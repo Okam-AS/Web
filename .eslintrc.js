@@ -14,6 +14,7 @@ module.exports = {
   rules: {
     quotes: ['warn', 'single'],
     indent: ['warn', 2],
-    'eol-last': 'off'
+    'eol-last': 'off',
+    'space-before-function-paren': ['warn', 'always']
   }
 }
