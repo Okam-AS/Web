@@ -1,8 +1,8 @@
+import store from 'nuxt'
 import { IProductService, IRequestService } from '../interfaces'
 import Configuration from '../helpers/configuration'
 import { Product } from '../models'
 import { ActionName } from '../enums'
-import store from '../../vuex/store'
 import { RequestService } from './request-service'
 
 export class ProductService implements IProductService {

@@ -1,7 +1,6 @@
+import { store } from 'nuxt'
 import { HttpMethod, HttpProperty, ActionName } from '../enums'
-
 import { IRequestService } from '../interfaces'
-import store from '../../vuex/store'
 export class RequestService implements IRequestService {
   private _baseUrl: string
   private httpModule: any;

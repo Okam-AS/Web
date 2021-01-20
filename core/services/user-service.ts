@@ -1,8 +1,8 @@
+import { store } from 'nuxt'
 import { Login, SendVerificationToken, Address } from '../models'
 import { ActionName } from '../enums'
 import { IUserService, IRequestService } from '../interfaces'
 import Configuration from '../helpers/configuration'
-import store from '../../vuex/store'
 import { RequestService } from './request-service'
 
 export class UserService implements IUserService {
