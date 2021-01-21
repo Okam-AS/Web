@@ -1,5 +1,4 @@
-import { store } from 'nuxt'
-import { HttpMethod, HttpProperty, ActionName } from '../enums'
+import { HttpMethod, HttpProperty } from '../enums'
 import { IRequestService } from '../interfaces'
 export class RequestService implements IRequestService {
   private _baseUrl: string
@@ -59,11 +58,13 @@ export class RequestService implements IRequestService {
   }
 
   private _clearTokenIfExpired (response: any) {
-    if (response.statusCode === 440) { store.dispatch(ActionName.ClearState) }
+    if (response.statusCode === 440) {
+      // TODO: store.dispatch(ActionName.ClearState)
+    }
   }
 
   private _defaultRequest (path: string, payload: any, method: HttpMethod): any {
-    return this._buildRequest(path, method, payload ? JSON.stringify(payload) : '', store.state.currentUser?.token)
+    return this._buildRequest(path, method, payload ? JSON.stringify(payload) : '', '')// TODO: siste param store.state.currentUser?.token)
   };
 
   private _buildRequest (path: string, method: HttpMethod, content?: string, bearerToken?: string): any {

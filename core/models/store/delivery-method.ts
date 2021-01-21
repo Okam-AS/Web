@@ -1,8 +1,8 @@
 export class DeliveryMethod {
-    id: string | undefined;
-    storeId: number | undefined;
-    minimumDistance: number | undefined;
-    maxDistance: number | undefined;
-    amount: number | undefined;
-    minimumOrderPrice: number | undefined;
+    id: string;
+    storeId: number;
+    minimumDistance: number;
+    maxDistance: number;
+    amount: number;
+    minimumOrderPrice: number;
 }

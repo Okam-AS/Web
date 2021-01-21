@@ -2,7 +2,7 @@
   <div>{{ test }}</div>
 </template>
 <script>
-import { UserService } from '@/core/services'
+import { UserService } from '@/core/services/user-service.ts'
 
 export default {
   data: () => ({

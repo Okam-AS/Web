@@ -3,20 +3,20 @@ import { Address, DeliveryMethod, OpeningHour, ProductPosition } from '@/core/mo
 import { StoreImage } from './store-image'
 
 export class Store {
-    id: number | undefined;
-    name: string | undefined;
-    logoUrl: string | undefined;
-    address: Address | undefined;
-    openingHours: Array<OpeningHour> | undefined;
-    isOpenNow: boolean | undefined;
-    productPositions: Array<ProductPosition> | undefined;
-    images: Array<StoreImage> | undefined;
-    admins: Array<IUser> | undefined;
-    editors: Array<IUser> | undefined;
-    homeDeliveryMethods: Array<DeliveryMethod> | undefined;
-    approved: boolean | undefined;
-    selfCheckout: boolean | undefined;
-    selfPickUp: boolean | undefined;
-    registered: Date | undefined;
-    bankAccountId: string | undefined;
+    id: number;
+    name: string;
+    logoUrl: string;
+    address: Address;
+    openingHours: Array<OpeningHour>;
+    isOpenNow: boolean;
+    productPositions: Array<ProductPosition>;
+    images: Array<StoreImage>;
+    admins: Array<IUser>;
+    editors: Array<IUser>;
+    homeDeliveryMethods: Array<DeliveryMethod>;
+    approved: boolean;
+    selfCheckout: boolean;
+    selfPickUp: boolean;
+    registered: Date;
+    bankAccountId: string;
 }

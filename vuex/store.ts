@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import { Cart, Order, Store, Address } from '@/core/models'
-import { CartService, StoreService, OrderService, ProductPositionService } from '@/core/services'
+import { Cart, Order, Store, Address } from '../core/models'
+import { CartService, StoreService, OrderService, ProductPositionService } from '../core/services'
 import { MutationName, ActionName } from '../core/enums'
 import { IUser } from '../core/interfaces'
 
