@@ -1,3 +1,4 @@
+import { state } from '@/store/index'
 import { Login, SendVerificationToken, Address } from '../models'
 // import { ActionName } from '../enums'
 import { IUserService, IRequestService } from '../interfaces'
@@ -7,6 +8,7 @@ import { RequestService } from './request-service'
 export class UserService implements IUserService {
   private _requestService: IRequestService;
   constructor () {
+    window.console.log('State', state())
     this._requestService = new RequestService(Configuration.okamApiBaseUrl)
   }
 

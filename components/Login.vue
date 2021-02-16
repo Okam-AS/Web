@@ -1,18 +1,20 @@
 <template>
-  <div>{{ test }}</div>
+  <div @click="$store.commit('increment')">
+    {{ test }} {{ $store.state.counter }}
+  </div>
 </template>
 <script>
 import { UserService } from '@/core/services/user-service.ts'
 
 export default {
   data: () => ({
-    test: 'tesst'
+    test: 'Hi!'
   }),
   created () {
-    this.test = 'foo'
+    this.test = 'I am a counter, please click me'
   },
   mounted () {
-    window.console.table(UserService)
+    window.console.log('UserService', new UserService())
   }
 }
 </script>
