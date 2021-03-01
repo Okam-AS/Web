@@ -8,7 +8,7 @@ import { RequestService } from './request-service'
 export class UserService implements IUserService {
   private _requestService: IRequestService;
   constructor () {
-    window.console.log('State', state())
+    console.log('State', state())
     this._requestService = new RequestService(Configuration.okamApiBaseUrl)
   }
 

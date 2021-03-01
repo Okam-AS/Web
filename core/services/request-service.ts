@@ -1,15 +1,16 @@
+import axios from 'axios'
 import { HttpMethod, HttpProperty } from '../enums'
 import { IRequestService } from '../interfaces'
+
 export class RequestService implements IRequestService {
   private _baseUrl: string
-  private httpModule: any;
   constructor (baseUrl: string) {
     this._baseUrl = baseUrl
   }
 
   deleteRequest (path: string): Promise<any> {
     const request = this._defaultRequest(path, undefined, HttpMethod.DELETE)
-    return this.httpModule.request(request).then((response: any) => {
+    return axios(request).then((response: any) => {
       this._clearTokenIfExpired(response)
       if (response.statusCode !== 200) { window.console.log(response.content.toString()) }
       return response
@@ -18,7 +19,7 @@ export class RequestService implements IRequestService {
 
   getRequest (path: string): Promise<any> {
     const request = this._defaultRequest(path, false, HttpMethod.GET)
-    return this.httpModule.request(request).then((response: any) => {
+    return axios(request).then((response: any) => {
       this._clearTokenIfExpired(response)
       if (response.statusCode !== 200) { window.console.log(response.content.toString()) }
       return response
@@ -27,7 +28,8 @@ export class RequestService implements IRequestService {
 
   postRequest (path: string, payload?: any): Promise<any> {
     const request = this._defaultRequest(path, payload, HttpMethod.POST)
-    return this.httpModule.request(request).then((response: any) => {
+    console.log(request)
+    return axios(request).then((response: any) => {
       this._clearTokenIfExpired(response)
       if (response.statusCode !== 200) { window.console.log(response.content.toString()) }
       return response
@@ -36,7 +38,7 @@ export class RequestService implements IRequestService {
 
   putRequest (path: string, payload: any): Promise<any> {
     const request = this._defaultRequest(path, payload, HttpMethod.PUT)
-    return this.httpModule.request(request).then((response: any) => {
+    return axios(request).then((response: any) => {
       this._clearTokenIfExpired(response)
       if (response.statusCode !== 200) { window.console.log(response.content.toString()) }
       return response
