@@ -12,7 +12,7 @@ export class RequestService implements IRequestService {
     const request = this._defaultRequest(path, undefined, HttpMethod.DELETE)
     return axios(request).then((response: any) => {
       this._clearTokenIfExpired(response)
-      if (response.statusCode !== 200) { window.console.log(response.data) }
+      if (response.status !== 200) { window.console.log(response.data) }
       return response
     })
   }
@@ -21,17 +21,18 @@ export class RequestService implements IRequestService {
     const request = this._defaultRequest(path, false, HttpMethod.GET)
     return axios(request).then((response: any) => {
       this._clearTokenIfExpired(response)
-      if (response.statusCode !== 200) { window.console.log(response.data) }
+      if (response.status !== 200) { window.console.log(response.data) }
       return response
     })
   }
 
   postRequest (path: string, payload?: any): Promise<any> {
     const request = this._defaultRequest(path, payload, HttpMethod.POST)
-    console.log(request)
+    window.console.log('postRequest', payload)
     return axios(request).then((response: any) => {
       this._clearTokenIfExpired(response)
-      if (response.statusCode !== 200) { window.console.log(response.data) }
+      if (response.status !== 200) { window.console.log(response.data) }
+      window.console.log('postRequest return', response)
       return response
     })
   }
@@ -40,16 +41,17 @@ export class RequestService implements IRequestService {
     const request = this._defaultRequest(path, payload, HttpMethod.PUT)
     return axios(request).then((response: any) => {
       this._clearTokenIfExpired(response)
-      if (response.statusCode !== 200) { window.console.log(response.data) }
+      if (response.status !== 200) { window.console.log(response.data) }
       return response
     })
   }
 
   tryParseResponse (response: any) {
-    if (response && response.statusCode === 200) {
+    window.console.log('tryParseResponse', response)
+    if (response && response.status === 200) {
       let parsedResponse
       try {
-        parsedResponse = response.data.toJSON()
+        parsedResponse = response.data
       } catch (e) {
         return undefined
       }
@@ -60,7 +62,7 @@ export class RequestService implements IRequestService {
   }
 
   private _clearTokenIfExpired (response: any) {
-    if (response.statusCode === 440) {
+    if (response.status === 440) {
       // TODO: store.dispatch(ActionName.ClearState)
     }
   }
@@ -73,7 +75,6 @@ export class RequestService implements IRequestService {
     const request = {
       headers: {
         'Content-Type': 'application/json'
-        // Accept: 'application/json'
       },
       url: this._baseUrl + path,
       method,

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import { MutationName, ActionName } from '../core/enums'
+import cookie from '../core/utilities/cookie'
 import { CartService, StoreService, OrderService, ProductPositionService } from '../core/services'
 
 const _cartService = new CartService()
@@ -8,7 +9,6 @@ const _productPositionService = new ProductPositionService()
 const _orderService = new OrderService()
 
 export const state = () => ({
-  counter: 0,
   currentUser: {},
   carts: [],
   orders: [],
@@ -126,9 +126,6 @@ export const actions = {
 }
 
 export const mutations = {
-  increment (state) {
-    state.counter++
-  },
   [MutationName.Load] () {
     // const appsettingState = getString(AppSettingKey.State, '{}')
     // this.replaceState(
@@ -162,7 +159,9 @@ export const mutations = {
     state.currentUser.address = address
   },
   [MutationName.SetCurrentUser] (state, user) {
-    state.currentUser = user
+    console.log('Current user mutation', { ...user })
+    state.currentUser = { ...user }
+    cookie.set('token', user.token)
   },
   [MutationName.ClearCurrentUser] (state) {
     state.currentUser = {}

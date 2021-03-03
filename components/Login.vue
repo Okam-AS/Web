@@ -1,32 +1,35 @@
 <template>
   <div>
-    <!--
-    <button @click="$store.commit('increment')">
-      Clicked {{ $store.state.counter }} times
-    </button>
-    -->
     <div style="margin-top: 20px; padding: 20px; border: 1px dashed #f00;">
      <template v-if="!smsSent">
-        <p>Skriv ditt telefonnummer for å få tilsendt sms-kode</p>
+        <p>{{ $t('enterPhoneNumberLabel') }}</p>
         <input
           v-model="phone"
-          placeholder="Telefon"
+          @keyup.enter="getCode"
+          :placeholder="$t('enterPhoneNumberPlaceholder')"
           type="text"
         />
-        <button @click="getCode">Send</button>
+        <button @click="getCode">
+          {{ $t('enterPhoneNumberSubmit') }}
+        </button>
       </template>
       <template v-else-if="!codeSent">
-        <p>Skriv inn kode fra SMS for å logge inn</p>
+        <p>{{ $t('enterPhoneCodeLabel') }}</p>
         <input
           v-model="code"
-          placeholder="Kode fra SMS"
+          @keyup.enter="login"
+          :placeholder="$t('enterPhoneCodePlaceholder')"
           type="text"
         />
-        <button @click="login">Login</button>
+        <button @click="login">
+          {{ $t('enterPhoneCodeSubmit') }}
+        </button>
       </template>
       <template v-else>
-        Da er du logget inn<br />
-        {{ response }}
+        <p>{{ $t('youAreLoggedIn') }}</p>
+        <pre>
+          {{ user }}
+        </pre>
       </template>
     </div>
   </div>
@@ -34,7 +37,6 @@
 <script>
 import { UserService } from '@/core/services/user-service.ts'
 import { SendVerificationToken /* , Login, NotificationRegistration */ } from "@/core/models/index.ts"
-const _userService = new UserService()
 
 export default {
   data: () => ({
@@ -42,11 +44,11 @@ export default {
     code: '',
     smsSent: false,
     codeSent: false,
-    response: null
+    userService: null
   }),
   methods: {
     getCode () {
-      _userService.SendVerificationToken(
+      this.userService.SendVerificationToken(
         new SendVerificationToken('+47' + this.phone)
       ).finally(() => {
         this.smsSent = true
@@ -54,12 +56,20 @@ export default {
     },
     login () {
       const params = { phoneNumber: '+47' + this.phone, token: this.code }
-      _userService.Login(params).then((res) => {
-        this.response = res
-      }).finally(() => {
+      this.userService.Login(params).then(() => {
         this.codeSent = true
+      }).catch(() => {
+        this.codeSent = false
       })
     }
+  },
+  computed: {
+    user () {
+      return this.$store.state.currentUser
+    }
+  },
+  mounted () {
+    this.userService = new UserService(this.$store)
   }
 }
 </script>

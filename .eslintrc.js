@@ -15,6 +15,7 @@ module.exports = {
     quotes: ['warn', 'single'],
     indent: ['warn', 2],
     'eol-last': 'off',
-    'space-before-function-paren': ['warn', 'always']
+    'space-before-function-paren': ['warn', 'always'],
+    'comma-dangle': ['warn']
   }
 }
