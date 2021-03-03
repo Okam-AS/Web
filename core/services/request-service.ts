@@ -70,11 +70,16 @@ export class RequestService implements IRequestService {
   };
 
   private _buildRequest (path: string, method: HttpMethod, content?: string, bearerToken?: string): any {
-    const request = { headers: {} }
-    request[HttpProperty.Url] = this._baseUrl + path
-    request[HttpProperty.Method] = method
-    request.headers[HttpProperty.ContentType] = 'application/json; charset=utf-8'
-    if (content) { request[HttpProperty.Content] = content }
+    const request = {
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        Accept: 'application/json',
+        Origin: 'http://localhost:4000'
+      },
+      url: this._baseUrl + path,
+      method,
+      data: content || {}
+    }
     if (bearerToken) { request.headers[HttpProperty.Authorization] = 'Bearer ' + bearerToken }
     return request
   };
