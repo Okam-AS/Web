@@ -6,6 +6,7 @@
     <div style="margin-top: 20px; padding: 20px; border: 1px dashed #f00;">
       User:
       <pre>{{ $store.state.currentUser }}</pre>
+      SMS sent? {{ smsSent }}
       <input
         v-model="phone"
         type="text"
@@ -21,18 +22,16 @@ const _userService = new UserService()
 
 export default {
   data: () => ({
-    phone: ''
+    phone: '',
+    smsSent: false
   }),
   methods: {
-    async login () {
-      console.log('Login attempt')
-      console.log(_userService)
-      console.log(this.phone)
-      const success = await _userService.SendVerificationToken(
-        new SendVerificationToken('47' + this.phone)
-      )
-
-      console.log(success)
+    login () {
+      _userService.SendVerificationToken(
+        new SendVerificationToken('+47' + this.phone)
+      ).finally(() => {
+        this.smsSent = true
+      })
     }
   }
 }

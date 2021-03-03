@@ -12,7 +12,7 @@ export class RequestService implements IRequestService {
     const request = this._defaultRequest(path, undefined, HttpMethod.DELETE)
     return axios(request).then((response: any) => {
       this._clearTokenIfExpired(response)
-      if (response.statusCode !== 200) { window.console.log(response.content.toString()) }
+      if (response.statusCode !== 200) { window.console.log(response.data) }
       return response
     })
   }
@@ -21,7 +21,7 @@ export class RequestService implements IRequestService {
     const request = this._defaultRequest(path, false, HttpMethod.GET)
     return axios(request).then((response: any) => {
       this._clearTokenIfExpired(response)
-      if (response.statusCode !== 200) { window.console.log(response.content.toString()) }
+      if (response.statusCode !== 200) { window.console.log(response.data) }
       return response
     })
   }
@@ -31,7 +31,7 @@ export class RequestService implements IRequestService {
     console.log(request)
     return axios(request).then((response: any) => {
       this._clearTokenIfExpired(response)
-      if (response.statusCode !== 200) { window.console.log(response.content.toString()) }
+      if (response.statusCode !== 200) { window.console.log(response.data) }
       return response
     })
   }
@@ -40,7 +40,7 @@ export class RequestService implements IRequestService {
     const request = this._defaultRequest(path, payload, HttpMethod.PUT)
     return axios(request).then((response: any) => {
       this._clearTokenIfExpired(response)
-      if (response.statusCode !== 200) { window.console.log(response.content.toString()) }
+      if (response.statusCode !== 200) { window.console.log(response.data) }
       return response
     })
   }
@@ -49,7 +49,7 @@ export class RequestService implements IRequestService {
     if (response && response.statusCode === 200) {
       let parsedResponse
       try {
-        parsedResponse = response.content.toJSON()
+        parsedResponse = response.data.toJSON()
       } catch (e) {
         return undefined
       }
@@ -72,13 +72,12 @@ export class RequestService implements IRequestService {
   private _buildRequest (path: string, method: HttpMethod, content?: string, bearerToken?: string): any {
     const request = {
       headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        Accept: 'application/json',
-        Origin: 'http://localhost:4000'
+        'Content-Type': 'application/json'
+        // Accept: 'application/json'
       },
       url: this._baseUrl + path,
       method,
-      data: content || {}
+      data: JSON.parse(content || '')
     }
     if (bearerToken) { request.headers[HttpProperty.Authorization] = 'Bearer ' + bearerToken }
     return request
