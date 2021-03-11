@@ -16,6 +16,9 @@ module.exports = {
     indent: ['warn', 2],
     'eol-last': 'off',
     'space-before-function-paren': ['warn', 'always'],
-    'comma-dangle': ['warn']
+    'comma-dangle': ['warn'],
+    'no-trailing-spaces': 'warn',
+    'padded-blocks': 'warn',
+    'no-irregular-whitespace': 'warn'
   }
 }

@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import { MutationName, ActionName } from '../core/enums'
-import cookie from '../core/utilities/cookie'
 import { CartService, StoreService, OrderService, ProductPositionService } from '../core/services'
 
 const _cartService = new CartService()
@@ -159,9 +158,10 @@ export const mutations = {
     state.currentUser.address = address
   },
   [MutationName.SetCurrentUser] (state, user) {
-    console.log('Current user mutation', { ...user })
     state.currentUser = { ...user }
-    cookie.set('token', user.token)
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem('user', JSON.stringify(user))
+    }
   },
   [MutationName.ClearCurrentUser] (state) {
     state.currentUser = {}

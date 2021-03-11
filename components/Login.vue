@@ -1,36 +1,40 @@
 <template>
   <div>
     <div style="margin-top: 20px; padding: 20px; border: 1px dashed #f00;">
-     <template v-if="!smsSent">
-        <p>{{ $t('enterPhoneNumberLabel') }}</p>
-        <input
-          v-model="phone"
-          @keyup.enter="getCode"
-          :placeholder="$t('enterPhoneNumberPlaceholder')"
-          type="text"
-        />
-        <button @click="getCode">
-          {{ $t('enterPhoneNumberSubmit') }}
-        </button>
-      </template>
-      <template v-else-if="!codeSent">
-        <p>{{ $t('enterPhoneCodeLabel') }}</p>
-        <input
-          v-model="code"
-          @keyup.enter="login"
-          :placeholder="$t('enterPhoneCodePlaceholder')"
-          type="text"
-        />
-        <button @click="login">
-          {{ $t('enterPhoneCodeSubmit') }}
-        </button>
-      </template>
-      <template v-else>
-        <p>{{ $t('youAreLoggedIn') }}</p>
-        <pre>
-          {{ user }}
-        </pre>
-      </template>
+      <div v-if="mounted">
+        <div v-if="user && user.token">
+          {{ $t('youAreLoggedIn')}} 
+          <button @click="wipeUser">
+            {{ $t('logout') }}
+          </button>
+        </div>
+        <div v-else>
+          <template v-if="!smsSent">
+            <p>{{ $t('enterPhoneNumberLabel') }}</p>
+            <input
+              v-model="phone"
+              @keyup.enter="getCode"
+              :placeholder="$t('enterPhoneNumberPlaceholder')"
+              type="text"
+            />
+            <button @click="getCode">
+              {{ $t('enterPhoneNumberSubmit') }}
+            </button>
+          </template>
+          <template v-else-if="!codeSent">
+            <p>{{ $t('enterPhoneCodeLabel') }}</p>
+            <input
+              v-model="code"
+              @keyup.enter="login"
+              :placeholder="$t('enterPhoneCodePlaceholder')"
+              type="text"
+            />
+            <button @click="login">
+              {{ $t('enterPhoneCodeSubmit') }}
+            </button>
+          </template>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -40,6 +44,7 @@ import { SendVerificationToken /* , Login, NotificationRegistration */ } from "@
 
 export default {
   data: () => ({
+    mounted: false,
     phone: '',
     code: '',
     smsSent: false,
@@ -58,9 +63,15 @@ export default {
       const params = { phoneNumber: '+47' + this.phone, token: this.code }
       this.userService.Login(params).then(() => {
         this.codeSent = true
+        
       }).catch(() => {
         this.codeSent = false
       })
+    },
+    wipeUser () {
+      this.$store.dispatch('SetCurrentUser', {})
+      this.smsSent = false
+      this.codeSent = false
     }
   },
   computed: {
@@ -69,7 +80,13 @@ export default {
     }
   },
   mounted () {
+    const storedUser = localStorage.getItem('user') || false
+    if (storedUser) {
+      const user = JSON.parse(storedUser)
+      this.$store.dispatch('SetCurrentUser', user)
+    }
     this.userService = new UserService(this.$store)
+    this.mounted = true
   }
 }
 </script>

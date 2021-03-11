@@ -34,7 +34,8 @@ export default {
           enterPhoneCodeLabel: 'Enter SMS code',
           enterPhoneCodePlaceholder: 'Code…',
           enterPhoneCodeSubmit: 'Send',
-          youAreLoggedIn: 'You are logged in'
+          youAreLoggedIn: 'You are logged in',
+          logout: 'Log out'
         },
         no: {
           enterPhoneNumberLabel: 'Skriv ditt telefonnummer for å få tilsendt sms-kode',
@@ -43,7 +44,8 @@ export default {
           enterPhoneCodeLabel: 'Skriv inn kode fra SMS for å logge inn',
           enterPhoneCodePlaceholder: 'Kode…',
           enterPhoneCodeSubmit: 'Send',
-          youAreLoggedIn: 'Du er innlogget'
+          youAreLoggedIn: 'Du er innlogget',
+          logout: 'Logg ut'
         }
       }
     }
@@ -73,7 +75,7 @@ export default {
     // https://go.nuxtjs.dev/content
     '@nuxt/content',
     // i18n plugin
-    'nuxt-i18n',
+    'nuxt-i18n'
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
