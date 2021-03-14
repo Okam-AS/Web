@@ -78,8 +78,13 @@ export class RequestService implements IRequestService {
       },
       url: this._baseUrl + path,
       method,
-      data: JSON.parse(content || '')
+      data: null
     }
+
+    if (content) {
+      request.data = JSON.parse(content)
+    }
+
     if (bearerToken) { request.headers[HttpProperty.Authorization] = 'Bearer ' + bearerToken }
     return request
   };
