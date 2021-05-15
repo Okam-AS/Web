@@ -28,6 +28,7 @@ export default {
       fallbackLocale: 'no',
       messages: {
         en: {
+          back: 'Back',
           enterPhoneNumberLabel: 'Enter your phone number to receive a SMS code',
           enterPhoneNumberPlaceholder: 'Phone',
           enterPhoneNumberSubmit: 'Send',
@@ -38,6 +39,7 @@ export default {
           logout: 'Log out'
         },
         no: {
+          back: 'Tilbake',
           enterPhoneNumberLabel: 'Skriv ditt telefonnummer for å få tilsendt sms-kode',
           enterPhoneNumberPlaceholder: 'Telefon',
           enterPhoneNumberSubmit: 'Send',

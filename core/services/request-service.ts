@@ -47,7 +47,7 @@ export class RequestService implements IRequestService {
   }
 
   tryParseResponse (response: any) {
-    window.console.log('tryParseResponse', response)
+    window.console.log(response)
     if (response && response.status === 200) {
       let parsedResponse
       try {

@@ -1,15 +1,16 @@
 <template>
-  <div class="container">
-    <div>
-      <Login />
-    </div>
-  </div>
+  <Login v-if="isLogin" />
+  <FrontPage v-else />
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 
-export default Vue.extend({})
+export default Vue.extend({
+  data: () => ({
+    isLogin: false
+  })
+})
 </script>
 
 <style>
