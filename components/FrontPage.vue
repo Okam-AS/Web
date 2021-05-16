@@ -1,31 +1,6 @@
 <template>
   <div>
-    <header class="page-header">
-      <div class="page-header__wrapper">
-        <div class="page-header__logo-wrapper">
-          <a class="page-header__logo-link" href="/">
-            <img class="page-header__logo" src="~/assets/UI/logo.svg" alt="">
-          </a>
-        </div>
-        <button class="page-header__menu-trigger" :aria-expanded="menuExpanded" aria-controls="main-menu" type="button">
-          <span class="sr-only">Meny</span>
-          <span class="burger" />
-        </button>
-        <nav id="main-menu" class="main-menu">
-          <ul class="main-menu__list">
-            <li class="main-menu__item">
-              <a class="main-menu__link" href="/om-okam/">For forbrukere</a>
-            </li>
-            <li class="main-menu__item">
-              <a class="main-menu__link" href="/verdens-raskeste-vei-til-egen-nettbutikk/">For butikker</a>
-            </li>
-            <li class="main-menu__item">
-              <a class="main-menu__link" href="/kontakt/">Kontakt oss</a>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </header>
+    <page-header />
     <main class="page-content">
       <div class="big-teaser">
         <div class="wrapper">
@@ -211,43 +186,14 @@
       </section>
     </main>
 
-    <footer class="page-footer">
-      <div class="wrapper">
-        <div class="page-footer__cols">
-          <div class="page-footer__col">
-            <img class="page-header__logo" src="~/assets/UI/okam_logo_dark.svg" alt="">
-          </div>
-          <div class="page-footer__col">
-            <ul class="link-list">
-              <li class="link-list__item">
-                <a href="/om-okam">Om Okam</a>
-              </li>
-              <li class="link-list__item">
-                <a href="/verdens-raskeste-vei-til-egen-nettbutikk">Om Okam Butikk</a>
-              </li>
-              <li class="link-list__item">
-                <a href="/personvern">Personvern</a>
-              </li>
-              <li class="link-list__item">
-                <a href="/kontakt">Kontakt</a>
-              </li>
-            </ul>
-          </div>
-          <div class="page-footer__col">
-            <div class="page-footer__contact">
-              <h2>Okam AS</h2>
-              <p>Org nr.: 925 024 414</p>
-              <p>Tlf: 988 65 120<br>E-post: <a href="mailto:post@okam.no">kontakt@okam.no</a></p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
+    <page-footer />
   </div>
 </template>
 
 <script>
+import PageHeader from './PageHeader.vue'
 export default {
+  components: { PageHeader },
   data: () => ({
     menuExpanded: false
   })

@@ -2,19 +2,20 @@ export default {
   debug: true,
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    title: 'okam-consumer',
+    title: 'Okam',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' }
+      { hid: 'description', name: 'description', content: 'Handle i butikker og utsalg nær deg med enkle bildeklikk.' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap' }
     ]
   },
 
   server: {
-    // port: 4000 // default: 3000
+    // port: process.env.PORT || 4000 // default: 3000
   },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
