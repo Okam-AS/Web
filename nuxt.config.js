@@ -19,6 +19,7 @@ export default {
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [
+    '~/assets/sass/main.scss'
   ],
 
   i18n: {

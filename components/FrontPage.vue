@@ -4,7 +4,7 @@
       <div class="page-header__wrapper">
         <div class="page-header__logo-wrapper">
           <a class="page-header__logo-link" href="/">
-            <img class="page-header__logo" src="https://okam.no/UI/logo.svg" alt="">
+            <img class="page-header__logo" src="~/assets/UI/logo.svg" alt="">
           </a>
         </div>
         <button class="page-header__menu-trigger" :aria-expanded="menuExpanded" aria-controls="main-menu" type="button">
@@ -30,7 +30,7 @@
       <div class="big-teaser">
         <div class="wrapper">
           <div class="big-teaser__content element">
-            <img src="https://usercontent.one/wp/www.okam.no/wp-content/uploads/2021/05/startpage_stores.png">
+            <img src="~/assets/UI/startpage_stores.png">
           </div>
           <div class="big-teaser__content element">
             <h1 class="heading-1">
@@ -38,8 +38,8 @@
             </h1>
             <p>Det har aldri vært enklere å starte egen nettbutikk. Ta et bilde av varene du selger, last det opp i din Okam butikk og kunder kan straks legge inn sine bestillinger.</p>
             <div class="big-teaser__links">
-              <a class="ga-ios-download" href="https://apps.apple.com/no/developer/okam/id1514296964"><img alt="AppStore" height="40" src="/UI/appstore-btn.png"></a>
-              <a class="ga-android-download" href="https://play.google.com/store/apps/developer?id=Okam"><img alt="Google Play" height="40" src="/UI/googleplay-btn.png"></a>
+              <a class="ga-ios-download" href="https://apps.apple.com/no/developer/okam/id1514296964"><img alt="AppStore" height="40" src="~/assets/UI/appstore-btn.png"></a>
+              <a class="ga-android-download" href="https://play.google.com/store/apps/developer?id=Okam"><img alt="Google Play" height="40" src="~/assets/UI/googleplay-btn.png"></a>
             </div>
           </div>
         </div>
@@ -63,7 +63,7 @@
                 </p>
               </div>
               <div class="media-item__image element">
-                <img src="UI/ill_store.svg" alt="">
+                <img src="~/assets/UI/ill_store.svg" alt="">
               </div>
             </article>
             <article class="media-item">
@@ -76,7 +76,7 @@
                 </p>
               </div>
               <div class="media-item__image element">
-                <img src="UI/ill-phone.svg" alt="">
+                <img src="~/assets/UI/ill-phone.svg" alt="">
               </div>
             </article>
             <article class="media-item">
@@ -89,7 +89,7 @@
                 </p>
               </div>
               <div class="media-item__image element">
-                <img src="UI/ill-cart.svg" alt="">
+                <img src="~/assets/UI/ill-cart.svg" alt="">
               </div>
             </article>
           </div>
@@ -108,7 +108,7 @@
             <div class="big-teaser__links" />
           </div>
           <div class="big-teaser__image element">
-            <img src="UI/ill-store-dark.svg" alt="">
+            <img src="~/assets/UI/ill-store-dark.svg" alt="">
           </div>
         </div>
       </section>
@@ -215,7 +215,7 @@
       <div class="wrapper">
         <div class="page-footer__cols">
           <div class="page-footer__col">
-            <img class="page-header__logo" src="/UI/okam_logo_dark.svg" alt="">
+            <img class="page-header__logo" src="~/assets/UI/okam_logo_dark.svg" alt="">
           </div>
           <div class="page-footer__col">
             <ul class="link-list">
@@ -253,9 +253,3 @@ export default {
   })
 }
 </script>
-
-<style>
-/* Old styles */
-  .wrapper{max-width:900px;margin-right:auto;margin-left:auto;padding-right:1.875rem;padding-left:1.875rem}.page-header{margin-top:1.875rem}.page-header__wrapper{max-width:1200px;margin-right:auto;margin-left:auto;text-align:center;position:relative;padding-right:1.875rem;padding-left:1.875rem}.page-header__logo{width:60px}@media only screen and (min-width: 40em){.page-header__logo{width:100px}}.page-header__logo-link{border-bottom:none}.page-header__logo-link:focus{box-shadow:none}.page-header__menu-trigger{position:absolute;top:0;right:1.25rem;border:none;background-color:transparent;padding:0;margin:0;width:24px;height:24px;outline:none;z-index:11}.page-header__menu-trigger .burger,.page-header__menu-trigger .burger:before,.page-header__menu-trigger .burger:after{content:"";position:absolute;top:50%;left:0;width:100%;height:2px;background-color:#000;display:block;transition:all .2s ease-in-out}.page-header__menu-trigger .burger:before{top:-8px}.page-header__menu-trigger .burger:after{top:8px}.page-header__menu-trigger:focus .burger,.page-header__menu-trigger:focus .burger:before,.page-header__menu-trigger:focus .burger:after{content:"";height:3px}.page-header__menu-trigger[aria-expanded=true] .burger,.page-header__menu-trigger[aria-expanded=true] .burger:before,.page-header__menu-trigger[aria-expanded=true] .burger:after{top:50%}.page-header__menu-trigger[aria-expanded=true] .burger{background-color:transparent}.page-header__menu-trigger[aria-expanded=true] .burger:before{transform:rotate(45deg);background-color:#fff}.page-header__menu-trigger[aria-expanded=true] .burger:after{transform:rotate(-45deg);background-color:#fff}.page-footer{padding:0 0 4rem;position:relative;background-color:#d5f6e5;margin-top:4rem}@media only screen and (min-width: 40em){.page-footer{padding-bottom:6.25rem;margin-top:6.25rem}}.page-footer:before{content:"";position:absolute;top:-4rem;right:0;bottom:50px;left:0;background-color:#d5f6e5;transform:skewY(2deg);z-index:-1}@media only screen and (min-width: 40em){.page-footer:before{top:-6.25rem}}.page-footer__cols{text-align:center}@media only screen and (min-width: 40em){.page-footer__cols{display:flex;text-align:left}}.page-footer__col{margin-bottom:2.5rem}@media only screen and (min-width: 40em){.page-footer__col{flex:0 0 33.33%;padding-right:1.875rem;margin-bottom:0}}.page-footer__contact h2{font-size:18px;font-size:1.125rem;font-weight:normal;margin-bottom:.625rem}.page-footer__contact p{font-size:14px;font-size:0.875rem}.contrast-block{background-color:#d5f6e5;padding:5rem 0 8rem;transform:skewY(2deg);margin:0 0 -4rem}@media only screen and (min-width: 40em){.contrast-block{padding:6.25rem 0 12.5rem;margin:0 0 -6.25rem}}.contrast-block .wrapper{transform:skewY(-2deg)}.element{padding:1.25rem 1.875rem}.article .wrapper{padding-top:4rem;padding-bottom:4rem}@media only screen and (min-width: 40em){.article .wrapper{padding-top:6.25rem;padding-bottom:6.25rem}}body{margin:0;font-family:"Montserrat",sans-serif;font-size:100%;line-height:1.5;color:#000}body.has-overlay{overflow:hidden}*{box-sizing:border-box}img{max-width:100%;vertical-align:middle}a{color:#000;text-decoration:none;border-bottom:1px solid #000;outline:none}a:focus{box-shadow:0 3px 0 0 #000}button{cursor:pointer}h1,h2,h3,p,ul,ol,form,blockquote,figure{margin:0}.heading-1{font-size:24px;font-size:1.5rem;margin-bottom:.75em;line-height:1.2}@media only screen and (min-width: 40em){.heading-1{font-size:42px;font-size:2.625rem}}p{margin-bottom:1.5em}p:last-child{margin-bottom:0}.sr-only{clip:rect(1px, 1px, 1px, 1px);position:absolute !important}.u-center{text-align:center}.big-teaser .wrapper{padding-top:4rem;padding-bottom:4rem}@media only screen and (min-width: 40em){.big-teaser .wrapper{padding-top:6.25rem;padding-bottom:6.25rem;display:flex;align-items:center}}@media only screen and (min-width: 40em){.big-teaser__content,.big-teaser__image{flex:0 0 50%}}.big-teaser__content{order:2}.big-teaser__content p{font-size:18px;font-size:1.125rem}@media only screen and (min-width: 40em){.big-teaser__content p{font-size:20px;font-size:1.25rem}}.big-teaser__image{text-align:right}.big-teaser--dark{background-color:#4a3a5a;color:#fff;transform:skewY(-2deg)}.big-teaser--dark .wrapper{transform:skewY(2deg)}.big-teaser--dark .big-teaser__content{order:-1;text-align:right}.big-teaser--dark .big-teaser__content a{color:#fff}.big-teaser--dark .big-teaser__image{text-align:left}.media-items--counter{counter-reset:media-counter}.media-item{counter-increment:media-counter}@media only screen and (min-width: 40em){.media-item{display:flex;align-items:center}}.media-item:nth-child(2n+2) .media-item__content{text-align:left}.media-item:nth-child(2n+2) .media-item__image{order:-1;text-align:right}.media-item__content,.media-item__image{flex:0 0 50%}.media-item__content{text-align:right}.media-item__title{font-size:20px;font-size:1.25rem;margin-bottom:.5em}@media only screen and (min-width: 40em){.media-item__title{font-size:24px;font-size:1.5rem}}.media-item__title:before{content:counter(media-counter);background-color:#000;color:#fff;margin-right:.8333333333rem;border-radius:50%;width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px #000}.media-item__ingress{font-size:18px;font-size:1.125rem}@media only screen and (min-width: 40em){.media-item__ingress{font-size:20px;font-size:1.25rem}}.faq{padding:4rem 0 5.5rem}@media only screen and (min-width: 40em){.faq{padding:6.25rem 0 9.375rem}}.faq-list__item{margin-bottom:4px;font-size:16px;font-size:1rem}@media only screen and (min-width: 40em){.faq-list__item{font-size:18px;font-size:1.125rem}}.faq-list__item[open] .faq-list__question .icon{transform:rotate(180deg)}.faq-list__question-wrapper{background-color:#ece4ef;padding:1.25rem;cursor:pointer;outline:none}.faq-list__question-wrapper::-webkit-details-marker{display:none}.faq-list__question-wrapper .icon{transition:transform .2s ease-in-out;fill:#4a3a5a;margin-left:1.25rem;width:20px;height:20px;flex-shrink:0}.faq-list__question{display:flex;justify-content:space-between;align-items:center}.faq-list__answer{padding:1rem;margin-bottom:1.25rem;border:5px solid #ece4ef;border-top:none}.link-list{list-style:none;padding:0}.link-list__item{font-size:18px;font-size:1.125rem;margin-bottom:.625rem}.main-menu{position:fixed;background-color:#4a3a5a;top:0;right:0;bottom:0;left:0;z-index:10;padding:5rem 2rem;display:none;overflow:auto}@media only screen and (min-width: 40em){.main-menu{padding:10rem 2rem}}.main-menu__list{list-style:none;padding:0}.main-menu__item{padding:.8333333333rem 0}.main-menu__link{color:#fff;display:inline-block;padding:.15625rem 0;font-size:20px;font-size:1.25rem;border-bottom:none}@media only screen and (min-width: 40em){.main-menu__link{font-size:24px;font-size:1.5rem}}.main-menu__link:hover,.main-menu__link:focus{box-shadow:0 2px 0 0 #fff}.main-menu.is-active{display:block}.wp-block-table{margin:2.5rem 0 .625rem}@media only screen and (min-width: 40em){.wp-block-table{margin-top:3.75rem}}.wp-block-table table{width:100%;padding:0;border-collapse:collapse}.wp-block-table table th,.wp-block-table table td{padding:.625rem;color:#fff;font-size:14px;font-size:0.875rem}@media only screen and (min-width: 40em){.wp-block-table table th,.wp-block-table table td{padding:.8333333333rem 1.25rem;font-size:16px;font-size:1rem}}.wp-block-table table thead th{background-color:#000;padding:.8333333333rem .625rem;border-left:1px solid #fff}@media only screen and (min-width: 40em){.wp-block-table table thead th{font-size:20px;font-size:1.25rem;padding:1.25rem}}.wp-block-table table tbody th{font-weight:normal;text-align:left}.wp-block-table table tbody td{text-align:center;border-left:1px solid #fff}.wp-block-table table tbody td svg{fill:#fff;width:22px;height:22px}@media only screen and (min-width: 40em){.wp-block-table table tbody td.xl-text{font-size:24px;font-size:1.5rem}}.wp-block-table table tbody tr th,.wp-block-table table tbody tr td{background-color:#4a3a5a}.wp-block-table table tbody tr:nth-child(2n+2) th,.wp-block-table table tbody tr:nth-child(2n+2) td{background-color:#6e5f7e}
-
-</style>

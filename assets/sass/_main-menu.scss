@@ -1,0 +1,46 @@
+.main-menu {
+  position: fixed;
+  background-color: $color-support;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  padding: 5rem 2rem;
+  display: none;
+  overflow: auto;
+  
+  @include br-md {
+    padding: 10rem 2rem;
+  }
+
+  &__list {
+    list-style: none;
+    padding: 0;
+  }
+
+  &__item {
+    padding: $space/1.5 0;
+  }
+
+  &__link {
+    color: white;
+    display: inline-block;
+    padding: $space/8 0;
+    @include font-size($font-size--lg);
+    border-bottom: none;
+
+    @include br-md {
+      @include font-size($font-size--xl);
+    }
+
+    &:hover,
+    &:focus {
+      box-shadow: 0 2px 0 0 white;
+    }
+  }
+
+  &.is-active {
+    display: block;
+  }
+}

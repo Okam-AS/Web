@@ -1,6 +1,5 @@
 <template>
-  <Login v-if="isLogin" />
-  <FrontPage v-else />
+  <FrontPage />
 </template>
 
 <script lang="ts">
@@ -8,18 +7,7 @@ import Vue from 'vue'
 
 export default Vue.extend({
   data: () => ({
-    isLogin: false
+    whatever: false
   })
 })
 </script>
-
-<style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-</style>
