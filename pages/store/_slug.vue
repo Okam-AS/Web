@@ -4,13 +4,13 @@
     <main class="page-content">
       <div class="article">
         <div class="wrapper">
-          <div class="element text-content">
+          <div class="element text-content u-center">
 
-            <template v-if="res.logoUrl">
-              <img :src="res.logoUrl" style="width: 100px; height: auto; float: right;">
-            </template>
+            <p v-if="res.logoUrl">
+              <img :src="res.logoUrl" style="width: 100px; height: auto; margin: 0 auto 20px;">
+            </p>
 
-            <h1 class="heading-1 u-center">
+            <h1 class="heading-1">
               <template v-if="res.name">
                 Velkommen til {{ res.name }}
               </template>
@@ -18,7 +18,10 @@
                 Velkommen
               </template>
             </h1>
-            <p>Last ned Okam for å se vareutvalg og legge inn bestilling hos oss</p>
+
+            <p>
+              Last ned Okam for å se vareutvalg og legge inn bestilling hos oss
+            </p>
 
             <p style="font-weight:bold;">
               Trykk for å laste ned
