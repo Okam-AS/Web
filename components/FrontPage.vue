@@ -9,9 +9,9 @@
           </div>
           <div class="big-teaser__content element">
             <h1 class="heading-1">
-              Den enkleste veien til egen nettbutikk
+              En rask og enkel vei til nettbutikk
             </h1>
-            <p>Det har aldri vært enklere å starte egen nettbutikk. Ta et bilde av varene du selger, last det opp i din Okam butikk og kunder kan straks legge inn sine bestillinger.</p>
+            <p>Okam gjør det enkelt. Ta noen bilder av varene du selger, last de opp i din Okam butikk og kunder kan straks legge inn sine bestillinger.</p>
             <div class="big-teaser__links">
               <a class="ga-ios-download" href="https://apps.apple.com/no/developer/okam/id1514296964"><img alt="AppStore" height="40" src="~/assets/UI/appstore-btn.png"></a>
               <a class="ga-android-download" href="https://play.google.com/store/apps/developer?id=Okam"><img alt="Google Play" height="40" src="~/assets/UI/googleplay-btn.png"></a>
@@ -25,7 +25,7 @@
             Slik fungerer det
           </h2>
           <p>
-            Ta et bilde av varene du selger, last det opp i din Okam butikk og kunder kan straks legge inn sine bestillinger. Okam Butikk registrerer hvilke varer kundene trykker på i bildene dine og lager en bestillingssliste hvor de kan redigere antall og legge til kommentarer før de betaler og sender inn bestillingen til deg. Okam sørger for å varsle kunden når du har bekreftet bestillingen og når den er klar for henting eller på vei til hjemlevering. Du velger selv om du vil tilby hjemlevering til dine kunder.
+            Ta noen bilder av varene du selger, last de opp i din Okam butikk og kunder kan straks legge inn sine bestillinger. Okam Butikk registrerer hvilke varer kundene trykker på og lager en bestillingssliste hvor de kan redigere antall og legge til kommentarer før de betaler og sender inn bestillingen til deg. Okam sørger for å varsle kunden når du har bekreftet bestillingen og når den er klar for henting eller på vei til hjemlevering. Du velger selv om du vil tilby hjemlevering til dine kunder.
           </p>
           <div class="media-items media-items--counter">
             <article class="media-item">

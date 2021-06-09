@@ -19,6 +19,8 @@ module.exports = {
     'comma-dangle': ['warn'],
     'no-trailing-spaces': 'warn',
     'padded-blocks': 'warn',
-    'no-irregular-whitespace': 'warn'
+    'no-irregular-whitespace': 'warn',
+    'no-tabs': 'warn',
+    'no-mixed-spaces-and-tabs': 'warn'
   }
 }

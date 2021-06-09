@@ -79,8 +79,14 @@ export default {
     // https://go.nuxtjs.dev/content
     '@nuxt/content',
     // i18n plugin
-    'nuxt-i18n'
+    'nuxt-i18n',
+    // GTM
+    '@nuxtjs/gtm'
   ],
+
+  gtm: {
+    id: 'GTM-WWZ4P62'
+  },
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {},

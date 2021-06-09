@@ -1,6 +1,8 @@
-# okam-consumer
+# Okam nettbutikk
 
-## Build Setup
+## Dette er Okam
+
+### Build Setup
 
 ```bash
 # install dependencies
