@@ -21,6 +21,7 @@ module.exports = {
     'padded-blocks': 'warn',
     'no-irregular-whitespace': 'warn',
     'no-tabs': 'warn',
-    'no-mixed-spaces-and-tabs': 'warn'
+    'no-mixed-spaces-and-tabs': 'warn',
+    'no-multiple-empty-lines': 'warn'
   }
 }

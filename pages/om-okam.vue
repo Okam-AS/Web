@@ -1,33 +1,51 @@
 <template>
   <div>
     <page-header />
-    <main class="page-content">
+ 	      <main class="page-content">
       <div class="article">
         <div class="wrapper">
-         <h1 class="heading-1 u-center">Verdens raskeste vei til egen nettbutikk</h1>
+						 	<div class="element text-content">
+            	<h1 class="heading-1 u-center">Handle i butikker og utsalg nær deg med enkle bildeklikk.</h1>
 	  								<!-- article -->
-			   <article id="post-20" class="post-20 page type-page status-publish hentry">
+			<article id="post-17" class="post-17 page type-page status-publish hentry">
 
-          <div class="wp-block-group alignwide"><div class="wp-block-group__inner-container">
-            <p class="has-text-align-left">Det har aldri vært enklere å starte egen nettbutikk. Ta et bilde av varene du selger, last det opp i din Okam butikk og kunder kan straks legge inn sine bestillinger. Okam Butikk registrerer hvilke varer kundene trykker på i bildet og lager en bestillingssliste hvor kundene kan redigere antall og legge til en kommentar før de sender inn bestillingen til deg. </p>
+				
+<p>Okam&nbsp;gjør det enkelt å dra på&nbsp;virtuell shopping! Kjøp varer fra butikker eller private utsalg gjennom enkle trykk på butikkbilder. Finn butikk, trykk på varene du vil ha i bildene, justér antall og legg til eventuelle kommentarer og send inn bestillingen. </p>
 
-            <p>Okam sørger for å varsle kunden når du har bekreftet bestillingen og når den er klar for henting eller på vei til hjemlevering. Du velger selv om du vil tilby hjemlevering til dine kunder.</p>
 
-            <p>Betalingen gjøres ved bestilling.</p>
+
+<p>Du betaler ved bestilling. Du får beskjed når bestillingen er klar for henting, eller når varene er på vei dersom du har valgt hjemlevering.</p>
+
+
+
+<p>Du trenger ikke å legge inn påloggingsinformasjon, betalingsdetaljer eller andre personlige data. Et telefonnummer er nok. Enklere blir det ikke. Historikken over dine bestillinger ligger lagret i appen inntil du velger å slette den selv. </p>
+
+
+
+<p>Er du butikkeier eller har noe du skulle ha solgt selv, kan du også laste ned Okam Butikk og lage din egen nettbutikk. Det er superenkelt. Fra du trykker på nedlasting til butikken er klar til å ta i mot bestillinger går det kun minutter.</p>
+
+
+
+<p>Bruken av Okam er helt gratis. For butikker tar Okam en liten transaksjonskostnad per bestilling. Det finnes ingen skjulte kostander.</p>
+
+
+
+<p style="font-weight:bold;">Trykk for å laste ned</p>
+<div class="big-teaser__links">
+              <a class="ga-ios-download" href="https://apps.apple.com/no/app/okam/id1514296965"><img alt="AppStore" height="40" src="~assets/UI/appstore-btn.png"></a>
+              <a class="ga-android-download" href="https://play.google.com/store/apps/details?id=no.okam.consumer"><img alt="Google Play" height="40" src="~assets/UI/googleplay-btn.png"></a>
             </div>
-          </div>
 
-          <p>Okam Butikk passer til alle typer butikker, store og små. Trenger du en ad hoc butikk eller å sende kundene dine utvalg og kampanjer så er Okam Butikk det perfekte valget. Enklere blir det ikke!</p>
+				<br class="clear">
 
-            <p style="font-weight:bold;">Trykk for å laste ned</p>
-            <div class="big-teaser__links">
-              <a href="https://apps.apple.com/no/app/okam-butikk/id1514667230"><img alt="AppStore" height="40" src="~/assets/UI/appstore-btn.png"></a>
-              <a href="https://play.google.com/store/apps/details?id=no.okam.store"><img alt="Google Play" height="40" src="~/assets/UI/googleplay-btn.png"></a>
-            </div>
-            <br class="clear">
-			    </article>
+			</article>
+			<!-- /article -->
+
+		
+		          </div>
         </div>
       </div>
+     
     </main>
     <page-footer />
   </div>

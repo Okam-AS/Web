@@ -31,10 +31,7 @@
             <a class="main-menu__link" href="/om-okam/">For forbrukere</a>
           </li>
           <li class="main-menu__item">
-            <a class="main-menu__link" href="/verdens-raskeste-vei-til-egen-nettbutikk/">For butikker</a>
-          </li>
-          <li class="main-menu__item">
-            <a class="main-menu__link" href="/kontakt/">Kontakt oss</a>
+            <a class="main-menu__link" href="/rask-vei-til-egen-nettbutikk/">For butikker</a>
           </li>
         </ul>
       </nav>

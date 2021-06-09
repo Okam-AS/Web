@@ -14,13 +14,10 @@
               <a href="/om-okam">Om Okam</a>
             </li>
             <li class="link-list__item">
-              <a href="/verdens-raskeste-vei-til-egen-nettbutikk">Om Okam Butikk</a>
+              <a href="/rask-vei-til-egen-nettbutikk">Om Okam Butikk</a>
             </li>
             <li class="link-list__item">
               <a href="/personvern">Personvern</a>
-            </li>
-            <li class="link-list__item">
-              <a href="/kontakt">Kontakt</a>
             </li>
           </ul>
         </div>
