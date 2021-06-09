@@ -28,9 +28,10 @@
       padding: $space;
       cursor: pointer;
       outline: none;
+      list-style: none;
       
       &::-webkit-details-marker {
-        display:none;
+        display: none !important;
       }
 
       .icon {
