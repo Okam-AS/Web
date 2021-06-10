@@ -109,9 +109,7 @@ export default {
   },
   methods: {
     async submitFeedback () {
-      window.console.log('Test')
       if (this.submitEnabled) {
-        window.console.log('submitEnabled')
         this.messageSent = true
         const data = {
           feedback: this.userEmail + ' ' + this.message,
