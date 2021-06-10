@@ -1,8 +1,5 @@
 <template>
-  <header
-    v-if="show"
-    class="page-header"
-  >
+  <header v-if="show" class="page-header">
     <div class="page-header__wrapper">
       <div class="page-header__logo-wrapper">
         <a class="page-header__logo-link" href="/">
@@ -23,7 +20,7 @@
         id="main-menu"
         :class="{
           'main-menu': true,
-          'is-active': isActive
+          'is-active': isActive,
         }"
       >
         <ul class="main-menu__list">
@@ -31,7 +28,13 @@
             <a class="main-menu__link" href="/om-okam/">For forbrukere</a>
           </li>
           <li class="main-menu__item">
-            <a class="main-menu__link" href="/rask-vei-til-egen-nettbutikk/">For butikker</a>
+            <a
+              class="main-menu__link"
+              href="/rask-vei-til-egen-nettbutikk/"
+            >For butikker</a>
+          </li>
+          <li class="main-menu__item">
+            <a class="main-menu__link" href="/kontakt/">Kontakt oss</a>
           </li>
         </ul>
       </nav>

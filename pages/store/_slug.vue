@@ -5,7 +5,6 @@
       <div class="article">
         <div class="wrapper">
           <div class="element text-content u-center">
-
             <p v-if="res.logoUrl">
               <img :src="res.logoUrl" style="width: 100px; height: auto; margin: 0 auto 20px;">
             </p>
@@ -40,7 +39,7 @@
 
 <script>
 export default {
-  async asyncData({ params, redirect }) {
+  async asyncData ({ params, redirect }) {
     const slug = parseInt(params.slug, 10) || false // When calling /abc the slug will be "abc"
     if (slug) {
       const res = await fetch(
