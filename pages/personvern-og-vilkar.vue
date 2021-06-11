@@ -13,13 +13,11 @@
               id="post-41"
               class="post-41 page type-page status-publish hentry"
             >
-              <p />
-
               <p>
-                <a href="https://personvern.okam.no/?nolayout">Personvern</a>
+                <a href="/personvern/?nolayout">Personvern</a>
               </p>
 
-              <p><a href="https://vilkar.okam.no/?nolayout">Vilkår</a></p>
+              <p><a href="/vilkar/?nolayout">Vilkår</a></p>
 
               <br class="clear">
             </article>
