@@ -45,15 +45,15 @@
 <script>
 export default {
   data: () => ({
-    show: true,
+    show: false,
     isActive: false
   }),
   mounted () {
     const search = new URLSearchParams(window.location.search) || {}
     const hideLayout = search.has('nolayout') || false
 
-    if (hideLayout) {
-      this.show = false
+    if (!hideLayout) {
+      this.show = true
     }
   },
   methods: {
