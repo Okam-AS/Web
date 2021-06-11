@@ -50,8 +50,9 @@ export default {
   }),
   mounted () {
     const search = new URLSearchParams(window.location.search) || {}
-    const layout = search.get('nolayout') || false
-    if (layout) {
+    const hideLayout = search.has('nolayout') || false
+
+    if (hideLayout) {
       this.show = false
     }
   },
