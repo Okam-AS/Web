@@ -10,21 +10,21 @@
             </h1>
             <!-- article -->
             <article id="post-17" class="post-17 page type-page status-publish hentry">
-              <p>Okam&nbsp;gjør det enkelt å dra på&nbsp;virtuell shopping! Kjøp varer fra butikker eller private utsalg. Finn butikk, trykk på varene du vil ha, gjør eventuelle justeringer. Legg til eventuelle kommentarer og send inn bestillingen. </p>
+              <p>Okam&nbsp;gjør det enkelt å dra på&nbsp;virtuell shopping! Vårt mål er å gjøre det enklere for deg å handle i butikkene i ditt nærområde. Finn butikk, trykk på varene du vil ha, legg til eventuelle kommentarer og send inn bestillingen. </p>
 
               <p>Du betaler ved bestilling. Du får beskjed når bestillingen er klar for henting, eller når varene er på vei dersom du har valgt hjemlevering.</p>
 
-              <p>Du trenger ikke å legge inn påloggingsinformasjon, betalingsdetaljer eller andre personlige data. Et telefonnummer er nok. Enklere blir det ikke. Historikken over dine bestillinger ligger lagret i appen inntil du velger å slette den selv. </p>
+              <p>Et telefonnummer er nok for identifikasjon, og ingen andre persondata blir lagret. Enklere blir det ikke. Historikken over dine bestillinger ligger lagret i appen inntil du velger å slette den selv. </p>
 
               <p>Bruken av Okam er helt gratis. For butikker tar Okam en liten transaksjonskostnad per bestilling. Det finnes ingen skjulte kostander.</p>
-              
+
               <section class="contrast-block" style="margin-bottom: 100px;">
                 <div class="wrapper">
                   <h2 class="heading-1 u-center">
                     Slik fungerer det
                   </h2>
                   <p>
-                    Okam er laget sånn at alt skal være så enkelt og raskt som overhode mulig. 
+                    Okam er laget sånn at alt skal være så enkelt og raskt som overhode mulig.
                   </p>
                   <div class="media-items media-items--counter">
                     <article class="media-item">
@@ -46,7 +46,7 @@
                           Velg varer
                         </h3>
                         <p class="media-item__ingress">
-                          Du legger de deretter i en handlekurv, som i en fysisk butikk. 
+                          Du legger de deretter i en handlekurv, som i en fysisk butikk.
                         </p>
                       </div>
                       <div class="media-item__image element">

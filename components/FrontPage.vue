@@ -12,7 +12,7 @@
               Enkel og rask handel fra ditt nærområde
             </h1>
             <p>
-              Okam gjør det enkelt å handle fra bedriftene du bryr deg om. Via et enkelt brukergrensesnitt, får du handlet på en trygg og rask måte. 
+              Okam gjør det enkelt å handle fra bedriftene du bryr deg om. Via et enkelt brukergrensesnitt får du handlet på en trygg og rask måte.
             </p>
             <div class="big-teaser__links">
               <a class="ga-ios-download" href="https://apps.apple.com/no/developer/okam/id1514296964"><img alt="AppStore" height="40" src="~/assets/UI/appstore-btn.png"></a>
@@ -21,14 +21,14 @@
           </div>
         </div>
       </div>
-      
+
       <section class="contrast-block">
         <div class="wrapper">
           <h2 class="heading-1 u-center">
             Slik fungerer det
           </h2>
           <p>
-            Okam er laget sånn at alt skal være så enkelt og raskt som overhode mulig. 
+            Okam er laget sånn at alt skal være så enkelt og raskt som overhode mulig.
           </p>
           <div class="media-items media-items--counter">
             <article class="media-item">
@@ -50,7 +50,7 @@
                   Velg varer
                 </h3>
                 <p class="media-item__ingress">
-                  Du legger de deretter i en handlekurv, som i en fysisk butikk. 
+                  Du legger de deretter i en handlekurv, som i en fysisk butikk.
                 </p>
               </div>
               <div class="media-item__image element">
@@ -77,7 +77,7 @@
         <div class="wrapper">
           <div class="big-teaser__content element">
             <h1 class="heading-1">
-              Okam gjør netthandel enkelt for alle
+              Vårt mål er å forenkle lokal handel
             </h1>
             <p />
             <div class="big-teaser__links" />
@@ -93,7 +93,7 @@
             Ønsker du å vite mer?
           </h2>
           <p>
-            Noen eier en bedrift mens andre bruker Okam for å handle. Hva beskriver deg best? 
+            Noen eier en bedrift mens andre bruker Okam for å handle. Hva beskriver deg best?
           </p>
 
           <div class="faq-list" style="margin-bottom: 50px;">
