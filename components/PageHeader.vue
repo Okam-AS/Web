@@ -25,22 +25,15 @@
       >
         <ul class="main-menu__list">
           <li class="main-menu__item">
-            <a class="main-menu__link" href="/om-okam/">
-              For kunder
-            </a>
+            <a class="main-menu__link" href="/om-okam/"> For kunder </a>
           </li>
           <li class="main-menu__item">
-            <a
-              class="main-menu__link"
-              href="/rask-vei-til-egen-nettbutikk/"
-            >
+            <a class="main-menu__link" href="/om-okam-admin/">
               For butikkeiere
             </a>
           </li>
           <li class="main-menu__item">
-            <a class="main-menu__link" href="/kontakt/">
-              Kontakt oss
-            </a>
+            <a class="main-menu__link" href="/kontakt/"> Kontakt oss </a>
           </li>
         </ul>
       </nav>

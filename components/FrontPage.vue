@@ -12,11 +12,27 @@
               Enkel og rask handel fra ditt nærområde
             </h1>
             <p>
-              Okam gjør det enkelt å handle fra bedriftene du bryr deg om. Via et enkelt brukergrensesnitt får du handlet på en trygg og rask måte.
+              Okam gjør det enkelt å handle fra bedriftene du bryr deg om. Via
+              et enkelt brukergrensesnitt får du handlet på en trygg og rask
+              måte.
             </p>
             <div class="big-teaser__links">
-              <a class="ga-ios-download" href="https://apps.apple.com/no/developer/okam/id1514296964"><img alt="AppStore" height="40" src="~/assets/UI/appstore-btn.png"></a>
-              <a class="ga-android-download" href="https://play.google.com/store/apps/developer?id=Okam"><img alt="Google Play" height="40" src="~/assets/UI/googleplay-btn.png"></a>
+              <a
+                class="ga-ios-download"
+                href="https://apps.apple.com/no/developer/okam/id1514296964"
+              ><img
+                alt="AppStore"
+                height="40"
+                src="~/assets/UI/appstore-btn.png"
+              ></a>
+              <a
+                class="ga-android-download"
+                href="https://play.google.com/store/apps/developer?id=Okam"
+              ><img
+                alt="Google Play"
+                height="40"
+                src="~/assets/UI/googleplay-btn.png"
+              ></a>
             </div>
           </div>
         </div>
@@ -28,7 +44,8 @@
             Slik fungerer det
           </h2>
           <p>
-            Okam er laget sånn at alt skal være så enkelt og raskt som overhode mulig.
+            Okam er laget sånn at alt skal være så enkelt og raskt som overhode
+            mulig.
           </p>
           <div class="media-items media-items--counter">
             <article class="media-item">
@@ -63,7 +80,8 @@
                   Se over og betal
                 </h3>
                 <p class="media-item__ingress">
-                  Gå til handlekurven, se over handlelisten, og betal. Så enkelt.
+                  Gå til handlekurven, se over handlelisten, og betal. Så
+                  enkelt.
                 </p>
               </div>
               <div class="media-item__image element">
@@ -77,7 +95,7 @@
         <div class="wrapper">
           <div class="big-teaser__content element">
             <h1 class="heading-1">
-              Vårt mål er å forenkle lokal handel
+              Vi ønsker å gjøre lokal handel enklere for alle
             </h1>
             <p />
             <div class="big-teaser__links" />
@@ -93,30 +111,55 @@
             Ønsker du å vite mer?
           </h2>
           <p>
-            Noen eier en bedrift mens andre bruker Okam for å handle. Hva beskriver deg best?
+            Noen eier en bedrift mens andre bruker Okam for å handle. Hva
+            beskriver deg best?
           </p>
 
-          <div class="faq-list" style="margin-bottom: 50px;">
+          <div class="faq-list" style="margin-bottom: 50px">
             <details class="faq-list__item">
               <summary class="faq-list__question-wrapper">
                 <div class="faq-list__question ga-is-it-more-expensive">
                   Jeg bruker Okam for å handle varer
-                  <svg class="icon" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M23.245 4l-11.245 14.374-11.219-14.374-.781.619 12 15.381 12-15.391-.755-.609z" /></svg>
+                  <svg
+                    class="icon"
+                    viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                  >
+                    <path
+                      d="M23.245 4l-11.245 14.374-11.219-14.374-.781.619 12 15.381 12-15.391-.755-.609z"
+                    />
+                  </svg>
                 </div>
               </summary>
               <div class="faq-list__answer">
-                Supert! Vi håper du liker Okam. <a href="/om-okam/">Klikk her for å lese hva andre som bruker Okam lurer på</a>.
+                Supert! Vi håper du liker Okam.
+                <a
+                  href="/om-okam/"
+                >Klikk her for å lese hva andre som bruker Okam lurer på</a>.
               </div>
             </details>
             <details class="faq-list__item">
               <summary class="faq-list__question-wrapper">
                 <div class="faq-list__question ga-is-it-safe">
                   Jeg eier en bedrift
-                  <svg class="icon" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M23.245 4l-11.245 14.374-11.219-14.374-.781.619 12 15.381 12-15.391-.755-.609z" /></svg>
+                  <svg
+                    class="icon"
+                    viewbox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                  >
+                    <path
+                      d="M23.245 4l-11.245 14.374-11.219-14.374-.781.619 12 15.381 12-15.391-.755-.609z"
+                    />
+                  </svg>
                 </div>
               </summary>
               <div class="faq-list__answer">
-                Supert! Da har du trolig interesse av å <a href="/rask-vei-til-egen-nettbutikk/">lese mer her</a>.
+                Supert! Da har du trolig interesse av å
+                <a href="/om-okam-admin/">lese mer her</a>.
               </div>
             </details>
           </div>

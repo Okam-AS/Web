@@ -8,6 +8,11 @@
             src="~/assets/UI/okam_logo_dark.svg"
             alt=""
           >
+          <div>
+            <span
+              style="font-size: 12px; margin-left: 6px"
+            >Laget med ♥ i Norge</span>
+          </div>
         </div>
         <div class="page-footer__col">
           <ul class="link-list">
@@ -15,7 +20,7 @@
               <a href="/om-okam">Om Okam</a>
             </li>
             <li class="link-list__item">
-              <a href="/rask-vei-til-egen-nettbutikk">Om Okam Butikk</a>
+              <a href="/om-okam-admin">Om Okam Admin</a>
             </li>
             <li class="link-list__item">
               <a href="/personvern">Personvern</a>
