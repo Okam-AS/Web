@@ -43,101 +43,33 @@
                 <h2 class="heading-1 u-center">
                   Spørsmål og svar
                 </h2>
-                <details class="faq-list__item">
-                  <summary class="faq-list__question-wrapper">
-                    <div class="faq-list__question ga-is-it-safe">
-                      Er det trygt å handle med Okam?
-                      <svg
-                        class="icon"
-                        viewbox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                      >
-                        <path
-                          d="M23.245 4l-11.245 14.374-11.219-14.374-.781.619 12 15.381 12-15.391-.755-.609z"
-                        />
-                      </svg>
-                    </div>
-                  </summary>
-                  <div class="faq-list__answer">
+                <FaqItem q="Er det trygt å handle med Okam?">
+                  <span>
                     Ja. Kundene sender sine bestillinger direkte til butikken.
                     Okam lagrer kun kundens telefonnummer og bestillingen og
                     formidler beskjed når bestillingen er klar for å hentes.
                     Betalingen gjøres ved bestilling i appen. Les mer om hvordan
                     vi behandler personopplysninger i
-                    <a href="/personvern">personvernerklæringen</a>.
-                  </div>
-                </details>
-                <details class="faq-list__item">
-                  <summary class="faq-list__question-wrapper">
-                    <div class="faq-list__question ga-is-it-more-expensive">
-                      Blir det dyrere å handle via Okam?
-                      <svg
-                        class="icon"
-                        viewbox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                      >
-                        <path
-                          d="M23.245 4l-11.245 14.374-11.219-14.374-.781.619 12 15.381 12-15.391-.755-.609z"
-                        />
-                      </svg>
-                    </div>
-                  </summary>
-                  <div class="faq-list__answer">
-                    Nei. Bruken av Okam til å kjøpe varer er helt gratis. Prisen
-                    kundene betaler er den butikken setter selv.
-                  </div>
-                </details>
-                <details class="faq-list__item">
-                  <summary class="faq-list__question-wrapper">
-                    <div class="faq-list__question ga-may-i-use-okam-private">
-                      Kan jeg bruke Okam som privatperson, for eksempel til et
-                      garasjesalg?
-                      <svg
-                        class="icon"
-                        viewbox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                      >
-                        <path
-                          d="M23.245 4l-11.245 14.374-11.219-14.374-.781.619 12 15.381 12-15.391-.755-.609z"
-                        />
-                      </svg>
-                    </div>
-                  </summary>
-                  <div class="faq-list__answer">
-                    Nei. For å benytte deg av Okam må du ha et
-                    organisasjonsnummer.
-                  </div>
-                </details>
-                <details class="faq-list__item">
-                  <summary class="faq-list__question-wrapper">
-                    <div class="faq-list__question ga-how-does-okam-earn-money">
-                      Hvordan tjener Okam penger?
-                      <svg
-                        class="icon"
-                        viewbox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                      >
-                        <path
-                          d="M23.245 4l-11.245 14.374-11.219-14.374-.781.619 12 15.381 12-15.391-.755-.609z"
-                        />
-                      </svg>
-                    </div>
-                  </summary>
-                  <div class="faq-list__answer">
-                    All funksjonalitet i Okam er gratis å bruke og Okam selger
+                    <a href="/personvern">personvernerklæringen</a>.</span>
+                </FaqItem>
+                <FaqItem
+                  q="Blir det dyrere å handle via Okam?"
+                  a="Nei. Bruken av Okam til å kjøpe varer er helt gratis. Prisen
+                    kundene betaler er den butikken setter selv."
+                />
+                <FaqItem
+                  q="Kan jeg bruke Okam som privatperson, for eksempel til et
+                      garasjesalg?"
+                  a="Nei. For å benytte deg av Okam må du ha et
+                    organisasjonsnummer."
+                />
+                <FaqItem
+                  q="Hvordan tjener Okam penger?"
+                  a="All funksjonalitet i Okam er gratis å bruke og Okam selger
                     ikke informasjon om bruk eller brukere til tredjepart. Okam
                     tar kun en liten transaksjonskostnad av butikken. Det finnes
-                    ingen skjulte kostander.
-                  </div>
-                </details>
+                    ingen skjulte kostander."
+                />
               </div>
 
               <p style="font-weight: bold">
@@ -172,3 +104,9 @@
     <page-footer />
   </div>
 </template>
+<script>
+import FaqItem from '../components/FaqItem.vue'
+export default {
+  components: { FaqItem }
+}
+</script>

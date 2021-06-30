@@ -74,7 +74,7 @@
               />
               <p style="margin-top: 2em">
                 Rabattkoder, statistikk, lagerstyring, servitørfunksjon og mye
-                mer... Skru på funksjonene butikk din trenger, helt gratis.
+                mer... Skru på funksjonene butikken din trenger, helt gratis.
               </p>
 
               <p style="font-weight: bold">
@@ -102,105 +102,40 @@
               <h2 class="heading-1 u-center">
                 Spørsmål og svar
               </h2>
-              <details class="faq-list__item">
-                <summary class="faq-list__question-wrapper">
-                  <div class="faq-list__question ga-how-much-does-it-cost">
-                    Hvordan legger jeg inn mine produkter?
-                    <svg
-                      class="icon"
-                      viewbox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                    >
-                      <path
-                        d="M23.245 4l-11.245 14.374-11.219-14.374-.781.619 12 15.381 12-15.391-.755-.609z"
-                      />
-                    </svg>
-                  </div>
-                </summary>
-                <div class="faq-list__answer">
-                  Okam Admin har et enkelt brukergrensesnitt for å legge til,
+              <FaqItem
+                q="Hvordan legger jeg inn mine produkter?"
+                a="Okam Admin har et enkelt brukergrensesnitt for å legge til,
                   endre eller slette produkter. Dersom du har en større
-                  vareliste kan vi hjelp med import av produktlista.
-                </div>
-              </details>
-              <details class="faq-list__item">
-                <summary class="faq-list__question-wrapper">
-                  <div
-                    class="faq-list__question ga-how-do-i-get-users-to-my-store"
-                  >
-                    Hvordan får jeg kunder til butikksiden min?
-                    <svg
-                      class="icon"
-                      viewbox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                    >
-                      <path
-                        d="M23.245 4l-11.245 14.374-11.219-14.374-.781.619 12 15.381 12-15.391-.755-.609z"
-                      />
-                    </svg>
-                  </div>
-                </summary>
-                <div class="faq-list__answer">
-                  Alle Okam butikker får en direkte lenke til sin butikkside i
+                  vareliste kan vi hjelp med import av produktlista."
+              />
+              <FaqItem
+                q="Hvordan får jeg kunder til butikksiden min?"
+                a="Alle Okam butikker får en direkte lenke til sin butikkside i
                   Okam. Den kan for eksempel deles via sosiale medier, e-post
                   eller SMS. Butikken får også en unik QR-kode som kan printes
-                  ut og plasseres i butikken.
-                </div>
-              </details>
-              <details class="faq-list__item">
-                <summary class="faq-list__question-wrapper">
-                  <div
-                    class="faq-list__question ga-how-do-i-get-users-to-my-store"
-                  >
-                    Hva koster det?
-                    <svg
-                      class="icon"
-                      viewbox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                    >
-                      <path
-                        d="M23.245 4l-11.245 14.374-11.219-14.374-.781.619 12 15.381 12-15.391-.755-.609z"
-                      />
-                    </svg>
-                  </div>
-                </summary>
-                <div class="faq-list__answer">
-                  Skru på funksjonene din butikk trenger, helt gratis. Vi tar
+                  ut og plasseres i butikken."
+              />
+              <FaqItem
+                q="Hva koster det?"
+                a="Skru på funksjonene butikken din trenger, helt gratis. Vi tar
                   bare 3% + 2 kr per transaksjon som går gjennom platformen.
                   Ingen bindingstid, månedskostnad, oppstartsgebyr eller andre
-                  skjulte kostnader.
-                </div>
-              </details>
-              <details class="faq-list__item">
-                <summary class="faq-list__question-wrapper">
-                  <div class="faq-list__question ga-how-much-does-it-cost">
-                    Kan jeg få hjelp?
-                    <svg
-                      class="icon"
-                      viewbox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                    >
-                      <path
-                        d="M23.245 4l-11.245 14.374-11.219-14.374-.781.619 12 15.381 12-15.391-.755-.609z"
-                      />
-                    </svg>
-                  </div>
-                </summary>
-                <div class="faq-list__answer">
+                  skjulte kostnader."
+              />
+              <FaqItem
+                q="Kan jeg bruke Okam som privatperson, for eksempel til et
+                      garasjesalg?"
+                a="Nei. For å benytte deg av Okam må du ha et
+                    organisasjonsnummer."
+              />
+              <FaqItem q="Kan jeg få hjelp?">
+                <span>
                   Okam Admin vil veilede deg gjennom oppsettet av butikken din,
                   men vi er her for deg hvis du trenger hjelp. Ta kontakt via
                   <a href="/kontakt">kontaktskjema</a> så svarer vi innen kort
                   tid.
-                </div>
-              </details>
+                </span>
+              </FaqItem>
             </div>
 
             <br class="clear">
@@ -211,8 +146,10 @@
     <page-footer />
   </div>
 </template>
+<script>
 import FeatureInfo from '../components/FeatureInfo.vue'
+import FaqItem from '../components/FaqItem.vue'
 export default {
-  components: { FeatureInfo }
+  components: { FeatureInfo, FaqItem }
 }
 </script>
