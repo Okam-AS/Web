@@ -141,8 +141,7 @@
               </div>
 
               <p style="font-weight: bold">
-                Last ned Okam for å handle fra butikker og serveringssteder du
-                bryr deg om
+                Last ned Okam for å handle fra butikker i ditt nærområde
               </p>
               <div class="big-teaser__links">
                 <a
