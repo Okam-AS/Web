@@ -1,3 +1,5 @@
+import redirectSSL from 'redirect-ssl'
+
 export default {
   debug: true,
   // Global page headers (https://go.nuxtjs.dev/config-head)
@@ -17,6 +19,12 @@ export default {
   server: {
     // port: process.env.PORT || 4000 // default: 3000
   },
+
+  serverMiddleware: [
+    redirectSSL.create({
+      enabled: process.env.NODE_ENV === 'production'
+    })
+  ],
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [
