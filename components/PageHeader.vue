@@ -1,33 +1,5 @@
 <template>
   <header v-if="show" class="page-header">
-    <!-- Messenger Chattillegg Code -->
-    <div id="fb-root" />
-
-    <!-- Your Chattillegg code -->
-    <div id="fb-customer-chat" class="fb-customerchat" />
-
-    <script>
-      var chatbox = document.getElementById("fb-customer-chat");
-      chatbox.setAttribute("page_id", "106381431516230");
-      chatbox.setAttribute("attribution", "biz_inbox");
-      window.fbAsyncInit = function () {
-      FB.init({
-      xfbml: true,
-      version: "v11.0",
-      });
-      };
-
-      (function (d, s, id) {
-      var js,
-      fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s);
-      js.id = id;
-      js.src = "https://connect.facebook.net/nb_NO/sdk/xfbml.customerchat.js";
-      fjs.parentNode.insertBefore(js, fjs);
-      })(document, "script", "facebook-jssdk");
-    </script>
-
     <div class="page-header__wrapper">
       <div class="page-header__logo-wrapper">
         <a class="page-header__logo-link" href="/">
