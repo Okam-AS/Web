@@ -40,7 +40,7 @@
 
             <div style="margin-top: 50px">
               <h2 class="heading-1 u-center">
-                Okam Admin gir bedriften din
+                Okam gir bedriften din
               </h2>
               <feature-info
                 name="Mobil bestillingsplattform"
@@ -74,11 +74,11 @@
               />
               <p style="margin-top: 2em">
                 Rabattkoder, statistikk, lagerstyring, servitørfunksjon og mye
-                mer... Skru på funksjonene din butikk trenger, helt gratis.
+                mer... Skru på funksjonene butikk din trenger, helt gratis.
               </p>
 
               <p style="font-weight: bold">
-                Last ned Okam Admin og sett opp din butikk
+                Last ned Okam Admin og sett opp din butikk gratis
               </p>
               <div class="big-teaser__links">
                 <a
@@ -98,7 +98,7 @@
               </div>
             </div>
 
-            <div class="faq-list" style="margin-bottom: 50px; margin-top: 50px">
+            <div class="faq-list" style="margin-top: 100px">
               <h2 class="heading-1 u-center">
                 Spørsmål og svar
               </h2>
@@ -122,7 +122,7 @@
                 <div class="faq-list__answer">
                   Okam Admin har et enkelt brukergrensesnitt for å legge til,
                   endre eller slette produkter. Dersom du har en større
-                  vareliste kan vi hjelp med import av produkter.
+                  vareliste kan vi hjelp med import av produktlista.
                 </div>
               </details>
               <details class="faq-list__item">
