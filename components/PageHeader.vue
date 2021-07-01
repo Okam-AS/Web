@@ -55,6 +55,10 @@ export default {
 
     if (!hideLayout) {
       this.show = true
+    } else {
+      window.Tawk_API.onLoad = () => {
+        window.Tawk_API.hideWidget()
+      }
     }
   },
   methods: {
