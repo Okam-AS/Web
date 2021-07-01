@@ -39,7 +39,16 @@
                 kostander.
               </p>
 
-              <div class="faq-list" style="margin-bottom: 50px">
+              <p>
+                <strong>Har du tips om et sted du skulle likt å handle med
+                  Okam?</strong>
+                <a href="/kontakt/">Send oss gjerne en melding her</a>.
+              </p>
+
+              <div
+                class="faq-list"
+                style="margin-bottom: 50px; margin-top: 50px"
+              >
                 <h2 class="heading-1 u-center">
                   Spørsmål og svar
                 </h2>
@@ -72,9 +81,7 @@
                 />
               </div>
 
-              <p style="font-weight: bold">
-                Last ned Okam for å handle fra butikker i ditt nærområde
-              </p>
+              <p>Last ned Okam for å handle fra butikker i ditt nærområde</p>
               <div class="big-teaser__links">
                 <a
                   class="ga-ios-download"
@@ -94,7 +101,10 @@
                 ></a>
               </div>
 
-              <br class="clear">
+              <p style="margin-top: 100px">
+                <strong>Driver du butikk?</strong> Da har du trolig interesse av
+                å <a href="/om-okam-admin/">lese mer her</a>.
+              </p>
             </article>
             <!-- /article -->
           </div>

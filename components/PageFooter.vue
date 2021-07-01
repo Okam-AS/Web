@@ -17,10 +17,10 @@
         <div class="page-footer__col">
           <ul class="link-list">
             <li class="link-list__item">
-              <a href="/om-okam">Om Okam</a>
+              <a href="/om-okam">For kunder</a>
             </li>
             <li class="link-list__item">
-              <a href="/om-okam-admin">Om Okam Admin</a>
+              <a href="/om-okam-admin">For butikkeiere</a>
             </li>
             <li class="link-list__item">
               <a href="/personvern">Personvern</a>

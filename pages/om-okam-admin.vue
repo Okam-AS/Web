@@ -15,11 +15,12 @@
             <div class="wp-block-group alignwide">
               <div class="wp-block-group__inner-container">
                 <p>
-                  Sett opp din butikk i Okam Admin for å gi dine kunder en bedre
-                  kjøpsopplevelse. Ta noen bilder av varene du selger, last de
-                  opp i din Okam Admin og kunder kan straks legge inn sine
-                  bestillinger. I Okam Admin har du full oversikt over
-                  bestillingene som kommer inn, og kan enkelt behandle disse.
+                  Sett opp din butikk i Okam Admin i løpet av få minutter for å
+                  gi dine kunder en bedre kjøpsopplevelse. Ta noen bilder av
+                  varene du selger, last de opp i din Okam Admin og kunder kan
+                  straks legge inn sine bestillinger. I Okam Admin har du full
+                  oversikt over bestillingene som kommer inn, og kan enkelt
+                  behandle disse.
                 </p>
                 <p>
                   Okam passer til alle typer butikker, store og små. Skru på
@@ -54,7 +55,7 @@
               />
               <feature-info
                 name="Hjemlevering"
-                description="Legg inn dine priser for hjemlevering etter kjøreavstand"
+                description="Legg inn dine priser for hjemlevering etter kjøreavstand dersom du tilbyr dette"
                 :icon-url="require('~/assets/UI/icon_car.svg')"
               />
               <feature-info
