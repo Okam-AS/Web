@@ -81,7 +81,7 @@ export default {
     }
   },
   mounted () {
-    const storedUser = localStorage.getItem('user') || false
+    const storedUser = localStorage.getItem('user') || false
     this.userService = new UserService(this.$store)
     this.storeServive = new StoreService()
     this.productService = new ProductService()

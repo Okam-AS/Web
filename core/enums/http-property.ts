@@ -3,5 +3,7 @@ export enum HttpProperty {
     Method = 'method',
     ContentType = 'Content-Type',
     Content = 'content',
-    Authorization = 'Authorization'
+    Authorization = 'Authorization',
+    ClientAppVersion = 'ClientAppVersion',
+    ClientPlatform = 'ClientPlatform'
 }

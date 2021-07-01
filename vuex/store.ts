@@ -1,12 +1,11 @@
 import Vue from 'vue'
 import { Cart, Order, Store, Address } from '../core/models'
-import { CartService, StoreService, OrderService, ProductPositionService } from '../core/services'
+import { CartService, StoreService, OrderService } from '../core/services'
 import { MutationName, ActionName } from '../core/enums'
 import { IUser } from '../core/interfaces'
 
 const _cartService = new CartService()
 const _storeService = new StoreService()
-const _productPositionService = new ProductPositionService()
 const _orderService = new OrderService()
 
 export const state = () => ({
@@ -80,19 +79,6 @@ export const actions = {
       if (catchHandler) { catchHandler() }
     })
   },
-  [ActionName.GetStoreImageProductPositions] ({ commit }, { storeId, storeImageId, thenHandler, catchHandler }) {
-    _productPositionService.Get(storeImageId).then((pp) => {
-      if (pp && Array.isArray(pp)) {
-        commit(MutationName.SetStoreImageProductPositions, {
-          storeId,
-          productPositions: pp
-        })
-      }
-      if (thenHandler) { thenHandler(pp) }
-    }).catch(() => {
-      if (catchHandler) { catchHandler() }
-    })
-  },
   [ActionName.SetDeliveryAddress] ({ commit }, address: Address) {
     commit(MutationName.SetDeliveryAddress, address)
   },
@@ -142,11 +128,6 @@ export const mutations = {
   },
   [MutationName.SetStores] (state, stores: Array<Store>) {
     state.stores = stores
-  },
-  [MutationName.SetStoreImageProductPositions] (state, { storeId, productPositions }) {
-    const store = (state.stores || []).find(x => x.id === storeId)
-    if (!store) { return }
-    store.productPositions = productPositions
   },
   [MutationName.SetStore] (state, store: Store) {
     const storeIndex = state.stores.findIndex(x => x.id === store.id)

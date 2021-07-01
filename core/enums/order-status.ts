@@ -4,6 +4,7 @@ export enum OrderStatus {
     ReadyForPickup = 'ReadyForPickup',
     ReadyForDriver = 'ReadyForDriver',
     DriverPickedUp = 'DriverPickedUp',
+    Served = 'Served',
     Completed = 'Completed',
     Canceled = 'Canceled'
 }

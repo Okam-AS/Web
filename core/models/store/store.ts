@@ -1,22 +1,20 @@
-import { IUser } from '@/core/interfaces'
-import { Address, DeliveryMethod, OpeningHour, ProductPosition } from '@/core/models'
-import { StoreImage } from './store-image'
+import { Address, OpeningHour, StoreUserSetting, User, Category } from '@/core/models'
 
 export class Store {
     id: number;
     name: string;
     logoUrl: string;
     address: Address;
+    categories: Array<Category>;
     openingHours: Array<OpeningHour>;
-    isOpenNow: boolean;
-    productPositions: Array<ProductPosition>;
-    images: Array<StoreImage>;
-    admins: Array<IUser>;
-    editors: Array<IUser>;
-    homeDeliveryMethods: Array<DeliveryMethod>;
+    admins: Array<User>;
+    storeUserSettings: Array<StoreUserSetting>;
     approved: boolean;
-    selfCheckout: boolean;
     selfPickUp: boolean;
+    tableDeliveryEnabled: boolean;
+    homeDeliveryEnabled: boolean;
+    selfCheckout: boolean;
     registered: Date;
     bankAccountId: string;
+    minimumOrderPriceForHomeDelivery: number;
 }
