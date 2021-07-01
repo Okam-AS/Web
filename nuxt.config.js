@@ -8,7 +8,17 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Handle i butikker og utsalg nær deg med enkle bildeklikk.' }
+      { hid: 'description', name: 'description', content: 'Vi forenkler lokal handel' },
+      {
+        hid: 'og:title',
+        property: 'og:title',
+        content: 'Okam'
+      },
+      {
+        hid: 'og:description',
+        property: 'og:description',
+        content: 'Vi forenkler lokal handel'
+      }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },

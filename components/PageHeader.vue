@@ -42,6 +42,8 @@
 </template>
 
 <script>
+const ogImage = require('~/assets/UI/kom-i-gang.png')
+
 export default {
   data: () => ({
     show: false,
@@ -59,6 +61,27 @@ export default {
     toggle () {
       document.querySelector('body').classList.toggle('has-overlay')
       this.isActive = !this.isActive
+    }
+  },
+  head () {
+    return {
+      meta: [
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content: ogImage
+        },
+        {
+          hid: 'og:image:secure_url',
+          property: 'og:image:secure_url',
+          content: ogImage
+        },
+        {
+          hid: 'og:image:alt',
+          property: 'og:image:alt',
+          content: 'Vi forenkler lokal handel'
+        }
+      ]
     }
   }
 }
