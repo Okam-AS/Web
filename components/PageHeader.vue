@@ -55,7 +55,7 @@ export default {
 
     if (!hideLayout) {
       this.show = true
-    } else {
+    } else if (window && window.Tawk_API) {
       window.Tawk_API.onLoad = () => {
         window.Tawk_API.hideWidget()
       }
