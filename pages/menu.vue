@@ -10,6 +10,7 @@
               {{ row.heading }}
             </h3>
             <div v-else class="product">
+              <img :src="row.product.image.thumbnailUrl">
               <p class="price">
                 <template v-if="!row.product.soldOut">
                   {{ priceLabel(row.product.amount) }}
@@ -58,7 +59,7 @@ export default {
     priceLabel (totalPrice, hideFractionIfZero) {
       return (
         'kr ' + this.wholeAmount(totalPrice) + ((!hideFractionIfZero || parseInt(this.fractionAmount(totalPrice)) > 0)
-          ? ',' + this.fractionAmount(totalPrice) 
+          ? ',' + this.fractionAmount(totalPrice)
           : '')
       )
     },

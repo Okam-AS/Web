@@ -1,7 +1,7 @@
 <template>
   <details class="faq-list__item">
     <summary class="faq-list__question-wrapper">
-      <div class="faq-list__question ga-how-much-does-it-cost">
+      <div class="faq-list__question">
         {{ q }}
         <svg
           class="icon"

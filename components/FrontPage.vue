@@ -118,7 +118,7 @@
           <div class="faq-list" style="margin-bottom: 50px">
             <details class="faq-list__item">
               <summary class="faq-list__question-wrapper">
-                <div class="faq-list__question ga-is-it-more-expensive">
+                <div class="faq-list__question">
                   Jeg bruker Okam for å handle varer
                   <svg
                     class="icon"
@@ -142,7 +142,7 @@
             </details>
             <details class="faq-list__item">
               <summary class="faq-list__question-wrapper">
-                <div class="faq-list__question ga-is-it-safe">
+                <div class="faq-list__question">
                   Jeg eier en bedrift
                   <svg
                     class="icon"
