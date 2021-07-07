@@ -74,6 +74,7 @@ export default {
     init () {
       const search = new URLSearchParams(window.location.search) || {}
       const storeId = search.get('store') || false
+      const nolayout = search.has('nolayout') || false
 
       if (storeId) {
         this.storeId = storeId
@@ -82,6 +83,12 @@ export default {
         this.cartService = new CartService()
         this.getStore()
         this.getCategories()
+      }
+
+      if (nolayout && window && window.Tawk_API) {
+        window.Tawk_API.onLoad = () => {
+          window.Tawk_API.hideWidget()
+        }
       }
     },
     getStore () {
