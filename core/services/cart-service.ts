@@ -1,4 +1,4 @@
-import { Cart, CartValidation, Order } from '../models'
+import { Cart, CartValidation, Order, CartLineItem } from '../models'
 import { ICartService, IRequestService } from '../interfaces'
 import Configuration from '../helpers/configuration'
 import { RequestService } from './request-service'
@@ -7,6 +7,14 @@ export class CartService implements ICartService {
   private _requestService: IRequestService;
   constructor () {
     this._requestService = new RequestService(Configuration.okamApiBaseUrl)
+  }
+
+  public async getCartLineItem (cartLineItem: CartLineItem): Promise<CartLineItem> {
+    const response = await this._requestService.postRequest('/carts/lineItem', cartLineItem)
+    const parsedResponse = this._requestService.tryParseResponse(response)
+    if (parsedResponse === undefined) { throw new Error('Kunne ikke hente produkt') }
+
+    return parsedResponse
   }
 
   public async update (model: Cart): Promise<Cart> {

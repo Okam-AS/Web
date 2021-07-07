@@ -1,51 +1,59 @@
 <template>
-  <div class="menu">
-    <div v-if="store.id">
-      <h1> {{ store.name }}</h1>
-      <div v-for="(category, i) in categories" :key="i" class="category">
-        <h2>{{ category.name }}</h2>
-        <ul>
-          <li v-for="(row, j) in category.categoryProductListItems" :key="j">
-            <h3 v-if="row.heading">
-              {{ row.heading }}
-            </h3>
-            <div v-else class="product">
-              <img :src="row.product.image.thumbnailUrl">
-              <p class="price">
-                <template v-if="!row.product.soldOut">
-                  {{ priceLabel(row.product.amount) }}
-                </template>
-                <template v-else>
-                  Utsolgt
-                </template>
-              </p>
-              <h3>{{ row.product.name }}</h3>
-              <p v-if="row.product.description">
-                {{ row.product.description }}
-              </p>
-            </div>
-          </li>
-        </ul>
+  <div>
+    <template v-if="store.id">
+      <div v-for="(category, i) in categories" :key="i">
+        <h2 class="category-header">
+          {{ category.name }}
+        </h2>
+
+        <div class="container">
+          <div v-for="(row, j) in (category.categoryProductListItems || []).filter(x => !x.heading)" :key="j" class="box">
+            <template @click="openProduct(row.product.id)">
+              <img v-if="row.product.image && row.product.image.thumbnailUrl" class="product-thumbnail" :src="row.product.image.thumbnailUrl">
+              <div class="product-text">
+                <h4>
+                  {{ row.product.name }}
+                </h4>
+                <span v-if="row.product.description">
+                  {{ row.product.description }}
+                </span>
+              </div>
+              <div class="product-price">
+                {{ row.product.soldOut ? 'Utsolgt' : priceLabel(row.product.amount) }}
+              </div>
+            </template>
+          </div>
+        </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
 <script>
-import { StoreService, CategoryService } from '@/core/services'
+import { StoreService, CategoryService, CartService } from '@/core/services'
 
 export default {
   data: () => ({
     storeService: null,
     categoryService: null,
+    cartService: null,
     storeId: null,
     store: {},
-    categories: []
+    categories: [],
+    selectedProduct: {}
   }),
   mounted () {
     this.init()
   },
   methods: {
+    openProduct (productId) {
+      const comp = this
+      this.cartService.getCartLineItem({ product: { id: productId } }).then((result) => {
+        if (result && result.product) {
+          comp.selectedProduct = result.product
+        }
+      })
+    },
     wholeAmount (amount) {
       if (!amount) { return '0' }
       const wholeAmount = amount.toString().slice(0, -2)
@@ -71,6 +79,7 @@ export default {
         this.storeId = storeId
         this.storeServive = new StoreService()
         this.categoryService = new CategoryService()
+        this.cartService = new CartService()
         this.getStore()
         this.getCategories()
       }
@@ -98,16 +107,65 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.menu {
-  .category {
-    .product {
-      margin-bottom: 1rem;
-      clear: both;
-      .price {
-        float: right;
-      }
-    }
+<style lang="scss" scoped>
+.product-price{
+  line-height:1em;
+  white-space: nowrap;
+  margin-right: 20px;
+  font-size: 16px;
+}
+.product-text{
+  padding: 10px;
+  width:100%;
+}
+.product-text span {
+  color: gray;
+  font-size: 14px;
+}
+
+.product-thumbnail{
+  border-radius: 20px 0 0 20px;
+  height:99%;
+}
+
+.category-header{
+  font-size: 14px;
+  margin-left: 10px;
+  margin-top: 20px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: left;
+}
+
+.box {
+  border-radius: 20px;
+  height: 100px;
+  width: calc(100% - 20px);
+  margin: 5px 10px;
+  border: 1px solid rgb(236, 236, 236);
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  font-size: 1.2em;
+ // cursor: pointer;
+}
+// .box:hover{
+//   background: rgb(236, 236, 236);
+// }
+
+@media (min-width: 800px) {
+  .container {
+      flex-direction: row;
+      flex-wrap: wrap;
+  }
+  .box {
+      flex-basis: 45%;
+      flex-direction: row;
   }
 }
+
 </style>
