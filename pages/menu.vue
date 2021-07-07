@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="container">
     <template v-if="store.id">
       <div v-for="(category, i) in categories" :key="i">
         <h2 class="category-header">
@@ -40,12 +40,22 @@ export default {
     storeId: null,
     store: {},
     categories: [],
-    selectedProduct: {}
+    selectedProduct: {},
+    timer: ''
   }),
   mounted () {
     this.init()
+    this.timer = setInterval(this.iframeHeightNotify, 300)
+  },
+  beforeDestroy () {
+    clearInterval(this.timer)
   },
   methods: {
+    iframeHeightNotify () {
+      window.parent.postMessage({
+        height: this.$refs.container.scrollHeight
+      }, 'https://www.grandpizza.no')
+    },
     openProduct (productId) {
       const comp = this
       this.cartService.getCartLineItem({ product: { id: productId } }).then((result) => {
