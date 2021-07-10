@@ -19,7 +19,7 @@
                 </span>
               </div>
               <div class="product-price">
-                {{ row.product.soldOut ? 'Utsolgt' : priceLabel(row.product.amount) }}
+                {{ priceLabel(row.product.amount) }}
               </div>
             </template>
           </div>
@@ -128,8 +128,8 @@ export default {
 .product-price{
   line-height:1em;
   white-space: nowrap;
-  margin-right: 20px;
-  font-size: 16px;
+  margin-right: 10px;
+  font-size: 14px;
 }
 .product-text{
   padding: 10px;
@@ -137,6 +137,10 @@ export default {
 }
 .product-text span {
   color: gray;
+  font-size: 12px;
+}
+
+.product-text h4 {
   font-size: 14px;
 }
 
@@ -146,7 +150,7 @@ export default {
 }
 
 .category-header{
-  font-size: 14px;
+  font-size: 22px;
   margin-left: 10px;
   margin-top: 20px;
 }
