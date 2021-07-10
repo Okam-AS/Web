@@ -151,7 +151,6 @@ export default {
 
 .category-header{
   font-size: 22px;
-  margin-left: 10px;
   margin-top: 20px;
 }
 
@@ -166,7 +165,8 @@ export default {
   border-radius: 20px;
   height: 100px;
   width: calc(100% - 20px);
-  margin: 5px 10px;
+  margin-right: 10px;
+  margin-top: 10px;
   border: 1px solid rgb(236, 236, 236);
   display: flex;
   justify-content: left;
