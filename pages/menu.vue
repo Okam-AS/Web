@@ -165,7 +165,7 @@ export default {
   border-radius: 20px;
   height: 100px;
   width: calc(100% - 20px);
-  margin-right: 10px;
+  margin-right: 0;
   margin-top: 10px;
   border: 1px solid rgb(236, 236, 236);
   display: flex;
@@ -185,6 +185,7 @@ export default {
   }
   .box {
       flex-basis: 45%;
+      margin-right: 10px;
       flex-direction: row;
   }
 }
