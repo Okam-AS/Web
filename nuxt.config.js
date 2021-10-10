@@ -86,7 +86,9 @@ export default {
     // https://go.nuxtjs.dev/typescript
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/stylelint
-    '@nuxtjs/stylelint-module'
+    '@nuxtjs/stylelint-module',
+
+    '@nuxtjs/google-analytics'
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
@@ -98,12 +100,10 @@ export default {
     // https://go.nuxtjs.dev/content
     '@nuxt/content',
     // i18n plugin
-    'nuxt-i18n',
-    // GTM
-    '@nuxtjs/gtm'
+    'nuxt-i18n'
   ],
 
-  gtm: {
+  googleAnalytics: {
     id: 'UA-167439729-2'
   },
 
