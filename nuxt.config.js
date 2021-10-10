@@ -104,7 +104,7 @@ export default {
   ],
 
   gtm: {
-    id: 'GTM-WWZ4P62'
+    id: 'UA-167439729-2'
   },
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)

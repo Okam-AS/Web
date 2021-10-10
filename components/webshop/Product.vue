@@ -23,7 +23,7 @@
     <input type="button" value="-" @click="addQuantity(-1)">
     <input type="text" :value="localLineItem.quantity">
     <input type="button" value="+" @click="addQuantity(1)">
-    <input type="button" value="Legg til handlevogn">
+    <input type="button" :value="saveBtnText">
     <span>{{ priceLabel(totalAmount) }}</span>
     <span>{{ selectedOptionNames }}</span>
   </div>
