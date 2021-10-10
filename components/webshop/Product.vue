@@ -1,17 +1,37 @@
 <template>
   <div>
-    <ProductVariants
-      :items="localLineItem.product.productVariants"
-      @click="optionClick"
-    />
+    <div
+      v-for="(variant, i) in localLineItem.product.productVariants"
+      :key="i"
+    >
+      <div>
+        <span style="font-weight:bold">{{ variant.name }}</span>
+        <span style="font-size: 0.5em;color:gray;">{{ variant.required ? 'Påkrevd' : 'Valgfritt' }}</span>
+      </div>
+      <div>
+        <div
+          v-for="(option, j) in variant.options"
+          :key="j"
+          :class="{'selected' : selectedOptions.map(x => x.id).includes(option.id)}"
+          style="font-size: 0.8em;"
+          @click="optionClick(option.id)"
+        >
+          {{ option.name }}
+        </div>
+      </div>
+    </div>
+    <input type="button" value="-" @click="addQuantity(-1)">
+    <input type="text" :value="localLineItem.quantity">
+    <input type="button" value="+" @click="addQuantity(1)">
+    <input type="button" value="Legg til handlevogn">
+    <span>{{ priceLabel(totalAmount) }}</span>
+    <span>{{ selectedOptionNames }}</span>
   </div>
 </template>
 
 <script>
-import ProductVariants from './ProductVariants.vue'
 
 export default {
-  components: { ProductVariants },
   props: {
     lineItem: {
       type: Object,
@@ -74,15 +94,29 @@ export default {
         (totalAmount <= 0 ? this.localLineItem.product.amount : totalAmount) *
         (this.localLineItem.quantity ? this.localLineItem.quantity : 1)
       )
-    },
-    amountPrefix () {
-      return this.localLineItem.product.currency === 'NOK' ? 'kr' : ''
     }
   },
   mounted () {
     this.localLineItem = this.lineItem
   },
   methods: {
+    wholeAmount (amount) {
+      if (!amount) { return '0' }
+      const wholeAmount = amount.toString().slice(0, -2)
+      return wholeAmount ? wholeAmount.replace(/\B(?=(\d{3})+(?!\d))/g, ' ') : '0'
+    },
+    fractionAmount (amount) {
+      if (!amount) { return '00' }
+      const fractionAmount = amount.toString().slice(-2)
+      return fractionAmount.length < 2 ? '00' : fractionAmount
+    },
+    priceLabel (totalPrice, hideFractionIfZero) {
+      return (
+        'kr ' + this.wholeAmount(totalPrice) + ((!hideFractionIfZero || parseInt(this.fractionAmount(totalPrice)) > 0)
+          ? ',' + this.fractionAmount(totalPrice)
+          : '')
+      )
+    },
     createGuid () {
       const _p8 = (s) => {
         const p = (Math.random().toString(16) + '000000000').substr(2, 8)
@@ -159,3 +193,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+.selected{
+  background:lightgreen
+}
+</style>
