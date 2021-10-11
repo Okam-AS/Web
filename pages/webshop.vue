@@ -19,7 +19,8 @@
                 </span>
               </div>
               <div class="product-price">
-                {{ priceLabel(row.product.amount) }}
+                <span v-if="row.product.hasDiscount" style="text-decoration:line-through;">{{ priceLabel(row.product.discountAmount+row.product.amount) }}</span>
+                <span>{{ row.product.soldOut ? 'Utsolgt' : priceLabel(row.product.amount) }}</span>
               </div>
             </div>
             <template v-if="selectedLineItem && selectedLineItem.product && selectedLineItem.product.id === row.product.id">
