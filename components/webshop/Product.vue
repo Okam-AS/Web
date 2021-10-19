@@ -23,7 +23,7 @@
     <input type="button" value="-" @click="addQuantity(-1)">
     <input type="text" :value="localLineItem.quantity">
     <input type="button" value="+" @click="addQuantity(1)">
-    <input type="button" :value="saveBtnText">
+    <input type="button" :value="saveBtnText" @click="saveAndClose">
     <span>{{ priceLabel(totalAmount) }}</span>
     <span>{{ selectedOptionNames }}</span>
   </div>
@@ -184,10 +184,10 @@ export default {
       comp.localLineItem.product.amount =
         comp.localLineItem.product.baseAmount + this.selectedOptionsAmount
       if (comp.localLineItem.product.soldOut) { comp.localLineItem.quantity = 0 }
-      // comp.$store.dispatch(ActionName.SetLineItem, {
-      //   storeId: comp.localLineItem.product.storeId,
-      //   lineItem: comp.localLineItem
-      // })
+      comp.$store.dispatch('SetLineItem', {
+        storeId: comp.localLineItem.product.storeId,
+        lineItem: comp.localLineItem
+      })
       // comp.$modal.close(comp.localLineItem.product.id)
     }
   }

@@ -111,12 +111,11 @@ export const actions = {
 }
 
 export const mutations = {
-  [MutationName.Load] () {
-    // const appsettingState = getString(AppSettingKey.State, '{}')
-    // this.replaceState(
-    //   Object.assign(state, JSON.parse(appsettingState))
-    // )
-    // TODO: Lagre state i storage
+  [MutationName.Load] (state) {
+    const storedState = localStorage.getItem('state') || false
+    if (storedState) {
+      Object.assign(state, JSON.parse(storedState))
+    }
   },
   [MutationName.SetIntroIsSeen] (state, value) {
     state.introIsSeen = value
