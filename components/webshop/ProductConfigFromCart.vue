@@ -4,7 +4,14 @@
       <td>{{ item.product.name }}</td>
       <td>{{ item.product.selectedOptionNames }}</td>
       <td>{{ priceLabel(item.product.amount) }}</td>
-      <td>{{ 'x'+ item.quantity }}</td>
+
+      <td @click="addQuantity(item, -1)">
+        -
+      </td>
+      <td>{{ item.quantity }}</td>
+      <td @click="addQuantity(item, 1)">
+        +
+      </td>
     </tr>
   </table>
 </template>
@@ -36,6 +43,21 @@ export default {
     }
   },
   methods: {
+    addQuantity (lineItem, add) {
+      if ((lineItem.quantity + add) === 0) {
+        this.$store.dispatch('RemoveLineItem', {
+          storeId: this.storeId,
+          lineItemId: lineItem.id
+        })
+      } else {
+        const tempLineItem = JSON.parse(JSON.stringify(lineItem))
+        tempLineItem.quantity += add
+        this.$store.dispatch('SetLineItem', {
+          storeId: this.storeId,
+          lineItem: tempLineItem
+        })
+      }
+    },
     wholeAmount (amount) {
       if (!amount) { return '0' }
       const wholeAmount = amount.toString().slice(0, -2)
