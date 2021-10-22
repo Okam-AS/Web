@@ -16,7 +16,6 @@ export enum ActionName {
     GetStore = 'GetStore',
     RemoveCart = 'RemoveCart',
     SetLineItem = 'SetLineItem',
-    AddQuantityLineItem = 'AddQuantityLineItem',
     SetCartRootProperties = 'SetCartRootProperties',
     RemoveLineItem = 'RemoveLineItem'
 }

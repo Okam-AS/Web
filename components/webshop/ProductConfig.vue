@@ -185,10 +185,18 @@ export default {
       comp.localLineItem.product.amount =
         comp.localLineItem.product.baseAmount + this.selectedOptionsAmount
       if (comp.localLineItem.product.soldOut) { comp.localLineItem.quantity = 0 }
-      comp.$store.dispatch('SetLineItem', {
-        storeId: comp.localLineItem.product.storeId,
-        lineItem: JSON.parse(JSON.stringify(comp.localLineItem))
-      })
+
+      if (comp.localLineItem.quantity === 0) {
+        comp.$store.dispatch('RemoveLineItem', {
+          storeId: comp.localLineItem.product.storeId,
+          lineItemId: comp.localLineItem.id
+        })
+      } else {
+        comp.$store.dispatch('SetLineItem', {
+          storeId: comp.localLineItem.product.storeId,
+          lineItem: JSON.parse(JSON.stringify(comp.localLineItem))
+        })
+      }
       // comp.$modal.close(comp.localLineItem.product.id)
     }
   }

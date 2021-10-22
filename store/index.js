@@ -103,8 +103,8 @@ export const actions = {
     commit(MutationName.SetLineItem, { storeId, lineItem })
     dispatch(ActionName.UpdateCartInDbAndSetState, storeId)
   },
-  [ActionName.RemoveLineItem] ({ commit, dispatch }, { storeId, productId }) {
-    commit(MutationName.RemoveLineItem, { storeId, productId })
+  [ActionName.RemoveLineItem] ({ commit, dispatch }, { storeId, lineItemId }) {
+    commit(MutationName.RemoveLineItem, { storeId, lineItemId })
     dispatch(ActionName.UpdateCartInDbAndSetState, storeId)
   }
 }
@@ -178,10 +178,10 @@ export const mutations = {
       state.carts.push({ storeId, items: [lineItem] })
     }
   },
-  [MutationName.RemoveLineItem] (state, { storeId, productId }) {
+  [MutationName.RemoveLineItem] (state, { storeId, lineItemId }) {
     const cart = state.carts.find(x => x.storeId === storeId)
     if (!cart) { return }
-    const index = (cart.items || []).map(item => item.product.id ? item.product.id : '').indexOf(productId)
+    const index = (cart.items || []).findIndex(x => x.id === lineItemId)
     Vue.delete(cart.items, index)
   }
 }
