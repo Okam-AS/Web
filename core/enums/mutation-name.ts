@@ -12,7 +12,6 @@ export enum MutationName {
     SetProductsQuery = 'SetProductsQuery',
     StartNewOrderNotificationsInterval = 'StartNewOrderNotificationsInterval',
     StopNewOrderNotificationsInterval = 'StopNewOrderNotificationsInterval',
-    SetIntroIsSeen = 'SetIntroIsSeen',
     SetDeliveryAddress = 'SetDeliveryAddress',
     ClearCurrentUser = 'ClearCurrentUser',
     SetCarts = 'SetCarts',

@@ -97,7 +97,7 @@ export default {
     }
   },
   mounted () {
-    this.localLineItem = this.lineItem
+    this.localLineItem = JSON.parse(JSON.stringify(this.lineItem))
   },
   methods: {
     wholeAmount (amount) {
@@ -171,6 +171,7 @@ export default {
     },
     saveAndClose () {
       const comp = this
+
       if (!comp.saveEnabled || !comp.valid()) { return }
       if (!comp.localLineItem.id) {
         if (comp.localLineItem.quantity === 0) {
@@ -186,7 +187,7 @@ export default {
       if (comp.localLineItem.product.soldOut) { comp.localLineItem.quantity = 0 }
       comp.$store.dispatch('SetLineItem', {
         storeId: comp.localLineItem.product.storeId,
-        lineItem: comp.localLineItem
+        lineItem: JSON.parse(JSON.stringify(comp.localLineItem))
       })
       // comp.$modal.close(comp.localLineItem.product.id)
     }

@@ -11,8 +11,7 @@ export const state = () => ({
   carts: [],
   orders: [],
   stores: [],
-  cartIsLoading: false,
-  introIsSeen: false
+  cartIsLoading: false
 })
 
 export const getters = {
@@ -117,9 +116,6 @@ export const mutations = {
       Object.assign(state, JSON.parse(storedState))
     }
   },
-  [MutationName.SetIntroIsSeen] (state, value) {
-    state.introIsSeen = value
-  },
   [MutationName.SetOrders] (state, orders) {
     state.orders = orders
   },
@@ -172,7 +168,7 @@ export const mutations = {
   [MutationName.SetLineItem] (state, { storeId, lineItem }) {
     const cartIndex = state.carts.findIndex(x => x.storeId === storeId)
     if (cartIndex >= 0) {
-      const itemIndex = state.carts[cartIndex].items.findIndex(item => item.product.id === lineItem.product.id)
+      const itemIndex = state.carts[cartIndex].items.findIndex(item => item.id === lineItem.id)
       if (itemIndex >= 0) {
         Vue.set(state.carts[cartIndex].items, itemIndex, lineItem)
       } else {

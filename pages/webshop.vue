@@ -23,8 +23,11 @@
                 <span>{{ row.product.soldOut ? 'Utsolgt' : priceLabel(row.product.amount) }}</span>
               </div>
             </div>
+            <template v-if="row.product && row.product.id">
+              <ProductConfigFromCart :store-id="row.product.storeId" :product-id="row.product.id" />
+            </template>
             <template v-if="selectedLineItem && selectedLineItem.product && selectedLineItem.product.id === row.product.id">
-              <Product :line-item="selectedLineItem" />
+              <ProductConfig :line-item="selectedLineItem" />
             </template>
           </div>
         </div>
@@ -35,10 +38,11 @@
 
 <script>
 import { StoreService, CategoryService, CartService } from '@/core/services'
-import Product from '../components/webshop/Product.vue'
+import ProductConfig from '../components/webshop/ProductConfig.vue'
+import ProductConfigFromCart from '../components/webshop/ProductConfigFromCart.vue'
 
 export default {
-  components: { Product },
+  components: { ProductConfig, ProductConfigFromCart },
   data: () => ({
     storeService: null,
     categoryService: null,
