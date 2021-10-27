@@ -87,8 +87,9 @@ export default {
     this.productService = new ProductService()
     if (storedUser) {
       const user = JSON.parse(storedUser)
-      this.$store.dispatch('SetCurrentUser', user)
+      this.$store.dispatch('setCurrentUser', user)
       this.getStores()
+      this.$emit('loggedIn')
     }
     this.mounted = true
   },
@@ -114,10 +115,11 @@ export default {
         this.codeSent = false
       }).finally(() => {
         this.getStores()
+        this.$emit('loggedIn')
       })
     },
     wipeUser () {
-      this.$store.dispatch('SetCurrentUser', {})
+      this.$store.dispatch('setCurrentUser', {})
       this.smsSent = false
       this.codeSent = false
     },

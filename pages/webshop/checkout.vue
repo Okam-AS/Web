@@ -1,6 +1,7 @@
 <template>
   <div ref="container">
     <p>Checkout</p>
+    <Login @loggedIn="loggedIn" />
   </div>
 </template>
 
@@ -80,6 +81,9 @@ export default {
       this.storeServive.get(this.storeId).then((res) => {
         this.store = res
       })
+    },
+    loggedIn () {
+      this.$store.dispatch('UpdateCartInDbAndSetState', this.storeId)
     }
   }
 }

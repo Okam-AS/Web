@@ -68,7 +68,17 @@ export class RequestService implements IRequestService {
   }
 
   private _defaultRequest (path: string, payload: any, method: HttpMethod): any {
-    return this._buildRequest(path, method, payload ? JSON.stringify(payload) : '', '')// TODO: siste param store.state.currentUser?.token)
+    let bearerToken = ''
+    const storedState = localStorage.getItem('state') || false
+    const stateObject = { currentUser: { token: '' } }
+    if (storedState) {
+      Object.assign(stateObject, JSON.parse(storedState))
+      if (stateObject.currentUser && stateObject.currentUser.token) {
+        bearerToken = stateObject.currentUser.token
+      }
+    }
+
+    return this._buildRequest(path, method, payload ? JSON.stringify(payload) : '', bearerToken)
   };
 
   private _buildRequest (path: string, method: HttpMethod, content?: string, bearerToken?: string): any {
