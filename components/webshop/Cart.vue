@@ -1,9 +1,11 @@
 <template>
   <table>
     <tr v-for="item in itemsInCart" :key="item.id">
-      <td>{{ item.product.name }}</td>
-      <td>{{ item.product.selectedOptionNames }}</td>
-      <td>{{ priceLabel(item.product.amount) }}</td>
+      <td><span style="font-weight:bold">{{ item.product.name }}</span><br><span>{{ item.product.selectedOptionNames }}</span></td>
+
+      <td style="font-size:10px;color:gray;">
+        {{ priceLabel(item.product.amount) }}
+      </td>
 
       <td @click="addQuantity(item, -1)">
         -
@@ -20,10 +22,6 @@
 
 export default {
   props: {
-    productId: {
-      type: String,
-      default: ''
-    },
     storeId: {
       type: Number,
       default: 0
@@ -39,7 +37,7 @@ export default {
     itemsInCart () {
       const comp = this
       const currentCart = (comp.$store.state.carts || []).find(x => x.storeId === comp.storeId) || []
-      return (currentCart.items || []).filter(x => !!x.product && x.product.id === comp.productId)
+      return currentCart.items || []
     }
   },
   methods: {

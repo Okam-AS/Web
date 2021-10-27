@@ -33,26 +33,37 @@
         </div>
       </div>
     </template>
+    <div v-if="storeId" class="sidebar-cart">
+      <Cart :store-id="storeId" />
+      <a class="checkout-btn" :href="checkoutUrl">Gå til kassen</a>
+    </div>
   </div>
 </template>
 
 <script>
 import { StoreService, CategoryService, CartService } from '@/core/services'
-import ProductConfig from '../components/webshop/ProductConfig.vue'
-import ProductConfigFromCart from '../components/webshop/ProductConfigFromCart.vue'
+import ProductConfig from '../../components/webshop/ProductConfig.vue'
+import ProductConfigFromCart from '../../components/webshop/ProductConfigFromCart.vue'
+import Cart from '../../components/webshop/Cart.vue'
 
 export default {
-  components: { ProductConfig, ProductConfigFromCart },
+  components: { ProductConfig, ProductConfigFromCart, Cart },
   data: () => ({
     storeService: null,
     categoryService: null,
     cartService: null,
     storeId: null,
+    noLayout: false,
     store: {},
     categories: [],
     selectedLineItem: {},
     timer: ''
   }),
+  computed: {
+    checkoutUrl () {
+      return '/webshop/checkout/?store=' + this.storeId + (this.noLayout ? '&nolayout=true' : '')
+    }
+  },
   mounted () {
     this.init()
     this.timer = setInterval(this.iframeHeightNotify, 300)
@@ -112,7 +123,8 @@ export default {
       const nolayout = search.has('nolayout') || false
 
       if (storeId) {
-        this.storeId = storeId
+        this.storeId = parseInt(storeId)
+        this.noLayout = nolayout
         this.storeServive = new StoreService()
         this.categoryService = new CategoryService()
         this.cartService = new CartService()
@@ -185,7 +197,7 @@ export default {
 .item {
   display: inline-block;
   border-radius: 20px;
-  width: 45%;
+  width: 35%;
   margin-right: 0;
   margin-top: 10px;
   border: 1px solid rgb(236, 236, 236);
@@ -198,5 +210,23 @@ export default {
   justify-content: left;
   align-items: left;
 }
+.sidebar-cart {
+  background:whitesmoke;
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 300px;
 
+border: 1px solid black;
+}
+.checkout-btn{
+ position: fixed;
+  bottom: 0;
+  width: 300px;
+  text-align: center;
+  padding-top:20px;
+  padding-bottom:20px;
+  border-top: 1px solid black;
+}
 </style>
