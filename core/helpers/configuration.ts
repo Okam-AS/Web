@@ -4,8 +4,8 @@ class Configuration implements IConfiguration {
   okamApiBaseUrl: string;
 
   constructor () {
-    // this.okamApiBaseUrl = 'https://okamapitest.azurewebsites.net'
-    this.okamApiBaseUrl = 'https://okamapi.azurewebsites.net'
+    this.okamApiBaseUrl = 'https://okamapitest.azurewebsites.net'
+    // this.okamApiBaseUrl = 'https://okamapi.azurewebsites.net'
   }
 }
 
