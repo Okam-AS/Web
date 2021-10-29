@@ -1,3 +1,3 @@
 interface Window {
-	Stripe: any;
+  Stripe: any;
 }

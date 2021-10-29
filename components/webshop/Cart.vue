@@ -1,21 +1,24 @@
 <template>
-  <table>
-    <tr v-for="item in itemsInCart" :key="item.id">
-      <td><span style="font-weight:bold">{{ item.product.name }}</span><br><span>{{ item.product.selectedOptionNames }}</span></td>
+  <div class="cart">
+    <h2>Handlekurv</h2>
+    <table>
+      <tr v-for="item in itemsInCart" :key="item.id">
+        <td><span style="font-weight:bold">{{ item.product.name }}</span><br><span>{{ item.product.selectedOptionNames }}</span></td>
 
-      <td style="font-size:10px;color:gray;">
-        {{ priceLabel(item.product.amount) }}
-      </td>
+        <td style="font-size:10px;color:gray;">
+          {{ priceLabel(item.product.amount) }}
+        </td>
 
-      <td @click="addQuantity(item, -1)">
-        -
-      </td>
-      <td>{{ item.quantity }}</td>
-      <td @click="addQuantity(item, 1)">
-        +
-      </td>
-    </tr>
-  </table>
+        <td @click="addQuantity(item, -1)">
+          -
+        </td>
+        <td>{{ item.quantity }}</td>
+        <td @click="addQuantity(item, 1)">
+          +
+        </td>
+      </tr>
+    </table>
+  </div>
 </template>
 
 <script>
@@ -76,3 +79,10 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.cart {
+  background: #D5F6E5;
+  border: 1px solid green;
+}
+</style>
