@@ -7,3 +7,5 @@ export { ProductService } from './product-service'
 export { DeliveryMethodService } from './delivery-method-service'
 export { DiscountService } from './discount-service'
 export { CategoryService } from './category-service'
+export { StripeService } from './stripe-service'
+

@@ -5,13 +5,18 @@
     <client-only>
       <stripe-element-card
         :pk="stripePKey"
+        :hide-postal-code="true"
+        :elements-options="{ locale: 'nb' }"
       />
     </client-only>
+    <div>
+      <pre>{{ cards }}</pre>
+    </div>
   </div>
 </template>
 
 <script>
-import { StoreService, CartService } from '@/core/services'
+import { StoreService, CartService, StripeService } from '@/core/services'
 
 // import ProductConfig from '../../components/webshop/ProductConfig.vue'
 
@@ -128,7 +133,9 @@ export default {
         this.storeId = parseInt(storeId)
         this.storeServive = new StoreService()
         this.cartService = new CartService()
+        this.stripeService = new StripeService()
         this.getStore()
+        this.getRegisteredCards()
       }
 
       if (nolayout && window && window.Tawk_API) {
@@ -140,16 +147,12 @@ export default {
       // Checkout
       const comp = this
       comp.localDeliveryType = 'NotSet'
+
       // comp.localTableName = JSON.parse(JSON.stringify(comp.storeCart.tableName))
       // comp.localComment =
       // comp.storeCart.comment === 'Ingen kommentar'
       //   ? ''
       //   : JSON.parse(JSON.stringify(comp.storeCart.comment))
-      // // comp.stripeService = new StripeService()
-      // comp.getRegisteredCards()
-      // setTimeout(() => {
-      //   if (comp.cardView.postalCodeEntryEnabled) { comp.cardView.postalCodeEntryEnabled = false }
-      // }, 300)
     },
     getStore () {
       this.storeServive.get(this.storeId).then((res) => {
@@ -160,19 +163,19 @@ export default {
       this.$store.dispatch('UpdateCartInDbAndSetState', this.storeId)
     },
     getRegisteredCards () {
-      // const comp = this
-      // comp.stripeService
-      //   .getPaymentMethods(comp.store.id)
-      //   .then((result) => {
-      //     if (Array.isArray(result)) { comp.cards = result }
-      //     comp.isLoadingCards = false
-      //     comp.setPaymentMethodId(
-      //       comp.cards.length > 0 ? comp.cards[0].id : ''
-      //     )
-      //   })
-      //   .catch(() => {
-      //     comp.isLoadingCards = false
-      //   })
+      const comp = this
+      comp.stripeService
+        .getPaymentMethods(comp.storeId)
+        .then((result) => {
+          if (Array.isArray(result)) { comp.cards = result }
+          comp.isLoadingCards = false
+          // comp.setPaymentMethodId(
+          //   comp.cards.length > 0 ? comp.cards[0].id : ''
+          // )
+        })
+        .catch(() => {
+          comp.isLoadingCards = false
+        })
     }
   }
 }

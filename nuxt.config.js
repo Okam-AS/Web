@@ -23,6 +23,9 @@ export default {
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap' }
+    ],
+    script: [
+      { src: 'https://js.stripe.com/v3' }
     ]
   },
 
