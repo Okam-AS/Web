@@ -92,10 +92,10 @@ export const actions = {
     _cartService.delete(storeId)
   },
   [ActionName.SetCartRootProperties] ({ commit, dispatch }, {
-    storeId, homeDeliveryMethodId, isSelfPickup, discountCode, fullAddress, zipCode, city, paymentIntentId, comment
+    storeId, homeDeliveryMethodId, isWaiterOrder, deliveryType, discountCode, fullAddress, zipCode, city, paymentIntentId, comment, tipPercent, tableName
   }) {
     commit(MutationName.SetCartRootProperties, {
-      storeId, homeDeliveryMethodId, isSelfPickup, discountCode, fullAddress, zipCode, city, paymentIntentId, comment
+      storeId, homeDeliveryMethodId, isWaiterOrder, deliveryType, discountCode, fullAddress, zipCode, city, paymentIntentId, comment, tipPercent, tableName
     })
     dispatch(ActionName.UpdateCartInDbAndSetState, storeId)
   },
@@ -159,7 +159,7 @@ export const mutations = {
   [MutationName.SetCartRootProperties] (state, payload) {
     const cartIndex = state.carts.findIndex(x => x.storeId === payload.storeId)
     if (cartIndex >= 0) {
-      ['homeDeliveryMethodId', 'isSelfPickup', 'discountCode', 'fullAddress', 'zipCode', 'city', 'paymentIntentId', 'comment']
+      ['homeDeliveryMethodId', 'isWaiterOrder', 'deliveryType', 'discountCode', 'fullAddress', 'zipCode', 'city', 'paymentIntentId', 'comment', 'tipPercent', 'tableName']
         .forEach((key) => {
           if (payload[key] !== undefined) { Vue.set(state.carts[cartIndex], key, payload[key]) }
         })

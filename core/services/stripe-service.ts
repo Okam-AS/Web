@@ -3,12 +3,10 @@ import { RequestService } from './request-service'
 
 export class StripeService {
     private _requestService: RequestService;
-    private _stripe: any;
 
     constructor () {
       const that = this
       that._requestService = new RequestService(Configuration.okamApiBaseUrl)
-      that._stripe = window.Stripe('pk_test_51H4qD7LNNQ2fMCqGKVqDxFBnljHO1QyXuLSQ8BTvltvx9jKXGSw78WuX01i9miBj9hzh5L8AS9aiIXF9qUDq5kKH005deCclVN')
     }
 
     public async getPaymentMethods (storeId: number): Promise<any> {
@@ -35,17 +33,5 @@ export class StripeService {
       const parsedResponse = this._requestService.tryParseResponse(response)
       if (parsedResponse === undefined) { throw new Error('Betalingen ikke ikke gjennomføres på dette tidspunktet') }
       return parsedResponse
-    }
-
-    public createPaymentMethod (number: string, expMonth: number, expYear: number, cvc: string): Promise<any> {
-      const that = this
-      return new Promise((resolve, reject) => {
-        that._stripe.createPaymentMethod(
-          { number, exp_month: expMonth, exp_year: expYear, cvc },
-          (error, pm) => {
-            if (error) { return reject(error) }
-            resolve(pm)
-          })
-      })
     }
 }

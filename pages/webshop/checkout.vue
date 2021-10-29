@@ -2,15 +2,50 @@
   <div ref="container">
     <p>Checkout</p>
     <Login @loggedIn="loggedIn" />
-    <client-only>
-      <stripe-element-card
-        :pk="stripePKey"
-        :hide-postal-code="true"
-        :elements-options="{ locale: 'nb' }"
-      />
-    </client-only>
     <div>
-      <pre>{{ cards }}</pre>
+      <span style="font-weight:bold;">Leveringsmetoder</span>
+
+      <div v-if="store.selfPickUp" @click="setLocalDeliveryType('SelfPickup')">
+        <span v-show="localDeliveryType === 'SelfPickup'">✓</span><span>Hent selv</span>
+      </div>
+
+      <div
+        v-if="store.homeDeliveryMethods && store.homeDeliveryMethods.length > 0"
+        @click="
+          storeCart.calculations.itemsAmount >=
+            store.minimumOrderPriceForHomeDelivery
+            ? setLocalDeliveryType('InstantHomeDelivery')
+            : false
+        "
+      >
+        <span v-show="localDeliveryType === 'InstantHomeDelivery'">✓</span><span>Hjemlevering</span>
+        <span
+          v-if="
+            store.minimumOrderPriceForHomeDelivery > 0 &&
+              storeCart.calculations.itemsAmount <
+              store.minimumOrderPriceForHomeDelivery
+          "
+        >{{ 'Min. bestilling: ' + priceLabel(store.minimumOrderPriceForHomeDelivery) }}</span>
+      </div>
+
+      <div v-if="store.tableDelivery" @click="setLocalDeliveryType('TableDelivery')">
+        <span v-if="localDeliveryType === 'TableDelivery'">✓</span><span>Spis inne</span>
+      </div>
+
+      <client-only>
+        <stripe-element-card
+          ref="cardElement"
+          :pk="stripePKey"
+          :hide-postal-code="true"
+          :elements-options="{ locale: 'nb' }"
+        />
+      </client-only>
+      <input type="button" value="OK" @click="submit">
+
+      <div>
+        <span style="font-weight:bold;">Betalingsmetoder</span>
+        <pre>{{ cards }}</pre>
+      </div>
     </div>
   </div>
 </template>
@@ -48,12 +83,7 @@ export default {
     selectedPaymentMethodId: '',
     rememberCard: true,
     isLoadingCards: true,
-    creditCardError: false,
-
-    cardNumber: '',
-    expMonth: '',
-    expYear: '',
-    cvc: ''
+    creditCardError: false
   }),
   computed: {
     cartIsEmpty () {
@@ -91,6 +121,64 @@ export default {
     clearInterval(this.timer)
   },
   methods: {
+    async submit () {
+      const comp = this
+      try {
+        const paymentMethod = await comp.$refs.cardElement.stripe.createPaymentMethod({
+          type: 'card',
+          card: comp.$refs.cardElement.element
+        })
+        // comp.createPaymentIntent(paymentMethod.id, comp.rememberCard)
+        window.console.table(paymentMethod)
+      } catch (error) {
+        comp.isSending = false
+        comp.errorMessage =
+                   'Betalingen kunne ikke gjennomføres. Kontroller kortinformasjon og prøv igjen.'
+      }
+    },
+    setTip (tipPercent) {
+      if (this.isLoading) { return }
+      this.localTipPercent = tipPercent
+      this.updateCart()
+    },
+    setPaymentMethodId (id) {
+      if (this.isLoading) { return }
+      this.selectedPaymentMethodId = id
+      this.updateCart()
+    },
+    setLocalDeliveryType (value) {
+      // if (this.isLoading) { return }
+      this.clearErrors()
+      this.localDeliveryType = value
+      this.updateCart()
+    },
+    updateCart () {
+      if (!this.storeId) { return }
+      this.$store.dispatch('SetCartRootProperties', {
+        storeId: this.storeId,
+        isWaiterOrder: this.selectedPaymentMethodId === 'waiter',
+        deliveryType: this.localDeliveryType,
+        fullAddress: this.$store.state.currentUser.address
+          ? this.$store.state.currentUser.address.fullAddress
+          : '',
+        zipCode: this.$store.state.currentUser.address
+          ? this.$store.state.currentUser.address.zipCode
+          : '',
+        city: this.$store.state.currentUser.address
+          ? this.$store.state.currentUser.address.city
+          : '',
+        comment: this.localComment ? this.localComment : 'Ingen kommentar',
+        tipPercent: this.localTipPercent,
+        tableName: this.localTableName
+      })
+    },
+    clearErrors () {
+      this.errorMessage = ''
+      this.deliveryMethodError = false
+      this.deliveryAddressError = false
+      this.tableNameError = false
+      this.creditCardError = false
+    },
     iframeHeightNotify () {
       const search = new URLSearchParams(window.location.search) || {}
       const parentUrl = (search.get('parent') || '')
@@ -147,12 +235,10 @@ export default {
       // Checkout
       const comp = this
       comp.localDeliveryType = 'NotSet'
-
-      // comp.localTableName = JSON.parse(JSON.stringify(comp.storeCart.tableName))
-      // comp.localComment =
-      // comp.storeCart.comment === 'Ingen kommentar'
-      //   ? ''
-      //   : JSON.parse(JSON.stringify(comp.storeCart.comment))
+      if (comp.storeCart) {
+        comp.localTableName = comp.storeCart.tableName === undefined ? '' : comp.storeCart.tableName + ''
+        comp.localComment = comp.storeCart.comment === undefined || comp.storeCart.comment === 'Ingen kommentar' ? '' : comp.storeCart.comment + ''
+      }
     },
     getStore () {
       this.storeServive.get(this.storeId).then((res) => {
@@ -169,9 +255,9 @@ export default {
         .then((result) => {
           if (Array.isArray(result)) { comp.cards = result }
           comp.isLoadingCards = false
-          // comp.setPaymentMethodId(
-          //   comp.cards.length > 0 ? comp.cards[0].id : ''
-          // )
+        // comp.setPaymentMethodId(
+        //   comp.cards.length > 0 ? comp.cards[0].id : ''
+        // )
         })
         .catch(() => {
           comp.isLoadingCards = false
