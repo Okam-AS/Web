@@ -84,7 +84,9 @@ export class RequestService implements IRequestService {
   private _buildRequest (path: string, method: HttpMethod, content?: string, bearerToken?: string): any {
     const request = {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json; charset=utf-8',
+        ClientPlatform: 'Desktop',
+        ClientAppVersion: '1.0.0'
       },
       url: this._baseUrl + path,
       method,
