@@ -1,12 +1,16 @@
 import { IStoreService, IRequestService } from '../interfaces'
 import Configuration from '../helpers/configuration'
 import { Store } from '../models'
+import GetStoreModule from '../../modules/store-module'
 import { RequestService } from './request-service'
 
 export class StoreService implements IStoreService {
+    private $store: any;
     private _requestService: IRequestService;
+
     constructor () {
       this._requestService = new RequestService(Configuration.okamApiBaseUrl)
+      this.$store = GetStoreModule()
     }
 
     public async get (id: number): Promise<Store> {
