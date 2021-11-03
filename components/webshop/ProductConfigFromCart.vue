@@ -1,19 +1,21 @@
 <template>
-  <table>
-    <tr v-for="item in itemsInCart" :key="item.id">
-      <td>{{ item.product.name }}</td>
-      <td>{{ item.product.selectedOptionNames }}</td>
-      <td>{{ priceLabel(item.product.amount) }}</td>
+  <div v-if="itemsInCart.length" class="product-config-from-cart">
+    <table class="product-config-from-cart-summary">
+      <tr v-for="item in itemsInCart" :key="item.id">
+        <td>{{ item.product.name }}</td>
+        <td>{{ item.product.selectedOptionNames }}</td>
+        <td>{{ priceLabel(item.product.amount) }}</td>
 
-      <td @click="addQuantity(item, -1)">
-        -
-      </td>
-      <td>{{ item.quantity }}</td>
-      <td @click="addQuantity(item, 1)">
-        +
-      </td>
-    </tr>
-  </table>
+        <td @click="addQuantity(item, -1)">
+          -
+        </td>
+        <td>{{ item.quantity }}</td>
+        <td @click="addQuantity(item, 1)">
+          +
+        </td>
+      </tr>
+    </table>
+  </div>
 </template>
 
 <script>
