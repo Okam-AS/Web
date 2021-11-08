@@ -4,4 +4,6 @@ export class ImageSource {
     thumbnailUrl: string;
     width: number;
     height: number;
+  
+    constructor() { }
 }

@@ -1,11 +1,11 @@
-import { ImageSource, ImageCarouselItem, CategoryProductListItem, ProductVariant } from '../index'
+import { ImageSource, ImageCarouselItem, CategoryProductListItem } from "../index";
 
 export class Category {
     id: string;
     orderIndex: number;
     name: string;
     image: ImageSource;
-
+    
     published: boolean;
 
     imageCarouselEnabled: boolean;
@@ -14,8 +14,6 @@ export class Category {
     categoryProductListEnabled: boolean;
     categoryProductListItems: Array<CategoryProductListItem>;
 
-    productVariantEnabled: boolean;
-    productVariants: Array<ProductVariant>;
-
     storeId: number;
+    constructor() { }
 }

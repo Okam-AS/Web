@@ -1,52 +1,51 @@
-import { Login, SendVerificationToken, Address } from '../models'
-import { ActionName } from '../enums'
-import { IUserService, IRequestService } from '../interfaces'
-import Configuration from '../helpers/configuration'
-import { RequestService } from './request-service'
-export class UserService implements IUserService {
-  private _requestService: IRequestService;
-  private _store: any;
+import { Login, SendVerificationToken, Address } from "../models";
+import { ActionName } from "../enums"
+import { RequestService } from './request-service';
+import Configuration from "../helpers/configuration"
+import store from "../../vuex/store"
 
-  constructor ($store: any) {
-    this._store = $store
-    this._requestService = new RequestService(Configuration.okamApiBaseUrl)
-  }
+export class UserService {
 
-  public Logout () {
-    this._store.dispatch(ActionName.ClearState)
-  }
+    private _requestService: RequestService;
+    constructor() {
+        this._requestService = new RequestService(Configuration.okamApiBaseUrl);
+    }
 
-  public async Get (): Promise<boolean> {
-    const response = await this._requestService.getRequest('/user')
-    const parsedResponse = this._requestService.tryParseResponse(response)
-    if (response.status === 401 && this._store.getters.currentUser.token) { this._store.dispatch(ActionName.ClearState) }
-    return parsedResponse !== undefined
-  }
+    public Logout() {
+        store.dispatch(ActionName.ClearState);
+    }
 
-  public async Login (model: Login): Promise<boolean> {
-    const response = await this._requestService.postRequest('/user/login', model)
-    const parsedResponse = this._requestService.tryParseResponse(response)
-    if (parsedResponse === undefined) { return false }
-    this._store.dispatch(ActionName.SetCurrentUser, parsedResponse)
-    return parsedResponse
-  }
+    public async Get(): Promise<boolean> {
+        if(!store.state.currentUser?.token) return false;
+        let response = await this._requestService.getRequest('/user');
+        const parsedResponse = this._requestService.tryParseResponse(response)
+        if (response.statusCode === 401 && store.state.currentUser.token) store.dispatch(ActionName.ClearState);
+        return parsedResponse !== undefined;
+    }
 
-  public UpdateDeliveryAddress (model: Address): boolean {
-    this._store.dispatch(ActionName.SetDeliveryAddress, model)
-    // window.console.log(model)
-    return true
-  }
+    public async Login(model: Login): Promise<boolean> {
+        let response = await this._requestService.postRequest('/user/login', model);
+        const parsedResponse = this._requestService.tryParseResponse(response)
+        if (parsedResponse === undefined) return false;
+        store.dispatch(ActionName.SetCurrentUser, parsedResponse);
+        return true
+    }
 
-  public async Delete (): Promise<boolean> {
-    const response = await this._requestService.deleteRequest('/user')
-    const parsedResponse = this._requestService.tryParseResponse(response)
-    if (parsedResponse === undefined) { return false }
-    this._store.dispatch(ActionName.ClearState)
-    return true
-  }
+    public async UpdateDeliveryAddress(model: Address): Promise<boolean> {
+        store.dispatch(ActionName.SetDeliveryAddress, model);
+        return true
+    }
 
-  public async SendVerificationToken (model: SendVerificationToken): Promise<boolean> {
-    const response = await this._requestService.postRequest('/user/sendverificationtoken', model)
-    return this._requestService.tryParseResponse(response) === true
-  }
+    public async Delete(): Promise<boolean> {
+        let response = await this._requestService.deleteRequest('/user');
+        const parsedResponse = this._requestService.tryParseResponse(response)
+        if (parsedResponse === undefined) return false;
+        store.dispatch(ActionName.ClearState);
+        return true
+    }
+
+    public async SendVerificationToken(model: SendVerificationToken): Promise<boolean> {
+        var response = await this._requestService.postRequest('/user/sendverificationtoken', model)
+        return this._requestService.tryParseResponse(response) === true;
+    }
 }

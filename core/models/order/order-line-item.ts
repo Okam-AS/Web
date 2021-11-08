@@ -1,4 +1,4 @@
-import { ProductImage } from '@/core/models/'
+import { ProductImage, OrderLineItemOption } from '@/core/models/';
 
 export class OrderLineItem {
   id: string;
@@ -10,7 +10,9 @@ export class OrderLineItem {
   name: string;
   description: string;
   currency: string;
+  negativeAmount: boolean;
   amount: number;
   amountPreDiscount: number;
   tax: number;
+  options: Array<OrderLineItemOption>;
 }

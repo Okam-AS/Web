@@ -1,4 +1,4 @@
-import { Product } from '../index'
+import { ImageSource, Product } from "../index";
 
 export class ImageCarouselItemMarker {
     id: string;
@@ -7,4 +7,6 @@ export class ImageCarouselItemMarker {
     productId: string;
     product: Product;
     imageCarouselItemId: string;
+    
+    constructor() { }
 }

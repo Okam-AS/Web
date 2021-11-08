@@ -1,7 +1,10 @@
 export class CartCalculation {
-  itemsAmount: number | undefined;
-  itemsAmountLineThrough: number | undefined;
-  deliveryAmount: number | undefined;
-  orderDiscountAmount: number | undefined;
-  finalAmount: number | undefined;
+  itemsAmount: number;
+  itemsAmountLineThrough: number;
+  deliveryAmount: number;
+  orderDiscountAmount: number;
+  tableAdditionalAmount: number;
+  tipAmount: number;
+  finalAmount: number;
+  constructor() { }
 }

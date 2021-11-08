@@ -1,20 +1,24 @@
-import { Address, OpeningHour, StoreUserSetting, User, Category } from '@/core/models'
+import { Address, Category, DeliveryMethod, OpeningHour, User } from '@/core/models';
 
 export class Store {
     id: number;
     name: string;
+    phoneNumber: string;
     logoUrl: string;
     address: Address;
     categories: Array<Category>;
     openingHours: Array<OpeningHour>;
+    isOpenNow: boolean;
     admins: Array<User>;
-    storeUserSettings: Array<StoreUserSetting>;
+    editors: Array<User>;
+    homeDeliveryMethods: Array<DeliveryMethod>;
     approved: boolean;
-    selfPickUp: boolean;
-    tableDeliveryEnabled: boolean;
-    homeDeliveryEnabled: boolean;
     selfCheckout: boolean;
+    selfPickUp: boolean;
+    tableDelivery: boolean;
     registered: Date;
     bankAccountId: string;
     minimumOrderPriceForHomeDelivery: number;
+
+    constructor() { }
 }

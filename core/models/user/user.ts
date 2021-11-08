@@ -1,8 +1,8 @@
-import { StoreName } from '@/core/models'
+import { Address } from "../index"
 
 export class User {
   id: string;
   phoneNumber: string;
-  adminIn: Array<StoreName>;
+  address: Address;
   token: string;
 }

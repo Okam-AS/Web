@@ -1,20 +1,28 @@
-import { DeliveryMethod, CartLineItem, CartCalculation } from '@/core/models'
+import { DeliveryType } from '@/core/enums';
+import { DeliveryMethod, CartLineItem, CartCalculation } from "@/core/models";
 export class Cart {
-  id: string | undefined;
+  id: string;
   items: Array<CartLineItem> = [];
-  storeId: number | undefined;
+  storeId: number;
 
-  homeDeliveryMethodId: string | undefined;
-  homeDeliveryMethod: DeliveryMethod | undefined;
+  homeDeliveryMethodId: string;
+  homeDeliveryMethod: DeliveryMethod;
 
-  isSelfPickup: boolean = false;
+  ignoreLegecyIsSelfPickupBool: boolean;
+  deliveryType: DeliveryType;
 
-  discountCode: string = '';
-  fullAddress: string = '';
-  zipCode: string = '';
-  city: string = '';
-  paymentIntentId: string = '';
-  comment: string = '';
+  discountCode: string;
+  fullAddress: string;
+  zipCode: string;
+  city: string;
+  paymentIntentId: string;
+  comment: string;
 
-  calculations: CartCalculation | undefined;
+  tipPercent: number;
+  tableName: string;
+
+  itemsCountInCategory;
+
+  calculations: CartCalculation;
 }
+
