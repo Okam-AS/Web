@@ -6,5 +6,4 @@ export class ProductImage {
     height: number;
     isCropped: boolean;
     imageId: string;
-    constructor() { }
 }

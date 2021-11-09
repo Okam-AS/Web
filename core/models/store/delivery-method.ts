@@ -5,6 +5,4 @@ export class DeliveryMethod {
     maxDistance: number;
     amount: number;
     minimumOrderPrice: number;
-    constructor() { }
 }
-

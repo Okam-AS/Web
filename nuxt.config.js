@@ -3,6 +3,14 @@ import redirectSSL from 'redirect-ssl'
 export default {
   debug: true,
   // Global page headers (https://go.nuxtjs.dev/config-head)
+  env: {
+    IS_PRODUCTION: process.env.NODE_ENV === 'production',
+    API_BASE_URL: process.env.NODE_ENV === 'production' ? 'https://okamapi.azurewebsites.net' : 'https://okamapitest.azurewebsites.net',
+    IS_NATIVESCRIPT: 'false',
+    VERSION: '1.0.0',
+    STRIPE_PUBLISHABLE_KEY: 'pk_test_51H4qD7LNNQ2fMCqGKVqDxFBnljHO1QyXuLSQ8BTvltvx9jKXGSw78WuX01i9miBj9hzh5L8AS9aiIXF9qUDq5kKH005deCclVN'
+  },
+
   head: {
     title: 'Okam',
     meta: [

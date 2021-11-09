@@ -1,4 +1,4 @@
-import { Address } from "../index"
+import { Address } from '../index'
 
 export class User {
   id: string;

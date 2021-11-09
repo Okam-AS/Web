@@ -1,4 +1,4 @@
-import { Product } from '@/core/models/';
+import { Product } from '@/core/models/'
 export class CartValidation {
   itemsOutOfStock: Array<Product>;
   deliveryAddressError: boolean;
@@ -10,5 +10,4 @@ export class CartValidation {
   itemsInStock: boolean;
   hasErrors: boolean;
   minimumPrice: number;
-  constructor() { }
 }

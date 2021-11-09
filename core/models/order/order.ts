@@ -1,6 +1,6 @@
-import { OrderStatus, DeliveryType } from '@/core/enums';
-import { OrderLineItem } from '@/core/models'
-import { TaxDetail } from '@/core/models'
+import { OrderStatus, DeliveryType } from '@/core/enums'
+import { OrderLineItem, TaxDetail } from '@/core/models'
+
 export class Order {
     id: string;
     userId: string;
@@ -35,6 +35,4 @@ export class Order {
     storeCity: string;
 
     comment: string;
-
-    constructor() { }
 }

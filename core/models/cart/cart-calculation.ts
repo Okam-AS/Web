@@ -6,5 +6,4 @@ export class CartCalculation {
   tableAdditionalAmount: number;
   tipAmount: number;
   finalAmount: number;
-  constructor() { }
 }

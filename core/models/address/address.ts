@@ -3,6 +3,4 @@ export class Address {
     fullAddress: string;
     zipCode: string;
     city: string;
-
-    constructor() { }
 }

@@ -1,4 +1,4 @@
-import { ProductVariantOption } from "../index";
+import { ProductVariantOption } from '../index'
 
 export class ProductVariant {
     id: string;
@@ -8,5 +8,4 @@ export class ProductVariant {
     multiselect: boolean;
     required: boolean;
     productId: string;
-    constructor() { }
 }

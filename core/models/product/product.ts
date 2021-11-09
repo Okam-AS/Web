@@ -1,4 +1,4 @@
-import { ImageSource, ProductVariant } from "../index";
+import { ImageSource, ProductVariant } from '../index'
 export class Product {
     id: string;
     name: string;
@@ -27,5 +27,4 @@ export class Product {
     regularDiscountId: string;
 
     tableAdditionalAmount: number;
-    constructor() { }
 }

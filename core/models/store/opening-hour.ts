@@ -3,5 +3,4 @@ export class OpeningHour {
     openingTime: string;
     closingTime: string;
     open: boolean;
-    constructor() { }
 }

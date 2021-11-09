@@ -1,5 +1,5 @@
-import { DeliveryType } from '@/core/enums';
-import { DeliveryMethod, CartLineItem, CartCalculation } from "@/core/models";
+import { DeliveryType } from '@/core/enums'
+import { DeliveryMethod, CartLineItem, CartCalculation } from '@/core/models'
 export class Cart {
   id: string;
   items: Array<CartLineItem> = [];
@@ -25,4 +25,3 @@ export class Cart {
 
   calculations: CartCalculation;
 }
-

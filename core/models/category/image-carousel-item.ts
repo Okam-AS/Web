@@ -1,4 +1,4 @@
-import { ImageSource, ImageCarouselItemMarker } from "../index";
+import { ImageSource, ImageCarouselItemMarker } from '../index'
 
 export class ImageCarouselItem {
     id: string;
@@ -6,6 +6,4 @@ export class ImageCarouselItem {
     markers: Array<ImageCarouselItemMarker>;
     image: ImageSource;
     categoryId: string;
-    
-    constructor() { }
 }

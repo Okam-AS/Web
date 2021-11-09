@@ -1,4 +1,4 @@
-import { Product, Category } from "../index";
+import { Product, Category } from '../index'
 
 export class CategoryProductListItem {
     id: string;
@@ -9,6 +9,4 @@ export class CategoryProductListItem {
     product: Product;
     categoryId: string;
     category: Category;
-    
-    constructor() { }
 }

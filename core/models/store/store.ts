@@ -1,4 +1,4 @@
-import { Address, Category, DeliveryMethod, OpeningHour, User } from '@/core/models';
+import { Address, Category, DeliveryMethod, OpeningHour, User } from '@/core/models'
 
 export class Store {
     id: number;
@@ -19,6 +19,4 @@ export class Store {
     registered: Date;
     bankAccountId: string;
     minimumOrderPriceForHomeDelivery: number;
-
-    constructor() { }
 }
