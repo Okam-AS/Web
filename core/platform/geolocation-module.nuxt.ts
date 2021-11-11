@@ -1,8 +1,10 @@
 import { IGeolocationModule } from '../interfaces'
 
-export class GeolocationModuleNUXT implements IGeolocationModule {
+class GeolocationModuleNUXT implements IGeolocationModule {
     getCurrentLocation: any;
     isEnabled: any;
     longitude: any;
     latitude: any;
 }
+
+export const GeolocationModule = GeolocationModuleNUXT

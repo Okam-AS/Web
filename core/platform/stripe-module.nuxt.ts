@@ -1,6 +1,8 @@
 import { IStripeModule } from '../interfaces'
 
-export class StripeModuleNS implements IStripeModule {
+class StripeModuleNUXT implements IStripeModule {
     CardParams: any;
     stripe: any;
 }
+
+export const StripeModule = StripeModuleNUXT

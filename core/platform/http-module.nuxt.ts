@@ -1,10 +1,11 @@
 import { IHttpModule } from '../interfaces'
 
-export class HttpModuleNS implements IHttpModule {
+class HttpModuleNUXT implements IHttpModule {
   httpClient: any;
 
   constructor () {
-    const temp = require('@nuxtjs/axios')
-    this.httpClient = temp.default
+    this.httpClient = require('axios')
   }
 }
+
+export const HttpModule = HttpModuleNUXT

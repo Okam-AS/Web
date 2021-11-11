@@ -1,6 +1,6 @@
 import { IHttpModule } from '../interfaces'
 
-export class HttpModuleNS implements IHttpModule {
+class HttpModuleNS implements IHttpModule {
   httpClient: any;
 
   constructor () {
@@ -8,3 +8,5 @@ export class HttpModuleNS implements IHttpModule {
     this.httpClient = client.Http.request
   }
 }
+
+export const HttpModule = HttpModuleNS

@@ -7,7 +7,7 @@ const stripeStandardConfig = require(stripeStandardConfigPath)
 const privateStripePath = '@triniwiz/nativescript-stripe'
 const privateStripe = require(privateStripePath)
 
-export class StripeModuleNS implements IStripeModule {
+class StripeModuleNS implements IStripeModule {
     CardParams: any;
     stripe: any;
 
@@ -19,3 +19,5 @@ export class StripeModuleNS implements IStripeModule {
       this.stripe = new privateStripe.Stripe($config.stripePublishableKey)
     }
 }
+
+export const StripeModule = StripeModuleNS

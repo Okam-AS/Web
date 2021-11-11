@@ -6,7 +6,7 @@ const messaging = require(messagingPath)
 const localNotificationsPath = '@nativescript/local-notifications'
 const localNotifications = require(localNotificationsPath)
 
-export class NotificationModuleNS implements INotificationModule {
+class NotificationModuleNS implements INotificationModule {
     areNotificationsEnabled: any;
     registerForPushNotifications: any;
     addOnPushTokenReceivedCallback: any;
@@ -21,3 +21,5 @@ export class NotificationModuleNS implements INotificationModule {
       this.schedule = localNotifications.schedule
     }
 }
+
+export const NotificationModule = NotificationModuleNS

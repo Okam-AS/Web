@@ -5,51 +5,56 @@ import $config from '../helpers/configuration'
 
 export class RequestService {
     private _baseUrl: string
+    private _httpModule: typeof HttpModule
+    private _vuexModule: typeof VuexModule
+
     constructor (baseUrl: string) {
       this._baseUrl = baseUrl
+      this._httpModule = new HttpModule()
+      this._vuexModule = new VuexModule()
     }
 
     deleteRequest (path: string): Promise<any> {
       const request = this._defaultRequest(path, undefined, HttpMethod.DELETE)
-      return HttpModule.httpClient(request).then((response) => {
+      return this._httpModule.httpClient(request).then((response) => {
         this._clearTokenIfExpired(response)
-        if (response.statusCode !== 200) { window.console.log(response.content.toString()) }
+        if (response.status !== 200) { window.console.log(response.data.toString()) }
         return response
       })
     }
 
     getRequest (path: string): Promise<any> {
       const request = this._defaultRequest(path, false, HttpMethod.GET)
-      return HttpModule.httpClient(request).then((response) => {
+      return this._httpModule.httpClient(request).then((response) => {
         this._clearTokenIfExpired(response)
-        if (response.statusCode !== 200) { window.console.log(response.content.toString()) }
+        if (response.status !== 200) { window.console.log(response.data.toString()) }
         return response
       })
     }
 
     postRequest (path: string, payload?: any): Promise<any> {
       const request = this._defaultRequest(path, payload, HttpMethod.POST)
-      return HttpModule.httpClient(request).then((response) => {
+      return this._httpModule.httpClient(request).then((response) => {
         this._clearTokenIfExpired(response)
-        if (response.statusCode !== 200) { window.console.log(response.content.toString()) }
+        if (response.status !== 200) { window.console.log(response.data.toString()) }
         return response
       })
     }
 
     putRequest (path: string, payload: any): Promise<any> {
       const request = this._defaultRequest(path, payload, HttpMethod.PUT)
-      return HttpModule.httpClient(request).then((response) => {
+      return this._httpModule.httpClient(request).then((response) => {
         this._clearTokenIfExpired(response)
-        if (response.statusCode !== 200) { window.console.log(response.content.toString()) }
+        if (response.status !== 200) { window.console.log(response.data.toString()) }
         return response
       })
     }
 
-    tryParseResponse (response) {
-      if (response && response.statusCode === 200) {
+    tryParseResponse (response: any) {
+      if (response && response.status === 200) {
         let parsedResponse
         try {
-          parsedResponse = response.content.toJSON()
+          parsedResponse = response.data
         } catch (e) {
           return undefined
         }
@@ -60,12 +65,11 @@ export class RequestService {
     }
 
     private _clearTokenIfExpired (response: any) {
-      if (response && response.statusCode === 440) { VuexModule.dispatch(ActionName.ClearState) }
+      if (response && response.status === 440) { this._vuexModule.dispatch(ActionName.ClearState) }
     }
 
     private _defaultRequest (path: string, payload: any, method: HttpMethod): any {
-      window.console.log(JSON.stringify(VuexModule))
-      return this._buildRequest(path, method, payload ? JSON.stringify(payload) : '', VuexModule.state?.currentUser?.token)
+      return this._buildRequest(path, method, payload ? JSON.stringify(payload) : '', this._vuexModule.state?.currentUser?.token)
     };
 
     private _buildRequest (path: string, method: HttpMethod, content?: string, bearerToken?: string): any {

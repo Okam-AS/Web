@@ -3,7 +3,7 @@ import { IGeolocationModule } from '../interfaces'
 const geolocationPath = '@nativescript/geolocation'
 const geolocation = require(geolocationPath)
 
-export class GeolocationModuleNS implements IGeolocationModule {
+class GeolocationModuleNS implements IGeolocationModule {
     getCurrentLocation: any;
     isEnabled: any;
     longitude: any;
@@ -16,3 +16,5 @@ export class GeolocationModuleNS implements IGeolocationModule {
       this.latitude = geolocation.latitude
     }
 }
+
+export const GeolocationModule = GeolocationModuleNS

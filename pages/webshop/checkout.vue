@@ -209,7 +209,7 @@ export default {
       )
     },
     init () {
-      this.$store.dispatch('load')
+      this.$store.dispatch('Load')
       this.$store.subscribe((mutation, state) => {
         if (mutation && window && window.localStorage) {
           localStorage.setItem('state', JSON.stringify(state))

@@ -1,9 +1,11 @@
 import { INotificationModule } from '../interfaces'
 
-export class NotificationModuleNUXT implements INotificationModule {
+class NotificationModuleNUXT implements INotificationModule {
     areNotificationsEnabled: any;
     registerForPushNotifications: any;
     addOnPushTokenReceivedCallback: any;
     addOnMessageReceivedCallback: any;
     schedule: any;
 }
+
+export const NotificationModule = NotificationModuleNUXT

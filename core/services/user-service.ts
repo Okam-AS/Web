@@ -6,20 +6,22 @@ import { RequestService } from './request-service'
 
 export class UserService {
     private _requestService: RequestService;
+    private _vuexModule: typeof VuexModule;
 
     constructor () {
       this._requestService = new RequestService($config.okamApiBaseUrl)
+      this._vuexModule = new VuexModule()
     }
 
     public Logout () {
-      VuexModule.dispatch(ActionName.ClearState)
+      this._vuexModule.dispatch(ActionName.ClearState)
     }
 
     public async Get (): Promise<boolean> {
-      if (!VuexModule.state.currentUser?.token) { return false }
+      if (!this._vuexModule.state.currentUser?.token) { return false }
       const response = await this._requestService.getRequest('/user')
       const parsedResponse = this._requestService.tryParseResponse(response)
-      if (response.statusCode === 401 && VuexModule.state.currentUser.token) { VuexModule.dispatch(ActionName.ClearState) }
+      if (response.statusCode === 401 && this._vuexModule.state.currentUser.token) { this._vuexModule.dispatch(ActionName.ClearState) }
       return parsedResponse !== undefined
     }
 
@@ -27,12 +29,12 @@ export class UserService {
       const response = await this._requestService.postRequest('/user/login', model)
       const parsedResponse = this._requestService.tryParseResponse(response)
       if (parsedResponse === undefined) { return false }
-      VuexModule.dispatch(ActionName.SetCurrentUser, parsedResponse)
+      this._vuexModule.dispatch(ActionName.SetCurrentUser, parsedResponse)
       return true
     }
 
     public UpdateDeliveryAddress (model: Address): boolean {
-      VuexModule.dispatch(ActionName.SetDeliveryAddress, model)
+      this._vuexModule.dispatch(ActionName.SetDeliveryAddress, model)
       return true
     }
 
@@ -40,7 +42,7 @@ export class UserService {
       const response = await this._requestService.deleteRequest('/user')
       const parsedResponse = this._requestService.tryParseResponse(response)
       if (parsedResponse === undefined) { return false }
-      VuexModule.dispatch(ActionName.ClearState)
+      this._vuexModule.dispatch(ActionName.ClearState)
       return true
     }
 

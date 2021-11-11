@@ -1,6 +1,6 @@
 import { IVuexModule } from '../interfaces'
 
-export class VuexModuleNS implements IVuexModule {
+class VuexModuleNS implements IVuexModule {
   state: any;
   getters: any;
   commit: any;
@@ -19,3 +19,5 @@ export class VuexModuleNS implements IVuexModule {
     this.watch = tempStore.watch
   }
 }
+
+export const VuexModule = VuexModuleNS
