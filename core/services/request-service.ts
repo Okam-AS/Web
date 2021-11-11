@@ -73,14 +73,18 @@ export class RequestService {
     };
 
     private _buildRequest (path: string, method: HttpMethod, content?: string, bearerToken?: string): any {
-      const request = { headers: {} }
+      const request = { headers: {}, data: null }
       request[HttpProperty.Url] = this._baseUrl + path
       request[HttpProperty.Method] = method
       request.headers[HttpProperty.ContentType] = 'application/json; charset=utf-8'
       request.headers[HttpProperty.ClientPlatform] = this._getClientPlatformName()
       request.headers[HttpProperty.ClientAppVersion] = $config.version
 
-      if (content) { request[HttpProperty.Content] = content }
+      if (content) {
+        request[HttpProperty.Data] = JSON.parse(content)
+        request[HttpProperty.Content] = content
+      }
+
       if (bearerToken) { request.headers[HttpProperty.Authorization] = 'Bearer ' + bearerToken }
       return request
     };
