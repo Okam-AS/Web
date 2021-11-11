@@ -87,7 +87,7 @@ export default {
     this.productService = new ProductService()
     if (storedUser) {
       const user = JSON.parse(storedUser)
-      this.$store.dispatch('setCurrentUser', user)
+      this.$store.dispatch('SetCurrentUser', user)
       this.getStores()
       this.$emit('loggedIn')
     }
@@ -119,7 +119,7 @@ export default {
       })
     },
     wipeUser () {
-      this.$store.dispatch('setCurrentUser', {})
+      this.$store.dispatch('SetCurrentUser', {})
       this.smsSent = false
       this.codeSent = false
     },
