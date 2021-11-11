@@ -129,5 +129,13 @@ export default {
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
+    extend (config, { _isDev, _isClient }) {
+      config.module.rules.push({
+        enforce: 'pre',
+        test: /\.(ns.ts)$/,
+        loader: 'ignore-loader',
+        exclude: /(node_modules)/
+      })
+    }
   }
 }

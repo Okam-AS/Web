@@ -1,6 +1,6 @@
 export interface IGeolocationModule {
   getCurrentLocation: any;
-  isEnabled: any;
+  isEnabled: boolean;
   longitude: any;
   latitude: any;
 }

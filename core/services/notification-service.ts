@@ -1,6 +1,6 @@
 import { ActionName, NotificationPlatform } from '../enums'
 import { NotificationRegistration } from '../models'
-import { NotificationModule } from '../platform'
+import { NotificationModule, VuexModule } from '../platform'
 import $config from '../helpers/configuration'
 import { RequestService } from './request-service'
 
@@ -12,13 +12,13 @@ export class NotificationService {
 
     public isEnabled () {
       const enabled = !!NotificationModule.areNotificationsEnabled()
-      const loggedIn = $config.store.state.currentUser && $config.store.state.currentUser.id
-      if (enabled && loggedIn && !$config.store.state.notificationApproved) { $config.store.dispatch(ActionName.SetNotificationApproved, true) }
-      return $config.store.state.notificationApproved
+      const loggedIn = VuexModule.state.currentUser && VuexModule.state.currentUser.id
+      if (enabled && loggedIn && !VuexModule.state.notificationApproved) { VuexModule.dispatch(ActionName.SetNotificationApproved, true) }
+      return VuexModule.state.notificationApproved
     }
 
     public register () {
-      $config.store.dispatch(ActionName.SetNotificationApproved, true)
+      VuexModule.dispatch(ActionName.SetNotificationApproved, true)
       NotificationModule.registerForPushNotifications({
         onPushTokenReceivedCallback: token => this.registerNotificationOnServer(token),
         onMessageReceivedCallback: data => this.messageReceivedCallback(data),
@@ -40,8 +40,8 @@ export class NotificationService {
 
     // Turn off (called when user logges off)
     public deactivate () {
-      $config.store.dispatch(ActionName.SetNotificationApproved, false)
-      if ($config.store.state.notificationId) { this.delete($config.store.state.notificationId) }
+      VuexModule.dispatch(ActionName.SetNotificationApproved, false)
+      if (VuexModule.state.notificationId) { this.delete(VuexModule.state.notificationId) }
     }
 
     private registerNotificationOnServer (token) {
@@ -67,7 +67,7 @@ export class NotificationService {
             }
           ])
         }
-        $config.store.dispatch(ActionName.GetOrders)
+        VuexModule.dispatch(ActionName.GetOrders)
       }, 500)
     }
 
@@ -75,7 +75,7 @@ export class NotificationService {
       const response = await this._requestService.getRequest('/notification/consumer/' + handle)
       const parsedResponse = this._requestService.tryParseResponse(response)
       if (parsedResponse === undefined) { return '' }
-      $config.store.dispatch(ActionName.SetNotificationId, parsedResponse.id)
+      VuexModule.dispatch(ActionName.SetNotificationId, parsedResponse.id)
       return parsedResponse.id
     }
 

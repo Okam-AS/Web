@@ -1,5 +1,6 @@
 import { HttpMethod, HttpProperty, ActionName } from '../enums'
 
+import { HttpModule, VuexModule } from '../platform'
 import $config from '../helpers/configuration'
 
 export class RequestService {
@@ -10,7 +11,7 @@ export class RequestService {
 
     deleteRequest (path: string): Promise<any> {
       const request = this._defaultRequest(path, undefined, HttpMethod.DELETE)
-      return $config.httpClient(request).then((response) => {
+      return HttpModule.httpClient(request).then((response) => {
         this._clearTokenIfExpired(response)
         if (response.statusCode !== 200) { window.console.log(response.content.toString()) }
         return response
@@ -19,7 +20,7 @@ export class RequestService {
 
     getRequest (path: string): Promise<any> {
       const request = this._defaultRequest(path, false, HttpMethod.GET)
-      return $config.httpClient(request).then((response) => {
+      return HttpModule.httpClient(request).then((response) => {
         this._clearTokenIfExpired(response)
         if (response.statusCode !== 200) { window.console.log(response.content.toString()) }
         return response
@@ -28,7 +29,7 @@ export class RequestService {
 
     postRequest (path: string, payload?: any): Promise<any> {
       const request = this._defaultRequest(path, payload, HttpMethod.POST)
-      return $config.httpClient(request).then((response) => {
+      return HttpModule.httpClient(request).then((response) => {
         this._clearTokenIfExpired(response)
         if (response.statusCode !== 200) { window.console.log(response.content.toString()) }
         return response
@@ -37,7 +38,7 @@ export class RequestService {
 
     putRequest (path: string, payload: any): Promise<any> {
       const request = this._defaultRequest(path, payload, HttpMethod.PUT)
-      return $config.httpClient(request).then((response) => {
+      return HttpModule.httpClient(request).then((response) => {
         this._clearTokenIfExpired(response)
         if (response.statusCode !== 200) { window.console.log(response.content.toString()) }
         return response
@@ -59,11 +60,12 @@ export class RequestService {
     }
 
     private _clearTokenIfExpired (response: any) {
-      if (response && response.statusCode === 440) { $config.store.dispatch(ActionName.ClearState) }
+      if (response && response.statusCode === 440) { VuexModule.dispatch(ActionName.ClearState) }
     }
 
     private _defaultRequest (path: string, payload: any, method: HttpMethod): any {
-      return this._buildRequest(path, method, payload ? JSON.stringify(payload) : '', $config.store.state.currentUser?.token)
+      window.console.log(JSON.stringify(VuexModule))
+      return this._buildRequest(path, method, payload ? JSON.stringify(payload) : '', VuexModule.state?.currentUser?.token)
     };
 
     private _buildRequest (path: string, method: HttpMethod, content?: string, bearerToken?: string): any {
