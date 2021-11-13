@@ -6,9 +6,11 @@ export default {
   env: {
     IS_PRODUCTION: process.env.NODE_ENV === 'production',
     API_BASE_URL: process.env.NODE_ENV === 'production' ? 'https://okamapi.azurewebsites.net' : 'https://okamapitest.azurewebsites.net',
+    STRAPI_BASE_URL: 'https://okam-strapi.herokuapp.com',
     IS_NATIVESCRIPT: 'false',
     VERSION: '1.0.0',
-    STRIPE_PUBLISHABLE_KEY: 'pk_test_51H4qD7LNNQ2fMCqGKVqDxFBnljHO1QyXuLSQ8BTvltvx9jKXGSw78WuX01i9miBj9hzh5L8AS9aiIXF9qUDq5kKH005deCclVN'
+    STRIPE_PUBLISHABLE_KEY: 'pk_test_51H4qD7LNNQ2fMCqGKVqDxFBnljHO1QyXuLSQ8BTvltvx9jKXGSw78WuX01i9miBj9hzh5L8AS9aiIXF9qUDq5kKH005deCclVN',
+    PLATFORM_FILE_SUFFIX: '.nuxt'
   },
 
   head: {
@@ -114,8 +116,14 @@ export default {
     // https://go.nuxtjs.dev/content
     '@nuxt/content',
     // i18n plugin
-    'nuxt-i18n'
+    'nuxt-i18n',
+    // Reading richt text from Strapi
+    '@nuxtjs/markdownit'
   ],
+
+  markdownit: {
+    runtime: true // Support `$md()`
+  },
 
   googleAnalytics: {
     id: 'UA-167439729-2'

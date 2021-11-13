@@ -1,0 +1,77 @@
+<template>
+  <div>
+    <page-header />
+    <main class="page-content">
+      <div class="article">
+        <div class="wrapper">
+          <div class="element text-content">
+            <h1 class="heading-1 u-center">
+              {{ page.Heading }}
+            </h1>
+            <!-- article -->
+            <article
+              :id="'post-'+page.id"
+              class="page type-page status-publish hentry"
+            >
+              <div v-if="page.Main_intro" v-html="$md.render(page.Main_intro)" />
+              <div v-if="page.Main_body" v-html="$md.render(page.Main_body)" />
+
+              <p style="margin-top:50px;">
+                <strong>Har du tips om et sted du skulle likt å handle med
+                  Okam?</strong>
+                <a href="/kontakt/">Send oss gjerne en melding her</a>.
+              </p>
+
+              <p>Last ned Okam for å handle fra butikker i ditt nærområde</p>
+              <div class="big-teaser__links">
+                <a
+                  class="ga-ios-download"
+                  href="https://apps.apple.com/no/app/okam/id1514296965"
+                ><img
+                  alt="AppStore"
+                  height="40"
+                  src="~assets/UI/appstore-btn.png"
+                ></a>
+                <a
+                  class="ga-android-download"
+                  href="https://play.google.com/store/apps/details?id=no.okam.consumer"
+                ><img
+                  alt="Google Play"
+                  height="40"
+                  src="~assets/UI/googleplay-btn.png"
+                ></a>
+              </div>
+            </article>
+            <!-- /article -->
+          </div>
+        </div>
+      </div>
+    </main>
+    <page-footer />
+  </div>
+</template>
+<script>
+export default {
+  data: () => ({
+    strapiBaseUrl: process.env.STRAPI_BASE_URL,
+    page: {
+      id: 0,
+      Heading: '',
+      Main_intro: '',
+      Main_body: '',
+      Employee: [], // {id, name, description, job_title, profile}
+      created_at: '',
+      updated_at: ''
+    }
+  }),
+  mounted () {
+    fetch(`${this.strapiBaseUrl}/about-us`)
+      .then((res) => {
+        res.json().then(
+          (jsonResponse) => {
+            this.page = jsonResponse
+          })
+      })
+  }
+}
+</script>

@@ -17,6 +17,9 @@
         <div class="page-footer__col">
           <ul class="link-list">
             <li class="link-list__item">
+              <a href="/om-oss">Om oss</a>
+            </li>
+            <li class="link-list__item">
               <a href="/om-okam">For kunder</a>
             </li>
             <li class="link-list__item">

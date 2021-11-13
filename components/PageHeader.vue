@@ -25,6 +25,9 @@
       >
         <ul class="main-menu__list">
           <li class="main-menu__item">
+            <a class="main-menu__link" href="/om-oss/"> Om oss </a>
+          </li>
+          <li class="main-menu__item">
             <a class="main-menu__link" href="/om-okam/"> For kunder </a>
           </li>
           <li class="main-menu__item">
