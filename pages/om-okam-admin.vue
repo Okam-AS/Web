@@ -22,7 +22,7 @@
                 :key="feature.id"
                 :name="feature.title"
                 :description="feature.description"
-                :icon-url="feature.icon.url"
+                :icon-url="strapiBaseUrl+feature.icon.url"
               />
               <div v-if="page.body_below_features" v-html="$md.render(page.body_below_features)" />
             </div>
