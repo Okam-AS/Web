@@ -6,15 +6,15 @@
         <div class="wrapper">
           <div class="element text-content">
             <h1 class="heading-1 u-center">
-              {{ page.Heading }}
+              {{ page.heading }}
             </h1>
             <!-- article -->
             <article
               :id="'post-'+page.id"
               class="page type-page status-publish hentry"
             >
-              <div v-if="page.Main_intro" v-html="$md.render(page.Main_intro)" />
-              <div v-if="page.Main_body" v-html="$md.render(page.Main_body)" />
+              <div v-if="page.main_intro" v-html="$md.render(page.main_intro)" />
+              <div v-if="page.main_body" v-html="$md.render(page.main_body)" />
 
               <p style="margin-top:50px;">
                 <strong>Har du tips om et sted du skulle likt å handle med
@@ -56,10 +56,10 @@ export default {
     strapiBaseUrl: process.env.STRAPI_BASE_URL,
     page: {
       id: 0,
-      Heading: '',
-      Main_intro: '',
-      Main_body: '',
-      Employee: [], // {id, name, description, job_title, profile}
+      heading: '',
+      main_intro: '',
+      main_body: '',
+      employee: [], // {id, name, description, job_title, profile}
       created_at: '',
       updated_at: ''
     }

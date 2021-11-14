@@ -122,7 +122,8 @@ export default {
   ],
 
   markdownit: {
-    runtime: true // Support `$md()`
+    runtime: true, // Support `$md()`
+    html: true // Support html-tags
   },
 
   googleAnalytics: {

@@ -5,141 +5,38 @@
       <div class="article">
         <div class="wrapper">
           <h1 class="heading-1 u-center">
-            Bli med på å gjøre lokal handel enklere for alle
+            {{ page.heading }}
           </h1>
-          <!-- article -->
           <article
-            id="post-20"
-            class="post-20 page type-page status-publish hentry"
+            :id="'post-'+page.id"
+            class="page type-page status-publish hentry"
           >
-            <div class="wp-block-group alignwide">
-              <div class="wp-block-group__inner-container">
-                <p>
-                  Sett opp din butikk i Okam Admin i løpet av få minutter for å
-                  gi dine kunder en bedre kjøpsopplevelse. Ta noen bilder av
-                  varene du selger, last de opp i din Okam Admin og kunder kan
-                  straks legge inn sine bestillinger. I Okam Admin har du full
-                  oversikt over bestillingene som kommer inn, og kan enkelt
-                  behandle disse.
-                </p>
-                <p>
-                  Okam passer til alle typer butikker, store og små. Skru på
-                  funksjonene din butikk trenger, helt gratis. Vi tar bare 3% +
-                  2 kr per transaksjon som går gjennom platformen. Ingen skjulte
-                  kostnader.
-                </p>
-              </div>
-            </div>
-            <div style="margin-top: 100px; margin-bottom: 100px">
-              <img
-                style="display: block; margin-left: auto; margin-right: auto"
-                width="800"
-                src="~/assets/UI/okam-admin-bestillinger.png"
-                alt=""
-              >
-            </div>
+            <div v-if="page.body" v-html="$md.render(page.body)" />
 
             <div style="margin-top: 50px">
               <h2 class="heading-1 u-center">
-                Okam gir bedriften din
+                {{ page.features_title }}
               </h2>
               <feature-info
-                name="Mobil bestillingsplattform"
-                description="Motta og administrer bestillinger fra ubegrenset antall telefoner eller tableter"
-                :icon-url="require('~/assets/UI/icon_card.svg')"
+                v-for="feature in page.features"
+                :key="feature.id"
+                :name="feature.title"
+                :description="feature.description"
+                :icon-url="feature.icon.url"
               />
-              <feature-info
-                name="Klikk & hent"
-                description="Gjør det enkelt og raskt for kundene dine å handle hos deg"
-                :icon-url="require('~/assets/UI/icon_click.svg')"
-              />
-              <feature-info
-                name="Hjemlevering"
-                description="Legg inn dine priser for hjemlevering etter kjøreavstand dersom du tilbyr dette"
-                :icon-url="require('~/assets/UI/icon_car.svg')"
-              />
-              <feature-info
-                name="Selvbetjening i butikk"
-                description="Kunder kan scanne strekkoder og betale for varene fra sin telefon"
-                :icon-url="require('~/assets/UI/icon_barcode.svg')"
-              />
-              <feature-info
-                name="Spis inne"
-                description="Serveringsteder kan tilby sine kunder å spise inne"
-                :icon-url="require('~/assets/UI/icon_food.svg')"
-              />
-              <feature-info
-                name="QR bestillingssystem"
-                description="QR-koden kan scannes av kunden for å se vareutvalg og handle "
-                :icon-url="require('~/assets/UI/icon_qr.svg')"
-              />
-              <p style="margin-top: 2em">
-                Rabattkoder, statistikk, lagerstyring, servitørfunksjon og mye
-                mer... Skru på funksjonene butikken din trenger, helt gratis.
-              </p>
-
-              <p style="font-weight: bold">
-                Last ned Okam Admin og sett opp din butikk gratis
-              </p>
-              <div class="big-teaser__links">
-                <a
-                  href="https://apps.apple.com/no/app/okam-butikk/id1514667230"
-                ><img
-                  alt="AppStore"
-                  height="40"
-                  src="~/assets/UI/appstore-btn.png"
-                ></a>
-                <a
-                  href="https://play.google.com/store/apps/details?id=no.okam.store"
-                ><img
-                  alt="Google Play"
-                  height="40"
-                  src="~/assets/UI/googleplay-btn.png"
-                ></a>
+              <div v-if="page.body_below_features" v-html="$md.render(page.body_below_features)" />
+            </div>
+            <div class="faq-list">
+              <h2 v-if="page.accordion_heading" class="heading-1 u-center">
+                {{ page.accordion_heading }}
+              </h2>
+              <div v-for="accordionItem in page.accordion" :key="accordionItem.id">
+                <FaqItem :q="accordionItem.title">
+                  <span v-html="$md.render(accordionItem.description)" />
+                </FaqItem>
               </div>
             </div>
-
-            <div class="faq-list" style="margin-top: 100px">
-              <h2 class="heading-1 u-center">
-                Spørsmål og svar
-              </h2>
-              <FaqItem
-                q="Hvordan legger jeg inn mine produkter?"
-                a="Okam Admin har et enkelt brukergrensesnitt for å legge til,
-                  endre eller slette produkter. Dersom du har en større
-                  vareliste kan vi hjelp med import av produktlista."
-              />
-              <FaqItem
-                q="Hvordan får jeg kunder til butikksiden min?"
-                a="Alle Okam butikker får en direkte lenke til sin butikkside i
-                  Okam. Den kan for eksempel deles via sosiale medier, e-post
-                  eller SMS. Butikken får også en unik QR-kode som kan printes
-                  ut og plasseres i butikken."
-              />
-              <FaqItem
-                q="Hva koster det?"
-                a="Skru på funksjonene butikken din trenger, helt gratis. Vi tar
-                  bare 3% + 2 kr per transaksjon som går gjennom platformen.
-                  Ingen bindingstid, månedskostnad, oppstartsgebyr eller andre
-                  skjulte kostnader."
-              />
-              <FaqItem
-                q="Kan jeg bruke Okam som privatperson, for eksempel til et
-                      garasjesalg?"
-                a="Nei. For å benytte deg av Okam må du ha et
-                    organisasjonsnummer."
-              />
-              <FaqItem q="Kan jeg få hjelp?">
-                <span>
-                  Okam Admin vil veilede deg gjennom oppsettet av butikken din,
-                  men vi er her for deg hvis du trenger hjelp. Ta kontakt via
-                  <a href="/kontakt">kontaktskjema</a> så svarer vi innen kort
-                  tid.
-                </span>
-              </FaqItem>
-            </div>
-
-            <br class="clear">
+            <div v-if="page.body_below_accordion" v-html="$md.render(page.body_below_accordion)" />
           </article>
         </div>
       </div>
@@ -151,6 +48,31 @@
 import FeatureInfo from '../components/FeatureInfo.vue'
 import FaqItem from '../components/FaqItem.vue'
 export default {
-  components: { FeatureInfo, FaqItem }
+  components: { FeatureInfo, FaqItem },
+  data: () => ({
+    strapiBaseUrl: process.env.STRAPI_BASE_URL,
+    page: {
+      id: '',
+      heading: '',
+      accordion_heading: '',
+      body: '',
+      body_below_accordion: '',
+      published_at: '',
+      created_at: '',
+      updated_at: '',
+      features_title: '',
+      features: [], // {id,title,description,icon{url} }
+      accordion: [] // {id,title,description}
+    }
+  }),
+  mounted () {
+    fetch(`${this.strapiBaseUrl}/for-stores`)
+      .then((res) => {
+        res.json().then(
+          (jsonResponse) => {
+            this.page = jsonResponse
+          })
+      })
+  }
 }
 </script>
