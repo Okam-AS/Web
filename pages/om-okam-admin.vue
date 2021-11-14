@@ -27,8 +27,8 @@
               <div v-if="page.body_below_features" v-html="$md.render(page.body_below_features)" />
             </div>
             <div class="faq-list">
-              <h2 v-if="page.accordion_heading" class="heading-1 u-center">
-                {{ page.accordion_heading }}
+              <h2 v-if="page.accordion_title" class="heading-1 u-center">
+                {{ page.accordion_title }}
               </h2>
               <div v-for="accordionItem in page.accordion" :key="accordionItem.id">
                 <FaqItem :q="accordionItem.title">
@@ -54,7 +54,7 @@ export default {
     page: {
       id: '',
       heading: '',
-      accordion_heading: '',
+      accordion_title: '',
       body: '',
       body_below_accordion: '',
       published_at: '',
