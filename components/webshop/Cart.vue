@@ -1,23 +1,24 @@
 <template>
   <div class="cart">
     <h2>Handlekurv</h2>
-    <table>
-      <tr v-for="item in itemsInCart" :key="item.id">
-        <td><span style="font-weight:bold">{{ item.product.name }}</span><br><span>{{ item.product.selectedOptionNames }}</span></td>
+    <div
+      v-for="item in itemsInCart"
+      :key="item.id"
+      class="cart-row"
+    >
+      <div class="cart-row-title">
+        <span style="font-weight:bold">{{ item.product.name }}</span><br>
+        <span>{{ item.product.selectedOptionNames }}</span>
+      </div>
 
-        <td style="font-size:10px;color:gray;">
-          {{ priceLabel(item.product.amount) }}
-        </td>
+      <span style="font-size:10px;color:gray;">
+        {{ priceLabel(item.product.amount) }}
+      </span>
 
-        <td @click="addQuantity(item, -1)">
-          -
-        </td>
-        <td>{{ item.quantity }}</td>
-        <td @click="addQuantity(item, 1)">
-          +
-        </td>
-      </tr>
-    </table>
+      <button @click="addQuantity(item, -1)">-</button>
+      <span>{{ item.quantity }}</span>
+      <button @click="addQuantity(item, 1)">+</button>
+    </div>
   </div>
 </template>
 
@@ -67,5 +68,20 @@ export default {
 .cart {
   background: #D5F6E5;
   border: 1px solid green;
+
+  &-row {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    &-title {
+      flex-grow: 1;
+    }
+  }
+
+  button {
+    padding: 10px;
+    border-radius: 5px;
+  }
 }
 </style>

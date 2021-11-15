@@ -1,20 +1,17 @@
 <template>
-  <div v-if="itemsInCart.length" class="product-config-from-cart">
-    <table class="product-config-from-cart-summary">
-      <tr v-for="item in itemsInCart" :key="item.id">
-        <td>{{ item.product.name }}</td>
-        <td>{{ item.product.selectedOptionNames }}</td>
-        <td>{{ priceLabel(item.product.amount) }}</td>
-
-        <td @click="addQuantity(item, -1)">
-          -
-        </td>
-        <td>{{ item.quantity }}</td>
-        <td @click="addQuantity(item, 1)">
-          +
-        </td>
-      </tr>
-    </table>
+  <div v-if="itemsInCart.length" class="product-config">
+    <div
+      v-for="item in itemsInCart"
+      :key="item.id"
+      class="product-config"
+    >
+      <span>{{ item.product.name }}</span>
+      <span>{{ item.product.selectedOptionNames }}</span>
+      <span>{{ priceLabel(item.product.amount) }}</span>
+      <button @click="addQuantity(item, -1)">-</button>
+      <span>{{ item.quantity }}</span>
+      <button @click="addQuantity(item, 1)">+</button>
+    </div>
   </div>
 </template>
 
@@ -63,3 +60,23 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.product-config {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  background: #D5F6E5;
+  border: 1px solid green;
+  border-radius: 5px;
+
+  &-product {
+    flex-grow: 1;
+  }
+
+  button {
+    padding: 10px;
+    border-radius: 5px
+  }
+}
+</style>
