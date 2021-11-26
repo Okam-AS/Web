@@ -56,11 +56,6 @@
   </div>
 </template>
 <script>
-import { UserService } from '@/core/services/user-service.ts'
-import { StoreService } from '@/core/services/store-service.ts'
-import { ProductService } from '@/core/services/product-service.ts'
-import { SendVerificationToken /* , Login, NotificationRegistration */ } from '@/core/models/index.ts'
-
 export default {
   data: () => ({
     mounted: false,
@@ -69,9 +64,6 @@ export default {
     code: '',
     smsSent: false,
     codeSent: false,
-    userService: null,
-    storeServive: null,
-    productServive: null,
     stores: [],
     activeStore: null
   }),
@@ -82,9 +74,6 @@ export default {
   },
   mounted () {
     const storedUser = localStorage.getItem('user') || false
-    this.userService = new UserService(this.$store)
-    this.storeServive = new StoreService()
-    this.productService = new ProductService()
     if (storedUser) {
       const user = JSON.parse(storedUser)
       this.$store.dispatch('SetCurrentUser', user)
@@ -96,20 +85,17 @@ export default {
   methods: {
     activateStore (s) {
       this.activeStore = { ...s }
-      this.productService.Get(s.id).then((res) => {
+      this._productService.Get(s.id).then((res) => {
         window.console.log(res)
       })
     },
     getCode () {
-      this.userService.SendVerificationToken(
-        new SendVerificationToken(this.countryCode + this.phone)
-      ).finally(() => {
+      this._userService.SendVerificationToken(this.countryCode + this.phone).finally(() => {
         this.smsSent = true
       })
     },
     login () {
-      const params = { phoneNumber: this.countryCode + this.phone, token: this.code }
-      this.userService.Login(params).then(() => {
+      this._userService.Login(this.countryCode + this.phone, this.code).then(() => {
         this.codeSent = true
       }).catch(() => {
         this.codeSent = false
@@ -124,7 +110,7 @@ export default {
       this.codeSent = false
     },
     getStores () {
-      this.storeServive.getAll().then((res) => {
+      this._storeService.GetAll().then((res) => {
         this.stores = res
       })
     }

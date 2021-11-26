@@ -53,16 +53,25 @@
   </div>
 </template>
 
-<script>
-import { StoreService, CartService, StripeService } from '@/core/services'
-
+<script type="ts">
 // import ProductConfig from '../../components/webshop/ProductConfig.vue'
+
+import {
+  CartService,
+  ProductService,
+  UserService,
+  DiscountService,
+  StoreService,
+  CategoryService,
+  DeliveryMethodService,
+  NotificationService,
+  OrderService,
+  StripeService
+} from '@/core/services'
 
 export default {
   data: () => ({
     stripePKey: 'pk_test_51H4qD7LNNQ2fMCqGKVqDxFBnljHO1QyXuLSQ8BTvltvx9jKXGSw78WuX01i9miBj9hzh5L8AS9aiIXF9qUDq5kKH005deCclVN',
-    storeService: null,
-    cartService: null,
     storeId: null,
     store: {},
     timer: '',
@@ -81,7 +90,6 @@ export default {
     deliveryMethodError: false,
 
     // CREDITCARD DATA
-    stripeService: {},
     cards: [],
     selectedPaymentMethodId: '',
     rememberCard: true,
@@ -89,6 +97,17 @@ export default {
     creditCardError: false
   }),
   computed: {
+    _userService () { return new UserService(this.$store) },
+    _cartService () { return new CartService(this.$store) },
+    _productService () { return new ProductService(this.$store) },
+    _discountService () { return new DiscountService(this.$store) },
+    _storeService () { return new StoreService(this.$store) },
+    _stripeService () { return new StripeService(this.$store) },
+    _orderService () { return new OrderService(this.$store) },
+    _notificationService () { return new NotificationService(this.$store) },
+    _categoryService () { return new CategoryService(this.$store) },
+    _deliveryMethodService () { return new DeliveryMethodService(this.$store) },
+
     cartIsEmpty () {
       return !this.storeCart || (this.storeCart.items || []).length <= 0
     },
@@ -222,9 +241,6 @@ export default {
 
       if (storeId) {
         this.storeId = parseInt(storeId)
-        this.storeServive = new StoreService()
-        this.cartService = new CartService()
-        this.stripeService = new StripeService()
         this.getStore()
         this.getRegisteredCards()
       }
@@ -244,7 +260,7 @@ export default {
       }
     },
     getStore () {
-      this.storeServive.get(this.storeId).then((res) => {
+      this._storeService.Get(this.storeId).then((res) => {
         this.store = res
       })
     },
@@ -253,7 +269,7 @@ export default {
     },
     getRegisteredCards () {
       const comp = this
-      comp.stripeService
+      comp._stripeService
         .getPaymentMethods(comp.storeId)
         .then((result) => {
           if (Array.isArray(result)) { comp.cards = result }

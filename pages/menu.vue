@@ -88,9 +88,9 @@ export default {
 
       if (storeId) {
         this.storeId = storeId
-        this.storeServive = new StoreService()
-        this.categoryService = new CategoryService()
-        this.cartService = new CartService()
+        this.storeService = new StoreService(this.$store)
+        this.categoryService = new CategoryService(this.$store)
+        this.cartService = new CartService(this.$store)
         this.getStore()
         this.getCategories()
       }
@@ -102,7 +102,7 @@ export default {
       }
     },
     getStore () {
-      this.storeServive.get(this.storeId).then((res) => {
+      this.storeService.Get(this.storeId).then((res) => {
         this.store = res
       })
     },

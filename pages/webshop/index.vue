@@ -41,7 +41,18 @@
 </template>
 
 <script>
-import { StoreService, CategoryService, CartService } from '@/core/services'
+import {
+  CartService,
+  ProductService,
+  UserService,
+  DiscountService,
+  StoreService,
+  CategoryService,
+  DeliveryMethodService,
+  NotificationService,
+  OrderService,
+  StripeService
+} from '@/core/services'
 import ProductConfig from '../../components/webshop/ProductConfig.vue'
 import ProductConfigFromCart from '../../components/webshop/ProductConfigFromCart.vue'
 import Cart from '../../components/webshop/Cart.vue'
@@ -49,9 +60,6 @@ import Cart from '../../components/webshop/Cart.vue'
 export default {
   components: { ProductConfig, ProductConfigFromCart, Cart },
   data: () => ({
-    storeService: null,
-    categoryService: null,
-    cartService: null,
     storeId: null,
     noLayout: false,
     store: {},
@@ -62,7 +70,18 @@ export default {
   computed: {
     checkoutUrl () {
       return '/webshop/checkout/?store=' + this.storeId + (this.noLayout ? '&nolayout=true' : '')
-    }
+    },
+
+    _userService () { return new UserService(this.$store) },
+    _cartService () { return new CartService(this.$store) },
+    _productService () { return new ProductService(this.$store) },
+    _discountService () { return new DiscountService(this.$store) },
+    _storeService () { return new StoreService(this.$store) },
+    _stripeService () { return new StripeService(this.$store) },
+    _orderService () { return new OrderService(this.$store) },
+    _notificationService () { return new NotificationService(this.$store) },
+    _categoryService () { return new CategoryService(this.$store) },
+    _deliveryMethodService () { return new DeliveryMethodService(this.$store) }
   },
   mounted () {
     this.init()
@@ -86,7 +105,7 @@ export default {
       if (this.selectedLineItem?.product?.id === productId) {
         this.selectedLineItem = {}
       } else {
-        this.cartService.getCartLineItem({ product: { id: productId } }).then((result) => {
+        this._cartService.getCartLineItem({ product: { id: productId } }).then((result) => {
           if (result && result.product) {
             comp.selectedLineItem = { quantity: 1, product: result.product }
           }
@@ -125,9 +144,6 @@ export default {
       if (storeId) {
         this.storeId = parseInt(storeId)
         this.noLayout = nolayout
-        this.storeServive = new StoreService()
-        this.categoryService = new CategoryService()
-        this.cartService = new CartService()
         this.getStore()
         this.getCategories()
       }
@@ -139,7 +155,7 @@ export default {
       }
     },
     getStore () {
-      this.storeServive.get(this.storeId).then((res) => {
+      this._storeService.Get(this.storeId).then((res) => {
         this.store = res
       })
     },
@@ -147,14 +163,14 @@ export default {
       this.$set(this.categories, index, category)
     },
     getCategories () {
-      this.categoryService.GetAll(this.storeId).then((res) => {
+      this._categoryService.GetAll(this.storeId).then((res) => {
         this.categories = res
         const firstCat = this.categories[0]
-        this.categoryService.Get(firstCat.id).then((c) => {
+        this._categoryService.Get(firstCat.id).then((c) => {
           this.updateCategory(0, c)
         })
         // this.categories.forEach((category, index) => {
-        //   this.categoryService.Get(category.id).then((c) => {
+        //   this._categoryService.Get(category.id).then((c) => {
         //     this.updateCategory(index, c)
         //   })
         // })
