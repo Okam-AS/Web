@@ -241,7 +241,7 @@ export default {
       })
     },
     loggedIn () {
-      if (this.storeId) { this.$store.dispatch('UpdateCartInDbAndSetState', this.storeId) }
+      if (this.storeId) { this._cartService.updateCartInDbAndSetState(this.storeId) }
     },
     getRegisteredCards () {
       const comp = this

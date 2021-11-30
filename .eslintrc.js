@@ -23,6 +23,7 @@ module.exports = {
     'no-irregular-whitespace': 'warn',
     'no-tabs': 'warn',
     'no-mixed-spaces-and-tabs': 'warn',
-    'no-multiple-empty-lines': 'warn'
+    'no-multiple-empty-lines': 'warn',
+    'vue/no-v-html': 0
   }
 }

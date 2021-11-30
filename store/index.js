@@ -1,12 +1,5 @@
 import Vue from 'vue'
 import { MutationName, ActionName } from '../core/enums'
-import { CartService, StoreService, OrderService } from '../core/services'
-
-const _cartService = new CartService()
-const _storeService = new StoreService()
-const _orderService = new OrderService()
-
-// TODO: remove all usages og services in this file. The actions has moved to methods in services
 
 export const state = () => ({
   currentUser: {},
@@ -36,48 +29,6 @@ export const actions = {
   [ActionName.Load] ({ commit }) {
     commit(MutationName.Load)
   },
-  [ActionName.UpdateCartInDbAndSetState] ({ commit, getters }, storeId) {
-    if (getters.userIsLoggedIn) {
-      const updatedCart = getters.cartByStoreId(storeId)
-      commit(MutationName.SetCartIsLoading, true)
-      _cartService.update(updatedCart).then((cart) => {
-        commit(MutationName.SetCarts, [cart])
-        commit(MutationName.SetCartIsLoading, false)
-      }).catch(() => {
-        commit(MutationName.SetCartIsLoading, false)
-      })
-    }
-  },
-  [ActionName.GetOrders] ({ commit }, { thenHandler, catchHandler }) {
-    _orderService.getAll().then((orders) => {
-      if (Array.isArray(orders)) {
-        commit(MutationName.SetOrders, orders)
-      }
-      if (thenHandler) { thenHandler(state().orders) }
-    }).catch(() => {
-      if (catchHandler) { catchHandler() }
-    })
-  },
-  [ActionName.GetStores] ({ commit }, { thenHandler, catchHandler }) {
-    _storeService.getAll().then((stores) => {
-      if (Array.isArray(stores)) {
-        commit(MutationName.SetStores, stores)
-      }
-      if (thenHandler) { thenHandler(state().stores) }
-    }).catch(() => {
-      if (catchHandler) { catchHandler() }
-    })
-  },
-  [ActionName.GetStore] ({ commit }, { storeId, thenHandler, catchHandler }) {
-    _storeService.get(storeId).then((store) => {
-      if (store && store.id) {
-        commit(MutationName.SetStore, store)
-      }
-      if (thenHandler) { thenHandler(store) }
-    }).catch(() => {
-      if (catchHandler) { catchHandler() }
-    })
-  },
   [ActionName.SetDeliveryAddress] ({ commit }, address) {
     commit(MutationName.SetDeliveryAddress, address)
   },
@@ -88,10 +39,6 @@ export const actions = {
     commit(MutationName.ClearCurrentUser)
     commit(MutationName.SetCarts, [])
     commit(MutationName.SetOrders, [])
-  },
-  [ActionName.RemoveCart] ({ commit }, storeId) {
-    commit(MutationName.RemoveCart, storeId)
-    _cartService.delete(storeId)
   }
 }
 

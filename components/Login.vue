@@ -105,7 +105,7 @@ export default {
       })
     },
     wipeUser () {
-      this.$store.dispatch('SetCurrentUser', {})
+      this._userService.Logout()
       this.smsSent = false
       this.codeSent = false
     },
