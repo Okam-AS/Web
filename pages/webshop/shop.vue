@@ -26,16 +26,12 @@
 </template>
 
 <script>
-import { StoreService, CategoryService, CartService } from '@/core/services'
 import Product from '@/components/webshop/Product.vue'
 import Cart from '../../components/webshop/Cart.vue'
 
 export default {
   components: { Product, Cart },
   data: () => ({
-    storeService: null,
-    categoryService: null,
-    cartService: null,
     storeId: null,
     noLayout: false,
     store: {},
@@ -64,7 +60,7 @@ export default {
       if (this.selectedLineItem?.product?.id === productId) {
         this.selectedLineItem = {}
       } else {
-        this.cartService
+        this._cartService
           .getCartLineItem({ product: { id: productId } })
           .then((result) => {
             if (result && result.product) {
@@ -88,9 +84,6 @@ export default {
       if (storeId) {
         this.storeId = parseInt(storeId)
         this.noLayout = nolayout
-        this.storeService = new StoreService(this.$store)
-        this.categoryService = new CategoryService(this.$store)
-        this.cartService = new CartService(this.$store)
         this.getStore()
         this.getCategories()
       }
@@ -102,7 +95,7 @@ export default {
       }
     },
     getStore () {
-      this.storeService.Get(this.storeId).then((res) => {
+      this._storeService.Get(this.storeId).then((res) => {
         this.store = res
       })
     },
@@ -110,14 +103,14 @@ export default {
       this.$set(this.categories, index, category)
     },
     getCategories () {
-      this.categoryService.GetAll(this.storeId).then((res) => {
+      this._categoryService.GetAll(this.storeId).then((res) => {
         this.categories = res
         const firstCat = this.categories[0]
-        this.categoryService.Get(firstCat.id).then((c) => {
+        this._categoryService.Get(firstCat.id).then((c) => {
           this.updateCategory(0, c)
         })
-        // this.categories.forEach((category, index) => {
-        //   this.categoryService.Get(category.id).then((c) => {
+        // this._categories.forEach((category, index) => {
+        //   this._categoryService.Get(category.id).then((c) => {
         //     this.updateCategory(index, c)
         //   })
         // })

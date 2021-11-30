@@ -30,13 +30,8 @@
 </template>
 
 <script>
-import { StoreService, CategoryService, CartService } from '@/core/services'
-
 export default {
   data: () => ({
-    storeService: null,
-    categoryService: null,
-    cartService: null,
     storeId: null,
     store: {},
     categories: [],
@@ -58,7 +53,7 @@ export default {
     },
     openProduct (productId) {
       const comp = this
-      this.cartService.getCartLineItem({ product: { id: productId } }).then((result) => {
+      this._cartService.getCartLineItem({ product: { id: productId } }).then((result) => {
         if (result && result.product) {
           comp.selectedProduct = result.product
         }
@@ -88,9 +83,6 @@ export default {
 
       if (storeId) {
         this.storeId = storeId
-        this.storeService = new StoreService(this.$store)
-        this.categoryService = new CategoryService(this.$store)
-        this.cartService = new CartService(this.$store)
         this.getStore()
         this.getCategories()
       }
@@ -102,7 +94,7 @@ export default {
       }
     },
     getStore () {
-      this.storeService.Get(this.storeId).then((res) => {
+      this._storeService.Get(this.storeId).then((res) => {
         this.store = res
       })
     },
@@ -110,11 +102,11 @@ export default {
       this.$set(this.categories, index, category)
     },
     getCategories () {
-      this.categoryService.GetAll(this.storeId).then((res) => {
+      this._categoryService.GetAll(this.storeId).then((res) => {
         this.categories = res
 
-        this.categories.forEach((category, index) => {
-          this.categoryService.Get(category.id).then((c) => {
+        this._categories.forEach((category, index) => {
+          this._categoryService.Get(category.id).then((c) => {
             this.updateCategory(index, c)
           })
         })
