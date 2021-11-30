@@ -187,12 +187,12 @@ export default {
       if (comp.localLineItem.product.soldOut) { comp.localLineItem.quantity = 0 }
 
       if (comp.localLineItem.quantity === 0) {
-        comp.$store.dispatch('RemoveLineItem', {
+        comp._cartService.removeLineItem({
           storeId: comp.localLineItem.product.storeId,
           lineItemId: comp.localLineItem.id
         })
       } else {
-        comp.$store.dispatch('SetLineItem', {
+        comp._cartService.setLineItem({
           storeId: comp.localLineItem.product.storeId,
           lineItem: JSON.parse(JSON.stringify(comp.localLineItem))
         })

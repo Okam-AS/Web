@@ -6,6 +6,8 @@ const _cartService = new CartService()
 const _storeService = new StoreService()
 const _orderService = new OrderService()
 
+// TODO: remove all usages og services in this file. The actions has moved to methods in services
+
 export const state = () => ({
   currentUser: {},
   carts: [],
@@ -90,22 +92,6 @@ export const actions = {
   [ActionName.RemoveCart] ({ commit }, storeId) {
     commit(MutationName.RemoveCart, storeId)
     _cartService.delete(storeId)
-  },
-  [ActionName.SetCartRootProperties] ({ commit, dispatch }, {
-    storeId, homeDeliveryMethodId, isWaiterOrder, deliveryType, discountCode, fullAddress, zipCode, city, paymentIntentId, comment, tipPercent, tableName
-  }) {
-    commit(MutationName.SetCartRootProperties, {
-      storeId, homeDeliveryMethodId, isWaiterOrder, deliveryType, discountCode, fullAddress, zipCode, city, paymentIntentId, comment, tipPercent, tableName
-    })
-    dispatch(ActionName.UpdateCartInDbAndSetState, storeId)
-  },
-  [ActionName.SetLineItem] ({ commit, dispatch }, { storeId, lineItem }) {
-    commit(MutationName.SetLineItem, { storeId, lineItem })
-    dispatch(ActionName.UpdateCartInDbAndSetState, storeId)
-  },
-  [ActionName.RemoveLineItem] ({ commit, dispatch }, { storeId, lineItemId }) {
-    commit(MutationName.RemoveLineItem, { storeId, lineItemId })
-    dispatch(ActionName.UpdateCartInDbAndSetState, storeId)
   }
 }
 

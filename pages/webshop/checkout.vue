@@ -152,7 +152,7 @@ export default {
     },
     updateCart () {
       if (!this.storeId) { return }
-      this.$store.dispatch('SetCartRootProperties', {
+      this._cartService.setCartRootProperties({
         storeId: this.storeId,
         isWaiterOrder: this.selectedPaymentMethodId === 'waiter',
         deliveryType: this.localDeliveryType,
