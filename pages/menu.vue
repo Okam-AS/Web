@@ -53,7 +53,7 @@ export default {
     },
     openProduct (productId) {
       const comp = this
-      this._cartService.getCartLineItem({ product: { id: productId } }).then((result) => {
+      this._cartService.GetCartLineItem({ product: { id: productId } }).then((result) => {
         if (result && result.product) {
           comp.selectedProduct = result.product
         }

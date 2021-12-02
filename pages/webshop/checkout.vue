@@ -152,7 +152,7 @@ export default {
     },
     updateCart () {
       if (!this.storeId) { return }
-      this._cartService.setCartRootProperties({
+      this._cartService.SetCartRootProperties({
         storeId: this.storeId,
         isWaiterOrder: this.selectedPaymentMethodId === 'waiter',
         deliveryType: this.localDeliveryType,
@@ -241,12 +241,12 @@ export default {
       })
     },
     loggedIn () {
-      if (this.storeId) { this._cartService.updateCartInDbAndSetState(this.storeId) }
+      if (this.storeId) { this._cartService.UpdateCartInDbAndSetState(this.storeId) }
     },
     getRegisteredCards () {
       const comp = this
       comp._stripeService
-        .getPaymentMethods(comp.storeId)
+        .GetPaymentMethods(comp.storeId)
         .then((result) => {
           if (Array.isArray(result)) { comp.cards = result }
           comp.isLoadingCards = false

@@ -82,7 +82,7 @@ export default {
       if (this.selectedLineItem?.product?.id === productId) {
         this.selectedLineItem = {}
       } else {
-        this._cartService.getCartLineItem({ product: { id: productId } }).then((result) => {
+        this._cartService.GetCartLineItem({ product: { id: productId } }).then((result) => {
           if (result && result.product) {
             comp.selectedLineItem = { quantity: 1, product: result.product }
           }

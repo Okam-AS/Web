@@ -61,7 +61,7 @@ export default {
         this.selectedLineItem = {}
       } else {
         this._cartService
-          .getCartLineItem({ product: { id: productId } })
+          .GetCartLineItem({ product: { id: productId } })
           .then((result) => {
             if (result && result.product) {
               comp.selectedLineItem = { quantity: 1, product: result.product }

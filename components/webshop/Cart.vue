@@ -46,14 +46,14 @@ export default {
   methods: {
     addQuantity (lineItem, add) {
       if ((lineItem.quantity + add) === 0) {
-        this._cartService.removeLineItem({
+        this._cartService.RemoveLineItem({
           storeId: this.storeId,
           lineItemId: lineItem.id
         })
       } else {
         const tempLineItem = JSON.parse(JSON.stringify(lineItem))
         tempLineItem.quantity += add
-        this._cartService.setLineItem({
+        this._cartService.SetLineItem({
           storeId: this.storeId,
           lineItem: tempLineItem
         })
