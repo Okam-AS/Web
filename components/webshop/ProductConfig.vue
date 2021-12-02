@@ -100,23 +100,6 @@ export default {
     this.localLineItem = JSON.parse(JSON.stringify(this.lineItem))
   },
   methods: {
-    wholeAmount (amount) {
-      if (!amount) { return '0' }
-      const wholeAmount = amount.toString().slice(0, -2)
-      return wholeAmount ? wholeAmount.replace(/\B(?=(\d{3})+(?!\d))/g, ' ') : '0'
-    },
-    fractionAmount (amount) {
-      if (!amount) { return '00' }
-      const fractionAmount = amount.toString().slice(-2)
-      return fractionAmount.length < 2 ? '00' : fractionAmount
-    },
-    priceLabel (totalPrice, hideFractionIfZero) {
-      return (
-        'kr ' + this.wholeAmount(totalPrice) + ((!hideFractionIfZero || parseInt(this.fractionAmount(totalPrice)) > 0)
-          ? ',' + this.fractionAmount(totalPrice)
-          : '')
-      )
-    },
     createGuid () {
       const _p8 = (s) => {
         const p = (Math.random().toString(16) + '000000000').substr(2, 8)

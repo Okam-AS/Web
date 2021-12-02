@@ -59,23 +59,6 @@ export default {
         }
       })
     },
-    wholeAmount (amount) {
-      if (!amount) { return '0' }
-      const wholeAmount = amount.toString().slice(0, -2)
-      return wholeAmount ? wholeAmount.replace(/\B(?=(\d{3})+(?!\d))/g, ' ') : '0'
-    },
-    fractionAmount (amount) {
-      if (!amount) { return '00' }
-      const fractionAmount = amount.toString().slice(-2)
-      return fractionAmount.length < 2 ? '00' : fractionAmount
-    },
-    priceLabel (totalPrice, hideFractionIfZero) {
-      return (
-        'kr ' + this.wholeAmount(totalPrice) + ((!hideFractionIfZero || parseInt(this.fractionAmount(totalPrice)) > 0)
-          ? ',' + this.fractionAmount(totalPrice)
-          : '')
-      )
-    },
     init () {
       const search = new URLSearchParams(window.location.search) || {}
       const storeId = search.get('store') || false
