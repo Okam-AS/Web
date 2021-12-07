@@ -11,7 +11,7 @@
     "lint:style": "stylelint **/*.{vue,css} --ignore-path .gitignore",
     "lint": "npm run lint:js && npm run lint:style",
     "test": "jest",
-    "reinstall": "rm -rf && npm i"
+    "reinstall": "rm -rf node_modules && npm i"
   },
   "lint-staged": {
     "*.{js,vue,ts}": "eslint",
