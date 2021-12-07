@@ -2,6 +2,8 @@
 
 ## Dette er Okam
 
+## Sjekk .gitmodules for deploy
+
 ### Build Setup
 
 ```bash

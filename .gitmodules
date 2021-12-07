@@ -1,3 +1,14 @@
 [submodule "core"]
 	path = core
 	url = https://github.com/Okam-AS/Core.git
+
+## Add subrepo
+# rm -rf .git/modules/Core && rm -rf .git/modules/core
+# git rm --cached core  
+# git submodule add https://github.com/Okam-AS/Core.git core/
+
+## Run this to deploy:
+# git push heroku master
+
+## If you get a error about not finding repo in heroku, you have to add a remote:
+# heroku git:remote -a okam-site  
