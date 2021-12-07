@@ -16,6 +16,12 @@
                 <a :href="'/aktuelt/' + article.url" class="blog_item">
                   <div class="blog_image">
                     <img
+                      v-if="
+                        article.main_image &&
+                          article.main_image.formats &&
+                          article.main_image.formats.thumbnail &&
+                          article.main_image.formats.thumbnail.url
+                      "
                       :src="article.main_image.formats.thumbnail.url"
                       :alt="article.main_image.alternativeText"
                     >

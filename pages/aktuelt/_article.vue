@@ -9,6 +9,12 @@
               {{ article.heading }}
             </h1>
             <img
+              v-if="
+                article.main_image &&
+                  article.main_image.formats &&
+                  article.main_image.formats.small &&
+                  article.main_image.formats.small.url
+              "
               class="blog-post__image"
               :src="article.main_image.formats.small.url"
               :alt="article.main_image.alternativeText"
