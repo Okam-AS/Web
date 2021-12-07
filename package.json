@@ -2,6 +2,9 @@
   "name": "okam-consumer",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": "15.14"
+  },
   "scripts": {
     "dev": "nuxt-ts",
     "build": "nuxt-ts build",
