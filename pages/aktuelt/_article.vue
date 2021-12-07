@@ -19,8 +19,8 @@
               :src="article.main_image.formats.small.url"
               :alt="article.main_image.alternativeText"
             >
-            <p>{{ article.main_intro }}</p>
-            <p>{{ article.main_body }}</p>
+            <p v-html="$md.render( article.main_intro)" />
+            <p v-html="$md.render( article.main_body)" />
           </div>
         </div>
       </div>
