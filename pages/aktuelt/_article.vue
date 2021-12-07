@@ -73,9 +73,9 @@ export default {
 
 <style lang="scss">
 .blog-post {
-	&__image {
-		margin-bottom: 3rem;
-		max-width: 100%;
-	}
+  &__image {
+    margin-bottom: 3rem;
+    max-width: 100%;
+  }
 }
 </style>

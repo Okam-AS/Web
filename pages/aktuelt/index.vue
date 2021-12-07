@@ -91,34 +91,34 @@ export default {
 
 <style lang="scss">
 .blog {
-	&_item {
-		margin-top: 5rem;
-		display: flex;
-		flex-direction: column;
-		border-bottom: none;
+  &_item {
+    margin-top: 5rem;
+    display: flex;
+    flex-direction: column;
+    border-bottom: none;
 
-		@media only screen and (min-width: 600px) {
-			flex-direction: row;
-		}
-	}
+    @media only screen and (min-width: 600px) {
+      flex-direction: row;
+    }
+}
 
-	&_image {
-		max-width: 100%;
-		@media only screen and (min-width: 600px) {
-			float: left;
-			max-width: 200px;
-		}
+  &_image {
+    max-width: 100%;
+    @media only screen and (min-width: 600px) {
+      float: left;
+      max-width: 200px;
+    }
 
-		img {
-			width: 100%;
-			height: auto;
-		}
-	}
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
 
-	&_teaser {
-		@media only screen and (min-width: 600px) {
-			padding-left: 2rem;
-		}
-	}
+  &_teaser {
+    @media only screen and (min-width: 600px) {
+      padding-left: 2rem;
+    }
+  }
 }
 </style>
