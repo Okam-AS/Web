@@ -9,7 +9,7 @@
               {{ page.heading }}
             </h1>
             <article class="page type-page status-publish hentry">
-              <div v-if="page.body" v-html="$md.render(page.body)" />
+              <div v-if="page.body" v-html="$md.render(page.body || '')" />
             </article>
           </div>
         </div>

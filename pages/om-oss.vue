@@ -13,8 +13,8 @@
               :id="'post-'+page.id"
               class="page type-page status-publish hentry"
             >
-              <div v-if="page.main_intro" v-html="$md.render(page.main_intro)" />
-              <div v-if="page.main_body" v-html="$md.render(page.main_body)" />
+              <div v-if="page.main_intro" v-html="$md.render(page.main_intro || '')" />
+              <div v-if="page.main_body" v-html="$md.render(page.main_body || '')" />
 
               <p style="margin-top:50px;">
                 <strong>Har du tips om et sted du skulle likt å handle med

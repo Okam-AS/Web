@@ -11,7 +11,7 @@
             :id="'post-'+page.id"
             class="page type-page status-publish hentry"
           >
-            <div v-if="page.body" v-html="$md.render(page.body)" />
+            <div v-if="page.body" v-html="$md.render(page.body || '')" />
 
             <div style="margin-top: 50px">
               <h2 class="heading-1 u-center">
@@ -24,7 +24,7 @@
                 :description="feature.description"
                 :icon-url="feature.icon.url"
               />
-              <div v-if="page.body_below_features" v-html="$md.render(page.body_below_features)" />
+              <div v-if="page.body_below_features" v-html="$md.render(page.body_below_features || '')" />
             </div>
             <div class="faq-list">
               <h2 v-if="page.accordion_title" class="heading-1 u-center">
@@ -32,11 +32,11 @@
               </h2>
               <div v-for="accordionItem in page.accordion" :key="accordionItem.id">
                 <FaqItem :q="accordionItem.title">
-                  <span v-html="$md.render(accordionItem.description)" />
+                  <span v-html="$md.render(accordionItem.description || '')" />
                 </FaqItem>
               </div>
             </div>
-            <div v-if="page.body_below_accordion" v-html="$md.render(page.body_below_accordion)" />
+            <div v-if="page.body_below_accordion" v-html="$md.render(page.body_below_accordion || '')" />
           </article>
         </div>
       </div>
