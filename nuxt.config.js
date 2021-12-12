@@ -119,7 +119,12 @@ export default {
     // i18n plugin
     'nuxt-i18n',
     // Reading richt text from Strapi
-    '@nuxtjs/markdownit'
+    '@nuxtjs/markdownit',
+
+    ['@nuxtjs/robots', {
+      UserAgent: '*',
+      Disallow: '/lang'
+    }]
   ],
 
   markdownit: {
