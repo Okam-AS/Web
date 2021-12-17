@@ -49,7 +49,7 @@
                     maxlength="100"
                   >
                   <div class="wpforms-field-description">
-                    Vennligst oppgi e-posten du ønsker svar på
+                    Vennligst oppgi e-posten du ønsker svar til
                   </div>
                 </div>
                 <div
