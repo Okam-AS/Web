@@ -35,7 +35,7 @@ export default {
       `${process.env.STRAPI_BASE_URL}/blog-posts`
     ).then(res => res.json())
     const filteredPost = blogPosts.find(
-      el => !!el.url && el.url.toLowerCase() === params.article
+      el => el?.url?.toLowerCase() === params.article
     )
     if (filteredPost) {
       return {
