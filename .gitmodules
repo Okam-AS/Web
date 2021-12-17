@@ -8,6 +8,7 @@
 # git submodule add https://github.com/Okam-AS/Core.git core/
 
 ## Run this to deploy:
+# heroku login
 # git push heroku master
 
 ## If you get a error about not finding repo in heroku, you have to add a remote:

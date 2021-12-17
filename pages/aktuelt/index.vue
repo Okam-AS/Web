@@ -28,7 +28,7 @@
                   </div>
                   <div class="blog_teaser">
                     <h2>{{ article.heading }}</h2>
-                    <p v-html="$md.render(article.main_intro || '')" />
+                    <div v-html="$md.render(article.main_intro || '')" />
                     <a :href="'/aktuelt/' + article.url">Les mer</a>
                   </div>
                 </a>

@@ -19,8 +19,8 @@
               :src="article.main_image.formats.small.url"
               :alt="article.main_image.alternativeText"
             >
-            <p v-html="$md.render(article.main_intro || '')" />
-            <p v-html="$md.render(article.main_body || '')" />
+            <div v-html="$md.render(article.main_intro || '')" />
+            <div v-html="$md.render(article.main_body || '')" />
           </div>
         </div>
       </div>
@@ -34,14 +34,18 @@ export default {
     const blogPosts = await fetch(
       `${process.env.STRAPI_BASE_URL}/blog-posts`
     ).then(res => res.json())
-    const filteredPost = blogPosts.find(
-      el => el?.url?.toLowerCase() === params.article
-    )
-    if (filteredPost) {
-      return {
-        article: filteredPost
+    try {
+      const filteredPost = blogPosts.find(
+        el => el?.url?.toLowerCase() === params.article
+      )
+      if (filteredPost) {
+        return {
+          article: filteredPost
+        }
+      } else {
+        redirect('/aktuelt')
       }
-    } else {
+    } catch (error) {
       redirect('/aktuelt')
     }
   },
