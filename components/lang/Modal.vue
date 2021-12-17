@@ -35,7 +35,7 @@
 }
 
 .modal-container {
-  width: 300px;
+  width: 400px;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: #fff;
@@ -48,7 +48,7 @@
 .modal-body {
   margin: 0.5em;
 }
-.modal-buttons button{
+.modal-buttons button {
   display: inline-block;
 }
 </style>

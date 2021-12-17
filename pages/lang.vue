@@ -19,8 +19,8 @@
             {{ lang.data[key] }}
           </td>
           <td>
-            <input class="emoji-btn" type="button" value="✍🏻" @click="editRow(key)">
-            <input class="emoji-btn" type="button" value="🗑" @click="deleteRow(key)">
+            <input class="emoji-btn" type="button" value="✍🏻 Rediger" @click="editRow(key)">
+            <input class="emoji-btn" type="button" value="🗑 Slett" @click="deleteRow(key)">
           </td>
         </tr>
       </tbody>
@@ -30,9 +30,7 @@
       <template>
         <p>Alle feltene må være tomme for å slette raden</p>
         <div class="modal-buttons">
-          <button class="modal-default-button" @click="showCantDeleteInfo = false">
-            Avbryt
-          </button>
+          <input class="emoji-btn" type="button" value="❌ Avbryt" @click="showCantDeleteInfo = false">
         </div>
       </template>
     </Modal>
@@ -135,7 +133,7 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 table{
   width: 100%;
 }
@@ -161,11 +159,16 @@ tr:nth-child(even) {
 .search-container{
   padding: 1em 0 1em 0
 }
-.emoji-btn{
+input {
   padding:5px;
+}
+.emoji-btn{
   cursor: pointer;
 }
 .add-new {
   float:right
+}
+.modal-buttons{
+  margin-top: 1em;;
 }
 </style>
