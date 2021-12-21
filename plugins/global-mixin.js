@@ -12,30 +12,24 @@ import {
   OrderService,
   StripeService
 } from '@/core/services'
+import { wholeAmount, fractionAmount, priceLabel, formatString } from '~/core/helpers/tools'
 
 const mixin = {
   methods: {
+    formatString (str, format) {
+      return formatString(str, format)
+    },
     formatDate (dateTime) {
       return (!dateTime) ? '' : dayjs(dateTime).format('DD.MM.YY HH:mm')
     },
     priceLabel (totalPrice, hideFractionIfZero) {
-      const prefix = 'kr '
-      const wholeAmount = this.wholeAmount(totalPrice)
-      let fraction = ''
-      if (!hideFractionIfZero || parseInt(this.fractionAmount(totalPrice)) > 0) {
-        fraction = ',' + this.fractionAmount(totalPrice)
-      }
-      return prefix + wholeAmount + fraction
+      return priceLabel(totalPrice, hideFractionIfZero)
     },
     wholeAmount (amount) {
-      if (!amount) { return '0' }
-      const wholeAmount = amount.toString().slice(0, -2)
-      return wholeAmount ? wholeAmount.replace(/\B(?=(\d{3})+(?!\d))/g, ' ') : '0'
+      return wholeAmount(amount)
     },
     fractionAmount (amount) {
-      if (!amount) { return '00' }
-      const fractionAmount = amount.toString().slice(-2)
-      return fractionAmount.length < 2 ? '00' : fractionAmount
+      return fractionAmount(amount)
     }
   },
   computed: {
