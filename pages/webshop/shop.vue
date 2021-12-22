@@ -105,15 +105,17 @@ export default {
     getCategories () {
       this._categoryService.GetAll(this.storeId).then((res) => {
         this.categories = res
+        /*
         const firstCat = this.categories[0]
         this._categoryService.Get(firstCat.id).then((c) => {
           this.updateCategory(0, c)
         })
-        // this._categories.forEach((category, index) => {
-        //   this._categoryService.Get(category.id).then((c) => {
-        //     this.updateCategory(index, c)
-        //   })
-        // })
+        */
+        this.categories.forEach((category, index) => {
+          this._categoryService.Get(category.id).then((c) => {
+            this.updateCategory(index, c)
+          })
+        })
       })
     }
   }

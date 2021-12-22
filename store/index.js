@@ -111,10 +111,10 @@ export const mutations = {
       state.carts.push({ storeId, items: [lineItem] })
     }
   },
-  [MutationName.RemoveLineItem] (state, { storeId, lineItemId }) {
+  [MutationName.RemoveLineItem] (state, { storeId, lineItem }) {
     const cart = state.carts.find(x => x.storeId === storeId)
     if (!cart) { return }
-    const index = (cart.items || []).findIndex(x => x.id === lineItemId)
+    const index = (cart.items || []).findIndex(x => x.id === lineItem.id)
     Vue.delete(cart.items, index)
   }
 }

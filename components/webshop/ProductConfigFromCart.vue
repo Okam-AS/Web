@@ -3,14 +3,22 @@
     <div
       v-for="item in itemsInCart"
       :key="item.id"
-      class="product-config"
+      class="product-config-item"
     >
-      <span>{{ item.product.name }}</span>
-      <span>{{ item.product.selectedOptionNames }}</span>
-      <span>{{ priceLabel(item.product.amount) }}</span>
-      <button @click="addQuantity(item, -1)">-</button>
-      <span>{{ item.quantity }}</span>
-      <button @click="addQuantity(item, 1)">+</button>
+      <div class="product-config-item-description">
+        <span>{{ item.product.name }}</span>
+        <span>{{ item.product.selectedOptionNames }}</span>
+        <span>{{ priceLabel(item.product.amount) }}</span>
+      </div>
+      <div class="product-config-item-controls">
+        <button @click="addQuantity(item, -1)">
+          -
+        </button>
+        <span class="product-config-item-controls-quantity">{{ item.quantity }}</span>
+        <button @click="addQuantity(item, 1)">
+          +
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -46,7 +54,7 @@ export default {
       if ((lineItem.quantity + add) === 0) {
         this._cartService.RemoveLineItem({
           storeId: this.storeId,
-          lineItemId: lineItem.id
+          lineItem
         })
       } else {
         const tempLineItem = JSON.parse(JSON.stringify(lineItem))
@@ -65,10 +73,27 @@ export default {
 .product-config {
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   background: #D5F6E5;
   border: 1px solid green;
   border-radius: 5px;
+
+  &-item {
+    display: flex;
+    justify-content: space-between;
+
+    &-description {
+      flex-grow: 1;
+    }
+
+    &-controls {
+      &-quantity {
+        display: inline-block;
+        min-width: 3rem;
+        text-align: center;
+      }
+    }
+  }
 
   &-product {
     flex-grow: 1;

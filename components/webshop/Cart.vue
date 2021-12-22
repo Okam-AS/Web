@@ -11,13 +11,19 @@
         <span>{{ item.product.selectedOptionNames }}</span>
       </div>
 
-      <span style="font-size:10px;color:gray;">
-        {{ priceLabel(item.product.amount) }}
-      </span>
+      <div class="cart-row-controls">
+        <span style="font-size:10px;color:gray;">
+          {{ priceLabel(item.product.amount) }}
+        </span>
 
-      <button @click="addQuantity(item, -1)">-</button>
-      <span>{{ item.quantity }}</span>
-      <button @click="addQuantity(item, 1)">+</button>
+        <button @click="addQuantity(item, -1)">
+          -
+        </button>
+        <span class="cart-row-controls-quantity">{{ item.quantity }}</span>
+        <button @click="addQuantity(item, 1)">
+          +
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -49,7 +55,7 @@ export default {
       if ((lineItem.quantity + add) === 0) {
         this._cartService.RemoveLineItem({
           storeId: this.storeId,
-          lineItemId: lineItem.id
+          lineItem
         })
       } else {
         const tempLineItem = JSON.parse(JSON.stringify(lineItem))
@@ -76,6 +82,14 @@ export default {
 
     &-title {
       flex-grow: 1;
+    }
+
+    &-controls {
+      &-quantity {
+        display: inline-block;
+        min-width: 3rem;
+        text-align: center;
+      }
     }
   }
 

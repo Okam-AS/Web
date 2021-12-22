@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="product-conf">
     <div
       v-for="(variant, i) in localLineItem.product.productVariants"
       :key="i"
@@ -20,12 +20,21 @@
         </div>
       </div>
     </div>
-    <input type="button" value="-" @click="addQuantity(-1)">
-    <input type="text" :value="localLineItem.quantity">
-    <input type="button" value="+" @click="addQuantity(1)">
-    <input type="button" :value="saveBtnText" @click="saveAndClose">
-    <span>{{ priceLabel(totalAmount) }}</span>
-    <span>{{ selectedOptionNames }}</span>
+    <div class="product-conf-controls">
+      <button @click="addQuantity(-1)">
+        -
+      </button>
+      <span class="product-conf-controls-quantity">{{ localLineItem.quantity }}</span>
+      <button @click="addQuantity(1)">
+        +
+      </button>
+
+      <button @click="saveAndClose">
+        {{ saveBtnText }}
+      </button>
+      <span>{{ priceLabel(totalAmount) }}</span>
+      <span>{{ selectedOptionNames }}</span>
+    </div>
   </div>
 </template>
 
@@ -172,7 +181,7 @@ export default {
       if (comp.localLineItem.quantity === 0) {
         comp._cartService.RemoveLineItem({
           storeId: comp.localLineItem.product.storeId,
-          lineItemId: comp.localLineItem.id
+          lineItem: comp.localLineItem
         })
       } else {
         comp._cartService.SetLineItem({
@@ -180,6 +189,8 @@ export default {
           lineItem: JSON.parse(JSON.stringify(comp.localLineItem))
         })
       }
+
+      this.$emit('close')
       // comp.$modal.close(comp.localLineItem.product.id)
     }
   }
@@ -188,5 +199,9 @@ export default {
 <style scoped>
 .selected{
   background:lightgreen
+}
+
+.product-conf {
+  border: 1px solid red;
 }
 </style>

@@ -1,6 +1,16 @@
 <template>
   <div class="product">
-    <div class="product-header" @click="$emit('openProduct', product.id)">
+    <Modal v-if="expanded" @close="expanded = false">
+      <ProductConfig
+        v-if="selectedLineItem &&
+          selectedLineItem.product &&
+          selectedLineItem.product.id === product.id
+        "
+        :line-item="selectedLineItem"
+        @close="expanded = false"
+      />
+    </Modal>
+    <div class="product-header" @click="openProduct">
       <div class="product-image">
         <img
           v-if="product.image && product.image.thumbnailUrl"
@@ -33,21 +43,11 @@
     </div>
 
     <div class="product-footer">
-      <template v-if="product && product.id">
-        <ProductConfigFromCart
-          :store-id="product.storeId"
-          :product-id="product.id"
-        />
-      </template>
-      <template
-        v-if="
-          selectedLineItem &&
-            selectedLineItem.product &&
-            selectedLineItem.product.id === product.id
-        "
-      >
-        <ProductConfig :line-item="selectedLineItem" />
-      </template>
+      <ProductConfigFromCart
+        v-if="product && product.id"
+        :store-id="product.storeId"
+        :product-id="product.id"
+      />
     </div>
   </div>
 </template>
@@ -55,9 +55,10 @@
 <script>
 import ProductConfig from '../../components/webshop/ProductConfig.vue'
 import ProductConfigFromCart from '../../components/webshop/ProductConfigFromCart.vue'
+import Modal from '~/components/lang/Modal.vue'
 
 export default {
-  components: { ProductConfig, ProductConfigFromCart },
+  components: { ProductConfig, ProductConfigFromCart, Modal },
   props: {
     product: {
       type: Object,
@@ -70,7 +71,13 @@ export default {
   },
   data: () => ({
     expanded: false
-  })
+  }),
+  methods: {
+    openProduct () {
+      this.expanded = true
+      this.$emit('openProduct', this.product.id)
+    }
+  }
 }
 </script>
 
