@@ -92,7 +92,8 @@ export default {
     { src: '~/plugins/global-mixin', ssr: false },
     { src: '~/plugins/tawk', ssr: false },
     { src: '~/plugins/stripe-element-card.js', mode: 'client' },
-    { src: '~/plugins/store-init' }
+    { src: '~/plugins/store-init' },
+    { src: '~/plugins/vue-currency-input' }
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -124,6 +125,9 @@ export default {
     ['@nuxtjs/robots', {
       UserAgent: '*',
       Disallow: '/lang'
+    }, {
+      UserAgent: '*',
+      Disallow: '/import'
     }]
   ],
 

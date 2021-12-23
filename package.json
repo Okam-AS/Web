@@ -40,6 +40,7 @@
     "nuxt-i18n": "^6.20.4",
     "redirect-ssl": "^3.0.0",
     "stripe": "^8.184.0",
+    "vue-currency-input": "^1.22.6",
     "vue-tawk": "^1.0.1",
     "vuex": "^3.6.2"
   },
