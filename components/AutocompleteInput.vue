@@ -3,6 +3,7 @@
     <input
       type="text"
       :value="value"
+      maxlength="150"
       @input="$emit('input', $event.target.value)"
       @focus="hasFocus = true"
       @blur.self="hasFocus = false"
