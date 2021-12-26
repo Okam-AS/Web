@@ -2,6 +2,7 @@
   <div class="container">
     <template>
       <input class="emoji-btn" type="button" value="📲 Importer" @click="showModal = true">
+      <input class="emoji-btn" type="button" value="🧑🏻‍💻 Bytt bruker" @click="showLogin = true">
       <table>
         <tbody>
           <tr>
@@ -90,23 +91,19 @@
         <input class="emoji-btn" type="button" value="❌ Avbryt" @click="showModal = false">
       </div>
     </Modal>
-    <Modal v-if="!isLoggedIn">
-      <h1>Logg inn</h1>
-      <p>Bare trykk knappen under så er du inne...</p>
-      <div class="modal-buttons">
-        <input class="emoji-btn" type="button" value="🔑 Logg inn" @click="isLoggedIn = true">
-      </div>
-    </Modal>
+    <LoginModal v-if="showLogin" :close-if-logged-in="closeIfLoggedIn" @loggedIn="showLogin = false; closeIfLoggedIn = false" @loggedOut="showLogin = true" />
   </div>
 </template>
 <script>
 import Modal from '~/components/lang/Modal.vue'
 import AutocompleteInput from '~/components/AutocompleteInput.vue'
+import LoginModal from '~/components/LoginModal.vue'
 export default {
-  components: { Modal, AutocompleteInput },
+  components: { Modal, AutocompleteInput, LoginModal },
   data: () => ({
+    closeIfLoggedIn: true,
     showModal: false,
-    isLoggedIn: false,
+    showLogin: true,
     rows: []
   }),
   computed: {

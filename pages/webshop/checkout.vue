@@ -1,7 +1,6 @@
 <template>
   <div ref="container">
     <p>Checkout</p>
-    <Login @loggedIn="loggedIn" />
     <div>
       <span class="material-icons">shopping_cart</span>
       <span class="material-icons">credit_card</span>

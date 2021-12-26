@@ -57,7 +57,7 @@ export default {
 
   i18n: {
     locales: ['en', 'no'],
-    defaultLocale: 'en',
+    defaultLocale: 'no',
     vueI18n: {
       fallbackLocale: 'no',
       messages: {
@@ -65,23 +65,25 @@ export default {
           back: 'Back',
           enterPhoneNumberLabel: 'Enter your phone number to receive a SMS code',
           enterPhoneNumberPlaceholder: 'Phone',
-          enterPhoneNumberSubmit: 'Send',
+          enterPhoneNumberSubmit: '📱 Send',
           enterPhoneCodeLabel: 'Enter SMS code',
           enterPhoneCodePlaceholder: 'Code…',
-          enterPhoneCodeSubmit: 'Send',
-          youAreLoggedIn: 'You are logged in',
-          logout: 'Log out'
+          enterPhoneCodeSubmit: '🔑 Login',
+          youAreLoggedIn: 'You are logged in as',
+          logout: '🔒 Log out',
+          close: '✖️ Close'
         },
         no: {
           back: 'Tilbake',
           enterPhoneNumberLabel: 'Skriv ditt telefonnummer for å få tilsendt sms-kode',
           enterPhoneNumberPlaceholder: 'Telefon',
-          enterPhoneNumberSubmit: 'Send',
+          enterPhoneNumberSubmit: '📱 Send kode',
           enterPhoneCodeLabel: 'Skriv inn kode fra SMS for å logge inn',
           enterPhoneCodePlaceholder: 'Kode…',
-          enterPhoneCodeSubmit: 'Send',
-          youAreLoggedIn: 'Du er innlogget',
-          logout: 'Logg ut'
+          enterPhoneCodeSubmit: '🔑 Logg inn',
+          youAreLoggedIn: 'Du er innlogget som',
+          logout: '🔒 Logg ut',
+          close: '✖️ Lukk'
         }
       }
     }

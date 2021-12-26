@@ -39,6 +39,9 @@ export const actions = {
     commit(MutationName.ClearCurrentUser)
     commit(MutationName.SetCarts, [])
     commit(MutationName.SetOrders, [])
+  },
+  [ActionName.SetNotificationApproved] () {
+    // Used for mobile push
   }
 }
 
@@ -67,10 +70,7 @@ export const mutations = {
     state.currentUser.address = address
   },
   [MutationName.SetCurrentUser] (state, user) {
-    state.currentUser = { ...user }
-    if (typeof window !== 'undefined' && window.localStorage) {
-      localStorage.setItem('user', JSON.stringify(user))
-    }
+    state.currentUser = JSON.parse(JSON.stringify(user))
   },
   [MutationName.ClearCurrentUser] (state) {
     state.currentUser = {}
