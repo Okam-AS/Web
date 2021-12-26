@@ -1,7 +1,6 @@
 <template>
   <div class="container">
     <input class="emoji-btn" type="button" value="📲 Importer" @click="showModal = true">
-
     <table>
       <tbody>
         <tr>
@@ -14,9 +13,32 @@
           <th>Utsolgt</th>
         </tr>
         <tr v-for="(row, index) in rows" :key="index">
-          <td><autocomplete-input v-model="row.categoryName" :suggestions="['drikke', 'hamburger', 'pizza']" type="text" /></td>
-          <td><autocomplete-input v-model="row.name" :suggestions="['cola 0.5L', 'fanta 0.5L', 'esso burger']" type="text" /></td>
-          <td><autocomplete-input v-model="row.description" :suggestions="['her kommer en lengre beskrivelse som kan ta mye plass', 'fanta 0.5L', 'esso burger']" type="text" /></td>
+          <td>
+            <autocomplete-input
+              ref="autocomplete-input"
+              v-model="row.categoryName"
+              class="full-width"
+              :suggestions="allCategoryNames"
+              type="text"
+            />
+          </td>
+          <td>
+            <autocomplete-input
+              v-model="row.name"
+              class="full-width"
+              :suggestions="allProductNames"
+              type="text"
+            />
+          </td>
+          <td>
+            <autocomplete-input
+              v-model="row.description"
+              class="full-width"
+              :suggestions="allProductDescriptions"
+              :min-length="0"
+              type="text"
+            />
+          </td>
           <td>
             <currency-input
               v-model="row.price"
@@ -24,7 +46,7 @@
               style="width:100px"
             />
           </td>
-          <td><input v-model="row.tax" type="number" min="0" max="99"></td>
+          <td><input v-model="row.tax" class="full-width" type="number" min="0" max="99"></td>
           <td>
             <currency-input
               v-model="row.depositPrice"
@@ -32,10 +54,10 @@
               style="width:60px"
             />
           </td>
-          <td><input v-model="row.isSoldOut" type="checkbox"></td>
-          <td v-if="index !== rows.length-1">
+          <td><input v-model="row.isSoldOut" style="margin-left:1.5em;" type="checkbox"></td>
+          <td v-if="index !== rows.length-1 || rows.length < 2">
             <input class="emoji-btn" type="button" value="🔂 Dupliser rad" @click="copyRow(index)">
-            <input class="emoji-btn" type="button" value="❌ Fjern rad" @click="deleteRow(index)">
+            <input class="emoji-btn" type="button" value="➖ Fjern rad" @click="deleteRow(index)">
           </td>
         </tr>
       </tbody>
@@ -57,21 +79,26 @@ export default {
   components: { Modal, AutocompleteInput },
   data: () => ({
     showModal: false,
-    rows: [],
-    tempSuggestions: ['test', 'asdas', 'sdfwfd']
+    rows: []
   }),
   computed: {
-    allKeys () {
-      return ''
+    allCategoryNames () {
+      return this.getAllDisctinct('categoryName')
+    },
+    allProductNames () {
+      return this.getAllDisctinct('name')
+    },
+    allProductDescriptions () {
+      return this.getAllDisctinct('description')
     },
     emptyRow () {
       return {
         categoryName: '',
         name: '',
         description: '',
-        price: undefined,
+        price: 0,
         tax: 15,
-        depositPrice: undefined,
+        depositPrice: 0,
         isSoldOut: false
       }
     }
@@ -81,7 +108,7 @@ export default {
       handler (val) {
         if (!Array.isArray(val) || val.length < 1) {
           this.rows = [this.emptyRow]
-        } else if (!this.isEmptyRow(val[val.length - 1])) {
+        } else if (val.length === 1 || !this.isEmptyRow(val[val.length - 1])) {
           this.addEmptyRow()
         }
       },
@@ -100,6 +127,9 @@ export default {
     //   })
   },
   methods: {
+    getAllDisctinct (rowKey) {
+      return this.rows.map(x => x[rowKey]).filter((value, index, self) => self.indexOf(value) === index)
+    },
     isEmptyRow (row) {
       if (!row) { return true }
       const _this = this
@@ -119,15 +149,22 @@ export default {
       const copiedRow = JSON.parse(JSON.stringify(this.rows[index]))
       this.rows.splice(index, 0, copiedRow)
     }
+
   }
 }
 </script>
 <style lang="scss">
 input {
   padding:5px;
+  border-radius: 3px;
+  border: 1px solid lightgray;
+}
+.full-width, .full-width input {
+  width:100%
 }
 .emoji-btn{
   cursor: pointer;
+  padding: 0 5px 0 5px;
 }
 tr th {
   text-align: left;
