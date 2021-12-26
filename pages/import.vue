@@ -1,91 +1,100 @@
 <template>
   <div class="container">
-    <input class="emoji-btn" type="button" value="📲 Importer" @click="showModal = true">
-    <table>
-      <tbody>
-        <tr>
-          <th />
-          <th>Kategorinavn</th>
-          <th>Produktnavn</th>
-          <th style="min-width:300px">
-            Produktbeskrivelse
-          </th>
-          <th>Pris</th>
-          <th>MVA (%)</th>
-          <th>Pant</th>
-          <th>Utsolgt</th>
-        </tr>
-        <tr v-for="(row, index) in rows" :key="index">
-          <td class="row-count">
-            {{ index !== rows.length-1 ? index+1 : '' }}
-          </td>
-          <td>
-            <autocomplete-input
-              ref="autocomplete-input"
-              v-model="row.categoryName"
-              class="full-width"
-              :suggestions="allCategoryNames"
-              type="text"
-            />
-          </td>
-          <td>
-            <autocomplete-input
-              v-model="row.name"
-              class="full-width"
-              :suggestions="allProductNames"
-              type="text"
-            />
-          </td>
-          <td>
-            <autocomplete-input
-              v-model="row.description"
-              class="full-width"
-              :suggestions="allProductDescriptions"
-              :min-length="0"
-              type="text"
-            />
-          </td>
-          <td>
-            <currency-input
-              v-model="row.priceModel"
-              currency="NOK"
-              style="width:100px"
-              @change="amountChange(index, 'price', $event)"
-            />
-          </td>
-          <td>
-            <input
-              v-model="row.tax"
-              class="full-width"
-              type="number"
-              pattern="[0-9]{2}"
-              min="0"
-              max="99"
-              @change="taxChange($event, index)"
-            >
-          </td>
-          <td>
-            <currency-input
-              v-model="row.depositModel"
-              currency="NOK"
-              style="width:60px"
-              @change="amountChange(index, 'deposit', $event)"
-            />
-          </td>
-          <td><input v-model="row.isSoldOut" style="margin-left:1.5em;" type="checkbox"></td>
-          <td v-if="index !== rows.length-1 || rows.length < 2">
-            <input class="emoji-btn" type="button" value="🔂 Dupliser rad" @click="copyRow(index)">
-            <input class="emoji-btn" type="button" value="➖ Fjern rad" @click="deleteRow(index)">
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <template>
+      <input class="emoji-btn" type="button" value="📲 Importer" @click="showModal = true">
+      <table>
+        <tbody>
+          <tr>
+            <th />
+            <th>Kategorinavn</th>
+            <th>Produktnavn</th>
+            <th style="min-width:300px">
+              Produktbeskrivelse
+            </th>
+            <th>Pris</th>
+            <th>MVA (%)</th>
+            <th>Pant</th>
+            <th>Utsolgt</th>
+          </tr>
+          <tr v-for="(row, index) in rows" :key="index">
+            <td class="row-count">
+              {{ index !== rows.length-1 ? index+1 : '' }}
+            </td>
+            <td>
+              <autocomplete-input
+                ref="autocomplete-input"
+                v-model="row.categoryName"
+                class="full-width"
+                :suggestions="allCategoryNames"
+                type="text"
+              />
+            </td>
+            <td>
+              <autocomplete-input
+                v-model="row.name"
+                class="full-width"
+                :suggestions="allProductNames"
+                type="text"
+              />
+            </td>
+            <td>
+              <autocomplete-input
+                v-model="row.description"
+                class="full-width"
+                :suggestions="allProductDescriptions"
+                :min-length="0"
+                type="text"
+              />
+            </td>
+            <td>
+              <currency-input
+                v-model="row.priceModel"
+                currency="NOK"
+                style="width:100px"
+                @change="amountChange(index, 'price', $event)"
+              />
+            </td>
+            <td>
+              <input
+                v-model="row.tax"
+                class="full-width"
+                type="number"
+                pattern="[0-9]{2}"
+                min="0"
+                max="99"
+                @change="taxChange($event, index)"
+              >
+            </td>
+            <td>
+              <currency-input
+                v-model="row.depositModel"
+                currency="NOK"
+                style="width:60px"
+                @change="amountChange(index, 'deposit', $event)"
+              />
+            </td>
+            <td><input v-model="row.isSoldOut" style="margin-left:1.5em;" type="checkbox"></td>
+            <td v-if="index !== rows.length-1 || rows.length < 2">
+              <input class="emoji-btn" type="button" value="🔂 Dupliser rad" @click="copyRow(index)">
+              <input class="emoji-btn" type="button" value="➖ Fjern rad" @click="deleteRow(index)">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </template>
     <Modal v-if="showModal">
       <p>Er du sikker på at du ønsker å importere?</p>
       <p>Her kommer sammendrag av import</p>
       <div class="modal-buttons">
         <input class="emoji-btn" type="button" value="✅ Kjør på" @click="showModal = false">
         <input class="emoji-btn" type="button" value="❌ Avbryt" @click="showModal = false">
+      </div>
+    </Modal>
+    <Modal v-if="!isLoggedIn">
+      <h1>Logg inn</h1>
+      <p>Bare trykk knappen under så er du inne...</p>
+      <div class="modal-buttons">
+        <input class="emoji-btn" type="button" value="🔑 Logg inn" @click="isLoggedIn = true">
       </div>
     </Modal>
   </div>
@@ -97,6 +106,7 @@ export default {
   components: { Modal, AutocompleteInput },
   data: () => ({
     showModal: false,
+    isLoggedIn: false,
     rows: []
   }),
   computed: {
