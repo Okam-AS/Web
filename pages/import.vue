@@ -1,8 +1,10 @@
 <template>
   <div class="container">
     <template>
-      <input class="emoji-btn" type="button" value="👓 Kontroll" @click="showModal = true">
-      <input class="emoji-btn" type="button" value="🧑🏻‍💻 Bytt bruker" @click="showLogin = true">
+      <div style="margin:1em">
+        <input class="emoji-btn" type="button" value="👓 Kontroll" @click="showModal = true">
+        <input class="emoji-btn" type="button" value="🧑🏻‍💻 Bytt bruker" @click="showLogin = true">
+      </div>
       <table>
         <tbody>
           <tr>
@@ -87,7 +89,7 @@
       <h1 style="margin-bottom:1em">
         Importer
       </h1>
-      <span>{{ rows.length }} produkter og {{ allCategoryNames.length }} kategorier til butikk:</span>
+      <span>{{ rows.length-1 }} produkter og {{ allCategoryNames.length }} kategorier til butikk:</span>
       <div style="margin-bottom:1em;">
         <select v-model="selectedStore">
           <option value="0">
@@ -189,7 +191,7 @@ export default {
       this.rows[index].tax = parseInt(event.target.value)
     },
     getAllDisctinct (rowKey) {
-      return this.rows.map(x => x[rowKey]).filter((value, index, self) => self.indexOf(value) === index)
+      return this.rows.map(x => x[rowKey]).filter((value, index, self) => self.indexOf(value) === index && !!value)
     },
     isEmptyRow (row) {
       if (!row) { return true }
