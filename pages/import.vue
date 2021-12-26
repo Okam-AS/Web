@@ -47,17 +47,29 @@
           </td>
           <td>
             <currency-input
-              v-model="row.price"
+              v-model="row.priceModel"
               currency="NOK"
               style="width:100px"
+              @change="amountChange(index, 'price', $event)"
             />
           </td>
-          <td><input v-model="row.tax" class="full-width" type="number" min="0" max="99"></td>
+          <td>
+            <input
+              v-model="row.tax"
+              class="full-width"
+              type="number"
+              pattern="[0-9]{2}"
+              min="0"
+              max="99"
+              @change="taxChange($event, index)"
+            >
+          </td>
           <td>
             <currency-input
-              v-model="row.depositPrice"
+              v-model="row.depositModel"
               currency="NOK"
               style="width:60px"
+              @change="amountChange(index, 'deposit', $event)"
             />
           </td>
           <td><input v-model="row.isSoldOut" style="margin-left:1.5em;" type="checkbox"></td>
@@ -102,9 +114,11 @@ export default {
         categoryName: '',
         name: '',
         description: '',
-        price: 0,
+        priceModel: 0,
+        priceAmount: 0,
         tax: 15,
-        depositPrice: 0,
+        depositModel: 0,
+        depositAmount: 0,
         isSoldOut: false
       }
     }
@@ -133,6 +147,26 @@ export default {
     //   })
   },
   methods: {
+    amountChange (rowIndex, rowKey, newValue) {
+      if (isNaN(parseInt(newValue)) || !Number.isInteger(parseInt(newValue)) || parseInt(newValue) < 0 || parseInt(newValue) > 10000) {
+        this.rows[rowIndex][rowKey + 'Model'] = 0
+        this.rows[rowIndex][rowKey + 'Amount'] = 0
+      } else {
+        this.rows[rowIndex][rowKey + 'Amount'] = Math.trunc((newValue ?? 0) * 100)
+      }
+    },
+    taxChange (event, index) {
+      if (!event || !event.target || isNaN(parseInt(event.target.value)) || !Number.isInteger(parseInt(event.target.value))) {
+        this.rows[index].tax = 0
+      }
+      if (event.target.value > 99) {
+        this.rows[index].tax = 99
+      }
+      if (event.target.value < 0) {
+        this.rows[index].tax = 0
+      }
+      this.rows[index].tax = parseInt(event.target.value)
+    },
     getAllDisctinct (rowKey) {
       return this.rows.map(x => x[rowKey]).filter((value, index, self) => self.indexOf(value) === index)
     },
