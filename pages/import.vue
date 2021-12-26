@@ -4,15 +4,21 @@
     <table>
       <tbody>
         <tr>
+          <th />
           <th>Kategorinavn</th>
           <th>Produktnavn</th>
-          <th>Produktbeskrivelse</th>
+          <th style="min-width:300px">
+            Produktbeskrivelse
+          </th>
           <th>Pris</th>
           <th>MVA (%)</th>
           <th>Pant</th>
           <th>Utsolgt</th>
         </tr>
         <tr v-for="(row, index) in rows" :key="index">
+          <td class="row-count">
+            {{ index !== rows.length-1 ? index+1 : '' }}
+          </td>
           <td>
             <autocomplete-input
               ref="autocomplete-input"
@@ -168,5 +174,15 @@ input {
 }
 tr th {
   text-align: left;
+}
+th {
+  font-size: 14px;
+}
+.row-count{
+  color: gray;
+  padding: 5px;
+  font-size: 11px;
+  min-width: 25px;
+  text-align: right;
 }
 </style>
