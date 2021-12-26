@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <template>
-      <input class="emoji-btn" type="button" value="📲 Importer" @click="showModal = true">
+      <input class="emoji-btn" type="button" value="👓 Kontroll" @click="showModal = true">
       <input class="emoji-btn" type="button" value="🧑🏻‍💻 Bytt bruker" @click="showLogin = true">
       <table>
         <tbody>
@@ -84,8 +84,21 @@
       </table>
     </template>
     <Modal v-if="showModal">
-      <p>Er du sikker på at du ønsker å importere?</p>
-      <p>Her kommer sammendrag av import</p>
+      <h1 style="margin-bottom:1em">
+        Importer
+      </h1>
+      <span>{{ rows.length }} produkter og {{ allCategoryNames.length }} kategorier til butikk:</span>
+      <div style="margin-bottom:1em;">
+        <select v-model="selectedStore">
+          <option value="0">
+            Velg butikk
+          </option>
+          <option v-for="option in $store.state.currentUser.adminIn " :key="option.id" :value="option.id">
+            {{ option.name }}
+          </option>
+        </select>
+      </div>
+      <label><input type="checkbox"> Slett alle eksisterende produkter før import</label>
       <div class="modal-buttons">
         <input class="emoji-btn" type="button" value="✅ Kjør på" @click="showModal = false">
         <input class="emoji-btn" type="button" value="❌ Avbryt" @click="showModal = false">
@@ -104,6 +117,7 @@ export default {
     closeIfLoggedIn: true,
     showModal: false,
     showLogin: true,
+    selectedStore: 0,
     rows: []
   }),
   computed: {
@@ -201,6 +215,9 @@ export default {
 }
 </script>
 <style lang="scss">
+.modal-buttons{
+  margin-top: 1em;;
+}
 input {
   padding:5px;
   border-radius: 3px;

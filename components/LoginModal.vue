@@ -1,7 +1,10 @@
 <template>
   <Modal>
     <Loading :loading="isLoading" />
-    <template v-show="!isLoading">
+    <template v-if="!isLoading">
+      <h1 style="margin-bottom:1em">
+        {{ $t('login') }}
+      </h1>
       <div v-if="user && user.token">
         {{ $t('youAreLoggedIn') + ' ' + user.phoneNumber }}
         <div>

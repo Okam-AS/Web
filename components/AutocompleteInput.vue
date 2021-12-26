@@ -57,6 +57,8 @@ export default {
         return 'Feltet er for langt'
       } else if (this.startsWithLowerCase(this.value)) {
         return 'Må begynne med stor forbokstav'
+      } else if (this.value.trim() !== this.value) {
+        return 'Kan ikke begynne eller avslutte med mellomrom'
       }
       return ''
     }

@@ -71,6 +71,7 @@ export default {
           enterPhoneCodeSubmit: '🔑 Login',
           youAreLoggedIn: 'You are logged in as',
           logout: '🔒 Log out',
+          login: 'Login',
           close: '✖️ Close'
         },
         no: {
@@ -83,6 +84,7 @@ export default {
           enterPhoneCodeSubmit: '🔑 Logg inn',
           youAreLoggedIn: 'Du er innlogget som',
           logout: '🔒 Logg ut',
+          login: 'Logg inn',
           close: '✖️ Lukk'
         }
       }
