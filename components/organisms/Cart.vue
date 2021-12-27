@@ -27,9 +27,16 @@
           />
         </div>
       </div>
+
+      <button
+        class="checkout-button"
+        @click="checkout"
+      >
+        Fortsett
+      </button>
     </div>
 
-    <div v-else @click="expanded = true">
+    <div v-else style="cursor: pointer" @click="expanded = true">
       Handlekurv ({{ itemsInCart.length }})
     </div>
   </div>
@@ -75,6 +82,9 @@ export default {
           lineItem: tempLineItem
         })
       }
+    },
+    checkout () {
+      alert('TODO: Implement')
     }
   }
 }
@@ -101,5 +111,13 @@ export default {
       flex-grow: 1;
     }
   }
+}
+
+.checkout-button {
+  background: $color-support;
+  color: white;
+  padding: rem(10);
+  border-radius: rem(20);
+  border: none;
 }
 </style>
