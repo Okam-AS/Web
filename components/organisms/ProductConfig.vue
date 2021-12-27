@@ -27,7 +27,7 @@
         @subtract="addQuantity(-1)"
       />
 
-      <button @click="saveAndClose">
+      <button class="add-button" @click="saveAndClose">
         {{ saveBtnText }}
       </button>
       <span>{{ priceLabel(totalAmount) }}</span>
@@ -195,7 +195,16 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../../assets/sass/common.scss";
+
 .selected {
   background: $color-profile;
+}
+
+.add-button {
+  background: $color-support;
+  color: white;
+  padding: rem(10);
+  border-radius: rem(20);
+  border: none;
 }
 </style>
