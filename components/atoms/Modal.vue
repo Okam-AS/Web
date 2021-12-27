@@ -5,6 +5,12 @@
         <div class="modal-wrapper">
           <div class="modal-container">
             <div class="modal-body">
+              <button
+                class="modal-close-button"
+                @click="$emit('close')"
+              >
+                x
+              </button>
               <slot />
             </div>
           </div>
@@ -54,6 +60,10 @@
   }
   &-buttons button {
     display: inline-block;
+  }
+
+  &-close-button {
+    float: right;
   }
 }
 </style>
