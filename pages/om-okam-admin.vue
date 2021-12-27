@@ -45,8 +45,8 @@
   </div>
 </template>
 <script>
-import FeatureInfo from '../components/FeatureInfo.vue'
-import FaqItem from '../components/FaqItem.vue'
+import FeatureInfo from '@/components/atoms/FeatureInfo.vue'
+import FaqItem from '@/components/atoms/FaqItem.vue'
 export default {
   components: { FeatureInfo, FaqItem },
   data: () => ({

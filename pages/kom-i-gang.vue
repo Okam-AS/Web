@@ -87,8 +87,8 @@
   </div>
 </template>
 <script>
-import FeatureInfo from '../components/FeatureInfo.vue'
-import CheckInfo from '../components/CheckInfo.vue'
+import FeatureInfo from '@/components/atoms/FeatureInfo.vue'
+import CheckInfo from '@/components/atoms/CheckInfo.vue'
 export default {
   components: { FeatureInfo, CheckInfo }
 }

@@ -53,7 +53,7 @@
 </template>
 
 <script type="ts">
-// import ProductConfig from '../../components/webshop/ProductConfig.vue'
+// import ProductConfig from '@/components/organisms/ProductConfig.vue'
 
 export default {
   data: () => ({

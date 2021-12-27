@@ -33,7 +33,7 @@
   </div>
 </template>
 <script>
-import FaqItem from '../components/FaqItem.vue'
+import FaqItem from '@/components/atoms/FaqItem.vue'
 export default {
   components: { FaqItem },
   data: () => ({
