@@ -19,8 +19,7 @@
     </div>
 
     <div v-if="storeId" class="shop-cart">
-      <Cart :store-id="storeId" />
-      <a class="checkout-btn" :href="checkoutUrl">Gå til kassen</a>
+      <Cart :store-id="storeId" :checkout-url="checkoutUrl" />
     </div>
   </div>
 </template>

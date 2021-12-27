@@ -51,6 +51,10 @@ export default {
     storeId: {
       type: Number,
       default: 0
+    },
+    checkoutUrl: {
+      type: String,
+      default: ''
     }
   },
   data () {
@@ -84,7 +88,7 @@ export default {
       }
     },
     checkout () {
-      alert('TODO: Implement')
+      window.location.href = this.checkoutUrl
     }
   }
 }
