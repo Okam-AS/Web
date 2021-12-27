@@ -87,9 +87,12 @@
   </div>
 </template>
 <script>
+import PageHeader from '@/components/organisms/PageHeader.vue'
+import PageFooter from '@/components/organisms/PageFooter.vue'
 import FeatureInfo from '@/components/atoms/FeatureInfo.vue'
 import CheckInfo from '@/components/atoms/CheckInfo.vue'
+
 export default {
-  components: { FeatureInfo, CheckInfo }
+  components: { PageHeader, PageFooter, FeatureInfo, CheckInfo }
 }
 </script>

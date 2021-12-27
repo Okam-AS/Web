@@ -20,22 +20,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.loader__svg{
-  width:50px;
-}
-.loader__circle {
-  stroke: #CCCCCC;
-}
-.loader{
+.loader {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 30px 0;
+
   &__svg {
+    width:50px;
     transform-origin: center;
     animation: rotate 2s linear infinite;
   }
   &__circle {
+    stroke: #CCCCCC;
     fill: none;
     stroke-width: 3;
     stroke-dasharray: 1, 200;

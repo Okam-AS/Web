@@ -33,9 +33,12 @@
   </div>
 </template>
 <script>
+import PageHeader from '@/components/organisms/PageHeader.vue'
+import PageFooter from '@/components/organisms/PageFooter.vue'
 import FaqItem from '@/components/atoms/FaqItem.vue'
+
 export default {
-  components: { FaqItem },
+  components: { PageHeader, PageFooter, FaqItem },
   data: () => ({
     strapiBaseUrl: process.env.STRAPI_BASE_URL,
     page: {

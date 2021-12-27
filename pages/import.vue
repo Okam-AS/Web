@@ -110,10 +110,12 @@
     <LoginModal v-if="showLogin" :close-if-logged-in="closeIfLoggedIn" @loggedIn="showLogin = false; closeIfLoggedIn = false" @loggedOut="showLogin = true" />
   </div>
 </template>
+
 <script>
 import Modal from '~/components/atoms/Modal.vue'
 import AutocompleteInput from '~/components/atoms/AutocompleteInput.vue'
 import LoginModal from '~/components/molecules/LoginModal.vue'
+
 export default {
   components: { Modal, AutocompleteInput, LoginModal },
   data: () => ({

@@ -24,19 +24,8 @@
         }"
       >
         <ul class="main-menu__list">
-          <li class="main-menu__item">
-            <a class="main-menu__link" href="/om-oss/"> Om oss </a>
-          </li>
-          <li class="main-menu__item">
-            <a class="main-menu__link" href="/om-okam/"> For kunder </a>
-          </li>
-          <li class="main-menu__item">
-            <a class="main-menu__link" href="/om-okam-admin/">
-              For butikkeiere
-            </a>
-          </li>
-          <li class="main-menu__item">
-            <a class="main-menu__link" href="/kontakt/"> Kontakt oss </a>
+          <li v-for="(link, index) in links" :key="`link-${index}`" class="main-menu__item">
+            <a class="main-menu__link" :href="link.href">{{ link.title }}</a>
           </li>
         </ul>
       </nav>
@@ -50,7 +39,28 @@ const ogImage = require('~/assets/UI/kom-i-gang.png')
 export default {
   data: () => ({
     show: false,
-    isActive: false
+    isActive: false,
+    links: [
+      {
+        href: '/om-oss/',
+        title: 'Om oss'
+      },
+
+      {
+        href: '/om-okam/',
+        title: 'For kunder'
+      },
+
+      {
+        href: '/om-okam-admin/',
+        title: 'For butikkeiere'
+      },
+
+      {
+        href: '/kontakt/',
+        title: 'Kontakt oss'
+      }
+    ]
   }),
   mounted () {
     const search = new URLSearchParams(window.location.search) || {}

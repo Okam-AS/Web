@@ -47,8 +47,11 @@
 <script>
 import FeatureInfo from '@/components/atoms/FeatureInfo.vue'
 import FaqItem from '@/components/atoms/FaqItem.vue'
+import PageHeader from '@/components/organisms/PageHeader.vue'
+import PageFooter from '@/components/organisms/PageFooter.vue'
+
 export default {
-  components: { FeatureInfo, FaqItem },
+  components: { FeatureInfo, FaqItem, PageHeader, PageFooter },
   data: () => ({
     strapiBaseUrl: process.env.STRAPI_BASE_URL,
     page: {

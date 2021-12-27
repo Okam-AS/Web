@@ -30,3 +30,12 @@
     <page-footer />
   </div>
 </template>
+
+<script>
+import PageHeader from '@/components/organisms/PageHeader.vue'
+import PageFooter from '@/components/organisms/PageFooter.vue'
+
+export default {
+  components: { PageHeader, PageFooter }
+}
+</script>

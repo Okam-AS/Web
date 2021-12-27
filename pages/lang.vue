@@ -39,6 +39,7 @@
 <script>
 import EditRowModal from '@/components/organisms/EditLangRowModal.vue'
 import Modal from '@/components/atoms/Modal.vue'
+
 export default {
   components: { EditRowModal, Modal },
   data: () => ({
