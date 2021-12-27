@@ -55,7 +55,7 @@
 <script>
 import ProductConfig from '../../components/webshop/ProductConfig.vue'
 import ProductConfigFromCart from '../../components/webshop/ProductConfigFromCart.vue'
-import Modal from '~/components/lang/Modal.vue'
+import Modal from '~/components/atoms/Modal.vue'
 
 export default {
   components: { ProductConfig, ProductConfigFromCart, Modal },

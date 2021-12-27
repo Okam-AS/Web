@@ -111,7 +111,7 @@
   </div>
 </template>
 <script>
-import Modal from '~/components/lang/Modal.vue'
+import Modal from '~/components/atoms/Modal.vue'
 import AutocompleteInput from '~/components/AutocompleteInput.vue'
 import LoginModal from '~/components/LoginModal.vue'
 export default {

@@ -42,7 +42,7 @@
   </Modal>
 </template>
 <script>
-import Modal from '~/components/lang/Modal.vue'
+import Modal from '~/components/atoms/Modal.vue'
 import Loading from '~/components/Loading.vue'
 
 export default {
