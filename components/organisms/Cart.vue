@@ -100,6 +100,9 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
+  max-height: 100vh;
+  overflow-y: auto;
+  @include z-index('cart');
 
   &-row {
     width: 100%;
