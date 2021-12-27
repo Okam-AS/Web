@@ -112,8 +112,8 @@
 </template>
 <script>
 import Modal from '~/components/atoms/Modal.vue'
-import AutocompleteInput from '~/components/AutocompleteInput.vue'
-import LoginModal from '~/components/LoginModal.vue'
+import AutocompleteInput from '~/components/atoms/AutocompleteInput.vue'
+import LoginModal from '~/components/molecules/LoginModal.vue'
 export default {
   components: { Modal, AutocompleteInput, LoginModal },
   data: () => ({

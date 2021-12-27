@@ -53,9 +53,9 @@
 </template>
 
 <script>
-import ProductConfig from '../../components/webshop/ProductConfig.vue'
-import ProductConfigFromCart from '../../components/webshop/ProductConfigFromCart.vue'
-import Modal from '~/components/atoms/Modal.vue'
+import ProductConfig from '@/components/organisms/ProductConfig.vue'
+import ProductConfigFromCart from '@/components/organisms/ProductConfigFromCart.vue'
+import Modal from '@/components/atoms/Modal.vue'
 
 export default {
   components: { ProductConfig, ProductConfigFromCart, Modal },

@@ -26,8 +26,8 @@
 </template>
 
 <script>
-import Product from '@/components/webshop/Product.vue'
-import Cart from '../../components/webshop/Cart.vue'
+import Product from '@/components/organisms/Product.vue'
+import Cart from '@/components/organisms/Cart.vue'
 
 export default {
   components: { Product, Cart },

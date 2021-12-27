@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import Stepper from '../molecules/Stepper'
+import Stepper from '@/components/molecules/Stepper'
 
 export default {
   components: { Stepper },

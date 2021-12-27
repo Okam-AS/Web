@@ -43,7 +43,7 @@
 </template>
 <script>
 import Modal from '~/components/atoms/Modal.vue'
-import Loading from '~/components/Loading.vue'
+import Loading from '~/components/atoms/Loading.vue'
 
 export default {
   components: { Modal, Loading },
