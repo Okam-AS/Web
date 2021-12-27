@@ -10,22 +10,20 @@
         <span>{{ item.product.selectedOptionNames }}</span>
         <span>{{ priceLabel(item.product.amount) }}</span>
       </div>
-      <div class="product-config-item-controls">
-        <button @click="addQuantity(item, -1)">
-          -
-        </button>
-        <span class="product-config-item-controls-quantity">{{ item.quantity }}</span>
-        <button @click="addQuantity(item, 1)">
-          +
-        </button>
-      </div>
+      <Stepper
+        :quantity="item.quantity"
+        @add="addQuantity(item, 1)"
+        @subtract="addQuantity(item, -1)"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import Stepper from '../molecules/Stepper'
 
 export default {
+  components: { Stepper },
   props: {
     productId: {
       type: String,
@@ -70,12 +68,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../assets/sass/common.scss";
+
 .product-config {
   width: 100%;
   display: flex;
   flex-direction: column;
-  background: #D5F6E5;
-  border: 1px solid green;
+  background: $color-profile;
+  border: 1px solid $color-support;
   border-radius: 5px;
 
   &-item {
@@ -85,23 +85,10 @@ export default {
     &-description {
       flex-grow: 1;
     }
-
-    &-controls {
-      &-quantity {
-        display: inline-block;
-        min-width: 3rem;
-        text-align: center;
-      }
-    }
   }
 
   &-product {
     flex-grow: 1;
-  }
-
-  button {
-    padding: 10px;
-    border-radius: 5px
   }
 }
 </style>

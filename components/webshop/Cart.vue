@@ -1,36 +1,45 @@
 <template>
-  <div class="cart">
-    <h2>Handlekurv</h2>
-    <div
-      v-for="item in itemsInCart"
-      :key="item.id"
-      class="cart-row"
-    >
-      <div class="cart-row-title">
-        <span style="font-weight:bold">{{ item.product.name }}</span><br>
-        <span>{{ item.product.selectedOptionNames }}</span>
-      </div>
+  <div v-if="itemsInCart.length" class="cart">
+    <div v-if="expanded">
+      <button @click="expanded = false">
+        Lukk
+      </button>
+      <h2>Handlekurv</h2>
+      <div
+        v-for="item in itemsInCart"
+        :key="item.id"
+        class="cart-row"
+      >
+        <div class="cart-row-title">
+          <span style="font-weight:bold">{{ item.product.name }}</span><br>
+          <span>{{ item.product.selectedOptionNames }}</span>
+        </div>
 
-      <div class="cart-row-controls">
-        <span style="font-size:10px;color:gray;">
-          {{ priceLabel(item.product.amount) }}
-        </span>
+        <div class="cart-row-controls">
+          <span style="font-size:10px;color:gray;">
+            {{ priceLabel(item.product.amount) }}
+          </span>
 
-        <button @click="addQuantity(item, -1)">
-          -
-        </button>
-        <span class="cart-row-controls-quantity">{{ item.quantity }}</span>
-        <button @click="addQuantity(item, 1)">
-          +
-        </button>
+          <Stepper
+            :quantity="item.quantity"
+            @add="addQuantity(item, 1)"
+            @subtract="addQuantity(item, -1)"
+          />
+        </div>
       </div>
+    </div>
+
+    <div v-else @click="expanded = true">
+      Handlekurv ({{ itemsInCart.length }})
     </div>
   </div>
 </template>
 
 <script>
+import Stepper from '../molecules/Stepper'
 
 export default {
+  components: { Stepper },
   props: {
     storeId: {
       type: Number,
@@ -40,7 +49,8 @@ export default {
   data () {
     return {
       isLoading: false,
-      errorMessage: ''
+      errorMessage: '',
+      expanded: false
     }
   },
   computed: {
@@ -71,9 +81,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../assets/sass/common.scss";
+
 .cart {
-  background: #D5F6E5;
-  border: 1px solid green;
+  background: $color-profile;
+  border: 1px solid $color-support;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
 
   &-row {
     width: 100%;
@@ -83,19 +99,6 @@ export default {
     &-title {
       flex-grow: 1;
     }
-
-    &-controls {
-      &-quantity {
-        display: inline-block;
-        min-width: 3rem;
-        text-align: center;
-      }
-    }
-  }
-
-  button {
-    padding: 10px;
-    border-radius: 5px;
   }
 }
 </style>

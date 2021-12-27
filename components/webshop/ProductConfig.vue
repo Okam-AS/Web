@@ -21,13 +21,11 @@
       </div>
     </div>
     <div class="product-conf-controls">
-      <button @click="addQuantity(-1)">
-        -
-      </button>
-      <span class="product-conf-controls-quantity">{{ localLineItem.quantity }}</span>
-      <button @click="addQuantity(1)">
-        +
-      </button>
+      <Stepper
+        :quantity="localLineItem.quantity"
+        @add="addQuantity(1)"
+        @subtract="addQuantity(-1)"
+      />
 
       <button @click="saveAndClose">
         {{ saveBtnText }}
@@ -39,8 +37,10 @@
 </template>
 
 <script>
+import Stepper from '../molecules/Stepper'
 
 export default {
+  components: { Stepper },
   props: {
     lineItem: {
       type: Object,
@@ -153,40 +153,37 @@ export default {
       return !errorMessage
     },
     addQuantity (addQuantity) {
-      const comp = this
-      const newQuantity = comp.localLineItem.quantity + addQuantity
+      const newQuantity = this.localLineItem.quantity + addQuantity
       if (
         newQuantity < 0 ||
-        (comp.localLineItem.product.soldOut && addQuantity > 0)
+        (this.localLineItem.product.soldOut && addQuantity > 0)
       ) { return }
-      comp.localLineItem.quantity = newQuantity
+      this.localLineItem.quantity = newQuantity
     },
     saveAndClose () {
-      const comp = this
-
-      if (!comp.saveEnabled || !comp.valid()) { return }
-      if (!comp.localLineItem.id) {
-        if (comp.localLineItem.quantity === 0) {
+      if (!this.saveEnabled || !this.valid()) { return }
+      if (!this.localLineItem.id) {
+        if (this.localLineItem.quantity === 0) {
           // comp.$modal.close()
           return
         }
-        comp.localLineItem.id = comp.createGuid()
+        this.localLineItem.id = this.createGuid()
       }
-      comp.localLineItem.product.selectedOptionNames = this.selectedOptionNames
-      comp.localLineItem.product.selectedOptionsAmount = this.selectedOptionsAmount
-      comp.localLineItem.product.amount =
-        comp.localLineItem.product.baseAmount + this.selectedOptionsAmount
-      if (comp.localLineItem.product.soldOut) { comp.localLineItem.quantity = 0 }
+      this.localLineItem.product.selectedOptionNames = this.selectedOptionNames
+      this.localLineItem.product.selectedOptionsAmount = this.selectedOptionsAmount
+      this.localLineItem.product.amount =
+        this.localLineItem.product.baseAmount + this.selectedOptionsAmount
+      if (this.localLineItem.product.soldOut) { this.localLineItem.quantity = 0 }
 
-      if (comp.localLineItem.quantity === 0) {
-        comp._cartService.RemoveLineItem({
-          storeId: comp.localLineItem.product.storeId,
-          lineItem: comp.localLineItem
+      if (this.localLineItem.quantity === 0) {
+        this._cartService.RemoveLineItem({
+          storeId: this.localLineItem.product.storeId,
+          lineItem: this.localLineItem
         })
       } else {
-        comp._cartService.SetLineItem({
-          storeId: comp.localLineItem.product.storeId,
-          lineItem: JSON.parse(JSON.stringify(comp.localLineItem))
+        this._cartService.SetLineItem({
+          storeId: this.localLineItem.product.storeId,
+          lineItem: JSON.parse(JSON.stringify(this.localLineItem))
         })
       }
 
@@ -196,12 +193,10 @@ export default {
   }
 }
 </script>
-<style scoped>
-.selected{
-  background:lightgreen
-}
+<style lang="scss" scoped>
+@import "../../assets/sass/common.scss";
 
-.product-conf {
-  border: 1px solid red;
+.selected{
+  background: $color-profile;
 }
 </style>
