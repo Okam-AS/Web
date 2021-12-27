@@ -101,8 +101,9 @@
         </select>
       </div>
       <label><input type="checkbox"> Slett alle eksisterende produkter før import</label>
+      <pre>{{ importResponse }}</pre>
       <div class="modal-buttons">
-        <input class="emoji-btn" type="button" value="✅ Kjør på" @click="showModal = false">
+        <input class="emoji-btn" type="button" value="✅ Kjør på" @click="runImport">
         <input class="emoji-btn" type="button" value="❌ Avbryt" @click="showModal = false">
       </div>
     </Modal>
@@ -120,7 +121,8 @@ export default {
     showModal: false,
     showLogin: true,
     selectedStore: 0,
-    rows: []
+    rows: [],
+    importResponse: {}
   }),
   computed: {
     allCategoryNames () {
@@ -161,13 +163,6 @@ export default {
   mounted () {
     this.addEmptyRow()
     this.addEmptyRow()
-    // fetch(`${this.strapiBaseUrl}/about-us`)
-    //   .then((res) => {
-    //     res.json().then(
-    //       (jsonResponse) => {
-    //         this.page = jsonResponse
-    //       })
-    //   })
   },
   methods: {
     amountChange (rowIndex, rowKey, newValue) {
@@ -211,8 +206,22 @@ export default {
     copyRow (index) {
       const copiedRow = JSON.parse(JSON.stringify(this.rows[index]))
       this.rows.splice(index, 0, copiedRow)
+    },
+    runImport () {
+      if (this.selectedStore <= 0) {
+        this.importResponse = 'Velg butikk først'
+      } else {
+        this._productService.BulkImport({
+          storeId: this.selectedStore,
+          currency: 'NOK',
+          verifyOnly: true,
+          replaceAll: true,
+          rows: JSON.parse(JSON.stringify(this.rows)).slice(0, this.rows.length - 1) // Remove last item as it is a empty row
+        }).then((res) => {
+          this.importResponse = res
+        })
+      }
     }
-
   }
 }
 </script>
