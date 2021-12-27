@@ -24,7 +24,11 @@
         }"
       >
         <ul class="main-menu__list">
-          <li v-for="(link, index) in links" :key="`link-${index}`" class="main-menu__item">
+          <li
+            v-for="(link, index) in links"
+            :key="`link-${index}`"
+            class="main-menu__item"
+          >
             <a class="main-menu__link" :href="link.href">{{ link.title }}</a>
           </li>
         </ul>

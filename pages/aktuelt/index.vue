@@ -90,6 +90,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import "../../assets/sass/common.scss";
+
 .blog {
   &_item {
     margin-top: 5rem;
@@ -106,7 +108,7 @@ export default {
     max-width: 100%;
     @media only screen and (min-width: 600px) {
       float: left;
-      max-width: 200px;
+      max-width: rem(200);
     }
 
     img {

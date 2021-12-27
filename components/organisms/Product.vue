@@ -82,10 +82,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../assets/sass/common.scss";
+
 .product {
   border-bottom: 1px solid #c3c3c3;
-  padding-bottom: 20px;
-  margin-bottom: 20px;
+  padding-bottom: rem(20);
+  margin-bottom: rem(20);
 
   &-header {
     display: flex;
@@ -94,9 +96,9 @@ export default {
   }
 
   &-image {
-    min-width: 50px;
-    max-width: 50px;
-    margin-right: 20px;
+    min-width: rem(50);
+    max-width: rem(50);
+    margin-right: rem(20);
 
     img {
       width: 100%;
@@ -109,11 +111,11 @@ export default {
   }
 
   &-config-from-cart {
-    margin: 20px 0 0 0;
+    margin: rem(20) 0 0 0;
     background: #D5F6E5;
     border: 1px solid green;
     border-radius: 4px;
-    margin-left: 60px;
+    margin-left: rem(60);
     padding: 4px;
 
     &-summary {

@@ -141,6 +141,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../assets/sass/common.scss";
+
 .product-price{
   line-height:1em;
   white-space: nowrap;
@@ -172,10 +174,10 @@ export default {
 
 .item {
   display: inline-block;
-  border-radius: 20px;
+  border-radius: rem(20);
   width: 35%;
   margin-right: 0;
-  margin-top: 10px;
+  margin-top: rem(10);
   border: 1px solid rgb(236, 236, 236);
   font-size: 1.2em;
   cursor: pointer;
@@ -192,14 +194,14 @@ export default {
   right: 0;
   top: 0;
   height: 100%;
-  width: 300px;
+  width: rem(300);
 
 border: 1px solid black;
 }
 .checkout-btn{
  position: fixed;
   bottom: 0;
-  width: 300px;
+  width: rem(300);
   text-align: center;
   padding-top:20px;
   padding-bottom:20px;

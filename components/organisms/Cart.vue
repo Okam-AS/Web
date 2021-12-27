@@ -95,6 +95,7 @@ export default {
     width: 100%;
     display: flex;
     justify-content: space-between;
+    padding: rem(10);
 
     &-title {
       flex-grow: 1;

@@ -100,6 +100,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../assets/sass/common.scss";
+
 .product-price{
   line-height:1em;
   white-space: nowrap;
@@ -160,7 +162,7 @@ export default {
   }
   .box {
       flex-basis: 45%;
-      margin-right: 10px;
+      margin-right: rem(10);
       flex-direction: row;
   }
 }

@@ -38,9 +38,9 @@
   }
 
   &-container {
-    width: 400px;
+    width: rem(400);
     margin: 0px auto;
-    padding: 20px 30px;
+    padding: rem(20) rem(30);
     background-color: #fff;
     border-radius: 2px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
@@ -49,7 +49,7 @@
   }
 
   &-body {
-    margin: 0.5em;
+    margin: rem(10);
   }
   &-buttons button {
     display: inline-block;

@@ -195,8 +195,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../../assets/sass/common.scss";
-
-.selected{
+.selected {
   background: $color-profile;
 }
 </style>

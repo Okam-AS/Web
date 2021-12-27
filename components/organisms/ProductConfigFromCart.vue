@@ -71,12 +71,13 @@ export default {
 @import "../../assets/sass/common.scss";
 
 .product-config {
-  width: 100%;
   display: flex;
   flex-direction: column;
   background: $color-profile;
   border: 1px solid $color-support;
-  border-radius: 5px;
+  border-radius: rem(5);
+  margin-left: rem(70);
+  padding: rem(10);
 
   &-item {
     display: flex;

@@ -1,0 +1,17 @@
+// Input: name of element found in z-index list (inside variables.scss)
+@mixin z-index($str) {
+  z-index: index($z, $str)
+}
+
+// Input: pixel size
+// Output: rem size
+@function rem($size) {
+  @return ($size / 16) * 1rem;
+}
+
+// Input: size for with and height. Eg. @include xySize(20)
+// Output: width: 20; height: 20;
+@mixin xySize($size) {
+  width: rem($size);
+  height: rem($size);
+}

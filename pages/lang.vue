@@ -135,11 +135,13 @@ export default {
 }
 </script>
 <style lang="scss">
+@import "../assets/sass/common.scss";
+
 table{
   width: 100%;
 }
 th {
-  min-width: 200px;
+  min-width: rem(200);
   text-align: left;
 }
 td {
@@ -161,7 +163,7 @@ tr:nth-child(even) {
   padding: 1em 0 1em 0
 }
 input {
-  padding:5px;
+  padding: rem(5);
 }
 .emoji-btn{
   cursor: pointer;

@@ -79,15 +79,17 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+@import "../../assets/sass/common.scss";
+
 ul{
-  min-width: 200px;
+  min-width: rem(200);
   cursor: pointer;
   position: absolute;
   background: white;
   border: 1px solid lightgray
 }
 li {
-  padding: 5px;
+  padding: rem(5);
   border-bottom: 1px solid lightgray;
   list-style: none;
 }
@@ -98,18 +100,18 @@ li:hover{
   position: absolute;
   background: crimson;
   color: white;
-  margin-top: 6px;
-  padding: 6px;
-  border-radius: 3px;
-  font-size: 10px;
+  margin-top: rem(6);
+  padding: rem(6);
+  border-radius: rem(3);
+  font-size: rem(10);
 }
 .field-error-message:before{
   content:'';
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-bottom: 6px solid crimson;
+  border-left: rem(6) solid transparent;
+  border-right: rem(6) solid transparent;
+  border-bottom: rem(6) solid crimson;
   position: absolute;
-  top: -6px;
+  top: rem(-6);
 }
 .hasErrors{
   border: 1px solid crimson;

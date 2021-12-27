@@ -123,6 +123,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../assets/sass/common.scss";
+
 .shop {
   margin: 0 auto;
   max-width: 600px;

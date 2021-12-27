@@ -24,10 +24,10 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 30px 0;
+  padding: rem(30) 0;
 
   &__svg {
-    width:50px;
+    width: rem(50);
     transform-origin: center;
     animation: rotate 2s linear infinite;
   }
@@ -55,10 +55,10 @@ export default {
   }
   50% {
     stroke-dasharray: 90, 200;
-    stroke-dashoffset: -35px;
+    stroke-dashoffset: rem(-35);
   }
   100% {
-    stroke-dashoffset: -125px;
+    stroke-dashoffset: rem(-125);
   }
 }
 </style>
