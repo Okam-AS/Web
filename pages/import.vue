@@ -76,7 +76,7 @@
                 @change="amountChange(index, 'deposit', $event)"
               />
             </td>
-            <td><input v-model="row.isSoldOut" style="margin-left:1.5em;" type="checkbox"></td>
+            <td><input v-model="row.soldOut" style="margin-left:1.5em;" type="checkbox"></td>
             <td v-if="index !== rows.length-1 || rows.length < 2">
               <input class="emoji-btn" type="button" value="🔂 Dupliser rad" @click="copyRow(index)">
               <input class="emoji-btn" type="button" value="➖ Fjern rad" @click="deleteRow(index)">
@@ -142,7 +142,7 @@ export default {
         tax: 15,
         depositModel: 0,
         depositAmount: 0,
-        isSoldOut: false
+        soldOut: false
       }
     }
   },
