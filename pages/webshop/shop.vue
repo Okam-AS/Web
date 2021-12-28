@@ -23,6 +23,9 @@
     </div>
 
     <Modal v-if="selectedLineItem.product" @close="selectedLineItem = {}">
+      <Product
+        :product="selectedLineItem.product"
+      />
       <ProductConfig
         v-if="selectedLineItem &&
           selectedLineItem.product &&

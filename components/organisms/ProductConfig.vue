@@ -26,12 +26,14 @@
         @add="addQuantity(1)"
         @subtract="addQuantity(-1)"
       />
+      <div>
+        <span>{{ priceLabel(totalAmount) }}</span>
+        <span>{{ selectedOptionNames }}</span>
+      </div>
 
       <button class="add-button" @click="saveAndClose">
         {{ saveBtnText }}
       </button>
-      <span>{{ priceLabel(totalAmount) }}</span>
-      <span>{{ selectedOptionNames }}</span>
     </div>
   </div>
 </template>
@@ -164,7 +166,7 @@ export default {
       if (!this.saveEnabled || !this.valid()) { return }
       if (!this.localLineItem.id) {
         if (this.localLineItem.quantity === 0) {
-          // comp.$modal.close()
+          // this.$modal.close()
           return
         }
         this.localLineItem.id = this.createGuid()
@@ -188,7 +190,7 @@ export default {
       }
 
       this.$emit('close')
-      // comp.$modal.close(comp.localLineItem.product.id)
+      // this.$modal.close(this.localLineItem.product.id)
     }
   }
 }
@@ -196,15 +198,23 @@ export default {
 <style lang="scss" scoped>
 @import "../../assets/sass/common.scss";
 
-.selected {
-  background: $color-profile;
-}
+.product-conf {
+  &-controls {
+    display: flex;
+  }
 
-.add-button {
-  background: $color-support;
-  color: white;
-  padding: rem(10);
-  border-radius: rem(20);
-  border: none;
+  .selected {
+    background: $color-profile;
+    cursor: pointer;
+    margin-left: rem(20);
+  }
+
+  .add-button {
+    background: $color-support;
+    color: white;
+    padding: rem(10);
+    border-radius: rem(20);
+    border: none;
+  }
 }
 </style>
