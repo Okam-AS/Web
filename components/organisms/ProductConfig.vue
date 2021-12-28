@@ -12,10 +12,10 @@
         <div
           v-for="(option, j) in variant.options"
           :key="j"
-          :class="{'selected' : selectedOptions.map(x => x.id).includes(option.id)}"
-          style="font-size: 0.8em;"
+          :class="{ 'product-option': true, 'product-option-selected' : selectedOptions.map(x => x.id).includes(option.id)}"
           @click="optionClick(option.id)"
         >
+          <img v-if="selectedOptions.map(x => x.id).includes(option.id)" src="~/assets/UI/icon_check.svg">
           {{ option.name }}
         </div>
       </div>
@@ -203,10 +203,19 @@ export default {
     display: flex;
   }
 
-  .selected {
-    background: $color-profile;
+  .product-option {
+    font-size: 0.8em;
     cursor: pointer;
-    margin-left: rem(20);
+    margin-left: rem(28);
+
+    img {
+      width: rem(16);
+      height: rem(16);
+    }
+
+    &-selected {
+      margin-left: rem(8);
+    }
   }
 
   .add-button {
