@@ -1,15 +1,5 @@
 <template>
   <div class="product">
-    <Modal v-if="expanded" @close="expanded = false">
-      <ProductConfig
-        v-if="selectedLineItem &&
-          selectedLineItem.product &&
-          selectedLineItem.product.id === product.id
-        "
-        :line-item="selectedLineItem"
-        @close="expanded = false"
-      />
-    </Modal>
     <div class="product-header" @click="openProduct">
       <div class="product-image">
         <img
@@ -47,18 +37,17 @@
         v-if="product && product.id"
         :store-id="product.storeId"
         :product-id="product.id"
+        @openLineItem="openLineItem"
       />
     </div>
   </div>
 </template>
 
 <script>
-import ProductConfig from '@/components/organisms/ProductConfig.vue'
 import ProductConfigFromCart from '@/components/organisms/ProductConfigFromCart.vue'
-import Modal from '@/components/atoms/Modal.vue'
 
 export default {
-  components: { ProductConfig, ProductConfigFromCart, Modal },
+  components: { ProductConfigFromCart },
   props: {
     product: {
       type: Object,
@@ -69,13 +58,12 @@ export default {
       default: () => {}
     }
   },
-  data: () => ({
-    expanded: false
-  }),
   methods: {
     openProduct () {
-      this.expanded = true
       this.$emit('openProduct', this.product.id)
+    },
+    openLineItem (lineItem) {
+      this.$emit('openLineItem', lineItem)
     }
   }
 }

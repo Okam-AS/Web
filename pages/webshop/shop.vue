@@ -14,22 +14,34 @@
           :product="row.product"
           :selected-line-item="selectedLineItem"
           @openProduct="openProduct"
+          @openLineItem="openLineItem"
         />
       </div>
     </div>
-
     <div v-if="storeId" class="shop-cart">
       <Cart :store-id="storeId" :checkout-url="checkoutUrl" />
     </div>
+
+    <Modal v-if="selectedLineItem.product" @close="selectedLineItem = {}">
+      <ProductConfig
+        v-if="selectedLineItem &&
+          selectedLineItem.product &&
+          selectedLineItem.product.id
+        "
+        :line-item="selectedLineItem"
+        @close="selectedLineItem = {}"
+      />
+    </Modal>
   </div>
 </template>
 
 <script>
 import Product from '@/components/organisms/Product.vue'
 import Cart from '@/components/organisms/Cart.vue'
-
+import Modal from '@/components/atoms/Modal.vue'
+import ProductConfig from '@/components/organisms/ProductConfig.vue'
 export default {
-  components: { Product, Cart },
+  components: { Product, Cart, Modal, ProductConfig },
   data: () => ({
     storeId: null,
     noLayout: false,
@@ -56,17 +68,16 @@ export default {
   methods: {
     openProduct (productId) {
       const comp = this
-      if (this.selectedLineItem?.product?.id === productId) {
-        this.selectedLineItem = {}
-      } else {
-        this._cartService
-          .GetCartLineItem({ product: { id: productId } })
-          .then((result) => {
-            if (result && result.product) {
-              comp.selectedLineItem = { quantity: 1, product: result.product }
-            }
-          })
-      }
+      this._cartService
+        .GetCartLineItem({ product: { id: productId } })
+        .then((result) => {
+          if (result && result.product) {
+            comp.selectedLineItem = { quantity: 1, product: result.product }
+          }
+        })
+    },
+    openLineItem (lineItem) {
+      this.selectedLineItem = lineItem
     },
     init () {
       this.$store.dispatch('Load')

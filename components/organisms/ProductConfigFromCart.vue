@@ -10,6 +10,9 @@
         <span>{{ item.product.selectedOptionNames }}</span>
         <span>{{ priceLabel(item.product.amount) }}</span>
       </div>
+      <button @click="openLineItem(item)">
+        Endre
+      </button>
       <Stepper
         :quantity="item.quantity"
         @add="addQuantity(item, 1)"
@@ -48,6 +51,9 @@ export default {
     }
   },
   methods: {
+    openLineItem (lineItem) {
+      this.$emit('openLineItem', lineItem)
+    },
     addQuantity (lineItem, add) {
       if ((lineItem.quantity + add) === 0) {
         this._cartService.RemoveLineItem({
