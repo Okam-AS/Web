@@ -60,6 +60,7 @@ export default {
     }
   },
   mounted () {
+    this._userService.Logout() // Bug i ProductConfig når man er pålogget, jeg fikser -André
     this.init()
   },
   beforeDestroy () {
