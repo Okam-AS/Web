@@ -85,7 +85,7 @@
         </tbody>
       </table>
     </template>
-    <Modal v-if="showModal">
+    <Modal v-if="showModal" @close="showModal = false">
       <h1 style="margin-bottom:1em">
         Importer
       </h1>

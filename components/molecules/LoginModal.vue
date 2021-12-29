@@ -1,5 +1,5 @@
 <template>
-  <Modal>
+  <Modal @close="close">
     <Loading :loading="isLoading" />
     <template v-if="!isLoading">
       <h1 style="margin-bottom:1em">
@@ -111,6 +111,9 @@ export default {
         }).finally(() => {
           _this.isLoading = false
         })
+    },
+    close () {
+      if (this.$store.getters.userIsLoggedIn) { this.$emit('loggedIn') } else { this.$emit('loggedOut') }
     },
     wipeUser () {
       this._userService.Logout()
