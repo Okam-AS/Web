@@ -32,7 +32,7 @@
       </div>
     </div>
 
-    <div class="product-footer">
+    <div v-if="!hideLineItems" class="product-footer">
       <ProductConfigFromCart
         v-if="product && product.id"
         :store-id="product.storeId"
@@ -52,6 +52,10 @@ export default {
     product: {
       type: Object,
       required: true
+    },
+    hideLineItems: {
+      type: Boolean,
+      default: false
     },
     selectedLineItem: {
       type: Object,

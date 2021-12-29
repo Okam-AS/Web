@@ -25,6 +25,7 @@
     <Modal v-if="selectedLineItem.product" @close="selectedLineItem = {}">
       <Product
         :product="selectedLineItem.product"
+        :hide-line-items="true"
       />
       <ProductConfig
         v-if="selectedLineItem &&
