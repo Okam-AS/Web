@@ -63,7 +63,6 @@ export default {
     }
   },
   mounted () {
-    this._userService.Logout() // Bug i ProductConfig når man er pålogget, jeg fikser -André
     this.init()
   },
   beforeDestroy () {
@@ -81,7 +80,14 @@ export default {
         })
     },
     openLineItem (lineItem) {
-      this.selectedLineItem = lineItem
+      const comp = this
+      this._cartService
+        .GetCartLineItem(lineItem)
+        .then((result) => {
+          if (result && result.product) {
+            comp.selectedLineItem = result
+          }
+        })
     },
     init () {
       this.$store.dispatch('Load')
