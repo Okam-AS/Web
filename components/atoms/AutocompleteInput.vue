@@ -1,14 +1,14 @@
 <template>
   <div>
     <input
-      :class="{'hasErrors': value && hasBeenBlured && errorMessage}"
+      :class="{'hasErrors': errorMessage && serverErrorMessage}"
       type="text"
       :value="value"
       @input="$emit('input', $event.target.value)"
       @focus="focused"
       @blur="blured"
     >
-    <div v-if="hasBeenBlured && hasFocus && errorMessage" class="field-error-message">
+    <div v-if="errorMessage && hasFocus" class="field-error-message">
       {{ errorMessage }}
     </div>
     <ul v-else-if="hasFocus && filteredSuggestions.length > 0">
@@ -21,10 +21,13 @@
 <script>
 export default {
   props: {
+    serverErrorMessage: {
+      type: String,
+      default: ''
+    },
     value: {
       type: String,
-      default: '',
-      required: true
+      default: ''
     },
     minLength: {
       type: Number,
@@ -41,7 +44,6 @@ export default {
   },
   data () {
     return {
-      hasBeenBlured: false,
       hasFocus: false
     }
   },
@@ -69,7 +71,6 @@ export default {
     },
     blured () {
       this.hasFocus = false
-      this.hasBeenBlured = true
     },
     startsWithLowerCase (stringValue) {
       const first = stringValue.charAt(0)

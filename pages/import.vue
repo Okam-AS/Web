@@ -2,14 +2,14 @@
   <div class="container">
     <template>
       <div style="margin:1em">
-        <input class="emoji-btn" type="button" value="👓 Kontroll" @click="showModal = true">
+        <input class="emoji-btn" type="button" value="👓 Verifiser og importer" @click="showModal = true">
+        <input class="emoji-btn" type="button" value="🆑 Tøm alle rader" @click="showClearRowsModal = true">
         <input class="emoji-btn" type="button" value="🧑🏻‍💻 Bytt bruker" @click="showLogin = true">
       </div>
       <table>
         <tbody>
           <tr>
             <th />
-            <th>Kategorinavn</th>
             <th>Produktnavn</th>
             <th style="min-width:300px">
               Produktbeskrivelse
@@ -25,19 +25,11 @@
             </td>
             <td>
               <autocomplete-input
-                ref="autocomplete-input"
-                v-model="row.categoryName"
-                class="full-width"
-                :suggestions="allCategoryNames"
-                type="text"
-              />
-            </td>
-            <td>
-              <autocomplete-input
                 v-model="row.name"
                 class="full-width"
                 :suggestions="allProductNames"
                 type="text"
+                :server-error-message="getFailedMessage(index, 'name')"
               />
             </td>
             <td>
@@ -47,6 +39,7 @@
                 :suggestions="allProductDescriptions"
                 :min-length="0"
                 type="text"
+                :server-error-message="getFailedMessage(index, 'description')"
               />
             </td>
             <td>
@@ -85,12 +78,11 @@
         </tbody>
       </table>
     </template>
-    <Modal v-if="showModal" @close="showModal = false">
+    <Modal v-if="showModal" @close="closeModal">
       <h1 style="margin-bottom:1em">
         Importer
       </h1>
-      <span>{{ rows.length-1 }} produkter og {{ allCategoryNames.length }} kategorier til butikk:</span>
-      <div style="margin-bottom:1em;">
+      <div>
         <select v-model="selectedStore">
           <option value="0">
             Velg butikk
@@ -100,31 +92,61 @@
           </option>
         </select>
       </div>
-      <label><input type="checkbox"> Slett alle eksisterende produkter før import</label>
-      <pre>{{ importResponse }}</pre>
-      <div class="modal-buttons">
-        <input class="emoji-btn" type="button" value="✅ Kjør på" @click="runImport">
-        <input class="emoji-btn" type="button" value="❌ Avbryt" @click="showModal = false">
+      <div style="margin:1em 0 1em 0">
+        <label><input v-model="replaceAll" type="checkbox"> Slett alle eksisterende produkter før import</label>
       </div>
+      <div v-if="importMessage" class="import-messages">
+        <p>
+          {{ importMessage }}
+        </p>
+        <p v-if="importResponse.createdProductCount">
+          <span style="font-weight:bold">Antall import av produkter: </span>
+          <span>{{ importResponse.createdProductCount }}</span>
+        </p>
+        <p v-if="importResponse.deletedProductCount">
+          <span style="font-weight:bold">Antall sletting av produkter: </span>
+          <span>{{ importResponse.deletedProductCount }}</span>
+        </p>
+      </div>
+
+      <div class="modal-buttons">
+        <input v-if="isVerified" class="emoji-btn" type="button" value="✅ Godkjenn og importer" @click="runImport(false)">
+        <input class="emoji-btn" type="button" value="👓 Verifiser" @click="runImport(true)">
+        <input class="emoji-btn" type="button" value="❌ Avbryt" @click="closeModal">
+      </div>
+      <Loading :loading="isLoading" />
     </Modal>
     <LoginModal v-if="showLogin" :close-if-logged-in="closeIfLoggedIn" @loggedIn="showLogin = false; closeIfLoggedIn = false" @loggedOut="showLogin = true" />
+    <Modal v-if="showClearRowsModal" @close="showClearRowsModal = false">
+      <p>Er du sikker på at du ønsker å fjerne alle rader fra denne tabellen? Produkter som allerede er importert vil ikke bli berørt.</p>
+      <div class="modal-buttons">
+        <input class="emoji-btn" type="button" value="🆑 Tøm alle rader" @click="clearRows">
+        <input class="emoji-btn" type="button" value="❌ Avbryt" @click="showClearRowsModal = false">
+      </div>
+    </Modal>
   </div>
 </template>
 
 <script>
+import Loading from '@/components/atoms/Loading.vue'
 import Modal from '~/components/atoms/Modal.vue'
 import AutocompleteInput from '~/components/atoms/AutocompleteInput.vue'
 import LoginModal from '~/components/molecules/LoginModal.vue'
 
 export default {
-  components: { Modal, AutocompleteInput, LoginModal },
+  components: { Modal, AutocompleteInput, LoginModal, Loading },
   data: () => ({
+    isLoading: false,
     closeIfLoggedIn: true,
     showModal: false,
     showLogin: true,
     selectedStore: 0,
+    replaceAll: false,
     rows: [],
-    importResponse: {}
+    importResponse: {},
+    importMessage: '',
+    isVerified: false,
+    showClearRowsModal: false
   }),
   computed: {
     allCategoryNames () {
@@ -158,15 +180,29 @@ export default {
         } else if (val.length === 1 || !this.isEmptyRow(val[val.length - 1])) {
           this.addEmptyRow()
         }
+        if (window && window.localStorage) { localStorage.setItem('importRows', JSON.stringify(val)) }
       },
       deep: true
     }
   },
   mounted () {
-    this.addEmptyRow()
-    this.addEmptyRow()
+    let storedRows = false
+    if (window && window.localStorage) { storedRows = localStorage.getItem('importRows') || false }
+    if (storedRows) {
+      this.$set(this, 'rows', JSON.parse(storedRows))
+    } else {
+      this.clearRows()
+    }
   },
   methods: {
+    clearRows () {
+      this.selectedStore = 0
+      this.replaceAll = false
+      this.rows = [JSON.parse(JSON.stringify(this.emptyRow)), JSON.parse(JSON.stringify(this.emptyRow))]
+      this.showClearRowsModal = false
+      this.importResponse = {}
+      if (window && window.localStorage) { localStorage.removeItem('importRows') }
+    },
     amountChange (rowIndex, rowKey, newValue) {
       if (isNaN(parseInt(newValue)) || !Number.isInteger(parseInt(newValue)) || parseInt(newValue) < 0 || parseInt(newValue) > 10000) {
         this.rows[rowIndex][rowKey + 'Model'] = 0
@@ -209,18 +245,42 @@ export default {
       const copiedRow = JSON.parse(JSON.stringify(this.rows[index]))
       this.rows.splice(index, 0, copiedRow)
     },
-    runImport () {
-      if (this.selectedStore <= 0) {
-        this.importResponse = 'Velg butikk først'
+    closeModal () {
+      this.isVerified = false
+      this.showModal = false
+      this.importMessage = ''
+    },
+    getFailedMessage (index, key) {
+      if (!this.importResponse || !Array.isArray(this.importResponse.failed)) { return '' }
+      const fail = this.importResponse.failed.find(x => x.rowNumber === index + 1 && x.rowKey.toLowerCase() === key.toLowerCase())
+      return fail ? fail.reason : ''
+    },
+    runImport (verifyOnly) {
+      const _this = this
+      _this.importMessage = ''
+      if (_this.selectedStore <= 0) {
+        _this.importMessage = 'Velg butikk først'
       } else {
-        this._productService.BulkImport({
+        _this.isLoading = true
+        _this._productService.BulkImport({
           storeId: this.selectedStore,
           currency: 'NOK',
-          verifyOnly: true,
-          replaceAll: true,
-          rows: JSON.parse(JSON.stringify(this.rows)).slice(0, this.rows.length - 1) // Remove last item as it is a empty row
+          verifyOnly,
+          replaceAll: _this.replaceAll,
+          rows: JSON.parse(JSON.stringify(_this.rows)).slice(0, _this.rows.length - 1) // Remove last item as it is a empty row
         }).then((res) => {
-          this.importResponse = res
+          _this.importResponse = res
+          if (Array.isArray(_this.importResponse.failed) && _this.importResponse.failed.length === 0) {
+            _this.isVerified = true
+            _this.importMessage = verifyOnly ? 'Dette ser bra ut! Ønsker du å gjennomføre denne handlingen:' : 'Ferdig! Dette ble gjennomført:'
+          } else {
+            _this.importMessage = 'Ser ut noen felter er feil. Lukk denne modalen for å se gjennom feltene som er markert med rødt'
+            _this.importResponse.createdProductCount = 0
+            _this.importResponse.deletedProductCount = 0
+            window.console.log(res)
+          }
+        }).finally(() => {
+          _this.isLoading = false
         })
       }
     }
@@ -255,5 +315,10 @@ th {
   font-size: 11px;
   min-width: 25px;
   text-align: right;
+}
+.import-messages{
+  background: cornsilk;
+  border-radius: 3px;
+  padding: 1em
 }
 </style>
