@@ -1,7 +1,19 @@
 <template>
-  <div v-if="itemsInCart.length" class="cart">
-    <div v-if="expanded">
-      <button @click="expanded = false">
+  <div
+    v-if="itemsInCart.length"
+    :class="{
+      'cart': true,
+      'cart--expanded': expanded
+    }"
+  >
+    <div
+      v-if="expanded"
+      class="cart-content"
+    >
+      <button
+        class="close-button"
+        @click="expanded = false"
+      >
         Lukk
       </button>
       <h2>Handlekurv</h2>
@@ -36,7 +48,11 @@
       </button>
     </div>
 
-    <div v-else style="cursor: pointer" @click="expanded = true">
+    <div
+      v-else
+      class="cart-indicator"
+      @click="expanded = true"
+    >
       Handlekurv ({{ itemsInCart.length }})
     </div>
   </div>
@@ -108,6 +124,10 @@ export default {
   overflow-y: auto;
   @include z-index('cart');
 
+  &--expanded {
+    top: 0;
+  }
+
   &-row {
     width: 100%;
     display: flex;
@@ -118,6 +138,21 @@ export default {
       flex-grow: 1;
     }
   }
+
+  &-content {
+    max-width: rem(600);
+    margin: rem(60) auto;
+  }
+
+  &-indicator {
+    cursor: pointer;
+    padding: rem(20);
+    text-align: right;
+  }
+}
+
+.close-button {
+  float: right;
 }
 
 .checkout-button {
@@ -126,5 +161,8 @@ export default {
   padding: rem(10);
   border-radius: rem(20);
   border: none;
+  float: right;
+  margin-top: rem(10);
 }
+
 </style>
