@@ -1,21 +1,39 @@
 <template>
   <div class="shop">
     <div class="shop-menu">
-      Menu
+      Nettbestilling
     </div>
     <div class="shop-products">
       <div v-for="(category, i) in categories" :key="i">
-        <h2 class="category-header">
+        <h2
+          :class="{
+            'category-header': true,
+            'category-header--expanded': category.active
+          }"
+          @click="toggleCategory(i)"
+        >
           {{ category.name }}
+
+          <div class="icon">
+            <svg
+              class="icon"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+            ><path d="M23.245 4l-11.245 14.374-11.219-14.374-.781.619 12 15.381 12-15.391-.755-.609z" /></svg>
+          </div>
         </h2>
-        <Product
-          v-for="(row, j) in (category.categoryProductListItems || []).filter((x) => !x.heading)"
-          :key="j"
-          :product="row.product"
-          :selected-line-item="selectedLineItem"
-          @openProduct="openProduct"
-          @openLineItem="openLineItem"
-        />
+        <div v-if="category.active" class="product-group">
+          <Product
+            v-for="(row, j) in (category.categoryProductListItems || []).filter((x) => !x.heading)"
+            :key="j"
+            :product="row.product"
+            :selected-line-item="selectedLineItem"
+            @openProduct="openProduct"
+            @openLineItem="openLineItem"
+          />
+        </div>
       </div>
     </div>
     <div v-if="storeId" class="shop-cart">
@@ -71,22 +89,21 @@ export default {
   },
   methods: {
     openProduct (productId) {
-      const comp = this
+      // const _this = this
       this._cartService
         .GetCartLineItem({ product: { id: productId } })
         .then((result) => {
           if (result && result.product) {
-            comp.selectedLineItem = { quantity: 1, product: result.product }
+            this.selectedLineItem = { quantity: 1, product: result.product }
           }
         })
     },
     openLineItem (lineItem) {
-      const comp = this
       this._cartService
         .GetCartLineItem(lineItem)
         .then((result) => {
           if (result && result.product) {
-            comp.selectedLineItem = result
+            this.selectedLineItem = result
           }
         })
     },
@@ -123,20 +140,34 @@ export default {
     updateCategory (index, category) {
       this.$set(this.categories, index, category)
     },
+    closeAll () {
+      const copy = JSON.parse(JSON.stringify(this.categories))
+      copy.forEach((category) => {
+        category.active = false
+      })
+      this.categories = copy
+    },
+    toggleCategoryActive (index) {
+      if (!this.categories[index].categoryProductListItems.length) {
+        this._categoryService.Get(this.categories[index].id).then((category) => {
+          this.updateCategory(index, category)
+          this.categories[index].active = true
+        })
+      } else {
+        this.categories[index].active = true
+      }
+    },
+    toggleCategory (index) {
+      if (this.categories[index].active) {
+        this.closeAll()
+      } else {
+        this.closeAll()
+        this.toggleCategoryActive(index)
+      }
+    },
     getCategories () {
       this._categoryService.GetAll(this.storeId).then((res) => {
         this.categories = res
-        /*
-        const firstCat = this.categories[0]
-        this._categoryService.Get(firstCat.id).then((c) => {
-          this.updateCategory(0, c)
-        })
-        */
-        this.categories.forEach((category, index) => {
-          this._categoryService.Get(category.id).then((c) => {
-            this.updateCategory(index, c)
-          })
-        })
       })
     }
   }
@@ -149,5 +180,34 @@ export default {
 .shop {
   margin: 0 auto;
   max-width: 600px;
+
+  &-products {
+    margin-bottom: rem(300);
+  }
+  .category-header {
+    background: $color-profile;
+    padding: rem(10);
+    border-bottom: rem(1) solid white;
+
+    .icon {
+      float: right;
+
+      svg {
+        width: rem(20);
+        height: rem(20);
+        transition: transform .2s ease-in-out;
+      }
+    }
+
+    &--expanded {
+      .icon svg {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .product-group {
+    margin-top: rem(30);
+  }
 }
 </style>

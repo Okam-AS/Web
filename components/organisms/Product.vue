@@ -32,10 +32,8 @@
       </div>
     </div>
 
-    <div v-if="!hideLineItems" class="product-footer">
+    <div v-if="!hideLineItems && product.storeId" class="product-footer">
       <ProductConfigFromCart
-        v-if="product && product.id"
-        :store-id="product.storeId"
         :product-id="product.id"
         @openLineItem="openLineItem"
       />
