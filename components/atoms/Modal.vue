@@ -1,26 +1,66 @@
 <template>
-  <div>
-    <transition name="modal">
-      <div class="modal-mask">
-        <div class="modal-wrapper">
-          <div class="modal-container">
-            <div class="modal-body">
-              <button
-                class="modal-close-button"
-                @click="$emit('close')"
-              >
-                x
-              </button>
-              <slot />
+  <focus-trap>
+    <div>
+      <transition name="modal">
+        <div class="modal-mask">
+          <div class="modal-wrapper">
+            <div class="modal-container">
+              <div class="modal-body">
+                <button
+                  class="modal-close-button"
+                  @click="$emit('close')"
+                >
+                  x
+                </button>
+                <slot />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </transition>
-  </div>
+      </transition>
+    </div>
+  </focus-trap>
   </transition>
   </div>
 </template>
+
+<script>
+import FocusTrap from '@/components/molecules/FocusTrap'
+
+export default {
+  components: {
+    FocusTrap
+  },
+  data: () => ({
+    active: false
+  }),
+  emits: ['close'],
+  mounted () {
+    document.body.classList.add('noscroll')
+    window.addEventListener('keydown', this.escapeListener)
+    setTimeout(() => {
+      this.active = true
+    }, 100)
+  },
+  methods: {
+    close () {
+      this.active = false
+      setTimeout(() => {
+        this.$emit('close')
+      }, 400)
+    },
+    escapeListener (e) {
+      if (e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27) {
+        this.close()
+      }
+    }
+  },
+  beforeUnmount () {
+    document.body.classList.remove('noscroll')
+    window.removeEventListener('keydown', this.escapeListener)
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 @import "../../assets/sass/common.scss";

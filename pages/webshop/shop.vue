@@ -183,14 +183,21 @@ export default {
 
   &-products {
     margin-bottom: rem(300);
+
+    .product {
+      border-bottom: 1px solid $color-profile;
+    }
   }
   .category-header {
     background: $color-profile;
     padding: rem(10);
-    border-bottom: rem(1) solid white;
+    border-bottom: rem(2) solid white;
+    border-radius: rem(5);
+    cursor: pointer;
 
     .icon {
       float: right;
+      margin-top: rem(4);
 
       svg {
         width: rem(20);

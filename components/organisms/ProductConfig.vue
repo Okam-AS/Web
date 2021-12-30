@@ -20,16 +20,19 @@
         </div>
       </div>
     </div>
+    <div class="product-conf-summary">
+      <span>{{ selectedOptionNames }}</span>
+      <span class="product-conf-summary-price">
+        {{ priceLabel(totalAmount) }}
+      </span>
+    </div>
     <div class="product-conf-controls">
+      <span>Antall:</span>
       <Stepper
         :quantity="localLineItem.quantity"
         @add="addQuantity(1)"
         @subtract="addQuantity(-1)"
       />
-      <div>
-        <span>{{ priceLabel(totalAmount) }}</span>
-        <span>{{ selectedOptionNames }}</span>
-      </div>
 
       <button class="add-button" @click="saveAndClose">
         {{ saveBtnText }}
@@ -201,6 +204,17 @@ export default {
 .product-conf {
   &-controls {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &-summary {
+    margin-top: rem(20);
+    padding-top: rem(20);
+    border-top: rem(1) solid $color-support;
+    &-price {
+      font-weight: bold;
+    }
   }
 
   .product-option {

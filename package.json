@@ -36,6 +36,7 @@
     "@vue-stripe/vue-stripe": "^4.2.5",
     "core-js": "^3.6.5",
     "dayjs": "^1.10.7",
+    "focus-lock": "^0.10.1",
     "nuxt": "^2.14.11",
     "nuxt-i18n": "^6.20.4",
     "redirect-ssl": "^3.0.0",

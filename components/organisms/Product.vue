@@ -75,9 +75,12 @@ export default {
 @import "../../assets/sass/common.scss";
 
 .product {
-  border-bottom: 1px solid #c3c3c3;
   padding-bottom: rem(20);
   margin-bottom: rem(20);
+
+  &:last-child {
+    border-bottom: none;
+  }
 
   &-header {
     display: flex;
@@ -89,10 +92,14 @@ export default {
     min-width: rem(50);
     max-width: rem(50);
     margin-right: rem(20);
+    border-radius: rem(5);
+    max-height: rem(50);
+    background-color: #f6f6f6;
 
     img {
       width: 100%;
       height: auto;
+      border-radius: rem(5);
     }
   }
 
