@@ -1,8 +1,14 @@
 <template>
   <focus-trap>
     <div>
-      <transition name="modal">
-        <div class="modal-mask">
+      <transition
+        name="modal"
+        mode="out-in"
+      >
+        <div
+          v-if="active"
+          class="modal-mask"
+        >
           <div class="modal-wrapper">
             <div class="modal-container">
               <div class="modal-body">
@@ -42,6 +48,10 @@ export default {
       this.active = true
     }, 100)
   },
+  beforeDestroy () {
+    document.body.classList.remove('noscroll')
+    window.removeEventListener('keydown', this.escapeListener)
+  },
   methods: {
     close () {
       this.active = false
@@ -54,10 +64,6 @@ export default {
         this.close()
       }
     }
-  },
-  beforeUnmount () {
-    document.body.classList.remove('noscroll')
-    window.removeEventListener('keydown', this.escapeListener)
   }
 }
 </script>

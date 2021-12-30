@@ -169,7 +169,6 @@ export default {
       if (!this.saveEnabled || !this.valid()) { return }
       if (!this.localLineItem.id) {
         if (this.localLineItem.quantity === 0) {
-          // this.$modal.close()
           return
         }
         this.localLineItem.id = this.createGuid()
@@ -193,7 +192,6 @@ export default {
       }
 
       this.$emit('close')
-      // this.$modal.close(this.localLineItem.product.id)
     }
   }
 }
