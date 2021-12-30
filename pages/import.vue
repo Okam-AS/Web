@@ -275,13 +275,22 @@ export default {
             _this.importMessage = verifyOnly ? 'Dette ser bra ut! Ønsker du å gjennomføre denne handlingen:' : 'Ferdig! Dette ble gjennomført:'
           } else {
             _this.importMessage = 'Ser ut noen felter er feil. Lukk denne modalen for å se gjennom feltene som er markert med rødt'
+            _this.isVerified = false
             _this.importResponse.createdProductCount = 0
             _this.importResponse.deletedProductCount = 0
             window.console.log(res)
           }
-        }).finally(() => {
-          _this.isLoading = false
         })
+          .catch((err) => {
+            _this.importMessage = 'Noe gikk galt her. Mest sannsynlig var det noen produkter som ikke kunne slettes. Kontakt systemansvarlig for mer hjelp.'
+            _this.isVerified = false
+            _this.importResponse.createdProductCount = 0
+            _this.importResponse.deletedProductCount = 0
+            window.console.log(err)
+          })
+          .finally(() => {
+            _this.isLoading = false
+          })
       }
     }
   }
