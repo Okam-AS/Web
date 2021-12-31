@@ -8,7 +8,8 @@
       <span style="font-weight:bold;">Leveringsmetoder</span>
 
       <div v-if="store.selfPickUp" @click="setLocalDeliveryType('SelfPickup')">
-        <span v-show="localDeliveryType === 'SelfPickup'">✓</span><span>Hent selv</span>
+        <span>{{ localDeliveryType === 'SelfPickup' ? '✅' : '⬜️' }}</span>
+        <span>Hent selv</span>
       </div>
 
       <div
@@ -20,7 +21,8 @@
             : false
         "
       >
-        <span v-show="localDeliveryType === 'InstantHomeDelivery'">✓</span><span>Hjemlevering</span>
+        <span>{{ localDeliveryType === 'InstantHomeDelivery' ? '✅' : '⬜️' }}</span>
+        <span>Hjemlevering</span>
         <span
           v-if="
             store.minimumOrderPriceForHomeDelivery > 0 &&
@@ -31,22 +33,48 @@
       </div>
 
       <div v-if="store.tableDelivery" @click="setLocalDeliveryType('TableDelivery')">
-        <span v-if="localDeliveryType === 'TableDelivery'">✓</span><span>Spis inne</span>
+        <span>{{ localDeliveryType === 'TableDelivery' ? '✅' : '⬜️' }}</span>
+        <span>Spis inne</span>
       </div>
-
-      <client-only>
-        <stripe-element-card
-          ref="cardElement"
-          :pk="stripePKey"
-          :hide-postal-code="true"
-          :elements-options="{ locale: 'nb' }"
-        />
-      </client-only>
-      <input type="button" value="OK" @click="submit">
 
       <div>
         <span style="font-weight:bold;">Betalingsmetoder</span>
-        <pre>{{ cards }}</pre>
+        <div>
+          <Loading
+            v-if="isLoadingCards"
+          />
+          <div v-else>
+            <div v-for="(item, index) in cards" :key="index" @click="setPaymentMethodId(item.id)">
+              <div v-if="item.id === 'waiter'">
+                <span>{{ selectedPaymentMethodId === item.id ? '✅' : '⬜️' }}</span>
+                <span class="material-icons">edit_note</span>
+                <span>Legg inn bestilling som servitør</span>
+              </div>
+              <div v-else-if="item.card">
+                <span>{{ selectedPaymentMethodId === item.id ? '✅' : '⬜️' }}</span>
+                <span class="material-icons">credit_card</span>
+                <span>{{ '****' + item.card.last4 + ' ' + item.card.exp_month + '/' + item.card.exp_year }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div @click="setPaymentMethodId('')">
+              <span>{{ selectedPaymentMethodId === '' ? '✅' : '⬜️' }}</span>     <span>Nytt kort</span>
+            </div>
+            <div v-show="selectedPaymentMethodId === ''">
+              <client-only>
+                <stripe-element-card
+                  ref="cardElement"
+                  :pk="stripePKey"
+                  :hide-postal-code="true"
+                  :elements-options="{ locale: 'nb' }"
+                />
+              </client-only>
+              <label><input v-model="rememberCard" type="checkbox">Husk dette kortet</label>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -54,8 +82,10 @@
 
 <script type="ts">
 // import ProductConfig from '@/components/organisms/ProductConfig.vue'
+import Loading from '@/components/atoms/Loading.vue'
 
 export default {
+  components: { Loading },
   data: () => ({
     stripePKey: 'pk_test_51H4qD7LNNQ2fMCqGKVqDxFBnljHO1QyXuLSQ8BTvltvx9jKXGSw78WuX01i9miBj9hzh5L8AS9aiIXF9qUDq5kKH005deCclVN',
     storeId: null,
@@ -232,9 +262,9 @@ export default {
         .then((result) => {
           if (Array.isArray(result)) { comp.cards = result }
           comp.isLoadingCards = false
-        // comp.setPaymentMethodId(
-        //   comp.cards.length > 0 ? comp.cards[0].id : ''
-        // )
+          comp.setPaymentMethodId(
+            comp.cards.length > 0 ? comp.cards[0].id : ''
+          )
         })
         .catch(() => {
           comp.isLoadingCards = false
