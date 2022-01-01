@@ -1,5 +1,5 @@
 <template>
-  <div v-show="loading" class="loader">
+  <div v-show="loading" class="loader" :style="'width:' + size + 'px;height:' + size + 'px;'">
     <slot>
       <svg viewBox="25 25 50 50" class="loader__svg">
         <circle cx="50" cy="50" r="20" class="loader__circle" />
@@ -13,7 +13,11 @@ export default {
   props: {
     loading: {
       type: Boolean,
-      default: false
+      default: true
+    },
+    size: {
+      type: Number,
+      default: 30
     }
   }
 }

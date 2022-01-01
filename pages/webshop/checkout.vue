@@ -54,22 +54,21 @@
                 <span>{{ '****' + item.card.last4 + ' ' + item.card.exp_month + '/' + item.card.exp_year }}</span>
               </div>
             </div>
-          </div>
-
-          <div>
-            <div class="clickable" @click="setPaymentMethodId('')">
-              <span>{{ selectedPaymentMethodId === '' ? '✅' : '⬜️' }}</span><span>Nytt kort</span>
-            </div>
-            <div v-show="selectedPaymentMethodId === ''">
-              <client-only>
-                <stripe-element-card
-                  ref="cardElement"
-                  :pk="stripePKey"
-                  :hide-postal-code="true"
-                  :elements-options="{ locale: 'nb' }"
-                />
-              </client-only>
-              <label><input v-model="rememberCard" type="checkbox">Husk dette kortet</label>
+            <div>
+              <div class="clickable" @click="setPaymentMethodId('')">
+                <span>{{ selectedPaymentMethodId === '' ? '✅' : '⬜️' }}</span><span>Nytt kort</span>
+              </div>
+              <div v-show="selectedPaymentMethodId === ''">
+                <client-only>
+                  <stripe-element-card
+                    ref="cardElement"
+                    :pk="stripePKey"
+                    :hide-postal-code="true"
+                    :elements-options="{ locale: 'nb' }"
+                  />
+                </client-only>
+                <label><input v-model="rememberCard" type="checkbox">Husk dette kortet</label>
+              </div>
             </div>
           </div>
         </div>
@@ -86,21 +85,71 @@
       <div class="section">
         <span class="title">Kommentar</span>
         <div>
-          <textarea v-model="localComment" maxlength="100" :placeholder="commentHint" />
+          <textarea v-model="localComment" style="width:400px;height:100px" maxlength="100" :placeholder="commentHint" />
         </div>
       </div>
-      <p>Her kommer sum av priser og rabatter</p>
-      <input class="emoji-btn clickable" type="button" value="Bekreft og betal" @click="submit">
+      <div v-if="storeCart.calculations" style="width:400px">
+        <div>
+          <span>{{ totalQuantityLabel }}</span>
+          <span v-show="storeCart.calculations.itemsAmountLineThrough > 0" class="right" style="text-decoration: line-through;">
+            {{ priceLabel(storeCart.calculations.itemsAmountLineThrough) + ' ' }}
+          </span>
+          <span class="right">{{ priceLabel(storeCart.calculations.itemsAmount) }}</span>
+        </div>
+        <div v-show="storeCart.calculations.tipAmount > 0">
+          <span>Tips</span>
+          <span class="right">{{ priceLabel(storeCart.calculations.tipAmount) }}</span>
+        </div>
+        <div>
+          <span>Levering</span>
+          <span class="right">{{ priceLabel(storeCart.calculations.deliveryAmount) }}</span>
+        </div>
+        <div v-show="storeCart.calculations.orderDiscountAmount > 0">
+          <span>Rabatt</span>
+          <span class="right">{{ '-' + priceLabel(storeCart.calculations.orderDiscountAmount) }}</span>
+        </div>
+        <div v-show="storeCart.calculations.tableAdditionalAmount > 0">
+          <span>Spis inne</span>
+          <span class="right">{{ priceLabel(storeCart.calculations.tableAdditionalAmount) }}</span>
+        </div>
+        <div>
+          <span>Totalt</span>
+          <span class="right">{{ priceLabel(storeCart.calculations.finalAmount) }}</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <span v-if="!store.isOpenNow && store.name" style="padding:1em;background:#fcf0cc;">
+          {{ store.name + ' er stengt for øyeblikket' }}
+        </span>
+        <input
+          v-if="!isLoading"
+          class="emoji-btn clickable"
+          type="button"
+          value="Bekreft og betal"
+          @click="submit"
+        >
+        <div class="terms">
+          <span>Jeg er enig i </span>
+          <span class="clickable" style="font-weight:bold" @click="showTerms = true">salgsbetingelsene</span>
+          <span> og klar over at kjøpet innebærer begrensinger i </span>
+          <span class="clickable" style="font-weight:bold" @click="showTerms = true">angreretten</span>
+        </div>
+      </div>
     </div>
+    <Modal v-if="showTerms" @close="showTerms = false">
+      <iframe style="border:none;" weight="400" height="400" src="https://www.okam.no/personvern-og-vilkar/?nolayout" />
+    </Modal>
   </div>
 </template>
 
 <script type="ts">
 // import ProductConfig from '@/components/organisms/ProductConfig.vue'
 import Loading from '@/components/atoms/Loading.vue'
+import Modal from '@/components/atoms/Modal.vue'
 
 export default {
-  components: { Loading },
+  components: { Loading, Modal },
   data: () => ({
     stripePKey: 'pk_test_51H4qD7LNNQ2fMCqGKVqDxFBnljHO1QyXuLSQ8BTvltvx9jKXGSw78WuX01i9miBj9hzh5L8AS9aiIXF9qUDq5kKH005deCclVN',
     storeId: null,
@@ -111,6 +160,7 @@ export default {
     errorMessage: '',
     deliveryAddressError: false,
     tableNameError: false,
+    showTerms: false,
 
     localDeliveryType: 'NotSet',
     localComment: '',
@@ -174,8 +224,7 @@ export default {
         window.console.table(paymentMethod)
       } catch (error) {
         comp.isSending = false
-        comp.errorMessage =
-                   'Betalingen kunne ikke gjennomføres. Kontroller kortinformasjon og prøv igjen.'
+        comp.errorMessage = 'Betalingen kunne ikke gjennomføres. Kontroller kortinformasjon og prøv igjen.'
       }
     },
     setTip (tipPercent) {
@@ -189,7 +238,7 @@ export default {
       this.updateCart()
     },
     setLocalDeliveryType (value) {
-      // if (this.isLoading) { return }
+      if (this.isLoading) { return }
       this.clearErrors()
       this.localDeliveryType = value
       this.updateCart()
@@ -302,5 +351,11 @@ export default {
 .title{
   font-weight: bold;
   margin-top: 100px;
+}
+.right {
+  float:right;
+}
+.terms span {
+  font-size: 10px;
 }
 </style>
