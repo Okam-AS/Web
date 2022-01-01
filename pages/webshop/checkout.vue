@@ -88,7 +88,8 @@
           <textarea v-model="localComment" style="width:400px;height:100px" maxlength="100" :placeholder="commentHint" />
         </div>
       </div>
-      <div v-if="storeCart.calculations" style="width:400px">
+      <Loading v-if="isLoading" />
+      <div v-else-if="storeCart.calculations" style="width:400px">
         <div>
           <span>{{ totalQuantityLabel }}</span>
           <span v-show="storeCart.calculations.itemsAmountLineThrough > 0" class="right" style="text-decoration: line-through;">
@@ -118,12 +119,11 @@
         </div>
       </div>
 
-      <div class="section">
+      <div v-if="!isLoading" class="section">
         <span v-if="!store.isOpenNow && store.name" style="padding:1em;background:#fcf0cc;">
           {{ store.name + ' er stengt for øyeblikket' }}
         </span>
         <input
-          v-if="!isLoading"
           class="emoji-btn clickable"
           type="button"
           value="Bekreft og betal"
