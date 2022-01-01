@@ -195,11 +195,10 @@ export default {
   top: 0;
   height: 100%;
   width: rem(300);
-
-border: 1px solid black;
+  border: 1px solid black;
 }
 .checkout-btn{
- position: fixed;
+  position: fixed;
   bottom: 0;
   width: rem(300);
   text-align: center;

@@ -1,19 +1,17 @@
 <template>
   <div ref="container">
     <p>Checkout</p>
-    <div>
-      <span class="material-icons">shopping_cart</span>
-      <span class="material-icons">credit_card</span>
+    <div class="section">
+      <span class="title">Leveringsmetoder</span>
 
-      <span style="font-weight:bold;">Leveringsmetoder</span>
-
-      <div v-if="store.selfPickUp" @click="setLocalDeliveryType('SelfPickup')">
+      <div v-if="store.selfPickUp" class="clickable" @click="setLocalDeliveryType('SelfPickup')">
         <span>{{ localDeliveryType === 'SelfPickup' ? '✅' : '⬜️' }}</span>
         <span>Hent selv</span>
       </div>
 
       <div
         v-if="store.homeDeliveryMethods && store.homeDeliveryMethods.length > 0"
+        class="clickable"
         @click="
           storeCart.calculations.itemsAmount >=
             store.minimumOrderPriceForHomeDelivery
@@ -32,19 +30,19 @@
         >{{ 'Min. bestilling: ' + priceLabel(store.minimumOrderPriceForHomeDelivery) }}</span>
       </div>
 
-      <div v-if="store.tableDelivery" @click="setLocalDeliveryType('TableDelivery')">
+      <div v-if="store.tableDelivery" class="clickable" @click="setLocalDeliveryType('TableDelivery')">
         <span>{{ localDeliveryType === 'TableDelivery' ? '✅' : '⬜️' }}</span>
         <span>Spis inne</span>
       </div>
 
-      <div>
-        <span style="font-weight:bold;">Betalingsmetoder</span>
+      <div class="section">
+        <span class="title">Betalingsmetoder</span>
         <div>
           <Loading
             v-if="isLoadingCards"
           />
           <div v-else>
-            <div v-for="(item, index) in cards" :key="index" @click="setPaymentMethodId(item.id)">
+            <div v-for="(item, index) in cards" :key="index" class="clickable" @click="setPaymentMethodId(item.id)">
               <div v-if="item.id === 'waiter'">
                 <span>{{ selectedPaymentMethodId === item.id ? '✅' : '⬜️' }}</span>
                 <span class="material-icons">edit_note</span>
@@ -59,8 +57,8 @@
           </div>
 
           <div>
-            <div @click="setPaymentMethodId('')">
-              <span>{{ selectedPaymentMethodId === '' ? '✅' : '⬜️' }}</span>     <span>Nytt kort</span>
+            <div class="clickable" @click="setPaymentMethodId('')">
+              <span>{{ selectedPaymentMethodId === '' ? '✅' : '⬜️' }}</span><span>Nytt kort</span>
             </div>
             <div v-show="selectedPaymentMethodId === ''">
               <client-only>
@@ -76,6 +74,23 @@
           </div>
         </div>
       </div>
+      <div v-if="!isLoadingCards" class="section">
+        <span class="title">Tips</span>
+        <div>
+          <span class="clickable" @click="setTip(0)">{{ localTipPercent === 0 ? '✅' : '⬜️' }} 0%</span>
+          <span class="clickable" @click="setTip(5)">{{ localTipPercent === 5 ? '✅' : '⬜️' }} 5%</span>
+          <span class="clickable" @click="setTip(10)">{{ localTipPercent === 10 ? '✅' : '⬜️' }} 10%</span>
+          <span class="clickable" @click="setTip(20)">{{ localTipPercent === 20 ? '✅' : '⬜️' }} 20%</span>
+        </div>
+      </div>
+      <div class="section">
+        <span class="title">Kommentar</span>
+        <div>
+          <textarea v-model="localComment" maxlength="100" :placeholder="commentHint" />
+        </div>
+      </div>
+      <p>Her kommer sum av priser og rabatter</p>
+      <input class="emoji-btn clickable" type="button" value="Bekreft og betal" @click="submit">
     </div>
   </div>
 </template>
@@ -273,3 +288,19 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.emoji-btn{
+  cursor: pointer;
+  padding: 0 5px 0 5px;
+}
+.clickable {
+  cursor: pointer;
+}
+.section {
+  margin-top: 2em;
+}
+.title{
+  font-weight: bold;
+  margin-top: 100px;
+}
+</style>
