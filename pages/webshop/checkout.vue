@@ -1,6 +1,6 @@
 <template>
   <div ref="container" class="checkout-page">
-    <p>Checkout</p>
+    <p>Kasse</p>
     <div class="section">
       <span class="title">Leveringsmetoder</span>
 
@@ -85,11 +85,11 @@
       <div class="section">
         <span class="title">Kommentar</span>
         <div>
-          <textarea v-model="localComment" style="width:400px;height:100px" maxlength="100" :placeholder="commentHint" />
+          <textarea v-model="localComment" style="width:100%;height:100px" maxlength="100" :placeholder="commentHint" />
         </div>
       </div>
       <Loading v-if="isLoading" />
-      <div v-else-if="storeCart.calculations" style="width:400px">
+      <div v-else-if="storeCart.calculations">
         <div>
           <span>{{ totalQuantityLabel }}</span>
           <span v-show="storeCart.calculations.itemsAmountLineThrough > 0" class="right" style="text-decoration: line-through;">
