@@ -120,9 +120,9 @@
       </div>
 
       <div v-if="!isLoading" class="section">
-        <span v-if="!store.isOpenNow && store.name" style="padding:1em;background:#fcf0cc;">
+        <p v-if="!store.isOpenNow && store.name" style="padding:1em;background:#fcf0cc;">
           {{ store.name + ' er stengt for øyeblikket' }}
-        </span>
+        </p>
         <input
           class="emoji-btn clickable"
           type="button"
