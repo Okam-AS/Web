@@ -13,7 +13,11 @@
           v-for="(option, j) in variant.options"
           :key="j"
           :class="{ 'product-option': true, 'product-option-selected' : selectedOptions.map(x => x.id).includes(option.id)}"
+          role="checkbox"
+          tabindex="0"
+          :aria-selected="selectedOptions.map(x => x.id).includes(option.id)"
           @click="optionClick(option.id)"
+          @keyup.enter="optionClick(option.id)"
         >
           <img v-if="selectedOptions.map(x => x.id).includes(option.id)" src="~/assets/UI/icon_check.svg">
           {{ option.name }}
