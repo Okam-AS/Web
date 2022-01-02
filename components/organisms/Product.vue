@@ -1,6 +1,11 @@
 <template>
-  <div class="product">
-    <div class="product-header" @click="openProduct">
+  <div
+    class="product"
+    :tabindex="hideLineItems ? -1 : 0"
+    @click="openProduct"
+    @keyup.enter="openProduct"
+  >
+    <div class="product-header">
       <div class="product-image">
         <img
           v-if="product.image && product.image.thumbnailUrl"
@@ -62,7 +67,9 @@ export default {
   },
   methods: {
     openProduct () {
-      this.$emit('openProduct', this.product.id)
+      if (!this.hideLineItems) {
+        this.$emit('openProduct', this.product.id)
+      }
     },
     openLineItem (lineItem) {
       this.$emit('openLineItem', lineItem)

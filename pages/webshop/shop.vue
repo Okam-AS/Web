@@ -10,7 +10,10 @@
             'category-header': true,
             'category-header--expanded': category.active
           }"
+          tabindex="0"
+          role="button"
           @click="toggleCategory(i)"
+          @keyup.enter="toggleCategory(i)"
         >
           {{ category.name }}
 
