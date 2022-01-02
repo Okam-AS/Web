@@ -1,5 +1,5 @@
 <template>
-  <div ref="container">
+  <div ref="container" class="checkout-page">
     <p>Checkout</p>
     <div class="section">
       <span class="title">Leveringsmetoder</span>
@@ -338,6 +338,12 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+@import "../../assets/sass/common.scss";
+
+.checkout-page {
+  max-width: rem(600);
+  margin: 0 auto;
+}
 .emoji-btn{
   cursor: pointer;
   padding: 0 5px 0 5px;
