@@ -10,13 +10,13 @@
         <tr>
           <th>Nøkkel</th>
           <th v-for="lang in langs" :key="lang.code">
-            {{ lang.name }}
+            {{ lang.nativeName }}
           </th>
         </tr>
         <tr v-for="key in filteredKeys" :key="key">
           <td>{{ key }}</td>
           <td v-for="lang in langs" :key="lang.code">
-            {{ lang.data[key] }}
+            {{ lang.translations[key] }}
           </td>
           <td>
             <input class="emoji-btn" type="button" value="✍🏻 Rediger" @click="editRow(key)">
@@ -50,8 +50,8 @@ export default {
     langs: [
       {
         code: 'no',
-        name: 'Norsk',
-        data: {
+        nativeName: 'Norsk',
+        translations: {
           'best.testkey': 'hei',
           'test.asd': 'hei hei',
           'about.heading': 'Om oss',
@@ -61,8 +61,8 @@ export default {
       },
       {
         code: 'en',
-        name: 'Engelsk',
-        data:
+        nativeName: 'English',
+        translations:
           {
             'best.testkey': 'hei',
             'test.asd': 'hei hei',
@@ -77,7 +77,7 @@ export default {
     allKeys () {
       const allKeys = []
       this.langs.forEach((lang) => {
-        allKeys.push(...Object.keys(lang.data))
+        allKeys.push(...Object.keys(lang.translations))
       })
       const onlyUnique = (value, index, self) => self.indexOf(value) === index
       return allKeys.filter(onlyUnique).sort()
@@ -88,7 +88,7 @@ export default {
 
       return _this.allKeys.filter(key =>
         key.includes(_this.searchInput.toLowerCase()) ||
-        _this.langs.some(x => x.data[key]?.toLowerCase().includes(_this.searchInput.toLowerCase())))
+        _this.langs.some(x => x.translations[key]?.toLowerCase().includes(_this.searchInput.toLowerCase())))
     }
   },
   mounted () {
@@ -106,7 +106,7 @@ export default {
       if (key) {
         _this.langs.forEach((lang) => {
           const editedLang = editedLangs.find(editedLang => editedLang.code === lang.code)
-          _this.$set(lang.data, key, editedLang.data[key])
+          _this.$set(lang.translations, key, editedLang.translations[key])
         })
       }
       _this.showEditModal = false
@@ -117,12 +117,12 @@ export default {
     },
     deleteRow (key) {
       const _this = this
-      const hasValues = _this.langs.some(lang => lang.data[key])
+      const hasValues = _this.langs.some(lang => lang.translations[key])
       if (hasValues) {
         _this.showCantDeleteInfo = true
       } else {
         _this.langs.forEach((lang) => {
-          _this.$delete(lang.data, key)
+          _this.$delete(lang.translations, key)
         })
       }
     },
