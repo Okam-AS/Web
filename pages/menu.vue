@@ -88,7 +88,7 @@ export default {
       this._categoryService.GetAll(this.storeId).then((res) => {
         this.categories = res
 
-        this._categories.forEach((category, index) => {
+        this.categories.forEach((category, index) => {
           this._categoryService.Get(category.id).then((c) => {
             this.updateCategory(index, c)
           })
