@@ -29,7 +29,11 @@
   </div>
 </template>
 <script>
+import PageHeader from '@/components/organisms/PageHeader.vue'
+import PageFooter from '@/components/organisms/PageFooter.vue'
+
 export default {
+  components: { PageHeader, PageFooter },
   async asyncData ({ params, redirect }) {
     const blogPosts = await fetch(
       `${process.env.STRAPI_BASE_URL}/blog-posts`
