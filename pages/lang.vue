@@ -4,6 +4,7 @@
       <input v-model="searchInput" class="search-input" type="text">
       <span class="search-icon">🔍</span>
       <input class="emoji-btn add-new" type="button" value="➕ Ny rad" @click="addRow">
+      <input class="emoji-btn user-btn" type="button" value="🧑🏻‍💻 Bytt bruker" @click="showLogin = true">
     </div>
     <table>
       <tbody>
@@ -144,8 +145,9 @@ input {
 .emoji-btn{
   cursor: pointer;
 }
-.add-new {
-  float:right
+.add-new, .user-btn {
+  float:right;
+  margin-left:1em;
 }
 .modal-buttons{
   margin-top: 1em;;
