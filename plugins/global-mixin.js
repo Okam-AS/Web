@@ -10,7 +10,8 @@ import {
   DeliveryMethodService,
   NotificationService,
   OrderService,
-  StripeService
+  StripeService,
+  CultureService
 } from '@/core/services'
 import { wholeAmount, fractionAmount, priceLabel, formatString } from '~/core/helpers/tools'
 
@@ -42,7 +43,8 @@ const mixin = {
     _orderService () { return new OrderService(this.$store) },
     _notificationService () { return new NotificationService(this.$store) },
     _categoryService () { return new CategoryService(this.$store) },
-    _deliveryMethodService () { return new DeliveryMethodService(this.$store) }
+    _deliveryMethodService () { return new DeliveryMethodService(this.$store) },
+    _cultureService () { return new CultureService(this.$store) }
   }
 }
 

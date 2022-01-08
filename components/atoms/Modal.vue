@@ -13,6 +13,7 @@
             <div class="modal-container">
               <div class="modal-body">
                 <button
+                  v-if="!hideCloseBtn"
                   class="modal-close-button"
                   @click="$emit('close')"
                 >
@@ -36,6 +37,12 @@ import FocusTrap from '@/components/molecules/FocusTrap'
 export default {
   components: {
     FocusTrap
+  },
+  props: {
+    hideCloseBtn: {
+      type: Boolean,
+      default: false
+    }
   },
   data: () => ({
     active: false

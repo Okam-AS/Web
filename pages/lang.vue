@@ -25,8 +25,8 @@
         </tr>
       </tbody>
     </table>
-    <EditRowModal v-if="showEditModal" :langs="langs" :lang-data-key="editKey" @close="showEditModal = false" @save="edited" />
-    <Modal v-if="showCantDeleteInfo">
+    <EditRowModal v-if="showEditModal" :langs="langs" :lang-translation-key="editKey" @close="showEditModal = false" @save="edited" />
+    <Modal v-if="showCantDeleteInfo" :hide-close-btn="true">
       <template>
         <p>Alle feltene må være tomme for å slette raden</p>
         <div class="modal-buttons">
@@ -34,44 +34,24 @@
         </div>
       </template>
     </Modal>
+    <LoginModal v-if="showLogin" :close-if-logged-in="closeIfLoggedIn" @loggedIn="showLogin = false; closeIfLoggedIn = false" @loggedOut="showLogin = true" />
   </div>
 </template>
 <script>
 import EditRowModal from '@/components/organisms/EditLangRowModal.vue'
 import Modal from '@/components/atoms/Modal.vue'
+import LoginModal from '~/components/molecules/LoginModal.vue'
 
 export default {
-  components: { EditRowModal, Modal },
+  components: { EditRowModal, Modal, LoginModal },
   data: () => ({
     showEditModal: false,
     showCantDeleteInfo: false,
     searchInput: '',
     editKey: '',
-    langs: [
-      {
-        code: 'no',
-        nativeName: 'Norsk',
-        translations: {
-          'best.testkey': 'hei',
-          'test.asd': 'hei hei',
-          'about.heading': 'Om oss',
-          'xest.sss': 'okse',
-          unikino: 'sdsf'
-        }
-      },
-      {
-        code: 'en',
-        nativeName: 'English',
-        translations:
-          {
-            'best.testkey': 'hei',
-            'test.asd': 'hei hei',
-            'about.heading': 'About us',
-            'xest.sss': 'okse',
-            'unik.ien': 'engelsk'
-          }
-      }
-    ]
+    langs: [],
+    showLogin: true,
+    closeIfLoggedIn: true
   }),
   computed: {
     allKeys () {
@@ -92,23 +72,20 @@ export default {
     }
   },
   mounted () {
-    // fetch(`${this.strapiBaseUrl}/about-us`)
-    //   .then((res) => {
-    //     res.json().then(
-    //       (jsonResponse) => {
-    //         this.page = jsonResponse
-    //       })
-    //   })
+    this.loadCultures()
   },
   methods: {
-    edited ({ key, editedLangs }) {
+    loadCultures () {
       const _this = this
-      if (key) {
-        _this.langs.forEach((lang) => {
-          const editedLang = editedLangs.find(editedLang => editedLang.code === lang.code)
-          _this.$set(lang.translations, key, editedLang.translations[key])
-        })
-      }
+      _this._cultureService.GetAll().then((response) => {
+        _this.langs = response
+      })
+    },
+    edited (requestModel) {
+      const _this = this
+      _this._cultureService.CreateOrUpdateTranslations(requestModel).then(() => {
+        _this.loadCultures()
+      })
       _this.showEditModal = false
     },
     editRow (key) {
@@ -121,8 +98,8 @@ export default {
       if (hasValues) {
         _this.showCantDeleteInfo = true
       } else {
-        _this.langs.forEach((lang) => {
-          _this.$delete(lang.translations, key)
+        _this._cultureService.Delete(key).then(() => {
+          _this.loadCultures()
         })
       }
     },
@@ -130,7 +107,6 @@ export default {
       this.editKey = ''
       this.showEditModal = true
     }
-
   }
 }
 </script>
