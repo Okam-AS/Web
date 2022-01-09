@@ -321,8 +321,9 @@ export default {
     },
     getRegisteredCards () {
       const comp = this
+      // TODO: update like consumer app
       comp._stripeService
-        .GetPaymentMethods(comp.storeId)
+        .GetPaymentMethods(comp.storeCart.id)
         .then((result) => {
           if (Array.isArray(result)) { comp.cards = result }
           comp.isLoadingCards = false
