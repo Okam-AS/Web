@@ -99,7 +99,7 @@ export default {
       if (hasValues) {
         _this.showCantDeleteInfo = true
       } else {
-        _this._cultureService.Delete(key).then(() => {
+        _this._cultureService.DeleteTranslation(key).then(() => {
           _this.loadCultures()
         })
       }
