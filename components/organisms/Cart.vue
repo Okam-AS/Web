@@ -103,10 +103,6 @@ export default {
       }
     }
   },
-  mounted () {
-    document.body.classList.add('noscroll')
-    window.addEventListener('keydown', this.escapeListener)
-  },
   beforeDestroy () {
     document.body.classList.remove('noscroll')
     window.removeEventListener('keydown', this.escapeListener)
