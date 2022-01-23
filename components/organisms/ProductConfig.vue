@@ -221,6 +221,7 @@ export default {
 
   .product-option {
     font-size: 0.8em;
+    padding: rem(2) 0;
     cursor: pointer;
     margin-left: rem(28);
 

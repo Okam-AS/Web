@@ -123,12 +123,11 @@
         <p v-if="!store.isOpenNow && store.name" style="padding:1em;background:#fcf0cc;">
           {{ store.name + ' er stengt for øyeblikket' }}
         </p>
-        <input
-          class="emoji-btn clickable"
-          type="button"
-          value="Bekreft og betal"
+        <continue-button
           @click="submit"
         >
+          Bekreft og betal
+        </continue-button>
         <div class="terms">
           <span>Jeg er enig i </span>
           <span class="clickable" style="font-weight:bold" @click="showTerms = true">salgsbetingelsene</span>
@@ -146,10 +145,11 @@
 <script type="ts">
 // import ProductConfig from '@/components/organisms/ProductConfig.vue'
 import Loading from '@/components/atoms/Loading.vue'
+import ContinueButton from '@/components/atoms/ContinueButton.vue'
 import Modal from '@/components/atoms/Modal.vue'
 
 export default {
-  components: { Loading, Modal },
+  components: { ContinueButton, Loading, Modal },
   data: () => ({
     stripePKey: 'pk_test_51H4qD7LNNQ2fMCqGKVqDxFBnljHO1QyXuLSQ8BTvltvx9jKXGSw78WuX01i9miBj9hzh5L8AS9aiIXF9qUDq5kKH005deCclVN',
     storeId: null,
@@ -344,24 +344,31 @@ export default {
 .checkout-page {
   max-width: rem(600);
   margin: 0 auto;
+  padding: rem(20);
 }
-.emoji-btn{
+
+.emoji-btn {
   cursor: pointer;
   padding: 0 5px 0 5px;
 }
+
 .clickable {
   cursor: pointer;
 }
+
 .section {
   margin-top: 2em;
 }
-.title{
+
+.title {
   font-weight: bold;
   margin-top: 100px;
 }
+
 .right {
   float:right;
 }
+
 .terms span {
   font-size: 10px;
 }

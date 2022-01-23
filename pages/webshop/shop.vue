@@ -65,6 +65,7 @@ import Product from '@/components/organisms/Product.vue'
 import Cart from '@/components/organisms/Cart.vue'
 import Modal from '@/components/atoms/Modal.vue'
 import ProductConfig from '@/components/organisms/ProductConfig.vue'
+
 export default {
   components: { Product, Cart, Modal, ProductConfig },
   data: () => ({
@@ -183,6 +184,10 @@ export default {
 .shop {
   margin: 0 auto;
   max-width: 600px;
+
+  &-menu {
+    margin: rem(20) 0;
+  }
 
   &-products {
     margin-bottom: rem(300);

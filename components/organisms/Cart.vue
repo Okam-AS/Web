@@ -11,12 +11,12 @@
         v-if="expanded"
         class="cart-content"
       >
-        <button
+        <close-button
           class="close-button"
           @click="expanded = false"
         >
           Lukk
-        </button>
+        </close-button>
         <h2>Handlekurv</h2>
         <div
           v-for="item in itemsInCart"
@@ -51,7 +51,10 @@
       <div
         v-else
         class="cart-indicator"
+        role="button"
+        tabindex="0"
         @click="expanded = true"
+        @keyup.enter="expanded = true"
       >
         Handlekurv ({{ itemsInCart.length }})
       </div>
@@ -63,9 +66,10 @@
 import Stepper from '@/components/molecules/Stepper'
 import FocusTrap from '@/components/molecules/FocusTrap'
 import ContinueButton from '@/components/atoms/ContinueButton'
+import CloseButton from '@/components/atoms/CloseButton'
 
 export default {
-  components: { ContinueButton, FocusTrap, Stepper },
+  components: { CloseButton, ContinueButton, FocusTrap, Stepper },
   props: {
     storeId: {
       type: Number,
@@ -147,8 +151,8 @@ export default {
 @import "../../assets/sass/common.scss";
 
 .cart {
+  // border: 1px solid $color-support;
   background: $color-profile;
-  border: 1px solid $color-support;
   position: fixed;
   left: 0;
   right: 0;
@@ -166,7 +170,7 @@ export default {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    padding: rem(10);
+    padding: rem(10) 0;
 
     &-title {
       flex-grow: 1;

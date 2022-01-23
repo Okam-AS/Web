@@ -12,13 +12,13 @@
           <div class="modal-wrapper">
             <div class="modal-container">
               <div class="modal-body">
-                <button
+                <close-button
                   v-if="!hideCloseBtn"
                   class="modal-close-button"
                   @click="$emit('close')"
                 >
-                  x
-                </button>
+                  {{ closeBtnText }}
+                </close-button>
                 <slot />
               </div>
             </div>
@@ -33,15 +33,20 @@
 
 <script>
 import FocusTrap from '@/components/molecules/FocusTrap'
+import CloseButton from '@/components/atoms/CloseButton'
 
 export default {
   components: {
-    FocusTrap
+    CloseButton, FocusTrap
   },
   props: {
     hideCloseBtn: {
       type: Boolean,
       default: false
+    },
+    closeBtnText: {
+      type: String,
+      default: 'Avbryt'
     }
   },
   data: () => ({
@@ -97,9 +102,11 @@ export default {
   }
 
   &-container {
-    width: rem(400);
+    position: relative;
+    max-width: rem(600);
+    min-width: rem(280);
     margin: 0px auto;
-    padding: rem(20) rem(30);
+    padding: rem(20) rem(20);
     background-color: #fff;
     border-radius: 2px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
