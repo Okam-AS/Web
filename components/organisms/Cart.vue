@@ -1,68 +1,71 @@
 <template>
-  <div
-    v-if="itemsInCart.length"
-    :class="{
-      'cart': true,
-      'cart--expanded': expanded
-    }"
-  >
+  <focus-trap>
     <div
-      v-if="expanded"
-      class="cart-content"
+      v-if="itemsInCart.length"
+      :class="{
+        'cart': true,
+        'cart--expanded': expanded
+      }"
     >
-      <button
-        class="close-button"
-        @click="expanded = false"
-      >
-        Lukk
-      </button>
-      <h2>Handlekurv</h2>
       <div
-        v-for="item in itemsInCart"
-        :key="item.id"
-        class="cart-row"
+        v-if="expanded"
+        class="cart-content"
       >
-        <div class="cart-row-title">
-          <span style="font-weight:bold">{{ item.product.name }}</span><br>
-          <span>{{ item.product.selectedOptionNames }}</span>
+        <button
+          class="close-button"
+          @click="expanded = false"
+        >
+          Lukk
+        </button>
+        <h2>Handlekurv</h2>
+        <div
+          v-for="item in itemsInCart"
+          :key="item.id"
+          class="cart-row"
+        >
+          <div class="cart-row-title">
+            <span style="font-weight:bold">{{ item.product.name }}</span><br>
+            <span>{{ item.product.selectedOptionNames }}</span>
+          </div>
+
+          <div class="cart-row-controls">
+            <span style="font-size:10px;color:gray;">
+              {{ priceLabel(item.product.amount) }}
+            </span>
+
+            <Stepper
+              :quantity="item.quantity"
+              @add="addQuantity(item, 1)"
+              @subtract="addQuantity(item, -1)"
+            />
+          </div>
         </div>
 
-        <div class="cart-row-controls">
-          <span style="font-size:10px;color:gray;">
-            {{ priceLabel(item.product.amount) }}
-          </span>
-
-          <Stepper
-            :quantity="item.quantity"
-            @add="addQuantity(item, 1)"
-            @subtract="addQuantity(item, -1)"
-          />
-        </div>
+        <continue-button
+          @click="checkout"
+        >
+          Fortsett
+        </continue-button>
       </div>
 
-      <button
-        class="checkout-button"
-        @click="checkout"
+      <div
+        v-else
+        class="cart-indicator"
+        @click="expanded = true"
       >
-        Fortsett
-      </button>
+        Handlekurv ({{ itemsInCart.length }})
+      </div>
     </div>
-
-    <div
-      v-else
-      class="cart-indicator"
-      @click="expanded = true"
-    >
-      Handlekurv ({{ itemsInCart.length }})
-    </div>
-  </div>
+  </focus-trap>
 </template>
 
 <script>
 import Stepper from '@/components/molecules/Stepper'
+import FocusTrap from '@/components/molecules/FocusTrap'
+import ContinueButton from '@/components/atoms/ContinueButton'
 
 export default {
-  components: { Stepper },
+  components: { ContinueButton, FocusTrap, Stepper },
   props: {
     storeId: {
       type: Number,
@@ -87,7 +90,37 @@ export default {
       return currentCart.items || []
     }
   },
+  watch: {
+    expanded () {
+      if (this.expanded) {
+        this.addNoScroll()
+      } else {
+        this.removeNoScroll()
+      }
+    }
+  },
+  mounted () {
+    document.body.classList.add('noscroll')
+    window.addEventListener('keydown', this.escapeListener)
+  },
+  beforeDestroy () {
+    document.body.classList.remove('noscroll')
+    window.removeEventListener('keydown', this.escapeListener)
+  },
   methods: {
+    escapeListener (e) {
+      if (e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27) {
+        this.expanded = false
+      }
+    },
+    addNoScroll () {
+      document.body.classList.add('noscroll')
+      window.addEventListener('keydown', this.escapeListener)
+    },
+    removeNoScroll () {
+      document.body.classList.remove('noscroll')
+      window.removeEventListener('keydown', this.escapeListener)
+    },
     addQuantity (lineItem, add) {
       if ((lineItem.quantity + add) === 0) {
         this._cartService.RemoveLineItem({
@@ -126,6 +159,7 @@ export default {
 
   &--expanded {
     top: 0;
+    padding: rem(20);
   }
 
   &-row {
@@ -153,16 +187,6 @@ export default {
 
 .close-button {
   float: right;
-}
-
-.checkout-button {
-  background: $color-support;
-  color: white;
-  padding: rem(10);
-  border-radius: rem(20);
-  border: none;
-  float: right;
-  margin-top: rem(10);
 }
 
 </style>
