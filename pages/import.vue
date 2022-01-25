@@ -116,7 +116,7 @@
       </div>
       <Loading :loading="isLoading" />
     </Modal>
-    <LoginModal v-if="showLogin" @close="closeLoginModal" @loggedIn="showLogin = false" @loggedOut="showLogin = true" />
+    <LoginModal v-if="showLogin" :close-if-logged-in="false" @close="closeLoginModal" />
     <Modal v-if="showClearRowsModal" @close="showClearRowsModal = false">
       <p>Er du sikker på at du ønsker å fjerne alle rader fra denne tabellen? Produkter som allerede er importert vil ikke bli berørt.</p>
       <div class="modal-buttons">

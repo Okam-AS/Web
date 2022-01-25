@@ -75,7 +75,7 @@ export default {
       }
     })
     this.isLoading = false
-    if (this.$store.getters.userIsLoggedIn && this.closeIfLoggedIn) { this.$emit('loggedIn') }
+    if (this.$store.getters.userIsLoggedIn && this.closeIfLoggedIn) { this.$emit('close', true) }
   },
   methods: {
     reset () {
@@ -104,7 +104,7 @@ export default {
       this._userService.Login(this.countryCode + this.phone, this.code)
         .then(() => {
           this.codeSent = true
-          this.$emit('loggedIn')
+          this.$emit('close', true)
         }).catch(() => {
           this.codeSent = false
           _this.errorMessage = 'Feil kode'
@@ -119,7 +119,7 @@ export default {
       this._userService.Logout()
       this.smsSent = false
       this.codeSent = false
-      this.$emit('loggedOut')
+      this.$emit('close', false)
     }
   }
 }

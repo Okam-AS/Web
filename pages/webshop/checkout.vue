@@ -136,7 +136,7 @@
         </div>
       </div>
     </div>
-    <LoginModal v-if="showLogin" @close="closeLoginModal" @loggedIn="showLogin = false" @loggedOut="showLogin = true" />
+    <LoginModal v-if="showLogin" @close="closeLoginModal" />
     <Modal v-if="showTerms" @close="showTerms = false">
       <iframe style="border:none;" weight="400" height="400" src="https://www.okam.no/personvern-og-vilkar/?nolayout" />
     </Modal>
@@ -154,7 +154,7 @@ export default {
   components: { ContinueButton, Loading, Modal, LoginModal },
   data: () => ({
 
-    showLogin: true,
+    showLogin: false,
 
     storeId: null,
     store: {},
@@ -223,8 +223,8 @@ export default {
     clearInterval(this.timer)
   },
   methods: {
-    closeLoginModal () {
-
+    closeLoginModal (isLoggedIn) {
+      if (isLoggedIn) { location.reload() }
     },
     async submit () {
       if (!this.userIsLoggedIn) { return }
@@ -324,14 +324,17 @@ export default {
         comp.localTableName = comp.storeCart.tableName === undefined ? '' : comp.storeCart.tableName + ''
         comp.localComment = comp.storeCart.comment === undefined || comp.storeCart.comment === 'Ingen kommentar' ? '' : comp.storeCart.comment + ''
       }
+
+      if (this.storeId && this.userIsLoggedIn) {
+        this._cartService.UpdateCartInDbAndSetState(this.storeId)
+      } else {
+        this.showLogin = true
+      }
     },
     getStore () {
       this._storeService.Get(this.storeId).then((res) => {
         this.store = res
       })
-    },
-    loggedIn () {
-      if (this.storeId) { this._cartService.UpdateCartInDbAndSetState(this.storeId) }
     },
     getRegisteredCards () {
       const comp = this

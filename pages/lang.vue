@@ -35,7 +35,7 @@
         </div>
       </template>
     </Modal>
-    <LoginModal v-if="showLogin" @close="closeLoginModal" @loggedIn="showLogin = false" @loggedOut="showLogin = true" />
+    <LoginModal v-if="showLogin" :close-if-logged-in="false" @close="closeLoginModal" />
   </div>
 </template>
 <script>
