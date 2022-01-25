@@ -62,7 +62,7 @@
                 <client-only>
                   <stripe-element-card
                     ref="cardElement"
-                    :pk="stripePKey"
+                    :pk="stripePublishableKey"
                     :hide-postal-code="true"
                     :elements-options="{ locale: 'nb' }"
                   />
@@ -136,6 +136,7 @@
         </div>
       </div>
     </div>
+    <LoginModal v-if="showLogin" @close="closeLoginModal" @loggedIn="showLogin = false" @loggedOut="showLogin = true" />
     <Modal v-if="showTerms" @close="showTerms = false">
       <iframe style="border:none;" weight="400" height="400" src="https://www.okam.no/personvern-og-vilkar/?nolayout" />
     </Modal>
@@ -143,15 +144,18 @@
 </template>
 
 <script type="ts">
-// import ProductConfig from '@/components/organisms/ProductConfig.vue'
 import Loading from '@/components/atoms/Loading.vue'
 import ContinueButton from '@/components/atoms/ContinueButton.vue'
 import Modal from '@/components/atoms/Modal.vue'
+import $config from '@/core/helpers/configuration'
+import LoginModal from '~/components/molecules/LoginModal.vue'
 
 export default {
-  components: { ContinueButton, Loading, Modal },
+  components: { ContinueButton, Loading, Modal, LoginModal },
   data: () => ({
-    stripePKey: 'pk_test_51H4qD7LNNQ2fMCqGKVqDxFBnljHO1QyXuLSQ8BTvltvx9jKXGSw78WuX01i9miBj9hzh5L8AS9aiIXF9qUDq5kKH005deCclVN',
+
+    showLogin: true,
+
     storeId: null,
     store: {},
     timer: '',
@@ -178,6 +182,12 @@ export default {
     creditCardError: false
   }),
   computed: {
+    userIsLoggedIn () {
+      return this.$store.getters.userIsLoggedIn
+    },
+    stripePublishableKey () {
+      return $config.stripePublishableKey
+    },
     cartIsEmpty () {
       return !this.storeCart || (this.storeCart.items || []).length <= 0
     },
@@ -213,7 +223,11 @@ export default {
     clearInterval(this.timer)
   },
   methods: {
+    closeLoginModal () {
+
+    },
     async submit () {
+      if (!this.userIsLoggedIn) { return }
       const comp = this
       try {
         const paymentMethod = await comp.$refs.cardElement.stripe.createPaymentMethod({

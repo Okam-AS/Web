@@ -116,7 +116,7 @@
       </div>
       <Loading :loading="isLoading" />
     </Modal>
-    <LoginModal v-if="showLogin" :close-if-logged-in="closeIfLoggedIn" @loggedIn="showLogin = false; closeIfLoggedIn = false" @loggedOut="showLogin = true" />
+    <LoginModal v-if="showLogin" @close="closeLoginModal" @loggedIn="showLogin = false" @loggedOut="showLogin = true" />
     <Modal v-if="showClearRowsModal" @close="showClearRowsModal = false">
       <p>Er du sikker på at du ønsker å fjerne alle rader fra denne tabellen? Produkter som allerede er importert vil ikke bli berørt.</p>
       <div class="modal-buttons">
@@ -137,7 +137,6 @@ export default {
   components: { Modal, AutocompleteInput, LoginModal, Loading },
   data: () => ({
     isLoading: false,
-    closeIfLoggedIn: true,
     showModal: false,
     showLogin: true,
     selectedStore: 0,
@@ -195,6 +194,9 @@ export default {
     }
   },
   methods: {
+    closeLoginModal (isLoggedIn) {
+      this.showLogin = !isLoggedIn
+    },
     clearRows () {
       this.selectedStore = 0
       this.replaceAll = false

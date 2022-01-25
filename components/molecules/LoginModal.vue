@@ -8,7 +8,7 @@
       <div v-if="user && user.token">
         {{ $t('youAreLoggedIn') + ' ' + user.phoneNumber }}
         <div>
-          <input type="button" class="emoji-btn" style="margin-top:1em" :value="$t('close')" @click="$emit('loggedIn')">
+          <input type="button" class="emoji-btn" style="margin-top:1em" :value="$t('close')" @click="close">
           <input type="button" class="emoji-btn" style="margin-top:1em" :value="$t('logout')" @click="wipeUser">
         </div>
       </div>
@@ -113,7 +113,7 @@ export default {
         })
     },
     close () {
-      if (this.$store.getters.userIsLoggedIn) { this.$emit('loggedIn') } else { this.$emit('loggedOut') }
+      this.$emit('close', this.$store.getters.userIsLoggedIn)
     },
     wipeUser () {
       this._userService.Logout()

@@ -41,9 +41,7 @@
           </div>
         </div>
 
-        <continue-button
-          @click="checkout"
-        >
+        <continue-button @click="checkout">
           Fortsett
         </continue-button>
       </div>

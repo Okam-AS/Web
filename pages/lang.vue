@@ -35,7 +35,7 @@
         </div>
       </template>
     </Modal>
-    <LoginModal v-if="showLogin" :close-if-logged-in="closeIfLoggedIn" @loggedIn="showLogin = false; closeIfLoggedIn = false" @loggedOut="showLogin = true" />
+    <LoginModal v-if="showLogin" @close="closeLoginModal" @loggedIn="showLogin = false" @loggedOut="showLogin = true" />
   </div>
 </template>
 <script>
@@ -51,8 +51,7 @@ export default {
     searchInput: '',
     editKey: '',
     langs: [],
-    showLogin: true,
-    closeIfLoggedIn: true
+    showLogin: true
   }),
   computed: {
     allKeys () {
@@ -76,6 +75,9 @@ export default {
     this.loadCultures()
   },
   methods: {
+    closeLoginModal (isLoggedIn) {
+      this.showLogin = !isLoggedIn
+    },
     loadCultures () {
       const _this = this
       _this._cultureService.GetAll().then((response) => {

@@ -1,52 +1,73 @@
 <template>
-  <div ref="container">
-    <template v-if="store.id">
+  <div class="shop">
+    <div class="shop-menu">
+      Nettbestilling
+    </div>
+    <div class="shop-products">
       <div v-for="(category, i) in categories" :key="i">
-        <h2 class="category-header">
+        <h2
+          :class="{
+            'category-header': true,
+            'category-header--expanded': category.active
+          }"
+          tabindex="0"
+          role="button"
+          @click="toggleCategory(i)"
+          @keyup.enter="toggleCategory(i)"
+        >
           {{ category.name }}
-        </h2>
 
-        <div class="container">
-          <div v-for="(row, j) in (category.categoryProductListItems || []).filter(x => !x.heading)" :key="j" class="item">
-            <div class="item-header" @click="openProduct(row.product.id)">
-              <img v-if="row.product.image && row.product.image.thumbnailUrl" class="product-thumbnail" :src="row.product.image.thumbnailUrl">
-              <div class="product-text">
-                <h4>
-                  {{ row.product.name }}
-                </h4>
-                <span v-if="row.product.description">
-                  {{ row.product.description }}
-                </span>
-              </div>
-              <div class="product-price">
-                <span v-if="row.product.hasDiscount" style="text-decoration:line-through;">{{ priceLabel(row.product.discountAmount+row.product.amount) }}</span>
-                <span>{{ row.product.soldOut ? 'Utsolgt' : priceLabel(row.product.amount) }}</span>
-              </div>
-            </div>
-            <template v-if="row.product && row.product.id">
-              <ProductConfigFromCart :store-id="row.product.storeId" :product-id="row.product.id" />
-            </template>
-            <template v-if="selectedLineItem && selectedLineItem.product && selectedLineItem.product.id === row.product.id">
-              <ProductConfig :line-item="selectedLineItem" />
-            </template>
+          <div class="icon">
+            <svg
+              class="icon"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+            ><path d="M23.245 4l-11.245 14.374-11.219-14.374-.781.619 12 15.381 12-15.391-.755-.609z" /></svg>
           </div>
+        </h2>
+        <div v-if="category.active" class="product-group">
+          <Product
+            v-for="(row, j) in (category.categoryProductListItems || []).filter((x) => !x.heading)"
+            :key="j"
+            :product="row.product"
+            :selected-line-item="selectedLineItem"
+            @openProduct="openProduct"
+            @openLineItem="openLineItem"
+          />
         </div>
       </div>
-    </template>
-    <div v-if="storeId" class="sidebar-cart">
-      <Cart :store-id="storeId" />
-      <a class="checkout-btn" :href="checkoutUrl">Gå til kassen</a>
     </div>
+    <div v-if="storeId" class="shop-cart">
+      <Cart :store-id="storeId" :checkout-url="checkoutUrl" />
+    </div>
+
+    <Modal v-if="selectedLineItem.product" @close="selectedLineItem = {}">
+      <Product
+        :product="selectedLineItem.product"
+        :hide-line-items="true"
+      />
+      <ProductConfig
+        v-if="selectedLineItem &&
+          selectedLineItem.product &&
+          selectedLineItem.product.id
+        "
+        :line-item="selectedLineItem"
+        @close="selectedLineItem = {}"
+      />
+    </Modal>
   </div>
 </template>
 
 <script>
-import ProductConfig from '@/components/organisms/ProductConfig.vue'
-import ProductConfigFromCart from '@/components/organisms/ProductConfigFromCart.vue'
+import Product from '@/components/organisms/Product.vue'
 import Cart from '@/components/organisms/Cart.vue'
+import Modal from '@/components/atoms/Modal.vue'
+import ProductConfig from '@/components/organisms/ProductConfig.vue'
 
 export default {
-  components: { ProductConfig, ProductConfigFromCart, Cart },
+  components: { Product, Cart, Modal, ProductConfig },
   data: () => ({
     storeId: null,
     noLayout: false,
@@ -57,37 +78,38 @@ export default {
   }),
   computed: {
     checkoutUrl () {
-      return '/webshop/checkout/?store=' + this.storeId + (this.noLayout ? '&nolayout=true' : '')
+      return (
+        '/webshop/checkout/?store=' +
+        this.storeId +
+        (this.noLayout ? '&nolayout=true' : '')
+      )
     }
   },
   mounted () {
     this.init()
-    this.timer = setInterval(this.iframeHeightNotify, 300)
   },
   beforeDestroy () {
     clearInterval(this.timer)
   },
   methods: {
-    iframeHeightNotify () {
-      const search = new URLSearchParams(window.location.search) || {}
-      const parentUrl = (search.get('parent') || '')
-      if (parentUrl) {
-        window.parent.postMessage({
-          height: this.$refs.container.scrollHeight
-        }, parentUrl)
-      }
-    },
     openProduct (productId) {
-      const comp = this
-      if (this.selectedLineItem?.product?.id === productId) {
-        this.selectedLineItem = {}
-      } else {
-        this._cartService.GetCartLineItem({ product: { id: productId } }).then((result) => {
+      // const _this = this
+      this._cartService
+        .GetCartLineItem({ product: { id: productId } })
+        .then((result) => {
           if (result && result.product) {
-            comp.selectedLineItem = { quantity: 1, product: result.product }
+            this.selectedLineItem = { quantity: 1, product: result.product }
           }
         })
-      }
+    },
+    openLineItem (lineItem) {
+      this._cartService
+        .GetCartLineItem(lineItem)
+        .then((result) => {
+          if (result && result.product) {
+            this.selectedLineItem = result
+          }
+        })
     },
     init () {
       this.$store.dispatch('Load')
@@ -122,18 +144,34 @@ export default {
     updateCategory (index, category) {
       this.$set(this.categories, index, category)
     },
+    closeAll () {
+      const copy = JSON.parse(JSON.stringify(this.categories))
+      copy.forEach((category) => {
+        category.active = false
+      })
+      this.categories = copy
+    },
+    toggleCategoryActive (index) {
+      if (!this.categories[index].categoryProductListItems.length) {
+        this._categoryService.Get(this.categories[index].id).then((category) => {
+          this.updateCategory(index, category)
+          this.categories[index].active = true
+        })
+      } else {
+        this.categories[index].active = true
+      }
+    },
+    toggleCategory (index) {
+      if (this.categories[index].active) {
+        this.closeAll()
+      } else {
+        this.closeAll()
+        this.toggleCategoryActive(index)
+      }
+    },
     getCategories () {
       this._categoryService.GetAll(this.storeId).then((res) => {
         this.categories = res
-        const firstCat = this.categories[0]
-        this._categoryService.Get(firstCat.id).then((c) => {
-          this.updateCategory(0, c)
-        })
-        // this.categories.forEach((category, index) => {
-        //   this._categoryService.Get(category.id).then((c) => {
-        //     this.updateCategory(index, c)
-        //   })
-        // })
       })
     }
   }
@@ -143,67 +181,48 @@ export default {
 <style lang="scss" scoped>
 @import "../../assets/sass/common.scss";
 
-.product-price{
-  line-height:1em;
-  white-space: nowrap;
-  margin-right: 10px;
-  font-size: 14px;
-}
-.product-text{
-  padding: 10px;
-  width:100%;
-}
-.product-text span {
-  color: gray;
-  font-size: 12px;
-}
+.shop {
+  margin: 0 auto;
+  max-width: 600px;
 
-.product-text h4 {
-  font-size: 14px;
-}
+  &-menu {
+    margin: rem(20) 0;
+  }
 
-.product-thumbnail{
-  border-radius: 20px 0 0 20px;
-  height:99%;
-}
+  &-products {
+    margin-bottom: rem(300);
 
-.category-header{
-  font-size: 22px;
-  margin-top: 20px;
-}
+    .product {
+      border-bottom: 1px solid $color-profile;
+    }
+  }
+  .category-header {
+    background: $color-profile;
+    padding: rem(10);
+    border-bottom: rem(2) solid white;
+    border-radius: rem(5);
+    cursor: pointer;
 
-.item {
-  display: inline-block;
-  border-radius: rem(20);
-  width: 35%;
-  margin-right: 0;
-  margin-top: rem(10);
-  border: 1px solid rgb(236, 236, 236);
-  font-size: 1.2em;
-  cursor: pointer;
-}
-.item-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: left;
-  align-items: left;
-}
-.sidebar-cart {
-  background:whitesmoke;
-  position: fixed;
-  right: 0;
-  top: 0;
-  height: 100%;
-  width: rem(300);
-  border: 1px solid black;
-}
-.checkout-btn{
-  position: fixed;
-  bottom: 0;
-  width: rem(300);
-  text-align: center;
-  padding-top:20px;
-  padding-bottom:20px;
-  border-top: 1px solid black;
+    .icon {
+      float: right;
+      margin-top: rem(4);
+
+      svg {
+        width: rem(20);
+        height: rem(20);
+        transition: transform .2s ease-in-out;
+      }
+    }
+
+    &--expanded {
+      .icon svg {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .product-group {
+    margin-top: rem(30);
+  }
 }
 </style>
