@@ -1,7 +1,8 @@
 <template>
   <div class="shop">
     <div class="shop-menu">
-      Nettbestilling
+      <span>Nettbestilling</span>
+      <MyUserDropdown style="float:right" />
     </div>
     <div class="shop-products">
       <div v-for="(category, i) in categories" :key="i">
@@ -64,10 +65,11 @@
 import Product from '@/components/organisms/Product.vue'
 import Cart from '@/components/organisms/Cart.vue'
 import Modal from '@/components/atoms/Modal.vue'
+import MyUserDropdown from '@/components/atoms/MyUserDropdown.vue'
 import ProductConfig from '@/components/organisms/ProductConfig.vue'
 
 export default {
-  components: { Product, Cart, Modal, ProductConfig },
+  components: { Product, Cart, Modal, MyUserDropdown, ProductConfig },
   data: () => ({
     storeId: null,
     noLayout: false,

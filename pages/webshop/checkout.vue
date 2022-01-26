@@ -1,6 +1,10 @@
 <template>
   <div ref="container" class="checkout-page">
-    <p>Kasse</p>
+    <div class="shop-menu">
+      <span>Kasse</span>
+      <MyUserDropdown style="float:right" />
+    </div>
+
     <div class="section">
       <span class="title">Leveringsmetoder</span>
 
@@ -148,10 +152,11 @@ import Loading from '@/components/atoms/Loading.vue'
 import ContinueButton from '@/components/atoms/ContinueButton.vue'
 import Modal from '@/components/atoms/Modal.vue'
 import $config from '@/core/helpers/configuration'
+import MyUserDropdown from '@/components/atoms/MyUserDropdown.vue'
 import LoginModal from '~/components/molecules/LoginModal.vue'
 
 export default {
-  components: { ContinueButton, Loading, Modal, LoginModal },
+  components: { ContinueButton, MyUserDropdown, Loading, Modal, LoginModal },
   data: () => ({
 
     showLogin: false,
@@ -224,10 +229,13 @@ export default {
   },
   methods: {
     closeLoginModal (isLoggedIn) {
-      if (isLoggedIn) { location.reload() }
+      if (isLoggedIn) { location.reload() } else { this.showLogin = false }
     },
     async submit () {
-      if (!this.userIsLoggedIn) { return }
+      if (!this.userIsLoggedIn) {
+        this.showLogin = true
+        return
+      }
       const comp = this
       try {
         const paymentMethod = await comp.$refs.cardElement.stripe.createPaymentMethod({
