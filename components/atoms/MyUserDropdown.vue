@@ -9,7 +9,7 @@
       </div>
     </div>
     <div v-if="showOptions">
-      <div style="cursor:pointer;border:1px solid black">
+      <div style="cursor:pointer;border:1px solid black" @click="myOrders">
         <span class="material-icons">receipt</span><span>Mine bestillinger</span>
       </div>
       <div style="cursor:pointer;border:1px solid black" @click="logout">
@@ -43,6 +43,9 @@ export default {
     }
   },
   methods: {
+    myOrders () {
+      location.href = '/webshop/orders?nolayout=true'
+    },
     loginClick () {
       this.showLogin = true
       this.showOptions = false
