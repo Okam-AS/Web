@@ -2,7 +2,7 @@
   <div ref="container" class="checkout-page">
     <div class="shop-menu">
       <span>Kasse</span>
-      <MyUserDropdown style="float:right" />
+      <MyUserDropdown style="float:right" @close="closeLoginModal" />
     </div>
 
     <div class="section">

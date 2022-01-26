@@ -54,6 +54,7 @@ export default {
     closeLoginModal () {
       this.showLogin = false
       this.showOptions = false
+      this.$emit('close', this.$store.getters.userIsLoggedIn)
     },
     logout () {
       this._userService.Logout()

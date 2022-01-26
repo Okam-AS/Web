@@ -19,7 +19,7 @@
                 >
                   {{ closeBtnText }}
                 </close-button>
-                <slot />
+                <div><slot /></div>
               </div>
             </div>
           </div>
