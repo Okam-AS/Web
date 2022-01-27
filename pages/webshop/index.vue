@@ -195,15 +195,27 @@ export default {
     margin-bottom: rem(300);
 
     .product {
-      border-bottom: 1px solid $color-profile;
+      border-bottom: 1px solid $color-neutral-light;
+      margin-bottom: 0;
+      padding: rem(24) rem(16);
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:hover,
+      &:focus {
+        background-color: #f6f6f6;
+      }
     }
   }
   .category-header {
-    background: $color-profile;
-    padding: rem(10);
-    border-bottom: rem(2) solid white;
-    border-radius: rem(5);
+    background: $color-support-light;
+    padding: rem(16) rem(24);
+    border-bottom: rem(4) solid white;
     cursor: pointer;
+    font-size: rem(20);
+    font-weight: 400;
 
     .icon {
       float: right;
@@ -224,7 +236,7 @@ export default {
   }
 
   .product-group {
-    margin-top: rem(30);
+    margin-bottom: rem(4);
   }
 }
 </style>

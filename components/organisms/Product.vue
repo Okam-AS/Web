@@ -16,9 +16,9 @@
 
       <div class="product-info">
         <div class="product-text">
-          <h4>
+          <h3 class="product-title">
             {{ product.name }}
-          </h4>
+          </h3>
           <span v-if="product.description">
             {{ product.description }}
           </span>
@@ -112,6 +112,14 @@ export default {
 
   &-info {
     flex-grow: 1;
+  }
+
+  &-title {
+    font-size: rem(18);
+  }
+
+  &-price {
+    margin-top: rem(8);
   }
 
   &-config-from-cart {
