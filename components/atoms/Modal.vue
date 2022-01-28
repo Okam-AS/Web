@@ -90,15 +90,14 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: table;
-    transition: opacity 0.3s ease;
-    @include z-index('modal-backgrop')
+    background-color: #fff;
+    transition: transform 0.3s ease;
+    @include z-index('modal-backgrop');
+    overflow: auto;
   }
 
   &-wrapper {
-    display: table-cell;
-    vertical-align: middle;
+    overflow: auto;
   }
 
   &-container {
@@ -106,16 +105,12 @@ export default {
     max-width: rem(600);
     min-width: rem(280);
     margin: 0px auto;
-    padding: rem(20) rem(20);
+    padding: rem(24) 0;
     background-color: #fff;
-    border-radius: 2px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
     transition: all 0.3s ease;
-    font-family: Helvetica, Arial, sans-serif;
   }
 
   &-body {
-    margin: rem(10);
     @include z-index('modal-body');
   }
   &-buttons button {
@@ -123,7 +118,9 @@ export default {
   }
 
   &-close-button {
-    float: right;
+    position: absolute;
+    top: rem(16);
+    right: rem(16);
   }
 }
 </style>

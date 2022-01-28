@@ -3,35 +3,35 @@
     <div
       v-for="(variant, i) in localLineItem.product.productVariants"
       :key="i"
+      class="product-group"
     >
-      <div>
-        <span style="font-weight:bold">{{ variant.name }}</span>
-        <span style="font-size: 0.5em;color:gray;">{{ variant.required ? 'Påkrevd' : 'Valgfritt' }}</span>
+      <div class="product-group__header">
+        <h3 class="product-group__heading">{{ variant.name }}</h3>
+        <div class="product-group__status">{{ variant.required ? 'Påkrevd' : 'Valgfritt' }}</div>
       </div>
       <div>
         <div
           v-for="(option, j) in variant.options"
           :key="j"
-          :class="{ 'product-option': true, 'product-option-selected' : selectedOptions.map(x => x.id).includes(option.id)}"
+          :class="{ 'product-option': true, 'is-selected' : selectedOptions.map(x => x.id).includes(option.id)}"
           role="checkbox"
           tabindex="0"
           :aria-selected="selectedOptions.map(x => x.id).includes(option.id)"
           @click="optionClick(option.id)"
           @keyup.enter="optionClick(option.id)"
         >
-          <img v-if="selectedOptions.map(x => x.id).includes(option.id)" src="~/assets/UI/icon_check.svg">
-          {{ option.name }}
+          <span class="product-option__radio"></span>
+          <span class="product-option__text">{{ option.name }}</span>
         </div>
       </div>
     </div>
     <div class="product-conf-summary">
-      <span>{{ selectedOptionNames }}</span>
-      <span class="product-conf-summary-price">
+      <span class="product-conf-summary__text">{{ selectedOptionNames }}</span>
+      <span class="product-conf-summary__price">
         {{ priceLabel(totalAmount) }}
       </span>
     </div>
     <div class="product-conf-controls">
-      <span>Antall:</span>
       <Stepper
         :quantity="localLineItem.quantity"
         @add="addQuantity(1)"
@@ -208,39 +208,103 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0 rem(24);
+  }
+
+  .product-group {
+    background-color: $color-profile;
+    padding: rem(24);
+    margin-bottom: rem(4);
+
+    &__header {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    &__heading {
+      font-size: rem(16);
+    }
+
+    &__status {
+      font-size: rem(12);
+    }
   }
 
   &-summary {
     margin-top: rem(20);
-    padding-top: rem(20);
-    border-top: rem(1) solid $color-support;
-    &-price {
+    padding: 0 rem(24) rem(24);
+    display: flex;
+    justify-content: space-between;
+    column-gap: rem(24);
+
+    &__text {
+      font-size: rem(14);
+    }
+
+    &__price {
       font-weight: bold;
+      white-space: nowrap;
     }
   }
 
   .product-option {
-    font-size: 0.8em;
-    padding: rem(2) 0;
+    font-size: rem(14);
+    padding: rem(8) 0;
     cursor: pointer;
-    margin-left: rem(28);
+    display: flex;
+    align-items: flex-start;
 
-    img {
-      width: rem(16);
-      height: rem(16);
+    &__radio,
+    &__checkbox {
+      width: rem(24);
+      height: rem(24);
+      border: 1px solid $color-dark;
+      display: block;
+      background-color: #fff;
+      margin-right: rem(8);
+      position: relative;
+      flex-shrink: 0;
     }
 
-    &-selected {
-      margin-left: rem(8);
+    &__radio {
+      border-radius: 50%;
+    }
+
+    &__text {
+      padding-top: rem(3);
+    }
+
+    &.is-selected {
+      .product-option__radio,
+      .product-option__checkbox {
+        &:before {
+          position: absolute;
+          content: "";
+          width: rem(14);
+          height: rem(14);
+          background-color: $color-dark;
+          top: rem(4);
+          left: rem(4);
+        }
+      }
+      
+      .product-option__radio {
+        &:before {
+          border-radius: 50%;
+        }
+      }
     }
   }
 
   .add-button {
-    background: $color-support;
+    background: #148556;
     color: white;
-    padding: rem(10);
+    padding: rem(12) rem(24);
     border-radius: rem(20);
     border: none;
+    font-size: rem(14);
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
   }
 }
 </style>

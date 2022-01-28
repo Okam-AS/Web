@@ -1,8 +1,8 @@
 <template>
   <div class="shop">
     <div class="shop-menu">
-      <span>Nettbestilling</span>
-      <MyUserDropdown style="float:right" />
+      <h1 class="shop-menu__title">Nettbestilling</h1>
+      <MyUserDropdown />
     </div>
     <div class="shop-products">
       <div v-for="(category, i) in categories" :key="i">
@@ -188,27 +188,36 @@ export default {
   max-width: 600px;
 
   &-menu {
-    margin: rem(20) 0;
+    padding: rem(16) rem(24);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &__title {
+      font-size: rem(18);
+      font-weight: 400;
+      line-height: 1.3;
+    }
   }
 
   &-products {
     margin-bottom: rem(300);
 
     .product {
+      cursor: pointer;
       border-bottom: 1px solid $color-neutral-light;
-      margin-bottom: 0;
-      padding: rem(24) rem(16);
-
-      &:last-child {
-        border-bottom: none;
-      }
 
       &:hover,
       &:focus {
         background-color: #f6f6f6;
       }
+
+      &:last-child {
+        border-bottom: none;
+      }
     }
   }
+
   .category-header {
     background: $color-support-light;
     padding: rem(16) rem(24);

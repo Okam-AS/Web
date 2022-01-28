@@ -4,7 +4,7 @@
       class="stepper-button"
       @click="subtract"
     >
-      -
+      −
     </button>
     <span class="stepper-quantity">{{ quantity }}</span>
     <button
@@ -36,14 +36,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../assets/sass/settings.scss";
+@import "../../assets/sass/common.scss";
 
 .stepper {
   display: flex;
+  align-items: center;
 
   &-quantity {
     display: inline-block;
-    min-width: 3rem;
+    min-width: 2.5rem;
     text-align: center;
   }
 
@@ -54,8 +55,11 @@ export default {
 		width: 2rem;
 		height: 2rem;
 		border-radius: 50%;
-		border: 1px solid $color-profile;
-		background: white;
+		border: none;
+		background: $color-dark;
+    color: #fff;
+    font-size: rem(20);
+    line-height: 1;
 	}
 }
 </style>

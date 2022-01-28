@@ -82,17 +82,13 @@ export default {
 @import "../../assets/sass/common.scss";
 
 .product {
-  padding-bottom: rem(20);
-  margin-bottom: rem(20);
-
-  &:last-child {
-    border-bottom: none;
-  }
+  margin-bottom: 0;
+  padding: rem(24) rem(16);
 
   &-header {
     display: flex;
     justify-content: space-between;
-    cursor: pointer;
+    width: 100%;
   }
 
   &-image {
@@ -102,6 +98,7 @@ export default {
     border-radius: rem(5);
     max-height: rem(50);
     background-color: #f6f6f6;
+    flex-shrink: 0;
 
     img {
       width: 100%;

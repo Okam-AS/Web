@@ -2,9 +2,9 @@
   <button
     class="close-button"
     @click="$emit('click')"
+    aria-label="Avbryt"
   >
-    <img src="~/assets/UI/close.svg" class="close-button-x">
-    <slot />
+    <span class="close-button-x" aria-hidden="true">×</span>
   </button>
 </template>
 <script>
@@ -14,16 +14,20 @@ export default {}
 @import "../../assets/sass/common.scss";
 
 .close-button {
-  background: white;
+  background: $color-dark;
+  color: white;
   padding: rem(10);
-  border-radius: rem(20);
-  border: 1px solid rgba(0,0,0,0.2);
+  border-radius: 50%;
+  border: none;
+  font-size: rem(24);
+  width: rem(30);
+  height: rem(30);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
 	&-x {
-		float: left;
-		width: rem(14);
-		height: rem(14);
-		margin-right: rem(5);
+    line-height: 1;
 	}
 }
 </style>
