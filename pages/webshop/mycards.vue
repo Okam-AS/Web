@@ -8,14 +8,13 @@
       Du må logge inn for å se dine betalingskort
     </div>
     <div v-else>
-      <Loading v-if="isLoading" />
       <span>
         Din kortinformasjon blir lagret trygt hos vår betalingsleverandør. Du kan legge til et nytt kort neste gang du handler.
       </span>
       <span v-if="!isLoading && cards.length === 0">
         Du har ingen registrerte kort
       </span>
-      <div>
+      <div v-if="!isLoading">
         <div
           v-for="(item, index) in cards"
           :key="index"
@@ -24,6 +23,7 @@
           <span class="material-icons" style="cursor:pointer" @click="deleteCard(item.id)">delete</span>
         </div>
       </div>
+      <Loading v-if="isLoading" />
     </div>
   </div>
 </template>
