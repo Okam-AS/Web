@@ -159,12 +159,8 @@ import LoginModal from '~/components/molecules/LoginModal.vue'
 export default {
   components: { ContinueButton, MyUserDropdown, Loading, Modal, LoginModal },
   data: () => ({
-
     showLogin: false,
-
-    storeId: null,
     store: {},
-    timer: '',
 
     isSending: false,
     errorMessage: '',
@@ -230,11 +226,22 @@ export default {
     }
   },
   mounted () {
-    this.init()
-    this.timer = setInterval(this.iframeHeightNotify, 300)
-  },
-  beforeDestroy () {
-    clearInterval(this.timer)
+    if (this.storeId) {
+      this.getStore()
+      this.getAvailablePaymentMethods()
+    }
+
+    this.localDeliveryType = 'NotSet'
+    if (this.storeCart) {
+      this.localTableName = this.storeCart.tableName === undefined ? '' : this.storeCart.tableName + ''
+      this.localComment = this.storeCart.comment === undefined || this.storeCart.comment === 'Ingen kommentar' ? '' : this.storeCart.comment + ''
+    }
+
+    if (this.storeId && this.userIsLoggedIn) {
+      this.updateCart()
+    } else {
+      this.showLogin = true
+    }
   },
   methods: {
     closeLoginModal (isLoggedIn) {
@@ -245,17 +252,16 @@ export default {
         this.showLogin = true
         return
       }
-      const comp = this
       try {
-        const paymentMethod = await comp.$refs.cardElement.stripe.createPaymentMethod({
+        const paymentMethod = await this.$refs.cardElement.stripe.createPaymentMethod({
           type: 'card',
-          card: comp.$refs.cardElement.element
+          card: this.$refs.cardElement.element
         })
-        // comp.createPaymentIntent(paymentMethod.id, comp.rememberCard)
+        // this.createPaymentIntent(paymentMethod.id, this.rememberCard)
         window.console.table(paymentMethod)
       } catch (error) {
-        comp.isSending = false
-        comp.errorMessage = 'Betalingen kunne ikke gjennomføres. Kontroller kortinformasjon og prøv igjen.'
+        this.isSending = false
+        this.errorMessage = 'Betalingen kunne ikke gjennomføres. Kontroller kortinformasjon og prøv igjen.'
       }
     },
     setTip (tipPercent) {
@@ -299,76 +305,28 @@ export default {
       this.tableNameError = false
       this.creditCardError = false
     },
-    iframeHeightNotify () {
-      const search = new URLSearchParams(window.location.search) || {}
-      const parentUrl = (search.get('parent') || '')
-      if (parentUrl) {
-        window.parent.postMessage({
-          height: this.$refs.container.scrollHeight
-        }, parentUrl)
-      }
-    },
-    init () {
-      this.$store.dispatch('Load')
-      this.$store.subscribe((mutation, state) => {
-        if (mutation && window && window.localStorage) {
-          localStorage.setItem('state', JSON.stringify(state))
-        }
-      })
-
-      const search = new URLSearchParams(window.location.search) || {}
-      const storeId = search.get('store') || false
-      const nolayout = search.has('nolayout') || false
-
-      if (storeId) {
-        this.storeId = parseInt(storeId)
-        this.getStore()
-        this.getAvailablePaymentMethods()
-      }
-
-      if (nolayout && window && window.Tawk_API) {
-        window.Tawk_API.onLoad = () => {
-          window.Tawk_API.hideWidget()
-        }
-      }
-
-      // Checkout
-      const comp = this
-      comp.localDeliveryType = 'NotSet'
-      if (comp.storeCart) {
-        comp.localTableName = comp.storeCart.tableName === undefined ? '' : comp.storeCart.tableName + ''
-        comp.localComment = comp.storeCart.comment === undefined || comp.storeCart.comment === 'Ingen kommentar' ? '' : comp.storeCart.comment + ''
-      }
-
-      if (this.storeId && this.userIsLoggedIn) {
-        this.updateCart()
-      } else {
-        this.showLogin = true
-      }
-    },
     getStore () {
       this._storeService.Get(this.storeId).then((res) => {
         this.store = res
       })
     },
     getAvailablePaymentMethods () {
-      const comp = this
-      comp._stripeService
-        .GetPaymentMethods(comp.storeCart.id)
+      this._stripeService
+        .GetPaymentMethods(this.storeCart.id)
         .then((result) => {
-          if (Array.isArray(result)) { comp.cards = result }
-          comp.isLoadingCards = false
+          if (Array.isArray(result)) { this.cards = result }
+          this.isLoadingCards = false
           if (
             !this.selectedPaymentMethodId ||
             this.selectedPaymentMethodId === 'waiter'
           ) {
-            comp.setPaymentMethodId(
-              comp.cards.length > 0 ? comp.cards[0].id : ''
+            this.setPaymentMethodId(
+              this.cards.length > 0 ? this.cards[0].id : ''
             )
           }
         })
         .catch(() => {
-          comp.isLoadingCards = false
+          this.isLoadingCards = false
         })
     }
   }

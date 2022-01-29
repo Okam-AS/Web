@@ -26,24 +26,14 @@ import MyUserDropdown from '@/components/atoms/MyUserDropdown.vue'
 export default {
   components: { OrderModal, Loading, MyUserDropdown },
   data: () => ({
-    noLayout: false,
     isLoadingOrders: false,
     orders: [],
     selectedOrder: {}
   }),
   mounted () {
-    this.init()
+    this.loadOrders()
   },
   methods: {
-    init () {
-      this.$store.dispatch('Load')
-      this.$store.subscribe((mutation, state) => {
-        if (mutation && window && window.localStorage) {
-          localStorage.setItem('state', JSON.stringify(state))
-        }
-      })
-      this.loadOrders()
-    },
     loadOrders () {
       if (!this.$store.getters.userIsLoggedIn) { return }
       this.isLoadingOrders = true

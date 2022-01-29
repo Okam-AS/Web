@@ -71,10 +71,6 @@ import CloseButton from '@/components/atoms/CloseButton'
 export default {
   components: { CloseButton, ContinueButton, FocusTrap, Stepper },
   props: {
-    storeId: {
-      type: Number,
-      default: 0
-    },
     checkoutUrl: {
       type: String,
       default: ''

@@ -1,5 +1,5 @@
 <template>
-  <header v-if="show" class="page-header">
+  <header v-if="!noLayout" class="page-header">
     <div class="page-header__wrapper">
       <div class="page-header__logo-wrapper">
         <a class="page-header__logo-link" href="/">
@@ -42,7 +42,6 @@ const ogImage = require('~/assets/UI/kom-i-gang.png')
 
 export default {
   data: () => ({
-    show: false,
     isActive: false,
     links: [
       {
@@ -66,18 +65,6 @@ export default {
       }
     ]
   }),
-  mounted () {
-    const search = new URLSearchParams(window.location.search) || {}
-    const hideLayout = search.has('nolayout') || false
-
-    if (!hideLayout) {
-      this.show = true
-    } else if (window && window.Tawk_API) {
-      window.Tawk_API.onLoad = () => {
-        window.Tawk_API.hideWidget()
-      }
-    }
-  },
   methods: {
     toggle () {
       document.querySelector('body').classList.toggle('has-overlay')

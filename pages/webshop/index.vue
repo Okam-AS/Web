@@ -1,10 +1,15 @@
 <template>
   <div class="shop">
     <div class="shop-menu">
-      <h1 class="shop-menu__title">Nettbestilling</h1>
+      <div v-if="store && store.id">
+        <img width="50" :src="store.logoUrl" :alt="store.name + ' logo'">
+        <h4>{{ store.name }}</h4>
+        <span>{{ storeAddressOneLiner }}</span>
+      </div>
       <MyUserDropdown />
     </div>
-    <div class="shop-products">
+    <Loading v-if="isLoadingInit" />
+    <div v-else class="shop-products">
       <div v-for="(category, i) in categories" :key="i">
         <h2
           :class="{
@@ -29,6 +34,7 @@
           </div>
         </h2>
         <div v-if="category.active" class="product-group">
+          <Loading v-if="isLoadingProducts" />
           <Product
             v-for="(row, j) in (category.categoryProductListItems || []).filter((x) => !x.heading)"
             :key="j"
@@ -41,7 +47,7 @@
       </div>
     </div>
     <div v-if="storeId" class="shop-cart">
-      <Cart :store-id="storeId" :checkout-url="checkoutUrl" />
+      <Cart :checkout-url="checkoutUrl" />
     </div>
 
     <Modal v-if="selectedLineItem.product" @close="selectedLineItem = {}">
@@ -67,16 +73,19 @@ import Cart from '@/components/organisms/Cart.vue'
 import Modal from '@/components/atoms/Modal.vue'
 import MyUserDropdown from '@/components/atoms/MyUserDropdown.vue'
 import ProductConfig from '@/components/organisms/ProductConfig.vue'
+import Loading from '@/components/atoms/Loading.vue'
 
 export default {
-  components: { Product, Cart, Modal, MyUserDropdown, ProductConfig },
+  components: { Loading, Product, Cart, Modal, MyUserDropdown, ProductConfig },
   data: () => ({
     storeId: null,
     noLayout: false,
     store: {},
     categories: [],
     selectedLineItem: {},
-    timer: ''
+    timer: '',
+    isLoadingInit: true,
+    isLoadingProducts: false
   }),
   computed: {
     checkoutUrl () {
@@ -85,17 +94,22 @@ export default {
         this.storeId +
         (this.noLayout ? '&nolayout=true' : '')
       )
+    },
+    storeAddressOneLiner () {
+      if (this.store && this.store.address) { return (this.store.address.fullAddress + ', ' + this.store.address.zipCode + ' ' + this.store.address.city) } else { return '' }
     }
   },
   mounted () {
-    this.init()
+    if (this.storeId) {
+      this.getStore()
+      this.getCategories()
+    }
   },
   beforeDestroy () {
     clearInterval(this.timer)
   },
   methods: {
     openProduct (productId) {
-      // const _this = this
       this._cartService
         .GetCartLineItem({ product: { id: productId } })
         .then((result) => {
@@ -112,31 +126,6 @@ export default {
             this.selectedLineItem = result
           }
         })
-    },
-    init () {
-      this.$store.dispatch('Load')
-      this.$store.subscribe((mutation, state) => {
-        if (mutation && window && window.localStorage) {
-          localStorage.setItem('state', JSON.stringify(state))
-        }
-      })
-
-      const search = new URLSearchParams(window.location.search) || {}
-      const storeId = search.get('store') || false
-      const nolayout = search.has('nolayout') || false
-
-      if (storeId) {
-        this.storeId = parseInt(storeId)
-        this.noLayout = nolayout
-        this.getStore()
-        this.getCategories()
-      }
-
-      if (nolayout && window && window.Tawk_API) {
-        window.Tawk_API.onLoad = () => {
-          window.Tawk_API.hideWidget()
-        }
-      }
     },
     getStore () {
       this._storeService.Get(this.storeId).then((res) => {
@@ -155,9 +144,13 @@ export default {
     },
     toggleCategoryActive (index) {
       if (!this.categories[index].categoryProductListItems.length) {
+        this.isLoadingProducts = true
         this._categoryService.Get(this.categories[index].id).then((category) => {
           this.updateCategory(index, category)
           this.categories[index].active = true
+          this.isLoadingProducts = false
+        }).catch(() => {
+          this.isLoadingProducts = false
         })
       } else {
         this.categories[index].active = true
@@ -174,6 +167,9 @@ export default {
     getCategories () {
       this._categoryService.GetAll(this.storeId).then((res) => {
         this.categories = res
+        this.isLoadingInit = false
+      }).catch(() => {
+        this.isLoadingInit = false
       })
     }
   }

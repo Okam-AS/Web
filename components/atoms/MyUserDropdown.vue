@@ -12,6 +12,9 @@
       <div style="cursor:pointer;border:1px solid black" @click="myOrders">
         <span class="material-icons">receipt</span><span>Mine bestillinger</span>
       </div>
+      <div style="cursor:pointer;border:1px solid black" @click="myCards">
+        <span class="material-icons">payment</span><span>Mine betalingskort</span>
+      </div>
       <div style="cursor:pointer;border:1px solid black" @click="logout">
         <span class="material-icons">logout</span><span>Logg ut</span>
       </div>
@@ -45,6 +48,9 @@ export default {
   methods: {
     myOrders () {
       location.href = '/webshop/orders?nolayout=true'
+    },
+    myCards () {
+      location.href = '/webshop/mycards?nolayout=true'
     },
     loginClick () {
       this.showLogin = true

@@ -32,14 +32,16 @@
 <script>
 export default {
   data: () => ({
-    storeId: null,
     store: {},
     categories: [],
     selectedProduct: {},
     timer: ''
   }),
   mounted () {
-    this.init()
+    if (this.storeId) {
+      this.getStore()
+      this.getCategories()
+    }
     this.timer = setInterval(this.iframeHeightNotify, 300)
   },
   beforeDestroy () {
@@ -58,23 +60,6 @@ export default {
           comp.selectedProduct = result.product
         }
       })
-    },
-    init () {
-      const search = new URLSearchParams(window.location.search) || {}
-      const storeId = search.get('store') || false
-      const nolayout = search.has('nolayout') || false
-
-      if (storeId) {
-        this.storeId = storeId
-        this.getStore()
-        this.getCategories()
-      }
-
-      if (nolayout && window && window.Tawk_API) {
-        window.Tawk_API.onLoad = () => {
-          window.Tawk_API.hideWidget()
-        }
-      }
     },
     getStore () {
       this._storeService.Get(this.storeId).then((res) => {

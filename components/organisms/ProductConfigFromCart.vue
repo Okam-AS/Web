@@ -4,15 +4,16 @@
       v-for="item in itemsInCart"
       :key="item.id"
       class="product-config-item"
+      @click.stop="openLineItem(item)"
     >
       <div class="product-config-item-description">
         <span>{{ item.product.name }}</span>
         <span>{{ item.product.selectedOptionNames }}</span>
         <span>{{ priceLabel(item.product.amount) }}</span>
       </div>
-      <button @click="openLineItem(item)">
-        Endre
-      </button>
+      <span class="material-icons">
+        edit
+      </span>
       <Stepper
         :quantity="item.quantity"
         @add="addQuantity(item, 1)"
@@ -31,10 +32,6 @@ export default {
     productId: {
       type: String,
       default: ''
-    },
-    storeId: {
-      type: Number,
-      default: 0
     }
   },
   data () {
