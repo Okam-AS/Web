@@ -79,7 +79,6 @@ export default {
   components: { Loading, Product, Cart, Modal, MyUserDropdown, ProductConfig },
   data: () => ({
     storeId: null,
-    noLayout: false,
     store: {},
     categories: [],
     selectedLineItem: {},

@@ -17,15 +17,21 @@
         >
           Lukk
         </close-button>
-        <h2 class="cart__heading">Handlekurv</h2>
+        <h2 class="cart__heading">
+          Handlekurv
+        </h2>
         <div
           v-for="item in itemsInCart"
           :key="item.id"
           class="cart-row"
         >
           <div class="cart-row__title">
-            <div class="cart-row__heading">{{ item.product.name }}</div>
-            <div class="cart-row__extras">{{ item.product.selectedOptionNames }}</div>
+            <div class="cart-row__heading">
+              {{ item.product.name }}
+            </div>
+            <div class="cart-row__extras">
+              {{ item.product.selectedOptionNames }}
+            </div>
           </div>
 
           <div class="cart-row__controls">
@@ -35,9 +41,9 @@
 
             <Stepper
               :quantity="item.quantity"
+              class="stepper--small"
               @add="addQuantity(item, 1)"
               @subtract="addQuantity(item, -1)"
-              class="stepper--small"
             />
           </div>
         </div>

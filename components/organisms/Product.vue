@@ -19,7 +19,7 @@
           <h3 class="product-title">
             {{ product.name }}
           </h3>
-          <span class="product-text" v-if="product.description">
+          <span v-if="product.description" class="product-text">
             {{ product.description }}
           </span>
         </div>
@@ -30,7 +30,7 @@
           >{{
             priceLabel(product.discountAmount + product.amount)
           }}</span>
-          <span class="product-price__sold-out" v-if="product.soldOut">
+          <span v-if="product.soldOut" class="product-price__sold-out">
             Utsolgt
           </span>
           <span v-else>{{
