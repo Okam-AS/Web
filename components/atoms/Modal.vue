@@ -92,7 +92,7 @@ export default {
     height: 100%;
     background-color: #fff;
     transition: transform 0.3s ease;
-    @include z-index('modal-backgrop');
+    @include z-index('modal-backdrop');
     overflow: auto;
   }
 
