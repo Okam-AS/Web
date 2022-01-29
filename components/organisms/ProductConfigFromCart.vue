@@ -7,18 +7,26 @@
       @click.stop="openLineItem(item)"
     >
       <div class="product-config-item-description">
-        <span>{{ item.product.name }}</span>
-        <span>{{ item.product.selectedOptionNames }}</span>
-        <span>{{ priceLabel(item.product.amount) }}</span>
+        <div>
+          <span>{{ item.product.name }}</span>
+          <span>{{ item.product.selectedOptionNames }}</span>
+        </div>
+        <div class="product-config-item-price">{{ priceLabel(item.product.amount) }}</div>
       </div>
-      <span class="material-icons">
-        edit
-      </span>
-      <Stepper
-        :quantity="item.quantity"
-        @add="addQuantity(item, 1)"
-        @subtract="addQuantity(item, -1)"
-      />
+      <div class="product-config-item-tools">
+        <div class="product-config-item-edit">
+          <span class="product-config-item-edit-icon material-icons">
+            edit
+          </span>
+          <span>Endre</span>
+        </div>
+        <Stepper
+          :quantity="item.quantity"
+          @add="addQuantity(item, 1)"
+          @subtract="addQuantity(item, -1)"
+          class="stepper--small"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -76,18 +84,41 @@ export default {
 .product-config {
   display: flex;
   flex-direction: column;
-  background: $color-profile;
-  border: 1px solid $color-support;
-  border-radius: rem(5);
+  background: $color-support-light;
+  margin-top: rem(16);
   margin-left: rem(70);
-  padding: rem(10);
+  padding: rem(16);
 
   &-item {
-    display: flex;
-    justify-content: space-between;
-
     &-description {
       flex-grow: 1;
+      display: flex;
+      justify-content: space-between;
+      column-gap: rem(24);
+      line-height: 1.35;
+      font-size: rem(14);
+    }
+
+    &-price {
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    &-tools {
+      display: flex;
+      justify-content: space-between;
+      margin-top: rem(16);
+    }
+
+    &-edit {
+      display: flex;
+      align-items: center;
+      font-size: rem(14);
+
+      &-icon {
+        font-size: rem(20);
+        margin-right: rem(4);
+      }
     }
   }
 

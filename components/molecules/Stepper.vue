@@ -70,6 +70,7 @@ export default {
 
     .stepper-quantity {
       min-width: rem(32);
+      font-size: rem(14);
     }
   }
 }
