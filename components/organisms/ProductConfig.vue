@@ -204,11 +204,17 @@ export default {
 @import "../../assets/sass/common.scss";
 
 .product-conf {
+  padding-bottom: rem(74);
+
   &-controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 rem(24);
+    padding: rem(16) rem(24);
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #fff;
   }
 
   .product-group {
@@ -231,8 +237,7 @@ export default {
   }
 
   &-summary {
-    margin-top: rem(20);
-    padding: 0 rem(24) rem(24);
+    padding: rem(16) rem(24);
     display: flex;
     justify-content: space-between;
     column-gap: rem(24);

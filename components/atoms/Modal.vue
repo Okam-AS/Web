@@ -105,7 +105,7 @@ export default {
     max-width: rem(600);
     min-width: rem(280);
     margin: 0px auto;
-    padding: rem(24) 0;
+    padding: rem(24) 0 0;
     background-color: #fff;
     transition: all 0.3s ease;
   }
