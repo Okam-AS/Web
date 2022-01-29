@@ -8,7 +8,7 @@
       </div>
       <MyUserDropdown />
     </div>
-    <Loading v-if="isInitLoading" />
+    <Loading v-if="isLoadingInit" />
     <div v-else class="shop-products">
       <div v-for="(category, i) in categories" :key="i">
         <h2
@@ -34,6 +34,7 @@
           </div>
         </h2>
         <div v-if="category.active" class="product-group">
+          <Loading v-if="isLoadingProducts" />
           <Product
             v-for="(row, j) in (category.categoryProductListItems || []).filter((x) => !x.heading)"
             :key="j"
@@ -46,7 +47,7 @@
       </div>
     </div>
     <div v-if="storeId" class="shop-cart">
-      <Cart :store-id="storeId" :checkout-url="checkoutUrl" />
+      <Cart :checkout-url="checkoutUrl" />
     </div>
 
     <Modal v-if="selectedLineItem.product" @close="selectedLineItem = {}">
@@ -83,7 +84,8 @@ export default {
     categories: [],
     selectedLineItem: {},
     timer: '',
-    isInitLoading: true
+    isLoadingInit: true,
+    isLoadingProducts: false
   }),
   computed: {
     checkoutUrl () {
@@ -142,9 +144,13 @@ export default {
     },
     toggleCategoryActive (index) {
       if (!this.categories[index].categoryProductListItems.length) {
+        this.isLoadingProducts = true
         this._categoryService.Get(this.categories[index].id).then((category) => {
           this.updateCategory(index, category)
           this.categories[index].active = true
+          this.isLoadingProducts = false
+        }).catch(() => {
+          this.isLoadingProducts = false
         })
       } else {
         this.categories[index].active = true
@@ -161,9 +167,9 @@ export default {
     getCategories () {
       this._categoryService.GetAll(this.storeId).then((res) => {
         this.categories = res
-        this.isInitLoading = false
+        this.isLoadingInit = false
       }).catch(() => {
-        this.isInitLoading = false
+        this.isLoadingInit = false
       })
     }
   }

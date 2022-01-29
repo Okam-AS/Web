@@ -32,10 +32,6 @@ export default {
     productId: {
       type: String,
       default: ''
-    },
-    storeId: {
-      type: Number,
-      default: 0
     }
   },
   data () {
