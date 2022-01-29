@@ -1,5 +1,5 @@
 <template>
-  <footer v-if="show" class="page-footer">
+  <footer v-if="!noLayout" class="page-footer">
     <div class="wrapper">
       <div class="page-footer__cols">
         <div class="page-footer__col">
@@ -47,19 +47,3 @@
     </div>
   </footer>
 </template>
-
-<script>
-export default {
-  data: () => ({
-    show: false
-  }),
-  mounted () {
-    const search = new URLSearchParams(window.location.search) || {}
-    const hideLayout = search.has('nolayout') || false
-
-    if (!hideLayout) {
-      this.show = true
-    }
-  }
-}
-</script>

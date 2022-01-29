@@ -16,6 +16,12 @@ import {
 import { wholeAmount, fractionAmount, priceLabel, formatString } from '~/core/helpers/tools'
 
 const mixin = {
+  data () {
+    return {
+      storeId: undefined,
+      noLayout: false
+    }
+  },
   mounted () {
     this.$store.dispatch('Load')
     this.$store.subscribe((mutation, state) => {
@@ -23,6 +29,24 @@ const mixin = {
         localStorage.setItem('state', JSON.stringify(state))
       }
     })
+
+    if (window && window.location) {
+      const search = new URLSearchParams(window.location.search) || {}
+      const storeId = search.get('store') || false
+      const noLayout = search.has('nolayout') || false
+
+      if (storeId) {
+        this.storeId = parseInt(storeId)
+      }
+      if (noLayout) {
+        this.noLayout = !!noLayout
+        if (window.Tawk_API) {
+          window.Tawk_API.onLoad = () => {
+            window.Tawk_API.hideWidget()
+          }
+        }
+      }
+    }
   },
   methods: {
     formatString (str, format) {

@@ -26,7 +26,6 @@ import MyUserDropdown from '@/components/atoms/MyUserDropdown.vue'
 export default {
   components: { OrderModal, Loading, MyUserDropdown },
   data: () => ({
-    noLayout: false,
     isLoadingOrders: false,
     orders: [],
     selectedOrder: {}

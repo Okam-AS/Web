@@ -159,12 +159,8 @@ import LoginModal from '~/components/molecules/LoginModal.vue'
 export default {
   components: { ContinueButton, MyUserDropdown, Loading, Modal, LoginModal },
   data: () => ({
-
     showLogin: false,
-
-    storeId: null,
     store: {},
-    timer: '',
 
     isSending: false,
     errorMessage: '',
@@ -230,11 +226,22 @@ export default {
     }
   },
   mounted () {
-    this.init()
-    this.timer = setInterval(this.iframeHeightNotify, 300)
-  },
-  beforeDestroy () {
-    clearInterval(this.timer)
+    if (this.storeId) {
+      this.getStore()
+      this.getAvailablePaymentMethods()
+    }
+
+    this.localDeliveryType = 'NotSet'
+    if (this.storeCart) {
+      this.localTableName = this.storeCart.tableName === undefined ? '' : this.storeCart.tableName + ''
+      this.localComment = this.storeCart.comment === undefined || this.storeCart.comment === 'Ingen kommentar' ? '' : this.storeCart.comment + ''
+    }
+
+    if (this.storeId && this.userIsLoggedIn) {
+      this.updateCart()
+    } else {
+      this.showLogin = true
+    }
   },
   methods: {
     closeLoginModal (isLoggedIn) {
@@ -298,46 +305,6 @@ export default {
       this.deliveryAddressError = false
       this.tableNameError = false
       this.creditCardError = false
-    },
-    iframeHeightNotify () {
-      const search = new URLSearchParams(window.location.search) || {}
-      const parentUrl = (search.get('parent') || '')
-      if (parentUrl) {
-        window.parent.postMessage({
-          height: this.$refs.container.scrollHeight
-        }, parentUrl)
-      }
-    },
-    init () {
-      const search = new URLSearchParams(window.location.search) || {}
-      const storeId = search.get('store') || false
-      const nolayout = search.has('nolayout') || false
-
-      if (storeId) {
-        this.storeId = parseInt(storeId)
-        this.getStore()
-        this.getAvailablePaymentMethods()
-      }
-
-      if (nolayout && window && window.Tawk_API) {
-        window.Tawk_API.onLoad = () => {
-          window.Tawk_API.hideWidget()
-        }
-      }
-
-      // Checkout
-      const comp = this
-      comp.localDeliveryType = 'NotSet'
-      if (comp.storeCart) {
-        comp.localTableName = comp.storeCart.tableName === undefined ? '' : comp.storeCart.tableName + ''
-        comp.localComment = comp.storeCart.comment === undefined || comp.storeCart.comment === 'Ingen kommentar' ? '' : comp.storeCart.comment + ''
-      }
-
-      if (this.storeId && this.userIsLoggedIn) {
-        this.updateCart()
-      } else {
-        this.showLogin = true
-      }
     },
     getStore () {
       this._storeService.Get(this.storeId).then((res) => {

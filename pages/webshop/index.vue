@@ -98,7 +98,10 @@ export default {
     }
   },
   mounted () {
-    this.init()
+    if (this.storeId) {
+      this.getStore()
+      this.getCategories()
+    }
   },
   beforeDestroy () {
     clearInterval(this.timer)
@@ -121,24 +124,6 @@ export default {
             this.selectedLineItem = result
           }
         })
-    },
-    init () {
-      const search = new URLSearchParams(window.location.search) || {}
-      const storeId = search.get('store') || false
-      const nolayout = search.has('nolayout') || false
-
-      if (storeId) {
-        this.storeId = parseInt(storeId)
-        this.noLayout = nolayout
-        this.getStore()
-        this.getCategories()
-      }
-
-      if (nolayout && window && window.Tawk_API) {
-        window.Tawk_API.onLoad = () => {
-          window.Tawk_API.hideWidget()
-        }
-      }
     },
     getStore () {
       this._storeService.Get(this.storeId).then((res) => {
