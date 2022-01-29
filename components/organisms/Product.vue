@@ -30,8 +30,11 @@
           >{{
             priceLabel(product.discountAmount + product.amount)
           }}</span>
-          <span>{{
-            product.soldOut ? "Utsolgt" : priceLabel(product.amount)
+          <span v-if="product.soldOut" style="background:red;padding:5px 10px;color:white;">
+            Utsolgt
+          </span>
+          <span v-else>{{
+            priceLabel(product.amount)
           }}</span>
         </div>
       </div>
