@@ -128,6 +128,7 @@
           {{ store.name + ' er stengt for øyeblikket' }}
         </p>
         <continue-button
+          :class="{'disabled': submitDisabled }"
           @click="submit"
         >
           Bekreft og betal
@@ -215,6 +216,9 @@ export default {
       return (
         this.isSending || this.$store.state.cartIsLoading || this.isLoadingCards
       )
+    },
+    submitDisabled () {
+      return this.isLoading && this.store.isOpenNow && !this.isSending && !this.cartIsEmpty
     }
   },
   watch: {
@@ -247,18 +251,106 @@ export default {
     closeLoginModal (isLoggedIn) {
       if (isLoggedIn) { location.reload() } else { this.showLogin = false }
     },
-    async submit () {
+    createPaymentIntent (paymentMethodId, setupFutureUsage) {
+      const comp = this
+      comp.isSending = true
+      comp._stripeService
+        .CreatePaymentIntent(
+          comp.storeCart.calculations.finalAmount,
+          'NOK',
+          paymentMethodId,
+          comp.storeCart.id,
+          setupFutureUsage
+        )
+        .then((result) => {
+          if (result && result.paymentIntentId) {
+            if (!result.nextAction) {
+              // SUCCESS
+              comp.completeCart()
+            } else if (result.nextAction.type === 'redirect_to_url') {
+              // 3D SECURE
+              // TODO:
+              // comp
+              //   .$showModal(SecureWebViewModal, {
+              //     fullscreen: true,
+              //     props: {
+              //       url: result.nextAction.redirect_to_url.url,
+              //       returnUrl: result.nextAction.redirect_to_url.return_url
+              //     }
+              //   })
+              //   .then((success) => {
+              //     if (!success) {
+              //       comp.errorMessage = 'Kortautentisering feilet'
+              //       comp.isSending = false
+              //     } else {
+              //       comp.completeCart()
+              //     }
+              //   })
+            } else {
+              // NOT HANDLED
+              comp.errorMessage =
+                'Betalingen kunne ikke gjennomføres for øyeblikket. Prøv igjen senere!'
+              comp.isSending = false
+            }
+          } else {
+            comp.isSending = false
+          }
+        })
+        .catch(() => {
+          comp.errorMessage =
+            'Betalingen kunne ikke gjennomføres på grunn av manglende dekning eller ugyldig kortinformasjon'
+          comp.isSending = false
+        })
+    },
+    completeCart () {
+      const comp = this
+      comp._cartService
+        .Complete(comp.store.id)
+        .then(() => {
+          location.href = '/webshop/orders?nolayout=true'
+
+          // TODO:
+          // comp.$navigator.navigate('OrderList', {
+          //   clearHistory: true,
+          //   props: {
+          //     showConfirmation: true,
+          //     clearCartInStore: comp.store.id
+          //   }
+          // })
+        })
+        .catch(() => {
+          comp.errorMessage =
+            'Betalingen kunne ikke gjennomføres. Prøv igjen senere.'
+          comp.isSending = false
+          comp.updateCart()
+        })
+    },
+    submit () {
       if (!this.userIsLoggedIn) {
         this.showLogin = true
         return
       }
+      if (this.submitDisabled) { return }
+      this.isSending = true
       try {
-        const paymentMethod = await this.$refs.cardElement.stripe.createPaymentMethod({
-          type: 'card',
-          card: this.$refs.cardElement.element
-        })
-        // this.createPaymentIntent(paymentMethod.id, this.rememberCard)
-        window.console.table(paymentMethod)
+        // Valider først!
+        if (this.selectedPaymentMethodId === 'waiter') {
+          this.completeCart()
+        } else if (this.selectedPaymentMethodId) {
+          // Using saved card
+          this.createPaymentIntent(this.selectedPaymentMethodId, true)
+        } else {
+          // Nytt kort:
+          this.$refs.cardElement.stripe.createPaymentMethod({
+            type: 'card',
+            card: this.$refs.cardElement.element
+          }).then((paymentMethod) => {
+            this.createPaymentIntent(paymentMethod.id, this.rememberCard)
+          }).catch(() => {
+            this.isSending = false
+          })
+        }
+        this.isSending = true
       } catch (error) {
         this.isSending = false
         this.errorMessage = 'Betalingen kunne ikke gjennomføres. Kontroller kortinformasjon og prøv igjen.'
