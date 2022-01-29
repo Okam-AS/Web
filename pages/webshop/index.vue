@@ -1,7 +1,9 @@
 <template>
   <div class="shop">
     <div class="shop-menu">
-      <h1 class="shop-menu__title">Nettbestilling</h1>
+      <h1 class="shop-menu__title">
+        Nettbestilling
+      </h1>
       <MyUserDropdown />
     </div>
     <div class="shop-products">
@@ -114,13 +116,6 @@ export default {
         })
     },
     init () {
-      this.$store.dispatch('Load')
-      this.$store.subscribe((mutation, state) => {
-        if (mutation && window && window.localStorage) {
-          localStorage.setItem('state', JSON.stringify(state))
-        }
-      })
-
       const search = new URLSearchParams(window.location.search) || {}
       const storeId = search.get('store') || false
       const nolayout = search.has('nolayout') || false

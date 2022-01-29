@@ -16,6 +16,14 @@ import {
 import { wholeAmount, fractionAmount, priceLabel, formatString } from '~/core/helpers/tools'
 
 const mixin = {
+  mounted () {
+    this.$store.dispatch('Load')
+    this.$store.subscribe((mutation, state) => {
+      if (mutation && window && window.localStorage) {
+        localStorage.setItem('state', JSON.stringify(state))
+      }
+    })
+  },
   methods: {
     formatString (str, format) {
       return formatString(str, format)

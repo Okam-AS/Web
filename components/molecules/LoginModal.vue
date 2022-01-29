@@ -68,12 +68,6 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch('Load')
-    this.$store.subscribe((mutation, state) => {
-      if (mutation && window && window.localStorage) {
-        localStorage.setItem('state', JSON.stringify(state))
-      }
-    })
     this.isLoading = false
     if (this.$store.getters.userIsLoggedIn && this.closeIfLoggedIn) { this.$emit('close', true) }
   },

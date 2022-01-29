@@ -309,13 +309,6 @@ export default {
       }
     },
     init () {
-      this.$store.dispatch('Load')
-      this.$store.subscribe((mutation, state) => {
-        if (mutation && window && window.localStorage) {
-          localStorage.setItem('state', JSON.stringify(state))
-        }
-      })
-
       const search = new URLSearchParams(window.location.search) || {}
       const storeId = search.get('store') || false
       const nolayout = search.has('nolayout') || false
