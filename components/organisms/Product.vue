@@ -70,7 +70,7 @@ export default {
   },
   methods: {
     openProduct () {
-      if (!this.hideLineItems) {
+      if (!this.hideLineItems && !this.product.soldOut) {
         this.$emit('openProduct', this.product.id)
       }
     },
