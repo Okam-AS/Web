@@ -187,7 +187,7 @@ export default {
     padding: rem(16) rem(24);
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
 
     &__title {
       font-size: rem(18);
