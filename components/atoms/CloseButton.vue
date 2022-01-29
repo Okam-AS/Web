@@ -29,5 +29,11 @@ export default {}
 	&-x {
     line-height: 1;
 	}
+
+  &--top-right {
+    position: absolute;
+    top: rem(16);
+    right: rem(16);
+  }
 }
 </style>

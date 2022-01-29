@@ -44,7 +44,7 @@ export default {
 
   &-quantity {
     display: inline-block;
-    min-width: 2.5rem;
+    min-width: rem(40);
     text-align: center;
   }
 
@@ -52,8 +52,8 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-		width: 2rem;
-		height: 2rem;
+		width: rem(32);
+		height: rem(32);
 		border-radius: 50%;
 		border: none;
 		background: $color-dark;
@@ -61,5 +61,16 @@ export default {
     font-size: rem(20);
     line-height: 1;
 	}
+
+  &--small {
+    .stepper-button {
+      width: rem(24);
+      height: rem(24);
+    }
+
+    .stepper-quantity {
+      min-width: rem(32);
+    }
+  }
 }
 </style>

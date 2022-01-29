@@ -14,7 +14,7 @@
               <div class="modal-body">
                 <close-button
                   v-if="!hideCloseBtn"
-                  class="modal-close-button"
+                  class="close-button--top-right"
                   @click="$emit('close')"
                 >
                   {{ closeBtnText }}
@@ -91,7 +91,6 @@ export default {
     width: 100%;
     height: 100%;
     background-color: #fff;
-    transition: transform 0.3s ease;
     @include z-index('modal-backdrop');
     overflow: auto;
   }
@@ -105,9 +104,8 @@ export default {
     max-width: rem(600);
     min-width: rem(280);
     margin: 0px auto;
-    padding: rem(24) 0 0;
+    padding: rem(32) 0 0;
     background-color: #fff;
-    transition: all 0.3s ease;
   }
 
   &-body {
@@ -115,12 +113,6 @@ export default {
   }
   &-buttons button {
     display: inline-block;
-  }
-
-  &-close-button {
-    position: absolute;
-    top: rem(16);
-    right: rem(16);
   }
 }
 </style>

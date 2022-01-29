@@ -19,7 +19,7 @@
           <h3 class="product-title">
             {{ product.name }}
           </h3>
-          <span v-if="product.description">
+          <span class="product-text" v-if="product.description">
             {{ product.description }}
           </span>
         </div>
@@ -30,7 +30,7 @@
           >{{
             priceLabel(product.discountAmount + product.amount)
           }}</span>
-          <span v-if="product.soldOut" style="background:red;padding:5px 10px;color:white;">
+          <span class="product-price__sold-out" v-if="product.soldOut">
             Utsolgt
           </span>
           <span v-else>{{
@@ -116,10 +116,21 @@ export default {
 
   &-title {
     font-size: rem(18);
+    line-height: 1.35;
+  }
+
+  &-text {
+    line-height: 1.35;
   }
 
   &-price {
     margin-top: rem(8);
+
+    &__sold-out {
+      background-color: $color-neutral-light;
+      padding: rem(4) rem(8);
+      font-style: italic;
+    }
   }
 
   &-config-from-cart {

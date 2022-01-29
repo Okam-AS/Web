@@ -1,6 +1,6 @@
 <template>
   <button
-    class="continue-button"
+    class="btn btn--primary"
     @click="$emit('click')"
   >
     <slot />
@@ -12,13 +12,5 @@ export default {}
 <style lang="scss" scoped>
 @import "../../assets/sass/common.scss";
 
-.continue-button {
-  background: $color-support;
-  color: white;
-  padding: rem(10);
-  border-radius: rem(20);
-  border: none;
-  float: right;
-  margin-top: rem(10);
-}
+
 </style>

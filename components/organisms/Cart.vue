@@ -12,38 +12,40 @@
         class="cart-content"
       >
         <close-button
-          class="close-button"
+          class="close-button close-button--top-right"
           @click="expanded = false"
         >
           Lukk
         </close-button>
-        <h2>Handlekurv</h2>
+        <h2 class="cart__heading">Handlekurv</h2>
         <div
           v-for="item in itemsInCart"
           :key="item.id"
           class="cart-row"
         >
-          <div class="cart-row-title">
-            <span style="font-weight:bold">{{ item.product.name }}</span><br>
-            <span>{{ item.product.selectedOptionNames }}</span>
+          <div class="cart-row__title">
+            <div class="cart-row__heading">{{ item.product.name }}</div>
+            <div class="cart-row__extras">{{ item.product.selectedOptionNames }}</div>
           </div>
 
-          <div class="cart-row-controls">
-            <span style="font-size:10px;color:gray;">
+          <div class="cart-row__controls">
+            <div class="cart-row__price">
               {{ priceLabel(item.product.amount) }}
-            </span>
+            </div>
 
             <Stepper
               :quantity="item.quantity"
               @add="addQuantity(item, 1)"
               @subtract="addQuantity(item, -1)"
+              class="stepper--small"
             />
           </div>
         </div>
-
-        <continue-button @click="checkout">
-          Fortsett
-        </continue-button>
+        <div class="btn-row btn-row--right">
+          <continue-button @click="checkout">
+            Fortsett
+          </continue-button>
+        </div>
       </div>
 
       <div
@@ -146,7 +148,7 @@ export default {
 
 .cart {
   // border: 1px solid $color-support;
-  background: $color-profile;
+  background: #fff;
   position: fixed;
   left: 0;
   right: 0;
@@ -157,34 +159,51 @@ export default {
 
   &--expanded {
     top: 0;
-    padding: rem(20);
+    padding: rem(24);
+  }
+
+  &__heading {
+    margin-bottom: rem(24);
   }
 
   &-row {
-    width: 100%;
     display: flex;
+    column-gap: rem(24);
     justify-content: space-between;
-    padding: rem(10) 0;
+    padding: rem(16) rem(24);
+    margin: 0 rem(-24) rem(4);
+    background-color: $color-support-light;
 
-    &-title {
+    &__title {
       flex-grow: 1;
+    }
+
+    &__heading {
+      font-weight: 700;
+    }
+
+    &__extras {
+      font-size: rem(14);
+    }
+
+    &__price {
+      text-align: right;
+      margin-bottom: rem(8);
     }
   }
 
   &-content {
     max-width: rem(600);
-    margin: rem(60) auto;
+    margin: rem(24) auto;
   }
 
   &-indicator {
     cursor: pointer;
     padding: rem(20);
     text-align: right;
+    background-color: $color-profile-dark;
+    color: #fff;
   }
-}
-
-.close-button {
-  float: right;
 }
 
 </style>

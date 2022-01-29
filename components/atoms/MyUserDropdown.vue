@@ -1,19 +1,22 @@
 <template>
-  <div style="background:white">
-    <div style="cursor:pointer;border:1px solid black">
-      <div v-if="isLoggedIn" @click="optionsToggle">
-        <span class="material-icons">face</span><span>{{ $store.state.currentUser.phoneNumber }}</span>
+  <div class="my-user">
+    <div>
+      <div class="my-user__trigger" v-if="isLoggedIn" @click="optionsToggle">
+        <span class="my-user__trigger-icon material-icons">person</span>
+        <!--span>{{ $store.state.currentUser.phoneNumber }}</span-->
       </div>
       <div v-else @click="loginClick">
         <span class="material-icons">login</span><span>Logg inn</span>
       </div>
     </div>
-    <div v-if="showOptions">
-      <div style="cursor:pointer;border:1px solid black" @click="myOrders">
-        <span class="material-icons">receipt</span><span>Mine bestillinger</span>
+    <div class="my-user__menu" v-if="showOptions">
+      <div class="my-user__menu-item" @click="myOrders">
+        <span class="my-user__menu-icon material-icons">receipt</span>
+        <span>Mine bestillinger</span>
       </div>
-      <div style="cursor:pointer;border:1px solid black" @click="logout">
-        <span class="material-icons">logout</span><span>Logg ut</span>
+      <div class="my-user__menu-item" @click="logout">
+        <span class="my-user__menu-icon material-icons">logout</span>
+        <span>Logg ut</span>
       </div>
     </div>
     <LoginModal v-if="showLogin" @close="closeLoginModal" />
@@ -67,3 +70,43 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+@import "../../assets/sass/common.scss";
+
+.my-user {
+  &__trigger {
+    display: flex;
+    align-items: center;
+
+    &-icon {
+      border-radius: 50%;
+      background-color: $color-dark;
+      color: #fff;
+      padding: rem(4);
+      font-size: rem(22);
+      margin-right: rem(-8);
+    }
+  }
+
+  &__menu {
+    position: absolute;
+    right: 0;
+    background-color: #fff;
+    margin-top: rem(8);
+
+    &-item {
+      display: flex;
+      align-items: center;
+      padding: rem(10) rem(12);
+      border-bottom: 1px solid $color-dark;
+    }
+
+    &-icon {
+      margin-right: rem(8);
+      font-size: rem(22);
+    }
+  }
+}
+
+</style>

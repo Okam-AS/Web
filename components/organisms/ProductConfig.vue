@@ -42,7 +42,7 @@
         @subtract="addQuantity(-1)"
       />
 
-      <button class="add-button" @click="saveAndClose">
+      <button class="btn btn--primary" @click="saveAndClose">
         {{ saveBtnText }}
       </button>
     </div>
@@ -222,7 +222,7 @@ export default {
   }
 
   .product-group {
-    background-color: $color-profile;
+    background-color: $color-support-light;
     padding: rem(24);
     margin-bottom: rem(4);
 
@@ -303,17 +303,6 @@ export default {
         }
       }
     }
-  }
-
-  .add-button {
-    background: #148556;
-    color: white;
-    padding: rem(12) rem(24);
-    border-radius: rem(20);
-    border: none;
-    font-size: rem(14);
-    font-weight: 700;
-    font-family: 'Montserrat', sans-serif;
   }
 }
 </style>
