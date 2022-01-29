@@ -1,11 +1,14 @@
 <template>
   <div class="shop">
     <div class="shop-menu">
-      <h1 class="shop-menu__title">
-        Nettbestilling
-      </h1>
+      <div v-if="store && store.id">
+        <img width="50" :src="store.logoUrl" :alt="store.name + ' logo'">
+        <h4>{{ store.name }}</h4>
+        <span>{{ storeAddressOneLiner }}</span>
+      </div>
       <MyUserDropdown />
     </div>
+
     <div class="shop-products">
       <div v-for="(category, i) in categories" :key="i">
         <h2
@@ -87,6 +90,9 @@ export default {
         this.storeId +
         (this.noLayout ? '&nolayout=true' : '')
       )
+    },
+    storeAddressOneLiner () {
+      if (this.store && this.store.address) { return (this.store.address.fullAddress + ', ' + this.store.address.zipCode + ' ' + this.store.address.city) } else { return '' }
     }
   },
   mounted () {
