@@ -8,8 +8,8 @@
       </div>
       <MyUserDropdown />
     </div>
-
-    <div class="shop-products">
+    <Loading v-if="isInitLoading" />
+    <div v-else class="shop-products">
       <div v-for="(category, i) in categories" :key="i">
         <h2
           :class="{
@@ -72,16 +72,18 @@ import Cart from '@/components/organisms/Cart.vue'
 import Modal from '@/components/atoms/Modal.vue'
 import MyUserDropdown from '@/components/atoms/MyUserDropdown.vue'
 import ProductConfig from '@/components/organisms/ProductConfig.vue'
+import Loading from '@/components/atoms/Loading.vue'
 
 export default {
-  components: { Product, Cart, Modal, MyUserDropdown, ProductConfig },
+  components: { Loading, Product, Cart, Modal, MyUserDropdown, ProductConfig },
   data: () => ({
     storeId: null,
     noLayout: false,
     store: {},
     categories: [],
     selectedLineItem: {},
-    timer: ''
+    timer: '',
+    isInitLoading: true
   }),
   computed: {
     checkoutUrl () {
@@ -103,7 +105,6 @@ export default {
   },
   methods: {
     openProduct (productId) {
-      // const _this = this
       this._cartService
         .GetCartLineItem({ product: { id: productId } })
         .then((result) => {
@@ -175,6 +176,9 @@ export default {
     getCategories () {
       this._categoryService.GetAll(this.storeId).then((res) => {
         this.categories = res
+        this.isInitLoading = false
+      }).catch(() => {
+        this.isInitLoading = false
       })
     }
   }
