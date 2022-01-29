@@ -49,6 +49,28 @@ const mixin = {
     }
   },
   methods: {
+    deliveryTypeLabel (deliveryTypeEnum) {
+      switch (deliveryTypeEnum) {
+      case 'SelfPickup': return 'Hent selv'
+      case 'InstantHomeDelivery': return 'Hjemlevering'
+      case 'GroupedHomeDelivery': return 'Hjemlevering'
+      case 'TableDelivery': return 'Spis inne'
+      default: return 'Ikke satt'
+      }
+    },
+    orderStatusLabel (orderStatusEnum) {
+      switch (orderStatusEnum) {
+      case 'Accepted': return 'Ny bestilling'
+      case 'Processing': return 'Behandles'
+      case 'ReadyForPickup': return 'Klar for henting'
+      case 'ReadyForDriver': return 'På vei'
+      case 'DriverPickedUp': return 'Sjåføren er på vei'
+      case 'Served': return 'Servert'
+      case 'Completed': return 'Fullført'
+      case 'Canceled': return 'Kansellert'
+      default: return 'Ikke satt'
+      }
+    },
     formatString (str, format) {
       return formatString(str, format)
     },

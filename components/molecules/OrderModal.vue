@@ -5,7 +5,7 @@
         <span class="bold">Bestillingsnummer</span><span class="right">{{ order.id }}</span>
       </div>
       <div>
-        <span class="bold">Leveringsmetode</span><span class="right">{{ order.deliveryType }}</span>
+        <span class="bold">Leveringsmetode</span><span class="right">{{ deliveryTypeLabel(order.deliveryType) }}</span>
       </div>
       <div>
         <span class="bold">Bestilt</span><span class="right">{{ formatDate(order.created || order.pickup) }}</span>
@@ -14,7 +14,7 @@
         <span class="bold">Behandles til</span><span class="right">{{ formatDate(order.countdownEndTime) }}</span>
       </div>
       <div>
-        <span class="bold">Status</span><span class="right">{{ order.status }}</span>
+        <span class="bold">Status</span><span class="right">{{ orderStatusLabel(order.status) }}</span>
       </div>
       <div>
         <span class="bold">Kommentar</span><span class="right">{{ order.comment }}</span>
