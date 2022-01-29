@@ -2,14 +2,14 @@
   <div class="stepper">
     <button
       class="stepper-button"
-      @click="subtract"
+      @click.stop="subtract"
     >
       −
     </button>
     <span class="stepper-quantity">{{ quantity }}</span>
     <button
       class="stepper-button"
-      @click="add"
+      @click.stop="add"
     >
       +
     </button>

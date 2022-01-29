@@ -252,17 +252,16 @@ export default {
         this.showLogin = true
         return
       }
-      const comp = this
       try {
-        const paymentMethod = await comp.$refs.cardElement.stripe.createPaymentMethod({
+        const paymentMethod = await this.$refs.cardElement.stripe.createPaymentMethod({
           type: 'card',
-          card: comp.$refs.cardElement.element
+          card: this.$refs.cardElement.element
         })
-        // comp.createPaymentIntent(paymentMethod.id, comp.rememberCard)
+        // this.createPaymentIntent(paymentMethod.id, this.rememberCard)
         window.console.table(paymentMethod)
       } catch (error) {
-        comp.isSending = false
-        comp.errorMessage = 'Betalingen kunne ikke gjennomføres. Kontroller kortinformasjon og prøv igjen.'
+        this.isSending = false
+        this.errorMessage = 'Betalingen kunne ikke gjennomføres. Kontroller kortinformasjon og prøv igjen.'
       }
     },
     setTip (tipPercent) {
@@ -312,23 +311,22 @@ export default {
       })
     },
     getAvailablePaymentMethods () {
-      const comp = this
-      comp._stripeService
-        .GetPaymentMethods(comp.storeCart.id)
+      this._stripeService
+        .GetPaymentMethods(this.storeCart.id)
         .then((result) => {
-          if (Array.isArray(result)) { comp.cards = result }
-          comp.isLoadingCards = false
+          if (Array.isArray(result)) { this.cards = result }
+          this.isLoadingCards = false
           if (
             !this.selectedPaymentMethodId ||
             this.selectedPaymentMethodId === 'waiter'
           ) {
-            comp.setPaymentMethodId(
-              comp.cards.length > 0 ? comp.cards[0].id : ''
+            this.setPaymentMethodId(
+              this.cards.length > 0 ? this.cards[0].id : ''
             )
           }
         })
         .catch(() => {
-          comp.isLoadingCards = false
+          this.isLoadingCards = false
         })
     }
   }
