@@ -3,11 +3,15 @@
     <div
       v-for="(variant, i) in localLineItem.product.productVariants"
       :key="i"
-      class="product-group"
+      :class="'product-group' + (variant.required ? ' required' : '')"
     >
       <div class="product-group__header">
-        <h3 class="product-group__heading">{{ variant.name }}</h3>
-        <div class="product-group__status">{{ variant.required ? 'Påkrevd' : 'Valgfritt' }}</div>
+        <h3 class="product-group__heading">
+          {{ variant.name }}
+        </h3>
+        <div class="product-group__status">
+          {{ variant.required ? 'Påkrevd' : 'Valgfritt' }}
+        </div>
       </div>
       <div>
         <div
@@ -20,7 +24,7 @@
           @click="optionClick(option.id)"
           @keyup.enter="optionClick(option.id)"
         >
-          <span class="product-option__radio"></span>
+          <span :class="variant.multiselect ? 'product-option__checkbox' : 'product-option__radio'" />
           <span class="product-option__text">{{ option.name }}</span>
         </div>
       </div>
@@ -292,7 +296,7 @@ export default {
           left: rem(4);
         }
       }
-      
+
       .product-option__radio {
         &:before {
           border-radius: 50%;
