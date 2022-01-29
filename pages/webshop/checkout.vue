@@ -153,6 +153,7 @@ import ContinueButton from '@/components/atoms/ContinueButton.vue'
 import Modal from '@/components/atoms/Modal.vue'
 import $config from '@/core/helpers/configuration'
 import MyUserDropdown from '@/components/atoms/MyUserDropdown.vue'
+import { debounce } from '../../core/helpers/ts-debounce'
 import LoginModal from '~/components/molecules/LoginModal.vue'
 
 export default {
@@ -220,6 +221,14 @@ export default {
       )
     }
   },
+  watch: {
+    localComment () {
+      this.debouncedUpdateCart()
+    },
+    localTableName () {
+      this.debouncedUpdateCart()
+    }
+  },
   mounted () {
     this.init()
     this.timer = setInterval(this.iframeHeightNotify, 300)
@@ -250,22 +259,20 @@ export default {
       }
     },
     setTip (tipPercent) {
-      if (this.isLoading) { return }
       this.localTipPercent = tipPercent
-      this.updateCart()
+      this.debouncedUpdateCart()
     },
     setPaymentMethodId (id) {
-      if (this.isLoading) { return }
       this.selectedPaymentMethodId = id
-      this.updateCart()
+      this.debouncedUpdateCart()
     },
     setLocalDeliveryType (value) {
-      if (this.isLoading) { return }
       this.clearErrors()
       this.localDeliveryType = value
-      this.updateCart()
+      this.updateCart(true)
     },
-    updateCart () {
+    debouncedUpdateCart: debounce(function () { this.updateCart() }, 400),
+    updateCart (updateAvailablePaymentMethods) {
       if (!this.storeId) { return }
       this._cartService.SetCartRootProperties({
         storeId: this.storeId,
@@ -283,7 +290,7 @@ export default {
         comment: this.localComment ? this.localComment : 'Ingen kommentar',
         tipPercent: this.localTipPercent,
         tableName: this.localTableName
-      })
+      }, updateAvailablePaymentMethods ? this.getAvailablePaymentMethods : undefined)
     },
     clearErrors () {
       this.errorMessage = ''
@@ -316,7 +323,7 @@ export default {
       if (storeId) {
         this.storeId = parseInt(storeId)
         this.getStore()
-        this.getRegisteredCards()
+        this.getAvailablePaymentMethods()
       }
 
       if (nolayout && window && window.Tawk_API) {
@@ -334,7 +341,7 @@ export default {
       }
 
       if (this.storeId && this.userIsLoggedIn) {
-        this._cartService.UpdateCartInDbAndSetState(this.storeId)
+        this.updateCart()
       } else {
         this.showLogin = true
       }
@@ -344,17 +351,21 @@ export default {
         this.store = res
       })
     },
-    getRegisteredCards () {
+    getAvailablePaymentMethods () {
       const comp = this
-      // TODO: update like consumer app
       comp._stripeService
         .GetPaymentMethods(comp.storeCart.id)
         .then((result) => {
           if (Array.isArray(result)) { comp.cards = result }
           comp.isLoadingCards = false
-          comp.setPaymentMethodId(
-            comp.cards.length > 0 ? comp.cards[0].id : ''
-          )
+          if (
+            !this.selectedPaymentMethodId ||
+            this.selectedPaymentMethodId === 'waiter'
+          ) {
+            comp.setPaymentMethodId(
+              comp.cards.length > 0 ? comp.cards[0].id : ''
+            )
+          }
         })
         .catch(() => {
           comp.isLoadingCards = false
