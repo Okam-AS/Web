@@ -43,7 +43,7 @@
           />
           <div v-else>
             <div v-for="(item, index) in cards" :key="index">
-              <SelectButton v-if="item.id === 'waiter'" text="Betal i kassa" :selected="selectedPaymentMethodId === item.id" @click="setPaymentMethodId(item.id)">
+              <SelectButton v-if="item.id === 'waiter'" text="Betal i kassa" :selected="selectedPaymentMethodId === item.id" @change="setPaymentMethodId(item.id)">
                 <span class="material-icons">point_of_sale</span>
               </SelectButton>
               <SelectButton v-else-if="item.card" :text="'****' + item.card.last4 + ' ' + item.card.exp_month + '/' + item.card.exp_year" :selected="selectedPaymentMethodId === item.id" @change="setPaymentMethodId(item.id)">
