@@ -84,7 +84,6 @@ import Loading from '@/components/atoms/Loading.vue'
 export default {
   components: { Loading, Product, Cart, Modal, MyUserDropdown, ProductConfig },
   data: () => ({
-    storeId: null,
     store: {},
     categories: [],
     selectedLineItem: {},

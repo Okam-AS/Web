@@ -198,7 +198,7 @@ export default {
       return this.cartIsEmpty ? [] : this.storeCart.items
     },
     storeCart () {
-      return this.$store.getters.cartByStoreId(this.store.id)
+      return this.$store.getters.cartByStoreId(this.storeId) || { calculations: {} }
     },
     storeAddressOneLiner () {
       if (this.store && this.store.address) { return (this.store.address.fullAddress + ', ' + this.store.address.zipCode + ' ' + this.store.address.city) } else { return '' }
@@ -234,24 +234,30 @@ export default {
   },
   mounted () {
     if (this.storeId) {
-      this.getStore()
       this.getAvailablePaymentMethods()
-    }
+      this._storeService.Get(this.storeId).then((res) => {
+        this.store = res
+        this.localDeliveryType = 'NotSet'
+        if (this.storeCart) {
+          this.localTableName = this.storeCart.tableName === undefined ? '' : this.storeCart.tableName + ''
+          if (!this.localTableName && this.qsTableName) {
+            this.localTableName = this.qsTableName
+          }
+          if (this.localTableName) { this.localDeliveryType = 'TableDelivery' }
 
-    this.localDeliveryType = 'NotSet'
-    if (this.storeCart) {
-      this.localTableName = this.storeCart.tableName === undefined ? '' : this.storeCart.tableName + ''
-      this.localComment = this.storeCart.comment === undefined || this.storeCart.comment === 'Ingen kommentar' ? '' : this.storeCart.comment + ''
-    }
+          this.localComment = this.storeCart.comment === undefined || this.storeCart.comment === 'Ingen kommentar' ? '' : this.storeCart.comment + ''
+        }
 
-    if (this.storeId && this.userIsLoggedIn) {
-      this.updateCart()
-    } else {
-      this.showLogin = true
-    }
+        if (this.userIsLoggedIn) {
+          this.updateCart()
+        } else {
+          this.showLogin = true
+        }
 
-    if (this.paymentStatus === 'failed') {
-      this.errorMessage = 'Betalingen med BankID feilet. Prøv igjen.'
+        if (this.paymentStatus === 'failed') {
+          this.errorMessage = 'Betalingen med BankID feilet. Prøv igjen.'
+        }
+      })
     }
   },
   methods: {
@@ -382,11 +388,6 @@ export default {
       this.deliveryAddressError = false
       this.tableNameError = false
       this.creditCardError = false
-    },
-    getStore () {
-      this._storeService.Get(this.storeId).then((res) => {
-        this.store = res
-      })
     },
     getAvailablePaymentMethods () {
       this._stripeService

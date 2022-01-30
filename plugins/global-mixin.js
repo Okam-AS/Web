@@ -20,8 +20,8 @@ const mixin = {
     return {
       storeId: undefined,
       noLayout: false,
-      tryCompleteCart: false,
-      paymentStatus: undefined
+      paymentStatus: undefined,
+      qsTableName: ''
     }
   },
   mounted () {
@@ -37,8 +37,8 @@ const mixin = {
 
       this.storeId = (search.get('store') || false) ? parseInt(search.get('store')) : undefined
       this.noLayout = !!(search.has('nolayout') || false)
-      this.tryCompleteCart = !!(search.has('tryCompleteCart') || false)
       this.paymentStatus = search.has('paymentStatus') ? search.get('paymentStatus') : undefined
+      this.qsTableName = search.has('table') ? decodeURI(search.get('table')) : ''
 
       if (this.noLayout && window.Tawk_API) {
         window.Tawk_API.onLoad = () => {
@@ -91,8 +91,8 @@ const mixin = {
       let qs = ''
       if (this.storeId) { qs += 'store=' + this.storeId + '&' }
       if (this.noLayout) { qs += 'nolayout=' + this.noLayout + '&' }
-      if (this.tryCompleteCart) { qs += 'tryCompleteCart=' + this.tryCompleteCart + '&' }
       if (this.paymentStatus) { qs += 'paymentStatus=' + this.paymentStatus + '&' }
+      if (this.qsTableName) { qs += 'table=' + encodeURI(this.qsTableName) + '&' }
       return qs ? '?' + qs : ''
     },
     _userService () { return new UserService(this.$store) },

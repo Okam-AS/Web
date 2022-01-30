@@ -13,7 +13,7 @@ export const getters = {
   userIsLoggedIn: state => state.currentUser && state.currentUser.id,
   cartByStoreId (state) {
     return (storeId) => {
-      return (state.carts || []).find(x => x.storeId === storeId) || {}
+      return (state.carts || []).find(x => x.storeId === storeId) || { calculations: {} }
     }
   },
   deliveryAddress (state) {
