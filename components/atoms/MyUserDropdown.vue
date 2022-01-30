@@ -3,7 +3,7 @@
     <div>
       <div class="my-user__trigger" v-if="isLoggedIn" @click="optionsToggle">
         <span class="my-user__trigger-icon material-icons">person</span>
-        <!--span>{{ $store.state.currentUser.phoneNumber }}</span-->
+        <!--span class="my-user__trigger-icon material-icons">close</span--> <!-- bytte til close når aktiv -->
       </div>
       <div v-else @click="loginClick">
         <span class="material-icons">login</span><span>Logg inn</span>
@@ -82,6 +82,10 @@ export default {
   &__trigger {
     display: flex;
     align-items: center;
+    position: relative;
+    @include z-index('menu-trigger');
+    margin-right: rem(-8);
+    cursor: pointer;
 
     &-icon {
       border-radius: 50%;
@@ -89,21 +93,27 @@ export default {
       color: #fff;
       padding: rem(4);
       font-size: rem(22);
-      margin-right: rem(-8);
     }
   }
 
   &__menu {
     position: absolute;
+    top: 0;
     right: 0;
-    background-color: #fff;
-    margin-top: rem(8);
+    left: 0;
+    bottom: 0;
+    background-color: $color-profile;
+    @include z-index('menu');
+    box-shadow: 0 1px 5px 0 rgba(0 0 0 / 20%);
+    padding: rem(16) rem(24);
+    max-width: rem(600);
+    margin: 0 auto;
 
     &-item {
       display: flex;
       align-items: center;
-      padding: rem(10) rem(12);
-      border-bottom: 1px solid $color-dark;
+      padding: rem(10) 0;
+      margin-right: rem(64);
     }
 
     &-icon {
