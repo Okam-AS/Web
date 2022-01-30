@@ -77,8 +77,8 @@ export default {
       if (
         this.localLineItem.quantity === 0 ||
         (this.localLineItem.product.soldOut && this.localLineItem.id)
-      ) { return 'Fjern fra handlevogn' }
-      if (!this.localLineItem.id) { return 'Legg i handlevogn' }
+      ) { return 'Fjern fra bestillingen' }
+      if (!this.localLineItem.id) { return 'Legg til bestillingen' }
       return 'Oppdater'
     },
     saveEnabled () {
@@ -214,11 +214,13 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: rem(16) rem(24);
+    padding: rem(16);
     position: fixed;
-    bottom: 0;
-    width: 100%;
+    right: rem(16);
+    bottom: rem(16);
+    left: rem(16);
     background-color: #fff;
+    border-radius: rem(15);
   }
 
   .product-group {

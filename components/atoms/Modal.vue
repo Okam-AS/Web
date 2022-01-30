@@ -5,30 +5,28 @@
         name="modal"
         mode="out-in"
       >
-        <div
-          v-if="active"
-          class="modal-mask"
-        >
+        <div class="modal">
+          <close-button
+            v-if="!hideCloseBtn"
+            class="close-button"
+            @click="$emit('close')"
+          >
+            {{ closeBtnText }}
+          </close-button>
+          <div
+            v-if="active"
+            class="modal-mask"
+          >
+          </div>
           <div class="modal-wrapper">
             <div class="modal-container">
-              <div class="modal-body">
-                <close-button
-                  v-if="!hideCloseBtn"
-                  class="close-button--top-right"
-                  @click="$emit('close')"
-                >
-                  {{ closeBtnText }}
-                </close-button>
-                <div><slot /></div>
-              </div>
+              <div><slot /></div>
             </div>
           </div>
         </div>
       </transition>
     </div>
   </focus-trap>
-  </transition>
-  </div>
 </template>
 
 <script>
@@ -83,20 +81,35 @@ export default {
 <style lang="scss" scoped>
 @import "../../assets/sass/common.scss";
 
-.modal {
+.modal {  
   &-mask {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #fff;
+    background-color: rgba(0 0 0 / 50%);
     @include z-index('modal-backdrop');
-    overflow: auto;
+  }
+
+  .close-button {
+    position: fixed;
+    top: rem(6);
+    right: rem(6);
+    @include z-index('modal-close');
+    border: 2px solid white;
   }
 
   &-wrapper {
     overflow: auto;
+    position: fixed;
+    top: rem(16);
+    right: rem(16);
+    bottom: rem(16);
+    left: rem(16);
+    @include z-index('modal-body');
+    border-radius: rem(12);
+    background-color: #fff;
   }
 
   &-container {
@@ -104,13 +117,8 @@ export default {
     max-width: rem(600);
     min-width: rem(280);
     margin: 0px auto;
-    padding: rem(32) 0 0;
-    background-color: #fff;
   }
 
-  &-body {
-    @include z-index('modal-body');
-  }
   &-buttons button {
     display: inline-block;
   }
