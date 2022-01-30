@@ -1,81 +1,49 @@
 <template>
-  <focus-trap>
+  <div>
+    <h2 class="cart__heading">
+      Handlekurv
+    </h2>
     <div
-      v-if="itemsInCart.length"
-      :class="{
-        'cart': true,
-        'cart--expanded': expanded
-      }"
+      v-for="item in itemsInCart"
+      :key="item.id"
+      class="cart-row"
     >
-      <div
-        v-if="expanded"
-        class="cart-content"
-      >
-        <close-button
-          class="close-button close-button--top-right"
-          @click="expanded = false"
-        >
-          Lukk
-        </close-button>
-        <h2 class="cart__heading">
-          Handlekurv
-        </h2>
-        <div
-          v-for="item in itemsInCart"
-          :key="item.id"
-          class="cart-row"
-        >
-          <div class="cart-row__title">
-            <div class="cart-row__heading">
-              {{ item.product.name }}
-            </div>
-            <div class="cart-row__extras">
-              {{ item.product.selectedOptionNames }}
-            </div>
-          </div>
-
-          <div class="cart-row__controls">
-            <div class="cart-row__price">
-              {{ priceLabel(item.product.amount) }}
-            </div>
-
-            <Stepper
-              :quantity="item.quantity"
-              class="stepper--small"
-              @add="addQuantity(item, 1)"
-              @subtract="addQuantity(item, -1)"
-            />
-          </div>
+      <div class="cart-row__title">
+        <div class="cart-row__heading">
+          {{ item.product.name }}
         </div>
-        <div class="btn-row btn-row--right">
-          <continue-button @click="checkout">
-            Fortsett
-          </continue-button>
+        <div class="cart-row__extras">
+          {{ item.product.selectedOptionNames }}
         </div>
       </div>
 
-      <div
-        v-else
-        class="cart-indicator"
-        role="button"
-        tabindex="0"
-        @click="expanded = true"
-        @keyup.enter="expanded = true"
-      >
-        Handlekurv ({{ itemsInCart.length }})
+      <div class="cart-row__controls">
+        <div class="cart-row__price">
+          {{ priceLabel(item.product.amount) }}
+        </div>
+
+        <Stepper
+          :quantity="item.quantity"
+          class="stepper--small"
+          @add="addQuantity(item, 1)"
+          @subtract="addQuantity(item, -1)"
+        />
       </div>
     </div>
-  </focus-trap>
+    <div class="btn-row btn-row--right">
+      <continue-button @click="checkout">
+        Fortsett
+      </continue-button>
+    </div>
+  </div>
 </template>
 
 <script>
 import Stepper from '@/components/molecules/Stepper'
-import FocusTrap from '@/components/molecules/FocusTrap'
 import ContinueButton from '@/components/atoms/ContinueButton'
-import CloseButton from '@/components/atoms/CloseButton'
 
 export default {
-  components: { CloseButton, ContinueButton, FocusTrap, Stepper },
+  components: { ContinueButton, Stepper },
   props: {
     checkoutUrl: {
       type: String,
