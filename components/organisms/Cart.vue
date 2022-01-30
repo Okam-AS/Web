@@ -53,8 +53,7 @@ export default {
   data () {
     return {
       isLoading: false,
-      errorMessage: '',
-      expanded: false
+      errorMessage: ''
     }
   },
   computed: {
@@ -64,33 +63,7 @@ export default {
       return currentCart.items || []
     }
   },
-  watch: {
-    expanded () {
-      if (this.expanded) {
-        this.addNoScroll()
-      } else {
-        this.removeNoScroll()
-      }
-    }
-  },
-  beforeDestroy () {
-    document.body.classList.remove('noscroll')
-    window.removeEventListener('keydown', this.escapeListener)
-  },
   methods: {
-    escapeListener (e) {
-      if (e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27) {
-        this.expanded = false
-      }
-    },
-    addNoScroll () {
-      document.body.classList.add('noscroll')
-      window.addEventListener('keydown', this.escapeListener)
-    },
-    removeNoScroll () {
-      document.body.classList.remove('noscroll')
-      window.removeEventListener('keydown', this.escapeListener)
-    },
     addQuantity (lineItem, add) {
       if ((lineItem.quantity + add) === 0) {
         this._cartService.RemoveLineItem({
