@@ -1,15 +1,15 @@
 <template>
   <div class="my-user">
     <div>
-      <div class="my-user__trigger" v-if="isLoggedIn" @click="optionsToggle">
-        <span class="my-user__trigger-icon material-icons">person</span>
-        <!--span class="my-user__trigger-icon material-icons">close</span--> <!-- bytte til close når aktiv -->
+      <div v-if="isLoggedIn" class="my-user__trigger" @click="optionsToggle">
+        <span v-if="!showOptions" class="my-user__trigger-icon material-icons">person</span>
+        <span v-else class="my-user__trigger-icon material-icons">close</span>
       </div>
       <div v-else @click="loginClick">
         <span class="material-icons">login</span><span>Logg inn</span>
       </div>
     </div>
-    <div class="my-user__menu" v-if="showOptions">
+    <div v-if="showOptions" class="my-user__menu">
       <div class="my-user__menu-item" @click="myOrders">
         <span class="my-user__menu-icon material-icons">receipt</span><span>Mine bestillinger</span>
       </div>
