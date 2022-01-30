@@ -22,4 +22,15 @@
     &--center {
         text-align: center;
     }
+
+    &--modal {
+        position: fixed;
+        right: rem(16);
+        bottom: rem(16);
+        left: rem(16);
+        padding: rem(16);
+        margin-top: 0;
+        background-color: #fff;
+        border-radius: rem(15);
+    }
 }

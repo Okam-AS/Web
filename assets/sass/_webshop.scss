@@ -11,3 +11,15 @@
         font-weight: 400;
     }
 }
+
+.cart-indicator {
+    cursor: pointer;
+    padding: rem(16);
+    text-align: right;
+    background-color: $color-profile-dark;
+    color: #fff;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="cart">
     <h2 class="cart__heading">
       Handlekurv
     </h2>
@@ -30,7 +30,7 @@
         />
       </div>
     </div>
-    <div class="btn-row btn-row--right">
+    <div class="btn-row btn-row--right btn-row--modal">
       <continue-button @click="checkout">
         Fortsett
       </continue-button>
@@ -117,15 +117,7 @@ export default {
 @import "../../assets/sass/common.scss";
 
 .cart {
-  // border: 1px solid $color-support;
-  background: #fff;
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  max-height: 100vh;
-  overflow-y: auto;
-  @include z-index('cart');
+  padding: rem(24) rem(24) rem(74);
 
   &--expanded {
     top: 0;
@@ -134,6 +126,8 @@ export default {
 
   &__heading {
     margin-bottom: rem(24);
+    font-size: rem(20);
+    font-weight: 400;
   }
 
   &-row {
@@ -165,14 +159,6 @@ export default {
   &-content {
     max-width: rem(600);
     margin: rem(24) auto;
-  }
-
-  &-indicator {
-    cursor: pointer;
-    padding: rem(20);
-    text-align: right;
-    background-color: $color-profile-dark;
-    color: #fff;
   }
 }
 
