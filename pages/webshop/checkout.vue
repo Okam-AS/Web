@@ -1,7 +1,9 @@
 <template>
   <div ref="container" class="checkout-page">
     <div class="shop__header">
-      <h2 class="shop__heading">Kasse</h2>
+      <h2 class="shop__heading">
+        Kasse
+      </h2>
       <MyUserDropdown style="float:right" @close="closeLoginModal" />
       <div v-if="errorMessage" style="background:red;padding:10px;color:white;">
         {{ errorMessage }}
@@ -11,36 +13,26 @@
     <div class="checkout-form">
       <span class="label">Leveringsmetoder</span>
 
-      <div v-if="store.selfPickUp" class="clickable" @click="setLocalDeliveryType('SelfPickup')">
-        <span>{{ localDeliveryType === 'SelfPickup' ? '✅' : '⬜️' }}</span>
-        <span>Hent selv</span>
-      </div>
-
-      <div
+      <SelectButton v-if="store.selfPickUp" :selected="localDeliveryType === 'SelfPickup'" text="Hent selv" @change="setLocalDeliveryType('SelfPickup')" />
+      <SelectButton
         v-if="store.homeDeliveryMethods && store.homeDeliveryMethods.length > 0"
-        class="clickable"
-        @click="
+        text="Hjemlevering"
+        :selected="localDeliveryType === 'InstantHomeDelivery'"
+        @change="
           storeCart.calculations.itemsAmount >=
             store.minimumOrderPriceForHomeDelivery
             ? setLocalDeliveryType('InstantHomeDelivery')
-            : false
-        "
+            : false"
       >
-        <span>{{ localDeliveryType === 'InstantHomeDelivery' ? '✅' : '⬜️' }}</span>
-        <span>Hjemlevering</span>
         <span
           v-if="
             store.minimumOrderPriceForHomeDelivery > 0 &&
               storeCart.calculations.itemsAmount <
               store.minimumOrderPriceForHomeDelivery
           "
-        >{{ 'Min. bestilling: ' + priceLabel(store.minimumOrderPriceForHomeDelivery) }}</span>
-      </div>
-
-      <div v-if="store.tableDelivery" class="clickable" @click="setLocalDeliveryType('TableDelivery')">
-        <span>{{ localDeliveryType === 'TableDelivery' ? '✅' : '⬜️' }}</span>
-        <span>Spis inne</span>
-      </div>
+        >{{ '(Min. bestilling: ' + priceLabel(store.minimumOrderPriceForHomeDelivery) + ' )' }}</span>
+      </SelectButton>
+      <SelectButton v-if="store.tableDelivery" text="Spis inne" :selected="localDeliveryType === 'TableDelivery'" @change="setLocalDeliveryType('TableDelivery')" />
 
       <div class="section">
         <span class="label">Betalingsmetoder</span>
@@ -49,22 +41,16 @@
             v-if="isLoadingCards"
           />
           <div v-else>
-            <div v-for="(item, index) in cards" :key="index" class="clickable" @click="setPaymentMethodId(item.id)">
-              <div v-if="item.id === 'waiter'">
-                <span>{{ selectedPaymentMethodId === item.id ? '✅' : '⬜️' }}</span>
-                <span class="material-icons">edit_note</span>
-                <span>Legg inn bestilling som servitør</span>
-              </div>
-              <div v-else-if="item.card">
-                <span>{{ selectedPaymentMethodId === item.id ? '✅' : '⬜️' }}</span>
+            <div v-for="(item, index) in cards" :key="index">
+              <SelectButton v-if="item.id === 'waiter'" text="Betal i kassa" :selected="selectedPaymentMethodId === item.id" @click="setPaymentMethodId(item.id)">
+                <span class="material-icons">point_of_sale</span>
+              </SelectButton>
+              <SelectButton v-else-if="item.card" :text="'****' + item.card.last4 + ' ' + item.card.exp_month + '/' + item.card.exp_year" :selected="selectedPaymentMethodId === item.id" @change="setPaymentMethodId(item.id)">
                 <span class="material-icons">credit_card</span>
-                <span>{{ '****' + item.card.last4 + ' ' + item.card.exp_month + '/' + item.card.exp_year }}</span>
-              </div>
+              </SelectButton>
             </div>
             <div>
-              <div class="clickable" @click="setPaymentMethodId('')">
-                <span>{{ selectedPaymentMethodId === '' ? '✅' : '⬜️' }}</span><span>Nytt kort</span>
-              </div>
+              <SelectButton text="Nytt kort" :selected="selectedPaymentMethodId === ''" @change="setPaymentMethodId('')" />
               <div v-show="selectedPaymentMethodId === ''">
                 <client-only>
                   <stripe-element-card
@@ -82,22 +68,22 @@
         </div>
       </div>
       <div v-if="!isLoadingCards" class="section">
-        <span class="label">Tips</span>
+        <span class="label" style="margin-bottom:1em;">Tips</span>
         <div>
-          <span class="clickable" @click="setTip(0)">{{ localTipPercent === 0 ? '✅' : '⬜️' }} 0%</span>
-          <span class="clickable" @click="setTip(5)">{{ localTipPercent === 5 ? '✅' : '⬜️' }} 5%</span>
-          <span class="clickable" @click="setTip(10)">{{ localTipPercent === 10 ? '✅' : '⬜️' }} 10%</span>
-          <span class="clickable" @click="setTip(20)">{{ localTipPercent === 20 ? '✅' : '⬜️' }} 20%</span>
+          <span :class="{'tip': true, 'selected': localTipPercent === 0}" @click="setTip(0)">🙂 0%</span>
+          <span :class="{'tip': true, 'selected': localTipPercent === 5}" @click="setTip(5)">😀 5%</span>
+          <span :class="{'tip': true, 'selected': localTipPercent === 10}" @click="setTip(10)">😃 10%</span>
+          <span :class="{'tip': true, 'selected': localTipPercent === 20}" @click="setTip(20)">😍 20%</span>
         </div>
       </div>
       <div class="section">
         <span class="label">Kommentar</span>
         <div>
-          <textarea class="input" v-model="localComment" maxlength="100" rows="7" :placeholder="commentHint" />
+          <textarea v-model="localComment" class="input" maxlength="100" rows="7" :placeholder="commentHint" />
         </div>
       </div>
       <Loading v-if="isLoading" />
-      <div class="section price-summary" v-else-if="storeCart.calculations">
+      <div v-else-if="storeCart.calculations" class="section price-summary">
         <div class="price-summary__row">
           <span>{{ totalQuantityLabel }}</span>
           <span v-show="storeCart.calculations.itemsAmountLineThrough > 0" class="right" style="text-decoration: line-through;">
@@ -105,7 +91,7 @@
           </span>
           <span class="right">{{ priceLabel(storeCart.calculations.itemsAmount) }}</span>
         </div>
-        <div class="price-summary__row" v-show="storeCart.calculations.tipAmount > 0">
+        <div v-show="storeCart.calculations.tipAmount > 0" class="price-summary__row">
           <span>Tips</span>
           <span class="right">{{ priceLabel(storeCart.calculations.tipAmount) }}</span>
         </div>
@@ -113,11 +99,11 @@
           <span>Levering</span>
           <span class="right">{{ priceLabel(storeCart.calculations.deliveryAmount) }}</span>
         </div>
-        <div class="price-summary__row" v-show="storeCart.calculations.orderDiscountAmount > 0">
+        <div v-show="storeCart.calculations.orderDiscountAmount > 0" class="price-summary__row">
           <span>Rabatt</span>
           <span class="right">{{ '-' + priceLabel(storeCart.calculations.orderDiscountAmount) }}</span>
         </div>
-        <div class="price-summary__row" v-show="storeCart.calculations.tableAdditionalAmount > 0">
+        <div v-show="storeCart.calculations.tableAdditionalAmount > 0" class="price-summary__row">
           <span>Spis inne</span>
           <span class="right">{{ priceLabel(storeCart.calculations.tableAdditionalAmount) }}</span>
         </div>
@@ -155,10 +141,11 @@ import Modal from '@/components/atoms/Modal.vue'
 import $config from '@/core/helpers/configuration'
 import MyUserDropdown from '@/components/atoms/MyUserDropdown.vue'
 import { debounce } from '../../core/helpers/ts-debounce'
+import SelectButton from '~/components/atoms/SelectButton.vue'
 import LoginModal from '~/components/molecules/LoginModal.vue'
 
 export default {
-  components: { ContinueButton, MyUserDropdown, Loading, Modal, LoginModal },
+  components: { ContinueButton, SelectButton, MyUserDropdown, Loading, Modal, LoginModal },
   data: () => ({
     showLogin: false,
     store: {},
@@ -405,6 +392,16 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../../assets/sass/common.scss";
+
+.tip {
+  cursor: pointer;
+  background: white;
+  padding: 5px;
+  border-radius: 1em;
+}
+.tip.selected {
+  border: 2px solid black;
+}
 
 .checkout-page {
   max-width: rem(600);
