@@ -11,7 +11,9 @@
           <span>{{ item.product.name }}</span>
           <span>{{ item.product.selectedOptionNames }}</span>
         </div>
-        <div class="product-config-item-price">{{ priceLabel(item.product.amount) }}</div>
+        <div class="product-config-item-price">
+          {{ priceLabel(item.product.amount) }}
+        </div>
       </div>
       <div class="product-config-item-tools">
         <div class="product-config-item-edit">
@@ -22,9 +24,9 @@
         </div>
         <Stepper
           :quantity="item.quantity"
+          class="stepper--small"
           @add="addQuantity(item, 1)"
           @subtract="addQuantity(item, -1)"
-          class="stepper--small"
         />
       </div>
     </div>
