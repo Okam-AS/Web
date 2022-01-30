@@ -3,17 +3,19 @@
     <div
       :class="{
         'product-option': true,
-        'is-selected' : selected
+        'is-selected' : selected,
+        'is-disabled': disabled
       }"
       role="checkbox"
       tabindex="0"
       :aria-selected="selected"
-      @click="$emit('change', !selected)"
-      @keyup.enter="$emit('change', !selected)"
+      @click="trigger"
+      @keyup.enter="trigger"
     >
       <span class="product-option__radio" />
       <slot />
       <span class="product-option__text">{{ text }}</span>
+      <slot name="suffix" />
     </div>
   </div>
 </template>
@@ -21,6 +23,10 @@
 <script>
 export default {
   props: {
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     selected: {
       type: Boolean,
       default: false
@@ -28,6 +34,13 @@ export default {
     text: {
       type: String,
       default: ''
+    }
+  },
+  methods: {
+    trigger () {
+      if (!this.disabled) {
+        this.$emit('change', !this.selected)
+      }
     }
   }
 }
@@ -82,6 +95,13 @@ export default {
         &:before {
           border-radius: 50%;
         }
+      }
+    }
+
+    &.is-disabled {
+      .product-option__radio,
+      .product-option__text {
+        opacity: 0.5;
       }
     }
   }

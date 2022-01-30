@@ -18,22 +18,33 @@
       <SelectButton
         v-if="store.homeDeliveryMethods && store.homeDeliveryMethods.length > 0"
         text="Hjemlevering"
+        :disabled="storeCart.calculations.itemsAmount < store.minimumOrderPriceForHomeDelivery"
         :selected="localDeliveryType === 'InstantHomeDelivery'"
-        @change="
-          storeCart.calculations.itemsAmount >=
-            store.minimumOrderPriceForHomeDelivery
-            ? setLocalDeliveryType('InstantHomeDelivery')
-            : false"
+        @change="setLocalDeliveryType('InstantHomeDelivery')"
       >
-        <span
-          v-if="
-            store.minimumOrderPriceForHomeDelivery > 0 &&
-              storeCart.calculations.itemsAmount <
-              store.minimumOrderPriceForHomeDelivery
-          "
-        >{{ '(Min. bestilling: ' + priceLabel(store.minimumOrderPriceForHomeDelivery) + ' )' }}</span>
+        <template slot="suffix">
+          <span
+            v-if="
+              store.minimumOrderPriceForHomeDelivery > 0 &&
+                storeCart.calculations.itemsAmount <
+                store.minimumOrderPriceForHomeDelivery
+            "
+            class="sold-out"
+          >{{ 'Min. bestilling: ' + priceLabel(store.minimumOrderPriceForHomeDelivery) }}</span>
+        </template>
       </SelectButton>
       <SelectButton v-if="store.tableDelivery" text="Spis inne" :selected="localDeliveryType === 'TableDelivery'" @change="setLocalDeliveryType('TableDelivery')" />
+      <div v-if="localDeliveryType === 'SelfPickup'" class="section">
+        <span class="label">Henteadresse</span>
+        <div>{{ storeAddressOneLiner }}</div>
+      </div>
+      <div v-if="localDeliveryType === 'TableDelivery'" class="section">
+        <span class="label">Bordnummer</span>
+        <div>
+          <input v-model="localTableName" class="input" maxlength="30" rows="1" placeholder="F.eks: 7">
+        </div>
+      </div>
+      <DeliveryAddressInputs v-if="localDeliveryType === 'InstantHomeDelivery'" />
 
       <div class="section">
         <span class="label">Betalingsmetoder</span>
@@ -138,6 +149,7 @@
 <script type="ts">
 import Loading from '@/components/atoms/Loading.vue'
 import ContinueButton from '@/components/atoms/ContinueButton.vue'
+import DeliveryAddressInputs from '@/components/atoms/DeliveryAddressInputs.vue'
 import Modal from '@/components/atoms/Modal.vue'
 import $config from '@/core/helpers/configuration'
 import MyUserDropdown from '@/components/atoms/MyUserDropdown.vue'
@@ -146,7 +158,7 @@ import SelectButton from '~/components/atoms/SelectButton.vue'
 import LoginModal from '~/components/molecules/LoginModal.vue'
 
 export default {
-  components: { ContinueButton, SelectButton, MyUserDropdown, Loading, Modal, LoginModal },
+  components: { ContinueButton, DeliveryAddressInputs, SelectButton, MyUserDropdown, Loading, Modal, LoginModal },
   data: () => ({
     showLogin: false,
     store: {},
@@ -187,6 +199,9 @@ export default {
     },
     storeCart () {
       return this.$store.getters.cartByStoreId(this.store.id)
+    },
+    storeAddressOneLiner () {
+      if (this.store && this.store.address) { return (this.store.address.fullAddress + ', ' + this.store.address.zipCode + ' ' + this.store.address.city) } else { return '' }
     },
     totalQuantityLabel () {
       const totalQuantity = this.cartItems
@@ -397,7 +412,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../../assets/sass/common.scss";
-
+.sold-out{
+  background-color: $color-neutral-light;
+  padding: rem(4) rem(8);
+  font-style: italic;
+  font-size: 11px;
+  margin-left: 1em;
+}
 .tip {
   cursor: pointer;
   background: white;
