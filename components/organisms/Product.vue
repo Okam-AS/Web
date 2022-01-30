@@ -24,18 +24,16 @@
           </span>
         </div>
         <div class="product-price">
-          <span
-            v-if="product.hasDiscount"
-            style="text-decoration:line-through;"
-          >{{
-            priceLabel(product.discountAmount + product.amount)
-          }}</span>
+          <span v-if="product.hasDiscount" style="text-decoration:line-through;">
+            {{ priceLabel(product.discountAmount + product.amount) }}
+          </span>
           <span v-if="product.soldOut" class="product-price__sold-out">
             Utsolgt
           </span>
-          <span v-else>{{
-            priceLabel(product.amount)
-          }}</span>
+          <span v-else>{{ priceLabel(product.amount) }}</span>
+          <span v-if="!product.soldOut && product.tableAdditionalAmount > 0 && hideLineItems" class="product-price__sold-out">
+            {{ '+' + priceLabel(product.tableAdditionalAmount, true) + ' for spis inne' }}
+          </span>
         </div>
       </div>
     </div>
@@ -130,6 +128,7 @@ export default {
       background-color: $color-neutral-light;
       padding: rem(4) rem(8);
       font-style: italic;
+      font-size: 11px;
     }
   }
 
