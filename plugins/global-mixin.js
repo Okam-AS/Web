@@ -87,6 +87,14 @@ const mixin = {
     }
   },
   computed: {
+    urlQueryStrings () {
+      let qs = ''
+      if (this.storeId) { qs += 'store=' + this.storeId + '&' }
+      if (this.noLayout) { qs += 'nolayout=' + this.noLayout + '&' }
+      if (this.tryCompleteCart) { qs += 'tryCompleteCart=' + this.tryCompleteCart + '&' }
+      if (this.paymentStatus) { qs += 'paymentStatus=' + this.paymentStatus + '&' }
+      return qs ? '?' + qs : ''
+    },
     _userService () { return new UserService(this.$store) },
     _cartService () { return new CartService(this.$store) },
     _productService () { return new ProductService(this.$store) },

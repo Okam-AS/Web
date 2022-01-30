@@ -1,6 +1,7 @@
 <template>
   <div class="shop">
     <div class="shop-menu">
+      <span v-if="storeId" @click="goToStore">Tilbake til meny</span>
       <span>Mine bestillinger</span>
       <MyUserDropdown style="float:right" @close="loadOrders" />
     </div>
@@ -40,6 +41,9 @@ export default {
     }
   },
   methods: {
+    goToStore () {
+      location.href = '/webshop' + this.urlQueryStrings
+    },
     loadOrders () {
       if (!this.$store.getters.userIsLoggedIn) { return }
       this.isLoadingOrders = true

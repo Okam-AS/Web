@@ -1,6 +1,7 @@
 <template>
   <div class="shop">
     <div class="shop-menu">
+      <span v-if="storeId" @click="goToStore">Tilbake til meny</span>
       <span>Mine betalingskort</span>
       <MyUserDropdown style="float:right" @close="load" />
     </div>
@@ -42,6 +43,9 @@ export default {
     this.load()
   },
   methods: {
+    goToStore () {
+      location.href = '/webshop' + this.urlQueryStrings
+    },
     load () {
       if (!this.$store.getters.userIsLoggedIn) { return }
       this.isLoading = true

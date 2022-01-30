@@ -1,6 +1,7 @@
 <template>
   <div ref="container" class="checkout-page">
     <div class="shop__header">
+      <span v-if="storeId" @click="goToStore">Tilbake</span>
       <h2 class="shop__heading">
         Kasse
       </h2>
@@ -239,6 +240,9 @@ export default {
     }
   },
   methods: {
+    goToStore () {
+      location.href = '/webshop' + this.urlQueryStrings
+    },
     closeLoginModal (isLoggedIn) {
       if (isLoggedIn) { location.reload() } else { this.showLogin = false }
     },
@@ -282,7 +286,8 @@ export default {
       comp._cartService
         .Complete(comp.store.id)
         .then(() => {
-          location.href = '/webshop/orders?nolayout=true&paymentStatus=success&store=' + this.storeId
+          this.paymentStatus = 'success'
+          location.href = '/webshop/orders' + this.urlQueryStrings
         })
         .catch(() => {
           comp.errorMessage =

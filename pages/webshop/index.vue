@@ -96,9 +96,7 @@ export default {
   computed: {
     checkoutUrl () {
       return (
-        '/webshop/checkout/?store=' +
-        this.storeId +
-        (this.noLayout ? '&nolayout=true' : '')
+        '/webshop/checkout' + this.urlQueryStrings
       )
     },
     itemsInCart () {

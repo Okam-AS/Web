@@ -25,10 +25,12 @@ export default {
   },
   methods: {
     redirectToSuccess () {
-      location.href = '/webshop/orders?nolayout=true&paymentStatus=success&store=' + this.storeId
+      this.paymentStatus = 'success'
+      location.href = '/webshop/orders' + this.urlQueryStrings
     },
     redirectToError () {
-      location.href = '/webshop/checkout?nolayout=true&paymentStatus=failed' + (this.storeId ? '&store=' + this.storeId : '')
+      this.paymentStatus = 'failed'
+      location.href = '/webshop/checkout' + this.urlQueryStrings
     }
   }
 }
