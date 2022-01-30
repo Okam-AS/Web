@@ -1,0 +1,13 @@
+.shop {
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: rem(16);
+    }
+
+    &__heading {
+        font-size: rem(20);
+        margin: 0;
+        font-weight: 400;
+    }
+}

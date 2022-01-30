@@ -1,15 +1,15 @@
 <template>
   <div ref="container" class="checkout-page">
-    <div class="shop-menu">
-      <span>Kasse</span>
+    <div class="shop__header">
+      <h2 class="shop__heading">Kasse</h2>
       <MyUserDropdown style="float:right" @close="closeLoginModal" />
       <div v-if="errorMessage" style="background:red;padding:10px;color:white;">
         {{ errorMessage }}
       </div>
     </div>
 
-    <div class="section">
-      <span class="title">Leveringsmetoder</span>
+    <div class="checkout-form">
+      <span class="label">Leveringsmetoder</span>
 
       <div v-if="store.selfPickUp" class="clickable" @click="setLocalDeliveryType('SelfPickup')">
         <span>{{ localDeliveryType === 'SelfPickup' ? '✅' : '⬜️' }}</span>
@@ -43,7 +43,7 @@
       </div>
 
       <div class="section">
-        <span class="title">Betalingsmetoder</span>
+        <span class="label">Betalingsmetoder</span>
         <div>
           <Loading
             v-if="isLoadingCards"
@@ -72,16 +72,17 @@
                     :pk="stripePublishableKey"
                     :hide-postal-code="true"
                     :elements-options="{ locale: 'nb' }"
+                    class="card-input"
                   />
                 </client-only>
-                <label><input v-model="rememberCard" type="checkbox">Husk dette kortet</label>
+                <label class="checkbox-label"><input v-model="rememberCard" type="checkbox">Husk dette kortet</label>
               </div>
             </div>
           </div>
         </div>
       </div>
       <div v-if="!isLoadingCards" class="section">
-        <span class="title">Tips</span>
+        <span class="label">Tips</span>
         <div>
           <span class="clickable" @click="setTip(0)">{{ localTipPercent === 0 ? '✅' : '⬜️' }} 0%</span>
           <span class="clickable" @click="setTip(5)">{{ localTipPercent === 5 ? '✅' : '⬜️' }} 5%</span>
@@ -90,58 +91,54 @@
         </div>
       </div>
       <div class="section">
-        <span class="title">Kommentar</span>
+        <span class="label">Kommentar</span>
         <div>
-          <textarea v-model="localComment" style="width:100%;height:100px" maxlength="100" :placeholder="commentHint" />
+          <textarea class="input" v-model="localComment" maxlength="100" rows="7" :placeholder="commentHint" />
         </div>
       </div>
       <Loading v-if="isLoading" />
-      <div v-else-if="storeCart.calculations">
-        <div>
+      <div class="section price-summary" v-else-if="storeCart.calculations">
+        <div class="price-summary__row">
           <span>{{ totalQuantityLabel }}</span>
           <span v-show="storeCart.calculations.itemsAmountLineThrough > 0" class="right" style="text-decoration: line-through;">
             {{ priceLabel(storeCart.calculations.itemsAmountLineThrough) + ' ' }}
           </span>
           <span class="right">{{ priceLabel(storeCart.calculations.itemsAmount) }}</span>
         </div>
-        <div v-show="storeCart.calculations.tipAmount > 0">
+        <div class="price-summary__row" v-show="storeCart.calculations.tipAmount > 0">
           <span>Tips</span>
           <span class="right">{{ priceLabel(storeCart.calculations.tipAmount) }}</span>
         </div>
-        <div>
+        <div class="price-summary__row">
           <span>Levering</span>
           <span class="right">{{ priceLabel(storeCart.calculations.deliveryAmount) }}</span>
         </div>
-        <div v-show="storeCart.calculations.orderDiscountAmount > 0">
+        <div class="price-summary__row" v-show="storeCart.calculations.orderDiscountAmount > 0">
           <span>Rabatt</span>
           <span class="right">{{ '-' + priceLabel(storeCart.calculations.orderDiscountAmount) }}</span>
         </div>
-        <div v-show="storeCart.calculations.tableAdditionalAmount > 0">
+        <div class="price-summary__row" v-show="storeCart.calculations.tableAdditionalAmount > 0">
           <span>Spis inne</span>
           <span class="right">{{ priceLabel(storeCart.calculations.tableAdditionalAmount) }}</span>
         </div>
-        <div>
+        <div class="price-summary__row price-summary__row--total">
           <span>Totalt</span>
           <span class="right">{{ priceLabel(storeCart.calculations.finalAmount) }}</span>
         </div>
       </div>
-
-      <div v-if="!isLoading" class="section">
-        <p v-if="!store.isOpenNow && store.name" style="padding:1em;background:#fcf0cc;">
-          {{ store.name + ' er stengt for øyeblikket' }}
-        </p>
-        <continue-button
-          :class="{'disabled': submitDisabled }"
-          @click="submit"
-        >
-          Bekreft og betal
-        </continue-button>
-        <div class="terms">
-          <span>Jeg er enig i </span>
-          <span class="clickable" style="font-weight:bold" @click="showTerms = true">salgsbetingelsene</span>
-          <span> og klar over at kjøpet innebærer begrensinger i </span>
-          <span class="clickable" style="font-weight:bold" @click="showTerms = true">angreretten</span>
-        </div>
+    </div>
+    <div v-if="!isLoading" class="btn-row btn-row--center">
+      <p v-if="!store.isOpenNow && store.name" style="padding:1em;background:#fcf0cc;">
+        {{ store.name + ' er stengt for øyeblikket' }}
+      </p>
+      <continue-button
+        :class="{'disabled': submitDisabled }"
+        @click="submit"
+      >
+        Bekreft og betal
+      </continue-button>
+      <div class="terms">
+        Jeg er enig i <span class="clickable" style="font-weight:bold" @click="showTerms = true">salgsbetingelsene</span> og klar over at kjøpet innebærer begrensinger i <span class="clickable" style="font-weight:bold" @click="showTerms = true">angreretten</span>.
       </div>
     </div>
     <LoginModal v-if="showLogin" @close="closeLoginModal" />
@@ -412,7 +409,14 @@ export default {
 .checkout-page {
   max-width: rem(600);
   margin: 0 auto;
-  padding: rem(20);
+  padding: rem(16) rem(24);
+}
+
+.checkout-form {
+  background-color: $color-support-light;
+  padding: rem(24);
+  margin-right: rem(-24);
+  margin-left: rem(-24);
 }
 
 .emoji-btn {
@@ -425,7 +429,7 @@ export default {
 }
 
 .section {
-  margin-top: 2em;
+  margin-top: rem(24);
 }
 
 .title {
@@ -437,7 +441,28 @@ export default {
   float:right;
 }
 
-.terms span {
-  font-size: 10px;
+.terms {
+  font-size: rem(12);
+  margin-top: rem(16);
+
+  span {
+    font-weight: 700;
+    text-decoration: underline;
+  }
+}
+
+.card-input {
+  margin: rem(8) 0;
+}
+
+.price-summary {
+  &__row {
+    &--total {
+      font-weight: 700;
+      border-top: 1px solid $color-dark;
+      padding-top: rem(8);
+      margin-top: rem(8);
+    }
+  }
 }
 </style>

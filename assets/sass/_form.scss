@@ -1,3 +1,30 @@
+.label {
+  font-weight: 700;
+  display: block;
+  margin-bottom: rem(4);
+  font-size: rem(16);
+}
+
+.input {
+  padding: rem(8);
+  width: 100%;
+  font-family: 'Montserrat', sans-serif;
+  font-size: rem(16);
+  vertical-align: top;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+
+  input {
+    width: rem(18);
+    height: rem(18);
+    margin-top: rem(2);
+    margin-right: rem(8);
+  }
+}
+
 .wpforms-field-hp {
   display: none;
 }
