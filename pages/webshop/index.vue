@@ -48,7 +48,7 @@
         @click="expandedCart = true"
         @keyup.enter="expandedCart = true"
       >
-        Handlekurv ({{ itemsInCart.length }})
+        Handlekurv ({{ totalQuantityLabel }})
       </div>
     </div>
 
@@ -103,6 +103,12 @@ export default {
       const comp = this
       const currentCart = (comp.$store.state.carts || []).find(x => x.storeId === comp.storeId) || []
       return currentCart.items || []
+    },
+    totalQuantityLabel () {
+      const totalQuantity = this.itemsInCart
+        .map(item => item.quantity)
+        .reduce((a, b) => a + b, 0)
+      return totalQuantity + (totalQuantity === 1 ? ' vare' : ' varer')
     },
     storeAddressOneLiner () {
       if (this.store && this.store.address) { return (this.store.address.fullAddress + ', ' + this.store.address.zipCode + ' ' + this.store.address.city) } else { return '' }

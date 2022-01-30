@@ -31,8 +31,10 @@
       </div>
     </div>
     <div class="btn-row btn-row--right btn-row--modal">
+      <span>{{ totalQuantityLabel }}</span>
+      <span>{{ totalPriceLabel }}</span>
       <continue-button @click="checkout">
-        Fortsett
+        Gå til kassa
       </continue-button>
     </div>
   </div>
@@ -61,6 +63,18 @@ export default {
       const comp = this
       const currentCart = (comp.$store.state.carts || []).find(x => x.storeId === comp.storeId) || []
       return currentCart.items || []
+    },
+    totalQuantityLabel () {
+      const totalQuantity = this.itemsInCart
+        .map(item => item.quantity)
+        .reduce((a, b) => a + b, 0)
+      return totalQuantity + (totalQuantity === 1 ? ' vare ' : ' varer ')
+    },
+    totalPriceLabel () {
+      const totalPrice = this.itemsInCart
+        .map(item => item.quantity * item.product.amount)
+        .reduce((a, b) => a + b, 0)
+      return this.priceLabel(totalPrice)
     }
   },
   methods: {
