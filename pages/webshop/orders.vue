@@ -32,6 +32,12 @@ export default {
   }),
   mounted () {
     this.loadOrders()
+    if (this.paymentStatus === 'success') {
+      if (!!this.storeId && this.storeId > 0) {
+        this._cartService.DeleteFromDbAndState(this.storeId)
+      }
+      // TODO: Show success message
+    }
   },
   methods: {
     loadOrders () {

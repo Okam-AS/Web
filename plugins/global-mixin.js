@@ -19,7 +19,9 @@ const mixin = {
   data () {
     return {
       storeId: undefined,
-      noLayout: false
+      noLayout: false,
+      tryCompleteCart: false,
+      paymentStatus: undefined
     }
   },
   mounted () {
@@ -32,18 +34,15 @@ const mixin = {
 
     if (window && window.location) {
       const search = new URLSearchParams(window.location.search) || {}
-      const storeId = search.get('store') || false
-      const noLayout = search.has('nolayout') || false
 
-      if (storeId) {
-        this.storeId = parseInt(storeId)
-      }
-      if (noLayout) {
-        this.noLayout = !!noLayout
-        if (window.Tawk_API) {
-          window.Tawk_API.onLoad = () => {
-            window.Tawk_API.hideWidget()
-          }
+      this.storeId = (search.get('store') || false) ? parseInt(search.get('store')) : undefined
+      this.noLayout = !!(search.has('nolayout') || false)
+      this.tryCompleteCart = !!(search.has('tryCompleteCart') || false)
+      this.paymentStatus = search.has('paymentStatus') ? search.get('paymentStatus') : undefined
+
+      if (this.noLayout && window.Tawk_API) {
+        window.Tawk_API.onLoad = () => {
+          window.Tawk_API.hideWidget()
         }
       }
     }

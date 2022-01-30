@@ -3,6 +3,9 @@
     <div class="shop-menu">
       <span>Kasse</span>
       <MyUserDropdown style="float:right" @close="closeLoginModal" />
+      <div v-if="errorMessage" style="background:red;padding:10px;color:white;">
+        {{ errorMessage }}
+      </div>
     </div>
 
     <div class="section">
@@ -246,6 +249,10 @@ export default {
     } else {
       this.showLogin = true
     }
+
+    if (this.paymentStatus === 'failed') {
+      this.errorMessage = 'Betalingen med BankID feilet. Prøv igjen.'
+    }
   },
   methods: {
     closeLoginModal (isLoggedIn) {
@@ -269,23 +276,7 @@ export default {
               comp.completeCart()
             } else if (result.nextAction.type === 'redirect_to_url') {
               // 3D SECURE
-              // TODO:
-              // comp
-              //   .$showModal(SecureWebViewModal, {
-              //     fullscreen: true,
-              //     props: {
-              //       url: result.nextAction.redirect_to_url.url,
-              //       returnUrl: result.nextAction.redirect_to_url.return_url
-              //     }
-              //   })
-              //   .then((success) => {
-              //     if (!success) {
-              //       comp.errorMessage = 'Kortautentisering feilet'
-              //       comp.isSending = false
-              //     } else {
-              //       comp.completeCart()
-              //     }
-              //   })
+              location.href = result.nextAction.redirect_to_url.url
             } else {
               // NOT HANDLED
               comp.errorMessage =
@@ -298,7 +289,7 @@ export default {
         })
         .catch(() => {
           comp.errorMessage =
-            'Betalingen kunne ikke gjennomføres på grunn av manglende dekning eller ugyldig kortinformasjon'
+            'Betalingen kunne ikke gjennomføres på grunn av manglende dekning eller ugyldig kortinformasjon'
           comp.isSending = false
         })
     },
@@ -307,16 +298,7 @@ export default {
       comp._cartService
         .Complete(comp.store.id)
         .then(() => {
-          location.href = '/webshop/orders?nolayout=true'
-
-          // TODO:
-          // comp.$navigator.navigate('OrderList', {
-          //   clearHistory: true,
-          //   props: {
-          //     showConfirmation: true,
-          //     clearCartInStore: comp.store.id
-          //   }
-          // })
+          location.href = '/webshop/orders?nolayout=true&paymentStatus=success&store=' + this.storeId
         })
         .catch(() => {
           comp.errorMessage =
@@ -333,7 +315,7 @@ export default {
       if (this.submitDisabled) { return }
       this.isSending = true
       try {
-        // Valider først!
+        // TODO: Valider først!
         if (this.selectedPaymentMethodId === 'waiter') {
           this.completeCart()
         } else if (this.selectedPaymentMethodId) {
@@ -344,8 +326,8 @@ export default {
           this.$refs.cardElement.stripe.createPaymentMethod({
             type: 'card',
             card: this.$refs.cardElement.element
-          }).then((paymentMethod) => {
-            this.createPaymentIntent(paymentMethod.id, this.rememberCard)
+          }).then((result) => {
+            this.createPaymentIntent(result.paymentMethod.id, this.rememberCard)
           }).catch(() => {
             this.isSending = false
           })
