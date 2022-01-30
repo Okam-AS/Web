@@ -45,10 +45,22 @@
           />
         </div>
       </div>
+
+      <div
+        v-if="itemsInCart.length > 0"
+        class="cart-indicator"
+        role="button"
+        tabindex="0"
+        @click="expandedCart = true"
+        @keyup.enter="expandedCart = true"
+      >
+        Handlekurv ({{ itemsInCart.length }})
+      </div>
     </div>
-    <div v-if="storeId" class="shop-cart">
+
+    <Modal v-if="storeId && itemsInCart.length > 0 && expandedCart" @close="expandedCart = false">
       <Cart :checkout-url="checkoutUrl" />
-    </div>
+    </Modal>
 
     <Modal v-if="selectedLineItem.product" @close="selectedLineItem = {}">
       <Product
@@ -83,6 +95,7 @@ export default {
     categories: [],
     selectedLineItem: {},
     timer: '',
+    expandedCart: false,
     isLoadingInit: true,
     isLoadingProducts: false
   }),
@@ -93,6 +106,11 @@ export default {
         this.storeId +
         (this.noLayout ? '&nolayout=true' : '')
       )
+    },
+    itemsInCart () {
+      const comp = this
+      const currentCart = (comp.$store.state.carts || []).find(x => x.storeId === comp.storeId) || []
+      return currentCart.items || []
     },
     storeAddressOneLiner () {
       if (this.store && this.store.address) { return (this.store.address.fullAddress + ', ' + this.store.address.zipCode + ' ' + this.store.address.city) } else { return '' }
