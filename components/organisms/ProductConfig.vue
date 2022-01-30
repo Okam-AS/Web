@@ -26,15 +26,26 @@
         >
           <span :class="variant.multiselect ? 'product-option__checkbox' : 'product-option__radio'" />
           <span class="product-option__text">{{ option.name }}</span>
+          <span v-if="option.amount > 0" class="product-option__price">{{ (option.negativeAmount ? '-' : '+') + priceLabel(option.amount, true) }}</span>
         </div>
       </div>
     </div>
+    <div class="product-group">
+      <div class="product-group__header">
+        <h3 class="product-group__heading">
+          Kommentar
+        </h3>
+      </div>
+      <textarea v-model="localLineItem.notes" class="input" maxlength="100" rows="3" placeholder="Andre spesielle ønsker?" />
+    </div>
+
     <div class="product-conf-summary">
       <span class="product-conf-summary__text">{{ selectedOptionNames }}</span>
       <span class="product-conf-summary__price">
         {{ priceLabel(totalAmount) }}
       </span>
     </div>
+
     <div class="product-conf-controls">
       <Stepper
         :quantity="localLineItem.quantity"
@@ -148,6 +159,7 @@ export default {
         this.localLineItem.quantity === 0 ||
         this.localLineItem.product.soldOut
       ) { return true }
+      // TODO:
       // (this.localLineItem.product.productVariants || []).some((variant) => {
       //   if (
       //     variant.options &&
@@ -283,6 +295,13 @@ export default {
 
     &__text {
       padding-top: rem(3);
+    }
+
+    &__price {
+      padding-top: rem(5);
+      padding-left: rem(5);
+      font-size: 12px;
+      color:gray
     }
 
     &.is-selected {
