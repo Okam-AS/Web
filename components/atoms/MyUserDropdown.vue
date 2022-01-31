@@ -84,7 +84,7 @@ export default {
     align-items: center;
     position: relative;
     @include z-index('menu-trigger');
-    margin-right: rem(-8);
+    margin-right: rem(-4);
     cursor: pointer;
 
     &-icon {

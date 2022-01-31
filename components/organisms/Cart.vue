@@ -30,11 +30,13 @@
         />
       </div>
     </div>
-    <div class="btn-row btn-row--right btn-row--modal">
-      <span>{{ totalQuantityLabel }}</span>
-      <span>{{ totalPriceLabel }}</span>
+    <div class="btn-row btn-row--space-between btn-row--modal">
+      <div class="u-small">
+        <div>{{ totalQuantityLabel }}</div>
+        <div>{{ totalPriceLabel }}</div>
+      </div>
       <continue-button @click="checkout">
-        Fortsett til betaling
+        Til betaling
       </continue-button>
     </div>
   </div>

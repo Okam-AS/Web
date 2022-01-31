@@ -1,11 +1,11 @@
 <template>
   <div class="product-conf">
-    <div class="message-box error">
+    <div class="message-box message-box--error">
       <div>
         Betalingen med BankID feilet. Prøv igjen.
       </div>
       <div>
-        <span class="material-icons" @click="errorMessage=''">close</span>
+        <span class="message-box__close material-icons" @click="errorMessage=''">close</span>
       </div>
     </div>
     <div

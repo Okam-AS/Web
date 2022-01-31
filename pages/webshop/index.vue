@@ -1,11 +1,11 @@
 <template>
   <div class="shop">
-    <div class="shop-menu">
-      <div v-if="store && store.id" class="shop-menu-container">
-        <div class="shop-menu-logo">
+    <div class="shop__header">
+      <div v-if="store && store.id" class="shop__header-container">
+        <div class="shop__header-logo">
           <img width="50" :src="store.logoUrl" :alt="store.name + ' logo'">
         </div>
-        <div class="shop-menu-info">
+        <div class="shop__header-info">
           <h4>{{ store.name }}</h4>
           <span>{{ storeAddressOneLiner }}</span>
         </div>
@@ -227,16 +227,8 @@ export default {
 @import "../../assets/sass/common.scss";
 
 .shop {
-  margin: 0 auto;
-  max-width: 600px;
-
-  &-menu {
-    padding: rem(16) rem(24);
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-
-    &-container {
+  &__header { 
+     &-container {
       display: flex;
       align-items: stretch;
     }
@@ -263,7 +255,9 @@ export default {
   }
 
   &-products {
-    margin-bottom: rem(300);
+    padding-bottom: rem(74);
+    margin-right: rem(-24);
+    margin-left: rem(-24);
 
     .product {
       cursor: pointer;

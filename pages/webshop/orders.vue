@@ -1,12 +1,11 @@
 <template>
   <div class="shop">
-    <div class="shop-menu">
+    <div class="shop__header">
       <button v-if="storeId" class="shop__header-back" @click="goToStore">
-        <span class="material-icons">arrow_back_ios</span>
-        <span>Tilbake til meny</span>
+        <span class="shop__header-back-icon material-icons">arrow_back</span>
       </button>
       <span>Mine bestillinger</span>
-      <MyUserDropdown style="float:right" @close="loadOrders" />
+      <MyUserDropdown @close="loadOrders" />
     </div>
     <div v-if="!$store.getters.userIsLoggedIn">
       Du må logge inn for å se dine bestillinger

@@ -1,21 +1,20 @@
 <template>
-  <div ref="container" class="checkout-page">
+  <div ref="container" class="shop">
     <div class="shop__header">
       <button v-if="storeId" class="shop__header-back" @click="goToStore">
-        <span class="material-icons">arrow_back_ios</span>
-        <span>Tilbake</span>
+        <span class="shop__header-back-icon material-icons">arrow_back</span>
       </button>
       <h2 class="shop__heading">
         Kasse
       </h2>
-      <MyUserDropdown style="float:right" @close="closeLoginModal" />
+      <MyUserDropdown @close="closeLoginModal" />
     </div>
-    <div class="message-box error">
+    <div class="message-box message-box--error m-b">
       <div>
         Betalingen med BankID feilet. Prøv igjen.
       </div>
       <div>
-        <span class="material-icons" @click="errorMessage=''">close</span>
+        <span class="message-box__close material-icons" @click="errorMessage=''">close</span>
       </div>
     </div>
     <div class="checkout-form">

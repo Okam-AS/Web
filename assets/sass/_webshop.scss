@@ -1,14 +1,28 @@
 .shop {
+    padding: rem(16) rem(24);
+    margin: 0 auto;
+    max-width: 600px;
+
     &__header {
         display: flex;
         justify-content: space-between;
         margin-bottom: rem(16);
+
         &-back{
             display: flex;
             align-items: center;
-            background: none;
-            border:none;
-            box-shadow: none;
+            justify-content: center;
+            background: $color-dark;
+            border: none;
+            width: rem(30);
+            height: rem(30);
+            border-radius: 50%;
+            color: #fff;
+            margin-left: rem(-4);
+            
+            &-icon {
+                font-size: rem(22);
+            }
         }
     }
 
