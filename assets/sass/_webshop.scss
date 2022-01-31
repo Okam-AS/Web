@@ -3,6 +3,13 @@
         display: flex;
         justify-content: space-between;
         margin-bottom: rem(16);
+        &-back{
+            display: flex;
+            align-items: center;
+            background: none;
+            border:none;
+            box-shadow: none;
+        }
     }
 
     &__heading {
@@ -14,12 +21,41 @@
 
 .cart-indicator {
     cursor: pointer;
-    padding: rem(16);
-    text-align: right;
     background-color: $color-profile-dark;
     color: #fff;
     position: fixed;
     right: 0;
     bottom: 0;
     left: 0;
+    display: flex;
+    justify-content: space-between;
+
+    .separator{
+        height: rem(40);
+        width: rem(2);
+        background: white;
+        transform: rotate(20deg);
+
+    }
+
+    button {
+       background: none; 
+       border:none;
+       box-shadow: none;
+       display: flex;
+       align-items: center;
+       color: white;
+    }
+    &-cart{
+        float:left;
+        .material-icons{
+            margin-right: rem(10);
+        }
+    }
+    &-checkout{
+        float:right;
+        .material-icons{
+            margin-left: rem(10);
+        }
+    }
 }

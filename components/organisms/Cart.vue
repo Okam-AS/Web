@@ -34,7 +34,7 @@
       <span>{{ totalQuantityLabel }}</span>
       <span>{{ totalPriceLabel }}</span>
       <continue-button @click="checkout">
-        Gå til kassa
+        Fortsett til betaling
       </continue-button>
     </div>
   </div>

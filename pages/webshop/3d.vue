@@ -26,11 +26,11 @@ export default {
   methods: {
     redirectToSuccess () {
       this.paymentStatus = 'success'
-      location.href = '/webshop/orders' + this.urlQueryStrings
+      window.location.href = '/webshop/orders' + this.urlQueryStrings
     },
     redirectToError () {
       this.paymentStatus = 'failed'
-      location.href = '/webshop/checkout' + this.urlQueryStrings
+      window.location.href = '/webshop/checkout' + this.urlQueryStrings
     }
   }
 }

@@ -1,10 +1,14 @@
 <template>
   <div class="shop">
     <div class="shop-menu">
-      <div v-if="store && store.id">
-        <img width="50" :src="store.logoUrl" :alt="store.name + ' logo'">
-        <h4>{{ store.name }}</h4>
-        <span>{{ storeAddressOneLiner }}</span>
+      <div v-if="store && store.id" class="shop-menu-container">
+        <div class="shop-menu-logo">
+          <img width="50" :src="store.logoUrl" :alt="store.name + ' logo'">
+        </div>
+        <div class="shop-menu-info">
+          <h4>{{ store.name }}</h4>
+          <span>{{ storeAddressOneLiner }}</span>
+        </div>
       </div>
       <MyUserDropdown />
     </div>
@@ -43,12 +47,24 @@
       <div
         v-if="itemsInCart.length > 0"
         class="cart-indicator"
-        role="button"
-        tabindex="0"
-        @click="expandedCart = true"
-        @keyup.enter="expandedCart = true"
       >
-        Handlekurv ({{ totalQuantityLabel }})
+        <button
+          class="cart-indicator-cart"
+          @click="expandedCart = true"
+          @keyup.enter="expandedCart = true"
+        >
+          <span class="material-icons">shopping_cart</span>
+          <span>Vis handlekurv ({{ totalQuantityLabel }})</span>
+        </button>
+        <div class="separator" />
+        <button
+          class="cart-indicator-checkout"
+          @click="goToCheckout"
+          @keyup.enter="goToCheckout"
+        >
+          <span>Fortsett til betaling</span>
+          <span class="material-icons">arrow_forward_ios</span>
+        </button>
       </div>
     </div>
 
@@ -84,6 +100,7 @@ import Loading from '@/components/atoms/Loading.vue'
 export default {
   components: { Loading, Product, Cart, Modal, MyUserDropdown, ProductConfig },
   data: () => ({
+    storeId: undefined,
     store: {},
     categories: [],
     selectedLineItem: {},
@@ -130,6 +147,9 @@ export default {
     clearInterval(this.timer)
   },
   methods: {
+    goToCheckout () {
+      window.location.href = this.checkoutUrl
+    },
     openProduct (productId) {
       this._cartService
         .GetCartLineItem({ product: { id: productId } })
@@ -209,6 +229,25 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+
+    &-container {
+      display: flex;
+      align-items: stretch;
+    }
+
+    &-info {
+      margin-left: rem(20);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      h4 {
+        line-height: 1;
+      }
+      span {
+        font-size: rem(12);
+      }
+    }
 
     &__title {
       font-size: rem(18);

@@ -48,10 +48,10 @@ export default {
   },
   methods: {
     myOrders () {
-      location.href = '/webshop/orders' + this.urlQueryStrings
+      window.location.href = '/webshop/orders' + this.urlQueryStrings
     },
     myCards () {
-      location.href = '/webshop/mycards' + this.urlQueryStrings
+      window.location.href = '/webshop/mycards' + this.urlQueryStrings
     },
     loginClick () {
       this.showLogin = true

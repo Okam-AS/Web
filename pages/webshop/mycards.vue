@@ -1,7 +1,10 @@
 <template>
   <div class="shop">
     <div class="shop-menu">
-      <span v-if="storeId" @click="goToStore">Tilbake til meny</span>
+      <button v-if="storeId" class="shop__header-back" @click="goToStore">
+        <span class="material-icons">arrow_back_ios</span>
+        <span>Tilbake til meny</span>
+      </button>
       <span>Mine betalingskort</span>
       <MyUserDropdown style="float:right" @close="load" />
     </div>
@@ -44,7 +47,7 @@ export default {
   },
   methods: {
     goToStore () {
-      location.href = '/webshop' + this.urlQueryStrings
+      window.location.href = '/webshop' + this.urlQueryStrings
     },
     load () {
       if (!this.$store.getters.userIsLoggedIn) { return }

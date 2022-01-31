@@ -1,7 +1,10 @@
 <template>
   <div ref="container" class="checkout-page">
     <div class="shop__header">
-      <span v-if="storeId" @click="goToStore">Tilbake</span>
+      <button v-if="storeId" class="shop__header-back" @click="goToStore">
+        <span class="material-icons">arrow_back_ios</span>
+        <span>Tilbake</span>
+      </button>
       <h2 class="shop__heading">
         Kasse
       </h2>
@@ -54,7 +57,7 @@
           />
           <div v-else>
             <div v-for="(item, index) in cards" :key="index">
-              <SelectButton v-if="item.id === 'waiter'" text="Betal i kassa" :selected="selectedPaymentMethodId === item.id" @change="setPaymentMethodId(item.id)">
+              <SelectButton v-if="item.id === 'waiter'" text="Betal på stedet" :selected="selectedPaymentMethodId === item.id" @change="setPaymentMethodId(item.id)">
                 <span class="material-icons">point_of_sale</span>
               </SelectButton>
               <SelectButton v-else-if="item.card" :text="'****' + item.card.last4 + ' ' + item.card.exp_month + '/' + item.card.exp_year" :selected="selectedPaymentMethodId === item.id" @change="setPaymentMethodId(item.id)">
@@ -160,6 +163,7 @@ import LoginModal from '~/components/molecules/LoginModal.vue'
 export default {
   components: { ContinueButton, DeliveryAddressInputs, SelectButton, MyUserDropdown, Loading, Modal, LoginModal },
   data: () => ({
+    storeId: undefined,
     showLogin: false,
     store: {},
 
@@ -262,7 +266,7 @@ export default {
   },
   methods: {
     goToStore () {
-      location.href = '/webshop' + this.urlQueryStrings
+      window.location.href = '/webshop' + this.urlQueryStrings
     },
     closeLoginModal (isLoggedIn) {
       if (isLoggedIn) { location.reload() } else { this.showLogin = false }
@@ -285,7 +289,7 @@ export default {
               comp.completeCart()
             } else if (result.nextAction.type === 'redirect_to_url') {
               // 3D SECURE
-              location.href = result.nextAction.redirect_to_url.url
+              window.location.href = result.nextAction.redirect_to_url.url
             } else {
               // NOT HANDLED
               comp.errorMessage =
@@ -308,7 +312,7 @@ export default {
         .Complete(comp.store.id)
         .then(() => {
           this.paymentStatus = 'success'
-          location.href = '/webshop/orders' + this.urlQueryStrings
+          window.location.href = '/webshop/orders' + this.urlQueryStrings
         })
         .catch(() => {
           comp.errorMessage =
