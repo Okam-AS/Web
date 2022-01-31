@@ -26,13 +26,7 @@
         <template v-else-if="!codeSent">
           <p>{{ $t('enterPhoneCodeLabel') }}</p>
           <div>{{ phone }} <input type="button" style="font-size:10px;margin-bottom:16px" value="✏️" @click="reset"></div>
-          <input
-            v-model="code"
-            :placeholder="$t('enterPhoneCodePlaceholder')"
-            type="text"
-            @keyup.enter="login"
-          >
-          <input type="button" class="emoji-btn" :value="$t('enterPhoneCodeSubmit')" @click="login">
+          <OtpInput loading="true" @complete="login" />
         </template>
         <p v-if="errorMessage" class="error-message">
           {{ errorMessage }}
@@ -43,10 +37,11 @@
 </template>
 <script>
 import Modal from '@/components/atoms/Modal.vue'
+import OtpInput from '@/components/atoms/OtpInput.vue'
 import Loading from '@/components/atoms/Loading.vue'
 
 export default {
-  components: { Modal, Loading },
+  components: { Modal, OtpInput, Loading },
   props: {
     closeIfLoggedIn: {
       type: Boolean,
@@ -80,30 +75,29 @@ export default {
       this.code = ''
     },
     getCode () {
-      const _this = this
-      _this.errorMessage = ''
-      _this.isLoading = true
+      this.errorMessage = ''
+      this.isLoading = true
       this._userService.SendVerificationToken(this.countryCode + this.phone).then(() => {
         this.smsSent = true
       }).catch(() => {
-        _this.errorMessage = 'Feil telefonnummer'
+        this.errorMessage = 'Feil telefonnummer'
       }).finally(() => {
-        _this.isLoading = false
+        this.isLoading = false
       })
     },
-    login () {
-      const _this = this
-      _this.errorMessage = ''
-      _this.isLoading = true
+    login (code) {
+      this.code = code
+      this.errorMessage = ''
+      this.isLoading = true
       this._userService.Login(this.countryCode + this.phone, this.code)
         .then(() => {
           this.codeSent = true
           this.$emit('close', true)
         }).catch(() => {
           this.codeSent = false
-          _this.errorMessage = 'Feil kode'
+          this.errorMessage = 'Feil kode'
         }).finally(() => {
-          _this.isLoading = false
+          this.isLoading = false
         })
     },
     close () {
