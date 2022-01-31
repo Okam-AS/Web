@@ -4,7 +4,7 @@
     <div>
       <input
         v-model="fullAddress"
-        class="input"
+        :class="{'input': true, 'border-error': hasErrors}"
         style="margin-bottom:0.5em;"
         maxlength="30"
         rows="1"
@@ -12,7 +12,7 @@
       >
       <input
         v-model="zipCode"
-        class="input"
+        :class="{'input': true, 'border-error': hasErrors}"
         style="margin-bottom:0.5em;"
         maxlength="30"
         rows="1"
@@ -20,7 +20,7 @@
       >
       <input
         v-model="city"
-        class="input"
+        :class="{'input': true, 'border-error': hasErrors}"
         style="margin-bottom:0.5em;"
         maxlength="30"
         rows="1"
@@ -34,6 +34,12 @@
 import { debounce } from '../../core/helpers/ts-debounce'
 
 export default {
+  props: {
+    hasErrors: {
+      type: Boolean,
+      default: false
+    }
+  },
   data () {
     return {
       fullAddress: '',

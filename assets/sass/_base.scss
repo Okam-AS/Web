@@ -69,8 +69,9 @@ p {
     background: $color-error;
   }
 
-  .message-box__close {
+  &__close {
     position: absolute;
+    cursor: pointer;
     top: rem(5);
     right: rem(5);
     font-size: rem(20);

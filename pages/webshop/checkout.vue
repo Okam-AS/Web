@@ -9,12 +9,19 @@
       </h2>
       <MyUserDropdown @close="closeLoginModal" />
     </div>
-    <div class="message-box message-box--error m-b">
+    <div
+      v-if="errorMessage"
+      :class="{
+        'message-box': true,
+        'message-box--error': errorMessage,
+        'm-b': true
+      }"
+    >
       <div>
-        Betalingen med BankID feilet. Prøv igjen.
+        {{ errorMessage }}
       </div>
       <div>
-        <span class="message-box__close material-icons" @click="errorMessage=''">close</span>
+        <span class="message-box__close material-icons" @click="clearErrors">close</span>
       </div>
     </div>
     <div class="checkout-form">
@@ -47,10 +54,16 @@
       <div v-if="localDeliveryType === 'TableDelivery'" class="section">
         <span class="label">Bordnummer</span>
         <div>
-          <input v-model="localTableName" class="input" maxlength="30" rows="1" placeholder="F.eks: 7">
+          <input
+            v-model="localTableName"
+            :class="{'input': true, 'border-error': tableNameError}"
+            maxlength="30"
+            rows="1"
+            placeholder="F.eks: 7"
+          >
         </div>
       </div>
-      <DeliveryAddressInputs v-if="localDeliveryType === 'InstantHomeDelivery'" />
+      <DeliveryAddressInputs v-if="localDeliveryType === 'InstantHomeDelivery'" :has-errors="deliveryAddressError" />
 
       <div class="section">
         <span class="label">Betalingsmetoder</span>
@@ -97,7 +110,7 @@
       <div class="section">
         <span class="label">Kommentar</span>
         <div>
-          <textarea v-model="localComment" class="input" maxlength="100" rows="7" :placeholder="commentHint" />
+          <textarea v-model="localComment" class="input" maxlength="100" rows="4" :placeholder="commentHint" />
         </div>
       </div>
       <Loading v-if="isLoading" />
@@ -246,13 +259,13 @@ export default {
         this.store = res
         this.localDeliveryType = 'NotSet'
         if (this.storeCart) {
-          this.localTableName = this.storeCart.tableName === undefined ? '' : this.storeCart.tableName + ''
+          this.localTableName = !this.storeCart.tableName ? '' : this.storeCart.tableName + ''
           if (!this.localTableName && this.qsTableName) {
             this.localTableName = this.qsTableName
           }
           if (this.localTableName) { this.localDeliveryType = 'TableDelivery' }
 
-          this.localComment = this.storeCart.comment === undefined || this.storeCart.comment === 'Ingen kommentar' ? '' : this.storeCart.comment + ''
+          this.localComment = !this.storeCart.comment || this.storeCart.comment === 'Ingen kommentar' ? '' : this.storeCart.comment + ''
         }
 
         if (this.userIsLoggedIn) {
@@ -268,6 +281,106 @@ export default {
     }
   },
   methods: {
+    async validate () {
+      const comp = this
+      comp.clearErrors()
+      let containsErrors = false
+      if (
+        comp.localDeliveryType === 'InstantHomeDelivery' &&
+        (!comp.$store.getters.deliveryAddress().trim() || !comp.validAddress())
+      ) {
+        comp.deliveryAddressError = true
+        comp.errorMessage = 'Legg inn en gyldig leveringsadresse'
+        containsErrors = true
+      }
+      if (comp.localDeliveryType === 'NotSet') {
+        comp.errorMessage = 'Velg leveringsmetode'
+        containsErrors = true
+      }
+      if (
+        comp.localDeliveryType === 'TableDelivery' &&
+        (!comp.localTableName || comp.localTableName.trim() === '')
+      ) {
+        comp.tableNameError = true
+        comp.errorMessage = 'Skriv inn bordnummer'
+        containsErrors = true
+      }
+
+      if (containsErrors) { return false }
+
+      try {
+        const {
+          itemsOutOfStock,
+          cartIsEmpty,
+          storeIsClosed,
+          deliveryAddressError,
+          deliveryMethodError,
+          priceDifferError,
+          priceTooLowError,
+          minimumPrice,
+          hasErrors
+        } = await this._cartService.Validate(comp.store.id)
+
+        if (priceTooLowError) {
+          comp.errorMessage =
+            'Beløpet er for lite. Du må minst handle for ' +
+            comp.priceLabel(minimumPrice)
+        }
+
+        if (priceDifferError) {
+          comp.errorMessage =
+            'Prisene er endret siden sist. Gå tilbake for å oppdatere handlevogna.'
+        }
+        if (itemsOutOfStock.length > 0) {
+          let itemNames = ''
+          if (itemsOutOfStock.length === 1) {
+            itemNames = `'${itemsOutOfStock[0].name}'`
+          } else if (itemsOutOfStock.length === 2) {
+            itemNames = `'${itemsOutOfStock[0].name}' og '${itemsOutOfStock[1].name}'`
+          } else {
+            itemNames = `'${itemsOutOfStock[0].name}', '${
+              itemsOutOfStock[1].name
+            }' og ${itemsOutOfStock.length - 2} ${
+              itemsOutOfStock.length - 2 === 1 ? 'annen vare' : 'andre varer'
+            }`
+          }
+          comp.errorMessage = `Det er ikke nok av ${itemNames} på lager. Gå tilbake for å fjerne ${
+            itemsOutOfStock.length === 1 ? 'den' : 'de'
+          } fra handlevogna.`
+        }
+        if (deliveryAddressError) {
+          comp.deliveryAddressError = true
+          comp.errorMessage = 'Leveringsadressen er ikke gyldig'
+        }
+        if (deliveryMethodError) {
+          comp.deliveryMethodError = true
+          comp.errorMessage =
+            'Butikken leverer ikke til din adresse for øyeblikket'
+        }
+        if (storeIsClosed) {
+          comp.errorMessage = comp.store.name + ' er stengt for øyeblikket'
+        }
+        if (cartIsEmpty) {
+          comp.errorMessage = 'Handlevogna er tom'
+        }
+
+        return !hasErrors
+      } catch (err) {
+        comp.errorMessage = 'Noe gikk galt. Prøv igjen senere!'
+        return false
+      }
+    },
+    validAddress () {
+      const address = this.$store.state.currentUser.address
+      if (!address) { return false }
+      if (
+        !address.fullAddress ||
+        address.fullAddress.toString().trim().length < 3
+      ) { return false }
+      if (!address.zipCode || address.zipCode.trim().length !== 4) { return false }
+      if (!address.city || address.city.trim().length < 3) { return false }
+      return true
+    },
     goToStore () {
       window.location.href = '/webshop' + this.urlQueryStrings
     },
@@ -324,7 +437,7 @@ export default {
           comp.updateCart()
         })
     },
-    submit () {
+    async submit () {
       if (!this.userIsLoggedIn) {
         this.showLogin = true
         return
@@ -332,24 +445,28 @@ export default {
       if (this.submitDisabled) { return }
       this.isSending = true
       try {
-        // TODO: Valider først!
-        if (this.selectedPaymentMethodId === 'waiter') {
-          this.completeCart()
-        } else if (this.selectedPaymentMethodId) {
+        await this.validate()
+        if (!this.errorMessage) {
+          if (this.selectedPaymentMethodId === 'waiter') {
+            this.completeCart()
+          } else if (this.selectedPaymentMethodId) {
           // Using saved card
-          this.createPaymentIntent(this.selectedPaymentMethodId, true)
-        } else {
+            this.createPaymentIntent(this.selectedPaymentMethodId, true)
+          } else {
           // Nytt kort:
-          this.$refs.cardElement.stripe.createPaymentMethod({
-            type: 'card',
-            card: this.$refs.cardElement.element
-          }).then((result) => {
-            this.createPaymentIntent(result.paymentMethod.id, this.rememberCard)
-          }).catch(() => {
-            this.isSending = false
-          })
+            this.$refs.cardElement.stripe.createPaymentMethod({
+              type: 'card',
+              card: this.$refs.cardElement.element
+            }).then((result) => {
+              this.createPaymentIntent(result.paymentMethod.id, this.rememberCard)
+            }).catch(() => {
+              this.isSending = false
+            })
+          }
+          this.isSending = true
+        } else {
+          this.isSending = false
         }
-        this.isSending = true
       } catch (error) {
         this.isSending = false
         this.errorMessage = 'Betalingen kunne ikke gjennomføres. Kontroller kortinformasjon og prøv igjen.'
@@ -418,8 +535,17 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss" >
 @import "../../assets/sass/common.scss";
+.border-error{
+  border-color: $color-error;
+}
+#stripe-element-errors{
+  color: $color-error;
+  padding-top:rem(5);
+  padding-bottom:rem(5);
+  font-size: 0.75em;
+}
 
 .sold-out{
   background-color: $color-neutral-light;

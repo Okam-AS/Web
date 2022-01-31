@@ -1,8 +1,8 @@
 <template>
   <div class="product-conf">
-    <div class="message-box message-box--error">
+    <div v-if="errorMessage" class="message-box">
       <div>
-        Betalingen med BankID feilet. Prøv igjen.
+        {{ errorMessage }}
       </div>
       <div>
         <span class="message-box__close material-icons" @click="errorMessage=''">close</span>
@@ -162,28 +162,24 @@ export default {
       })
     },
     valid () {
-      const errorMessage = ''
+      this.errorMessage = ''
       if (
         this.localLineItem.quantity === 0 ||
         this.localLineItem.product.soldOut
       ) { return true }
-      // TODO:
-      // (this.localLineItem.product.productVariants || []).some((variant) => {
-      //   if (
-      //     variant.options &&
-      //     variant.required &&
-      //     (variant.options.filter(option => option.selected) || []).length ===
-      //       0
-      //   ) {
-      //     errorMessage =
-      //       'Velg \'' + variant.name + '\' for å legge vare i handlevogn'
-      //     return true // Breaks loop
-      //   }
-      // })
-      if (errorMessage) {
-        window.alert(errorMessage)
-      }
-      return !errorMessage
+      (this.localLineItem.product.productVariants || []).forEach((variant) => {
+        if (
+          variant.options &&
+          variant.required &&
+          (variant.options.filter(option => option.selected) || []).length ===
+            0
+        ) {
+          this.errorMessage =
+            'Velg \'' + variant.name + '\' for å legge vare i handlevogn'
+          return true // Breaks loop
+        }
+      })
+      return !this.errorMessage
     },
     addQuantity (addQuantity) {
       const newQuantity = this.localLineItem.quantity + addQuantity
