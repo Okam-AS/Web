@@ -9,11 +9,15 @@
         Kasse
       </h2>
       <MyUserDropdown style="float:right" @close="closeLoginModal" />
-      <div v-if="errorMessage" style="background:red;padding:10px;color:white;">
-        {{ errorMessage }}
+    </div>
+    <div class="message-box error">
+      <div>
+        Betalingen med BankID feilet. Prøv igjen.
+      </div>
+      <div>
+        <span class="material-icons" @click="errorMessage=''">close</span>
       </div>
     </div>
-
     <div class="checkout-form">
       <span class="label">Leveringsmetoder</span>
 
@@ -144,7 +148,7 @@
     </div>
     <LoginModal v-if="showLogin" @close="closeLoginModal" />
     <Modal v-if="showTerms" @close="showTerms = false">
-      <iframe style="border:none;" weight="400" height="400" src="https://www.okam.no/personvern-og-vilkar/?nolayout" />
+      <iframe style="border:none;" width="100%" height="800" src="https://www.okam.no/personvern-og-vilkar/?nolayout" />
     </Modal>
   </div>
 </template>
@@ -417,6 +421,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../../assets/sass/common.scss";
+
 .sold-out{
   background-color: $color-neutral-light;
   padding: rem(4) rem(8);

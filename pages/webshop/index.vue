@@ -62,7 +62,7 @@
           @click="goToCheckout"
           @keyup.enter="goToCheckout"
         >
-          <span>Fortsett til betaling</span>
+          <span>Fortsett til betaling ({{ totalPriceLabel }})</span>
           <span class="material-icons">arrow_forward_ios</span>
         </button>
       </div>
@@ -125,6 +125,12 @@ export default {
         .map(item => item.quantity)
         .reduce((a, b) => a + b, 0)
       return totalQuantity + (totalQuantity === 1 ? ' vare' : ' varer')
+    },
+    totalPriceLabel () {
+      const totalPrice = this.itemsInCart
+        .map(item => item.quantity * item.product.amount)
+        .reduce((a, b) => a + b, 0)
+      return this.priceLabel(totalPrice)
     },
     storeAddressOneLiner () {
       if (this.store && this.store.address) { return (this.store.address.fullAddress + ', ' + this.store.address.zipCode + ' ' + this.store.address.city) } else { return '' }
