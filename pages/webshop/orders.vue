@@ -7,7 +7,7 @@
       <span>Mine bestillinger</span>
       <MyUserDropdown @close="loadOrders" />
     </div>
-    <div v-if="successMessage" class="message-box">
+    <div v-if="successMessage && orders && orders[0]" class="message-box" @click="openOrder(orders[0])">
       <div>
         {{ successMessage }}
       </div>
