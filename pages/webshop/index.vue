@@ -278,7 +278,7 @@ export default {
     padding: rem(16) rem(24);
     border-bottom: rem(4) solid white;
     cursor: pointer;
-    font-size: rem(20);
+    font-size: rem(18);
     font-weight: 400;
 
     .icon {
