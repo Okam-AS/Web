@@ -43,8 +43,8 @@ export default {
   },
   data () {
     return {
-      iRefs: ['i0', 'i1', 'i2', 'i3'],
-      values: ['', '', '', ''],
+      iRefs: ['i0', 'i1', 'i2', 'i3', 'i4', 'i5'],
+      values: ['', '', '', '', '', ''],
       activeIndex: 0
     }
   },
@@ -56,10 +56,10 @@ export default {
       event.preventDefault()
       const pastedData = event.clipboardData
         .getData('text/plain')
-        .slice(0, 4 - this.activeIndex)
+        .slice(0, 6 - this.activeIndex)
         .split('')
 
-      if (pastedData.length === 4) {
+      if (pastedData.length === 6) {
         this.values = pastedData
         this.triggerChange()
       }
@@ -81,14 +81,14 @@ export default {
       values = Object.assign([], values)
       if (value.length > 1) {
         let nextIndex = value.length + index - 1
-        if (nextIndex >= 4) {
-          nextIndex = 4 - 1
+        if (nextIndex >= 6) {
+          nextIndex = 6 - 1
         }
         next = this.iRefs[nextIndex]
         const split = value.split('')
         split.forEach((item, i) => {
           const cursor = index + i
-          if (cursor < 4) {
+          if (cursor < 6) {
             values[cursor] = item
           }
         })
@@ -149,7 +149,7 @@ export default {
     triggerChange (values = this.values) {
       const val = values.join('')
       this.$emit('update', val)
-      if (val.length >= 4) {
+      if (val.length >= 6) {
         this.$emit('complete', val)
       }
     }
