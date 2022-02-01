@@ -54,7 +54,7 @@
       </span>
     </div>
 
-    <div class="product-conf-controls">
+    <div class="btn-row btn-row--modal btn-row--space-between">
       <Stepper
         :quantity="localLineItem.quantity"
         @add="addQuantity(1)"
@@ -225,19 +225,6 @@ export default {
 
 .product-conf {
   padding-bottom: rem(74);
-
-  &-controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: rem(16);
-    position: fixed;
-    right: rem(16);
-    bottom: rem(16);
-    left: rem(16);
-    background-color: #fff;
-    border-radius: rem(15);
-  }
 
   .product-group {
     background-color: $color-support-light;

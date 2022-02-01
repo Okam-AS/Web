@@ -6,6 +6,7 @@
     &__header {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         margin-bottom: rem(16);
 
         &-back{
@@ -34,42 +35,44 @@
 }
 
 .cart-indicator {
-    cursor: pointer;
-    background-color: $color-profile-dark;
-    color: #fff;
     position: fixed;
     right: 0;
     bottom: 0;
     left: 0;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    padding: rem(16);
+    border-radius: rem(15) rem(15) 0 0;
+    background-color: #fff;
+    box-shadow: 0 0 20px 0 rgba(0,0,0,0.2);
+    @include z-index('cart');
 
-    .separator{
-        height: rem(40);
-        width: rem(2);
-        background: white;
-        transform: rotate(20deg);
+    &__cart {
+        width: rem(36);
+        height: rem(36);
+        background-color: $color-dark;
+        border-radius: 50%;
+        color: #fff;
+        border: none;
+        position: relative;
 
-    }
-
-    button {
-       background: none; 
-       border:none;
-       box-shadow: none;
-       display: flex;
-       align-items: center;
-       color: white;
-    }
-    &-cart{
-        float:left;
         .material-icons{
-            margin-right: rem(10);
+            font-size: rem(20);    
         }
-    }
-    &-checkout{
-        float:right;
-        .material-icons{
-            margin-left: rem(10);
+
+        &-number {
+            position: absolute;
+            top: 0;
+            background-color: $color-profile-dark;
+            width: rem(18);
+            height: rem(18);
+            border-radius: 50%;
+            font-size: rem(12);
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
         }
     }
 }

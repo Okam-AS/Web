@@ -49,21 +49,20 @@
         class="cart-indicator"
       >
         <button
-          class="cart-indicator-cart"
+          class="cart-indicator__cart"
           @click="expandedCart = true"
           @keyup.enter="expandedCart = true"
+          aria-label="Vis handlekurv"
         >
-          <span class="material-icons">shopping_cart</span>
-          <span>Vis handlekurv ({{ totalQuantityLabel }})</span>
+          <span class="material-icons">shopping_basket</span>
+          <span class="cart-indicator__cart-number">{{ totalQuantityLabel }}</span>
         </button>
-        <div class="separator" />
         <button
-          class="cart-indicator-checkout"
+          class="cart-indicator__checkout btn btn--primary"
           @click="goToCheckout"
           @keyup.enter="goToCheckout"
         >
-          <span>Fortsett til betaling ({{ totalPriceLabel }})</span>
-          <span class="material-icons">arrow_forward_ios</span>
+          Til betaling <span class="u-regular">{{ totalPriceLabel }}</span>
         </button>
       </div>
     </div>
@@ -124,7 +123,7 @@ export default {
       const totalQuantity = this.itemsInCart
         .map(item => item.quantity)
         .reduce((a, b) => a + b, 0)
-      return totalQuantity + (totalQuantity === 1 ? ' vare' : ' varer')
+      return totalQuantity
     },
     totalPriceLabel () {
       const totalPrice = this.itemsInCart
