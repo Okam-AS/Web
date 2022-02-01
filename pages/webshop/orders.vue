@@ -68,9 +68,12 @@ export default {
 <style lang="scss" scoped>
 .order-item{
   border: 1px solid black;
-  border-bottom: none;
   padding: 20px;
   cursor: pointer;
+
+  &:last-child {
+    border-bottom: none;
+  }
 }
 .order-id{
   background:black;
