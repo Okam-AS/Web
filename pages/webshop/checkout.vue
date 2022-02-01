@@ -250,7 +250,7 @@ export default {
       )
     },
     submitDisabled () {
-      return this.isLoading && this.store.isOpenNow && !this.isSending && !this.cartIsEmpty
+      return this.isLoading || !this.store.isOpenNow || this.isSending || this.cartIsEmpty
     }
   },
   watch: {
@@ -521,11 +521,11 @@ export default {
       this.creditCardError = false
     },
     getAvailablePaymentMethods () {
+      this.isLoadingCards = true
       this._stripeService
         .GetPaymentMethods(this.storeCart.id)
         .then((result) => {
           if (Array.isArray(result)) { this.cards = result }
-          this.isLoadingCards = false
           if (
             !this.selectedPaymentMethodId ||
             this.selectedPaymentMethodId === 'waiter'
@@ -534,9 +534,10 @@ export default {
               this.cards.length > 0 ? this.cards[0].id : ''
             )
           }
+          // this.isLoadingCards = false
         })
         .catch(() => {
-          this.isLoadingCards = false
+          // this.isLoadingCards = false
         })
     }
   }
@@ -544,6 +545,9 @@ export default {
 </script>
 <style lang="scss" >
 @import "../../assets/sass/common.scss";
+.disabled{
+  opacity: 0.5;
+}
 .border-error{
   border-color: $color-error;
 }
