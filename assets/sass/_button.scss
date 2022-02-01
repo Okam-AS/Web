@@ -10,6 +10,19 @@
         background: #148556;
         color: white;
     }
+
+    &--small {
+        font-size: rem(12);
+        padding: rem(6) rem(10) rem(10) rem(6);
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+
+        .material-icons {
+            margin-right: rem(6);
+            font-size: rem(18);
+        }
+    }
 }
 
 .btn-row {
@@ -42,4 +55,9 @@
         border-radius: rem(15);
         box-shadow: 0 0 20px 0 rgba(0,0,0,0.2);
     }
+}
+
+.input-btn-row {
+    display: flex;
+    column-gap: rem(8);
 }

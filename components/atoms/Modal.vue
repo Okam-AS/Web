@@ -122,5 +122,9 @@ export default {
   &-buttons button {
     display: inline-block;
   }
+
+  &-body {
+    padding: rem(24);
+  }
 }
 </style>
