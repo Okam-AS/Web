@@ -30,7 +30,10 @@
         Logg inn
       </continue-button>
     </div>
-    <div v-if="userIsLoggedIn" class="checkout-form">
+    <div v-else-if="cartIsEmpty" class="checkout-form">
+      <p>Handlevogna er tom</p>
+    </div>
+    <div v-if="userIsLoggedIn && !cartIsEmpty" class="checkout-form">
       <span class="label">Leveringsmetoder</span>
 
       <SelectButton v-if="store.selfPickUp" :selected="localDeliveryType === 'SelfPickup'" text="Hent selv" @change="setLocalDeliveryType('SelfPickup')" />
@@ -150,7 +153,7 @@
         </div>
       </div>
     </div>
-    <div v-if="!isLoading" class="btn-row btn-row--center">
+    <div v-if="userIsLoggedIn && !cartIsEmpty" class="btn-row btn-row--center">
       <p v-if="!store.isOpenNow && store.name" style="padding:1em;background:#fcf0cc;">
         {{ store.name + ' er stengt for øyeblikket' }}
       </p>
