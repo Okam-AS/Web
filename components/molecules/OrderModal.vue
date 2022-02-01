@@ -5,6 +5,9 @@
         <span class="bold">Bestillingsnummer</span><span class="right">{{ order.id }}</span>
       </div>
       <div>
+        <span class="bold">Betaling</span><span class="right">{{ order.isWaiterOrder ? 'Betal i kassa' : 'Betalt' }}</span>
+      </div>
+      <div>
         <span class="bold">Leveringsmetode</span><span class="right">{{ deliveryTypeLabel(order.deliveryType) }}</span>
       </div>
       <div>
