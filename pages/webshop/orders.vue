@@ -7,6 +7,11 @@
       <span>Mine bestillinger</span>
       <MyUserDropdown @close="loadOrders" />
     </div>
+    <div v-if="successMessage" class="message-box">
+      <div>
+        {{ successMessage }}
+      </div>
+    </div>
     <div v-if="!$store.getters.userIsLoggedIn">
       Du må logge inn for å se dine bestillinger
     </div>
@@ -30,6 +35,8 @@ export default {
   components: { OrderModal, Loading, MyUserDropdown },
   data: () => ({
     storeId: undefined,
+    paymentStatus: '',
+    successMessage: '',
     isLoadingOrders: false,
     orders: [],
     selectedOrder: {}
@@ -40,7 +47,13 @@ export default {
       if (!!this.storeId && this.storeId > 0) {
         this._cartService.DeleteFromDbAndState(this.storeId)
       }
-      // TODO: Show success message
+      this.successMessage = 'Takk for din bestilling!'
+      const nextUrl = window.location.href
+        .replace('&paymentStatus=success', '')
+        .replace('?paymentStatus=success', '')
+
+      window.history.replaceState({}, '', nextUrl)
+      this.paymentStatus = ''
     }
   },
   methods: {
@@ -59,6 +72,7 @@ export default {
     },
     openOrder (order) {
       this.selectedOrder = order
+      this.successMessage = ''
     },
     closeOrder () {
       this.selectedOrder = {}

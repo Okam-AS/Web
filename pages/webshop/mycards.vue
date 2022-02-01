@@ -39,7 +39,8 @@ export default {
   components: { Loading, MyUserDropdown },
   data: () => ({
     isLoading: false,
-    cards: []
+    cards: [],
+    storeId: undefined
   }),
   mounted () {
     this.load()
