@@ -35,7 +35,7 @@
 
       <SelectButton v-if="store.selfPickUp" :selected="localDeliveryType === 'SelfPickup'" text="Hent selv" @change="setLocalDeliveryType('SelfPickup')" />
       <SelectButton
-        v-if="store.homeDeliveryMethods && store.homeDeliveryMethods.length > 0"
+        v-if="storeCart && storeCart.calculations && store.homeDeliveryMethods && store.homeDeliveryMethods.length > 0"
         text="Hjemlevering"
         :disabled="storeCart.calculations.itemsAmount < store.minimumOrderPriceForHomeDelivery"
         :selected="localDeliveryType === 'InstantHomeDelivery'"
@@ -120,7 +120,7 @@
         </div>
       </div>
       <Loading v-if="isLoading" />
-      <div v-else-if="storeCart.calculations" class="section price-summary">
+      <div v-else-if="storeCart && storeCart.calculations" class="section price-summary">
         <div class="price-summary__row">
           <span>{{ totalQuantityLabel }}</span>
           <span v-show="storeCart.calculations.itemsAmountLineThrough > 0" class="right" style="text-decoration: line-through;">
