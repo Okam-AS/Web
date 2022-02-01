@@ -29,6 +29,7 @@ import MyUserDropdown from '@/components/atoms/MyUserDropdown.vue'
 export default {
   components: { OrderModal, Loading, MyUserDropdown },
   data: () => ({
+    storeId: undefined,
     isLoadingOrders: false,
     orders: [],
     selectedOrder: {}
@@ -68,11 +69,12 @@ export default {
 <style lang="scss" scoped>
 .order-item{
   border: 1px solid black;
+  border-bottom: none;
   padding: 20px;
   cursor: pointer;
 
   &:last-child {
-    border-bottom: none;
+    border-bottom: 1px solid black;
   }
 }
 .order-id{

@@ -47,3 +47,12 @@
     </div>
   </footer>
 </template>
+<script>
+export default {
+  data () {
+    return {
+      noLayout: false
+    }
+  }
+}
+</script>

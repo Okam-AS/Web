@@ -42,6 +42,7 @@ const ogImage = require('~/assets/UI/kom-i-gang.png')
 
 export default {
   data: () => ({
+    noLayout: false,
     isActive: false,
     links: [
       {
