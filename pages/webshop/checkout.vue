@@ -24,7 +24,13 @@
         <span class="message-box__close material-icons" @click="clearErrors">close</span>
       </div>
     </div>
-    <div class="checkout-form">
+    <div v-if="!userIsLoggedIn" class="checkout-form">
+      <p>Du må logge inn for å kunne gjennomføre bestillingen</p>
+      <continue-button @click="showLogin = true">
+        Logg inn
+      </continue-button>
+    </div>
+    <div v-if="userIsLoggedIn" class="checkout-form">
       <span class="label">Leveringsmetoder</span>
 
       <SelectButton v-if="store.selfPickUp" :selected="localDeliveryType === 'SelfPickup'" text="Hent selv" @change="setLocalDeliveryType('SelfPickup')" />
@@ -253,32 +259,30 @@ export default {
     }
   },
   mounted () {
-    if (this.storeId) {
-      this.getAvailablePaymentMethods()
-      this._storeService.Get(this.storeId).then((res) => {
-        this.store = res
-        this.localDeliveryType = 'NotSet'
-        if (this.storeCart) {
-          this.localTableName = !this.storeCart.tableName ? '' : this.storeCart.tableName + ''
-          if (!this.localTableName && this.qsTableName) {
-            this.localTableName = this.qsTableName
-          }
-          if (this.localTableName) { this.localDeliveryType = 'TableDelivery' }
+    if (!this.storeId) { return }
+    if (!this.userIsLoggedIn) { this.showLogin = true; return }
 
-          this.localComment = !this.storeCart.comment || this.storeCart.comment === 'Ingen kommentar' ? '' : this.storeCart.comment + ''
+    this._storeService.Get(this.storeId).then((res) => {
+      this.store = res
+      this.localDeliveryType = 'NotSet'
+      if (this.storeCart) {
+        this.localTableName = !this.storeCart.tableName ? '' : this.storeCart.tableName + ''
+        if (!this.localTableName && this.qsTableName) {
+          this.localTableName = this.qsTableName
         }
+        if (this.localTableName) { this.localDeliveryType = 'TableDelivery' }
 
-        if (this.userIsLoggedIn) {
-          this.updateCart()
-        } else {
-          this.showLogin = true
-        }
+        this.localComment = !this.storeCart.comment || this.storeCart.comment === 'Ingen kommentar' ? '' : this.storeCart.comment + ''
+      }
 
-        if (this.paymentStatus === 'failed') {
-          this.errorMessage = 'Betalingen med BankID feilet. Prøv igjen.'
-        }
-      })
-    }
+      if (this.userIsLoggedIn) {
+        this.updateCart(true)
+      }
+
+      if (this.paymentStatus === 'failed') {
+        this.errorMessage = 'Betalingen med BankID feilet. Prøv igjen.'
+      }
+    })
   },
   methods: {
     async validate () {
@@ -385,7 +389,7 @@ export default {
       window.location.href = '/webshop' + this.urlQueryStrings
     },
     closeLoginModal (isLoggedIn) {
-      if (isLoggedIn) { location.reload() } else { this.showLogin = false }
+      if (isLoggedIn) { window.location.reload() } else { this.showLogin = false }
     },
     createPaymentIntent (paymentMethodId, setupFutureUsage) {
       const comp = this
