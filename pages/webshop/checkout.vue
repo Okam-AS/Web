@@ -534,10 +534,10 @@ export default {
               this.cards.length > 0 ? this.cards[0].id : ''
             )
           }
-          // this.isLoadingCards = false
+          this.isLoadingCards = false
         })
         .catch(() => {
-          // this.isLoadingCards = false
+          this.isLoadingCards = false
         })
     }
   }
