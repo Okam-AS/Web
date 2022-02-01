@@ -32,6 +32,10 @@
         margin: 0;
         font-weight: 400;
     }
+
+    &__content {
+        padding: rem(24);
+    }
 }
 
 .cart-indicator {
