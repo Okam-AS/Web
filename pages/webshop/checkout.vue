@@ -25,9 +25,9 @@
       </div>
     </div>
     <div v-if="!userIsLoggedIn" class="checkout-form">
-      <p>Du må logge inn for å kunne gjennomføre bestillingen</p>
+      <p>Du må bekrefte telefonnummer for å kunne gjennomføre bestillingen</p>
       <continue-button @click="showLogin = true">
-        Logg inn
+        Bekreft telefonnummer
       </continue-button>
     </div>
     <div v-else-if="cartIsEmpty" class="checkout-form">

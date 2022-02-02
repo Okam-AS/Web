@@ -80,7 +80,7 @@ export default {
           enterPhoneCodeLabel: 'Skriv inn kode fra SMS for å logge inn:',
           youAreLoggedIn: 'Du er innlogget som',
           logout: '🔒 Logg ut',
-          login: 'Logg inn',
+          login: 'Bekreft telefonnummer',
           close: '✖️ Lukk'
         }
       }
