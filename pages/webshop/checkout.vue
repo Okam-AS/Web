@@ -273,7 +273,7 @@ export default {
         if (!this.localTableName && this.qsTableName) {
           this.localTableName = this.qsTableName
         }
-        if (this.localTableName) { this.localDeliveryType = 'TableDelivery' }
+        if (this.localTableName && this.store.tableDelivery) { this.localDeliveryType = 'TableDelivery' }
 
         this.localComment = !this.storeCart.comment || this.storeCart.comment === 'Ingen kommentar' ? '' : this.storeCart.comment + ''
       }
