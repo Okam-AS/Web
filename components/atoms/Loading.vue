@@ -24,11 +24,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../assets/sass/common.scss";
+
 .loader {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: rem(30) 0;
+  margin: auto;
 
   &__svg {
     width: rem(50);

@@ -25,6 +25,14 @@
     }
 }
 
+.btn-link {
+    border: none;
+    background-color: transparent;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    font-size: rem(16);
+}
+
 .btn-row {
     margin-top: rem(24);
     display: flex;
@@ -60,4 +68,7 @@
 .input-btn-row {
     display: flex;
     column-gap: rem(8);
+    background-color: $color-support-light;
+    padding: rem(24);
+    margin: 0 rem(-24);
 }

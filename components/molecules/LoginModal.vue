@@ -30,11 +30,11 @@
           <template v-else-if="!codeSent">
             <p>{{ $t('enterPhoneCodeLabel') }}</p>
             <OtpInput loading="true" @complete="login" />
-            <div>{{ phone }} <input type="button" value="✏️" @click="reset"></div>
+            <div class="m-b">{{ phone }} <input class="btn-link" type="button" value="Endre telefonnummer" @click="reset"></div>
           </template>
-          <p v-if="errorMessage" class="error-message">
+          <div v-if="errorMessage" class="message-box message-box--error">
             {{ errorMessage }}
-          </p>
+          </div>
         </div>
       </template>
     </div>

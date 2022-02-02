@@ -11,6 +11,13 @@
   font-family: 'Montserrat', sans-serif;
   font-size: rem(16);
   vertical-align: top;
+  border: 1px solid $color-dark;
+  appearance: none;
+  outline: none;
+
+  &:focus {
+    box-shadow: 0 0 0 1px $color-dark;
+  }
 }
 
 .checkbox-label {

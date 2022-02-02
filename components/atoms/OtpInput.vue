@@ -11,7 +11,7 @@
         :data-id="index"
         :value="value"
         maxlength="1"
-        class="otp-input__input"
+        class="input"
         @input="onValueChange"
         @focus="onFocus"
         @keydown="onKeyDown"
@@ -163,24 +163,21 @@ export default {
 .otp-input {
   margin-bottom: rem(16);
   text-align: center;
-  color: red;
 
   &__wrapper {
     position: relative;
     display: flex;
     justify-content: stretch;
-    max-width: rem(250);
-    margin: 0 auto;
+    margin: 0 rem(-24);
+    background-color: $color-support-light;
+    padding: rem(24);
   }
 
-  &__input {
+  .input {
     width: rem(40);
     height: rem(40);
-    max-width: rem(40);
-    display: block;
     text-align: center;
     margin: 0 auto;
-    border-radius: rem(2);
   }
 }
 </style>
