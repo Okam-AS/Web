@@ -11,16 +11,17 @@
       Du må logge inn for å se dine betalingskort
     </div>
     <div v-else>
-      <span>
+      <p>
         Din kortinformasjon blir lagret trygt hos vår betalingsleverandør. Du kan legge til et nytt kort neste gang du handler.
-      </span>
-      <span v-if="!isLoading && cards.length === 0">
+      </p>
+      <p v-if="!isLoading && cards.length === 0">
         Du har ingen registrerte kort
-      </span>
-      <div v-if="!isLoading">
+      </p>
+      <div class="card-list" v-if="!isLoading">
         <div
           v-for="(item, index) in cards"
           :key="index"
+          class="card-list__item"
         >
           <span>{{ '****' + item.card.last4 + ' ' + item.card.exp_month + '/' + item.card.exp_year }}</span>
           <span class="material-icons" style="cursor:pointer" @click="deleteCard(item.id)">delete</span>
@@ -69,3 +70,29 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+@import "../../assets/sass/common.scss";
+
+.card-list {
+  background-color: $color-profile;
+  padding: rem(24);
+  margin: 0 rem(-24);
+
+  &__item {
+    display: flex;
+    align-items: center;
+    margin-bottom: rem(16);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .material-icons {
+      margin-left: rem(8);
+      font-size: rem(20);
+    }
+  }
+}
+
+</style>
