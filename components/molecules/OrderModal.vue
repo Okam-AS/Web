@@ -1,112 +1,93 @@
 <template>
   <Modal close-btn-text="Lukk" @close="close">
-    <div class="gray-container">
-      <div>
-        <span class="bold">Bestillingsnummer</span><span class="right">{{ order.id }}</span>
+    <div class="receipt">
+      <h2 class="receipt__heading">Kvittering</h2>
+      <div class="receipt__group">
+        <dl class="definition-list">
+          <div class="definition-list__item">
+            <dt>Bestillingsnummer</dt>
+            <dd>{{ order.id }}</dd>
+          </div>
+          <div class="definition-list__item">
+            <dt>Betaling</dt>
+            <dd>{{ order.isWaiterOrder ? 'Betal i kassa' : 'Betalt' }}</dd>
+          </div>
+          <div class="definition-list__item">
+            <dt>Leveringsmetode</dt>
+            <dd>{{ deliveryTypeLabel(order.deliveryType) }}</dd>
+          </div>
+          <div class="definition-list__item">
+            <dt>Bestilt</dt>
+            <dd>{{ formatDate(order.created || order.pickup) }}</dd>
+          </div>
+          <div class="definition-list__item">
+            <dt>Behandles til</dt>
+            <dd>{{ formatDate(order.countdownEndTime) }}</dd>
+          </div>
+          <div class="definition-list__item">
+            <dt>Status</dt>
+            <dd>{{ orderStatusLabel(order.status) }}</dd>
+          </div>
+          <div class="definition-list__item">
+            <dt>Kommentar</dt>
+            <dd>{{ order.comment }}</dd>
+          </div>
+        </dl>
       </div>
-      <div>
-        <span class="bold">Betaling</span><span class="right">{{ order.isWaiterOrder ? 'Betal i kassa' : 'Betalt' }}</span>
+
+      <div class="receipt__group">
+        <div class="u-bold">{{ order.storeLegalName }}</div>
+        <div>{{ order.storeFullAddress }}</div>
+        <div>{{ order.storeZipCode }} {{ order.storeCity }}</div>
+        <div class="m-t-xs">Org.nummer: {{ order.storeVAT }}</div>
       </div>
-      <div>
-        <span class="bold">Leveringsmetode</span><span class="right">{{ deliveryTypeLabel(order.deliveryType) }}</span>
+
+      <div class="receipt__group">
+        <table class="receipt__table">
+          <thead>
+            <tr>
+              <th class="u-left">Vare</th>
+              <th class="u-right">Pris</th>
+            </tr>
+          </thead>
+          <tr v-for="item in order.items" :key="item.id">
+            <td>
+              {{ item.quantity }} {{ item.name }}<br />
+              Mva: {{ item.tax }}%
+            </td>
+            <td class="u-right">
+              {{ priceLabel(item.amount) }}
+            </td>
+          </tr>
+
+          <tr class="receipt__table-total">
+            <td>
+              Totalt
+            </td>
+            <td class="u-right">
+              {{ priceLabel(order.finalAmount) }}
+            </td>
+          </tr>
+        </table>
       </div>
-      <div>
-        <span class="bold">Bestilt</span><span class="right">{{ formatDate(order.created || order.pickup) }}</span>
-      </div>
-      <div>
-        <span class="bold">Behandles til</span><span class="right">{{ formatDate(order.countdownEndTime) }}</span>
-      </div>
-      <div>
-        <span class="bold">Status</span><span class="right">{{ orderStatusLabel(order.status) }}</span>
-      </div>
-      <div>
-        <span class="bold">Kommentar</span><span class="right">{{ order.comment }}</span>
+
+      <div class="receipt__group">
+        <table class="receipt__table" v-for="(taxDetail,index) in order.taxDetails" :key="index">
+          <tr>
+            <th class="u-left">Grunnlag {{ taxDetail.percent }}%</th>
+            <td class="u-right">{{ priceLabel(taxDetail.basis) }}</td>
+          </tr>
+          <tr>
+            <th class="u-left">Mva.</th>
+            <td class="u-right">{{ priceLabel(taxDetail.amount) }}</td>
+          </tr>
+          <tr class="receipt__table-total">
+            <th class="u-left">Totalt</th>
+            <td class="u-right">{{ priceLabel(taxDetail.totalAmount) }}</td>
+          </tr>
+        </table>
       </div>
     </div>
-    <div class="gray-container">
-      <div>{{ order.storeLegalName }}</div>
-      <div>{{ order.storeVAT }}</div>
-      <div>{{ order.storeFullAddress }}</div>
-      <div>{{ order.storeZipCode }}</div>
-      <div>{{ order.storeCity }}</div>
-    </div>
-
-    <table class="gray-container" width="100%">
-      <thead>
-        <tr>
-          <th class="text-align-left">
-            Vare
-          </th>
-          <th class="text-align-right">
-            Antall
-          </th>
-          <th class="text-align-right">
-            MVA
-          </th>
-          <th class="text-align-right">
-            Pris
-          </th>
-        </tr>
-      </thead>
-      <tr v-for="item in order.items" :key="item.id">
-        <td class="text-align-left">
-          {{ item.name }}
-        </td>
-        <td class="text-align-right">
-          {{ item.quantity }}
-        </td>
-        <td class="text-align-right">
-          {{ item.tax }}%
-        </td>
-        <td class="text-align-right">
-          {{ priceLabel(item.amount) }}
-        </td>
-      </tr>
-
-      <tr style="border-top:1px solid black">
-        <th class="text-align-left">
-          Totalt
-        </th>
-        <th />
-        <th />
-        <th class="text-align-right">
-          {{ priceLabel(order.finalAmount) }}
-        </th>
-      </tr>
-    </table>
-
-    <table class="gray-container" width="100%">
-      <thead>
-        <tr>
-          <th class="text-align-left">
-            MVA-sats
-          </th>
-          <th class="text-align-left">
-            Grunnlag
-          </th>
-          <th class="text-align-left">
-            MVA
-          </th>
-          <th class="text-align-left">
-            Totalt ink. MVA
-          </th>
-        </tr>
-      </thead>
-      <tr v-for="(taxDetail,index) in order.taxDetails" :key="index">
-        <td class="text-align-left">
-          {{ taxDetail.percent }}%
-        </td>
-        <td class="text-align-left">
-          {{ priceLabel(taxDetail.basis) }}
-        </td>
-        <td class="text-align-left">
-          {{ priceLabel(taxDetail.amount) }}
-        </td>
-        <td class="text-align-left">
-          {{ priceLabel(taxDetail.totalAmount) }}
-        </td>
-      </tr>
-    </table>
   </Modal>
 </template>
 <script>
@@ -128,22 +109,65 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.bold{
-  font-weight: bold;
+@import "../../assets/sass/common.scss";
+
+.receipt {
+  padding: rem(24) rem(24) 0;
+
+  &__heading {
+    margin-bottom: rem(24);
+    font-size: rem(20);
+    font-weight: 400;
+  }
+
+  &__group {
+    background: $color-profile;
+    margin: 0 rem(-24) rem(8);
+    padding: rem(24);
+    font-size: rem(14);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+
+    td,
+    th {
+      vertical-align: top;
+      padding-bottom: rem(8);
+
+      &.u-right {
+        white-space: nowrap;
+        padding-left: rem(16);
+      }
+    }
+
+    &-total td,
+    &-total th {
+      border-top: 1px solid $color-dark;
+      padding-top: rem(8);
+      padding-bottom: 0;
+      font-weight: 700;
+    }
+
+    & + .receipt__table {
+      margin-top: rem(24);
+    }
+  }
 }
-.right{
-  float: right;
+
+.definition-list {
+  &__item {
+    margin-bottom: rem(8);
+
+    dt {
+      font-weight: 700;
+    }
+  }
 }
-.text-align-left{
-text-align: left;
-}
-.text-align-right{
-text-align: right;
-}
-.gray-container{
-  background:lightgray;
-  margin:0.5em;
-  padding:0.5em;
-  width:100%;
-}
+
 </style>
