@@ -16,8 +16,7 @@
           <div
             v-if="active"
             class="modal-mask"
-          >
-          </div>
+          />
           <div class="modal-wrapper">
             <div class="modal-container">
               <div><slot /></div>
@@ -81,7 +80,7 @@ export default {
 <style lang="scss" scoped>
 @import "../../assets/sass/common.scss";
 
-.modal {  
+.modal {
   &-mask {
     position: fixed;
     top: 0;

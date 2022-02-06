@@ -1,7 +1,9 @@
 <template>
   <Modal close-btn-text="Lukk" @close="close">
     <div class="receipt">
-      <h2 class="receipt__heading">Kvittering</h2>
+      <h2 class="receipt__heading">
+        Kvittering
+      </h2>
       <div class="receipt__group">
         <dl class="definition-list">
           <div class="definition-list__item">
@@ -36,23 +38,31 @@
       </div>
 
       <div class="receipt__group">
-        <div class="u-bold">{{ order.storeLegalName }}</div>
+        <div class="u-bold">
+          {{ order.storeLegalName }}
+        </div>
         <div>{{ order.storeFullAddress }}</div>
         <div>{{ order.storeZipCode }} {{ order.storeCity }}</div>
-        <div class="m-t-xs">Org.nummer: {{ order.storeVAT }}</div>
+        <div class="m-t-xs">
+          Org.nummer: {{ order.storeVAT }}
+        </div>
       </div>
 
       <div class="receipt__group">
         <table class="receipt__table">
           <thead>
             <tr>
-              <th class="u-left">Vare</th>
-              <th class="u-right">Pris</th>
+              <th class="u-left">
+                Vare
+              </th>
+              <th class="u-right">
+                Pris
+              </th>
             </tr>
           </thead>
           <tr v-for="item in order.items" :key="item.id">
             <td>
-              {{ item.quantity }} {{ item.name }}<br />
+              {{ item.quantity }} {{ item.name }}<br>
               Mva: {{ item.tax }}%
             </td>
             <td class="u-right">
@@ -72,18 +82,30 @@
       </div>
 
       <div class="receipt__group">
-        <table class="receipt__table" v-for="(taxDetail,index) in order.taxDetails" :key="index">
+        <table v-for="(taxDetail,index) in order.taxDetails" :key="index" class="receipt__table">
           <tr>
-            <th class="u-left">Grunnlag {{ taxDetail.percent }}%</th>
-            <td class="u-right">{{ priceLabel(taxDetail.basis) }}</td>
+            <th class="u-left">
+              Grunnlag {{ taxDetail.percent }}%
+            </th>
+            <td class="u-right">
+              {{ priceLabel(taxDetail.basis) }}
+            </td>
           </tr>
           <tr>
-            <th class="u-left">Mva.</th>
-            <td class="u-right">{{ priceLabel(taxDetail.amount) }}</td>
+            <th class="u-left">
+              Mva.
+            </th>
+            <td class="u-right">
+              {{ priceLabel(taxDetail.amount) }}
+            </td>
           </tr>
           <tr class="receipt__table-total">
-            <th class="u-left">Totalt</th>
-            <td class="u-right">{{ priceLabel(taxDetail.totalAmount) }}</td>
+            <th class="u-left">
+              Totalt
+            </th>
+            <td class="u-right">
+              {{ priceLabel(taxDetail.totalAmount) }}
+            </td>
           </tr>
         </table>
       </div>

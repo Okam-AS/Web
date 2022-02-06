@@ -12,5 +12,4 @@ export default {}
 <style lang="scss" scoped>
 @import "../../assets/sass/common.scss";
 
-
 </style>

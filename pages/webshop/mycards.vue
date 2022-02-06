@@ -17,7 +17,7 @@
       <p v-if="!isLoading && cards.length === 0">
         Du har ingen registrerte kort
       </p>
-      <div class="card-list" v-if="!isLoading">
+      <div v-if="!isLoading" class="card-list">
         <div
           v-for="(item, index) in cards"
           :key="index"

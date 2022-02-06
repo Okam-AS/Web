@@ -5,7 +5,7 @@
         <span v-if="!showOptions" class="my-user__trigger-icon material-icons">person</span>
         <span v-else class="my-user__trigger-icon material-icons">close</span>
       </div>
-      <div v-else @click="loginClick" class="btn btn--primary btn--small">
+      <div v-else class="btn btn--primary btn--small" @click="loginClick">
         <span class="material-icons">login</span>
         <span>Logg inn</span>
       </div>

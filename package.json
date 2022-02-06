@@ -26,6 +26,7 @@
     }
   },
   "dependencies": {
+    "@chenfengyuan/vue-qrcode": "^1.0.2",
     "@nuxt/content": "^1.9.0",
     "@nuxt/typescript-runtime": "^2.1.0",
     "@nuxtjs/axios": "^5.12.4",
@@ -41,6 +42,7 @@
     "nuxt-i18n": "^6.20.4",
     "redirect-ssl": "^3.0.0",
     "stripe": "^8.184.0",
+    "vue": "^2.6.14",
     "vue-currency-input": "^1.22.6",
     "vue-tawk": "^1.0.1",
     "vuex": "^3.6.2"

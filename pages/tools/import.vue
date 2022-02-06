@@ -1,17 +1,32 @@
 <template>
   <div class="container">
     <template>
-      <div style="margin:1em">
-        <input class="emoji-btn" type="button" value="👓 Verifiser og importer" @click="showModal = true">
-        <input class="emoji-btn" type="button" value="🆑 Tøm alle rader" @click="showClearRowsModal = true">
-        <input class="emoji-btn" type="button" value="🧑🏻‍💻 Bytt bruker" @click="showLogin = true">
+      <div style="margin: 1em">
+        <input
+          class="emoji-btn"
+          type="button"
+          value="👓 Verifiser og importer"
+          @click="showModal = true"
+        >
+        <input
+          class="emoji-btn"
+          type="button"
+          value="🆑 Tøm alle rader"
+          @click="showClearRowsModal = true"
+        >
+        <input
+          class="emoji-btn"
+          type="button"
+          value="🧑🏻‍💻 Bytt bruker"
+          @click="showLogin = true"
+        >
       </div>
       <table>
         <tbody>
           <tr>
             <th />
             <th>Produktnavn</th>
-            <th style="min-width:300px">
+            <th style="min-width: 300px">
               Produktbeskrivelse
             </th>
             <th>Pris</th>
@@ -21,7 +36,7 @@
           </tr>
           <tr v-for="(row, index) in rows" :key="index">
             <td class="row-count">
-              {{ index !== rows.length-1 ? index+1 : '' }}
+              {{ index !== rows.length - 1 ? index + 1 : "" }}
             </td>
             <td>
               <autocomplete-input
@@ -46,7 +61,7 @@
               <currency-input
                 v-model="row.priceModel"
                 currency="NOK"
-                style="width:100px"
+                style="width: 100px"
                 @change="amountChange(index, 'price', $event)"
               />
             </td>
@@ -65,21 +80,37 @@
               <currency-input
                 v-model="row.depositModel"
                 currency="NOK"
-                style="width:60px"
+                style="width: 60px"
                 @change="amountChange(index, 'deposit', $event)"
               />
             </td>
-            <td><input v-model="row.soldOut" style="margin-left:1.5em;" type="checkbox"></td>
-            <td v-if="index !== rows.length-1 || rows.length < 2">
-              <input class="emoji-btn" type="button" value="🔂 Dupliser rad" @click="copyRow(index)">
-              <input class="emoji-btn" type="button" value="➖ Fjern rad" @click="deleteRow(index)">
+            <td>
+              <input
+                v-model="row.soldOut"
+                style="margin-left: 1.5em"
+                type="checkbox"
+              >
+            </td>
+            <td v-if="index !== rows.length - 1 || rows.length < 2">
+              <input
+                class="emoji-btn"
+                type="button"
+                value="🔂 Dupliser rad"
+                @click="copyRow(index)"
+              >
+              <input
+                class="emoji-btn"
+                type="button"
+                value="➖ Fjern rad"
+                @click="deleteRow(index)"
+              >
             </td>
           </tr>
         </tbody>
       </table>
     </template>
     <Modal v-if="showModal" @close="closeModal">
-      <h1 style="margin-bottom:1em">
+      <h1 style="margin-bottom: 1em">
         Importer
       </h1>
       <div>
@@ -87,41 +118,75 @@
           <option value="0">
             Velg butikk
           </option>
-          <option v-for="option in $store.state.currentUser.adminIn " :key="option.id" :value="option.id">
+          <option
+            v-for="option in $store.state.currentUser.adminIn"
+            :key="option.id"
+            :value="option.id"
+          >
             {{ option.name }}
           </option>
         </select>
       </div>
-      <div style="margin:1em 0 1em 0">
-        <label><input v-model="replaceAll" type="checkbox"> Slett alle eksisterende produkter før import</label>
+      <div style="margin: 1em 0 1em 0">
+        <label><input v-model="replaceAll" type="checkbox"> Slett alle
+          eksisterende produkter før import</label>
       </div>
       <div v-if="importMessage" class="import-messages">
         <p>
           {{ importMessage }}
         </p>
         <p v-if="importResponse.createdProductCount">
-          <span style="font-weight:bold">Antall import av produkter: </span>
+          <span style="font-weight: bold">Antall import av produkter: </span>
           <span>{{ importResponse.createdProductCount }}</span>
         </p>
         <p v-if="importResponse.deletedProductCount">
-          <span style="font-weight:bold">Antall sletting av produkter: </span>
+          <span style="font-weight: bold">Antall sletting av produkter: </span>
           <span>{{ importResponse.deletedProductCount }}</span>
         </p>
       </div>
 
       <div class="modal-buttons">
-        <input v-if="isVerified" class="emoji-btn" type="button" value="✅ Godkjenn og importer" @click="runImport(false)">
-        <input class="emoji-btn" type="button" value="👓 Verifiser" @click="runImport(true)">
-        <input class="emoji-btn" type="button" value="❌ Avbryt" @click="closeModal">
+        <input
+          v-if="isVerified"
+          class="emoji-btn"
+          type="button"
+          value="✅ Godkjenn og importer"
+          @click="runImport(false)"
+        >
+        <input
+          class="emoji-btn"
+          type="button"
+          value="👓 Verifiser"
+          @click="runImport(true)"
+        >
+        <input
+          class="emoji-btn"
+          type="button"
+          value="❌ Avbryt"
+          @click="closeModal"
+        >
       </div>
       <Loading :loading="isLoading" />
     </Modal>
-    <LoginModal v-if="showLogin" :close-if-logged-in="false" @close="closeLoginModal" />
+    <LoginModal v-if="showLogin" @close="closeLoginModal" />
     <Modal v-if="showClearRowsModal" @close="showClearRowsModal = false">
-      <p>Er du sikker på at du ønsker å fjerne alle rader fra denne tabellen? Produkter som allerede er importert vil ikke bli berørt.</p>
+      <p>
+        Er du sikker på at du ønsker å fjerne alle rader fra denne tabellen?
+        Produkter som allerede er importert vil ikke bli berørt.
+      </p>
       <div class="modal-buttons">
-        <input class="emoji-btn" type="button" value="🆑 Tøm alle rader" @click="clearRows">
-        <input class="emoji-btn" type="button" value="❌ Avbryt" @click="showClearRowsModal = false">
+        <input
+          class="emoji-btn"
+          type="button"
+          value="🆑 Tøm alle rader"
+          @click="clearRows"
+        >
+        <input
+          class="emoji-btn"
+          type="button"
+          value="❌ Avbryt"
+          @click="showClearRowsModal = false"
+        >
       </div>
     </Modal>
   </div>
@@ -179,14 +244,18 @@ export default {
         } else if (val.length === 1 || !this.isEmptyRow(val[val.length - 1])) {
           this.addEmptyRow()
         }
-        if (window && window.localStorage) { localStorage.setItem('importRows', JSON.stringify(val)) }
+        if (window && window.localStorage) {
+          localStorage.setItem('importRows', JSON.stringify(val))
+        }
       },
       deep: true
     }
   },
   mounted () {
     let storedRows = false
-    if (window && window.localStorage) { storedRows = localStorage.getItem('importRows') || false }
+    if (window && window.localStorage) {
+      storedRows = localStorage.getItem('importRows') || false
+    }
     if (storedRows) {
       this.$set(this, 'rows', JSON.parse(storedRows))
     } else {
@@ -200,21 +269,38 @@ export default {
     clearRows () {
       this.selectedStore = 0
       this.replaceAll = false
-      this.rows = [JSON.parse(JSON.stringify(this.emptyRow)), JSON.parse(JSON.stringify(this.emptyRow))]
+      this.rows = [
+        JSON.parse(JSON.stringify(this.emptyRow)),
+        JSON.parse(JSON.stringify(this.emptyRow))
+      ]
       this.showClearRowsModal = false
       this.importResponse = {}
-      if (window && window.localStorage) { localStorage.removeItem('importRows') }
+      if (window && window.localStorage) {
+        localStorage.removeItem('importRows')
+      }
     },
     amountChange (rowIndex, rowKey, newValue) {
-      if (isNaN(parseInt(newValue)) || !Number.isInteger(parseInt(newValue)) || parseInt(newValue) < 0 || parseInt(newValue) > 10000) {
+      if (
+        isNaN(parseInt(newValue)) ||
+        !Number.isInteger(parseInt(newValue)) ||
+        parseInt(newValue) < 0 ||
+        parseInt(newValue) > 10000
+      ) {
         this.rows[rowIndex][rowKey + 'Model'] = 0
         this.rows[rowIndex][rowKey + 'Amount'] = 0
       } else {
-        this.rows[rowIndex][rowKey + 'Amount'] = Math.trunc((newValue ?? 0) * 100)
+        this.rows[rowIndex][rowKey + 'Amount'] = Math.trunc(
+          (newValue ?? 0) * 100
+        )
       }
     },
     taxChange (event, index) {
-      if (!event || !event.target || isNaN(parseInt(event.target.value)) || !Number.isInteger(parseInt(event.target.value))) {
+      if (
+        !event ||
+        !event.target ||
+        isNaN(parseInt(event.target.value)) ||
+        !Number.isInteger(parseInt(event.target.value))
+      ) {
         this.rows[index].tax = 0
       }
       if (event.target.value > 99) {
@@ -226,14 +312,22 @@ export default {
       this.rows[index].tax = parseInt(event.target.value)
     },
     getAllDisctinct (rowKey) {
-      return this.rows.map(x => x[rowKey]).filter((value, index, self) => self.indexOf(value) === index && !!value)
+      return this.rows
+        .map(x => x[rowKey])
+        .filter(
+          (value, index, self) => self.indexOf(value) === index && !!value
+        )
     },
     isEmptyRow (row) {
-      if (!row) { return true }
+      if (!row) {
+        return true
+      }
       const _this = this
       let isEmptyRow = true
       Object.keys(this.emptyRow).forEach((key) => {
-        if (row[key] !== _this.emptyRow[key]) { isEmptyRow = false }
+        if (row[key] !== _this.emptyRow[key]) {
+          isEmptyRow = false
+        }
       })
       return isEmptyRow
     },
@@ -253,8 +347,14 @@ export default {
       this.importMessage = ''
     },
     getFailedMessage (index, key) {
-      if (!this.importResponse || !Array.isArray(this.importResponse.failed)) { return '' }
-      const fail = this.importResponse.failed.find(x => x.rowNumber === index + 1 && x.rowKey.toLowerCase() === key.toLowerCase())
+      if (!this.importResponse || !Array.isArray(this.importResponse.failed)) {
+        return ''
+      }
+      const fail = this.importResponse.failed.find(
+        x =>
+          x.rowNumber === index + 1 &&
+          x.rowKey.toLowerCase() === key.toLowerCase()
+      )
       return fail ? fail.reason : ''
     },
     runImport (verifyOnly) {
@@ -264,27 +364,39 @@ export default {
         _this.importMessage = 'Velg butikk først'
       } else {
         _this.isLoading = true
-        _this._productService.BulkImport({
-          storeId: this.selectedStore,
-          currency: 'NOK',
-          verifyOnly,
-          replaceAll: _this.replaceAll,
-          rows: JSON.parse(JSON.stringify(_this.rows)).slice(0, _this.rows.length - 1) // Remove last item as it is a empty row
-        }).then((res) => {
-          _this.importResponse = res
-          if (Array.isArray(_this.importResponse.failed) && _this.importResponse.failed.length === 0) {
-            _this.isVerified = true
-            _this.importMessage = verifyOnly ? 'Dette ser bra ut! Ønsker du å gjennomføre denne handlingen:' : 'Ferdig! Dette ble gjennomført:'
-          } else {
-            _this.importMessage = 'Ser ut noen felter er feil. Lukk denne modalen for å se gjennom feltene som er markert med rødt'
-            _this.isVerified = false
-            _this.importResponse.createdProductCount = 0
-            _this.importResponse.deletedProductCount = 0
-            window.console.log(res)
-          }
-        })
+        _this._productService
+          .BulkImport({
+            storeId: this.selectedStore,
+            currency: 'NOK',
+            verifyOnly,
+            replaceAll: _this.replaceAll,
+            rows: JSON.parse(JSON.stringify(_this.rows)).slice(
+              0,
+              _this.rows.length - 1
+            ) // Remove last item as it is an empty row
+          })
+          .then((res) => {
+            _this.importResponse = res
+            if (
+              Array.isArray(_this.importResponse.failed) &&
+              _this.importResponse.failed.length === 0
+            ) {
+              _this.isVerified = true
+              _this.importMessage = verifyOnly
+                ? 'Dette ser bra ut! Ønsker du å gjennomføre denne handlingen:'
+                : 'Ferdig! Dette ble gjennomført:'
+            } else {
+              _this.importMessage =
+                'Ser ut noen felter er feil. Lukk denne modalen for å se gjennom feltene som er markert med rødt'
+              _this.isVerified = false
+              _this.importResponse.createdProductCount = 0
+              _this.importResponse.deletedProductCount = 0
+              window.console.log(res)
+            }
+          })
           .catch((err) => {
-            _this.importMessage = 'Noe gikk galt her. Mest sannsynlig var det noen produkter som ikke kunne slettes. Kontakt systemansvarlig for mer hjelp.'
+            _this.importMessage =
+              'Noe gikk galt her. Mest sannsynlig var det noen produkter som ikke kunne slettes. Kontakt systemansvarlig for mer hjelp.'
             _this.isVerified = false
             _this.importResponse.createdProductCount = 0
             _this.importResponse.deletedProductCount = 0
@@ -299,18 +411,19 @@ export default {
 }
 </script>
 <style lang="scss">
-.modal-buttons{
-  margin-top: 1em;;
+.modal-buttons {
+  margin-top: 1em;
 }
 input {
-  padding:5px;
+  padding: 5px;
   border-radius: 3px;
   border: 1px solid lightgray;
 }
-.full-width, .full-width input {
-  width:100%
+.full-width,
+.full-width input {
+  width: 100%;
 }
-.emoji-btn{
+.emoji-btn {
   cursor: pointer;
   padding: 0 5px 0 5px;
 }
@@ -320,16 +433,16 @@ tr th {
 th {
   font-size: 14px;
 }
-.row-count{
+.row-count {
   color: gray;
   padding: 5px;
   font-size: 11px;
   min-width: 25px;
   text-align: right;
 }
-.import-messages{
+.import-messages {
   background: cornsilk;
   border-radius: 3px;
-  padding: 1em
+  padding: 1em;
 }
 </style>

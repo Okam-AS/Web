@@ -50,9 +50,9 @@
       >
         <button
           class="cart-indicator__cart"
+          aria-label="Vis handlekurv"
           @click="expandedCart = true"
           @keyup.enter="expandedCart = true"
-          aria-label="Vis handlekurv"
         >
           <span class="material-icons">shopping_basket</span>
           <span class="cart-indicator__cart-number">{{ totalQuantityLabel }}</span>
@@ -226,7 +226,7 @@ export default {
 @import "../../assets/sass/common.scss";
 
 .shop {
-  &__header { 
+  &__header {
      &-container {
       display: flex;
       align-items: stretch;

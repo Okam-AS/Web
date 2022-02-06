@@ -1,8 +1,8 @@
 <template>
   <button
     class="close-button"
-    @click="$emit('click')"
     aria-label="Avbryt"
+    @click="$emit('click')"
   >
     <span class="close-button-x" aria-hidden="true">×</span>
   </button>
