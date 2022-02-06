@@ -65,26 +65,38 @@
         </div>
       </div>
       <div style="clear: both">
-        <continue-button>Lag QR koder</continue-button>
+        <continue-button
+          :class="{ disabled: isLoading }"
+          @click="goToQRCodePage"
+        >
+          Forhåndsvis
+        </continue-button>
+        <continue-button
+          :class="{ disabled: isLoading }"
+          @click="generateQRCodes"
+        >
+          Last ned QR koder
+        </continue-button>
       </div>
 
       <div v-if="generatedUrl">
         <VueQrcode :value="generatedUrl" tag="svg" :options="{ width: 148 }" />
       </div>
+      <Loading :loading="isLoading" />
     </div>
     <LoginModal v-if="showLogin" @close="closeLoginModal" />
   </div>
 </template>
 
 <script>
-// import Loading from '@/components/atoms/Loading.vue'
+import Loading from '@/components/atoms/Loading.vue'
 import ContinueButton from '@/components/atoms/ContinueButton.vue'
 import VueQrcode from '@chenfengyuan/vue-qrcode'
 // import Modal from '~/components/atoms/Modal.vue'
 import LoginModal from '~/components/molecules/LoginModal.vue'
 
 export default {
-  components: { ContinueButton, LoginModal, VueQrcode },
+  components: { ContinueButton, LoginModal, VueQrcode, Loading },
   data: () => ({
     isLoading: false,
     showModal: false,
@@ -109,6 +121,19 @@ export default {
       return this.selectedStore.id
         ? 'https://www.okam.no/webshop/?store=' + this.selectedStoreId
         : ''
+    },
+    resultUrl () {
+      let tableInfo = ''
+      if (this.includeTableNumbers) {
+        tableInfo = '&f=' + this.fromTableNumber + '&t=' + this.toTableNumber
+      }
+      return this.selectedStore.id
+        ? '/tools/qr/result/?store=' +
+            this.selectedStoreId +
+            '&design=' +
+            this.selectedDesign +
+            tableInfo
+        : ''
     }
   },
   mounted () {
@@ -126,6 +151,42 @@ export default {
     },
     closeModal () {
       this.showModal = false
+    },
+    generateQRCodes () {
+      if (this.isLoading) {
+        return
+      }
+      this.isLoading = true
+      const convertUrl =
+        'https://v2.convertapi.com/convert/web/to/pdf?Secret=ZEs18uk4oGyNR3O3&StoreFile=true&Url=' +
+        'https://www.okam.no' +
+        this.resultUrl
+      fetch(convertUrl)
+        .then((res) => {
+          res
+            .json()
+            .then((response) => {
+              if (
+                response &&
+                Array.isArray(response.Files) &&
+                response.Files[0]
+              ) {
+                window.location.href = response.Files[0].Url
+              }
+            })
+            .finally(() => {
+              this.isLoading = false
+            })
+        })
+        .finally(() => {
+          this.isLoading = false
+        })
+    },
+    goToQRCodePage () {
+      if (this.isLoading) {
+        return
+      }
+      window.location.href = this.resultUrl
     }
   }
 }
@@ -138,5 +199,8 @@ export default {
 }
 .thumbnail-design.selected {
   border: 2px solid green;
+}
+.disabled {
+  opacity: 0.5;
 }
 </style>
