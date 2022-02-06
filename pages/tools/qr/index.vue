@@ -14,11 +14,7 @@
           <option disabled value="0">
             Velg butikk
           </option>
-          <option
-            v-for="option in $store.state.currentUser.adminIn"
-            :key="option.id"
-            :value="option.id"
-          >
+          <option v-for="option in stores" :key="option.id" :value="option.id">
             {{ option.name }}
           </option>
         </select>
