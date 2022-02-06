@@ -89,4 +89,10 @@ h2 {
 .float-left {
   float: left;
 }
+
+@media print {
+  .simpleA3 {
+    border: none;
+  }
+}
 </style>

@@ -159,11 +159,13 @@ export default {
         return
       }
       this.isLoading = true
+      const convertApiKey = 'KOuoWvNa8USrmH8S'
       const convertUrl =
-        'https://v2.convertapi.com/convert/web/to/pdf?Secret=ZEs18uk4oGyNR3O3&StoreFile=true&Url=' +
+        'https://v2.convertapi.com/convert/web/to/pdf?Secret=' +
+        convertApiKey +
+        '&StoreFile=true&CssMediaType=print&PageSize=a4&MarginTop=0&MarginRight=0&MarginBottom=0&MarginLeft=0&Url=' +
         'https://www.okam.no' +
-        this.resultUrl +
-        +'&convertapi=true'
+        this.resultUrl
       fetch(convertUrl)
         .then((res) => {
           res
