@@ -40,7 +40,10 @@ const mixin = {
       this.paymentStatus = search.has('paymentStatus') ? search.get('paymentStatus') : undefined
       this.qsTableName = search.has('table') ? decodeURI(search.get('table')) : ''
 
-      if ((this.noLayout || window.location.href.includes('/webshop')) && window.Tawk_API) {
+      if ((this.noLayout ||
+        window.location.href.includes('/webshop') ||
+        window.location.href.includes('/tools')
+      ) && window.Tawk_API) {
         window.Tawk_API.onLoad = () => {
           window.Tawk_API.hideWidget()
         }
