@@ -55,8 +55,8 @@ h2 {
   /* transform: rotate(270deg); */
 }
 .simpleA3 {
-  border-right: 1px dashed white;
-  border-bottom: 1px dashed white;
+  border-right: 1px dashed rgba(127, 192, 162, 1);
+  border-bottom: 1px dashed rgba(127, 192, 162, 1);
   background: rgb(127, 192, 162);
   background: radial-gradient(
     circle,
@@ -88,10 +88,5 @@ h2 {
 }
 .float-left {
   float: left;
-}
-@media print {
-  .simpleA3 {
-    border: none;
-  }
 }
 </style>

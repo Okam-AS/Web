@@ -162,7 +162,8 @@ export default {
       const convertUrl =
         'https://v2.convertapi.com/convert/web/to/pdf?Secret=ZEs18uk4oGyNR3O3&StoreFile=true&Url=' +
         'https://www.okam.no' +
-        this.resultUrl
+        this.resultUrl +
+        +'&convertapi=true'
       fetch(convertUrl)
         .then((res) => {
           res

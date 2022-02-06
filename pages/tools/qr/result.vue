@@ -1,5 +1,27 @@
 <template>
-  <div class="container">
+  <div :class="{ container: true, convertapi: convertApi }">
+    <div class="pdfpage">
+      <SimpleA3
+        class="half-size float-left"
+        :store="store"
+        :qr-value="generatedUrl"
+      />
+      <SimpleA3
+        class="half-size float-left"
+        :store="store"
+        :qr-value="generatedUrl"
+      />
+      <SimpleA3
+        class="half-size float-left"
+        :store="store"
+        :qr-value="generatedUrl"
+      />
+      <SimpleA3
+        class="half-size float-left"
+        :store="store"
+        :qr-value="generatedUrl"
+      />
+    </div>
     <div class="pdfpage">
       <SimpleA3
         class="half-size float-left"
@@ -37,6 +59,7 @@ export default {
     store: {},
     tableNumberFrom: undefined,
     tableNumberTo: undefined,
+    convertApi: false,
     design: ''
   }),
   computed: {
@@ -66,6 +89,9 @@ export default {
       this.tableNumberTo =
         search.get('t') || false ? parseInt(search.get('t')) : undefined
       this.design = search.has('design') ? search.get('design') : undefined
+      this.convertApi = search.has('convertapi')
+        ? search.get('convertapi')
+        : false
     }
   }
 }
@@ -95,5 +121,11 @@ export default {
     margin: 0;
     box-shadow: none;
   }
+}
+.convertapi.container,
+.convertapi .pdfpage {
+  margin: 0;
+  box-shadow: none;
+  background: white;
 }
 </style>
