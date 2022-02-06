@@ -1,27 +1,36 @@
 <template>
   <div class="container">
-    <img :src="store.logoUrl">
-    <div v-if="generatedUrl">
-      <VueQrcode
-        v-for="(x, index) in 40"
-        :key="index"
-        :value="generatedUrl"
-        tag="svg"
-        :options="{ width: 150 }"
+    <div class="pdfpage">
+      <SimpleA3
+        class="half-size float-left"
+        :store="store"
+        :qr-value="generatedUrl"
       />
-      <pre>
-        {{ logData }}
-      </pre>
+      <SimpleA3
+        class="half-size float-left"
+        :store="store"
+        :qr-value="generatedUrl"
+      />
+      <SimpleA3
+        class="half-size float-left"
+        :store="store"
+        :qr-value="generatedUrl"
+      />
+      <SimpleA3
+        class="half-size float-left"
+        :store="store"
+        :qr-value="generatedUrl"
+      />
     </div>
   </div>
 </template>
 
 <script>
 // import Loading from '@/components/atoms/Loading.vue'
-import VueQrcode from '@chenfengyuan/vue-qrcode'
+import SimpleA3 from '@/pages/tools/qr/cards/simple-A3.vue'
 
 export default {
-  components: { VueQrcode },
+  components: { SimpleA3 },
   data: () => ({
     isLoading: false,
     storeId: undefined,
@@ -61,3 +70,30 @@ export default {
   }
 }
 </script>
+<style scoped>
+.container {
+  background: rgb(204, 204, 204);
+}
+.pdfpage {
+  background: white;
+  width: 21cm;
+  height: 29.7cm;
+  display: block;
+  margin: 0 auto 0.5cm;
+  box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+}
+.half-size {
+  width: 50%;
+  height: 50%;
+}
+.float-left {
+  float: left;
+}
+@media print {
+  .container,
+  .pdfpage {
+    margin: 0;
+    box-shadow: none;
+  }
+}
+</style>

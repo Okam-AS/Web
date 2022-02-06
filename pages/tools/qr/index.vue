@@ -77,6 +77,8 @@
         >
           Last ned QR koder
         </continue-button>
+        <span>Note til utvikler: "Last ned QR kode" knappen generer bare det som
+          ligger i prod</span>
       </div>
 
       <div v-if="generatedUrl">
