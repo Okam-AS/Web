@@ -48,12 +48,18 @@ export default {
 }
 </script>
 <style scoped>
+
 h2 {
   color: white;
+  margin-bottom: 24px;
 }
 .content {
-  /* transform: rotate(270deg); */
+    transform: rotate(90deg);
+    position: relative;
+    top: 220px;
+    left: 100px;
 }
+
 .simpleA3 {
   border-right: 1px dashed rgba(127, 192, 162, 1);
   border-bottom: 1px dashed rgba(127, 192, 162, 1);

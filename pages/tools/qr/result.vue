@@ -2,44 +2,44 @@
   <div class="container">
     <div class="pdfpage">
       <SimpleA3
-        class="half-size float-left"
+        class="half-size"
         :store="store"
         :qr-value="generatedUrl"
       />
       <SimpleA3
-        class="half-size float-left"
+        class="half-size"
         :store="store"
         :qr-value="generatedUrl"
       />
       <SimpleA3
-        class="half-size float-left"
+        class="half-size"
         :store="store"
         :qr-value="generatedUrl"
       />
       <SimpleA3
-        class="half-size float-left"
+        class="half-size"
         :store="store"
         :qr-value="generatedUrl"
       />
     </div>
     <div class="pdfpage">
       <SimpleA3
-        class="half-size float-left"
+        class="half-size"
         :store="store"
         :qr-value="generatedUrl"
       />
       <SimpleA3
-        class="half-size float-left"
+        class="half-size"
         :store="store"
         :qr-value="generatedUrl"
       />
       <SimpleA3
-        class="half-size float-left"
+        class="half-size"
         :store="store"
         :qr-value="generatedUrl"
       />
       <SimpleA3
-        class="half-size float-left"
+        class="half-size"
         :store="store"
         :qr-value="generatedUrl"
       />
@@ -96,21 +96,18 @@ export default {
 .container {
   background: rgb(204, 204, 204);
 }
+
 .pdfpage {
   background: white;
   width: 21cm;
   height: 29.7cm;
-  display: block;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
   margin: 0 auto 0.5cm;
   box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
 }
-.half-size {
-  width: 50%;
-  height: 50%;
-}
-.float-left {
-  float: left;
-}
+
 @media print {
   .container,
   .pdfpage {
