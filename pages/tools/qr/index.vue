@@ -37,27 +37,10 @@
       </div>
       <div>
         <div>
-          <span>Velg design</span>
+          <span>Tekst på kort</span>
         </div>
-        <div
-          :class="{
-            'thumbnail-design': true,
-            selected: selectedDesign === 'simple',
-          }"
-          @click="selectedDesign = 'simple'"
-        >
-          <div><span>*Liten thumbnail av design*</span></div>
-          <span>Størrelse: A3</span>
-        </div>
-        <div
-          :class="{
-            'thumbnail-design': true,
-            selected: selectedDesign === 'bigger',
-          }"
-          @click="selectedDesign = 'bigger'"
-        >
-          <div><span>*Liten thumbnail av design*</span></div>
-          <span>Størrelse: A4</span>
+        <div>
+          <textarea v-model="cardText" maxlength="80" rows="3" />
         </div>
       </div>
       <div style="clear: both">
@@ -102,8 +85,9 @@ export default {
     fromTableNumber: 0,
     toTableNumber: 0,
     selectedStoreId: 0,
-    selectedDesign: 'simple',
-    stores: []
+    stores: [],
+    cardText:
+      'Skann QR-kode med kamera og bestill mat og drikke direkte til bordet!'
   }),
   computed: {
     userIsLoggedIn () {
@@ -127,8 +111,8 @@ export default {
       return this.selectedStore.id
         ? '/tools/qr/result/?store=' +
             this.selectedStoreId +
-            '&design=' +
-            this.selectedDesign +
+            '&text=' +
+            encodeURI(this.cardText) +
             tableInfo
         : ''
     }
@@ -192,14 +176,6 @@ export default {
 }
 </script>
 <style>
-.thumbnail-design {
-  border: 1px solid black;
-  padding: 10px;
-  float: left;
-}
-.thumbnail-design.selected {
-  border: 2px solid green;
-}
 .disabled {
   opacity: 0.5;
 }

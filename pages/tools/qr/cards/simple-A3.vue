@@ -2,7 +2,7 @@
   <div class="simple-a3">
     <div v-if="store && store.id" class="content">
       <h2>
-        Skann QR-kode med kamera og bestill mat og drikke direkte til bordet.
+        {{ cardText }}
       </h2>
       <div class="qr-row">
         <VueQrcode
@@ -45,6 +45,10 @@ export default {
       default: () => {}
     },
     tableName: {
+      type: String,
+      default: ''
+    },
+    cardText: {
       type: String,
       default: ''
     },

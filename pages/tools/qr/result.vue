@@ -6,6 +6,7 @@
         :key="xindex"
         class="half-size"
         :store="store"
+        :card-text="cardText"
         :table-name="tableNumber + ''"
         :qr-value="generatedUrl + '&table=' + tableNumber"
       />
@@ -25,7 +26,7 @@ export default {
     store: {},
     tableNumberFrom: undefined,
     tableNumberTo: undefined,
-    design: '',
+    cardText: '',
     tableNumbers: [],
     cardGroups: []
   }),
@@ -34,13 +35,6 @@ export default {
       return this.storeId
         ? 'https://www.okam.no/webshop/?store=' + this.storeId
         : ''
-    },
-    logData () {
-      return {
-        design: this.design,
-        tableNumberFrom: this.tableNumberFrom,
-        tableNumberTo: this.tableNumberTo
-      }
     }
   },
   mounted () {
@@ -55,7 +49,7 @@ export default {
         search.get('f') || false ? parseInt(search.get('f')) : undefined
       this.tableNumberTo =
         search.get('t') || false ? parseInt(search.get('t')) : undefined
-      this.design = search.has('design') ? search.get('design') : undefined
+      this.cardText = search.has('text') ? decodeURI(search.get('text')) : ''
     }
     if (
       this.tableNumberFrom &&
