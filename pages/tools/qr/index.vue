@@ -43,12 +43,9 @@
           <textarea v-model="cardText" maxlength="80" rows="3" />
         </div>
       </div>
-      <div style="clear: both">
-        <continue-button
-          :class="{ disabled: isLoading }"
-          @click="goToQRCodePage"
-        >
-          Forhåndsvis
+      <div v-if="resultUrl" style="clear: both">
+        <a :href="resultUrl" :class="{ disabled: isLoading }" target="_blank">Forhåndsvis</a>
+
         </continue-button>
         <continue-button
           :class="{ disabled: isLoading }"
@@ -165,12 +162,6 @@ export default {
         .finally(() => {
           this.isLoading = false
         })
-    },
-    goToQRCodePage () {
-      if (this.isLoading) {
-        return
-      }
-      window.location.href = this.resultUrl
     }
   }
 }
