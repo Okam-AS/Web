@@ -90,7 +90,6 @@
 import Loading from '@/components/atoms/Loading.vue'
 import ContinueButton from '@/components/atoms/ContinueButton.vue'
 import VueQrcode from '@chenfengyuan/vue-qrcode'
-// import Modal from '~/components/atoms/Modal.vue'
 import LoginModal from '~/components/molecules/LoginModal.vue'
 
 export default {

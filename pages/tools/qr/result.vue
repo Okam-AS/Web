@@ -1,47 +1,13 @@
 <template>
   <div class="container">
-    <div class="pdfpage">
+    <div v-for="(cards, index) in cardGroups" :key="index" class="pdfpage">
       <SimpleA3
+        v-for="(tableNumber, xindex) in cards"
+        :key="xindex"
         class="half-size"
         :store="store"
-        :qr-value="generatedUrl"
-      />
-      <SimpleA3
-        class="half-size"
-        :store="store"
-        :qr-value="generatedUrl"
-      />
-      <SimpleA3
-        class="half-size"
-        :store="store"
-        :qr-value="generatedUrl"
-      />
-      <SimpleA3
-        class="half-size"
-        :store="store"
-        :qr-value="generatedUrl"
-      />
-    </div>
-    <div class="pdfpage">
-      <SimpleA3
-        class="half-size"
-        :store="store"
-        :qr-value="generatedUrl"
-      />
-      <SimpleA3
-        class="half-size"
-        :store="store"
-        :qr-value="generatedUrl"
-      />
-      <SimpleA3
-        class="half-size"
-        :store="store"
-        :qr-value="generatedUrl"
-      />
-      <SimpleA3
-        class="half-size"
-        :store="store"
-        :qr-value="generatedUrl"
+        :table-name="tableNumber + ''"
+        :qr-value="generatedUrl + '&table=' + tableNumber"
       />
     </div>
   </div>
@@ -59,7 +25,9 @@ export default {
     store: {},
     tableNumberFrom: undefined,
     tableNumberTo: undefined,
-    design: ''
+    design: '',
+    tableNumbers: [],
+    cardGroups: []
   }),
   computed: {
     generatedUrl () {
@@ -88,6 +56,25 @@ export default {
       this.tableNumberTo =
         search.get('t') || false ? parseInt(search.get('t')) : undefined
       this.design = search.has('design') ? search.get('design') : undefined
+    }
+    if (
+      this.tableNumberFrom &&
+      this.tableNumberTo &&
+      typeof this.tableNumberFrom === 'number' &&
+      typeof this.tableNumberTo === 'number' &&
+      this.tableNumberFrom <= this.tableNumberTo
+    ) {
+      for (let y = this.tableNumberFrom; y <= this.tableNumberTo; y++) {
+        this.tableNumbers.push(y)
+      }
+    }
+
+    for (let i = 0, j = this.tableNumbers.length; i < j; i += 4) {
+      this.cardGroups.push(this.tableNumbers.slice(i, i + 4))
+    }
+
+    if (this.cardGroups.length === 0) {
+      this.cardGroups.push(['']) // Add empty tablename
     }
   }
 }
