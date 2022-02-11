@@ -76,8 +76,8 @@ h2 {
 .content {
   transform: rotate(90deg);
   position: relative;
-  top: rem(134);
-  left: rem(10);
+  top: rem(140);
+  left: rem(0);
   padding: 0 rem(24);
 }
 
@@ -125,8 +125,8 @@ h2 {
 
 .logo {
   position: absolute;
-  bottom: rem(-50);
-  right: rem(-60);
+  top: rem(-45);
+  left: rem(-65);
 
   svg {
     width: rem(70);
