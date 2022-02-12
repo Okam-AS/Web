@@ -126,7 +126,7 @@ h2 {
 .logo {
   position: absolute;
   top: rem(-45);
-  left: rem(-65);
+  left: rem(-45);
 
   svg {
     width: rem(70);

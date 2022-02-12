@@ -83,8 +83,7 @@ export default {
     toTableNumber: 0,
     selectedStoreId: 0,
     stores: [],
-    cardText:
-      'Skann QR-kode med kamera og bestill mat og drikke direkte til bordet!'
+    cardText: 'Skann QR-kode med kamera og bestill til bordet'
   }),
   computed: {
     userIsLoggedIn () {
