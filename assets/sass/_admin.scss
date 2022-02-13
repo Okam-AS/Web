@@ -1,0 +1,130 @@
+.admin {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+
+    &__wrapper {
+        max-width: rem(1280);
+        margin: 0 auto;
+        padding: 0 rem(24);
+    }
+
+    &__header {
+        position: relative;
+        @include z-index('admin-header');
+
+        &-nav {
+            background-color: $color-profile-dark;
+            padding: rem(16) 0;
+
+            > .admin__wrapper {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        &-logo {
+            width: rem(100);
+            height: rem(21);
+            vertical-align: middle;
+            fill: #fff;
+        }
+
+        &-menu-trigger {
+            position: relative;
+            width: rem(30);
+            height: rem(24);
+            background-color: transparent;
+            border: none;
+
+            span,
+            span:before,
+            span:after {
+                position: absolute;
+                top: rem(9);
+                left: 0;
+                width: 100%;
+                height: rem(3);
+                background-color: #fff;
+                transition: all .2s ease-in-out;
+                border-radius: rem(5);
+            }
+
+            span:before,
+            span:after {
+                content: "";
+            }
+
+            span:before {
+                top: rem(-10);
+            }
+
+            span:after {
+                top: rem(10);
+            }
+
+            &[aria-expanded="true"] {
+                span {
+                    background-color: transparent;
+                }
+
+                span:before {
+                    transform: rotate(45deg);
+                    top: 0;
+                }
+
+                span:after {
+                    transform: rotate(-45deg);
+                    top: 0;
+                }
+            }
+        }
+
+        &-panel {
+            background-color: $color-profile;
+            padding: rem(32) 0 rem(60);
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            box-shadow: 0 0 15px 1px rgba(0 0 0 / 20%);
+            will-change: transform;
+            transform: translate(0, -100%);
+            transition: transform .4s ease-in;
+            z-index: -1;
+
+            &.is-active {
+                transform: translate(0, 0);
+                transition: transform .3s ease-out;
+            }
+        }
+
+        &-menu-list {
+            list-style: none;
+
+            @include br-lg {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                column-gap: rem(24);
+            }
+
+            a {
+                display: block;
+                padding: rem(16) 0;
+                font-size: rem($font-size--md);
+            }
+        }
+    }
+
+    &__content {
+        padding-top: rem(40);
+        padding-bottom: rem(40);
+    }
+
+    &__footer {
+        margin-top: auto;
+        background-color: $color-neutral-light;
+        padding: rem(24) 0;
+    }
+}
