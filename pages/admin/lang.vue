@@ -1,88 +1,91 @@
 <template>
-  <div class="container">
-    <div class="search-container">
-      <input v-model="searchInput" class="search-input" type="text">
-      <span class="search-icon">🔍</span>
-      <input
-        class="emoji-btn add-new"
-        type="button"
-        value="➕ Ny rad"
-        @click="addRow"
-      >
-      <input
-        class="emoji-btn user-btn"
-        type="button"
-        value="🧑🏻‍💻 Bytt bruker"
-        @click="showLogin = true"
-      >
+  <AdminPage>
+    <div class="container">
+      <div class="search-container">
+        <input v-model="searchInput" class="search-input" type="text">
+        <span class="search-icon">🔍</span>
+        <input
+          class="emoji-btn add-new"
+          type="button"
+          value="➕ Ny rad"
+          @click="addRow"
+        >
+        <input
+          class="emoji-btn user-btn"
+          type="button"
+          value="🧑🏻‍💻 Bytt bruker"
+          @click="showLogin = true"
+        >
+      </div>
+      <table>
+        <tbody>
+          <tr>
+            <th>Nøkkel</th>
+            <th v-for="lang in langs" :key="lang.code">
+              {{ lang.nativeName }}
+            </th>
+          </tr>
+          <tr v-for="key in filteredKeys" :key="key">
+            <td>{{ key }}</td>
+            <td v-for="lang in langs" :key="lang.code">
+              {{ lang.translations[key] }}
+            </td>
+            <td>
+              <input
+                class="emoji-btn"
+                type="button"
+                value="✍🏻 Rediger"
+                @click="editRow(key)"
+              >
+              <input
+                class="emoji-btn"
+                type="button"
+                value="🗑 Slett"
+                @click="deleteRow(key)"
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <EditRowModal
+        v-if="showEditModal"
+        :langs="langs"
+        :lang-translation-key="editKey"
+        @close="showEditModal = false"
+        @save="edited"
+      />
+      <Modal v-if="showCantDeleteInfo" :hide-close-btn="true">
+        <template>
+          <p>Alle feltene må være tomme for å slette raden</p>
+          <div class="modal-buttons">
+            <input
+              class="emoji-btn"
+              type="button"
+              value="❌ Avbryt"
+              @click="showCantDeleteInfo = false"
+            >
+          </div>
+        </template>
+      </Modal>
+      <LoginModal v-if="showLogin" @close="closeLoginModal" />
     </div>
-    <table>
-      <tbody>
-        <tr>
-          <th>Nøkkel</th>
-          <th v-for="lang in langs" :key="lang.code">
-            {{ lang.nativeName }}
-          </th>
-        </tr>
-        <tr v-for="key in filteredKeys" :key="key">
-          <td>{{ key }}</td>
-          <td v-for="lang in langs" :key="lang.code">
-            {{ lang.translations[key] }}
-          </td>
-          <td>
-            <input
-              class="emoji-btn"
-              type="button"
-              value="✍🏻 Rediger"
-              @click="editRow(key)"
-            >
-            <input
-              class="emoji-btn"
-              type="button"
-              value="🗑 Slett"
-              @click="deleteRow(key)"
-            >
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <EditRowModal
-      v-if="showEditModal"
-      :langs="langs"
-      :lang-translation-key="editKey"
-      @close="showEditModal = false"
-      @save="edited"
-    />
-    <Modal v-if="showCantDeleteInfo" :hide-close-btn="true">
-      <template>
-        <p>Alle feltene må være tomme for å slette raden</p>
-        <div class="modal-buttons">
-          <input
-            class="emoji-btn"
-            type="button"
-            value="❌ Avbryt"
-            @click="showCantDeleteInfo = false"
-          >
-        </div>
-      </template>
-    </Modal>
-    <LoginModal v-if="showLogin" @close="closeLoginModal" />
-  </div>
+  </AdminPage>
 </template>
 <script>
 import EditRowModal from '@/components/organisms/EditLangRowModal.vue'
 import Modal from '@/components/atoms/Modal.vue'
+import AdminPage from '@/components/organisms/AdminPage.vue'
 import LoginModal from '~/components/molecules/LoginModal.vue'
 
 export default {
-  components: { EditRowModal, Modal, LoginModal },
+  components: { AdminPage, EditRowModal, Modal, LoginModal },
   data: () => ({
     showEditModal: false,
     showCantDeleteInfo: false,
     searchInput: '',
     editKey: '',
     langs: [],
-    showLogin: true
+    showLogin: false
   }),
   computed: {
     allKeys () {
@@ -111,6 +114,10 @@ export default {
     }
   },
   mounted () {
+    if (!this.$store.getters.userIsLoggedIn) {
+      this.showLogin = true
+      return
+    }
     this.loadCultures()
   },
   methods: {
