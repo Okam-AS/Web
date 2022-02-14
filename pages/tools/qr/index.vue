@@ -32,53 +32,64 @@
       </div>
       <div v-else>
         <h1>Lag QR kode for din butikk</h1>
-        <div>
-          <span>Velg butikk</span>
-          <select v-model="selectedStoreId">
-            <option disabled value="0">
-              Velg butikk
-            </option>
-            <option v-for="option in stores" :key="option.id" :value="option.id">
-              {{ option.name }}
-            </option>
-          </select>
-        </div>
-        <div>
-          <label>
-            <input v-model="includeTableNumbers" type="checkbox">
-            <span>Ta med bordnummer i QR kode</span>
-          </label>
-          <div v-if="includeTableNumbers">
-            <label>
-              <span>Fra</span>
-              <input v-model="fromTableNumber" type="number" min="0" max="100">
+        <div class="form">
+          <div class="form-row">
+            <label class="label" for="selectStore">Velg butikk</label>
+            <select id="selectStore" v-model="selectedStoreId" class="input">
+              <option disabled value="0">
+                Velg butikk
+              </option>
+              <option v-for="option in stores" :key="option.id" :value="option.id">
+                {{ option.name }}
+              </option>
+            </select>
+          </div>
+          <fieldset class="form-row">
+            <label class="checkbox">
+              <input v-model="includeTableNumbers" type="checkbox">
+              <span>Ta med bordnummer i QR kode</span>
             </label>
-            <label>
-              <span>Til</span>
-              <input v-model="toTableNumber" type="number" min="0" max="100">
-            </label>
+            <fieldset v-if="includeTableNumbers" class="form-items">
+              <div>
+                <label class="label" for="fromTable">Fra</label>
+                <input 
+                  id="fromTable"
+                  v-model="fromTableNumber"
+                  class="input"
+                  type="number"
+                  min="0"
+                  max="100"
+                >
+              </div>
+              <div>
+                <label class="label" for="toTable">Til</label>
+                <input 
+                  id="toTable"
+                  v-model="toTableNumber"
+                  class="input"
+                  type="number"
+                  min="0"
+                  max="100"
+                >
+              </div>
+            </fieldset>
+          </fieldset>
+          <div class="form-row">
+            <label class="label" for="cardText">Tekst på kort</label>
+            <textarea v-model="cardText" class="input" maxlength="80" rows="3" />
           </div>
         </div>
-        <div>
-          <div>
-            <span>Tekst på kort</span>
+        <div v-if="resultUrl">
+          <div class="btn-row btn-row--margin-bottom">
+            <continue-button
+              :class="{ disabled: isLoading }"
+              @click="generateQRCodes"
+            >
+              Last ned QR koder
+            </continue-button>
+            <a :href="resultUrl" :class="{ disabled: isLoading }" target="_blank">Forhåndsvis</a>
           </div>
-          <div>
-            <textarea v-model="cardText" maxlength="80" rows="3" />
-          </div>
-        </div>
-        <div v-if="resultUrl" style="clear: both">
-          <a :href="resultUrl" :class="{ disabled: isLoading }" target="_blank">Forhåndsvis</a>
-
-          </continue-button>
-          <continue-button
-            :class="{ disabled: isLoading }"
-            @click="generateQRCodes"
-          >
-            Last ned QR koder
-          </continue-button>
-          <span>Note til utvikler: "Last ned QR kode" knappen generer bare det som
-            ligger i prod</span>
+          <div>Note til utvikler: "Last ned QR kode" knappen generer bare det som ligger i prod</div>
         </div>
 
         <div v-if="generatedUrl">

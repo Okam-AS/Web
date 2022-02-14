@@ -63,6 +63,10 @@
         border-radius: rem(15);
         box-shadow: 0 0 20px 0 rgba(0,0,0,0.2);
     }
+
+    &--margin-bottom {
+        margin-bottom: rem(24);
+    }
 }
 
 .input-btn-row {

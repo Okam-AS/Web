@@ -101,7 +101,7 @@
                     class="card-input"
                   />
                 </client-only>
-                <label class="checkbox-label"><input v-model="rememberCard" type="checkbox">Husk dette kortet</label>
+                <label class="checkbox"><input v-model="rememberCard" type="checkbox">Husk dette kortet</label>
               </div>
             </div>
           </div>
