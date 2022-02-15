@@ -15,12 +15,6 @@
             value="🆑 Tøm alle rader"
             @click="showClearRowsModal = true"
           >
-          <input
-            class="emoji-btn"
-            type="button"
-            value="🧑🏻‍💻 Bytt bruker"
-            @click="showLogin = true"
-          >
         </div>
         <table>
           <tbody>
@@ -278,7 +272,9 @@ export default {
     },
     closeLoginModal (isLoggedIn) {
       this.showLogin = !isLoggedIn
-      if (isLoggedIn) { this.init() }
+      if (isLoggedIn) {
+        this.init()
+      }
     },
     clearRows () {
       this.selectedStore = 0

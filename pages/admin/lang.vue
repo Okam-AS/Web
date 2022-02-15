@@ -10,12 +10,6 @@
           value="➕ Ny rad"
           @click="addRow"
         >
-        <input
-          class="emoji-btn user-btn"
-          type="button"
-          value="🧑🏻‍💻 Bytt bruker"
-          @click="showLogin = true"
-        >
       </div>
       <table>
         <tbody>
@@ -123,7 +117,9 @@ export default {
   methods: {
     closeLoginModal (isLoggedIn) {
       this.showLogin = !isLoggedIn
-      if (isLoggedIn) { this.loadCultures() }
+      if (isLoggedIn) {
+        this.loadCultures()
+      }
     },
     loadCultures () {
       const _this = this
