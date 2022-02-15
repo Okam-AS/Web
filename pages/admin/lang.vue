@@ -123,6 +123,7 @@ export default {
   methods: {
     closeLoginModal (isLoggedIn) {
       this.showLogin = !isLoggedIn
+      if (isLoggedIn) { this.loadCultures() }
     },
     loadCultures () {
       const _this = this

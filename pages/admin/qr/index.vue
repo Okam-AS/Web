@@ -11,11 +11,15 @@
       <div class="form">
         <div class="form-row">
           <label class="label" for="selectStore">Velg butikk</label>
-          <select v-model="selectedStoreId" id="selectStore" class="input">
+          <select id="selectStore" v-model="selectedStoreId" class="input">
             <option disabled value="0">
               Velg butikk
             </option>
-            <option v-for="option in stores" :key="option.id" :value="option.id">
+            <option
+              v-for="option in stores"
+              :key="option.id"
+              :value="option.id"
+            >
               {{ option.name }}
             </option>
           </select>
@@ -28,9 +32,9 @@
           <fieldset v-if="includeTableNumbers" class="form-items">
             <div>
               <label class="label" for="fromTable">Fra</label>
-              <input 
-                v-model="fromTableNumber"
+              <input
                 id="fromTable"
+                v-model="fromTableNumber"
                 class="input"
                 type="number"
                 min="0"
@@ -40,8 +44,8 @@
             <div>
               <label class="label" for="toTable">Til</label>
               <input
-                v-model="toTableNumber"
                 id="toTable"
+                v-model="toTableNumber"
                 class="input"
                 type="number"
                 min="0"
@@ -63,13 +67,12 @@
           >
             Last ned QR koder
           </continue-button>
-          <a :href="resultUrl" :class="{ disabled: isLoading }" target="_blank">Forhåndsvis</a>
+          <a
+            :href="resultUrl"
+            :class="{ disabled: isLoading }"
+            target="_blank"
+          >Forhåndsvis</a>
         </div>
-        <div>Note til utvikler: "Last ned QR kode" knappen generer bare det som ligger i prod</div>
-      </div>
-
-      <div v-if="generatedUrl">
-        <VueQrcode :value="generatedUrl" tag="svg" :options="{ width: 148 }" />
       </div>
       <Loading :loading="isLoading" />
     </div>
@@ -80,12 +83,11 @@
 <script>
 import Loading from '@/components/atoms/Loading.vue'
 import ContinueButton from '@/components/atoms/ContinueButton.vue'
-import VueQrcode from '@chenfengyuan/vue-qrcode'
 import AdminPage from '@/components/organisms/AdminPage.vue'
 import LoginModal from '~/components/molecules/LoginModal.vue'
 
 export default {
-  components: { AdminPage, ContinueButton, LoginModal, VueQrcode, Loading },
+  components: { AdminPage, ContinueButton, LoginModal, Loading },
   data: () => ({
     menuIsActive: false,
     isLoading: false,
@@ -127,13 +129,12 @@ export default {
     }
   },
   mounted () {
-    if (!this.userIsLoggedIn) {
-      this.showLogin = true
-      return
-    }
     this._storeService.GetAll().then((res) => {
       this.stores = res
     })
+    if (!this.userIsLoggedIn) {
+      this.showLogin = true
+    }
   },
   methods: {
     closeLoginModal () {

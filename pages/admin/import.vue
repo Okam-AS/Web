@@ -262,19 +262,23 @@ export default {
       this.showLogin = true
       return
     }
-    let storedRows = false
-    if (window && window.localStorage) {
-      storedRows = localStorage.getItem('importRows') || false
-    }
-    if (storedRows) {
-      this.$set(this, 'rows', JSON.parse(storedRows))
-    } else {
-      this.clearRows()
-    }
+    this.init()
   },
   methods: {
+    init () {
+      let storedRows = false
+      if (window && window.localStorage) {
+        storedRows = localStorage.getItem('importRows') || false
+      }
+      if (storedRows) {
+        this.$set(this, 'rows', JSON.parse(storedRows))
+      } else {
+        this.clearRows()
+      }
+    },
     closeLoginModal (isLoggedIn) {
       this.showLogin = !isLoggedIn
+      if (isLoggedIn) { this.init() }
     },
     clearRows () {
       this.selectedStore = 0
