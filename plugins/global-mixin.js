@@ -42,7 +42,7 @@ const mixin = {
 
       if ((this.noLayout ||
         window.location.href.includes('/webshop') ||
-        window.location.href.includes('/tools')
+        window.location.href.includes('/admin')
       ) && window.Tawk_API) {
         window.Tawk_API.onLoad = () => {
           window.Tawk_API.hideWidget()

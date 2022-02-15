@@ -1,209 +1,215 @@
 <template>
-  <div class="container">
-    <template>
-      <div style="margin: 1em">
-        <input
-          class="emoji-btn"
-          type="button"
-          value="👓 Verifiser og importer"
-          @click="showModal = true"
-        >
-        <input
-          class="emoji-btn"
-          type="button"
-          value="🆑 Tøm alle rader"
-          @click="showClearRowsModal = true"
-        >
-        <input
-          class="emoji-btn"
-          type="button"
-          value="🧑🏻‍💻 Bytt bruker"
-          @click="showLogin = true"
-        >
-      </div>
-      <table>
-        <tbody>
-          <tr>
-            <th />
-            <th>Produktnavn</th>
-            <th style="min-width: 300px">
-              Produktbeskrivelse
-            </th>
-            <th>Pris</th>
-            <th>MVA (%)</th>
-            <th>Pant</th>
-            <th>Utsolgt</th>
-          </tr>
-          <tr v-for="(row, index) in rows" :key="index">
-            <td class="row-count">
-              {{ index !== rows.length - 1 ? index + 1 : "" }}
-            </td>
-            <td>
-              <autocomplete-input
-                v-model="row.name"
-                class="full-width"
-                :suggestions="allProductNames"
-                type="text"
-                :server-error-message="getFailedMessage(index, 'name')"
-              />
-            </td>
-            <td>
-              <autocomplete-input
-                v-model="row.description"
-                class="full-width"
-                :suggestions="allProductDescriptions"
-                :min-length="0"
-                type="text"
-                :server-error-message="getFailedMessage(index, 'description')"
-              />
-            </td>
-            <td>
-              <currency-input
-                v-model="row.priceModel"
-                currency="NOK"
-                style="width: 100px"
-                @change="amountChange(index, 'price', $event)"
-              />
-            </td>
-            <td>
-              <input
-                v-model="row.tax"
-                class="full-width"
-                type="number"
-                pattern="[0-9]{2}"
-                min="0"
-                max="99"
-                @change="taxChange($event, index)"
-              >
-            </td>
-            <td>
-              <currency-input
-                v-model="row.depositModel"
-                currency="NOK"
-                style="width: 60px"
-                @change="amountChange(index, 'deposit', $event)"
-              />
-            </td>
-            <td>
-              <input
-                v-model="row.soldOut"
-                style="margin-left: 1.5em"
-                type="checkbox"
-              >
-            </td>
-            <td v-if="index !== rows.length - 1 || rows.length < 2">
-              <input
-                class="emoji-btn"
-                type="button"
-                value="🔂 Dupliser rad"
-                @click="copyRow(index)"
-              >
-              <input
-                class="emoji-btn"
-                type="button"
-                value="➖ Fjern rad"
-                @click="deleteRow(index)"
-              >
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </template>
-    <Modal v-if="showModal" @close="closeModal">
-      <h1 style="margin-bottom: 1em">
-        Importer
-      </h1>
-      <div>
-        <select v-model="selectedStore">
-          <option value="0">
-            Velg butikk
-          </option>
-          <option
-            v-for="option in $store.state.currentUser.adminIn"
-            :key="option.id"
-            :value="option.id"
+  <AdminPage>
+    <div class="container">
+      <template>
+        <div style="margin: 1em">
+          <input
+            class="emoji-btn"
+            type="button"
+            value="👓 Verifiser og importer"
+            @click="showModal = true"
           >
-            {{ option.name }}
-          </option>
-        </select>
-      </div>
-      <div style="margin: 1em 0 1em 0">
-        <label><input v-model="replaceAll" type="checkbox"> Slett alle
-          eksisterende produkter før import</label>
-      </div>
-      <div v-if="importMessage" class="import-messages">
-        <p>
-          {{ importMessage }}
-        </p>
-        <p v-if="importResponse.createdProductCount">
-          <span style="font-weight: bold">Antall import av produkter: </span>
-          <span>{{ importResponse.createdProductCount }}</span>
-        </p>
-        <p v-if="importResponse.deletedProductCount">
-          <span style="font-weight: bold">Antall sletting av produkter: </span>
-          <span>{{ importResponse.deletedProductCount }}</span>
-        </p>
-      </div>
+          <input
+            class="emoji-btn"
+            type="button"
+            value="🆑 Tøm alle rader"
+            @click="showClearRowsModal = true"
+          >
+          <input
+            class="emoji-btn"
+            type="button"
+            value="🧑🏻‍💻 Bytt bruker"
+            @click="showLogin = true"
+          >
+        </div>
+        <table>
+          <tbody>
+            <tr>
+              <th />
+              <th>Produktnavn</th>
+              <th style="min-width: 300px">
+                Produktbeskrivelse
+              </th>
+              <th>Pris</th>
+              <th>MVA (%)</th>
+              <th>Pant</th>
+              <th>Utsolgt</th>
+            </tr>
+            <tr v-for="(row, index) in rows" :key="index">
+              <td class="row-count">
+                {{ index !== rows.length - 1 ? index + 1 : "" }}
+              </td>
+              <td>
+                <autocomplete-input
+                  v-model="row.name"
+                  class="full-width"
+                  :suggestions="allProductNames"
+                  type="text"
+                  :server-error-message="getFailedMessage(index, 'name')"
+                />
+              </td>
+              <td>
+                <autocomplete-input
+                  v-model="row.description"
+                  class="full-width"
+                  :suggestions="allProductDescriptions"
+                  :min-length="0"
+                  type="text"
+                  :server-error-message="getFailedMessage(index, 'description')"
+                />
+              </td>
+              <td>
+                <currency-input
+                  v-model="row.priceModel"
+                  currency="NOK"
+                  style="width: 100px"
+                  @change="amountChange(index, 'price', $event)"
+                />
+              </td>
+              <td>
+                <input
+                  v-model="row.tax"
+                  class="full-width"
+                  type="number"
+                  pattern="[0-9]{2}"
+                  min="0"
+                  max="99"
+                  @change="taxChange($event, index)"
+                >
+              </td>
+              <td>
+                <currency-input
+                  v-model="row.depositModel"
+                  currency="NOK"
+                  style="width: 60px"
+                  @change="amountChange(index, 'deposit', $event)"
+                />
+              </td>
+              <td>
+                <input
+                  v-model="row.soldOut"
+                  style="margin-left: 1.5em"
+                  type="checkbox"
+                >
+              </td>
+              <td v-if="index !== rows.length - 1 || rows.length < 2">
+                <input
+                  class="emoji-btn"
+                  type="button"
+                  value="🔂 Dupliser rad"
+                  @click="copyRow(index)"
+                >
+                <input
+                  class="emoji-btn"
+                  type="button"
+                  value="➖ Fjern rad"
+                  @click="deleteRow(index)"
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </template>
+      <Modal v-if="showModal" @close="closeModal">
+        <h1 style="margin-bottom: 1em">
+          Importer
+        </h1>
+        <div>
+          <select v-model="selectedStore">
+            <option value="0">
+              Velg butikk
+            </option>
+            <option
+              v-for="option in $store.state.currentUser.adminIn"
+              :key="option.id"
+              :value="option.id"
+            >
+              {{ option.name }}
+            </option>
+          </select>
+        </div>
+        <div style="margin: 1em 0 1em 0">
+          <label><input v-model="replaceAll" type="checkbox"> Slett alle
+            eksisterende produkter før import</label>
+        </div>
+        <div v-if="importMessage" class="import-messages">
+          <p>
+            {{ importMessage }}
+          </p>
+          <p v-if="importResponse.createdProductCount">
+            <span style="font-weight: bold">Antall import av produkter: </span>
+            <span>{{ importResponse.createdProductCount }}</span>
+          </p>
+          <p v-if="importResponse.deletedProductCount">
+            <span
+              style="font-weight: bold"
+            >Antall sletting av produkter:
+            </span>
+            <span>{{ importResponse.deletedProductCount }}</span>
+          </p>
+        </div>
 
-      <div class="modal-buttons">
-        <input
-          v-if="isVerified"
-          class="emoji-btn"
-          type="button"
-          value="✅ Godkjenn og importer"
-          @click="runImport(false)"
-        >
-        <input
-          class="emoji-btn"
-          type="button"
-          value="👓 Verifiser"
-          @click="runImport(true)"
-        >
-        <input
-          class="emoji-btn"
-          type="button"
-          value="❌ Avbryt"
-          @click="closeModal"
-        >
-      </div>
-      <Loading :loading="isLoading" />
-    </Modal>
-    <LoginModal v-if="showLogin" @close="closeLoginModal" />
-    <Modal v-if="showClearRowsModal" @close="showClearRowsModal = false">
-      <p>
-        Er du sikker på at du ønsker å fjerne alle rader fra denne tabellen?
-        Produkter som allerede er importert vil ikke bli berørt.
-      </p>
-      <div class="modal-buttons">
-        <input
-          class="emoji-btn"
-          type="button"
-          value="🆑 Tøm alle rader"
-          @click="clearRows"
-        >
-        <input
-          class="emoji-btn"
-          type="button"
-          value="❌ Avbryt"
-          @click="showClearRowsModal = false"
-        >
-      </div>
-    </Modal>
-  </div>
+        <div class="modal-buttons">
+          <input
+            v-if="isVerified"
+            class="emoji-btn"
+            type="button"
+            value="✅ Godkjenn og importer"
+            @click="runImport(false)"
+          >
+          <input
+            class="emoji-btn"
+            type="button"
+            value="👓 Verifiser"
+            @click="runImport(true)"
+          >
+          <input
+            class="emoji-btn"
+            type="button"
+            value="❌ Avbryt"
+            @click="closeModal"
+          >
+        </div>
+        <Loading :loading="isLoading" />
+      </Modal>
+      <LoginModal v-if="showLogin" @close="closeLoginModal" />
+      <Modal v-if="showClearRowsModal" @close="showClearRowsModal = false">
+        <p>
+          Er du sikker på at du ønsker å fjerne alle rader fra denne tabellen?
+          Produkter som allerede er importert vil ikke bli berørt.
+        </p>
+        <div class="modal-buttons">
+          <input
+            class="emoji-btn"
+            type="button"
+            value="🆑 Tøm alle rader"
+            @click="clearRows"
+          >
+          <input
+            class="emoji-btn"
+            type="button"
+            value="❌ Avbryt"
+            @click="showClearRowsModal = false"
+          >
+        </div>
+      </Modal>
+    </div>
+  </AdminPage>
 </template>
 
 <script>
 import Loading from '@/components/atoms/Loading.vue'
+import AdminPage from '@/components/organisms/AdminPage.vue'
 import Modal from '~/components/atoms/Modal.vue'
 import AutocompleteInput from '~/components/atoms/AutocompleteInput.vue'
 import LoginModal from '~/components/molecules/LoginModal.vue'
 
 export default {
-  components: { Modal, AutocompleteInput, LoginModal, Loading },
+  components: { AdminPage, Modal, AutocompleteInput, LoginModal, Loading },
   data: () => ({
     isLoading: false,
     showModal: false,
-    showLogin: true,
+    showLogin: false,
     selectedStore: 0,
     replaceAll: false,
     rows: [],
@@ -252,6 +258,10 @@ export default {
     }
   },
   mounted () {
+    if (!this.$store.getters.userIsLoggedIn) {
+      this.showLogin = true
+      return
+    }
     let storedRows = false
     if (window && window.localStorage) {
       storedRows = localStorage.getItem('importRows') || false

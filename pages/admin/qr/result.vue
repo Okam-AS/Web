@@ -16,7 +16,7 @@
 
 <script>
 // import Loading from '@/components/atoms/Loading.vue'
-import SimpleA3 from '@/pages/tools/qr/cards/simple-A3.vue'
+import SimpleA3 from '@/pages/admin/qr/cards/simple-A3.vue'
 
 export default {
   components: { SimpleA3 },
