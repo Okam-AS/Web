@@ -14,14 +14,17 @@
       :class="{
         'message-box': true,
         'message-box--error': errorMessage,
-        'm-b': true
+        'm-b': true,
       }"
     >
       <div>
         {{ errorMessage }}
       </div>
       <div>
-        <span class="message-box__close material-icons" @click="clearErrors">close</span>
+        <span
+          class="message-box__close material-icons"
+          @click="clearErrors"
+        >close</span>
       </div>
     </div>
     <div v-if="!userIsLoggedIn" class="checkout-form">
@@ -36,11 +39,24 @@
     <div v-if="userIsLoggedIn && !cartIsEmpty" class="checkout-form">
       <span class="label">Leveringsmetoder</span>
 
-      <SelectButton v-if="store.selfPickUp" :selected="localDeliveryType === 'SelfPickup'" text="Hent selv" @change="setLocalDeliveryType('SelfPickup')" />
       <SelectButton
-        v-if="storeCart && storeCart.calculations && store.homeDeliveryMethods && store.homeDeliveryMethods.length > 0"
+        v-if="store.selfPickUp"
+        :selected="localDeliveryType === 'SelfPickup'"
+        text="Hent selv"
+        @change="setLocalDeliveryType('SelfPickup')"
+      />
+      <SelectButton
+        v-if="
+          storeCart &&
+            storeCart.calculations &&
+            store.homeDeliveryMethods &&
+            store.homeDeliveryMethods.length > 0
+        "
         text="Hjemlevering"
-        :disabled="storeCart.calculations.itemsAmount < store.minimumOrderPriceForHomeDelivery"
+        :disabled="
+          storeCart.calculations.itemsAmount <
+            store.minimumOrderPriceForHomeDelivery
+        "
         :selected="localDeliveryType === 'InstantHomeDelivery'"
         @change="setLocalDeliveryType('InstantHomeDelivery')"
       >
@@ -52,10 +68,18 @@
                 store.minimumOrderPriceForHomeDelivery
             "
             class="sold-out"
-          >{{ 'Min. bestilling: ' + priceLabel(store.minimumOrderPriceForHomeDelivery) }}</span>
+          >{{
+            "Min. bestilling: " +
+              priceLabel(store.minimumOrderPriceForHomeDelivery)
+          }}</span>
         </template>
       </SelectButton>
-      <SelectButton v-if="store.tableDelivery" text="Spis inne" :selected="localDeliveryType === 'TableDelivery'" @change="setLocalDeliveryType('TableDelivery')" />
+      <SelectButton
+        v-if="store.tableDelivery"
+        text="Spis inne"
+        :selected="localDeliveryType === 'TableDelivery'"
+        @change="setLocalDeliveryType('TableDelivery')"
+      />
       <div v-if="localDeliveryType === 'SelfPickup'" class="section">
         <span class="label">Henteadresse</span>
         <div>{{ storeAddressOneLiner }}</div>
@@ -65,32 +89,54 @@
         <div>
           <input
             v-model="localTableName"
-            :class="{'input': true, 'border-error': tableNameError}"
+            :class="{ input: true, 'border-error': tableNameError }"
             maxlength="30"
             rows="1"
             placeholder="F.eks: 7"
           >
         </div>
       </div>
-      <DeliveryAddressInputs v-if="localDeliveryType === 'InstantHomeDelivery'" :has-errors="deliveryAddressError" />
+      <DeliveryAddressInputs
+        v-if="localDeliveryType === 'InstantHomeDelivery'"
+        :has-errors="deliveryAddressError"
+      />
 
       <div class="section">
         <span class="label">Betalingsmetoder</span>
         <div>
-          <Loading
-            v-if="isLoadingCards"
-          />
+          <Loading v-if="isLoadingCards" />
           <div v-else>
             <div v-for="(item, index) in cards" :key="index">
-              <SelectButton v-if="item.id === 'waiter'" text="Betal på stedet" :selected="selectedPaymentMethodId === item.id" @change="setPaymentMethodId(item.id)">
+              <SelectButton
+                v-if="item.id === 'waiter'"
+                text="Betal på stedet"
+                :selected="selectedPaymentMethodId === item.id"
+                @change="setPaymentMethodId(item.id)"
+              >
                 <span class="material-icons">point_of_sale</span>
               </SelectButton>
-              <SelectButton v-else-if="item.card" :text="'****' + item.card.last4 + ' ' + item.card.exp_month + '/' + item.card.exp_year" :selected="selectedPaymentMethodId === item.id" @change="setPaymentMethodId(item.id)">
+              <SelectButton
+                v-else-if="item.card"
+                :text="
+                  '****' +
+                    item.card.last4 +
+                    ' ' +
+                    item.card.exp_month +
+                    '/' +
+                    item.card.exp_year
+                "
+                :selected="selectedPaymentMethodId === item.id"
+                @change="setPaymentMethodId(item.id)"
+              >
                 <span class="material-icons">credit_card</span>
               </SelectButton>
             </div>
-            <div>
-              <SelectButton text="Nytt kort" :selected="selectedPaymentMethodId === ''" @change="setPaymentMethodId('')" />
+            <div v-if="storeId !== 28">
+              <SelectButton
+                text="Nytt kort"
+                :selected="selectedPaymentMethodId === ''"
+                @change="setPaymentMethodId('')"
+              />
               <div v-show="selectedPaymentMethodId === ''">
                 <client-only>
                   <stripe-element-card
@@ -101,75 +147,142 @@
                     class="card-input"
                   />
                 </client-only>
-                <label class="checkbox"><input v-model="rememberCard" type="checkbox">Husk dette kortet</label>
+                <label
+                  class="checkbox"
+                ><input v-model="rememberCard" type="checkbox">Husk dette
+                  kortet</label>
               </div>
             </div>
           </div>
         </div>
       </div>
       <div v-if="!isLoadingCards" class="section">
-        <span class="label" style="margin-bottom:1em;">Tips</span>
+        <span class="label" style="margin-bottom: 1em">Tips</span>
         <div>
-          <span :class="{'tip': true, 'selected': localTipPercent === 0}" @click="setTip(0)">🙂 0%</span>
-          <span :class="{'tip': true, 'selected': localTipPercent === 5}" @click="setTip(5)">😀 5%</span>
-          <span :class="{'tip': true, 'selected': localTipPercent === 10}" @click="setTip(10)">😃 10%</span>
-          <span :class="{'tip': true, 'selected': localTipPercent === 20}" @click="setTip(20)">😍 20%</span>
+          <span
+            :class="{ tip: true, selected: localTipPercent === 0 }"
+            @click="setTip(0)"
+          >🙂 0%</span>
+          <span
+            :class="{ tip: true, selected: localTipPercent === 5 }"
+            @click="setTip(5)"
+          >😀 5%</span>
+          <span
+            :class="{ tip: true, selected: localTipPercent === 10 }"
+            @click="setTip(10)"
+          >😃 10%</span>
+          <span
+            :class="{ tip: true, selected: localTipPercent === 20 }"
+            @click="setTip(20)"
+          >😍 20%</span>
         </div>
       </div>
       <div class="section">
         <span class="label">Kommentar</span>
         <div>
-          <textarea v-model="localComment" class="input" maxlength="100" rows="4" :placeholder="commentHint" />
+          <textarea
+            v-model="localComment"
+            class="input"
+            maxlength="100"
+            rows="4"
+            :placeholder="commentHint"
+          />
         </div>
       </div>
       <Loading v-if="isLoading" />
-      <div v-else-if="storeCart && storeCart.calculations" class="section price-summary">
+      <div
+        v-else-if="storeCart && storeCart.calculations"
+        class="section price-summary"
+      >
         <div class="price-summary__row">
           <span>{{ totalQuantityLabel }}</span>
-          <span v-show="storeCart.calculations.itemsAmountLineThrough > 0" class="right" style="text-decoration: line-through;">
-            {{ priceLabel(storeCart.calculations.itemsAmountLineThrough) + ' ' }}
+          <span
+            v-show="storeCart.calculations.itemsAmountLineThrough > 0"
+            class="right"
+            style="text-decoration: line-through"
+          >
+            {{
+              priceLabel(storeCart.calculations.itemsAmountLineThrough) + " "
+            }}
           </span>
-          <span class="right">{{ priceLabel(storeCart.calculations.itemsAmount) }}</span>
+          <span class="right">{{
+            priceLabel(storeCart.calculations.itemsAmount)
+          }}</span>
         </div>
-        <div v-show="storeCart.calculations.tipAmount > 0" class="price-summary__row">
+        <div
+          v-show="storeCart.calculations.tipAmount > 0"
+          class="price-summary__row"
+        >
           <span>Tips</span>
-          <span class="right">{{ priceLabel(storeCart.calculations.tipAmount) }}</span>
+          <span class="right">{{
+            priceLabel(storeCart.calculations.tipAmount)
+          }}</span>
         </div>
         <div class="price-summary__row">
           <span>Levering</span>
-          <span class="right">{{ priceLabel(storeCart.calculations.deliveryAmount) }}</span>
+          <span class="right">{{
+            priceLabel(storeCart.calculations.deliveryAmount)
+          }}</span>
         </div>
-        <div v-show="storeCart.calculations.orderDiscountAmount > 0" class="price-summary__row">
+        <div
+          v-show="storeCart.calculations.orderDiscountAmount > 0"
+          class="price-summary__row"
+        >
           <span>Rabatt</span>
-          <span class="right">{{ '-' + priceLabel(storeCart.calculations.orderDiscountAmount) }}</span>
+          <span class="right">{{
+            "-" + priceLabel(storeCart.calculations.orderDiscountAmount)
+          }}</span>
         </div>
-        <div v-show="storeCart.calculations.tableAdditionalAmount > 0" class="price-summary__row">
+        <div
+          v-show="storeCart.calculations.tableAdditionalAmount > 0"
+          class="price-summary__row"
+        >
           <span>Spis inne</span>
-          <span class="right">{{ priceLabel(storeCart.calculations.tableAdditionalAmount) }}</span>
+          <span class="right">{{
+            priceLabel(storeCart.calculations.tableAdditionalAmount)
+          }}</span>
         </div>
         <div class="price-summary__row price-summary__row--total">
           <span>Totalt</span>
-          <span class="right">{{ priceLabel(storeCart.calculations.finalAmount) }}</span>
+          <span class="right">{{
+            priceLabel(storeCart.calculations.finalAmount)
+          }}</span>
         </div>
       </div>
     </div>
     <div v-if="userIsLoggedIn && !cartIsEmpty" class="btn-row btn-row--center">
-      <p v-if="!store.isOpenNow && store.name" style="padding:1em;background:#fcf0cc;">
-        {{ store.name + ' er stengt for øyeblikket' }}
-      </p>
-      <continue-button
-        :class="{'disabled': submitDisabled }"
-        @click="submit"
+      <p
+        v-if="!store.isOpenNow && store.name"
+        style="padding: 1em; background: #fcf0cc"
       >
+        {{ store.name + " er stengt for øyeblikket" }}
+      </p>
+      <continue-button :class="{ disabled: submitDisabled }" @click="submit">
         Bekreft og betal
       </continue-button>
       <div class="terms">
-        Jeg er enig i <span class="clickable" style="font-weight:bold" @click="showTerms = true">salgsbetingelsene</span> og klar over at kjøpet innebærer begrensinger i <span class="clickable" style="font-weight:bold" @click="showTerms = true">angreretten</span>.
+        Jeg er enig i
+        <span
+          class="clickable"
+          style="font-weight: bold"
+          @click="showTerms = true"
+        >salgsbetingelsene</span>
+        og klar over at kjøpet innebærer begrensinger i
+        <span
+          class="clickable"
+          style="font-weight: bold"
+          @click="showTerms = true"
+        >angreretten</span>.
       </div>
     </div>
     <LoginModal v-if="showLogin" @close="closeLoginModal" />
     <Modal v-if="showTerms" @close="showTerms = false">
-      <iframe style="border:none;" width="100%" height="800" src="https://www.okam.no/personvern-og-vilkar/?nolayout" />
+      <iframe
+        style="border: none"
+        width="100%"
+        height="800"
+        src="https://www.okam.no/personvern-og-vilkar/?nolayout"
+      />
     </Modal>
   </div>
 </template>
@@ -186,7 +299,15 @@ import SelectButton from '~/components/atoms/SelectButton.vue'
 import LoginModal from '~/components/molecules/LoginModal.vue'
 
 export default {
-  components: { ContinueButton, DeliveryAddressInputs, SelectButton, MyUserDropdown, Loading, Modal, LoginModal },
+  components: {
+    ContinueButton,
+    DeliveryAddressInputs,
+    SelectButton,
+    MyUserDropdown,
+    Loading,
+    Modal,
+    LoginModal
+  },
   data: () => ({
     storeId: undefined,
     showLogin: false,
@@ -227,10 +348,22 @@ export default {
       return this.cartIsEmpty ? [] : this.storeCart.items
     },
     storeCart () {
-      return this.$store.getters.cartByStoreId(this.storeId) || { calculations: {} }
+      return (
+        this.$store.getters.cartByStoreId(this.storeId) || { calculations: {} }
+      )
     },
     storeAddressOneLiner () {
-      if (this.store && this.store.address) { return (this.store.address.fullAddress + ', ' + this.store.address.zipCode + ' ' + this.store.address.city) } else { return '' }
+      if (this.store && this.store.address) {
+        return (
+          this.store.address.fullAddress +
+          ', ' +
+          this.store.address.zipCode +
+          ' ' +
+          this.store.address.city
+        )
+      } else {
+        return ''
+      }
     },
     totalQuantityLabel () {
       const totalQuantity = this.cartItems
@@ -239,8 +372,12 @@ export default {
       return totalQuantity + (totalQuantity === 1 ? ' vare' : ' varer')
     },
     commentHint () {
-      if (this.localDeliveryType === 'SelfPickup') { return 'Ønsker du å hente bestillingen på et senere tidspunkt eller har en annen beskjed til den som behandler din bestilling, kan du skrive den inn her.' }
-      if (this.localDeliveryType === 'InstantHomeDelivery') { return 'Ønsker du å få bestillingen levert på et senere tidspunkt, har en beskjed til sjåføren eller den som behandler din bestilling, kan du skrive den inn her.' }
+      if (this.localDeliveryType === 'SelfPickup') {
+        return 'Ønsker du å hente bestillingen på et senere tidspunkt eller har en annen beskjed til den som behandler din bestilling, kan du skrive den inn her.'
+      }
+      if (this.localDeliveryType === 'InstantHomeDelivery') {
+        return 'Ønsker du å få bestillingen levert på et senere tidspunkt, har en beskjed til sjåføren eller den som behandler din bestilling, kan du skrive den inn her.'
+      }
 
       return 'Har du en beskjed til den som behandler din bestilling, kan du skrive den inn her'
     },
@@ -250,7 +387,12 @@ export default {
       )
     },
     submitDisabled () {
-      return this.isLoading || !this.store.isOpenNow || this.isSending || this.cartIsEmpty
+      return (
+        this.isLoading ||
+        !this.store.isOpenNow ||
+        this.isSending ||
+        this.cartIsEmpty
+      )
     }
   },
   watch: {
@@ -262,20 +404,33 @@ export default {
     }
   },
   mounted () {
-    if (!this.storeId) { return }
-    if (!this.userIsLoggedIn) { this.showLogin = true; return }
+    if (!this.storeId) {
+      return
+    }
+    if (!this.userIsLoggedIn) {
+      this.showLogin = true
+      return
+    }
 
     this._storeService.Get(this.storeId).then((res) => {
       this.store = res
       this.localDeliveryType = 'NotSet'
       if (this.storeCart) {
-        this.localTableName = !this.storeCart.tableName ? '' : this.storeCart.tableName + ''
+        this.localTableName = !this.storeCart.tableName
+          ? ''
+          : this.storeCart.tableName + ''
         if (!this.localTableName && this.qsTableName) {
           this.localTableName = this.qsTableName
         }
-        if (this.localTableName && this.store.tableDelivery) { this.localDeliveryType = 'TableDelivery' }
+        if (this.localTableName && this.store.tableDelivery) {
+          this.localDeliveryType = 'TableDelivery'
+        }
 
-        this.localComment = !this.storeCart.comment || this.storeCart.comment === 'Ingen kommentar' ? '' : this.storeCart.comment + ''
+        this.localComment =
+          !this.storeCart.comment ||
+          this.storeCart.comment === 'Ingen kommentar'
+            ? ''
+            : this.storeCart.comment + ''
       }
 
       if (this.userIsLoggedIn) {
@@ -313,7 +468,9 @@ export default {
         containsErrors = true
       }
 
-      if (containsErrors) { return false }
+      if (containsErrors) {
+        return false
+      }
 
       try {
         const {
@@ -379,20 +536,32 @@ export default {
     },
     validAddress () {
       const address = this.$store.state.currentUser.address
-      if (!address) { return false }
+      if (!address) {
+        return false
+      }
       if (
         !address.fullAddress ||
         address.fullAddress.toString().trim().length < 3
-      ) { return false }
-      if (!address.zipCode || address.zipCode.trim().length !== 4) { return false }
-      if (!address.city || address.city.trim().length < 3) { return false }
+      ) {
+        return false
+      }
+      if (!address.zipCode || address.zipCode.trim().length !== 4) {
+        return false
+      }
+      if (!address.city || address.city.trim().length < 3) {
+        return false
+      }
       return true
     },
     goToStore () {
       window.location.href = '/webshop' + this.urlQueryStrings
     },
     closeLoginModal (isLoggedIn) {
-      if (isLoggedIn) { window.location.reload() } else { this.showLogin = false }
+      if (isLoggedIn) {
+        window.location.reload()
+      } else {
+        this.showLogin = false
+      }
     },
     createPaymentIntent (paymentMethodId, setupFutureUsage) {
       const comp = this
@@ -449,7 +618,9 @@ export default {
         this.showLogin = true
         return
       }
-      if (this.submitDisabled) { return }
+      if (this.submitDisabled) {
+        return
+      }
       this.isSending = true
       try {
         await this.validate()
@@ -457,18 +628,24 @@ export default {
           if (this.selectedPaymentMethodId === 'waiter') {
             this.completeCart()
           } else if (this.selectedPaymentMethodId) {
-          // Using saved card
+            // Using saved card
             this.createPaymentIntent(this.selectedPaymentMethodId, true)
           } else {
-          // Nytt kort:
-            this.$refs.cardElement.stripe.createPaymentMethod({
-              type: 'card',
-              card: this.$refs.cardElement.element
-            }).then((result) => {
-              this.createPaymentIntent(result.paymentMethod.id, this.rememberCard)
-            }).catch(() => {
-              this.isSending = false
-            })
+            // Nytt kort:
+            this.$refs.cardElement.stripe
+              .createPaymentMethod({
+                type: 'card',
+                card: this.$refs.cardElement.element
+              })
+              .then((result) => {
+                this.createPaymentIntent(
+                  result.paymentMethod.id,
+                  this.rememberCard
+                )
+              })
+              .catch(() => {
+                this.isSending = false
+              })
           }
           this.isSending = true
         } else {
@@ -476,7 +653,8 @@ export default {
         }
       } catch (error) {
         this.isSending = false
-        this.errorMessage = 'Betalingen kunne ikke gjennomføres. Kontroller kortinformasjon og prøv igjen.'
+        this.errorMessage =
+          'Betalingen kunne ikke gjennomføres. Kontroller kortinformasjon og prøv igjen.'
       }
     },
     setTip (tipPercent) {
@@ -492,26 +670,35 @@ export default {
       this.localDeliveryType = value
       this.updateCart(true)
     },
-    debouncedUpdateCart: debounce(function () { this.updateCart() }, 400),
+    debouncedUpdateCart: debounce(function () {
+      this.updateCart()
+    }, 400),
     updateCart (updateAvailablePaymentMethods) {
-      if (!this.storeId) { return }
-      this._cartService.SetCartRootProperties({
-        storeId: this.storeId,
-        isWaiterOrder: this.selectedPaymentMethodId === 'waiter',
-        deliveryType: this.localDeliveryType,
-        fullAddress: this.$store.state.currentUser.address
-          ? this.$store.state.currentUser.address.fullAddress
-          : '',
-        zipCode: this.$store.state.currentUser.address
-          ? this.$store.state.currentUser.address.zipCode
-          : '',
-        city: this.$store.state.currentUser.address
-          ? this.$store.state.currentUser.address.city
-          : '',
-        comment: this.localComment ? this.localComment : 'Ingen kommentar',
-        tipPercent: this.localTipPercent,
-        tableName: this.localTableName
-      }, updateAvailablePaymentMethods ? this.getAvailablePaymentMethods : undefined)
+      if (!this.storeId) {
+        return
+      }
+      this._cartService.SetCartRootProperties(
+        {
+          storeId: this.storeId,
+          isWaiterOrder: this.selectedPaymentMethodId === 'waiter',
+          deliveryType: this.localDeliveryType,
+          fullAddress: this.$store.state.currentUser.address
+            ? this.$store.state.currentUser.address.fullAddress
+            : '',
+          zipCode: this.$store.state.currentUser.address
+            ? this.$store.state.currentUser.address.zipCode
+            : '',
+          city: this.$store.state.currentUser.address
+            ? this.$store.state.currentUser.address.city
+            : '',
+          comment: this.localComment ? this.localComment : 'Ingen kommentar',
+          tipPercent: this.localTipPercent,
+          tableName: this.localTableName
+        },
+        updateAvailablePaymentMethods
+          ? this.getAvailablePaymentMethods
+          : undefined
+      )
     },
     clearErrors () {
       this.errorMessage = ''
@@ -525,7 +712,9 @@ export default {
       this._stripeService
         .GetPaymentMethods(this.storeCart.id)
         .then((result) => {
-          if (Array.isArray(result)) { this.cards = result }
+          if (Array.isArray(result)) {
+            this.cards = result
+          }
           if (
             !this.selectedPaymentMethodId ||
             this.selectedPaymentMethodId === 'waiter'
@@ -545,20 +734,20 @@ export default {
 </script>
 <style lang="scss" >
 @import "../../assets/sass/common.scss";
-.disabled{
+.disabled {
   opacity: 0.5;
 }
-.border-error{
+.border-error {
   border-color: $color-error;
 }
-#stripe-element-errors{
+#stripe-element-errors {
   color: $color-error;
-  padding-top:rem(5);
-  padding-bottom:rem(5);
+  padding-top: rem(5);
+  padding-bottom: rem(5);
   font-size: 0.75em;
 }
 
-.sold-out{
+.sold-out {
   background-color: $color-neutral-light;
   padding: rem(4) rem(8);
   font-style: italic;
@@ -607,7 +796,7 @@ export default {
 }
 
 .right {
-  float:right;
+  float: right;
 }
 
 .terms {

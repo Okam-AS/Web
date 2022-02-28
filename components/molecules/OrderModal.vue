@@ -12,7 +12,7 @@
           </div>
           <div class="definition-list__item">
             <dt>Betaling</dt>
-            <dd>{{ order.isWaiterOrder ? 'Betal i kassa' : 'Betalt' }}</dd>
+            <dd>{{ order.isWaiterOrder ? "Betal i kassen" : "Betalt" }}</dd>
           </div>
           <div class="definition-list__item">
             <dt>Leveringsmetode</dt>
@@ -71,9 +71,7 @@
           </tr>
 
           <tr class="receipt__table-total">
-            <td>
-              Totalt
-            </td>
+            <td>Totalt</td>
             <td class="u-right">
               {{ priceLabel(order.finalAmount) }}
             </td>
@@ -82,7 +80,11 @@
       </div>
 
       <div class="receipt__group">
-        <table v-for="(taxDetail,index) in order.taxDetails" :key="index" class="receipt__table">
+        <table
+          v-for="(taxDetail, index) in order.taxDetails"
+          :key="index"
+          class="receipt__table"
+        >
           <tr>
             <th class="u-left">
               Grunnlag {{ taxDetail.percent }}%
@@ -191,5 +193,4 @@ export default {
     }
   }
 }
-
 </style>

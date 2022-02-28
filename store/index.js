@@ -10,6 +10,7 @@ export const state = () => ({
 })
 
 export const getters = {
+  clientPlatformName: () => 'Web',
   userIsLoggedIn: state => state.currentUser && state.currentUser.id,
   cartByStoreId (state) {
     return (storeId) => {
