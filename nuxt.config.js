@@ -9,7 +9,7 @@ export default {
     STRAPI_BASE_URL: 'https://okam-strapi.herokuapp.com',
     IS_NATIVESCRIPT: 'false',
     VERSION: '1.0.0',
-    STRIPE_PUBLISHABLE_KEY: 'pk_test_51H4qD7LNNQ2fMCqGKVqDxFBnljHO1QyXuLSQ8BTvltvx9jKXGSw78WuX01i9miBj9hzh5L8AS9aiIXF9qUDq5kKH005deCclVN',
+    STRIPE_PUBLISHABLE_KEY: 'pk_live_51H4qD7LNNQ2fMCqGIIRGK82JJUQxiMC8MA8pQOHUGkOkZz3hYB07AY8cwwrvRhdbV6TGcsG4q2C4Uyd10qlCJwwB00rxwMJ4WQ',
     PLATFORM_FILE_SUFFIX: '.nuxt'
   },
 
