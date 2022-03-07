@@ -27,6 +27,7 @@
                 <li><a href="/admin/qr">Bordkort med QR-koder</a></li>
                 <li><a href="/admin/lang">Språk</a></li>
                 <li><a href="/admin/import">Import</a></li>
+                <li><a href="/admin/ongoing">Pågående bestillinger</a></li>
               </ul>
             </div>
           </div>
