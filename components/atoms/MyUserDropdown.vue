@@ -103,18 +103,19 @@ export default {
     right: 0;
     left: 0;
     bottom: 0;
-    background-color: $color-profile;
+    background-color: $color-support-dark;
     @include z-index('menu');
     box-shadow: 0 1px 5px 0 rgba(0 0 0 / 20%);
-    padding: rem(16) rem(24);
+    padding: rem(64) rem(40);
     max-width: rem(600);
     margin: 0 auto;
 
     &-item {
       display: flex;
       align-items: center;
-      padding: rem(10) 0;
-      margin-right: rem(64);
+      padding: rem(16) 0;
+      color: #fff;
+      border-bottom: 1px solid rgba(255,255,255,0.3);
     }
 
     &-icon {

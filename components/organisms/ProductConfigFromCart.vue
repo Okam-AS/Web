@@ -88,8 +88,8 @@ export default {
   flex-direction: column;
   background: $color-support-light;
   margin-top: rem(16);
-  margin-left: rem(70);
   padding: rem(16);
+  border-radius: rem(10);
 
   &-item {
     &-description {

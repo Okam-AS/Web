@@ -84,7 +84,11 @@ export default {
 
 .product {
   margin-bottom: 0;
-  padding: rem(24) rem(16);
+  padding: rem(16) rem(16);
+
+  .modal-container & {
+    padding: rem(24) rem(16);
+  }
 
   &-header {
     display: flex;
@@ -93,11 +97,11 @@ export default {
   }
 
   &-image {
-    min-width: rem(50);
-    max-width: rem(50);
-    margin-right: rem(20);
+    min-width: rem(60);
+    max-width: rem(60);
+    margin-right: rem(15);
     border-radius: rem(5);
-    max-height: rem(50);
+    max-height: rem(60);
     background-color: #f6f6f6;
     flex-shrink: 0;
 
@@ -113,22 +117,30 @@ export default {
   }
 
   &-title {
-    font-size: rem(18);
+    font-size: rem(16);
     line-height: 1.35;
+    margin-bottom: rem(4);
+
+    .modal-container & {
+      padding-right: rem(30);
+    }
   }
 
   &-text {
     line-height: 1.35;
+    font-size: rem(14);
   }
 
   &-price {
-    margin-top: rem(8);
+    margin-top: rem(10);
+    font-size: rem(14);
 
     &__sold-out {
       background-color: $color-neutral-light;
       padding: rem(4) rem(8);
       font-style: italic;
       font-size: 11px;
+      border-radius: rem(4);
     }
   }
 
@@ -145,4 +157,5 @@ export default {
     }
   }
 }
+
 </style>

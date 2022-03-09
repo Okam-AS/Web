@@ -54,13 +54,13 @@
 
     &--modal {
         position: fixed;
-        right: rem(16);
-        bottom: rem(16);
-        left: rem(16);
+        right: 0;
+        bottom: 0;
+        left: 0;
         padding: rem(16);
         margin-top: 0;
         background-color: #fff;
-        border-radius: rem(15);
+        border-radius: rem(15) rem(15) 0 0;
         box-shadow: 0 0 20px 0 rgba(0,0,0,0.2);
     }
 

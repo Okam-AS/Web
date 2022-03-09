@@ -93,21 +93,19 @@ export default {
 
   .close-button {
     position: fixed;
-    top: rem(6);
-    right: rem(6);
+    top: rem(10);
+    right: rem(8);
     @include z-index('modal-close');
-    border: 2px solid white;
   }
 
   &-wrapper {
     overflow: auto;
     position: fixed;
-    top: rem(16);
-    right: rem(16);
-    bottom: rem(16);
-    left: rem(16);
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     @include z-index('modal-body');
-    border-radius: rem(12);
     background-color: #fff;
   }
 

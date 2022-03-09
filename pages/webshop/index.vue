@@ -260,26 +260,26 @@ export default {
 
     .product {
       cursor: pointer;
-      border-bottom: 1px solid $color-neutral-light;
+      box-shadow: 0 0 10px 0 $color-neutral-light;
+      margin: rem(10);
+      border-radius: rem(10);
+      background-color: #fff;
 
       &:hover,
       &:focus {
         background-color: #f6f6f6;
       }
-
-      &:last-child {
-        border-bottom: none;
-      }
     }
   }
 
   .category-header {
-    background: $color-support-light;
+    background: $color-support-dark;
     padding: rem(16) rem(24);
-    border-bottom: rem(4) solid white;
+    border-bottom: rem(1) solid rgba(255,255,255,0.3);
     cursor: pointer;
     font-size: rem(18);
     font-weight: 400;
+    color: #fff;
 
     .icon {
       float: right;
@@ -289,10 +289,13 @@ export default {
         width: rem(20);
         height: rem(20);
         transition: transform .2s ease-in-out;
+        fill: #fff;
       }
     }
 
     &--expanded {
+      border-bottom: none;
+
       .icon svg {
         transform: rotate(180deg);
       }
@@ -300,7 +303,7 @@ export default {
   }
 
   .product-group {
-    margin-bottom: rem(4);
+
   }
 }
 </style>
