@@ -75,7 +75,7 @@
         </template>
       </SelectButton>
       <SelectButton
-        v-if="store.tableDelivery"
+        v-if="store.tableDeliveryEnabled"
         text="Spis inne"
         :selected="localDeliveryType === 'TableDelivery'"
         @change="setLocalDeliveryType('TableDelivery')"
@@ -156,8 +156,10 @@
           </div>
         </div>
       </div>
-      <div v-if="!isLoadingCards" class="section">
-        <span class="label" style="margin-bottom: 1em">Tips</span>
+      <div v-if="!isLoadingCards && store.tipEnabled" class="section">
+        <span class="label" style="margin-bottom: 1em">
+          {{ store.tipLabel ? store.tipLabel : "Tips" }}
+        </span>
         <div>
           <span
             :class="{ tip: true, selected: localTipPercent === 0 }"
