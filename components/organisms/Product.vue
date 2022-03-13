@@ -5,12 +5,14 @@
     @click="openProduct"
     @keyup.enter="openProduct"
   >
+    <img v-if="isLargeImage" :src="product.image.imageUrl" class="expanded-image" @click="expandedImage = false">
     <div class="product-header">
-      <div class="product-image">
+      <div v-if="!isLargeImage" class="product-image">
         <img
           v-if="product.image && product.image.thumbnailUrl"
           class="product-thumbnail"
           :src="product.image.thumbnailUrl"
+          @click="expandedImage = true"
         >
       </div>
 
@@ -66,6 +68,25 @@ export default {
       default: () => {}
     }
   },
+  data: () => ({
+    expandedImage: false
+  }),
+  computed: {
+    isLargeImage () {
+      if (this.expandedImage) {
+        return true
+      }
+
+      return false
+    }
+  },
+  watch: {
+    selectedLineItem () {
+      if (!this.selectedLineItem && !this.selectedLineItem.product) {
+        this.expandedImage = false
+      }
+    }
+  },
   methods: {
     openProduct () {
       if (!this.hideLineItems && !this.product.soldOut) {
@@ -90,6 +111,13 @@ export default {
     padding: rem(24) rem(16);
   }
 
+  .expanded-image {
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+    margin-bottom: rem(20);
+  }
+
   &-header {
     display: flex;
     justify-content: space-between;
@@ -109,6 +137,7 @@ export default {
       width: 100%;
       height: auto;
       border-radius: rem(5);
+      cursor: pointer;
     }
   }
 
