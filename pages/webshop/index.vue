@@ -73,6 +73,7 @@
 
     <Modal v-if="selectedLineItem.product" @close="selectedLineItem = {}">
       <Product
+        :image-can-be-expanded="true"
         :product="selectedLineItem.product"
         :hide-line-items="true"
       />

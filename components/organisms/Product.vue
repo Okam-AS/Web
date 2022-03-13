@@ -55,6 +55,10 @@ import ProductConfigFromCart from '@/components/organisms/ProductConfigFromCart.
 export default {
   components: { ProductConfigFromCart },
   props: {
+    imageCanBeExpanded: {
+      type: Boolean,
+      default: false
+    },
     product: {
       type: Object,
       required: true
@@ -73,11 +77,7 @@ export default {
   }),
   computed: {
     isLargeImage () {
-      if (this.expandedImage) {
-        return true
-      }
-
-      return false
+      return this.imageCanBeExpanded && this.expandedImage
     }
   },
   watch: {
