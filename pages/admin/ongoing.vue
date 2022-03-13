@@ -29,7 +29,9 @@
           <span v-if="order.tableName">Bordnummer: {{ order.tableName }}</span>
           <br v-if="order.tableName">
           <span>Betaling:
-            {{ order.isWaiterOrder ? "Betales i kassen" : "Betalt" }}</span>
+            {{
+              order.paymentType === "PayInStore" ? "Betal i kassen" : "Betalt"
+            }}</span>
           <br>
           <span>Kommentar: {{ order.comment }}</span>
           <br>

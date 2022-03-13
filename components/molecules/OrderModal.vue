@@ -12,7 +12,11 @@
           </div>
           <div class="definition-list__item">
             <dt>Betaling</dt>
-            <dd>{{ order.isWaiterOrder ? "Betal i kassen" : "Betalt" }}</dd>
+            <dd>
+              {{
+                order.paymentType === "PayInStore" ? "Betal i kassen" : "Betalt"
+              }}
+            </dd>
           </div>
           <div class="definition-list__item">
             <dt>Leveringsmetode</dt>

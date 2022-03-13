@@ -7,7 +7,11 @@
       <span>Mine bestillinger</span>
       <MyUserDropdown @close="loadOrders" />
     </div>
-    <div v-if="successMessage && orders && orders[0]" class="message-box" @click="openOrder(orders[0])">
+    <div
+      v-if="successMessage && orders && orders[0]"
+      class="message-box"
+      @click="openOrder(orders[0])"
+    >
       <div>
         {{ successMessage }}
       </div>
@@ -17,12 +21,25 @@
     </div>
     <div v-else>
       <Loading v-if="isLoadingOrders" />
-      <div v-for="order in orders" :key="order.id" class="order-item" @click="openOrder(order)">
-        <span class="order-id">{{ order.id }}</span>
-        <span style="float:right">{{ formatDate(order.created || order.pickup) }}</span>
+      <div
+        v-for="order in orders"
+        :key="order.id"
+        class="order-item"
+        @click="openOrder(order)"
+      >
+        <span class="order-id">{{
+          order.friendlyOrderId ? order.friendlyOrderId : order.id
+        }}</span>
+        <span style="float: right">{{
+          formatDate(order.created || order.pickup)
+        }}</span>
       </div>
     </div>
-    <OrderModal v-if="selectedOrder && selectedOrder.id" :order="selectedOrder" @close="closeOrder" />
+    <OrderModal
+      v-if="selectedOrder && selectedOrder.id"
+      :order="selectedOrder"
+      @close="closeOrder"
+    />
   </div>
 </template>
 
@@ -61,14 +78,19 @@ export default {
       window.location.href = '/webshop' + this.urlQueryStrings
     },
     loadOrders () {
-      if (!this.$store.getters.userIsLoggedIn) { return }
+      if (!this.$store.getters.userIsLoggedIn) {
+        return
+      }
       this.isLoadingOrders = true
-      this._orderService.GetAll().then((orders) => {
-        this.orders = orders
-        this.isLoadingOrders = false
-      }).catch(() => {
-        this.isLoadingOrders = false
-      })
+      this._orderService
+        .GetAll()
+        .then((orders) => {
+          this.orders = orders
+          this.isLoadingOrders = false
+        })
+        .catch(() => {
+          this.isLoadingOrders = false
+        })
     },
     openOrder (order) {
       this.selectedOrder = order
@@ -81,7 +103,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.order-item{
+.order-item {
   border: 1px solid black;
   border-bottom: none;
   padding: 20px;
@@ -91,10 +113,10 @@ export default {
     border-bottom: 1px solid black;
   }
 }
-.order-id{
-  background:black;
-  color:white;
-  padding:5px;
+.order-id {
+  background: black;
+  color: white;
+  padding: 5px;
   border-radius: 5px;
 }
 </style>

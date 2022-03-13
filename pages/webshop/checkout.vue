@@ -685,7 +685,8 @@ export default {
       this._cartService.SetCartRootProperties(
         {
           storeId: this.storeId,
-          isWaiterOrder: this.selectedPaymentMethodId === 'waiter',
+          paymentType:
+            this.selectedPaymentMethodId === 'waiter' ? 'PayInStore' : 'Stripe',
           deliveryType: this.localDeliveryType,
           fullAddress: this.$store.state.currentUser.address
             ? this.$store.state.currentUser.address.fullAddress
