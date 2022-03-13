@@ -116,6 +116,7 @@ export default {
     height: auto;
     cursor: pointer;
     margin-bottom: rem(20);
+    border-radius: rem(5);
   }
 
   &-header {
