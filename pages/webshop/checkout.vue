@@ -131,7 +131,7 @@
                 <span class="material-icons">credit_card</span>
               </SelectButton>
             </div>
-            <div v-if="storeId !== 28">
+            <div v-if="store.payment && store.payment.stripeEnabled === true">
               <SelectButton
                 text="Nytt kort"
                 :selected="selectedPaymentMethodId === ''"
@@ -156,9 +156,12 @@
           </div>
         </div>
       </div>
-      <div v-if="!isLoadingCards && store.tipEnabled" class="section">
+      <div
+        v-if="!isLoadingCards && store.tip && store.tip.percentEnabled"
+        class="section"
+      >
         <span class="label" style="margin-bottom: 1em">
-          {{ store.tipLabel ? store.tipLabel : "Tips" }}
+          {{ store.tip && store.tip.heading ? store.tip.heading : "Tips" }}
         </span>
         <div>
           <span
