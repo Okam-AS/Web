@@ -27,7 +27,7 @@
               <a class="ga-ios-download" href="https://apps.apple.com/no/app/okam/id1514296965"><img alt="AppStore" height="40" src="~assets/UI/appstore-btn.png"></a>
               <a class="ga-android-download" href="https://play.google.com/store/apps/details?id=no.okam.consumer"><img alt="Google Play" height="40" src="~assets/UI/googleplay-btn.png"></a>
             </div>
-            <p v-if="res && res.id && res.id === 28" style="margin-top:2em;">
+            <p v-if="showWebshopUrl" style="margin-top:2em;">
               <a :href="webshopUrl">Eller fortsett i nettleseren</a>
             </p>
           </div>
@@ -55,7 +55,13 @@ export default {
       redirect('/')
     }
   },
+  data: () => ({
+    hasWebLinks: [28, 39]
+  }),
   computed: {
+    showWebshopUrl () {
+      return this.res && this.res.id && this.hasWebLinks.includes(this.res.id)
+    },
     webshopUrl () {
       return this.res && this.res.id ? '/webshop/?nolayout=true&store=' + this.res.id : '/'
     }
