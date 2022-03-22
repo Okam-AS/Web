@@ -6,7 +6,10 @@
         <div class="wrapper">
           <div class="element text-content u-center">
             <p v-if="res && res.logoUrl">
-              <img :src="res.logoUrl" style="width: 100px; height: auto; margin: 0 auto 20px;">
+              <img
+                :src="res.logoUrl"
+                style="width: 100px; height: auto; margin: 0 auto 20px"
+              >
             </p>
 
             <h1 class="heading-1">
@@ -20,14 +23,26 @@
 
             <p>Se meny og legge inn bestilling</p>
 
-            <p>
-              Last ned og bruk Okam appen
-            </p>
+            <p>Last ned og bruk Okam appen</p>
             <div class="big-teaser__links">
-              <a class="ga-ios-download" href="https://apps.apple.com/no/app/okam/id1514296965"><img alt="AppStore" height="40" src="~assets/UI/appstore-btn.png"></a>
-              <a class="ga-android-download" href="https://play.google.com/store/apps/details?id=no.okam.consumer"><img alt="Google Play" height="40" src="~assets/UI/googleplay-btn.png"></a>
+              <a
+                class="ga-ios-download"
+                href="https://apps.apple.com/no/app/okam/id1514296965"
+              ><img
+                alt="AppStore"
+                height="40"
+                src="~assets/UI/appstore-btn.png"
+              ></a>
+              <a
+                class="ga-android-download"
+                href="https://play.google.com/store/apps/details?id=no.okam.consumer"
+              ><img
+                alt="Google Play"
+                height="40"
+                src="~assets/UI/googleplay-btn.png"
+              ></a>
             </div>
-            <p v-if="showWebshopUrl" style="margin-top:2em;">
+            <p v-if="showWebshopUrl" style="margin-top: 2em">
               <a :href="webshopUrl">Eller fortsett i nettleseren</a>
             </p>
           </div>
@@ -56,14 +71,16 @@ export default {
     }
   },
   data: () => ({
-    hasWebLinks: [28, 39]
+    hasWebLinks: [25, 28, 39]
   }),
   computed: {
     showWebshopUrl () {
       return this.res && this.res.id && this.hasWebLinks.includes(this.res.id)
     },
     webshopUrl () {
-      return this.res && this.res.id ? '/webshop/?nolayout=true&store=' + this.res.id : '/'
+      return this.res && this.res.id
+        ? '/webshop/?nolayout=true&store=' + this.res.id
+        : '/'
     }
   }
 }
