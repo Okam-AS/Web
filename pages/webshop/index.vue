@@ -33,14 +33,19 @@
         </h2>
         <div v-if="category.active" class="product-group">
           <Loading v-if="isLoadingProducts" />
-          <Product
-            v-for="(row, j) in (category.categoryProductListItems || []).filter((x) => !x.heading)"
-            :key="j"
-            :product="row.product"
-            :selected-line-item="selectedLineItem"
-            @openProduct="openProduct"
-            @openLineItem="openLineItem"
-          />
+          <template v-for="(row, j) in category.categoryProductListItems || []">
+            <h3 v-if="row.isHeading" :key="j" class="product-group-heading">
+              {{ row.heading }}
+            </h3>
+            <Product
+              v-else
+              :key="j"
+              :product="row.product"
+              :selected-line-item="selectedLineItem"
+              @openProduct="openProduct"
+              @openLineItem="openLineItem"
+            />
+          </template>
         </div>
       </div>
 
@@ -304,7 +309,11 @@ export default {
   }
 
   .product-group {
-
+    margin-bottom: rem(20);
+    &-heading {
+      margin-top: rem(20);
+      margin-left: rem(20);
+    }
   }
 }
 </style>
