@@ -3,9 +3,13 @@
     <div class="container">
       <Loading v-if="isLoading" :loading="true" />
 
-      <div v-for="order in filteredOrders" :key="order.id">
+      <div
+        v-for="order in filteredOrders"
+        :key="order.id"
+        style="border: 1px solid gray; margin-bottom: 2px"
+      >
         <div
-          style="background: lightgray; margin-bottom: 2px; padding: 1em"
+          style="background: lightgray; padding: 1em; cursor: pointer"
           @click="
             showOrderId === order.id
               ? (showOrderId = '')
@@ -15,27 +19,68 @@
           <span>{{ order.storeLegalName }}</span>
           <span style="float: right">{{ orderStatusLabel(order.status) }}</span>
         </div>
-        <div v-if="showOrderId === order.id">
+        <div v-if="showOrderId === order.id" style="margin: 1em">
+          <span>Platform: {{ order.platform }}</span>
+          <br>
           <span>Bestilit: {{ formatDate(order.created || order.pickup) }}</span>
           <br>
-          <span>Klar til: {{ formatDate(order.countdownEndTime) }}</span>
-          <br>
-          <span>Ferdig: {{ formatDate(order.completed) }}</span>
-          <br>
+          <span
+            v-if="order.countdownEndTime"
+          >Klar til: {{ formatDate(order.countdownEndTime) }}</span>
+          <br v-if="order.countdownEndTime">
+          <span
+            v-if="order.completed"
+          >Ferdig: {{ formatDate(order.completed) }}</span>
+          <br v-if="order.completed">
           <span>Totalpris: {{ priceLabel(order.finalAmount) }}</span>
           <br>
           <span>Levering: {{ deliveryTypeLabel(order.deliveryType) }}</span>
           <br>
           <span v-if="order.tableName">Bordnummer: {{ order.tableName }}</span>
           <br v-if="order.tableName">
-          <span>Betaling:
-            {{
-              order.paymentType === "PayInStore" ? "Betal i kassen" : "Betalt"
-            }}</span>
+          <span>Betaling: {{ paymentTypeLabel(order.paymentType) }} </span>
           <br>
           <span>Kommentar: {{ order.comment }}</span>
           <br>
           <br>
+          <div>
+            <div
+              style="text-decoration: underline; cursor: pointer"
+              @click="
+                showOrderItemsOfOrderId === order.id
+                  ? (showOrderItemsOfOrderId = '')
+                  : (showOrderItemsOfOrderId = order.id)
+              "
+            >
+              {{
+                showOrderItemsOfOrderId !== order.id
+                  ? " 👇🏻 Vis varer "
+                  : " 👆🏻 Skjul varer "
+              }}
+            </div>
+            <div v-if="showOrderItemsOfOrderId === order.id">
+              <table style="margin-top: 1em" class="receipt__table">
+                <thead>
+                  <tr>
+                    <th class="u-left">
+                      Vare
+                    </th>
+                    <th class="u-right">
+                      Pris
+                    </th>
+                  </tr>
+                </thead>
+                <tr v-for="item in order.items" :key="item.id">
+                  <td>
+                    {{ item.quantity }} {{ item.name }} (Mva: {{ item.tax }}%)
+                  </td>
+                  <td class="u-right">
+                    {{ priceLabel(item.amount) }}
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
       <LoginModal v-if="showLogin" @close="closeLoginModal" />
@@ -53,7 +98,8 @@ export default {
     showLogin: false,
     isLoading: false,
     orders: [],
-    showOrderId: ''
+    showOrderId: '',
+    showOrderItemsOfOrderId: ''
   }),
   computed: {
     filteredOrders () {

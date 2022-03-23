@@ -51,6 +51,14 @@ const mixin = {
     }
   },
   methods: {
+    paymentTypeLabel (paymentTypeEnum) {
+      switch (paymentTypeEnum) {
+      case 'PayInStore': return 'Hent selv'
+      case 'Stripe': return 'Betalt med kort'
+      case 'Vipps': return 'Betalt med Vipps'
+      default: return 'Ukjent'
+      }
+    },
     deliveryTypeLabel (deliveryTypeEnum) {
       switch (deliveryTypeEnum) {
       case 'SelfPickup': return 'Hent selv'

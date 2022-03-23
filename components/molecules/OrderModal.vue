@@ -13,9 +13,7 @@
           <div class="definition-list__item">
             <dt>Betaling</dt>
             <dd>
-              {{
-                order.paymentType === "PayInStore" ? "Betal i kassen" : "Betalt"
-              }}
+              {{ paymentTypeLabel(order.paymentType) }}
             </dd>
           </div>
           <div class="definition-list__item">
