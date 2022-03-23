@@ -17,6 +17,7 @@ export default {
     title: 'Okam',
     meta: [
       { charset: 'utf-8' },
+      { name: 'apple-itunes-app', content: 'app-id=1514296965' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: 'Vi forenkler lokal handel' },
       {
