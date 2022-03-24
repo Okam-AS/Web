@@ -82,7 +82,7 @@
         @change="setLocalDeliveryType('TableDelivery')"
       />
 
-      <div v-if="localDeliveryType === 'SelfPickup'" class="section">
+      <div v-if="localDeliveryType === 'SelfPickup' || localDeliveryType === 'InstantHomeDelivery'" class="section">
         <span class="label">Når?</span>
 
         <div>
@@ -93,36 +93,21 @@
 
           <div>
             <input id="asap" v-model="localRequestedCompletion" type="radio" value="1">
-            <label for="asap">Velg et tidspunkt for forhåndsbestilling</label>
+            <label for="asap">Velg ønsket tidspunkt for forhåndsbestilling</label>
           </div>
 
           <div v-if="localRequestedCompletion">
             <select v-model="localSelectedRequestedCompletionDateOptionIndex" @change="requestedCompletionChange">
-              <option v-for="(item, index) in requestedCompletionDateOptions.map((x) => x.label)" :key="index" :value="item.value">
+              <option v-for="(item, index) in requestedCompletionDateOptions.map((x) => x.label)" :key="`date-${index}`" :value="index">
                 {{ item }}
               </option>
             </select>
 
-            <!-- TODO:
-            <select v-model="localSelectedRequestedCompletionDateOptionIndex" @change="requestedCompletionChange">
-              <option v-for="(item, index) in requestedCompletionDateOptions.map((x) => x.label)" :key="index" :value="item.value">
-                {{ item.label }}
+            <select v-model="localSelectedRequestedCompletionTime">
+              <option v-for="(item, index) in timeSelection" :key="`time-${index}`" :value="item">
+                {{ item }}
               </option>
             </select>
-
-            <TimePicker
-              col="1"
-              :minuteInterval="5"
-              height="150"
-              width="150"
-              v-model="localSelectedRequestedCompletionTime"
-              maxHour="23"
-              maxMinute="59"
-              iosPreferredDatePickerStyle="1"
-              @loaded="onPickerLoaded"
-              @timeChange="requestedCompletionChange"
-            />
-            -->
           </div>
         </div>
       </div>
@@ -350,10 +335,13 @@ import DeliveryAddressInputs from '@/components/atoms/DeliveryAddressInputs.vue'
 import Modal from '@/components/atoms/Modal.vue'
 import $config from '@/core/helpers/configuration'
 import MyUserDropdown from '@/components/atoms/MyUserDropdown.vue'
+import dayjs from 'dayjs'
 import { debounce } from '../../core/helpers/ts-debounce'
 import SelectButton from '~/components/atoms/SelectButton.vue'
 import LoginModal from '~/components/molecules/LoginModal.vue'
-// import dayjs from 'dayjs'
+
+const objectSupport = require('dayjs/plugin/objectSupport')
+dayjs.extend(objectSupport)
 
 export default {
   components: {
@@ -398,6 +386,27 @@ export default {
     creditCardError: false
   }),
   computed: {
+    timeSelection () {
+      const result = []
+      const now = dayjs()
+      const nowHour = now.hour()
+      const nowMinute = now.minute()
+      const isToday = this.localSelectedRequestedCompletionDateOptionIndex === 0
+
+      for (let i = 0; i < 24; i++) {
+        for (let j = 0; j < 61; j = j + 5) {
+          if (isToday) {
+            if (i >= nowHour && j >= nowMinute) {
+              result.push(`${dayjs({ hour: i, minute: j }).format('HH:mm')}`)
+            }
+          } else {
+            result.push(`${dayjs({ hour: i, minute: j }).format('HH:mm')}`)
+          }
+        }
+      }
+
+      return result
+    },
     localSelectedRequestedCompletionDate () {
       return this.requestedCompletionDateOptions[
         this.localSelectedRequestedCompletionDateOptionIndex
