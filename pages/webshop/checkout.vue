@@ -92,8 +92,8 @@
           </div>
 
           <div>
-            <input id="asap" v-model="localRequestedCompletion" type="radio" value="1">
-            <label for="asap">Velg ønsket tidspunkt for forhåndsbestilling</label>
+            <input id="later" v-model="localRequestedCompletion" type="radio" value="1">
+            <label for="later">Velg ønsket tidspunkt for forhåndsbestilling</label>
           </div>
 
           <div v-if="localRequestedCompletion">
