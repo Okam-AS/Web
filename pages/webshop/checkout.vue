@@ -217,6 +217,48 @@
             priceLabel(storeCart.calculations.itemsAmount)
           }}</span>
         </div>
+
+        <div class="price-summary__row">
+          <span>Når?</span>
+
+          <div>
+            <input id="asap" v-model="localRequestedCompletion" type="radio" value="">
+            <label for="asap">Så snart som mulig</label>
+
+            <input id="asap" v-model="localRequestedCompletion" type="radio" value="1">
+            <label for="asap">Velg et tidspunkt for forhåndsbestilling</label>
+
+            <div v-if="localRequestedCompletion">
+              <select v-model="localSelectedRequestedCompletionDateOptionIndex" @change="requestedCompletionChange">
+                <option v-for="(item, index) in requestedCompletionDateOptions.map((x) => x.label)" :key="index" :value="item.value">
+                  {{ item.label }}
+                </option>
+              </select>
+
+              <!-- TODO:
+              <select v-model="localSelectedRequestedCompletionDateOptionIndex" @change="requestedCompletionChange">
+                <option v-for="(item, index) in requestedCompletionDateOptions.map((x) => x.label)" :key="index" :value="item.value">
+                  {{ item.label }}
+                </option>
+              </select>
+
+              <TimePicker
+                col="1"
+                :minuteInterval="5"
+                height="150"
+                width="150"
+                v-model="localSelectedRequestedCompletionTime"
+                maxHour="23"
+                maxMinute="59"
+                iosPreferredDatePickerStyle="1"
+                @loaded="onPickerLoaded"
+                @timeChange="requestedCompletionChange"
+              />
+              -->
+            </div>
+          </div>
+        </div>
+
         <div
           v-show="storeCart.calculations.tipAmount > 0"
           class="price-summary__row"
@@ -305,6 +347,7 @@ import MyUserDropdown from '@/components/atoms/MyUserDropdown.vue'
 import { debounce } from '../../core/helpers/ts-debounce'
 import SelectButton from '~/components/atoms/SelectButton.vue'
 import LoginModal from '~/components/molecules/LoginModal.vue'
+// import dayjs from 'dayjs'
 
 export default {
   components: {
@@ -334,6 +377,10 @@ export default {
     localTableName: '',
     localTipPercent: 0,
 
+    localRequestedCompletion: '',
+    localSelectedRequestedCompletionDateOptionIndex: 0,
+    localSelectedRequestedCompletionTime: new Date(),
+
     // DELIVERY METHOD
     deliveryMethodError: false,
 
@@ -345,6 +392,24 @@ export default {
     creditCardError: false
   }),
   computed: {
+    localSelectedRequestedCompletionDate () {
+      return this.requestedCompletionDateOptions[
+        this.localSelectedRequestedCompletionDateOptionIndex
+      ].value
+    },
+    requestedCompletionDateOptions () {
+      const today = new Date()
+      const options = []
+      for (let index = 0; index < 7; index++) {
+        const tempDate = new Date(today)
+        tempDate.setDate(tempDate.getDate() + index)
+        options.push({
+          label: this.requestedCompletionDateLabel(index, tempDate),
+          value: tempDate
+        })
+      }
+      return options
+    },
     userIsLoggedIn () {
       return this.$store.getters.userIsLoggedIn
     },
@@ -406,6 +471,9 @@ export default {
     }
   },
   watch: {
+    localRequestedCompletion: debounce(function () {
+      this.updateCart()
+    }, 400),
     localComment () {
       this.debouncedUpdateCart()
     },
@@ -439,6 +507,9 @@ export default {
         this.localComment = this.storeCart.comment
           ? this.storeCart.comment + ''
           : ''
+        this.localRequestedCompletion = JSON.parse(
+          JSON.stringify(this.storeCart.requestedCompletion)
+        )
       }
 
       if (this.userIsLoggedIn) {
@@ -451,6 +522,32 @@ export default {
     })
   },
   methods: {
+    requestedCompletionDateLabel (index, date) {
+      if (index === 0) { return 'I dag' }
+      if (index === 1) { return 'I morgen' }
+      return (
+        ['søn', 'man', 'tir', 'ons', 'tor', 'fre', 'lør'][date.getDay()] +
+        '. ' +
+        date.getDate() +
+        '.' +
+        (date.getMonth() + 1) +
+        '.'
+      )
+    },
+    getSelectedDateTime () {
+      return new Date(
+        this.localSelectedRequestedCompletionDate.getFullYear(),
+        this.localSelectedRequestedCompletionDate.getMonth(),
+        this.localSelectedRequestedCompletionDate.getDate(),
+        this.localSelectedRequestedCompletionTime.getHours(),
+        this.localSelectedRequestedCompletionTime.getMinutes()
+      )
+    },
+    requestedCompletionChange () {
+      const tzoffset = new Date().getTimezoneOffset() * 60000
+      const tempDate = new Date(this.getSelectedDateTime() - tzoffset)
+      this.localRequestedCompletion = tempDate.toISOString().slice(0, -1)
+    },
     async validate () {
       const comp = this
       comp.clearErrors()
