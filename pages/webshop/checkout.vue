@@ -45,6 +45,7 @@
         text="Hent selv"
         @change="setLocalDeliveryType('SelfPickup')"
       />
+
       <SelectButton
         v-if="
           storeCart &&
@@ -80,6 +81,52 @@
         :selected="localDeliveryType === 'TableDelivery'"
         @change="setLocalDeliveryType('TableDelivery')"
       />
+
+      <div v-if="localDeliveryType === 'SelfPickup'" class="section">
+        <span class="label">Når?</span>
+
+        <div>
+          <div>
+            <input id="asap" v-model="localRequestedCompletion" type="radio" value="">
+            <label for="asap">Så snart som mulig</label>
+          </div>
+
+          <div>
+            <input id="asap" v-model="localRequestedCompletion" type="radio" value="1">
+            <label for="asap">Velg et tidspunkt for forhåndsbestilling</label>
+          </div>
+
+          <div v-if="localRequestedCompletion">
+            <select v-model="localSelectedRequestedCompletionDateOptionIndex" @change="requestedCompletionChange">
+              <option v-for="(item, index) in requestedCompletionDateOptions.map((x) => x.label)" :key="index" :value="item.value">
+                {{ item }}
+              </option>
+            </select>
+
+            <!-- TODO:
+            <select v-model="localSelectedRequestedCompletionDateOptionIndex" @change="requestedCompletionChange">
+              <option v-for="(item, index) in requestedCompletionDateOptions.map((x) => x.label)" :key="index" :value="item.value">
+                {{ item.label }}
+              </option>
+            </select>
+
+            <TimePicker
+              col="1"
+              :minuteInterval="5"
+              height="150"
+              width="150"
+              v-model="localSelectedRequestedCompletionTime"
+              maxHour="23"
+              maxMinute="59"
+              iosPreferredDatePickerStyle="1"
+              @loaded="onPickerLoaded"
+              @timeChange="requestedCompletionChange"
+            />
+            -->
+          </div>
+        </div>
+      </div>
+
       <div v-if="localDeliveryType === 'SelfPickup'" class="section">
         <span class="label">Henteadresse</span>
         <div>{{ storeAddressOneLiner }}</div>
@@ -216,47 +263,6 @@
           <span class="right">{{
             priceLabel(storeCart.calculations.itemsAmount)
           }}</span>
-        </div>
-
-        <div class="price-summary__row">
-          <span>Når?</span>
-
-          <div>
-            <input id="asap" v-model="localRequestedCompletion" type="radio" value="">
-            <label for="asap">Så snart som mulig</label>
-
-            <input id="asap" v-model="localRequestedCompletion" type="radio" value="1">
-            <label for="asap">Velg et tidspunkt for forhåndsbestilling</label>
-
-            <div v-if="localRequestedCompletion">
-              <select v-model="localSelectedRequestedCompletionDateOptionIndex" @change="requestedCompletionChange">
-                <option v-for="(item, index) in requestedCompletionDateOptions.map((x) => x.label)" :key="index" :value="item.value">
-                  {{ item.label }}
-                </option>
-              </select>
-
-              <!-- TODO:
-              <select v-model="localSelectedRequestedCompletionDateOptionIndex" @change="requestedCompletionChange">
-                <option v-for="(item, index) in requestedCompletionDateOptions.map((x) => x.label)" :key="index" :value="item.value">
-                  {{ item.label }}
-                </option>
-              </select>
-
-              <TimePicker
-                col="1"
-                :minuteInterval="5"
-                height="150"
-                width="150"
-                v-model="localSelectedRequestedCompletionTime"
-                maxHour="23"
-                maxMinute="59"
-                iosPreferredDatePickerStyle="1"
-                @loaded="onPickerLoaded"
-                @timeChange="requestedCompletionChange"
-              />
-              -->
-            </div>
-          </div>
         </div>
 
         <div
