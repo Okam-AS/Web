@@ -97,7 +97,7 @@
           </div>
 
           <div v-if="localRequestedCompletion">
-            <select v-model="localSelectedRequestedCompletionDateOptionIndex" @change="requestedCompletionChange">
+            <select v-model="localSelectedRequestedCompletionDateOptionIndex">
               <option v-for="(item, index) in requestedCompletionDateOptions.map((x) => x.label)" :key="`date-${index}`" :value="index">
                 {{ item }}
               </option>
