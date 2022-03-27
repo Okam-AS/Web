@@ -53,7 +53,7 @@ const mixin = {
   methods: {
     paymentTypeLabel (paymentTypeEnum) {
       switch (paymentTypeEnum) {
-      case 'PayInStore': return 'Hent selv'
+      case 'PayInStore': return 'Betal i butikk'
       case 'Stripe': return 'Betalt med kort'
       case 'Vipps': return 'Betalt med Vipps'
       default: return 'Ukjent'
