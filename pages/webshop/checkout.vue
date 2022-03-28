@@ -108,25 +108,28 @@
           <div v-else>
             <div v-for="(item, index) in cards" :key="index">
               <SelectButton
-                v-if="item.id === 'waiter'"
+                v-if="item.paymentType === 'PayInStore'"
                 text="Betal på stedet"
                 :selected="selectedPaymentMethodId === item.id"
-                @change="setPaymentMethodId(item.id)"
+                @change="setPaymentMethod(item)"
               >
                 <span class="material-icons">point_of_sale</span>
               </SelectButton>
               <SelectButton
-                v-else-if="item.card"
+                v-if="item.paymentType === 'Stripe'"
                 :text="
-                  '****' +
-                    item.card.last4 +
-                    ' ' +
-                    item.card.exp_month +
-                    '/' +
-                    item.card.exp_year
+                  '****' + item.last4 + ' ' + item.expMonth + '/' + item.expYear
                 "
                 :selected="selectedPaymentMethodId === item.id"
-                @change="setPaymentMethodId(item.id)"
+                @change="setPaymentMethod(item)"
+              >
+                <span class="material-icons">credit_card</span>
+              </SelectButton>
+              <SelectButton
+                v-if="item.paymentType === 'Vipps'"
+                text="Vipps"
+                :selected="selectedPaymentMethodId === item.id"
+                @change="setPaymentMethod(item)"
               >
                 <span class="material-icons">credit_card</span>
               </SelectButton>
@@ -135,7 +138,7 @@
               <SelectButton
                 text="Nytt kort"
                 :selected="selectedPaymentMethodId === ''"
-                @change="setPaymentMethodId('')"
+                @change="setPaymentMethod(undefined)"
               />
               <div v-show="selectedPaymentMethodId === ''">
                 <client-only>
@@ -325,6 +328,7 @@ export default {
     showTerms: false,
 
     localDeliveryType: 'NotSet',
+    localPaymentType: 'NotSet',
     localComment: '',
     localTableName: '',
     localTipPercent: 0,
@@ -431,11 +435,9 @@ export default {
           this.localDeliveryType = 'TableDelivery'
         }
 
-        this.localComment =
-          !this.storeCart.comment ||
-          this.storeCart.comment === 'Ingen kommentar'
-            ? ''
-            : this.storeCart.comment + ''
+        this.localComment = this.storeCart.comment
+          ? this.storeCart.comment + ''
+          : ''
       }
 
       if (this.userIsLoggedIn) {
@@ -443,7 +445,7 @@ export default {
       }
 
       if (this.paymentStatus === 'failed') {
-        this.errorMessage = 'Betalingen med BankID feilet. Prøv igjen.'
+        this.errorMessage = 'Betalingen feilet. Prøv igjen.'
       }
     })
   },
@@ -458,6 +460,10 @@ export default {
       ) {
         comp.deliveryAddressError = true
         comp.errorMessage = 'Legg inn en gyldig leveringsadresse'
+        containsErrors = true
+      }
+      if (comp.localPaymentType === 'NotSet') {
+        comp.errorMessage = 'Velg betalingsmetode'
         containsErrors = true
       }
       if (comp.localDeliveryType === 'NotSet') {
@@ -568,6 +574,24 @@ export default {
         this.showLogin = false
       }
     },
+    initiateVipps () {
+      this.isSending = true
+      this._vippsService
+        .Initiate(
+          this.storeCart.id,
+          this.storeCart.calculations.finalAmount,
+          false
+        )
+        .then((result) => {
+          window.location.href = result.url
+          this.isSending = false
+        })
+        .catch(() => {
+          this.errorMessage =
+            'Betaling med Vipps kunne ikke gjennomføres for øyeblikket.'
+          this.isSending = false
+        })
+    },
     createPaymentIntent (paymentMethodId, setupFutureUsage) {
       const comp = this
       comp.isSending = true
@@ -630,12 +654,14 @@ export default {
       try {
         await this.validate()
         if (!this.errorMessage) {
-          if (this.selectedPaymentMethodId === 'waiter') {
+          if (this.localPaymentType === 'PayInStore') {
             this.completeCart()
-          } else if (this.selectedPaymentMethodId) {
+          } else if (this.localPaymentType === 'Stripe') {
             // Using saved card
             this.createPaymentIntent(this.selectedPaymentMethodId, true)
-          } else {
+          } else if (this.localPaymentType === 'Vipps') {
+            this.initiateVipps()
+          } else if (!this.selectedPaymentMethodId) {
             // Nytt kort:
             this.$refs.cardElement.stripe
               .createPaymentMethod({
@@ -666,8 +692,9 @@ export default {
       this.localTipPercent = tipPercent
       this.debouncedUpdateCart()
     },
-    setPaymentMethodId (id) {
-      this.selectedPaymentMethodId = id
+    setPaymentMethod (item) {
+      this.selectedPaymentMethodId = item === undefined ? '' : item.id
+      this.localPaymentType = item === undefined ? 'NotSet' : item.paymentType
       this.debouncedUpdateCart()
     },
     setLocalDeliveryType (value) {
@@ -685,19 +712,12 @@ export default {
       this._cartService.SetCartRootProperties(
         {
           storeId: this.storeId,
-          paymentType:
-            this.selectedPaymentMethodId === 'waiter' ? 'PayInStore' : 'Stripe',
+          paymentType: this.localPaymentType,
           deliveryType: this.localDeliveryType,
-          fullAddress: this.$store.state.currentUser.address
-            ? this.$store.state.currentUser.address.fullAddress
-            : '',
-          zipCode: this.$store.state.currentUser.address
-            ? this.$store.state.currentUser.address.zipCode
-            : '',
-          city: this.$store.state.currentUser.address
-            ? this.$store.state.currentUser.address.city
-            : '',
-          comment: this.localComment ? this.localComment : 'Ingen kommentar',
+          fullAddress: this.$store.state.currentUser.address?.fullAddress || '',
+          zipCode: this.$store.state.currentUser.address?.zipCode || '',
+          city: this.$store.state.currentUser.address?.city || '',
+          comment: this.localComment,
           tipPercent: this.localTipPercent,
           tableName: this.localTableName
         },
@@ -715,18 +735,19 @@ export default {
     },
     getAvailablePaymentMethods () {
       this.isLoadingCards = true
-      this._stripeService
+      this._paymentService
         .GetPaymentMethods(this.storeCart.id)
         .then((result) => {
           if (Array.isArray(result)) {
             this.cards = result
           }
-          if (
-            !this.selectedPaymentMethodId ||
-            this.selectedPaymentMethodId === 'waiter'
-          ) {
-            this.setPaymentMethodId(
-              this.cards.length > 0 ? this.cards[0].id : ''
+          if ((this.cards || []).length === 1) {
+            this.setPaymentMethod(this.cards[0])
+          } else if (!this.selectedPaymentMethodId) {
+            this.setPaymentMethod(
+              (this.cards || []).find(
+                x => x.id === this.selectedPaymentMethodId
+              )
             )
           }
           this.isLoadingCards = false

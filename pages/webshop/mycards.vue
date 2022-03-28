@@ -5,14 +5,15 @@
         <span class="shop__header-back-icon material-icons">arrow_back</span>
       </button>
       <span>Mine betalingskort</span>
-      <MyUserDropdown style="float:right" @close="load" />
+      <MyUserDropdown style="float: right" @close="load" />
     </div>
     <div v-if="!$store.getters.userIsLoggedIn">
       Du må logge inn for å se dine betalingskort
     </div>
     <div v-else>
       <p>
-        Din kortinformasjon blir lagret trygt hos vår betalingsleverandør. Du kan legge til et nytt kort neste gang du handler.
+        Din kortinformasjon blir lagret trygt hos vår betalingsleverandør. Du
+        kan legge til et nytt kort neste gang du handler.
       </p>
       <p v-if="!isLoading && cards.length === 0">
         Du har ingen registrerte kort
@@ -23,8 +24,14 @@
           :key="index"
           class="card-list__item"
         >
-          <span>{{ '****' + item.card.last4 + ' ' + item.card.exp_month + '/' + item.card.exp_year }}</span>
-          <span class="material-icons" style="cursor:pointer" @click="deleteCard(item.id)">delete</span>
+          <span>{{
+            "****" + item.last4 + " " + item.expMonth + "/" + item.expYear
+          }}</span>
+          <span
+            class="material-icons"
+            style="cursor: pointer"
+            @click="deleteCard(item.id)"
+          >delete</span>
         </div>
       </div>
       <Loading v-if="isLoading" />
@@ -51,14 +58,21 @@ export default {
       window.location.href = '/webshop' + this.urlQueryStrings
     },
     load () {
-      if (!this.$store.getters.userIsLoggedIn) { return }
+      if (!this.$store.getters.userIsLoggedIn) {
+        return
+      }
       this.isLoading = true
-      this._stripeService.GetPaymentMethods().then((cards) => {
-        if (Array.isArray(cards)) { this.cards = cards }
-        this.isLoading = false
-      }).catch(() => {
-        this.isLoading = false
-      })
+      this._paymentService
+        .GetPaymentMethods()
+        .then((cards) => {
+          if (Array.isArray(cards)) {
+            this.cards = cards
+          }
+          this.isLoading = false
+        })
+        .catch(() => {
+          this.isLoading = false
+        })
     },
     deleteCard (id) {
       if (confirm('Er du sikker på at du ønsker å slette dette kortet?')) {
@@ -94,5 +108,4 @@ export default {
     }
   }
 }
-
 </style>
