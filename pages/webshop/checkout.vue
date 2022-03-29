@@ -131,7 +131,7 @@
                 :selected="selectedPaymentMethodId === item.id"
                 @change="setPaymentMethod(item)"
               >
-                <span class="material-icons">credit_card</span>
+                <img src="~/assets/UI/icon_vipps.svg" height="24" alt="Vipps">
               </SelectButton>
             </div>
             <div v-if="store.payment && store.payment.stripeEnabled === true">
