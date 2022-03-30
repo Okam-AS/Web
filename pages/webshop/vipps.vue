@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Loading />
+    <Loading v-if="isLoading" />
     <div v-if="showSuccessResponse || showFailResponse">
       <span>{{ showSuccessResponse ? "Success" : "Fail" }}</span>
     </div>
@@ -13,6 +13,7 @@ import Loading from '@/components/atoms/Loading.vue'
 export default {
   components: { Loading },
   data: () => ({
+    isLoading: true,
     vippsOrderId: '',
     showSuccessResponse: false,
     showFailResponse: false
@@ -62,6 +63,7 @@ export default {
       if (this.userIsLoggedIn && storeId) {
         this.redirectToSuccess(storeId)
       } else {
+        this.isLoading = false
         this.showSuccessResponse = true
       }
     },
@@ -69,6 +71,7 @@ export default {
       if (this.userIsLoggedIn && storeId) {
         this.redirectToError(storeId)
       } else {
+        this.isLoading = false
         this.showFailResponse = true
       }
     },
