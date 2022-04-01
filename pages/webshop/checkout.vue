@@ -329,6 +329,7 @@ export default {
 
     localDeliveryType: 'NotSet',
     localPaymentType: 'NotSet',
+
     localComment: '',
     localTableName: '',
     localTipPercent: 0,
@@ -689,6 +690,7 @@ export default {
       }
     },
     setTip (tipPercent) {
+      if (this.isLoading) { return }
       this.localTipPercent = tipPercent
       this.debouncedUpdateCart()
     },
@@ -698,6 +700,7 @@ export default {
       this.debouncedUpdateCart()
     },
     setLocalDeliveryType (value) {
+      if (this.isLoading) { return }
       this.clearErrors()
       this.localDeliveryType = value
       this.updateCart(true)
@@ -738,17 +741,14 @@ export default {
       this._paymentService
         .GetPaymentMethods(this.storeCart.id)
         .then((result) => {
-          if (Array.isArray(result)) {
-            this.cards = result
-          }
-          if ((this.cards || []).length === 1) {
-            this.setPaymentMethod(this.cards[0])
-          } else if (!this.selectedPaymentMethodId) {
+          this.cards = Array.isArray(result) ? result : this.cards
+          this.cards = this.cards ? this.cards : []
+          if (this.selectedPaymentMethodId) {
             this.setPaymentMethod(
-              (this.cards || []).find(
-                x => x.id === this.selectedPaymentMethodId
-              )
+              this.cards.find(x => x.id === this.selectedPaymentMethodId)
             )
+          } else if (this.cards.length >= 1) {
+            this.setPaymentMethod(this.cards[0])
           }
           this.isLoadingCards = false
         })
