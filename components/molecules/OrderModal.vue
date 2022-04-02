@@ -18,7 +18,14 @@
           </div>
           <div class="definition-list__item">
             <dt>Leveringsmetode</dt>
-            <dd>{{ deliveryTypeLabel(order.deliveryType) }}</dd>
+            <dd>
+              {{
+                deliveryTypeLabel(order.deliveryType) +
+                  (order.deliveryType == "TableDelivery" && order.tableName
+                    ? " (Bord " + order.tableName + ")"
+                    : "")
+              }}
+            </dd>
           </div>
           <div class="definition-list__item">
             <dt>Bestilt</dt>
