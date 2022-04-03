@@ -93,7 +93,7 @@ export const mutations = {
   [MutationName.SetCartRootProperties] (state, payload) {
     const cartIndex = state.carts.findIndex(x => x.storeId === payload.storeId)
     if (cartIndex >= 0) {
-      ['homeDeliveryMethodId', 'paymentType', 'deliveryType', 'discountCode', 'fullAddress', 'zipCode', 'city', 'paymentIntentId', 'comment', 'tipPercent', 'tableName']
+      ['homeDeliveryMethodId', 'paymentType', 'deliveryType', 'discountCode', 'fullAddress', 'zipCode', 'city', 'paymentIntentId', 'comment', 'tipPercent', 'tableName', 'requestedCompletion']
         .forEach((key) => {
           if (payload[key] !== undefined) { Vue.set(state.carts[cartIndex], key, payload[key]) }
         })

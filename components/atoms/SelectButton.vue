@@ -45,7 +45,7 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 @import "../../assets/sass/common.scss";
 
 .product-conf {

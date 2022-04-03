@@ -45,6 +45,7 @@
         text="Hent selv"
         @change="setLocalDeliveryType('SelfPickup')"
       />
+
       <SelectButton
         v-if="
           storeCart &&
@@ -80,6 +81,52 @@
         :selected="localDeliveryType === 'TableDelivery'"
         @change="setLocalDeliveryType('TableDelivery')"
       />
+
+      <div v-if="localDeliveryType === 'SelfPickup' || localDeliveryType === 'InstantHomeDelivery'" class="section">
+        <span class="label">Når?</span>
+
+        <div class="product-conf">
+          <div :class="{ 'product-option': true, 'is-selected' : localRequestedCompletion === '' }" @click="localRequestedCompletion = ''">
+            <span
+              id="asap"
+              role="radio"
+              value=""
+              class="product-option__radio"
+            />
+            <label for="asap" class="product-option__text">Så snart som mulig</label>
+            </span>
+          </div>
+
+          <div :class="{ 'product-option': true, 'is-selected' : localRequestedCompletion !== '' }" @click="requestedCompletionChange">
+            <span
+              id="later"
+              role="radio"
+              value="1"
+              class="product-option__radio"
+            />
+            <label for="later" class="product-option__text">Velg ønsket tidspunkt for forhåndsbestilling</label>
+          </div>
+
+          <div v-if="localRequestedCompletion">
+            <select v-model="localSelectedRequestedCompletionDateOptionIndex" class="checkout-select">
+              <option
+                v-for="(item, index) in requestedCompletionDateOptions.map((x) => x.label)"
+                :key="`date-${index}`"
+                :value="index"
+              >
+                {{ item }}
+              </option>
+            </select>
+
+            <select v-model="localSelectedRequestedCompletionTimeIndex" class="checkout-select">
+              <option v-for="(item, index) in timeSelection" :key="`time-${index}`" :value="index">
+                {{ item }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+
       <div v-if="localDeliveryType === 'SelfPickup'" class="section">
         <span class="label">Henteadresse</span>
         <div>{{ storeAddressOneLiner }}</div>
@@ -217,6 +264,7 @@
             priceLabel(storeCart.calculations.itemsAmount)
           }}</span>
         </div>
+
         <div
           v-show="storeCart.calculations.tipAmount > 0"
           class="price-summary__row"
@@ -302,9 +350,13 @@ import DeliveryAddressInputs from '@/components/atoms/DeliveryAddressInputs.vue'
 import Modal from '@/components/atoms/Modal.vue'
 import $config from '@/core/helpers/configuration'
 import MyUserDropdown from '@/components/atoms/MyUserDropdown.vue'
+import dayjs from 'dayjs'
 import { debounce } from '../../core/helpers/ts-debounce'
 import SelectButton from '~/components/atoms/SelectButton.vue'
 import LoginModal from '~/components/molecules/LoginModal.vue'
+
+const objectSupport = require('dayjs/plugin/objectSupport')
+dayjs.extend(objectSupport)
 
 export default {
   components: {
@@ -334,6 +386,10 @@ export default {
     localTableName: '',
     localTipPercent: 0,
 
+    localRequestedCompletion: '',
+    localSelectedRequestedCompletionDateOptionIndex: 0,
+    localSelectedRequestedCompletionTimeIndex: 0,
+
     // DELIVERY METHOD
     deliveryMethodError: false,
 
@@ -345,6 +401,45 @@ export default {
     creditCardError: false
   }),
   computed: {
+    timeSelection () {
+      const result = []
+      const now = dayjs()
+      const nowHour = now.hour()
+      const nowMinute = now.minute()
+      const isToday = this.localSelectedRequestedCompletionDateOptionIndex === 0
+
+      for (let i = 0; i < 24; i++) {
+        for (let j = 0; j < 61; j = j + 5) {
+          if (isToday) {
+            if (i >= nowHour && j >= nowMinute) {
+              result.push(`${dayjs({ hour: i, minute: j }).format('HH:mm')}`)
+            }
+          } else {
+            result.push(`${dayjs({ hour: i, minute: j }).format('HH:mm')}`)
+          }
+        }
+      }
+
+      return result
+    },
+    localSelectedRequestedCompletionDate () {
+      return this.requestedCompletionDateOptions[
+        this.localSelectedRequestedCompletionDateOptionIndex
+      ].value
+    },
+    requestedCompletionDateOptions () {
+      const today = new Date()
+      const options = []
+      for (let index = 0; index < 7; index++) {
+        const tempDate = new Date(today)
+        tempDate.setDate(tempDate.getDate() + index)
+        options.push({
+          label: this.requestedCompletionDateLabel(index, tempDate),
+          value: tempDate
+        })
+      }
+      return options
+    },
     userIsLoggedIn () {
       return this.$store.getters.userIsLoggedIn
     },
@@ -406,6 +501,14 @@ export default {
     }
   },
   watch: {
+    localSelectedRequestedCompletionTimeIndex () {
+      this.requestedCompletionChange()
+      this.debouncedUpdateCart()
+    },
+    localSelectedRequestedCompletionDateOptionIndex () {
+      this.requestedCompletionChange()
+      this.debouncedUpdateCart()
+    },
     localComment () {
       this.debouncedUpdateCart()
     },
@@ -439,6 +542,9 @@ export default {
         this.localComment = this.storeCart.comment
           ? this.storeCart.comment + ''
           : ''
+        this.localRequestedCompletion = JSON.parse(
+          JSON.stringify(this.storeCart.requestedCompletion || '')
+        )
       }
 
       if (this.userIsLoggedIn) {
@@ -451,6 +557,38 @@ export default {
     })
   },
   methods: {
+    requestedCompletionDateLabel (index, date) {
+      if (index === 0) { return 'I dag' }
+      if (index === 1) { return 'I morgen' }
+      return (
+        ['søn', 'man', 'tir', 'ons', 'tor', 'fre', 'lør'][date.getDay()] +
+        '. ' +
+        date.getDate() +
+        '.' +
+        (date.getMonth() + 1) +
+        '.'
+      )
+    },
+    getSelectedDateTime () {
+      const result = new Date(
+        this.localSelectedRequestedCompletionDate.getFullYear(),
+        this.localSelectedRequestedCompletionDate.getMonth(),
+        this.localSelectedRequestedCompletionDate.getDate()
+      )
+
+      const timeOption = this.timeSelection[this.localSelectedRequestedCompletionTimeIndex || 0].split(':')
+      const hours = timeOption[0]
+      const minutes = timeOption[1]
+      result.setHours(hours)
+      result.setMinutes(minutes)
+
+      return result
+    },
+    requestedCompletionChange () {
+      const tzoffset = new Date().getTimezoneOffset() * 60000
+      const tempDate = new Date(this.getSelectedDateTime() - tzoffset)
+      this.localRequestedCompletion = tempDate.toISOString().slice(0, -1)
+    },
     async validate () {
       const comp = this
       comp.clearErrors()
@@ -720,6 +858,7 @@ export default {
           fullAddress: this.$store.state.currentUser.address?.fullAddress || '',
           zipCode: this.$store.state.currentUser.address?.zipCode || '',
           city: this.$store.state.currentUser.address?.city || '',
+          requestedCompletion: this.localRequestedCompletion,
           comment: this.localComment,
           tipPercent: this.localTipPercent,
           tableName: this.localTableName
@@ -761,12 +900,20 @@ export default {
 </script>
 <style lang="scss" >
 @import "../../assets/sass/common.scss";
+.checkout {
+  &-select {
+    padding: rem(10);
+  }
+}
+
 .disabled {
   opacity: 0.5;
 }
+
 .border-error {
   border-color: $color-error;
 }
+
 #stripe-element-errors {
   color: $color-error;
   padding-top: rem(5);
