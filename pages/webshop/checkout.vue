@@ -86,7 +86,7 @@
         <span class="label">Når?</span>
 
         <div class="product-conf">
-          <div :class="{ 'product-option': true, 'is-selected' : localRequestedCompletion === storeCart.requestedCompletion }" @click="localRequestedCompletion = storeCart.requestedCompletion">
+          <div :class="{ 'product-option': true, 'is-selected' : localRequestedCompletion === '' }" @click="localRequestedCompletion = ''">
             <span
               id="asap"
               role="radio"
@@ -97,7 +97,7 @@
             </span>
           </div>
 
-          <div :class="{ 'product-option': true, 'is-selected' : localRequestedCompletion === '1' }" @click="localRequestedCompletion = '1'">
+          <div :class="{ 'product-option': true, 'is-selected' : localRequestedCompletion !== '' }" @click="requestedCompletionChange">
             <span
               id="later"
               role="radio"
@@ -109,13 +109,17 @@
 
           <div v-if="localRequestedCompletion">
             <select v-model="localSelectedRequestedCompletionDateOptionIndex" class="checkout-select">
-              <option v-for="(item, index) in requestedCompletionDateOptions.map((x) => x.label)" :key="`date-${index}`" :value="index">
+              <option
+                v-for="(item, index) in requestedCompletionDateOptions.map((x) => x.label)"
+                :key="`date-${index}`"
+                :value="index"
+              >
                 {{ item }}
               </option>
             </select>
 
-            <select v-model="localSelectedRequestedCompletionTime" class="checkout-select">
-              <option v-for="(item, index) in timeSelection" :key="`time-${index}`" :value="item">
+            <select v-model="localSelectedRequestedCompletionTimeIndex" class="checkout-select">
+              <option v-for="(item, index) in timeSelection" :key="`time-${index}`" :value="index">
                 {{ item }}
               </option>
             </select>
@@ -382,9 +386,9 @@ export default {
     localTableName: '',
     localTipPercent: 0,
 
-    localRequestedCompletion: 0,
+    localRequestedCompletion: '',
     localSelectedRequestedCompletionDateOptionIndex: 0,
-    localSelectedRequestedCompletionTime: new Date(),
+    localSelectedRequestedCompletionTimeIndex: 0,
 
     // DELIVERY METHOD
     deliveryMethodError: false,
@@ -497,9 +501,14 @@ export default {
     }
   },
   watch: {
-    localRequestedCompletion: debounce(function () {
-      this.updateCart()
-    }, 400),
+    localSelectedRequestedCompletionTimeIndex () {
+      this.requestedCompletionChange()
+      this.debouncedUpdateCart()
+    },
+    localSelectedRequestedCompletionDateOptionIndex () {
+      this.requestedCompletionChange()
+      this.debouncedUpdateCart()
+    },
     localComment () {
       this.debouncedUpdateCart()
     },
@@ -534,7 +543,7 @@ export default {
           ? this.storeCart.comment + ''
           : ''
         this.localRequestedCompletion = JSON.parse(
-          JSON.stringify(this.storeCart.requestedCompletion)
+          JSON.stringify(this.storeCart.requestedCompletion || '')
         )
       }
 
@@ -561,13 +570,19 @@ export default {
       )
     },
     getSelectedDateTime () {
-      return new Date(
+      const result = new Date(
         this.localSelectedRequestedCompletionDate.getFullYear(),
         this.localSelectedRequestedCompletionDate.getMonth(),
-        this.localSelectedRequestedCompletionDate.getDate(),
-        this.localSelectedRequestedCompletionTime.getHours(),
-        this.localSelectedRequestedCompletionTime.getMinutes()
+        this.localSelectedRequestedCompletionDate.getDate()
       )
+
+      const timeOption = this.timeSelection[this.localSelectedRequestedCompletionTimeIndex || 0].split(':')
+      const hours = timeOption[0]
+      const minutes = timeOption[1]
+      result.setHours(hours)
+      result.setMinutes(minutes)
+
+      return result
     },
     requestedCompletionChange () {
       const tzoffset = new Date().getTimezoneOffset() * 60000
@@ -843,6 +858,7 @@ export default {
           fullAddress: this.$store.state.currentUser.address?.fullAddress || '',
           zipCode: this.$store.state.currentUser.address?.zipCode || '',
           city: this.$store.state.currentUser.address?.city || '',
+          requestedCompletion: this.localRequestedCompletion,
           comment: this.localComment,
           tipPercent: this.localTipPercent,
           tableName: this.localTableName
