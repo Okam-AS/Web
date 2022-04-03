@@ -86,7 +86,7 @@
         <span class="label">Når?</span>
 
         <div class="product-conf">
-          <div :class="{ 'product-option': true, 'is-selected' : localRequestedCompletion === '' }" @click="localRequestedCompletion = ''">
+          <div :class="{ 'product-option': true, 'is-selected' : localRequestedCompletion === storeCart.requestedCompletion }" @click="localRequestedCompletion = storeCart.requestedCompletion">
             <span
               id="asap"
               role="radio"
@@ -382,7 +382,7 @@ export default {
     localTableName: '',
     localTipPercent: 0,
 
-    localRequestedCompletion: '',
+    localRequestedCompletion: 0,
     localSelectedRequestedCompletionDateOptionIndex: 0,
     localSelectedRequestedCompletionTime: new Date(),
 
