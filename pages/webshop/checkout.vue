@@ -85,25 +85,36 @@
       <div v-if="localDeliveryType === 'SelfPickup' || localDeliveryType === 'InstantHomeDelivery'" class="section">
         <span class="label">Når?</span>
 
-        <div>
-          <div>
-            <input id="asap" v-model="localRequestedCompletion" type="radio" value="">
-            <label for="asap">Så snart som mulig</label>
+        <div class="product-conf">
+          <div :class="{ 'product-option': true, 'is-selected' : localRequestedCompletion === '' }" @click="localRequestedCompletion = ''">
+            <span
+              id="asap"
+              role="radio"
+              value=""
+              class="product-option__radio"
+            />
+            <label for="asap" class="product-option__text">Så snart som mulig</label>
+            </span>
           </div>
 
-          <div>
-            <input id="later" v-model="localRequestedCompletion" type="radio" value="1">
-            <label for="later">Velg ønsket tidspunkt for forhåndsbestilling</label>
+          <div :class="{ 'product-option': true, 'is-selected' : localRequestedCompletion === '1' }" @click="localRequestedCompletion = '1'">
+            <span
+              id="later"
+              role="radio"
+              value="1"
+              class="product-option__radio"
+            />
+            <label for="later" class="product-option__text">Velg ønsket tidspunkt for forhåndsbestilling</label>
           </div>
 
           <div v-if="localRequestedCompletion">
-            <select v-model="localSelectedRequestedCompletionDateOptionIndex">
+            <select v-model="localSelectedRequestedCompletionDateOptionIndex" class="checkout-select">
               <option v-for="(item, index) in requestedCompletionDateOptions.map((x) => x.label)" :key="`date-${index}`" :value="index">
                 {{ item }}
               </option>
             </select>
 
-            <select v-model="localSelectedRequestedCompletionTime">
+            <select v-model="localSelectedRequestedCompletionTime" class="checkout-select">
               <option v-for="(item, index) in timeSelection" :key="`time-${index}`" :value="item">
                 {{ item }}
               </option>
@@ -873,12 +884,20 @@ export default {
 </script>
 <style lang="scss" >
 @import "../../assets/sass/common.scss";
+.checkout {
+  &-select {
+    padding: rem(10);
+  }
+}
+
 .disabled {
   opacity: 0.5;
 }
+
 .border-error {
   border-color: $color-error;
 }
+
 #stripe-element-errors {
   color: $color-error;
   padding-top: rem(5);
