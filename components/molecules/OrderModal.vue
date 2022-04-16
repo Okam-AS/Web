@@ -1,9 +1,33 @@
 <template>
   <Modal close-btn-text="Lukk" @close="close">
+    <div class="message-box">
+      <div class="push-label">
+        Få varsling da bestillingen er klar ved å laste ned Okam appen
+      </div>
+      <div class="download-links">
+        <a href="https://apps.apple.com/no/app/okam/id1514296965">
+          <img
+            class="appstore"
+            src="~/assets/UI/appstore-btn.png"
+            alt="appstore"
+          >
+        </a>
+        <a
+          href="https://play.google.com/store/apps/details?id=no.okam.consumer"
+        >
+          <img
+            class="googleplay"
+            src="~/assets/UI/googleplay-btn.png"
+            alt="googleplay"
+          >
+        </a>
+      </div>
+    </div>
     <div class="receipt">
       <h2 class="receipt__heading">
         Kvittering
       </h2>
+
       <div class="receipt__group">
         <dl class="definition-list">
           <div class="definition-list__item">
