@@ -25,14 +25,16 @@
     </div>
     <div class="receipt">
       <h2 class="receipt__heading">
-        Kvittering
+        Kvittering #{{ order.id }}
       </h2>
 
       <div class="receipt__group">
         <dl class="definition-list">
           <div class="definition-list__item">
             <dt>Bestillingsnummer</dt>
-            <dd>{{ order.id }}</dd>
+            <dd>
+              {{ order.friendlyOrderId ? order.friendlyOrderId : order.id }}
+            </dd>
           </div>
           <div class="definition-list__item">
             <dt>Betaling</dt>
