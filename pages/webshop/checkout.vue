@@ -639,6 +639,7 @@ export default {
           deliveryMethodError,
           priceDifferError,
           priceTooLowError,
+          paymentTypeError,
           minimumPrice,
           hasErrors
         } = await this._cartService.Validate(comp.store.id)
@@ -647,6 +648,10 @@ export default {
           comp.errorMessage =
             'Beløpet er for lite. Du må minst handle for ' +
             comp.priceLabel(minimumPrice)
+        }
+
+        if (paymentTypeError) {
+          comp.errorMessage = 'Betalingsmetoden er midlertidig utilgjengelig'
         }
 
         if (priceDifferError) {
