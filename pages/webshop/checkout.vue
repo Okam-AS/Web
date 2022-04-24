@@ -875,7 +875,7 @@ export default {
           fullAddress: this.$store.state.currentUser.address?.fullAddress || '',
           zipCode: this.$store.state.currentUser.address?.zipCode || '',
           city: this.$store.state.currentUser.address?.city || '',
-          requestedCompletion: this.localRequestedCompletion,
+          requestedCompletion: '', // TODO: this.localRequestedCompletion,
           comment: this.localComment,
           tipPercent: this.localTipPercent,
           tableName: this.localTableName
