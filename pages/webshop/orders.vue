@@ -71,25 +71,25 @@ export default {
   data: () => ({
     storeId: undefined,
     paymentStatus: '',
-    successMessage: 'Takk for din bestilling!',
+    successMessage: '',
     isLoadingOrders: false,
     orders: [],
     selectedOrder: {}
   }),
   mounted () {
     this.loadOrders()
-    // if (this.paymentStatus === "success") {
-    //   if (!!this.storeId && this.storeId > 0) {
-    //     this._cartService.DeleteFromDbAndState(this.storeId);
-    //   }
-    //   this.successMessage = "Takk for din bestilling!";
-    //   const nextUrl = window.location.href
-    //     .replace("&paymentStatus=success", "")
-    //     .replace("?paymentStatus=success", "");
+    if (this.paymentStatus === 'success') {
+      if (!!this.storeId && this.storeId > 0) {
+        this._cartService.DeleteFromDbAndState(this.storeId)
+      }
+      this.successMessage = 'Takk for din bestilling!'
+      const nextUrl = window.location.href
+        .replace('&paymentStatus=success', '')
+        .replace('?paymentStatus=success', '')
 
-    //   window.history.replaceState({}, "", nextUrl);
-    //   this.paymentStatus = "";
-    // }
+      window.history.replaceState({}, '', nextUrl)
+      this.paymentStatus = ''
+    }
   },
   methods: {
     goToStore () {
