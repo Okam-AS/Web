@@ -82,7 +82,7 @@
         @change="setLocalDeliveryType('TableDelivery')"
       />
 
-      <div v-if="localDeliveryType === 'SelfPickup' || localDeliveryType === 'InstantHomeDelivery'" class="section">
+      <div v-if="false && (localDeliveryType === 'SelfPickup' || localDeliveryType === 'InstantHomeDelivery')" class="section">
         <span class="label">Når?</span>
 
         <div class="product-conf">
@@ -406,7 +406,8 @@ export default {
       const now = dayjs()
       const nowHour = now.hour()
       const nowMinute = now.minute()
-      const isToday = this.localSelectedRequestedCompletionDateOptionIndex === 0
+      const isToday =
+        this.localSelectedRequestedCompletionDateOptionIndex === 0
 
       for (let i = 0; i < 24; i++) {
         for (let j = 0; j < 61; j = j + 5) {
@@ -558,8 +559,12 @@ export default {
   },
   methods: {
     requestedCompletionDateLabel (index, date) {
-      if (index === 0) { return 'I dag' }
-      if (index === 1) { return 'I morgen' }
+      if (index === 0) {
+        return 'I dag'
+      }
+      if (index === 1) {
+        return 'I morgen'
+      }
       return (
         ['søn', 'man', 'tir', 'ons', 'tor', 'fre', 'lør'][date.getDay()] +
         '. ' +
@@ -576,7 +581,10 @@ export default {
         this.localSelectedRequestedCompletionDate.getDate()
       )
 
-      const timeOption = this.timeSelection[this.localSelectedRequestedCompletionTimeIndex || 0].split(':')
+      const timeOption =
+        this.timeSelection[
+          this.localSelectedRequestedCompletionTimeIndex || 0
+        ].split(':')
       const hours = timeOption[0]
       const minutes = timeOption[1]
       result.setHours(hours)
@@ -828,7 +836,9 @@ export default {
       }
     },
     setTip (tipPercent) {
-      if (this.isLoading) { return }
+      if (this.isLoading) {
+        return
+      }
       this.localTipPercent = tipPercent
       this.debouncedUpdateCart()
     },
@@ -838,7 +848,9 @@ export default {
       this.debouncedUpdateCart()
     },
     setLocalDeliveryType (value) {
-      if (this.isLoading) { return }
+      if (this.isLoading) {
+        return
+      }
       this.clearErrors()
       this.localDeliveryType = value
       this.updateCart(true)
