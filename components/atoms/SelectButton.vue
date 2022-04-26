@@ -3,8 +3,8 @@
     <div
       :class="{
         'product-option': true,
-        'is-selected' : selected,
-        'is-disabled': disabled
+        'is-selected': selected,
+        'is-disabled': disabled,
       }"
       role="checkbox"
       tabindex="0"
@@ -45,11 +45,10 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 @import "../../assets/sass/common.scss";
 
 .product-conf {
-
   .product-option {
     font-size: rem(14);
     padding: rem(8) 0;
@@ -74,6 +73,7 @@ export default {
     }
 
     &__text {
+      margin-left: 0.5em;
       padding-top: rem(3);
     }
 

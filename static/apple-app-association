@@ -4,11 +4,15 @@
         "details": [
             {
                 "appID": "6QH8SGJ256.no.okam.consumer",
-                "paths": ["/store/*"]
+                "paths": [
+                    "/store/*"
+                ]
             }
         ]
     },
-     "webcredentials": {
-      "apps": [ "6QH8SGJ256.no.okam.consumer" ]
-   }
+    "webcredentials": {
+        "apps": [
+            "6QH8SGJ256.no.okam.consumer"
+        ]
+    }
 }

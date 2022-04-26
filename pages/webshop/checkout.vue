@@ -45,6 +45,7 @@
         text="Hent selv"
         @change="setLocalDeliveryType('SelfPickup')"
       />
+
       <SelectButton
         v-if="
           storeCart &&
@@ -80,6 +81,52 @@
         :selected="localDeliveryType === 'TableDelivery'"
         @change="setLocalDeliveryType('TableDelivery')"
       />
+
+      <div v-if="false && (localDeliveryType === 'SelfPickup' || localDeliveryType === 'InstantHomeDelivery')" class="section">
+        <span class="label">Når?</span>
+
+        <div class="product-conf">
+          <div :class="{ 'product-option': true, 'is-selected' : localRequestedCompletion === '' }" @click="localRequestedCompletion = ''">
+            <span
+              id="asap"
+              role="radio"
+              value=""
+              class="product-option__radio"
+            />
+            <label for="asap" class="product-option__text">Så snart som mulig</label>
+            </span>
+          </div>
+
+          <div :class="{ 'product-option': true, 'is-selected' : localRequestedCompletion !== '' }" @click="requestedCompletionChange">
+            <span
+              id="later"
+              role="radio"
+              value="1"
+              class="product-option__radio"
+            />
+            <label for="later" class="product-option__text">Velg ønsket tidspunkt for forhåndsbestilling</label>
+          </div>
+
+          <div v-if="localRequestedCompletion">
+            <select v-model="localSelectedRequestedCompletionDateOptionIndex" class="checkout-select">
+              <option
+                v-for="(item, index) in requestedCompletionDateOptions.map((x) => x.label)"
+                :key="`date-${index}`"
+                :value="index"
+              >
+                {{ item }}
+              </option>
+            </select>
+
+            <select v-model="localSelectedRequestedCompletionTimeIndex" class="checkout-select">
+              <option v-for="(item, index) in timeSelection" :key="`time-${index}`" :value="index">
+                {{ item }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+
       <div v-if="localDeliveryType === 'SelfPickup'" class="section">
         <span class="label">Henteadresse</span>
         <div>{{ storeAddressOneLiner }}</div>
@@ -108,34 +155,37 @@
           <div v-else>
             <div v-for="(item, index) in cards" :key="index">
               <SelectButton
-                v-if="item.id === 'waiter'"
+                v-if="item.paymentType === 'PayInStore'"
                 text="Betal på stedet"
                 :selected="selectedPaymentMethodId === item.id"
-                @change="setPaymentMethodId(item.id)"
+                @change="setPaymentMethod(item)"
               >
                 <span class="material-icons">point_of_sale</span>
               </SelectButton>
               <SelectButton
-                v-else-if="item.card"
+                v-if="item.paymentType === 'Stripe'"
                 :text="
-                  '****' +
-                    item.card.last4 +
-                    ' ' +
-                    item.card.exp_month +
-                    '/' +
-                    item.card.exp_year
+                  '****' + item.last4 + ' ' + item.expMonth + '/' + item.expYear
                 "
                 :selected="selectedPaymentMethodId === item.id"
-                @change="setPaymentMethodId(item.id)"
+                @change="setPaymentMethod(item)"
               >
                 <span class="material-icons">credit_card</span>
+              </SelectButton>
+              <SelectButton
+                v-if="item.paymentType === 'Vipps'"
+                text="Vipps"
+                :selected="selectedPaymentMethodId === item.id"
+                @change="setPaymentMethod(item)"
+              >
+                <img src="~/assets/UI/icon_vipps.svg" height="24" alt="Vipps">
               </SelectButton>
             </div>
             <div v-if="store.payment && store.payment.stripeEnabled === true">
               <SelectButton
                 text="Nytt kort"
                 :selected="selectedPaymentMethodId === ''"
-                @change="setPaymentMethodId('')"
+                @change="setPaymentMethod(undefined)"
               />
               <div v-show="selectedPaymentMethodId === ''">
                 <client-only>
@@ -214,6 +264,7 @@
             priceLabel(storeCart.calculations.itemsAmount)
           }}</span>
         </div>
+
         <div
           v-show="storeCart.calculations.tipAmount > 0"
           class="price-summary__row"
@@ -299,9 +350,13 @@ import DeliveryAddressInputs from '@/components/atoms/DeliveryAddressInputs.vue'
 import Modal from '@/components/atoms/Modal.vue'
 import $config from '@/core/helpers/configuration'
 import MyUserDropdown from '@/components/atoms/MyUserDropdown.vue'
+import dayjs from 'dayjs'
 import { debounce } from '../../core/helpers/ts-debounce'
 import SelectButton from '~/components/atoms/SelectButton.vue'
 import LoginModal from '~/components/molecules/LoginModal.vue'
+
+const objectSupport = require('dayjs/plugin/objectSupport')
+dayjs.extend(objectSupport)
 
 export default {
   components: {
@@ -325,9 +380,15 @@ export default {
     showTerms: false,
 
     localDeliveryType: 'NotSet',
+    localPaymentType: 'NotSet',
+
     localComment: '',
     localTableName: '',
     localTipPercent: 0,
+
+    localRequestedCompletion: '',
+    localSelectedRequestedCompletionDateOptionIndex: 0,
+    localSelectedRequestedCompletionTimeIndex: 0,
 
     // DELIVERY METHOD
     deliveryMethodError: false,
@@ -340,6 +401,46 @@ export default {
     creditCardError: false
   }),
   computed: {
+    timeSelection () {
+      const result = []
+      const now = dayjs()
+      const nowHour = now.hour()
+      const nowMinute = now.minute()
+      const isToday =
+        this.localSelectedRequestedCompletionDateOptionIndex === 0
+
+      for (let i = 0; i < 24; i++) {
+        for (let j = 0; j < 61; j = j + 5) {
+          if (isToday) {
+            if (i >= nowHour && j >= nowMinute) {
+              result.push(`${dayjs({ hour: i, minute: j }).format('HH:mm')}`)
+            }
+          } else {
+            result.push(`${dayjs({ hour: i, minute: j }).format('HH:mm')}`)
+          }
+        }
+      }
+
+      return result
+    },
+    localSelectedRequestedCompletionDate () {
+      return this.requestedCompletionDateOptions[
+        this.localSelectedRequestedCompletionDateOptionIndex
+      ].value
+    },
+    requestedCompletionDateOptions () {
+      const today = new Date()
+      const options = []
+      for (let index = 0; index < 7; index++) {
+        const tempDate = new Date(today)
+        tempDate.setDate(tempDate.getDate() + index)
+        options.push({
+          label: this.requestedCompletionDateLabel(index, tempDate),
+          value: tempDate
+        })
+      }
+      return options
+    },
     userIsLoggedIn () {
       return this.$store.getters.userIsLoggedIn
     },
@@ -401,6 +502,14 @@ export default {
     }
   },
   watch: {
+    localSelectedRequestedCompletionTimeIndex () {
+      this.requestedCompletionChange()
+      this.debouncedUpdateCart()
+    },
+    localSelectedRequestedCompletionDateOptionIndex () {
+      this.requestedCompletionChange()
+      this.debouncedUpdateCart()
+    },
     localComment () {
       this.debouncedUpdateCart()
     },
@@ -431,11 +540,12 @@ export default {
           this.localDeliveryType = 'TableDelivery'
         }
 
-        this.localComment =
-          !this.storeCart.comment ||
-          this.storeCart.comment === 'Ingen kommentar'
-            ? ''
-            : this.storeCart.comment + ''
+        this.localComment = this.storeCart.comment
+          ? this.storeCart.comment + ''
+          : ''
+        this.localRequestedCompletion = JSON.parse(
+          JSON.stringify(this.storeCart.requestedCompletion || '')
+        )
       }
 
       if (this.userIsLoggedIn) {
@@ -443,11 +553,50 @@ export default {
       }
 
       if (this.paymentStatus === 'failed') {
-        this.errorMessage = 'Betalingen med BankID feilet. Prøv igjen.'
+        this.errorMessage = 'Betalingen feilet. Prøv igjen.'
       }
     })
   },
   methods: {
+    requestedCompletionDateLabel (index, date) {
+      if (index === 0) {
+        return 'I dag'
+      }
+      if (index === 1) {
+        return 'I morgen'
+      }
+      return (
+        ['søn', 'man', 'tir', 'ons', 'tor', 'fre', 'lør'][date.getDay()] +
+        '. ' +
+        date.getDate() +
+        '.' +
+        (date.getMonth() + 1) +
+        '.'
+      )
+    },
+    getSelectedDateTime () {
+      const result = new Date(
+        this.localSelectedRequestedCompletionDate.getFullYear(),
+        this.localSelectedRequestedCompletionDate.getMonth(),
+        this.localSelectedRequestedCompletionDate.getDate()
+      )
+
+      const timeOption =
+        this.timeSelection[
+          this.localSelectedRequestedCompletionTimeIndex || 0
+        ].split(':')
+      const hours = timeOption[0]
+      const minutes = timeOption[1]
+      result.setHours(hours)
+      result.setMinutes(minutes)
+
+      return result
+    },
+    requestedCompletionChange () {
+      const tzoffset = new Date().getTimezoneOffset() * 60000
+      const tempDate = new Date(this.getSelectedDateTime() - tzoffset)
+      this.localRequestedCompletion = tempDate.toISOString().slice(0, -1)
+    },
     async validate () {
       const comp = this
       comp.clearErrors()
@@ -458,6 +607,10 @@ export default {
       ) {
         comp.deliveryAddressError = true
         comp.errorMessage = 'Legg inn en gyldig leveringsadresse'
+        containsErrors = true
+      }
+      if (comp.localPaymentType === 'NotSet') {
+        comp.errorMessage = 'Velg betalingsmetode'
         containsErrors = true
       }
       if (comp.localDeliveryType === 'NotSet') {
@@ -486,6 +639,7 @@ export default {
           deliveryMethodError,
           priceDifferError,
           priceTooLowError,
+          paymentTypeError,
           minimumPrice,
           hasErrors
         } = await this._cartService.Validate(comp.store.id)
@@ -494,6 +648,10 @@ export default {
           comp.errorMessage =
             'Beløpet er for lite. Du må minst handle for ' +
             comp.priceLabel(minimumPrice)
+        }
+
+        if (paymentTypeError) {
+          comp.errorMessage = 'Betalingsmetoden er midlertidig utilgjengelig'
         }
 
         if (priceDifferError) {
@@ -568,6 +726,24 @@ export default {
         this.showLogin = false
       }
     },
+    initiateVipps () {
+      this.isSending = true
+      this._vippsService
+        .Initiate(
+          this.storeCart.id,
+          this.storeCart.calculations.finalAmount,
+          false
+        )
+        .then((result) => {
+          window.location.href = result.url
+          this.isSending = false
+        })
+        .catch(() => {
+          this.errorMessage =
+            'Betaling med Vipps kunne ikke gjennomføres for øyeblikket.'
+          this.isSending = false
+        })
+    },
     createPaymentIntent (paymentMethodId, setupFutureUsage) {
       const comp = this
       comp.isSending = true
@@ -630,12 +806,14 @@ export default {
       try {
         await this.validate()
         if (!this.errorMessage) {
-          if (this.selectedPaymentMethodId === 'waiter') {
+          if (this.localPaymentType === 'PayInStore') {
             this.completeCart()
-          } else if (this.selectedPaymentMethodId) {
+          } else if (this.localPaymentType === 'Stripe') {
             // Using saved card
             this.createPaymentIntent(this.selectedPaymentMethodId, true)
-          } else {
+          } else if (this.localPaymentType === 'Vipps') {
+            this.initiateVipps()
+          } else if (!this.selectedPaymentMethodId) {
             // Nytt kort:
             this.$refs.cardElement.stripe
               .createPaymentMethod({
@@ -663,14 +841,21 @@ export default {
       }
     },
     setTip (tipPercent) {
+      if (this.isLoading) {
+        return
+      }
       this.localTipPercent = tipPercent
       this.debouncedUpdateCart()
     },
-    setPaymentMethodId (id) {
-      this.selectedPaymentMethodId = id
+    setPaymentMethod (item) {
+      this.selectedPaymentMethodId = item === undefined ? '' : item.id
+      this.localPaymentType = item === undefined ? 'NotSet' : item.paymentType
       this.debouncedUpdateCart()
     },
     setLocalDeliveryType (value) {
+      if (this.isLoading) {
+        return
+      }
       this.clearErrors()
       this.localDeliveryType = value
       this.updateCart(true)
@@ -685,19 +870,13 @@ export default {
       this._cartService.SetCartRootProperties(
         {
           storeId: this.storeId,
-          paymentType:
-            this.selectedPaymentMethodId === 'waiter' ? 'PayInStore' : 'Stripe',
+          paymentType: this.localPaymentType,
           deliveryType: this.localDeliveryType,
-          fullAddress: this.$store.state.currentUser.address
-            ? this.$store.state.currentUser.address.fullAddress
-            : '',
-          zipCode: this.$store.state.currentUser.address
-            ? this.$store.state.currentUser.address.zipCode
-            : '',
-          city: this.$store.state.currentUser.address
-            ? this.$store.state.currentUser.address.city
-            : '',
-          comment: this.localComment ? this.localComment : 'Ingen kommentar',
+          fullAddress: this.$store.state.currentUser.address?.fullAddress || '',
+          zipCode: this.$store.state.currentUser.address?.zipCode || '',
+          city: this.$store.state.currentUser.address?.city || '',
+          requestedCompletion: '', // TODO: this.localRequestedCompletion,
+          comment: this.localComment,
           tipPercent: this.localTipPercent,
           tableName: this.localTableName
         },
@@ -715,19 +894,17 @@ export default {
     },
     getAvailablePaymentMethods () {
       this.isLoadingCards = true
-      this._stripeService
+      this._paymentService
         .GetPaymentMethods(this.storeCart.id)
         .then((result) => {
-          if (Array.isArray(result)) {
-            this.cards = result
-          }
-          if (
-            !this.selectedPaymentMethodId ||
-            this.selectedPaymentMethodId === 'waiter'
-          ) {
-            this.setPaymentMethodId(
-              this.cards.length > 0 ? this.cards[0].id : ''
+          this.cards = Array.isArray(result) ? result : this.cards
+          this.cards = this.cards ? this.cards : []
+          if (this.selectedPaymentMethodId) {
+            this.setPaymentMethod(
+              this.cards.find(x => x.id === this.selectedPaymentMethodId)
             )
+          } else if (this.cards.length >= 1) {
+            this.setPaymentMethod(this.cards[0])
           }
           this.isLoadingCards = false
         })
@@ -740,12 +917,20 @@ export default {
 </script>
 <style lang="scss" >
 @import "../../assets/sass/common.scss";
+.checkout {
+  &-select {
+    padding: rem(10);
+  }
+}
+
 .disabled {
   opacity: 0.5;
 }
+
 .border-error {
   border-color: $color-error;
 }
+
 #stripe-element-errors {
   color: $color-error;
   padding-top: rem(5);

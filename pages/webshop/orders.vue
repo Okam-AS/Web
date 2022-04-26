@@ -7,13 +7,30 @@
       <span>Mine bestillinger</span>
       <MyUserDropdown @close="loadOrders" />
     </div>
-    <div
-      v-if="successMessage && orders && orders[0]"
-      class="message-box"
-      @click="openOrder(orders[0])"
-    >
+    <div v-if="successMessage && orders && orders[0]" class="message-box">
       <div>
         {{ successMessage }}
+      </div>
+      <div class="push-label">
+        Få varsling da bestillingen er klar ved å laste ned Okam appen
+      </div>
+      <div class="download-links">
+        <a href="https://apps.apple.com/no/app/okam/id1514296965">
+          <img
+            class="appstore"
+            src="~/assets/UI/appstore-btn.png"
+            alt="appstore"
+          >
+        </a>
+        <a
+          href="https://play.google.com/store/apps/details?id=no.okam.consumer"
+        >
+          <img
+            class="googleplay"
+            src="~/assets/UI/googleplay-btn.png"
+            alt="googleplay"
+          >
+        </a>
       </div>
     </div>
     <div v-if="!$store.getters.userIsLoggedIn">
@@ -30,6 +47,7 @@
         <span class="order-id">{{
           order.friendlyOrderId ? order.friendlyOrderId : order.id
         }}</span>
+        <span class="store-name">{{ order.storeLegalName }}</span>
         <span style="float: right">{{
           formatDate(order.created || order.pickup)
         }}</span>
@@ -118,5 +136,8 @@ export default {
   color: white;
   padding: 5px;
   border-radius: 5px;
+}
+.store-name {
+  margin-left: 1em;
 }
 </style>

@@ -80,4 +80,20 @@ p {
     right: rem(5);
     font-size: rem(20);
   }
+
+  .push-label {
+    margin-top: 1em;
+    margin-bottom: 1em;
+  }
+  .download-links a {
+    display: inline-block;
+  }
+  .googleplay {
+    border-radius: 5px;
+    height: 2em;
+  }
+  .appstore {
+    border-radius: 5px;
+    height: 2em;
+  }
 }

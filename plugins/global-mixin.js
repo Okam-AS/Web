@@ -11,6 +11,8 @@ import {
   NotificationService,
   OrderService,
   StripeService,
+  PaymentService,
+  VippsService,
   CultureService
 } from '@/core/services'
 import { wholeAmount, fractionAmount, priceLabel, formatString } from '~/core/helpers/tools'
@@ -116,7 +118,9 @@ const mixin = {
     _notificationService () { return new NotificationService(this.$store) },
     _categoryService () { return new CategoryService(this.$store) },
     _deliveryMethodService () { return new DeliveryMethodService(this.$store) },
-    _cultureService () { return new CultureService(this.$store) }
+    _cultureService () { return new CultureService(this.$store) },
+    _vippsService () { return new VippsService(this.$store) },
+    _paymentService () { return new PaymentService(this.$store) }
   }
 }
 

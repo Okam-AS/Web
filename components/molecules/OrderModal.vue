@@ -1,14 +1,40 @@
 <template>
   <Modal close-btn-text="Lukk" @close="close">
+    <div class="message-box">
+      <div class="push-label">
+        Få varsling da bestillingen er klar ved å laste ned Okam appen
+      </div>
+      <div class="download-links">
+        <a href="https://apps.apple.com/no/app/okam/id1514296965">
+          <img
+            class="appstore"
+            src="~/assets/UI/appstore-btn.png"
+            alt="appstore"
+          >
+        </a>
+        <a
+          href="https://play.google.com/store/apps/details?id=no.okam.consumer"
+        >
+          <img
+            class="googleplay"
+            src="~/assets/UI/googleplay-btn.png"
+            alt="googleplay"
+          >
+        </a>
+      </div>
+    </div>
     <div class="receipt">
       <h2 class="receipt__heading">
-        Kvittering
+        Kvittering #{{ order.id }}
       </h2>
+
       <div class="receipt__group">
         <dl class="definition-list">
           <div class="definition-list__item">
             <dt>Bestillingsnummer</dt>
-            <dd>{{ order.id }}</dd>
+            <dd>
+              {{ order.friendlyOrderId ? order.friendlyOrderId : order.id }}
+            </dd>
           </div>
           <div class="definition-list__item">
             <dt>Betaling</dt>
@@ -18,7 +44,14 @@
           </div>
           <div class="definition-list__item">
             <dt>Leveringsmetode</dt>
-            <dd>{{ deliveryTypeLabel(order.deliveryType) }}</dd>
+            <dd>
+              {{
+                deliveryTypeLabel(order.deliveryType) +
+                  (order.deliveryType == "TableDelivery" && order.tableName
+                    ? " (Bord " + order.tableName + ")"
+                    : "")
+              }}
+            </dd>
           </div>
           <div class="definition-list__item">
             <dt>Bestilt</dt>

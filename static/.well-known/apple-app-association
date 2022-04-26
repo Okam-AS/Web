@@ -1,0 +1,14 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appID": "6QH8SGJ256.no.okam.consumer",
+                "paths": ["/store/*"]
+            }
+        ]
+    },
+     "webcredentials": {
+      "apps": [ "6QH8SGJ256.no.okam.consumer" ]
+   }
+}
