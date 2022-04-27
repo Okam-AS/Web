@@ -82,7 +82,7 @@
         @change="setLocalDeliveryType('TableDelivery')"
       />
 
-      <div v-if="false && (localDeliveryType === 'SelfPickup' || localDeliveryType === 'InstantHomeDelivery')" class="section">
+      <div v-if="localDeliveryType === 'SelfPickup' || localDeliveryType === 'InstantHomeDelivery'" class="section">
         <span class="label">Når?</span>
 
         <div class="product-conf">
@@ -543,9 +543,6 @@ export default {
         this.localComment = this.storeCart.comment
           ? this.storeCart.comment + ''
           : ''
-        this.localRequestedCompletion = JSON.parse(
-          JSON.stringify(this.storeCart.requestedCompletion || '')
-        )
       }
 
       if (this.userIsLoggedIn) {
@@ -875,7 +872,7 @@ export default {
           fullAddress: this.$store.state.currentUser.address?.fullAddress || '',
           zipCode: this.$store.state.currentUser.address?.zipCode || '',
           city: this.$store.state.currentUser.address?.city || '',
-          requestedCompletion: '', // TODO: this.localRequestedCompletion,
+          requestedCompletion: this.localRequestedCompletion,
           comment: this.localComment,
           tipPercent: this.localTipPercent,
           tableName: this.localTableName
