@@ -46,17 +46,16 @@
           />
           <p style="margin-top: 2em">
             Rabattkoder, statistikk, lagerstyring, servitørfunksjon og mye
-            mer... Skru på funksjonene butikken din trenger, helt gratis.
+            mer... Skru på funksjonene butikken din trenger.
           </p>
 
           <div>
             <CheckInfo text="Ingen bindingstid" />
-            <CheckInfo text="Ingen månedskostnad" />
-            <CheckInfo text="Ingen oppstartsgebyr" />
+            <CheckInfo text="Første måned GRATIS" />
             <CheckInfo text="Gratis support" />
-            <CheckInfo
-              text="Kun 3% + 2 kr per transaksjon som går gjennom platformen"
-            />
+            <CheckInfo text="Lav transaksjonskostnad" />
+
+            <p>Se prisene våres <a href="/priser">her</a></p>
           </div>
 
           <div style="margin-top: 50px">
