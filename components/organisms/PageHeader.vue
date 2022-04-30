@@ -49,17 +49,18 @@ export default {
         href: '/om-oss/',
         title: 'Om oss'
       },
-
       {
         href: '/om-okam/',
         title: 'For kunder'
       },
-
       {
         href: '/om-okam-admin/',
         title: 'For butikkeiere'
       },
-
+      {
+        href: '/priser/',
+        title: 'Priser'
+      },
       {
         href: '/kontakt/',
         title: 'Kontakt oss'
