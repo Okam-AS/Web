@@ -4,7 +4,9 @@
       <thead>
         <tr>
           <th><span class="sr-only">Betalinger</span></th>
-          <th>Kost. *</th>
+          <th class="hide-only-mobile">
+            Kost. *
+          </th>
           <th>Liten</th>
           <th>Medium</th>
           <th>Stor</th>
@@ -15,7 +17,7 @@
           <th class="border">
             Pris pr. måned
           </th>
-          <td class="border" />
+          <td class="border hide-only-mobile" />
           <td class="xl-text border">
             49,-
           </td>
@@ -28,7 +30,9 @@
         </tr>
         <tr>
           <th>Betal i kassa</th>
-          <td>0 %</td>
+          <td class="hide-only-mobile">
+            0 %
+          </td>
           <td>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -68,7 +72,9 @@
         </tr>
         <tr>
           <th>Kortbetaling</th>
-          <td>2,99 %</td>
+          <td class="hide-only-mobile">
+            2,99 %
+          </td>
           <td>–</td>
           <td>
             <svg
@@ -97,7 +103,9 @@
         </tr>
         <tr>
           <th>Vipps</th>
-          <td>1,49 %</td>
+          <td class="hide-only-mobile">
+            1,49 %
+          </td>
           <td>–</td>
           <td>–</td>
           <td>
@@ -117,10 +125,38 @@
       <tfoot>
         <tr>
           <td colspan="5">
-            * Kostnad pr. transaksjon
+            <span class="hide-only-mobile">* Kostnad pr. transaksjon</span>
+            <p class="show-only-mobile">
+              <span style="font-weight: bold;">Transaksjonskostnader:</span><br>
+              Betal i kassa: 0,- per transaksjon<br>
+              Vipps: 1,49 % per transaksjon<br>
+              Kortbetaling: 2,99 % per transaksjon
+            </p>
           </td>
         </tr>
       </tfoot>
     </table>
   </div>
 </template>
+
+<style lang="scss">
+@import "../../assets/sass/common.scss";
+
+.highlight-table {
+  @include br-mobile {
+    margin-left: -20px;
+  }
+
+  .hide-only-mobile {
+    @include br-mobile {
+      display: none;
+    }
+  }
+
+  .show-only-mobile {
+    @include br-md {
+      display: none;
+    }
+  }
+}
+</style>
