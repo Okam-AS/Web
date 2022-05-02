@@ -17,8 +17,48 @@
               <CheckInfo text="Gratis support" />
               <CheckInfo text="Lav transaksjonskostnad" />
 
+              <br>
+              <h3>Ingen oppstartskostnad</h3>
+              <p>
+                Okam er en automatisert tjeneste og du kan sette opp butikken
+                din selv i Okam Admin-appen. Gjør du dette har vi ingen
+                oppstartskostnad.
+              </p>
+
+              <h3>Oppsett av butikk</h3>
+              <p>
+                Vi kan sette opp butikken for deg hvis ønskelig. Denne tjenesten
+                koster 2499,- eks mva.
+              </p>
+
+              <h3>Administrasjon</h3>
+              <p>
+                Du setter opp og administrerer butikken med produkter, priser,
+                bilder og informasjon i appen Okam Admin helt kostnadsfritt.
+                Dette kan utføres på en hvilken som helst Android- eller
+                iOS-enhet. Det er her du også mottar bestillingene.
+              </p>
+
+              <h3>Tablet og printer</h3>
+              <p>
+                Bestillinger mottas rett i Okam Admin til hvilken som helst
+                mobil eller tablet. Hvis ønskelig, tilbyr vi også en egen
+                tablet- og printerpakke for å gjøre samhandlingen mellom Okam og
+                kjøkkenet mest mulig sømløst for restauranter. Samsung Galaxy
+                Tab A7 og printer kan leveres for kr 4000,- eks mva.
+              </p>
+
+              <h3>100% fornøyd-garanti</h3>
+              <p>
+                Dersom du har kjøpt tablet og printer og ikke er fornøyd kan du
+                returnere innen 3 måneder og få pengene tilbake.
+              </p>
+
               <div style="margin-top: 50px">
-                <h2>Last ned Okam Admin og kom i gang!</h2>
+                <h3>
+                  Last ned Okam Admin og registrer butikken din i dag og få
+                  gratis månedsavgift den første måneden
+                </h3>
                 <div style="margin-top: 1em" class="big-teaser__links">
                   <a
                     href="https://apps.apple.com/no/app/okam-butikk/id1514667230"
