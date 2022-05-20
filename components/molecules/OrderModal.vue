@@ -25,7 +25,7 @@
     </div>
     <div class="receipt">
       <h2 class="receipt__heading">
-        Kvittering #{{ order.id }}
+        Bestilling #{{ order.id }}
       </h2>
 
       <div class="receipt__group">
