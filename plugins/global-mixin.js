@@ -72,7 +72,7 @@ const mixin = {
     },
     orderStatusLabel (orderStatusEnum) {
       switch (orderStatusEnum) {
-      case 'Accepted': return 'Ny bestilling'
+      case 'Accepted': return 'Forespurt'
       case 'Processing': return 'Behandles'
       case 'ReadyForPickup': return 'Klar for henting'
       case 'ReadyForDriver': return 'På vei'

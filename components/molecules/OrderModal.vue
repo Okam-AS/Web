@@ -30,9 +30,18 @@
 
       <div class="receipt__group">
         <dl class="definition-list">
-          <div class="definition-list__item">
-            <dt>Bestillingsnummer</dt>
-            <dd>
+          <div
+            style="border: 1px solid white; text-align: center; padding: 1em"
+            class="definition-list__item"
+          >
+            <dt style="font-weight: normal">
+              {{
+                order.deliveryType === "SelfPickup"
+                  ? "Hentekode"
+                  : "Bestillingsnummer"
+              }}
+            </dt>
+            <dd style="font-size: 22px">
               {{ order.friendlyOrderId ? order.friendlyOrderId : order.id }}
             </dd>
           </div>
@@ -59,7 +68,13 @@
           </div>
           <div class="definition-list__item">
             <dt>Behandles til</dt>
-            <dd>{{ formatDate(order.countdownEndTime) }}</dd>
+            <dd>
+              {{
+                order.status === "Accepted"
+                  ? "Venter godkjenning..."
+                  : formatDate(order.countdownEndTime)
+              }}
+            </dd>
           </div>
           <div class="definition-list__item">
             <dt>Status</dt>

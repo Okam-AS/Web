@@ -12,6 +12,11 @@
         {{ successMessage }}
       </div>
       <div class="push-label">
+        Du får en behandlingstid når bestillingen har blitt godkjent. Som oftes
+        blir bestillinger godkjent innen noen få minutter, men ved stor pågang
+        kan det ta noe lengre tid.
+      </div>
+      <div class="push-label">
         Få varsling da bestillingen er klar ved å laste ned Okam appen
       </div>
       <div class="download-links">
@@ -82,7 +87,7 @@ export default {
       if (!!this.storeId && this.storeId > 0) {
         this._cartService.DeleteFromDbAndState(this.storeId)
       }
-      this.successMessage = 'Takk for din bestilling!'
+      this.successMessage = 'Takk! Bestillingen er nå sendt inn.'
       const nextUrl = window.location.href
         .replace('&paymentStatus=success', '')
         .replace('?paymentStatus=success', '')
