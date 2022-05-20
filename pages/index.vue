@@ -4,49 +4,29 @@
     <main class="page-content">
       <div class="big-teaser">
         <div class="wrapper">
-          <div class="big-teaser__content element">
-            <img src="~/assets/UI/startpage_stores.png">
-          </div>
-          <div class="big-teaser__content element">
-            <h1 class="heading-1">
-              Enkel og rask handel fra ditt nærområde
-            </h1>
-            <p>
-              Okam gjør det enkelt å handle fra bedriftene du bryr deg om. Via
-              et enkelt brukergrensesnitt får du handlet på en trygg og rask
-              måte.
-            </p>
-            <div class="big-teaser__links">
-              <a
-                class="ga-ios-download"
-                href="https://apps.apple.com/no/developer/okam/id1514296964"
-              ><img
-                alt="AppStore"
-                height="40"
-                src="~/assets/UI/appstore-btn.png"
-              ></a>
-              <a
-                class="ga-android-download"
-                href="https://play.google.com/store/apps/developer?id=Okam"
-              ><img
-                alt="Google Play"
-                height="40"
-                src="~/assets/UI/googleplay-btn.png"
-              ></a>
-            </div>
-          </div>
+          <iframe
+            style="margin-left: auto; margin-right: auto"
+            width="800"
+            height="448"
+            src="https://www.youtube-nocookie.com/embed/gKwyq1n4ilM?controls=0"
+            title="Ikigai + Okam"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          />
         </div>
       </div>
 
       <section class="contrast-block">
         <div class="wrapper">
           <h2 class="heading-1 u-center">
-            Slik fungerer det
+            Enkel og rask handel fra ditt nærområde
           </h2>
           <p>
-            Okam er laget sånn at alt skal være så enkelt og raskt som overhode
-            mulig.
+            Okam gjør det enkelt å handle fra virksomhetene du bryr deg om. Via
+            et enkelt brukergrensesnitt får du handlet på en trygg og rask måte.
           </p>
+
           <div class="media-items media-items--counter">
             <article class="media-item">
               <div class="media-item__content element">
@@ -54,7 +34,7 @@
                   Velg butikk
                 </h3>
                 <p class="media-item__ingress">
-                  Velg bedriften du ønsker å se utvalget i, eller handle fra
+                  Velg bedriften du ønsker å se utvalget til, eller handle fra
                 </p>
               </div>
               <div class="media-item__image element">
@@ -67,7 +47,7 @@
                   Velg varer
                 </h3>
                 <p class="media-item__ingress">
-                  Du legger de deretter i en handlekurv, som i en fysisk butikk.
+                  Legg til i handlekurven
                 </p>
               </div>
               <div class="media-item__image element">
@@ -162,6 +142,27 @@
                 <a href="/om-okam-admin/">lese mer her</a>.
               </div>
             </details>
+          </div>
+          <h3 style="margin-top: 5em">
+            Last ned Okam for å utforske
+          </h3>
+          <div style="margin-top: 1em" class="big-teaser__links">
+            <a
+              class="ga-ios-download"
+              href="https://apps.apple.com/no/developer/okam/id1514296964"
+            ><img
+              alt="AppStore"
+              height="40"
+              src="~/assets/UI/appstore-btn.png"
+            ></a>
+            <a
+              class="ga-android-download"
+              href="https://play.google.com/store/apps/developer?id=Okam"
+            ><img
+              alt="Google Play"
+              height="40"
+              src="~/assets/UI/googleplay-btn.png"
+            ></a>
           </div>
         </div>
       </section>
