@@ -3,12 +3,11 @@
     <page-header />
     <main class="page-content">
       <div class="big-teaser">
-        <div class="wrapper">
+        <div class="embed-youtube wrapper">
           <iframe
+            class="youtube-video"
             style="margin-left: auto; margin-right: auto"
-            width="800"
-            height="448"
-            src="https://www.youtube-nocookie.com/embed/gKwyq1n4ilM?controls=0"
+            src="https://www.youtube-nocookie.com/embed/gKwyq1n4ilM"
             title="Ikigai + Okam"
             frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -183,3 +182,29 @@ export default {
   })
 }
 </script>
+<style scoped>
+.youtube-video {
+  width: 800px;
+  height: 448px;
+}
+@media screen and (max-device-width: 800px) {
+  .embed-youtube {
+    position: relative;
+    padding-bottom: 56.25%;
+    padding-top: 30px;
+    height: 0;
+    overflow: hidden;
+  }
+
+  .embed-youtube iframe,
+  .embed-youtube object,
+  .embed-youtube embed {
+    border: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+</style>
