@@ -87,7 +87,7 @@ export default {
 
     setInterval(() => {
       if (this.continuouslyLoadOrders) {
-        this.loadOrders()
+        this.loadOrders(true)
       }
     }, 10000)
 
@@ -108,11 +108,11 @@ export default {
     goToStore () {
       window.location.href = '/webshop' + this.urlQueryStrings
     },
-    loadOrders () {
+    loadOrders (withoutLoadingSpinner) {
       if (!this.$store.getters.userIsLoggedIn) {
         return
       }
-      this.isLoadingOrders = true
+      this.isLoadingOrders = !withoutLoadingSpinner
       this._orderService
         .GetAll()
         .then((orders) => {
