@@ -79,10 +79,18 @@ export default {
     successMessage: '',
     isLoadingOrders: false,
     orders: [],
-    selectedOrder: {}
+    selectedOrder: {},
+    continuouslyLoadOrders: false
   }),
   mounted () {
     this.loadOrders()
+
+    setInterval(() => {
+      if (this.continuouslyLoadOrders) {
+        this.loadOrders()
+      }
+    }, 10000)
+
     if (this.paymentStatus === 'success') {
       if (!!this.storeId && this.storeId > 0) {
         this._cartService.DeleteFromDbAndState(this.storeId)
@@ -108,7 +116,23 @@ export default {
       this._orderService
         .GetAll()
         .then((orders) => {
-          this.orders = orders
+          this.orders = orders || []
+          this.continuouslyLoadOrders =
+            (
+              this.orders.filter(
+                x => x.status !== 'Completed' && x.status !== 'Canceled'
+              ) || []
+            ).length > 0
+
+          if (this.selectedOrder && this.selectedOrder.id) {
+            const updatedOrder = this.orders.find(
+              x => x.id === this.selectedOrder.id
+            )
+            if (updatedOrder && updatedOrder.id) {
+              this.selectedOrder = updatedOrder
+            }
+          }
+
           this.isLoadingOrders = false
         })
         .catch(() => {
