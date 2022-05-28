@@ -185,7 +185,7 @@ export default {
 <style scoped>
 .youtube-video {
   width: 800px;
-  height: 448px;
+  height: 450px;
 }
 @media screen and (max-device-width: 800px) {
   .embed-youtube {
