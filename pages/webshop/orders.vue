@@ -101,6 +101,7 @@ export default {
         .replace('?paymentStatus=success', '')
 
       window.history.replaceState({}, '', nextUrl)
+
       this.paymentStatus = ''
     }
   },
@@ -131,6 +132,13 @@ export default {
             if (updatedOrder && updatedOrder.id) {
               this.selectedOrder = updatedOrder
             }
+          }
+
+          if (window.location.href.includes('&popopen=true')) {
+            const popOpen = window.location.href.replace('&popopen=true', '')
+            window.history.replaceState({}, '', popOpen)
+
+            this.openOrder(this.orders[0])
           }
 
           this.isLoadingOrders = false

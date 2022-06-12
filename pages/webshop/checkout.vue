@@ -782,7 +782,7 @@ export default {
         .Complete(comp.store.id)
         .then(() => {
           this.paymentStatus = 'success'
-          window.location.href = '/webshop/orders' + this.urlQueryStrings
+          window.location.href = '/webshop/orders' + this.urlQueryStrings + '&popopen=true'
         })
         .catch(() => {
           comp.errorMessage =
