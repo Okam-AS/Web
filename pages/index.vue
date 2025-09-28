@@ -113,7 +113,7 @@
                     <span class="star filled">★</span>
                     <span class="star filled">★</span>
                   </div>
-                  <span class="rating-number">4,8</span>
+                  <span class="rating-number">4,9</span>
                 </div>
               </div>
             </div>
