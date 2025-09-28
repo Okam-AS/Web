@@ -35,11 +35,9 @@ export default {
       }
     },
     loadLetters () {
-      const context = require.context('~/assets/UI/logos/', false, /\.png$/)
-      this.letters = context.keys().map(key => ({
-        name: this.extractNameFromFilename(key),
-        imageUrl: context(key)
-      }))
+      // For static generation, we'll use a predefined list or empty array
+      // since require.context doesn't work well with static builds
+      this.letters = []
     },
     extractNameFromFilename (filename) {
       return filename
