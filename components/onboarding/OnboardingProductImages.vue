@@ -105,7 +105,7 @@
 
 <script>
 import axios from "axios";
-import $config from "~/core/helpers/configuration";
+import $config from "@/core/helpers/configuration";
 import dayjs from "dayjs";
 
 export default {

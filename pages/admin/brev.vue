@@ -35,7 +35,7 @@ export default {
       }
     },
     loadLetters () {
-      const context = require.context('~/assets/UI/logos/', false, /\.png$/)
+      const context = require.context('@/assets/UI/logos/', false, /\.png$/)
       this.letters = context.keys().map(key => ({
         name: this.extractNameFromFilename(key),
         imageUrl: context(key)

@@ -8,6 +8,14 @@ export default {
   router: {
     base: process.env.NODE_ENV === 'production' ? '/Web/' : '/'
   },
+  // Alias configuration
+  alias: {
+    '@': '~'
+  },
+  // TypeScript configuration
+  typescript: {
+    typeCheck: false
+  },
   // Global page headers (https://go.nuxtjs.dev/config-head)
   env: {
     IS_PRODUCTION: process.env.NODE_ENV === 'production',
@@ -199,6 +207,9 @@ export default {
         loader: 'ignore-loader',
         exclude: /(node_modules)/
       })
+      
+      // Add TypeScript file resolution
+      config.resolve.extensions.push('.ts', '.tsx')
     },
     optimization: {
       splitChunks: {

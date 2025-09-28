@@ -24,7 +24,7 @@ import {
   WoltService,
   RewardService
 } from '@/core/services'
-import { wholeAmount, fractionAmount, priceLabel, formatString } from '~/core/helpers/tools'
+import { wholeAmount, fractionAmount, priceLabel, formatString } from '@/core/helpers/tools'
 
 const mixin = {
   data() {

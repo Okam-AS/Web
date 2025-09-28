@@ -147,7 +147,7 @@
 </template>
 
 <script>
-import { priceLabel } from "~/core/helpers/tools";
+import { priceLabel } from "@/core/helpers/tools";
 
 export default {
   name: "OfferDocument",
