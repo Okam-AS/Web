@@ -150,7 +150,6 @@
                         </svg>
                       </span>
                       Utbetalinger
-                      <span class="coming-soon-label">NYHET</span>
                     </a>
                   </li>
                   <li>
