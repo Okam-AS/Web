@@ -183,8 +183,8 @@
 </template>
 
 <script>
-import AdminPage from "@/components/organisms/AdminPage.vue";
-import Modal from "@/components/atoms/Modal.vue";
+import AdminPage from "~/components/organisms/AdminPage.vue";
+import Modal from "~/components/atoms/Modal.vue";
 
 export default {
   components: { AdminPage, Modal },

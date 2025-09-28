@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { MutationName, ActionName } from '@/core/enums'
+import { MutationName, ActionName } from '~/core/enums'
 
 export const state = () => ({
   currentUser: {},

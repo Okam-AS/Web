@@ -322,10 +322,10 @@
 </template>
 
 <script>
-import AdminPage from "@/components/organisms/AdminPage.vue";
-import Modal from "@/components/atoms/Modal.vue";
-import PriceInput from "@/components/atoms/PriceInput.vue";
-import { OfferItemModel } from "@/core/models";
+import AdminPage from "~/components/organisms/AdminPage.vue";
+import Modal from "~/components/atoms/Modal.vue";
+import PriceInput from "~/components/atoms/PriceInput.vue";
+import { OfferItemModel } from "~/core/models";
 
 export default {
   components: { AdminPage, Modal, PriceInput },

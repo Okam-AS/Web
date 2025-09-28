@@ -38,9 +38,9 @@
 </template>
 
 <script>
-import Loading from '@/components/atoms/Loading.vue'
-import ContinueButton from '@/components/atoms/ContinueButton.vue'
-import AdminPage from '@/components/organisms/AdminPage.vue'
+import Loading from '~/components/atoms/Loading.vue'
+import ContinueButton from '~/components/atoms/ContinueButton.vue'
+import AdminPage from '~/components/organisms/AdminPage.vue'
 import VueQrcode from '@chenfengyuan/vue-qrcode'
 import LoginModal from '~/components/molecules/LoginModal.vue'
 

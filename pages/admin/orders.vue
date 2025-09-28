@@ -202,7 +202,7 @@
 </template>
 
 <script>
-import AdminPage from "@/components/organisms/AdminPage.vue";
+import AdminPage from "~/components/organisms/AdminPage.vue";
 import LoginModal from "~/components/molecules/LoginModal.vue";
 import OrderModal from "~/components/organisms/OrderModal.vue";
 

@@ -216,9 +216,9 @@
 </template>
 
 <script>
-import Loading from "@/components/atoms/Loading.vue";
-import TermsModal from "@/components/modals/TermsModal.vue";
-import OfferDocument from "@/components/shared/OfferDocument.vue";
+import Loading from "~/components/atoms/Loading.vue";
+import TermsModal from "~/components/modals/TermsModal.vue";
+import OfferDocument from "~/components/shared/OfferDocument.vue";
 
 export default {
   components: {

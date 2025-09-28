@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import FocusTrap from '@/components/molecules/FocusTrap'
-import CloseButton from '@/components/atoms/CloseButton'
+import FocusTrap from '~/components/molecules/FocusTrap'
+import CloseButton from '~/components/atoms/CloseButton'
 
 export default {
   components: {

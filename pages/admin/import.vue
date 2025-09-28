@@ -234,8 +234,8 @@
 </template>
 
 <script>
-import Loading from '@/components/atoms/Loading.vue';
-import AdminPage from '@/components/organisms/AdminPage.vue';
+import Loading from '~/components/atoms/Loading.vue';
+import AdminPage from '~/components/organisms/AdminPage.vue';
 import Modal from '~/components/atoms/Modal.vue';
 import AutocompleteInput from '~/components/atoms/AutocompleteInput.vue';
 import LoginModal from '~/components/molecules/LoginModal.vue';

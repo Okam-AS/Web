@@ -388,11 +388,11 @@
 </template>
 
 <script>
-import AdminPage from "@/components/organisms/AdminPage.vue";
+import AdminPage from "~/components/organisms/AdminPage.vue";
 import axios from "axios";
 import dayjs from "dayjs";
 import LoginModal from "~/components/molecules/LoginModal.vue";
-import $config from "@/core/helpers/configuration";
+import $config from "~/core/helpers/configuration";
 
 export default {
   components: { AdminPage, LoginModal },

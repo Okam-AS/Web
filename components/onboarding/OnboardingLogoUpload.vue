@@ -38,7 +38,7 @@
 
 <script>
 import axios from 'axios'
-import $config from '@/core/helpers/configuration'
+import $config from '~/core/helpers/configuration'
 
 export default {
   name: 'OnboardingLogoUpload',

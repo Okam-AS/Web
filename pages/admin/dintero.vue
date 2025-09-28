@@ -424,11 +424,11 @@
 </template>
 
 <script>
-import AdminPage from "@/components/organisms/AdminPage.vue";
-import Loading from "@/components/atoms/Loading.vue";
-import LoginModal from "@/components/molecules/LoginModal.vue";
-import Modal from "@/components/atoms/Modal.vue";
-import VatAutocompleteInput from "@/components/atoms/VatAutocompleteInput.vue";
+import AdminPage from "~/components/organisms/AdminPage.vue";
+import Loading from "~/components/atoms/Loading.vue";
+import LoginModal from "~/components/molecules/LoginModal.vue";
+import Modal from "~/components/atoms/Modal.vue";
+import VatAutocompleteInput from "~/components/atoms/VatAutocompleteInput.vue";
 
 export default {
   name: "DinteroConfig",

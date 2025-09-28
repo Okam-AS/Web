@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import Loading from '@/components/atoms/Loading.vue'
+import Loading from '~/components/atoms/Loading.vue'
 
 // NOTE: Rewritten from https://github.com/suweya/vue-verification-code-input/blob/master/src/components/CodeInput.vue
 const KEY_CODE = {

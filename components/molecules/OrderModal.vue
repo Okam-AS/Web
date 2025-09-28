@@ -163,7 +163,7 @@
   </Modal>
 </template>
 <script>
-import Modal from '@/components/atoms/Modal.vue'
+import Modal from '~/components/atoms/Modal.vue'
 
 export default {
   components: { Modal },

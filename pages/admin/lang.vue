@@ -66,9 +66,9 @@
   </AdminPage>
 </template>
 <script>
-import EditRowModal from '@/components/organisms/EditLangRowModal.vue'
-import Modal from '@/components/atoms/Modal.vue'
-import AdminPage from '@/components/organisms/AdminPage.vue'
+import EditRowModal from '~/components/organisms/EditLangRowModal.vue'
+import Modal from '~/components/atoms/Modal.vue'
+import AdminPage from '~/components/organisms/AdminPage.vue'
 import LoginModal from '~/components/molecules/LoginModal.vue'
 
 export default {

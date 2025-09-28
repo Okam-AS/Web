@@ -10,9 +10,9 @@
 </template>
 
 <script>
-import AdminPageHeader from "@/components/organisms/AdminPageHeader.vue";
-import AdminPageFooter from "@/components/organisms/AdminPageFooter.vue";
-import OnboardingNotification from "@/components/organisms/OnboardingNotification.vue";
+import AdminPageHeader from "~/components/organisms/AdminPageHeader.vue";
+import AdminPageFooter from "~/components/organisms/AdminPageFooter.vue";
+import OnboardingNotification from "~/components/organisms/OnboardingNotification.vue";
 
 export default {
   components: {

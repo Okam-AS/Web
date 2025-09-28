@@ -8,10 +8,6 @@ export default {
   router: {
     base: process.env.NODE_ENV === 'production' ? '/Web/' : '/'
   },
-  // Alias configuration
-  alias: {
-    '@': '~'
-  },
   // TypeScript configuration
   typescript: {
     typeCheck: false

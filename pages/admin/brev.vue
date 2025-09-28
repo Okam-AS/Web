@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import AdminPage from '@/components/organisms/AdminPage.vue'
+import AdminPage from '~/components/organisms/AdminPage.vue'
 import SalesLetter from '~/components/organisms/SalesLetter.vue'
 import LoginModal from '~/components/molecules/LoginModal.vue'
 
@@ -35,7 +35,7 @@ export default {
       }
     },
     loadLetters () {
-      const context = require.context('@/assets/UI/logos/', false, /\.png$/)
+      const context = require.context('~/assets/UI/logos/', false, /\.png$/)
       this.letters = context.keys().map(key => ({
         name: this.extractNameFromFilename(key),
         imageUrl: context(key)

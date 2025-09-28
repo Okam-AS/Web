@@ -435,12 +435,12 @@
 </template>
 
 <script>
-import AdminPage from "@/components/organisms/AdminPage.vue";
-import Loading from "@/components/atoms/Loading.vue";
-import Modal from "@/components/atoms/Modal.vue";
-import OfferDocument from "@/components/shared/OfferDocument.vue"; // Import OfferDocument component
-import PriceInput from "@/components/atoms/PriceInput.vue"; // Import PriceInput component
-import { OfferItemModel, OfferProposalModel, OfferProposalLineItemModel } from "@/core/models";
+import AdminPage from "~/components/organisms/AdminPage.vue";
+import Loading from "~/components/atoms/Loading.vue";
+import Modal from "~/components/atoms/Modal.vue";
+import OfferDocument from "~/components/shared/OfferDocument.vue"; // Import OfferDocument component
+import PriceInput from "~/components/atoms/PriceInput.vue"; // Import PriceInput component
+import { OfferItemModel, OfferProposalModel, OfferProposalLineItemModel } from "~/core/models";
 
 export default {
   components: { AdminPage, Loading, Modal, OfferDocument, PriceInput }, // Register OfferDocument and PriceInput components

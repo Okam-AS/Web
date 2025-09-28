@@ -97,8 +97,8 @@
 </template>
 
 <script>
-import AdminPage from "@/components/organisms/AdminPage.vue";
-import Loading from "@/components/atoms/Loading.vue";
+import AdminPage from "~/components/organisms/AdminPage.vue";
+import Loading from "~/components/atoms/Loading.vue";
 import LoginModal from "~/components/molecules/LoginModal.vue";
 
 export default {

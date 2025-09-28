@@ -595,9 +595,9 @@
   </AdminPage>
 </template>
 <script>
-import AdminPage from "@/components/organisms/AdminPage.vue";
-import Loading from "@/components/atoms/Loading.vue";
-import { debounce } from "@/core/helpers/ts-debounce";
+import AdminPage from "~/components/organisms/AdminPage.vue";
+import Loading from "~/components/atoms/Loading.vue";
+import { debounce } from "~/core/helpers/ts-debounce";
 import LoginModal from "~/components/molecules/LoginModal.vue";
 
 export default {

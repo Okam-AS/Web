@@ -187,8 +187,8 @@
 </template>
 
 <script>
-import AdminPage from "@/components/organisms/AdminPage.vue";
-import Loading from "@/components/atoms/Loading.vue";
+import AdminPage from "~/components/organisms/AdminPage.vue";
+import Loading from "~/components/atoms/Loading.vue";
 
 export default {
   name: "PendingSettlements",

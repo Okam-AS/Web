@@ -239,10 +239,10 @@
 </template>
 
 <script>
-import AdminPage from "@/components/organisms/AdminPage.vue";
-import OnboardingLogoUpload from "@/components/onboarding/OnboardingLogoUpload.vue";
-import OnboardingAIImport from "@/components/onboarding/OnboardingAIImport.vue";
-import OnboardingProductImages from "@/components/onboarding/OnboardingProductImages.vue";
+import AdminPage from "~/components/organisms/AdminPage.vue";
+import OnboardingLogoUpload from "~/components/onboarding/OnboardingLogoUpload.vue";
+import OnboardingAIImport from "~/components/onboarding/OnboardingAIImport.vue";
+import OnboardingProductImages from "~/components/onboarding/OnboardingProductImages.vue";
 import LoginModal from "~/components/molecules/LoginModal.vue";
 
 export default {

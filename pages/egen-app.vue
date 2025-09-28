@@ -221,8 +221,8 @@
 </template>
 
 <script>
-import PageHeader from "@/components/organisms/PageHeader.vue";
-import PageFooter from "@/components/organisms/PageFooter.vue";
+import PageHeader from "~/components/organisms/PageHeader.vue";
+import PageFooter from "~/components/organisms/PageFooter.vue";
 import PerImage from "~/assets/UI/testimonials/per.png";
 import TamImage from "~/assets/UI/testimonials/tam.png";
 import CatharinaImage from "~/assets/UI/testimonials/catharina.png";

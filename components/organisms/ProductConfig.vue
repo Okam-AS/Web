@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import Stepper from '@/components/molecules/Stepper'
+import Stepper from '~/components/molecules/Stepper'
 
 export default {
   components: { Stepper },

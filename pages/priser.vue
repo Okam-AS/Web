@@ -139,9 +139,9 @@
   </div>
 </template>
 <script>
-import PageHeader from "@/components/organisms/PageHeader.vue";
-import PageFooter from "@/components/organisms/PageFooter.vue";
-import FaqItem from "@/components/atoms/FaqItem.vue";
+import PageHeader from "~/components/organisms/PageHeader.vue";
+import PageFooter from "~/components/organisms/PageFooter.vue";
+import FaqItem from "~/components/atoms/FaqItem.vue";
 
 export default {
   components: {

@@ -437,11 +437,11 @@
 </template>
 
 <script>
-import AdminPage from "@/components/organisms/AdminPage.vue";
-import Loading from "@/components/atoms/Loading.vue";
-import { debounce } from "@/core/helpers/ts-debounce";
+import AdminPage from "~/components/organisms/AdminPage.vue";
+import Loading from "~/components/atoms/Loading.vue";
+import { debounce } from "~/core/helpers/ts-debounce";
 import dayjs from "dayjs";
-import { KeyAccountManagerStatus } from "@/core/enums";
+import { KeyAccountManagerStatus } from "~/core/enums";
 
 export default {
   components: { AdminPage, Loading },
