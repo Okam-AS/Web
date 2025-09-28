@@ -6,7 +6,7 @@ export default {
   target: 'static',
   // Router configuration for GitHub Pages
   router: {
-    base: process.env.NODE_ENV === 'production' ? '/Web/' : '/'
+    base: '/'
   },
   // TypeScript configuration
   typescript: {
