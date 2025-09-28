@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/en/admin/import", {data:[{}],fetch:{},mutations:[]});

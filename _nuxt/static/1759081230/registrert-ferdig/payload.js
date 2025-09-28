@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/registrert-ferdig", {data:[{}],fetch:{},mutations:[]});

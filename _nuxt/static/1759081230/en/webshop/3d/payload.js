@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/en/webshop/3d", {data:[{}],fetch:{},mutations:[]});

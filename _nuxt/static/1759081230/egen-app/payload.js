@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/egen-app", {data:[{}],fetch:{},mutations:[]});

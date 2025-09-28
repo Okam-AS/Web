@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/en/store/notfound", {data:[{}],fetch:{},mutations:[]});

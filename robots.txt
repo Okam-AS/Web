@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /import/
+Disallow: /offer/
+Disallow: /offers/
+Sitemap: https
+User-agent: *
+Disallow: /lang
+Disallow: /admin

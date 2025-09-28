@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/en/admin/lang", {data:[{}],fetch:{},mutations:[]});

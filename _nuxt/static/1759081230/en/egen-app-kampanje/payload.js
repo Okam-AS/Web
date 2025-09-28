@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/en/egen-app-kampanje", {data:[{}],fetch:{},mutations:[]});

@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[69],{855:function(e,n,t){"use strict";t.r(n);var o={components:{RedirectToNewStore:t(509).default}},c=t(78),component=Object(c.a)(o,(function(){var e=this._self._c;return e("client-only",[e("RedirectToNewStore")],1)}),[],!1,null,null,null);n.default=component.exports}}]);

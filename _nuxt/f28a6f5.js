@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[51],{873:function(e,n,r){"use strict";r.r(n);var d={name:"OfferIndex",asyncData:function(e){return(0,e.error)({statusCode:404,message:"Offer code is required"})}},t=r(78),component=Object(t.a)(d,undefined,undefined,!1,null,null,null);n.default=component.exports}}]);

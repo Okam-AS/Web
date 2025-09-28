@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/en/admin/categories", {data:[{}],fetch:{},mutations:[]});

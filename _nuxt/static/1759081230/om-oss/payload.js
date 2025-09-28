@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/om-oss", {data:[{}],fetch:{},mutations:[]});

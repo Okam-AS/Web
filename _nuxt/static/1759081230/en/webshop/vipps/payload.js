@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/en/webshop/vipps", {data:[{}],fetch:{},mutations:[]});

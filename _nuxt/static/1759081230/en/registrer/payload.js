@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/en/registrer", {data:[{}],fetch:{},mutations:[]});

@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/vilkar-store", {data:[{}],fetch:{},mutations:[]});

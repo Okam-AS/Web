@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/en/last-ned", {data:[{}],fetch:{},mutations:[]});

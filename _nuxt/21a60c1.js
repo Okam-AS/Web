@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[52],{875:function(n,e,d){"use strict";d.r(e);var l={middleware:"om-okam-admin"},o=d(78),component=Object(o.a)(l,undefined,undefined,!1,null,null,null);e.default=component.exports}}]);

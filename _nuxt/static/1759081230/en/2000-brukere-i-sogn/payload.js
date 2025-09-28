@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/en/2000-brukere-i-sogn", {data:[{}],fetch:{},mutations:[]});

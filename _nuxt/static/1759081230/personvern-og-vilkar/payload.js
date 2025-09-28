@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/personvern-og-vilkar", {data:[{}],fetch:{},mutations:[]});
