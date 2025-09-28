@@ -1,0 +1,15 @@
+[
+	{
+		"relation": [
+			"delegate_permission/common.handle_all_urls",
+			"delegate_permission/common.get_login_creds"
+		],
+		"target": {
+			"namespace": "android_app",
+			"package_name": "no.okam.consumer",
+			"sha256_cert_fingerprints": [
+				"7C:37:34:A6:9B:FF:12:2D:32:AD:E4:70:B4:47:90:02:34:66:5E:C6:3D:F7:6B:CF:A6:D8:1D:8F:0D:86:CA:1F"
+			]
+		}
+	}
+]

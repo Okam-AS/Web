@@ -1,0 +1,91 @@
+.btn {
+    padding: rem(12) rem(16);
+    border-radius: rem(10);
+    border: none;
+    font-size: rem(14);
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+
+    &--primary {
+        background-color: #001f3d;
+        color: white;
+        
+        &:hover {
+            background-color: #001529;
+        }
+    }
+
+    &--small {
+        font-size: rem(12);
+        padding: rem(6) rem(10) rem(10) rem(6);
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+
+        .material-icons {
+            margin-right: rem(6);
+            font-size: rem(18);
+        }
+    }
+
+    &--outline {
+        border: 1px solid #000000;
+        color: #000000;
+        
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.15);
+        }
+    }
+}
+
+.btn-link {
+    border: none;
+    background-color: transparent;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    font-size: rem(16);
+}
+
+.btn-row {
+    margin-top: rem(24);
+    display: flex;
+    align-items: center;
+    column-gap: rem(24);
+
+    &--right {
+        justify-content: flex-end;
+    }
+
+    &--center {
+        display: block;
+        text-align: center;
+    }
+
+    &--space-between {
+        justify-content: space-between;
+    }
+
+    &--modal {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        padding: rem(16);
+        margin-top: 0;
+        background-color: #fff;
+        border-radius: rem(15) rem(15) 0 0;
+        box-shadow: 0 0 20px 0 rgba(0,0,0,0.2);
+    }
+
+    &--margin-bottom {
+        margin-bottom: rem(24);
+    }
+}
+
+.input-btn-row {
+    display: flex;
+    column-gap: rem(8);
+    background-color: $color-support-light;
+    padding: rem(24);
+    margin: 0 rem(-24);
+}

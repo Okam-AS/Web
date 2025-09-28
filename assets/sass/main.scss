@@ -1,0 +1,31 @@
+@import 'common';
+@import 'layout';
+@import 'form';
+@import 'button';
+@import 'base';
+@import 'utilities';
+@import 'big-teaser';
+@import 'media-item';
+@import 'faq';
+@import 'link-list';
+@import 'main-menu';
+@import 'highlight-box';
+@import 'highlight-table';
+@import 'webshop';
+@import 'admin';
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Montserrat Regular'), local('Montserrat-Regular');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Montserrat SemiBold'), local('Montserrat-SemiBold');
+}

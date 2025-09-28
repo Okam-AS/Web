@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /import/
+Disallow: /offer/
+Disallow: /offers/
+
+Sitemap: https://okam.no/sitemap.xml 

@@ -1,0 +1,55 @@
+$space: 1.25rem;
+
+// Colors
+$color-text         : black;
+$color-profile      : #f2f4fb;
+$color-profile-dark : #003058;
+$color-support      : #003058;
+$color-support-light: #f2f4fb;
+$color-dark         : #000000;
+$color-support-medium: #6e5f7e;
+$color-support-dark : #4A3A5A;
+$color-neutral-light: #ddd;
+$color-neutral-lighter: #f5f5f5;
+$color-neutral      : #999;
+$color-error        : #CC0000;
+$color-primary      : #003058;
+
+// Font-sizes
+$font-size--sm      : 14;
+$font-size--base    : 16;
+$font-size--md      : 18;
+$font-size--lg      : 20;
+$font-size--xl      : 24;
+$font-size--xxl     : 42;
+
+// Breakpoints
+@mixin br-lg {
+  @media only screen and (min-width: 56em) {
+    @content;
+  }
+}
+
+@mixin br-md {
+  @media only screen and (min-width: 40em) {
+    @content;
+  }
+}
+
+@mixin br-sm {
+  @media only screen and (min-width: 30em) {
+    @content;
+  }
+}
+
+@mixin br-mobile {
+  @media only screen and (max-width: 39.9375em) {
+    @content;
+  }
+}
+
+// Fonts
+@mixin font-size($sizeValue: 16) {
+  font-size: ($sizeValue) + px;
+  font-size: $sizeValue/16 + rem;
+}

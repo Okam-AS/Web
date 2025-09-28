@@ -1,0 +1,9 @@
+.link-list {
+  list-style: none;
+  padding: 0;
+
+  &__item {
+    @include font-size($font-size--md);
+    margin-bottom: $space/2;
+  }
+}

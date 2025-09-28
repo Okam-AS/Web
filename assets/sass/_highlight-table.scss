@@ -1,0 +1,84 @@
+.highlight-table {
+  margin: $space*2 0;
+  
+  @include br-md {
+   margin-top: $space*3; 
+   margin-bottom: $space*3; 
+  }
+
+  table {
+    width: 100%;
+    padding: 0;
+    border-collapse: collapse;
+    background-color: #f2f4fb;
+    border-radius: 30px;
+    box-shadow: 0 0 30px 0 rgba(0,0,0,0.15);
+
+    th,
+    td {
+      padding: $space/2;
+      @include font-size($font-size--sm);
+      border-right: 2px solid #fff;
+
+      &:last-child {
+        border-right: none;
+      }
+
+      @include br-md {
+        padding: $space/1.5 $space;
+        @include font-size($font-size--base);
+      }
+    }
+
+    thead {
+      th {
+        padding: $space/1.5 $space/2;
+        border-bottom: 2px solid #fff;
+
+        @include br-md {
+          padding: $space;
+        }
+      }
+    }
+
+    tbody {
+      tr.highlight {
+        background-color: $color-profile;
+      }
+
+      th.border,
+      td.border {
+        border-bottom: 2px solid #fff;
+      }
+
+      th {
+        text-align: right;
+      }
+
+      td {
+        text-align: center;
+
+        svg {
+          fill: #2f8153;
+          width: 22px;
+          height: 22px;
+        }
+
+        &.xl-text {
+          @include br-md {
+            @include font-size(36);
+            padding: $space*1.5 $space;
+          }
+        }
+      }
+    }
+
+    tfoot {
+      td {
+        border-top: 2px solid #fff;
+        text-align: center;
+        padding: $space;
+      }
+    }
+  }
+}

@@ -1,0 +1,97 @@
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 100%;
+  line-height: 1.5;
+  color: $color-text;
+
+  &.has-overlay {
+    overflow: hidden;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+fieldset {
+  border: none;
+}
+
+img {
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+a {
+  color: darken($color-text, 10%);
+  text-decoration: none;
+  outline: none;
+
+  &:focus {
+    box-shadow: 0 3px 0 0 darken($color-text, 15%);
+  }
+}
+
+button {
+  cursor: pointer;
+}
+
+h1,h2,h3,p,ul,ol,form,blockquote,figure {
+  margin: 0;
+}
+
+.heading-1 {
+  @include font-size($font-size--xl);
+  margin-bottom: .75em;
+  line-height: 1.2;
+
+  @include br-md {
+    @include font-size($font-size--xxl);
+  }
+}
+
+p {
+  margin-bottom: 1.5em;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.message-box{
+  background: darken($color-support-dark, 10%);
+  padding: rem(24);
+  color: white;
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  
+  &--error {
+    background: darken($color-error, 5%);
+  }
+
+  &__close {
+    position: absolute;
+    cursor: pointer;
+    top: rem(5);
+    right: rem(5);
+    font-size: rem(20);
+  }
+}
+
+.push-label {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.download-links a {
+  display: inline-block;
+  border-bottom: none;
+}
+
+.googleplay, .appstore  {
+  border-radius: 5px;
+  height: 2em;
+}
