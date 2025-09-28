@@ -14,7 +14,7 @@
           </div>
 
           <div class="big-teaser__content">
-            <h1 class="heading-1">Din egen bestillingsapp</h1>
+            <h1 class="heading-1">Din egen bestillingsapp!</h1>
             <p class="big-teaser__description">Bli en del av Okam appen eller få din egen bestillingsapp</p>
             <div class="big-teaser__links">
               <a
