@@ -1,0 +1,1 @@
+window.__NUXT__=(function(a){return {staticAssetsBase:"\u002FWeb\u002F_nuxt\u002Fstatic\u002F1759081672",layout:"default",error:a,state:a,serverRendered:false,routePath:"\u002Fen\u002Frask-vei-til-egen-nettbutikk",config:{_app:{basePath:"\u002FWeb\u002F",assetsPath:"\u002FWeb\u002F_nuxt\u002F",cdnURL:a},content:{dbHash:"b25b294c"}}}}(null));
