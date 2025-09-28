@@ -2,6 +2,12 @@ import redirectSSL from 'redirect-ssl'
 
 export default {
   debug: true,
+  // Target for static generation
+  target: 'static',
+  // Router configuration for GitHub Pages
+  router: {
+    base: process.env.NODE_ENV === 'production' ? '/Web/' : '/'
+  },
   // Global page headers (https://go.nuxtjs.dev/config-head)
   env: {
     IS_PRODUCTION: process.env.NODE_ENV === 'production',

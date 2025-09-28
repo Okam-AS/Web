@@ -10,7 +10,7 @@
     "dev": "NODE_ENV=development nuxt-ts",
     "build": "nuxt-ts build",
     "start": "NODE_ENV=production nuxt-ts start",
-    "generate": "nuxt-ts generate",
+    "generate": "NODE_ENV=production nuxt-ts generate",
     "test": "jest",
     "reinstall": "rm -rf node_modules && npm i",
     "heroku login": "heroku login",
