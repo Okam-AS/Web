@@ -2,8 +2,8 @@
   <AdminPage>
     <div class="pending-settlements">
       <div class="page-header">
-        <h1>Utestående utbetalinger</h1>
-        <p class="page-description">Oversikt over bestillinger som ikke er inkludert i utbetalinger ennå</p>
+        <h1>Utbetalinger</h1>
+        <p class="page-description">Rapporter og fremtidige utbetalinger</p>
       </div>
 
       <!-- Store and Date Selection -->
