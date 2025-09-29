@@ -2,8 +2,8 @@
   <AdminPage>
     <div class="pending-settlements">
       <div class="page-header">
-        <h1>Utestående utbetalinger</h1>
-        <p class="page-description">Oversikt over bestillinger som ikke er inkludert i utbetalinger ennå</p>
+        <h1>Utbetalinger</h1>
+        <p class="page-description">Rapporter og fremtidige utbetalinger</p>
       </div>
 
       <!-- Store and Date Selection -->
@@ -141,7 +141,7 @@
         v-if="settlementData && settlementData.settlements && settlementData.settlements.length > 0 && !isLoading"
         class="settlements-section"
       >
-        <h2>Utbetalinger i perioden ({{ settlementData.settlements.length }})</h2>
+        <h2>Utbetalinger</h2>
         <div class="settlements-grid">
           <div
             v-for="settlement in settlementData.settlements"
