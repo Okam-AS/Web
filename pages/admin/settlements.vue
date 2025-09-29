@@ -141,7 +141,7 @@
         v-if="settlementData && settlementData.settlements && settlementData.settlements.length > 0 && !isLoading"
         class="settlements-section"
       >
-        <h2>Utbetalinger</h2>
+        <h2>Utbetalinger i perioden ({{ settlementData.settlements.length }})</h2>
         <div class="settlements-grid">
           <div
             v-for="settlement in settlementData.settlements"
