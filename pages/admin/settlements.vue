@@ -160,6 +160,16 @@
               </div>
               <div class="settlement-count">{{ settlement.transactionCount }} transaksjoner</div>
               <div class="settlement-period">{{ formatDate(settlement.startAt) }} - {{ formatDate(settlement.endAt) }}</div>
+             
+              <button
+                v-if="settlement.invoiceId"
+                class="btn-download"
+                :disabled="downloadingInvoiceId === settlement.invoiceId"
+                @click="downloadInvoice(settlement)"
+              >
+                <span v-if="downloadingInvoiceId === settlement.invoiceId">Laster ned...</span>
+                <span v-else>Last ned rapport</span>
+              </button>
             </div>
           </div>
         </div>
@@ -202,6 +212,7 @@ export default {
         from: this.getDefaultFromDate(),
         to: this.getDefaultToDate(),
       },
+      downloadingInvoiceId: null,
     };
   },
   computed: {
@@ -305,6 +316,42 @@ export default {
     showNotification(message, type) {
       // Implement notification logic or use existing notification system
       alert(message);
+    },
+
+    async downloadInvoice(settlement) {
+      if (this.downloadingInvoiceId) return;
+
+      this.downloadingInvoiceId = settlement.invoiceId;
+      try {
+        const token = this.$store.state.currentUser?.token;
+        const apiBaseUrl = process.env.API_BASE_URL || '';
+        const url = `${apiBaseUrl}/Invoices/pdf/${settlement.invoiceId}`;
+
+        const axios = require('axios');
+        const response = await axios({
+          url: url,
+          method: 'GET',
+          responseType: 'blob',
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+        const blobUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = `Faktura-${settlement.invoiceId}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(blobUrl);
+      } catch (error) {
+        console.error('Error downloading invoice:', error);
+        this.showNotification('Kunne ikke laste ned faktura', 'error');
+      } finally {
+        this.downloadingInvoiceId = null;
+      }
     },
   },
 };
@@ -580,6 +627,29 @@ export default {
   color: #666;
   font-size: 0.8em;
   font-style: italic;
+}
+
+.btn-download {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background-color: #1bb776;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  width: 100%;
+}
+
+.btn-download:hover:not(:disabled) {
+  background-color: #159159;
+}
+
+.btn-download:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .empty-state {

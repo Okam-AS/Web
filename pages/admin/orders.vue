@@ -10,7 +10,7 @@
             <input
               v-model="searchQuery"
               type="text"
-              placeholder="Søk etter kode, telefon eller ID..."
+              placeholder="Søk etter kode, telefon, navn eller ID..."
               class="search-input"
               @keyup.enter="fetchOrders(1)"
             />
