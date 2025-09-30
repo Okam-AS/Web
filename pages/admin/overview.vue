@@ -48,6 +48,16 @@
               </div>
             </div>
           </div>
+          <div class="overview__filter overview__filter--search">
+            <label for="store-name-filter">Butikkfilter:</label>
+            <input
+              id="store-name-filter"
+              v-model="storeNameFilter"
+              type="text"
+              class="overview__search-input"
+              placeholder="Søk etter butikk"
+            />
+          </div>
         </div>
 
         <!-- KAM Leaderboard Section -->
@@ -474,6 +484,7 @@ export default {
     showKamStatusFilterDropdown: false,
     totalOrderCount: 0,
     totalAmountSum: 0,
+    storeNameFilter: "",
   }),
 
   computed: {
@@ -493,6 +504,13 @@ export default {
       if (this.selectedKamStatusFilters.length > 0) {
         // When filters are applied, only show stores with matching status
         filteredStores = filteredStores.filter((store) => this.selectedKamStatusFilters.includes(store.kamStatus));
+      }
+
+      if (this.storeNameFilter) {
+        const normalizedQuery = this.storeNameFilter.trim().toLocaleLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
+        if (normalizedQuery.length > 0) {
+          filteredStores = filteredStores.filter((store) => (store.name || "").toLocaleLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").includes(normalizedQuery));
+        }
       }
 
       return filteredStores.sort((a, b) => {
@@ -559,6 +577,9 @@ export default {
         }
       },
       immediate: true,
+    },
+    storeNameFilter() {
+      this.saveFiltersToLocalStorage();
     },
   },
 
@@ -818,6 +839,8 @@ export default {
         // Save sort settings
         localStorage.setItem("okam_overview_sort_key", this.sortKey);
         localStorage.setItem("okam_overview_sort_order", this.sortOrder);
+
+        localStorage.setItem("okam_overview_store_name", this.storeNameFilter);
       } catch (error) {
         console.error("Error saving filters to localStorage:", error);
       }
@@ -856,6 +879,13 @@ export default {
         if (savedSortOrder) {
           this.sortOrder = savedSortOrder;
         }
+
+        const savedStoreNameFilter = localStorage.getItem("okam_overview_store_name");
+        if (savedStoreNameFilter) {
+          this.storeNameFilter = savedStoreNameFilter;
+        } else {
+          this.storeNameFilter = "";
+        }
       } catch (error) {
         console.error("Error loading filters from localStorage:", error);
       }
@@ -885,6 +915,8 @@ export default {
 @media (min-width: 768px) {
   .overview__filters {
     flex-direction: row;
+    align-items: flex-end;
+    gap: 1rem;
   }
 }
 
@@ -893,6 +925,22 @@ export default {
   align-items: center;
   margin-right: 1rem;
   margin-bottom: 1rem;
+}
+
+.overview__filter--search {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.25rem;
+}
+
+@media (min-width: 640px) {
+  .overview__filter--search {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 0.25rem;
+    width: auto;
+  }
 }
 
 @media (min-width: 768px) {
@@ -906,10 +954,31 @@ export default {
   font-weight: 500;
 }
 
+.overview__search-input {
+  padding: 0.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.25rem;
+  background-color: white;
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .overview__search-input {
+    width: auto;
+    min-width: 240px;
+  }
+}
+
 .date-selection {
   display: flex;
   align-items: center;
   width: 100%;
+}
+
+@media (min-width: 640px) {
+  .date-selection {
+    width: auto;
+  }
 }
 
 .date-picker-wrapper {
