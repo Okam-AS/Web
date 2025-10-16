@@ -22,6 +22,8 @@ import {
   KamService,
   DinteroService,
   WoltService,
+  WoltMenuService,
+  WoltVenueService,
   RewardService
 } from '~/core/services'
 import { wholeAmount, fractionAmount, priceLabel, formatString } from '~/core/helpers/tools'
@@ -73,6 +75,30 @@ const mixin = {
         case 'TableDelivery': return 'Spis inne'
         case 'WoltDelivery': return 'Wolt'
         default: return 'Ikke satt'
+      }
+    },
+    dineHomeDeliveryStatusLabel(dineHomeDeliveryTypeEnum) {
+      switch (dineHomeDeliveryTypeEnum) {
+        case 'Accepted': return 'Sjåfør har akseptert'
+        case 'PickedUp': return 'Sjåfør leverer bestilling'
+        case 'ReachedDestination': return 'Sjåfør fremme hos kunde'
+        case 'Completed': return 'Fullført'
+        case 'Canceled': return 'Sjåfør har kansellert'
+        default: return 'Venter aksept fra sjåfør'
+      }
+    },
+    woltDeliveryStatusLabel(woltDeliveryStatusEnum) {
+      switch (woltDeliveryStatusEnum) {
+        case 'OrderReceived': return 'Bestilling mottatt'
+        case 'OrderRejected': return 'Bestilling avvist'
+        case 'PickupStarted': return 'Henting startet'
+        case 'PickedUp': return 'Hentet'
+        case 'PickupArrival': return 'Sjåfør ankommer'
+        case 'DropoffStarted': return 'Levering startet'
+        case 'DropoffArrival': return 'Levering ankommer'
+        case 'Delivered': return 'Levert'
+        case 'CustomerNoShow': return 'Kunde møtte ikke'
+        default: return 'Venter på sjåfør'
       }
     },
     orderStatusLabel(orderStatusEnum) {
@@ -133,6 +159,8 @@ const mixin = {
     _kamService() { return new KamService(this.$store) },
     _dinteroService() { return new DinteroService(this.$store) },
     _woltService() { return new WoltService(this.$store) },
+    _woltMenuService() { return new WoltMenuService(this.$store) },
+    _woltVenueService() { return new WoltVenueService(this.$store) },
     _rewardService() { return new RewardService(this.$store) }
 
   }

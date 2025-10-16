@@ -28,117 +28,21 @@
             v-if="(!isMobile || !collapsedColumns.new) && newOrders.length"
             class="orders-list"
           >
-            <div
+            <OrderCard
               v-for="order in newOrders"
               :key="order.id"
-              class="order-card"
-              :class="{
-                'is-warning': isOrderDelayed(order),
-              }"
-            >
-              <div
-                class="order-header"
-                @click="showOrderId === order.id ? (showOrderId = '') : (showOrderId = order.id)"
-              >
-                <div class="header-left">
-                  <span class="store-name">{{ order.storeLegalName }}</span>
-                </div>
-                <span class="order-status">
-                  <span class="material-icons">{{ iconForOrder(order) }}</span>
-                  {{ order.friendlyOrderId }}
-                </span>
-              </div>
-
-              <div
-                v-if="showOrderId === order.id"
-                class="order-details"
-              >
-                <div class="info-grid">
-                  <div class="info-item">
-                    <label>Platform:</label>
-                    <span>{{ order.platform }}</span>
-                  </div>
-                  <div
-                    v-if="order.deliveryType === 'DineHomeDelivery'"
-                    class="info-item"
-                  >
-                    <label>Sjåførstatus:</label>
-                    <div class="status-wrapper">
-                      <span>{{ dineHomeDeliveryStatusLabel(order.dineHomeStatus) }}</span>
-                      <span
-                        v-if="getDriverDelay(order) > 0"
-                        class="delay-badge"
-                      >
-                        {{ getDriverDelay(order) }} min forsinket
-                      </span>
-                    </div>
-                  </div>
-                  <div class="info-item">
-                    <label>Bestilit:</label>
-                    <span>{{ formatDate(order.created || order.pickup) }}</span>
-                  </div>
-                  <div class="info-item">
-                    <label>Klar til:</label>
-                    <span v-if="order.countdownEndTime">{{ formatDate(order.countdownEndTime) }}</span>
-                  </div>
-                  <div class="info-item">
-                    <label>Totalpris:</label>
-                    <span>{{ priceLabel(order.finalAmount) }}</span>
-                  </div>
-                  <div class="info-item">
-                    <label>Levering:</label>
-                    <span>{{ deliveryTypeLabel(order.deliveryType) }}</span>
-                  </div>
-                  <div class="info-item">
-                    <label>Betaling:</label>
-                    <span>{{ paymentTypeLabel(order.paymentType) }}</span>
-                  </div>
-                  <div class="info-item">
-                    <label>Kommentar:</label>
-                    <span>{{ order.comment }}</span>
-                  </div>
-                </div>
-
-                <div class="order-items">
-                  <button
-                    class="toggle-items-btn"
-                    @click="showOrderItemsOfOrderId === order.id ? (showOrderItemsOfOrderId = '') : (showOrderItemsOfOrderId = order.id)"
-                  >
-                    <span class="btn-text">{{ showOrderItemsOfOrderId !== order.id ? "Vis varer" : "Skjul varer" }}</span>
-                    <span
-                      class="btn-icon"
-                      :class="{ 'is-up': showOrderItemsOfOrderId === order.id }"
-                      >▼</span
-                    >
-                  </button>
-
-                  <div
-                    v-if="showOrderItemsOfOrderId === order.id"
-                    class="items-table"
-                  >
-                    <table>
-                      <thead>
-                        <tr>
-                          <th class="u-left">Vare</th>
-                          <th class="u-right">Pris</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr
-                          v-for="item in order.items"
-                          :key="item.id"
-                        >
-                          <td>{{ item.quantity }} {{ item.name }} (Mva: {{ item.tax }}%)</td>
-                          <td class="u-right">
-                            {{ priceLabel(item.amount) }}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
+              :order="order"
+              :expanded-order-id="showOrderId"
+              :admin-stores="adminStores"
+              :primary-action-button="order.status === 'Accepted' ? 'Neste' : null"
+              @toggle-expand="toggleOrderExpand"
+              @primary-action="startProcessing"
+              @transfer="transferOrder"
+              @change-delivery="changeDeliveryType"
+              @sms-driver="openSmsDriver"
+              @receipt="openReceipt"
+              @cancel="cancelOrder"
+            />
           </div>
           <div
             v-else-if="!isMobile || !collapsedColumns.new"
@@ -169,121 +73,21 @@
             class="orders-list"
           >
             <div v-if="processingOrders.length">
-              <div
+              <OrderCard
                 v-for="order in processingOrders"
                 :key="order.id"
-                class="order-card"
-                :class="{
-                  'is-warning': isOrderDelayed(order),
-                }"
-              >
-                <div
-                  class="order-header"
-                  @click="showOrderId === order.id ? (showOrderId = '') : (showOrderId = order.id)"
-                >
-                  <div class="header-left">
-                    <span class="store-name">{{ order.storeLegalName }}</span>
-                  </div>
-                  <span class="order-status">
-                    <span class="material-icons">{{ iconForOrder(order) }}</span>
-                    {{ order.friendlyOrderId }}
-                  </span>
-                </div>
-
-                <div
-                  v-if="showOrderId === order.id"
-                  class="order-details"
-                >
-                  <div class="info-grid">
-                    <div class="info-item">
-                      <label>Platform:</label>
-                      <span>{{ order.platform }}</span>
-                    </div>
-                    <div
-                      v-if="order.deliveryType === 'DineHomeDelivery'"
-                      class="info-item"
-                    >
-                      <label>Sjåførstatus:</label>
-                      <div class="status-wrapper">
-                        <span>{{ dineHomeDeliveryStatusLabel(order.dineHomeStatus) }}</span>
-                        <span
-                          v-if="getDriverDelay(order) > 0"
-                          class="delay-badge"
-                        >
-                          {{ getDriverDelay(order) }} min forsinket
-                        </span>
-                      </div>
-                    </div>
-                    <div class="info-item">
-                      <label>Bestilit:</label>
-                      <span>{{ formatDate(order.created || order.pickup) }}</span>
-                    </div>
-                    <div class="info-item">
-                      <label>Klar til:</label>
-                      <span v-if="order.countdownEndTime">{{ formatDate(order.countdownEndTime) }}</span>
-                    </div>
-
-                    <div class="info-item">
-                      <label>Totalpris:</label>
-                      <span>{{ priceLabel(order.finalAmount) }}</span>
-                    </div>
-                    <div class="info-item">
-                      <label>Levering:</label>
-                      <span>{{ deliveryTypeLabel(order.deliveryType) }}</span>
-                    </div>
-
-                    <div class="info-item">
-                      <label>Betaling:</label>
-                      <span>{{ paymentTypeLabel(order.paymentType) }}</span>
-                    </div>
-                    <div class="info-item">
-                      <label>Kommentar:</label>
-                      <span>{{ order.comment }}</span>
-                    </div>
-                  </div>
-
-                  <div class="order-items">
-                    <button
-                      class="toggle-items-btn"
-                      @click="showOrderItemsOfOrderId === order.id ? (showOrderItemsOfOrderId = '') : (showOrderItemsOfOrderId = order.id)"
-                    >
-                      <span class="btn-text">{{ showOrderItemsOfOrderId !== order.id ? "Vis varer" : "Skjul varer" }}</span>
-                      <span
-                        class="btn-icon"
-                        :class="{
-                          'is-up': showOrderItemsOfOrderId === order.id,
-                        }"
-                        >▼</span
-                      >
-                    </button>
-
-                    <div
-                      v-if="showOrderItemsOfOrderId === order.id"
-                      class="items-table"
-                    >
-                      <table>
-                        <thead>
-                          <tr>
-                            <th class="u-left">Vare</th>
-                            <th class="u-right">Pris</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr
-                            v-for="item in order.items"
-                            :key="item.id"
-                          >
-                            <td>{{ item.quantity }} {{ item.name }} (Mva: {{ item.tax }}%)</td>
-                            <td class="u-right">
-                              {{ priceLabel(item.amount) }}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                :order="order"
+                :expanded-order-id="showOrderId"
+                :admin-stores="adminStores"
+                :primary-action-button="order.status === 'Processing' ? 'Neste' : null"
+                @toggle-expand="toggleOrderExpand"
+                @primary-action="updateOrderToReady"
+                @transfer="transferOrder"
+                @change-delivery="changeDeliveryType"
+                @sms-driver="openSmsDriver"
+                @receipt="openReceipt"
+                @cancel="cancelOrder"
+              />
             </div>
             <div
               v-else
@@ -315,121 +119,21 @@
             class="orders-list"
           >
             <div v-if="readyOrders.length">
-              <div
+              <OrderCard
                 v-for="order in readyOrders"
                 :key="order.id"
-                class="order-card"
-                :class="{
-                  'is-warning': isOrderDelayed(order),
-                }"
-              >
-                <div
-                  class="order-header"
-                  @click="showOrderId === order.id ? (showOrderId = '') : (showOrderId = order.id)"
-                >
-                  <div class="header-left">
-                    <span class="store-name">{{ order.storeLegalName }}</span>
-                  </div>
-                  <span class="order-status">
-                    <span class="material-icons">{{ iconForOrder(order) }}</span>
-                    {{ order.friendlyOrderId }}
-                  </span>
-                </div>
-
-                <div
-                  v-if="showOrderId === order.id"
-                  class="order-details"
-                >
-                  <div class="info-grid">
-                    <div class="info-item">
-                      <label>Platform:</label>
-                      <span>{{ order.platform }}</span>
-                    </div>
-                    <div
-                      v-if="order.deliveryType === 'DineHomeDelivery'"
-                      class="info-item"
-                    >
-                      <label>Sjåførstatus:</label>
-                      <div class="status-wrapper">
-                        <span>{{ dineHomeDeliveryStatusLabel(order.dineHomeStatus) }}</span>
-                        <span
-                          v-if="getDriverDelay(order) > 0"
-                          class="delay-badge"
-                        >
-                          {{ getDriverDelay(order) }} min forsinket
-                        </span>
-                      </div>
-                    </div>
-                    <div class="info-item">
-                      <label>Bestilit:</label>
-                      <span>{{ formatDate(order.created || order.pickup) }}</span>
-                    </div>
-                    <div class="info-item">
-                      <label>Klar til:</label>
-                      <span v-if="order.countdownEndTime">{{ formatDate(order.countdownEndTime) }}</span>
-                    </div>
-
-                    <div class="info-item">
-                      <label>Totalpris:</label>
-                      <span>{{ priceLabel(order.finalAmount) }}</span>
-                    </div>
-                    <div class="info-item">
-                      <label>Levering:</label>
-                      <span>{{ deliveryTypeLabel(order.deliveryType) }}</span>
-                    </div>
-
-                    <div class="info-item">
-                      <label>Betaling:</label>
-                      <span>{{ paymentTypeLabel(order.paymentType) }}</span>
-                    </div>
-                    <div class="info-item">
-                      <label>Kommentar:</label>
-                      <span>{{ order.comment }}</span>
-                    </div>
-                  </div>
-
-                  <div class="order-items">
-                    <button
-                      class="toggle-items-btn"
-                      @click="showOrderItemsOfOrderId === order.id ? (showOrderItemsOfOrderId = '') : (showOrderItemsOfOrderId = order.id)"
-                    >
-                      <span class="btn-text">{{ showOrderItemsOfOrderId !== order.id ? "Vis varer" : "Skjul varer" }}</span>
-                      <span
-                        class="btn-icon"
-                        :class="{
-                          'is-up': showOrderItemsOfOrderId === order.id,
-                        }"
-                        >▼</span
-                      >
-                    </button>
-
-                    <div
-                      v-if="showOrderItemsOfOrderId === order.id"
-                      class="items-table"
-                    >
-                      <table>
-                        <thead>
-                          <tr>
-                            <th class="u-left">Vare</th>
-                            <th class="u-right">Pris</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr
-                            v-for="item in order.items"
-                            :key="item.id"
-                          >
-                            <td>{{ item.quantity }} {{ item.name }} (Mva: {{ item.tax }}%)</td>
-                            <td class="u-right">
-                              {{ priceLabel(item.amount) }}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                :order="order"
+                :expanded-order-id="showOrderId"
+                :admin-stores="adminStores"
+                :primary-action-button="['Ready', 'ReadyForPickup', 'ReadyForDriver', 'Served'].includes(order.status) ? 'Fullfør' : null"
+                @toggle-expand="toggleOrderExpand"
+                @primary-action="completeOrder"
+                @transfer="transferOrder"
+                @change-delivery="changeDeliveryType"
+                @sms-driver="openSmsDriver"
+                @receipt="openReceipt"
+                @cancel="cancelOrder"
+              />
             </div>
             <div
               v-else
@@ -591,6 +295,38 @@
         v-if="showLogin"
         @close="closeLoginModal"
       />
+
+      <OrderProcessingModal
+        v-if="showProcessingModal && currentOrder"
+        :order="currentOrder"
+        @close="closeProcessingModal"
+      />
+
+      <ReceiptModal
+        v-if="showReceiptModal && currentOrder"
+        :order="currentOrder"
+        @close="closeReceiptModal"
+      />
+
+      <TransferOrderModal
+        v-if="showTransferModal && currentOrder"
+        :order="currentOrder"
+        :stores="adminStores"
+        @close="closeTransferModal"
+      />
+
+      <ChangeDeliveryTypeModal
+        v-if="showChangeDeliveryModal && currentOrder"
+        :order="currentOrder"
+        @close="closeChangeDeliveryModal"
+      />
+
+      <SmsDriverModal
+        v-if="showSmsDriverModal && currentOrder"
+        :order="currentOrder"
+        @close="closeSmsDriverModal"
+        @success="onSmsSuccess"
+      />
     </div>
   </AdminPage>
 </template>
@@ -599,9 +335,15 @@ import AdminPage from "~/components/organisms/AdminPage.vue";
 import Loading from "~/components/atoms/Loading.vue";
 import { debounce } from "~/core/helpers/ts-debounce";
 import LoginModal from "~/components/molecules/LoginModal.vue";
+import OrderProcessingModal from "~/components/molecules/OrderProcessingModal.vue";
+import ReceiptModal from "~/components/molecules/ReceiptModal.vue";
+import TransferOrderModal from "~/components/molecules/TransferOrderModal.vue";
+import ChangeDeliveryTypeModal from "~/components/molecules/ChangeDeliveryTypeModal.vue";
+import SmsDriverModal from "~/components/molecules/SmsDriverModal.vue";
+import OrderCard from "~/components/molecules/OrderCard.vue";
 
 export default {
-  components: { AdminPage, LoginModal, Loading },
+  components: { AdminPage, LoginModal, Loading, OrderProcessingModal, ReceiptModal, TransferOrderModal, ChangeDeliveryTypeModal, SmsDriverModal, OrderCard },
   data: () => ({
     showLogin: false,
     isLoading: false,
@@ -613,7 +355,6 @@ export default {
       table: null,
     },
     showOrderId: "",
-    showOrderItemsOfOrderId: "",
     collapsedColumns: {
       new: false,
       processing: false,
@@ -631,6 +372,12 @@ export default {
       to: new Date().toISOString().split("T")[0],
     },
     isLoadingStats: false,
+    showProcessingModal: false,
+    currentOrder: null,
+    showReceiptModal: false,
+    showTransferModal: false,
+    showChangeDeliveryModal: false,
+    showSmsDriverModal: false,
   }),
   computed: {
     newOrders() {
@@ -640,7 +387,7 @@ export default {
       return this.orders.filter((x) => x.status === "Processing").sort((a, b) => new Date(a.created) - new Date(b.created));
     },
     readyOrders() {
-      return this.orders.filter((x) => ["Ready", "ReadyForPickup", "ReadyForDriver"].includes(x.status)).sort((a, b) => new Date(a.created) - new Date(b.created));
+      return this.orders.filter((x) => ["Ready", "ReadyForPickup", "ReadyForDriver", "Served"].includes(x.status)).sort((a, b) => new Date(a.created) - new Date(b.created));
     },
   },
   mounted() {
@@ -804,68 +551,8 @@ export default {
         clearInterval(this.refreshInterval);
       }
     },
-    iconForOrder(order) {
-      // Delivery icon
-      if (order.deliveryType === "InstantHomeDelivery" || order.deliveryType === "DineHomeDelivery" || order.deliveryType === "WoltDelivery") {
-        return "delivery_dining";
-      }
-      if (order.deliveryType === "SelfPickup") {
-        return "shopping_bag";
-      }
-      if (order.deliveryType === "TableDelivery") {
-        return "deck";
-      }
-
-      return "receipt_long"; // fallback icon
-    },
-    isOrderDelayed(order) {
-      const now = new Date();
-      const created = new Date(order.created);
-      const processingEnd = order.processingEndTime ? new Date(order.processingEndTime) : null;
-      const estimatedEnd = order.estimatedProcessingEndTime ? new Date(order.estimatedProcessingEndTime) : null;
-
-      // Unaccepted orders over 8 minutes old
-      if (order.status === "Accepted") {
-        const diffSeconds = (now - created) / 1000;
-        return diffSeconds >= 480;
-      }
-
-      // Driver waiting orders over 10 minutes old
-      if (order.status === "ReadyForDriver" && processingEnd && estimatedEnd) {
-        const latestEnd = processingEnd > estimatedEnd ? processingEnd : estimatedEnd;
-        const diffSeconds = (now - latestEnd) / 1000;
-        return diffSeconds >= 600 && (!order.dineHomeStatus || order.dineHomeStatus === "NotSet" || order.dineHomeStatus === "Accepted");
-      }
-
-      return false;
-    },
-    getDriverDelay(order) {
-      const now = new Date();
-      const processingEnd = order.processingEndTime ? new Date(order.processingEndTime) : null;
-      const estimatedEnd = order.estimatedProcessingEndTime ? new Date(order.estimatedProcessingEndTime) : null;
-
-      if (order.status === "ReadyForDriver" && processingEnd && estimatedEnd && (!order.dineHomeStatus || order.dineHomeStatus === "NotSet" || order.dineHomeStatus === "Accepted")) {
-        const latestEnd = processingEnd > estimatedEnd ? processingEnd : estimatedEnd;
-        const diffMinutes = Math.floor((now - latestEnd) / (1000 * 60));
-        return diffMinutes >= 10 ? diffMinutes : 0;
-      }
-      return 0;
-    },
-    dineHomeDeliveryStatusLabel(dineHomeDeliveryTypeEnum) {
-      switch (dineHomeDeliveryTypeEnum) {
-        case "Accepted":
-          return "Sjåfør har akseptert";
-        case "PickedUp":
-          return "Sjåfør leverer bestilling";
-        case "ReachedDestination":
-          return "Sjåfør fremme hos kunde";
-        case "Completed":
-          return "Fullført";
-        case "Canceled":
-          return "Sjåfør har kansellert";
-        default:
-          return "Venter aksept fra sjåfør";
-      }
+    toggleOrderExpand(orderId) {
+      this.showOrderId = this.showOrderId === orderId ? '' : orderId;
     },
     formatStatValue(stat) {
       if (stat.headingValueIsPrice) {
@@ -976,6 +663,121 @@ export default {
       this.applyDateRange();
       this.showDatePicker = false;
     },
+    startProcessing(order) {
+      this.currentOrder = order;
+      this.showProcessingModal = true;
+    },
+    closeProcessingModal(success) {
+      this.showProcessingModal = false;
+      if (success) {
+        this.loadOrders();
+      }
+      this.currentOrder = null;
+    },
+    transferOrder(order) {
+      if (!order || this.adminStores.length <= 1) return;
+      this.currentOrder = order;
+      this.showTransferModal = true;
+    },
+    closeTransferModal(success) {
+      this.showTransferModal = false;
+      if (success) {
+        this.loadOrders();
+      }
+      this.currentOrder = null;
+    },
+    changeDeliveryType(order) {
+      if (!order) return;
+      this.currentOrder = order;
+      this.showChangeDeliveryModal = true;
+    },
+    closeChangeDeliveryModal(success) {
+      this.showChangeDeliveryModal = false;
+      if (success) {
+        this.loadOrders();
+      }
+      this.currentOrder = null;
+    },
+    openReceipt(order) {
+      this.currentOrder = order;
+      this.showReceiptModal = true;
+    },
+    closeReceiptModal() {
+      this.showReceiptModal = false;
+      this.currentOrder = null;
+    },
+    updateOrderToReady(order) {
+      if (!order) return;
+
+      let nextStatus = 'Ready';
+
+      // Determine the correct "ready" status based on delivery type
+      if (order.deliveryType === 'SelfPickup') {
+        nextStatus = 'ReadyForPickup';
+      } else if (order.deliveryType === 'InstantHomeDelivery' || order.deliveryType === 'DineHomeDelivery' || order.deliveryType === 'WoltDelivery') {
+        nextStatus = 'ReadyForDriver';
+      } else if (order.deliveryType === 'TableDelivery') {
+        nextStatus = 'Served';
+      }
+
+      this._orderService
+        .UpdateStatus(order.id, nextStatus)
+        .then(() => {
+          this.loadOrders();
+        })
+        .catch((error) => {
+          alert('Feil ved oppdatering: ' + (error.message || 'Ukjent feil'));
+        });
+    },
+    completeOrder(order) {
+      if (!order) return;
+
+      const confirmed = confirm(
+        'Fullfør bestilling #' + order.friendlyOrderId + '?'
+      );
+
+      if (!confirmed) return;
+
+      this._orderService
+        .UpdateStatus(order.id, 'Completed')
+        .then(() => {
+          this.loadOrders();
+        })
+        .catch((error) => {
+          alert('Feil ved fullføring: ' + (error.message || 'Ukjent feil'));
+        });
+    },
+    cancelOrder(order) {
+      if (!order) return;
+
+      const confirmed = confirm(
+        'Er du sikker på at du vil kansellere ' + order.storeLegalName + ' sin bestilling #' +
+          order.friendlyOrderId + '?'
+      );
+
+      if (!confirmed) return;
+
+      this._orderService
+        .UpdateStatus(order.id, 'Canceled')
+        .then(() => {
+          this.loadOrders();
+        })
+        .catch((error) => {
+          alert('Feil ved kansellering: ' + (error.message || 'Ukjent feil'));
+        });
+    },
+    openSmsDriver(order) {
+      this.currentOrder = order;
+      this.showSmsDriverModal = true;
+    },
+    closeSmsDriverModal() {
+      this.showSmsDriverModal = false;
+      this.currentOrder = null;
+    },
+    onSmsSuccess() {
+      // Optionally reload orders or show a notification
+      this.loadOrders();
+    },
   },
 };
 </script>
@@ -1083,204 +885,6 @@ export default {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.order-card {
-  margin-bottom: 20px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  }
-
-  .order-header {
-    background: #f8f9fa;
-    padding: 16px 20px;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 12px 12px 0 0;
-    transition: background-color 0.2s ease;
-
-    &:hover {
-      background: #f0f2f5;
-    }
-
-    .header-left {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      flex: 1;
-      min-width: 0;
-
-      .store-name {
-        font-weight: 600;
-        font-size: 0.95em;
-        line-height: 1.4;
-        word-break: break-word;
-        color: #292c34;
-      }
-    }
-
-    .order-status {
-      flex-shrink: 0;
-      padding: 6px 14px;
-      border-radius: 20px;
-      background: #e8eaed;
-      font-size: 0.9em;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 500;
-      transition: background-color 0.2s ease;
-
-      .material-icons {
-        font-size: 18px;
-      }
-
-      &:hover {
-        background: #e0e2e6;
-      }
-    }
-  }
-
-  &.is-warning {
-    border-left: 4px solid #ff4444;
-
-    .order-header {
-      background: #fff5f5;
-      padding-left: 16px;
-
-      &:hover {
-        background: #ffe8e8;
-      }
-
-      .header-left::before {
-        content: "warning";
-        font-family: "Material Icons";
-        color: #ff4444;
-        font-size: 18px;
-        margin-top: 2px;
-      }
-    }
-  }
-}
-
-.order-details {
-  padding: 24px;
-  background: white;
-  border-radius: 0 0 12px 12px;
-}
-
-.info-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-  margin-bottom: 28px;
-
-  .info-item {
-    padding: 12px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    transition: background-color 0.2s ease;
-
-    &:hover {
-      background: #f0f2f5;
-    }
-
-    label {
-      font-weight: 600;
-      color: #4a5568;
-      margin-right: 8px;
-      font-size: 0.9em;
-    }
-
-    span {
-      color: #1a202c;
-      font-size: 0.95em;
-    }
-  }
-}
-
-.toggle-items-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  background: #f0f7ff;
-  border: 2px solid #1bb776;
-  border-radius: 8px;
-  color: #1bb776;
-  cursor: pointer;
-  padding: 10px 20px;
-  font-size: 0.95em;
-  font-weight: 600;
-  width: 100%;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: #e8f7f1;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(27, 183, 118, 0.1);
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
-
-  .btn-icon {
-    font-size: 0.8em;
-    transition: transform 0.3s ease;
-
-    &.is-up {
-      transform: rotate(-180deg);
-    }
-  }
-}
-
-.items-table {
-  margin-top: 20px;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-
-    th,
-    td {
-      padding: 14px;
-      border-bottom: 1px solid #edf2f7;
-    }
-
-    th {
-      background: #f8f9fa;
-      font-weight: 600;
-      color: #4a5568;
-      font-size: 0.9em;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    td {
-      color: #1a202c;
-      font-size: 0.95em;
-    }
-
-    tr:last-child td {
-      border-bottom: none;
-    }
-
-    tr:hover td {
-      background: #f8f9fa;
-    }
-  }
-}
-
 .empty-state {
   text-align: center;
   padding: 24px;
@@ -1289,17 +893,6 @@ export default {
   background: #f8f9fa;
   border-radius: 8px;
   margin: 12px 0;
-}
-
-.delay-badge {
-  background: #ff4444;
-  color: white;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.8em;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  box-shadow: 0 2px 4px rgba(255, 68, 68, 0.2);
 }
 
 .statistics-section {
@@ -1420,29 +1013,6 @@ export default {
       opacity: 0.9;
     }
   }
-}
-
-.u-left {
-  text-align: left;
-}
-
-.u-right {
-  text-align: right;
-}
-
-.delay-badge {
-  background: #ff4444;
-  color: white;
-  padding: 2px 8px;
-  border-radius: 8px;
-  font-size: 0.5em;
-  margin-left: 8px;
-}
-
-.status-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .statistics-section {

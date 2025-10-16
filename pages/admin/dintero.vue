@@ -406,6 +406,75 @@
               </button>
             </div>
           </div>
+
+          <div class="dintero-config__section">
+            <h2 class="dintero-config__section-title">Wolt Marketplace Konfigurasjon</h2>
+            <p class="dintero-config__section-description">Konfigurer Wolt Marketplace integrasjon for denne butikken.</p>
+
+            <div class="form-group">
+              <label for="woltMarketplaceVenueId">Venue ID</label>
+              <input
+                id="woltMarketplaceVenueId"
+                v-model="woltMarketplaceConfig.venueId"
+                type="text"
+                class="form-control"
+                placeholder="venue_id"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="woltMarketplaceClientId">Client ID (OAuth)</label>
+              <input
+                id="woltMarketplaceClientId"
+                v-model="woltMarketplaceConfig.clientId"
+                type="text"
+                class="form-control"
+                placeholder="client_id"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="woltMarketplaceClientSecret">Client Secret (OAuth)</label>
+              <input
+                id="woltMarketplaceClientSecret"
+                v-model="woltMarketplaceConfig.clientSecret"
+                type="password"
+                class="form-control"
+                placeholder="client_secret"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="woltMarketplaceAccessToken">Access Token</label>
+              <input
+                id="woltMarketplaceAccessToken"
+                v-model="woltMarketplaceConfig.accessToken"
+                type="text"
+                class="form-control"
+                placeholder="access_token"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="woltMarketplaceRefreshToken">Refresh Token</label>
+              <input
+                id="woltMarketplaceRefreshToken"
+                v-model="woltMarketplaceConfig.refreshToken"
+                type="text"
+                class="form-control"
+                placeholder="refresh_token"
+              />
+            </div>
+
+            <div class="form-actions">
+              <button
+                class="btn btn-primary"
+                @click="updateWoltMarketplaceConfig"
+              >
+                Lagre Wolt Marketplace Konfigurasjon
+              </button>
+            </div>
+          </div>
         </div>
 
         <div
@@ -480,6 +549,13 @@ export default {
       createSellerSuccess: false,
       allStores: [],
       showCreateSellerModal: false,
+      woltMarketplaceConfig: {
+        venueId: "",
+        clientId: "",
+        clientSecret: "",
+        accessToken: "",
+        refreshToken: "",
+      },
     };
   },
   watch: {
@@ -554,6 +630,13 @@ export default {
         woltCustomerDeliveryFeeAmount: 0,
         woltServiceFeeAmount: 0,
         splitSellerId: "",
+      };
+      this.woltMarketplaceConfig = {
+        venueId: "",
+        clientId: "",
+        clientSecret: "",
+        accessToken: "",
+        refreshToken: "",
       };
     },
     fetchStoreData(storeId) {
@@ -731,6 +814,39 @@ export default {
       this.showCreateSellerModal = false;
       this.createSellerError = "";
       this.createSellerSuccess = false;
+    },
+    updateWoltMarketplaceConfig() {
+      if (!this.selectedStore) {
+        console.log("[WOLT] No store selected");
+        return;
+      }
+
+      this.isLoading = true;
+
+      const payload = {
+        venueId: this.woltMarketplaceConfig.venueId,
+        clientId: this.woltMarketplaceConfig.clientId,
+        clientSecret: this.woltMarketplaceConfig.clientSecret,
+        accessToken: this.woltMarketplaceConfig.accessToken,
+        refreshToken: this.woltMarketplaceConfig.refreshToken,
+      };
+
+      console.log("[WOLT] Updating Wolt Marketplace config for store:", this.selectedStore);
+      console.log("[WOLT] Payload:", payload);
+
+      this._storeService
+        .ConfigureWolt(this.selectedStore, payload)
+        .then((response) => {
+          console.log("[WOLT] Configuration update response:", response);
+          this.isLoading = false;
+          this.showNotification("Wolt Marketplace konfigurasjon oppdatert", "success");
+        })
+        .catch((error) => {
+          console.error("[WOLT] Error updating Wolt Marketplace configuration:", error);
+          console.error("[WOLT] Error details:", JSON.stringify(error, null, 2));
+          this.isLoading = false;
+          this.showNotification("Kunne ikke oppdatere Wolt Marketplace konfigurasjon. Vennligst prøv igjen senere.", "error");
+        });
     },
   },
 };
