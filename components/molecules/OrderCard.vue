@@ -73,6 +73,15 @@
             </span>
           </div>
         </div>
+        <div
+          v-if="order.deliveryType === 'WoltDelivery' && order.woltDeliveryInfo"
+          class="info-item"
+        >
+          <label>Wolt status:</label>
+          <div class="status-wrapper">
+            <span>{{ woltDeliveryStatusLabel(order.woltDeliveryInfo.status) }}</span>
+          </div>
+        </div>
         <div class="info-item">
           <label>Bestilit:</label>
           <span>{{ formatDate(order.created || order.pickup) }}</span>

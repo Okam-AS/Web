@@ -125,7 +125,7 @@
                 :order="order"
                 :expanded-order-id="showOrderId"
                 :admin-stores="adminStores"
-                :primary-action-button="['Ready', 'ReadyForPickup', 'ReadyForDriver', 'Served'].includes(order.status) ? 'Fullfør' : null"
+                :primary-action-button="['ReadyForPickup', 'ReadyForDriver', 'Served'].includes(order.status) ? 'Fullfør' : null"
                 @toggle-expand="toggleOrderExpand"
                 @primary-action="completeOrder"
                 @transfer="transferOrder"
@@ -387,7 +387,7 @@ export default {
       return this.orders.filter((x) => x.status === "Processing").sort((a, b) => new Date(a.created) - new Date(b.created));
     },
     readyOrders() {
-      return this.orders.filter((x) => ["Ready", "ReadyForPickup", "ReadyForDriver", "Served"].includes(x.status)).sort((a, b) => new Date(a.created) - new Date(b.created));
+      return this.orders.filter((x) => ["ReadyForPickup", "ReadyForDriver", "Served"].includes(x.status)).sort((a, b) => new Date(a.created) - new Date(b.created));
     },
   },
   mounted() {
@@ -709,7 +709,7 @@ export default {
     updateOrderToReady(order) {
       if (!order) return;
 
-      let nextStatus = 'Ready';
+      let nextStatus;
 
       // Determine the correct "ready" status based on delivery type
       if (order.deliveryType === 'SelfPickup') {
@@ -718,6 +718,9 @@ export default {
         nextStatus = 'ReadyForDriver';
       } else if (order.deliveryType === 'TableDelivery') {
         nextStatus = 'Served';
+      } else {
+        // Fallback for any other delivery types
+        nextStatus = 'ReadyForPickup';
       }
 
       this._orderService
@@ -732,9 +735,19 @@ export default {
     completeOrder(order) {
       if (!order) return;
 
-      const confirmed = confirm(
-        'Fullfør bestilling #' + order.friendlyOrderId + '?'
-      );
+      let confirmMessage = 'Fullfør bestilling #' + order.friendlyOrderId + '?';
+
+      // Special confirmation for delivery orders that haven't been delivered yet
+      if (order.deliveryType === 'WoltDelivery' &&
+          order.woltDeliveryInfo &&
+          order.woltDeliveryInfo.status !== 'Delivered') {
+        confirmMessage = 'Bestillingen er ikke levert ennå hos kunde. Marker som fullført likevel?\n\nBestilling #' + order.friendlyOrderId;
+      } else if (order.deliveryType === 'DineHomeDelivery' &&
+                 order.dineHomeStatus !== 'Completed') {
+        confirmMessage = 'Bestillingen er ikke levert ennå hos kunde. Marker som fullført likevel?\n\nBestilling #' + order.friendlyOrderId;
+      }
+
+      const confirmed = confirm(confirmMessage);
 
       if (!confirmed) return;
 

@@ -85,46 +85,48 @@
             class="wolt-menu__data"
           >
             <div
-              v-if="menuStatus && menuStatus !== 'READY'"
+              v-if="menuData.status && menuData.status !== 'READY'"
               class="wolt-menu__status-warning"
             >
               <div class="status-warning__content">
-                <div
-                  v-if="menuStatus === 'PENDING'"
-                  class="status-warning__spinner"
-                >
-                  <svg
-                    class="spinner"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      class="spinner-track"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      stroke-width="4"
-                    />
-                    <path
-                      class="spinner-path"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    />
-                  </svg>
-                </div>
                 <div>
-                  <p><strong>Meny status:</strong> {{ menuStatus }}</p>
-                  <p v-if="menuStatus === 'PENDING'">
-                    Menyen behandles for øyeblikket av Wolt. Oppdaterer automatisk hvert 5. sekund...
+                  <p><strong>Meny status:</strong> {{ menuData.status }}</p>
+                  <p v-if="menuData.status === 'PENDING'">
+                    Menyen behandles av Wolt. Dette kan ta flere minutter.
+                  </p>
+                  <p v-if="menuData.status === 'PENDING'" class="status-warning__note">
+                    💡 Tips: Vent minst 2-3 minutter mellom hver oppdatering på grunn av Wolts rate limits.
                   </p>
                 </div>
               </div>
+              <button
+                v-if="menuData.status === 'PENDING'"
+                class="status-warning__button"
+                :disabled="isLoading"
+                @click="importMenuFromWolt"
+              >
+                <svg
+                  v-if="!isLoading"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polyline points="23 4 23 10 17 10" />
+                  <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+                </svg>
+                <span v-if="isLoading">Oppdaterer...</span>
+                <span v-else>Oppdater status</span>
+              </button>
             </div>
 
             <div
-              v-if="menuData.menu"
+              v-if="menuData.categories && menuData.categories.length > 0 && menuData.status !== 'ERROR'"
               class="wolt-menu__formatted"
             >
               <!-- Edit Mode Toggle and Save -->
@@ -165,6 +167,30 @@
                   Du har ulagrede endringer
                 </div>
                 <div class="menu-actions__buttons">
+                  <button
+                    v-if="!isEditMode"
+                    class="menu-action-button menu-action-button--sync"
+                    :disabled="isSyncing"
+                    @click="syncWithWolt"
+                  >
+                    <svg
+                      v-if="!isSyncing"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <polyline points="23 4 23 10 17 10" />
+                      <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+                    </svg>
+                    <span v-if="isSyncing">Synkroniserer...</span>
+                    <span v-else>Synkroniser med Wolt</span>
+                  </button>
                   <button
                     v-if="!isEditMode"
                     class="menu-action-button menu-action-button--edit"
@@ -247,69 +273,66 @@
               <div class="menu-info">
                 <div class="menu-info__item">
                   <span class="menu-info__label">Valuta:</span>
-                  <span class="menu-info__value">{{ menuData.menu.currency }}</span>
+                  <span class="menu-info__value">{{ menuData.currency || 'N/A' }}</span>
                 </div>
                 <div class="menu-info__item">
                   <span class="menu-info__label">Primærspråk:</span>
-                  <span class="menu-info__value">{{ menuData.menu.primary_language }}</span>
+                  <span class="menu-info__value">{{ menuData.primaryLanguage || 'N/A' }}</span>
                 </div>
                 <div class="menu-info__item">
                   <span class="menu-info__label">Antall kategorier:</span>
-                  <span class="menu-info__value">{{ menuData.menu.categories.length }}</span>
+                  <span class="menu-info__value">{{ menuData.categories.length }}</span>
                 </div>
                 <div class="menu-info__item">
                   <span class="menu-info__label">Antall produkter:</span>
-                  <span class="menu-info__value">{{ menuData.menu.items.length }}</span>
+                  <span class="menu-info__value">{{ getTotalItemCount() }}</span>
                 </div>
               </div>
 
               <!-- Categories -->
               <div
-                v-for="category in menuData.menu.categories"
+                v-for="category in menuData.categories"
                 :key="category.id"
                 class="menu-category"
               >
                 <div class="menu-category__header">
                   <h2 class="menu-category__title">
-                    {{ getLocalizedValue(category.name) }}
+                    {{ parseAndGetLocalizedValue(category.nameJson) }}
                   </h2>
                   <span class="menu-category__count">
-                    {{ category.item_bindings.length }} produkter
+                    {{ category.items ? category.items.length : 0 }} produkter
                   </span>
                 </div>
                 <p
-                  v-if="category.description"
+                  v-if="category.descriptionJson"
                   class="menu-category__description"
                 >
-                  {{ getLocalizedValue(category.description) }}
+                  {{ parseAndGetLocalizedValue(category.descriptionJson) }}
                 </p>
 
                 <!-- Items in Category -->
                 <div class="menu-items">
                   <div
-                    v-for="binding in category.item_bindings"
-                    :key="binding.id"
+                    v-for="item in category.items"
+                    :key="item.id"
                     class="menu-item"
                   >
-                    <div
-                      v-if="getItemById(binding.item_id)"
-                      class="menu-item__content"
-                    >
+                    <div class="menu-item__content">
                       <div class="menu-item__header">
                         <h3 class="menu-item__name">
-                          {{ getLocalizedValue(getItemById(binding.item_id).product.name) }}
+                          {{ parseAndGetLocalizedValue(item.nameJson) }}
                         </h3>
                         <div
                           v-if="isEditMode"
                           class="menu-item__price-edit"
                         >
                           <input
-                            :value="formatPriceForInput(getItemById(binding.item_id).price)"
+                            :value="formatPriceForInput(item.price)"
                             type="number"
                             step="0.01"
                             min="0"
                             class="menu-item__price-input"
-                            @blur="updateItemPrice(getItemById(binding.item_id), $event.target.value)"
+                            @blur="updateItemPrice(item, $event.target.value)"
                           >
                           <span class="menu-item__price-currency">kr</span>
                         </div>
@@ -317,14 +340,14 @@
                           v-else
                           class="menu-item__price"
                         >
-                          {{ formatPrice(getItemById(binding.item_id).price) }}
+                          {{ formatPrice(item.price) }}
                         </div>
                       </div>
                       <p
-                        v-if="getItemById(binding.item_id).product.description"
+                        v-if="item.descriptionJson"
                         class="menu-item__description"
                       >
-                        {{ getLocalizedValue(getItemById(binding.item_id).product.description) }}
+                        {{ parseAndGetLocalizedValue(item.descriptionJson) }}
                       </p>
                       <div class="menu-item__meta">
                         <div
@@ -333,94 +356,97 @@
                         >
                           <label class="menu-item__toggle-label">
                             <input
-                              :checked="getItemById(binding.item_id).enabled && getItemById(binding.item_id).enabled.enabled"
+                              :checked="item.enabled"
                               type="checkbox"
                               class="menu-item__toggle-input"
-                              @change="toggleItemEnabled(getItemById(binding.item_id), $event.target.checked)"
+                              @change="toggleItemEnabled(item, $event.target.checked)"
                             >
                             <span class="menu-item__toggle-slider" />
                           </label>
                           <span class="menu-item__toggle-text">
-                            {{ getItemById(binding.item_id).enabled && getItemById(binding.item_id).enabled.enabled ? 'Aktiv' : 'Deaktivert' }}
+                            {{ item.enabled ? 'Aktiv' : 'Deaktivert' }}
                           </span>
                         </div>
                         <span
                           v-else
                           class="menu-item__badge"
-                          :class="getItemById(binding.item_id).enabled && getItemById(binding.item_id).enabled.enabled ? 'menu-item__badge--enabled' : 'menu-item__badge--disabled'"
+                          :class="item.enabled ? 'menu-item__badge--enabled' : 'menu-item__badge--disabled'"
                         >
-                          {{ getItemById(binding.item_id).enabled && getItemById(binding.item_id).enabled.enabled ? 'Aktiv' : 'Deaktivert' }}
+                          {{ item.enabled ? 'Aktiv' : 'Deaktivert' }}
+                        </span>
+                        <div
+                          v-if="isEditMode"
+                          class="menu-item__toggle-wrapper"
+                        >
+                          <label class="menu-item__toggle-label">
+                            <input
+                              :checked="item.inStock"
+                              type="checkbox"
+                              class="menu-item__toggle-input"
+                              @change="toggleItemInStock(item, $event.target.checked)"
+                            >
+                            <span class="menu-item__toggle-slider" />
+                          </label>
+                          <span class="menu-item__toggle-text">
+                            {{ item.inStock ? 'På lager' : 'Utsolgt' }}
+                          </span>
+                        </div>
+                        <span
+                          v-else
+                          class="menu-item__badge"
+                          :class="item.inStock ? 'menu-item__badge--enabled' : 'menu-item__badge--disabled'"
+                        >
+                          {{ item.inStock ? 'På lager' : 'Utsolgt' }}
                         </span>
                         <span class="menu-item__meta-item">
-                          MVA: {{ getItemById(binding.item_id).vat_percentage }}%
+                          MVA: {{ item.salesTaxPercentage }}%
                         </span>
                         <span
-                          v-if="getItemById(binding.item_id).product.external_id"
+                          v-if="item.externalData"
                           class="menu-item__meta-item menu-item__meta-item--muted"
                         >
-                          ID: {{ getItemById(binding.item_id).product.external_id }}
+                          ID: {{ item.externalData }}
                         </span>
                       </div>
 
                       <!-- Options for this item -->
                       <div
-                        v-if="getItemById(binding.item_id).option_bindings && getItemById(binding.item_id).option_bindings.length > 0"
+                        v-if="item.options && item.options.length > 0"
                         class="menu-item__options"
                       >
                         <h4 class="menu-item__options-title">Tilvalg:</h4>
                         <div
-                          v-for="optionBinding in getItemById(binding.item_id).option_bindings"
-                          :key="optionBinding.id"
+                          v-for="option in item.options"
+                          :key="option.id"
                           class="menu-option"
                         >
-                          <div
-                            v-if="getOptionById(optionBinding.option_id)"
-                            class="menu-option__content"
-                          >
+                          <div class="menu-option__content">
                             <div class="menu-option__header">
                               <span class="menu-option__name">
-                                {{ getLocalizedValue(getOptionById(optionBinding.option_id).name) }}
+                                {{ parseAndGetLocalizedValue(option.nameJson) }}
                               </span>
                               <span class="menu-option__type">
-                                ({{ optionBinding.multi_choice_config ? 'Flervalg' : 'Enkeltvalg' }})
+                                ({{ option.type === 'MultiChoice' ? 'Flervalg' : 'Enkeltvalg' }})
                               </span>
                             </div>
                             <div
-                              v-if="optionBinding.multi_choice_config && optionBinding.multi_choice_config.selection_range"
+                              v-if="option.selectionRangeMin !== null && option.selectionRangeMax !== null"
                               class="menu-option__range"
                             >
-                              Velg {{ optionBinding.multi_choice_config.selection_range.min }}-{{ optionBinding.multi_choice_config.selection_range.max }}
+                              Velg {{ option.selectionRangeMin }}-{{ option.selectionRangeMax }}
                             </div>
                             <!-- Option values -->
                             <div class="menu-option__values">
                               <div
-                                v-for="value in getOptionById(optionBinding.option_id).values"
+                                v-for="value in option.values"
                                 :key="value.id"
                                 class="menu-option__value"
                               >
                                 <div class="menu-option__value-info">
                                   <span class="menu-option__value-name">
-                                    {{ getLocalizedValue(value.product.name) }}
+                                    {{ parseAndGetLocalizedValue(value.nameJson) }}
                                   </span>
-                                  <div
-                                    v-if="isEditMode"
-                                    class="menu-option__value-price-edit"
-                                  >
-                                    <span class="menu-option__value-price-prefix">+</span>
-                                    <input
-                                      :value="formatPriceForInput(value.price)"
-                                      type="number"
-                                      step="0.01"
-                                      min="0"
-                                      class="menu-option__value-price-input"
-                                      @blur="updateOptionPrice(value, $event.target.value)"
-                                    >
-                                    <span class="menu-option__value-price-currency">kr</span>
-                                  </div>
-                                  <span
-                                    v-else
-                                    class="menu-option__value-price"
-                                  >
+                                  <span class="menu-option__value-price">
                                     +{{ formatPrice(value.price) }}
                                   </span>
                                 </div>
@@ -430,7 +456,7 @@
                                 >
                                   <label class="menu-option__toggle-label">
                                     <input
-                                      :checked="value.enabled && value.enabled.enabled"
+                                      :checked="value.enabled"
                                       type="checkbox"
                                       class="menu-option__toggle-input"
                                       @change="toggleOptionEnabled(value, $event.target.checked)"
@@ -441,9 +467,9 @@
                                 <span
                                   v-else
                                   class="menu-option__value-badge"
-                                  :class="value.enabled && value.enabled.enabled ? 'menu-option__value-badge--enabled' : 'menu-option__value-badge--disabled'"
+                                  :class="value.enabled ? 'menu-option__value-badge--enabled' : 'menu-option__value-badge--disabled'"
                                 >
-                                  {{ value.enabled && value.enabled.enabled ? 'Aktiv' : 'Deaktivert' }}
+                                  {{ value.enabled ? 'Aktiv' : 'Deaktivert' }}
                                 </span>
                               </div>
                             </div>
@@ -455,7 +481,7 @@
                 </div>
 
                 <div
-                  v-if="category.item_bindings.length === 0"
+                  v-if="!category.items || category.items.length === 0"
                   class="menu-category__empty"
                 >
                   Ingen produkter i denne kategorien
@@ -465,10 +491,36 @@
 
           </div>
           <div
-            v-else
+            v-if="!menuData || menuData.status === 'ERROR' || !menuData.categories || menuData.categories.length === 0"
             class="wolt-menu__no-data"
           >
-            <p>Ingen meny funnet for denne butikken.</p>
+            <p v-if="menuData && menuData.status === 'ERROR'">
+              Menyen er i feilstatus. Slett menyen fra databasen eller opprett en ny meny.
+            </p>
+            <p v-else>
+              Ingen meny funnet for denne butikken.
+            </p>
+            <button
+              v-if="menuData && menuData.status === 'ERROR'"
+              class="create-menu-button create-menu-button--delete"
+              @click="deleteMenu"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+              </svg>
+              Slett feilmeny
+            </button>
             <button
               class="create-menu-button"
               @click="showCreateMenuForm = true"
@@ -661,10 +713,10 @@ export default {
       showLogin: false,
       isEditMode: false,
       isSaving: false,
+      isSyncing: false,
       originalMenuSnapshot: null, // JSON snapshot of menu when entering edit mode
       editedItems: {}, // Track all edited items by ID
       editedOptions: {}, // Track all edited options by ID
-      pollTimer: null, // Timer for polling when menu status is PENDING
       showCreateMenuForm: false,
       isCreatingMenu: false,
       newMenuData: {
@@ -678,18 +730,23 @@ export default {
       if (!this.isEditMode || !this.originalMenuSnapshot) {
         return false;
       }
-      // Simple check: compare current state with snapshot
+
+      // Check if any items or options were explicitly tracked as edited
+      const hasEditedItems = Object.keys(this.editedItems).length > 0;
+      const hasEditedOptions = Object.keys(this.editedOptions).length > 0;
+
+      // Also compare snapshots for additional safety
       const currentSnapshot = this.createMenuSnapshot();
-      return currentSnapshot !== this.originalMenuSnapshot;
+      const snapshotChanged = currentSnapshot !== this.originalMenuSnapshot;
+
+      const hasChanges = hasEditedItems || hasEditedOptions || snapshotChanged;
+
+
+      return hasChanges;
     },
   },
   watch: {
     selectedStore(newVal, oldVal) {
-      // Stop polling when switching stores
-      if (oldVal && oldVal !== newVal) {
-        this.stopPolling();
-      }
-
       if (newVal > 0) {
         this.fetchMenuData(newVal);
         this.fetchVenueStatus(newVal);
@@ -698,7 +755,6 @@ export default {
         this.menuData = null;
         this.venueStatus = null;
         this.deliveryProvider = null;
-        this.stopPolling();
       }
       if (window && window.localStorage) {
         localStorage.setItem("woltMenuSelectedStore", newVal);
@@ -730,10 +786,6 @@ export default {
         console.error("Error fetching user data:", error);
         this.showLogin = true;
       });
-  },
-  beforeDestroy() {
-    // Clean up polling timer when component is destroyed
-    this.stopPolling();
   },
   methods: {
     init() {
@@ -772,16 +824,8 @@ export default {
             // Extract status if present
             if (data && data.status) {
               this.menuStatus = data.status;
-
-              if (this.menuStatus === 'PENDING') {
-                this.startPolling();
-              } else {
-                // Stop polling if status is no longer PENDING
-                this.stopPolling();
-              }
             } else {
               this.menuStatus = null;
-              this.stopPolling();
             }
             this.isLoading = false;
           })
@@ -790,25 +834,8 @@ export default {
             this.menuData = null;
             this.menuStatus = null;
             this.isLoading = false;
-            this.stopPolling();
             alert("Kunne ikke hente Wolt-meny. Vennligst prøv igjen senere.");
           });
-      }
-    },
-    startPolling() {
-      // Clear any existing poll timer
-      this.stopPolling();
-
-      // Set up new poll timer
-      this.pollTimer = setTimeout(() => {
-        console.log('[startPolling] Polling for menu update...');
-        this.fetchMenuData(this.selectedStore, true);
-      }, 2000); 
-    },
-    stopPolling() {
-      if (this.pollTimer) {
-        clearTimeout(this.pollTimer);
-        this.pollTimer = null;
       }
     },
     getLocalizedValue(values, preferredLang = 'nb') {
@@ -827,6 +854,26 @@ export default {
       }
       // Return first available
       return values[0].value;
+    },
+    parseAndGetLocalizedValue(jsonString, preferredLang = 'nb') {
+      if (!jsonString) {
+        return '';
+      }
+      try {
+        const values = JSON.parse(jsonString);
+        return this.getLocalizedValue(values, preferredLang);
+      } catch (e) {
+        console.error('Error parsing localized JSON:', e, jsonString);
+        return jsonString; // Return as-is if parsing fails
+      }
+    },
+    getTotalItemCount() {
+      if (!this.menuData || !this.menuData.categories) {
+        return 0;
+      }
+      return this.menuData.categories.reduce((total, category) => {
+        return total + (category.items ? category.items.length : 0);
+      }, 0);
     },
     getItemById(itemId) {
       if (!this.menuData || !this.menuData.menu || !this.menuData.menu.items) {
@@ -857,25 +904,44 @@ export default {
       return amount.toFixed(2);
     },
     toggleItemEnabled(item, enabled) {
-      if (!item || !item.product || !item.product.external_id) {
-        alert('Produktet mangler external_id og kan ikke oppdateres');
+      if (!item || !item.woltItemId) {
+        alert('Produktet mangler Wolt ID og kan ikke oppdateres');
         return;
       }
 
-      // Update local display
-      if (item.enabled) {
-        this.$set(item.enabled, 'enabled', enabled);
-      } else {
-        this.$set(item, 'enabled', { enabled: enabled });
+      // Update the specific item by database ID
+      for (const category of this.menuData.categories) {
+        const foundItem = category.items.find(i => i.id === item.id);
+        if (foundItem) {
+          this.$set(foundItem, 'enabled', enabled);
+          break;
+        }
       }
 
       // Track that this item was edited
-      const externalId = item.product.external_id;
-      this.$set(this.editedItems, externalId, true);
+      this.$set(this.editedItems, item.woltItemId, true);
+    },
+    toggleItemInStock(item, inStock) {
+      if (!item || !item.woltItemId) {
+        alert('Produktet mangler Wolt ID og kan ikke oppdateres');
+        return;
+      }
+
+      // Update the specific item by database ID
+      for (const category of this.menuData.categories) {
+        const foundItem = category.items.find(i => i.id === item.id);
+        if (foundItem) {
+          this.$set(foundItem, 'inStock', inStock);
+          break;
+        }
+      }
+
+      // Track that this item was edited
+      this.$set(this.editedItems, item.woltItemId, true);
     },
     updateItemPrice(item, newPrice) {
-      if (!item || !item.product || !item.product.external_id) {
-        alert('Produktet mangler external_id og kan ikke oppdateres');
+      if (!item || !item.woltItemId) {
+        alert('Produktet mangler Wolt ID og kan ikke oppdateres');
         return;
       }
 
@@ -888,12 +954,18 @@ export default {
       // Convert from kroner to øre (cents)
       const priceInOre = Math.round(priceValue * 100);
 
-      // Update local display
-      this.$set(item, 'price', priceInOre);
+      // Find the specific item by Wolt ID (unique identifier)
+      for (const category of this.menuData.categories) {
+        const foundItem = category.items.find(i => i.id === item.id);
+        if (foundItem) {
+          console.log(`[Price Update] WoltID:${item.woltItemId} ${foundItem.price} → ${priceInOre}`);
+          this.$set(foundItem, 'price', priceInOre);
+          break;
+        }
+      }
 
-      // Track that this item was edited
-      const externalId = item.product.external_id;
-      this.$set(this.editedItems, externalId, true);
+      // Track that this item was edited (use woltItemId as unique key)
+      this.$set(this.editedItems, item.woltItemId, true);
     },
     toggleOptionEnabled(optionValue, enabled) {
       if (!optionValue) {
@@ -901,56 +973,21 @@ export default {
         return;
       }
 
-      // Try to use external_id first (if set when menu was created), otherwise use Wolt's internal ID
-      const optionId = optionValue.external_id || optionValue.id;
+      // Use externalData or woltOptionValueId as the identifier
+      const optionId = optionValue.externalData || optionValue.woltOptionValueId;
       if (!optionId) {
-        console.error('[toggleOptionEnabled] Missing both external_id and ID:', optionValue);
+        console.error('[toggleOptionEnabled] Missing both externalData and woltOptionValueId:', optionValue);
         return;
       }
 
       // Update local display
-      if (optionValue.enabled) {
-        this.$set(optionValue.enabled, 'enabled', enabled);
-      } else {
-        this.$set(optionValue, 'enabled', { enabled: enabled });
-      }
+      this.$set(optionValue, 'enabled', enabled);
 
       // Track that this option was edited
       this.$set(this.editedOptions, optionId, true);
-    },
-    updateOptionPrice(optionValue, newPrice) {
-      if (!optionValue) {
-        console.error('[updateOptionPrice] Option value mangler:', optionValue);
-        return;
-      }
-
-      // Try to use external_id first (if set when menu was created), otherwise use Wolt's internal ID
-      const optionId = optionValue.external_id || optionValue.id;
-      if (!optionId) {
-        console.error('[updateOptionPrice] Missing both external_id and ID:', optionValue);
-        return;
-      }
-
-      const priceValue = parseFloat(newPrice);
-      if (isNaN(priceValue) || priceValue < 0) {
-        console.error('[updateOptionPrice] Ugyldig pris:', newPrice);
-        return;
-      }
-
-      // Convert from kroner to øre (cents)
-      const priceInOre = Math.round(priceValue * 100);
-
-      console.log(`[updateOptionPrice] Updating option ${optionId}: ${priceInOre} øre (using ${optionValue.external_id ? 'external_id' : 'internal ID'})`);
-
-      // Update local display
-      this.$set(optionValue, 'price', priceInOre);
-
-      // Track that this option was edited
-      this.$set(this.editedOptions, optionId, true);
-      console.log('[updateOptionPrice] editedOptions:', Object.keys(this.editedOptions));
     },
     createMenuSnapshot() {
-      if (!this.menuData || !this.menuData.menu) {
+      if (!this.menuData || !this.menuData.categories) {
         return null;
       }
 
@@ -960,39 +997,38 @@ export default {
         options: {}
       };
 
-      // Snapshot all items
-      if (this.menuData.menu.items) {
-        this.menuData.menu.items.forEach(item => {
-          if (item.product && item.product.external_id) {
-            snapshot.items[item.product.external_id] = {
-              price: item.price,
-              enabled: item.enabled && item.enabled.enabled
-            };
-          }
-        });
-      }
+      // Snapshot all items across all categories
+      this.menuData.categories.forEach(category => {
+        if (category.items) {
+          category.items.forEach(item => {
+            if (item.woltItemId) {
+              snapshot.items[item.woltItemId] = {
+                price: item.price || 0,
+                enabled: !!item.enabled,
+                inStock: !!item.inStock
+              };
+            }
 
-      // Snapshot all options
-      if (this.menuData.menu.options) {
-        this.menuData.menu.options.forEach(option => {
-          if (option.values) {
-            option.values.forEach(value => {
-              // Try to use external_id first (if set when menu was created), otherwise use Wolt's internal ID
-              const optionId = value.external_id || value.id;
-              if (optionId) {
-                snapshot.options[optionId] = {
-                  price: value.price,
-                  enabled: value.enabled && value.enabled.enabled,
-                  // Store which identifier we're using for this option
-                  _useExternalId: !!value.external_id
-                };
-              } else {
-                console.warn('[createMenuSnapshot] Option value missing both external_id and ID:', value);
-              }
-            });
-          }
-        });
-      }
+            // Snapshot all option values for this item (only enabled status, not price)
+            if (item.options) {
+              item.options.forEach(option => {
+                if (option.values) {
+                  option.values.forEach(value => {
+                    const optionId = value.externalData || value.woltOptionValueId;
+                    if (optionId) {
+                      snapshot.options[optionId] = {
+                        enabled: !!value.enabled
+                      };
+                    } else {
+                      console.warn('[createMenuSnapshot] Option value missing both externalData and woltOptionValueId:', value);
+                    }
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
 
       return JSON.stringify(snapshot);
     },
@@ -1020,27 +1056,37 @@ export default {
         return;
       }
 
+      // Blur any focused input to trigger @blur events
+      if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+        document.activeElement.blur();
+        await new Promise(resolve => setTimeout(resolve, 10));
+      }
+
       this.isSaving = true;
 
       try {
-        // Parse original and current snapshots to find what changed
         const original = JSON.parse(this.originalMenuSnapshot);
         const current = JSON.parse(this.createMenuSnapshot());
 
+        console.log('[Save] Comparing snapshots...');
         const itemUpdates = [];
         const optionUpdates = [];
 
-        // Find changed items (only those that were actually edited)
-        Object.keys(this.editedItems).forEach(externalId => {
-          const originalItem = original.items[externalId];
-          const currentItem = current.items[externalId];
+        // Find changed items
+        Object.keys(this.editedItems).forEach(woltItemId => {
+          const originalItem = original.items[woltItemId];
+          const currentItem = current.items[woltItemId];
 
-          if (!originalItem || !currentItem) return;
+          if (!originalItem || !currentItem) {
+            console.warn(`[Save] Missing data for WoltID:${woltItemId}`);
+            return;
+          }
 
-          const update = { external_id: externalId };
+          const update = { wolt_item_id: woltItemId };
           let hasChanges = false;
 
           if (originalItem.price !== currentItem.price) {
+            console.log(`[Save] WoltID:${woltItemId} price: ${originalItem.price} → ${currentItem.price}`);
             update.price = currentItem.price;
             hasChanges = true;
           }
@@ -1050,61 +1096,46 @@ export default {
             hasChanges = true;
           }
 
+          if (originalItem.inStock !== currentItem.inStock) {
+            update.in_stock = currentItem.inStock;
+            hasChanges = true;
+          }
+
           if (hasChanges) {
             itemUpdates.push(update);
           }
         });
 
-        // Find changed options (only those that were actually edited)
-        console.log('[saveChanges] Checking editedOptions:', Object.keys(this.editedOptions));
-        console.log('[saveChanges] Original options snapshot:', original.options);
-        console.log('[saveChanges] Current options snapshot:', current.options);
-
+        // Find changed options (only enabled status, not price)
         Object.keys(this.editedOptions).forEach(optionId => {
           const originalOption = original.options[optionId];
           const currentOption = current.options[optionId];
 
-          console.log(`[saveChanges] Checking option ${optionId}:`, { originalOption, currentOption });
-
           if (!originalOption || !currentOption) {
-            console.warn(`[saveChanges] Option ${optionId} missing in snapshot`, { originalOption, currentOption });
             return;
           }
 
-          // For Wolt API, we need to send the internal ID as external_id
-          // since option values don't have a separate external_id field
           const update = { external_id: optionId };
           let hasChanges = false;
-
-          if (originalOption.price !== currentOption.price) {
-            update.price = currentOption.price;
-            hasChanges = true;
-            console.log(`[saveChanges] Option ${optionId} price changed: ${originalOption.price} -> ${currentOption.price}`);
-          }
 
           if (originalOption.enabled !== currentOption.enabled) {
             update.enabled = currentOption.enabled;
             hasChanges = true;
-            console.log(`[saveChanges] Option ${optionId} enabled changed: ${originalOption.enabled} -> ${currentOption.enabled}`);
           }
 
           if (hasChanges) {
             optionUpdates.push(update);
-            console.log(`[saveChanges] Added option update:`, update);
-          } else {
-            console.log(`[saveChanges] No changes detected for option ${optionId}`);
           }
         });
 
-        // Save item changes
+        // Save changes
         if (itemUpdates.length > 0) {
-          console.log('Saving item changes:', itemUpdates);
+          console.log(`[Save] Saving ${itemUpdates.length} item(s)`);
           await this._woltMenuService.updateMenuItems(this.selectedStore, { data: itemUpdates });
         }
 
-        // Save option changes
         if (optionUpdates.length > 0) {
-          console.log('Saving option changes:', optionUpdates);
+          console.log(`[Save] Saving ${optionUpdates.length} option(s)`);
           await this._woltMenuService.updateMenuOptions(this.selectedStore, { data: optionUpdates });
         }
 
@@ -1113,6 +1144,9 @@ export default {
         this.editedOptions = {};
         this.originalMenuSnapshot = null;
         this.isEditMode = false;
+
+        // Refresh menu data to show saved changes
+        await this.fetchMenuData(this.selectedStore);
 
       } catch (error) {
         console.error('Error saving changes:', error);
@@ -1228,6 +1262,87 @@ export default {
         this.isCreatingMenu = false;
       }
     },
+    async syncWithWolt() {
+      if (!this.selectedStore) {
+        alert('Ingen butikk valgt');
+        return;
+      }
+
+      this.isSyncing = true;
+
+      try {
+        const success = await this._woltMenuService.syncMenu(this.selectedStore);
+
+        if (success) {
+          this.fetchMenuData(this.selectedStore);
+        } else {
+          alert('Kunne ikke synkronisere menyen med Wolt. Vennligst prøv igjen.');
+        }
+      } catch (error) {
+        console.error('Error syncing menu:', error);
+        alert('Feil ved synkronisering av meny: ' + (error.message || 'Ukjent feil'));
+      } finally {
+        this.isSyncing = false;
+      }
+    },
+    async importMenuFromWolt() {
+      if (!this.selectedStore) {
+        alert('Ingen butikk valgt');
+        return;
+      }
+
+      this.isLoading = true;
+
+      try {
+        const success = await this._woltMenuService.importMenu(this.selectedStore);
+
+        if (success) {
+          // Refresh menu data to show updated status
+          this.fetchMenuData(this.selectedStore);
+        } else {
+          alert('Kunne ikke importere meny fra Wolt. Vennligst prøv igjen.');
+          this.isLoading = false;
+        }
+      } catch (error) {
+        console.error('Error importing menu:', error);
+
+        // Better error messages based on error type
+        if (error.message && error.message.includes('429')) {
+          alert('Wolt API rate limit nådd. Vennligst vent 1-2 minutter før du prøver igjen.\n\nWolt har strenge grenser på hvor ofte vi kan sjekke status.');
+        } else if (error.message && error.message.includes('PENDING')) {
+          alert('Menyen behandles fortsatt av Wolt. Vennligst vent noen minutter og prøv igjen.');
+        } else {
+          alert('Feil ved import av meny: ' + (error.message || 'Ukjent feil'));
+        }
+
+        this.isLoading = false;
+      }
+    },
+    async deleteMenu() {
+      if (!this.selectedStore) {
+        alert('Ingen butikk valgt');
+        return;
+      }
+
+      if (!confirm('Er du sikker på at du vil slette menyen fra databasen? Dette kan ikke angres.')) {
+        return;
+      }
+
+      try {
+        const success = await this._woltMenuService.deleteMenu(this.selectedStore);
+
+        if (success) {
+          alert('Menyen ble slettet fra databasen');
+          // Refresh to clear the menu data
+          this.fetchMenuData(this.selectedStore);
+        } else {
+          alert('Kunne ikke slette menyen. Vennligst prøv igjen.');
+        }
+      } catch (error) {
+        console.error('Error deleting menu:', error);
+        alert('Feil ved sletting av meny: ' + (error.message || 'Ukjent feil'));
+      }
+    },
   },
 };
 </script>
@@ -1312,6 +1427,10 @@ export default {
 }
 
 .wolt-menu__status-warning {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
   background-color: #fffbea;
   border: 1px solid #f6e05e;
   border-radius: 0.25rem;
@@ -1337,37 +1456,42 @@ export default {
 }
 
 .status-warning__content {
+  flex: 1;
+}
+
+.status-warning__note {
+  font-size: 0.875rem;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.status-warning__button {
   display: flex;
-  align-items: flex-start;
-  gap: 1rem;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #744210;
+  color: #fffbea;
+  border: none;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
 }
 
-.status-warning__spinner {
+.status-warning__button:hover:not(:disabled) {
+  background-color: #5a3308;
+}
+
+.status-warning__button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.status-warning__button svg {
   flex-shrink: 0;
-  padding-top: 0.25rem;
-}
-
-.spinner {
-  width: 32px;
-  height: 32px;
-  animation: spin 1s linear infinite;
-}
-
-.spinner-track {
-  opacity: 0.25;
-}
-
-.spinner-path {
-  opacity: 0.75;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 /* Edit Mode Actions */
@@ -1412,6 +1536,15 @@ export default {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none;
+}
+
+.menu-action-button--sync {
+  background-color: #3182ce;
+  color: white;
+}
+
+.menu-action-button--sync:hover:not(:disabled) {
+  background-color: #2c5282;
 }
 
 .menu-action-button--edit {
@@ -2054,6 +2187,15 @@ export default {
 
 .create-menu-button svg {
   flex-shrink: 0;
+}
+
+.create-menu-button--delete {
+  background-color: #e53e3e;
+  margin-right: 0.75rem;
+}
+
+.create-menu-button--delete:hover {
+  background-color: #c53030;
 }
 
 /* Modal Styles */
