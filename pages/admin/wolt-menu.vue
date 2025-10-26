@@ -26,55 +26,80 @@
           </div>
         </div>
 
-        <!-- Venue Status Section -->
+        <!-- Compact Restaurant Status Header -->
         <div
           v-if="selectedStore > 0 && venueStatus"
-          class="venue-status-section"
+          class="status-header"
         >
-          <h2 class="venue-status__title">Restaurant Status</h2>
-          <div class="venue-status__grid">
-            <div class="venue-status__card">
-              <div class="venue-status__card-header">
-                <span class="venue-status__card-title">Online Status</span>
+          <div class="status-header__main">
+            <div class="status-header__online">
+              <label class="status-toggle">
+                <input
+                  :checked="venueStatus.online"
+                  type="checkbox"
+                  class="status-toggle__input"
+                  @change="toggleVenueOnline($event.target.checked)"
+                >
+                <span class="status-toggle__slider" />
+              </label>
+              <div class="status-header__info">
                 <span
-                  :class="['venue-status__badge', venueStatus.online ? 'venue-status__badge--online' : 'venue-status__badge--offline']"
+                  :class="['status-badge', venueStatus.online ? 'status-badge--online' : 'status-badge--offline']"
                 >
                   {{ venueStatus.online ? 'ONLINE' : 'OFFLINE' }}
                 </span>
-              </div>
-              <div class="venue-status__card-content">
-                <div class="venue-status__toggle-wrapper">
-                  <label class="venue-status__toggle-label">
-                    <input
-                      :checked="venueStatus.online"
-                      type="checkbox"
-                      class="venue-status__toggle-input"
-                      @change="toggleVenueOnline($event.target.checked)"
-                    >
-                    <span class="venue-status__toggle-slider" />
-                  </label>
-                  <span class="venue-status__toggle-text">
-                    {{ venueStatus.online ? 'Restaurant er åpen på Wolt' : 'Restaurant er stengt på Wolt' }}
-                  </span>
-                </div>
+                <span class="status-header__text">
+                  {{ venueStatus.online ? 'Åpen på Wolt' : 'Stengt på Wolt' }}
+                </span>
               </div>
             </div>
 
-            <div class="venue-status__card">
-              <div class="venue-status__card-header">
-                <span class="venue-status__card-title">Leveringspartner</span>
-              </div>
-              <div
-                v-if="deliveryProvider"
-                class="venue-status__card-content"
+            <div class="status-header__divider" />
+
+            <div class="status-header__meta">
+              <button
+                class="status-header__details-btn"
+                @click="showOpeningHoursModal = true"
               >
-                <p class="venue-status__provider-info">
-                  <strong>Aktiv leveringspartner:</strong> {{ deliveryProvider.current_provider || 'Ikke satt' }}
-                </p>
-              </div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+                Åpningstider
+              </button>
+
+              <span
+                v-if="deliveryProvider"
+                class="status-header__provider"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect x="1" y="3" width="15" height="13" />
+                  <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+                  <circle cx="5.5" cy="18.5" r="2.5" />
+                  <circle cx="18.5" cy="18.5" r="2.5" />
+                </svg>
+                {{ deliveryProvider.current_provider || 'Ingen partner' }}
+              </span>
             </div>
           </div>
         </div>
+
 
         <div
           v-if="selectedStore > 0"
@@ -269,40 +294,65 @@
                 </div>
               </div>
 
-              <!-- Menu Info -->
-              <div class="menu-info">
-                <div class="menu-info__item">
-                  <span class="menu-info__label">Valuta:</span>
-                  <span class="menu-info__value">{{ menuData.currency || 'N/A' }}</span>
+              <!-- Compact Menu Info (Collapsible) -->
+              <details class="menu-info-collapsible">
+                <summary class="menu-info-collapsible__summary">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="16" x2="12" y2="12" />
+                    <line x1="12" y1="8" x2="12.01" y2="8" />
+                  </svg>
+                  <span>{{ getTotalItemCount() }} produkter i {{ menuData.categories.length }} kategorier</span>
+                </summary>
+                <div class="menu-info-collapsible__content">
+                  <div class="menu-info-collapsible__item">
+                    <span class="menu-info-collapsible__label">Valuta:</span>
+                    <span class="menu-info-collapsible__value">{{ menuData.currency || 'N/A' }}</span>
+                  </div>
+                  <div class="menu-info-collapsible__item">
+                    <span class="menu-info-collapsible__label">Primærspråk:</span>
+                    <span class="menu-info-collapsible__value">{{ menuData.primaryLanguage || 'N/A' }}</span>
+                  </div>
                 </div>
-                <div class="menu-info__item">
-                  <span class="menu-info__label">Primærspråk:</span>
-                  <span class="menu-info__value">{{ menuData.primaryLanguage || 'N/A' }}</span>
-                </div>
-                <div class="menu-info__item">
-                  <span class="menu-info__label">Antall kategorier:</span>
-                  <span class="menu-info__value">{{ menuData.categories.length }}</span>
-                </div>
-                <div class="menu-info__item">
-                  <span class="menu-info__label">Antall produkter:</span>
-                  <span class="menu-info__value">{{ getTotalItemCount() }}</span>
-                </div>
-              </div>
+              </details>
 
-              <!-- Categories -->
-              <div
+              <!-- Categories (Collapsible) -->
+              <details
                 v-for="category in menuData.categories"
                 :key="category.id"
                 class="menu-category"
+                open
               >
-                <div class="menu-category__header">
-                  <h2 class="menu-category__title">
-                    {{ parseAndGetLocalizedValue(category.nameJson) }}
-                  </h2>
-                  <span class="menu-category__count">
-                    {{ category.items ? category.items.length : 0 }} produkter
-                  </span>
-                </div>
+                <summary class="menu-category__header">
+                  <svg
+                    class="menu-category__chevron"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                  <div class="menu-category__header-content">
+                    <h2 class="menu-category__title">
+                      {{ parseAndGetLocalizedValue(category.nameJson) }}
+                    </h2>
+                    <span class="menu-category__count">
+                      {{ category.items ? category.items.length : 0 }} produkter
+                    </span>
+                  </div>
+                </summary>
                 <p
                   v-if="category.descriptionJson"
                   class="menu-category__description"
@@ -486,7 +536,7 @@
                 >
                   Ingen produkter i denne kategorien
                 </div>
-              </div>
+              </details>
             </div>
 
           </div>
@@ -687,6 +737,207 @@
         </div>
       </div>
     </div>
+
+    <!-- Opening Hours Modal -->
+    <div
+      v-if="showOpeningHoursModal"
+      class="modal-overlay"
+      @click.self="showOpeningHoursModal = false"
+    >
+      <div class="modal-content modal-content--large">
+        <div class="modal-header">
+          <h2>Åpningstider</h2>
+          <button
+            class="modal-close"
+            @click="showOpeningHoursModal = false"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- View Mode -->
+          <div v-if="!isEditingOpeningHours">
+            <div
+              v-if="venueStatus && venueStatus.opening_times && venueStatus.opening_times.length > 0"
+              class="opening-hours-list"
+            >
+              <div
+                v-for="(slot, index) in venueStatus.opening_times"
+                :key="index"
+                class="opening-hours-item"
+              >
+                <span class="opening-hours-item__day">{{ formatDayName(slot.opening_day) }}</span>
+                <span class="opening-hours-item__time">{{ slot.opening_time }} - {{ slot.closing_time }}</span>
+                <span
+                  v-if="slot.closing_day !== slot.opening_day"
+                  class="opening-hours-item__badge"
+                >
+                  til {{ formatDayName(slot.closing_day) }}
+                </span>
+              </div>
+            </div>
+            <div
+              v-else
+              class="empty-state"
+            >
+              <p>Ingen åpningstider satt</p>
+            </div>
+          </div>
+
+          <!-- Edit Mode -->
+          <div v-else>
+            <div class="info-banner">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="16" x2="12" y2="12" />
+                <line x1="12" y1="8" x2="12.01" y2="8" />
+              </svg>
+              <p>Legg til åpningstider for hvert tidsrom. Bruk formatet HH:mm (f.eks. 10:00)</p>
+            </div>
+
+            <div
+              v-for="(slot, index) in editedOpeningTimes"
+              :key="index"
+              class="opening-hours-edit-slot"
+            >
+              <div class="opening-hours-edit-row">
+                <div class="form-field">
+                  <label>Åpningsdag</label>
+                  <div class="select-wrapper">
+                    <select v-model="slot.opening_day">
+                      <option value="MONDAY">Mandag</option>
+                      <option value="TUESDAY">Tirsdag</option>
+                      <option value="WEDNESDAY">Onsdag</option>
+                      <option value="THURSDAY">Torsdag</option>
+                      <option value="FRIDAY">Fredag</option>
+                      <option value="SATURDAY">Lørdag</option>
+                      <option value="SUNDAY">Søndag</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-field">
+                  <label>Åpningstid</label>
+                  <input
+                    v-model="slot.opening_time"
+                    type="time"
+                    placeholder="10:00"
+                  >
+                </div>
+                <div class="form-field">
+                  <label>Lukkingsdag</label>
+                  <div class="select-wrapper">
+                    <select v-model="slot.closing_day">
+                      <option value="MONDAY">Mandag</option>
+                      <option value="TUESDAY">Tirsdag</option>
+                      <option value="WEDNESDAY">Onsdag</option>
+                      <option value="THURSDAY">Torsdag</option>
+                      <option value="FRIDAY">Fredag</option>
+                      <option value="SATURDAY">Lørdag</option>
+                      <option value="SUNDAY">Søndag</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-field">
+                  <label>Lukkingstid</label>
+                  <input
+                    v-model="slot.closing_time"
+                    type="time"
+                    placeholder="22:00"
+                  >
+                </div>
+                <button
+                  class="icon-button icon-button--danger"
+                  @click="removeOpeningTimeSlot(index)"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <button
+              class="button-secondary"
+              @click="addOpeningTimeSlot"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              Legg til tidsrom
+            </button>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            v-if="!isEditingOpeningHours"
+            class="modal-button modal-button--secondary"
+            @click="showOpeningHoursModal = false"
+          >
+            Lukk
+          </button>
+          <button
+            v-if="!isEditingOpeningHours"
+            class="modal-button modal-button--primary"
+            @click="startEditingOpeningHours"
+          >
+            Rediger åpningstider
+          </button>
+          <template v-else>
+            <button
+              class="modal-button modal-button--secondary"
+              @click="cancelEditingOpeningHours"
+            >
+              Avbryt
+            </button>
+            <button
+              class="modal-button modal-button--primary"
+              :disabled="isSavingOpeningHours"
+              @click="saveOpeningHours"
+            >
+              <span v-if="isSavingOpeningHours">Lagrer...</span>
+              <span v-else>Lagre åpningstider</span>
+            </button>
+          </template>
+        </div>
+      </div>
+    </div>
   </AdminPage>
 </template>
 
@@ -722,7 +973,12 @@ export default {
       newMenuData: {
         currency: 'NOK',
         primaryLanguage: 'nb'
-      }
+      },
+      isEditingOpeningHours: false,
+      editedOpeningTimes: [],
+      isSavingOpeningHours: false,
+      showOpeningHours: false,
+      showOpeningHoursModal: false
     };
   },
   computed: {
@@ -1341,6 +1597,88 @@ export default {
       } catch (error) {
         console.error('Error deleting menu:', error);
         alert('Feil ved sletting av meny: ' + (error.message || 'Ukjent feil'));
+      }
+    },
+    formatDayName(day) {
+      const dayNames = {
+        MONDAY: 'Mandag',
+        TUESDAY: 'Tirsdag',
+        WEDNESDAY: 'Onsdag',
+        THURSDAY: 'Torsdag',
+        FRIDAY: 'Fredag',
+        SATURDAY: 'Lørdag',
+        SUNDAY: 'Søndag'
+      };
+      return dayNames[day] || day;
+    },
+    startEditingOpeningHours() {
+      this.isEditingOpeningHours = true;
+      this.showOpeningHours = true;
+      // Deep clone the opening times for editing
+      this.editedOpeningTimes = JSON.parse(JSON.stringify(this.venueStatus.opening_times || []));
+
+      // Log to debug what values we're getting
+      console.log('Starting edit with opening times:', this.editedOpeningTimes);
+
+      // If no opening times exist, add a default slot
+      if (this.editedOpeningTimes.length === 0) {
+        this.addOpeningTimeSlot();
+      }
+    },
+    cancelEditingOpeningHours() {
+      this.isEditingOpeningHours = false;
+      this.editedOpeningTimes = [];
+      this.showOpeningHoursModal = false;
+    },
+    addOpeningTimeSlot() {
+      this.editedOpeningTimes.push({
+        opening_day: 'MONDAY',
+        opening_time: '10:00',
+        closing_day: 'MONDAY',
+        closing_time: '22:00'
+      });
+    },
+    removeOpeningTimeSlot(index) {
+      this.editedOpeningTimes.splice(index, 1);
+    },
+    async saveOpeningHours() {
+      if (!this.selectedStore) {
+        alert('Ingen butikk valgt');
+        return;
+      }
+
+      // Validate that all slots have required fields
+      for (const slot of this.editedOpeningTimes) {
+        if (!slot.opening_day || !slot.opening_time || !slot.closing_day || !slot.closing_time) {
+          alert('Alle felt må fylles ut for hver åpningstid');
+          return;
+        }
+      }
+
+      this.isSavingOpeningHours = true;
+
+      try {
+        const request = {
+          availability: this.editedOpeningTimes
+        };
+
+        const success = await this._woltVenueService.updateVenueOpeningTimes(this.selectedStore, request);
+
+        if (success) {
+          alert('Åpningstider ble oppdatert');
+          this.isEditingOpeningHours = false;
+          this.editedOpeningTimes = [];
+          this.showOpeningHoursModal = false;
+          // Refresh venue status to show updated opening times
+          await this.fetchVenueStatus(this.selectedStore);
+        } else {
+          alert('Kunne ikke oppdatere åpningstider. Vennligst prøv igjen.');
+        }
+      } catch (error) {
+        console.error('Error saving opening hours:', error);
+        alert('Feil ved lagring av åpningstider: ' + (error.message || 'Ukjent feil'));
+      } finally {
+        this.isSavingOpeningHours = false;
       }
     },
   },
@@ -2021,54 +2359,59 @@ export default {
 
 /* Venue Status Section */
 .venue-status-section {
-  margin-bottom: 2rem;
-  padding: 1.5rem;
+  margin-bottom: 1.5rem;
   background-color: white;
   border: 1px solid #e2e8f0;
   border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 .venue-status__title {
-  margin: 0 0 1.5rem 0;
-  font-size: 1.5rem;
+  margin: 0;
+  padding: 1rem 1.25rem;
+  font-size: 1.25rem;
   font-weight: 600;
   color: #2d3748;
+  background-color: #f7fafc;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .venue-status__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .venue-status__card {
-  border: 1px solid #e2e8f0;
-  border-radius: 0.375rem;
-  overflow: hidden;
-  background-color: #f7fafc;
+  border-right: 1px solid #e2e8f0;
+  background-color: white;
+}
+
+.venue-status__card:last-child {
+  border-right: none;
 }
 
 .venue-status__card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 1.25rem;
-  background-color: #edf2f7;
+  padding: 0.875rem 1.25rem;
+  background-color: #fafafa;
   border-bottom: 1px solid #e2e8f0;
 }
 
 .venue-status__card-title {
   font-weight: 600;
   color: #2d3748;
-  font-size: 1rem;
+  font-size: 0.875rem;
 }
 
 .venue-status__badge {
   display: inline-block;
-  padding: 0.25rem 0.75rem;
+  padding: 0.2rem 0.625rem;
   border-radius: 0.25rem;
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -2085,7 +2428,7 @@ export default {
 }
 
 .venue-status__card-content {
-  padding: 1.25rem;
+  padding: 1rem 1.25rem;
 }
 
 .venue-status__toggle-wrapper {
@@ -2350,6 +2693,704 @@ export default {
 
 .modal-button--primary:hover:not(:disabled) {
   background-color: #159960;
+}
+
+/* Opening Hours Section */
+.opening-hours-section {
+  margin-top: 1.5rem;
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.opening-hours__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background-color: #f7fafc;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.opening-hours__header--collapsible {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.opening-hours__header--collapsible:hover {
+  background-color: #edf2f7;
+}
+
+.opening-hours__header-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.opening-hours__title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.opening-hours__summary {
+  font-size: 0.875rem;
+  color: #718096;
+  font-weight: 500;
+}
+
+.opening-hours__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.opening-hours__edit-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background-color: transparent;
+  color: #1bb776;
+  border: 1px solid #1bb776;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.opening-hours__edit-button:hover {
+  background-color: #1bb776;
+  color: white;
+}
+
+.opening-hours__chevron {
+  color: #718096;
+  transition: transform 0.2s;
+}
+
+.opening-hours__chevron--open {
+  transform: rotate(180deg);
+}
+
+.opening-hours__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 1rem 1.25rem;
+}
+
+.opening-hours__item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.625rem 0;
+  border-bottom: 1px solid #f7fafc;
+}
+
+.opening-hours__item:last-child {
+  border-bottom: none;
+}
+
+.opening-hours__day {
+  font-weight: 600;
+  color: #2d3748;
+  min-width: 90px;
+  font-size: 0.875rem;
+}
+
+.opening-hours__time {
+  color: #4a5568;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.opening-hours__next-day {
+  font-size: 0.8125rem;
+  color: #718096;
+  font-style: italic;
+}
+
+.opening-hours__empty {
+  padding: 1.5rem 0;
+  text-align: center;
+  color: #a0aec0;
+  font-style: italic;
+  font-size: 0.875rem;
+}
+
+.opening-hours__edit {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+}
+
+.opening-hours__edit-info {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: #ebf8ff;
+  border: 1px solid #bee3f8;
+  border-radius: 0.375rem;
+  align-items: flex-start;
+}
+
+.opening-hours__edit-info svg {
+  flex-shrink: 0;
+  color: #3182ce;
+  margin-top: 0.125rem;
+}
+
+.opening-hours__edit-info p {
+  margin: 0;
+  color: #2c5282;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.opening-hours__edit-slot {
+  padding: 1rem;
+  background-color: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.375rem;
+}
+
+.opening-hours__edit-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr auto;
+  gap: 1rem;
+  align-items: end;
+}
+
+.opening-hours__edit-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.opening-hours__edit-field label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.opening-hours__edit-field select,
+.opening-hours__edit-field input {
+  padding: 0.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  color: #2d3748;
+  background-color: white;
+  transition: border-color 0.2s;
+}
+
+.opening-hours__edit-field select:focus,
+.opening-hours__edit-field input:focus {
+  outline: none;
+  border-color: #1bb776;
+  box-shadow: 0 0 0 3px rgba(27, 183, 118, 0.1);
+}
+
+.opening-hours__remove-button {
+  padding: 0.5rem;
+  background-color: #e53e3e;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+}
+
+.opening-hours__remove-button:hover {
+  background-color: #c53030;
+}
+
+.opening-hours__add-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background-color: #3182ce;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  align-self: flex-start;
+}
+
+.opening-hours__add-button:hover {
+  background-color: #2c5282;
+}
+
+.opening-hours__edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.opening-hours__cancel-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #e2e8f0;
+  color: #4a5568;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.opening-hours__cancel-button:hover {
+  background-color: #cbd5e0;
+}
+
+.opening-hours__save-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #1bb776;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.opening-hours__save-button:hover:not(:disabled) {
+  background-color: #159960;
+}
+
+.opening-hours__save-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ======================================
+   NEW IMPROVED STYLES
+   ====================================== */
+
+/* Compact Status Header */
+.status-header {
+  margin-bottom: 2rem;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 1rem 1.5rem;
+}
+
+.status-header__main {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.status-header__online {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.status-header__info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.status-badge--online {
+  background-color: #c6f6d5;
+  color: #22543d;
+}
+
+.status-badge--offline {
+  background-color: #fed7d7;
+  color: #742a2a;
+}
+
+.status-header__text {
+  font-size: 0.875rem;
+  color: #4a5568;
+}
+
+.status-header__divider {
+  width: 1px;
+  height: 32px;
+  background-color: #e2e8f0;
+}
+
+.status-header__meta {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex: 1;
+}
+
+.status-header__details-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.status-header__details-btn:hover {
+  background: #edf2f7;
+  border-color: #cbd5e0;
+}
+
+.status-header__provider {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #718096;
+}
+
+.status-header__provider svg {
+  color: #a0aec0;
+}
+
+/* Status Toggle Switch */
+.status-toggle {
+  position: relative;
+  display: inline-block;
+  width: 54px;
+  height: 28px;
+  cursor: pointer;
+}
+
+.status-toggle__input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.status-toggle__slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #cbd5e0;
+  border-radius: 28px;
+  transition: all 0.3s;
+}
+
+.status-toggle__slider:before {
+  content: "";
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  border-radius: 50%;
+  transition: all 0.3s;
+}
+
+.status-toggle__input:checked + .status-toggle__slider {
+  background-color: #48bb78;
+}
+
+.status-toggle__input:checked + .status-toggle__slider:before {
+  transform: translateX(26px);
+}
+
+/* Menu Info Collapsible */
+.menu-info-collapsible {
+  margin-bottom: 1.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.375rem;
+  background: #f7fafc;
+}
+
+.menu-info-collapsible__summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.875rem;
+  color: #4a5568;
+  list-style: none;
+}
+
+.menu-info-collapsible__summary::-webkit-details-marker {
+  display: none;
+}
+
+.menu-info-collapsible__summary svg {
+  color: #718096;
+}
+
+.menu-info-collapsible__content {
+  padding: 0 1rem 1rem 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.menu-info-collapsible__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.menu-info-collapsible__label {
+  font-size: 0.75rem;
+  color: #718096;
+}
+
+.menu-info-collapsible__value {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+/* Improved Category Headers (with collapse chevron) */
+.menu-category {
+  margin-bottom: 2rem;
+}
+
+.menu-category__header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 0;
+  border-bottom: 2px solid #2d3748;
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+}
+
+.menu-category__header::-webkit-details-marker {
+  display: none;
+}
+
+.menu-category__chevron {
+  flex-shrink: 0;
+  color: #4a5568;
+  transition: transform 0.2s;
+}
+
+details[open] .menu-category__chevron {
+  transform: rotate(180deg);
+}
+
+.menu-category__header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+}
+
+/* Opening Hours Modal Styles */
+.opening-hours-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.opening-hours-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: #f7fafc;
+  border-radius: 0.375rem;
+}
+
+.opening-hours-item__day {
+  font-weight: 600;
+  color: #2d3748;
+  min-width: 100px;
+}
+
+.opening-hours-item__time {
+  color: #4a5568;
+  flex: 1;
+}
+
+.opening-hours-item__badge {
+  padding: 0.25rem 0.5rem;
+  background: #edf2f7;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  color: #718096;
+}
+
+.opening-hours-edit-slot {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.375rem;
+  background: #f7fafc;
+}
+
+.opening-hours-edit-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr auto;
+  gap: 0.75rem;
+  align-items: end;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.form-field label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.form-field input {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  background-color: white;
+}
+
+.form-field input:focus {
+  outline: none;
+  border-color: #1bb776;
+  box-shadow: 0 0 0 3px rgba(27, 183, 118, 0.1);
+}
+
+/* Use select-wrapper for styled dropdowns in forms */
+.form-field .select-wrapper {
+  width: 100%;
+}
+
+.form-field .select-wrapper select {
+  width: 100%;
+  padding: 0.5rem 2rem 0.5rem 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.25rem;
+  background-color: white;
+  font-size: 0.875rem;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-field .select-wrapper select:focus {
+  outline: none;
+  border-color: #1bb776;
+  box-shadow: 0 0 0 3px rgba(27, 183, 118, 0.1);
+}
+
+.icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.25rem;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.icon-button--danger {
+  color: #e53e3e;
+}
+
+.icon-button--danger:hover {
+  background: #fed7d7;
+  border-color: #fc8181;
+}
+
+.button-secondary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #2d3748;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.button-secondary:hover {
+  background: #f7fafc;
+  border-color: #cbd5e0;
+}
+
+.empty-state {
+  padding: 3rem 1rem;
+  text-align: center;
+  color: #a0aec0;
+  font-style: italic;
+}
+
+.info-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  background: #ebf8ff;
+  border: 1px solid #90cdf4;
+  border-radius: 0.375rem;
+  color: #2c5282;
+}
+
+.info-banner svg {
+  flex-shrink: 0;
+  color: #3182ce;
+}
+
+.info-banner p {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+/* Modal Enhancements */
+.modal-content--large {
+  max-width: 900px;
 }
 
 </style>
