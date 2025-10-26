@@ -75,6 +75,7 @@ const mixin = {
         case 'DineHomeDelivery': return 'DineHome Hjemlevering'
         case 'TableDelivery': return 'Spis inne'
         case 'WoltDelivery': return 'Wolt'
+        case 'WoltMarketplaceDelivery': return 'Wolt Marketplace'
         default: return 'Ikke satt'
       }
     },
