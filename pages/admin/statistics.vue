@@ -245,7 +245,7 @@
                 {{ getComparisonDeliveryTypeCount('TableDelivery') }}
               </span>
             </div>
-            <div class="delivery-stat-label">Bord</div>
+            <div class="delivery-stat-label">Spis inne</div>
             <div class="delivery-stat-amount">
               {{ getDeliveryTypeAmount('TableDelivery') }}
               <span
