@@ -31,6 +31,7 @@
     "@nuxtjs/pwa": "^3.0.2",
     "@nuxtjs/robots": "^2.5.0",
     "@nuxtjs/sitemap": "^2.4.0",
+    "chart.js": "^4.5.1",
     "core-js": "^3.6.5",
     "dayjs": "^1.10.7",
     "focus-lock": "^0.10.1",

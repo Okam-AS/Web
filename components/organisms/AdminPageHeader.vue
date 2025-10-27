@@ -113,6 +113,27 @@
                     </a>
                   </li>
                   <li>
+                    <a href="/admin/statistics">
+                      <span class="menu-icon">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                          />
+                        </svg>
+                      </span>
+                      Statistikk
+                      <span class="new-badge">NYHET</span>
+                    </a>
+                  </li>
+                  <li>
                     <a href="/admin/orders">
                       <span class="menu-icon">
                         <svg
@@ -507,6 +528,17 @@ export default {
   padding: 2px 6px;
   border-radius: 4px;
   color: #4a5568;
+}
+
+.new-badge {
+  margin-left: 0.5rem;
+  font-size: 0.65rem;
+  font-weight: bold;
+  background-color: #10b981;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 10px;
+  text-transform: uppercase;
 }
 
 .admin__header-section {

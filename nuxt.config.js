@@ -15,7 +15,7 @@ export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
   env: {
     IS_PRODUCTION: process.env.NODE_ENV === 'production',
-    API_BASE_URL: process.env.NODE_ENV === 'production' ? 'https://okamapi.azurewebsites.net' : 'https://okamapi.azurewebsites.net', // 'http://localhost:5000',
+    API_BASE_URL: 'http://localhost:5000',
     IS_NATIVESCRIPT: 'false',
     VERSION: '1.0.0',
     PLATFORM_FILE_SUFFIX: '.nuxt'
@@ -196,6 +196,7 @@ export default {
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
+    transpile: ['chart.js'],
     extend(config, { _isDev, _isClient }) {
       config.module.rules.push({
         enforce: 'pre',
@@ -203,7 +204,7 @@ export default {
         loader: 'ignore-loader',
         exclude: /(node_modules)/
       })
-      
+
       // Add TypeScript file resolution
       config.resolve.extensions.push('.ts', '.tsx')
     },
