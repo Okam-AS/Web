@@ -5,10 +5,10 @@
   >
     <button
       class="dropdown-toggle"
-      :class="{ 'is-open': isOpen }"
+      :class="{ 'is-open': isOpen, 'has-selection': hasPartialSelection }"
       @click="toggleDropdown"
     >
-      <span class="dropdown-label">{{ displayText }}</span>
+      <span class="dropdown-label" :class="{ 'has-selection': hasPartialSelection }">{{ displayText }}</span>
       <span class="material-icons">{{ isOpen ? 'expand_less' : 'expand_more' }}</span>
     </button>
 
@@ -115,6 +115,9 @@ export default {
       }
       return `${this.selected.length} valgt`;
     },
+    hasPartialSelection() {
+      return this.selected.length > 0 && this.selected.length < this.options.length;
+    },
     filteredOptions() {
       if (!this.searchQuery) {
         return this.options;
@@ -207,11 +210,21 @@ export default {
   .dropdown-label {
     flex: 1;
     text-align: left;
+
+    &.has-selection {
+      color: #1bb776;
+      font-weight: 600;
+    }
   }
 
   .material-icons {
     font-size: 20px;
     color: #666;
+  }
+
+  &.has-selection {
+    border-color: #1bb776;
+    background-color: #f0fdf7;
   }
 }
 

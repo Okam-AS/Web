@@ -58,7 +58,7 @@ const mixin = {
         case 'PayInStore': return 'Betal i butikk'
         case 'Stripe': return 'Betalt med kort'
         case 'Vipps': return 'Betalt med Vipps'
-        case 'Giftcard': return 'Betalt med giftkort'
+        case 'Giftcard': return 'Betalt med gavekort'
         case 'Dintero': return 'Betalt med Dintero'
         case 'DinteroVipps': return 'Betalt med Vipps'
         case 'DinteroBillie': return 'Betalt med Billie'
@@ -74,7 +74,7 @@ const mixin = {
         case 'GroupedHomeDelivery': return 'Hjemlevering'
         case 'DineHomeDelivery': return 'DineHome Hjemlevering'
         case 'TableDelivery': return 'Spis inne'
-        case 'WoltDelivery': return 'Wolt'
+        case 'WoltDelivery': return 'Wolt Drive'
         case 'WoltMarketplaceDelivery': return 'Wolt Marketplace'
         default: return 'Ikke satt'
       }

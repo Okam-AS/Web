@@ -141,6 +141,35 @@
             </table>
           </div>
         </div>
+
+        <!-- Wolt Tracking -->
+        <div
+          v-if="order.woltDeliveryInfo && order.woltDeliveryInfo.trackingUrl"
+          class="wolt-tracking-section"
+        >
+          <h4>Wolt Sporing</h4>
+          <div class="tracking-info">
+            <div class="tracking-header">
+              <a
+                :href="order.woltDeliveryInfo.trackingUrl"
+                target="_blank"
+                class="tracking-link-external"
+              >
+                <span class="material-icons">open_in_new</span>
+                Åpne i nytt vindu
+              </a>
+            </div>
+            <div class="tracking-iframe-container">
+              <iframe
+                :src="order.woltDeliveryInfo.trackingUrl"
+                class="tracking-iframe"
+                frameborder="0"
+                title="Wolt Sporing"
+                sandbox="allow-scripts allow-same-origin allow-popups"
+              ></iframe>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div
@@ -270,16 +299,22 @@ export default {
   width: 90%;
   max-width: 800px;
   max-height: 90%;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .modal-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px 24px;
   border-bottom: 1px solid #e2e8f0;
+  border-radius: 12px 12px 0 0;
 
   h3 {
     margin: 0;
@@ -309,6 +344,8 @@ export default {
 
 .modal-body {
   padding: 24px;
+  overflow-y: auto;
+  flex: 1;
 }
 
 .loading-container,
@@ -447,6 +484,82 @@ export default {
     margin: 0 0 16px 0;
     color: #292c34;
     font-size: 1.1rem;
+  }
+}
+
+.wolt-tracking-section {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 2px solid #e2e8f0;
+
+  h4 {
+    margin: 0 0 16px 0;
+    color: #292c34;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tracking-info {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid #e2e8f0;
+  }
+
+  .tracking-header {
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .tracking-link-external {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: #1bb776;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    &:hover {
+      background: #159c63;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(27, 183, 118, 0.3);
+    }
+
+    .material-icons {
+      font-size: 18px;
+    }
+  }
+
+  .tracking-iframe-container {
+    position: relative;
+    width: 100%;
+    height: 800px;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .tracking-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 8px;
+  }
+
+  @media (max-width: 768px) {
+    .tracking-iframe-container {
+      height: 600px;
+    }
   }
 }
 
