@@ -560,9 +560,11 @@ export default {
         return {
           width: this.columnWidths[columnId] + 'px',
           minWidth: this.columnWidths[columnId] + 'px',
-          maxWidth: this.columnWidths[columnId] + 'px'
+          maxWidth: this.columnWidths[columnId] + 'px',
+          flexShrink: '0'
         };
       }
+      // Return empty object to use default CSS widths
       return {};
     },
     saveColumnVisibility() {
@@ -1413,8 +1415,21 @@ export default {
       text-overflow: ellipsis;
       white-space: nowrap;
       font-size: 0.9rem;
-      flex: 1;
-      min-width: 100px;
+      flex-shrink: 0;
+
+      // Default widths for each column type
+      &.col-friendlyOrderId { width: 100px; }
+      &.col-storeName { width: 150px; }
+      &.col-status { width: 140px; }
+      &.col-customer { width: 180px; }
+      &.col-created { width: 150px; }
+      &.col-finalAmount { width: 100px; }
+      &.col-deliveryType { width: 140px; }
+      &.col-pickupEta { width: 120px; }
+      &.col-drivingTime { width: 100px; }
+      &.col-orderCode { width: 280px; }
+      &.col-totalTime { width: 100px; }
+      &.col-tracking { width: 100px; }
     }
 
     &.header {
