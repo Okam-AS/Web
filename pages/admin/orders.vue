@@ -195,7 +195,7 @@
               v-for="columnId in orderedVisibleColumns"
               :key="columnId"
               :class="['col', `col-${columnId}`]"
-              :style="columnWidths[columnId] ? { width: columnWidths[columnId] + 'px', minWidth: columnWidths[columnId] + 'px', maxWidth: columnWidths[columnId] + 'px' } : {}"
+              :style="getColumnStyle(columnId)"
             >
               {{ getColumnLabel(columnId) }}
               <div
@@ -214,7 +214,7 @@
               v-for="columnId in orderedVisibleColumns"
               :key="columnId"
               :class="['col', `col-${columnId}`]"
-              :style="columnWidths[columnId] ? { width: columnWidths[columnId] + 'px', minWidth: columnWidths[columnId] + 'px', maxWidth: columnWidths[columnId] + 'px' } : {}"
+              :style="getColumnStyle(columnId)"
             >
               <template v-if="columnId === 'friendlyOrderId'">
                 {{ order.friendlyOrderId }}
@@ -552,6 +552,17 @@ export default {
     getColumnLabel(columnId) {
       const column = this.allColumns.find(col => col.id === columnId);
       return column ? column.label : columnId;
+    },
+    getColumnStyle(columnId) {
+      // Use custom widths from localStorage if available (works on both desktop and mobile)
+      if (this.columnWidths[columnId]) {
+        return {
+          width: this.columnWidths[columnId] + 'px',
+          minWidth: this.columnWidths[columnId] + 'px',
+          maxWidth: this.columnWidths[columnId] + 'px'
+        };
+      }
+      return {};
     },
     saveColumnVisibility() {
       try {
@@ -1318,6 +1329,33 @@ export default {
         background: #a0aec0;
       }
     }
+
+    // Mobile scroll indicator shadows
+    @media (max-width: 768px) {
+      // Smooth touch scrolling
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+
+      // Enhanced scrollbar visibility on mobile
+      &::-webkit-scrollbar {
+        height: 10px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: #94a3b8;
+      }
+
+      // Scroll shadow indicators
+      background:
+        linear-gradient(to right, white 30%, rgba(255,255,255,0)),
+        linear-gradient(to right, rgba(255,255,255,0), white 70%) 100% 0,
+        radial-gradient(farthest-side at 0% 50%, rgba(0,0,0,.15), rgba(0,0,0,0)),
+        radial-gradient(farthest-side at 100% 50%, rgba(0,0,0,.15), rgba(0,0,0,0)) 100% 0;
+      background-repeat: no-repeat;
+      background-color: white;
+      background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+      background-attachment: local, local, scroll, scroll;
+    }
   }
 
   .pagination-footer {
@@ -1415,12 +1453,15 @@ export default {
     }
 
     @media (max-width: 768px) {
-      padding: 10px 12px;
+      padding: 8px 10px;
       gap: 8px;
 
       .col {
         font-size: 0.8rem;
-        min-width: 80px;
+      }
+
+      &.header .col {
+        font-size: 0.75rem;
       }
     }
   }
@@ -1446,6 +1487,16 @@ export default {
 
     .material-icons {
       font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+      padding: 3px 6px;
+      font-size: 0.65rem;
+      gap: 2px;
+
+      .material-icons {
+        font-size: 12px;
+      }
     }
   }
 
@@ -1497,6 +1548,13 @@ export default {
       background: #f3f4f6;
       color: #6b7280;
     }
+
+    @media (max-width: 768px) {
+      padding: 3px 6px;
+      font-size: 0.65rem;
+      border-radius: 8px;
+      white-space: nowrap;
+    }
   }
 
   @media (max-width: 768px) {
@@ -1504,9 +1562,16 @@ export default {
     border-radius: 0;
     padding: 16px 8px;
 
-    .orders-table {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+    .column-visibility-control {
+      .visibility-toggle-btn {
+        font-size: 0.85rem;
+        padding: 6px 12px;
+      }
+    }
+
+    .pagination-footer {
+      margin-top: 16px;
+      padding: 12px 0;
     }
   }
 }
