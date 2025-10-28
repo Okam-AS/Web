@@ -201,6 +201,7 @@
               <div
                 class="resize-handle"
                 @mousedown="startResize($event, columnId)"
+                @touchstart="startResize($event, columnId)"
               ></div>
             </div>
           </div>
@@ -559,9 +560,11 @@ export default {
         return {
           width: this.columnWidths[columnId] + 'px',
           minWidth: this.columnWidths[columnId] + 'px',
-          maxWidth: this.columnWidths[columnId] + 'px'
+          maxWidth: this.columnWidths[columnId] + 'px',
+          flexShrink: '0'
         };
       }
+      // Return empty object to use default CSS widths
       return {};
     },
     saveColumnVisibility() {
@@ -577,18 +580,31 @@ export default {
 
       const headerCol = event.target.parentElement;
       this.resizingColumn = columnId;
-      this.resizeStartX = event.clientX;
+
+      // Support both mouse and touch events
+      const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+      this.resizeStartX = clientX;
       this.resizeStartWidth = headerCol.offsetWidth;
 
+      // Add both mouse and touch event listeners
       document.addEventListener('mousemove', this.onResize);
       document.addEventListener('mouseup', this.stopResize);
+      document.addEventListener('touchmove', this.onResize, { passive: false });
+      document.addEventListener('touchend', this.stopResize);
       document.body.style.cursor = 'col-resize';
       document.body.style.userSelect = 'none';
     },
     onResize(event) {
       if (!this.resizingColumn) return;
 
-      const diff = event.clientX - this.resizeStartX;
+      // Prevent default scrolling on touch devices
+      if (event.touches) {
+        event.preventDefault();
+      }
+
+      // Support both mouse and touch events
+      const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+      const diff = clientX - this.resizeStartX;
       const newWidth = Math.max(50, this.resizeStartWidth + diff);
 
       this.$set(this.columnWidths, this.resizingColumn, newWidth);
@@ -601,6 +617,8 @@ export default {
       this.resizingColumn = null;
       document.removeEventListener('mousemove', this.onResize);
       document.removeEventListener('mouseup', this.stopResize);
+      document.removeEventListener('touchmove', this.onResize);
+      document.removeEventListener('touchend', this.stopResize);
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
     },
@@ -1400,8 +1418,21 @@ export default {
       text-overflow: ellipsis;
       white-space: nowrap;
       font-size: 0.9rem;
-      flex: 1;
-      min-width: 100px;
+      flex-shrink: 0;
+
+      // Default widths for each column type
+      &.col-friendlyOrderId { width: 100px; }
+      &.col-storeName { width: 150px; }
+      &.col-status { width: 140px; }
+      &.col-customer { width: 180px; }
+      &.col-created { width: 150px; }
+      &.col-finalAmount { width: 100px; }
+      &.col-deliveryType { width: 140px; }
+      &.col-pickupEta { width: 120px; }
+      &.col-drivingTime { width: 100px; }
+      &.col-orderCode { width: 280px; }
+      &.col-totalTime { width: 100px; }
+      &.col-tracking { width: 100px; }
     }
 
     &.header {
@@ -1429,6 +1460,7 @@ export default {
           width: 8px;
           cursor: col-resize;
           z-index: 10;
+          touch-action: none;
 
           &:hover {
             background: rgba(27, 183, 118, 0.2);
@@ -1450,6 +1482,26 @@ export default {
             opacity: 1;
             width: 2px;
             background: #1bb776;
+          }
+
+          // Make resize handle more touch-friendly on mobile
+          @media (max-width: 768px) {
+            width: 16px;
+
+            &::after {
+              width: 2px;
+              right: 6px;
+              background: #94a3b8;
+            }
+
+            &:active {
+              background: rgba(27, 183, 118, 0.3);
+            }
+
+            &:active::after {
+              width: 3px;
+              background: #1bb776;
+            }
           }
         }
       }
