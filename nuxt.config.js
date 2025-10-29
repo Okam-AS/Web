@@ -244,6 +244,11 @@ export default {
     }
   },
 
+  // Generate configuration for GitHub Pages
+  generate: {
+    fallback: true // This generates a 404.html for SPA fallback mode
+  },
+
   // Legg til sitemap konfigurasjon
   sitemap: {
     hostname: 'https://okam.no', // Endre til din faktiske URL
