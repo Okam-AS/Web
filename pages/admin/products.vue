@@ -1066,7 +1066,7 @@ export default {
     color: white;
     padding: 2px 6px;
     font-size: 0.675rem;
-    z-index: 5;
+    z-index: 1;
     border-top-left-radius: 4px;
   }
 }
