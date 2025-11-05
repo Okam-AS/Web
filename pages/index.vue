@@ -306,7 +306,22 @@ export default {
       {
         tittel: "QR-bordbestilling",
         ikon: "qr_code_scanner",
-        beskrivelse: "Moderne QR-kode løsning som lar gjester bestille direkte fra bordet uten å vente på servitør",
+        beskrivelse: "QR-kode løsning som lar gjester bestille direkte fra bordet uten å vente på servitør",
+      },
+      {
+        tittel: "Regnskapsintegrasjon",
+        ikon: "account_balance",
+        beskrivelse: "Automatisk import til regnskapssystemet, spar tid og reduser feil ved manuell dataregistrering",
+      },
+      {
+        tittel: "AI-analyse av data",
+        ikon: "psychology",
+        beskrivelse: "Få innsikt i salg og kundemønstre med kunstig intelligens som analyserer dine data automatisk",
+      },
+      {
+        tittel: "Alt i én app",
+        ikon: "all_inclusive",
+        beskrivelse: "Styr alle avdelinger og bestillinger fra nettside, Okam og Wolt i én app",
       },
     ],
     fordeler: [
