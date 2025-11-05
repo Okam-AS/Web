@@ -504,7 +504,7 @@ export default {
         return currentSelected;
       },
       set(value) {
-        this.$store.dispatch(ActionName.SetSelectedAdminStore, value);
+        this.$store.dispatch("SetSelectedAdminStore", value);
       }
     },
     currentStoreName() {
@@ -525,7 +525,7 @@ export default {
         // Ensure a store is always selected when stores are loaded
         if (stores.length > 0 && !this.$store.state.selectedAdminStore) {
           this.$nextTick(() => {
-            this.$store.dispatch(ActionName.SetSelectedAdminStore, stores[0].id);
+            this.$store.dispatch("SetSelectedAdminStore", stores[0].id);
           });
         }
       }
@@ -537,7 +537,7 @@ export default {
 
     // Ensure a store is selected on mount
     if (this.adminStores.length > 0 && !this.$store.state.selectedAdminStore) {
-      this.$store.dispatch(ActionName.SetSelectedAdminStore, this.adminStores[0].id);
+      this.$store.dispatch("SetSelectedAdminStore", this.adminStores[0].id);
     }
 
     // Close dropdown when clicking outside
@@ -553,7 +553,7 @@ export default {
       this.dropdownOpen = !this.dropdownOpen;
     },
     selectStore(storeId) {
-      this.$store.dispatch(ActionName.SetSelectedAdminStore, storeId);
+      this.$store.dispatch("SetSelectedAdminStore", storeId);
       this.dropdownOpen = false;
     },
     handleClickOutside(event) {

@@ -48,8 +48,8 @@ export const actions = {
   [ActionName.SetNotificationApproved] () {
     // Used for mobile push
   },
-  [ActionName.SetSelectedAdminStore] ({ commit, state }, storeId) {
-    commit(MutationName.SetSelectedAdminStore, storeId)
+  ["SetSelectedAdminStore"] ({ commit, state }, storeId) {
+    commit("SetSelectedAdminStore", storeId)
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem('selectedAdminStore', storeId)
 
@@ -145,7 +145,7 @@ export const mutations = {
     const index = (cart.items || []).findIndex(x => x.id === lineItem.id)
     Vue.delete(cart.items, index)
   },
-  [MutationName.SetSelectedAdminStore] (state, storeId) {
+  ["SetSelectedAdminStore"] (state, storeId) {
     state.selectedAdminStore = storeId
   }
 }
