@@ -199,9 +199,8 @@
           </NuxtLink>
         </div>
         <button
-          v-if="false"
           class="banner-close"
-          @click="dismissBanner"
+          @click="hideBanner = true"
         >
           <span class="material-icons">close</span>
         </button>
@@ -241,7 +240,7 @@ export default {
     showTransferModal: false,
     showChangeDeliveryModal: false,
     showSmsDriverModal: false,
-    hideBanner: false,
+    hideBanner: true,
   }),
   computed: {
     newOrders() {
@@ -260,8 +259,6 @@ export default {
       return;
     }
     this.adminStores = this.$store.state.currentUser.adminIn;
-    // Check if banner was previously dismissed
-    this.hideBanner = localStorage.getItem('hideStatisticsBanner') === 'true';
     this.loadOrders();
     this.checkMobile();
     window.addEventListener("resize", this.checkMobile);
@@ -277,10 +274,6 @@ export default {
       if (isLoggedIn) {
         this.loadOrders();
       }
-    },
-    dismissBanner() {
-      this.hideBanner = true;
-      localStorage.setItem('hideStatisticsBanner', 'true');
     },
     loadOrders() {
       this.isLoading = true;

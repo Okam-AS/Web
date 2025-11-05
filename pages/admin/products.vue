@@ -1,5 +1,5 @@
 <template>
-  <AdminPage>
+  <AdminPage @login-success="handleLoginSuccess">
     <div class="container">
       <div>
         <h1 style="margin-bottom: 0.5em">Produkter</h1>
@@ -7,17 +7,6 @@
       </div>
       <div class="store-selector">
         <div class="selector-container">
-          <div class="select-wrapper">
-            <select v-model="selectedStore">
-              <option
-                v-for="option in $store.state.currentUser.adminIn"
-                :key="option.id"
-                :value="option.id"
-              >
-                {{ option.name }} ({{ option.id }})
-              </option>
-            </select>
-          </div>
           <div class="filter-wrapper">
             <div class="search-input">
               <span class="search-icon">🔍</span>
@@ -171,11 +160,6 @@
           Neste
         </button>
       </div>
-
-      <LoginModal
-        v-if="showLogin"
-        @close="closeLoginModal"
-      />
 
       <div
         class="product-editor"
@@ -391,14 +375,11 @@
 import AdminPage from "~/components/organisms/AdminPage.vue";
 import axios from "axios";
 import dayjs from "dayjs";
-import LoginModal from "~/components/molecules/LoginModal.vue";
 import $config from "~/core/helpers/configuration";
 
 export default {
-  components: { AdminPage, LoginModal },
+  components: { AdminPage },
   data: () => ({
-    showLogin: false,
-    selectedStore: null,
     products: [],
     draggingProducts: {},
     uploadingFor: null,
@@ -411,6 +392,10 @@ export default {
   }),
 
   computed: {
+    selectedStore() {
+      return this.$store.state.selectedAdminStore;
+    },
+
     filteredProducts() {
       if (!this.productFilter) {
         return this.sortProductsByDate(this.products);
@@ -454,9 +439,6 @@ export default {
 
   watch: {
     selectedStore(newVal) {
-      if (window && window.localStorage) {
-        localStorage.setItem("selectedStore", newVal);
-      }
       if (newVal > 0) {
         this.currentPage = 1;
         this.loadProducts();
@@ -489,35 +471,18 @@ export default {
 
   mounted() {
     if (!this.$store.getters.userIsLoggedIn) {
-      this.showLogin = true;
       return;
     }
 
-    // Try to get stored selection first
-    const storedStore = localStorage.getItem("selectedStore");
-    if (storedStore && this.$store.state.currentUser.adminIn?.find((store) => store.id === parseInt(storedStore))) {
-      this.selectedStore = parseInt(storedStore);
-    }
-    // Otherwise default to first store
-    else if (this.$store.state.currentUser.adminIn?.length > 0) {
-      this.selectedStore = this.$store.state.currentUser.adminIn[0].id;
+    if (this.selectedStore > 0) {
+      this.loadProducts();
     }
   },
 
   methods: {
-    closeLoginModal(isLoggedIn) {
-      this.showLogin = !isLoggedIn;
-
-      // If login successful, set store selection
-      if (isLoggedIn) {
-        const storedStore = localStorage.getItem("selectedStore");
-        if (storedStore && this.$store.state.currentUser.adminIn?.find((store) => store.id === parseInt(storedStore))) {
-          this.selectedStore = parseInt(storedStore);
-        }
-        // Otherwise default to first store
-        else if (this.$store.state.currentUser.adminIn?.length > 0) {
-          this.selectedStore = this.$store.state.currentUser.adminIn[0].id;
-        }
+    handleLoginSuccess() {
+      if (this.selectedStore > 0) {
+        this.loadProducts();
       }
     },
 
@@ -951,16 +916,12 @@ export default {
   }
 
   &::after {
-    content: "🏠";
+    content: "𝍬";
     position: absolute;
     right: 0.75rem;
     top: 50%;
     transform: translateY(-50%);
     pointer-events: none;
-  }
-
-  &.items-per-page::after {
-    content: "𝍬";
   }
 }
 

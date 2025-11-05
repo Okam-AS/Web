@@ -5,22 +5,6 @@
         <h1 style="margin-bottom: 0.5em">Kategorier</h1>
         <p style="margin-bottom: 1.5em">Oversikt over kategorier for valgt butikk. For administrasjon av kategorier, bruk Okam Admin appen.</p>
       </div>
-      <div class="store-selector">
-        <div class="selector-container">
-          <div class="select-wrapper">
-            <select v-model="selectedStore">
-              <option
-                v-for="option in $store.state.currentUser.adminIn"
-                :key="option.id"
-                :value="option.id"
-              >
-                {{ option.name }} ({{ option.id }})
-              </option>
-            </select>
-          </div>
-        </div>
-      </div>
-
       <div
         v-if="loading"
         class="loading-container"
@@ -153,7 +137,6 @@ export default {
 
   data() {
     return {
-      selectedStore: null,
       categories: [],
       loading: false,
       error: null,
@@ -161,6 +144,12 @@ export default {
       draggingCategories: {},
       imageDimensions: {},
     };
+  },
+
+  computed: {
+    selectedStore() {
+      return this.$store.state.selectedAdminStore;
+    },
   },
 
   watch: {
@@ -174,9 +163,8 @@ export default {
   },
 
   mounted() {
-    // Set the first store as default if user is admin in any stores
-    if (this.$store.state.currentUser && this.$store.state.currentUser.adminIn && this.$store.state.currentUser.adminIn.length > 0) {
-      this.selectedStore = this.$store.state.currentUser.adminIn[0].id;
+    if (this.selectedStore) {
+      this.loadCategories();
     }
   },
   methods: {
@@ -315,46 +303,6 @@ export default {
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
-}
-
-.store-selector {
-  margin-bottom: 2rem;
-
-  .selector-container {
-    display: flex;
-    align-items: center;
-  }
-
-  .select-wrapper {
-    position: relative;
-    min-width: 300px;
-
-    select {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      background-color: white;
-      font-size: 1rem;
-      appearance: none;
-
-      &:focus {
-        outline: none;
-        border-color: #0066cc;
-      }
-    }
-
-    &::after {
-      content: "▼";
-      position: absolute;
-      right: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      pointer-events: none;
-      font-size: 0.8rem;
-      color: #666;
-    }
-  }
 }
 
 .loading-container {

@@ -1,5 +1,5 @@
 <template>
-  <AdminPage>
+  <AdminPage @login-success="handleLoginSuccess">
     <div class="dintero-config">
       <div class="dintero-config__header">
         <h1 class="dintero-config__title">Dintero Konfigurasjon</h1>
@@ -22,19 +22,6 @@
         v-else
         class="dintero-config__content"
       >
-        <div class="store-selector-wrapper">
-          <div class="select-wrapper">
-            <select v-model="selectedStore">
-              <option
-                v-for="option in $store.state.currentUser.adminIn"
-                :key="option.id"
-                :value="option.id"
-              >
-                {{ option.name }} ({{ option.id }})
-              </option>
-            </select>
-          </div>
-        </div>
 
         <div class="dintero-create-seller-section">
           <h3>Legg til ny Dintero-selger</h3>
@@ -485,17 +472,12 @@
         </div>
       </div>
     </div>
-    <LoginModal
-      v-if="showLogin"
-      @close="closeLoginModal"
-    />
   </AdminPage>
 </template>
 
 <script>
 import AdminPage from "~/components/organisms/AdminPage.vue";
 import Loading from "~/components/atoms/Loading.vue";
-import LoginModal from "~/components/molecules/LoginModal.vue";
 import Modal from "~/components/atoms/Modal.vue";
 import VatAutocompleteInput from "~/components/atoms/VatAutocompleteInput.vue";
 
@@ -504,16 +486,13 @@ export default {
   components: {
     AdminPage,
     Loading,
-    LoginModal,
     Modal,
     VatAutocompleteInput,
   },
   data() {
     return {
-      selectedStore: 0,
       initialLoading: true,
       isLoading: false,
-      showLogin: false,
       notification: {
         show: false,
         message: "",
@@ -558,6 +537,11 @@ export default {
       },
     };
   },
+  computed: {
+    selectedStore() {
+      return this.$store.state.selectedAdminStore;
+    },
+  },
   watch: {
     selectedStore(newVal) {
       if (newVal > 0) {
@@ -569,7 +553,6 @@ export default {
   },
   mounted() {
     if (!this.$store.getters.userIsLoggedIn) {
-      this.showLogin = true;
       return;
     }
 
@@ -588,19 +571,12 @@ export default {
   },
   methods: {
     init() {
-      if (this.$store.state.currentUser?.adminIn?.length > 0) {
-        this.selectedStore = this.$store.state.currentUser.adminIn[0].id;
-      } else {
-        this.initialLoading = false;
-      }
+      this.initialLoading = false;
       this.loadSellers();
     },
-    closeLoginModal(isLoggedIn) {
-      this.showLogin = !isLoggedIn;
-      if (isLoggedIn) {
-        this.initialLoading = false;
-        this.init();
-      }
+    handleLoginSuccess() {
+      this.initialLoading = false;
+      this.init();
     },
     showNotification(message, type = "success") {
       this.notification = {
@@ -881,38 +857,6 @@ export default {
   padding: 2rem 0;
 }
 
-.store-selector-wrapper {
-  margin-bottom: 2rem;
-}
-
-.select-wrapper {
-  display: inline-block;
-  position: relative;
-}
-
-.select-wrapper select {
-  padding: 0.5rem 2rem 0.5rem 0.75rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 0.25rem;
-  background-color: white;
-  font-size: 1rem;
-  appearance: none;
-  min-width: 250px;
-}
-
-.select-wrapper::after {
-  content: "";
-  position: absolute;
-  right: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 0;
-  height: 0;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 5px solid #4a5568;
-  pointer-events: none;
-}
 
 .dintero-config__section {
   background-color: white;

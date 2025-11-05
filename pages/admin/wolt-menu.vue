@@ -1,5 +1,5 @@
 <template>
-  <AdminPage>
+  <AdminPage @login-success="handleLoginSuccess">
     <div class="wolt-menu">
       <h1 class="wolt-menu__title">Wolt</h1>
       <div
@@ -12,22 +12,6 @@
         v-else
         class="wolt-menu__content"
       >
-        <div
-          v-if="hasMultipleStores"
-          class="store-selector-wrapper"
-        >
-          <div class="select-wrapper">
-            <select v-model="selectedStore">
-              <option
-                v-for="option in $store.state.currentUser.adminIn"
-                :key="option.id"
-                :value="option.id"
-              >
-                {{ option.name }} ({{ option.id }})
-              </option>
-            </select>
-          </div>
-        </div>
 
         <!-- Warning message when Wolt is not configured -->
         <div
@@ -982,7 +966,6 @@ export default {
       deliveryProvider: null,
       fullStore: null, // Full store object with woltMarketplaceConfiguration
       isLoading: false,
-      selectedStore: null,
       showLogin: false,
       isEditMode: false,
       isSaving: false,
@@ -1004,6 +987,9 @@ export default {
     };
   },
   computed: {
+    selectedStore() {
+      return this.$store.state.selectedAdminStore;
+    },
     hasMultipleStores() {
       return this.$store.state.currentUser.adminIn?.length > 1;
     },
@@ -1049,9 +1035,6 @@ export default {
         this.venueStatus = null;
         this.deliveryProvider = null;
       }
-      if (window && window.localStorage) {
-        localStorage.setItem("woltMenuSelectedStore", newVal);
-      }
     },
   },
   mounted() {
@@ -1068,12 +1051,6 @@ export default {
           this.showLogin = true;
           return;
         }
-
-        this.init();
-
-        if (!this.selectedStore && this.$store.state.currentUser.adminIn?.length) {
-          this.selectedStore = this.$store.state.currentUser.adminIn[0].id;
-        }
       })
       .catch((error) => {
         console.error("Error fetching user data:", error);
@@ -1081,19 +1058,6 @@ export default {
       });
   },
   methods: {
-    init() {
-      if (window && window.localStorage) {
-        const storedStore = localStorage.getItem("woltMenuSelectedStore");
-        if (storedStore) {
-          this.selectedStore = parseInt(storedStore);
-        } else if (this.$store.state.currentUser.adminIn?.length) {
-          // Fallback to first store in adminIn array if no stored selection
-          this.selectedStore = this.$store.state.currentUser.adminIn[0].id;
-          // Save this selection for future use
-          localStorage.setItem("woltMenuSelectedStore", this.selectedStore.toString());
-        }
-      }
-    },
     fetchStoreData(storeId) {
       if (!storeId || storeId <= 0) {
         this.fullStore = null;
@@ -1116,12 +1080,6 @@ export default {
     },
     closeLoginModal(isLoggedIn) {
       this.showLogin = !isLoggedIn;
-      if (isLoggedIn) {
-        this.init();
-        if (!this.selectedStore && this.$store.state.currentUser.adminIn?.length) {
-          this.selectedStore = this.$store.state.currentUser.adminIn[0].id;
-        }
-      }
     },
     fetchMenuData(storeId, isPolling = false) {
       if (storeId) {
@@ -1778,38 +1736,6 @@ export default {
   padding: 2rem 0;
 }
 
-.store-selector-wrapper {
-  margin-bottom: 2rem;
-}
-
-.select-wrapper {
-  display: inline-block;
-  position: relative;
-}
-
-.select-wrapper select {
-  padding: 0.5rem 2rem 0.5rem 0.75rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 0.25rem;
-  background-color: white;
-  font-size: 1rem;
-  appearance: none;
-  min-width: 250px;
-}
-
-.select-wrapper::after {
-  content: "";
-  position: absolute;
-  right: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 0;
-  height: 0;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 5px solid #4a5568;
-  pointer-events: none;
-}
 
 .wolt-warning-message {
   display: flex;

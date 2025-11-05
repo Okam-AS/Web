@@ -1,5 +1,5 @@
 <template>
-  <AdminPage>
+  <AdminPage @login-success="handleLoginSuccess">
     <div class="container">
       <div class="table-wrapper">
         <div style="margin: 1em">
@@ -10,13 +10,6 @@
             Et nyttig verktøy for førstegangsimport av varer, for å opprette produkter og kategorier
           </p>
           <div class="store-categories-wrapper">
-            <div class="select-wrapper">
-              <select v-model="selectedStore">
-                <option v-for="option in $store.state.currentUser.adminIn" :key="option.id" :value="option.id">
-                  {{ option.name }} ({{ option.id }})
-                </option>
-              </select>
-            </div>
             <div class="button-group">
               <input class="emoji-btn" type="button" value="👓 Verifiser og importer" @click="showModal = true">
               <input class="emoji-btn" type="button" value="🤖 AI Import" @click="showAIModal = true">
@@ -193,7 +186,6 @@
             <input class="emoji-btn" type="button" value="Avbryt" @click="showAIConfirmModal = false">
           </div>
         </Modal>
-        <LoginModal v-if="showLogin" @close="closeLoginModal" />
         <Modal v-if="showClearRowsModal" @close="showClearRowsModal = false">
           <p>
             Er du sikker på at du ønsker å fjerne alle rader fra denne tabellen? Produkter som allerede er importert
@@ -238,16 +230,13 @@ import Loading from '~/components/atoms/Loading.vue';
 import AdminPage from '~/components/organisms/AdminPage.vue';
 import Modal from '~/components/atoms/Modal.vue';
 import AutocompleteInput from '~/components/atoms/AutocompleteInput.vue';
-import LoginModal from '~/components/molecules/LoginModal.vue';
 
 export default {
-  components: { AdminPage, Modal, AutocompleteInput, LoginModal, Loading },
+  components: { AdminPage, Modal, AutocompleteInput, Loading },
   data() {
     return {
       isLoading: false,
       showModal: false,
-      showLogin: false,
-      selectedStore: null,
       replaceAll: false,
       rows: [],
       importResponse: {},
@@ -271,6 +260,9 @@ export default {
     };
   },
   computed: {
+    selectedStore() {
+      return this.$store.state.selectedAdminStore;
+    },
     allCategoryNames() {
       const fromRows = this.getAllDisctinct('categoryName');
       const fromCategories = this.categories.map(c => c.name);
@@ -323,9 +315,6 @@ export default {
       } else {
         this.categories = [];
       }
-      if (window && window.localStorage) {
-        localStorage.setItem('importSelectedStore', newVal);
-      }
     },
     showExportModal(val) {
       if (val) {
@@ -343,36 +332,27 @@ export default {
   },
   mounted() {
     if (!this.$store.getters.userIsLoggedIn) {
-      this.showLogin = true;
       return;
     }
     this.init();
-    if (!this.selectedStore && this.$store.state.currentUser.adminIn?.length) {
-      this.selectedStore = this.$store.state.currentUser.adminIn[0].id;
+    if (this.selectedStore > 0) {
+      this.getCategories();
     }
   },
   methods: {
     init() {
       if (window && window.localStorage) {
         const storedRows = localStorage.getItem('importRows');
-        const storedStore = localStorage.getItem('importSelectedStore');
 
         if (storedRows) {
           this.$set(this, 'rows', JSON.parse(storedRows));
         } else {
           this.clearRows();
         }
-
-        if (storedStore) {
-          this.selectedStore = parseInt(storedStore);
-        }
       }
     },
-    closeLoginModal(isLoggedIn) {
-      this.showLogin = !isLoggedIn;
-      if (isLoggedIn) {
-        this.init();
-      }
+    handleLoginSuccess() {
+      this.init();
     },
     clearRows() {
       this.replaceAll = false;
@@ -666,20 +646,6 @@ select {
     outline: none;
     border-color: #3b82f6;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-  }
-}
-
-.select-wrapper {
-  position: relative;
-  display: inline-block;
-
-  &::after {
-    content: "🏠";
-    position: absolute;
-    right: 0.75rem;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
   }
 }
 

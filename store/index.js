@@ -6,7 +6,8 @@ export const state = () => ({
   carts: [],
   orders: [],
   stores: [],
-  cartIsLoading: false
+  cartIsLoading: false,
+  selectedAdminStore: null,
 })
 
 export const getters = {
@@ -46,6 +47,18 @@ export const actions = {
   },
   [ActionName.SetNotificationApproved] () {
     // Used for mobile push
+  },
+  [ActionName.SetSelectedAdminStore] ({ commit, state }, storeId) {
+    commit(MutationName.SetSelectedAdminStore, storeId)
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('selectedAdminStore', storeId)
+
+      // Also cache the store name to prevent blinking on reload
+      const store = state.currentUser?.adminIn?.find(s => s.id === storeId)
+      if (store && store.name) {
+        localStorage.setItem('selectedAdminStoreName', store.name)
+      }
+    }
   }
 }
 
@@ -54,6 +67,11 @@ export const mutations = {
     const storedState = localStorage.getItem('state') || false
     if (storedState) {
       Object.assign(state, JSON.parse(storedState))
+    }
+    // Load selected admin store from localStorage
+    const selectedAdminStore = localStorage.getItem('selectedAdminStore')
+    if (selectedAdminStore) {
+      state.selectedAdminStore = parseInt(selectedAdminStore, 10)
     }
   },
   [MutationName.SetOrders] (state, orders) {
@@ -126,5 +144,8 @@ export const mutations = {
     if (!cart) { return }
     const index = (cart.items || []).findIndex(x => x.id === lineItem.id)
     Vue.delete(cart.items, index)
+  },
+  [MutationName.SetSelectedAdminStore] (state, storeId) {
+    state.selectedAdminStore = storeId
   }
 }

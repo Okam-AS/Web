@@ -8,25 +8,6 @@
 
       <!-- Store and Date Selection -->
       <div class="filters-section">
-        <div class="filter-group">
-          <label for="store-select">Velg butikk:</label>
-          <div class="select-wrapper">
-            <select
-              id="store-select"
-              v-model="selectedStoreId"
-              @change="loadData"
-            >
-              <option value="">Velg butikk</option>
-              <option
-                v-for="store in availableStores"
-                :key="store.id"
-                :value="store.id"
-              >
-                {{ store.name }} ({{ store.id }})
-              </option>
-            </select>
-          </div>
-        </div>
 
         <div class="date-filters">
           <div class="date-input">
@@ -206,7 +187,6 @@ export default {
   data() {
     return {
       isLoading: false,
-      selectedStoreId: "",
       settlementData: null,
       dateRange: {
         from: this.getDefaultFromDate(),
@@ -216,19 +196,18 @@ export default {
     };
   },
   computed: {
+    selectedStoreId() {
+      return this.$store.state.selectedAdminStore;
+    },
     availableStores() {
       return this.$store.state.currentUser?.adminIn || [];
     },
   },
   watch: {
-    availableStores: {
-      handler(newStores) {
-        if (newStores && newStores.length > 0 && !this.selectedStoreId) {
-          this.selectedStoreId = newStores[0].id;
-          this.loadData();
-        }
-      },
-      immediate: true
+    selectedStoreId(newVal) {
+      if (newVal) {
+        this.loadData();
+      }
     }
   },
   mounted() {
@@ -236,16 +215,8 @@ export default {
       // Handle not logged in case if needed
       return;
     }
-    this.initializePage();
   },
   methods: {
-    initializePage() {
-      // Set default store if user has only one store
-      if (this.availableStores.length === 1) {
-        this.selectedStoreId = this.availableStores[0].id;
-        this.loadData();
-      }
-    },
 
     getDefaultFromDate() {
       const date = new Date();
@@ -401,50 +372,6 @@ export default {
   margin-bottom: 30px;
 }
 
-.filter-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  min-width: 200px;
-}
-
-.filter-group label {
-  font-weight: 500;
-  color: #292c34;
-}
-
-.select-wrapper {
-  position: relative;
-  display: inline-block;
-  min-width: 200px;
-}
-
-.select-wrapper select {
-  width: 100%;
-  padding: 10px 2.5rem 10px 10px;
-  border-radius: 4px;
-  border: 1px solid #ddd;
-  background-color: white;
-  appearance: none;
-  font-size: 1em;
-  color: #334155;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.select-wrapper select:focus {
-  outline: none;
-  border-color: #1bb776;
-}
-
-.select-wrapper::after {
-  content: "🏠";
-  position: absolute;
-  right: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
 
 .date-filters {
   display: flex;

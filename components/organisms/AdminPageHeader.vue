@@ -1,21 +1,106 @@
 <template>
-  <header class="admin__header">
+  <header class="admin__header" v-if="$store.getters.userIsLoggedIn">
     <div class="admin__header-nav">
       <div class="admin__wrapper">
-        <div class="admin__header-logo">
-          <a href="/admin">
-            <div class="logo-container">
+        <div class="admin__header-left">
+          <a href="/admin" class="home-icon-link">
+            <div class="home-icon">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 836.826 175.846"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
                 <path
-                  d="M330.7,154.371a14.251,14.251,0,0,1-7.139,18.849,29.732,29.732,0,0,1-33.265-6.11l-65.674-65.843V157a18.613,18.613,0,1,1-37.225,0V23.4a18.613,18.613,0,1,1,37.225,0V79.136L290.14,13.453A29.732,29.732,0,0,1,323.4,7.343a14.253,14.253,0,0,1,4.259,23.036L268.263,90.2l59.56,59.983A14.247,14.247,0,0,1,330.7,154.371ZM169.105,90.04c0,47.261-37.855,85.573-84.552,85.573S0,137.3,0,90.04,37.856,4.467,84.553,4.467,169.105,42.779,169.105,90.04Zm-37.225,0c0-26.453-21.189-47.9-47.327-47.9S37.225,63.587,37.225,90.04s21.19,47.9,47.328,47.9S131.88,116.494,131.88,90.04ZM469.931,19.111A29.388,29.388,0,0,0,442.4,0a12.769,12.769,0,0,1-3.8,0,29.388,29.388,0,0,0-27.532,19.111L361.058,153.09A14.012,14.012,0,0,0,374.184,172a29.147,29.147,0,0,0,27.284-18.894L440.5,49.233l39.032,103.873A29.147,29.147,0,0,0,506.816,172a14.012,14.012,0,0,0,13.126-18.91ZM835.942,153.09,785.931,19.111A29.388,29.388,0,0,0,758.4,0c-.3,0-.6.027-.9.045-.3-.018-.6-.045-.9-.045a29.388,29.388,0,0,0-27.532,19.111L691.5,119.759,653.931,19.111A29.388,29.388,0,0,0,626.4,0c-.472,0-.939.025-1.4.071C624.54.025,624.073,0,623.6,0a29.388,29.388,0,0,0-27.532,19.111L546.058,153.09A14.012,14.012,0,0,0,559.184,172a29.147,29.147,0,0,0,27.284-18.894L625,50.563l38.532,102.543A29.147,29.147,0,0,0,690.816,172c.231,0,.456-.023.684-.035.228.012.453.035.684.035a29.147,29.147,0,0,0,27.284-18.894L757.5,51.894l38.032,101.212A29.147,29.147,0,0,0,822.816,172a14.012,14.012,0,0,0,13.126-18.91Z"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
                 />
               </svg>
-              <span class="admin-badge">Admin</span>
             </div>
           </a>
+          <div class="store-selector-container">
+            <div v-if="adminStores.length === 1" class="store-display">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                class="store-icon"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                />
+              </svg>
+              <span class="store-name">{{ adminStores[0].name }}</span>
+            </div>
+            <div v-else-if="adminStores.length !== 1" class="store-dropdown" @click="toggleDropdown">
+              <div class="store-dropdown-trigger">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  class="store-icon"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                  />
+                </svg>
+                <span class="store-name">{{ currentStoreName }}</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  class="chevron-icon"
+                  :class="{ 'chevron-icon--open': dropdownOpen }"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>
+              <transition name="dropdown">
+                <div v-if="dropdownOpen" class="store-dropdown-menu">
+                  <div
+                    v-for="store in adminStores"
+                    :key="store.id"
+                    class="store-dropdown-item"
+                    :class="{ 'store-dropdown-item--active': store.id === selectedStore }"
+                    @click.stop="selectStore(store.id)"
+                  >
+                    <span class="store-dropdown-item-name">{{ store.name }}</span>
+                    <svg
+                      v-if="store.id === selectedStore"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      class="check-icon"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </transition>
+            </div>
+          </div>
         </div>
         <div class="admin__header-menu">
           <button
@@ -33,7 +118,7 @@
               <div class="admin__header-section">
                 <ul class="admin__header-menu-list">
                   <li>
-                    <a href="/admin/settings">
+                    <a href="/admin">
                       <span class="menu-icon">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -49,47 +134,7 @@
                           />
                         </svg>
                       </span>
-                      Innstillinger
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/admin/qr">
-                      <span class="menu-icon">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"
-                          />
-                        </svg>
-                      </span>
-                      QR Bordkort
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/admin/openinghours">
-                      <span class="menu-icon">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                          />
-                        </svg>
-                      </span>
-                      Åpningstider
+                      Dashbord
                     </a>
                   </li>
                   <li>
@@ -428,11 +473,16 @@
 </template>
 
 <script>
+import { ActionName } from '~/core/enums'
+
 export default {
-  data: () => ({
-    menuIsActive: false,
-    onboardingInProgress: false,
-  }),
+  data() {
+    return {
+      menuIsActive: false,
+      onboardingInProgress: false,
+      dropdownOpen: false,
+    };
+  },
 
   computed: {
     isKeyAccountManager() {
@@ -441,52 +491,300 @@ export default {
     isPowerUser() {
       return this.$store.state.currentUser?.isPowerUser;
     },
+    adminStores() {
+      return this.$store.state.currentUser?.adminIn || [];
+    },
+    selectedStore: {
+      get() {
+        // Always ensure a store is selected, default to first if none selected
+        const currentSelected = this.$store.state.selectedAdminStore;
+        if (!currentSelected && this.adminStores.length > 0) {
+          return this.adminStores[0].id;
+        }
+        return currentSelected;
+      },
+      set(value) {
+        this.$store.dispatch(ActionName.SetSelectedAdminStore, value);
+      }
+    },
+    currentStoreName() {
+      const store = this.adminStores.find(s => s.id === this.selectedStore);
+
+      if (store && store.name) {
+        return store.name;
+      }
+
+      return this.adminStores.length > 0 ? this.adminStores[0].name : '';
+    },
+  },
+
+  watch: {
+    adminStores: {
+      immediate: true,
+      handler(stores) {
+        // Ensure a store is always selected when stores are loaded
+        if (stores.length > 0 && !this.$store.state.selectedAdminStore) {
+          this.$nextTick(() => {
+            this.$store.dispatch(ActionName.SetSelectedAdminStore, stores[0].id);
+          });
+        }
+      }
+    }
   },
 
   mounted() {
     this.onboardingInProgress = localStorage.getItem("onboardingInProgress");
+
+    // Ensure a store is selected on mount
+    if (this.adminStores.length > 0 && !this.$store.state.selectedAdminStore) {
+      this.$store.dispatch(ActionName.SetSelectedAdminStore, this.adminStores[0].id);
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', this.handleClickOutside);
   },
+
+  beforeDestroy() {
+    document.removeEventListener('click', this.handleClickOutside);
+  },
+
+  methods: {
+    toggleDropdown() {
+      this.dropdownOpen = !this.dropdownOpen;
+    },
+    selectStore(storeId) {
+      this.$store.dispatch(ActionName.SetSelectedAdminStore, storeId);
+      this.dropdownOpen = false;
+    },
+    handleClickOutside(event) {
+      const dropdown = this.$el.querySelector('.store-dropdown');
+      if (dropdown && !dropdown.contains(event.target)) {
+        this.dropdownOpen = false;
+      }
+    }
+  }
 };
 </script>
 
 <style scoped>
-.admin__header-logo {
+.admin__header-left {
   display: flex;
   align-items: center;
+  gap: 1rem;
   height: 100%;
 }
 
-.admin__header-logo a {
+.home-icon-link {
   text-decoration: none;
   border-bottom: none;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
-.admin__header-logo svg {
-  fill: white;
-  display: block;
-  height: 20px;
-  width: auto;
+.home-icon {
+  width: 40px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
 }
 
-.logo-container {
+.home-icon:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+.home-icon svg {
+  width: 22px;
+  height: 22px;
+  stroke: white;
+  stroke-width: 2;
+}
+
+.store-selector-container {
   position: relative;
   display: flex;
-  flex-direction: row;
   align-items: center;
 }
 
-.admin-badge {
-  background-color: black;
-  color: white;
-  font-size: 0.7rem;
-  font-weight: bold;
-  padding: 2px 6px;
-  border-radius: 10px;
-  margin-left: 8px;
-  text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+/* Single store display */
+.store-display {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 1.25rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.store-display .store-icon {
+  width: 20px;
+  height: 20px;
+  stroke: #1bb776;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+
+.store-display .store-name {
+  color: #1f2937;
+  font-size: 0.95rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Custom dropdown */
+.store-dropdown {
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+
+.store-dropdown-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 1.25rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  min-width: 220px;
+}
+
+.store-dropdown-trigger:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.95) 100%);
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.store-dropdown-trigger .store-icon {
+  width: 20px;
+  height: 20px;
+  stroke: #1bb776;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+
+.store-dropdown-trigger .store-name {
+  flex: 1;
+  color: #1f2937;
+  font-size: 0.95rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.store-dropdown-trigger .chevron-icon {
+  width: 18px;
+  height: 18px;
+  stroke: #6b7280;
+  stroke-width: 2;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+}
+
+.chevron-icon--open {
+  transform: rotate(180deg);
+}
+
+/* Dropdown menu */
+.store-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  z-index: 1000;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.store-dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.store-dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.store-dropdown-item:hover {
+  background-color: rgba(27, 183, 118, 0.08);
+}
+
+.store-dropdown-item--active {
+  background-color: rgba(27, 183, 118, 0.12);
+}
+
+.store-dropdown-item--active:hover {
+  background-color: rgba(27, 183, 118, 0.16);
+}
+
+.store-dropdown-item-name {
+  color: #1f2937;
+  font-size: 0.9rem;
+  font-weight: 500;
+  flex: 1;
+}
+
+.store-dropdown-item--active .store-dropdown-item-name {
+  font-weight: 600;
+  color: #1bb776;
+}
+
+.check-icon {
+  width: 18px;
+  height: 18px;
+  stroke: #1bb776;
+  stroke-width: 2.5;
+  flex-shrink: 0;
+}
+
+/* Dropdown transition */
+.dropdown-enter-active,
+.dropdown-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: top;
+}
+
+.dropdown-enter {
+  opacity: 0;
+  transform: translateY(-8px) scale(0.95);
+}
+
+.dropdown-enter-to {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.dropdown-leave {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.dropdown-leave-to {
+  opacity: 0;
+  transform: translateY(-8px) scale(0.95);
 }
 
 .menu-icon {
