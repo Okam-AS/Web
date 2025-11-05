@@ -308,6 +308,11 @@ export default {
         ikon: "qr_code_scanner",
         beskrivelse: "Moderne QR-kode løsning som lar gjester bestille direkte fra bordet uten å vente på servitør",
       },
+      {
+        tittel: "Regnskapsintegrasjon",
+        ikon: "account_balance",
+        beskrivelse: "Automatisk import til regnskapssystemet hver natt - spar tid og reduser feil ved manuell dataregistrering",
+      },
     ],
     fordeler: [
       {
