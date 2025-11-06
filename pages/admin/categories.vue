@@ -1,10 +1,17 @@
 <template>
   <AdminPage>
     <div class="container">
-      <div>
-        <h1 style="margin-bottom: 0.5em">Kategorier</h1>
-        <p style="margin-bottom: 1.5em">Oversikt over kategorier for valgt butikk. For administrasjon av kategorier, bruk Okam Admin appen.</p>
+      <div class="page-header-section">
+        <div>
+          <h1 style="margin-bottom: 0.5em">Kategorier</h1>
+          <p style="margin-bottom: 1.5em">Administrer kategorier for valgt butikk.</p>
+        </div>
+        <button class="btn btn-create" @click="createNewCategory">
+          <span class="material-icons">add</span>
+          Opprett kategori
+        </button>
       </div>
+
       <div
         v-if="loading"
         class="loading-container"
@@ -25,6 +32,10 @@
         class="no-categories"
       >
         <p>Ingen kategorier funnet for denne butikken.</p>
+        <button class="btn btn-create" @click="createNewCategory" style="margin-top: 1rem">
+          <span class="material-icons">add</span>
+          Opprett første kategori
+        </button>
       </div>
 
       <div
@@ -33,17 +44,57 @@
       >
         <div class="categories-grid">
           <div
-            v-for="category in categories"
+            v-for="(category, index) in categories"
             :key="category.id"
             class="category-card"
-            :class="{ hidden: category.hide }"
+            :class="{
+              hidden: category.hide
+            }"
           >
+            <!-- Reorder Buttons -->
+            <div class="reorder-actions">
+              <button
+                v-if="index > 0"
+                class="action-btn reorder-btn"
+                @click.stop="moveCategory(index, index - 1)"
+                title="Flytt opp"
+              >
+                <span class="material-icons">arrow_upward</span>
+              </button>
+              <button
+                v-if="index < categories.length - 1"
+                class="action-btn reorder-btn"
+                @click.stop="moveCategory(index, index + 1)"
+                title="Flytt ned"
+              >
+                <span class="material-icons">arrow_downward</span>
+              </button>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="category-actions">
+              <button
+                class="action-btn edit-btn"
+                @click.stop="editCategory(category.id)"
+                title="Rediger kategori"
+              >
+                <span class="material-icons">edit</span>
+              </button>
+              <button
+                class="action-btn delete-btn"
+                @click.stop="deleteCategory(category)"
+                title="Slett kategori"
+              >
+                <span class="material-icons">delete</span>
+              </button>
+            </div>
+
             <div
               class="category-image-container"
               :class="{ dragging: draggingCategories[category.id] }"
-              @dragover.prevent="draggingCategories[category.id] = true"
-              @dragleave.prevent="draggingCategories[category.id] = false"
-              @drop.prevent="handleDrop($event, category.id)"
+              @dragover.prevent="handleImageDragOver($event, category.id)"
+              @dragleave.prevent="handleImageDragLeave(category.id)"
+              @drop.prevent="handleImageDrop($event, category.id)"
               @click="triggerFileInput(category.id)"
             >
               <input
@@ -143,6 +194,7 @@ export default {
       uploadingFor: null,
       draggingCategories: {},
       imageDimensions: {},
+      isReordering: false
     };
   },
 
@@ -167,17 +219,116 @@ export default {
       this.loadCategories();
     }
   },
+
   methods: {
-    async handleDrop(event, categoryId) {
+    async createNewCategory() {
+      const name = prompt('Kategorinavn:');
+      if (!name || name.trim() === '') {
+        return;
+      }
+
+      try {
+        const newCategory = {
+          name: name.trim(),
+          storeId: this.selectedStore,
+          orderIndex: this.categories.length,
+          hide: false,
+          soldOut: false,
+          published: false
+        };
+
+        const created = await this._categoryService.Create(newCategory);
+
+        // Navigate to editor
+        this.$router.push({
+          path: '/admin/category-editor',
+          query: { id: created.id }
+        });
+      } catch (err) {
+        console.error('Failed to create category:', err);
+        alert('Kunne ikke opprette kategorien. Vennligst prøv igjen.');
+      }
+    },
+
+    editCategory(categoryId) {
+      this.$router.push({
+        path: '/admin/category-editor',
+        query: { id: categoryId }
+      });
+    },
+
+    async deleteCategory(category) {
+      if (!confirm(`Er du sikker på at du vil slette kategorien "${category.name}"?`)) {
+        return;
+      }
+
+      try {
+        await this._categoryService.Delete(category.id);
+        alert('Kategori slettet');
+        this.loadCategories();
+      } catch (err) {
+        console.error('Failed to delete category:', err);
+        alert('Kunne ikke slette kategorien. Vennligst prøv igjen.');
+      }
+    },
+
+    // Category reordering
+    async moveCategory(fromIndex, toIndex) {
+      if (this.isReordering) return;
+
+      try {
+        this.isReordering = true;
+
+        const newCategories = [...this.categories];
+        const [movedCategory] = newCategories.splice(fromIndex, 1);
+        newCategories.splice(toIndex, 0, movedCategory);
+
+        // Update local state
+        this.categories = newCategories;
+
+        // Assign order indexes
+        this.categories.forEach((category, index) => {
+          category.orderIndex = index;
+        });
+
+        // Save to API
+        await this._categoryService.Reorder(this.selectedStore, this.categories);
+      } catch (err) {
+        console.error('Failed to reorder categories:', err);
+        alert('Kunne ikke lagre rekkefølgen. Vennligst last siden på nytt.');
+        this.loadCategories(); // Reload to get correct order
+      } finally {
+        this.isReordering = false;
+      }
+    },
+
+    // Image upload
+    handleImageDragOver(event, categoryId) {
+      if (event.dataTransfer.types.includes('Files')) {
+        this.draggingCategories[categoryId] = true;
+      }
+    },
+
+    handleImageDragLeave(categoryId) {
+      this.draggingCategories[categoryId] = false;
+    },
+
+    async handleImageDrop(event, categoryId) {
+      this.draggingCategories[categoryId] = false;
+
+      if (!event.dataTransfer.files || event.dataTransfer.files.length === 0) {
+        return;
+      }
+
       const file = event.dataTransfer.files[0];
 
       if (!file.type.match(/image\/(jpeg|png)/)) {
-        alert("Only JPG and PNG files are allowed");
+        alert("Kun JPG og PNG filer er tillatt");
         return;
       }
 
       if (file.size > 5 * 1024 * 1024) {
-        alert("File size must be less than 5MB");
+        alert("Filstørrelsen må være mindre enn 5MB");
         return;
       }
 
@@ -188,10 +339,9 @@ export default {
         await this.uploadImage(categoryId, resizedBlob);
       } catch (error) {
         console.error("Failed to upload image:", error);
-        alert("Failed to upload image");
+        alert("Kunne ikke laste opp bilde");
       } finally {
         this.uploadingFor = null;
-        this.draggingCategories[categoryId] = false;
       }
     },
 
@@ -210,7 +360,7 @@ export default {
 
       // Create a fake drop event to reuse existing logic
       const fakeDropEvent = { dataTransfer: { files: [file] } };
-      this.handleDrop(fakeDropEvent, categoryId);
+      this.handleImageDrop(fakeDropEvent, categoryId);
 
       // Reset the input so the same file can be selected again
       event.target.value = "";
@@ -274,7 +424,7 @@ export default {
         })
         .catch((error) => {
           console.error("Error uploading image:", error);
-          alert("Failed to upload image: " + (error.message || "Unknown error"));
+          alert("Kunne ikke laste opp bilde: " + (error.message || "Ukjent feil"));
         });
     },
 
@@ -305,6 +455,50 @@ export default {
   margin: 0 auto;
 }
 
+.page-header-section {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  .material-icons {
+    font-size: 20px;
+  }
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.btn-create {
+  background: #10b981;
+  color: #fff;
+
+  &:hover {
+    background: #059669;
+  }
+}
+
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -328,15 +522,21 @@ export default {
 }
 
 .no-categories {
-  padding: 2rem;
+  padding: 3rem 2rem;
   text-align: center;
   background-color: #f5f5f5;
-  border-radius: 4px;
+  border-radius: 8px;
+
+  p {
+    font-size: 1.1em;
+    color: #6b7280;
+    margin-bottom: 0;
+  }
 }
 
 .categories-container {
   background-color: #f8f9fa;
-  border-radius: 4px;
+  border-radius: 8px;
   padding: 1rem;
 }
 
@@ -351,18 +551,97 @@ export default {
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
   position: relative;
   height: 200px;
-  cursor: pointer;
+  cursor: default;
+  user-select: none;
 
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+
+    .reorder-actions {
+      opacity: 1;
+    }
+
+    .category-actions {
+      opacity: 1;
+    }
   }
 
   &.hidden {
     opacity: 0.7;
+  }
+}
+
+.reorder-actions {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.category-actions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 5;
+  display: flex;
+  gap: 6px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.action-btn {
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  border-radius: 6px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+  .material-icons {
+    font-size: 20px;
+  }
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.reorder-btn {
+  color: #6b7280;
+
+  &:hover {
+    background: #f3f4f6;
+    color: #111827;
+  }
+}
+
+.edit-btn {
+  color: #0066cc;
+
+  &:hover {
+    background: #eff6ff;
+  }
+}
+
+.delete-btn {
+  color: #ef4444;
+
+  &:hover {
+    background: #fee2e2;
   }
 }
 
@@ -375,6 +654,7 @@ export default {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  cursor: pointer;
 
   &.dragging {
     border: 2px dashed #0066cc;
@@ -445,6 +725,7 @@ export default {
   right: 0;
   height: 100%;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.7) 100%);
+  pointer-events: none;
 }
 
 .category-status-top {
@@ -457,6 +738,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+  pointer-events: none;
 }
 
 .category-details {
@@ -466,6 +748,7 @@ export default {
   right: 0;
   padding: 1rem;
   z-index: 2;
+  pointer-events: none;
 }
 
 .category-name {
