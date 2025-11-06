@@ -10,6 +10,28 @@
     >
       <!-- Regular Admin Section -->
       <div class="dashboard__section">
+        <!-- Status Message Banner -->
+        <div
+          v-if="hasStatusMessage"
+          class="status-banner"
+          @click="scrollToStatusCard"
+        >
+          <div class="status-banner__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div class="status-banner__content">
+            <div class="status-banner__label">Aktiv statusmelding - synlig for kunder</div>
+            <div class="status-banner__message">{{ statusMessage }}</div>
+          </div>
+          <div class="status-banner__arrow">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </div>
+
         <div class="welcome-container">
           <h1
             v-if="showWelcome"
@@ -184,18 +206,29 @@
               </div>
             </div>
 
-            <!-- Status Message Card (only show if has message or editing) -->
-            <div v-if="hasStatusMessage || editingStatus" class="store-card store-card--warning">
+            <!-- Status Message Card -->
+            <div ref="statusCard" class="store-card">
               <div class="store-card__header">
-                <div class="store-card__icon-wrapper store-card__icon-wrapper--warning">
+                <div class="store-card__icon-wrapper">
                   <svg class="store-card__icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
                 <h3 class="store-card__title">Statusmelding</h3>
               </div>
 
-              <div v-if="!editingStatus" class="store-card__content">
+              <div v-if="!editingStatus && !hasStatusMessage" class="store-card__content">
+                <p class="store-card__empty-state">Ingen aktiv statusmelding</p>
+                <button class="store-card__action-btn" @click="editingStatus = true">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                  </svg>
+                  Legg til statusmelding
+                </button>
+              </div>
+
+              <div v-if="!editingStatus && hasStatusMessage" class="store-card__content">
+                <p class="status-info-text">Denne meldingen er synlig for kunder på butikksiden</p>
                 <div class="status-display">
                   <p class="status-message">{{ statusMessage }}</p>
                 </div>
@@ -215,7 +248,7 @@
                 </div>
               </div>
 
-              <div v-else class="store-card__edit">
+              <div v-if="editingStatus" class="store-card__edit">
                 <div class="form-group">
                   <label>Statusmelding til kunder</label>
                   <textarea
@@ -224,10 +257,12 @@
                     rows="4"
                     placeholder="Skriv en statusmelding som vil vises på butikksiden..."
                   ></textarea>
+                  <p class="form-helper-text">Statusmeldingen vises på butikksiden for å informere kunder</p>
                 </div>
                 <div class="form-actions">
                   <button class="btn btn-primary" :disabled="!statusMessage.trim()" @click="updateStatusMessage">Lagre</button>
                   <button v-if="hasStatusMessage" class="btn btn-secondary" @click="cancelStatusEdit">Avbryt</button>
+                  <button v-else class="btn btn-secondary" @click="editingStatus = false">Avbryt</button>
                 </div>
               </div>
 
@@ -603,12 +638,23 @@ export default {
 
     cancelStatusEdit() {
       if (this.hasStatusMessage) {
+        // Fetch original status message from store
+        const store = this.$store.state.stores?.find(s => s.id === this.selectedStore);
+        if (store) {
+          this.statusMessage = store.statusMessage || "";
+        }
         this.editingStatus = false;
       }
     },
 
     toggleInfoExpanded(section) {
       this.infoExpanded[section] = !this.infoExpanded[section];
+    },
+
+    scrollToStatusCard() {
+      if (this.$refs.statusCard) {
+        this.$refs.statusCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     },
 
     handleLoginSuccess() {
@@ -699,10 +745,6 @@ export default {
   transform: translateY(-2px);
 }
 
-.store-card--warning {
-  border-left: 4px solid #f59e0b;
-}
-
 .store-card__header {
   display: flex;
   align-items: center;
@@ -721,18 +763,10 @@ export default {
   justify-content: center;
 }
 
-.store-card__icon-wrapper--warning {
-  background-color: rgba(245, 158, 11, 0.1);
-}
-
 .store-card__icon {
   width: 1.5rem;
   height: 1.5rem;
   color: #292c34;
-}
-
-.store-card__icon-wrapper--warning .store-card__icon {
-  color: #f59e0b;
 }
 
 .store-card__title {
@@ -938,11 +972,88 @@ export default {
   border-radius: 0.375rem;
 }
 
-/* Status Display */
+/* Status Banner at Top */
+.status-banner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: #fef3c7;
+  border: 2px solid #f59e0b;
+  border-radius: 0.75rem;
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  animation: slideDown 0.4s ease-out;
+}
+
+.status-banner:hover {
+  background: #fde68a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+}
+
+.status-banner__icon {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: #f59e0b;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-banner__icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: white;
+}
+
+.status-banner__content {
+  flex: 1;
+}
+
+.status-banner__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #92400e;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+.status-banner__message {
+  font-size: 1rem;
+  color: #292c34;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.status-banner__arrow {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #f59e0b;
+}
+
+.status-banner__arrow svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Status Display in Card */
+.status-info-text {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0 0 1rem 0;
+  font-style: italic;
+}
+
 .status-display {
   padding: 1rem;
   background: #fef3c7;
-  border: 1px solid #fbbf24;
+  border: 2px solid #f59e0b;
   border-radius: 0.5rem;
 }
 
@@ -951,6 +1062,21 @@ export default {
   color: #292c34;
   margin: 0;
   line-height: 1.6;
+}
+
+.store-card__empty-state {
+  color: #94a3b8;
+  font-size: 0.875rem;
+  margin: 0 0 1rem 0;
+  font-style: italic;
+}
+
+.form-helper-text {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+  font-style: italic;
 }
 
 /* Toggle Switch */
