@@ -557,6 +557,11 @@ export default {
       this.dropdownOpen = false;
     },
     handleClickOutside(event) {
+      // Check if $el exists and is an element before querying
+      if (!this.$el || typeof this.$el.querySelector !== 'function') {
+        return;
+      }
+
       const dropdown = this.$el.querySelector('.store-dropdown');
       if (dropdown && !dropdown.contains(event.target)) {
         this.dropdownOpen = false;

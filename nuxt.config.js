@@ -92,7 +92,6 @@ export default {
       messages: {
         en: {
           back: 'Back',
-          enterPhoneNumberLabel: 'Enter your phone number to receive a SMS code',
           enterPhoneNumberPlaceholder: 'Phone',
           enterPhoneNumberSubmit: '📱 Send',
           enterPhoneCodeLabel: 'Enter SMS code',
@@ -103,7 +102,6 @@ export default {
         },
         no: {
           back: 'Tilbake',
-          enterPhoneNumberLabel: 'Skriv ditt telefonnummer for å få tilsendt sms-kode',
           enterPhoneNumberPlaceholder: 'Telefon',
           enterPhoneNumberSubmit: 'Send kode',
           enterPhoneCodeLabel: 'Skriv inn kode fra SMS for å logge inn:',

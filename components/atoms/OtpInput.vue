@@ -39,6 +39,10 @@ export default {
     loading: {
       type: Boolean,
       default: false
+    },
+    error: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -46,6 +50,20 @@ export default {
       iRefs: ['i0', 'i1', 'i2', 'i3', 'i4', 'i5'],
       values: ['', '', '', '', '', ''],
       activeIndex: 0
+    }
+  },
+  watch: {
+    error(newVal) {
+      if (newVal) {
+        // Clear all values and focus first input
+        this.values = ['', '', '', '', '', '']
+        this.$nextTick(() => {
+          const firstInput = this.getRef('i0')
+          if (firstInput) {
+            firstInput.focus()
+          }
+        })
+      }
     }
   },
   methods: {
@@ -157,27 +175,57 @@ export default {
 }
 </script>
 
-<style lang="scss">
-@import "../../assets/sass/common.scss";
-
+<style lang="scss" scoped>
 .otp-input {
-  margin-bottom: rem(16);
+  margin-bottom: 1rem;
   text-align: center;
 
   &__wrapper {
     position: relative;
     display: flex;
-    justify-content: stretch;
-    margin: 0 rem(-24);
-    background-color: $color-support-light;
-    padding: rem(24);
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1.5rem 0;
   }
 
   .input {
-    width: rem(40);
-    height: rem(40);
+    width: 52px;
+    height: 56px;
     text-align: center;
-    margin: 0 auto;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+    background: #f9fafb;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    caret-color: #1bb776;
+
+    &:hover {
+      border-color: #cbd5e0;
+      background: #ffffff;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: #1bb776;
+      background: #ffffff;
+      box-shadow: 0 0 0 4px rgba(27, 183, 118, 0.1);
+      transform: translateY(-2px);
+    }
+
+    // When input has a value
+    &:not(:placeholder-shown) {
+      border-color: #1bb776;
+      background: #ffffff;
+      color: #1bb776;
+    }
+
+    @media (max-width: 480px) {
+      width: 44px;
+      height: 48px;
+      font-size: 1.25rem;
+    }
   }
 }
 </style>

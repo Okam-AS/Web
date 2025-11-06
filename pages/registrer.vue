@@ -4,19 +4,29 @@
     <main class="page-content">
       <div class="article">
         <div class="wrapper">
-          <h1 class="heading-1 u-center">Registrer din butikk</h1>
+          <div class="page-header-section">
+            <h1 class="heading-1 u-center">Registrer din butikk</h1>
+            <p class="page-subtitle">Få i gang din digitale bestillingsløsning på få minutter</p>
+          </div>
 
           <!-- Login Status Bar -->
           <div
             v-if="userIsLoggedIn"
             class="login-status"
           >
-            <span class="status-icon">✓</span>
-            <span>Admin: {{ user.phoneNumber }}</span>
+            <div class="login-status__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <span class="login-status__text">Innlogget som: <strong>{{ user.phoneNumber }}</strong></span>
             <button
               class="logout-btn"
               @click="logout"
             >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+              </svg>
               Bytt nummer
             </button>
           </div>
@@ -232,20 +242,30 @@
               </button>
             </div>
           </div>
+
+          <!-- Existing User Alert -->
+          <div class="alert-banner alert-banner--info">
+            <div class="alert-banner__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+              </svg>
+            </div>
+            <div class="alert-banner__content">
+              <h3 class="alert-banner__title">Er du allerede registrert?</h3>
+              <p class="alert-banner__text">
+                Hvis du allerede har en butikk registrert hos Okam, kan du logge inn her.
+              </p>
+              <a href="/admin" class="alert-banner__link">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                </svg>
+                Gå til Admin Panel
+              </a>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Flyttet utenfor article og wrapper -->
-      <div class="admin-login-prompt">
-        <p>Er du allerede registrert?</p>
-        <a
-          href="/admin"
-          target="_blank"
-          class="admin-link"
-        >
-          Logg inn til Admin Panel her
-        </a>
-      </div>
     </main>
     <page-footer />
   </div>
@@ -441,15 +461,173 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// Page Header Section
+.page-header-section {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  animation: fadeIn 0.6s ease-out;
+
+  .heading-1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #292c34;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+
+    @media (max-width: 768px) {
+      font-size: 2rem;
+    }
+  }
+
+  .page-subtitle {
+    font-size: 1.125rem;
+    color: #6b7280;
+    font-weight: 400;
+    margin: 0;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+
+    @media (max-width: 768px) {
+      font-size: 1rem;
+    }
+  }
+}
+
+// Alert Banner Styles
+.alert-banner {
+  display: flex;
+  gap: 0.875rem;
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  margin: 2.5rem auto 0;
+  max-width: 500px;
+  animation: slideUp 0.4s ease-out;
+
+  &--info {
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+    border: 1px solid #d1d5db;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f3f4f6;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+
+    svg {
+      width: 22px;
+      height: 22px;
+      color: #6b7280;
+    }
+  }
+
+  &__content {
+    flex: 1;
+  }
+
+  &__title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0 0 0.375rem 0;
+  }
+
+  &__text {
+    font-size: 0.875rem;
+    color: #4b5563;
+    margin: 0 0 0.75rem 0;
+    line-height: 1.5;
+
+    strong {
+      font-weight: 600;
+      color: #1f2937;
+    }
+  }
+
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 1rem;
+    background: #f3f4f6;
+    color: #1f2937;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e5e7eb;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover {
+      background: #e5e7eb;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    text-align: center;
+    padding: 1rem;
+    margin-top: 2rem;
+
+    &__icon {
+      margin: 0 auto;
+    }
+
+    &__link {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .registration-form {
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
-  padding: 0 20px;
-  position: relative; /* Add this to make the absolute positioning of the overlay work */
+  padding: 2rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+  position: relative;
+  animation: fadeIn 0.4s ease-out;
+
+  @media (max-width: 600px) {
+    padding: 1.5rem;
+  }
 }
 
 .form-section {
-  margin-top: 20px;
+  margin-top: 1.5rem;
 }
 
 .field-group {
@@ -474,10 +652,12 @@ export default {
 }
 
 .field-label {
-  margin-bottom: 0;
+  display: block;
+  margin-bottom: 0.5rem;
   font-weight: 600;
-  color: #333;
-  font-size: 16px;
+  color: #374151;
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
 }
 
 // Base input styles
@@ -533,12 +713,36 @@ input[type="number"],
 }
 
 .error-message {
-  background: #ffebee;
-  padding: 16px;
-  margin-bottom: 24px;
-  border-radius: 8px;
-  border: 1px solid rgba(237, 94, 104, 0.3);
-  color: #d32f2f;
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  border-radius: 12px;
+  border: 2px solid #ef4444;
+  color: #991b1b;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+  animation: shake 0.5s;
+
+  &::before {
+    content: '⚠';
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-4px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(4px);
+  }
 }
 
 .terms-section {
@@ -584,32 +788,66 @@ input[type="number"],
 
 .cta-link {
   width: 100%;
-  background: #1bb776;
+  background: linear-gradient(135deg, #1bb776 0%, #159b62 100%);
   color: white;
-  padding: 16px 24px;
+  padding: 1rem 1.5rem;
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
+  border-radius: 12px;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
-  margin-top: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 1rem;
+  box-shadow: 0 4px 12px rgba(27, 183, 118, 0.3);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
 
   &:hover {
-    background: #169c64;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #169c64 0%, #138a56 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(27, 183, 118, 0.4);
+
+    &::before {
+      width: 300px;
+      height: 300px;
+    }
   }
 
   &:active {
     transform: translateY(0);
-    box-shadow: none;
+    box-shadow: 0 2px 8px rgba(27, 183, 118, 0.3);
   }
 
   &.disabled-btn {
-    opacity: 0.7;
+    opacity: 0.6;
     pointer-events: none;
-    background: #9e9e9e;
+    background: linear-gradient(135deg, #9e9e9e 0%, #757575 100%);
+    box-shadow: none;
+    transform: none;
+  }
+
+  &.secondary {
+    background: #f5f5f5;
+    color: #333;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    &:hover {
+      background: #e0e0e0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
   }
 }
 
@@ -641,45 +879,121 @@ input[type="number"],
 }
 
 .login-status {
-  background: #d5f6e5;
-  padding: 12px 20px;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
   display: flex;
   align-items: center;
-  gap: 12px;
-  max-width: 560px;
-  margin: 0 auto 24px;
+  gap: 1rem;
+  max-width: 700px;
+  margin: 0 auto 2rem;
+  border: 2px solid #10b981;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+  animation: slideDown 0.4s ease-out;
 
-  .status-icon {
-    color: #1bb776;
-    font-weight: bold;
+  &__icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #10b981;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+
+    svg {
+      width: 24px;
+      height: 24px;
+      color: white;
+    }
+  }
+
+  &__text {
+    flex: 1;
+    color: #065f46;
+    font-size: 0.95rem;
+    font-weight: 500;
+
+    strong {
+      font-weight: 700;
+      color: #047857;
+    }
   }
 
   .logout-btn {
-    margin-left: auto;
-    background: none;
-    border: none;
-    color: #1bb776;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: white;
+    border: 2px solid #10b981;
+    color: #10b981;
     cursor: pointer;
-    padding: 4px 8px;
-    font-size: 14px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
 
     &:hover {
-      text-decoration: underline;
+      background: #10b981;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 600px) {
+    flex-wrap: wrap;
+    padding: 1rem;
+
+    .logout-btn {
+      width: 100%;
+      justify-content: center;
     }
   }
 }
 
 .login-section {
-  max-width: 400px;
+  max-width: 500px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 2rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+  animation: fadeIn 0.4s ease-out;
 
   .heading-2 {
     text-align: center;
-    margin-bottom: 32px;
-    font-size: 24px;
-    color: #333;
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #292c34;
+  }
+
+  @media (max-width: 600px) {
+    padding: 1.5rem;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
@@ -789,82 +1103,38 @@ input[type="number"],
   margin-top: 8px;
 }
 
-// Add these styles at the bottom
-.admin-login-prompt {
-  text-align: center;
-  padding: 40px 20px 40px;
-  background: #f8f9fa;
-  margin-top: 20px;
-  position: relative;
-  z-index: 0;
-  margin-bottom: -20px;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100vw;
-    height: 100%;
-    background: inherit;
-    z-index: -1;
-  }
-
-  p {
-    margin: 0 0 12px;
-    color: #495057;
-    font-size: 18px;
-  }
-
-  .admin-link {
-    display: inline-block;
-    color: #1bb776;
-    font-weight: 600;
-    font-size: 18px;
-    text-decoration: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    transition: all 0.2s ease;
-
-    &:hover {
-      background: rgba(27, 183, 118, 0.1);
-      transform: translateY(-1px);
-    }
-
-    &:active {
-      transform: translateY(0);
-    }
-  }
-}
-
 .loading-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  z-index: 1;
+  z-index: 10;
+  border-radius: 16px;
+  animation: fadeIn 0.3s ease-out;
 
   .loading-spinner {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
-    border: 4px solid #1bb776;
-    border-top-color: transparent;
-    animation: spin 1s linear infinite;
+    border: 4px solid #e5e7eb;
+    border-top-color: #1bb776;
+    animation: spin 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+    box-shadow: 0 4px 12px rgba(27, 183, 118, 0.2);
   }
 
   .loading-message {
-    font-size: 18px;
+    font-size: 1.125rem;
     font-weight: 600;
-    color: #333;
-    margin-top: 16px;
+    color: #292c34;
+    margin-top: 1.25rem;
+    animation: pulse 1.5s ease-in-out infinite;
   }
 }
 
@@ -874,6 +1144,15 @@ input[type="number"],
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
   }
 }
 </style>
