@@ -1,12 +1,29 @@
 <template>
   <AdminPage>
     <div class="ongoing-orders">
-      <Loading
-        v-if="isLoading"
-        :loading="true"
-      />
+      <div class="page-header">
+        <h1>Pågående bestillinger</h1>
+      </div>
 
-      <div class="orders-grid">
+      <p
+        v-show="adminStores.length > 1"
+        class="page-description"
+
+      >
+        Her viser alle pågående bestillinger på dine {{ adminStores.length }} avdelinger
+      </p>
+
+      <div
+        v-if="isLoading"
+        class="loading-container"
+      >
+        <Loading :loading="true" />
+      </div>
+
+      <div
+        v-else
+        class="orders-grid"
+      >
         <!-- New Orders Column -->
         <div
           class="orders-column"
@@ -15,7 +32,10 @@
           <div
             class="column-header"
             :class="{ 'is-clickable': isMobile && newOrders.length }"
-            @click="isMobile && newOrders.length && (collapsedColumns.new = !collapsedColumns.new)"
+            @touchstart="handleTouchStart"
+            @touchmove="handleTouchMove"
+            @touchend="handleTouchEnd('new')"
+            @click.stop="handleColumnClick('new', newOrders.length)"
           >
             <h2>Nye</h2>
             <span
@@ -59,7 +79,10 @@
         >
           <div
             class="column-header"
-            @click="isMobile && (collapsedColumns.processing = !collapsedColumns.processing)"
+            @touchstart="handleTouchStart"
+            @touchmove="handleTouchMove"
+            @touchend="handleTouchEnd('processing')"
+            @click.stop="handleColumnClick('processing')"
           >
             <h2>Pågående</h2>
             <span
@@ -105,7 +128,10 @@
         >
           <div
             class="column-header"
-            @click="isMobile && (collapsedColumns.ready = !collapsedColumns.ready)"
+            @touchstart="handleTouchStart"
+            @touchmove="handleTouchMove"
+            @touchend="handleTouchEnd('ready')"
+            @click.stop="handleColumnClick('ready')"
           >
             <h2>Klar</h2>
             <span
@@ -241,6 +267,8 @@ export default {
     showChangeDeliveryModal: false,
     showSmsDriverModal: false,
     hideBanner: true,
+    touchStartY: 0,
+    touchMoved: false,
   }),
   computed: {
     newOrders() {
@@ -447,6 +475,27 @@ export default {
       // Optionally reload orders or show a notification
       this.loadOrders();
     },
+    handleTouchStart(e) {
+      this.touchStartY = e.touches[0].clientY;
+      this.touchMoved = false;
+    },
+    handleTouchMove(e) {
+      const touchDeltaY = Math.abs(e.touches[0].clientY - this.touchStartY);
+      if (touchDeltaY > 10) {
+        this.touchMoved = true;
+      }
+    },
+    handleTouchEnd(column) {
+      if (!this.touchMoved && this.isMobile) {
+        this.collapsedColumns[column] = !this.collapsedColumns[column];
+      }
+      this.touchMoved = false;
+    },
+    handleColumnClick(column, hasOrders = true) {
+      if (!this.isMobile) return;
+      if (column === 'new' && !hasOrders) return;
+      this.collapsedColumns[column] = !this.collapsedColumns[column];
+    },
   },
 };
 </script>
@@ -454,65 +503,131 @@ export default {
 @import "../../assets/sass/common.scss";
 
 .ongoing-orders {
-  max-width: 100%;
-  margin: 0;
-  padding: 0;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
   display: flex;
   flex-direction: column;
   height: 100%;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+}
+
+.page-header {
+  margin-bottom: 16px;
+  margin-top: 16px;
+
+  h1 {
+    font-size: 2em;
+    font-weight: 600;
+    color: #292c34;
+    margin: 0;
+
+    @media (max-width: 768px) {
+      font-size: 1.5em;
+    }
+  }
+}
+
+.page-description {
+  color: #666;
+  font-size: 0.9em;
+  line-height: 1.5;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  padding: 60px 24px;
 }
 
 .orders-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: 20px;
   flex: 1;
   min-height: 0;
-  padding: 24px;
   height: 100%;
-  margin-bottom: 40px;
+  margin-bottom: 32px;
+  margin-top: 32px;
+  align-items: start;
+
+  @media (max-width: 1200px) {
+    gap: 16px;
+  }
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    padding: 16px;
-    gap: 16px;
+    gap: 12px;
     margin-bottom: 24px;
   }
 }
 
 .orders-column {
-  background: #f8f9fa;
+  background: #fff;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
   min-height: 0;
   height: 100%;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e8e8e8;
+  transition: all 0.2s ease;
 
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+  @media (min-width: 769px) {
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+  }
+
+  &.is-collapsed {
+    @media (max-width: 768px) {
+      .orders-list {
+        display: none;
+      }
+    }
   }
 
   .column-header {
     padding: 20px;
-    background: #292c34;
-    border-radius: 12px 12px 0 0;
+    background: linear-gradient(135deg, #292c34 0%, #1a1d23 100%);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    cursor: pointer;
     user-select: none;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
+    min-height: 64px;
+
+    @media (min-width: 769px) {
+      cursor: default;
+    }
+
+    @media (max-width: 768px) {
+      cursor: pointer;
+      padding: 16px 20px;
+      min-height: 56px;
+
+      &:active {
+        background: linear-gradient(135deg, #1a1d23 0%, #292c34 100%);
+      }
+    }
 
     h2 {
       color: #d5f6e5;
       margin: 0;
-      font-size: 1.25em;
+      font-size: 1.1em;
       font-weight: 600;
       letter-spacing: 0.5px;
+
+      @media (max-width: 768px) {
+        font-size: 1em;
+      }
     }
   }
 
@@ -520,66 +635,74 @@ export default {
     flex: 1;
     overflow-y: auto;
     padding: 20px;
+    background: #f8f9fa;
     height: calc(100% - 64px);
-    transition: all 0.3s ease;
+
+    @media (max-width: 768px) {
+      padding: 16px;
+    }
 
     &::-webkit-scrollbar {
       width: 8px;
     }
 
     &::-webkit-scrollbar-track {
-      background: #f8f9fa;
+      background: transparent;
       border-radius: 4px;
     }
 
     &::-webkit-scrollbar-thumb {
-      background: #ddd;
+      background: #cbd5e0;
       border-radius: 4px;
+      transition: background 0.2s ease;
 
       &:hover {
-        background: #ccc;
+        background: #a0aec0;
       }
     }
   }
 }
 
 .count-badge {
-  background: #d5f6e5;
+  background: rgba(213, 246, 229, 0.95);
   color: #292c34;
-  padding: 4px 12px;
+  padding: 6px 14px;
   border-radius: 20px;
-  font-size: 0.9em;
-  font-weight: 600;
+  font-size: 0.85em;
+  font-weight: 700;
   letter-spacing: 0.5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  min-width: 32px;
+  text-align: center;
+  display: inline-block;
 }
 
 .empty-state {
   text-align: center;
-  padding: 24px;
-  color: #718096;
-  font-style: italic;
-  background: #f8f9fa;
+  padding: 48px 24px;
+  color: #a0aec0;
+  font-size: 0.95em;
+  font-weight: 500;
+  background: transparent;
   border-radius: 8px;
-  margin: 12px 0;
+  margin: 0;
 }
 
 .info-banner {
-  background: #f5f5f5;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 12px 16px;
-  margin: 24px;
-  margin-top: 0;
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 
   @media (max-width: 768px) {
-    margin: 16px;
-    margin-top: 0;
-    padding: 10px 14px;
+    padding: 14px 16px;
+    margin-bottom: 24px;
   }
 
   .banner-content {
@@ -590,16 +713,16 @@ export default {
     flex-wrap: wrap;
 
     .banner-text {
-      color: #666;
-      font-size: 0.85em;
-      font-weight: 400;
+      color: #4a5568;
+      font-size: 0.9em;
+      font-weight: 500;
     }
 
     .banner-link {
       color: #1bb776;
-      font-weight: 500;
+      font-weight: 600;
       text-decoration: none;
-      font-size: 0.85em;
+      font-size: 0.9em;
       white-space: nowrap;
       transition: all 0.2s ease;
 
@@ -611,46 +734,29 @@ export default {
   }
 
   .banner-close {
-    background: none;
+    background: transparent;
     border: none;
     cursor: pointer;
-    padding: 4px;
+    padding: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 4px;
+    border-radius: 6px;
     transition: all 0.2s ease;
 
     .material-icons {
-      color: #999;
-      font-size: 18px;
+      color: #a0aec0;
+      font-size: 20px;
     }
 
     &:hover {
-      background: rgba(0, 0, 0, 0.05);
+      background: #f8f9fa;
 
       .material-icons {
-        color: #666;
+        color: #4a5568;
       }
     }
   }
 }
 
-.column-header {
-  @media (min-width: 769px) {
-    cursor: default;
-
-    &:hover {
-      opacity: 1;
-    }
-  }
-
-  &.is-clickable {
-    cursor: pointer;
-
-    &:hover {
-      opacity: 0.9;
-    }
-  }
-}
 </style>

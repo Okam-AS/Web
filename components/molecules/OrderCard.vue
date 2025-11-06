@@ -342,15 +342,21 @@ export default {
 @import "../../assets/sass/common.scss";
 
 .order-card {
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   background: white;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1.5px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: #cbd5e0;
   }
 
   .order-header {
@@ -425,7 +431,12 @@ export default {
   }
 
   &.is-warning {
+    border: 2px solid #ff4444;
     border-left: 4px solid #ff4444;
+
+    &:hover {
+      border-color: #ff4444;
+    }
 
     .order-header {
       background: #fff5f5;
