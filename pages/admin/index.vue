@@ -33,11 +33,9 @@
         </div>
 
         <div class="welcome-container">
-          <h1
-            v-if="showWelcome"
-            class="welcome-text"
-          >
-            Velkommen, {{ $store.state.currentUser.fullName }}!
+          <h1 class="welcome-text">
+            <template v-if="userName">Velkommen {{ userName }}!</template>
+            <template v-else>Velkommen!</template>
           </h1>
           <p class="welcome-subtitle">Her er dine administrative verktøy og funksjoner</p>
         </div>
@@ -457,8 +455,8 @@ export default {
     ],
   }),
   computed: {
-    showWelcome() {
-      return this.$store.state.currentUser?.fullName ?? false;
+    userName() {
+      return this.$store.state.currentUser?.fullName || null;
     },
     selectedStore() {
       return this.$store.state.selectedAdminStore;
