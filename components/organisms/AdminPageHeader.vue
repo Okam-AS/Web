@@ -656,7 +656,7 @@ export default {
   align-items: center;
   gap: 0.75rem;
   padding: 0.625rem 1.25rem;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%);
+  background: white;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -666,7 +666,6 @@ export default {
 }
 
 .store-dropdown-trigger:hover {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.95) 100%);
   border-color: rgba(255, 255, 255, 0.6);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
   transform: translateY(-1px);

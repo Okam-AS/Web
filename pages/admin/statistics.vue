@@ -326,6 +326,93 @@
           </div>
         </div>
 
+        <!-- Product List Section -->
+        <div
+          v-if="statistics && selectedDateFilter !== 'ThisYear'"
+          class="product-list-section"
+        >
+          <button
+            v-if="ordersSummary.length === 0 && !isLoadingItems"
+            class="show-product-list-btn"
+            @click="loadProductList"
+          >
+            <span class="material-icons">list_alt</span>
+            Vis produktliste
+          </button>
+
+          <div
+            v-if="isLoadingItems"
+            class="product-list-loading"
+          >
+            <div
+              v-for="i in 5"
+              :key="i"
+              class="product-list-skeleton-item"
+            >
+              <div class="skeleton-line skeleton-quantity"></div>
+              <div class="skeleton-line skeleton-name"></div>
+              <div class="skeleton-line skeleton-amount"></div>
+            </div>
+          </div>
+
+          <div
+            v-else-if="ordersSummary.length > 0"
+            class="product-list-card"
+          >
+            <div class="product-list-header">
+              <h3>Produktliste</h3>
+              <button
+                class="clear-list-btn"
+                @click="ordersSummary = []; openOrderSummaryIndices = []"
+              >
+                <span class="material-icons">close</span>
+              </button>
+            </div>
+
+            <div class="product-list-items">
+              <div
+                v-for="(item, index) in ordersSummary"
+                :key="index"
+                class="product-item"
+                :class="{ 'has-options': item.options && item.options.length > 0 }"
+              >
+                <div
+                  class="product-item-main"
+                  @click="item.options && item.options.length > 0 ? toggleProductItem(index) : null"
+                >
+                  <span class="product-quantity">{{ item.quantity }}x</span>
+                  <span class="product-name">
+                    {{ item.name }}
+                    <span
+                      v-if="item.options && item.options.length > 0"
+                      class="expand-icon material-icons"
+                      :class="{ 'expanded': openOrderSummaryIndices.includes(index) }"
+                    >
+                      expand_more
+                    </span>
+                  </span>
+                  <span class="product-amount">{{ priceLabel(item.amount) }}</span>
+                </div>
+
+                <div
+                  v-if="item.options && item.options.length > 0 && openOrderSummaryIndices.includes(index)"
+                  class="product-options"
+                >
+                  <div
+                    v-for="(option, optionIndex) in item.options"
+                    :key="optionIndex"
+                    class="product-option-row"
+                  >
+                    <span class="option-quantity">{{ option.quantity }}x</span>
+                    <span class="option-name">{{ option.name }}</span>
+                    <span class="option-amount">{{ priceLabel(option.amount) }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       <!-- AI Query Box -->
       <AIQueryBox
         v-if="!isLoading && statistics"
@@ -412,6 +499,9 @@ export default {
     ],
     debouncedLoadStatistics: null,
     sparklineCharts: {},
+    ordersSummary: [],
+    openOrderSummaryIndices: [],
+    isLoadingItems: false,
   }),
   computed: {
     dateFilters() {
@@ -553,10 +643,14 @@ export default {
       }
     },
     onFilterChange() {
+      this.ordersSummary = [];
+      this.openOrderSummaryIndices = [];
       this.debouncedLoadStatistics();
     },
     loadStatistics() {
       this.isLoading = true;
+      this.ordersSummary = [];
+      this.openOrderSummaryIndices = [];
 
       const baseModel = {
         storeIds: this.selectedStoreIds,
@@ -903,6 +997,39 @@ export default {
     getComparisonDateRangeLabel() {
       if (!this.comparisonMode) return '';
       return `${this.comparisonDateRange.from} - ${this.comparisonDateRange.to}`;
+    },
+    loadProductList() {
+      this.isLoadingItems = true;
+
+      const baseModel = {
+        storeIds: this.selectedStoreIds,
+        from: this.dateRange.from,
+        to: this.dateRange.to,
+        statuses: this.selectedStatuses,
+        paymentTypes: this.selectedPaymentTypes,
+        deliveryTypes: this.selectedDeliveryTypes,
+        includeItems: true,
+      };
+
+      this._statisticsService
+        .Get(baseModel)
+        .then((response) => {
+          this.ordersSummary = response.ordersSummary || [];
+        })
+        .catch((error) => {
+          console.error('Failed to load product list:', error);
+        })
+        .finally(() => {
+          this.isLoadingItems = false;
+        });
+    },
+    toggleProductItem(index) {
+      const idx = this.openOrderSummaryIndices.indexOf(index);
+      if (idx >= 0) {
+        this.openOrderSummaryIndices.splice(idx, 1);
+      } else {
+        this.openOrderSummaryIndices.push(index);
+      }
     },
   },
 };
@@ -1318,6 +1445,263 @@ export default {
           font-weight: bold;
           color: #1e40af;
           margin-top: 8px;
+        }
+      }
+    }
+  }
+}
+
+.product-list-section {
+  margin-top: 32px;
+  margin-bottom: 32px;
+
+  .show-product-list-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 24px;
+    background: linear-gradient(135deg, #1bb776 0%, #16a068 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(27, 183, 118, 0.3);
+
+    .material-icons {
+      font-size: 22px;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(27, 183, 118, 0.4);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  .product-list-loading {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+
+    .product-list-skeleton-item {
+      display: grid;
+      grid-template-columns: 60px 1fr 100px;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 24px;
+      border-bottom: 1px solid #f0f0f0;
+
+      @media (max-width: 640px) {
+        grid-template-columns: 50px 1fr 90px;
+        gap: 12px;
+        padding: 12px 16px;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .skeleton-line {
+        height: 20px;
+        background: linear-gradient(
+          90deg,
+          #f0f0f0 25%,
+          #e0e0e0 50%,
+          #f0f0f0 75%
+        );
+        background-size: 200% 100%;
+        animation: loading 1.5s ease-in-out infinite;
+        border-radius: 4px;
+      }
+
+      .skeleton-quantity {
+        width: 40px;
+      }
+
+      .skeleton-name {
+        width: 70%;
+      }
+
+      .skeleton-amount {
+        width: 80px;
+        justify-self: end;
+      }
+    }
+  }
+
+  @keyframes loading {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  .product-list-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+
+    .product-list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      border-bottom: 2px solid #f0f0f0;
+
+      h3 {
+        font-size: 1.3em;
+        font-weight: 600;
+        color: #292c34;
+        margin: 0;
+      }
+
+      .clear-list-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        background: #f8f9fa;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        .material-icons {
+          font-size: 20px;
+          color: #666;
+        }
+
+        &:hover {
+          background: #fee;
+          .material-icons {
+            color: #dc3545;
+          }
+        }
+      }
+    }
+
+    .product-list-items {
+      .product-item {
+        border-bottom: 1px solid #f0f0f0;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .product-item-main {
+          display: grid;
+          grid-template-columns: 60px 1fr 100px;
+          align-items: center;
+          gap: 16px;
+          padding: 16px 24px;
+          transition: background 0.2s ease;
+
+          @media (max-width: 640px) {
+            grid-template-columns: 50px 1fr 90px;
+            gap: 12px;
+            padding: 12px 16px;
+          }
+
+          .product-quantity {
+            font-size: 1em;
+            font-weight: 700;
+            color: #1bb776;
+            text-align: left;
+          }
+
+          .product-name {
+            font-size: 1em;
+            color: #292c34;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          }
+
+          .expand-icon {
+            font-size: 24px;
+            color: #999;
+            transition: transform 0.3s ease, color 0.2s ease;
+            flex-shrink: 0;
+
+            &.expanded {
+              transform: rotate(180deg);
+              color: #1bb776;
+            }
+          }
+
+          .product-amount {
+            font-size: 1.05em;
+            font-weight: 700;
+            color: #1bb776;
+            text-align: right;
+            white-space: nowrap;
+          }
+        }
+
+        &.has-options .product-item-main {
+          cursor: pointer;
+
+          &:hover {
+            background: #f8f9fa;
+          }
+        }
+
+        .product-options {
+          background: #fafbfc;
+          padding: 8px 24px 16px 24px;
+          border-top: 1px solid #e8e8e8;
+
+          @media (max-width: 640px) {
+            padding: 8px 16px 12px 16px;
+          }
+
+          .product-option-row {
+            display: grid;
+            grid-template-columns: 60px 1fr auto;
+            align-items: center;
+            gap: 16px;
+            padding: 8px 0 8px 20px;
+
+            @media (max-width: 640px) {
+              grid-template-columns: 50px 1fr auto;
+              gap: 12px;
+              padding-left: 12px;
+            }
+
+            .option-quantity {
+              font-size: 0.9em;
+              font-weight: 600;
+              color: #666;
+              text-align: left;
+            }
+
+            .option-name {
+              font-size: 0.9em;
+              color: #666;
+              font-weight: 400;
+            }
+
+            .option-amount {
+              font-size: 0.95em;
+              font-weight: 600;
+              color: #666;
+              text-align: right;
+              white-space: nowrap;
+            }
+          }
         }
       }
     }
