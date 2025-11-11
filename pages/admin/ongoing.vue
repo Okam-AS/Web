@@ -27,15 +27,9 @@
         <!-- New Orders Column -->
         <div
           class="orders-column"
-          :class="{ 'is-collapsed': isMobile && collapsedColumns.new }"
         >
           <div
             class="column-header"
-            :class="{ 'is-clickable': isMobile && newOrders.length }"
-            @touchstart="handleTouchStart"
-            @touchmove="handleTouchMove"
-            @touchend="handleTouchEnd('new')"
-            @click.stop="handleColumnClick('new', newOrders.length)"
           >
             <h2>Nye</h2>
             <span
@@ -45,7 +39,7 @@
             >
           </div>
           <div
-            v-if="(!isMobile || !collapsedColumns.new) && newOrders.length"
+            v-if="newOrders.length"
             class="orders-list"
           >
             <OrderCard
@@ -66,7 +60,7 @@
             />
           </div>
           <div
-            v-else-if="!isMobile || !collapsedColumns.new"
+            v-else
             class="empty-state"
           >
             Ingen nye ordrer
@@ -76,14 +70,9 @@
         <!-- Processing Orders Column -->
         <div
           class="orders-column"
-          :class="{ 'is-collapsed': isMobile && collapsedColumns.processing }"
         >
           <div
             class="column-header"
-            @touchstart="handleTouchStart"
-            @touchmove="handleTouchMove"
-            @touchend="handleTouchEnd('processing')"
-            @click.stop="handleColumnClick('processing')"
           >
             <h2>Pågående</h2>
             <span
@@ -93,7 +82,6 @@
             >
           </div>
           <div
-            v-if="!isMobile || !collapsedColumns.processing"
             class="orders-list"
           >
             <div v-if="processingOrders.length">
@@ -126,14 +114,9 @@
         <!-- Ready Orders Column -->
         <div
           class="orders-column"
-          :class="{ 'is-collapsed': isMobile && collapsedColumns.ready }"
         >
           <div
             class="column-header"
-            @touchstart="handleTouchStart"
-            @touchmove="handleTouchMove"
-            @touchend="handleTouchEnd('ready')"
-            @click.stop="handleColumnClick('ready')"
           >
             <h2>Klar</h2>
             <span
@@ -143,7 +126,6 @@
             >
           </div>
           <div
-            v-if="!isMobile || !collapsedColumns.ready"
             class="orders-list"
           >
             <div v-if="readyOrders.length">
@@ -265,11 +247,6 @@ export default {
     isLoading: false,
     orders: [],
     showOrderId: "",
-    collapsedColumns: {
-      new: false,
-      processing: false,
-      ready: false,
-    },
     isMobile: false,
     refreshInterval: null,
     adminStores: [],
@@ -281,8 +258,6 @@ export default {
     showSmsDriverModal: false,
     showCustomerModal: false,
     hideBanner: true,
-    touchStartY: 0,
-    touchMoved: false,
   }),
   computed: {
     newOrders() {
@@ -330,21 +305,6 @@ export default {
     },
     checkMobile() {
       this.isMobile = window.innerWidth <= 768;
-      if (!this.isMobile) {
-        // Reset collapsed state on desktop
-        this.collapsedColumns = {
-          new: false,
-          processing: false,
-          ready: false,
-        };
-      } else {
-        // Close empty columns on mobile
-        this.collapsedColumns = {
-          new: !this.newOrders.length,
-          processing: !this.processingOrders.length,
-          ready: !this.readyOrders.length,
-        };
-      }
     },
     startAutoRefresh() {
       this.refreshInterval = setInterval(() => {
@@ -498,27 +458,6 @@ export default {
       this.showCustomerModal = false;
       this.currentOrder = null;
     },
-    handleTouchStart(e) {
-      this.touchStartY = e.touches[0].clientY;
-      this.touchMoved = false;
-    },
-    handleTouchMove(e) {
-      const touchDeltaY = Math.abs(e.touches[0].clientY - this.touchStartY);
-      if (touchDeltaY > 10) {
-        this.touchMoved = true;
-      }
-    },
-    handleTouchEnd(column) {
-      if (!this.touchMoved && this.isMobile) {
-        this.collapsedColumns[column] = !this.collapsedColumns[column];
-      }
-      this.touchMoved = false;
-    },
-    handleColumnClick(column, hasOrders = true) {
-      if (!this.isMobile) return;
-      if (column === 'new' && !hasOrders) return;
-      this.collapsedColumns[column] = !this.collapsedColumns[column];
-    },
   },
 };
 </script>
@@ -609,14 +548,6 @@ export default {
     }
   }
 
-  &.is-collapsed {
-    @media (max-width: 768px) {
-      .orders-list {
-        display: none;
-      }
-    }
-  }
-
   .column-header {
     padding: 20px;
     background: linear-gradient(135deg, #292c34 0%, #1a1d23 100%);
@@ -627,18 +558,9 @@ export default {
     transition: all 0.2s ease;
     min-height: 64px;
 
-    @media (min-width: 769px) {
-      cursor: default;
-    }
-
     @media (max-width: 768px) {
-      cursor: pointer;
       padding: 16px 20px;
       min-height: 56px;
-
-      &:active {
-        background: linear-gradient(135deg, #1a1d23 0%, #292c34 100%);
-      }
     }
 
     h2 {
