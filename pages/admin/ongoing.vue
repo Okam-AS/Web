@@ -62,6 +62,7 @@
               @sms-driver="openSmsDriver"
               @receipt="openReceipt"
               @cancel="cancelOrder"
+              @open-customer="openCustomerModal"
             />
           </div>
           <div
@@ -110,6 +111,7 @@
                 @sms-driver="openSmsDriver"
                 @receipt="openReceipt"
                 @cancel="cancelOrder"
+                @open-customer="openCustomerModal"
               />
             </div>
             <div
@@ -159,6 +161,7 @@
                 @sms-driver="openSmsDriver"
                 @receipt="openReceipt"
                 @cancel="cancelOrder"
+                @open-customer="openCustomerModal"
               />
             </div>
             <div
@@ -208,6 +211,15 @@
         @success="onSmsSuccess"
       />
 
+      <CustomerInfoModal
+        v-if="showCustomerModal && currentOrder"
+        :user-id="currentOrder.userId || (currentOrder.user && currentOrder.user.id)"
+        :store-id="currentOrder.storeId"
+        :customer-name="currentOrder.userFullName"
+        :customer-phone="currentOrder.user && currentOrder.user.phoneNumber"
+        @close="closeCustomerModal"
+      />
+
       <!-- Info Banner -->
       <div
         v-if="!hideBanner"
@@ -243,10 +255,11 @@ import ReceiptModal from "~/components/molecules/ReceiptModal.vue";
 import TransferOrderModal from "~/components/molecules/TransferOrderModal.vue";
 import ChangeDeliveryTypeModal from "~/components/molecules/ChangeDeliveryTypeModal.vue";
 import SmsDriverModal from "~/components/molecules/SmsDriverModal.vue";
+import CustomerInfoModal from "~/components/molecules/CustomerInfoModal.vue";
 import OrderCard from "~/components/molecules/OrderCard.vue";
 
 export default {
-  components: { AdminPage, LoginModal, Loading, OrderProcessingModal, ReceiptModal, TransferOrderModal, ChangeDeliveryTypeModal, SmsDriverModal, OrderCard },
+  components: { AdminPage, LoginModal, Loading, OrderProcessingModal, ReceiptModal, TransferOrderModal, ChangeDeliveryTypeModal, SmsDriverModal, CustomerInfoModal, OrderCard },
   data: () => ({
     showLogin: false,
     isLoading: false,
@@ -266,6 +279,7 @@ export default {
     showTransferModal: false,
     showChangeDeliveryModal: false,
     showSmsDriverModal: false,
+    showCustomerModal: false,
     hideBanner: true,
     touchStartY: 0,
     touchMoved: false,
@@ -474,6 +488,15 @@ export default {
     onSmsSuccess() {
       // Optionally reload orders or show a notification
       this.loadOrders();
+    },
+    openCustomerModal(order) {
+      if (!order || !order.userId || !order.storeId) return;
+      this.currentOrder = order;
+      this.showCustomerModal = true;
+    },
+    closeCustomerModal() {
+      this.showCustomerModal = false;
+      this.currentOrder = null;
     },
     handleTouchStart(e) {
       this.touchStartY = e.touches[0].clientY;

@@ -47,10 +47,12 @@
       <!-- Customer Info -->
       <div
         v-if="order.userFullName || (order.user && order.user.phoneNumber && order.user.phoneNumber !== '+4799999999')"
-        class="customer-info"
+        class="customer-info customer-info-clickable"
+        @click="openCustomerInfo"
       >
         <span class="material-icons">{{ order.userIsMember ? 'military_tech' : 'person' }}</span>
         <span>{{ order.userFullName || (order.user ? order.user.phoneNumber : '') }}</span>
+        <span class="material-icons customer-chevron">chevron_right</span>
       </div>
 
       <div class="info-grid">
@@ -243,6 +245,9 @@ export default {
   methods: {
     toggleExpanded() {
       this.$emit('toggle-expand', this.order.id);
+    },
+    openCustomerInfo() {
+      this.$emit('open-customer', this.order);
     },
     iconForOrder(order) {
       if (order.deliveryType === 'InstantHomeDelivery' || order.deliveryType === 'DineHomeDelivery' || order.deliveryType === 'WoltDelivery') {
@@ -528,6 +533,30 @@ export default {
   .material-icons {
     color: #1bb776;
     font-size: 20px;
+  }
+
+  &.customer-info-clickable {
+    cursor: pointer;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: #e2e8f0;
+      border-color: #1bb776;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .customer-chevron {
+      margin-left: auto;
+      color: #6b7280;
+      font-size: 18px;
+      transition: color 0.2s ease;
+    }
+
+    &:hover .customer-chevron {
+      color: #1bb776;
+    }
   }
 }
 
