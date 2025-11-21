@@ -671,7 +671,7 @@ export default {
         }),
         this._statisticsService.Get({
           ...baseModel,
-          deliveryTypes: ['InstantHomeDelivery', 'WoltDelivery'],
+          deliveryTypes: ['InstantHomeDelivery', 'WoltDelivery', 'WoltMarketplaceDelivery'],
         }),
         this._statisticsService.Get({
           ...baseModel,
@@ -705,7 +705,7 @@ export default {
           }),
           this._statisticsService.Get({
             ...comparisonBaseModel,
-            deliveryTypes: ['InstantHomeDelivery', 'WoltDelivery'],
+            deliveryTypes: ['InstantHomeDelivery', 'WoltDelivery', 'WoltMarketplaceDelivery'],
           }),
           this._statisticsService.Get({
             ...comparisonBaseModel,
