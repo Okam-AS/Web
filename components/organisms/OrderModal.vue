@@ -170,6 +170,18 @@
             </div>
           </div>
         </div>
+
+        <div class="modal-footer">
+          <button
+            class="download-receipt-btn"
+            :disabled="isDownloadingReceipt"
+            @click="downloadReceipt"
+          >
+            <span class="material-icons">download</span>
+            <span v-if="isDownloadingReceipt">Laster ned...</span>
+            <span v-else>Last ned kvittering</span>
+          </button>
+        </div>
       </div>
 
       <div
@@ -193,6 +205,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import CustomerInfoModal from "~/components/molecules/CustomerInfoModal.vue";
 
 export default {
@@ -210,6 +223,7 @@ export default {
       order: null,
       isLoading: false,
       showCustomerModal: false,
+      isDownloadingReceipt: false,
     };
   },
   computed: {
@@ -273,6 +287,39 @@ export default {
           return "status-canceled";
         default:
           return "status-default";
+      }
+    },
+    async downloadReceipt() {
+      if (this.isDownloadingReceipt || !this.order) return;
+
+      this.isDownloadingReceipt = true;
+      try {
+        const token = this.$store.state.currentUser?.token;
+        const apiBaseUrl = process.env.API_BASE_URL || '';
+        const url = `${apiBaseUrl}/orders/receipt/${this.orderCode}`;
+
+        const response = await axios({
+          url: url,
+          method: 'GET',
+          responseType: 'blob',
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+        const blobUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = `Kvittering-${this.order.friendlyOrderId || this.orderCode}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(blobUrl);
+      } catch (error) {
+        console.error('Error downloading receipt:', error);
+      } finally {
+        this.isDownloadingReceipt = false;
       }
     },
   },
@@ -375,6 +422,41 @@ export default {
 
 .order-info {
   margin-bottom: 32px;
+}
+
+.modal-footer {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e2e8f0;
+
+  .download-receipt-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background-color: #1bb776;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background-color: #159c63;
+      transform: translateY(-1px);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .material-icons {
+      font-size: 20px;
+    }
+  }
 }
 
 .info-grid {
