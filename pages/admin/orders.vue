@@ -148,43 +148,108 @@
         v-if="ordersData && ordersData.orders && ordersData.orders.length > 0"
         class="orders-section"
       >
-        <!-- Column visibility control -->
-        <div class="column-visibility-control">
-          <button
-            class="visibility-toggle-btn"
-            @click="showColumnVisibilityMenu = !showColumnVisibilityMenu"
-          >
-            <span class="material-icons">visibility</span>
-            Kolonner
-          </button>
+        <!-- Table toolbar -->
+        <div class="table-toolbar">
+          <!-- Column visibility control -->
+          <div class="column-visibility-control">
+            <button
+              class="visibility-toggle-btn"
+              @click="showColumnVisibilityMenu = !showColumnVisibilityMenu"
+            >
+              <span class="material-icons">visibility</span>
+              Kolonner
+            </button>
 
-          <!-- Column visibility dropdown -->
-          <div
-            v-if="showColumnVisibilityMenu"
-            class="column-visibility-dropdown"
-          >
-            <div class="visibility-header">
-              <h4>Vis/skjul kolonner</h4>
-              <button
-                class="close-btn"
-                @click="showColumnVisibilityMenu = false"
-              >
-                <span class="material-icons">close</span>
-              </button>
+            <!-- Column visibility dropdown -->
+            <div
+              v-if="showColumnVisibilityMenu"
+              class="column-visibility-dropdown"
+            >
+              <div class="visibility-header">
+                <h4>Vis/skjul kolonner</h4>
+                <button
+                  class="close-btn"
+                  @click="showColumnVisibilityMenu = false"
+                >
+                  <span class="material-icons">close</span>
+                </button>
+              </div>
+              <div class="visibility-options">
+                <label
+                  v-for="column in allColumns"
+                  :key="column.id"
+                  class="visibility-option"
+                >
+                  <input
+                    type="checkbox"
+                    v-model="visibleColumns[column.id]"
+                    @change="saveColumnVisibility"
+                  />
+                  <span>{{ column.label }}</span>
+                </label>
+              </div>
             </div>
-            <div class="visibility-options">
-              <label
-                v-for="column in allColumns"
-                :key="column.id"
-                class="visibility-option"
+          </div>
+
+          <!-- Download control -->
+          <div class="download-control">
+            <button
+              class="download-toggle-btn"
+              :disabled="isExporting"
+              @click="showDownloadMenu = !showDownloadMenu"
+            >
+              <span v-if="isExporting" class="loading-spinner-small" />
+              <span v-else class="material-icons">download</span>
+              {{ isExporting ? 'Eksporterer...' : 'Last ned' }}
+            </button>
+
+            <!-- Download dropdown -->
+            <div
+              v-if="showDownloadMenu"
+              class="download-dropdown"
+            >
+              <div class="download-header">
+                <h4>Last ned som...</h4>
+                <button
+                  class="close-btn"
+                  @click="showDownloadMenu = false"
+                >
+                  <span class="material-icons">close</span>
+                </button>
+              </div>
+
+              <!-- Too many results warning -->
+              <div
+                v-if="ordersData && ordersData.totalPages > 20"
+                class="download-warning"
               >
-                <input
-                  type="checkbox"
-                  v-model="visibleColumns[column.id]"
-                  @change="saveColumnVisibility"
-                />
-                <span>{{ column.label }}</span>
-              </label>
+                <span class="material-icons">warning</span>
+                <div class="warning-text">
+                  <strong>For mange resultater</strong>
+                  <p>Filen blir for stor. Vennligst filtrer ned resultatene for å eksportere (maks 20 sider).</p>
+                </div>
+              </div>
+
+              <!-- Download options -->
+              <div
+                v-else
+                class="download-options"
+              >
+                <button
+                  class="download-option"
+                  @click="exportOrders('csv')"
+                >
+                  <span class="material-icons">description</span>
+                  CSV
+                </button>
+                <button
+                  class="download-option"
+                  @click="exportOrders('json')"
+                >
+                  <span class="material-icons">code</span>
+                  JSON
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -378,6 +443,8 @@ export default {
     ],
     debouncedFetchOrders: null,
     showColumnVisibilityMenu: false,
+    showDownloadMenu: false,
+    isExporting: false,
     columnWidths: {},
     resizingColumn: null,
     resizeStartX: 0,
@@ -834,6 +901,141 @@ export default {
       this.showOrderModal = false;
       this.selectedOrderCode = null;
     },
+    async exportOrders(format) {
+      if (this.isExporting) return;
+
+      this.isExporting = true;
+      this.showDownloadMenu = false;
+
+      try {
+        // Fetch all pages of orders
+        const allOrders = [];
+        const totalPages = this.ordersData?.totalPages || 1;
+
+        for (let page = 1; page <= totalPages; page++) {
+          const response = await this._orderService.GetAllOrdersWithPagination(
+            page,
+            this.pageSize,
+            this.searchQuery || undefined,
+            this.dateFrom || undefined,
+            this.dateTo || undefined,
+            this.selectedStoreIds,
+            this.selectedStatuses,
+            this.selectedDeliveryTypes,
+            this.selectedPaymentTypes
+          );
+
+          if (response?.orders) {
+            allOrders.push(...response.orders);
+          }
+        }
+
+        if (allOrders.length === 0) {
+          console.warn("No orders to export");
+          return;
+        }
+
+        // Generate file based on format
+        if (format === 'csv') {
+          this.generateCSV(allOrders);
+        } else if (format === 'json') {
+          this.generateJSON(allOrders);
+        }
+      } catch (error) {
+        console.error("Failed to export orders:", error);
+      } finally {
+        this.isExporting = false;
+      }
+    },
+    generateCSV(orders) {
+      const columns = this.orderedVisibleColumns;
+
+      // Build header row
+      const headers = columns.map(colId => this.getColumnLabel(colId));
+
+      // Build data rows
+      const rows = orders.map(order => {
+        return columns.map(colId => {
+          const value = this.getExportValue(order, colId);
+          // Escape quotes and wrap in quotes if contains comma or quotes
+          const escaped = String(value).replace(/"/g, '""');
+          if (escaped.includes(',') || escaped.includes('"') || escaped.includes('\n')) {
+            return `"${escaped}"`;
+          }
+          return escaped;
+        });
+      });
+
+      // Combine headers and rows
+      const csvContent = [
+        headers.join(','),
+        ...rows.map(row => row.join(','))
+      ].join('\n');
+
+      // Add BOM for Excel compatibility with Norwegian characters
+      const bom = '\uFEFF';
+      this.downloadFile(bom + csvContent, 'bestillinger.csv', 'text/csv;charset=utf-8');
+    },
+    generateJSON(orders) {
+      const columns = this.orderedVisibleColumns;
+
+      // Map orders to objects with only visible columns
+      const exportData = orders.map(order => {
+        const obj = {};
+        columns.forEach(colId => {
+          const label = this.getColumnLabel(colId);
+          obj[label] = this.getExportValue(order, colId);
+        });
+        return obj;
+      });
+
+      const jsonContent = JSON.stringify(exportData, null, 2);
+      this.downloadFile(jsonContent, 'bestillinger.json', 'application/json');
+    },
+    getExportValue(order, columnId) {
+      switch (columnId) {
+        case 'friendlyOrderId':
+          return order.friendlyOrderId || '';
+        case 'storeName':
+          return order.storeName || '';
+        case 'status':
+          return this.orderStatusLabel(order.status) || '';
+        case 'customer':
+          return order.userFullName || order.userPhoneNumber || '-';
+        case 'created':
+          return this.formatDate(order.created) || '';
+        case 'finalAmount':
+          return this.priceLabel(order.finalAmount, true) || '';
+        case 'deliveryType':
+          return this.deliveryTypeLabel(order.deliveryType) || '';
+        case 'pickupEta':
+          if (order.woltDeliveryInfo?.pickupEta) {
+            return this.formatCourierEta(order.woltDeliveryInfo.pickupEta);
+          }
+          return '-';
+        case 'drivingTime':
+          return order.drivingTimeInMinutes ? `${order.drivingTimeInMinutes} min` : '-';
+        case 'orderCode':
+          return order.orderCode || '';
+        case 'totalTime':
+          return order.totalTimeInMinutes ? `${order.totalTimeInMinutes} min` : '-';
+        case 'tracking':
+          return order.woltDeliveryInfo?.trackingUrl || '-';
+        default:
+          return '';
+      }
+    },
+    downloadFile(content, filename, mimeType) {
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    },
   },
 };
 </script>
@@ -1126,7 +1328,6 @@ export default {
   // Column visibility control
   .column-visibility-control {
     position: relative;
-    margin-bottom: 12px;
 
     .visibility-toggle-btn {
       display: flex;
@@ -1227,6 +1428,173 @@ export default {
             font-size: 0.9rem;
             color: #4a5568;
             user-select: none;
+          }
+        }
+      }
+    }
+  }
+
+  // Table toolbar
+  .table-toolbar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+
+    @media (max-width: 768px) {
+      gap: 8px;
+    }
+  }
+
+  // Download control
+  .download-control {
+    position: relative;
+
+    .download-toggle-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: #4a5568;
+      transition: all 0.2s ease;
+
+      &:hover:not(:disabled) {
+        background: #f8fafc;
+        border-color: #cbd5e0;
+      }
+
+      &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
+
+      .material-icons {
+        font-size: 18px;
+      }
+
+      .loading-spinner-small {
+        width: 16px;
+        height: 16px;
+        border: 2px solid #e2e8f0;
+        border-top: 2px solid #1bb776;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+    }
+
+    .download-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      margin-top: 4px;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+      padding: 12px;
+      min-width: 250px;
+      z-index: 1000;
+
+      .download-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #e2e8f0;
+
+        h4 {
+          margin: 0;
+          color: #292c34;
+          font-size: 0.9rem;
+          font-weight: 600;
+        }
+
+        .close-btn {
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 2px;
+          color: #6b7280;
+          transition: all 150ms ease;
+          border-radius: 4px;
+
+          &:hover {
+            background: #f3f4f6;
+            color: #292c34;
+          }
+
+          .material-icons {
+            font-size: 18px;
+          }
+        }
+      }
+
+      .download-warning {
+        display: flex;
+        gap: 12px;
+        padding: 12px;
+        background: #fef3c7;
+        border-radius: 6px;
+        color: #92400e;
+
+        .material-icons {
+          font-size: 24px;
+          flex-shrink: 0;
+        }
+
+        .warning-text {
+          strong {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.9rem;
+          }
+
+          p {
+            margin: 0;
+            font-size: 0.85rem;
+            line-height: 1.4;
+          }
+        }
+      }
+
+      .download-options {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+
+        .download-option {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 10px 12px;
+          background: none;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 0.9rem;
+          color: #4a5568;
+          transition: all 0.15s ease;
+          text-align: left;
+          width: 100%;
+
+          &:hover {
+            background: #f8fafc;
+            color: #1bb776;
+          }
+
+          .material-icons {
+            font-size: 20px;
+            color: #6b7280;
+          }
+
+          &:hover .material-icons {
+            color: #1bb776;
           }
         }
       }
