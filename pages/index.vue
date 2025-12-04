@@ -323,6 +323,11 @@ export default {
         ikon: "all_inclusive",
         beskrivelse: "Styr alle avdelinger og bestillinger fra nettside, Okam og Wolt i én app",
       },
+      {
+        tittel: "Regnskapsintegrasjon",
+        ikon: "account_balance",
+        beskrivelse: "Automatisk import til regnskapssystemet hver natt - spar tid og reduser feil ved manuell dataregistrering",
+      },
     ],
     fordeler: [
       {
