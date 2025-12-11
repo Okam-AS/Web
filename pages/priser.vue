@@ -91,7 +91,7 @@
 
                   <div class="tier">
                     <div>
-                      <h4>Din merkevare</h4>
+                      <h4>Din egen app</h4>
 
                       <p class="price">Ta kontakt</p>
                       <div class="feature-list">
