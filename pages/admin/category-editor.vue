@@ -413,24 +413,26 @@ export default {
   },
 
   watch: {
-    selectedStore(newVal) {
-      if (newVal && !this.isNewCategory) {
-        this.loadCategory()
+    selectedStore: {
+      immediate: true,
+      handler(newVal) {
+        if (newVal) {
+          if (this.isNewCategory) {
+            this.category.storeId = newVal
+            this.hasChanges = false
+          } else if (this.categoryId) {
+            this.loadCategory()
+          }
+        }
       }
     }
   },
 
   mounted() {
-    try {
-      if (this.isNewCategory) {
-        this.category.storeId = this.selectedStore
-        this.hasChanges = false
-      } else if (this.selectedStore) {
-        this.loadCategory()
-      }
-    } catch (err) {
-      console.error('Error in mounted:', err)
-      this.error = 'Kunne ikke initialisere siden'
+    // Validation is now handled by the selectedStore watcher with immediate: true
+    // This ensures we wait for selectedStore to be available before loading
+    if (!this.categoryId && !this.isNewCategory) {
+      this.error = 'Ingen kategori-ID funnet i URL'
     }
   },
 
@@ -459,7 +461,10 @@ export default {
     },
 
     async loadCategory() {
+      // Prevent duplicate loads
       if (this.isLoading) return
+      // Don't reload if already loaded the same category
+      if (this.category.id === this.categoryId) return
 
       try {
         this.isLoading = true
