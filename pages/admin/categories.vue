@@ -100,6 +100,9 @@
                 </svg>
               </div>
               <div class="category-overlay" />
+              <div class="category-edit-overlay">
+                <span class="material-icons">edit</span>
+              </div>
               <div class="category-status-top">
                 <span
                   v-if="category.hide"
@@ -522,6 +525,32 @@ export default {
   height: 100%;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.7) 100%);
   pointer-events: none;
+}
+
+.category-edit-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  z-index: 3;
+
+  .material-icons {
+    font-size: 48px;
+    color: white;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  }
+}
+
+.category-card:hover .category-edit-overlay {
+  opacity: 1;
 }
 
 .category-status-top {
