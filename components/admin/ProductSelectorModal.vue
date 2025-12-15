@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isOpen" class="modal-overlay" @click.self="closeModal">
+  <div v-if="isOpen" class="modal-overlay" @click.self="handleOverlayClick">
     <div class="modal-container">
       <div class="modal-header">
         <h2>Velg produkter</h2>
@@ -27,6 +27,17 @@
               <span class="material-icons">clear</span>
             </button>
           </div>
+
+          <!-- Store Filter Button (only show if user has multiple stores) -->
+          <button
+            v-if="hasMultipleStores"
+            class="store-filter-btn"
+            @click="openStoreSelector"
+          >
+            <span class="material-icons">store</span>
+            <span>{{ selectedStoreIds.length }} butikk{{ selectedStoreIds.length !== 1 ? 'er' : '' }}</span>
+            <span class="material-icons">arrow_drop_down</span>
+          </button>
         </div>
 
         <!-- Selected Count -->
@@ -36,7 +47,7 @@
 
         <!-- Loading State -->
         <div v-if="isLoading" class="loading-container">
-          <span class="material-icons spinning">refresh</span>
+          <Loading :loading="true" :size="48" />
           <p>Laster produkter...</p>
         </div>
 
@@ -70,7 +81,12 @@
 
             <!-- Product Info -->
             <div class="product-info">
-              <div class="product-name">{{ product.name }}</div>
+              <div class="product-name">
+                {{ product.name }}
+                <span v-if="product.storeName && isFromDifferentStore(product)" class="store-badge">
+                  {{ product.storeName }}
+                </span>
+              </div>
               <div v-if="product.description" class="product-description">
                 {{ product.description }}
               </div>
@@ -83,7 +99,10 @@
           <!-- Empty State -->
           <div v-if="filteredProducts.length === 0" class="empty-state">
             <span class="material-icons">search_off</span>
-            <p>Ingen produkter funnet</p>
+            <p v-if="hasMultipleStores && selectedStoreIds.length === 0">
+              Velg butikker for å søke etter produkter
+            </p>
+            <p v-else>Ingen produkter funnet</p>
           </div>
         </div>
       </div>
@@ -97,12 +116,26 @@
         </button>
       </div>
     </div>
+
+    <!-- Store Selector Modal -->
+    <StoreSelector
+      ref="storeSelector"
+      :selectedStoreIds="selectedStoreIds"
+      @update:selectedStoreIds="handleStoreSelectionChange"
+    />
   </div>
 </template>
 
 <script>
+import Loading from '~/components/atoms/Loading.vue'
+import StoreSelector from '~/components/admin/StoreSelector.vue'
+
 export default {
   name: 'ProductSelectorModal',
+  components: {
+    Loading,
+    StoreSelector
+  },
   props: {
     defaultSelectedProductIds: {
       type: Array,
@@ -115,12 +148,21 @@ export default {
       isLoading: false,
       products: [],
       selectedProductIds: [],
+      originalSelectedIds: [],
       searchQuery: '',
+      selectedStoreIds: [],
+      searchDebounceTimer: null,
       resolve: null
     }
   },
   computed: {
     filteredProducts() {
+      // When using cross-store search, filtering is done server-side
+      // For single-store mode, filter client-side
+      if (this.hasMultipleStores && this.searchQuery) {
+        return this.products
+      }
+
       if (!this.searchQuery || this.searchQuery.trim() === '') {
         return this.products
       }
@@ -128,13 +170,50 @@ export default {
       return this.products.filter(product =>
         product.name && product.name.toLowerCase().includes(query)
       )
+    },
+    hasChanges() {
+      // Check if selection has changed
+      if (this.selectedProductIds.length !== this.originalSelectedIds.length) {
+        return true
+      }
+      // Sort and compare - use numeric sort for consistency
+      const sorted1 = [...this.selectedProductIds].sort((a, b) => a - b)
+      const sorted2 = [...this.originalSelectedIds].sort((a, b) => a - b)
+      return JSON.stringify(sorted1) !== JSON.stringify(sorted2)
+    },
+    hasMultipleStores() {
+      return this.$store.state.currentUser?.adminIn?.length > 1
+    },
+    currentStoreId() {
+      return this.$store.state.selectedAdminStore
+    }
+  },
+  watch: {
+    searchQuery(newQuery) {
+      if (this.hasMultipleStores) {
+        this.debouncedSearch(newQuery)
+      }
     }
   },
   methods: {
     async open(preSelectedIds = []) {
       this.isOpen = true
       this.selectedProductIds = [...preSelectedIds]
+      this.originalSelectedIds = [...preSelectedIds]
       this.searchQuery = ''
+
+      // Initialize selected stores - default to current store
+      if (this.hasMultipleStores) {
+        this.selectedStoreIds = [this.currentStoreId]
+      }
+
+      console.log('ProductSelectorModal opened with:', {
+        preSelectedIds,
+        selectedProductIds: this.selectedProductIds,
+        originalSelectedIds: this.originalSelectedIds,
+        hasMultipleStores: this.hasMultipleStores,
+        selectedStoreIds: this.selectedStoreIds
+      })
 
       await this.loadProducts()
 
@@ -146,8 +225,32 @@ export default {
     async loadProducts() {
       try {
         this.isLoading = true
-        const storeId = this.$store.state.selectedAdminStore
-        this.products = await this._productService.GetAll(storeId)
+
+        if (this.hasMultipleStores) {
+          // Use cross-store search if user has multiple stores
+          if (this.selectedStoreIds.length === 0) {
+            // If no stores selected, show empty list
+            this.products = []
+            return
+          }
+
+          // If only one store selected, use regular GetAll
+          if (this.selectedStoreIds.length === 1) {
+            this.products = await this._productService.GetAll(this.selectedStoreIds[0])
+          } else {
+            // Multiple stores - use cross-store search
+            // Use empty string to get all products when no search query
+            const query = this.searchQuery && this.searchQuery.trim() !== '' ? this.searchQuery : ''
+            this.products = await this._productService.SearchAcrossStores(
+              query,
+              this.selectedStoreIds
+            )
+          }
+        } else {
+          // Single store - load all products
+          const storeId = this.currentStoreId
+          this.products = await this._productService.GetAll(storeId)
+        }
       } catch (error) {
         console.error('Failed to load products:', error)
         alert('Kunne ikke laste produkter. Vennligst prøv igjen.')
@@ -155,6 +258,30 @@ export default {
       } finally {
         this.isLoading = false
       }
+    },
+
+    debouncedSearch() {
+      if (this.searchDebounceTimer) {
+        clearTimeout(this.searchDebounceTimer)
+      }
+
+      this.searchDebounceTimer = setTimeout(() => {
+        this.loadProducts()
+      }, 300)
+    },
+
+    openStoreSelector() {
+      this.$refs.storeSelector.open()
+    },
+
+    handleStoreSelectionChange(newStoreIds) {
+      this.selectedStoreIds = newStoreIds
+      // Reload products with new store selection
+      this.loadProducts()
+    },
+
+    isFromDifferentStore(product) {
+      return product.storeId !== this.currentStoreId
     },
 
     isSelected(productId) {
@@ -170,20 +297,54 @@ export default {
       }
     },
 
+    handleOverlayClick() {
+      // Only allow closing by clicking outside if there are no changes
+      if (!this.hasChanges) {
+        this.closeModal()
+      }
+    },
+
     confirmSelection() {
+      console.log('Confirming selection:', {
+        selectedProductIds: this.selectedProductIds,
+        originalSelectedIds: this.originalSelectedIds,
+        hasChanges: this.hasChanges
+      })
+
       if (this.resolve) {
         this.resolve([...this.selectedProductIds])
       }
-      this.closeModal()
+      // Don't call closeModal, just close directly without checking for changes
+      // since we're confirming the selection
+      this.isOpen = false
+      this.products = []
+      this.selectedProductIds = []
+      this.originalSelectedIds = []
+      this.searchQuery = ''
+      this.resolve = null
     },
 
     closeModal() {
+      console.log('Closing modal:', {
+        selectedProductIds: this.selectedProductIds,
+        originalSelectedIds: this.originalSelectedIds,
+        hasChanges: this.hasChanges
+      })
+
+      // Check for unsaved changes
+      if (this.hasChanges) {
+        if (!confirm('Du har ulagrede endringer. Er du sikker på at du vil lukke?')) {
+          return
+        }
+      }
+
       if (this.resolve) {
         this.resolve(null)
       }
       this.isOpen = false
       this.products = []
       this.selectedProductIds = []
+      this.originalSelectedIds = []
       this.searchQuery = ''
       this.resolve = null
     }
@@ -260,11 +421,16 @@ export default {
 
 .search-section {
   margin-bottom: 16px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 
   .search-input-wrapper {
     position: relative;
     display: flex;
     align-items: center;
+    flex: 1;
+    min-width: 200px;
 
     .search-icon {
       position: absolute;
@@ -283,7 +449,8 @@ export default {
 
       &:focus {
         outline: none;
-        border-color: #0066cc;
+        border-color: #94a3b8;
+        box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.1);
       }
     }
 
@@ -307,14 +474,39 @@ export default {
       }
     }
   }
+
+  .store-filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    background: #f1f5f9;
+    border: 2px solid #cbd5e0;
+    border-radius: 8px;
+    font-size: 0.95em;
+    font-weight: 600;
+    color: #334155;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+
+    &:hover {
+      background: #e2e8f0;
+      border-color: #94a3b8;
+    }
+
+    .material-icons {
+      font-size: 20px;
+    }
+  }
 }
 
 .selected-count {
   margin-bottom: 16px;
   padding: 8px 12px;
-  background: #eff6ff;
+  background: #f1f5f9;
   border-radius: 8px;
-  color: #1e40af;
+  color: #334155;
   font-weight: 600;
   font-size: 0.95em;
   text-align: center;
@@ -331,11 +523,9 @@ export default {
   .material-icons {
     font-size: 48px;
     margin-bottom: 12px;
-    color: #0066cc;
+    color: #334155;
 
-    &.spinning {
-      animation: spin 1s linear infinite;
-    }
+    // Spinner now handled by Loading component
   }
 
   p {
@@ -363,13 +553,13 @@ export default {
   transition: all 0.2s;
 
   &:hover {
-    border-color: #0066cc;
+    border-color: #cbd5e0;
     background: #f9fafb;
   }
 
   &.selected {
-    border-color: #0066cc;
-    background: #eff6ff;
+    border-color: #334155;
+    background: #f1f5f9;
   }
 }
 
@@ -387,8 +577,8 @@ export default {
     transition: all 0.2s;
 
     &.checked {
-      background: #0066cc;
-      border-color: #0066cc;
+      background: #334155;
+      border-color: #334155;
 
       .material-icons {
         color: #fff;
@@ -438,6 +628,21 @@ export default {
     font-weight: 600;
     color: #292c34;
     margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    .store-badge {
+      display: inline-flex;
+      padding: 2px 8px;
+      background: #dbeafe;
+      color: #1e40af;
+      border-radius: 4px;
+      font-size: 0.75em;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
   }
 
   .product-description {
@@ -452,7 +657,7 @@ export default {
   .product-price {
     font-size: 0.95em;
     font-weight: 600;
-    color: #1bb776;
+    color: #0f172a;
   }
 }
 
@@ -512,11 +717,11 @@ export default {
 }
 
 .btn-primary {
-  background: #0066cc;
+  background: #334155;
   color: #fff;
 
   &:hover {
-    background: #0052a3;
+    background: #1e293b;
   }
 }
 

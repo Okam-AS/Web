@@ -20,51 +20,51 @@
           </button>
         </div>
 
-        <!-- Days Selection -->
+        <!-- Day Selection -->
         <div class="form-group">
-          <label>Dager</label>
-          <div class="days-grid">
-            <label
-              v-for="day in weekDays"
-              :key="day.value"
-              class="day-checkbox"
-              :class="{ checked: isDaySelected(rule, day.value) }"
-            >
-              <input
-                type="checkbox"
-                :checked="isDaySelected(rule, day.value)"
-                @change="toggleDay(rule, day.value)"
-              />
-              <span class="day-label">{{ day.label }}</span>
-            </label>
-          </div>
+          <label>Dag</label>
+          <select v-model.number="rule.dayOfWeek" class="form-select" @change="emitChanges">
+            <option :value="1">Mandag</option>
+            <option :value="2">Tirsdag</option>
+            <option :value="3">Onsdag</option>
+            <option :value="4">Torsdag</option>
+            <option :value="5">Fredag</option>
+            <option :value="6">Lørdag</option>
+            <option :value="0">Søndag</option>
+          </select>
         </div>
 
         <!-- All Day Toggle -->
         <div class="form-group">
           <label class="checkbox-label">
-            <input v-model="rule.allDay" type="checkbox" />
+            <input
+              :checked="isAllDay(rule)"
+              type="checkbox"
+              @change="toggleAllDay(rule)"
+            />
             <span>Hele dagen</span>
           </label>
         </div>
 
         <!-- Time Range (shown when not all day) -->
-        <div v-if="!rule.allDay" class="time-range">
+        <div v-if="!isAllDay(rule)" class="time-range">
           <div class="form-group">
             <label>Fra kl.</label>
             <input
-              v-model="rule.startTime"
+              :value="minutesToTime(rule.startTimeInMinutes)"
               type="time"
               class="time-input"
+              @input="updateStartTime(rule, $event.target.value)"
             />
           </div>
 
           <div class="form-group">
             <label>Til kl.</label>
             <input
-              v-model="rule.endTime"
+              :value="minutesToTime(rule.endTimeInMinutes)"
               type="time"
               class="time-input"
+              @input="updateEndTime(rule, $event.target.value)"
             />
           </div>
         </div>
@@ -79,7 +79,11 @@
     </div>
 
     <!-- Add Rule Button -->
-    <button class="btn btn-add-rule" @click="addRule">
+    <button
+      type="button"
+      class="btn-add-rule"
+      @click="addRule"
+    >
       <span class="material-icons">add</span>
       Legg til regel
     </button>
@@ -97,68 +101,109 @@ export default {
   },
   data() {
     return {
-      localRules: [],
-      weekDays: [
-        { label: 'Man', value: 1, fullName: 'Mandag' },
-        { label: 'Tir', value: 2, fullName: 'Tirsdag' },
-        { label: 'Ons', value: 3, fullName: 'Onsdag' },
-        { label: 'Tor', value: 4, fullName: 'Torsdag' },
-        { label: 'Fre', value: 5, fullName: 'Fredag' },
-        { label: 'Lør', value: 6, fullName: 'Lørdag' },
-        { label: 'Søn', value: 0, fullName: 'Søndag' }
-      ]
+      localRules: []
     }
   },
   watch: {
     rules: {
       immediate: true,
-      handler(newRules) {
-        this.localRules = newRules && newRules.length > 0
-          ? JSON.parse(JSON.stringify(newRules))
-          : []
-      }
-    },
-    localRules: {
       deep: true,
       handler(newRules) {
-        this.$emit('update:rules', newRules)
+        console.log('Publishing rules received from backend:', newRules)
+        // Convert backend format to component format
+        const convertedRules = (newRules || []).map(rule => ({
+          ...rule,
+          dayOfWeek: this.dayOfWeekStringToNumber(rule.dayOfWeek)
+        }))
+
+        // Only update localRules if there's an actual difference
+        // This prevents emitting change events when props update with the same data
+        if (JSON.stringify(this.localRules) !== JSON.stringify(convertedRules)) {
+          this.localRules = convertedRules
+          console.log('Local rules updated:', this.localRules)
+        }
       }
     }
   },
   methods: {
+    // Convert C# DayOfWeek string to number (0=Sunday, 1=Monday, etc.)
+    dayOfWeekStringToNumber(dayOfWeekString) {
+      // If already a number, return it
+      if (typeof dayOfWeekString === 'number') return dayOfWeekString
+
+      const mapping = {
+        'Sunday': 0,
+        'Monday': 1,
+        'Tuesday': 2,
+        'Wednesday': 3,
+        'Thursday': 4,
+        'Friday': 5,
+        'Saturday': 6
+      }
+      return mapping[dayOfWeekString] !== undefined ? mapping[dayOfWeekString] : 1
+    },
+
+    // Convert time string (HH:MM) to minutes from midnight
+    timeToMinutes(timeStr) {
+      if (!timeStr) return 0
+      const [hours, minutes] = timeStr.split(':').map(Number)
+      return hours * 60 + minutes
+    },
+
+    // Convert minutes from midnight to time string (HH:MM)
+    minutesToTime(minutes) {
+      if (minutes === undefined || minutes === null) return '00:00'
+      const hours = Math.floor(minutes / 60)
+      const mins = minutes % 60
+      return `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}`
+    },
+
+    emitChanges() {
+      this.$emit('update:rules', this.localRules)
+    },
+
     addRule() {
       this.localRules.push({
-        days: [],
-        startTime: '09:00',
-        endTime: '17:00',
-        allDay: false
+        id: null,
+        dayOfWeek: 1, // Default to Monday
+        startTimeInMinutes: 540, // 09:00
+        endTimeInMinutes: 1020 // 17:00
       })
+      this.emitChanges()
     },
 
     removeRule(index) {
       if (confirm('Er du sikker på at du vil fjerne denne regelen?')) {
         this.localRules.splice(index, 1)
+        this.emitChanges()
       }
     },
 
-    isDaySelected(rule, dayValue) {
-      return rule.days && rule.days.includes(dayValue)
+    updateStartTime(rule, timeStr) {
+      rule.startTimeInMinutes = this.timeToMinutes(timeStr)
+      this.emitChanges()
     },
 
-    toggleDay(rule, dayValue) {
-      if (!rule.days) {
-        rule.days = []
-      }
+    updateEndTime(rule, timeStr) {
+      rule.endTimeInMinutes = this.timeToMinutes(timeStr)
+      this.emitChanges()
+    },
 
-      const index = rule.days.indexOf(dayValue)
-      if (index === -1) {
-        rule.days.push(dayValue)
+    isAllDay(rule) {
+      return rule.startTimeInMinutes === 0 && rule.endTimeInMinutes === 1440
+    },
+
+    toggleAllDay(rule) {
+      if (this.isAllDay(rule)) {
+        // Switch to partial day (default 09:00-17:00)
+        rule.startTimeInMinutes = 540
+        rule.endTimeInMinutes = 1020
       } else {
-        rule.days.splice(index, 1)
+        // Switch to all day (00:00-24:00)
+        rule.startTimeInMinutes = 0
+        rule.endTimeInMinutes = 1440
       }
-
-      // Trigger reactivity
-      this.$set(rule, 'days', [...rule.days])
+      this.emitChanges()
     }
   }
 }
@@ -252,46 +297,20 @@ export default {
   }
 }
 
-.days-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-  gap: 8px;
-}
-
-.day-checkbox {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.form-select {
+  width: 100%;
   padding: 10px 12px;
-  background: #fff;
-  border: 2px solid #d1d5db;
+  border: 1px solid #d1d5db;
   border-radius: 6px;
+  font-size: 1em;
+  font-family: inherit;
+  background: #fff;
   cursor: pointer;
-  transition: all 0.2s;
-  user-select: none;
 
-  input[type="checkbox"] {
-    display: none;
-  }
-
-  .day-label {
-    font-weight: 600;
-    color: #6b7280;
-    font-size: 0.95em;
-  }
-
-  &:hover {
-    border-color: #0066cc;
-    background: #f9fafb;
-  }
-
-  &.checked {
-    background: #eff6ff;
-    border-color: #0066cc;
-
-    .day-label {
-      color: #0066cc;
-    }
+  &:focus {
+    outline: none;
+    border-color: #94a3b8;
+    box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.1);
   }
 }
 
@@ -326,7 +345,8 @@ export default {
 
   &:focus {
     outline: none;
-    border-color: #0066cc;
+    border-color: #94a3b8;
+    box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.1);
   }
 }
 
@@ -363,20 +383,21 @@ export default {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 20px;
-  background: #10b981;
+  padding: 12px 24px;
+  background: #334155;
   color: #fff;
   border: none;
   border-radius: 8px;
-  font-size: 1em;
+  font-size: 0.95em;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
   &:hover {
-    background: #059669;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    background: #1e293b;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
   }
 
   &:active {

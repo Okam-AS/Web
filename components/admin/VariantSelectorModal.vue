@@ -101,7 +101,7 @@
 
           <!-- Loading State -->
           <div v-if="isLoading" class="loading-container">
-            <span class="material-icons spinning">refresh</span>
+            <Loading :loading="true" :size="48" />
             <p>Laster varianter...</p>
           </div>
 
@@ -162,8 +162,13 @@
 </template>
 
 <script>
+import Loading from '~/components/atoms/Loading.vue'
+
 export default {
   name: 'VariantSelectorModal',
+  components: {
+    Loading
+  },
   props: {
     defaultSelectedVariantIds: {
       type: Array,
@@ -600,9 +605,7 @@ export default {
     margin-bottom: 12px;
     color: #0066cc;
 
-    &.spinning {
-      animation: spin 1s linear infinite;
-    }
+    // Spinner now handled by Loading component
   }
 
   p {

@@ -175,7 +175,6 @@
                         </svg>
                       </span>
                       Statistikk
-                      <span class="new-badge">NYHET</span>
                     </a>
                   </li>
                   <li>
@@ -195,7 +194,6 @@
                         </svg>
                       </span>
                       Historikk
-                      <span class="new-badge">NYHET</span>
                     </a>
                   </li>
                   <li>
@@ -256,6 +254,7 @@
                         </svg>
                       </span>
                       Kategorier
+                      <span class="new-badge">NYHET</span>
                     </a>
                   </li>
                   <li>
@@ -299,7 +298,6 @@
                         </svg>
                       </span>
                       Wolt
-                      <span class="new-badge">NYHET</span>
                     </a>
                   </li>
                   <li v-if="onboardingInProgress">

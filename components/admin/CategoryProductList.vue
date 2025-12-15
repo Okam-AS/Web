@@ -1,60 +1,72 @@
 <template>
   <div class="category-product-list">
-    <div
-      v-for="(item, index) in items"
-      :key="item.id || `temp-${index}`"
-      class="list-item"
-      :class="{ 'is-heading': item.isHeading, 'is-dragging': draggedIndex === index }"
-      draggable="true"
-      @dragstart="handleDragStart($event, index)"
-      @dragend="handleDragEnd"
-      @dragover="handleDragOver($event, index)"
-      @drop="handleDrop($event, index)"
+    <draggable
+      v-if="items.length > 0"
+      :value="items"
+      @input="handleReorder"
+      handle=".drag-handle"
+      animation="200"
+      ghost-class="ghost"
+      drag-class="dragging"
+      class="draggable-list"
     >
-      <!-- Drag Handle -->
-      <div class="drag-handle">
-        <span class="material-icons">drag_indicator</span>
-      </div>
+      <div
+        v-for="(item, index) in items"
+        :key="item.id || `temp-${index}`"
+        class="list-item"
+        :class="{ 'is-heading': item.isHeading }"
+      >
+        <!-- Drag Handle -->
+        <div class="drag-handle">
+          <span class="material-icons">drag_indicator</span>
+        </div>
 
-      <!-- Heading Item -->
-      <div v-if="item.isHeading" class="heading-content">
-        <span class="material-icons heading-icon">title</span>
-        <div class="heading-text">{{ item.heading }}</div>
-      </div>
+        <!-- Heading Item -->
+        <div v-if="item.isHeading" class="heading-content">
+          <span class="material-icons heading-icon">title</span>
+          <div class="heading-text">{{ item.heading }}</div>
+        </div>
 
-      <!-- Product Item -->
-      <div v-else class="product-content">
-        <!-- Product Image -->
-        <div class="product-image">
-          <img
-            v-if="item.product && item.product.image && item.product.image.imageUrl"
-            :src="item.product.image.imageUrl"
-            :alt="item.product.name"
-          />
-          <div v-else class="placeholder-image">
-            <span class="material-icons">image</span>
+        <!-- Product Item -->
+        <div v-else class="product-content">
+          <!-- Product Image -->
+          <div class="product-image">
+            <img
+              v-if="item.product && item.product.image && item.product.image.imageUrl"
+              :src="item.product.image.imageUrl"
+              :alt="item.product.name"
+            />
+            <div v-else class="placeholder-image">
+              <span class="material-icons">image</span>
+            </div>
+          </div>
+
+          <!-- Product Info -->
+          <div class="product-info">
+            <div class="product-name">
+              {{ item.product ? item.product.name : 'Loading...' }}
+              <span
+                v-if="item.product && isFromDifferentStore(item.product)"
+                class="store-badge"
+              >
+                {{ getStoreName(item.product) }}
+              </span>
+            </div>
+            <div v-if="item.product && item.product.description" class="product-description">
+              {{ item.product.description }}
+            </div>
+            <div v-if="item.product" class="product-price">
+              {{ priceLabel(item.product.amount, true) }}
+            </div>
           </div>
         </div>
 
-        <!-- Product Info -->
-        <div class="product-info">
-          <div class="product-name">
-            {{ item.product ? item.product.name : 'Loading...' }}
-          </div>
-          <div v-if="item.product && item.product.description" class="product-description">
-            {{ item.product.description }}
-          </div>
-          <div v-if="item.product" class="product-price">
-            {{ priceLabel(item.product.amount, true) }}
-          </div>
-        </div>
+        <!-- Delete Button -->
+        <button class="delete-btn" @click.stop="handleDelete(index)" title="Fjern">
+          <span class="material-icons">close</span>
+        </button>
       </div>
-
-      <!-- Delete Button -->
-      <button class="delete-btn" @click="handleDelete(index)" title="Fjern">
-        <span class="material-icons">delete</span>
-      </button>
-    </div>
+    </draggable>
 
     <!-- Empty State -->
     <div v-if="items.length === 0" class="empty-state">
@@ -66,67 +78,71 @@
 </template>
 
 <script>
+import draggable from 'vuedraggable'
+
 export default {
   name: 'CategoryProductList',
+  components: {
+    draggable
+  },
   props: {
     items: {
       type: Array,
       required: true
+    },
+    currentStoreId: {
+      type: Number,
+      required: false,
+      default: null
     }
   },
-  data() {
-    return {
-      draggedIndex: null,
-      dragOverIndex: null
+  computed: {
+    stores() {
+      return this.$store.state.currentUser?.adminIn || []
     }
   },
   methods: {
-    handleDragStart(event, index) {
-      this.draggedIndex = index
-      event.dataTransfer.effectAllowed = 'move'
-      event.dataTransfer.setData('text/html', event.target.innerHTML)
-      event.target.style.opacity = '0.4'
-    },
-
-    handleDragEnd(event) {
-      event.target.style.opacity = '1'
-      this.draggedIndex = null
-      this.dragOverIndex = null
-    },
-
-    handleDragOver(event, index) {
-      event.preventDefault()
-      event.dataTransfer.dropEffect = 'move'
-      this.dragOverIndex = index
-    },
-
-    handleDrop(event, index) {
-      event.preventDefault()
-
-      if (this.draggedIndex === null || this.draggedIndex === index) {
-        return
-      }
-
-      const newItems = [...this.items]
-      const draggedItem = newItems[this.draggedIndex]
-
-      // Remove from old position
-      newItems.splice(this.draggedIndex, 1)
-
-      // Insert at new position
-      const insertIndex = this.draggedIndex < index ? index - 1 : index
-      newItems.splice(insertIndex, 0, draggedItem)
-
+    handleReorder(newItems) {
       this.$emit('reorder', newItems)
     },
 
     handleDelete(index) {
-      const item = this.items[index]
-      const itemName = item.isHeading ? item.heading : (item.product ? item.product.name : 'dette elementet')
+      this.$emit('delete', index)
+    },
 
-      if (confirm(`Er du sikker på at du vil fjerne "${itemName}"?`)) {
-        this.$emit('delete', index)
+    isFromDifferentStore(product) {
+      const isDifferent = this.currentStoreId && product.storeId && product.storeId !== this.currentStoreId
+      console.log('isFromDifferentStore check:', {
+        productName: product.name,
+        productStoreId: product.storeId,
+        currentStoreId: this.currentStoreId,
+        isDifferent
+      })
+      return isDifferent
+    },
+
+    getStoreName(product) {
+      // Debug logging
+      console.log('Getting store name for product:', {
+        productName: product.name,
+        storeName: product.storeName,
+        storeId: product.storeId,
+        currentStoreId: this.currentStoreId,
+        availableStores: this.stores.map(s => ({ id: s.id, name: s.name }))
+      })
+
+      // First try to use storeName if available (from cross-store search)
+      if (product.storeName) {
+        return product.storeName
       }
+
+      // Otherwise, look up store name from storeId
+      if (product.storeId) {
+        const store = this.stores.find(s => s.id === product.storeId)
+        return store ? store.name : `Ukjent butikk (ID: ${product.storeId})`
+      }
+
+      return 'Ukjent butikk'
     }
   }
 }
@@ -136,7 +152,12 @@ export default {
 .category-product-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+}
+
+.draggable-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .list-item {
@@ -147,22 +168,30 @@ export default {
   background: #fff;
   border: 2px solid #e5e7eb;
   border-radius: 8px;
-  transition: all 0.2s;
-  cursor: move;
+  transition: all 0.15s ease;
 
   &:hover {
     border-color: #d1d5db;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   }
 
-  &.is-dragging {
-    opacity: 0.4;
-  }
-
   &.is-heading {
     background: #f9fafb;
     border-color: #d1d5db;
   }
+}
+
+// Vuedraggable classes
+.ghost {
+  opacity: 0.5;
+  background: #e0f2fe;
+  border-color: #0066cc;
+}
+
+.dragging {
+  opacity: 0.9;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transform: scale(1.02);
 }
 
 .drag-handle {
@@ -249,9 +278,21 @@ export default {
     font-weight: 600;
     color: #292c34;
     margin-bottom: 4px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    .store-badge {
+      display: inline-flex;
+      padding: 2px 8px;
+      background: #dbeafe;
+      color: #1e40af;
+      border-radius: 4px;
+      font-size: 0.75em;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
   }
 
   .product-description {
@@ -279,12 +320,13 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ef4444;
+  color: #9ca3af;
   border-radius: 6px;
   transition: all 0.2s;
 
   &:hover {
     background: #fee2e2;
+    color: #ef4444;
   }
 
   .material-icons {

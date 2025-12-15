@@ -27,14 +27,15 @@ a {
   color: darken($color-text, 10%);
   text-decoration: none;
   outline: none;
-
-  &:focus {
-    box-shadow: 0 3px 0 0 darken($color-text, 15%);
-  }
 }
 
 button {
   cursor: pointer;
+  outline: none;
+
+  &:focus {
+    outline: none;
+  }
 }
 
 h1,h2,h3,p,ul,ol,form,blockquote,figure {

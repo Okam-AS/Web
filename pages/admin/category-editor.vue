@@ -18,12 +18,12 @@
             Slett kategori
           </button>
           <button
-            v-if="hasChanges"
             class="btn btn-primary"
             @click="saveCategory"
-            :disabled="isSaving"
+            :disabled="isSaving || !hasChanges"
           >
-            <span class="material-icons">{{ isSaving ? 'refresh' : 'save' }}</span>
+            <Loading v-if="isSaving" :loading="true" :size="20" />
+            <span v-else class="material-icons">save</span>
             {{ isSaving ? 'Lagrer...' : 'Lagre endringer' }}
           </button>
         </div>
@@ -31,7 +31,7 @@
 
       <!-- Loading State -->
       <div v-if="isLoading" class="loading-container">
-        <span class="material-icons spinning">refresh</span>
+        <Loading :loading="true" :size="48" />
         <p>Laster kategori...</p>
       </div>
 
@@ -84,7 +84,7 @@
 
               <!-- Upload Overlay -->
               <div v-if="isUploadingImage" class="upload-overlay">
-                <span class="material-icons spinning">refresh</span>
+                <Loading :loading="true" :size="48" />
                 <p>Laster opp...</p>
               </div>
 
@@ -111,11 +111,11 @@
           <div class="section-header">
             <h2>Produkter</h2>
             <div class="section-actions">
-              <button class="btn btn-secondary" @click="addHeading">
+              <button class="btn btn-secondary" @click="addHeading" :disabled="isNewCategory">
                 <span class="material-icons">title</span>
                 Legg til overskrift
               </button>
-              <button class="btn btn-primary" @click="openProductSelector">
+              <button class="btn btn-primary" @click="openProductSelector" :disabled="isNewCategory">
                 <span class="material-icons">add</span>
                 Velg produkter
               </button>
@@ -123,11 +123,21 @@
           </div>
 
           <p class="section-description">
-            {{ category.categoryProductListItems.length }} produkt{{ category.categoryProductListItems.length !== 1 ? 'er' : '' }} i denne kategorien
+            <template v-if="isNewCategory">
+              Lagre kategorien først for å legge til produkter
+            </template>
+            <template v-else>
+              {{ category.categoryProductListItems.length }} produkt{{ category.categoryProductListItems.length !== 1 ? 'er' : '' }} i denne kategorien
+              <span v-if="isSavingProducts" class="saving-indicator">
+                <Loading :loading="true" :size="16" />
+                Lagrer...
+              </span>
+            </template>
           </p>
 
           <CategoryProductList
             :items="category.categoryProductListItems"
+            :currentStoreId="selectedStore"
             @reorder="handleProductsReorder"
             @delete="handleProductDelete"
           />
@@ -137,42 +147,52 @@
         <div class="editor-section">
           <div class="section-header">
             <h2>Felles tilbehør (Valgfritt)</h2>
-            <button class="btn btn-primary" @click="openVariantSelector">
+            <button class="btn btn-primary" @click="openVariantEditor" :disabled="isNewCategory">
               <span class="material-icons">add</span>
               Legg til tilbehør
             </button>
           </div>
 
           <p class="section-description">
-            Varianter som vises på alle produkter i denne kategorien
+            <template v-if="isNewCategory">
+              Lagre kategorien først for å legge til tilbehør
+            </template>
+            <template v-else>
+              Varianter som vises på alle produkter i denne kategorien. Klikk for å redigere.
+            </template>
           </p>
 
-          <div v-if="category.productVariants && category.productVariants.length > 0" class="variants-list">
+          <draggable
+            v-if="category.productVariants && category.productVariants.length > 0"
+            v-model="category.productVariants"
+            class="variants-list"
+            handle=".drag-handle"
+            animation="200"
+            ghost-class="variant-ghost"
+            @end="handleVariantReorder"
+          >
             <div
               v-for="(variant, index) in category.productVariants"
               :key="variant.id || index"
-              class="variant-item"
-              draggable="true"
-              @dragstart="handleVariantDragStart($event, index)"
-              @dragover.prevent
-              @drop.prevent="handleVariantDrop($event, index)"
+              class="variant-item clickable"
+              @click="editVariant(index)"
             >
               <span class="material-icons drag-handle">drag_indicator</span>
               <div class="variant-info">
                 <div class="variant-name">{{ variant.name }}</div>
                 <div class="variant-meta">
                   <span v-if="variant.multiselect" class="badge">Flervalg</span>
-                  <span v-if="variant.required" class="badge">Obligatorisk</span>
-                  <span class="option-count">
-                    {{ variant.options ? variant.options.length : 0 }} alternativ
+                  <span v-if="variant.required" class="badge badge-required">Obligatorisk</span>
+                  <span class="variant-options-preview">
+                    {{ formatOptionsPreview(variant.options) }}
                   </span>
                 </div>
               </div>
-              <button class="delete-btn-small" @click="removeVariant(index)">
+              <button class="delete-btn-small" @click.stop="removeVariant(index)">
                 <span class="material-icons">close</span>
               </button>
             </div>
-          </div>
+          </draggable>
           <div v-else class="empty-hint">
             Ingen felles tilbehør lagt til
           </div>
@@ -245,33 +265,55 @@
           <div class="form-row">
             <div class="form-group">
               <label>Start publisering</label>
-              <input
-                v-model="category.startPublish"
-                type="datetime-local"
-                class="form-input"
-                @change="markAsChanged"
-              />
+              <div class="datetime-input-wrapper" @click="$refs.startPublishInput.showPicker ? $refs.startPublishInput.showPicker() : $refs.startPublishInput.focus()">
+                <input
+                  ref="startPublishInput"
+                  v-model="category.startPublish"
+                  type="datetime-local"
+                  class="form-input"
+                  @change="markAsChanged"
+                />
+                <button
+                  v-if="category.startPublish"
+                  type="button"
+                  class="clear-datetime-btn"
+                  @click.stop="clearStartPublish"
+                  title="Fjern dato"
+                >
+                  <span class="material-icons">close</span>
+                </button>
+              </div>
             </div>
 
             <div class="form-group">
               <label>Stopp publisering</label>
-              <input
-                v-model="category.stopPublish"
-                type="datetime-local"
-                class="form-input"
-                @change="markAsChanged"
-              />
+              <div class="datetime-input-wrapper" @click="$refs.stopPublishInput.showPicker ? $refs.stopPublishInput.showPicker() : $refs.stopPublishInput.focus()">
+                <input
+                  ref="stopPublishInput"
+                  v-model="category.stopPublish"
+                  type="datetime-local"
+                  class="form-input"
+                  @change="markAsChanged"
+                />
+                <button
+                  v-if="category.stopPublish"
+                  type="button"
+                  class="clear-datetime-btn"
+                  @click.stop="clearStopPublish"
+                  title="Fjern dato"
+                >
+                  <span class="material-icons">close</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
         <!-- Advanced Publishing Rules -->
-        <div class="editor-section">
-          <PublishingRuleEditor
-            :rules.sync="category.publishRules"
-            @update:rules="markAsChanged"
-          />
-        </div>
+        <PublishingRuleEditor
+          :rules="category.publishRules"
+          @update:rules="updatePublishRules"
+        />
       </div>
 
       <!-- Modals -->
@@ -280,11 +322,15 @@
         :defaultSelectedProductIds="[]"
       />
 
-      <VariantSelectorModal
-        ref="variantSelector"
-        :categoryId="categoryId"
-        :defaultSelectedVariantIds="[]"
-      />
+      <VariantEditorModal ref="variantEditor" />
+
+      <!-- Toast notification -->
+      <transition name="toast">
+        <div v-if="toast.show" class="toast" :class="toast.type">
+          <span class="material-icons">{{ toast.type === 'success' ? 'check_circle' : 'error' }}</span>
+          <span>{{ toast.message }}</span>
+        </div>
+      </transition>
     </div>
   </AdminPage>
 </template>
@@ -292,9 +338,11 @@
 <script>
 import AdminPage from '~/components/organisms/AdminPage.vue'
 import ProductSelectorModal from '~/components/admin/ProductSelectorModal.vue'
-import VariantSelectorModal from '~/components/admin/VariantSelectorModal.vue'
+import VariantEditorModal from '~/components/admin/VariantEditorModal.vue'
 import CategoryProductList from '~/components/admin/CategoryProductList.vue'
 import PublishingRuleEditor from '~/components/admin/PublishingRuleEditor.vue'
+import Loading from '~/components/atoms/Loading.vue'
+import draggable from 'vuedraggable'
 import axios from 'axios'
 import $config from '~/core/helpers/configuration'
 
@@ -302,22 +350,45 @@ export default {
   components: {
     AdminPage,
     ProductSelectorModal,
-    VariantSelectorModal,
+    VariantEditorModal,
     CategoryProductList,
-    PublishingRuleEditor
+    PublishingRuleEditor,
+    Loading,
+    draggable
   },
 
   data() {
     return {
-      category: this.getEmptyCategory(),
-      originalCategory: null,
+      category: {
+        id: null,
+        name: '',
+        storeId: null,
+        orderIndex: 0,
+        hide: false,
+        soldOut: false,
+        published: false,
+        image: null,
+        categoryProductListItems: [],
+        productVariants: [],
+        hideFromDeliveryTypes: [],
+        publishRules: [],
+        handlePublishRules: true,
+        startPublish: null,
+        stopPublish: null
+      },
       isLoading: false,
       isSaving: false,
       isUploadingImage: false,
       isDragging: false,
       error: null,
       hasChanges: false,
-      draggedVariantIndex: null
+      isSavingProducts: false,
+      saveProductsDebounceTimer: null,
+      toast: {
+        show: false,
+        message: '',
+        type: 'success'
+      }
     }
   },
 
@@ -350,15 +421,20 @@ export default {
   },
 
   mounted() {
-    if (this.isNewCategory) {
-      this.category = this.getEmptyCategory()
-      this.originalCategory = JSON.stringify(this.category)
-    } else if (this.selectedStore) {
-      this.loadCategory()
+    try {
+      if (this.isNewCategory) {
+        this.category.storeId = this.selectedStore
+        this.hasChanges = false
+      } else if (this.selectedStore) {
+        this.loadCategory()
+      }
+    } catch (err) {
+      console.error('Error in mounted:', err)
+      this.error = 'Kunne ikke initialisere siden'
     }
   },
 
-  beforeRouteLeave(to, from, next) {
+  beforeRouteLeave(_, __, next) {
     if (this.hasChanges) {
       const answer = window.confirm(
         'Du har ulagrede endringer. Er du sikker på at du vil forlate siden?'
@@ -374,40 +450,43 @@ export default {
   },
 
   methods: {
-    getEmptyCategory() {
-      return {
-        id: null,
-        name: '',
-        storeId: this.selectedStore,
-        orderIndex: 0,
-        hide: false,
-        soldOut: false,
-        published: false,
-        image: null,
-        categoryProductListItems: [],
-        productVariants: [],
-        hideFromDeliveryTypes: [],
-        publishRules: [],
-        startPublish: null,
-        stopPublish: null
-      }
+    // Format datetime for datetime-local input (yyyy-MM-ddThh:mm)
+    formatDateTimeLocal(dateTimeString) {
+      if (!dateTimeString) return null
+      // Remove microseconds and timezone info, keep only yyyy-MM-ddTHH:mm:ss
+      const formatted = dateTimeString.substring(0, 19)
+      return formatted
     },
 
     async loadCategory() {
+      if (this.isLoading) return
+
       try {
         this.isLoading = true
         this.error = null
 
         const category = await this._categoryService.Get(this.categoryId, true)
+
+        // Freeze product data to prevent deep reactivity (improves performance)
+        const items = (category.categoryProductListItems || []).map(item => {
+          if (item.product) {
+            item.product = Object.freeze(item.product)
+          }
+          return item
+        })
+
         this.category = {
           ...category,
           publishRules: category.publishRules || [],
+          handlePublishRules: true,
           hideFromDeliveryTypes: category.hideFromDeliveryTypes || [],
-          categoryProductListItems: category.categoryProductListItems || [],
-          productVariants: category.productVariants || []
+          categoryProductListItems: items,
+          productVariants: category.productVariants || [],
+          // Format datetime values for datetime-local inputs
+          startPublish: this.formatDateTimeLocal(category.startPublish),
+          stopPublish: this.formatDateTimeLocal(category.stopPublish)
         }
 
-        this.originalCategory = JSON.stringify(this.category)
         this.hasChanges = false
       } catch (err) {
         console.error('Failed to load category:', err)
@@ -418,16 +497,13 @@ export default {
     },
 
     markAsChanged() {
-      this.$nextTick(() => {
-        const current = JSON.stringify(this.category)
-        this.hasChanges = current !== this.originalCategory
-      })
+      this.hasChanges = true
     },
 
     async saveCategory() {
       // Validation
       if (!this.category.name || this.category.name.trim() === '') {
-        alert('Vennligst angi et kategorinavn')
+        this.showToast('Vennligst angi et kategorinavn', 'error')
         return
       }
 
@@ -441,20 +517,18 @@ export default {
 
           // Redirect to editor for the new category
           this.$router.replace({ query: { id: created.id } })
-          this.category = created
-          alert('Kategori opprettet!')
+          this.category.id = created.id
+          this.showToast('Kategori opprettet!')
         } else {
-          // Update existing category
-          const updated = await this._categoryService.Update(this.category)
-          this.category = updated
-          alert('Kategori lagret!')
+          // Update existing category - don't replace the whole object
+          await this._categoryService.Update(this.category)
+          this.showToast('Kategori lagret!')
         }
 
-        this.originalCategory = JSON.stringify(this.category)
         this.hasChanges = false
       } catch (err) {
         console.error('Failed to save category:', err)
-        alert('Kunne ikke lagre kategorien. Vennligst prøv igjen.')
+        this.showToast('Kunne ikke lagre kategorien. Vennligst prøv igjen.', 'error')
       } finally {
         this.isSaving = false
       }
@@ -467,11 +541,11 @@ export default {
 
       try {
         await this._categoryService.Delete(this.categoryId)
-        alert('Kategori slettet')
+        this.showToast('Kategori slettet')
         this.$router.push('/admin/categories')
       } catch (err) {
         console.error('Failed to delete category:', err)
-        alert('Kunne ikke slette kategorien. Vennligst prøv igjen.')
+        this.showToast('Kunne ikke slette kategorien. Vennligst prøv igjen.', 'error')
       }
     },
 
@@ -503,12 +577,12 @@ export default {
       const file = event.dataTransfer.files[0]
 
       if (!file.type.match(/image\/(jpeg|png)/)) {
-        alert('Kun JPG og PNG filer er tillatt')
+        this.showToast('Kun JPG og PNG filer er tillatt', 'error')
         return
       }
 
       if (file.size > 5 * 1024 * 1024) {
-        alert('Filstørrelsen må være mindre enn 5MB')
+        this.showToast('Filstørrelsen må være mindre enn 5MB', 'error')
         return
       }
 
@@ -518,14 +592,14 @@ export default {
 
         if (this.isNewCategory) {
           // For new categories, just store the blob to upload after creation
-          alert('Lagre kategorien først før du laster opp bilde')
+          this.showToast('Lagre kategorien først før du laster opp bilde', 'error')
           return
         }
 
         await this.uploadImage(resizedBlob)
       } catch (error) {
         console.error('Failed to process/upload image:', error)
-        alert('Kunne ikke laste opp bilde')
+        this.showToast('Kunne ikke laste opp bilde', 'error')
       } finally {
         this.isUploadingImage = false
       }
@@ -596,6 +670,11 @@ export default {
       const toRemove = existingProductIds.filter(id => !pickedProductIds.includes(id))
       const toAdd = pickedProductIds.filter(id => !existingProductIds.includes(id))
 
+      // If no changes, just return without saving
+      if (toRemove.length === 0 && toAdd.length === 0) {
+        return
+      }
+
       // Remove deselected products
       toRemove.forEach(productId => {
         const index = this.category.categoryProductListItems.findIndex(
@@ -606,7 +685,7 @@ export default {
         }
       })
 
-      // Add new products
+      // Add new products (without product data for now)
       toAdd.forEach(productId => {
         this.category.categoryProductListItems.push({
           productId: productId,
@@ -615,13 +694,16 @@ export default {
       })
 
       await this.saveCategoryProductList()
+
+      // Reload category to get full product data from backend
+      await this.loadCategory()
     },
 
     async addHeading() {
       const text = prompt('Overskriftstekst (2-30 tegn):')
       if (!text || text.trim().length < 2 || text.trim().length > 30) {
         if (text !== null) {
-          alert('Overskriften må være mellom 2 og 30 tegn')
+          this.showToast('Overskriften må være mellom 2 og 30 tegn', 'error')
         }
         return
       }
@@ -635,9 +717,19 @@ export default {
       await this.saveCategoryProductList()
     },
 
-    async handleProductsReorder(newOrder) {
-      this.category.categoryProductListItems = newOrder
-      await this.saveCategoryProductList()
+    handleProductsReorder(newOrder) {
+      // Use Vue.set or spread to ensure reactivity
+      this.$set(this.category, 'categoryProductListItems', [...newOrder])
+      this.debouncedSaveProductList()
+    },
+
+    debouncedSaveProductList() {
+      if (this.saveProductsDebounceTimer) {
+        clearTimeout(this.saveProductsDebounceTimer)
+      }
+      this.saveProductsDebounceTimer = setTimeout(() => {
+        this.saveCategoryProductList()
+      }, 300)
     },
 
     async handleProductDelete(index) {
@@ -651,39 +743,59 @@ export default {
         return
       }
 
+      if (this.isSavingProducts) return
+
       try {
+        this.isSavingProducts = true
+
         // Assign order indexes
         this.category.categoryProductListItems.forEach((item, index) => {
           item.orderIndex = index
         })
 
-        const updatedCategory = await this._categoryService.CreateOrUpdateCategoryProductList(
+        // Just send the update, don't replace the whole category
+        await this._categoryService.CreateOrUpdateCategoryProductList(
           this.categoryId,
           this.category.categoryProductListItems
         )
 
-        this.category = updatedCategory
-        this.originalCategory = JSON.stringify(this.category)
         this.hasChanges = false
+        this.showToast('Produktliste lagret!')
       } catch (err) {
         console.error('Failed to save product list:', err)
-        alert('Kunne ikke lagre produktlisten. Vennligst prøv igjen.')
-        await this.loadCategory() // Rollback
+        this.showToast('Kunne ikke lagre produktlisten. Vennligst prøv igjen.', 'error')
+      } finally {
+        this.isSavingProducts = false
       }
     },
 
     // Variant management
-    async openVariantSelector() {
-      const existingVariantIds = this.category.productVariants
-        ? this.category.productVariants.map(v => v.id)
-        : []
+    async openVariantEditor() {
+      const newVariant = await this.$refs.variantEditor.open(null)
+      if (!newVariant) return
 
-      const selectedVariants = await this.$refs.variantSelector.open(existingVariantIds)
-
-      if (!selectedVariants) return
-
-      this.category.productVariants = selectedVariants
+      if (!this.category.productVariants) {
+        this.category.productVariants = []
+      }
+      this.category.productVariants.push(newVariant)
       await this.saveVariants()
+    },
+
+    async editVariant(index) {
+      const variant = this.category.productVariants[index]
+      const editedVariant = await this.$refs.variantEditor.open(variant)
+      if (!editedVariant) return
+
+      this.$set(this.category.productVariants, index, editedVariant)
+      await this.saveVariants()
+    },
+
+    formatOptionsPreview(options) {
+      if (!options || options.length === 0) return 'Ingen alternativer'
+      const names = options.map(o => o.name).filter(n => n)
+      if (names.length === 0) return 'Ingen alternativer'
+      if (names.length <= 3) return names.join(', ')
+      return `${names.slice(0, 2).join(', ')}, +${names.length - 2} mer`
     },
 
     async saveVariants() {
@@ -703,12 +815,10 @@ export default {
           this.category.productVariants
         )
 
-        alert('Tilbehør lagret!')
-        await this.loadCategory()
+        this.showToast('Tilbehør lagret!')
       } catch (err) {
         console.error('Failed to save variants:', err)
-        alert('Kunne ikke lagre tilbehør. Vennligst prøv igjen.')
-        await this.loadCategory()
+        this.showToast('Kunne ikke lagre tilbehør. Vennligst prøv igjen.', 'error')
       }
     },
 
@@ -719,26 +829,9 @@ export default {
       }
     },
 
-    handleVariantDragStart(event, index) {
-      this.draggedVariantIndex = index
-      event.dataTransfer.effectAllowed = 'move'
-    },
-
-    async handleVariantDrop(event, index) {
-      if (this.draggedVariantIndex === null || this.draggedVariantIndex === index) {
-        return
-      }
-
-      const variants = [...this.category.productVariants]
-      const draggedVariant = variants[this.draggedVariantIndex]
-
-      variants.splice(this.draggedVariantIndex, 1)
-      const insertIndex = this.draggedVariantIndex < index ? index - 1 : index
-      variants.splice(insertIndex, 0, draggedVariant)
-
-      this.category.productVariants = variants
-      this.draggedVariantIndex = null
-
+    async handleVariantReorder() {
+      // vuedraggable automatically updates the array via v-model
+      // We just need to save the new order
       await this.saveVariants()
     },
 
@@ -763,6 +856,13 @@ export default {
       this.markAsChanged()
     },
 
+    showToast(message, type = 'success') {
+      this.toast = { show: true, message, type }
+      setTimeout(() => {
+        this.toast.show = false
+      }, 3000)
+    },
+
     toggleHomeDelivery() {
       const homeDeliveryTypes = ['InstantHomeDelivery', 'DineHomeDelivery', 'WoltDelivery']
 
@@ -784,6 +884,28 @@ export default {
         })
       }
 
+      this.markAsChanged()
+    },
+
+    updatePublishRules(newRules) {
+      // Only mark as changed if rules actually changed
+      const currentRulesJson = JSON.stringify(this.category.publishRules || [])
+      const newRulesJson = JSON.stringify(newRules || [])
+
+      this.$set(this.category, 'publishRules', newRules)
+
+      if (currentRulesJson !== newRulesJson) {
+        this.markAsChanged()
+      }
+    },
+
+    clearStartPublish() {
+      this.category.startPublish = null
+      this.markAsChanged()
+    },
+
+    clearStopPublish() {
+      this.category.stopPublish = null
       this.markAsChanged()
     }
   }
@@ -812,16 +934,17 @@ export default {
   gap: 8px;
   background: none;
   border: none;
-  color: #0066cc;
+  color: #64748b;
   font-size: 1em;
   font-weight: 600;
   cursor: pointer;
   padding: 8px 12px;
   border-radius: 6px;
-  transition: background 0.2s;
+  transition: all 0.2s;
 
   &:hover {
     background: #f3f4f6;
+    color: #334155;
   }
 
   .material-icons {
@@ -858,19 +981,15 @@ export default {
 
   .material-icons {
     font-size: 20px;
-
-    &.spinning {
-      animation: spin 1s linear infinite;
-    }
   }
 }
 
 .btn-primary {
-  background: #0066cc;
+  background: #334155;
   color: #fff;
 
   &:hover:not(:disabled) {
-    background: #0052a3;
+    background: #1e293b;
   }
 }
 
@@ -912,15 +1031,7 @@ export default {
   }
 }
 
-.loading-container {
-  .material-icons {
-    color: #0066cc;
-
-    &.spinning {
-      animation: spin 1s linear infinite;
-    }
-  }
-}
+// Loading component handles the spinner styling
 
 .error-container {
   .material-icons {
@@ -970,6 +1081,19 @@ export default {
   margin: 0 0 16px 0;
   color: #6b7280;
   font-size: 0.95em;
+
+  .saving-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 8px;
+    color: #334155;
+    font-size: 0.9em;
+
+    .material-icons {
+      font-size: 16px;
+    }
+  }
 }
 
 .form-group {
@@ -1004,7 +1128,8 @@ export default {
 
   &:focus {
     outline: none;
-    border-color: #0066cc;
+    border-color: #94a3b8;
+    box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.1);
   }
 }
 
@@ -1015,6 +1140,46 @@ export default {
 
   @media (max-width: 640px) {
     grid-template-columns: 1fr;
+  }
+}
+
+.datetime-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  .form-input {
+    flex: 1;
+    padding-right: 40px; // Make room for the clear button
+    cursor: pointer;
+  }
+
+  .clear-datetime-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9ca3af;
+    border-radius: 4px;
+    transition: all 0.2s;
+    z-index: 1;
+
+    &:hover {
+      background: #fee2e2;
+      color: #ef4444;
+    }
+
+    .material-icons {
+      font-size: 18px;
+    }
   }
 }
 
@@ -1052,13 +1217,13 @@ export default {
   transition: all 0.2s;
 
   &:hover {
-    border-color: #0066cc;
+    border-color: #cbd5e0;
     background: #f9fafb;
   }
 
   &.dragging {
-    border-color: #0066cc;
-    background: rgba(0, 102, 204, 0.05);
+    border-color: #334155;
+    background: rgba(51, 65, 85, 0.05);
   }
 
   &.uploading {
@@ -1085,12 +1250,8 @@ export default {
 
   .material-icons {
     font-size: 48px;
-    color: #0066cc;
+    color: #334155;
     margin-bottom: 12px;
-
-    &.spinning {
-      animation: spin 1s linear infinite;
-    }
   }
 
   p {
@@ -1143,15 +1304,26 @@ export default {
   background: #f9fafb;
   border: 2px solid #e5e7eb;
   border-radius: 8px;
-  cursor: move;
+  transition: all 0.15s ease;
+
+  &.clickable {
+    cursor: pointer;
+
+    &:hover {
+      border-color: #cbd5e0;
+      background: #f1f5f9;
+    }
+  }
 
   &:hover {
-    border-color: #d1d5db;
+    border-color: #cbd5e0;
   }
 
   .drag-handle {
     color: #9ca3af;
     cursor: grab;
+    display: flex;
+    align-items: center;
 
     &:active {
       cursor: grabbing;
@@ -1160,6 +1332,7 @@ export default {
 
   .variant-info {
     flex: 1;
+    min-width: 0;
 
     .variant-name {
       font-weight: 600;
@@ -1180,11 +1353,21 @@ export default {
         border-radius: 4px;
         font-size: 0.8em;
         font-weight: 600;
+        flex-shrink: 0;
       }
 
-      .option-count {
-        font-size: 0.9em;
+      .badge-required {
+        background: #fef3c7;
+        color: #92400e;
+      }
+
+      .variant-options-preview {
+        font-size: 0.85em;
         color: #6b7280;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 200px;
       }
     }
   }
@@ -1196,17 +1379,27 @@ export default {
     padding: 4px;
     display: flex;
     align-items: center;
-    color: #ef4444;
+    color: #9ca3af;
     border-radius: 4px;
+    flex-shrink: 0;
+    transition: all 0.2s;
 
     &:hover {
       background: #fee2e2;
+      color: #ef4444;
     }
 
     .material-icons {
       font-size: 20px;
     }
   }
+}
+
+// Vuedraggable ghost class for variants
+.variant-ghost {
+  opacity: 0.5;
+  background: #f1f5f9;
+  border-color: #334155;
 }
 
 .empty-hint {
@@ -1218,12 +1411,44 @@ export default {
   border-radius: 8px;
 }
 
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
+// Removed @keyframes spin - now using Loading component
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  font-weight: 500;
+
+  &.success {
+    background: #334155;
+    color: #fff;
   }
-  to {
-    transform: rotate(360deg);
+
+  &.error {
+    background: #ef4444;
+    color: #fff;
   }
+
+  .material-icons {
+    font-size: 20px;
+  }
+}
+
+.toast-enter-active,
+.toast-leave-active {
+  transition: all 0.3s ease;
+}
+
+.toast-enter-from,
+.toast-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
 }
 </style>
