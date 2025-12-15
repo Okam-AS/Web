@@ -917,6 +917,10 @@ export default {
   padding: 2rem;
   max-width: 1000px;
   margin: 0 auto;
+
+  @media (max-width: 768px) {
+    padding: 0.5rem;
+  }
 }
 
 .page-header {
