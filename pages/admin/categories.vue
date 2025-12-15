@@ -1,17 +1,18 @@
 <template>
   <AdminPage>
-    <div class="container">
-      <div>
-        <h1 style="margin-bottom: 0.5em">Kategorier</h1>
-        <p style="margin-bottom: 1.5em">Oversikt over kategorier for valgt butikk. For administrasjon av kategorier, bruk Okam Admin appen.</p>
+    <div class="categories-page">
+      <div class="page-header">
+        <div>
+          <h1>Kategorier</h1>
+          <p>Administrer kategorier for valgt butikk.</p>
+        </div>
+        <button class="btn btn-create" @click="createNewCategory">
+          <span class="material-icons">add</span>
+          Opprett kategori
+        </button>
       </div>
-      <div
-        v-if="loading"
-        class="loading-container"
-      >
-        <i class="fas fa-spinner fa-spin" />
-        <span>Laster kategorier...</span>
-      </div>
+
+      <LoadingSkeleton v-if="loading" />
 
       <div
         v-else-if="error"
@@ -20,45 +21,46 @@
         <p>{{ error }}</p>
       </div>
 
-      <div
-        v-else-if="categories.length === 0"
-        class="no-categories"
-      >
-        <p>Ingen kategorier funnet for denne butikken.</p>
+      <div v-else-if="categories.length === 0" class="empty-state">
+        <span class="material-icons">inventory_2</span>
+        <h3>Ingen kategorier enda</h3>
+        <p>Kom i gang ved å opprette din første kategori</p>
+        <button class="create-first-btn" @click="createNewCategory">
+          <span class="material-icons">add</span>
+          Opprett første kategori
+        </button>
       </div>
 
       <div
         v-else
         class="categories-container"
       >
-        <div class="categories-grid">
+        <draggable
+          v-model="categories"
+          class="categories-grid"
+          handle=".drag-handle"
+          animation="200"
+          ghost-class="category-ghost"
+          drag-class="category-dragging"
+          @end="handleCategoryReorder"
+        >
           <div
             v-for="category in categories"
             :key="category.id"
             class="category-card"
-            :class="{ hidden: category.hide }"
+            :class="{
+              hidden: category.hide
+            }"
+            @click="editCategory(category.id)"
           >
-            <div
-              class="category-image-container"
-              :class="{ dragging: draggingCategories[category.id] }"
-              @dragover.prevent="draggingCategories[category.id] = true"
-              @dragleave.prevent="draggingCategories[category.id] = false"
-              @drop.prevent="handleDrop($event, category.id)"
-              @click="triggerFileInput(category.id)"
-            >
-              <input
-                :ref="`fileInput-${category.id}`"
-                type="file"
-                class="hidden-file-input"
-                accept="image/jpeg,image/png"
-                @change="handleFileSelect($event, category.id)"
-              />
-              <div
-                v-if="uploadingFor === category.id"
-                class="loading-overlay"
-              >
-                <i class="fas fa-spinner fa-spin" />
+            <!-- Drag Handle -->
+            <div class="drag-handle-container" @click.stop>
+              <div class="drag-handle" title="Dra for å endre rekkefølge">
+                <span class="material-icons">drag_indicator</span>
               </div>
+            </div>
+
+            <div class="category-image-container">
               <img
                 v-if="category.image && category.image.imageUrl"
                 :src="category.image.imageUrl"
@@ -68,7 +70,6 @@
               <div
                 v-else
                 class="category-image-placeholder"
-                style="pointer-events: none"
               >
                 <svg
                   width="50"
@@ -97,7 +98,6 @@
                     fill="#adb5bd"
                   />
                 </svg>
-                <span class="upload-hint">Klikk eller slipp bilde her</span>
               </div>
               <div class="category-overlay" />
               <div class="category-status-top">
@@ -119,7 +119,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </draggable>
       </div>
     </div>
   </AdminPage>
@@ -127,12 +127,14 @@
 
 <script>
 import AdminPage from "~/components/organisms/AdminPage.vue";
-import axios from "axios";
-import $config from "~/core/helpers/configuration";
+import LoadingSkeleton from "~/components/molecules/LoadingSkeleton.vue";
+import draggable from "vuedraggable";
 
 export default {
   components: {
     AdminPage,
+    LoadingSkeleton,
+    draggable,
   },
 
   data() {
@@ -140,9 +142,7 @@ export default {
       categories: [],
       loading: false,
       error: null,
-      uploadingFor: null,
-      draggingCategories: {},
-      imageDimensions: {},
+      isReordering: false
     };
   },
 
@@ -167,115 +167,65 @@ export default {
       this.loadCategories();
     }
   },
+
   methods: {
-    async handleDrop(event, categoryId) {
-      const file = event.dataTransfer.files[0];
-
-      if (!file.type.match(/image\/(jpeg|png)/)) {
-        alert("Only JPG and PNG files are allowed");
+    async createNewCategory() {
+      const name = prompt('Kategorinavn:');
+      if (!name || name.trim() === '') {
         return;
       }
-
-      if (file.size > 5 * 1024 * 1024) {
-        alert("File size must be less than 5MB");
-        return;
-      }
-
-      this.uploadingFor = categoryId;
 
       try {
-        const resizedBlob = await this.processImage(file);
-        await this.uploadImage(categoryId, resizedBlob);
-      } catch (error) {
-        console.error("Failed to upload image:", error);
-        alert("Failed to upload image");
-      } finally {
-        this.uploadingFor = null;
-        this.draggingCategories[categoryId] = false;
-      }
-    },
+        const newCategory = {
+          name: name.trim(),
+          storeId: this.selectedStore,
+          orderIndex: this.categories.length,
+          hide: false,
+          soldOut: false,
+          published: false
+        };
 
-    triggerFileInput(categoryId) {
-      const fileInput = this.$refs[`fileInput-${categoryId}`];
-      if (fileInput?.[0]) {
-        fileInput[0].click();
-      }
-    },
+        const created = await this._categoryService.Create(newCategory);
 
-    handleFileSelect(event, categoryId) {
-      const file = event.target.files[0];
-      if (!file) {
-        return;
-      }
-
-      // Create a fake drop event to reuse existing logic
-      const fakeDropEvent = { dataTransfer: { files: [file] } };
-      this.handleDrop(fakeDropEvent, categoryId);
-
-      // Reset the input so the same file can be selected again
-      event.target.value = "";
-    },
-
-    async processImage(file) {
-      const objectUrl = URL.createObjectURL(file);
-      const img = new Image();
-
-      await new Promise((resolve, reject) => {
-        img.onload = resolve;
-        img.onerror = reject;
-        img.src = objectUrl;
-      });
-
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-
-      // Set fixed dimensions
-      canvas.width = 500;
-      canvas.height = 500;
-
-      // Calculate crop dimensions
-      const size = Math.min(img.width, img.height);
-      const startX = (img.width - size) / 2;
-      const startY = (img.height - size) / 2;
-
-      // Draw the centered square crop
-      ctx.drawImage(
-        img,
-        startX,
-        startY,
-        size,
-        size, // Source crop
-        0,
-        0,
-        500,
-        500 // Destination dimensions
-      );
-
-      URL.revokeObjectURL(objectUrl);
-
-      return new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.9));
-    },
-
-    uploadImage(categoryId, blob) {
-      const formData = new FormData();
-      formData.append("image", blob, "image.jpg");
-      formData.append("guidId", categoryId);
-
-      return axios
-        .post(`${$config.okamApiBaseUrl}/categories/${categoryId}/image`, formData, {
-          headers: {
-            Authorization: `Bearer ${this.$store.state.currentUser.token}`,
-          },
-        })
-        .then(() => {
-          // Reload categories to get updated image
-          this.loadCategories();
-          this.$set(this.imageDimensions, categoryId, "500x500");
-        })
-        .catch((error) => {
-          console.error("Error uploading image:", error);
-          alert("Failed to upload image: " + (error.message || "Unknown error"));
+        // Navigate to editor
+        this.$router.push({
+          path: '/admin/category-editor',
+          query: { id: created.id }
         });
+      } catch (err) {
+        console.error('Failed to create category:', err);
+        alert('Kunne ikke opprette kategorien. Vennligst prøv igjen.');
+      }
+    },
+
+    editCategory(categoryId) {
+      this.$router.push({
+        path: '/admin/category-editor',
+        query: { id: categoryId }
+      });
+    },
+
+    // Category reordering with drag and drop
+    async handleCategoryReorder() {
+      if (this.isReordering) return;
+
+      try {
+        this.isReordering = true;
+
+        // Assign order indexes based on current array order
+        this.categories.forEach((category, index) => {
+          category.orderIndex = index;
+        });
+
+        // Save to API
+        await this._categoryService.Reorder(this.selectedStore, this.categories);
+      } catch (err) {
+        console.error('Failed to reorder categories:', err);
+        alert('Kunne ikke lagre rekkefølgen. Vennligst last siden på nytt.');
+        this.loadCategories(); // Reload to get correct order
+      } finally {
+        this.isReordering = false;
+      }
     },
 
     loadCategories() {
@@ -299,25 +249,79 @@ export default {
 </script>
 
 <style lang="scss">
-.container {
-  padding: 2rem;
-  max-width: 1200px;
+.categories-page {
+  max-width: 1400px;
   margin: 0 auto;
-}
+  padding: 24px;
 
-.loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 3rem;
-
-  i {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    color: #0066cc;
+  @media (max-width: 768px) {
+    padding: 16px;
   }
 }
+
+.page-header {
+  margin-bottom: 32px;
+
+  h1 {
+    font-size: 2em;
+    font-weight: 600;
+    color: #292c34;
+    margin: 0 0 8px 0;
+
+    @media (max-width: 768px) {
+      font-size: 1.5em;
+    }
+  }
+
+  p {
+    color: #64748b;
+    margin: 0 0 24px 0;
+    font-size: 0.95em;
+  }
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  .material-icons {
+    font-size: 20px;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.btn-create {
+  background: #334155;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    background: #1e293b;
+  }
+}
+
 
 .error-container {
   padding: 1rem;
@@ -327,16 +331,65 @@ export default {
   margin-bottom: 1rem;
 }
 
-.no-categories {
-  padding: 2rem;
+.empty-state {
   text-align: center;
-  background-color: #f5f5f5;
-  border-radius: 4px;
+  padding: 64px 24px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  margin: 32px 0;
+
+  .material-icons {
+    font-size: 4em;
+    color: #cbd5e0;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-size: 1.5em;
+    color: #292c34;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  p {
+    color: #64748b;
+    margin-bottom: 24px;
+    font-size: 0.95em;
+  }
+
+  .create-first-btn {
+    background: #334155;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    &:hover {
+      background: #1e293b;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .material-icons {
+      font-size: 20px;
+      color: white;
+      margin-bottom: 0;
+    }
+  }
 }
 
 .categories-container {
   background-color: #f8f9fa;
-  border-radius: 4px;
+  border-radius: 8px;
   padding: 1rem;
 }
 
@@ -351,20 +404,79 @@ export default {
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
   position: relative;
   height: 200px;
   cursor: pointer;
+  user-select: none;
 
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+
+    .drag-handle-container {
+      opacity: 1;
+    }
   }
 
   &.hidden {
     opacity: 0.7;
   }
 }
+
+// Vuedraggable ghost and drag classes
+.category-ghost {
+  opacity: 0.5;
+  background: #e0f2fe;
+  transform: rotate(2deg);
+}
+
+.category-dragging {
+  opacity: 0.9;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
+}
+
+.drag-handle-container {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 5;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.drag-handle {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 6px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s;
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  .material-icons {
+    font-size: 20px;
+    color: #6b7280;
+  }
+
+  &:hover {
+    background: #f3f4f6;
+    transform: scale(1.1);
+
+    .material-icons {
+      color: #111827;
+    }
+  }
+}
+
 
 .category-image-container {
   height: 100%;
@@ -375,33 +487,6 @@ export default {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-
-  &.dragging {
-    border: 2px dashed #0066cc;
-    background-color: rgba(0, 102, 204, 0.1);
-  }
-}
-
-.hidden-file-input {
-  display: none;
-}
-
-.loading-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(255, 255, 255, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-
-  i {
-    font-size: 2rem;
-    color: #0066cc;
-  }
 }
 
 .category-image {
@@ -426,16 +511,7 @@ export default {
   svg {
     width: 50px;
     height: 50px;
-    margin-bottom: 8px;
   }
-}
-
-.upload-hint {
-  display: block;
-  margin-top: 8px;
-  font-size: 0.8rem;
-  color: #6c757d;
-  text-align: center;
 }
 
 .category-overlay {
@@ -445,6 +521,7 @@ export default {
   right: 0;
   height: 100%;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.7) 100%);
+  pointer-events: none;
 }
 
 .category-status-top {
@@ -457,6 +534,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+  pointer-events: none;
 }
 
 .category-details {
@@ -466,6 +544,7 @@ export default {
   right: 0;
   padding: 1rem;
   z-index: 2;
+  pointer-events: none;
 }
 
 .category-name {

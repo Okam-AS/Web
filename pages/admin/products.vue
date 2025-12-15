@@ -1,11 +1,12 @@
 <template>
   <AdminPage @login-success="handleLoginSuccess">
-    <div class="container">
-      <div>
-        <h1 style="margin-bottom: 0.5em">Produkter</h1>
-        <p style="margin-bottom: 1.5em">Et verktøy for å enkelt kunne redigere produkter på PC</p>
+    <div class="products-page">
+      <div class="page-header">
+        <h1>Produkter</h1>
+        <p>Et verktøy for å enkelt kunne redigere produkter på PC</p>
       </div>
-      <div class="store-selector">
+      <div class="controls-section">
+        <div class="store-selector">
         <div class="selector-container">
           <div class="filter-wrapper">
             <div class="search-input">
@@ -44,8 +45,9 @@
           </button>
         </div>
       </div>
+      </div>
 
-      <div class="results-count">
+      <div class="results-count" v-if="!isLoading && products.length > 0">
         Viser {{ paginatedProducts.length }} av {{ products.length }} produkter
         <button
           v-if="productFilter"
@@ -56,7 +58,18 @@
         </button>
       </div>
 
-      <div class="products-grid">
+      <LoadingSkeleton v-if="isLoading" />
+
+      <div v-else-if="products.length === 0 && !productFilter" class="empty-state">
+        <span class="material-icons">inventory_2</span>
+        <h3>Ingen produkter enda</h3>
+        <p>Kom i gang ved å legge til ditt første produkt</p>
+        <button class="create-first-btn" @click="createNewProduct">
+          <i class="fas fa-plus" /> Opprett første produkt
+        </button>
+      </div>
+
+      <div v-else-if="paginatedProducts.length > 0" class="products-grid">
         <div
           v-for="product in paginatedProducts"
           :key="product.id"
@@ -84,7 +97,7 @@
               v-if="uploadingFor === product.id"
               class="loading-overlay"
             >
-              <i class="fas fa-spinner fa-spin" />
+              <Loading :loading="true" :size="30" />
             </div>
             <div v-if="product.image?.imageUrl">
               <img
@@ -204,7 +217,7 @@
                     v-if="uploadingFor === selectedProduct.id"
                     class="loading-overlay"
                   >
-                    <i class="fas fa-spinner fa-spin" />
+                    <Loading :loading="true" :size="30" />
                   </div>
                   <div v-if="selectedProduct.image?.imageUrl">
                     <img
@@ -339,7 +352,46 @@
               </div>
             </div>
 
-            <p class="results-count">For andre produktendringer (som f.eks varianter), vennligst bruk Okam Admin appen.</p>
+            <!-- Product Variants Section -->
+            <div v-if="selectedProduct.id" class="form-group variants-section">
+              <div class="section-header-inline">
+                <label>Tilbehør / Varianter</label>
+                <button
+                  class="btn-add-variant"
+                  type="button"
+                  @click="openVariantEditor"
+                >
+                  <i class="fas fa-plus" /> Legg til
+                </button>
+              </div>
+              <p class="helper-text">Varianter som er spesifikke for dette produktet</p>
+
+              <div v-if="selectedProduct.productVariants && selectedProduct.productVariants.length > 0" class="variants-list-compact">
+                <div
+                  v-for="(variant, index) in selectedProduct.productVariants"
+                  :key="variant.id || index"
+                  class="variant-item-compact"
+                  @click="editVariant(index)"
+                >
+                  <div class="variant-info-compact">
+                    <div class="variant-name-compact">{{ variant.name }}</div>
+                    <div class="variant-meta-compact">
+                      <span v-if="variant.multiselect" class="badge-compact">Flervalg</span>
+                      <span v-if="variant.required" class="badge-compact badge-required-compact">Obligatorisk</span>
+                      <span class="variant-options-preview-compact">
+                        {{ formatOptionsPreview(variant.options) }}
+                      </span>
+                    </div>
+                  </div>
+                  <button class="delete-btn-variant" type="button" @click.stop="removeVariant(index)">
+                    <i class="fas fa-trash" />
+                  </button>
+                </div>
+              </div>
+              <div v-else class="empty-hint-compact">
+                Ingen varianter lagt til
+              </div>
+            </div>
           </div>
 
           <div class="editor-actions">
@@ -367,18 +419,28 @@
           </div>
         </div>
       </div>
+
+      <!-- Modals -->
+      <VariantEditorModal ref="variantEditor" />
     </div>
   </AdminPage>
 </template>
 
 <script>
 import AdminPage from "~/components/organisms/AdminPage.vue";
+import VariantEditorModal from "~/components/admin/VariantEditorModal.vue";
+import LoadingSkeleton from "~/components/molecules/LoadingSkeleton.vue";
+import Loading from "~/components/atoms/Loading.vue";
 import axios from "axios";
-import dayjs from "dayjs";
 import $config from "~/core/helpers/configuration";
 
 export default {
-  components: { AdminPage },
+  components: {
+    AdminPage,
+    VariantEditorModal,
+    LoadingSkeleton,
+    Loading
+  },
   data: () => ({
     products: [],
     draggingProducts: {},
@@ -389,6 +451,12 @@ export default {
     itemsPerPage: 10,
     selectedProduct: null,
     isSaving: false,
+    isLoading: false,
+    toast: {
+      show: false,
+      message: '',
+      type: 'success'
+    }
   }),
 
   computed: {
@@ -487,6 +555,7 @@ export default {
     },
 
     async loadProducts() {
+      this.isLoading = true;
       try {
         const products = await this._productService.GetAll(this.selectedStore);
         this.products = this.sortProductsByDate(products);
@@ -494,6 +563,8 @@ export default {
         products.forEach((p) => this.updateImageDimension(p));
       } catch (err) {
         console.error("Failed to load products:", err);
+      } finally {
+        this.isLoading = false;
       }
     },
 
@@ -649,8 +720,24 @@ export default {
       }
     },
 
-    editProduct(product) {
-      this.selectedProduct = JSON.parse(JSON.stringify(product));
+    async editProduct(product) {
+      // Fetch full product details from server (includes productVariants)
+      try {
+        const fullProduct = await this._productService.Get(product.id);
+        this.selectedProduct = JSON.parse(JSON.stringify(fullProduct));
+
+        // Ensure productVariants is initialized
+        if (!this.selectedProduct.productVariants) {
+          this.selectedProduct.productVariants = [];
+        }
+      } catch (err) {
+        console.error('Failed to load product details:', err);
+        // Fallback to the product from the list
+        this.selectedProduct = JSON.parse(JSON.stringify(product));
+        if (!this.selectedProduct.productVariants) {
+          this.selectedProduct.productVariants = [];
+        }
+      }
     },
 
     async saveProduct() {
@@ -805,6 +892,7 @@ export default {
         deliveryPriceEnabled: false,
         deliveryAdditionalAmount: 0,
         deliveryTax: 15,
+        productVariants: []
       };
     },
 
@@ -840,7 +928,7 @@ export default {
           // Use the full ISO string for comparison to preserve millisecond precision
           const dateA = a.createdAt && a.createdAt !== "0001-01-01T00:00:00" ? a.createdAt : "9999-12-31T23:59:59.9999999";
           const dateB = b.createdAt && b.createdAt !== "0001-01-01T00:00:00" ? b.createdAt : "9999-12-31T23:59:59.9999999";
-          
+
           // Direct string comparison works for ISO dates and preserves millisecond precision
           return dateA < dateB ? -1 : dateA > dateB ? 1 : 0;
         });
@@ -849,31 +937,146 @@ export default {
       // Otherwise return the original array
       return products;
     },
+
+    // Variant management methods
+    async openVariantEditor() {
+      const newVariant = await this.$refs.variantEditor.open(null);
+      if (!newVariant) return;
+
+      if (!this.selectedProduct.productVariants) {
+        this.selectedProduct.productVariants = [];
+      }
+      this.selectedProduct.productVariants.push(newVariant);
+      await this.saveVariants();
+    },
+
+    async editVariant(index) {
+      const variant = this.selectedProduct.productVariants[index];
+      const editedVariant = await this.$refs.variantEditor.open(variant);
+      if (!editedVariant) return;
+
+      this.$set(this.selectedProduct.productVariants, index, editedVariant);
+      await this.saveVariants();
+    },
+
+    async removeVariant(index) {
+      if (!confirm('Er du sikker på at du vil fjerne dette tilbehøret?')) {
+        return;
+      }
+      this.selectedProduct.productVariants.splice(index, 1);
+      await this.saveVariants();
+    },
+
+    formatOptionsPreview(options) {
+      if (!options || options.length === 0) return 'Ingen alternativer';
+      const names = options.map(o => o.name).filter(n => n);
+      if (names.length === 0) return 'Ingen alternativer';
+      if (names.length <= 3) return names.join(', ');
+      return `${names.slice(0, 2).join(', ')}, +${names.length - 2} mer`;
+    },
+
+    async saveVariants() {
+      if (!this.selectedProduct.id) {
+        this.showToast('Lagre produktet først', 'error');
+        return;
+      }
+
+      try {
+        // Assign order indexes
+        this.selectedProduct.productVariants.forEach((variant, index) => {
+          variant.orderIndex = index;
+        });
+
+        await this._productVariantService.CreateOrUpdate(
+          this.selectedProduct.id,
+          this.selectedProduct.productVariants
+        );
+
+        this.showToast('Varianter lagret!');
+
+        // Reload the product from the server to get updated variants with IDs
+        const updatedProduct = await this._productService.Get(this.selectedProduct.id);
+
+        if (updatedProduct && updatedProduct.productVariants) {
+          // Update selectedProduct with fresh data from server
+          this.$set(this.selectedProduct, 'productVariants', updatedProduct.productVariants);
+
+          // Update the product in the products list as well
+          const productIndex = this.products.findIndex(p => p.id === this.selectedProduct.id);
+          if (productIndex !== -1) {
+            this.$set(this.products[productIndex], 'productVariants', updatedProduct.productVariants);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to save variants:', err);
+        this.showToast('Kunne ikke lagre varianter. Vennligst prøv igjen.', 'error');
+      }
+    },
+
+    showToast(message, type = 'success') {
+      this.toast = { show: true, message, type };
+      setTimeout(() => {
+        this.toast.show = false;
+      }, 3000);
+    },
   },
 };
 </script>
 
 <style lang="scss">
-.container {
-  max-width: 1200px;
+.products-page {
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 24px;
   padding-top: 0;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   @media (min-width: 769px) {
     &.editor-open {
-      margin-right: 500px; // Match editor width
+      margin-right: 500px;
       max-width: calc(100% - 500px);
     }
   }
 
   @media (max-width: 768px) {
-    padding: 1rem;
+    padding: 16px;
     &.editor-open {
       overflow: hidden;
       height: 100vh;
     }
+  }
+}
+
+.page-header {
+  margin-bottom: 32px;
+
+  h1 {
+    font-size: 2em;
+    font-weight: 600;
+    color: #292c34;
+    margin: 0 0 8px 0;
+
+    @media (max-width: 768px) {
+      font-size: 1.5em;
+    }
+  }
+
+  p {
+    color: #64748b;
+    margin: 0;
+    font-size: 0.95em;
+  }
+}
+
+.controls-section {
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 32px;
+
+  @media (max-width: 768px) {
+    padding: 16px;
   }
 }
 
@@ -928,24 +1131,27 @@ export default {
 .products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 0.75rem;
+  gap: 20px;
+  margin-bottom: 32px;
 
   @media (max-width: 480px) {
     grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 16px;
   }
 }
 
 .product-card {
-  border: 1px solid #e2e8f0;
-  border-radius: 0.75rem;
-  padding: 0.625rem;
-  background: white;
-  transition: all 0.2s;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   width: 100%;
 
   &:hover {
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-    transform: translateY(-2px);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
   }
 }
 
@@ -1007,16 +1213,12 @@ export default {
     align-items: center;
     justify-content: center;
     z-index: 10;
-
-    i {
-      color: #3b82f6;
-      font-size: 1.5rem;
-    }
   }
 
   &.dragging {
     border-color: #3b82f6;
     background-color: #f0f9ff;
+    border-width: 3px;
   }
 
   .dimension-tag {
@@ -1025,10 +1227,11 @@ export default {
     right: 0;
     background: rgba(0, 0, 0, 0.6);
     color: white;
-    padding: 2px 6px;
-    font-size: 0.675rem;
+    padding: 4px 10px;
+    font-size: 0.7em;
+    font-weight: 600;
     z-index: 1;
-    border-top-left-radius: 4px;
+    border-top-left-radius: 8px;
   }
 }
 
@@ -1178,7 +1381,7 @@ export default {
   width: 500px;
   height: 100vh;
   background: white;
-  box-shadow: -5px 0 30px rgba(0, 0, 0, 0.15);
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.15);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1000;
 
@@ -1212,38 +1415,39 @@ export default {
   }
 
   .editor-header {
-    padding: 1.5rem;
-    background: white;
-    border-bottom: 1px solid #e2e8f0;
+    padding: 24px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-bottom: 2px solid #e2e8f0;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 
     h2 {
       margin: 0;
-      font-size: 1.25rem;
+      font-size: 1.5em;
       font-weight: 600;
-      color: #1e293b;
+      color: #292c34;
     }
 
     .close-btn {
-      background: #f1f5f9;
-      border: none;
+      background: #f8f9fa;
+      border: 2px solid #e2e8f0;
       font-size: 1.25rem;
       cursor: pointer;
       padding: 0.5rem;
       border-radius: 0.5rem;
-      width: 40px;
-      height: 40px;
+      width: 44px;
+      height: 44px;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s;
+      transition: all 0.3s ease;
 
       &:hover {
-        background: #e2e8f0;
-        color: #ef4444;
+        background: #f1f5f9;
+        border-color: #cbd5e0;
+        transform: rotate(90deg);
       }
     }
   }
@@ -1260,32 +1464,32 @@ export default {
 
   .editor-actions {
     background: white;
-    padding: 1.25rem;
-    border-top: 1px solid #e2e8f0;
+    padding: 20px 24px;
+    border-top: 2px solid #e2e8f0;
     display: flex;
-    gap: 1rem;
-    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+    gap: 12px;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.05);
 
     button {
-      padding: 0.75rem 1.5rem;
-      border-radius: 0.5rem;
+      padding: 14px 24px;
+      border-radius: 8px;
       cursor: pointer;
       font-weight: 500;
       font-size: 0.875rem;
-      transition: all 0.2s;
+      transition: all 0.3s ease;
       flex: 1;
     }
 
     .delete-btn {
       background: white;
       color: #ef4444;
-      border: 1px solid #ef4444;
-      padding: 0.75rem 1.5rem;
-      border-radius: 0.5rem;
+      border: 2px solid #ef4444;
+      padding: 14px 24px;
+      border-radius: 8px;
       cursor: pointer;
       font-weight: 500;
       font-size: 0.875rem;
-      transition: all 0.2s;
+      transition: all 0.3s ease;
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -1296,8 +1500,10 @@ export default {
       }
 
       &:not(:disabled):hover {
-        background: #f8fafc;
-        border-color: #cbd5e1;
+        background: #ef4444;
+        color: white;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
       }
     }
   }
@@ -1306,10 +1512,12 @@ export default {
 .edit-btn {
   margin-top: 0.5rem;
   padding: 0.25rem 0.5rem;
-  background: #f8fafc;
+  background: white;
+  color: #334155;
   border: 1px solid #e2e8f0;
   border-radius: 0.375rem;
   font-size: 0.75rem;
+  font-weight: 500;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -1318,9 +1526,11 @@ export default {
   margin-left: auto;
   margin-right: auto;
   min-width: 80px;
+  transition: all 0.3s ease;
 
   &:hover {
-    background: #f1f5f9;
+    background: #f8fafc;
+    border-color: #cbd5e0;
   }
 }
 
@@ -1404,8 +1614,8 @@ export default {
 
     &:focus {
       outline: none;
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      border-color: #94a3b8;
+      box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.1);
     }
 
     &::placeholder {
@@ -1432,31 +1642,39 @@ export default {
 
 // Form styling
 .form-group {
-  margin-bottom: 1.25rem;
+  margin-bottom: 24px;
 
   label {
     display: block;
-    margin-bottom: 0.5rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #334155;
+    margin-bottom: 8px;
+    font-size: 0.85em;
+    font-weight: 600;
+    color: #292c34;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
   }
 
   input[type="text"],
   input[type="number"],
   textarea {
     width: 100%;
-    padding: 0.625rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.375rem;
+    padding: 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
     background: white;
-    font-size: 0.875rem;
-    transition: all 0.2s;
+    font-size: 0.95em;
+    color: #292c34;
+    transition: all 0.3s ease;
+
+    &:hover {
+      border-color: #cbd5e0;
+    }
 
     &:focus {
       outline: none;
-      border-color: #334155;
-      box-shadow: 0 0 0 3px rgba(51, 65, 85, 0.1);
+      border-color: #94a3b8;
+      box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.1);
+      background: #ffffff;
     }
 
     &::placeholder {
@@ -1466,7 +1684,7 @@ export default {
 
   textarea {
     resize: vertical;
-    min-height: 80px;
+    min-height: 100px;
   }
 }
 
@@ -1474,22 +1692,41 @@ export default {
 .checkbox-label {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 10px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
   cursor: pointer;
   user-select: none;
-  margin-bottom: 0.75rem;
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #f1f5f9;
+  }
 
   input[type="checkbox"] {
-    width: 1rem;
-    height: 1rem;
-    border-radius: 0.25rem;
-    border: 1px solid #e2e8f0;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 2px solid #cbd5e0;
     cursor: pointer;
+    transition: all 0.3s ease;
 
     &:checked {
       background-color: #334155;
       border-color: #334155;
     }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(51, 65, 85, 0.1);
+    }
+  }
+
+  span {
+    font-weight: 500;
+    color: #292c34;
   }
 }
 
@@ -1498,49 +1735,51 @@ export default {
   background: #334155;
   color: white;
   border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
+  padding: 14px 24px;
+  border-radius: 8px;
   cursor: pointer;
-  font-weight: 500;
-  font-size: 0.875rem;
-  transition: all 0.2s;
+  font-weight: 600;
+  font-size: 0.95em;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
   &:disabled {
-    opacity: 0.5;
+    background: #cbd5e0;
+    box-shadow: none;
     cursor: not-allowed;
-    background: #94a3b8;
+    opacity: 0.6;
   }
 
   &:not(:disabled):hover {
-    background: #1e293b;
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
   }
 
-  &:active {
+  &:active:not(:disabled) {
     transform: translateY(0);
   }
 }
 
 .cancel-btn,
-.edit-btn,
 .pagination-btn {
   background: white;
-  color: #334155;
-  border: 1px solid #e2e8f0;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
+  color: #292c34;
+  border: 2px solid #e2e8f0;
+  padding: 14px 24px;
+  border-radius: 8px;
   cursor: pointer;
   font-weight: 500;
   font-size: 0.875rem;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
 
   &:hover:not(:disabled) {
-    background: #f8fafc;
-    border-color: #cbd5e1;
+    background: #f8f9fa;
+    border-color: #cbd5e0;
+    transform: translateY(-1px);
   }
 }
 
@@ -1641,6 +1880,56 @@ export default {
   }
 }
 
+.empty-state {
+  text-align: center;
+  padding: 64px 24px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  margin: 32px 0;
+
+  .material-icons {
+    font-size: 4em;
+    color: #cbd5e0;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-size: 1.5em;
+    color: #292c34;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  p {
+    color: #64748b;
+    margin-bottom: 24px;
+    font-size: 0.95em;
+  }
+
+  .create-first-btn {
+    background: #334155;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    &:hover {
+      background: #1e293b;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+  }
+}
+
 .selector-container {
   display: flex;
   gap: 1rem;
@@ -1659,11 +1948,12 @@ export default {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    transition: all 0.2s;
+    transition: all 0.3s ease;
 
     &:hover {
       background: #1e293b;
       transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     }
 
     i {
@@ -1746,5 +2036,190 @@ export default {
       font-size: 0.75rem;
     }
   }
+}
+
+// Variants section styling
+.variants-section {
+  border-top: 2px solid #e2e8f0;
+  padding-top: 24px;
+  margin-top: 32px;
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.section-header-inline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+
+  label {
+    margin-bottom: 0 !important;
+  }
+}
+
+.btn-add-variant {
+  background: white;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #f8fafc;
+    border-color: #cbd5e0;
+  }
+
+  i {
+    font-size: 0.625rem;
+  }
+}
+
+.variants-list-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.variant-item-compact {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: #cbd5e0;
+    background: #f1f5f9;
+  }
+}
+
+.variant-info-compact {
+  flex: 1;
+  min-width: 0;
+}
+
+.variant-name-compact {
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+.variant-meta-compact {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.badge-compact {
+  padding: 4px 10px;
+  background: #dbeafe;
+  color: #1e40af;
+  border-radius: 6px;
+  font-size: 0.75em;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.badge-required-compact {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.variant-options-preview-compact {
+  font-size: 0.75rem;
+  color: #64748b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.delete-btn-variant {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.375rem;
+  display: flex;
+  align-items: center;
+  color: #94a3b8;
+  border-radius: 0.375rem;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #fee2e2;
+    color: #ef4444;
+    transform: scale(1.1);
+  }
+
+  i {
+    font-size: 0.875rem;
+  }
+}
+
+.empty-hint-compact {
+  padding: 32px 16px;
+  text-align: center;
+  color: #64748b;
+  font-size: 0.875rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+  border: 2px dashed #cbd5e0;
+}
+
+// Toast notification styling
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  font-weight: 500;
+
+  &.success {
+    background: #10b981;
+    color: #fff;
+  }
+
+  &.error {
+    background: #ef4444;
+    color: #fff;
+  }
+
+  .material-icons {
+    font-size: 20px;
+  }
+}
+
+.toast-enter-active,
+.toast-leave-active {
+  transition: all 0.3s ease;
+}
+
+.toast-enter-from,
+.toast-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
 }
 </style>
