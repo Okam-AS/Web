@@ -124,6 +124,35 @@
           </div>
         </draggable>
       </div>
+
+      <!-- New Category Name Modal -->
+      <div v-if="showNewCategoryModal" class="modal-overlay" @click.self="closeNewCategoryModal">
+        <div class="new-category-modal">
+          <h3>Ny kategori</h3>
+          <p class="modal-description">Skriv inn kategorinavn for å komme i gang</p>
+          <input
+            ref="newCategoryNameInput"
+            v-model="newCategoryName"
+            type="text"
+            placeholder="Kategorinavn"
+            class="modal-input"
+            @keyup.enter="confirmNewCategory"
+            @keyup.esc="closeNewCategoryModal"
+          />
+          <div class="modal-actions">
+            <button class="modal-btn-secondary" @click="closeNewCategoryModal">
+              Avbryt
+            </button>
+            <button
+              class="modal-btn-primary"
+              :disabled="!newCategoryName.trim() || isCreatingCategory"
+              @click="confirmNewCategory"
+            >
+              {{ isCreatingCategory ? 'Oppretter...' : 'Opprett kategori' }}
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </AdminPage>
 </template>
@@ -145,7 +174,10 @@ export default {
       categories: [],
       loading: false,
       error: null,
-      isReordering: false
+      isReordering: false,
+      showNewCategoryModal: false,
+      newCategoryName: '',
+      isCreatingCategory: false
     };
   },
 
@@ -172,15 +204,27 @@ export default {
   },
 
   methods: {
-    async createNewCategory() {
-      const name = prompt('Kategorinavn:');
-      if (!name || name.trim() === '') {
-        return;
-      }
+    createNewCategory() {
+      this.newCategoryName = '';
+      this.showNewCategoryModal = true;
+      this.$nextTick(() => {
+        this.$refs.newCategoryNameInput?.focus();
+      });
+    },
 
+    closeNewCategoryModal() {
+      this.showNewCategoryModal = false;
+      this.newCategoryName = '';
+      this.isCreatingCategory = false;
+    },
+
+    async confirmNewCategory() {
+      if (!this.newCategoryName.trim() || this.isCreatingCategory) return;
+
+      this.isCreatingCategory = true;
       try {
         const newCategory = {
-          name: name.trim(),
+          name: this.newCategoryName.trim(),
           storeId: this.selectedStore,
           orderIndex: this.categories.length,
           hide: false,
@@ -190,6 +234,9 @@ export default {
 
         const created = await this._categoryService.Create(newCategory);
 
+        // Close modal
+        this.closeNewCategoryModal();
+
         // Navigate to editor
         this.$router.push({
           path: '/admin/category-editor',
@@ -198,6 +245,7 @@ export default {
       } catch (err) {
         console.error('Failed to create category:', err);
         alert('Kunne ikke opprette kategorien. Vennligst prøv igjen.');
+        this.isCreatingCategory = false;
       }
     },
 
@@ -599,6 +647,110 @@ export default {
   &.unpublished {
     background-color: rgba(255, 243, 205, 0.8);
     color: #856404;
+  }
+}
+
+// New Category Modal
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.new-category-modal {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+
+  h3 {
+    font-size: 1.25em;
+    font-weight: 600;
+    color: #292c34;
+    margin: 0 0 8px 0;
+  }
+
+  .modal-description {
+    color: #64748b;
+    font-size: 0.9em;
+    margin: 0 0 20px 0;
+  }
+
+  .modal-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1em;
+    color: #292c34;
+    transition: all 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #334155;
+      box-shadow: 0 0 0 3px rgba(51, 65, 85, 0.1);
+    }
+
+    &::placeholder {
+      color: #94a3b8;
+    }
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    justify-content: flex-end;
+  }
+
+  .modal-btn-secondary {
+    padding: 10px 20px;
+    background: white;
+    color: #292c34;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: #f8f9fa;
+      border-color: #cbd5e0;
+    }
+  }
+
+  .modal-btn-primary {
+    padding: 10px 20px;
+    background: #334155;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+    &:hover:not(:disabled) {
+      background: #1e293b;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    &:disabled {
+      background: #cbd5e0;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
   }
 }
 </style>

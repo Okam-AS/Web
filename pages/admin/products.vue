@@ -270,6 +270,43 @@
                 placeholder="F.eks: Inneholder gluten, melk, egg"
               />
             </div>
+
+            <!-- Categories Section -->
+            <div v-if="selectedProduct.id" class="form-group categories-section">
+              <label>Kategorier</label>
+              <div class="multi-select-dropdown" :class="{ open: categoryDropdownOpen }">
+                <div class="dropdown-trigger" @click.stop="categoryDropdownOpen = !categoryDropdownOpen">
+                  <span v-if="selectedProductCategoryIds.length === 0" class="placeholder">
+                    Velg kategorier...
+                  </span>
+                  <span v-else class="selected-names">
+                    {{ selectedCategoryNames }}
+                  </span>
+                  <i class="fas fa-chevron-down dropdown-arrow" />
+                </div>
+                <div v-if="categoryDropdownOpen" class="dropdown-menu">
+                  <div
+                    v-for="category in categories"
+                    :key="category.id"
+                    class="dropdown-item"
+                    :class="{ selected: selectedProductCategoryIds.includes(category.id) }"
+                    @click="toggleCategory(category)"
+                  >
+                    <input
+                      type="checkbox"
+                      :checked="selectedProductCategoryIds.includes(category.id)"
+                      @click.stop="toggleCategory(category)"
+                    />
+                    <span>{{ category.name }}</span>
+                  </div>
+                  <div v-if="categories.length === 0" class="dropdown-empty">
+                    Ingen kategorier funnet
+                  </div>
+                </div>
+              </div>
+              <p class="helper-text">Produktet vil vises i de valgte kategoriene</p>
+            </div>
+
             <div class="form-group">
               <label>Pris (NOK)</label>
               <input
@@ -422,6 +459,35 @@
 
       <!-- Modals -->
       <VariantEditorModal ref="variantEditor" />
+
+      <!-- New Product Name Modal -->
+      <div v-if="showNewProductModal" class="modal-overlay" @click.self="closeNewProductModal">
+        <div class="new-product-modal">
+          <h3>Nytt produkt</h3>
+          <p class="modal-description">Skriv inn produktnavn for å komme i gang</p>
+          <input
+            ref="newProductNameInput"
+            v-model="newProductName"
+            type="text"
+            placeholder="Produktnavn"
+            class="modal-input"
+            @keyup.enter="confirmNewProduct"
+            @keyup.esc="closeNewProductModal"
+          />
+          <div class="modal-actions">
+            <button class="modal-btn-secondary" @click="closeNewProductModal">
+              Avbryt
+            </button>
+            <button
+              class="modal-btn-primary"
+              :disabled="!newProductName.trim() || isCreatingProduct"
+              @click="confirmNewProduct"
+            >
+              {{ isCreatingProduct ? 'Oppretter...' : 'Opprett produkt' }}
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </AdminPage>
 </template>
@@ -443,6 +509,7 @@ export default {
   },
   data: () => ({
     products: [],
+    categories: [],
     draggingProducts: {},
     uploadingFor: null,
     productFilter: "",
@@ -452,6 +519,13 @@ export default {
     selectedProduct: null,
     isSaving: false,
     isLoading: false,
+    loadingCategories: false,
+    categoryDropdownOpen: false,
+    pendingCategoryChanges: {}, // { categoryId: { add: boolean, items: [] } }
+    originalCategoryIds: [], // Track original state to detect changes
+    showNewProductModal: false,
+    newProductName: '',
+    isCreatingProduct: false,
     toast: {
       show: false,
       message: '',
@@ -503,6 +577,36 @@ export default {
     canSave() {
       return this.selectedProduct?.name?.trim();
     },
+
+    selectedProductCategoryIds() {
+      if (!this.selectedProduct?.id) return [];
+
+      // Start with categories that contain the product
+      const categoryIds = this.categories
+        .filter(cat => cat.categoryProductListItems?.some(
+          item => item.productId === this.selectedProduct.id
+        ))
+        .map(cat => cat.id);
+
+      // Apply pending changes
+      for (const [categoryId, change] of Object.entries(this.pendingCategoryChanges)) {
+        if (change.add && !categoryIds.includes(categoryId)) {
+          categoryIds.push(categoryId);
+        } else if (!change.add && categoryIds.includes(categoryId)) {
+          const index = categoryIds.indexOf(categoryId);
+          categoryIds.splice(index, 1);
+        }
+      }
+
+      return categoryIds;
+    },
+
+    selectedCategoryNames() {
+      return this.categories
+        .filter(cat => this.selectedProductCategoryIds.includes(cat.id))
+        .map(cat => cat.name)
+        .join(', ');
+    },
   },
 
   watch: {
@@ -523,7 +627,7 @@ export default {
       this.currentPage = 1;
     },
 
-    selectedProduct(newVal) {
+    selectedProduct(newVal, oldVal) {
       // Only lock body scroll on mobile
       if (window.innerWidth <= 768) {
         document.body.style.overflow = newVal ? "hidden" : "";
@@ -533,6 +637,13 @@ export default {
       const container = document.querySelector(".container");
       if (container) {
         container.classList.toggle("editor-open", !!newVal);
+      }
+
+      // Reset pending changes when closing editor
+      if (!newVal && oldVal) {
+        this.pendingCategoryChanges = {};
+        this.originalCategoryIds = [];
+        this.categoryDropdownOpen = false;
       }
     },
   },
@@ -545,6 +656,12 @@ export default {
     if (this.selectedStore > 0) {
       this.loadProducts();
     }
+
+    document.addEventListener('click', this.handleClickOutside);
+  },
+
+  beforeDestroy() {
+    document.removeEventListener('click', this.handleClickOutside);
   },
 
   methods: {
@@ -561,10 +678,31 @@ export default {
         this.products = this.sortProductsByDate(products);
         this.imageDimensions = {};
         products.forEach((p) => this.updateImageDimension(p));
+        // Also load categories
+        await this.loadCategories();
       } catch (err) {
         console.error("Failed to load products:", err);
       } finally {
         this.isLoading = false;
+      }
+    },
+
+    async loadCategories() {
+      this.loadingCategories = true;
+      try {
+        // First get basic category list
+        const basicCategories = await this._categoryService.GetAll(this.selectedStore, true);
+
+        // Then fetch each category with full details (including categoryProductListItems)
+        const detailedCategories = await Promise.all(
+          basicCategories.map(cat => this._categoryService.Get(cat.id, true))
+        );
+
+        this.categories = detailedCategories;
+      } catch (err) {
+        console.error("Failed to load categories:", err);
+      } finally {
+        this.loadingCategories = false;
       }
     },
 
@@ -721,6 +859,9 @@ export default {
     },
 
     async editProduct(product) {
+      // Reset pending category changes
+      this.pendingCategoryChanges = {};
+
       // Fetch full product details from server (includes productVariants)
       try {
         const fullProduct = await this._productService.Get(product.id);
@@ -738,6 +879,13 @@ export default {
           this.selectedProduct.productVariants = [];
         }
       }
+
+      // Store original category IDs for this product
+      this.originalCategoryIds = this.categories
+        .filter(cat => cat.categoryProductListItems?.some(
+          item => item.productId === this.selectedProduct.id
+        ))
+        .map(cat => cat.id);
     },
 
     async saveProduct() {
@@ -752,14 +900,64 @@ export default {
           name: this.selectedProduct.name.trim(),
         };
         await this._productService.CreateOrUpdate(productData);
+
+        // Save pending category changes
+        await this.savePendingCategoryChanges();
+
         await this.loadProducts();
         this.productFilter = productData.name;
+        this.pendingCategoryChanges = {};
         this.selectedProduct = null;
       } catch (err) {
         console.error("Failed to save product:", err);
         alert("Failed to save product");
       } finally {
         this.isSaving = false;
+      }
+    },
+
+    async savePendingCategoryChanges() {
+      const productId = this.selectedProduct.id;
+      if (!productId || Object.keys(this.pendingCategoryChanges).length === 0) return;
+
+      for (const [categoryId, change] of Object.entries(this.pendingCategoryChanges)) {
+        // Fetch fresh category data to ensure we have latest items
+        const freshCategory = await this._categoryService.Get(categoryId, true);
+        if (!freshCategory) continue;
+
+        const existingItems = (freshCategory.categoryProductListItems || []);
+
+        let updatedItems;
+        if (change.add) {
+          // Check if product already exists (might have been added elsewhere)
+          const alreadyExists = existingItems.some(item => item.productId === productId);
+          if (alreadyExists) continue;
+
+          // Add product to category at the end
+          const newItem = {
+            productId: productId,
+            categoryId: categoryId,
+            orderIndex: existingItems.length,
+            isHeading: false
+          };
+          updatedItems = [...existingItems, newItem];
+        } else {
+          // Remove product from category
+          updatedItems = existingItems.filter(
+            item => item.productId !== productId
+          );
+        }
+
+        // Update order indexes
+        const itemsToSend = updatedItems.map((item, index) => ({
+          ...item,
+          orderIndex: index
+        }));
+
+        await this._categoryService.CreateOrUpdateCategoryProductList(
+          categoryId,
+          itemsToSend
+        );
       }
     },
 
@@ -878,22 +1076,58 @@ export default {
     },
 
     createNewProduct() {
-      this.selectedProduct = {
-        name: "",
-        storeId: this.selectedStore,
-        description: "",
-        otherInformation: "",
-        amount: 0,
-        currency: "NOK",
-        tax: 15,
-        tablePriceEnabled: false,
-        tableAdditionalAmount: 0,
-        tableTax: 25,
-        deliveryPriceEnabled: false,
-        deliveryAdditionalAmount: 0,
-        deliveryTax: 15,
-        productVariants: []
-      };
+      this.newProductName = '';
+      this.showNewProductModal = true;
+      this.$nextTick(() => {
+        this.$refs.newProductNameInput?.focus();
+      });
+    },
+
+    closeNewProductModal() {
+      this.showNewProductModal = false;
+      this.newProductName = '';
+      this.isCreatingProduct = false;
+    },
+
+    async confirmNewProduct() {
+      if (!this.newProductName.trim() || this.isCreatingProduct) return;
+
+      this.isCreatingProduct = true;
+      try {
+        // Create the product with just the name
+        const newProduct = {
+          name: this.newProductName.trim(),
+          storeId: this.selectedStore,
+          description: "",
+          otherInformation: "",
+          amount: 0,
+          currency: "NOK",
+          tax: 15,
+          tablePriceEnabled: false,
+          tableAdditionalAmount: 0,
+          tableTax: 25,
+          deliveryPriceEnabled: false,
+          deliveryAdditionalAmount: 0,
+          deliveryTax: 15,
+          productVariants: []
+        };
+
+        // Save to backend
+        const created = await this._productService.CreateOrUpdate(newProduct);
+
+        // Close modal
+        this.closeNewProductModal();
+
+        // Reload products
+        await this.loadProducts();
+
+        // Open the newly created product in editor
+        this.editProduct(created);
+      } catch (err) {
+        console.error("Failed to create product:", err);
+        alert("Kunne ikke opprette produkt");
+        this.isCreatingProduct = false;
+      }
     },
 
     async removeImage(productId) {
@@ -1018,6 +1252,39 @@ export default {
       setTimeout(() => {
         this.toast.show = false;
       }, 3000);
+    },
+
+    handleClickOutside(e) {
+      if (this.categoryDropdownOpen && !e.target.closest('.multi-select-dropdown')) {
+        this.categoryDropdownOpen = false;
+      }
+    },
+
+    toggleCategory(category) {
+      if (!this.selectedProduct?.id) return;
+
+      const isCurrentlySelected = this.selectedProductCategoryIds.includes(category.id);
+      const wasOriginallyInCategory = this.originalCategoryIds.includes(category.id);
+
+      if (isCurrentlySelected) {
+        // User wants to remove from category
+        if (wasOriginallyInCategory) {
+          // Was in category, mark for removal
+          this.$set(this.pendingCategoryChanges, category.id, { add: false });
+        } else {
+          // Was added in this session, just remove the pending add
+          this.$delete(this.pendingCategoryChanges, category.id);
+        }
+      } else {
+        // User wants to add to category
+        if (wasOriginallyInCategory) {
+          // Was originally in category, just remove the pending removal
+          this.$delete(this.pendingCategoryChanges, category.id);
+        } else {
+          // New addition
+          this.$set(this.pendingCategoryChanges, category.id, { add: true });
+        }
+      }
     },
   },
 };
@@ -2183,6 +2450,107 @@ export default {
   border: 2px dashed #cbd5e0;
 }
 
+// Categories multi-select dropdown
+.categories-section {
+  margin-top: 24px;
+}
+
+.multi-select-dropdown {
+  position: relative;
+
+  .dropdown-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      border-color: #cbd5e0;
+    }
+
+    .placeholder {
+      color: #94a3b8;
+    }
+
+    .selected-names {
+      color: #292c34;
+      font-weight: 500;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .dropdown-arrow {
+      color: #94a3b8;
+      transition: transform 0.2s;
+    }
+  }
+
+  &.open .dropdown-trigger {
+    border-color: #94a3b8;
+
+    .dropdown-arrow {
+      transform: rotate(180deg);
+    }
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 4px;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    max-height: 250px;
+    overflow-y: auto;
+  }
+
+  .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover {
+      background: #f8f9fa;
+    }
+
+    &.selected {
+      background: #f1f5f9;
+    }
+
+    input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    span {
+      color: #292c34;
+      font-size: 0.95em;
+    }
+  }
+
+  .dropdown-empty {
+    padding: 16px;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 0.9em;
+  }
+}
+
 // Toast notification styling
 .toast {
   position: fixed;
@@ -2221,5 +2589,108 @@ export default {
 .toast-leave-to {
   opacity: 0;
   transform: translateY(20px);
+}
+
+// New Product Modal
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.new-product-modal {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+
+  h3 {
+    font-size: 1.25em;
+    font-weight: 600;
+    color: #292c34;
+    margin: 0 0 8px 0;
+  }
+
+  .modal-description {
+    color: #64748b;
+    font-size: 0.9em;
+    margin: 0 0 20px 0;
+  }
+
+  .modal-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1em;
+    color: #292c34;
+    transition: all 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #1bb776;
+      box-shadow: 0 0 0 3px rgba(27, 183, 118, 0.1);
+    }
+
+    &::placeholder {
+      color: #94a3b8;
+    }
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    justify-content: flex-end;
+  }
+
+  .modal-btn-secondary {
+    padding: 10px 20px;
+    background: white;
+    color: #292c34;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: #f8f9fa;
+      border-color: #cbd5e0;
+    }
+  }
+
+  .modal-btn-primary {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #1bb776 0%, #159f63 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(27, 183, 118, 0.3);
+
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(27, 183, 118, 0.4);
+    }
+
+    &:disabled {
+      background: #cbd5e0;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+  }
 }
 </style>
