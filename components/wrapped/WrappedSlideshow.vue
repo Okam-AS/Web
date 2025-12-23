@@ -56,6 +56,11 @@
     <div v-if="slides.length > 1" class="keyboard-hint">
       Bruk piltastene eller sveip for å navigere
     </div>
+
+    <!-- Snøfnugg-animasjon -->
+    <div class="snowflakes" aria-hidden="true">
+      <div v-for="i in 12" :key="i" class="snowflake">❄</div>
+    </div>
   </div>
 </template>
 
@@ -355,5 +360,48 @@ export default {
 .slide-right-leave-to {
   opacity: 0;
   transform: translateX(100px);
+}
+
+// Snøfnugg-animasjon
+.snowflakes {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 50;
+  overflow: hidden;
+}
+
+.snowflake {
+  position: absolute;
+  top: -20px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.2rem;
+  animation: snowfall linear infinite;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+
+  &:nth-child(1) { left: 2%; animation-duration: 10s; animation-delay: 0s; font-size: 1rem; opacity: 0.6; }
+  &:nth-child(2) { left: 10%; animation-duration: 12s; animation-delay: 2s; font-size: 1.4rem; opacity: 0.8; }
+  &:nth-child(3) { left: 18%; animation-duration: 9s; animation-delay: 4s; font-size: 0.9rem; opacity: 0.5; }
+  &:nth-child(4) { left: 26%; animation-duration: 14s; animation-delay: 1s; font-size: 1.2rem; opacity: 0.7; }
+  &:nth-child(5) { left: 34%; animation-duration: 11s; animation-delay: 3s; font-size: 1.1rem; opacity: 0.6; }
+  &:nth-child(6) { left: 42%; animation-duration: 13s; animation-delay: 0s; font-size: 1.5rem; opacity: 0.9; }
+  &:nth-child(7) { left: 50%; animation-duration: 10s; animation-delay: 2s; font-size: 0.8rem; opacity: 0.5; }
+  &:nth-child(8) { left: 58%; animation-duration: 15s; animation-delay: 4s; font-size: 1.3rem; opacity: 0.7; }
+  &:nth-child(9) { left: 66%; animation-duration: 9s; animation-delay: 1s; font-size: 1rem; opacity: 0.6; }
+  &:nth-child(10) { left: 74%; animation-duration: 12s; animation-delay: 3s; font-size: 1.4rem; opacity: 0.8; }
+  &:nth-child(11) { left: 82%; animation-duration: 11s; animation-delay: 0s; font-size: 0.9rem; opacity: 0.5; }
+  &:nth-child(12) { left: 90%; animation-duration: 14s; animation-delay: 2s; font-size: 1.2rem; opacity: 0.7; }
+}
+
+@keyframes snowfall {
+  0% {
+    transform: translateY(-20px) rotate(0deg);
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+  }
 }
 </style>

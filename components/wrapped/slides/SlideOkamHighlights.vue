@@ -91,14 +91,29 @@ export default {
         desc: 'Full integrasjon med Wolt for ordremottak og synkronisering'
       },
       {
+        icon: 'local_shipping',
+        title: 'Wolt Drive',
+        desc: 'Bestill levering via Wolt direkte fra admin'
+      },
+      {
         icon: 'smart_toy',
         title: 'AI-chat',
         desc: 'Påbegynt arbeid rundt bruken av AI'
       },
       {
-        icon: 'category',
-        title: 'Kategori-editor',
-        desc: 'Ny måte å organisere produktene dine på'
+        icon: 'receipt',
+        title: 'Fakturabetaling',
+        desc: 'Ny betalingsmetode for bedriftskunder'
+      },
+      {
+        icon: 'savings',
+        title: 'Lavere transaksjonskostnader',
+        desc: 'Reduserte gebyrer på alle betalinger'
+      },
+      {
+        icon: 'computer',
+        title: 'Okam Admin på web',
+        desc: 'Full admin-funksjonalitet nå tilgjengelig i nettleseren'
       }
     ],
     forbedringer: [
@@ -160,7 +175,7 @@ export default {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  background: linear-gradient(180deg, #667eea 0%, #764ba2 30%, #191414 70%);
+  background: linear-gradient(180deg, #4c5eb0 0%, #593879 30%, #191414 70%);
   padding: 24px;
   padding-top: 40px;
   padding-bottom: 40px;

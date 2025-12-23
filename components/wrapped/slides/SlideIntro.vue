@@ -9,7 +9,7 @@
       <div class="year-container" :class="{ 'animate-in': showYear }">
         <div class="year-number">2025</div>
         <div class="year-sparkles">
-          <span v-for="i in 6" :key="i" class="sparkle" :style="getSparkleStyle(i)">✨</span>
+          <span v-for="i in 6" :key="i" class="sparkle" :style="getSparkleStyle(i)">❄️</span>
         </div>
       </div>
 
@@ -18,7 +18,7 @@
       </h1>
 
       <p class="intro-text" :class="{ 'animate-in': showText }">
-        La oss se tilbake på året som gikk...
+        🎄 La oss se tilbake på året som gikk... 🎄
       </p>
 
       <button class="start-btn" :class="{ 'animate-in': showButton }" @click="$emit('next')">
@@ -76,7 +76,7 @@ export default {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  background: linear-gradient(180deg, #1db954 0%, #191414 60%);
+  background: linear-gradient(180deg, #158a40 0%, #191414 60%);
   padding: 24px;
   padding-top: 40px;
   padding-bottom: 40px;

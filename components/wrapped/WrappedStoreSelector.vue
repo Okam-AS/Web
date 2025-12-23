@@ -1,6 +1,7 @@
 <template>
   <div class="store-selector">
     <div class="store-selector__content">
+      <div class="christmas-header">🎄 ❄️ 🎅 ❄️ 🎄</div>
       <div class="year-badge">2025</div>
       <h1 class="store-selector__title">Okam Wrapped</h1>
       <p class="store-selector__subtitle">Hvilken butikk vil du se?</p>
@@ -60,12 +61,18 @@ export default {
   align-items: center;
   justify-content: center;
   padding: 24px;
-  background: linear-gradient(180deg, #1db954 0%, #191414 40%);
+  background: linear-gradient(180deg, #158a40 0%, #191414 40%);
 
   &__content {
     text-align: center;
     max-width: 600px;
     width: 100%;
+  }
+
+  .christmas-header {
+    font-size: 2rem;
+    margin-bottom: 16px;
+    animation: fadeIn 0.6s ease-out;
   }
 
   .year-badge {

@@ -116,7 +116,7 @@ export default {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  background: linear-gradient(180deg, #ff9a9e 0%, #fecfef 30%, #191414 70%);
+  background: linear-gradient(180deg, #bf7477 0%, #be9bb3 30%, #191414 70%);
   padding: 24px;
   padding-top: 40px;
   padding-bottom: 40px;

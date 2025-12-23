@@ -2,13 +2,13 @@
   <div class="slide slide-2026">
     <div class="slide-content">
       <div class="thank-you-section" :class="{ 'animate-in': showThankYou }">
-        <div class="heart-icon">
-          <span class="material-icons">favorite</span>
+        <div class="christmas-icons">
+          🎄🎅⭐
         </div>
-        <h2>Takk for 2025!</h2>
+        <h2>God jul og godt nyttår!</h2>
         <p class="thank-you-text">
-          Vi setter utrolig stor pris på at du bruker Okam.
-          Sammen har vi skapt noe fantastisk!
+          Takk for et fantastisk 2025 sammen med Okam.
+          Vi gleder oss til å fortsette eventyret i 2026!
         </p>
       </div>
 
@@ -120,7 +120,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, #1bb776 0%, #159f63 30%, #191414 70%);
+  background: linear-gradient(180deg, #14894a 0%, #10774a 30%, #191414 70%);
   padding: 24px;
   padding-bottom: 80px; // Extra space for navigation
   position: relative;
@@ -144,14 +144,10 @@ export default {
       transform: translateY(0);
     }
 
-    .heart-icon {
+    .christmas-icons {
+      font-size: 3rem;
       margin-bottom: 16px;
-
-      .material-icons {
-        font-size: 48px;
-        color: #f5576c;
-        animation: pulse 1.5s ease-in-out infinite;
-      }
+      animation: pulse 2s ease-in-out infinite;
     }
 
     h2 {
