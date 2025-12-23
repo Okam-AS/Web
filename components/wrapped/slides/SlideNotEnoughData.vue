@@ -19,7 +19,7 @@
       </div>
 
       <div class="encouragement" :class="{ 'animate-in': showEncouragement }">
-        <p>Vi gleder oss til å se hva 2025 bringer!</p>
+        <p>Vi gleder oss til å se hva 2026 bringer!</p>
         <span class="rocket">🚀</span>
       </div>
 
