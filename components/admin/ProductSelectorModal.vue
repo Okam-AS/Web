@@ -157,12 +157,12 @@ export default {
   },
   computed: {
     filteredProducts() {
-      // When using cross-store search, filtering is done server-side
-      // For single-store mode, filter client-side
-      if (this.hasMultipleStores && this.searchQuery) {
+      // When using cross-store search with multiple stores, filtering is done server-side
+      if (this.hasMultipleStores && this.selectedStoreIds.length > 1 && this.searchQuery) {
         return this.products
       }
 
+      // For single-store mode or when only one store is selected, filter client-side
       if (!this.searchQuery || this.searchQuery.trim() === '') {
         return this.products
       }
@@ -517,6 +517,7 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  min-height: 400px;
   padding: 40px 20px;
   color: #6b7280;
 
@@ -538,6 +539,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-height: 400px;
   max-height: 400px;
   overflow-y: auto;
 }

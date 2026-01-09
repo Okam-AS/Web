@@ -414,7 +414,6 @@ export default {
 
   watch: {
     selectedStore: {
-      immediate: true,
       handler(newVal) {
         if (newVal) {
           if (this.isNewCategory) {
@@ -429,10 +428,21 @@ export default {
   },
 
   mounted() {
-    // Validation is now handled by the selectedStore watcher with immediate: true
-    // This ensures we wait for selectedStore to be available before loading
+    // Validate URL parameters
     if (!this.categoryId && !this.isNewCategory) {
       this.error = 'Ingen kategori-ID funnet i URL'
+      return
+    }
+
+    // If store is already selected, load category
+    // Otherwise, the watcher will handle it when store becomes available
+    if (this.selectedStore) {
+      if (this.isNewCategory) {
+        this.category.storeId = this.selectedStore
+        this.hasChanges = false
+      } else if (this.categoryId) {
+        this.loadCategory()
+      }
     }
   },
 
@@ -471,6 +481,12 @@ export default {
         this.error = null
 
         const category = await this._categoryService.Get(this.categoryId, true)
+
+        // Handle case where category is not found or API returns null
+        if (!category) {
+          this.error = 'Kategorien ble ikke funnet. Den kan ha blitt slettet.'
+          return
+        }
 
         // Freeze product data to prevent deep reactivity (improves performance)
         const items = (category.categoryProductListItems || []).map(item => {
@@ -653,8 +669,18 @@ export default {
           }
         )
 
-        // Reload category to get updated image
+        // API returns true, not the image data - we need to fetch the category again
+        // Reset category.id to bypass the duplicate load check in loadCategory()
+        const currentCategoryId = this.category.id
+        this.category.id = null
         await this.loadCategory()
+
+        // If load failed for some reason, restore the ID
+        if (!this.category.id) {
+          this.category.id = currentCategoryId
+        }
+
+        this.showToast('Bilde lastet opp!')
       } catch (error) {
         console.error('Error uploading image:', error)
         throw error
