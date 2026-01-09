@@ -4,5 +4,6 @@ Disallow: /admin/
 Disallow: /import/
 Disallow: /offer/
 Disallow: /offers/
+Disallow: /helle.jpg
 
 Sitemap: https://okam.no/sitemap.xml 
