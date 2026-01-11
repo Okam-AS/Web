@@ -419,6 +419,24 @@
         :selected-store-ids="selectedStoreIds"
       />
 
+      <!-- Wrapped 2025 Section -->
+      <div class="wrapped-section">
+        <a href="/admin/wrapped" class="wrapped-card">
+          <div class="wrapped-card__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+          </div>
+          <div class="wrapped-card__content">
+            <h3>Sammendrag av 2025</h3>
+            <p>Se dine høydepunkter fra 2025</p>
+          </div>
+          <div class="wrapped-card__arrow">
+            <span class="material-icons">arrow_forward</span>
+          </div>
+        </a>
+      </div>
+
       </div>
 
       <LoginModal
@@ -1704,6 +1722,78 @@ export default {
           }
         }
       }
+    }
+  }
+}
+
+.wrapped-section {
+  margin-top: 32px;
+
+  .wrapped-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #292c34;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+      border-color: #292c34;
+    }
+
+    &__icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(41, 44, 52, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+
+      svg {
+        width: 24px;
+        height: 24px;
+        color: #292c34;
+      }
+    }
+
+    &__content {
+      flex: 1;
+
+      h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0 0 4px 0;
+        color: #292c34;
+      }
+
+      p {
+        font-size: 0.9rem;
+        color: #64748b;
+        margin: 0;
+      }
+    }
+
+    &__arrow {
+      color: #64748b;
+      transition: all 0.3s ease;
+
+      .material-icons {
+        font-size: 24px;
+      }
+    }
+
+    &:hover &__arrow {
+      color: #292c34;
+      transform: translateX(4px);
     }
   }
 }

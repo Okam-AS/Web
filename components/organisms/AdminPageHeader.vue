@@ -254,7 +254,6 @@
                         </svg>
                       </span>
                       Kategorier
-                      <span class="new-badge">NYHET</span>
                     </a>
                   </li>
                   <li>

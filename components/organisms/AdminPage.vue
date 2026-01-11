@@ -1,7 +1,6 @@
 <template>
   <div class="admin">
     <AdminPageHeader />
-    <WrappedBanner v-if="!isWrappedPage" />
     <OnboardingNotification v-if="!isOnboardingPage" />
     <main :class="['admin__content', { admin__wrapper: !fullWidth }]">
       <slot />
@@ -19,7 +18,6 @@ import AdminPageHeader from "~/components/organisms/AdminPageHeader.vue";
 import AdminPageFooter from "~/components/organisms/AdminPageFooter.vue";
 import OnboardingNotification from "~/components/organisms/OnboardingNotification.vue";
 import LoginModal from "~/components/molecules/LoginModal.vue";
-import WrappedBanner from "~/components/wrapped/WrappedBanner.vue";
 
 export default {
   components: {
@@ -27,7 +25,6 @@ export default {
     AdminPageFooter,
     OnboardingNotification,
     LoginModal,
-    WrappedBanner,
   },
   props: {
     fullWidth: {
@@ -41,9 +38,6 @@ export default {
   computed: {
     isOnboardingPage() {
       return this.$route && this.$route.path.includes("/admin/onboarding");
-    },
-    isWrappedPage() {
-      return this.$route && this.$route.path.includes("/admin/wrapped");
     },
   },
   mounted() {

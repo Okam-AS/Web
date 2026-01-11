@@ -325,6 +325,28 @@
           </a>
         </div>
       </div>
+
+      <!-- Okam Wrapped Section -->
+      <div class="dashboard__section">
+        <div class="dashboard__grid">
+          <a
+            href="/admin/wrapped"
+            class="dashboard__card"
+          >
+            <div class="dashboard__content">
+              <div class="dashboard__header">
+                <span class="dashboard__icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                </span>
+                <h2 class="dashboard__card-title">Sammendrag av 2025</h2>
+              </div>
+              <p class="dashboard__description">Se dine høydepunkter fra 2025</p>
+            </div>
+          </a>
+        </div>
+      </div>
     </div>
   </AdminPage>
 </template>
@@ -408,7 +430,6 @@ export default {
         path: "/admin/categories",
         description: "Administrer produktkategorier",
         icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>',
-        isNew: true,
       },
       {
         title: "Import",
@@ -1287,17 +1308,16 @@ export default {
 .dashboard__icon {
   flex-shrink: 0;
   display: inline-flex;
-  width: 2rem;
-  height: 2rem;
-  margin-bottom: 0.75rem;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
   color: #292c34;
+  background-color: rgba(41, 44, 52, 0.1);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
 }
 
-.dashboard__icon svg {
-  width: 2rem;
-  height: 2rem;
-  display: block;
-}
 
 .dashboard__content {
   width: 100%;
@@ -1308,13 +1328,6 @@ export default {
   align-items: center;
   gap: 0.75rem;
   margin-bottom: 0.75rem;
-}
-
-.dashboard__icon {
-  margin-bottom: 0;
-  background-color: rgba(41, 44, 52, 0.1);
-  padding: 0.5rem;
-  border-radius: 0.5rem;
 }
 
 .dashboard__card-title {
@@ -1401,5 +1414,15 @@ export default {
   border-radius: 10px;
   text-transform: uppercase;
   vertical-align: middle;
+}
+
+</style>
+
+<style>
+/* Unscoped styles for v-html SVG icons */
+.dashboard__icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  display: block;
 }
 </style>
