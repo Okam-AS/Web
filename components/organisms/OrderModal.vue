@@ -52,6 +52,13 @@
                 {{ orderStatusLabel(order.status) }}
               </span>
             </div>
+            <div
+              v-if="order.status === 'Canceled'"
+              class="info-item"
+            >
+              <label>Kansellert av:</label>
+              <span>{{ order.canceledByStore ? 'Butikk' : 'Kunde' }}</span>
+            </div>
             <div class="info-item">
               <label>Platform:</label>
               <span>{{ order.platform }}</span>
