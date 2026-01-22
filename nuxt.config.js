@@ -46,6 +46,35 @@ export default {
       { name: 'twitter:card', content: '/og-image.png' },
       { name: 'twitter:site', content: '@sharghi_a' }
     ],
+    script: [
+      {
+        hid: 'fb-pixel',
+        innerHTML: `
+          !function(f,b,e,v,n,t,s)
+          {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+          n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+          if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+          n.queue=[];t=b.createElement(e);t.async=!0;
+          t.src=v;s=b.getElementsByTagName(e)[0];
+          s.parentNode.insertBefore(t,s)}(window, document,'script',
+          'https://connect.facebook.net/en_US/fbevents.js');
+          fbq('init', '2834635726843367');
+          fbq('track', 'PageView');
+        `,
+        type: 'text/javascript',
+        charset: 'utf-8'
+      }
+    ],
+    noscript: [
+      {
+        hid: 'fb-pixel-noscript',
+        innerHTML: '<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2834635726843367&ev=PageView&noscript=1" />'
+      }
+    ],
+    __dangerouslyDisableSanitizersByTagID: {
+      'fb-pixel': ['innerHTML'],
+      'fb-pixel-noscript': ['innerHTML']
+    },
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       // Preload fonts
