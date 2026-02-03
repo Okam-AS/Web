@@ -16,7 +16,7 @@
               id="from-date"
               v-model="dateRange.from"
               type="date"
-              @change="loadData"
+              @change="onDateChange"
             />
           </div>
           <div class="date-input">
@@ -25,7 +25,7 @@
               id="to-date"
               v-model="dateRange.to"
               type="date"
-              @change="loadData"
+              @change="onDateChange"
             />
           </div>
         </div>
@@ -199,16 +199,36 @@ export default {
     selectedStoreId() {
       return this.$store.state.selectedAdminStore;
     },
+    userIsLoggedIn() {
+      return this.$store.getters.userIsLoggedIn;
+    },
     availableStores() {
       return this.$store.state.currentUser?.adminIn || [];
     },
   },
   watch: {
-    selectedStoreId(newVal) {
-      if (newVal) {
-        this.loadData();
-      }
-    }
+    selectedStoreId: {
+      immediate: true,
+      handler() {
+        if (this.canLoadData()) {
+          this.loadData();
+        }
+      },
+    },
+    userIsLoggedIn: {
+      immediate: true,
+      handler(isLoggedIn) {
+        if (isLoggedIn && this.canLoadData()) {
+          this.loadData();
+        }
+      },
+    },
+    "$route.query": {
+      handler(newQuery) {
+        this.applyQueryDates(newQuery);
+      },
+      immediate: true,
+    },
   },
   mounted() {
     if (!this.$store.getters.userIsLoggedIn) {
@@ -217,6 +237,80 @@ export default {
     }
   },
   methods: {
+    applyQueryDates(query) {
+      const range = this.getDateRangeFromQuery(query);
+      if (!range) {
+        return;
+      }
+
+      const hasChanges =
+        range.from !== this.dateRange.from || range.to !== this.dateRange.to;
+
+      if (!hasChanges) {
+        return;
+      }
+
+      this.dateRange.from = range.from;
+      this.dateRange.to = range.to;
+
+      if (this.canLoadData()) {
+        this.loadData();
+      }
+    },
+
+    getDateRangeFromQuery(query) {
+      const from = this.parseQueryDate(query?.from);
+      const to = this.parseQueryDate(query?.to);
+
+      if (!from || !to) {
+        return null;
+      }
+
+      return { from, to };
+    },
+
+    parseQueryDate(value) {
+      if (typeof value !== "string") {
+        return null;
+      }
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+        return null;
+      }
+      const date = new Date(`${value}T00:00:00`);
+      if (Number.isNaN(date.getTime())) {
+        return null;
+      }
+      if (date.toISOString().slice(0, 10) !== value) {
+        return null;
+      }
+      return value;
+    },
+
+    updateQueryDates() {
+      const nextQuery = {
+        ...this.$route.query,
+        from: this.dateRange.from,
+        to: this.dateRange.to,
+      };
+
+      const currentFrom = this.$route.query?.from;
+      const currentTo = this.$route.query?.to;
+
+      if (currentFrom === nextQuery.from && currentTo === nextQuery.to) {
+        return;
+      }
+
+      this.$router.replace({ query: nextQuery });
+    },
+
+    onDateChange() {
+      this.updateQueryDates();
+      this.loadData();
+    },
+
+    canLoadData() {
+      return this.userIsLoggedIn && !!this.selectedStoreId;
+    },
 
     getDefaultFromDate() {
       const date = new Date();

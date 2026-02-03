@@ -516,13 +516,43 @@ export default {
   },
 
   watch: {
+    "$route.query": {
+      handler(newQuery) {
+        this.applyQueryStore(newQuery);
+      },
+      immediate: true,
+    },
     adminStores: {
       immediate: true,
       handler(stores) {
+        const queryStoreId = this.getQueryStoreId();
+        const hasStores = stores.length > 0;
+        const queryStoreExists = queryStoreId && stores.some(store => store.id === queryStoreId);
+
+        if (queryStoreExists) {
+          if (this.$store.state.selectedAdminStore !== queryStoreId) {
+            this.$nextTick(() => {
+              this.$store.dispatch("SetSelectedAdminStore", queryStoreId);
+            });
+          }
+          this.updateQueryStore(queryStoreId);
+          return;
+        }
+
+        if (queryStoreId && hasStores) {
+          const fallbackStoreId = stores[0].id;
+          this.$nextTick(() => {
+            this.$store.dispatch("SetSelectedAdminStore", fallbackStoreId);
+            this.updateQueryStore(fallbackStoreId);
+          });
+          return;
+        }
+
         // Ensure a store is always selected when stores are loaded
-        if (stores.length > 0 && !this.$store.state.selectedAdminStore) {
+        if (hasStores && !this.$store.state.selectedAdminStore) {
           this.$nextTick(() => {
             this.$store.dispatch("SetSelectedAdminStore", stores[0].id);
+            this.updateQueryStore(stores[0].id);
           });
         }
       }
@@ -531,6 +561,9 @@ export default {
 
   mounted() {
     this.onboardingInProgress = localStorage.getItem("onboardingInProgress");
+
+    this.applyQueryStore(this.$route.query);
+    this.syncQueryStoreIfMissing();
 
     // Ensure a store is selected on mount
     if (this.adminStores.length > 0 && !this.$store.state.selectedAdminStore) {
@@ -546,11 +579,97 @@ export default {
   },
 
   methods: {
+    getQueryStoreId(query = this.$route.query) {
+      if (!query || typeof query !== "object") {
+        return null;
+      }
+
+      const directKeys = ["storeId", "storeid", "store", "storeID"];
+      for (const key of directKeys) {
+        const rawValue = query[key];
+        const parsed = this.parseStoreId(rawValue);
+        if (parsed) {
+          return parsed;
+        }
+      }
+
+      for (const [key, value] of Object.entries(query)) {
+        const normalized = key.toLowerCase();
+        if (normalized === "storeid" || normalized === "store") {
+          const parsed = this.parseStoreId(value);
+          if (parsed) {
+            return parsed;
+          }
+        }
+      }
+
+      return null;
+    },
+
+    parseStoreId(value) {
+      if (typeof value === "string") {
+        const parsed = parseInt(value, 10);
+        if (!Number.isNaN(parsed) && parsed > 0) {
+          return parsed;
+        }
+      }
+      if (typeof value === "number" && Number.isFinite(value) && value > 0) {
+        return value;
+      }
+      return null;
+    },
+
+    applyQueryStore(query) {
+      const queryStoreId = this.getQueryStoreId(query);
+      if (!queryStoreId) {
+        return;
+      }
+
+      if (this.$store.state.selectedAdminStore !== queryStoreId) {
+        this.$store.dispatch("SetSelectedAdminStore", queryStoreId);
+      }
+    },
+
+    updateQueryStore(storeId) {
+      if (!storeId) {
+        return;
+      }
+
+      const nextQuery = {
+        ...this.$route.query,
+        storeId: storeId,
+      };
+
+      delete nextQuery.store;
+      delete nextQuery.storeid;
+      delete nextQuery.storeID;
+
+      const currentStoreId = this.$route.query?.storeId;
+      if (String(currentStoreId) === String(storeId)) {
+        return;
+      }
+
+      this.$router.replace({ query: nextQuery });
+    },
+
+    syncQueryStoreIfMissing() {
+      const existingStoreId = this.getQueryStoreId(this.$route.query);
+      if (existingStoreId) {
+        return;
+      }
+
+      const selectedStoreId = this.$store.state.selectedAdminStore;
+      if (selectedStoreId) {
+        this.updateQueryStore(selectedStoreId);
+      }
+    },
+
     toggleDropdown() {
       this.dropdownOpen = !this.dropdownOpen;
     },
     selectStore(storeId) {
       this.$store.dispatch("SetSelectedAdminStore", storeId);
+      this.updateQueryStore(storeId);
       this.dropdownOpen = false;
     },
     handleClickOutside(event) {
