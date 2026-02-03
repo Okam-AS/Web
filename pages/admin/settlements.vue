@@ -243,15 +243,18 @@ export default {
         return;
       }
 
+      const nextFrom = range.from || this.dateRange.from;
+      const nextTo = range.to || this.dateRange.to;
+
       const hasChanges =
-        range.from !== this.dateRange.from || range.to !== this.dateRange.to;
+        nextFrom !== this.dateRange.from || nextTo !== this.dateRange.to;
 
       if (!hasChanges) {
         return;
       }
 
-      this.dateRange.from = range.from;
-      this.dateRange.to = range.to;
+      this.dateRange.from = nextFrom;
+      this.dateRange.to = nextTo;
 
       if (this.canLoadData()) {
         this.loadData();
@@ -262,7 +265,7 @@ export default {
       const from = this.parseQueryDate(query?.from);
       const to = this.parseQueryDate(query?.to);
 
-      if (!from || !to) {
+      if (!from && !to) {
         return null;
       }
 
@@ -270,20 +273,24 @@ export default {
     },
 
     parseQueryDate(value) {
-      if (typeof value !== "string") {
+      let raw = value;
+      if (Array.isArray(raw)) {
+        raw = raw[0];
+      }
+      if (typeof raw !== "string") {
         return null;
       }
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(raw)) {
         return null;
       }
-      const date = new Date(`${value}T00:00:00`);
+      const date = new Date(`${raw}T00:00:00`);
       if (Number.isNaN(date.getTime())) {
         return null;
       }
-      if (date.toISOString().slice(0, 10) !== value) {
+      if (date.toISOString().slice(0, 10) !== raw) {
         return null;
       }
-      return value;
+      return raw;
     },
 
     updateQueryDates() {
