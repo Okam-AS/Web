@@ -235,6 +235,9 @@ export default {
       // Handle not logged in case if needed
       return;
     }
+
+    // Ensure query dates are applied after mount (route/query is stable on client).
+    this.applyQueryDates(this.$route.query);
   },
   methods: {
     applyQueryDates(query) {
@@ -283,7 +286,7 @@ export default {
       if (!/^\d{4}-\d{2}-\d{2}$/.test(raw)) {
         return null;
       }
-      const date = new Date(`${raw}T00:00:00`);
+      const date = new Date(`${raw}T00:00:00Z`);
       if (Number.isNaN(date.getTime())) {
         return null;
       }
