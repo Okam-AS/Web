@@ -392,10 +392,20 @@
             <!-- Product Variants Section -->
             <div v-if="selectedProduct.id" class="form-group variants-section">
               <div class="section-header-inline">
-                <label>Tilbehør / Varianter</label>
+                <div class="section-label-with-toggle">
+                  <label>Tilbehør / Varianter</label>
+                  <label class="toggle-switch">
+                    <input
+                      v-model="selectedProduct.productVariantEnabled"
+                      type="checkbox"
+                    />
+                    <span class="toggle-slider" />
+                  </label>
+                </div>
                 <button
                   class="btn-add-variant"
                   type="button"
+                  :disabled="!selectedProduct.productVariantEnabled"
                   @click="openVariantEditor"
                 >
                   <i class="fas fa-plus" /> Legg til
@@ -403,7 +413,11 @@
               </div>
               <p class="helper-text">Varianter som er spesifikke for dette produktet</p>
 
-              <div v-if="selectedProduct.productVariants && selectedProduct.productVariants.length > 0" class="variants-list-compact">
+              <div
+                v-if="selectedProduct.productVariants && selectedProduct.productVariants.length > 0"
+                class="variants-list-compact"
+                :class="{ 'variants-disabled': !selectedProduct.productVariantEnabled }"
+              >
                 <div
                   v-for="(variant, index) in selectedProduct.productVariants"
                   :key="variant.id || index"
@@ -2327,6 +2341,61 @@ export default {
   }
 }
 
+.section-label-with-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  cursor: pointer;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: #cbd5e0;
+    border-radius: 24px;
+    transition: all 0.3s ease;
+
+    &::before {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      left: 3px;
+      bottom: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+  }
+
+  input:checked + .toggle-slider {
+    background: #1bb776;
+    box-shadow: 0 0 0 3px rgba(27, 183, 118, 0.15);
+  }
+
+  input:checked + .toggle-slider::before {
+    transform: translateX(20px);
+  }
+}
+
+.variants-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 .btn-add-variant {
   background: white;
   color: #334155;
@@ -2348,6 +2417,11 @@ export default {
 
   i {
     font-size: 0.625rem;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
   }
 }
 
