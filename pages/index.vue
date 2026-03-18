@@ -82,9 +82,15 @@
           <h2 class="seksjons-tittel">Så enkelt mottar du bestillinger</h2>
           <p class="demo-beskrivelse">Bonger kan printes automatisk for travle kjøkken 🖨️</p>
           <div class="demo-video-wrapper">
-            <video autoplay muted loop playsinline>
+            <video ref="demoVideo" autoplay muted loop playsinline @loadedmetadata="onVideoLoaded">
               <source src="/videos/ordre-fast.mp4" type="video/mp4" />
             </video>
+            <div class="video-seeker" @click="seekVideo" @mousedown="startSeeking" @touchstart.passive="startSeeking">
+              <div class="seeker-track">
+                <div class="seeker-progress" :style="{ width: videoProgress + '%' }"></div>
+                <div class="seeker-thumb" :style="{ left: videoProgress + '%' }"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -393,7 +399,25 @@ export default {
       },
     ],
     showValidation: false,
+    videoProgress: 0,
+    isSeeking: false,
   }),
+
+  mounted() {
+    document.addEventListener('mousemove', this.onSeekMove);
+    document.addEventListener('mouseup', this.stopSeeking);
+    document.addEventListener('touchmove', this.onSeekMove, { passive: false });
+    document.addEventListener('touchend', this.stopSeeking);
+    this.startProgressLoop();
+  },
+
+  beforeDestroy() {
+    document.removeEventListener('mousemove', this.onSeekMove);
+    document.removeEventListener('mouseup', this.stopSeeking);
+    document.removeEventListener('touchmove', this.onSeekMove);
+    document.removeEventListener('touchend', this.stopSeeking);
+    if (this._rafId) cancelAnimationFrame(this._rafId);
+  },
 
   computed: {
     isFormValid() {
@@ -404,6 +428,58 @@ export default {
   },
 
   methods: {
+    onVideoLoaded() {
+      this.videoProgress = 0;
+    },
+    startProgressLoop() {
+      const update = () => {
+        if (!this.isSeeking) {
+          const video = this.$refs.demoVideo;
+          if (video && video.duration) {
+            this.videoProgress = (video.currentTime / video.duration) * 100;
+          }
+        }
+        this._rafId = requestAnimationFrame(update);
+      };
+      this._rafId = requestAnimationFrame(update);
+    },
+    seekVideo(e) {
+      this.seekToPosition(e);
+    },
+    seekToPosition(e) {
+      const seeker = e.currentTarget || e.target.closest('.video-seeker');
+      if (!seeker) return;
+      const rect = seeker.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const percent = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+      const video = this.$refs.demoVideo;
+      if (video && video.duration) {
+        video.currentTime = percent * video.duration;
+        this.videoProgress = percent * 100;
+      }
+    },
+    startSeeking(e) {
+      this.isSeeking = true;
+      this._seekerEl = e.currentTarget;
+      this.seekToPosition(e);
+    },
+    onSeekMove(e) {
+      if (!this.isSeeking) return;
+      if (e.touches) e.preventDefault();
+      const seeker = this._seekerEl;
+      if (!seeker) return;
+      const rect = seeker.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const percent = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+      const video = this.$refs.demoVideo;
+      if (video && video.duration) {
+        video.currentTime = percent * video.duration;
+        this.videoProgress = percent * 100;
+      }
+    },
+    stopSeeking() {
+      this.isSeeking = false;
+    },
     async submitFeedback() {
       this.showValidation = true;
 
@@ -1039,7 +1115,48 @@ export default {
   width: 100%;
   height: auto;
   display: block;
-  border-radius: 20px;
+  border-radius: 20px 20px 0 0;
+}
+
+.video-seeker {
+  position: relative;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 0 0 20px 20px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.seeker-track {
+  position: relative;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  transition: height 0.2s ease;
+}
+
+
+.seeker-progress {
+  height: 100%;
+  background: linear-gradient(90deg, #1bb776, #22d68a);
+  border-radius: 4px;
+}
+
+.seeker-thumb {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.video-seeker:hover .seeker-thumb {
+  transform: translate(-50%, -50%) scale(1);
 }
 
 
@@ -1115,6 +1232,25 @@ export default {
 
   .demo-video-wrapper {
     border-radius: 12px;
+  }
+
+  .demo-video-wrapper video {
+    border-radius: 12px 12px 0 0;
+  }
+
+  .video-seeker {
+    border-radius: 0 0 12px 12px;
+    padding: 20px 16px;
+  }
+
+  .seeker-track {
+    height: 6px;
+  }
+
+  .seeker-thumb {
+    width: 18px;
+    height: 18px;
+    transform: translate(-50%, -50%) scale(1);
   }
 }
 </style>
