@@ -77,6 +77,18 @@
         </div>
       </div>
 
+      <div class="demo-seksjon">
+        <div class="container">
+          <h2 class="seksjons-tittel">Så enkelt mottar du bestillinger</h2>
+          <p class="demo-beskrivelse">Bonger kan printes automatisk for travle kjøkken 🖨️</p>
+          <div class="demo-video-wrapper">
+            <video autoplay muted loop playsinline>
+              <source src="/videos/ordre-fast.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </div>
+      </div>
+
       <div class="app-rating-seksjon">
         <div class="container">
           <h2 class="app-rating-tittel">Vi er stolte av å levere høy kvalitet!</h2>
@@ -1004,6 +1016,33 @@ export default {
   line-height: 1.6;
 }
 
+.demo-seksjon {
+  padding: 80px 0;
+  background: white;
+}
+
+.demo-beskrivelse {
+  text-align: center;
+  color: #666;
+  font-size: 1.1rem;
+  margin-bottom: 40px;
+}
+
+.demo-video-wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.demo-video-wrapper video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 20px;
+}
+
+
 @media (max-width: 1024px) and (min-width: 769px) {
   .testimonials-rutenett {
     grid-template-columns: repeat(2, 1fr);
@@ -1068,6 +1107,14 @@ export default {
   .volume-text {
     font-size: 1.3rem;
     margin: 0;
+  }
+
+  .demo-seksjon {
+    padding: 50px 0;
+  }
+
+  .demo-video-wrapper {
+    border-radius: 12px;
   }
 }
 </style>
