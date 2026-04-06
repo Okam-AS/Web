@@ -131,9 +131,10 @@
                   v-model="vatNumber"
                   :class="{ error: fieldsWithErrors.includes('vatNumber') }"
                   type="text"
-                  maxlength="9"
+                  maxlength="15"
                   placeholder="987654321"
-                  @input="clearFieldError('vatNumber')"
+                  @input="onVatInput"
+                  @paste="onVatInput"
                 />
               </div>
               <span
@@ -151,9 +152,47 @@
               </button>
             </div>
 
+            <!-- Duplicate VAT Warning -->
+            <div
+              v-if="validVat && vatExists && !isLoading"
+              class="vat-warning"
+            >
+              <div class="vat-warning__icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                </svg>
+              </div>
+              <h3 class="vat-warning__title">
+                Det finnes allerede en butikk med dette organisasjonsnummeret
+              </h3>
+              <p class="vat-warning__store-name">
+                <strong>{{ existingStoreName }}</strong> er allerede registrert med org.nr. {{ vatNumber }}.
+              </p>
+              <p class="vat-warning__text">
+               Hvis du allerede er tilknyttet denne butikken, logg inn via Admin Panel. Hvis du ønsker tilgang, kontakt butikkens administrator for å bli lagt til som ansatt.
+              </p>
+
+              <button class="cta-link" @click="logout">
+                Logg ut
+              </button>
+
+              <p class="vat-warning__customer-text">
+                Er du kunde og ønsker å handle?
+                <a href="https://shop.okam.no" class="vat-warning__link">Gå til butikkoversikten</a>
+              </p>
+
+              <a
+                href="#"
+                class="vat-warning__continue-link"
+                @click.prevent="continueAnywayTap"
+              >
+                Jeg forstår, men ønsker likevel å registrere en helt ny butikk
+              </a>
+            </div>
+
             <!-- Store Details Section -->
             <div
-              v-if="validVat && !isLoading"
+              v-if="validVat && !vatExists && !isLoading"
               class="form-section"
             >
               <div class="field-group">
@@ -291,6 +330,8 @@ export default {
     zipCode: "",
     city: "",
     acceptedTerms: false,
+    vatExists: false,
+    existingStoreName: "",
     messageSent: false,
     showPhoneInput: true,
     landcode: "+47",
@@ -306,6 +347,13 @@ export default {
     },
   },
   methods: {
+    onVatInput() {
+      this.$nextTick(() => {
+        this.vatNumber = this.vatNumber.replace(/\D/g, "").slice(0, 9);
+        this.clearFieldError('vatNumber');
+      });
+    },
+
     clearFieldError(field) {
       this.fieldsWithErrors = this.fieldsWithErrors.filter((f) => f !== field);
       this.errorMessage = "";
@@ -331,12 +379,25 @@ export default {
         this.address = brregData.fullAddress;
         this.zipCode = brregData.zipCode;
         this.city = brregData.city;
+
+        // Check if a store with this VAT already exists
+        try {
+          const vatCheck = await this._storeService.CheckVatExists(this.vatNumber);
+          this.vatExists = vatCheck.exists;
+          this.existingStoreName = vatCheck.storeName;
+        } catch {
+          this.vatExists = false;
+        }
       } catch (error) {
         this.errorMessage = "Kunne ikke validere organisasjonsnummer";
         this.fieldsWithErrors.push("vatNumber");
       } finally {
         this.isLoading = false;
       }
+    },
+
+    continueAnywayTap() {
+      this.vatExists = false;
     },
 
     showTerms() {
@@ -400,6 +461,8 @@ export default {
       this.zipCode = "";
       this.city = "";
       this.acceptedTerms = false;
+      this.vatExists = false;
+      this.existingStoreName = "";
       this.fieldsWithErrors = [];
       this.errorMessage = "";
     },
@@ -607,6 +670,86 @@ export default {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+.vat-warning {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border: 2px solid #f59e0b;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.2);
+  text-align: center;
+  animation: fadeIn 0.4s ease-out;
+
+  &__icon {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f59e0b;
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+
+    svg {
+      width: 32px;
+      height: 32px;
+      color: white;
+    }
+  }
+
+  &__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #92400e;
+    margin: 0 0 0.75rem 0;
+  }
+
+  &__store-name {
+    font-size: 1rem;
+    color: #78350f;
+    margin: 0 0 0.5rem 0;
+
+    strong {
+      font-weight: 700;
+    }
+  }
+
+  &__text {
+    font-size: 0.95rem;
+    color: #92400e;
+    margin: 0 0 1.5rem 0;
+    line-height: 1.6;
+  }
+
+  &__customer-text {
+    font-size: 0.875rem;
+    color: #92400e;
+    margin: 1.5rem 0 1rem 0;
+  }
+
+  &__link {
+    color: #92400e;
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  &__continue-link {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: #92400e;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    font-weight: 400;
+
+    &:hover {
+      color: #78350f;
+    }
   }
 }
 
