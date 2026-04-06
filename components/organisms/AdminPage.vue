@@ -40,7 +40,7 @@ export default {
       return this.$route && this.$route.path.includes("/admin/onboarding");
     },
   },
-  mounted() {
+  async mounted() {
     if (!this.$store.getters.userIsLoggedIn) {
       this.showLogin = true;
       // Only redirect to /admin if we're on a different admin page
