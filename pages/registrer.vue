@@ -172,7 +172,7 @@
                Hvis du allerede er tilknyttet denne butikken, logg inn via Admin Panel. Hvis du ønsker tilgang, kontakt butikkens administrator for å bli lagt til som ansatt.
               </p>
 
-              <button class="cta-link" @click="logout">
+              <button class="cta-link" @click="logout(true)">
                 Logg ut
               </button>
 
@@ -445,8 +445,8 @@ export default {
       }
     },
 
-    logout() {
-      if (confirm("Er du sikker på at du ønsker å registrere butikken på et annet telefonnummer? Alle felter må fylles på nytt.")) {
+    logout(skipConfirm = false) {
+      if (skipConfirm || confirm("Er du sikker på at du ønsker å registrere butikken på et annet telefonnummer? Alle felter må fylles på nytt.")) {
         this._userService.Logout();
         this.resetForm();
       }

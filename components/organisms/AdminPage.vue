@@ -49,7 +49,12 @@ export default {
         this.$router.replace(`/admin?redirect=${encodeURIComponent(this.$route.fullPath)}`);
       }
     } else {
-      this._userService.Reload();
+      await this._userService.Reload();
+      const adminIn = this.$store.state.currentUser?.adminIn;
+      if (!adminIn || adminIn.length === 0) {
+        this.$router.replace("/registrer");
+        return;
+      }
     }
   },
   methods: {
