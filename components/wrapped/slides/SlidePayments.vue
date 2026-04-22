@@ -73,6 +73,7 @@ export default {
         'Gavekort': '🎁',
         'Klarna': '🛒',
         'Billie': '📋',
+        'Kravia': '📋',
         'Wolt': '🛵'
       }
       return icons[name] || '💰'

@@ -513,6 +513,7 @@ export default {
       'DinteroVipps',
       'DinteroBillie',
       'DinteroKlarna',
+      'DinteroKravia',
       'WoltMarketplace',
     ],
     debouncedLoadStatistics: null,
@@ -565,6 +566,7 @@ export default {
         { id: 'DinteroVipps', label: 'Dintero Vipps' },
         { id: 'DinteroBillie', label: 'Dintero Billie' },
         { id: 'DinteroKlarna', label: 'Dintero Klarna' },
+        { id: 'DinteroKravia', label: 'Dintero Kravia' },
         { id: 'WoltMarketplace', label: 'Wolt Marketplace' },
       ];
     },

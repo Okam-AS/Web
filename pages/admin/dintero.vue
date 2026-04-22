@@ -384,6 +384,20 @@
               >
             </div>
 
+            <div class="form-check">
+              <input
+                id="kraviaEnabled"
+                v-model="dinteroConfig.kraviaEnabled"
+                type="checkbox"
+                class="form-check-input"
+              />
+              <label
+                for="kraviaEnabled"
+                class="form-check-label"
+                >Kravia</label
+              >
+            </div>
+
             <div class="form-actions">
               <button
                 class="btn btn-primary"
@@ -509,6 +523,7 @@ export default {
         googlePayEnabled: false,
         klarnaEnabled: false,
         billieEnabled: false,
+        kraviaEnabled: false,
         commissionPercentage: 0,
         woltDeliveryFeePercent: 0,
         woltCustomerDeliveryFeeAmount: 0,
@@ -601,6 +616,7 @@ export default {
         googlePayEnabled: false,
         klarnaEnabled: false,
         billieEnabled: false,
+        kraviaEnabled: false,
         commissionPercentage: 0,
         woltDeliveryFeePercent: 0,
         woltCustomerDeliveryFeeAmount: 0,
@@ -637,6 +653,7 @@ export default {
             googlePayEnabled: config.googlePayEnabled || false,
             klarnaEnabled: config.klarnaEnabled || false,
             billieEnabled: config.billieEnabled || false,
+            kraviaEnabled: config.kraviaEnabled || false,
             commissionPercentage: config.commissionPercentage || 0,
             woltDeliveryFeePercent: config.woltDeliveryFeePercent || 0,
             woltCustomerDeliveryFeeAmount: config.woltCustomerDeliveryFeeAmount || 0,
@@ -704,6 +721,7 @@ export default {
         googlePayEnabled: this.dinteroConfig.googlePayEnabled,
         klarnaEnabled: this.dinteroConfig.klarnaEnabled,
         billieEnabled: this.dinteroConfig.billieEnabled,
+        kraviaEnabled: this.dinteroConfig.kraviaEnabled,
         commissionPercentage: this.dinteroConfig.commissionPercentage,
         woltDeliveryFeePercent: this.dinteroConfig.woltDeliveryFeePercent,
         woltCustomerDeliveryFeeAmount: this.dinteroConfig.woltCustomerDeliveryFeeAmount,

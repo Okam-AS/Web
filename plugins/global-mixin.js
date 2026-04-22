@@ -66,6 +66,7 @@ const mixin = {
         case 'DinteroVipps': return 'Betalt med Vipps'
         case 'DinteroBillie': return 'Betalt med Billie'
         case 'DinteroKlarna': return 'Betalt med Klarna'
+        case 'DinteroKravia': return 'Betalt med Kravia'
         case 'WoltMarketplace': return 'Betalt via Wolt'
         default: return 'Ukjent'
       }

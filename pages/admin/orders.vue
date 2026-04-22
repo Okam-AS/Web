@@ -439,6 +439,7 @@ export default {
       "DinteroVipps",
       "DinteroBillie",
       "DinteroKlarna",
+      "DinteroKravia",
       "WoltMarketplace",
     ],
     debouncedFetchOrders: null,
@@ -576,6 +577,7 @@ export default {
         { id: "DinteroVipps", label: "Betalt med Vipps" },
         { id: "DinteroBillie", label: "Betalt med Billie" },
         { id: "DinteroKlarna", label: "Betalt med Klarna" },
+        { id: "DinteroKravia", label: "Betalt med Kravia" },
         { id: "WoltMarketplace", label: "Betalt via Wolt" },
       ];
     },
@@ -834,6 +836,7 @@ export default {
         "DinteroVipps",
         "DinteroBillie",
         "DinteroKlarna",
+        "DinteroKravia",
         "WoltMarketplace",
       ];
       this.fetchOrders(1);
