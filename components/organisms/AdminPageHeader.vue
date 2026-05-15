@@ -217,6 +217,27 @@
                     </a>
                   </li>
                   <li>
+                    <a href="/admin/kravia-invoice">
+                      <span class="menu-icon">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M9 14h6m-6-4h6m-7 10h8a2 2 0 002-2V7.414a2 2 0 00-.586-1.414l-3.414-3.414A2 2 0 0012.586 2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
+                          />
+                        </svg>
+                      </span>
+                      Send faktura
+                      <span class="new-badge">Nyhet</span>
+                    </a>
+                  </li>
+                  <li>
                     <a href="/admin/products">
                       <span class="menu-icon">
                         <svg
