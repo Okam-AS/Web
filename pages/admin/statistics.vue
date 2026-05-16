@@ -413,6 +413,12 @@
           </div>
         </div>
 
+      <!-- AI Query Box -->
+      <AIQueryBox
+        v-if="!isLoading && statistics"
+        :selected-store-ids="selectedStoreIds"
+      />
+
       <!-- Wrapped 2025 Section -->
       <div class="wrapped-section">
         <a href="/admin/wrapped" class="wrapped-card">
@@ -448,6 +454,7 @@ import MultiSelectDropdown from '~/components/molecules/MultiSelectDropdown.vue'
 import StatisticsChart from '~/components/molecules/StatisticsChart.vue';
 import LoadingSkeleton from '~/components/molecules/LoadingSkeleton.vue';
 import PeakPerformanceHeatmap from '~/components/molecules/PeakPerformanceHeatmap.vue';
+import AIQueryBox from '~/components/admin/statistics/AIQueryBox.vue';
 import { debounce } from '~/core/helpers/ts-debounce';
 
 export default {
@@ -458,6 +465,7 @@ export default {
     StatisticsChart,
     LoadingSkeleton,
     PeakPerformanceHeatmap,
+    AIQueryBox,
   },
   data: () => ({
     showLogin: false,
