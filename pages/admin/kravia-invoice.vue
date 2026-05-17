@@ -295,7 +295,7 @@ export default {
       return Math.max(0, this.totalInclVat - this.totalExVat);
     },
     invoiceFeeAmount() {
-      return 1000;
+      return 2000;
     },
     invoiceFeeExVat() {
       return Math.round(this.invoiceFeeAmount / 1.25);
