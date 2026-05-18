@@ -27,17 +27,44 @@
 
           <div class="form-group form-group--lookup">
             <label for="organizationNumber">Mottaker org.nr</label>
-            <div class="lookup-row">
-              <input
-                id="organizationNumber"
-                v-model="form.organizationNumber"
-                inputmode="numeric"
-                placeholder="999999999"
-                @keyup.enter="lookupCompany"
-              />
-              <button type="button" class="btn btn-secondary" :disabled="companyLoading" @click="lookupCompany">
-                {{ companyLoading ? "Henter..." : "Hent" }}
-              </button>
+            <div class="company-lookup">
+              <div class="lookup-row">
+                <input
+                  id="organizationNumber"
+                  v-model="form.organizationNumber"
+                  inputmode="numeric"
+                  placeholder="999999999"
+                  @focus="focusCompanyLookup"
+                  @blur="blurCompanyLookup"
+                  @input="handleCompanyInput"
+                  @keyup.enter="lookupCompany"
+                />
+                <button type="button" class="btn btn-secondary" :disabled="companyLoading" @click="lookupCompany">
+                  {{ companyLoading ? "Henter..." : "Hent" }}
+                </button>
+              </div>
+              <div v-if="companyAutocompleteOpen" class="company-history-suggestions">
+                <div v-if="companyHistoryLoading" class="company-history-state">
+                  Henter tidligere bedrifter...
+                </div>
+                <template v-else-if="companyHistorySuggestions.length">
+                  <button
+                    v-for="company in companyHistorySuggestions"
+                    :key="company.organizationNumber"
+                    type="button"
+                    @mousedown.prevent="selectHistoricalCompany(company)"
+                  >
+                    <span>
+                      <strong>{{ company.companyName }}</strong>
+                      <small>{{ company.organizationNumber }}</small>
+                    </span>
+                    <small>{{ company.companyAddress }}, {{ company.companyZipCode }} {{ company.companyCity }}</small>
+                  </button>
+                </template>
+                <div v-else class="company-history-state">
+                  Ingen tidligere bedrifter funnet
+                </div>
+              </div>
             </div>
           </div>
 
@@ -243,6 +270,11 @@ export default {
   data: () => ({
     initialLoading: true,
     companyLoading: false,
+    companyHistoryLoading: false,
+    companyHistoryLoadedForStoreId: null,
+    companyHistory: [],
+    companyAutocompleteOpen: false,
+    companyAutocompleteCloseTimer: null,
     productsLoading: false,
     isSending: false,
     showConfirmModal: false,
@@ -277,6 +309,18 @@ export default {
     },
     selectedStoreObject() {
       return this.adminStores.find((store) => store.id === this.selectedStoreId) || null;
+    },
+    companyHistorySuggestions() {
+      const query = (this.form.organizationNumber || "").trim().toLowerCase();
+      const normalizedQuery = this.normalizeOrgNo(query);
+      return (this.companyHistory || [])
+        .filter((company) => {
+          if (!query) return true;
+          const orgNo = this.normalizeOrgNo(company.organizationNumber || "");
+          const name = (company.companyName || "").toLowerCase();
+          return orgNo.includes(normalizedQuery) || name.includes(query);
+        })
+        .slice(0, 12);
     },
     totalExVat() {
       return this.lines.reduce((sum, line) => sum + this.lineExVat(line), 0) + this.invoiceFeeExVat;
@@ -319,8 +363,63 @@ export default {
       this.$store.dispatch("SetSelectedAdminStore", this.selectedStoreId);
       this.products = [];
       this.lines = [];
+      this.companyHistory = [];
+      this.companyHistoryLoading = false;
+      this.companyHistoryLoadedForStoreId = null;
+      this.companyAutocompleteOpen = false;
       this.addLine();
       this.loadProducts();
+    },
+    focusCompanyLookup() {
+      if (this.companyAutocompleteCloseTimer) clearTimeout(this.companyAutocompleteCloseTimer);
+      this.companyAutocompleteOpen = true;
+      this.loadCompanyHistory();
+    },
+    blurCompanyLookup() {
+      this.companyAutocompleteCloseTimer = setTimeout(() => {
+        this.companyAutocompleteOpen = false;
+      }, 150);
+    },
+    handleCompanyInput() {
+      this.companyAutocompleteOpen = true;
+      this.loadCompanyHistory();
+    },
+    loadCompanyHistory() {
+      if (!this.selectedStoreId || this.companyHistoryLoading || this.companyHistoryLoadedForStoreId === this.selectedStoreId) return;
+      const storeId = this.selectedStoreId;
+      this.companyHistoryLoading = true;
+      this._kraviaInvoiceService.GetCompanyHistory(storeId)
+        .then((companies) => {
+          if (this.selectedStoreId !== storeId) return;
+          this.companyHistory = Array.isArray(companies) ? companies : [];
+          this.companyHistoryLoadedForStoreId = storeId;
+        })
+        .catch(() => {
+          if (this.selectedStoreId !== storeId) return;
+          this.companyHistory = [];
+          this.showNotification("Kunne ikke hente tidligere bedriftskunder", "error");
+        })
+        .finally(() => {
+          if (this.selectedStoreId === storeId) {
+            this.companyHistoryLoading = false;
+          }
+        });
+    },
+    selectHistoricalCompany(company) {
+      this.form.organizationNumber = company.organizationNumber || "";
+      this.form.companyName = company.companyName || "";
+      this.form.companyAddress = company.companyAddress || "";
+      this.form.companyZipCode = company.companyZipCode || "";
+      this.form.companyCity = company.companyCity || "";
+      this.form.referenceFirstName = company.referenceFirstName || "";
+      this.form.referenceLastName = company.referenceLastName || "";
+      this.form.phone = company.phone || "";
+      this.form.email = company.email || "";
+      this.companyAutocompleteOpen = false;
+      this.showNotification("Tidligere bedriftskunde valgt", "success");
+    },
+    normalizeOrgNo(value) {
+      return (value || "").toString().toLowerCase().replace(/\s|-/g, "").replace("mva", "").trim();
     },
     loadProducts() {
       if (!this.selectedStoreId) return;
@@ -648,6 +747,68 @@ select {
 
 .lookup-row input {
   flex: 1;
+}
+
+.company-lookup {
+  position: relative;
+}
+
+.company-history-suggestions {
+  position: absolute;
+  z-index: 55;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 300px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.company-history-suggestions button {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  border: 0;
+  background: #fff;
+  color: #292c34;
+  cursor: pointer;
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.company-history-suggestions button:hover {
+  background: #f8f9fa;
+}
+
+.company-history-suggestions span,
+.company-history-suggestions small {
+  min-width: 0;
+}
+
+.company-history-suggestions span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.company-history-suggestions small {
+  color: #64748b;
+  line-height: 1.35;
+}
+
+.company-history-suggestions button > small {
+  max-width: 48%;
+  text-align: right;
+}
+
+.company-history-state {
+  color: #64748b;
+  padding: 12px;
 }
 
 .btn {
@@ -1012,6 +1173,16 @@ select {
   .add-line-button,
   .submit-bar .btn {
     width: 100%;
+  }
+
+  .company-history-suggestions button {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .company-history-suggestions button > small {
+    max-width: 100%;
+    text-align: left;
   }
 
   .submit-bar {
