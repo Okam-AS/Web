@@ -206,14 +206,7 @@
         <div v-if="notification.show" :class="['notification', 'submit-notification', `notification--${notification.type}`]">
           {{ notification.message }}
         </div>
-        <div class="coming-soon-message">
-          <strong>Fakturering kommer snart</strong>
-          <span>
-            Snart kan du lage og sende faktura til bedriftskunder direkte fra Okam Admin. Du fyller inn kundeinformasjon,
-            legger til varelinjer og sender fakturaen videre for betaling. 
-          </span>
-        </div>
-        <button type="button" class="btn btn-primary" disabled>
+        <button type="button" class="btn btn-primary" @click="openConfirm">
           Send faktura
         </button>
       </div>
@@ -897,25 +890,6 @@ select {
 
 .submit-bar {
   justify-content: flex-end;
-}
-
-.coming-soon-message {
-  flex: 1;
-  border: 1px solid #bfdbfe;
-  border-radius: 8px;
-  background: #eff6ff;
-  color: #1e3a8a;
-  line-height: 1.45;
-  padding: 12px 16px;
-
-  strong,
-  span {
-    display: block;
-  }
-
-  strong {
-    margin-bottom: 4px;
-  }
 }
 
 .notification {
