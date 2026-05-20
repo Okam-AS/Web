@@ -298,6 +298,32 @@
                     </a>
                   </li>
                   <li>
+                    <a href="/admin/delivery">
+                      <span class="menu-icon">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M9 17a2 2 0 11-4 0 2 2 0 014 0zm10 0a2 2 0 11-4 0 2 2 0 014 0z"
+                          />
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10h2m8 0h2m-2 0h-2m4 0h4v-5h-2.586a1 1 0 01-.707-.293L13 8"
+                          />
+                        </svg>
+                      </span>
+                      Delivery
+                    </a>
+                  </li>
+                  <li>
                     <a href="/admin/wolt">
                       <span class="menu-icon menu-icon--filled">
                         <svg
@@ -511,8 +537,6 @@
 </template>
 
 <script>
-import { ActionName } from '~/core/enums'
-
 export default {
   data() {
     return {
@@ -678,7 +702,7 @@ export default {
 
       const nextQuery = {
         ...this.$route.query,
-        storeId: storeId,
+        storeId,
       };
 
       delete nextQuery.store;
@@ -709,9 +733,57 @@ export default {
       this.dropdownOpen = !this.dropdownOpen;
     },
     selectStore(storeId) {
-      this.$store.dispatch("SetSelectedAdminStore", storeId);
-      this.updateQueryStore(storeId);
+      const parsedStoreId = this.parseStoreId(storeId);
+      if (!parsedStoreId) {
+        return;
+      }
+
+      if (String(this.$store.state.selectedAdminStore) === String(parsedStoreId)) {
+        this.dropdownOpen = false;
+        return;
+      }
+
+      this.$store.dispatch("SetSelectedAdminStore", parsedStoreId);
       this.dropdownOpen = false;
+
+      if (typeof window !== "undefined") {
+        window.location.assign(this.buildStoreUrl(parsedStoreId));
+      } else {
+        this.updateQueryStore(parsedStoreId);
+      }
+    },
+    buildStoreUrl(storeId) {
+      const nextQuery = {
+        ...this.$route.query,
+        storeId,
+      };
+
+      delete nextQuery.store;
+      delete nextQuery.storeid;
+      delete nextQuery.storeID;
+
+      const searchParams = new URLSearchParams();
+      Object.entries(nextQuery).forEach(([key, value]) => {
+        if (value === undefined || value === null) {
+          return;
+        }
+
+        if (Array.isArray(value)) {
+          value.forEach((item) => {
+            if (item !== undefined && item !== null) {
+              searchParams.append(key, item);
+            }
+          });
+          return;
+        }
+
+        searchParams.set(key, value);
+      });
+
+      const queryString = searchParams.toString();
+      const hash = this.$route.hash || "";
+
+      return `${this.$route.path}${queryString ? `?${queryString}` : ""}${hash}`;
     },
     handleClickOutside(event) {
       // Check if $el exists and is an element before querying
