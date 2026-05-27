@@ -103,31 +103,6 @@
         </div>
       </section>
 
-      <section class="invoice-section">
-        <h2>Levering og betaling</h2>
-        <div class="preorder-panel">
-          <label class="checkbox-row">
-            <input v-model="isPreorder" type="checkbox" @change="handlePreorderToggle" />
-            <span>Forhåndsbestilling</span>
-          </label>
-
-          <div v-if="isPreorder" class="form-grid form-grid--compact">
-            <div class="form-group">
-              <label for="preorderDate">Dato</label>
-              <input id="preorderDate" v-model="preorderDate" type="date" :min="todayInputValue" />
-            </div>
-            <div class="form-group">
-              <label for="preorderTime">Tidspunkt</label>
-              <input id="preorderTime" v-model="preorderTime" type="time" />
-            </div>
-          </div>
-
-          <div class="due-date-info">
-            {{ dueDateInfo }}
-          </div>
-        </div>
-      </section>
-
       <section class="invoice-section invoice-section--lines">
         <div class="section-heading">
           <h2>Varelinjer</h2>
@@ -254,9 +229,28 @@
         </div>
       </section>
 
+      <section v-if="isPreorder" class="invoice-section preorder-section">
+        <div class="form-grid form-grid--compact">
+          <div class="form-group">
+            <label for="preorderDate">Dato</label>
+            <input id="preorderDate" v-model="preorderDate" type="date" :min="todayInputValue" />
+          </div>
+          <div class="form-group">
+            <label for="preorderTime">Tidspunkt</label>
+            <input id="preorderTime" v-model="preorderTime" type="time" />
+          </div>
+        </div>
+      </section>
+
       <div class="submit-bar">
-        <div v-if="notification.show" :class="['notification', 'submit-notification', `notification--${notification.type}`]">
-          {{ notification.message }}
+        <div class="submit-options">
+          <label class="checkbox-row">
+            <input v-model="isPreorder" type="checkbox" @change="handlePreorderToggle" />
+            <span>Forhåndsbestilling</span>
+          </label>
+          <div v-if="notification.show" :class="['notification', 'submit-notification', `notification--${notification.type}`]">
+            {{ notification.message }}
+          </div>
         </div>
         <button type="button" class="btn btn-primary" @click="openConfirm">
           {{ submitButtonLabel }}
@@ -371,13 +365,6 @@ export default {
     },
     todayInputValue() {
       return this.formatDateInput(new Date());
-    },
-    dueDateInfo() {
-      if (this.isPreorder) {
-        return "Forfallsdato settes 14 dager etter fakturadato når bestillingen fullføres.";
-      }
-
-      return `Forfallsdato: ${this.formatDisplayDate(this.addDays(new Date(), 14))} (14 dager etter fakturadato).`;
     },
     submitButtonLabel() {
       return this.isPreorder ? "Opprett forhåndsbestilling" : "Send faktura";
@@ -578,11 +565,6 @@ export default {
     roundMoney(value) {
       return Math.round((Number(value) || 0) * 100) / 100;
     },
-    addDays(date, days) {
-      const result = new Date(date.getTime());
-      result.setDate(result.getDate() + days);
-      return result;
-    },
     formatDateInput(date) {
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -593,9 +575,6 @@ export default {
       const hours = String(date.getHours()).padStart(2, "0");
       const minutes = String(date.getMinutes()).padStart(2, "0");
       return `${hours}:${minutes}`;
-    },
-    formatDisplayDate(date) {
-      return new Intl.DateTimeFormat("nb-NO", { day: "2-digit", month: "2-digit", year: "numeric" }).format(date);
     },
     setDefaultPreorderDateTime() {
       const date = new Date();
@@ -789,7 +768,7 @@ export default {
 }
 
 .form-grid--compact {
-  grid-template-columns: repeat(2, minmax(160px, 220px));
+  grid-template-columns: repeat(2, minmax(160px, 240px));
 }
 
 .form-group {
@@ -805,10 +784,8 @@ export default {
   }
 }
 
-.preorder-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.preorder-section {
+  margin-top: -8px;
 }
 
 .checkbox-row {
@@ -827,18 +804,6 @@ export default {
   height: 18px;
   margin: 0;
   padding: 0;
-}
-
-.due-date-info {
-  width: fit-content;
-  max-width: 100%;
-  border: 1px solid #cfe7da;
-  border-radius: 8px;
-  background: #f0fdf4;
-  color: #166534;
-  font-weight: 600;
-  line-height: 1.4;
-  padding: 10px 12px;
 }
 
 input,
@@ -1193,7 +1158,14 @@ select {
 }
 
 .submit-bar {
-  justify-content: flex-end;
+  justify-content: space-between;
+}
+
+.submit-options {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
 }
 
 .notification {
@@ -1336,6 +1308,11 @@ select {
     align-items: stretch;
     flex-direction: column;
     justify-content: stretch;
+  }
+
+  .submit-options {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .modal-actions {
