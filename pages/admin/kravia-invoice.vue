@@ -230,6 +230,7 @@
       </section>
 
       <section v-if="isPreorder" class="invoice-section preorder-section">
+        <h2>Leveringstidspunkt</h2>
         <div class="form-grid form-grid--compact">
           <div class="form-group">
             <label for="preorderDate">Dato</label>
