@@ -103,6 +103,31 @@
         </div>
       </section>
 
+      <section class="invoice-section">
+        <h2>Levering og betaling</h2>
+        <div class="preorder-panel">
+          <label class="checkbox-row">
+            <input v-model="isPreorder" type="checkbox" @change="handlePreorderToggle" />
+            <span>Forhåndsbestilling</span>
+          </label>
+
+          <div v-if="isPreorder" class="form-grid form-grid--compact">
+            <div class="form-group">
+              <label for="preorderDate">Dato</label>
+              <input id="preorderDate" v-model="preorderDate" type="date" :min="todayInputValue" />
+            </div>
+            <div class="form-group">
+              <label for="preorderTime">Tidspunkt</label>
+              <input id="preorderTime" v-model="preorderTime" type="time" />
+            </div>
+          </div>
+
+          <div class="due-date-info">
+            {{ dueDateInfo }}
+          </div>
+        </div>
+      </section>
+
       <section class="invoice-section invoice-section--lines">
         <div class="section-heading">
           <h2>Varelinjer</h2>
@@ -234,14 +259,18 @@
           {{ notification.message }}
         </div>
         <button type="button" class="btn btn-primary" @click="openConfirm">
-          Send faktura
+          {{ submitButtonLabel }}
         </button>
       </div>
 
       <Modal v-if="showConfirmModal" :hide-close-btn="true" @close="showConfirmModal = false">
         <div class="confirm-modal">
-          <h2>Send faktura?</h2>
-          <p>
+          <h2>{{ confirmTitle }}</h2>
+          <p v-if="isPreorder">
+            Ordre på <strong>{{ priceLabel(totalInclVat) }}</strong> opprettes for
+            <strong>{{ form.companyName }}</strong>. Faktura sendes når bestillingen fullføres.
+          </p>
+          <p v-else>
             Faktura på <strong>{{ priceLabel(totalInclVat) }}</strong> sendes til
             <strong>{{ form.companyName }}</strong>.
           </p>
@@ -251,7 +280,7 @@
           <div class="modal-actions">
             <button type="button" class="btn btn-secondary" :disabled="isSending" @click="showConfirmModal = false">Avbryt</button>
             <button type="button" class="btn btn-primary" :disabled="isSending" @click="sendInvoice">
-              {{ isSending ? "Sender..." : "Send faktura" }}
+              {{ isSending ? "Sender..." : submitButtonLabel }}
             </button>
           </div>
         </div>
@@ -283,6 +312,9 @@ export default {
     showInvoiceFeeInfo: false,
     sendError: "",
     selectedStoreId: null,
+    isPreorder: false,
+    preorderDate: "",
+    preorderTime: "",
     products: [],
     form: {
       organizationNumber: "",
@@ -337,6 +369,22 @@ export default {
     invoiceFeeExVat() {
       return Math.round(this.invoiceFeeAmount / 1.25);
     },
+    todayInputValue() {
+      return this.formatDateInput(new Date());
+    },
+    dueDateInfo() {
+      if (this.isPreorder) {
+        return "Forfallsdato settes 14 dager etter fakturadato når bestillingen fullføres.";
+      }
+
+      return `Forfallsdato: ${this.formatDisplayDate(this.addDays(new Date(), 14))} (14 dager etter fakturadato).`;
+    },
+    submitButtonLabel() {
+      return this.isPreorder ? "Opprett forhåndsbestilling" : "Send faktura";
+    },
+    confirmTitle() {
+      return this.isPreorder ? "Opprett forhåndsbestilling?" : "Send faktura?";
+    },
   },
   mounted() {
     if (!this.$store.getters.userIsLoggedIn) {
@@ -357,6 +405,7 @@ export default {
       if (!this.lines.length) {
         this.addLine();
       }
+      this.setDefaultPreorderDateTime();
       this.initialLoading = false;
     },
     storeChanged() {
@@ -369,6 +418,11 @@ export default {
       this.companyAutocompleteOpen = false;
       this.addLine();
       this.loadProducts();
+    },
+    handlePreorderToggle() {
+      if (this.isPreorder && (!this.preorderDate || !this.preorderTime)) {
+        this.setDefaultPreorderDateTime();
+      }
     },
     focusCompanyLookup() {
       if (this.companyAutocompleteCloseTimer) clearTimeout(this.companyAutocompleteCloseTimer);
@@ -524,6 +578,43 @@ export default {
     roundMoney(value) {
       return Math.round((Number(value) || 0) * 100) / 100;
     },
+    addDays(date, days) {
+      const result = new Date(date.getTime());
+      result.setDate(result.getDate() + days);
+      return result;
+    },
+    formatDateInput(date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    },
+    formatTimeInput(date) {
+      const hours = String(date.getHours()).padStart(2, "0");
+      const minutes = String(date.getMinutes()).padStart(2, "0");
+      return `${hours}:${minutes}`;
+    },
+    formatDisplayDate(date) {
+      return new Intl.DateTimeFormat("nb-NO", { day: "2-digit", month: "2-digit", year: "numeric" }).format(date);
+    },
+    setDefaultPreorderDateTime() {
+      const date = new Date();
+      date.setMinutes(date.getMinutes() + 30);
+      date.setSeconds(0, 0);
+      this.preorderDate = this.formatDateInput(date);
+      this.preorderTime = this.formatTimeInput(date);
+    },
+    getRequestedCompletion() {
+      if (!this.isPreorder || !this.preorderDate || !this.preorderTime) return null;
+      const [year, month, day] = this.preorderDate.split("-").map(Number);
+      const [hours, minutes] = this.preorderTime.split(":").map(Number);
+      return new Date(year, month - 1, day, hours, minutes, 0, 0);
+    },
+    getRequestedCompletionPayload() {
+      if (!this.isPreorder || !this.preorderDate || !this.preorderTime) return null;
+      const time = this.preorderTime.length === 5 ? `${this.preorderTime}:00` : this.preorderTime;
+      return `${this.preorderDate}T${time}`;
+    },
     getValidationError() {
       if (!this.selectedStoreId) return "Velg hvilken butikk fakturaen skal sendes fra";
       if (!this.form.organizationNumber) return "Skriv inn mottakers organisasjonsnummer";
@@ -539,6 +630,11 @@ export default {
       if (!this.form.email) return "E-post mangler";
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.form.email)) return "E-postadressen er ugyldig";
       if (!this.lines.length) return "Legg til minst én varelinje";
+      if (this.isPreorder) {
+        const requestedCompletion = this.getRequestedCompletion();
+        if (!requestedCompletion || isNaN(requestedCompletion.getTime())) return "Velg dato og tidspunkt for forhåndsbestilling";
+        if (requestedCompletion < new Date(Date.now() + 20 * 60000)) return "Forhåndsbestilling må være minst 20 minutter frem i tid";
+      }
 
       const invalidLineIndex = this.lines.findIndex((line) =>
         !line.productName ||
@@ -578,6 +674,7 @@ export default {
       const payload = {
         storeId: this.selectedStoreId,
         ...this.form,
+        requestedCompletion: this.getRequestedCompletionPayload(),
         lines: this.lines.map((line) => ({
           productId: line.productId,
           productName: line.productName,
@@ -590,7 +687,11 @@ export default {
       this._kraviaInvoiceService.SendInvoice(payload)
         .then((result) => {
           this.showConfirmModal = false;
-          this.showNotification(`Faktura sendt. Ordre ${result.friendlyOrderId || result.orderId} er opprettet.`, "success");
+          if (this.isPreorder) {
+            this.showNotification(`Forhåndsbestilling opprettet. Ordre ${result.friendlyOrderId || result.orderId} faktureres når den fullføres.`, "success");
+          } else {
+            this.showNotification(`Faktura sendt. Ordre ${result.friendlyOrderId || result.orderId} er opprettet.`, "success");
+          }
           this.resetForm();
         })
         .catch((error) => {
@@ -613,6 +714,8 @@ export default {
         phone: "",
         email: "",
       };
+      this.isPreorder = false;
+      this.setDefaultPreorderDateTime();
       this.lines = [];
       this.addLine();
     },
@@ -685,6 +788,10 @@ export default {
   gap: 16px;
 }
 
+.form-grid--compact {
+  grid-template-columns: repeat(2, minmax(160px, 220px));
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
@@ -696,6 +803,42 @@ export default {
     font-weight: 600;
     text-transform: uppercase;
   }
+}
+
+.preorder-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.checkbox-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+  color: #292c34;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.checkbox-row input {
+  width: 18px;
+  min-height: 18px;
+  height: 18px;
+  margin: 0;
+  padding: 0;
+}
+
+.due-date-info {
+  width: fit-content;
+  max-width: 100%;
+  border: 1px solid #cfe7da;
+  border-radius: 8px;
+  background: #f0fdf4;
+  color: #166534;
+  font-weight: 600;
+  line-height: 1.4;
+  padding: 10px 12px;
 }
 
 input,
@@ -1112,6 +1255,10 @@ select {
   }
 
   .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-grid--compact {
     grid-template-columns: 1fr;
   }
 
