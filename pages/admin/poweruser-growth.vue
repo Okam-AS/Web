@@ -993,6 +993,8 @@ export default {
 
 .chart-panel {
   position: relative;
+  z-index: 0;
+  isolation: isolate;
   height: min(74vh, 760px);
   min-height: 540px;
   background: #ffffff;
