@@ -447,6 +447,26 @@
                 <h3 class="admin__header-section-title">Power User funksjoner</h3>
                 <ul class="admin__header-menu-list">
                   <li>
+                    <a href="/admin/poweruser-growth">
+                      <span class="menu-icon">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M3 19h18M5 16l4-4 4 3 6-8m0 0h-5m5 0v5"
+                          />
+                        </svg>
+                      </span>
+                      Okam vekst
+                    </a>
+                  </li>
+                  <li>
                     <a href="/admin/dintero">
                       <span class="menu-icon">
                         <svg
