@@ -460,7 +460,7 @@ export default {
         title: "Okam vekst",
         path: "/admin/poweruser-growth",
         description: "Plattformvekst fra 2020",
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3v18m0 0l-4-4m4 4l4-4M3 17l5-5 4 4 7-9" /></svg>',
+        icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 19h18M5 16l4-4 4 3 6-8m0 0h-5m5 0v5" /></svg>',
         powerUserOnly: true,
       },
       {
