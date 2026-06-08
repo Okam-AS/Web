@@ -264,7 +264,7 @@
             {{ notification.message }}
           </div>
         </div>
-        <button type="button" class="btn btn-primary" @click="openConfirm">
+        <button type="button" class="btn btn-primary submit-button" @click="openConfirm">
           {{ submitButtonLabel }}
         </button>
       </div>
@@ -821,10 +821,11 @@ export default {
   display: inline-flex;
   align-items: flex-start;
   gap: 10px;
-  max-width: 520px;
+  width: 100%;
   border: 1px solid #cbd5e0;
   border-radius: 8px;
   background: #fff;
+  box-sizing: border-box;
   color: #292c34;
   cursor: pointer;
   padding: 10px 12px;
@@ -1214,15 +1215,25 @@ select {
 }
 
 .submit-bar {
+  align-items: flex-end;
+  gap: 24px;
   justify-content: space-between;
 }
 
 .submit-options {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
+  display: grid;
+  flex: 1 1 auto;
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
   gap: 16px;
   min-width: 0;
+}
+
+.submit-button {
+  min-width: 170px;
+  min-height: 64px;
+  padding: 14px 28px;
+  font-size: 1.05em;
+  line-height: 1.2;
 }
 
 .notification {
@@ -1234,7 +1245,7 @@ select {
 
 .submit-notification {
   box-shadow: none;
-  flex: 1;
+  grid-column: 1 / -1;
   margin: 0;
   min-height: 42px;
   display: flex;
@@ -1324,6 +1335,16 @@ select {
     flex-direction: column;
     gap: 8px;
   }
+
+  .submit-bar {
+    align-items: stretch;
+    flex-direction: column;
+    justify-content: stretch;
+  }
+
+  .submit-button {
+    align-self: flex-end;
+  }
 }
 
 @media (max-width: 560px) {
@@ -1363,13 +1384,15 @@ select {
 
   .submit-bar {
     align-items: stretch;
-    flex-direction: column;
     justify-content: stretch;
   }
 
   .submit-options {
-    align-items: stretch;
-    flex-direction: column;
+    grid-template-columns: 1fr;
+  }
+
+  .submit-button {
+    align-self: stretch;
   }
 
   .modal-actions {
