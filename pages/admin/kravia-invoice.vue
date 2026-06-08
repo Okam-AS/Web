@@ -180,6 +180,7 @@
           </div>
 
           <div
+            v-if="!manualInvoice"
             class="line-row line-row--fee"
             tabindex="0"
             role="button"
@@ -249,6 +250,13 @@
             <input v-model="isPreorder" type="checkbox" @change="handlePreorderToggle" />
             <span>Forhåndsbestilling</span>
           </label>
+          <label :class="['manual-invoice-option', { 'manual-invoice-option--active': manualInvoice }]">
+            <input v-model="manualInvoice" type="checkbox" />
+            <span class="manual-invoice-copy">
+              <strong>Manuell faktura</strong>
+              <small>Bestilling blir lagt inn som 'Betal i kassa' og betaling gjøres opp utenfor Okam systemet</small>
+            </span>
+          </label>
           <div v-if="notification.show" :class="['notification', 'submit-notification', `notification--${notification.type}`]">
             {{ notification.message }}
           </div>
@@ -261,7 +269,11 @@
       <Modal v-if="showConfirmModal" :hide-close-btn="true" @close="showConfirmModal = false">
         <div class="confirm-modal">
           <h2>{{ confirmTitle }}</h2>
-          <p v-if="isPreorder">
+          <p v-if="manualInvoice">
+            Bestilling på <strong>{{ priceLabel(totalInclVat) }}</strong> opprettes for
+            <strong>{{ form.companyName }}</strong> som manuell bestilling. Betaling gjøres opp utenfor Okam systemet.
+          </p>
+          <p v-else-if="isPreorder">
             Ordre på <strong>{{ priceLabel(totalInclVat) }}</strong> opprettes for
             <strong>{{ form.companyName }}</strong>. Faktura sendes når bestillingen fullføres.
           </p>
@@ -308,6 +320,7 @@ export default {
     sendError: "",
     selectedStoreId: null,
     isPreorder: false,
+    manualInvoice: false,
     preorderDate: "",
     preorderTime: "",
     products: [],
@@ -359,7 +372,7 @@ export default {
       return Math.max(0, this.totalInclVat - this.totalExVat);
     },
     invoiceFeeAmount() {
-      return 2000;
+      return this.manualInvoice ? 0 : 2000;
     },
     invoiceFeeExVat() {
       return Math.round(this.invoiceFeeAmount / 1.25);
@@ -368,9 +381,15 @@ export default {
       return this.formatDateInput(new Date());
     },
     submitButtonLabel() {
+      if (this.manualInvoice) {
+        return this.isPreorder ? "Opprett manuell forhåndsbestilling" : "Opprett manuell bestilling";
+      }
       return this.isPreorder ? "Opprett forhåndsbestilling" : "Send faktura";
     },
     confirmTitle() {
+      if (this.manualInvoice) {
+        return this.isPreorder ? "Opprett manuell forhåndsbestilling?" : "Opprett manuell bestilling?";
+      }
       return this.isPreorder ? "Opprett forhåndsbestilling?" : "Send faktura?";
     },
   },
@@ -654,6 +673,7 @@ export default {
       const payload = {
         storeId: this.selectedStoreId,
         ...this.form,
+        manualInvoice: this.manualInvoice,
         requestedCompletion: this.getRequestedCompletionPayload(),
         lines: this.lines.map((line) => ({
           productId: line.productId,
@@ -667,7 +687,11 @@ export default {
       this._kraviaInvoiceService.SendInvoice(payload)
         .then((result) => {
           this.showConfirmModal = false;
-          if (this.isPreorder) {
+          if (this.manualInvoice && this.isPreorder) {
+            this.showNotification(`Manuell forhåndsbestilling opprettet. Ordre ${result.friendlyOrderId || result.orderId} er lagt inn som Betal i kassa.`, "success");
+          } else if (this.manualInvoice) {
+            this.showNotification(`Manuell faktura opprettet. Ordre ${result.friendlyOrderId || result.orderId} er lagt inn som Betal i kassa.`, "success");
+          } else if (this.isPreorder) {
             this.showNotification(`Forhåndsbestilling opprettet. Ordre ${result.friendlyOrderId || result.orderId} faktureres når den fullføres.`, "success");
           } else {
             this.showNotification(`Faktura sendt. Ordre ${result.friendlyOrderId || result.orderId} er opprettet.`, "success");
@@ -695,6 +719,7 @@ export default {
         email: "",
       };
       this.isPreorder = false;
+      this.manualInvoice = false;
       this.setDefaultPreorderDateTime();
       this.lines = [];
       this.addLine();
@@ -805,6 +830,51 @@ export default {
   height: 18px;
   margin: 0;
   padding: 0;
+}
+
+.manual-invoice-option {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 10px;
+  max-width: 520px;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  background: #fff;
+  color: #292c34;
+  cursor: pointer;
+  padding: 10px 12px;
+}
+
+.manual-invoice-option--active {
+  border-color: #1bb776;
+  background: #f0fdf4;
+}
+
+.manual-invoice-option input {
+  width: 18px;
+  min-height: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  margin: 2px 0 0;
+  padding: 0;
+}
+
+.manual-invoice-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.manual-invoice-copy strong {
+  font-size: 0.95em;
+}
+
+.manual-invoice-copy small {
+  color: #64748b;
+  font-size: 0.82em;
+  font-weight: 500;
+  line-height: 1.35;
 }
 
 input,
@@ -1165,6 +1235,7 @@ select {
 .submit-options {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 16px;
   min-width: 0;
 }
