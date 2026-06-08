@@ -246,13 +246,16 @@
 
       <div class="submit-bar">
         <div class="submit-options">
-          <label class="checkbox-row">
+          <label :class="['invoice-option', { 'invoice-option--active': isPreorder }]">
             <input v-model="isPreorder" type="checkbox" @change="handlePreorderToggle" />
-            <span>Forhåndsbestilling</span>
+            <span class="invoice-option-copy">
+              <strong>Forhåndsbestilling</strong>
+              <small>Bestilling blir lagt inn med en gang, faktura blir sendt automatisk etter fullført bestilling</small>
+            </span>
           </label>
-          <label :class="['manual-invoice-option', { 'manual-invoice-option--active': manualInvoice }]">
+          <label :class="['invoice-option', { 'invoice-option--active': manualInvoice }]">
             <input v-model="manualInvoice" type="checkbox" />
-            <span class="manual-invoice-copy">
+            <span class="invoice-option-copy">
               <strong>Manuell faktura</strong>
               <small>Bestilling blir lagt inn som 'Betal i kassa' og betaling gjøres opp utenfor Okam systemet</small>
             </span>
@@ -814,25 +817,7 @@ export default {
   margin-top: -8px;
 }
 
-.checkbox-row {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  width: fit-content;
-  color: #292c34;
-  cursor: pointer;
-  font-weight: 700;
-}
-
-.checkbox-row input {
-  width: 18px;
-  min-height: 18px;
-  height: 18px;
-  margin: 0;
-  padding: 0;
-}
-
-.manual-invoice-option {
+.invoice-option {
   display: inline-flex;
   align-items: flex-start;
   gap: 10px;
@@ -845,12 +830,12 @@ export default {
   padding: 10px 12px;
 }
 
-.manual-invoice-option--active {
+.invoice-option--active {
   border-color: #1bb776;
   background: #f0fdf4;
 }
 
-.manual-invoice-option input {
+.invoice-option input {
   width: 18px;
   min-height: 18px;
   height: 18px;
@@ -859,18 +844,18 @@ export default {
   padding: 0;
 }
 
-.manual-invoice-copy {
+.invoice-option-copy {
   display: flex;
   flex-direction: column;
   gap: 3px;
   min-width: 0;
 }
 
-.manual-invoice-copy strong {
+.invoice-option-copy strong {
   font-size: 0.95em;
 }
 
-.manual-invoice-copy small {
+.invoice-option-copy small {
   color: #64748b;
   font-size: 0.82em;
   font-weight: 500;
