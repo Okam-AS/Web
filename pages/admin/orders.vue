@@ -68,11 +68,11 @@
               type="text"
               placeholder="Søk etter kode, telefon, navn eller ID..."
               class="search-input"
-              @keyup.enter="fetchOrders(1)"
+              @keyup.enter="applyFilters"
             />
             <button
               class="search-btn"
-              @click="fetchOrders(1)"
+              @click="applyFilters"
             >
               <span class="material-icons">search</span>
               Søk
@@ -99,7 +99,7 @@
           </div>
           <button
             class="apply-filters-btn"
-            @click="fetchOrders(1)"
+            @click="applyFilters"
           >
             Filtrer
           </button>
@@ -396,6 +396,18 @@ import LoginModal from "~/components/molecules/LoginModal.vue";
 import OrderModal from "~/components/organisms/OrderModal.vue";
 import MultiSelectDropdown from "~/components/molecules/MultiSelectDropdown.vue";
 import { debounce } from "~/core/helpers/ts-debounce";
+import {
+  DEFAULT_DELIVERY_TYPE_FILTERS,
+  DEFAULT_ORDER_STATUS_FILTERS,
+  DEFAULT_PAYMENT_TYPE_FILTERS,
+  filterValidValues,
+  getAdminSavedDateValue,
+  normalizeAdminDateFilterForRange,
+  orderStatusesToStatisticsStatuses,
+  readAdminOrderFilters,
+  resolveOrderStatuses,
+  saveAdminOrderFilters,
+} from "~/helpers/admin-order-filters";
 
 export default {
   components: { AdminPage, LoginModal, OrderModal, MultiSelectDropdown },
@@ -412,36 +424,9 @@ export default {
     selectedOrderCode: null,
     adminStores: [],
     selectedStoreIds: [],
-    selectedStatuses: [
-      "Accepted",
-      "Processing",
-      "ReadyForPickup",
-      "ReadyForDriver",
-      "DriverPickedUp",
-      "Served",
-      "Completed",
-      "Canceled",
-    ],
-    selectedDeliveryTypes: [
-      "SelfPickup",
-      "InstantHomeDelivery",
-      "DineHomeDelivery",
-      "WoltDelivery",
-      "WoltMarketplaceDelivery",
-      "TableDelivery",
-    ],
-    selectedPaymentTypes: [
-      "PayInStore",
-      "Stripe",
-      "Vipps",
-      "Giftcard",
-      "Dintero",
-      "DinteroVipps",
-      "DinteroBillie",
-      "DinteroKlarna",
-      "DinteroKravia",
-      "WoltMarketplace",
-    ],
+    selectedStatuses: [...DEFAULT_ORDER_STATUS_FILTERS],
+    selectedDeliveryTypes: [...DEFAULT_DELIVERY_TYPE_FILTERS],
+    selectedPaymentTypes: [...DEFAULT_PAYMENT_TYPE_FILTERS],
     debouncedFetchOrders: null,
     showColumnVisibilityMenu: false,
     showDownloadMenu: false,
@@ -604,21 +589,25 @@ export default {
       this.showLogin = true;
       return;
     }
-    this.adminStores = this.$store.state.currentUser.adminIn;
-
-    // Load store selection from localStorage if exists, otherwise select all
-    const savedStoreIds = this.getSavedStoreIds();
-    if (savedStoreIds && savedStoreIds.length > 0) {
-      this.selectedStoreIds = savedStoreIds.filter(id =>
-        this.adminStores.some(store => store.id === id)
-      );
-    } else {
-      this.selectedStoreIds = this.adminStores.map((store) => store.id);
-    }
-
+    this.initializeOrderFilters();
     this.fetchOrders();
   },
   methods: {
+    initializeOrderFilters() {
+      this.adminStores = this.$store.state.currentUser.adminIn;
+
+      const loadedSharedFilters = this.loadSharedFiltersFromLocalStorage();
+      if (!loadedSharedFilters) {
+        // Load legacy store selection from localStorage if exists, otherwise select all
+        const savedStoreIds = this.getSavedStoreIds();
+        const storeIds = this.adminStores.map((store) => store.id);
+        if (savedStoreIds) {
+          this.selectedStoreIds = filterValidValues(savedStoreIds, storeIds, storeIds);
+        } else {
+          this.selectedStoreIds = storeIds;
+        }
+      }
+    },
     getColumnLabel(columnId) {
       const column = this.allColumns.find(col => col.id === columnId);
       return column ? column.label : columnId;
@@ -699,6 +688,7 @@ export default {
       }
     },
     loadSettingsFromLocalStorage() {
+      let loadedLegacyFilters = false;
       try {
         const savedColumns = localStorage.getItem("ordersPageVisibleColumns");
         if (savedColumns) {
@@ -712,21 +702,47 @@ export default {
 
         const savedStatuses = localStorage.getItem("ordersPageStatuses");
         if (savedStatuses) {
-          this.selectedStatuses = JSON.parse(savedStatuses);
+          this.selectedStatuses = filterValidValues(JSON.parse(savedStatuses), DEFAULT_ORDER_STATUS_FILTERS, DEFAULT_ORDER_STATUS_FILTERS);
+          loadedLegacyFilters = true;
         }
 
         const savedDeliveryTypes = localStorage.getItem("ordersPageDeliveryTypes");
         if (savedDeliveryTypes) {
-          this.selectedDeliveryTypes = JSON.parse(savedDeliveryTypes);
+          this.selectedDeliveryTypes = filterValidValues(JSON.parse(savedDeliveryTypes), DEFAULT_DELIVERY_TYPE_FILTERS, DEFAULT_DELIVERY_TYPE_FILTERS);
+          loadedLegacyFilters = true;
         }
 
         const savedPaymentTypes = localStorage.getItem("ordersPagePaymentTypes");
         if (savedPaymentTypes) {
-          this.selectedPaymentTypes = JSON.parse(savedPaymentTypes);
+          this.selectedPaymentTypes = filterValidValues(JSON.parse(savedPaymentTypes), DEFAULT_PAYMENT_TYPE_FILTERS, DEFAULT_PAYMENT_TYPE_FILTERS);
+          loadedLegacyFilters = true;
         }
       } catch (error) {
         console.warn("Failed to load settings from localStorage:", error);
       }
+      return loadedLegacyFilters;
+    },
+    loadSharedFiltersFromLocalStorage() {
+      const savedFilters = readAdminOrderFilters();
+      if (!savedFilters) {
+        return false;
+      }
+
+      const storeIds = this.adminStores.map((store) => store.id);
+      this.selectedStoreIds = filterValidValues(savedFilters.storeIds, storeIds, storeIds);
+      this.selectedStatuses = resolveOrderStatuses(savedFilters, DEFAULT_ORDER_STATUS_FILTERS);
+      this.selectedDeliveryTypes = filterValidValues(savedFilters.deliveryTypes, DEFAULT_DELIVERY_TYPE_FILTERS, DEFAULT_DELIVERY_TYPE_FILTERS);
+      this.selectedPaymentTypes = filterValidValues(savedFilters.paymentTypes, DEFAULT_PAYMENT_TYPE_FILTERS, DEFAULT_PAYMENT_TYPE_FILTERS);
+
+      if (savedFilters.dateFrom !== undefined) {
+        this.dateFrom = getAdminSavedDateValue(savedFilters.dateFrom);
+      }
+
+      if (savedFilters.dateTo !== undefined) {
+        this.dateTo = getAdminSavedDateValue(savedFilters.dateTo);
+      }
+
+      return true;
     },
     getSavedStoreIds() {
       try {
@@ -748,15 +764,40 @@ export default {
         console.warn("Failed to save settings to localStorage:", error);
       }
     },
+    saveSharedFiltersToLocalStorage() {
+      const savedFilters = readAdminOrderFilters();
+
+      saveAdminOrderFilters({
+        storeIds: this.selectedStoreIds,
+        dateFrom: this.dateFrom,
+        dateTo: this.dateTo,
+        selectedDateFilter: normalizeAdminDateFilterForRange(
+          savedFilters && savedFilters.selectedDateFilter,
+          this.dateFrom,
+          this.dateTo
+        ),
+        orderStatuses: this.selectedStatuses,
+        statisticsStatuses: orderStatusesToStatisticsStatuses(this.selectedStatuses),
+        deliveryTypes: this.selectedDeliveryTypes,
+        paymentTypes: this.selectedPaymentTypes,
+      });
+    },
     closeLoginModal(isLoggedIn) {
       this.showLogin = !isLoggedIn;
       if (isLoggedIn) {
+        this.loadSettingsFromLocalStorage();
+        this.initializeOrderFilters();
         this.fetchOrders();
       }
     },
     onFilterChange() {
       this.saveSettingsToLocalStorage();
+      this.saveSharedFiltersToLocalStorage();
       this.debouncedFetchOrders(1);
+    },
+    applyFilters() {
+      this.saveSharedFiltersToLocalStorage();
+      this.fetchOrders(1);
     },
     async fetchOrders(page) {
       // If page is an event object or not a number, use current page
@@ -809,36 +850,11 @@ export default {
       this.dateFrom = "";
       this.dateTo = "";
       this.selectedStoreIds = this.adminStores.map((store) => store.id);
-      this.selectedStatuses = [
-        "Accepted",
-        "Processing",
-        "ReadyForPickup",
-        "ReadyForDriver",
-        "DriverPickedUp",
-        "Served",
-        "Completed",
-        "Canceled",
-      ];
-      this.selectedDeliveryTypes = [
-        "SelfPickup",
-        "InstantHomeDelivery",
-        "DineHomeDelivery",
-        "WoltDelivery",
-        "WoltMarketplaceDelivery",
-        "TableDelivery",
-      ];
-      this.selectedPaymentTypes = [
-        "PayInStore",
-        "Stripe",
-        "Vipps",
-        "Giftcard",
-        "Dintero",
-        "DinteroVipps",
-        "DinteroBillie",
-        "DinteroKlarna",
-        "DinteroKravia",
-        "WoltMarketplace",
-      ];
+      this.selectedStatuses = [...DEFAULT_ORDER_STATUS_FILTERS];
+      this.selectedDeliveryTypes = [...DEFAULT_DELIVERY_TYPE_FILTERS];
+      this.selectedPaymentTypes = [...DEFAULT_PAYMENT_TYPE_FILTERS];
+      this.saveSettingsToLocalStorage();
+      this.saveSharedFiltersToLocalStorage();
       this.fetchOrders(1);
     },
     getStatusClass(status) {

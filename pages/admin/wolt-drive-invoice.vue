@@ -110,9 +110,10 @@
           <button
             class="btn-export"
             type="button"
-            @click="exportCsv"
+            :disabled="isDownloadingPdf"
+            @click="downloadPdf"
           >
-            Eksporter CSV
+            {{ isDownloadingPdf ? "Laster ned..." : "Last ned PDF" }}
           </button>
         </div>
         <div class="table-container">
@@ -187,6 +188,7 @@ export default {
   data() {
     return {
       isLoading: false,
+      isDownloadingPdf: false,
       report: null,
       dateRange: {
         from: this.getDefaultFromDate(),
@@ -419,98 +421,48 @@ export default {
       }
       return new Intl.NumberFormat("nb-NO").format(value);
     },
-    buildCsvRows() {
-      if (!this.report) {
-        return [];
-      }
-
-      const rows = [];
-      rows.push([
-        "Completed",
-        "StoreId",
-        "StoreLegalName",
-        "Status",
-        "OrderId",
-        "ItemCount",
-        "TotalKm",
-      ]);
-
-      const storeId = this.report.storeId || this.selectedStoreId || "";
-      const storeLegalName = this.report.storeLegalName || "";
-
-      (this.report.orderRows || []).forEach((row) => {
-        rows.push([
-          this.formatCsvDate(row.completed),
-          storeId,
-          storeLegalName,
-          row.status || "",
-          row.orderId || "",
-          "",
-          "",
-        ]);
-      });
-
-      (this.report.statusTotals || []).forEach((total) => {
-        rows.push([
-          "",
-          storeId,
-          storeLegalName,
-          total.status || "",
-          "",
-          total.itemCount ?? "",
-          total.totalKm ?? "",
-        ]);
-      });
-
-      return rows;
-    },
-    formatCsvDate(value) {
-      if (!value) {
-        return "";
-      }
-      const date = new Date(value);
-      if (Number.isNaN(date.getTime())) {
-        return "";
-      }
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, "0");
-      const day = String(date.getDate()).padStart(2, "0");
-      const hours = String(date.getHours()).padStart(2, "0");
-      const minutes = String(date.getMinutes()).padStart(2, "0");
-      return `${year}-${month}-${day} ${hours}:${minutes}`;
-    },
-    escapeCsvValue(value) {
-      if (value === null || value === undefined) {
-        return "";
-      }
-      const stringValue = String(value);
-      const needsQuotes = /[;"\n\r]/.test(stringValue);
-      const escaped = stringValue.replace(/"/g, '""');
-      return needsQuotes ? `"${escaped}"` : escaped;
-    },
-    exportCsv() {
-      const rows = this.buildCsvRows();
-      if (!rows.length) {
+    async downloadPdf() {
+      if (!this.canLoadData() || this.isDownloadingPdf) {
         return;
       }
 
-      const delimiter = ";";
-      const csvContent = rows
-        .map((row) => row.map((value) => this.escapeCsvValue(value)).join(delimiter))
-        .join("\n");
+      this.isDownloadingPdf = true;
+      try {
+        const token = this.$store.state.currentUser?.token;
+        const apiBaseUrl = process.env.API_BASE_URL || "";
+        const axios = require("axios");
+        const response = await axios({
+          url: `${apiBaseUrl}/statistics/wolt-drive-invoice/pdf`,
+          method: "POST",
+          responseType: "blob",
+          data: {
+            StoreId: parseInt(this.selectedStoreId),
+            From: this.dateRange.from,
+            To: this.dateRange.to,
+            AvgMetersPerDelivery: this.avgMetersPerDelivery,
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      const storeId = this.report?.storeId || this.selectedStoreId || "store";
-      const fromDate = this.dateRange.from || "from";
-      const toDate = this.dateRange.to || "to";
-      link.href = url;
-      link.download = `wolt-drive-invoice-${storeId}-${fromDate}-${toDate}.csv`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+        const blob = new Blob([response.data], { type: "application/pdf" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        const storeId = this.report?.storeId || this.selectedStoreId || "store";
+        const fromDate = this.dateRange.from || "from";
+        const toDate = this.dateRange.to || "to";
+        link.href = url;
+        link.download = `wolt-drive-invoice-${storeId}-${fromDate}-${toDate}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error("Failed to download Wolt Drive invoice PDF:", error);
+      } finally {
+        this.isDownloadingPdf = false;
+      }
     },
   },
 };
@@ -676,6 +628,11 @@ export default {
 
 .btn-export:hover {
   background-color: #1e2026;
+}
+
+.btn-export:disabled {
+  background-color: #8a9099;
+  cursor: not-allowed;
 }
 
 .table-container {
