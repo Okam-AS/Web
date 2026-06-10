@@ -28,7 +28,7 @@
                 v-model="dateRange.from"
                 type="date"
                 :max="dateRange.to"
-                @change="onDateRangeChange"
+                @change="loadStatistics"
               />
             </div>
             <div class="date-input-group">
@@ -37,7 +37,7 @@
                 v-model="dateRange.to"
                 type="date"
                 :min="dateRange.from"
-                @change="onDateRangeChange"
+                @change="loadStatistics"
               />
             </div>
             <!-- Quick date shortcuts -->
@@ -69,7 +69,7 @@
                   v-model="comparisonDateRange.from"
                   type="date"
                   :max="comparisonDateRange.to"
-                  @change="onComparisonDateRangeChange"
+                  @change="loadStatistics"
                 />
               </div>
               <div class="date-input-group">
@@ -78,7 +78,7 @@
                   v-model="comparisonDateRange.to"
                   type="date"
                   :min="comparisonDateRange.from"
-                  @change="onComparisonDateRangeChange"
+                  @change="loadStatistics"
                 />
               </div>
             </div>
@@ -456,31 +456,6 @@ import LoadingSkeleton from '~/components/molecules/LoadingSkeleton.vue';
 import PeakPerformanceHeatmap from '~/components/molecules/PeakPerformanceHeatmap.vue';
 import AIQueryBox from '~/components/admin/statistics/AIQueryBox.vue';
 import { debounce } from '~/core/helpers/ts-debounce';
-import {
-  CUSTOM_DATE_FILTER,
-  DEFAULT_DELIVERY_TYPE_FILTERS,
-  DEFAULT_PAYMENT_TYPE_FILTERS,
-  DEFAULT_STATISTICS_STATUS_FILTERS,
-  filterValidValues,
-  getAdminDateFilterRange,
-  getCompleteAdminDateRange,
-  normalizeAdminDateFilterForRange,
-  readAdminOrderFilters,
-  resolveStatisticsStatuses,
-  saveAdminOrderFilters,
-  statisticsStatusesToOrderStatuses,
-} from '~/helpers/admin-order-filters';
-
-function hasSameFilterValues(first, second) {
-  if (!Array.isArray(first) || !Array.isArray(second)) {
-    return false;
-  }
-
-  return (
-    first.length === second.length &&
-    first.every((value) => second.includes(value))
-  );
-}
 
 export default {
   components: {
@@ -509,14 +484,38 @@ export default {
       table: null,
     },
     heatmapRawData: [],
-    comparisonDateRange: getAdminDateFilterRange('Yesterday'),
+    comparisonDateRange: {
+      from: new Date(Date.now() - 86400000).toISOString().split('T')[0],
+      to: new Date(Date.now() - 86400000).toISOString().split('T')[0],
+    },
     adminStores: [],
     selectedStoreIds: [],
     selectedDateFilter: 'Today',
-    dateRange: getAdminDateFilterRange('Today'),
-    selectedStatuses: [...DEFAULT_STATISTICS_STATUS_FILTERS],
-    selectedDeliveryTypes: [...DEFAULT_DELIVERY_TYPE_FILTERS],
-    selectedPaymentTypes: [...DEFAULT_PAYMENT_TYPE_FILTERS],
+    dateRange: {
+      from: new Date().toISOString().split('T')[0],
+      to: new Date().toISOString().split('T')[0],
+    },
+    selectedStatuses: ['Completed'],
+    selectedDeliveryTypes: [
+      'SelfPickup',
+      'InstantHomeDelivery',
+      'DineHomeDelivery',
+      'WoltDelivery',
+      'WoltMarketplaceDelivery',
+      'TableDelivery',
+    ],
+    selectedPaymentTypes: [
+      'PayInStore',
+      'Stripe',
+      'Vipps',
+      'Giftcard',
+      'Dintero',
+      'DinteroVipps',
+      'DinteroBillie',
+      'DinteroKlarna',
+      'DinteroKravia',
+      'WoltMarketplace',
+    ],
     debouncedLoadStatistics: null,
     sparklineCharts: {},
     ordersSummary: [],
@@ -593,99 +592,19 @@ export default {
       this.showLogin = true;
       return;
     }
-    this.initializeStatisticsFilters();
+    this.adminStores = this.$store.state.currentUser.adminIn;
+    this.selectedStoreIds = this.adminStores.map((store) => store.id);
     this.loadStatistics();
   },
   created() {
     this.debouncedLoadStatistics = debounce(this.loadStatistics, 1000);
   },
   methods: {
-    initializeStatisticsFilters() {
-      this.adminStores = this.$store.state.currentUser.adminIn;
-      const storeIds = this.adminStores.map((store) => store.id);
-
-      const loadedSharedFilters = this.loadSharedFiltersFromLocalStorage();
-      if (!loadedSharedFilters) {
-        this.selectedStoreIds = storeIds;
-      }
-    },
     closeLoginModal(isLoggedIn) {
       this.showLogin = !isLoggedIn;
       if (isLoggedIn) {
-        this.initializeStatisticsFilters();
         this.loadStatistics();
       }
-    },
-    loadSharedFiltersFromLocalStorage() {
-      const savedFilters = readAdminOrderFilters();
-      if (!savedFilters) {
-        return false;
-      }
-
-      const storeIds = this.adminStores.map((store) => store.id);
-      this.selectedStoreIds = filterValidValues(savedFilters.storeIds, storeIds, storeIds);
-      this.selectedStatuses = resolveStatisticsStatuses(savedFilters, DEFAULT_STATISTICS_STATUS_FILTERS);
-      this.selectedDeliveryTypes = filterValidValues(savedFilters.deliveryTypes, DEFAULT_DELIVERY_TYPE_FILTERS, DEFAULT_DELIVERY_TYPE_FILTERS);
-      this.selectedPaymentTypes = filterValidValues(savedFilters.paymentTypes, DEFAULT_PAYMENT_TYPE_FILTERS, DEFAULT_PAYMENT_TYPE_FILTERS);
-
-      const savedDateRange = getCompleteAdminDateRange(savedFilters.dateFrom, savedFilters.dateTo);
-      const savedComparisonDateRange = getCompleteAdminDateRange(savedFilters.comparisonDateFrom, savedFilters.comparisonDateTo);
-
-      if (savedDateRange) {
-        this.dateRange.from = savedDateRange.from;
-        this.dateRange.to = savedDateRange.to;
-        this.selectedDateFilter = normalizeAdminDateFilterForRange(
-          savedFilters.selectedDateFilter,
-          savedDateRange.from,
-          savedDateRange.to
-        ) || CUSTOM_DATE_FILTER;
-      }
-
-      if (typeof savedFilters.comparisonMode === 'boolean') {
-        this.comparisonMode = savedFilters.comparisonMode;
-      }
-
-      if (savedComparisonDateRange) {
-        this.comparisonDateRange.from = savedComparisonDateRange.from;
-        this.comparisonDateRange.to = savedComparisonDateRange.to;
-      }
-
-      return true;
-    },
-    saveSharedFiltersToLocalStorage() {
-      const savedFilters = readAdminOrderFilters();
-      const previousStatisticsStatuses = resolveStatisticsStatuses(savedFilters, DEFAULT_STATISTICS_STATUS_FILTERS);
-      const statusFilterChanged = !hasSameFilterValues(previousStatisticsStatuses, this.selectedStatuses);
-      const shouldWriteOrderStatuses =
-        !savedFilters ||
-        statusFilterChanged ||
-        !Array.isArray(savedFilters.orderStatuses);
-      const orderStatuses = shouldWriteOrderStatuses
-        ? statisticsStatusesToOrderStatuses(this.selectedStatuses)
-        : undefined;
-
-      saveAdminOrderFilters({
-        storeIds: this.selectedStoreIds,
-        dateFrom: this.dateRange.from,
-        dateTo: this.dateRange.to,
-        selectedDateFilter: this.selectedDateFilter,
-        orderStatuses,
-        statisticsStatuses: this.selectedStatuses,
-        deliveryTypes: this.selectedDeliveryTypes,
-        paymentTypes: this.selectedPaymentTypes,
-        comparisonMode: this.comparisonMode,
-        comparisonDateFrom: this.comparisonDateRange.from,
-        comparisonDateTo: this.comparisonDateRange.to,
-      });
-    },
-    onDateRangeChange() {
-      this.selectedDateFilter = CUSTOM_DATE_FILTER;
-      this.saveSharedFiltersToLocalStorage();
-      this.loadStatistics();
-    },
-    onComparisonDateRangeChange() {
-      this.saveSharedFiltersToLocalStorage();
-      this.loadStatistics();
     },
     selectDateFilter(value) {
       this.selectedDateFilter = value;
@@ -697,20 +616,55 @@ export default {
         this.comparisonDateRange.to = this.dateRange.to;
       }
 
-      this.saveSharedFiltersToLocalStorage();
       this.loadStatistics();
     },
     setDates(value) {
-      const dateFilterRange = getAdminDateFilterRange(value);
-      if (dateFilterRange) {
-        this.dateRange.from = dateFilterRange.from;
-        this.dateRange.to = dateFilterRange.to;
+      const today = new Date();
+      const formatDate = (date) => date.toISOString().split('T')[0];
+
+      switch (value) {
+        case 'Today':
+          this.dateRange.from = formatDate(today);
+          this.dateRange.to = formatDate(today);
+          break;
+        case 'Yesterday': {
+          const yesterday = new Date(today);
+          yesterday.setDate(yesterday.getDate() - 1);
+          this.dateRange.from = formatDate(yesterday);
+          this.dateRange.to = formatDate(yesterday);
+          break;
+        }
+        case 'Last7Days': {
+          const sevenDaysAgo = new Date(today);
+          sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+          this.dateRange.from = formatDate(sevenDaysAgo);
+          this.dateRange.to = formatDate(today);
+          break;
+        }
+        case 'ThisMonth': {
+          const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+          this.dateRange.from = formatDate(firstDay);
+          this.dateRange.to = formatDate(today);
+          break;
+        }
+        case 'LastMonth': {
+          const lastMonthStart = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+          const lastMonthEnd = new Date(today.getFullYear(), today.getMonth(), 0);
+          this.dateRange.from = formatDate(lastMonthStart);
+          this.dateRange.to = formatDate(lastMonthEnd);
+          break;
+        }
+        case 'ThisYear': {
+          const yearStart = new Date(today.getFullYear(), 0, 1);
+          this.dateRange.from = formatDate(yearStart);
+          this.dateRange.to = formatDate(today);
+          break;
+        }
       }
     },
     onFilterChange() {
       this.ordersSummary = [];
       this.openOrderSummaryIndices = [];
-      this.saveSharedFiltersToLocalStorage();
       this.debouncedLoadStatistics();
     },
     loadStatistics() {
@@ -892,12 +846,10 @@ export default {
         // Auto-fill comparison period with same dates as main period
         this.comparisonDateRange.from = this.dateRange.from;
         this.comparisonDateRange.to = this.dateRange.to;
-        this.saveSharedFiltersToLocalStorage();
         this.loadStatistics();
       } else {
         this.comparisonStatistics = null;
         this.comparisonDeliveryStats = { pickup: null, delivery: null, table: null };
-        this.saveSharedFiltersToLocalStorage();
       }
     },
     getComparisonDeliveryTypeCount(deliveryType) {
