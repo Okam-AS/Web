@@ -172,11 +172,13 @@ export function saveAdminOrderFilters (filters) {
 }
 
 export function filterValidValues (values, validValues, fallbackValues) {
-  if (!Array.isArray(values)) {
+  const selectedValues = getValidFilterValues(values, validValues)
+
+  if (selectedValues.length === 0) {
     return [...fallbackValues]
   }
 
-  return values.filter(value => validValues.includes(value))
+  return selectedValues
 }
 
 export function orderStatusesToStatisticsStatuses (orderStatuses) {
@@ -228,11 +230,20 @@ export function resolveOrderStatuses (filters, fallbackStatuses = DEFAULT_ORDER_
     return [...fallbackStatuses]
   }
 
-  const statuses = Array.isArray(filters.orderStatuses)
-    ? filters.orderStatuses
-    : statisticsStatusesToOrderStatuses(filters.statisticsStatuses)
+  const savedOrderStatuses = getValidFilterValues(filters.orderStatuses, DEFAULT_ORDER_STATUS_FILTERS)
+  if (savedOrderStatuses.length > 0) {
+    return savedOrderStatuses
+  }
 
-  return filterValidValues(statuses, DEFAULT_ORDER_STATUS_FILTERS, fallbackStatuses)
+  const statusesFromStatistics = getValidFilterValues(
+    statisticsStatusesToOrderStatuses(filters.statisticsStatuses),
+    DEFAULT_ORDER_STATUS_FILTERS
+  )
+  if (statusesFromStatistics.length > 0) {
+    return statusesFromStatistics
+  }
+
+  return [...fallbackStatuses]
 }
 
 export function resolveStatisticsStatuses (filters, fallbackStatuses = DEFAULT_STATISTICS_STATUS_FILTERS) {
@@ -240,11 +251,20 @@ export function resolveStatisticsStatuses (filters, fallbackStatuses = DEFAULT_S
     return [...fallbackStatuses]
   }
 
-  const statuses = Array.isArray(filters.statisticsStatuses)
-    ? filters.statisticsStatuses
-    : orderStatusesToStatisticsStatuses(filters.orderStatuses)
+  const savedStatisticsStatuses = getValidFilterValues(filters.statisticsStatuses, ALL_STATISTICS_STATUS_FILTERS)
+  if (savedStatisticsStatuses.length > 0) {
+    return savedStatisticsStatuses
+  }
 
-  return filterValidValues(statuses, ALL_STATISTICS_STATUS_FILTERS, fallbackStatuses)
+  const statusesFromOrders = getValidFilterValues(
+    orderStatusesToStatisticsStatuses(filters.orderStatuses),
+    ALL_STATISTICS_STATUS_FILTERS
+  )
+  if (statusesFromOrders.length > 0) {
+    return statusesFromOrders
+  }
+
+  return [...fallbackStatuses]
 }
 
 function removeUndefinedValues (object) {
@@ -254,6 +274,14 @@ function removeUndefinedValues (object) {
     }
     return result
   }, {})
+}
+
+function getValidFilterValues (values, validValues) {
+  if (!Array.isArray(values)) {
+    return []
+  }
+
+  return values.filter(value => validValues.includes(value))
 }
 
 function formatDate (date) {

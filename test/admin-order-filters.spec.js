@@ -1,8 +1,13 @@
 import {
   CUSTOM_DATE_FILTER,
+  DEFAULT_ORDER_STATUS_FILTERS,
+  DEFAULT_STATISTICS_STATUS_FILTERS,
+  filterValidValues,
   getAdminDateFilterRange,
   getCompleteAdminDateRange,
-  normalizeAdminDateFilterForRange
+  normalizeAdminDateFilterForRange,
+  resolveOrderStatuses,
+  resolveStatisticsStatuses
 } from '~/helpers/admin-order-filters'
 
 describe('admin order filter date metadata', () => {
@@ -64,5 +69,36 @@ describe('admin order filter date metadata', () => {
         referenceDate
       )
     ).toBeNull()
+  })
+})
+
+describe('admin order filter restored selections', () => {
+  test('falls back when restored filter arrays are empty or invalid', () => {
+    expect(filterValidValues([], ['one', 'two'], ['one', 'two'])).toEqual(['one', 'two'])
+    expect(filterValidValues(['stale'], ['one', 'two'], ['one'])).toEqual(['one'])
+    expect(filterValidValues(['one', 'stale'], ['one', 'two'], ['two'])).toEqual(['one'])
+  })
+
+  test('restores order statuses from statistics status metadata when order statuses are empty', () => {
+    expect(
+      resolveOrderStatuses({
+        orderStatuses: [],
+        statisticsStatuses: ['Completed']
+      })
+    ).toEqual(['Completed'])
+  })
+
+  test('restores statistics statuses from order status metadata when statistics statuses are empty', () => {
+    expect(
+      resolveStatisticsStatuses({
+        statisticsStatuses: [],
+        orderStatuses: ['Accepted', 'Completed']
+      })
+    ).toEqual(['Remaining', 'Completed'])
+  })
+
+  test('uses defaults when restored status filters contain no valid values', () => {
+    expect(resolveOrderStatuses({ orderStatuses: ['stale'] })).toEqual(DEFAULT_ORDER_STATUS_FILTERS)
+    expect(resolveStatisticsStatuses({ statisticsStatuses: ['stale'] })).toEqual(DEFAULT_STATISTICS_STATUS_FILTERS)
   })
 })

@@ -595,12 +595,12 @@ export default {
   methods: {
     initializeOrderFilters() {
       this.adminStores = this.$store.state.currentUser.adminIn;
+      const storeIds = this.adminStores.map((store) => store.id);
 
       const loadedSharedFilters = this.loadSharedFiltersFromLocalStorage();
       if (!loadedSharedFilters) {
         // Load legacy store selection from localStorage if exists, otherwise select all
         const savedStoreIds = this.getSavedStoreIds();
-        const storeIds = this.adminStores.map((store) => store.id);
         if (savedStoreIds) {
           this.selectedStoreIds = filterValidValues(savedStoreIds, storeIds, storeIds);
         } else {

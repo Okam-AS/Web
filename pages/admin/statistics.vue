@@ -602,10 +602,11 @@ export default {
   methods: {
     initializeStatisticsFilters() {
       this.adminStores = this.$store.state.currentUser.adminIn;
+      const storeIds = this.adminStores.map((store) => store.id);
 
       const loadedSharedFilters = this.loadSharedFiltersFromLocalStorage();
       if (!loadedSharedFilters) {
-        this.selectedStoreIds = this.adminStores.map((store) => store.id);
+        this.selectedStoreIds = storeIds;
       }
     },
     closeLoginModal(isLoggedIn) {
