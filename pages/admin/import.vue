@@ -46,6 +46,7 @@
                 <th>Spis inne MVA (%)</th>
                 <th>Pant</th>
                 <th>Utsolgt</th>
+                <th>Varianter</th>
               </tr>
               <tr v-for="(row, index) in rows" :key="index">
                 <td class="row-count">
@@ -92,6 +93,10 @@
                 <td>
                   <input v-model="row.soldOut" style="margin-left: 1.5em" type="checkbox">
                 </td>
+                <td>
+                  <input v-if="index !== rows.length - 1" class="emoji-btn" type="button"
+                    :value="`🎛️ ${(row.variants && row.variants.length) || 0}`" @click="openRowVariants(index)">
+                </td>
                 <td v-if="index !== rows.length - 1 || rows.length < 2">
                   <input class="emoji-btn" type="button" value="🔂 Dupliser rad" @click="copyRow(index)">
                   <input class="emoji-btn" type="button" value="➖ Fjern rad" @click="deleteRow(index)">
@@ -100,6 +105,51 @@
             </tbody>
           </table>
         </template>
+        <div class="category-variants-section" style="margin: 1em">
+          <div class="section-header">
+            <h3>Felles tilbehør per kategori</h3>
+            <input class="emoji-btn" type="button" value="➕ Legg til kategori-tilbehør"
+              @click="addCategoryVariantGroup">
+          </div>
+          <p class="helper-text">Tilbehør som gjelder alle produkter i en kategori</p>
+          <div v-if="categoryVariants.length === 0" class="empty-hint">
+            Ingen felles tilbehør lagt til
+          </div>
+          <div v-for="(group, groupIndex) in categoryVariants" :key="groupIndex" class="category-variant-group">
+            <autocomplete-input v-model="group.categoryName" class="category-variant-name" :suggestions="allCategoryNames"
+              type="text" placeholder="Kategorinavn" />
+            <span class="category-variant-count">{{ group.variants.length }} tilbehør</span>
+            <input class="emoji-btn" type="button" value="🎛️ Rediger" @click="openCategoryVariants(groupIndex)">
+            <input class="emoji-btn" type="button" value="➖ Fjern" @click="removeCategoryVariantGroup(groupIndex)">
+          </div>
+        </div>
+        <Modal v-if="showVariantsManager" @close="showVariantsManager = false">
+          <h1 style="margin-bottom: 1em">
+            {{ variantsManagerTitle }}
+          </h1>
+          <div v-if="variantsManagerTarget && variantsManagerTarget.length" class="variants-list">
+            <div v-for="(variant, vIndex) in variantsManagerTarget" :key="variant.id || vIndex" class="variant-item"
+              @click="editVariantInTarget(vIndex)">
+              <div class="variant-info">
+                <div class="variant-name">{{ variant.name }}</div>
+                <div class="variant-meta">
+                  <span v-if="variant.multiselect" class="badge">Flervalg</span>
+                  <span v-if="variant.required" class="badge badge-required">Obligatorisk</span>
+                  <span class="variant-options-preview">{{ formatOptionsPreview(variant.options) }}</span>
+                </div>
+              </div>
+              <input class="emoji-btn" type="button" value="➖" @click.stop="removeVariantFromTarget(vIndex)">
+            </div>
+          </div>
+          <div v-else class="empty-hint">
+            Ingen tilbehør lagt til
+          </div>
+          <div class="modal-buttons">
+            <input class="emoji-btn" type="button" value="➕ Legg til tilbehør" @click="addVariantToTarget">
+            <input class="emoji-btn" type="button" value="Lukk" @click="showVariantsManager = false">
+          </div>
+        </Modal>
+        <VariantEditorModal ref="variantEditor" />
         <Modal v-if="showModal" @close="closeModal">
           <h1 style="margin-bottom: 1em">
             Importer
@@ -230,9 +280,10 @@ import Loading from '~/components/atoms/Loading.vue';
 import AdminPage from '~/components/organisms/AdminPage.vue';
 import Modal from '~/components/atoms/Modal.vue';
 import AutocompleteInput from '~/components/atoms/AutocompleteInput.vue';
+import VariantEditorModal from '~/components/admin/VariantEditorModal.vue';
 
 export default {
-  components: { AdminPage, Modal, AutocompleteInput, Loading },
+  components: { AdminPage, Modal, AutocompleteInput, Loading, VariantEditorModal },
   data() {
     return {
       isLoading: false,
@@ -256,7 +307,12 @@ export default {
       aiImportCompleted: false,
       showAIModal: false,
       showAIConfirmModal: false,
-      aiImportData: null
+      aiImportData: null,
+      aiImportCategoryVariants: [],
+      categoryVariants: [],
+      showVariantsManager: false,
+      variantsManagerTitle: '',
+      variantsManagerTarget: null
     };
   },
   computed: {
@@ -322,7 +378,8 @@ export default {
           {
             storeId: this.selectedStore,
             replaceAll: this.replaceAll,
-            rows: this.rows.slice(0, -1) // Remove empty row
+            rows: this.rows.slice(0, -1), // Remove empty row
+            categoryVariants: this.categoryVariants
           },
           null,
           2
@@ -357,6 +414,7 @@ export default {
     clearRows() {
       this.replaceAll = false;
       this.rows = [JSON.parse(JSON.stringify(this.emptyRow)), JSON.parse(JSON.stringify(this.emptyRow))];
+      this.categoryVariants = [];
       this.showClearRowsModal = false;
       this.importResponse = {};
       if (window && window.localStorage) {
@@ -458,7 +516,9 @@ export default {
             currency: 'NOK',
             verifyOnly,
             replaceAll: _this.replaceAll,
-            rows: JSON.parse(JSON.stringify(_this.rows)).slice(0, _this.rows.length - 1) // Remove last item as it is an empty row
+            rows: JSON.parse(JSON.stringify(_this.rows)).slice(0, _this.rows.length - 1), // Remove last item as it is an empty row
+            categoryVariants: JSON.parse(JSON.stringify(_this.categoryVariants || []))
+              .filter(group => group.categoryName && group.variants && group.variants.length)
           })
           .then((res) => {
             _this.importResponse = res;
@@ -535,14 +595,24 @@ export default {
 
             // Make sure each row has all required properties initialized
             const processedRows = res.rows || [];
+            processedRows.forEach((row) => {
+              row.variants = _this.mapAiVariants(row.variants);
+            });
+
+            const mappedCategoryVariants = (res.categoryVariants || []).map(cv => ({
+              categoryName: cv.categoryName,
+              variants: _this.mapAiVariants(cv.variants)
+            }));
 
             // If there are existing rows, ask for confirmation
             if (_this.rows.some(row => row.name || row.description)) {
               _this.aiImportData = processedRows;
+              _this.aiImportCategoryVariants = mappedCategoryVariants;
               _this.showAIConfirmModal = true;
             } else {
               // No existing rows, just set them directly
               _this.rows = processedRows;
+              _this.categoryVariants = mappedCategoryVariants;
               _this.closeAIModal();
             }
           } else {
@@ -564,6 +634,7 @@ export default {
       if (replace) {
         // Replace all existing rows
         this.rows = this.aiImportData;
+        this.categoryVariants = this.aiImportCategoryVariants;
       } else {
         // Add new rows to existing ones
         // Remove the last empty row before adding new rows
@@ -572,9 +643,96 @@ export default {
           currentRows.pop();
         }
         this.rows = [...currentRows, ...this.aiImportData];
+        this.mergeCategoryVariants(this.aiImportCategoryVariants);
       }
+      this.aiImportCategoryVariants = [];
       this.showAIConfirmModal = false;
       this.closeAIModal();
+    },
+    mapAiVariant(aiVariant, orderIndex) {
+      return {
+        id: null,
+        name: (aiVariant.name || '').trim(),
+        multiselect: !!aiVariant.multiselect,
+        required: !!aiVariant.required,
+        orderIndex,
+        options: (aiVariant.options || []).map((opt, idx) => {
+          const amountInOre = Math.max(0, parseInt(opt.priceAmount, 10) || 0);
+          return {
+            id: null,
+            name: (opt.name || '').trim(),
+            amount: amountInOre,
+            wholeAmount: Math.floor(amountInOre / 100),
+            fractionAmount: String(amountInOre % 100).padStart(2, '0'),
+            orderIndex: idx,
+            negativeAmount: !!opt.negativeAmount,
+            otherInformation: ''
+          };
+        })
+      };
+    },
+    mapAiVariants(aiVariants) {
+      return (aiVariants || []).map((v, i) => this.mapAiVariant(v, i));
+    },
+    mergeCategoryVariants(incoming) {
+      (incoming || []).forEach((group) => {
+        const existing = this.categoryVariants.find(
+          g => (g.categoryName || '').toLowerCase() === (group.categoryName || '').toLowerCase()
+        );
+        if (existing) {
+          existing.variants.push(...group.variants);
+        } else {
+          this.categoryVariants.push(group);
+        }
+      });
+    },
+    openRowVariants(index) {
+      const row = this.rows[index];
+      if (!row.variants) {
+        this.$set(row, 'variants', []);
+      }
+      this.variantsManagerTarget = row.variants;
+      this.variantsManagerTitle = row.name ? `Varianter: ${row.name}` : 'Varianter';
+      this.showVariantsManager = true;
+    },
+    openCategoryVariants(index) {
+      const group = this.categoryVariants[index];
+      this.variantsManagerTarget = group.variants;
+      this.variantsManagerTitle = group.categoryName ? `Felles tilbehør: ${group.categoryName}` : 'Felles tilbehør';
+      this.showVariantsManager = true;
+    },
+    async addVariantToTarget() {
+      const variant = await this.$refs.variantEditor.open(null);
+      if (!variant || !this.variantsManagerTarget) {
+        return;
+      }
+      this.variantsManagerTarget.push(variant);
+    },
+    async editVariantInTarget(index) {
+      const variant = await this.$refs.variantEditor.open(this.variantsManagerTarget[index]);
+      if (!variant) {
+        return;
+      }
+      this.$set(this.variantsManagerTarget, index, variant);
+    },
+    removeVariantFromTarget(index) {
+      if (!confirm('Er du sikker på at du vil fjerne dette tilbehøret?')) {
+        return;
+      }
+      this.variantsManagerTarget.splice(index, 1);
+    },
+    addCategoryVariantGroup() {
+      this.categoryVariants.push({ categoryName: '', variants: [] });
+    },
+    removeCategoryVariantGroup(index) {
+      this.categoryVariants.splice(index, 1);
+    },
+    formatOptionsPreview(options) {
+      if (!options || options.length === 0) return 'Ingen alternativer';
+      const names = options.map(o => o.name).filter(n => n);
+      if (names.length === 0) return 'Ingen alternativer';
+      if (names.length <= 3) return names.join(', ');
+      return `${names.slice(0, 2).join(', ')}, +${names.length - 2} mer`;
     },
     copyToClipboard() {
       navigator.clipboard.writeText(this.exportData);
@@ -584,6 +742,7 @@ export default {
         const data = JSON.parse(this.importData);
         if (data.rows && Array.isArray(data.rows)) {
           this.rows = data.rows;
+          this.categoryVariants = Array.isArray(data.categoryVariants) ? data.categoryVariants : [];
           this.selectedStore = data.storeId || 0;
           this.replaceAll = data.replaceAll || false;
           this.showExportModal = false;
@@ -837,6 +996,103 @@ table {
     margin-bottom: 0.5rem;
     font-size: 1rem;
     color: #475569;
+  }
+}
+
+.category-variants-section {
+  margin-top: 2rem;
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    h3 {
+      font-size: 1rem;
+      color: #475569;
+    }
+  }
+
+  .helper-text {
+    font-size: 0.85rem;
+    color: #718096;
+    margin: 0.25rem 0 1rem 0;
+  }
+
+  .empty-hint {
+    font-size: 0.875rem;
+    color: #94a3b8;
+    font-style: italic;
+  }
+}
+
+.category-variant-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  flex-wrap: wrap;
+
+  .category-variant-name {
+    min-width: 200px;
+  }
+
+  .category-variant-count {
+    font-size: 0.85rem;
+    color: #475569;
+  }
+}
+
+.variants-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.variant-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.375rem;
+  cursor: pointer;
+
+  &:hover {
+    border-color: #cbd5e1;
+  }
+
+  .variant-name {
+    font-weight: 600;
+    color: #292c34;
+  }
+
+  .variant-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+    font-size: 0.8rem;
+    color: #718096;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    background: #e2e8f0;
+    color: #475569;
+    border-radius: 1rem;
+    padding: 0.1rem 0.5rem;
+    font-size: 0.7rem;
+  }
+
+  .badge-required {
+    background: #fde68a;
+    color: #854d0e;
   }
 }
 </style>
