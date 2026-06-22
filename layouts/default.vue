@@ -5,9 +5,11 @@
 </template>
 
 <script>
+import { market } from "~/config/edition";
+
 export default {
   head() {
-    const canonical = `https://okam.no${this.$route.path}`;
+    const canonical = `${market.hostname}${this.$route.path}`;
     return {
       link: [{ rel: "canonical", href: canonical }],
       htmlAttrs: {

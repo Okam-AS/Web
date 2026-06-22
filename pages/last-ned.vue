@@ -5,8 +5,8 @@
       <div class="article">
         <div class="wrapper">
           <div class="download-section">
-            <h1>Last ned Okam Admin-appen</h1>
-            <p class="description">og begynn å sette opp din butikk nå!</p>
+            <h1>{{ copy.title }}</h1>
+            <p class="description">{{ copy.description }}</p>
 
             <div class="download-buttons">
               <a
@@ -19,7 +19,7 @@
                   height="40"
                   width="120"
                   src="~/assets/UI/appstore-btn.png"
-                  alt="Last ned Okam Admin-appen på App Store"
+                  :alt="copy.appStoreAlt"
                 />
               </a>
               <a
@@ -32,7 +32,7 @@
                   height="40"
                   width="130"
                   src="~/assets/UI/googleplay-btn.png"
-                  alt="Last ned Okam Admin-appen på Google Play"
+                  :alt="copy.googlePlayAlt"
                 />
               </a>
             </div>
@@ -40,59 +40,59 @@
             <div class="app-features">
               <div class="feature">
                 <span class="material-icons feature-icon">edit</span>
-                <h3>Administrer menyen</h3>
-                <p>Oppdater priser, legg til retter og rediger menyen din når som helst</p>
+                <h3>{{ copy.featureMenuTitle }}</h3>
+                <p>{{ copy.featureMenuText }}</p>
               </div>
               <div class="feature">
                 <span class="material-icons feature-icon">receipt_long</span>
-                <h3>Håndter bestillinger</h3>
-                <p>Motta og behandle bestillinger direkte på mobilen</p>
+                <h3>{{ copy.featureOrdersTitle }}</h3>
+                <p>{{ copy.featureOrdersText }}</p>
               </div>
               <div class="feature">
                 <span class="material-icons feature-icon">analytics</span>
-                <h3>Se statistikk</h3>
-                <p>Få oversikt over salg og populære retter</p>
+                <h3>{{ copy.featureStatsTitle }}</h3>
+                <p>{{ copy.featureStatsText }}</p>
               </div>
               <div class="feature">
                 <span class="material-icons feature-icon">delivery_dining</span>
-                <h3>Hjemlevering</h3>
-                <p>Administrer leveringer gjennom vår samarbeidspartner</p>
+                <h3>{{ copy.featureDeliveryTitle }}</h3>
+                <p>{{ copy.featureDeliveryText }}</p>
               </div>
               <div class="feature">
                 <span class="material-icons feature-icon">card_giftcard</span>
-                <h3>Lojalitetsprogram</h3>
-                <p>Administrer lojalitetskort og gavekort</p>
+                <h3>{{ copy.featureLoyaltyTitle }}</h3>
+                <p>{{ copy.featureLoyaltyText }}</p>
               </div>
               <div class="feature">
                 <span class="material-icons feature-icon">qr_code_scanner</span>
-                <h3>QR-kodebestilling</h3>
-                <p>Håndter bordbestillinger via QR-kode</p>
+                <h3>{{ copy.featureQrTitle }}</h3>
+                <p>{{ copy.featureQrText }}</p>
               </div>
               <div class="feature">
                 <span class="material-icons feature-icon">language</span>
-                <h3>Nettbestilling</h3>
-                <p>Integrert løsning for bestilling på nett</p>
+                <h3>{{ copy.featureWebTitle }}</h3>
+                <p>{{ copy.featureWebText }}</p>
               </div>
               <div class="feature">
                 <span class="material-icons feature-icon">payment</span>
-                <h3>Fleksibel betaling</h3>
-                <p>Støtte for flere betalingsmåter (Vipps, kort, kontant)</p>
+                <h3>{{ copy.featurePaymentTitle }}</h3>
+                <p>{{ copy.featurePaymentText }}</p>
               </div>
 
               <div class="feature">
                 <span class="material-icons feature-icon">support_agent</span>
-                <h3>24/7 Support</h3>
-                <p>Teknisk støtte og opplæring når du trenger det</p>
+                <h3>{{ copy.featureSupportTitle }}</h3>
+                <p>{{ copy.featureSupportText }}</p>
               </div>
               <div class="feature">
                 <span class="material-icons feature-icon">bar_chart</span>
-                <h3>Verdifull innsikt</h3>
-                <p>Få nyttig data om kunder og salg</p>
+                <h3>{{ copy.featureInsightTitle }}</h3>
+                <p>{{ copy.featureInsightText }}</p>
               </div>
               <div class="feature">
                 <span class="material-icons feature-icon">devices</span>
-                <h3>Fleksibel løsning</h3>
-                <p>Administrer alt fra iPad eller din egen telefon</p>
+                <h3>{{ copy.featureFlexTitle }}</h3>
+                <p>{{ copy.featureFlexText }}</p>
               </div>
             </div>
 
@@ -105,7 +105,7 @@
                 <img
                   class="appstore"
                   src="~/assets/UI/appstore-btn.png"
-                  alt="Last ned Okam Admin-appen på App Store"
+                  :alt="copy.appStoreAlt"
                 />
               </a>
               <a
@@ -116,7 +116,7 @@
                 <img
                   class="googleplay"
                   src="~/assets/UI/googleplay-btn.png"
-                  alt="Last ned Okam Admin-appen på Google Play"
+                  :alt="copy.googlePlayAlt"
                 />
               </a>
             </div>
@@ -129,6 +129,7 @@
 </template>
 
 <script>
+import { isCh } from "~/config/edition";
 import PageHeader from "~/components/organisms/PageHeader.vue";
 import PageFooter from "~/components/organisms/PageFooter.vue";
 
@@ -136,6 +137,67 @@ export default {
   components: {
     PageHeader,
     PageFooter,
+  },
+  computed: {
+    copy() {
+      return isCh
+        ? {
+            title: "Laden Sie die Okam Admin-App herunter",
+            description: "und richten Sie Ihr Geschäft jetzt ein!",
+            appStoreAlt: "Okam Admin-App im App Store herunterladen",
+            googlePlayAlt: "Okam Admin-App bei Google Play herunterladen",
+            featureMenuTitle: "Menü verwalten",
+            featureMenuText: "Aktualisieren Sie Preise, fügen Sie Gerichte hinzu und bearbeiten Sie Ihr Menü jederzeit",
+            featureOrdersTitle: "Bestellungen verwalten",
+            featureOrdersText: "Empfangen und bearbeiten Sie Bestellungen direkt auf dem Mobiltelefon",
+            featureStatsTitle: "Statistiken ansehen",
+            featureStatsText: "Verschaffen Sie sich einen Überblick über Umsätze und beliebte Gerichte",
+            featureDeliveryTitle: "Hauslieferung",
+            featureDeliveryText: "Verwalten Sie Lieferungen über unseren Partner",
+            featureLoyaltyTitle: "Treueprogramm",
+            featureLoyaltyText: "Verwalten Sie Treuekarten und Geschenkkarten",
+            featureQrTitle: "QR-Code-Bestellung",
+            featureQrText: "Verwalten Sie Tischbestellungen per QR-Code",
+            featureWebTitle: "Online-Bestellung",
+            featureWebText: "Integrierte Lösung für die Bestellung im Internet",
+            featurePaymentTitle: "Flexible Bezahlung",
+            featurePaymentText: "Unterstützung für mehrere Zahlungsmethoden (TWINT, Karte, Bargeld)",
+            featureSupportTitle: "24/7 Support",
+            featureSupportText: "Technischer Support und Schulung, wann immer Sie ihn brauchen",
+            featureInsightTitle: "Wertvolle Einblicke",
+            featureInsightText: "Erhalten Sie nützliche Daten über Kunden und Umsätze",
+            featureFlexTitle: "Flexible Lösung",
+            featureFlexText: "Verwalten Sie alles vom iPad oder Ihrem eigenen Telefon aus",
+          }
+        : {
+            title: "Last ned Okam Admin-appen",
+            description: "og begynn å sette opp din butikk nå!",
+            appStoreAlt: "Last ned Okam Admin-appen på App Store",
+            googlePlayAlt: "Last ned Okam Admin-appen på Google Play",
+            featureMenuTitle: "Administrer menyen",
+            featureMenuText: "Oppdater priser, legg til retter og rediger menyen din når som helst",
+            featureOrdersTitle: "Håndter bestillinger",
+            featureOrdersText: "Motta og behandle bestillinger direkte på mobilen",
+            featureStatsTitle: "Se statistikk",
+            featureStatsText: "Få oversikt over salg og populære retter",
+            featureDeliveryTitle: "Hjemlevering",
+            featureDeliveryText: "Administrer leveringer gjennom vår samarbeidspartner",
+            featureLoyaltyTitle: "Lojalitetsprogram",
+            featureLoyaltyText: "Administrer lojalitetskort og gavekort",
+            featureQrTitle: "QR-kodebestilling",
+            featureQrText: "Håndter bordbestillinger via QR-kode",
+            featureWebTitle: "Nettbestilling",
+            featureWebText: "Integrert løsning for bestilling på nett",
+            featurePaymentTitle: "Fleksibel betaling",
+            featurePaymentText: "Støtte for flere betalingsmåter (Vipps, kort, kontant)",
+            featureSupportTitle: "24/7 Support",
+            featureSupportText: "Teknisk støtte og opplæring når du trenger det",
+            featureInsightTitle: "Verdifull innsikt",
+            featureInsightText: "Få nyttig data om kunder og salg",
+            featureFlexTitle: "Fleksibel løsning",
+            featureFlexText: "Administrer alt fra iPad eller din egen telefon",
+          };
+    },
   },
 };
 </script>

@@ -6,8 +6,8 @@
         <div class="wrapper">
           <div class="success-message">
             <div class="success-content">
-              <p>Registreringen er fullført!</p>
-              <p class="sub-text">Du kan nå legge inn menyen din på admin.okam.no eller i Okam Admin-appen</p>
+              <p>{{ copy.completed }}</p>
+              <p class="sub-text">{{ copy.subText }}</p>
 
               <div class="action-buttons">
                 <a
@@ -15,13 +15,13 @@
                   target="_blank"
                   class="cta-link"
                 >
-                  Gå til admin.okam.no
+                  {{ copy.goToAdmin }}
                 </a>
                 <a
                   href="https://okam.no/last-ned"
                   class="cta-link secondary"
                 >
-                  Last ned Okam Admin-appen
+                  {{ copy.downloadApp }}
                 </a>
               </div>
             </div>
@@ -36,9 +36,27 @@
 <script>
 import PageHeader from "~/components/organisms/PageHeader.vue";
 import PageFooter from "~/components/organisms/PageFooter.vue";
+import { isCh } from "~/config/edition";
 
 export default {
   components: { PageHeader, PageFooter },
+  computed: {
+    copy() {
+      return isCh
+        ? {
+            completed: "Die Registrierung ist abgeschlossen!",
+            subText: "Sie können Ihre Speisekarte jetzt auf admin.okam.no oder in der Okam Admin-App erfassen",
+            goToAdmin: "Zu admin.okam.no",
+            downloadApp: "Okam Admin-App herunterladen",
+          }
+        : {
+            completed: "Registreringen er fullført!",
+            subText: "Du kan nå legge inn menyen din på admin.okam.no eller i Okam Admin-appen",
+            goToAdmin: "Gå til admin.okam.no",
+            downloadApp: "Last ned Okam Admin-appen",
+          };
+    },
+  },
 };
 </script>
 

@@ -5,28 +5,48 @@
         {{ error.statusCode === 404 ? "404" : "!" }}
       </div>
       <h1 class="error-title">
-        {{ error.statusCode === 404 ? "Oops! Siden finnes ikke" : "Beklager! En feil oppstod" }}
+        {{ copy.title }}
       </h1>
       <p class="error-message">
-        {{ error.statusCode === 404 ? "Siden du leter etter kan ha blitt flyttet eller slettet." : "Noe gikk galt. Vennligst prøv igjen senere." }}
+        {{ copy.message }}
       </p>
       <nuxt-link
         to="/"
         class="error-button"
       >
-        Gå til forsiden
+        {{ copy.backToHome }}
       </nuxt-link>
     </div>
   </div>
 </template>
 
 <script>
+import { isCh } from "~/config/edition";
+
 export default {
   props: ["error"],
   head() {
     return {
-      title: this.error.statusCode === 404 ? "Side ikke funnet" : "Feil",
+      title: isCh
+        ? (this.error.statusCode === 404 ? "Seite nicht gefunden" : "Fehler")
+        : (this.error.statusCode === 404 ? "Side ikke funnet" : "Feil"),
     };
+  },
+  computed: {
+    copy() {
+      const is404 = this.error.statusCode === 404;
+      return isCh
+        ? {
+            title: is404 ? "Hoppla! Diese Seite gibt es nicht" : "Entschuldigung! Es ist ein Fehler aufgetreten",
+            message: is404 ? "Die gesuchte Seite wurde möglicherweise verschoben oder gelöscht." : "Etwas ist schiefgelaufen. Bitte versuchen Sie es später erneut.",
+            backToHome: "Zur Startseite",
+          }
+        : {
+            title: is404 ? "Oops! Siden finnes ikke" : "Beklager! En feil oppstod",
+            message: is404 ? "Siden du leter etter kan ha blitt flyttet eller slettet." : "Noe gikk galt. Vennligst prøv igjen senere.",
+            backToHome: "Gå til forsiden",
+          };
+    },
   },
 };
 </script>

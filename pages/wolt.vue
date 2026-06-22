@@ -7,27 +7,27 @@
         <div class="container">
           <div class="hero-innhold">
             <div class="hero-tekst">
-              <h1 class="hero-tittel">Rimeligere levering med Wolt</h1>
-              <p class="hero-undertittel">Okam samarbeider med Wolt for å gi hjemlevering direkte i Okam-appen, for en lavere pris.</p>
+              <h1 class="hero-tittel">{{ copy.heroTitle }}</h1>
+              <p class="hero-undertittel">{{ copy.heroSubtitle }}</p>
               <div class="hero-fordeler">
                 <div class="fordel-punkt">
                   <span class="material-icons">trending_down</span>
-                  <span>Lavere provisjon</span>
+                  <span>{{ copy.heroBenefitLower }}</span>
                 </div>
                 <div class="fordel-punkt">
                   <span class="material-icons">support_agent</span>
-                  <span>Norsk 24/7 support</span>
+                  <span>{{ copy.heroBenefitSupport }}</span>
                 </div>
                 <div class="fordel-punkt">
                   <span class="material-icons">location_on</span>
-                  <span>Tilgjengelig alle steder Wolt opererer</span>
+                  <span>{{ copy.heroBenefitCoverage }}</span>
                 </div>
               </div>
               <button
                 class="handling-knapp hero-handling"
                 @click="scrollToRegistration"
               >
-                Prøv gratis
+                {{ copy.heroCta }}
               </button>
             </div>
             <div class="hero-bilde">
@@ -44,7 +44,7 @@
                   class="wolt-logo"
                 />
               </div>
-              <p class="partnerskap-tekst">Offisiell partner</p>
+              <p class="partnerskap-tekst">{{ copy.officialPartner }}</p>
             </div>
           </div>
         </div>
@@ -109,32 +109,32 @@
             v-if="!messageSent"
             class="registrering-skjema"
           >
-            <h2 class="seksjons-tittel">Prøv Okam gratis</h2>
-            <p class="registrering-undertekst">Registrer din restaurant og få tilgang til Okam Admin helt gratis inntil du omsetter for 5 000 kr/mnd.</p>
+            <h2 class="seksjons-tittel">{{ copy.formTitle }}</h2>
+            <p class="registrering-undertekst">{{ copy.formSubtitle }}</p>
             <div class="skjema-felt">
-              <label>Navn på restaurant</label>
+              <label>{{ copy.labelRestaurant }}</label>
               <input
                 v-model="restaurantName"
                 type="text"
-                placeholder="Din restaurant"
+                :placeholder="copy.placeholderRestaurant"
                 maxlength="100"
               />
             </div>
             <div class="skjema-felt">
-              <label>Din e-post</label>
+              <label>{{ copy.labelEmail }}</label>
               <input
                 v-model="email"
                 type="email"
-                placeholder="din@epost.no"
+                :placeholder="copy.placeholderEmail"
                 maxlength="100"
               />
             </div>
             <div class="skjema-felt">
-              <label>Telefonnummer</label>
+              <label>{{ copy.labelPhone }}</label>
               <input
                 v-model="phone"
                 type="tel"
-                placeholder="12345678"
+                :placeholder="copy.placeholderPhone"
                 maxlength="8"
               />
             </div>
@@ -144,7 +144,7 @@
                 class="handling-knapp handling-knapp--primær"
                 @click="registerRestaurant"
               >
-                Registrer restaurant
+                {{ copy.submitButton }}
               </button>
             </div>
           </div>
@@ -155,8 +155,8 @@
             <div class="bekreftelse-ikon">
               <span class="material-icons">check_circle</span>
             </div>
-            <h3>Takk for din registrering!</h3>
-            <p>Vi har mottatt din forespørsel og vil kontakte deg snarest for å hjelpe deg med å komme i gang.</p>
+            <h3>{{ copy.confirmTitle }}</h3>
+            <p>{{ copy.confirmText }}</p>
           </div>
         </div>
       </div>
@@ -166,6 +166,7 @@
 </template>
 
 <script>
+import { isCh } from "~/config/edition";
 import PageHeader from "~/components/organisms/PageHeader.vue";
 import PageFooter from "~/components/organisms/PageFooter.vue";
 
@@ -178,48 +179,145 @@ export default {
       email: "",
       phone: "",
       messageSent: false,
-
-      fordeler: [
-        {
-          ikon: "trending_down",
-          tittel: "Lavere provisjon",
-          beskrivelse: "Spar penger på hver levering.",
-        },
-        {
-          ikon: "support_agent",
-          tittel: "Norsk 24/7 support",
-          beskrivelse: "Få hjelp når du trenger det med direktenummer og e-post.",
-        },
-        {
-          ikon: "location_on",
-          tittel: "Bred dekning",
-          beskrivelse: "Tilgjengelig alle steder Wolt opererer i Norge.",
-        },
-      ],
-
-      steg: [
-        {
-          ikon: "app_registration",
-          tittel: "Registrer restaurant",
-          beskrivelse: "Opprett din Okam-konto og få tilgang til admin-panelet helt gratis.",
-        },
-        {
-          ikon: "restaurant_menu",
-          tittel: "Last opp meny",
-          beskrivelse: "Legg inn dine retter og priser i det brukervennlige admin-systemet.",
-        },
-        {
-          ikon: "toggle_on",
-          tittel: "Aktiver Wolt-levering",
-          beskrivelse: "Skru på Wolt-levering med ett enkelt klikk når du er klar til å tilby levering.",
-        },
-        {
-          ikon: "trending_up",
-          tittel: "Øk salget",
-          beskrivelse: "Motta bestillinger med Wolt-levering og øk omsetningen med lavere kostnader.",
-        },
-      ],
     };
+  },
+
+  computed: {
+    copy() {
+      return isCh
+        ? {
+            heroTitle: "Günstigere Lieferung mit Wolt",
+            heroSubtitle: "Okam arbeitet mit Wolt zusammen, um Hauslieferungen direkt in der Okam-App anzubieten, zu einem tieferen Preis.",
+            heroBenefitLower: "Tiefere Provision",
+            heroBenefitSupport: "24/7 Support auf Deutsch",
+            heroBenefitCoverage: "Überall verfügbar, wo Wolt aktiv ist",
+            heroCta: "Gratis testen",
+            officialPartner: "Offizieller Partner",
+            formTitle: "Okam gratis testen",
+            formSubtitle: "Registrieren Sie Ihr Restaurant und erhalten Sie kostenlosen Zugang zu Okam Admin, bis Sie einen Umsatz von 500 CHF/Monat erreichen.",
+            labelRestaurant: "Name des Restaurants",
+            placeholderRestaurant: "Ihr Restaurant",
+            labelEmail: "Ihre E-Mail",
+            placeholderEmail: "ihre@email.ch",
+            labelPhone: "Telefonnummer",
+            placeholderPhone: "12345678",
+            submitButton: "Restaurant registrieren",
+            confirmTitle: "Vielen Dank für Ihre Registrierung!",
+            confirmText: "Wir haben Ihre Anfrage erhalten und werden uns so schnell wie möglich bei Ihnen melden, um Ihnen beim Einstieg zu helfen.",
+            alertRestaurant: "Bitte geben Sie den Namen des Restaurants an",
+            alertEmail: "Bitte geben Sie eine gültige E-Mail-Adresse an",
+            alertPhone: "Bitte geben Sie eine gültige Telefonnummer an",
+          }
+        : {
+            heroTitle: "Rimeligere levering med Wolt",
+            heroSubtitle: "Okam samarbeider med Wolt for å gi hjemlevering direkte i Okam-appen, for en lavere pris.",
+            heroBenefitLower: "Lavere provisjon",
+            heroBenefitSupport: "Norsk 24/7 support",
+            heroBenefitCoverage: "Tilgjengelig alle steder Wolt opererer",
+            heroCta: "Prøv gratis",
+            officialPartner: "Offisiell partner",
+            formTitle: "Prøv Okam gratis",
+            formSubtitle: "Registrer din restaurant og få tilgang til Okam Admin helt gratis inntil du omsetter for 5 000 kr/mnd.",
+            labelRestaurant: "Navn på restaurant",
+            placeholderRestaurant: "Din restaurant",
+            labelEmail: "Din e-post",
+            placeholderEmail: "din@epost.no",
+            labelPhone: "Telefonnummer",
+            placeholderPhone: "12345678",
+            submitButton: "Registrer restaurant",
+            confirmTitle: "Takk for din registrering!",
+            confirmText: "Vi har mottatt din forespørsel og vil kontakte deg snarest for å hjelpe deg med å komme i gang.",
+            alertRestaurant: "Vennligst oppgi restaurantens navn",
+            alertEmail: "Vennligst oppgi en gyldig e-postadresse",
+            alertPhone: "Vennligst oppgi et gyldig telefonnummer",
+          };
+    },
+
+    fordeler() {
+      return isCh
+        ? [
+            {
+              ikon: "trending_down",
+              tittel: "Tiefere Provision",
+              beskrivelse: "Sparen Sie bei jeder Lieferung Geld.",
+            },
+            {
+              ikon: "support_agent",
+              tittel: "24/7 Support auf Deutsch",
+              beskrivelse: "Erhalten Sie Hilfe, wann immer Sie sie brauchen, per Direktnummer und E-Mail.",
+            },
+            {
+              ikon: "location_on",
+              tittel: "Breite Abdeckung",
+              beskrivelse: "Überall verfügbar, wo Wolt in der Schweiz aktiv ist.",
+            },
+          ]
+        : [
+            {
+              ikon: "trending_down",
+              tittel: "Lavere provisjon",
+              beskrivelse: "Spar penger på hver levering.",
+            },
+            {
+              ikon: "support_agent",
+              tittel: "Norsk 24/7 support",
+              beskrivelse: "Få hjelp når du trenger det med direktenummer og e-post.",
+            },
+            {
+              ikon: "location_on",
+              tittel: "Bred dekning",
+              beskrivelse: "Tilgjengelig alle steder Wolt opererer i Norge.",
+            },
+          ];
+    },
+
+    steg() {
+      return isCh
+        ? [
+            {
+              ikon: "app_registration",
+              tittel: "Restaurant registrieren",
+              beskrivelse: "Erstellen Sie Ihr Okam-Konto und erhalten Sie kostenlosen Zugang zum Admin-Panel.",
+            },
+            {
+              ikon: "restaurant_menu",
+              tittel: "Menü hochladen",
+              beskrivelse: "Erfassen Sie Ihre Gerichte und Preise im benutzerfreundlichen Admin-System.",
+            },
+            {
+              ikon: "toggle_on",
+              tittel: "Wolt-Lieferung aktivieren",
+              beskrivelse: "Schalten Sie die Wolt-Lieferung mit einem einzigen Klick ein, sobald Sie bereit sind, Lieferungen anzubieten.",
+            },
+            {
+              ikon: "trending_up",
+              tittel: "Umsatz steigern",
+              beskrivelse: "Empfangen Sie Bestellungen mit Wolt-Lieferung und steigern Sie Ihren Umsatz bei tieferen Kosten.",
+            },
+          ]
+        : [
+            {
+              ikon: "app_registration",
+              tittel: "Registrer restaurant",
+              beskrivelse: "Opprett din Okam-konto og få tilgang til admin-panelet helt gratis.",
+            },
+            {
+              ikon: "restaurant_menu",
+              tittel: "Last opp meny",
+              beskrivelse: "Legg inn dine retter og priser i det brukervennlige admin-systemet.",
+            },
+            {
+              ikon: "toggle_on",
+              tittel: "Aktiver Wolt-levering",
+              beskrivelse: "Skru på Wolt-levering med ett enkelt klikk når du er klar til å tilby levering.",
+            },
+            {
+              ikon: "trending_up",
+              tittel: "Øk salget",
+              beskrivelse: "Motta bestillinger med Wolt-levering og øk omsetningen med lavere kostnader.",
+            },
+          ];
+    },
   },
 
   methods: {
@@ -229,17 +327,17 @@ export default {
 
     async registerRestaurant() {
       if (!this.restaurantName.trim()) {
-        alert("Vennligst oppgi restaurantens navn");
+        alert(this.copy.alertRestaurant);
         return;
       }
 
       if (!this.email.trim() || !this.email.includes("@")) {
-        alert("Vennligst oppgi en gyldig e-postadresse");
+        alert(this.copy.alertEmail);
         return;
       }
 
       if (!this.phone.trim() || this.phone.length < 8) {
-        alert("Vennligst oppgi et gyldig telefonnummer");
+        alert(this.copy.alertPhone);
         return;
       }
 

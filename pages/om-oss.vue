@@ -5,21 +5,21 @@
       <div class="article">
         <div class="wrapper">
           <div class="element text-content">
-            <h1 class="heading-1 u-center">Om oss</h1>
+            <h1 class="heading-1 u-center">{{ copy.heading }}</h1>
             <!-- article -->
             <article class="page type-page status-publish hentry">
               <div>
-                <p>Okam er en norskutviklet bestillingsplattform som gjør lokal handel enklere for alle. Vi gir bedrifter sin egen merkevareapp og nettbutikk.</p>
+                <p>{{ copy.intro1 }}</p>
 
-                <p>Vår misjon er å styrke lokale bedrifter i en tid der store kjeder dominerer - fordi det er de små, uavhengige bedriftene som skaper mangfold og særpreg i lokalmiljøet vårt.</p>
+                <p>{{ copy.intro2 }}</p>
 
-                <p>Gjennom flere års utvikling i Norge har vi skapt en løsning som er både kraftfull og enkel å bruke. Våre kunder melder om:</p>
+                <p>{{ copy.intro3 }}</p>
 
                 <ul>
-                  <li>Økt omsetning</li>
-                  <li>Bedre kundelojalitet</li>
-                  <li>Mer effektiv drift</li>
-                  <li>Betydelige kostnadsbesparelser</li>
+                  <li>{{ copy.benefit1 }}</li>
+                  <li>{{ copy.benefit2 }}</li>
+                  <li>{{ copy.benefit3 }}</li>
+                  <li>{{ copy.benefit4 }}</li>
                 </ul>
               </div>
 
@@ -31,33 +31,33 @@
                 />
                 <div class="founder-content">
                   <blockquote class="leader-quote">
-                    <p>"Vi bygger en stor plattform for de små, og måler vår suksess etter hvor fornøyde våre partnere er. Ved å gi restauranter og lokale butikker tilgang til moderne teknologi, kan de konkurrere på like vilkår med de store kjedene."</p>
-                    <footer>- Alireza Sharghi, Daglig leder</footer>
+                    <p>{{ copy.quote }}</p>
+                    <footer>{{ copy.quoteAuthor }}</footer>
                   </blockquote>
                 </div>
               </div>
 
               <div class="cta-section">
                 <div class="cta-card">
-                  <h3>Er du butikkeier?</h3>
-                  <p>Øk salget med din egen app og nettbutikk</p>
+                  <h3>{{ copy.ctaOwnerTitle }}</h3>
+                  <p>{{ copy.ctaOwnerText }}</p>
                   <nuxt-link
                     to="/egen-app"
                     class="cta-button"
                   >
-                    Les mer om egen app
+                    {{ copy.ctaOwnerLink }}
                   </nuxt-link>
                 </div>
 
                 <div class="cta-card">
-                  <h3>Er du kunde?</h3>
-                  <p>Last ned Okam for å handle fra butikker i ditt nærområde</p>
+                  <h3>{{ copy.ctaCustomerTitle }}</h3>
+                  <p>{{ copy.ctaCustomerText }}</p>
                   <div class="app-download-buttons">
                     <a
                       class="ga-ios-download"
                       href="https://apps.apple.com/no/app/okam/id1514296965"
                       ><img
-                        alt="Last ned Okam-appen på App Store"
+                        :alt="copy.appStoreAlt"
                         height="40"
                         width="120"
                         src="~assets/UI/appstore-btn.png"
@@ -66,7 +66,7 @@
                       class="ga-android-download"
                       href="https://play.google.com/store/apps/details?id=no.okam.consumer"
                       ><img
-                        alt="Last ned Okam-appen på Google Play"
+                        :alt="copy.googlePlayAlt"
                         height="40"
                         width="130"
                         src="~assets/UI/googleplay-btn.png"
@@ -76,8 +76,8 @@
               </div>
 
               <p style="margin-top: 50px">
-                <strong>Har du tips om et sted du skulle likt å handle med Okam?</strong>
-                <a href="/kontakt/">Send oss gjerne en melding her</a>.
+                <strong>{{ copy.tipsTitle }}</strong>
+                <a href="/kontakt/">{{ copy.tipsLink }}</a>.
               </p>
             </article>
             <!-- /article -->
@@ -91,9 +91,85 @@
 <script>
 import PageHeader from "~/components/organisms/PageHeader.vue";
 import PageFooter from "~/components/organisms/PageFooter.vue";
+import { isCh } from "~/config/edition";
 
 export default {
   components: { PageHeader, PageFooter },
+  head () {
+    return isCh
+      ? {
+          title: "Über uns - Okam",
+          meta: [
+            {
+              hid: "description",
+              name: "description",
+              content:
+                "Okam stärkt lokale Betriebe mit einer eigenen Marken-App und einem Webshop. Erfahren Sie mehr über unsere Mission und unser Team."
+            }
+          ]
+        }
+      : {};
+  },
+  computed: {
+    copy () {
+      return isCh
+        ? {
+            heading: "Über uns",
+            intro1:
+              "Okam ist eine Bestellplattform, die den lokalen Handel für alle einfacher macht. Wir geben Betrieben ihre eigene Marken-App und ihren eigenen Webshop.",
+            intro2:
+              "Unsere Mission ist es, lokale Betriebe in einer Zeit zu stärken, in der grosse Ketten dominieren - denn es sind die kleinen, unabhängigen Betriebe, die Vielfalt und Charakter in unsere Quartiere bringen.",
+            intro3:
+              "In mehreren Jahren Entwicklung haben wir eine Lösung geschaffen, die leistungsstark und gleichzeitig einfach zu bedienen ist. Unsere Kundinnen und Kunden berichten von:",
+            benefit1: "Höherem Umsatz",
+            benefit2: "Besserer Kundenbindung",
+            benefit3: "Effizienterem Betrieb",
+            benefit4: "Spürbaren Kosteneinsparungen",
+            quote:
+              "\"Wir bauen eine grosse Plattform für die Kleinen und messen unseren Erfolg daran, wie zufrieden unsere Partner sind. Indem wir Restaurants und lokalen Geschäften Zugang zu moderner Technologie geben, können sie mit den grossen Ketten auf Augenhöhe konkurrieren.\"",
+            quoteAuthor: "- Alireza Sharghi, Geschäftsführer",
+            ctaOwnerTitle: "Sind Sie Geschäftsinhaber?",
+            ctaOwnerText:
+              "Steigern Sie Ihren Umsatz mit Ihrer eigenen App und Ihrem eigenen Webshop",
+            ctaOwnerLink: "Mehr über die eigene App",
+            ctaCustomerTitle: "Sind Sie Kundin oder Kunde?",
+            ctaCustomerText:
+              "Laden Sie Okam herunter, um bei Geschäften in Ihrer Nähe einzukaufen",
+            appStoreAlt: "Okam-App im App Store herunterladen",
+            googlePlayAlt: "Okam-App bei Google Play herunterladen",
+            tipsTitle:
+              "Haben Sie einen Tipp für einen Ort, an dem Sie gerne mit Okam einkaufen würden?",
+            tipsLink: "Schreiben Sie uns hier gerne eine Nachricht"
+          }
+        : {
+            heading: "Om oss",
+            intro1:
+              "Okam er en norskutviklet bestillingsplattform som gjør lokal handel enklere for alle. Vi gir bedrifter sin egen merkevareapp og nettbutikk.",
+            intro2:
+              "Vår misjon er å styrke lokale bedrifter i en tid der store kjeder dominerer - fordi det er de små, uavhengige bedriftene som skaper mangfold og særpreg i lokalmiljøet vårt.",
+            intro3:
+              "Gjennom flere års utvikling i Norge har vi skapt en løsning som er både kraftfull og enkel å bruke. Våre kunder melder om:",
+            benefit1: "Økt omsetning",
+            benefit2: "Bedre kundelojalitet",
+            benefit3: "Mer effektiv drift",
+            benefit4: "Betydelige kostnadsbesparelser",
+            quote:
+              "\"Vi bygger en stor plattform for de små, og måler vår suksess etter hvor fornøyde våre partnere er. Ved å gi restauranter og lokale butikker tilgang til moderne teknologi, kan de konkurrere på like vilkår med de store kjedene.\"",
+            quoteAuthor: "- Alireza Sharghi, Daglig leder",
+            ctaOwnerTitle: "Er du butikkeier?",
+            ctaOwnerText: "Øk salget med din egen app og nettbutikk",
+            ctaOwnerLink: "Les mer om egen app",
+            ctaCustomerTitle: "Er du kunde?",
+            ctaCustomerText:
+              "Last ned Okam for å handle fra butikker i ditt nærområde",
+            appStoreAlt: "Last ned Okam-appen på App Store",
+            googlePlayAlt: "Last ned Okam-appen på Google Play",
+            tipsTitle:
+              "Har du tips om et sted du skulle likt å handle med Okam?",
+            tipsLink: "Send oss gjerne en melding her"
+          };
+    }
+  }
 };
 </script>
 

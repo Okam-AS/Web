@@ -3,7 +3,45 @@
     v-if="!noLayout"
     class="page-footer"
   >
-    <div class="wrapper">
+    <!-- Swiss edition footer (de-CH, legal links) -->
+    <div
+      v-if="isCh"
+      class="wrapper"
+    >
+      <div class="page-footer__cols">
+        <div class="page-footer__col">
+          <img
+            class="page-header__logo"
+            src="~/assets/UI/okam_logo_dark.svg"
+            alt=""
+          >
+        </div>
+        <div class="page-footer__col">
+          <ul class="link-list">
+            <li class="link-list__item">
+              <a href="/impressum">Impressum</a>
+            </li>
+            <li class="link-list__item">
+              <a href="/datenschutz">Datenschutz</a>
+            </li>
+            <li class="link-list__item">
+              <a href="/agb">AGB</a>
+            </li>
+          </ul>
+        </div>
+        <div class="page-footer__col">
+          <div class="page-footer__contact">
+            <p>© Okam</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Norwegian edition footer -->
+    <div
+      v-else
+      class="wrapper"
+    >
       <div class="page-footer__cols">
         <div class="page-footer__col">
           <img
@@ -51,10 +89,13 @@
   </footer>
 </template>
 <script>
+import { isCh } from "~/config/edition";
+
 export default {
   data () {
     return {
-      noLayout: false
+      noLayout: false,
+      isCh
     }
   }
 }
