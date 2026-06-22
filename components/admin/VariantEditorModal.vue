@@ -14,14 +14,38 @@
         <!-- Variant Name -->
         <div class="form-group" :class="{ 'has-error': errors.name }">
           <label>Navn *</label>
-          <input
-            ref="nameInput"
-            v-model="form.name"
-            type="text"
-            placeholder="F.eks. Dressing, Ekstra ost"
-            class="form-input"
-            @input="clearError('name')"
-          />
+          <div class="autocomplete-wrapper">
+            <input
+              ref="nameInput"
+              v-model="form.name"
+              type="text"
+              placeholder="F.eks. Dressing, Ekstra ost"
+              class="form-input"
+              autocomplete="off"
+              @input="onNameInput"
+              @focus="showSuggestions = true"
+              @blur="onNameBlur"
+              @keydown.down.prevent="moveSuggestion(1)"
+              @keydown.up.prevent="moveSuggestion(-1)"
+              @keydown.enter.prevent="selectHighlightedSuggestion"
+              @keydown.esc="showSuggestions = false"
+            />
+            <ul
+              v-if="showSuggestions && filteredSuggestions.length"
+              class="autocomplete-list"
+            >
+              <li
+                v-for="(suggestion, index) in filteredSuggestions"
+                :key="suggestion"
+                class="autocomplete-item"
+                :class="{ 'is-highlighted': index === highlightedIndex }"
+                @mousedown.prevent="selectSuggestion(suggestion)"
+                @mouseenter="highlightedIndex = index"
+              >
+                {{ suggestion }}
+              </li>
+            </ul>
+          </div>
           <span v-if="errors.name" class="error-message">{{ errors.name }}</span>
         </div>
 
@@ -128,6 +152,17 @@ import Loading from '~/components/atoms/Loading.vue'
 
 let optionKeyCounter = 0
 
+const NAME_SUGGESTIONS = [
+  'Størrelse',
+  'Ekstra',
+  'Drikke',
+  'Tilbehør',
+  'Dressing',
+  'Saus',
+  'Valg av kjøtt',
+  'Menyvalg'
+]
+
 export default {
   name: 'VariantEditorModal',
 
@@ -142,6 +177,9 @@ export default {
       isEditing: false,
       isSaving: false,
       resolve: null,
+      nameSuggestions: NAME_SUGGESTIONS,
+      showSuggestions: false,
+      highlightedIndex: -1,
       form: {
         id: null,
         name: '',
@@ -158,6 +196,14 @@ export default {
   },
 
   computed: {
+    filteredSuggestions() {
+      const query = (this.form.name || '').trim().toLowerCase()
+      if (!query) return this.nameSuggestions
+      return this.nameSuggestions.filter(
+        (s) => s.toLowerCase().includes(query) && s.toLowerCase() !== query
+      )
+    },
+
     hasChanges() {
       if (!this.originalForm) return false
 
@@ -194,6 +240,8 @@ export default {
       this.isEditing = !!variant
       this.isSaving = false
       this.errors = { name: null, options: null }
+      this.showSuggestions = false
+      this.highlightedIndex = -1
 
       if (variant) {
         // Editing existing variant - deep clone
@@ -339,6 +387,48 @@ export default {
       }
     },
 
+    onNameInput() {
+      this.clearError('name')
+      this.showSuggestions = true
+      this.highlightedIndex = -1
+    },
+
+    onNameBlur() {
+      // Delay so a click/mousedown on a suggestion is registered first
+      setTimeout(() => {
+        this.showSuggestions = false
+        this.highlightedIndex = -1
+      }, 150)
+    },
+
+    selectSuggestion(suggestion) {
+      this.form.name = suggestion
+      this.clearError('name')
+      this.showSuggestions = false
+      this.highlightedIndex = -1
+    },
+
+    moveSuggestion(direction) {
+      if (!this.showSuggestions) {
+        this.showSuggestions = true
+        return
+      }
+      const count = this.filteredSuggestions.length
+      if (!count) return
+      this.highlightedIndex =
+        (this.highlightedIndex + direction + count) % count
+    },
+
+    selectHighlightedSuggestion() {
+      if (
+        this.showSuggestions &&
+        this.highlightedIndex >= 0 &&
+        this.filteredSuggestions[this.highlightedIndex]
+      ) {
+        this.selectSuggestion(this.filteredSuggestions[this.highlightedIndex])
+      }
+    },
+
     clearError(field) {
       this.errors[field] = null
     },
@@ -434,6 +524,8 @@ export default {
       this.isSaving = false
       this.resolve = null
       this.originalForm = null
+      this.showSuggestions = false
+      this.highlightedIndex = -1
       this.form = {
         id: null,
         name: '',
@@ -566,6 +658,42 @@ export default {
   color: #ef4444;
   font-size: 0.85em;
   margin-top: 4px;
+}
+
+// Autocomplete
+.autocomplete-wrapper {
+  position: relative;
+}
+
+.autocomplete-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.autocomplete-item {
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.95em;
+  color: #292c34;
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &.is-highlighted,
+  &:hover {
+    background: #f1f5f9;
+  }
 }
 
 // Checkbox styles
