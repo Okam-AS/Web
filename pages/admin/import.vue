@@ -128,8 +128,8 @@
             {{ variantsManagerTitle }}
           </h1>
           <div v-if="variantsManagerTarget && variantsManagerTarget.length" class="variants-list">
-            <div v-for="(variant, vIndex) in variantsManagerTarget" :key="variant.id || vIndex" class="variant-item"
-              @click="editVariantInTarget(vIndex)">
+            <div v-for="(variant, vIndex) in variantsManagerTarget" :key="variant.id || vIndex"
+              class="variant-item clickable" @click="editVariantInTarget(vIndex)">
               <div class="variant-info">
                 <div class="variant-name">{{ variant.name }}</div>
                 <div class="variant-meta">
@@ -138,7 +138,9 @@
                   <span class="variant-options-preview">{{ formatOptionsPreview(variant.options) }}</span>
                 </div>
               </div>
-              <input class="emoji-btn" type="button" value="➖" @click.stop="removeVariantFromTarget(vIndex)">
+              <button class="delete-btn-small" @click.stop="removeVariantFromTarget(vIndex)">
+                <span class="material-icons">close</span>
+              </button>
             </div>
           </div>
           <div v-else class="empty-hint">
@@ -148,8 +150,8 @@
             <input class="emoji-btn" type="button" value="➕ Legg til tilbehør" @click="addVariantToTarget">
             <input class="emoji-btn" type="button" value="Lukk" @click="showVariantsManager = false">
           </div>
+          <VariantEditorModal ref="variantEditor" />
         </Modal>
-        <VariantEditorModal ref="variantEditor" />
         <Modal v-if="showModal" @close="closeModal">
           <h1 style="margin-bottom: 1em">
             Importer
@@ -1048,51 +1050,95 @@ table {
 .variants-list {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 8px;
   margin: 1rem 0;
 }
 
 .variant-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.75rem;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 0.375rem;
-  cursor: pointer;
+  gap: 12px;
+  padding: 12px;
+  background: #f9fafb;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+
+  &.clickable {
+    cursor: pointer;
+
+    &:hover {
+      border-color: #cbd5e0;
+      background: #f1f5f9;
+    }
+  }
 
   &:hover {
-    border-color: #cbd5e1;
+    border-color: #cbd5e0;
   }
 
-  .variant-name {
-    font-weight: 600;
-    color: #292c34;
+  .variant-info {
+    flex: 1;
+    min-width: 0;
+
+    .variant-name {
+      font-weight: 600;
+      color: #292c34;
+      margin-bottom: 4px;
+    }
+
+    .variant-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+
+      .badge {
+        padding: 2px 8px;
+        background: #dbeafe;
+        color: #1e40af;
+        border-radius: 4px;
+        font-size: 0.8em;
+        font-weight: 600;
+        flex-shrink: 0;
+      }
+
+      .badge-required {
+        background: #fef3c7;
+        color: #92400e;
+      }
+
+      .variant-options-preview {
+        font-size: 0.85em;
+        color: #6b7280;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 200px;
+      }
+    }
   }
 
-  .variant-meta {
+  .delete-btn-small {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.25rem;
-    font-size: 0.8rem;
-    color: #718096;
-    flex-wrap: wrap;
-  }
+    color: #9ca3af;
+    border-radius: 4px;
+    flex-shrink: 0;
+    transition: all 0.2s;
 
-  .badge {
-    background: #e2e8f0;
-    color: #475569;
-    border-radius: 1rem;
-    padding: 0.1rem 0.5rem;
-    font-size: 0.7rem;
-  }
+    &:hover {
+      background: #fee2e2;
+      color: #ef4444;
+    }
 
-  .badge-required {
-    background: #fde68a;
-    color: #854d0e;
+    .material-icons {
+      font-size: 20px;
+    }
   }
 }
 </style>
