@@ -36,6 +36,13 @@
                   src="~/assets/UI/googleplay-btn.png"
               /></a>
             </div>
+            <p
+              v-if="isCh"
+              class="ch-payments"
+            >
+              <span class="ch-payments__badge">TWINT</span>
+              Ihre Gäste bezahlen mit TWINT, Karte, Apple Pay und Google Pay.
+            </p>
           </div>
         </div>
       </div>

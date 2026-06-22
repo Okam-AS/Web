@@ -217,8 +217,7 @@ export default {
       gzip: true,
       exclude: [
         '/admin/**',
-        '/import',
-        '/twint'
+        '/import'
       ]
     }]
   ],
@@ -299,8 +298,7 @@ export default {
     gzip: true,
     exclude: [
       '/admin/**',
-      '/import',
-      '/twint'
+      '/import'
     ]
   },
 

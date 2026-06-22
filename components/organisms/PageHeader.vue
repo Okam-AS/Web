@@ -122,7 +122,6 @@ export default {
       if (this.isCh) {
         return [
           { href: "/priser", title: "Preise" },
-          { href: "/twint", title: "TWINT" },
           { href: "/kontakt", title: "Kontakt" },
         ];
       }
