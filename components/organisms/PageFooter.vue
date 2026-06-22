@@ -89,13 +89,10 @@
   </footer>
 </template>
 <script>
-import { isCh } from "~/config/edition";
-
 export default {
   data () {
     return {
-      noLayout: false,
-      isCh
+      noLayout: false
     }
   }
 }

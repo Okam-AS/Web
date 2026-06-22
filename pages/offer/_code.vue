@@ -216,7 +216,6 @@
 </template>
 
 <script>
-import { isCh } from "~/config/edition";
 import Loading from "~/components/atoms/Loading.vue";
 import TermsModal from "~/components/modals/TermsModal.vue";
 import OfferDocument from "~/components/shared/OfferDocument.vue";
@@ -244,7 +243,7 @@ export default {
   },
   computed: {
     copy() {
-      return isCh
+      return this.isCh
         ? {
             confirmReadIntro: "Ich bestätige, dass ich die Bestellung gelesen und",
             termsLink: "die Vertragsbedingungen der Okam AG",

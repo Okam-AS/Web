@@ -91,12 +91,11 @@
 <script>
 import PageHeader from "~/components/organisms/PageHeader.vue";
 import PageFooter from "~/components/organisms/PageFooter.vue";
-import { isCh } from "~/config/edition";
 
 export default {
   components: { PageHeader, PageFooter },
   head () {
-    return isCh
+    return this.isCh
       ? {
           title: "Über uns - Okam",
           meta: [
@@ -112,7 +111,7 @@ export default {
   },
   computed: {
     copy () {
-      return isCh
+      return this.isCh
         ? {
             heading: "Über uns",
             intro1:

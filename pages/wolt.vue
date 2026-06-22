@@ -166,7 +166,6 @@
 </template>
 
 <script>
-import { isCh } from "~/config/edition";
 import PageHeader from "~/components/organisms/PageHeader.vue";
 import PageFooter from "~/components/organisms/PageFooter.vue";
 
@@ -184,7 +183,7 @@ export default {
 
   computed: {
     copy() {
-      return isCh
+      return this.isCh
         ? {
             heroTitle: "Günstigere Lieferung mit Wolt",
             heroSubtitle: "Okam arbeitet mit Wolt zusammen, um Hauslieferungen direkt in der Okam-App anzubieten, zu einem tieferen Preis.",
@@ -234,7 +233,7 @@ export default {
     },
 
     fordeler() {
-      return isCh
+      return this.isCh
         ? [
             {
               ikon: "trending_down",
@@ -272,7 +271,7 @@ export default {
     },
 
     steg() {
-      return isCh
+      return this.isCh
         ? [
             {
               ikon: "app_registration",

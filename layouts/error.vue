@@ -21,13 +21,11 @@
 </template>
 
 <script>
-import { isCh } from "~/config/edition";
-
 export default {
   props: ["error"],
   head() {
     return {
-      title: isCh
+      title: this.isCh
         ? (this.error.statusCode === 404 ? "Seite nicht gefunden" : "Fehler")
         : (this.error.statusCode === 404 ? "Side ikke funnet" : "Feil"),
     };
@@ -35,7 +33,7 @@ export default {
   computed: {
     copy() {
       const is404 = this.error.statusCode === 404;
-      return isCh
+      return this.isCh
         ? {
             title: is404 ? "Hoppla! Diese Seite gibt es nicht" : "Entschuldigung! Es ist ein Fehler aufgetreten",
             message: is404 ? "Die gesuchte Seite wurde möglicherweise verschoben oder gelöscht." : "Etwas ist schiefgelaufen. Bitte versuchen Sie es später erneut.",

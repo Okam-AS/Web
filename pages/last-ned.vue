@@ -129,7 +129,6 @@
 </template>
 
 <script>
-import { isCh } from "~/config/edition";
 import PageHeader from "~/components/organisms/PageHeader.vue";
 import PageFooter from "~/components/organisms/PageFooter.vue";
 
@@ -140,7 +139,7 @@ export default {
   },
   computed: {
     copy() {
-      return isCh
+      return this.isCh
         ? {
             title: "Laden Sie die Okam Admin-App herunter",
             description: "und richten Sie Ihr Geschäft jetzt ein!",

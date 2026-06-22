@@ -142,7 +142,6 @@
 import PageHeader from "~/components/organisms/PageHeader.vue";
 import PageFooter from "~/components/organisms/PageFooter.vue";
 import FaqItem from "~/components/atoms/FaqItem.vue";
-import { isCh } from "~/config/edition";
 
 export default {
   components: {
@@ -151,7 +150,7 @@ export default {
     PageFooter,
   },
   head () {
-    return isCh
+    return this.isCh
       ? {
           title: "Preise - Okam",
           meta: [
@@ -167,7 +166,7 @@ export default {
   },
   computed: {
     copy () {
-      return isCh
+      return this.isCh
         ? {
             heading: "Preise",
             getStarted: "Jetzt starten",

@@ -242,7 +242,6 @@
 </template>
 
 <script>
-import { isCh } from "~/config/edition";
 import PerImage from "~/assets/UI/testimonials/per.png";
 import TamImage from "~/assets/UI/testimonials/tam.png";
 import CatharinaImage from "~/assets/UI/testimonials/catharina.png";
@@ -260,7 +259,7 @@ export default {
 
   computed: {
     copy() {
-      return isCh
+      return this.isCh
         ? {
             introTitle: "Steigern Sie Ihren Gewinn mit Ihrer eigenen App!",
             introSubtitle: "Steigern Sie den Umsatz, senken Sie die Kosten und gewinnen Sie die Kontrolle zurück!",

@@ -31,7 +31,6 @@ import {
   WrappedService
 } from '~/core/services'
 import { wholeAmount, fractionAmount, priceLabel, formatString } from '~/core/helpers/tools'
-import { isCh } from '~/config/edition'
 import { formatChf } from '~/utils/price'
 
 const mixin = {
@@ -130,7 +129,7 @@ const mixin = {
       return (!dateTime) ? '' : dayjs(dateTime).format('DD.MM.YY HH:mm')
     },
     priceLabel(totalPrice, hideFractionIfZero) {
-      if (isCh) {
+      if (this.isCh) {
         return formatChf(totalPrice)
       }
       return priceLabel(totalPrice, hideFractionIfZero)

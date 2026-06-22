@@ -15,8 +15,6 @@
 </template>
 
 <script>
-import { isCh } from '~/config/edition'
-
 export default {
   props: {
     title: {
@@ -54,7 +52,7 @@ export default {
       if (!this.priceLabel || this.oldPrice < 1) {
         return ''
       }
-      const prefix = isCh ? '(Ordentlicher Preis ' : '(Ordinær pris kr '
+      const prefix = this.isCh ? '(Ordentlicher Preis ' : '(Ordinær pris kr '
       return prefix + this.priceLabel(this.oldPrice) + ')'
     }
   },

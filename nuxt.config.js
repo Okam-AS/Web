@@ -161,6 +161,7 @@ export default {
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
     { src: '~/plugins/global-mixin', ssr: false },
+    '~/plugins/market-mixin',
     { src: '~/plugins/store-init' },
     { src: '~/plugins/vue-currency-input' },
     '~/plugins/jsonld'

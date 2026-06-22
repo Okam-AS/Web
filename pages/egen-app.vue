@@ -221,7 +221,6 @@
 </template>
 
 <script>
-import { isCh } from "~/config/edition";
 import PageHeader from "~/components/organisms/PageHeader.vue";
 import PageFooter from "~/components/organisms/PageFooter.vue";
 import PerImage from "~/assets/UI/testimonials/per.png";
@@ -242,7 +241,7 @@ export default {
   }),
 
   head() {
-    if (!isCh) {
+    if (!this.isCh) {
       return {};
     }
     return {
@@ -260,7 +259,7 @@ export default {
 
   computed: {
     copy() {
-      return isCh
+      return this.isCh
         ? {
             ownAppTitle: "Ihre eigene Bestell-App",
             petterAlt: "Porträtbild von Petter von Jungel Pizza",

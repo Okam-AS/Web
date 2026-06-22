@@ -90,7 +90,6 @@
 <script>
 import PageHeader from '~/components/organisms/PageHeader.vue'
 import PageFooter from '~/components/organisms/PageFooter.vue'
-import { isCh } from '~/config/edition'
 
 export default {
   components: { PageHeader, PageFooter },
@@ -100,7 +99,7 @@ export default {
     messageSent: false
   }),
   head () {
-    return isCh
+    return this.isCh
       ? {
           title: 'Kontakt - Okam',
           meta: [
@@ -116,7 +115,7 @@ export default {
   },
   computed: {
     copy () {
-      return isCh
+      return this.isCh
         ? {
             heading: 'Nehmen Sie Kontakt mit uns auf!',
             intro:

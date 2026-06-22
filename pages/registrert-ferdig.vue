@@ -36,13 +36,12 @@
 <script>
 import PageHeader from "~/components/organisms/PageHeader.vue";
 import PageFooter from "~/components/organisms/PageFooter.vue";
-import { isCh } from "~/config/edition";
 
 export default {
   components: { PageHeader, PageFooter },
   computed: {
     copy() {
-      return isCh
+      return this.isCh
         ? {
             completed: "Die Registrierung ist abgeschlossen!",
             subText: "Sie können Ihre Speisekarte jetzt auf admin.okam.ch oder in der Okam Admin-App erfassen",

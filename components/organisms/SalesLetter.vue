@@ -81,8 +81,6 @@
 </style>
 
 <script>
-import { isCh } from "~/config/edition";
-
 export default {
   props: {
     name: {
@@ -96,7 +94,7 @@ export default {
   },
   computed: {
     copy() {
-      return isCh
+      return this.isCh
         ? {
             greeting: "Sehr geehrtes Team von",
             intro:

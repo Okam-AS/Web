@@ -32,4 +32,4 @@ const markets = {
 
 const market = isCh ? markets.ch : markets.no
 
-export { EDITION, isCh, market }
+export { EDITION, isCh, market, markets }

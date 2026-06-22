@@ -58,7 +58,6 @@
 <script>
 import PageHeader from "~/components/organisms/PageHeader.vue";
 import PageFooter from "~/components/organisms/PageFooter.vue";
-import { isCh } from "~/config/edition";
 
 export default {
   components: { PageHeader, PageFooter },
@@ -79,7 +78,7 @@ export default {
   }),
   computed: {
     copy() {
-      return isCh
+      return this.isCh
         ? {
             welcomeTo: "Willkommen bei",
             welcome: "Willkommen",

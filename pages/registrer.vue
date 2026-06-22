@@ -314,7 +314,6 @@
 import PageHeader from "~/components/organisms/PageHeader.vue";
 import PageFooter from "~/components/organisms/PageFooter.vue";
 import OtpInput from "~/components/atoms/OtpInput.vue";
-import { isCh } from "~/config/edition";
 
 export default {
   components: { PageHeader, PageFooter, OtpInput },
@@ -347,7 +346,7 @@ export default {
       return this.$store.state.currentUser;
     },
     copy() {
-      return isCh
+      return this.isCh
         ? {
             pageTitle: "Registrieren Sie Ihr Geschäft",
             pageSubtitle: "Bringen Sie Ihre digitale Bestelllösung in wenigen Minuten an den Start",

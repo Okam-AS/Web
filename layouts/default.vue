@@ -5,11 +5,9 @@
 </template>
 
 <script>
-import { market } from "~/config/edition";
-
 export default {
   head() {
-    const canonical = `${market.hostname}${this.$route.path}`;
+    const canonical = `${this.marketConfig.hostname}${this.$route.path}`;
     return {
       link: [{ rel: "canonical", href: canonical }],
       htmlAttrs: {
