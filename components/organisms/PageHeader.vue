@@ -118,8 +118,11 @@ export default {
   computed: {
     links() {
       if (isCh) {
-        // Most internal pages are still Norwegian, so keep the Swiss nav lean.
-        return [{ href: "/kontakt", title: "Kontakt" }];
+        return [
+          { href: "/priser", title: "Preise" },
+          { href: "/twint", title: "TWINT" },
+          { href: "/kontakt", title: "Kontakt" },
+        ];
       }
       return [
         { href: "/om-oss", title: "Om oss" },

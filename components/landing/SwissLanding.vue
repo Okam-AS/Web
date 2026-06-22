@@ -158,6 +158,44 @@
         </div>
       </section>
 
+      <!-- Payments / TWINT -->
+      <section class="payments">
+        <div class="container">
+          <header class="section-head">
+            <span class="eyebrow">Bezahlen</span>
+            <h2 class="section-title">Zahlung, die Ihre Gäste kennen</h2>
+            <p class="section-sub">
+              Mit <strong>TWINT</strong> bezahlen Ihre Gäste in Sekunden &ndash; scannen,
+              bestätigen, fertig. Karten, Wallets und Bezahlung im Lokal inklusive.
+            </p>
+          </header>
+          <div class="payments__panel">
+            <div class="payments__methods">
+              <div class="pay-method pay-method--twint">
+                <span class="pay-method__badge">TWINT</span>
+                <span class="pay-method__label">Schnell mit der App</span>
+              </div>
+              <div class="pay-method">
+                <span class="material-icons">credit_card</span>
+                <span class="pay-method__label">Kredit- &amp; Debitkarte</span>
+              </div>
+              <div class="pay-method">
+                <span class="material-icons">smartphone</span>
+                <span class="pay-method__label">Apple Pay &amp; Google Pay</span>
+              </div>
+              <div class="pay-method">
+                <span class="material-icons">storefront</span>
+                <span class="pay-method__label">Im Lokal bezahlen</span>
+              </div>
+            </div>
+            <div class="payments__cta">
+              <p>Sehen Sie, wie eine TWINT-Zahlung für Ihre Gäste aussieht &ndash; live im Demo-Checkout.</p>
+              <a href="/twint" class="btn btn--primary">TWINT-Zahlung ansehen</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- Pricing teaser -->
       <section class="pricing">
         <div class="container">
@@ -1257,5 +1295,123 @@ $bg-soft: #f8f9fa;
   .cta__title {
     font-size: 1.7rem;
   }
+}
+
+/* Payments / TWINT ------------------------------------------------------- */
+.payments {
+  padding: 88px 0;
+  background: $bg-soft;
+}
+
+.payments__panel {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 40px;
+  align-items: center;
+  background: #fff;
+  border: 1px solid $line;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.payments__methods {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.pay-method {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid $line;
+  border-radius: 12px;
+  background: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: $ink;
+  transition: all 0.25s ease;
+
+  .material-icons { color: $green; }
+
+  &:hover {
+    border-color: #cbd5e0;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  }
+
+  &--twint {
+    border-color: #000;
+    background: #000;
+    color: #fff;
+
+    &:hover { box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25); }
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    color: #000;
+    font-weight: 800;
+    font-size: 0.72rem;
+    letter-spacing: 0.5px;
+    padding: 5px 9px;
+    border-radius: 5px;
+  }
+}
+
+.payments__cta {
+  p {
+    color: $muted;
+    margin: 0 0 18px;
+    line-height: 1.6;
+  }
+}
+
+/* Hero load + float motion ---------------------------------------------- */
+@keyframes heroRise {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes heroFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+.hero__copy > * {
+  opacity: 0;
+  animation: heroRise 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.hero__copy .eyebrow { animation-delay: 0.05s; }
+.hero__copy .hero__title { animation-delay: 0.15s; }
+.hero__copy .hero__lead { animation-delay: 0.25s; }
+.hero__copy .hero__cta { animation-delay: 0.35s; }
+.hero__copy .hero__points { animation-delay: 0.45s; }
+
+.hero__visual {
+  opacity: 0;
+  animation: heroRise 0.9s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+
+  img {
+    animation: heroFloat 6s ease-in-out 1.2s infinite;
+    filter: drop-shadow(0 24px 48px rgba(41, 44, 52, 0.16));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__copy > *,
+  .hero__visual,
+  .hero__visual img { animation: none; opacity: 1; }
+}
+
+@media (max-width: 768px) {
+  .payments { padding: 56px 0; }
+  .payments__panel { grid-template-columns: 1fr; padding: 28px 20px; gap: 28px; }
+  .payments__methods { grid-template-columns: 1fr; }
 }
 </style>
