@@ -115,43 +115,85 @@
           <div v-if="categoryVariants.length === 0" class="empty-hint">
             Ingen felles tilbehør lagt til
           </div>
-          <div v-for="(group, groupIndex) in categoryVariants" :key="groupIndex" class="category-variant-group">
-            <autocomplete-input v-model="group.categoryName" class="category-variant-name" :suggestions="allCategoryNames"
-              type="text" placeholder="Kategorinavn" />
-            <span class="category-variant-count">{{ group.variants.length }} tilbehør</span>
-            <input class="emoji-btn" type="button" value="🎛️ Rediger" @click="openCategoryVariants(groupIndex)">
-            <input class="emoji-btn" type="button" value="➖ Fjern" @click="removeCategoryVariantGroup(groupIndex)">
-          </div>
-        </div>
-        <Modal v-if="showVariantsManager" @close="showVariantsManager = false">
-          <h1 style="margin-bottom: 1em">
-            {{ variantsManagerTitle }}
-          </h1>
-          <div v-if="variantsManagerTarget && variantsManagerTarget.length" class="variants-list">
-            <div v-for="(variant, vIndex) in variantsManagerTarget" :key="variant.id || vIndex"
-              class="variant-item clickable" @click="editVariantInTarget(vIndex)">
-              <div class="variant-info">
-                <div class="variant-name">{{ variant.name }}</div>
-                <div class="variant-meta">
-                  <span v-if="variant.multiselect" class="badge">Flervalg</span>
-                  <span v-if="variant.required" class="badge badge-required">Obligatorisk</span>
-                  <span class="variant-options-preview">{{ formatOptionsPreview(variant.options) }}</span>
+          <div v-else class="category-variants-list">
+            <div v-for="(group, groupIndex) in categoryVariants" :key="groupIndex" class="category-variant-group">
+              <div class="category-variant-group-header">
+                <SuggestInput v-model="group.categoryName" class="category-variant-name"
+                  :suggestions="allCategoryNames" placeholder="Kategorinavn" />
+                <button class="delete-btn-small" type="button" title="Fjern kategori"
+                  @click="removeCategoryVariantGroup(groupIndex)">
+                  <span class="material-icons">close</span>
+                </button>
+              </div>
+
+              <div v-if="group.variants.length" class="variants-list">
+                <div v-for="(variant, vIndex) in group.variants" :key="variant.id || vIndex"
+                  class="variant-item clickable" @click="editCategoryVariant(groupIndex, vIndex)">
+                  <div class="variant-info">
+                    <div class="variant-name">{{ variant.name }}</div>
+                    <div class="variant-meta">
+                      <span v-if="variant.multiselect" class="badge">Flervalg</span>
+                      <span v-if="variant.required" class="badge badge-required">Obligatorisk</span>
+                      <span class="variant-options-preview">{{ formatOptionsPreview(variant.options) }}</span>
+                    </div>
+                  </div>
+                  <button class="delete-btn-small" type="button" title="Fjern tilbehør"
+                    @click.stop="removeCategoryVariant(groupIndex, vIndex)">
+                    <span class="material-icons">close</span>
+                  </button>
                 </div>
               </div>
-              <button class="delete-btn-small" @click.stop="removeVariantFromTarget(vIndex)">
-                <span class="material-icons">close</span>
+              <div v-else class="empty-hint group-empty">
+                Ingen tilbehør lagt til
+              </div>
+
+              <button class="btn-add-variant" type="button" @click="addCategoryVariant(groupIndex)">
+                <span class="material-icons">add</span>
+                Legg til tilbehør
               </button>
             </div>
           </div>
-          <div v-else class="empty-hint">
-            Ingen tilbehør lagt til
+        </div>
+
+        <!-- Variant manager (compact modal for produkt-/rad-varianter) -->
+        <div v-if="showVariantsManager" class="vm-overlay" @click.self="showVariantsManager = false">
+          <div class="vm-container">
+            <div class="vm-header">
+              <h2>{{ variantsManagerTitle }}</h2>
+              <button class="vm-close" type="button" @click="showVariantsManager = false">
+                <span class="material-icons">close</span>
+              </button>
+            </div>
+            <div class="vm-body">
+              <div v-if="variantsManagerTarget && variantsManagerTarget.length" class="variants-list">
+                <div v-for="(variant, vIndex) in variantsManagerTarget" :key="variant.id || vIndex"
+                  class="variant-item clickable" @click="editVariantInTarget(vIndex)">
+                  <div class="variant-info">
+                    <div class="variant-name">{{ variant.name }}</div>
+                    <div class="variant-meta">
+                      <span v-if="variant.multiselect" class="badge">Flervalg</span>
+                      <span v-if="variant.required" class="badge badge-required">Obligatorisk</span>
+                      <span class="variant-options-preview">{{ formatOptionsPreview(variant.options) }}</span>
+                    </div>
+                  </div>
+                  <button class="delete-btn-small" type="button" title="Fjern tilbehør"
+                    @click.stop="removeVariantFromTarget(vIndex)">
+                    <span class="material-icons">close</span>
+                  </button>
+                </div>
+              </div>
+              <div v-else class="empty-hint">
+                Ingen tilbehør lagt til
+              </div>
+
+              <button class="btn-add-variant" type="button" @click="addVariantToTarget">
+                <span class="material-icons">add</span>
+                Legg til tilbehør
+              </button>
+            </div>
           </div>
-          <div class="modal-buttons">
-            <input class="emoji-btn" type="button" value="➕ Legg til tilbehør" @click="addVariantToTarget">
-            <input class="emoji-btn" type="button" value="Lukk" @click="showVariantsManager = false">
-          </div>
-          <VariantEditorModal ref="variantEditor" />
-        </Modal>
+        </div>
+        <VariantEditorModal ref="variantEditor" />
         <Modal v-if="showModal" @close="closeModal">
           <h1 style="margin-bottom: 1em">
             Importer
@@ -283,9 +325,10 @@ import AdminPage from '~/components/organisms/AdminPage.vue';
 import Modal from '~/components/atoms/Modal.vue';
 import AutocompleteInput from '~/components/atoms/AutocompleteInput.vue';
 import VariantEditorModal from '~/components/admin/VariantEditorModal.vue';
+import SuggestInput from '~/components/admin/SuggestInput.vue';
 
 export default {
-  components: { AdminPage, Modal, AutocompleteInput, Loading, VariantEditorModal },
+  components: { AdminPage, Modal, AutocompleteInput, Loading, VariantEditorModal, SuggestInput },
   data() {
     return {
       isLoading: false,
@@ -367,6 +410,14 @@ export default {
       },
       deep: true
     },
+    categoryVariants: {
+      handler(val) {
+        if (window && window.localStorage) {
+          localStorage.setItem('importCategoryVariants', JSON.stringify(val || []));
+        }
+      },
+      deep: true
+    },
     selectedStore(newVal) {
       if (newVal > 0) {
         this.getCategories();
@@ -402,6 +453,11 @@ export default {
     init() {
       if (window && window.localStorage) {
         const storedRows = localStorage.getItem('importRows');
+        const storedCategoryVariants = localStorage.getItem('importCategoryVariants');
+
+        if (storedCategoryVariants) {
+          this.$set(this, 'categoryVariants', JSON.parse(storedCategoryVariants));
+        }
 
         if (storedRows) {
           this.$set(this, 'rows', JSON.parse(storedRows));
@@ -421,6 +477,7 @@ export default {
       this.importResponse = {};
       if (window && window.localStorage) {
         localStorage.removeItem('importRows');
+        localStorage.removeItem('importCategoryVariants');
       }
     },
     amountChange(rowIndex, rowKey, newValue) {
@@ -697,11 +754,26 @@ export default {
       this.variantsManagerTitle = row.name ? `Varianter: ${row.name}` : 'Varianter';
       this.showVariantsManager = true;
     },
-    openCategoryVariants(index) {
-      const group = this.categoryVariants[index];
-      this.variantsManagerTarget = group.variants;
-      this.variantsManagerTitle = group.categoryName ? `Felles tilbehør: ${group.categoryName}` : 'Felles tilbehør';
-      this.showVariantsManager = true;
+    async addCategoryVariant(groupIndex) {
+      const variant = await this.$refs.variantEditor.open(null);
+      if (!variant) {
+        return;
+      }
+      this.categoryVariants[groupIndex].variants.push(variant);
+    },
+    async editCategoryVariant(groupIndex, vIndex) {
+      const group = this.categoryVariants[groupIndex];
+      const variant = await this.$refs.variantEditor.open(group.variants[vIndex]);
+      if (!variant) {
+        return;
+      }
+      this.$set(group.variants, vIndex, variant);
+    },
+    removeCategoryVariant(groupIndex, vIndex) {
+      if (!confirm('Er du sikker på at du vil fjerne dette tilbehøret?')) {
+        return;
+      }
+      this.categoryVariants[groupIndex].variants.splice(vIndex, 1);
     },
     async addVariantToTarget() {
       const variant = await this.$refs.variantEditor.open(null);
@@ -1030,20 +1102,82 @@ table {
   }
 }
 
-.category-variant-group {
+.category-variants-list {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem 0;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 1rem;
+}
 
-  .category-variant-name {
-    min-width: 200px;
+.category-variant-group {
+  padding: 16px;
+  background: #fff;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+
+  .category-variant-group-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+
+    .category-variant-name {
+      flex: 1;
+      min-width: 0;
+    }
   }
 
-  .category-variant-count {
-    font-size: 0.85rem;
-    color: #475569;
+  .variants-list {
+    margin: 0 0 12px 0;
+  }
+
+  .group-empty {
+    margin-bottom: 12px;
+  }
+
+  .delete-btn-small {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    color: #9ca3af;
+    border-radius: 4px;
+    flex-shrink: 0;
+    transition: all 0.2s;
+
+    &:hover {
+      background: #fee2e2;
+      color: #ef4444;
+    }
+
+    .material-icons {
+      font-size: 20px;
+    }
+  }
+
+  .btn-add-variant {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 12px;
+    background: #f3f4f6;
+    color: #374151;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background: #e5e7eb;
+    }
+
+    .material-icons {
+      font-size: 18px;
+    }
   }
 }
 
@@ -1138,6 +1272,108 @@ table {
 
     .material-icons {
       font-size: 20px;
+    }
+  }
+}
+
+// Compact variant-manager modal (produkt-/rad-varianter)
+.vm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9990;
+  padding: 20px;
+}
+
+.vm-container {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.vm-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  h2 {
+    margin: 0;
+    font-size: 1.25em;
+    font-weight: 600;
+    color: #292c34;
+  }
+
+  .vm-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    color: #6b7280;
+    border-radius: 4px;
+    transition: all 0.2s;
+
+    &:hover {
+      color: #292c34;
+      background: #f3f4f6;
+    }
+
+    .material-icons {
+      font-size: 24px;
+    }
+  }
+}
+
+.vm-body {
+  padding: 24px;
+  flex: 1;
+  overflow-y: auto;
+
+  .variants-list {
+    margin: 0 0 16px 0;
+  }
+
+  .empty-hint {
+    margin-bottom: 16px;
+    font-size: 0.875rem;
+    color: #94a3b8;
+    font-style: italic;
+  }
+
+  .btn-add-variant {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 12px;
+    background: #f3f4f6;
+    color: #374151;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background: #e5e7eb;
+    }
+
+    .material-icons {
+      font-size: 18px;
     }
   }
 }
