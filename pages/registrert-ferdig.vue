@@ -11,14 +11,14 @@
 
               <div class="action-buttons">
                 <a
-                  href="https://admin.okam.no"
+                  :href="copy.adminUrl"
                   target="_blank"
                   class="cta-link"
                 >
                   {{ copy.goToAdmin }}
                 </a>
                 <a
-                  href="https://okam.no/last-ned"
+                  :href="copy.downloadUrl"
                   class="cta-link secondary"
                 >
                   {{ copy.downloadApp }}
@@ -45,15 +45,19 @@ export default {
       return isCh
         ? {
             completed: "Die Registrierung ist abgeschlossen!",
-            subText: "Sie können Ihre Speisekarte jetzt auf admin.okam.no oder in der Okam Admin-App erfassen",
-            goToAdmin: "Zu admin.okam.no",
+            subText: "Sie können Ihre Speisekarte jetzt auf admin.okam.ch oder in der Okam Admin-App erfassen",
+            goToAdmin: "Zu admin.okam.ch",
             downloadApp: "Okam Admin-App herunterladen",
+            adminUrl: "https://admin.okam.ch",
+            downloadUrl: "https://okam.ch/last-ned",
           }
         : {
             completed: "Registreringen er fullført!",
             subText: "Du kan nå legge inn menyen din på admin.okam.no eller i Okam Admin-appen",
             goToAdmin: "Gå til admin.okam.no",
             downloadApp: "Last ned Okam Admin-appen",
+            adminUrl: "https://admin.okam.no",
+            downloadUrl: "https://okam.no/last-ned",
           };
     },
   },

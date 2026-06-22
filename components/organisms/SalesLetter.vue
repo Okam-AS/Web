@@ -125,7 +125,7 @@ export default {
               this.name +
               " anpassen lässt. Schreiben Sie mir gerne eine E-Mail oder rufen Sie mich unter 988 65 120 an, um einen Termin zu vereinbaren.",
             signOff: "Freundliche Grüsse,",
-            role: "Geschäftsführer, Okam AS",
+            role: "Geschäftsführer, Okam AG",
             okamLogoAlt: "Logo",
             website: "https://okam.ch"
           }

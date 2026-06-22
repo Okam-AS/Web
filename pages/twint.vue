@@ -127,6 +127,10 @@ import { isCh } from '~/config/edition'
 
 export default {
   components: { VueQrcode },
+  // Swiss-only demo page: render 404 on the Norwegian edition.
+  validate () {
+    return isCh
+  },
   data: () => ({
     isCh,
     step: 'idle', // idle | qr | card | processing | success

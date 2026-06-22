@@ -18,6 +18,7 @@ export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
   env: {
     EDITION: OKAM_EDITION,
+    STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY || '',
     IS_PRODUCTION: process.env.NODE_ENV === 'production',
     API_BASE_URL: process.env.NODE_ENV === 'production' ? 'https://okamapi.azurewebsites.net' : 'https://okamapi.azurewebsites.net', // 'http://localhost:5000',
     IS_NATIVESCRIPT: 'false',
@@ -215,7 +216,8 @@ export default {
       gzip: true,
       exclude: [
         '/admin/**',
-        '/import'
+        '/import',
+        '/twint'
       ]
     }]
   ],
@@ -296,7 +298,8 @@ export default {
     gzip: true,
     exclude: [
       '/admin/**',
-      '/import'
+      '/import',
+      '/twint'
     ]
   },
 

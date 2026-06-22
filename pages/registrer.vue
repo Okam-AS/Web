@@ -178,7 +178,7 @@
 
               <p class="vat-warning__customer-text">
                 {{ copy.customerPrompt }}
-                <a href="https://shop.okam.no" class="vat-warning__link">{{ copy.goToStoreOverview }}</a>
+                <a :href="copy.storeOverviewUrl" class="vat-warning__link">{{ copy.goToStoreOverview }}</a>
               </p>
 
               <a
@@ -370,6 +370,7 @@ export default {
             logout: "Abmelden",
             customerPrompt: "Sind Sie Kundin oder Kunde und möchten einkaufen?",
             goToStoreOverview: "Zur Geschäftsübersicht",
+            storeOverviewUrl: "https://shop.okam.ch",
             continueAnyway: "Ich verstehe, möchte aber trotzdem ein ganz neues Geschäft registrieren",
             displayNameLabel: "Anzeigename (wird den Kundinnen und Kunden angezeigt)",
             legalNameLabel: "Firmenname (rechtlicher Name)",
@@ -413,6 +414,7 @@ export default {
             logout: "Logg ut",
             customerPrompt: "Er du kunde og ønsker å handle?",
             goToStoreOverview: "Gå til butikkoversikten",
+            storeOverviewUrl: "https://shop.okam.no",
             continueAnyway: "Jeg forstår, men ønsker likevel å registrere en helt ny butikk",
             displayNameLabel: "Visningsnavn (vises til kundene)",
             legalNameLabel: "Selskapsnavn (juridisk navn)",

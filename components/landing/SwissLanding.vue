@@ -66,7 +66,7 @@
         <div class="container">
           <header class="section-head">
             <h2 class="section-title">So einfach erhalten Sie Bestellungen</h2>
-            <p class="section-sub">In drei Schritten zu Ihrer eigenen digitalen Bestelllosung.</p>
+            <p class="section-sub">In drei Schritten zu Ihrer eigenen digitalen Bestelllösung.</p>
           </header>
           <div class="how__grid">
             <article

@@ -247,7 +247,7 @@ export default {
       return isCh
         ? {
             confirmReadIntro: "Ich bestätige, dass ich die Bestellung gelesen und",
-            termsLink: "die Vertragsbedingungen der Okam AS",
+            termsLink: "die Vertragsbedingungen der Okam AG",
             confirmReadOutro: "verstanden habe.",
             confirmButton: "Bestätigen",
             mustAcceptTerms: "Sie müssen die Geschäftsbedingungen akzeptieren, bevor Sie fortfahren können",
