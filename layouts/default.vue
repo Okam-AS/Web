@@ -11,7 +11,10 @@ export default {
     return {
       link: [{ rel: "canonical", href: canonical }],
       htmlAttrs: {
-        lang: this.$i18n.locale,
+        lang: this.isCh ? "de-CH" : this.$i18n.locale,
+      },
+      bodyAttrs: {
+        class: this.isCh ? "okam-ch" : "",
       },
     };
   },
