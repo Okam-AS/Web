@@ -773,8 +773,10 @@ export default {
       }
     },
     buildStoreUrl(storeId) {
+      // Use includes() so the check also matches the locale-prefixed (/en/...)
+      // and trailing-slash ("/admin/category-editor/") variants of the path.
       const isExistingCategoryEditor =
-        this.$route.path === "/admin/category-editor" &&
+        this.$route.path.includes("/admin/category-editor") &&
         this.$route.query?.id &&
         this.$route.query.id !== "new";
 
