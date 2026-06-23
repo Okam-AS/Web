@@ -481,11 +481,37 @@ export default {
       return formatted
     },
 
+    parsePositiveStoreId(value) {
+      const parsed = parseInt(value, 10)
+      return Number.isFinite(parsed) && parsed > 0 ? parsed : null
+    },
+
+    syncSelectedStoreWithCategory(category) {
+      const categoryStoreId = this.parsePositiveStoreId(category?.storeId)
+      if (!categoryStoreId) return
+
+      if (this.parsePositiveStoreId(this.selectedStore) !== categoryStoreId) {
+        this.$store.dispatch('SetSelectedAdminStore', categoryStoreId)
+      }
+
+      if (String(this.$route.query?.storeId) !== String(categoryStoreId)) {
+        this.$router.replace({
+          query: {
+            ...this.$route.query,
+            storeId: categoryStoreId
+          }
+        })
+      }
+    },
+
     async loadCategory() {
       // Prevent duplicate loads
       if (this.isLoading) return
       // Don't reload if already loaded the same category
-      if (this.category.id === this.categoryId) return
+      if (
+        this.category.id === this.categoryId &&
+        this.parsePositiveStoreId(this.category.storeId) === this.parsePositiveStoreId(this.selectedStore)
+      ) return
 
       try {
         this.isLoading = true
@@ -498,6 +524,8 @@ export default {
           this.error = 'Kategorien ble ikke funnet. Den kan ha blitt slettet.'
           return
         }
+
+        this.syncSelectedStoreWithCategory(category)
 
         // Freeze product data to prevent deep reactivity (improves performance)
         const items = (category.categoryProductListItems || []).map(item => {

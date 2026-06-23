@@ -773,10 +773,17 @@ export default {
       }
     },
     buildStoreUrl(storeId) {
-      const nextQuery = {
-        ...this.$route.query,
-        storeId,
-      };
+      const isExistingCategoryEditor =
+        this.$route.path === "/admin/category-editor" &&
+        this.$route.query?.id &&
+        this.$route.query.id !== "new";
+
+      const nextQuery = isExistingCategoryEditor
+        ? { storeId }
+        : {
+          ...this.$route.query,
+          storeId,
+        };
 
       delete nextQuery.store;
       delete nextQuery.storeid;
@@ -802,8 +809,9 @@ export default {
 
       const queryString = searchParams.toString();
       const hash = this.$route.hash || "";
+      const path = isExistingCategoryEditor ? "/admin/categories" : this.$route.path;
 
-      return `${this.$route.path}${queryString ? `?${queryString}` : ""}${hash}`;
+      return `${path}${queryString ? `?${queryString}` : ""}${hash}`;
     },
     handleClickOutside(event) {
       // Check if $el exists and is an element before querying
