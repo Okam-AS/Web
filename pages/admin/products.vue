@@ -440,10 +440,10 @@
                     title="Kopier til andre produkter"
                     @click.stop="copyVariantToProducts(index)"
                   >
-                    <i class="fas fa-copy" />
+                    <span class="material-icons">content_copy</span>
                   </button>
                   <button class="delete-btn-variant" type="button" @click.stop="removeVariant(index)">
-                    <i class="fas fa-trash" />
+                    <span class="material-icons">delete_outline</span>
                   </button>
                 </div>
               </div>
@@ -2566,8 +2566,8 @@ export default {
     transform: scale(1.1);
   }
 
-  i {
-    font-size: 0.875rem;
+  .material-icons {
+    font-size: 1.125rem;
   }
 }
 
@@ -2589,8 +2589,8 @@ export default {
     transform: scale(1.1);
   }
 
-  i {
-    font-size: 0.875rem;
+  .material-icons {
+    font-size: 1.125rem;
   }
 }
 

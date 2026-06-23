@@ -13,6 +13,18 @@
       <div class="modal-body">
         <p class="copy-description">{{ description }}</p>
 
+        <div v-if="showSearch" class="search-wrapper">
+          <span class="material-icons search-icon">search</span>
+          <input
+            ref="searchInput"
+            v-model="search"
+            type="text"
+            :placeholder="searchPlaceholder"
+            class="form-input"
+            autocomplete="off"
+          />
+        </div>
+
         <div class="select-row">
           <span class="selected-count">{{ selectedIds.length }} valgt</span>
           <div class="select-actions">
@@ -22,8 +34,8 @@
           </div>
         </div>
 
-        <ul v-if="targets.length" class="target-list">
-          <li v-for="target in targets" :key="target.id">
+        <ul v-if="filteredTargets.length" class="target-list">
+          <li v-for="target in filteredTargets" :key="target.id">
             <label class="target-item">
               <input
                 type="checkbox"
@@ -35,7 +47,7 @@
           </li>
         </ul>
         <div v-else class="empty-hint">
-          Ingen tilgjengelige mål
+          {{ search ? 'Ingen treff' : 'Ingen tilgjengelige mål' }}
         </div>
       </div>
 
@@ -68,7 +80,8 @@ export default {
       variantName: '',
       targetType: 'category',
       targets: [],
-      selectedIds: []
+      selectedIds: [],
+      search: ''
     }
   },
 
@@ -77,6 +90,21 @@ export default {
       return this.targetType === 'product'
         ? 'Velg hvilke produkter tilbehøret skal kopieres til. Finnes en gruppe med samme navn fra før, blir den oppdatert.'
         : 'Velg hvilke kategorier tilbehøret skal kopieres til. Finnes en gruppe med samme navn fra før, blir den oppdatert.'
+    },
+
+    // Only show the filter for long lists, otherwise keep the picker clean.
+    showSearch() {
+      return this.targets.length > 20
+    },
+
+    searchPlaceholder() {
+      return this.targetType === 'product' ? 'Søk etter produkt…' : 'Søk etter kategori…'
+    },
+
+    filteredTargets() {
+      const query = this.search.trim().toLowerCase()
+      if (!query) return this.targets
+      return this.targets.filter(t => (t.name || '').toLowerCase().includes(query))
     }
   },
 
@@ -95,6 +123,7 @@ export default {
       this.targetType = targetType
       this.targets = (targets || []).filter(t => t.id && t.id !== excludeId)
       this.selectedIds = []
+      this.search = ''
       this.isOpen = true
 
       return new Promise((resolve) => {
@@ -112,7 +141,10 @@ export default {
     },
 
     selectAll() {
-      this.selectedIds = this.targets.map(t => t.id)
+      // Select everything currently visible (respecting the filter when present).
+      const visibleIds = this.filteredTargets.map(t => t.id)
+      const set = new Set([...this.selectedIds, ...visibleIds])
+      this.selectedIds = Array.from(set)
     },
 
     selectNone() {
@@ -140,6 +172,7 @@ export default {
       this.variantName = ''
       this.targets = []
       this.selectedIds = []
+      this.search = ''
     }
   }
 }
@@ -217,6 +250,44 @@ export default {
   margin: 0 0 16px 0;
   color: #64748b;
   font-size: 0.9em;
+}
+
+.search-wrapper {
+  position: relative;
+  margin-bottom: 12px;
+
+  .search-icon {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    font-size: 20px;
+    pointer-events: none;
+  }
+
+  .form-input {
+    padding-left: 38px;
+  }
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 1em;
+  transition: border-color 0.2s;
+
+  &:focus {
+    outline: none;
+    border-color: #94a3b8;
+    box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.1);
+  }
+
+  &::placeholder {
+    color: #9ca3af;
+  }
 }
 
 .select-row {
