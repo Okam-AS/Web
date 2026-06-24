@@ -2,6 +2,14 @@ import redirectSSL from 'redirect-ssl'
 
 const OKAM_EDITION = process.env.OKAM_EDITION || 'no'
 const isCh = OKAM_EDITION === 'ch'
+// Swiss-only routes: keep them out of the Norwegian sitemap so they're not
+// discoverable on okam.no (they're only relevant to the Swiss edition).
+const sitemapExclude = isCh
+  ? ['/admin/**', '/import']
+  : ['/admin/**', '/import',
+     '/impressum', '/en/impressum',
+     '/datenschutz', '/en/datenschutz',
+     '/agb', '/en/agb']
 
 export default {
   debug: true,
@@ -215,10 +223,7 @@ export default {
     ['@nuxtjs/sitemap', {
       hostname: isCh ? 'https://okam-swiss.ch' : 'https://okam.no',
       gzip: true,
-      exclude: [
-        '/admin/**',
-        '/import'
-      ]
+      exclude: sitemapExclude
     }]
   ],
 
@@ -296,10 +301,7 @@ export default {
   sitemap: {
     hostname: isCh ? 'https://okam-swiss.ch' : 'https://okam.no', // Endre til din faktiske URL
     gzip: true,
-    exclude: [
-      '/admin/**',
-      '/import'
-    ]
+    exclude: sitemapExclude
   },
 
   // Oppdater PWA konfigurasjon
