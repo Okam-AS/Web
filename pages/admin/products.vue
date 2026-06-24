@@ -434,8 +434,16 @@
                       </span>
                     </div>
                   </div>
+                  <button
+                    class="copy-btn-variant"
+                    type="button"
+                    title="Kopier til andre produkter"
+                    @click.stop="copyVariantToProducts(index)"
+                  >
+                    <span class="material-icons">content_copy</span>
+                  </button>
                   <button class="delete-btn-variant" type="button" @click.stop="removeVariant(index)">
-                    <i class="fas fa-trash" />
+                    <span class="material-icons">delete_outline</span>
                   </button>
                 </div>
               </div>
@@ -473,6 +481,7 @@
 
       <!-- Modals -->
       <VariantEditorModal ref="variantEditor" />
+      <CopyVariantToTargetsModal ref="copyVariant" />
 
       <!-- New Product Name Modal -->
       <div v-if="showNewProductModal" class="modal-overlay" @click.self="closeNewProductModal">
@@ -509,15 +518,18 @@
 <script>
 import AdminPage from "~/components/organisms/AdminPage.vue";
 import VariantEditorModal from "~/components/admin/VariantEditorModal.vue";
+import CopyVariantToTargetsModal from "~/components/admin/CopyVariantToTargetsModal.vue";
 import LoadingSkeleton from "~/components/molecules/LoadingSkeleton.vue";
 import Loading from "~/components/atoms/Loading.vue";
 import axios from "axios";
 import $config from "~/core/helpers/configuration";
+import { mergeVariantByName } from "~/core/helpers/variant-copy";
 
 export default {
   components: {
     AdminPage,
     VariantEditorModal,
+    CopyVariantToTargetsModal,
     LoadingSkeleton,
     Loading
   },
@@ -1213,6 +1225,51 @@ export default {
       }
       this.selectedProduct.productVariants.splice(index, 1);
       await this.saveVariants();
+    },
+
+    async copyVariantToProducts(index) {
+      const sourceVariant = this.selectedProduct.productVariants[index];
+      if (!sourceVariant) return;
+
+      try {
+        const products = await this._productService.GetAll(this.selectedStore);
+        const targets = products.map(p => ({ id: p.id, name: p.name }));
+
+        const targetIds = await this.$refs.copyVariant.open({
+          variantName: sourceVariant.name,
+          targets,
+          targetType: 'product',
+          excludeId: this.selectedProduct.id
+        });
+        if (!targetIds || targetIds.length === 0) return;
+
+        let succeeded = 0;
+        const failed = [];
+        for (const targetId of targetIds) {
+          try {
+            const target = await this._productService.Get(targetId);
+            const mergedList = mergeVariantByName(target.productVariants || [], sourceVariant);
+            await this._productVariantService.CreateOrUpdate(targetId, mergedList);
+            succeeded++;
+          } catch (err) {
+            console.error('Failed to copy variant to product:', targetId, err);
+            const target = products.find(p => p.id === targetId);
+            failed.push(target ? target.name : targetId);
+          }
+        }
+
+        if (failed.length === 0) {
+          this.showToast(`Kopiert til ${succeeded} ${succeeded === 1 ? 'produkt' : 'produkter'}!`);
+        } else {
+          this.showToast(
+            `Kopiert til ${succeeded}, men feilet for: ${failed.join(', ')}`,
+            'error'
+          );
+        }
+      } catch (err) {
+        console.error('Failed to copy variant:', err);
+        this.showToast('Kunne ikke kopiere tilbehør. Vennligst prøv igjen.', 'error');
+      }
     },
 
     formatOptionsPreview(options) {
@@ -2491,6 +2548,29 @@ export default {
   white-space: nowrap;
 }
 
+.copy-btn-variant {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.375rem;
+  display: flex;
+  align-items: center;
+  color: #94a3b8;
+  border-radius: 0.375rem;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #dcfce7;
+    color: #1bb776;
+    transform: scale(1.1);
+  }
+
+  .material-icons {
+    font-size: 1.125rem;
+  }
+}
+
 .delete-btn-variant {
   background: none;
   border: none;
@@ -2509,8 +2589,8 @@ export default {
     transform: scale(1.1);
   }
 
-  i {
-    font-size: 0.875rem;
+  .material-icons {
+    font-size: 1.125rem;
   }
 }
 

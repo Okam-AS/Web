@@ -188,6 +188,13 @@
                   </span>
                 </div>
               </div>
+              <button
+                class="copy-btn-small"
+                title="Kopier til andre kategorier"
+                @click.stop="copyVariantToCategories(index)"
+              >
+                <span class="material-icons">content_copy</span>
+              </button>
               <button class="delete-btn-small" @click.stop="removeVariant(index)">
                 <span class="material-icons">close</span>
               </button>
@@ -323,6 +330,7 @@
       />
 
       <VariantEditorModal ref="variantEditor" />
+      <CopyVariantToTargetsModal ref="copyVariant" />
 
       <!-- Toast notification -->
       <transition name="toast">
@@ -339,18 +347,21 @@
 import AdminPage from '~/components/organisms/AdminPage.vue'
 import ProductSelectorModal from '~/components/admin/ProductSelectorModal.vue'
 import VariantEditorModal from '~/components/admin/VariantEditorModal.vue'
+import CopyVariantToTargetsModal from '~/components/admin/CopyVariantToTargetsModal.vue'
 import CategoryProductList from '~/components/admin/CategoryProductList.vue'
 import PublishingRuleEditor from '~/components/admin/PublishingRuleEditor.vue'
 import Loading from '~/components/atoms/Loading.vue'
 import draggable from 'vuedraggable'
 import axios from 'axios'
 import $config from '~/core/helpers/configuration'
+import { mergeVariantByName } from '~/core/helpers/variant-copy'
 
 export default {
   components: {
     AdminPage,
     ProductSelectorModal,
     VariantEditorModal,
+    CopyVariantToTargetsModal,
     CategoryProductList,
     PublishingRuleEditor,
     Loading,
@@ -470,11 +481,37 @@ export default {
       return formatted
     },
 
+    parsePositiveStoreId(value) {
+      const parsed = parseInt(value, 10)
+      return Number.isFinite(parsed) && parsed > 0 ? parsed : null
+    },
+
+    syncSelectedStoreWithCategory(category) {
+      const categoryStoreId = this.parsePositiveStoreId(category?.storeId)
+      if (!categoryStoreId) return
+
+      if (this.parsePositiveStoreId(this.selectedStore) !== categoryStoreId) {
+        this.$store.dispatch('SetSelectedAdminStore', categoryStoreId)
+      }
+
+      if (String(this.$route.query?.storeId) !== String(categoryStoreId)) {
+        this.$router.replace({
+          query: {
+            ...this.$route.query,
+            storeId: categoryStoreId
+          }
+        })
+      }
+    },
+
     async loadCategory() {
       // Prevent duplicate loads
       if (this.isLoading) return
       // Don't reload if already loaded the same category
-      if (this.category.id === this.categoryId) return
+      if (
+        this.category.id === this.categoryId &&
+        this.parsePositiveStoreId(this.category.storeId) === this.parsePositiveStoreId(this.selectedStore)
+      ) return
 
       try {
         this.isLoading = true
@@ -487,6 +524,8 @@ export default {
           this.error = 'Kategorien ble ikke funnet. Den kan ha blitt slettet.'
           return
         }
+
+        this.syncSelectedStoreWithCategory(category)
 
         // Freeze product data to prevent deep reactivity (improves performance)
         const items = (category.categoryProductListItems || []).map(item => {
@@ -857,6 +896,51 @@ export default {
       if (confirm('Er du sikker på at du vil fjerne dette tilbehøret?')) {
         this.category.productVariants.splice(index, 1)
         this.saveVariants()
+      }
+    },
+
+    async copyVariantToCategories(index) {
+      const sourceVariant = this.category.productVariants[index]
+      if (!sourceVariant) return
+
+      try {
+        const categories = await this._categoryService.GetAll(this.selectedStore, true)
+        const targets = categories.map(c => ({ id: c.id, name: c.name }))
+
+        const targetIds = await this.$refs.copyVariant.open({
+          variantName: sourceVariant.name,
+          targets,
+          targetType: 'category',
+          excludeId: this.categoryId
+        })
+        if (!targetIds || targetIds.length === 0) return
+
+        let succeeded = 0
+        const failed = []
+        for (const targetId of targetIds) {
+          try {
+            const target = await this._categoryService.Get(targetId, true)
+            const mergedList = mergeVariantByName(target.productVariants || [], sourceVariant)
+            await this._categoryProductVariantService.CreateOrUpdate(targetId, mergedList)
+            succeeded++
+          } catch (err) {
+            console.error('Failed to copy variant to category:', targetId, err)
+            const target = categories.find(c => c.id === targetId)
+            failed.push(target ? target.name : targetId)
+          }
+        }
+
+        if (failed.length === 0) {
+          this.showToast(`Kopiert til ${succeeded} ${succeeded === 1 ? 'kategori' : 'kategorier'}!`)
+        } else {
+          this.showToast(
+            `Kopiert til ${succeeded}, men feilet for: ${failed.join(', ')}`,
+            'error'
+          )
+        }
+      } catch (err) {
+        console.error('Failed to copy variant:', err)
+        this.showToast('Kunne ikke kopiere tilbehør. Vennligst prøv igjen.', 'error')
       }
     },
 
@@ -1404,6 +1488,28 @@ export default {
         white-space: nowrap;
         max-width: 200px;
       }
+    }
+  }
+
+  .copy-btn-small {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    color: #9ca3af;
+    border-radius: 4px;
+    flex-shrink: 0;
+    transition: all 0.2s;
+
+    &:hover {
+      background: #dcfce7;
+      color: #1bb776;
+    }
+
+    .material-icons {
+      font-size: 20px;
     }
   }
 
