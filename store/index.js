@@ -65,9 +65,6 @@ export const actions = {
         localStorage.setItem('selectedAdminStoreName', store.name)
       }
     }
-  },
-  SetMarket ({ commit }, market) {
-    commit('SetMarket', market)
   }
 }
 
@@ -156,8 +153,5 @@ export const mutations = {
   },
   ["SetSelectedAdminStore"] (state, storeId) {
     state.selectedAdminStore = storeId
-  },
-  SetMarket (state, market) {
-    state.market = market
   }
 }

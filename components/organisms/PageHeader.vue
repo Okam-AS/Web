@@ -35,7 +35,6 @@
 
         <!-- CTA Buttons -->
         <div class="header__cta">
-          <MarketSwitcher />
           <a
             v-if="!isCh"
             :href="startNowHref"
@@ -87,7 +86,6 @@
               </li>
             </ul>
             <div class="mobile-nav__cta">
-              <MarketSwitcher />
               <a
                 v-if="!isCh"
                 :href="startNowHref"
@@ -108,10 +106,7 @@
 </template>
 
 <script>
-import MarketSwitcher from "~/components/molecules/MarketSwitcher.vue";
-
 export default {
-  components: { MarketSwitcher },
   data: () => ({
     isMenuOpen: false,
     isScrolled: false,
