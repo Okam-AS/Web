@@ -5,8 +5,8 @@
       <div class="article">
         <div class="wrapper">
           <div class="page-header-section">
-            <h1 class="heading-1 u-center">Registrer din butikk</h1>
-            <p class="page-subtitle">Få i gang din digitale bestillingsløsning på få minutter</p>
+            <h1 class="heading-1 u-center">{{ copy.pageTitle }}</h1>
+            <p class="page-subtitle">{{ copy.pageSubtitle }}</p>
           </div>
 
           <!-- Login Status Bar -->
@@ -19,7 +19,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <span class="login-status__text">Innlogget som: <strong>{{ user.phoneNumber }}</strong></span>
+            <span class="login-status__text">{{ copy.loggedInAs }} <strong>{{ user.phoneNumber }}</strong></span>
             <button
               class="logout-btn"
               @click="logout"
@@ -27,7 +27,7 @@
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
               </svg>
-              Bytt nummer
+              {{ copy.changeNumber }}
             </button>
           </div>
 
@@ -39,7 +39,7 @@
             <div class="login-form">
               <div v-if="showPhoneInput">
                 <div class="field-group">
-                  <label class="field-label">Telefonnummer</label>
+                  <label class="field-label">{{ copy.phoneNumberLabel }}</label>
                   <div class="phone-input">
                     <input
                       type="text"
@@ -51,7 +51,7 @@
                       v-model="phoneNumber"
                       type="tel"
                       maxlength="8"
-                      placeholder="Skriv inn telefonnummer"
+                      :placeholder="copy.phoneNumberPlaceholder"
                       @input="errorMessage = ''"
                     />
                   </div>
@@ -61,24 +61,24 @@
                   :class="{ 'disabled-btn': !phoneNumberIsValid() || isLoading }"
                   @click="sendTokenTap"
                 >
-                  Send meg engangskode på SMS
+                  {{ copy.sendOtp }}
                 </button>
               </div>
 
               <div v-else>
                 <div class="field-group">
-                  <label class="field-label">Engangskode</label>
+                  <label class="field-label">{{ copy.otpLabel }}</label>
                   <OtpInput
                     :loading="isLoading"
                     @complete="verifyTokenTap"
                   />
-                  <p class="sent-confirmation">Engangskode sendt til {{ landcode }}{{ phoneNumber }}</p>
+                  <p class="sent-confirmation">{{ copy.otpSentTo }} {{ landcode }}{{ phoneNumber }}</p>
                 </div>
                 <button
                   class="cta-link secondary"
                   @click="tryAgainTap"
                 >
-                  Endre telefonnummer
+                  {{ copy.changePhoneNumber }}
                 </button>
               </div>
 
@@ -110,7 +110,7 @@
               class="loading-overlay"
             >
               <div class="loading-spinner" />
-              <div class="loading-message">Registrerer butikk...</div>
+              <div class="loading-message">{{ copy.registeringStore }}</div>
             </div>
 
             <!-- VAT Number Section -->
@@ -120,10 +120,10 @@
             >
               <div class="field-group">
                 <div class="field-header">
-                  <label class="field-label">Organisasjonsummer</label>
+                  <label class="field-label">{{ copy.vatLabel }}</label>
                   <span
                     class="help-icon"
-                    @click="showHelp('Skriv inn organisasjonsummeret til butikken du ønsker å registrere')"
+                    @click="showHelp(copy.vatHelp)"
                     >?</span
                   >
                 </div>
@@ -141,14 +141,14 @@
                 v-if="fieldsWithErrors.includes('vatNumber')"
                 class="error-text"
               >
-                Skriv inn et gyldig organisasjonsummer
+                {{ copy.vatError }}
               </span>
               <button
                 class="cta-link"
                 :class="{ 'disabled-btn': isLoading }"
                 @click="validateVat"
               >
-                Fortsett
+                {{ copy.continue }}
               </button>
             </div>
 
@@ -163,22 +163,22 @@
                 </svg>
               </div>
               <h3 class="vat-warning__title">
-                Det finnes allerede en butikk med dette organisasjonsnummeret
+                {{ copy.vatExistsTitle }}
               </h3>
               <p class="vat-warning__store-name">
-                <strong>{{ existingStoreName }}</strong> er allerede registrert med org.nr. {{ vatNumber }}.
+                <strong>{{ existingStoreName }}</strong> {{ copy.vatExistsRegisteredWith }} {{ vatNumber }}.
               </p>
               <p class="vat-warning__text">
-               Hvis du allerede er tilknyttet denne butikken, logg inn via Admin Panel. Hvis du ønsker tilgang, kontakt butikkens administrator for å bli lagt til som ansatt.
+               {{ copy.vatExistsText }}
               </p>
 
               <button class="cta-link" @click="logout(true)">
-                Logg ut
+                {{ copy.logout }}
               </button>
 
               <p class="vat-warning__customer-text">
-                Er du kunde og ønsker å handle?
-                <a href="https://shop.okam.no" class="vat-warning__link">Gå til butikkoversikten</a>
+                {{ copy.customerPrompt }}
+                <a :href="copy.storeOverviewUrl" class="vat-warning__link">{{ copy.goToStoreOverview }}</a>
               </p>
 
               <a
@@ -186,7 +186,7 @@
                 class="vat-warning__continue-link"
                 @click.prevent="continueAnywayTap"
               >
-                Jeg forstår, men ønsker likevel å registrere en helt ny butikk
+                {{ copy.continueAnyway }}
               </a>
             </div>
 
@@ -196,7 +196,7 @@
               class="form-section"
             >
               <div class="field-group">
-                <label class="field-label">Visningsnavn (vises til kundene)</label>
+                <label class="field-label">{{ copy.displayNameLabel }}</label>
                 <input
                   v-model="displayName"
                   :class="{ 'input-field': true, error: fieldsWithErrors.includes('displayName') }"
@@ -207,7 +207,7 @@
               </div>
 
               <div class="field-group">
-                <label class="field-label">Selskapsnavn (juridisk navn)</label>
+                <label class="field-label">{{ copy.legalNameLabel }}</label>
                 <input
                   v-model="legalName"
                   :class="{ 'input-field': true, error: fieldsWithErrors.includes('legalName') }"
@@ -218,10 +218,10 @@
               </div>
 
               <div class="field-group">
-                <label class="field-label">Hentested for bestillinger</label>
+                <label class="field-label">{{ copy.pickupLabel }}</label>
                 <input
                   v-model="address"
-                  placeholder="Gateadresse"
+                  :placeholder="copy.streetAddressPlaceholder"
                   type="text"
                   :class="{ error: fieldsWithErrors.includes('address') }"
                   @input="clearFieldError('address')"
@@ -231,7 +231,7 @@
               <div class="field-group address-fields">
                 <input
                   v-model="zipCode"
-                  placeholder="Postnummer"
+                  :placeholder="copy.zipCodePlaceholder"
                   type="text"
                   maxlength="4"
                   :class="{ error: fieldsWithErrors.includes('zipCode') }"
@@ -239,7 +239,7 @@
                 />
                 <input
                   v-model="city"
-                  placeholder="Sted"
+                  :placeholder="copy.cityPlaceholder"
                   type="text"
                   :class="{ error: fieldsWithErrors.includes('city') }"
                   @input="clearFieldError('city')"
@@ -255,12 +255,12 @@
                     @change="clearFieldError('acceptedTerms')"
                   />
                   <span class="terms-text">
-                    Jeg har lest og aksepterer
+                    {{ copy.termsPrefix }}
                     <a
                       href="#"
                       class="terms-link"
                       @click.prevent="showTerms"
-                      >vilkårene</a
+                      >{{ copy.termsLink }}</a
                     >
                   </span>
                 </label>
@@ -268,7 +268,7 @@
                   v-if="fieldsWithErrors.includes('acceptedTerms')"
                   class="error-text"
                 >
-                  Vilkårene må aksepteres
+                  {{ copy.termsError }}
                 </span>
               </div>
 
@@ -277,7 +277,7 @@
                 :class="{ 'disabled-btn': isLoading || isRegistering }"
                 @click="registerStore"
               >
-                Registrer
+                {{ copy.register }}
               </button>
             </div>
           </div>
@@ -290,15 +290,15 @@
               </svg>
             </div>
             <div class="alert-banner__content">
-              <h3 class="alert-banner__title">Er du allerede registrert?</h3>
+              <h3 class="alert-banner__title">{{ copy.alreadyRegisteredTitle }}</h3>
               <p class="alert-banner__text">
-                Hvis du allerede har en butikk registrert hos Okam, kan du logge inn her.
+                {{ copy.alreadyRegisteredText }}
               </p>
               <a href="/admin" class="alert-banner__link">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
                 </svg>
-                Gå til Admin Panel
+                {{ copy.goToAdminPanel }}
               </a>
             </div>
           </div>
@@ -345,6 +345,97 @@ export default {
     user() {
       return this.$store.state.currentUser;
     },
+    copy() {
+      return this.isCh
+        ? {
+            pageTitle: "Registrieren Sie Ihr Geschäft",
+            pageSubtitle: "Bringen Sie Ihre digitale Bestelllösung in wenigen Minuten an den Start",
+            loggedInAs: "Angemeldet als:",
+            changeNumber: "Nummer wechseln",
+            phoneNumberLabel: "Telefonnummer",
+            phoneNumberPlaceholder: "Telefonnummer eingeben",
+            sendOtp: "Einmalcode per SMS senden",
+            otpLabel: "Einmalcode",
+            otpSentTo: "Einmalcode gesendet an",
+            changePhoneNumber: "Telefonnummer ändern",
+            registeringStore: "Geschäft wird registriert...",
+            vatLabel: "Firmennummer (UID)",
+            vatHelp: "Geben Sie die Firmennummer (UID) des Geschäfts ein, das Sie registrieren möchten",
+            vatError: "Geben Sie eine gültige Firmennummer (UID) ein",
+            continue: "Weiter",
+            vatExistsTitle: "Es existiert bereits ein Geschäft mit dieser Firmennummer",
+            vatExistsRegisteredWith: "ist bereits unter der UID-Nr.",
+            vatExistsText: "Wenn Sie bereits mit diesem Geschäft verbunden sind, melden Sie sich über das Admin Panel an. Wenn Sie Zugang wünschen, kontaktieren Sie die Administratorin oder den Administrator des Geschäfts, um als Mitarbeitende hinzugefügt zu werden.",
+            logout: "Abmelden",
+            customerPrompt: "Sind Sie Kundin oder Kunde und möchten einkaufen?",
+            goToStoreOverview: "Zur Geschäftsübersicht",
+            storeOverviewUrl: "https://shop.okam-swiss.ch",
+            continueAnyway: "Ich verstehe, möchte aber trotzdem ein ganz neues Geschäft registrieren",
+            displayNameLabel: "Anzeigename (wird den Kundinnen und Kunden angezeigt)",
+            legalNameLabel: "Firmenname (rechtlicher Name)",
+            pickupLabel: "Abholort für Bestellungen",
+            streetAddressPlaceholder: "Strasse und Hausnummer",
+            zipCodePlaceholder: "Postleitzahl",
+            cityPlaceholder: "Ort",
+            termsPrefix: "Ich akzeptiere die",
+            termsLink: "Bedingungen",
+            termsError: "Die Bedingungen müssen akzeptiert werden",
+            register: "Registrieren",
+            alreadyRegisteredTitle: "Sind Sie bereits registriert?",
+            alreadyRegisteredText: "Wenn Sie bei Okam bereits ein Geschäft registriert haben, können Sie sich hier anmelden.",
+            goToAdminPanel: "Zum Admin Panel",
+            vatValidationError: "Firmennummer konnte nicht validiert werden",
+            registrationError: "Bei der Registrierung ist etwas schiefgelaufen. Bitte rufen Sie uns unter 98865120 an, dann helfen wir Ihnen bei der Registrierung.",
+            logoutConfirm: "Sind Sie sicher, dass Sie das Geschäft mit einer anderen Telefonnummer registrieren möchten? Alle Felder müssen neu ausgefüllt werden.",
+            invalidPhoneNumber: "Ungültige Telefonnummer",
+            smsSendError: "SMS konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.",
+            invalidCode: "Ungültiger Code",
+          }
+        : {
+            pageTitle: "Registrer din butikk",
+            pageSubtitle: "Få i gang din digitale bestillingsløsning på få minutter",
+            loggedInAs: "Innlogget som:",
+            changeNumber: "Bytt nummer",
+            phoneNumberLabel: "Telefonnummer",
+            phoneNumberPlaceholder: "Skriv inn telefonnummer",
+            sendOtp: "Send meg engangskode på SMS",
+            otpLabel: "Engangskode",
+            otpSentTo: "Engangskode sendt til",
+            changePhoneNumber: "Endre telefonnummer",
+            registeringStore: "Registrerer butikk...",
+            vatLabel: "Organisasjonsummer",
+            vatHelp: "Skriv inn organisasjonsummeret til butikken du ønsker å registrere",
+            vatError: "Skriv inn et gyldig organisasjonsummer",
+            continue: "Fortsett",
+            vatExistsTitle: "Det finnes allerede en butikk med dette organisasjonsnummeret",
+            vatExistsRegisteredWith: "er allerede registrert med org.nr.",
+            vatExistsText: "Hvis du allerede er tilknyttet denne butikken, logg inn via Admin Panel. Hvis du ønsker tilgang, kontakt butikkens administrator for å bli lagt til som ansatt.",
+            logout: "Logg ut",
+            customerPrompt: "Er du kunde og ønsker å handle?",
+            goToStoreOverview: "Gå til butikkoversikten",
+            storeOverviewUrl: "https://shop.okam.no",
+            continueAnyway: "Jeg forstår, men ønsker likevel å registrere en helt ny butikk",
+            displayNameLabel: "Visningsnavn (vises til kundene)",
+            legalNameLabel: "Selskapsnavn (juridisk navn)",
+            pickupLabel: "Hentested for bestillinger",
+            streetAddressPlaceholder: "Gateadresse",
+            zipCodePlaceholder: "Postnummer",
+            cityPlaceholder: "Sted",
+            termsPrefix: "Jeg har lest og aksepterer",
+            termsLink: "vilkårene",
+            termsError: "Vilkårene må aksepteres",
+            register: "Registrer",
+            alreadyRegisteredTitle: "Er du allerede registrert?",
+            alreadyRegisteredText: "Hvis du allerede har en butikk registrert hos Okam, kan du logge inn her.",
+            goToAdminPanel: "Gå til Admin Panel",
+            vatValidationError: "Kunne ikke validere organisasjonsnummer",
+            registrationError: "Noe gikk galt ved registrering. Vennligst ring oss på 98865120 så kan vi hjelpe med registrering.",
+            logoutConfirm: "Er du sikker på at du ønsker å registrere butikken på et annet telefonnummer? Alle felter må fylles på nytt.",
+            invalidPhoneNumber: "Ugyldig telefonnummer",
+            smsSendError: "Kunne ikke sende SMS. Prøv igjen senere.",
+            invalidCode: "Ugyldig kode",
+          };
+    },
   },
   methods: {
     onVatInput() {
@@ -389,7 +480,7 @@ export default {
           this.vatExists = false;
         }
       } catch (error) {
-        this.errorMessage = "Kunne ikke validere organisasjonsnummer";
+        this.errorMessage = this.copy.vatValidationError;
         this.fieldsWithErrors.push("vatNumber");
       } finally {
         this.isLoading = false;
@@ -440,13 +531,13 @@ export default {
         // Navigate to onboarding page
         this.$router.push("/admin/onboarding");
       } catch (error) {
-        this.errorMessage = "Noe gikk galt ved registrering. Vennligst ring oss på 98865120 så kan vi hjelpe med registrering.";
+        this.errorMessage = this.copy.registrationError;
         this.isRegistering = false;
       }
     },
 
     logout(skipConfirm = false) {
-      if (skipConfirm || confirm("Er du sikker på at du ønsker å registrere butikken på et annet telefonnummer? Alle felter må fylles på nytt.")) {
+      if (skipConfirm || confirm(this.copy.logoutConfirm)) {
         this._userService.Logout();
         this.resetForm();
       }
@@ -473,7 +564,7 @@ export default {
 
     async sendTokenTap() {
       if (!this.phoneNumberIsValid()) {
-        this.errorMessage = "Ugyldig telefonnummer";
+        this.errorMessage = this.copy.invalidPhoneNumber;
         return;
       }
 
@@ -482,7 +573,7 @@ export default {
         const success = await this._userService.SendVerificationToken(this.landcode + this.phoneNumber.replace(/\s/g, ''));
 
         if (!success) {
-          this.errorMessage = "Kunne ikke sende SMS. Prøv igjen senere.";
+          this.errorMessage = this.copy.smsSendError;
           return;
         }
 
@@ -494,7 +585,7 @@ export default {
 
     async verifyTokenTap(code) {
       if (!code) {
-        this.errorMessage = "Ugyldig kode";
+        this.errorMessage = this.copy.invalidCode;
         return;
       }
 
@@ -503,11 +594,11 @@ export default {
         const success = await this._userService.LoginAdmin(this.landcode + this.phoneNumber.replace(/\s/g, ''), code);
 
         if (!success) {
-          this.errorMessage = "Ugyldig kode";
+          this.errorMessage = this.copy.invalidCode;
           return;
         }
       } catch (error) {
-        this.errorMessage = "Ugyldig kode";
+        this.errorMessage = this.copy.invalidCode;
         return;
       } finally {
         this.isLoading = false;

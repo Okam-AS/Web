@@ -4,27 +4,27 @@
     <main class="page-content">
       <div class="testimonials-seksjon jungel-header">
         <div class="container">
-          <h2 class="seksjons-tittel">Din egen bestillingsapp</h2>
+          <h2 class="seksjons-tittel">{{ copy.ownAppTitle }}</h2>
 
           <div class="featured-testimonial" @click="openJungelPizza">
             <div class="featured-testimonial-content">
               <div class="featured-person">
                 <img
                   src="~/assets/UI/jungelpizza/petter.png"
-                  alt="Portrettbilde av Petter fra Jungel Pizza"
+                  :alt="copy.petterAlt"
                   class="person-image"
                 />
                 <div class="featured-quote">
-                  <p class="testimonial-sitat">"Etter over ett års bruk av vår egen app, kan vi trygt si at det har vært en suksess. Vi sparer tid og penger, har bedre kontroll, og kundene våre elsker den nye løsningen."</p>
+                  <p class="testimonial-sitat">{{ copy.featuredQuote }}</p>
                   <div class="testimonial-info">
-                    <p class="testimonial-navn">Sukumar Sathiyamoorthy</p>
-                    <p class="testimonial-bedrift">Daglig leder av Jungel Pizza</p>
+                    <p class="testimonial-navn">{{ copy.featuredName }}</p>
+                    <p class="testimonial-bedrift">{{ copy.featuredCompany }}</p>
                   </div>
                 </div>
               </div>
               <img
                 src="~/assets/UI/jungelpizza/screenshots.png"
-                alt="Skjermbilder av Jungel Pizza sin bestillingsapp"
+                :alt="copy.screenshotsAlt"
                 class="featured-image"
               />
             </div>
@@ -35,7 +35,7 @@
               class="handling-knapp header-handling"
               @click="scrollToRegistration"
             >
-              Book demo
+              {{ copy.bookDemo }}
             </button>
           </div>
 
@@ -49,7 +49,7 @@
                 <div class="testimonial-venstre">
                   <img
                     :src="testimonial.bilde"
-                    :alt="'Portrettbilde av ' + testimonial.navn"
+                    :alt="copy.portraitAltPrefix + testimonial.navn"
                     class="testimonial-bilde"
                   />
                 </div>
@@ -74,10 +74,10 @@
 
       <div class="funksjoner-seksjon">
         <div class="container">
-          <h2 class="seksjons-tittel">Dette er noe av det du får:</h2>
+          <h2 class="seksjons-tittel">{{ copy.featuresTitle }}</h2>
           <div class="funksjoner-rutenett">
             <div
-              v-for="funksjon in funksjoner"
+              v-for="funksjon in copy.funksjoner"
               :key="funksjon.tittel"
               class="funksjons-kort"
             >
@@ -97,10 +97,10 @@
 
       <div class="fordeler-seksjon">
         <div class="container">
-          <h2 class="seksjons-tittel">Hvorfor velge oss?</h2>
+          <h2 class="seksjons-tittel">{{ copy.benefitsTitle }}</h2>
           <div class="fordeler-rutenett">
             <div
-              v-for="fordel in fordeler"
+              v-for="fordel in copy.fordeler"
               :key="fordel.tittel"
               class="fordel-kort"
             >
@@ -127,9 +127,9 @@
             v-if="!messageSent"
             class="registrering-skjema"
           >
-            <h2 class="seksjons-tittel">Book en uforpliktende demo</h2>
+            <h2 class="seksjons-tittel">{{ copy.formTitle }}</h2>
             <div class="skjema-felt">
-              <label>Navn på selskap</label>
+              <label>{{ copy.companyNameLabel }}</label>
               <input
                 v-model="storeName"
                 type="text"
@@ -139,11 +139,11 @@
                 v-if="showValidation && !storeName.length"
                 class="validation-message"
               >
-                Vennligst fyll inn navn på selskap
+                {{ copy.companyNameValidation }}
               </p>
             </div>
             <div class="skjema-felt">
-              <label>Navn på kontaktperson</label>
+              <label>{{ copy.contactNameLabel }}</label>
               <input
                 v-model="userContactName"
                 type="text"
@@ -153,18 +153,18 @@
                 v-if="showValidation && !userContactName.length"
                 class="validation-message"
               >
-                Vennligst fyll inn navn på kontaktperson
+                {{ copy.contactNameValidation }}
               </p>
             </div>
             <div class="skjema-felt">
-              <label>Hvordan ønsker du å bli kontaktet?</label>
+              <label>{{ copy.contactPreferenceLabel }}</label>
               <select v-model="contactPreference">
-                <option value="phone">Ring meg</option>
-                <option value="email">Send meg e-post</option>
+                <option value="phone">{{ copy.contactPhoneOption }}</option>
+                <option value="email">{{ copy.contactEmailOption }}</option>
               </select>
             </div>
             <div class="skjema-felt">
-              <label>Telefonnummer</label>
+              <label>{{ copy.phoneLabel }}</label>
               <input
                 v-model="userPhone"
                 type="text"
@@ -175,11 +175,11 @@
                 v-if="showValidation && contactPreference === 'phone' && !userPhone.trim().length"
                 class="validation-message"
               >
-                Vennligst fyll inn telefonnummer
+                {{ copy.phoneValidation }}
               </p>
             </div>
             <div class="skjema-felt">
-              <label>E-post</label>
+              <label>{{ copy.emailLabel }}</label>
               <input
                 v-model="userEmail"
                 type="email"
@@ -190,7 +190,7 @@
                 v-if="showValidation && contactPreference === 'email' && !userEmail.trim().length"
                 class="validation-message"
               >
-                Vennligst fyll inn e-post
+                {{ copy.emailValidation }}
               </p>
             </div>
             <div class="skjema-handling">
@@ -199,7 +199,7 @@
                 class="handling-knapp"
                 @click="submitFeedback"
               >
-                Book demo
+                {{ copy.bookDemo }}
               </button>
             </div>
           </div>
@@ -208,9 +208,9 @@
             class="registrering-bekreftelse"
           >
             <p>
-              Takk for din interesse! Vi kontakter deg
-              {{ contactPreference === "phone" ? "på telefon" : "på e-post" }}
-              snarest.
+              {{ copy.confirmationPrefix }}
+              {{ contactPreference === "phone" ? copy.confirmationPhone : copy.confirmationEmail }}
+              {{ copy.confirmationSuffix }}
             </p>
           </div>
         </div>
@@ -230,80 +230,6 @@ import CatharinaImage from "~/assets/UI/testimonials/catharina.png";
 export default {
   components: { PageHeader, PageFooter },
   data: () => ({
-    funksjoner: [
-      {
-        tittel: "Din egen merkevareapp",
-        ikon: "smartphone",
-        beskrivelse: "App med din logo, farger og design",
-      },
-      {
-        tittel: "Nettbestilling",
-        ikon: "language",
-        beskrivelse: "Integrert løsning for bestilling på nett",
-      },
-      {
-        tittel: "Administrasjon",
-        ikon: "settings",
-        beskrivelse: "Kraftig admin-app for full oversikt over bestillinger og meny",
-      },
-      {
-        tittel: "Hjemlevering",
-        ikon: "delivery_dining",
-        beskrivelse: "Rimelig og effektiv hjemlevering gjennom vår samarbeidspartner",
-      },
-      {
-        tittel: "Lojalitetsprogram",
-        ikon: "card_giftcard",
-        beskrivelse: "Innebygd system for lojalitetskort og gavekort",
-      },
-      {
-        tittel: "Fleksibel betaling",
-        ikon: "payment",
-        beskrivelse: "Støtte for flere betalingsmåter (Vipps, kort, kontant)",
-      },
-    ],
-    fordeler: [
-      {
-        tittel: "Lave kostnader",
-        ikon: "savings",
-        beskrivelse: "Okam tar en lav månedspris.",
-      },
-      {
-        tittel: "Økt omsetning",
-        ikon: "trending_up",
-        beskrivelse: "Våre kunder rapporterer 20-50% økt omsetning",
-      },
-      {
-        tittel: "Kundelojalitet",
-        ikon: "favorite",
-        beskrivelse: "Skap tettere kunderelasjoner",
-      },
-      {
-        tittel: "Enklere drift",
-        ikon: "bolt",
-        beskrivelse: "Effektiv ordrehåndtering og færre feil",
-      },
-      {
-        tittel: "Verdifull innsikt",
-        ikon: "bar_chart",
-        beskrivelse: "Få nyttig data om kunder og salg",
-      },
-      {
-        tittel: "24/7 Support",
-        ikon: "support_agent",
-        beskrivelse: "Teknisk støtte og opplæring når du trenger det",
-      },
-      {
-        tittel: "Fleksibel løsning",
-        ikon: "devices",
-        beskrivelse: "Administrer alt fra iPad eller din egen telefon",
-      },
-      {
-        tittel: "Markedsledende",
-        ikon: "verified",
-        beskrivelse: "Bygget på mange års erfaring og kontinuerlig utvikling",
-      },
-    ],
     storeName: "",
     userContactName: "",
     userPhone: "",
@@ -314,7 +240,240 @@ export default {
     showValidation: false,
   }),
 
+  head() {
+    if (!this.isCh) {
+      return {};
+    }
+    return {
+      title: "Ihre eigene Bestell-App - Okam",
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content:
+            "Erhalten Sie Ihre eigene Bestell-App mit Ihrem Logo, Ihren Farben und Ihrem Design. Online-Bestellung, Lieferung, Treueprogramm und flexible Zahlung - alles in einer Lösung.",
+        },
+      ],
+    };
+  },
+
   computed: {
+    copy() {
+      return this.isCh
+        ? {
+            ownAppTitle: "Ihre eigene Bestell-App",
+            petterAlt: "Porträtbild von Petter von Jungel Pizza",
+            featuredQuote:
+              '"Nach über einem Jahr Nutzung unserer eigenen App können wir mit Sicherheit sagen, dass es ein Erfolg war. Wir sparen Zeit und Geld, haben eine bessere Kontrolle und unsere Kunden lieben die neue Lösung."',
+            featuredName: "Sukumar Sathiyamoorthy",
+            featuredCompany: "Geschäftsführer von Jungel Pizza",
+            screenshotsAlt: "Screenshots der Bestell-App von Jungel Pizza",
+            bookDemo: "Demo buchen",
+            portraitAltPrefix: "Porträtbild von ",
+            featuresTitle: "Das ist ein Teil von dem, was Sie erhalten:",
+            benefitsTitle: "Warum uns wählen?",
+            formTitle: "Buchen Sie eine unverbindliche Demo",
+            companyNameLabel: "Name des Unternehmens",
+            companyNameValidation: "Bitte geben Sie den Namen des Unternehmens ein",
+            contactNameLabel: "Name der Kontaktperson",
+            contactNameValidation: "Bitte geben Sie den Namen der Kontaktperson ein",
+            contactPreferenceLabel: "Wie möchten Sie kontaktiert werden?",
+            contactPhoneOption: "Rufen Sie mich an",
+            contactEmailOption: "Senden Sie mir eine E-Mail",
+            phoneLabel: "Telefonnummer",
+            phoneValidation: "Bitte geben Sie die Telefonnummer ein",
+            emailLabel: "E-Mail",
+            emailValidation: "Bitte geben Sie die E-Mail-Adresse ein",
+            confirmationPrefix: "Vielen Dank für Ihr Interesse! Wir kontaktieren Sie",
+            confirmationPhone: "telefonisch",
+            confirmationEmail: "per E-Mail",
+            confirmationSuffix: "so bald wie möglich.",
+            funksjoner: [
+              {
+                tittel: "Ihre eigene Marken-App",
+                ikon: "smartphone",
+                beskrivelse: "App mit Ihrem Logo, Ihren Farben und Ihrem Design",
+              },
+              {
+                tittel: "Online-Bestellung",
+                ikon: "language",
+                beskrivelse: "Integrierte Lösung für Online-Bestellungen",
+              },
+              {
+                tittel: "Verwaltung",
+                ikon: "settings",
+                beskrivelse:
+                  "Leistungsstarke Admin-App für die volle Übersicht über Bestellungen und Menü",
+              },
+              {
+                tittel: "Hauslieferung",
+                ikon: "delivery_dining",
+                beskrivelse:
+                  "Günstige und effiziente Hauslieferung über unseren Partner",
+              },
+              {
+                tittel: "Treueprogramm",
+                ikon: "card_giftcard",
+                beskrivelse: "Integriertes System für Treuekarten und Geschenkkarten",
+              },
+              {
+                tittel: "Flexible Zahlung",
+                ikon: "payment",
+                beskrivelse:
+                  "Unterstützung für verschiedene Zahlungsarten (TWINT, Karte, Bargeld)",
+              },
+            ],
+            fordeler: [
+              {
+                tittel: "Niedrige Kosten",
+                ikon: "savings",
+                beskrivelse: "Okam berechnet einen niedrigen Monatspreis.",
+              },
+              {
+                tittel: "Höherer Umsatz",
+                ikon: "trending_up",
+                beskrivelse: "Unsere Kunden berichten von 20-50% mehr Umsatz",
+              },
+              {
+                tittel: "Kundentreue",
+                ikon: "favorite",
+                beskrivelse: "Schaffen Sie engere Kundenbeziehungen",
+              },
+              {
+                tittel: "Einfacherer Betrieb",
+                ikon: "bolt",
+                beskrivelse: "Effiziente Auftragsabwicklung und weniger Fehler",
+              },
+              {
+                tittel: "Wertvolle Einblicke",
+                ikon: "bar_chart",
+                beskrivelse: "Erhalten Sie nützliche Daten über Kunden und Verkäufe",
+              },
+              {
+                tittel: "24/7 Support",
+                ikon: "support_agent",
+                beskrivelse:
+                  "Technischer Support und Schulung, wann immer Sie ihn brauchen",
+              },
+              {
+                tittel: "Flexible Lösung",
+                ikon: "devices",
+                beskrivelse:
+                  "Verwalten Sie alles vom iPad oder Ihrem eigenen Telefon aus",
+              },
+              {
+                tittel: "Marktführend",
+                ikon: "verified",
+                beskrivelse:
+                  "Aufgebaut auf jahrelanger Erfahrung und kontinuierlicher Entwicklung",
+              },
+            ],
+          }
+        : {
+            ownAppTitle: "Din egen bestillingsapp",
+            petterAlt: "Portrettbilde av Petter fra Jungel Pizza",
+            featuredQuote:
+              '"Etter over ett års bruk av vår egen app, kan vi trygt si at det har vært en suksess. Vi sparer tid og penger, har bedre kontroll, og kundene våre elsker den nye løsningen."',
+            featuredName: "Sukumar Sathiyamoorthy",
+            featuredCompany: "Daglig leder av Jungel Pizza",
+            screenshotsAlt: "Skjermbilder av Jungel Pizza sin bestillingsapp",
+            bookDemo: "Book demo",
+            portraitAltPrefix: "Portrettbilde av ",
+            featuresTitle: "Dette er noe av det du får:",
+            benefitsTitle: "Hvorfor velge oss?",
+            formTitle: "Book en uforpliktende demo",
+            companyNameLabel: "Navn på selskap",
+            companyNameValidation: "Vennligst fyll inn navn på selskap",
+            contactNameLabel: "Navn på kontaktperson",
+            contactNameValidation: "Vennligst fyll inn navn på kontaktperson",
+            contactPreferenceLabel: "Hvordan ønsker du å bli kontaktet?",
+            contactPhoneOption: "Ring meg",
+            contactEmailOption: "Send meg e-post",
+            phoneLabel: "Telefonnummer",
+            phoneValidation: "Vennligst fyll inn telefonnummer",
+            emailLabel: "E-post",
+            emailValidation: "Vennligst fyll inn e-post",
+            confirmationPrefix: "Takk for din interesse! Vi kontakter deg",
+            confirmationPhone: "på telefon",
+            confirmationEmail: "på e-post",
+            confirmationSuffix: "snarest.",
+            funksjoner: [
+              {
+                tittel: "Din egen merkevareapp",
+                ikon: "smartphone",
+                beskrivelse: "App med din logo, farger og design",
+              },
+              {
+                tittel: "Nettbestilling",
+                ikon: "language",
+                beskrivelse: "Integrert løsning for bestilling på nett",
+              },
+              {
+                tittel: "Administrasjon",
+                ikon: "settings",
+                beskrivelse: "Kraftig admin-app for full oversikt over bestillinger og meny",
+              },
+              {
+                tittel: "Hjemlevering",
+                ikon: "delivery_dining",
+                beskrivelse: "Rimelig og effektiv hjemlevering gjennom vår samarbeidspartner",
+              },
+              {
+                tittel: "Lojalitetsprogram",
+                ikon: "card_giftcard",
+                beskrivelse: "Innebygd system for lojalitetskort og gavekort",
+              },
+              {
+                tittel: "Fleksibel betaling",
+                ikon: "payment",
+                beskrivelse: "Støtte for flere betalingsmåter (Vipps, kort, kontant)",
+              },
+            ],
+            fordeler: [
+              {
+                tittel: "Lave kostnader",
+                ikon: "savings",
+                beskrivelse: "Okam tar en lav månedspris.",
+              },
+              {
+                tittel: "Økt omsetning",
+                ikon: "trending_up",
+                beskrivelse: "Våre kunder rapporterer 20-50% økt omsetning",
+              },
+              {
+                tittel: "Kundelojalitet",
+                ikon: "favorite",
+                beskrivelse: "Skap tettere kunderelasjoner",
+              },
+              {
+                tittel: "Enklere drift",
+                ikon: "bolt",
+                beskrivelse: "Effektiv ordrehåndtering og færre feil",
+              },
+              {
+                tittel: "Verdifull innsikt",
+                ikon: "bar_chart",
+                beskrivelse: "Få nyttig data om kunder og salg",
+              },
+              {
+                tittel: "24/7 Support",
+                ikon: "support_agent",
+                beskrivelse: "Teknisk støtte og opplæring når du trenger det",
+              },
+              {
+                tittel: "Fleksibel løsning",
+                ikon: "devices",
+                beskrivelse: "Administrer alt fra iPad eller din egen telefon",
+              },
+              {
+                tittel: "Markedsledende",
+                ikon: "verified",
+                beskrivelse: "Bygget på mange års erfaring og kontinuerlig utvikling",
+              },
+            ],
+          };
+    },
+
     isFormValid() {
       const hasBasicInfo = this.storeName.length > 0 && this.userContactName.length > 0;
       const hasValidContact = this.contactPreference === "phone" ? this.userPhone.trim().length > 0 : this.userEmail.trim().length > 0;

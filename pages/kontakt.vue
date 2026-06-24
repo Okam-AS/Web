@@ -5,17 +5,17 @@
       <div class="article">
         <div class="wrapper">
           <h1 class="heading-1 u-center">
-            Ta kontakt med oss!
+            {{ copy.heading }}
           </h1>
           <article
             id="post-11"
             class="post-11 page type-page status-publish hentry"
           >
-            <p>Vi vil gjerne høre fra deg hvis det er noe du lurer på, eller om det er noe annet vi kan gjøre for deg.</p>
+            <p>{{ copy.intro }}</p>
 
             <p>
-              Send oss en e-post på
-              <a href="mailto:kontakt@okam.no">kontakt@okam.no</a> eller brukt kontaktskjema under.
+              {{ copy.emailLeadBefore }}
+              <a :href="`mailto:${copy.email}`">{{ copy.email }}</a> {{ copy.emailLeadAfter }}
             </p>
 
             <div
@@ -33,7 +33,7 @@
                   <label
                     class="wpforms-field-label"
                     for="wpforms-33-field_1"
-                  >E-post</label><input
+                  >{{ copy.emailLabel }}</label><input
                     id="wpforms-33-field_1"
                     v-model="userEmail"
                     type="email"
@@ -42,7 +42,7 @@
                     maxlength="100"
                   >
                   <div class="wpforms-field-description">
-                    Vennligst oppgi e-posten du ønsker svar til
+                    {{ copy.emailDescription }}
                   </div>
                 </div>
                 <div
@@ -53,7 +53,7 @@
                   <label
                     class="wpforms-field-label"
                     for="wpforms-33-field_2"
-                  >Melding <span class="wpforms-required-label">*</span></label><textarea
+                  >{{ copy.messageLabel }} <span class="wpforms-required-label">*</span></label><textarea
                     id="wpforms-33-field_2"
                     v-model="message"
                     class="wpforms-field-medium wpforms-field-required message-field"
@@ -72,12 +72,12 @@
                   }"
                   @click="submitFeedback"
                 >
-                  Send
+                  {{ copy.submit }}
                 </button>
               </div>
             </div>
             <div v-else>
-              <p>Meldingen er sendt. Takk for tilbakemeldingen!</p>
+              <p>{{ copy.sentConfirmation }}</p>
             </div>
           </article>
         </div>
@@ -98,7 +98,51 @@ export default {
     message: '',
     messageSent: false
   }),
+  head () {
+    return this.isCh
+      ? {
+          title: 'Kontakt - Okam',
+          meta: [
+            {
+              hid: 'description',
+              name: 'description',
+              content:
+                'Nehmen Sie Kontakt mit dem Okam-Team auf. Schreiben Sie uns eine E-Mail oder nutzen Sie das Kontaktformular - wir helfen Ihnen gerne weiter.'
+            }
+          ]
+        }
+      : {}
+  },
   computed: {
+    copy () {
+      return this.isCh
+        ? {
+            heading: 'Nehmen Sie Kontakt mit uns auf!',
+            intro:
+              'Wir hören gerne von Ihnen, wenn Sie eine Frage haben oder wenn wir sonst etwas für Sie tun können.',
+            emailLeadBefore: 'Schreiben Sie uns eine E-Mail an',
+            emailLeadAfter: 'oder verwenden Sie das Kontaktformular unten.',
+            email: 'kontakt@okam.ch',
+            emailLabel: 'E-Mail',
+            emailDescription: 'Bitte geben Sie die E-Mail-Adresse an, an die Sie eine Antwort wünschen',
+            messageLabel: 'Nachricht',
+            submit: 'Senden',
+            sentConfirmation: 'Die Nachricht wurde gesendet. Vielen Dank für Ihre Rückmeldung!'
+          }
+        : {
+            heading: 'Ta kontakt med oss!',
+            intro:
+              'Vi vil gjerne høre fra deg hvis det er noe du lurer på, eller om det er noe annet vi kan gjøre for deg.',
+            emailLeadBefore: 'Send oss en e-post på',
+            emailLeadAfter: 'eller brukt kontaktskjema under.',
+            email: 'kontakt@okam.no',
+            emailLabel: 'E-post',
+            emailDescription: 'Vennligst oppgi e-posten du ønsker svar til',
+            messageLabel: 'Melding',
+            submit: 'Send',
+            sentConfirmation: 'Meldingen er sendt. Takk for tilbakemeldingen!'
+          }
+    },
     submitEnabled () {
       return !this.messageSent && this.message.length > 0
     }

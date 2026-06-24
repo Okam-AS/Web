@@ -1,5 +1,16 @@
 import redirectSSL from 'redirect-ssl'
 
+const OKAM_EDITION = process.env.OKAM_EDITION || 'no'
+const isCh = OKAM_EDITION === 'ch'
+// Swiss-only routes: keep them out of the Norwegian sitemap so they're not
+// discoverable on okam.no (they're only relevant to the Swiss edition).
+const sitemapExclude = isCh
+  ? ['/admin/**', '/import']
+  : ['/admin/**', '/import',
+     '/impressum', '/en/impressum',
+     '/datenschutz', '/en/datenschutz',
+     '/agb', '/en/agb']
+
 export default {
   debug: true,
   // Target for static generation
@@ -14,6 +25,8 @@ export default {
   },
   // Global page headers (https://go.nuxtjs.dev/config-head)
   env: {
+    EDITION: OKAM_EDITION,
+    STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY || '',
     IS_PRODUCTION: process.env.NODE_ENV === 'production',
     API_BASE_URL: process.env.NODE_ENV === 'production' ? 'https://okamapi.azurewebsites.net' : 'https://okamapi.azurewebsites.net', // 'http://localhost:5000',
     IS_NATIVESCRIPT: 'false',
@@ -46,7 +59,7 @@ export default {
       { name: 'twitter:card', content: '/og-image.png' },
       { name: 'twitter:site', content: '@sharghi_a' }
     ],
-    script: [
+    script: isCh ? [] : [
       {
         hid: 'fb-pixel',
         innerHTML: `
@@ -65,13 +78,13 @@ export default {
         charset: 'utf-8'
       }
     ],
-    noscript: [
+    noscript: isCh ? [] : [
       {
         hid: 'fb-pixel-noscript',
         innerHTML: '<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2834635726843367&ev=PageView&noscript=1" />'
       }
     ],
-    __dangerouslyDisableSanitizersByTagID: {
+    __dangerouslyDisableSanitizersByTagID: isCh ? {} : {
       'fb-pixel': ['innerHTML'],
       'fb-pixel-noscript': ['innerHTML']
     },
@@ -114,10 +127,10 @@ export default {
   ],
 
   i18n: {
-    locales: ['en', 'no'],
-    defaultLocale: 'no',
+    locales: isCh ? ['de', 'en'] : ['en', 'no'],
+    defaultLocale: isCh ? 'de' : 'no',
     vueI18n: {
-      fallbackLocale: 'no',
+      fallbackLocale: isCh ? 'de' : 'no',
       messages: {
         en: {
           back: 'Back',
@@ -138,6 +151,16 @@ export default {
           logout: '🔒 Logg ut',
           login: 'Logg inn',
           close: '✖️ Lukk'
+        },
+        de: {
+          back: 'Zurück',
+          enterPhoneNumberPlaceholder: 'Telefon',
+          enterPhoneNumberSubmit: 'Code senden',
+          enterPhoneCodeLabel: 'SMS-Code eingeben, um sich anzumelden:',
+          youAreLoggedIn: 'Sie sind angemeldet als',
+          logout: 'Abmelden',
+          login: 'Anmelden',
+          close: 'Schliessen'
         }
       }
     }
@@ -146,6 +169,7 @@ export default {
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
     { src: '~/plugins/global-mixin', ssr: false },
+    '~/plugins/market-mixin',
     { src: '~/plugins/store-init' },
     { src: '~/plugins/vue-currency-input' },
     '~/plugins/jsonld'
@@ -197,12 +221,9 @@ export default {
         Disallow: '/import'
       }],
     ['@nuxtjs/sitemap', {
-      hostname: 'https://okam.no',
+      hostname: isCh ? 'https://okam-swiss.ch' : 'https://okam.no',
       gzip: true,
-      exclude: [
-        '/admin/**',
-        '/import'
-      ]
+      exclude: sitemapExclude
     }]
   ],
 
@@ -212,7 +233,7 @@ export default {
   },
 
   googleAnalytics: {
-    id: 'UA-167439729-2'
+    id: isCh ? undefined : 'UA-167439729-2'
   },
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
@@ -278,12 +299,9 @@ export default {
 
   // Legg til sitemap konfigurasjon
   sitemap: {
-    hostname: 'https://okam.no', // Endre til din faktiske URL
+    hostname: isCh ? 'https://okam-swiss.ch' : 'https://okam.no', // Endre til din faktiske URL
     gzip: true,
-    exclude: [
-      '/admin/**',
-      '/import'
-    ]
+    exclude: sitemapExclude
   },
 
   // Oppdater PWA konfigurasjon
@@ -296,7 +314,7 @@ export default {
     manifest: {
       name: 'Okam App',
       short_name: 'Okam',
-      lang: 'no',
+      lang: isCh ? 'de' : 'no',
       display: 'standalone'
     }
   },

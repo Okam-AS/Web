@@ -26,13 +26,13 @@
                 />
                 <span class="checkmark" />
                 <span class="acceptance-text">
-                  Jeg bekrefter at jeg har lest gjennom ordren og forstått
+                  {{ copy.confirmReadIntro }}
                   <a
                     href="#"
                     class="terms-link"
                     @click.prevent="showTermsModal = true"
-                    >Okam AS sine avtalevilkår</a
-                  >.
+                    >{{ copy.termsLink }}</a
+                  >{{ copy.confirmReadOutro }}
                 </span>
               </label>
             </div>
@@ -42,7 +42,7 @@
               :disabled="isSubmitting"
               @click="termsAccepted ? sendVerification() : (showTermsWarning = true)"
             >
-              Bekreft
+              {{ copy.confirmButton }}
             </button>
 
             <div
@@ -78,7 +78,7 @@
                   y2="16"
                 />
               </svg>
-              <span>Du må godta vilkårene og betingelsene før du kan fortsette</span>
+              <span>{{ copy.mustAcceptTerms }}</span>
             </div>
             <div
               v-if="showError"
@@ -109,21 +109,21 @@
                 </svg>
               </div>
               <div class="verification-title">
-                <h3>Siste steg: Bekreft med SMS-kode</h3>
+                <h3>{{ copy.verificationLastStep }}</h3>
                 <p>
-                  Vi har sendt en verifiseringskode til <strong>{{ offerProposal.clientPhoneNumber }}</strong>
+                  {{ copy.verificationSentPrefix }} <strong>{{ offerProposal.clientPhoneNumber }}</strong>
                 </p>
               </div>
             </div>
 
             <div class="verification-body">
               <div class="code-input-container">
-                <label for="verification-code">Skriv inn koden fra SMS:</label>
+                <label for="verification-code">{{ copy.verificationCodeLabel }}</label>
                 <input
                   id="verification-code"
                   v-model="verificationCode"
                   type="text"
-                  placeholder="Skriv inn 6-sifret kode"
+                  :placeholder="copy.verificationCodePlaceholder"
                   maxlength="6"
                   class="verification-code-input"
                 />
@@ -135,7 +135,7 @@
                   :disabled="!verificationCode || isSubmitting"
                   @click="acceptOffer"
                 >
-                  <span class="btn-text">Fullfør</span>
+                  <span class="btn-text">{{ copy.completeButton }}</span>
                   <span class="btn-icon">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -160,13 +160,13 @@
                 </button>
 
                 <div class="resend-container">
-                  <span>Ikke mottatt kode?</span>
+                  <span>{{ copy.notReceivedCode }}</span>
                   <button
                     class="btn-resend"
                     :disabled="isSubmitting"
                     @click="sendVerification"
                   >
-                    Send kode på nytt
+                    {{ copy.resendCode }}
                   </button>
                 </div>
                 <div
@@ -185,8 +185,8 @@
           class="document-section acceptance-confirmed"
         >
           <div class="success-message">
-            <h2>Ordren er bekreftet!</h2>
-            <p>Vi vil kontakte deg snart for å starte prosessen.</p>
+            <h2>{{ copy.orderConfirmedTitle }}</h2>
+            <p>{{ copy.orderConfirmedText }}</p>
           </div>
         </div>
       </OfferDocument>
@@ -203,8 +203,8 @@
       v-else-if="error"
       class="error-container"
     >
-      <h2>Tilbudet er utløpt</h2>
-      <p>Vennligst kontakt oss for å få et nytt tilbud.</p>
+      <h2>{{ copy.offerExpiredTitle }}</h2>
+      <p>{{ copy.offerExpiredText }}</p>
     </div>
 
     <!-- Terms Modal -->
@@ -242,6 +242,55 @@ export default {
     };
   },
   computed: {
+    copy() {
+      return this.isCh
+        ? {
+            confirmReadIntro: "Ich bestätige, dass ich die Bestellung gelesen und",
+            termsLink: "die Vertragsbedingungen der Okam AG",
+            confirmReadOutro: "verstanden habe.",
+            confirmButton: "Bestätigen",
+            mustAcceptTerms: "Sie müssen die Geschäftsbedingungen akzeptieren, bevor Sie fortfahren können",
+            verificationLastStep: "Letzter Schritt: Mit SMS-Code bestätigen",
+            verificationSentPrefix: "Wir haben einen Bestätigungscode gesendet an",
+            verificationCodeLabel: "Geben Sie den Code aus der SMS ein:",
+            verificationCodePlaceholder: "6-stelligen Code eingeben",
+            completeButton: "Abschliessen",
+            notReceivedCode: "Code nicht erhalten?",
+            resendCode: "Code erneut senden",
+            orderConfirmedTitle: "Die Bestellung ist bestätigt!",
+            orderConfirmedText: "Wir werden uns in Kürze bei Ihnen melden, um den Prozess zu starten.",
+            offerExpiredTitle: "Das Angebot ist abgelaufen",
+            offerExpiredText: "Bitte kontaktieren Sie uns, um ein neues Angebot zu erhalten.",
+            errorNoOrderNumber: "Keine Bestellnummer angegeben",
+            errorCouldNotLoad: "Bestellung konnte nicht geladen werden",
+            errorCouldNotSendCodeRetry: "Bestätigungscode konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.",
+            errorCouldNotSendCode: "Bestätigungscode konnte nicht gesendet werden.",
+            errorWrongCode: "Falscher Bestätigungscode. Bitte versuchen Sie es erneut.",
+          }
+        : {
+            confirmReadIntro: "Jeg bekrefter at jeg har lest gjennom ordren og forstått",
+            termsLink: "Okam AS sine avtalevilkår",
+            confirmReadOutro: ".",
+            confirmButton: "Bekreft",
+            mustAcceptTerms: "Du må godta vilkårene og betingelsene før du kan fortsette",
+            verificationLastStep: "Siste steg: Bekreft med SMS-kode",
+            verificationSentPrefix: "Vi har sendt en verifiseringskode til",
+            verificationCodeLabel: "Skriv inn koden fra SMS:",
+            verificationCodePlaceholder: "Skriv inn 6-sifret kode",
+            completeButton: "Fullfør",
+            notReceivedCode: "Ikke mottatt kode?",
+            resendCode: "Send kode på nytt",
+            orderConfirmedTitle: "Ordren er bekreftet!",
+            orderConfirmedText: "Vi vil kontakte deg snart for å starte prosessen.",
+            offerExpiredTitle: "Tilbudet er utløpt",
+            offerExpiredText: "Vennligst kontakt oss for å få et nytt tilbud.",
+            errorNoOrderNumber: "Ingen ordrenummer oppgitt",
+            errorCouldNotLoad: "Kunne ikke laste ordren",
+            errorCouldNotSendCodeRetry: "Kunne ikke sende verifiseringskode. Vennligst prøv igjen senere.",
+            errorCouldNotSendCode: "Kunne ikke sende verifiseringskode.",
+            errorWrongCode: "Feil verifiseringskode. Vennligst prøv igjen.",
+          };
+    },
     totalMonthlyFee() {
       if (!this.offerProposal || !this.offerProposal.lineItems) {
         return 0;
@@ -286,7 +335,7 @@ export default {
       const code = this.$route.params.code;
 
       if (!code) {
-        this.error = "Ingen ordrenummer oppgitt";
+        this.error = this.copy.errorNoOrderNumber;
         this.loading = false;
         return;
       }
@@ -301,7 +350,7 @@ export default {
       }
     } catch (error) {
       console.error("Error fetching offer proposal:", error);
-      this.error = error.message || "Kunne ikke laste ordren";
+      this.error = error.message || this.copy.errorCouldNotLoad;
     } finally {
       this.loading = false;
     }
@@ -337,11 +386,11 @@ export default {
         if (success) {
           this.verificationSent = true;
         } else {
-          this.errorMessage = "Kunne ikke sende verifiseringskode. Vennligst prøv igjen senere.";
+          this.errorMessage = this.copy.errorCouldNotSendCodeRetry;
           this.showError = true;
         }
       } catch (error) {
-        this.errorMessage = error.message || "Kunne ikke sende verifiseringskode.";
+        this.errorMessage = error.message || this.copy.errorCouldNotSendCode;
         this.showError = true;
       } finally {
         this.scrollToBottom();
@@ -375,7 +424,7 @@ export default {
       } catch (error) {
         this.scrollToBottom();
         console.error("Error accepting offer:", error);
-        this.errorMessage = "Feil verifiseringskode. Vennligst prøv igjen.";
+        this.errorMessage = this.copy.errorWrongCode;
         this.showError = true;
       } finally {
         this.isSubmitting = false;

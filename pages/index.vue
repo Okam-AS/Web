@@ -7,15 +7,15 @@
           <div class="big-teaser__content">
             <img
               src="~/assets/UI/front-page.png"
-              alt="Okam bestillingsplattform illustrasjon"
+              :alt="copy.heroImageAlt"
               width="360"
               height="360"
             />
           </div>
 
           <div class="big-teaser__content">
-            <h1 class="heading-1">Få din egen bestillingsapp</h1>
-            <p class="big-teaser__description">Bli en del av Okam appen eller få din egen bestillingsapp</p>
+            <h1 class="heading-1">{{ copy.heroTitle }}</h1>
+            <p class="big-teaser__description">{{ copy.heroDescription }}</p>
             <div class="big-teaser__links">
               <a
                 class="ga-ios-download"
@@ -36,25 +36,32 @@
                   src="~/assets/UI/googleplay-btn.png"
               /></a>
             </div>
+            <p
+              v-if="isCh"
+              class="ch-payments"
+            >
+              <span class="ch-payments__badge">TWINT</span>
+              Ihre Gäste bezahlen mit TWINT, Karte, Apple Pay und Google Pay.
+            </p>
           </div>
         </div>
       </div>
 
       <div class="testimonials-seksjon">
         <div class="container">
-          <h2 class="seksjons-tittel">Våre kunder sier</h2>
+          <h2 class="seksjons-tittel">{{ copy.testimonialsTitle }}</h2>
 
           <div class="featured-testimonial">
             <div class="featured-testimonial-content">
               <div class="featured-quote-only">
-                <p class="testimonial-sitat">"Vi har satset på vår egen app, og kan trygt si at det har vært en suksess. Vi sparer tid og penger, har bedre kontroll, og kundene våre elsker den nye løsningen."</p>
+                <p class="testimonial-sitat">{{ copy.featuredQuote }}</p>
                 <div class="testimonial-info">
                   <p class="testimonial-bedrift">- Jungel Pizza</p>
                 </div>
               </div>
               <img
                 src="~/assets/UI/jungelpizza/screenshots.png"
-                alt="Skjermbilder av Jungel Pizza sin bestillingsapp"
+                :alt="copy.featuredImageAlt"
                 class="featured-image-large"
               />
             </div>
@@ -62,7 +69,7 @@
 
           <div class="testimonials-rutenett">
             <div
-              v-for="testimonial in testimonials"
+              v-for="testimonial in copy.testimonials"
               :key="testimonial.bedrift"
               class="testimonial-kort"
             >
@@ -79,8 +86,8 @@
 
       <div class="demo-seksjon">
         <div class="container">
-          <h2 class="seksjons-tittel">Så enkelt mottar du bestillinger</h2>
-          <p class="demo-beskrivelse">Bonger kan printes automatisk for travle kjøkken 🖨️</p>
+          <h2 class="seksjons-tittel">{{ copy.demoTitle }}</h2>
+          <p class="demo-beskrivelse">{{ copy.demoDescription }}</p>
           <div class="demo-video-wrapper">
             <video ref="demoVideo" autoplay muted loop playsinline @loadedmetadata="onVideoLoaded">
               <source src="/videos/ordre-fast.mp4" type="video/mp4" />
@@ -97,13 +104,13 @@
 
       <div class="app-rating-seksjon">
         <div class="container">
-          <h2 class="app-rating-tittel">Vi er stolte av å levere høy kvalitet!</h2>
+          <h2 class="app-rating-tittel">{{ copy.appRatingTitle }}</h2>
           <div class="app-rating-content">
             <div class="app-showcase">
               <div class="app-item">
                 <img
                   src="~/static/okam-appicon.png"
-                  alt="Okam App Icon"
+                  :alt="copy.okamAppIconAlt"
                   class="app-icon"
                 />
                 <div class="app-rating">
@@ -120,7 +127,7 @@
               <div class="app-item">
                 <img
                   src="~/static/jungel-appicon.png"
-                  alt="Jungel App Icon"
+                  :alt="copy.jungelAppIconAlt"
                   class="app-icon"
                 />
                 <div class="app-rating">
@@ -135,17 +142,17 @@
                 </div>
               </div>
             </div>
-            <p class="volume-text">Med tusenvis av bestillinger håndtert hver måned!</p>
+            <p class="volume-text">{{ copy.volumeText }}</p>
           </div>
         </div>
       </div>
 
       <div class="funksjoner-seksjon">
         <div class="container">
-          <h2 class="seksjons-tittel">Dette er noe av det du får:</h2>
+          <h2 class="seksjons-tittel">{{ copy.featuresTitle }}</h2>
           <div class="funksjoner-rutenett">
             <div
-              v-for="funksjon in funksjoner"
+              v-for="funksjon in copy.funksjoner"
               :key="funksjon.tittel"
               class="funksjons-kort"
             >
@@ -165,10 +172,10 @@
 
       <div class="fordeler-seksjon">
         <div class="container">
-          <h2 class="seksjons-tittel">Hvorfor velge oss?</h2>
+          <h2 class="seksjons-tittel">{{ copy.benefitsTitle }}</h2>
           <div class="fordeler-rutenett">
             <div
-              v-for="fordel in fordeler"
+              v-for="fordel in copy.fordeler"
               :key="fordel.tittel"
               class="fordel-kort"
             >
@@ -195,9 +202,9 @@
             v-if="!messageSent"
             class="registrering-skjema"
           >
-            <h2 class="seksjons-tittel">Book en uforpliktende demo</h2>
+            <h2 class="seksjons-tittel">{{ copy.formTitle }}</h2>
             <div class="skjema-felt">
-              <label>Navn på selskap</label>
+              <label>{{ copy.labelCompany }}</label>
               <input
                 v-model="storeName"
                 type="text"
@@ -207,11 +214,11 @@
                 v-if="showValidation && !storeName.length"
                 class="validation-message"
               >
-                Vennligst fyll inn navn på selskap
+                {{ copy.validationCompany }}
               </p>
             </div>
             <div class="skjema-felt">
-              <label>Navn på kontaktperson</label>
+              <label>{{ copy.labelContact }}</label>
               <input
                 v-model="userContactName"
                 type="text"
@@ -221,18 +228,18 @@
                 v-if="showValidation && !userContactName.length"
                 class="validation-message"
               >
-                Vennligst fyll inn navn på kontaktperson
+                {{ copy.validationContact }}
               </p>
             </div>
             <div class="skjema-felt">
-              <label>Hvordan ønsker du å bli kontaktet?</label>
+              <label>{{ copy.labelContactPreference }}</label>
               <select v-model="contactPreference">
-                <option value="phone">Ring meg</option>
-                <option value="email">Send meg e-post</option>
+                <option value="phone">{{ copy.optionPhone }}</option>
+                <option value="email">{{ copy.optionEmail }}</option>
               </select>
             </div>
             <div class="skjema-felt">
-              <label>Telefonnummer</label>
+              <label>{{ copy.labelPhone }}</label>
               <input
                 v-model="userPhone"
                 type="text"
@@ -243,11 +250,11 @@
                 v-if="showValidation && contactPreference === 'phone' && !userPhone.trim().length"
                 class="validation-message"
               >
-                Vennligst fyll inn telefonnummer
+                {{ copy.validationPhone }}
               </p>
             </div>
             <div class="skjema-felt">
-              <label>E-post</label>
+              <label>{{ copy.labelEmail }}</label>
               <input
                 v-model="userEmail"
                 type="email"
@@ -258,7 +265,7 @@
                 v-if="showValidation && contactPreference === 'email' && !userEmail.trim().length"
                 class="validation-message"
               >
-                Vennligst fyll inn e-post
+                {{ copy.validationEmail }}
               </p>
             </div>
             <div class="skjema-handling">
@@ -267,7 +274,7 @@
                 class="handling-knapp"
                 @click="submitFeedback"
               >
-                Book demo
+                {{ copy.submitButton }}
               </button>
             </div>
           </div>
@@ -276,9 +283,9 @@
             class="registrering-bekreftelse"
           >
             <p>
-              Takk for din interesse! Vi kontakter deg
-              {{ contactPreference === "phone" ? "på telefon" : "på e-post" }}
-              snarest.
+              {{ copy.confirmationPrefix }}
+              {{ contactPreference === "phone" ? copy.confirmationPhone : copy.confirmationEmail }}
+              {{ copy.confirmationSuffix }}
             </p>
           </div>
         </div>
@@ -295,109 +302,12 @@ import PageFooter from "~/components/organisms/PageFooter.vue";
 export default {
   components: { PageHeader, PageFooter },
   data: () => ({
-    funksjoner: [
-      {
-        tittel: "Skreddersydd bestillingsapp",
-        ikon: "smartphone",
-        beskrivelse: "Vi lager en komplett mobilapp med ditt merke, logo og design som kundene kan laste ned fra App Store og Google Play",
-      },
-      {
-        tittel: "Nettbestilling",
-        ikon: "language",
-        beskrivelse: "Komplett nettside for bestillinger som fungerer på alle enheter - ingen app-nedlasting nødvendig",
-      },
-      {
-        tittel: "Admin-dashboard",
-        ikon: "settings",
-        beskrivelse: "Kraftig administrasjonsverktøy hvor du enkelt kan håndtere bestillinger, oppdatere meny og følge salgsstatistikk",
-      },
-      {
-        tittel: "Integrert levering",
-        ikon: "delivery_dining",
-        beskrivelse: "Sømløs integrasjon med leveringspartnere som Wolt for effektiv hjemlevering til dine kunder",
-      },
-      {
-        tittel: "Kundelojalitet",
-        ikon: "card_giftcard",
-        beskrivelse: "Innebygde bonusprogram og cashback som holder kundene dine engasjerte og kommer tilbake",
-      },
-      {
-        tittel: "QR-bordbestilling",
-        ikon: "qr_code_scanner",
-        beskrivelse: "QR-kode løsning som lar gjester bestille direkte fra bordet uten å vente på servitør",
-      },
-      {
-        tittel: "Regnskapsintegrasjon",
-        ikon: "account_balance",
-        beskrivelse: "Automatisk import til regnskapssystemet, spar tid og reduser feil ved manuell dataregistrering",
-      },
-      {
-        tittel: "AI-analyse av data",
-        ikon: "psychology",
-        beskrivelse: "Få innsikt i salg og kundemønstre med kunstig intelligens som analyserer dine data automatisk",
-      },
-      {
-        tittel: "Alt i én app",
-        ikon: "all_inclusive",
-        beskrivelse: "Styr alle avdelinger og bestillinger fra nettside, Okam og Wolt i én app",
-      },
-    ],
-    fordeler: [
-      {
-        tittel: "Dokumentert vekst",
-        ikon: "trending_up",
-        beskrivelse: "Flere av våre restauranter har opplevd 20-40% økning i bestillingsvolum første år etter lansering.",
-      },
-      {
-        tittel: "Direkte kundeforhold",
-        ikon: "favorite",
-        beskrivelse: "Bygg sterke relasjoner med dine kunder gjennom din egen app - ikke gjennom en tredjepartsplattform.",
-      },
-      {
-        tittel: "Effektiv drift",
-        ikon: "bolt",
-        beskrivelse: "Automatiser bestillingsflyt, reduser telefontid og eliminer feil fra manuell ordreregistrering.",
-      },
-      {
-        tittel: "Verdifull data",
-        ikon: "bar_chart",
-        beskrivelse: "Få detaljert innsikt i kundepreferanser, bestillingsmønstre og lønnsomhet for å ta bedre forretningsbeslutninger.",
-      },
-      {
-        tittel: "Norsk kvalitet og støtte",
-        ikon: "verified",
-        beskrivelse: "Utviklet i Norge for norske restauranter med personlig oppfølging og teknisk support.",
-      },
-      {
-        tittel: "Enkel administrasjon",
-        ikon: "devices",
-        beskrivelse: "Håndter alt fra din iPad, telefon eller datamaskin - hvor som helst, når som helst.",
-      },
-    ],
     storeName: "",
     userContactName: "",
     userPhone: "",
     userEmail: "",
     contactPreference: "phone",
     messageSent: false,
-    testimonials: [
-      {
-        bedrift: "Stolpen Restaurant",
-        sitat: "Jeg kunne ikke ha tenkt meg å drive virksomheten uten appen nå.",
-      },
-      {
-        bedrift: "Hotpot Oslo",
-        sitat: "Veldig enkelt å motta bestillinger, og kundene er veldig fornøyde.",
-      },
-      {
-        bedrift: "Lierbyen Sushi",
-        sitat: "Flinke på det de gjør, veldig rask oppfølging på alle spørsmål, kan absolutt anbefale til andre",
-      },
-      {
-        bedrift: "Circle K Skei",
-        sitat: "Enkelt, brukervennlig og driftsikkert!",
-      },
-    ],
     showValidation: false,
     videoProgress: 0,
     isSeeking: false,
@@ -419,11 +329,292 @@ export default {
     if (this._rafId) cancelAnimationFrame(this._rafId);
   },
 
+  head() {
+    if (this.isCh) {
+      return {
+        title: "Okam – Ihre eigene Bestell-App für Restaurants in der Schweiz",
+        meta: [
+          {
+            hid: "description",
+            name: "description",
+            content:
+              "Okam ist die All-in-One Bestellplattform für Schweizer Restaurants und Kleinbetriebe: eigener Webshop, App, Dashboard und Lieferung – ohne Provisionen.",
+          },
+        ],
+      };
+    }
+    return {};
+  },
+
   computed: {
     isFormValid() {
       const hasBasicInfo = this.storeName.length > 0 && this.userContactName.length > 0;
       const hasValidContact = this.contactPreference === "phone" ? this.userPhone.trim().length > 0 : this.userEmail.trim().length > 0;
       return hasBasicInfo && hasValidContact;
+    },
+    copy() {
+      if (this.isCh) {
+        return {
+          heroImageAlt: "Okam Bestell-App für Restaurants",
+          heroTitle: "Ihre eigene Bestell-App",
+          heroDescription: "Werden Sie Teil der Okam App oder erhalten Sie Ihre eigene Bestell-App",
+          testimonialsTitle: "Das sagen unsere Kunden",
+          featuredQuote: "\"Wir haben auf unsere eigene App gesetzt und können mit Überzeugung sagen, dass es ein Erfolg war. Wir sparen Zeit und Geld, haben mehr Kontrolle, und unsere Gäste lieben die neue Lösung.\"",
+          featuredImageAlt: "Screenshots der Bestell-App von Jungel Pizza",
+          demoTitle: "So einfach erhalten Sie Bestellungen",
+          demoDescription: "Bons können für die Küche bei Stosszeiten automatisch gedruckt werden 🖨️",
+          appRatingTitle: "Wir sind stolz darauf, hohe Qualität zu liefern!",
+          okamAppIconAlt: "Okam App-Icon",
+          jungelAppIconAlt: "Jungel App-Icon",
+          volumeText: "Mit Tausenden von Bestellungen, die jeden Monat verarbeitet werden!",
+          featuresTitle: "Das ist alles dabei:",
+          benefitsTitle: "Warum Okam?",
+          formTitle: "Buchen Sie eine unverbindliche Demo",
+          labelCompany: "Name des Betriebs",
+          validationCompany: "Bitte geben Sie den Namen Ihres Betriebs ein",
+          labelContact: "Name der Kontaktperson",
+          validationContact: "Bitte geben Sie eine Kontaktperson ein",
+          labelContactPreference: "Wie möchten Sie kontaktiert werden?",
+          optionPhone: "Rufen Sie mich an",
+          optionEmail: "Schreiben Sie mir eine E-Mail",
+          labelPhone: "Telefonnummer",
+          validationPhone: "Bitte geben Sie eine Telefonnummer ein",
+          labelEmail: "E-Mail",
+          validationEmail: "Bitte geben Sie eine E-Mail-Adresse ein",
+          submitButton: "Demo buchen",
+          confirmationPrefix: "Vielen Dank für Ihr Interesse! Wir melden uns",
+          confirmationPhone: "telefonisch",
+          confirmationEmail: "per E-Mail",
+          confirmationSuffix: "so schnell wie möglich bei Ihnen.",
+          funksjoner: [
+            {
+              tittel: "Massgeschneiderte Bestell-App",
+              ikon: "smartphone",
+              beskrivelse: "Wir erstellen eine komplette mobile App mit Ihrer Marke, Ihrem Logo und Design, die Ihre Kunden im App Store und bei Google Play herunterladen können",
+            },
+            {
+              tittel: "Online-Bestellung",
+              ikon: "language",
+              beskrivelse: "Eine komplette Bestellseite, die auf jedem Gerät funktioniert – ganz ohne App-Download",
+            },
+            {
+              tittel: "Admin-Dashboard",
+              ikon: "settings",
+              beskrivelse: "Ein leistungsstarkes Verwaltungswerkzeug, mit dem Sie Bestellungen verwalten, die Speisekarte aktualisieren und Verkaufszahlen verfolgen können",
+            },
+            {
+              tittel: "Lieferung integriert",
+              ikon: "delivery_dining",
+              beskrivelse: "Nahtlose Anbindung an Lieferpartner für eine effiziente Auslieferung an Ihre Gäste",
+            },
+            {
+              tittel: "Treueprogramm",
+              ikon: "card_giftcard",
+              beskrivelse: "Integrierte Bonus- und Cashback-Programme, die Ihre Gäste engagiert halten und immer wieder zurückbringen",
+            },
+            {
+              tittel: "QR-Bestellung am Tisch",
+              ikon: "qr_code_scanner",
+              beskrivelse: "Eine QR-Code-Lösung, mit der Ihre Gäste direkt am Tisch bestellen, ohne auf die Bedienung zu warten",
+            },
+            {
+              tittel: "Buchhaltungsintegration",
+              ikon: "account_balance",
+              beskrivelse: "Automatischer Import in Ihr Buchhaltungssystem – sparen Sie Zeit und reduzieren Sie Fehler bei der manuellen Dateneingabe",
+            },
+            {
+              tittel: "KI-Analyse Ihrer Daten",
+              ikon: "psychology",
+              beskrivelse: "Gewinnen Sie Einblicke in Umsatz und Kundenverhalten mit künstlicher Intelligenz, die Ihre Daten automatisch auswertet",
+            },
+            {
+              tittel: "Alles in einer App",
+              ikon: "all_inclusive",
+              beskrivelse: "Steuern Sie alle Abteilungen und Bestellungen aus Webshop, Okam und Lieferpartnern in einer App",
+            },
+          ],
+          fordeler: [
+            {
+              tittel: "Dokumentiertes Wachstum",
+              ikon: "trending_up",
+              beskrivelse: "Mehrere unserer Restaurants verzeichneten im ersten Jahr nach dem Start eine Steigerung des Bestellvolumens um 20–40 %.",
+            },
+            {
+              tittel: "Direkte Kundenbeziehung",
+              ikon: "favorite",
+              beskrivelse: "Bauen Sie starke Beziehungen zu Ihren Gästen über Ihre eigene App auf – nicht über eine Drittanbieter-Plattform.",
+            },
+            {
+              tittel: "Effizienter Betrieb",
+              ikon: "bolt",
+              beskrivelse: "Automatisieren Sie den Bestellablauf, reduzieren Sie Telefonzeit und vermeiden Sie Fehler aus der manuellen Erfassung.",
+            },
+            {
+              tittel: "Wertvolle Daten",
+              ikon: "bar_chart",
+              beskrivelse: "Erhalten Sie detaillierte Einblicke in Kundenpräferenzen, Bestellverhalten und Rentabilität, um bessere Geschäftsentscheidungen zu treffen.",
+            },
+            {
+              tittel: "Schweizer Qualität und Support",
+              ikon: "verified",
+              beskrivelse: "Entwickelt für Schweizer Restaurants mit persönlicher Betreuung und technischem Support auf Deutsch.",
+            },
+            {
+              tittel: "Einfache Verwaltung",
+              ikon: "devices",
+              beskrivelse: "Steuern Sie alles vom iPad, Telefon oder Computer – jederzeit und überall.",
+            },
+          ],
+          testimonials: [
+            {
+              bedrift: "Stolpen Restaurant",
+              sitat: "Ich könnte mir nicht mehr vorstellen, den Betrieb ohne die App zu führen.",
+            },
+            {
+              bedrift: "Hotpot Oslo",
+              sitat: "Sehr einfach, Bestellungen zu erhalten, und die Gäste sind sehr zufrieden.",
+            },
+            {
+              bedrift: "Lierbyen Sushi",
+              sitat: "Sie verstehen ihr Handwerk, reagieren sehr schnell auf alle Fragen – absolut weiterzuempfehlen.",
+            },
+            {
+              bedrift: "Circle K Skei",
+              sitat: "Einfach, benutzerfreundlich und zuverlässig im Betrieb!",
+            },
+          ],
+        };
+      }
+      return {
+        heroImageAlt: "Okam bestillingsplattform illustrasjon",
+        heroTitle: "Få din egen bestillingsapp",
+        heroDescription: "Bli en del av Okam appen eller få din egen bestillingsapp",
+        testimonialsTitle: "Våre kunder sier",
+        featuredQuote: "\"Vi har satset på vår egen app, og kan trygt si at det har vært en suksess. Vi sparer tid og penger, har bedre kontroll, og kundene våre elsker den nye løsningen.\"",
+        featuredImageAlt: "Skjermbilder av Jungel Pizza sin bestillingsapp",
+        demoTitle: "Så enkelt mottar du bestillinger",
+        demoDescription: "Bonger kan printes automatisk for travle kjøkken 🖨️",
+        appRatingTitle: "Vi er stolte av å levere høy kvalitet!",
+        okamAppIconAlt: "Okam App Icon",
+        jungelAppIconAlt: "Jungel App Icon",
+        volumeText: "Med tusenvis av bestillinger håndtert hver måned!",
+        featuresTitle: "Dette er noe av det du får:",
+        benefitsTitle: "Hvorfor velge oss?",
+        formTitle: "Book en uforpliktende demo",
+        labelCompany: "Navn på selskap",
+        validationCompany: "Vennligst fyll inn navn på selskap",
+        labelContact: "Navn på kontaktperson",
+        validationContact: "Vennligst fyll inn navn på kontaktperson",
+        labelContactPreference: "Hvordan ønsker du å bli kontaktet?",
+        optionPhone: "Ring meg",
+        optionEmail: "Send meg e-post",
+        labelPhone: "Telefonnummer",
+        validationPhone: "Vennligst fyll inn telefonnummer",
+        labelEmail: "E-post",
+        validationEmail: "Vennligst fyll inn e-post",
+        submitButton: "Book demo",
+        confirmationPrefix: "Takk for din interesse! Vi kontakter deg",
+        confirmationPhone: "på telefon",
+        confirmationEmail: "på e-post",
+        confirmationSuffix: "snarest.",
+        funksjoner: [
+          {
+            tittel: "Skreddersydd bestillingsapp",
+            ikon: "smartphone",
+            beskrivelse: "Vi lager en komplett mobilapp med ditt merke, logo og design som kundene kan laste ned fra App Store og Google Play",
+          },
+          {
+            tittel: "Nettbestilling",
+            ikon: "language",
+            beskrivelse: "Komplett nettside for bestillinger som fungerer på alle enheter - ingen app-nedlasting nødvendig",
+          },
+          {
+            tittel: "Admin-dashboard",
+            ikon: "settings",
+            beskrivelse: "Kraftig administrasjonsverktøy hvor du enkelt kan håndtere bestillinger, oppdatere meny og følge salgsstatistikk",
+          },
+          {
+            tittel: "Integrert levering",
+            ikon: "delivery_dining",
+            beskrivelse: "Sømløs integrasjon med leveringspartnere som Wolt for effektiv hjemlevering til dine kunder",
+          },
+          {
+            tittel: "Kundelojalitet",
+            ikon: "card_giftcard",
+            beskrivelse: "Innebygde bonusprogram og cashback som holder kundene dine engasjerte og kommer tilbake",
+          },
+          {
+            tittel: "QR-bordbestilling",
+            ikon: "qr_code_scanner",
+            beskrivelse: "QR-kode løsning som lar gjester bestille direkte fra bordet uten å vente på servitør",
+          },
+          {
+            tittel: "Regnskapsintegrasjon",
+            ikon: "account_balance",
+            beskrivelse: "Automatisk import til regnskapssystemet, spar tid og reduser feil ved manuell dataregistrering",
+          },
+          {
+            tittel: "AI-analyse av data",
+            ikon: "psychology",
+            beskrivelse: "Få innsikt i salg og kundemønstre med kunstig intelligens som analyserer dine data automatisk",
+          },
+          {
+            tittel: "Alt i én app",
+            ikon: "all_inclusive",
+            beskrivelse: "Styr alle avdelinger og bestillinger fra nettside, Okam og Wolt i én app",
+          },
+        ],
+        fordeler: [
+          {
+            tittel: "Dokumentert vekst",
+            ikon: "trending_up",
+            beskrivelse: "Flere av våre restauranter har opplevd 20-40% økning i bestillingsvolum første år etter lansering.",
+          },
+          {
+            tittel: "Direkte kundeforhold",
+            ikon: "favorite",
+            beskrivelse: "Bygg sterke relasjoner med dine kunder gjennom din egen app - ikke gjennom en tredjepartsplattform.",
+          },
+          {
+            tittel: "Effektiv drift",
+            ikon: "bolt",
+            beskrivelse: "Automatiser bestillingsflyt, reduser telefontid og eliminer feil fra manuell ordreregistrering.",
+          },
+          {
+            tittel: "Verdifull data",
+            ikon: "bar_chart",
+            beskrivelse: "Få detaljert innsikt i kundepreferanser, bestillingsmønstre og lønnsomhet for å ta bedre forretningsbeslutninger.",
+          },
+          {
+            tittel: "Norsk kvalitet og støtte",
+            ikon: "verified",
+            beskrivelse: "Utviklet i Norge for norske restauranter med personlig oppfølging og teknisk support.",
+          },
+          {
+            tittel: "Enkel administrasjon",
+            ikon: "devices",
+            beskrivelse: "Håndter alt fra din iPad, telefon eller datamaskin - hvor som helst, når som helst.",
+          },
+        ],
+        testimonials: [
+          {
+            bedrift: "Stolpen Restaurant",
+            sitat: "Jeg kunne ikke ha tenkt meg å drive virksomheten uten appen nå.",
+          },
+          {
+            bedrift: "Hotpot Oslo",
+            sitat: "Veldig enkelt å motta bestillinger, og kundene er veldig fornøyde.",
+          },
+          {
+            bedrift: "Lierbyen Sushi",
+            sitat: "Flinke på det de gjør, veldig rask oppfølging på alle spørsmål, kan absolutt anbefale til andre",
+          },
+          {
+            bedrift: "Circle K Skei",
+            sitat: "Enkelt, brukervennlig og driftsikkert!",
+          },
+        ],
+      };
     },
   },
 

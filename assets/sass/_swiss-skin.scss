@@ -1,0 +1,83 @@
+/* ------------------------------------------------------------------ *
+ *  Swiss Edition skin — "Premium Swiss Minimal"
+ *  Applied ONLY when the runtime market is Swiss (body.okam-ch, toggled
+ *  reactively by the market switcher). Refines typography, whitespace and
+ *  surfaces in the International Typographic Style — keeps the green brand
+ *  and introduces no new colours. The Norwegian view is untouched.
+ *  `body.okam-ch …` intentionally out-specifies the components' scoped
+ *  styles so this is a skin, not a structural rewrite.
+ * ------------------------------------------------------------------ */
+
+body.okam-ch {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Confident, tightly-set headings (Swiss grotesque feel) */
+  h1, h2, h3,
+  .heading-1, .seksjons-tittel, .funksjons-tittel, .fordel-tittel,
+  .app-rating-tittel, .section-title, .hero__title, .cta__title {
+    letter-spacing: -0.022em;
+    line-height: 1.14;
+  }
+
+  /* Precise, generously-tracked labels */
+  label, .field-label, .form-label {
+    letter-spacing: 0.04em;
+  }
+  .eyebrow {
+    letter-spacing: 0.16em;
+  }
+
+  /* Airier reading rhythm */
+  p, li {
+    line-height: 1.72;
+  }
+
+  /* Crisp, restrained surfaces — tighter radii, flatter cards */
+  .cta-link, .btn, button, input, select, textarea {
+    border-radius: 6px;
+  }
+  .funksjons-kort, .testimonial-kort, .app-item {
+    box-shadow: none;
+    border: 1px solid #e9edf1;
+    border-radius: 8px;
+  }
+
+  /* Generous whitespace + a thin Swiss grid rhythm between sections */
+  .testimonials-seksjon,
+  .funksjoner-seksjon,
+  .registrering-seksjon,
+  .app-rating {
+    padding-top: 5.5rem;
+    padding-bottom: 5.5rem;
+    border-top: 1px solid #eef1f4;
+  }
+
+  /* Slightly tighter, editorial measure */
+  .container {
+    max-width: 1180px;
+  }
+
+  /* "We support TWINT" payment line in the hero (Swiss only) */
+  .ch-payments {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #64748b;
+    line-height: 1.5;
+  }
+  .ch-payments__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+    color: #fff;
+    font-weight: 800;
+    font-size: 0.72rem;
+    letter-spacing: 0.5px;
+    padding: 4px 8px;
+    border-radius: 5px;
+  }
+}

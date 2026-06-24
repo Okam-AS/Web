@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import { MutationName, ActionName } from '~/core/enums'
+import { markets, EDITION } from '~/config/edition'
 
 export const state = () => ({
   currentUser: {},
@@ -8,10 +9,15 @@ export const state = () => ({
   stores: [],
   cartIsLoading: false,
   selectedAdminStore: null,
+  // Runtime market: 'no' (Norwegian) | 'ch' (Swiss). Switchable live via the
+  // market switcher; persisted with the rest of the state to localStorage.
+  market: EDITION,
 })
 
 export const getters = {
   clientPlatformName: () => 'Web',
+  marketIsCh: state => state.market === 'ch',
+  marketConfig: state => markets[state.market] || markets.no,
   userIsLoggedIn: state => state.currentUser && state.currentUser.id,
   cartByStoreId (state) {
     return (storeId) => {

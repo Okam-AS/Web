@@ -6,22 +6,22 @@
         <div class="wrapper">
           <div class="success-message">
             <div class="success-content">
-              <p>Registreringen er fullført!</p>
-              <p class="sub-text">Du kan nå legge inn menyen din på admin.okam.no eller i Okam Admin-appen</p>
+              <p>{{ copy.completed }}</p>
+              <p class="sub-text">{{ copy.subText }}</p>
 
               <div class="action-buttons">
                 <a
-                  href="https://admin.okam.no"
+                  :href="copy.adminUrl"
                   target="_blank"
                   class="cta-link"
                 >
-                  Gå til admin.okam.no
+                  {{ copy.goToAdmin }}
                 </a>
                 <a
-                  href="https://okam.no/last-ned"
+                  :href="copy.downloadUrl"
                   class="cta-link secondary"
                 >
-                  Last ned Okam Admin-appen
+                  {{ copy.downloadApp }}
                 </a>
               </div>
             </div>
@@ -39,6 +39,27 @@ import PageFooter from "~/components/organisms/PageFooter.vue";
 
 export default {
   components: { PageHeader, PageFooter },
+  computed: {
+    copy() {
+      return this.isCh
+        ? {
+            completed: "Die Registrierung ist abgeschlossen!",
+            subText: "Sie können Ihre Speisekarte jetzt auf admin.okam-swiss.ch oder in der Okam Admin-App erfassen",
+            goToAdmin: "Zu admin.okam-swiss.ch",
+            downloadApp: "Okam Admin-App herunterladen",
+            adminUrl: "https://admin.okam-swiss.ch",
+            downloadUrl: "https://okam-swiss.ch/last-ned",
+          }
+        : {
+            completed: "Registreringen er fullført!",
+            subText: "Du kan nå legge inn menyen din på admin.okam.no eller i Okam Admin-appen",
+            goToAdmin: "Gå til admin.okam.no",
+            downloadApp: "Last ned Okam Admin-appen",
+            adminUrl: "https://admin.okam.no",
+            downloadUrl: "https://okam.no/last-ned",
+          };
+    },
+  },
 };
 </script>
 

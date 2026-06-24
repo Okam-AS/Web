@@ -5,129 +5,129 @@
       <div class="article">
         <div class="wrapper">
           <div class="element text-content">
-            <h1 class="heading-1 u-center">Priser</h1>
+            <h1 class="heading-1 u-center">{{ copy.heading }}</h1>
 
             <article class="page type-page status-publish">
               <div>
                 <div class="tiers">
                   <div class="tier">
-                    <h4>Gratis</h4>
+                    <h4>{{ copy.freeTitle }}</h4>
                     <p class="price">
-                      0 kr/mnd
-                      <span class="price-qualifier">Helt gratis inntil du omsetter for 5 000 kr/mnd via appen</span>
+                      {{ copy.freePrice }}
+                      <span class="price-qualifier">{{ copy.freeQualifier }}</span>
                     </p>
 
                     <div class="feature-list">
                       <div class="feature">
                         <span class="material-icons"> check_circle </span>
-                        <span class="feature-text"> Full tilgang til hele plattformen </span>
+                        <span class="feature-text"> {{ copy.freeFeature1 }} </span>
                       </div>
                       <div class="feature">
                         <span class="material-icons"> check_circle </span>
-                        <span class="feature-text"> Betaling med Vipps, kort, eller i kassen </span>
+                        <span class="feature-text"> {{ copy.freeFeature2 }} </span>
                       </div>
                       <div class="feature">
                         <span class="material-icons"> check_circle </span>
-                        <span class="feature-text"> Rapporter til regnskap </span>
+                        <span class="feature-text"> {{ copy.freeFeature3 }} </span>
                       </div>
                       <div class="feature">
                         <span class="material-icons"> check_circle </span>
-                        <span class="feature-text"> Ingen oppstartskostnad </span>
+                        <span class="feature-text"> {{ copy.freeFeature4 }} </span>
                       </div>
                     </div>
                     <FaqItem
-                      q="Les mer"
-                      a="Full tilgang til alle funksjoner helt gratis så lenge månedlig omsetning er under 5 000 kr. Inkluderer online betaling, rapportering og alt du trenger for å administrere butikken din."
+                      :q="copy.readMore"
+                      :a="copy.freeReadMore"
                     />
 
                     <div class="cta-wrapper">
                       <a
                         href="/registrer?price=0"
                         class="cta-link"
-                        >Kom i gang</a
+                        >{{ copy.getStarted }}</a
                       >
                     </div>
                   </div>
 
                   <div class="tier">
-                    <h4>Premium</h4>
+                    <h4>{{ copy.premiumTitle }}</h4>
                     <p class="price">
-                      1000 kr/mnd
-                      <span class="price-qualifier">Når du omsetter for mer enn 5 000 kr/mnd via appen</span>
+                      {{ copy.premiumPrice }}
+                      <span class="price-qualifier">{{ copy.premiumQualifier }}</span>
                     </p>
 
                     <div class="feature-list">
                       <div class="feature">
                         <span class="material-icons"> check_circle </span>
-                        <span class="feature-text"> Alt fra gratisversjonen </span>
+                        <span class="feature-text"> {{ copy.premiumFeature1 }} </span>
                       </div>
                       <div class="feature">
                         <span class="material-icons"> check_circle </span>
-                        <span class="feature-text"> Ubegrenset omsetning </span>
+                        <span class="feature-text"> {{ copy.premiumFeature2 }} </span>
                       </div>
                       <div class="feature">
                         <span class="material-icons"> check_circle </span>
-                        <span class="feature-text"> Prioritert support </span>
+                        <span class="feature-text"> {{ copy.premiumFeature3 }} </span>
                       </div>
                       <div class="feature">
                         <span class="material-icons"> check_circle </span>
-                        <span class="feature-text"> Wolt levering </span>
+                        <span class="feature-text"> {{ copy.premiumFeature4 }} </span>
                       </div>
                     </div>
 
                     <FaqItem
-                      q="Les mer"
-                      a="For bedrifter med over 5 000 kr i månedlig omsetning. Inkluderer alle funksjoner fra gratisversjonen, ubegrenset omsetning og prioritert support."
+                      :q="copy.readMore"
+                      :a="copy.premiumReadMore"
                     />
 
                     <div class="cta-wrapper">
                       <a
                         href="/registrer?price=1"
                         class="cta-link"
-                        >Kom i gang</a
+                        >{{ copy.getStarted }}</a
                       >
                     </div>
                   </div>
 
                   <div class="tier">
                     <div>
-                      <h4>Din egen app</h4>
+                      <h4>{{ copy.ownAppTitle }}</h4>
 
-                      <p class="price">Ta kontakt</p>
+                      <p class="price">{{ copy.ownAppPrice }}</p>
                       <div class="feature-list">
                         <div class="feature">
                           <span class="material-icons"> check_circle </span>
-                          <span class="feature-text"> Alt fra Premium </span>
+                          <span class="feature-text"> {{ copy.ownAppFeature1 }} </span>
                         </div>
                         <div class="feature">
                           <span class="material-icons"> check_circle </span>
-                          <span class="feature-text"> Egen merkevare-app for både iOS og Android, og på web. </span>
+                          <span class="feature-text"> {{ copy.ownAppFeature2 }} </span>
                         </div>
                       </div>
                     </div>
                     <div>
                       <FaqItem
-                        q="Les mer"
-                        a="Din helt egen app, med egen branding, inkludert alle funksjonene fra Premium. Tilgjengelig i AppStore og Google Play og på web."
+                        :q="copy.readMore"
+                        :a="copy.ownAppReadMore"
                       />
                     </div>
                     <div class="cta-wrapper">
                       <a
                         href="/registrer?price=2"
                         class="cta-link"
-                        >Kom i gang</a
+                        >{{ copy.getStarted }}</a
                       >
                     </div>
                   </div>
                 </div>
                 <p class="small-text">
-                  Alle priser er ekskl. mva. Les mer om våre vilkår
-                  <a href="/vilkar">her</a>.
+                  {{ copy.vatNoteBefore }}
+                  <a href="/vilkar">{{ copy.vatNoteLink }}</a>{{ copy.vatNoteAfter }}
                 </p>
 
                 <div>
-                  <h4>Utstyr</h4>
-                  <p>Okam fungerer med din egen telefon eller tablet, men dersom ønskelig kan du kjøpe eller leie iPad og printer av oss.</p>
+                  <h4>{{ copy.equipmentTitle }}</h4>
+                  <p>{{ copy.equipmentText }}</p>
                 </div>
               </div>
             </article>
@@ -148,6 +148,103 @@ export default {
     FaqItem,
     PageHeader,
     PageFooter,
+  },
+  head () {
+    return this.isCh
+      ? {
+          title: "Preise - Okam",
+          meta: [
+            {
+              hid: "description",
+              name: "description",
+              content:
+                "Faire und transparente Preise für Ihre Okam-Bestellplattform. Starten Sie gratis und wählen Sie das Abo, das zu Ihrem Betrieb passt.",
+            },
+          ],
+        }
+      : {};
+  },
+  computed: {
+    copy () {
+      return this.isCh
+        ? {
+            heading: "Preise",
+            getStarted: "Jetzt starten",
+            readMore: "Mehr erfahren",
+            freeTitle: "Gratis",
+            freePrice: "CHF 0/Monat",
+            freeQualifier:
+              "Komplett gratis, solange Ihr Umsatz über die App unter CHF 500/Monat liegt",
+            freeFeature1: "Voller Zugang zur gesamten Plattform",
+            freeFeature2: "Zahlung mit TWINT, Karte oder an der Kasse",
+            freeFeature3: "Berichte für die Buchhaltung",
+            freeFeature4: "Keine Startkosten",
+            freeReadMore:
+              "Voller Zugang zu allen Funktionen, komplett gratis, solange der monatliche Umsatz unter CHF 500 liegt. Inklusive Online-Zahlung, Berichten und allem, was Sie für die Verwaltung Ihres Geschäfts brauchen.",
+            premiumTitle: "Premium",
+            premiumPrice: "CHF 99/Monat",
+            premiumQualifier:
+              "Wenn Sie über die App mehr als CHF 500/Monat umsetzen",
+            premiumFeature1: "Alles aus der Gratisversion",
+            premiumFeature2: "Unbegrenzter Umsatz",
+            premiumFeature3: "Priorisierter Support",
+            premiumFeature4: "Lieferung",
+            premiumReadMore:
+              "Für Betriebe mit über CHF 500 monatlichem Umsatz. Inklusive aller Funktionen aus der Gratisversion, unbegrenztem Umsatz und priorisiertem Support.",
+            ownAppTitle: "Ihre eigene App",
+            ownAppPrice: "Kontaktieren Sie uns",
+            ownAppFeature1: "Alles aus Premium",
+            ownAppFeature2:
+              "Eigene Marken-App für iOS und Android sowie im Web.",
+            ownAppReadMore:
+              "Ihre ganz eigene App mit eigenem Branding, inklusive aller Funktionen aus Premium. Verfügbar im App Store, bei Google Play und im Web.",
+            vatNoteBefore:
+              "Alle Preise verstehen sich exkl. MwSt. Mehr über unsere Bedingungen erfahren Sie",
+            vatNoteLink: "hier",
+            vatNoteAfter: ".",
+            equipmentTitle: "Ausrüstung",
+            equipmentText:
+              "Okam funktioniert mit Ihrem eigenen Smartphone oder Tablet. Auf Wunsch können Sie iPad und Drucker bei uns kaufen oder mieten.",
+          }
+        : {
+            heading: "Priser",
+            getStarted: "Kom i gang",
+            readMore: "Les mer",
+            freeTitle: "Gratis",
+            freePrice: "0 kr/mnd",
+            freeQualifier:
+              "Helt gratis inntil du omsetter for 5 000 kr/mnd via appen",
+            freeFeature1: "Full tilgang til hele plattformen",
+            freeFeature2: "Betaling med Vipps, kort, eller i kassen",
+            freeFeature3: "Rapporter til regnskap",
+            freeFeature4: "Ingen oppstartskostnad",
+            freeReadMore:
+              "Full tilgang til alle funksjoner helt gratis så lenge månedlig omsetning er under 5 000 kr. Inkluderer online betaling, rapportering og alt du trenger for å administrere butikken din.",
+            premiumTitle: "Premium",
+            premiumPrice: "1000 kr/mnd",
+            premiumQualifier:
+              "Når du omsetter for mer enn 5 000 kr/mnd via appen",
+            premiumFeature1: "Alt fra gratisversjonen",
+            premiumFeature2: "Ubegrenset omsetning",
+            premiumFeature3: "Prioritert support",
+            premiumFeature4: "Wolt levering",
+            premiumReadMore:
+              "For bedrifter med over 5 000 kr i månedlig omsetning. Inkluderer alle funksjoner fra gratisversjonen, ubegrenset omsetning og prioritert support.",
+            ownAppTitle: "Din egen app",
+            ownAppPrice: "Ta kontakt",
+            ownAppFeature1: "Alt fra Premium",
+            ownAppFeature2:
+              "Egen merkevare-app for både iOS og Android, og på web.",
+            ownAppReadMore:
+              "Din helt egen app, med egen branding, inkludert alle funksjonene fra Premium. Tilgjengelig i AppStore og Google Play og på web.",
+            vatNoteBefore: "Alle priser er ekskl. mva. Les mer om våre vilkår",
+            vatNoteLink: "her",
+            vatNoteAfter: ".",
+            equipmentTitle: "Utstyr",
+            equipmentText:
+              "Okam fungerer med din egen telefon eller tablet, men dersom ønskelig kan du kjøpe eller leie iPad og printer av oss.",
+          };
+    },
   },
 };
 </script>

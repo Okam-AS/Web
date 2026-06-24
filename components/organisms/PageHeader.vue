@@ -36,14 +36,15 @@
         <!-- CTA Buttons -->
         <div class="header__cta">
           <a
+            v-if="!isCh"
             :href="startNowHref"
             class="btn btn--outline"
             >{{ startNowLabel }}</a
           >
           <a
-            href="https://shop.okam.no"
+            :href="orderHref"
             class="btn btn--blue"
-            >Bestill mat</a
+            >{{ orderLabel }}</a
           >
         </div>
 
@@ -86,14 +87,15 @@
             </ul>
             <div class="mobile-nav__cta">
               <a
+                v-if="!isCh"
                 :href="startNowHref"
                 class="btn btn--outline btn--full"
                 >{{ startNowLabel }}</a
               >
               <a
-                href="https://shop.okam.no"
+                :href="orderHref"
                 class="btn btn--blue btn--full"
-                >Bestill mat</a
+                >{{ orderLabel }}</a
               >
             </div>
           </nav>
@@ -108,15 +110,29 @@ export default {
   data: () => ({
     isMenuOpen: false,
     isScrolled: false,
-    links: [
-      { href: "/om-oss", title: "Om oss" },
-      { href: "/wolt", title: "Wolt" },
-      { href: "/priser", title: "Priser" },
-      { href: "/kontakt", title: "Kontakt" },
-    ],
   }),
 
   computed: {
+    links() {
+      if (this.isCh) {
+        return [
+          { href: "/priser", title: "Preise" },
+          { href: "/kontakt", title: "Kontakt" },
+        ];
+      }
+      return [
+        { href: "/om-oss", title: "Om oss" },
+        { href: "/wolt", title: "Wolt" },
+        { href: "/priser", title: "Priser" },
+        { href: "/kontakt", title: "Kontakt" },
+      ];
+    },
+    orderHref() {
+      return this.marketConfig.shopUrl;
+    },
+    orderLabel() {
+      return this.isCh ? "Jetzt bestellen" : "Bestill mat";
+    },
     startNowHref() {
       return this.$store.getters.userIsLoggedIn ? "/admin" : "/registrer";
     },

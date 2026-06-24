@@ -14,19 +14,19 @@
             </p>
 
             <h1 class="heading-1">
-              <template v-if="res && res.name"> Velkommen til {{ res.name }} </template>
-              <template v-else> Velkommen </template>
+              <template v-if="res && res.name"> {{ copy.welcomeTo }} {{ res.name }} </template>
+              <template v-else> {{ copy.welcome }} </template>
             </h1>
 
-            <p>Se meny og legge inn bestilling</p>
+            <p>{{ copy.seeMenu }}</p>
 
-            <p>Last ned og bruk Okam appen</p>
+            <p>{{ copy.downloadApp }}</p>
             <div class="big-teaser__links">
               <a
                 class="ga-ios-download"
                 href="https://apps.apple.com/no/app/okam/id1514296965"
                 ><img
-                  alt="Last ned Okam-appen på App Store"
+                  :alt="copy.appStoreAlt"
                   height="40"
                   width="120"
                   src="~assets/UI/appstore-btn.png"
@@ -35,7 +35,7 @@
                 class="ga-android-download"
                 href="https://play.google.com/store/apps/details?id=no.okam.consumer"
                 ><img
-                  alt="Last ned Okam-appen på Google Play"
+                  :alt="copy.googlePlayAlt"
                   height="40"
                   width="130"
                   src="~assets/UI/googleplay-btn.png"
@@ -45,7 +45,7 @@
               v-if="showWebshopUrl"
               style="margin-top: 2em"
             >
-              <a :href="webshopUrl">Eller fortsett i nettleseren</a>
+              <a :href="webshopUrl">{{ copy.continueInBrowser }}</a>
             </p>
           </div>
         </div>
@@ -77,6 +77,27 @@ export default {
     hasWebLinks: [25, 28, 39],
   }),
   computed: {
+    copy() {
+      return this.isCh
+        ? {
+            welcomeTo: "Willkommen bei",
+            welcome: "Willkommen",
+            seeMenu: "Speisekarte ansehen und Bestellung aufgeben",
+            downloadApp: "Laden Sie die Okam-App herunter und nutzen Sie sie",
+            appStoreAlt: "Okam-App im App Store herunterladen",
+            googlePlayAlt: "Okam-App bei Google Play herunterladen",
+            continueInBrowser: "Oder im Browser fortfahren",
+          }
+        : {
+            welcomeTo: "Velkommen til",
+            welcome: "Velkommen",
+            seeMenu: "Se meny og legge inn bestilling",
+            downloadApp: "Last ned og bruk Okam appen",
+            appStoreAlt: "Last ned Okam-appen på App Store",
+            googlePlayAlt: "Last ned Okam-appen på Google Play",
+            continueInBrowser: "Eller fortsett i nettleseren",
+          };
+    },
     showWebshopUrl() {
       return this.res && this.res.id && this.hasWebLinks.includes(this.res.id);
     },
