@@ -127,7 +127,7 @@ export default {
   ],
 
   i18n: {
-    locales: isCh ? ['de', 'en'] : ['en', 'no'],
+    locales: isCh ? ['de'] : ['en', 'no'],
     defaultLocale: isCh ? 'de' : 'no',
     vueI18n: {
       fallbackLocale: isCh ? 'de' : 'no',
