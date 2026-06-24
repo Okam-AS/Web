@@ -369,7 +369,7 @@ export default {
             logout: "Abmelden",
             customerPrompt: "Sind Sie Kundin oder Kunde und möchten einkaufen?",
             goToStoreOverview: "Zur Geschäftsübersicht",
-            storeOverviewUrl: "https://shop.okam.ch",
+            storeOverviewUrl: "https://shop.okam-swiss.ch",
             continueAnyway: "Ich verstehe, möchte aber trotzdem ein ganz neues Geschäft registrieren",
             displayNameLabel: "Anzeigename (wird den Kundinnen und Kunden angezeigt)",
             legalNameLabel: "Firmenname (rechtlicher Name)",

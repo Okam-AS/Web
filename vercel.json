@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run generate",
+  "outputDirectory": "dist",
+  "framework": "nuxtjs",
+  "installCommand": "npm install --legacy-peer-deps",
+  "build": {
+    "env": {
+      "OKAM_EDITION": "ch"
+    }
+  }
+}

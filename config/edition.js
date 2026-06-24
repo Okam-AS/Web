@@ -23,8 +23,10 @@ const markets = {
     locale: 'de',
     currency: 'CHF',
     country: 'CH',
-    hostname: 'https://okam.ch',
-    shopUrl: 'https://shop.okam.ch',
+    hostname: 'https://okam-swiss.ch',
+    // NOTE: the Swiss consumer shop domain is assumed to mirror the site domain.
+    // Update if the Swiss shop lives elsewhere.
+    shopUrl: 'https://shop.okam-swiss.ch',
     phonePrefix: '+41',
     gaId: null
   }

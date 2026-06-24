@@ -213,7 +213,7 @@ export default {
         Disallow: '/import'
       }],
     ['@nuxtjs/sitemap', {
-      hostname: isCh ? 'https://okam.ch' : 'https://okam.no',
+      hostname: isCh ? 'https://okam-swiss.ch' : 'https://okam.no',
       gzip: true,
       exclude: [
         '/admin/**',
@@ -294,7 +294,7 @@ export default {
 
   // Legg til sitemap konfigurasjon
   sitemap: {
-    hostname: isCh ? 'https://okam.ch' : 'https://okam.no', // Endre til din faktiske URL
+    hostname: isCh ? 'https://okam-swiss.ch' : 'https://okam.no', // Endre til din faktiske URL
     gzip: true,
     exclude: [
       '/admin/**',

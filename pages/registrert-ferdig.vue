@@ -44,11 +44,11 @@ export default {
       return this.isCh
         ? {
             completed: "Die Registrierung ist abgeschlossen!",
-            subText: "Sie können Ihre Speisekarte jetzt auf admin.okam.ch oder in der Okam Admin-App erfassen",
-            goToAdmin: "Zu admin.okam.ch",
+            subText: "Sie können Ihre Speisekarte jetzt auf admin.okam-swiss.ch oder in der Okam Admin-App erfassen",
+            goToAdmin: "Zu admin.okam-swiss.ch",
             downloadApp: "Okam Admin-App herunterladen",
-            adminUrl: "https://admin.okam.ch",
-            downloadUrl: "https://okam.ch/last-ned",
+            adminUrl: "https://admin.okam-swiss.ch",
+            downloadUrl: "https://okam-swiss.ch/last-ned",
           }
         : {
             completed: "Registreringen er fullført!",

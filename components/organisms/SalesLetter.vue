@@ -125,7 +125,7 @@ export default {
             signOff: "Freundliche Grüsse,",
             role: "Geschäftsführer, Okam AG",
             okamLogoAlt: "Logo",
-            website: "https://okam.ch"
+            website: "https://okam-swiss.ch"
           }
         : {
             greeting: "Kjære",
