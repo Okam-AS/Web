@@ -38,7 +38,7 @@
           >
             <div class="program-row__info">
               <span class="program-row__name">{{ program.name || 'Bonusprogram' }}</span>
-              <span class="program-row__stores">{{ program.storeCount || 0 }} butikk(er)</span>
+              <span v-if="program.storeCount != null" class="program-row__stores">{{ program.storeCount }} butikk(er)</span>
             </div>
             <button class="btn btn-secondary btn-sm" :disabled="isInitializing" @click="linkWithExisting(program)">
               Koble til
@@ -188,12 +188,12 @@
           <div class="stores-list">
             <div
               v-for="store in rewardStores"
-              :key="store.storeId"
+              :key="store.id"
               class="store-item"
-              :class="{ 'store-item--current': store.storeId === selectedStore }"
+              :class="{ 'store-item--current': store.id === selectedStore }"
             >
-              <span class="store-item__name">{{ store.storeName }}</span>
-              <span v-if="store.storeId === selectedStore" class="badge badge--current">Denne butikken</span>
+              <span class="store-item__name">{{ store.name }}</span>
+              <span v-if="store.id === selectedStore" class="badge badge--current">Denne butikken</span>
             </div>
           </div>
           <button
@@ -285,20 +285,22 @@ export default {
       this.hasRewardProgram = false
       try {
         const result = await this._rewardService.Get(storeId || this.selectedStore)
-        if (!result || !result.rewardProgram) {
+        this.otherRewardPrograms = result?.others || []
+
+        if (!result || !result.current) {
           this.hasRewardProgram = false
-          this.otherRewardPrograms = result?.otherRewardPrograms || []
           return
         }
 
+        const program = result.current
         this.hasRewardProgram = true
-        this.rewardProgramId = result.rewardProgram.id
-        this.cashbackEnabled = result.rewardProgram.cashbackEnabled || false
-        this.rewardProgramName = result.rewardProgram.name || ''
-        this.rewardMembershipCount = result.rewardProgram.membershipCount || 0
-        this.rewardStores = result.rewardProgram.stores || []
+        this.rewardProgramId = program.rewardProgramId
+        this.cashbackEnabled = program.cashbackEnabled || false
+        this.rewardProgramName = program.name || ''
+        this.rewardMembershipCount = program.membershipCount || 0
+        this.rewardStores = program.stores || []
 
-        const ranges = result.rewardProgram.cashbackRanges || []
+        const ranges = program.cashbackRanges || []
         const baseRange = ranges.find(r => r.fromAmount === 0)
         this.baseCashbackPercent = baseRange ? baseRange.percent : 0
         this.additionalTiers = ranges.filter(r => r.fromAmount > 0).sort((a, b) => a.fromAmount - b.fromAmount)

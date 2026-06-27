@@ -23,54 +23,6 @@
           <p class="section-hint">Kunder kan betale kontant eller med terminal i butikken</p>
         </div>
 
-        <!-- Section: Giftcard -->
-        <div class="form-section">
-          <div class="section-header">
-            <h2 class="section-title">Gavekort</h2>
-            <label class="toggle-switch">
-              <input v-model="paymentForm.giftcardEnabled" type="checkbox" @change="markDirty" />
-              <span class="toggle-slider" />
-            </label>
-          </div>
-          <p class="section-hint">Aktiver gavekortbetaling for kunder</p>
-
-          <template v-if="paymentForm.giftcardEnabled">
-            <div class="form-field" style="margin-top: 16px;">
-              <label>Kontonummer for utbetaling</label>
-              <div class="input-with-action">
-                <input
-                  v-model="paymentForm.giftcardBankAccountNumber"
-                  type="text"
-                  placeholder="1234.56.78901"
-                  class="text-input"
-                  @input="markDirty"
-                />
-              </div>
-            </div>
-
-            <div v-if="awaitingPayout !== null" class="payout-section">
-              <div class="payout-balance">
-                <span class="payout-balance__label">Tilgjengelig for utbetaling:</span>
-                <span class="payout-balance__amount">{{ formatAmount(awaitingPayout.payoutAmount) }}</span>
-              </div>
-              <div v-if="awaitingPayout.payoutAmount > 0" class="payout-actions">
-                <button
-                  v-if="!awaitingPayout.requested"
-                  class="btn btn-primary btn-sm"
-                  :disabled="isRequestingPayout"
-                  @click="requestGiftcardPayout"
-                >
-                  {{ isRequestingPayout ? 'Ber om utbetaling...' : 'Be om utbetaling' }}
-                </button>
-                <div v-else class="payout-requested">
-                  <span class="badge badge--pending">Utbetaling forespurt</span>
-                  <button class="btn-link" @click="cancelGiftcardPayout">Avbryt</button>
-                </div>
-              </div>
-            </div>
-          </template>
-        </div>
-
         <!-- Section: Dintero -->
         <div v-if="paymentConfig.dinteroAvailable" class="form-section">
           <div class="section-header">
@@ -117,78 +69,6 @@
               </label>
             </div>
           </div>
-        </div>
-
-        <!-- Section: Stripe -->
-        <div class="form-section">
-          <div class="section-header">
-            <h2 class="section-title">Kortbetaling (Stripe)</h2>
-            <label class="toggle-switch">
-              <input v-model="paymentForm.stripeEnabled" type="checkbox" @change="onStripeToggle" />
-              <span class="toggle-slider" />
-            </label>
-          </div>
-          <p class="section-hint">Godta kortbetalinger online via Stripe</p>
-
-          <template v-if="paymentForm.stripeEnabled">
-            <!-- No Stripe account -->
-            <div v-if="!paymentForm.stripeBankAccountId" class="stripe-setup">
-              <p class="stripe-setup__text">Du har ikke tilknyttet en Stripe-konto ennå.</p>
-              <button class="btn btn-primary btn-sm" :disabled="isStripeLoading" @click="registerStripe">
-                {{ isStripeLoading ? 'Oppretter...' : 'Registrer Stripe-konto' }}
-              </button>
-            </div>
-
-            <!-- Has Stripe account -->
-            <div v-else-if="stripeAccount" class="stripe-account">
-              <!-- Status badge -->
-              <div class="stripe-status">
-                <div v-if="stripeStatus === 'approved'" class="status-badge status-badge--approved">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  Godkjent
-                </div>
-                <div v-else-if="stripeStatus === 'pending'" class="status-badge status-badge--pending">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  Venter på verifisering
-                </div>
-                <div v-else class="status-badge status-badge--error">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                  </svg>
-                  Mangler dokumentasjon
-                </div>
-              </div>
-
-              <!-- Bank info -->
-              <div v-if="stripeBankInfo" class="stripe-bank-info">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                </svg>
-                {{ stripeBankInfo.bank_name }} •••• {{ stripeBankInfo.last4 }}
-              </div>
-
-              <!-- Actions -->
-              <div class="stripe-actions">
-                <button class="btn btn-secondary btn-sm" :disabled="isStripeLoading" @click="stripeLogin">
-                  Logg inn i Stripe
-                </button>
-                <button v-if="stripeStatus !== 'approved'" class="btn btn-secondary btn-sm" :disabled="isStripeLoading" @click="stripeOnboard">
-                  Last opp dokumenter
-                </button>
-                <button class="btn btn-danger btn-sm" :disabled="isStripeLoading" @click="confirmDeleteStripe">
-                  Slett konto
-                </button>
-              </div>
-            </div>
-
-            <div v-else class="stripe-setup">
-              <Loading :loading="true" />
-            </div>
-          </template>
         </div>
 
         <!-- Section: Report Emails -->
@@ -247,18 +127,12 @@ export default {
       isSaving: false,
       isDirty: false,
       saveStatus: null,
-      isRequestingPayout: false,
-      isStripeLoading: false,
       paymentForm: {
         payInStoreEnabled: false,
-        giftcardEnabled: false,
-        giftcardBankAccountNumber: '',
         dinteroEnabled: false,
         dinteroBillieEnabled: false,
         dinteroKlarnaEnabled: false,
         dinteroKraviaEnabled: false,
-        stripeEnabled: false,
-        stripeBankAccountId: null,
         sendInvoiceToEmails: '',
       },
       paymentConfig: {
@@ -271,8 +145,6 @@ export default {
         dinteroKraviaAvailable: false,
         dinteroKraviaPrice: null,
       },
-      awaitingPayout: null,
-      stripeAccount: null,
       toast: { show: false, message: '', type: 'success' },
     }
   },
@@ -282,18 +154,6 @@ export default {
     },
     userIsLoggedIn() {
       return this.$store.getters.userIsLoggedIn
-    },
-    stripeStatus() {
-      if (!this.stripeAccount) return null
-      const errs = this.stripeAccount.requirements?.errors || []
-      const pending = this.stripeAccount.requirements?.pending_verification || []
-      if (errs.length > 0) return 'missing_docs'
-      if (pending.length > 0) return 'pending'
-      return 'approved'
-    },
-    stripeBankInfo() {
-      const data = this.stripeAccount?.external_accounts?.data
-      return data && data.length > 0 ? data[0] : null
     },
   },
   watch: {
@@ -317,46 +177,27 @@ export default {
       this.saveStatus = null
       try {
         const id = storeId || this.selectedStore
-        const [store, payout] = await Promise.all([
-          this._storeService.Get(id),
-          this._payoutService.GetAwaiting(id).catch(() => null),
-        ])
+        const store = await this._storeService.Get(id)
 
         this._storeService.GetPaymentConfig(id).then(config => {
           this.paymentConfig = config || {}
         }).catch(() => {})
 
         if (store) {
+          const payment = store.payment || {}
           this.paymentForm = {
-            payInStoreEnabled: store.payInStoreEnabled || false,
-            giftcardEnabled: store.giftcardEnabled || false,
-            giftcardBankAccountNumber: store.giftcardBankAccountNumber || '',
-            dinteroEnabled: store.dinteroEnabled || false,
-            dinteroBillieEnabled: store.dinteroBillieEnabled || false,
-            dinteroKlarnaEnabled: store.dinteroKlarnaEnabled || false,
-            dinteroKraviaEnabled: store.dinteroKraviaEnabled || false,
-            stripeEnabled: store.stripeEnabled || false,
-            stripeBankAccountId: store.stripeBankAccountId || null,
-            sendInvoiceToEmails: store.sendInvoiceToEmails || '',
-          }
-
-          if (store.stripeBankAccountId) {
-            this.loadStripeAccount(store.stripeBankAccountId)
+            payInStoreEnabled: payment.payInStoreEnabled || false,
+            dinteroEnabled: payment.dinteroEnabled || false,
+            dinteroBillieEnabled: payment.dinteroBillieEnabled || false,
+            dinteroKlarnaEnabled: payment.dinteroKlarnaEnabled || false,
+            dinteroKraviaEnabled: payment.dinteroKraviaEnabled || false,
+            sendInvoiceToEmails: payment.sendInvoiceToEmails || '',
           }
         }
-
-        this.awaitingPayout = payout
       } catch (e) {
         this.showToast('Kunne ikke laste betalingsinnstillinger', 'error')
       } finally {
         this.isLoading = false
-      }
-    },
-    async loadStripeAccount(accountId) {
-      try {
-        this.stripeAccount = await this._bankAccountService.Get(accountId)
-      } catch (e) {
-        this.stripeAccount = null
       }
     },
     markDirty() {
@@ -369,13 +210,10 @@ export default {
       try {
         await this._storeService.UpdatePayment(this.selectedStore, {
           payInStoreEnabled: this.paymentForm.payInStoreEnabled,
-          giftcardEnabled: this.paymentForm.giftcardEnabled,
-          giftcardBankAccountNumber: this.paymentForm.giftcardBankAccountNumber,
           dinteroEnabled: this.paymentForm.dinteroEnabled,
           dinteroBillieEnabled: this.paymentForm.dinteroBillieEnabled,
           dinteroKlarnaEnabled: this.paymentForm.dinteroKlarnaEnabled,
           dinteroKraviaEnabled: this.paymentForm.dinteroKraviaEnabled,
-          stripeEnabled: this.paymentForm.stripeEnabled,
           sendInvoiceToEmails: this.paymentForm.sendInvoiceToEmails,
         })
         this.isDirty = false
@@ -387,90 +225,6 @@ export default {
       } finally {
         this.isSaving = false
       }
-    },
-    async requestGiftcardPayout() {
-      this.isRequestingPayout = true
-      try {
-        await this._payoutService.RequestPayout(this.selectedStore)
-        this.awaitingPayout = { ...this.awaitingPayout, requested: true }
-        this.showToast('Utbetalingsforespørsel sendt', 'success')
-      } catch (e) {
-        this.showToast('Kunne ikke be om utbetaling', 'error')
-      } finally {
-        this.isRequestingPayout = false
-      }
-    },
-    async cancelGiftcardPayout() {
-      try {
-        await this._payoutService.CancelRequestPayout(this.selectedStore)
-        this.awaitingPayout = { ...this.awaitingPayout, requested: false }
-        this.showToast('Utbetalingsforespørsel avbrutt', 'success')
-      } catch (e) {
-        this.showToast('Kunne ikke avbryte forespørsel', 'error')
-      }
-    },
-    onStripeToggle() {
-      this.markDirty()
-    },
-    async registerStripe() {
-      this.isStripeLoading = true
-      try {
-        const account = await this._bankAccountService.Create(this.selectedStore)
-        this.paymentForm.stripeBankAccountId = account.id
-        this.stripeAccount = account
-
-        const onboardData = await this._bankAccountService.Onboard(account.id)
-        if (onboardData?.url) {
-          window.open(onboardData.url, '_blank')
-        }
-        this.markDirty()
-      } catch (e) {
-        this.showToast('Kunne ikke opprette Stripe-konto', 'error')
-      } finally {
-        this.isStripeLoading = false
-      }
-    },
-    async stripeOnboard() {
-      this.isStripeLoading = true
-      try {
-        const data = await this._bankAccountService.Onboard(this.paymentForm.stripeBankAccountId)
-        if (data?.url) window.open(data.url, '_blank')
-      } catch (e) {
-        this.showToast('Kunne ikke åpne Stripe', 'error')
-      } finally {
-        this.isStripeLoading = false
-      }
-    },
-    async stripeLogin() {
-      this.isStripeLoading = true
-      try {
-        const data = await this._bankAccountService.Login(this.paymentForm.stripeBankAccountId)
-        if (data?.url) window.open(data.url, '_blank')
-      } catch (e) {
-        this.showToast('Kunne ikke logge inn i Stripe', 'error')
-      } finally {
-        this.isStripeLoading = false
-      }
-    },
-    async confirmDeleteStripe() {
-      if (!confirm('Er du sikker på at du vil slette Stripe-kontoen? Dette kan ikke angres.')) return
-      this.isStripeLoading = true
-      try {
-        await this._bankAccountService.Delete(this.paymentForm.stripeBankAccountId)
-        this.paymentForm.stripeBankAccountId = null
-        this.paymentForm.stripeEnabled = false
-        this.stripeAccount = null
-        this.markDirty()
-        this.showToast('Stripe-konto slettet', 'success')
-      } catch (e) {
-        this.showToast('Kunne ikke slette Stripe-konto', 'error')
-      } finally {
-        this.isStripeLoading = false
-      }
-    },
-    formatAmount(amount) {
-      if (amount == null) return '0 kr'
-      return `${(amount / 100).toLocaleString('nb-NO', { minimumFractionDigits: 2 })} kr`
     },
     showToast(message, type = 'success') {
       this.toast = { show: true, message, type }
@@ -680,129 +434,6 @@ export default {
   color: #9ca3af;
 }
 
-.payout-section {
-  margin-top: 16px;
-  padding: 16px;
-  background: #f9fafb;
-  border-radius: 8px;
-}
-
-.payout-balance {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.payout-balance__label {
-  font-size: 14px;
-  color: #6b7280;
-}
-
-.payout-balance__amount {
-  font-size: 18px;
-  font-weight: 700;
-  color: #292c34;
-}
-
-.payout-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.payout-requested {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.badge {
-  font-size: 12px;
-  font-weight: 600;
-  padding: 3px 10px;
-  border-radius: 999px;
-}
-
-.badge--pending { background: #fef3c7; color: #d97706; }
-
-.btn-link {
-  background: none;
-  border: none;
-  color: #dc2626;
-  font-size: 13px;
-  cursor: pointer;
-  padding: 0;
-  text-decoration: underline;
-}
-
-.stripe-setup {
-  margin-top: 16px;
-  padding: 20px;
-  background: #f9fafb;
-  border-radius: 8px;
-  text-align: center;
-}
-
-.stripe-setup__text {
-  font-size: 14px;
-  color: #6b7280;
-  margin: 0 0 12px;
-}
-
-.stripe-account {
-  margin-top: 16px;
-  padding: 16px;
-  background: #f9fafb;
-  border-radius: 8px;
-}
-
-.stripe-status {
-  margin-bottom: 12px;
-}
-
-.status-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  font-weight: 600;
-  padding: 6px 12px;
-  border-radius: 8px;
-}
-
-.status-badge svg { width: 16px; height: 16px; }
-
-.status-badge--approved { background: #d1fae5; color: #065f46; }
-.status-badge--pending { background: #fef3c7; color: #d97706; }
-.status-badge--error { background: #fee2e2; color: #dc2626; }
-
-.stripe-bank-info {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  color: #374151;
-  margin-bottom: 16px;
-}
-
-.stripe-bank-info svg {
-  width: 18px;
-  height: 18px;
-  color: #9ca3af;
-}
-
-.stripe-actions {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.input-with-action {
-  display: flex;
-  gap: 8px;
-}
-
 .save-bar {
   display: flex;
   align-items: center;
@@ -865,6 +496,5 @@ export default {
 
 @media (max-width: 640px) {
   .payment-page { padding: 16px; }
-  .stripe-actions { flex-direction: column; }
 }
 </style>
