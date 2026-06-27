@@ -28,7 +28,8 @@ import {
   WoltMenuService,
   WoltVenueService,
   RewardService,
-  WrappedService
+  WrappedService,
+  BankAccountService
 } from '~/core/services'
 import { wholeAmount, fractionAmount, priceLabel, formatString } from '~/core/helpers/tools'
 import { formatChf } from '~/utils/price'
@@ -176,7 +177,8 @@ const mixin = {
     _woltMenuService() { return new WoltMenuService(this.$store) },
     _woltVenueService() { return new WoltVenueService(this.$store) },
     _rewardService() { return new RewardService(this.$store) },
-    _wrappedService() { return new WrappedService(this.$store) }
+    _wrappedService() { return new WrappedService(this.$store) },
+    _bankAccountService() { return new BankAccountService(this.$store) }
 
   }
 }
