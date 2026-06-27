@@ -82,6 +82,8 @@ dist
 
 # Service worker
 sw.*
+# Men static/sw.js er vår bevisste self-destroying SW (Workbox er avskrudd) og MÅ committes/deployes
+!static/sw.js
 
 # macOS
 .DS_Store

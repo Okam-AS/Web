@@ -306,6 +306,7 @@ export default {
 
   // Oppdater PWA konfigurasjon
   pwa: {
+    workbox: false,
     meta: {
       name: 'Okam',
       author: 'Okam',
