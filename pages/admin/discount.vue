@@ -376,7 +376,7 @@ export default {
     },
     async openProductPicker() {
       const picked = await this.$refs.productSelector.open(this.selectedProductIds)
-      if (picked !== undefined) {
+      if (Array.isArray(picked)) {
         this.selectedProductIds = picked
         this.localDiscount.discountProducts = picked.map(id => ({ productId: id }))
       }
