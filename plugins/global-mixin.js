@@ -164,21 +164,41 @@ const mixin = {
         cultureCode: this.$store.state.adminLocale || 'no'
       }
     },
-    // UserService: stateless in unified core. Re-add the v3 state side-effects
-    // (clear/set currentUser in Vuex) so all call-sites keep working unchanged.
+    // UserService adapter. The unified service is stateless and, unlike v3,
+    // REJECTS on a missing token / auth failure (v3 returned a falsy boolean and
+    // mutated Vuex internally). This adapter restores the exact v3 contract so the
+    // app's (often unguarded) `await Reload()` call-sites never crash:
+    //   - Reload: boolean; on success preserve the token + dispatch SetCurrentUser;
+    //     on rejection (no token / 401) dispatch ClearState and return false.
+    //   - Get: boolean; ClearState on failure. Login: boolean. LoginAdmin: user|false.
+    //   - Logout: route through the unified clearState callback.
+    // (Without the reject->false conversion, an unauthenticated /admin visit crashed
+    //  the client mount -> blank page.)
     _userService() {
       const svc = new UserService(this._coreInitializer)
       const store = this.$store
+      const currentToken = () => (store.state.currentUser && store.state.currentUser.token) || ''
       const _logout = svc.Logout.bind(svc)
       svc.Logout = (notificationId) => _logout(notificationId, () => store.dispatch('ClearState'))
       const _reload = svc.Reload.bind(svc)
-      svc.Reload = async () => { const user = await _reload(); store.dispatch('SetCurrentUser', user); return user }
+      svc.Reload = () => _reload()
+        .then((user) => {
+          if (!user) return false
+          user.token = currentToken() // preserve token across reload (v3 parity)
+          store.dispatch('SetCurrentUser', user)
+          return true
+        })
+        .catch(() => { store.dispatch('ClearState'); return false })
+      const _get = svc.Get.bind(svc)
+      svc.Get = () => _get().then((u) => !!u).catch(() => { store.dispatch('ClearState'); return false })
+      const _login = svc.Login.bind(svc)
+      svc.Login = (phoneNumber, token) => _login(phoneNumber, token)
+        .then((user) => { if (user) { store.dispatch('SetCurrentUser', user); return true } return false })
+        .catch(() => false)
       const _loginAdmin = svc.LoginAdmin.bind(svc)
-      svc.LoginAdmin = async (phoneNumber, token, setCurrentStoreFunction) => {
-        const user = await _loginAdmin(phoneNumber, token, setCurrentStoreFunction)
-        if (user) store.dispatch('SetCurrentUser', user)
-        return user
-      }
+      svc.LoginAdmin = (phoneNumber, token, setCurrentStoreFunction) => _loginAdmin(phoneNumber, token, setCurrentStoreFunction)
+        .then((user) => { if (user) store.dispatch('SetCurrentUser', user); return user })
+        .catch(() => false)
       return svc
     },
     // CartService: SetLineItem/RemoveLineItem were Vuex-mutation helpers in v3
