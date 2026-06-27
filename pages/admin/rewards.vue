@@ -258,12 +258,21 @@ export default {
     selectedStore() {
       return this.$store.state.selectedAdminStore
     },
+    userIsLoggedIn() {
+      return this.$store.getters.userIsLoggedIn
+    },
   },
   watch: {
     selectedStore: {
       immediate: true,
       handler(storeId) {
-        if (storeId) this.loadRewardProgram(storeId)
+        if (this.userIsLoggedIn && storeId) this.loadRewardProgram(storeId)
+      },
+    },
+    userIsLoggedIn: {
+      immediate: true,
+      handler(isLoggedIn) {
+        if (isLoggedIn && this.selectedStore) this.loadRewardProgram(this.selectedStore)
       },
     },
   },

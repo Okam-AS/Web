@@ -288,11 +288,15 @@ export default {
       errors: [],
       fieldErrors: {},
       toast: { show: false, message: '', type: 'success' },
+      hasInitialized: false,
     }
   },
   computed: {
     selectedStore() {
       return this.$store.state.selectedAdminStore
+    },
+    userIsLoggedIn() {
+      return this.$store.getters.userIsLoggedIn
     },
     discountId() {
       return this.$route.query.id
@@ -302,19 +306,32 @@ export default {
     },
   },
   watch: {
-    selectedStore(storeId) {
-      if (storeId && !this.isNew) {
-        this.$router.push('/admin/discounts')
-      }
+    selectedStore: {
+      immediate: true,
+      handler(storeId) {
+        if (!storeId) return
+        if (this.hasInitialized && !this.isNew) {
+          this.$router.push('/admin/discounts')
+        } else if (!this.hasInitialized && this.userIsLoggedIn) {
+          this.loadData()
+        }
+      },
     },
-  },
-  async mounted() {
-    await this.loadData()
+    userIsLoggedIn: {
+      immediate: true,
+      handler(isLoggedIn) {
+        if (isLoggedIn && this.selectedStore && !this.hasInitialized) {
+          this.loadData()
+        }
+      },
+    },
   },
   methods: {
     async loadData() {
       const storeId = this.selectedStore
       if (!storeId) return
+
+      this.hasInitialized = true
 
       if (this.isNew) {
         this.localDiscount = {
@@ -359,7 +376,7 @@ export default {
     },
     async openProductPicker() {
       const picked = await this.$refs.productSelector.open(this.selectedProductIds)
-      if (picked !== undefined) {
+      if (Array.isArray(picked)) {
         this.selectedProductIds = picked
         this.localDiscount.discountProducts = picked.map(id => ({ productId: id }))
       }

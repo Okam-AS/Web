@@ -1,5 +1,5 @@
 <template>
-  <AdminPage @login-success="loadPaymentData">
+  <AdminPage>
     <div class="payment-page">
       <div class="page-header">
         <h1>Betaling</h1>
@@ -280,6 +280,9 @@ export default {
     selectedStore() {
       return this.$store.state.selectedAdminStore
     },
+    userIsLoggedIn() {
+      return this.$store.getters.userIsLoggedIn
+    },
     stripeStatus() {
       if (!this.stripeAccount) return null
       const errs = this.stripeAccount.requirements?.errors || []
@@ -297,7 +300,13 @@ export default {
     selectedStore: {
       immediate: true,
       handler(storeId) {
-        if (storeId) this.loadPaymentData(storeId)
+        if (this.userIsLoggedIn && storeId) this.loadPaymentData(storeId)
+      },
+    },
+    userIsLoggedIn: {
+      immediate: true,
+      handler(isLoggedIn) {
+        if (isLoggedIn && this.selectedStore) this.loadPaymentData(this.selectedStore)
       },
     },
   },

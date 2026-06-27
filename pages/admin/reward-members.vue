@@ -1,5 +1,5 @@
 <template>
-  <AdminPage @login-success="loadMembers">
+  <AdminPage>
     <div class="reward-members-page">
       <div class="page-header">
         <a href="/admin/rewards" class="back-link">
@@ -85,6 +85,9 @@ export default {
     selectedStore() {
       return this.$store.state.selectedAdminStore
     },
+    userIsLoggedIn() {
+      return this.$store.getters.userIsLoggedIn
+    },
     filteredMembers() {
       if (!this.searchQuery) return this.allMembers
       const q = this.searchQuery.toLowerCase()
@@ -95,7 +98,13 @@ export default {
     selectedStore: {
       immediate: true,
       handler(storeId) {
-        if (storeId) this.loadMembers(storeId)
+        if (this.userIsLoggedIn && storeId) this.loadMembers(storeId)
+      },
+    },
+    userIsLoggedIn: {
+      immediate: true,
+      handler(isLoggedIn) {
+        if (isLoggedIn && this.selectedStore) this.loadMembers(this.selectedStore)
       },
     },
   },
