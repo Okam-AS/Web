@@ -32,36 +32,11 @@
           </div>
         </div>
 
-        <div class="welcome-container">
+        <div>
           <h1 class="welcome-text">
             <template v-if="userName">Velkommen {{ userName }}!</template>
             <template v-else>Velkommen!</template>
           </h1>
-          <p class="welcome-subtitle">Her er dine administrative verktøy og funksjoner</p>
-        </div>
-
-        <div class="dashboard__grid">
-          <a
-            v-for="(item, index) in regularMenuItems"
-            :key="`regular-${index}`"
-            :href="item.currentPage ? '#' : item.path"
-            class="dashboard__card"
-            :class="{ 'dashboard__card--current': item.currentPage }"
-          >
-            <div class="dashboard__content">
-              <div class="dashboard__header">
-                <span
-                  class="dashboard__icon"
-                  v-html="item.icon"
-                />
-                <h2 class="dashboard__card-title">
-                  {{ item.title }}
-                  <span v-if="item.isNew" class="new-badge">NYHET</span>
-                </h2>
-              </div>
-              <p class="dashboard__description">{{ item.description }}</p>
-            </div>
-          </a>
         </div>
 
         <!-- Store Information Section -->
@@ -271,82 +246,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Key Account Manager Section -->
-      <div
-        v-if="showKamSection"
-        class="dashboard__section dashboard__section--kam"
-      >
-        <h1 class="dashboard__section-title">KAM funksjoner</h1>
-        <div class="dashboard__grid">
-          <a
-            v-for="(item, index) in kamMenuItems"
-            :key="`kam-${index}`"
-            :href="item.path"
-            class="dashboard__card"
-          >
-            <div class="dashboard__content">
-              <div class="dashboard__header">
-                <span
-                  class="dashboard__icon"
-                  v-html="item.icon"
-                />
-                <h2 class="dashboard__card-title">{{ item.title }}</h2>
-              </div>
-              <p class="dashboard__description">{{ item.description }}</p>
-            </div>
-          </a>
-        </div>
-      </div>
-
-      <!-- Power User Section -->
-      <div
-        v-if="showPowerUserSection"
-        class="dashboard__section dashboard__section--power-user"
-      >
-        <h1 class="dashboard__section-title">Power User funksjoner</h1>
-        <div class="dashboard__grid">
-          <a
-            v-for="(item, index) in powerUserMenuItems"
-            :key="`power-user-${index}`"
-            :href="item.path"
-            class="dashboard__card"
-          >
-            <div class="dashboard__content">
-              <div class="dashboard__header">
-                <span
-                  class="dashboard__icon"
-                  v-html="item.icon"
-                />
-                <h2 class="dashboard__card-title">{{ item.title }}</h2>
-              </div>
-              <p class="dashboard__description">{{ item.description }}</p>
-            </div>
-          </a>
-        </div>
-      </div>
-
-      <!-- Okam Wrapped Section -->
-      <div class="dashboard__section">
-        <div class="dashboard__grid">
-          <a
-            href="/admin/wrapped"
-            class="dashboard__card"
-          >
-            <div class="dashboard__content">
-              <div class="dashboard__header">
-                <span class="dashboard__icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                  </svg>
-                </span>
-                <h2 class="dashboard__card-title">Sammendrag av 2025</h2>
-              </div>
-              <p class="dashboard__description">Se dine høydepunkter fra 2025</p>
-            </div>
-          </a>
-        </div>
-      </div>
     </div>
   </AdminPage>
 </template>
@@ -387,148 +286,6 @@ export default {
       section: "",
       timeout: null,
     },
-    menuItems: [
-      {
-        title: "Dashboard",
-        path: "/admin",
-        description: "Oversikt og hurtiginnstillinger",
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>',
-        currentPage: true,
-      },
-      {
-        title: "Pågående bestillinger",
-        path: "/admin/ongoing",
-        description: "Se pågående bestillinger",
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>',
-      },
-      {
-        title: "Statistikk",
-        path: "/admin/statistics",
-        description: "Se statistikk over bestillinger",
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>',
-      },
-      {
-        title: "Historikk",
-        path: "/admin/orders",
-        description: "Se alle bestillinger med søk og filter",
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><g><path d="M0,0h24v24H0V0z" fill="none"/></g><g><path d="M7,9H2V7h5V9z M7,12H2v2h5V12z M20.59,19l-3.83-3.83C15.96,15.69,15.02,16,14,16c-2.76,0-5-2.24-5-5s2.24-5,5-5s5,2.24,5,5 c0,1.02-0.31,1.96-0.83,2.75L22,17.59L20.59,19z M17,11c0-1.65-1.35-3-3-3s-3,1.35-3,3s1.35,3,3,3S17,12.65,17,11z M2,19h10v-2H2 V19z"/></g></svg>',
-      },
-      {
-        title: "Utbetalinger",
-        path: "/admin/settlements",
-        description: "Oversikt over Dintero-utbetalinger",
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
-      },
-      {
-        title: "Send faktura",
-        path: "/admin/kravia-invoice",
-        description: "Lag og send faktura til bedrift",
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14h6m-6-4h6m-7 10h8a2 2 0 002-2V7.414a2 2 0 00-.586-1.414l-3.414-3.414A2 2 0 0012.586 2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>',
-        isNew: true,
-      },
-      {
-        title: "Produkter",
-        path: "/admin/products",
-        description: "Enkel redigering av produkter",
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>',
-      },
-      {
-        title: "Kategorier",
-        path: "/admin/categories",
-        description: "Administrer produktkategorier",
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>',
-      },
-      {
-        title: "Import",
-        path: "/admin/import",
-        description: "Masseimport av nye produkter med kategorier",
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>',
-      },
-      {
-        title: "Levering",
-        path: "/admin/delivery",
-        description: "Administrer henting, spis inne og hjemlevering",
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zm10 0a2 2 0 11-4 0 2 2 0 014 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10h2m8 0h2m-2 0h-2m4 0h4v-5h-2.586a1 1 0 01-.707-.293L13 8" /></svg>',
-      },
-      {
-        title: "Wolt",
-        path: "/admin/wolt",
-        description: "Wolt Marketplace",
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><g><rect fill="none" height="24" width="24"/></g><g><g><path d="M19,7c0-1.1-0.9-2-2-2h-3v2h3v2.65L13.52,14H10V9H6c-2.21,0-4,1.79-4,4v3h2c0,1.66,1.34,3,3,3s3-1.34,3-3h4.48L19,10.35V7 z M4,14v-1c0-1.1,0.9-2,2-2h2v3H4z M7,17c-0.55,0-1-0.45-1-1h2C8,16.55,7.55,17,7,17z"/><rect height="2" width="5" x="5" y="6"/><path d="M19,13c-1.66,0-3,1.34-3,3s1.34,3,3,3s3-1.34,3-3S20.66,13,19,13z M19,17c-0.55,0-1-0.45-1-1s0.45-1,1-1s1,0.45,1,1 S19.55,17,19,17z"/></g></g></svg>',
-      },
-      {
-        title: "Kunder",
-        path: "/admin/customers",
-        description: "Søk etter kunder og se statistikk",
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>',
-      },
-      {
-        title: "Ansatte",
-        path: "/admin/employees",
-        description: "Administrer hvem som har tilgang til butikken",
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>',
-      },
-      {
-        title: "Bonus",
-        path: "/admin/rewards",
-        description: "Administrer bonusprogram og cashback",
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>',
-      },
-      {
-        title: "Rabatter",
-        path: "/admin/discounts",
-        description: "Opprett og administrer rabattkoder",
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>',
-      },
-      {
-        title: "Betaling",
-        path: "/admin/payment",
-        description: "Administrer betalingsmetoder",
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>',
-      },
-      {
-        title: "Okam vekst",
-        path: "/admin/poweruser-growth",
-        description: "Plattformvekst fra 2020",
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 19h18M5 16l4-4 4 3 6-8m0 0h-5m5 0v5" /></svg>',
-        powerUserOnly: true,
-      },
-      {
-        title: "Wolt Drive Invoice",
-        path: "/admin/wolt-drive-invoice",
-        description: "Fakturagrunnlag for Wolt Drive",
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>',
-        powerUserOnly: true,
-      },
-      {
-        title: "Dintero",
-        path: "/admin/dintero",
-        description: "Betalingsinnstillinger for Dintero",
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>',
-        powerUserOnly: true,
-      },
-      {
-        title: "Avtaler",
-        path: "/admin/offers",
-        description: "Administrer avtaler og tilbud",
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>',
-        kamOnly: true,
-      },
-      {
-        title: "Varer og tjenester",
-        path: "/admin/goods",
-        description: "Administrer varer og tjenester for avtaler",
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>',
-        powerUserOnly: true,
-      },
-      {
-        title: "KAM Administrasjon",
-        path: "/admin/kam",
-        description: "Manage Key Account Manager relationships",
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>',
-        powerUserOnly: true,
-      },
-    ],
   }),
   computed: {
     userName() {
@@ -539,37 +296,6 @@ export default {
     },
     generatedUrl() {
       return this.selectedStore ? `https://shop.okam.no/shop?id=${this.selectedStore}` : "";
-    },
-    regularMenuItems() {
-      return this.menuItems.filter((item) => !item.kamOnly && !item.powerUserOnly);
-    },
-    kamMenuItems() {
-      const kamOnlyItems = this.menuItems.filter((item) => item.kamOnly);
-
-      // Add KAM-specific items
-      return kamOnlyItems.concat([
-        {
-          title: "Oversikt",
-          path: "/admin/overview",
-          description: "Se oversikt over alle butikker",
-          icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0h6m2 0h2a2 2 0 002-2v-6a2 2 0 00-2-2h-2a2 2 0 00-2 2v6a2 2 0 002 2z" /></svg>',
-        },
-        {
-          title: "Onboarding",
-          path: "/admin/onboarding",
-          description: "Oppsett av ny butikk",
-          icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>',
-        },
-      ]);
-    },
-    showKamSection() {
-      return this.$store.state?.currentUser?.isKeyAccountManager;
-    },
-    powerUserMenuItems() {
-      return this.menuItems.filter((item) => item.powerUserOnly);
-    },
-    showPowerUserSection() {
-      return this.$store.state?.currentUser?.isPowerUser;
     },
     getOpeningHoursSummary() {
       const today = new Date().getDay();
@@ -748,13 +474,6 @@ export default {
   padding: 2rem;
   background-color: #f8f9fa;
   min-height: calc(100vh - 60px);
-}
-
-.welcome-container {
-  margin-bottom: 2rem;
-  padding: 1.5rem;
-  color: #292c34;
-  animation: fadeIn 0.6s ease-out;
 }
 
 .welcome-text {
@@ -1308,137 +1027,8 @@ export default {
   }
 }
 
-.dashboard__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.25rem;
-  animation: slideUp 0.5s ease-out;
-}
-
-.dashboard__card {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1.5rem;
-  background: white;
-  border-radius: 0.75rem;
-  text-decoration: none;
-  color: inherit;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-  border: 1px solid rgba(0, 0, 0, 0.03);
-  height: 100%;
-}
-
-.dashboard__card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  border-color: #292c34;
-}
-
-.dashboard__card--current {
-  cursor: default;
-  pointer-events: none;
-  background: none;
-  border: none;
-  box-shadow: none;
-}
-
-.dashboard__card--current:hover {
-  transform: none;
-  box-shadow: none;
-}
-
-.dashboard__card--current .dashboard__card-title,
-.dashboard__card--current .dashboard__description,
-.dashboard__card--current .dashboard__icon {
-  opacity: 1;
-  color: inherit;
-}
-
-.dashboard__card[href="#"] {
-  opacity: 0.7;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-.dashboard__icon {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  color: #292c34;
-  background-color: rgba(41, 44, 52, 0.1);
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-}
-
-
-.dashboard__content {
-  width: 100%;
-}
-
-.dashboard__header {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
-}
-
-.dashboard__card-title {
-  font-size: 1.1rem;
-  margin-bottom: 0;
-  font-weight: 600;
-  color: #292c34;
-}
-
-.dashboard__description {
-  font-size: 0.95rem;
-  color: #64748b;
-  line-height: 1.5;
-}
-
 .dashboard__section {
   margin-bottom: 2.5rem;
-}
-
-.dashboard__section-title {
-  font-size: 1.5rem;
-  margin-bottom: 1.25rem;
-  font-weight: 600;
-  color: #292c34;
-  position: relative;
-  padding-left: 1rem;
-}
-
-.dashboard__section-title::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 4px;
-  height: 1.2em;
-  background-color: #292c34;
-  border-radius: 2px;
-}
-
-.dashboard__section--kam {
-  background-color: #f0f2f5;
-  padding: 1.5rem;
-  border-radius: 0.75rem;
-  border: 1px solid rgba(41, 44, 52, 0.15);
-  animation: fadeIn 0.8s ease-out;
-}
-
-.dashboard__section--power-user {
-  background-color: #f0f2f5;
-  padding: 1.5rem;
-  border-radius: 0.75rem;
-  border: 1px solid rgba(41, 44, 52, 0.15);
-  animation: fadeIn 0.8s ease-out;
 }
 
 @keyframes fadeIn {
@@ -1450,36 +1040,4 @@ export default {
   }
 }
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.new-badge {
-  margin-left: 0.5rem;
-  font-size: 0.65rem;
-  font-weight: bold;
-  background-color: #10b981;
-  color: white;
-  padding: 2px 8px;
-  border-radius: 10px;
-  text-transform: uppercase;
-  vertical-align: middle;
-}
-
-</style>
-
-<style>
-/* Unscoped styles for v-html SVG icons */
-.dashboard__icon svg {
-  width: 1.5rem;
-  height: 1.5rem;
-  display: block;
-}
 </style>

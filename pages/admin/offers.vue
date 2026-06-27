@@ -477,6 +477,13 @@ export default {
   },
 
   mounted() {
+    // Restrict to Key Account Managers (Power Users also allowed)
+    const user = this.$store.state.currentUser;
+    if (!user?.isKeyAccountManager && !user?.isPowerUser) {
+      this.$router.push("/admin");
+      return;
+    }
+
     this.fetchOfferProposals();
     this.fetchOfferItems(); // Add back fetchOfferItems method
 

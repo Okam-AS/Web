@@ -1,11 +1,16 @@
 <template>
-  <div class="admin">
-    <AdminPageHeader />
-    <OnboardingNotification v-if="!isOnboardingPage" />
-    <main :class="['admin__content', { admin__wrapper: !fullWidth }]">
-      <slot />
-    </main>
-    <AdminPageFooter />
+  <div class="admin" :class="{ 'admin--collapsed': sidebarCollapsed }">
+    <AdminPageHeader
+      :collapsed="sidebarCollapsed"
+      @toggle-sidebar="toggleSidebar"
+    />
+    <div class="admin__main">
+      <OnboardingNotification v-if="!isOnboardingPage" />
+      <main :class="['admin__content', { admin__wrapper: !fullWidth }]">
+        <slot />
+      </main>
+      <AdminPageFooter v-if="!userIsLoggedIn" />
+    </div>
     <LoginModal
       v-if="showLogin"
       @close="closeLoginModal"
@@ -34,13 +39,30 @@ export default {
   },
   data: () => ({
     showLogin: false,
+    sidebarCollapsed: false,
   }),
   computed: {
     isOnboardingPage() {
       return this.$route && this.$route.path.includes("/admin/onboarding");
     },
+    userIsLoggedIn() {
+      return this.$store.getters.userIsLoggedIn;
+    },
   },
-  async mounted() {
+  mounted() {
+    if (typeof localStorage !== "undefined") {
+      this.sidebarCollapsed = localStorage.getItem("adminSidebarCollapsed") === "true";
+    }
+    this.initAuth();
+  },
+  methods: {
+    toggleSidebar() {
+      this.sidebarCollapsed = !this.sidebarCollapsed;
+      if (typeof localStorage !== "undefined") {
+        localStorage.setItem("adminSidebarCollapsed", this.sidebarCollapsed);
+      }
+    },
+    async initAuth() {
     if (!this.$store.getters.userIsLoggedIn) {
       this.showLogin = true;
       // Only redirect to /admin if we're on a different admin page
@@ -56,8 +78,7 @@ export default {
         return;
       }
     }
-  },
-  methods: {
+    },
     closeLoginModal(isLoggedIn) {
       this.showLogin = !isLoggedIn;
       if (isLoggedIn) {
@@ -75,3 +96,26 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.admin__main {
+  margin-left: var(--admin-sidebar-width, 264px);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  background-color: #f8f9fa;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.admin--collapsed .admin__main {
+  margin-left: 0;
+}
+
+@media (max-width: 1024px) {
+  .admin__main {
+    margin-left: 0;
+    padding-top: 56px;
+  }
+}
+</style>

@@ -559,6 +559,13 @@ export default {
   },
 
   mounted() {
+    // Restrict to Key Account Managers (Power Users also allowed)
+    const user = this.$store.state.currentUser;
+    if (!user?.isKeyAccountManager && !user?.isPowerUser) {
+      this.$router.push("/admin");
+      return;
+    }
+
     // Load saved filters from localStorage
     this.loadFiltersFromLocalStorage();
 
