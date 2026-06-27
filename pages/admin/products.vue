@@ -26,6 +26,16 @@
               </button>
             </div>
           </div>
+          <div class="select-wrapper sort-select">
+            <select v-model="sortOption">
+              <option value="name-asc">Navn A-Å</option>
+              <option value="name-desc">Navn Å-A</option>
+              <option value="amount-asc">Pris (lavest)</option>
+              <option value="amount-desc">Pris (høyest)</option>
+              <option value="createdAt-asc">Dato (eldst)</option>
+              <option value="createdAt-desc">Dato (nyest)</option>
+            </select>
+          </div>
           <div class="select-wrapper items-per-page">
             <select v-model="itemsPerPage">
               <option
@@ -539,6 +549,7 @@ export default {
     draggingProducts: {},
     uploadingFor: null,
     productFilter: "",
+    sortOption: "name-asc",
     imageDimensions: {},
     currentPage: 1,
     itemsPerPage: 10,
@@ -565,11 +576,24 @@ export default {
     },
 
     filteredProducts() {
-      if (!this.productFilter) {
-        return this.sortProductsByDate(this.products);
-      }
-      const filter = this.productFilter.toLowerCase();
-      return this.sortProductsByDate(this.products.filter((p) => p.name.toLowerCase().includes(filter)));
+      const [sortKey, sortDir] = this.sortOption.split("-");
+      const base = this.productFilter
+        ? this.products.filter((p) => p.name.toLowerCase().includes(this.productFilter.toLowerCase()))
+        : this.products;
+      return [...base].sort((a, b) => {
+        let valA = a[sortKey];
+        let valB = b[sortKey];
+        if (sortKey === "createdAt") {
+          valA = valA && valA !== "0001-01-01T00:00:00" ? valA : "9999-12-31T23:59:59.9999999";
+          valB = valB && valB !== "0001-01-01T00:00:00" ? valB : "9999-12-31T23:59:59.9999999";
+        } else if (typeof valA === "string") {
+          valA = (valA || "").toLowerCase();
+          valB = (valB || "").toLowerCase();
+        }
+        if (valA < valB) return sortDir === "asc" ? -1 : 1;
+        if (valA > valB) return sortDir === "asc" ? 1 : -1;
+        return 0;
+      });
     },
 
     paginatedProducts() {
@@ -649,6 +673,10 @@ export default {
       this.currentPage = 1;
     },
 
+    sortOption() {
+      this.currentPage = 1;
+    },
+
     itemsPerPage() {
       this.currentPage = 1;
     },
@@ -701,7 +729,7 @@ export default {
       this.isLoading = true;
       try {
         const products = await this._productService.GetAll(this.selectedStore);
-        this.products = this.sortProductsByDate(products);
+        this.products = products;
         this.imageDimensions = {};
         products.forEach((p) => this.updateImageDimension(p));
         // Also load categories
@@ -1703,6 +1731,12 @@ export default {
     .pagination-btn {
       flex: 1;
     }
+  }
+}
+
+.sort-select {
+  select {
+    min-width: 150px;
   }
 }
 
