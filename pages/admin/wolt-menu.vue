@@ -29,11 +29,9 @@
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
           </svg>
           <div class="wolt-warning-message__content">
-            <h3 class="wolt-warning-message__title">{{ fullStore?.name || 'Butikken' }} er ikke koblet til Wolt</h3>
+            <h3 class="wolt-warning-message__title">{{ $i('woltMenu_notConnectedTitle', { storeName: fullStore?.name || $i('woltMenu_defaultStoreName') }) }}</h3>
             <p class="wolt-warning-message__text">
-              Send en mail til <a href="mailto:hei@okam.no">hei@okam.no</a> så kan vi koble Wolt til Okam,
-              slik at du ikke lenger trenger dedikert Wolt-tablet og printer.
-              Alle bestillinger kommer rett inn i Okam Admin.
+              {{ $i('woltMenu_notConnectedTextBefore') }} <a href="mailto:hei@okam.no">hei@okam.no</a> {{ $i('woltMenu_notConnectedTextAfter') }}
             </p>
           </div>
         </div>
@@ -58,10 +56,10 @@
                 <span
                   :class="['status-badge', venueStatus.online ? 'status-badge--online' : 'status-badge--offline']"
                 >
-                  {{ venueStatus.online ? 'ONLINE' : 'OFFLINE' }}
+                  {{ venueStatus.online ? $i('woltMenu_statusOnline') : $i('woltMenu_statusOffline') }}
                 </span>
                 <span class="status-header__text">
-                  {{ venueStatus.online ? 'Åpen på Wolt' : 'Stengt på Wolt' }}
+                  {{ venueStatus.online ? $i('woltMenu_openOnWolt') : $i('woltMenu_closedOnWolt') }}
                 </span>
               </div>
             </div>
@@ -85,7 +83,7 @@
                   <circle cx="12" cy="12" r="10" />
                   <polyline points="12 6 12 12 16 14" />
                 </svg>
-                Åpningstider
+                {{ $i('woltMenu_openingHours') }}
               </button>
 
               <span
@@ -106,7 +104,7 @@
                   <circle cx="5.5" cy="18.5" r="2.5" />
                   <circle cx="18.5" cy="18.5" r="2.5" />
                 </svg>
-                {{ deliveryProvider.current_provider || 'Ingen partner' }}
+                {{ deliveryProvider.current_provider || $i('woltMenu_noPartner') }}
               </span>
             </div>
           </div>
@@ -127,12 +125,12 @@
             >
               <div class="status-warning__content">
                 <div>
-                  <p><strong>Meny status:</strong> {{ menuData.status }}</p>
+                  <p><strong>{{ $i('woltMenu_menuStatusLabel') }}</strong> {{ menuData.status }}</p>
                   <p v-if="menuData.status === 'PENDING'">
-                    Menyen behandles av Wolt. Dette kan ta flere minutter.
+                    {{ $i('woltMenu_menuProcessing') }}
                   </p>
                   <p v-if="menuData.status === 'PENDING'" class="status-warning__note">
-                    💡 Tips: Vent minst 2-3 minutter mellom hver oppdatering på grunn av Wolts rate limits.
+                    {{ $i('woltMenu_menuProcessingTip') }}
                   </p>
                 </div>
               </div>
@@ -157,8 +155,8 @@
                   <polyline points="23 4 23 10 17 10" />
                   <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
                 </svg>
-                <span v-if="isLoading">Oppdaterer...</span>
-                <span v-else>Oppdater status</span>
+                <span v-if="isLoading">{{ $i('woltMenu_updating') }}</span>
+                <span v-else>{{ $i('woltMenu_updateStatus') }}</span>
               </button>
             </div>
 
@@ -201,7 +199,7 @@
                       y2="16"
                     />
                   </svg>
-                  Du har ulagrede endringer
+                  {{ $i('woltMenu_unsavedChanges') }}
                 </div>
                 <div class="menu-actions__buttons">
                   <button
@@ -225,8 +223,8 @@
                       <polyline points="23 4 23 10 17 10" />
                       <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
                     </svg>
-                    <span v-if="isSyncing">Synkroniserer...</span>
-                    <span v-else>Synkroniser med Wolt</span>
+                    <span v-if="isSyncing">{{ $i('woltMenu_syncing') }}</span>
+                    <span v-else>{{ $i('woltMenu_syncWithWolt') }}</span>
                   </button>
                   <button
                     v-if="!isEditMode"
@@ -247,7 +245,7 @@
                       <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
                       <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
                     </svg>
-                    Rediger meny
+                    {{ $i('woltMenu_editMenu') }}
                   </button>
                   <template v-else>
                     <button
@@ -278,7 +276,7 @@
                           y2="18"
                         />
                       </svg>
-                      Avbryt
+                      {{ $i('common_cancel') }}
                     </button>
                     <button
                       class="menu-action-button menu-action-button--save"
@@ -299,8 +297,8 @@
                       >
                         <polyline points="20 6 9 17 4 12" />
                       </svg>
-                      <span v-if="isSaving">Lagrer...</span>
-                      <span v-else>Lagre endringer</span>
+                      <span v-if="isSaving">{{ $i('common_saving') }}</span>
+                      <span v-else>{{ $i('woltMenu_saveChanges') }}</span>
                     </button>
                   </template>
                 </div>
@@ -322,15 +320,15 @@
                     <line x1="12" y1="16" x2="12" y2="12" />
                     <line x1="12" y1="8" x2="12.01" y2="8" />
                   </svg>
-                  <span>{{ getTotalItemCount() }} produkter i {{ menuData.categories.length }} kategorier</span>
+                  <span>{{ $i('woltMenu_productsInCategories', { products: getTotalItemCount(), categories: menuData.categories.length }) }}</span>
                 </summary>
                 <div class="menu-info-collapsible__content">
                   <div class="menu-info-collapsible__item">
-                    <span class="menu-info-collapsible__label">Valuta:</span>
+                    <span class="menu-info-collapsible__label">{{ $i('woltMenu_currencyLabel') }}</span>
                     <span class="menu-info-collapsible__value">{{ menuData.currency || 'N/A' }}</span>
                   </div>
                   <div class="menu-info-collapsible__item">
-                    <span class="menu-info-collapsible__label">Primærspråk:</span>
+                    <span class="menu-info-collapsible__label">{{ $i('woltMenu_primaryLanguageLabel') }}</span>
                     <span class="menu-info-collapsible__value">{{ menuData.primaryLanguage || 'N/A' }}</span>
                   </div>
                 </div>
@@ -361,7 +359,7 @@
                       {{ parseAndGetLocalizedValue(category.nameJson) }}
                     </h2>
                     <span class="menu-category__count">
-                      {{ category.items ? category.items.length : 0 }} produkter
+                      {{ $i('woltMenu_productCount', { count: category.items ? category.items.length : 0 }) }}
                     </span>
                   </div>
                 </summary>
@@ -426,7 +424,7 @@
                             <span class="menu-item__toggle-slider" />
                           </label>
                           <span class="menu-item__toggle-text">
-                            {{ item.enabled ? 'Aktiv' : 'Deaktivert' }}
+                            {{ item.enabled ? $i('woltMenu_active') : $i('woltMenu_disabled') }}
                           </span>
                         </div>
                         <span
@@ -434,7 +432,7 @@
                           class="menu-item__badge"
                           :class="item.enabled ? 'menu-item__badge--enabled' : 'menu-item__badge--disabled'"
                         >
-                          {{ item.enabled ? 'Aktiv' : 'Deaktivert' }}
+                          {{ item.enabled ? $i('woltMenu_active') : $i('woltMenu_disabled') }}
                         </span>
                         <div
                           v-if="isEditMode"
@@ -450,7 +448,7 @@
                             <span class="menu-item__toggle-slider" />
                           </label>
                           <span class="menu-item__toggle-text">
-                            {{ item.inStock ? 'På lager' : 'Utsolgt' }}
+                            {{ item.inStock ? $i('woltMenu_inStock') : $i('woltMenu_soldOut') }}
                           </span>
                         </div>
                         <span
@@ -458,10 +456,10 @@
                           class="menu-item__badge"
                           :class="item.inStock ? 'menu-item__badge--enabled' : 'menu-item__badge--disabled'"
                         >
-                          {{ item.inStock ? 'På lager' : 'Utsolgt' }}
+                          {{ item.inStock ? $i('woltMenu_inStock') : $i('woltMenu_soldOut') }}
                         </span>
                         <span class="menu-item__meta-item">
-                          MVA: {{ item.salesTaxPercentage }}%
+                          {{ $i('woltMenu_vat', { percentage: item.salesTaxPercentage }) }}
                         </span>
                         <span
                           v-if="item.externalData"
@@ -476,7 +474,7 @@
                         v-if="item.options && item.options.length > 0"
                         class="menu-item__options"
                       >
-                        <h4 class="menu-item__options-title">Tilvalg:</h4>
+                        <h4 class="menu-item__options-title">{{ $i('woltMenu_optionsTitle') }}</h4>
                         <div
                           v-for="option in item.options"
                           :key="option.id"
@@ -488,14 +486,14 @@
                                 {{ parseAndGetLocalizedValue(option.nameJson) }}
                               </span>
                               <span class="menu-option__type">
-                                ({{ option.type === 'MultiChoice' ? 'Flervalg' : 'Enkeltvalg' }})
+                                ({{ option.type === 'MultiChoice' ? $i('woltMenu_multiChoice') : $i('woltMenu_singleChoice') }})
                               </span>
                             </div>
                             <div
                               v-if="option.selectionRangeMin !== null && option.selectionRangeMax !== null"
                               class="menu-option__range"
                             >
-                              Velg {{ option.selectionRangeMin }}-{{ option.selectionRangeMax }}
+                              {{ $i('woltMenu_selectRange', { min: option.selectionRangeMin, max: option.selectionRangeMax }) }}
                             </div>
                             <!-- Option values -->
                             <div class="menu-option__values">
@@ -531,7 +529,7 @@
                                   class="menu-option__value-badge"
                                   :class="value.enabled ? 'menu-option__value-badge--enabled' : 'menu-option__value-badge--disabled'"
                                 >
-                                  {{ value.enabled ? 'Aktiv' : 'Deaktivert' }}
+                                  {{ value.enabled ? $i('woltMenu_active') : $i('woltMenu_disabled') }}
                                 </span>
                               </div>
                             </div>
@@ -546,7 +544,7 @@
                   v-if="!category.items || category.items.length === 0"
                   class="menu-category__empty"
                 >
-                  Ingen produkter i denne kategorien
+                  {{ $i('woltMenu_noProductsInCategory') }}
                 </div>
               </details>
             </div>
@@ -557,10 +555,10 @@
             class="wolt-menu__no-data"
           >
             <p v-if="menuData && menuData.status === 'ERROR'">
-              Menyen er i feilstatus. Slett menyen fra databasen eller opprett en ny meny.
+              {{ $i('woltMenu_errorStatusText') }}
             </p>
             <p v-else>
-              Ingen meny funnet for denne butikken.
+              {{ $i('woltMenu_noMenuFound') }}
             </p>
             <button
               v-if="menuData && menuData.status === 'ERROR'"
@@ -581,7 +579,7 @@
                 <polyline points="3 6 5 6 21 6" />
                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
               </svg>
-              Slett feilmeny
+              {{ $i('woltMenu_deleteErrorMenu') }}
             </button>
             <button
               class="create-menu-button"
@@ -611,7 +609,7 @@
                   y2="12"
                 />
               </svg>
-              Opprett ny meny
+              {{ $i('woltMenu_createNewMenu') }}
             </button>
           </div>
         </div>
@@ -630,7 +628,7 @@
     >
       <div class="modal-content">
         <div class="modal-header">
-          <h2>Opprett ny Wolt Meny</h2>
+          <h2>{{ $i('woltMenu_createMenuModalTitle') }}</h2>
           <button
             class="modal-close"
             @click="closeCreateMenuForm"
@@ -663,11 +661,11 @@
         </div>
         <div class="modal-body">
           <p class="modal-description">
-            Opprett en ny meny basert på dine eksisterende produkter. Menyen vil bli sendt til Wolt for godkjenning.
+            {{ $i('woltMenu_createMenuDescription') }}
           </p>
 
           <div class="form-group">
-            <label for="currency">Valuta</label>
+            <label for="currency">{{ $i('woltMenu_currency') }}</label>
             <input
               id="currency"
               v-model="newMenuData.currency"
@@ -678,7 +676,7 @@
           </div>
 
           <div class="form-group">
-            <label for="primaryLanguage">Primærspråk</label>
+            <label for="primaryLanguage">{{ $i('woltMenu_primaryLanguage') }}</label>
             <select
               id="primaryLanguage"
               v-model="newMenuData.primaryLanguage"
@@ -721,7 +719,7 @@
                 y2="8"
               />
             </svg>
-            <p>Menyen vil bli opprettet basert på dine eksisterende produkter og kategorier fra systemet.</p>
+            <p>{{ $i('woltMenu_createMenuInfo') }}</p>
           </div>
         </div>
         <div class="modal-footer">
@@ -729,15 +727,15 @@
             class="modal-button modal-button--secondary"
             @click="closeCreateMenuForm"
           >
-            Avbryt
+            {{ $i('common_cancel') }}
           </button>
           <button
             class="modal-button modal-button--primary"
             :disabled="isCreatingMenu"
             @click="createMenu"
           >
-            <span v-if="isCreatingMenu">Oppretter...</span>
-            <span v-else>Opprett meny</span>
+            <span v-if="isCreatingMenu">{{ $i('woltMenu_creating') }}</span>
+            <span v-else>{{ $i('woltMenu_createMenu') }}</span>
           </button>
         </div>
       </div>
@@ -751,7 +749,7 @@
     >
       <div class="modal-content modal-content--large">
         <div class="modal-header">
-          <h2>Åpningstider</h2>
+          <h2>{{ $i('woltMenu_openingHours') }}</h2>
           <button
             class="modal-close"
             @click="showOpeningHoursModal = false"
@@ -788,7 +786,7 @@
                   v-if="slot.closing_day !== slot.opening_day"
                   class="opening-hours-item__badge"
                 >
-                  til {{ formatDayName(slot.closing_day) }}
+                  {{ $i('woltMenu_until', { day: formatDayName(slot.closing_day) }) }}
                 </span>
               </div>
             </div>
@@ -796,7 +794,7 @@
               v-else
               class="empty-state"
             >
-              <p>Ingen åpningstider satt</p>
+              <p>{{ $i('woltMenu_noOpeningHoursSet') }}</p>
             </div>
           </div>
 
@@ -816,7 +814,7 @@
                 <line x1="12" y1="16" x2="12" y2="12" />
                 <line x1="12" y1="8" x2="12.01" y2="8" />
               </svg>
-              <p>Legg til åpningstider for hvert tidsrom. Bruk formatet HH:mm (f.eks. 10:00)</p>
+              <p>{{ $i('woltMenu_openingHoursEditInfo') }}</p>
             </div>
 
             <div
@@ -826,21 +824,21 @@
             >
               <div class="opening-hours-edit-row">
                 <div class="form-field">
-                  <label>Åpningsdag</label>
+                  <label>{{ $i('woltMenu_openingDay') }}</label>
                   <div class="select-wrapper">
                     <select v-model="slot.opening_day">
-                      <option value="MONDAY">Mandag</option>
-                      <option value="TUESDAY">Tirsdag</option>
-                      <option value="WEDNESDAY">Onsdag</option>
-                      <option value="THURSDAY">Torsdag</option>
-                      <option value="FRIDAY">Fredag</option>
-                      <option value="SATURDAY">Lørdag</option>
-                      <option value="SUNDAY">Søndag</option>
+                      <option value="MONDAY">{{ $i('woltMenu_monday') }}</option>
+                      <option value="TUESDAY">{{ $i('woltMenu_tuesday') }}</option>
+                      <option value="WEDNESDAY">{{ $i('woltMenu_wednesday') }}</option>
+                      <option value="THURSDAY">{{ $i('woltMenu_thursday') }}</option>
+                      <option value="FRIDAY">{{ $i('woltMenu_friday') }}</option>
+                      <option value="SATURDAY">{{ $i('woltMenu_saturday') }}</option>
+                      <option value="SUNDAY">{{ $i('woltMenu_sunday') }}</option>
                     </select>
                   </div>
                 </div>
                 <div class="form-field">
-                  <label>Åpningstid</label>
+                  <label>{{ $i('woltMenu_openingTime') }}</label>
                   <input
                     v-model="slot.opening_time"
                     type="time"
@@ -848,21 +846,21 @@
                   >
                 </div>
                 <div class="form-field">
-                  <label>Lukkingsdag</label>
+                  <label>{{ $i('woltMenu_closingDay') }}</label>
                   <div class="select-wrapper">
                     <select v-model="slot.closing_day">
-                      <option value="MONDAY">Mandag</option>
-                      <option value="TUESDAY">Tirsdag</option>
-                      <option value="WEDNESDAY">Onsdag</option>
-                      <option value="THURSDAY">Torsdag</option>
-                      <option value="FRIDAY">Fredag</option>
-                      <option value="SATURDAY">Lørdag</option>
-                      <option value="SUNDAY">Søndag</option>
+                      <option value="MONDAY">{{ $i('woltMenu_monday') }}</option>
+                      <option value="TUESDAY">{{ $i('woltMenu_tuesday') }}</option>
+                      <option value="WEDNESDAY">{{ $i('woltMenu_wednesday') }}</option>
+                      <option value="THURSDAY">{{ $i('woltMenu_thursday') }}</option>
+                      <option value="FRIDAY">{{ $i('woltMenu_friday') }}</option>
+                      <option value="SATURDAY">{{ $i('woltMenu_saturday') }}</option>
+                      <option value="SUNDAY">{{ $i('woltMenu_sunday') }}</option>
                     </select>
                   </div>
                 </div>
                 <div class="form-field">
-                  <label>Lukkingstid</label>
+                  <label>{{ $i('woltMenu_closingTime') }}</label>
                   <input
                     v-model="slot.closing_time"
                     type="time"
@@ -905,7 +903,7 @@
                 <line x1="12" y1="5" x2="12" y2="19" />
                 <line x1="5" y1="12" x2="19" y2="12" />
               </svg>
-              Legg til tidsrom
+              {{ $i('woltMenu_addTimeSlot') }}
             </button>
           </div>
         </div>
@@ -915,29 +913,29 @@
             class="modal-button modal-button--secondary"
             @click="showOpeningHoursModal = false"
           >
-            Lukk
+            {{ $i('common_close') }}
           </button>
           <button
             v-if="!isEditingOpeningHours"
             class="modal-button modal-button--primary"
             @click="startEditingOpeningHours"
           >
-            Rediger åpningstider
+            {{ $i('woltMenu_editOpeningHours') }}
           </button>
           <template v-else>
             <button
               class="modal-button modal-button--secondary"
               @click="cancelEditingOpeningHours"
             >
-              Avbryt
+              {{ $i('common_cancel') }}
             </button>
             <button
               class="modal-button modal-button--primary"
               :disabled="isSavingOpeningHours"
               @click="saveOpeningHours"
             >
-              <span v-if="isSavingOpeningHours">Lagrer...</span>
-              <span v-else>Lagre åpningstider</span>
+              <span v-if="isSavingOpeningHours">{{ $i('common_saving') }}</span>
+              <span v-else>{{ $i('woltMenu_saveOpeningHours') }}</span>
             </button>
           </template>
         </div>
@@ -1183,7 +1181,7 @@ export default {
     },
     toggleItemEnabled(item, enabled) {
       if (!item || !item.woltItemId) {
-        alert('Produktet mangler Wolt ID og kan ikke oppdateres');
+        alert(this.$i('woltMenu_alertMissingWoltId'));
         return;
       }
 
@@ -1201,7 +1199,7 @@ export default {
     },
     toggleItemInStock(item, inStock) {
       if (!item || !item.woltItemId) {
-        alert('Produktet mangler Wolt ID og kan ikke oppdateres');
+        alert(this.$i('woltMenu_alertMissingWoltId'));
         return;
       }
 
@@ -1219,13 +1217,13 @@ export default {
     },
     updateItemPrice(item, newPrice) {
       if (!item || !item.woltItemId) {
-        alert('Produktet mangler Wolt ID og kan ikke oppdateres');
+        alert(this.$i('woltMenu_alertMissingWoltId'));
         return;
       }
 
       const priceValue = parseFloat(newPrice);
       if (isNaN(priceValue) || priceValue < 0) {
-        alert('Ugyldig pris');
+        alert(this.$i('woltMenu_alertInvalidPrice'));
         return;
       }
 
@@ -1318,7 +1316,7 @@ export default {
     },
     cancelEdit() {
       if (this.hasUnsavedChanges) {
-        if (!confirm('Du har ulagrede endringer. Er du sikker på at du vil avbryte?')) {
+        if (!confirm(this.$i('woltMenu_confirmCancelUnsaved'))) {
           return;
         }
       }
@@ -1428,7 +1426,7 @@ export default {
 
       } catch (error) {
         console.error('Error saving changes:', error);
-        alert('Feil ved lagring av endringer: ' + (error.message || 'Ukjent feil'));
+        alert(this.$i('woltMenu_alertSaveError', { error: error.message || this.$i('woltMenu_unknownError') }));
       } finally {
         this.isSaving = false;
       }
@@ -1477,7 +1475,7 @@ export default {
             console.log('Delivery provider:', data);
             // Map the API response structure to what the UI expects
             this.deliveryProvider = {
-              current_provider: data.delivery_provider || 'Ikke satt'
+              current_provider: data.delivery_provider || this.$i('woltMenu_notSet')
             };
           })
           .catch((error) => {
@@ -1497,13 +1495,13 @@ export default {
           // Update local state
           this.venueStatus.online = online;
           this.$forceUpdate();
-          alert(`Restaurant er nå ${online ? 'åpen' : 'stengt'} på Wolt`);
+          alert(online ? this.$i('woltMenu_alertVenueOpened') : this.$i('woltMenu_alertVenueClosed'));
         } else {
-          alert('Kunne ikke oppdatere online status');
+          alert(this.$i('woltMenu_alertOnlineStatusFailed'));
         }
       } catch (error) {
         console.error('Error toggling venue online status:', error);
-        alert('Feil ved oppdatering av online status');
+        alert(this.$i('woltMenu_alertOnlineStatusError'));
       }
     },
     closeCreateMenuForm() {
@@ -1515,12 +1513,12 @@ export default {
     },
     async createMenu() {
       if (!this.selectedStore) {
-        alert('Ingen butikk valgt');
+        alert(this.$i('woltMenu_alertNoStoreSelected'));
         return;
       }
 
       if (!this.newMenuData.currency || !this.newMenuData.primaryLanguage) {
-        alert('Vennligst fyll ut alle feltene');
+        alert(this.$i('woltMenu_alertFillAllFields'));
         return;
       }
 
@@ -1538,23 +1536,23 @@ export default {
         const success = await this._woltMenuService.createMenu(this.selectedStore, menuRequest);
 
         if (success) {
-          alert('Menyen ble opprettet! Den vil bli sendt til Wolt for godkjenning.');
+          alert(this.$i('woltMenu_alertMenuCreated'));
           this.closeCreateMenuForm();
           // Refresh menu data to show the newly created menu
           this.fetchMenuData(this.selectedStore);
         } else {
-          alert('Kunne ikke opprette menyen. Vennligst prøv igjen.');
+          alert(this.$i('woltMenu_alertMenuCreateFailed'));
         }
       } catch (error) {
         console.error('Error creating menu:', error);
-        alert('Feil ved opprettelse av meny: ' + (error.message || 'Ukjent feil'));
+        alert(this.$i('woltMenu_alertMenuCreateError', { error: error.message || this.$i('woltMenu_unknownError') }));
       } finally {
         this.isCreatingMenu = false;
       }
     },
     async syncWithWolt() {
       if (!this.selectedStore) {
-        alert('Ingen butikk valgt');
+        alert(this.$i('woltMenu_alertNoStoreSelected'));
         return;
       }
 
@@ -1566,18 +1564,18 @@ export default {
         if (success) {
           this.fetchMenuData(this.selectedStore);
         } else {
-          alert('Kunne ikke synkronisere menyen med Wolt. Vennligst prøv igjen.');
+          alert(this.$i('woltMenu_alertSyncFailed'));
         }
       } catch (error) {
         console.error('Error syncing menu:', error);
-        alert('Feil ved synkronisering av meny: ' + (error.message || 'Ukjent feil'));
+        alert(this.$i('woltMenu_alertSyncError', { error: error.message || this.$i('woltMenu_unknownError') }));
       } finally {
         this.isSyncing = false;
       }
     },
     async importMenuFromWolt() {
       if (!this.selectedStore) {
-        alert('Ingen butikk valgt');
+        alert(this.$i('woltMenu_alertNoStoreSelected'));
         return;
       }
 
@@ -1590,7 +1588,7 @@ export default {
           // Refresh menu data to show updated status
           this.fetchMenuData(this.selectedStore);
         } else {
-          alert('Kunne ikke importere meny fra Wolt. Vennligst prøv igjen.');
+          alert(this.$i('woltMenu_alertImportFailed'));
           this.isLoading = false;
         }
       } catch (error) {
@@ -1598,11 +1596,11 @@ export default {
 
         // Better error messages based on error type
         if (error.message && error.message.includes('429')) {
-          alert('Wolt API rate limit nådd. Vennligst vent 1-2 minutter før du prøver igjen.\n\nWolt har strenge grenser på hvor ofte vi kan sjekke status.');
+          alert(this.$i('woltMenu_alertRateLimit'));
         } else if (error.message && error.message.includes('PENDING')) {
-          alert('Menyen behandles fortsatt av Wolt. Vennligst vent noen minutter og prøv igjen.');
+          alert(this.$i('woltMenu_alertStillPending'));
         } else {
-          alert('Feil ved import av meny: ' + (error.message || 'Ukjent feil'));
+          alert(this.$i('woltMenu_alertImportError', { error: error.message || this.$i('woltMenu_unknownError') }));
         }
 
         this.isLoading = false;
@@ -1610,11 +1608,11 @@ export default {
     },
     async deleteMenu() {
       if (!this.selectedStore) {
-        alert('Ingen butikk valgt');
+        alert(this.$i('woltMenu_alertNoStoreSelected'));
         return;
       }
 
-      if (!confirm('Er du sikker på at du vil slette menyen fra databasen? Dette kan ikke angres.')) {
+      if (!confirm(this.$i('woltMenu_confirmDeleteMenu'))) {
         return;
       }
 
@@ -1622,26 +1620,26 @@ export default {
         const success = await this._woltMenuService.deleteMenu(this.selectedStore);
 
         if (success) {
-          alert('Menyen ble slettet fra databasen');
+          alert(this.$i('woltMenu_alertMenuDeleted'));
           // Refresh to clear the menu data
           this.fetchMenuData(this.selectedStore);
         } else {
-          alert('Kunne ikke slette menyen. Vennligst prøv igjen.');
+          alert(this.$i('woltMenu_alertMenuDeleteFailed'));
         }
       } catch (error) {
         console.error('Error deleting menu:', error);
-        alert('Feil ved sletting av meny: ' + (error.message || 'Ukjent feil'));
+        alert(this.$i('woltMenu_alertMenuDeleteError', { error: error.message || this.$i('woltMenu_unknownError') }));
       }
     },
     formatDayName(day) {
       const dayNames = {
-        MONDAY: 'Mandag',
-        TUESDAY: 'Tirsdag',
-        WEDNESDAY: 'Onsdag',
-        THURSDAY: 'Torsdag',
-        FRIDAY: 'Fredag',
-        SATURDAY: 'Lørdag',
-        SUNDAY: 'Søndag'
+        MONDAY: this.$i('woltMenu_monday'),
+        TUESDAY: this.$i('woltMenu_tuesday'),
+        WEDNESDAY: this.$i('woltMenu_wednesday'),
+        THURSDAY: this.$i('woltMenu_thursday'),
+        FRIDAY: this.$i('woltMenu_friday'),
+        SATURDAY: this.$i('woltMenu_saturday'),
+        SUNDAY: this.$i('woltMenu_sunday')
       };
       return dayNames[day] || day;
     },
@@ -1677,14 +1675,14 @@ export default {
     },
     async saveOpeningHours() {
       if (!this.selectedStore) {
-        alert('Ingen butikk valgt');
+        alert(this.$i('woltMenu_alertNoStoreSelected'));
         return;
       }
 
       // Validate that all slots have required fields
       for (const slot of this.editedOpeningTimes) {
         if (!slot.opening_day || !slot.opening_time || !slot.closing_day || !slot.closing_time) {
-          alert('Alle felt må fylles ut for hver åpningstid');
+          alert(this.$i('woltMenu_alertOpeningTimesIncomplete'));
           return;
         }
       }
@@ -1699,18 +1697,18 @@ export default {
         const success = await this._woltVenueService.updateVenueOpeningTimes(this.selectedStore, request);
 
         if (success) {
-          alert('Åpningstider ble oppdatert');
+          alert(this.$i('woltMenu_alertOpeningHoursUpdated'));
           this.isEditingOpeningHours = false;
           this.editedOpeningTimes = [];
           this.showOpeningHoursModal = false;
           // Refresh venue status to show updated opening times
           await this.fetchVenueStatus(this.selectedStore);
         } else {
-          alert('Kunne ikke oppdatere åpningstider. Vennligst prøv igjen.');
+          alert(this.$i('woltMenu_alertOpeningHoursFailed'));
         }
       } catch (error) {
         console.error('Error saving opening hours:', error);
-        alert('Feil ved lagring av åpningstider: ' + (error.message || 'Ukjent feil'));
+        alert(this.$i('woltMenu_alertOpeningHoursError', { error: error.message || this.$i('woltMenu_unknownError') }));
       } finally {
         this.isSavingOpeningHours = false;
       }

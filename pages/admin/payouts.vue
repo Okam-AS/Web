@@ -4,7 +4,7 @@
       <Loading v-if="isLoading" :loading="true" />
 
       <span v-if="payouts.length === 0 && !isLoading" class="empty-state">
-        Ingen utbetalinger
+        {{ $i('payouts_empty') }}
       </span>
 
       <div
@@ -16,22 +16,22 @@
         <div class="payout-header" @click="togglePayout(payout)">
           <span>{{ payout.store.legalName }}</span>
           <span class="payout-amount">
-            <span v-if="payout.requested" class="requested-tag">Forespurt utbetaling</span>
+            <span v-if="payout.requested" class="requested-tag">{{ $i('payouts_requestedTag') }}</span>
             {{ priceLabel(payout.payoutAmount) }}
           </span>
         </div>
 
         <div v-if="showPayoutId === payout.okamPayoutId" class="payout-details">
           <div v-if="payout.requested" class="payout-info">
-            Forespurt: {{ formatDate(payout.requested) }}
+            {{ $i('payouts_requestedAt', { date: formatDate(payout.requested) }) }}
           </div>
           <div v-if="payout.payed" class="payout-info">
-            Utbetalt: {{ formatDate(payout.payed) }}
+            {{ $i('payouts_payedAt', { date: formatDate(payout.payed) }) }}
           </div>
 
           <div v-if="payout.requested && !payout.payed" class="payout-amount-details">
-            <div>Konto: {{ payout.storeBankAccountNumber }}</div>
-            <div>Beløp: {{ priceLabel(payout.payoutAmount) }}</div>
+            <div>{{ $i('payouts_account', { account: payout.storeBankAccountNumber }) }}</div>
+            <div>{{ $i('payouts_amount', { amount: priceLabel(payout.payoutAmount) }) }}</div>
           </div>
 
           <div class="payout-actions">
@@ -41,7 +41,7 @@
               class="btn"
               @click="requestPayout(payout)"
             >
-              Forespør utbetaling
+              {{ $i('payouts_requestPayout') }}
             </button>
             <button
               v-if="payout.requested && !payout.payed"
@@ -49,7 +49,7 @@
               class="btn"
               @click="completePayout(payout)"
             >
-              Fullfør utbetaling
+              {{ $i('payouts_completePayout') }}
             </button>
             <button
               v-if="payout.payed && !payout.invoiceSent"
@@ -57,7 +57,7 @@
               class="btn"
               @click="sendInvoiceMail(payout)"
             >
-              Send faktura
+              {{ $i('payouts_sendInvoice') }}
             </button>
           </div>
         </div>

@@ -44,7 +44,7 @@
           <!-- Product Info -->
           <div class="product-info">
             <div class="product-name">
-              {{ item.product ? item.product.name : 'Loading...' }}
+              {{ item.product ? item.product.name : $i('common_loading') }}
               <span
                 v-if="item.product && isFromDifferentStore(item.product)"
                 class="store-badge"
@@ -62,7 +62,7 @@
         </div>
 
         <!-- Delete Button -->
-        <button class="delete-btn" @click.stop="handleDelete(index)" title="Fjern">
+        <button class="delete-btn" @click.stop="handleDelete(index)" :title="$i('categoryProductList_remove')">
           <span class="material-icons">close</span>
         </button>
       </div>
@@ -71,8 +71,8 @@
     <!-- Empty State -->
     <div v-if="items.length === 0" class="empty-state">
       <span class="material-icons">inventory_2</span>
-      <p>Ingen produkter lagt til ennå</p>
-      <p class="empty-hint">Klikk "Velg produkter" for å legge til produkter</p>
+      <p>{{ $i('categoryProductList_emptyTitle') }}</p>
+      <p class="empty-hint">{{ $i('categoryProductList_emptyHint') }}</p>
     </div>
   </div>
 </template>
@@ -139,10 +139,10 @@ export default {
       // Otherwise, look up store name from storeId
       if (product.storeId) {
         const store = this.stores.find(s => s.id === product.storeId)
-        return store ? store.name : `Ukjent butikk (ID: ${product.storeId})`
+        return store ? store.name : this.$i('categoryProductList_unknownStoreWithId', { id: product.storeId })
       }
 
-      return 'Ukjent butikk'
+      return this.$i('categoryProductList_unknownStore')
     }
   }
 }

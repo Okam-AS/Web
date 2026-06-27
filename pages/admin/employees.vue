@@ -2,13 +2,13 @@
   <AdminPage>
     <div class="employees-page">
       <div class="page-header">
-        <h1>Ansatte</h1>
-        <p class="page-description">Legg til brukere som skal ha tilgang til butikken</p>
+        <h1>{{ $i('employees_title') }}</h1>
+        <p class="page-description">{{ $i('employees_pageDescription') }}</p>
       </div>
 
       <div v-if="!selectedStore" class="empty-state">
-        <h3>Velg en butikk</h3>
-        <p>Velg en butikk for å administrere ansatte.</p>
+        <h3>{{ $i('employees_selectStore') }}</h3>
+        <p>{{ $i('employees_selectStoreDescription') }}</p>
       </div>
 
       <EmployeeManager v-else :store-id="selectedStore" />

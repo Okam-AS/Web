@@ -83,7 +83,7 @@ export default {
       // Build datasets array
       const datasets = [
         {
-          label: this.dateRange || 'Periode 1',
+          label: this.dateRange || this.$i('statisticsChart_period1'),
           data: this.data.values || [],
           borderColor: '#1bb776',
           backgroundColor: 'rgba(27, 183, 118, 0.15)',
@@ -102,7 +102,7 @@ export default {
       // Add comparison dataset if available
       if (this.comparisonData && this.comparisonData.values) {
         datasets.push({
-          label: this.comparisonDateRange || 'Periode 2',
+          label: this.comparisonDateRange || this.$i('statisticsChart_period2'),
           data: this.comparisonData.values || [],
           borderColor: '#1e40af',
           backgroundColor: 'rgba(30, 64, 175, 0.1)',
@@ -196,7 +196,7 @@ export default {
                     const avgText = self.valueIsPrice
                       ? 'kr ' + self.average.toLocaleString('nb-NO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
                       : self.average.toFixed(0);
-                    return [``, `Gjennomsnitt: ${avgText}`];
+                    return [``, self.$i('statisticsChart_average', { value: avgText })];
                   }
 
                   // Show comparison if both datasets present
@@ -209,7 +209,7 @@ export default {
                     const icon = diff > 0 ? '↑' : diff < 0 ? '↓' : '→';
                     const sign = diff > 0 ? '+' : '';
 
-                    return [``, `Endring: ${icon} ${sign}${percentChange}%`];
+                    return [``, self.$i('statisticsChart_change', { icon, sign, percent: percentChange })];
                   }
 
                   return [];
@@ -265,18 +265,18 @@ export default {
 
       this.chart.data.labels = this.data.labels || [];
       this.chart.data.datasets[0].data = this.data.values || [];
-      this.chart.data.datasets[0].label = this.dateRange || 'Periode 1';
+      this.chart.data.datasets[0].label = this.dateRange || this.$i('statisticsChart_period1');
 
       // Update or add comparison dataset
       if (this.comparisonData && this.comparisonData.values) {
         if (this.chart.data.datasets.length > 1) {
           // Update existing comparison dataset
           this.chart.data.datasets[1].data = this.comparisonData.values || [];
-          this.chart.data.datasets[1].label = this.comparisonDateRange || 'Periode 2';
+          this.chart.data.datasets[1].label = this.comparisonDateRange || this.$i('statisticsChart_period2');
         } else {
           // Add new comparison dataset
           this.chart.data.datasets.push({
-            label: this.comparisonDateRange || 'Periode 2',
+            label: this.comparisonDateRange || this.$i('statisticsChart_period2'),
             data: this.comparisonData.values || [],
             borderColor: '#1e40af',
             backgroundColor: 'rgba(30, 64, 175, 0.1)',

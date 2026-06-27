@@ -1,9 +1,9 @@
 <template>
   <div class="publishing-rule-editor">
     <div class="editor-header">
-      <h3>Publiseringsregler</h3>
+      <h3>{{ $i('publishingRuleEditor_title') }}</h3>
       <p class="description">
-        Definer når denne kategorien skal være synlig for kunder basert på dag og tid.
+        {{ $i('publishingRuleEditor_description') }}
       </p>
     </div>
 
@@ -14,23 +14,23 @@
         class="rule-card"
       >
         <div class="rule-header">
-          <span class="rule-number">Regel {{ index + 1 }}</span>
-          <button class="remove-rule-btn" @click="removeRule(index)" title="Fjern regel">
+          <span class="rule-number">{{ $i('publishingRuleEditor_ruleNumber', { number: index + 1 }) }}</span>
+          <button class="remove-rule-btn" @click="removeRule(index)" :title="$i('publishingRuleEditor_removeRule')">
             <span class="material-icons">delete</span>
           </button>
         </div>
 
         <!-- Day Selection -->
         <div class="form-group">
-          <label>Dag</label>
+          <label>{{ $i('publishingRuleEditor_day') }}</label>
           <select v-model.number="rule.dayOfWeek" class="form-select" @change="emitChanges">
-            <option :value="1">Mandag</option>
-            <option :value="2">Tirsdag</option>
-            <option :value="3">Onsdag</option>
-            <option :value="4">Torsdag</option>
-            <option :value="5">Fredag</option>
-            <option :value="6">Lørdag</option>
-            <option :value="0">Søndag</option>
+            <option :value="1">{{ $i('publishingRuleEditor_monday') }}</option>
+            <option :value="2">{{ $i('publishingRuleEditor_tuesday') }}</option>
+            <option :value="3">{{ $i('publishingRuleEditor_wednesday') }}</option>
+            <option :value="4">{{ $i('publishingRuleEditor_thursday') }}</option>
+            <option :value="5">{{ $i('publishingRuleEditor_friday') }}</option>
+            <option :value="6">{{ $i('publishingRuleEditor_saturday') }}</option>
+            <option :value="0">{{ $i('publishingRuleEditor_sunday') }}</option>
           </select>
         </div>
 
@@ -42,14 +42,14 @@
               type="checkbox"
               @change="toggleAllDay(rule)"
             />
-            <span>Hele dagen</span>
+            <span>{{ $i('publishingRuleEditor_allDay') }}</span>
           </label>
         </div>
 
         <!-- Time Range (shown when not all day) -->
         <div v-if="!isAllDay(rule)" class="time-range">
           <div class="form-group">
-            <label>Fra kl.</label>
+            <label>{{ $i('publishingRuleEditor_fromTime') }}</label>
             <input
               :value="minutesToTime(rule.startTimeInMinutes)"
               type="time"
@@ -59,7 +59,7 @@
           </div>
 
           <div class="form-group">
-            <label>Til kl.</label>
+            <label>{{ $i('publishingRuleEditor_toTime') }}</label>
             <input
               :value="minutesToTime(rule.endTimeInMinutes)"
               type="time"
@@ -73,8 +73,8 @@
       <!-- Empty State -->
       <div v-if="localRules.length === 0" class="empty-state">
         <span class="material-icons">event_available</span>
-        <p>Ingen publiseringsregler definert</p>
-        <p class="empty-hint">Kategorien vil alltid være synlig</p>
+        <p>{{ $i('publishingRuleEditor_emptyTitle') }}</p>
+        <p class="empty-hint">{{ $i('publishingRuleEditor_emptyHint') }}</p>
       </div>
     </div>
 
@@ -85,7 +85,7 @@
       @click="addRule"
     >
       <span class="material-icons">add</span>
-      Legg til regel
+      {{ $i('publishingRuleEditor_addRule') }}
     </button>
   </div>
 </template>
@@ -173,7 +173,7 @@ export default {
     },
 
     removeRule(index) {
-      if (confirm('Er du sikker på at du vil fjerne denne regelen?')) {
+      if (confirm(this.$i('publishingRuleEditor_confirmRemove'))) {
         this.localRules.splice(index, 1)
         this.emitChanges()
       }

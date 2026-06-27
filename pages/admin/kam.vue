@@ -4,22 +4,22 @@
       <div class="overview__content">
         <div class="overview__table-container">
           <div class="overview__header">
-            <h3>KAM-Direktør Relasjoner</h3>
+            <h3>{{ $i('kam_kamDirectorRelationships') }}</h3>
             <button
               class="overview__button"
               @click="showAssignManagerModal"
             >
-              Tildel Direktør til KAM
+              {{ $i('kam_assignDirectorToKam') }}
             </button>
           </div>
           <table class="overview__table">
             <thead>
               <tr>
-                <th class="sortable-header">Key Account Manager</th>
-                <th class="sortable-header">Telefonnummer</th>
-                <th class="sortable-header">Direktør</th>
-                <th class="sortable-header">Direktør Telefon</th>
-                <th>Handlinger</th>
+                <th class="sortable-header">{{ $i('kam_keyAccountManager') }}</th>
+                <th class="sortable-header">{{ $i('kam_phoneNumber') }}</th>
+                <th class="sortable-header">{{ $i('kam_director') }}</th>
+                <th class="sortable-header">{{ $i('kam_directorPhone') }}</th>
+                <th>{{ $i('common_actions') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -37,13 +37,13 @@
                       class="action-button action-button--edit"
                       @click="editRelationship(relationship)"
                     >
-                      Endre
+                      {{ $i('kam_change') }}
                     </button>
                     <button
                       class="action-button action-button--reject"
                       @click="confirmUnassignManager(relationship)"
                     >
-                      Fjern
+                      {{ $i('kam_remove') }}
                     </button>
                   </div>
                 </td>
@@ -53,7 +53,7 @@
                   colspan="5"
                   class="overview__empty"
                 >
-                  Ingen KAM-Direktør relasjoner funnet
+                  {{ $i('kam_noRelationshipsFound') }}
                 </td>
               </tr>
             </tbody>
@@ -68,11 +68,11 @@
         >
           <div style="width: 600px; max-width: 90vw; margin: 0 auto; text-align: center">
             <h1 style="margin-bottom: 1em">
-              {{ isEditMode ? "Endre KAM-Direktør Relasjon" : "Tildel Direktør til KAM" }}
+              {{ isEditMode ? $i('kam_editRelationshipTitle') : $i('kam_assignDirectorToKam') }}
             </h1>
             <form @submit.prevent="saveAssignment">
               <div class="form-group">
-                <label for="kamSelect">Key Account Manager</label>
+                <label for="kamSelect">{{ $i('kam_keyAccountManager') }}</label>
                 <br />
                 <select
                   id="kamSelect"
@@ -84,7 +84,7 @@
                     value=""
                     disabled
                   >
-                    Velg en Key Account Manager
+                    {{ $i('kam_selectKam') }}
                   </option>
                   <option
                     v-for="kam in kamUsers"
@@ -97,7 +97,7 @@
               </div>
 
               <div class="form-group">
-                <label for="directorSelect">Direktør</label>
+                <label for="directorSelect">{{ $i('kam_director') }}</label>
                 <br />
                 <select
                   id="directorSelect"
@@ -109,7 +109,7 @@
                     value=""
                     disabled
                   >
-                    Velg en Direktør
+                    {{ $i('kam_selectDirector') }}
                   </option>
                   <option
                     v-for="director in kamUsers"
@@ -125,13 +125,13 @@
                 <input
                   class="emoji-btn"
                   type="button"
-                  value="Avbryt"
+                  :value="$i('common_cancel')"
                   @click="closeAssignModal"
                 />
                 <input
                   class="emoji-btn save-btn"
                   type="submit"
-                  value="Lagre"
+                  :value="$i('common_save')"
                   :disabled="isLoading"
                 />
               </div>
@@ -146,21 +146,21 @@
           @close="closeUnassignModal"
         >
           <div style="width: 500px; max-width: 90vw; margin: 0 auto; text-align: center">
-            <h1 style="margin-bottom: 1em">Bekreft Fjerning</h1>
+            <h1 style="margin-bottom: 1em">{{ $i('kam_confirmRemovalTitle') }}</h1>
             <p>
-              Er du sikker på at du vil fjerne direktøren fra denne Key Account Manager?
+              {{ $i('kam_confirmRemovalText') }}
             </p>
             <div class="modal-buttons">
               <input
                 class="emoji-btn"
                 type="button"
-                value="Avbryt"
+                :value="$i('common_cancel')"
                 @click="closeUnassignModal"
               />
               <input
                 class="emoji-btn action-button--reject"
                 type="button"
-                value="Fjern"
+                :value="$i('kam_remove')"
                 @click="unassignManager"
               />
             </div>
@@ -174,7 +174,7 @@
         >
           <div class="loader-content">
             <div class="spinner" />
-            <p>Laster...</p>
+            <p>{{ $i('common_loading') }}</p>
           </div>
         </div>
       </div>
@@ -240,7 +240,7 @@ export default {
         await Promise.all([this.fetchRelationships(), this.fetchKamUsers()]);
       } catch (error) {
         console.error("Error fetching data:", error);
-        alert("Kunne ikke laste data. Vennligst prøv igjen.");
+        alert(this.$i("kam_errorLoadData"));
       } finally {
         this.isLoading = false;
       }
@@ -306,7 +306,7 @@ export default {
 
     async saveAssignment() {
       if (!this.currentAssignment.kamId || !this.currentAssignment.directorId) {
-        alert("Vennligst velg både en Key Account Manager og en Direktør");
+        alert(this.$i("kam_selectBothKamAndDirector"));
         return;
       }
 
@@ -318,11 +318,11 @@ export default {
           this.closeAssignModal();
           await this.fetchRelationships();
         } else {
-          alert("Kunne ikke lagre tildelingen. Vennligst prøv igjen.");
+          alert(this.$i("kam_errorSaveAssignment"));
         }
       } catch (error) {
         console.error("Error saving assignment:", error);
-        alert("En feil oppstod under lagring. Vennligst prøv igjen.");
+        alert(this.$i("kam_errorDuringSave"));
       } finally {
         this.isLoading = false;
       }
@@ -330,7 +330,7 @@ export default {
 
     async unassignManager() {
       if (!this.selectedKamId) {
-        alert("Ingen Key Account Manager valgt");
+        alert(this.$i("kam_noKamSelected"));
         return;
       }
 
@@ -342,11 +342,11 @@ export default {
           this.closeUnassignModal();
           await this.fetchRelationships();
         } else {
-          alert("Kunne ikke fjerne direktøren. Vennligst prøv igjen.");
+          alert(this.$i("kam_errorRemoveDirector"));
         }
       } catch (error) {
         console.error("Error unassigning manager:", error);
-        alert("En feil oppstod under fjerning av direktøren. Vennligst prøv igjen.");
+        alert(this.$i("kam_errorDuringRemoval"));
       } finally {
         this.isLoading = false;
       }

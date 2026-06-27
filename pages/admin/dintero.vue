@@ -2,7 +2,7 @@
   <AdminPage @login-success="handleLoginSuccess">
     <div class="dintero-config">
       <div class="dintero-config__header">
-        <h1 class="dintero-config__title">Dintero Konfigurasjon</h1>
+        <h1 class="dintero-config__title">{{ $i('dintero_title') }}</h1>
         <div
           v-if="isLoading"
           class="dintero-config__title-loading"
@@ -24,13 +24,13 @@
       >
 
         <div class="dintero-create-seller-section">
-          <h3>Legg til ny Dintero-selger</h3>
+          <h3>{{ $i('dintero_addNewSeller') }}</h3>
           <button
             class="btn btn-primary"
             style="margin-bottom: 1rem"
             @click="showCreateSellerModal = true"
           >
-            Opprett ny selger
+            {{ $i('dintero_createNewSeller') }}
           </button>
           <Modal
             v-if="showCreateSellerModal"
@@ -38,7 +38,7 @@
             @close="closeCreateSellerModal"
           >
             <div style="width: 600px; max-width: 90vw; margin: 0 auto; text-align: center">
-              <h1 style="margin-bottom: 1em">Opprett Dintero-selger</h1>
+              <h1 style="margin-bottom: 1em">{{ $i('dintero_createSellerTitle') }}</h1>
               <form @submit.prevent="handleCreateSeller">
                 <div
                   class="form-group"
@@ -49,7 +49,7 @@
                     v-model="createSellerForm.selectedVat"
                     input-id="createSellerVat"
                     :stores="allStores"
-                    placeholder="Skriv inn org.nr eller velg fra listen"
+                    :placeholder="$i('dintero_vatPlaceholder')"
                   />
                 </div>
                 <div
@@ -76,9 +76,9 @@
                     class="form-select"
                     required
                   >
-                    <option value="monthly">Månedlig</option>
-                    <option value="weekly">Ukentlig</option>
-                    <option value="daily">Daglig</option>
+                    <option value="monthly">{{ $i('dintero_intervalMonthly') }}</option>
+                    <option value="weekly">{{ $i('dintero_intervalWeekly') }}</option>
+                    <option value="daily">{{ $i('dintero_intervalDaily') }}</option>
                   </select>
                 </div>
                 <div class="modal-buttons">
@@ -86,12 +86,12 @@
                     class="emoji-btn save-btn"
                     type="submit"
                     :disabled="createSellerLoading"
-                    :value="createSellerLoading ? 'Oppretter...' : 'Opprett selger'"
+                    :value="createSellerLoading ? $i('dintero_creating') : $i('dintero_createSeller')"
                   />
                   <input
                     class="emoji-btn action-button--reject"
                     type="button"
-                    value="Avbryt"
+                    :value="$i('common_cancel')"
                     @click="closeCreateSellerModal"
                   />
                 </div>
@@ -107,7 +107,7 @@
                   class="notification notification--success"
                   style="margin-top: 1rem"
                 >
-                  Selger opprettet!
+                  {{ $i('dintero_sellerCreated') }}
                 </div>
               </form>
             </div>
@@ -115,7 +115,7 @@
         </div>
 
         <div class="dintero-sellers-section">
-          <h2 class="dintero-config__section-title">Dintero Selgere</h2>
+          <h2 class="dintero-config__section-title">{{ $i('dintero_sellersTitle') }}</h2>
           <div
             v-if="sellersLoading"
             class="dintero-config__loading"
@@ -126,12 +126,12 @@
             <table class="dintero-sellers-table">
               <thead>
                 <tr>
-                  <th>Org.nr</th>
-                  <th>DestinationId</th>
-                  <th>Interval</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                  <th>Contract</th>
+                  <th>{{ $i('dintero_colOrgNumber') }}</th>
+                  <th>{{ $i('dintero_colDestinationId') }}</th>
+                  <th>{{ $i('dintero_colInterval') }}</th>
+                  <th>{{ $i('common_status') }}</th>
+                  <th>{{ $i('common_actions') }}</th>
+                  <th>{{ $i('dintero_colContract') }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -148,7 +148,7 @@
                       class="btn btn-danger"
                       @click="deleteSeller(seller.id)"
                     >
-                      Slett
+                      {{ $i('common_delete') }}
                     </button>
                   </td>
                   <td>
@@ -158,7 +158,7 @@
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      Open Contract
+                      {{ $i('dintero_openContract') }}
                     </a>
                     <span v-else>-</span>
                   </td>
@@ -179,14 +179,14 @@
           class="dintero-config__form"
         >
           <div class="dintero-config__section">
-            <h2 class="dintero-config__section-title">Dintero API Konfigurasjon</h2>
+            <h2 class="dintero-config__section-title">{{ $i('dintero_apiConfigTitle') }}</h2>
             <div
               v-if="notification.show"
               :class="['notification', `notification--${notification.type}`]"
             >
               {{ notification.message }}
             </div>
-            <p class="dintero-config__section-description">Konfigurer Dintero betalingsløsning for denne butikken.</p>
+            <p class="dintero-config__section-description">{{ $i('dintero_apiConfigDescription') }}</p>
 
             <div class="form-group">
               <label for="splitSellerId">Split Seller ID</label>
@@ -245,7 +245,7 @@
 
             <div class="form-group">
               <details class="white-label-config">
-                <summary class="white-label-summary">White label konfigurasjon</summary>
+                <summary class="white-label-summary">{{ $i('dintero_whiteLabelConfig') }}</summary>
                 <div class="white-label-content">
                   <div class="form-group">
                     <label for="dinteroAccountId">Dintero Account ID</label>
@@ -283,8 +283,8 @@
               </details>
             </div>
 
-            <h3 class="dintero-config__subsection-title">Betalingsmetoder</h3>
-            <p class="dintero-config__section-description">Velg hvilke betalingsmetoder som skal være tilgjengelige for denne butikken.</p>
+            <h3 class="dintero-config__subsection-title">{{ $i('dintero_paymentMethods') }}</h3>
+            <p class="dintero-config__section-description">{{ $i('dintero_paymentMethodsDescription') }}</p>
 
             <div class="form-check">
               <input
@@ -296,7 +296,7 @@
               <label
                 for="dinteroEnabled"
                 class="form-check-label"
-                >Aktiver Dintero</label
+                >{{ $i('dintero_enableDintero') }}</label
               >
             </div>
 
@@ -338,7 +338,7 @@
               <label
                 for="creditCardEnabled"
                 class="form-check-label"
-                >Kredittkort</label
+                >{{ $i('dintero_creditCard') }}</label
               >
             </div>
 
@@ -403,14 +403,14 @@
                 class="btn btn-primary"
                 @click="updateDinteroConfig"
               >
-                Lagre endringer
+                {{ $i('dintero_saveChanges') }}
               </button>
             </div>
           </div>
 
           <div class="dintero-config__section">
-            <h2 class="dintero-config__section-title">Wolt Marketplace Konfigurasjon</h2>
-            <p class="dintero-config__section-description">Konfigurer Wolt Marketplace integrasjon for denne butikken.</p>
+            <h2 class="dintero-config__section-title">{{ $i('dintero_woltConfigTitle') }}</h2>
+            <p class="dintero-config__section-description">{{ $i('dintero_woltConfigDescription') }}</p>
 
             <div class="form-group">
               <label for="woltMarketplaceVenueId">Venue ID</label>
@@ -472,7 +472,7 @@
                 class="btn btn-primary"
                 @click="updateWoltMarketplaceConfig"
               >
-                Lagre Wolt Marketplace Konfigurasjon
+                {{ $i('dintero_saveWoltConfig') }}
               </button>
             </div>
           </div>
@@ -482,7 +482,7 @@
           v-else
           class="dintero-config__no-store"
         >
-          <p>Velg en butikk for å administrere Dintero konfigurasjon.</p>
+          <p>{{ $i('dintero_selectStore') }}</p>
         </div>
       </div>
     </div>
@@ -668,7 +668,7 @@ export default {
           this.resetForm();
           this.isLoading = false;
           this.initialLoading = false;
-          this.showNotification("Kunne ikke hente Dintero konfigurasjon. Vennligst prøv igjen senere.", "error");
+          this.showNotification(this.$i("dintero_fetchConfigError"), "error");
         });
     },
     loadSellers() {
@@ -682,14 +682,14 @@ export default {
         })
         .catch((err) => {
           console.error("Error fetching sellers:", err);
-          this.sellersError = "Kunne ikke hente selgere";
+          this.sellersError = this.$i("dintero_fetchSellersError");
         })
         .finally(() => {
           this.sellersLoading = false;
         });
     },
     deleteSeller(id) {
-      if (confirm("Er du sikker på at du vil slette denne selgeren?")) {
+      if (confirm(this.$i("dintero_confirmDeleteSeller"))) {
         this.sellersLoading = true;
         const forceDelete = true;
         this._dinteroService
@@ -697,7 +697,7 @@ export default {
           .then(() => this.loadSellers())
           .catch((err) => {
             console.error("Error deleting seller:", err);
-            this.sellersError = "Kunne ikke slette selger";
+            this.sellersError = this.$i("dintero_deleteSellerError");
             this.sellersLoading = false;
           });
       }
@@ -734,15 +734,15 @@ export default {
         .then((success) => {
           this.isLoading = false;
           if (success) {
-            this.showNotification("Dintero konfigurasjon oppdatert", "success");
+            this.showNotification(this.$i("dintero_configUpdated"), "success");
           } else {
-            this.showNotification("Kunne ikke oppdatere Dintero konfigurasjon. Vennligst prøv igjen senere.", "error");
+            this.showNotification(this.$i("dintero_updateConfigError"), "error");
           }
         })
         .catch((error) => {
           console.error("Error updating Dintero configuration:", error);
           this.isLoading = false;
-          this.showNotification("Kunne ikke oppdatere Dintero konfigurasjon. Vennligst prøv igjen senere.", "error");
+          this.showNotification(this.$i("dintero_updateConfigError"), "error");
         });
     },
     getContractUrl(seller) {
@@ -761,7 +761,7 @@ export default {
         const organizationNumber = this.createSellerForm.selectedVat;
         console.log("[DINTERO] handleCreateSeller selectedVat:", organizationNumber, "selectedStore:", selectedStore);
         if (!organizationNumber) {
-          this.createSellerError = "Organisasjonsnummer må fylles ut.";
+          this.createSellerError = this.$i("dintero_orgNumberRequired");
           this.createSellerLoading = false;
           return;
         }
@@ -794,7 +794,7 @@ export default {
         });
         this.closeCreateSellerModal();
       } catch (e) {
-        this.createSellerError = e && e.message ? e.message : "Kunne ikke opprette selger.";
+        this.createSellerError = e && e.message ? e.message : this.$i("dintero_createSellerError");
       } finally {
         this.createSellerLoading = false;
       }
@@ -833,13 +833,13 @@ export default {
         .then((response) => {
           console.log("[WOLT] Configuration update response:", response);
           this.isLoading = false;
-          this.showNotification("Wolt Marketplace konfigurasjon oppdatert", "success");
+          this.showNotification(this.$i("dintero_woltConfigUpdated"), "success");
         })
         .catch((error) => {
           console.error("[WOLT] Error updating Wolt Marketplace configuration:", error);
           console.error("[WOLT] Error details:", JSON.stringify(error, null, 2));
           this.isLoading = false;
-          this.showNotification("Kunne ikke oppdatere Wolt Marketplace konfigurasjon. Vennligst prøv igjen senere.", "error");
+          this.showNotification(this.$i("dintero_updateWoltConfigError"), "error");
         });
     },
   },

@@ -2,7 +2,7 @@
   <div v-if="isOpen" class="modal-overlay" @click.self="close">
     <div class="modal-container">
       <div class="modal-header">
-        <h3>Velg butikker</h3>
+        <h3>{{ $i('storeSelector_title') }}</h3>
         <button class="close-btn" @click="close">
           <span class="material-icons">close</span>
         </button>
@@ -17,7 +17,7 @@
             @click="selectAll"
           >
             <span class="material-icons">check_box</span>
-            Velg alle
+            {{ $i('storeSelector_selectAll') }}
           </button>
           <button
             class="bulk-action-btn"
@@ -25,7 +25,7 @@
             @click="deselectAll"
           >
             <span class="material-icons">check_box_outline_blank</span>
-            Fjern alle
+            {{ $i('storeSelector_deselectAll') }}
           </button>
         </div>
 
@@ -53,7 +53,7 @@
 
       <div class="modal-footer">
         <button class="btn btn-secondary" @click="close">
-          Lukk
+          {{ $i('common_close') }}
         </button>
       </div>
     </div>

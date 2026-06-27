@@ -3,12 +3,12 @@
     <div class="categories-page">
       <div class="page-header">
         <div>
-          <h1>Kategorier</h1>
-          <p>Administrer kategorier for valgt butikk.</p>
+          <h1>{{ $i('categories_title') }}</h1>
+          <p>{{ $i('categories_subtitle') }}</p>
         </div>
         <button class="btn btn-create" @click="createNewCategory">
           <span class="material-icons">add</span>
-          Opprett kategori
+          {{ $i('categories_create') }}
         </button>
       </div>
 
@@ -23,11 +23,11 @@
 
       <div v-else-if="categories.length === 0" class="empty-state">
         <span class="material-icons">inventory_2</span>
-        <h3>Ingen kategorier enda</h3>
-        <p>Kom i gang ved å opprette din første kategori</p>
+        <h3>{{ $i('categories_emptyTitle') }}</h3>
+        <p>{{ $i('categories_emptyDescription') }}</p>
         <button class="create-first-btn" @click="createNewCategory">
           <span class="material-icons">add</span>
-          Opprett første kategori
+          {{ $i('categories_createFirst') }}
         </button>
       </div>
 
@@ -55,7 +55,7 @@
           >
             <!-- Drag Handle -->
             <div class="drag-handle-container" @click.stop>
-              <div class="drag-handle" title="Dra for å endre rekkefølge">
+              <div class="drag-handle" :title="$i('categories_dragToReorder')">
                 <span class="material-icons">drag_indicator</span>
               </div>
             </div>
@@ -107,12 +107,12 @@
                 <span
                   v-if="category.hide"
                   class="status-badge hidden"
-                  >Skjult</span
+                  >{{ $i('categories_hidden') }}</span
                 >
                 <span
                   v-if="!category.published || !category.image"
                   class="status-badge unpublished"
-                  >Ikke publisert</span
+                  >{{ $i('categories_unpublished') }}</span
                 >
               </div>
               <div class="category-details">
@@ -128,27 +128,27 @@
       <!-- New Category Name Modal -->
       <div v-if="showNewCategoryModal" class="modal-overlay" @click.self="closeNewCategoryModal">
         <div class="new-category-modal">
-          <h3>Ny kategori</h3>
-          <p class="modal-description">Skriv inn kategorinavn for å komme i gang</p>
+          <h3>{{ $i('categories_newCategory') }}</h3>
+          <p class="modal-description">{{ $i('categories_newCategoryDescription') }}</p>
           <input
             ref="newCategoryNameInput"
             v-model="newCategoryName"
             type="text"
-            placeholder="Kategorinavn"
+            :placeholder="$i('categories_categoryNamePlaceholder')"
             class="modal-input"
             @keyup.enter="confirmNewCategory"
             @keyup.esc="closeNewCategoryModal"
           />
           <div class="modal-actions">
             <button class="modal-btn-secondary" @click="closeNewCategoryModal">
-              Avbryt
+              {{ $i('common_cancel') }}
             </button>
             <button
               class="modal-btn-primary"
               :disabled="!newCategoryName.trim() || isCreatingCategory"
               @click="confirmNewCategory"
             >
-              {{ isCreatingCategory ? 'Oppretter...' : 'Opprett kategori' }}
+              {{ isCreatingCategory ? $i('categories_creating') : $i('categories_create') }}
             </button>
           </div>
         </div>
@@ -244,7 +244,7 @@ export default {
         });
       } catch (err) {
         console.error('Failed to create category:', err);
-        alert('Kunne ikke opprette kategorien. Vennligst prøv igjen.');
+        alert(this.$i('categories_createError'));
         this.isCreatingCategory = false;
       }
     },
@@ -272,7 +272,7 @@ export default {
         await this._categoryService.Reorder(this.selectedStore, this.categories);
       } catch (err) {
         console.error('Failed to reorder categories:', err);
-        alert('Kunne ikke lagre rekkefølgen. Vennligst last siden på nytt.');
+        alert(this.$i('categories_reorderError'));
         this.loadCategories(); // Reload to get correct order
       } finally {
         this.isReordering = false;
@@ -291,7 +291,7 @@ export default {
         })
         .catch((err) => {
           console.error("Error loading categories:", err);
-          this.error = "Kunne ikke laste kategorier: " + (err.message || "Ukjent feil");
+          this.error = this.$i('categories_loadError', { error: err.message || this.$i('categories_unknownError') });
           this.loading = false;
         });
     },

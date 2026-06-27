@@ -3,7 +3,7 @@
     <div class="modal-container">
       <!-- Header -->
       <div class="modal-header">
-        <h2>Kopier «{{ variantName }}» til…</h2>
+        <h2>{{ $i('copyVariantToTargetsModal_title', { variantName }) }}</h2>
         <button class="close-btn" type="button" @click="cancel">
           <span class="material-icons">close</span>
         </button>
@@ -26,11 +26,11 @@
         </div>
 
         <div class="select-row">
-          <span class="selected-count">{{ selectedIds.length }} valgt</span>
+          <span class="selected-count">{{ $i('copyVariantToTargetsModal_selectedCount', { count: selectedIds.length }) }}</span>
           <div class="select-actions">
-            <button type="button" class="link-btn" @click="selectAll">Velg alle</button>
+            <button type="button" class="link-btn" @click="selectAll">{{ $i('copyVariantToTargetsModal_selectAll') }}</button>
             <span class="divider">·</span>
-            <button type="button" class="link-btn" @click="selectNone">Fjern alle</button>
+            <button type="button" class="link-btn" @click="selectNone">{{ $i('copyVariantToTargetsModal_selectNone') }}</button>
           </div>
         </div>
 
@@ -47,14 +47,14 @@
           </li>
         </ul>
         <div v-else class="empty-hint">
-          {{ search ? 'Ingen treff' : 'Ingen tilgjengelige mål' }}
+          {{ search ? $i('copyVariantToTargetsModal_noMatches') : $i('copyVariantToTargetsModal_noTargets') }}
         </div>
       </div>
 
       <!-- Footer -->
       <div class="modal-footer">
         <button class="btn btn-secondary" type="button" @click="cancel">
-          Avbryt
+          {{ $i('common_cancel') }}
         </button>
         <button
           class="btn btn-primary"
@@ -62,7 +62,7 @@
           :disabled="selectedIds.length === 0"
           @click="confirm"
         >
-          Kopier{{ selectedIds.length ? ` (${selectedIds.length})` : '' }}
+          {{ selectedIds.length ? $i('copyVariantToTargetsModal_copyWithCount', { count: selectedIds.length }) : $i('copyVariantToTargetsModal_copy') }}
         </button>
       </div>
     </div>
@@ -88,8 +88,8 @@ export default {
   computed: {
     description() {
       return this.targetType === 'product'
-        ? 'Velg hvilke produkter tilbehøret skal kopieres til. Finnes en gruppe med samme navn fra før, blir den oppdatert.'
-        : 'Velg hvilke kategorier tilbehøret skal kopieres til. Finnes en gruppe med samme navn fra før, blir den oppdatert.'
+        ? this.$i('copyVariantToTargetsModal_descriptionProduct')
+        : this.$i('copyVariantToTargetsModal_descriptionCategory')
     },
 
     // Only show the filter for long lists, otherwise keep the picker clean.
@@ -98,7 +98,9 @@ export default {
     },
 
     searchPlaceholder() {
-      return this.targetType === 'product' ? 'Søk etter produkt…' : 'Søk etter kategori…'
+      return this.targetType === 'product'
+        ? this.$i('copyVariantToTargetsModal_searchProduct')
+        : this.$i('copyVariantToTargetsModal_searchCategory')
     },
 
     filteredTargets() {

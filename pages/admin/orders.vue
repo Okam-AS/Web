@@ -1,7 +1,7 @@
 <template>
   <AdminPage :full-width="true">
     <div class="orders-page">
-      <h2>Alle bestillinger</h2>
+      <h2>{{ $i('orders_allOrders') }}</h2>
 
       <!-- Multi-select filters -->
       <div class="filters-section">
@@ -10,49 +10,49 @@
             v-if="adminStores.length > 1"
             class="filter-group"
           >
-            <label class="filter-label">Butikker</label>
+            <label class="filter-label">{{ $i('orders_stores') }}</label>
             <MultiSelectDropdown
               :options="storeOptions"
               :selected.sync="selectedStoreIds"
-              placeholder="Velg butikker"
-              all-text="Alle butikker"
-              search-placeholder="Søk etter butikk..."
+              :placeholder="$i('orders_selectStores')"
+              :all-text="$i('orders_allStores')"
+              :search-placeholder="$i('orders_searchStore')"
               @update:selected="onFilterChange"
             />
           </div>
 
           <div class="filter-group">
-            <label class="filter-label">Status</label>
+            <label class="filter-label">{{ $i('common_status') }}</label>
             <MultiSelectDropdown
               :options="statusOptions"
               :selected.sync="selectedStatuses"
-              placeholder="Velg status"
-              all-text="Alle statuser"
-              search-placeholder="Søk..."
+              :placeholder="$i('orders_selectStatus')"
+              :all-text="$i('orders_allStatuses')"
+              :search-placeholder="$i('common_search')"
               @update:selected="onFilterChange"
             />
           </div>
 
           <div class="filter-group">
-            <label class="filter-label">Leveringstyper</label>
+            <label class="filter-label">{{ $i('orders_deliveryTypes') }}</label>
             <MultiSelectDropdown
               :options="deliveryTypeOptions"
               :selected.sync="selectedDeliveryTypes"
-              placeholder="Velg leveringstyper"
-              all-text="Alle leveringstyper"
-              search-placeholder="Søk..."
+              :placeholder="$i('orders_selectDeliveryTypes')"
+              :all-text="$i('orders_allDeliveryTypes')"
+              :search-placeholder="$i('common_search')"
               @update:selected="onFilterChange"
             />
           </div>
 
           <div class="filter-group">
-            <label class="filter-label">Betalingstyper</label>
+            <label class="filter-label">{{ $i('orders_paymentTypes') }}</label>
             <MultiSelectDropdown
               :options="paymentTypeOptions"
               :selected.sync="selectedPaymentTypes"
-              placeholder="Velg betalingstyper"
-              all-text="Alle betalingstyper"
-              search-placeholder="Søk..."
+              :placeholder="$i('orders_selectPaymentTypes')"
+              :all-text="$i('orders_allPaymentTypes')"
+              :search-placeholder="$i('common_search')"
               @update:selected="onFilterChange"
             />
           </div>
@@ -66,7 +66,7 @@
             <input
               v-model="searchQuery"
               type="text"
-              placeholder="Søk etter kode, telefon, navn eller ID..."
+              :placeholder="$i('orders_searchPlaceholder')"
               class="search-input"
               @keyup.enter="fetchOrders(1)"
             />
@@ -75,14 +75,14 @@
               @click="fetchOrders(1)"
             >
               <span class="material-icons">search</span>
-              Søk
+              {{ $i('common_search') }}
             </button>
           </div>
         </div>
 
         <div class="date-filters-row">
           <div class="date-input">
-            <label>Fra dato:</label>
+            <label>{{ $i('orders_fromDate') }}</label>
             <input
               v-model="dateFrom"
               type="date"
@@ -90,7 +90,7 @@
             />
           </div>
           <div class="date-input">
-            <label>Til dato:</label>
+            <label>{{ $i('orders_toDate') }}</label>
             <input
               v-model="dateTo"
               type="date"
@@ -101,13 +101,13 @@
             class="apply-filters-btn"
             @click="fetchOrders(1)"
           >
-            Filtrer
+            {{ $i('orders_filter') }}
           </button>
           <button
             class="clear-filters-btn"
             @click="clearFilters"
           >
-            Nullstill
+            {{ $i('orders_reset') }}
           </button>
         </div>
       </div>
@@ -119,7 +119,7 @@
       >
         <div class="loading-content">
           <div class="loading-spinner" />
-          <p>Laster bestillinger...</p>
+          <p>{{ $i('orders_loadingOrders') }}</p>
         </div>
       </div>
 
@@ -128,17 +128,17 @@
         v-if="!isLoadingOrders && ordersData && ordersData.orders && ordersData.orders.length === 0"
         class="orders-info-banner"
       >
-        <p>Ingen bestillinger funnet</p>
+        <p>{{ $i('orders_noOrdersFound') }}</p>
         <div
           v-if="hasActiveFilters"
           class="filter-hint"
         >
-          <p>Prøv å fjerne noen filtre for å se flere resultater</p>
+          <p>{{ $i('orders_tryRemoveFilters') }}</p>
           <button
             class="clear-filters-hint-btn"
             @click="clearFilters"
           >
-            Nullstill filtre
+            {{ $i('orders_resetFilters') }}
           </button>
         </div>
       </div>
@@ -157,7 +157,7 @@
               @click="showColumnVisibilityMenu = !showColumnVisibilityMenu"
             >
               <span class="material-icons">visibility</span>
-              Kolonner
+              {{ $i('orders_columns') }}
             </button>
 
             <!-- Column visibility dropdown -->
@@ -166,7 +166,7 @@
               class="column-visibility-dropdown"
             >
               <div class="visibility-header">
-                <h4>Vis/skjul kolonner</h4>
+                <h4>{{ $i('orders_showHideColumns') }}</h4>
                 <button
                   class="close-btn"
                   @click="showColumnVisibilityMenu = false"
@@ -200,7 +200,7 @@
             >
               <span v-if="isExporting" class="loading-spinner-small" />
               <span v-else class="material-icons">download</span>
-              {{ isExporting ? 'Eksporterer...' : 'Last ned' }}
+              {{ isExporting ? $i('orders_exporting') : $i('orders_download') }}
             </button>
 
             <!-- Download dropdown -->
@@ -209,7 +209,7 @@
               class="download-dropdown"
             >
               <div class="download-header">
-                <h4>Last ned som...</h4>
+                <h4>{{ $i('orders_downloadAs') }}</h4>
                 <button
                   class="close-btn"
                   @click="showDownloadMenu = false"
@@ -225,8 +225,8 @@
               >
                 <span class="material-icons">warning</span>
                 <div class="warning-text">
-                  <strong>For mange resultater</strong>
-                  <p>Filen blir for stor. Vennligst filtrer ned resultatene for å eksportere (maks 20 sider).</p>
+                  <strong>{{ $i('orders_tooManyResults') }}</strong>
+                  <p>{{ $i('orders_tooManyResultsHint') }}</p>
                 </div>
               </div>
 
@@ -332,7 +332,7 @@
                   @click.stop
                 >
                   <span class="material-icons">open_in_new</span>
-                  Spor
+                  {{ $i('orders_track') }}
                 </a>
                 <span v-else>-</span>
               </template>
@@ -346,7 +346,7 @@
             <button
               :disabled="currentPage <= 1 || isLoadingOrders"
               class="pagination-btn nav-btn"
-              title="Forrige side"
+              :title="$i('orders_previousPage')"
               @click="changePage(currentPage - 1)"
             >
               <span class="material-icons">chevron_left</span>
@@ -367,7 +367,7 @@
             <button
               :disabled="currentPage >= (ordersData.totalPages || 1) || isLoadingOrders"
               class="pagination-btn nav-btn"
-              title="Neste side"
+              :title="$i('orders_nextPage')"
               @click="changePage(currentPage + 1)"
             >
               <span class="material-icons">chevron_right</span>
@@ -485,18 +485,18 @@ export default {
     },
     allColumns() {
       return [
-        { id: "friendlyOrderId", label: "Kode" },
-        { id: "storeName", label: "Butikk" },
-        { id: "status", label: "Status" },
-        { id: "customer", label: "Kunde" },
-        { id: "created", label: "Opprettet" },
-        { id: "finalAmount", label: "Beløp" },
-        { id: "deliveryType", label: "Levering" },
-        { id: "pickupEta", label: "Sjåfør ETA" },
-        { id: "drivingTime", label: "Kjøretid" },
-        { id: "orderCode", label: "ID" },
-        { id: "totalTime", label: "Total tid" },
-        { id: "tracking", label: "Sporing" },
+        { id: "friendlyOrderId", label: this.$i("orders_colCode") },
+        { id: "storeName", label: this.$i("orders_colStore") },
+        { id: "status", label: this.$i("common_status") },
+        { id: "customer", label: this.$i("orders_colCustomer") },
+        { id: "created", label: this.$i("orders_colCreated") },
+        { id: "finalAmount", label: this.$i("orders_colAmount") },
+        { id: "deliveryType", label: this.$i("orders_colDelivery") },
+        { id: "pickupEta", label: this.$i("orders_colDriverEta") },
+        { id: "drivingTime", label: this.$i("orders_colDrivingTime") },
+        { id: "orderCode", label: this.$i("orders_colId") },
+        { id: "totalTime", label: this.$i("orders_colTotalTime") },
+        { id: "tracking", label: this.$i("orders_colTracking") },
       ];
     },
     visiblePages() {
@@ -547,38 +547,38 @@ export default {
     },
     statusOptions() {
       return [
-        { id: "Accepted", label: "Forespurt" },
-        { id: "Processing", label: "Tilberedes" },
-        { id: "ReadyForPickup", label: "Klar for henting" },
-        { id: "ReadyForDriver", label: "På vei" },
-        { id: "DriverPickedUp", label: "Sjåføren er på vei" },
-        { id: "Served", label: "Servert" },
-        { id: "Completed", label: "Fullført" },
-        { id: "Canceled", label: "Kansellert" },
+        { id: "Accepted", label: this.$i("orders_statusAccepted") },
+        { id: "Processing", label: this.$i("orders_statusProcessing") },
+        { id: "ReadyForPickup", label: this.$i("orders_statusReadyForPickup") },
+        { id: "ReadyForDriver", label: this.$i("orders_statusReadyForDriver") },
+        { id: "DriverPickedUp", label: this.$i("orders_statusDriverPickedUp") },
+        { id: "Served", label: this.$i("orders_statusServed") },
+        { id: "Completed", label: this.$i("orders_statusCompleted") },
+        { id: "Canceled", label: this.$i("orders_statusCanceled") },
       ];
     },
     deliveryTypeOptions() {
       return [
-        { id: "SelfPickup", label: "Hent selv" },
-        { id: "InstantHomeDelivery", label: "Hjemlevering" },
-        { id: "DineHomeDelivery", label: "DineHome Hjemlevering" },
+        { id: "SelfPickup", label: this.$i("orders_deliverySelfPickup") },
+        { id: "InstantHomeDelivery", label: this.$i("orders_deliveryInstantHome") },
+        { id: "DineHomeDelivery", label: this.$i("orders_deliveryDineHome") },
         { id: "WoltDelivery", label: "Wolt Drive" },
         { id: "WoltMarketplaceDelivery", label: "Wolt Marketplace" },
-        { id: "TableDelivery", label: "Spis inne" },
+        { id: "TableDelivery", label: this.$i("orders_deliveryTable") },
       ];
     },
     paymentTypeOptions() {
       return [
-        { id: "PayInStore", label: "Betal i butikk" },
-        { id: "Stripe", label: "Betalt med kort" },
-        { id: "Vipps", label: "Betalt med Vipps" },
-        { id: "Giftcard", label: "Betalt med gavekort" },
-        { id: "Dintero", label: "Betalt med Dintero" },
-        { id: "DinteroVipps", label: "Betalt med Vipps" },
-        { id: "DinteroBillie", label: "Betalt med Billie" },
-        { id: "DinteroKlarna", label: "Betalt med Klarna" },
-        { id: "DinteroKravia", label: "Betalt med Kravia" },
-        { id: "WoltMarketplace", label: "Betalt via Wolt" },
+        { id: "PayInStore", label: this.$i("orders_paymentPayInStore") },
+        { id: "Stripe", label: this.$i("orders_paymentCard") },
+        { id: "Vipps", label: this.$i("orders_paymentVipps") },
+        { id: "Giftcard", label: this.$i("orders_paymentGiftcard") },
+        { id: "Dintero", label: this.$i("orders_paymentDintero") },
+        { id: "DinteroVipps", label: this.$i("orders_paymentVipps") },
+        { id: "DinteroBillie", label: this.$i("orders_paymentBillie") },
+        { id: "DinteroKlarna", label: this.$i("orders_paymentKlarna") },
+        { id: "DinteroKravia", label: this.$i("orders_paymentKravia") },
+        { id: "WoltMarketplace", label: this.$i("orders_paymentWolt") },
       ];
     },
     hasActiveFilters() {
@@ -977,7 +977,7 @@ export default {
 
       // Add BOM for Excel compatibility with Norwegian characters
       const bom = '\uFEFF';
-      this.downloadFile(bom + csvContent, 'bestillinger.csv', 'text/csv;charset=utf-8');
+      this.downloadFile(bom + csvContent, `${this.$i("orders_exportFilename")}.csv`, 'text/csv;charset=utf-8');
     },
     generateJSON(orders) {
       const columns = this.orderedVisibleColumns;
@@ -993,7 +993,7 @@ export default {
       });
 
       const jsonContent = JSON.stringify(exportData, null, 2);
-      this.downloadFile(jsonContent, 'bestillinger.json', 'application/json');
+      this.downloadFile(jsonContent, `${this.$i("orders_exportFilename")}.json`, 'application/json');
     },
     getExportValue(order, columnId) {
       switch (columnId) {

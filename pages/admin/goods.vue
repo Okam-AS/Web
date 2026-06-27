@@ -4,22 +4,22 @@
       <div class="overview__content">
         <div class="overview__table-container">
           <div class="overview__header">
-            <h3>Varer og tjenester</h3>
+            <h3>{{ $i('goods_title') }}</h3>
             <button
               class="overview__button"
               @click="showAddOfferModal"
             >
-              Legg til vare/tjeneste
+              {{ $i('goods_addItem') }}
             </button>
           </div>
           <table class="overview__table">
             <thead>
               <tr>
-                <th class="sortable-header">Navn</th>
-                <th class="sortable-header">Beskrivelse</th>
-                <th class="sortable-header">Månedspris</th>
-                <th class="sortable-header">Engangspris</th>
-                <th>Handling</th>
+                <th class="sortable-header">{{ $i('common_name') }}</th>
+                <th class="sortable-header">{{ $i('common_description') }}</th>
+                <th class="sortable-header">{{ $i('goods_monthlyPrice') }}</th>
+                <th class="sortable-header">{{ $i('goods_onetimePrice') }}</th>
+                <th>{{ $i('common_actions') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -37,13 +37,13 @@
                       class="action-button action-button--edit"
                       @click="editOffer(item)"
                     >
-                      Endre
+                      {{ $i('common_edit') }}
                     </button>
                     <button
                       class="action-button action-button--reject"
                       @click="confirmDeleteOffer(item)"
                     >
-                      Slett
+                      {{ $i('common_delete') }}
                     </button>
                   </div>
                 </td>
@@ -53,7 +53,7 @@
                   colspan="11"
                   class="overview__empty"
                 >
-                  Ingen varer/tjenester funnet
+                  {{ $i('goods_noItemsFound') }}
                 </td>
               </tr>
             </tbody>
@@ -68,11 +68,11 @@
         >
           <div style="width: 1000px; max-width: 90vw; margin: 0 auto; text-align: center">
             <h1 style="margin-bottom: 1em">
-              {{ isEditMode ? "Endre vare/tjeneste" : "Legge ny vare/tjeneste" }}
+              {{ isEditMode ? $i('goods_editItem') : $i('goods_addNewItem') }}
             </h1>
             <form @submit.prevent="saveOffer">
               <div class="form-group">
-                <label for="name">Navn</label>
+                <label for="name">{{ $i('common_name') }}</label>
                 <br />
                 <input
                   id="name"
@@ -82,7 +82,7 @@
                 />
               </div>
               <div class="form-group">
-                <label for="description">Beskrivelse</label>
+                <label for="description">{{ $i('common_description') }}</label>
                 <br />
                 <textarea
                   id="description"
@@ -92,7 +92,7 @@
                 />
               </div>
               <div class="form-group">
-                <label for="internalDescription">Intern beskrivelse</label>
+                <label for="internalDescription">{{ $i('goods_internalDescription') }}</label>
                 <br />
                 <textarea
                   id="internalDescription"
@@ -103,7 +103,7 @@
               </div>
 
               <div class="form-section">
-                <h6>Prisalternativer</h6>
+                <h6>{{ $i('goods_priceOptions') }}</h6>
                 <div class="form-row">
                   <div class="form-group form-group--half">
                     <div class="checkbox-container">
@@ -113,7 +113,7 @@
                         type="checkbox"
                         class="checkbox-input"
                       />
-                      <label for="enableMonthlyFee" class="checkbox-label">Aktiver månedspris</label>
+                      <label for="enableMonthlyFee" class="checkbox-label">{{ $i('goods_enableMonthlyPrice') }}</label>
                     </div>
                   </div>
                   <div class="form-group form-group--half">
@@ -124,17 +124,17 @@
                         type="checkbox"
                         class="checkbox-input"
                       />
-                      <label for="enableOnetimeFee" class="checkbox-label">Aktiver engangspris</label>
+                      <label for="enableOnetimeFee" class="checkbox-label">{{ $i('goods_enableOnetimePrice') }}</label>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div class="form-section" v-if="currentOffer.enableMonthlyFee || currentOffer.enableOnetimeFee">
-                <h6>Minimumspris</h6>
+                <h6>{{ $i('goods_minimumPrice') }}</h6>
                 <div class="form-row">
                   <div class="form-group form-group--half" v-if="currentOffer.enableMonthlyFee">
-                    <label for="minMonthlyFee">Min månedspris</label>
+                    <label for="minMonthlyFee">{{ $i('goods_minMonthlyPrice') }}</label>
                     <br />
                     <PriceInput
                       id="minMonthlyFee"
@@ -142,7 +142,7 @@
                     />
                   </div>
                   <div class="form-group form-group--half" v-if="currentOffer.enableOnetimeFee">
-                    <label for="minOnetimeFee">Min engangspris</label>
+                    <label for="minOnetimeFee">{{ $i('goods_minOnetimePrice') }}</label>
                     <br />
                     <PriceInput
                       id="minOnetimeFee"
@@ -153,10 +153,10 @@
               </div>
 
               <div class="form-section" v-if="currentOffer.enableMonthlyFee || currentOffer.enableOnetimeFee">
-                <h6>Maksimumspris</h6>
+                <h6>{{ $i('goods_maximumPrice') }}</h6>
                 <div class="form-row">
                   <div class="form-group form-group--half" v-if="currentOffer.enableMonthlyFee">
-                    <label for="maxMonthlyFee">Maks månedspris</label>
+                    <label for="maxMonthlyFee">{{ $i('goods_maxMonthlyPrice') }}</label>
                     <br />
                     <PriceInput
                       id="maxMonthlyFee"
@@ -164,7 +164,7 @@
                     />
                   </div>
                   <div class="form-group form-group--half" v-if="currentOffer.enableOnetimeFee">
-                    <label for="maxOnetimeFee">Maks engangspris</label>
+                    <label for="maxOnetimeFee">{{ $i('goods_maxOnetimePrice') }}</label>
                     <br />
                     <PriceInput
                       id="maxOnetimeFee"
@@ -175,11 +175,11 @@
               </div>
 
               <div class="form-section" v-if="currentOffer.enableMonthlyFee || currentOffer.enableOnetimeFee">
-                <h6>Selgers bonus (prosent regnes som andel av salgspris minus selvkost)</h6>
+                <h6>{{ $i('goods_sellerBonus') }}</h6>
 
                 <div class="form-row">
                   <div class="form-group form-group--half" v-if="currentOffer.enableMonthlyFee">
-                    <label for="monthlyBonusToSeller">Månedsbonus</label>
+                    <label for="monthlyBonusToSeller">{{ $i('goods_monthlyBonus') }}</label>
                     <br />
                     <PriceInput
                       id="monthlyBonusToSeller"
@@ -187,7 +187,7 @@
                     />
                   </div>
                   <div class="form-group form-group--half" v-if="currentOffer.enableOnetimeFee">
-                    <label for="onetimeBonusToSeller">Engangsbonus</label>
+                    <label for="onetimeBonusToSeller">{{ $i('goods_onetimeBonus') }}</label>
                     <br />
                     <PriceInput
                       id="onetimeBonusToSeller"
@@ -197,7 +197,7 @@
                 </div>
                 <div class="form-row">
                   <div class="form-group form-group--half" v-if="currentOffer.enableMonthlyFee">
-                    <label for="monthlyPercentBonusToSeller">Månedsbonus (%)</label>
+                    <label for="monthlyPercentBonusToSeller">{{ $i('goods_monthlyBonusPercent') }}</label>
                     <br />
                     <input
                       id="monthlyPercentBonusToSeller"
@@ -209,7 +209,7 @@
                     />
                   </div>
                   <div class="form-group form-group--half" v-if="currentOffer.enableOnetimeFee">
-                    <label for="onetimePercentBonusToSeller">Engangsbonus (%)</label>
+                    <label for="onetimePercentBonusToSeller">{{ $i('goods_onetimeBonusPercent') }}</label>
                     <br />
                     <input
                       id="onetimePercentBonusToSeller"
@@ -224,10 +224,10 @@
               </div>
 
               <div class="form-section" v-if="currentOffer.enableMonthlyFee || currentOffer.enableOnetimeFee">
-                <h6>Selgers leders bonus (prosent regnes som andel av salgspris minus selvkost)</h6>
+                <h6>{{ $i('goods_sellersManagerBonus') }}</h6>
                 <div class="form-row">
                   <div class="form-group form-group--half" v-if="currentOffer.enableMonthlyFee">
-                    <label for="monthlyBonusToSellersManager">Månedsbonus</label>
+                    <label for="monthlyBonusToSellersManager">{{ $i('goods_monthlyBonus') }}</label>
                     <br />
                     <PriceInput
                       id="monthlyBonusToSellersManager"
@@ -235,7 +235,7 @@
                     />
                   </div>
                   <div class="form-group form-group--half" v-if="currentOffer.enableOnetimeFee">
-                    <label for="oneTimeBonusToSellersManager">Engangsbonus</label>
+                    <label for="oneTimeBonusToSellersManager">{{ $i('goods_onetimeBonus') }}</label>
                     <br />
                     <PriceInput
                       id="oneTimeBonusToSellersManager"
@@ -245,7 +245,7 @@
                 </div>
                 <div class="form-row">
                   <div class="form-group form-group--half" v-if="currentOffer.enableMonthlyFee">
-                    <label for="monthlyPercentBonusToSellersManager">Månedsbonus (%)</label>
+                    <label for="monthlyPercentBonusToSellersManager">{{ $i('goods_monthlyBonusPercent') }}</label>
                     <br />
                     <input
                       id="monthlyPercentBonusToSellersManager"
@@ -257,7 +257,7 @@
                     />
                   </div>
                   <div class="form-group form-group--half" v-if="currentOffer.enableOnetimeFee">
-                    <label for="onetimePercentBonusToSellersManager">Engangsbonus (%)</label>
+                    <label for="onetimePercentBonusToSellersManager">{{ $i('goods_onetimeBonusPercent') }}</label>
                     <br />
                     <input
                       id="onetimePercentBonusToSellersManager"
@@ -275,13 +275,13 @@
                 <input
                   class="emoji-btn"
                   type="button"
-                  value="Avbryt"
+                  :value="$i('common_cancel')"
                   @click="closeOfferModal"
                 />
                 <input
                   class="emoji-btn"
                   type="submit"
-                  value="Lagre"
+                  :value="$i('common_save')"
                 />
               </div>
             </form>
@@ -294,23 +294,21 @@
           @close="closeDeleteModal"
         >
           <div style="width: 500px; max-width: 90vw; margin: 0 auto; text-align: center">
-            <h1 style="margin-bottom: 1em">Bekreft sletting</h1>
+            <h1 style="margin-bottom: 1em">{{ $i('goods_confirmDeletion') }}</h1>
             <p>
-              Er du sikker på at du vil slette varen/tjenesten
-              <strong>{{ itemToDelete && itemToDelete.name }}</strong
-              >?
+              {{ $i('goods_confirmDeleteMessage', { name: itemToDelete && itemToDelete.name }) }}
             </p>
             <div class="modal-buttons">
               <input
                 class="emoji-btn"
                 type="button"
-                value="Avbryt"
+                :value="$i('common_cancel')"
                 @click="closeDeleteModal"
               />
               <input
                 class="emoji-btn"
                 type="button"
-                value="Slett"
+                :value="$i('common_delete')"
                 @click="deleteOffer"
               />
             </div>
@@ -378,7 +376,7 @@ export default {
         })
         .catch((error) => {
           console.error("Error fetching offer items:", error);
-          alert("Kunne ikke hente varer/tjenester. Prøv igjen senere.");
+          alert(this.$i("goods_errorFetch"));
         })
         .finally(() => {
           this.isLoading = false;
@@ -432,7 +430,7 @@ export default {
         })
         .catch((error) => {
           console.error("Error saving offer item:", error);
-          alert("Kunne ikke lagre vare/tjeneste. Prøv igjen senere.");
+          alert(this.$i("goods_errorSave"));
         })
         .finally(() => {
           this.isLoading = false;
@@ -453,7 +451,7 @@ export default {
         })
         .catch((error) => {
           console.error("Error deleting offer item:", error);
-          alert("Kunne ikke slette vare/tjeneste. Prøv igjen senere.");
+          alert(this.$i("goods_errorDelete"));
         })
         .finally(() => {
           this.isLoading = false;

@@ -16,7 +16,7 @@
         <!-- Page title -->
         <div class="onboarding-title">
           <h1 v-if="storeName">
-            Oppsett av
+            {{ $i('onboarding_setupOf') }}
             <span
               v-if="storeSelectorAvailable"
               class="store-name-dropdown"
@@ -114,7 +114,7 @@
           v-if="storeApproved"
           class="approved-store-container"
         >
-          <h1>{{ storeName }} er publisert!</h1>
+          <h1>{{ $i('onboarding_storePublished', { storeName }) }}</h1>
 
           <a
             :href="`https://shop.okam.no/store/${storeSlug}`"
@@ -184,7 +184,7 @@
               class="final-step-container"
             >
               <div class="publish-explanation">
-                <p>Ved å klikke på knappen nedenfor, vil butikken din bli publisert og tilgjengelig for kunder. Du kan fortsatt gjøre endringer i butikken din etter publisering.</p>
+                <p>{{ $i('onboarding_publishExplanation') }}</p>
               </div>
 
               <div class="publish-button-container">
@@ -192,7 +192,7 @@
                   class="btn publish-btn"
                   @click="publishStore"
                 >
-                  Publiser {{ storeName }}
+                  {{ $i('onboarding_publishStore', { storeName }) }}
                 </button>
               </div>
             </div>
@@ -215,7 +215,7 @@
                 class="btn btn-secondary"
                 @click="prevStep"
               >
-                Tilbake
+                {{ $i('common_back') }}
               </button>
             </div>
             <div>
@@ -224,7 +224,7 @@
                 class="btn btn-primary"
                 @click="nextStep"
               >
-                Fortsett
+                {{ $i('onboarding_continue') }}
               </button>
             </div>
           </div>
@@ -256,24 +256,6 @@ export default {
   data() {
     return {
       currentStep: 0,
-      steps: [
-        {
-          label: "Logo",
-          title: "Last opp butikklogo",
-        },
-        {
-          label: "Meny",
-          title: "Importer meny",
-        },
-        {
-          label: "Bilder",
-          title: "Last opp produktbilder",
-        },
-        {
-          label: "Publiser",
-          title: "Publiser butikk",
-        },
-      ],
       storeId: null,
       storeName: "butikk",
       storeApproved: false,
@@ -293,6 +275,26 @@ export default {
     };
   },
   computed: {
+    steps() {
+      return [
+        {
+          label: this.$i("onboarding_stepLogoLabel"),
+          title: this.$i("onboarding_stepLogoTitle"),
+        },
+        {
+          label: this.$i("onboarding_stepMenuLabel"),
+          title: this.$i("onboarding_stepMenuTitle"),
+        },
+        {
+          label: this.$i("onboarding_stepImagesLabel"),
+          title: this.$i("onboarding_stepImagesTitle"),
+        },
+        {
+          label: this.$i("onboarding_stepPublishLabel"),
+          title: this.$i("onboarding_stepPublishTitle"),
+        },
+      ];
+    },
     storeSelectorAvailable() {
       return this.storeName !== "butikk" && this.$store.state.currentUser && this.$store.state.currentUser.adminIn && this.$store.state.currentUser.adminIn.length > 1;
     },
@@ -462,7 +464,7 @@ export default {
           this.isPublishing = false;
         })
         .catch((_error) => {
-          alert("Feil ved lasting av butikkdata. Vennligst prøv igjen.");
+          alert(this.$i("onboarding_loadStoreDataError"));
           this.isLoading = false;
           this.isPublishing = false;
         });

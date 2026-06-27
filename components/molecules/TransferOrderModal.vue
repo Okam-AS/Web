@@ -5,7 +5,7 @@
   >
     <div class="modal-content">
       <div class="modal-header">
-        <h2>Flytt ordre til annen avdeling</h2>
+        <h2>{{ $i('transferOrderModal_title') }}</h2>
         <button
           class="close-btn"
           @click="cancel"
@@ -17,17 +17,17 @@
       <div class="modal-body">
         <div class="order-info">
           <div class="info-row">
-            <span class="label">Butikk:</span>
+            <span class="label">{{ $i('transferOrderModal_storeLabel') }}</span>
             <span class="value">{{ order.storeLegalName }}</span>
           </div>
           <div class="info-row">
-            <span class="label">Ordre:</span>
+            <span class="label">{{ $i('transferOrderModal_orderLabel') }}</span>
             <span class="value">#{{ order.friendlyOrderId || order.id }}</span>
           </div>
         </div>
 
         <div class="store-selection">
-          <label>Velg avdeling:</label>
+          <label>{{ $i('transferOrderModal_selectDepartment') }}</label>
           <div class="store-list">
             <button
               v-for="store in availableStores"
@@ -48,7 +48,7 @@
           class="btn btn-secondary"
           @click="cancel"
         >
-          Avbryt
+          {{ $i('common_cancel') }}
         </button>
         <button
           v-if="!isLoading"
@@ -56,7 +56,7 @@
           :disabled="!selectedStoreId"
           @click="confirm"
         >
-          Flytt ordre
+          {{ $i('transferOrderModal_confirmButton') }}
         </button>
         <div
           v-else
@@ -110,7 +110,7 @@ export default {
           this.$emit('close', true)
         })
         .catch((error) => {
-          alert('Feil ved flytting av ordre: ' + (error.message || 'Ukjent feil'))
+          alert(this.$i('transferOrderModal_transferError', { error: error.message || this.$i('transferOrderModal_unknownError') }))
           this.isLoading = false
         })
     },

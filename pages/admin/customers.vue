@@ -2,8 +2,8 @@
   <AdminPage @login-success="onLoginSuccess">
     <div class="customers-page">
       <div class="page-header">
-        <h1>Kunder</h1>
-        <p class="page-description">Søk etter kunder eller se statistikk og oversikt</p>
+        <h1>{{ $i('customers_title') }}</h1>
+        <p class="page-description">{{ $i('customers_pageDescription') }}</p>
       </div>
 
       <!-- Search Bar -->
@@ -14,7 +14,7 @@
         <input
           v-model="searchQuery"
           type="text"
-          placeholder="Søk på navn eller telefon (min. 3 tegn)..."
+          :placeholder="$i('customers_searchPlaceholder')"
           class="search-input"
           @input="onSearchInput"
         />
@@ -31,7 +31,7 @@
           <Loading :loading="true" />
         </div>
         <div v-else-if="searchQuery.length < 3" class="search-hint">
-          Skriv minst 3 tegn for å søke
+          {{ $i('customers_searchHint') }}
         </div>
         <div v-else-if="customers.length === 0" class="empty-state">
           <div class="empty-state__icon">
@@ -39,8 +39,8 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </div>
-          <h3>Ingen kunder funnet</h3>
-          <p>Ingen kunder matcher "{{ searchQuery }}"</p>
+          <h3>{{ $i('customers_noCustomersFound') }}</h3>
+          <p>{{ $i('customers_noCustomersMatch', { query: searchQuery }) }}</p>
         </div>
         <div v-else class="customers-list">
           <div
@@ -92,7 +92,7 @@
 
           <!-- Platform Distribution -->
           <div v-if="hasPlatformData" class="form-section">
-            <h2 class="section-title">Plattformfordeling</h2>
+            <h2 class="section-title">{{ $i('customers_platformDistribution') }}</h2>
             <div class="platform-chart">
               <canvas ref="platformChart" width="200" height="200" class="pie-canvas" />
               <div class="platform-legend">
@@ -117,7 +117,7 @@
 
           <!-- Favorite Products -->
           <div v-if="dashboardData.favoriteProducts && dashboardData.favoriteProducts.length" class="form-section">
-            <h2 class="section-title">Mest populære produkter</h2>
+            <h2 class="section-title">{{ $i('customers_mostPopularProducts') }}</h2>
             <div class="favorites-list">
               <div
                 v-for="(product, index) in dashboardData.favoriteProducts"
@@ -126,15 +126,15 @@
               >
                 <span class="favorite-rank">{{ index + 1 }}</span>
                 <span class="favorite-name">{{ product.name }}</span>
-                <span class="favorite-count">{{ product.favoriteCount }} favoritter</span>
+                <span class="favorite-count">{{ $i('customers_favoritesCount', { count: product.favoriteCount }) }}</span>
               </div>
             </div>
           </div>
         </template>
 
         <div v-else class="empty-state">
-          <h3>Velg en butikk</h3>
-          <p>Velg en butikk for å se kundestatistikk.</p>
+          <h3>{{ $i('customers_selectStoreTitle') }}</h3>
+          <p>{{ $i('customers_selectStoreDescription') }}</p>
         </div>
       </template>
 
@@ -189,13 +189,13 @@ export default {
     },
     periodOptions() {
       return [
-        { label: '1 dag', value: 1 },
-        { label: '7 dager', value: 7 },
-        { label: '30 dager', value: 30 },
-        { label: '45 dager', value: 45 },
-        { label: '90 dager', value: 90 },
-        { label: 'Dette året', value: 365 },
-        { label: 'Siden start', value: 9999 },
+        { label: this.$i('customers_period1Day'), value: 1 },
+        { label: this.$i('customers_period7Days'), value: 7 },
+        { label: this.$i('customers_period30Days'), value: 30 },
+        { label: this.$i('customers_period45Days'), value: 45 },
+        { label: this.$i('customers_period90Days'), value: 90 },
+        { label: this.$i('customers_periodThisYear'), value: 365 },
+        { label: this.$i('customers_periodSinceStart'), value: 9999 },
       ]
     },
     hasPlatformData() {

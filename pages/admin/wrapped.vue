@@ -17,16 +17,16 @@
     <!-- Loading State -->
     <div v-else-if="isLoading" class="wrapped-loading">
       <div class="loading-spinner"></div>
-      <p>Laster inn ditt 2025...</p>
+      <p>{{ $i('wrapped_loading') }}</p>
     </div>
 
     <!-- Error State -->
     <div v-else-if="error" class="wrapped-error">
       <span class="material-icons">error_outline</span>
-      <h2>Oops!</h2>
+      <h2>{{ $i('wrapped_oops') }}</h2>
       <p>{{ error }}</p>
       <button class="btn-primary" @click="goBack">
-        Tilbake til admin
+        {{ $i('wrapped_backToAdmin') }}
       </button>
     </div>
   </div>
@@ -67,7 +67,7 @@ export default {
     if (this.adminStores.length === 1) {
       this.onStoreSelect(this.adminStores[0].id)
     } else if (this.adminStores.length === 0) {
-      this.error = 'Du har ikke tilgang til noen butikker.'
+      this.error = this.$i('wrapped_noStoreAccess')
     }
   },
   methods: {
@@ -83,7 +83,7 @@ export default {
         // Load wrapped data
         this.wrappedData = await this._wrappedService.GetWrappedData(storeId)
       } catch (err) {
-        this.error = 'Kunne ikke laste inn Wrapped 2025. Vennligst prøv igjen.'
+        this.error = this.$i('wrapped_loadFailed')
         console.error('Failed to load wrapped data:', err)
       } finally {
         this.isLoading = false

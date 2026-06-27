@@ -2,7 +2,7 @@
   <div v-if="isOpen" class="modal-overlay" @click.self="closeModal">
     <div class="modal-container">
       <div class="modal-header">
-        <h2>Velg tilbehør</h2>
+        <h2>{{ $i('variantSelectorModal_title') }}</h2>
         <button class="close-btn" @click="closeModal">
           <span class="material-icons">close</span>
         </button>
@@ -10,24 +10,24 @@
 
       <div class="modal-body">
         <p class="modal-description">
-          Velg varianter som skal vises som tilbehør på alle produkter i denne kategorien.
+          {{ $i('variantSelectorModal_description') }}
         </p>
 
         <!-- Create New Variant Section -->
         <div class="create-section">
           <button class="btn btn-create" @click="showCreateForm = !showCreateForm">
             <span class="material-icons">add</span>
-            Opprett ny variant
+            {{ $i('variantSelectorModal_createNewVariant') }}
           </button>
 
           <!-- Create Form -->
           <div v-if="showCreateForm" class="create-form">
             <div class="form-group">
-              <label>Variantnavn *</label>
+              <label>{{ $i('variantSelectorModal_variantNameLabel') }}</label>
               <input
                 v-model="newVariant.name"
                 type="text"
-                placeholder="F.eks. Ekstra ost, Dressing, etc."
+                :placeholder="$i('variantSelectorModal_variantNamePlaceholder')"
                 class="form-input"
               />
             </div>
@@ -36,21 +36,21 @@
               <div class="form-group checkbox-group">
                 <label>
                   <input v-model="newVariant.multiselect" type="checkbox" />
-                  <span>Flervalg</span>
+                  <span>{{ $i('variantSelectorModal_multiselect') }}</span>
                 </label>
               </div>
 
               <div class="form-group checkbox-group">
                 <label>
                   <input v-model="newVariant.required" type="checkbox" />
-                  <span>Obligatorisk</span>
+                  <span>{{ $i('variantSelectorModal_required') }}</span>
                 </label>
               </div>
             </div>
 
             <!-- Variant Options -->
             <div class="options-section">
-              <label>Alternativer *</label>
+              <label>{{ $i('variantSelectorModal_optionsLabel') }}</label>
               <div
                 v-for="(option, index) in newVariant.options"
                 :key="index"
@@ -59,20 +59,20 @@
                 <input
                   v-model="option.name"
                   type="text"
-                  placeholder="Alternativ navn"
+                  :placeholder="$i('variantSelectorModal_optionNamePlaceholder')"
                   class="option-input"
                 />
                 <input
                   v-model.number="option.amount"
                   type="number"
-                  placeholder="Pris (øre)"
+                  :placeholder="$i('variantSelectorModal_optionPricePlaceholder')"
                   class="option-price"
                   min="0"
                 />
                 <button
                   class="remove-option-btn"
                   @click="removeOption(index)"
-                  title="Fjern alternativ"
+                  :title="$i('variantSelectorModal_removeOption')"
                 >
                   <span class="material-icons">close</span>
                 </button>
@@ -80,16 +80,16 @@
 
               <button class="btn btn-add-option" @click="addOption">
                 <span class="material-icons">add</span>
-                Legg til alternativ
+                {{ $i('variantSelectorModal_addOption') }}
               </button>
             </div>
 
             <div class="form-actions">
               <button class="btn btn-secondary" @click="cancelCreate">
-                Avbryt
+                {{ $i('common_cancel') }}
               </button>
               <button class="btn btn-primary" @click="saveNewVariant">
-                Lagre variant
+                {{ $i('variantSelectorModal_saveVariant') }}
               </button>
             </div>
           </div>
@@ -97,12 +97,12 @@
 
         <!-- Existing Variants List -->
         <div class="variants-section">
-          <h3>Eksisterende varianter</h3>
+          <h3>{{ $i('variantSelectorModal_existingVariants') }}</h3>
 
           <!-- Loading State -->
           <div v-if="isLoading" class="loading-container">
             <Loading :loading="true" :size="48" />
-            <p>Laster varianter...</p>
+            <p>{{ $i('variantSelectorModal_loadingVariants') }}</p>
           </div>
 
           <!-- Variants List -->
@@ -125,10 +125,10 @@
               <div class="variant-info">
                 <div class="variant-name">{{ variant.name }}</div>
                 <div class="variant-details">
-                  <span v-if="variant.multiselect" class="badge">Flervalg</span>
-                  <span v-if="variant.required" class="badge">Obligatorisk</span>
+                  <span v-if="variant.multiselect" class="badge">{{ $i('variantSelectorModal_multiselect') }}</span>
+                  <span v-if="variant.required" class="badge">{{ $i('variantSelectorModal_required') }}</span>
                   <span class="option-count">
-                    {{ variant.options ? variant.options.length : 0 }} alternativ{{ variant.options && variant.options.length !== 1 ? 'er' : '' }}
+                    {{ optionCountLabel(variant.options ? variant.options.length : 0) }}
                   </span>
                 </div>
               </div>
@@ -138,23 +138,23 @@
           <!-- Empty State -->
           <div v-else class="empty-state">
             <span class="material-icons">category</span>
-            <p>Ingen varianter tilgjengelig</p>
-            <p class="empty-hint">Opprett en ny variant for å komme i gang</p>
+            <p>{{ $i('variantSelectorModal_noVariants') }}</p>
+            <p class="empty-hint">{{ $i('variantSelectorModal_noVariantsHint') }}</p>
           </div>
         </div>
 
         <!-- Selected Count -->
         <div v-if="selectedVariantIds.length > 0" class="selected-count">
-          {{ selectedVariantIds.length }} variant{{ selectedVariantIds.length !== 1 ? 'er' : '' }} valgt
+          {{ selectedCountLabel }}
         </div>
       </div>
 
       <div class="modal-footer">
         <button class="btn btn-secondary" @click="closeModal">
-          Avbryt
+          {{ $i('common_cancel') }}
         </button>
         <button class="btn btn-primary" @click="confirmSelection">
-          Bekreft valg
+          {{ $i('variantSelectorModal_confirmSelection') }}
         </button>
       </div>
     </div>
@@ -190,7 +190,21 @@ export default {
       resolve: null
     }
   },
+  computed: {
+    selectedCountLabel() {
+      const count = this.selectedVariantIds.length
+      return count === 1
+        ? this.$i('variantSelectorModal_selectedCountSingular', { count })
+        : this.$i('variantSelectorModal_selectedCountPlural', { count })
+    }
+  },
   methods: {
+    optionCountLabel(count) {
+      return count === 1
+        ? this.$i('variantSelectorModal_optionCountSingular', { count })
+        : this.$i('variantSelectorModal_optionCountPlural', { count })
+    },
+
     getEmptyVariant() {
       return {
         name: '',
@@ -238,7 +252,7 @@ export default {
         this.availableVariants = Array.from(variantsMap.values())
       } catch (error) {
         console.error('Failed to load variants:', error)
-        alert('Kunne ikke laste varianter. Vennligst prøv igjen.')
+        alert(this.$i('variantSelectorModal_loadError'))
         this.availableVariants = []
       } finally {
         this.isLoading = false
@@ -284,13 +298,13 @@ export default {
     async saveNewVariant() {
       // Validation
       if (!this.newVariant.name || this.newVariant.name.trim() === '') {
-        alert('Vennligst angi et variantnavn')
+        alert(this.$i('variantSelectorModal_validationName'))
         return
       }
 
       const validOptions = this.newVariant.options.filter(opt => opt.name && opt.name.trim())
       if (validOptions.length === 0) {
-        alert('Vennligst legg til minst ett alternativ')
+        alert(this.$i('variantSelectorModal_validationOptions'))
         return
       }
 
@@ -312,7 +326,7 @@ export default {
         // For now, we'll just add it to the local list and select it
         // The actual API call would be handled when saving the category
 
-        alert('Variant opprettet! (Husk å lagre kategorien)')
+        alert(this.$i('variantSelectorModal_createdSuccess'))
         this.showCreateForm = false
         this.newVariant = this.getEmptyVariant()
 
@@ -320,7 +334,7 @@ export default {
         // For now, we'll just close the form
       } catch (error) {
         console.error('Failed to create variant:', error)
-        alert('Kunne ikke opprette variant. Vennligst prøv igjen.')
+        alert(this.$i('variantSelectorModal_createError'))
       }
     },
 

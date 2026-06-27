@@ -2,7 +2,7 @@
   <div v-if="isOpen" class="modal-overlay" @click.self="handleOverlayClick">
     <div class="modal-container">
       <div class="modal-header">
-        <h2>Velg produkter</h2>
+        <h2>{{ $i('productSelectorModal_title') }}</h2>
         <button class="close-btn" @click="closeModal">
           <span class="material-icons">close</span>
         </button>
@@ -16,7 +16,7 @@
             <input
               v-model="searchQuery"
               type="text"
-              placeholder="Søk etter produkt..."
+              :placeholder="$i('productSelectorModal_searchPlaceholder')"
               class="search-input"
             />
             <button
@@ -35,20 +35,20 @@
             @click="openStoreSelector"
           >
             <span class="material-icons">store</span>
-            <span>{{ selectedStoreIds.length }} butikk{{ selectedStoreIds.length !== 1 ? 'er' : '' }}</span>
+            <span>{{ storeCountLabel }}</span>
             <span class="material-icons">arrow_drop_down</span>
           </button>
         </div>
 
         <!-- Selected Count -->
         <div class="selected-count">
-          {{ selectedProductIds.length }} produkt{{ selectedProductIds.length !== 1 ? 'er' : '' }} valgt
+          {{ selectedCountLabel }}
         </div>
 
         <!-- Loading State -->
         <div v-if="isLoading" class="loading-container">
           <Loading :loading="true" :size="48" />
-          <p>Laster produkter...</p>
+          <p>{{ $i('productSelectorModal_loading') }}</p>
         </div>
 
         <!-- Product List -->
@@ -100,19 +100,19 @@
           <div v-if="filteredProducts.length === 0" class="empty-state">
             <span class="material-icons">search_off</span>
             <p v-if="hasMultipleStores && selectedStoreIds.length === 0">
-              Velg butikker for å søke etter produkter
+              {{ $i('productSelectorModal_selectStoresPrompt') }}
             </p>
-            <p v-else>Ingen produkter funnet</p>
+            <p v-else>{{ $i('productSelectorModal_noProductsFound') }}</p>
           </div>
         </div>
       </div>
 
       <div class="modal-footer">
         <button class="btn btn-secondary" @click="closeModal">
-          Avbryt
+          {{ $i('common_cancel') }}
         </button>
         <button class="btn btn-primary" @click="confirmSelection">
-          Bekreft valg
+          {{ $i('productSelectorModal_confirmSelection') }}
         </button>
       </div>
     </div>
@@ -186,6 +186,18 @@ export default {
     },
     currentStoreId() {
       return this.$store.state.selectedAdminStore
+    },
+    storeCountLabel() {
+      const count = this.selectedStoreIds.length
+      return count !== 1
+        ? this.$i('productSelectorModal_storeCountPlural', { count })
+        : this.$i('productSelectorModal_storeCountSingular', { count })
+    },
+    selectedCountLabel() {
+      const count = this.selectedProductIds.length
+      return count !== 1
+        ? this.$i('productSelectorModal_selectedCountPlural', { count })
+        : this.$i('productSelectorModal_selectedCountSingular', { count })
     }
   },
   watch: {
@@ -253,7 +265,7 @@ export default {
         }
       } catch (error) {
         console.error('Failed to load products:', error)
-        alert('Kunne ikke laste produkter. Vennligst prøv igjen.')
+        alert(this.$i('productSelectorModal_loadError'))
         this.products = []
       } finally {
         this.isLoading = false
@@ -333,7 +345,7 @@ export default {
 
       // Check for unsaved changes
       if (this.hasChanges) {
-        if (!confirm('Du har ulagrede endringer. Er du sikker på at du vil lukke?')) {
+        if (!confirm(this.$i('productSelectorModal_unsavedChangesConfirm'))) {
           return
         }
       }

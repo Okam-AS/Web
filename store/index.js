@@ -12,6 +12,10 @@ export const state = () => ({
   // Runtime market: 'no' (Norwegian) | 'ch' (Swiss). Switchable live via the
   // market switcher; persisted with the rest of the state to localStorage.
   market: EDITION,
+  // Admin UI language: 'no' | 'en' | 'de'. Switchable live via the language
+  // switcher in the admin sidebar. Defaults to the edition's locale and is
+  // persisted to localStorage (both explicitly and via the generic state dump).
+  adminLocale: (markets[EDITION] && markets[EDITION].locale) || 'no',
 })
 
 export const getters = {
@@ -65,6 +69,12 @@ export const actions = {
         localStorage.setItem('selectedAdminStoreName', store.name)
       }
     }
+  },
+  ["SetAdminLocale"] ({ commit }, locale) {
+    commit("SetAdminLocale", locale)
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('adminLocale', locale)
+    }
   }
 }
 
@@ -78,6 +88,11 @@ export const mutations = {
     const selectedAdminStore = localStorage.getItem('selectedAdminStore')
     if (selectedAdminStore) {
       state.selectedAdminStore = parseInt(selectedAdminStore, 10)
+    }
+    // Load selected admin language from localStorage
+    const adminLocale = localStorage.getItem('adminLocale')
+    if (adminLocale) {
+      state.adminLocale = adminLocale
     }
   },
   [MutationName.SetOrders] (state, orders) {
@@ -153,5 +168,8 @@ export const mutations = {
   },
   ["SetSelectedAdminStore"] (state, storeId) {
     state.selectedAdminStore = storeId
+  },
+  ["SetAdminLocale"] (state, locale) {
+    state.adminLocale = locale
   }
 }

@@ -5,7 +5,7 @@
   >
     <div class="modal-content">
       <div class="modal-header">
-        <h2>{{ dateRequestedLabel ? 'Forhåndsbestilling' : 'Når vil du ha bestillingen klar?' }}</h2>
+        <h2>{{ dateRequestedLabel ? $i('orderProcessingModal_preorderTitle') : $i('orderProcessingModal_readyWhenTitle') }}</h2>
         <button
           class="close-btn"
           @click="cancel"
@@ -19,7 +19,7 @@
           v-if="dateRequestedLabel"
           class="preorder-info"
         >
-          Vi varsler deg før du må starte tilberedningen
+          {{ $i('orderProcessingModal_preorderInfo') }}
         </p>
 
         <!-- Requested completion time for preorders -->
@@ -27,7 +27,7 @@
           v-if="dateRequestedLabel"
           class="requested-time"
         >
-          <label>Ønsket ferdig til:</label>
+          <label>{{ $i('orderProcessingModal_requestedReadyBy') }}</label>
           <div class="time-display preorder-time">
             <span class="material-icons">update</span>
             <span class="time-text">{{ dateRequestedLabel }}, {{ timeRequestedLabel }}</span>
@@ -36,7 +36,7 @@
 
         <!-- Selected completion time -->
         <div class="selected-time">
-          <label>Klar til:</label>
+          <label>{{ $i('orderProcessingModal_readyBy') }}</label>
           <div class="time-display">
             <span>{{ dateLabel }}, </span>
             <button
@@ -64,7 +64,7 @@
             class="close-picker-btn"
             @click="showTimePicker = false"
           >
-            Lukk
+            {{ $i('common_close') }}
           </button>
         </div>
 
@@ -77,11 +77,11 @@
             :class="{ 'is-selected': isSelected(minutes) }"
             @click="selectPredefinedTime(minutes)"
           >
-            <span class="time-value">{{ minutes === 0 ? 'Nå' : minutes }}</span>
+            <span class="time-value">{{ minutes === 0 ? $i('orderProcessingModal_now') : minutes }}</span>
             <span
               v-if="minutes !== 0"
               class="time-unit"
-            >min</span>
+            >{{ $i('orderProcessingModal_minuteUnit') }}</span>
           </button>
         </div>
       </div>
@@ -92,7 +92,7 @@
           class="btn btn-primary"
           @click="confirm"
         >
-          Bekreft {{ dateTimeLabel }}
+          {{ $i('orderProcessingModal_confirm', { dateTime: dateTimeLabel }) }}
         </button>
         <div
           v-else
@@ -143,10 +143,10 @@ export default {
       return this.getNumberWithTrailingZero(this.selectedTime.getHours()) + ':' + this.getNumberWithTrailingZero(this.selectedTime.getMinutes())
     },
     dateTimeLabel() {
-      if (this.numberOfMinutes <= 0) return 'nå'
-      if (this.numberOfMinutes < 60) return 'om ' + this.numberOfMinutes + ' minutter'
-      if (this.numberOfMinutes === 60) return 'om en time'
-      return 'kl. ' + this.timeLabel + ' ' + this.dateLabel
+      if (this.numberOfMinutes <= 0) return this.$i('orderProcessingModal_dateTimeNow')
+      if (this.numberOfMinutes < 60) return this.$i('orderProcessingModal_dateTimeInMinutes', { count: this.numberOfMinutes })
+      if (this.numberOfMinutes === 60) return this.$i('orderProcessingModal_dateTimeInOneHour')
+      return this.$i('orderProcessingModal_dateTimeAtClock', { time: this.timeLabel, date: this.dateLabel })
     },
     isPreorder() {
       return !!this.order?.requestedCompletion
@@ -179,11 +179,11 @@ export default {
     },
     getDateLabel(date) {
       const today = new Date()
-      if (this.isSameDay(date, today)) return 'i dag'
+      if (this.isSameDay(date, today)) return this.$i('orderProcessingModal_today')
 
       const tomorrow = new Date()
       tomorrow.setDate(tomorrow.getDate() + 1)
-      if (this.isSameDay(date, tomorrow)) return 'i morgen'
+      if (this.isSameDay(date, tomorrow)) return this.$i('orderProcessingModal_tomorrow')
 
       return this.getNumberWithTrailingZero(date.getDate()) + '.' + this.getNumberWithTrailingZero(date.getMonth() + 1) + '.' + date.getFullYear()
     },
@@ -279,7 +279,7 @@ export default {
           this.$emit('close', true)
         })
         .catch((error) => {
-          alert(error.message || 'Kunne ikke oppdatere bestilling')
+          alert(error.message || this.$i('orderProcessingModal_updateError'))
         })
         .finally(() => {
           this.isLoading = false

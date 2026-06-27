@@ -5,7 +5,7 @@
   >
     <div class="modal-content">
       <div class="modal-header">
-        <h2>Kvittering</h2>
+        <h2>{{ $i('receiptModal_title') }}</h2>
         <button
           class="close-btn"
           @click="close"
@@ -36,66 +36,66 @@
             v-if="order.storeVAT"
             class="store-vat"
           >
-            <p>Org.nr {{ order.storeVAT }} MVA</p>
-            <p>Foretaksregisteret</p>
+            <p>{{ $i('receiptModal_orgNumber', { vat: order.storeVAT }) }}</p>
+            <p>{{ $i('receiptModal_companyRegistry') }}</p>
           </div>
         </div>
 
         <!-- Order Details -->
         <div class="order-details">
           <div class="detail-row">
-            <span class="label">Bestillingsnummer:</span>
+            <span class="label">{{ $i('receiptModal_orderNumber') }}</span>
             <span class="value">{{ order.friendlyOrderId ? order.friendlyOrderId + ' (' + order.id + ')' : order.id }}</span>
           </div>
           <div
             v-if="order.userFullName || order.user?.phoneNumber"
             class="detail-row"
           >
-            <span class="label">Kunde:</span>
+            <span class="label">{{ $i('receiptModal_customer') }}</span>
             <span class="value">{{ order.userFullName || order.user?.phoneNumber || '-' }}</span>
           </div>
           <div class="detail-row">
-            <span class="label">Betaling:</span>
+            <span class="label">{{ $i('receiptModal_payment') }}</span>
             <span class="value">{{ paymentTypeLabel(order.paymentType) }}</span>
           </div>
           <div class="detail-row">
-            <span class="label">Leveringsmåte:</span>
+            <span class="label">{{ $i('receiptModal_deliveryMethod') }}</span>
             <span class="value">{{ deliveryTypeLabel(order.deliveryType) }}</span>
           </div>
           <div
             v-if="order.tableName"
             class="detail-row"
           >
-            <span class="label">Bordnummer:</span>
+            <span class="label">{{ $i('receiptModal_tableNumber') }}</span>
             <span class="value">{{ order.tableName }}</span>
           </div>
           <div
             v-if="(order.deliveryType === 'InstantHomeDelivery' || order.deliveryType === 'DineHomeDelivery' || order.deliveryType === 'WoltDelivery') && order.fullAddress"
             class="detail-row"
           >
-            <span class="label">Leveringsadresse:</span>
+            <span class="label">{{ $i('receiptModal_deliveryAddress') }}</span>
             <span class="value">{{ order.fullAddress }}, {{ order.zipCode }} {{ order.city }}</span>
           </div>
           <div class="detail-row">
-            <span class="label">Bestilt:</span>
+            <span class="label">{{ $i('receiptModal_ordered') }}</span>
             <span class="value">{{ formatDate(order.created || order.pickup) }}</span>
           </div>
           <div
             v-if="order.paymentType === 'Stripe' && order.completed && order.status === 'Completed'"
             class="detail-row"
           >
-            <span class="label">Betalt:</span>
+            <span class="label">{{ $i('receiptModal_paid') }}</span>
             <span class="value">{{ formatDate(order.completed) }}</span>
           </div>
           <div class="detail-row">
-            <span class="label">Status:</span>
+            <span class="label">{{ $i('common_status') }}:</span>
             <span class="value">{{ orderStatusLabel(order.status) }}</span>
           </div>
           <div
             v-if="order.comment"
             class="detail-row"
           >
-            <span class="label">Kommentar:</span>
+            <span class="label">{{ $i('receiptModal_comment') }}</span>
             <span class="value">{{ order.comment }}</span>
           </div>
         </div>
@@ -109,14 +109,14 @@
             v-if="order.usedRewardAmount > 0"
             class="detail-row"
           >
-            <span class="label">Reward rabatt:</span>
+            <span class="label">{{ $i('receiptModal_rewardDiscount') }}</span>
             <span class="value discount-value">{{ priceLabel(order.usedRewardAmount) }}</span>
           </div>
           <div
             v-if="totalDiscountAmount > 0"
             class="detail-row"
           >
-            <span class="label">Rabatt:</span>
+            <span class="label">{{ $i('receiptModal_discount') }}</span>
             <span class="value discount-value">{{ priceLabel(totalDiscountAmount) }}</span>
           </div>
         </div>
@@ -124,10 +124,10 @@
         <!-- Order Items -->
         <div class="order-items">
           <div class="items-header">
-            <span class="item-name">Vare</span>
-            <span class="item-qty">Ant.</span>
-            <span class="item-tax">Mva</span>
-            <span class="item-price">Pris</span>
+            <span class="item-name">{{ $i('receiptModal_itemColumn') }}</span>
+            <span class="item-qty">{{ $i('receiptModal_quantityColumn') }}</span>
+            <span class="item-tax">{{ $i('receiptModal_vatColumn') }}</span>
+            <span class="item-price">{{ $i('common_price') }}</span>
           </div>
           <div class="items-divider" />
           <div
@@ -145,7 +145,7 @@
         <!-- Total -->
         <div class="total-section">
           <div class="total-row">
-            <span class="total-label">Totalt</span>
+            <span class="total-label">{{ $i('common_total') }}</span>
             <span class="total-value">{{ priceLabel(order.finalAmount) }}</span>
           </div>
         </div>
@@ -156,10 +156,10 @@
           class="tax-details"
         >
           <div class="tax-header">
-            <span class="tax-rate">Mva-sats</span>
-            <span class="tax-basis">Grunnlag</span>
-            <span class="tax-amount">Mva</span>
-            <span class="tax-total">Totalt inkl. mva</span>
+            <span class="tax-rate">{{ $i('receiptModal_vatRate') }}</span>
+            <span class="tax-basis">{{ $i('receiptModal_basis') }}</span>
+            <span class="tax-amount">{{ $i('receiptModal_vatColumn') }}</span>
+            <span class="tax-total">{{ $i('receiptModal_totalInclVat') }}</span>
           </div>
           <div class="items-divider" />
           <div

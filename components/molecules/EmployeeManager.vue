@@ -2,7 +2,7 @@
   <div class="employee-manager">
     <!-- Add employee -->
     <div class="form-section">
-      <h2 class="section-title">Legg til ansatt</h2>
+      <h2 class="section-title">{{ $i('employeeManager_addEmployee') }}</h2>
       <div class="add-row">
         <div class="phone-input">
           <span class="phone-prefix">+47</span>
@@ -10,7 +10,7 @@
             v-model="phoneInput"
             type="tel"
             inputmode="numeric"
-            placeholder="Telefonnummer"
+            :placeholder="$i('employeeManager_phoneNumber')"
             class="text-input"
             :disabled="isAdding || !!pendingVerificationPhone"
             @keyup.enter="addEmployee"
@@ -21,29 +21,29 @@
           :disabled="!canAdd"
           @click="addEmployee"
         >
-          <span v-if="isAdding">Legger til...</span>
-          <span v-else>Legg til</span>
+          <span v-if="isAdding">{{ $i('employeeManager_adding') }}</span>
+          <span v-else>{{ $i('common_add') }}</span>
         </button>
       </div>
 
       <!-- SMS verification step -->
       <div v-if="pendingVerificationPhone" class="verify-panel">
-        <p class="verify-text">Skriv inn engangskode sendt på SMS til {{ pendingVerificationPhone }}</p>
+        <p class="verify-text">{{ $i('employeeManager_smsCodeSent', { phone: pendingVerificationPhone }) }}</p>
         <div class="add-row">
           <input
             v-model="verificationCode"
             type="tel"
             inputmode="numeric"
-            placeholder="Engangskode"
+            :placeholder="$i('employeeManager_oneTimeCode')"
             class="text-input"
             :disabled="isVerifying"
             @keyup.enter="confirmVerification"
           />
           <button class="btn btn-primary" :disabled="!verificationCode || isVerifying" @click="confirmVerification">
-            <span v-if="isVerifying">Bekrefter...</span>
-            <span v-else>Bekreft</span>
+            <span v-if="isVerifying">{{ $i('employeeManager_confirming') }}</span>
+            <span v-else>{{ $i('common_confirm') }}</span>
           </button>
-          <button class="btn btn-secondary" :disabled="isVerifying" @click="cancelVerification">Avbryt</button>
+          <button class="btn btn-secondary" :disabled="isVerifying" @click="cancelVerification">{{ $i('common_cancel') }}</button>
         </div>
       </div>
 
@@ -52,14 +52,14 @@
 
     <!-- Employee list -->
     <div class="form-section">
-      <h2 class="section-title">Brukere med tilgang</h2>
+      <h2 class="section-title">{{ $i('employeeManager_usersWithAccess') }}</h2>
 
       <div v-if="isLoading" class="loading-section">
         <Loading :loading="true" />
       </div>
 
       <div v-else-if="employees.length === 0" class="list-empty">
-        <p>Ingen ansatte enda.</p>
+        <p>{{ $i('employeeManager_noEmployeesYet') }}</p>
       </div>
 
       <div v-else class="employees-list">
@@ -71,12 +71,12 @@
         >
           <div class="employee-info">
             <span class="employee-name">{{ displayName(user) }}</span>
-            <span v-if="user.id === currentUserId" class="badge">Deg</span>
+            <span v-if="user.id === currentUserId" class="badge">{{ $i('employeeManager_you') }}</span>
           </div>
           <button
             v-if="user.id !== currentUserId || isPowerUser"
             class="btn-icon-only btn-icon-only--danger"
-            title="Fjern"
+            :title="$i('employeeManager_remove')"
             :disabled="isLoading"
             @click="removeEmployee(user)"
           >
@@ -157,7 +157,7 @@ export default {
       try {
         this.currentStore = await this._storeService.Get(id)
       } catch (e) {
-        this.showToast('Kunne ikke laste ansatte', 'error')
+        this.showToast(this.$i('employeeManager_couldNotLoadEmployees'), 'error')
       } finally {
         this.isLoading = false
       }
@@ -171,14 +171,14 @@ export default {
         if (added) {
           this.phoneInput = ''
           await this.loadStore(this.storeId)
-          this.showToast('Ansatt lagt til', 'success')
+          this.showToast(this.$i('employeeManager_employeeAdded'), 'success')
         } else {
           // User needs to confirm via SMS one-time code
           await this._userService.SendVerificationToken(this.fullPhoneNumber)
           this.pendingVerificationPhone = this.fullPhoneNumber
         }
       } catch (e) {
-        this.errorMessage = (e && e.message) || 'Noe gikk galt. Prøv igjen senere'
+        this.errorMessage = (e && e.message) || this.$i('employeeManager_somethingWentWrong')
       } finally {
         this.isAdding = false
       }
@@ -190,7 +190,7 @@ export default {
       try {
         const verified = await this._userService.VerifyToken(this.pendingVerificationPhone, this.verificationCode.trim())
         if (!verified) {
-          this.errorMessage = 'Feil engangskode. Prøv igjen.'
+          this.errorMessage = this.$i('employeeManager_wrongCode')
           return
         }
         const added = await this._storeService.AddEmployee(this.storeId, this.pendingVerificationPhone)
@@ -199,12 +199,12 @@ export default {
           this.verificationCode = ''
           this.pendingVerificationPhone = null
           await this.loadStore(this.storeId)
-          this.showToast('Ansatt lagt til', 'success')
+          this.showToast(this.$i('employeeManager_employeeAdded'), 'success')
         } else {
-          this.errorMessage = 'Kunne ikke legge til bruker'
+          this.errorMessage = this.$i('employeeManager_couldNotAddUser')
         }
       } catch (e) {
-        this.errorMessage = (e && e.message) || 'Noe gikk galt. Prøv igjen senere'
+        this.errorMessage = (e && e.message) || this.$i('employeeManager_somethingWentWrong')
       } finally {
         this.isVerifying = false
       }
@@ -219,8 +219,8 @@ export default {
       const isSelf = user.id === this.currentUserId
       if (isSelf && !this.isPowerUser) return
       const message = isSelf
-        ? 'Er du sikker på at du vil fjerne deg selv som ansatt? Du mister tilgang til butikken.'
-        : 'Er du sikker på at du ønsker å fjerne brukeren?'
+        ? this.$i('employeeManager_confirmRemoveSelf')
+        : this.$i('employeeManager_confirmRemoveUser')
       if (!confirm(message)) return
       this.isLoading = true
       this.errorMessage = ''
@@ -228,13 +228,13 @@ export default {
         const removed = await this._storeService.RemoveEmployee(this.storeId, user.id)
         if (removed) {
           await this.loadStore(this.storeId)
-          this.showToast('Ansatt fjernet', 'success')
+          this.showToast(this.$i('employeeManager_employeeRemoved'), 'success')
         } else {
-          this.errorMessage = 'Kunne ikke fjerne bruker'
+          this.errorMessage = this.$i('employeeManager_couldNotRemoveUser')
           this.isLoading = false
         }
       } catch (e) {
-        this.errorMessage = (e && e.message) || 'Noe gikk galt. Prøv igjen senere'
+        this.errorMessage = (e && e.message) || this.$i('employeeManager_somethingWentWrong')
         this.isLoading = false
       }
     },
@@ -242,7 +242,7 @@ export default {
       if (!user) return ''
       const name = `${user.firstName || ''} ${user.lastName || ''}`.trim()
       if (name) return name
-      return (user.phoneNumber || '').replace('+47', '') || 'Ukjent bruker'
+      return (user.phoneNumber || '').replace('+47', '') || this.$i('employeeManager_unknownUser')
     },
     showToast(message, type = 'success') {
       this.toast = { show: true, message, type }

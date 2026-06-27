@@ -4,21 +4,21 @@
       <div class="table-wrapper">
         <div style="margin: 1em">
           <h1 style="margin-bottom: 0.5em">
-            Import
+            {{ $i('import_title') }}
           </h1>
           <p style="margin-bottom: 1.5em">
-            Et nyttig verktøy for førstegangsimport av varer, for å opprette produkter og kategorier
+            {{ $i('import_subtitle') }}
           </p>
           <div class="store-categories-wrapper">
             <div class="button-group">
-              <input class="emoji-btn" type="button" value="👓 Verifiser og importer" @click="showModal = true">
-              <input class="emoji-btn" type="button" value="🤖 AI Import" @click="showAIModal = true">
-              <input class="emoji-btn" type="button" value="🆑 Tøm alle rader" @click="showClearRowsModal = true">
-              <input class="emoji-btn" type="button" value="💾 Eksport/Import" @click="showExportModal = true">
+              <input class="emoji-btn" type="button" :value="$i('import_verifyAndImport')" @click="showModal = true">
+              <input class="emoji-btn" type="button" :value="$i('import_aiImport')" @click="showAIModal = true">
+              <input class="emoji-btn" type="button" :value="$i('import_clearAllRows')" @click="showClearRowsModal = true">
+              <input class="emoji-btn" type="button" :value="$i('import_exportImport')" @click="showExportModal = true">
             </div>
           </div>
           <div v-if="selectedStore > 0" class="categories-section">
-            <h3>Kategorier</h3>
+            <h3>{{ $i('import_categories') }}</h3>
             <div class="categories-list">
               <div class="categories-inline">
                 <span v-for="category in categories" :key="category.id" class="category-tag">
@@ -34,19 +34,19 @@
             <tbody>
               <tr>
                 <th />
-                <th>Kategorinavn</th>
-                <th>Produktnavn</th>
+                <th>{{ $i('import_colCategoryName') }}</th>
+                <th>{{ $i('import_colProductName') }}</th>
                 <th style="min-width: 300px">
-                  Produktbeskrivelse
+                  {{ $i('import_colProductDescription') }}
                 </th>
-                <th>Allergener</th>
-                <th>Pris</th>
-                <th>Take away MVA (%)</th>
-                <th>Tillegg for spis inne</th>
-                <th>Spis inne MVA (%)</th>
-                <th>Pant</th>
-                <th>Utsolgt</th>
-                <th>Varianter</th>
+                <th>{{ $i('import_colAllergens') }}</th>
+                <th>{{ $i('import_colPrice') }}</th>
+                <th>{{ $i('import_colTakeawayVat') }}</th>
+                <th>{{ $i('import_colEatInAddition') }}</th>
+                <th>{{ $i('import_colEatInVat') }}</th>
+                <th>{{ $i('import_colDeposit') }}</th>
+                <th>{{ $i('import_colSoldOut') }}</th>
+                <th>{{ $i('import_colVariants') }}</th>
               </tr>
               <tr v-for="(row, index) in rows" :key="index">
                 <td class="row-count">
@@ -98,8 +98,8 @@
                     :value="`🎛️ ${(row.variants && row.variants.length) || 0}`" @click="openRowVariants(index)">
                 </td>
                 <td v-if="index !== rows.length - 1 || rows.length < 2">
-                  <input class="emoji-btn" type="button" value="🔂 Dupliser rad" @click="copyRow(index)">
-                  <input class="emoji-btn" type="button" value="➖ Fjern rad" @click="deleteRow(index)">
+                  <input class="emoji-btn" type="button" :value="$i('import_duplicateRow')" @click="copyRow(index)">
+                  <input class="emoji-btn" type="button" :value="$i('import_removeRow')" @click="deleteRow(index)">
                 </td>
               </tr>
             </tbody>
@@ -107,20 +107,20 @@
         </template>
         <div class="category-variants-section" style="margin: 1em">
           <div class="section-header">
-            <h3>Felles tilbehør per kategori</h3>
-            <input class="emoji-btn" type="button" value="➕ Legg til kategori-tilbehør"
+            <h3>{{ $i('import_categoryVariantsTitle') }}</h3>
+            <input class="emoji-btn" type="button" :value="$i('import_addCategoryVariant')"
               @click="addCategoryVariantGroup">
           </div>
-          <p class="helper-text">Tilbehør som gjelder alle produkter i en kategori</p>
+          <p class="helper-text">{{ $i('import_categoryVariantsHelper') }}</p>
           <div v-if="categoryVariants.length === 0" class="empty-hint">
-            Ingen felles tilbehør lagt til
+            {{ $i('import_noCategoryVariants') }}
           </div>
           <div v-else class="category-variants-list">
             <div v-for="(group, groupIndex) in categoryVariants" :key="groupIndex" class="category-variant-group">
               <div class="category-variant-group-header">
                 <SuggestInput v-model="group.categoryName" class="category-variant-name"
-                  :suggestions="allCategoryNames" placeholder="Kategorinavn" />
-                <button class="delete-btn-small" type="button" title="Fjern kategori"
+                  :suggestions="allCategoryNames" :placeholder="$i('import_categoryNamePlaceholder')" />
+                <button class="delete-btn-small" type="button" :title="$i('import_removeCategory')"
                   @click="removeCategoryVariantGroup(groupIndex)">
                   <span class="material-icons">close</span>
                 </button>
@@ -132,24 +132,24 @@
                   <div class="variant-info">
                     <div class="variant-name">{{ variant.name }}</div>
                     <div class="variant-meta">
-                      <span v-if="variant.multiselect" class="badge">Flervalg</span>
-                      <span v-if="variant.required" class="badge badge-required">Obligatorisk</span>
+                      <span v-if="variant.multiselect" class="badge">{{ $i('import_multiselect') }}</span>
+                      <span v-if="variant.required" class="badge badge-required">{{ $i('import_required') }}</span>
                       <span class="variant-options-preview">{{ formatOptionsPreview(variant.options) }}</span>
                     </div>
                   </div>
-                  <button class="delete-btn-small" type="button" title="Fjern tilbehør"
+                  <button class="delete-btn-small" type="button" :title="$i('import_removeAddon')"
                     @click.stop="removeCategoryVariant(groupIndex, vIndex)">
                     <span class="material-icons">close</span>
                   </button>
                 </div>
               </div>
               <div v-else class="empty-hint group-empty">
-                Ingen tilbehør lagt til
+                {{ $i('import_noAddonsAdded') }}
               </div>
 
               <button class="btn-add-variant" type="button" @click="addCategoryVariant(groupIndex)">
                 <span class="material-icons">add</span>
-                Legg til tilbehør
+                {{ $i('import_addAddon') }}
               </button>
             </div>
           </div>
@@ -171,24 +171,24 @@
                   <div class="variant-info">
                     <div class="variant-name">{{ variant.name }}</div>
                     <div class="variant-meta">
-                      <span v-if="variant.multiselect" class="badge">Flervalg</span>
-                      <span v-if="variant.required" class="badge badge-required">Obligatorisk</span>
+                      <span v-if="variant.multiselect" class="badge">{{ $i('import_multiselect') }}</span>
+                      <span v-if="variant.required" class="badge badge-required">{{ $i('import_required') }}</span>
                       <span class="variant-options-preview">{{ formatOptionsPreview(variant.options) }}</span>
                     </div>
                   </div>
-                  <button class="delete-btn-small" type="button" title="Fjern tilbehør"
+                  <button class="delete-btn-small" type="button" :title="$i('import_removeAddon')"
                     @click.stop="removeVariantFromTarget(vIndex)">
                     <span class="material-icons">close</span>
                   </button>
                 </div>
               </div>
               <div v-else class="empty-hint">
-                Ingen tilbehør lagt til
+                {{ $i('import_noAddonsAdded') }}
               </div>
 
               <button class="btn-add-variant" type="button" @click="addVariantToTarget">
                 <span class="material-icons">add</span>
-                Legg til tilbehør
+                {{ $i('import_addAddon') }}
               </button>
             </div>
           </div>
@@ -196,58 +196,58 @@
         <VariantEditorModal ref="variantEditor" />
         <Modal v-if="showModal" @close="closeModal">
           <h1 style="margin-bottom: 1em">
-            Importer
+            {{ $i('import_modalTitle') }}
           </h1>
           <div v-if="!importCompleted" style="margin: 1em 0 1em 0">
             <label><input v-model="replaceAll" type="checkbox">
-              Slett alle eksisterende produkter før import</label>
+              {{ $i('import_deleteAllBeforeImport') }}</label>
           </div>
           <div v-if="importMessage" class="import-messages">
             <p>
               {{ importMessage }}
             </p>
             <p v-if="importResponse.createdProductCount">
-              <span style="font-weight: bold">Antall import av produkter: </span>
+              <span style="font-weight: bold">{{ $i('import_createdProductCount') }}</span>
               <span>{{ importResponse.createdProductCount }}</span>
             </p>
             <p v-if="importResponse.deletedProductCount">
-              <span style="font-weight: bold">Antall sletting av produkter: </span>
+              <span style="font-weight: bold">{{ $i('import_deletedProductCount') }}</span>
               <span>{{ importResponse.deletedProductCount }}</span>
             </p>
           </div>
 
           <div class="modal-buttons">
-            <input v-if="isVerified" class="emoji-btn" type="button" value="✅ Godkjenn og importer"
+            <input v-if="isVerified" class="emoji-btn" type="button" :value="$i('import_approveAndImport')"
               :style="{ opacity: importCompleted ? 0.5 : 1 }" :disabled="importCompleted" @click="runImport(false)">
-            <input v-if="!importCompleted" class="emoji-btn" type="button" value="👓 Verifiser"
+            <input v-if="!importCompleted" class="emoji-btn" type="button" :value="$i('import_verify')"
               @click="runImport(true)">
-            <input class="emoji-btn" type="button" value="Lukk" @click="closeModal">
+            <input class="emoji-btn" type="button" :value="$i('common_close')" @click="closeModal">
           </div>
           <Loading :loading="isLoading" />
         </Modal>
         <Modal v-if="showAIModal" @close="closeAIModal">
           <div style="width: 100%; min-width: 500px">
             <h1 style="margin-bottom: 1.5em">
-              AI Import
+              {{ $i('import_aiImport') }}
             </h1>
             <div v-if="!aiImportCompleted" style="margin: 1em 0 1em 0">
               <div class="form-group" style="margin-bottom: 1.5em">
-                <label style="display: block; margin-bottom: 0.5em">Lim inn menyen som tekst</label>
+                <label style="display: block; margin-bottom: 0.5em">{{ $i('import_aiPasteMenu') }}</label>
                 <textarea v-model="aiMenuText" rows="10" class="form-control"
                   style="width: 100%; padding: 0.5rem 0.75rem; border-radius: 0.375rem; border: 1px solid #e2e8f0; min-height: 200px; resize: vertical; font-family: inherit; line-height: 1.5" />
                 <div style="margin-top: 0.5em; font-size: 0.85em; color: #718096">
-                  Merk: For lange menyer kan bli avkortet. Importer 2-3 kategorier av gangen for best resultat.
+                  {{ $i('import_aiTruncateNote') }}
                 </div>
               </div>
               <div class="form-group" style="margin-bottom: 1.5em">
-                <label style="display: block; margin-bottom: 0.5em">Ekstra instruksjoner (valgfritt)</label>
+                <label style="display: block; margin-bottom: 0.5em">{{ $i('import_aiExtraInstructions') }}</label>
                 <textarea v-model="aiExtraInstructions" rows="4" class="form-control"
                   style="width: 100%; padding: 0.5rem 0.75rem; border-radius: 0.375rem; border: 1px solid #e2e8f0; resize: vertical; font-family: inherit; line-height: 1.5" />
               </div>
               <div class="button-group" style="margin-top: 2em; margin-bottom: 1.5em">
-                <input :disabled="isAILoading || selectedStore <= 0" class="emoji-btn" type="button" value="🚀 Importer"
+                <input :disabled="isAILoading || selectedStore <= 0" class="emoji-btn" type="button" :value="$i('import_aiRun')"
                   @click="runAIImport">
-                <input class="emoji-btn" type="button" value="Lukk" @click="closeAIModal">
+                <input class="emoji-btn" type="button" :value="$i('common_close')" @click="closeAIModal">
               </div>
               <div v-if="aiImportMessage" class="import-message"
                 style="margin-top: 1.5em; padding: 1em; background-color: #f8f9fa; border-radius: 0.375rem">
@@ -261,56 +261,54 @@
                 {{ aiImportMessage }}
               </div>
               <div class="button-group" style="margin-top: 2em">
-                <input class="emoji-btn" type="button" value="Lukk" @click="closeAIModal">
+                <input class="emoji-btn" type="button" :value="$i('common_close')" @click="closeAIModal">
               </div>
             </div>
           </div>
         </Modal>
         <Modal v-if="showAIConfirmModal" @close="showAIConfirmModal = false">
           <h1 style="margin-bottom: 1em">
-            Bekreft AI-import
+            {{ $i('import_aiConfirmTitle') }}
           </h1>
-          <p>Du har allerede eksisterende rader. Ønsker du å erstatter disse med nye rader eller legge dem til?</p>
+          <p>{{ $i('import_aiConfirmQuestion') }}</p>
           <p style="margin-top: 0.5em; font-size: 0.9em;">
-            {{ aiImportData ? aiImportData.length : 0 }} nye produkter er klare for import.
+            {{ $i('import_aiConfirmReady', { count: aiImportData ? aiImportData.length : 0 }) }}
           </p>
           <div class="modal-buttons">
-            <input class="emoji-btn" type="button" value="Erstatt eksisterende rader" @click="handleAIConfirm(true)">
-            <input class="emoji-btn" type="button" value="Legg til nye rader" @click="handleAIConfirm(false)">
-            <input class="emoji-btn" type="button" value="Avbryt" @click="showAIConfirmModal = false">
+            <input class="emoji-btn" type="button" :value="$i('import_aiReplaceRows')" @click="handleAIConfirm(true)">
+            <input class="emoji-btn" type="button" :value="$i('import_aiAddRows')" @click="handleAIConfirm(false)">
+            <input class="emoji-btn" type="button" :value="$i('common_cancel')" @click="showAIConfirmModal = false">
           </div>
         </Modal>
         <Modal v-if="showClearRowsModal" @close="showClearRowsModal = false">
           <p>
-            Er du sikker på at du ønsker å fjerne alle rader fra denne tabellen? Produkter som allerede er importert
-            vil ikke
-            bli berørt.
+            {{ $i('import_clearRowsConfirm') }}
           </p>
           <div class="modal-buttons">
-            <input class="emoji-btn" type="button" value="🆑 Tøm alle rader" @click="clearRows">
-            <input class="emoji-btn" type="button" value="Lukk" @click="showClearRowsModal = false">
+            <input class="emoji-btn" type="button" :value="$i('import_clearAllRows')" @click="clearRows">
+            <input class="emoji-btn" type="button" :value="$i('common_close')" @click="showClearRowsModal = false">
           </div>
         </Modal>
         <Modal v-if="showExportModal" @close="showExportModal = false">
           <h1 style="margin-bottom: 1em">
-            Eksport/Import Data
+            {{ $i('import_exportTitle') }}
           </h1>
           <div v-if="!importMode" class="export-container">
-            <p>Kopier denne dataen for å lagre din nåværende importkonfigurasjon:</p>
+            <p>{{ $i('import_exportInstruction') }}</p>
             <textarea v-model="exportData" readonly class="export-textarea" @focus="$event.target.select()" />
             <div class="modal-buttons">
-              <input class="emoji-btn" type="button" value="📋 Kopier til utklippstavle" @click="copyToClipboard">
-              <input class="emoji-btn" type="button" value="📥 Bytt til import" @click="importMode = true">
-              <input class="emoji-btn" type="button" value="Lukk" @click="showExportModal = false">
+              <input class="emoji-btn" type="button" :value="$i('import_copyToClipboard')" @click="copyToClipboard">
+              <input class="emoji-btn" type="button" :value="$i('import_switchToImport')" @click="importMode = true">
+              <input class="emoji-btn" type="button" :value="$i('common_close')" @click="showExportModal = false">
             </div>
           </div>
           <div v-else class="import-container">
-            <p>Lim inn din lagrede importkonfigurasjon her:</p>
-            <textarea v-model="importData" class="export-textarea" placeholder="Lim inn importdata her..." />
+            <p>{{ $i('import_importInstruction') }}</p>
+            <textarea v-model="importData" class="export-textarea" :placeholder="$i('import_importDataPlaceholder')" />
             <div class="modal-buttons">
-              <input class="emoji-btn" type="button" value="📥 Importer data" @click="importSavedData">
-              <input class="emoji-btn" type="button" value="📤 Bytt til eksport" @click="importMode = false">
-              <input class="emoji-btn" type="button" value="Lukk" @click="showExportModal = false">
+              <input class="emoji-btn" type="button" :value="$i('import_importData')" @click="importSavedData">
+              <input class="emoji-btn" type="button" :value="$i('import_switchToExport')" @click="importMode = false">
+              <input class="emoji-btn" type="button" :value="$i('common_close')" @click="showExportModal = false">
             </div>
           </div>
         </Modal>
@@ -566,7 +564,7 @@ export default {
       }
 
       if (_this.selectedStore <= 0) {
-        _this.importMessage = 'Velg butikk først';
+        _this.importMessage = _this.$i('import_selectStoreFirst');
       } else {
         _this.isLoading = true;
         _this._productService
@@ -583,13 +581,13 @@ export default {
             _this.importResponse = res;
             if (Array.isArray(_this.importResponse.failed) && _this.importResponse.failed.length === 0) {
               _this.isVerified = true;
-              _this.importMessage = verifyOnly ? 'Dette ser bra ut! Ønsker du å gjennomføre denne handlingen:' : 'Ferdig! Dette ble gjennomført:';
+              _this.importMessage = verifyOnly ? _this.$i('import_verifyOk') : _this.$i('import_done');
               if (!verifyOnly) {
                 _this.importCompleted = true;
                 _this.getCategories();
               }
             } else {
-              _this.importMessage = 'Ser ut noen felter er feil. Lukk denne modalen for å se gjennom feltene som er markert med rødt';
+              _this.importMessage = _this.$i('import_fieldsError');
               _this.isVerified = false;
               _this.importResponse.createdProductCount = 0;
               _this.importResponse.deletedProductCount = 0;
@@ -598,7 +596,7 @@ export default {
             }
           })
           .catch((err) => {
-            _this.importMessage = 'Noe gikk galt her. Mest sannsynlig var det noen produkter som ikke kunne slettes. Kontakt systemansvarlig for mer hjelp.';
+            _this.importMessage = _this.$i('import_genericError');
             _this.isVerified = false;
             _this.importResponse.createdProductCount = 0;
             _this.importResponse.deletedProductCount = 0;
@@ -612,15 +610,15 @@ export default {
     },
     runAIImport() {
       const _this = this;
-      _this.aiImportMessage = 'Starter import...';
+      _this.aiImportMessage = _this.$i('import_aiStarting');
 
       if (_this.selectedStore <= 0) {
-        _this.aiImportMessage = 'Velg butikk først';
+        _this.aiImportMessage = _this.$i('import_selectStoreFirst');
         return;
       }
 
       if (!_this.aiMenuText || _this.aiMenuText.trim() === '') {
-        _this.aiImportMessage = 'Vennligst lim inn menytekst';
+        _this.aiImportMessage = _this.$i('import_aiPasteMenuRequired');
         return;
       }
 
@@ -628,7 +626,7 @@ export default {
 
       // Set up progress messages
       let messageIndex = 0;
-      const progressMessages = ['Leser gjennom menyoppføringer...', 'Analyserer priser og kategorier...', 'Strukturerer menyelementer...', 'Henter ut produktdetaljer...', 'Formaterer data for import...', 'Nesten ferdig...'];
+      const progressMessages = [_this.$i('import_aiProgressReading'), _this.$i('import_aiProgressAnalyzing'), _this.$i('import_aiProgressStructuring'), _this.$i('import_aiProgressExtracting'), _this.$i('import_aiProgressFormatting'), _this.$i('import_aiProgressAlmostDone')];
 
       // Show progress messages while waiting
       const messageInterval = setInterval(() => {
@@ -649,7 +647,7 @@ export default {
 
           // If the response contains rows, check if we need to confirm before replacing
           if (res && Array.isArray(res.rows) && res.rows.length > 0) {
-            _this.aiImportMessage = 'Menyen er konvertert til JSON format.';
+            _this.aiImportMessage = _this.$i('import_aiConverted');
             _this.aiImportCompleted = true;
 
             // Make sure each row has all required properties initialized
@@ -676,7 +674,7 @@ export default {
             }
           } else {
             // Show error if no rows were found
-            _this.aiImportMessage = 'Feil ved import: Ingen produkter ble funnet i menyteksten. Prøv å omformulere eller legg til mer detaljer.';
+            _this.aiImportMessage = _this.$i('import_aiNoProducts');
             _this.aiImportCompleted = false;
           }
         })
@@ -685,7 +683,7 @@ export default {
           // eslint-disable-next-line no-console
           console.error('Error running AI import:', error);
           _this.isAILoading = false;
-          _this.aiImportMessage = `Feil ved import: ${error.message || 'Ukjent feil'}`;
+          _this.aiImportMessage = _this.$i('import_aiError', { message: error.message || _this.$i('import_aiUnknownError') });
           _this.aiImportCompleted = false;
         });
     },
@@ -751,7 +749,7 @@ export default {
         this.$set(row, 'variants', []);
       }
       this.variantsManagerTarget = row.variants;
-      this.variantsManagerTitle = row.name ? `Varianter: ${row.name}` : 'Varianter';
+      this.variantsManagerTitle = row.name ? this.$i('import_variantsTitleNamed', { name: row.name }) : this.$i('import_variantsTitle');
       this.showVariantsManager = true;
     },
     async addCategoryVariant(groupIndex) {
@@ -770,7 +768,7 @@ export default {
       this.$set(group.variants, vIndex, variant);
     },
     removeCategoryVariant(groupIndex, vIndex) {
-      if (!confirm('Er du sikker på at du vil fjerne dette tilbehøret?')) {
+      if (!confirm(this.$i('import_removeAddonConfirm'))) {
         return;
       }
       this.categoryVariants[groupIndex].variants.splice(vIndex, 1);
@@ -790,7 +788,7 @@ export default {
       this.$set(this.variantsManagerTarget, index, variant);
     },
     removeVariantFromTarget(index) {
-      if (!confirm('Er du sikker på at du vil fjerne dette tilbehøret?')) {
+      if (!confirm(this.$i('import_removeAddonConfirm'))) {
         return;
       }
       this.variantsManagerTarget.splice(index, 1);
@@ -802,11 +800,11 @@ export default {
       this.categoryVariants.splice(index, 1);
     },
     formatOptionsPreview(options) {
-      if (!options || options.length === 0) return 'Ingen alternativer';
+      if (!options || options.length === 0) return this.$i('import_noOptions');
       const names = options.map(o => o.name).filter(n => n);
-      if (names.length === 0) return 'Ingen alternativer';
+      if (names.length === 0) return this.$i('import_noOptions');
       if (names.length <= 3) return names.join(', ');
-      return `${names.slice(0, 2).join(', ')}, +${names.length - 2} mer`;
+      return this.$i('import_optionsMore', { names: names.slice(0, 2).join(', '), count: names.length - 2 });
     },
     copyToClipboard() {
       navigator.clipboard.writeText(this.exportData);
@@ -824,7 +822,7 @@ export default {
         }
       } catch (e) {
         // eslint-disable-next-line no-alert
-        alert('Invalid import data format');
+        alert(this.$i('import_invalidImportData'));
       }
     }
   }

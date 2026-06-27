@@ -3,8 +3,8 @@
     <div class="delivery-page">
       <div class="page-header">
         <div>
-          <h1>Levering</h1>
-          <p>Administrer henting, bordservering og hjemlevering for valgt butikk.</p>
+          <h1>{{ $i('delivery_title') }}</h1>
+          <p>{{ $i('delivery_subtitle') }}</p>
         </div>
       </div>
 
@@ -18,8 +18,8 @@
         class="empty-state"
       >
         <span class="material-icons">storefront</span>
-        <h3>Ingen butikk valgt</h3>
-        <p>Velg butikk i menyen for å administrere levering.</p>
+        <h3>{{ $i('delivery_noStoreSelectedTitle') }}</h3>
+        <p>{{ $i('delivery_noStoreSelectedText') }}</p>
       </div>
 
       <div
@@ -29,8 +29,8 @@
         <section class="settings-panel">
           <div class="settings-row">
             <div>
-              <h2>Hent selv</h2>
-              <p>Kunder kan hente bestillingen i butikken.</p>
+              <h2>{{ $i('delivery_selfPickUpTitle') }}</h2>
+              <p>{{ $i('delivery_selfPickUpText') }}</p>
             </div>
             <label class="toggle-switch">
               <input
@@ -45,8 +45,8 @@
 
           <div class="settings-row">
             <div>
-              <h2>Spis inne</h2>
-              <p>Kunder kan velge servering i lokalet.</p>
+              <h2>{{ $i('delivery_dineInTitle') }}</h2>
+              <p>{{ $i('delivery_dineInText') }}</p>
             </div>
             <label class="toggle-switch">
               <input
@@ -61,8 +61,8 @@
 
           <div class="settings-row">
             <div>
-              <h2>Hjemlevering</h2>
-              <p>Aktiver hjemlevering med egen kjøring eller Wolt.</p>
+              <h2>{{ $i('delivery_homeDeliveryTitle') }}</h2>
+              <p>{{ $i('delivery_homeDeliveryText') }}</p>
             </div>
             <label class="toggle-switch">
               <input
@@ -80,7 +80,7 @@
             class="delivery-type-section"
           >
             <div class="section-heading">
-              <h2>Type hjemlevering</h2>
+              <h2>{{ $i('delivery_homeDeliveryTypeTitle') }}</h2>
               <span>{{ selectedDeliveryTypeLabel }}</span>
             </div>
             <div class="delivery-type-options">
@@ -92,7 +92,7 @@
                 @click="changeDeliveryType('own')"
               >
                 <span class="material-icons">delivery_dining</span>
-                Egen kjøring
+                {{ $i('delivery_ownDriving') }}
               </button>
               <button
                 type="button"
@@ -111,7 +111,7 @@
             v-if="localWoltDeliveryEnabled && currentStore && !currentStore.woltDriveIsConfigured"
             class="warning-message"
           >
-            For å aktivere Wolt-levering må du ha en gyldig avtale. Ta kontakt på hei@okam.no så hjelper vi deg i gang!
+            {{ $i('delivery_woltNotConfiguredWarning') }}
           </div>
         </section>
 
@@ -121,8 +121,8 @@
         >
           <div class="section-heading">
             <div>
-              <h2>Fraktpriser</h2>
-              <p>Sett pris basert på kjøreavstand fra butikken til kunden.</p>
+              <h2>{{ $i('delivery_shippingPricesTitle') }}</h2>
+              <p>{{ $i('delivery_shippingPricesText') }}</p>
             </div>
             <button
               class="btn btn-secondary"
@@ -130,7 +130,7 @@
               @click="createDeliveryMethod"
             >
               <span class="material-icons">add</span>
-              Legg til ny fraktpris
+              {{ $i('delivery_addShippingPrice') }}
             </button>
           </div>
 
@@ -138,7 +138,7 @@
             v-if="deliveryMethods.length === 0"
             class="empty-card"
           >
-            Ingen fraktpriser er lagt til enda.
+            {{ $i('delivery_noShippingPrices') }}
           </div>
 
           <div
@@ -153,11 +153,11 @@
               @click="editDeliveryMethod(deliveryMethod)"
             >
               <div>
-                <span>Kjøreavstand</span>
+                <span>{{ $i('delivery_drivingDistance') }}</span>
                 <strong>{{ distanceLabel(deliveryMethod) }}</strong>
               </div>
               <div>
-                <span>Pris</span>
+                <span>{{ $i('common_price') }}</span>
                 <strong>{{ priceLabel(deliveryMethod.amount) }}</strong>
               </div>
               <span class="material-icons">chevron_right</span>
@@ -171,8 +171,8 @@
         >
           <div class="section-heading">
             <div>
-              <h2>Utkjøring fra adresse</h2>
-              <p>Adressen brukes som startpunkt for levering.</p>
+              <h2>{{ $i('delivery_deliveryFromAddressTitle') }}</h2>
+              <p>{{ $i('delivery_deliveryFromAddressText') }}</p>
             </div>
             <button
               v-if="showSaveButton"
@@ -181,13 +181,13 @@
               @click="saveChanges"
             >
               <span class="material-icons">save</span>
-              Lagre
+              {{ $i('common_save') }}
             </button>
           </div>
 
           <div class="form-grid">
             <div class="form-group form-group-full">
-              <label>Adresse</label>
+              <label>{{ $i('delivery_address') }}</label>
               <input
                 v-model="localDeliveryFullAddress"
                 type="text"
@@ -195,7 +195,7 @@
               />
             </div>
             <div class="form-group">
-              <label>Postkode</label>
+              <label>{{ $i('delivery_zipCode') }}</label>
               <input
                 v-model="localDeliveryZipCode"
                 type="text"
@@ -204,7 +204,7 @@
               />
             </div>
             <div class="form-group">
-              <label>Sted</label>
+              <label>{{ $i('delivery_city') }}</label>
               <input
                 v-model="localDeliveryCity"
                 type="text"
@@ -212,7 +212,7 @@
               />
             </div>
             <div class="form-group">
-              <label>Minimum bestilling i kroner</label>
+              <label>{{ $i('delivery_minimumOrderKroner') }}</label>
               <input
                 v-model="localMinimumAmountForDelivery"
                 type="text"
@@ -240,7 +240,7 @@
         <div class="delivery-method-modal">
           <div class="modal-header">
             <div>
-              <h2>{{ creatingDeliveryMethod ? "Ny fraktpris" : "Fraktpris" }}</h2>
+              <h2>{{ creatingDeliveryMethod ? $i('delivery_newShippingPrice') : $i('delivery_shippingPrice') }}</h2>
               <p>{{ deliveryMethodSummary }}</p>
             </div>
             <button
@@ -261,7 +261,7 @@
 
           <div class="form-grid">
             <div class="form-group">
-              <label>Kjøreavstand i km</label>
+              <label>{{ $i('delivery_drivingDistanceKm') }}</label>
               <div class="distance-input">
                 <span>{{ editorMinimumKm }} -</span>
                 <input
@@ -277,13 +277,13 @@
             </div>
 
             <div class="form-group">
-              <label>Pris</label>
+              <label>{{ $i('common_price') }}</label>
               <div class="amount-inputs">
                 <input
                   v-model="editorDeliveryMethod.wholeAmount"
                   type="text"
                   inputmode="numeric"
-                  placeholder="Kroner"
+                  :placeholder="$i('delivery_kroner')"
                   :class="{ error: editorErrorFields.includes('wholeAmount') }"
                   @blur="updateDeliveryMethodSummary"
                 />
@@ -292,7 +292,7 @@
                   type="text"
                   inputmode="numeric"
                   maxlength="2"
-                  placeholder="Ører"
+                  :placeholder="$i('delivery_ore')"
                   :class="{ error: editorErrorFields.includes('fractionAmount') }"
                   @blur="updateDeliveryMethodSummary"
                 />
@@ -308,7 +308,7 @@
               :disabled="editorLoading"
               @click="deleteDeliveryMethod"
             >
-              Slett
+              {{ $i('common_delete') }}
             </button>
             <div class="modal-action-spacer" />
             <button
@@ -317,7 +317,7 @@
               :disabled="editorLoading"
               @click="closeDeliveryMethodEditor"
             >
-              Avbryt
+              {{ $i('common_cancel') }}
             </button>
             <button
               class="btn btn-primary"
@@ -325,7 +325,7 @@
               :disabled="editorLoading"
               @click="saveDeliveryMethod"
             >
-              {{ creatingDeliveryMethod ? "Opprett" : "Lagre" }}
+              {{ creatingDeliveryMethod ? $i('common_create') : $i('common_save') }}
             </button>
           </div>
         </div>
@@ -387,12 +387,12 @@ export default {
         return "DineHome";
       }
       if (this.localInstantHomeDeliveryEnabled) {
-        return "Egen kjøring";
+        return this.$i("delivery_ownDriving");
       }
       if (this.localWoltDeliveryEnabled) {
         return "Wolt";
       }
-      return "Velg leveringstype";
+      return this.$i("delivery_selectDeliveryType");
     },
     hasDeliveryAddressChanges() {
       return (
@@ -452,7 +452,7 @@ export default {
           await this.loadDeliveryMethods(storeId);
         }
       } catch (error) {
-        this.showNotification(error.message || "Kunne ikke laste leveringsinnstillinger", "error");
+        this.showNotification(error.message || this.$i("delivery_loadSettingsError"), "error");
       } finally {
         this.isLoading = false;
       }
@@ -521,7 +521,7 @@ export default {
       if (!this.currentStore || this.isSaving || this.localSelfPickUp === this.currentStore.selfPickUp) {
         return;
       }
-      await this.updateToggle(() => this._storeService.UpdateSelfPickUp(this.selectedStore, this.localSelfPickUp), "Hent selv er oppdatert");
+      await this.updateToggle(() => this._storeService.UpdateSelfPickUp(this.selectedStore, this.localSelfPickUp), this.$i("delivery_selfPickUpUpdated"));
     },
     async tableDeliveryEnabledChange() {
       if (!this.currentStore || this.isSaving || this.localTableDeliveryEnabled === this.currentStore.tableDeliveryEnabled) {
@@ -529,7 +529,7 @@ export default {
       }
       await this.updateToggle(
         () => this._storeService.UpdateTableDelivery(this.selectedStore, this.localTableDeliveryEnabled),
-        this.localTableDeliveryEnabled ? "Spis inne er aktivert. Husk å kontrollere mva-oppsett for produktene dine." : "Spis inne er deaktivert"
+        this.localTableDeliveryEnabled ? this.$i("delivery_dineInActivated") : this.$i("delivery_dineInDeactivated")
       );
     },
     async deliveryEnabledChange() {
@@ -546,7 +546,7 @@ export default {
             this._storeService.UpdateDineHomeDelivery(this.selectedStore, false),
             this._storeService.UpdateWoltDelivery(this.selectedStore, false),
           ]);
-          this.showNotification("Hjemlevering er deaktivert");
+          this.showNotification(this.$i("delivery_homeDeliveryDeactivated"));
         } else {
           this.localInstantHomeDeliveryEnabled = true;
           this.localWoltDeliveryEnabled = false;
@@ -555,12 +555,12 @@ export default {
             this._storeService.UpdateDineHomeDelivery(this.selectedStore, false),
             this._storeService.UpdateWoltDelivery(this.selectedStore, false),
           ]);
-          this.showNotification("Hjemlevering er aktivert med egen kjøring");
+          this.showNotification(this.$i("delivery_homeDeliveryActivatedOwn"));
         }
         await this.refreshStore({ preserveUnsavedFormChanges: true });
         await this.loadDeliveryMethods();
       } catch (error) {
-        this.showNotification(error.message || "Kunne ikke oppdatere hjemlevering", "error");
+        this.showNotification(error.message || this.$i("delivery_updateHomeDeliveryError"), "error");
         this.setLocalVariables({ preserveUnsavedFormChanges: true });
       } finally {
         this.isSaving = false;
@@ -587,7 +587,7 @@ export default {
         this.localDeliveryEnabled = true;
         this.localInstantHomeDeliveryEnabled = useOwnDelivery;
         this.localWoltDeliveryEnabled = useWolt;
-        this.showNotification(`Hjemleveringstype endret til ${useOwnDelivery ? "egen kjøring" : "Wolt"}`);
+        this.showNotification(this.$i("delivery_homeDeliveryTypeChanged", { type: useOwnDelivery ? this.$i("delivery_ownDrivingLower") : "Wolt" }));
         await this.refreshStore({ preserveUnsavedFormChanges: true });
         if (useOwnDelivery) {
           await this.loadDeliveryMethods();
@@ -595,7 +595,7 @@ export default {
           this.deliveryMethods = [];
         }
       } catch (error) {
-        this.showNotification(error.message || "Kunne ikke endre hjemleveringstype", "error");
+        this.showNotification(error.message || this.$i("delivery_changeHomeDeliveryTypeError"), "error");
         this.setLocalVariables({ preserveUnsavedFormChanges: true });
       } finally {
         this.isSaving = false;
@@ -610,7 +610,7 @@ export default {
           await this.refreshStore({ preserveUnsavedFormChanges: true });
         }
       } catch (error) {
-        this.showNotification(error.message || "Kunne ikke lagre endringen", "error");
+        this.showNotification(error.message || this.$i("delivery_saveChangeError"), "error");
         this.setLocalVariables({ preserveUnsavedFormChanges: true });
       } finally {
         this.isSaving = false;
@@ -655,10 +655,10 @@ export default {
         }
 
         await Promise.all(tasks);
-        this.showNotification("Leveringsinnstillinger lagret");
+        this.showNotification(this.$i("delivery_settingsSaved"));
         await this.refreshStore();
       } catch (error) {
-        this.showNotification(error.message || "Kunne ikke lagre leveringsinnstillinger", "error");
+        this.showNotification(error.message || this.$i("delivery_saveSettingsError"), "error");
       } finally {
         this.isSaving = false;
       }
@@ -702,7 +702,12 @@ export default {
       const maxKm = this.editorDeliveryMethod.km || "0";
       const wholeAmount = this.editorDeliveryMethod.wholeAmount || "0";
       const fractionAmount = this.editorDeliveryMethod.fractionAmount || "00";
-      this.deliveryMethodSummary = `For levering innenfor ${minKm} til ${maxKm} km fra butikken til kunden, vil et kjøretillegg på kr ${wholeAmount},${fractionAmount} forekomme.`;
+      this.deliveryMethodSummary = this.$i("delivery_methodSummary", {
+        minKm,
+        maxKm,
+        wholeAmount,
+        fractionAmount,
+      });
     },
     numericInputValue(value) {
       return String(value ?? "").trim();
@@ -727,22 +732,22 @@ export default {
 
       if (!this.isDigits(method.km)) {
         this.editorErrorFields.push("km");
-        this.editorError = "Antall km er påkrevd";
+        this.editorError = this.$i("delivery_kmRequired");
       }
       if (
         !/^\d{2}$/.test(this.numericInputValue(method.fractionAmount))
       ) {
         this.editorErrorFields.push("fractionAmount");
-        this.editorError = "Ører må være mellom 00 og 99";
+        this.editorError = this.$i("delivery_fractionAmountRange");
       }
       if (!this.isDigits(method.wholeAmount)) {
         this.editorErrorFields.push("wholeAmount");
-        this.editorError = "Pris er påkrevd";
+        this.editorError = this.$i("delivery_priceRequired");
       }
 
       if (this.editorErrorFields.length === 0 && parseInt(this.numericInputValue(method.km), 10) <= this.editorMinimumKm) {
         this.editorErrorFields.push("km");
-        this.editorError = `Antall km må være større enn ${this.editorMinimumKm}`;
+        this.editorError = this.$i("delivery_kmMustBeGreaterThan", { minimumKm: this.editorMinimumKm });
       }
 
       return this.editorErrorFields.length === 0;
@@ -760,26 +765,26 @@ export default {
           await this._deliveryMethodService.Update(this.editorDeliveryMethod);
         }
         await this.loadDeliveryMethods();
-        this.showNotification(this.creatingDeliveryMethod ? "Fraktpris opprettet" : "Fraktpris lagret");
+        this.showNotification(this.creatingDeliveryMethod ? this.$i("delivery_shippingPriceCreated") : this.$i("delivery_shippingPriceSaved"));
         this.closeDeliveryMethodEditor();
       } catch (error) {
-        this.editorError = error.message || "Kunne ikke lagre fraktpris";
+        this.editorError = error.message || this.$i("delivery_saveShippingPriceError");
       } finally {
         this.editorLoading = false;
       }
     },
     async deleteDeliveryMethod() {
-      if (this.editorLoading || !window.confirm("Er du sikker på at du ønsker å slette fraktprisen?")) {
+      if (this.editorLoading || !window.confirm(this.$i("delivery_confirmDeleteShippingPrice"))) {
         return;
       }
       this.editorLoading = true;
       try {
         await this._deliveryMethodService.Delete(this.editorDeliveryMethod.id);
         await this.loadDeliveryMethods();
-        this.showNotification("Fraktpris slettet");
+        this.showNotification(this.$i("delivery_shippingPriceDeleted"));
         this.closeDeliveryMethodEditor();
       } catch (error) {
-        this.editorError = error.message || "Kunne ikke slette fraktpris";
+        this.editorError = error.message || this.$i("delivery_deleteShippingPriceError");
       } finally {
         this.editorLoading = false;
       }

@@ -170,6 +170,7 @@ export default {
   plugins: [
     { src: '~/plugins/global-mixin', ssr: false },
     '~/plugins/market-mixin',
+    '~/plugins/i18n',
     { src: '~/plugins/store-init' },
     { src: '~/plugins/vue-currency-input' },
     '~/plugins/jsonld'

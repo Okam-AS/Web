@@ -1,7 +1,7 @@
 <template>
   <AdminPage>
     <div class="dinehome-page">
-      <h2>Wolt Kalkulator</h2>
+      <h2>{{ $i('woltCalc_title') }}</h2>
 
       <div
         v-if="isKeyAccountManager || isPowerUser"
@@ -10,7 +10,7 @@
         <div class="wolt-calc-form-container">
           <form class="wolt-calc-form">
             <div class="wolt-calc-row">
-              <label>Gjennomsnittlig ordreverdi (inkl. 15% mva)</label>
+              <label>{{ $i('woltCalc_avgOrderValueLabel') }}</label>
               <input
                 v-model.number="woltCalc.avgOrderValue"
                 type="number"
@@ -19,7 +19,7 @@
               />
             </div>
             <div class="wolt-calc-row">
-              <label>Fraktpris til sluttkunde (inkl. 25% mva)</label>
+              <label>{{ $i('woltCalc_shippingPriceLabel') }}</label>
               <input
                 v-model.number="woltCalc.shippingPrice"
                 type="number"
@@ -28,7 +28,7 @@
               />
             </div>
             <div class="wolt-calc-row">
-              <label>Service fee til sluttkunde (inkl. 25% mva)</label>
+              <label>{{ $i('woltCalc_serviceFeeLabel') }}</label>
               <input
                 v-model.number="woltCalc.serviceFee"
                 type="number"
@@ -37,7 +37,7 @@
               />
             </div>
             <div class="wolt-calc-row">
-              <label>Wolt basispris (inkl. 25% mva)</label>
+              <label>{{ $i('woltCalc_basePriceLabel') }}</label>
               <input
                 v-model.number="woltCalc.basePrice"
                 type="number"
@@ -46,7 +46,7 @@
               />
             </div>
             <div class="wolt-calc-row">
-              <label>Wolt avstandspris (per 500m)</label>
+              <label>{{ $i('woltCalc_distancePriceLabel') }}</label>
               <input
                 v-model.number="woltCalc.distancePrice"
                 type="number"
@@ -56,27 +56,27 @@
             </div>
             <div class="wolt-calc-result-summary">
               <div class="wolt-result-box">
-                <h4>Wolt kostnad:</h4>
+                <h4>{{ $i('woltCalc_costHeading') }}</h4>
                 <div class="result-percentage">{{ woltCalcResult.result.toFixed(0) }}<span class="percentage-symbol">%</span></div>
-                <p class="result-explanation">av gjennomsnittlig ordreverdi eks. mva</p>
+                <p class="result-explanation">{{ $i('woltCalc_costExplanation') }}</p>
               </div>
             </div>
           </form>
         </div>
 
         <div class="wolt-calc-table-container">
-          <h3>Beregningstabell (for 100 ordre)</h3>
+          <h3>{{ $i('woltCalc_tableHeading') }}</h3>
           <div class="wolt-calc-table-wrapper">
             <table class="wolt-calc-table">
               <thead>
                 <tr>
-                  <th>Avstand (m)</th>
-                  <th>Andel</th>
-                  <th>Antall ordre</th>
-                  <th>Frakt & Serviceinntekt</th>
-                  <th>Fraktkost</th>
-                  <th>Netto Subsidier per enhet</th>
-                  <th>Netto subsidier kategori</th>
+                  <th>{{ $i('woltCalc_thDistance') }}</th>
+                  <th>{{ $i('woltCalc_thShare') }}</th>
+                  <th>{{ $i('woltCalc_thOrderCount') }}</th>
+                  <th>{{ $i('woltCalc_thShippingServiceIncome') }}</th>
+                  <th>{{ $i('woltCalc_thShippingCost') }}</th>
+                  <th>{{ $i('woltCalc_thNetSubsidyPerUnit') }}</th>
+                  <th>{{ $i('woltCalc_thNetSubsidyCategory') }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -96,7 +96,7 @@
               <tfoot>
                 <tr>
                   <td colspan="2">
-                    <strong>Total</strong>
+                    <strong>{{ $i('common_total') }}</strong>
                   </td>
                   <td>
                     <strong>{{ woltCalcResult.tableTotals.count.toFixed(0) }}</strong>
@@ -117,7 +117,7 @@
                     colspan="6"
                     style="text-align: right"
                   >
-                    <strong>Netto subsidier i %:</strong>
+                    <strong>{{ $i('woltCalc_netSubsidyPercent') }}</strong>
                   </td>
                   <td>
                     <strong>{{ woltCalcResult.result.toFixed(0) }}%</strong>
@@ -130,22 +130,22 @@
             class="wolt-calc-explanation"
             style="margin-top: 24px"
           >
-            <h4>Forklaring:</h4>
+            <h4>{{ $i('woltCalc_explanationHeading') }}</h4>
             <div class="explanation-content">
               <div class="explanation-item">
-                <span class="explanation-label">Fraktkost</span>
-                <span class="explanation-formula">= Basispris ({{ woltCalc.basePrice }}) + (Avstandspris ({{ woltCalc.distancePrice }}) × avstandsfaktor)</span>
+                <span class="explanation-label">{{ $i('woltCalc_thShippingCost') }}</span>
+                <span class="explanation-formula">{{ $i('woltCalc_shippingCostFormula', { basePrice: woltCalc.basePrice, distancePrice: woltCalc.distancePrice }) }}</span>
               </div>
               <div class="explanation-item">
-                <span class="explanation-label">Frakt & Serviceinntekt</span>
+                <span class="explanation-label">{{ $i('woltCalc_thShippingServiceIncome') }}</span>
                 <span class="explanation-value">= {{ woltCalc.shippingPrice }} + {{ woltCalc.serviceFee }} = {{ woltCalc.shippingPrice + woltCalc.serviceFee }}</span>
               </div>
               <div class="explanation-item">
-                <span class="explanation-label">Netto Subsidier</span>
-                <span class="explanation-formula">= Fraktkost - Frakt & Serviceinntekt</span>
+                <span class="explanation-label">{{ $i('woltCalc_netSubsidyLabel') }}</span>
+                <span class="explanation-formula">{{ $i('woltCalc_netSubsidyFormula') }}</span>
               </div>
               <div class="explanation-total">
-                Subsidiebeløp: <strong>{{ woltCalcResult.tableTotals.netSubsidy ? Math.round(woltCalcResult.tableTotals.netSubsidy / 100) : "0" }}</strong> kr per ordre
+                {{ $i('woltCalc_subsidyAmountPrefix') }} <strong>{{ woltCalcResult.tableTotals.netSubsidy ? Math.round(woltCalcResult.tableTotals.netSubsidy / 100) : "0" }}</strong> {{ $i('woltCalc_subsidyAmountSuffix') }}
               </div>
             </div>
           </div>

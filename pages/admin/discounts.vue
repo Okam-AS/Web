@@ -3,14 +3,14 @@
     <div class="discounts-page">
       <div class="page-header">
         <div class="page-header__left">
-          <h1>Rabatter</h1>
-          <p class="page-description">Opprett og administrer rabatter og kampanjekoder</p>
+          <h1>{{ $i('discounts_title') }}</h1>
+          <p class="page-description">{{ $i('discounts_pageDescription') }}</p>
         </div>
         <button class="btn btn-primary" @click="createDiscount">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="btn-icon">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
-          Opprett rabatt
+          {{ $i('discounts_createDiscount') }}
         </button>
       </div>
 
@@ -24,8 +24,8 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
           </svg>
         </div>
-        <h3>Velg en butikk</h3>
-        <p>Velg en butikk for å se og administrere rabatter.</p>
+        <h3>{{ $i('discounts_selectStoreTitle') }}</h3>
+        <p>{{ $i('discounts_selectStoreDescription') }}</p>
       </div>
 
       <div v-else-if="discounts.length === 0" class="empty-state">
@@ -34,9 +34,9 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
           </svg>
         </div>
-        <h3>Ingen rabatter</h3>
-        <p>Det finnes ingen rabatter for denne butikken ennå.</p>
-        <button class="btn btn-primary" @click="createDiscount">Opprett første rabatt</button>
+        <h3>{{ $i('discounts_emptyTitle') }}</h3>
+        <p>{{ $i('discounts_emptyDescription') }}</p>
+        <button class="btn btn-primary" @click="createDiscount">{{ $i('discounts_createFirstDiscount') }}</button>
       </div>
 
       <div v-else class="discounts-list">
@@ -55,8 +55,8 @@
               <span v-if="discount.code" class="discount-item__code">{{ discount.code }}</span>
             </div>
             <div class="discount-item__meta">
-              <span v-if="discount.expired" class="badge badge--expired">Utløpt</span>
-              <span v-else-if="discount.isUnavailable" class="badge badge--unavailable">Utilgjengelig</span>
+              <span v-if="discount.expired" class="badge badge--expired">{{ $i('discounts_badgeExpired') }}</span>
+              <span v-else-if="discount.isUnavailable" class="badge badge--unavailable">{{ $i('discounts_badgeUnavailable') }}</span>
             </div>
           </div>
           <div class="discount-item__amount">

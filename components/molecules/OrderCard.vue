@@ -39,7 +39,7 @@
       >
         <span class="material-icons">update</span>
         <div>
-          <span class="label">Ønsket ferdig til:</span>
+          <span class="label">{{ $i('orderCard_requestedCompletionLabel') }}</span>
           <span class="time">{{ formatRequestedCompletionDate(order.requestedCompletion) }}</span>
         </div>
       </div>
@@ -57,21 +57,21 @@
 
       <div class="info-grid">
         <div class="info-item">
-          <label>Platform:</label>
+          <label>{{ $i('orderCard_platformLabel') }}</label>
           <span>{{ order.platform }}</span>
         </div>
         <div
           v-if="order.deliveryType === 'DineHomeDelivery'"
           class="info-item"
         >
-          <label>Sjåførstatus:</label>
+          <label>{{ $i('orderCard_driverStatusLabel') }}</label>
           <div class="status-wrapper">
             <span>{{ dineHomeDeliveryStatusLabel(order.dineHomeStatus) }}</span>
             <span
               v-if="getDriverDelay(order) > 0"
               class="delay-badge"
             >
-              {{ getDriverDelay(order) }} min forsinket
+              {{ $i('orderCard_minutesDelayed', { minutes: getDriverDelay(order) }) }}
             </span>
           </div>
         </div>
@@ -79,33 +79,33 @@
           v-if="order.deliveryType === 'WoltDelivery' && order.woltDeliveryInfo"
           class="info-item"
         >
-          <label>Wolt status:</label>
+          <label>{{ $i('orderCard_woltStatusLabel') }}</label>
           <div class="status-wrapper">
             <span>{{ woltDeliveryStatusLabel(order.woltDeliveryInfo.status) }}</span>
           </div>
         </div>
         <div class="info-item">
-          <label>Bestilit:</label>
+          <label>{{ $i('orderCard_orderedLabel') }}</label>
           <span>{{ formatDate(order.created || order.pickup) }}</span>
         </div>
         <div class="info-item">
-          <label>Klar til:</label>
+          <label>{{ $i('orderCard_readyByLabel') }}</label>
           <span v-if="order.countdownEndTime">{{ formatDate(order.countdownEndTime) }}</span>
         </div>
         <div class="info-item">
-          <label>Totalpris:</label>
+          <label>{{ $i('orderCard_totalPriceLabel') }}</label>
           <span>{{ priceLabel(order.finalAmount) }}</span>
         </div>
         <div class="info-item">
-          <label>Levering:</label>
+          <label>{{ $i('orderCard_deliveryLabel') }}</label>
           <span>{{ deliveryTypeLabel(order.deliveryType) }}</span>
         </div>
         <div class="info-item">
-          <label>Betaling:</label>
+          <label>{{ $i('orderCard_paymentLabel') }}</label>
           <span>{{ paymentTypeLabel(order.paymentType) }}</span>
         </div>
         <div class="info-item">
-          <label>Kommentar:</label>
+          <label>{{ $i('orderCard_commentLabel') }}</label>
           <span>{{ order.comment }}</span>
         </div>
       </div>
@@ -115,7 +115,7 @@
           class="toggle-items-btn"
           @click="showItems = !showItems"
         >
-          <span class="btn-text">{{ showItems ? "Skjul varer" : "Vis varer" }}</span>
+          <span class="btn-text">{{ showItems ? $i('orderCard_hideItems') : $i('orderCard_showItems') }}</span>
           <span
             class="btn-icon"
             :class="{ 'is-up': showItems }"
@@ -129,8 +129,8 @@
           <table>
             <thead>
               <tr>
-                <th class="u-left">Vare</th>
-                <th class="u-right">Pris</th>
+                <th class="u-left">{{ $i('orderCard_itemColumn') }}</th>
+                <th class="u-right">{{ $i('orderCard_priceColumn') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -138,7 +138,7 @@
                 v-for="item in order.items"
                 :key="item.id"
               >
-                <td>{{ item.quantity }} {{ item.name }} (Mva: {{ item.tax }}%)</td>
+                <td>{{ $i('orderCard_itemRow', { quantity: item.quantity, name: item.name, tax: item.tax }) }}</td>
                 <td class="u-right">
                   {{ priceLabel(item.amount) }}
                 </td>
@@ -177,14 +177,14 @@
           @click="$emit('transfer', order)"
         >
           <span class="material-icons">swap_horiz</span>
-          Flytt
+          {{ $i('orderCard_transfer') }}
         </button>
         <button
           class="action-btn"
           @click="$emit('change-delivery', order)"
         >
           <span class="material-icons">edit</span>
-          Endre leveringstype
+          {{ $i('orderCard_changeDeliveryType') }}
         </button>
         <button
           v-if="order.deliveryType === 'InstantHomeDelivery'"
@@ -192,21 +192,21 @@
           @click="$emit('sms-driver', order)"
         >
           <span class="material-icons">sms</span>
-          Send SMS til sjåfør
+          {{ $i('orderCard_smsDriver') }}
         </button>
         <button
           class="action-btn"
           @click="$emit('receipt', order)"
         >
           <span class="material-icons">receipt</span>
-          Kvittering
+          {{ $i('orderCard_receipt') }}
         </button>
         <button
           class="action-btn action-btn-danger"
           @click="$emit('cancel', order)"
         >
           <span class="material-icons">block</span>
-          Kanseller
+          {{ $i('orderCard_cancel') }}
         </button>
       </div>
     </div>
@@ -295,17 +295,17 @@ export default {
     dineHomeDeliveryStatusLabel(dineHomeDeliveryTypeEnum) {
       switch (dineHomeDeliveryTypeEnum) {
         case 'Accepted':
-          return 'Sjåfør har akseptert';
+          return this.$i('orderCard_dineHomeAccepted');
         case 'PickedUp':
-          return 'Sjåfør leverer bestilling';
+          return this.$i('orderCard_dineHomePickedUp');
         case 'ReachedDestination':
-          return 'Sjåfør fremme hos kunde';
+          return this.$i('orderCard_dineHomeReachedDestination');
         case 'Completed':
-          return 'Fullført';
+          return this.$i('orderCard_dineHomeCompleted');
         case 'Canceled':
-          return 'Sjåfør har kansellert';
+          return this.$i('orderCard_dineHomeCanceled');
         default:
-          return 'Venter aksept fra sjåfør';
+          return this.$i('orderCard_dineHomeWaiting');
       }
     },
     formatRequestedCompletionDate(dateString) {
@@ -325,9 +325,9 @@ export default {
 
       let dateText = '';
       if (isSameDay(date, today)) {
-        dateText = 'I dag';
+        dateText = this.$i('orderCard_today');
       } else if (isSameDay(date, tomorrow)) {
-        dateText = 'I morgen';
+        dateText = this.$i('orderCard_tomorrow');
       } else {
         dateText = `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1)
           .toString()
@@ -337,7 +337,7 @@ export default {
       const hours = date.getHours().toString().padStart(2, '0');
       const minutes = date.getMinutes().toString().padStart(2, '0');
 
-      return `${dateText} kl. ${hours}:${minutes}`;
+      return this.$i('orderCard_dateTime', { date: dateText, hours, minutes });
     },
   },
 };

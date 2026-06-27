@@ -2,8 +2,8 @@
   <AdminPage @login-success="handleLoginSuccess">
     <div class="products-page">
       <div class="page-header">
-        <h1>Produkter</h1>
-        <p>Et verktøy for å enkelt kunne redigere produkter på PC</p>
+        <h1>{{ $i('products_pageTitle') }}</h1>
+        <p>{{ $i('products_pageSubtitle') }}</p>
       </div>
       <div class="controls-section">
         <div class="store-selector">
@@ -14,7 +14,7 @@
               <input
                 v-model="productFilter"
                 type="text"
-                placeholder="Filtrer produkter..."
+                :placeholder="$i('products_filterPlaceholder')"
                 class="product-filter"
               />
               <button
@@ -28,12 +28,12 @@
           </div>
           <div class="select-wrapper sort-select">
             <select v-model="sortOption">
-              <option value="name-asc">Navn A-Å</option>
-              <option value="name-desc">Navn Å-A</option>
-              <option value="amount-asc">Pris (lavest)</option>
-              <option value="amount-desc">Pris (høyest)</option>
-              <option value="createdAt-asc">Dato (eldst)</option>
-              <option value="createdAt-desc">Dato (nyest)</option>
+              <option value="name-asc">{{ $i('products_sortNameAsc') }}</option>
+              <option value="name-desc">{{ $i('products_sortNameDesc') }}</option>
+              <option value="amount-asc">{{ $i('products_sortPriceAsc') }}</option>
+              <option value="amount-desc">{{ $i('products_sortPriceDesc') }}</option>
+              <option value="createdAt-asc">{{ $i('products_sortDateAsc') }}</option>
+              <option value="createdAt-desc">{{ $i('products_sortDateDesc') }}</option>
             </select>
           </div>
           <div class="select-wrapper items-per-page">
@@ -43,7 +43,7 @@
                 :key="n"
                 :value="n"
               >
-                {{ n }} per side
+                {{ $i('products_itemsPerPage', { count: n }) }}
               </option>
             </select>
           </div>
@@ -51,20 +51,20 @@
             class="new-product-btn"
             @click="createNewProduct"
           >
-            <i class="fas fa-plus" /> Nytt produkt
+            <i class="fas fa-plus" /> {{ $i('products_newProduct') }}
           </button>
         </div>
       </div>
       </div>
 
       <div class="results-count" v-if="!isLoading && products.length > 0">
-        Viser {{ paginatedProducts.length }} av {{ products.length }} produkter
+        {{ $i('products_resultsCount', { shown: paginatedProducts.length, total: products.length }) }}
         <button
           v-if="productFilter"
           class="clear-filter-btn"
           @click="productFilter = ''"
         >
-          Fjern filter på '{{ productFilter }}'
+          {{ $i('products_clearFilter', { filter: productFilter }) }}
         </button>
       </div>
 
@@ -72,10 +72,10 @@
 
       <div v-else-if="products.length === 0 && !productFilter" class="empty-state">
         <span class="material-icons">inventory_2</span>
-        <h3>Ingen produkter enda</h3>
-        <p>Kom i gang ved å legge til ditt første produkt</p>
+        <h3>{{ $i('products_emptyTitle') }}</h3>
+        <p>{{ $i('products_emptyDescription') }}</p>
         <button class="create-first-btn" @click="createNewProduct">
-          <i class="fas fa-plus" /> Opprett første produkt
+          <i class="fas fa-plus" /> {{ $i('products_createFirst') }}
         </button>
       </div>
 
@@ -126,7 +126,7 @@
               class="no-image"
             >
               <i class="fas fa-cloud-upload-alt" />
-              <span>Slipp bilde her</span>
+              <span>{{ $i('products_dropImageHere') }}</span>
             </div>
           </div>
           <div class="product-info">
@@ -138,7 +138,7 @@
                 v-if="product.tablePriceEnabled"
                 class="table-price"
               >
-                <span class="table-label">Spis inne:</span>
+                <span class="table-label">{{ $i('products_dineInLabel') }}</span>
                 {{ ((product.amount + product.tableAdditionalAmount) / 100).toFixed(2) }} {{ product.currency }}
               </div>
             </div>
@@ -146,7 +146,7 @@
               class="edit-btn"
               @click="editProduct(product)"
             >
-              <i class="fas fa-edit" /> Rediger
+              <i class="fas fa-edit" /> {{ $i('common_edit') }}
             </button>
           </div>
         </div>
@@ -161,7 +161,7 @@
           class="pagination-btn"
           @click="changePage(currentPage - 1)"
         >
-          Forrige
+          {{ $i('common_previous') }}
         </button>
 
         <div class="page-numbers">
@@ -180,7 +180,7 @@
           class="pagination-btn"
           @click="changePage(currentPage + 1)"
         >
-          Neste
+          {{ $i('common_next') }}
         </button>
       </div>
 
@@ -193,7 +193,7 @@
           class="editor-content"
         >
           <div class="editor-header">
-            <h2>Rediger produkt</h2>
+            <h2>{{ $i('products_editProduct') }}</h2>
             <button
               class="close-btn"
               @click="selectedProduct = null"
@@ -246,7 +246,7 @@
                     class="no-image"
                   >
                     <i class="fas fa-cloud-upload-alt" />
-                    <span>Slipp bilde her</span>
+                    <span>{{ $i('products_dropImageHere') }}</span>
                   </div>
                 </div>
                 <button
@@ -254,40 +254,40 @@
                   class="remove-image-btn"
                   @click.stop="removeImage(selectedProduct.id)"
                 >
-                  Slett bilde
+                  {{ $i('products_removeImage') }}
                 </button>
               </div>
             </div>
             <div class="form-group">
-              <label>Navn</label>
+              <label>{{ $i('common_name') }}</label>
               <input
                 v-model="selectedProduct.name"
                 type="text"
               />
             </div>
             <div class="form-group">
-              <label>Beskrivelse</label>
+              <label>{{ $i('common_description') }}</label>
               <textarea
                 v-model="selectedProduct.description"
                 rows="3"
               />
             </div>
             <div class="form-group">
-              <label>Allergener</label>
+              <label>{{ $i('products_allergens') }}</label>
               <textarea
                 v-model="selectedProduct.otherInformation"
                 rows="2"
-                placeholder="F.eks: Inneholder gluten, melk, egg"
+                :placeholder="$i('products_allergensPlaceholder')"
               />
             </div>
 
             <!-- Categories Section -->
             <div v-if="selectedProduct.id" class="form-group categories-section">
-              <label>Kategorier</label>
+              <label>{{ $i('products_categories') }}</label>
               <div class="multi-select-dropdown" :class="{ open: categoryDropdownOpen }">
                 <div class="dropdown-trigger" @click.stop="categoryDropdownOpen = !categoryDropdownOpen">
                   <span v-if="selectedProductCategoryIds.length === 0" class="placeholder">
-                    Velg kategorier...
+                    {{ $i('products_selectCategories') }}
                   </span>
                   <span v-else class="selected-names">
                     {{ selectedCategoryNames }}
@@ -310,15 +310,15 @@
                     <span>{{ category.name }}</span>
                   </div>
                   <div v-if="categories.length === 0" class="dropdown-empty">
-                    Ingen kategorier funnet
+                    {{ $i('products_noCategoriesFound') }}
                   </div>
                 </div>
               </div>
-              <p class="helper-text">Produktet vil vises i de valgte kategoriene</p>
+              <p class="helper-text">{{ $i('products_categoriesHelper') }}</p>
             </div>
 
             <div class="form-group">
-              <label>Pris (NOK)</label>
+              <label>{{ $i('products_priceNok') }}</label>
               <input
                 :value="priceDisplay"
                 type="text"
@@ -329,7 +329,7 @@
               />
             </div>
             <div class="form-group">
-              <label>MVA (%)</label>
+              <label>{{ $i('products_vat') }}</label>
               <input
                 v-model.number="selectedProduct.tax"
                 type="number"
@@ -337,7 +337,7 @@
                 max="100"
                 placeholder="15"
               />
-              <span class="helper-text">Vanligvis 15% for takeaway</span>
+              <span class="helper-text">{{ $i('products_vatHelperTakeaway') }}</span>
             </div>
             <div class="form-group">
               <label class="checkbox-label">
@@ -345,10 +345,10 @@
                   v-model="selectedProduct.tablePriceEnabled"
                   type="checkbox"
                 />
-                Egen pris for 'Spis inne'
+                {{ $i('products_dineInOwnPrice') }}
               </label>
               <div v-if="selectedProduct.tablePriceEnabled">
-                <label>Spis inne pris (NOK)</label>
+                <label>{{ $i('products_dineInPriceNok') }}</label>
                 <input
                   :value="finalTablePriceDisplay"
                   type="text"
@@ -357,7 +357,7 @@
                   @input="handleFinalTablePriceInput"
                   @blur="formatFinalTablePrice"
                 />
-                <label class="mt-4">Spis inne MVA (%)</label>
+                <label class="mt-4">{{ $i('products_dineInVat') }}</label>
                 <input
                   v-model.number="selectedProduct.tableTax"
                   type="number"
@@ -365,7 +365,7 @@
                   max="100"
                   placeholder="25"
                 />
-                <span class="helper-text">Vanligvis 25% for spis inne</span>
+                <span class="helper-text">{{ $i('products_vatHelperDineIn') }}</span>
               </div>
             </div>
 
@@ -375,10 +375,10 @@
                   v-model="selectedProduct.deliveryPriceEnabled"
                   type="checkbox"
                 />
-                Egen pris for 'Hjemlevering'
+                {{ $i('products_deliveryOwnPrice') }}
               </label>
               <div v-if="selectedProduct.deliveryPriceEnabled">
-                <label>Hjemlevering pris (NOK)</label>
+                <label>{{ $i('products_deliveryPriceNok') }}</label>
                 <input
                   :value="finalDeliveryPriceDisplay"
                   type="text"
@@ -387,7 +387,7 @@
                   @input="handleFinalDeliveryPriceInput"
                   @blur="formatFinalDeliveryPrice"
                 />
-                <label class="mt-4">Hjemlevering MVA (%)</label>
+                <label class="mt-4">{{ $i('products_deliveryVat') }}</label>
                 <input
                   v-model.number="selectedProduct.deliveryTax"
                   type="number"
@@ -395,7 +395,7 @@
                   max="100"
                   placeholder="15"
                 />
-                <span class="helper-text">Vanligvis 15% for hjemlevering</span>
+                <span class="helper-text">{{ $i('products_vatHelperDelivery') }}</span>
               </div>
             </div>
 
@@ -403,7 +403,7 @@
             <div v-if="selectedProduct.id" class="form-group variants-section">
               <div class="section-header-inline">
                 <div class="section-label-with-toggle">
-                  <label>Tilbehør / Varianter</label>
+                  <label>{{ $i('products_variantsLabel') }}</label>
                   <label class="toggle-switch">
                     <input
                       v-model="selectedProduct.productVariantEnabled"
@@ -418,10 +418,10 @@
                   :disabled="!selectedProduct.productVariantEnabled"
                   @click="openVariantEditor"
                 >
-                  <i class="fas fa-plus" /> Legg til
+                  <i class="fas fa-plus" /> {{ $i('common_add') }}
                 </button>
               </div>
-              <p class="helper-text">Varianter som er spesifikke for dette produktet</p>
+              <p class="helper-text">{{ $i('products_variantsHelper') }}</p>
 
               <div
                 v-if="selectedProduct.productVariants && selectedProduct.productVariants.length > 0"
@@ -437,8 +437,8 @@
                   <div class="variant-info-compact">
                     <div class="variant-name-compact">{{ variant.name }}</div>
                     <div class="variant-meta-compact">
-                      <span v-if="variant.multiselect" class="badge-compact">Flervalg</span>
-                      <span v-if="variant.required" class="badge-compact badge-required-compact">Obligatorisk</span>
+                      <span v-if="variant.multiselect" class="badge-compact">{{ $i('products_badgeMultiselect') }}</span>
+                      <span v-if="variant.required" class="badge-compact badge-required-compact">{{ $i('products_badgeRequired') }}</span>
                       <span class="variant-options-preview-compact">
                         {{ formatOptionsPreview(variant.options) }}
                       </span>
@@ -447,7 +447,7 @@
                   <button
                     class="copy-btn-variant"
                     type="button"
-                    title="Kopier til andre produkter"
+                    :title="$i('products_copyToOtherProducts')"
                     @click.stop="copyVariantToProducts(index)"
                   >
                     <span class="material-icons">content_copy</span>
@@ -458,7 +458,7 @@
                 </div>
               </div>
               <div v-else class="empty-hint-compact">
-                Ingen varianter lagt til
+                {{ $i('products_noVariantsAdded') }}
               </div>
             </div>
           </div>
@@ -469,13 +469,13 @@
               :disabled="isSaving || !canSave"
               @click="saveProduct"
             >
-              <span>{{ isSaving ? "Lagrer..." : "Lagre endringer" }}</span>
+              <span>{{ isSaving ? $i('common_saving') : $i('products_saveChanges') }}</span>
             </button>
             <button
               class="cancel-btn"
               @click="selectedProduct = null"
             >
-              Avbryt
+              {{ $i('common_cancel') }}
             </button>
             <button
               v-if="selectedProduct.id"
@@ -483,7 +483,7 @@
               :disabled="isSaving"
               @click="confirmDelete"
             >
-              Slett
+              {{ $i('common_delete') }}
             </button>
           </div>
         </div>
@@ -496,27 +496,27 @@
       <!-- New Product Name Modal -->
       <div v-if="showNewProductModal" class="modal-overlay" @click.self="closeNewProductModal">
         <div class="new-product-modal">
-          <h3>Nytt produkt</h3>
-          <p class="modal-description">Skriv inn produktnavn for å komme i gang</p>
+          <h3>{{ $i('products_newProduct') }}</h3>
+          <p class="modal-description">{{ $i('products_newProductModalDescription') }}</p>
           <input
             ref="newProductNameInput"
             v-model="newProductName"
             type="text"
-            placeholder="Produktnavn"
+            :placeholder="$i('products_productNamePlaceholder')"
             class="modal-input"
             @keyup.enter="confirmNewProduct"
             @keyup.esc="closeNewProductModal"
           />
           <div class="modal-actions">
             <button class="modal-btn-secondary" @click="closeNewProductModal">
-              Avbryt
+              {{ $i('common_cancel') }}
             </button>
             <button
               class="modal-btn-primary"
               :disabled="!newProductName.trim() || isCreatingProduct"
               @click="confirmNewProduct"
             >
-              {{ isCreatingProduct ? 'Oppretter...' : 'Opprett produkt' }}
+              {{ isCreatingProduct ? $i('products_creating') : $i('products_createProduct') }}
             </button>
           </div>
         </div>
@@ -764,12 +764,12 @@ export default {
       const file = event.dataTransfer.files[0];
 
       if (!file.type.match(/image\/(jpeg|png)/)) {
-        alert("Only JPG and PNG files are allowed");
+        alert(this.$i("products_alertOnlyJpgPng"));
         return;
       }
 
       if (file.size > 5 * 1024 * 1024) {
-        alert("File size must be less than 5MB");
+        alert(this.$i("products_alertFileTooLarge"));
         return;
       }
 
@@ -780,7 +780,7 @@ export default {
         await this.uploadImage(productId, resizedBlob);
       } catch (error) {
         console.error("Failed to upload image:", error);
-        alert("Failed to upload image");
+        alert(this.$i("products_alertUploadFailed"));
       } finally {
         this.uploadingFor = null;
       }
@@ -821,7 +821,7 @@ export default {
         await this.uploadImage(productId, resizedBlob);
       } catch (error) {
         console.error("Failed to resize and upload image:", error);
-        alert("Failed to resize and upload image");
+        alert(this.$i("products_alertResizeUploadFailed"));
       } finally {
         this.uploadingFor = null;
       }
@@ -964,7 +964,7 @@ export default {
         this.selectedProduct = null;
       } catch (err) {
         console.error("Failed to save product:", err);
-        alert("Failed to save product");
+        alert(this.$i("products_alertSaveFailed"));
       } finally {
         this.isSaving = false;
       }
@@ -1112,7 +1112,7 @@ export default {
     },
 
     async confirmDelete() {
-      if (!confirm("Er du sikker på at du vil slette dette produktet?")) {
+      if (!confirm(this.$i("products_confirmDelete"))) {
         return;
       }
 
@@ -1123,7 +1123,7 @@ export default {
         this.selectedProduct = null;
       } catch (err) {
         console.error("Failed to delete product:", err);
-        alert("Kunne ikke slette produktet");
+        alert(this.$i("products_alertDeleteFailed"));
       } finally {
         this.isSaving = false;
       }
@@ -1179,7 +1179,7 @@ export default {
         this.editProduct(created);
       } catch (err) {
         console.error("Failed to create product:", err);
-        alert("Kunne ikke opprette produkt");
+        alert(this.$i("products_alertCreateFailed"));
         this.isCreatingProduct = false;
       }
     },
@@ -1248,7 +1248,7 @@ export default {
     },
 
     async removeVariant(index) {
-      if (!confirm('Er du sikker på at du vil fjerne dette tilbehøret?')) {
+      if (!confirm(this.$i('products_confirmRemoveVariant'))) {
         return;
       }
       this.selectedProduct.productVariants.splice(index, 1);
@@ -1287,30 +1287,34 @@ export default {
         }
 
         if (failed.length === 0) {
-          this.showToast(`Kopiert til ${succeeded} ${succeeded === 1 ? 'produkt' : 'produkter'}!`);
+          this.showToast(
+            succeeded === 1
+              ? this.$i('products_toastCopiedSingle', { count: succeeded })
+              : this.$i('products_toastCopiedMultiple', { count: succeeded })
+          );
         } else {
           this.showToast(
-            `Kopiert til ${succeeded}, men feilet for: ${failed.join(', ')}`,
+            this.$i('products_toastCopiedPartial', { count: succeeded, failed: failed.join(', ') }),
             'error'
           );
         }
       } catch (err) {
         console.error('Failed to copy variant:', err);
-        this.showToast('Kunne ikke kopiere tilbehør. Vennligst prøv igjen.', 'error');
+        this.showToast(this.$i('products_toastCopyFailed'), 'error');
       }
     },
 
     formatOptionsPreview(options) {
-      if (!options || options.length === 0) return 'Ingen alternativer';
+      if (!options || options.length === 0) return this.$i('products_noOptions');
       const names = options.map(o => o.name).filter(n => n);
-      if (names.length === 0) return 'Ingen alternativer';
+      if (names.length === 0) return this.$i('products_noOptions');
       if (names.length <= 3) return names.join(', ');
-      return `${names.slice(0, 2).join(', ')}, +${names.length - 2} mer`;
+      return this.$i('products_optionsMore', { names: names.slice(0, 2).join(', '), count: names.length - 2 });
     },
 
     async saveVariants() {
       if (!this.selectedProduct.id) {
-        this.showToast('Lagre produktet først', 'error');
+        this.showToast(this.$i('products_toastSaveProductFirst'), 'error');
         return;
       }
 
@@ -1325,7 +1329,7 @@ export default {
           this.selectedProduct.productVariants
         );
 
-        this.showToast('Varianter lagret!');
+        this.showToast(this.$i('products_toastVariantsSaved'));
 
         // Reload the product from the server to get updated variants with IDs
         const updatedProduct = await this._productService.Get(this.selectedProduct.id);
@@ -1342,7 +1346,7 @@ export default {
         }
       } catch (err) {
         console.error('Failed to save variants:', err);
-        this.showToast('Kunne ikke lagre varianter. Vennligst prøv igjen.', 'error');
+        this.showToast(this.$i('products_toastSaveVariantsFailed'), 'error');
       }
     },
 

@@ -2,14 +2,14 @@
   <AdminPage>
     <div class="wolt-drive-invoice">
       <div class="page-header">
-        <h1>Wolt Drive Invoice</h1>
-        <p class="page-description">Fakturagrunnlag for Wolt Drive basert på valgt butikk og periode</p>
+        <h1>{{ $i('woltDriveInvoice_title') }}</h1>
+        <p class="page-description">{{ $i('woltDriveInvoice_pageDescription') }}</p>
       </div>
 
       <div class="filters-section">
         <div class="date-filters">
           <div class="date-input">
-            <label for="from-date">Fra dato:</label>
+            <label for="from-date">{{ $i('woltDriveInvoice_fromDate') }}</label>
             <input
               id="from-date"
               v-model="dateRange.from"
@@ -18,7 +18,7 @@
             />
           </div>
           <div class="date-input">
-            <label for="to-date">Til dato:</label>
+            <label for="to-date">{{ $i('woltDriveInvoice_toDate') }}</label>
             <input
               id="to-date"
               v-model="dateRange.to"
@@ -29,7 +29,7 @@
         </div>
 
         <div class="meters-input">
-          <label for="avg-meters">Snitt meter per levering</label>
+          <label for="avg-meters">{{ $i('woltDriveInvoice_avgMetersPerDelivery') }}</label>
           <input
             id="avg-meters"
             v-model.number="avgMetersPerDelivery"
@@ -54,15 +54,15 @@
       >
         <div class="summary-cards">
           <div class="summary-card">
-            <h3>Fullførte</h3>
+            <h3>{{ $i('woltDriveInvoice_completed') }}</h3>
             <div class="stat-value">{{ formatNumber(report.completedCount) }}</div>
           </div>
           <div class="summary-card cancelled">
-            <h3>Kansellerte</h3>
+            <h3>{{ $i('woltDriveInvoice_cancelled') }}</h3>
             <div class="stat-value">{{ formatNumber(report.cancelledCount) }}</div>
           </div>
           <div class="summary-card total">
-            <h3>Total km</h3>
+            <h3>{{ $i('woltDriveInvoice_totalKm') }}</h3>
             <div class="stat-value">{{ formatNumber(report.totalKm) }}</div>
           </div>
         </div>
@@ -72,16 +72,16 @@
         v-if="report && report.summaryLines && report.summaryLines.length > 0 && !isLoading"
         class="summary-table-section"
       >
-        <h2>Fakturalinjer</h2>
+        <h2>{{ $i('woltDriveInvoice_invoiceLines') }}</h2>
         <div class="table-container">
           <table class="summary-table">
             <thead>
               <tr>
-                <th>Beskrivelse</th>
-                <th>Antall</th>
-                <th>Pris</th>
-                <th>Sum eks. mva</th>
-                <th>Sum inkl. mva</th>
+                <th>{{ $i('common_description') }}</th>
+                <th>{{ $i('woltDriveInvoice_count') }}</th>
+                <th>{{ $i('common_price') }}</th>
+                <th>{{ $i('woltDriveInvoice_sumExVat') }}</th>
+                <th>{{ $i('woltDriveInvoice_sumIncVat') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -106,14 +106,14 @@
         class="details-section"
       >
         <div class="details-header">
-          <h2>Detaljer ({{ report.orderRows.length }})</h2>
+          <h2>{{ $i('woltDriveInvoice_details', { count: report.orderRows.length }) }}</h2>
           <button
             class="btn-export"
             type="button"
             :disabled="isDownloadingPdf"
             @click="downloadPdf"
           >
-            {{ isDownloadingPdf ? "Laster ned..." : "Last ned PDF" }}
+            {{ isDownloadingPdf ? $i('woltDriveInvoice_downloading') : $i('woltDriveInvoice_downloadPdf') }}
           </button>
         </div>
         <div class="table-container">
@@ -125,8 +125,8 @@
                 <th>StoreLegalName</th>
                 <th>Status</th>
                 <th>OrderId</th>
-                <th>Antall</th>
-                <th>Total km</th>
+                <th>{{ $i('woltDriveInvoice_count') }}</th>
+                <th>{{ $i('woltDriveInvoice_totalKm') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -149,7 +149,7 @@
                 :key="`total-${index}`"
                 class="totals-row"
               >
-                <td colspan="4">Sum ({{ total.status }})</td>
+                <td colspan="4">{{ $i('woltDriveInvoice_sumForStatus', { status: total.status }) }}</td>
                 <td>-</td>
                 <td>{{ formatNumber(total.itemCount) }}</td>
                 <td>{{ total.totalKm !== null && total.totalKm !== undefined ? formatNumber(total.totalKm) : "-" }}</td>
@@ -163,16 +163,16 @@
         v-if="!isLoading && selectedStoreId && (!report || report.totalOrderCount === 0)"
         class="empty-state"
       >
-        <h3>Ingen ordrer funnet</h3>
-        <p>Det er ingen Wolt Drive-ordrer i den valgte perioden for denne butikken.</p>
+        <h3>{{ $i('woltDriveInvoice_noOrdersTitle') }}</h3>
+        <p>{{ $i('woltDriveInvoice_noOrdersDescription') }}</p>
       </div>
 
       <div
         v-if="!isLoading && !selectedStoreId"
         class="empty-state"
       >
-        <h3>Velg en butikk</h3>
-        <p>Velg en butikk og datoperiode for å se Wolt Drive-fakturagrunnlag.</p>
+        <h3>{{ $i('woltDriveInvoice_selectStoreTitle') }}</h3>
+        <p>{{ $i('woltDriveInvoice_selectStoreDescription') }}</p>
       </div>
     </div>
   </AdminPage>

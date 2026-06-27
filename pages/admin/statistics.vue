@@ -2,28 +2,28 @@
   <AdminPage>
     <div class="statistics-page">
       <div class="page-header">
-        <h1>Statistikk</h1>
+        <h1>{{ $i('statistics_title') }}</h1>
       </div>
 
       <div class="filters-section">
         <!-- Date Filter Buttons -->
         <div class="filter-group">
           <div class="period-label-with-compare">
-            <label class="filter-label">{{ comparisonMode ? 'Periode 1' : 'Periode' }}</label>
+            <label class="filter-label">{{ comparisonMode ? $i('statistics_period1') : $i('statistics_period') }}</label>
             <button
               class="comparison-toggle-btn"
               :class="{ active: comparisonMode }"
               @click="toggleComparisonMode"
             >
               <span class="material-icons">compare_arrows</span>
-              {{ comparisonMode ? 'Avbryt sammenligning' : 'Sammenlign periode' }}
+              {{ comparisonMode ? $i('statistics_cancelComparison') : $i('statistics_comparePeriod') }}
             </button>
           </div>
 
           <!-- Date Range -->
           <div class="custom-date-range">
             <div class="date-input-group">
-              <label>Fra dato:</label>
+              <label>{{ $i('statistics_fromDate') }}</label>
               <input
                 v-model="dateRange.from"
                 type="date"
@@ -32,7 +32,7 @@
               />
             </div>
             <div class="date-input-group">
-              <label>Til dato:</label>
+              <label>{{ $i('statistics_toDate') }}</label>
               <input
                 v-model="dateRange.to"
                 type="date"
@@ -47,7 +47,7 @@
                 :key="filter.value"
                 class="date-shortcut-btn"
                 @click="selectDateFilter(filter.value)"
-                :title="'Sett til: ' + filter.label"
+                :title="$i('statistics_setTo', { label: filter.label })"
               >
                 {{ filter.label }}
               </button>
@@ -61,10 +61,10 @@
           class="comparison-period-section"
         >
           <div class="filter-group">
-            <label class="filter-label">Periode 2 (Sammenligning)</label>
+            <label class="filter-label">{{ $i('statistics_period2') }}</label>
             <div class="custom-date-range">
               <div class="date-input-group">
-                <label>Fra dato:</label>
+                <label>{{ $i('statistics_fromDate') }}</label>
                 <input
                   v-model="comparisonDateRange.from"
                   type="date"
@@ -73,7 +73,7 @@
                 />
               </div>
               <div class="date-input-group">
-                <label>Til dato:</label>
+                <label>{{ $i('statistics_toDate') }}</label>
                 <input
                   v-model="comparisonDateRange.to"
                   type="date"
@@ -91,49 +91,49 @@
             v-if="adminStores.length > 1"
             class="filter-group"
           >
-            <label class="filter-label">Butikker</label>
+            <label class="filter-label">{{ $i('statistics_stores') }}</label>
             <MultiSelectDropdown
               :options="storeOptions"
               :selected.sync="selectedStoreIds"
-              placeholder="Velg butikker"
-              all-text="Alle butikker"
-              search-placeholder="Søk etter butikk..."
+              :placeholder="$i('statistics_selectStores')"
+              :all-text="$i('statistics_allStores')"
+              :search-placeholder="$i('statistics_searchStore')"
               @update:selected="onFilterChange"
             />
           </div>
 
           <div class="filter-group">
-            <label class="filter-label">Status</label>
+            <label class="filter-label">{{ $i('common_status') }}</label>
             <MultiSelectDropdown
               :options="statusOptions"
               :selected.sync="selectedStatuses"
-              placeholder="Velg status"
-              all-text="Alle statuser"
-              search-placeholder="Søk..."
+              :placeholder="$i('statistics_selectStatus')"
+              :all-text="$i('statistics_allStatuses')"
+              :search-placeholder="$i('statistics_searchPlaceholder')"
               @update:selected="onFilterChange"
             />
           </div>
 
           <div class="filter-group">
-            <label class="filter-label">Leveringstyper</label>
+            <label class="filter-label">{{ $i('statistics_deliveryTypes') }}</label>
             <MultiSelectDropdown
               :options="deliveryTypeOptions"
               :selected.sync="selectedDeliveryTypes"
-              placeholder="Velg leveringstyper"
-              all-text="Alle leveringstyper"
-              search-placeholder="Søk..."
+              :placeholder="$i('statistics_selectDeliveryTypes')"
+              :all-text="$i('statistics_allDeliveryTypes')"
+              :search-placeholder="$i('statistics_searchPlaceholder')"
               @update:selected="onFilterChange"
             />
           </div>
 
           <div class="filter-group">
-            <label class="filter-label">Betalingstyper</label>
+            <label class="filter-label">{{ $i('statistics_paymentTypes') }}</label>
             <MultiSelectDropdown
               :options="paymentTypeOptions"
               :selected.sync="selectedPaymentTypes"
-              placeholder="Velg betalingstyper"
-              all-text="Alle betalingstyper"
-              search-placeholder="Søk..."
+              :placeholder="$i('statistics_selectPaymentTypes')"
+              :all-text="$i('statistics_allPaymentTypes')"
+              :search-placeholder="$i('statistics_searchPlaceholder')"
               @update:selected="onFilterChange"
             />
           </div>
@@ -171,7 +171,7 @@
                 {{ getComparisonDeliveryTypeCount('SelfPickup') }}
               </span>
             </div>
-            <div class="delivery-stat-label">Henting</div>
+            <div class="delivery-stat-label">{{ $i('statistics_pickup') }}</div>
             <div class="delivery-stat-amount">
               {{ getDeliveryTypeAmount('SelfPickup') }}
               <span
@@ -208,7 +208,7 @@
                 {{ getComparisonDeliveryTypeCount('WoltDelivery') }}
               </span>
             </div>
-            <div class="delivery-stat-label">Levering</div>
+            <div class="delivery-stat-label">{{ $i('statistics_delivery') }}</div>
             <div class="delivery-stat-amount">
               {{ getDeliveryTypeAmount('InstantHomeDelivery') }}
               <span
@@ -245,7 +245,7 @@
                 {{ getComparisonDeliveryTypeCount('TableDelivery') }}
               </span>
             </div>
-            <div class="delivery-stat-label">Spis inne</div>
+            <div class="delivery-stat-label">{{ $i('statistics_dineIn') }}</div>
             <div class="delivery-stat-amount">
               {{ getDeliveryTypeAmount('TableDelivery') }}
               <span
@@ -337,7 +337,7 @@
             @click="loadProductList"
           >
             <span class="material-icons">list_alt</span>
-            Vis produktliste
+            {{ $i('statistics_showProductList') }}
           </button>
 
           <div
@@ -360,7 +360,7 @@
             class="product-list-card"
           >
             <div class="product-list-header">
-              <h3>Produktliste</h3>
+              <h3>{{ $i('statistics_productList') }}</h3>
               <button
                 class="clear-list-btn"
                 @click="ordersSummary = []; openOrderSummaryIndices = []"
@@ -428,8 +428,8 @@
             </svg>
           </div>
           <div class="wrapped-card__content">
-            <h3>Sammendrag av 2025</h3>
-            <p>Se dine høydepunkter fra 2025</p>
+            <h3>{{ $i('statistics_wrappedTitle') }}</h3>
+            <p>{{ $i('statistics_wrappedDescription') }}</p>
           </div>
           <div class="wrapped-card__arrow">
             <span class="material-icons">arrow_forward</span>
@@ -525,12 +525,12 @@ export default {
   computed: {
     dateFilters() {
       return [
-        { value: 'Today', label: 'I dag' },
-        { value: 'Yesterday', label: 'I går' },
-        { value: 'Last7Days', label: 'Siste 7 dager' },
-        { value: 'ThisMonth', label: 'Denne måneden' },
-        { value: 'LastMonth', label: 'Forrige måned' },
-        { value: 'ThisYear', label: 'Dette året' },
+        { value: 'Today', label: this.$i('statistics_filterToday') },
+        { value: 'Yesterday', label: this.$i('statistics_filterYesterday') },
+        { value: 'Last7Days', label: this.$i('statistics_filterLast7Days') },
+        { value: 'ThisMonth', label: this.$i('statistics_filterThisMonth') },
+        { value: 'LastMonth', label: this.$i('statistics_filterLastMonth') },
+        { value: 'ThisYear', label: this.$i('statistics_filterThisYear') },
       ];
     },
     storeOptions() {
@@ -541,27 +541,27 @@ export default {
     },
     statusOptions() {
       return [
-        { id: 'Remaining', label: 'Pågående' },
-        { id: 'Completed', label: 'Fullført' },
-        { id: 'Canceled', label: 'Kansellert' },
+        { id: 'Remaining', label: this.$i('statistics_statusRemaining') },
+        { id: 'Completed', label: this.$i('statistics_statusCompleted') },
+        { id: 'Canceled', label: this.$i('statistics_statusCanceled') },
       ];
     },
     deliveryTypeOptions() {
       return [
-        { id: 'SelfPickup', label: 'Henting' },
-        { id: 'InstantHomeDelivery', label: 'Hjemlevering' },
+        { id: 'SelfPickup', label: this.$i('statistics_pickup') },
+        { id: 'InstantHomeDelivery', label: this.$i('statistics_homeDelivery') },
         { id: 'DineHomeDelivery', label: 'Dine Home Delivery' },
         { id: 'WoltDelivery', label: 'Wolt Drive' },
         { id: 'WoltMarketplaceDelivery', label: 'Wolt Marketplace' },
-        { id: 'TableDelivery', label: 'Spis inne' },
+        { id: 'TableDelivery', label: this.$i('statistics_dineIn') },
       ];
     },
     paymentTypeOptions() {
       return [
-        { id: 'PayInStore', label: 'Betal i butikk' },
+        { id: 'PayInStore', label: this.$i('statistics_payInStore') },
         { id: 'Stripe', label: 'Stripe' },
         { id: 'Vipps', label: 'Vipps' },
-        { id: 'Giftcard', label: 'Gavekort' },
+        { id: 'Giftcard', label: this.$i('statistics_giftcard') },
         { id: 'Dintero', label: 'Dintero' },
         { id: 'DinteroVipps', label: 'Dintero Vipps' },
         { id: 'DinteroBillie', label: 'Dintero Billie' },

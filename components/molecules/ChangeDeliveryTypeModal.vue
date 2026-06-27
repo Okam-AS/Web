@@ -5,7 +5,7 @@
   >
     <div class="modal-content">
       <div class="modal-header">
-        <h2>Endre leveringstype</h2>
+        <h2>{{ $i('changeDeliveryTypeModal_title') }}</h2>
         <button
           class="close-btn"
           @click="cancel"
@@ -17,21 +17,21 @@
       <div class="modal-body">
         <div class="order-info">
           <div class="info-row">
-            <span class="label">Butikk:</span>
+            <span class="label">{{ $i('changeDeliveryTypeModal_storeLabel') }}</span>
             <span class="value">{{ order.storeLegalName }}</span>
           </div>
           <div class="info-row">
-            <span class="label">Ordre:</span>
+            <span class="label">{{ $i('changeDeliveryTypeModal_orderLabel') }}</span>
             <span class="value">#{{ order.friendlyOrderId || order.id }}</span>
           </div>
           <div class="info-row">
-            <span class="label">Nåværende leveringstype:</span>
+            <span class="label">{{ $i('changeDeliveryTypeModal_currentDeliveryTypeLabel') }}</span>
             <span class="value">{{ deliveryTypeLabel(order.deliveryType) }}</span>
           </div>
         </div>
 
         <div class="delivery-selection">
-          <label>Velg ny leveringstype:</label>
+          <label>{{ $i('changeDeliveryTypeModal_selectNewLabel') }}</label>
           <div class="delivery-list">
             <button
               v-for="type in availableDeliveryTypes"
@@ -59,7 +59,7 @@
           class="btn btn-secondary"
           @click="cancel"
         >
-          Avbryt
+          {{ $i('common_cancel') }}
         </button>
         <button
           v-if="!isLoading"
@@ -67,7 +67,7 @@
           :disabled="!selectedDeliveryType"
           @click="confirm"
         >
-          Endre leveringstype
+          {{ $i('changeDeliveryTypeModal_title') }}
         </button>
         <div
           v-else
@@ -90,13 +90,7 @@ export default {
   data() {
     return {
       isLoading: false,
-      selectedDeliveryType: null,
-      deliveryTypes: [
-        { value: 'SelfPickup', label: 'Hent selv', icon: 'shopping_bag', description: 'Kunde henter selv' },
-        { value: 'InstantHomeDelivery', label: 'Hjemlevering', icon: 'delivery_dining', description: 'Leveres hjem til kunde' },
-        { value: 'TableDelivery', label: 'Spis inne', icon: 'deck', description: 'Serveres ved bord' },
-        { value: 'WoltDelivery', label: 'Wolt', icon: 'delivery_dining', description: 'Leveres via Wolt' }
-      ]
+      selectedDeliveryType: null
     }
   },
   mounted() {
@@ -108,6 +102,14 @@ export default {
     document.body.style.overflow = '';
   },
   computed: {
+    deliveryTypes() {
+      return [
+        { value: 'SelfPickup', label: this.$i('changeDeliveryTypeModal_selfPickupLabel'), icon: 'shopping_bag', description: this.$i('changeDeliveryTypeModal_selfPickupDescription') },
+        { value: 'InstantHomeDelivery', label: this.$i('changeDeliveryTypeModal_homeDeliveryLabel'), icon: 'delivery_dining', description: this.$i('changeDeliveryTypeModal_homeDeliveryDescription') },
+        { value: 'TableDelivery', label: this.$i('changeDeliveryTypeModal_tableDeliveryLabel'), icon: 'deck', description: this.$i('changeDeliveryTypeModal_tableDeliveryDescription') },
+        { value: 'WoltDelivery', label: this.$i('changeDeliveryTypeModal_woltLabel'), icon: 'delivery_dining', description: this.$i('changeDeliveryTypeModal_woltDescription') }
+      ]
+    },
     availableDeliveryTypes() {
       return this.deliveryTypes.filter(t => t.value !== this.order.deliveryType)
     }
@@ -123,7 +125,7 @@ export default {
           this.$emit('close', true)
         })
         .catch((error) => {
-          alert('Feil ved endring av leveringstype: ' + (error.message || 'Ukjent feil'))
+          alert(this.$i('changeDeliveryTypeModal_changeError', { error: error.message || this.$i('changeDeliveryTypeModal_unknownError') }))
           this.isLoading = false
         })
     },

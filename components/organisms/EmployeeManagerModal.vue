@@ -2,7 +2,7 @@
   <div class="modal-overlay" @click="closeModal">
     <div class="modal-content" @click.stop>
       <div class="modal-header">
-        <h3>Ansatte<template v-if="storeName"> – {{ storeName }}</template></h3>
+        <h3>{{ $i('employeeManagerModal_title') }}<template v-if="storeName"> – {{ storeName }}</template></h3>
         <button class="close-btn" @click="closeModal">
           <span class="material-icons">close</span>
         </button>

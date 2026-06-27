@@ -4,16 +4,16 @@
     <div v-else class="kravia-page">
       <div class="kravia-header">
         <div>
-          <h1>Send faktura</h1>
-          <p>Opprett en bedriftsfaktura.</p>
+          <h1>{{ $i('kraviaInvoice_pageTitle') }}</h1>
+          <p>{{ $i('kraviaInvoice_pageSubtitle') }}</p>
         </div>
       </div>
 
       <section class="invoice-section">
-        <h2>Kunde info</h2>
+        <h2>{{ $i('kraviaInvoice_customerInfo') }}</h2>
         <div class="form-grid">
           <div v-if="adminStores.length > 1" class="form-group">
-            <label for="storeId">Send fra butikk</label>
+            <label for="storeId">{{ $i('kraviaInvoice_sendFromStore') }}</label>
             <select id="storeId" v-model.number="selectedStoreId" @change="storeChanged">
               <option v-for="store in adminStores" :key="store.id" :value="store.id">
                 {{ store.name }}
@@ -21,12 +21,12 @@
             </select>
           </div>
           <div v-else class="form-group">
-            <label>Send fra butikk</label>
+            <label>{{ $i('kraviaInvoice_sendFromStore') }}</label>
             <div class="static-field">{{ selectedStoreObject ? selectedStoreObject.name : "-" }}</div>
           </div>
 
           <div class="form-group form-group--lookup">
-            <label for="organizationNumber">Mottaker org.nr</label>
+            <label for="organizationNumber">{{ $i('kraviaInvoice_recipientOrgNumber') }}</label>
             <div class="company-lookup">
               <div class="lookup-row">
                 <input
@@ -40,12 +40,12 @@
                   @keyup.enter="lookupCompany"
                 />
                 <button type="button" class="btn btn-secondary" :disabled="companyLoading" @click="lookupCompany">
-                  {{ companyLoading ? "Henter..." : "Hent" }}
+                  {{ companyLoading ? $i('kraviaInvoice_fetching') : $i('kraviaInvoice_fetch') }}
                 </button>
               </div>
               <div v-if="companyAutocompleteOpen" class="company-history-suggestions">
                 <div v-if="companyHistoryLoading" class="company-history-state">
-                  Henter tidligere bedrifter...
+                  {{ $i('kraviaInvoice_loadingPreviousCompanies') }}
                 </div>
                 <template v-else-if="companyHistorySuggestions.length">
                   <button
@@ -62,42 +62,42 @@
                   </button>
                 </template>
                 <div v-else class="company-history-state">
-                  Ingen tidligere bedrifter funnet
+                  {{ $i('kraviaInvoice_noPreviousCompanies') }}
                 </div>
               </div>
             </div>
           </div>
 
           <div class="form-group">
-            <label for="companyName">Bedriftsnavn</label>
+            <label for="companyName">{{ $i('kraviaInvoice_companyName') }}</label>
             <input id="companyName" v-model="form.companyName" type="text" />
           </div>
           <div class="form-group">
-            <label for="companyAddress">Adresse</label>
+            <label for="companyAddress">{{ $i('kraviaInvoice_address') }}</label>
             <input id="companyAddress" v-model="form.companyAddress" type="text" />
           </div>
           <div class="form-group">
-            <label for="companyZipCode">Postnummer</label>
+            <label for="companyZipCode">{{ $i('kraviaInvoice_zipCode') }}</label>
             <input id="companyZipCode" v-model="form.companyZipCode" type="text" />
           </div>
           <div class="form-group">
-            <label for="companyCity">Poststed</label>
+            <label for="companyCity">{{ $i('kraviaInvoice_city') }}</label>
             <input id="companyCity" v-model="form.companyCity" type="text" />
           </div>
           <div class="form-group">
-            <label for="referenceFirstName">Fornavn</label>
+            <label for="referenceFirstName">{{ $i('kraviaInvoice_firstName') }}</label>
             <input id="referenceFirstName" v-model="form.referenceFirstName" type="text" />
           </div>
           <div class="form-group">
-            <label for="referenceLastName">Etternavn</label>
+            <label for="referenceLastName">{{ $i('kraviaInvoice_lastName') }}</label>
             <input id="referenceLastName" v-model="form.referenceLastName" type="text" />
           </div>
           <div class="form-group">
-            <label for="phone">Telefon</label>
+            <label for="phone">{{ $i('kraviaInvoice_phone') }}</label>
             <input id="phone" v-model="form.phone" type="tel" />
           </div>
           <div class="form-group">
-            <label for="email">E-post</label>
+            <label for="email">{{ $i('kraviaInvoice_email') }}</label>
             <input id="email" v-model="form.email" type="email" />
           </div>
         </div>
@@ -105,27 +105,27 @@
 
       <section class="invoice-section invoice-section--lines">
         <div class="section-heading">
-          <h2>Varelinjer</h2>
+          <h2>{{ $i('kraviaInvoice_lineItems') }}</h2>
         </div>
 
         <div class="line-table">
           <div class="line-row line-row--header">
-            <div>Produkt</div>
-            <div>Antall</div>
-            <div>Enhetspris ekskl. mva</div>
-            <div>Rabatt</div>
-            <div>Mva-sats</div>
-            <div>Beløp inkl. mva</div>
+            <div>{{ $i('kraviaInvoice_product') }}</div>
+            <div>{{ $i('kraviaInvoice_quantity') }}</div>
+            <div>{{ $i('kraviaInvoice_unitPriceExVat') }}</div>
+            <div>{{ $i('kraviaInvoice_discount') }}</div>
+            <div>{{ $i('kraviaInvoice_vatRate') }}</div>
+            <div>{{ $i('kraviaInvoice_amountInclVat') }}</div>
           </div>
 
           <div v-for="(line, index) in lines" :key="line.localId" class="line-row">
             <div class="line-field line-field--product">
-              <span class="mobile-label">Produkt</span>
+              <span class="mobile-label">{{ $i('kraviaInvoice_product') }}</span>
               <div class="product-cell">
                 <input
                   v-model="line.productName"
                   type="text"
-                  placeholder="Søk eller skriv fritekst"
+                  :placeholder="$i('kraviaInvoice_productSearchPlaceholder')"
                   @input="line.productId = null"
                   @focus="focusProductLine(index)"
                   @blur="blurProductLine"
@@ -138,28 +138,28 @@
                     @mousedown.prevent="selectProduct(line, product)"
                   >
                     <span>{{ product.name }}</span>
-                    <small>{{ priceLabel(product.amount) }} inkl. mva</small>
+                    <small>{{ $i('kraviaInvoice_priceInclVatSuffix', { price: priceLabel(product.amount) }) }}</small>
                   </button>
                 </div>
               </div>
             </div>
             <div class="line-field">
-              <span class="mobile-label">Antall</span>
+              <span class="mobile-label">{{ $i('kraviaInvoice_quantity') }}</span>
               <input v-model.number="line.quantity" type="number" min="1" step="1" />
             </div>
             <div class="line-field">
-              <span class="mobile-label">Enhetspris ekskl. mva</span>
+              <span class="mobile-label">{{ $i('kraviaInvoice_unitPriceExVat') }}</span>
               <input v-model.number="line.unitPriceExVat" type="number" min="0" step="0.01" />
             </div>
             <div class="line-field">
-              <span class="mobile-label">Rabatt</span>
+              <span class="mobile-label">{{ $i('kraviaInvoice_discount') }}</span>
               <div class="percent-input">
                 <input v-model.number="line.discountPercent" type="number" min="0" max="100" step="0.01" />
                 <span>%</span>
               </div>
             </div>
             <div class="line-field">
-              <span class="mobile-label">Mva-sats</span>
+              <span class="mobile-label">{{ $i('kraviaInvoice_vatRate') }}</span>
               <select v-model.number="line.vatRate">
                 <option :value="25">25%</option>
                 <option :value="15">15%</option>
@@ -168,14 +168,14 @@
               </select>
             </div>
             <div class="line-field">
-              <span class="mobile-label">Beløp inkl. mva</span>
+              <span class="mobile-label">{{ $i('kraviaInvoice_amountInclVat') }}</span>
               <div class="readonly-amount">{{ priceLabel(lineAmountInclVat(line)) }}</div>
             </div>
             <div class="line-actions">
-              <button type="button" title="Flytt opp" :disabled="index === 0" @click="moveLine(index, -1)">Opp</button>
-              <button type="button" title="Flytt ned" :disabled="index === lines.length - 1" @click="moveLine(index, 1)">Ned</button>
-              <button type="button" title="Kopier" @click="copyLine(index)">Kopi</button>
-              <button type="button" title="Fjern" :disabled="lines.length === 1" @click="removeLine(index)">Slett</button>
+              <button type="button" :title="$i('kraviaInvoice_moveUp')" :disabled="index === 0" @click="moveLine(index, -1)">{{ $i('kraviaInvoice_up') }}</button>
+              <button type="button" :title="$i('kraviaInvoice_moveDown')" :disabled="index === lines.length - 1" @click="moveLine(index, 1)">{{ $i('kraviaInvoice_down') }}</button>
+              <button type="button" :title="$i('kraviaInvoice_copy')" @click="copyLine(index)">{{ $i('kraviaInvoice_copyShort') }}</button>
+              <button type="button" :title="$i('kraviaInvoice_remove')" :disabled="lines.length === 1" @click="removeLine(index)">{{ $i('common_delete') }}</button>
             </div>
           </div>
 
@@ -184,61 +184,61 @@
             class="line-row line-row--fee"
             tabindex="0"
             role="button"
-            aria-label="Fakturagebyr: vis forklaring"
+            :aria-label="$i('kraviaInvoice_invoiceFeeAriaLabel')"
             @click="toggleInvoiceFeeInfo"
             @blur="hideInvoiceFeeInfo"
           >
             <div class="line-field line-field--product line-field--fee-product">
-              <span class="mobile-label">Produkt</span>
+              <span class="mobile-label">{{ $i('kraviaInvoice_product') }}</span>
               <div class="fee-text fee-name">
-                <span>Fakturagebyr</span>
+                <span>{{ $i('kraviaInvoice_invoiceFee') }}</span>
                 <span class="help-icon" aria-hidden="true">?</span>
                 <div :class="['fee-tooltip', { 'fee-tooltip--visible': showInvoiceFeeInfo }]">
-                  Fakturagebyret dekker Okam sin kostnad for å opprette og administrere fakturaen via Kravia. Hele gebyret går til Okam og kan ikke fjernes fra fakturaen.
+                  {{ $i('kraviaInvoice_invoiceFeeTooltip') }}
                 </div>
               </div>
             </div>
             <div class="line-field">
-              <span class="mobile-label">Antall</span>
+              <span class="mobile-label">{{ $i('kraviaInvoice_quantity') }}</span>
               <div class="fee-text">1</div>
             </div>
             <div class="line-field">
-              <span class="mobile-label">Enhetspris ekskl. mva</span>
+              <span class="mobile-label">{{ $i('kraviaInvoice_unitPriceExVat') }}</span>
               <div class="fee-text">{{ priceLabel(invoiceFeeExVat) }}</div>
             </div>
             <div class="line-field">
-              <span class="mobile-label">Rabatt</span>
+              <span class="mobile-label">{{ $i('kraviaInvoice_discount') }}</span>
               <div class="fee-text">0 %</div>
             </div>
             <div class="line-field">
-              <span class="mobile-label">Mva-sats</span>
+              <span class="mobile-label">{{ $i('kraviaInvoice_vatRate') }}</span>
               <div class="fee-text">25%</div>
             </div>
             <div class="line-field">
-              <span class="mobile-label">Beløp inkl. mva</span>
+              <span class="mobile-label">{{ $i('kraviaInvoice_amountInclVat') }}</span>
               <div class="fee-text fee-text--amount">{{ priceLabel(invoiceFeeAmount) }}</div>
             </div>
           </div>
         </div>
 
-        <button type="button" class="btn btn-secondary add-line-button" @click="addLine">Legg til varelinje</button>
+        <button type="button" class="btn btn-secondary add-line-button" @click="addLine">{{ $i('kraviaInvoice_addLineItem') }}</button>
 
         <div class="totals">
-          <div><span>Netto</span><strong>{{ priceLabel(totalExVat) }}</strong></div>
-          <div><span>Mva</span><strong>{{ priceLabel(totalVat) }}</strong></div>
-          <div><span>Totalt</span><strong>{{ priceLabel(totalInclVat) }}</strong></div>
+          <div><span>{{ $i('kraviaInvoice_net') }}</span><strong>{{ priceLabel(totalExVat) }}</strong></div>
+          <div><span>{{ $i('kraviaInvoice_vat') }}</span><strong>{{ priceLabel(totalVat) }}</strong></div>
+          <div><span>{{ $i('kraviaInvoice_total') }}</span><strong>{{ priceLabel(totalInclVat) }}</strong></div>
         </div>
       </section>
 
       <section v-if="isPreorder" class="invoice-section preorder-section">
-        <h2>Leveringstidspunkt</h2>
+        <h2>{{ $i('kraviaInvoice_deliveryTime') }}</h2>
         <div class="form-grid form-grid--compact">
           <div class="form-group">
-            <label for="preorderDate">Dato</label>
+            <label for="preorderDate">{{ $i('kraviaInvoice_date') }}</label>
             <input id="preorderDate" v-model="preorderDate" type="date" :min="todayInputValue" />
           </div>
           <div class="form-group">
-            <label for="preorderTime">Tidspunkt</label>
+            <label for="preorderTime">{{ $i('kraviaInvoice_time') }}</label>
             <input id="preorderTime" v-model="preorderTime" type="time" />
           </div>
         </div>
@@ -249,15 +249,15 @@
           <label :class="['invoice-option', { 'invoice-option--active': isPreorder }]">
             <input v-model="isPreorder" type="checkbox" @change="handlePreorderToggle" />
             <span class="invoice-option-copy">
-              <strong>Forhåndsbestilling</strong>
-              <small>Bestilling blir lagt inn med en gang, faktura blir sendt automatisk etter fullført bestilling</small>
+              <strong>{{ $i('kraviaInvoice_preorder') }}</strong>
+              <small>{{ $i('kraviaInvoice_preorderDescription') }}</small>
             </span>
           </label>
           <label :class="['invoice-option', { 'invoice-option--active': manualInvoice }]">
             <input v-model="manualInvoice" type="checkbox" />
             <span class="invoice-option-copy">
-              <strong>Manuell faktura</strong>
-              <small>Bestilling blir lagt inn som 'Betal i kassa' og betaling gjøres opp utenfor Okam systemet</small>
+              <strong>{{ $i('kraviaInvoice_manualInvoice') }}</strong>
+              <small>{{ $i('kraviaInvoice_manualInvoiceDescription') }}</small>
             </span>
           </label>
           <div v-if="notification.show" :class="['notification', 'submit-notification', `notification--${notification.type}`]">
@@ -273,24 +273,21 @@
         <div class="confirm-modal">
           <h2>{{ confirmTitle }}</h2>
           <p v-if="manualInvoice">
-            Bestilling på <strong>{{ priceLabel(totalInclVat) }}</strong> opprettes for
-            <strong>{{ form.companyName }}</strong> som manuell bestilling. Betaling gjøres opp utenfor Okam systemet.
+            <span v-html="$i('kraviaInvoice_confirmManual', { amount: priceLabel(totalInclVat), company: form.companyName })" />
           </p>
           <p v-else-if="isPreorder">
-            Ordre på <strong>{{ priceLabel(totalInclVat) }}</strong> opprettes for
-            <strong>{{ form.companyName }}</strong>. Faktura sendes når bestillingen fullføres.
+            <span v-html="$i('kraviaInvoice_confirmPreorder', { amount: priceLabel(totalInclVat), company: form.companyName })" />
           </p>
           <p v-else>
-            Faktura på <strong>{{ priceLabel(totalInclVat) }}</strong> sendes til
-            <strong>{{ form.companyName }}</strong>.
+            <span v-html="$i('kraviaInvoice_confirmInvoice', { amount: priceLabel(totalInclVat), company: form.companyName })" />
           </p>
           <div v-if="sendError" class="notification notification--error">
             {{ sendError }}
           </div>
           <div class="modal-actions">
-            <button type="button" class="btn btn-secondary" :disabled="isSending" @click="showConfirmModal = false">Avbryt</button>
+            <button type="button" class="btn btn-secondary" :disabled="isSending" @click="showConfirmModal = false">{{ $i('common_cancel') }}</button>
             <button type="button" class="btn btn-primary" :disabled="isSending" @click="sendInvoice">
-              {{ isSending ? "Sender..." : submitButtonLabel }}
+              {{ isSending ? $i('kraviaInvoice_sending') : submitButtonLabel }}
             </button>
           </div>
         </div>
@@ -385,15 +382,15 @@ export default {
     },
     submitButtonLabel() {
       if (this.manualInvoice) {
-        return this.isPreorder ? "Opprett manuell forhåndsbestilling" : "Opprett manuell bestilling";
+        return this.isPreorder ? this.$i("kraviaInvoice_submitManualPreorder") : this.$i("kraviaInvoice_submitManual");
       }
-      return this.isPreorder ? "Opprett forhåndsbestilling" : "Send faktura";
+      return this.isPreorder ? this.$i("kraviaInvoice_submitPreorder") : this.$i("kraviaInvoice_submitInvoice");
     },
     confirmTitle() {
       if (this.manualInvoice) {
-        return this.isPreorder ? "Opprett manuell forhåndsbestilling?" : "Opprett manuell bestilling?";
+        return this.isPreorder ? this.$i("kraviaInvoice_confirmTitleManualPreorder") : this.$i("kraviaInvoice_confirmTitleManual");
       }
-      return this.isPreorder ? "Opprett forhåndsbestilling?" : "Send faktura?";
+      return this.isPreorder ? this.$i("kraviaInvoice_confirmTitlePreorder") : this.$i("kraviaInvoice_confirmTitleInvoice");
     },
   },
   mounted() {
@@ -461,7 +458,7 @@ export default {
         .catch(() => {
           if (this.selectedStoreId !== storeId) return;
           this.companyHistory = [];
-          this.showNotification("Kunne ikke hente tidligere bedriftskunder", "error");
+          this.showNotification(this.$i("kraviaInvoice_errorLoadCompanyHistory"), "error");
         })
         .finally(() => {
           if (this.selectedStoreId === storeId) {
@@ -480,7 +477,7 @@ export default {
       this.form.phone = company.phone || "";
       this.form.email = company.email || "";
       this.companyAutocompleteOpen = false;
-      this.showNotification("Tidligere bedriftskunde valgt", "success");
+      this.showNotification(this.$i("kraviaInvoice_companySelected"), "success");
     },
     normalizeOrgNo(value) {
       return (value || "").toString().toLowerCase().replace(/\s|-/g, "").replace("mva", "").trim();
@@ -492,14 +489,14 @@ export default {
         .then((products) => {
           this.products = Array.isArray(products) ? products : [];
         })
-        .catch(() => this.showNotification("Kunne ikke hente produkter", "error"))
+        .catch(() => this.showNotification(this.$i("kraviaInvoice_errorLoadProducts"), "error"))
         .finally(() => {
           this.productsLoading = false;
         });
     },
     lookupCompany() {
       if (!this.form.organizationNumber) {
-        this.showNotification("Skriv inn organisasjonsnummer", "error");
+        this.showNotification(this.$i("kraviaInvoice_errorEnterOrgNumber"), "error");
         return;
       }
       this.companyLoading = true;
@@ -510,9 +507,9 @@ export default {
           this.form.companyAddress = company.fullAddress || "";
           this.form.companyZipCode = company.zipCode || "";
           this.form.companyCity = company.city || "";
-          this.showNotification("Bedriftsinformasjon hentet", "success");
+          this.showNotification(this.$i("kraviaInvoice_companyInfoFetched"), "success");
         })
-        .catch((error) => this.showNotification(error.message || "Fant ikke bedriften", "error"))
+        .catch((error) => this.showNotification(error.message || this.$i("kraviaInvoice_companyNotFound"), "error"))
         .finally(() => {
           this.companyLoading = false;
         });
@@ -618,24 +615,24 @@ export default {
       return `${this.preorderDate}T${time}`;
     },
     getValidationError() {
-      if (!this.selectedStoreId) return "Velg hvilken butikk fakturaen skal sendes fra";
-      if (!this.form.organizationNumber) return "Skriv inn mottakers organisasjonsnummer";
-      if (!/^\d{9}$/.test((this.form.organizationNumber || "").replace(/\D/g, ""))) return "Organisasjonsnummer må være 9 siffer";
-      if (!this.form.companyName) return "Bedriftsnavn mangler";
-      if (!this.form.companyAddress) return "Adresse mangler";
-      if (!this.form.companyZipCode) return "Postnummer mangler";
-      if (!this.form.companyCity) return "Poststed mangler";
-      if (!this.form.referenceFirstName) return "Fornavn på kontaktperson mangler";
-      if (!this.form.referenceLastName) return "Etternavn på kontaktperson mangler";
-      if (!this.form.phone) return "Telefonnummer mangler";
-      if (!/^\+?\d{5,15}$/.test((this.form.phone || "").replace(/[\s\-()]/g, ""))) return "Telefonnummer må være 5-15 siffer, eventuelt med + foran";
-      if (!this.form.email) return "E-post mangler";
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.form.email)) return "E-postadressen er ugyldig";
-      if (!this.lines.length) return "Legg til minst én varelinje";
+      if (!this.selectedStoreId) return this.$i("kraviaInvoice_validationSelectStore");
+      if (!this.form.organizationNumber) return this.$i("kraviaInvoice_validationEnterOrgNumber");
+      if (!/^\d{9}$/.test((this.form.organizationNumber || "").replace(/\D/g, ""))) return this.$i("kraviaInvoice_validationOrgNumberFormat");
+      if (!this.form.companyName) return this.$i("kraviaInvoice_validationCompanyNameMissing");
+      if (!this.form.companyAddress) return this.$i("kraviaInvoice_validationAddressMissing");
+      if (!this.form.companyZipCode) return this.$i("kraviaInvoice_validationZipCodeMissing");
+      if (!this.form.companyCity) return this.$i("kraviaInvoice_validationCityMissing");
+      if (!this.form.referenceFirstName) return this.$i("kraviaInvoice_validationFirstNameMissing");
+      if (!this.form.referenceLastName) return this.$i("kraviaInvoice_validationLastNameMissing");
+      if (!this.form.phone) return this.$i("kraviaInvoice_validationPhoneMissing");
+      if (!/^\+?\d{5,15}$/.test((this.form.phone || "").replace(/[\s\-()]/g, ""))) return this.$i("kraviaInvoice_validationPhoneFormat");
+      if (!this.form.email) return this.$i("kraviaInvoice_validationEmailMissing");
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.form.email)) return this.$i("kraviaInvoice_validationEmailInvalid");
+      if (!this.lines.length) return this.$i("kraviaInvoice_validationAddLineItem");
       if (this.isPreorder) {
         const requestedCompletion = this.getRequestedCompletion();
-        if (!requestedCompletion || isNaN(requestedCompletion.getTime())) return "Velg dato og tidspunkt for forhåndsbestilling";
-        if (requestedCompletion < new Date(Date.now() + 20 * 60000)) return "Forhåndsbestilling må være minst 20 minutter frem i tid";
+        if (!requestedCompletion || isNaN(requestedCompletion.getTime())) return this.$i("kraviaInvoice_validationSelectDateTime");
+        if (requestedCompletion < new Date(Date.now() + 20 * 60000)) return this.$i("kraviaInvoice_validationPreorderMinTime");
       }
 
       const invalidLineIndex = this.lines.findIndex((line) =>
@@ -651,12 +648,12 @@ export default {
       if (invalidLineIndex >= 0) {
         const lineNumber = invalidLineIndex + 1;
         const line = this.lines[invalidLineIndex];
-        if (!line.productName) return `Varelinje ${lineNumber} mangler produktnavn`;
-        if (Number(line.quantity) <= 0) return `Varelinje ${lineNumber} må ha antall større enn 0`;
-        if (Number(line.unitPriceExVat) < 0) return `Varelinje ${lineNumber} kan ikke ha negativ enhetspris`;
-        if (Number(line.discountPercent) < 0 || Number(line.discountPercent) > 100) return `Varelinje ${lineNumber} må ha rabatt mellom 0 og 100 prosent`;
-        if (Number(line.vatRate) < 0) return `Varelinje ${lineNumber} har ugyldig mva-sats`;
-        return `Varelinje ${lineNumber} må ha beløp større enn 0`;
+        if (!line.productName) return this.$i("kraviaInvoice_validationLineProductName", { line: lineNumber });
+        if (Number(line.quantity) <= 0) return this.$i("kraviaInvoice_validationLineQuantity", { line: lineNumber });
+        if (Number(line.unitPriceExVat) < 0) return this.$i("kraviaInvoice_validationLineNegativePrice", { line: lineNumber });
+        if (Number(line.discountPercent) < 0 || Number(line.discountPercent) > 100) return this.$i("kraviaInvoice_validationLineDiscount", { line: lineNumber });
+        if (Number(line.vatRate) < 0) return this.$i("kraviaInvoice_validationLineVatRate", { line: lineNumber });
+        return this.$i("kraviaInvoice_validationLineAmount", { line: lineNumber });
       }
 
       return "";
@@ -690,19 +687,20 @@ export default {
       this._kraviaInvoiceService.SendInvoice(payload)
         .then((result) => {
           this.showConfirmModal = false;
+          const orderId = result.friendlyOrderId || result.orderId;
           if (this.manualInvoice && this.isPreorder) {
-            this.showNotification(`Manuell forhåndsbestilling opprettet. Ordre ${result.friendlyOrderId || result.orderId} er lagt inn som Betal i kassa.`, "success");
+            this.showNotification(this.$i("kraviaInvoice_successManualPreorder", { orderId }), "success");
           } else if (this.manualInvoice) {
-            this.showNotification(`Manuell faktura opprettet. Ordre ${result.friendlyOrderId || result.orderId} er lagt inn som Betal i kassa.`, "success");
+            this.showNotification(this.$i("kraviaInvoice_successManual", { orderId }), "success");
           } else if (this.isPreorder) {
-            this.showNotification(`Forhåndsbestilling opprettet. Ordre ${result.friendlyOrderId || result.orderId} faktureres når den fullføres.`, "success");
+            this.showNotification(this.$i("kraviaInvoice_successPreorder", { orderId }), "success");
           } else {
-            this.showNotification(`Faktura sendt. Ordre ${result.friendlyOrderId || result.orderId} er opprettet.`, "success");
+            this.showNotification(this.$i("kraviaInvoice_successInvoice", { orderId }), "success");
           }
           this.resetForm();
         })
         .catch((error) => {
-          this.sendError = error.message || "Kunne ikke sende faktura";
+          this.sendError = error.message || this.$i("kraviaInvoice_errorSendInvoice");
           this.showNotification(this.sendError, "error");
         })
         .finally(() => {

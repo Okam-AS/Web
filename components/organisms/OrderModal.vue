@@ -8,7 +8,7 @@
       @click.stop
     >
       <div class="modal-header">
-        <h3>Ordre detaljer</h3>
+        <h3>{{ $i('orderModal_title') }}</h3>
         <button
           class="close-btn"
           @click="closeModal"
@@ -22,7 +22,7 @@
         class="loading-container"
       >
         <div class="loading-spinner" />
-        <p>Laster ordre...</p>
+        <p>{{ $i('orderModal_loadingOrder') }}</p>
       </div>
 
       <div
@@ -32,19 +32,19 @@
         <div class="order-info">
           <div class="info-grid">
             <div class="info-item">
-              <label>Kode:</label>
+              <label>{{ $i('orderModal_code') }}</label>
               <span>{{ order.friendlyOrderId }}</span>
             </div>
             <div class="info-item">
-              <label>ID:</label>
+              <label>{{ $i('orderModal_id') }}</label>
               <span>{{ order.id }}</span>
             </div>
             <div class="info-item">
-              <label>Butikk:</label>
+              <label>{{ $i('orderModal_store') }}</label>
               <span>{{ order.storeLegalName }}</span>
             </div>
             <div class="info-item">
-              <label>Status:</label>
+              <label>{{ $i('orderModal_statusLabel') }}</label>
               <span
                 class="status-badge"
                 :class="getStatusClass(order.status)"
@@ -56,53 +56,53 @@
               v-if="order.status === 'Canceled'"
               class="info-item"
             >
-              <label>Kansellert av:</label>
-              <span>{{ order.canceledByStore ? 'Butikk' : 'Kunde' }}</span>
+              <label>{{ $i('orderModal_canceledBy') }}</label>
+              <span>{{ order.canceledByStore ? $i('orderModal_byStore') : $i('orderModal_byCustomer') }}</span>
             </div>
             <div class="info-item">
-              <label>Platform:</label>
+              <label>{{ $i('orderModal_platform') }}</label>
               <span>{{ order.platform }}</span>
             </div>
             <div class="info-item">
-              <label>Bestilt:</label>
+              <label>{{ $i('orderModal_ordered') }}</label>
               <span>{{ formatDate(order.created) }}</span>
             </div>
             <div
               v-if="order.completed"
               class="info-item"
             >
-              <label>Fullført:</label>
+              <label>{{ $i('orderModal_completed') }}</label>
               <span>{{ formatDate(order.completed) }}</span>
             </div>
             <div class="info-item">
-              <label>Totalpris:</label>
+              <label>{{ $i('orderModal_totalPrice') }}</label>
               <span>{{ priceLabel(order.finalAmount) }}</span>
             </div>
             <div class="info-item">
-              <label>Levering:</label>
+              <label>{{ $i('orderModal_delivery') }}</label>
               <span>{{ deliveryTypeLabel(order.deliveryType) }}</span>
             </div>
             <div class="info-item">
-              <label>Betaling:</label>
+              <label>{{ $i('orderModal_payment') }}</label>
               <span>{{ paymentTypeLabel(order.paymentType) }}</span>
             </div>
             <div
               v-if="order.comment"
               class="info-item"
             >
-              <label>Kommentar:</label>
+              <label>{{ $i('orderModal_comment') }}</label>
               <span>{{ order.comment }}</span>
             </div>
             <div
               v-if="order.userFullName || (order.user && order.user.phoneNumber)"
               class="info-item"
             >
-              <label>Kunde:</label>
+              <label>{{ $i('orderModal_customer') }}</label>
               <div
                 class="customer-info-clickable"
                 @click="openCustomerModal"
               >
-                <span class="customer-name">{{ order.userFullName || "Ukjent kunde" }}</span>
+                <span class="customer-name">{{ order.userFullName || $i('orderModal_unknownCustomer') }}</span>
                 <span
                   v-if="order.user && order.user.phoneNumber"
                   class="customer-phone"
@@ -115,7 +115,7 @@
               v-if="order.fullAddress"
               class="info-item full-width"
             >
-              <label>Adresse:</label>
+              <label>{{ $i('orderModal_address') }}</label>
               <span>{{ order.fullAddress }}, {{ order.zipCode }} {{ order.city }}</span>
             </div>
           </div>
@@ -125,13 +125,13 @@
           v-if="order.items && order.items.length"
           class="order-items"
         >
-          <h4>Bestilte varer</h4>
+          <h4>{{ $i('orderModal_orderedItems') }}</h4>
           <div class="items-table">
             <table>
               <thead>
                 <tr>
-                  <th class="u-left">Vare</th>
-                  <th class="u-right">Pris</th>
+                  <th class="u-left">{{ $i('orderModal_item') }}</th>
+                  <th class="u-right">{{ $i('orderModal_price') }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -139,7 +139,7 @@
                   v-for="item in order.items"
                   :key="item.id"
                 >
-                  <td>{{ item.quantity }} {{ item.name }} (Mva: {{ item.tax }}%)</td>
+                  <td>{{ item.quantity }} {{ item.name }} {{ $i('orderModal_itemTax', { tax: item.tax }) }}</td>
                   <td class="u-right">
                     {{ priceLabel(item.amount) }}
                   </td>
@@ -154,7 +154,7 @@
           v-if="order.woltDeliveryInfo && order.woltDeliveryInfo.trackingUrl"
           class="wolt-tracking-section"
         >
-          <h4>Wolt Sporing</h4>
+          <h4>{{ $i('orderModal_woltTracking') }}</h4>
           <div class="tracking-info">
             <div class="tracking-header">
               <a
@@ -163,7 +163,7 @@
                 class="tracking-link-external"
               >
                 <span class="material-icons">open_in_new</span>
-                Åpne i nytt vindu
+                {{ $i('orderModal_openInNewWindow') }}
               </a>
             </div>
             <div class="tracking-iframe-container">
@@ -171,7 +171,7 @@
                 :src="order.woltDeliveryInfo.trackingUrl"
                 class="tracking-iframe"
                 frameborder="0"
-                title="Wolt Sporing"
+                :title="$i('orderModal_woltTracking')"
                 sandbox="allow-scripts allow-same-origin allow-popups"
               ></iframe>
             </div>
@@ -185,8 +185,8 @@
             @click="downloadReceipt"
           >
             <span class="material-icons">download</span>
-            <span v-if="isDownloadingReceipt">Laster ned...</span>
-            <span v-else>Last ned kvittering</span>
+            <span v-if="isDownloadingReceipt">{{ $i('orderModal_downloading') }}</span>
+            <span v-else>{{ $i('orderModal_downloadReceipt') }}</span>
           </button>
         </div>
       </div>
@@ -195,7 +195,7 @@
         v-else
         class="error-container"
       >
-        <p>Kunne ikke laste ordre detaljer</p>
+        <p>{{ $i('orderModal_loadError') }}</p>
       </div>
     </div>
 
@@ -318,7 +318,7 @@ export default {
         const blobUrl = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = blobUrl;
-        link.download = `Kvittering-${this.order.friendlyOrderId || this.orderCode}.pdf`;
+        link.download = this.$i('orderModal_receiptFileName', { id: this.order.friendlyOrderId || this.orderCode });
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);

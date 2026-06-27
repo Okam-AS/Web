@@ -2,8 +2,8 @@
   <AdminPage @login-success="loadRewardProgram">
     <div class="rewards-page">
       <div class="page-header">
-        <h1>Bonus</h1>
-        <p class="page-description">Administrer bonusprogram og cashback for dine kunder</p>
+        <h1>{{ $i('rewards_title') }}</h1>
+        <p class="page-description">{{ $i('rewards_pageDescription') }}</p>
       </div>
 
       <div v-if="isLoading" class="loading-section">
@@ -11,8 +11,8 @@
       </div>
 
       <div v-else-if="!selectedStore" class="empty-state">
-        <h3>Velg en butikk</h3>
-        <p>Velg en butikk for å se bonusprogrammet.</p>
+        <h3>{{ $i('rewards_selectStoreTitle') }}</h3>
+        <p>{{ $i('rewards_selectStoreDescription') }}</p>
       </div>
 
       <!-- No reward program -->
@@ -24,31 +24,31 @@
             </svg>
           </div>
           <div>
-            <h3>Ingen bonusprogram</h3>
-            <p>Opprett et nytt bonusprogram eller koble butikken til et eksisterende.</p>
+            <h3>{{ $i('rewards_noProgramTitle') }}</h3>
+            <p>{{ $i('rewards_noProgramDescription') }}</p>
           </div>
         </div>
 
         <div v-if="otherRewardPrograms.length > 0" class="form-section">
-          <h2 class="section-title">Eksisterende programmer</h2>
+          <h2 class="section-title">{{ $i('rewards_existingPrograms') }}</h2>
           <div
             v-for="program in otherRewardPrograms"
             :key="program.rewardProgramId"
             class="program-row"
           >
             <div class="program-row__info">
-              <span class="program-row__name">{{ program.name || 'Bonusprogram' }}</span>
-              <span v-if="program.storeCount != null" class="program-row__stores">{{ program.storeCount }} butikk(er)</span>
+              <span class="program-row__name">{{ program.name || $i('rewards_defaultProgramName') }}</span>
+              <span v-if="program.storeCount != null" class="program-row__stores">{{ $i('rewards_storeCount', { count: program.storeCount }) }}</span>
             </div>
             <button class="btn btn-secondary btn-sm" :disabled="isInitializing" @click="linkWithExisting(program)">
-              Koble til
+              {{ $i('rewards_link') }}
             </button>
           </div>
         </div>
 
         <button class="btn btn-primary" :disabled="isInitializing" @click="initRewardProgram">
-          <span v-if="isInitializing">Oppretter...</span>
-          <span v-else>Opprett nytt bonusprogram</span>
+          <span v-if="isInitializing">{{ $i('rewards_creating') }}</span>
+          <span v-else>{{ $i('rewards_createNewProgram') }}</span>
         </button>
       </template>
 
@@ -58,8 +58,8 @@
         <div class="form-section">
           <div class="toggle-row">
             <div class="toggle-row__info">
-              <span class="toggle-row__label">Aktiver cashback</span>
-              <span class="toggle-row__hint">Kunder tjener cashback på kjøp</span>
+              <span class="toggle-row__label">{{ $i('rewards_enableCashback') }}</span>
+              <span class="toggle-row__hint">{{ $i('rewards_enableCashbackHint') }}</span>
             </div>
             <label class="toggle-switch">
               <input v-model="cashbackEnabled" type="checkbox" @change="onSettingChange" />
@@ -70,12 +70,12 @@
 
         <!-- Program Name -->
         <div class="form-section">
-          <h2 class="section-title">Programnavn</h2>
+          <h2 class="section-title">{{ $i('rewards_programName') }}</h2>
           <div class="form-field">
             <input
               v-model="rewardProgramName"
               type="text"
-              placeholder="F.eks. Lojalitetsprogram"
+              :placeholder="$i('rewards_programNamePlaceholder')"
               class="text-input"
               @input="onSettingChange"
             />
@@ -84,11 +84,11 @@
 
         <!-- Cashback Tiers -->
         <div class="form-section">
-          <h2 class="section-title">Cashback-nivåer</h2>
+          <h2 class="section-title">{{ $i('rewards_cashbackTiers') }}</h2>
 
           <!-- Base percentage -->
           <div class="tier-base">
-            <label class="tier-base__label">Grunnprosent (0 kr og oppover)</label>
+            <label class="tier-base__label">{{ $i('rewards_basePercent') }}</label>
             <div class="tier-base__input">
               <input
                 v-model="baseCashbackPercent"
@@ -113,28 +113,28 @@
               <div v-if="editingTierIndex === index" class="tier-edit-form">
                 <div class="tier-edit-inputs">
                   <div class="form-field">
-                    <label>Fra (kr)</label>
+                    <label>{{ $i('rewards_fromAmountLabel') }}</label>
                     <input v-model="editingTier.fromAmount" type="number" min="1" class="text-input text-input--small" />
                   </div>
                   <div class="form-field">
-                    <label>Prosent (%)</label>
+                    <label>{{ $i('rewards_percentLabel') }}</label>
                     <input v-model="editingTier.percent" type="number" min="0" max="100" class="text-input text-input--small" />
                   </div>
                 </div>
                 <div class="tier-edit-actions">
-                  <button class="btn btn-primary btn-sm" @click="saveTierEdit">Lagre</button>
-                  <button class="btn btn-ghost btn-sm" @click="editingTierIndex = -1">Avbryt</button>
+                  <button class="btn btn-primary btn-sm" @click="saveTierEdit">{{ $i('common_save') }}</button>
+                  <button class="btn btn-ghost btn-sm" @click="editingTierIndex = -1">{{ $i('common_cancel') }}</button>
                 </div>
               </div>
               <div v-else class="tier-display">
-                <span class="tier-display__text">Fra {{ tier.fromAmount }} kr: {{ tier.percent }}%</span>
+                <span class="tier-display__text">{{ $i('rewards_tierDisplay', { fromAmount: tier.fromAmount, percent: tier.percent }) }}</span>
                 <div class="tier-display__actions">
-                  <button class="btn-icon-only" title="Rediger" @click="startEditTier(index, tier)">
+                  <button class="btn-icon-only" :title="$i('common_edit')" @click="startEditTier(index, tier)">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </svg>
                   </button>
-                  <button class="btn-icon-only btn-icon-only--danger" title="Slett" @click="deleteTier(index)">
+                  <button class="btn-icon-only btn-icon-only--danger" :title="$i('common_delete')" @click="deleteTier(index)">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
@@ -148,17 +148,17 @@
           <div v-if="showAddTierForm" class="tier-add-form">
             <div class="tier-edit-inputs">
               <div class="form-field">
-                <label>Fra (kr)</label>
+                <label>{{ $i('rewards_fromAmountLabel') }}</label>
                 <input v-model="newTier.fromAmount" type="number" min="1" placeholder="500" class="text-input text-input--small" />
               </div>
               <div class="form-field">
-                <label>Prosent (%)</label>
+                <label>{{ $i('rewards_percentLabel') }}</label>
                 <input v-model="newTier.percent" type="number" min="0" max="100" placeholder="5" class="text-input text-input--small" />
               </div>
             </div>
             <div class="tier-edit-actions">
-              <button class="btn btn-primary btn-sm" @click="addTier">Legg til</button>
-              <button class="btn btn-ghost btn-sm" @click="showAddTierForm = false">Avbryt</button>
+              <button class="btn btn-primary btn-sm" @click="addTier">{{ $i('common_add') }}</button>
+              <button class="btn btn-ghost btn-sm" @click="showAddTierForm = false">{{ $i('common_cancel') }}</button>
             </div>
           </div>
 
@@ -166,25 +166,25 @@
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="btn-icon">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>
-            Legg til nivå
+            {{ $i('rewards_addTier') }}
           </button>
         </div>
 
         <!-- Members -->
         <div class="form-section">
-          <h2 class="section-title">Medlemmer</h2>
+          <h2 class="section-title">{{ $i('rewards_members') }}</h2>
           <div class="members-row">
             <div class="members-count">
               <span class="members-count__number">{{ rewardMembershipCount }}</span>
-              <span class="members-count__label">aktive medlemmer</span>
+              <span class="members-count__label">{{ $i('rewards_activeMembers') }}</span>
             </div>
-            <a href="/admin/reward-members" class="btn btn-secondary btn-sm">Se alle</a>
+            <a href="/admin/reward-members" class="btn btn-secondary btn-sm">{{ $i('rewards_seeAll') }}</a>
           </div>
         </div>
 
         <!-- Associated Stores -->
         <div class="form-section">
-          <h2 class="section-title">Tilknyttede butikker</h2>
+          <h2 class="section-title">{{ $i('rewards_associatedStores') }}</h2>
           <div class="stores-list">
             <div
               v-for="store in rewardStores"
@@ -193,7 +193,7 @@
               :class="{ 'store-item--current': store.id === selectedStore }"
             >
               <span class="store-item__name">{{ store.name }}</span>
-              <span v-if="store.id === selectedStore" class="badge badge--current">Denne butikken</span>
+              <span v-if="store.id === selectedStore" class="badge badge--current">{{ $i('rewards_thisStore') }}</span>
             </div>
           </div>
           <button
@@ -202,15 +202,15 @@
             style="margin-top: 16px;"
             @click="removeStore"
           >
-            Fjern denne butikken fra programmet
+            {{ $i('rewards_removeStoreFromProgram') }}
           </button>
         </div>
 
         <!-- Save notification -->
         <div v-if="saveStatus" class="save-status" :class="`save-status--${saveStatus}`">
-          <span v-if="saveStatus === 'saving'">Lagrer...</span>
-          <span v-else-if="saveStatus === 'saved'">Lagret ✓</span>
-          <span v-else-if="saveStatus === 'error'">Feil ved lagring</span>
+          <span v-if="saveStatus === 'saving'">{{ $i('common_saving') }}</span>
+          <span v-else-if="saveStatus === 'saved'">{{ $i('rewards_saved') }}</span>
+          <span v-else-if="saveStatus === 'error'">{{ $i('rewards_saveError') }}</span>
         </div>
       </template>
 
@@ -316,7 +316,7 @@ export default {
         await this._rewardService.Init(this.selectedStore)
         await this.loadRewardProgram(this.selectedStore)
       } catch (e) {
-        this.showToast('Kunne ikke opprette bonusprogram', 'error')
+        this.showToast(this.$i('rewards_createError'), 'error')
       } finally {
         this.isInitializing = false
       }
@@ -327,18 +327,18 @@ export default {
         await this._rewardService.Link(this.selectedStore, program.rewardProgramId)
         await this.loadRewardProgram(this.selectedStore)
       } catch (e) {
-        this.showToast('Kunne ikke koble til program', 'error')
+        this.showToast(this.$i('rewards_linkError'), 'error')
       } finally {
         this.isInitializing = false
       }
     },
     async removeStore() {
-      if (!confirm('Er du sikker på at du vil fjerne denne butikken fra bonusprogrammet?')) return
+      if (!confirm(this.$i('rewards_removeStoreConfirm'))) return
       try {
         await this._rewardService.Remove(this.selectedStore)
         await this.loadRewardProgram(this.selectedStore)
       } catch (e) {
-        this.showToast('Kunne ikke fjerne butikk', 'error')
+        this.showToast(this.$i('rewards_removeError'), 'error')
       }
     },
     onSettingChange() {
@@ -368,7 +368,7 @@ export default {
     },
     addTier() {
       if (!this.newTier.fromAmount || Number(this.newTier.fromAmount) <= 0) {
-        this.showToast('Fra-beløp må være større enn 0', 'error')
+        this.showToast(this.$i('rewards_fromAmountValidation'), 'error')
         return
       }
       this.additionalTiers.push({ fromAmount: Number(this.newTier.fromAmount), percent: Number(this.newTier.percent) })

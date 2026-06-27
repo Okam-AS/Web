@@ -5,7 +5,7 @@
   >
     <div class="modal-content">
       <div class="modal-header">
-        <h2>Send SMS til sjåfør</h2>
+        <h2>{{ $i('smsDriverModal_title') }}</h2>
         <button
           class="close-btn"
           @click="$emit('close')"
@@ -15,10 +15,10 @@
       </div>
 
       <div class="modal-body">
-        <p class="info-text">Skriv inn telefonnummer til sjåføren</p>
+        <p class="info-text">{{ $i('smsDriverModal_infoText') }}</p>
 
         <div class="input-group">
-          <label for="phone-input">Telefonnummer</label>
+          <label for="phone-input">{{ $i('smsDriverModal_phoneLabel') }}</label>
           <input
             id="phone-input"
             v-model="phoneNumber"
@@ -42,7 +42,7 @@
           class="success-message"
         >
           <span class="material-icons">check_circle</span>
-          SMS sendt til sjåfør!
+          {{ $i('smsDriverModal_success') }}
         </div>
       </div>
 
@@ -51,15 +51,15 @@
           class="btn btn-secondary"
           @click="$emit('close')"
         >
-          Avbryt
+          {{ $i('common_cancel') }}
         </button>
         <button
           class="btn btn-primary"
           :disabled="!phoneNumber || sending"
           @click="sendSms"
         >
-          <span v-if="sending">Sender...</span>
-          <span v-else>Send SMS</span>
+          <span v-if="sending">{{ $i('smsDriverModal_sending') }}</span>
+          <span v-else>{{ $i('smsDriverModal_send') }}</span>
         </button>
       </div>
     </div>
@@ -116,7 +116,7 @@ export default {
           this.$emit('close');
         }, 1500);
       } catch (err) {
-        this.error = err.message || 'Kunne ikke sende SMS. Prøv igjen.';
+        this.error = err.message || this.$i('smsDriverModal_errorGeneric');
         console.error('Failed to send SMS:', err);
       } finally {
         this.sending = false;

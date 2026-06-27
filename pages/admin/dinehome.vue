@@ -2,9 +2,9 @@
   <AdminPage>
     <div class="dinehome-page">
       <div class="date-picker-section">
-        <h2>DineHome leveringstider</h2>
+        <h2>{{ $i('dinehome_title') }}</h2>
         <p style="margin-bottom: 1.5em">
-          Her kan du se leveringstider fra DineHome for dine butikker.
+          {{ $i('dinehome_subtitle') }}
         </p>
         <div class="date-picker-container">
           <div class="date-picker-wrapper">
@@ -15,7 +15,7 @@
               <span>←</span>
             </button>
             <div class="date-input">
-              <label>Velg dato:</label>
+              <label>{{ $i('dinehome_selectDate') }}</label>
               <input
                 v-model="selectedDate"
                 type="date"
@@ -37,7 +37,7 @@
         v-if="deliveryTimes.length"
         class="delivery-count"
       >
-        Resultat: {{ deliveryTimes.length }} leveringer
+        {{ $i('dinehome_resultCount', { count: deliveryTimes.length }) }}
       </div>
 
       <Loading
@@ -54,7 +54,7 @@
             class="col store-name sortable"
             @click="handleColumnClick($event, 'storeName')"
           >
-            Butikk
+            {{ $i('dinehome_colStore') }}
             <span
               v-if="sortField === 'storeName'"
               class="sort-icon"
@@ -86,7 +86,7 @@
             class="col sortable"
             @click="handleColumnClick($event, 'estimatedProcessingEndTime')"
           >
-            Avtalt klar
+            {{ $i('dinehome_colAgreedReady') }}
             <span
               v-if="sortField === 'estimatedProcessingEndTime'"
               class="sort-icon"
@@ -102,7 +102,7 @@
             class="col sortable"
             @click="handleColumnClick($event, 'processingEndTime')"
           >
-            Faktisk klar
+            {{ $i('dinehome_colActualReady') }}
             <span
               v-if="sortField === 'processingEndTime'"
               class="sort-icon"
@@ -118,7 +118,7 @@
             class="col sortable"
             @click="handleColumnClick($event, 'completedTime')"
           >
-            Fullført
+            {{ $i('dinehome_colCompleted') }}
             <span
               v-if="sortField === 'completedTime'"
               class="sort-icon"
@@ -134,7 +134,7 @@
             class="col sortable"
             @click="handleColumnClick($event, 'drivingTimeInMinutes')"
           >
-            Leveringstid
+            {{ $i('dinehome_colDeliveryTime') }}
             <span
               v-if="sortField === 'drivingTimeInMinutes'"
               class="sort-icon"
@@ -175,14 +175,14 @@
           <div class="col">
             {{ formatDate(time.completedTime) || "-" }}
           </div>
-          <div class="col">{{ calculateActualDrivingTime(time) }} minutter</div>
+          <div class="col">{{ $i('dinehome_minutes', { count: calculateActualDrivingTime(time) }) }}</div>
         </div>
       </div>
       <div
         v-else-if="!isLoading"
         class="empty-state"
       >
-        Ingen leveringstider funnet i valgt periode. Har du ikke en DineHome-avtale? Kontakt hei@okam.no for å komme i gang.
+        {{ $i('dinehome_emptyState') }}
       </div>
 
       <LoginModal
@@ -324,9 +324,11 @@ export default {
       }
       const diff = Math.round((new Date(actual) - new Date(estimated)) / (1000 * 60));
       if (diff === 0) {
-        return "Presist";
+        return this.$i("dinehome_onTime");
       }
-      return diff > 0 ? `${diff} min senere` : `${Math.abs(diff)} min tidligere`;
+      return diff > 0
+        ? this.$i("dinehome_minutesLater", { count: diff })
+        : this.$i("dinehome_minutesEarlier", { count: Math.abs(diff) });
     },
     handleColumnClick(event, field) {
       if (!this.isResizing) {

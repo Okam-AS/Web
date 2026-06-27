@@ -47,7 +47,7 @@
           <svg class="admin-nav__logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 836.826 175.846">
             <path d="M330.7,154.371a14.251,14.251,0,0,1-7.139,18.849,29.732,29.732,0,0,1-33.265-6.11l-65.674-65.843V157a18.613,18.613,0,1,1-37.225,0V23.4a18.613,18.613,0,1,1,37.225,0V79.136L290.14,13.453A29.732,29.732,0,0,1,323.4,7.343a14.253,14.253,0,0,1,4.259,23.036L268.263,90.2l59.56,59.983A14.247,14.247,0,0,1,330.7,154.371ZM169.105,90.04c0,47.261-37.855,85.573-84.552,85.573S0,137.3,0,90.04,37.856,4.467,84.553,4.467,169.105,42.779,169.105,90.04Zm-37.225,0c0-26.453-21.189-47.9-47.327-47.9S37.225,63.587,37.225,90.04s21.19,47.9,47.328,47.9S131.88,116.494,131.88,90.04ZM469.931,19.111A29.388,29.388,0,0,0,442.4,0a12.769,12.769,0,0,1-3.8,0,29.388,29.388,0,0,0-27.532,19.111L361.058,153.09A14.012,14.012,0,0,0,374.184,172a29.147,29.147,0,0,0,27.284-18.894L440.5,49.233l39.032,103.873A29.147,29.147,0,0,0,506.816,172a14.012,14.012,0,0,0,13.126-18.91ZM835.942,153.09,785.931,19.111A29.388,29.388,0,0,0,758.4,0c-.3,0-.6.027-.9.045-.3-.018-.6-.045-.9-.045a29.388,29.388,0,0,0-27.532,19.111L691.5,119.759,653.931,19.111A29.388,29.388,0,0,0,626.4,0c-.472,0-.939.025-1.4.071C624.54.025,624.073,0,623.6,0a29.388,29.388,0,0,0-27.532,19.111L546.058,153.09A14.012,14.012,0,0,0,559.184,172a29.147,29.147,0,0,0,27.284-18.894L625,50.563l38.532,102.543A29.147,29.147,0,0,0,690.816,172c.231,0,.456-.023.684-.035.228.012.453.035.684.035a29.147,29.147,0,0,0,27.284-18.894L757.5,51.894l38.032,101.212A29.147,29.147,0,0,0,822.816,172a14.012,14.012,0,0,0,13.126-18.91Z" />
           </svg>
-          <span class="admin-nav__badge">Admin</span>
+          <span class="admin-nav__badge">{{ $i('nav_admin_badge') }}</span>
         </a>
         <button
           class="admin-nav__collapse"
@@ -141,7 +141,7 @@
               >
                 <span class="admin-nav__icon" v-html="item.icon" />
                 <span class="admin-nav__label">{{ item.label }}</span>
-                <span v-if="item.isNew" class="new-badge">Nyhet</span>
+                <span v-if="item.isNew" class="new-badge">{{ $i('nav_new_badge') }}</span>
               </a>
             </li>
           </ul>
@@ -161,13 +161,14 @@
             <span v-if="user.phoneNumber" class="admin-nav__user-phone">{{ user.phoneNumber }}</span>
           </span>
         </div>
+        <LanguageSwitcher class="admin-nav__lang" />
         <button class="admin-nav__logout" type="button" @click="showLogoutConfirm = true">
           <span class="admin-nav__icon">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
             </svg>
           </span>
-          <span>Logg ut</span>
+          <span>{{ $i('nav_logout') }}</span>
         </button>
       </div>
     </aside>
@@ -179,14 +180,14 @@
       @click.self="showLogoutConfirm = false"
     >
       <div class="confirm-modal">
-        <h3>Logg ut</h3>
-        <p class="modal-description">Er du sikker på at du vil logge ut?</p>
+        <h3>{{ $i('nav_logout_confirm_title') }}</h3>
+        <p class="modal-description">{{ $i('nav_logout_confirm_message') }}</p>
         <div class="modal-actions">
           <button class="modal-btn-secondary" @click="showLogoutConfirm = false">
-            Avbryt
+            {{ $i('common_cancel') }}
           </button>
           <button class="modal-btn-danger" @click="logout">
-            Logg ut
+            {{ $i('nav_logout') }}
           </button>
         </div>
       </div>
@@ -195,6 +196,8 @@
 </template>
 
 <script>
+import LanguageSwitcher from "~/components/admin/LanguageSwitcher.vue";
+
 const icons = {
   dashboard: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>',
   ongoing: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>',
@@ -222,6 +225,9 @@ const icons = {
 };
 
 export default {
+  components: {
+    LanguageSwitcher,
+  },
   props: {
     collapsed: {
       type: Boolean,
@@ -253,56 +259,56 @@ export default {
     navGroups() {
       const groups = [
         {
-          title: "Drift",
+          title: this.$i("nav_group_operations"),
           items: [
-            { label: "Dashbord", path: "/admin", icon: icons.dashboard },
-            { label: "Pågående bestillinger", path: "/admin/ongoing", icon: icons.ongoing },
-            { label: "Historikk", path: "/admin/orders", icon: icons.orders },
-            { label: "Statistikk", path: "/admin/statistics", icon: icons.statistics },
+            { label: this.$i("nav_dashboard"), path: "/admin", icon: icons.dashboard },
+            { label: this.$i("nav_ongoing"), path: "/admin/ongoing", icon: icons.ongoing },
+            { label: this.$i("nav_history"), path: "/admin/orders", icon: icons.orders },
+            { label: this.$i("nav_statistics"), path: "/admin/statistics", icon: icons.statistics },
           ],
         },
         {
-          title: "Meny",
+          title: this.$i("nav_group_menu"),
           items: [
-            { label: "Produkter", path: "/admin/products", icon: icons.products },
-            { label: "Kategorier", path: "/admin/categories", icon: icons.categories },
-            { label: "Import", path: "/admin/import", icon: icons.import },
+            { label: this.$i("nav_products"), path: "/admin/products", icon: icons.products },
+            { label: this.$i("nav_categories"), path: "/admin/categories", icon: icons.categories },
+            { label: this.$i("nav_import"), path: "/admin/import", icon: icons.import },
           ],
         },
         {
-          title: "Levering",
+          title: this.$i("nav_group_delivery"),
           items: [
-            { label: "Levering", path: "/admin/delivery", icon: icons.delivery },
-            { label: "Wolt", path: "/admin/wolt", icon: icons.wolt },
+            { label: this.$i("nav_delivery"), path: "/admin/delivery", icon: icons.delivery },
+            { label: this.$i("nav_wolt"), path: "/admin/wolt", icon: icons.wolt },
           ],
         },
         {
-          title: "Salg & marked",
+          title: this.$i("nav_group_sales"),
           items: [
-            { label: "Send faktura", path: "/admin/kravia-invoice", icon: icons.invoice, isNew: true },
-            { label: "Bonus", path: "/admin/rewards", icon: icons.rewards },
-            { label: "Rabatter", path: "/admin/discounts", icon: icons.discounts },
+            { label: this.$i("nav_send_invoice"), path: "/admin/kravia-invoice", icon: icons.invoice, isNew: true },
+            { label: this.$i("nav_rewards"), path: "/admin/rewards", icon: icons.rewards },
+            { label: this.$i("nav_discounts"), path: "/admin/discounts", icon: icons.discounts },
           ],
         },
         {
-          title: "Økonomi",
+          title: this.$i("nav_group_economy"),
           items: [
-            { label: "Betaling", path: "/admin/payment", icon: icons.payment },
-            { label: "Utbetalinger", path: "/admin/settlements", icon: icons.settlements },
+            { label: this.$i("nav_payment"), path: "/admin/payment", icon: icons.payment },
+            { label: this.$i("nav_settlements"), path: "/admin/settlements", icon: icons.settlements },
           ],
         },
         {
-          title: "Administrasjon",
+          title: this.$i("nav_group_administration"),
           items: [
-            { label: "Kunder", path: "/admin/customers", icon: icons.customers },
-            { label: "Ansatte", path: "/admin/employees", icon: icons.employees },
+            { label: this.$i("nav_customers"), path: "/admin/customers", icon: icons.customers },
+            { label: this.$i("nav_employees"), path: "/admin/employees", icon: icons.employees },
           ],
         },
       ];
 
       if (this.onboardingInProgress) {
         groups[groups.length - 1].items.push({
-          label: "Onboarding",
+          label: this.$i("nav_onboarding"),
           path: "/admin/onboarding",
           icon: icons.onboarding,
         });
@@ -310,26 +316,26 @@ export default {
 
       if (this.isKeyAccountManager || this.isPowerUser) {
         groups.push({
-          title: "KAM",
+          title: this.$i("nav_group_kam"),
           role: true,
           items: [
-            { label: "Avtaler", path: "/admin/offers", icon: icons.offers },
-            { label: "Oversikt", path: "/admin/overview", icon: icons.overview },
-            { label: "Onboarding", path: "/admin/onboarding", icon: icons.onboarding },
+            { label: this.$i("nav_offers"), path: "/admin/offers", icon: icons.offers },
+            { label: this.$i("nav_overview"), path: "/admin/overview", icon: icons.overview },
+            { label: this.$i("nav_onboarding"), path: "/admin/onboarding", icon: icons.onboarding },
           ],
         });
       }
 
       if (this.isPowerUser) {
         groups.push({
-          title: "Power User",
+          title: this.$i("nav_group_poweruser"),
           role: true,
           items: [
-            { label: "Okam vekst", path: "/admin/poweruser-growth", icon: icons.growth },
-            { label: "Dintero", path: "/admin/dintero", icon: icons.dintero },
-            { label: "Wolt Drive Invoice", path: "/admin/wolt-drive-invoice", icon: icons.invoice },
-            { label: "Varer og tjenester", path: "/admin/goods", icon: icons.goods },
-            { label: "KAM Administrasjon", path: "/admin/kam", icon: icons.kam },
+            { label: this.$i("nav_okam_growth"), path: "/admin/poweruser-growth", icon: icons.growth },
+            { label: this.$i("nav_dintero"), path: "/admin/dintero", icon: icons.dintero },
+            { label: this.$i("nav_wolt_drive_invoice"), path: "/admin/wolt-drive-invoice", icon: icons.invoice },
+            { label: this.$i("nav_goods"), path: "/admin/goods", icon: icons.goods },
+            { label: this.$i("nav_kam_administration"), path: "/admin/kam", icon: icons.kam },
           ],
         });
       }
@@ -1013,6 +1019,10 @@ export default {
   padding: 6px 12px 10px;
   color: #64748b;
   min-width: 0;
+}
+
+.admin-nav__lang {
+  margin-bottom: 8px;
 }
 
 .admin-nav__user-icon {

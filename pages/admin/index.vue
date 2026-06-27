@@ -22,7 +22,7 @@
             </svg>
           </div>
           <div class="status-banner__content">
-            <div class="status-banner__label">Aktiv statusmelding - synlig for kunder</div>
+            <div class="status-banner__label">{{ $i('index_activeStatusBannerLabel') }}</div>
             <div class="status-banner__message">{{ statusMessage }}</div>
           </div>
           <div class="status-banner__arrow">
@@ -34,14 +34,14 @@
 
         <div>
           <h1 class="welcome-text">
-            <template v-if="userName">Velkommen {{ userName }}!</template>
-            <template v-else>Velkommen!</template>
+            <template v-if="userName">{{ $i('index_welcomeNamed', { name: userName }) }}</template>
+            <template v-else>{{ $i('index_welcome') }}</template>
           </h1>
         </div>
 
         <!-- Store Information Section -->
         <div class="store-info-section">
-          <h2 class="store-info-section__title">Butikkinformasjon</h2>
+          <h2 class="store-info-section__title">{{ $i('index_storeInformation') }}</h2>
 
           <div class="store-info-grid">
             <!-- Address Card -->
@@ -53,7 +53,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
                 </div>
-                <h3 class="store-card__title">Adresse</h3>
+                <h3 class="store-card__title">{{ $i('index_address') }}</h3>
               </div>
 
               <div v-if="!editingAddress" class="store-card__content">
@@ -66,28 +66,28 @@
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                   </svg>
-                  Rediger
+                  {{ $i('common_edit') }}
                 </button>
               </div>
 
               <div v-else class="store-card__edit">
                 <div class="form-group">
-                  <label>Adresse</label>
+                  <label>{{ $i('index_address') }}</label>
                   <input v-model="storeAddress.fullAddress" type="text" class="form-control" />
                 </div>
                 <div class="form-row">
                   <div class="form-group">
-                    <label>Postnummer</label>
+                    <label>{{ $i('index_zipCode') }}</label>
                     <input v-model="storeAddress.zipCode" type="text" class="form-control" />
                   </div>
                   <div class="form-group">
-                    <label>Poststed</label>
+                    <label>{{ $i('index_city') }}</label>
                     <input v-model="storeAddress.city" type="text" class="form-control" />
                   </div>
                 </div>
                 <div class="form-actions">
-                  <button class="btn btn-primary" @click="updateAddress">Lagre</button>
-                  <button class="btn btn-secondary" @click="cancelAddressEdit">Avbryt</button>
+                  <button class="btn btn-primary" @click="updateAddress">{{ $i('common_save') }}</button>
+                  <button class="btn btn-secondary" @click="cancelAddressEdit">{{ $i('common_cancel') }}</button>
                 </div>
               </div>
 
@@ -104,7 +104,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <h3 class="store-card__title">Åpningstider</h3>
+                <h3 class="store-card__title">{{ $i('index_openingHours') }}</h3>
               </div>
 
               <div v-if="!editingHours" class="store-card__content">
@@ -113,7 +113,7 @@
                     <span class="hours-day">{{ dayLabels[day.dayOfWeek] }}</span>
                     <span class="hours-time" :class="{ 'hours-time--closed': !day.open }">
                       <template v-if="day.open">{{ day.openingTime }} - {{ day.closingTime }}</template>
-                      <template v-else>Stengt</template>
+                      <template v-else>{{ $i('index_closed') }}</template>
                     </span>
                   </div>
                 </div>
@@ -121,7 +121,7 @@
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                   </svg>
-                  Rediger
+                  {{ $i('common_edit') }}
                 </button>
               </div>
 
@@ -143,7 +143,7 @@
                   </div>
                 </div>
                 <div class="form-actions">
-                  <button class="btn btn-secondary" @click="editingHours = false">Lukk</button>
+                  <button class="btn btn-secondary" @click="editingHours = false">{{ $i('common_close') }}</button>
                 </div>
               </div>
 
@@ -160,7 +160,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
                   </svg>
                 </div>
-                <h3 class="store-card__title">QR Bestilling</h3>
+                <h3 class="store-card__title">{{ $i('index_qrOrdering') }}</h3>
               </div>
 
               <div class="store-card__content">
@@ -172,7 +172,7 @@
                     class="qr-code"
                   />
                   <div class="qr-info">
-                    <p class="qr-description">Scan denne QR-koden for bestilling</p>
+                    <p class="qr-description">{{ $i('index_qrDescription') }}</p>
                     <p class="qr-url">{{ generatedUrl }}</p>
                   </div>
                 </div>
@@ -187,21 +187,21 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <h3 class="store-card__title">Statusmelding</h3>
+                <h3 class="store-card__title">{{ $i('index_statusMessage') }}</h3>
               </div>
 
               <div v-if="!editingStatus && !hasStatusMessage" class="store-card__content">
-                <p class="store-card__empty-state">Ingen aktiv statusmelding</p>
+                <p class="store-card__empty-state">{{ $i('index_noActiveStatusMessage') }}</p>
                 <button class="store-card__action-btn" @click="editingStatus = true">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                   </svg>
-                  Legg til statusmelding
+                  {{ $i('index_addStatusMessage') }}
                 </button>
               </div>
 
               <div v-if="!editingStatus && hasStatusMessage" class="store-card__content">
-                <p class="status-info-text">Denne meldingen er synlig for kunder på butikksiden</p>
+                <p class="status-info-text">{{ $i('index_statusVisibleInfo') }}</p>
                 <div class="status-display">
                   <p class="status-message">{{ statusMessage }}</p>
                 </div>
@@ -210,32 +210,32 @@
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </svg>
-                    Rediger
+                    {{ $i('common_edit') }}
                   </button>
                   <button class="store-card__action-btn store-card__action-btn--danger" @click="removeStatusMessage">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
-                    Fjern
+                    {{ $i('index_remove') }}
                   </button>
                 </div>
               </div>
 
               <div v-if="editingStatus" class="store-card__edit">
                 <div class="form-group">
-                  <label>Statusmelding til kunder</label>
+                  <label>{{ $i('index_statusMessageToCustomers') }}</label>
                   <textarea
                     v-model="statusMessage"
                     class="form-control"
                     rows="4"
-                    placeholder="Skriv en statusmelding som vil vises på butikksiden..."
+                    :placeholder="$i('index_statusMessagePlaceholder')"
                   ></textarea>
-                  <p class="form-helper-text">Statusmeldingen vises på butikksiden for å informere kunder</p>
+                  <p class="form-helper-text">{{ $i('index_statusMessageHelper') }}</p>
                 </div>
                 <div class="form-actions">
-                  <button class="btn btn-primary" :disabled="!statusMessage.trim()" @click="updateStatusMessage">Lagre</button>
-                  <button v-if="hasStatusMessage" class="btn btn-secondary" @click="cancelStatusEdit">Avbryt</button>
-                  <button v-else class="btn btn-secondary" @click="editingStatus = false">Avbryt</button>
+                  <button class="btn btn-primary" :disabled="!statusMessage.trim()" @click="updateStatusMessage">{{ $i('common_save') }}</button>
+                  <button v-if="hasStatusMessage" class="btn btn-secondary" @click="cancelStatusEdit">{{ $i('common_cancel') }}</button>
+                  <button v-else class="btn btn-secondary" @click="editingStatus = false">{{ $i('common_cancel') }}</button>
                 </div>
               </div>
 
@@ -270,7 +270,6 @@ export default {
     editingHours: false,
     editingStatus: false,
     localOpeningHours: [],
-    dayLabels: ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag", "Søndag"],
     statusMessage: "",
     hasStatusMessage: false,
     infoExpanded: {
@@ -288,6 +287,17 @@ export default {
     },
   }),
   computed: {
+    dayLabels() {
+      return [
+        this.$i("index_dayMonday"),
+        this.$i("index_dayTuesday"),
+        this.$i("index_dayWednesday"),
+        this.$i("index_dayThursday"),
+        this.$i("index_dayFriday"),
+        this.$i("index_daySaturday"),
+        this.$i("index_daySunday"),
+      ];
+    },
     userName() {
       return this.$store.state.currentUser?.fullName || null;
     },
@@ -302,9 +312,12 @@ export default {
       const dayIndex = today === 0 ? 6 : today - 1;
       const todayHours = this.localOpeningHours[dayIndex];
       if (!todayHours || !todayHours.open) {
-        return "Stengt i dag";
+        return this.$i("index_closedToday");
       }
-      return `I dag: ${todayHours.openingTime} - ${todayHours.closingTime}`;
+      return this.$i("index_openToday", {
+        openingTime: todayHours.openingTime,
+        closingTime: todayHours.closingTime,
+      });
     },
   },
   watch: {
@@ -386,10 +399,10 @@ export default {
         await this._storeService.UpdateAddress(this.selectedStore, this.storeAddress);
         this.originalAddress = { ...this.storeAddress };
         this.editingAddress = false;
-        this.showNotification("Adresse oppdatert", "success", "address");
+        this.showNotification(this.$i("index_addressUpdated"), "success", "address");
       } catch (error) {
         console.error("Error updating address:", error);
-        this.showNotification("Kunne ikke oppdatere adresse", "error", "address");
+        this.showNotification(this.$i("index_addressUpdateFailed"), "error", "address");
       }
     },
 
@@ -404,10 +417,10 @@ export default {
           this.selectedStore,
           JSON.parse(JSON.stringify(this.localOpeningHours))
         );
-        this.showNotification("Åpningstider oppdatert", "success", "hours");
+        this.showNotification(this.$i("index_openingHoursUpdated"), "success", "hours");
       } catch (error) {
         console.error("Error updating opening hours:", error);
-        this.showNotification("Kunne ikke oppdatere åpningstider", "error", "hours");
+        this.showNotification(this.$i("index_openingHoursUpdateFailed"), "error", "hours");
       }
     },
 
@@ -416,10 +429,10 @@ export default {
         await this._storeService.UpdateStatusMessage(this.selectedStore, this.statusMessage);
         this.hasStatusMessage = !!this.statusMessage;
         this.editingStatus = false;
-        this.showNotification("Statusmelding oppdatert", "success", "status");
+        this.showNotification(this.$i("index_statusMessageUpdated"), "success", "status");
       } catch (error) {
         console.error("Error updating status message:", error);
-        this.showNotification("Kunne ikke oppdatere statusmelding", "error", "status");
+        this.showNotification(this.$i("index_statusMessageUpdateFailed"), "error", "status");
       }
     },
 
@@ -429,10 +442,10 @@ export default {
         this.statusMessage = "";
         this.hasStatusMessage = false;
         this.editingStatus = false;
-        this.showNotification("Statusmelding fjernet", "success", "status");
+        this.showNotification(this.$i("index_statusMessageRemoved"), "success", "status");
       } catch (error) {
         console.error("Error removing status message:", error);
-        this.showNotification("Kunne ikke fjerne statusmelding", "error", "status");
+        this.showNotification(this.$i("index_statusMessageRemoveFailed"), "error", "status");
       }
     },
 

@@ -2,7 +2,7 @@
   <AdminPage>
     <div class="ongoing-orders">
       <div class="page-header">
-        <h1>Pågående bestillinger</h1>
+        <h1>{{ $i('ongoing_title') }}</h1>
       </div>
 
       <p
@@ -10,7 +10,7 @@
         class="page-description"
 
       >
-        Her viser alle pågående bestillinger på dine {{ adminStores.length }} avdelinger
+        {{ $i('ongoing_pageDescription', { count: adminStores.length }) }}
       </p>
 
       <div
@@ -31,7 +31,7 @@
           <div
             class="column-header"
           >
-            <h2>Nye</h2>
+            <h2>{{ $i('ongoing_columnNew') }}</h2>
             <span
               v-if="newOrders.length"
               class="count-badge"
@@ -48,7 +48,7 @@
               :order="order"
               :expanded-order-id="showOrderId"
               :admin-stores="adminStores"
-              :primary-action-button="order.status === 'Accepted' ? 'Neste' : null"
+              :primary-action-button="order.status === 'Accepted' ? $i('ongoing_actionNext') : null"
               @toggle-expand="toggleOrderExpand"
               @primary-action="startProcessing"
               @transfer="transferOrder"
@@ -63,7 +63,7 @@
             v-else
             class="empty-state"
           >
-            Ingen nye ordrer
+            {{ $i('ongoing_emptyNew') }}
           </div>
         </div>
 
@@ -74,7 +74,7 @@
           <div
             class="column-header"
           >
-            <h2>Pågående</h2>
+            <h2>{{ $i('ongoing_columnProcessing') }}</h2>
             <span
               v-if="processingOrders.length"
               class="count-badge"
@@ -91,7 +91,7 @@
                 :order="order"
                 :expanded-order-id="showOrderId"
                 :admin-stores="adminStores"
-                :primary-action-button="order.status === 'Processing' ? 'Neste' : null"
+                :primary-action-button="order.status === 'Processing' ? $i('ongoing_actionNext') : null"
                 @toggle-expand="toggleOrderExpand"
                 @primary-action="updateOrderToReady"
                 @transfer="transferOrder"
@@ -106,7 +106,7 @@
               v-else
               class="empty-state"
             >
-              Ingen pågående ordrer
+              {{ $i('ongoing_emptyProcessing') }}
             </div>
           </div>
         </div>
@@ -118,7 +118,7 @@
           <div
             class="column-header"
           >
-            <h2>Klar</h2>
+            <h2>{{ $i('ongoing_columnReady') }}</h2>
             <span
               v-if="readyOrders.length"
               class="count-badge"
@@ -135,7 +135,7 @@
                 :order="order"
                 :expanded-order-id="showOrderId"
                 :admin-stores="adminStores"
-                :primary-action-button="['ReadyForPickup', 'ReadyForDriver', 'Served'].includes(order.status) ? 'Fullfør' : null"
+                :primary-action-button="['ReadyForPickup', 'ReadyForDriver', 'Served'].includes(order.status) ? $i('ongoing_actionComplete') : null"
                 @toggle-expand="toggleOrderExpand"
                 @primary-action="completeOrder"
                 @transfer="transferOrder"
@@ -150,7 +150,7 @@
               v-else
               class="empty-state"
             >
-              Ingen klare ordrer
+              {{ $i('ongoing_emptyReady') }}
             </div>
           </div>
         </div>
@@ -209,13 +209,13 @@
       >
         <div class="banner-content">
           <span class="banner-text">
-            Ser du etter statistikk? Det finner du nå på en egen side.
+            {{ $i('ongoing_bannerText') }}
           </span>
           <NuxtLink
             to="/admin/statistics"
             class="banner-link"
           >
-            Gå til statistikk →
+            {{ $i('ongoing_bannerLink') }}
           </NuxtLink>
         </div>
         <button
@@ -387,22 +387,22 @@ export default {
           this.loadOrders();
         })
         .catch((error) => {
-          alert('Feil ved oppdatering: ' + (error.message || 'Ukjent feil'));
+          alert(this.$i('ongoing_errorUpdate', { error: error.message || this.$i('ongoing_unknownError') }));
         });
     },
     completeOrder(order) {
       if (!order) return;
 
-      let confirmMessage = 'Fullfør bestilling #' + order.friendlyOrderId + '?';
+      let confirmMessage = this.$i('ongoing_confirmComplete', { orderId: order.friendlyOrderId });
 
       // Special confirmation for delivery orders that haven't been delivered yet
       if (order.deliveryType === 'WoltDelivery' &&
           order.woltDeliveryInfo &&
           order.woltDeliveryInfo.status !== 'Delivered') {
-        confirmMessage = 'Bestillingen er ikke levert ennå hos kunde. Marker som fullført likevel?\n\nBestilling #' + order.friendlyOrderId;
+        confirmMessage = this.$i('ongoing_confirmCompleteNotDelivered', { orderId: order.friendlyOrderId });
       } else if (order.deliveryType === 'DineHomeDelivery' &&
                  order.dineHomeStatus !== 'Completed') {
-        confirmMessage = 'Bestillingen er ikke levert ennå hos kunde. Marker som fullført likevel?\n\nBestilling #' + order.friendlyOrderId;
+        confirmMessage = this.$i('ongoing_confirmCompleteNotDelivered', { orderId: order.friendlyOrderId });
       }
 
       const confirmed = confirm(confirmMessage);
@@ -415,15 +415,14 @@ export default {
           this.loadOrders();
         })
         .catch((error) => {
-          alert('Feil ved fullføring: ' + (error.message || 'Ukjent feil'));
+          alert(this.$i('ongoing_errorComplete', { error: error.message || this.$i('ongoing_unknownError') }));
         });
     },
     cancelOrder(order) {
       if (!order) return;
 
       const confirmed = confirm(
-        'Er du sikker på at du vil kansellere ' + order.storeLegalName + ' sin bestilling #' +
-          order.friendlyOrderId + '?'
+        this.$i('ongoing_confirmCancel', { storeName: order.storeLegalName, orderId: order.friendlyOrderId })
       );
 
       if (!confirmed) return;
@@ -434,7 +433,7 @@ export default {
           this.loadOrders();
         })
         .catch((error) => {
-          alert('Feil ved kansellering: ' + (error.message || 'Ukjent feil'));
+          alert(this.$i('ongoing_errorCancel', { error: error.message || this.$i('ongoing_unknownError') }));
         });
     },
     openSmsDriver(order) {

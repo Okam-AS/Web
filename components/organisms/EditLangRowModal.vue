@@ -2,7 +2,7 @@
   <Modal :hide-close-btn="true">
     <div>
       <label>
-        Nøkkel
+        {{ $i('editLangRowModal_key') }}
         <input v-model="editableKey" type="text" :disabled="!!langTranslationKey">
       </label>
     </div>
@@ -13,8 +13,8 @@
       </label>
     </div>
     <div class="modal-buttons">
-      <input class="emoji-btn" type="button" value="Avbryt" @click="$emit('close')">
-      <input class="emoji-btn" type="button" value="Lagre" @click="$emit('save', saved)">
+      <input class="emoji-btn" type="button" :value="$i('common_cancel')" @click="$emit('close')">
+      <input class="emoji-btn" type="button" :value="$i('common_save')" @click="$emit('save', saved)">
     </div>
   </Modal>
 </template>

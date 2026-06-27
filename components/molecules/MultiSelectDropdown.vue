@@ -21,7 +21,7 @@
           v-model="searchQuery"
           type="text"
           class="search-input"
-          :placeholder="searchPlaceholder"
+          :placeholder="resolvedSearchPlaceholder"
           @click.stop
         />
       </div>
@@ -31,13 +31,13 @@
           class="action-btn"
           @click="selectAll"
         >
-          Velg alle
+          {{ $i('multiSelectDropdown_selectAll') }}
         </button>
         <button
           class="action-btn"
           @click="deselectAll"
         >
-          Fjern alle
+          {{ $i('multiSelectDropdown_deselectAll') }}
         </button>
       </div>
 
@@ -59,7 +59,7 @@
           v-if="filteredOptions.length === 0"
           class="no-results"
         >
-          Ingen resultater
+          {{ $i('multiSelectDropdown_noResults') }}
         </div>
       </div>
     </div>
@@ -82,15 +82,15 @@ export default {
     },
     placeholder: {
       type: String,
-      default: 'Velg...',
+      default: '',
     },
     allText: {
       type: String,
-      default: 'Alle',
+      default: '',
     },
     searchPlaceholder: {
       type: String,
-      default: 'Søk...',
+      default: '',
     },
   },
   data() {
@@ -106,14 +106,17 @@ export default {
     document.removeEventListener('click', this.handleClickOutside);
   },
   computed: {
+    resolvedSearchPlaceholder() {
+      return this.searchPlaceholder || this.$i('multiSelectDropdown_searchPlaceholder');
+    },
     displayText() {
       if (this.selected.length === 0) {
-        return this.placeholder;
+        return this.placeholder || this.$i('multiSelectDropdown_placeholder');
       }
       if (this.selected.length === this.options.length) {
-        return this.allText;
+        return this.allText || this.$i('common_all');
       }
-      return `${this.selected.length} valgt`;
+      return this.$i('multiSelectDropdown_countSelected', { count: this.selected.length });
     },
     hasPartialSelection() {
       return this.selected.length > 0 && this.selected.length < this.options.length;

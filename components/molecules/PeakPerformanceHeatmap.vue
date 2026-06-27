@@ -3,12 +3,12 @@
     <div class="heatmap-header">
       <h3 class="heatmap-title">
         <span class="material-icons">assessment</span>
-        Toppytelse Oversikt
+        {{ $i('peakPerformanceHeatmap_title') }}
       </h3>
     </div>
 
     <div class="heatmap-description">
-      <p>Oversikt over aktivitet fordelt på ukedag og time. Mørkere grønn = høyere aktivitet.</p>
+      <p>{{ $i('peakPerformanceHeatmap_description') }}</p>
     </div>
 
     <div class="heatmap-container">
@@ -67,9 +67,9 @@
 
       <!-- Color scale legend -->
       <div class="color-legend">
-        <span class="legend-label">Lav</span>
+        <span class="legend-label">{{ $i('peakPerformanceHeatmap_legendLow') }}</span>
         <div class="legend-gradient"></div>
-        <span class="legend-label">Høy</span>
+        <span class="legend-label">{{ $i('peakPerformanceHeatmap_legendHigh') }}</span>
       </div>
     </div>
 
@@ -83,7 +83,7 @@
       <div class="tooltip-content">
         <div class="tooltip-row">
           <span class="material-icons">shopping_cart</span>
-          <span>{{ tooltip.orders }} bestillinger</span>
+          <span>{{ $i('peakPerformanceHeatmap_ordersCount', { count: tooltip.orders }) }}</span>
         </div>
         <div
           v-if="dateRange"
@@ -96,14 +96,14 @@
           v-if="tooltip.percentage"
           class="tooltip-row secondary"
         >
-          <span>{{ tooltip.percentage }} av total</span>
+          <span>{{ $i('peakPerformanceHeatmap_percentageOfTotal', { percentage: tooltip.percentage }) }}</span>
         </div>
         <div
           v-if="tooltip.isBusiest"
           class="tooltip-badge"
         >
           <span class="material-icons">star</span>
-          Travleste time
+          {{ $i('peakPerformanceHeatmap_busiestHour') }}
         </div>
       </div>
     </div>
@@ -126,15 +126,6 @@ export default {
   },
   data() {
     return {
-      days: [
-        { id: 1, name: 'Mandag', short: 'Man' },
-        { id: 2, name: 'Tirsdag', short: 'Tir' },
-        { id: 3, name: 'Onsdag', short: 'Ons' },
-        { id: 4, name: 'Torsdag', short: 'Tor' },
-        { id: 5, name: 'Fredag', short: 'Fre' },
-        { id: 6, name: 'Lørdag', short: 'Lør' },
-        { id: 0, name: 'Søndag', short: 'Søn' },
-      ],
       hours: Array.from({ length: 24 }, (_, i) => i),
       tooltip: {
         visible: false,
@@ -149,6 +140,19 @@ export default {
       maxValue: 0,
       minValue: 0,
     };
+  },
+  computed: {
+    days() {
+      return [
+        { id: 1, name: this.$i('peakPerformanceHeatmap_monday'), short: this.$i('peakPerformanceHeatmap_mondayShort') },
+        { id: 2, name: this.$i('peakPerformanceHeatmap_tuesday'), short: this.$i('peakPerformanceHeatmap_tuesdayShort') },
+        { id: 3, name: this.$i('peakPerformanceHeatmap_wednesday'), short: this.$i('peakPerformanceHeatmap_wednesdayShort') },
+        { id: 4, name: this.$i('peakPerformanceHeatmap_thursday'), short: this.$i('peakPerformanceHeatmap_thursdayShort') },
+        { id: 5, name: this.$i('peakPerformanceHeatmap_friday'), short: this.$i('peakPerformanceHeatmap_fridayShort') },
+        { id: 6, name: this.$i('peakPerformanceHeatmap_saturday'), short: this.$i('peakPerformanceHeatmap_saturdayShort') },
+        { id: 0, name: this.$i('peakPerformanceHeatmap_sunday'), short: this.$i('peakPerformanceHeatmap_sundayShort') },
+      ];
+    },
   },
   watch: {
     data: {

@@ -8,7 +8,7 @@
       @click.stop
     >
       <div class="modal-header">
-        <h3>Kundeinformasjon</h3>
+        <h3>{{ $i('customerInfoModal_title') }}</h3>
         <button
           class="close-btn"
           @click="closeModal"
@@ -22,7 +22,7 @@
         class="loading-container"
       >
         <div class="loading-spinner" />
-        <p>Laster kundeinformasjon...</p>
+        <p>{{ $i('customerInfoModal_loading') }}</p>
       </div>
 
       <div
@@ -47,7 +47,7 @@
 
         <!-- Rewards Section -->
         <div class="customer-rewards-section">
-          <h4>Bonuspoeng</h4>
+          <h4>{{ $i('customerInfoModal_rewardPoints') }}</h4>
 
           <!-- Reward Member Details -->
           <div
@@ -56,18 +56,18 @@
           >
             <div class="reward-info-grid">
               <div class="reward-info-item">
-                <label>Opptjent bonus:</label>
+                <label>{{ $i('customerInfoModal_earnedBonus') }}</label>
                 <span>{{ priceLabel(primaryRewardCard.balance) }}</span>
               </div>
               <div class="reward-info-item">
-                <label>Medlem siden:</label>
+                <label>{{ $i('customerInfoModal_memberSince') }}</label>
                 <span>{{ formatDate(memberJoinedDate) }}</span>
               </div>
             </div>
           </div>
 
           <div class="send-bonus-form">
-            <label class="send-bonus-label">Send bonuspoeng til denne kunden:</label>
+            <label class="send-bonus-label">{{ $i('customerInfoModal_sendBonusLabel') }}</label>
 
             <div class="reward-form">
               <div class="amount-input">
@@ -77,7 +77,7 @@
                   type="number"
                   min="1"
                   step="1"
-                  placeholder="Skriv inn beløp"
+                  :placeholder="$i('customerInfoModal_amountPlaceholder')"
                   class="reward-input"
                   :disabled="isSendingReward"
                 />
@@ -97,7 +97,7 @@
                   class="material-icons"
                   >card_giftcard</span
                 >
-                {{ isSendingReward ? "Sender..." : "Send bonus" }}
+                {{ isSendingReward ? $i('customerInfoModal_sending') : $i('customerInfoModal_sendBonus') }}
               </button>
             </div>
 
@@ -116,7 +116,7 @@
         v-else
         class="error-container"
       >
-        <p>Kunne ikke laste kundeinformasjon</p>
+        <p>{{ $i('customerInfoModal_loadError') }}</p>
       </div>
     </div>
   </div>
@@ -210,7 +210,7 @@ export default {
 
         if (userForStore) {
           this.customer = {
-            fullName: `${userForStore.firstName || ""} ${userForStore.lastName || ""}`.trim() || this.customerName || "Ukjent kunde",
+            fullName: `${userForStore.firstName || ""} ${userForStore.lastName || ""}`.trim() || this.customerName || this.$i("customerInfoModal_unknownCustomer"),
             phoneNumber: userForStore.phoneNumber || this.customerPhone || "-",
             email: userForStore.email || "-",
             registered: userForStore.data ? userForStore.data.find((d) => d.key === "Kunde siden")?.value : null,
@@ -221,7 +221,7 @@ export default {
         } else {
           // Fallback to props data if API call fails
           this.customer = {
-            fullName: this.customerName || "Ukjent kunde",
+            fullName: this.customerName || this.$i("customerInfoModal_unknownCustomer"),
             phoneNumber: this.customerPhone || "-",
             email: "-",
             registered: null,
@@ -235,7 +235,7 @@ export default {
         console.error("Error fetching customer info:", error);
         // Fallback to props data if API call fails
         this.customer = {
-          fullName: this.customerName || "Ukjent kunde",
+          fullName: this.customerName || this.$i("customerInfoModal_unknownCustomer"),
           phoneNumber: this.customerPhone || "-",
           email: "-",
           registered: null,
@@ -263,7 +263,7 @@ export default {
         const result = await this._rewardService.SendReward(this.storeId, this.userId, amountInOre);
 
         if (result) {
-          this.rewardMessage = `Bonus på ${this.rewardAmount} kr er sendt til kunden!`;
+          this.rewardMessage = this.$i("customerInfoModal_bonusSentSuccess", { amount: this.rewardAmount });
           this.rewardMessageType = "success";
           this.rewardAmount = null;
 
@@ -275,11 +275,11 @@ export default {
             this.rewardMessage = "";
           }, 3000);
         } else {
-          this.rewardMessage = "Kunne ikke sende bonus. Prøv igjen.";
+          this.rewardMessage = this.$i("customerInfoModal_bonusSendFailed");
           this.rewardMessageType = "error";
         }
       } catch (error) {
-        this.rewardMessage = "Det oppstod en feil ved sending av bonus.";
+        this.rewardMessage = this.$i("customerInfoModal_bonusSendError");
         this.rewardMessageType = "error";
       } finally {
         this.isSendingReward = false;
@@ -319,13 +319,13 @@ export default {
     getTransactionLabel(type) {
       switch (type) {
         case "Earned":
-          return "Opptjent";
+          return this.$i("customerInfoModal_transactionEarned");
         case "Spent":
-          return "Brukt";
+          return this.$i("customerInfoModal_transactionSpent");
         case "Gifted":
-          return "Gave";
+          return this.$i("customerInfoModal_transactionGifted");
         default:
-          return type || "Ukjent";
+          return type || this.$i("customerInfoModal_transactionUnknown");
       }
     },
 

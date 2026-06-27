@@ -6,10 +6,10 @@
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
           </svg>
-          Bonus
+          {{ $i('rewardMembers_backToRewards') }}
         </a>
-        <h1>Bonusmedlemmer</h1>
-        <p class="page-description">Listen oppdateres hver natt</p>
+        <h1>{{ $i('rewardMembers_title') }}</h1>
+        <p class="page-description">{{ $i('rewardMembers_listUpdatedNightly') }}</p>
       </div>
 
       <div v-if="isLoading" class="loading-section">
@@ -24,7 +24,7 @@
           <input
             v-model="searchQuery"
             type="text"
-            placeholder="Søk på telefonnummer..."
+            :placeholder="$i('rewardMembers_searchPlaceholder')"
             class="search-input"
           />
           <button v-if="searchQuery" class="search-clear" @click="searchQuery = ''">
@@ -40,14 +40,14 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
           </div>
-          <h3>{{ searchQuery ? 'Ingen treff' : 'Ingen medlemmer' }}</h3>
-          <p>{{ searchQuery ? `Ingen medlemmer matcher "${searchQuery}"` : 'Det er ingen bonusmedlemmer ennå.' }}</p>
+          <h3>{{ searchQuery ? $i('rewardMembers_noMatches') : $i('rewardMembers_noMembers') }}</h3>
+          <p>{{ searchQuery ? $i('rewardMembers_noMembersMatch', { query: searchQuery }) : $i('rewardMembers_noMembersYet') }}</p>
         </div>
 
         <div v-else class="members-list">
           <div class="members-list__header">
-            <span>Telefon</span>
-            <span>Saldo</span>
+            <span>{{ $i('rewardMembers_columnPhone') }}</span>
+            <span>{{ $i('rewardMembers_columnBalance') }}</span>
           </div>
           <div
             v-for="member in filteredMembers"
@@ -60,7 +60,7 @@
         </div>
 
         <div v-if="allMembers.length > 0" class="members-count-footer">
-          Viser {{ filteredMembers.length }} av {{ allMembers.length }} medlemmer
+          {{ $i('rewardMembers_showingCount', { shown: filteredMembers.length, total: allMembers.length }) }}
         </div>
       </template>
     </div>

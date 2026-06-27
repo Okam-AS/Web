@@ -6,7 +6,7 @@
         <div class="overview__table-container">
           <div class="overview__header">
             <div class="title-container">
-              <h3>Avtaler</h3>
+              <h3>{{ $i('offers_title') }}</h3>
               <Loading
                 v-if="isLoading"
                 class="header-spinner"
@@ -16,20 +16,20 @@
               class="overview__button"
               @click="showCreateProposalModal"
             >
-              Opprett avtale
+              {{ $i('offers_createProposal') }}
             </button>
           </div>
           <table class="overview__table">
             <thead>
               <tr>
-                <th class="sortable-header">Kode</th>
-                <th class="sortable-header">Kunde</th>
-                <th class="sortable-header">Firma</th>
-                <th class="sortable-header">Status</th>
-                <th class="sortable-header">Opprettet</th>
-                <th class="sortable-header">Endret</th>
-                <th class="sortable-header">Selger</th>
-                <th>Handling</th>
+                <th class="sortable-header">{{ $i('offers_columnCode') }}</th>
+                <th class="sortable-header">{{ $i('offers_columnClient') }}</th>
+                <th class="sortable-header">{{ $i('offers_columnCompany') }}</th>
+                <th class="sortable-header">{{ $i('common_status') }}</th>
+                <th class="sortable-header">{{ $i('offers_columnCreated') }}</th>
+                <th class="sortable-header">{{ $i('offers_columnChanged') }}</th>
+                <th class="sortable-header">{{ $i('offers_columnSeller') }}</th>
+                <th>{{ $i('offers_columnAction') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -54,28 +54,28 @@
                       class="action-button action-button--view"
                       @click="viewProposal(proposal)"
                     >
-                      Vis
+                      {{ $i('offers_view') }}
                     </button>
                     <button
                       v-if="proposal.status === 'Created' || proposal.status === 'Sent' || proposal.status === 'Read'"
                       class="action-button action-button--edit"
                       @click="editProposal(proposal)"
                     >
-                      Endre
+                      {{ $i('common_edit') }}
                     </button>
                     <button
                       v-if="proposal.status === 'Created' || proposal.status === 'Sent' || proposal.status === 'Read'"
                       class="action-button action-button--reject"
                       @click="rejectProposal(proposal)"
                     >
-                      Slett
+                      {{ $i('common_delete') }}
                     </button>
                     <button
                       v-if="proposal.status === 'StoreRegistered' || proposal.status === 'Accepted'"
                       class="action-button action-button--cancel"
                       @click="cancelProposalConfirmation(proposal)"
                     >
-                      Si opp
+                      {{ $i('offers_terminate') }}
                     </button>
                   </div>
                 </td>
@@ -85,7 +85,7 @@
                   colspan="8"
                   class="overview__empty"
                 >
-                  Ingen avtaler funnet
+                  {{ $i('offers_noProposalsFound') }}
                 </td>
               </tr>
             </tbody>
@@ -100,7 +100,7 @@
         >
           <div style="width: 1000px; max-width: 90vw; margin: 0 auto; text-align: center">
             <h1 style="margin-bottom: 1em">
-              {{ isEditingProposal ? "Endre avtale" : "Opprett ny avtale" }}
+              {{ isEditingProposal ? $i('offers_editProposal') : $i('offers_createNewProposal') }}
             </h1>
 
             <div v-if="proposalStep === 1">
@@ -114,7 +114,7 @@
                     v-model="currentProposal.companyVAT"
                     type="text"
                     class="kam-input"
-                    placeholder="Organisasjonsnummer"
+                    :placeholder="$i('offers_orgNumber')"
                     required
                     style="width: 400px; font-size: 18px; padding: 10px"
                     @keyup.enter="lookupCompanyInfo"
@@ -125,7 +125,7 @@
                     style="height: 44px; font-size: 18px; padding: 10px; margin-left: 10px"
                     @click="lookupCompanyInfo"
                   >
-                    {{ isLookingUp ? "Søker..." : "Søk" }}
+                    {{ isLookingUp ? $i('offers_searching') : $i('common_search') }}
                   </button>
                 </div>
               </div>
@@ -136,10 +136,10 @@
               @submit.prevent="saveProposal"
             >
               <div class="form-section">
-                <h6 class="section-title">Kundeinformasjon</h6>
+                <h6 class="section-title">{{ $i('offers_clientInfo') }}</h6>
                 <div class="form-row">
                   <div class="form-group form-group--half">
-                    <label for="clientName">Navn på kontaktperson *</label>
+                    <label for="clientName">{{ $i('offers_contactPersonName') }}</label>
                     <br />
                     <input
                       id="clientName"
@@ -150,7 +150,7 @@
                     />
                   </div>
                   <div class="form-group form-group--half">
-                    <label for="clientPhoneNumber">Telefonnummer *</label>
+                    <label for="clientPhoneNumber">{{ $i('offers_phoneNumber') }}</label>
                     <br />
                     <input
                       id="clientPhoneNumber"
@@ -163,7 +163,7 @@
                 </div>
                 <div class="form-row">
                   <div class="form-group">
-                    <label for="clientEmail">E-post</label>
+                    <label for="clientEmail">{{ $i('offers_email') }}</label>
                     <br />
                     <input
                       id="clientEmail"
@@ -176,10 +176,10 @@
               </div>
 
               <div class="form-section">
-                <h6 class="section-title">Firmainformasjon</h6>
+                <h6 class="section-title">{{ $i('offers_companyInfo') }}</h6>
                 <div class="form-row">
                   <div class="form-group form-group--half">
-                    <label for="companyLegalName">Firmanavn *</label>
+                    <label for="companyLegalName">{{ $i('offers_companyName') }}</label>
                     <br />
                     <input
                       id="companyLegalName"
@@ -190,7 +190,7 @@
                     />
                   </div>
                   <div class="form-group form-group--half">
-                    <label for="companyVAT">Organisasjonsnummer *</label>
+                    <label for="companyVAT">{{ $i('offers_orgNumberRequired') }}</label>
                     <br />
                     <input
                       id="companyVAT"
@@ -203,7 +203,7 @@
                 </div>
                 <div class="form-row">
                   <div class="form-group">
-                    <label for="companyFullAddress">Adresse</label>
+                    <label for="companyFullAddress">{{ $i('offers_address') }}</label>
                     <br />
                     <input
                       id="companyFullAddress"
@@ -215,7 +215,7 @@
                 </div>
                 <div class="form-row">
                   <div class="form-group form-group--half">
-                    <label for="companyZipCode">Postnummer</label>
+                    <label for="companyZipCode">{{ $i('offers_zipCode') }}</label>
                     <br />
                     <input
                       id="companyZipCode"
@@ -225,7 +225,7 @@
                     />
                   </div>
                   <div class="form-group form-group--half">
-                    <label for="companyCity">Sted</label>
+                    <label for="companyCity">{{ $i('offers_city') }}</label>
                     <br />
                     <input
                       id="companyCity"
@@ -238,7 +238,7 @@
               </div>
 
               <div class="form-section">
-                <h6 class="section-title">Varer og tjenester</h6>
+                <h6 class="section-title">{{ $i('offers_itemsAndServices') }}</h6>
                 <div class="offer-items-selection">
                   <div
                     v-for="item in offerItems"
@@ -265,7 +265,7 @@
                       class="quantity-selector"
                     >
                       <div class="price-input-group">
-                        <label :for="'quantity-' + item.offerItemId">Antall:</label>
+                        <label :for="'quantity-' + item.offerItemId">{{ $i('offers_quantity') }}</label>
                         <input
                           :id="'quantity-' + item.offerItemId"
                           v-model.number="lineItems[item.offerItemId].quantity"
@@ -276,7 +276,7 @@
                       </div>
                       <template v-if="item.enableMonthlyFee">
                         <div class="price-input-group">
-                          <label :for="'monthlyFee-' + item.offerItemId">Mnd. pris:</label>
+                          <label :for="'monthlyFee-' + item.offerItemId">{{ $i('offers_monthlyPrice') }}</label>
                           <PriceInput
                             :id="'monthlyFee-' + item.offerItemId"
                             v-model="lineItems[item.offerItemId].monthlyFee"
@@ -286,7 +286,7 @@
                       </template>
                       <template v-if="item.enableOnetimeFee">
                         <div class="price-input-group">
-                          <label :for="'onetimeFee-' + item.offerItemId">Engangs:</label>
+                          <label :for="'onetimeFee-' + item.offerItemId">{{ $i('offers_onetimeFee') }}</label>
                           <PriceInput
                             :id="'onetimeFee-' + item.offerItemId"
                             v-model="lineItems[item.offerItemId].onetimeFee"
@@ -300,7 +300,7 @@
                     v-if="offerItems.length === 0"
                     class="no-items-message"
                   >
-                    Ingen varer eller tjenester tilgjengelig
+                    {{ $i('offers_noItemsAvailable') }}
                   </div>
                 </div>
               </div>
@@ -309,13 +309,13 @@
                 <input
                   class="emoji-btn cancel-btn"
                   type="button"
-                  value="Avbryt"
+                  :value="$i('common_cancel')"
                   @click="closeProposalModal"
                 />
                 <input
                   class="emoji-btn save-btn"
                   type="submit"
-                  value="Lagre"
+                  :value="$i('common_save')"
                   :disabled="!isProposalValid || isSubmitting"
                 />
               </div>
@@ -342,14 +342,14 @@
                   class="emoji-btn"
                   @click="closeViewProposalModal"
                 >
-                  Lukk
+                  {{ $i('common_close') }}
                 </button>
                 <button
                   v-if="viewingProposal && (viewingProposal.status === 'Created' || viewingProposal.status === 'Sent')"
                   class="emoji-btn"
                   @click="editViewingProposal"
                 >
-                  Endre
+                  {{ $i('common_edit') }}
                 </button>
                 <button
                   v-if="viewingProposal && viewingProposal.clientPhoneNumber && (viewingProposal.status === 'Created' || viewingProposal.status === 'Sent' || viewingProposal.status === 'Read')"
@@ -357,7 +357,7 @@
                   :disabled="isSendingSms"
                   @click="sendProposalSms"
                 >
-                  {{ viewingProposal.status === "Created" ? "Send SMS" : "Send ny SMS" }}
+                  {{ viewingProposal.status === "Created" ? $i('offers_sendSms') : $i('offers_sendNewSms') }}
                 </button>
                 <button
                   v-if="viewingProposal && viewingProposal.clientEmail && (viewingProposal.status === 'Created' || viewingProposal.status === 'Sent' || viewingProposal.status === 'Read')"
@@ -365,7 +365,7 @@
                   :disabled="isSendingEmail"
                   @click="sendProposalEmail"
                 >
-                  {{ viewingProposal.status === "Created" ? "Send E-post" : "Send ny E-post" }}
+                  {{ viewingProposal.status === "Created" ? $i('offers_sendEmail') : $i('offers_sendNewEmail') }}
                 </button>
               </div>
             </div>
@@ -379,22 +379,22 @@
           @close="closeDeleteProposalModal"
         >
           <div style="width: 500px; max-width: 90vw; margin: 0 auto; text-align: center">
-            <h1 style="margin-bottom: 1em">Bekreft sletting</h1>
+            <h1 style="margin-bottom: 1em">{{ $i('offers_confirmDeleteTitle') }}</h1>
             <p>
-              Er du sikker på at du vil slette avtalen for <strong>{{ proposalToDelete?.clientName }}</strong
-              >?
+              {{ $i('offers_confirmDeletePrefix') }} <strong>{{ proposalToDelete?.clientName }}</strong
+              >{{ $i('offers_confirmDeleteSuffix') }}
             </p>
             <div class="modal-buttons">
               <input
                 class="emoji-btn cancel-btn"
                 type="button"
-                value="Avbryt"
+                :value="$i('common_cancel')"
                 @click="closeDeleteProposalModal"
               />
               <input
                 class="emoji-btn action-button--reject"
                 type="button"
-                value="Slett"
+                :value="$i('common_delete')"
                 @click="confirmDeleteProposal"
               />
             </div>
@@ -408,22 +408,22 @@
           @close="closeCancelProposalModal"
         >
           <div style="width: 500px; max-width: 90vw; margin: 0 auto; text-align: center">
-            <h1 style="margin-bottom: 1em">Bekreft oppsigelse</h1>
+            <h1 style="margin-bottom: 1em">{{ $i('offers_confirmCancelTitle') }}</h1>
             <p>
-              Er du sikker på at du vil si opp avtalen for <strong>{{ proposalToCancel?.clientName }}</strong
-              >?
+              {{ $i('offers_confirmCancelPrefix') }} <strong>{{ proposalToCancel?.clientName }}</strong
+              >{{ $i('offers_confirmCancelSuffix') }}
             </p>
             <div class="modal-buttons">
               <input
                 class="emoji-btn cancel-btn"
                 type="button"
-                value="Avbryt"
+                :value="$i('common_cancel')"
                 @click="closeCancelProposalModal"
               />
               <input
                 class="emoji-btn action-button--cancel"
                 type="button"
-                value="Si opp"
+                :value="$i('offers_terminate')"
                 @click="confirmCancelProposal"
               />
             </div>
@@ -584,7 +584,7 @@ export default {
 
     async lookupCompanyInfo() {
       if (!this.currentProposal.companyVAT) {
-        alert("Skriv inn organisasjonsnummeret først, er du snill 😃");
+        alert(this.$i("offers_alertEnterOrgNumber"));
         return;
       }
 
@@ -654,7 +654,7 @@ export default {
 
     async saveProposal() {
       if (!this.isProposalValid) {
-        alert("🫨 Du er litt for kjapp! Fyll ut alle feltene og velg minst én vare eller tjeneste først.");
+        alert(this.$i("offers_alertFillAllFields"));
         return;
       }
 
@@ -753,18 +753,18 @@ export default {
             this.viewProposal(createdProposal);
           } else {
             console.error("Could not find the created proposal in the updated list");
-            alert("Avtalen ble opprettet, men kunne ikke vise detaljer. Oppdater siden for å se den nye avtalen.");
+            alert(this.$i("offers_alertCreatedNoDetails"));
           }
         } else {
           console.error("No proposal ID returned from save operation");
-          alert("Avtalen ble opprettet, men kunne ikke vise detaljer. Oppdater siden for å se den nye avtalen.");
+          alert(this.$i("offers_alertCreatedNoDetails"));
         }
       } catch (error) {
         console.error("Error saving proposal:", error);
         if (error?.response?.data) {
           alert(error?.response?.data);
         } else {
-          alert(error.message || "En ukjent feil oppstod ved lagring av avtalen");
+          alert(error.message || this.$i("offers_alertSaveError"));
         }
       } finally {
         this.isSubmitting = false;
@@ -774,19 +774,19 @@ export default {
     getStatusLabel(status) {
       switch (status) {
         case "Created":
-          return "Ikke sendt";
+          return this.$i("offers_statusCreated");
         case "Sent":
-          return "Sendt";
+          return this.$i("offers_statusSent");
         case "Read":
-          return "Lest";
+          return this.$i("offers_statusRead");
         case "Accepted":
-          return "Akseptert";
+          return this.$i("offers_statusAccepted");
         case "StoreRegistered":
-          return "Registrert";
+          return this.$i("offers_statusRegistered");
         case "Rejected":
-          return "Avvist";
+          return this.$i("offers_statusRejected");
         case "Cancelled":
-          return "Oppsagt";
+          return this.$i("offers_statusCancelled");
         default:
           return status;
       }
@@ -871,7 +871,7 @@ export default {
 
     sendProposalSms() {
       if (!this.viewingProposal || !this.viewingProposal.offerProposalId) {
-        alert("Kunne ikke sende SMS: Mangler avtale-ID");
+        alert(this.$i("offers_alertSmsMissingId"));
         return;
       }
 
@@ -890,7 +890,7 @@ export default {
         })
         .catch((error) => {
           console.error("Error sending SMS:", error);
-          alert("Kunne ikke sende SMS: " + (error.message || "Ukjent feil"));
+          alert(this.$i("offers_alertSmsError", { error: error.message || this.$i("offers_unknownError") }));
         })
         .finally(() => {
           this.isLoading = false;
@@ -899,7 +899,7 @@ export default {
     },
     sendProposalEmail() {
       if (!this.viewingProposal || !this.viewingProposal.offerProposalId) {
-        alert("Kunne ikke sende E-post: Mangler avtale-ID");
+        alert(this.$i("offers_alertEmailMissingId"));
         return;
       }
 
@@ -918,7 +918,7 @@ export default {
         })
         .catch((error) => {
           console.error("Error sending Email:", error);
-          alert("Kunne ikke sende E-post: " + (error.message || "Ukjent feil"));
+          alert(this.$i("offers_alertEmailError", { error: error.message || this.$i("offers_unknownError") }));
         })
         .finally(() => {
           this.isLoading = false;
@@ -949,7 +949,7 @@ export default {
                 this.viewProposal(foundProposal);
               } else {
                 console.error("Could not find proposal with code even after fetching all proposals");
-                alert("Kunne ikke hente avtaledetaljer - manglende kode");
+                alert(this.$i("offers_alertFetchDetailsNoCode"));
               }
             })
             .catch((error) => {
@@ -974,7 +974,7 @@ export default {
         })
         .catch((error) => {
           console.error("Error fetching proposal details:", error);
-          alert("Kunne ikke hente avtaledetaljer");
+          alert(this.$i("offers_alertFetchDetailsError"));
         })
         .finally(() => {
           this.isLoading = false;
@@ -1005,7 +1005,7 @@ export default {
         this.closeDeleteProposalModal();
       } catch (error) {
         console.error("Error rejecting proposal:", error);
-        alert("Kunne ikke slette avtalen. Vennligst prøv igjen senere.");
+        alert(this.$i("offers_alertDeleteError"));
       } finally {
         this.isLoading = false;
       }
@@ -1030,7 +1030,7 @@ export default {
         this.closeCancelProposalModal();
       } catch (error) {
         console.error("Error canceling proposal:", error);
-        alert("Kunne ikke si opp avtalen. Vennligst prøv igjen senere.");
+        alert(this.$i("offers_alertCancelError"));
       } finally {
         this.isLoading = false;
       }

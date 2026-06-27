@@ -4,40 +4,40 @@
       <div class="growth-shell">
         <header class="growth-header">
           <div>
-            <h1>Okam vekst</h1>
+            <h1>{{ $i('poweruserGrowth_title') }}</h1>
             <p class="period">
-              Fullførte bestillinger fra {{ formatShortDate(reportRange.from) }} til {{ formatShortDate(reportRange.to) }}
+              {{ $i('poweruserGrowth_periodLabel', { from: formatShortDate(reportRange.from), to: formatShortDate(reportRange.to) }) }}
             </p>
           </div>
-          <div class="metric-toggle" role="tablist" aria-label="Velg metrikk">
+          <div class="metric-toggle" role="tablist" :aria-label="$i('poweruserGrowth_selectMetric')">
             <button
               type="button"
               :class="{ active: selectedMetric === 'orders' }"
               @click="setMetric('orders')"
             >
-              Bestillinger
+              {{ $i('poweruserGrowth_orders') }}
             </button>
             <button
               type="button"
               :class="{ active: selectedMetric === 'revenue' }"
               @click="setMetric('revenue')"
             >
-              Kroner
+              {{ $i('poweruserGrowth_kroner') }}
             </button>
           </div>
         </header>
 
         <section class="hero-stats" v-if="growthData">
           <div class="hero-stat">
-            <span>Bestillinger</span>
+            <span>{{ $i('poweruserGrowth_orders') }}</span>
             <strong>{{ formatNumber(latestOrderCount) }}</strong>
           </div>
           <div class="hero-stat">
-            <span>Omsetning</span>
+            <span>{{ $i('poweruserGrowth_revenue') }}</span>
             <strong>{{ formatCurrency(latestRevenueAmount) }}</strong>
           </div>
           <div class="hero-stat">
-            <span>Siste måned</span>
+            <span>{{ $i('poweruserGrowth_lastMonth') }}</span>
             <strong>{{ formatMonth(latestPointDate) }}</strong>
           </div>
         </section>
@@ -47,14 +47,14 @@
         </div>
 
         <div v-else-if="errorMessage" class="empty-state">
-          <h2>Kunne ikke hente vekstdata</h2>
+          <h2>{{ $i('poweruserGrowth_loadError') }}</h2>
           <p>{{ errorMessage }}</p>
         </div>
 
         <section v-else-if="growthData" ref="chartPanel" class="chart-panel">
           <div class="chart-zoom-controls">
-            <span>{{ isZoomed ? zoomRangeLabel : "Dra i grafen for å zoome" }}</span>
-            <button v-if="isZoomed" type="button" @click="resetZoom">Vis alt</button>
+            <span>{{ isZoomed ? zoomRangeLabel : $i('poweruserGrowth_dragToZoom') }}</span>
+            <button v-if="isZoomed" type="button" @click="resetZoom">{{ $i('poweruserGrowth_showAll') }}</button>
           </div>
           <div class="chart-legend">
             <button
@@ -64,7 +64,7 @@
               :aria-pressed="visibleAnnotationTypes.store.toString()"
               @click="toggleAnnotationType('store')"
             >
-              <i class="legend-dot legend-dot--store"></i>Nye butikker
+              <i class="legend-dot legend-dot--store"></i>{{ $i('poweruserGrowth_newStores') }}
             </button>
             <button
               type="button"
@@ -73,7 +73,7 @@
               :aria-pressed="visibleAnnotationTypes.feature.toString()"
               @click="toggleAnnotationType('feature')"
             >
-              <i class="legend-dot legend-dot--milestone"></i>Nye features
+              <i class="legend-dot legend-dot--milestone"></i>{{ $i('poweruserGrowth_newFeatures') }}
             </button>
           </div>
           <canvas ref="growthCanvas"></canvas>
@@ -89,12 +89,12 @@
           >
             <strong>{{ activeAnnotationItem.title }}</strong>
             <span>{{ activeAnnotationItem.dateLabel }}</span>
-            <small>{{ activeAnnotationItem.type === "store" ? "Butikker som startet" : "Hendelser" }}</small>
+            <small>{{ activeAnnotationItem.type === "store" ? $i('poweruserGrowth_storesStarted') : $i('poweruserGrowth_events') }}</small>
             <ul>
               <li v-for="line in activeAnnotationLines" :key="line">{{ line }}</li>
             </ul>
             <div v-if="activeAnnotationMonthStats" class="annotation-month-stats">
-              <small>Månedspunkt på kurven</small>
+              <small>{{ $i('poweruserGrowth_monthPointOnCurve') }}</small>
               <div>
                 <span>{{ activeAnnotationMonthStats.monthLabel }}</span>
                 <strong>{{ activeAnnotationMonthStats.monthValue }}</strong>
@@ -246,7 +246,7 @@ export default {
       if (!this.activeAnnotationItem) return [];
       const visibleLines = this.activeAnnotationItem.lines.slice(0, 7);
       const overflowCount = this.activeAnnotationItem.lines.length - visibleLines.length;
-      return overflowCount > 0 ? [...visibleLines, `+ ${overflowCount} til`] : visibleLines;
+      return overflowCount > 0 ? [...visibleLines, this.$i('poweruserGrowth_moreItems', { count: overflowCount })] : visibleLines;
     },
     activeAnnotationMonthStats() {
       if (!this.activeAnnotationItem) return null;
@@ -266,9 +266,9 @@ export default {
         : this.getPointValue(point, "cumulativeOrderCount");
 
       return {
-        monthLabel: isRevenue ? "Omsetning denne måneden" : "Bestillinger denne måneden",
+        monthLabel: isRevenue ? this.$i('poweruserGrowth_revenueThisMonth') : this.$i('poweruserGrowth_ordersThisMonth'),
         monthValue: isRevenue ? this.formatCurrency(monthValue) : this.formatNumber(monthValue),
-        totalLabel: isRevenue ? "Omsetning totalt til da" : "Bestillinger totalt til da",
+        totalLabel: isRevenue ? this.$i('poweruserGrowth_revenueTotalSoFar') : this.$i('poweruserGrowth_ordersTotalSoFar'),
         totalValue: isRevenue ? this.formatCurrency(totalValue) : this.formatNumber(totalValue),
       };
     },
@@ -363,8 +363,8 @@ export default {
       return Object.values(grouped).map((item) => ({
         ...item,
         title: item.type === "store"
-          ? (item.lines.length === 1 ? "Ny butikk" : `${item.lines.length} nye butikker`)
-          : (item.lines.length === 1 ? "Ny feature" : `${item.lines.length} nye features`),
+          ? (item.lines.length === 1 ? this.$i('poweruserGrowth_newStore') : this.$i('poweruserGrowth_newStoresCount', { count: item.lines.length }))
+          : (item.lines.length === 1 ? this.$i('poweruserGrowth_newFeature') : this.$i('poweruserGrowth_newFeaturesCount', { count: item.lines.length })),
       }));
     },
     async loadData() {
@@ -374,7 +374,7 @@ export default {
         this.growthData = await this._statisticsService.GetPlatformGrowth();
         this.$nextTick(() => this.renderChart());
       } catch (error) {
-        this.errorMessage = error?.message || "Ukjent feil";
+        this.errorMessage = error?.message || this.$i('poweruserGrowth_unknownError');
       } finally {
         this.isLoading = false;
       }
@@ -443,7 +443,7 @@ export default {
           labels: this.labels,
           datasets: [
             {
-              label: this.selectedMetric === "revenue" ? "Kroner" : "Bestillinger",
+              label: this.selectedMetric === "revenue" ? this.$i('poweruserGrowth_kroner') : this.$i('poweruserGrowth_orders'),
               data: this.chartValues,
               borderColor: "#102a43",
               backgroundColor: "rgba(16, 42, 67, 0.08)",
@@ -717,13 +717,13 @@ export default {
 
                 if (component.selectedMetric === "revenue") {
                   return [
-                    `Totalt: ${component.formatCurrency(value * 100)}`,
-                    `Måned: ${component.formatCurrency(monthValue)}`,
+                    component.$i('poweruserGrowth_tooltipTotal', { value: component.formatCurrency(value * 100) }),
+                    component.$i('poweruserGrowth_tooltipMonth', { value: component.formatCurrency(monthValue) }),
                   ];
                 }
                 return [
-                  `Totalt: ${component.formatNumber(value)} bestillinger`,
-                  `Måned: ${component.formatNumber(monthValue)} bestillinger`,
+                  component.$i('poweruserGrowth_tooltipTotalOrders', { value: component.formatNumber(value) }),
+                  component.$i('poweruserGrowth_tooltipMonthOrders', { value: component.formatNumber(monthValue) }),
                 ];
               },
             },
@@ -777,7 +777,7 @@ export default {
               padding: 10,
               callback(value) {
                 if (component.selectedMetric === "revenue") {
-                  return `${component.formatCompactNumber(value)} kr`;
+                  return component.$i('poweruserGrowth_axisKr', { value: component.formatCompactNumber(value) });
                 }
                 return component.formatCompactNumber(value);
               },
@@ -792,7 +792,7 @@ export default {
         return;
       }
       this.chart.data.labels = this.labels;
-      this.chart.data.datasets[0].label = this.selectedMetric === "revenue" ? "Kroner" : "Bestillinger";
+      this.chart.data.datasets[0].label = this.selectedMetric === "revenue" ? this.$i('poweruserGrowth_kroner') : this.$i('poweruserGrowth_orders');
       this.chart.data.datasets[0].data = this.chartValues;
       this.chart.options = this.buildChartOptions();
       this.chart.update();

@@ -7,7 +7,7 @@
             <div class="date-selection">
               <div class="date-picker-wrapper">
                 <div class="date-input">
-                  <label>Fra dato:</label>
+                  <label>{{ $i('overview_fromDate') }}</label>
                   <input
                     v-model="dateRange.from"
                     type="date"
@@ -16,7 +16,7 @@
                   />
                 </div>
                 <div class="date-input">
-                  <label>Til dato:</label>
+                  <label>{{ $i('overview_toDate') }}</label>
                   <input
                     v-model="dateRange.to"
                     type="date"
@@ -29,13 +29,13 @@
                     class="date-button"
                     @click="setToday"
                   >
-                    I dag
+                    {{ $i('overview_today') }}
                   </button>
                   <button
                     class="date-button"
                     @click="setThisMonth"
                   >
-                    Denne måneden
+                    {{ $i('overview_thisMonth') }}
                   </button>
                   <div class="loading-container">
                     <Loading
@@ -49,13 +49,13 @@
             </div>
           </div>
           <div class="overview__filter overview__filter--search">
-            <label for="store-name-filter">Butikkfilter:</label>
+            <label for="store-name-filter">{{ $i('overview_storeFilter') }}</label>
             <input
               id="store-name-filter"
               v-model="storeNameFilter"
               type="text"
               class="overview__search-input"
-              placeholder="Søk etter butikk"
+              :placeholder="$i('overview_searchStorePlaceholder')"
             />
           </div>
         </div>
@@ -80,7 +80,7 @@
                   class="sortable-header"
                   @click="sortBy('name')"
                 >
-                  Butikknavn
+                  {{ $i('overview_storeName') }}
                   <span
                     v-if="sortKey === 'name'"
                     class="sort-icon"
@@ -92,7 +92,7 @@
                   class="sortable-header"
                   @click="sortBy('orderCount')"
                 >
-                  Bestillinger
+                  {{ $i('overview_orders') }}
                   <span
                     v-if="sortKey === 'orderCount'"
                     class="sort-icon"
@@ -104,7 +104,7 @@
                   class="sortable-header"
                   @click="sortBy('totalAmount')"
                 >
-                  Total beløp
+                  {{ $i('overview_totalAmount') }}
                   <span
                     v-if="sortKey === 'totalAmount'"
                     class="sort-icon"
@@ -117,7 +117,7 @@
                   class="sortable-header"
                   @click="sortBy('approved')"
                 >
-                  Status
+                  {{ $i('common_status') }}
                   <span
                     v-if="sortKey === 'approved'"
                     class="sort-icon"
@@ -169,7 +169,7 @@
                             :checked="tempSelectedKamFilters.length === 0 || tempSelectedKamFilters.includes('')"
                             @change="toggleKamFilter('')"
                           />
-                          <span>Ingen</span>
+                          <span>{{ $i('overview_none') }}</span>
                         </label>
                         <label
                           v-for="kam in kams"
@@ -192,7 +192,7 @@
                   class="sortable-header"
                   @click="sortBy('kamStatus')"
                 >
-                  KAM Status
+                  {{ $i('overview_kamStatus') }}
                   <span
                     v-if="sortKey === 'kamStatus'"
                     class="sort-icon"
@@ -233,14 +233,14 @@
                       />
                     </svg>
                     <div class="status-info-tooltip">
-                      <h4>KAM Status forklaringer:</h4>
+                      <h4>{{ $i('overview_kamStatusExplanationsTitle') }}</h4>
                       <ul>
-                        <li><strong>Mangler oppsett:</strong> Meny, bilder eller andre detaljer mangler</li>
-                        <li><strong>Klar for demo:</strong> Butikken er klar til å bli demonstrert</li>
-                        <li><strong>Venter på kundesvar:</strong> Vi venter på tilbakemelding fra kunden</li>
-                        <li><strong>Krever oppfølging:</strong> Kunden venter på oss eller bør følges opp</li>
-                        <li><strong>I drift:</strong> Butikken er i gang og bruker Okam</li>
-                        <li><strong>Slettet:</strong> Butikken er ikke i bruk</li>
+                        <li><strong>{{ $i('overview_kamStatusMissingSetup') }}:</strong> {{ $i('overview_kamStatusMissingSetupDesc') }}</li>
+                        <li><strong>{{ $i('overview_kamStatusReadyForDemo') }}:</strong> {{ $i('overview_kamStatusReadyForDemoDesc') }}</li>
+                        <li><strong>{{ $i('overview_kamStatusWaitingForCustomerResponse') }}:</strong> {{ $i('overview_kamStatusWaitingForCustomerResponseDesc') }}</li>
+                        <li><strong>{{ $i('overview_kamStatusRequiresFollowUp') }}:</strong> {{ $i('overview_kamStatusRequiresFollowUpDesc') }}</li>
+                        <li><strong>{{ $i('overview_kamStatusInOperation') }}:</strong> {{ $i('overview_kamStatusInOperationDesc') }}</li>
+                        <li><strong>{{ $i('overview_kamStatusDeleted') }}:</strong> {{ $i('overview_kamStatusDeletedDesc') }}</li>
                       </ul>
                     </div>
                   </span>
@@ -285,8 +285,8 @@
                     </div>
                   </span>
                 </th>
-                <th v-if="showKAMColumns">KAM Notater</th>
-                <th class="sortable-header">Admin</th>
+                <th v-if="showKAMColumns">{{ $i('overview_kamNotes') }}</th>
+                <th class="sortable-header">{{ $i('overview_admin') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -320,7 +320,7 @@
                       v-if="publishingStoreIds.includes(store.storeId)"
                       class="status-spinner"
                     />
-                    <span v-else>{{ store.approved ? "Publisert" : "Ikke publisert" }}</span>
+                    <span v-else>{{ store.approved ? $i('overview_published') : $i('overview_notPublished') }}</span>
                   </span>
                 </td>
                 <td v-if="showKAMColumns">
@@ -329,7 +329,7 @@
                     class="kam-input"
                     @change="debouncedKeyAccountManagerUpdate(store)"
                   >
-                    <option value="">Ingen</option>
+                    <option value="">{{ $i('overview_none') }}</option>
                     <option
                       v-for="kam in kams"
                       :key="kam.id"
@@ -358,7 +358,7 @@
                   <textarea
                     v-model="store.kamNotes"
                     class="kam-textarea"
-                    placeholder="Notater"
+                    :placeholder="$i('overview_notesPlaceholder')"
                     @input="debouncedKeyAccountManagerUpdate(store)"
                   />
                 </td>
@@ -367,7 +367,7 @@
                     <span>{{ store.firstAdmin }}</span>
                     <button
                       class="manage-employees-btn"
-                      title="Administrer ansatte"
+                      :title="$i('overview_manageEmployees')"
                       @click="openEmployeeModal(store)"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -376,7 +376,7 @@
                         <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
                         <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                       </svg>
-                      {{ store.adminCount != null ? `${store.adminCount} ansatte` : "Ansatte" }}
+                      {{ store.adminCount != null ? $i('overview_employeeCount', { count: store.adminCount }) : $i('overview_employees') }}
                     </button>
                   </div>
                 </td>
@@ -386,12 +386,12 @@
                   :colspan="showKAMColumns ? 9 : 5"
                   class="overview__empty"
                 >
-                  Ingen butikker funnet
+                  {{ $i('overview_noStoresFound') }}
                 </td>
               </tr>
               <tr v-if="sortedStores.length > 0">
                 <td />
-                <td style="font-weight: bold">Sum:</td>
+                <td style="font-weight: bold">{{ $i('overview_sum') }}</td>
                 <td style="font-weight: bold">
                   {{ totalOrderCount }}
                 </td>
@@ -445,14 +445,6 @@ export default {
     tempSelectedKamFilters: [],
     showKamFilterDropdown: false,
     publishingStoreIds: [],
-    kamStatusTranslations: {
-      [KeyAccountManagerStatus.MissingSetup]: "Mangler oppsett",
-      [KeyAccountManagerStatus.ReadyForDemo]: "Klar for demo",
-      [KeyAccountManagerStatus.WaitingForCustomerResponse]: "Venter på kundesvar",
-      [KeyAccountManagerStatus.RequiresFollowUp]: "Krever oppfølging",
-      [KeyAccountManagerStatus.InOperation]: "I drift",
-      [KeyAccountManagerStatus.Deleted]: "Slettet",
-    },
     selectedKamStatusFilters: [],
     tempSelectedKamStatusFilters: [],
     showKamStatusFilterDropdown: false,
@@ -463,6 +455,16 @@ export default {
   }),
 
   computed: {
+    kamStatusTranslations() {
+      return {
+        [KeyAccountManagerStatus.MissingSetup]: this.$i("overview_kamStatusMissingSetup"),
+        [KeyAccountManagerStatus.ReadyForDemo]: this.$i("overview_kamStatusReadyForDemo"),
+        [KeyAccountManagerStatus.WaitingForCustomerResponse]: this.$i("overview_kamStatusWaitingForCustomerResponse"),
+        [KeyAccountManagerStatus.RequiresFollowUp]: this.$i("overview_kamStatusRequiresFollowUp"),
+        [KeyAccountManagerStatus.InOperation]: this.$i("overview_kamStatusInOperation"),
+        [KeyAccountManagerStatus.Deleted]: this.$i("overview_kamStatusDeleted"),
+      };
+    },
     sortedStores() {
       const sortKey = this.sortKey;
       const order = this.sortOrder === "asc" ? 1 : -1;
@@ -655,7 +657,7 @@ export default {
     publishStore(store) {
       // Only ask for confirmation when unpublishing
       if (store.approved) {
-        if (!confirm("Er du sikker på at du vil ta " + store.name + " offline?")) {
+        if (!confirm(this.$i("overview_confirmUnpublish", { name: store.name }))) {
           return; // User cancelled the action
         }
       }
@@ -677,7 +679,7 @@ export default {
         })
         .catch((error) => {
           console.error("Error publishing store:", error);
-          alert("Det oppstod en feil ved publisering av butikken.");
+          alert(this.$i("overview_publishError"));
           // Clear the publishing store ID to hide spinner
           this.publishingStoreIds = this.publishingStoreIds.filter((id) => id !== store.storeId);
         });

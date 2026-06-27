@@ -24,13 +24,13 @@
             <div class="connection-status__header">
               <h2 class="connection-status__title">
                 <template v-if="!hasWoltIntegration">
-                  Wolt-integrasjon ikke koblet til
+                  {{ $i('wolt_integrationNotConnected') }}
                 </template>
                 <template v-else-if="woltEnabled">
-                  Wolt-integrasjon aktivert
+                  {{ $i('wolt_integrationEnabled') }}
                 </template>
                 <template v-else>
-                  Wolt-integrasjon deaktivert
+                  {{ $i('wolt_integrationDisabled') }}
                 </template>
               </h2>
               <span
@@ -40,13 +40,13 @@
                 ]"
               >
                 <template v-if="!hasWoltIntegration">
-                  Ikke tilkoblet
+                  {{ $i('wolt_badgeNotConnected') }}
                 </template>
                 <template v-else-if="woltEnabled">
-                  Aktiv
+                  {{ $i('wolt_badgeActive') }}
                 </template>
                 <template v-else>
-                  Inaktiv
+                  {{ $i('wolt_badgeInactive') }}
                 </template>
               </span>
             </div>
@@ -54,15 +54,13 @@
               v-if="!hasWoltIntegration"
               class="connection-status__description"
             >
-              Send en mail til <a href="mailto:hei@okam.no">hei@okam.no</a> så kan vi koble Wolt til Okam,
-              slik at du ikke lenger trenger dedikert Wolt-tablet og printer.
-              Alle bestillinger kommer rett inn i Okam Admin.
+              {{ $i('wolt_notConnectedDescriptionBefore') }} <a href="mailto:hei@okam.no">hei@okam.no</a> {{ $i('wolt_notConnectedDescriptionAfter') }}
             </p>
             <p
               v-else-if="!woltEnabled"
               class="connection-status__description connection-status__description--warning"
             >
-              Integrasjonen er koblet til, men deaktivert. Aktiver "Motta Wolt bestillinger" for å begynne å motta bestillinger.
+              {{ $i('wolt_disabledWarning') }}
             </p>
           </div>
         </div>
@@ -75,9 +73,9 @@
           <!-- Enable/Disable Wolt Integration Toggle -->
           <div class="wolt-setting-item">
             <div class="wolt-setting-item__content">
-              <label class="wolt-setting-item__label">Motta Wolt bestillinger</label>
+              <label class="wolt-setting-item__label">{{ $i('wolt_receiveOrders') }}</label>
               <p class="wolt-setting-item__description">
-                Aktiver eller deaktiver mottak av bestillinger fra Wolt
+                {{ $i('wolt_receiveOrdersDescription') }}
               </p>
             </div>
             <label class="status-toggle">
@@ -97,9 +95,9 @@
             class="wolt-setting-item"
           >
             <div class="wolt-setting-item__content">
-              <label class="wolt-setting-item__label">Wolt Meny</label>
+              <label class="wolt-setting-item__label">{{ $i('wolt_menuLabel') }}</label>
               <p class="wolt-setting-item__description">
-                Rediger menyen din i Wolt Merchant Portal
+                {{ $i('wolt_menuDescription') }}
               </p>
             </div>
             <button
@@ -119,7 +117,7 @@
                 <polyline points="15 3 21 3 21 9" />
                 <line x1="10" y1="14" x2="21" y2="3" />
               </svg>
-              Rediger meny
+              {{ $i('wolt_editMenu') }}
             </button>
           </div>
         </div>
@@ -133,16 +131,16 @@
           <div class="wolt-setting-item wolt-setting-item--prominent">
             <div class="wolt-setting-item__content">
               <div class="wolt-setting-item__header">
-                <label class="wolt-setting-item__label">Wolt-butikk status</label>
+                <label class="wolt-setting-item__label">{{ $i('wolt_venueStatusLabel') }}</label>
                 <span
                   :class="['inline-status-badge', venueStatus.online ? 'inline-status-badge--online' : 'inline-status-badge--offline']"
                 >
                   <span class="inline-status-badge__dot" />
-                  {{ venueStatus.online ? 'Åpen' : 'Stengt' }}
+                  {{ venueStatus.online ? $i('wolt_open') : $i('wolt_closed') }}
                 </span>
               </div>
               <p class="wolt-setting-item__description">
-                {{ venueStatus.online ? 'Butikken din er nå åpen og mottar bestillinger på Wolt' : 'Butikken din er stengt på Wolt og mottar ikke bestillinger' }}
+                {{ venueStatus.online ? $i('wolt_venueOnlineDescription') : $i('wolt_venueOfflineDescription') }}
               </p>
             </div>
             <label class="status-toggle">
@@ -159,9 +157,9 @@
           <!-- Opening Hours Button -->
           <div class="wolt-setting-item">
             <div class="wolt-setting-item__content">
-              <label class="wolt-setting-item__label">Åpningstider</label>
+              <label class="wolt-setting-item__label">{{ $i('wolt_openingHours') }}</label>
               <p class="wolt-setting-item__description">
-                Se og rediger åpningstidene dine i Wolt
+                {{ $i('wolt_openingHoursDescription') }}
               </p>
             </div>
             <button
@@ -180,7 +178,7 @@
                 <circle cx="12" cy="12" r="10" />
                 <polyline points="12 6 12 12 16 14" />
               </svg>
-              Se åpningstider
+              {{ $i('wolt_viewOpeningHours') }}
             </button>
           </div>
 
@@ -190,9 +188,9 @@
             class="wolt-setting-item wolt-setting-item--info"
           >
             <div class="wolt-setting-item__content">
-              <label class="wolt-setting-item__label">Leverandør</label>
+              <label class="wolt-setting-item__label">{{ $i('wolt_provider') }}</label>
               <p class="wolt-setting-item__description">
-                {{ deliveryProvider.current_provider || 'Ingen partner valgt' }}
+                {{ deliveryProvider.current_provider || $i('wolt_noPartnerSelected') }}
               </p>
             </div>
             <svg
@@ -223,7 +221,7 @@
     >
       <div class="modal-content modal-content--large">
         <div class="modal-header">
-          <h2>Åpningstider i Wolt</h2>
+          <h2>{{ $i('wolt_openingHoursModalTitle') }}</h2>
           <button
             class="modal-close"
             @click="showOpeningHoursModal = false"
@@ -260,7 +258,7 @@
                   v-if="slot.closing_day !== slot.opening_day"
                   class="opening-hours-item__badge"
                 >
-                  til {{ formatDayName(slot.closing_day) }}
+                  {{ $i('wolt_untilDay', { day: formatDayName(slot.closing_day) }) }}
                 </span>
               </div>
             </div>
@@ -268,7 +266,7 @@
               v-else
               class="empty-state"
             >
-              <p>Ingen åpningstider satt</p>
+              <p>{{ $i('wolt_noOpeningHoursSet') }}</p>
             </div>
           </div>
 
@@ -288,7 +286,7 @@
                 <line x1="12" y1="16" x2="12" y2="12" />
                 <line x1="12" y1="8" x2="12.01" y2="8" />
               </svg>
-              <p>Legg til åpningstider for hvert tidsrom. Bruk formatet HH:mm (f.eks. 10:00)</p>
+              <p>{{ $i('wolt_editInfo') }}</p>
             </div>
 
             <div
@@ -298,21 +296,21 @@
             >
               <div class="opening-hours-edit-row">
                 <div class="form-field">
-                  <label>Åpningsdag</label>
+                  <label>{{ $i('wolt_openingDay') }}</label>
                   <div class="select-wrapper">
                     <select v-model="slot.opening_day">
-                      <option value="MONDAY">Mandag</option>
-                      <option value="TUESDAY">Tirsdag</option>
-                      <option value="WEDNESDAY">Onsdag</option>
-                      <option value="THURSDAY">Torsdag</option>
-                      <option value="FRIDAY">Fredag</option>
-                      <option value="SATURDAY">Lørdag</option>
-                      <option value="SUNDAY">Søndag</option>
+                      <option value="MONDAY">{{ $i('wolt_monday') }}</option>
+                      <option value="TUESDAY">{{ $i('wolt_tuesday') }}</option>
+                      <option value="WEDNESDAY">{{ $i('wolt_wednesday') }}</option>
+                      <option value="THURSDAY">{{ $i('wolt_thursday') }}</option>
+                      <option value="FRIDAY">{{ $i('wolt_friday') }}</option>
+                      <option value="SATURDAY">{{ $i('wolt_saturday') }}</option>
+                      <option value="SUNDAY">{{ $i('wolt_sunday') }}</option>
                     </select>
                   </div>
                 </div>
                 <div class="form-field">
-                  <label>Åpningstid</label>
+                  <label>{{ $i('wolt_openingTime') }}</label>
                   <input
                     v-model="slot.opening_time"
                     type="time"
@@ -320,21 +318,21 @@
                   >
                 </div>
                 <div class="form-field">
-                  <label>Lukkingsdag</label>
+                  <label>{{ $i('wolt_closingDay') }}</label>
                   <div class="select-wrapper">
                     <select v-model="slot.closing_day">
-                      <option value="MONDAY">Mandag</option>
-                      <option value="TUESDAY">Tirsdag</option>
-                      <option value="WEDNESDAY">Onsdag</option>
-                      <option value="THURSDAY">Torsdag</option>
-                      <option value="FRIDAY">Fredag</option>
-                      <option value="SATURDAY">Lørdag</option>
-                      <option value="SUNDAY">Søndag</option>
+                      <option value="MONDAY">{{ $i('wolt_monday') }}</option>
+                      <option value="TUESDAY">{{ $i('wolt_tuesday') }}</option>
+                      <option value="WEDNESDAY">{{ $i('wolt_wednesday') }}</option>
+                      <option value="THURSDAY">{{ $i('wolt_thursday') }}</option>
+                      <option value="FRIDAY">{{ $i('wolt_friday') }}</option>
+                      <option value="SATURDAY">{{ $i('wolt_saturday') }}</option>
+                      <option value="SUNDAY">{{ $i('wolt_sunday') }}</option>
                     </select>
                   </div>
                 </div>
                 <div class="form-field">
-                  <label>Lukkingstid</label>
+                  <label>{{ $i('wolt_closingTime') }}</label>
                   <input
                     v-model="slot.closing_time"
                     type="time"
@@ -377,7 +375,7 @@
                 <line x1="12" y1="5" x2="12" y2="19" />
                 <line x1="5" y1="12" x2="19" y2="12" />
               </svg>
-              Legg til tidsrom
+              {{ $i('wolt_addTimeSlot') }}
             </button>
           </div>
         </div>
@@ -387,29 +385,29 @@
             class="modal-button modal-button--secondary"
             @click="showOpeningHoursModal = false"
           >
-            Lukk
+            {{ $i('common_close') }}
           </button>
           <button
             v-if="!isEditingOpeningHours"
             class="modal-button modal-button--primary"
             @click="startEditingOpeningHours"
           >
-            Rediger åpningstider
+            {{ $i('wolt_editOpeningHours') }}
           </button>
           <template v-else>
             <button
               class="modal-button modal-button--secondary"
               @click="cancelEditingOpeningHours"
             >
-              Avbryt
+              {{ $i('common_cancel') }}
             </button>
             <button
               class="modal-button modal-button--primary"
               :disabled="isSavingOpeningHours"
               @click="saveOpeningHours"
             >
-              <span v-if="isSavingOpeningHours">Lagrer...</span>
-              <span v-else>Lagre åpningstider</span>
+              <span v-if="isSavingOpeningHours">{{ $i('common_saving') }}</span>
+              <span v-else>{{ $i('wolt_saveOpeningHours') }}</span>
             </button>
           </template>
         </div>
@@ -596,7 +594,7 @@ export default {
             console.log('Delivery provider:', data);
             // Map the API response structure to what the UI expects
             this.deliveryProvider = {
-              current_provider: data.delivery_provider || 'Ikke satt'
+              current_provider: data.delivery_provider || this.$i('wolt_notSet')
             };
           })
           .catch((error) => {
@@ -607,7 +605,7 @@ export default {
     },
     async toggleWoltEnabled(enabled) {
       if (!this.selectedStore || this.selectedStore <= 0) {
-        alert('Ingen butikk valgt');
+        alert(this.$i('wolt_noStoreSelected'));
         return;
       }
 
@@ -623,20 +621,20 @@ export default {
         });
 
         if (!result || !result.success) {
-          this.errorMessage = 'Kunne ikke lagre innstillinger';
+          this.errorMessage = this.$i('wolt_couldNotSaveSettings');
           // Revert on error
           this.woltEnabled = previousValue;
-          alert('Kunne ikke oppdatere Wolt-integrasjon');
+          alert(this.$i('wolt_couldNotUpdateIntegration'));
         } else {
           // Refresh store data to get updated configuration
           await this.fetchStoreData(this.selectedStore);
         }
       } catch (error) {
         console.error('Error toggling Wolt enabled:', error);
-        this.errorMessage = 'Kunne ikke lagre innstillinger';
+        this.errorMessage = this.$i('wolt_couldNotSaveSettings');
         // Revert on error
         this.woltEnabled = previousValue;
-        alert('Feil ved oppdatering av Wolt-integrasjon');
+        alert(this.$i('wolt_errorUpdatingIntegration'));
       }
     },
     openMerchantPortal() {
@@ -656,24 +654,24 @@ export default {
           this.venueStatus.online = online;
           this.$forceUpdate();
         } else {
-          alert('Kunne ikke oppdatere online status');
+          alert(this.$i('wolt_couldNotUpdateOnlineStatus'));
         }
       } catch (error) {
         console.error('Error toggling venue online status:', error);
-        alert('Feil ved oppdatering av online status');
+        alert(this.$i('wolt_errorUpdatingOnlineStatus'));
       }
     },
     formatDayName(day) {
-      const dayNames = {
-        MONDAY: 'Mandag',
-        TUESDAY: 'Tirsdag',
-        WEDNESDAY: 'Onsdag',
-        THURSDAY: 'Torsdag',
-        FRIDAY: 'Fredag',
-        SATURDAY: 'Lørdag',
-        SUNDAY: 'Søndag'
+      const dayKeys = {
+        MONDAY: 'wolt_monday',
+        TUESDAY: 'wolt_tuesday',
+        WEDNESDAY: 'wolt_wednesday',
+        THURSDAY: 'wolt_thursday',
+        FRIDAY: 'wolt_friday',
+        SATURDAY: 'wolt_saturday',
+        SUNDAY: 'wolt_sunday'
       };
-      return dayNames[day] || day;
+      return dayKeys[day] ? this.$i(dayKeys[day]) : day;
     },
     startEditingOpeningHours() {
       this.isEditingOpeningHours = true;
@@ -707,14 +705,14 @@ export default {
     },
     async saveOpeningHours() {
       if (!this.selectedStore) {
-        alert('Ingen butikk valgt');
+        alert(this.$i('wolt_noStoreSelected'));
         return;
       }
 
       // Validate that all slots have required fields
       for (const slot of this.editedOpeningTimes) {
         if (!slot.opening_day || !slot.opening_time || !slot.closing_day || !slot.closing_time) {
-          alert('Alle felt må fylles ut for hver åpningstid');
+          alert(this.$i('wolt_allFieldsRequired'));
           return;
         }
       }
@@ -735,11 +733,11 @@ export default {
           // Refresh venue status to show updated opening times
           await this.fetchVenueStatus(this.selectedStore);
         } else {
-          alert('Kunne ikke oppdatere åpningstider. Vennligst prøv igjen.');
+          alert(this.$i('wolt_couldNotUpdateOpeningHours'));
         }
       } catch (error) {
         console.error('Error saving opening hours:', error);
-        alert('Feil ved lagring av åpningstider: ' + (error.message || 'Ukjent feil'));
+        alert(this.$i('wolt_errorSavingOpeningHours', { error: error.message || this.$i('wolt_unknownError') }));
       } finally {
         this.isSavingOpeningHours = false;
       }

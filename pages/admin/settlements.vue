@@ -2,8 +2,8 @@
   <AdminPage>
     <div class="pending-settlements">
       <div class="page-header">
-        <h1>Utbetalinger</h1>
-        <p class="page-description">Rapporter og fremtidige utbetalinger</p>
+        <h1>{{ $i('settlements_pageTitle') }}</h1>
+        <p class="page-description">{{ $i('settlements_pageDescription') }}</p>
       </div>
 
       <!-- Store and Date Selection -->
@@ -11,7 +11,7 @@
 
         <div class="date-filters">
           <div class="date-input">
-            <label for="from-date">Fra dato:</label>
+            <label for="from-date">{{ $i('settlements_fromDate') }}</label>
             <input
               id="from-date"
               v-model="dateRange.from"
@@ -20,7 +20,7 @@
             />
           </div>
           <div class="date-input">
-            <label for="to-date">Til dato:</label>
+            <label for="to-date">{{ $i('settlements_toDate') }}</label>
             <input
               id="to-date"
               v-model="dateRange.to"
@@ -46,7 +46,7 @@
       >
         <div class="summary-cards">
           <div class="summary-card">
-            <h3>Totalt bestillinger</h3>
+            <h3>{{ $i('settlements_totalOrders') }}</h3>
             <div class="stat-value">
               {{ settlementData.totalDinteroOrders }}
             </div>
@@ -55,7 +55,7 @@
             </div>
           </div>
           <div class="summary-card settled">
-            <h3>Utbetalt</h3>
+            <h3>{{ $i('settlements_settled') }}</h3>
             <div class="stat-value">
               {{ settlementData.totalSettledOrders }}
             </div>
@@ -64,7 +64,7 @@
             </div>
           </div>
           <div class="summary-card pending">
-            <h3>Utestående</h3>
+            <h3>{{ $i('settlements_pending') }}</h3>
             <div class="stat-value">
               {{ settlementData.totalPendingOrders }}
             </div>
@@ -80,18 +80,18 @@
         v-if="settlementData && settlementData.pendingOrders && settlementData.pendingOrders.length > 0 && !isLoading"
         class="pending-orders-section"
       >
-        <h2>Utestående ordrer ({{ settlementData.totalPendingOrders }})</h2>
+        <h2>{{ $i('settlements_pendingOrdersTitle', { count: settlementData.totalPendingOrders }) }}</h2>
         <div class="table-container">
           <table class="orders-table">
             <thead>
               <tr>
-                <th>Ordre ID</th>
-                <th>Dato</th>
-                <th>Beløp</th>
-                <th>Betaling</th>
-                <th>Levering</th>
-                <th>Kunde</th>
-                <th>Telefon</th>
+                <th>{{ $i('settlements_orderId') }}</th>
+                <th>{{ $i('settlements_date') }}</th>
+                <th>{{ $i('settlements_amount') }}</th>
+                <th>{{ $i('settlements_payment') }}</th>
+                <th>{{ $i('settlements_delivery') }}</th>
+                <th>{{ $i('settlements_customer') }}</th>
+                <th>{{ $i('settlements_phone') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -122,7 +122,7 @@
         v-if="settlementData && settlementData.settlements && settlementData.settlements.length > 0 && !isLoading"
         class="settlements-section"
       >
-        <h2>Utbetalinger i perioden ({{ settlementData.settlements.length }})</h2>
+        <h2>{{ $i('settlements_settlementsInPeriodTitle', { count: settlementData.settlements.length }) }}</h2>
         <div class="settlements-grid">
           <div
             v-for="settlement in settlementData.settlements"
@@ -130,7 +130,7 @@
             class="settlement-card"
           >
             <div class="settlement-header">
-              <h3>Utbetaling</h3>
+              <h3>{{ $i('settlements_settlement') }}</h3>
               <div class="settlement-date">
                 {{ formatDate(settlement.settledAt) }}
               </div>
@@ -139,7 +139,7 @@
               <div class="settlement-amount">
                 {{ settlement.totalAmountFormatted }}
               </div>
-              <div class="settlement-count">{{ settlement.transactionCount }} transaksjoner</div>
+              <div class="settlement-count">{{ $i('settlements_transactionCount', { count: settlement.transactionCount }) }}</div>
               <div class="settlement-period">{{ formatDate(settlement.startAt) }} - {{ formatDate(settlement.endAt) }}</div>
              
               <button
@@ -148,8 +148,8 @@
                 :disabled="downloadingInvoiceId === settlement.invoiceId"
                 @click="downloadInvoice(settlement)"
               >
-                <span v-if="downloadingInvoiceId === settlement.invoiceId">Laster ned...</span>
-                <span v-else>Last ned rapport</span>
+                <span v-if="downloadingInvoiceId === settlement.invoiceId">{{ $i('settlements_downloading') }}</span>
+                <span v-else>{{ $i('settlements_downloadReport') }}</span>
               </button>
             </div>
           </div>
@@ -162,16 +162,16 @@
         class="empty-state"
       >
         <div class="empty-icon">📊</div>
-        <h3>Ingen bestillinger funnet</h3>
-        <p>Det er ingen bestillinger i den valgte perioden for denne butikken.</p>
+        <h3>{{ $i('settlements_noOrdersTitle') }}</h3>
+        <p>{{ $i('settlements_noOrdersDescription') }}</p>
       </div>
 
       <div
         v-if="!isLoading && !selectedStoreId"
         class="empty-state"
       >
-        <h3>Velg en butikk</h3>
-        <p>Velg en butikk og datoperiode for å se utestående utbetalinger.</p>
+        <h3>{{ $i('settlements_selectStoreTitle') }}</h3>
+        <p>{{ $i('settlements_selectStoreDescription') }}</p>
       </div>
     </div>
   </AdminPage>
@@ -357,7 +357,7 @@ export default {
         this.settlementData = await this._statisticsService.GetPendingSettlements(model);
       } catch (error) {
         console.error("Failed to load pending settlements:", error);
-        this.showNotification("Kunne ikke laste utestående utbetalinger", "error");
+        this.showNotification(this.$i("settlements_loadError"), "error");
       } finally {
         this.isLoading = false;
       }
@@ -423,7 +423,7 @@ export default {
         URL.revokeObjectURL(blobUrl);
       } catch (error) {
         console.error('Error downloading invoice:', error);
-        this.showNotification('Kunne ikke laste ned faktura', 'error');
+        this.showNotification(this.$i('settlements_downloadError'), 'error');
       } finally {
         this.downloadingInvoiceId = null;
       }

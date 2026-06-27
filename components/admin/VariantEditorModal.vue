@@ -3,7 +3,7 @@
     <div class="modal-container">
       <!-- Header -->
       <div class="modal-header">
-        <h2>{{ isEditing ? 'Rediger tilbehør' : 'Nytt tilbehør' }}</h2>
+        <h2>{{ isEditing ? $i('variantEditorModal_editTitle') : $i('variantEditorModal_newTitle') }}</h2>
         <button class="close-btn" @click="cancel" type="button">
           <span class="material-icons">close</span>
         </button>
@@ -13,13 +13,13 @@
       <div class="modal-body">
         <!-- Variant Name -->
         <div class="form-group" :class="{ 'has-error': errors.name }">
-          <label>Navn *</label>
+          <label>{{ $i('variantEditorModal_nameLabel') }}</label>
           <div class="autocomplete-wrapper">
             <input
               ref="nameInput"
               v-model="form.name"
               type="text"
-              placeholder="F.eks. Dressing, Ekstra ost"
+              :placeholder="$i('variantEditorModal_namePlaceholder')"
               class="form-input"
               autocomplete="off"
               @input="onNameInput"
@@ -54,16 +54,16 @@
           <label class="checkbox-label">
             <input v-model="form.multiselect" type="checkbox" />
             <span class="checkbox-text">
-              <strong>Flervalg</strong>
-              <small>Kunden kan velge flere alternativer</small>
+              <strong>{{ $i('variantEditorModal_multiselectTitle') }}</strong>
+              <small>{{ $i('variantEditorModal_multiselectDescription') }}</small>
             </span>
           </label>
 
           <label class="checkbox-label">
             <input v-model="form.required" type="checkbox" />
             <span class="checkbox-text">
-              <strong>Obligatorisk</strong>
-              <small>Kunden må velge minst ett alternativ</small>
+              <strong>{{ $i('variantEditorModal_requiredTitle') }}</strong>
+              <small>{{ $i('variantEditorModal_requiredDescription') }}</small>
             </span>
           </label>
         </div>
@@ -71,7 +71,7 @@
         <!-- Options Section -->
         <div class="options-section">
           <div class="options-header">
-            <label>Alternativer *</label>
+            <label>{{ $i('variantEditorModal_optionsLabel') }}</label>
             <span v-if="errors.options" class="error-message">{{ errors.options }}</span>
           </div>
 
@@ -91,7 +91,7 @@
               <input
                 v-model="option.name"
                 type="text"
-                placeholder="Navn på alternativ"
+                :placeholder="$i('variantEditorModal_optionNamePlaceholder')"
                 class="option-name-input"
                 @input="clearError('options')"
               />
@@ -113,7 +113,7 @@
                 type="button"
                 @click="removeOption(index)"
                 :disabled="form.options.length <= 1"
-                title="Fjern alternativ"
+                :title="$i('variantEditorModal_removeOptionTitle')"
               >
                 <span class="material-icons">close</span>
               </button>
@@ -122,7 +122,7 @@
 
           <button class="btn btn-add-option" type="button" @click="addOption">
             <span class="material-icons">add</span>
-            Legg til alternativ
+            {{ $i('variantEditorModal_addOption') }}
           </button>
         </div>
       </div>
@@ -130,7 +130,7 @@
       <!-- Footer -->
       <div class="modal-footer">
         <button class="btn btn-secondary" type="button" @click="cancel">
-          Avbryt
+          {{ $i('common_cancel') }}
         </button>
         <button
           class="btn btn-primary"
@@ -139,7 +139,7 @@
           :disabled="isSaving"
         >
           <Loading v-if="isSaving" :loading="true" :size="20" />
-          {{ isEditing ? 'Lagre endringer' : 'Opprett' }}
+          {{ isEditing ? $i('variantEditorModal_saveChanges') : $i('common_create') }}
         </button>
       </div>
     </div>
@@ -152,15 +152,15 @@ import Loading from '~/components/atoms/Loading.vue'
 
 let optionKeyCounter = 0
 
-const NAME_SUGGESTIONS = [
-  'Størrelse',
-  'Ekstra',
-  'Drikke',
-  'Tilbehør',
-  'Dressing',
-  'Saus',
-  'Valg av kjøtt',
-  'Menyvalg'
+const NAME_SUGGESTION_KEYS = [
+  'variantEditorModal_suggestionSize',
+  'variantEditorModal_suggestionExtra',
+  'variantEditorModal_suggestionDrink',
+  'variantEditorModal_suggestionSides',
+  'variantEditorModal_suggestionDressing',
+  'variantEditorModal_suggestionSauce',
+  'variantEditorModal_suggestionMeatChoice',
+  'variantEditorModal_suggestionMenuChoice'
 ]
 
 export default {
@@ -177,7 +177,6 @@ export default {
       isEditing: false,
       isSaving: false,
       resolve: null,
-      nameSuggestions: NAME_SUGGESTIONS,
       showSuggestions: false,
       highlightedIndex: -1,
       form: {
@@ -196,6 +195,10 @@ export default {
   },
 
   computed: {
+    nameSuggestions() {
+      return NAME_SUGGESTION_KEYS.map((key) => this.$i(key))
+    },
+
     filteredSuggestions() {
       const query = (this.form.name || '').trim().toLowerCase()
       if (!query) return this.nameSuggestions
@@ -439,14 +442,14 @@ export default {
 
       // Validate name
       if (!this.form.name || this.form.name.trim() === '') {
-        this.errors.name = 'Vennligst angi et navn'
+        this.errors.name = this.$i('variantEditorModal_errorNameRequired')
         isValid = false
       }
 
       // Validate options - at least one with a name
       const validOptions = this.form.options.filter(opt => opt.name && opt.name.trim())
       if (validOptions.length === 0) {
-        this.errors.options = 'Legg til minst ett alternativ med navn'
+        this.errors.options = this.$i('variantEditorModal_errorOptionsRequired')
         isValid = false
       }
 
@@ -507,7 +510,7 @@ export default {
     cancel() {
       // Check for unsaved changes
       if (this.hasChanges) {
-        if (!confirm('Du har ulagrede endringer. Er du sikker på at du vil lukke?')) {
+        if (!confirm(this.$i('variantEditorModal_unsavedChangesConfirm'))) {
           return
         }
       }

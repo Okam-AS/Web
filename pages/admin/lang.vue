@@ -7,14 +7,14 @@
         <input
           class="emoji-btn add-new"
           type="button"
-          value="➕ Ny rad"
+          :value="$i('lang_newRow')"
           @click="addRow"
         >
       </div>
       <table>
         <tbody>
           <tr>
-            <th>Nøkkel</th>
+            <th>{{ $i('lang_key') }}</th>
             <th v-for="lang in langs" :key="lang.code">
               {{ lang.nativeName }}
             </th>
@@ -28,13 +28,13 @@
               <input
                 class="emoji-btn"
                 type="button"
-                value="✍🏻 Rediger"
+                :value="$i('lang_edit')"
                 @click="editRow(key)"
               >
               <input
                 class="emoji-btn"
                 type="button"
-                value="🗑 Slett"
+                :value="$i('lang_delete')"
                 @click="deleteRow(key)"
               >
             </td>
@@ -50,12 +50,12 @@
       />
       <Modal v-if="showCantDeleteInfo" :hide-close-btn="true">
         <template>
-          <p>Alle feltene må være tomme for å slette raden</p>
+          <p>{{ $i('lang_cantDeleteInfo') }}</p>
           <div class="modal-buttons">
             <input
               class="emoji-btn"
               type="button"
-              value="Avbryt"
+              :value="$i('common_cancel')"
               @click="showCantDeleteInfo = false"
             >
           </div>

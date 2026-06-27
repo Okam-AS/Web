@@ -2,7 +2,7 @@
   <div class="ai-query-box">
     <div class="query-header">
       <span class="material-icons">chat</span>
-      <h4>Spør Okam AI om statistikken</h4>
+      <h4>{{ $i('aIQueryBox_title') }}</h4>
     </div>
 
     <div class="query-input-wrapper">
@@ -10,7 +10,7 @@
         v-model="query"
         type="text"
         class="query-input"
-        placeholder="F.eks: 'Hvor mye tjente vi i går?', 'Når er vi mest travel?'"
+        :placeholder="$i('aIQueryBox_inputPlaceholder')"
         @keyup.enter="submitQuery"
         :disabled="isLoading"
       />
@@ -26,7 +26,7 @@
 
     <!-- Example queries -->
     <div v-if="!hasAskedQuery" class="example-queries">
-      <span class="example-label">Eksempler:</span>
+      <span class="example-label">{{ $i('aIQueryBox_examplesLabel') }}</span>
       <button
         v-for="(example, index) in exampleQueries"
         :key="index"
@@ -42,9 +42,9 @@
       <div class="response-header">
         <div class="response-header-left">
           <span class="material-icons">smart_toy</span>
-          <span class="response-label">AI-svar:</span>
+          <span class="response-label">{{ $i('aIQueryBox_responseLabel') }}</span>
         </div>
-        <button class="close-btn" @click="clearResponse" title="Lukk">
+        <button class="close-btn" @click="clearResponse" :title="$i('common_close')">
           <span class="material-icons">close</span>
         </button>
       </div>
@@ -77,12 +77,16 @@ export default {
       error: null,
       isLoading: false,
       hasAskedQuery: false,
-      exampleQueries: [
-        'Hvor mye tjente vi 17. mai i fjor?',
-        'Hvilken kategori selger best?',
-        'Hva er gjennomsnittlig ordrestørrelse per leveringstype?',
-      ],
     };
+  },
+  computed: {
+    exampleQueries() {
+      return [
+        this.$i('aIQueryBox_example1'),
+        this.$i('aIQueryBox_example2'),
+        this.$i('aIQueryBox_example3'),
+      ];
+    },
   },
   methods: {
     async submitQuery() {
@@ -104,11 +108,11 @@ export default {
         if (result && result.answer) {
           this.response = result.answer;
         } else {
-          this.error = 'Kunne ikke få svar fra AI';
+          this.error = this.$i('aIQueryBox_noAnswerError');
         }
       } catch (err) {
         console.error('AI query error:', err);
-        this.error = 'Det oppstod en feil ved spørring til AI';
+        this.error = this.$i('aIQueryBox_genericError');
       } finally {
         this.isLoading = false;
       }

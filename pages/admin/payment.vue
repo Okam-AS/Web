@@ -2,8 +2,8 @@
   <AdminPage>
     <div class="payment-page">
       <div class="page-header">
-        <h1>Betaling</h1>
-        <p class="page-description">Konfigurer betalingsmetoder og utbetalingsinnstillinger</p>
+        <h1>{{ $i('payment_title') }}</h1>
+        <p class="page-description">{{ $i('payment_description') }}</p>
       </div>
 
       <div v-if="isLoading" class="loading-section">
@@ -14,13 +14,13 @@
         <!-- Section: Pay in Store -->
         <div class="form-section">
           <div class="section-header">
-            <h2 class="section-title">Betal i butikk</h2>
+            <h2 class="section-title">{{ $i('payment_payInStore') }}</h2>
             <label class="toggle-switch">
               <input v-model="paymentForm.payInStoreEnabled" type="checkbox" @change="markDirty" />
               <span class="toggle-slider" />
             </label>
           </div>
-          <p class="section-hint">Kunder kan betale kontant eller med terminal i butikken</p>
+          <p class="section-hint">{{ $i('payment_payInStoreHint') }}</p>
         </div>
 
         <!-- Section: Dintero -->
@@ -32,13 +32,13 @@
               <span class="toggle-slider" />
             </label>
           </div>
-          <p class="section-hint">Kortbetaling via Dintero</p>
+          <p class="section-hint">{{ $i('payment_dinteroHint') }}</p>
           <div v-if="paymentConfig.dinteroPrice" class="price-badge">{{ paymentConfig.dinteroPrice }}</div>
 
           <div v-if="paymentForm.dinteroEnabled" class="subsections">
             <div v-if="paymentConfig.dinteroBillieAvailable" class="subsection-row">
               <div class="subsection-info">
-                <span class="subsection-label">Billie (Kjøp nå, betal senere)</span>
+                <span class="subsection-label">{{ $i('payment_billieLabel') }}</span>
                 <span v-if="paymentConfig.dinteroBilliePrice" class="subsection-price">{{ paymentConfig.dinteroBilliePrice }}</span>
               </div>
               <label class="toggle-switch toggle-switch--sm">
@@ -73,35 +73,35 @@
 
         <!-- Section: Report Emails -->
         <div class="form-section">
-          <h2 class="section-title">Rapportering</h2>
-          <p class="section-hint">Motta betalingsrapporter på e-post</p>
+          <h2 class="section-title">{{ $i('payment_reporting') }}</h2>
+          <p class="section-hint">{{ $i('payment_reportingHint') }}</p>
           <div class="form-field" style="margin-top: 12px;">
-            <label>E-postadresse(r) for rapporter</label>
+            <label>{{ $i('payment_reportEmailsLabel') }}</label>
             <input
               v-model="paymentForm.sendInvoiceToEmails"
               type="text"
-              placeholder="epost@butikk.no, epost2@butikk.no"
+              :placeholder="$i('payment_reportEmailsPlaceholder')"
               class="text-input"
               @input="markDirty"
             />
-            <span class="field-hint">Separér flere adresser med komma</span>
+            <span class="field-hint">{{ $i('payment_reportEmailsHint') }}</span>
           </div>
         </div>
 
         <!-- Save Button -->
         <div class="save-bar">
           <button class="btn btn-primary" :disabled="isSaving || !isDirty" @click="savePayment">
-            <span v-if="isSaving">Lagrer...</span>
-            <span v-else>Lagre endringer</span>
+            <span v-if="isSaving">{{ $i('common_saving') }}</span>
+            <span v-else>{{ $i('payment_saveChanges') }}</span>
           </button>
-          <span v-if="saveStatus === 'saved'" class="save-confirmation">Lagret ✓</span>
-          <span v-else-if="saveStatus === 'error'" class="save-error">Feil ved lagring</span>
+          <span v-if="saveStatus === 'saved'" class="save-confirmation">{{ $i('payment_saved') }}</span>
+          <span v-else-if="saveStatus === 'error'" class="save-error">{{ $i('payment_saveError') }}</span>
         </div>
       </template>
 
       <div v-else class="empty-state">
-        <h3>Velg en butikk</h3>
-        <p>Velg en butikk for å konfigurere betalingsinnstillinger.</p>
+        <h3>{{ $i('payment_selectStore') }}</h3>
+        <p>{{ $i('payment_selectStoreHint') }}</p>
       </div>
 
       <!-- Toast -->
@@ -195,7 +195,7 @@ export default {
           }
         }
       } catch (e) {
-        this.showToast('Kunne ikke laste betalingsinnstillinger', 'error')
+        this.showToast(this.$i('payment_loadError'), 'error')
       } finally {
         this.isLoading = false
       }
@@ -221,7 +221,7 @@ export default {
         setTimeout(() => { this.saveStatus = null }, 3000)
       } catch (e) {
         this.saveStatus = 'error'
-        this.showToast('Kunne ikke lagre endringer', 'error')
+        this.showToast(this.$i('payment_saveErrorToast'), 'error')
       } finally {
         this.isSaving = false
       }

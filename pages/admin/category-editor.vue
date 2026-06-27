@@ -5,7 +5,7 @@
       <div class="page-header">
         <button class="back-btn" @click="goBack">
           <span class="material-icons">arrow_back</span>
-          Tilbake
+          {{ $i('common_back') }}
         </button>
 
         <div class="header-actions">
@@ -15,7 +15,7 @@
             @click="deleteCategory"
           >
             <span class="material-icons">delete</span>
-            Slett kategori
+            {{ $i('categoryEditor_deleteCategory') }}
           </button>
           <button
             class="btn btn-primary"
@@ -24,7 +24,7 @@
           >
             <Loading v-if="isSaving" :loading="true" :size="20" />
             <span v-else class="material-icons">save</span>
-            {{ isSaving ? 'Lagrer...' : 'Lagre endringer' }}
+            {{ isSaving ? $i('common_saving') : $i('categoryEditor_saveChanges') }}
           </button>
         </div>
       </div>
@@ -32,7 +32,7 @@
       <!-- Loading State -->
       <div v-if="isLoading" class="loading-container">
         <Loading :loading="true" :size="48" />
-        <p>Laster kategori...</p>
+        <p>{{ $i('categoryEditor_loadingCategory') }}</p>
       </div>
 
       <!-- Error State -->
@@ -40,7 +40,7 @@
         <span class="material-icons">error</span>
         <p>{{ error }}</p>
         <button class="btn btn-secondary" @click="goBack">
-          Gå tilbake
+          {{ $i('categoryEditor_goBack') }}
         </button>
       </div>
 
@@ -48,14 +48,14 @@
       <div v-else class="editor-content">
         <!-- Basic Info Section -->
         <div class="editor-section">
-          <h2>Grunnleggende informasjon</h2>
+          <h2>{{ $i('categoryEditor_basicInfo') }}</h2>
 
           <div class="form-group">
-            <label>Kategorinavn *</label>
+            <label>{{ $i('categoryEditor_categoryNameLabel') }}</label>
             <input
               v-model="category.name"
               type="text"
-              placeholder="F.eks. Pizza, Drikke, etc."
+              :placeholder="$i('categoryEditor_categoryNamePlaceholder')"
               class="form-input"
               @input="markAsChanged"
             />
@@ -63,8 +63,8 @@
 
           <!-- Category Image -->
           <div class="form-group">
-            <label>Kategoribilde *</label>
-            <p class="field-hint">Bildet beskjæres automatisk til 500x500px</p>
+            <label>{{ $i('categoryEditor_categoryImageLabel') }}</label>
+            <p class="field-hint">{{ $i('categoryEditor_imageCropHint') }}</p>
 
             <div
               class="image-upload-area"
@@ -85,7 +85,7 @@
               <!-- Upload Overlay -->
               <div v-if="isUploadingImage" class="upload-overlay">
                 <Loading :loading="true" :size="48" />
-                <p>Laster opp...</p>
+                <p>{{ $i('categoryEditor_uploading') }}</p>
               </div>
 
               <!-- Image Preview -->
@@ -99,8 +99,8 @@
               <!-- Placeholder -->
               <div v-else class="image-placeholder">
                 <span class="material-icons">add_photo_alternate</span>
-                <p>Klikk eller slipp bilde her</p>
-                <p class="hint">JPG eller PNG, maks 5MB</p>
+                <p>{{ $i('categoryEditor_imageDropPrompt') }}</p>
+                <p class="hint">{{ $i('categoryEditor_imageFormatHint') }}</p>
               </div>
             </div>
           </div>
@@ -109,28 +109,28 @@
         <!-- Products Section -->
         <div class="editor-section">
           <div class="section-header">
-            <h2>Produkter</h2>
+            <h2>{{ $i('categoryEditor_products') }}</h2>
             <div class="section-actions">
               <button class="btn btn-secondary" @click="addHeading" :disabled="isNewCategory">
                 <span class="material-icons">title</span>
-                Legg til overskrift
+                {{ $i('categoryEditor_addHeading') }}
               </button>
               <button class="btn btn-primary" @click="openProductSelector" :disabled="isNewCategory">
                 <span class="material-icons">add</span>
-                Velg produkter
+                {{ $i('categoryEditor_selectProducts') }}
               </button>
             </div>
           </div>
 
           <p class="section-description">
             <template v-if="isNewCategory">
-              Lagre kategorien først for å legge til produkter
+              {{ $i('categoryEditor_saveFirstForProducts') }}
             </template>
             <template v-else>
-              {{ category.categoryProductListItems.length }} produkt{{ category.categoryProductListItems.length !== 1 ? 'er' : '' }} i denne kategorien
+              {{ $i('categoryEditor_productCount', { count: category.categoryProductListItems.length }) }}
               <span v-if="isSavingProducts" class="saving-indicator">
                 <Loading :loading="true" :size="16" />
-                Lagrer...
+                {{ $i('common_saving') }}
               </span>
             </template>
           </p>
@@ -146,19 +146,19 @@
         <!-- Accessories Section -->
         <div class="editor-section">
           <div class="section-header">
-            <h2>Felles tilbehør (Valgfritt)</h2>
+            <h2>{{ $i('categoryEditor_sharedAccessories') }}</h2>
             <button class="btn btn-primary" @click="openVariantEditor" :disabled="isNewCategory">
               <span class="material-icons">add</span>
-              Legg til tilbehør
+              {{ $i('categoryEditor_addAccessory') }}
             </button>
           </div>
 
           <p class="section-description">
             <template v-if="isNewCategory">
-              Lagre kategorien først for å legge til tilbehør
+              {{ $i('categoryEditor_saveFirstForAccessories') }}
             </template>
             <template v-else>
-              Varianter som vises på alle produkter i denne kategorien. Klikk for å redigere.
+              {{ $i('categoryEditor_accessoriesDescription') }}
             </template>
           </p>
 
@@ -181,8 +181,8 @@
               <div class="variant-info">
                 <div class="variant-name">{{ variant.name }}</div>
                 <div class="variant-meta">
-                  <span v-if="variant.multiselect" class="badge">Flervalg</span>
-                  <span v-if="variant.required" class="badge badge-required">Obligatorisk</span>
+                  <span v-if="variant.multiselect" class="badge">{{ $i('categoryEditor_multiselectBadge') }}</span>
+                  <span v-if="variant.required" class="badge badge-required">{{ $i('categoryEditor_requiredBadge') }}</span>
                   <span class="variant-options-preview">
                     {{ formatOptionsPreview(variant.options) }}
                   </span>
@@ -190,7 +190,7 @@
               </div>
               <button
                 class="copy-btn-small"
-                title="Kopier til andre kategorier"
+                :title="$i('categoryEditor_copyToOtherCategories')"
                 @click.stop="copyVariantToCategories(index)"
               >
                 <span class="material-icons">content_copy</span>
@@ -201,13 +201,13 @@
             </div>
           </draggable>
           <div v-else class="empty-hint">
-            Ingen felles tilbehør lagt til
+            {{ $i('categoryEditor_noAccessories') }}
           </div>
         </div>
 
         <!-- Visibility Settings -->
         <div class="editor-section">
-          <h2>Synlighet</h2>
+          <h2>{{ $i('categoryEditor_visibility') }}</h2>
 
           <div class="form-group">
             <label class="checkbox-label">
@@ -216,7 +216,7 @@
                 type="checkbox"
                 @change="markAsChanged"
               />
-              <span>Skjul kategori</span>
+              <span>{{ $i('categoryEditor_hideCategory') }}</span>
             </label>
           </div>
 
@@ -227,12 +227,12 @@
                 type="checkbox"
                 @change="markAsChanged"
               />
-              <span>Utsolgt</span>
+              <span>{{ $i('categoryEditor_soldOut') }}</span>
             </label>
           </div>
 
           <div class="form-group">
-            <label>Skjul fra leveringstyper</label>
+            <label>{{ $i('categoryEditor_hideFromDeliveryTypes') }}</label>
             <div class="delivery-types">
               <label class="checkbox-label">
                 <input
@@ -240,7 +240,7 @@
                   :checked="isHiddenFromDeliveryType('SelfPickup')"
                   @change="toggleDeliveryType('SelfPickup')"
                 />
-                <span>Hent selv</span>
+                <span>{{ $i('categoryEditor_deliverySelfPickup') }}</span>
               </label>
               <label class="checkbox-label">
                 <input
@@ -248,7 +248,7 @@
                   :checked="isHiddenFromDeliveryType('TableDelivery')"
                   @change="toggleDeliveryType('TableDelivery')"
                 />
-                <span>Spis inne</span>
+                <span>{{ $i('categoryEditor_deliveryTableDelivery') }}</span>
               </label>
               <label class="checkbox-label">
                 <input
@@ -256,7 +256,7 @@
                   :checked="isHiddenFromHomeDelivery"
                   @change="toggleHomeDelivery"
                 />
-                <span>Hjemlevering</span>
+                <span>{{ $i('categoryEditor_deliveryHomeDelivery') }}</span>
               </label>
             </div>
           </div>
@@ -264,14 +264,14 @@
 
         <!-- Publishing Schedule -->
         <div class="editor-section">
-          <h2>Publiseringsplan (Valgfritt)</h2>
+          <h2>{{ $i('categoryEditor_publishingSchedule') }}</h2>
           <p class="section-description">
-            Sett når kategorien skal være synlig for kunder
+            {{ $i('categoryEditor_publishingScheduleDescription') }}
           </p>
 
           <div class="form-row">
             <div class="form-group">
-              <label>Start publisering</label>
+              <label>{{ $i('categoryEditor_startPublish') }}</label>
               <div class="datetime-input-wrapper" @click="$refs.startPublishInput.showPicker ? $refs.startPublishInput.showPicker() : $refs.startPublishInput.focus()">
                 <input
                   ref="startPublishInput"
@@ -285,7 +285,7 @@
                   type="button"
                   class="clear-datetime-btn"
                   @click.stop="clearStartPublish"
-                  title="Fjern dato"
+                  :title="$i('categoryEditor_clearDate')"
                 >
                   <span class="material-icons">close</span>
                 </button>
@@ -293,7 +293,7 @@
             </div>
 
             <div class="form-group">
-              <label>Stopp publisering</label>
+              <label>{{ $i('categoryEditor_stopPublish') }}</label>
               <div class="datetime-input-wrapper" @click="$refs.stopPublishInput.showPicker ? $refs.stopPublishInput.showPicker() : $refs.stopPublishInput.focus()">
                 <input
                   ref="stopPublishInput"
@@ -307,7 +307,7 @@
                   type="button"
                   class="clear-datetime-btn"
                   @click.stop="clearStopPublish"
-                  title="Fjern dato"
+                  :title="$i('categoryEditor_clearDate')"
                 >
                   <span class="material-icons">close</span>
                 </button>
@@ -441,7 +441,7 @@ export default {
   mounted() {
     // Validate URL parameters
     if (!this.categoryId && !this.isNewCategory) {
-      this.error = 'Ingen kategori-ID funnet i URL'
+      this.error = this.$i('categoryEditor_errorNoCategoryId')
       return
     }
 
@@ -460,7 +460,7 @@ export default {
   beforeRouteLeave(_, __, next) {
     if (this.hasChanges) {
       const answer = window.confirm(
-        'Du har ulagrede endringer. Er du sikker på at du vil forlate siden?'
+        this.$i('categoryEditor_unsavedChangesLeavePage')
       )
       if (answer) {
         next()
@@ -521,7 +521,7 @@ export default {
 
         // Handle case where category is not found or API returns null
         if (!category) {
-          this.error = 'Kategorien ble ikke funnet. Den kan ha blitt slettet.'
+          this.error = this.$i('categoryEditor_errorCategoryNotFound')
           return
         }
 
@@ -550,7 +550,7 @@ export default {
         this.hasChanges = false
       } catch (err) {
         console.error('Failed to load category:', err)
-        this.error = 'Kunne ikke laste kategorien. Vennligst prøv igjen.'
+        this.error = this.$i('categoryEditor_errorLoadFailed')
       } finally {
         this.isLoading = false
       }
@@ -563,7 +563,7 @@ export default {
     async saveCategory() {
       // Validation
       if (!this.category.name || this.category.name.trim() === '') {
-        this.showToast('Vennligst angi et kategorinavn', 'error')
+        this.showToast(this.$i('categoryEditor_validationNameRequired'), 'error')
         return
       }
 
@@ -578,40 +578,40 @@ export default {
           // Redirect to editor for the new category
           this.$router.replace({ query: { id: created.id } })
           this.category.id = created.id
-          this.showToast('Kategori opprettet!')
+          this.showToast(this.$i('categoryEditor_toastCategoryCreated'))
         } else {
           // Update existing category - don't replace the whole object
           await this._categoryService.Update(this.category)
-          this.showToast('Kategori lagret!')
+          this.showToast(this.$i('categoryEditor_toastCategorySaved'))
         }
 
         this.hasChanges = false
       } catch (err) {
         console.error('Failed to save category:', err)
-        this.showToast('Kunne ikke lagre kategorien. Vennligst prøv igjen.', 'error')
+        this.showToast(this.$i('categoryEditor_toastSaveFailed'), 'error')
       } finally {
         this.isSaving = false
       }
     },
 
     async deleteCategory() {
-      if (!confirm(`Er du sikker på at du vil slette kategorien "${this.category.name}"?`)) {
+      if (!confirm(this.$i('categoryEditor_confirmDeleteCategory', { name: this.category.name }))) {
         return
       }
 
       try {
         await this._categoryService.Delete(this.categoryId)
-        this.showToast('Kategori slettet')
+        this.showToast(this.$i('categoryEditor_toastCategoryDeleted'))
         this.$router.push('/admin/categories')
       } catch (err) {
         console.error('Failed to delete category:', err)
-        this.showToast('Kunne ikke slette kategorien. Vennligst prøv igjen.', 'error')
+        this.showToast(this.$i('categoryEditor_toastDeleteFailed'), 'error')
       }
     },
 
     goBack() {
       if (this.hasChanges) {
-        if (!confirm('Du har ulagrede endringer. Er du sikker på at du vil gå tilbake?')) {
+        if (!confirm(this.$i('categoryEditor_unsavedChangesGoBack'))) {
           return
         }
       }
@@ -637,12 +637,12 @@ export default {
       const file = event.dataTransfer.files[0]
 
       if (!file.type.match(/image\/(jpeg|png)/)) {
-        this.showToast('Kun JPG og PNG filer er tillatt', 'error')
+        this.showToast(this.$i('categoryEditor_toastOnlyJpgPng'), 'error')
         return
       }
 
       if (file.size > 5 * 1024 * 1024) {
-        this.showToast('Filstørrelsen må være mindre enn 5MB', 'error')
+        this.showToast(this.$i('categoryEditor_toastFileTooLarge'), 'error')
         return
       }
 
@@ -652,14 +652,14 @@ export default {
 
         if (this.isNewCategory) {
           // For new categories, just store the blob to upload after creation
-          this.showToast('Lagre kategorien først før du laster opp bilde', 'error')
+          this.showToast(this.$i('categoryEditor_toastSaveBeforeUpload'), 'error')
           return
         }
 
         await this.uploadImage(resizedBlob)
       } catch (error) {
         console.error('Failed to process/upload image:', error)
-        this.showToast('Kunne ikke laste opp bilde', 'error')
+        this.showToast(this.$i('categoryEditor_toastImageUploadFailed'), 'error')
       } finally {
         this.isUploadingImage = false
       }
@@ -719,7 +719,7 @@ export default {
           this.category.id = currentCategoryId
         }
 
-        this.showToast('Bilde lastet opp!')
+        this.showToast(this.$i('categoryEditor_toastImageUploaded'))
       } catch (error) {
         console.error('Error uploading image:', error)
         throw error
@@ -770,10 +770,10 @@ export default {
     },
 
     async addHeading() {
-      const text = prompt('Overskriftstekst (2-30 tegn):')
+      const text = prompt(this.$i('categoryEditor_headingPrompt'))
       if (!text || text.trim().length < 2 || text.trim().length > 30) {
         if (text !== null) {
-          this.showToast('Overskriften må være mellom 2 og 30 tegn', 'error')
+          this.showToast(this.$i('categoryEditor_headingValidation'), 'error')
         }
         return
       }
@@ -830,10 +830,10 @@ export default {
         )
 
         this.hasChanges = false
-        this.showToast('Produktliste lagret!')
+        this.showToast(this.$i('categoryEditor_toastProductListSaved'))
       } catch (err) {
         console.error('Failed to save product list:', err)
-        this.showToast('Kunne ikke lagre produktlisten. Vennligst prøv igjen.', 'error')
+        this.showToast(this.$i('categoryEditor_toastProductListSaveFailed'), 'error')
       } finally {
         this.isSavingProducts = false
       }
@@ -861,11 +861,11 @@ export default {
     },
 
     formatOptionsPreview(options) {
-      if (!options || options.length === 0) return 'Ingen alternativer'
+      if (!options || options.length === 0) return this.$i('categoryEditor_noOptions')
       const names = options.map(o => o.name).filter(n => n)
-      if (names.length === 0) return 'Ingen alternativer'
+      if (names.length === 0) return this.$i('categoryEditor_noOptions')
       if (names.length <= 3) return names.join(', ')
-      return `${names.slice(0, 2).join(', ')}, +${names.length - 2} mer`
+      return this.$i('categoryEditor_optionsPreviewMore', { names: names.slice(0, 2).join(', '), count: names.length - 2 })
     },
 
     async saveVariants() {
@@ -885,15 +885,15 @@ export default {
           this.category.productVariants
         )
 
-        this.showToast('Tilbehør lagret!')
+        this.showToast(this.$i('categoryEditor_toastAccessorySaved'))
       } catch (err) {
         console.error('Failed to save variants:', err)
-        this.showToast('Kunne ikke lagre tilbehør. Vennligst prøv igjen.', 'error')
+        this.showToast(this.$i('categoryEditor_toastAccessorySaveFailed'), 'error')
       }
     },
 
     removeVariant(index) {
-      if (confirm('Er du sikker på at du vil fjerne dette tilbehøret?')) {
+      if (confirm(this.$i('categoryEditor_confirmRemoveAccessory'))) {
         this.category.productVariants.splice(index, 1)
         this.saveVariants()
       }
@@ -931,16 +931,20 @@ export default {
         }
 
         if (failed.length === 0) {
-          this.showToast(`Kopiert til ${succeeded} ${succeeded === 1 ? 'kategori' : 'kategorier'}!`)
+          this.showToast(
+            succeeded === 1
+              ? this.$i('categoryEditor_toastCopiedToCategory', { count: succeeded })
+              : this.$i('categoryEditor_toastCopiedToCategories', { count: succeeded })
+          )
         } else {
           this.showToast(
-            `Kopiert til ${succeeded}, men feilet for: ${failed.join(', ')}`,
+            this.$i('categoryEditor_toastCopiedPartialFailure', { count: succeeded, failed: failed.join(', ') }),
             'error'
           )
         }
       } catch (err) {
         console.error('Failed to copy variant:', err)
-        this.showToast('Kunne ikke kopiere tilbehør. Vennligst prøv igjen.', 'error')
+        this.showToast(this.$i('categoryEditor_toastCopyFailed'), 'error')
       }
     },
 

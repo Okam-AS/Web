@@ -6,9 +6,9 @@
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
           </svg>
-          Rabatter
+          {{ $i('discount_discounts') }}
         </a>
-        <h1>{{ isNew ? 'Ny rabatt' : 'Rediger rabatt' }}</h1>
+        <h1>{{ isNew ? $i('discount_newDiscount') : $i('discount_editDiscount') }}</h1>
       </div>
 
       <div v-if="isLoading" class="loading-section">
@@ -27,26 +27,26 @@
 
         <!-- Label -->
         <div class="form-section">
-          <h2 class="section-title">Navn</h2>
+          <h2 class="section-title">{{ $i('discount_nameTitle') }}</h2>
           <div class="form-field" :class="{ 'form-field--error': fieldErrors.label }">
-            <label>Navn på rabatt</label>
+            <label>{{ $i('discount_nameLabel') }}</label>
             <input
               v-model="localDiscount.label"
               type="text"
               maxlength="25"
-              placeholder="F.eks. Sommerrabatt"
+              :placeholder="$i('discount_namePlaceholder')"
               class="text-input"
             />
-            <span class="field-hint">{{ (localDiscount.label || '').length }}/25 tegn</span>
+            <span class="field-hint">{{ $i('discount_charCount', { count: (localDiscount.label || '').length }) }}</span>
           </div>
         </div>
 
         <!-- Amount & Type -->
         <div class="form-section">
-          <h2 class="section-title">Rabattverdi</h2>
+          <h2 class="section-title">{{ $i('discount_valueTitle') }}</h2>
           <div class="amount-row">
             <div class="form-field" :class="{ 'form-field--error': fieldErrors.discount }">
-              <label>Beløp</label>
+              <label>{{ $i('discount_amountLabel') }}</label>
               <input
                 v-model="localDiscount.discount"
                 type="number"
@@ -76,16 +76,16 @@
 
         <!-- Applicability -->
         <div class="form-section">
-          <h2 class="section-title">Gjelder for</h2>
+          <h2 class="section-title">{{ $i('discount_appliesToTitle') }}</h2>
           <div class="form-field">
-            <label>Bruksområde</label>
+            <label>{{ $i('discount_applicabilityLabel') }}</label>
             <select v-model="localDiscount.applicability" class="select-input">
-              <option value="Order">Hele ordren</option>
-              <option value="HomeDelivery">Kun hjemlevering</option>
-              <option value="SelfPickup">Kun henting</option>
-              <option value="DineIn">Kun spis inne</option>
-              <option value="ProductsInclusive">Bestemte produkter (inklusiv)</option>
-              <option value="ProductsExclusive">Bestemte produkter (eksklusiv)</option>
+              <option value="Order">{{ $i('discount_applicabilityOrder') }}</option>
+              <option value="HomeDelivery">{{ $i('discount_applicabilityHomeDelivery') }}</option>
+              <option value="SelfPickup">{{ $i('discount_applicabilitySelfPickup') }}</option>
+              <option value="DineIn">{{ $i('discount_applicabilityDineIn') }}</option>
+              <option value="ProductsInclusive">{{ $i('discount_applicabilityProductsInclusive') }}</option>
+              <option value="ProductsExclusive">{{ $i('discount_applicabilityProductsExclusive') }}</option>
             </select>
           </div>
           <div
@@ -96,37 +96,37 @@
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="btn-icon">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
               </svg>
-              Velg produkter
+              {{ $i('discount_selectProducts') }}
             </button>
             <span class="product-count-label">
-              {{ selectedProductIds.length }} produkt{{ selectedProductIds.length !== 1 ? 'er' : '' }} valgt
+              {{ $i('discount_productsSelected', { count: selectedProductIds.length }) }}
             </span>
           </div>
         </div>
 
         <!-- Code -->
         <div class="form-section">
-          <h2 class="section-title">Kampanjekode (valgfritt)</h2>
+          <h2 class="section-title">{{ $i('discount_codeTitle') }}</h2>
           <div class="form-field">
-            <label>Kode</label>
+            <label>{{ $i('discount_codeLabel') }}</label>
             <input
               v-model="localDiscount.code"
               type="text"
               maxlength="20"
-              placeholder="F.eks. SOMMER20"
+              :placeholder="$i('discount_codePlaceholder')"
               class="text-input text-input--mono"
             />
-            <span class="field-hint">Legg til en kode kunder må oppgi for å bruke rabatten</span>
+            <span class="field-hint">{{ $i('discount_codeHint') }}</span>
           </div>
         </div>
 
         <!-- Conditions -->
         <div class="form-section">
-          <h2 class="section-title">Betingelser</h2>
+          <h2 class="section-title">{{ $i('discount_conditionsTitle') }}</h2>
 
           <div class="condition-row">
             <div class="condition-toggle-row">
-              <label class="toggle-label">Minimum ordreverdi</label>
+              <label class="toggle-label">{{ $i('discount_minimumOrderValue') }}</label>
               <label class="toggle-switch">
                 <input v-model="localDiscount.minimumOrderAmountEnabled" type="checkbox" />
                 <span class="toggle-slider" />
@@ -146,7 +146,7 @@
 
           <div class="condition-row">
             <div class="condition-toggle-row">
-              <label class="toggle-label">Maks antall ganger brukt totalt</label>
+              <label class="toggle-label">{{ $i('discount_maxTotalUsage') }}</label>
               <label class="toggle-switch">
                 <input v-model="localDiscount.maximumTotalUsageCountEnabled" type="checkbox" />
                 <span class="toggle-slider" />
@@ -160,13 +160,13 @@
                 placeholder="10"
                 class="text-input"
               />
-              <span class="input-suffix">ganger</span>
+              <span class="input-suffix">{{ $i('discount_timesSuffix') }}</span>
             </div>
           </div>
 
           <div class="condition-row">
             <div class="condition-toggle-row">
-              <label class="toggle-label">Maks bruk per kunde</label>
+              <label class="toggle-label">{{ $i('discount_maxUsagePerCustomer') }}</label>
               <label class="toggle-switch">
                 <input v-model="localDiscount.maximumUsagePerCustomerCountEnabled" type="checkbox" />
                 <span class="toggle-slider" />
@@ -180,13 +180,13 @@
                 placeholder="1"
                 class="text-input"
               />
-              <span class="input-suffix">ganger</span>
+              <span class="input-suffix">{{ $i('discount_timesSuffix') }}</span>
             </div>
           </div>
 
           <div class="condition-row">
             <div class="condition-toggle-row">
-              <label class="toggle-label">Tidsbegrenset</label>
+              <label class="toggle-label">{{ $i('discount_timed') }}</label>
               <label class="toggle-switch">
                 <input v-model="localDiscount.timedEnabled" type="checkbox" />
                 <span class="toggle-slider" />
@@ -194,11 +194,11 @@
             </div>
             <div v-if="localDiscount.timedEnabled" class="datetime-inputs">
               <div class="form-field">
-                <label>Gyldig fra</label>
+                <label>{{ $i('discount_validFrom') }}</label>
                 <input v-model="localDiscount.validFrom" type="datetime-local" class="text-input" />
               </div>
               <div class="form-field">
-                <label>Gyldig til</label>
+                <label>{{ $i('discount_validTo') }}</label>
                 <input v-model="localDiscount.validTo" type="datetime-local" class="text-input" />
               </div>
             </div>
@@ -207,12 +207,12 @@
 
         <!-- Special Options -->
         <div class="form-section">
-          <h2 class="section-title">Spesielle innstillinger</h2>
+          <h2 class="section-title">{{ $i('discount_specialOptionsTitle') }}</h2>
 
           <div class="condition-toggle-row">
             <label class="toggle-label">
-              <span>Gi bonuspoeng i stedet for rabatt</span>
-              <span class="toggle-hint">Kunden mottar poeng fremfor prisreduksjon</span>
+              <span>{{ $i('discount_giveRewardLabel') }}</span>
+              <span class="toggle-hint">{{ $i('discount_giveRewardHint') }}</span>
             </label>
             <label class="toggle-switch">
               <input v-model="localDiscount.giveRewardInsteadOfDiscountEnabled" type="checkbox" />
@@ -222,8 +222,8 @@
 
           <div v-if="!isNew" class="condition-toggle-row" style="margin-top: 16px;">
             <label class="toggle-label">
-              <span>Marker som utløpt</span>
-              <span class="toggle-hint">Rabatten vil ikke lenger kunne brukes</span>
+              <span>{{ $i('discount_markExpiredLabel') }}</span>
+              <span class="toggle-hint">{{ $i('discount_markExpiredHint') }}</span>
             </label>
             <label class="toggle-switch">
               <input v-model="localDiscount.expired" type="checkbox" />
@@ -234,9 +234,9 @@
 
         <!-- Usage Stats -->
         <div v-if="!isNew && localDiscount.discountUsages" class="form-section">
-          <h2 class="section-title">Statistikk</h2>
+          <h2 class="section-title">{{ $i('discount_statisticsTitle') }}</h2>
           <div class="stats-row">
-            <span class="stats-label">Ganger brukt:</span>
+            <span class="stats-label">{{ $i('discount_timesUsedLabel') }}</span>
             <span class="stats-value">{{ localDiscount.discountUsages.length }}</span>
           </div>
         </div>
@@ -245,14 +245,14 @@
         <div class="action-bar">
           <div class="action-bar__left">
             <button v-if="!isNew" class="btn btn-danger" :disabled="isSaving" @click="confirmDelete">
-              Slett rabatt
+              {{ $i('discount_deleteDiscount') }}
             </button>
           </div>
           <div class="action-bar__right">
-            <a href="/admin/discounts" class="btn btn-ghost">Avbryt</a>
+            <a href="/admin/discounts" class="btn btn-ghost">{{ $i('common_cancel') }}</a>
             <button class="btn btn-primary" :disabled="isSaving" @click="saveDiscount">
-              <span v-if="isSaving">Lagrer...</span>
-              <span v-else>{{ isNew ? 'Opprett rabatt' : 'Lagre endringer' }}</span>
+              <span v-if="isSaving">{{ $i('common_saving') }}</span>
+              <span v-else>{{ isNew ? $i('discount_createDiscount') : $i('discount_saveChanges') }}</span>
             </button>
           </div>
         </div>
@@ -386,15 +386,15 @@ export default {
       this.fieldErrors = {}
 
       if (!this.localDiscount.label || this.localDiscount.label.trim().length < 3) {
-        this.errors.push('Navn på rabatt må være minst 3 tegn')
+        this.errors.push(this.$i('discount_errorNameMinLength'))
         this.fieldErrors.label = true
       }
       if (!this.localDiscount.discount || Number(this.localDiscount.discount) <= 0) {
-        this.errors.push('Rabattbeløp må være større enn 0')
+        this.errors.push(this.$i('discount_errorAmountPositive'))
         this.fieldErrors.discount = true
       }
       if (this.localDiscount.type === 'Percent' && Number(this.localDiscount.discount) > 100) {
-        this.errors.push('Prosent kan ikke være mer enn 100')
+        this.errors.push(this.$i('discount_errorPercentMax'))
         this.fieldErrors.discount = true
       }
 
@@ -411,23 +411,23 @@ export default {
           discount: String(this.localDiscount.discount),
         }
         await this._discountService.CreateOrUpdate(payload)
-        this.showToast('Rabatt lagret', 'success')
+        this.showToast(this.$i('discount_toastSaved'), 'success')
         setTimeout(() => this.$router.push('/admin/discounts'), 1000)
       } catch (e) {
-        this.showToast('Noe gikk galt. Prøv igjen.', 'error')
+        this.showToast(this.$i('discount_toastSaveError'), 'error')
       } finally {
         this.isSaving = false
       }
     },
     async confirmDelete() {
-      if (!confirm(`Er du sikker på at du vil slette rabatten "${this.localDiscount.label}"?`)) return
+      if (!confirm(this.$i('discount_confirmDelete', { label: this.localDiscount.label }))) return
 
       this.isSaving = true
       try {
         await this._discountService.Delete(this.localDiscount.id)
         this.$router.push('/admin/discounts')
       } catch (e) {
-        this.showToast('Kunne ikke slette rabatt. Prøv igjen.', 'error')
+        this.showToast(this.$i('discount_toastDeleteError'), 'error')
         this.isSaving = false
       }
     },
