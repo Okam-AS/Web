@@ -45,7 +45,7 @@
         <div v-else class="customers-list">
           <div
             v-for="customer in customers"
-            :key="customer.userId || customer.phoneNumber"
+            :key="customer.id || customer.phoneNumber"
             class="customer-item"
             @click="openCustomerModal(customer)"
           >
@@ -141,7 +141,7 @@
       <!-- Customer Detail Modal -->
       <CustomerInfoModal
         v-if="showCustomerModal && selectedCustomer"
-        :userId="selectedCustomer.userId"
+        :userId="selectedCustomer.id || selectedCustomer.userId"
         :storeId="selectedStore"
         :customerName="selectedCustomer.fullName"
         :customerPhone="selectedCustomer.phoneNumber"
@@ -565,7 +565,7 @@ export default {
   flex-wrap: wrap;
 }
 
-.pie-canvas { max-width: 160px; }
+.pie-canvas { width: 160px; height: 160px; }
 
 .platform-legend {
   display: flex;

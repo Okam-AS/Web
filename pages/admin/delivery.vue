@@ -3,7 +3,7 @@
     <div class="delivery-page">
       <div class="page-header">
         <div>
-          <h1>Delivery</h1>
+          <h1>Levering</h1>
           <p>Administrer henting, bordservering og hjemlevering for valgt butikk.</p>
         </div>
       </div>

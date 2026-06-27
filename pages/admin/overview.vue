@@ -362,7 +362,24 @@
                     @input="debouncedKeyAccountManagerUpdate(store)"
                   />
                 </td>
-                <td>{{ store.firstAdmin }}</td>
+                <td>
+                  <div class="admin-cell">
+                    <span>{{ store.firstAdmin }}</span>
+                    <button
+                      class="manage-employees-btn"
+                      title="Administrer ansatte"
+                      @click="openEmployeeModal(store)"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                      </svg>
+                      {{ store.adminCount != null ? `${store.adminCount} ansatte` : "Ansatte" }}
+                    </button>
+                  </div>
+                </td>
               </tr>
               <tr v-if="sortedStores.length === 0 && !isLoading">
                 <td
@@ -392,18 +409,26 @@
         </div>
       </div>
     </div>
+
+    <EmployeeManagerModal
+      v-if="employeeModalStore"
+      :store-id="employeeModalStore.storeId"
+      :store-name="employeeModalStore.name"
+      @close="employeeModalStore = null"
+    />
   </AdminPage>
 </template>
 
 <script>
 import AdminPage from "~/components/organisms/AdminPage.vue";
 import Loading from "~/components/atoms/Loading.vue";
+import EmployeeManagerModal from "~/components/organisms/EmployeeManagerModal.vue";
 import { debounce } from "~/core/helpers/ts-debounce";
 import dayjs from "dayjs";
 import { KeyAccountManagerStatus } from "~/core/enums";
 
 export default {
-  components: { AdminPage, Loading },
+  components: { AdminPage, Loading, EmployeeManagerModal },
 
   data: () => ({
     isLoading: false,
@@ -434,6 +459,7 @@ export default {
     totalOrderCount: 0,
     totalAmountSum: 0,
     storeNameFilter: "",
+    employeeModalStore: null,
   }),
 
   computed: {
@@ -608,6 +634,9 @@ export default {
       }
     },
 
+    openEmployeeModal(store) {
+      this.employeeModalStore = store;
+    },
     keyAccountManagerUpdate(store) {
       // this._storeService is a global mixin
       this._storeService.KeyAccountManagerUpdate(store.storeId, {
@@ -1376,5 +1405,39 @@ export default {
 
 .kam-textarea:hover {
   border-color: #a0aec0;
+}
+
+.admin-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.manage-employees-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background-color: #f8f9fa;
+  color: #292c34;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.manage-employees-btn:hover {
+  background-color: #1bb776;
+  border-color: #1bb776;
+  color: white;
+}
+
+.manage-employees-btn svg {
+  width: 16px;
+  height: 16px;
 }
 </style>
