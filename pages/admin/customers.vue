@@ -234,6 +234,9 @@ export default {
     selectedStore() {
       return this.$store.state.selectedAdminStore
     },
+    userIsLoggedIn() {
+      return this.$store.getters.userIsLoggedIn
+    },
     periodOptions() {
       return [
         { label: '1 dag', value: 1 },
@@ -257,7 +260,13 @@ export default {
     selectedStore: {
       immediate: true,
       handler(storeId) {
-        if (storeId && !this.searchQuery) this.loadStats(storeId)
+        if (this.userIsLoggedIn && storeId && !this.searchQuery) this.loadStats(storeId)
+      },
+    },
+    userIsLoggedIn: {
+      immediate: true,
+      handler(isLoggedIn) {
+        if (isLoggedIn && this.selectedStore && !this.searchQuery) this.loadStats(this.selectedStore)
       },
     },
     hasPlatformData(val) {
