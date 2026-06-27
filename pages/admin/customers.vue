@@ -125,7 +125,7 @@
                 class="favorite-item"
               >
                 <span class="favorite-rank">{{ index + 1 }}</span>
-                <span class="favorite-name">{{ product.productName }}</span>
+                <span class="favorite-name">{{ product.name }}</span>
                 <span class="favorite-count">{{ product.favoriteCount }} favoritter</span>
               </div>
             </div>
@@ -139,59 +139,14 @@
       </template>
 
       <!-- Customer Detail Modal -->
-      <div v-if="showCustomerModal" class="modal-overlay" @click.self="closeCustomerModal">
-        <div class="modal-container">
-          <div class="modal-header">
-            <h2>Kundeinformasjon</h2>
-            <button class="modal-close" @click="closeCustomerModal">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-
-          <div v-if="isLoadingCustomer" class="modal-loading">
-            <Loading :loading="true" />
-          </div>
-
-          <template v-else-if="customerDetail">
-            <div class="customer-info-list">
-              <div
-                v-for="(item, index) in customerDetail.data"
-                :key="index"
-                class="customer-info-row"
-              >
-                <span class="customer-info-row__key">{{ item.key }}</span>
-                <span class="customer-info-row__value">{{ item.value }}</span>
-              </div>
-            </div>
-
-            <div class="reward-section">
-              <h3 class="reward-section__title">Send bonuspoeng</h3>
-              <div class="reward-input-row">
-                <input
-                  v-model="rewardAmount"
-                  type="number"
-                  min="1"
-                  placeholder="Antall poeng"
-                  class="text-input"
-                />
-                <button
-                  class="btn btn-primary"
-                  :disabled="isSendingReward || !rewardAmount || Number(rewardAmount) <= 0"
-                  @click="sendReward"
-                >
-                  <span v-if="isSendingReward">Sender...</span>
-                  <span v-else>Send poeng</span>
-                </button>
-              </div>
-              <div v-if="rewardMessage" class="reward-message" :class="`reward-message--${rewardMessageType}`">
-                {{ rewardMessage }}
-              </div>
-            </div>
-          </template>
-        </div>
-      </div>
+      <CustomerInfoModal
+        v-if="showCustomerModal && selectedCustomer"
+        :userId="selectedCustomer.userId"
+        :storeId="selectedStore"
+        :customerName="selectedCustomer.fullName"
+        :customerPhone="selectedCustomer.phoneNumber"
+        @close="closeCustomerModal"
+      />
     </div>
   </AdminPage>
 </template>
@@ -199,11 +154,12 @@
 <script>
 import AdminPage from '~/components/organisms/AdminPage.vue'
 import Loading from '~/components/atoms/Loading.vue'
+import CustomerInfoModal from '~/components/molecules/CustomerInfoModal.vue'
 import { debounce } from '~/core/helpers/ts-debounce'
 
 export default {
   name: 'Customers',
-  components: { AdminPage, Loading },
+  components: { AdminPage, Loading, CustomerInfoModal },
   data() {
     return {
       searchQuery: '',
@@ -220,12 +176,6 @@ export default {
       },
       showCustomerModal: false,
       selectedCustomer: null,
-      customerDetail: null,
-      isLoadingCustomer: false,
-      rewardAmount: '',
-      isSendingReward: false,
-      rewardMessage: '',
-      rewardMessageType: 'success',
       pieChartInstance: null,
       debouncedSearch: null,
     }
@@ -330,41 +280,13 @@ export default {
         this.isSearching = false
       }
     },
-    async openCustomerModal(customer) {
+    openCustomerModal(customer) {
       this.selectedCustomer = customer
       this.showCustomerModal = true
-      this.customerDetail = null
-      this.rewardAmount = ''
-      this.rewardMessage = ''
-      this.isLoadingCustomer = true
-      try {
-        this.customerDetail = await this._userService.GetForStore(this.selectedStore, customer.userId)
-      } catch (e) {
-        this.customerDetail = null
-      } finally {
-        this.isLoadingCustomer = false
-      }
     },
     closeCustomerModal() {
       this.showCustomerModal = false
       this.selectedCustomer = null
-      this.customerDetail = null
-    },
-    async sendReward() {
-      if (!this.rewardAmount || Number(this.rewardAmount) <= 0) return
-      this.isSendingReward = true
-      this.rewardMessage = ''
-      try {
-        await this._rewardService.SendReward(this.selectedStore, this.selectedCustomer.userId, Number(this.rewardAmount) * 100)
-        this.rewardMessage = `${this.rewardAmount} bonuspoeng sendt!`
-        this.rewardMessageType = 'success'
-        this.rewardAmount = ''
-      } catch (e) {
-        this.rewardMessage = 'Kunne ikke sende bonuspoeng. Prøv igjen.'
-        this.rewardMessageType = 'error'
-      } finally {
-        this.isSendingReward = false
-      }
     },
     highlight(text, query) {
       if (!text || !query) return text || ''
@@ -718,158 +640,6 @@ export default {
   color: #9ca3af;
 }
 
-/* Modal */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
-  padding: 24px;
-}
-
-.modal-container {
-  background: white;
-  border-radius: 16px;
-  width: 100%;
-  max-width: 500px;
-  max-height: 80vh;
-  overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-}
-
-.modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 24px;
-  border-bottom: 1px solid #f3f4f6;
-  position: sticky;
-  top: 0;
-  background: white;
-}
-
-.modal-header h2 {
-  font-size: 18px;
-  font-weight: 700;
-  color: #292c34;
-  margin: 0;
-}
-
-.modal-close {
-  width: 32px;
-  height: 32px;
-  border: none;
-  background: #f3f4f6;
-  border-radius: 50%;
-  cursor: pointer;
-  color: #6b7280;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal-close:hover { background: #e5e7eb; }
-.modal-close svg { width: 16px; height: 16px; }
-
-.modal-loading {
-  display: flex;
-  justify-content: center;
-  padding: 40px;
-}
-
-.customer-info-list {
-  padding: 0 24px;
-}
-
-.customer-info-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 0;
-  border-bottom: 1px solid #f3f4f6;
-  gap: 16px;
-}
-
-.customer-info-row:last-child { border-bottom: none; }
-
-.customer-info-row__key {
-  font-size: 13px;
-  color: #9ca3af;
-  flex-shrink: 0;
-}
-
-.customer-info-row__value {
-  font-size: 14px;
-  font-weight: 500;
-  color: #292c34;
-  text-align: right;
-}
-
-.reward-section {
-  padding: 20px 24px;
-  border-top: 1px solid #f3f4f6;
-  background: #f9fafb;
-}
-
-.reward-section__title {
-  font-size: 15px;
-  font-weight: 700;
-  color: #292c34;
-  margin: 0 0 12px;
-}
-
-.reward-input-row {
-  display: flex;
-  gap: 12px;
-}
-
-.text-input {
-  flex: 1;
-  padding: 10px 12px;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  font-size: 14px;
-  color: #292c34;
-  background: white;
-  box-sizing: border-box;
-}
-
-.text-input:focus {
-  outline: none;
-  border-color: #1bb776;
-}
-
-.reward-message {
-  margin-top: 10px;
-  font-size: 13px;
-  font-weight: 500;
-  padding: 8px 12px;
-  border-radius: 6px;
-}
-
-.reward-message--success { background: #d1fae5; color: #065f46; }
-.reward-message--error { background: #fee2e2; color: #dc2626; }
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-  transition: opacity 0.2s;
-  white-space: nowrap;
-}
-
-.btn:hover { opacity: 0.85; }
-.btn:disabled { opacity: 0.5; cursor: not-allowed; }
-.btn-primary { background: linear-gradient(135deg, #1bb776, #159f63); color: white; }
 </style>
 
 <style>
