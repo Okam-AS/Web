@@ -1,9 +1,7 @@
 import Vue from 'vue'
 import dayjs from 'dayjs'
 import {
-  CartService,
   ProductService,
-  UserService,
   DiscountService,
   StoreService,
   CategoryService,
@@ -31,8 +29,13 @@ import {
   WrappedService,
   BankAccountService
 } from '~/core/services'
-import { wholeAmount, fractionAmount, priceLabel, formatString } from '~/core/helpers/tools'
+import { AdminUserService, AdminCartService } from '~/plugins/admin-core-services'
+import { wholeAmount, fractionAmount, priceLabel, formatString, setCurrencyFormat } from '~/core/helpers/tools'
 import { formatChf } from '~/utils/price'
+
+// Unified core formats prices via currencyInfo (consumer default "100,–").
+// Admin web keeps the legacy "kr 100" prefix format.
+setCurrencyFormat({ prefix: 'kr ', suffix: '' })
 
 const mixin = {
   data() {
@@ -150,35 +153,50 @@ const mixin = {
       if (this.qsTableName) { qs += 'table=' + encodeURI(this.qsTableName) + '&' }
       return qs ? '?' + qs : ''
     },
-    _userService() { return new UserService(this.$store) },
-    _cartService() { return new CartService(this.$store) },
-    _productService() { return new ProductService(this.$store) },
-    _discountService() { return new DiscountService(this.$store) },
-    _storeService() { return new StoreService(this.$store) },
-    _orderService() { return new OrderService(this.$store) },
-    _statisticsService() { return new StatisticsService(this.$store) },
-    _payoutService() { return new PayoutService(this.$store) },
-    _notificationService() { return new NotificationService(this.$store) },
-    _categoryService() { return new CategoryService(this.$store) },
-    _categoryProductVariantService() { return new CategoryProductVariantService(this.$store) },
-    _productVariantService() { return new ProductVariantService(this.$store) },
-    _deliveryMethodService() { return new DeliveryMethodService(this.$store) },
-    _cultureService() { return new CultureService(this.$store) },
-    _vippsService() { return new VippsService(this.$store) },
-    _paymentService() { return new PaymentService(this.$store) },
-    _dineHomeService() { return new DineHomeService(this.$store) },
-    _aiService() { return new AIService(this.$store) },
-    _offerService() { return new OfferService(this.$store) },
-    _offerProposalService() { return new OfferProposalService(this.$store) },
-    _kamService() { return new KamService(this.$store) },
-    _dinteroService() { return new DinteroService(this.$store) },
-    _kraviaInvoiceService() { return new KraviaInvoiceService(this.$store) },
-    _woltService() { return new WoltService(this.$store) },
-    _woltMenuService() { return new WoltMenuService(this.$store) },
-    _woltVenueService() { return new WoltVenueService(this.$store) },
-    _rewardService() { return new RewardService(this.$store) },
-    _wrappedService() { return new WrappedService(this.$store) },
-    _bankAccountService() { return new BankAccountService(this.$store) }
+    // Unified core services are stateless API clients constructed from an
+    // ICoreInitializer instead of the Vuex store. Built fresh per access so the
+    // bearer token / locale are always read live from the store (reactive).
+    _coreInitializer() {
+      return {
+        bearerToken: (this.$store.state.currentUser && this.$store.state.currentUser.token) || '',
+        clientPlatformName: this.$store.getters.clientPlatformName,
+        cultureCode: this.$store.state.adminLocale || 'no'
+      }
+    },
+    // UserService / CartService need v3-contract behavior the stateless core dropped
+    // (reject->falsy, auto SetCurrentUser, ClearState only on 401, the removed
+    // SetLineItem/RemoveLineItem Vuex helpers). That logic lives in dedicated adapter
+    // subclasses in ~/plugins/admin-core-services — see that file. Everything else is
+    // a plain stateless client built fresh per access so token/locale read live.
+    _userService() { return new AdminUserService(this.$store, this._coreInitializer) },
+    _cartService() { return new AdminCartService(this.$store, this._coreInitializer) },
+    _productService() { return new ProductService(this._coreInitializer) },
+    _discountService() { return new DiscountService(this._coreInitializer) },
+    _storeService() { return new StoreService(this._coreInitializer) },
+    _orderService() { return new OrderService(this._coreInitializer) },
+    _statisticsService() { return new StatisticsService(this._coreInitializer) },
+    _payoutService() { return new PayoutService(this._coreInitializer) },
+    _notificationService() { return new NotificationService(this._coreInitializer) },
+    _categoryService() { return new CategoryService(this._coreInitializer) },
+    _categoryProductVariantService() { return new CategoryProductVariantService(this._coreInitializer) },
+    _productVariantService() { return new ProductVariantService(this._coreInitializer) },
+    _deliveryMethodService() { return new DeliveryMethodService(this._coreInitializer) },
+    _cultureService() { return new CultureService(this._coreInitializer) },
+    _vippsService() { return new VippsService(this._coreInitializer) },
+    _paymentService() { return new PaymentService(this._coreInitializer) },
+    _dineHomeService() { return new DineHomeService(this._coreInitializer) },
+    _aiService() { return new AIService(this._coreInitializer) },
+    _offerService() { return new OfferService(this._coreInitializer) },
+    _offerProposalService() { return new OfferProposalService(this._coreInitializer) },
+    _kamService() { return new KamService(this._coreInitializer) },
+    _dinteroService() { return new DinteroService(this._coreInitializer) },
+    _kraviaInvoiceService() { return new KraviaInvoiceService(this._coreInitializer) },
+    _woltService() { return new WoltService(this._coreInitializer) },
+    _woltMenuService() { return new WoltMenuService(this._coreInitializer) },
+    _woltVenueService() { return new WoltVenueService(this._coreInitializer) },
+    _rewardService() { return new RewardService(this._coreInitializer) },
+    _wrappedService() { return new WrappedService(this._coreInitializer) },
+    _bankAccountService() { return new BankAccountService(this._coreInitializer) }
 
   }
 }

@@ -32,6 +32,9 @@
   "exclude": [
     "node_modules",
     ".nuxt",
-    "dist"
+    "dist",
+    "core/pinia",
+    "core/platform",
+    "core/translations"
   ]
 }
