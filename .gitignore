@@ -92,3 +92,6 @@ sw.*
 *.swp
 
 .claude
+# local env overrides — never commit
+.env.local
+.env.*.local

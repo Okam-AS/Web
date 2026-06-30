@@ -1,3 +1,4 @@
+import 'dotenv/config' // loads a gitignored .env if present (e.g. local API_BASE_URL); no-op otherwise
 import redirectSSL from 'redirect-ssl'
 
 const OKAM_EDITION = process.env.OKAM_EDITION || 'no'
@@ -28,7 +29,7 @@ export default {
     EDITION: OKAM_EDITION,
     STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY || '',
     IS_PRODUCTION: process.env.NODE_ENV === 'production',
-    API_BASE_URL: process.env.NODE_ENV === 'production' ? 'https://okamapi.azurewebsites.net' : 'https://okamapi.azurewebsites.net', // 'http://localhost:5000',
+    API_BASE_URL: process.env.API_BASE_URL || 'https://okamapi.azurewebsites.net', // default prod; override via gitignored .env (e.g. http://localhost:5080)
     IS_NATIVESCRIPT: 'false',
     VERSION: '1.0.0',
     PLATFORM_FILE_SUFFIX: '.nuxt'
