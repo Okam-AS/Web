@@ -1,0 +1,74 @@
+# Web
+
+> okam's Nuxt 2 (Vue 2) **merchant/registration + admin web** app (package name `okam-consumer`). It serves the public marketing/registration site (`okam.no`), the self-serve merchant onboarding flow, and the full merchant **admin panel** (`/admin/*`: products, orders, discounts, payouts, statistics, Wolt/Dintero integrations). It talks to the OkamAPI backend over HTTP (axios) and shares all domain models/services with the other okam clients via the vendored `Core` TypeScript submodule. This repo also owns `config/edition.js` — the NO/CH market model that is being ported into `Core` for the Swiss go-live.
+
+## Context
+
+okam is a restaurant ordering + payments platform **built for Norway**, now being **localized to go live in Switzerland** ("okam is the brain"). The committed Swiss go-live plan lives in the backend repo at `OkamAPI/docs/swiss/00-INDEX.md` (an INDEX + 14 specs) and is tracked in Linear (team **Nordane**, issues **NOR-40..127**; this LLM-Wiki effort is KP.1 under epic NOR-119).
+
+This repo is on branch `feature/swiss`. Its Swiss work is intentionally a **frontend reskin** of the marketing/legal surface — the local design spec is `docs/superpowers/specs/2026-06-22-okam-swiss-edition-design.md`. The Swiss edition is selected at **build time** by `OKAM_EDITION=ch` (default `no`); see `config/edition.js`.
+
+**Relationship to Core:** `Core` (the shared TypeScript library) is a git submodule vendored into **all 4 okam clients**. Here it lives at `core/` (see `.gitmodules`, url `Okam-AS/Core.git`). Core holds the models, services (incl. `stripe-service`), Pinia stores, helpers and translations; a change in Core must be re-vendored / SHA-bumped in **all 4 clients in lockstep** (Web, ConsumerWeb, ConsumerApp, AdminApp). This repo imports it via the `~/core/*` alias (e.g. `~/core/services`, `~/core/enums`).
+
+## Architecture & key paths
+
+- `nuxt.config.js` — Nuxt 2 config. `target: 'static'` but production runs **SSR** (`npm run start`). Reads `OKAM_EDITION`; gates i18n locales, sitemap, PWA `lang`, Google Analytics and the **Facebook Pixel** (NO only) per edition. Build-time `env.EDITION` (NOT `publicRuntimeConfig`).
+- `config/edition.js` — **the NO/CH market model** (the port target for Core). Exports `EDITION`, `isCh`, `market`, `markets` (per-market `code/locale/currency/country/hostname/shopUrl/phonePrefix/gaId`). Plain JS, no Nuxt imports.
+- `core/` — **vendored `Core` submodule** (shared TS). `core/models`, `core/services` (~40 stateless API clients incl. `stripe-service.ts`, `order-service.ts`, `payment-service.ts`), `core/pinia` stores, `core/enums`, `core/interfaces`, `core/helpers`, `core/translations`. Imported as `~/core/*`.
+- `platform/` — Web's implementations of Core's platform contracts, registered once via `setPlatform()`: `http-module.ts` (axios → `IHttpModule`), `persistence-module.ts` (`localStorage` → `IPersistenceModule`).
+- `pages/` — Nuxt file-based routes. Public marketing/registration pages are mostly hardcoded Norwegian (e.g. `index.vue`, `registrer.vue`, `priser.vue`, `kontakt.vue`). Swiss legal pages are German: `impressum.vue`, `datenschutz.vue`, `agb.vue`.
+- `pages/admin/` — the **merchant admin panel** (35+ pages): `products.vue`, `categories.vue`, `category-editor.vue`, `orders.vue`, `ongoing.vue`, `discounts.vue`, `payouts.vue`, `settlements.vue`, `statistics.vue`, `employees.vue`, `payment.vue`, `dintero.vue`, `wolt*.vue`, `rewards.vue`, etc.
+- `pages/webshop/` — **thin redirect wrappers only** (`checkout.vue`, `vipps.vue`, `3d.vue`, …) that forward to the separate consumer shop app (`shop.okam.no`). The consumer checkout and all client-side Stripe live in that other app — **there is no Stripe.js in this repo**.
+- `components/` — **atomic-design** hierarchy: `atoms/`, `molecules/`, `organisms/`, plus `admin/`, `modals/`, `onboarding/`, `shared/`, `wrapped/`. Components are auto-imported (`components: true`).
+- `plugins/` — `market-mixin.js` (reactive `isCh`/`marketConfig` from Vuex, SSR-safe), `global-mixin.js`, `admin-core-services.js` (`AdminUserService`/`AdminCartService` adapters that restore the v3 contract over the new stateless Core services), `i18n.js`, `platform-init.js` (calls `setPlatform`), `store-init.js`, `vue-currency-input.js`, `jsonld.js`.
+- `store/index.js` — root Vuex store. Holds `currentUser`, `carts`, `orders`, `stores`, `selectedAdminStore`, the runtime `market` (`no`/`ch`) and `adminLocale`; persisted to `localStorage`. Getters `marketIsCh` / `marketConfig` drive the market mixin.
+- `translations/` — flat per-language admin dictionaries (`no.ts`, `en.ts`, `de.ts`, `index.js`), mirroring the native ConsumerApp structure; consumed by the `$i` helper. Distinct from the small inline `nuxt-i18n` messages.
+- `utils/price.js` — `formatChf(amountMinor)` → `"CHF 1'234.50"` (de-CH, minor units / Rappen, ASCII apostrophe). Tested by `test/chf-format.test.js`.
+- `assets/sass/` — global SCSS partials (`_admin.scss`, `_button.scss`, `_form.scss`, …) entered via `assets/sass/main.scss`.
+- `layouts/` — `default.vue`, `empty.vue`, `error.vue`. `middleware/` — small route redirects. `content/` — `@nuxt/content` markdown.
+- `CLAUDE.md` — the admin-pages **design system** (colors, spacing, components), written in Norwegian. `README.md` — submodule add + build setup.
+
+## Build & run
+
+Node **22.x** (`.nvmrc` = `22`, `package.json` engines `22.x`). Scripts use `nuxt-ts` (`@nuxt/typescript-runtime`).
+
+```bash
+npm install                # (CI/Vercel use: npm install --legacy-peer-deps)
+git submodule update --init   # fetch the Core submodule into core/
+npm run dev                # NODE_ENV=development nuxt-ts  → http://localhost:3000
+npm run build              # nuxt-ts build
+npm run start              # NODE_ENV=production nuxt-ts start  (SSR; Procfile `web:` cmd)
+npm run generate           # NODE_ENV=production nuxt-ts generate  (static; Vercel buildCommand → dist/)
+npm test                   # jest
+
+# Swiss edition (build/run/generate with the build flag):
+OKAM_EDITION=ch npm run build      # or dev / generate / start
+```
+
+Config via env (defaults target **production** API; override with a gitignored `.env`):
+`OKAM_EDITION` (`no`|`ch`), `API_BASE_URL` (default `https://okamapi.azurewebsites.net`), `STRIPE_PUBLISHABLE_KEY`, `NODE_ENV`, `PORT`. Vercel deploys the `ch` edition (`vercel.json` sets `OKAM_EDITION=ch`, `npm run generate` → `dist/`); Heroku via `Procfile`.
+
+## Conventions
+
+- **Norway → Switzerland localization is build-flag-gated, additive, and non-destructive.** Keep the Norwegian (`no`) behavior 100% intact; only add Swiss behavior behind `isCh` checks (`config/edition.js` header states this explicitly). `no` = NOK / `no` locale / `okam.no`; `ch` = CHF / `de` locale / `okam-swiss.ch` / `+41`.
+- **Edition is build-time, not runtime.** Use `env.EDITION` (DefinePlugin-inlined via `nuxt.config.js`), never `publicRuntimeConfig` (production is SSR). There is *also* a live runtime market switcher in Vuex (`store/index.js` `market`, surfaced by `plugins/market-mixin.js` as `isCh`/`marketConfig`) for the admin UI — don't confuse the two.
+- **Submodule lockstep:** `core/` is shared and vendored ×4. Never branch Swiss logic inside `core/`. CHF price formatting lives in the **app layer** (`utils/price.js` + the app-layer mixin), never in `core` `priceLabel`. Core changes must be SHA-bumped across all 4 clients together.
+- **Atomic design** for components (`atoms` → `molecules` → `organisms`), auto-imported. Admin pages follow the design system in `CLAUDE.md` (primary green `#1bb776`, 4px spacing scale, `AdminPage`/`LoadingSkeleton`, loading/empty states).
+- **Core services are stateless** (reject on auth failure, no Vuex mutation). Admin call-sites use the `AdminUserService`/`AdminCartService` adapters in `plugins/admin-core-services.js`; only a genuine HTTP **401** clears the session.
+- **i18n is two-layered:** small inline `nuxt-i18n` messages in `nuxt.config.js` (locales `['en','no']` for NO, `['de']` for CH) for site chrome, plus the flat `translations/{no,en,de}.ts` admin dictionaries (`$i` helper). Most marketing pages are still hardcoded Norwegian — only ~6 use `$t()`; full German translation is a later phase.
+- **Edition-gated tracking:** the Facebook Pixel + Google Analytics fire on the `no` build only; the `ch` build is gated off (revDSG / avoid duplicate-content + wrong-jurisdiction tracking). Swiss-only routes (`/impressum`, `/datenschutz`, `/agb`) are excluded from the `no` sitemap.
+- **NativeScript files excluded:** `*.ns.ts` files are stripped by `ignore-loader` (this codebase shares source patterns with the NativeScript clients).
+- Tooling: ESLint (`@nuxtjs/eslint-config-typescript`) + Stylelint, run on commit via husky + lint-staged. CI: `.github/workflows/` (`nuxtjs.yml`, plus Claude review workflows).
+
+## Key concepts
+
+- **Edition / market model** — `OKAM_EDITION` (`no`|`ch`) selects market (`markets` in `config/edition.js`): currency, locale, hostname, shop URL, phone prefix, GA id. This is the model being ported to Core for the Swiss go-live.
+- **okam clients & Core** — Web is one of 4 clients (ConsumerWeb, ConsumerApp, AdminApp). All consume the same `Core` submodule; the backend is OkamAPI.
+- **Merchant admin panel** — the heart of this repo: stores, products & categories, orders (live `ongoing`/board), discounts & rewards, employees, payouts/settlements, statistics, and integrations (Stripe, Vipps, Dintero, Wolt) — all driven through Core services.
+- **Consumer checkout is elsewhere** — ordering/payment for end consumers lives in the separate `shop.okam.*` app; `pages/webshop/*` are redirect stubs. TWINT (the Swiss payment method) frontend is descoped from this repo.
+- **Payments** — Stripe (cards), Vipps (NO), Dintero, and TWINT (CH, via Stripe `confirmTwintPayment` in the shop app). Stripe connected accounts are currently `Country="NO"`; the Swiss path needs a Swiss Stripe account.
+- **Platform registration** — Core is bundler/platform-agnostic; Web registers `axios` + `localStorage` adapters (`platform/*.ts`) via `setPlatform()` before any Core service/store runs.
+
+## Knowledge base
+
+Part of the **okam Knowledge Platform** (KP, Linear epic NOR-119) — internal / dev-facing navigation index for this repo.
