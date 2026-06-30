@@ -13,6 +13,11 @@
           >
             <p>{{ copy.intro }}</p>
 
+            <div class="kontakt-demo">
+              <p class="kontakt-demo__lead">{{ copy.bookDemoLead }}</p>
+              <BookDemoButton />
+            </div>
+
             <p>
               {{ copy.emailLeadBefore }}
               <a :href="`mailto:${copy.email}`">{{ copy.email }}</a> {{ copy.emailLeadAfter }}
@@ -90,9 +95,10 @@
 <script>
 import PageHeader from '~/components/organisms/PageHeader.vue'
 import PageFooter from '~/components/organisms/PageFooter.vue'
+import BookDemoButton from '~/components/molecules/BookDemoButton.vue'
 
 export default {
-  components: { PageHeader, PageFooter },
+  components: { PageHeader, PageFooter, BookDemoButton },
   data: () => ({
     userEmail: '',
     message: '',
@@ -120,6 +126,7 @@ export default {
             heading: 'Nehmen Sie Kontakt mit uns auf!',
             intro:
               'Wir hören gerne von Ihnen, wenn Sie eine Frage haben oder wenn wir sonst etwas für Sie tun können.',
+            bookDemoLead: 'Möchten Sie Okam in Aktion sehen? Wählen Sie einen passenden Zeitpunkt für eine Demo:',
             emailLeadBefore: 'Schreiben Sie uns eine E-Mail an',
             emailLeadAfter: 'oder verwenden Sie das Kontaktformular unten.',
             email: 'kontakt@okam.ch',
@@ -133,6 +140,7 @@ export default {
             heading: 'Ta kontakt med oss!',
             intro:
               'Vi vil gjerne høre fra deg hvis det er noe du lurer på, eller om det er noe annet vi kan gjøre for deg.',
+            bookDemoLead: 'Vil du se Okam i praksis? Velg et tidspunkt som passer deg for en demo:',
             emailLeadBefore: 'Send oss en e-post på',
             emailLeadAfter: 'eller brukt kontaktskjema under.',
             email: 'kontakt@okam.no',
@@ -176,5 +184,16 @@ export default {
 
 .message-field {
   min-height: 200px;
+}
+
+.kontakt-demo {
+  margin: 24px 0 32px;
+  padding: 24px;
+  background: #f8f9fa;
+  border-radius: 12px;
+
+  &__lead {
+    margin: 0 0 16px;
+  }
 }
 </style>

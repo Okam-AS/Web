@@ -4,18 +4,13 @@
     <main class="page-content">
       <div class="big-teaser">
         <div class="wrapper">
-          <div class="big-teaser__content">
+          <div class="big-teaser__content big-teaser__content--media">
             <img
               src="~/assets/UI/front-page.png"
               :alt="copy.heroImageAlt"
               width="360"
               height="360"
             />
-          </div>
-
-          <div class="big-teaser__content">
-            <h1 class="heading-1">{{ copy.heroTitle }}</h1>
-            <p class="big-teaser__description">{{ copy.heroDescription }}</p>
             <div class="big-teaser__links">
               <a
                 class="ga-ios-download"
@@ -35,6 +30,14 @@
                   width="130"
                   src="~/assets/UI/googleplay-btn.png"
               /></a>
+            </div>
+          </div>
+
+          <div class="big-teaser__content">
+            <h1 class="heading-1">{{ copy.heroTitle }}</h1>
+            <p class="big-teaser__description">{{ copy.heroDescription }}</p>
+            <div class="big-teaser__cta">
+              <BookDemoButton />
             </div>
             <p
               v-if="isCh"
@@ -203,6 +206,13 @@
             class="registrering-skjema"
           >
             <h2 class="seksjons-tittel">{{ copy.formTitle }}</h2>
+            <div class="demo-kalender">
+              <p class="demo-kalender__lead">{{ copy.calendarLead }}</p>
+              <BookDemoButton :label="copy.calendarButton" block />
+              <div class="demo-kalender__eller">
+                <span>{{ copy.orDivider }}</span>
+              </div>
+            </div>
             <div class="skjema-felt">
               <label>{{ copy.labelCompany }}</label>
               <input
@@ -298,9 +308,10 @@
 <script>
 import PageHeader from "~/components/organisms/PageHeader.vue";
 import PageFooter from "~/components/organisms/PageFooter.vue";
+import BookDemoButton from "~/components/molecules/BookDemoButton.vue";
 
 export default {
-  components: { PageHeader, PageFooter },
+  components: { PageHeader, PageFooter, BookDemoButton },
   data: () => ({
     storeName: "",
     userContactName: "",
@@ -370,6 +381,9 @@ export default {
           featuresTitle: "Das ist alles dabei:",
           benefitsTitle: "Warum Okam?",
           formTitle: "Buchen Sie eine unverbindliche Demo",
+          calendarLead: "Wählen Sie direkt einen passenden Zeitpunkt – wir treffen uns per Video.",
+          calendarButton: "Zeitpunkt im Kalender wählen",
+          orDivider: "oder lassen Sie sich von uns kontaktieren",
           labelCompany: "Name des Betriebs",
           validationCompany: "Bitte geben Sie den Namen Ihres Betriebs ein",
           labelContact: "Name der Kontaktperson",
@@ -381,7 +395,7 @@ export default {
           validationPhone: "Bitte geben Sie eine Telefonnummer ein",
           labelEmail: "E-Mail",
           validationEmail: "Bitte geben Sie eine E-Mail-Adresse ein",
-          submitButton: "Demo buchen",
+          submitButton: "Kontaktieren Sie mich",
           confirmationPrefix: "Vielen Dank für Ihr Interesse! Wir melden uns",
           confirmationPhone: "telefonisch",
           confirmationEmail: "per E-Mail",
@@ -501,6 +515,9 @@ export default {
         featuresTitle: "Dette er noe av det du får:",
         benefitsTitle: "Hvorfor velge oss?",
         formTitle: "Book en uforpliktende demo",
+        calendarLead: "Velg et tidspunkt som passer deg – så møtes vi på video.",
+        calendarButton: "Velg tidspunkt i kalenderen",
+        orDivider: "eller la oss kontakte deg",
         labelCompany: "Navn på selskap",
         validationCompany: "Vennligst fyll inn navn på selskap",
         labelContact: "Navn på kontaktperson",
@@ -512,7 +529,7 @@ export default {
         validationPhone: "Vennligst fyll inn telefonnummer",
         labelEmail: "E-post",
         validationEmail: "Vennligst fyll inn e-post",
-        submitButton: "Book demo",
+        submitButton: "Kontakt meg",
         confirmationPrefix: "Takk for din interesse! Vi kontakter deg",
         confirmationPhone: "på telefon",
         confirmationEmail: "på e-post",
@@ -729,6 +746,12 @@ export default {
   border-radius: 12px;
 }
 
+.big-teaser__content--media {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .heading-1 {
   font-size: 3rem;
   font-weight: 700;
@@ -754,8 +777,51 @@ export default {
 
 .big-teaser__links {
   display: flex;
-  gap: 15px;
+  gap: 12px;
   align-items: center;
+  margin-top: 20px;
+  /* Bildet er høyre-tungt, så nudg badgene litt til høyre for visuell balanse */
+  transform: translateX(28px);
+}
+
+.big-teaser__cta {
+  margin-top: 24px;
+}
+
+.demo-kalender {
+  max-width: 600px;
+  margin: 0 auto 32px;
+  text-align: center;
+}
+
+.demo-kalender__lead {
+  color: #666;
+  font-size: 1.05rem;
+  margin-bottom: 16px;
+}
+
+.demo-kalender__eller {
+  position: relative;
+  text-align: center;
+  margin: 28px 0 8px;
+}
+
+.demo-kalender__eller::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #e2e8f0;
+}
+
+.demo-kalender__eller span {
+  position: relative;
+  background: white;
+  padding: 0 16px;
+  color: #94a3b8;
+  font-size: 0.9rem;
 }
 
 .big-teaser__links a {
@@ -768,7 +834,7 @@ export default {
 }
 
 .big-teaser__links img {
-  height: 50px;
+  height: 30px;
   width: auto;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -1376,6 +1442,7 @@ export default {
   .big-teaser__links {
     justify-content: center;
     flex-wrap: wrap;
+    transform: none;
   }
 
   .featured-testimonial-content {
