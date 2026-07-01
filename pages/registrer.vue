@@ -50,7 +50,7 @@
                     <input
                       v-model="phoneNumber"
                       type="tel"
-                      maxlength="8"
+                      :maxlength="phoneNationalLength"
                       :placeholder="copy.phoneNumberPlaceholder"
                       @input="errorMessage = ''"
                     />
@@ -334,7 +334,6 @@ export default {
     existingStoreName: "",
     messageSent: false,
     showPhoneInput: true,
-    landcode: "+47",
     phoneNumber: "",
     token: "",
   }),
@@ -344,6 +343,15 @@ export default {
     },
     user() {
       return this.$store.state.currentUser;
+    },
+    // Landcode is driven by the active market (+47 for NO, +41 for CH) rather
+    // than a hardcoded Norwegian prefix, so a Swiss merchant registers a +41 number.
+    landcode() {
+      return this.marketConfig.phonePrefix;
+    },
+    // Max national digits allowed in the phone input, per market (NO 8, CH 9).
+    phoneNationalLength() {
+      return this.marketConfig.phoneNationalLength;
     },
     copy() {
       return this.isCh
@@ -385,7 +393,7 @@ export default {
             alreadyRegisteredText: "Wenn Sie bei Okam bereits ein Geschäft registriert haben, können Sie sich hier anmelden.",
             goToAdminPanel: "Zum Admin Panel",
             vatValidationError: "Firmennummer konnte nicht validiert werden",
-            registrationError: "Bei der Registrierung ist etwas schiefgelaufen. Bitte rufen Sie uns unter 98865120 an, dann helfen wir Ihnen bei der Registrierung.",
+            registrationError: "Bei der Registrierung ist etwas schiefgelaufen. Bitte versuchen Sie es erneut oder kontaktieren Sie uns, dann helfen wir Ihnen bei der Registrierung.",
             logoutConfirm: "Sind Sie sicher, dass Sie das Geschäft mit einer anderen Telefonnummer registrieren möchten? Alle Felder müssen neu ausgefüllt werden.",
             invalidPhoneNumber: "Ungültige Telefonnummer",
             smsSendError: "SMS konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.",
@@ -492,7 +500,7 @@ export default {
     },
 
     showTerms() {
-      window.open("/vilkar", "_blank");
+      window.open(this.marketConfig.termsUrl, "_blank");
     },
 
     async registerStore() {
@@ -559,6 +567,13 @@ export default {
     },
 
     phoneNumberIsValid() {
+      if (this.isCh) {
+        // Swiss mobile: 9 national digits starting with 7 (+41 7x xxx xx xx).
+        // Strip spaces so a formatted "79 123 45 67" still validates by digit count.
+        const digits = (this.phoneNumber || "").replace(/\D/g, "");
+        return digits.length === 9 && digits.charAt(0) === "7";
+      }
+      // Norway (unchanged): 8-digit mobile number above 40000000.
       return this.phoneNumber && this.phoneNumber.length === 8 && parseInt(this.phoneNumber) > 40000000;
     },
 
