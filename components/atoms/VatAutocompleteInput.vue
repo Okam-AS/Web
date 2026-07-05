@@ -4,7 +4,7 @@
     style="position: relative"
   >
     <slot name="label">
-      <label :for="inputId">Organisasjonsnummer (VAT)</label>
+      <label :for="inputId">{{ $i("vatAutocomplete_label") }}</label>
     </slot>
     <input
       :id="inputId"
@@ -12,7 +12,7 @@
       v-model="vatInputValue"
       type="text"
       class="form-control"
-      :placeholder="placeholder"
+      :placeholder="placeholder || $i('vatAutocomplete_placeholder')"
       autocomplete="off"
       @input="onInput"
       @focus="onFocus"
@@ -49,7 +49,7 @@ export default {
     },
     placeholder: {
       type: String,
-      default: "Skriv inn org.nr eller velg fra listen",
+      default: "",
     },
     inputId: {
       type: String,

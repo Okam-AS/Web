@@ -1,13 +1,13 @@
 <template>
-  <Modal close-btn-text="Lukk" @close="close">
+  <Modal :close-btn-text="$i('orderReceipt_close')" @close="close">
     <div class="receipt">
       <div class="receipt__group">
         <h2 class="receipt__heading">
-          Bestilling #{{ order.id }}
+          {{ $i("orderReceipt_heading", { id: order.id }) }}
         </h2>
 
         <div class="push-label">
-          Få varsling da bestillingen er klar ved å laste ned Okam appen
+          {{ $i("orderReceipt_pushPrompt") }}
         </div>
         <div class="download-links">
           <a href="https://apps.apple.com/no/app/okam/id1514296965">
@@ -35,8 +35,8 @@
             <dt style="font-weight: normal">
               {{
                 order.deliveryType === "SelfPickup"
-                  ? "Hentekode"
-                  : "Bestillingsnummer"
+                  ? $i("orderReceipt_pickupCode")
+                  : $i("orderReceipt_orderNumber")
               }}
             </dt>
             <dd style="font-size: 22px">
@@ -44,42 +44,42 @@
             </dd>
           </div>
           <div class="definition-list__item">
-            <dt>Betaling</dt>
+            <dt>{{ $i("orderReceipt_payment") }}</dt>
             <dd>
               {{ paymentTypeLabel(order.paymentType) }}
             </dd>
           </div>
           <div class="definition-list__item">
-            <dt>Leveringsmetode</dt>
+            <dt>{{ $i("orderReceipt_deliveryMethod") }}</dt>
             <dd>
               {{
                 deliveryTypeLabel(order.deliveryType) +
                   (order.deliveryType == "TableDelivery" && order.tableName
-                    ? " (Bord " + order.tableName + ")"
+                    ? $i("orderReceipt_tableSuffix", { name: order.tableName })
                     : "")
               }}
             </dd>
           </div>
           <div class="definition-list__item">
-            <dt>Bestilt</dt>
+            <dt>{{ $i("orderReceipt_ordered") }}</dt>
             <dd>{{ formatDate(order.created || order.pickup) }}</dd>
           </div>
           <div class="definition-list__item">
-            <dt>Tilberedes til</dt>
+            <dt>{{ $i("orderReceipt_readyBy") }}</dt>
             <dd>
               {{
                 order.status === "Accepted"
-                  ? "Venter godkjenning..."
+                  ? $i("orderReceipt_awaitingApproval")
                   : formatDate(order.countdownEndTime)
               }}
             </dd>
           </div>
           <div class="definition-list__item">
-            <dt>Status</dt>
+            <dt>{{ $i("orderReceipt_status") }}</dt>
             <dd>{{ orderStatusLabel(order.status) }}</dd>
           </div>
           <div class="definition-list__item">
-            <dt>Kommentar</dt>
+            <dt>{{ $i("orderReceipt_comment") }}</dt>
             <dd>{{ order.comment }}</dd>
           </div>
         </dl>
@@ -92,7 +92,7 @@
         <div>{{ order.storeFullAddress }}</div>
         <div>{{ order.storeZipCode }} {{ order.storeCity }}</div>
         <div class="m-t-xs">
-          Org.nummer: {{ order.storeVAT }}
+          {{ $i("orderReceipt_orgNumber") }} {{ order.storeVAT }}
         </div>
       </div>
 
@@ -101,17 +101,17 @@
           <thead>
             <tr>
               <th class="u-left">
-                Vare
+                {{ $i("orderReceipt_itemColumn") }}
               </th>
               <th class="u-right">
-                Pris
+                {{ $i("orderReceipt_priceColumn") }}
               </th>
             </tr>
           </thead>
           <tr v-for="item in order.items" :key="item.id">
             <td>
               {{ item.quantity }} {{ item.name }}<br>
-              Mva: {{ item.tax }}%
+              {{ $i("orderReceipt_itemVat", { tax: item.tax }) }}
             </td>
             <td class="u-right">
               {{ priceLabel(item.amount) }}
@@ -119,7 +119,7 @@
           </tr>
 
           <tr class="receipt__table-total">
-            <td>Totalt</td>
+            <td>{{ $i("orderReceipt_total") }}</td>
             <td class="u-right">
               {{ priceLabel(order.finalAmount) }}
             </td>
@@ -135,7 +135,7 @@
         >
           <tr>
             <th class="u-left">
-              Grunnlag {{ taxDetail.percent }}%
+              {{ $i("orderReceipt_basis") }} {{ taxDetail.percent }}%
             </th>
             <td class="u-right">
               {{ priceLabel(taxDetail.basis) }}
@@ -143,7 +143,7 @@
           </tr>
           <tr>
             <th class="u-left">
-              Mva.
+              {{ $i("orderReceipt_vatColumn") }}
             </th>
             <td class="u-right">
               {{ priceLabel(taxDetail.amount) }}
@@ -151,7 +151,7 @@
           </tr>
           <tr class="receipt__table-total">
             <th class="u-left">
-              Totalt
+              {{ $i("orderReceipt_total") }}
             </th>
             <td class="u-right">
               {{ priceLabel(taxDetail.totalAmount) }}

@@ -22,19 +22,19 @@
         >
           <button
             class="close-button"
-            title="Lukk"
+            :title='$i("adminFooter_close")'
             @click="toggleLogoutButton"
           >
             <span class="material-icons closing-icon">close</span>
-            <span>Lukk</span>
+            <span>{{ $i("adminFooter_close") }}</span>
           </button>
           <button
             class="logout-button"
-            title="Logg ut"
+            :title='$i("adminFooter_logout")'
             @click="logout"
           >
             <span class="material-icons logout-icon">logout</span>
-            <span>Logg ut</span>
+            <span>{{ $i("adminFooter_logout") }}</span>
           </button>
         </div>
         <div

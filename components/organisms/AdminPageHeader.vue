@@ -9,7 +9,7 @@
       <button
         class="admin-nav__burger"
         type="button"
-        aria-label="Åpne meny"
+        :aria-label="$i('nav_openMenu')"
         :aria-expanded="drawerOpen"
         @click="drawerOpen = true"
       >
@@ -22,7 +22,7 @@
     <button
       class="admin-nav__show"
       type="button"
-      aria-label="Vis meny"
+      :aria-label="$i('nav_showMenu')"
       @click="$emit('toggle-sidebar')"
     >
       <span /><span /><span />
@@ -52,7 +52,7 @@
         <button
           class="admin-nav__collapse"
           type="button"
-          aria-label="Skjul meny"
+          :aria-label="$i('nav_collapseMenu')"
           @click="$emit('toggle-sidebar')"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -62,7 +62,7 @@
         <button
           class="admin-nav__close"
           type="button"
-          aria-label="Lukk meny"
+          :aria-label="$i('nav_closeMenu')"
           @click="drawerOpen = false"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">

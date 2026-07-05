@@ -77,13 +77,13 @@ export default {
       const valueToCheck = this.value || '';
       
       if (valueToCheck.length < this.minLength) {
-        return 'Feltet er for kort';
+        return this.$i('autocompleteInput_errorTooShort');
       } else if (valueToCheck.length > this.maxLength) {
-        return 'Feltet er for langt';
+        return this.$i('autocompleteInput_errorTooLong');
       } else if (this.startsWithLowerCase(valueToCheck)) {
-        return 'Må begynne med stor forbokstav';
+        return this.$i('autocompleteInput_errorMustStartUppercase');
       } else if (valueToCheck.trim() !== valueToCheck) {
-        return 'Kan ikke begynne eller avslutte med mellomrom';
+        return this.$i('autocompleteInput_errorNoLeadingTrailingSpace');
       }
       return '';
     }

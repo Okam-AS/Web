@@ -8,15 +8,15 @@
         </svg>
       </div>
       <div class="onboarding-notification__message">
-        Du har en pågående oppsett-prosess for <strong>{{ storeName }}</strong>.
-        Du er på steg {{ currentStep + 1 }} av {{ totalSteps }}.
+        {{ $i('onboardingNotification_progressIntro') }} <strong>{{ storeName }}</strong>.
+        {{ $i('onboardingNotification_progressStep', { current: currentStep + 1, total: totalSteps }) }}
       </div>
       <div class="onboarding-notification__actions">
         <button class="btn btn-primary" @click="continueOnboarding">
-          Fortsett oppsett
+          {{ $i('onboardingNotification_continueSetup') }}
         </button>
         <button class="btn btn-text" @click="dismissNotification">
-          Lukk
+          {{ $i('onboardingNotification_dismiss') }}
         </button>
       </div>
     </div>
@@ -57,10 +57,10 @@ export default {
           const data = JSON.parse(onboardingData)
           this.onboardingInProgress = true
           this.storeId = data.storeId
-          this.storeName = data.storeName || 'din butikk'
+          this.storeName = data.storeName || this.$i('onboardingNotification_defaultStoreName')
           this.currentStep = data.currentStep || 0
         } catch (error) {
-          alert('Error parsing onboarding data')
+          alert(this.$i('onboardingNotification_parseError'))
           localStorage.removeItem('onboardingInProgress')
         }
       }

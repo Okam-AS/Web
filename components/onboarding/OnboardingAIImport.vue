@@ -5,23 +5,23 @@
       class="form-section add-more-section"
     >
       <div class="form-group">
-        <label>Lim inn menyen som tekst</label>
+        <label>{{ $i('import_aiPasteMenu') }}</label>
         <textarea
           v-model="aiMenuText"
           rows="10"
           class="form-control"
-          placeholder="Lim inn menytekst her..."
+          :placeholder="$i('onboardingAI_menuPlaceholder')"
         />
-        <div class="form-hint">Merk: For lange menyer kan bli avkortet. Importer 2-3 kategorier av gangen for best resultat.</div>
+        <div class="form-hint">{{ $i('import_aiTruncateNote') }}</div>
       </div>
 
       <div class="form-group">
-        <label>Ekstra instruksjoner (valgfritt)</label>
+        <label>{{ $i('import_aiExtraInstructions') }}</label>
         <textarea
           v-model="aiExtraInstructions"
           rows="4"
           class="form-control"
-          placeholder="F.eks. 'Alle priser er inkl. MVA', 'Kategoriser etter type mat', etc."
+          :placeholder="$i('onboardingAI_extraInstructionsPlaceholder')"
         />
       </div>
 
@@ -31,8 +31,8 @@
           class="btn btn-primary"
           @click="runAIImport()"
         >
-          <span v-if="!isAILoading">🤖 Importer med AI</span>
-          <span v-else>Importerer...</span>
+          <span v-if="!isAILoading">🤖 {{ $i('onboardingAI_importWithAI') }}</span>
+          <span v-else>{{ $i('onboardingAI_importing') }}</span>
         </button>
       </div>
     </div>
@@ -41,15 +41,15 @@
       v-if="importedProducts.length > 0"
       class="results-section"
     >
-      <h3>Fant {{ importedProducts.length }} produkter</h3>
+      <h3>{{ $i('onboardingAI_foundProducts', { count: importedProducts.length }) }}</h3>
       <div class="products-table-container">
         <table class="products-table">
           <thead>
             <tr>
-              <th>Kategori</th>
-              <th>Produkt</th>
-              <th>Beskrivelse</th>
-              <th>Pris</th>
+              <th>{{ $i('onboardingAI_tableCategory') }}</th>
+              <th>{{ $i('onboardingAI_tableProduct') }}</th>
+              <th>{{ $i('onboardingAI_tableDescription') }}</th>
+              <th>{{ $i('import_colPrice') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -60,7 +60,7 @@
               <td>{{ product.categoryName }}</td>
               <td>{{ product.name }}</td>
               <td>{{ product.description }}</td>
-              <td>{{ formatPrice(product.priceModel) }} kr</td>
+              <td>{{ formatPrice(product.priceModel) }} {{ $i('onboardingAI_priceUnit') }}</td>
             </tr>
           </tbody>
         </table>
@@ -73,11 +73,11 @@
         <div class="import-messages">
           <p>{{ importMessage }}</p>
           <p v-if="importResponse.createdProductCount">
-            <span class="bold">Antall import av produkter: </span>
+            <span class="bold">{{ $i('import_createdProductCount') }}</span>
             <span>{{ importResponse.createdProductCount }}</span>
           </p>
           <p v-if="importResponse.deletedProductCount">
-            <span class="bold">Antall sletting av produkter: </span>
+            <span class="bold">{{ $i('import_deletedProductCount') }}</span>
             <span>{{ importResponse.deletedProductCount }}</span>
           </p>
         </div>
@@ -88,20 +88,20 @@
           class="btn btn-secondary"
           @click="resetComponent"
         >
-          🔃 Start på nytt
+          🔃 {{ $i('onboardingAI_startOver') }}
         </button>
         <button
           class="btn btn-secondary"
           @click="showInputForm"
         >
-          ➕ Legg til flere produkter
+          ➕ {{ $i('onboardingAI_addMoreProducts') }}
         </button>
         <button
           class="btn btn-primary"
           :disabled="importCompleted || isLoading"
           @click="runImport()"
         >
-          💾 Importer {{ importedProducts.length }} produkter til {{ storeName }}
+          💾 {{ $i('onboardingAI_importToStore', { count: importedProducts.length, storeName }) }}
         </button>
       </div>
     </div>
@@ -110,24 +110,24 @@
       v-if="showAddMoreForm"
       class="form-section add-more-section"
     >
-      <h4>Legg til flere produkter</h4>
+      <h4>{{ $i('onboardingAI_addMoreProducts') }}</h4>
       <div class="form-group">
-        <label>Lim inn menyen som tekst</label>
+        <label>{{ $i('import_aiPasteMenu') }}</label>
         <textarea
           v-model="aiMenuText"
           rows="10"
           class="form-control"
-          placeholder="Lim inn menytekst her..."
+          :placeholder="$i('onboardingAI_menuPlaceholder')"
         />
       </div>
 
       <div class="form-group">
-        <label>Ekstra instruksjoner (valgfritt)</label>
+        <label>{{ $i('import_aiExtraInstructions') }}</label>
         <textarea
           v-model="aiExtraInstructions"
           rows="4"
           class="form-control"
-          placeholder="F.eks. 'Alle priser er inkl. MVA', 'Kategoriser etter type mat', etc."
+          :placeholder="$i('onboardingAI_extraInstructionsPlaceholder')"
         />
       </div>
 
@@ -137,14 +137,14 @@
           class="btn btn-primary"
           @click="runAIImport(true)"
         >
-          <span v-if="!isAILoading">🤖 Importer med AI</span>
-          <span v-else>Importerer...</span>
+          <span v-if="!isAILoading">🤖 {{ $i('onboardingAI_importWithAI') }}</span>
+          <span v-else>{{ $i('onboardingAI_importing') }}</span>
         </button>
         <button
           class="btn btn-secondary"
           @click="showAddMoreForm = false"
         >
-          Avbryt
+          {{ $i('common_cancel') }}
         </button>
       </div>
     </div>
@@ -164,7 +164,7 @@
       class="loading-overlay"
     >
       <div class="loading-spinner" />
-      <div class="loading-message">Importerer produkter...</div>
+      <div class="loading-message">{{ $i('onboardingAI_importingProducts') }}</div>
     </div>
 
     <div
@@ -172,26 +172,26 @@
       class="replace-confirmation-dialog"
     >
       <div class="dialog-content">
-        <h4>Denne butikken har eksisterende produkter</h4>
-        <p>Hva ønsker du å gjøre?</p>
+        <h4>{{ $i('onboardingAI_existingProductsTitle') }}</h4>
+        <p>{{ $i('onboardingAI_existingProductsQuestion') }}</p>
         <div class="confirmation-buttons">
           <button
             class="btn btn-primary"
             @click="confirmReplaceProducts(true)"
           >
-            Slett eksisterende og legg til nye
+            {{ $i('onboardingAI_deleteExistingAddNew') }}
           </button>
           <button
             class="btn btn-secondary"
             @click="confirmReplaceProducts(false)"
           >
-            Behold eksisterende og legg til nye
+            {{ $i('onboardingAI_keepExistingAddNew') }}
           </button>
           <button
             class="btn btn-outline-secondary cancel-btn"
             @click="cancelReplaceConfirmation()"
           >
-            Avbryt
+            {{ $i('common_cancel') }}
           </button>
         </div>
       </div>
@@ -220,7 +220,6 @@ export default {
       isAILoading: false,
       importedProducts: [],
       showAddMoreForm: false,
-      progressMessages: ["Leser gjennom menyoppføringer...", "Analyserer priser og kategorier...", "Strukturerer menyelementer...", "Henter ut produktdetaljer...", "Formaterer data for import...", "Nesten ferdig..."],
       messageInterval: null,
 
       // Import related data
@@ -270,13 +269,13 @@ export default {
 
       if (!this.storeId) {
         console.log("2. Error: Missing storeId");
-        this.aiImportMessage = "Butikk-ID mangler";
+        this.aiImportMessage = this.$i("onboardingAI_storeIdMissing");
         return;
       }
 
       if (!this.aiMenuText || this.aiMenuText.trim() === "") {
         console.log("3. Error: Missing menu text");
-        this.aiImportMessage = "Vennligst lim inn menytekst";
+        this.aiImportMessage = this.$i("import_aiPasteMenuRequired");
         return;
       }
 
@@ -285,7 +284,7 @@ export default {
       console.log("6. Extra instructions:", this.aiExtraInstructions);
 
       this.isAILoading = true;
-      this.aiImportMessage = "Starter import...";
+      this.aiImportMessage = this.$i("import_aiStarting");
       console.log("7. Set isAILoading to true, starting import process");
 
       // Only reset products if not appending
@@ -302,6 +301,7 @@ export default {
 
       // Set up progress messages
       let messageIndex = 0;
+      const progressMessages = [this.$i("import_aiProgressReading"), this.$i("import_aiProgressAnalyzing"), this.$i("import_aiProgressStructuring"), this.$i("import_aiProgressExtracting"), this.$i("import_aiProgressFormatting"), this.$i("import_aiProgressAlmostDone")];
       console.log("10. Setting up progress message interval");
       this.messageInterval = setInterval(() => {
         if (!this.isAILoading) {
@@ -310,7 +310,7 @@ export default {
           return;
         }
 
-        this.aiImportMessage = this.progressMessages[messageIndex % this.progressMessages.length];
+        this.aiImportMessage = progressMessages[messageIndex % progressMessages.length];
         console.log("12. Updated progress message:", this.aiImportMessage);
         messageIndex++;
       }, 4000); // Change message every 4 seconds
@@ -336,7 +336,7 @@ export default {
           // If the response contains rows, process them
           if (res && Array.isArray(res.rows) && res.rows.length > 0) {
             console.log("21. Response contains rows, count:", res.rows.length);
-            this.aiImportMessage = `Fant ${res.rows.length} produkter.`;
+            this.aiImportMessage = this.$i("onboardingAI_foundProducts", { count: res.rows.length });
 
             // If appending, add to existing products, otherwise replace
             if (appendProducts) {
@@ -360,7 +360,7 @@ export default {
           } else {
             // Show error if no rows were found
             console.log("21. Error: No products found in response", res);
-            this.aiImportMessage = "Feil ved import: Ingen produkter ble funnet i menyteksten. Prøv å omformulere eller legg til mer detaljer.";
+            this.aiImportMessage = this.$i("import_aiNoProducts");
           }
         })
         .catch((error) => {
@@ -370,13 +370,13 @@ export default {
           clearInterval(this.messageInterval);
           console.log("19. Cleared message interval");
 
-          alert("Error running AI import: " + (error.message || "Ukjent feil"));
+          alert(this.$i("import_aiError", { message: error.message || this.$i("import_aiUnknownError") }));
           console.log("20. Displayed error alert");
 
           this.isAILoading = false;
           console.log("21. Set isAILoading to false");
 
-          this.aiImportMessage = `Feil ved import: ${error.message || "Ukjent feil"}`;
+          this.aiImportMessage = this.$i("import_aiError", { message: error.message || this.$i("import_aiUnknownError") });
           console.log("22. Updated aiImportMessage with error");
         });
 
@@ -459,11 +459,11 @@ export default {
             // Emit a new event to trigger navigation to next step
             this.$emit("go-to-next-step");
           } else {
-            this.importMessage = "Noen produkter kunne ikke importeres. Vennligst sjekk listen over feilede produkter.";
+            this.importMessage = this.$i("onboardingAI_importPartialError");
           }
         })
         .catch((error) => {
-          this.importMessage = `Feil ved import: ${error.message || "Ukjent feil"}`;
+          this.importMessage = this.$i("import_aiError", { message: error.message || this.$i("import_aiUnknownError") });
         })
         .finally(() => {
           this.isLoading = false;

@@ -11,24 +11,24 @@
             @change="handleFileSelect">
           <div v-if="isUploading" class="loading-overlay">
             <div class="spinner" />
-            <span>Laster opp...</span>
+            <span>{{ $i("onboarding_logoUpload_uploading") }}</span>
           </div>
           <div v-else-if="storeLogoUrl" class="logo-preview">
             <img :src="storeLogoUrl" alt="Store Logo" @error="storeLogoUrl = null">
           </div>
           <div v-else class="upload-placeholder">
             <span class="upload-icon">↑</span>
-            <span>Dra og slipp logo her<br>eller klikk for å velge fil</span>
+            <span>{{ $i("onboarding_logoUpload_dragHere") }}<br>{{ $i("onboarding_logoUpload_clickToSelect") }}</span>
           </div>
         </div>
 
         <div class="logo-guidelines">
-          <h3>Tips for en god logo:</h3>
+          <h3>{{ $i("onboarding_logoUpload_tipsTitle") }}</h3>
           <ul>
-            <li>Bruk en kvadratisk eller rund logo for best resultat</li>
-            <li>Anbefalt størrelse: minst 500x500 piksler</li>
-            <li>Filformater: JPG eller PNG</li>
-            <li>Maksimal filstørrelse: 5MB</li>
+            <li>{{ $i("onboarding_logoUpload_tipShape") }}</li>
+            <li>{{ $i("onboarding_logoUpload_tipSize") }}</li>
+            <li>{{ $i("onboarding_logoUpload_tipFormats") }}</li>
+            <li>{{ $i("onboarding_logoUpload_tipMaxSize") }}</li>
           </ul>
         </div>
       </div>
@@ -89,13 +89,13 @@ export default {
 
       // Check file type first
       if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
-        alert('Vennligst bruk et bilde i JPEG eller PNG format.')
+        alert(this.$i("onboarding_logoUpload_invalidFormat"))
         return
       }
 
       // Check file size
       if (file.size > 5 * 1024 * 1024) {
-        alert('Filen er for stor. Maksimal størrelse er 5MB.')
+        alert(this.$i("onboarding_logoUpload_fileTooLarge"))
         return
       }
 
@@ -107,13 +107,13 @@ export default {
       if (file) {
         // Check file type first
         if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
-          alert('Vennligst bruk et bilde i JPEG eller PNG format.')
+          alert(this.$i("onboarding_logoUpload_invalidFormat"))
           return
         }
 
         // Check file size
         if (file.size > 5 * 1024 * 1024) {
-          alert('Filen er for stor. Maksimal størrelse er 5MB.')
+          alert(this.$i("onboarding_logoUpload_fileTooLarge"))
           return
         }
 
@@ -134,20 +134,20 @@ export default {
 
       reader.onerror = (_error) => {
         // Handle FileReader error
-        alert('Det oppstod en feil ved lesing av bildet. Prøv et annet bilde eller reduser størrelsen.')
+        alert(this.$i("onboarding_logoUpload_errorReadingImage"))
       }
 
       reader.onload = (e) => {
         // Make sure we have valid data
         if (!e.target || !e.target.result) {
-          alert('Det oppstod en feil ved lesing av bildet. Prøv et annet bilde.')
+          alert(this.$i("onboarding_logoUpload_errorReadingImageRetry"))
           return
         }
 
         const img = new Image()
 
         img.onerror = () => {
-          alert('Det oppstod en feil ved lasting av bildet. Prøv et annet bilde.')
+          alert(this.$i("onboarding_logoUpload_errorLoadingImage"))
         }
 
         // Set crossOrigin to anonymous to avoid CORS issues
@@ -230,7 +230,7 @@ export default {
             }
             backgroundImage.src = canvas.toDataURL(file.type)
           } catch (_error) {
-            alert('Det oppstod en feil ved behandling av bildet. Prøv et annet bilde eller reduser størrelsen.')
+            alert(this.$i("onboarding_logoUpload_errorProcessingImage"))
           }
         }
 
@@ -242,7 +242,7 @@ export default {
       try {
         reader.readAsDataURL(file)
       } catch (_error) {
-        alert('Det oppstod en feil ved lesing av filen. Prøv et annet bilde eller reduser størrelsen.')
+        alert(this.$i("onboarding_logoUpload_errorReadingFile"))
       }
     },
     resizeAndUploadSquare(img, fileType) {
@@ -287,7 +287,7 @@ export default {
         })
         .catch((_error) => {
           this.isUploading = false
-          alert('Feil ved opplasting av logo. Vennligst prøv igjen.')
+          alert(this.$i("onboarding_logoUpload_uploadError"))
         })
     },
     removeLogo() {

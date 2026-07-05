@@ -5,7 +5,7 @@
       class="loading-overlay"
     >
       <div class="spinner" />
-      <p>Laster produkter...</p>
+      <p>{{ $i("onboarding_productImages_loading") }}</p>
     </div>
 
     <div v-else>
@@ -13,7 +13,7 @@
         v-if="products.length === 0"
         class="no-products"
       >
-        <p>Ingen produkter funnet. Vennligst gå tilbake til forrige steg for å importere produkter.</p>
+        <p>{{ $i("onboarding_productImages_noProducts") }}</p>
       </div>
 
       <div v-else>
@@ -23,7 +23,7 @@
             <input
               v-model="productFilter"
               type="text"
-              placeholder="Filtrer produkter..."
+              :placeholder="$i('onboarding_productImages_filterPlaceholder')"
               class="product-filter"
             />
             <button
@@ -37,13 +37,13 @@
         </div>
 
         <div class="results-count">
-          Viser {{ filteredProducts.length }} av {{ products.length }} produkter
+          {{ $i("onboarding_productImages_showingCount", { shown: filteredProducts.length, total: products.length }) }}
           <button
             v-if="productFilter"
             class="clear-filter-btn"
             @click="productFilter = ''"
           >
-            Fjern filter på '{{ productFilter }}'
+            {{ $i("onboarding_productImages_clearFilter", { filter: productFilter }) }}
           </button>
         </div>
 
@@ -79,7 +79,7 @@
                 class="upload-placeholder"
               >
                 <i class="fas fa-cloud-upload-alt" />
-                <p>Dra og slipp bilde her eller klikk for å velge fil</p>
+                <p>{{ $i("onboarding_productImages_dropHint") }}</p>
               </div>
               <input
                 :ref="`fileInput-${product.id}`"
@@ -93,7 +93,7 @@
               <h3>{{ product.name }}</h3>
               <p class="product-price">{{ (product.amount / 100).toFixed(2) }} {{ product.currency }}</p>
               <p class="product-description">
-                {{ product.description || "Ingen beskrivelse" }}
+                {{ product.description || $i("onboarding_productImages_noDescription") }}
               </p>
             </div>
           </div>
@@ -226,10 +226,10 @@ export default {
             })
             .catch((error) => {
               console.error("Failed to process dropped image", error);
-              alert("Det oppstod en feil ved behandling av bildet. Vennligst prøv igjen.");
+              alert(this.$i("onboarding_productImages_processImageError"));
             });
         } else {
-          alert("Vennligst last opp et gyldig bildeformat (JPG, PNG, GIF, etc.)");
+          alert(this.$i("onboarding_productImages_invalidImageFormat"));
         }
       }
     },
@@ -250,7 +250,7 @@ export default {
       const file = event.target.files[0];
       if (file) {
         if (!file.type.startsWith("image/")) {
-          alert("Vennligst last opp et gyldig bildeformat (JPG, PNG, GIF, etc.)");
+          alert(this.$i("onboarding_productImages_invalidImageFormat"));
           return;
         }
         console.log("Selected file:", file);
@@ -260,7 +260,7 @@ export default {
           })
           .catch((error) => {
             console.error("Failed to process selected image", error);
-            alert("Det oppstod en feil ved behandling av bildet. Vennligst prøv igjen.");
+            alert(this.$i("onboarding_productImages_processImageError"));
           });
       }
     },
@@ -328,7 +328,7 @@ export default {
           })
           .catch((error) => {
             console.error("Upload failed", error);
-            alert("Bilde-opplastingen feilet. Vennligst prøv igjen senere.");
+            alert(this.$i("onboarding_productImages_uploadFailed"));
           });
 
         // Load only the updated product instead of all products
@@ -349,7 +349,7 @@ export default {
         }
       } catch (error) {
         console.error("Upload failed", error);
-        alert("Bilde-opplastingen feilet. Vennligst prøv igjen senere.");
+        alert(this.$i("onboarding_productImages_uploadFailed"));
       }
     },
 
