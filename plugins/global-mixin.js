@@ -31,11 +31,17 @@ import {
 } from '~/core/services'
 import { AdminUserService, AdminCartService } from '~/plugins/admin-core-services'
 import { wholeAmount, fractionAmount, priceLabel, formatString, setCurrencyFormat } from '~/core/helpers/tools'
-import { formatChf } from '~/utils/price'
+import { market } from '~/config/edition'
 
 // Unified core formats prices via currencyInfo (consumer default "100,–").
-// Admin web keeps the legacy "kr 100" prefix format.
-setCurrencyFormat({ prefix: 'kr ', suffix: '' })
+// Admin web keeps a currency-prefix format, chosen from the resolved market
+// (build-time OKAM_EDITION via config/edition.js) instead of a hardcoded "kr ":
+//   Switzerland (CHF) -> "CHF " prefix, Norway (NOK) -> "kr " prefix.
+setCurrencyFormat(
+  market.currency === 'CHF'
+    ? { prefix: 'CHF ', suffix: '', decimalSeparator: '.', thousandSeparator: "'" }
+    : { prefix: 'kr ', suffix: '' }
+)
 
 const mixin = {
   data() {
@@ -133,9 +139,8 @@ const mixin = {
       return (!dateTime) ? '' : dayjs(dateTime).format('DD.MM.YY HH:mm')
     },
     priceLabel(totalPrice, hideFractionIfZero) {
-      if (this.isCh) {
-        return formatChf(totalPrice)
-      }
+      // All amounts (NO and CH) flow through the single setCurrencyFormat seam
+      // configured at module load; no per-market formatChf detour here.
       return priceLabel(totalPrice, hideFractionIfZero)
     },
     wholeAmount(amount) {
