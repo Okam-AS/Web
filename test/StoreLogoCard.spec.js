@@ -1,4 +1,5 @@
 jest.mock('axios')
+jest.mock('~/core/helpers/configuration', () => ({ __esModule: true, default: { okamApiBaseUrl: 'http://api.test' } }))
 
 import { shallowMount } from '@vue/test-utils'
 import axios from 'axios'
@@ -10,7 +11,6 @@ function mountCard (getImpl) {
     propsData: { storeId: 42 },
     mocks: {
       $i: (k) => k,
-      $config: { okamApiBaseUrl: 'http://api.test' },
       $store: { state: { currentUser: { token: 't' } } },
       _storeService
     }

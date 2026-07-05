@@ -41,6 +41,7 @@
 
 <script>
 import axios from 'axios'
+import $config from '~/core/helpers/configuration'
 import { validateLogoFile } from '~/utils/logo'
 
 export default {
@@ -99,7 +100,7 @@ export default {
       formData.append('Image', blob, 'logo.png')
       formData.append('NumberId', this.storeId.toString())
       const token = this.$store.state.currentUser && this.$store.state.currentUser.token
-      axios.post(`${this.$config.okamApiBaseUrl}/stores/logo`, formData, {
+      axios.post(`${$config.okamApiBaseUrl}/stores/logo`, formData, {
         headers: { Authorization: `Bearer ${token}` }
       }).then(() => {
         this.isUploading = false
