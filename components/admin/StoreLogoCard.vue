@@ -1,5 +1,9 @@
 <template>
   <div class="store-card store-logo-card">
+    <div v-if="toast.show" class="toast" :class="`toast--${toast.type}`">
+      {{ toast.message }}
+    </div>
+
     <div class="store-card__header">
       <h3 class="store-logo-card__title">{{ $i('logo_cardTitle') }}</h3>
     </div>
@@ -44,7 +48,12 @@ export default {
   props: {
     storeId: { type: [Number, String], required: true }
   },
-  data: () => ({ logoUrl: null, isUploading: false, isDragging: false }),
+  data: () => ({
+    logoUrl: null,
+    isUploading: false,
+    isDragging: false,
+    toast: { show: false, message: '', type: 'success' }
+  }),
   watch: {
     storeId: { immediate: true, handler () { this.fetchCurrentLogo() } }
   },
@@ -112,6 +121,10 @@ export default {
           this.logoUrl = null
         }
       }).catch(() => { this.logoUrl = null })
+    },
+    showToast (message, type = 'success') {
+      this.toast = { show: true, message, type }
+      setTimeout(() => { this.toast.show = false }, 3000)
     }
   }
 }
@@ -131,4 +144,17 @@ export default {
 .store-logo-card__icon { font-size: 2em; color: #94a3b8; }
 .store-logo-card__status { color: #1bb776; font-weight: 600; }
 .store-logo-card__tips { margin: 12px 0 0; padding-left: 18px; color: #64748b; font-size: 0.85em; }
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  padding: 14px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 1100;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+.toast--success { background: #1bb776; color: white; }
+.toast--error { background: #ef4444; color: white; }
 </style>

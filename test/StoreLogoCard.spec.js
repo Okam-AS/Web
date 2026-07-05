@@ -5,7 +5,6 @@ import axios from 'axios'
 import StoreLogoCard from '~/components/admin/StoreLogoCard.vue'
 
 function mountCard (getImpl) {
-  const showToast = jest.fn()
   const _storeService = { Get: jest.fn().mockImplementation(getImpl || (() => Promise.resolve({}))) }
   const wrapper = shallowMount(StoreLogoCard, {
     propsData: { storeId: 42 },
@@ -13,11 +12,10 @@ function mountCard (getImpl) {
       $i: (k) => k,
       $config: { okamApiBaseUrl: 'http://api.test' },
       $store: { state: { currentUser: { token: 't' } } },
-      showToast,
       _storeService
     }
   })
-  return { wrapper, showToast, _storeService }
+  return { wrapper, _storeService }
 }
 
 describe('StoreLogoCard', () => {
@@ -31,7 +29,8 @@ describe('StoreLogoCard', () => {
   })
 
   test('rejects an invalid file with a toast and does not upload', () => {
-    const { wrapper, showToast } = mountCard()
+    const { wrapper } = mountCard()
+    const showToast = jest.spyOn(wrapper.vm, 'showToast').mockImplementation(() => {})
     const spy = jest.spyOn(wrapper.vm, 'cropAndUpload').mockImplementation(() => {})
     wrapper.vm.handleFile({ type: 'image/gif', size: 10 })
     expect(showToast).toHaveBeenCalledWith('logo_errorFormat', 'error')
@@ -47,7 +46,8 @@ describe('StoreLogoCard', () => {
 
   test('upload() posts the cropped blob and reports success', async () => {
     axios.post.mockResolvedValue({})
-    const { wrapper, showToast } = mountCard()
+    const { wrapper } = mountCard()
+    const showToast = jest.spyOn(wrapper.vm, 'showToast').mockImplementation(() => {})
 
     wrapper.vm.upload(new Blob(['x'], { type: 'image/png' }))
     await wrapper.vm.$nextTick()
@@ -67,7 +67,8 @@ describe('StoreLogoCard', () => {
 
   test('upload() shows an error toast and does not emit when the request fails', async () => {
     axios.post.mockRejectedValue(new Error('boom'))
-    const { wrapper, showToast } = mountCard()
+    const { wrapper } = mountCard()
+    const showToast = jest.spyOn(wrapper.vm, 'showToast').mockImplementation(() => {})
 
     wrapper.vm.upload(new Blob(['x'], { type: 'image/png' }))
     await wrapper.vm.$nextTick()
@@ -75,5 +76,16 @@ describe('StoreLogoCard', () => {
 
     expect(showToast).toHaveBeenCalledWith('logo_errorUpload', 'error')
     expect(wrapper.emitted('logo-updated')).toBeFalsy()
+  })
+
+  test('showToast (real implementation) sets toast state to visible with the given message and type', () => {
+    const { wrapper } = mountCard()
+    jest.useFakeTimers()
+
+    wrapper.vm.showToast('x', 'success')
+    expect(wrapper.vm.toast).toEqual({ show: true, message: 'x', type: 'success' })
+
+    jest.runAllTimers()
+    jest.useRealTimers()
   })
 })
