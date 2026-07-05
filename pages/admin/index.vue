@@ -179,6 +179,12 @@
               </div>
             </div>
 
+            <!-- Store Logo Card -->
+            <StoreLogoCard
+              v-if="storeIdForLogo"
+              :store-id="storeIdForLogo"
+            />
+
             <!-- Status Message Card -->
             <div ref="statusCard" class="store-card">
               <div class="store-card__header">
@@ -254,9 +260,10 @@
 import AdminPage from "~/components/organisms/AdminPage.vue";
 import Loading from "~/components/atoms/Loading.vue";
 import VueQrcode from "@chenfengyuan/vue-qrcode";
+import StoreLogoCard from "~/components/admin/StoreLogoCard.vue";
 
 export default {
-  components: { AdminPage, Loading, VueQrcode },
+  components: { AdminPage, Loading, VueQrcode, StoreLogoCard },
   data: () => ({
     isLoading: false,
     storeName: "",
@@ -303,6 +310,11 @@ export default {
     },
     selectedStore() {
       return this.$store.state.selectedAdminStore;
+    },
+    // StoreLogoCard's `store-id` prop: reuses this page's existing active-store
+    // accessor (selectedStore) rather than introducing a second source of truth.
+    storeIdForLogo() {
+      return this.selectedStore;
     },
     generatedUrl() {
       return this.selectedStore ? `https://shop.okam.no/shop?id=${this.selectedStore}` : "";
