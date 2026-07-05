@@ -22,9 +22,9 @@
               class="store-name-dropdown"
               @click="toggleStoreSelector"
             >
-              {{ storeName }} <span class="dropdown-arrow">▼</span>
+              {{ displayStoreName }} <span class="dropdown-arrow">▼</span>
             </span>
-            <span v-else>{{ storeName }}</span>
+            <span v-else>{{ displayStoreName }}</span>
           </h1>
 
           <!-- Dropdown for store selection -->
@@ -275,6 +275,12 @@ export default {
     };
   },
   computed: {
+    // Shows the localized placeholder while the real store name is still
+    // loading; `storeName` itself stays the raw sentinel "butikk" so the
+    // `storeSelectorAvailable` "has it loaded yet?" check below is unaffected.
+    displayStoreName() {
+      return this.storeName === "butikk" ? this.$i("onboarding_defaultStoreName") : this.storeName;
+    },
     steps() {
       return [
         {

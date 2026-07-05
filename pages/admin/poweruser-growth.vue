@@ -143,11 +143,14 @@ const STORE_START_EVENTS = [
   { date: "2026-03-10T17:55:24", name: "CieloPizzaBurger" },
 ];
 
+// `name` here is the service name only (an untranslated proper noun); the
+// "First {service} order" phrasing itself is localized where it's rendered
+// (see buildGroupedAnnotationItems), unlike STORE_START_EVENTS' business names.
 const FEATURE_EVENTS = [
-  { date: "2022-04-28T21:30:58", name: "Første Vipps-bestilling" },
-  { date: "2025-05-07T12:28:36", name: "Første Wolt Drive-bestilling" },
-  { date: "2025-05-07T12:28:36", name: "Første Dintero-bestilling" },
-  { date: "2025-11-11T17:48:12", name: "Første Wolt Marketplace-bestilling" },
+  { date: "2022-04-28T21:30:58", name: "Vipps" },
+  { date: "2025-05-07T12:28:36", name: "Wolt Drive" },
+  { date: "2025-05-07T12:28:36", name: "Dintero" },
+  { date: "2025-11-11T17:48:12", name: "Wolt Marketplace" },
 ];
 
 export default {
@@ -356,7 +359,7 @@ export default {
           };
         }
 
-        acc[key].lines.push(event.name);
+        acc[key].lines.push(type === "feature" ? this.$i('poweruserGrowth_firstOrderEvent', { service: event.name }) : event.name);
         return acc;
       }, {});
 

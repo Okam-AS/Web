@@ -6,22 +6,22 @@
         <div class="wrapper">
           <div class="success-message">
             <div class="success-content">
-              <p>{{ copy.completed }}</p>
-              <p class="sub-text">{{ copy.subText }}</p>
+              <p>{{ $i('registerComplete_completed') }}</p>
+              <p class="sub-text">{{ $i('registerComplete_subText', { adminHost }) }}</p>
 
               <div class="action-buttons">
                 <a
-                  :href="copy.adminUrl"
+                  :href="adminUrl"
                   target="_blank"
                   class="cta-link"
                 >
-                  {{ copy.goToAdmin }}
+                  {{ $i('registerComplete_goToAdmin', { adminHost }) }}
                 </a>
                 <a
-                  :href="copy.downloadUrl"
+                  :href="downloadUrl"
                   class="cta-link secondary"
                 >
-                  {{ copy.downloadApp }}
+                  {{ $i('registerComplete_downloadApp') }}
                 </a>
               </div>
             </div>
@@ -40,24 +40,17 @@ import PageFooter from "~/components/organisms/PageFooter.vue";
 export default {
   components: { PageHeader, PageFooter },
   computed: {
-    copy() {
-      return this.isCh
-        ? {
-            completed: "Die Registrierung ist abgeschlossen!",
-            subText: "Sie können Ihre Speisekarte jetzt auf admin.okam-swiss.ch oder in der Okam Admin-App erfassen",
-            goToAdmin: "Zu admin.okam-swiss.ch",
-            downloadApp: "Okam Admin-App herunterladen",
-            adminUrl: "https://admin.okam-swiss.ch",
-            downloadUrl: "https://okam-swiss.ch/last-ned",
-          }
-        : {
-            completed: "Registreringen er fullført!",
-            subText: "Du kan nå legge inn menyen din på admin.okam.no eller i Okam Admin-appen",
-            goToAdmin: "Gå til admin.okam.no",
-            downloadApp: "Last ned Okam Admin-appen",
-            adminUrl: "https://admin.okam.no",
-            downloadUrl: "https://okam.no/last-ned",
-          };
+    // Domain/URLs are market-driven (not language-driven), derived from
+    // marketConfig.hostname so they stay correct regardless of which
+    // adminLocale the user has chosen for the surrounding $i() text below.
+    adminHost() {
+      return this.marketConfig.hostname.replace("https://", "admin.");
+    },
+    adminUrl() {
+      return `https://${this.adminHost}`;
+    },
+    downloadUrl() {
+      return `${this.marketConfig.hostname}/last-ned`;
     },
   },
 };

@@ -43,7 +43,12 @@ export default {
     },
     closeBtnText: {
       type: String,
-      default: 'Avbryt'
+      // Function default so it resolves through $i() (locale-aware) instead of
+      // being frozen at the Norwegian literal for every caller that doesn't
+      // pass its own close-btn-text.
+      default () {
+        return this.$i('common_cancel')
+      }
     },
     wide: {
       type: Boolean,

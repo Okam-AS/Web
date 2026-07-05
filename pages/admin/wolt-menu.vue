@@ -394,7 +394,7 @@
                             class="menu-item__price-input"
                             @blur="updateItemPrice(item, $event.target.value)"
                           >
-                          <span class="menu-item__price-currency">kr</span>
+                          <span class="menu-item__price-currency">{{ $i('woltMenu_priceUnit') }}</span>
                         </div>
                         <div
                           v-else
@@ -1165,11 +1165,11 @@ export default {
     },
     formatPrice(price) {
       if (!price && price !== 0) {
-        return '0 kr';
+        return `0 ${this.$i('woltMenu_priceUnit')}`;
       }
       // Prices are in smallest currency unit (øre for NOK), so divide by 100
       const amount = price / 100;
-      return `${amount.toFixed(2)} kr`;
+      return `${amount.toFixed(2)} ${this.$i('woltMenu_priceUnit')}`;
     },
     formatPriceForInput(price) {
       if (!price && price !== 0) {

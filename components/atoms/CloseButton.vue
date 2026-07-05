@@ -1,5 +1,5 @@
 <template>
-  <button class="close-button" aria-label="Avbryt" @click="$emit('click')">
+  <button class="close-button" :aria-label="$i('common_cancel')" @click="$emit('click')">
     <span class="close-button-x" aria-hidden="true">×</span>
   </button>
 </template>
