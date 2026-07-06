@@ -330,7 +330,17 @@
             </div>
             <div class="form-group">
               <label>{{ $i('products_vat') }}</label>
+              <!-- CH: pick a valid decimal MWST rate (8.1/2.6/3.8 don't fit the legacy int field);
+                   NO: unchanged integer input. -->
+              <select
+                v-if="isCh"
+                v-model.number="selectedProduct.taxRate"
+                @change="syncTaxInt('tax', 'taxRate')"
+              >
+                <option v-for="r in vatRates" :key="r.value" :value="r.value">{{ r.label }}</option>
+              </select>
               <input
+                v-else
                 v-model.number="selectedProduct.tax"
                 type="number"
                 min="0"
@@ -358,7 +368,15 @@
                   @blur="formatFinalTablePrice"
                 />
                 <label class="mt-4">{{ $i('products_dineInVat') }}</label>
+                <select
+                  v-if="isCh"
+                  v-model.number="selectedProduct.tableTaxRate"
+                  @change="syncTaxInt('tableTax', 'tableTaxRate')"
+                >
+                  <option v-for="r in vatRates" :key="r.value" :value="r.value">{{ r.label }}</option>
+                </select>
                 <input
+                  v-else
                   v-model.number="selectedProduct.tableTax"
                   type="number"
                   min="0"
@@ -388,7 +406,15 @@
                   @blur="formatFinalDeliveryPrice"
                 />
                 <label class="mt-4">{{ $i('products_deliveryVat') }}</label>
+                <select
+                  v-if="isCh"
+                  v-model.number="selectedProduct.deliveryTaxRate"
+                  @change="syncTaxInt('deliveryTax', 'deliveryTaxRate')"
+                >
+                  <option v-for="r in vatRates" :key="r.value" :value="r.value">{{ r.label }}</option>
+                </select>
                 <input
+                  v-else
                   v-model.number="selectedProduct.deliveryTax"
                   type="number"
                   min="0"
@@ -571,6 +597,11 @@ export default {
   }),
 
   computed: {
+    // isCh is provided globally by plugins/market-mixin.js (Vuex marketIsCh). On CH the VAT fields
+    // become a decimal MWST picker bound to taxRate; NO keeps the legacy integer tax input.
+    vatRates() {
+      return (this.marketConfig && this.marketConfig.vat && this.marketConfig.vat.rates) || [];
+    },
     selectedStore() {
       return this.$store.state.selectedAdminStore;
     },
@@ -719,6 +750,12 @@ export default {
   },
 
   methods: {
+    // Keep the legacy int tax fallback roughly in sync with the CH decimal rate, so a product is
+    // never left at a stale/zero int if the decimal somehow doesn't persist (backend prefers taxRate).
+    syncTaxInt(intField, rateField) {
+      const rate = this.selectedProduct[rateField];
+      this.selectedProduct[intField] = rate == null ? 0 : Math.round(rate);
+    },
     handleLoginSuccess() {
       if (this.selectedStore > 0) {
         this.loadProducts();
@@ -1149,20 +1186,27 @@ export default {
       this.isCreatingProduct = true;
       try {
         // Create the product with just the name
+        // Market-aware defaults: CH products default to the standard MWST rate (decimal taxRate) and
+        // CHF; NO keeps the legacy integer tax defaults + NOK. taxRate null on NO => the backend falls
+        // back to the int tax.
+        const chStdRate = this.isCh ? (this.vatRates[0] && this.vatRates[0].value) : null;
         const newProduct = {
           name: this.newProductName.trim(),
           storeId: this.selectedStore,
           description: "",
           otherInformation: "",
           amount: 0,
-          currency: "NOK",
-          tax: 15,
+          currency: (this.marketConfig && this.marketConfig.currency) || "NOK",
+          tax: this.isCh ? Math.round(chStdRate || 0) : 15,
+          taxRate: chStdRate,
           tablePriceEnabled: false,
           tableAdditionalAmount: 0,
           tableTax: 25,
+          tableTaxRate: chStdRate,
           deliveryPriceEnabled: false,
           deliveryAdditionalAmount: 0,
           deliveryTax: 15,
+          deliveryTaxRate: chStdRate,
           productVariants: []
         };
 
