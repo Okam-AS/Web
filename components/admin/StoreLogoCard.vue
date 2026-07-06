@@ -116,8 +116,12 @@ export default {
       if (!this.storeId) return
       this._storeService.Get(this.storeId).then((store) => {
         if (store && store.logoUrl) {
+          // Use the server-provided logoUrl (authoritative per deployment) rather than a hardcoded
+          // NO storage account, so the preview also works on CH/test deployments. Append a
+          // cache-buster so the freshly uploaded logo isn't served stale from cache.
           const ts = new Date().getTime()
-          this.logoUrl = `https://okamapistorage.blob.core.windows.net/storelogo/${this.storeId}?v=${ts}`
+          const sep = store.logoUrl.includes('?') ? '&' : '?'
+          this.logoUrl = `${store.logoUrl}${sep}v=${ts}`
         } else {
           this.logoUrl = null
         }
