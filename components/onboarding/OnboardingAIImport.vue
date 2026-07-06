@@ -60,7 +60,7 @@
               <td>{{ product.categoryName }}</td>
               <td>{{ product.name }}</td>
               <td>{{ product.description }}</td>
-              <td>{{ formatPrice(product.priceModel) }} {{ $i('onboardingAI_priceUnit') }}</td>
+              <td>{{ formatPrice(product.priceModel) }} {{ marketConfig.currencySymbol }}</td>
             </tr>
           </tbody>
         </table>

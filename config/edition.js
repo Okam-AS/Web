@@ -12,6 +12,8 @@ const markets = {
     code: 'no',
     locale: 'no',
     currency: 'NOK',
+    // Trailing price-label symbol. Distinct from the ISO `currency` above: NOK renders as "kr".
+    currencySymbol: 'kr',
     country: 'NO',
     hostname: 'https://okam.no',
     shopUrl: 'https://shop.okam.no',
@@ -26,6 +28,7 @@ const markets = {
     code: 'ch',
     locale: 'de',
     currency: 'CHF',
+    currencySymbol: 'CHF',
     country: 'CH',
     hostname: 'https://okam-swiss.ch',
     // NOTE: the Swiss consumer shop domain is assumed to mirror the site domain.
