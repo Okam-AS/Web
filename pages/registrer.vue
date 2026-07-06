@@ -50,7 +50,7 @@
                     <input
                       v-model="phoneNumber"
                       type="tel"
-                      :maxlength="phoneNationalLength"
+                      :maxlength="phoneInputMaxLength"
                       :placeholder="$i('register_phoneNumberPlaceholder')"
                       @input="errorMessage = ''"
                     />
@@ -353,6 +353,12 @@ export default {
     phoneNationalLength() {
       return this.marketConfig.phoneNationalLength;
     },
+    // Input cap = NSN + 5: room for the CH trunk-0 form ("079…") and separators. normalizedPhone()
+    // and phoneNumberIsValid() strip back to the canonical NSN before send/validation, so a
+    // bare-NSN cap would have truncated valid Swiss input and blocked merchant signup.
+    phoneInputMaxLength() {
+      return this.phoneNationalLength + 5;
+    },
   },
   methods: {
     onVatInput() {
@@ -476,14 +482,23 @@ export default {
     },
 
     phoneNumberIsValid() {
+      const digits = (this.phoneNumber || "").replace(/\D/g, "");
       if (this.isCh) {
-        // Swiss mobile: 9 national digits starting with 7 (+41 7x xxx xx xx).
-        // Strip spaces so a formatted "79 123 45 67" still validates by digit count.
-        const digits = (this.phoneNumber || "").replace(/\D/g, "");
-        return digits.length === 9 && digits.charAt(0) === "7";
+        // Swiss mobile: 9 national digits starting with 7 (+41 7x xxx xx xx). Accept the
+        // habitual trunk-0 form ("079…") by stripping a leading 0 first — matching how the
+        // number is normalized on send — so the standard way people type it isn't rejected.
+        const nsn = digits.startsWith("0") ? digits.slice(1) : digits;
+        return nsn.length === 9 && nsn.charAt(0) === "7";
       }
-      // Norway (unchanged): 8-digit mobile number above 40000000.
-      return this.phoneNumber && this.phoneNumber.length === 8 && parseInt(this.phoneNumber) > 40000000;
+      // Norway: 8-digit mobile number above 40000000. Digit-strip so a spaced form validates too.
+      return digits.length === 8 && parseInt(digits) > 40000000;
+    },
+
+    normalizedPhone() {
+      // Canonical national significant number for send: digits only, CH trunk-0 removed.
+      let digits = (this.phoneNumber || "").replace(/\D/g, "");
+      if (this.isCh && digits.startsWith("0")) digits = digits.slice(1);
+      return digits;
     },
 
     async sendTokenTap() {
@@ -494,7 +509,7 @@ export default {
 
       this.isLoading = true;
       try {
-        const success = await this._userService.SendVerificationToken(this.landcode + this.phoneNumber.replace(/\s/g, ''));
+        const success = await this._userService.SendVerificationToken(this.landcode + this.normalizedPhone());
 
         if (!success) {
           this.errorMessage = this.$i('register_smsSendError');
@@ -515,7 +530,7 @@ export default {
 
       this.isLoading = true;
       try {
-        const success = await this._userService.LoginAdmin(this.landcode + this.phoneNumber.replace(/\s/g, ''), code);
+        const success = await this._userService.LoginAdmin(this.landcode + this.normalizedPhone(), code);
 
         if (!success) {
           this.errorMessage = this.$i('register_invalidCode');
