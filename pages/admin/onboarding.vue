@@ -117,11 +117,11 @@
           <h1>{{ $i('onboarding_storePublished', { storeName }) }}</h1>
 
           <a
-            :href="`https://shop.okam.no/store/${storeSlug}`"
+            :href="`${marketConfig.shopUrl}/store/${storeSlug}`"
             target="_blank"
             class="shop-url"
           >
-            https://shop.okam.no/store/{{ storeSlug }}
+            {{ marketConfig.shopUrl }}/store/{{ storeSlug }}
           </a>
         </div>
 
