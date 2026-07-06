@@ -265,122 +265,85 @@ export default {
         });
     },
     runAIImport(appendProducts = false) {
-      console.log("1. Starting runAIImport method, appendProducts:", appendProducts);
 
       if (!this.storeId) {
-        console.log("2. Error: Missing storeId");
         this.aiImportMessage = this.$i("onboardingAI_storeIdMissing");
         return;
       }
 
       if (!this.aiMenuText || this.aiMenuText.trim() === "") {
-        console.log("3. Error: Missing menu text");
         this.aiImportMessage = this.$i("import_aiPasteMenuRequired");
         return;
       }
 
-      console.log("4. Input validation passed, storeId:", this.storeId);
-      console.log("5. Menu text length:", this.aiMenuText.length);
-      console.log("6. Extra instructions:", this.aiExtraInstructions);
 
       this.isAILoading = true;
       this.aiImportMessage = this.$i("import_aiStarting");
-      console.log("7. Set isAILoading to true, starting import process");
 
       // Only reset products if not appending
       if (!appendProducts) {
-        console.log("8. Not appending, resetting importedProducts array");
         this.importedProducts = [];
-      } else {
-        console.log("8. Appending mode, keeping existing importedProducts:", this.importedProducts.length);
       }
 
       this.resetImportState();
       this.showAddMoreForm = false;
-      console.log("9. Reset import state and hid add more form");
 
       // Set up progress messages
       let messageIndex = 0;
       const progressMessages = [this.$i("import_aiProgressReading"), this.$i("import_aiProgressAnalyzing"), this.$i("import_aiProgressStructuring"), this.$i("import_aiProgressExtracting"), this.$i("import_aiProgressFormatting"), this.$i("import_aiProgressAlmostDone")];
-      console.log("10. Setting up progress message interval");
       this.messageInterval = setInterval(() => {
         if (!this.isAILoading) {
-          console.log("11. isAILoading is false, clearing message interval");
           clearInterval(this.messageInterval);
           return;
         }
 
         this.aiImportMessage = progressMessages[messageIndex % progressMessages.length];
-        console.log("12. Updated progress message:", this.aiImportMessage);
         messageIndex++;
       }, 4000); // Change message every 4 seconds
 
       // Call the AI service
-      console.log("13. About to call AI service MenuToJson method");
-      console.log("14. Parameters - storeId:", this.storeId);
-      console.log("15. Parameters - menuText length:", this.aiMenuText.length);
-      console.log("16. Parameters - extraInstructions:", this.aiExtraInstructions);
 
       this._aiService
         .MenuToJson(this.storeId, this.aiMenuText, this.aiExtraInstructions)
         .then((res) => {
-          console.log("17. AI service MenuToJson call succeeded");
-          console.log("18. Response received:", res);
 
           clearInterval(this.messageInterval);
-          console.log("19. Cleared message interval");
 
           this.isAILoading = false;
-          console.log("20. Set isAILoading to false");
 
           // If the response contains rows, process them
           if (res && Array.isArray(res.rows) && res.rows.length > 0) {
-            console.log("21. Response contains rows, count:", res.rows.length);
             this.aiImportMessage = this.$i("onboardingAI_foundProducts", { count: res.rows.length });
 
             // If appending, add to existing products, otherwise replace
             if (appendProducts) {
-              console.log("22. Appending new products to existing ones");
               this.importedProducts = [...this.importedProducts, ...res.rows];
             } else {
-              console.log("22. Replacing all products with new ones");
               this.importedProducts = res.rows;
             }
-            console.log("23. Updated importedProducts, new count:", this.importedProducts.length);
 
             // Clear the input fields
             this.aiMenuText = "";
             this.aiExtraInstructions = "";
-            console.log("24. Cleared input fields");
 
             // Emit event to notify parent component
-            console.log("25. Emitting products-imported event");
             this.$emit("products-imported", this.importedProducts);
-            console.log("26. Event emitted successfully");
           } else {
             // Show error if no rows were found
-            console.log("21. Error: No products found in response", res);
             this.aiImportMessage = this.$i("import_aiNoProducts");
           }
         })
         .catch((error) => {
-          console.log("17. AI service MenuToJson call failed with error:", error);
-          console.log("18. Error details:", error.message || "No error message");
 
           clearInterval(this.messageInterval);
-          console.log("19. Cleared message interval");
 
           alert(this.$i("import_aiError", { message: error.message || this.$i("import_aiUnknownError") }));
-          console.log("20. Displayed error alert");
 
           this.isAILoading = false;
-          console.log("21. Set isAILoading to false");
 
           this.aiImportMessage = this.$i("import_aiError", { message: error.message || this.$i("import_aiUnknownError") });
-          console.log("22. Updated aiImportMessage with error");
         });
 
-      console.log("27. AI service call initiated, method execution complete");
     },
     formatPrice(price) {
       if (!price) {
