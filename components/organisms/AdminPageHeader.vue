@@ -130,7 +130,9 @@
           class="admin-nav__group"
           :class="{ 'admin-nav__group--role': group.role }"
         >
-          <h3 class="admin-nav__group-title">{{ group.title }}</h3>
+          <h3 class="admin-nav__group-title">
+            {{ group.title }}
+          </h3>
           <ul class="admin-nav__list">
             <li v-for="item in group.items" :key="item.path">
               <a
@@ -181,7 +183,9 @@
     >
       <div class="confirm-modal">
         <h3>{{ $i('nav_logout_confirm_title') }}</h3>
-        <p class="modal-description">{{ $i('nav_logout_confirm_message') }}</p>
+        <p class="modal-description">
+          {{ $i('nav_logout_confirm_message') }}
+        </p>
         <div class="modal-actions">
           <button class="modal-btn-secondary" @click="showLogoutConfirm = false">
             {{ $i('common_cancel') }}
@@ -196,7 +200,7 @@
 </template>
 
 <script>
-import LanguageSwitcher from "~/components/admin/LanguageSwitcher.vue";
+import LanguageSwitcher from '~/components/admin/LanguageSwitcher.vue';
 
 const icons = {
   dashboard: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>',
@@ -222,128 +226,133 @@ const icons = {
   dintero: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>',
   goods: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>',
   kam: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>',
+  tables: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM15 13a1 1 0 011-1h3a1 1 0 011 1v6a1 1 0 01-1 1h-3a1 1 0 01-1-1v-6z" /></svg>',
+  reservations: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>'
 };
 
 export default {
   components: {
-    LanguageSwitcher,
+    LanguageSwitcher
   },
   props: {
     collapsed: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
-  data() {
+  data () {
     return {
       drawerOpen: false,
       onboardingInProgress: false,
       dropdownOpen: false,
-      showLogoutConfirm: false,
+      showLogoutConfirm: false
     };
   },
 
   computed: {
-    isKeyAccountManager() {
+    isKeyAccountManager () {
       return this.$store.state.currentUser?.isKeyAccountManager;
     },
-    isPowerUser() {
+    isPowerUser () {
       return this.$store.state.currentUser?.isPowerUser;
     },
-    user() {
+    user () {
       return this.$store.state.currentUser || {};
     },
-    adminStores() {
+    adminStores () {
       return this.$store.state.currentUser?.adminIn || [];
     },
-    navGroups() {
+    navGroups () {
       const groups = [
         {
-          title: this.$i("nav_group_operations"),
+          title: this.$i('nav_group_operations'),
           items: [
-            { label: this.$i("nav_dashboard"), path: "/admin", icon: icons.dashboard },
-            { label: this.$i("nav_ongoing"), path: "/admin/ongoing", icon: icons.ongoing },
-            { label: this.$i("nav_history"), path: "/admin/orders", icon: icons.orders },
-            { label: this.$i("nav_statistics"), path: "/admin/statistics", icon: icons.statistics },
-          ],
+            { label: this.$i('nav_dashboard'), path: '/admin', icon: icons.dashboard },
+            { label: this.$i('nav_ongoing'), path: '/admin/ongoing', icon: icons.ongoing },
+            { label: this.$i('nav_history'), path: '/admin/orders', icon: icons.orders },
+            { label: this.$i('nav_statistics'), path: '/admin/statistics', icon: icons.statistics }
+          ]
         },
         {
-          title: this.$i("nav_group_menu"),
+          title: this.$i('nav_group_menu'),
           items: [
-            { label: this.$i("nav_products"), path: "/admin/products", icon: icons.products },
-            { label: this.$i("nav_categories"), path: "/admin/categories", icon: icons.categories },
-            { label: this.$i("nav_import"), path: "/admin/import", icon: icons.import },
-          ],
+            { label: this.$i('nav_products'), path: '/admin/products', icon: icons.products },
+            { label: this.$i('nav_categories'), path: '/admin/categories', icon: icons.categories },
+            { label: this.$i('nav_import'), path: '/admin/import', icon: icons.import }
+          ]
         },
         {
-          title: this.$i("nav_group_delivery"),
+          title: this.$i('nav_group_delivery'),
           items: [
-            { label: this.$i("nav_delivery"), path: "/admin/delivery", icon: icons.delivery },
-            { label: this.$i("nav_wolt"), path: "/admin/wolt", icon: icons.wolt },
-          ],
+            { label: this.$i('nav_delivery'), path: '/admin/delivery', icon: icons.delivery },
+            { label: this.$i('nav_wolt'), path: '/admin/wolt', icon: icons.wolt }
+          ]
         },
         {
-          title: this.$i("nav_group_sales"),
+          title: this.$i('nav_group_sales'),
           items: [
-            { label: this.$i("nav_send_invoice"), path: "/admin/kravia-invoice", icon: icons.invoice, isNew: true },
-            { label: this.$i("nav_rewards"), path: "/admin/rewards", icon: icons.rewards },
-            { label: this.$i("nav_discounts"), path: "/admin/discounts", icon: icons.discounts },
-          ],
+            { label: this.$i('nav_send_invoice'), path: '/admin/kravia-invoice', icon: icons.invoice, isNew: true },
+            { label: this.$i('nav_rewards'), path: '/admin/rewards', icon: icons.rewards },
+            { label: this.$i('nav_discounts'), path: '/admin/discounts', icon: icons.discounts }
+          ]
         },
         {
-          title: this.$i("nav_group_economy"),
+          title: this.$i('nav_group_economy'),
           items: [
-            { label: this.$i("nav_payment"), path: "/admin/payment", icon: icons.payment },
-            { label: this.$i("nav_settlements"), path: "/admin/settlements", icon: icons.settlements },
-          ],
+            { label: this.$i('nav_payment'), path: '/admin/payment', icon: icons.payment },
+            { label: this.$i('nav_settlements'), path: '/admin/settlements', icon: icons.settlements }
+          ]
         },
         {
-          title: this.$i("nav_group_administration"),
+          title: this.$i('nav_group_administration'),
           items: [
-            { label: this.$i("nav_customers"), path: "/admin/customers", icon: icons.customers },
-            { label: this.$i("nav_employees"), path: "/admin/employees", icon: icons.employees },
-          ],
-        },
+            { label: this.$i('nav_customers'), path: '/admin/customers', icon: icons.customers },
+            { label: this.$i('nav_employees'), path: '/admin/employees', icon: icons.employees }
+          ]
+        }
       ];
 
       if (this.onboardingInProgress) {
         groups[groups.length - 1].items.push({
-          label: this.$i("nav_onboarding"),
-          path: "/admin/onboarding",
-          icon: icons.onboarding,
+          label: this.$i('nav_onboarding'),
+          path: '/admin/onboarding',
+          icon: icons.onboarding
         });
       }
 
       if (this.isKeyAccountManager || this.isPowerUser) {
         groups.push({
-          title: this.$i("nav_group_kam"),
+          title: this.$i('nav_group_kam'),
           role: true,
           items: [
-            { label: this.$i("nav_offers"), path: "/admin/offers", icon: icons.offers },
-            { label: this.$i("nav_overview"), path: "/admin/overview", icon: icons.overview },
-            { label: this.$i("nav_onboarding"), path: "/admin/onboarding", icon: icons.onboarding },
-          ],
+            { label: this.$i('nav_offers'), path: '/admin/offers', icon: icons.offers },
+            { label: this.$i('nav_overview'), path: '/admin/overview', icon: icons.overview },
+            { label: this.$i('nav_onboarding'), path: '/admin/onboarding', icon: icons.onboarding }
+          ]
         });
       }
 
       if (this.isPowerUser) {
         groups.push({
-          title: this.$i("nav_group_poweruser"),
+          title: this.$i('nav_group_poweruser'),
           role: true,
           items: [
-            { label: this.$i("nav_okam_growth"), path: "/admin/poweruser-growth", icon: icons.growth },
-            { label: this.$i("nav_dintero"), path: "/admin/dintero", icon: icons.dintero },
-            { label: this.$i("nav_wolt_drive_invoice"), path: "/admin/wolt-drive-invoice", icon: icons.invoice },
-            { label: this.$i("nav_goods"), path: "/admin/goods", icon: icons.goods },
-            { label: this.$i("nav_kam_administration"), path: "/admin/kam", icon: icons.kam },
-          ],
+            { label: this.$i('nav_okam_growth'), path: '/admin/poweruser-growth', icon: icons.growth },
+            { label: this.$i('nav_dintero'), path: '/admin/dintero', icon: icons.dintero },
+            { label: 'Dintero Terminal', path: '/admin/dintero-terminal', icon: icons.dintero },
+            { label: 'Bordkart (beta)', path: '/admin/tables', icon: icons.tables },
+            { label: 'Reservasjoner (beta)', path: '/admin/reservations', icon: icons.reservations },
+            { label: this.$i('nav_wolt_drive_invoice'), path: '/admin/wolt-drive-invoice', icon: icons.invoice },
+            { label: this.$i('nav_goods'), path: '/admin/goods', icon: icons.goods },
+            { label: this.$i('nav_kam_administration'), path: '/admin/kam', icon: icons.kam }
+          ]
         });
       }
 
       return groups;
     },
     selectedStore: {
-      get() {
+      get () {
         // Always ensure a store is selected, default to first if none selected
         const currentSelected = this.$store.state.selectedAdminStore;
         if (!currentSelected && this.adminStores.length > 0) {
@@ -351,11 +360,11 @@ export default {
         }
         return currentSelected;
       },
-      set(value) {
-        this.$store.dispatch("SetSelectedAdminStore", value);
+      set (value) {
+        this.$store.dispatch('SetSelectedAdminStore', value);
       }
     },
-    currentStoreName() {
+    currentStoreName () {
       const store = this.adminStores.find(s => s.id === this.selectedStore);
 
       if (store && store.name) {
@@ -363,22 +372,22 @@ export default {
       }
 
       return this.adminStores.length > 0 ? this.adminStores[0].name : '';
-    },
+    }
   },
 
   watch: {
-    "$route.query": {
-      handler(newQuery) {
+    '$route.query': {
+      handler (newQuery) {
         this.applyQueryStore(newQuery);
       },
-      immediate: true,
+      immediate: true
     },
-    "$route.path"() {
+    '$route.path' () {
       this.drawerOpen = false;
     },
     adminStores: {
       immediate: true,
-      handler(stores) {
+      handler (stores) {
         const queryStoreId = this.getQueryStoreId();
         const hasStores = stores.length > 0;
         const queryStoreExists = queryStoreId && stores.some(store => store.id === queryStoreId);
@@ -386,7 +395,7 @@ export default {
         if (queryStoreExists) {
           if (this.$store.state.selectedAdminStore !== queryStoreId) {
             this.$nextTick(() => {
-              this.$store.dispatch("SetSelectedAdminStore", queryStoreId);
+              this.$store.dispatch('SetSelectedAdminStore', queryStoreId);
             });
           }
           this.updateQueryStore(queryStoreId);
@@ -396,7 +405,7 @@ export default {
         if (queryStoreId && hasStores) {
           const fallbackStoreId = stores[0].id;
           this.$nextTick(() => {
-            this.$store.dispatch("SetSelectedAdminStore", fallbackStoreId);
+            this.$store.dispatch('SetSelectedAdminStore', fallbackStoreId);
             this.updateQueryStore(fallbackStoreId);
           });
           return;
@@ -405,7 +414,7 @@ export default {
         // Ensure a store is always selected when stores are loaded
         if (hasStores && !this.$store.state.selectedAdminStore) {
           this.$nextTick(() => {
-            this.$store.dispatch("SetSelectedAdminStore", stores[0].id);
+            this.$store.dispatch('SetSelectedAdminStore', stores[0].id);
             this.updateQueryStore(stores[0].id);
           });
         }
@@ -413,57 +422,57 @@ export default {
     }
   },
 
-  mounted() {
-    this.onboardingInProgress = localStorage.getItem("onboardingInProgress");
+  mounted () {
+    this.onboardingInProgress = localStorage.getItem('onboardingInProgress');
 
     this.applyQueryStore(this.$route.query);
     this.syncQueryStoreIfMissing();
 
     // Ensure a store is selected on mount
     if (this.adminStores.length > 0 && !this.$store.state.selectedAdminStore) {
-      this.$store.dispatch("SetSelectedAdminStore", this.adminStores[0].id);
+      this.$store.dispatch('SetSelectedAdminStore', this.adminStores[0].id);
     }
 
     // Close dropdown when clicking outside
     document.addEventListener('click', this.handleClickOutside);
   },
 
-  beforeDestroy() {
+  beforeDestroy () {
     document.removeEventListener('click', this.handleClickOutside);
   },
 
   methods: {
-    navHref(path) {
+    navHref (path) {
       const storeId = this.selectedStore;
       return storeId ? `${path}?storeId=${storeId}` : path;
     },
 
-    isActive(path) {
-      const current = (this.$route.path || "").replace(/\/+$/, "") || "/";
-      const target = path.replace(/\/+$/, "");
-      if (target === "/admin") {
-        return current === "/admin" || current.endsWith("/admin");
+    isActive (path) {
+      const current = (this.$route.path || '').replace(/\/+$/, '') || '/';
+      const target = path.replace(/\/+$/, '');
+      if (target === '/admin') {
+        return current === '/admin' || current.endsWith('/admin');
       }
       return current === target || current.endsWith(target);
     },
 
-    closeDrawer() {
+    closeDrawer () {
       this.drawerOpen = false;
     },
 
-    logout() {
+    logout () {
       this._userService.Logout();
       if (window && window.location) {
-        window.location.href = "/";
+        window.location.href = '/';
       }
     },
 
-    getQueryStoreId(query = this.$route.query) {
-      if (!query || typeof query !== "object") {
+    getQueryStoreId (query = this.$route.query) {
+      if (!query || typeof query !== 'object') {
         return null;
       }
 
-      const directKeys = ["storeId", "storeid", "store", "storeID"];
+      const directKeys = ['storeId', 'storeid', 'store', 'storeID'];
       for (const key of directKeys) {
         const rawValue = query[key];
         const parsed = this.parseStoreId(rawValue);
@@ -474,7 +483,7 @@ export default {
 
       for (const [key, value] of Object.entries(query)) {
         const normalized = key.toLowerCase();
-        if (normalized === "storeid" || normalized === "store") {
+        if (normalized === 'storeid' || normalized === 'store') {
           const parsed = this.parseStoreId(value);
           if (parsed) {
             return parsed;
@@ -485,38 +494,38 @@ export default {
       return null;
     },
 
-    parseStoreId(value) {
-      if (typeof value === "string") {
+    parseStoreId (value) {
+      if (typeof value === 'string') {
         const parsed = parseInt(value, 10);
         if (!Number.isNaN(parsed) && parsed > 0) {
           return parsed;
         }
       }
-      if (typeof value === "number" && Number.isFinite(value) && value > 0) {
+      if (typeof value === 'number' && Number.isFinite(value) && value > 0) {
         return value;
       }
       return null;
     },
 
-    applyQueryStore(query) {
+    applyQueryStore (query) {
       const queryStoreId = this.getQueryStoreId(query);
       if (!queryStoreId) {
         return;
       }
 
       if (this.$store.state.selectedAdminStore !== queryStoreId) {
-        this.$store.dispatch("SetSelectedAdminStore", queryStoreId);
+        this.$store.dispatch('SetSelectedAdminStore', queryStoreId);
       }
     },
 
-    updateQueryStore(storeId) {
+    updateQueryStore (storeId) {
       if (!storeId) {
         return;
       }
 
       const nextQuery = {
         ...this.$route.query,
-        storeId,
+        storeId
       };
 
       delete nextQuery.store;
@@ -531,7 +540,7 @@ export default {
       this.$router.replace({ query: nextQuery });
     },
 
-    syncQueryStoreIfMissing() {
+    syncQueryStoreIfMissing () {
       const existingStoreId = this.getQueryStoreId(this.$route.query);
       if (existingStoreId) {
         return;
@@ -543,10 +552,10 @@ export default {
       }
     },
 
-    toggleDropdown() {
+    toggleDropdown () {
       this.dropdownOpen = !this.dropdownOpen;
     },
-    selectStore(storeId) {
+    selectStore (storeId) {
       const parsedStoreId = this.parseStoreId(storeId);
       if (!parsedStoreId) {
         return;
@@ -557,28 +566,28 @@ export default {
         return;
       }
 
-      this.$store.dispatch("SetSelectedAdminStore", parsedStoreId);
+      this.$store.dispatch('SetSelectedAdminStore', parsedStoreId);
       this.dropdownOpen = false;
 
-      if (typeof window !== "undefined") {
+      if (typeof window !== 'undefined') {
         window.location.assign(this.buildStoreUrl(parsedStoreId));
       } else {
         this.updateQueryStore(parsedStoreId);
       }
     },
-    buildStoreUrl(storeId) {
+    buildStoreUrl (storeId) {
       // Use includes() so the check also matches the locale-prefixed (/en/...)
       // and trailing-slash ("/admin/category-editor/") variants of the path.
       const isExistingCategoryEditor =
-        this.$route.path.includes("/admin/category-editor") &&
+        this.$route.path.includes('/admin/category-editor') &&
         this.$route.query?.id &&
-        this.$route.query.id !== "new";
+        this.$route.query.id !== 'new';
 
       const nextQuery = isExistingCategoryEditor
         ? { storeId }
         : {
           ...this.$route.query,
-          storeId,
+          storeId
         };
 
       delete nextQuery.store;
@@ -604,12 +613,12 @@ export default {
       });
 
       const queryString = searchParams.toString();
-      const hash = this.$route.hash || "";
-      const path = isExistingCategoryEditor ? "/admin/categories" : this.$route.path;
+      const hash = this.$route.hash || '';
+      const path = isExistingCategoryEditor ? '/admin/categories' : this.$route.path;
 
-      return `${path}${queryString ? `?${queryString}` : ""}${hash}`;
+      return `${path}${queryString ? `?${queryString}` : ''}${hash}`;
     },
-    handleClickOutside(event) {
+    handleClickOutside (event) {
       // Check if $el exists and is an element before querying
       if (!this.$el || typeof this.$el.querySelector !== 'function') {
         return;

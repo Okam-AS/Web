@@ -21,13 +21,16 @@ import {
   OfferProposalService,
   KamService,
   DinteroService,
+  DinteroTerminalService,
   KraviaInvoiceService,
   WoltService,
   WoltMenuService,
   WoltVenueService,
   RewardService,
   WrappedService,
-  BankAccountService
+  BankAccountService,
+  TableService,
+  ReservationService
 } from '~/core/services'
 import { AdminUserService, AdminCartService } from '~/plugins/admin-core-services'
 import { wholeAmount, fractionAmount, priceLabel, formatString, setCurrencyFormat } from '~/core/helpers/tools'
@@ -190,13 +193,16 @@ const mixin = {
     _offerProposalService() { return new OfferProposalService(this._coreInitializer) },
     _kamService() { return new KamService(this._coreInitializer) },
     _dinteroService() { return new DinteroService(this._coreInitializer) },
+    _dinteroTerminalService() { return new DinteroTerminalService(this._coreInitializer) },
     _kraviaInvoiceService() { return new KraviaInvoiceService(this._coreInitializer) },
     _woltService() { return new WoltService(this._coreInitializer) },
     _woltMenuService() { return new WoltMenuService(this._coreInitializer) },
     _woltVenueService() { return new WoltVenueService(this._coreInitializer) },
     _rewardService() { return new RewardService(this._coreInitializer) },
     _wrappedService() { return new WrappedService(this._coreInitializer) },
-    _bankAccountService() { return new BankAccountService(this._coreInitializer) }
+    _bankAccountService() { return new BankAccountService(this._coreInitializer) },
+    _tableService() { return new TableService(this._coreInitializer) },
+    _reservationService() { return new ReservationService(this._coreInitializer) }
 
   }
 }

@@ -28,7 +28,7 @@ export default {
     EDITION: OKAM_EDITION,
     STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY || '',
     IS_PRODUCTION: process.env.NODE_ENV === 'production',
-    API_BASE_URL: process.env.NODE_ENV === 'production' ? 'https://okamapi.azurewebsites.net' : 'https://okamapi.azurewebsites.net', // 'http://localhost:5000',
+    API_BASE_URL: process.env.API_BASE_URL || (process.env.NODE_ENV === 'production' ? 'https://okamapi.azurewebsites.net' : 'https://okamapi.azurewebsites.net'), // override locally e.g. API_BASE_URL=http://localhost:5080
     IS_NATIVESCRIPT: 'false',
     VERSION: '1.0.0',
     PLATFORM_FILE_SUFFIX: '.nuxt'
