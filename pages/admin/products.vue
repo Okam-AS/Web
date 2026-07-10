@@ -539,6 +539,13 @@
           </div>
         </div>
       </div>
+
+      <transition name="toast">
+        <div v-if="toast.show" :class="['toast', toast.type]">
+          <span class="material-icons">{{ toast.type === 'success' ? 'check_circle' : 'error' }}</span>
+          {{ toast.message }}
+        </div>
+      </transition>
     </div>
   </AdminPage>
 </template>
@@ -2863,6 +2870,7 @@ export default {
   transition: all 0.3s ease;
 }
 
+.toast-enter,
 .toast-enter-from,
 .toast-leave-to {
   opacity: 0;
