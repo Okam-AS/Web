@@ -654,6 +654,7 @@ export default {
   nav_dashboard: "Dashboard",
   nav_delivery: "Lieferung",
   nav_dintero: "Dintero",
+  nav_surfboard: "Surfboard",
   nav_discounts: "Rabatte",
   nav_employees: "Mitarbeiter",
   nav_goods: "Waren & Dienstleistungen",
