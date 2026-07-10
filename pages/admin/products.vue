@@ -687,6 +687,7 @@ export default {
 
     otherAdminStores() {
       const adminIn = this.$store.state.currentUser?.adminIn || [];
+      if (adminIn.length < 2) return [];
       const productStoreId = this.selectedProduct?.storeId || this.selectedStore;
       return adminIn.filter((store) => store.id !== productStoreId);
     },
