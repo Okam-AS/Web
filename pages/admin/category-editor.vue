@@ -765,8 +765,28 @@ export default {
 
       await this.saveCategoryProductList()
 
-      // Reload category to get full product data from backend
-      await this.loadCategory()
+      // Fetch full product data for the newly added rows. Can't use
+      // loadCategory() here – it early-returns when the category is
+      // already loaded.
+      await this.refreshProductList()
+    },
+
+    async refreshProductList() {
+      try {
+        const category = await this._categoryService.Get(this.categoryId, true)
+        if (!category) return
+
+        const items = (category.categoryProductListItems || []).map(item => {
+          if (item.product) {
+            item.product = Object.freeze(item.product)
+          }
+          return item
+        })
+
+        this.$set(this.category, 'categoryProductListItems', items)
+      } catch (err) {
+        console.error('Failed to refresh product list:', err)
+      }
     },
 
     async addHeading() {
