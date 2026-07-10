@@ -461,6 +461,23 @@
                 {{ $i('products_noVariantsAdded') }}
               </div>
             </div>
+
+            <div
+              v-if="selectedProduct.id && otherAdminStores.length"
+              class="form-group copy-to-stores-section"
+            >
+              <label>{{ $i('products_copyToStores') }}</label>
+              <p class="helper-text">{{ $i('products_copyToStoresHelper') }}</p>
+              <button
+                class="copy-to-stores-btn"
+                type="button"
+                :disabled="isSaving"
+                @click="copyProductToStores"
+              >
+                <span class="material-icons">content_copy</span>
+                {{ $i('products_copyToStoresButton') }}
+              </button>
+            </div>
           </div>
 
           <div class="editor-actions">
@@ -492,6 +509,7 @@
       <!-- Modals -->
       <VariantEditorModal ref="variantEditor" />
       <CopyVariantToTargetsModal ref="copyVariant" />
+      <CopyProductToStoresModal ref="copyProductToStores" />
 
       <!-- New Product Name Modal -->
       <div v-if="showNewProductModal" class="modal-overlay" @click.self="closeNewProductModal">
@@ -529,6 +547,7 @@
 import AdminPage from "~/components/organisms/AdminPage.vue";
 import VariantEditorModal from "~/components/admin/VariantEditorModal.vue";
 import CopyVariantToTargetsModal from "~/components/admin/CopyVariantToTargetsModal.vue";
+import CopyProductToStoresModal from "~/components/admin/CopyProductToStoresModal.vue";
 import LoadingSkeleton from "~/components/molecules/LoadingSkeleton.vue";
 import Loading from "~/components/atoms/Loading.vue";
 import axios from "axios";
@@ -540,6 +559,7 @@ export default {
     AdminPage,
     VariantEditorModal,
     CopyVariantToTargetsModal,
+    CopyProductToStoresModal,
     LoadingSkeleton,
     Loading
   },
@@ -656,6 +676,12 @@ export default {
         .filter(cat => this.selectedProductCategoryIds.includes(cat.id))
         .map(cat => cat.name)
         .join(', ');
+    },
+
+    otherAdminStores() {
+      const adminIn = this.$store.state.currentUser?.adminIn || [];
+      const productStoreId = this.selectedProduct?.storeId || this.selectedStore;
+      return adminIn.filter((store) => store.id !== productStoreId);
     },
   },
 
@@ -1301,6 +1327,29 @@ export default {
       } catch (err) {
         console.error('Failed to copy variant:', err);
         this.showToast(this.$i('products_toastCopyFailed'), 'error');
+      }
+    },
+
+    async copyProductToStores() {
+      const product = this.selectedProduct;
+      if (!product?.id) return;
+
+      const targetIds = await this.$refs.copyProductToStores.open({
+        productName: product.name,
+        targets: this.otherAdminStores.map(store => ({ id: store.id, name: store.name }))
+      });
+      if (!targetIds || targetIds.length === 0) return;
+
+      try {
+        await this._productService.CopyToStores(product.id, targetIds);
+        this.showToast(
+          targetIds.length === 1
+            ? this.$i('products_toastCopiedToStoresSingle', { count: targetIds.length })
+            : this.$i('products_toastCopiedToStoresMultiple', { count: targetIds.length })
+        );
+      } catch (err) {
+        console.error('Failed to copy product to stores:', err);
+        this.showToast(this.$i('products_toastCopyToStoresFailed'), 'error');
       }
     },
 
@@ -2371,6 +2420,43 @@ export default {
   font-size: 0.75rem;
   color: #64748b;
   margin-top: 0.25rem;
+}
+
+.copy-to-stores-section {
+  .helper-text {
+    margin-bottom: 0.5rem;
+  }
+
+  .copy-to-stores-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 12px 20px;
+    background: white;
+    color: #334155;
+    border: 2px solid #cbd5e0;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+
+    .material-icons {
+      font-size: 18px;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &:not(:disabled):hover {
+      border-color: #94a3b8;
+      background: #f8fafc;
+    }
+  }
 }
 
 .mt-4 {
