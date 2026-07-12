@@ -1,9 +1,6 @@
 <template>
   <div class="crud">
     <div class="crud__bar">
-      <h2 class="crud__heading">
-        {{ $i('posset_tab_allergens') }}
-      </h2>
       <div class="crud__bar-actions">
         <button class="crud__seed" :disabled="seeding" @click="seed">
           {{ $i('posset_alg_seed') }}
@@ -69,9 +66,10 @@
 </template>
 
 <script>
-// Allergen register (per store). CRUD plus a standard-set seeder.
+// Allergen register (per store). CRUD plus a standard-set seeder. Managed on the Products/Menu
+// side (/admin/allergens); allergens are a menu concern, not a POS-only one.
 export default {
-  name: 'AllergensTab',
+  name: 'AllergensManager',
   props: { storeId: { type: [Number, String], required: true } },
   data () {
     return { items: [], loading: true, form: null, saving: false, seeding: false };
@@ -139,7 +137,7 @@ export default {
 </script>
 
 <style scoped>
-.crud__bar { display: flex; align-items: center; justify-content: space-between; }
+.crud__bar { display: flex; align-items: center; justify-content: flex-end; }
 .crud__bar-actions { display: flex; align-items: center; gap: 10px; }
 .crud__heading { font-size: 1.3rem; font-weight: 600; color: #292c34; margin: 0; }
 .crud__hint { color: #64748b; margin: 4px 0 16px; font-size: 0.9rem; }

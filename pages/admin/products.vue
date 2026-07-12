@@ -273,12 +273,51 @@
               />
             </div>
             <div class="form-group">
-              <label>{{ $i('products_allergens') }}</label>
+              <label>{{ $i('products_otherInfo') }}</label>
               <textarea
                 v-model="selectedProduct.otherInformation"
                 rows="2"
-                :placeholder="$i('products_allergensPlaceholder')"
+                :placeholder="$i('products_otherInfoPlaceholder')"
               />
+            </div>
+
+            <!-- Allergens (structured, from the store's allergen catalogue) -->
+            <div class="form-group allergens-section">
+              <label>{{ $i('products_allergens') }}</label>
+              <div class="multi-select-dropdown" :class="{ open: allergenDropdownOpen }">
+                <div class="dropdown-trigger" @click.stop="allergenDropdownOpen = !allergenDropdownOpen">
+                  <span v-if="!selectedProduct.allergenIds || selectedProduct.allergenIds.length === 0" class="placeholder">
+                    {{ $i('products_selectAllergens') }}
+                  </span>
+                  <span v-else class="selected-names">
+                    {{ selectedAllergenNames }}
+                  </span>
+                  <i class="fas fa-chevron-down dropdown-arrow" />
+                </div>
+                <div v-if="allergenDropdownOpen" class="dropdown-menu">
+                  <div
+                    v-for="allergen in activeAllergens"
+                    :key="allergen.allergenId"
+                    class="dropdown-item"
+                    :class="{ selected: (selectedProduct.allergenIds || []).includes(allergen.allergenId) }"
+                    @click="toggleAllergen(allergen)"
+                  >
+                    <input
+                      type="checkbox"
+                      :checked="(selectedProduct.allergenIds || []).includes(allergen.allergenId)"
+                      @click.stop="toggleAllergen(allergen)"
+                    />
+                    <span>{{ allergen.name }}</span>
+                  </div>
+                  <div v-if="activeAllergens.length === 0" class="dropdown-empty">
+                    {{ $i('products_noAllergensFound') }}
+                  </div>
+                </div>
+              </div>
+              <p class="helper-text">
+                {{ $i('products_allergensHelper') }}
+                <a href="/admin/allergens" class="allergens-manage-link">{{ $i('products_manageAllergens') }}</a>
+              </p>
             </div>
 
             <!-- Categories Section -->
@@ -546,6 +585,7 @@ export default {
   data: () => ({
     products: [],
     categories: [],
+    allergens: [],
     draggingProducts: {},
     uploadingFor: null,
     productFilter: "",
@@ -558,6 +598,7 @@ export default {
     isLoading: false,
     loadingCategories: false,
     categoryDropdownOpen: false,
+    allergenDropdownOpen: false,
     pendingCategoryChanges: {}, // { categoryId: { add: boolean, items: [] } }
     originalCategoryIds: [], // Track original state to detect changes
     showNewProductModal: false,
@@ -657,6 +698,19 @@ export default {
         .map(cat => cat.name)
         .join(', ');
     },
+
+    // Only active allergens from the store's catalogue (/admin/allergens) are offered as tags.
+    activeAllergens() {
+      return (this.allergens || []).filter(a => a.isActive);
+    },
+
+    selectedAllergenNames() {
+      const ids = (this.selectedProduct && this.selectedProduct.allergenIds) || [];
+      return (this.allergens || [])
+        .filter(a => ids.includes(a.allergenId))
+        .map(a => a.name)
+        .join(', ');
+    },
   },
 
   watch: {
@@ -698,6 +752,7 @@ export default {
         this.pendingCategoryChanges = {};
         this.originalCategoryIds = [];
         this.categoryDropdownOpen = false;
+        this.allergenDropdownOpen = false;
       }
     },
   },
@@ -732,8 +787,9 @@ export default {
         this.products = products;
         this.imageDimensions = {};
         products.forEach((p) => this.updateImageDimension(p));
-        // Also load categories
+        // Also load categories and the store's allergen catalogue
         await this.loadCategories();
+        await this.loadAllergens();
       } catch (err) {
         console.error("Failed to load products:", err);
       } finally {
@@ -758,6 +814,28 @@ export default {
       } finally {
         this.loadingCategories = false;
       }
+    },
+
+    async loadAllergens() {
+      try {
+        this.allergens = await this._allergenService.GetForStore(this.selectedStore) || [];
+      } catch (err) {
+        console.error("Failed to load allergens:", err);
+        this.allergens = [];
+      }
+    },
+
+    // Toggle a structured allergen tag on the product being edited. allergenIds is sent to the
+    // backend as-is on save (StoreProductModel.AllergenIds replaces the product's tags).
+    toggleAllergen(allergen) {
+      const ids = (this.selectedProduct.allergenIds || []).slice();
+      const index = ids.indexOf(allergen.allergenId);
+      if (index === -1) {
+        ids.push(allergen.allergenId);
+      } else {
+        ids.splice(index, 1);
+      }
+      this.$set(this.selectedProduct, 'allergenIds', ids);
     },
 
     async handleDrop(event, productId) {
@@ -932,6 +1010,11 @@ export default {
         if (!this.selectedProduct.productVariants) {
           this.selectedProduct.productVariants = [];
         }
+      }
+
+      // Normalize the structured allergen tags to an array so the picker binds cleanly.
+      if (!Array.isArray(this.selectedProduct.allergenIds)) {
+        this.$set(this.selectedProduct, 'allergenIds', []);
       }
 
       // Store original category IDs for this product
@@ -1154,6 +1237,7 @@ export default {
           storeId: this.selectedStore,
           description: "",
           otherInformation: "",
+          allergenIds: [],
           amount: 0,
           currency: "NOK",
           tax: 15,
@@ -1358,8 +1442,9 @@ export default {
     },
 
     handleClickOutside(e) {
-      if (this.categoryDropdownOpen && !e.target.closest('.multi-select-dropdown')) {
+      if (!e.target.closest('.multi-select-dropdown')) {
         this.categoryDropdownOpen = false;
+        this.allergenDropdownOpen = false;
       }
     },
 
@@ -2371,6 +2456,12 @@ export default {
   font-size: 0.75rem;
   color: #64748b;
   margin-top: 0.25rem;
+}
+
+.allergens-manage-link {
+  color: #159f63;
+  font-weight: 600;
+  margin-left: 4px;
 }
 
 .mt-4 {

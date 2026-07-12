@@ -46,16 +46,15 @@
 import AdminPage from '~/components/organisms/AdminPage.vue';
 import CashPointsTab from '~/components/admin/pos-settings/CashPointsTab.vue';
 import OperatorsTab from '~/components/admin/pos-settings/OperatorsTab.vue';
-import PosDiscountsTab from '~/components/admin/pos-settings/PosDiscountsTab.vue';
 import GoodsGroupsTab from '~/components/admin/pos-settings/GoodsGroupsTab.vue';
-import AllergensTab from '~/components/admin/pos-settings/AllergensTab.vue';
 
-// Power-user backoffice for the POS: cash points (incl. terminal provider), operators + PIN,
-// discounts (managed in the shared discount catalogue), goods groups and allergens. Operates on
-// the store selected in the nav.
+// Power-user backoffice for the POS: cash points (incl. terminal provider), operators + PIN, and
+// goods groups. Operates on the store selected in the nav. Discounts (incl. the "show in POS" flag
+// and manager-PIN requirement) are managed on the shared discount page (/admin/discounts);
+// allergens are managed on the Products/Menu side (/admin/allergens).
 export default {
   name: 'AdminPosSettings',
-  components: { AdminPage, CashPointsTab, OperatorsTab, PosDiscountsTab, GoodsGroupsTab, AllergensTab },
+  components: { AdminPage, CashPointsTab, OperatorsTab, GoodsGroupsTab },
   data () {
     return {
       activeTab: 'cashpoints',
@@ -74,18 +73,14 @@ export default {
       return [
         { key: 'cashpoints', label: this.$i('posset_tab_cashpoints') },
         { key: 'operators', label: this.$i('posset_tab_operators') },
-        { key: 'discounts', label: this.$i('posset_tab_discounts') },
-        { key: 'goods', label: this.$i('posset_tab_goods') },
-        { key: 'allergens', label: this.$i('posset_tab_allergens') }
+        { key: 'goods', label: this.$i('posset_tab_goods') }
       ];
     },
     activeComponent () {
       return {
         cashpoints: 'CashPointsTab',
         operators: 'OperatorsTab',
-        discounts: 'PosDiscountsTab',
-        goods: 'GoodsGroupsTab',
-        allergens: 'AllergensTab'
+        goods: 'GoodsGroupsTab'
       }[this.activeTab];
     }
   },
