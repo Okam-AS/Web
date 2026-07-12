@@ -84,6 +84,13 @@
             <span>{{ woltDeliveryStatusLabel(order.woltDeliveryInfo.status) }}</span>
           </div>
         </div>
+        <div
+          v-if="order.deliveryType === 'WoltDelivery' && order.woltDeliveryInfo && order.woltDeliveryInfo.pickupEta"
+          class="info-item"
+        >
+          <label>{{ $i('orderCard_woltPickupEtaLabel') }}</label>
+          <span>{{ formatRequestedCompletionDate(order.woltDeliveryInfo.pickupEta) }}</span>
+        </div>
         <div class="info-item">
           <label>{{ $i('orderCard_orderedLabel') }}</label>
           <span>{{ formatDate(order.created || order.pickup) }}</span>

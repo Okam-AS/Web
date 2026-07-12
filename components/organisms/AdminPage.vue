@@ -1,15 +1,16 @@
 <template>
-  <div class="admin" :class="{ 'admin--collapsed': sidebarCollapsed }">
+  <div class="admin" :class="{ 'admin--collapsed': sidebarCollapsed, 'admin--chromeless': chromeless }">
     <AdminPageHeader
+      v-if="!chromeless"
       :collapsed="sidebarCollapsed"
       @toggle-sidebar="toggleSidebar"
     />
     <div class="admin__main">
-      <OnboardingNotification v-if="!isOnboardingPage" />
-      <main :class="['admin__content', { admin__wrapper: !fullWidth }]">
+      <OnboardingNotification v-if="!chromeless && !isOnboardingPage" />
+      <main :class="['admin__content', { admin__wrapper: !fullWidth && !chromeless }]">
         <slot />
       </main>
-      <AdminPageFooter v-if="!userIsLoggedIn" />
+      <AdminPageFooter v-if="!chromeless && !userIsLoggedIn" />
     </div>
     <LoginModal
       v-if="showLogin"
@@ -33,6 +34,12 @@ export default {
   },
   props: {
     fullWidth: {
+      type: Boolean,
+      default: false,
+    },
+    // Full-screen mode with no sidebar/header/footer chrome (used by the POS register
+    // flate). Auth handling (initAuth/LoginModal) is preserved so the page is still guarded.
+    chromeless: {
       type: Boolean,
       default: false,
     },
@@ -112,10 +119,21 @@ export default {
   margin-left: 0;
 }
 
+/* Chromeless (POS full-screen): no sidebar/header/footer, so the main area
+   must fill the viewport with no reserved sidebar gutter at any width. */
+.admin--chromeless .admin__main {
+  margin-left: 0;
+  padding-top: 0;
+}
+
 @media (max-width: 1024px) {
   .admin__main {
     margin-left: 0;
     padding-top: 56px;
+  }
+
+  .admin--chromeless .admin__main {
+    padding-top: 0;
   }
 }
 </style>

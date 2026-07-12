@@ -232,6 +232,51 @@
           </div>
         </div>
 
+        <!-- POS (kassa) -->
+        <div class="form-section">
+          <h2 class="section-title">{{ $i('discount_posTitle') }}</h2>
+
+          <div class="condition-toggle-row">
+            <label class="toggle-label">
+              <span>{{ $i('discount_showInPosLabel') }}</span>
+              <span class="toggle-hint">{{ $i('discount_showInPosHint') }}</span>
+            </label>
+            <label class="toggle-switch">
+              <input v-model="localDiscount.showInPos" type="checkbox" />
+              <span class="toggle-slider" />
+            </label>
+          </div>
+
+          <template v-if="localDiscount.showInPos">
+            <div class="condition-toggle-row" style="margin-top: 16px;">
+              <label class="toggle-label">
+                <span>{{ $i('discount_requiresManagerPinLabel') }}</span>
+                <span class="toggle-hint">{{ $i('discount_requiresManagerPinHint') }}</span>
+              </label>
+              <label class="toggle-switch">
+                <input v-model="localDiscount.requiresManagerPin" type="checkbox" />
+                <span class="toggle-slider" />
+              </label>
+            </div>
+
+            <div class="amount-row" style="margin-top: 16px;">
+              <div class="form-field">
+                <label>{{ $i('discount_staffGroupLabel') }}</label>
+                <select v-model="localDiscount.staffGroup" class="text-input">
+                  <option :value="null">{{ $i('discount_staffGroupNone') }}</option>
+                  <option value="Staff">{{ $i('discount_staffGroupStaff') }}</option>
+                  <option value="Owner">{{ $i('discount_staffGroupOwner') }}</option>
+                  <option value="Guest">{{ $i('discount_staffGroupGuest') }}</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label>{{ $i('discount_sortOrderLabel') }}</label>
+                <input v-model.number="localDiscount.sortOrder" type="number" min="0" class="text-input" />
+              </div>
+            </div>
+          </template>
+        </div>
+
         <!-- Usage Stats -->
         <div v-if="!isNew && localDiscount.discountUsages" class="form-section">
           <h2 class="section-title">{{ $i('discount_statisticsTitle') }}</h2>
@@ -352,6 +397,10 @@ export default {
           validTo: null,
           giveRewardInsteadOfDiscountEnabled: false,
           expired: false,
+          showInPos: false,
+          requiresManagerPin: true,
+          staffGroup: null,
+          sortOrder: 0,
           discountProducts: [],
           discountUsages: [],
         }

@@ -1,0 +1,890 @@
+// Kitchen Display System (KDS) — the unified kitchen board (plan Fase 3).
+// This is the evolution of /admin/ongoing: one ticket wall that merges in-house POS
+// table checks (per-line coursing) and online consumer orders (order-level fulfilment).
+// Designed for a wall iPad / kitchen monitor: big text, high contrast, touch targets,
+// and an optional dark theme. Everything is namespaced under .kds-board so nothing
+// leaks into the rest of the admin app.
+
+.kds-board {
+  // Light theme (default; matches the admin app).
+  --kds-bg: #eef1f4;
+  --kds-surface: #ffffff;
+  --kds-surface-2: #f6f8fa;
+  --kds-surface-3: #eef1f5;
+  --kds-text: #1a202c;
+  --kds-text-dim: #64748b;
+  --kds-border: #e2e8f0;
+  --kds-header-bg: #292c34;
+  --kds-header-text: #ffffff;
+  --kds-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --kds-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+  // Age / status colours (identical in both themes so escalation reads the same).
+  --kds-green: #16a34a;
+  --kds-green-soft: rgba(22, 163, 74, 0.14);
+  --kds-amber: #d97706;
+  --kds-amber-soft: rgba(217, 119, 6, 0.15);
+  --kds-red: #dc2626;
+  --kds-red-soft: rgba(220, 38, 38, 0.15);
+  --kds-blue: #2563eb;
+  --kds-blue-soft: rgba(37, 99, 235, 0.12);
+
+  min-height: 100vh;
+  background: var(--kds-bg);
+  color: var(--kds-text);
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+
+  &.is-dark {
+    --kds-bg: #0e1116;
+    --kds-surface: #1a1f27;
+    --kds-surface-2: #222833;
+    --kds-surface-3: #2b323e;
+    --kds-text: #f1f5f9;
+    --kds-text-dim: #98a3b3;
+    --kds-border: #303845;
+    --kds-header-bg: #05070a;
+    --kds-header-text: #f1f5f9;
+    --kds-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    --kds-shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.6);
+    --kds-green: #22c55e;
+    --kds-amber: #f59e0b;
+    --kds-red: #f04747;
+  }
+}
+
+// ---------- Toolbar ----------
+.kds-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px 20px;
+  background: var(--kds-header-bg);
+  color: var(--kds-header-text);
+  box-shadow: var(--kds-shadow);
+
+  .kds-toolbar__title {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+
+  .kds-toolbar__store {
+    font-size: 0.95rem;
+    font-weight: 500;
+    opacity: 0.75;
+  }
+
+  .kds-toolbar__spacer {
+    flex: 1 1 auto;
+  }
+
+  .kds-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    opacity: 0.85;
+
+    .kds-live__dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #4ade80;
+      box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7);
+      animation: kds-pulse 2s infinite;
+    }
+  }
+}
+
+@keyframes kds-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.6); }
+  70% { box-shadow: 0 0 0 8px rgba(74, 222, 128, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+}
+
+// Segmented view switch + icon buttons in the toolbar.
+.kds-seg {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 3px;
+
+  .kds-seg__btn {
+    appearance: none;
+    border: none;
+    background: transparent;
+    color: var(--kds-header-text);
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.15s ease;
+
+    .material-icons {
+      font-size: 18px;
+    }
+
+    &.is-active {
+      background: var(--kds-header-text);
+      color: var(--kds-header-bg);
+    }
+  }
+}
+
+.kds-iconbtn {
+  appearance: none;
+  border: none;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--kds-header-text);
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+
+  .material-icons {
+    font-size: 22px;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.22);
+  }
+
+  &.is-active {
+    background: #f59e0b;
+    color: #1a1205;
+  }
+}
+
+.kds-completeall {
+  appearance: none;
+  border: none;
+  background: #16a34a;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  .material-icons {
+    font-size: 18px;
+  }
+
+  &:hover {
+    filter: brightness(1.06);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+// ---------- All-day counts strip ----------
+.kds-allday {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 20px;
+  background: var(--kds-surface);
+  border-bottom: 1px solid var(--kds-border);
+  overflow-x: auto;
+
+  .kds-allday__label {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--kds-text-dim);
+
+    .material-icons {
+      font-size: 18px;
+    }
+  }
+
+  .kds-allday__list {
+    display: flex;
+    gap: 10px;
+  }
+
+  .kds-allday__chip {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 7px;
+    padding: 7px 14px;
+    background: var(--kds-surface-2);
+    border: 1px solid var(--kds-border);
+    border-radius: 999px;
+    font-size: 1rem;
+    white-space: nowrap;
+
+    .kds-allday__qty {
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: var(--kds-blue);
+    }
+
+    .kds-allday__name {
+      font-weight: 600;
+    }
+  }
+
+  .kds-allday__empty {
+    color: var(--kds-text-dim);
+    font-size: 0.9rem;
+  }
+}
+
+// ---------- Ticket wall (masonry-ish responsive columns) ----------
+.kds-wall {
+  flex: 1;
+  padding: 18px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-auto-rows: min-content;
+  gap: 16px;
+  align-items: start;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+    padding: 12px;
+    gap: 12px;
+  }
+}
+
+.kds-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 80px 20px;
+  color: var(--kds-text-dim);
+
+  .material-icons {
+    font-size: 64px;
+    opacity: 0.4;
+  }
+
+  span {
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+}
+
+// ---------- Ticket card ----------
+.kds-ticket {
+  background: var(--kds-surface);
+  border-radius: 14px;
+  border: 1px solid var(--kds-border);
+  box-shadow: var(--kds-shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-left: 6px solid var(--kds-green);
+  transition: border-color 0.3s ease, box-shadow 0.2s ease, opacity 0.3s ease;
+
+  &.is-age-amber { border-left-color: var(--kds-amber); }
+  &.is-age-red { border-left-color: var(--kds-red); }
+
+  &.is-online { border-top: 3px solid var(--kds-blue); }
+
+  &.is-runnable {
+    box-shadow: 0 0 0 2px var(--kds-green), var(--kds-shadow);
+  }
+
+  &.is-done {
+    opacity: 0.55;
+  }
+}
+
+.kds-ticket__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--kds-surface-2);
+  border-bottom: 1px solid var(--kds-border);
+}
+
+.kds-ticket__source {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--kds-blue-soft);
+  color: var(--kds-blue);
+
+  .material-icons {
+    font-size: 24px;
+  }
+
+  &.is-table {
+    background: var(--kds-green-soft);
+    color: var(--kds-green);
+  }
+}
+
+.kds-ticket__idbox {
+  flex: 1;
+  min-width: 0;
+
+  .kds-ticket__table {
+    font-size: 1.35rem;
+    font-weight: 800;
+    line-height: 1.15;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .kds-ticket__meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    margin-top: 2px;
+    font-size: 0.85rem;
+    color: var(--kds-text-dim);
+    font-weight: 600;
+
+    .material-icons {
+      font-size: 15px;
+      vertical-align: -3px;
+      margin-right: 2px;
+    }
+  }
+}
+
+// Age timer badge (colour-coded, live-ticking).
+.kds-timer {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 11px;
+  border-radius: 999px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  background: var(--kds-green-soft);
+  color: var(--kds-green);
+
+  .material-icons {
+    font-size: 17px;
+  }
+
+  &.is-amber {
+    background: var(--kds-amber-soft);
+    color: var(--kds-amber);
+  }
+
+  &.is-red {
+    background: var(--kds-red-soft);
+    color: var(--kds-red);
+    animation: kds-blink 1.4s ease-in-out infinite;
+  }
+}
+
+@keyframes kds-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+// Kitchen / table message.
+.kds-ticket__comment {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 10px 14px 0;
+  padding: 9px 12px;
+  background: #fef9c3;
+  border: 1px solid #fde047;
+  border-radius: 10px;
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: #713f12;
+  line-height: 1.35;
+
+  .material-icons {
+    font-size: 18px;
+    flex-shrink: 0;
+    color: #a16207;
+  }
+}
+
+.kds-board.is-dark .kds-ticket__comment {
+  background: rgba(250, 204, 21, 0.12);
+  border-color: rgba(250, 204, 21, 0.4);
+  color: #fde68a;
+
+  .material-icons { color: #fbbf24; }
+}
+
+.kds-ticket__customer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 14px 0;
+  padding: 8px 12px;
+  border: 1px solid var(--kds-border);
+  border-radius: 10px;
+  background: var(--kds-surface-2);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  .material-icons { font-size: 19px; color: var(--kds-green); }
+  .kds-ticket__customer-chevron { margin-left: auto; color: var(--kds-text-dim); font-size: 18px; }
+
+  &:hover { border-color: var(--kds-green); }
+}
+
+.kds-ticket__body {
+  padding: 6px 0 4px;
+}
+
+// ---------- Course section ----------
+.kds-course {
+  & + & {
+    border-top: 1px dashed var(--kds-border);
+  }
+}
+
+.kds-course__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px 6px;
+
+  .kds-course__title {
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--kds-text-dim);
+  }
+
+  .kds-course__spacer { flex: 1; }
+
+  .kds-course__bump {
+    appearance: none;
+    border: none;
+    background: var(--kds-green-soft);
+    color: var(--kds-green);
+    font-size: 0.82rem;
+    font-weight: 800;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+
+    .material-icons { font-size: 16px; }
+
+    &:hover { background: var(--kds-green); color: #fff; }
+  }
+}
+
+// ---------- Line row ----------
+.kds-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 11px 14px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.12s ease;
+  position: relative;
+
+  & + & {
+    border-top: 1px solid var(--kds-border);
+  }
+
+  &:hover {
+    background: var(--kds-surface-2);
+  }
+
+  &.is-bumpable:active {
+    background: var(--kds-green-soft);
+  }
+
+  &.is-ready {
+    cursor: default;
+
+    .kds-line__name { text-decoration: line-through; color: var(--kds-text-dim); }
+    .kds-line__qty { opacity: 0.5; }
+  }
+
+  &.is-fired .kds-line__qty {
+    background: var(--kds-amber);
+    color: #fff;
+  }
+}
+
+.kds-line__check {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  border: 2px solid var(--kds-border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+  color: transparent;
+  transition: all 0.15s ease;
+
+  .material-icons { font-size: 20px; }
+
+  .kds-line.is-ready & {
+    background: var(--kds-green);
+    border-color: var(--kds-green);
+    color: #fff;
+  }
+}
+
+.kds-line__qty {
+  flex-shrink: 0;
+  min-width: 38px;
+  height: 32px;
+  padding: 0 9px;
+  border-radius: 8px;
+  background: var(--kds-surface-3);
+  color: var(--kds-text);
+  font-size: 1.2rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+
+.kds-line__main {
+  flex: 1;
+  min-width: 0;
+}
+
+.kds-line__name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+.kds-line__options {
+  margin-top: 3px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.kds-line__option {
+  font-size: 0.98rem;
+  color: var(--kds-text-dim);
+  font-weight: 600;
+  line-height: 1.3;
+
+  &::before {
+    content: '+ ';
+    color: var(--kds-blue);
+    font-weight: 800;
+  }
+}
+
+.kds-line__notes {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 5px;
+  padding: 5px 10px;
+  background: var(--kds-blue-soft);
+  color: var(--kds-text);
+  border-radius: 8px;
+  font-size: 0.98rem;
+  font-weight: 700;
+  line-height: 1.3;
+
+  .material-icons { font-size: 16px; color: var(--kds-blue); flex-shrink: 0; margin-top: 1px; }
+}
+
+// Allergens — impossible to miss.
+.kds-line__allergens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 6px;
+}
+
+.kds-allergen {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  background: var(--kds-red);
+  color: #fff;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+
+  .material-icons { font-size: 14px; }
+}
+
+.kds-line__recall {
+  flex-shrink: 0;
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--kds-text-dim);
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+
+  .material-icons { font-size: 20px; }
+
+  &:hover { background: var(--kds-amber-soft); color: var(--kds-amber); }
+}
+
+// ---------- Ticket footer / actions ----------
+.kds-ticket__footer {
+  display: flex;
+  gap: 8px;
+  padding: 12px 14px;
+  border-top: 1px solid var(--kds-border);
+  background: var(--kds-surface-2);
+}
+
+.kds-btn {
+  appearance: none;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 12px 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  transition: filter 0.15s ease, background 0.15s ease;
+
+  .material-icons { font-size: 20px; }
+
+  &.kds-btn--primary {
+    flex: 1;
+    background: var(--kds-green);
+    color: #fff;
+
+    &:hover { filter: brightness(1.07); }
+  }
+
+  &.kds-btn--bump {
+    flex: 1;
+    background: var(--kds-header-bg);
+    color: var(--kds-header-text);
+
+    &:hover { filter: brightness(1.2); }
+  }
+
+  &.kds-btn--ghost {
+    flex-shrink: 0;
+    background: transparent;
+    border: 1.5px solid var(--kds-border);
+    color: var(--kds-text);
+    padding: 12px;
+
+    &:hover { border-color: var(--kds-text-dim); }
+  }
+}
+
+// Online expandable action menu.
+.kds-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 14px 12px;
+}
+
+.kds-actions__btn {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 14px;
+  border: 1.5px solid var(--kds-border);
+  background: var(--kds-surface);
+  border-radius: 9px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--kds-text);
+  cursor: pointer;
+  text-align: left;
+
+  .material-icons { font-size: 19px; }
+
+  &:hover { border-color: var(--kds-green); color: var(--kds-green); }
+
+  &.is-danger {
+    color: var(--kds-red);
+
+    &:hover { border-color: var(--kds-red); color: var(--kds-red); }
+  }
+}
+
+// ---------- Expo / pass view ----------
+.kds-expo {
+  flex: 1;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  @media (max-width: 640px) { padding: 12px; }
+}
+
+.kds-expo__row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 18px;
+  background: var(--kds-surface);
+  border: 1px solid var(--kds-border);
+  border-left: 6px solid var(--kds-green);
+  border-radius: 12px;
+  box-shadow: var(--kds-shadow);
+
+  &.is-age-amber { border-left-color: var(--kds-amber); }
+  &.is-age-red { border-left-color: var(--kds-red); }
+  &.is-runnable { box-shadow: 0 0 0 2px var(--kds-green), var(--kds-shadow); }
+
+  .kds-expo__source {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: var(--kds-blue-soft);
+    color: var(--kds-blue);
+
+    &.is-table { background: var(--kds-green-soft); color: var(--kds-green); }
+
+    .material-icons { font-size: 26px; }
+  }
+
+  .kds-expo__id {
+    flex-shrink: 0;
+    min-width: 120px;
+
+    .kds-expo__table { font-size: 1.3rem; font-weight: 800; }
+    .kds-expo__sub { font-size: 0.82rem; color: var(--kds-text-dim); font-weight: 600; }
+  }
+
+  .kds-expo__progress {
+    flex: 1;
+    min-width: 0;
+
+    .kds-expo__bar {
+      height: 12px;
+      border-radius: 999px;
+      background: var(--kds-surface-3);
+      overflow: hidden;
+    }
+
+    .kds-expo__fill {
+      height: 100%;
+      background: var(--kds-green);
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+
+    .kds-expo__count {
+      margin-top: 5px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--kds-text-dim);
+    }
+  }
+
+  .kds-expo__state {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    font-size: 1rem;
+    font-weight: 800;
+    background: var(--kds-amber-soft);
+    color: var(--kds-amber);
+
+    .material-icons { font-size: 20px; }
+
+    &.is-ready { background: var(--kds-green-soft); color: var(--kds-green); }
+  }
+
+  .kds-expo__run {
+    flex-shrink: 0;
+    appearance: none;
+    border: none;
+    border-radius: 10px;
+    background: var(--kds-green);
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 11px 16px;
+    cursor: pointer;
+
+    &:hover { filter: brightness(1.07); }
+  }
+}
+
+// ---------- Loading ----------
+.kds-loading {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+}

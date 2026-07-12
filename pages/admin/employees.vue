@@ -4,6 +4,10 @@
       <div class="page-header">
         <h1>{{ $i('employees_title') }}</h1>
         <p class="page-description">{{ $i('employees_pageDescription') }}</p>
+        <p v-if="isPowerUser" class="page-xlink">
+          {{ $i('employees_pos_hint') }}
+          <a href="/admin/pos-settings">{{ $i('employees_pos_link') }}</a>
+        </p>
       </div>
 
       <div v-if="!selectedStore" class="empty-state">
@@ -26,6 +30,9 @@ export default {
   computed: {
     selectedStore() {
       return this.$store.state.selectedAdminStore
+    },
+    isPowerUser() {
+      return !!(this.$store.state.currentUser && this.$store.state.currentUser.isPowerUser)
     },
   },
 }
@@ -54,6 +61,13 @@ export default {
   margin: 0;
   font-size: 14px;
 }
+
+.page-xlink {
+  color: #6b7280;
+  margin: 8px 0 0;
+  font-size: 14px;
+}
+.page-xlink a { color: #159f63; font-weight: 600; }
 
 .empty-state {
   text-align: center;

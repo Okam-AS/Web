@@ -28,7 +28,21 @@ import {
   WoltVenueService,
   RewardService,
   WrappedService,
-  BankAccountService
+  BankAccountService,
+  PosService,
+  OpenCheckService,
+  KitchenService,
+  CashDrawerService,
+  CashPointService,
+  OperatorService,
+  ReportService,
+  JournalService,
+  SaftService,
+  GoodsGroupService,
+  AllergenService,
+  TableService,
+  ReservationService,
+  DinteroTerminalService
 } from '~/core/services'
 import { AdminUserService, AdminCartService } from '~/plugins/admin-core-services'
 import { wholeAmount, fractionAmount, priceLabel, formatString, setCurrencyFormat } from '~/core/helpers/tools'
@@ -109,6 +123,7 @@ const mixin = {
       case 'PickupArrival': return 'Sjåfør ankommer'
       case 'DropoffStarted': return 'Levering startet'
       case 'DropoffArrival': return 'Levering ankommer'
+      case 'DropoffCompleted': return 'Levert hos kunde'
       case 'Delivered': return 'Levert'
       case 'CustomerNoShow': return 'Kunde møtte ikke'
       default: return 'Venter på sjåfør'
@@ -198,7 +213,24 @@ const mixin = {
     _woltVenueService () { return new WoltVenueService(this._coreInitializer) },
     _rewardService () { return new RewardService(this._coreInitializer) },
     _wrappedService () { return new WrappedService(this._coreInitializer) },
-    _bankAccountService () { return new BankAccountService(this._coreInitializer) }
+    _bankAccountService () { return new BankAccountService(this._coreInitializer) },
+    // POS / Kassa services. The session-scoped ones (pos, open check, cash drawer, operator,
+    // report, journal, saft) expose an `operatorSessionId` field the PosShell stamps before each
+    // call so the X-Operator-Session header is sent. Built fresh per access like every other getter.
+    _posService () { return new PosService(this._coreInitializer) },
+    _openCheckService () { return new OpenCheckService(this._coreInitializer) },
+    _kitchenService () { return new KitchenService(this._coreInitializer) },
+    _cashDrawerService () { return new CashDrawerService(this._coreInitializer) },
+    _cashPointService () { return new CashPointService(this._coreInitializer) },
+    _operatorService () { return new OperatorService(this._coreInitializer) },
+    _reportService () { return new ReportService(this._coreInitializer) },
+    _journalService () { return new JournalService(this._coreInitializer) },
+    _saftService () { return new SaftService(this._coreInitializer) },
+    _goodsGroupService () { return new GoodsGroupService(this._coreInitializer) },
+    _allergenService () { return new AllergenService(this._coreInitializer) },
+    _tableService () { return new TableService(this._coreInitializer) },
+    _reservationService () { return new ReservationService(this._coreInitializer) },
+    _dinteroTerminalService () { return new DinteroTerminalService(this._coreInitializer) }
 
   }
 }
