@@ -22,8 +22,6 @@
             <span class="material-icons">people</span>{{ $i('kds_guests', { count: ticket.couverts }) }}
           </span>
           <span v-if="isOnline">{{ deliveryTypeLabel(ticket.deliveryType) }}</span>
-          <span v-if="isOnline && statusText">· {{ statusText }}</span>
-          <span v-if="multiStore && storeName">· {{ storeName }}</span>
         </div>
       </div>
 
@@ -42,17 +40,6 @@
     >
       <span class="material-icons">chat</span>
       <span>{{ ticket.comment }}</span>
-    </div>
-
-    <!-- Customer (online only) -->
-    <div
-      v-if="isOnline && customerName"
-      class="kds-ticket__customer"
-      @click="$emit('open-customer', ticket.order)"
-    >
-      <span class="material-icons">person</span>
-      <span>{{ customerName }}</span>
-      <span class="material-icons kds-ticket__customer-chevron">chevron_right</span>
     </div>
 
     <!-- Lines, grouped into courses -->
@@ -80,72 +67,16 @@
       </div>
     </div>
 
-    <!-- Online: expandable fulfilment actions -->
-    <div
-      v-if="isOnline && showActions"
-      class="kds-actions"
-    >
-      <button
-        v-if="multiStore"
-        class="kds-actions__btn"
-        @click="$emit('transfer', ticket.order)"
-      >
-        <span class="material-icons">swap_horiz</span>{{ $i('orderCard_transfer') }}
-      </button>
-      <button
-        class="kds-actions__btn"
-        @click="$emit('change-delivery', ticket.order)"
-      >
-        <span class="material-icons">edit</span>{{ $i('orderCard_changeDeliveryType') }}
-      </button>
-      <button
-        v-if="ticket.deliveryType === 'InstantHomeDelivery'"
-        class="kds-actions__btn"
-        @click="$emit('sms-driver', ticket.order)"
-      >
-        <span class="material-icons">sms</span>{{ $i('orderCard_smsDriver') }}
-      </button>
-      <button
-        class="kds-actions__btn"
-        @click="$emit('receipt', ticket.order)"
-      >
-        <span class="material-icons">receipt</span>{{ $i('orderCard_receipt') }}
-      </button>
-      <button
-        class="kds-actions__btn is-danger"
-        @click="$emit('cancel', ticket.order)"
-      >
-        <span class="material-icons">block</span>{{ $i('orderCard_cancel') }}
-      </button>
-    </div>
-
-    <!-- Footer actions -->
+    <!-- Footer: the one kitchen action. POS: bump every open line to Ready. Online: mark the
+         order ready (delivery-type-aware, server-side) — it then leaves the board. -->
     <div class="kds-ticket__footer">
-      <template v-if="isOnline">
-        <button
-          v-if="primaryLabel"
-          class="kds-btn kds-btn--primary"
-          @click="$emit('primary-action', ticket.order)"
-        >
-          <span class="material-icons">{{ primaryIcon }}</span>{{ primaryLabel }}
-        </button>
-        <button
-          class="kds-btn kds-btn--ghost"
-          :title="$i('kds_moreActions')"
-          @click="showActions = !showActions"
-        >
-          <span class="material-icons">{{ showActions ? 'expand_less' : 'more_horiz' }}</span>
-        </button>
-      </template>
-      <template v-else>
-        <button
-          class="kds-btn kds-btn--bump"
-          :disabled="!ticketBumpable"
-          @click="$emit('bump-ticket')"
-        >
-          <span class="material-icons">done_all</span>{{ $i('kds_bumpTicket') }}
-        </button>
-      </template>
+      <button
+        class="kds-btn kds-btn--bump"
+        :disabled="!isOnline && !ticketBumpable"
+        @click="$emit('bump-ticket')"
+      >
+        <span class="material-icons">done_all</span>{{ isOnline ? $i('kds_orderReady') : $i('kds_bumpTicket') }}
+      </button>
     </div>
   </div>
 </template>
@@ -153,11 +84,10 @@
 <script>
 import CourseSection from '~/components/admin/kitchen/CourseSection.vue'
 
-const READY_STATUSES = ['ReadyForPickup', 'ReadyForDriver', 'DriverPickedUp', 'Served']
-
 export default {
   components: { CourseSection },
   props: {
+    // A KitchenTicketModel straight off the board feed.
     ticket: {
       type: Object,
       required: true
@@ -174,21 +104,11 @@ export default {
     redMinutes: {
       type: Number,
       default: 15
-    },
-    multiStore: {
-      type: Boolean,
-      default: false
     }
   },
-  data: () => ({
-    showActions: false
-  }),
   computed: {
     isOnline () {
-      return this.ticket.kind === 'online'
-    },
-    order () {
-      return this.ticket.order || {}
+      return this.ticket.source === 'Online'
     },
     ageSeconds () {
       if (!this.ticket.createdAt) { return 0 }
@@ -252,20 +172,6 @@ export default {
       }
       return ''
     },
-    storeName () {
-      return this.order.storeLegalName || ''
-    },
-    statusText () {
-      return this.ticket.status ? this.orderStatusLabel(this.ticket.status) : ''
-    },
-    customerName () {
-      const o = this.order
-      if (o.userFullName) { return o.userFullName }
-      if (o.user && o.user.phoneNumber && o.user.phoneNumber !== '+4799999999') {
-        return o.user.phoneNumber
-      }
-      return ''
-    },
     courseGroups () {
       const groups = []
       const map = {}
@@ -292,23 +198,6 @@ export default {
     },
     ticketBumpable () {
       return (this.ticket.lines || []).some(l => l.status === 'Sent' || l.status === 'Fired')
-    },
-    primaryLabel () {
-      if (!this.isOnline) { return '' }
-      const status = this.ticket.status
-      if (status === 'Accepted' || status === 'Processing') {
-        return this.$i('ongoing_actionNext')
-      }
-      if (READY_STATUSES.includes(status)) {
-        return this.$i('ongoing_actionComplete')
-      }
-      return ''
-    },
-    primaryIcon () {
-      const status = this.ticket.status
-      if (status === 'Accepted') { return 'play_arrow' }
-      if (status === 'Processing') { return 'check_circle' }
-      return 'done_all'
     }
   }
 }

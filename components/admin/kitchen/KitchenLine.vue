@@ -20,7 +20,8 @@
 
     <div class="kds-line__main">
       <div class="kds-line__name">
-        {{ line.name }}
+        <!-- Guest (seat) badge so a runner knows which cover the plate is for. Compact "G{n}". -->
+        <span v-if="line.seatNumber != null" class="kds-line__seat">{{ seatBadge }}</span>{{ line.name }}
       </div>
 
       <div
@@ -85,6 +86,10 @@ export default {
     }
   },
   computed: {
+    // Compact guest marker, e.g. "G2". Locale-independent abbreviation shared with the POS check.
+    seatBadge () {
+      return 'G' + this.line.seatNumber
+    },
     isReady () {
       return this.line.status === 'Ready' || this.line.status === 'Served'
     },

@@ -17,12 +17,11 @@
         </button>
       </div>
 
-      <div class="product-grid__delivery" :class="{ 'is-locked': deliveryLocked }">
+      <div class="product-grid__delivery">
         <button
           type="button"
           class="product-grid__delivery-btn"
           :class="{ 'is-active': deliveryType === 'TableDelivery' }"
-          :disabled="deliveryLocked"
           @click="$emit('set-delivery', 'TableDelivery')"
         >
           {{ $i('pos_eat_in') }}
@@ -31,7 +30,6 @@
           type="button"
           class="product-grid__delivery-btn"
           :class="{ 'is-active': deliveryType === 'SelfPickup' }"
-          :disabled="deliveryLocked"
           @click="$emit('set-delivery', 'SelfPickup')"
         >
           {{ $i('pos_takeaway') }}
@@ -60,6 +58,40 @@
         @click="$emit('set-course', n)"
       >
         {{ n }}
+      </button>
+    </div>
+
+    <!-- Guest (seat) context: new lines are tagged to the selected guest, mirroring coursing. Only
+         shown once seating is in play (a table with guests, or a check that already carries seats),
+         so a waiter who ignores it has an unchanged flow. -->
+    <div v-if="seatingEnabled" class="product-grid__seat">
+      <span class="product-grid__seat-label">{{ $i('pos_seat_label') }}</span>
+      <button
+        type="button"
+        class="product-grid__seat-btn"
+        :class="{ 'is-active': currentSeat === null }"
+        @click="$emit('set-seat', null)"
+      >
+        {{ $i('pos_seat_shared') }}
+      </button>
+      <button
+        v-for="n in seatChipCount"
+        :key="n"
+        type="button"
+        class="product-grid__seat-btn"
+        :class="{ 'is-active': currentSeat === n }"
+        @click="$emit('set-seat', n)"
+      >
+        {{ n }}
+        <span v-if="seatCounts[n]" class="product-grid__seat-count">{{ seatCounts[n] }}</span>
+      </button>
+      <button
+        type="button"
+        class="product-grid__seat-add"
+        :title="$i('pos_seat_add')"
+        @click="$emit('add-seat')"
+      >
+        +
       </button>
     </div>
 
@@ -125,9 +157,15 @@ export default {
     soldOutProductIds: { type: Array, default: () => [] },
     soldOutCategoryIds: { type: Array, default: () => [] },
     deliveryType: { type: String, default: 'TableDelivery' },
-    deliveryLocked: { type: Boolean, default: false },
     currentCourse: { type: Number, default: null },
     coursingEnabled: { type: Boolean, default: false },
+    // Active guest for new lines (null = Felles / shared). Seating mirrors coursing but is opt-in.
+    currentSeat: { type: Number, default: null },
+    seatingEnabled: { type: Boolean, default: false },
+    // How many numbered guest chips to render (derived from couverts and seats already on the check).
+    seatChipCount: { type: Number, default: 0 },
+    // Map of guest number -> item count, so a chip can show a subtle badge of who already has orders.
+    seatCounts: { type: Object, default: () => ({}) },
     catalogError: { type: Boolean, default: false }
   },
   data () {
@@ -264,7 +302,6 @@ export default {
   font-size: 0.9rem;
 }
 .product-grid__delivery-btn.is-active { background: #ffffff; color: var(--pos-ink, #292c34); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
-.product-grid__delivery.is-locked .product-grid__delivery-btn { cursor: default; opacity: 0.75; }
 
 .product-grid__course {
   display: flex;
@@ -276,6 +313,37 @@ export default {
 .product-grid__course-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: #94a3b8; margin-right: 4px; }
 .product-grid__course-btn { border: 1px solid #e2e8f0; background: #fff; color: #64748b; min-width: 34px; height: 30px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; padding: 0 10px; }
 .product-grid__course-btn.is-active { background: var(--pos-primary, #1bb776); border-color: var(--pos-primary, #1bb776); color: #fff; }
+
+.product-grid__seat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 16px 10px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.product-grid__seat-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: #94a3b8; margin-right: 4px; }
+.product-grid__seat-btn { position: relative; border: 1px solid #e2e8f0; background: #fff; color: #64748b; min-width: 34px; height: 30px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; padding: 0 10px; }
+.product-grid__seat-btn.is-active { background: var(--pos-primary, #1bb776); border-color: var(--pos-primary, #1bb776); color: #fff; }
+/* Subtle badge of how many items a guest already has, so the waiter sees at a glance who is served. */
+.product-grid__seat-count {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  border-radius: 8px;
+  background: #64748b;
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
+}
+.product-grid__seat-btn.is-active .product-grid__seat-count { background: var(--pos-primary-dark, #159f63); }
+.product-grid__seat-add { border: 1px dashed #cbd5e0; background: #fff; color: #64748b; min-width: 34px; height: 30px; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; padding: 0 10px; }
+.product-grid__seat-add:hover { border-color: var(--pos-primary, #1bb776); color: var(--pos-primary-dark, #159f63); }
 
 .product-grid__tabs {
   display: flex;

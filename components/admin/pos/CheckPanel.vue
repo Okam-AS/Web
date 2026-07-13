@@ -77,10 +77,12 @@
           :key="g.key"
           :group="g"
           :coursing="coursingEnabled"
+          :seating="seating"
           @inc="$emit('inc', g)"
           @dec="$emit('dec', g)"
           @remove="$emit('remove', g)"
           @note="$emit('note', g)"
+          @seat="$emit('seat', g)"
           @serve="$emit('serve', g)"
         />
       </template>
@@ -120,6 +122,10 @@
         <button type="button" class="check-panel__action" :disabled="!hasItems" @click="$emit('discount')">
           {{ $i('pos_discount') }}
         </button>
+        <!-- The whole bill becomes the return: ring the goods in, one tap, settle. -->
+        <button type="button" class="check-panel__action check-panel__action--negative" :disabled="!hasItems" @click="$emit('negative-sale', groups)">
+          {{ $i('pos_negative_sale') }}
+        </button>
         <button type="button" class="check-panel__action check-panel__action--icon" :disabled="!check" @click="$emit('more')">
           ⋮
         </button>
@@ -148,7 +154,9 @@ export default {
   components: { CheckLine },
   props: {
     check: { type: Object, default: null },
-    parkedCount: { type: Number, default: 0 }
+    parkedCount: { type: Number, default: 0 },
+    // Whether guest (seat) tagging is in play; drives the per-line guest tag on each row.
+    seating: { type: Boolean, default: false }
   },
   data () {
     return {
@@ -179,6 +187,8 @@ export default {
           optSig,
           line.notes || '',
           line.courseSequence || '',
+          // Different guests must not fold into one row (the row's guest tag has to stay meaningful).
+          line.seatNumber || '',
           line.discountAmount || 0,
           line.discountReason || '',
           // Keep a just-added "Ny" line as its own row rather than folding it into an already-sent
@@ -194,6 +204,7 @@ export default {
             options: line.options || [],
             notes: line.notes || '',
             courseSequence: line.courseSequence,
+            seatNumber: line.seatNumber != null ? line.seatNumber : null,
             status: line.status,
             unitAmount: line.unitAmount,
             tax: line.tax,
@@ -202,6 +213,7 @@ export default {
             discountAmount: 0,
             discountReason: line.discountReason,
             depositAmount: 0,
+            goodsGroupId: line.goodsGroupId != null ? line.goodsGroupId : null,
             lineIds: []
           };
           order.push(key);
@@ -387,6 +399,15 @@ export default {
 }
 .check-panel__action:disabled { opacity: 0.5; cursor: not-allowed; }
 .check-panel__action--icon { flex: 0 0 46px; font-size: 1.3rem; }
+/* The "turn the bill into a return" action: red = money leaves the till. */
+.check-panel__action--negative {
+  border-color: #fecaca;
+  background: #fef2f2;
+  color: #dc2626;
+  font-weight: 700;
+  font-size: 0.88rem;
+  padding: 0 4px;
+}
 
 .check-panel__pay {
   width: 100%;

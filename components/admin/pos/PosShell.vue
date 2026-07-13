@@ -155,6 +155,9 @@ export default {
     drawerSvc () { const s = this._cashDrawerService; s.operatorSessionId = this.sessionId; return s; },
     operatorSvc () { const s = this._operatorService; s.operatorSessionId = this.sessionId; return s; },
     reportSvc () { const s = this._reportService; s.operatorSessionId = this.sessionId; return s; },
+    // The journal read API is JWT/StoreAdmin, not operator-session scoped, so it is used as-is.
+    journalSvc () { return this._journalService; },
+    goodsGroupSvc () { return this._goodsGroupService; },
 
     errMsg (e) {
       return (e && e.response && e.response.data && e.response.data.message) || (e && e.message) || this.$i('pos_generic_error');

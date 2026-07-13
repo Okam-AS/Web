@@ -32,6 +32,12 @@
           <button type="button" class="day-flow__action" @click="openX">
             {{ $i('pos_xreport') }}
           </button>
+          <button type="button" class="day-flow__action" @click="showReturnLookup = true">
+            {{ $i('pos_return_refund_sale') }}
+          </button>
+          <button type="button" class="day-flow__action" @click="showReturnBuilder = true">
+            {{ $i('pos_return_new') }}
+          </button>
           <button type="button" class="day-flow__action day-flow__action--danger" @click="showEod = true">
             {{ $i('pos_eod_close_day') }}
           </button>
@@ -83,6 +89,9 @@
       @done="onEodDone"
       @close="showEod = false"
     />
+
+    <ReturnLookup v-if="showReturnLookup" @close="showReturnLookup = false" />
+    <ReturnBuilder v-if="showReturnBuilder" @done="onReturnDone" @close="showReturnBuilder = false" />
   </div>
 </template>
 
@@ -90,12 +99,14 @@
 import DrawerTransactionModal from '~/components/admin/pos/DrawerTransactionModal.vue';
 import XReportView from '~/components/admin/pos/XReportView.vue';
 import EodWizard from '~/components/admin/pos/EodWizard.vue';
+import ReturnLookup from '~/components/admin/pos/ReturnLookup.vue';
+import ReturnBuilder from '~/components/admin/pos/ReturnBuilder.vue';
 
 // Day mode: opening summary + running expected cash, manual pay-in/out, the X report (no side
 // effect) and the end-of-day wizard. Begin-day itself is the blocking BeginDayModal in the shell.
 export default {
   name: 'DayFlow',
-  components: { DrawerTransactionModal, XReportView, EodWizard },
+  components: { DrawerTransactionModal, XReportView, EodWizard, ReturnLookup, ReturnBuilder },
   inject: ['pos'],
   data () {
     return {
@@ -107,6 +118,8 @@ export default {
       showX: false,
       xReport: null,
       showEod: false,
+      showReturnLookup: false,
+      showReturnBuilder: false,
       notice: { show: false, message: '', type: 'info' },
       noticeTimer: null
     };
@@ -171,6 +184,11 @@ export default {
     async onEodDone () {
       this.showEod = false;
       await this.pos.loadDay();
+    },
+    async onReturnDone () {
+      this.showReturnBuilder = false;
+      // A cash return leaves the drawer, so refresh the running expected cash.
+      await this.loadEod();
     }
   }
 };

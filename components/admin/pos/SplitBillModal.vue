@@ -19,9 +19,14 @@
           <button type="button" class="split__mode" :class="{ 'is-active': mode === 'ByItem' }" @click="mode = 'ByItem'">
             {{ $i('pos_split_byitem') }}
           </button>
+          <!-- Per-guest only appears when the check carries seat tags; it prefills a by-item split. -->
+          <button v-if="hasSeats" type="button" class="split__mode" :class="{ 'is-active': mode === 'BySeat' }" @click="mode = 'BySeat'">
+            {{ $i('pos_split_byseat') }}
+          </button>
         </div>
 
-        <div class="split__partcount">
+        <!-- The part count is meaningless for a per-guest split (guests define the parts). -->
+        <div v-if="mode !== 'BySeat'" class="split__partcount">
           <span>{{ $i('pos_split_parts') }}</span>
           <button type="button" class="split__step" :disabled="partCount <= 2" @click="setParts(partCount - 1)">
             −
@@ -54,6 +59,57 @@
           </div>
         </div>
 
+        <!-- BySeat: shared lines must be placed first, then per-guest buckets with live subtotals. -->
+        <div v-if="mode === 'BySeat'" class="split__byseat">
+          <div v-if="unassignedLines.length" class="split__felles">
+            <p class="split__felles-head">
+              {{ $i('pos_split_unassigned') }}
+            </p>
+            <div v-for="line in unassignedLines" :key="line.orderLineItemId" class="split__seatline">
+              <div class="split__line-info">
+                <span class="split__line-name">{{ line.quantity }}× {{ line.name }}</span>
+                <span class="split__line-amount">{{ priceLabel(line.netLineAmount) }}</span>
+              </div>
+              <div class="split__seatchips">
+                <button
+                  v-for="n in seatChips"
+                  :key="n"
+                  type="button"
+                  class="split__seatchip"
+                  @click="placeLine(line, n)"
+                >
+                  {{ n }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div v-for="bucket in seatBuckets" :key="'bucket' + bucket.seat" class="split__bucket">
+            <div class="split__bucket-head">
+              <span class="split__bucket-name">{{ $i('pos_seat_num', { n: bucket.seat }) }}</span>
+              <span class="split__bucket-total">{{ priceLabel(bucket.subtotal) }}</span>
+            </div>
+            <div v-for="line in bucket.lines" :key="line.orderLineItemId" class="split__seatline">
+              <div class="split__line-info">
+                <span class="split__line-name">{{ line.quantity }}× {{ line.name }}</span>
+                <span class="split__line-amount">{{ priceLabel(line.netLineAmount) }}</span>
+              </div>
+              <div class="split__seatchips">
+                <button
+                  v-for="n in seatChips"
+                  :key="n"
+                  type="button"
+                  class="split__seatchip"
+                  :class="{ 'is-active': seatAssign[line.orderLineItemId] === n }"
+                  @click="placeLine(line, n)"
+                >
+                  {{ n }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <p v-if="error" class="split__error">
           {{ error }}
         </p>
@@ -69,7 +125,7 @@
             :class="{ 'is-paid': paid[part.partOrderId] }"
           >
             <div class="split__part-info">
-              <span class="split__part-num">{{ $i('pos_split_part') }} {{ part.partNumber }}</span>
+              <span class="split__part-num">{{ partLabel(part) }}</span>
               <span class="split__part-amount">{{ priceLabel(part.amount) }}</span>
             </div>
             <button
@@ -92,7 +148,7 @@
         <!-- Part cash pad -->
         <div v-else class="split__paypart">
           <p class="split__paypart-label">
-            {{ $i('pos_split_part') }} {{ payingPart.partNumber }}
+            {{ partLabel(payingPart) }}
           </p>
           <CashPad :amount="payingPart.amount" @confirm="onPartCashConfirm" />
           <p v-if="error" class="split__error">
@@ -105,7 +161,10 @@
       </div>
 
       <footer v-if="step === 'configure'" class="split__foot">
-        <button type="button" class="split__confirm" :disabled="busy" @click="doSplit">
+        <p v-if="mode === 'BySeat' && !bySeatValid" class="split__foot-hint">
+          {{ allPlaced ? $i('pos_split_byseat_need_two') : $i('pos_split_unassigned') }}
+        </p>
+        <button type="button" class="split__confirm" :disabled="busy || (mode === 'BySeat' && !bySeatValid)" @click="doSplit">
           {{ busy ? $i('pos_working') : $i('pos_split_confirm') }}
         </button>
       </footer>
@@ -137,6 +196,10 @@ export default {
       mode: 'EqualParts',
       partCount: 2,
       assignments: {},
+      // BySeat: line id -> guest number (null = still shared / unplaced). Seeded from the line seats.
+      seatAssign: {},
+      // BySeat: part number -> "Gjest n" label, so the pay step reads by guest instead of "Del n".
+      partLabels: {},
       splitModel: null,
       paid: {},
       payingPart: null,
@@ -149,11 +212,57 @@ export default {
     cashPointId () { return this.pos.cashPoint.cashPointId; },
     allPaid () {
       return this.splitModel && this.splitModel.parts.every(p => this.paid[p.partOrderId]);
+    },
+    // The per-guest mode is offered only when the check actually carries seat tags.
+    hasSeats () { return this.lines.some(l => l.seatNumber != null); },
+    // Guests to offer as placement chips: every guest up to the largest of couverts, the seats the
+    // lines came in with, and any current assignment.
+    maxSeat () {
+      let m = (this.check.couverts || 0);
+      this.lines.forEach((l) => {
+        if (l.seatNumber != null && l.seatNumber > m) { m = l.seatNumber; }
+        const a = this.seatAssign[l.orderLineItemId];
+        if (a != null && a > m) { m = a; }
+      });
+      return Math.min(Math.max(m, 2), 20);
+    },
+    seatChips () {
+      const out = [];
+      for (let n = 1; n <= this.maxSeat; n++) { out.push(n); }
+      return out;
+    },
+    // Lines still shared (unplaced); they block the split until every one is assigned to a guest.
+    unassignedLines () {
+      return this.lines.filter(l => this.seatAssign[l.orderLineItemId] == null);
+    },
+    allPlaced () { return this.unassignedLines.length === 0; },
+    // One bucket per guest with lines and a live subtotal, sorted by ascending guest number.
+    seatBuckets () {
+      const map = {};
+      this.lines.forEach((l) => {
+        const s = this.seatAssign[l.orderLineItemId];
+        if (s == null) { return; }
+        if (!map[s]) { map[s] = { seat: s, lines: [], subtotal: 0 }; }
+        map[s].lines.push(l);
+        map[s].subtotal += l.netLineAmount;
+      });
+      return Object.keys(map).map(k => map[k]).sort((a, b) => a.seat - b.seat);
+    },
+    // A per-guest split needs every line placed and at least two non-empty guest buckets.
+    bySeatValid () {
+      return this.allPlaced && this.seatBuckets.length >= 2;
     }
   },
   mounted () {
-    // Default every line to part 1 for the by-item assignment.
-    this.lines.forEach((_line, idx) => { this.$set(this.assignments, idx, 1); });
+    // Default every line to part 1 for the by-item assignment, and seed the per-guest assignment
+    // from each line's existing seat tag (null stays shared / unplaced).
+    this.lines.forEach((line, idx) => {
+      this.$set(this.assignments, idx, 1);
+      this.$set(this.seatAssign, line.orderLineItemId, line.seatNumber != null ? line.seatNumber : null);
+    });
+    // Open straight on the per-guest split when the waiter has already tagged guests — that is the
+    // payoff of seat tagging; the other modes stay a tap away.
+    if (this.hasSeats) { this.mode = 'BySeat'; }
   },
   methods: {
     close () {
@@ -167,13 +276,34 @@ export default {
         if (this.assignments[k] > n) { this.$set(this.assignments, k, n); }
       });
     },
+    // BySeat: put a shared/other-guest line into a guest bucket. Live subtotals update reactively.
+    placeLine (line, seat) {
+      this.$set(this.seatAssign, line.orderLineItemId, seat);
+    },
+    // Pay-step label: "Gjest n" for a per-guest split (from partLabels), "Del n" for the others.
+    partLabel (part) {
+      return this.partLabels[part.partNumber] || (this.$i('pos_split_part') + ' ' + part.partNumber);
+    },
     async doSplit () {
       this.busy = true;
       this.error = '';
+      this.partLabels = {};
       try {
         let request;
         if (this.mode === 'EqualParts') {
           request = { mode: 'EqualParts', partCount: this.partCount, parts: [] };
+        } else if (this.mode === 'BySeat') {
+          // One part per guest bucket, ordered by ascending guest. It rides the same ByItem engine;
+          // partLabels lets the pay step read out "Gjest n" instead of "Del n".
+          const buckets = this.seatBuckets;
+          if (buckets.length < 2) {
+            this.error = this.$i('pos_split_byseat_need_two');
+            this.busy = false;
+            return;
+          }
+          const parts = buckets.map(b => ({ orderLineItemIds: b.lines.map(l => l.orderLineItemId) }));
+          buckets.forEach((b, i) => { this.$set(this.partLabels, i + 1, this.$i('pos_seat_num', { n: b.seat })); });
+          request = { mode: 'ByItem', partCount: null, parts };
         } else {
           const parts = [];
           for (let n = 1; n <= this.partCount; n++) {
@@ -245,6 +375,19 @@ export default {
 .split__line-parts { display: flex; gap: 4px; }
 .split__partbtn { width: 34px; height: 34px; border: 1px solid #cbd5e0; background: #fff; border-radius: 8px; font-weight: 700; color: #64748b; cursor: pointer; }
 .split__partbtn.is-active { background: var(--pos-primary, #1bb776); border-color: var(--pos-primary, #1bb776); color: #fff; }
+
+/* BySeat: amber Felles bucket (must be emptied), then a section per guest with a live subtotal. */
+.split__felles { border: 1px solid #fcd34d; background: #fffbeb; border-radius: 12px; padding: 10px 12px; margin-bottom: 14px; }
+.split__felles-head { font-size: 0.8rem; font-weight: 700; color: #b45309; margin: 0 0 4px; }
+.split__bucket { margin-bottom: 14px; }
+.split__bucket-head { display: flex; align-items: center; justify-content: space-between; padding: 4px 0 6px; border-bottom: 1px solid #eef1f5; }
+.split__bucket-name { font-weight: 700; color: var(--pos-ink, #292c34); }
+.split__bucket-total { font-weight: 800; color: var(--pos-primary-dark, #159f63); font-variant-numeric: tabular-nums; }
+.split__seatline { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 0; }
+.split__seatchips { display: flex; flex-wrap: wrap; gap: 4px; justify-content: flex-end; }
+.split__seatchip { min-width: 30px; height: 30px; border: 1px solid #cbd5e0; background: #fff; border-radius: 8px; font-weight: 700; color: #64748b; cursor: pointer; padding: 0 6px; }
+.split__seatchip.is-active { background: var(--pos-primary, #1bb776); border-color: var(--pos-primary, #1bb776); color: #fff; }
+.split__foot-hint { text-align: center; color: #b45309; font-weight: 600; font-size: 0.85rem; margin: 0 0 10px; }
 
 .split__part { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 10px; }
 .split__part.is-paid { background: rgba(27, 183, 118, 0.06); border-color: var(--pos-primary, #1bb776); }

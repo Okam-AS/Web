@@ -1,154 +1,157 @@
-<!--
-  Kitchen Display System (KDS) — the unified kitchen board (plan Fase 3).
-
-  EVOLVE-IN-PLACE DECISION: /admin/ongoing IS the restaurants' kitchen/status screen today, so
-  this page (not a new /admin/kitchen) is reworked in place into the one unified board. Keeping the
-  route + nav entry means no parallel screen, no redirect, and no broken bookmarks — ongoing simply
-  grows up into the KDS. Every action the old ongoing board had survives on the online tickets
-  (accept -> processing prep-timer, next -> delivery-type-aware ready, complete, transfer, change
-  delivery type, driver SMS, receipt, cancel, customer, Complete-all); POS table checks add the new
-  per-line / coursing layer on top.
-
-  DATA SOURCES (two feeds, polled together, see the note above `refresh`):
-    * _kitchenService.GetBoard(storeId)  -> POS table tickets (per-line coursing) AND online orders
-      that are Accepted/Processing, with full kitchen detail (courses, options, notes, allergens).
-      Drives the POS tickets and enriches active online tickets.
-    * _orderService.GetAllOngoing()      -> the full online Order objects. This stays a REAL source,
-      not just "detail": the kitchen board omits online orders once they reach a ready state
-      (ReadyForPickup / ReadyForDriver / Served), but those still need their Complete / SMS / receipt
-      actions — so online tickets are rendered from this feed (enriched with board detail when the
-      order is still on the board) and every online mutation runs through _orderService exactly as
-      the old ongoing board did.
-
-  Timers key off createdAt: there is no per-line sent-at column yet (KitchenTicketModel.sentAt is
-  always null) — a real sent-at is a later migration/UI pass.
--->
 <template>
-  <AdminPage full-width>
-    <div
-      ref="kdsBoard"
-      class="kds-board"
-      :class="{ 'is-dark': darkMode }"
-    >
-      <!-- Toolbar -->
-      <div class="kds-toolbar">
-        <h1 class="kds-toolbar__title">
-          {{ $i('kds_title') }}
-          <span
-            v-if="currentStoreName"
-            class="kds-toolbar__store"
-          >{{ currentStoreName }}</span>
-        </h1>
-
-        <span class="kds-toolbar__spacer" />
-
-        <span class="kds-live">
-          <span class="kds-live__dot" />{{ $i('kds_live') }}
-        </span>
-
-        <div class="kds-seg">
-          <button
-            class="kds-seg__btn"
-            :class="{ 'is-active': viewMode === 'wall' }"
-            @click="viewMode = 'wall'"
-          >
-            <span class="material-icons">grid_view</span>{{ $i('kds_viewWall') }}
-          </button>
-          <button
-            class="kds-seg__btn"
-            :class="{ 'is-active': viewMode === 'expo' }"
-            @click="viewMode = 'expo'"
-          >
-            <span class="material-icons">list_alt</span>{{ $i('kds_viewExpo') }}
-          </button>
-        </div>
-
-        <button
-          class="kds-completeall"
-          :disabled="!hasReadyOnline"
-          @click="completeAll"
-        >
-          <span class="material-icons">done_all</span>{{ $i('kds_completeAll') }}
-        </button>
-
-        <button
-          class="kds-iconbtn"
-          :class="{ 'is-active': darkMode }"
-          :title="$i('kds_toggleDark')"
-          @click="toggleDark"
-        >
-          <span class="material-icons">{{ darkMode ? 'light_mode' : 'dark_mode' }}</span>
-        </button>
-
-        <button
-          class="kds-iconbtn"
-          :title="$i('kds_fullscreen')"
-          @click="toggleFullscreen"
-        >
-          <span class="material-icons">{{ isFullscreen ? 'fullscreen_exit' : 'fullscreen' }}</span>
-        </button>
+  <AdminPage>
+    <div class="ongoing-orders">
+      <div class="page-header">
+        <h1>{{ $i('ongoing_title') }}</h1>
       </div>
 
-      <!-- All-day counts (expo aggregate) -->
-      <AllDayCounts :counts="allDayCounts" />
+      <p
+        v-show="adminStores.length > 1"
+        class="page-description"
+      >
+        {{ $i('ongoing_pageDescription', { count: adminStores.length }) }}
+      </p>
 
-      <!-- Loading -->
       <div
         v-if="isLoading"
-        class="kds-loading"
+        class="loading-container"
       >
         <Loading :loading="true" />
       </div>
 
-      <!-- Empty -->
       <div
-        v-else-if="!unifiedTickets.length"
-        class="kds-empty"
-      >
-        <span class="material-icons">restaurant</span>
-        <span>{{ $i('kds_emptyBoard') }}</span>
-      </div>
-
-      <!-- Ticket wall -->
-      <div
-        v-else-if="viewMode === 'wall'"
-        class="kds-wall"
-      >
-        <KitchenTicket
-          v-for="ticket in unifiedTickets"
-          :key="ticket.key"
-          :ticket="ticket"
-          :now="now"
-          :amber-minutes="amberMinutes"
-          :red-minutes="redMinutes"
-          :multi-store="multiStore"
-          @bump-line="(line) => onBumpLine(ticket, line)"
-          @bump-course="(seq) => onBumpCourse(ticket, seq)"
-          @bump-ticket="onBumpTicket(ticket)"
-          @recall-line="(line) => onRecallLine(ticket, line)"
-          @primary-action="onPrimaryAction"
-          @transfer="transferOrder"
-          @change-delivery="changeDeliveryType"
-          @sms-driver="openSmsDriver"
-          @receipt="openReceipt"
-          @cancel="cancelOrder"
-          @open-customer="openCustomerModal"
-        />
-      </div>
-
-      <!-- Expo / pass view -->
-      <ExpoView
         v-else
-        :tickets="unifiedTickets"
-        :now="now"
-        :amber-minutes="amberMinutes"
-        :red-minutes="redMinutes"
-        :multi-store="multiStore"
-        @bump-ticket="onBumpTicket"
-        @primary="onPrimaryAction"
-      />
+        class="orders-grid"
+      >
+        <!-- New Orders Column -->
+        <div
+          class="orders-column"
+        >
+          <div
+            class="column-header"
+          >
+            <h2>{{ $i('ongoing_columnNew') }}</h2>
+            <span
+              v-if="newOrders.length"
+              class="count-badge"
+            >{{ newOrders.length }}</span>
+          </div>
+          <div
+            v-if="newOrders.length"
+            class="orders-list"
+          >
+            <OrderCard
+              v-for="order in newOrders"
+              :key="order.id"
+              :order="order"
+              :expanded-order-id="showOrderId"
+              :admin-stores="adminStores"
+              :primary-action-button="order.status === 'Accepted' ? $i('ongoing_actionNext') : null"
+              @toggle-expand="toggleOrderExpand"
+              @primary-action="startProcessing"
+              @transfer="transferOrder"
+              @change-delivery="changeDeliveryType"
+              @sms-driver="openSmsDriver"
+              @receipt="openReceipt"
+              @cancel="cancelOrder"
+              @open-customer="openCustomerModal"
+            />
+          </div>
+          <div
+            v-else
+            class="empty-state"
+          >
+            {{ $i('ongoing_emptyNew') }}
+          </div>
+        </div>
 
-      <!-- Modals (preserved from the old ongoing board) -->
+        <!-- Processing Orders Column -->
+        <div
+          class="orders-column"
+        >
+          <div
+            class="column-header"
+          >
+            <h2>{{ $i('ongoing_columnProcessing') }}</h2>
+            <span
+              v-if="processingOrders.length"
+              class="count-badge"
+            >{{ processingOrders.length }}</span>
+          </div>
+          <div
+            class="orders-list"
+          >
+            <div v-if="processingOrders.length">
+              <OrderCard
+                v-for="order in processingOrders"
+                :key="order.id"
+                :order="order"
+                :expanded-order-id="showOrderId"
+                :admin-stores="adminStores"
+                :primary-action-button="order.status === 'Processing' ? $i('ongoing_actionNext') : null"
+                @toggle-expand="toggleOrderExpand"
+                @primary-action="updateOrderToReady"
+                @transfer="transferOrder"
+                @change-delivery="changeDeliveryType"
+                @sms-driver="openSmsDriver"
+                @receipt="openReceipt"
+                @cancel="cancelOrder"
+                @open-customer="openCustomerModal"
+              />
+            </div>
+            <div
+              v-else
+              class="empty-state"
+            >
+              {{ $i('ongoing_emptyProcessing') }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Ready Orders Column -->
+        <div
+          class="orders-column"
+        >
+          <div
+            class="column-header"
+          >
+            <h2>{{ $i('ongoing_columnReady') }}</h2>
+            <span
+              v-if="readyOrders.length"
+              class="count-badge"
+            >{{ readyOrders.length }}</span>
+          </div>
+          <div
+            class="orders-list"
+          >
+            <div v-if="readyOrders.length">
+              <OrderCard
+                v-for="order in readyOrders"
+                :key="order.id"
+                :order="order"
+                :expanded-order-id="showOrderId"
+                :admin-stores="adminStores"
+                :primary-action-button="['ReadyForPickup', 'ReadyForDriver', 'Served'].includes(order.status) ? $i('ongoing_actionComplete') : null"
+                @toggle-expand="toggleOrderExpand"
+                @primary-action="completeOrder"
+                @transfer="transferOrder"
+                @change-delivery="changeDeliveryType"
+                @sms-driver="openSmsDriver"
+                @receipt="openReceipt"
+                @cancel="cancelOrder"
+                @open-customer="openCustomerModal"
+              />
+            </div>
+            <div
+              v-else
+              class="empty-state"
+            >
+              {{ $i('ongoing_emptyReady') }}
+            </div>
+          </div>
+        </div>
+      </div>
+
       <LoginModal
         v-if="showLogin"
         @close="closeLoginModal"
@@ -194,447 +197,506 @@
         :customer-phone="currentOrder.user && currentOrder.user.phoneNumber"
         @close="closeCustomerModal"
       />
+
+      <!-- Info Banner -->
+      <div
+        v-if="!hideBanner"
+        class="info-banner"
+      >
+        <div class="banner-content">
+          <span class="banner-text">
+            {{ $i('ongoing_bannerText') }}
+          </span>
+          <NuxtLink
+            to="/admin/statistics"
+            class="banner-link"
+          >
+            {{ $i('ongoing_bannerLink') }}
+          </NuxtLink>
+        </div>
+        <button
+          class="banner-close"
+          @click="hideBanner = true"
+        >
+          <span class="material-icons">close</span>
+        </button>
+      </div>
     </div>
   </AdminPage>
 </template>
-
 <script>
-import AdminPage from '~/components/organisms/AdminPage.vue'
-import Loading from '~/components/atoms/Loading.vue'
-import LoginModal from '~/components/molecules/LoginModal.vue'
-import OrderProcessingModal from '~/components/molecules/OrderProcessingModal.vue'
-import ReceiptModal from '~/components/molecules/ReceiptModal.vue'
-import TransferOrderModal from '~/components/molecules/TransferOrderModal.vue'
-import ChangeDeliveryTypeModal from '~/components/molecules/ChangeDeliveryTypeModal.vue'
-import SmsDriverModal from '~/components/molecules/SmsDriverModal.vue'
-import CustomerInfoModal from '~/components/molecules/CustomerInfoModal.vue'
-import KitchenTicket from '~/components/admin/kitchen/KitchenTicket.vue'
-import AllDayCounts from '~/components/admin/kitchen/AllDayCounts.vue'
-import ExpoView from '~/components/admin/kitchen/ExpoView.vue'
-
-const READY_STATUSES = ['ReadyForPickup', 'ReadyForDriver', 'DriverPickedUp', 'Served']
+import AdminPage from '~/components/organisms/AdminPage.vue';
+import Loading from '~/components/atoms/Loading.vue';
+import LoginModal from '~/components/molecules/LoginModal.vue';
+import OrderProcessingModal from '~/components/molecules/OrderProcessingModal.vue';
+import ReceiptModal from '~/components/molecules/ReceiptModal.vue';
+import TransferOrderModal from '~/components/molecules/TransferOrderModal.vue';
+import ChangeDeliveryTypeModal from '~/components/molecules/ChangeDeliveryTypeModal.vue';
+import SmsDriverModal from '~/components/molecules/SmsDriverModal.vue';
+import CustomerInfoModal from '~/components/molecules/CustomerInfoModal.vue';
+import OrderCard from '~/components/molecules/OrderCard.vue';
 
 export default {
-  components: {
-    AdminPage,
-    Loading,
-    LoginModal,
-    OrderProcessingModal,
-    ReceiptModal,
-    TransferOrderModal,
-    ChangeDeliveryTypeModal,
-    SmsDriverModal,
-    CustomerInfoModal,
-    KitchenTicket,
-    AllDayCounts,
-    ExpoView
-  },
+  components: { AdminPage, LoginModal, Loading, OrderProcessingModal, ReceiptModal, TransferOrderModal, ChangeDeliveryTypeModal, SmsDriverModal, CustomerInfoModal, OrderCard },
   data: () => ({
     showLogin: false,
-    isLoading: true,
-    board: { tickets: [] },
-    onlineOrders: [],
-    now: Date.now(),
-    viewMode: 'wall',
-    darkMode: false,
-    amberMinutes: 8,
-    redMinutes: 15,
+    isLoading: false,
+    orders: [],
+    showOrderId: '',
+    isMobile: false,
     refreshInterval: null,
-    clockInterval: null,
-    isRefreshing: false,
-    isFullscreen: false,
-    // Preserved ongoing modal state
+    adminStores: [],
     showProcessingModal: false,
     currentOrder: null,
     showReceiptModal: false,
     showTransferModal: false,
     showChangeDeliveryModal: false,
     showSmsDriverModal: false,
-    showCustomerModal: false
+    showCustomerModal: false,
+    hideBanner: true
   }),
   computed: {
-    adminStores () {
-      return (this.$store.state.currentUser && this.$store.state.currentUser.adminIn) || []
+    newOrders () {
+      return this.orders.filter(x => x.status === 'Accepted').sort((a, b) => new Date(a.created) - new Date(b.created));
     },
-    multiStore () {
-      return this.adminStores.length > 1
+    processingOrders () {
+      return this.orders.filter(x => x.status === 'Processing').sort((a, b) => new Date(a.created) - new Date(b.created));
     },
-    selectedStore () {
-      const selected = this.$store.state.selectedAdminStore
-      if (selected) { return selected }
-      return this.adminStores.length ? this.adminStores[0].id : null
-    },
-    currentStoreName () {
-      const store = this.adminStores.find(s => s.id === this.selectedStore)
-      return store ? store.name : ''
-    },
-    posTickets () {
-      return (this.board.tickets || [])
-        .filter(t => t.source === 'PosTable')
-        .map(t => ({
-          key: 'pos-' + t.orderId,
-          kind: 'pos',
-          orderId: t.orderId,
-          friendlyId: t.friendlyId,
-          tableName: t.tableName,
-          couverts: t.couverts,
-          comment: t.comment,
-          createdAt: t.createdAt,
-          deliveryType: t.deliveryType,
-          status: t.status,
-          overallStatus: t.overallStatus,
-          lines: t.lines || [],
-          order: null
-        }))
-    },
-    onlineTickets () {
-      // Board online tickets (Accepted/Processing) carry the full kitchen detail; index them so a
-      // still-active online order shows options/notes/allergens. Ready online orders are not on the
-      // board, so they fall back to their plain order items.
-      const boardByFriendly = {}
-      ;(this.board.tickets || []).forEach((t) => {
-        if (t.source === 'Online') { boardByFriendly[t.friendlyId] = t }
-      })
-      const storeId = this.selectedStore
-      return (this.onlineOrders || [])
-        .filter(o => !storeId || o.storeId === storeId)
-        .map((o) => {
-          const bt = boardByFriendly[o.friendlyOrderId] || null
-          return {
-            key: 'online-' + o.id,
-            kind: 'online',
-            orderId: bt ? bt.orderId : null,
-            friendlyId: o.friendlyOrderId,
-            tableName: o.tableName,
-            couverts: null,
-            comment: o.comment,
-            createdAt: o.created,
-            deliveryType: o.deliveryType,
-            status: o.status,
-            overallStatus: bt ? bt.overallStatus : null,
-            lines: bt ? bt.lines : this.normalizeOrderItems(o.items),
-            order: o
-          }
-        })
-    },
-    unifiedTickets () {
-      return this.posTickets.concat(this.onlineTickets).sort((a, b) => {
-        const at = a.createdAt ? new Date(a.createdAt).getTime() : Number.MAX_SAFE_INTEGER
-        const bt = b.createdAt ? new Date(b.createdAt).getTime() : Number.MAX_SAFE_INTEGER
-        return at - bt
-      })
-    },
-    allDayCounts () {
-      // Aggregate everything still to be made across the kitchen (expo volume). POS: lines not yet
-      // ready. Online: all lines while the order is still Accepted/Processing.
-      const counts = {}
-      const add = (name, qty) => { counts[name] = (counts[name] || 0) + (qty || 0) }
-      this.posTickets.forEach((t) => {
-        t.lines.forEach((l) => {
-          if (l.status === 'Sent' || l.status === 'Fired') { add(l.name, l.quantity) }
-        })
-      })
-      this.onlineTickets.forEach((t) => {
-        if (t.status === 'Accepted' || t.status === 'Processing') {
-          t.lines.forEach(l => add(l.name, l.quantity))
-        }
-      })
-      return Object.keys(counts)
-        .map(name => ({ name, quantity: counts[name] }))
-        .sort((a, b) => b.quantity - a.quantity)
-    },
-    hasReadyOnline () {
-      return this.onlineTickets.some(t => READY_STATUSES.includes(t.status))
-    }
-  },
-  watch: {
-    selectedStore () {
-      // Switching store: drop stale tickets and reload for the new kitchen.
-      this.board = { tickets: [] }
-      this.onlineOrders = []
-      this.isLoading = true
-      this.refresh()
+    readyOrders () {
+      return this.orders.filter(x => ['ReadyForPickup', 'ReadyForDriver', 'Served'].includes(x.status)).sort((a, b) => new Date(a.created) - new Date(b.created));
     }
   },
   mounted () {
     if (!this.$store.getters.userIsLoggedIn) {
-      this.showLogin = true
-      this.isLoading = false
-      return
+      this.showLogin = true;
+      return;
     }
-    this.darkMode = localStorage.getItem('kdsDarkMode') === '1'
-    this.refresh()
-    this.startAutoRefresh()
-    this.clockInterval = setInterval(() => { this.now = Date.now() }, 1000)
-    document.addEventListener('fullscreenchange', this.onFullscreenChange)
+    this.adminStores = this.$store.state.currentUser.adminIn;
+    this.loadOrders();
+    this.checkMobile();
+    window.addEventListener('resize', this.checkMobile);
+    this.startAutoRefresh();
   },
   beforeDestroy () {
-    this.stopAutoRefresh()
-    if (this.clockInterval) { clearInterval(this.clockInterval) }
-    document.removeEventListener('fullscreenchange', this.onFullscreenChange)
+    window.removeEventListener('resize', this.checkMobile);
+    this.stopAutoRefresh();
   },
   methods: {
-    // Poll both feeds together and merge incrementally so cards/timers/scroll never flicker.
-    refresh () {
-      const storeId = this.selectedStore
-      if (!storeId || this.isRefreshing) { return Promise.resolve() }
-      this.isRefreshing = true
-      return Promise.all([
-        this._kitchenService.GetBoard(storeId),
-        this._orderService.GetAllOngoing()
-      ])
-        .then(([board, online]) => {
-          this.mergeBoard(board)
-          this.onlineOrders = online || []
-        })
-        .catch(() => {
-          // Keep the last good board on a transient poll failure.
+    closeLoginModal (isLoggedIn) {
+      this.showLogin = !isLoggedIn;
+      if (isLoggedIn) {
+        this.loadOrders();
+      }
+    },
+    loadOrders () {
+      this.isLoading = true;
+      this._orderService
+        .GetAllOngoing()
+        .then((orders) => {
+          this.orders = orders;
         })
         .finally(() => {
-          this.isRefreshing = false
-          this.isLoading = false
-        })
+          this.isLoading = false;
+        });
+    },
+    checkMobile () {
+      this.isMobile = window.innerWidth <= 768;
     },
     startAutoRefresh () {
-      this.refreshInterval = setInterval(this.refresh, 5000)
+      this.refreshInterval = setInterval(() => {
+        this._orderService.GetAllOngoing().then((orders) => {
+          this.orders = orders;
+        });
+      }, 7000);
     },
     stopAutoRefresh () {
-      if (this.refreshInterval) { clearInterval(this.refreshInterval) }
-    },
-    // Diff the incoming board against current state and update tickets/lines in place (keyed by
-    // orderId / orderLineItemId) so Vue patches rather than recreates — no flicker, no lost scroll.
-    mergeBoard (newBoard) {
-      const incoming = (newBoard && newBoard.tickets) || []
-      const byId = {}
-      ;(this.board.tickets || []).forEach((t) => { byId[t.orderId] = t })
-      this.board.tickets = incoming.map((nt) => {
-        const cur = byId[nt.orderId]
-        if (!cur) { return nt }
-        cur.source = nt.source
-        cur.friendlyId = nt.friendlyId
-        cur.tableName = nt.tableName
-        cur.couverts = nt.couverts
-        cur.comment = nt.comment
-        cur.createdAt = nt.createdAt
-        cur.sentAt = nt.sentAt
-        cur.deliveryType = nt.deliveryType
-        cur.status = nt.status
-        cur.overallStatus = nt.overallStatus
-        cur.lines = this.mergeLines(cur.lines, nt.lines)
-        return cur
-      })
-    },
-    mergeLines (existing, incoming) {
-      const cur = existing || []
-      const next = incoming || []
-      const byId = {}
-      cur.forEach((l) => { byId[l.orderLineItemId] = l })
-      return next.map((nl) => {
-        const line = byId[nl.orderLineItemId]
-        if (!line) { return nl }
-        line.name = nl.name
-        line.quantity = nl.quantity
-        line.courseSequence = nl.courseSequence
-        line.status = nl.status
-        line.notes = nl.notes
-        line.allergens = nl.allergens
-        line.options = nl.options
-        return line
-      })
-    },
-    normalizeOrderItems (items) {
-      return (items || []).map(it => ({
-        orderLineItemId: it.id,
-        name: it.name,
-        quantity: it.quantity,
-        courseSequence: null,
-        status: null,
-        notes: it.notes,
-        allergens: [],
-        options: it.options || []
-      }))
-    },
-    // ---- POS coursing mutations (every call returns the refreshed board) ----
-    onBumpLine (ticket, line) {
-      this._kitchenService
-        .BumpLine(this.selectedStore, ticket.orderId, line.orderLineItemId)
-        .then(board => this.mergeBoard(board))
-        .catch(error => this.reportError(error))
-    },
-    onBumpCourse (ticket, courseSequence) {
-      this._kitchenService
-        .BumpCourse(this.selectedStore, ticket.orderId, courseSequence)
-        .then(board => this.mergeBoard(board))
-        .catch(error => this.reportError(error))
-    },
-    onBumpTicket (ticket) {
-      // Only POS tickets emit a kitchen ticket-bump; online tickets use their primary action.
-      this._kitchenService
-        .BumpTicket(this.selectedStore, ticket.orderId)
-        .then(board => this.mergeBoard(board))
-        .catch(error => this.reportError(error))
-    },
-    onRecallLine (ticket, line) {
-      this._kitchenService
-        .RecallLine(this.selectedStore, ticket.orderId, line.orderLineItemId)
-        .then(board => this.mergeBoard(board))
-        .catch(error => this.reportError(error))
-    },
-    reportError (error) {
-      alert(this.$i('ongoing_errorUpdate', { error: (error && error.message) || this.$i('ongoing_unknownError') }))
-    },
-    // ---- Online order actions (unchanged behaviour from the old ongoing board) ----
-    onPrimaryAction (order) {
-      if (!order) { return }
-      if (order.status === 'Accepted') {
-        this.startProcessing(order)
-      } else if (order.status === 'Processing') {
-        this.updateOrderToReady(order)
-      } else if (READY_STATUSES.includes(order.status)) {
-        this.completeOrder(order)
+      if (this.refreshInterval) {
+        clearInterval(this.refreshInterval);
       }
+    },
+    toggleOrderExpand (orderId) {
+      this.showOrderId = this.showOrderId === orderId ? '' : orderId;
     },
     startProcessing (order) {
-      this.currentOrder = order
-      this.showProcessingModal = true
+      this.currentOrder = order;
+      this.showProcessingModal = true;
     },
     closeProcessingModal (success) {
-      this.showProcessingModal = false
-      if (success) { this.refresh() }
-      this.currentOrder = null
-    },
-    updateOrderToReady (order) {
-      if (!order) { return }
-      let nextStatus
-      if (order.deliveryType === 'SelfPickup') {
-        nextStatus = 'ReadyForPickup'
-      } else if (order.deliveryType === 'InstantHomeDelivery' || order.deliveryType === 'DineHomeDelivery' || order.deliveryType === 'WoltDelivery') {
-        nextStatus = 'ReadyForDriver'
-      } else if (order.deliveryType === 'TableDelivery') {
-        nextStatus = 'Served'
-      } else {
-        nextStatus = 'ReadyForPickup'
+      this.showProcessingModal = false;
+      if (success) {
+        this.loadOrders();
       }
-      this._orderService
-        .UpdateStatus(order.id, nextStatus)
-        .then(() => this.refresh())
-        .catch((error) => {
-          alert(this.$i('ongoing_errorUpdate', { error: error.message || this.$i('ongoing_unknownError') }))
-        })
-    },
-    completeOrder (order) {
-      if (!order) { return }
-      let confirmMessage = this.$i('ongoing_confirmComplete', { orderId: order.friendlyOrderId })
-      if (order.deliveryType === 'WoltDelivery' && order.woltDeliveryInfo && order.woltDeliveryInfo.status !== 'Delivered') {
-        confirmMessage = this.$i('ongoing_confirmCompleteNotDelivered', { orderId: order.friendlyOrderId })
-      } else if (order.deliveryType === 'DineHomeDelivery' && order.dineHomeStatus !== 'Completed') {
-        confirmMessage = this.$i('ongoing_confirmCompleteNotDelivered', { orderId: order.friendlyOrderId })
-      }
-      if (!confirm(confirmMessage)) { return }
-      this._orderService
-        .UpdateStatus(order.id, 'Completed')
-        .then(() => this.refresh())
-        .catch((error) => {
-          alert(this.$i('ongoing_errorComplete', { error: error.message || this.$i('ongoing_unknownError') }))
-        })
-    },
-    cancelOrder (order) {
-      if (!order) { return }
-      const confirmed = confirm(this.$i('ongoing_confirmCancel', { storeName: order.storeLegalName, orderId: order.friendlyOrderId }))
-      if (!confirmed) { return }
-      this._orderService
-        .UpdateStatus(order.id, 'Canceled')
-        .then(() => this.refresh())
-        .catch((error) => {
-          alert(this.$i('ongoing_errorCancel', { error: error.message || this.$i('ongoing_unknownError') }))
-        })
+      this.currentOrder = null;
     },
     transferOrder (order) {
-      if (!order || this.adminStores.length <= 1) { return }
-      this.currentOrder = order
-      this.showTransferModal = true
+      if (!order || this.adminStores.length <= 1) { return; }
+      this.currentOrder = order;
+      this.showTransferModal = true;
     },
     closeTransferModal (success) {
-      this.showTransferModal = false
-      if (success) { this.refresh() }
-      this.currentOrder = null
+      this.showTransferModal = false;
+      if (success) {
+        this.loadOrders();
+      }
+      this.currentOrder = null;
     },
     changeDeliveryType (order) {
-      if (!order) { return }
-      this.currentOrder = order
-      this.showChangeDeliveryModal = true
+      if (!order) { return; }
+      this.currentOrder = order;
+      this.showChangeDeliveryModal = true;
     },
     closeChangeDeliveryModal (success) {
-      this.showChangeDeliveryModal = false
-      if (success) { this.refresh() }
-      this.currentOrder = null
+      this.showChangeDeliveryModal = false;
+      if (success) {
+        this.loadOrders();
+      }
+      this.currentOrder = null;
     },
     openReceipt (order) {
-      this.currentOrder = order
-      this.showReceiptModal = true
+      this.currentOrder = order;
+      this.showReceiptModal = true;
     },
     closeReceiptModal () {
-      this.showReceiptModal = false
-      this.currentOrder = null
+      this.showReceiptModal = false;
+      this.currentOrder = null;
+    },
+    updateOrderToReady (order) {
+      if (!order) { return; }
+
+      let nextStatus;
+
+      // Determine the correct "ready" status based on delivery type
+      if (order.deliveryType === 'SelfPickup') {
+        nextStatus = 'ReadyForPickup';
+      } else if (order.deliveryType === 'InstantHomeDelivery' || order.deliveryType === 'DineHomeDelivery' || order.deliveryType === 'WoltDelivery') {
+        nextStatus = 'ReadyForDriver';
+      } else if (order.deliveryType === 'TableDelivery') {
+        nextStatus = 'Served';
+      } else {
+        // Fallback for any other delivery types
+        nextStatus = 'ReadyForPickup';
+      }
+
+      this._orderService
+        .UpdateStatus(order.id, nextStatus)
+        .then(() => {
+          this.loadOrders();
+        })
+        .catch((error) => {
+          alert(this.$i('ongoing_errorUpdate', { error: error.message || this.$i('ongoing_unknownError') }));
+        });
+    },
+    completeOrder (order) {
+      if (!order) { return; }
+
+      let confirmMessage = this.$i('ongoing_confirmComplete', { orderId: order.friendlyOrderId });
+
+      // Special confirmation for delivery orders that haven't been delivered yet
+      if (order.deliveryType === 'WoltDelivery' &&
+          order.woltDeliveryInfo &&
+          order.woltDeliveryInfo.status !== 'Delivered') {
+        confirmMessage = this.$i('ongoing_confirmCompleteNotDelivered', { orderId: order.friendlyOrderId });
+      } else if (order.deliveryType === 'DineHomeDelivery' &&
+                 order.dineHomeStatus !== 'Completed') {
+        confirmMessage = this.$i('ongoing_confirmCompleteNotDelivered', { orderId: order.friendlyOrderId });
+      }
+
+      const confirmed = confirm(confirmMessage);
+
+      if (!confirmed) { return; }
+
+      this._orderService
+        .UpdateStatus(order.id, 'Completed')
+        .then(() => {
+          this.loadOrders();
+        })
+        .catch((error) => {
+          alert(this.$i('ongoing_errorComplete', { error: error.message || this.$i('ongoing_unknownError') }));
+        });
+    },
+    cancelOrder (order) {
+      if (!order) { return; }
+
+      const confirmed = confirm(
+        this.$i('ongoing_confirmCancel', { storeName: order.storeLegalName, orderId: order.friendlyOrderId })
+      );
+
+      if (!confirmed) { return; }
+
+      this._orderService
+        .UpdateStatus(order.id, 'Canceled')
+        .then(() => {
+          this.loadOrders();
+        })
+        .catch((error) => {
+          alert(this.$i('ongoing_errorCancel', { error: error.message || this.$i('ongoing_unknownError') }));
+        });
     },
     openSmsDriver (order) {
-      this.currentOrder = order
-      this.showSmsDriverModal = true
+      this.currentOrder = order;
+      this.showSmsDriverModal = true;
     },
     closeSmsDriverModal () {
-      this.showSmsDriverModal = false
-      this.currentOrder = null
+      this.showSmsDriverModal = false;
+      this.currentOrder = null;
     },
     onSmsSuccess () {
-      this.refresh()
+      // Optionally reload orders or show a notification
+      this.loadOrders();
     },
     openCustomerModal (order) {
-      if (!order || !order.userId || !order.storeId) { return }
-      this.currentOrder = order
-      this.showCustomerModal = true
+      if (!order || !order.userId || !order.storeId) { return; }
+      this.currentOrder = order;
+      this.showCustomerModal = true;
     },
     closeCustomerModal () {
-      this.showCustomerModal = false
-      this.currentOrder = null
-    },
-    completeAll () {
-      if (!this.hasReadyOnline) { return }
-      const confirmed = confirm(this.$i('kds_confirmCompleteAll', { storeName: this.currentStoreName }))
-      if (!confirmed) { return }
-      this._orderService
-        .CompleteAll(this.selectedStore)
-        .then(() => this.refresh())
-        .catch((error) => {
-          alert(this.$i('ongoing_errorComplete', { error: error.message || this.$i('ongoing_unknownError') }))
-        })
-    },
-    closeLoginModal (isLoggedIn) {
-      this.showLogin = !isLoggedIn
-      if (isLoggedIn) {
-        this.isLoading = true
-        this.refresh()
-        this.startAutoRefresh()
-      }
-    },
-    toggleDark () {
-      this.darkMode = !this.darkMode
-      localStorage.setItem('kdsDarkMode', this.darkMode ? '1' : '0')
-    },
-    toggleFullscreen () {
-      const el = this.$refs.kdsBoard
-      if (!document.fullscreenElement) {
-        if (el && el.requestFullscreen) { el.requestFullscreen() }
-      } else if (document.exitFullscreen) {
-        document.exitFullscreen()
-      }
-    },
-    onFullscreenChange () {
-      this.isFullscreen = !!document.fullscreenElement
+      this.showCustomerModal = false;
+      this.currentOrder = null;
+    }
+  }
+};
+</script>
+<style lang="scss">
+@import "../../assets/sass/common.scss";
+
+.ongoing-orders {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+}
+
+.page-header {
+  margin-bottom: 16px;
+  margin-top: 16px;
+
+  h1 {
+    font-size: 2em;
+    font-weight: 600;
+    color: #292c34;
+    margin: 0;
+
+    @media (max-width: 768px) {
+      font-size: 1.5em;
     }
   }
 }
-</script>
 
-<style lang="scss">
-@import '../../assets/sass/kds';
+.page-description {
+  color: #666;
+  font-size: 0.9em;
+  line-height: 1.5;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  padding: 60px 24px;
+}
+
+.orders-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  margin-bottom: 32px;
+  margin-top: 32px;
+  align-items: start;
+
+  @media (max-width: 1200px) {
+    gap: 16px;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+}
+
+.orders-column {
+  background: #fff;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e8e8e8;
+  transition: all 0.2s ease;
+
+  @media (min-width: 769px) {
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+  }
+
+  .column-header {
+    padding: 20px;
+    background: linear-gradient(135deg, #292c34 0%, #1a1d23 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+    transition: all 0.2s ease;
+    min-height: 64px;
+
+    @media (max-width: 768px) {
+      padding: 16px 20px;
+      min-height: 56px;
+    }
+
+    h2 {
+      color: #d5f6e5;
+      margin: 0;
+      font-size: 1.1em;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+
+      @media (max-width: 768px) {
+        font-size: 1em;
+      }
+    }
+  }
+
+  .orders-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: #f8f9fa;
+    height: calc(100% - 64px);
+
+    @media (max-width: 768px) {
+      padding: 16px;
+    }
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #cbd5e0;
+      border-radius: 4px;
+      transition: background 0.2s ease;
+
+      &:hover {
+        background: #a0aec0;
+      }
+    }
+  }
+}
+
+.count-badge {
+  background: rgba(213, 246, 229, 0.95);
+  color: #292c34;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85em;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  min-width: 32px;
+  text-align: center;
+  display: inline-block;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: #a0aec0;
+  font-size: 0.95em;
+  font-weight: 500;
+  background: transparent;
+  border-radius: 8px;
+  margin: 0;
+}
+
+.info-banner {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+
+  @media (max-width: 768px) {
+    padding: 14px 16px;
+    margin-bottom: 24px;
+  }
+
+  .banner-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    flex-wrap: wrap;
+
+    .banner-text {
+      color: #4a5568;
+      font-size: 0.9em;
+      font-weight: 500;
+    }
+
+    .banner-link {
+      color: #1bb776;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.9em;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+
+      &:hover {
+        text-decoration: underline;
+        color: #158c5a;
+      }
+    }
+  }
+
+  .banner-close {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+
+    .material-icons {
+      color: #a0aec0;
+      font-size: 20px;
+    }
+
+    &:hover {
+      background: #f8f9fa;
+
+      .material-icons {
+        color: #4a5568;
+      }
+    }
+  }
+}
+
 </style>

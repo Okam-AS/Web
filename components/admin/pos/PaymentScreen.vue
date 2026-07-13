@@ -72,7 +72,7 @@
           <button type="button" class="payment__ract" @click="copyReceipt">
             {{ $i('pos_receipt_copy') }}
           </button>
-          <button v-if="canRefund" type="button" class="payment__ract payment__ract--danger" @click="startRefund">
+          <button v-if="canRefund" type="button" class="payment__ract payment__ract--danger" @click="showRefundModal = true">
             {{ $i('pos_refund_sale') }}
           </button>
         </div>
@@ -88,26 +88,14 @@
         <button type="button" class="payment__newerorder" @click="$emit('done')">
           {{ $i('pos_new_order') }}
         </button>
-
-        <div v-if="showRefund" class="payment__refund">
-          <input v-model="refundReason" type="text" class="payment__refund-reason" :placeholder="$i('pos_refund_reason_ph')">
-          <button type="button" class="payment__refund-go" :disabled="!refundReason.trim()" @click="showRefundPin = true">
-            {{ $i('pos_refund_continue') }}
-          </button>
-        </div>
       </div>
     </div>
 
-    <PinPadModal
-      v-if="showRefundPin"
-      :title="$i('pos_refund_approve')"
-      :subtitle="$i('pos_manager_pin_required')"
-      :operators="managerOperators"
-      :error="refundError"
-      :busy="refundBusy"
-      :confirm-label="$i('pos_refund_sale')"
-      @submit="onRefundSubmit"
-      @close="showRefundPin = false"
+    <RefundModal
+      v-if="showRefundModal"
+      :receipt="receipt"
+      @done="onRefundDone"
+      @close="showRefundModal = false"
     />
 
     <SplitBillModal
@@ -123,7 +111,7 @@
 import CashPad from '~/components/admin/pos/CashPad.vue';
 import CardTerminalStatus from '~/components/admin/pos/CardTerminalStatus.vue';
 import PosReceiptView from '~/components/admin/pos/PosReceiptView.vue';
-import PinPadModal from '~/components/admin/pos/PinPadModal.vue';
+import RefundModal from '~/components/admin/pos/RefundModal.vue';
 import SplitBillModal from '~/components/admin/pos/SplitBillModal.vue';
 
 // Payment flow for a single check. Cash goes straight through POST /pos/payment/cash (the server
@@ -136,7 +124,7 @@ const CARD_TIMEOUT_MS = 120000;
 
 export default {
   name: 'PaymentScreen',
-  components: { CashPad, CardTerminalStatus, PosReceiptView, PinPadModal, SplitBillModal },
+  components: { CashPad, CardTerminalStatus, PosReceiptView, RefundModal, SplitBillModal },
   inject: ['pos'],
   props: {
     check: { type: Object, default: null }
@@ -156,22 +144,16 @@ export default {
       showSms: false,
       smsPhone: '',
       smsResult: '',
-      showRefund: false,
-      showRefundPin: false,
-      refundReason: '',
-      refundBusy: false,
-      refundError: ''
+      showRefundModal: false
     };
   },
   computed: {
     cashPointId () { return this.pos.cashPoint.cashPointId; },
-    managerOperators () {
-      return (this.pos.operators || []).filter(o => o.roleLevel === 'Leder' || o.roleLevel === 'Eier');
-    },
+    // A finalized, non-training, non-void sale can be refunded — cash or card, routed by RefundModal
+    // from the receipt's payment mean.
     canRefund () {
       const r = this.receipt;
-      return !!r && r.receiptType !== 'Return' && !r.isVoid && !r.isTraining &&
-        (r.payments || []).some(p => p.paymentType === 'Cash');
+      return !!r && r.receiptType !== 'Return' && !r.isVoid && !r.isTraining && (r.payments || []).length > 0;
     },
     orderId () { return this.check ? this.check.orderId : null; },
     total () { return this.check ? this.check.finalAmount : 0; },
@@ -302,30 +284,11 @@ export default {
         this.smsResult = this.pos.errMsg(e);
       }
     },
-    startRefund () {
-      this.refundReason = '';
-      this.refundError = '';
-      this.showRefund = true;
-    },
-    async onRefundSubmit ({ operatorId, pin }) {
-      this.refundBusy = true;
-      this.refundError = '';
-      try {
-        const rc = await this.pos.posSvc().RefundCash(this.receipt.journalEntryId, {
-          cashPointId: this.cashPointId,
-          amount: null,
-          reason: this.refundReason.trim(),
-          approverOperatorId: operatorId,
-          pin
-        });
-        this.receipt = rc;
-        this.showRefundPin = false;
-        this.showRefund = false;
-      } catch (e) {
-        this.refundError = this.pos.errMsg(e);
-      } finally {
-        this.refundBusy = false;
-      }
+    // The RefundModal produced the RETREC (cash synchronously, or card once the terminal confirms):
+    // show it in place of the sale receipt so the operator can print the return.
+    onRefundDone (returnReceipt) {
+      if (returnReceipt) { this.receipt = returnReceipt; }
+      this.showRefundModal = false;
     }
   }
 };

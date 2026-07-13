@@ -22,8 +22,12 @@
             </svg>
           </div>
           <div class="status-banner__content">
-            <div class="status-banner__label">{{ $i('index_activeStatusBannerLabel') }}</div>
-            <div class="status-banner__message">{{ statusMessage }}</div>
+            <div class="status-banner__label">
+              {{ $i('index_activeStatusBannerLabel') }}
+            </div>
+            <div class="status-banner__message">
+              {{ statusMessage }}
+            </div>
           </div>
           <div class="status-banner__arrow">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -34,14 +38,20 @@
 
         <div>
           <h1 class="welcome-text">
-            <template v-if="userName">{{ $i('index_welcomeNamed', { name: userName }) }}</template>
-            <template v-else>{{ $i('index_welcome') }}</template>
+            <template v-if="userName">
+              {{ $i('index_welcomeNamed', { name: userName }) }}
+            </template>
+            <template v-else>
+              {{ $i('index_welcome') }}
+            </template>
           </h1>
         </div>
 
         <!-- Store Information Section -->
         <div class="store-info-section">
-          <h2 class="store-info-section__title">{{ $i('index_storeInformation') }}</h2>
+          <h2 class="store-info-section__title">
+            {{ $i('index_storeInformation') }}
+          </h2>
 
           <div class="store-info-grid">
             <!-- Address Card -->
@@ -53,14 +63,22 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
                 </div>
-                <h3 class="store-card__title">{{ $i('index_address') }}</h3>
+                <h3 class="store-card__title">
+                  {{ $i('index_address') }}
+                </h3>
               </div>
 
               <div v-if="!editingAddress" class="store-card__content">
                 <div class="store-card__info">
-                  <p class="store-card__name">{{ storeName }}</p>
-                  <p class="store-card__detail">{{ storeAddress.fullAddress }}</p>
-                  <p class="store-card__detail">{{ storeAddress.zipCode }} {{ storeAddress.city }}</p>
+                  <p class="store-card__name">
+                    {{ storeName }}
+                  </p>
+                  <p class="store-card__detail">
+                    {{ storeAddress.fullAddress }}
+                  </p>
+                  <p class="store-card__detail">
+                    {{ storeAddress.zipCode }} {{ storeAddress.city }}
+                  </p>
                 </div>
                 <button class="store-card__action-btn" @click="editingAddress = true">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -73,21 +91,25 @@
               <div v-else class="store-card__edit">
                 <div class="form-group">
                   <label>{{ $i('index_address') }}</label>
-                  <input v-model="storeAddress.fullAddress" type="text" class="form-control" />
+                  <input v-model="storeAddress.fullAddress" type="text" class="form-control">
                 </div>
                 <div class="form-row">
                   <div class="form-group">
                     <label>{{ $i('index_zipCode') }}</label>
-                    <input v-model="storeAddress.zipCode" type="text" class="form-control" />
+                    <input v-model="storeAddress.zipCode" type="text" class="form-control">
                   </div>
                   <div class="form-group">
                     <label>{{ $i('index_city') }}</label>
-                    <input v-model="storeAddress.city" type="text" class="form-control" />
+                    <input v-model="storeAddress.city" type="text" class="form-control">
                   </div>
                 </div>
                 <div class="form-actions">
-                  <button class="btn btn-primary" @click="updateAddress">{{ $i('common_save') }}</button>
-                  <button class="btn btn-secondary" @click="cancelAddressEdit">{{ $i('common_cancel') }}</button>
+                  <button class="btn btn-primary" @click="updateAddress">
+                    {{ $i('common_save') }}
+                  </button>
+                  <button class="btn btn-secondary" @click="cancelAddressEdit">
+                    {{ $i('common_cancel') }}
+                  </button>
                 </div>
               </div>
 
@@ -104,7 +126,9 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <h3 class="store-card__title">{{ $i('index_openingHours') }}</h3>
+                <h3 class="store-card__title">
+                  {{ $i('index_openingHours') }}
+                </h3>
               </div>
 
               <div v-if="!editingHours" class="store-card__content">
@@ -131,19 +155,99 @@
                     <div class="hours-edit-header">
                       <span class="hours-day">{{ dayLabels[day.dayOfWeek] }}</span>
                       <label class="toggle-switch">
-                        <input type="checkbox" v-model="day.open" @change="updateOpeningHours" />
-                        <span class="toggle-slider"></span>
+                        <input v-model="day.open" type="checkbox" @change="updateOpeningHours">
+                        <span class="toggle-slider" />
                       </label>
                     </div>
                     <div v-if="day.open" class="time-inputs">
-                      <input type="time" v-model="day.openingTime" @change="updateOpeningHours" class="time-input" />
+                      <input v-model="day.openingTime" type="time" class="time-input" @change="updateOpeningHours">
                       <span class="time-separator">-</span>
-                      <input type="time" v-model="day.closingTime" @change="updateOpeningHours" class="time-input" />
+                      <input v-model="day.closingTime" type="time" class="time-input" @change="updateOpeningHours">
                     </div>
                   </div>
                 </div>
                 <div class="form-actions">
-                  <button class="btn btn-secondary" @click="editingHours = false">{{ $i('common_close') }}</button>
+                  <button class="btn btn-secondary" @click="editingHours = false">
+                    {{ $i('common_close') }}
+                  </button>
+                </div>
+              </div>
+
+              <!-- Special days: dated overrides of the weekly hours (closed or manual time) -->
+              <div class="special-days">
+                <h4 class="special-days__title">
+                  {{ $i('index_specialDays') }}
+                </h4>
+
+                <div v-if="localSpecialDays.length" class="special-days__list">
+                  <div v-for="s in localSpecialDays" :key="s.specialOpeningHourId" class="sday">
+                    <span class="sday__date">{{ formatSpecialDate(s.date) }}</span>
+                    <span class="sday__badge" :class="s.open ? 'sday__badge--open' : 'sday__badge--closed'">
+                      <template v-if="s.open">{{ s.openingTime }}–{{ s.closingTime }}</template>
+                      <template v-else>{{ $i('index_closed') }}</template>
+                    </span>
+                    <span v-if="s.note" class="sday__note">{{ s.note }}</span>
+                    <button class="sday__remove" :title="$i('common_delete')" @click="removeSpecialDay(s)">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <p v-else class="special-days__empty">
+                  {{ $i('index_specialDays_empty') }}
+                </p>
+
+                <button v-if="!showSpecialForm" class="sday-addbtn" @click="openSpecialForm">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                  </svg>
+                  {{ $i('index_specialDays_addTitle') }}
+                </button>
+
+                <div v-else class="sday-form">
+                  <label class="sday-form__label">{{ $i('index_specialDays_pickDates') }}</label>
+                  <MultiDateCalendar v-model="newSpecialDay.dates" />
+                  <p v-if="newSpecialDay.dates.length" class="sday-form__count">
+                    {{ $i('index_specialDays_selectedCount', { count: newSpecialDay.dates.length }) }}
+                  </p>
+
+                  <div class="sday-form__field">
+                    <label class="sday-form__label">{{ $i('index_specialDays_status') }}</label>
+                    <div class="sday-seg">
+                      <button type="button" class="sday-seg__btn" :class="{ 'is-active is-closed': !newSpecialDay.open }" @click="newSpecialDay.open = false">
+                        {{ $i('index_closed') }}
+                      </button>
+                      <button type="button" class="sday-seg__btn" :class="{ 'is-active is-open': newSpecialDay.open }" @click="newSpecialDay.open = true">
+                        {{ $i('index_specialDays_openLabel') }}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div v-if="newSpecialDay.open" class="sday-form__row">
+                    <div class="sday-form__field">
+                      <label class="sday-form__label">{{ $i('index_specialDays_from') }}</label>
+                      <input v-model="newSpecialDay.openingTime" type="time" class="sday-form__input">
+                    </div>
+                    <div class="sday-form__field">
+                      <label class="sday-form__label">{{ $i('index_specialDays_to') }}</label>
+                      <input v-model="newSpecialDay.closingTime" type="time" class="sday-form__input">
+                    </div>
+                  </div>
+
+                  <div class="sday-form__field">
+                    <label class="sday-form__label">{{ $i('index_specialDays_note') }}</label>
+                    <input v-model="newSpecialDay.note" type="text" :placeholder="$i('index_specialDays_note_ph')" class="sday-form__input">
+                  </div>
+
+                  <div class="sday-form__actions">
+                    <button class="btn btn-secondary" @click="showSpecialForm = false">
+                      {{ $i('common_cancel') }}
+                    </button>
+                    <button class="btn btn-primary" :disabled="!newSpecialDay.dates.length || savingSpecialDay" @click="addSpecialDay">
+                      {{ $i('index_specialDays_add') }}
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -160,7 +264,9 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
                   </svg>
                 </div>
-                <h3 class="store-card__title">{{ $i('index_qrOrdering') }}</h3>
+                <h3 class="store-card__title">
+                  {{ $i('index_qrOrdering') }}
+                </h3>
               </div>
 
               <div class="store-card__content">
@@ -172,8 +278,12 @@
                     class="qr-code"
                   />
                   <div class="qr-info">
-                    <p class="qr-description">{{ $i('index_qrDescription') }}</p>
-                    <p class="qr-url">{{ generatedUrl }}</p>
+                    <p class="qr-description">
+                      {{ $i('index_qrDescription') }}
+                    </p>
+                    <p class="qr-url">
+                      {{ generatedUrl }}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -187,11 +297,15 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <h3 class="store-card__title">{{ $i('index_statusMessage') }}</h3>
+                <h3 class="store-card__title">
+                  {{ $i('index_statusMessage') }}
+                </h3>
               </div>
 
               <div v-if="!editingStatus && !hasStatusMessage" class="store-card__content">
-                <p class="store-card__empty-state">{{ $i('index_noActiveStatusMessage') }}</p>
+                <p class="store-card__empty-state">
+                  {{ $i('index_noActiveStatusMessage') }}
+                </p>
                 <button class="store-card__action-btn" @click="editingStatus = true">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -201,9 +315,13 @@
               </div>
 
               <div v-if="!editingStatus && hasStatusMessage" class="store-card__content">
-                <p class="status-info-text">{{ $i('index_statusVisibleInfo') }}</p>
+                <p class="status-info-text">
+                  {{ $i('index_statusVisibleInfo') }}
+                </p>
                 <div class="status-display">
-                  <p class="status-message">{{ statusMessage }}</p>
+                  <p class="status-message">
+                    {{ statusMessage }}
+                  </p>
                 </div>
                 <div class="store-card__actions">
                   <button class="store-card__action-btn" @click="editingStatus = true">
@@ -229,13 +347,21 @@
                     class="form-control"
                     rows="4"
                     :placeholder="$i('index_statusMessagePlaceholder')"
-                  ></textarea>
-                  <p class="form-helper-text">{{ $i('index_statusMessageHelper') }}</p>
+                  />
+                  <p class="form-helper-text">
+                    {{ $i('index_statusMessageHelper') }}
+                  </p>
                 </div>
                 <div class="form-actions">
-                  <button class="btn btn-primary" :disabled="!statusMessage.trim()" @click="updateStatusMessage">{{ $i('common_save') }}</button>
-                  <button v-if="hasStatusMessage" class="btn btn-secondary" @click="cancelStatusEdit">{{ $i('common_cancel') }}</button>
-                  <button v-else class="btn btn-secondary" @click="editingStatus = false">{{ $i('common_cancel') }}</button>
+                  <button class="btn btn-primary" :disabled="!statusMessage.trim()" @click="updateStatusMessage">
+                    {{ $i('common_save') }}
+                  </button>
+                  <button v-if="hasStatusMessage" class="btn btn-secondary" @click="cancelStatusEdit">
+                    {{ $i('common_cancel') }}
+                  </button>
+                  <button v-else class="btn btn-secondary" @click="editingStatus = false">
+                    {{ $i('common_cancel') }}
+                  </button>
                 </div>
               </div>
 
@@ -251,132 +377,155 @@
 </template>
 
 <script>
-import AdminPage from "~/components/organisms/AdminPage.vue";
-import Loading from "~/components/atoms/Loading.vue";
-import VueQrcode from "@chenfengyuan/vue-qrcode";
+import VueQrcode from '@chenfengyuan/vue-qrcode';
+import AdminPage from '~/components/organisms/AdminPage.vue';
+import Loading from '~/components/atoms/Loading.vue';
+import MultiDateCalendar from '~/components/admin/MultiDateCalendar.vue';
 
 export default {
-  components: { AdminPage, Loading, VueQrcode },
+  components: { AdminPage, Loading, VueQrcode, MultiDateCalendar },
   data: () => ({
     isLoading: false,
-    storeName: "",
+    storeName: '',
     storeAddress: {
-      fullAddress: "",
-      zipCode: "",
-      city: "",
+      fullAddress: '',
+      zipCode: '',
+      city: ''
     },
     originalAddress: null,
     editingAddress: false,
     editingHours: false,
     editingStatus: false,
     localOpeningHours: [],
-    statusMessage: "",
+    localSpecialDays: [],
+    showSpecialForm: false,
+    newSpecialDay: { dates: [], open: false, openingTime: '10:00', closingTime: '20:00', note: '' },
+    savingSpecialDay: false,
+    statusMessage: '',
     hasStatusMessage: false,
     infoExpanded: {
       address: false,
       hours: false,
       qr: false,
-      status: false,
+      status: false
     },
     notification: {
       show: false,
-      message: "",
-      type: "success",
-      section: "",
-      timeout: null,
-    },
+      message: '',
+      type: 'success',
+      section: '',
+      timeout: null
+    }
   }),
   computed: {
-    dayLabels() {
+    dayLabels () {
       return [
-        this.$i("index_dayMonday"),
-        this.$i("index_dayTuesday"),
-        this.$i("index_dayWednesday"),
-        this.$i("index_dayThursday"),
-        this.$i("index_dayFriday"),
-        this.$i("index_daySaturday"),
-        this.$i("index_daySunday"),
+        this.$i('index_dayMonday'),
+        this.$i('index_dayTuesday'),
+        this.$i('index_dayWednesday'),
+        this.$i('index_dayThursday'),
+        this.$i('index_dayFriday'),
+        this.$i('index_daySaturday'),
+        this.$i('index_daySunday')
       ];
     },
-    userName() {
+    userName () {
       return this.$store.state.currentUser?.fullName || null;
     },
-    selectedStore() {
+    selectedStore () {
       return this.$store.state.selectedAdminStore;
     },
-    generatedUrl() {
-      return this.selectedStore ? `https://shop.okam.no/shop?id=${this.selectedStore}` : "";
+    generatedUrl () {
+      return this.selectedStore ? `https://shop.okam.no/shop?id=${this.selectedStore}` : '';
     },
-    getOpeningHoursSummary() {
+    getOpeningHoursSummary () {
       const today = new Date().getDay();
       const dayIndex = today === 0 ? 6 : today - 1;
       const todayHours = this.localOpeningHours[dayIndex];
       if (!todayHours || !todayHours.open) {
-        return this.$i("index_closedToday");
+        return this.$i('index_closedToday');
       }
-      return this.$i("index_openToday", {
+      return this.$i('index_openToday', {
         openingTime: todayHours.openingTime,
-        closingTime: todayHours.closingTime,
+        closingTime: todayHours.closingTime
       });
-    },
+    }
   },
   watch: {
     selectedStore: {
       immediate: true,
-      async handler(storeId) {
+      async handler (storeId) {
         if (storeId) {
           await this.fetchStoreData(storeId);
         }
-      },
-    },
+      }
+    }
   },
-  mounted() {
+  mounted () {
     if (!this.$store.getters.userIsLoggedIn) {
       return;
     }
     this.isLoading = false;
   },
   methods: {
-    async fetchStoreData(storeId) {
+    async fetchStoreData (storeId) {
       try {
         await this._userService.Reload();
         const store = await this._storeService.Get(storeId);
 
         if (store) {
-          this.storeName = store.name || "";
+          this.storeName = store.name || '';
           this.storeAddress = {
-            fullAddress: store.address?.fullAddress || "",
-            zipCode: store.address?.zipCode || "",
-            city: store.address?.city || "",
+            fullAddress: store.address?.fullAddress || '',
+            zipCode: store.address?.zipCode || '',
+            city: store.address?.city || ''
           };
           this.originalAddress = { ...this.storeAddress };
 
-          this.statusMessage = store.statusMessage || "";
+          this.statusMessage = store.statusMessage || '';
           this.hasStatusMessage = !!store.statusMessage;
 
           this.updateLocalOpeningHours(store);
         }
       } catch (error) {
-        console.error("Error fetching store data:", error);
+        console.error('Error fetching store data:', error);
       }
     },
 
-    updateLocalOpeningHours(store) {
+    updateLocalOpeningHours (store) {
       this.localOpeningHours = [];
       const unsortedOpeningHours = store.openingHours || [];
 
       [0, 1, 2, 3, 4, 5, 6].forEach((dayOfWeek) => {
-        const openingHours = unsortedOpeningHours.find((x) => x.dayOfWeek === dayOfWeek) || {
+        const openingHours = unsortedOpeningHours.find(x => x.dayOfWeek === dayOfWeek) || {
           dayOfWeek,
-          openingTime: "09:00",
-          closingTime: "20:00",
-          open: false,
+          openingTime: '09:00',
+          closingTime: '20:00',
+          open: false
         };
         this.localOpeningHours.push(openingHours);
       });
+
+      // Seed from the store payload (dates/times only), then load the admin view: the consumer
+      // payload deliberately carries no note, so the staff note comes from the admin endpoint.
+      this.localSpecialDays = (store.specialOpeningHours || [])
+        .slice()
+        .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+      this.loadSpecialDays();
     },
 
-    showNotification(message, type = "success", section = "") {
+    async loadSpecialDays () {
+      try {
+        const specials = await this._storeService.GetSpecialOpeningHours(this.selectedStore);
+        this.localSpecialDays = (specials || [])
+          .slice()
+          .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+      } catch (error) {
+        console.error('Error loading special opening days:', error);
+      }
+    },
+
+    showNotification (message, type = 'success', section = '') {
       if (this.notification.timeout) {
         clearTimeout(this.notification.timeout);
       }
@@ -386,7 +535,7 @@ export default {
         message,
         type,
         section,
-        timeout: null,
+        timeout: null
       };
 
       this.notification.timeout = setTimeout(() => {
@@ -394,91 +543,146 @@ export default {
       }, 3000);
     },
 
-    async updateAddress() {
+    async updateAddress () {
       try {
         await this._storeService.UpdateAddress(this.selectedStore, this.storeAddress);
         this.originalAddress = { ...this.storeAddress };
         this.editingAddress = false;
-        this.showNotification(this.$i("index_addressUpdated"), "success", "address");
+        this.showNotification(this.$i('index_addressUpdated'), 'success', 'address');
       } catch (error) {
-        console.error("Error updating address:", error);
-        this.showNotification(this.$i("index_addressUpdateFailed"), "error", "address");
+        console.error('Error updating address:', error);
+        this.showNotification(this.$i('index_addressUpdateFailed'), 'error', 'address');
       }
     },
 
-    cancelAddressEdit() {
+    cancelAddressEdit () {
       this.storeAddress = { ...this.originalAddress };
       this.editingAddress = false;
     },
 
-    async updateOpeningHours() {
+    async updateOpeningHours () {
       try {
         await this._storeService.UpdateOpeningHours(
           this.selectedStore,
           JSON.parse(JSON.stringify(this.localOpeningHours))
         );
-        this.showNotification(this.$i("index_openingHoursUpdated"), "success", "hours");
+        this.showNotification(this.$i('index_openingHoursUpdated'), 'success', 'hours');
       } catch (error) {
-        console.error("Error updating opening hours:", error);
-        this.showNotification(this.$i("index_openingHoursUpdateFailed"), "error", "hours");
+        console.error('Error updating opening hours:', error);
+        this.showNotification(this.$i('index_openingHoursUpdateFailed'), 'error', 'hours');
       }
     },
 
-    async updateStatusMessage() {
+    openSpecialForm () {
+      this.newSpecialDay = { dates: [], open: false, openingTime: '10:00', closingTime: '20:00', note: '' };
+      this.showSpecialForm = true;
+    },
+
+    async addSpecialDay () {
+      if (!this.newSpecialDay.dates.length || this.savingSpecialDay) {
+        return;
+      }
+      this.savingSpecialDay = true;
+      try {
+        const created = await this._storeService.AddSpecialOpeningHoursBulk(this.selectedStore, {
+          dates: this.newSpecialDay.dates,
+          open: this.newSpecialDay.open,
+          openingTime: this.newSpecialDay.open ? this.newSpecialDay.openingTime : null,
+          closingTime: this.newSpecialDay.open ? this.newSpecialDay.closingTime : null,
+          note: this.newSpecialDay.note
+        });
+        // Replace any existing entries for the chosen dates (one override per date, backend-enforced).
+        const createdDates = created.map(c => c.date.substring(0, 10));
+        this.localSpecialDays = this.localSpecialDays
+          .filter(s => !createdDates.includes(s.date.substring(0, 10)))
+          .concat(created)
+          .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+        this.showSpecialForm = false;
+        this.showNotification(this.$i('index_specialDays_added'), 'success', 'hours');
+      } catch (error) {
+        console.error('Error adding special days:', error);
+        this.showNotification(this.$i('index_specialDays_failed'), 'error', 'hours');
+      } finally {
+        this.savingSpecialDay = false;
+      }
+    },
+
+    async removeSpecialDay (special) {
+      try {
+        await this._storeService.DeleteSpecialOpeningHour(this.selectedStore, special.specialOpeningHourId);
+        this.localSpecialDays = this.localSpecialDays.filter(
+          s => s.specialOpeningHourId !== special.specialOpeningHourId
+        );
+        this.showNotification(this.$i('index_specialDays_removed'), 'success', 'hours');
+      } catch (error) {
+        console.error('Error removing special day:', error);
+        this.showNotification(this.$i('index_specialDays_failed'), 'error', 'hours');
+      }
+    },
+
+    formatSpecialDate (date) {
+      const d = new Date(date);
+      if (isNaN(d.getTime())) {
+        return date;
+      }
+      return d.toLocaleDateString('nb-NO', { weekday: 'short', day: 'numeric', month: 'short' });
+    },
+
+    async updateStatusMessage () {
       try {
         await this._storeService.UpdateStatusMessage(this.selectedStore, this.statusMessage);
         this.hasStatusMessage = !!this.statusMessage;
         this.editingStatus = false;
-        this.showNotification(this.$i("index_statusMessageUpdated"), "success", "status");
+        this.showNotification(this.$i('index_statusMessageUpdated'), 'success', 'status');
       } catch (error) {
-        console.error("Error updating status message:", error);
-        this.showNotification(this.$i("index_statusMessageUpdateFailed"), "error", "status");
+        console.error('Error updating status message:', error);
+        this.showNotification(this.$i('index_statusMessageUpdateFailed'), 'error', 'status');
       }
     },
 
-    async removeStatusMessage() {
+    async removeStatusMessage () {
       try {
-        await this._storeService.UpdateStatusMessage(this.selectedStore, "");
-        this.statusMessage = "";
+        await this._storeService.UpdateStatusMessage(this.selectedStore, '');
+        this.statusMessage = '';
         this.hasStatusMessage = false;
         this.editingStatus = false;
-        this.showNotification(this.$i("index_statusMessageRemoved"), "success", "status");
+        this.showNotification(this.$i('index_statusMessageRemoved'), 'success', 'status');
       } catch (error) {
-        console.error("Error removing status message:", error);
-        this.showNotification(this.$i("index_statusMessageRemoveFailed"), "error", "status");
+        console.error('Error removing status message:', error);
+        this.showNotification(this.$i('index_statusMessageRemoveFailed'), 'error', 'status');
       }
     },
 
-    cancelStatusEdit() {
+    cancelStatusEdit () {
       if (this.hasStatusMessage) {
         // Fetch original status message from store
         const store = this.$store.state.stores?.find(s => s.id === this.selectedStore);
         if (store) {
-          this.statusMessage = store.statusMessage || "";
+          this.statusMessage = store.statusMessage || '';
         }
         this.editingStatus = false;
       }
     },
 
-    toggleInfoExpanded(section) {
+    toggleInfoExpanded (section) {
       this.infoExpanded[section] = !this.infoExpanded[section];
     },
 
-    scrollToStatusCard() {
+    scrollToStatusCard () {
       if (this.$refs.statusCard) {
         this.$refs.statusCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     },
 
-    handleLoginSuccess() {
+    handleLoginSuccess () {
       this.isLoading = false;
       // Check if there's a redirect parameter in the URL
       const redirectPath = this.$route.query.redirect;
       if (redirectPath && redirectPath !== this.$route.fullPath) {
         this.$router.push(redirectPath);
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -663,6 +867,130 @@ export default {
   flex-direction: column;
   gap: 0.5rem;
 }
+
+.special-days {
+  padding: 1.75rem 1.5rem;
+  border-top: 1px solid #eef1f5;
+}
+.special-days__title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin: 0 0 1.1rem;
+}
+.special-days__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+.special-days__empty {
+  color: #94a3b8;
+  font-size: 0.88rem;
+  margin: 0 0 1.25rem;
+}
+
+.sday {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0.9rem;
+  background: #f8f9fa;
+  border-radius: 0.6rem;
+}
+.sday__date { font-weight: 600; color: #292c34; min-width: 6rem; text-transform: capitalize; }
+.sday__badge { font-size: 0.78rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 999px; white-space: nowrap; }
+.sday__badge--open { background: #dcfce7; color: #15803d; }
+.sday__badge--closed { background: #fee2e2; color: #b91c1c; }
+.sday__note { flex: 1; color: #94a3b8; font-size: 0.85rem; }
+.sday__remove {
+  margin-left: auto;
+  border: none;
+  background: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: inline-flex;
+  border-radius: 0.4rem;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.sday__remove:hover { color: #ef4444; background: #fef2f2; }
+.sday__remove svg { width: 1.05rem; height: 1.05rem; }
+
+.sday-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  background: #f8f9fa;
+  border: 1px solid #eef1f5;
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+.sday-form__row { display: flex; gap: 0.85rem; }
+.sday-form__field { flex: 1; display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
+.sday-form__label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #94a3b8;
+}
+.sday-form__input {
+  height: 2.4rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 0 0.7rem;
+  font-size: 0.9rem;
+  background: #fff;
+  color: #292c34;
+  width: 100%;
+}
+.sday-form__input:focus { outline: none; border-color: #292c34; }
+
+.sday-seg {
+  display: flex;
+  background: #eef1f5;
+  border-radius: 0.5rem;
+  padding: 0.22rem;
+  height: 2.4rem;
+}
+.sday-seg__btn {
+  flex: 1;
+  border: none;
+  background: none;
+  border-radius: 0.4rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.sday-seg__btn.is-active { background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
+.sday-seg__btn.is-active.is-closed { color: #b91c1c; }
+.sday-seg__btn.is-active.is-open { color: #15803d; }
+
+.sday-addbtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px dashed #cbd5e0;
+  background: #fff;
+  color: #292c34;
+  border-radius: 0.6rem;
+  padding: 0.65rem 1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.sday-addbtn:hover { border-color: #292c34; background: #f8f9fa; }
+.sday-addbtn svg { width: 1.1rem; height: 1.1rem; }
+.sday-form__count { font-size: 0.82rem; color: #292c34; font-weight: 600; margin: 0; }
+.sday-form__actions { display: flex; gap: 0.6rem; justify-content: flex-end; margin-top: 0.25rem; }
+.sday-form__submit { align-self: flex-start; }
+.sday-form__submit:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .hours-row {
   display: flex;

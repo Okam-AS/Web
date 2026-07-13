@@ -1,11 +1,11 @@
 <template>
   <div class="check-line" :class="{ 'check-line--ready': isReady }">
     <div class="check-line__qty">
-      <button type="button" class="check-line__qtybtn" @click="$emit('dec', group)">
+      <button type="button" class="check-line__qtybtn" @click.stop="$emit('dec', group)">
         −
       </button>
       <span class="check-line__qtyval">{{ group.quantity }}</span>
-      <button type="button" class="check-line__qtybtn" @click="$emit('inc', group)">
+      <button type="button" class="check-line__qtybtn" @click.stop="$emit('inc', group)">
         +
       </button>
     </div>
@@ -26,6 +26,26 @@
           <span v-if="group.courseSequence" class="check-line__tag">{{ $i('pos_course') }} {{ group.courseSequence }}</span>
           <span v-if="statusLabel" class="check-line__tag" :class="statusClass">{{ statusLabel }}</span>
         </template>
+        <!-- Guest tag: who the line belongs to. Tappable to (re)assign; a ghost "+ Gjest" invites
+             tagging when the line is still shared. Stop propagation so it doesn't toggle row select. -->
+        <template v-if="seating">
+          <button
+            v-if="group.seatNumber != null"
+            type="button"
+            class="check-line__tag check-line__tag--seat"
+            @click.stop="$emit('seat', group)"
+          >
+            {{ $i('pos_seat_num', { n: group.seatNumber }) }}
+          </button>
+          <button
+            v-else
+            type="button"
+            class="check-line__tag check-line__tag--seat-add"
+            @click.stop="$emit('seat', group)"
+          >
+            {{ $i('pos_seat_add') }}
+          </button>
+        </template>
       </div>
 
       <p v-if="group.notes" class="check-line__notes">
@@ -42,7 +62,7 @@
           type="button"
           class="check-line__serve"
           :class="{ 'check-line__serve--ready': isReady }"
-          @click="$emit('serve', group)"
+          @click.stop="$emit('serve', group)"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M5 13l4 4L19 7" /></svg>
           <span>{{ $i('pos_serve') }}</span>
@@ -56,11 +76,11 @@
         class="check-line__note-btn"
         :class="{ 'check-line__note-btn--set': !!group.notes }"
         :title="$i('pos_note_title')"
-        @click="$emit('note', group)"
+        @click.stop="$emit('note', group)"
       >
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
       </button>
-      <button type="button" class="check-line__remove" :title="$i('pos_remove_line')" @click="$emit('remove', group)">
+      <button type="button" class="check-line__remove" :title="$i('pos_remove_line')" @click.stop="$emit('remove', group)">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
       </button>
     </div>
@@ -76,7 +96,9 @@ export default {
     group: { type: Object, required: true },
     // Table checks course their lines; quick sales do not, so line status and course tags are
     // hidden there (build -> pay, no kitchen round).
-    coursing: { type: Boolean, default: false }
+    coursing: { type: Boolean, default: false },
+    // Guest (seat) tagging in play: renders the per-line guest tag (assigned or a ghost "+ Gjest").
+    seating: { type: Boolean, default: false }
   },
   computed: {
     // A "Ny" line is not yet sent to the kitchen; "Sendt" confirms it is on the kitchen screen;
@@ -94,9 +116,10 @@ export default {
     statusClass () {
       return this.group.status ? 'check-line__tag--' + String(this.group.status).toLowerCase() : '';
     },
-    // The deposit tag always shows; the course / status tags only on a coursing (table) check.
+    // The deposit tag always shows; the course / status tags only on a coursing (table) check; the
+    // guest tag (assigned or the ghost affordance) whenever seating is in play.
     showTags () {
-      return this.group.depositAmount > 0 || this.coursing;
+      return this.group.depositAmount > 0 || this.coursing || this.seating;
     },
     // The kitchen has finished this line (bumped Ready) — highlight it so a server notices at a
     // glance that it is ready to run.
@@ -174,6 +197,13 @@ export default {
   color: #64748b;
 }
 .check-line__tag--deposit { background: rgba(59, 130, 246, 0.12); color: #2563eb; }
+/* Guest tag uses the blue "who" family (like deposit) so it never reads as a kitchen state.
+   Rendered as a button because it is tappable to reassign the line's guest. */
+.check-line__tag--seat { background: rgba(59, 130, 246, 0.12); color: #2563eb; border: 1px solid rgba(59, 130, 246, 0.28); cursor: pointer; font-family: inherit; line-height: 1.2; }
+.check-line__tag--seat:hover { background: rgba(59, 130, 246, 0.2); }
+/* Ghost affordance inviting the operator to tag an as-yet-shared line. */
+.check-line__tag--seat-add { background: transparent; color: #94a3b8; border: 1px dashed #cbd5e0; cursor: pointer; font-family: inherit; line-height: 1.2; }
+.check-line__tag--seat-add:hover { border-color: #2563eb; color: #2563eb; }
 /* "Ny": a calm but clear green marker for a line not yet sent to the kitchen. */
 .check-line__tag--pending { background: rgba(27, 183, 118, 0.14); color: #159f63; }
 /* "Sendt": muted with a check, confirming the line is on the kitchen screen. */

@@ -7,15 +7,20 @@
         :catalog-error="catalogError"
         :sold-out-product-ids="soldOutProductIds"
         :sold-out-category-ids="soldOutCategoryIds"
-        :delivery-type="deliveryType"
-        :delivery-locked="!!check"
+        :delivery-type="effectiveDeliveryType"
         :current-course="currentCourse"
         :coursing-enabled="coursingEnabled"
+        :current-seat="currentSeat"
+        :seating-enabled="seatingEnabled"
+        :seat-chip-count="seatChipCount"
+        :seat-counts="seatCounts"
         @select="onSelect"
         @open-price="showOpenPrice = true"
         @scan="onScan"
         @set-delivery="setDelivery"
         @set-course="currentCourse = $event"
+        @set-seat="currentSeat = $event"
+        @add-seat="onAddSeat"
         @reload-catalog="pos.loadCatalog()"
       />
     </div>
@@ -51,6 +56,7 @@
     <CheckPanel
       :check="check"
       :parked-count="parkedChecks.length"
+      :seating="seatingEnabled"
       @show-parked="showParked = true"
       @inc="onInc"
       @dec="onDec"
@@ -58,12 +64,14 @@
       @park="onPark"
       @discount="onDiscount"
       @remove-discount="onRemoveDiscount"
+      @negative-sale="onNegativeSale"
       @fire-course="onFireCourse"
       @serve="onServeLine"
       @serve-course="onServeCourse"
       @send-to-kitchen="onSendToKitchen"
       @set-couverts="onSetCouverts"
       @note="onNote"
+      @seat="onSeat"
       @more="onMore"
       @pay="onPay"
     />
@@ -102,6 +110,17 @@
       @close="noteGroup = null"
     />
 
+    <SeatPickerModal
+      v-if="seatGroup"
+      :target-name="seatGroup.name"
+      :initial-seat="seatGroup.seatNumber"
+      :couverts="check && check.couverts ? check.couverts : 0"
+      :max-seat="maxSeatOnCheck"
+      :busy="busy"
+      @confirm="onSeatConfirm"
+      @close="seatGroup = null"
+    />
+
     <PaymentScreen
       v-if="showPayment"
       :check="check"
@@ -129,6 +148,14 @@
       @close="showVoid = false"
     />
 
+    <ReturnBuilder
+      v-if="showNegativeSale"
+      title-key="pos_negative_sale"
+      :initial-lines="negativeSalePrefill"
+      @done="onNegativeSaleDone"
+      @close="showNegativeSale = false; negativeSalePrefill = null"
+    />
+
     <!-- ⋮ action sheet -->
     <div v-if="showMore" class="sell__more" @click.self="showMore = false">
       <div class="sell__more-sheet">
@@ -152,6 +179,8 @@ import PaymentScreen from '~/components/admin/pos/PaymentScreen.vue';
 import DiscountModal from '~/components/admin/pos/DiscountModal.vue';
 import VoidModal from '~/components/admin/pos/VoidModal.vue';
 import LineNoteModal from '~/components/admin/pos/LineNoteModal.vue';
+import SeatPickerModal from '~/components/admin/pos/SeatPickerModal.vue';
+import ReturnBuilder from '~/components/admin/pos/ReturnBuilder.vue';
 
 // The sales screen: product grid on the left, open check on the right. It orchestrates adding lines
 // (direct, options, open price, EAN), quantity changes and hands off to payment. The check itself
@@ -159,12 +188,18 @@ import LineNoteModal from '~/components/admin/pos/LineNoteModal.vue';
 // payment screen (not here), so a single tap on Pay reaches every way to settle.
 export default {
   name: 'SellScreen',
-  components: { ProductGrid, CheckPanel, OptionPicker, OpenPriceModal, PaymentScreen, DiscountModal, VoidModal, LineNoteModal },
+  components: { ProductGrid, CheckPanel, OptionPicker, OpenPriceModal, PaymentScreen, DiscountModal, VoidModal, LineNoteModal, SeatPickerModal, ReturnBuilder },
   inject: ['pos'],
   data () {
     return {
       deliveryType: 'TableDelivery',
       currentCourse: null,
+      // Active guest for new lines (null = Felles / shared), mirroring currentCourse. seatExtra holds
+      // any chip added past the couverts/seat-derived count via the grid's "+" (an unexpected guest).
+      currentSeat: null,
+      seatExtra: 0,
+      // The check group whose guest is being edited (opens SeatPickerModal); null when closed.
+      seatGroup: null,
       optionProduct: null,
       showOpenPrice: false,
       showPayment: false,
@@ -175,6 +210,9 @@ export default {
       voidBusy: false,
       voidError: '',
       showMore: false,
+      showNegativeSale: false,
+      // Return lines mapped from the selected bill rows; null when the builder starts empty.
+      negativeSalePrefill: null,
       showParked: false,
       // The check group whose note is being edited (opens LineNoteModal); null when closed.
       noteGroup: null,
@@ -190,9 +228,41 @@ export default {
   },
   computed: {
     check () { return this.pos.activeCheck; },
+    // The delivery (VAT) context shown on the toggle: the open check's own once one exists (it is
+    // server state and survives park/resume), the local pick before the first item.
+    effectiveDeliveryType () {
+      return this.check ? this.check.deliveryType : this.deliveryType;
+    },
     // Coursing (the course selector, line status, "Send til kjøkken") is a table-service concept;
     // a quick sale has no tableId, so it is build -> pay with no kitchen round.
     coursingEnabled () { return !!(this.check && this.check.tableId); },
+    // Guest tagging is opt-in and only surfaces once it is meaningful: a coursing (table) check that
+    // either has guests set or already carries seated lines. A waiter who never sets guests sees it
+    // never, so the flow is byte-identical to today.
+    seatingEnabled () {
+      if (!this.coursingEnabled) { return false; }
+      const couverts = (this.check && this.check.couverts) || 0;
+      return couverts >= 2 || this.checkItems.some(i => i.seatNumber != null);
+    },
+    checkItems () { return (this.check && this.check.items) || []; },
+    // Highest guest number already tagged on the check (0 when none), so chip rows always reach it.
+    maxSeatOnCheck () {
+      return this.checkItems.reduce((m, i) => (i.seatNumber != null && i.seatNumber > m ? i.seatNumber : m), 0);
+    },
+    // Numbered guest chips to render: enough for the couverts, any seat already used, and any extra
+    // guest the operator added via "+". Capped at 20 to keep the row sane.
+    seatChipCount () {
+      const base = Math.max((this.check && this.check.couverts) || 0, this.maxSeatOnCheck, this.seatExtra);
+      return Math.min(base, 20);
+    },
+    // Item count per guest, so a chip can show who already has orders at a glance.
+    seatCounts () {
+      const counts = {};
+      this.checkItems.forEach((i) => {
+        if (i.seatNumber != null) { counts[i.seatNumber] = (counts[i.seatNumber] || 0) + i.quantity; }
+      });
+      return counts;
+    },
     catalog () { return this.pos.catalog || []; },
     catalogError () { return this.pos.catalogError; },
     board () { return this.pos.boardStatus; },
@@ -202,6 +272,15 @@ export default {
     // Operators who can authorise manager-gated discounts and voids.
     managerOperators () {
       return (this.pos.operators || []).filter(o => o.roleLevel === 'Leder' || o.roleLevel === 'Eier');
+    },
+    // The robust reset hook: the active guest is per-check ambient state, so it clears whenever the
+    // check changes — a new/resumed check, or the check going away on park, void or payment.
+    checkId () { return this.check ? this.check.orderId : null; }
+  },
+  watch: {
+    checkId () {
+      this.currentSeat = null;
+      this.seatExtra = 0;
     }
   },
   mounted () {
@@ -235,9 +314,77 @@ export default {
       if (this.noticeTimer) { clearTimeout(this.noticeTimer); }
       this.noticeTimer = setTimeout(() => { this.notice.show = false; }, 3500);
     },
-    setDelivery (dt) {
-      if (this.check) { return; }
-      this.deliveryType = dt;
+    // Switching eat-in / take-away is always allowed: before a check exists it just sets the
+    // context for the next one; on an open check the server re-prices every line for the new VAT
+    // context and returns the updated bill.
+    async setDelivery (dt) {
+      if (!this.check) {
+        this.deliveryType = dt;
+        return;
+      }
+      if (this.busy || this.check.deliveryType === dt) { return; }
+      this.busy = true;
+      try {
+        this.pos.applyCheck(await this.pos.checkSvc().SetDeliveryType(this.check.orderId, { deliveryType: dt }));
+        this.deliveryType = dt;
+      } catch (e) {
+        this.notify(this.pos.errMsg(e), 'error');
+      } finally {
+        this.busy = false;
+      }
+    },
+    // The whole bill becomes the return: ring the goods in on the ordinary grid, one tap, and the
+    // § 5-3-7 settle flow takes over. Amounts, VAT and goods groups all come from the bill rows —
+    // nothing is re-entered.
+    onNegativeSale (groups) {
+      this.negativeSalePrefill = groups.map((g) => {
+        const optionNames = (g.options || []).map(o => o.name).filter(Boolean);
+        const name = optionNames.length ? g.name + ' (' + optionNames.join(', ') + ')' : g.name;
+        // A discounted row refunds exactly what was charged: one unit at the discounted total
+        // (the per-unit net may not divide evenly in ore).
+        if (g.discountAmount > 0) {
+          return {
+            name,
+            quantity: 1,
+            unitAmount: g.lineAmount - g.discountAmount,
+            vatPercent: g.tax,
+            goodsGroupId: g.goodsGroupId,
+            sourceLineIds: g.lineIds.slice()
+          };
+        }
+        return {
+          name,
+          quantity: g.quantity,
+          unitAmount: g.unitAmount,
+          vatPercent: g.tax,
+          goodsGroupId: g.goodsGroupId,
+          sourceLineIds: g.lineIds.slice()
+        };
+      });
+      this.showNegativeSale = true;
+    },
+    // The RETREC is journalled; the bill was returned in full, so every rung line comes off the
+    // check again (leaving it empty and ready for the next customer).
+    async onNegativeSaleDone (_receipt, lines) {
+      this.showNegativeSale = false;
+      this.negativeSalePrefill = null;
+      const lineIds = (lines || []).flatMap(l => l.sourceLineIds || []);
+      if (this.check && lineIds.length) {
+        this.busy = true;
+        try {
+          let result = this.check;
+          for (const lineId of lineIds) {
+            result = await this.pos.checkSvc().RemoveLine(this.check.orderId, lineId);
+          }
+          this.pos.applyCheck(result);
+        } catch (e) {
+          this.notify(this.pos.errMsg(e), 'error');
+          this.busy = false;
+          return;
+        }
+        this.busy = false;
+      }
+      this.notify(this.$i('pos_negative_sale_done'), 'success');
     },
 
     // ---- Adding ----
@@ -268,15 +415,21 @@ export default {
       this.optionProduct = null;
       this.addProduct(product, selectedOptionIds, quantity);
     },
-    async addProduct (product, selectedOptionIds, quantity) {
+    async addProduct (product, selectedOptionIds, quantity, seatOverride) {
       if (this.busy) { return; }
       this.busy = true;
       try {
         const check = await this.ensureCheck();
+        // seatOverride (used by "+" on a row) forces the row's own guest; otherwise a new line takes
+        // the active guest. undefined means "not overridden" so an explicit null (Felles) is honoured.
+        const seatNumber = seatOverride !== undefined
+          ? seatOverride
+          : (this.seatingEnabled ? this.currentSeat : null);
         const request = {
           quantity: 1,
           notes: '',
           courseSequence: this.coursingEnabled ? this.currentCourse : null,
+          seatNumber,
           productId: product.id,
           selectedOptionIds: selectedOptionIds || [],
           isOpenPrice: false,
@@ -310,6 +463,7 @@ export default {
           quantity: 1,
           notes: '',
           courseSequence: this.coursingEnabled ? this.currentCourse : null,
+          seatNumber: this.seatingEnabled ? this.currentSeat : null,
           productId: null,
           selectedOptionIds: [],
           isOpenPrice: true,
@@ -343,10 +497,13 @@ export default {
     // ---- Quantity ----
     async onInc (group) {
       if (this.busy) { return; }
+      // "+" adds one more of this exact row, so the new line inherits the row's guest — never the
+      // stale recipe seat and never the currently active guest.
+      const rowSeat = group.seatNumber != null ? group.seatNumber : null;
       // Simple catalog line: rebuild straight from the catalog.
       if (!group.isOpenPrice && (!group.options || !group.options.length)) {
         const product = this.findCatalogProduct(group.productId);
-        if (product) { return this.addProduct(product, [], 1); }
+        if (product) { return this.addProduct(product, [], 1, rowSeat); }
       }
       const key = group.isOpenPrice
         ? 'o|' + group.name + '|' + group.unitAmount + '|' + group.tax
@@ -355,7 +512,7 @@ export default {
       this.busy = true;
       try {
         if (recipe) {
-          this.pos.applyCheck(await this.pos.checkSvc().AddLine(this.check.orderId, recipe));
+          this.pos.applyCheck(await this.pos.checkSvc().AddLine(this.check.orderId, { ...recipe, seatNumber: rowSeat }));
         } else if (group.lineIds.length) {
           // No client-side recipe (resumed or refreshed check): copy the existing line server-side.
           const lineId = group.lineIds[group.lineIds.length - 1];
@@ -582,6 +739,39 @@ export default {
         }
         this.pos.applyCheck(result);
         this.notify(this.$i('pos_note_saved'), 'success');
+      } catch (e) {
+        this.notify(this.pos.errMsg(e), 'error');
+      } finally {
+        this.busy = false;
+      }
+    },
+    // The grid's "+" adds a chip one past the current count and selects it — an unexpected extra
+    // guest. It does not touch couverts (the party size stays what the operator set).
+    onAddSeat () {
+      const next = this.seatChipCount + 1;
+      if (next > 20) { return; }
+      this.seatExtra = next;
+      this.currentSeat = next;
+    },
+    // Opens the guest picker for a line group's tag. Table checks only (seating is a coursing concept).
+    onSeat (group) {
+      if (!this.check) { return; }
+      this.seatGroup = group;
+    },
+    async onSeatConfirm (seatNumber) {
+      const group = this.seatGroup;
+      this.seatGroup = null;
+      if (!group || !this.check || this.busy || !group.lineIds.length) { return; }
+      this.busy = true;
+      try {
+        // Seat is part of the group key, so set it on every member line to keep the row together
+        // (the same reasoning as notes) — leaving members on different guests would split the row.
+        let result = this.check;
+        for (const lineId of group.lineIds) {
+          result = await this.pos.checkSvc().SetLineSeat(this.check.orderId, lineId, seatNumber);
+        }
+        this.pos.applyCheck(result);
+        this.notify(this.$i('pos_seat_saved'), 'success');
       } catch (e) {
         this.notify(this.pos.errMsg(e), 'error');
       } finally {
