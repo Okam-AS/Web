@@ -109,6 +109,10 @@ export default {
       catalog: [],
       catalogError: false,
       mode: 'sell',
+      // Training mode: sales produce a TRAINREC (segregated into the X/Z training totals) instead of
+      // settling for real. Device-scoped and reset on reload / operator change, so it can never leak
+      // into a real shift silently.
+      trainingMode: false,
       online: true,
       showSwitch: false,
       switchBusy: false,
@@ -264,6 +268,7 @@ export default {
           deviceInfo: 'web-pos'
         });
         this.session = session;
+        this.trainingMode = false;
         this.persist();
         this.showSwitch = false;
       } catch (e) {
@@ -277,7 +282,11 @@ export default {
       try { await this.operatorSvc().Logout(); } catch (e) { /* ignore */ }
       this.session = null;
       this.daySession = null;
+      this.trainingMode = false;
       this.persist();
+    },
+    toggleTrainingMode () {
+      this.trainingMode = !this.trainingMode;
     },
 
     // ---- Cash point ----

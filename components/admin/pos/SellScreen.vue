@@ -1,5 +1,6 @@
 <template>
-  <div class="sell">
+  <div class="sell" :class="{ 'sell--training': pos.trainingMode }">
+    <div v-if="pos.trainingMode" class="sell__training-banner">{{ $i('pos_training_banner') }}</div>
     <div class="sell__grid">
       <ProductGrid
         ref="grid"
@@ -169,6 +170,9 @@
         <button v-if="hasFloorTables" type="button" class="sell__more-item" :disabled="busy" @click="openMoveMerge">
           {{ $i('pos_move_merge') }}
         </button>
+        <button type="button" class="sell__more-item" @click="onToggleTraining">
+          {{ pos.trainingMode ? $i('pos_training_off') : $i('pos_training_on') }}
+        </button>
         <button type="button" class="sell__more-item sell__more-item--danger" @click="onVoid">
           {{ $i('pos_void_check') }}
         </button>
@@ -203,12 +207,13 @@
       </div>
     </div>
 
-    <!-- Provisional bill ("regning" before payment): a PROREC, not proof of purchase. -->
-    <div v-if="provisionalReceipt" class="sell__proforma" @click.self="provisionalReceipt = null">
+    <!-- An unpaid document: the provisional bill (PROREC, "regning" before payment) or a training
+         sale (TRAINREC). Neither is proof of purchase, and neither settles the check. -->
+    <div v-if="unpaidReceipt" class="sell__proforma" @click.self="unpaidReceipt = null">
       <div class="sell__proforma-panel">
-        <PosReceiptView ref="proformaView" :receipt="provisionalReceipt" />
+        <PosReceiptView ref="proformaView" :receipt="unpaidReceipt" />
         <div class="sell__proforma-actions">
-          <button type="button" class="sell__proforma-close" @click="provisionalReceipt = null">{{ $i('common_close') }}</button>
+          <button type="button" class="sell__proforma-close" @click="unpaidReceipt = null">{{ $i('common_close') }}</button>
           <button type="button" class="sell__proforma-print" @click="printProvisional">{{ $i('pos_receipt_print') }}</button>
         </div>
       </div>
@@ -261,8 +266,9 @@ export default {
       voidError: '',
       showMore: false,
       showMoveMerge: false,
-      // The provisional bill (PROREC) shown for print; null when closed.
-      provisionalReceipt: null,
+      // The unpaid document shown for print (a provisional bill PROREC or a training sale TRAINREC);
+      // null when closed. Neither settles the check.
+      unpaidReceipt: null,
       showNegativeSale: false,
       // Return lines mapped from the selected bill rows; null when the builder starts empty.
       negativeSalePrefill: null,
@@ -886,7 +892,7 @@ export default {
       if (!this.check || this.busy || !this.checkHasLines) { return; }
       this.busy = true;
       try {
-        this.provisionalReceipt = await this.pos.posSvc().ProvisionalReceipt({
+        this.unpaidReceipt = await this.pos.posSvc().ProvisionalReceipt({
           cashPointId: this.pos.cashPoint.cashPointId,
           orderId: this.check.orderId,
           vatContext: this.effectiveDeliveryType
@@ -953,8 +959,31 @@ export default {
         this.voidBusy = false;
       }
     },
-    onPay () {
+    onToggleTraining () {
+      this.showMore = false;
+      this.pos.toggleTrainingMode();
+    },
+    async onPay () {
       if (!this.check) { return; }
+      // In training mode a "sale" produces a TRAINREC (counted only in the X/Z training totals)
+      // instead of taking real money. It does not settle the check — the trainee can ring more
+      // practice sales or clear it — so the banner keeps it unmistakably a rehearsal.
+      if (this.pos.trainingMode) {
+        if (this.busy || !this.checkHasLines) { return; }
+        this.busy = true;
+        try {
+          this.unpaidReceipt = await this.pos.posSvc().TrainingReceipt({
+            cashPointId: this.pos.cashPoint.cashPointId,
+            orderId: this.check.orderId,
+            vatContext: this.effectiveDeliveryType
+          });
+        } catch (e) {
+          this.notify(this.pos.errMsg(e), 'error');
+        } finally {
+          this.busy = false;
+        }
+        return;
+      }
       this.showPayment = true;
     },
     onPaymentDone () {
@@ -973,6 +1002,10 @@ export default {
   display: flex;
   min-height: 0;
 }
+/* Training mode: a persistent amber frame + top strip so a rehearsal can never be mistaken for a
+   real shift. The strip does not intercept taps. */
+.sell--training { box-shadow: inset 0 0 0 3px #d97706; }
+.sell__training-banner { position: absolute; top: 0; left: 0; right: 0; z-index: 1000; pointer-events: none; background: #d97706; color: #fff; text-align: center; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; padding: 5px; font-size: 0.8rem; }
 .sell__grid { flex: 1; min-width: 0; }
 
 .sell__parked {
