@@ -367,7 +367,20 @@
                 @blur="formatPrice"
               />
             </div>
-            <div class="form-group">
+            <div v-if="goodsGroups.length" class="form-group">
+              <label>{{ $i('products_goodsGroup') }}</label>
+              <select v-model.number="selectedProduct.goodsGroupId">
+                <option :value="null">{{ $i('products_goodsGroup_none') }}</option>
+                <option v-for="g in goodsGroups" :key="g.goodsGroupId" :value="g.goodsGroupId">
+                  {{ g.name }}<template v-if="g.code"> ({{ g.code }})</template>
+                </option>
+              </select>
+              <span v-if="selectedGroupHasProfile" class="helper-text">
+                {{ $i('products_goodsGroupVatNote', { takeaway: selectedGroup.takeAwayVatPercent, eatin: selectedGroup.eatInVatPercent, delivery: selectedGroup.deliveryVatPercent }) }}
+                <a href="#" class="advanced-vat-link" @click.prevent="advancedVatOpen = !advancedVatOpen">{{ advancedVatOpen ? $i('products_vatAdvancedHide') : $i('products_vatAdvancedShow') }}</a>
+              </span>
+            </div>
+            <div v-if="showRawVat" class="form-group">
               <label>{{ $i('products_vat') }}</label>
               <input
                 v-model.number="selectedProduct.tax"
@@ -396,15 +409,17 @@
                   @input="handleFinalTablePriceInput"
                   @blur="formatFinalTablePrice"
                 />
-                <label class="mt-4">{{ $i('products_dineInVat') }}</label>
-                <input
-                  v-model.number="selectedProduct.tableTax"
-                  type="number"
-                  min="0"
-                  max="100"
-                  placeholder="25"
-                />
-                <span class="helper-text">{{ $i('products_vatHelperDineIn') }}</span>
+                <template v-if="showRawVat">
+                  <label class="mt-4">{{ $i('products_dineInVat') }}</label>
+                  <input
+                    v-model.number="selectedProduct.tableTax"
+                    type="number"
+                    min="0"
+                    max="100"
+                    placeholder="25"
+                  />
+                  <span class="helper-text">{{ $i('products_vatHelperDineIn') }}</span>
+                </template>
               </div>
             </div>
 
@@ -426,15 +441,17 @@
                   @input="handleFinalDeliveryPriceInput"
                   @blur="formatFinalDeliveryPrice"
                 />
-                <label class="mt-4">{{ $i('products_deliveryVat') }}</label>
-                <input
-                  v-model.number="selectedProduct.deliveryTax"
-                  type="number"
-                  min="0"
-                  max="100"
-                  placeholder="15"
-                />
-                <span class="helper-text">{{ $i('products_vatHelperDelivery') }}</span>
+                <template v-if="showRawVat">
+                  <label class="mt-4">{{ $i('products_deliveryVat') }}</label>
+                  <input
+                    v-model.number="selectedProduct.deliveryTax"
+                    type="number"
+                    min="0"
+                    max="100"
+                    placeholder="15"
+                  />
+                  <span class="helper-text">{{ $i('products_vatHelperDelivery') }}</span>
+                </template>
               </div>
             </div>
 
@@ -586,6 +603,9 @@ export default {
     products: [],
     categories: [],
     allergens: [],
+    goodsGroups: [],
+    // "Avansert": reveal the raw VAT rate fields even when a profiled goods group drives them.
+    advancedVatOpen: false,
     draggingProducts: {},
     uploadingFor: null,
     productFilter: "",
@@ -614,6 +634,25 @@ export default {
   computed: {
     selectedStore() {
       return this.$store.state.selectedAdminStore;
+    },
+
+    // The goods group the product currently belongs to, if any.
+    selectedGroup() {
+      if (!this.selectedProduct || this.selectedProduct.goodsGroupId == null) { return null; }
+      return this.goodsGroups.find(g => g.goodsGroupId === this.selectedProduct.goodsGroupId) || null;
+    },
+
+    // A profiled group is the authoritative VAT source, so the raw rate fields are hidden behind
+    // "Avansert" (the backend stamps them from the profile on save).
+    selectedGroupHasProfile() {
+      const g = this.selectedGroup;
+      return !!g && g.takeAwayVatPercent != null && g.eatInVatPercent != null && g.deliveryVatPercent != null;
+    },
+
+    // Show the raw VAT rate fields when no profiled group drives them, or when the merchant opens
+    // "Avansert" for a legacy override.
+    showRawVat() {
+      return !this.selectedGroupHasProfile || this.advancedVatOpen;
     },
 
     filteredProducts() {
@@ -787,9 +826,10 @@ export default {
         this.products = products;
         this.imageDimensions = {};
         products.forEach((p) => this.updateImageDimension(p));
-        // Also load categories and the store's allergen catalogue
+        // Also load categories, the store's allergen catalogue and its goods groups
         await this.loadCategories();
         await this.loadAllergens();
+        await this.loadGoodsGroups();
       } catch (err) {
         console.error("Failed to load products:", err);
       } finally {
@@ -822,6 +862,15 @@ export default {
       } catch (err) {
         console.error("Failed to load allergens:", err);
         this.allergens = [];
+      }
+    },
+
+    async loadGoodsGroups() {
+      try {
+        this.goodsGroups = (await this._goodsGroupService.GetForStore(this.selectedStore) || []).filter(g => g.isActive);
+      } catch (err) {
+        console.error("Failed to load goods groups:", err);
+        this.goodsGroups = [];
       }
     },
 
@@ -2456,6 +2505,13 @@ export default {
   font-size: 0.75rem;
   color: #64748b;
   margin-top: 0.25rem;
+}
+.advanced-vat-link {
+  margin-left: 6px;
+  color: #1bb776;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .allergens-manage-link {

@@ -97,6 +97,7 @@
     <OpenPriceModal
       v-if="showOpenPrice"
       :goods-groups="goodsGroups"
+      :vat-context="effectiveDeliveryType"
       @confirm="onOpenPriceConfirm"
       @close="showOpenPrice = false"
     />

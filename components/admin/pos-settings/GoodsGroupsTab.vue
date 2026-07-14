@@ -10,13 +10,14 @@
 
     <table v-else class="crud__table">
       <thead>
-        <tr><th>{{ $i('posset_col_name') }}</th><th>{{ $i('posset_col_code') }}</th><th>{{ $i('posset_col_sort') }}</th><th>{{ $i('posset_col_active') }}</th><th /></tr>
+        <tr><th>{{ $i('posset_col_name') }}</th><th>{{ $i('posset_col_code') }}</th><th>{{ $i('posset_col_profile') }}</th><th>{{ $i('posset_col_sort') }}</th><th>{{ $i('posset_col_active') }}</th><th /></tr>
       </thead>
       <tbody>
-        <tr v-if="!items.length"><td colspan="5" class="crud__empty">{{ $i('posset_none') }}</td></tr>
+        <tr v-if="!items.length"><td colspan="6" class="crud__empty">{{ $i('posset_none') }}</td></tr>
         <tr v-for="it in items" :key="it.goodsGroupId">
           <td>{{ it.name }}</td>
           <td>{{ it.code }}</td>
+          <td>{{ profileLabel(it) }}</td>
           <td>{{ it.sortOrder }}</td>
           <td>{{ it.isActive ? '✓' : '—' }}</td>
           <td class="crud__row-actions"><button class="crud__edit" @click="startEdit(it)">{{ $i('common_edit') }}</button></td>
@@ -32,9 +33,39 @@
         <label>{{ $i('posset_col_sort') }}<input v-model.number="form.sortOrder" type="number"></label>
         <label class="crud__check"><input v-model="form.isActive" type="checkbox"> {{ $i('posset_col_active') }}</label>
       </div>
+
+      <div class="gg-profile">
+        <div class="gg-profile__head">
+          <h4>{{ $i('posset_goods_profile') }}</h4>
+          <p>{{ $i('posset_goods_profile_hint') }}</p>
+        </div>
+        <div class="crud__grid">
+          <label>{{ $i('posset_goods_takeaway') }}
+            <select v-model="form.takeAwayVatPercent">
+              <option :value="null">{{ $i('posset_goods_rate_none') }}</option>
+              <option v-for="r in vatRates" :key="'ta'+r" :value="r">{{ r }} %</option>
+            </select>
+          </label>
+          <label>{{ $i('posset_goods_eatin') }}
+            <select v-model="form.eatInVatPercent">
+              <option :value="null">{{ $i('posset_goods_rate_none') }}</option>
+              <option v-for="r in vatRates" :key="'ei'+r" :value="r">{{ r }} %</option>
+            </select>
+          </label>
+          <label>{{ $i('posset_goods_delivery') }}
+            <select v-model="form.deliveryVatPercent">
+              <option :value="null">{{ $i('posset_goods_rate_none') }}</option>
+              <option v-for="r in vatRates" :key="'de'+r" :value="r">{{ r }} %</option>
+            </select>
+          </label>
+        </div>
+        <p v-if="profileIncomplete" class="gg-profile__warn">{{ $i('posset_goods_profile_incomplete') }}</p>
+        <p v-else-if="hasProfile" class="gg-profile__reprice">{{ $i('posset_goods_profile_reprice') }}</p>
+      </div>
+
       <div class="crud__form-actions">
         <button class="crud__cancel" @click="form = null">{{ $i('common_cancel') }}</button>
-        <button class="crud__save" :disabled="saving || !form.name.trim()" @click="save">{{ saving ? $i('common_saving') : $i('common_save') }}</button>
+        <button class="crud__save" :disabled="saving || !form.name.trim() || profileIncomplete" @click="save">{{ saving ? $i('common_saving') : $i('common_save') }}</button>
       </div>
     </div>
   </div>
@@ -46,10 +77,29 @@ export default {
   name: 'GoodsGroupsTab',
   props: { storeId: { type: [Number, String], required: true } },
   data () {
-    return { items: [], loading: true, form: null, saving: false };
+    // The supported Norwegian VAT rates (must match AccountingHelper on the backend).
+    return { items: [], loading: true, form: null, saving: false, vatRates: [0, 12, 15, 25] };
+  },
+  computed: {
+    // A VAT profile is either complete (all three rates set) or fully empty (legacy group). A
+    // partial profile is rejected by the backend, so the form guards against it too.
+    profileSetCount () {
+      if (!this.form) { return 0; }
+      return [this.form.takeAwayVatPercent, this.form.eatInVatPercent, this.form.deliveryVatPercent]
+        .filter(v => v !== null && v !== undefined && v !== '').length;
+    },
+    hasProfile () { return this.profileSetCount === 3; },
+    profileIncomplete () { return this.profileSetCount === 1 || this.profileSetCount === 2; }
   },
   mounted () { this.load(); },
   methods: {
+    // "Ta med 15 · Spis her 25 · Lev. 15" for a profiled group, or "—" for a legacy group.
+    profileLabel (it) {
+      if (it.takeAwayVatPercent == null || it.eatInVatPercent == null || it.deliveryVatPercent == null) {
+        return '—';
+      }
+      return `${it.takeAwayVatPercent} / ${it.eatInVatPercent} / ${it.deliveryVatPercent}`;
+    },
     async load () {
       this.loading = true;
       try {
@@ -62,15 +112,35 @@ export default {
     },
     errMsg (e) { return (e && e.response && e.response.data && e.response.data.message) || (e && e.message) || 'Feil'; },
     startNew () {
-      this.form = { storeId: Number(this.storeId), name: '', code: '', sortOrder: (this.items.length + 1), isActive: true };
+      this.form = { storeId: Number(this.storeId), name: '', code: '', sortOrder: (this.items.length + 1), isActive: true, takeAwayVatPercent: null, eatInVatPercent: null, deliveryVatPercent: null };
     },
     startEdit (it) {
-      this.form = { goodsGroupId: it.goodsGroupId, storeId: Number(this.storeId), name: it.name, code: it.code, sortOrder: it.sortOrder, isActive: it.isActive };
+      this.form = {
+        goodsGroupId: it.goodsGroupId,
+        storeId: Number(this.storeId),
+        name: it.name,
+        code: it.code,
+        sortOrder: it.sortOrder,
+        isActive: it.isActive,
+        takeAwayVatPercent: it.takeAwayVatPercent != null ? it.takeAwayVatPercent : null,
+        eatInVatPercent: it.eatInVatPercent != null ? it.eatInVatPercent : null,
+        deliveryVatPercent: it.deliveryVatPercent != null ? it.deliveryVatPercent : null
+      };
     },
     async save () {
       this.saving = true;
       try {
-        const model = { storeId: Number(this.storeId), name: this.form.name.trim(), code: this.form.code, sortOrder: this.form.sortOrder, isActive: this.form.isActive };
+        const model = {
+          storeId: Number(this.storeId),
+          name: this.form.name.trim(),
+          code: this.form.code,
+          sortOrder: this.form.sortOrder,
+          isActive: this.form.isActive,
+          // All-or-nothing: send the complete profile, or three nulls for a legacy group.
+          takeAwayVatPercent: this.hasProfile ? this.form.takeAwayVatPercent : null,
+          eatInVatPercent: this.hasProfile ? this.form.eatInVatPercent : null,
+          deliveryVatPercent: this.hasProfile ? this.form.deliveryVatPercent : null
+        };
         if (this.form.goodsGroupId) {
           await this._goodsGroupService.Update(this.form.goodsGroupId, model);
         } else {
@@ -111,4 +181,10 @@ export default {
 .crud__cancel { border: 1px solid #cbd5e0; background: #fff; padding: 9px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; color: #292c34; }
 .crud__save { border: none; background: #1bb776; color: #fff; padding: 9px 20px; border-radius: 8px; cursor: pointer; font-weight: 700; }
 .crud__save:disabled { background: #cbd5e0; cursor: not-allowed; }
+.gg-profile { margin-top: 18px; padding: 16px; border: 1px dashed #cbd5e0; border-radius: 10px; }
+.gg-profile__head h4 { margin: 0 0 4px; font-size: 0.95rem; color: #292c34; }
+.gg-profile__head p { margin: 0 0 12px; font-size: 0.8rem; color: #64748b; }
+.gg-profile select { height: 40px; border: 1px solid #cbd5e0; border-radius: 8px; padding: 0 10px; font-size: 0.95rem; color: #292c34; background: #fff; }
+.gg-profile__warn { margin: 12px 0 0; color: #b91c1c; font-size: 0.82rem; font-weight: 600; }
+.gg-profile__reprice { margin: 12px 0 0; color: #b45309; font-size: 0.82rem; }
 </style>

@@ -12,6 +12,16 @@
 
       <!-- Build the return lines -->
       <div v-if="step === 'build'" class="rbuild__body">
+        <!-- One eat-in/take-away context for the whole return (default take-away): a line whose goods
+             group has a VAT profile takes its rate from group x this context. -->
+        <div class="rbuild__context">
+          <span class="rbuild__context-label">{{ $i('pos_return_context') }}</span>
+          <div class="rbuild__context-toggle">
+            <button type="button" :class="{ 'is-active': vatContext === 'SelfPickup' }" @click="setContext('SelfPickup')">{{ $i('pos_takeaway') }}</button>
+            <button type="button" :class="{ 'is-active': vatContext === 'TableDelivery' }" @click="setContext('TableDelivery')">{{ $i('pos_eat_in') }}</button>
+          </div>
+        </div>
+
         <div v-if="lines.length" class="rbuild__lines">
           <div v-for="(l, i) in lines" :key="i" class="rbuild__line">
             <div class="rbuild__line-main">
@@ -80,7 +90,12 @@
           </div>
 
           <label class="rbuild__label">{{ $i('pos_open_price_vat') }}</label>
-          <div class="rbuild__vat">
+          <!-- Profiled group: the rate follows from group x the return's context (read-only). -->
+          <div v-if="draftGroupHasProfile" class="rbuild__vat-readonly">
+            {{ draftDerivedVat }}% · {{ contextLabel }}
+          </div>
+          <!-- No group, or a legacy group without a profile: operator picks the rate. -->
+          <div v-else class="rbuild__vat">
             <button
               v-for="rate in vatRates"
               :key="rate"
@@ -247,6 +262,9 @@ export default {
       goodsGroups: [],
       lines: (this.initialLines || []).map(l => ({ ...l })),
       draft: { name: '', quantity: 1, unitAmount: 0, vatPercent: 25, goodsGroupId: null },
+      // Per-document eat-in/take-away context (default take-away). Sent with the return so the
+      // backend derives each profiled line's rate from group x this context.
+      vatContext: 'SelfPickup',
       vatRates: [25, 15, 12, 0],
       method: 'cash',
       // Idempotency key for the cash return (required by the backend): one GUID per builder
@@ -275,6 +293,9 @@ export default {
     canAddLine () {
       return this.draft.name.trim().length > 0 && this.draft.unitAmount > 0 && this.draft.quantity >= 1 && this.draft.goodsGroupId != null;
     },
+    contextLabel () { return this.vatContext === 'TableDelivery' ? this.$i('pos_eat_in') : this.$i('pos_takeaway'); },
+    draftGroupHasProfile () { return this.effectiveVat(this.draft.goodsGroupId) != null; },
+    draftDerivedVat () { return this.effectiveVat(this.draft.goodsGroupId); },
     // Every sellable product across the catalog, so a return line can be picked from the menu.
     allProducts () {
       const out = [];
@@ -317,13 +338,31 @@ export default {
         this.goodsGroups = [];
       }
     },
+    // The VAT rate for a goods group in the current context: group profile x context when the group
+    // is profiled, otherwise null (the operator-picked rate applies).
+    effectiveVat (goodsGroupId) {
+      const g = this.goodsGroups.find(x => x.goodsGroupId === goodsGroupId);
+      if (g && g.takeAwayVatPercent != null && g.eatInVatPercent != null && g.deliveryVatPercent != null) {
+        return this.vatContext === 'TableDelivery' ? g.eatInVatPercent : g.takeAwayVatPercent;
+      }
+      return null;
+    },
+    // Switching the document context re-prices every already-added line whose group is profiled.
+    setContext (ctx) {
+      this.vatContext = ctx;
+      this.lines.forEach((l) => {
+        const v = this.effectiveVat(l.goodsGroupId);
+        if (v != null) { l.vatPercent = v; }
+      });
+    },
     addLine () {
       if (!this.canAddLine) { return; }
+      const derived = this.effectiveVat(this.draft.goodsGroupId);
       this.lines.push({
         name: this.draft.name.trim(),
         quantity: this.draft.quantity,
         unitAmount: this.draft.unitAmount,
-        vatPercent: this.draft.vatPercent,
+        vatPercent: derived != null ? derived : this.draft.vatPercent,
         goodsGroupId: this.draft.goodsGroupId
       });
       this.draft = { name: '', quantity: 1, unitAmount: 0, vatPercent: this.draft.vatPercent, goodsGroupId: this.draft.goodsGroupId };
@@ -332,7 +371,10 @@ export default {
     // product missing a goods group (or on an unsupported VAT rate) drops into the manual form so the
     // operator completes it, rather than being added as an invalid line the backend would reject.
     pickProduct (p) {
-      const vatPercent = [0, 15, 25].includes(p.tax) ? p.tax : 25;
+      // Menu pick sets the goods group from the product; the rate follows from group x context for a
+      // profiled group, else the product's own rate.
+      const derived = this.effectiveVat(p.goodsGroupId);
+      const vatPercent = derived != null ? derived : ([0, 15, 25].includes(p.tax) ? p.tax : 25);
       if (p.goodsGroupId == null) {
         this.draft = { name: p.name, quantity: 1, unitAmount: p.amount, vatPercent, goodsGroupId: null };
         this.entryMode = 'manual';
@@ -359,6 +401,10 @@ export default {
         pin,
         reason: this.reason.trim(),
         customerPhone: this.customerPhone.trim(),
+        // Manual builder sends the eat-in/take-away context so profiled lines resolve their rate
+        // server-side. The negative-sale-from-bill flow (prefilled) leaves it null and keeps the
+        // rates the bill already carried.
+        vatContext: this.prefilled ? null : this.vatContext,
         lines: this.lines
       };
       try {
@@ -451,6 +497,12 @@ export default {
 .rbuild__vat { display: flex; gap: 8px; }
 .rbuild__vat-btn { flex: 1; height: 42px; border: 1px solid #cbd5e0; background: #fff; border-radius: 10px; font-weight: 600; color: var(--pos-ink, #292c34); cursor: pointer; }
 .rbuild__vat-btn.is-active { border-color: var(--pos-primary, #1bb776); background: rgba(27, 183, 118, 0.08); color: var(--pos-primary-dark, #159f63); }
+.rbuild__vat-readonly { height: 42px; display: flex; align-items: center; padding: 0 14px; border: 1px solid #e2e8f0; border-radius: 10px; background: #f8fafc; font-weight: 700; color: var(--pos-ink, #292c34); }
+.rbuild__context { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
+.rbuild__context-label { font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.03em; }
+.rbuild__context-toggle { display: flex; gap: 6px; }
+.rbuild__context-toggle button { height: 38px; padding: 0 16px; border: 1px solid #cbd5e0; background: #fff; border-radius: 9px; font-weight: 600; color: var(--pos-ink, #292c34); cursor: pointer; }
+.rbuild__context-toggle button.is-active { border-color: var(--pos-primary, #1bb776); background: rgba(27, 183, 118, 0.08); color: var(--pos-primary-dark, #159f63); }
 
 .rbuild__add-btn { width: 100%; height: 46px; margin-top: 14px; border: 1px dashed var(--pos-primary, #1bb776); background: rgba(27, 183, 118, 0.06); border-radius: 10px; color: var(--pos-primary-dark, #159f63); font-weight: 700; cursor: pointer; }
 .rbuild__add-btn:disabled { border-color: #cbd5e0; background: #f8f9fa; color: #cbd5e0; cursor: not-allowed; }

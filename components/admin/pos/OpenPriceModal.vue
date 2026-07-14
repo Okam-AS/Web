@@ -27,7 +27,12 @@
         </select>
 
         <label class="open-price__label">{{ $i('pos_open_price_vat') }}</label>
-        <div class="open-price__vat">
+        <!-- Profiled group: the rate follows from group x the bill's context and is read-only. -->
+        <div v-if="groupHasProfile" class="open-price__vat-readonly">
+          {{ derivedTax }}% · {{ contextLabel }}
+        </div>
+        <!-- No group selected yet, or a legacy group without a profile: operator picks the rate. -->
+        <div v-else class="open-price__vat">
           <button
             v-for="rate in vatRates"
             :key="rate"
@@ -71,7 +76,10 @@ export default {
   name: 'OpenPriceModal',
   components: { AmountPad },
   props: {
-    goodsGroups: { type: Array, default: () => [] }
+    goodsGroups: { type: Array, default: () => [] },
+    // The check's eat-in / take-away context ('TableDelivery' | 'SelfPickup'); drives the rate for a
+    // profiled group.
+    vatContext: { type: String, default: 'SelfPickup' }
   },
   data () {
     return {
@@ -84,6 +92,23 @@ export default {
     };
   },
   computed: {
+    selectedGroup () {
+      return this.goodsGroups.find(g => g.goodsGroupId === this.goodsGroupId) || null;
+    },
+    groupHasProfile () {
+      const g = this.selectedGroup;
+      return !!g && g.takeAwayVatPercent != null && g.eatInVatPercent != null && g.deliveryVatPercent != null;
+    },
+    // The rate the backend will apply for a profiled group: group x the bill's context. Shown as
+    // read-only text and sent as tax so the confirm price and the journal agree.
+    derivedTax () {
+      const g = this.selectedGroup;
+      if (!this.groupHasProfile) { return null; }
+      return this.vatContext === 'TableDelivery' ? g.eatInVatPercent : g.takeAwayVatPercent;
+    },
+    contextLabel () {
+      return this.vatContext === 'TableDelivery' ? this.$i('pos_eat_in') : this.$i('pos_takeaway');
+    },
     canConfirm () {
       return this.name.trim().length > 0 && this.amount > 0 && this.goodsGroupId != null;
     }
@@ -97,7 +122,9 @@ export default {
       this.$emit('confirm', {
         name: this.name.trim(),
         amount: this.amount,
-        tax: this.tax,
+        // A profiled group's rate follows from group x context; the backend overrides it anyway, so
+        // send the derived value for a consistent receipt. A legacy group keeps the picked rate.
+        tax: this.groupHasProfile ? this.derivedTax : this.tax,
         goodsGroupId: this.goodsGroupId
       });
     }
@@ -165,6 +192,7 @@ export default {
   cursor: pointer;
 }
 .open-price__vat-btn.is-active { border-color: var(--pos-primary, #1bb776); background: rgba(27, 183, 118, 0.08); color: var(--pos-primary-dark, #159f63); }
+.open-price__vat-readonly { height: 44px; display: flex; align-items: center; padding: 0 14px; border: 1px solid #e2e8f0; border-radius: 10px; background: #f8fafc; font-weight: 700; color: var(--pos-ink, #292c34); }
 
 .open-price__error { color: #ef4444; font-weight: 600; font-size: 0.85rem; margin: 12px 0 0; }
 
