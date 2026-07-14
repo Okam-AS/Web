@@ -84,6 +84,8 @@
           @note="$emit('note', g)"
           @seat="$emit('seat', g)"
           @serve="$emit('serve', g)"
+          @line-discount="$emit('line-discount', g)"
+          @line-remove-discount="$emit('line-remove-discount', g)"
         />
       </template>
     </div>

@@ -64,6 +64,8 @@
       @park="onPark"
       @discount="onDiscount"
       @remove-discount="onRemoveDiscount"
+      @line-discount="onLineDiscount"
+      @line-remove-discount="onRemoveLineDiscount"
       @negative-sale="onNegativeSale"
       @fire-course="onFireCourse"
       @serve="onServeLine"
@@ -133,7 +135,8 @@
       v-if="showDiscount"
       :reasons="discountReasons"
       :manager-operators="managerOperators"
-      scope="order"
+      :scope="discountScope"
+      :target-name="discountTargetName"
       :busy="discountBusy"
       :error="discountError"
       @confirm="onDiscountConfirm"
@@ -160,12 +163,54 @@
     <!-- ⋮ action sheet -->
     <div v-if="showMore" class="sell__more" @click.self="showMore = false">
       <div class="sell__more-sheet">
+        <button type="button" class="sell__more-item" :disabled="busy || !checkHasLines" @click="onProvisional">
+          {{ $i('pos_print_bill') }}
+        </button>
+        <button v-if="hasFloorTables" type="button" class="sell__more-item" :disabled="busy" @click="openMoveMerge">
+          {{ $i('pos_move_merge') }}
+        </button>
         <button type="button" class="sell__more-item sell__more-item--danger" @click="onVoid">
           {{ $i('pos_void_check') }}
         </button>
         <button type="button" class="sell__more-item sell__more-cancel" @click="showMore = false">
           {{ $i('common_cancel') }}
         </button>
+      </div>
+    </div>
+
+    <!-- Move the check to another table, or merge another table's check onto this one. Tapping a
+         free table moves; tapping an occupied one merges that check's lines here. -->
+    <div v-if="showMoveMerge" class="sell__movemerge" @click.self="showMoveMerge = false">
+      <div class="sell__movemerge-panel">
+        <h3 class="sell__movemerge-title">{{ $i('pos_move_merge') }}</h3>
+        <p class="sell__movemerge-hint">{{ $i('pos_move_merge_hint') }}</p>
+        <div class="sell__movemerge-list">
+          <button
+            v-for="t in moveMergeTables"
+            :key="t.tableId"
+            type="button"
+            class="sell__movemerge-table"
+            :class="{ 'is-occupied': !!t.openCheck }"
+            :disabled="busy"
+            @click="t.openCheck ? onMerge(t) : onMove(t)"
+          >
+            <span class="sell__movemerge-name">{{ t.name || ($i('pos_table') + ' ' + t.tableNumber) }}</span>
+            <span class="sell__movemerge-act">{{ t.openCheck ? $i('pos_merge_here') : $i('pos_move_here') }}</span>
+          </button>
+          <p v-if="!moveMergeTables.length" class="sell__movemerge-empty">{{ $i('pos_move_merge_empty') }}</p>
+        </div>
+        <button type="button" class="sell__movemerge-cancel" @click="showMoveMerge = false">{{ $i('common_cancel') }}</button>
+      </div>
+    </div>
+
+    <!-- Provisional bill ("regning" before payment): a PROREC, not proof of purchase. -->
+    <div v-if="provisionalReceipt" class="sell__proforma" @click.self="provisionalReceipt = null">
+      <div class="sell__proforma-panel">
+        <PosReceiptView ref="proformaView" :receipt="provisionalReceipt" />
+        <div class="sell__proforma-actions">
+          <button type="button" class="sell__proforma-close" @click="provisionalReceipt = null">{{ $i('common_close') }}</button>
+          <button type="button" class="sell__proforma-print" @click="printProvisional">{{ $i('pos_receipt_print') }}</button>
+        </div>
       </div>
     </div>
   </div>
@@ -182,6 +227,7 @@ import VoidModal from '~/components/admin/pos/VoidModal.vue';
 import LineNoteModal from '~/components/admin/pos/LineNoteModal.vue';
 import SeatPickerModal from '~/components/admin/pos/SeatPickerModal.vue';
 import ReturnBuilder from '~/components/admin/pos/ReturnBuilder.vue';
+import PosReceiptView from '~/components/admin/pos/PosReceiptView.vue';
 
 // The sales screen: product grid on the left, open check on the right. It orchestrates adding lines
 // (direct, options, open price, EAN), quantity changes and hands off to payment. The check itself
@@ -189,7 +235,7 @@ import ReturnBuilder from '~/components/admin/pos/ReturnBuilder.vue';
 // payment screen (not here), so a single tap on Pay reaches every way to settle.
 export default {
   name: 'SellScreen',
-  components: { ProductGrid, CheckPanel, OptionPicker, OpenPriceModal, PaymentScreen, DiscountModal, VoidModal, LineNoteModal, SeatPickerModal, ReturnBuilder },
+  components: { ProductGrid, CheckPanel, OptionPicker, OpenPriceModal, PaymentScreen, DiscountModal, VoidModal, LineNoteModal, SeatPickerModal, ReturnBuilder, PosReceiptView },
   inject: ['pos'],
   data () {
     return {
@@ -207,10 +253,16 @@ export default {
       showDiscount: false,
       discountBusy: false,
       discountError: '',
+      // 'order' or 'line'; when 'line', discountGroup is the grouped row being discounted.
+      discountScope: 'order',
+      discountGroup: null,
       showVoid: false,
       voidBusy: false,
       voidError: '',
       showMore: false,
+      showMoveMerge: false,
+      // The provisional bill (PROREC) shown for print; null when closed.
+      provisionalReceipt: null,
       showNegativeSale: false,
       // Return lines mapped from the selected bill rows; null when the builder starts empty.
       negativeSalePrefill: null,
@@ -246,6 +298,15 @@ export default {
       return couverts >= 2 || this.checkItems.some(i => i.seatNumber != null);
     },
     checkItems () { return (this.check && this.check.items) || []; },
+    checkHasLines () { return this.checkItems.length > 0; },
+    discountTargetName () { return this.discountGroup ? this.discountGroup.name : ''; },
+    boardTables () { return (this.pos.boardStatus && this.pos.boardStatus.tables) || []; },
+    hasFloorTables () { return this.boardTables.some(t => t.isActive); },
+    // Tables the current check can move to (free) or merge with (occupied), excluding its own table.
+    moveMergeTables () {
+      const currentTableId = this.check ? this.check.tableId : null;
+      return this.boardTables.filter(t => t.isActive && t.tableId !== currentTableId);
+    },
     // Highest guest number already tagged on the check (0 when none), so chip rows always reach it.
     maxSeatOnCheck () {
       return this.checkItems.reduce((m, i) => (i.seatNumber != null && i.seatNumber > m ? i.seatNumber : m), 0);
@@ -603,6 +664,16 @@ export default {
     },
     onDiscount () {
       if (!this.check) { return; }
+      this.discountScope = 'order';
+      this.discountGroup = null;
+      this.discountError = '';
+      this.showDiscount = true;
+    },
+    // Discount a single grouped row (all its member lines).
+    onLineDiscount (group) {
+      if (!this.check || !group || !group.lineIds.length) { return; }
+      this.discountScope = 'line';
+      this.discountGroup = group;
       this.discountError = '';
       this.showDiscount = true;
     },
@@ -610,13 +681,38 @@ export default {
       this.discountBusy = true;
       this.discountError = '';
       try {
-        this.pos.applyCheck(await this.pos.checkSvc().ApplyOrderDiscount(this.check.orderId, request));
+        if (this.discountScope === 'line' && this.discountGroup) {
+          // A visible row can be backed by several member line ids (quantity > 1); discount each.
+          let result = this.check;
+          for (const lineId of this.discountGroup.lineIds) {
+            result = await this.pos.checkSvc().ApplyLineDiscount(this.check.orderId, { lineId, ...request });
+          }
+          this.pos.applyCheck(result);
+        } else {
+          this.pos.applyCheck(await this.pos.checkSvc().ApplyOrderDiscount(this.check.orderId, request));
+        }
         this.showDiscount = false;
         this.notify(this.$i('pos_discount_applied'), 'success');
       } catch (e) {
         this.discountError = this.pos.errMsg(e);
       } finally {
         this.discountBusy = false;
+      }
+    },
+    async onRemoveLineDiscount (group) {
+      if (!this.check || this.busy || !group || !group.lineIds.length) { return; }
+      this.busy = true;
+      try {
+        let result = this.check;
+        for (const lineId of group.lineIds) {
+          result = await this.pos.checkSvc().RemoveLineDiscount(this.check.orderId, lineId);
+        }
+        this.pos.applyCheck(result);
+        this.notify(this.$i('pos_discount_removed'), 'success');
+      } catch (e) {
+        this.notify(this.pos.errMsg(e), 'error');
+      } finally {
+        this.busy = false;
       }
     },
     async onRemoveDiscount () {
@@ -783,6 +879,60 @@ export default {
       if (!this.check) { return; }
       this.showMore = true;
     },
+    // Produce a provisional bill ("regning") for the customer before payment. It is a PROREC
+    // (journalled, "not proof of purchase"), so it does not settle the check.
+    async onProvisional () {
+      this.showMore = false;
+      if (!this.check || this.busy || !this.checkHasLines) { return; }
+      this.busy = true;
+      try {
+        this.provisionalReceipt = await this.pos.posSvc().ProvisionalReceipt({
+          cashPointId: this.pos.cashPoint.cashPointId,
+          orderId: this.check.orderId,
+          vatContext: this.effectiveDeliveryType
+        });
+      } catch (e) {
+        this.notify(this.pos.errMsg(e), 'error');
+      } finally {
+        this.busy = false;
+      }
+    },
+    printProvisional () {
+      if (this.$refs.proformaView) { this.$refs.proformaView.print(); }
+    },
+    openMoveMerge () {
+      this.showMore = false;
+      if (!this.check) { return; }
+      this.showMoveMerge = true;
+    },
+    // Move the check to a free table.
+    async onMove (t) {
+      if (this.busy || !this.check) { return; }
+      this.busy = true;
+      try {
+        this.pos.applyCheck(await this.pos.checkSvc().Move(this.check.orderId, { tableId: t.tableId }));
+        this.showMoveMerge = false;
+        this.notify(this.$i('pos_moved'), 'success');
+      } catch (e) {
+        this.notify(this.pos.errMsg(e), 'error');
+      } finally {
+        this.busy = false;
+      }
+    },
+    // Merge an occupied table's check onto this one (the source check is consumed).
+    async onMerge (t) {
+      if (this.busy || !this.check || !t.openCheck) { return; }
+      this.busy = true;
+      try {
+        this.pos.applyCheck(await this.pos.checkSvc().Merge(this.check.orderId, { sourceOrderId: t.openCheck.orderId }));
+        this.showMoveMerge = false;
+        this.notify(this.$i('pos_merged'), 'success');
+      } catch (e) {
+        this.notify(this.pos.errMsg(e), 'error');
+      } finally {
+        this.busy = false;
+      }
+    },
     onVoid () {
       this.showMore = false;
       this.voidError = '';
@@ -900,4 +1050,23 @@ export default {
 }
 .sell__more-item--danger { color: #ef4444; }
 .sell__more-cancel { color: #64748b; }
+.sell__more-item:disabled { color: #cbd5e0; cursor: not-allowed; }
+.sell__proforma { position: fixed; inset: 0; background: rgba(18, 20, 26, 0.6); display: flex; align-items: center; justify-content: center; z-index: 1200; padding: 16px; }
+.sell__proforma-panel { background: #ffffff; border-radius: 16px; width: 100%; max-width: 420px; max-height: 92vh; overflow-y: auto; padding: 16px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35); }
+.sell__proforma-actions { display: flex; gap: 10px; margin-top: 14px; }
+.sell__proforma-close { flex: 1; height: 48px; border: 1px solid #cbd5e0; background: #fff; border-radius: 10px; font-weight: 700; color: var(--pos-ink, #292c34); cursor: pointer; }
+.sell__proforma-print { flex: 1; height: 48px; border: none; border-radius: 10px; background: var(--pos-primary, #1bb776); color: #fff; font-weight: 700; cursor: pointer; }
+.sell__movemerge { position: fixed; inset: 0; background: rgba(18, 20, 26, 0.6); display: flex; align-items: center; justify-content: center; z-index: 1200; padding: 16px; }
+.sell__movemerge-panel { background: #fff; border-radius: 16px; width: 100%; max-width: 420px; max-height: 88vh; display: flex; flex-direction: column; padding: 18px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35); }
+.sell__movemerge-title { margin: 0 0 4px; font-size: 1.15rem; font-weight: 700; color: var(--pos-ink, #292c34); }
+.sell__movemerge-hint { margin: 0 0 12px; font-size: 0.85rem; color: #64748b; }
+.sell__movemerge-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+.sell__movemerge-table { display: flex; align-items: center; justify-content: space-between; height: 52px; padding: 0 16px; border: 1px solid #e2e8f0; background: #fff; border-radius: 10px; cursor: pointer; }
+.sell__movemerge-table.is-occupied { border-color: #f59e0b; background: rgba(245, 158, 11, 0.06); }
+.sell__movemerge-table:disabled { opacity: 0.5; cursor: not-allowed; }
+.sell__movemerge-name { font-weight: 700; color: var(--pos-ink, #292c34); }
+.sell__movemerge-act { font-weight: 600; color: #64748b; }
+.sell__movemerge-table.is-occupied .sell__movemerge-act { color: #b45309; }
+.sell__movemerge-empty { text-align: center; color: #94a3b8; padding: 20px 0; }
+.sell__movemerge-cancel { height: 48px; margin-top: 12px; border: 1px solid #cbd5e0; background: #fff; border-radius: 10px; font-weight: 700; color: #64748b; cursor: pointer; }
 </style>

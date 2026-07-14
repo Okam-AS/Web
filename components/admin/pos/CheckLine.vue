@@ -53,6 +53,7 @@
       </p>
       <p v-if="group.discountAmount > 0" class="check-line__discount">
         {{ group.discountReason || $i('pos_discount') }}: −{{ priceLabel(group.discountAmount) }}
+        <button type="button" class="check-line__discount-remove" :title="$i('pos_remove_discount')" @click.stop="$emit('line-remove-discount', group)">×</button>
       </p>
 
       <!-- Mark a fired/ready line as served. Kitchen-ready lines get the celebratory green button;
@@ -71,6 +72,15 @@
     </div>
 
     <div class="check-line__actions">
+      <button
+        type="button"
+        class="check-line__disc-btn"
+        :class="{ 'check-line__disc-btn--set': group.discountAmount > 0 }"
+        :title="$i('pos_discount')"
+        @click.stop="$emit('line-discount', group)"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5a1.99 1.99 0 011.414.586l7 7a2 2 0 010 2.828l-5 5a2 2 0 01-2.828 0l-7-7A1.99 1.99 0 013 12V7a4 4 0 014-4z" /></svg>
+      </button>
       <button
         type="button"
         class="check-line__note-btn"
@@ -263,4 +273,13 @@ export default {
 }
 .check-line__remove:hover { color: #ef4444; }
 .check-line__remove svg { width: 18px; height: 18px; }
+
+.check-line__disc-btn { border: none; background: none; color: #cbd5e0; cursor: pointer; padding: 2px; }
+.check-line__disc-btn:hover { color: var(--pos-primary-dark, #159f63); }
+/* A line that already carries a discount gets a filled-in tag so it reads at a glance. */
+.check-line__disc-btn--set { color: #ef4444; }
+.check-line__disc-btn--set:hover { color: #dc2626; }
+.check-line__disc-btn svg { width: 18px; height: 18px; }
+
+.check-line__discount-remove { border: none; background: none; color: #ef4444; font-size: 1.05rem; line-height: 1; cursor: pointer; padding: 0 4px; vertical-align: middle; }
 </style>
