@@ -79,11 +79,12 @@
           <h2 class="section-title">{{ $i('discount_appliesToTitle') }}</h2>
           <div class="form-field">
             <label>{{ $i('discount_applicabilityLabel') }}</label>
+            <!-- Values must match the backend DiscountApplicability enum names (string enums). -->
             <select v-model="localDiscount.applicability" class="select-input">
               <option value="Order">{{ $i('discount_applicabilityOrder') }}</option>
-              <option value="HomeDelivery">{{ $i('discount_applicabilityHomeDelivery') }}</option>
-              <option value="SelfPickup">{{ $i('discount_applicabilitySelfPickup') }}</option>
-              <option value="DineIn">{{ $i('discount_applicabilityDineIn') }}</option>
+              <option value="HomeDeliveryOrder">{{ $i('discount_applicabilityHomeDelivery') }}</option>
+              <option value="SelfPickupOrder">{{ $i('discount_applicabilitySelfPickup') }}</option>
+              <option value="TableDeliveryOrder">{{ $i('discount_applicabilityDineIn') }}</option>
               <option value="ProductsInclusive">{{ $i('discount_applicabilityProductsInclusive') }}</option>
               <option value="ProductsExclusive">{{ $i('discount_applicabilityProductsExclusive') }}</option>
             </select>
@@ -261,15 +262,6 @@
 
             <div class="amount-row" style="margin-top: 16px;">
               <div class="form-field">
-                <label>{{ $i('discount_staffGroupLabel') }}</label>
-                <select v-model="localDiscount.staffGroup" class="text-input">
-                  <option :value="null">{{ $i('discount_staffGroupNone') }}</option>
-                  <option value="Staff">{{ $i('discount_staffGroupStaff') }}</option>
-                  <option value="Owner">{{ $i('discount_staffGroupOwner') }}</option>
-                  <option value="Guest">{{ $i('discount_staffGroupGuest') }}</option>
-                </select>
-              </div>
-              <div class="form-field">
                 <label>{{ $i('discount_sortOrderLabel') }}</label>
                 <input v-model.number="localDiscount.sortOrder" type="number" min="0" class="text-input" />
               </div>
@@ -334,11 +326,18 @@ export default {
       fieldErrors: {},
       toast: { show: false, message: '', type: 'success' },
       hasInitialized: false,
+      loadedStoreId: null,
     }
   },
   computed: {
     selectedStore() {
       return this.$store.state.selectedAdminStore
+    },
+    // The store the discount belongs to: the list page puts it in the query so this page is
+    // independent of when the header (re-)syncs the Vuex store selection.
+    queryStoreId() {
+      const parsed = parseInt(this.$route.query.storeId, 10)
+      return Number.isNaN(parsed) || parsed <= 0 ? null : parsed
     },
     userIsLoggedIn() {
       return this.$store.getters.userIsLoggedIn
@@ -355,17 +354,24 @@ export default {
       immediate: true,
       handler(storeId) {
         if (!storeId) return
-        if (this.hasInitialized && !this.isNew) {
-          this.$router.push('/admin/discounts')
-        } else if (!this.hasInitialized && this.userIsLoggedIn) {
+        if (!this.hasInitialized && this.userIsLoggedIn) {
           this.loadData()
+        } else if (
+          this.hasInitialized &&
+          !this.isNew &&
+          this.loadedStoreId &&
+          String(storeId) !== String(this.loadedStoreId)
+        ) {
+          // The admin switched to another store while editing this store's discount. Re-dispatches
+          // of the same store (the header re-syncs after auth reload) must not bounce.
+          this.$router.push('/admin/discounts')
         }
       },
     },
     userIsLoggedIn: {
       immediate: true,
       handler(isLoggedIn) {
-        if (isLoggedIn && this.selectedStore && !this.hasInitialized) {
+        if (isLoggedIn && (this.queryStoreId || this.selectedStore) && !this.hasInitialized) {
           this.loadData()
         }
       },
@@ -373,10 +379,11 @@ export default {
   },
   methods: {
     async loadData() {
-      const storeId = this.selectedStore
+      const storeId = this.queryStoreId || this.selectedStore
       if (!storeId) return
 
       this.hasInitialized = true
+      this.loadedStoreId = storeId
 
       if (this.isNew) {
         this.localDiscount = {
@@ -399,7 +406,6 @@ export default {
           expired: false,
           showInPos: false,
           requiresManagerPin: true,
-          staffGroup: null,
           sortOrder: 0,
           discountProducts: [],
           discountUsages: [],
@@ -410,7 +416,7 @@ export default {
       this.isLoading = true
       try {
         const discounts = await this._discountService.Get(storeId)
-        const found = discounts.find(d => d.id === this.discountId)
+        const found = discounts.find(d => String(d.id) === String(this.discountId))
         if (!found) {
           this.$router.push('/admin/discounts')
           return
@@ -456,7 +462,7 @@ export default {
       try {
         const payload = {
           ...this.localDiscount,
-          storeId: this.selectedStore,
+          storeId: this.loadedStoreId || this.selectedStore,
           discount: String(this.localDiscount.discount),
         }
         await this._discountService.CreateOrUpdate(payload)

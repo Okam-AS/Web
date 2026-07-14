@@ -100,6 +100,7 @@
     <OpenPriceModal
       v-if="showOpenPrice"
       :goods-groups="goodsGroups"
+      :presets="openPricePresets"
       :vat-context="effectiveDeliveryType"
       @confirm="onOpenPriceConfirm"
       @close="showOpenPrice = false"
@@ -134,8 +135,9 @@
 
     <DiscountModal
       v-if="showDiscount"
-      :reasons="discountReasons"
+      :reasons="discountReasonsForScope"
       :manager-operators="managerOperators"
+      :current-is-manager="sessionIsManager"
       :scope="discountScope"
       :target-name="discountTargetName"
       :busy="discountBusy"
@@ -147,6 +149,7 @@
     <VoidModal
       v-if="showVoid"
       :manager-operators="managerOperators"
+      :current-is-manager="sessionIsManager"
       :busy="voidBusy"
       :error="voidError"
       @confirm="onVoidConfirm"
@@ -276,6 +279,7 @@ export default {
       // The check group whose note is being edited (opens LineNoteModal); null when closed.
       noteGroup: null,
       goodsGroups: [],
+      openPricePresets: [],
       discountReasons: [],
       busy: false,
       // Recipe map so "+" can re-add an option / open-price line whose ingredients aren't fully
@@ -306,6 +310,22 @@ export default {
     checkItems () { return (this.check && this.check.items) || []; },
     checkHasLines () { return this.checkItems.length > 0; },
     discountTargetName () { return this.discountGroup ? this.discountGroup.name : ''; },
+    // A product-restricted discount is only offered for a row whose product passes the restriction
+    // (the backend enforces the same rule). Order scope shows every reason; the backend narrows a
+    // product-restricted one to the eligible lines.
+    discountReasonsForScope () {
+      if (this.discountScope !== 'line' || !this.discountGroup) { return this.discountReasons; }
+      // An open-price row has no product (empty guid), so product-restricted reasons never apply
+      // to it — mirroring the backend rule.
+      const productId = this.discountGroup.productId;
+      const hasProduct = !!productId && productId !== '00000000-0000-0000-0000-000000000000';
+      return this.discountReasons.filter((r) => {
+        if (r.applicability !== 'ProductsInclusive' && r.applicability !== 'ProductsExclusive') { return true; }
+        if (!hasProduct) { return false; }
+        const listed = (r.discountProducts || []).some(p => p.productId === productId);
+        return r.applicability === 'ProductsInclusive' ? listed : !listed;
+      });
+    },
     boardTables () { return (this.pos.boardStatus && this.pos.boardStatus.tables) || []; },
     hasFloorTables () { return this.boardTables.some(t => t.isActive); },
     // Tables the current check can move to (free) or merge with (occupied), excluding its own table.
@@ -339,7 +359,11 @@ export default {
     soldOutCategoryIds () { return (this.board && this.board.soldOutCategoryIds) || []; },
     // Operators who can authorise manager-gated discounts and voids.
     managerOperators () {
-      return (this.pos.operators || []).filter(o => o.roleLevel === 'Leder' || o.roleLevel === 'Eier');
+      return (this.pos.operators || []).filter(o => o.roleLevel === 'Godkjenner');
+    },
+    // WP-B1: when the acting operator is already a Godkjenner, no separate approval PIN is needed.
+    sessionIsManager () {
+      return !!(this.pos.session && this.pos.session.roleLevel === 'Godkjenner');
     },
     // The robust reset hook: the active guest is per-check ambient state, so it clears whenever the
     // check changes — a new/resumed check, or the check going away on park, void or payment.
@@ -353,6 +377,7 @@ export default {
   },
   mounted () {
     this.loadGoodsGroups();
+    this.loadOpenPricePresets();
     this.loadDiscountReasons();
   },
   beforeDestroy () {
@@ -364,6 +389,13 @@ export default {
         this.goodsGroups = await this.pos._goodsGroupService.GetForStore(this.pos.storeId) || [];
       } catch (e) {
         this.goodsGroups = [];
+      }
+    },
+    async loadOpenPricePresets () {
+      try {
+        this.openPricePresets = (await this.pos.openPricePresetSvc().GetForStore(this.pos.storeId) || []).filter(p => p.isActive !== false);
+      } catch (e) {
+        this.openPricePresets = [];
       }
     },
     // POS discounts are the store's catalogue discounts flagged ShowInPos (shared with the consumer
@@ -521,12 +553,14 @@ export default {
         this.busy = false;
       }
     },
-    async onOpenPriceConfirm ({ name, amount, tax, goodsGroupId }) {
+    async onOpenPriceConfirm ({ name, amount, tax, goodsGroupId, openPricePresetId }) {
       this.showOpenPrice = false;
       if (this.busy) { return; }
       this.busy = true;
       try {
         const check = await this.ensureCheck();
+        // A preset carries its own name + goods group server-side (WP-A2); a custom open-price line
+        // sends the typed name / group / rate. Only one path is populated.
         const request = {
           quantity: 1,
           notes: '',
@@ -535,12 +569,13 @@ export default {
           productId: null,
           selectedOptionIds: [],
           isOpenPrice: true,
-          name,
+          name: name || null,
           amount,
-          tax,
-          goodsGroupId
+          tax: tax || 0,
+          goodsGroupId: goodsGroupId || null,
+          openPricePresetId: openPricePresetId || null
         };
-        this.recipes['o|' + name + '|' + amount + '|' + tax] = request;
+        this.recipes['o|' + (openPricePresetId ? 'p' + openPricePresetId : name) + '|' + amount + '|' + (tax || 0)] = request;
         this.pos.applyCheck(await this.pos.checkSvc().AddLine(check.orderId, request));
       } catch (e) {
         this.notify(this.pos.errMsg(e), 'error');
@@ -688,12 +723,9 @@ export default {
       this.discountError = '';
       try {
         if (this.discountScope === 'line' && this.discountGroup) {
-          // A visible row can be backed by several member line ids (quantity > 1); discount each.
-          let result = this.check;
-          for (const lineId of this.discountGroup.lineIds) {
-            result = await this.pos.checkSvc().ApplyLineDiscount(this.check.orderId, { lineId, ...request });
-          }
-          this.pos.applyCheck(result);
+          // One call for the whole visible row: a percentage is taken off each member line, a
+          // fixed amount is granted once and split across them server-side.
+          this.pos.applyCheck(await this.pos.checkSvc().ApplyLineDiscount(this.check.orderId, { lineIds: this.discountGroup.lineIds, ...request }));
         } else {
           this.pos.applyCheck(await this.pos.checkSvc().ApplyOrderDiscount(this.check.orderId, request));
         }

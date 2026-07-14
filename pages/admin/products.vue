@@ -372,7 +372,7 @@
               <select v-model.number="selectedProduct.goodsGroupId">
                 <option :value="null">{{ $i('products_goodsGroup_none') }}</option>
                 <option v-for="g in goodsGroups" :key="g.goodsGroupId" :value="g.goodsGroupId">
-                  {{ g.name }}<template v-if="g.code"> ({{ g.code }})</template>
+                  {{ goodsGroupOptionLabel(g) }}
                 </option>
               </select>
               <span v-if="selectedGroupHasProfile" class="helper-text">
@@ -382,13 +382,9 @@
             </div>
             <div v-if="showRawVat" class="form-group">
               <label>{{ $i('products_vat') }}</label>
-              <input
-                v-model.number="selectedProduct.tax"
-                type="number"
-                min="0"
-                max="100"
-                placeholder="15"
-              />
+              <select v-model.number="selectedProduct.tax">
+                <option v-for="r in vatOptions(selectedProduct.tax)" :key="'tax' + r" :value="r">{{ r }} %</option>
+              </select>
               <span class="helper-text">{{ $i('products_vatHelperTakeaway') }}</span>
             </div>
             <div class="form-group">
@@ -411,13 +407,9 @@
                 />
                 <template v-if="showRawVat">
                   <label class="mt-4">{{ $i('products_dineInVat') }}</label>
-                  <input
-                    v-model.number="selectedProduct.tableTax"
-                    type="number"
-                    min="0"
-                    max="100"
-                    placeholder="25"
-                  />
+                  <select v-model.number="selectedProduct.tableTax">
+                    <option v-for="r in vatOptions(selectedProduct.tableTax)" :key="'tableTax' + r" :value="r">{{ r }} %</option>
+                  </select>
                   <span class="helper-text">{{ $i('products_vatHelperDineIn') }}</span>
                 </template>
               </div>
@@ -443,13 +435,9 @@
                 />
                 <template v-if="showRawVat">
                   <label class="mt-4">{{ $i('products_deliveryVat') }}</label>
-                  <input
-                    v-model.number="selectedProduct.deliveryTax"
-                    type="number"
-                    min="0"
-                    max="100"
-                    placeholder="15"
-                  />
+                  <select v-model.number="selectedProduct.deliveryTax">
+                    <option v-for="r in vatOptions(selectedProduct.deliveryTax)" :key="'deliveryTax' + r" :value="r">{{ r }} %</option>
+                  </select>
                   <span class="helper-text">{{ $i('products_vatHelperDelivery') }}</span>
                 </template>
               </div>
@@ -813,6 +801,26 @@ export default {
   },
 
   methods: {
+    // Show the profile in the picker so choosing a group is choosing the rates:
+    // "Mat og drikke · 15/25/15 %". Legacy groups without a profile keep name (code).
+    goodsGroupOptionLabel(g) {
+      if (g.takeAwayVatPercent != null && g.eatInVatPercent != null && g.deliveryVatPercent != null) {
+        return `${g.name} · ${g.takeAwayVatPercent}/${g.eatInVatPercent}/${g.deliveryVatPercent} %`;
+      }
+      return g.code ? `${g.name} (${g.code})` : g.name;
+    },
+
+    // The legal Norwegian VAT rates (must match AccountingHelper on the backend). A legacy
+    // product may carry a non-standard rate; keep it in the list so opening the form does not
+    // silently change a stored value.
+    vatOptions(current) {
+      const rates = [0, 12, 15, 25];
+      if (current != null && current !== '' && !rates.includes(current)) {
+        return [current, ...rates];
+      }
+      return rates;
+    },
+
     handleLoginSuccess() {
       if (this.selectedStore > 0) {
         this.loadProducts();

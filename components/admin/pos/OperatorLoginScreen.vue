@@ -38,7 +38,8 @@
           </button>
         </div>
 
-        <!-- PIN entry -->
+        <!-- PIN entry: the fourth digit logs in; no dedicated button. The status line below the
+             dots always occupies its line, and errors shake the dots — nothing shifts layout. -->
         <div class="op-login__pin">
           <p class="op-login__pin-label">
             <template v-if="selectedOperator">
@@ -48,27 +49,18 @@
               {{ $i('pos_select_operator') }}
             </template>
           </p>
-          <div class="op-login__dots">
+          <div class="op-login__dots" :class="{ 'is-error': shaking, 'is-busy': busy }">
             <span
-              v-for="i in Math.max(4, pin.length)"
+              v-for="i in 4"
               :key="i"
               class="op-login__dot"
               :class="{ 'is-filled': i <= pin.length }"
             />
           </div>
-          <p v-if="error" class="op-login__error">
-            {{ error }}
+          <p class="op-login__status" :class="{ 'is-error': showError }">
+            {{ statusText }}
           </p>
-          <PosNumpad @key="onKey" @backspace="pin = pin.slice(0, -1)" @clear="pin = ''" />
-          <button
-            type="button"
-            class="op-login__submit"
-            :disabled="!canSubmit"
-            @click="submit"
-          >
-            <span v-if="busy">{{ $i('pos_working') }}</span>
-            <span v-else>{{ $i('pos_login_button') }}</span>
-          </button>
+          <PosNumpad class="op-login__numpad" :class="{ 'is-waiting': busy }" @key="onKey" @backspace="onBackspace" @clear="onClear" />
         </div>
       </div>
     </div>
@@ -77,6 +69,10 @@
 
 <script>
 import PosNumpad from '~/components/admin/pos/PosNumpad.vue';
+
+// A PIN is always exactly four digits; the fourth digit submits automatically and a wrong
+// PIN shakes the pad, so there is no dedicated login button.
+const PIN_LENGTH = 4;
 
 // Full-screen operator sign-in shown when a cash point is chosen but no valid operator session
 // exists. Reads operators from the shell and calls pos.login(); errors surface inline.
@@ -89,7 +85,11 @@ export default {
       selectedOperatorId: null,
       pin: '',
       error: '',
-      busy: false
+      // Neutral guidance ("pick an employee first") — shown in the status line without error styling.
+      hint: '',
+      busy: false,
+      shaking: false,
+      shakeTimer: null
     };
   },
   computed: {
@@ -98,8 +98,14 @@ export default {
     selectedOperator () {
       return this.operators.find(o => o.operatorId === this.selectedOperatorId) || null;
     },
-    canSubmit () {
-      return !!this.selectedOperatorId && this.pin.length >= 4 && !this.busy;
+    // The status line always renders (fixed height) so appearing text never shifts the pad.
+    statusText () {
+      if (this.busy) { return this.$i('pos_pin_checking'); }
+      return this.error || this.hint;
+    },
+    showError () {
+      // Only a rejected attempt reads as an error; the "pick an employee" nudge stays neutral.
+      return !this.busy && !!this.error;
     }
   },
   mounted () {
@@ -109,6 +115,7 @@ export default {
   },
   beforeDestroy () {
     window.removeEventListener('keydown', this.onKeydown);
+    clearTimeout(this.shakeTimer);
   },
   methods: {
     initials (name) {
@@ -127,29 +134,56 @@ export default {
       this.selectedOperatorId = op.operatorId;
       this.pin = '';
       this.error = '';
+      this.hint = '';
     },
     onKey (d) {
-      if (this.pin.length >= 8) { return; }
+      // A full PIN means a login attempt is in flight (or shaking); ignore input until it resolves.
+      if (this.busy || this.pin.length >= PIN_LENGTH) { return; }
+      if (!this.selectedOperatorId) {
+        this.hint = this.$i('pos_pinpad_pick_operator');
+        this.shake();
+        return;
+      }
+      this.error = '';
+      this.hint = '';
       this.pin += d;
+      if (this.pin.length === PIN_LENGTH) {
+        this.submit();
+      }
+    },
+    onBackspace () {
+      if (this.busy || this.shaking) { return; }
+      this.pin = this.pin.slice(0, -1);
+    },
+    onClear () {
+      if (this.busy || this.shaking) { return; }
+      this.pin = '';
     },
     onKeydown (e) {
       if (e.key >= '0' && e.key <= '9') {
         this.onKey(e.key);
       } else if (e.key === 'Backspace') {
-        this.pin = this.pin.slice(0, -1);
-      } else if (e.key === 'Enter' && this.canSubmit) {
-        this.submit();
+        this.onBackspace();
       }
     },
+    // Shake the dots (iOS style): the filled dots turn red and tremble, then empty once the
+    // shake has finished so the rejection reads before the retry starts.
+    shake () {
+      if (this.shaking) { return; }
+      this.shaking = true;
+      this.shakeTimer = setTimeout(() => {
+        this.shaking = false;
+        this.pin = '';
+      }, 500);
+    },
     async submit () {
-      if (!this.canSubmit) { return; }
       this.busy = true;
       this.error = '';
       try {
         await this.pos.login({ operatorId: this.selectedOperatorId, pin: this.pin });
       } catch (e) {
         this.error = this.pos.errMsg(e);
-        this.pin = '';
+        this.shake();
       } finally {
         this.busy = false;
       }
@@ -281,13 +315,16 @@ export default {
   font-size: 0.9rem;
   margin: 0 0 12px;
   min-height: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .op-login__dots {
   display: flex;
   gap: 12px;
   justify-content: center;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
   min-height: 18px;
 }
 .op-login__dot {
@@ -295,30 +332,66 @@ export default {
   height: 15px;
   border-radius: 50%;
   border: 2px solid #cbd5e0;
+  transition: background 0.15s ease, border-color 0.15s ease;
 }
 .op-login__dot.is-filled {
   background: var(--pos-primary, #1bb776);
   border-color: var(--pos-primary, #1bb776);
+  animation: op-dot-pop 0.18s ease;
 }
 
-.op-login__error {
-  color: #ef4444;
-  font-weight: 600;
+/* Wrong PIN: the dots turn red and tremble; the row shakes, never the whole pad. */
+.op-login__dots.is-error {
+  animation: op-dots-shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+.op-login__dots.is-error .op-login__dot.is-filled {
+  background: #e0655c;
+  border-color: #e0655c;
+  animation: none;
+}
+
+/* Verifying: the filled dots breathe while the backend checks the PIN. */
+.op-login__dots.is-busy .op-login__dot.is-filled {
+  animation: op-dot-pulse 1.1s ease-in-out infinite;
+}
+
+/* Always occupies its line so appearing/disappearing text never moves the numpad. */
+.op-login__status {
+  min-height: 20px;
+  margin: 0 0 12px;
   text-align: center;
   font-size: 0.85rem;
-  margin: 0 0 10px;
+  font-weight: 500;
+  color: #94a3b8;
+  transition: color 0.15s ease;
+}
+.op-login__status.is-error {
+  color: #c4554d;
 }
 
-.op-login__submit {
-  margin-top: 14px;
-  height: 58px;
-  border: none;
-  border-radius: 12px;
-  background: var(--pos-primary, #1bb776);
-  color: #ffffff;
-  font-size: 1.1rem;
-  font-weight: 700;
-  cursor: pointer;
+.op-login__numpad {
+  transition: opacity 0.2s ease;
 }
-.op-login__submit:disabled { background: #cbd5e0; cursor: not-allowed; }
+.op-login__numpad.is-waiting {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+@keyframes op-dot-pop {
+  0% { transform: scale(0.5); }
+  60% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes op-dot-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+@keyframes op-dots-shake {
+  10%, 90% { transform: translateX(-2px); }
+  20%, 80% { transform: translateX(4px); }
+  30%, 50%, 70% { transform: translateX(-7px); }
+  40%, 60% { transform: translateX(7px); }
+}
 </style>

@@ -348,8 +348,10 @@ export default {
         number: t.tableNumber,
         name: t.name,
         shape: SHAPE_API_TO_LOCAL[t.shape] || 'square',
-        posX: t.posX,
-        posY: t.posY,
+        // FloorPlanTable/ReservationFloorView render from x/y (cm, center point), so the API's
+        // posX/posY must be renamed here — same mapping as FloorPlanEditor and BoardView.
+        x: t.posX,
+        y: t.posY,
         width: t.width,
         height: t.height,
         rotation: t.rotation,

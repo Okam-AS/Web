@@ -38,9 +38,9 @@
         :title="$i('pos_switch_operator')"
         :subtitle="$i('pos_switch_operator_hint')"
         :operators="operators"
+        :pinless="fastSwitch"
         :error="switchError"
         :busy="switchBusy"
-        :confirm-label="$i('pos_switch_button')"
         @submit="onSwitchSubmit"
         @close="showSwitch = false"
       />
@@ -133,6 +133,8 @@ export default {
       return s ? s.name : '';
     },
     sessionId () { return this.session ? this.session.operatorSessionId : ''; },
+    // WP-B3: fast operator switch (opt-in per register) turns the switch pad into a single tap.
+    fastSwitch () { return !!(this.cashPoint && this.cashPoint.allowFastOperatorSwitch); },
     dayOpen () { return !!(this.daySession && !this.daySession.closedAt); },
     needsCashPoint () { return !this.cashPoint; },
     needsOperator () { return !!this.cashPoint && !this.session; },
@@ -162,9 +164,16 @@ export default {
     // The journal read API is JWT/StoreAdmin, not operator-session scoped, so it is used as-is.
     journalSvc () { return this._journalService; },
     goodsGroupSvc () { return this._goodsGroupService; },
+    openPricePresetSvc () { return this._openPricePresetService; },
 
     errMsg (e) {
-      return (e && e.response && e.response.data && e.response.data.message) || (e && e.message) || this.$i('pos_generic_error');
+      const raw = (e && e.response && e.response.data && e.response.data.message) || (e && e.message) || '';
+      // The backend's PIN messages are English constants; map the known ones so the pad
+      // speaks the operator's language.
+      if (raw === 'Invalid PIN') { return this.$i('pos_pin_wrong'); }
+      if (raw === 'Too many PIN attempts, try again later') { return this.$i('pos_pin_too_many'); }
+      if (raw === 'Operator is temporarily locked out') { return this.$i('pos_pin_locked'); }
+      return raw || this.$i('pos_generic_error');
     },
 
     // ---- Startup sequence ----

@@ -1,22 +1,28 @@
 <template>
-  <div class="admin" :class="{ 'admin--collapsed': sidebarCollapsed, 'admin--chromeless': chromeless }">
-    <AdminPageHeader
-      v-if="!chromeless"
-      :collapsed="sidebarCollapsed"
-      @toggle-sidebar="toggleSidebar"
-    />
-    <div class="admin__main">
-      <OnboardingNotification v-if="!chromeless && !isOnboardingPage" />
-      <main :class="['admin__content', { admin__wrapper: !fullWidth && !chromeless }]">
-        <slot />
-      </main>
-      <AdminPageFooter v-if="!chromeless && !userIsLoggedIn" />
+  <!-- The admin area renders client-side only: its content depends on the login state, which the
+       server does not have (the token lives in localStorage), so SSR markup would never match the
+       client render. A hydration bail at this boundary leaves the router-view holding detached DOM
+       references, after which client-side navigation updates the URL but not the page. -->
+  <client-only>
+    <div class="admin" :class="{ 'admin--collapsed': sidebarCollapsed, 'admin--chromeless': chromeless }">
+      <AdminPageHeader
+        v-if="!chromeless"
+        :collapsed="sidebarCollapsed"
+        @toggle-sidebar="toggleSidebar"
+      />
+      <div class="admin__main">
+        <OnboardingNotification v-if="!chromeless && !isOnboardingPage" />
+        <main :class="['admin__content', { admin__wrapper: !fullWidth && !chromeless }]">
+          <slot />
+        </main>
+        <AdminPageFooter v-if="!chromeless && !userIsLoggedIn" />
+      </div>
+      <LoginModal
+        v-if="showLogin"
+        @close="closeLoginModal"
+      />
     </div>
-    <LoginModal
-      v-if="showLogin"
-      @close="closeLoginModal"
-    />
-  </div>
+  </client-only>
 </template>
 
 <script>

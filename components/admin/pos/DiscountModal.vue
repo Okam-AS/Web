@@ -44,7 +44,6 @@
       :operators="managerOperators"
       :error="error"
       :busy="busy"
-      :confirm-label="$i('pos_approve')"
       @submit="onPinSubmit"
       @close="pendingReason = null"
     />
@@ -55,14 +54,16 @@
 import PinPadModal from '~/components/admin/pos/PinPadModal.vue';
 
 // Applies a catalogue discount (the store's RegularDiscount entries flagged ShowInPos) to a line or
-// the whole order. Discounts flagged requiresManagerPin need a Leder/Eier approval (PinPad); others
-// apply under the current operator. A fixed amount is stored in kroner, so it is scaled for display.
+// the whole order. Discounts flagged requiresManagerPin need a Godkjenner approval — but when the
+// acting operator is already a Godkjenner (currentIsManager) that is satisfied without a PIN prompt;
+// others apply under the current operator. A fixed amount is stored in kroner, so it is scaled.
 export default {
   name: 'DiscountModal',
   components: { PinPadModal },
   props: {
     reasons: { type: Array, default: () => [] },
     managerOperators: { type: Array, default: () => [] },
+    currentIsManager: { type: Boolean, default: false },
     scope: { type: String, default: 'order' },
     targetName: { type: String, default: '' },
     busy: { type: Boolean, default: false },
@@ -76,7 +77,7 @@ export default {
       return r.type === 'Percent' ? r.discount + '%' : this.priceLabel(r.discount * 100);
     },
     selectReason (r) {
-      if (r.requiresManagerPin) {
+      if (r.requiresManagerPin && !this.currentIsManager) {
         this.pendingReason = r;
       } else {
         this.$emit('confirm', { regularDiscountId: r.id, approverOperatorId: 0, pin: '' });

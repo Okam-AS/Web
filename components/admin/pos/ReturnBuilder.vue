@@ -69,44 +69,48 @@
           <label class="rbuild__label">{{ $i('pos_return_line_name') }}</label>
           <input v-model="draft.name" type="text" class="rbuild__input" :placeholder="$i('pos_return_line_name_ph')">
 
-          <div class="rbuild__row">
-            <div class="rbuild__col">
-              <label class="rbuild__label">{{ $i('pos_return_line_qty') }}</label>
-              <input v-model.number="draft.quantity" type="number" min="1" class="rbuild__input">
-            </div>
-            <div class="rbuild__col rbuild__col--group">
-              <label class="rbuild__label">{{ $i('pos_open_price_goods_group') }}</label>
-              <select v-model.number="draft.goodsGroupId" class="rbuild__input">
-                <option :value="null">
-                  {{ $i('pos_open_price_pick_group') }}
-                </option>
-                <option v-for="g in goodsGroups" :key="g.goodsGroupId" :value="g.goodsGroupId">
-                  {{ g.name }}<template v-if="g.code">
-                    ({{ g.code }})
-                  </template>
-                </option>
-              </select>
-            </div>
-          </div>
+          <label class="rbuild__label">{{ $i('pos_return_line_qty') }}</label>
+          <input v-model.number="draft.quantity" type="number" min="1" class="rbuild__input">
 
-          <label class="rbuild__label">{{ $i('pos_open_price_vat') }}</label>
-          <!-- Profiled group: the rate follows from group x the return's context (read-only). -->
-          <div v-if="draftGroupHasProfile" class="rbuild__vat-readonly">
-            {{ draftDerivedVat }}% · {{ contextLabel }}
-          </div>
-          <!-- No group, or a legacy group without a profile: operator picks the rate. -->
-          <div v-else class="rbuild__vat">
+          <label class="rbuild__label">{{ $i('pos_open_price_goods_group') }}</label>
+          <!-- The group is the rate selector: each button shows the rate that group gives for the
+               return's context, so picking a group is the only VAT input needed. -->
+          <p v-if="!goodsGroups.length" class="rbuild__no-groups">
+            {{ $i('pos_no_goods_groups') }}
+          </p>
+          <div class="rbuild__groups">
             <button
-              v-for="rate in vatRates"
-              :key="rate"
+              v-for="g in goodsGroups"
+              :key="g.goodsGroupId"
               type="button"
-              class="rbuild__vat-btn"
-              :class="{ 'is-active': draft.vatPercent === rate }"
-              @click="draft.vatPercent = rate"
+              class="rbuild__group"
+              :class="{ 'is-active': draft.goodsGroupId === g.goodsGroupId }"
+              @click="draft.goodsGroupId = g.goodsGroupId"
             >
-              {{ rate }}%
+              <span class="rbuild__group-name">{{ g.name }}</span>
+              <span class="rbuild__group-rate">
+                <template v-if="groupVat(g) != null">{{ groupVat(g) }} % · {{ contextLabel }}</template>
+                <template v-else>{{ $i('pos_goods_group_no_profile') }}</template>
+              </span>
             </button>
           </div>
+
+          <!-- Legacy group without a VAT profile: the operator still picks the rate manually. -->
+          <template v-if="draft.goodsGroupId != null && !draftGroupHasProfile">
+            <label class="rbuild__label">{{ $i('pos_open_price_vat') }}</label>
+            <div class="rbuild__vat">
+              <button
+                v-for="rate in vatRates"
+                :key="rate"
+                type="button"
+                class="rbuild__vat-btn"
+                :class="{ 'is-active': draft.vatPercent === rate }"
+                @click="draft.vatPercent = rate"
+              >
+                {{ rate }}%
+              </button>
+            </div>
+          </template>
 
           <label class="rbuild__label">{{ $i('pos_return_line_amount') }}</label>
           <AmountPad v-model="draft.unitAmount" />
@@ -156,11 +160,10 @@
           </button>
         </div>
 
-        <label class="rbuild__label">{{ $i('pos_refund_reason') }}</label>
-        <input v-model="reason" type="text" class="rbuild__input" :placeholder="$i('pos_refund_reason_ph')">
+        <ReasonPicker context="return" :label="$i('pos_refund_reason')" v-model="reasonSel" />
 
         <label class="rbuild__label">{{ $i('pos_return_customer_phone') }}</label>
-        <input v-model="customerPhone" type="tel" class="rbuild__input" :placeholder="$i('pos_return_customer_phone_ph')">
+        <PhonePad v-model="customerPhone" :placeholder="$i('pos_return_customer_phone_ph')" />
 
         <template v-if="method === 'cash'">
           <label class="rbuild__label">{{ $i('pos_return_signature') }}</label>
@@ -219,7 +222,6 @@
       :operators="managerOperators"
       :error="pinError"
       :busy="pinBusy"
-      :confirm-label="$i('pos_refund_sale')"
       @submit="onPinSubmit"
       @close="step = 'settle'"
     />
@@ -231,19 +233,23 @@ import AmountPad from '~/components/admin/pos/AmountPad.vue';
 import SignaturePad from '~/components/admin/pos/SignaturePad.vue';
 import PinPadModal from '~/components/admin/pos/PinPadModal.vue';
 import PosReceiptView from '~/components/admin/pos/PosReceiptView.vue';
+import ReasonPicker from '~/components/admin/pos/ReasonPicker.vue';
+import PhonePad from '~/components/admin/pos/PhonePad.vue';
 import { newGuid } from '~/utils/guid';
 
 const CARD_POLL_MS = 2500;
 const CARD_TIMEOUT_MS = 130000;
 
-// Unreferenced (open) return: rings in a refund without an original sale. The operator builds return
-// lines (each with a goods group + VAT so the RETREC is fiscally classified), then refunds to cash
-// (out of the drawer) or to a card on the terminal. § 5-3-7 documentation is captured before the
-// Leder PIN. The card path is asynchronous (cardholder taps) and only works when the acquirer has
-// enabled unreferenced credits — otherwise the backend returns a clear "not enabled" error.
+// Unreferenced (open) return: rings in a refund without an original sale. The operator picks return
+// lines from the menu (or builds them manually), each with a goods group + VAT so the RETREC is
+// fiscally classified, then refunds to cash (out of the drawer) or to a card on the terminal. § 5-3-7
+// documentation (a one-tap reason + phone, plus a signature for cash) is captured before the return
+// is authorized — with no separate PIN when the acting operator is already a Godkjenner. The card
+// path is asynchronous (cardholder taps) and only works when the acquirer has enabled unreferenced
+// credits — otherwise the backend returns a clear "not enabled" error.
 export default {
   name: 'ReturnBuilder',
-  components: { AmountPad, SignaturePad, PinPadModal, PosReceiptView },
+  components: { AmountPad, SignaturePad, PinPadModal, PosReceiptView, ReasonPicker, PhonePad },
   inject: ['pos'],
   props: {
     // Same fiscal object (an unreferenced RETREC), shown as "Ny retur" from Day flow or as
@@ -271,7 +277,7 @@ export default {
       // instance (one logical return), so a retry after a lost response returns the
       // already-journalled RETREC instead of signing and paying out a second one.
       returnId: newGuid(),
-      reason: '',
+      reasonSel: { reasonType: 'None', reasonText: '' },
       customerPhone: '',
       signature: '',
       error: '',
@@ -288,7 +294,15 @@ export default {
     cashPointId () { return this.pos.cashPoint.cashPointId; },
     total () { return this.lines.reduce((sum, l) => sum + l.unitAmount * l.quantity, 0); },
     managerOperators () {
-      return (this.pos.operators || []).filter(o => o.roleLevel === 'Leder' || o.roleLevel === 'Eier');
+      return (this.pos.operators || []).filter(o => o.roleLevel === 'Godkjenner');
+    },
+    currentIsManager () {
+      return !!(this.pos.session && this.pos.session.roleLevel === 'Godkjenner');
+    },
+    reasonChosen () {
+      if (this.reasonSel.reasonType === 'None') { return false; }
+      if (this.reasonSel.reasonType === 'Annet') { return !!(this.reasonSel.reasonText || '').trim(); }
+      return true;
     },
     canAddLine () {
       return this.draft.name.trim().length > 0 && this.draft.unitAmount > 0 && this.draft.quantity >= 1 && this.draft.goodsGroupId != null;
@@ -317,7 +331,7 @@ export default {
         // Every line must be classified with a goods group before the RETREC can be journalled; a
         // bill row may lack one (product without a goods group) until the inline picker fills it.
         if (!this.lines.length || this.lines.some(l => l.goodsGroupId == null)) { return false; }
-        if (!this.reason.trim() || !this.customerPhone.trim()) { return false; }
+        if (!this.reasonChosen || !this.customerPhone.trim()) { return false; }
         if (this.method === 'cash' && !this.signature) { return false; }
         return true;
       }
@@ -341,7 +355,9 @@ export default {
     // The VAT rate for a goods group in the current context: group profile x context when the group
     // is profiled, otherwise null (the operator-picked rate applies).
     effectiveVat (goodsGroupId) {
-      const g = this.goodsGroups.find(x => x.goodsGroupId === goodsGroupId);
+      return this.groupVat(this.goodsGroups.find(x => x.goodsGroupId === goodsGroupId));
+    },
+    groupVat (g) {
       if (g && g.takeAwayVatPercent != null && g.eatInVatPercent != null && g.deliveryVatPercent != null) {
         return this.vatContext === 'TableDelivery' ? g.eatInVatPercent : g.takeAwayVatPercent;
       }
@@ -390,16 +406,29 @@ export default {
     },
     advance () {
       if (this.step === 'build' && this.lines.length) { this.step = 'settle'; this.error = ''; return; }
-      if (this.step === 'settle' && this.canAdvance) { this.pinError = ''; this.step = 'pin'; }
+      if (this.step === 'settle' && this.canAdvance) {
+        this.pinError = '';
+        this.error = '';
+        // A Godkjenner authorises the return directly; otherwise fetch a Godkjenner PIN.
+        if (this.currentIsManager) {
+          this.doReturn(0, '');
+        } else {
+          this.step = 'pin';
+        }
+      }
     },
-    async onPinSubmit ({ operatorId, pin }) {
+    onPinSubmit ({ operatorId, pin }) {
+      this.doReturn(operatorId, pin);
+    },
+    async doReturn (operatorId, pin) {
       this.pinBusy = true;
       this.pinError = '';
       const base = {
         cashPointId: this.cashPointId,
         approverOperatorId: operatorId,
         pin,
-        reason: this.reason.trim(),
+        reasonType: this.reasonSel.reasonType,
+        reasonText: (this.reasonSel.reasonText || '').trim(),
         customerPhone: this.customerPhone.trim(),
         // Manual builder sends the eat-in/take-away context so profiled lines resolve their rate
         // server-side. The negative-sale-from-bill flow (prefilled) leaves it null and keeps the
@@ -427,7 +456,9 @@ export default {
           }
         }
       } catch (e) {
-        this.pinError = this.pos.errMsg(e);
+        // Show the error on the PIN pad if we were there, otherwise inline on the settle screen.
+        const msg = this.pos.errMsg(e);
+        if (this.step === 'pin') { this.pinError = msg; } else { this.error = msg; }
         this.step = 'settle';
       } finally {
         this.pinBusy = false;
@@ -490,14 +521,17 @@ export default {
 .rbuild__label { display: block; font-size: 0.78rem; font-weight: 700; color: #64748b; margin: 12px 0 6px; text-transform: uppercase; letter-spacing: 0.03em; }
 .rbuild__input { width: 100%; height: 44px; border: 1px solid #e2e8f0; border-radius: 10px; padding: 0 12px; font-size: 1rem; color: var(--pos-ink, #292c34); background: #fff; }
 .rbuild__input:focus { outline: none; border-color: var(--pos-primary, #1bb776); }
-.rbuild__row { display: flex; gap: 10px; }
-.rbuild__col { flex: 1; }
-.rbuild__col--group { flex: 2; }
+.rbuild__no-groups { color: #b45309; font-size: 0.82rem; font-weight: 600; margin: 0 0 8px; }
+.rbuild__groups { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.rbuild__group { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 10px 12px; min-height: 54px; border: 2px solid #e2e8f0; border-radius: 12px; background: #fff; cursor: pointer; text-align: left; }
+.rbuild__group.is-active { border-color: var(--pos-primary, #1bb776); background: rgba(27, 183, 118, 0.08); }
+.rbuild__group-name { font-weight: 600; color: var(--pos-ink, #292c34); font-size: 0.92rem; }
+.rbuild__group-rate { font-size: 0.76rem; font-weight: 600; color: #64748b; }
+.rbuild__group.is-active .rbuild__group-rate { color: var(--pos-primary-dark, #159f63); }
 
 .rbuild__vat { display: flex; gap: 8px; }
 .rbuild__vat-btn { flex: 1; height: 42px; border: 1px solid #cbd5e0; background: #fff; border-radius: 10px; font-weight: 600; color: var(--pos-ink, #292c34); cursor: pointer; }
 .rbuild__vat-btn.is-active { border-color: var(--pos-primary, #1bb776); background: rgba(27, 183, 118, 0.08); color: var(--pos-primary-dark, #159f63); }
-.rbuild__vat-readonly { height: 42px; display: flex; align-items: center; padding: 0 14px; border: 1px solid #e2e8f0; border-radius: 10px; background: #f8fafc; font-weight: 700; color: var(--pos-ink, #292c34); }
 .rbuild__context { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
 .rbuild__context-label { font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.03em; }
 .rbuild__context-toggle { display: flex; gap: 6px; }

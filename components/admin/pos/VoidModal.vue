@@ -14,15 +14,14 @@
           <p class="void-modal__warn">
             {{ $i('pos_void_warn') }}
           </p>
-          <label class="void-modal__label">{{ $i('pos_void_reason') }}</label>
-          <textarea v-model="reason" class="void-modal__textarea" :placeholder="$i('pos_void_reason_ph')" />
+          <ReasonPicker context="void" :label="$i('pos_void_reason')" v-model="reasonSel" />
         </div>
         <footer class="void-modal__foot">
           <button
             type="button"
             class="void-modal__confirm"
-            :disabled="!reason.trim()"
-            @click="showPin = true"
+            :disabled="!canContinue"
+            @click="onContinue"
           >
             {{ $i('pos_void_continue') }}
           </button>
@@ -37,7 +36,6 @@
       :operators="managerOperators"
       :error="error"
       :busy="busy"
-      :confirm-label="$i('pos_void_check')"
       @submit="onPinSubmit"
       @close="showPin = false"
     />
@@ -46,23 +44,49 @@
 
 <script>
 import PinPadModal from '~/components/admin/pos/PinPadModal.vue';
+import ReasonPicker from '~/components/admin/pos/ReasonPicker.vue';
 
-// Voids an entire open check. Always requires a Leder/Eier approval PIN and a reason; the void is
-// journalled (VOIDTRANS) and produces no receipt.
+// Voids an entire open check with a one-tap reason. When the acting operator is already a Godkjenner
+// (currentIsManager) no separate approval PIN is challenged; otherwise a Godkjenner approves. The
+// void is journalled (VOIDTRANS) and produces no receipt.
 export default {
   name: 'VoidModal',
-  components: { PinPadModal },
+  components: { PinPadModal, ReasonPicker },
   props: {
     managerOperators: { type: Array, default: () => [] },
+    currentIsManager: { type: Boolean, default: false },
     busy: { type: Boolean, default: false },
     error: { type: String, default: '' }
   },
   data () {
-    return { reason: '', showPin: false };
+    return { reasonSel: { reasonType: 'None', reasonText: '' }, showPin: false };
+  },
+  computed: {
+    canContinue () {
+      if (this.reasonSel.reasonType === 'None') { return false; }
+      if (this.reasonSel.reasonType === 'Annet') { return !!(this.reasonSel.reasonText || '').trim(); }
+      return true;
+    }
   },
   methods: {
+    onContinue () {
+      // A Godkjenner authorises their own void — go straight through with no PIN challenge.
+      if (this.currentIsManager) {
+        this.emitConfirm(0, '');
+      } else {
+        this.showPin = true;
+      }
+    },
     onPinSubmit ({ operatorId, pin }) {
-      this.$emit('confirm', { approverOperatorId: operatorId, pin, reason: this.reason.trim() });
+      this.emitConfirm(operatorId, pin);
+    },
+    emitConfirm (approverOperatorId, pin) {
+      this.$emit('confirm', {
+        approverOperatorId,
+        pin,
+        reasonType: this.reasonSel.reasonType,
+        reasonText: (this.reasonSel.reasonText || '').trim()
+      });
     }
   }
 };

@@ -353,6 +353,7 @@ export default {
             { label: this.$i('nav_okam_growth'), path: '/admin/poweruser-growth', icon: icons.growth },
             { label: this.$i('nav_dintero'), path: '/admin/dintero', icon: icons.dintero },
             { label: this.$i('nav_surfboard'), path: '/admin/surfboard', icon: icons.surfboard },
+            { label: this.$i('nav_tripletex'), path: '/admin/tripletex', icon: icons.invoice },
             { label: this.$i('nav_wolt_drive_invoice'), path: '/admin/wolt-drive-invoice', icon: icons.invoice },
             { label: this.$i('nav_goods'), path: '/admin/goods', icon: icons.goods },
             { label: this.$i('nav_kam_administration'), path: '/admin/kam', icon: icons.kam }
@@ -401,7 +402,10 @@ export default {
       handler (stores) {
         const queryStoreId = this.getQueryStoreId();
         const hasStores = stores.length > 0;
-        const queryStoreExists = queryStoreId && stores.some(store => store.id === queryStoreId);
+        // A PowerUser may legitimately work with a store outside their own adminIn list, so the
+        // query's store is trusted as-is instead of being force-switched to adminStores[0]
+        // (which would yank the selection — and any page keyed to it — after every auth reload).
+        const queryStoreExists = queryStoreId && (this.isPowerUser || stores.some(store => store.id === queryStoreId));
 
         if (queryStoreExists) {
           if (this.$store.state.selectedAdminStore !== queryStoreId) {

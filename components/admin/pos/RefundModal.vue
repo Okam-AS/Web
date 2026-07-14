@@ -31,11 +31,10 @@
         </div>
         <AmountPad v-if="amountMode === 'partial'" v-model="partialAmount" />
 
-        <label class="refund__label">{{ $i('pos_refund_reason') }}</label>
-        <input v-model="reason" type="text" class="refund__input" :placeholder="$i('pos_refund_reason_ph')">
+        <ReasonPicker context="return" :label="$i('pos_refund_reason')" v-model="reasonSel" />
 
         <label class="refund__label">{{ $i('pos_return_customer_phone') }}</label>
-        <input v-model="customerPhone" type="tel" class="refund__input" :placeholder="$i('pos_return_customer_phone_ph')">
+        <PhonePad v-model="customerPhone" :placeholder="$i('pos_return_customer_phone_ph')" />
 
         <template v-if="requiresSignature">
           <label class="refund__label">{{ $i('pos_return_signature') }}</label>
@@ -49,8 +48,8 @@
           {{ error }}
         </p>
 
-        <button type="button" class="refund__confirm" :disabled="!canContinue" @click="toPin">
-          {{ $i('pos_refund_continue') }}
+        <button type="button" class="refund__confirm" :disabled="!canContinue" @click="onContinue">
+          {{ currentIsManager ? $i('pos_refund_sale') : $i('pos_refund_continue') }}
         </button>
       </div>
 
@@ -89,7 +88,6 @@
       :operators="managerOperators"
       :error="pinError"
       :busy="pinBusy"
-      :confirm-label="$i('pos_refund_sale')"
       @submit="onPinSubmit"
       @close="step = 'form'"
     />
@@ -101,6 +99,8 @@ import AmountPad from '~/components/admin/pos/AmountPad.vue';
 import SignaturePad from '~/components/admin/pos/SignaturePad.vue';
 import PinPadModal from '~/components/admin/pos/PinPadModal.vue';
 import PosReceiptView from '~/components/admin/pos/PosReceiptView.vue';
+import ReasonPicker from '~/components/admin/pos/ReasonPicker.vue';
+import PhonePad from '~/components/admin/pos/PhonePad.vue';
 import { newGuid } from '~/utils/guid';
 
 const CARD_POLL_MS = 2500;
@@ -108,11 +108,12 @@ const CARD_TIMEOUT_MS = 130000;
 
 // Refund of a finalized sale, driven off its receipt. Cash produces the RETREC + drawer pay-out
 // synchronously; card pushes a return order to the terminal (the cardholder approves), so the RETREC
-// arrives asynchronously and is polled via RefundStatusCard. § 5-3-7 documentation (reason + phone,
-// plus an on-screen signature for cash) is captured before the Leder PIN authorizes the refund.
+// arrives asynchronously and is polled via RefundStatusCard. § 5-3-7 documentation (a one-tap reason
+// + phone, plus an on-screen signature for cash) is captured before the refund is authorized — with
+// no separate PIN when the acting operator is already a Godkjenner (currentIsManager).
 export default {
   name: 'RefundModal',
-  components: { AmountPad, SignaturePad, PinPadModal, PosReceiptView },
+  components: { AmountPad, SignaturePad, PinPadModal, PosReceiptView, ReasonPicker, PhonePad },
   inject: ['pos'],
   props: {
     receipt: { type: Object, required: true }
@@ -126,7 +127,7 @@ export default {
       // so a retry after a lost response returns the already-journalled RETREC instead of
       // paying out twice.
       returnId: newGuid(),
-      reason: '',
+      reasonSel: { reasonType: 'None', reasonText: '' },
       customerPhone: '',
       signature: '',
       error: '',
@@ -153,10 +154,18 @@ export default {
     },
     effectiveAmount () { return this.amountMode === 'full' ? this.maxAmount : this.partialAmount; },
     managerOperators () {
-      return (this.pos.operators || []).filter(o => o.roleLevel === 'Leder' || o.roleLevel === 'Eier');
+      return (this.pos.operators || []).filter(o => o.roleLevel === 'Godkjenner');
+    },
+    currentIsManager () {
+      return !!(this.pos.session && this.pos.session.roleLevel === 'Godkjenner');
+    },
+    reasonChosen () {
+      if (this.reasonSel.reasonType === 'None') { return false; }
+      if (this.reasonSel.reasonType === 'Annet') { return !!(this.reasonSel.reasonText || '').trim(); }
+      return true;
     },
     canContinue () {
-      if (!this.reason.trim() || !this.customerPhone.trim()) { return false; }
+      if (!this.reasonChosen || !this.customerPhone.trim()) { return false; }
       if (this.requiresSignature && !this.signature) { return false; }
       if (this.amountMode === 'partial' && (this.partialAmount <= 0 || this.partialAmount > this.maxAmount)) { return false; }
       return true;
@@ -169,22 +178,34 @@ export default {
     onBackdrop () {
       if (this.step === 'form') { this.$emit('close'); }
     },
-    toPin () {
+    onContinue () {
       if (!this.canContinue) { return; }
       this.error = '';
       this.pinError = '';
-      this.step = 'pin';
+      // A Godkjenner authorises the refund directly; anyone else must fetch a Godkjenner PIN.
+      if (this.currentIsManager) {
+        this.doRefund(0, '');
+      } else {
+        this.step = 'pin';
+      }
     },
-    async onPinSubmit ({ operatorId, pin }) {
+    onPinSubmit ({ operatorId, pin }) {
+      this.doRefund(operatorId, pin);
+    },
+    async doRefund (operatorId, pin) {
       this.pinBusy = true;
       this.pinError = '';
+      this.error = '';
       const amount = this.amountMode === 'full' ? this.maxAmount : this.partialAmount;
+      const reasonType = this.reasonSel.reasonType;
+      const reasonText = (this.reasonSel.reasonText || '').trim();
       try {
         if (this.isCard) {
           const result = await this.pos.posSvc().RefundCard(this.cardLine.paymentTransactionId, {
             cashPointId: this.cashPointId,
             amount,
-            reason: this.reason.trim(),
+            reasonType,
+            reasonText,
             customerPhone: this.customerPhone.trim(),
             approverOperatorId: operatorId,
             pin
@@ -195,7 +216,8 @@ export default {
             cashPointId: this.cashPointId,
             returnId: this.returnId,
             amount,
-            reason: this.reason.trim(),
+            reasonType,
+            reasonText,
             customerPhone: this.customerPhone.trim(),
             customerSignature: this.signature,
             approverOperatorId: operatorId,
@@ -205,7 +227,9 @@ export default {
           this.step = 'done';
         }
       } catch (e) {
-        this.pinError = this.pos.errMsg(e);
+        // Surface the error where the operator is looking: inline on the form when we skipped the
+        // PIN step, otherwise on the PIN pad.
+        if (this.step === 'pin') { this.pinError = this.pos.errMsg(e); } else { this.error = this.pos.errMsg(e); }
       } finally {
         this.pinBusy = false;
       }

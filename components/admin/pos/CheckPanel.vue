@@ -191,7 +191,9 @@ export default {
           line.courseSequence || '',
           // Different guests must not fold into one row (the row's guest tag has to stay meaningful).
           line.seatNumber || '',
-          line.discountAmount || 0,
+          // Only the reason, not the amount: a fixed discount is split proportionally across the
+          // member lines, and uneven ore shares must not break the row apart (the row shows the
+          // summed amount).
           line.discountReason || '',
           // Keep a just-added "Ny" line as its own row rather than folding it into an already-sent
           // group of the same product, so the Ny / Sendt distinction stays visible.

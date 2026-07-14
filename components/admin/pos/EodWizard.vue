@@ -19,14 +19,12 @@
           </div>
           <label class="eod__label">{{ $i('pos_eod_counted') }}</label>
           <AmountPad v-model="counted" />
-          <div class="eod__diff" :class="{ 'is-off': explanationRequired }">
+          <div class="eod__diff" :class="{ 'is-off': outOfTolerance }">
             <span>{{ $i('pos_report_cash_diff') }}</span>
             <strong>{{ priceLabel(diff) }}</strong>
           </div>
-          <template v-if="explanationRequired">
-            <label class="eod__label">{{ $i('pos_eod_explanation') }}</label>
-            <textarea v-model="explanation" class="eod__textarea" :placeholder="$i('pos_eod_explanation_ph')" />
-          </template>
+          <!-- § 5-3-14: any non-zero difference must be explained with a one-tap reason. -->
+          <ReasonPicker v-if="explanationRequired" context="eod" :label="$i('pos_eod_explanation')" v-model="reasonSel" />
         </template>
 
         <!-- Step 2: deposit + email -->
@@ -90,13 +88,15 @@
 
 <script>
 import AmountPad from '~/components/admin/pos/AmountPad.vue';
+import ReasonPicker from '~/components/admin/pos/ReasonPicker.vue';
 
-// End-of-day wizard: count the drawer (live difference vs expected), require an explanation when the
-// difference exceeds the cash point's limit, record the bank deposit and email, then close the day.
-// end-day generates the signed Z report and emails the EOD receipt server-side.
+// End-of-day wizard: count the drawer (live difference vs expected), require a one-tap reason for ANY
+// non-zero difference (bokføringsforskriften § 5-3-14), record the bank deposit and email, then close
+// the day. The cash-point limit only drives the out-of-tolerance warning, not whether a reason is
+// required. end-day generates the signed Z report and emails the EOD receipt server-side.
 export default {
   name: 'EodWizard',
-  components: { AmountPad },
+  components: { AmountPad, ReasonPicker },
   inject: ['pos'],
   props: {
     sessionId: { type: Number, required: true },
@@ -109,7 +109,7 @@ export default {
       step: 'count',
       counted: 0,
       bankDeposit: 0,
-      explanation: '',
+      reasonSel: { reasonType: 'None', reasonText: '' },
       email: this.defaultEmail,
       busy: false,
       error: '',
@@ -118,8 +118,15 @@ export default {
   },
   computed: {
     diff () { return this.counted - this.expectedCash; },
-    explanationRequired () { return Math.abs(this.diff) > this.maxDifference; },
-    canProceedCount () { return !this.explanationRequired || this.explanation.trim().length > 0; }
+    // A reason is required for any non-zero difference; the limit only flags out-of-tolerance.
+    explanationRequired () { return this.diff !== 0; },
+    outOfTolerance () { return Math.abs(this.diff) > this.maxDifference; },
+    reasonChosen () {
+      if (this.reasonSel.reasonType === 'None') { return false; }
+      if (this.reasonSel.reasonType === 'Annet') { return !!(this.reasonSel.reasonText || '').trim(); }
+      return true;
+    },
+    canProceedCount () { return !this.explanationRequired || this.reasonChosen; }
   },
   methods: {
     maybeClose () {
@@ -132,7 +139,8 @@ export default {
         this.result = await this.pos.drawerSvc().EndDay(this.sessionId, {
           endCountedAmount: this.counted,
           bankDepositAmount: this.bankDeposit,
-          differenceExplanation: this.explanation ? this.explanation.trim() : null,
+          differenceReasonType: this.reasonSel.reasonType,
+          differenceText: (this.reasonSel.reasonText || '').trim() || null,
           email: this.email || null
         });
         this.step = 'result';

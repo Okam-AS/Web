@@ -42,6 +42,13 @@
           <h4>{{ $i('posset_goods_profile') }}</h4>
           <p>{{ $i('posset_goods_profile_hint') }}</p>
         </div>
+        <!-- One-tap presets for the common Norwegian profiles; the selects below stay for
+             special cases (e.g. 12 %). -->
+        <div class="gg-profile__presets">
+          <button type="button" :class="{ 'is-active': presetActive(15, 25, 15) }" @click="applyPreset(15, 25, 15)">{{ $i('posset_goods_preset_food') }}</button>
+          <button type="button" :class="{ 'is-active': presetActive(25, 25, 25) }" @click="applyPreset(25, 25, 25)">{{ $i('posset_goods_preset_standard') }}</button>
+          <button type="button" :class="{ 'is-active': presetActive(0, 0, 0) }" @click="applyPreset(0, 0, 0)">{{ $i('posset_goods_preset_free') }}</button>
+        </div>
         <div class="crud__grid">
           <label>{{ $i('posset_goods_takeaway') }}
             <select v-model="form.takeAwayVatPercent">
@@ -128,6 +135,14 @@ export default {
         this.seeding = false;
       }
     },
+    applyPreset (takeAway, eatIn, delivery) {
+      this.form.takeAwayVatPercent = takeAway;
+      this.form.eatInVatPercent = eatIn;
+      this.form.deliveryVatPercent = delivery;
+    },
+    presetActive (takeAway, eatIn, delivery) {
+      return this.form && this.form.takeAwayVatPercent === takeAway && this.form.eatInVatPercent === eatIn && this.form.deliveryVatPercent === delivery;
+    },
     startNew () {
       this.form = { storeId: Number(this.storeId), name: '', code: '', sortOrder: (this.items.length + 1), isActive: true, takeAwayVatPercent: null, eatInVatPercent: null, deliveryVatPercent: null };
     },
@@ -205,6 +220,9 @@ export default {
 .gg-profile__head h4 { margin: 0 0 4px; font-size: 0.95rem; color: #292c34; }
 .gg-profile__head p { margin: 0 0 12px; font-size: 0.8rem; color: #64748b; }
 .gg-profile select { height: 40px; border: 1px solid #cbd5e0; border-radius: 8px; padding: 0 10px; font-size: 0.95rem; color: #292c34; background: #fff; }
+.gg-profile__presets { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.gg-profile__presets button { border: 1px solid #cbd5e0; background: #fff; color: #292c34; font-weight: 600; font-size: 0.82rem; padding: 7px 12px; border-radius: 8px; cursor: pointer; }
+.gg-profile__presets button.is-active { border-color: #1bb776; background: rgba(27, 183, 118, 0.08); color: #159f63; }
 .gg-profile__warn { margin: 12px 0 0; color: #b91c1c; font-size: 0.82rem; font-weight: 600; }
 .gg-profile__reprice { margin: 12px 0 0; color: #b45309; font-size: 0.82rem; }
 </style>

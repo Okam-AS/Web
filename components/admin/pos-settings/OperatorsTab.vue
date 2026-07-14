@@ -40,7 +40,7 @@
                 class="crud__pin"
                 type="password"
                 inputmode="numeric"
-                maxlength="6"
+                maxlength="4"
                 :placeholder="$i('posset_op_pin_ph')"
               >
               <button class="crud__save" :disabled="pinSaving || !pinValid" @click="savePin(it)">
@@ -71,8 +71,9 @@
           <select v-model="form.roleLevel">
             <option v-for="r in roles" :key="r" :value="r">{{ $i('pos_role_' + r.toLowerCase()) }}</option>
           </select>
+          <span class="crud__hint">{{ $i('posset_op_role_hint') }}</span>
         </label>
-        <label v-if="!form.operatorId">{{ $i('posset_op_pin') }}<input v-model="form.pin" type="password" inputmode="numeric" maxlength="6" :placeholder="$i('posset_op_pin_ph')"></label>
+        <label v-if="!form.operatorId">{{ $i('posset_op_pin') }}<input v-model="form.pin" type="password" inputmode="numeric" maxlength="4" :placeholder="$i('posset_op_pin_ph')"></label>
         <label class="crud__check"><input v-model="form.isActive" type="checkbox"> {{ $i('posset_col_active') }}</label>
       </div>
       <div class="crud__form-actions">
@@ -93,10 +94,10 @@ export default {
   name: 'OperatorsTab',
   props: { storeId: { type: [Number, String], required: true } },
   data () {
-    return { items: [], loading: true, form: null, saving: false, roles: ['Servitor', 'Kasserer', 'Leder', 'Eier'], pinFor: null, pin: '', pinSaving: false };
+    return { items: [], loading: true, form: null, saving: false, roles: ['Standard', 'Godkjenner'], pinFor: null, pin: '', pinSaving: false };
   },
   computed: {
-    pinValid () { return /^\d{4,6}$/.test(this.pin); }
+    pinValid () { return /^\d{4}$/.test(this.pin); }
   },
   mounted () { this.load(); },
   methods: {
@@ -112,7 +113,7 @@ export default {
     },
     errMsg (e) { return (e && e.response && e.response.data && e.response.data.message) || (e && e.message) || 'Feil'; },
     startNew () {
-      this.form = { storeId: Number(this.storeId), displayName: '', roleLevel: 'Servitor', isActive: true, pin: '' };
+      this.form = { storeId: Number(this.storeId), displayName: '', roleLevel: 'Standard', isActive: true, pin: '' };
     },
     startEdit (it) {
       this.form = { operatorId: it.operatorId, storeId: Number(this.storeId), displayName: it.displayName, roleLevel: it.roleLevel, isActive: it.isActive };

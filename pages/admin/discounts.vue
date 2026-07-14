@@ -121,11 +121,13 @@ export default {
         this.isLoading = false
       }
     },
+    // The detail page reads the store from the query, so navigation carries it explicitly instead
+    // of relying on the header re-syncing Vuex after the page has mounted.
     createDiscount() {
-      this.$router.push('/admin/discount?id=new')
+      this.$router.push(`/admin/discount?id=new&storeId=${this.selectedStore}`)
     },
     editDiscount(discount) {
-      this.$router.push(`/admin/discount?id=${discount.id}`)
+      this.$router.push(`/admin/discount?id=${discount.id}&storeId=${this.selectedStore}`)
     },
     formatDiscountAmount(discount) {
       if (discount.type === 'Percent') {

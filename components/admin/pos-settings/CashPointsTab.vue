@@ -65,6 +65,17 @@
         <label class="crud__check"><input v-model="form.isActive" type="checkbox"> {{ $i('posset_col_active') }}</label>
       </div>
 
+      <!-- WP-B2/B3: internal-control gates (default on) and fast operator switch (default off). -->
+      <p class="crud__provider-note">
+        {{ $i('posset_cp_gates_note') }}
+      </p>
+      <div class="crud__grid">
+        <label class="crud__check"><input v-model="form.requireManagerForVoid" type="checkbox"> {{ $i('posset_cp_require_void') }}</label>
+        <label class="crud__check"><input v-model="form.requireManagerForRefund" type="checkbox"> {{ $i('posset_cp_require_refund') }}</label>
+        <label class="crud__check"><input v-model="form.requireManagerForReturn" type="checkbox"> {{ $i('posset_cp_require_return') }}</label>
+        <label class="crud__check"><input v-model="form.allowFastOperatorSwitch" type="checkbox"> {{ $i('posset_cp_fast_switch') }}</label>
+      </div>
+
       <p class="crud__provider-note">
         {{ $i('posset_cp_provider_inherit_note', { provider: effectiveProviderLabel }) }}
       </p>
@@ -163,6 +174,10 @@ export default {
         registerId: '',
         maxCashDifference: 0,
         isActive: true,
+        requireManagerForVoid: true,
+        requireManagerForRefund: true,
+        requireManagerForReturn: true,
+        allowFastOperatorSwitch: false,
         surfboardTerminalId: '',
         surfboardAutoPrintReceipt: false,
         dinteroStoreId: '',
@@ -182,6 +197,10 @@ export default {
         registerId: it.registerId,
         maxCashDifference: it.maxCashDifference,
         isActive: it.isActive,
+        requireManagerForVoid: it.requireManagerForVoid !== false,
+        requireManagerForRefund: it.requireManagerForRefund !== false,
+        requireManagerForReturn: it.requireManagerForReturn !== false,
+        allowFastOperatorSwitch: !!it.allowFastOperatorSwitch,
         surfboardTerminalId: it.surfboardTerminalId || '',
         surfboardAutoPrintReceipt: !!it.surfboardAutoPrintReceipt,
         dinteroStoreId: it.dinteroStoreId || '',
@@ -203,6 +222,10 @@ export default {
           registerId: f.registerId,
           maxCashDifference: f.maxCashDifference,
           isActive: f.isActive,
+          requireManagerForVoid: f.requireManagerForVoid,
+          requireManagerForRefund: f.requireManagerForRefund,
+          requireManagerForReturn: f.requireManagerForReturn,
+          allowFastOperatorSwitch: f.allowFastOperatorSwitch,
           surfboardTerminalId: eff === 'surfboard' ? f.surfboardTerminalId : '',
           surfboardAutoPrintReceipt: eff === 'surfboard' ? f.surfboardAutoPrintReceipt : false,
           terminalProvider: 'Auto',

@@ -75,16 +75,18 @@
                     @change="amountChange(index, 'price', $event)" />
                 </td>
                 <td>
-                  <input v-model="row.tax" class="full-width" type="number" pattern="[0-9]{2}" min="0" max="99"
-                    @change="taxChange($event, 'tax', index)">
+                  <select v-model.number="row.tax" class="full-width">
+                    <option v-for="r in vatOptions(row.tax)" :key="'tax' + r" :value="r">{{ r }} %</option>
+                  </select>
                 </td>
                 <td>
                   <currency-input v-model="row.tableAdditionalModel" currency="NOK" style="width: 90px"
                     @change="amountChange(index, 'tableAdditional', $event)" />
                 </td>
                 <td>
-                  <input v-model="row.tableTax" class="full-width" type="number" pattern="[0-9]{2}" min="0" max="99"
-                    @change="taxChange($event, 'tableTax', index)">
+                  <select v-model.number="row.tableTax" class="full-width">
+                    <option v-for="r in vatOptions(row.tableTax)" :key="'tableTax' + r" :value="r">{{ r }} %</option>
+                  </select>
                 </td>
                 <td>
                   <currency-input v-model="row.depositModel" currency="NOK" style="width: 60px"
@@ -486,17 +488,16 @@ export default {
         this.rows[rowIndex][rowKey + 'Amount'] = Math.trunc((newValue ?? 0) * 100);
       }
     },
-    taxChange(event, keyName, index) {
-      if (!event || !event.target || isNaN(parseInt(event.target.value)) || !Number.isInteger(parseInt(event.target.value))) {
-        this.rows[index][keyName] = 0;
+    // The legal Norwegian VAT rates (must match AccountingHelper on the backend). An imported
+    // sheet may carry a non-standard rate; keep it selectable so loading the grid does not
+    // silently change it — the backend rejects it with a clear message on save.
+    vatOptions(current) {
+      const rates = [0, 12, 15, 25];
+      const parsed = parseInt(current);
+      if (!isNaN(parsed) && !rates.includes(parsed)) {
+        return [parsed, ...rates];
       }
-      if (event.target.value > 99) {
-        this.rows[index][keyName] = 99;
-      }
-      if (event.target.value < 0) {
-        this.rows[index][keyName] = 0;
-      }
-      this.rows[index][keyName] = parseInt(event.target.value);
+      return rates;
     },
     getAllDisctinct(rowKey) {
       return this.rows.map(x => x[rowKey]).filter((value, index, self) => self.indexOf(value) === index && !!value);

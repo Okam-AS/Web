@@ -11,39 +11,77 @@
       </header>
 
       <div class="open-price__body">
-        <label class="open-price__label">{{ $i('pos_open_price_name') }}</label>
-        <input v-model="name" type="text" class="open-price__input" :placeholder="$i('pos_open_price_name_ph')">
+        <!-- WP-A2: one-tap presets. Picking one fills the name + goods group so the operator never
+             types; "Egendefinert" reveals the manual fields for an ad hoc item. -->
+        <template v-if="presets.length">
+          <label class="open-price__label">{{ $i('pos_open_price_preset') }}</label>
+          <div class="open-price__groups">
+            <button
+              v-for="p in presets"
+              :key="p.openPricePresetId"
+              type="button"
+              class="open-price__group"
+              :class="{ 'is-active': selectedPresetId === p.openPricePresetId }"
+              @click="pickPreset(p)"
+            >
+              <span class="open-price__group-name">{{ p.name }}</span>
+            </button>
+            <button
+              type="button"
+              class="open-price__group"
+              :class="{ 'is-active': selectedPresetId == null && manualMode }"
+              @click="enterManual"
+            >
+              <span class="open-price__group-name">{{ $i('pos_open_price_custom') }}</span>
+            </button>
+          </div>
+        </template>
+
+        <template v-if="showManualFields">
+          <label class="open-price__label">{{ $i('pos_open_price_name') }}</label>
+          <input v-model="name" type="text" class="open-price__input" :placeholder="$i('pos_open_price_name_ph')">
 
         <label class="open-price__label">{{ $i('pos_open_price_goods_group') }}</label>
-        <select v-model.number="goodsGroupId" class="open-price__input">
-          <option :value="null">
-            {{ $i('pos_open_price_pick_group') }}
-          </option>
-          <option v-for="g in goodsGroups" :key="g.goodsGroupId" :value="g.goodsGroupId">
-            {{ g.name }}<template v-if="g.code">
-              ({{ g.code }})
-            </template>
-          </option>
-        </select>
-
-        <label class="open-price__label">{{ $i('pos_open_price_vat') }}</label>
-        <!-- Profiled group: the rate follows from group x the bill's context and is read-only. -->
-        <div v-if="groupHasProfile" class="open-price__vat-readonly">
-          {{ derivedTax }}% · {{ contextLabel }}
-        </div>
-        <!-- No group selected yet, or a legacy group without a profile: operator picks the rate. -->
-        <div v-else class="open-price__vat">
+        <!-- The group is the rate selector: each button shows the rate that group gives for the
+             bill's eat-in/take-away context, so picking a group is the only VAT input needed. -->
+        <p v-if="!selectableGroups.length" class="open-price__no-groups">
+          {{ $i('pos_no_goods_groups') }}
+        </p>
+        <div class="open-price__groups">
           <button
-            v-for="rate in vatRates"
-            :key="rate"
+            v-for="g in selectableGroups"
+            :key="g.goodsGroupId"
             type="button"
-            class="open-price__vat-btn"
-            :class="{ 'is-active': tax === rate }"
-            @click="tax = rate"
+            class="open-price__group"
+            :class="{ 'is-active': goodsGroupId === g.goodsGroupId }"
+            @click="goodsGroupId = g.goodsGroupId"
           >
-            {{ rate }}%
+            <span class="open-price__group-name">{{ g.name }}</span>
+            <span class="open-price__group-rate">
+              <template v-if="hasProfile(g)">{{ rateFor(g) }} % · {{ contextLabel }}</template>
+              <template v-else>{{ $i('pos_goods_group_no_profile') }}</template>
+            </span>
           </button>
         </div>
+
+        <!-- Legacy group without a VAT profile: the operator still picks the rate manually. -->
+        <template v-if="selectedGroup && !groupHasProfile">
+          <label class="open-price__label">{{ $i('pos_open_price_vat') }}</label>
+          <div class="open-price__vat">
+            <button
+              v-for="rate in vatRates"
+              :key="rate"
+              type="button"
+              class="open-price__vat-btn"
+              :class="{ 'is-active': tax === rate }"
+              @click="tax = rate"
+            >
+              {{ rate }}%
+            </button>
+          </div>
+        </template>
+
+        </template>
 
         <label class="open-price__label">{{ $i('pos_open_price_amount') }}</label>
         <AmountPad v-model="amount" />
@@ -77,6 +115,8 @@ export default {
   components: { AmountPad },
   props: {
     goodsGroups: { type: Array, default: () => [] },
+    // Configured open-price presets (WP-A2); one tap fills name + goods group.
+    presets: { type: Array, default: () => [] },
     // The check's eat-in / take-away context ('TableDelivery' | 'SelfPickup'); drives the rate for a
     // profiled group.
     vatContext: { type: String, default: 'SelfPickup' }
@@ -88,35 +128,75 @@ export default {
       tax: 25,
       goodsGroupId: null,
       vatRates: [25, 15, 12, 0],
+      // The chosen preset (WP-A2); null means manual entry. manualMode is set once the operator
+      // explicitly picks "Egendefinert" so the manual fields show even before a group is chosen.
+      selectedPresetId: null,
+      manualMode: false,
       error: ''
     };
   },
   computed: {
+    // Manual fields show when there are no presets at all, or the operator chose "Egendefinert".
+    showManualFields () {
+      return !this.presets.length || (this.selectedPresetId == null && this.manualMode);
+    },
+    selectableGroups () {
+      return this.goodsGroups
+        .filter(g => g.isActive !== false)
+        .slice()
+        .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0) || String(a.name).localeCompare(String(b.name)));
+    },
     selectedGroup () {
       return this.goodsGroups.find(g => g.goodsGroupId === this.goodsGroupId) || null;
     },
     groupHasProfile () {
-      const g = this.selectedGroup;
-      return !!g && g.takeAwayVatPercent != null && g.eatInVatPercent != null && g.deliveryVatPercent != null;
+      return this.hasProfile(this.selectedGroup);
     },
-    // The rate the backend will apply for a profiled group: group x the bill's context. Shown as
-    // read-only text and sent as tax so the confirm price and the journal agree.
+    // The rate the backend will apply for a profiled group: group x the bill's context. Shown on
+    // the group button and sent as tax so the confirm price and the journal agree.
     derivedTax () {
-      const g = this.selectedGroup;
       if (!this.groupHasProfile) { return null; }
-      return this.vatContext === 'TableDelivery' ? g.eatInVatPercent : g.takeAwayVatPercent;
+      return this.rateFor(this.selectedGroup);
     },
     contextLabel () {
       return this.vatContext === 'TableDelivery' ? this.$i('pos_eat_in') : this.$i('pos_takeaway');
     },
     canConfirm () {
-      return this.name.trim().length > 0 && this.amount > 0 && this.goodsGroupId != null;
+      if (this.amount <= 0) { return false; }
+      // A preset carries its own name + goods group, so only a positive amount is needed.
+      if (this.selectedPresetId != null) { return true; }
+      return this.name.trim().length > 0 && this.goodsGroupId != null;
     }
   },
   methods: {
+    pickPreset (p) {
+      this.selectedPresetId = p.openPricePresetId;
+      this.manualMode = false;
+      // Prefill for display / receipt consistency; the backend derives name + group from the preset.
+      this.name = p.name;
+      this.goodsGroupId = p.goodsGroupId;
+      this.error = '';
+    },
+    enterManual () {
+      this.selectedPresetId = null;
+      this.manualMode = true;
+      this.name = '';
+      this.goodsGroupId = null;
+    },
+    hasProfile (g) {
+      return !!g && g.takeAwayVatPercent != null && g.eatInVatPercent != null && g.deliveryVatPercent != null;
+    },
+    rateFor (g) {
+      return this.vatContext === 'TableDelivery' ? g.eatInVatPercent : g.takeAwayVatPercent;
+    },
     confirm () {
       if (!this.canConfirm) {
         this.error = this.$i('pos_open_price_incomplete');
+        return;
+      }
+      // Preset path: the backend resolves name + goods group from the preset id (one tap, no typing).
+      if (this.selectedPresetId != null) {
+        this.$emit('confirm', { openPricePresetId: this.selectedPresetId, amount: this.amount });
         return;
       }
       this.$emit('confirm', {
@@ -180,6 +260,35 @@ export default {
 }
 .open-price__input:focus { outline: none; border-color: var(--pos-primary, #1bb776); }
 
+.open-price__no-groups { color: #b45309; font-size: 0.85rem; font-weight: 600; margin: 0 0 8px; }
+
+.open-price__groups {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.open-price__group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 10px 12px;
+  min-height: 56px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+  cursor: pointer;
+  text-align: left;
+}
+.open-price__group.is-active {
+  border-color: var(--pos-primary, #1bb776);
+  background: rgba(27, 183, 118, 0.08);
+}
+.open-price__group-name { font-weight: 600; color: var(--pos-ink, #292c34); font-size: 0.95rem; }
+.open-price__group-rate { font-size: 0.78rem; font-weight: 600; color: #64748b; }
+.open-price__group.is-active .open-price__group-rate { color: var(--pos-primary-dark, #159f63); }
+
 .open-price__vat { display: flex; gap: 8px; }
 .open-price__vat-btn {
   flex: 1;
@@ -192,7 +301,6 @@ export default {
   cursor: pointer;
 }
 .open-price__vat-btn.is-active { border-color: var(--pos-primary, #1bb776); background: rgba(27, 183, 118, 0.08); color: var(--pos-primary-dark, #159f63); }
-.open-price__vat-readonly { height: 44px; display: flex; align-items: center; padding: 0 14px; border: 1px solid #e2e8f0; border-radius: 10px; background: #f8fafc; font-weight: 700; color: var(--pos-ink, #292c34); }
 
 .open-price__error { color: #ef4444; font-weight: 600; font-size: 0.85rem; margin: 12px 0 0; }
 
