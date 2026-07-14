@@ -1966,6 +1966,8 @@ export default {
   posset_op_col_pin: 'PIN satt',
   posset_op_col_locked: 'Låst',
   posset_goods_new: 'Ny varegruppe',
+  posset_goods_seed: 'Opprett standardgrupper',
+  posset_goods_seeded: 'Standardgrupper opprettet.',
   posset_goods_edit: 'Rediger varegruppe',
   posset_goods_hint: 'Varegrupper brukes til SAF-T-gruppering og styrer MVA. Åpen-pris-linjer krever en varegruppe.',
   posset_goods_code_ph: 'SAF-T-kode',
