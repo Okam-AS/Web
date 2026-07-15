@@ -42,7 +42,9 @@
         </p>
       </template>
 
-      <!-- Split payment: portion overview + amount entry -->
+      <!-- Split payment: per-person by default (each tap charges an equal share of what remains);
+           an optional free-amount pad covers "I'll just pay 200". One receipt either way — the
+           VAT lives on the sale, so how the payment is divided has no fiscal effect. -->
       <div v-else-if="step === 'splitpay'" class="payment__panel">
         <div class="payment__sp-status">
           <span>{{ $i('pos_splitpay_outstanding') }}</span>
@@ -54,15 +56,36 @@
             <span>{{ priceLabel(p.amount) }}</span>
           </li>
         </ul>
-        <AmountPad v-model="splitPortion" :quick-amounts="splitQuickAmounts" />
+
+        <template v-if="!splitCustom">
+          <div class="payment__sp-persons">
+            <span>{{ $i('pos_splitpay_persons') }}</span>
+            <button type="button" class="payment__sp-step" :disabled="splitPersons <= 2 || splitParts.length > 0" @click="splitPersons--">
+              −
+            </button>
+            <span class="payment__sp-persons-val">{{ splitPersons }}</span>
+            <button type="button" class="payment__sp-step" :disabled="splitPersons >= 12 || splitParts.length > 0" @click="splitPersons++">
+              +
+            </button>
+          </div>
+          <div class="payment__sp-share">
+            <span>{{ $i('pos_splitpay_next') }} ({{ Math.min(splitParts.length + 1, splitPersons) }}/{{ splitPersons }})</span>
+            <strong>{{ priceLabel(splitSuggestedShare) }}</strong>
+          </div>
+        </template>
+        <AmountPad v-else v-model="splitPortion" :quick-amounts="splitQuickAmounts" />
+
         <div class="payment__sp-actions">
-          <button type="button" class="payment__sp-card" :disabled="!splitPortionValid" @click="splitCard">
-            {{ $i('pos_pay_card') }} {{ splitPortionValid ? priceLabel(splitPortion) : '' }}
+          <button type="button" class="payment__sp-card" :disabled="!splitChargeValid" @click="splitCard">
+            {{ $i('pos_pay_card') }} {{ splitChargeValid ? priceLabel(splitChargeAmount) : '' }}
           </button>
           <button type="button" class="payment__sp-cash" @click="step = 'splitcash'">
             {{ $i('pos_splitpay_cash_rest') }}
           </button>
         </div>
+        <button type="button" class="payment__sp-toggle" @click="toggleSplitCustom">
+          {{ splitCustom ? $i('pos_splitpay_equal') : $i('pos_splitpay_custom') }}
+        </button>
         <p v-if="error" class="payment__error">
           {{ error }}
         </p>
@@ -206,10 +229,13 @@ export default {
       smsPhone: '',
       smsResult: '',
       showRefundModal: false,
-      // Split payment (partial payments on one provider order).
+      // Split payment (partial payments on one provider order). Defaults to per-person equal
+      // shares; splitCustom switches to free-amount entry.
       splitSettlementId: '',
       splitParts: [],
       splitOutstanding: 0,
+      splitPersons: 2,
+      splitCustom: false,
       splitPortion: 0,
       splitChargedPortion: 0,
       splitCardTxId: '',
@@ -233,8 +259,18 @@ export default {
     // Split payment requires a provider with partial-payment support (Surfboard cash points);
     // the per-store rollout flag is enforced server-side and surfaces as an error on initiate.
     canSplitPay () { return !!this.pos.cashPoint.surfboardTerminalId; },
-    splitPortionValid () { return this.splitPortion > 0 && this.splitPortion <= this.splitOutstanding; },
-    // Quick presets: an equal share for 2/3/4 payers, rounded up to whole kroner and capped.
+    // Payers not yet charged in the per-person mode.
+    splitPersonsLeft () { return Math.max(1, this.splitPersons - this.splitParts.length); },
+    // The next payer's equal share of what remains, recomputed each round so rounding drift and
+    // custom portions self-correct: whole kroner while several payers remain, the exact remainder
+    // (øre included) for the last one.
+    splitSuggestedShare () {
+      if (this.splitPersonsLeft === 1) { return this.splitOutstanding; }
+      return Math.min(this.splitOutstanding, Math.ceil(this.splitOutstanding / this.splitPersonsLeft / 100) * 100);
+    },
+    splitChargeAmount () { return this.splitCustom ? this.splitPortion : this.splitSuggestedShare; },
+    splitChargeValid () { return this.splitChargeAmount > 0 && this.splitChargeAmount <= this.splitOutstanding; },
+    // Quick presets on the free-amount pad: an equal share for 2/3/4 payers, whole kroner, capped.
     splitQuickAmounts () {
       const shares = [2, 3, 4]
         .map(n => Math.min(this.splitOutstanding, Math.ceil(this.splitOutstanding / n / 100) * 100))
@@ -346,6 +382,8 @@ export default {
         const settlement = await this.pos.posSvc().OpenSettlement({ cashPointId: this.cashPointId, orderId: this.orderId });
         this.splitSettlementId = settlement.posSettlementId;
         this.applySettlement(settlement);
+        this.splitPersons = 2;
+        this.splitCustom = false;
         this.splitPortion = 0;
         this.step = 'splitpay';
       } catch (e) {
@@ -356,10 +394,15 @@ export default {
       this.splitParts = (settlement.payments || []).filter(p => p.status === 'Confirmed');
       this.splitOutstanding = settlement.outstandingAmount;
     },
-    async splitCard () {
-      if (!this.splitPortionValid) { return; }
+    toggleSplitCustom () {
+      this.splitCustom = !this.splitCustom;
+      this.splitPortion = 0;
       this.error = '';
-      this.splitChargedPortion = this.splitPortion;
+    },
+    async splitCard () {
+      if (!this.splitChargeValid) { return; }
+      this.error = '';
+      this.splitChargedPortion = this.splitChargeAmount;
       this.step = 'splitcard';
       this.cardState = 'initiating';
       this.cardMessage = '';
@@ -647,6 +690,51 @@ export default {
   font-weight: 600;
   color: var(--pos-ink, #292c34);
 }
+.payment__sp-persons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: 10px 0 6px;
+  color: #64748b;
+  font-weight: 600;
+}
+.payment__sp-step {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid #cbd5e0;
+  background: #ffffff;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--pos-ink, #292c34);
+  cursor: pointer;
+}
+.payment__sp-step:disabled { color: #cbd5e0; cursor: not-allowed; }
+.payment__sp-persons-val { font-size: 1.5rem; font-weight: 800; color: var(--pos-ink, #292c34); min-width: 34px; text-align: center; }
+.payment__sp-share {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  font-weight: 600;
+}
+.payment__sp-share strong { font-size: 1.4rem; color: var(--pos-ink, #292c34); }
+.payment__sp-toggle {
+  display: block;
+  margin: 12px auto 0;
+  background: none;
+  border: none;
+  color: #64748b;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .payment__sp-actions { display: flex; gap: 10px; margin-top: 14px; }
 .payment__sp-card,
 .payment__sp-cash {
