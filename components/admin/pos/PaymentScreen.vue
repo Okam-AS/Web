@@ -31,10 +31,65 @@
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M8 7h12m0 0l-4-4m4 4l-4 4M16 17H4m0 0l4 4m-4-4l4-4" /></svg>
           <span>{{ $i('pos_split_title') }}</span>
         </button>
+        <!-- Split PAYMENT (one receipt, several tenders): partial payments on one provider order.
+             Surfboard cash points only; the store rollout flag is enforced server-side. -->
+        <button v-if="canSplitPay" type="button" class="payment__split" @click="startSplitPay">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M12 4v16m-7-8h14" /></svg>
+          <span>{{ $i('pos_splitpay_title') }}</span>
+        </button>
         <p v-if="error" class="payment__error">
           {{ error }}
         </p>
       </template>
+
+      <!-- Split payment: portion overview + amount entry -->
+      <div v-else-if="step === 'splitpay'" class="payment__panel">
+        <div class="payment__sp-status">
+          <span>{{ $i('pos_splitpay_outstanding') }}</span>
+          <strong>{{ priceLabel(splitOutstanding) }}</strong>
+        </div>
+        <ul v-if="splitParts.length" class="payment__sp-parts">
+          <li v-for="(p, i) in splitParts" :key="i">
+            <span>{{ p.paymentType === 'Cash' ? $i('pos_pay_cash') : $i('pos_pay_card') }}</span>
+            <span>{{ priceLabel(p.amount) }}</span>
+          </li>
+        </ul>
+        <AmountPad v-model="splitPortion" :quick-amounts="splitQuickAmounts" />
+        <div class="payment__sp-actions">
+          <button type="button" class="payment__sp-card" :disabled="!splitPortionValid" @click="splitCard">
+            {{ $i('pos_pay_card') }} {{ splitPortionValid ? priceLabel(splitPortion) : '' }}
+          </button>
+          <button type="button" class="payment__sp-cash" @click="step = 'splitcash'">
+            {{ $i('pos_splitpay_cash_rest') }}
+          </button>
+        </div>
+        <p v-if="error" class="payment__error">
+          {{ error }}
+        </p>
+      </div>
+
+      <!-- Split payment: card portion in progress -->
+      <div v-else-if="step === 'splitcard'" class="payment__panel payment__panel--narrow">
+        <CardTerminalStatus
+          :state="cardState"
+          :amount="splitChargedPortion"
+          :message="cardMessage"
+          @cancel="cancelSplitCard"
+          @retry="splitCard"
+          @abandon="abandonSplitCard"
+        />
+      </div>
+
+      <!-- Split payment: cash remainder -->
+      <div v-else-if="step === 'splitcash'" class="payment__panel">
+        <CashPad :amount="splitCashDue" @confirm="onSplitCashConfirm" />
+        <p v-if="error" class="payment__error">
+          {{ error }}
+        </p>
+        <div v-if="busy" class="payment__busy">
+          <div class="payment__spinner" />
+        </div>
+      </div>
 
       <!-- Cash -->
       <div v-else-if="step === 'cash'" class="payment__panel">
@@ -113,18 +168,24 @@ import CardTerminalStatus from '~/components/admin/pos/CardTerminalStatus.vue';
 import PosReceiptView from '~/components/admin/pos/PosReceiptView.vue';
 import RefundModal from '~/components/admin/pos/RefundModal.vue';
 import SplitBillModal from '~/components/admin/pos/SplitBillModal.vue';
+import AmountPad from '~/components/admin/pos/AmountPad.vue';
 
 // Payment flow for a single check. Cash goes straight through POST /pos/payment/cash (the server
 // wraps its own one-part settlement and returns the receipt). Card initiates a terminal payment,
 // which the provider webhook auto-captures and finalises; the client polls the check until it is
-// Completed, then fetches the receipt by its journal entry id. (Split tender across card+cash is a
-// later phase — it hits the terminal auto-finalise race and Surfboard's no-partial-capture rule.)
+// Completed, then fetches the receipt by its journal entry id.
+//
+// Split PAYMENT (one receipt, several tenders) runs on Surfboard partial payments: an open
+// settlement owns one bill-level provider order; each card portion is initiated with its amount
+// and polled via the reconcile endpoint (a completed portion never completes the check), then
+// allocated to the settlement; the cash remainder is allocated last and the settlement finalizes
+// into a single journal entry with one payment line per part.
 const CARD_POLL_MS = 2000;
 const CARD_TIMEOUT_MS = 120000;
 
 export default {
   name: 'PaymentScreen',
-  components: { CashPad, CardTerminalStatus, PosReceiptView, RefundModal, SplitBillModal },
+  components: { CashPad, CardTerminalStatus, PosReceiptView, RefundModal, SplitBillModal, AmountPad },
   inject: ['pos'],
   props: {
     check: { type: Object, default: null }
@@ -144,7 +205,16 @@ export default {
       showSms: false,
       smsPhone: '',
       smsResult: '',
-      showRefundModal: false
+      showRefundModal: false,
+      // Split payment (partial payments on one provider order).
+      splitSettlementId: '',
+      splitParts: [],
+      splitOutstanding: 0,
+      splitPortion: 0,
+      splitChargedPortion: 0,
+      splitCardTxId: '',
+      splitPollTimer: null,
+      splitElapsed: 0
     };
   },
   computed: {
@@ -159,10 +229,24 @@ export default {
     total () { return this.check ? this.check.finalAmount : 0; },
     backLabel () {
       return this.step === 'method' || this.step === 'receipt' ? this.$i('common_close') : this.$i('pos_back');
-    }
+    },
+    // Split payment requires a provider with partial-payment support (Surfboard cash points);
+    // the per-store rollout flag is enforced server-side and surfaces as an error on initiate.
+    canSplitPay () { return !!this.pos.cashPoint.surfboardTerminalId; },
+    splitPortionValid () { return this.splitPortion > 0 && this.splitPortion <= this.splitOutstanding; },
+    // Quick presets: an equal share for 2/3/4 payers, rounded up to whole kroner and capped.
+    splitQuickAmounts () {
+      const shares = [2, 3, 4]
+        .map(n => Math.min(this.splitOutstanding, Math.ceil(this.splitOutstanding / n / 100) * 100))
+        .filter(a => a > 0);
+      return [...new Set(shares)];
+    },
+    // The cash remainder rounds to the nearest whole krone (the server applies the same rounding).
+    splitCashDue () { return Math.round(this.splitOutstanding / 100) * 100; }
   },
   beforeDestroy () {
     this.stopCardPoll();
+    this.stopSplitPoll();
   },
   methods: {
     // ---- Cash ----
@@ -255,11 +339,173 @@ export default {
       this.step = 'method';
     },
 
+    // ---- Split payment (one receipt, several tenders) ----
+    async startSplitPay () {
+      this.error = '';
+      try {
+        const settlement = await this.pos.posSvc().OpenSettlement({ cashPointId: this.cashPointId, orderId: this.orderId });
+        this.splitSettlementId = settlement.posSettlementId;
+        this.applySettlement(settlement);
+        this.splitPortion = 0;
+        this.step = 'splitpay';
+      } catch (e) {
+        this.error = this.pos.errMsg(e);
+      }
+    },
+    applySettlement (settlement) {
+      this.splitParts = (settlement.payments || []).filter(p => p.status === 'Confirmed');
+      this.splitOutstanding = settlement.outstandingAmount;
+    },
+    async splitCard () {
+      if (!this.splitPortionValid) { return; }
+      this.error = '';
+      this.splitChargedPortion = this.splitPortion;
+      this.step = 'splitcard';
+      this.cardState = 'initiating';
+      this.cardMessage = '';
+      this.splitElapsed = 0;
+      try {
+        const result = await this.pos.posSvc().InitiateCard({
+          cashPointId: this.cashPointId,
+          orderId: this.orderId,
+          currency: 'NOK',
+          amount: this.splitChargedPortion,
+          posSettlementId: this.splitSettlementId
+        });
+        this.splitCardTxId = result.paymentTransactionId;
+        this.cardState = 'waiting';
+        this.startSplitPoll();
+      } catch (e) {
+        this.cardState = 'error';
+        this.cardMessage = this.pos.errMsg(e);
+      }
+    },
+    startSplitPoll () {
+      this.stopSplitPoll();
+      this.splitPollTimer = setInterval(this.pollSplitCard, CARD_POLL_MS);
+    },
+    stopSplitPoll () {
+      if (this.splitPollTimer) { clearInterval(this.splitPollTimer); this.splitPollTimer = null; }
+    },
+    // A portion never completes the check, so poll the reconcile endpoint for ITS state; once
+    // captured, allocate the share to the settlement and either continue or finalize.
+    async pollSplitCard () {
+      this.splitElapsed += CARD_POLL_MS;
+      try {
+        const status = await this.pos.posSvc().ReconcileCard(this.splitCardTxId, { cashPointId: this.cashPointId });
+        if (status.state === 'Captured') {
+          this.stopSplitPoll();
+          this.cardState = 'approved';
+          await this.allocateSplitCard();
+          return;
+        }
+        if (status.state === 'Failed' || status.state === 'Declined' || status.state === 'AuthorizationVoided') {
+          this.stopSplitPoll();
+          this.error = this.$i('pos_splitpay_portion_failed');
+          this.step = 'splitpay';
+          return;
+        }
+      } catch (e) {
+        // Transient poll failure — keep trying until the timeout.
+      }
+      if (this.splitElapsed >= CARD_TIMEOUT_MS) {
+        this.stopSplitPoll();
+        this.voidSplitPortion('timeout');
+        this.error = this.$i('pos_splitpay_portion_failed');
+        this.step = 'splitpay';
+      }
+    },
+    async allocateSplitCard () {
+      try {
+        const result = await this.pos.posSvc().AddSettlementAllocation(this.splitSettlementId, {
+          cashPointId: this.cashPointId,
+          paymentType: 'SurfboardTerminal',
+          amount: this.splitChargedPortion,
+          tenderedAmount: null,
+          paymentTransactionId: this.splitCardTxId
+        });
+        this.splitParts.push({ paymentType: 'SurfboardTerminal', amount: result.amount });
+        this.splitOutstanding = result.outstandingAmount;
+        this.splitPortion = 0;
+        if (result.fullyCovered) {
+          await this.finalizeSplit();
+        } else {
+          this.step = 'splitpay';
+        }
+      } catch (e) {
+        this.error = this.pos.errMsg(e);
+        this.step = 'splitpay';
+      }
+    },
+    async onSplitCashConfirm ({ tendered }) {
+      if (this.busy) { return; }
+      this.busy = true;
+      this.error = '';
+      try {
+        await this.pos.posSvc().AddSettlementAllocation(this.splitSettlementId, {
+          cashPointId: this.cashPointId,
+          paymentType: 'Cash',
+          amount: 0,
+          tenderedAmount: tendered,
+          paymentTransactionId: null
+        });
+        // Cash always settles the remainder, so the settlement is fully covered.
+        await this.finalizeSplit();
+      } catch (e) {
+        this.error = this.pos.errMsg(e);
+      } finally {
+        this.busy = false;
+      }
+    },
+    async finalizeSplit () {
+      try {
+        this.receipt = await this.pos.posSvc().FinalizeSettlement(this.splitSettlementId, { cashPointId: this.cashPointId });
+        this.step = 'receipt';
+      } catch (e) {
+        this.error = this.pos.errMsg(e);
+        this.step = 'splitpay';
+      }
+    },
+    // Cancels a portion the cardholder has not completed (provider cancel, logged as VOIDTRANS).
+    async voidSplitPortion (reason) {
+      if (!this.splitCardTxId) { return; }
+      try {
+        await this.pos.posSvc().TerminalTimeout(this.splitCardTxId, { cashPointId: this.cashPointId, reason });
+      } catch (e) { /* best effort */ }
+    },
+    cancelSplitCard () {
+      this.stopSplitPoll();
+      this.voidSplitPortion('operator_cancel');
+      this.step = 'splitpay';
+    },
+    abandonSplitCard () {
+      this.stopSplitPoll();
+      this.step = 'splitpay';
+    },
+    // Leaving the split flow aborts the settlement: confirmed parts are reversed server-side
+    // (captured card portions refunded, cash counter-posted) so no money is retained.
+    async abortSplitPay () {
+      if (this.splitParts.length > 0 && !window.confirm(this.$i('pos_splitpay_abort_confirm'))) {
+        return;
+      }
+      try {
+        await this.pos.posSvc().AbortSettlement(this.splitSettlementId, { cashPointId: this.cashPointId });
+      } catch (e) { /* best effort; the settlement can be aborted again from the board */ }
+      this.splitSettlementId = '';
+      this.splitParts = [];
+      this.splitOutstanding = 0;
+      this.error = '';
+      this.step = 'method';
+    },
+
     // ---- Navigation ----
     onBack () {
       if (this.step === 'receipt') { this.$emit('done'); return; }
       if (this.step === 'cash') { this.step = 'method'; this.error = ''; return; }
       if (this.step === 'card') { this.cancelCard(); return; }
+      if (this.step === 'splitpay') { this.abortSplitPay(); return; }
+      if (this.step === 'splitcard') { this.cancelSplitCard(); return; }
+      if (this.step === 'splitcash') { this.step = 'splitpay'; this.error = ''; return; }
       this.$emit('close');
     },
 
@@ -380,6 +626,41 @@ export default {
 }
 .payment__split:hover { border-color: var(--pos-primary, #1bb776); }
 .payment__split svg { width: 22px; height: 22px; color: #64748b; }
+
+.payment__sp-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 12px;
+  font-size: 1.05rem;
+  color: #64748b;
+}
+.payment__sp-status strong { font-size: 1.5rem; color: var(--pos-ink, #292c34); }
+.payment__sp-parts { list-style: none; margin: 0 0 12px; padding: 0; }
+.payment__sp-parts li {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #eef2f6;
+  margin-bottom: 4px;
+  font-weight: 600;
+  color: var(--pos-ink, #292c34);
+}
+.payment__sp-actions { display: flex; gap: 10px; margin-top: 14px; }
+.payment__sp-card,
+.payment__sp-cash {
+  flex: 1;
+  height: 58px;
+  border: none;
+  border-radius: 14px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+.payment__sp-card { background: var(--pos-primary, #1bb776); color: #ffffff; }
+.payment__sp-card:disabled { background: #cbd5e0; cursor: not-allowed; }
+.payment__sp-cash { background: #ffffff; border: 1px solid #cbd5e0; color: var(--pos-ink, #292c34); }
 
 .payment__panel { max-width: 460px; margin: 0 auto; width: 100%; }
 .payment__panel--narrow { max-width: 380px; }

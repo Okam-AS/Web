@@ -289,6 +289,14 @@
                 <label><input v-model="config.klarnaEnabled" type="checkbox"> Klarna</label>
               </div>
             </div>
+            <div class="form-group">
+              <label>Delbetaling (splittet regning)</label>
+              <div class="sb-checks">
+                <!-- Rollout-port: én Surfboard-ordre per regning + én betaling per porsjon. Skru
+                     først på etter bestått fysisk terminaltest for butikken. -->
+                <label><input v-model="config.partialPaymentsEnabled" type="checkbox"> Aktiver delbetaling på terminal</label>
+              </div>
+            </div>
             <div class="sb-row">
               <div class="form-group">
                 <label>Kommisjon online (%)</label>
@@ -485,6 +493,7 @@ export default {
         mobilePayEnabled: false,
         swishEnabled: false,
         klarnaEnabled: false,
+        partialPaymentsEnabled: false,
         commissionPercentage: 0,
         terminalCommissionPercentage: 0,
         woltDeliveryFeePercent: 0,
@@ -634,6 +643,7 @@ export default {
           mobilePayEnabled: this.config.mobilePayEnabled,
           swishEnabled: this.config.swishEnabled,
           klarnaEnabled: this.config.klarnaEnabled,
+          partialPaymentsEnabled: this.config.partialPaymentsEnabled,
           commissionPercentage: Number(this.config.commissionPercentage) || 0,
           terminalCommissionPercentage: Number(this.config.terminalCommissionPercentage) || 0,
           woltDeliveryFeePercent: Number(this.config.woltDeliveryFeePercent) || 0,
