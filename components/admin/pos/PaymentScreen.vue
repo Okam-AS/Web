@@ -79,7 +79,7 @@
           <button type="button" class="payment__sp-card" :disabled="!splitChargeValid" @click="splitCard">
             {{ $i('pos_pay_card') }} {{ splitChargeValid ? priceLabel(splitChargeAmount) : '' }}
           </button>
-          <button type="button" class="payment__sp-cash" @click="step = 'splitcash'">
+          <button type="button" class="payment__sp-cash" @click="splitChooseCash">
             {{ $i('pos_splitpay_cash_rest') }}
           </button>
         </div>
@@ -253,6 +253,7 @@ export default {
       splitChargedPortion: 0,
       splitCardTxId: '',
       splitPollTimer: null,
+      splitPollBusy: false,
       splitElapsed: 0
     };
   },
@@ -420,7 +421,6 @@ export default {
     },
     splitCard () {
       if (!this.splitChargeValid) { return; }
-      this.splitCashFirstAmount = 0;
       return this.initiateSplitPortion(this.splitChargeAmount);
     },
     // "I have a 200 note": take the typed amount in cash and let the card cover the rest. The card
@@ -428,14 +428,20 @@ export default {
     // remainder-settling allocation; on card approval the cash records automatically.
     splitCashFirstCard () {
       if (!this.splitCashFirstValid) { return; }
-      this.splitCashFirstAmount = this.splitPortion;
-      return this.initiateSplitPortion(this.splitOutstanding - this.splitPortion);
+      return this.initiateSplitPortion(this.splitOutstanding - this.splitPortion, this.splitPortion);
     },
     retrySplitCard () {
-      return this.initiateSplitPortion(this.splitChargedPortion);
+      return this.initiateSplitPortion(this.splitChargedPortion, this.splitCashFirstAmount);
     },
-    async initiateSplitPortion (amount) {
+    // Single write-point for the pending cash-first amount: every initiate sets it (0 for a plain
+    // card portion), so no exit path can leave a stale value that would auto-record a phantom cash
+    // remainder on a later, unrelated portion.
+    async initiateSplitPortion (amount, cashFirstAmount = 0) {
       this.error = '';
+      this.splitCashFirstAmount = cashFirstAmount;
+      // Clear the previous portion's id up front: if the initiate below throws before the new id is
+      // assigned, a cancel must not void the PREVIOUS, already-allocated portion.
+      this.splitCardTxId = '';
       this.splitChargedPortion = amount;
       this.step = 'splitcard';
       this.cardState = 'initiating';
@@ -467,42 +473,52 @@ export default {
     // A portion never completes the check, so poll the reconcile endpoint for ITS state; once
     // captured, allocate the share to the settlement and either continue or finalize.
     async pollSplitCard () {
-      this.splitElapsed += CARD_POLL_MS;
+      // Reentrancy guard: a reconcile slower than the poll interval must not let two overlapping
+      // invocations both observe 'Captured' and allocate the same portion twice (the server also
+      // dedupes, but the race should never leave the client).
+      if (this.splitPollBusy) { return; }
+      this.splitPollBusy = true;
       try {
-        const status = await this.pos.posSvc().ReconcileCard(this.splitCardTxId, { cashPointId: this.cashPointId });
-        if (status.state === 'Captured') {
-          this.stopSplitPoll();
-          this.cardState = 'approved';
-          await this.allocateSplitCard();
-          return;
+        this.splitElapsed += CARD_POLL_MS;
+        try {
+          const status = await this.pos.posSvc().ReconcileCard(this.splitCardTxId, { cashPointId: this.cashPointId });
+          if (status.state === 'Captured') {
+            this.stopSplitPoll();
+            this.cardState = 'approved';
+            await this.allocateSplitCard();
+            return;
+          }
+          if (status.state === 'Failed' || status.state === 'Declined' || status.state === 'AuthorizationVoided') {
+            this.stopSplitPoll();
+            this.error = this.$i('pos_splitpay_portion_failed');
+            this.step = 'splitpay';
+            return;
+          }
+        } catch (e) {
+          // Transient poll failure — keep trying until the timeout.
         }
-        if (status.state === 'Failed' || status.state === 'Declined' || status.state === 'AuthorizationVoided') {
+        if (this.splitElapsed >= CARD_TIMEOUT_MS) {
           this.stopSplitPoll();
-          this.splitCashFirstAmount = 0;
+          this.voidSplitPortion('timeout');
           this.error = this.$i('pos_splitpay_portion_failed');
           this.step = 'splitpay';
-          return;
         }
-      } catch (e) {
-        // Transient poll failure — keep trying until the timeout.
-      }
-      if (this.splitElapsed >= CARD_TIMEOUT_MS) {
-        this.stopSplitPoll();
-        this.voidSplitPortion('timeout');
-        this.splitCashFirstAmount = 0;
-        this.error = this.$i('pos_splitpay_portion_failed');
-        this.step = 'splitpay';
+      } finally {
+        this.splitPollBusy = false;
       }
     },
     async allocateSplitCard () {
       try {
+        const txId = this.splitCardTxId;
         const result = await this.pos.posSvc().AddSettlementAllocation(this.splitSettlementId, {
           cashPointId: this.cashPointId,
           paymentType: 'SurfboardTerminal',
           amount: this.splitChargedPortion,
           tenderedAmount: null,
-          paymentTransactionId: this.splitCardTxId
+          paymentTransactionId: txId
         });
+        // The portion is settled: forget its id so no later cancel/timeout can void it.
+        this.splitCardTxId = '';
         this.splitParts.push({ paymentType: 'SurfboardTerminal', amount: result.amount });
         this.splitOutstanding = result.outstandingAmount;
         this.splitPortion = 0;
@@ -517,10 +533,18 @@ export default {
           this.step = 'splitpay';
         }
       } catch (e) {
-        this.splitCashFirstAmount = 0;
         this.error = this.pos.errMsg(e);
         this.step = 'splitpay';
       }
+    },
+    // A sub-50-øre remainder rounds to a zero cash due, which the CashPad cannot confirm; allocate
+    // the zero-cash part directly (the server books the øre difference as the rounding line).
+    splitChooseCash () {
+      if (this.splitCashDue === 0 && this.splitOutstanding > 0) {
+        return this.onSplitCashConfirm({ tendered: 0 });
+      }
+      this.step = 'splitcash';
+      this.error = '';
     },
     async onSplitCashConfirm ({ tendered }) {
       if (this.busy) { return; }
@@ -560,15 +584,23 @@ export default {
       } catch (e) { /* best effort */ }
     },
     cancelSplitCard () {
+      // The portion has been approved and its allocation (and possibly the automatic cash leg) is
+      // in flight: cancelling now would void an allocated portion and skip the cash remainder.
+      if (this.cardState === 'approved') { return; }
       this.stopSplitPoll();
-      this.splitCashFirstAmount = 0;
       this.voidSplitPortion('operator_cancel');
       this.step = 'splitpay';
     },
-    abandonSplitCard () {
+    async abandonSplitCard () {
+      if (this.cardState === 'approved') { return; }
       this.stopSplitPoll();
-      this.splitCashFirstAmount = 0;
       this.step = 'splitpay';
+      // The abandoned portion may still complete on the terminal: refresh the settlement so the
+      // parts/outstanding shown reflect the server truth rather than a stale client figure.
+      try {
+        const settlement = await this.pos.posSvc().GetSettlement(this.splitSettlementId);
+        this.applySettlement(settlement);
+      } catch (e) { /* best effort */ }
     },
     // Leaving the split flow aborts the settlement: confirmed parts are reversed server-side
     // (captured card portions refunded, cash counter-posted) so no money is retained.
@@ -578,7 +610,12 @@ export default {
       }
       try {
         await this.pos.posSvc().AbortSettlement(this.splitSettlementId, { cashPointId: this.cashPointId });
-      } catch (e) { /* best effort; the settlement can be aborted again from the board */ }
+      } catch (e) {
+        // The abort did NOT happen (captured parts may still be held): stay here and say so, so the
+        // operator retries instead of walking away believing everything was reversed.
+        this.error = this.pos.errMsg(e);
+        return;
+      }
       this.splitSettlementId = '';
       this.splitParts = [];
       this.splitOutstanding = 0;
