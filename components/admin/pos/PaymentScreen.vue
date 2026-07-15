@@ -270,9 +270,12 @@ export default {
     backLabel () {
       return this.step === 'method' || this.step === 'receipt' ? this.$i('common_close') : this.$i('pos_back');
     },
-    // Split payment requires a provider with partial-payment support (Surfboard cash points);
-    // the per-store rollout flag is enforced server-side and surfaces as an error on initiate.
-    canSplitPay () { return !!this.pos.cashPoint.surfboardTerminalId; },
+    // Split payment requires a provider with partial-payment support (Surfboard cash points) AND
+    // the store's rollout flag, projected onto the cash point by the backend. The server enforces
+    // the flag at initiate regardless of what is shown here.
+    canSplitPay () {
+      return !!this.pos.cashPoint.surfboardTerminalId && this.pos.cashPoint.partialPaymentsEnabled === true;
+    },
     // Payers not yet charged in the per-person mode.
     splitPersonsLeft () { return Math.max(1, this.splitPersons - this.splitParts.length); },
     // The next payer's equal share of what remains, recomputed each round so rounding drift and
