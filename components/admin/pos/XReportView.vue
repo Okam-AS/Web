@@ -8,6 +8,10 @@
     </header>
 
     <div class="xreport__meta">
+      <!-- Enterprise identity (kassasystemforskrifta § 2-8-2 bokstav b). -->
+      <div v-if="report.sellerLegalName" class="xreport__meta-row xreport__meta-row--seller">
+        <span>{{ report.sellerLegalName }}</span><span>{{ report.sellerOrgNumber }}</span>
+      </div>
       <div class="xreport__meta-row">
         <span>{{ $i('pos_receipt_register') }}</span><span>{{ report.registerId }}</span>
       </div>
@@ -16,6 +20,9 @@
       </div>
       <div class="xreport__meta-row">
         <span>{{ $i('pos_report_seq') }}</span><span>{{ report.fromSequenceNumber }}–{{ report.toSequenceNumber }}</span>
+      </div>
+      <div class="xreport__meta-row">
+        <span>{{ $i('pos_report_receipt_count') }}</span><span>{{ report.receiptCount }}</span>
       </div>
     </div>
 
@@ -49,6 +56,9 @@
       <div class="xreport__row">
         <span>{{ $i('pos_report_drawer_opens') }}</span><span>{{ report.drawerOpenCount }}</span>
       </div>
+      <div v-if="report.manualDrawerOpenCount" class="xreport__row xreport__row--muted">
+        <span>· {{ $i('pos_report_manual_opens') }}</span><span>{{ report.manualDrawerOpenCount }}</span>
+      </div>
     </section>
 
     <!-- MVA samenstilling -->
@@ -68,20 +78,26 @@
       </div>
     </section>
 
-    <!-- GRAND TOTAL (from day 1) -->
+    <!-- GRAND TOTAL (from day 1): sal, retur og netto (§ 2-8-2 bokstav x/y/z). -->
     <section class="xreport__section">
       <h3>{{ $i('pos_report_grand_total') }}</h3>
       <div class="xreport__row">
-        <span>{{ $i('pos_report_net') }}</span><span>{{ priceLabel(report.grandTotalNet) }}</span>
+        <span>{{ $i('pos_report_sales') }}</span><span>{{ priceLabel(report.grandTotalSales) }}</span>
       </div>
       <div class="xreport__row">
-        <span>{{ $i('pos_report_gross') }}</span><span>{{ priceLabel(report.grandTotalSales) }}</span>
+        <span>{{ $i('pos_report_return') }}</span><span>−{{ priceLabel(report.grandTotalReturns) }}</span>
+      </div>
+      <div class="xreport__row xreport__row--sub">
+        <span>{{ $i('pos_report_net') }}</span><span>{{ priceLabel(report.grandTotalNet) }}</span>
       </div>
       <div class="xreport__row">
         <span>{{ $i('pos_report_negative_sales') }}</span><span>−{{ priceLabel(report.grandTotalNegativeSales) }}</span>
       </div>
       <div class="xreport__row">
         <span>{{ $i('pos_report_errors') }}</span><span>−{{ priceLabel(report.grandTotalErrors) }}</span>
+      </div>
+      <div v-if="report.grandTotalTips" class="xreport__row">
+        <span>{{ $i('pos_report_tips') }}</span><span>{{ priceLabel(report.grandTotalTips) }}</span>
       </div>
     </section>
 
@@ -90,6 +106,10 @@
       <h3>{{ $i('pos_report_received_payment') }}</h3>
       <div v-for="(p, i) in report.paymentMeans" :key="i" class="xreport__row">
         <span>{{ paymentLabel(p.paymentType) }} ({{ p.count }})</span><span>{{ priceLabel(p.amount) }}</span>
+      </div>
+      <!-- Tips (§ 2-8-2 bokstav i): received via the means above but outside the sales figures. -->
+      <div v-if="report.tipsAmount" class="xreport__row xreport__row--muted">
+        <span>· {{ $i('pos_report_tips') }} ({{ report.tipsCount }})</span><span>{{ priceLabel(report.tipsAmount) }}</span>
       </div>
       <div class="xreport__row xreport__row--sub">
         <span>{{ $i('pos_report_total_received') }}</span><span>{{ priceLabel(receivedTotal) }}</span>
@@ -105,33 +125,44 @@
       <div class="xreport__row">
         <span>{{ $i('pos_report_total_return') }} ({{ report.referencedReturnsCount }})</span><span>{{ priceLabel(report.referencedReturnsAmount) }}</span>
       </div>
+      <div class="xreport__row">
+        <span>{{ $i('pos_report_voids') }} ({{ report.abortedSalesCount }})</span><span>{{ priceLabel(report.abortedSalesAmount) }}</span>
+      </div>
+      <div class="xreport__row">
+        <span>{{ $i('pos_report_line_corrections') }} ({{ report.lineCorrectionCount }})</span><span>{{ priceLabel(report.lineCorrectionAmount) }}</span>
+      </div>
       <div class="xreport__row xreport__row--sub">
         <span>{{ $i('pos_report_total_corrections') }}</span><span>{{ priceLabel(correctionsTotal) }}</span>
       </div>
+      <!-- Special documents with count AND amount (§ 2-8-2 bokstav n / o / w). -->
       <div class="xreport__row">
-        <span>{{ $i('pos_report_receipt_copies') }}</span><span>{{ report.copyReceiptCount }}</span>
+        <span>{{ $i('pos_report_receipt_copies') }} ({{ report.copyReceiptCount }})</span><span>{{ priceLabel(report.copyReceiptAmount) }}</span>
       </div>
       <div class="xreport__row">
-        <span>{{ $i('pos_report_proforma') }}</span><span>{{ report.provisionalReceiptCount }}</span>
+        <span>{{ $i('pos_report_proforma') }} ({{ report.provisionalReceiptCount }})</span><span>{{ priceLabel(report.provisionalReceiptAmount) }}</span>
+      </div>
+      <div class="xreport__row">
+        <span>{{ $i('pos_report_training') }} ({{ report.trainingCount }})</span><span>{{ priceLabel(report.trainingAmount) }}</span>
       </div>
     </section>
 
-    <!-- Cash reconciliation (Z only) -->
-    <section v-if="isZ" class="xreport__section">
+    <!-- Cash reconciliation: the opening float shows on both X (the running day, § 2-8-2
+         bokstav k) and Z; the count/difference rows belong to the settled day (Z). -->
+    <section v-if="isZ || report.startFloat != null" class="xreport__section">
       <h3>{{ $i('pos_report_cash_recon') }}</h3>
       <div class="xreport__row">
         <span>{{ $i('pos_day_start_float') }}</span><span>{{ priceLabel(report.startFloat) }}</span>
       </div>
-      <div class="xreport__row">
+      <div v-if="isZ" class="xreport__row">
         <span>{{ $i('pos_report_cash_expected') }}</span><span>{{ priceLabel(report.cashExpected) }}</span>
       </div>
-      <div class="xreport__row">
+      <div v-if="isZ" class="xreport__row">
         <span>{{ $i('pos_report_cash_counted') }}</span><span>{{ priceLabel(report.cashCounted) }}</span>
       </div>
-      <div class="xreport__row xreport__row--diff" :class="{ 'is-off': report.cashDifference }">
+      <div v-if="isZ" class="xreport__row xreport__row--diff" :class="{ 'is-off': report.cashDifference }">
         <span>{{ $i('pos_report_cash_diff') }}</span><span>{{ priceLabel(report.cashDifference) }}</span>
       </div>
-      <div v-if="report.bankDepositAmount" class="xreport__row">
+      <div v-if="isZ && report.bankDepositAmount" class="xreport__row">
         <span>{{ $i('pos_report_bank_deposit') }}</span><span>{{ priceLabel(report.bankDepositAmount) }}</span>
       </div>
     </section>
@@ -207,6 +238,7 @@ export default {
 
 .xreport__meta { padding-bottom: 12px; border-bottom: 1px dashed #cbd5e0; margin-bottom: 12px; }
 .xreport__meta-row { display: flex; justify-content: space-between; color: #64748b; font-size: 0.88rem; padding: 2px 0; }
+.xreport__meta-row--seller { color: var(--pos-ink, #292c34); font-weight: 700; }
 
 .xreport__section { margin-bottom: 16px; }
 .xreport__section h3 { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #94a3b8; margin: 0 0 8px; }
