@@ -57,6 +57,15 @@
           </li>
         </ul>
 
+        <!-- A captured portion whose allocation failed: the money is taken, so the only valid
+             actions are adding it to the settlement here or aborting the whole settlement. -->
+        <div v-if="splitPendingAllocation" class="payment__sp-pending">
+          <p>{{ $i('pos_splitpay_pending_allocation') }}</p>
+          <button type="button" class="payment__sp-card" @click="retryPendingAllocation">
+            {{ $i('pos_splitpay_pending_add') }} {{ priceLabel(splitChargedPortion) }}
+          </button>
+        </div>
+
         <template v-if="!splitCustom">
           <div class="payment__sp-persons">
             <span>{{ $i('pos_splitpay_persons') }}</span>
@@ -76,10 +85,10 @@
         <AmountPad v-else v-model="splitPortion" :quick-amounts="splitQuickAmounts" />
 
         <div v-if="!splitCustom" class="payment__sp-actions">
-          <button type="button" class="payment__sp-card" :disabled="!splitChargeValid" @click="splitCard">
+          <button type="button" class="payment__sp-card" :disabled="!splitChargeValid || splitPendingAllocation" @click="splitCard">
             {{ $i('pos_pay_card') }} {{ splitChargeValid ? priceLabel(splitChargeAmount) : '' }}
           </button>
-          <button type="button" class="payment__sp-cash" @click="splitChooseCash">
+          <button type="button" class="payment__sp-cash" :disabled="splitPendingAllocation" @click="splitChooseCash">
             {{ $i('pos_splitpay_cash_rest') }}
           </button>
         </div>
@@ -88,10 +97,10 @@
              outstanding − amount first, then records the cash remainder — same net result, and the
              settlement's cash-rounds-the-remainder invariant holds. -->
         <div v-else class="payment__sp-actions">
-          <button type="button" class="payment__sp-card" :disabled="!splitChargeValid" @click="splitCard">
+          <button type="button" class="payment__sp-card" :disabled="!splitChargeValid || splitPendingAllocation" @click="splitCard">
             {{ $i('pos_pay_card') }} {{ splitChargeValid ? priceLabel(splitChargeAmount) : '' }}
           </button>
-          <button type="button" class="payment__sp-cash" :disabled="!splitCashFirstValid" @click="splitCashFirstCard">
+          <button type="button" class="payment__sp-cash" :disabled="!splitCashFirstValid || splitPendingAllocation" @click="splitCashFirstCard">
             {{ $i('pos_splitpay_cash_first') }} {{ splitCashFirstValid ? priceLabel(splitPortion) : '' }}
           </button>
         </div>
@@ -254,7 +263,16 @@ export default {
       splitCardTxId: '',
       splitPollTimer: null,
       splitPollBusy: false,
-      splitElapsed: 0
+      // Wall-clock start of the current card portion; the timeout must not stretch when slow
+      // reconciles make the poll skip ticks.
+      splitStartedAt: 0,
+      // Generation token for the split flow: every await checks it afterwards, so a cancel (or a
+      // new initiate) invalidates in-flight continuations instead of letting them resurrect a
+      // portion or resume a flow the operator already left.
+      splitEpoch: 0,
+      // A captured portion whose allocation call failed: the money is taken, so it is kept as a
+      // retryable pending allocation instead of being orphaned by the next charge.
+      splitPendingAllocation: false
     };
   },
   computed: {
@@ -305,6 +323,9 @@ export default {
   beforeDestroy () {
     this.stopCardPoll();
     this.stopSplitPoll();
+    // Invalidate in-flight split continuations; a capture that raced the teardown still books
+    // itself through the stale-portion path, but nothing resumes the flow on a dead component.
+    this.splitEpoch++;
   },
   methods: {
     // ---- Cash ----
@@ -402,12 +423,15 @@ export default {
       this.error = '';
       try {
         const settlement = await this.pos.posSvc().OpenSettlement({ cashPointId: this.cashPointId, orderId: this.orderId });
+        this.splitEpoch++;
         this.splitSettlementId = settlement.posSettlementId;
         this.applySettlement(settlement);
         this.splitPersons = 2;
         this.splitCustom = false;
         this.splitPortion = 0;
         this.splitCashFirstAmount = 0;
+        this.splitCardTxId = '';
+        this.splitPendingAllocation = false;
         this.step = 'splitpay';
       } catch (e) {
         this.error = this.pos.errMsg(e);
@@ -423,14 +447,14 @@ export default {
       this.error = '';
     },
     splitCard () {
-      if (!this.splitChargeValid) { return; }
+      if (!this.splitChargeValid || this.splitPendingAllocation) { return; }
       return this.initiateSplitPortion(this.splitChargeAmount);
     },
     // "I have a 200 note": take the typed amount in cash and let the card cover the rest. The card
     // is charged first (outstanding − cash) so the cash part stays the settlement's final,
     // remainder-settling allocation; on card approval the cash records automatically.
     splitCashFirstCard () {
-      if (!this.splitCashFirstValid) { return; }
+      if (!this.splitCashFirstValid || this.splitPendingAllocation) { return; }
       return this.initiateSplitPortion(this.splitOutstanding - this.splitPortion, this.splitPortion);
     },
     retrySplitCard () {
@@ -440,6 +464,8 @@ export default {
     // card portion), so no exit path can leave a stale value that would auto-record a phantom cash
     // remainder on a later, unrelated portion.
     async initiateSplitPortion (amount, cashFirstAmount = 0) {
+      if (this.splitPendingAllocation) { return; }
+      const epoch = ++this.splitEpoch;
       this.error = '';
       this.splitCashFirstAmount = cashFirstAmount;
       // Clear the previous portion's id up front: if the initiate below throws before the new id is
@@ -449,7 +475,7 @@ export default {
       this.step = 'splitcard';
       this.cardState = 'initiating';
       this.cardMessage = '';
-      this.splitElapsed = 0;
+      this.splitStartedAt = Date.now();
       try {
         const result = await this.pos.posSvc().InitiateCard({
           cashPointId: this.cashPointId,
@@ -458,10 +484,18 @@ export default {
           amount,
           posSettlementId: this.splitSettlementId
         });
+        if (epoch !== this.splitEpoch) {
+          // The operator left this attempt while the initiate was in flight. The portion that was
+          // just created must not resurrect (assigning it and starting a poll here would charge a
+          // "cancelled" payment) — kill it on the terminal instead.
+          this.voidPortionById(result.paymentTransactionId, 'operator_cancel');
+          return;
+        }
         this.splitCardTxId = result.paymentTransactionId;
         this.cardState = 'waiting';
         this.startSplitPoll();
       } catch (e) {
+        if (epoch !== this.splitEpoch) { return; }
         this.cardState = 'error';
         this.cardMessage = this.pos.errMsg(e);
       }
@@ -481,10 +515,21 @@ export default {
       // dedupes, but the race should never leave the client).
       if (this.splitPollBusy) { return; }
       this.splitPollBusy = true;
+      const epoch = this.splitEpoch;
+      const txId = this.splitCardTxId;
+      const amount = this.splitChargedPortion;
       try {
-        this.splitElapsed += CARD_POLL_MS;
         try {
-          const status = await this.pos.posSvc().ReconcileCard(this.splitCardTxId, { cashPointId: this.cashPointId });
+          const status = await this.pos.posSvc().ReconcileCard(txId, { cashPointId: this.cashPointId });
+          if (epoch !== this.splitEpoch) {
+            // The operator cancelled while this reconcile was in flight. A capture that raced the
+            // cancel is real money and must still be booked — but quietly, without resuming the
+            // cancelled flow (no auto-finalize, no pending cash leg).
+            if (status.state === 'Captured') {
+              await this.allocateStalePortion(txId, amount);
+            }
+            return;
+          }
           if (status.state === 'Captured') {
             this.stopSplitPoll();
             this.cardState = 'approved';
@@ -499,8 +544,11 @@ export default {
           }
         } catch (e) {
           // Transient poll failure — keep trying until the timeout.
+          if (epoch !== this.splitEpoch) { return; }
         }
-        if (this.splitElapsed >= CARD_TIMEOUT_MS) {
+        // Wall-clock timeout: counting ticks would under-count when slow reconciles make the
+        // reentrancy guard skip them, stretching the cutoff far past its intent.
+        if (Date.now() - this.splitStartedAt >= CARD_TIMEOUT_MS) {
           this.stopSplitPoll();
           this.voidSplitPortion('timeout');
           this.error = this.$i('pos_splitpay_portion_failed');
@@ -511,8 +559,8 @@ export default {
       }
     },
     async allocateSplitCard () {
+      const txId = this.splitCardTxId;
       try {
-        const txId = this.splitCardTxId;
         const result = await this.pos.posSvc().AddSettlementAllocation(this.splitSettlementId, {
           cashPointId: this.cashPointId,
           paymentType: 'SurfboardTerminal',
@@ -522,6 +570,7 @@ export default {
         });
         // The portion is settled: forget its id so no later cancel/timeout can void it.
         this.splitCardTxId = '';
+        this.splitPendingAllocation = false;
         this.splitParts.push({ paymentType: 'SurfboardTerminal', amount: result.amount });
         this.splitOutstanding = result.outstandingAmount;
         this.splitPortion = 0;
@@ -536,13 +585,73 @@ export default {
           this.step = 'splitpay';
         }
       } catch (e) {
-        this.error = this.pos.errMsg(e);
-        this.step = 'splitpay';
+        await this.recoverAllocationFailure(txId, e);
       }
     },
+    // The card is captured but the allocation call failed (lost response, transient server error).
+    // The money is taken, so this must never dead-end in "abort everything": refresh the server
+    // truth — if the part actually landed, continue as a success; otherwise keep the portion as a
+    // pending allocation the operator retries from the split screen (the finalize stray-guard
+    // blocks the settlement until it is added or aborted).
+    async recoverAllocationFailure (txId, e) {
+      try {
+        const settlement = await this.pos.posSvc().GetSettlement(this.splitSettlementId);
+        this.applySettlement(settlement);
+        const landed = (settlement.payments || [])
+          .some(p => p.status === 'Confirmed' && p.paymentTransactionId === txId);
+        if (landed) {
+          // The allocation succeeded server-side and only the response was lost (or the retry was
+          // refused as a duplicate) — continue exactly like the success path.
+          this.splitCardTxId = '';
+          this.splitPendingAllocation = false;
+          this.error = '';
+          this.splitPortion = 0;
+          if (settlement.outstandingAmount === 0) {
+            await this.finalizeSplit();
+          } else if (this.splitCashFirstAmount > 0) {
+            const cash = this.splitCashFirstAmount;
+            this.splitCashFirstAmount = 0;
+            await this.onSplitCashConfirm({ tendered: cash });
+          } else {
+            this.step = 'splitpay';
+          }
+          return;
+        }
+      } catch (e2) { /* fall through to the pending state */ }
+      this.splitPendingAllocation = true;
+      this.error = this.pos.errMsg(e);
+      this.step = 'splitpay';
+    },
+    // The "legg den til" action the server's stray-guard message asks for: re-allocate the
+    // captured portion kept from the failed attempt.
+    retryPendingAllocation () {
+      if (!this.splitCardTxId) { this.splitPendingAllocation = false; return; }
+      this.error = '';
+      return this.allocateSplitCard();
+    },
+    // Books a captured portion after its flow was cancelled (the void raced the tap and lost).
+    // Allocation only: never auto-finalizes and never records a cash leg — the part appears with a
+    // notice and the operator stays in control of what happens next.
+    async allocateStalePortion (txId, amount) {
+      if (!this.splitSettlementId) { return; }
+      try {
+        const result = await this.pos.posSvc().AddSettlementAllocation(this.splitSettlementId, {
+          cashPointId: this.cashPointId,
+          paymentType: 'SurfboardTerminal',
+          amount,
+          tenderedAmount: null,
+          paymentTransactionId: txId
+        });
+        this.splitParts.push({ paymentType: 'SurfboardTerminal', amount: result.amount });
+        this.splitOutstanding = result.outstandingAmount;
+        this.error = this.$i('pos_splitpay_portion_added_late');
+      } catch (e) { /* not captured after all, already allocated, or the settlement is closed */ }
+    },
     // A sub-50-øre remainder rounds to a zero cash due, which the CashPad cannot confirm; allocate
-    // the zero-cash part directly (the server books the øre difference as the rounding line).
+    // the zero-cash part directly (the server books the øre difference as the rounding line and
+    // requires no open trading day for a part that moves no coins).
     splitChooseCash () {
+      if (this.splitPendingAllocation) { return; }
       if (this.splitCashDue === 0 && this.splitOutstanding > 0) {
         return this.onSplitCashConfirm({ tendered: 0 });
       }
@@ -580,22 +689,28 @@ export default {
       }
     },
     // Cancels a portion the cardholder has not completed (provider cancel, logged as VOIDTRANS).
-    async voidSplitPortion (reason) {
-      if (!this.splitCardTxId) { return; }
+    async voidPortionById (txId, reason) {
+      if (!txId) { return; }
       try {
-        await this.pos.posSvc().TerminalTimeout(this.splitCardTxId, { cashPointId: this.cashPointId, reason });
+        await this.pos.posSvc().TerminalTimeout(txId, { cashPointId: this.cashPointId, reason });
       } catch (e) { /* best effort */ }
+    },
+    voidSplitPortion (reason) {
+      return this.voidPortionById(this.splitCardTxId, reason);
     },
     cancelSplitCard () {
       // The portion has been approved and its allocation (and possibly the automatic cash leg) is
       // in flight: cancelling now would void an allocated portion and skip the cash remainder.
       if (this.cardState === 'approved') { return; }
+      this.splitEpoch++;
       this.stopSplitPoll();
       this.voidSplitPortion('operator_cancel');
+      this.splitCardTxId = '';
       this.step = 'splitpay';
     },
     async abandonSplitCard () {
       if (this.cardState === 'approved') { return; }
+      this.splitEpoch++;
       this.stopSplitPoll();
       this.step = 'splitpay';
       // The abandoned portion may still complete on the terminal: refresh the settlement so the
@@ -606,25 +721,44 @@ export default {
       } catch (e) { /* best effort */ }
     },
     // Leaving the split flow aborts the settlement: confirmed parts are reversed server-side
-    // (captured card portions refunded, cash counter-posted) so no money is retained.
+    // (captured card portions refunded, cash counter-posted, stray portions swept) so no money is
+    // retained or left takeable.
     async abortSplitPay () {
-      if (this.splitParts.length > 0 && !window.confirm(this.$i('pos_splitpay_abort_confirm'))) {
+      if ((this.splitParts.length > 0 || this.splitPendingAllocation) &&
+        !window.confirm(this.$i('pos_splitpay_abort_confirm'))) {
         return;
       }
       try {
         await this.pos.posSvc().AbortSettlement(this.splitSettlementId, { cashPointId: this.cashPointId });
       } catch (e) {
-        // The abort did NOT happen (captured parts may still be held): stay here and say so, so the
-        // operator retries instead of walking away believing everything was reversed.
-        this.error = this.pos.errMsg(e);
-        return;
+        // The abort may have succeeded without us seeing it (lost response, a double tap, another
+        // device): only a settlement that is genuinely still open keeps us here — retrying against
+        // an already-closed one throws forever and would trap the operator on a screen whose only
+        // exit is this abort. When it IS still open, stay and say so, so the operator retries
+        // instead of walking away believing everything was reversed.
+        if (await this.isSettlementStillOpen()) {
+          this.error = this.pos.errMsg(e);
+          return;
+        }
       }
+      this.splitEpoch++;
       this.splitSettlementId = '';
       this.splitParts = [];
       this.splitOutstanding = 0;
       this.splitCashFirstAmount = 0;
+      this.splitCardTxId = '';
+      this.splitPendingAllocation = false;
       this.error = '';
       this.step = 'method';
+    },
+    async isSettlementStillOpen () {
+      try {
+        const settlement = await this.pos.posSvc().GetSettlement(this.splitSettlementId);
+        return settlement.status === 'Open';
+      } catch (e) {
+        // Unknown: assume open so the operator keeps the retry path rather than losing it.
+        return true;
+      }
     },
 
     // ---- Navigation ----
@@ -775,6 +909,18 @@ export default {
   margin-bottom: 4px;
   font-weight: 600;
   color: var(--pos-ink, #292c34);
+}
+.payment__sp-pending {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid #fbbf24;
+  background: #fef3c7;
+  margin-bottom: 12px;
+}
+.payment__sp-pending p {
+  margin: 0 0 8px;
+  font-weight: 600;
+  color: #92400e;
 }
 .payment__sp-persons {
   display: flex;
