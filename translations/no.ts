@@ -1872,6 +1872,7 @@ export default {
   pos_splitpay_persons: 'Antall personer',
   pos_splitpay_next: 'Neste person',
   pos_splitpay_custom: 'Valgfritt beløp',
+  pos_splitpay_cash_first: 'Kontant + rest på kort',
   pos_splitpay_equal: 'Likt per person',
   pos_splitpay_outstanding: 'Gjenstår',
   pos_splitpay_cash_rest: 'Kontant (rest)',

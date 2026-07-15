@@ -75,12 +75,24 @@
         </template>
         <AmountPad v-else v-model="splitPortion" :quick-amounts="splitQuickAmounts" />
 
-        <div class="payment__sp-actions">
+        <div v-if="!splitCustom" class="payment__sp-actions">
           <button type="button" class="payment__sp-card" :disabled="!splitChargeValid" @click="splitCard">
             {{ $i('pos_pay_card') }} {{ splitChargeValid ? priceLabel(splitChargeAmount) : '' }}
           </button>
           <button type="button" class="payment__sp-cash" @click="step = 'splitcash'">
             {{ $i('pos_splitpay_cash_rest') }}
+          </button>
+        </div>
+        <!-- Custom amount: charge it on a card, or take it in cash with the card covering the rest
+             ("I want to get rid of this 200 note"). The cash-first path charges the card for
+             outstanding − amount first, then records the cash remainder — same net result, and the
+             settlement's cash-rounds-the-remainder invariant holds. -->
+        <div v-else class="payment__sp-actions">
+          <button type="button" class="payment__sp-card" :disabled="!splitChargeValid" @click="splitCard">
+            {{ $i('pos_pay_card') }} {{ splitChargeValid ? priceLabel(splitChargeAmount) : '' }}
+          </button>
+          <button type="button" class="payment__sp-cash" :disabled="!splitCashFirstValid" @click="splitCashFirstCard">
+            {{ $i('pos_splitpay_cash_first') }} {{ splitCashFirstValid ? priceLabel(splitPortion) : '' }}
           </button>
         </div>
         <button type="button" class="payment__sp-toggle" @click="toggleSplitCustom">
@@ -98,7 +110,7 @@
           :amount="splitChargedPortion"
           :message="cardMessage"
           @cancel="cancelSplitCard"
-          @retry="splitCard"
+          @retry="retrySplitCard"
           @abandon="abandonSplitCard"
         />
       </div>
@@ -237,6 +249,7 @@ export default {
       splitPersons: 2,
       splitCustom: false,
       splitPortion: 0,
+      splitCashFirstAmount: 0,
       splitChargedPortion: 0,
       splitCardTxId: '',
       splitPollTimer: null,
@@ -270,6 +283,11 @@ export default {
     },
     splitChargeAmount () { return this.splitCustom ? this.splitPortion : this.splitSuggestedShare; },
     splitChargeValid () { return this.splitChargeAmount > 0 && this.splitChargeAmount <= this.splitOutstanding; },
+    // Cash-first: whole kroner (notes and coins) and strictly less than the outstanding amount —
+    // covering everything in cash is the plain "Kontant (rest)" action instead.
+    splitCashFirstValid () {
+      return this.splitPortion > 0 && this.splitPortion % 100 === 0 && this.splitPortion < this.splitOutstanding;
+    },
     // Quick presets on the free-amount pad: an equal share for 2/3/4 payers, whole kroner, capped.
     splitQuickAmounts () {
       const shares = [2, 3, 4]
@@ -385,6 +403,7 @@ export default {
         this.splitPersons = 2;
         this.splitCustom = false;
         this.splitPortion = 0;
+        this.splitCashFirstAmount = 0;
         this.step = 'splitpay';
       } catch (e) {
         this.error = this.pos.errMsg(e);
@@ -399,10 +418,25 @@ export default {
       this.splitPortion = 0;
       this.error = '';
     },
-    async splitCard () {
+    splitCard () {
       if (!this.splitChargeValid) { return; }
+      this.splitCashFirstAmount = 0;
+      return this.initiateSplitPortion(this.splitChargeAmount);
+    },
+    // "I have a 200 note": take the typed amount in cash and let the card cover the rest. The card
+    // is charged first (outstanding − cash) so the cash part stays the settlement's final,
+    // remainder-settling allocation; on card approval the cash records automatically.
+    splitCashFirstCard () {
+      if (!this.splitCashFirstValid) { return; }
+      this.splitCashFirstAmount = this.splitPortion;
+      return this.initiateSplitPortion(this.splitOutstanding - this.splitPortion);
+    },
+    retrySplitCard () {
+      return this.initiateSplitPortion(this.splitChargedPortion);
+    },
+    async initiateSplitPortion (amount) {
       this.error = '';
-      this.splitChargedPortion = this.splitChargeAmount;
+      this.splitChargedPortion = amount;
       this.step = 'splitcard';
       this.cardState = 'initiating';
       this.cardMessage = '';
@@ -412,7 +446,7 @@ export default {
           cashPointId: this.cashPointId,
           orderId: this.orderId,
           currency: 'NOK',
-          amount: this.splitChargedPortion,
+          amount,
           posSettlementId: this.splitSettlementId
         });
         this.splitCardTxId = result.paymentTransactionId;
@@ -444,6 +478,7 @@ export default {
         }
         if (status.state === 'Failed' || status.state === 'Declined' || status.state === 'AuthorizationVoided') {
           this.stopSplitPoll();
+          this.splitCashFirstAmount = 0;
           this.error = this.$i('pos_splitpay_portion_failed');
           this.step = 'splitpay';
           return;
@@ -454,6 +489,7 @@ export default {
       if (this.splitElapsed >= CARD_TIMEOUT_MS) {
         this.stopSplitPoll();
         this.voidSplitPortion('timeout');
+        this.splitCashFirstAmount = 0;
         this.error = this.$i('pos_splitpay_portion_failed');
         this.step = 'splitpay';
       }
@@ -472,10 +508,16 @@ export default {
         this.splitPortion = 0;
         if (result.fullyCovered) {
           await this.finalizeSplit();
+        } else if (this.splitCashFirstAmount > 0) {
+          // Cash-first: the card leg is done; record the cash remainder and finalize.
+          const cash = this.splitCashFirstAmount;
+          this.splitCashFirstAmount = 0;
+          await this.onSplitCashConfirm({ tendered: cash });
         } else {
           this.step = 'splitpay';
         }
       } catch (e) {
+        this.splitCashFirstAmount = 0;
         this.error = this.pos.errMsg(e);
         this.step = 'splitpay';
       }
@@ -496,6 +538,7 @@ export default {
         await this.finalizeSplit();
       } catch (e) {
         this.error = this.pos.errMsg(e);
+        this.step = 'splitpay';
       } finally {
         this.busy = false;
       }
@@ -518,11 +561,13 @@ export default {
     },
     cancelSplitCard () {
       this.stopSplitPoll();
+      this.splitCashFirstAmount = 0;
       this.voidSplitPortion('operator_cancel');
       this.step = 'splitpay';
     },
     abandonSplitCard () {
       this.stopSplitPoll();
+      this.splitCashFirstAmount = 0;
       this.step = 'splitpay';
     },
     // Leaving the split flow aborts the settlement: confirmed parts are reversed server-side
@@ -537,6 +582,7 @@ export default {
       this.splitSettlementId = '';
       this.splitParts = [];
       this.splitOutstanding = 0;
+      this.splitCashFirstAmount = 0;
       this.error = '';
       this.step = 'method';
     },

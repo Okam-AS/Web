@@ -1906,6 +1906,7 @@ export default {
   pos_splitpay_persons: 'Anzahl Personen',
   pos_splitpay_next: 'Nächste Person',
   pos_splitpay_custom: 'Freier Betrag',
+  pos_splitpay_cash_first: 'Bar + Rest auf Karte',
   pos_splitpay_equal: 'Gleich pro Person',
   pos_splitpay_outstanding: 'Verbleibend',
   pos_splitpay_cash_rest: 'Bar (Rest)',

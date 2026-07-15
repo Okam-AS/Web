@@ -12,10 +12,11 @@
 
       <!-- Configure -->
       <div v-if="step === 'configure'" class="split__body">
+        <!-- Equal-parts check split was removed on purpose: it produced separate receipts with
+             synthetic share lines (a grey zone against bokføringsforskriften § 5-1-1 nr. 3), and
+             "everyone pays their share" is covered by split PAYMENT on one receipt instead. A check
+             split remains for guests who need their own receipt, with real item lines. -->
         <div class="split__modes">
-          <button type="button" class="split__mode" :class="{ 'is-active': mode === 'EqualParts' }" @click="mode = 'EqualParts'">
-            {{ $i('pos_split_equal') }}
-          </button>
           <button type="button" class="split__mode" :class="{ 'is-active': mode === 'ByItem' }" @click="mode = 'ByItem'">
             {{ $i('pos_split_byitem') }}
           </button>
@@ -193,7 +194,7 @@ export default {
   data () {
     return {
       step: 'configure',
-      mode: 'EqualParts',
+      mode: 'ByItem',
       partCount: 2,
       assignments: {},
       // BySeat: line id -> guest number (null = still shared / unplaced). Seeded from the line seats.
@@ -290,9 +291,7 @@ export default {
       this.partLabels = {};
       try {
         let request;
-        if (this.mode === 'EqualParts') {
-          request = { mode: 'EqualParts', partCount: this.partCount, parts: [] };
-        } else if (this.mode === 'BySeat') {
+        if (this.mode === 'BySeat') {
           // One part per guest bucket, ordered by ascending guest. It rides the same ByItem engine;
           // partLabels lets the pay step read out "Gjest n" instead of "Del n".
           const buckets = this.seatBuckets;
