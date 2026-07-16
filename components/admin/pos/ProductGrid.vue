@@ -93,6 +93,15 @@
       >
         +
       </button>
+      <button
+        v-if="seatRemovable"
+        type="button"
+        class="product-grid__seat-remove"
+        :title="$i('pos_seat_remove')"
+        @click="$emit('remove-seat')"
+      >
+        −
+      </button>
     </div>
 
     <!-- Category tabs -->
@@ -166,6 +175,9 @@ export default {
     seatChipCount: { type: Number, default: 0 },
     // Map of guest number -> item count, so a chip can show a subtle badge of who already has orders.
     seatCounts: { type: Object, default: () => ({}) },
+    // Whether the top guest chip is a removable extra (added past the party size and unused), so the
+    // "−" button is offered — a guest number can never be stranded on the row with no way to clear it.
+    seatRemovable: { type: Boolean, default: false },
     catalogError: { type: Boolean, default: false }
   },
   data () {
@@ -344,6 +356,8 @@ export default {
 .product-grid__seat-btn.is-active .product-grid__seat-count { background: var(--pos-primary-dark, #159f63); }
 .product-grid__seat-add { border: 1px dashed #cbd5e0; background: #fff; color: #64748b; min-width: 34px; height: 30px; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; padding: 0 10px; }
 .product-grid__seat-add:hover { border-color: var(--pos-primary, #1bb776); color: var(--pos-primary-dark, #159f63); }
+.product-grid__seat-remove { border: 1px dashed #cbd5e0; background: #fff; color: #64748b; min-width: 34px; height: 30px; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; padding: 0 10px; }
+.product-grid__seat-remove:hover { border-color: #ef4444; color: #ef4444; }
 
 .product-grid__tabs {
   display: flex;

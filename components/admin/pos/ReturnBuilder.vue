@@ -214,24 +214,12 @@
         </button>
       </footer>
     </div>
-
-    <PinPadModal
-      v-if="step === 'pin'"
-      :title="$i('pos_refund_approve')"
-      :subtitle="$i('pos_manager_pin_required')"
-      :operators="managerOperators"
-      :error="pinError"
-      :busy="pinBusy"
-      @submit="onPinSubmit"
-      @close="step = 'settle'"
-    />
   </div>
 </template>
 
 <script>
 import AmountPad from '~/components/admin/pos/AmountPad.vue';
 import SignaturePad from '~/components/admin/pos/SignaturePad.vue';
-import PinPadModal from '~/components/admin/pos/PinPadModal.vue';
 import PosReceiptView from '~/components/admin/pos/PosReceiptView.vue';
 import ReasonPicker from '~/components/admin/pos/ReasonPicker.vue';
 import PhonePad from '~/components/admin/pos/PhonePad.vue';
@@ -243,13 +231,13 @@ const CARD_TIMEOUT_MS = 130000;
 // Unreferenced (open) return: rings in a refund without an original sale. The operator picks return
 // lines from the menu (or builds them manually), each with a goods group + VAT so the RETREC is
 // fiscally classified, then refunds to cash (out of the drawer) or to a card on the terminal. § 5-3-7
-// documentation (a one-tap reason + phone, plus a signature for cash) is captured before the return
-// is authorized — with no separate PIN when the acting operator is already a Godkjenner. The card
-// path is asynchronous (cardholder taps) and only works when the acquirer has enabled unreferenced
-// credits — otherwise the backend returns a clear "not enabled" error.
+// documentation (a one-tap reason + phone, plus a signature for cash) is captured before the acting
+// operator authorises the return. The card path is asynchronous (cardholder taps) and only works when
+// the acquirer has enabled unreferenced credits — otherwise the backend returns a clear "not enabled"
+// error.
 export default {
   name: 'ReturnBuilder',
-  components: { AmountPad, SignaturePad, PinPadModal, PosReceiptView, ReasonPicker, PhonePad },
+  components: { AmountPad, SignaturePad, PosReceiptView, ReasonPicker, PhonePad },
   inject: ['pos'],
   props: {
     // Same fiscal object (an unreferenced RETREC), shown as "Ny retur" from Day flow or as
@@ -281,8 +269,6 @@ export default {
       customerPhone: '',
       signature: '',
       error: '',
-      pinError: '',
-      pinBusy: false,
       resultReceipt: null,
       cardTxId: '',
       pollTimer: null,
@@ -293,12 +279,6 @@ export default {
     prefilled () { return !!(this.initialLines && this.initialLines.length); },
     cashPointId () { return this.pos.cashPoint.cashPointId; },
     total () { return this.lines.reduce((sum, l) => sum + l.unitAmount * l.quantity, 0); },
-    managerOperators () {
-      return (this.pos.operators || []).filter(o => o.roleLevel === 'Godkjenner');
-    },
-    currentIsManager () {
-      return !!(this.pos.session && this.pos.session.roleLevel === 'Godkjenner');
-    },
     reasonChosen () {
       if (this.reasonSel.reasonType === 'None') { return false; }
       if (this.reasonSel.reasonType === 'Annet') { return !!(this.reasonSel.reasonText || '').trim(); }
@@ -407,26 +387,13 @@ export default {
     advance () {
       if (this.step === 'build' && this.lines.length) { this.step = 'settle'; this.error = ''; return; }
       if (this.step === 'settle' && this.canAdvance) {
-        this.pinError = '';
         this.error = '';
-        // A Godkjenner authorises the return directly; otherwise fetch a Godkjenner PIN.
-        if (this.currentIsManager) {
-          this.doReturn(0, '');
-        } else {
-          this.step = 'pin';
-        }
+        this.doReturn();
       }
     },
-    onPinSubmit ({ operatorId, pin }) {
-      this.doReturn(operatorId, pin);
-    },
-    async doReturn (operatorId, pin) {
-      this.pinBusy = true;
-      this.pinError = '';
+    async doReturn () {
       const base = {
         cashPointId: this.cashPointId,
-        approverOperatorId: operatorId,
-        pin,
         reasonType: this.reasonSel.reasonType,
         reasonText: (this.reasonSel.reasonText || '').trim(),
         customerPhone: this.customerPhone.trim(),
@@ -452,16 +419,12 @@ export default {
             this.pollElapsed = 0;
             this.startPoll();
           } else {
-            this.pinError = this.$i('pos_generic_error');
+            this.error = this.$i('pos_generic_error');
           }
         }
       } catch (e) {
-        // Show the error on the PIN pad if we were there, otherwise inline on the settle screen.
-        const msg = this.pos.errMsg(e);
-        if (this.step === 'pin') { this.pinError = msg; } else { this.error = msg; }
+        this.error = this.pos.errMsg(e);
         this.step = 'settle';
-      } finally {
-        this.pinBusy = false;
       }
     },
     startPoll () {

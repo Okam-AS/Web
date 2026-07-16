@@ -15,6 +15,7 @@
         :seating-enabled="seatingEnabled"
         :seat-chip-count="seatChipCount"
         :seat-counts="seatCounts"
+        :seat-removable="seatRemovable"
         @select="onSelect"
         @open-price="showOpenPrice = true"
         @scan="onScan"
@@ -22,6 +23,7 @@
         @set-course="currentCourse = $event"
         @set-seat="currentSeat = $event"
         @add-seat="onAddSeat"
+        @remove-seat="onRemoveSeat"
         @reload-catalog="pos.loadCatalog()"
       />
     </div>
@@ -136,8 +138,6 @@
     <DiscountModal
       v-if="showDiscount"
       :reasons="discountReasonsForScope"
-      :manager-operators="managerOperators"
-      :current-is-manager="sessionIsManager"
       :scope="discountScope"
       :target-name="discountTargetName"
       :busy="discountBusy"
@@ -148,8 +148,6 @@
 
     <VoidModal
       v-if="showVoid"
-      :manager-operators="managerOperators"
-      :current-is-manager="sessionIsManager"
       :busy="voidBusy"
       :error="voidError"
       @confirm="onVoidConfirm"
@@ -343,6 +341,16 @@ export default {
       const base = Math.max((this.check && this.check.couverts) || 0, this.maxSeatOnCheck, this.seatExtra);
       return Math.min(base, 20);
     },
+    // The floor of guest chips that must always exist: the party size (couverts) and any guest that
+    // already carries orders. Chips above this floor are extras added via "+"; only those can be
+    // removed, so a guest with items or within the party size can never be cleared away by mistake.
+    seatFloor () {
+      return Math.max((this.check && this.check.couverts) || 0, this.maxSeatOnCheck);
+    },
+    // A "−" is offered only when the top chip is such a removable extra.
+    seatRemovable () {
+      return this.seatChipCount > this.seatFloor;
+    },
     // Item count per guest, so a chip can show who already has orders at a glance.
     seatCounts () {
       const counts = {};
@@ -357,14 +365,6 @@ export default {
     parkedChecks () { return (this.board && this.board.parkedChecks) || []; },
     soldOutProductIds () { return (this.board && this.board.soldOutProductIds) || []; },
     soldOutCategoryIds () { return (this.board && this.board.soldOutCategoryIds) || []; },
-    // Operators who can authorise manager-gated discounts and voids.
-    managerOperators () {
-      return (this.pos.operators || []).filter(o => o.roleLevel === 'Godkjenner');
-    },
-    // WP-B1: when the acting operator is already a Godkjenner, no separate approval PIN is needed.
-    sessionIsManager () {
-      return !!(this.pos.session && this.pos.session.roleLevel === 'Godkjenner');
-    },
     // The robust reset hook: the active guest is per-check ambient state, so it clears whenever the
     // check changes — a new/resumed check, or the check going away on park, void or payment.
     checkId () { return this.check ? this.check.orderId : null; }
@@ -547,6 +547,10 @@ export default {
           result = await this.pos.checkSvc().AddLine(check.orderId, request);
         }
         this.pos.applyCheck(result);
+        // The active guest is a per-line choice, not a sticky mode: after a line lands it falls back
+        // to Felles so the next item is never silently tagged to the previous guest. A row-repeat
+        // ("+" on a check line) passes an explicit seatOverride and must not disturb the selection.
+        if (seatOverride === undefined) { this.currentSeat = null; }
       } catch (e) {
         this.notify(this.pos.errMsg(e), 'error');
       } finally {
@@ -577,6 +581,8 @@ export default {
         };
         this.recipes['o|' + (openPricePresetId ? 'p' + openPricePresetId : name) + '|' + amount + '|' + (tax || 0)] = request;
         this.pos.applyCheck(await this.pos.checkSvc().AddLine(check.orderId, request));
+        // Fall back to Felles after the line lands, as for a product line.
+        this.currentSeat = null;
       } catch (e) {
         this.notify(this.pos.errMsg(e), 'error');
       } finally {
@@ -887,6 +893,17 @@ export default {
       if (next > 20) { return; }
       this.seatExtra = next;
       this.currentSeat = next;
+    },
+    // The grid's "−" removes the top guest chip when it is a removable extra (above the party size
+    // and carrying no orders). If that chip was the active guest, the selection falls back to Felles
+    // so a new line never lands on a guest that no longer exists.
+    onRemoveSeat () {
+      if (!this.seatRemovable) { return; }
+      const removed = this.seatChipCount;
+      this.seatExtra = removed - 1;
+      if (this.currentSeat != null && this.currentSeat >= removed) {
+        this.currentSeat = null;
+      }
     },
     // Opens the guest picker for a line group's tag. Table checks only (seating is a coursing concept).
     onSeat (group) {

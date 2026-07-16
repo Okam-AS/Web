@@ -1,6 +1,6 @@
 <template>
   <div class="discount-modal">
-    <div v-if="!pendingReason" class="discount-modal__overlay" @click.self="$emit('close')">
+    <div class="discount-modal__overlay" @click.self="$emit('close')">
       <div class="discount-modal__panel">
         <header class="discount-modal__head">
           <h2 class="discount-modal__title">
@@ -27,7 +27,6 @@
             >
               <span class="discount-modal__reason-name">{{ r.label }}</span>
               <span class="discount-modal__reason-value">{{ valueLabel(r) }}</span>
-              <span v-if="r.requiresManagerPin" class="discount-modal__reason-lock">{{ $i('pos_manager_pin') }}</span>
             </button>
           </div>
           <p v-if="error" class="discount-modal__error">
@@ -36,59 +35,27 @@
         </div>
       </div>
     </div>
-
-    <PinPadModal
-      v-if="pendingReason"
-      :title="$i('pos_approve_discount')"
-      :subtitle="pendingReason.label"
-      :operators="managerOperators"
-      :error="error"
-      :busy="busy"
-      @submit="onPinSubmit"
-      @close="pendingReason = null"
-    />
   </div>
 </template>
 
 <script>
-import PinPadModal from '~/components/admin/pos/PinPadModal.vue';
-
 // Applies a catalogue discount (the store's RegularDiscount entries flagged ShowInPos) to a line or
-// the whole order. Discounts flagged requiresManagerPin need a Godkjenner approval — but when the
-// acting operator is already a Godkjenner (currentIsManager) that is satisfied without a PIN prompt;
-// others apply under the current operator. A fixed amount is stored in kroner, so it is scaled.
+// the whole order under the acting operator. A fixed amount is stored in kroner, so it is scaled.
 export default {
   name: 'DiscountModal',
-  components: { PinPadModal },
   props: {
     reasons: { type: Array, default: () => [] },
-    managerOperators: { type: Array, default: () => [] },
-    currentIsManager: { type: Boolean, default: false },
     scope: { type: String, default: 'order' },
     targetName: { type: String, default: '' },
     busy: { type: Boolean, default: false },
     error: { type: String, default: '' }
-  },
-  data () {
-    return { pendingReason: null };
   },
   methods: {
     valueLabel (r) {
       return r.type === 'Percent' ? r.discount + '%' : this.priceLabel(r.discount * 100);
     },
     selectReason (r) {
-      if (r.requiresManagerPin && !this.currentIsManager) {
-        this.pendingReason = r;
-      } else {
-        this.$emit('confirm', { regularDiscountId: r.id, approverOperatorId: 0, pin: '' });
-      }
-    },
-    onPinSubmit ({ operatorId, pin }) {
-      this.$emit('confirm', {
-        regularDiscountId: this.pendingReason.id,
-        approverOperatorId: operatorId,
-        pin
-      });
+      this.$emit('confirm', { regularDiscountId: r.id });
     }
   }
 };
@@ -139,6 +106,5 @@ export default {
 .discount-modal__reason:hover { border-color: var(--pos-primary, #1bb776); }
 .discount-modal__reason-name { font-weight: 600; color: var(--pos-ink, #292c34); }
 .discount-modal__reason-value { font-weight: 700; color: var(--pos-primary-dark, #159f63); }
-.discount-modal__reason-lock { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; color: #d97706; }
 .discount-modal__error { color: #ef4444; font-weight: 600; text-align: center; margin: 12px 0 0; }
 </style>

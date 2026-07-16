@@ -1,6 +1,6 @@
 <template>
   <div class="void-modal">
-    <div v-if="!showPin" class="void-modal__overlay" @click.self="$emit('close')">
+    <div class="void-modal__overlay" @click.self="$emit('close')">
       <div class="void-modal__panel">
         <header class="void-modal__head">
           <h2 class="void-modal__title">
@@ -17,10 +17,13 @@
           <ReasonPicker context="void" :label="$i('pos_void_reason')" v-model="reasonSel" />
         </div>
         <footer class="void-modal__foot">
+          <p v-if="error" class="void-modal__error">
+            {{ error }}
+          </p>
           <button
             type="button"
             class="void-modal__confirm"
-            :disabled="!canContinue"
+            :disabled="!canContinue || busy"
             @click="onContinue"
           >
             {{ $i('pos_void_continue') }}
@@ -28,38 +31,23 @@
         </footer>
       </div>
     </div>
-
-    <PinPadModal
-      v-if="showPin"
-      :title="$i('pos_approve_void')"
-      :subtitle="$i('pos_manager_pin_required')"
-      :operators="managerOperators"
-      :error="error"
-      :busy="busy"
-      @submit="onPinSubmit"
-      @close="showPin = false"
-    />
   </div>
 </template>
 
 <script>
-import PinPadModal from '~/components/admin/pos/PinPadModal.vue';
 import ReasonPicker from '~/components/admin/pos/ReasonPicker.vue';
 
-// Voids an entire open check with a one-tap reason. When the acting operator is already a Godkjenner
-// (currentIsManager) no separate approval PIN is challenged; otherwise a Godkjenner approves. The
-// void is journalled (VOIDTRANS) and produces no receipt.
+// Voids an entire open check with a one-tap reason, authorised by the acting operator. The void is
+// journalled (VOIDTRANS) and produces no receipt.
 export default {
   name: 'VoidModal',
-  components: { PinPadModal, ReasonPicker },
+  components: { ReasonPicker },
   props: {
-    managerOperators: { type: Array, default: () => [] },
-    currentIsManager: { type: Boolean, default: false },
     busy: { type: Boolean, default: false },
     error: { type: String, default: '' }
   },
   data () {
-    return { reasonSel: { reasonType: 'None', reasonText: '' }, showPin: false };
+    return { reasonSel: { reasonType: 'None', reasonText: '' } };
   },
   computed: {
     canContinue () {
@@ -70,20 +58,7 @@ export default {
   },
   methods: {
     onContinue () {
-      // A Godkjenner authorises their own void — go straight through with no PIN challenge.
-      if (this.currentIsManager) {
-        this.emitConfirm(0, '');
-      } else {
-        this.showPin = true;
-      }
-    },
-    onPinSubmit ({ operatorId, pin }) {
-      this.emitConfirm(operatorId, pin);
-    },
-    emitConfirm (approverOperatorId, pin) {
       this.$emit('confirm', {
-        approverOperatorId,
-        pin,
         reasonType: this.reasonSel.reasonType,
         reasonText: (this.reasonSel.reasonText || '').trim()
       });
@@ -122,6 +97,7 @@ export default {
 .void-modal__textarea { width: 100%; min-height: 76px; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 12px; font-size: 0.95rem; font-family: inherit; color: var(--pos-ink, #292c34); resize: vertical; }
 .void-modal__textarea:focus { outline: none; border-color: #ef4444; }
 .void-modal__foot { padding: 14px 20px 18px; border-top: 1px solid #eef1f5; }
+.void-modal__error { color: #ef4444; font-size: 0.9rem; font-weight: 600; margin: 0 0 12px; }
 .void-modal__confirm { width: 100%; height: 52px; border: none; border-radius: 12px; background: #ef4444; color: #fff; font-size: 1.05rem; font-weight: 700; cursor: pointer; }
 .void-modal__confirm:disabled { background: #cbd5e0; cursor: not-allowed; }
 </style>

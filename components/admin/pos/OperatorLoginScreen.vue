@@ -31,7 +31,6 @@
             <span class="op-login__avatar">{{ initials(op.displayName) }}</span>
             <span class="op-login__op-text">
               <span class="op-login__op-name">{{ op.displayName }}</span>
-              <span class="op-login__op-role">{{ roleLabel(op.roleLevel) }}</span>
             </span>
             <span v-if="op.isLockedOut" class="op-login__op-flag op-login__op-flag--locked">{{ $i('pos_operator_locked') }}</span>
             <span v-else-if="!op.hasPin" class="op-login__op-flag op-login__op-flag--nopin">{{ $i('pos_operator_no_pin') }}</span>
@@ -125,9 +124,6 @@ export default {
         .slice(0, 2)
         .map(p => p[0].toUpperCase())
         .join('');
-    },
-    roleLabel (role) {
-      return this.$i('pos_role_' + String(role || '').toLowerCase()) || role;
     },
     selectOperator (op) {
       if (op.isLockedOut) { return; }
@@ -298,7 +294,6 @@ export default {
 
 .op-login__op-text { display: flex; flex-direction: column; flex: 1; }
 .op-login__op-name { font-weight: 600; color: var(--pos-ink, #292c34); }
-.op-login__op-role { font-size: 0.8rem; color: #64748b; }
 .op-login__op-flag { font-size: 0.72rem; font-weight: 700; }
 .op-login__op-flag--locked { color: #ef4444; }
 .op-login__op-flag--nopin { color: #d97706; }

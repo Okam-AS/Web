@@ -19,17 +19,16 @@
 
     <table v-else class="crud__table">
       <thead>
-        <tr><th>{{ $i('posset_col_name') }}</th><th>{{ $i('posset_op_col_role') }}</th><th>{{ $i('posset_op_col_pin') }}</th><th>{{ $i('posset_op_col_locked') }}</th><th>{{ $i('posset_col_active') }}</th><th /></tr>
+        <tr><th>{{ $i('posset_col_name') }}</th><th>{{ $i('posset_op_col_pin') }}</th><th>{{ $i('posset_op_col_locked') }}</th><th>{{ $i('posset_col_active') }}</th><th /></tr>
       </thead>
       <tbody>
         <tr v-if="!items.length">
-          <td colspan="6" class="crud__empty">
+          <td colspan="5" class="crud__empty">
             {{ $i('posset_none') }}
           </td>
         </tr>
         <tr v-for="it in items" :key="it.operatorId">
           <td>{{ it.displayName }}</td>
-          <td>{{ $i('pos_role_' + it.roleLevel.toLowerCase()) }}</td>
           <td>{{ it.hasPin ? '✓' : '—' }}</td>
           <td>{{ it.isLockedOut ? $i('pos_operator_locked') : '—' }}</td>
           <td>{{ it.isActive ? '✓' : '—' }}</td>
@@ -67,12 +66,6 @@
       <h3>{{ form.operatorId ? $i('posset_op_edit') : $i('posset_op_new') }}</h3>
       <div class="crud__grid">
         <label>{{ $i('posset_col_name') }}<input v-model="form.displayName" type="text"></label>
-        <label>{{ $i('posset_op_col_role') }}
-          <select v-model="form.roleLevel">
-            <option v-for="r in roles" :key="r" :value="r">{{ $i('pos_role_' + r.toLowerCase()) }}</option>
-          </select>
-          <span class="crud__hint">{{ $i('posset_op_role_hint') }}</span>
-        </label>
         <label v-if="!form.operatorId">{{ $i('posset_op_pin') }}<input v-model="form.pin" type="password" inputmode="numeric" maxlength="4" :placeholder="$i('posset_op_pin_ph')"></label>
         <label class="crud__check"><input v-model="form.isActive" type="checkbox"> {{ $i('posset_col_active') }}</label>
       </div>
@@ -94,7 +87,7 @@ export default {
   name: 'OperatorsTab',
   props: { storeId: { type: [Number, String], required: true } },
   data () {
-    return { items: [], loading: true, form: null, saving: false, roles: ['Standard', 'Godkjenner'], pinFor: null, pin: '', pinSaving: false };
+    return { items: [], loading: true, form: null, saving: false, pinFor: null, pin: '', pinSaving: false };
   },
   computed: {
     pinValid () { return /^\d{4}$/.test(this.pin); }
@@ -113,10 +106,10 @@ export default {
     },
     errMsg (e) { return (e && e.response && e.response.data && e.response.data.message) || (e && e.message) || 'Feil'; },
     startNew () {
-      this.form = { storeId: Number(this.storeId), displayName: '', roleLevel: 'Standard', isActive: true, pin: '' };
+      this.form = { storeId: Number(this.storeId), displayName: '', isActive: true, pin: '' };
     },
     startEdit (it) {
-      this.form = { operatorId: it.operatorId, storeId: Number(this.storeId), displayName: it.displayName, roleLevel: it.roleLevel, isActive: it.isActive };
+      this.form = { operatorId: it.operatorId, storeId: Number(this.storeId), displayName: it.displayName, isActive: it.isActive };
     },
     startPin (it) {
       this.pinFor = it.operatorId;
@@ -138,7 +131,7 @@ export default {
     async save () {
       this.saving = true;
       try {
-        const model = { storeId: Number(this.storeId), displayName: this.form.displayName.trim(), roleLevel: this.form.roleLevel, applicationUserId: null, isActive: this.form.isActive, pin: this.form.operatorId ? null : (this.form.pin || null) };
+        const model = { storeId: Number(this.storeId), displayName: this.form.displayName.trim(), applicationUserId: null, isActive: this.form.isActive, pin: this.form.operatorId ? null : (this.form.pin || null) };
         if (this.form.operatorId) {
           await this._operatorService.Update(this.form.operatorId, model);
         } else {

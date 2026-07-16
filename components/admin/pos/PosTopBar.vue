@@ -45,7 +45,6 @@
         <span class="pos-topbar__avatar">{{ initials }}</span>
         <span class="pos-topbar__op-text">
           <span class="pos-topbar__op-name">{{ operatorName }}</span>
-          <span class="pos-topbar__op-role">{{ roleLabel }}</span>
         </span>
       </button>
       <button type="button" class="pos-topbar__exit" :title="$i('pos_exit')" @click="pos.exit()">
@@ -69,7 +68,6 @@ export default {
     dayOpen () { return this.pos.dayOpen; },
     session () { return this.pos.session || {}; },
     operatorName () { return this.session.operatorName || '—'; },
-    roleLabel () { return this.$i('pos_role_' + String(this.session.roleLevel || '').toLowerCase()) || this.session.roleLevel || ''; },
     initials () {
       return String(this.operatorName || '')
         .split(' ').filter(Boolean).slice(0, 2).map(p => p[0].toUpperCase()).join('');
@@ -175,7 +173,6 @@ export default {
 }
 .pos-topbar__op-text { display: flex; flex-direction: column; align-items: flex-start; }
 .pos-topbar__op-name { font-size: 0.85rem; font-weight: 600; }
-.pos-topbar__op-role { font-size: 0.7rem; color: #94a3b8; }
 
 .pos-topbar__exit {
   background: none;

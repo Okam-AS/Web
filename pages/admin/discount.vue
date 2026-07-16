@@ -249,17 +249,6 @@
           </div>
 
           <template v-if="localDiscount.showInPos">
-            <div class="condition-toggle-row" style="margin-top: 16px;">
-              <label class="toggle-label">
-                <span>{{ $i('discount_requiresManagerPinLabel') }}</span>
-                <span class="toggle-hint">{{ $i('discount_requiresManagerPinHint') }}</span>
-              </label>
-              <label class="toggle-switch">
-                <input v-model="localDiscount.requiresManagerPin" type="checkbox" />
-                <span class="toggle-slider" />
-              </label>
-            </div>
-
             <div class="amount-row" style="margin-top: 16px;">
               <div class="form-field">
                 <label>{{ $i('discount_sortOrderLabel') }}</label>
@@ -405,7 +394,6 @@ export default {
           giveRewardInsteadOfDiscountEnabled: false,
           expired: false,
           showInPos: false,
-          requiresManagerPin: true,
           sortOrder: 0,
           discountProducts: [],
           discountUsages: [],

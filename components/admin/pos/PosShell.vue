@@ -328,6 +328,7 @@ export default {
     // Opens a new check. tableId null = quick sale without a table. deliveryType sets the VAT
     // context (TableDelivery = eat-in 25 %, SelfPickup = takeaway 15 %) and locks after finalize.
     async openCheck ({ tableId = null, couverts = null, deliveryType }) {
+      const previous = this.activeCheck;
       const check = await this.checkSvc().OpenCheck({
         cashPointId: this.cashPoint.cashPointId,
         tableId,
@@ -335,6 +336,11 @@ export default {
         deliveryType
       });
       this.activeCheck = check;
+      // Opening a new check means the operator moved on: clean up the one they left behind if it was
+      // an empty draft (a table opened but nothing rung in), so it never lingers on the board.
+      if (previous && previous.orderId !== check.orderId) {
+        this.discardCheckIfEmpty(previous);
+      }
       return check;
     },
 
@@ -345,6 +351,10 @@ export default {
     },
 
     setActiveCheck (check) {
+      const previous = this.activeCheck;
+      if (previous && (!check || previous.orderId !== check.orderId)) {
+        this.discardCheckIfEmpty(previous);
+      }
       this.activeCheck = check;
       this.mode = 'sell';
     },
@@ -363,8 +373,23 @@ export default {
       this.activeCheck = null;
     },
 
+    // Best-effort cleanup of an empty draft (a table opened but nothing rung in). The server
+    // re-checks and only discards a check with no line and nothing journalled, so a call on a check
+    // that turns out to hold something is a harmless no-op. Fire-and-forget: it must never block
+    // navigation, and a failure just leaves the check for the day-close guard to clean up.
+    discardCheckIfEmpty (check) {
+      if (!check || (check.items || []).length > 0) { return; }
+      this.checkSvc().DiscardEmptyCheck(check.orderId).catch(() => {});
+    },
+
     // ---- Mode / navigation ----
     setMode (mode) {
+      // Leaving the sell screen with an empty draft active (a table opened but nothing rung in)
+      // discards it so it never lingers on the board or blocks the day close.
+      if (mode !== 'sell' && this.mode === 'sell' && this.activeCheck && (this.activeCheck.items || []).length === 0) {
+        this.discardCheckIfEmpty(this.activeCheck);
+        this.activeCheck = null;
+      }
       this.mode = mode;
     },
 

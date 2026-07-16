@@ -24,7 +24,6 @@
           @click="selectOperator(op)"
         >
           <span class="pinpad__operator-name">{{ op.displayName }}</span>
-          <span class="pinpad__operator-role">{{ roleLabel(op.roleLevel) }}</span>
           <span v-if="op.isLockedOut" class="pinpad__operator-locked">{{ $i('pos_operator_locked') }}</span>
           <span v-else-if="!op.hasPin" class="pinpad__operator-nopin">{{ $i('pos_operator_no_pin') }}</span>
         </button>
@@ -63,9 +62,8 @@ import PosNumpad from '~/components/admin/pos/PosNumpad.vue';
 // submits automatically, and a rejected attempt shakes the pad and clears the dots for a retry.
 const PIN_LENGTH = 4;
 
-// Reusable PIN entry. Used to switch operator (list = all active operators) and to authorise
-// manager actions such as discounts / void / card refund (list = Leder/Eier operators). The
-// caller owns the submit call and sets `error`/`busy` so backend messages surface next to the pad.
+// Reusable PIN entry. Used to switch operator (list = all active operators). The caller owns the
+// submit call and sets `error`/`busy` so backend messages surface next to the pad.
 export default {
   name: 'PinPadModal',
   components: { PosNumpad },
@@ -124,9 +122,6 @@ export default {
     clearTimeout(this.shakeTimer);
   },
   methods: {
-    roleLabel (role) {
-      return this.$i('pos_role_' + String(role || '').toLowerCase()) || role;
-    },
     selectOperator (op) {
       if (op.isLockedOut) { return; }
       this.selectedOperatorId = op.operatorId;
@@ -270,7 +265,6 @@ export default {
 .pinpad__operator.is-locked { opacity: 0.55; cursor: not-allowed; }
 
 .pinpad__operator-name { font-weight: 600; color: var(--pos-ink, #292c34); font-size: 0.95rem; }
-.pinpad__operator-role { font-size: 0.75rem; color: #64748b; }
 .pinpad__operator-locked { font-size: 0.7rem; color: #ef4444; font-weight: 600; }
 .pinpad__operator-nopin { font-size: 0.7rem; color: #d97706; font-weight: 600; }
 
