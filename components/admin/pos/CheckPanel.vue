@@ -45,7 +45,7 @@
       </div>
     </header>
 
-    <div class="check-panel__lines">
+    <div ref="lines" class="check-panel__lines">
       <div v-if="!hasItems" class="check-panel__empty">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
         <p>{{ $i('pos_check_empty') }}</p>
@@ -88,6 +88,16 @@
           @line-remove-discount="$emit('line-remove-discount', g)"
         />
       </template>
+
+      <!-- Open price lives at the end of the bill: ring in an amount that has no product tile. -->
+      <button
+        type="button"
+        class="check-panel__openprice"
+        @click="$emit('open-price')"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+        <span>{{ $i('pos_open_price') }}</span>
+      </button>
     </div>
 
     <footer class="check-panel__foot">
@@ -165,6 +175,17 @@ export default {
       editingCouverts: false,
       couvertsDraft: 1
     };
+  },
+  watch: {
+    // Keep the newest line in view: when lines are added, scroll the list to the bottom.
+    'items.length' (newLength, oldLength) {
+      if (newLength > oldLength) {
+        this.$nextTick(() => {
+          const el = this.$refs.lines;
+          if (el) { el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' }); }
+        });
+      }
+    }
   },
   computed: {
     items () { return (this.check && this.check.items) || []; },
@@ -342,7 +363,27 @@ export default {
 .check-panel__guests-val { font-size: 1.05rem; font-weight: 700; color: var(--pos-ink, #292c34); min-width: 22px; text-align: center; }
 .check-panel__guests-ok { border: none; background: var(--pos-primary, #1bb776); color: #fff; font-weight: 700; padding: 7px 14px; border-radius: 9px; cursor: pointer; font-size: 0.85rem; }
 
-.check-panel__lines { flex: 1; min-height: 0; overflow-y: auto; padding: 4px 18px; }
+.check-panel__lines { flex: 1; min-height: 0; overflow-y: auto; padding: 4px 18px; display: flex; flex-direction: column; }
+
+/* Open price as the last row of the bill — dashed to read as an action, not a line. */
+.check-panel__openprice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-shrink: 0;
+  margin: 10px 0 12px;
+  padding: 11px 12px;
+  border: 1px dashed #cbd5e0;
+  background: #ffffff;
+  color: #64748b;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+.check-panel__openprice:hover { border-color: var(--pos-primary, #1bb776); color: var(--pos-primary-dark, #159f63); }
+.check-panel__openprice svg { width: 16px; height: 16px; }
 .check-panel__course { display: flex; align-items: center; justify-content: space-between; padding: 10px 0 4px; border-bottom: 1px solid #eef1f5; margin-top: 4px; }
 .check-panel__course-name { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #94a3b8; }
 .check-panel__course-actions { display: flex; gap: 6px; }
@@ -352,7 +393,7 @@ export default {
 .check-panel__serve-course { border: 1px solid var(--pos-primary, #1bb776); background: var(--pos-primary, #1bb776); color: #fff; font-weight: 700; font-size: 0.75rem; padding: 4px 12px; border-radius: 7px; cursor: pointer; }
 .check-panel__serve-course:hover { background: var(--pos-primary-dark, #159f63); border-color: var(--pos-primary-dark, #159f63); }
 .check-panel__empty {
-  height: 100%;
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;

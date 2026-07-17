@@ -1895,6 +1895,7 @@ export default {
   pos_remove_discount: 'Remove discount',
   pos_discount_removed: 'Discount removed.',
   pos_split_title: 'Split check',
+  pos_split_title_byitem: 'Split check by item',
   pos_splitpay_title: 'Split payment',
   pos_splitpay_persons: 'Number of people',
   pos_splitpay_next: 'Next person',

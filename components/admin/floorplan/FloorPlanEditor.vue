@@ -12,7 +12,7 @@
           {{ z.name }}<span v-if="!z.isActive" class="fp-zone-off">av</span>
         </button>
         <button class="fp-zone-add" title="Ny sone" @click="addZone">
-          +
+          + Legg til sone
         </button>
       </div>
       <div class="fp-tools">
@@ -112,38 +112,10 @@
         </svg>
 
         <div class="fp-palette">
-          <div class="fp-palette-title">
-            Bord
-          </div>
-          <button title="Rundt bord — dra inn på kartet eller klikk" @pointerdown.prevent="startPalette('round', $event)">
-            <svg viewBox="0 0 40 40"><circle class="pv" cx="20" cy="20" r="13" /></svg>
-            <span>Rundt</span>
+          <button class="fp-add-table" title="Legg til bord — klikk, eller dra det dit du vil ha det" @pointerdown.prevent="startPalette('rect', $event)">
+            <span class="fp-add-plus">+</span>
+            <span>Legg til bord</span>
           </button>
-          <button title="Kvadratisk bord — dra inn på kartet eller klikk" @pointerdown.prevent="startPalette('square', $event)">
-            <svg viewBox="0 0 40 40"><rect
-              class="pv"
-              x="8"
-              y="8"
-              width="24"
-              height="24"
-              rx="3"
-            /></svg>
-            <span>Kvadrat</span>
-          </button>
-          <button title="Rektangulært bord — dra inn på kartet eller klikk" @pointerdown.prevent="startPalette('rect', $event)">
-            <svg viewBox="0 0 40 40"><rect
-              class="pv"
-              x="4"
-              y="11"
-              width="32"
-              height="18"
-              rx="3"
-            /></svg>
-            <span>Langbord</span>
-          </button>
-          <div class="fp-palette-hint">
-            Dra inn på<br>kartet
-          </div>
         </div>
 
         <div class="fp-statusbar">
@@ -153,7 +125,7 @@
         <div v-if="!activeTables.length && !ghost" class="fp-empty">
           <div class="fp-empty-card">
             <h3>Tegn opp {{ activeZone ? activeZone.name.toLowerCase() : "lokalet" }}</h3>
-            <p>Dra et bord inn fra paletten til venstre — eller kom raskt i gang:</p>
+            <p>Trykk «+ Legg til bord» oppe til venstre — eller kom raskt i gang:</p>
             <div class="fp-empty-quick">
               <input v-model.number="quickCount" type="number" min="1" max="60">
               <button class="btn-primary" @click="quickGenerate">
@@ -177,21 +149,6 @@
             <span>Bordnummer</span>
             <input v-model.number="selectedTable.number" type="number" min="1" @change="normalizeSelected">
           </label>
-
-          <div class="fp-field">
-            <span>Form</span>
-            <div class="fp-shape-row">
-              <button :class="{ active: selectedTable.shape === 'round' }" @click="setShape('round')">
-                Rundt
-              </button>
-              <button :class="{ active: selectedTable.shape === 'square' }" @click="setShape('square')">
-                Kvadrat
-              </button>
-              <button :class="{ active: selectedTable.shape === 'rect' }" @click="setShape('rect')">
-                Langbord
-              </button>
-            </div>
-          </div>
 
           <div class="fp-field">
             <span>Plasser (stoler)</span>
@@ -482,7 +439,11 @@ export default {
             height: t.height,
             rotation: t.rotation,
             seats: t.seats,
-            seatsAuto: t.seatsAuto,
+            // Auto is the default: legacy rows saved before the seatsAuto
+            // field (stored as false) load as auto when their seat count
+            // already matches the auto value, so seats keep scaling with the
+            // table. An explicitly deviating manual count is respected.
+            seatsAuto: t.seatsAuto || t.seats === autoSeatsFor(SHAPE_API_TO_LOCAL[t.shape] || 'square', t.width, t.height),
             minCapacity: t.minCapacity,
             maxCapacity: t.maxCapacity,
             isActive: t.isActive
@@ -692,7 +653,7 @@ export default {
       return this.tables.reduce((max, t) => Math.max(max, t.number || 0), 0) + 1;
     },
     makeTable (shape, x, y) {
-      const d = TABLE_DEFAULTS[shape] || TABLE_DEFAULTS.square;
+      const d = TABLE_DEFAULTS[shape] || TABLE_DEFAULTS.rect;
       const seats = autoSeatsFor(shape, d.width, d.height);
       return {
         id: uid('t'),
@@ -778,7 +739,7 @@ export default {
       for (let i = 0; i < n; i++) {
         const col = i % cols;
         const row = Math.floor(i / cols);
-        this.tables.push(this.makeTable('square', col * spacing, row * spacing));
+        this.tables.push(this.makeTable('rect', col * spacing, row * spacing));
       }
       this.selectedId = null;
       this.commit();
@@ -786,25 +747,17 @@ export default {
     },
 
     // --- panel actions --------------------------------------------------------
-    setShape (shape) {
-      const t = this.selectedTable;
-      if (!t || t.shape === shape) { return; }
-      t.shape = shape;
-      if (shape !== 'rect') {
-        const s = Math.max(t.width, t.height);
-        t.width = s;
-        t.height = s;
-      }
-      if (t.seatsAuto) {
-        this.applyAutoSeats(t);
-      }
-      this.commit();
-    },
     setSeats (delta) {
       const t = this.selectedTable;
       if (!t) { return; }
       t.seatsAuto = false;
-      t.seats = clamp(t.seats + delta, 0, 30);
+      const next = clamp(t.seats + delta, 0, 30);
+      // Max guests follows the seat count as long as it has not been decoupled
+      // by a manual edit (same coupling rule as applyAutoSeats).
+      if (t.maxCapacity === t.seats) {
+        t.maxCapacity = next;
+      }
+      t.seats = next;
       if (t.maxCapacity < t.seats) { t.maxCapacity = t.seats; }
       this.commit();
     },
@@ -1203,13 +1156,15 @@ export default {
 }
 
 .fp-zone-add {
-  width: 34px;
   height: 34px;
+  padding: 0 14px;
   border: 2px dashed #cbd5e0;
   border-radius: 999px;
   background: #fff;
   color: #64748b;
-  font-size: 1.1em;
+  font-size: 0.85em;
+  font-weight: 600;
+  white-space: nowrap;
   cursor: pointer;
   transition: all 0.2s ease;
 
@@ -1314,62 +1269,33 @@ export default {
   position: absolute;
   top: 12px;
   left: 12px;
+}
+
+.fp-add-table {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-  width: 76px;
-  padding: 10px 8px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-
-  button {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    padding: 6px 4px;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    background: #fff;
-    cursor: grab;
-    font-size: 0.7em;
-    font-weight: 600;
-    color: #64748b;
-    transition: all 0.2s ease;
-    touch-action: none;
-
-    svg {
-      width: 38px;
-      height: 38px;
-    }
-    &:hover {
-      border-color: #1bb776;
-      color: #159f63;
-    }
-  }
-}
-
-.pv {
-  fill: #fff;
-  stroke: #64748b;
-  stroke-width: 2;
-}
-
-.fp-palette-title {
-  font-size: 0.7em;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 999px;
+  background: #1bb776;
+  color: #fff;
+  font-size: 0.85em;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  color: #94a3b8;
-  text-align: center;
-}
+  cursor: grab;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+  touch-action: none;
 
-.fp-palette-hint {
-  font-size: 0.65em;
-  color: #94a3b8;
-  text-align: center;
-  line-height: 1.4;
+  &:hover {
+    background: #159f63;
+  }
+
+  .fp-add-plus {
+    font-size: 1.4em;
+    font-weight: 600;
+    line-height: 1;
+  }
 }
 
 .fp-statusbar {
@@ -1510,30 +1436,6 @@ export default {
   }
 }
 
-.fp-shape-row {
-  display: flex;
-  gap: 6px;
-
-  button {
-    flex: 1;
-    padding: 8px 4px;
-    border: 2px solid #e2e8f0;
-    border-radius: 8px;
-    background: #fff;
-    font-size: 0.75em;
-    font-weight: 600;
-    color: #64748b;
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    &.active {
-      border-color: #1bb776;
-      background: #f0fdf7;
-      color: #159f63;
-    }
-  }
-}
-
 .fp-stepper {
   display: flex;
   align-items: center;
@@ -1564,7 +1466,11 @@ export default {
   }
 }
 
-.fp-auto {
+// Scoped under .fp-stepper to out-rank its `button` sizing rule — the auto
+// toggle is a text pill, not a fixed 34px +/- square.
+.fp-stepper .fp-auto {
+  width: auto;
+  height: auto;
   margin-left: auto;
   padding: 6px 12px;
   border: 2px solid #e2e8f0;

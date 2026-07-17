@@ -1895,6 +1895,7 @@ export default {
   pos_remove_discount: 'Rabatt entfernen',
   pos_discount_removed: 'Rabatt entfernt.',
   pos_split_title: 'Rechnung teilen',
+  pos_split_title_byitem: 'Rechnung nach Artikel teilen',
   pos_splitpay_title: 'Zahlung teilen',
   pos_splitpay_persons: 'Anzahl Personen',
   pos_splitpay_next: 'Nächste Person',

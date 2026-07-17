@@ -1866,6 +1866,7 @@ export default {
   pos_remove_discount: 'Fjern rabatt',
   pos_discount_removed: 'Rabatt fjernet.',
   pos_split_title: 'Splitt regning',
+  pos_split_title_byitem: 'Splitt regning per vare',
   pos_splitpay_title: 'Del betaling',
   pos_splitpay_persons: 'Antall personer',
   pos_splitpay_next: 'Neste person',

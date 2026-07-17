@@ -3,9 +3,11 @@
     <div class="split__panel">
       <header class="split__head">
         <h2 class="split__title">
-          {{ $i('pos_split_title') }}
+          {{ hasSeats ? $i('pos_split_title') : $i('pos_split_title_byitem') }}
         </h2>
-        <button type="button" class="split__close" @click="close">
+        <!-- Once a part is paid the split is irreversible and the remaining parts must be
+             settled, so the close affordance disappears instead of silently doing nothing. -->
+        <button v-if="step !== 'pay' || !anyPaid" type="button" class="split__close" @click="close">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
       </header>
@@ -16,12 +18,13 @@
              synthetic share lines (a grey zone against bokføringsforskriften § 5-1-1 nr. 3), and
              "everyone pays their share" is covered by split PAYMENT on one receipt instead. A check
              split remains for guests who need their own receipt, with real item lines. -->
-        <div class="split__modes">
+        <!-- The mode switch only exists when there is a real choice (seat tags enable the per-guest
+             split); with by-item as the only mode the title carries it instead of a one-tab bar. -->
+        <div v-if="hasSeats" class="split__modes">
           <button type="button" class="split__mode" :class="{ 'is-active': mode === 'ByItem' }" @click="mode = 'ByItem'">
             {{ $i('pos_split_byitem') }}
           </button>
-          <!-- Per-guest only appears when the check carries seat tags; it prefills a by-item split. -->
-          <button v-if="hasSeats" type="button" class="split__mode" :class="{ 'is-active': mode === 'BySeat' }" @click="mode = 'BySeat'">
+          <button type="button" class="split__mode" :class="{ 'is-active': mode === 'BySeat' }" @click="mode = 'BySeat'">
             {{ $i('pos_split_byseat') }}
           </button>
         </div>
@@ -214,6 +217,9 @@ export default {
     allPaid () {
       return this.splitModel && this.splitModel.parts.every(p => this.paid[p.partOrderId]);
     },
+    anyPaid () {
+      return !!this.splitModel && this.splitModel.parts.some(p => this.paid[p.partOrderId]);
+    },
     // The per-guest mode is offered only when the check actually carries seat tags.
     hasSeats () { return this.lines.some(l => l.seatNumber != null); },
     // Guests to offer as placement chips: every guest up to the largest of couverts, the seats the
@@ -266,8 +272,24 @@ export default {
     if (this.hasSeats) { this.mode = 'BySeat'; }
   },
   methods: {
-    close () {
-      if (this.step === 'pay') { return; } // don't allow closing mid-payment; parts already exist
+    async close () {
+      // In the pay step the parts already exist server-side. Before any part is paid the split
+      // can still be reverted (nothing is registered); once a part is paid there is no way back —
+      // the remaining parts must be settled.
+      if (this.step === 'pay') {
+        if (this.busy || this.anyPaid) { return; }
+        this.busy = true;
+        this.error = '';
+        try {
+          await this.pos.checkSvc().Unsplit(this.check.orderId);
+          this.$emit('close');
+        } catch (e) {
+          this.error = this.pos.errMsg(e);
+        } finally {
+          this.busy = false;
+        }
+        return;
+      }
       this.$emit('close');
     },
     setParts (n) {

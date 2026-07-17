@@ -137,16 +137,6 @@
           :sold-out="isSoldOut(p)"
           @select="$emit('select', p)"
         />
-        <!-- Open price is a tile, always last, in every category and in search. -->
-        <button
-          v-if="!catalogError"
-          type="button"
-          class="product-grid__openprice-tile"
-          @click="$emit('open-price')"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          <span>{{ $i('pos_open_price') }}</span>
-        </button>
       </div>
     </div>
   </div>
@@ -400,22 +390,4 @@ export default {
   gap: 12px;
 }
 
-/* Open price as the last tile — same footprint as a product tile, dashed to read as an action. */
-.product-grid__openprice-tile {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  min-height: 96px;
-  border: 1px dashed #cbd5e0;
-  background: #ffffff;
-  color: var(--pos-ink, #292c34);
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 0.95rem;
-  cursor: pointer;
-}
-.product-grid__openprice-tile svg { width: 26px; height: 26px; color: #64748b; }
-.product-grid__openprice-tile:hover { border-color: var(--pos-primary, #1bb776); }
 </style>
