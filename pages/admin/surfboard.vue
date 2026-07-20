@@ -321,36 +321,86 @@
       <section v-else-if="activeTab === 'terminals'" class="surfboard__section">
         <template v-if="selectedStoreId > 0">
           <template v-if="config.merchantId && config.storeExternalId">
-            <h3>Registrer terminal</h3>
+            <h3>Registrer ny terminal</h3>
+            <ol class="sb-steps">
+              <li>Skru på terminalen og la den stå på &laquo;Register terminal&raquo;-skjermen.</li>
+              <li>Trykk <strong>Generer kode</strong> under.</li>
+              <li>Skriv koden inn i de <strong>tomme feltene øverst</strong> på terminalskjermen.</li>
+            </ol>
             <p class="sb-hint">
-              Skru på terminalen (SurfTouch: 6-sifret kode ved oppstart; SurfPad/SurfPrint: serienr på baksiden).
+              Ikke bruk koden terminalen selv viser nederst &mdash; den registreringsmåten avvises for de
+              fleste terminaler (&laquo;TM_0011&raquo;).
             </p>
-            <div class="sb-form">
-              <div class="form-group">
-                <label>Registrerings-ID / serienr</label>
-                <input v-model="registerForm.registrationIdentifier" class="form-control" type="text">
-              </div>
-              <div class="form-group">
-                <label>Terminal-navn</label>
-                <input v-model="registerForm.terminalName" class="form-control" type="text">
-              </div>
-              <button class="btn btn-primary" :disabled="registerLoading" @click="doRegisterDevice">
-                Registrer
+
+            <div v-if="!regCode" class="sb-form">
+              <button class="btn btn-primary" :disabled="regCodeLoading" @click="generateRegCode">
+                {{ regCodeLoading ? "Henter kode&hellip;" : "Generer kode" }}
               </button>
             </div>
 
-            <h3 style="margin-top: 1.5rem">
-              Aktiver terminal (partner-lager)
-            </h3>
-            <div class="sb-form">
-              <div class="form-group">
-                <label>Serienr</label>
-                <input v-model="activateSerial" class="form-control" type="text">
+            <div v-else class="sb-code-card">
+              <p class="sb-code-label">
+                Skriv denne koden på terminalen
+              </p>
+              <p class="sb-code">
+                {{ regCode.registrationCode }}
+              </p>
+              <div v-if="regCode.registrationLink" class="sb-code-qr">
+                <vue-qrcode
+                  :value="regCode.registrationLink"
+                  :options="{ width: 170, margin: 1 }"
+                />
+                <p class="sb-code-label">
+                  &hellip;eller skann denne med terminalens kamera
+                </p>
               </div>
-              <button class="btn btn-secondary" :disabled="activateLoading" @click="doActivate">
-                Aktiver
-              </button>
+              <p :class="['sb-code-expiry', { 'sb-code-expiry--dead': regCodeSeconds <= 0 }]">
+                <template v-if="regCodeSeconds > 0">
+                  Utløper om {{ regCodeSeconds }} s
+                </template>
+                <template v-else>
+                  Koden er utløpt &mdash; generer en ny.
+                </template>
+              </p>
+              <div class="sb-code-actions">
+                <button class="btn btn-primary" :disabled="regCodeLoading" @click="generateRegCode">
+                  Generer ny kode
+                </button>
+                <button class="btn btn-secondary" @click="loadTerminals">
+                  Sjekk om terminalen kom inn
+                </button>
+              </div>
             </div>
+
+            <details class="sb-advanced">
+              <summary>Andre registreringsmåter</summary>
+              <p class="sb-hint">
+                Kun for terminaler som krever det: SurfPad/SurfPrint registreres med serienummeret på
+                baksiden, og terminaler fra eget partner-lager aktiveres før bruk.
+              </p>
+              <div class="sb-form">
+                <div class="form-group">
+                  <label>Registrerings-ID / serienr</label>
+                  <input v-model="registerForm.registrationIdentifier" class="form-control" type="text">
+                </div>
+                <div class="form-group">
+                  <label>Terminal-navn</label>
+                  <input v-model="registerForm.terminalName" class="form-control" type="text">
+                </div>
+                <button class="btn btn-secondary" :disabled="registerLoading" @click="doRegisterDevice">
+                  Registrer med serienr
+                </button>
+              </div>
+              <div class="sb-form" style="margin-top: 1rem">
+                <div class="form-group">
+                  <label>Aktiver fra partner-lager (serienr)</label>
+                  <input v-model="activateSerial" class="form-control" type="text">
+                </div>
+                <button class="btn btn-secondary" :disabled="activateLoading" @click="doActivate">
+                  Aktiver
+                </button>
+              </div>
+            </details>
 
             <div class="surfboard__section-head" style="margin-top: 1.5rem">
               <h3>Terminaler</h3>
@@ -401,13 +451,15 @@
 </template>
 
 <script>
+import VueQrcode from '@chenfengyuan/vue-qrcode';
 import AdminPage from '~/components/organisms/AdminPage.vue';
 import Loading from '~/components/atoms/Loading.vue';
 
 export default {
   components: {
     AdminPage,
-    Loading
+    Loading,
+    VueQrcode
   },
   data () {
     return {
@@ -433,6 +485,10 @@ export default {
       savingConfig: false,
       terminals: [],
       registerForm: { registrationIdentifier: '', terminalName: '' },
+      regCode: null,
+      regCodeLoading: false,
+      regCodeSeconds: 0,
+      regCodeTimer: null,
       registerLoading: false,
       activateSerial: '',
       activateLoading: false
@@ -454,6 +510,9 @@ export default {
       return;
     }
     this.init();
+  },
+  beforeDestroy () {
+    this.clearRegCodeTimer();
   },
   methods: {
     emptyOnboardForm () {
@@ -516,6 +575,35 @@ export default {
         this.notification.show = false;
       }, 5000);
     },
+    // The pairing code Surfboard issues is short-lived; the countdown mirrors the terminal's own
+    // 90-second window so an expired code is obvious instead of failing silently on the terminal.
+    generateRegCode () {
+      this.regCodeLoading = true;
+      this._surfboardService
+        .getDeviceRegistrationCode(this.config.merchantId, this.config.storeExternalId)
+        .then((code) => {
+          this.regCode = code;
+          this.startRegCodeCountdown();
+        })
+        .catch(e => this.apiError(e, 'Kunne ikke generere registreringskode.'))
+        .finally(() => {
+          this.regCodeLoading = false;
+        });
+    },
+    startRegCodeCountdown () {
+      this.clearRegCodeTimer();
+      this.regCodeSeconds = 90;
+      this.regCodeTimer = setInterval(() => {
+        this.regCodeSeconds -= 1;
+        if (this.regCodeSeconds <= 0) { this.clearRegCodeTimer(); }
+      }, 1000);
+    },
+    clearRegCodeTimer () {
+      if (this.regCodeTimer) {
+        clearInterval(this.regCodeTimer);
+        this.regCodeTimer = null;
+      }
+    },
     apiError (error, fallback) {
       const message = error?.response?.data?.message || error?.message || fallback;
       this.showNotification(message, 'error');
@@ -557,12 +645,13 @@ export default {
     loadStore (storeId) {
       this.isLoading = true;
       const store = this.allStores.find(s => s.id === storeId);
-      // Prefill the onboarding form from the Okam store. The online terms/privacy URLs are Okam's
-      // standard pages (privacy is shared; the store terms carry the Okam store id).
+      // Prefill the onboarding form from the Okam store. The online webshop/terms/privacy URLs are
+      // Okam's standard pages (privacy is shared; the webshop and store terms carry the Okam store id).
       this.onboardForm = Object.assign(this.emptyOnboardForm(), {
         corporateId: store && store.vat ? String(store.vat) : '',
         legalName: store ? store.name : '',
         storeName: store ? store.name : '',
+        merchantWebshopUrl: 'https://shop.okam.no/shop?id=' + storeId,
         privacyPolicyUrl: 'https://okam.no/personvern/',
         termsAndConditionsUrl: 'https://okam.no/vilkar-store/?id=' + storeId
       });
@@ -707,6 +796,58 @@ export default {
 </script>
 
 <style scoped>
+.sb-steps {
+  margin: 0 0 0.5rem 1.1rem;
+  padding: 0;
+  line-height: 1.7;
+}
+.sb-code-card {
+  border: 1px solid #d7dce3;
+  border-radius: 10px;
+  padding: 1.25rem;
+  text-align: center;
+  max-width: 340px;
+}
+.sb-code-label {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+.sb-code {
+  margin: 0.35rem 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 2.75rem;
+  font-weight: 700;
+  letter-spacing: 0.35rem;
+}
+.sb-code-qr {
+  margin: 0.75rem 0 0.35rem;
+}
+.sb-code-qr p {
+  margin-top: 0.4rem;
+}
+.sb-code-expiry {
+  margin: 0 0 0.9rem;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+.sb-code-expiry--dead {
+  color: #b91c1c;
+  font-weight: 600;
+}
+.sb-code-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.sb-advanced {
+  margin-top: 1.5rem;
+}
+.sb-advanced summary {
+  cursor: pointer;
+  font-weight: 600;
+}
 .surfboard {
   max-width: 960px;
   margin: 0 auto;
