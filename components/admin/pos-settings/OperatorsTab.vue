@@ -104,7 +104,9 @@ export default {
         this.loading = false;
       }
     },
-    errMsg (e) { return (e && e.response && e.response.data && e.response.data.message) || (e && e.message) || 'Feil'; },
+    // The operator service throws RequestService.BuildError errors: the backend message (and
+    // statusCode) live directly on the error, not on an axios-shaped e.response.
+    errMsg (e) { return (e && e.message) || 'Feil'; },
     startNew () {
       this.form = { storeId: Number(this.storeId), displayName: '', isActive: true, pin: '' };
     },

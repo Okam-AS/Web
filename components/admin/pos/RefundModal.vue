@@ -38,6 +38,7 @@
 
         <template v-if="requiresSignature">
           <label class="refund__label">{{ $i('pos_return_signature') }}</label>
+          <p class="sign-handover">{{ $i('pos_sign_hand_over') }}</p>
           <SignaturePad v-model="signature" />
         </template>
         <p v-else class="refund__terminal-note">
@@ -119,6 +120,7 @@ export default {
       customerPhone: '',
       signature: '',
       error: '',
+      busy: false,
       resultReceipt: null,
       cardTxId: '',
       pollTimer: null,
@@ -145,6 +147,9 @@ export default {
       return true;
     },
     canContinue () {
+      // Refunds are money-moving and the card path has no idempotency key — a second tap
+      // while the first request is in flight must never fire another refund.
+      if (this.busy) { return false; }
       if (!this.reasonChosen || !this.customerPhone.trim()) { return false; }
       if (this.requiresSignature && !this.signature) { return false; }
       if (this.amountMode === 'partial' && (this.partialAmount <= 0 || this.partialAmount > this.maxAmount)) { return false; }
@@ -160,6 +165,7 @@ export default {
     },
     async onContinue () {
       if (!this.canContinue) { return; }
+      this.busy = true;
       this.error = '';
       const amount = this.amountMode === 'full' ? this.maxAmount : this.partialAmount;
       const reasonType = this.reasonSel.reasonType;
@@ -189,6 +195,8 @@ export default {
         }
       } catch (e) {
         this.error = this.pos.errMsg(e);
+      } finally {
+        this.busy = false;
       }
     },
     handleCardResult (result, txId) {
@@ -239,6 +247,9 @@ export default {
 </script>
 
 <style scoped>
+.sign-handover { margin: 0 0 8px; color: #b45309; font-size: 0.85rem; font-weight: 600; }
+.refund__terminal-note { margin: 14px 0 0; font-size: 0.85rem; color: #64748b; background: #f8f9fa; border-radius: 8px; padding: 10px 12px; }
+
 .refund { position: fixed; inset: 0; background: rgba(18, 20, 26, 0.6); display: flex; align-items: center; justify-content: center; z-index: 1100; padding: 16px; }
 .refund__panel { background: #fff; border-radius: 18px; width: 100%; max-width: 460px; max-height: 94vh; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35); }
 .refund__head { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px 12px; border-bottom: 1px solid #eef1f5; }
@@ -261,7 +272,6 @@ export default {
 .refund__mode { flex: 1; height: 44px; border: 1px solid #cbd5e0; background: #fff; border-radius: 10px; font-weight: 600; color: var(--pos-ink, #292c34); cursor: pointer; }
 .refund__mode.is-active { border-color: var(--pos-primary, #1bb776); background: rgba(27, 183, 118, 0.08); color: var(--pos-primary-dark, #159f63); }
 
-.refund__terminal-note { margin: 14px 0 0; font-size: 0.85rem; color: #64748b; background: #f8f9fa; border-radius: 8px; padding: 10px 12px; }
 .refund__error { color: #ef4444; font-weight: 600; font-size: 0.85rem; margin: 12px 0 0; }
 
 .refund__confirm { width: 100%; height: 54px; margin-top: 18px; border: none; border-radius: 12px; background: var(--pos-primary, #1bb776); color: #fff; font-size: 1.05rem; font-weight: 700; cursor: pointer; }

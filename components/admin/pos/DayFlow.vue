@@ -22,6 +22,17 @@
           </div>
         </div>
 
+        <!-- The day cannot close while checks are open — warn up front with the count and a
+             shortcut, instead of letting the operator run into the backend error. -->
+        <div v-if="openChecksCount > 0" class="day-flow__warn">
+          <p class="day-flow__warn-text">
+            {{ $i('pos_eod_open_checks', { count: openChecksCount }) }}
+          </p>
+          <button type="button" class="day-flow__warn-btn" @click="pos.setMode('board')">
+            {{ $i('pos_eod_show_open') }}
+          </button>
+        </div>
+
         <div class="day-flow__actions">
           <button type="button" class="day-flow__action" @click="openTxn('PayIn')">
             {{ $i('pos_pay_in') }}
@@ -38,7 +49,12 @@
           <button type="button" class="day-flow__action" @click="showReturnBuilder = true">
             {{ $i('pos_return_new') }}
           </button>
-          <button type="button" class="day-flow__action day-flow__action--danger" @click="showEod = true">
+          <button
+            type="button"
+            class="day-flow__action day-flow__action--danger"
+            :disabled="openChecksCount > 0"
+            @click="onCloseDayTap"
+          >
             {{ $i('pos_eod_close_day') }}
           </button>
         </div>
@@ -127,7 +143,15 @@ export default {
   computed: {
     session () { return this.pos.daySession; },
     dayOpen () { return this.pos.dayOpen; },
-    cashPoint () { return this.pos.cashPoint; }
+    cashPoint () { return this.pos.cashPoint; },
+    // Open (seated) checks + parked checks from the live board poll: the backend refuses to
+    // close the day while any exist, so the UI blocks the flow with the same rule.
+    openChecksCount () {
+      const b = this.pos.boardStatus;
+      if (!b) { return 0; }
+      const seated = (b.tables || []).filter(t => t.openCheck).length;
+      return seated + ((b.parkedChecks || []).length);
+    }
   },
   watch: {
     dayOpen: {
@@ -153,6 +177,13 @@ export default {
       } catch (e) {
         this.eod = null;
       }
+    },
+    onCloseDayTap () {
+      if (this.openChecksCount > 0) {
+        this.notify(this.$i('pos_eod_open_checks', { count: this.openChecksCount }), 'error');
+        return;
+      }
+      this.showEod = true;
     },
     openTxn (type) {
       this.txnType = type;
@@ -204,6 +235,11 @@ export default {
 .day-flow__card--accent { border-color: var(--pos-primary, #1bb776); background: rgba(27, 183, 118, 0.06); }
 .day-flow__card-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.03em; }
 .day-flow__card-value { font-size: 1.4rem; font-weight: 700; color: var(--pos-ink, #292c34); }
+
+.day-flow__warn { border: 1px solid #fcd34d; background: #fffbeb; border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; }
+.day-flow__warn-text { margin: 0 0 10px; color: #b45309; font-weight: 600; }
+.day-flow__warn-btn { height: 42px; border: 1px solid #f59e0b; border-radius: 10px; background: #ffffff; color: #b45309; font-weight: 700; cursor: pointer; padding: 0 16px; }
+.day-flow__action:disabled { opacity: 0.45; cursor: not-allowed; }
 
 .day-flow__actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
 .day-flow__action {

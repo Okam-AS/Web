@@ -347,6 +347,7 @@ export default {
       }
     },
     async onPartCashConfirm ({ tendered }) {
+      if (this.busy) { return; }
       const part = this.payingPart;
       this.busy = true;
       this.error = '';

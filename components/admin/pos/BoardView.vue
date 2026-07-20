@@ -276,7 +276,7 @@ export default {
         this.busy = true;
         try {
           const check = await this.pos.checkSvc().GetCheck(oc.orderId);
-          this.pos.setActiveCheck(check);
+          await this.pos.setActiveCheck(check);
         } catch (e) {
           this.flash(this.pos.errMsg(e));
         } finally {
@@ -295,7 +295,7 @@ export default {
       this.busy = true;
       try {
         const check = await this.pos.openCheck({ tableId: t.id, couverts: null, deliveryType: 'TableDelivery' });
-        this.pos.setActiveCheck(check);
+        if (check) { await this.pos.setActiveCheck(check); }
       } catch (e) {
         this.flash(this.pos.errMsg(e));
       } finally {
@@ -311,8 +311,11 @@ export default {
       if (this.busy) { return; }
       this.busy = true;
       try {
+        // Resolve the current check BEFORE Resume: Resume un-parks server-side, so a
+        // cancelled park-or-void prompt afterwards would leave the resumed check dangling.
+        if (!(await this.pos.prepareForNewActiveCheck(p.orderId))) { return; }
         const check = await this.pos.checkSvc().Resume(p.orderId, { tableId: p.tableId || null });
-        this.pos.setActiveCheck(check);
+        this.pos.adoptCheck(check);
       } catch (e) {
         this.flash(this.pos.errMsg(e));
       } finally {
@@ -324,7 +327,7 @@ export default {
       this.busy = true;
       try {
         const check = await this.pos.checkSvc().GetCheck(oc.orderId);
-        this.pos.setActiveCheck(check);
+        await this.pos.setActiveCheck(check);
       } catch (e) {
         this.flash(this.pos.errMsg(e));
       } finally {

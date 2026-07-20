@@ -167,6 +167,7 @@
 
         <template v-if="method === 'cash'">
           <label class="rbuild__label">{{ $i('pos_return_signature') }}</label>
+          <p class="sign-handover">{{ $i('pos_sign_hand_over') }}</p>
           <SignaturePad v-model="signature" />
         </template>
         <p v-else class="rbuild__terminal-note">
@@ -269,6 +270,7 @@ export default {
       customerPhone: '',
       signature: '',
       error: '',
+      busy: false,
       resultReceipt: null,
       cardTxId: '',
       pollTimer: null,
@@ -306,6 +308,9 @@ export default {
       return this.allProducts.filter(p => (p.name || '').toLowerCase().includes(q));
     },
     canAdvance () {
+      // Returns are money-moving and the card path has no idempotency key — block a second
+      // tap while the first request is in flight.
+      if (this.busy) { return false; }
       if (this.step === 'build') { return this.lines.length > 0; }
       if (this.step === 'settle') {
         // Every line must be classified with a goods group before the RETREC can be journalled; a
@@ -370,7 +375,9 @@ export default {
       // Menu pick sets the goods group from the product; the rate follows from group x context for a
       // profiled group, else the product's own rate.
       const derived = this.effectiveVat(p.goodsGroupId);
-      const vatPercent = derived != null ? derived : ([0, 15, 25].includes(p.tax) ? p.tax : 25);
+      // Trust the product's own rate for any legal Norwegian VAT rate (incl. 12%) — silently
+      // rewriting it would journal the wrong rate on the RETREC.
+      const vatPercent = derived != null ? derived : (this.vatRates.includes(p.tax) ? p.tax : 25);
       if (p.goodsGroupId == null) {
         this.draft = { name: p.name, quantity: 1, unitAmount: p.amount, vatPercent, goodsGroupId: null };
         this.entryMode = 'manual';
@@ -392,6 +399,8 @@ export default {
       }
     },
     async doReturn () {
+      if (this.busy) { return; }
+      this.busy = true;
       const base = {
         cashPointId: this.cashPointId,
         reasonType: this.reasonSel.reasonType,
@@ -425,6 +434,8 @@ export default {
       } catch (e) {
         this.error = this.pos.errMsg(e);
         this.step = 'settle';
+      } finally {
+        this.busy = false;
       }
     },
     startPoll () {
@@ -461,6 +472,9 @@ export default {
 </script>
 
 <style scoped>
+.sign-handover { margin: 0 0 8px; color: #b45309; font-size: 0.85rem; font-weight: 600; }
+.rbuild__terminal-note { margin: 14px 0 0; font-size: 0.85rem; color: #64748b; background: #f8f9fa; border-radius: 8px; padding: 10px 12px; }
+
 .rbuild { position: fixed; inset: 0; background: rgba(18, 20, 26, 0.6); display: flex; align-items: center; justify-content: center; z-index: 1050; padding: 16px; }
 .rbuild__panel { background: #fff; border-radius: 18px; width: 100%; max-width: 460px; max-height: 94vh; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35); }
 .rbuild__head { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px 12px; border-bottom: 1px solid #eef1f5; }
@@ -519,7 +533,6 @@ export default {
 .rbuild__methods { display: flex; gap: 8px; }
 .rbuild__method { flex: 1; height: 46px; border: 1px solid #cbd5e0; background: #fff; border-radius: 10px; font-weight: 600; color: var(--pos-ink, #292c34); cursor: pointer; }
 .rbuild__method.is-active { border-color: var(--pos-primary, #1bb776); background: rgba(27, 183, 118, 0.08); color: var(--pos-primary-dark, #159f63); }
-.rbuild__terminal-note { margin: 14px 0 0; font-size: 0.85rem; color: #64748b; background: #f8f9fa; border-radius: 8px; padding: 10px 12px; }
 .rbuild__error { color: #ef4444; font-weight: 600; font-size: 0.85rem; margin: 12px 0 0; }
 
 .rbuild__spinner { width: 46px; height: 46px; border-radius: 50%; border: 4px solid #e2e8f0; border-top-color: var(--pos-primary, #1bb776); animation: rbuild-spin 0.8s linear infinite; }

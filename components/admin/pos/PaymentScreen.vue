@@ -245,7 +245,10 @@ export default {
       cardMessage: '',
       cardTransactionId: '',
       cardPollTimer: null,
-      cardElapsed: 0,
+      cardPollBusy: false,
+      // Wall-clock start of the card flow: browsers throttle background-tab timers, so counting
+      // ticks would under-count and stretch the timeout far past its intent.
+      cardStartedAt: 0,
       showSms: false,
       smsPhone: '',
       smsResult: '',
@@ -320,7 +323,13 @@ export default {
     // The cash remainder rounds to the nearest whole krone (the server applies the same rounding).
     splitCashDue () { return Math.round(this.splitOutstanding / 100) * 100; }
   },
+  created () {
+    // While the payment screen is up, a detected session expiry must not collapse the UI
+    // (the customer may be mid-tap on the terminal) — pos defers the teardown.
+    this.pos.paymentActive = true;
+  },
   beforeDestroy () {
+    this.pos.paymentActive = false;
     this.stopCardPoll();
     this.stopSplitPoll();
     // Invalidate in-flight split continuations; a capture that raced the teardown still books
@@ -331,6 +340,12 @@ export default {
     // ---- Cash ----
     chooseCash () {
       this.error = '';
+      // Nothing left to tender (100% discounted check): finalize directly, mirroring the
+      // split flow's zero-due shortcut — the cash pad has nothing meaningful to ask.
+      if (this.total === 0) {
+        this.onCashConfirm({ tendered: 0 });
+        return;
+      }
       this.step = 'cash';
     },
     async onCashConfirm ({ tendered }) {
@@ -353,13 +368,20 @@ export default {
 
     // ---- Card ----
     async chooseCard () {
+      // Nothing left to tender (100% discounted check): sending zero to the terminal only
+      // errors — finalize through the cash path's zero shortcut instead.
+      if (this.total === 0) {
+        this.chooseCash();
+        return;
+      }
       await this.startCardFlow();
     },
     async startCardFlow () {
       this.step = 'card';
       this.cardState = 'initiating';
       this.cardMessage = '';
-      this.cardElapsed = 0;
+      // Arm the timeout before the initiate so a hung initiate is covered by it too.
+      this.cardStartedAt = Date.now();
       try {
         const result = await this.pos.posSvc().InitiateCard({
           cashPointId: this.cashPointId,
@@ -382,23 +404,30 @@ export default {
       if (this.cardPollTimer) { clearInterval(this.cardPollTimer); this.cardPollTimer = null; }
     },
     async pollCard () {
-      this.cardElapsed += CARD_POLL_MS;
+      // Reentrancy guard (as in pollSplitCard): a GetCheck slower than the poll interval must
+      // not let two overlapping invocations both observe the completed check.
+      if (this.cardPollBusy) { return; }
+      this.cardPollBusy = true;
       try {
-        const check = await this.pos.checkSvc().GetCheck(this.orderId);
-        if (check && check.status === 'Completed' && check.journalEntryId) {
-          this.stopCardPoll();
-          this.cardState = 'approved';
-          this.receipt = await this.pos.posSvc().GetReceipt(check.journalEntryId);
-          this.step = 'receipt';
-          return;
+        try {
+          const check = await this.pos.checkSvc().GetCheck(this.orderId);
+          if (check && check.status === 'Completed' && check.journalEntryId) {
+            this.stopCardPoll();
+            this.cardState = 'approved';
+            this.receipt = await this.pos.posSvc().GetReceipt(check.journalEntryId);
+            this.step = 'receipt';
+            return;
+          }
+        } catch (e) {
+          // Transient poll failure — keep trying until the timeout.
         }
-      } catch (e) {
-        // Transient poll failure — keep trying until the timeout.
-      }
-      if (this.cardElapsed >= CARD_TIMEOUT_MS) {
-        this.stopCardPoll();
-        this.cardState = 'timeout';
-        this.voidTerminal('timeout');
+        if (Date.now() - this.cardStartedAt >= CARD_TIMEOUT_MS) {
+          this.stopCardPoll();
+          this.cardState = 'timeout';
+          this.voidTerminal('timeout');
+        }
+      } finally {
+        this.cardPollBusy = false;
       }
     },
     // Cancels a hanging/declined terminal transaction (provider void), logged as VOIDTRANS.

@@ -14,7 +14,7 @@
           <p class="void-modal__warn">
             {{ $i('pos_void_warn') }}
           </p>
-          <ReasonPicker context="void" :label="$i('pos_void_reason')" v-model="reasonSel" />
+          <ReasonPicker context="void" :label="$i('pos_void_reason_optional')" v-model="reasonSel" />
         </div>
         <footer class="void-modal__foot">
           <p v-if="error" class="void-modal__error">
@@ -50,9 +50,9 @@ export default {
     return { reasonSel: { reasonType: 'None', reasonText: '' } };
   },
   computed: {
+    // The § 5-3-7 documentation requirement applies to returns, not voids — the backend
+    // journals the VOIDTRANS either way and treats the reason as optional. So do we.
     canContinue () {
-      if (this.reasonSel.reasonType === 'None') { return false; }
-      if (this.reasonSel.reasonType === 'Annet') { return !!(this.reasonSel.reasonText || '').trim(); }
       return true;
     }
   },

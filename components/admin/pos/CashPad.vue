@@ -57,7 +57,9 @@ export default {
       return unique.slice(0, 4);
     },
     change () { return Math.max(0, this.tendered - this.due); },
-    canConfirm () { return this.due > 0 && this.tendered >= this.due; }
+    // due can legitimately be 0 (100% discounted check) — the sale must still be
+    // confirmable, otherwise the flow dead-ends.
+    canConfirm () { return this.tendered >= this.due; }
   },
   watch: {
     amount () { this.tendered = this.due; }

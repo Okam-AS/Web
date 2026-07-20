@@ -34,6 +34,9 @@
           <h2 class="sell__parked-title">
             {{ $i('pos_parked_title') }}
           </h2>
+          <button type="button" class="sell__parked-voidall" @click="onVoidAllParked">
+            {{ $i('pos_void_all_parked') }}
+          </button>
           <button type="button" class="sell__parked-close" @click="showParked = false">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
@@ -443,10 +446,12 @@ export default {
         // A discounted row refunds exactly what was charged: one unit at the discounted total
         // (the per-unit net may not divide evenly in ore).
         if (g.discountAmount > 0) {
+          // g.lineAmount is summed from netLineAmount and is already net of the discount —
+          // subtracting discountAmount again would under-refund the customer.
           return {
             name,
             quantity: 1,
-            unitAmount: g.lineAmount - g.discountAmount,
+            unitAmount: g.lineAmount,
             vatPercent: g.tax,
             goodsGroupId: g.goodsGroupId,
             sourceLineIds: g.lineIds.slice()
@@ -483,6 +488,7 @@ export default {
           return;
         }
         this.busy = false;
+        await this.voidIfEmptied();
       }
       this.notify(this.$i('pos_negative_sale_done'), 'success');
     },
@@ -520,6 +526,7 @@ export default {
       this.busy = true;
       try {
         const check = await this.ensureCheck();
+        if (!check) { return; }
         // seatOverride (used by "+" on a row) forces the row's own guest; otherwise a new line takes
         // the active guest. undefined means "not overridden" so an explicit null (Felles) is honoured.
         const seatNumber = seatOverride !== undefined
@@ -563,6 +570,7 @@ export default {
       this.busy = true;
       try {
         const check = await this.ensureCheck();
+        if (!check) { return; }
         // A preset carries its own name + goods group server-side (WP-A2); a custom open-price line
         // sends the typed name / group / rate. Only one path is populated.
         const request = {
@@ -639,6 +647,7 @@ export default {
       try {
         const lineId = group.lineIds[group.lineIds.length - 1];
         this.pos.applyCheck(await this.pos.checkSvc().RemoveLine(this.check.orderId, lineId));
+        await this.voidIfEmptied();
       } catch (e) {
         this.notify(this.pos.errMsg(e), 'error');
       } finally {
@@ -654,10 +663,26 @@ export default {
           result = await this.pos.checkSvc().RemoveLine(this.check.orderId, lineId);
         }
         this.pos.applyCheck(result);
+        await this.voidIfEmptied();
       } catch (e) {
         this.notify(this.pos.errMsg(e), 'error');
       } finally {
         this.busy = false;
+      }
+    },
+
+    // Removing the last line leaves a check whose line corrections are already journalled,
+    // so it cannot be silently discarded — close its story with a tap-less VOIDTRANS (an
+    // abandoned started sale is an "avbrutt salg" the X/Z report must count).
+    async voidIfEmptied () {
+      if (!this.check || (this.check.items || []).length > 0) { return; }
+      try {
+        await this.pos.voidCheckQuick(this.check.orderId);
+        this.pos.clearActiveCheck();
+        this.recipes = {};
+        this.notify(this.$i('pos_empty_voided'), 'success');
+      } catch (e) {
+        // The check keeps its lines' audit trail; the operator can void it explicitly.
       }
     },
     findCatalogProduct (productId) {
@@ -700,14 +725,45 @@ export default {
       if (this.busy) { return; }
       this.busy = true;
       try {
+        // Resolve the current check BEFORE Resume: Resume un-parks server-side, so a
+        // cancelled park-or-void prompt afterwards would leave the resumed check dangling.
+        if (!(await this.pos.prepareForNewActiveCheck(p.orderId))) { return; }
         const check = await this.pos.checkSvc().Resume(p.orderId, { tableId: p.tableId || null });
         this.showParked = false;
-        this.pos.setActiveCheck(check);
+        this.pos.adoptCheck(check);
       } catch (e) {
         this.notify(this.pos.errMsg(e), 'error');
       } finally {
         this.busy = false;
       }
+    },
+
+    // Bulk cleanup of the parked list — a small secondary action behind an explicit confirm
+    // (count + total), since every void is an irreversible journalled VOIDTRANS and a parked
+    // check may be a genuinely waiting order.
+    async onVoidAllParked () {
+      if (this.busy || !this.parkedChecks.length) { return; }
+      const total = this.parkedChecks.reduce((sum, p) => sum + (p.finalAmount || 0), 0);
+      if (!window.confirm(this.$i('pos_void_all_parked_confirm', { count: this.parkedChecks.length, amount: this.priceLabel(total) }))) {
+        return;
+      }
+      this.busy = true;
+      let done = 0;
+      for (const p of this.parkedChecks) {
+        try {
+          await this.pos.voidCheckQuick(p.orderId);
+          done++;
+        } catch (e) {
+          // Resumed or settled elsewhere mid-loop — skip it.
+        }
+      }
+      if (this.check && this.parkedChecks.some(p => p.orderId === this.check.orderId)) {
+        this.pos.clearActiveCheck();
+      }
+      this.busy = false;
+      this.showParked = false;
+      await this.pos.refreshBoard();
+      this.notify(this.$i('pos_void_all_parked_done', { count: done }), 'success');
     },
     onDiscount () {
       if (!this.check) { return; }
@@ -1068,6 +1124,7 @@ export default {
 .sell__parked-sheet { width: 100%; max-width: 400px; background: #f8f9fa; height: 100%; display: flex; flex-direction: column; box-shadow: -8px 0 30px rgba(0, 0, 0, 0.25); }
 .sell__parked-head { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; border-bottom: 1px solid #e2e8f0; background: #fff; }
 .sell__parked-title { font-size: 1.2rem; font-weight: 700; color: var(--pos-ink, #292c34); margin: 0; }
+.sell__parked-voidall { border: none; background: none; cursor: pointer; color: #dc2626; font-weight: 700; font-size: 0.85rem; margin-left: auto; padding: 4px 8px; }
 .sell__parked-close { border: none; background: none; cursor: pointer; color: #94a3b8; padding: 4px; }
 .sell__parked-close svg { width: 24px; height: 24px; }
 .sell__parked-list { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
