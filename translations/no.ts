@@ -726,6 +726,7 @@ export default {
   nav_ongoing: 'Pågående bestillinger',
   nav_overview: 'Oversikt',
   nav_payment: 'Betaling',
+  nav_terminals: 'Terminaler',
   nav_products: 'Produkter',
   nav_rewards: 'Bonus',
   nav_send_invoice: 'Send faktura',

@@ -101,8 +101,11 @@
           <!-- Connection form -->
           <section class="tripletex__section" style="margin-top: 1.25rem">
             <div class="tripletex__section-head">
-              <h3>Koble til / oppdater token</h3>
+              <h3>{{ status && status.exists ? 'Rediger tilkobling' : 'Koble til Tripletex' }}</h3>
             </div>
+            <p v-if="status && status.exists" class="tripletex__meta" style="margin-top:-0.4rem">
+              Endre kontoene under og lagre. Tokenet trenger du bare å lime inn hvis du skal bytte det.
+            </p>
 
             <div class="form-group">
               <label>Token-type <span class="tripletex__meta">(kan ikke utledes fra tokenet — velg riktig spor)</span></label>
@@ -113,10 +116,12 @@
             </div>
 
             <div class="form-group">
-              <label>API-token</label>
-              <textarea v-model="form.apiToken" class="form-control" rows="3" placeholder="Lim inn kundens Tripletex-token" />
+              <label>API-token <span v-if="status && status.hasToken" class="tripletex__meta">(valgfritt — token er lagret)</span></label>
+              <textarea v-model="form.apiToken" class="form-control" rows="3" :placeholder="status && status.hasToken ? 'Token er lagret — la stå tomt for å beholde det, eller lim inn et nytt' : 'Lim inn kundens Tripletex-token'" />
+              <p v-if="status && status.hasToken" class="tripletex__meta">Et token er allerede lagret. Du kan endre kontoene og lagre uten å lime inn tokenet på nytt.</p>
             </div>
 
+            <h4 class="tripletex__group-title">Driftskonti (bank, kasse, gebyr)</h4>
             <div class="tripletex__accounts">
               <div class="form-group"><label>Company id</label><input v-model="form.companyId" class="form-control" placeholder="0"></div>
               <div class="form-group"><label>Bankkonto (payout)</label><input v-model="form.bankAccountNumber" class="form-control"></div>
@@ -125,8 +130,31 @@
               <div class="form-group"><label>Kassedifferanse</label><input v-model="form.cashDifferenceAccountNumber" class="form-control"></div>
               <div class="form-group"><label>Bankinnskudd</label><input v-model="form.bankDepositAccountNumber" class="form-control"></div>
               <div class="form-group"><label>Øreavrunding</label><input v-model="form.roundingAccountNumber" class="form-control"></div>
-              <div class="form-group"><label>Mellomkonto Dintero</label><input v-model="form.dinteroIntermediaryAccountNumber" class="form-control"></div>
-              <div class="form-group"><label>Mellomkonto Surfboard</label><input v-model="form.surfboardIntermediaryAccountNumber" class="form-control"></div>
+              <div class="form-group"><label>Mellomkonto Dintero</label><input v-model="form.dinteroIntermediaryAccountNumber" class="form-control" placeholder="Opprett egen konto, f.eks. 1581"></div>
+              <div class="form-group"><label>Mellomkonto Surfboard</label><input v-model="form.surfboardIntermediaryAccountNumber" class="form-control" placeholder="Opprett egen konto, f.eks. 1582"></div>
+            </div>
+            <p class="tripletex__hint">
+              Balansekonti (bank/kasse/gebyr/mellomkonto) auto-opprettes hvis de mangler. Mellomkontoene bør
+              være egne, dedikerte konti per leverandør (f.eks. 1581/1582).
+            </p>
+
+            <h4 class="tripletex__group-title">Salgs- og MVA-konti</h4>
+            <div class="tripletex__accounts">
+              <div class="form-group"><label>Salg 25% (servering)</label><input v-model="form.salesAccount25Percent" class="form-control" placeholder="3000"></div>
+              <div class="form-group"><label>Salg 15% (mat/takeaway)</label><input v-model="form.salesAccount15Percent" class="form-control" placeholder="3001"></div>
+              <div class="form-group"><label>Salg 12% (lav sats)</label><input v-model="form.salesAccount12Percent" class="form-control" placeholder="3002"></div>
+              <div class="form-group"><label>Salg 0% (avgiftsfri)</label><input v-model="form.salesAccount0Percent" class="form-control" placeholder="3100"></div>
+              <div class="form-group"><label>Tips (utenfor mva)</label><input v-model="form.tipsAccount" class="form-control" placeholder="egen konto — valgfri"></div>
+              <div class="form-group"><label>Kundefordringer</label><input v-model="form.receivablesAccount" class="form-control" placeholder="1500"></div>
+            </div>
+            <p class="tripletex__hint">
+              Standard kontoplan (NS 4102) er forhåndsutfylt. Salgs-/MVA-konti auto-opprettes <strong>ikke</strong>
+              (feil mva-type = fiskal feil) — mangler vises under «Mangler i kontoplanen», og opprettes da manuelt
+              i Tripletex med riktig mva-sats. Tips ligger utenfor mva; sett en egen konto ved behov.
+            </p>
+            <div class="sb-checks">
+              <label><input v-model="form.accountingEnabled" type="checkbox"> Regnskapseksport aktiv</label>
+              <span class="tripletex__meta">Styrer den delte regnskapseksporten (både Tripletex og en ev. eMonkey-webhook). Skru av for å sette alt på pause uten å miste kontooppsettet.</span>
             </div>
 
             <div class="sb-checks">
@@ -134,7 +162,7 @@
             </div>
 
             <div class="tripletex__actions">
-              <button class="btn btn-primary" :disabled="busy.save || !form.apiToken" @click="saveConnection">
+              <button class="btn btn-primary" :disabled="busy.save || (!form.apiToken && !(status && status.hasToken))" @click="saveConnection">
                 {{ busy.save ? 'Lagrer…' : 'Lagre og valider' }}
               </button>
             </div>
@@ -366,14 +394,62 @@ export default {
         tokenType: 'CompanyJwt',
         companyId: '0',
         isActive: true,
-        bankAccountNumber: '',
-        feeAccountNumber: '',
-        cashboxAccountNumber: '',
-        cashDifferenceAccountNumber: '',
-        bankDepositAccountNumber: '',
-        roundingAccountNumber: '',
+        // Norwegian standard chart of accounts (NS 4102) defaults, verified against the
+        // Tripletex account plan. Admin can override per store before saving. The two
+        // provider intermediary ("mellomkonto") accounts have no safe default — each store
+        // must create a dedicated clearing account per provider — so they stay blank.
+        bankAccountNumber: '1920',
+        feeAccountNumber: '7770',
+        cashboxAccountNumber: '1900',
+        cashDifferenceAccountNumber: '1909',
+        bankDepositAccountNumber: '1920',
+        roundingAccountNumber: '7740',
         dinteroIntermediaryAccountNumber: '',
-        surfboardIntermediaryAccountNumber: ''
+        surfboardIntermediaryAccountNumber: '',
+        // Sales/VAT/tips/receivables accounts — verified NS 4102 standard accounts. These are never
+        // auto-created (a wrong VAT type on a revenue account is a fiscal error); a missing one is
+        // surfaced under "Mangler i kontoplanen". Tips has no standard account, so it stays blank.
+        salesAccount25Percent: '3000',   // Salgsinntekt, avgiftspliktig (mva 25%)
+        salesAccount15Percent: '3001',   // Salgsinntekt, middels sats (mva 15% — mat/takeaway)
+        salesAccount12Percent: '3002',   // Salgsinntekt, lav sats (mva 12%)
+        salesAccount0Percent: '3100',    // Salgsinntekt, avgiftsfri (mva 0%)
+        tipsAccount: '',                 // utenfor mva — sett egen konto
+        receivablesAccount: '1500',      // Kundefordringer
+        accountingEnabled: true          // a fresh setup enables the accounting export
+      };
+    },
+    // Load the saved connection's settings into the form so an existing connection is editable
+    // (refresh no longer resets to defaults). A store that has never been connected keeps the
+    // NS 4102 defaults from emptyForm(). The token is never returned, so its field stays blank —
+    // the API keeps the stored token when none is sent.
+    hydrateFormFromStatus (status) {
+      if (!status || !status.exists) {
+        this.form = this.emptyForm();
+        return;
+      }
+      const base = this.emptyForm();
+      const pick = (value, fallback) => (value === null || value === undefined || value === '' ? fallback : value);
+      this.form = {
+        apiToken: '',
+        tokenType: pick(status.tokenType, base.tokenType),
+        companyId: pick(status.companyId, base.companyId),
+        isActive: status.isActive,
+        bankAccountNumber: pick(status.bankAccountNumber, base.bankAccountNumber),
+        feeAccountNumber: pick(status.feeAccountNumber, base.feeAccountNumber),
+        cashboxAccountNumber: pick(status.cashboxAccountNumber, base.cashboxAccountNumber),
+        cashDifferenceAccountNumber: pick(status.cashDifferenceAccountNumber, base.cashDifferenceAccountNumber),
+        bankDepositAccountNumber: pick(status.bankDepositAccountNumber, base.bankDepositAccountNumber),
+        roundingAccountNumber: pick(status.roundingAccountNumber, base.roundingAccountNumber),
+        dinteroIntermediaryAccountNumber: pick(status.dinteroIntermediaryAccountNumber, ''),
+        surfboardIntermediaryAccountNumber: pick(status.surfboardIntermediaryAccountNumber, ''),
+        salesAccount25Percent: pick(status.salesAccount25Percent, base.salesAccount25Percent),
+        salesAccount15Percent: pick(status.salesAccount15Percent, base.salesAccount15Percent),
+        salesAccount12Percent: pick(status.salesAccount12Percent, base.salesAccount12Percent),
+        salesAccount0Percent: pick(status.salesAccount0Percent, base.salesAccount0Percent),
+        tipsAccount: pick(status.tipsAccount, ''),
+        receivablesAccount: pick(status.receivablesAccount, base.receivablesAccount),
+        // Hydrate the toggle from the stored value so re-saving never silently re-enables a paused export.
+        accountingEnabled: status.accountingConfigEnabled === true
       };
     },
     handleLoginSuccess () {
@@ -388,6 +464,7 @@ export default {
     },
     onStoreChange () {
       this.status = null;
+      this.form = this.emptyForm();
       this.reconciliation = null;
       this.results = [];
       this.verify = { voucherId: null, result: null, reversal: null };
@@ -459,7 +536,7 @@ export default {
     },
     loadStatus () {
       this._tripletexService.getStatus(this.selectedStoreId)
-        .then((status) => { this.status = status; })
+        .then((status) => { this.status = status; this.hydrateFormFromStatus(status); })
         .catch(e => this.apiError(e, 'Kunne ikke hente status'));
     },
     saveConnection () {
@@ -467,7 +544,13 @@ export default {
       this._tripletexService.upsertConnection(this.selectedStoreId, this.form)
         .then((status) => {
           this.status = status;
+          this.hydrateFormFromStatus(status);
           this.showNotification(status.verified ? 'Tilkobling lagret og verifisert.' : 'Lagret, men tokenet validerte ikke.', status.verified ? 'success' : 'error');
+          const created = (status && status.createdAccounts) || [];
+          if (created.length) {
+            const list = created.map(a => `${a.number} ${a.name}`).join('\n');
+            window.alert(`Nye kontoer opprettet i Tripletex:\n\n${list}`);
+          }
         })
         .catch(e => this.apiError(e, 'Kunne ikke lagre tilkobling'))
         .finally(() => { this.busy.save = false; });
@@ -630,6 +713,17 @@ export default {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.75rem 1rem;
+}
+.tripletex__hint {
+  color: #6b7280;
+  font-size: 0.85rem;
+  margin: 0.6rem 0 0;
+}
+.tripletex__group-title {
+  margin: 1.1rem 0 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #374151;
 }
 .tripletex__actions {
   display: flex;

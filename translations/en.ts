@@ -709,6 +709,7 @@ export default {
   nav_ongoing: 'Ongoing orders',
   nav_overview: 'Overview',
   nav_payment: 'Payment',
+  nav_terminals: 'Terminals',
   nav_products: 'Products',
   nav_rewards: 'Rewards',
   nav_send_invoice: 'Send invoice',

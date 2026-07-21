@@ -71,6 +71,51 @@
           </div>
         </div>
 
+        <!-- Section: Surfboard -->
+        <div v-if="paymentConfig.surfboardAvailable" class="form-section">
+          <div class="section-header">
+            <h2 class="section-title">Surfboard</h2>
+            <label class="toggle-switch">
+              <input v-model="paymentForm.surfboardEnabled" type="checkbox" @change="markDirty" />
+              <span class="toggle-slider" />
+            </label>
+          </div>
+          <p class="section-hint">Kort- og lommebokbetaling via Surfboard</p>
+          <div v-if="paymentConfig.surfboardPrice" class="price-badge">{{ paymentConfig.surfboardPrice }}</div>
+
+          <div v-if="paymentForm.surfboardEnabled" class="subsections">
+            <div class="subsection-row">
+              <div class="subsection-info">
+                <span class="subsection-label">Vipps</span>
+              </div>
+              <label class="toggle-switch toggle-switch--sm">
+                <input v-model="paymentForm.surfboardVippsEnabled" type="checkbox" @change="markDirty" />
+                <span class="toggle-slider" />
+              </label>
+            </div>
+
+            <div class="subsection-row">
+              <div class="subsection-info">
+                <span class="subsection-label">MobilePay</span>
+              </div>
+              <label class="toggle-switch toggle-switch--sm">
+                <input v-model="paymentForm.surfboardMobilePayEnabled" type="checkbox" @change="markDirty" />
+                <span class="toggle-slider" />
+              </label>
+            </div>
+
+            <div class="subsection-row">
+              <div class="subsection-info">
+                <span class="subsection-label">Klarna</span>
+              </div>
+              <label class="toggle-switch toggle-switch--sm">
+                <input v-model="paymentForm.surfboardKlarnaEnabled" type="checkbox" @change="markDirty" />
+                <span class="toggle-slider" />
+              </label>
+            </div>
+          </div>
+        </div>
+
         <!-- Section: Report Emails -->
         <div class="form-section">
           <h2 class="section-title">{{ $i('payment_reporting') }}</h2>
@@ -133,6 +178,10 @@ export default {
         dinteroBillieEnabled: false,
         dinteroKlarnaEnabled: false,
         dinteroKraviaEnabled: false,
+        surfboardEnabled: false,
+        surfboardVippsEnabled: false,
+        surfboardMobilePayEnabled: false,
+        surfboardKlarnaEnabled: false,
         sendInvoiceToEmails: '',
       },
       paymentConfig: {
@@ -144,6 +193,8 @@ export default {
         dinteroKlarnaPrice: null,
         dinteroKraviaAvailable: false,
         dinteroKraviaPrice: null,
+        surfboardAvailable: false,
+        surfboardPrice: null,
       },
       toast: { show: false, message: '', type: 'success' },
     }
@@ -191,6 +242,10 @@ export default {
             dinteroBillieEnabled: payment.dinteroBillieEnabled || false,
             dinteroKlarnaEnabled: payment.dinteroKlarnaEnabled || false,
             dinteroKraviaEnabled: payment.dinteroKraviaEnabled || false,
+            surfboardEnabled: payment.surfboardEnabled || false,
+            surfboardVippsEnabled: payment.surfboardVippsEnabled || false,
+            surfboardMobilePayEnabled: payment.surfboardMobilePayEnabled || false,
+            surfboardKlarnaEnabled: payment.surfboardKlarnaEnabled || false,
             sendInvoiceToEmails: payment.sendInvoiceToEmails || '',
           }
         }
@@ -214,6 +269,10 @@ export default {
           dinteroBillieEnabled: this.paymentForm.dinteroBillieEnabled,
           dinteroKlarnaEnabled: this.paymentForm.dinteroKlarnaEnabled,
           dinteroKraviaEnabled: this.paymentForm.dinteroKraviaEnabled,
+          surfboardEnabled: this.paymentForm.surfboardEnabled,
+          surfboardVippsEnabled: this.paymentForm.surfboardVippsEnabled,
+          surfboardMobilePayEnabled: this.paymentForm.surfboardMobilePayEnabled,
+          surfboardKlarnaEnabled: this.paymentForm.surfboardKlarnaEnabled,
           sendInvoiceToEmails: this.paymentForm.sendInvoiceToEmails,
         })
         this.isDirty = false
