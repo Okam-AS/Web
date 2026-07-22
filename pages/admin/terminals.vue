@@ -108,11 +108,12 @@
                   <th>Type</th>
                   <th>Status</th>
                   <th>Serienr</th>
+                  <th>Kasse</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-if="!terminals.length">
-                  <td colspan="4" class="ttable__empty">
+                  <td colspan="5" class="ttable__empty">
                     Ingen terminaler ennå. Legg til en med serienummeret over.
                   </td>
                 </tr>
@@ -123,6 +124,23 @@
                   <td>{{ t.terminalType }}</td>
                   <td><span :class="statusClass(t.terminalStatus)">{{ t.terminalStatus }}</span></td>
                   <td>{{ t.serialNo }}</td>
+                  <td>
+                    <select
+                      v-if="isPaymentTerminal(t)"
+                      class="tselect tselect--row"
+                      :value="boundCashPointId(t)"
+                      :disabled="binding"
+                      @change="bindToCashPoint(t, $event)"
+                    >
+                      <option :value="0">
+                        Ikke koblet
+                      </option>
+                      <option v-for="cp in cashPoints" :key="cp.cashPointId" :value="cp.cashPointId">
+                        {{ cp.name || cp.registerId }}
+                      </option>
+                    </select>
+                    <span v-else class="ttable__muted">&mdash;</span>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -150,6 +168,7 @@ export default {
       form: { serialNo: '', terminalName: '', cashPointId: 0 },
       loading: false,
       saving: false,
+      binding: false,
       toast: { show: false, message: '', type: 'success' },
       toastTimer: null
     };
@@ -194,6 +213,34 @@ export default {
       if (s === 'ACTIVE' || s === 'REGISTERED') { return 'tbadge tbadge--ok'; }
       if (s === 'DE_REGISTERED' || s === 'IN_ACTIVE') { return 'tbadge tbadge--bad'; }
       return 'tbadge';
+    },
+    isPaymentTerminal (t) {
+      return !['PaymentPage', 'SelfHostedPage', 'MerchantInitiated', 'printer', 'surfprint'].includes(t.terminalType);
+    },
+    boundCashPointId (t) {
+      const cp = this.cashPoints.find(c => c.surfboardTerminalId === t.terminalId);
+      return cp ? cp.cashPointId : 0;
+    },
+    bindToCashPoint (t, event) {
+      const cashPointId = Number(event.target.value);
+      if (!cashPointId) {
+        // There is no unbind endpoint (remove the id on the cash point instead); snap the select back.
+        this.loadStore(this.selectedStore);
+        return;
+      }
+      if (cashPointId === this.boundCashPointId(t)) { return; }
+      this.binding = true;
+      this._surfboardService
+        .bindTerminal(this.selectedStore, { terminalId: t.terminalId, cashPointId })
+        .then(() => {
+          this.notify('Terminalen er koblet til kassen.');
+          this.loadStore(this.selectedStore);
+        })
+        .catch((e) => {
+          this.apiError(e, 'Kunne ikke koble terminalen til kassen.');
+          this.loadStore(this.selectedStore);
+        })
+        .finally(() => { this.binding = false; });
     },
     loadStore (storeId) {
       this.loadTerminals();
@@ -338,6 +385,8 @@ export default {
 .ttable tbody tr:hover { background: #fafbfc; }
 .ttable__strong { font-weight: 600; color: #292c34; }
 .ttable__empty { color: #94a3b8; text-align: center; padding: 1.5rem; }
+.ttable__muted { color: #cbd5e0; }
+.tselect--row { width: auto; min-width: 140px; padding: 0.3rem 0.5rem; font-size: 0.85rem; }
 
 .tbadge {
   display: inline-block;

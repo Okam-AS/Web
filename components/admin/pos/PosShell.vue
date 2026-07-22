@@ -706,6 +706,11 @@ export default {
       if (this.noticeTimer) { clearTimeout(this.noticeTimer); }
       this.noticeTimer = setTimeout(() => { this.notice.show = false; }, 3500);
     },
+    // Opening the cash drawer is hardware-bound (printer kick pulse) and only works in the native
+    // POS app; the web build keeps the button for UI parity but can only say so.
+    openDrawer () {
+      this.notify(this.$i('pos_open_drawer_web_unsupported'), 'info');
+    },
     dismissNotice () {
       this.notice.show = false;
       if (this.noticeTimer) { clearTimeout(this.noticeTimer); this.noticeTimer = null; }

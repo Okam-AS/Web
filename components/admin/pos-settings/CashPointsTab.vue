@@ -75,9 +75,22 @@
       </p>
 
       <div v-if="effectiveProvider === 'surfboard'" class="crud__grid">
-        <label>{{ $i('posset_cp_sb_terminal') }}<input v-model="form.surfboardTerminalId" type="text" :placeholder="$i('posset_cp_sb_terminal_ph')"></label>
+        <label>{{ $i('posset_cp_sb_terminal') }}
+          <select v-model="form.surfboardTerminalId" class="crud__select">
+            <option value="">{{ $i('posset_cp_sb_no_terminal') }}</option>
+            <option v-for="t in terminalOptions" :key="t.terminalId" :value="t.terminalId">
+              {{ terminalLabel(t) }}
+            </option>
+            <option v-if="formTerminalMissingFromList" :value="form.surfboardTerminalId">
+              {{ $i('posset_cp_sb_unknown_terminal', { id: form.surfboardTerminalId }) }}
+            </option>
+          </select>
+        </label>
         <label class="crud__check"><input v-model="form.surfboardAutoPrintReceipt" type="checkbox"> {{ $i('posset_cp_sb_autoprint') }}</label>
       </div>
+      <p v-if="effectiveProvider === 'surfboard' && !terminalOptions.length" class="crud__provider-note">
+        {{ $i('posset_cp_sb_no_terminals_hint') }}
+      </p>
       <div v-else class="crud__grid">
         <label>{{ $i('posset_cp_dt_store') }}<input v-model="form.dinteroStoreId" type="text"></label>
         <label>{{ $i('posset_cp_dt_terminal') }}<input v-model="form.dinteroTerminalId" type="text"></label>
@@ -107,9 +120,18 @@ export default {
   name: 'CashPointsTab',
   props: { storeId: { type: [Number, String], required: true } },
   data () {
-    return { items: [], loading: true, form: null, saving: false, storeProvider: 'Surfboard', savingProvider: false };
+    return { items: [], loading: true, form: null, saving: false, storeProvider: 'Surfboard', savingProvider: false, terminals: [] };
   },
   computed: {
+    // Physical payment terminals only — online/virtual terminal types cannot serve a register.
+    terminalOptions () {
+      return (this.terminals || []).filter(t => t && t.terminalId &&
+        !['PaymentPage', 'SelfHostedPage', 'MerchantInitiated', 'printer', 'surfprint'].includes(t.terminalType));
+    },
+    formTerminalMissingFromList () {
+      const id = this.form && this.form.surfboardTerminalId;
+      return !!id && !this.terminalOptions.some(t => t.terminalId === id);
+    },
     maxDiffKr: {
       get () { return this.form ? Math.round(this.form.maxCashDifference) / 100 : 0; },
       set (v) { if (this.form) { this.form.maxCashDifference = Math.round((Number(v) || 0) * 100); } }
@@ -126,11 +148,13 @@ export default {
     async load () {
       this.loading = true;
       try {
-        const [items, config] = await Promise.all([
+        const [items, config, terminals] = await Promise.all([
           this._cashPointService.GetForStore(this.storeId),
-          this._storeService.GetPaymentConfig(this.storeId).catch(() => null)
+          this._storeService.GetPaymentConfig(this.storeId).catch(() => null),
+          this._surfboardService.getStoreTerminalsForStore(this.storeId).catch(() => [])
         ]);
         this.items = items || [];
+        this.terminals = terminals || [];
         // Surfboard is the default; only an explicit Dintero choice flips the store selector.
         this.storeProvider = config && config.terminalProvider === 'Dintero' ? 'Dintero' : 'Surfboard';
       } catch (e) {
@@ -140,6 +164,10 @@ export default {
       }
     },
     errMsg (e) { return (e && e.response && e.response.data && e.response.data.message) || (e && e.message) || 'Feil'; },
+    terminalLabel (t) {
+      const name = t.terminalName || t.terminalType || t.terminalId;
+      return t.serialNo ? `${name} · ${t.serialNo}` : name;
+    },
     async setStoreProvider (p) {
       if (p === this.storeProvider) { return; }
       const previous = this.storeProvider;
@@ -256,7 +284,7 @@ export default {
 .crud__form h3 { margin: 0 0 14px; font-size: 1.05rem; color: #292c34; }
 .crud__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 4px; }
 .crud__grid label { display: flex; flex-direction: column; gap: 5px; font-size: 0.8rem; font-weight: 600; color: #64748b; }
-.crud__grid input[type=text], .crud__grid input[type=number] { height: 40px; border: 1px solid #cbd5e0; border-radius: 8px; padding: 0 10px; font-size: 0.95rem; color: #292c34; }
+.crud__grid input[type=text], .crud__grid input[type=number], .crud__grid .crud__select { height: 40px; border: 1px solid #cbd5e0; border-radius: 8px; padding: 0 10px; font-size: 0.95rem; color: #292c34; background: #fff; }
 .crud__check { flex-direction: row !important; align-items: center; gap: 8px !important; }
 .crud__provider-note { margin: 16px 0 8px; font-size: 0.85rem; color: #64748b; }
 .crud__provider-toggle { display: inline-flex; background: #eef1f5; border-radius: 10px; padding: 4px; }

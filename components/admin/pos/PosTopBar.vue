@@ -28,39 +28,57 @@
     <div class="pos-topbar__right">
       <button
         type="button"
-        class="pos-topbar__chime"
+        class="pos-topbar__ctrl"
+        :title="$i('pos_open_drawer')"
+        @click="pos.openDrawer()"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7H4a1 1 0 00-1 1v3h18V8a1 1 0 00-1-1zM3 11v5a1 1 0 001 1h16a1 1 0 001-1v-5M10 14h4" /></svg>
+        <span class="pos-topbar__ctrl-label">{{ $i('pos_drawer_label') }}</span>
+      </button>
+      <button
+        type="button"
+        class="pos-topbar__ctrl"
         :class="{ 'is-on': pos.chimeEnabled }"
         :title="pos.chimeEnabled ? $i('pos_chime_on') : $i('pos_chime_off')"
         @click="pos.toggleChime()"
       >
         <svg v-if="pos.chimeEnabled" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M17.95 6.05a8 8 0 010 11.9M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
         <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15zM17 14l4-4m0 4l-4-4" /></svg>
+        <span class="pos-topbar__ctrl-label">{{ pos.chimeEnabled ? $i('pos_chime_on') : $i('pos_chime_off') }}</span>
       </button>
+      <TerminalStatusChip />
       <span
         class="pos-topbar__net"
         :class="pos.online ? 'is-online' : 'is-offline'"
         :title="pos.online ? $i('pos_online') : $i('pos_offline')"
-      />
+      >
+        <span class="pos-topbar__net-dot" />
+        <span class="pos-topbar__ctrl-label">{{ pos.online ? $i('pos_online') : $i('pos_offline') }}</span>
+      </span>
       <button type="button" class="pos-topbar__operator" @click="pos.requestSwitch()">
         <span class="pos-topbar__avatar">{{ initials }}</span>
         <span class="pos-topbar__op-text">
           <span class="pos-topbar__op-name">{{ operatorName }}</span>
         </span>
       </button>
-      <button type="button" class="pos-topbar__exit" :title="$i('pos_exit')" @click="pos.exit()">
+      <button type="button" class="pos-topbar__ctrl" :title="$i('pos_exit')" @click="pos.exit()">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+        <span class="pos-topbar__ctrl-label">{{ $i('pos_exit_short') }}</span>
       </button>
     </div>
   </header>
 </template>
 
 <script>
+import TerminalStatusChip from '~/components/admin/pos/TerminalStatusChip.vue';
+
 const ICON_SELL = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>';
 const ICON_BOARD = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h5v6H4V5zm10-1h5a1 1 0 011 1v5h-6V4zM4 13h6v6H5a1 1 0 01-1-1v-5zm10 0h6v5a1 1 0 01-1 1h-5v-6z" /></svg>';
 const ICON_DAY = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>';
 
 export default {
   name: 'PosTopBar',
+  components: { TerminalStatusChip },
   inject: ['pos'],
   computed: {
     cashPoint () { return this.pos.cashPoint; },
@@ -139,14 +157,40 @@ export default {
 
 .pos-topbar__right { display: flex; align-items: center; gap: 14px; }
 
-.pos-topbar__chime { background: none; border: none; color: #94a3b8; cursor: pointer; padding: 6px; display: inline-flex; }
-.pos-topbar__chime:hover { color: #ffffff; }
-.pos-topbar__chime.is-on { color: #43d197; }
-.pos-topbar__chime svg { width: 20px; height: 20px; }
+.pos-topbar__ctrl {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #1c1f28;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 12px;
+  color: #cbd5e0;
+  cursor: pointer;
+}
+.pos-topbar__ctrl:hover { color: #ffffff; }
+.pos-topbar__ctrl.is-on { color: #43d197; }
+.pos-topbar__ctrl svg { width: 18px; height: 18px; flex-shrink: 0; }
 
-.pos-topbar__net { width: 10px; height: 10px; border-radius: 50%; }
-.pos-topbar__net.is-online { background: #43d197; }
-.pos-topbar__net.is-offline { background: #f59e0b; }
+.pos-topbar__ctrl-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pos-topbar__net {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #1c1f28;
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+.pos-topbar__net-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.pos-topbar__net.is-online { color: #43d197; }
+.pos-topbar__net.is-online .pos-topbar__net-dot { background: #43d197; }
+.pos-topbar__net.is-offline { color: #f59e0b; }
+.pos-topbar__net.is-offline .pos-topbar__net-dot { background: #f59e0b; }
 
 .pos-topbar__operator {
   display: flex;
@@ -174,15 +218,9 @@ export default {
 .pos-topbar__op-text { display: flex; flex-direction: column; align-items: flex-start; }
 .pos-topbar__op-name { font-size: 0.85rem; font-weight: 600; }
 
-.pos-topbar__exit {
-  background: none;
-  border: none;
-  color: #94a3b8;
-  cursor: pointer;
-  padding: 6px;
+@media (max-width: 1100px) {
+  .pos-topbar__ctrl-label { display: none; }
 }
-.pos-topbar__exit:hover { color: #ffffff; }
-.pos-topbar__exit svg { width: 22px; height: 22px; }
 
 @media (max-width: 720px) {
   .pos-topbar__mode span:not(.pos-topbar__mode-icon) { display: none; }
