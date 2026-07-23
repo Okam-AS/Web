@@ -14,7 +14,8 @@
         v-for="(item, index) in items"
         :key="item.id || `temp-${index}`"
         class="list-item"
-        :class="{ 'is-heading': item.isHeading }"
+        :class="{ 'is-heading': item.isHeading, 'is-linked': isLinked(item) }"
+        :title="isLinked(item) ? $i('categoryProductList_linkedTooltip', { store: getStoreName(item.product) }) : null"
       >
         <!-- Drag Handle -->
         <div class="drag-handle">
@@ -39,18 +40,23 @@
             <div v-else class="placeholder-image">
               <span class="material-icons">image</span>
             </div>
+            <div v-if="isLinked(item)" class="linked-overlay">
+              <span class="material-icons">link</span>
+            </div>
           </div>
 
           <!-- Product Info -->
           <div class="product-info">
             <div class="product-name">
               {{ item.product ? item.product.name : $i('common_loading') }}
-              <span
-                v-if="item.product && isFromDifferentStore(item.product)"
-                class="store-badge"
-              >
-                {{ getStoreName(item.product) }}
+              <span v-if="isLinked(item)" class="store-badge">
+                <span class="material-icons">link</span>
+                {{ $i('categoryProductList_linkedBadge') }}
               </span>
+            </div>
+            <div v-if="isLinked(item)" class="linked-origin">
+              <span class="material-icons">storefront</span>
+              {{ $i('categoryProductList_linkedToStore', { store: getStoreName(item.product) }) }}
             </div>
             <div v-if="item.product && item.product.description" class="product-description">
               {{ item.product.description }}
@@ -110,27 +116,15 @@ export default {
       this.$emit('delete', index)
     },
 
+    isLinked(item) {
+      return !item.isHeading && !!item.product && this.isFromDifferentStore(item.product)
+    },
+
     isFromDifferentStore(product) {
-      const isDifferent = this.currentStoreId && product.storeId && product.storeId !== this.currentStoreId
-      console.log('isFromDifferentStore check:', {
-        productName: product.name,
-        productStoreId: product.storeId,
-        currentStoreId: this.currentStoreId,
-        isDifferent
-      })
-      return isDifferent
+      return !!(this.currentStoreId && product.storeId && product.storeId !== this.currentStoreId)
     },
 
     getStoreName(product) {
-      // Debug logging
-      console.log('Getting store name for product:', {
-        productName: product.name,
-        storeName: product.storeName,
-        storeId: product.storeId,
-        currentStoreId: this.currentStoreId,
-        availableStores: this.stores.map(s => ({ id: s.id, name: s.name }))
-      })
-
       // First try to use storeName if available (from cross-store search)
       if (product.storeName) {
         return product.storeName
@@ -178,6 +172,21 @@ export default {
   &.is-heading {
     background: #f9fafb;
     border-color: #d1d5db;
+  }
+
+  &.is-linked {
+    border-style: dashed;
+    border-color: #93c5fd;
+    background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+
+    &:hover {
+      border-color: #60a5fa;
+      box-shadow: 0 2px 4px rgba(37, 99, 235, 0.1);
+    }
+
+    .product-image img {
+      opacity: 0.85;
+    }
   }
 }
 
@@ -239,6 +248,7 @@ export default {
 }
 
 .product-image {
+  position: relative;
   flex-shrink: 0;
   width: 60px;
   height: 60px;
@@ -248,6 +258,25 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+
+  .linked-overlay {
+    position: absolute;
+    bottom: 3px;
+    left: 3px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #fff;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+
+    .material-icons {
+      font-size: 14px;
+    }
+  }
 
   img {
     width: 100%;
@@ -285,6 +314,8 @@ export default {
 
     .store-badge {
       display: inline-flex;
+      align-items: center;
+      gap: 4px;
       padding: 2px 8px;
       background: #dbeafe;
       color: #1e40af;
@@ -292,6 +323,24 @@ export default {
       font-size: 0.75em;
       font-weight: 600;
       flex-shrink: 0;
+
+      .material-icons {
+        font-size: 14px;
+      }
+    }
+  }
+
+  .linked-origin {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.85em;
+    font-weight: 500;
+    color: #1e40af;
+    margin-bottom: 4px;
+
+    .material-icons {
+      font-size: 15px;
     }
   }
 

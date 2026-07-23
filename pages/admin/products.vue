@@ -55,10 +55,29 @@
           </button>
         </div>
       </div>
+      <div class="property-filters">
+        <button
+          v-for="f in propertyFilterDefs"
+          :key="f.key"
+          :class="['filter-chip', { active: activePropertyFilters.includes(f.key) }]"
+          @click="togglePropertyFilter(f.key)"
+        >
+          <span class="material-icons">{{ f.icon }}</span>
+          {{ $i(f.labelKey) }}
+          <span class="chip-count">{{ propertyFilterCounts[f.key] }}</span>
+        </button>
+        <button
+          v-if="activePropertyFilters.length"
+          class="filter-chip clear-chip"
+          @click="activePropertyFilters = []"
+        >
+          ✕ {{ $i('products_clearPropertyFilters') }}
+        </button>
+      </div>
       </div>
 
       <div class="results-count" v-if="!isLoading && products.length > 0">
-        {{ $i('products_resultsCount', { shown: paginatedProducts.length, total: products.length }) }}
+        {{ $i('products_resultsCount', { shown: paginatedProducts.length, total: filteredProducts.length }) }}
         <button
           v-if="productFilter"
           class="clear-filter-btn"
@@ -109,6 +128,15 @@
             >
               <Loading :loading="true" :size="30" />
             </div>
+            <div class="status-badges">
+              <span v-if="product.hide" class="status-badge hidden-badge">
+                <span class="material-icons">visibility_off</span>
+                {{ $i('products_filterHidden') }}
+              </span>
+              <span v-if="isSoldOut(product)" class="status-badge soldout-badge">
+                {{ $i('products_filterSoldOut') }}
+              </span>
+            </div>
             <div v-if="product.image?.imageUrl">
               <img
                 :src="product.image.imageUrl"
@@ -150,6 +178,18 @@
             </button>
           </div>
         </div>
+      </div>
+
+      <div v-else class="empty-state no-results">
+        <span class="material-icons">filter_alt_off</span>
+        <h3>{{ $i('products_noResultsTitle') }}</h3>
+        <p>{{ $i('products_noResultsDescription') }}</p>
+        <button
+          class="create-first-btn"
+          @click="productFilter = ''; activePropertyFilters = []"
+        >
+          {{ $i('products_clearPropertyFilters') }}
+        </button>
       </div>
 
       <div
@@ -443,6 +483,132 @@
               </div>
             </div>
 
+            <!-- Visibility Section -->
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input
+                  v-model="selectedProduct.hide"
+                  type="checkbox"
+                />
+                {{ $i('products_hideLabel') }}
+              </label>
+              <p class="helper-text">{{ $i('products_hideHelper') }}</p>
+              <div v-if="!selectedProduct.hide" class="delivery-type-checkboxes">
+                <label>{{ $i('products_hideForDeliveryType') }}</label>
+                <label class="checkbox-label">
+                  <input v-model="hideForSelfPickup" type="checkbox" />
+                  {{ $i('products_hideForSelfPickup') }}
+                </label>
+                <label class="checkbox-label">
+                  <input v-model="hideForTableDelivery" type="checkbox" />
+                  {{ $i('products_hideForTableDelivery') }}
+                </label>
+                <label class="checkbox-label">
+                  <input v-model="hideForDelivery" type="checkbox" />
+                  {{ $i('products_hideForHomeDelivery') }}
+                </label>
+              </div>
+            </div>
+
+            <!-- Inventory Section -->
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input
+                  v-model="selectedProduct.inventoryEnabled"
+                  type="checkbox"
+                />
+                {{ $i('products_inventoryLabel') }}
+              </label>
+              <p class="helper-text">{{ $i('products_inventoryHelper') }}</p>
+              <div v-if="selectedProduct.inventoryEnabled">
+                <label>{{ $i('products_inventoryCount') }}</label>
+                <input
+                  v-model.number="selectedProduct.inventory"
+                  type="number"
+                  min="0"
+                  step="1"
+                  placeholder="0"
+                />
+              </div>
+            </div>
+
+            <!-- Deposit Section -->
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input
+                  v-model="selectedProduct.depositEnabled"
+                  type="checkbox"
+                />
+                {{ $i('products_depositLabel') }}
+              </label>
+              <p class="helper-text">{{ $i('products_depositHelper') }}</p>
+              <div v-if="selectedProduct.depositEnabled">
+                <label>{{ $i('products_depositAmountLabel') }}</label>
+                <input
+                  :value="depositDisplay"
+                  type="text"
+                  inputmode="decimal"
+                  placeholder="2.00"
+                  @input="handleDepositInput"
+                  @blur="formatDeposit"
+                />
+              </div>
+            </div>
+
+            <!-- Fixed Cashback Section -->
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input
+                  v-model="selectedProduct.manualRewardAmountEnabled"
+                  type="checkbox"
+                />
+                {{ $i('products_cashbackLabel') }}
+              </label>
+              <p class="helper-text">{{ $i('products_cashbackHelper') }}</p>
+              <div v-if="selectedProduct.manualRewardAmountEnabled">
+                <label>{{ $i('products_cashbackAmountLabel') }}</label>
+                <input
+                  v-model.number="selectedProduct.manualRewardAmount"
+                  type="number"
+                  min="0"
+                  step="1"
+                  placeholder="0"
+                />
+              </div>
+            </div>
+
+            <!-- Accounting Section -->
+            <div v-if="selectedProduct.accountingConfiguration" class="form-group">
+              <label class="checkbox-label">
+                <input
+                  v-model="selectedProduct.accountingConfiguration.enabled"
+                  type="checkbox"
+                />
+                {{ $i('products_accountingLabel') }}
+              </label>
+              <p class="helper-text">{{ $i('products_accountingHelper') }}</p>
+              <div v-if="selectedProduct.accountingConfiguration.enabled">
+                <label>{{ $i('products_account0') }}</label>
+                <input
+                  v-model="selectedProduct.accountingConfiguration.accountNumber0Percent"
+                  type="text"
+                  inputmode="numeric"
+                />
+                <label class="mt-4">{{ $i('products_account15') }}</label>
+                <input
+                  v-model="selectedProduct.accountingConfiguration.accountNumber15Percent"
+                  type="text"
+                  inputmode="numeric"
+                />
+                <label class="mt-4">{{ $i('products_account25') }}</label>
+                <input
+                  v-model="selectedProduct.accountingConfiguration.accountNumber25Percent"
+                  type="text"
+                  inputmode="numeric"
+                />
+              </div>
+            </div>
+
             <!-- Product Variants Section -->
             <div v-if="selectedProduct.id" class="form-group variants-section">
               <div class="section-header-inline">
@@ -505,6 +671,37 @@
                 {{ $i('products_noVariantsAdded') }}
               </div>
             </div>
+
+            <div
+              v-if="selectedProduct.id && otherAdminStores.length"
+              class="form-group copy-to-stores-section"
+            >
+              <label>{{ $i('products_copyToStores') }}</label>
+              <p class="helper-text">{{ $i('products_copyToStoresHelper') }}</p>
+              <button
+                class="copy-to-stores-btn"
+                type="button"
+                :disabled="isSaving"
+                @click="copyProductToStores"
+              >
+                <span class="material-icons">content_copy</span>
+                {{ $i('products_copyToStoresButton') }}
+              </button>
+            </div>
+
+            <div v-if="selectedProduct.id" class="form-group duplicate-section">
+              <label>{{ $i('products_duplicateLabel') }}</label>
+              <p class="helper-text">{{ $i('products_duplicateHelper') }}</p>
+              <button
+                class="copy-to-stores-btn"
+                type="button"
+                :disabled="isSaving || isDuplicating"
+                @click="duplicateProduct"
+              >
+                <span class="material-icons">library_add</span>
+                {{ isDuplicating ? $i('common_saving') : $i('products_duplicateButton') }}
+              </button>
+            </div>
           </div>
 
           <div class="editor-actions">
@@ -536,6 +733,7 @@
       <!-- Modals -->
       <VariantEditorModal ref="variantEditor" />
       <CopyVariantToTargetsModal ref="copyVariant" />
+      <CopyProductToStoresModal ref="copyProductToStores" />
 
       <!-- New Product Name Modal -->
       <div v-if="showNewProductModal" class="modal-overlay" @click.self="closeNewProductModal">
@@ -565,6 +763,13 @@
           </div>
         </div>
       </div>
+
+      <transition name="toast">
+        <div v-if="toast.show" :class="['toast', toast.type]">
+          <span class="material-icons">{{ toast.type === 'success' ? 'check_circle' : 'error' }}</span>
+          {{ toast.message }}
+        </div>
+      </transition>
     </div>
   </AdminPage>
 </template>
@@ -573,6 +778,7 @@
 import AdminPage from "~/components/organisms/AdminPage.vue";
 import VariantEditorModal from "~/components/admin/VariantEditorModal.vue";
 import CopyVariantToTargetsModal from "~/components/admin/CopyVariantToTargetsModal.vue";
+import CopyProductToStoresModal from "~/components/admin/CopyProductToStoresModal.vue";
 import LoadingSkeleton from "~/components/molecules/LoadingSkeleton.vue";
 import Loading from "~/components/atoms/Loading.vue";
 import axios from "axios";
@@ -584,6 +790,7 @@ export default {
     AdminPage,
     VariantEditorModal,
     CopyVariantToTargetsModal,
+    CopyProductToStoresModal,
     LoadingSkeleton,
     Loading
   },
@@ -597,11 +804,16 @@ export default {
     draggingProducts: {},
     uploadingFor: null,
     productFilter: "",
+    activePropertyFilters: [],
     sortOption: "name-asc",
     imageDimensions: {},
     currentPage: 1,
     itemsPerPage: 10,
     selectedProduct: null,
+    hideForSelfPickup: false,
+    hideForTableDelivery: false,
+    hideForDelivery: false,
+    isDuplicating: false,
     isSaving: false,
     isLoading: false,
     loadingCategories: false,
@@ -643,11 +855,33 @@ export default {
       return !this.selectedGroupHasProfile || this.advancedVatOpen;
     },
 
+    propertyFilterDefs() {
+      return [
+        { key: "hidden", labelKey: "products_filterHidden", icon: "visibility_off", predicate: p => !!p.hide },
+        { key: "visible", labelKey: "products_filterVisible", icon: "visibility", predicate: p => !p.hide },
+        { key: "soldOut", labelKey: "products_filterSoldOut", icon: "production_quantity_limits", predicate: p => this.isSoldOut(p) },
+        { key: "noImage", labelKey: "products_filterNoImage", icon: "image_not_supported", predicate: p => !p.image?.imageUrl },
+        { key: "variants", labelKey: "products_filterVariants", icon: "tune", predicate: p => !!p.productVariantEnabled },
+      ];
+    },
+
+    propertyFilterCounts() {
+      const counts = {};
+      for (const def of this.propertyFilterDefs) {
+        counts[def.key] = this.products.filter(def.predicate).length;
+      }
+      return counts;
+    },
+
     filteredProducts() {
       const [sortKey, sortDir] = this.sortOption.split("-");
-      const base = this.productFilter
+      let base = this.productFilter
         ? this.products.filter((p) => p.name.toLowerCase().includes(this.productFilter.toLowerCase()))
         : this.products;
+      if (this.activePropertyFilters.length) {
+        const activeDefs = this.propertyFilterDefs.filter(d => this.activePropertyFilters.includes(d.key));
+        base = base.filter(p => activeDefs.every(d => d.predicate(p)));
+      }
       return [...base].sort((a, b) => {
         let valA = a[sortKey];
         let valB = b[sortKey];
@@ -696,6 +930,10 @@ export default {
       return this.selectedProduct?.name?.trim();
     },
 
+    depositDisplay() {
+      return this.selectedProduct?.depositAmount ? (this.selectedProduct.depositAmount / 100).toFixed(2) : "";
+    },
+
     selectedProductCategoryIds() {
       if (!this.selectedProduct?.id) return [];
 
@@ -738,6 +976,13 @@ export default {
         .map(a => a.name)
         .join(', ');
     },
+
+    otherAdminStores() {
+      const adminIn = this.$store.state.currentUser?.adminIn || [];
+      if (adminIn.length < 2) return [];
+      const productStoreId = this.selectedProduct?.storeId || this.selectedStore;
+      return adminIn.filter((store) => store.id !== productStoreId);
+    },
   },
 
   watch: {
@@ -751,6 +996,10 @@ export default {
     },
 
     productFilter() {
+      this.currentPage = 1;
+    },
+
+    activePropertyFilters() {
       this.currentPage = 1;
     },
 
@@ -819,6 +1068,23 @@ export default {
         return [current, ...rates];
       }
       return rates;
+    },
+
+    isSoldOut(product) {
+      return !!product.inventoryEnabled && product.inventory === 0;
+    },
+
+    togglePropertyFilter(key) {
+      // Hidden/visible are mutually exclusive — selecting one drops the other.
+      const opposites = { hidden: "visible", visible: "hidden" };
+      if (this.activePropertyFilters.includes(key)) {
+        this.activePropertyFilters = this.activePropertyFilters.filter(k => k !== key);
+      } else {
+        this.activePropertyFilters = [
+          ...this.activePropertyFilters.filter(k => k !== opposites[key]),
+          key,
+        ];
+      }
     },
 
     handleLoginSuccess() {
@@ -1080,6 +1346,30 @@ export default {
           item => item.productId === this.selectedProduct.id
         ))
         .map(cat => cat.id);
+
+      if (!this.selectedProduct.accountingConfiguration) {
+        this.$set(this.selectedProduct, "accountingConfiguration", {
+          enabled: false,
+          accountNumber0Percent: "",
+          accountNumber15Percent: "",
+          accountNumber25Percent: ""
+        });
+      }
+
+      // Same delivery-type grouping as AdminApp: one checkbox covers all home delivery variants
+      const hiddenFor = this.selectedProduct.hideFromDeliveryTypes || [];
+      this.hideForSelfPickup = hiddenFor.includes("SelfPickup");
+      this.hideForTableDelivery = hiddenFor.includes("TableDelivery");
+      this.hideForDelivery = ["InstantHomeDelivery", "DineHomeDelivery", "WoltDelivery"]
+        .some(t => hiddenFor.includes(t));
+    },
+
+    buildHideFromDeliveryTypes() {
+      const types = [];
+      if (this.hideForSelfPickup) { types.push("SelfPickup"); }
+      if (this.hideForTableDelivery) { types.push("TableDelivery"); }
+      if (this.hideForDelivery) { types.push("InstantHomeDelivery", "DineHomeDelivery", "WoltDelivery"); }
+      return types;
     },
 
     async saveProduct() {
@@ -1092,6 +1382,7 @@ export default {
         const productData = {
           ...this.selectedProduct,
           name: this.selectedProduct.name.trim(),
+          hideFromDeliveryTypes: this.buildHideFromDeliveryTypes(),
         };
         await this._productService.CreateOrUpdate(productData);
 
@@ -1186,6 +1477,44 @@ export default {
       // Format on blur to show proper decimal places
       const formatted = (this.selectedProduct.amount / 100).toFixed(2);
       event.target.value = formatted;
+    },
+
+    handleDepositInput(event) {
+      let value = event.target.value.replace(/[^\d.,]/g, "");
+      value = value.replace(/[.,](?=.*[.,])/g, "");
+      value = value.replace(",", ".");
+
+      if (value === "") {
+        this.selectedProduct.depositAmount = 0;
+        return;
+      }
+
+      const kronerValue = parseFloat(value);
+      if (!isNaN(kronerValue)) {
+        this.selectedProduct.depositAmount = Math.round(kronerValue * 100);
+      }
+    },
+
+    formatDeposit(event) {
+      event.target.value = ((this.selectedProduct.depositAmount || 0) / 100).toFixed(2);
+    },
+
+    async duplicateProduct() {
+      if (!this.selectedProduct?.id || this.isDuplicating) { return; }
+      this.isDuplicating = true;
+
+      try {
+        const copy = await this._productService.Duplicate(this.selectedProduct.id);
+        await this.loadProducts();
+        this.selectedProduct = null;
+        this.productFilter = copy?.name || "";
+        this.showToast(this.$i("products_duplicateSuccess"));
+      } catch (err) {
+        console.error("Failed to duplicate product:", err);
+        this.showToast(this.$i("products_duplicateFailed"), "error");
+      } finally {
+        this.isDuplicating = false;
+      }
     },
 
     handleFinalTablePriceInput(event) {
@@ -1445,6 +1774,29 @@ export default {
       }
     },
 
+    async copyProductToStores() {
+      const product = this.selectedProduct;
+      if (!product?.id) return;
+
+      const targetIds = await this.$refs.copyProductToStores.open({
+        productName: product.name,
+        targets: this.otherAdminStores.map(store => ({ id: store.id, name: store.name }))
+      });
+      if (!targetIds || targetIds.length === 0) return;
+
+      try {
+        await this._productService.CopyToStores(product.id, targetIds);
+        this.showToast(
+          targetIds.length === 1
+            ? this.$i('products_toastCopiedToStoresSingle', { count: targetIds.length })
+            : this.$i('products_toastCopiedToStoresMultiple', { count: targetIds.length })
+        );
+      } catch (err) {
+        console.error('Failed to copy product to stores:', err);
+        this.showToast(this.$i('products_toastCopyToStoresFailed'), 'error');
+      }
+    },
+
     formatOptionsPreview(options) {
       if (!options || options.length === 0) return this.$i('products_noOptions');
       const names = options.map(o => o.name).filter(n => n);
@@ -1593,7 +1945,7 @@ export default {
 }
 
 .store-selector {
-  margin-bottom: 2rem;
+  margin-bottom: 16px;
 
   .selector-container {
     display: flex;
@@ -1637,6 +1989,104 @@ export default {
     top: 50%;
     transform: translateY(-50%);
     pointer-events: none;
+  }
+}
+
+.property-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 20px;
+  font-size: 0.85em;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  .material-icons {
+    font-size: 1.1em;
+  }
+
+  .chip-count {
+    background: #f1f5f9;
+    color: #64748b;
+    border-radius: 10px;
+    padding: 1px 8px;
+    font-size: 0.85em;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+
+  &:hover {
+    border-color: #cbd5e0;
+    color: #292c34;
+  }
+
+  &.active {
+    background: rgba(27, 183, 118, 0.08);
+    border-color: #1bb776;
+    color: #159f63;
+
+    .chip-count {
+      background: #1bb776;
+      color: white;
+    }
+  }
+
+  &.clear-chip {
+    border-color: transparent;
+    color: #ef4444;
+
+    &:hover {
+      background: rgba(239, 68, 68, 0.08);
+    }
+  }
+}
+
+.status-badges {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+  pointer-events: none;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.7em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+
+  .material-icons {
+    font-size: 1.2em;
+  }
+
+  &.hidden-badge {
+    background: rgba(41, 44, 52, 0.85);
+    color: white;
+  }
+
+  &.soldout-badge {
+    background: rgba(239, 68, 68, 0.9);
+    color: white;
   }
 }
 
@@ -2528,8 +2978,57 @@ export default {
   margin-left: 4px;
 }
 
+.copy-to-stores-section,
+.duplicate-section {
+  .helper-text {
+    margin-bottom: 0.5rem;
+  }
+
+  .copy-to-stores-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 12px 20px;
+    background: white;
+    color: #334155;
+    border: 2px solid #cbd5e0;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+
+    .material-icons {
+      font-size: 18px;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &:not(:disabled):hover {
+      border-color: #94a3b8;
+      background: #f8fafc;
+    }
+  }
+}
+
 .mt-4 {
   margin-top: 1rem;
+}
+
+.delivery-type-checkboxes {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  > label:first-child {
+    margin-bottom: 0;
+  }
 }
 
 .editor-image {
@@ -2932,6 +3431,7 @@ export default {
   transition: all 0.3s ease;
 }
 
+.toast-enter,
 .toast-enter-from,
 .toast-leave-to {
   opacity: 0;
