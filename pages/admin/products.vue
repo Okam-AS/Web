@@ -439,6 +439,132 @@
               </div>
             </div>
 
+            <!-- Visibility Section -->
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input
+                  v-model="selectedProduct.hide"
+                  type="checkbox"
+                />
+                {{ $i('products_hideLabel') }}
+              </label>
+              <p class="helper-text">{{ $i('products_hideHelper') }}</p>
+              <div v-if="!selectedProduct.hide" class="delivery-type-checkboxes">
+                <label>{{ $i('products_hideForDeliveryType') }}</label>
+                <label class="checkbox-label">
+                  <input v-model="hideForSelfPickup" type="checkbox" />
+                  {{ $i('products_hideForSelfPickup') }}
+                </label>
+                <label class="checkbox-label">
+                  <input v-model="hideForTableDelivery" type="checkbox" />
+                  {{ $i('products_hideForTableDelivery') }}
+                </label>
+                <label class="checkbox-label">
+                  <input v-model="hideForDelivery" type="checkbox" />
+                  {{ $i('products_hideForHomeDelivery') }}
+                </label>
+              </div>
+            </div>
+
+            <!-- Inventory Section -->
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input
+                  v-model="selectedProduct.inventoryEnabled"
+                  type="checkbox"
+                />
+                {{ $i('products_inventoryLabel') }}
+              </label>
+              <p class="helper-text">{{ $i('products_inventoryHelper') }}</p>
+              <div v-if="selectedProduct.inventoryEnabled">
+                <label>{{ $i('products_inventoryCount') }}</label>
+                <input
+                  v-model.number="selectedProduct.inventory"
+                  type="number"
+                  min="0"
+                  step="1"
+                  placeholder="0"
+                />
+              </div>
+            </div>
+
+            <!-- Deposit Section -->
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input
+                  v-model="selectedProduct.depositEnabled"
+                  type="checkbox"
+                />
+                {{ $i('products_depositLabel') }}
+              </label>
+              <p class="helper-text">{{ $i('products_depositHelper') }}</p>
+              <div v-if="selectedProduct.depositEnabled">
+                <label>{{ $i('products_depositAmountLabel') }}</label>
+                <input
+                  :value="depositDisplay"
+                  type="text"
+                  inputmode="decimal"
+                  placeholder="2.00"
+                  @input="handleDepositInput"
+                  @blur="formatDeposit"
+                />
+              </div>
+            </div>
+
+            <!-- Fixed Cashback Section -->
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input
+                  v-model="selectedProduct.manualRewardAmountEnabled"
+                  type="checkbox"
+                />
+                {{ $i('products_cashbackLabel') }}
+              </label>
+              <p class="helper-text">{{ $i('products_cashbackHelper') }}</p>
+              <div v-if="selectedProduct.manualRewardAmountEnabled">
+                <label>{{ $i('products_cashbackAmountLabel') }}</label>
+                <input
+                  v-model.number="selectedProduct.manualRewardAmount"
+                  type="number"
+                  min="0"
+                  step="1"
+                  placeholder="0"
+                />
+              </div>
+            </div>
+
+            <!-- Accounting Section -->
+            <div v-if="selectedProduct.accountingConfiguration" class="form-group">
+              <label class="checkbox-label">
+                <input
+                  v-model="selectedProduct.accountingConfiguration.enabled"
+                  type="checkbox"
+                />
+                {{ $i('products_accountingLabel') }}
+              </label>
+              <p class="helper-text">{{ $i('products_accountingHelper') }}</p>
+              <div v-if="selectedProduct.accountingConfiguration.enabled">
+                <label>{{ $i('products_account0') }}</label>
+                <input
+                  v-model="selectedProduct.accountingConfiguration.accountNumber0Percent"
+                  type="text"
+                  inputmode="numeric"
+                />
+                <label class="mt-4">{{ $i('products_account15') }}</label>
+                <input
+                  v-model="selectedProduct.accountingConfiguration.accountNumber15Percent"
+                  type="text"
+                  inputmode="numeric"
+                />
+                <label class="mt-4">{{ $i('products_account25') }}</label>
+                <input
+                  v-model="selectedProduct.accountingConfiguration.accountNumber25Percent"
+                  type="text"
+                  inputmode="numeric"
+                />
+              </div>
+            </div>
+
             <!-- Product Variants Section -->
             <div v-if="selectedProduct.id" class="form-group variants-section">
               <div class="section-header-inline">
@@ -516,6 +642,20 @@
               >
                 <span class="material-icons">content_copy</span>
                 {{ $i('products_copyToStoresButton') }}
+              </button>
+            </div>
+
+            <div v-if="selectedProduct.id" class="form-group duplicate-section">
+              <label>{{ $i('products_duplicateLabel') }}</label>
+              <p class="helper-text">{{ $i('products_duplicateHelper') }}</p>
+              <button
+                class="copy-to-stores-btn"
+                type="button"
+                :disabled="isSaving || isDuplicating"
+                @click="duplicateProduct"
+              >
+                <span class="material-icons">library_add</span>
+                {{ isDuplicating ? $i('common_saving') : $i('products_duplicateButton') }}
               </button>
             </div>
           </div>
@@ -622,6 +762,10 @@ export default {
     currentPage: 1,
     itemsPerPage: 10,
     selectedProduct: null,
+    hideForSelfPickup: false,
+    hideForTableDelivery: false,
+    hideForDelivery: false,
+    isDuplicating: false,
     isSaving: false,
     isLoading: false,
     loadingCategories: false,
@@ -716,6 +860,10 @@ export default {
 
     canSave() {
       return this.selectedProduct?.name?.trim();
+    },
+
+    depositDisplay() {
+      return this.selectedProduct?.depositAmount ? (this.selectedProduct.depositAmount / 100).toFixed(2) : "";
     },
 
     selectedProductCategoryIds() {
@@ -1058,6 +1206,30 @@ export default {
           item => item.productId === this.selectedProduct.id
         ))
         .map(cat => cat.id);
+
+      if (!this.selectedProduct.accountingConfiguration) {
+        this.$set(this.selectedProduct, "accountingConfiguration", {
+          enabled: false,
+          accountNumber0Percent: "",
+          accountNumber15Percent: "",
+          accountNumber25Percent: ""
+        });
+      }
+
+      // Same delivery-type grouping as AdminApp: one checkbox covers all home delivery variants
+      const hiddenFor = this.selectedProduct.hideFromDeliveryTypes || [];
+      this.hideForSelfPickup = hiddenFor.includes("SelfPickup");
+      this.hideForTableDelivery = hiddenFor.includes("TableDelivery");
+      this.hideForDelivery = ["InstantHomeDelivery", "DineHomeDelivery", "WoltDelivery"]
+        .some(t => hiddenFor.includes(t));
+    },
+
+    buildHideFromDeliveryTypes() {
+      const types = [];
+      if (this.hideForSelfPickup) { types.push("SelfPickup"); }
+      if (this.hideForTableDelivery) { types.push("TableDelivery"); }
+      if (this.hideForDelivery) { types.push("InstantHomeDelivery", "DineHomeDelivery", "WoltDelivery"); }
+      return types;
     },
 
     async saveProduct() {
@@ -1070,6 +1242,7 @@ export default {
         const productData = {
           ...this.selectedProduct,
           name: this.selectedProduct.name.trim(),
+          hideFromDeliveryTypes: this.buildHideFromDeliveryTypes(),
         };
         await this._productService.CreateOrUpdate(productData);
 
@@ -1164,6 +1337,44 @@ export default {
       // Format on blur to show proper decimal places
       const formatted = (this.selectedProduct.amount / 100).toFixed(2);
       event.target.value = formatted;
+    },
+
+    handleDepositInput(event) {
+      let value = event.target.value.replace(/[^\d.,]/g, "");
+      value = value.replace(/[.,](?=.*[.,])/g, "");
+      value = value.replace(",", ".");
+
+      if (value === "") {
+        this.selectedProduct.depositAmount = 0;
+        return;
+      }
+
+      const kronerValue = parseFloat(value);
+      if (!isNaN(kronerValue)) {
+        this.selectedProduct.depositAmount = Math.round(kronerValue * 100);
+      }
+    },
+
+    formatDeposit(event) {
+      event.target.value = ((this.selectedProduct.depositAmount || 0) / 100).toFixed(2);
+    },
+
+    async duplicateProduct() {
+      if (!this.selectedProduct?.id || this.isDuplicating) { return; }
+      this.isDuplicating = true;
+
+      try {
+        const copy = await this._productService.Duplicate(this.selectedProduct.id);
+        await this.loadProducts();
+        this.selectedProduct = null;
+        this.productFilter = copy?.name || "";
+        this.showToast(this.$i("products_duplicateSuccess"));
+      } catch (err) {
+        console.error("Failed to duplicate product:", err);
+        this.showToast(this.$i("products_duplicateFailed"), "error");
+      } finally {
+        this.isDuplicating = false;
+      }
     },
 
     handleFinalTablePriceInput(event) {
@@ -2612,7 +2823,8 @@ export default {
   margin-top: 0.25rem;
 }
 
-.copy-to-stores-section {
+.copy-to-stores-section,
+.duplicate-section {
   .helper-text {
     margin-bottom: 0.5rem;
   }
@@ -2651,6 +2863,17 @@ export default {
 
 .mt-4 {
   margin-top: 1rem;
+}
+
+.delivery-type-checkboxes {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  > label:first-child {
+    margin-bottom: 0;
+  }
 }
 
 .editor-image {
