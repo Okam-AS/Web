@@ -802,7 +802,18 @@ export default {
     },
 
     // ---- Receipt actions ----
-    printReceipt () {
+    // Prefers the Surfboard terminal's built-in printer (backend ESC/POS print) on a
+    // Surfboard-driven cash point; the browser's 80 mm iframe print is the fallback.
+    async printReceipt () {
+      const cashPoint = this.pos.cashPoint;
+      if (cashPoint && cashPoint.surfboardTerminalId && this.receipt && this.receipt.journalEntryId) {
+        try {
+          await this.pos.posSvc().PrintReceipt(this.receipt.journalEntryId, cashPoint.cashPointId);
+          return;
+        } catch (e) {
+          // Terminal print unavailable — fall back to the browser print below.
+        }
+      }
       if (this.$refs.receiptView) { this.$refs.receiptView.print(); }
     },
     async copyReceipt () {

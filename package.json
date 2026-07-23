@@ -13,7 +13,8 @@
     "test": "jest",
     "reinstall": "rm -rf node_modules && npm i",
     "heroku login": "heroku login",
-    "heroku deploy": "git push heroku master"
+    "heroku deploy": "git push heroku master",
+    "deckhand": "NODE_ENV=production NUXT_TARGET=server DISABLE_SSL_REDIRECT=true nuxt-ts start"
   },
   "lint-staged": {
     "*.{js,vue,ts}": "eslint",

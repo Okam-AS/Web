@@ -151,11 +151,14 @@
         </div>
 
         <label class="rbuild__label">{{ $i('pos_return_method') }}</label>
+        <!-- The card option only shows when the terminal provider supports unreferenced card
+             returns and the acquirer has enabled them (cashPoint.unreferencedCardReturnEnabled);
+             the backend refuses the initiate regardless. -->
         <div class="rbuild__methods">
           <button type="button" class="rbuild__method" :class="{ 'is-active': method === 'cash' }" @click="method = 'cash'">
             {{ $i('pos_pay_cash') }}
           </button>
-          <button type="button" class="rbuild__method" :class="{ 'is-active': method === 'card' }" @click="method = 'card'">
+          <button v-if="cardReturnEnabled" type="button" class="rbuild__method" :class="{ 'is-active': method === 'card' }" @click="method = 'card'">
             {{ $i('pos_pay_card') }}
           </button>
         </div>
@@ -280,6 +283,7 @@ export default {
   computed: {
     prefilled () { return !!(this.initialLines && this.initialLines.length); },
     cashPointId () { return this.pos.cashPoint.cashPointId; },
+    cardReturnEnabled () { return !!this.pos.cashPoint.unreferencedCardReturnEnabled; },
     total () { return this.lines.reduce((sum, l) => sum + l.unitAmount * l.quantity, 0); },
     reasonChosen () {
       if (this.reasonSel.reasonType === 'None') { return false; }
@@ -464,7 +468,18 @@ export default {
         this.error = this.$i('pos_refund_card_timeout');
       }
     },
-    printReceipt () {
+    // Prefers the Surfboard terminal's printer; browser print is the fallback.
+    async printReceipt () {
+      const cashPoint = this.pos.cashPoint;
+      const receipt = this.resultReceipt;
+      if (cashPoint && cashPoint.surfboardTerminalId && receipt && receipt.journalEntryId) {
+        try {
+          await this.pos.posSvc().PrintReceipt(receipt.journalEntryId, cashPoint.cashPointId);
+          return;
+        } catch (e) {
+          // Terminal print unavailable — fall back to the browser print below.
+        }
+      }
       if (this.$refs.receiptView) { this.$refs.receiptView.print(); }
     }
   }

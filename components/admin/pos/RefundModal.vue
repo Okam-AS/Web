@@ -239,7 +239,18 @@ export default {
         this.error = this.$i('pos_refund_card_timeout');
       }
     },
-    printReceipt () {
+    // Prefers the Surfboard terminal's printer; browser print is the fallback.
+    async printReceipt () {
+      const cashPoint = this.pos.cashPoint;
+      const receipt = this.resultReceipt;
+      if (cashPoint && cashPoint.surfboardTerminalId && receipt && receipt.journalEntryId) {
+        try {
+          await this.pos.posSvc().PrintReceipt(receipt.journalEntryId, cashPoint.cashPointId);
+          return;
+        } catch (e) {
+          // Terminal print unavailable — fall back to the browser print below.
+        }
+      }
       if (this.$refs.receiptView) { this.$refs.receiptView.print(); }
     }
   }

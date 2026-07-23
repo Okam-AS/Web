@@ -13,8 +13,10 @@ const sitemapExclude = isCh
 
 export default {
   debug: true,
-  // Target for static generation
-  target: 'static',
+  // Static by default (GitHub Pages). NUXT_TARGET=server switches to the SSR build for
+  // deckhand previews — with target static, `nuxt start` silently serves the stale generated
+  // dist/ folder instead of the fresh .nuxt build.
+  target: process.env.NUXT_TARGET || 'static',
   // Router configuration for GitHub Pages
   router: {
     base: '/'
@@ -117,9 +119,12 @@ export default {
 
   serverMiddleware: [
     redirectSSL.create({
-      enabled: process.env.NODE_ENV === 'production',
+      // DISABLE_SSL_REDIRECT gates the redirect for deckhand previews, where TLS terminates
+      // at the tunnel and the local hop is plain http.
+      enabled: process.env.NODE_ENV === 'production' && process.env.DISABLE_SSL_REDIRECT !== 'true',
       statusCode: 301
-    })
+    }),
+    { path: '/okam-api', handler: '~/server-middleware/okam-api-proxy.js' }
   ],
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
