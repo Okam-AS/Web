@@ -55,10 +55,29 @@
           </button>
         </div>
       </div>
+      <div class="property-filters">
+        <button
+          v-for="f in propertyFilterDefs"
+          :key="f.key"
+          :class="['filter-chip', { active: activePropertyFilters.includes(f.key) }]"
+          @click="togglePropertyFilter(f.key)"
+        >
+          <span class="material-icons">{{ f.icon }}</span>
+          {{ $i(f.labelKey) }}
+          <span class="chip-count">{{ propertyFilterCounts[f.key] }}</span>
+        </button>
+        <button
+          v-if="activePropertyFilters.length"
+          class="filter-chip clear-chip"
+          @click="activePropertyFilters = []"
+        >
+          ✕ {{ $i('products_clearPropertyFilters') }}
+        </button>
+      </div>
       </div>
 
       <div class="results-count" v-if="!isLoading && products.length > 0">
-        {{ $i('products_resultsCount', { shown: paginatedProducts.length, total: products.length }) }}
+        {{ $i('products_resultsCount', { shown: paginatedProducts.length, total: filteredProducts.length }) }}
         <button
           v-if="productFilter"
           class="clear-filter-btn"
@@ -109,6 +128,15 @@
             >
               <Loading :loading="true" :size="30" />
             </div>
+            <div class="status-badges">
+              <span v-if="product.hide" class="status-badge hidden-badge">
+                <span class="material-icons">visibility_off</span>
+                {{ $i('products_filterHidden') }}
+              </span>
+              <span v-if="isSoldOut(product)" class="status-badge soldout-badge">
+                {{ $i('products_filterSoldOut') }}
+              </span>
+            </div>
             <div v-if="product.image?.imageUrl">
               <img
                 :src="product.image.imageUrl"
@@ -150,6 +178,18 @@
             </button>
           </div>
         </div>
+      </div>
+
+      <div v-else class="empty-state no-results">
+        <span class="material-icons">filter_alt_off</span>
+        <h3>{{ $i('products_noResultsTitle') }}</h3>
+        <p>{{ $i('products_noResultsDescription') }}</p>
+        <button
+          class="create-first-btn"
+          @click="productFilter = ''; activePropertyFilters = []"
+        >
+          {{ $i('products_clearPropertyFilters') }}
+        </button>
       </div>
 
       <div
@@ -576,6 +616,7 @@ export default {
     draggingProducts: {},
     uploadingFor: null,
     productFilter: "",
+    activePropertyFilters: [],
     sortOption: "name-asc",
     imageDimensions: {},
     currentPage: 1,
@@ -602,11 +643,33 @@ export default {
       return this.$store.state.selectedAdminStore;
     },
 
+    propertyFilterDefs() {
+      return [
+        { key: "hidden", labelKey: "products_filterHidden", icon: "visibility_off", predicate: p => !!p.hide },
+        { key: "visible", labelKey: "products_filterVisible", icon: "visibility", predicate: p => !p.hide },
+        { key: "soldOut", labelKey: "products_filterSoldOut", icon: "production_quantity_limits", predicate: p => this.isSoldOut(p) },
+        { key: "noImage", labelKey: "products_filterNoImage", icon: "image_not_supported", predicate: p => !p.image?.imageUrl },
+        { key: "variants", labelKey: "products_filterVariants", icon: "tune", predicate: p => !!p.productVariantEnabled },
+      ];
+    },
+
+    propertyFilterCounts() {
+      const counts = {};
+      for (const def of this.propertyFilterDefs) {
+        counts[def.key] = this.products.filter(def.predicate).length;
+      }
+      return counts;
+    },
+
     filteredProducts() {
       const [sortKey, sortDir] = this.sortOption.split("-");
-      const base = this.productFilter
+      let base = this.productFilter
         ? this.products.filter((p) => p.name.toLowerCase().includes(this.productFilter.toLowerCase()))
         : this.products;
+      if (this.activePropertyFilters.length) {
+        const activeDefs = this.propertyFilterDefs.filter(d => this.activePropertyFilters.includes(d.key));
+        base = base.filter(p => activeDefs.every(d => d.predicate(p)));
+      }
       return [...base].sort((a, b) => {
         let valA = a[sortKey];
         let valB = b[sortKey];
@@ -707,6 +770,10 @@ export default {
       this.currentPage = 1;
     },
 
+    activePropertyFilters() {
+      this.currentPage = 1;
+    },
+
     sortOption() {
       this.currentPage = 1;
     },
@@ -753,6 +820,23 @@ export default {
   },
 
   methods: {
+    isSoldOut(product) {
+      return !!product.inventoryEnabled && product.inventory === 0;
+    },
+
+    togglePropertyFilter(key) {
+      // Hidden/visible are mutually exclusive — selecting one drops the other.
+      const opposites = { hidden: "visible", visible: "hidden" };
+      if (this.activePropertyFilters.includes(key)) {
+        this.activePropertyFilters = this.activePropertyFilters.filter(k => k !== key);
+      } else {
+        this.activePropertyFilters = [
+          ...this.activePropertyFilters.filter(k => k !== opposites[key]),
+          key,
+        ];
+      }
+    },
+
     handleLoginSuccess() {
       if (this.selectedStore > 0) {
         this.loadProducts();
@@ -1508,7 +1592,7 @@ export default {
 }
 
 .store-selector {
-  margin-bottom: 2rem;
+  margin-bottom: 16px;
 
   .selector-container {
     display: flex;
@@ -1552,6 +1636,104 @@ export default {
     top: 50%;
     transform: translateY(-50%);
     pointer-events: none;
+  }
+}
+
+.property-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 20px;
+  font-size: 0.85em;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  .material-icons {
+    font-size: 1.1em;
+  }
+
+  .chip-count {
+    background: #f1f5f9;
+    color: #64748b;
+    border-radius: 10px;
+    padding: 1px 8px;
+    font-size: 0.85em;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+
+  &:hover {
+    border-color: #cbd5e0;
+    color: #292c34;
+  }
+
+  &.active {
+    background: rgba(27, 183, 118, 0.08);
+    border-color: #1bb776;
+    color: #159f63;
+
+    .chip-count {
+      background: #1bb776;
+      color: white;
+    }
+  }
+
+  &.clear-chip {
+    border-color: transparent;
+    color: #ef4444;
+
+    &:hover {
+      background: rgba(239, 68, 68, 0.08);
+    }
+  }
+}
+
+.status-badges {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+  pointer-events: none;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.7em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+
+  .material-icons {
+    font-size: 1.2em;
+  }
+
+  &.hidden-badge {
+    background: rgba(41, 44, 52, 0.85);
+    color: white;
+  }
+
+  &.soldout-badge {
+    background: rgba(239, 68, 68, 0.9);
+    color: white;
   }
 }
 
