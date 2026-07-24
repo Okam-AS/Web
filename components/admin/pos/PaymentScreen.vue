@@ -27,20 +27,39 @@
             <span>{{ $i('pos_pay_cash') }}</span>
           </button>
         </div>
-        <button type="button" class="payment__split" @click="showSplit = true">
+        <!-- Unified split entry: with partial-payment support the chooser below offers by-item
+             split vs split payment; without it the by-item split modal opens directly. -->
+        <button type="button" class="payment__split" @click="openSplitEntry">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M8 7h12m0 0l-4-4m4 4l-4 4M16 17H4m0 0l4 4m-4-4l4-4" /></svg>
-          <span>{{ $i('pos_split_title') }}</span>
-        </button>
-        <!-- Split PAYMENT (one receipt, several tenders): partial payments on one provider order.
-             Surfboard cash points only; the store rollout flag is enforced server-side. -->
-        <button v-if="canSplitPay" type="button" class="payment__split" @click="startSplitPay">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M12 4v16m-7-8h14" /></svg>
-          <span>{{ $i('pos_splitpay_title') }}</span>
+          <span>{{ $i('pos_split_unified_title') }}</span>
         </button>
         <p v-if="error" class="payment__error">
           {{ error }}
         </p>
       </template>
+
+      <!-- Split chooser: by-item split (own receipt per guest) vs split PAYMENT (one receipt,
+           several tenders — partial payments on one provider order; Surfboard cash points only,
+           the store rollout flag is enforced server-side). -->
+      <div v-else-if="step === 'splitchoice'" class="payment__panel">
+        <button type="button" class="payment__choice" @click="chooseSplitByItem">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M8 7h12m0 0l-4-4m4 4l-4 4M16 17H4m0 0l4 4m-4-4l4-4" /></svg>
+          <span class="payment__choice-text">
+            <span class="payment__choice-title">{{ $i('pos_split_byitem_choice') }}</span>
+            <span class="payment__choice-sub">{{ $i('pos_split_byitem_hint') }}</span>
+          </span>
+        </button>
+        <button type="button" class="payment__choice" @click="startSplitPay">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M12 4v16m-7-8h14" /></svg>
+          <span class="payment__choice-text">
+            <span class="payment__choice-title">{{ $i('pos_splitpay_choice') }}</span>
+            <span class="payment__choice-sub">{{ $i('pos_splitpay_hint') }}</span>
+          </span>
+        </button>
+        <p v-if="error" class="payment__error">
+          {{ error }}
+        </p>
+      </div>
 
       <!-- Split payment: per-person by default (each tap charges an equal share of what remains);
            an optional free-amount pad covers "I'll just pay 200". One receipt either way — the
@@ -175,6 +194,9 @@
             {{ $i('pos_refund_sale') }}
           </button>
         </div>
+        <p v-if="receiptError" class="payment__error">
+          {{ receiptError }}
+        </p>
         <div v-if="showSms" class="payment__sms">
           <input v-model="smsPhone" type="tel" class="payment__sms-input" :placeholder="$i('pos_receipt_sms_ph')">
           <button type="button" class="payment__sms-send" :disabled="!smsPhone" @click="sendSms">
@@ -252,6 +274,7 @@ export default {
       showSms: false,
       smsPhone: '',
       smsResult: '',
+      receiptError: '',
       showRefundModal: false,
       // Split payment (partial payments on one provider order). Defaults to per-person equal
       // shares; splitCustom switches to free-amount entry.
@@ -328,7 +351,22 @@ export default {
     // (the customer may be mid-tap on the terminal) — pos defers the teardown.
     this.pos.paymentActive = true;
   },
+  mounted () {
+    // Browsers throttle timers in background tabs, so a capture completed while the tab was
+    // hidden may sit unnoticed until the next (delayed) tick. On becoming visible, poke the
+    // in-flight poll once immediately; both polls reconcile before any timeout void can fire.
+    this._onVisibility = () => {
+      if (document.visibilityState !== 'visible') { return; }
+      if (this.step === 'card' && this.cardTransactionId && this.cardState === 'waiting') {
+        this.pollCard();
+      } else if (this.step === 'splitcard' && this.splitCardTxId) {
+        this.pollSplitCard();
+      }
+    };
+    document.addEventListener('visibilitychange', this._onVisibility);
+  },
   beforeDestroy () {
+    document.removeEventListener('visibilitychange', this._onVisibility);
     this.pos.paymentActive = false;
     this.stopCardPoll();
     this.stopSplitPoll();
@@ -359,6 +397,7 @@ export default {
           amount: tendered
         });
         this.step = 'receipt';
+        this.autoPrint();
       } catch (e) {
         this.error = this.pos.errMsg(e);
       } finally {
@@ -416,6 +455,7 @@ export default {
             this.cardState = 'approved';
             this.receipt = await this.pos.posSvc().GetReceipt(check.journalEntryId);
             this.step = 'receipt';
+            this.autoPrint();
             return;
           }
         } catch (e) {
@@ -444,6 +484,23 @@ export default {
     },
     abandonCard () {
       this.stopCardPoll();
+      this.step = 'method';
+    },
+
+    // ---- Split entry ----
+    // Unified "Del regningen": with partial-payment support the operator picks between the two
+    // split flows; without it the only available flow (by-item split) opens directly — a chooser
+    // with one option is never shown.
+    openSplitEntry () {
+      this.error = '';
+      if (this.canSplitPay) {
+        this.step = 'splitchoice';
+        return;
+      }
+      this.showSplit = true;
+    },
+    chooseSplitByItem () {
+      this.showSplit = true;
       this.step = 'method';
     },
 
@@ -712,6 +769,7 @@ export default {
       try {
         this.receipt = await this.pos.posSvc().FinalizeSettlement(this.splitSettlementId, { cashPointId: this.cashPointId });
         this.step = 'receipt';
+        this.autoPrint();
       } catch (e) {
         this.error = this.pos.errMsg(e);
         this.step = 'splitpay';
@@ -793,6 +851,7 @@ export default {
     // ---- Navigation ----
     onBack () {
       if (this.step === 'receipt') { this.$emit('done'); return; }
+      if (this.step === 'splitchoice') { this.step = 'method'; this.error = ''; return; }
       if (this.step === 'cash') { this.step = 'method'; this.error = ''; return; }
       if (this.step === 'card') { this.cancelCard(); return; }
       if (this.step === 'splitpay') { this.abortSplitPay(); return; }
@@ -802,6 +861,12 @@ export default {
     },
 
     // ---- Receipt actions ----
+    // Prints the receipt automatically when the cash point is configured for it. Fire-and-forget:
+    // a print failure must never block or overlay the payment result.
+    autoPrint () {
+      if (!this.receipt || !this.pos.cashPoint || !this.pos.cashPoint.surfboardAutoPrintReceipt) { return; }
+      this.$nextTick(() => { this.printReceipt().catch(() => { /* best effort */ }); });
+    },
     // Prefers the Surfboard terminal's built-in printer (backend ESC/POS print) on a
     // Surfboard-driven cash point; the browser's 80 mm iframe print is the fallback.
     async printReceipt () {
@@ -817,11 +882,13 @@ export default {
       if (this.$refs.receiptView) { this.$refs.receiptView.print(); }
     },
     async copyReceipt () {
+      this.receiptError = '';
       try {
         this.receipt = await this.pos.posSvc().CopyReceipt(this.receipt.journalEntryId, { cashPointId: this.cashPointId });
         this.$nextTick(() => this.printReceipt());
       } catch (e) {
-        this.smsResult = this.pos.errMsg(e);
+        // Surface the copy failure directly, not in the unrelated SMS-status field.
+        this.receiptError = this.pos.errMsg(e);
       }
     },
     async sendSms () {
@@ -929,6 +996,27 @@ export default {
 }
 .payment__split:hover { border-color: var(--pos-primary, #1bb776); }
 .payment__split svg { width: 22px; height: 22px; color: #64748b; }
+
+.payment__choice {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+  padding: 20px 22px;
+  border: 2px solid #e2e8f0;
+  background: #ffffff;
+  border-radius: 18px;
+  margin-bottom: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.12s ease, transform 0.06s ease;
+}
+.payment__choice:hover { border-color: var(--pos-primary, #1bb776); }
+.payment__choice:active { transform: translateY(1px); }
+.payment__choice svg { width: 44px; height: 44px; flex-shrink: 0; color: var(--pos-primary, #1bb776); }
+.payment__choice-text { display: flex; flex-direction: column; gap: 4px; }
+.payment__choice-title { font-size: 1.25rem; font-weight: 700; color: var(--pos-ink, #292c34); }
+.payment__choice-sub { font-size: 0.95rem; color: #64748b; }
 
 .payment__sp-status {
   display: flex;

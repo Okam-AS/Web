@@ -409,13 +409,13 @@ export default {
         // Sales/VAT/tips/receivables accounts — verified NS 4102 standard accounts. These are never
         // auto-created (a wrong VAT type on a revenue account is a fiscal error); a missing one is
         // surfaced under "Mangler i kontoplanen". Tips has no standard account, so it stays blank.
-        salesAccount25Percent: '3000',   // Salgsinntekt, avgiftspliktig (mva 25%)
-        salesAccount15Percent: '3001',   // Salgsinntekt, middels sats (mva 15% — mat/takeaway)
-        salesAccount12Percent: '3002',   // Salgsinntekt, lav sats (mva 12%)
-        salesAccount0Percent: '3100',    // Salgsinntekt, avgiftsfri (mva 0%)
-        tipsAccount: '',                 // utenfor mva — sett egen konto
-        receivablesAccount: '1500',      // Kundefordringer
-        accountingEnabled: true          // a fresh setup enables the accounting export
+        salesAccount25Percent: '3000', // Salgsinntekt, avgiftspliktig (mva 25%)
+        salesAccount15Percent: '3001', // Salgsinntekt, middels sats (mva 15% — mat/takeaway)
+        salesAccount12Percent: '3002', // Salgsinntekt, lav sats (mva 12%)
+        salesAccount0Percent: '3100', // Salgsinntekt, avgiftsfri (mva 0%)
+        tipsAccount: '', // utenfor mva — sett egen konto
+        receivablesAccount: '1500', // Kundefordringer
+        accountingEnabled: true // a fresh setup enables the accounting export
       };
     },
     // Load the saved connection's settings into the form so an existing connection is editable
