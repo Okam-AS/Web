@@ -158,6 +158,10 @@
               Terminalen må stå på skjermen <strong>&laquo;Register terminal&raquo;</strong>. Skriv koden i de
               tomme feltene øverst.
             </p>
+            <p v-if="form.terminalName" class="twiz__hint">
+              Denne terminalen registrerer seg selv, så navnet &laquo;{{ form.terminalName }}&raquo; kan ikke
+              settes på den. Den vises med kassen den kobles til.
+            </p>
 
             <div v-if="!regCode" class="tcode-card tcode-card--pending">
               <p v-if="regCodeLoading">
@@ -351,6 +355,10 @@ export default {
     // first column makes the rows indistinguishable, so fall back through what the list does carry.
     terminalLabel (t) {
       if (t.terminalName) { return t.terminalName; }
+      // A terminal paired with the code flow has no name at Surfboard (only the serial registration
+      // carries one), so the cash point it serves is the name that actually means something here.
+      const boundName = this.cashPointName(this.boundCashPointId(t));
+      if (boundName) { return boundName; }
       if (t.serialNo) { return 'Terminal ' + t.serialNo; }
       if (t.terminalId) { return 'Terminal ' + String(t.terminalId).slice(-6); }
       return 'Terminal';
