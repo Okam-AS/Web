@@ -41,6 +41,10 @@
           <button class="pos-reports__btn" :disabled="!cashPointId || xLoading" @click="runX">
             {{ $i('posrep_run_x') }}
           </button>
+          <!-- Prints on the cash point's own Surfboard terminal, not on this browser's printer. -->
+          <button class="pos-reports__btn pos-reports__btn--ghost" :disabled="!cashPointId || printing || !canPrintReport" :title="printHint" @click="printX">
+            {{ $i('pos_report_print_x') }}
+          </button>
         </div>
         <div v-if="xReport" class="pos-reports__report">
           <XReportView :report="xReport" />
@@ -71,15 +75,24 @@
                 <button class="pos-reports__link" @click="viewZ(z)">
                   {{ $i('common_view') }}
                 </button>
+                <button class="pos-reports__link" :disabled="printing || !canPrintReport" :title="printHint" @click="printZ(z)">
+                  {{ $i('pos_receipt_print') }}
+                </button>
               </td>
             </tr>
           </tbody>
         </table>
         <div v-if="zModal" class="pos-reports__modal" @click.self="zModal = null">
           <div class="pos-reports__modal-inner">
-            <XReportView :report="zModal" /><button class="pos-reports__close" @click="zModal = null">
-              {{ $i('common_close') }}
-            </button>
+            <XReportView :report="zModal" />
+            <div class="pos-reports__modal-actions">
+              <button class="pos-reports__close" @click="zModal = null">
+                {{ $i('common_close') }}
+              </button>
+              <button class="pos-reports__btn" :disabled="printing || !canPrintReport" :title="printHint" @click="printZ(zModal)">
+                {{ $i('pos_report_print_z') }}
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -202,6 +215,7 @@ export default {
       cashPointId: 0,
       xReport: null,
       xLoading: false,
+      printing: false,
       zHistory: [],
       zModal: null,
       jFrom: '',
@@ -233,7 +247,19 @@ export default {
       const stores = (this.$store.state.currentUser && this.$store.state.currentUser.adminIn) || [];
       return stores.length ? stores[0].id : '';
     },
-    canSaft () { return !!this.storeId && !!this.sFrom && !!this.sTo; }
+    canSaft () { return !!this.storeId && !!this.sFrom && !!this.sTo; },
+    // X and Z print as ESC/POS on the cash point's own Surfboard terminal — there is no browser
+    // fallback for a report the way there is for a receipt. Without a bound terminal the button
+    // can only produce a backend error, so it is disabled and says why instead.
+    selectedCashPoint () {
+      return this.cashPoints.find(cp => cp.cashPointId === this.cashPointId) || null;
+    },
+    canPrintReport () {
+      return !!(this.selectedCashPoint && this.selectedCashPoint.surfboardTerminalId);
+    },
+    printHint () {
+      return this.canPrintReport ? '' : this.$i('pos_report_print_needs_terminal');
+    }
   },
   watch: {
     cashPointId () {
@@ -283,6 +309,33 @@ export default {
         this.notify(this.errMsg(e), 'error');
       } finally {
         this.xLoading = false;
+      }
+    },
+    // X and Z print on the cash point's Surfboard terminal (backend ESC/POS), so the paper matches
+    // the register's own receipts. Printing an X does not cut the period; a Z is already settled,
+    // so reprinting it is safe.
+    async printX () {
+      if (this.printing) { return; }
+      this.printing = true;
+      try {
+        await this._reportService.PrintXReport(this.cashPointId);
+        this.notify(this.$i('pos_report_printed'), 'success');
+      } catch (e) {
+        this.notify(this.errMsg(e), 'error');
+      } finally {
+        this.printing = false;
+      }
+    },
+    async printZ (report) {
+      if (this.printing || !report) { return; }
+      this.printing = true;
+      try {
+        await this._reportService.PrintZReport(report.zReportId);
+        this.notify(this.$i('pos_report_printed'), 'success');
+      } catch (e) {
+        this.notify(this.errMsg(e), 'error');
+      } finally {
+        this.printing = false;
       }
     },
     async loadZHistory () {
@@ -409,5 +462,8 @@ export default {
 .pos-reports__kv { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f1f5f9; }
 .pos-reports__kv span:first-child { color: #64748b; }
 .pos-reports__sig { word-break: break-all; }
+.pos-reports__modal-actions { display: flex; gap: 10px; margin-top: 14px; align-items: stretch; }
+.pos-reports__modal-actions .pos-reports__close { flex: 1; margin-top: 0; }
+.pos-reports__modal-actions .pos-reports__btn { flex: 1; }
 .pos-reports__close { display: block; width: 100%; margin-top: 14px; height: 46px; border: none; border-radius: 10px; background: #fff; color: #292c34; font-weight: 700; cursor: pointer; border: 1px solid #cbd5e0; }
 </style>

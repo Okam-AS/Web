@@ -18,6 +18,7 @@
         :seat-removable="seatRemovable"
         @select="onSelect"
         @scan="onScan"
+        @sold-out="onSoldOutPick"
         @set-delivery="setDelivery"
         @set-course="currentCourse = $event"
         @set-seat="currentSeat = $event"
@@ -61,6 +62,9 @@
     <CheckPanel
       :check="check"
       :parked-count="parkedChecks.length"
+      :pending-adds="pendingAdds"
+      :pending-label="pendingLabel"
+      :adds-outstanding="addsOutstanding"
       :seating="seatingEnabled"
       @show-parked="showParked = true"
       @open-price="showOpenPrice = true"
@@ -84,22 +88,23 @@
       @pay="onPay"
     />
 
-    <!-- Notice toast -->
-    <transition name="sell-notice">
-      <div
-        v-if="notice.show"
-        class="sell__notice"
-        :class="'sell__notice--' + notice.type"
-      >
-        {{ notice.message }}
-      </div>
-    </transition>
+    <PosConfirm
+      v-if="showVoidAllConfirm"
+      :title="$i('pos_void_all_parked')"
+      :text="$i('pos_void_all_parked_confirm', { count: parkedChecks.length, amount: priceLabel(parkedTotal) })"
+      :confirm-label="$i('pos_void_check')"
+      danger
+      @confirm="confirmVoidAllParked"
+      @cancel="showVoidAllConfirm = false"
+    />
 
     <OptionPicker
       v-if="optionProduct"
+      :key="optionProduct.id"
       :product="optionProduct"
+      :initial-quantity="optionQuantity"
       @confirm="onOptionConfirm"
-      @close="optionProduct = null"
+      @close="onOptionCancel"
     />
 
     <OpenPriceModal
@@ -218,7 +223,7 @@
         <PosReceiptView ref="proformaView" :receipt="unpaidReceipt" />
         <div class="sell__proforma-actions">
           <button type="button" class="sell__proforma-close" @click="unpaidReceipt = null">{{ $i('common_close') }}</button>
-          <button type="button" class="sell__proforma-print" @click="printProvisional">{{ $i('pos_receipt_print') }}</button>
+          <button type="button" class="sell__proforma-print" :disabled="printingProvisional" @click="printProvisional">{{ $i('pos_receipt_print') }}</button>
         </div>
       </div>
     </div>
@@ -237,6 +242,11 @@ import LineNoteModal from '~/components/admin/pos/LineNoteModal.vue';
 import SeatPickerModal from '~/components/admin/pos/SeatPickerModal.vue';
 import ReturnBuilder from '~/components/admin/pos/ReturnBuilder.vue';
 import PosReceiptView from '~/components/admin/pos/PosReceiptView.vue';
+import PosConfirm, { confirmIsOpen } from '~/components/admin/pos/PosConfirm.vue';
+
+// How long an add may be in flight before the check panel admits it is waiting. Below this the
+// line simply appears, which is what a fast register should look like.
+const PENDING_VISIBLE_AFTER_MS = 450;
 
 // The sales screen: product grid on the left, open check on the right. It orchestrates adding lines
 // (direct, options, open price, EAN), quantity changes and hands off to payment. The check itself
@@ -244,7 +254,7 @@ import PosReceiptView from '~/components/admin/pos/PosReceiptView.vue';
 // payment screen (not here), so a single tap on Pay reaches every way to settle.
 export default {
   name: 'SellScreen',
-  components: { ProductGrid, CheckPanel, OptionPicker, OpenPriceModal, PaymentScreen, DiscountModal, VoidModal, LineNoteModal, SeatPickerModal, ReturnBuilder, PosReceiptView },
+  components: { ProductGrid, CheckPanel, OptionPicker, OpenPriceModal, PaymentScreen, DiscountModal, VoidModal, LineNoteModal, SeatPickerModal, ReturnBuilder, PosReceiptView, PosConfirm },
   inject: ['pos'],
   data () {
     return {
@@ -257,6 +267,8 @@ export default {
       // The check group whose guest is being edited (opens SeatPickerModal); null when closed.
       seatGroup: null,
       optionProduct: null,
+      // Quantity the option picker opens with (an armed grid multiplier).
+      optionQuantity: 1,
       showOpenPrice: false,
       showPayment: false,
       showDiscount: false,
@@ -273,21 +285,30 @@ export default {
       // The unpaid document shown for print (a provisional bill PROREC or a training sale TRAINREC);
       // null when closed. Neither settles the check.
       unpaidReceipt: null,
+      // Guards the print button while the terminal job is in flight, so a double tap cannot put
+      // two identical bills on the roll.
+      printingProvisional: false,
       showNegativeSale: false,
       // Return lines mapped from the selected bill rows; null when the builder starts empty.
       negativeSalePrefill: null,
       showParked: false,
+      showVoidAllConfirm: false,
       // The check group whose note is being edited (opens LineNoteModal); null when closed.
       noteGroup: null,
+      // Items rung in but not yet acknowledged by the server (queue + the one in flight), and the
+      // name of the one currently going up — together they drive the check panel's ghost row.
+      pendingAdds: 0,
+      pendingLabel: '',
+      // The undelayed count. pendingAdds only drives the ghost row (and waits a beat first);
+      // anything that must not happen while lines are outstanding reads this instead.
+      addsOutstanding: 0,
       goodsGroups: [],
       openPricePresets: [],
       discountReasons: [],
       busy: false,
       // Recipe map so "+" can re-add an option / open-price line whose ingredients aren't fully
       // recoverable from the server line (option ids, goods group). Keyed to match a check group.
-      recipes: {},
-      notice: { show: false, message: '', type: 'info' },
-      noticeTimer: null
+      recipes: {}
     };
   },
   computed: {
@@ -310,6 +331,14 @@ export default {
     },
     checkItems () { return (this.check && this.check.items) || []; },
     checkHasLines () { return this.checkItems.length > 0; },
+    // Anything rendered on top of the sales screen. Keyboard shortcuts that act on the grid stand
+    // down while one is up: the grid is not what the operator is looking at.
+    overlayOpen () {
+      return !!(this.optionProduct || this.showPayment || this.showOpenPrice || this.showDiscount ||
+        this.showVoid || this.showNegativeSale || this.noteGroup || this.seatGroup ||
+        this.unpaidReceipt || this.showMoveMerge || this.showMore || this.showParked ||
+        this.showVoidAllConfirm);
+    },
     discountTargetName () { return this.discountGroup ? this.discountGroup.name : ''; },
     // A product-restricted discount is only offered for a row whose product passes the restriction
     // (the backend enforces the same rule). Order scope shows every reason; the backend narrows a
@@ -365,7 +394,16 @@ export default {
     catalog () { return this.pos.catalog || []; },
     catalogError () { return this.pos.catalogError; },
     board () { return this.pos.boardStatus; },
-    parkedChecks () { return (this.board && this.board.parkedChecks) || []; },
+    // The board's parkedChecks is "every open check that is not a table's primary tile", so a
+    // table-less check is in it whether it is parked or sitting on this very screen as the active
+    // one. Excluding the active check is what makes the list mean "parked" to the operator — and
+    // it is what stops "annuller alle parkerte" from voiding the check they are ringing into.
+    parkedChecks () {
+      const all = (this.board && this.board.parkedChecks) || [];
+      const activeId = this.check ? this.check.orderId : null;
+      return activeId ? all.filter(p => p.orderId !== activeId) : all;
+    },
+    parkedTotal () { return this.parkedChecks.reduce((sum, p) => sum + (p.finalAmount || 0), 0); },
     soldOutProductIds () { return (this.board && this.board.soldOutProductIds) || []; },
     soldOutCategoryIds () { return (this.board && this.board.soldOutCategoryIds) || []; },
     // The robust reset hook: the active guest is per-check ambient state, so it clears whenever the
@@ -373,20 +411,93 @@ export default {
     checkId () { return this.check ? this.check.orderId : null; }
   },
   watch: {
+    // A new check is a new customer: per-line intent from the previous one must not carry over.
+    // The multiplier lives in the grid, which is never remounted, so ×6 armed before a sale would
+    // otherwise be spent on the next customer's first tap.
     checkId () {
       this.currentSeat = null;
       this.seatExtra = 0;
+      if (this.$refs.grid && this.$refs.grid.armMultiplier) { this.$refs.grid.armMultiplier(1); }
     }
   },
   mounted () {
+    // Non-reactive add queue: only the derived counters (pendingAdds/pendingLabel) drive rendering,
+    // so draining does not re-render the grid on every shift.
+    this._addQueue = [];
+    this._draining = false;
+    this._pendingLabel = '';
+    // Holds the ghost row back until an add has been slow enough to be worth showing.
+    this._pendingTimer = null;
+    // Set in beforeDestroy so the drain's await loops stop instead of writing to a dead screen.
+    this._destroyed = false;
+    // The order the running drain belongs to; null between drains. Guards against the check being
+    // replaced under a queue that was rung into a different one.
+    this._drainOrderId = null;
+    window.addEventListener('keydown', this.onKeydown);
+    // Web-only exposure: the tab can be closed or reloaded mid-drain, and unlike a mode switch
+    // there is no chance to warn afterwards — the queued lines simply never reach the check.
+    window.addEventListener('beforeunload', this.onBeforeUnload);
     this.loadGoodsGroups();
     this.loadOpenPricePresets();
     this.loadDiscountReasons();
   },
   beforeDestroy () {
-    if (this.noticeTimer) { clearTimeout(this.noticeTimer); }
+    // The drain awaits between lines, so it can outlive this screen. Everything it does from here
+    // on would land on whatever check is active by then — stop it, and pull the undo toast whose
+    // closure points back into this instance.
+    this._destroyed = true;
+    // Lines still queued when the screen goes away are never rung in. Say so: a check that ends up
+    // short is money, and the toast lives on the shell so it survives this component's death.
+    const stranded = this._addQueue.length;
+    this._addQueue = [];
+    this.pos.addsPending = 0;
+    if (stranded) {
+      this.pos.notify(this.$i('pos_add_check_changed', { count: stranded }), 'error');
+    }
+    this.clearPendingTimer();
+    this.pos.dropToastActionsFor(this);
+    window.removeEventListener('keydown', this.onKeydown);
+    window.removeEventListener('beforeunload', this.onBeforeUnload);
   },
   methods: {
+    // Registers are often driven from a keyboard-equipped till with a wedge scanner. Esc used to do
+    // nothing here, so a sheet opened by mistake could only be closed by finding its Cancel button.
+    // Order matters: the topmost overlay closes first, one Esc at a time.
+    onKeydown (e) {
+      if (e.key === 'Escape') {
+        // A confirmation dialog on top owns the key. This listener registered first (the screen
+        // mounted before the dialog) and window listeners fire in registration order, so without
+        // this the same Esc would cancel the confirm AND close the overlay it was guarding.
+        if (confirmIsOpen()) { return; }
+        // Modal children (option picker, payment, discount, …) own their own Esc handling; only
+        // the plain overlays this screen renders itself are closed from here.
+        if (this.unpaidReceipt) { this.unpaidReceipt = null; return; }
+        if (this.showMoveMerge) { this.showMoveMerge = false; return; }
+        if (this.showMore) { this.showMore = false; return; }
+        if (this.showParked) { this.showParked = false; return; }
+        return;
+      }
+      // "/" jumps to the search field, the standard shortcut and the fastest way to reach a
+      // product that has no tile in view. Ignored while typing, so it can still be typed — and
+      // ignored behind an overlay, where it would focus a field the operator cannot see and let a
+      // scan ring in against whatever that overlay is in the middle of.
+      if (e.key === '/' && !this.isTypingTarget(e.target) && !this.overlayOpen) {
+        e.preventDefault();
+        if (this.$refs.grid && this.$refs.grid.focusSearch) { this.$refs.grid.focusSearch(); }
+      }
+    },
+    // Browsers show their own generic wording; assigning returnValue is what arms the prompt.
+    onBeforeUnload (e) {
+      if (this.addsOutstanding <= 0) { return undefined; }
+      e.preventDefault();
+      e.returnValue = '';
+      return '';
+    },
+    isTypingTarget (el) {
+      if (!el) { return false; }
+      const tag = (el.tagName || '').toLowerCase();
+      return tag === 'input' || tag === 'textarea' || tag === 'select' || el.isContentEditable;
+    },
     async loadGoodsGroups () {
       try {
         this.goodsGroups = await this.pos._goodsGroupService.GetForStore(this.pos.storeId) || [];
@@ -412,10 +523,10 @@ export default {
         this.discountReasons = [];
       }
     },
-    notify (message, type = 'info') {
-      this.notice = { show: true, message, type };
-      if (this.noticeTimer) { clearTimeout(this.noticeTimer); }
-      this.noticeTimer = setTimeout(() => { this.notice.show = false; }, 3500);
+    // Thin delegate: every toast in the register is owned and rendered by the shell, so a
+    // message raised here survives a switch to Board or Day mode.
+    notify (message, type = 'info', opts) {
+      return this.pos.notify(message, type, opts);
     },
     // Switching eat-in / take-away is always allowed: before a check exists it just sets the
     // context for the next one; on an open check the server re-prices every line for the new VAT
@@ -425,11 +536,18 @@ export default {
         this.deliveryType = dt;
         return;
       }
-      if (this.busy || this.check.deliveryType === dt) { return; }
+      if (this.check.deliveryType === dt || this.blockedByBusy()) { return; }
       this.busy = true;
       try {
+        const before = this.check.finalAmount;
         this.pos.applyCheck(await this.pos.checkSvc().SetDeliveryType(this.check.orderId, { deliveryType: dt }));
         this.deliveryType = dt;
+        // One tap moves every line between 25 % and 15 % VAT; without this the total just jumps
+        // and the operator has no way to tell a reprice from a mis-tap.
+        this.notify(this.$i(
+          dt === 'SelfPickup' ? 'pos_repriced_takeaway' : 'pos_repriced_eatin',
+          { from: this.priceLabel(before), to: this.priceLabel(this.check.finalAmount) }
+        ), 'info', { replaceKey: 'repriced' });
       } catch (e) {
         this.notify(this.pos.errMsg(e), 'error');
       } finally {
@@ -507,13 +625,16 @@ export default {
       });
       return names;
     },
-    onSelect (product) {
+    onSelect (product, quantity) {
       const hasOptions = product.productVariantEnabled &&
         Array.isArray(product.productVariants) && product.productVariants.length > 0;
       if (hasOptions) {
+        // An armed multiplier carries into the picker's own stepper rather than being lost —
+        // "six of these, with oat milk" stays one decision.
+        this.optionQuantity = Math.max(1, quantity || 1);
         this.optionProduct = product;
       } else {
-        this.addProduct(product, [], 1);
+        this.addProduct(product, [], Math.max(1, quantity || 1));
       }
     },
     onOptionConfirm ({ selectedOptionIds, quantity }) {
@@ -521,52 +642,165 @@ export default {
       this.optionProduct = null;
       this.addProduct(product, selectedOptionIds, quantity);
     },
-    async addProduct (product, selectedOptionIds, quantity, seatOverride) {
-      if (this.busy) { return; }
+    // Backing out of the picker rings in nothing, so the multiplier the tile tap spent has to go
+    // back on the banner — otherwise "×6" is silently gone and the next tap adds one.
+    onOptionCancel () {
+      const quantity = this.optionQuantity;
+      this.optionProduct = null;
+      if (quantity > 1 && this.$refs.grid && this.$refs.grid.armMultiplier) {
+        this.$refs.grid.armMultiplier(quantity);
+      }
+    },
+    // Ringing an item in never blocks. A tap that arrives while a previous AddLine is still in
+    // flight used to be dropped in silence — on a slow connection three quick taps produced one
+    // line and no explanation — so taps are queued instead and drained in order. The check panel
+    // shows a ghost row for what is still on its way, so the operator can keep going at their own
+    // speed and still see that nothing was lost.
+    addProduct (product, selectedOptionIds, quantity, seatOverride) {
+      // seatOverride (used by "+" on a row) forces the row's own guest; otherwise a new line takes
+      // the active guest. undefined means "not overridden" so an explicit null (Felles) is honoured.
+      const seatNumber = seatOverride !== undefined
+        ? seatOverride
+        : (this.seatingEnabled ? this.currentSeat : null);
+      const request = {
+        quantity: 1,
+        notes: '',
+        courseSequence: this.coursingEnabled ? this.currentCourse : null,
+        seatNumber,
+        productId: product.id,
+        selectedOptionIds: selectedOptionIds || [],
+        isOpenPrice: false,
+        name: null,
+        amount: 0,
+        tax: 0,
+        goodsGroupId: null
+      };
+      if (selectedOptionIds && selectedOptionIds.length) {
+        const names = this.optionNames(product, selectedOptionIds);
+        this.recipes['p|' + product.id + '|' + names.slice().sort().join(',')] = request;
+      }
+      // The active guest is a per-line choice, not a sticky mode: it falls back to Felles as soon
+      // as the item is on its way, so the next one is never silently tagged to the previous guest.
+      // A row-repeat ("+" on a check line) passes an explicit seatOverride and must not disturb it.
+      if (seatOverride === undefined) { this.currentSeat = null; }
+      this.queueAdd(request, product.name, quantity);
+    },
+
+    // Enqueue `count` copies of one AddLine request and start draining.
+    queueAdd (request, label, count) {
+      for (let i = 0; i < Math.max(1, count || 1); i++) {
+        this._addQueue.push({ request, label });
+      }
+      this.syncPending();
+      this.drainAdds();
+    },
+    // The ghost row exists for slow connections. On a fast one an AddLine round-trips in well under
+    // a tenth of a second, and a row that appears and disappears in that time reads as the UI
+    // glitching, not as progress — so it is held back until the add has actually been slow enough
+    // to be worth reporting. Once visible it tracks the queue until the queue drains.
+    syncPending () {
+      const count = this._addQueue.length + (this._draining ? 1 : 0);
+      this.pendingLabel = this._pendingLabel;
+      this.addsOutstanding = count;
+      // Mirrored onto the shell so setMode can refuse to unmount this screen mid-queue — the
+      // queue lives here and dies with the component.
+      this.pos.addsPending = count;
+      if (!count) {
+        this.clearPendingTimer();
+        this.pendingAdds = 0;
+        return;
+      }
+      if (this.pendingAdds) { this.pendingAdds = count; return; }
+      if (this._pendingTimer) { return; }
+      this._pendingTimer = setTimeout(() => {
+        this._pendingTimer = null;
+        this.pendingAdds = this._addQueue.length + (this._draining ? 1 : 0);
+      }, PENDING_VISIBLE_AFTER_MS);
+    },
+    clearPendingTimer () {
+      if (this._pendingTimer) { clearTimeout(this._pendingTimer); }
+      this._pendingTimer = null;
+    },
+    // A drain now holds `busy` for the whole queue, not one line, so the window in which other
+    // mutations bounce off it is long enough for an operator to hit it on purpose. They still have
+    // to wait — the queue is the ordering guarantee — but it says so instead of ignoring the tap.
+    // One toast at a time (replaceKey), so a flurry of taps does not stack up messages.
+    blockedByBusy () {
+      if (!this.busy) { return false; }
+      this.notify(
+        this.addsOutstanding > 0 ? this.$i('pos_wait_for_adds') : this.$i('pos_wait_busy'),
+        'info',
+        { replaceKey: 'wait-busy', timeout: 2000 }
+      );
+      return true;
+    },
+    async drainAdds () {
+      if (this._draining) { return; }
+      // Another mutation already owns `busy` (a reprice, a discount, a row delete): wait for it
+      // instead of running alongside it. Two writers on one check make whichever response lands
+      // last win — the queued line would vanish from the panel — and clearing `busy` in our own
+      // finally would unblock a third action while that mutation is still in flight. The taps stay
+      // queued meanwhile, so nothing is dropped; the ghost row keeps showing what is on its way.
+      while (this.busy && !this._destroyed) { await new Promise(resolve => setTimeout(resolve, 50)); }
+      // Re-checked after the wait: a drain started while we waited owns the queue now, and the
+      // screen may have gone away entirely while we sat here.
+      if (this._draining || this._destroyed) { return; }
+      this._draining = true;
+      // The queue holds the register's ordering guarantee, so every other check mutation waits
+      // for it — a discount or a quantity change applied mid-drain would race the pending lines.
       this.busy = true;
       try {
-        const check = await this.ensureCheck();
-        if (!check) { return; }
-        // seatOverride (used by "+" on a row) forces the row's own guest; otherwise a new line takes
-        // the active guest. undefined means "not overridden" so an explicit null (Felles) is honoured.
-        const seatNumber = seatOverride !== undefined
-          ? seatOverride
-          : (this.seatingEnabled ? this.currentSeat : null);
-        const request = {
-          quantity: 1,
-          notes: '',
-          courseSequence: this.coursingEnabled ? this.currentCourse : null,
-          seatNumber,
-          productId: product.id,
-          selectedOptionIds: selectedOptionIds || [],
-          isOpenPrice: false,
-          name: null,
-          amount: 0,
-          tax: 0,
-          goodsGroupId: null
-        };
-        if (selectedOptionIds && selectedOptionIds.length) {
-          const names = this.optionNames(product, selectedOptionIds);
-          this.recipes['p|' + product.id + '|' + names.slice().sort().join(',')] = request;
+        while (this._addQueue.length && !this._destroyed) {
+          const job = this._addQueue.shift();
+          this._pendingLabel = job.label;
+          this.syncPending();
+          try {
+            // The queue was rung into ONE check. Checked BEFORE ensureCheck: if the check it was
+            // meant for is gone — voided, settled, or dropped by the board reconcile — ensureCheck
+            // would open a brand-new one server-side, and the leftovers would surface as a phantom
+            // check on the board. The test has to come first to stop that from ever being created.
+            if (this._drainOrderId != null && (!this.check || this.check.orderId !== this._drainOrderId)) {
+              const stranded = this._addQueue.length + 1;
+              this._addQueue.length = 0;
+              this.notify(this.$i('pos_add_check_changed', { count: stranded }), 'error');
+              break;
+            }
+            const check = await this.ensureCheck();
+            if (!check) {
+              // No check to ring into (a restore is still pending). The last silent drop path in
+              // the drain — the two below both report, and so must this one.
+              const stranded = this._addQueue.length + 1;
+              this._addQueue.length = 0;
+              this.notify(this.$i('pos_add_check_changed', { count: stranded }), 'error');
+              break;
+            }
+            if (this._drainOrderId == null) { this._drainOrderId = check.orderId; }
+            this.pos.applyCheck(await this.pos.checkSvc().AddLine(check.orderId, job.request));
+          } catch (e) {
+            // Drop the rest of the queue: the operator has to see the failure before more lines
+            // land, and continuing would ring items onto a check that just rejected one.
+            const dropped = this._addQueue.length;
+            this._addQueue.length = 0;
+            this.notify(
+              dropped
+                ? this.$i('pos_add_failed_dropped', { message: this.pos.errMsg(e), count: dropped })
+                : this.pos.errMsg(e),
+              'error'
+            );
+            break;
+          }
         }
-        let result = check;
-        for (let i = 0; i < Math.max(1, quantity); i++) {
-          result = await this.pos.checkSvc().AddLine(check.orderId, request);
-        }
-        this.pos.applyCheck(result);
-        // The active guest is a per-line choice, not a sticky mode: after a line lands it falls back
-        // to Felles so the next item is never silently tagged to the previous guest. A row-repeat
-        // ("+" on a check line) passes an explicit seatOverride and must not disturb the selection.
-        if (seatOverride === undefined) { this.currentSeat = null; }
-      } catch (e) {
-        this.notify(this.pos.errMsg(e), 'error');
       } finally {
+        this._draining = false;
+        this._drainOrderId = null;
+        this._pendingLabel = '';
         this.busy = false;
+        this.syncPending();
       }
     },
     async onOpenPriceConfirm ({ name, amount, tax, goodsGroupId, openPricePresetId }) {
       this.showOpenPrice = false;
-      if (this.busy) { return; }
+      if (this.blockedByBusy()) { return; }
       this.busy = true;
       try {
         const check = await this.ensureCheck();
@@ -597,23 +831,39 @@ export default {
         this.busy = false;
       }
     },
-    async onScan (barcode) {
-      if (this.busy) { return; }
+    // Not gated on `busy`: a scan is a ring-in like a tile tap, and the queue exists so those are
+    // never dropped in silence — a barcode swallowed mid-drain is the exact failure the queue was
+    // built to end. The lookup is a read; the add that follows goes through the queue.
+    async onScan (barcode, quantity) {
       try {
         const product = await this.pos._productService.GetByBarcode(this.pos.storeId, barcode);
         if (!product || !product.id) {
-          this.notify(this.$i('pos_barcode_not_found', { code: barcode }), 'error');
+          this.failedScan(barcode, quantity);
           return;
         }
-        this.onSelect(product);
+        this.onSelect(product, quantity);
       } catch (e) {
-        this.notify(this.$i('pos_barcode_not_found', { code: barcode }), 'error');
+        this.failedScan(barcode, quantity);
       }
+    },
+    // The scan consumed the multiplier on the way out. Nothing was rung in, so give it back —
+    // same as backing out of the option picker; otherwise an armed x6 vanishes on a mistyped code
+    // and the next tap quietly rings in one.
+    failedScan (barcode, quantity) {
+      this.notify(this.$i('pos_barcode_not_found', { code: barcode }), 'error');
+      if (quantity > 1 && this.$refs.grid && this.$refs.grid.armMultiplier) {
+        this.$refs.grid.armMultiplier(quantity);
+      }
+    },
+    // Enter picked the only match and it is sold out: say so instead of doing nothing. The query
+    // is left alone so the operator can edit it rather than retype.
+    onSoldOutPick (product) {
+      this.notify(this.$i('pos_sold_out_named', { name: product.name }), 'error', { replaceKey: 'sold-out' });
     },
 
     // ---- Quantity ----
     async onInc (group) {
-      if (this.busy) { return; }
+      if (this.blockedByBusy()) { return; }
       // "+" adds one more of this exact row, so the new line inherits the row's guest — never the
       // stale recipe seat and never the currently active guest.
       const rowSeat = group.seatNumber != null ? group.seatNumber : null;
@@ -642,7 +892,7 @@ export default {
       }
     },
     async onDec (group) {
-      if (this.busy || !group.lineIds.length) { return; }
+      if (!group.lineIds.length || this.blockedByBusy()) { return; }
       this.busy = true;
       try {
         const lineId = group.lineIds[group.lineIds.length - 1];
@@ -654,8 +904,21 @@ export default {
         this.busy = false;
       }
     },
+    // Deleting a whole row is one tap on an icon in a busy screen, so it is the easiest action to
+    // fire by mistake. It stays immediate (the totals must never lie about what the customer owes)
+    // and is instead made reversible: the row is rebuilt from the recipe below if the operator
+    // taps Angre within the toast's lifetime.
     async onRemove (group) {
-      if (this.busy || !group.lineIds.length) { return; }
+      // The check has to exist before anything is read off it: the capture below runs outside the
+      // try, so a check dropped by the board reconcile would throw where nothing catches it.
+      if (!this.check || !group.lineIds.length || this.blockedByBusy()) { return; }
+      // Captured before the removal — afterwards the group is gone from the check. The order id
+      // has to be read HERE too, not inside the undo closure: read later it would be whatever
+      // check is active when Angre is tapped, which is exactly what the guard is meant to catch.
+      const restore = this.restoreRequestFor(group);
+      const quantity = group.quantity;
+      const name = group.name;
+      const orderId = this.check.orderId;
       this.busy = true;
       try {
         let result = this.check;
@@ -663,7 +926,17 @@ export default {
           result = await this.pos.checkSvc().RemoveLine(this.check.orderId, lineId);
         }
         this.pos.applyCheck(result);
-        await this.voidIfEmptied();
+        const emptied = await this.voidIfEmptied();
+        // Removing the last row voids the check (VOIDTRANS is journalled), and that cannot be
+        // taken back — voidIfEmptied already says so in its own toast.
+        if (emptied) { return; }
+        this.notify(this.$i('pos_line_removed', { name }), 'info', {
+          timeout: 6000,
+          replaceKey: 'line-removed',
+          owner: this,
+          actionLabel: restore ? this.$i('pos_undo') : '',
+          onAction: restore ? () => this.undoRemove(restore, quantity, name, orderId) : null
+        });
       } catch (e) {
         this.notify(this.pos.errMsg(e), 'error');
       } finally {
@@ -671,18 +944,87 @@ export default {
       }
     },
 
+    // Re-adds the removed row. Failure is reported rather than swallowed: the operator believes
+    // the row is back and would otherwise undercharge.
+    undoRemove (request, quantity, name, orderId) {
+      // The toast lives six seconds and only dies with the screen, so the check underneath it can
+      // change first (resume a parked one, settle and start the next customer). Re-adding then
+      // would put the row on a bill it never belonged to.
+      if (!this.check || this.check.orderId !== orderId) {
+        this.notify(this.$i('pos_undo_unavailable'), 'error');
+        return;
+      }
+      // Goes through the same queue as a product tap. The toast stays clickable for six seconds,
+      // so the operator can hit Angre while a drain or another mutation is still running; queueing
+      // keeps the re-added lines in order behind that work instead of racing it, shows the ghost
+      // row while they are on their way, and reports a failure through the drain's own toast.
+      this.queueAdd(request, name, quantity);
+    },
+
+    // The AddLine request that recreates a removed row, or null when it cannot be rebuilt from
+    // what the check told us (the product left the catalog, or an option name no longer resolves
+    // to a variant id — re-adding then would silently ring in a different price). Angre is only
+    // offered when this returns a request, so it is never a dead button.
+    restoreRequestFor (group) {
+      const base = {
+        quantity: 1,
+        notes: group.notes || '',
+        courseSequence: group.courseSequence != null ? group.courseSequence : null,
+        seatNumber: group.seatNumber != null ? group.seatNumber : null,
+        openPricePresetId: null
+      };
+      if (group.isOpenPrice) {
+        return {
+          ...base,
+          productId: null,
+          selectedOptionIds: [],
+          isOpenPrice: true,
+          name: group.name || null,
+          // unitAmount is the pre-discount price the line was rung in at; any discount on the row
+          // is not restored, which is the safe direction (it can be re-applied, never over-refunded).
+          amount: group.unitAmount,
+          tax: group.tax || 0,
+          goodsGroupId: group.goodsGroupId != null ? group.goodsGroupId : null
+        };
+      }
+      const product = this.findCatalogProduct(group.productId);
+      if (!product) { return null; }
+      const wanted = (group.options || []).map(o => o.name);
+      const selectedOptionIds = [];
+      (product.productVariants || []).forEach((v) => {
+        (v.options || []).forEach((o) => {
+          if (wanted.includes(o.name)) { selectedOptionIds.push(o.id); }
+        });
+      });
+      if (selectedOptionIds.length !== wanted.length) { return null; }
+      return {
+        ...base,
+        productId: group.productId,
+        selectedOptionIds,
+        isOpenPrice: false,
+        name: null,
+        amount: 0,
+        tax: 0,
+        goodsGroupId: null
+      };
+    },
+
     // Removing the last line leaves a check whose line corrections are already journalled,
     // so it cannot be silently discarded — close its story with a tap-less VOIDTRANS (an
     // abandoned started sale is an "avbrutt salg" the X/Z report must count).
+    // Returns true when it voided the check, so callers can tell "the row is gone" apart from
+    // "the whole check is gone" (the latter is journalled and cannot be undone).
     async voidIfEmptied () {
-      if (!this.check || (this.check.items || []).length > 0) { return; }
+      if (!this.check || (this.check.items || []).length > 0) { return false; }
       try {
         await this.pos.voidCheckQuick(this.check.orderId);
         this.pos.clearActiveCheck();
         this.recipes = {};
         this.notify(this.$i('pos_empty_voided'), 'success');
+        return true;
       } catch (e) {
         // The check keeps its lines' audit trail; the operator can void it explicitly.
+        return false;
       }
     },
     findCatalogProduct (productId) {
@@ -697,7 +1039,7 @@ export default {
 
     // ---- Check actions ----
     async onPark () {
-      if (!this.check || this.busy) { return; }
+      if (!this.check || this.blockedByBusy()) { return; }
       this.busy = true;
       try {
         await this.pos.checkSvc().Park(this.check.orderId);
@@ -722,7 +1064,7 @@ export default {
       return parts.join(' · ');
     },
     async onResumeParked (p) {
-      if (this.busy) { return; }
+      if (this.blockedByBusy()) { return; }
       this.busy = true;
       try {
         // Resolve the current check BEFORE Resume: Resume un-parks server-side, so a
@@ -741,25 +1083,32 @@ export default {
     // Bulk cleanup of the parked list — a small secondary action behind an explicit confirm
     // (count + total), since every void is an irreversible journalled VOIDTRANS and a parked
     // check may be a genuinely waiting order.
-    async onVoidAllParked () {
-      if (this.busy || !this.parkedChecks.length) { return; }
-      const total = this.parkedChecks.reduce((sum, p) => sum + (p.finalAmount || 0), 0);
-      if (!window.confirm(this.$i('pos_void_all_parked_confirm', { count: this.parkedChecks.length, amount: this.priceLabel(total) }))) {
-        return;
-      }
+    onVoidAllParked () {
+      if (!this.parkedChecks.length || this.blockedByBusy()) { return; }
+      this.showVoidAllConfirm = true;
+    },
+    async confirmVoidAllParked () {
+      this.showVoidAllConfirm = false;
+      if (!this.parkedChecks.length || this.blockedByBusy()) { return; }
       this.busy = true;
+      // Snapshot the ids up front. voidCheckQuick refreshes the board on every iteration, so
+      // reading the computed inside the loop would walk a list that is being rebuilt underneath it.
+      const activeId = this.check ? this.check.orderId : null;
+      const targets = this.parkedChecks
+        .map(p => p.orderId)
+        .filter(orderId => orderId !== activeId);
       let done = 0;
-      for (const p of this.parkedChecks) {
+      for (const orderId of targets) {
         try {
-          await this.pos.voidCheckQuick(p.orderId);
+          await this.pos.voidCheckQuick(orderId);
           done++;
         } catch (e) {
           // Resumed or settled elsewhere mid-loop — skip it.
         }
       }
-      if (this.check && this.parkedChecks.some(p => p.orderId === this.check.orderId)) {
-        this.pos.clearActiveCheck();
-      }
+      // No local cleanup of the active check here: `targets` excludes it by construction, so a
+      // check against that list could never fire. If it did disappear for some other reason,
+      // reconcileActiveCheck on the board poll below is what notices and drops it.
       this.busy = false;
       this.showParked = false;
       await this.pos.refreshBoard();
@@ -781,6 +1130,13 @@ export default {
       this.showDiscount = true;
     },
     async onDiscountConfirm (request) {
+      // The modal can outlive the check: reconcileActiveCheck drops a check that left the board
+      // while the discount sheet is open, and dereferencing it then throws a raw TypeError into
+      // the sheet's error slot. Say what actually happened instead.
+      if (!this.check) {
+        this.discountError = this.$i('pos_check_gone');
+        return;
+      }
       this.discountBusy = true;
       this.discountError = '';
       try {
@@ -800,7 +1156,7 @@ export default {
       }
     },
     async onRemoveLineDiscount (group) {
-      if (!this.check || this.busy || !group || !group.lineIds.length) { return; }
+      if (!this.check || !group || !group.lineIds.length || this.blockedByBusy()) { return; }
       this.busy = true;
       try {
         let result = this.check;
@@ -816,7 +1172,7 @@ export default {
       }
     },
     async onRemoveDiscount () {
-      if (!this.check || this.busy) { return; }
+      if (!this.check || this.blockedByBusy()) { return; }
       this.busy = true;
       try {
         this.pos.applyCheck(await this.pos.checkSvc().RemoveOrderDiscount(this.check.orderId));
@@ -828,7 +1184,7 @@ export default {
       }
     },
     async onSetCouverts (couverts) {
-      if (!this.check || this.busy) { return; }
+      if (!this.check || this.blockedByBusy()) { return; }
       this.busy = true;
       try {
         this.pos.applyCheck(await this.pos.checkSvc().SetCouverts(this.check.orderId, { couverts }));
@@ -839,7 +1195,7 @@ export default {
       }
     },
     async onFireCourse (courseSequence) {
-      if (!this.check || this.busy) { return; }
+      if (!this.check || this.blockedByBusy()) { return; }
       const lineIds = this.check.items
         .filter(i => (i.courseSequence || null) === (courseSequence || null))
         .map(i => i.orderLineItemId);
@@ -862,7 +1218,7 @@ export default {
     // group's members are all at least fired; each is moved to Served (no capture, no fiscal effect —
     // the same FireLine path the kitchen loop uses).
     async onServeLine (group) {
-      if (!this.check || this.busy || !group.lineIds.length) { return; }
+      if (!this.check || !group.lineIds.length || this.blockedByBusy()) { return; }
       this.busy = true;
       try {
         let result = null;
@@ -880,7 +1236,7 @@ export default {
     // Serves a whole course at once (mirrors onFireCourse): every fired/ready line in the course is
     // moved to Served. Pending/Sent lines in the course are skipped — you cannot serve unfired food.
     async onServeCourse (courseSequence) {
-      if (!this.check || this.busy) { return; }
+      if (!this.check || this.blockedByBusy()) { return; }
       const lineIds = this.check.items
         .filter(i => (i.courseSequence || null) === (courseSequence || null))
         .filter(i => i.status === 'Fired' || i.status === 'Ready')
@@ -903,7 +1259,7 @@ export default {
     // Sends every new ("Ny") line to the kitchen in one call; the server moves the kitchen-print
     // relevant Pending lines to Sent and leaves the rest. Items added afterwards are "Ny" again.
     async onSendToKitchen () {
-      if (!this.check || this.busy) { return; }
+      if (!this.check || this.blockedByBusy()) { return; }
       this.busy = true;
       try {
         this.pos.applyCheck(await this.pos.checkSvc().SendToKitchen(this.check.orderId));
@@ -994,7 +1350,7 @@ export default {
     // (journalled, "not proof of purchase"), so it does not settle the check.
     async onProvisional () {
       this.showMore = false;
-      if (!this.check || this.busy || !this.checkHasLines) { return; }
+      if (!this.check || !this.checkHasLines || this.blockedByBusy()) { return; }
       this.busy = true;
       try {
         this.unpaidReceipt = await this.pos.posSvc().ProvisionalReceipt({
@@ -1008,8 +1364,27 @@ export default {
         this.busy = false;
       }
     },
-    printProvisional () {
-      if (this.$refs.proformaView) { this.$refs.proformaView.print(); }
+    // The provisional bill / training sale is journalled (PROREC / TRAINREC), so it prints the
+    // same way a sale receipt does: rendered as ESC/POS by the backend and pushed to the cash
+    // point's Surfboard terminal. Browser print only when the cash point has no terminal.
+    async printProvisional () {
+      if (this.printingProvisional) { return; }
+      this.printingProvisional = true;
+      // One try/finally around the whole thing, browser fallback included: releasing the guard
+      // before opening the print dialog let a double tap put two dialogs on screen.
+      try {
+        // Printed on the terminal: confirm it on screen. The fall-through below prints in the
+        // browser instead, which the operator can already see happen.
+        if (await this.pos.printReceiptDoc(this.unpaidReceipt)) {
+          this.notify(this.$i('pos_receipt_printed'), 'success', { replaceKey: 'report-printed' });
+          return;
+        }
+        if (this.$refs.proformaView) { this.$refs.proformaView.print(); }
+      } catch (e) {
+        this.notify(this.pos.errMsg(e), 'error');
+      } finally {
+        this.printingProvisional = false;
+      }
     },
     openMoveMerge () {
       this.showMore = false;
@@ -1018,7 +1393,7 @@ export default {
     },
     // Move the check to a free table.
     async onMove (t) {
-      if (this.busy || !this.check) { return; }
+      if (!this.check || this.blockedByBusy()) { return; }
       this.busy = true;
       try {
         this.pos.applyCheck(await this.pos.checkSvc().Move(this.check.orderId, { tableId: t.tableId }));
@@ -1032,7 +1407,7 @@ export default {
     },
     // Merge an occupied table's check onto this one (the source check is consumed).
     async onMerge (t) {
-      if (this.busy || !this.check || !t.openCheck) { return; }
+      if (!this.check || !t.openCheck || this.blockedByBusy()) { return; }
       this.busy = true;
       try {
         this.pos.applyCheck(await this.pos.checkSvc().Merge(this.check.orderId, { sourceOrderId: t.openCheck.orderId }));
@@ -1050,6 +1425,12 @@ export default {
       this.showVoid = true;
     },
     async onVoidConfirm (request) {
+      // Same as the discount sheet: the board reconcile can drop the check while this modal is up,
+      // and a raw TypeError in the error slot is not an explanation.
+      if (!this.check) {
+        this.voidError = this.$i('pos_check_gone');
+        return;
+      }
       this.voidBusy = true;
       this.voidError = '';
       try {
@@ -1070,11 +1451,19 @@ export default {
     },
     async onPay () {
       if (!this.check) { return; }
+      // Lines still on their way would land on the order AFTER the payment screen quoted a total,
+      // so the customer would be charged for less than the check ends up holding. The button is
+      // disabled for the same reason; this is the guard for the keyboard and any other caller —
+      // and those callers see no disabled button, so it has to say why it did nothing.
+      if (this.addsOutstanding > 0) {
+        this.notify(this.$i('pos_wait_for_adds'), 'info', { replaceKey: 'wait-busy', timeout: 2000 });
+        return;
+      }
       // In training mode a "sale" produces a TRAINREC (counted only in the X/Z training totals)
       // instead of taking real money. It does not settle the check — the trainee can ring more
       // practice sales or clear it — so the banner keeps it unmistakably a rehearsal.
       if (this.pos.trainingMode) {
-        if (this.busy || !this.checkHasLines) { return; }
+        if (!this.checkHasLines || this.blockedByBusy()) { return; }
         this.busy = true;
         try {
           this.unpaidReceipt = await this.pos.posSvc().TrainingReceipt({
@@ -1147,25 +1536,6 @@ export default {
 .sell__parked-card-meta { grid-area: meta; font-size: 0.78rem; color: #64748b; }
 .sell__parked-card-amount { grid-area: amount; font-weight: 800; color: var(--pos-primary-dark, #159f63); font-size: 1.05rem; }
 
-.sell__notice {
-  position: absolute;
-  top: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 12px 22px;
-  border-radius: 12px;
-  font-weight: 600;
-  color: #ffffff;
-  z-index: 700;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-}
-.sell__notice--info { background: #334155; }
-.sell__notice--success { background: var(--pos-primary-dark, #159f63); }
-.sell__notice--error { background: #ef4444; }
-
-.sell-notice-enter-active, .sell-notice-leave-active { transition: opacity 0.2s ease, transform 0.2s ease; }
-.sell-notice-enter, .sell-notice-leave-to { opacity: 0; transform: translate(-50%, -8px); }
-
 .sell__more {
   position: fixed;
   inset: 0;
@@ -1195,6 +1565,7 @@ export default {
 .sell__proforma-actions { display: flex; gap: 10px; margin-top: 14px; }
 .sell__proforma-close { flex: 1; height: 48px; border: 1px solid #cbd5e0; background: #fff; border-radius: 10px; font-weight: 700; color: var(--pos-ink, #292c34); cursor: pointer; }
 .sell__proforma-print { flex: 1; height: 48px; border: none; border-radius: 10px; background: var(--pos-primary, #1bb776); color: #fff; font-weight: 700; cursor: pointer; }
+.sell__proforma-print:disabled { opacity: 0.6; cursor: not-allowed; }
 .sell__movemerge { position: fixed; inset: 0; background: rgba(18, 20, 26, 0.6); display: flex; align-items: center; justify-content: center; z-index: 1200; padding: 16px; }
 .sell__movemerge-panel { background: #fff; border-radius: 16px; width: 100%; max-width: 420px; max-height: 88vh; display: flex; flex-direction: column; padding: 18px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35); }
 .sell__movemerge-title { margin: 0 0 4px; font-size: 1.15rem; font-weight: 700; color: var(--pos-ink, #292c34); }

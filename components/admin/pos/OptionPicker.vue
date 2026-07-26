@@ -65,13 +65,16 @@
 export default {
   name: 'OptionPicker',
   props: {
-    product: { type: Object, required: true }
+    product: { type: Object, required: true },
+    // Quantity the stepper opens on — carries an armed grid multiplier into the picker so
+    // "six of these, with oat milk" stays a single decision.
+    initialQuantity: { type: Number, default: 1 }
   },
   data () {
     return {
       // variantId -> array of selected option ids
       selections: {},
-      quantity: 1
+      quantity: Math.max(1, this.initialQuantity || 1)
     };
   },
   computed: {

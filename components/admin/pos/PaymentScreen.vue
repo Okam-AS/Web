@@ -180,12 +180,23 @@
       <!-- Receipt -->
       <div v-else-if="step === 'receipt'" class="payment__panel">
         <PosReceiptView ref="receiptView" :receipt="receipt" />
+
+        <!-- Giving the customer their receipt is the point of this moment, so it is the primary
+             action — and it is the same control as in the receipts list, so an operator learns it
+             once. One field takes a mobile number or an email address. -->
+        <!-- Keyed on the document: a refund swaps `receipt` for the RETREC in place, and without a
+             key the component is reused with its "Sendt til …" state intact — claiming the return
+             receipt reached a customer who only ever got the sale receipt. -->
+        <ReceiptSend
+          v-if="receipt"
+          :key="receipt.journalEntryId"
+          :journal-entry-id="receipt.journalEntryId"
+          class="payment__send"
+        />
+
         <div class="payment__receipt-actions">
           <button type="button" class="payment__ract" @click="printReceipt">
             {{ $i('pos_receipt_print') }}
-          </button>
-          <button type="button" class="payment__ract" @click="showSms = !showSms">
-            {{ $i('pos_receipt_sms') }}
           </button>
           <button type="button" class="payment__ract" @click="copyReceipt">
             {{ $i('pos_receipt_copy') }}
@@ -196,15 +207,6 @@
         </div>
         <p v-if="receiptError" class="payment__error">
           {{ receiptError }}
-        </p>
-        <div v-if="showSms" class="payment__sms">
-          <input v-model="smsPhone" type="tel" class="payment__sms-input" :placeholder="$i('pos_receipt_sms_ph')">
-          <button type="button" class="payment__sms-send" :disabled="!smsPhone" @click="sendSms">
-            {{ $i('pos_receipt_sms_send') }}
-          </button>
-        </div>
-        <p v-if="smsResult" class="payment__sms-result">
-          {{ smsResult }}
         </p>
         <button type="button" class="payment__newerorder" @click="$emit('done')">
           {{ $i('pos_new_order') }}
@@ -217,6 +219,16 @@
       :receipt="receipt"
       @done="onRefundDone"
       @close="showRefundModal = false"
+    />
+
+    <PosConfirm
+      v-if="showAbortConfirm"
+      :title="$i('pos_splitpay_abort_title')"
+      :text="$i('pos_splitpay_abort_confirm')"
+      :confirm-label="$i('pos_splitpay_abort_ok')"
+      danger
+      @confirm="abortSplitPay"
+      @cancel="showAbortConfirm = false"
     />
 
     <SplitBillModal
@@ -235,6 +247,8 @@ import PosReceiptView from '~/components/admin/pos/PosReceiptView.vue';
 import RefundModal from '~/components/admin/pos/RefundModal.vue';
 import SplitBillModal from '~/components/admin/pos/SplitBillModal.vue';
 import AmountPad from '~/components/admin/pos/AmountPad.vue';
+import PosConfirm from '~/components/admin/pos/PosConfirm.vue';
+import ReceiptSend from '~/components/admin/pos/ReceiptSend.vue';
 
 // Payment flow for a single check. Cash goes straight through POST /pos/payment/cash (the server
 // wraps its own one-part settlement and returns the receipt). Card initiates a terminal payment,
@@ -251,7 +265,7 @@ const CARD_TIMEOUT_MS = 120000;
 
 export default {
   name: 'PaymentScreen',
-  components: { CashPad, CardTerminalStatus, PosReceiptView, RefundModal, SplitBillModal, AmountPad },
+  components: { CashPad, CardTerminalStatus, PosReceiptView, RefundModal, SplitBillModal, AmountPad, PosConfirm, ReceiptSend },
   inject: ['pos'],
   props: {
     check: { type: Object, default: null }
@@ -271,11 +285,10 @@ export default {
       // Wall-clock start of the card flow: browsers throttle background-tab timers, so counting
       // ticks would under-count and stretch the timeout far past its intent.
       cardStartedAt: 0,
-      showSms: false,
-      smsPhone: '',
-      smsResult: '',
       receiptError: '',
       showRefundModal: false,
+      // Guards leaving a split settlement that already holds money.
+      showAbortConfirm: false,
       // Split payment (partial payments on one provider order). Defaults to per-person equal
       // shares; splitCustom switches to free-amount entry.
       splitSettlementId: '',
@@ -749,13 +762,19 @@ export default {
       this.busy = true;
       this.error = '';
       try {
-        await this.pos.posSvc().AddSettlementAllocation(this.splitSettlementId, {
+        // Apply the result exactly like the card path does. Discarding it left splitParts and
+        // splitOutstanding showing the figures from BEFORE this cash part, so a finalize that
+        // then failed put the operator back on a screen claiming money was still owed that the
+        // customer had already handed over — and the obvious next move is to charge it again.
+        const result = await this.pos.posSvc().AddSettlementAllocation(this.splitSettlementId, {
           cashPointId: this.cashPointId,
           paymentType: 'Cash',
           amount: 0,
           tenderedAmount: tendered,
           paymentTransactionId: null
         });
+        this.splitParts.push({ paymentType: 'Cash', amount: result.amount });
+        this.splitOutstanding = result.outstandingAmount;
         // Cash always settles the remainder, so the settlement is fully covered.
         await this.finalizeSplit();
       } catch (e) {
@@ -773,6 +792,12 @@ export default {
       } catch (e) {
         this.error = this.pos.errMsg(e);
         this.step = 'splitpay';
+        // Every allocation that landed is still on the settlement; the operator is about to look
+        // at these figures and decide what else to charge, so they have to be the server's, not
+        // whatever the client last guessed. Same refresh the abandon path does.
+        try {
+          this.applySettlement(await this.pos.posSvc().GetSettlement(this.splitSettlementId));
+        } catch (err) { /* best effort — the error above is what the operator acts on */ }
       }
     },
     // Cancels a portion the cardholder has not completed (provider cancel, logged as VOIDTRANS).
@@ -810,11 +835,17 @@ export default {
     // Leaving the split flow aborts the settlement: confirmed parts are reversed server-side
     // (captured card portions refunded, cash counter-posted, stray portions swept) so no money is
     // retained or left takeable.
-    async abortSplitPay () {
-      if ((this.splitParts.length > 0 || this.splitPendingAllocation) &&
-        !window.confirm(this.$i('pos_splitpay_abort_confirm'))) {
+    // Raises the confirmation when money is already on the settlement; goes straight through when
+    // nothing has been taken yet.
+    requestAbortSplitPay () {
+      if (this.splitParts.length > 0 || this.splitPendingAllocation) {
+        this.showAbortConfirm = true;
         return;
       }
+      this.abortSplitPay();
+    },
+    async abortSplitPay () {
+      this.showAbortConfirm = false;
       try {
         await this.pos.posSvc().AbortSettlement(this.splitSettlementId, { cashPointId: this.cashPointId });
       } catch (e) {
@@ -854,7 +885,7 @@ export default {
       if (this.step === 'splitchoice') { this.step = 'method'; this.error = ''; return; }
       if (this.step === 'cash') { this.step = 'method'; this.error = ''; return; }
       if (this.step === 'card') { this.cancelCard(); return; }
-      if (this.step === 'splitpay') { this.abortSplitPay(); return; }
+      if (this.step === 'splitpay') { this.requestAbortSplitPay(); return; }
       if (this.step === 'splitcard') { this.cancelSplitCard(); return; }
       if (this.step === 'splitcash') { this.step = 'splitpay'; this.error = ''; return; }
       this.$emit('close');
@@ -865,19 +896,34 @@ export default {
     // a print failure must never block or overlay the payment result.
     autoPrint () {
       if (!this.receipt || !this.pos.cashPoint || !this.pos.cashPoint.surfboardAutoPrintReceipt) { return; }
-      this.$nextTick(() => { this.printReceipt().catch(() => { /* best effort */ }); });
+      // Silent on both outcomes. A print nobody asked for must not paint an error over the payment
+      // result, and it must not toast a success either — the paper is the confirmation. The Print
+      // button next to it reports both, so a failed auto-print is one tap from being seen.
+      this.$nextTick(() => { this.printReceipt({ silent: true }).catch(() => { /* best effort */ }); });
     },
-    // Prefers the Surfboard terminal's built-in printer (backend ESC/POS print) on a
-    // Surfboard-driven cash point; the browser's 80 mm iframe print is the fallback.
-    async printReceipt () {
-      const cashPoint = this.pos.cashPoint;
-      if (cashPoint && cashPoint.surfboardTerminalId && this.receipt && this.receipt.journalEntryId) {
-        try {
-          await this.pos.posSvc().PrintReceipt(this.receipt.journalEntryId, cashPoint.cashPointId);
+    // Prints on the Surfboard terminal (backend ESC/POS). The browser's 80 mm iframe print is
+    // only for cash points without a terminal; a terminal print that fails is surfaced, since
+    // silently printing something else would hide a broken printer.
+    async printReceipt ({ silent = false } = {}) {
+      try {
+        // Same reason as the Z: the paper comes out on the terminal, so a silent success reads as
+        // a dead button and the operator prints the customer a second copy.
+        if (await this.pos.printReceiptDoc(this.receipt)) {
+          if (!silent) {
+            this.pos.notify(this.$i('pos_receipt_printed'), 'success', { replaceKey: 'report-printed' });
+          }
           return;
-        } catch (e) {
-          // Terminal print unavailable — fall back to the browser print below.
         }
+      } catch (e) {
+        // A silent auto-print still has to fail loudly enough to be noticed: the customer is
+        // standing there waiting for paper that is not coming. It goes to a toast rather than the
+        // receipt step's error slot, so the payment result underneath stays readable.
+        if (silent) {
+          this.pos.notify(this.pos.errMsg(e), 'error', { replaceKey: 'receipt-print' });
+        } else {
+          this.receiptError = this.pos.errMsg(e);
+        }
+        return;
       }
       if (this.$refs.receiptView) { this.$refs.receiptView.print(); }
     },
@@ -889,15 +935,6 @@ export default {
       } catch (e) {
         // Surface the copy failure directly, not in the unrelated SMS-status field.
         this.receiptError = this.pos.errMsg(e);
-      }
-    },
-    async sendSms () {
-      try {
-        const res = await this.pos.posSvc().SendReceiptSms(this.receipt.journalEntryId, { phoneNumber: this.smsPhone });
-        this.smsResult = res && res.sent ? this.$i('pos_receipt_sms_ok') : this.$i('pos_receipt_sms_fail');
-        this.showSms = false;
-      } catch (e) {
-        this.smsResult = this.pos.errMsg(e);
       }
     },
     // The RefundModal produced the RETREC (cash synchronously, or card once the terminal confirms):
@@ -1143,6 +1180,7 @@ export default {
   cursor: pointer;
 }
 
+.payment__send { margin-top: 16px; }
 .payment__sms { display: flex; gap: 8px; max-width: 320px; margin: 14px auto 0; }
 .payment__sms-input { flex: 1; height: 46px; border: 1px solid #cbd5e0; border-radius: 10px; padding: 0 12px; font-size: 1rem; }
 .payment__sms-send { border: none; background: var(--pos-primary, #1bb776); color: #fff; font-weight: 700; padding: 0 18px; border-radius: 10px; cursor: pointer; }

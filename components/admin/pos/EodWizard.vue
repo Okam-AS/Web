@@ -61,6 +61,9 @@
                 <span>{{ $i('pos_report_bank_deposit') }}</span><span>{{ priceLabel(result.bankDepositAmount) }}</span>
               </div>
             </div>
+            <p v-if="error" class="eod__error">
+              {{ error }}
+            </p>
           </div>
         </template>
       </div>
@@ -78,9 +81,22 @@
             <span v-else>{{ $i('pos_eod_close_day') }}</span>
           </button>
         </template>
-        <button v-else-if="step === 'result'" type="button" class="eod__primary" @click="$emit('done')">
-          {{ $i('common_done') }}
-        </button>
+        <template v-else-if="step === 'result'">
+          <!-- The close cut a Z; printing it here is the operator's paper copy of the day. -->
+          <button
+            v-if="result.zReportId"
+            type="button"
+            class="eod__ghost"
+            :disabled="printing || !canPrintReport"
+            :title="canPrintReport ? '' : $i('pos_report_print_needs_terminal')"
+            @click="printZ"
+          >
+            {{ $i('pos_report_print_z') }}
+          </button>
+          <button type="button" class="eod__primary" @click="$emit('done')">
+            {{ $i('common_done') }}
+          </button>
+        </template>
       </footer>
     </div>
   </div>
@@ -112,6 +128,7 @@ export default {
       reasonSel: { reasonType: 'None', reasonText: '' },
       email: this.defaultEmail,
       busy: false,
+      printing: false,
       error: '',
       result: null
     };
@@ -126,7 +143,15 @@ export default {
       if (this.reasonSel.reasonType === 'Annet') { return !!(this.reasonSel.reasonText || '').trim(); }
       return true;
     },
-    canProceedCount () { return !this.explanationRequired || this.reasonChosen; }
+    canProceedCount () { return !this.explanationRequired || this.reasonChosen; },
+    // The Z prints on the cash point's Surfboard terminal; a report has no browser fallback the
+    // way a receipt does, so an unbound register gets a disabled button that explains itself
+    // rather than an error toast after the fact. The Z itself is already cut and stays retrievable
+    // from Rapporter.
+    canPrintReport () {
+      const cp = this.pos.cashPoint;
+      return !!(cp && cp.surfboardTerminalId);
+    }
   },
   methods: {
     maybeClose () {
@@ -136,11 +161,16 @@ export default {
       this.busy = true;
       this.error = '';
       try {
+        // A reason only belongs on a non-zero difference (§ 5-3-14). The picker is hidden once the
+        // count comes back to exact, but a reason chosen before the operator recounted is still in
+        // reasonSel — sending it would journal a zero difference with an explanation for something
+        // that never happened, on a signed fiscal document.
+        const explain = this.explanationRequired;
         this.result = await this.pos.drawerSvc().EndDay(this.sessionId, {
           endCountedAmount: this.counted,
           bankDepositAmount: this.bankDeposit,
-          differenceReasonType: this.reasonSel.reasonType,
-          differenceText: (this.reasonSel.reasonText || '').trim() || null,
+          differenceReasonType: explain ? this.reasonSel.reasonType : 'None',
+          differenceText: explain ? ((this.reasonSel.reasonText || '').trim() || null) : null,
           email: this.email || null
         });
         this.step = 'result';
@@ -148,6 +178,24 @@ export default {
         this.error = this.pos.errMsg(e);
       } finally {
         this.busy = false;
+      }
+    },
+    // Prints the Z the close just cut, on the cash point's Surfboard terminal. A Z is a settled,
+    // signed document, so reprinting it is allowed and always yields the same figures.
+    async printZ () {
+      if (this.printing || !this.result || !this.result.zReportId) { return; }
+      this.printing = true;
+      this.error = '';
+      try {
+        await this.pos.reportSvc().PrintZReport(this.result.zReportId);
+        // The paper comes out on the terminal behind the counter, so the screen is the only place
+        // the operator learns it worked — without this they read the silence as a dead button and
+        // tap again, cutting a second Z. Same confirmation as every other print path.
+        this.pos.notify(this.$i('pos_report_printed'), 'success', { replaceKey: 'report-printed' });
+      } catch (e) {
+        this.error = this.pos.errMsg(e);
+      } finally {
+        this.printing = false;
       }
     }
   }

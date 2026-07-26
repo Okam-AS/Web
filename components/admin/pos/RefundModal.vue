@@ -79,6 +79,9 @@
             {{ $i('common_done') }}
           </button>
         </div>
+        <p v-if="error" class="refund__error">
+          {{ error }}
+        </p>
       </div>
     </div>
   </div>
@@ -239,17 +242,15 @@ export default {
         this.error = this.$i('pos_refund_card_timeout');
       }
     },
-    // Prefers the Surfboard terminal's printer; browser print is the fallback.
+    // Prints on the Surfboard terminal (backend ESC/POS); browser print only when the cash point
+    // has no terminal. A failing terminal is reported rather than papered over.
     async printReceipt () {
-      const cashPoint = this.pos.cashPoint;
-      const receipt = this.resultReceipt;
-      if (cashPoint && cashPoint.surfboardTerminalId && receipt && receipt.journalEntryId) {
-        try {
-          await this.pos.posSvc().PrintReceipt(receipt.journalEntryId, cashPoint.cashPointId);
-          return;
-        } catch (e) {
-          // Terminal print unavailable — fall back to the browser print below.
-        }
+      this.error = '';
+      try {
+        if (await this.pos.printReceiptDoc(this.resultReceipt)) { return; }
+      } catch (e) {
+        this.error = this.pos.errMsg(e);
+        return;
       }
       if (this.$refs.receiptView) { this.$refs.receiptView.print(); }
     }

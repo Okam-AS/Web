@@ -173,9 +173,10 @@ export default {
   gap: 2px;
   flex-shrink: 0;
 }
+/* The most-tapped control on the screen; 44px per the admin touch-target guideline. */
 .check-line__qtybtn {
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   border: 1px solid #e2e8f0;
   background: #ffffff;
   border-radius: 8px;
@@ -250,13 +251,35 @@ export default {
 }
 .check-line__serve--ready:hover { background: var(--pos-primary-dark, #159f63); color: #ffffff; }
 
-.check-line__actions { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
-.check-line__note-btn {
+/* 2x2 grid of 44px targets rather than a column of 22px icons 6px apart. Delete sits in the
+   bottom-right cell, diagonally opposite the note pencil it used to be mistaken for; the empty
+   bottom-left cell is what buys that separation. The block is 88px tall, so it fits inside the
+   row height the quantity stepper already sets. */
+.check-line__actions {
+  display: grid;
+  grid-template-columns: 44px 44px;
+  grid-template-rows: 44px 44px;
+  flex-shrink: 0;
+}
+.check-line__disc-btn { grid-area: 1 / 1; }
+.check-line__note-btn { grid-area: 1 / 2; }
+.check-line__remove { grid-area: 2 / 2; }
+
+.check-line__actions > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
   border: none;
+  border-radius: 10px;
   background: none;
-  color: #cbd5e0;
   cursor: pointer;
-  padding: 2px;
+}
+.check-line__actions > button:active { background: #f1f5f9; }
+
+.check-line__note-btn {
+  color: #cbd5e0;
 }
 .check-line__note-btn:hover { color: var(--pos-primary-dark, #159f63); }
 /* A line that already carries a note gets a filled-in pencil so it reads at a glance. */
@@ -264,17 +287,12 @@ export default {
 .check-line__note-btn--set:hover { color: #b45309; }
 .check-line__note-btn svg { width: 18px; height: 18px; }
 
-.check-line__remove {
-  border: none;
-  background: none;
-  color: #cbd5e0;
-  cursor: pointer;
-  padding: 2px;
-}
+.check-line__remove { color: #cbd5e0; }
 .check-line__remove:hover { color: #ef4444; }
-.check-line__remove svg { width: 18px; height: 18px; }
+.check-line__remove:active { background: #fef2f2; }
+.check-line__remove svg { width: 20px; height: 20px; }
 
-.check-line__disc-btn { border: none; background: none; color: #cbd5e0; cursor: pointer; padding: 2px; }
+.check-line__disc-btn { color: #cbd5e0; }
 .check-line__disc-btn:hover { color: var(--pos-primary-dark, #159f63); }
 /* A line that already carries a discount gets a filled-in tag so it reads at a glance. */
 .check-line__disc-btn--set { color: #ef4444; }

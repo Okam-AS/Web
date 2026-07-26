@@ -43,8 +43,8 @@
           <button type="button" class="day-flow__action" @click="openX">
             {{ $i('pos_xreport') }}
           </button>
-          <button type="button" class="day-flow__action" @click="showReturnLookup = true">
-            {{ $i('pos_return_refund_sale') }}
+          <button type="button" class="day-flow__action" @click="pos.setMode('receipts')">
+            {{ $i('pos_mode_receipts') }}
           </button>
           <button type="button" class="day-flow__action" @click="showReturnBuilder = true">
             {{ $i('pos_return_new') }}
@@ -70,12 +70,6 @@
         </div>
       </template>
 
-      <!-- Notice -->
-      <transition name="day-notice">
-        <div v-if="notice.show" class="day-flow__notice" :class="'day-flow__notice--' + notice.type">
-          {{ notice.message }}
-        </div>
-      </transition>
     </div>
 
     <DrawerTransactionModal
@@ -90,9 +84,20 @@
     <div v-if="showX" class="day-flow__overlay" @click.self="showX = false">
       <div class="day-flow__xwrap">
         <XReportView :report="xReport" />
-        <button type="button" class="day-flow__xclose" @click="showX = false">
-          {{ $i('common_close') }}
-        </button>
+        <div class="day-flow__xactions">
+          <button type="button" class="day-flow__xclose" @click="showX = false">
+            {{ $i('common_close') }}
+          </button>
+          <button
+            type="button"
+            class="day-flow__xprint"
+            :disabled="xPrinting || !canPrintReport"
+            :title="canPrintReport ? '' : $i('pos_report_print_needs_terminal')"
+            @click="printX"
+          >
+            {{ $i('pos_receipt_print') }}
+          </button>
+        </div>
       </div>
     </div>
 
@@ -106,7 +111,6 @@
       @close="showEod = false"
     />
 
-    <ReturnLookup v-if="showReturnLookup" @close="showReturnLookup = false" />
     <ReturnBuilder v-if="showReturnBuilder" @done="onReturnDone" @close="showReturnBuilder = false" />
   </div>
 </template>
@@ -115,14 +119,14 @@
 import DrawerTransactionModal from '~/components/admin/pos/DrawerTransactionModal.vue';
 import XReportView from '~/components/admin/pos/XReportView.vue';
 import EodWizard from '~/components/admin/pos/EodWizard.vue';
-import ReturnLookup from '~/components/admin/pos/ReturnLookup.vue';
 import ReturnBuilder from '~/components/admin/pos/ReturnBuilder.vue';
+import { newGuid } from '~/utils/guid';
 
 // Day mode: opening summary + running expected cash, manual pay-in/out, the X report (no side
 // effect) and the end-of-day wizard. Begin-day itself is the blocking BeginDayModal in the shell.
 export default {
   name: 'DayFlow',
-  components: { DrawerTransactionModal, XReportView, EodWizard, ReturnLookup, ReturnBuilder },
+  components: { DrawerTransactionModal, XReportView, EodWizard, ReturnBuilder },
   inject: ['pos'],
   data () {
     return {
@@ -131,13 +135,14 @@ export default {
       txnType: 'PayIn',
       txnBusy: false,
       txnError: '',
+      // Idempotency key for the drawer movement being entered, and the amount it was minted for.
+      txnIdempotencyKey: '',
+      txnKeyedAmount: null,
       showX: false,
       xReport: null,
+      xPrinting: false,
       showEod: false,
-      showReturnLookup: false,
-      showReturnBuilder: false,
-      notice: { show: false, message: '', type: 'info' },
-      noticeTimer: null
+      showReturnBuilder: false
     };
   },
   computed: {
@@ -151,7 +156,11 @@ export default {
       if (!b) { return 0; }
       const seated = (b.tables || []).filter(t => t.openCheck).length;
       return seated + ((b.parkedChecks || []).length);
-    }
+    },
+    // An X prints as ESC/POS on this cash point's Surfboard terminal. Unlike a receipt there is no
+    // browser fallback for a report, so without a bound terminal the button could only ever return
+    // a backend error — it says why instead.
+    canPrintReport () { return !!(this.cashPoint && this.cashPoint.surfboardTerminalId); }
   },
   watch: {
     dayOpen: {
@@ -161,14 +170,10 @@ export default {
       }
     }
   },
-  beforeDestroy () {
-    if (this.noticeTimer) { clearTimeout(this.noticeTimer); }
-  },
   methods: {
-    notify (message, type = 'info') {
-      this.notice = { show: true, message, type };
-      if (this.noticeTimer) { clearTimeout(this.noticeTimer); }
-      this.noticeTimer = setTimeout(() => { this.notice.show = false; }, 3000);
+    // Thin delegate: every toast in the register is owned and rendered by the shell.
+    notify (message, type = 'info', opts) {
+      this.pos.notify(message, type, opts);
     },
     async loadEod () {
       if (!this.session) { return; }
@@ -188,13 +193,29 @@ export default {
     openTxn (type) {
       this.txnType = type;
       this.txnError = '';
+      this.txnIdempotencyKey = newGuid();
+      this.txnKeyedAmount = null;
       this.showTxn = true;
     },
+    // The key identifies ONE logical movement, and the amount is part of that identity: the pad
+    // stays editable after a failure, so an operator who spots a typo and corrects 500 to 5000
+    // would otherwise retry under the old key — the server would dedupe, return the original
+    // 500 posting, and the UI would report success while the drawer is short by 4500. A changed
+    // amount is a different movement and gets its own key; an unchanged one keeps the key, which
+    // is the whole point of the retry guard.
     async onTxnConfirm ({ amount }) {
+      if (this.txnKeyedAmount !== amount) {
+        this.txnIdempotencyKey = newGuid();
+        this.txnKeyedAmount = amount;
+      }
       this.txnBusy = true;
       this.txnError = '';
       try {
-        await this.pos.drawerSvc().RecordTransaction(this.session.cashDrawerSessionId, { type: this.txnType, amount });
+        await this.pos.drawerSvc().RecordTransaction(this.session.cashDrawerSessionId, {
+          type: this.txnType,
+          amount,
+          idempotencyKey: this.txnIdempotencyKey
+        });
         this.showTxn = false;
         await this.loadEod();
         this.notify(this.$i('pos_drawer_recorded'), 'success');
@@ -210,6 +231,20 @@ export default {
         this.showX = true;
       } catch (e) {
         this.notify(this.pos.errMsg(e), 'error');
+      }
+    },
+    // The X is reprojected server-side and printed as ESC/POS on the cash point's Surfboard
+    // terminal — the same roll the receipts come off. Reprinting is free: an X has no side effects.
+    async printX () {
+      if (this.xPrinting) { return; }
+      this.xPrinting = true;
+      try {
+        await this.pos.reportSvc().PrintXReport(this.cashPoint.cashPointId);
+        this.notify(this.$i('pos_report_printed'), 'success');
+      } catch (e) {
+        this.notify(this.pos.errMsg(e), 'error');
+      } finally {
+        this.xPrinting = false;
       }
     },
     async onEodDone () {
@@ -262,12 +297,9 @@ export default {
 
 .day-flow__overlay { position: fixed; inset: 0; background: rgba(18, 20, 26, 0.6); display: flex; align-items: center; justify-content: center; z-index: 1100; padding: 16px; overflow-y: auto; }
 .day-flow__xwrap { width: 100%; max-width: 440px; }
-.day-flow__xclose { display: block; width: 100%; margin-top: 14px; height: 50px; border: none; border-radius: 12px; background: #ffffff; color: var(--pos-ink, #292c34); font-weight: 700; cursor: pointer; }
+.day-flow__xactions { display: flex; gap: 10px; margin-top: 14px; }
+.day-flow__xclose { flex: 1; height: 50px; border: none; border-radius: 12px; background: #ffffff; color: var(--pos-ink, #292c34); font-weight: 700; cursor: pointer; }
+.day-flow__xprint { flex: 1; height: 50px; border: none; border-radius: 12px; background: var(--pos-primary, #1bb776); color: #ffffff; font-weight: 700; cursor: pointer; }
+.day-flow__xprint:disabled { opacity: 0.6; cursor: not-allowed; }
 
-.day-flow__notice { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); padding: 12px 22px; border-radius: 12px; font-weight: 600; color: #fff; z-index: 1200; }
-.day-flow__notice--info { background: #334155; }
-.day-flow__notice--success { background: var(--pos-primary-dark, #159f63); }
-.day-flow__notice--error { background: #ef4444; }
-.day-notice-enter-active, .day-notice-leave-active { transition: opacity 0.2s ease; }
-.day-notice-enter, .day-notice-leave-to { opacity: 0; }
 </style>

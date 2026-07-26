@@ -46,7 +46,7 @@
     </header>
 
     <div ref="lines" class="check-panel__lines">
-      <div v-if="!hasItems" class="check-panel__empty">
+      <div v-if="!hasItems && !pendingAdds" class="check-panel__empty">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
         <p>{{ $i('pos_check_empty') }}</p>
       </div>
@@ -88,6 +88,14 @@
           @line-remove-discount="$emit('line-remove-discount', g)"
         />
       </template>
+
+      <!-- Items still on their way to the server. Without this a tap during a slow AddLine looked
+           like nothing happened, and the operator tapped again. -->
+      <div v-if="pendingAdds > 0" class="check-panel__pending">
+        <span class="check-panel__pending-spinner" />
+        <span class="check-panel__pending-text">{{ pendingLabel }}</span>
+        <span v-if="pendingAdds > 1" class="check-panel__pending-count">×{{ pendingAdds }}</span>
+      </div>
 
       <!-- Open price lives at the end of the bill: ring in an amount that has no product tile. -->
       <button
@@ -143,10 +151,12 @@
         </button>
       </div>
 
+      <!-- Never payable while lines are still going up: the total on this button, and the amount
+           the customer is asked for, would be missing whatever is still in the queue. -->
       <button
         type="button"
         class="check-panel__pay"
-        :disabled="!hasItems"
+        :disabled="!hasItems || addsOutstanding > 0"
         @click="$emit('pay')"
       >
         <span>{{ $i('pos_pay') }}</span>
@@ -167,6 +177,13 @@ export default {
   props: {
     check: { type: Object, default: null },
     parkedCount: { type: Number, default: 0 },
+    // Lines rung in but not yet confirmed by the server, and the name of the one going up now.
+    // Held back for a beat so a fast add never flashes a spinner — display only.
+    pendingAdds: { type: Number, default: 0 },
+    pendingLabel: { type: String, default: '' },
+    // The same count without the delay. Gating (Pay) must use this one: for the first fraction of
+    // a second pendingAdds is still 0 while lines really are outstanding.
+    addsOutstanding: { type: Number, default: 0 },
     // Whether guest (seat) tagging is in play; drives the per-line guest tag on each row.
     seating: { type: Boolean, default: false }
   },
@@ -364,6 +381,33 @@ export default {
 .check-panel__guests-ok { border: none; background: var(--pos-primary, #1bb776); color: #fff; font-weight: 700; padding: 7px 14px; border-radius: 9px; cursor: pointer; font-size: 0.85rem; }
 
 .check-panel__lines { flex: 1; min-height: 0; overflow-y: auto; padding: 4px 18px; display: flex; flex-direction: column; }
+
+/* A line on its way to the server: same shape as a real row so it reads as "this is landing",
+   greyed so it can never be mistaken for one that already counts toward the total. */
+.check-panel__pending {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 0;
+  color: #94a3b8;
+  font-weight: 600;
+  /* Fades in rather than popping: by the time it shows, the add is already slow, and an abrupt
+     row appearing under the operator's hand reads as a glitch. */
+  animation: check-panel-fade 0.18s ease-out;
+}
+@keyframes check-panel-fade { from { opacity: 0; } to { opacity: 1; } }
+.check-panel__pending-spinner {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid #e2e8f0;
+  border-top-color: var(--pos-primary, #1bb776);
+  animation: check-panel-spin 0.7s linear infinite;
+}
+@keyframes check-panel-spin { to { transform: rotate(360deg); } }
+.check-panel__pending-text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.check-panel__pending-count { flex-shrink: 0; font-weight: 700; color: #64748b; }
 
 /* Open price as the last row of the bill — dashed to read as an action, not a line. */
 .check-panel__openprice {

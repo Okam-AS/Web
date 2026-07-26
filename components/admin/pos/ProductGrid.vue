@@ -104,18 +104,42 @@
       </button>
     </div>
 
-    <!-- Category tabs -->
-    <div v-if="!query" class="product-grid__tabs">
+    <!-- Category tabs. The row used to disappear entirely while searching, which cost the operator
+         the sense of where they were; it now stays put, dimmed, and doubles as the way back —
+         tapping a tab clears the search and lands on that category. -->
+    <div class="product-grid__tabs" :class="{ 'is-searching': !!query }">
       <button
         v-for="cat in categories"
         :key="cat.id"
         type="button"
         class="product-grid__tab"
-        :class="{ 'is-active': activeCategoryId === cat.id }"
-        @click="activeCategoryId = cat.id"
+        :class="{ 'is-active': !query && activeCategoryId === cat.id }"
+        @click="onTabClick(cat)"
       >
         {{ cat.name }}
       </button>
+      <span v-if="query" class="product-grid__tabs-count">{{ $i('pos_search_results', { count: visibleProducts.length }) }}</span>
+    </div>
+
+    <!-- Quantity multiplier: arm a count, then tap the product once. Ringing six coffees was six
+         taps (and six round trips); it is now two. Deliberately self-clearing after the next tile
+         so an armed ×6 can never leak into the following item — and the banner makes the armed
+         state impossible to miss while it lasts. -->
+    <div class="product-grid__multiplier">
+      <span class="product-grid__multiplier-label">{{ $i('pos_multiplier') }}</span>
+      <button
+        v-for="n in multiplierSteps"
+        :key="n"
+        type="button"
+        class="product-grid__multiplier-btn"
+        :class="{ 'is-active': multiplier === n }"
+        @click="setMultiplier(n)"
+      >
+        ×{{ n }}
+      </button>
+      <span v-if="multiplier > 1" class="product-grid__multiplier-armed">
+        {{ $i('pos_multiplier_armed', { count: multiplier }) }}
+      </span>
     </div>
 
     <!-- Tiles -->
@@ -135,7 +159,7 @@
           :key="p.id"
           :product="p"
           :sold-out="isSoldOut(p)"
-          @select="$emit('select', p)"
+          @select="onTileSelect(p)"
         />
       </div>
     </div>
@@ -173,7 +197,10 @@ export default {
   data () {
     return {
       query: '',
-      activeCategoryId: null
+      activeCategoryId: null,
+      // Armed quantity for the next tile tap; always falls back to 1 once it has been used.
+      multiplier: 1,
+      multiplierSteps: [2, 3, 5, 10]
     };
   },
   computed: {
@@ -197,6 +224,17 @@ export default {
       const q = this.query.trim().toLowerCase();
       if (!q) { return this.categoryProducts; }
       return this.allProducts.filter(p => (p.name || '').toLowerCase().includes(q));
+    },
+    // Which categories each product belongs to. Search results come from every category, so the
+    // sold-out test cannot go by the tab that happens to be selected.
+    categoryIdsByProduct () {
+      const map = {};
+      this.categories.forEach((cat) => {
+        this.productsOf(cat).forEach((p) => {
+          (map[p.id] || (map[p.id] = [])).push(cat.id);
+        });
+      });
+      return map;
     }
   },
   watch: {
@@ -217,15 +255,75 @@ export default {
         .map(i => i.product);
     },
     isSoldOut (p) {
-      return !!p.soldOut ||
-        this.soldOutProductIds.includes(p.id) ||
-        this.soldOutCategoryIds.includes(this.activeCategoryId);
+      if (p.soldOut || this.soldOutProductIds.includes(p.id)) { return true; }
+      // Browsing a category: that category decides, as it always has. Searching: the results come
+      // from everywhere, so going by the selected tab would both disable unrelated hits and let a
+      // product from a sold-out category through. It counts as sold out only when every category
+      // it sits in is sold out — one available route to it is enough to sell it.
+      if (!this.query.trim()) { return this.soldOutCategoryIds.includes(this.activeCategoryId); }
+      const catIds = this.categoryIdsByProduct[p.id] || [];
+      return catIds.length > 0 && catIds.every(id => this.soldOutCategoryIds.includes(id));
     },
+    // Enter used to always mean "look this up as a barcode", so typing a product name and pressing
+    // Enter produced a barcode-not-found error. A barcode is all digits (EAN-8/12/13/14 and the
+    // scanner's own output always are), so only that goes to the scan lookup; anything else picks
+    // the single remaining match — the fast path when the operator has typed enough to narrow it
+    // to one product — and otherwise just leaves the filtered grid up to tap from.
     onEnter () {
       const value = this.query.trim();
       if (!value) { return; }
-      this.$emit('scan', value);
+      if (/^\d{6,}$/.test(value)) {
+        // A scan consumes the multiplier too: the banner promises the NEXT item goes in ×n, and
+        // leaving it armed would silently apply it to whatever the operator taps afterwards.
+        this.$emit('scan', value, this.consumeMultiplier());
+        this.query = '';
+        return;
+      }
+      const matches = this.visibleProducts;
+      // Sold out is enforced on the tile by :disabled; Enter must respect the same rule, or the
+      // one product the operator cannot tap is the one they can still ring in by typing its name.
+      // It still has to answer, though: silently doing nothing reads as a broken keyboard, and the
+      // operator presses Enter again and again with no idea why.
+      if (matches.length === 1) {
+        if (this.isSoldOut(matches[0])) {
+          this.$emit('sold-out', matches[0]);
+          return;
+        }
+        this.$emit('select', matches[0], this.consumeMultiplier());
+        this.query = '';
+        return;
+      }
+      // Nothing matched the name either: it was probably a code after all — a scanner that emits
+      // letters, a short PLU, a code with a check character. Let the barcode lookup have it, so
+      // the operator gets "ukjent strekkode" rather than a keypress that does nothing at all.
+      if (!matches.length) {
+        this.$emit('scan', value, this.consumeMultiplier());
+        this.query = '';
+      }
+    },
+    // Tapping the armed step again disarms it, so a mis-tap costs one tap to undo.
+    setMultiplier (n) {
+      this.multiplier = this.multiplier === n ? 1 : n;
+    },
+    // Puts a spent multiplier back: the tile tap consumed it, but the option picker it opened was
+    // cancelled, so nothing was actually rung in.
+    armMultiplier (n) {
+      this.multiplier = Math.max(1, n || 1);
+    },
+    // Every path that rings something in takes the multiplier through here, so it is spent exactly
+    // once and the banner never keeps promising a quantity that has already been used.
+    consumeMultiplier () {
+      const quantity = this.multiplier;
+      this.multiplier = 1;
+      return quantity;
+    },
+    onTileSelect (product) {
+      this.$emit('select', product, this.consumeMultiplier());
+    },
+    // While searching, a tab is the way back out: clear the query and show that category.
+    onTabClick (cat) {
       this.query = '';
+      this.activeCategoryId = cat.id;
     },
     focusSearch () {
       if (this.$refs.search) { this.$refs.search.focus(); }
@@ -349,12 +447,66 @@ export default {
 .product-grid__seat-remove { border: 1px dashed #cbd5e0; background: #fff; color: #64748b; min-width: 34px; height: 30px; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; padding: 0 10px; }
 .product-grid__seat-remove:hover { border-color: #ef4444; color: #ef4444; }
 
+.product-grid__multiplier {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px 10px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.product-grid__multiplier-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: #64748b;
+}
+.product-grid__multiplier-btn {
+  min-width: 52px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+  color: #475569;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.product-grid__multiplier-btn:hover { border-color: #cbd5e0; }
+.product-grid__multiplier-btn.is-active {
+  background: var(--pos-primary, #1bb776);
+  border-color: var(--pos-primary, #1bb776);
+  color: #fff;
+}
+/* An armed multiplier changes what the next tap does, so it says so in words — a highlighted
+   chip alone is too easy to miss on a busy screen. */
+.product-grid__multiplier-armed {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--pos-primary-dark, #159f63);
+}
+
 .product-grid__tabs {
   display: flex;
+  align-items: center;
   gap: 8px;
   padding: 0 16px 10px;
   overflow-x: auto;
   flex-shrink: 0;
+}
+/* Dimmed, not hidden: the row still tells the operator where they were before they searched. */
+.product-grid__tabs.is-searching .product-grid__tab { opacity: 0.45; }
+.product-grid__tabs.is-searching .product-grid__tab:hover { opacity: 1; }
+.product-grid__tabs-count {
+  flex-shrink: 0;
+  margin-left: auto;
+  padding-left: 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #64748b;
+  white-space: nowrap;
 }
 .product-grid__tab {
   border: none;

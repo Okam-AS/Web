@@ -207,6 +207,9 @@
             {{ $i('common_done') }}
           </button>
         </div>
+        <p v-if="error" class="rbuild__error">
+          {{ error }}
+        </p>
       </div>
 
       <footer v-if="step === 'build' || step === 'settle'" class="rbuild__foot">
@@ -218,6 +221,17 @@
         </button>
       </footer>
     </div>
+
+    <!-- Raised only after a card attempt whose outcome we could not observe. -->
+    <PosConfirm
+      v-if="showRetryConfirm"
+      :title="$i('pos_return_retry_title')"
+      :text="$i('pos_return_retry_warn')"
+      :confirm-label="$i('pos_return_retry_ok')"
+      danger
+      @confirm="onRetryConfirmed"
+      @cancel="showRetryConfirm = false"
+    />
   </div>
 </template>
 
@@ -227,6 +241,7 @@ import SignaturePad from '~/components/admin/pos/SignaturePad.vue';
 import PosReceiptView from '~/components/admin/pos/PosReceiptView.vue';
 import ReasonPicker from '~/components/admin/pos/ReasonPicker.vue';
 import PhonePad from '~/components/admin/pos/PhonePad.vue';
+import PosConfirm from '~/components/admin/pos/PosConfirm.vue';
 import { newGuid } from '~/utils/guid';
 
 const CARD_POLL_MS = 2500;
@@ -241,7 +256,7 @@ const CARD_TIMEOUT_MS = 130000;
 // error.
 export default {
   name: 'ReturnBuilder',
-  components: { AmountPad, SignaturePad, PosReceiptView, ReasonPicker, PhonePad },
+  components: { AmountPad, SignaturePad, PosReceiptView, ReasonPicker, PhonePad, PosConfirm },
   inject: ['pos'],
   props: {
     // Same fiscal object (an unreferenced RETREC), shown as "Ny retur" from Day flow or as
@@ -276,6 +291,11 @@ export default {
       busy: false,
       resultReceipt: null,
       cardTxId: '',
+      // A card return that failed WITHOUT giving us a transaction id may still have reached the
+      // terminal — the initiate endpoint carries no idempotency key (unlike the cash path's
+      // returnId), so a blind second attempt refunds the customer twice.
+      cardMayHaveStarted: false,
+      showRetryConfirm: false,
       pollTimer: null,
       pollElapsed: 0
     };
@@ -404,6 +424,13 @@ export default {
     },
     async doReturn () {
       if (this.busy) { return; }
+      // Only ever asked after a card attempt whose outcome we could not observe. Refusing to
+      // re-arm silently is the point: the operator has to look at the terminal first, because the
+      // server cannot tell the retry apart from a fresh return.
+      if (this.method === 'card' && this.cardMayHaveStarted) {
+        this.showRetryConfirm = true;
+        return;
+      }
       this.busy = true;
       const base = {
         cashPointId: this.cashPointId,
@@ -436,11 +463,30 @@ export default {
           }
         }
       } catch (e) {
+        // A cash return is safe to retry (returnId dedupes it server-side). A card return is only
+        // unsafe when the outcome is genuinely unknown: no response at all, or a 5xx that may have
+        // been thrown after the terminal was already told to refund. A 4xx is the server's own
+        // validator rejecting the payload before anything reached the terminal — warning about a
+        // possible double refund there is false, and a warning that cries wolf gets clicked
+        // through on the one occasion it is real.
+        if (this.method === 'card' && this.outcomeUnknown(e)) { this.cardMayHaveStarted = true; }
         this.error = this.pos.errMsg(e);
         this.step = 'settle';
       } finally {
         this.busy = false;
       }
+    },
+    // No status = the request never completed (transport/timeout); 5xx = the server failed with
+    // the terminal call possibly already made. Both leave the outcome unknown.
+    outcomeUnknown (e) {
+      const status = e && e.statusCode;
+      return !status || status >= 500;
+    },
+    // The operator confirmed they checked the terminal: clear the flag and run the return for real.
+    onRetryConfirmed () {
+      this.showRetryConfirm = false;
+      this.cardMayHaveStarted = false;
+      this.doReturn();
     },
     startPoll () {
       this.stopPoll();
@@ -468,17 +514,15 @@ export default {
         this.error = this.$i('pos_refund_card_timeout');
       }
     },
-    // Prefers the Surfboard terminal's printer; browser print is the fallback.
+    // Prints on the Surfboard terminal (backend ESC/POS); browser print only when the cash point
+    // has no terminal. A failing terminal is reported rather than papered over.
     async printReceipt () {
-      const cashPoint = this.pos.cashPoint;
-      const receipt = this.resultReceipt;
-      if (cashPoint && cashPoint.surfboardTerminalId && receipt && receipt.journalEntryId) {
-        try {
-          await this.pos.posSvc().PrintReceipt(receipt.journalEntryId, cashPoint.cashPointId);
-          return;
-        } catch (e) {
-          // Terminal print unavailable — fall back to the browser print below.
-        }
+      this.error = '';
+      try {
+        if (await this.pos.printReceiptDoc(this.resultReceipt)) { return; }
+      } catch (e) {
+        this.error = this.pos.errMsg(e);
+        return;
       }
       if (this.$refs.receiptView) { this.$refs.receiptView.print(); }
     }

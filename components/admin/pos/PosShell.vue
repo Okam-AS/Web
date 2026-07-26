@@ -25,6 +25,7 @@
         <SellScreen v-if="mode === 'sell'" v-show="canOperate" />
         <BoardView v-else-if="mode === 'board'" />
         <DayFlow v-else-if="mode === 'day'" />
+        <ReceiptsView v-else-if="mode === 'receipts'" />
       </main>
 
       <!-- Blocking overlays (highest priority first) -->
@@ -46,52 +47,103 @@
       />
 
       <!-- Park-or-void prompt when the operator leaves a check that still carries items. -->
-      <div v-if="abandonPrompt" class="pos-abandon" @click.self="onAbandonChoice('cancel')">
+      <div v-if="abandonPrompt" class="pos-abandon" @click.self="abandonBusy || onAbandonChoice('cancel')">
         <div class="pos-abandon__panel">
           <h3 class="pos-abandon__title">{{ abandonPrompt.check.tableName || $i('pos_quick_sale') }}</h3>
           <p class="pos-abandon__text">
             {{ $i('pos_abandon_prompt', { name: abandonPrompt.check.tableName || $i('pos_quick_sale'), amount: priceLabel(abandonPrompt.check.finalAmount) }) }}
           </p>
-          <button type="button" class="pos-abandon__park" @click="onAbandonChoice('park')">
-            {{ $i('pos_park_check') }}
-          </button>
-          <button type="button" class="pos-abandon__void" @click="onAbandonChoice('void')">
-            {{ $i('pos_void_check') }}
-          </button>
-          <button type="button" class="pos-abandon__cancel" @click="onAbandonChoice('cancel')">
-            {{ $i('common_cancel') }}
-          </button>
+          <!-- Placing the check on a table is the mirror image of parking it (Park clears the table,
+               Move sets one), so it belongs in the same decision — otherwise a quick sale that turned
+               out to be a table's order has to be parked and resumed onto the table afterwards.
+               When the prompt was raised by tapping a table, that table IS the answer: offer it by
+               name and skip the list entirely. -->
+          <template v-if="!abandonTablePick">
+            <button
+              v-if="abandonTargetTable"
+              type="button"
+              class="pos-abandon__park"
+              :disabled="abandonBusy"
+              @click="onAbandonPlace(abandonTargetTable)"
+            >
+              {{ $i('pos_place_on_table_named', { name: tableLabel(abandonTargetTable) }) }}
+            </button>
+            <button
+              v-else-if="abandonTables.length"
+              type="button"
+              class="pos-abandon__park"
+              @click="abandonTablePick = true"
+            >
+              {{ $i('pos_place_on_table') }}
+            </button>
+            <!-- All three are disabled mid-move: a void firing on a check that is being moved
+                 would settle it twice and resolve the pending promise from two places. -->
+            <button
+              type="button"
+              :class="(abandonTargetTable || abandonTables.length) ? 'pos-abandon__secondary' : 'pos-abandon__park'"
+              :disabled="abandonBusy"
+              @click="onAbandonChoice('park')"
+            >
+              {{ $i('pos_park_check') }}
+            </button>
+            <button type="button" class="pos-abandon__cancel" :disabled="abandonBusy" @click="onAbandonChoice('cancel')">
+              {{ $i('common_cancel') }}
+            </button>
+            <!-- Void journals a VOIDTRANS and cannot be taken back, so it is separated from the
+                 keep-the-check options by a rule and demoted to a link rather than sitting as a
+                 same-size button directly under Park. It asks a second time below. -->
+            <div class="pos-abandon__danger">
+              <button type="button" class="pos-abandon__void" :disabled="abandonBusy" @click="abandonVoidConfirm = true">
+                {{ $i('pos_void_check') }}
+              </button>
+            </div>
+          </template>
+
+          <template v-else>
+            <div class="pos-abandon__tables">
+              <button
+                v-for="t in abandonTables"
+                :key="t.tableId"
+                type="button"
+                class="pos-abandon__table"
+                :disabled="abandonBusy"
+                @click="onAbandonPlace(t)"
+              >
+                <span class="pos-abandon__table-name">{{ tableLabel(t) }}</span>
+                <span class="pos-abandon__table-act">{{ $i('pos_move_here') }}</span>
+              </button>
+            </div>
+            <button type="button" class="pos-abandon__cancel" :disabled="abandonBusy" @click="abandonTablePick = false">
+              {{ $i('common_back') }}
+            </button>
+          </template>
         </div>
       </div>
 
-      <!-- Calm, non-blocking "food ready" toast: the board poll detected a check whose kitchen work
-           just finished (a line went to Ready). Shown across every mode; tap to dismiss. -->
-      <transition name="pos-foodtoast">
-        <button
-          v-if="foodReadyToast.show"
-          type="button"
-          class="pos-foodtoast"
-          @click="dismissFoodReady"
-        >
-          <span class="pos-foodtoast__icon">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-          </span>
-          <span class="pos-foodtoast__text">{{ foodReadyToast.message }}</span>
-        </button>
-      </transition>
+      <PosConfirm
+        v-if="abandonVoidConfirm"
+        :title="$i('pos_void_check')"
+        :text="$i('pos_void_check_confirm', { amount: abandonPrompt ? priceLabel(abandonPrompt.check.finalAmount) : '' })"
+        :confirm-label="$i('pos_void_check')"
+        danger
+        :busy="abandonBusy"
+        @confirm="onAbandonVoidConfirmed"
+        @cancel="abandonVoidConfirm = false"
+      />
 
-      <!-- Shell-level notice toast (park/void failures from the abandon prompt); tap to dismiss. -->
-      <transition name="pos-notice">
-        <button
-          v-if="notice.show"
-          type="button"
-          class="pos-notice"
-          :class="'pos-notice--' + notice.type"
-          @click="dismissNotice"
-        >
-          {{ notice.message }}
-        </button>
-      </transition>
+      <!-- Leaving the register with an open check is the same decision as leaving it any other
+           way, so it runs the same park-or-void prompt instead of silently walking away. -->
+      <PosConfirm
+        v-if="exitConfirm"
+        :title="$i('pos_exit')"
+        :text="$i('pos_exit_confirm')"
+        :confirm-label="$i('pos_exit_short')"
+        @confirm="onExitConfirmed"
+        @cancel="exitConfirm = false"
+      />
+
+      <!-- One toast host for the whole register (notices, food-ready, undo actions). -->
+      <PosToast :toasts="toasts" @dismiss="dismissToast" @action="runToastAction" />
     </template>
   </div>
 </template>
@@ -101,10 +153,13 @@ import PosTopBar from '~/components/admin/pos/PosTopBar.vue';
 import SellScreen from '~/components/admin/pos/SellScreen.vue';
 import BoardView from '~/components/admin/pos/BoardView.vue';
 import DayFlow from '~/components/admin/pos/DayFlow.vue';
+import ReceiptsView from '~/components/admin/pos/ReceiptsView.vue';
 import CashPointPicker from '~/components/admin/pos/CashPointPicker.vue';
 import OperatorLoginScreen from '~/components/admin/pos/OperatorLoginScreen.vue';
 import BeginDayModal from '~/components/admin/pos/BeginDayModal.vue';
 import PinPadModal from '~/components/admin/pos/PinPadModal.vue';
+import PosToast from '~/components/admin/pos/PosToast.vue';
+import PosConfirm from '~/components/admin/pos/PosConfirm.vue';
 
 // PosShell owns the whole POS session: cash point, operator session, open trading day, active mode
 // and the polled board status. It is provided to every descendant as `pos`, and it is the single
@@ -116,10 +171,13 @@ export default {
     SellScreen,
     BoardView,
     DayFlow,
+    ReceiptsView,
     CashPointPicker,
     OperatorLoginScreen,
     BeginDayModal,
-    PinPadModal
+    PinPadModal,
+    PosToast,
+    PosConfirm
   },
   provide () {
     return { pos: this };
@@ -148,21 +206,29 @@ export default {
       online: true,
       // A card payment is on the terminal: session teardown must wait for the flow to end.
       paymentActive: false,
+      // Lines rung in but not yet acknowledged by the server. Owned by the sell screen, mirrored
+      // here because a mode switch unmounts that screen (v-if) and its queue would go with it.
+      addsPending: 0,
       showSwitch: false,
       switchBusy: false,
       switchError: '',
       boardTimer: null,
-      // "Food ready" toast surfaced when the board poll sees a check newly gain a Ready line.
-      foodReadyToast: { show: false, message: '' },
-      foodReadyToastTimer: null,
-      // Shell-level toast for failures raised from shell-owned flows (park/void on abandon).
-      notice: { show: false, message: '', type: 'info' },
-      noticeTimer: null,
+      // Every toast in the register: notices, the food-ready nudge and action toasts (Angre).
+      // Owned here so a message raised on one screen survives a mode switch and two of them
+      // can never render on top of each other.
+      toasts: [],
       // Soft chime on food-ready. Off by default (no autoplay surprises); persisted per store and
       // toggled from the top bar.
       chimeEnabled: false,
-      // Leaving a non-empty check prompts park-or-void; resolves the pending switch.
-      abandonPrompt: null
+      // Leaving a non-empty check prompts place-on-table / park / void; resolves the pending switch.
+      abandonPrompt: null,
+      // The prompt's second step: the free-table list behind "Plasser på bord".
+      abandonTablePick: false,
+      abandonBusy: false,
+      // Second confirmation on the prompt's void branch (VOIDTRANS is irreversible).
+      abandonVoidConfirm: false,
+      // Leaving the register while a check is open.
+      exitConfirm: false
     };
   },
   computed: {
@@ -177,17 +243,54 @@ export default {
     dayOpen () { return !!(this.daySession && !this.daySession.closedAt); },
     needsCashPoint () { return !this.cashPoint; },
     needsOperator () { return !!this.cashPoint && !this.session; },
-    needsDay () { return !!this.cashPoint && !!this.session && !this.dayOpen && this.mode !== 'day'; },
-    canOperate () { return !!this.cashPoint && !!this.session && this.dayOpen; }
+    // Receipts are exempt alongside Dag: looking up a receipt to reprint or send it is reading
+    // what the day already produced, and the day is most often closed when a customer comes back
+    // for one. Forcing a new trading day open to reach it would be a fiscal event caused by a
+    // lookup.
+    needsDay () {
+      return !!this.cashPoint && !!this.session && !this.dayOpen &&
+        this.mode !== 'day' && this.mode !== 'receipts';
+    },
+    canOperate () { return !!this.cashPoint && !!this.session && this.dayOpen; },
+    // Free tables the abandoned check can be placed on. Occupied ones are left out on purpose:
+    // dropping a check onto a table that already has one is a merge, and a merge consumes a check —
+    // too big a decision to hide behind a table tap in a leave-the-screen prompt.
+    abandonTables () {
+      if (!this.abandonPrompt) { return []; }
+      const currentTableId = this.abandonPrompt.check.tableId;
+      const tables = (this.boardStatus && this.boardStatus.tables) || [];
+      return tables.filter(t => t.isActive && !t.openCheck && t.tableId !== currentTableId);
+    },
+    // The table the operator tapped to raise this prompt, when there was one. Re-read from the
+    // board (not trusted from the tap) so a table that got taken since the last poll falls back
+    // to the full list rather than offering a move that is about to fail.
+    abandonTargetTable () {
+      const id = this.abandonPrompt && this.abandonPrompt.targetTableId;
+      if (!id) { return null; }
+      return this.abandonTables.find(t => t.tableId === id) || null;
+    }
   },
-  mounted () {
-    // Non-reactive tracking of which open checks had a Ready line at the previous poll, so a toast
-    // fires once per table when it transitions into "food ready" (null = not yet seeded).
+  // Non-reactive bookkeeping is set up in created, NOT mounted: Vue 2 runs every child's mounted
+  // before the parent's, so a child that calls pos.notify() while mounting would hit an undefined
+  // _toastSeq and mint NaN toast ids — duplicate transition-group keys that cannot be dismissed.
+  created () {
+    // Which open checks had a Ready line at the previous poll, so a toast fires once per table
+    // when it transitions into "food ready" (null = not yet seeded).
     this._readyCheckIds = null;
     this._audioCtx = null;
+    // Monotonic toast key: the id must stay stable while the list splices around it, so a
+    // transition-group never re-uses a key and animates the wrong toast out.
+    this._toastSeq = 0;
+    // Consecutive board polls in which the active check was absent, and the check they belong to
+    // (see reconcileActiveCheck — the count is meaningless across a change of check).
+    this._activeCheckMisses = 0;
+    this._activeCheckMissId = null;
     // Board-poll bookkeeping: a request slower than the interval must not stack, and while
     // offline only every third tick probes.
     this._boardBusy = false;
+    // Resolves when the in-flight poll finishes, so a forced refresh can wait for it.
+    this._boardPoll = null;
+    this._boardPollDone = null;
     this._offlineTicks = 0;
     // restoreActiveCheck hit a transport failure: the saved activeOrderId must survive
     // persist() until a retry settles it (attached, or confirmed gone). The retry rides the
@@ -195,6 +298,8 @@ export default {
     this._restorePending = false;
     // Guards against two board-poll retries launching overlapping restoreActiveCheck calls.
     this._restoreInFlight = false;
+  },
+  mounted () {
     this.chimeEnabled = this.readChimePref();
     this.startup();
   },
@@ -206,8 +311,8 @@ export default {
       this.activeCheck = null;
       this.persist();
     }
-    if (this.foodReadyToastTimer) { clearTimeout(this.foodReadyToastTimer); }
-    if (this.noticeTimer) { clearTimeout(this.noticeTimer); this.noticeTimer = null; }
+    this.toasts.forEach((t) => { if (t.timer) { clearTimeout(t.timer); } });
+    this.toasts = [];
     // A prompt still pending when the shell unmounts must not leave its caller hanging.
     if (this.abandonPrompt) { this.abandonPrompt.resolve(false); this.abandonPrompt = null; }
     if (this._audioCtx && this._audioCtx.close) { this._audioCtx.close().catch(() => {}); }
@@ -467,7 +572,7 @@ export default {
     // (stays open, resumable) or void it (VOIDTRANS — an abandoned started sale is an
     // "avbrutt salg" the X/Z report must count, so it can never just be deleted). An empty
     // draft is discarded silently. Resolves false when the operator backs out.
-    resolvePreviousCheck (previous) {
+    resolvePreviousCheck (previous, targetTableId = null) {
       if (!previous) { return Promise.resolve(true); }
       const items = previous.items || [];
       if (items.length === 0) {
@@ -478,37 +583,94 @@ export default {
         // A prompt already pending (racing callers) must not be silently replaced — its
         // caller would hang forever; resolve it as backed-out first.
         if (this.abandonPrompt) { this.abandonPrompt.resolve(false); }
-        this.abandonPrompt = { check: previous, resolve };
+        this.abandonTablePick = false;
+        this.abandonBusy = false;
+        // A void confirmation left standing would re-render against the NEW prompt's check and
+        // void a check the operator never picked.
+        this.abandonVoidConfirm = false;
+        this.abandonPrompt = { check: previous, resolve, targetTableId };
       });
+    },
+
+    tableLabel (t) {
+      return t.name || (this.$i('pos_table') + ' ' + t.tableNumber);
+    },
+
+    // Places the abandoned check on a free table: it stays open and visible where the guests are
+    // sitting, instead of going to the parked list the floor has to remember to search.
+    async onAbandonPlace (table) {
+      const prompt = this.abandonPrompt;
+      if (!prompt || this.abandonBusy) { return; }
+      this.abandonBusy = true;
+      try {
+        const moved = await this.checkSvc().Move(prompt.check.orderId, { tableId: table.tableId });
+        this.abandonPrompt = null;
+        this.abandonTablePick = false;
+        this.refreshBoard();
+        // Moving onto the very table the operator was opening fulfils that intent, so the pending
+        // open must NOT continue — it would put a second check on the same table. It also means
+        // nothing downstream adopts the check, so do it here: the operator tapped that table to
+        // start ringing in, and adoptCheck lands them on the sell screen with it open. Anywhere
+        // else the check is merely settled, and the caller proceeds to its own check.
+        if (table.tableId === prompt.targetTableId) {
+          this.adoptCheck(moved);
+          prompt.resolve(false);
+        } else {
+          // Handed off to a different table: it is settled, not adopted. Keeping it as activeCheck
+          // only works while the caller overwrites it right after — and the callers that throw
+          // (Resume taken by another register, OpenCheck failing) never get that far, leaving the
+          // shell rendering and persisting a check that now belongs somewhere else.
+          this.clearActiveCheck();
+          prompt.resolve(true);
+        }
+      } catch (e) {
+        // Keep the prompt up on failure — the operator still has to settle this check, and the
+        // table may simply have been taken by another register since the last board poll.
+        this.notify(this.errMsg(e), 'error');
+        this.abandonTablePick = false;
+        this.refreshBoard();
+      } finally {
+        this.abandonBusy = false;
+      }
     },
 
     async onAbandonChoice (choice) {
       const prompt = this.abandonPrompt;
-      this.abandonPrompt = null;
-      if (!prompt) { return; }
-      if (choice === 'park') {
-        try {
+      if (!prompt || this.abandonBusy) { return; }
+      // Cancel settles instantly — nothing is sent, so there is nothing to wait for.
+      if (choice !== 'park' && choice !== 'void') {
+        this.abandonPrompt = null;
+        this.abandonTablePick = false;
+        prompt.resolve(false);
+        return;
+      }
+      // Park and void go over the wire, and a void journals an irreversible VOIDTRANS. The prompt
+      // stays up with its buttons disabled until the request settles, so the operator sees the
+      // work happening instead of a dialog that vanishes into a silent round trip — and cannot
+      // fire a second decision at the same check meanwhile.
+      this.abandonBusy = true;
+      try {
+        if (choice === 'park') {
           await this.checkSvc().Park(prompt.check.orderId);
-          this.refreshBoard();
-          prompt.resolve(true);
-        } catch (e) {
-          // Surface why the check could not be parked — a silent false reads as a dead button.
-          this.notify(this.errMsg(e), 'error');
-          prompt.resolve(false);
-        }
-        return;
-      }
-      if (choice === 'void') {
-        try {
+        } else {
           await this.voidCheckQuick(prompt.check.orderId);
-          prompt.resolve(true);
-        } catch (e) {
-          this.notify(this.errMsg(e), 'error');
-          prompt.resolve(false);
         }
-        return;
+        this.abandonPrompt = null;
+        this.abandonTablePick = false;
+        this.abandonVoidConfirm = false;
+        this.refreshBoard();
+        prompt.resolve(true);
+      } catch (e) {
+        // Surface why it could not be settled — a silent false reads as a dead button. The prompt
+        // stays up so the operator can pick another way out.
+        this.notify(this.errMsg(e), 'error');
+      } finally {
+        this.abandonBusy = false;
+        // Always: a failed void must not leave its confirmation dialog open on top of the prompt,
+        // still armed to fire the irreversible call again with the error toast covering it.
+        // Re-deciding to void has to be a fresh, deliberate confirmation.
+        this.abandonVoidConfirm = false;
       }
-      prompt.resolve(false);
     },
 
     // One-tap void: the backend journals VOIDTRANS regardless; the § 5-3-7 reason is only
@@ -519,7 +681,8 @@ export default {
     },
 
     async openCheck ({ tableId = null, couverts = null, deliveryType }) {
-      if (!(await this.prepareForNewActiveCheck(null))) { return null; }
+      // The table being opened is passed along so an abandon prompt can offer it by name.
+      if (!(await this.prepareForNewActiveCheck(null, tableId))) { return null; }
       const check = await this.checkSvc().OpenCheck({
         cashPointId: this.cashPoint.cashPointId,
         tableId,
@@ -542,7 +705,7 @@ export default {
     // Callers that mutate server state to obtain the new check (e.g. Resume, which un-parks)
     // MUST call this first, so a cancelled prompt doesn't leave the new check dangling —
     // neither parked nor active.
-    prepareForNewActiveCheck (nextOrderId) {
+    prepareForNewActiveCheck (nextOrderId, targetTableId = null) {
       // A restore that failed on transport may still reference a live check. Before adopting
       // a different one (which overwrites the saved id), park the referenced check server-side
       // (best effort) so it stays visible on the board instead of becoming an orphan.
@@ -555,7 +718,7 @@ export default {
       }
       const previous = this.activeCheck;
       if (previous && (!nextOrderId || previous.orderId !== nextOrderId)) {
-        return this.resolvePreviousCheck(previous);
+        return this.resolvePreviousCheck(previous, targetTableId);
       }
       return Promise.resolve(true);
     },
@@ -597,6 +760,14 @@ export default {
 
     // ---- Mode / navigation ----
     setMode (mode) {
+      // A mode switch unmounts the sell screen and takes its add queue with it. Lines the
+      // operator already rang in would never reach the check — it comes back short, and a bill
+      // settled in that state undercharges. beforeDestroy reports the loss, but preventing it is
+      // better than explaining it.
+      if (mode !== 'sell' && this.addsPending > 0) {
+        this.notify(this.$i('pos_wait_for_adds'), 'info', { replaceKey: 'wait-busy', timeout: 2000 });
+        return;
+      }
       // Leaving the sell screen with an empty draft active (a table opened but nothing rung in)
       // discards it so it never lingers on the board or blocks the day close.
       if (mode !== 'sell' && this.mode === 'sell' && this.activeCheck && (this.activeCheck.items || []).length === 0) {
@@ -607,7 +778,48 @@ export default {
       this.mode = mode;
     },
 
+    // Confirmed void from the abandon prompt's danger row. The confirm dialog stays up (its own
+    // :busy renders the wait) until onAbandonChoice settles and clears it, so the irreversible
+    // VOIDTRANS never runs behind a screen that already looks finished.
+    onAbandonVoidConfirmed () {
+      this.onAbandonChoice('void');
+    },
+
+    // Leaving with a check that still carries items ran no guard at all, while every other way out
+    // of a check (switching table, cash point, operator) prompts. An empty draft still leaves
+    // silently — beforeDestroy discards it.
+    requestExit () {
+      // Same reason as setMode, and worse here: leaving the register tears down the shell in the
+      // same tick as the sell screen, so the "lines were not added" toast is destroyed before it
+      // can be read. The check would come back short with nothing on screen to say so.
+      if (this.addsPending > 0) {
+        this.notify(this.$i('pos_wait_for_adds'), 'info', { replaceKey: 'wait-busy', timeout: 2000 });
+        return;
+      }
+      if (this.activeCheck && (this.activeCheck.items || []).length > 0) {
+        this.exitConfirm = true;
+        return;
+      }
+      this.exit();
+    },
+    async onExitConfirmed () {
+      this.exitConfirm = false;
+      // Same park-or-void decision as everywhere else; backing out of it cancels the exit.
+      if (!(await this.prepareForNewActiveCheck(null))) { return; }
+      this.activeCheck = null;
+      this.clearSavedActiveOrder();
+      this.exit();
+    },
+    // Every internal way out of the register funnels through here, not just the top-bar button, so
+    // the queued-lines guard belongs here too. It cannot rely on SellScreen's toast: Vue 2 runs the
+    // parent's beforeDestroy first, so the shell has already emptied `toasts` by the time the child
+    // raises one — on a shell teardown the warning is created into nothing. Refusing to leave while
+    // lines are outstanding is the only version of this the operator can actually see.
     exit () {
+      if (this.addsPending > 0) {
+        this.notify(this.$i('pos_wait_for_adds'), 'info', { replaceKey: 'wait-busy', timeout: 2000 });
+        return;
+      }
       this.$router.push('/admin?storeId=' + this.storeId);
     },
 
@@ -638,22 +850,30 @@ export default {
       this.online = true;
       this._offlineTicks = 0;
     },
-    async refreshBoard () {
+    // force = the operator asked for this one (the board's Oppdater button), as opposed to the
+    // background tick. It skips the offline backoff: a hand on the screen is exactly when the
+    // register should try, and the backoff would otherwise no-op two taps out of three — the
+    // case the button exists for.
+    async refreshBoard (force = false) {
       if (!this.session || !this.storeId) { return; }
       // During a card payment the board is hidden behind the payment overlay and its 401s are
       // deferred anyway — skip the poll so an expired session doesn't 401-spin every 6s.
       if (this.paymentActive) { return; }
       // A poll slower than the 6s interval must not stack requests, and while offline only
       // every third tick probes (≈18s) to spare the radio; the first success resets the pace.
-      if (this._boardBusy) { return; }
-      if (!this.online) {
+      // A forced refresh that lands mid-poll waits for that poll instead of returning straight
+      // away, so the button's spinner stops on real data rather than on nothing having happened.
+      if (this._boardBusy) { return force ? this._boardPoll : undefined; }
+      if (!this.online && !force) {
         this._offlineTicks++;
         if (this._offlineTicks % 3 !== 0) { return; }
       }
       this._boardBusy = true;
+      this._boardPoll = new Promise((resolve) => { this._boardPollDone = resolve; });
       try {
         this.boardStatus = await this.checkSvc().BoardStatus(this.storeId);
         this.detectFoodReady(this.boardStatus);
+        this.reconcileActiveCheck(this.boardStatus);
         this.online = true;
         this._offlineTicks = 0;
         // Connectivity is back: settle a restore that failed on transport earlier.
@@ -668,7 +888,47 @@ export default {
         }
       } finally {
         this._boardBusy = false;
+        if (this._boardPollDone) { this._boardPollDone(); }
+        this._boardPollDone = null;
       }
+    },
+
+    // The active check can stop being an open check without this register doing anything: another
+    // terminal settles it, a bulk void catches it, the day close sweeps it. Left alone the panel
+    // keeps rendering its lines and every action answers "the order is not an open check", with no
+    // way out but a reload. The board is the authority on what is still open, so a check that has
+    // vanished from it is dropped here.
+    //
+    // Two consecutive misses are required: a check opened between two polls is legitimately absent
+    // from the snapshot in flight, and dropping it on the first miss would delete a live cart.
+    reconcileActiveCheck (board) {
+      if (!board || !this.activeCheck) { this._activeCheckMisses = 0; return; }
+      // A card payment owns the check while the customer is at the terminal — never pull it away
+      // mid-flow; the poll is skipped then anyway, this is the belt. The count is cleared like
+      // every other early return: a miss recorded before the payment must not combine with the
+      // first miss after it and drop the check on what is effectively a single stale poll.
+      if (this.paymentActive) { this._activeCheckMisses = 0; return; }
+
+      const id = this.activeCheck.orderId;
+      const onBoard = (board.tables || []).some(t => t.openCheck && t.openCheck.orderId === id) ||
+        (board.parkedChecks || []).some(oc => oc.orderId === id);
+      if (onBoard) { this._activeCheckMisses = 0; return; }
+
+      // The count belongs to ONE check. Without this, a miss recorded for the check that just got
+      // settled elsewhere would carry over to the next check the operator opens — and a poll whose
+      // server-side snapshot predates that check (it is younger than the request) reads as its
+      // second miss, discarding a live check the operator is ringing into.
+      if (this._activeCheckMissId !== id) {
+        this._activeCheckMissId = id;
+        this._activeCheckMisses = 0;
+      }
+      this._activeCheckMisses++;
+      if (this._activeCheckMisses < 2) { return; }
+      this._activeCheckMisses = 0;
+      this._activeCheckMissId = null;
+      this.activeCheck = null;
+      this.clearSavedActiveOrder();
+      this.notify(this.$i('pos_check_gone'), 'info');
     },
 
     // ---- Food-ready detection (floor <-> kitchen loop) ----
@@ -695,29 +955,80 @@ export default {
       this._readyCheckIds = current;
     },
     showFoodReady (names) {
-      this.foodReadyToast = { show: true, message: this.$i('pos_food_ready_toast', { name: names.join(', ') }) };
-      if (this.foodReadyToastTimer) { clearTimeout(this.foodReadyToastTimer); }
-      this.foodReadyToastTimer = setTimeout(() => { this.foodReadyToast.show = false; }, 5000);
+      this.notify(this.$i('pos_food_ready_toast', { name: names.join(', ') }), 'food', {
+        position: 'bottom',
+        timeout: 5000,
+        // One food-ready nudge at a time: a second table going ready replaces the first rather
+        // than stacking a wall of bells over the floor plan.
+        replaceKey: 'food-ready'
+      });
       if (this.chimeEnabled) { this.playChime(); }
     },
-    // ---- Shell-level notice toast (same pattern as SellScreen/DayFlow's local notify) ----
-    notify (message, type = 'info') {
-      this.notice = { show: true, message, type };
-      if (this.noticeTimer) { clearTimeout(this.noticeTimer); }
-      this.noticeTimer = setTimeout(() => { this.notice.show = false; }, 3500);
+    // ---- Receipt printing ----
+    // Single owner of "print this document". Every receipt — sale, return, refund, copy,
+    // provisional bill and training sale — is rendered as ESC/POS by the backend and pushed to
+    // the cash point's Surfboard terminal printer, so paper always matches the journalled
+    // document. Returns false only when the cash point has no terminal (the caller then falls
+    // back to the browser's 80 mm iframe print); a terminal that is configured but fails throws,
+    // so the operator is told instead of silently getting a different-looking paper receipt.
+    async printReceiptDoc (receipt) {
+      const cashPoint = this.cashPoint;
+      if (!cashPoint || !cashPoint.surfboardTerminalId || !receipt) { return false; }
+      // A copy must print from the COPYREC entry: the original's id would render an unmarked
+      // second original instead of the "KOPI"-marked document.
+      const entryId = receipt.copyJournalEntryId || receipt.journalEntryId;
+      if (!entryId) { return false; }
+      await this.posSvc().PrintReceipt(entryId, cashPoint.cashPointId);
+      return true;
+    },
+    // ---- Toasts: the single notify() every screen calls ----
+    // opts.actionLabel + opts.onAction turn the toast into an undo affordance.
+    // opts.replaceKey drops any earlier toast carrying the same key.
+    notify (message, type = 'info', opts = {}) {
+      if (opts.replaceKey) {
+        this.toasts.filter(t => t.replaceKey === opts.replaceKey).forEach(t => this.dismissToast(t));
+      }
+      const toast = {
+        id: ++this._toastSeq,
+        message,
+        type,
+        position: opts.position || 'top',
+        actionLabel: opts.actionLabel || '',
+        onAction: opts.onAction || null,
+        // The screen whose state the action closes over, so the toast can be pulled when that
+        // screen goes away (see dropToastActionsFor). Only actionable toasts need one — a plain
+        // message is safe to outlive its author, which is the point of shell-owned toasts.
+        owner: opts.owner || null,
+        replaceKey: opts.replaceKey || '',
+        timer: null
+      };
+      toast.timer = setTimeout(() => this.dismissToast(toast), opts.timeout || 3500);
+      this.toasts.push(toast);
+      return toast;
+    },
+    dismissToast (toast) {
+      const i = this.toasts.indexOf(toast);
+      if (i === -1) { return; }
+      if (toast.timer) { clearTimeout(toast.timer); toast.timer = null; }
+      this.toasts.splice(i, 1);
+    },
+    // Called by a screen as it unmounts. An "Angre" whose closure belongs to a screen that is no
+    // longer there would re-add lines from a destroyed component — onto whichever check is active
+    // by then, with its progress row rendering nowhere. The toast goes with the screen.
+    dropToastActionsFor (owner) {
+      this.toasts.filter(t => t.owner === owner && t.onAction).forEach(t => this.dismissToast(t));
+    },
+    runToastAction (toast) {
+      const i = this.toasts.indexOf(toast);
+      if (i === -1) { return; }
+      if (toast.timer) { clearTimeout(toast.timer); toast.timer = null; }
+      this.toasts.splice(i, 1);
+      if (toast.onAction) { toast.onAction(); }
     },
     // Opening the cash drawer is hardware-bound (printer kick pulse) and only works in the native
     // POS app; the web build keeps the button for UI parity but can only say so.
     openDrawer () {
       this.notify(this.$i('pos_open_drawer_web_unsupported'), 'info');
-    },
-    dismissNotice () {
-      this.notice.show = false;
-      if (this.noticeTimer) { clearTimeout(this.noticeTimer); this.noticeTimer = null; }
-    },
-    dismissFoodReady () {
-      this.foodReadyToast.show = false;
-      if (this.foodReadyToastTimer) { clearTimeout(this.foodReadyToastTimer); this.foodReadyToastTimer = null; }
     },
     readChimePref () {
       try { return localStorage.getItem('okam-pos-chime-' + this.storeId) === '1'; } catch (e) { return false; }
@@ -880,62 +1191,55 @@ export default {
   font-weight: 700;
   cursor: pointer;
 }
-.pos-abandon__void {
+.pos-abandon__secondary {
   height: 52px;
-  border: 1px solid #fecaca;
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
-  background: #fef2f2;
-  color: #dc2626;
+  background: #ffffff;
+  color: var(--pos-ink, #292c34);
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
 }
-.pos-abandon__cancel { border: none; background: none; color: #64748b; font-weight: 600; cursor: pointer; padding: 8px; }
+.pos-abandon__secondary:hover { background: #f8fafc; }
 
-.pos-foodtoast {
-  position: fixed;
-  left: 50%;
-  bottom: 24px;
-  transform: translateX(-50%);
+.pos-abandon__tables { display: flex; flex-direction: column; gap: 8px; max-height: 46vh; overflow-y: auto; }
+.pos-abandon__table {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
-  background: #ffffff;
-  border: 1px solid rgba(27, 183, 118, 0.35);
-  border-left: 4px solid var(--pos-primary, #1bb776);
-  color: var(--pos-ink, #292c34);
-  padding: 12px 20px 12px 15px;
+  min-height: 52px;
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
-  font-weight: 700;
-  font-size: 1rem;
-  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.18);
+  background: #f8fafc;
   cursor: pointer;
-  z-index: 2200;
 }
-.pos-foodtoast__icon { color: var(--pos-primary-dark, #159f63); display: inline-flex; }
-.pos-foodtoast__icon svg { width: 22px; height: 22px; }
-.pos-foodtoast-enter-active, .pos-foodtoast-leave-active { transition: opacity 0.25s ease, transform 0.25s ease; }
-.pos-foodtoast-enter, .pos-foodtoast-leave-to { opacity: 0; transform: translate(-50%, 12px); }
+.pos-abandon__table:hover { background: #eef2f7; }
+.pos-abandon__table:disabled { opacity: 0.55; cursor: default; }
+.pos-abandon__table-name { font-weight: 700; color: var(--pos-ink, #292c34); }
+.pos-abandon__table-act { font-size: 0.82rem; font-weight: 600; color: var(--pos-primary, #1bb776); }
 
-/* Shell-level notice toast — same look as the screens' local notices, above every overlay. */
-.pos-notice {
-  position: fixed;
-  top: 16px;
-  left: 50%;
-  transform: translateX(-50%);
+.pos-abandon__danger {
+  margin-top: 6px;
+  padding-top: 12px;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+}
+.pos-abandon__void {
+  flex: 1;
+  min-height: 48px;
   border: none;
-  padding: 12px 22px;
   border-radius: 12px;
+  background: none;
+  color: #dc2626;
+  font-size: 0.95rem;
   font-weight: 600;
-  color: #ffffff;
   cursor: pointer;
-  z-index: 2300;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
-.pos-notice--info { background: #334155; }
-.pos-notice--success { background: var(--pos-primary-dark, #159f63); }
-.pos-notice--error { background: #ef4444; }
+.pos-abandon__void:hover:not(:disabled) { background: #fef2f2; }
+.pos-abandon__void:disabled { opacity: 0.5; cursor: default; }
+.pos-abandon__cancel { border: none; background: none; color: #64748b; font-weight: 600; cursor: pointer; padding: 8px; }
 
-.pos-notice-enter-active, .pos-notice-leave-active { transition: opacity 0.2s ease, transform 0.2s ease; }
-.pos-notice-enter, .pos-notice-leave-to { opacity: 0; transform: translate(-50%, -8px); }
 </style>

@@ -6,6 +6,19 @@
           {{ $i('pos_mode_board') }}
         </h2>
         <span v-if="!online" class="board__offline">{{ $i('pos_offline') }}</span>
+        <!-- The poll is 6s, and ~18s once it has backed off offline. Without this the operator
+             could see the board was stale but had no way to ask for a fresh one. -->
+        <button
+          type="button"
+          class="board__refresh"
+          :class="{ 'is-spinning': refreshing }"
+          :title="$i('pos_board_refresh')"
+          :disabled="refreshing"
+          @click="manualRefresh"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+          <span>{{ $i('pos_board_refresh') }}</span>
+        </button>
         <div class="board__zones">
           <button
             v-for="z in zones"
@@ -117,11 +130,6 @@
         </div>
       </section>
 
-      <transition name="board-notice">
-        <div v-if="notice" class="board__notice">
-          {{ notice }}
-        </div>
-      </transition>
     </div>
 
     <!-- Reservation warning before seating a walk-in on a reserved table -->
@@ -163,8 +171,8 @@ export default {
       floorPlan: { zones: [], tables: [] },
       zoneId: null,
       busy: false,
-      notice: '',
-      noticeTimer: null,
+      // Manual board refresh in flight — drives the spinner and blocks a double tap.
+      refreshing: false,
       reservationWarnFor: null
     };
   },
@@ -178,7 +186,14 @@ export default {
       const zid = this.zoneId != null ? this.zoneId : (this.zones[0] && this.zones[0].id);
       return (this.floorPlan.tables || []).filter(t => t.zoneId === zid && t.isActive);
     },
-    parked () { return (this.board && this.board.parkedChecks) || []; },
+    // Same exclusion as the sell screen: the board's parkedChecks holds every table-less open
+    // check, so the one currently being rung in would otherwise appear as "parked" and offer to
+    // resume itself.
+    parked () {
+      const all = (this.board && this.board.parkedChecks) || [];
+      const activeId = this.pos.activeCheck ? this.pos.activeCheck.orderId : null;
+      return activeId ? all.filter(p => p.orderId !== activeId) : all;
+    },
     boardTables () { return (this.board && this.board.tables) || []; },
     // Seated (open, non-parked) checks — used for the no-floor-plan list fallback.
     openChecks () { return this.boardTables.map(t => t.openCheck).filter(Boolean); },
@@ -204,9 +219,6 @@ export default {
   },
   mounted () {
     this.loadFloorPlan();
-  },
-  beforeDestroy () {
-    if (this.noticeTimer) { clearTimeout(this.noticeTimer); }
   },
   methods: {
     async loadFloorPlan () {
@@ -264,10 +276,25 @@ export default {
       if (p.lineCount != null) { parts.push(this.$i('pos_parked_lines', { count: p.lineCount })); }
       return parts.join(' · ');
     },
+    // Board only ever flashes failures; the shell owns the rendering.
     flash (msg) {
-      this.notice = msg;
-      if (this.noticeTimer) { clearTimeout(this.noticeTimer); }
-      this.noticeTimer = setTimeout(() => { this.notice = ''; }, 3000);
+      this.pos.notify(msg, 'error');
+    },
+    // Ask for a fresh board now. The spinner is held for a short beat even on a fast reply, so a
+    // tap that changes nothing on screen still reads as "it did refresh, nothing has moved".
+    async manualRefresh () {
+      if (this.refreshing) { return; }
+      this.refreshing = true;
+      try {
+        await Promise.all([
+          // Forced: an operator tap must reach the server even while the offline backoff is
+          // pacing the background poll — that is the whole point of the button.
+          this.pos.refreshBoard(true),
+          new Promise(resolve => setTimeout(resolve, 400))
+        ]);
+      } finally {
+        this.refreshing = false;
+      }
     },
     async onTableClick (t) {
       const oc = this.checkOf(t);
@@ -344,6 +371,26 @@ export default {
 .board__head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
 .board__title { font-size: 1.6rem; font-weight: 700; color: var(--pos-ink, #292c34); margin: 0; }
 .board__offline { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #f59e0b; background: rgba(245, 158, 11, 0.12); padding: 3px 8px; border-radius: 6px; }
+.board__refresh {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+  color: #475569;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.board__refresh:hover:not(:disabled) { background: #f8fafc; color: var(--pos-ink, #292c34); }
+.board__refresh:disabled { cursor: default; }
+.board__refresh svg { width: 17px; height: 17px; }
+.board__refresh.is-spinning svg { animation: board-spin 0.7s linear infinite; }
+@keyframes board-spin { to { transform: rotate(360deg); } }
+
 .board__zones { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
 .board__zone { border: 1px solid #e2e8f0; background: #fff; color: #475569; padding: 6px 14px; border-radius: 18px; font-weight: 600; font-size: 0.85rem; cursor: pointer; }
 .board__zone.is-active { background: var(--pos-primary, #1bb776); border-color: var(--pos-primary, #1bb776); color: #fff; }
@@ -401,10 +448,6 @@ export default {
 .board__parked-meta { font-size: 0.75rem; color: #64748b; }
 .board__parked-amount { font-weight: 800; color: var(--pos-primary-dark, #159f63); }
 .board__parked-resume { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #64748b; }
-
-.board__notice { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); background: #ef4444; color: #fff; font-weight: 600; padding: 12px 22px; border-radius: 12px; z-index: 1200; }
-.board-notice-enter-active, .board-notice-leave-active { transition: opacity 0.2s ease; }
-.board-notice-enter, .board-notice-leave-to { opacity: 0; }
 
 .board__modal { position: fixed; inset: 0; background: rgba(18, 20, 26, 0.6); display: flex; align-items: center; justify-content: center; z-index: 1150; padding: 16px; }
 .board__modal-panel { background: #fff; border-radius: 16px; padding: 24px; width: 100%; max-width: 380px; }
