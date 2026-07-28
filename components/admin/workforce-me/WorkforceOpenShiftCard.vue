@@ -4,6 +4,7 @@
       <div>
         <span class="wfme-open__date">{{ dateLabel }}</span>
         <span class="wfme-open__range">{{ range }}</span>
+        <span v-if="!zoneKnown" class="wfme-open__flag">{{ $i('wfme_zone_unknown') }}</span>
       </div>
       <span v-if="assignment.alreadyRequested" class="wfme-open__badge">{{ $i('wfme_open_asked') }}</span>
     </div>
@@ -51,7 +52,7 @@
 </template>
 
 <script>
-import { formatBusinessDate, formatMinutes, formatWallClock, paidMinutes } from '~/utils/workforce-me/shift-view';
+import { formatBusinessDate, formatMinutes, formatWallClock, paidMinutes, timeZoneIsKnown } from '~/utils/workforce-me/shift-view';
 
 // One shift the worker may ask for (#39). Asking creates a candidacy, never an assignment: a manager
 // awards exactly one candidate, so this card must stay honest about the fact that asking is not
@@ -75,6 +76,18 @@ export default {
       const zone = this.timeZoneId;
       return formatWallClock(this.assignment.startsUtc, zone, this.locale) +
         '–' + formatWallClock(this.assignment.endsUtc, zone, this.locale);
+    },
+    /**
+     * False means the range above is UTC rather than the store's wall clock, and the card says so.
+     *
+     * The zone is null exactly when this worker has no published shift at this store in the window
+     * (`workforce-me.vue`, `zoneForStore`) — which is precisely the person most likely to be reading
+     * the open-shift list. Without this flag `formatWallClock` falls back to UTC and the card
+     * presents it as a confident local wall clock, the one thing the page's honest-state rule
+     * forbids. `WorkforceShiftCard` has carried the same flag from the start.
+     */
+    zoneKnown () {
+      return timeZoneIsKnown(this.timeZoneId);
     },
     paid () {
       return formatMinutes(paidMinutes(this.assignment));
@@ -134,6 +147,20 @@ export default {
   font-weight: 600;
   color: #292c34;
   font-variant-numeric: tabular-nums;
+}
+
+.wfme-open__flag {
+  margin-left: 8px;
+  font-size: 0.72em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: #92400e;
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+  border-radius: 6px;
+  padding: 2px 7px;
+  white-space: nowrap;
 }
 
 .wfme-open__badge {

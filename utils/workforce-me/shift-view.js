@@ -1,5 +1,16 @@
 // Presentation helpers for the worker's own shifts — grouping, wall-clock formatting, and the
 // honest-state derivation the page renders its empty screens from.
+//
+// EVERY instant off the wire is parsed with `parseApiInstant`, never with `new Date(...)` directly.
+// The Workforce surface serialises column-loaded stamps (`startsUtc`, `endsUtc`, `createdAtUtc`)
+// BARE — no `Z` — because EF materialises them as `DateTimeKind.Unspecified` and Newtonsoft's
+// default `RoundtripKind` writes no designator for that kind. JavaScript reads a bare ISO string as
+// BROWSER-LOCAL, so `new Date('2026-07-28T06:00:00')` on a phone in Oslo is 04:00 UTC rather than
+// the 06:00 UTC the server meant, and every shift time on this page moves by the viewer's own
+// offset. `parseApiInstant` reads a bare string as UTC and leaves a `Z`-suffixed one alone, so it is
+// correct for both shapes the surface emits.
+
+import { parseApiInstant } from '~/utils/workforce/week-range';
 
 /** The schedule read has not completed, or it failed. Nothing is known — never render 0. */
 export const SCHEDULE_UNKNOWN = 'unknown';
@@ -105,8 +116,8 @@ export function formatBusinessDate (key, locale) {
  */
 export function formatWallClock (utcIso, timeZoneId, locale) {
   if (!utcIso) { return ''; }
-  const date = new Date(utcIso);
-  if (isNaN(date.getTime())) { return ''; }
+  const date = parseApiInstant(utcIso);
+  if (!date) { return ''; }
 
   try {
     return new Intl.DateTimeFormat(locale || 'nb-NO', {
@@ -146,12 +157,19 @@ export function formatShiftRange (item, locale) {
  *
  * Returns null when either instant is missing or unparseable, so the caller renders nothing rather
  * than a zero it cannot stand behind.
+ *
+ * Both ends are parsed as UTC. A same-offset misparse would cancel in the subtraction, but a shift
+ * whose BROWSER-local reading straddles a DST transition does not cancel: read as local Oslo time,
+ * 02:30→03:30 on the autumn fall-back date spans the repeated hour and measures 120 minutes for a
+ * 60-minute shift. Parsing as UTC has no folds and no gaps, so the duration is the real one.
  */
 export function paidMinutes (item) {
   if (!item || !item.startsUtc || !item.endsUtc) { return null; }
-  const start = new Date(item.startsUtc).getTime();
-  const end = new Date(item.endsUtc).getTime();
-  if (isNaN(start) || isNaN(end)) { return null; }
+  const startDate = parseApiInstant(item.startsUtc);
+  const endDate = parseApiInstant(item.endsUtc);
+  if (!startDate || !endDate) { return null; }
+  const start = startDate.getTime();
+  const end = endDate.getTime();
 
   const unpaid = typeof item.unpaidBreakMinutes === 'number' ? item.unpaidBreakMinutes : 0;
   const minutes = Math.round((end - start) / 60000) - unpaid;
@@ -173,10 +191,12 @@ export function crossesMidnight (item, locale) {
   if (!item || !item.startsUtc || !item.endsUtc) { return false; }
   const zone = item.timeZoneId || 'UTC';
   const day = (iso) => {
+    const instant = parseApiInstant(iso);
+    if (!instant) { return ''; }
     try {
       return new Intl.DateTimeFormat(locale || 'en-CA', {
         year: 'numeric', month: '2-digit', day: '2-digit', timeZone: zone
-      }).format(new Date(iso));
+      }).format(instant);
     } catch (e) {
       return '';
     }

@@ -17,18 +17,25 @@ import {
   timeZoneIsKnown
 } from '~/utils/workforce-me/shift-view'
 
+// THE WIRE SHAPE, NOT A CONVENIENT ONE. #33's instants are column-loaded, so EF materialises them
+// `DateTimeKind.Unspecified` and Newtonsoft's default `RoundtripKind` serialises them BARE — no `Z`.
+// These fixtures carry no `Z` for exactly that reason, and they match the manager lane's fixtures
+// (`test/workforce-external-commitments.test.js`) rather than contradicting them. An earlier version
+// of this file used `Z` throughout: every assertion below passed while the page was rendering every
+// shift time off by the viewer's UTC offset, because a `Z` string is the one shape the bug cannot
+// reach. Do not "tidy" these back to `Z`.
 const shift = over => Object.assign({
   staffMemberId: '30000000-0000-0000-0000-000000000002',
   storeId: 90001,
   timeZoneId: 'Europe/Oslo',
   publicationId: 'p1',
   publicationNumber: 1,
-  publishedAtUtc: '2026-07-20T08:00:00Z',
+  publishedAtUtc: '2026-07-20T08:00:00',
   shiftAssignmentId: 'a1',
   roleId: null,
   roleName: 'Kokk',
-  startsUtc: '2026-07-06T05:00:00Z',
-  endsUtc: '2026-07-06T13:00:00Z',
+  startsUtc: '2026-07-06T05:00:00',
+  endsUtc: '2026-07-06T13:00:00',
   localBusinessDate: '2026-07-06T00:00:00',
   startOffsetMinutes: 120,
   endOffsetMinutes: 120,
@@ -112,14 +119,37 @@ describe('business-date grouping', () => {
   })
 })
 
+describe('the wire is bare, and a bare stamp is UTC', () => {
+  // These are the assertions that fail on a `new Date(raw)` parser. They only fail under a non-UTC
+  // TZ: run the suite with TZ=Europe/Oslo. Under TZ=UTC a broken parser and a correct one agree.
+  test('a bare stamp is read as UTC, not as the browser zone', () => {
+    // 06:00 UTC is 08:00 in Oslo (CEST). Read as browser-local on an Oslo phone it would be 04:00
+    // UTC and render "06:00" — the server's own digits handed back as if they were a wall clock.
+    expect(formatWallClock('2026-07-28T06:00:00', 'Europe/Oslo', 'nb-NO')).toBe('08:00')
+    expect(formatWallClock('2026-07-28T06:00:00', 'UTC', 'nb-NO')).toBe('06:00')
+  })
+
+  test('a bare stamp and its Z-suffixed twin are the same instant', () => {
+    // The surface emits BOTH shapes: column-loaded stamps bare, server-computed ones with a `Z`.
+    // Neither may be favoured, and the two must never disagree.
+    expect(formatWallClock('2026-07-28T06:00:00', 'Europe/Oslo', 'nb-NO'))
+      .toBe(formatWallClock('2026-07-28T06:00:00Z', 'Europe/Oslo', 'nb-NO'))
+  })
+
+  test('an explicit offset is honoured rather than being re-stamped as UTC', () => {
+    // 08:00+02:00 is 06:00 UTC, so it is 08:00 in Oslo — not 10:00.
+    expect(formatWallClock('2026-07-28T08:00:00+02:00', 'Europe/Oslo', 'nb-NO')).toBe('08:00')
+  })
+})
+
 describe('times are the store wall clock, not the phone', () => {
   test('a UTC instant renders in the store zone', () => {
     // 05:00Z on 6 July is 07:00 in Europe/Oslo (CEST).
-    expect(formatWallClock('2026-07-06T05:00:00Z', 'Europe/Oslo', 'nb-NO')).toBe('07:00')
+    expect(formatWallClock('2026-07-06T05:00:00', 'Europe/Oslo', 'nb-NO')).toBe('07:00')
   })
 
   test('the same instant renders differently in a different store zone', () => {
-    expect(formatWallClock('2026-07-06T05:00:00Z', 'UTC', 'nb-NO')).toBe('05:00')
+    expect(formatWallClock('2026-07-06T05:00:00', 'UTC', 'nb-NO')).toBe('05:00')
   })
 
   test('a shift range uses the item zone on both ends', () => {
@@ -132,7 +162,7 @@ describe('times are the store wall clock, not the phone', () => {
     expect(timeZoneIsKnown('')).toBe(false)
     expect(timeZoneIsKnown('Not/AZone')).toBe(false)
     // It still renders something (UTC) instead of throwing or blanking the shift.
-    expect(formatWallClock('2026-07-06T05:00:00Z', 'Not/AZone', 'nb-NO')).toBe('05:00')
+    expect(formatWallClock('2026-07-06T05:00:00', 'Not/AZone', 'nb-NO')).toBe('05:00')
   })
 
   test('an absent or unparseable instant renders as nothing', () => {
@@ -142,11 +172,26 @@ describe('times are the store wall clock, not the phone', () => {
   })
 
   test('a shift crossing midnight in the store zone is flagged', () => {
-    const overnight = shift({ startsUtc: '2026-07-06T20:00:00Z', endsUtc: '2026-07-06T23:30:00Z' })
+    const overnight = shift({ startsUtc: '2026-07-06T20:00:00', endsUtc: '2026-07-06T23:30:00' })
     // 22:00 -> 01:30 Oslo, so it crosses.
     expect(crossesMidnight(overnight, 'en-CA')).toBe(true)
     expect(crossesMidnight(shift(), 'en-CA')).toBe(false)
     expect(crossesMidnight(null, 'en-CA')).toBe(false)
+  })
+
+  test('the overnight flag follows the store day, not the browser day', () => {
+    // 23:00Z on the 28th is 01:00 Oslo on the 29th, and 01:00Z on the 29th is 03:00 Oslo the same
+    // day: one Oslo day, no crossing. Parsed as browser-local on an Oslo phone the two stamps sit on
+    // different calendar dates and the card would flag an overnight that does not exist.
+    expect(crossesMidnight({
+      startsUtc: '2026-07-28T23:00:00', endsUtc: '2026-07-29T01:00:00', timeZoneId: 'Europe/Oslo'
+    }, 'en-CA')).toBe(false)
+
+    // The mirror image: 20:00Z (22:00 Oslo) to 23:30Z (01:30 Oslo the next day) really does cross,
+    // and a browser-local parse would miss it because both stamps fall on the 28th.
+    expect(crossesMidnight({
+      startsUtc: '2026-07-28T20:00:00', endsUtc: '2026-07-28T23:30:00', timeZoneId: 'Europe/Oslo'
+    }, 'en-CA')).toBe(true)
   })
 })
 
@@ -170,6 +215,34 @@ describe('paid time is a duration, never a wage', () => {
 
   test('a break longer than the shift floors at zero rather than going negative', () => {
     expect(paidMinutes(shift({ unpaidBreakMinutes: 600 }))).toBe(0)
+  })
+
+  test('the duration survives the autumn fall-back, where a local misparse does not cancel', () => {
+    // Misparsing both ends as browser-local usually cancels in the subtraction — the same offset is
+    // added to each end — which is why this function looked correct for so long. It does NOT cancel
+    // when the local reading straddles a DST transition, because the two ends then sit at different
+    // offsets and the error is the size of the shift, not zero.
+    //
+    // Oslo returns to CET at 03:00 CEST on 25 October 2026, so local 02:00–02:59 happens twice. A
+    // 60-minute shift at 02:30–03:30 UTC, read as Oslo local, spans the repeated hour and measures
+    // 120 minutes. An hour of paid time that nobody worked is not a rounding difference.
+    expect(paidMinutes({
+      startsUtc: '2026-10-25T02:30:00', endsUtc: '2026-10-25T03:30:00', unpaidBreakMinutes: 0
+    })).toBe(60)
+
+    // The spring gap does NOT break the same way, and that is worth pinning rather than assuming.
+    // Oslo jumps 02:00 -> 03:00 on 29 March 2026, so local 02:30 never happens; V8 resolves the
+    // nonexistent time forward, both ends end up at the same offset, and the error cancels — the old
+    // parser returned the right 60 here too. Only the fold breaks the cancellation. This case is a
+    // guard, not a discriminator, and is kept so nobody "fixes" the fold by special-casing March.
+    expect(paidMinutes({
+      startsUtc: '2026-03-29T01:30:00', endsUtc: '2026-03-29T02:30:00', unpaidBreakMinutes: 0
+    })).toBe(60)
+
+    // A whole shift spanning the fold is 8h30m of real clock. The old parser reported 9h30m.
+    expect(paidMinutes({
+      startsUtc: '2026-10-25T00:00:00', endsUtc: '2026-10-25T08:30:00', unpaidBreakMinutes: 0
+    })).toBe(510)
   })
 
   test('durations format as hours and minutes', () => {

@@ -47,6 +47,8 @@
 </template>
 
 <script>
+import { parseApiInstant } from '~/utils/workforce/week-range';
+
 // Unread schedule publications from the worker's own inbox (#34), with the read marker (#35) and the
 // acknowledgement receipt (#44).
 //
@@ -76,12 +78,17 @@ export default {
         ? this.$i('wfme_pub_receipt_already', { time })
         : this.$i('wfme_pub_receipt_new', { time });
     },
-    // The inbox carries no store zone, so these instants are rendered in the reader's own zone. That
+    // The inbox carries no store zone, so these instants are RENDERED in the reader's own zone. That
     // is honest for "when did this arrive" — unlike a shift time, it is not a rostered wall clock.
+    //
+    // Rendering local and PARSING local are different things. `createdAtUtc` and `occurredAtUtc` are
+    // column-loaded, so they arrive bare (`Unspecified` + Newtonsoft `RoundtripKind`), and
+    // `new Date(bare)` reads them as local — which would print the UTC wall clock while calling it
+    // the reader's local time, off by the reader's own offset. Parse as UTC, then render local.
     formatInstant (iso) {
       if (!iso) { return ''; }
-      const date = new Date(iso);
-      if (isNaN(date.getTime())) { return ''; }
+      const date = parseApiInstant(iso);
+      if (!date) { return ''; }
       return new Intl.DateTimeFormat(this.locale, {
         day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hour12: false
       }).format(date);
