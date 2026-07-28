@@ -342,11 +342,15 @@ describe('rendering — kind and times, never a store', () => {
   test('NOTHING resembling a store identity reaches the DOM, even if the payload grew one', () => {
     // An adversarial payload: today's contract carries none of these, and if it ever did, the grid
     // still may not draw them — the write path's refusal names no store either.
+    // The numeric ids are DISTINCTIVE on purpose. A plausible id like 99 cannot be asserted on: it
+    // occurs incidentally in a rendered week (in a time, a percentage, a generated class), so the
+    // assertion would pass or fail for reasons unrelated to disclosure. Six-digit and distinct per
+    // field, a hit names both the leak and the field it came from.
     const wrapper = render({
       external: response([Object.assign(commitment(), {
-        storeId: 99,
+        storeId: 987001,
         storeName: 'Kafé Sør',
-        otherStoreId: 99,
+        otherStoreId: 987002,
         shiftAssignmentId: 'foreign-assignment-1',
         scheduleRevisionId: 'foreign-revision-1',
         engagementId: 'foreign-engagement-1',
@@ -356,7 +360,12 @@ describe('rendering — kind and times, never a store', () => {
     })
 
     const html = wrapper.html()
-    for (const secret of ['Kafé Sør', 'foreign-assignment-1', 'foreign-revision-1', 'foreign-engagement-1', 'Bartender', 'Fast vakt på Sør']) {
+
+    // Positive control: the overlay really did render this commitment. Without it every assertion
+    // below is satisfied just as well by a grid that drew nothing at all.
+    expect(html).toContain('Opptatt annet sted')
+
+    for (const secret of ['987001', '987002', 'Kafé Sør', 'foreign-assignment-1', 'foreign-revision-1', 'foreign-engagement-1', 'Bartender', 'Fast vakt på Sør']) {
       expect(html).not.toContain(secret)
     }
   })
