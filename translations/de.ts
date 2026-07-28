@@ -2429,6 +2429,46 @@ export default {
   wf_published_ok: 'An {count} Empfänger veröffentlicht.',
   wf_generic_error: 'Etwas ist schiefgelaufen.',
 
+  // Schichten anlegen. Alle Texte unten gehören zu EINEM Schreibvorgang: PUT .../assignments:batch.
+  // Keiner verspricht einen Betrag — der Lohn wird vom Dienst berechnet und aus dessen Antwort gelesen.
+  wf_add_shift_for: 'Schicht für {name} hinzufügen',
+  wf_add_open_shift: 'Offene Schicht hinzufügen',
+  wf_new_shift: 'Neue Schicht',
+  wf_edit_shift: 'Schicht bearbeiten',
+  wf_field_person: 'Mitarbeiter',
+  wf_field_role: 'Funktion',
+  wf_field_day: 'Tag',
+  wf_field_start: 'Von',
+  wf_field_end: 'Bis',
+  wf_field_unpaid_break: 'Unbezahlte Pause (Min.)',
+  wf_field_note: 'Notiz',
+  wf_open_option: 'Offene Schicht (niemand zugewiesen)',
+  wf_editor_roles_unknown: 'Die Funktionsliste wurde nicht geladen. Die Liste oben kann daher kürzer sein als die des Standorts — sie ist nicht leer, weil der Standort keine Funktionen hätte.',
+  wf_overnight_hint: 'Die Schicht läuft über Mitternacht und gehört zu dem Tag, auf den Sie sie gelegt haben.',
+  wf_save_shift: 'Schicht speichern',
+  wf_delete_shift: 'Schicht löschen',
+  wf_cancel: 'Abbrechen',
+  wf_shift_created: 'Die Schicht wurde angelegt.',
+  wf_shift_saved: 'Die Schicht wurde gespeichert.',
+  wf_shift_moved: 'Die Schicht wurde verschoben.',
+  wf_shift_deleted: 'Die Schicht wurde entfernt.',
+  wf_move_unavailable: 'Die Schicht hat keine brauchbaren Zeiten und kann erst verschoben werden, wenn diese neu gesetzt sind.',
+  wf_author_employees_only: 'Schichten werden in der Mitarbeiteransicht angelegt — eine Schicht gehört zu einer Person und einem Tag, und die Funktionsansicht hat keine Tageszeilen dafür.',
+
+  // Ein abgelehnter Schreibvorgang. Der Dienst vergleicht Ihren Entwurf mit dem tatsächlich
+  // gespeicherten Stand und lehnt die GESAMTE Änderung ab, wenn jemand anderes schneller war. Es
+  // wird nichts automatisch erneut gesendet: ein automatischer Versuch würde die fremde Änderung
+  // überschreiben.
+  wf_stale_title: 'Die Änderung wurde nicht gespeichert',
+  wf_stale_detail: 'Jemand anderes hat diese Woche geändert, seit Sie sie geöffnet haben. Ihre Änderung wurde nicht gespeichert, und nichts wurde überschrieben. Laden Sie die Woche neu, um den aktuellen Stand zu sehen, und nehmen Sie Ihre Änderung erneut vor.',
+  wf_stale_reload: 'Woche neu laden',
+  wf_conflict_frozen_title: 'Die Woche ist veröffentlicht',
+  wf_conflict_frozen: 'Diese Revision ist veröffentlicht und unveränderlich. Legen Sie einen neuen Entwurf für die Woche an, um Änderungen vorzunehmen.',
+  wf_conflict_invalid_title: 'Die Schicht kann nicht gespeichert werden',
+  wf_conflict_dst_title: 'Diese Uhrzeit ist nicht eindeutig',
+  wf_conflict_dst_ambiguous: 'Diese Uhrzeit gibt es in dieser Nacht zweimal (Zeitumstellung zurück). Wählen Sie eine Zeit außerhalb dieser Stunde.',
+  wf_conflict_dst_gap: 'Diese Uhrzeit gibt es in dieser Nacht nicht (Zeitumstellung vor). Wählen Sie eine Zeit außerhalb dieser Stunde.',
+
   // Workforce — die drei Ansichten derselben Woche bzw. desselben Monats. Plandays dritter Reiter
   // («Personalgruppen») fehlt bewusst: die Funktion, für die eine Schicht geplant wird, IST die
   // Gruppierungsachse.

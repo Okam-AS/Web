@@ -115,8 +115,18 @@ export class WorkforceClientBase {
     return payload;
   }
 
-  /** Every Workforce mutation carries an `Idempotency-Key`; the surface rejects one without it. */
-  _mutate (method, path, body) {
-    return this._request(method, path, { body, headers: { 'Idempotency-Key': newGuid() } });
+  /**
+   * Every Workforce mutation carries an `Idempotency-Key`; the surface rejects one without it.
+   *
+   * `extraHeaders` carries the preconditions an individual route adds on top — today only the batch
+   * assignment edit's `If-Match`. It is threaded through here rather than built at the call site so
+   * there stays exactly ONE place that decides what a workforce mutation's headers are; a second
+   * place is how the two lanes' duplicated discriminator drifted apart before this file existed.
+   */
+  _mutate (method, path, body, extraHeaders) {
+    return this._request(method, path, {
+      body,
+      headers: Object.assign({ 'Idempotency-Key': newGuid() }, extraHeaders || {})
+    });
   }
 }

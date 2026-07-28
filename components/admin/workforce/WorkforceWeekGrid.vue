@@ -35,7 +35,8 @@
         </thead>
 
         <tbody>
-          <!-- Pinned first: an unassigned shift is a first-class object, not a gap in someone's row. -->
+          <!-- Pinned first: an unassigned shift is a first-class object, not a gap in someone's row.
+               It is also the UNASSIGN target: dragging a shift here takes the person off it. -->
           <tr class="wf-grid__row wf-grid__row--open">
             <th class="wf-grid__person" scope="row">
               <span class="wf-grid__person-name">{{ $i('wf_open_shifts') }}</span>
@@ -45,14 +46,28 @@
               v-for="cell in grid.openRow.cells"
               :key="cell.isoDate"
               class="wf-grid__cell"
-              :class="{ 'is-conflict': cell.hasConflict }"
+              :class="cellClass(cell, grid.openRow)"
+              @dragover="onDragOver($event, grid.openRow, cell)"
+              @dragleave="onDragLeave(grid.openRow, cell)"
+              @drop="onDrop($event, grid.openRow, cell)"
             >
-              <span
+              <!-- A real button only where it does something. A DISABLED button suppresses its own
+                   `title` in some browsers, and that tooltip is where the paid time, the overnight
+                   flag, the note and the two clash sentences live — so a read-only week keeps the
+                   plain span it always had rather than losing them to an affordance it cannot use. -->
+              <component
+                :is="canAuthor ? 'button' : 'span'"
                 v-for="shift in cell.shifts"
                 :key="shift.id"
+                :type="canAuthor ? 'button' : null"
                 class="wf-grid__shift wf-grid__shift--open"
-                :class="{ 'is-conflict': shift.isConflicting }"
+                :class="shiftClass(shift)"
                 :title="shiftTitle(shift)"
+                :disabled="(canAuthor && busy) || null"
+                :draggable="canAuthor && !busy"
+                @dragstart="onDragStart(shift)"
+                @dragend="onDragEnd"
+                @click="onEdit(shift, cell)"
               >
                 <span class="wf-grid__shift-time">{{ shiftTime(shift) }}</span>
                 <span v-if="shift.roleName" class="wf-grid__shift-role">{{ shift.roleName }}</span>
@@ -61,7 +76,17 @@
                   class="wf-grid__shift-cost"
                   :class="shiftCostClass(shift)"
                 >{{ shiftCostLabel(shift) }}</span>
-              </span>
+              </component>
+              <button
+                v-if="canAuthor"
+                type="button"
+                class="wf-grid__add"
+                :disabled="busy"
+                :title="$i('wf_add_open_shift')"
+                @click="onCreate(grid.openRow, cell)"
+              >
+                +
+              </button>
             </td>
             <td class="wf-grid__num">
               {{ hours(grid.openRow.totals.minutes) }}
@@ -92,14 +117,24 @@
               v-for="cell in row.cells"
               :key="cell.isoDate"
               class="wf-grid__cell"
-              :class="{ 'is-conflict': cell.hasConflict, 'is-external-clash': cell.hasExternalClash }"
+              :class="cellClass(cell, row)"
+              @dragover="onDragOver($event, row, cell)"
+              @dragleave="onDragLeave(row, cell)"
+              @drop="onDrop($event, row, cell)"
             >
-              <span
+              <component
+                :is="canAuthor ? 'button' : 'span'"
                 v-for="shift in cell.shifts"
                 :key="shift.id"
+                :type="canAuthor ? 'button' : null"
                 class="wf-grid__shift"
-                :class="{ 'is-conflict': shift.isConflicting, 'is-external-clash': shift.hasExternalClash }"
+                :class="shiftClass(shift)"
                 :title="shiftTitle(shift)"
+                :disabled="(canAuthor && busy) || null"
+                :draggable="canAuthor && !busy"
+                @dragstart="onDragStart(shift)"
+                @dragend="onDragEnd"
+                @click="onEdit(shift, cell)"
               >
                 <span class="wf-grid__shift-time">{{ shiftTime(shift) }}</span>
                 <span v-if="shift.roleName" class="wf-grid__shift-role">{{ shift.roleName }}</span>
@@ -108,7 +143,17 @@
                   class="wf-grid__shift-cost"
                   :class="shiftCostClass(shift)"
                 >{{ shiftCostLabel(shift) }}</span>
-              </span>
+              </component>
+              <button
+                v-if="canAuthor"
+                type="button"
+                class="wf-grid__add"
+                :disabled="busy"
+                :title="$i('wf_add_shift_for', { name: row.name })"
+                @click="onCreate(row, cell)"
+              >
+                +
+              </button>
               <span
                 v-for="marker in cell.markers"
                 :key="marker"
@@ -259,12 +304,31 @@ export default {
     currency: {
       type: String,
       default: null
+    },
+    // Whether this week can be written to at all. The page decides it (scheduler capability, the
+    // draft view, a revision that resolved, and an `If-Match` token it actually holds); the grid only
+    // obeys it. False means the grid draws no affordance whatsoever rather than offering one that
+    // would be refused.
+    canAuthor: {
+      type: Boolean,
+      default: false
+    },
+    // A write is in flight. Every affordance is disabled — the grid NEVER draws the pending result,
+    // because a cell showing a shift the server has not confirmed is a state nobody read.
+    busy: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
       // One mark for every unknown in the grid, so "we do not know" never looks like a number.
-      unknownMark: '—'
+      unknownMark: '—',
+      // The shift being dragged, held here rather than on the drag event's `dataTransfer`: the payload
+      // is a live object this component already has, and `dataTransfer` is string-only.
+      draggingId: null,
+      // The (row, day) currently under the pointer, so exactly one cell can light up as the target.
+      dropTargetKey: null
     };
   },
   computed: {
@@ -320,6 +384,84 @@ export default {
     }
   },
   methods: {
+    // --- authoring -----------------------------------------------------------------------------
+    //
+    // The grid emits INTENT and performs nothing: no request, no optimistic chip, no local total. The
+    // page owns the client, the `If-Match` token and what the server answered, which is why a failed
+    // write cannot leave a shift on screen that was never written.
+
+    // Which row and which day a cell is — the two coordinates every authoring event carries. The open
+    // row is not a person, so its `staffMemberId` is null: dropping a shift there UNASSIGNS it.
+    cellTarget (row, cell) {
+      return {
+        isoDate: cell.isoDate,
+        staffMemberId: row.isOpenRow ? null : row.staffMemberId,
+        isOpenRow: !!row.isOpenRow,
+        rowName: row.name || null
+      };
+    },
+    targetKey (row, cell) {
+      return row.key + '|' + cell.isoDate;
+    },
+    cellClass (cell, row) {
+      return {
+        'is-conflict': cell.hasConflict,
+        'is-external-clash': cell.hasExternalClash,
+        'is-authorable': this.canAuthor,
+        'is-drop-target': this.dropTargetKey === this.targetKey(row, cell)
+      };
+    },
+    shiftClass (shift) {
+      return {
+        'is-conflict': shift.isConflicting,
+        'is-external-clash': shift.hasExternalClash,
+        'is-dragging': this.draggingId === shift.id
+      };
+    },
+    onCreate (row, cell) {
+      this.$emit('create', this.cellTarget(row, cell));
+    },
+    onEdit (shift, cell) {
+      if (!this.canAuthor) { return; }
+      this.$emit('edit', { shift, isoDate: cell.isoDate });
+    },
+    onDragStart (shift) {
+      this.draggingId = shift.id;
+    },
+    onDragEnd () {
+      this.draggingId = null;
+      this.dropTargetKey = null;
+    },
+    // `preventDefault` is what makes a cell a legal drop target at all; without it the browser
+    // refuses the drop and the move silently never happens.
+    onDragOver (event, row, cell) {
+      if (!this.canAuthor || this.busy || !this.draggingId) { return; }
+      event.preventDefault();
+      this.dropTargetKey = this.targetKey(row, cell);
+    },
+    onDragLeave (row, cell) {
+      if (this.dropTargetKey === this.targetKey(row, cell)) { this.dropTargetKey = null; }
+    },
+    onDrop (event, row, cell) {
+      if (!this.canAuthor || this.busy || !this.draggingId) { return; }
+      event.preventDefault();
+      const id = this.draggingId;
+      this.onDragEnd();
+      const shift = this.findShift(id);
+      // A shift that vanished from the model mid-drag has no honest payload, so nothing is emitted.
+      if (shift) { this.$emit('move', Object.assign({ shift }, this.cellTarget(row, cell))); }
+    },
+    findShift (id) {
+      for (const row of [this.grid.openRow].concat(this.grid.rows)) {
+        for (const cell of row.cells) {
+          for (const shift of cell.shifts) {
+            if (shift.id === id) { return shift; }
+          }
+        }
+      }
+      return null;
+    },
+
     // The day columns are civil dates, so they are formatted as UTC — formatting them in the
     // viewer's zone would relabel the store's Monday for anyone reading from another country.
     civilDate (day) {
@@ -490,8 +632,22 @@ export default {
 .wf-grid__cell.is-external-clash { background: #fffbeb; }
 .wf-grid__cell.is-conflict { background: rgba(239, 68, 68, 0.1); }
 
-.wf-grid__shift { display: block; margin-bottom: 4px; padding: 5px 8px; border-radius: 6px; background: rgba(27, 183, 118, 0.12); border-left: 3px solid #1bb776; }
+.wf-grid__shift { display: block; width: 100%; margin-bottom: 4px; padding: 5px 8px; border-radius: 6px; background: rgba(27, 183, 118, 0.12); border: none; border-left: 3px solid #1bb776; text-align: left; font: inherit; }
+.wf-grid__shift:not(:disabled) { cursor: grab; }
+.wf-grid__shift:not(:disabled):hover { background: rgba(27, 183, 118, 0.2); }
+.wf-grid__shift:focus-visible { outline: 2px solid #1bb776; outline-offset: 1px; }
+.wf-grid__shift.is-dragging { opacity: 0.45; }
 .wf-grid__shift--open { background: #fff; border: 1px dashed #cbd5e0; border-left: 3px dashed #94a3b8; }
+.wf-grid__shift--open:not(:disabled):hover { background: #f1f5f9; }
+
+/* The create affordance. Held at low contrast until the cell is hovered or it takes focus, so seven
+   columns of plus signs do not compete with the shifts themselves — but it is always in the tab
+   order, because a schedule that can only be built with a mouse cannot be built by everyone. */
+.wf-grid__add { display: block; width: 100%; padding: 2px 0; border: 1px dashed #e2e8f0; border-radius: 6px; background: none; color: #cbd5e0; font-size: 0.9rem; line-height: 1.2; cursor: pointer; opacity: 0; transition: opacity 0.15s ease; }
+.wf-grid__cell:hover .wf-grid__add, .wf-grid__add:focus { opacity: 1; }
+.wf-grid__add:hover { border-color: #1bb776; color: #159f63; }
+.wf-grid__add:disabled { cursor: not-allowed; }
+.wf-grid__cell.is-drop-target { background: rgba(27, 183, 118, 0.14); outline: 2px dashed #1bb776; outline-offset: -2px; }
 .wf-grid__shift.is-external-clash { border-left-color: #d97706; }
 .wf-grid__shift.is-conflict { background: rgba(239, 68, 68, 0.14); border-left-color: #ef4444; }
 .wf-grid__shift-time { display: block; color: #292c34; font-size: 0.82rem; font-weight: 600; }

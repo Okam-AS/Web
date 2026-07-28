@@ -2472,6 +2472,45 @@ export default {
   wf_published_ok: 'Publisert til {count} mottakere.',
   wf_generic_error: 'Noe gikk galt.',
 
+  // Å legge inn vakter. Alt under handler om ÉN skriving: PUT .../assignments:batch. Ingen av
+  // tekstene lover et beløp — lønnen prises av tjenesten og leses av svaret, aldri regnet ut her.
+  wf_add_shift_for: 'Legg til vakt for {name}',
+  wf_add_open_shift: 'Legg til ledig vakt',
+  wf_new_shift: 'Ny vakt',
+  wf_edit_shift: 'Endre vakt',
+  wf_field_person: 'Ansatt',
+  wf_field_role: 'Funksjon',
+  wf_field_day: 'Dag',
+  wf_field_start: 'Fra',
+  wf_field_end: 'Til',
+  wf_field_unpaid_break: 'Ubetalt pause (min)',
+  wf_field_note: 'Notat',
+  wf_open_option: 'Ledig vakt (ingen ansatt)',
+  wf_editor_roles_unknown: 'Funksjonslisten er ikke hentet. Listen over kan derfor være kortere enn butikkens — den er ikke tom fordi butikken mangler funksjoner.',
+  wf_overnight_hint: 'Vakten går over midnatt og hører til dagen du la den på.',
+  wf_save_shift: 'Lagre vakt',
+  wf_delete_shift: 'Slett vakt',
+  wf_cancel: 'Avbryt',
+  wf_shift_created: 'Vakten er lagt inn.',
+  wf_shift_saved: 'Vakten er lagret.',
+  wf_shift_moved: 'Vakten er flyttet.',
+  wf_shift_deleted: 'Vakten er fjernet.',
+  wf_move_unavailable: 'Vakten mangler gyldige klokkeslett og kan ikke flyttes uten at de settes på nytt.',
+  wf_author_employees_only: 'Vakter legges inn i medarbeidervisningen — en vakt hører til en person og en dag, og funksjonsvisningen har ingen dagrader å plassere den i.',
+
+  // Avvist skriving. Tjenesten sammenligner utkastet ditt med det som faktisk står lagret, og
+  // avviser HELE endringen hvis noen andre har rukket å endre uken. Ingenting sendes på nytt
+  // automatisk: en automatisk gjentagelse ville skrive over den andres endring.
+  wf_stale_title: 'Endringen ble ikke lagret',
+  wf_stale_detail: 'Noen andre har endret denne uken siden du åpnet den. Endringen din er ikke lagret, og ingenting er overskrevet. Hent uken på nytt for å se hva som står der nå, og legg inn endringen din igjen.',
+  wf_stale_reload: 'Hent uken på nytt',
+  wf_conflict_frozen_title: 'Uken er publisert',
+  wf_conflict_frozen: 'Denne revisjonen er publisert og kan ikke endres. Opprett et nytt utkast for uken for å gjøre endringer.',
+  wf_conflict_invalid_title: 'Vakten kan ikke lagres',
+  wf_conflict_dst_title: 'Klokkeslettet finnes ikke entydig',
+  wf_conflict_dst_ambiguous: 'Klokkeslettet finnes to ganger denne natten (vintertid settes tilbake). Velg et tidspunkt utenfor den timen.',
+  wf_conflict_dst_gap: 'Klokkeslettet finnes ikke denne natten (sommertid settes fram). Velg et tidspunkt utenfor den timen.',
+
   // Bemanning — de tre visningene av samme uke/måned.
   // Planday har en tredje fane, «Personalgrupper». Okam har den bevisst ikke: funksjonen (rollen)
   // en vakt settes opp med ER gruppeaksen, og to lister ville måtte holdes i sync for hånd.

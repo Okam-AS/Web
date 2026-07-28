@@ -12,6 +12,7 @@
 //   GET  /workforce/stores/{storeId}/schedules/external-commitments?from&to  #23  WorkforceSchedulesController
 //   GET  /workforce/stores/{storeId}/requests?kind&state                    #23  WorkforceRequestsController
 //   POST /workforce/stores/{storeId}/schedules/drafts                       #16  WorkforceSchedulesController
+//   PUT  /workforce/stores/{storeId}/schedules/{revisionId}/assignments:batch #18 WorkforceSchedulesController
 //   POST /workforce/stores/{storeId}/schedules/{revisionId}/validate        #19  WorkforceSchedulesController
 //   POST /workforce/stores/{storeId}/schedules/{revisionId}/publish         #20  WorkforceSchedulesController
 //   GET  /workforce/stores/{storeId}/schedules/publication-history          #21  WorkforceSchedulesController
@@ -86,6 +87,34 @@ export class WorkforceScheduleService extends WorkforceClientBase {
 
   CreateDraft (storeId, request) {
     return this._mutate('POST', '/workforce/stores/' + storeId + '/schedules/drafts', request);
+  }
+
+  /**
+   * #18: the batch assignment edit — the ONE write that puts a shift on the schedule. Create (null
+   * `shiftAssignmentId`), edit (an existing id) and cancel (`delete:true`) all travel through it, and
+   * a batch is a DELTA: assignments it does not mention are left exactly as they are.
+   *
+   * THE `If-Match` IS THE POINT. The server recomputes the draft's checksum before it writes anything
+   * and refuses the whole batch when the submitted token is not that checksum — so two managers
+   * editing the same week cannot silently overwrite each other. The token is the `eTag` the range read
+   * (or the previous batch) answered with; `WorkforceScheduleService` reads it off the body, never off
+   * the `ETag` response header, because the API's CORS policy exposes no custom response header and
+   * `ETag` is not on the CORS-safelist — a browser simply cannot see it cross-origin.
+   *
+   * Quoted on the way out (the RFC 9110 entity-tag form). The server trims quotes before comparing, so either form is
+   * accepted; this one matches the `ETag` header it emits.
+   *
+   * The response is a full range document for the revision — the recomputed assignment set, the new
+   * `eTag` and the recomputed `cost`, all projected from the SAME in-transaction rows so they describe
+   * one moment. It is adopted wholesale by the caller; nothing downstream recomputes a total.
+   */
+  BatchAssignments (storeId, revisionId, etag, request) {
+    return this._mutate(
+      'PUT',
+      '/workforce/stores/' + storeId + '/schedules/' + revisionId + '/assignments:batch',
+      request,
+      { 'If-Match': '"' + etag + '"' }
+    );
   }
 
   Validate (storeId, revisionId) {

@@ -111,7 +111,7 @@
              It is surfaced verbatim: the same-store variant names the shift (and the grid marks it),
              the cross-store variant deliberately names nothing, and this says so rather than
              inventing a store. -->
-        <div v-if="conflict" class="wf-page__conflict">
+        <div v-if="conflict && !(staleWrite && editor)" class="wf-page__conflict">
           <strong>{{ conflictHeadline }}</strong>
           <span>{{ conflictDetail }}</span>
         </div>
@@ -132,9 +132,131 @@
              The role and month pivots are given none: the API totals cost per shift, per day and per
              range, never per role and never per month, and a pivot handed a formatter but no server
              figure is one refactor away from summing the chips itself. -->
-        <WorkforceWeekGrid v-if="isEmployees" :grid="grid" :locale="locale" :currency="currency" />
+        <WorkforceWeekGrid
+          v-if="isEmployees"
+          :grid="grid"
+          :locale="locale"
+          :currency="currency"
+          :can-author="canAuthor"
+          :busy="busy"
+          @create="openCreate"
+          @edit="openEdit"
+          @move="moveShift"
+        />
+        <!-- The role pivot re-groups the same week but is not an authoring surface: a shift belongs to
+             a person and a day, and the role rows carry neither. Editing stays on the pivot that has
+             both axes rather than being half-answered on one that has one. -->
+        <p v-if="isRoles && canAuthorHere" class="wf-page__notice">
+          {{ $i('wf_author_employees_only') }}
+        </p>
         <WorkforceRoleGrid v-else-if="isRoles" :grid="roleGrid" :locale="locale" />
         <WorkforceMonthGrid v-else :grid="monthGrid" :locale="locale" />
+
+        <!-- The shift editor. It is the ONE place a shift is authored: the grid's plus button, a chip
+             click and a drag all land here or go straight through it, so there is a single set of
+             rules about what a shift is rather than one per affordance.
+
+             It holds no money and computes none. The wage a shift costs is priced by the backend from
+             effective-dated rates and comes back on the response; a figure invented here while the
+             manager types would be a second, disagreeing source for the number in the footer. -->
+        <section v-if="editor" class="wf-editor">
+          <div class="wf-editor__head">
+            <h2 class="wf-page__section-title">
+              {{ editor.shiftAssignmentId ? $i('wf_edit_shift') : $i('wf_new_shift') }}
+            </h2>
+            <button class="wf-editor__close" :disabled="busy" @click="closeEditor">
+              ✕
+            </button>
+          </div>
+
+          <!-- A refused write, said in full. The manager's edit is still in the fields above it: the
+               only way forward is to re-read the week and decide again, and that is a button they
+               press rather than something that happens to them. -->
+          <div v-if="staleWrite" class="wf-editor__stale">
+            <strong>{{ $i('wf_stale_title') }}</strong>
+            <span>{{ $i('wf_stale_detail') }}</span>
+            <button class="wf-page__btn" :disabled="busy" @click="reloadAfterStale">
+              {{ $i('wf_stale_reload') }}
+            </button>
+          </div>
+
+          <div class="wf-editor__fields">
+            <label class="wf-editor__field">
+              <span class="wf-editor__label">{{ $i('wf_field_person') }}</span>
+              <select v-model="editor.staffMemberId" :disabled="busy">
+                <option :value="null">{{ $i('wf_open_option') }}</option>
+                <option v-for="option in personOptions" :key="option.value" :value="option.value">
+                  {{ option.label }}
+                </option>
+              </select>
+            </label>
+
+            <label class="wf-editor__field">
+              <span class="wf-editor__label">{{ $i('wf_field_role') }}</span>
+              <select v-model="editor.roleId" :disabled="busy">
+                <option :value="null">{{ $i('wf_role_none') }}</option>
+                <option v-for="option in roleOptions" :key="option.value" :value="option.value">
+                  {{ option.label }}
+                </option>
+              </select>
+            </label>
+
+            <label class="wf-editor__field">
+              <span class="wf-editor__label">{{ $i('wf_field_day') }}</span>
+              <select v-model="editor.dayKey" :disabled="busy">
+                <option v-for="day in dayOptions" :key="day.value" :value="day.value">
+                  {{ day.label }}
+                </option>
+              </select>
+            </label>
+
+            <label class="wf-editor__field wf-editor__field--narrow">
+              <span class="wf-editor__label">{{ $i('wf_field_start') }}</span>
+              <input v-model="editor.start" type="time" :disabled="busy">
+            </label>
+
+            <label class="wf-editor__field wf-editor__field--narrow">
+              <span class="wf-editor__label">{{ $i('wf_field_end') }}</span>
+              <input v-model="editor.end" type="time" :disabled="busy">
+            </label>
+
+            <label class="wf-editor__field wf-editor__field--narrow">
+              <span class="wf-editor__label">{{ $i('wf_field_unpaid_break') }}</span>
+              <input v-model.number="editor.unpaidBreakMinutes" type="number" min="0" step="5" :disabled="busy">
+            </label>
+
+            <label class="wf-editor__field wf-editor__field--wide">
+              <span class="wf-editor__label">{{ $i('wf_field_note') }}</span>
+              <input v-model="editor.note" type="text" :disabled="busy">
+            </label>
+          </div>
+
+          <p v-if="!rolesKnown" class="wf-editor__hint">
+            {{ $i('wf_editor_roles_unknown') }}
+          </p>
+          <!-- An overnight shift keeps the DAY it was placed on: the backend takes the business date
+               from the submitted start, so a 22:00–02:00 close belongs to the evening it began. -->
+          <p v-if="editorCrossesMidnight" class="wf-editor__hint">
+            {{ $i('wf_overnight_hint') }}
+          </p>
+
+          <div class="wf-editor__actions">
+            <button class="wf-page__btn" :disabled="busy || !canSaveShift" @click="saveShift">
+              {{ $i('wf_save_shift') }}
+            </button>
+            <button
+              v-if="editor.shiftAssignmentId"
+              class="wf-page__btn wf-page__btn--danger"
+              :disabled="busy"
+              @click="deleteShift"
+            >
+              {{ $i('wf_delete_shift') }}
+            </button>
+            <button class="wf-page__btn wf-page__btn--ghost" :disabled="busy" @click="closeEditor">
+              {{ $i('wf_cancel') }}
+            </button>
+          </div>
+        </section>
 
         <section v-if="!isMonth && validation" class="wf-page__validation">
           <h2 class="wf-page__section-title">
@@ -173,7 +295,16 @@ import WorkforceMonthGrid from '~/components/admin/workforce/WorkforceMonthGrid.
 import { isWorkforceApiError, toUtcRangeParam } from '~/utils/workforce/api-client';
 import { WorkforceScheduleService } from '~/utils/workforce/schedule-client';
 import { weekRange, monthRange, isoWeekNumber } from '~/utils/workforce/week-range';
-import { buildWeekGrid, buildRoleGrid, markersFromRequests, DATA_UNKNOWN, DATA_NO_PLAN } from '~/utils/workforce/week-grid';
+import {
+  buildWeekGrid,
+  buildRoleGrid,
+  markersFromRequests,
+  toAssignmentInput,
+  toDeleteInput,
+  isAuthorable,
+  DATA_UNKNOWN,
+  DATA_NO_PLAN
+} from '~/utils/workforce/week-grid';
 import { buildMonthGrid } from '~/utils/workforce/month-grid';
 
 const VIEW_DRAFT = 'draft';
@@ -215,6 +346,10 @@ export default {
       monthWeeks: null,
       validation: null,
       conflict: null,
+      // The open shift editor, or null. It holds the manager's INTENT and nothing the server has
+      // said: no id it invented, no total it computed. It survives a refused write on purpose — a
+      // stale-revision 409 must not throw away what somebody just typed.
+      editor: null,
       toast: { show: false, message: '', type: 'success' },
       toastTimer: null
     };
@@ -330,6 +465,82 @@ export default {
     canPublish () {
       return !this.isMonth && this.isManager && this.view === VIEW_DRAFT && this.grid.state === 'Validated';
     },
+
+    /**
+     * Whether this week can be WRITTEN to, stated the same way the backend states it rather than
+     * inferred from a 409 after the fact.
+     *
+     * `WorkforceScheduler` is the capability the batch edit requires. A PUBLISHED revision is
+     * terminal server-side — it answers `workforce.revision-not-editable` — and the draft view never
+     * resolves one, so both halves of that rule are asserted here rather than trusted to one. A
+     * VALIDATED revision IS editable; the edit simply sends it back to Draft, which is why publishing
+     * disappears after one (see `canPublish`) instead of the receipt going quietly stale.
+     *
+     * The `If-Match` token is part of the precondition, not a detail: without it there is nothing to
+     * write against, and offering an affordance that is guaranteed to be refused is worse than
+     * offering none.
+     */
+    canAuthorHere () {
+      return !this.isMonth &&
+        this.isScheduler &&
+        this.view === VIEW_DRAFT &&
+        !!this.grid.scheduleRevisionId &&
+        !!this.grid.etag &&
+        this.grid.state !== 'Published';
+    },
+    // The employee pivot is the only one with both axes a shift needs (a person and a day), so it is
+    // the only one that draws the affordance.
+    canAuthor () {
+      return this.isEmployees && this.canAuthorHere;
+    },
+
+    /** True while the LAST write was refused as stale. Cleared by any new attempt or a reload. */
+    staleWrite () {
+      return !!(this.conflict && this.conflict.conflictKind === 'stale-revision');
+    },
+
+    // The same people the grid draws, in the same order — including anyone off the roster who already
+    // holds a shift, because a person the grid shows must be a person the editor can name.
+    personOptions () {
+      return this.grid.rows
+        .filter(row => row.staffMemberId)
+        .map(row => ({ value: row.staffMemberId, label: row.name }));
+    },
+    rolesKnown () {
+      return Array.isArray(this.roles);
+    },
+    /**
+     * The role axis, plus — when the list has not answered — the role the shift being edited already
+     * carries. Without that fallback, saving an untouched shift would silently strip its role, since
+     * the item is a full replace and a role absent from the select is a role absent from the payload.
+     */
+    roleOptions () {
+      const options = (this.roles || [])
+        .filter(role => role && role.roleId)
+        .map(role => ({ value: role.roleId, label: role.name || role.roleId }));
+
+      const current = this.editor && this.editor.roleId;
+      if (current && !options.some(option => option.value === current)) {
+        options.push({ value: current, label: (this.editor.roleName || current) });
+      }
+      return options;
+    },
+    dayOptions () {
+      const days = this.week ? this.week.days : [];
+      return days.map(day => ({
+        value: day.isoDate,
+        label: new Intl.DateTimeFormat(this.locale, { weekday: 'long', day: '2-digit', month: '2-digit', timeZone: 'UTC' })
+          .format(new Date(Date.UTC(day.year, day.month - 1, day.day)))
+      }));
+    },
+    canSaveShift () {
+      return this.canAuthorHere && isAuthorable(this.editor);
+    },
+    // An end that is not after the start is the NEXT local day — the same rule the payload builder
+    // applies, said out loud so a manager knows which day the shift will be filed under.
+    editorCrossesMidnight () {
+      return !!(this.editor && this.editor.start && this.editor.end && this.editor.end <= this.editor.start);
+    },
     stateBadge () {
       if (this.grid.dataState === DATA_UNKNOWN) { return { label: this.$i('wf_state_unknown'), tone: 'unknown' }; }
       if (this.grid.dataState === DATA_NO_PLAN) { return { label: this.$i('wf_state_none'), tone: 'none' }; }
@@ -363,6 +574,11 @@ export default {
       switch (this.conflict.conflictKind) {
       case 'hidden-engagement-conflict': return this.$i('wf_conflict_hidden_title');
       case 'assignment-overlap': return this.$i('wf_conflict_overlap_title');
+      case 'stale-revision': return this.$i('wf_stale_title');
+      case 'revision-not-editable': return this.$i('wf_conflict_frozen_title');
+      case 'assignment-invalid': return this.$i('wf_conflict_invalid_title');
+      case 'dst-ambiguous-offset-required':
+      case 'dst-nonexistent-time': return this.$i('wf_conflict_dst_title');
       default: return this.$i('wf_conflict_generic_title');
       }
     },
@@ -371,6 +587,13 @@ export default {
       switch (this.conflict.conflictKind) {
       case 'hidden-engagement-conflict': return this.$i('wf_conflict_hidden');
       case 'assignment-overlap': return this.$i('wf_conflict_overlap');
+      case 'stale-revision': return this.$i('wf_stale_detail');
+      case 'revision-not-editable': return this.$i('wf_conflict_frozen');
+      // The server names the offending field and says why in prose it wrote for this purpose. It is
+      // shown verbatim rather than mapped to a second, thinner sentence per field.
+      case 'assignment-invalid': return this.conflict.message;
+      case 'dst-ambiguous-offset-required': return this.$i('wf_conflict_dst_ambiguous');
+      case 'dst-nonexistent-time': return this.$i('wf_conflict_dst_gap');
       default: return this.conflict.message;
       }
     }
@@ -423,6 +646,9 @@ export default {
       this.loading = true;
       this.conflict = null;
       this.validation = null;
+      // The editor is written against a revision and an `If-Match` token that this read replaces, and
+      // the shift it points at may not survive it. It closes rather than being carried across.
+      this.editor = null;
       // Cleared to unknown, not to empty: a failed or in-flight read must not render as an empty
       // week, which is a different claim.
       this.range = null;
@@ -477,6 +703,7 @@ export default {
       this.loading = true;
       this.conflict = null;
       this.validation = null;
+      this.editor = null;
       this.monthWeeks = null;
 
       const weeks = await Promise.all(this.month.weeks.map(week =>
@@ -566,6 +793,160 @@ export default {
       }
     },
 
+    // --- authoring ------------------------------------------------------------------------------
+
+    /**
+     * The role axis, fetched on demand rather than on every load.
+     *
+     * It is needed only once a shift is being authored, and the employee pivot deliberately does not
+     * read it otherwise. A failure leaves `roles` null, which the editor reports as an UNKNOWN list —
+     * never as a store with no roles — and the current role stays selectable regardless.
+     */
+    async ensureRoles () {
+      if (this.roles || !this.storeId) { return; }
+      this.roles = await this._workforceScheduleService.ListRoles(this.storeId)
+        .then(roles => (Array.isArray(roles) ? roles : null))
+        .catch(() => null);
+    },
+
+    openCreate (target) {
+      if (!this.canAuthorHere) { return; }
+      this.conflict = null;
+      this.editor = {
+        shiftAssignmentId: null,
+        staffMemberId: target.staffMemberId,
+        roleId: null,
+        roleName: null,
+        dayKey: target.isoDate,
+        start: '',
+        end: '',
+        paidBreakMinutes: 0,
+        unpaidBreakMinutes: 0,
+        note: '',
+        // No existing shift, so no stored fold offset to preserve.
+        current: null
+      };
+      this.ensureRoles();
+    },
+
+    openEdit (event) {
+      if (!this.canAuthorHere) { return; }
+      const shift = event.shift;
+      this.conflict = null;
+      this.editor = {
+        shiftAssignmentId: shift.id,
+        staffMemberId: shift.staffMemberId,
+        roleId: shift.roleId,
+        roleName: shift.roleName,
+        dayKey: event.isoDate,
+        start: shift.start,
+        end: shift.end,
+        // Round-tripped, not defaulted: endpoint 18's item is a full replace, so a break dropped here
+        // would be a break deleted server-side — and the shift's paid time, and its wage, with it.
+        paidBreakMinutes: shift.paidBreakMinutes,
+        unpaidBreakMinutes: shift.unpaidBreakMinutes,
+        note: shift.note || '',
+        // The shift as the server last stated it, so an unchanged wall clock keeps its resolved
+        // DST-fold offset instead of the save being refused as ambiguous.
+        current: shift
+      };
+      this.ensureRoles();
+    },
+
+    closeEditor () {
+      this.editor = null;
+    },
+
+    /**
+     * A drag between cells: the shift keeps its clock and its every other field, and changes only the
+     * day it sits on and the person it belongs to. Dropping on the open row passes a null person,
+     * which is what UNASSIGNS it.
+     */
+    moveShift (event) {
+      const shift = event.shift;
+      // A shift whose instants were unusable has no honest wall clock to resubmit, and endpoint 18's
+      // item is a full replace — sending a guess would rewrite the times the server holds.
+      if (!shift.start || !shift.end) {
+        this.notify(this.$i('wf_move_unavailable'), 'error');
+        return Promise.resolve();
+      }
+
+      return this.submitBatch([toAssignmentInput({
+        shiftAssignmentId: shift.id,
+        staffMemberId: event.staffMemberId,
+        roleId: shift.roleId,
+        dayKey: event.isoDate,
+        start: shift.start,
+        end: shift.end,
+        paidBreakMinutes: shift.paidBreakMinutes,
+        unpaidBreakMinutes: shift.unpaidBreakMinutes,
+        note: shift.note,
+        current: shift
+      })], 'wf_shift_moved');
+    },
+
+    saveShift () {
+      if (!this.canSaveShift) { return Promise.resolve(); }
+      const created = !this.editor.shiftAssignmentId;
+      return this.submitBatch([toAssignmentInput(this.editor)], created ? 'wf_shift_created' : 'wf_shift_saved');
+    },
+
+    deleteShift () {
+      if (!this.editor || !this.editor.shiftAssignmentId) { return Promise.resolve(); }
+      return this.submitBatch([toDeleteInput(this.editor.shiftAssignmentId)], 'wf_shift_deleted');
+    },
+
+    /**
+     * The one write. Every authored change — create, move, reassign, unassign, edit, remove — is this
+     * call, because endpoint 18 is the only route on the surface that mutates an assignment at all.
+     *
+     * THE MONEY. What comes back is the whole revision as the server now holds it: the assignment set,
+     * the next `eTag` and the recomputed `cost`, all projected from the SAME in-transaction rows so
+     * they describe one moment. It is adopted whole and nothing here adds, adjusts or carries forward
+     * a figure — the backend rounds each shift once and each day and the week once over the UNROUNDED
+     * amounts, so any total this page arrived at by arithmetic would disagree with the one it calls
+     * true. A refetch is not used either: it would answer a LATER moment, which could fold in a
+     * second manager's edit and pair this week's footer with a set of shifts nobody wrote together.
+     *
+     * A FAILED WRITE CHANGES NOTHING ON SCREEN. `range` is left exactly as it was read, so the grid
+     * keeps showing a state that was actually answered rather than one this page hoped for.
+     */
+    async submitBatch (assignments, okKey) {
+      if (this.busy || !this.canAuthorHere) { return; }
+      this.busy = true;
+      this.conflict = null;
+      try {
+        const response = await this._workforceScheduleService.BatchAssignments(
+          this.storeId, this.grid.scheduleRevisionId, this.grid.etag, { assignments });
+
+        this.range = response;
+        // An edit knocks a Validated revision back to Draft, so the receipt on screen was produced
+        // against a revision that no longer exists. It is dropped rather than left to be read as
+        // current — and `canPublish`, which keys on the Validated state, closes with it.
+        this.validation = null;
+        this.editor = null;
+        this.notify(this.$i(okKey));
+      } catch (e) {
+        this.handleMutationError(e);
+      } finally {
+        this.busy = false;
+      }
+    },
+
+    /**
+     * The only way out of a stale write, and it is a deliberate act.
+     *
+     * The refusal carries the current checksum, and this page pointedly does NOT resubmit against it.
+     * Doing so would take the other manager's week as the base for an edit written against a week
+     * they had already replaced — the overwrite the precondition exists to prevent, performed
+     * automatically. Re-reading is the honest move: it shows what they did, and the manager decides
+     * again with their own edit still in front of them until they leave.
+     */
+    async reloadAfterStale () {
+      this.editor = null;
+      await this.load();
+    },
+
     handleMutationError (e) {
       if (isWorkforceApiError(e) && e.conflictKind) {
         this.conflict = e;
@@ -641,6 +1022,25 @@ export default {
 .wf-page__conflict { display: flex; flex-direction: column; gap: 3px; padding: 12px 16px; border-radius: 10px; background: rgba(239, 68, 68, 0.1); color: #b91c1c; margin-bottom: 12px; font-size: 0.86rem; }
 .wf-page__notice { padding: 10px 16px; border-radius: 10px; background: #f8f9fa; border: 1px dashed #e2e8f0; color: #64748b; margin-bottom: 12px; font-size: 0.86rem; }
 .wf-page__notice--warn { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
+
+.wf-page__btn--danger { background: #fff; color: #ef4444; border: 1px solid #ef4444; }
+
+.wf-editor { margin-top: 20px; padding: 18px 20px; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); }
+.wf-editor__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.wf-editor__head .wf-page__section-title { margin: 0; }
+.wf-editor__close { border: none; background: none; color: #94a3b8; font-size: 1rem; cursor: pointer; padding: 4px 8px; }
+.wf-editor__fields { display: flex; flex-wrap: wrap; gap: 12px; }
+.wf-editor__field { display: flex; flex-direction: column; gap: 4px; flex: 1 1 180px; }
+.wf-editor__field--narrow { flex: 0 1 120px; }
+.wf-editor__field--wide { flex: 2 1 260px; }
+.wf-editor__label { font-size: 0.74rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.03em; }
+.wf-editor__field select, .wf-editor__field input { padding: 9px 10px; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 0.88rem; color: #292c34; background: #fff; }
+.wf-editor__field select:focus, .wf-editor__field input:focus { outline: none; border-color: #1bb776; box-shadow: 0 0 0 3px rgba(27, 183, 118, 0.1); }
+.wf-editor__hint { margin: 10px 0 0; color: #94a3b8; font-size: 0.78rem; }
+.wf-editor__actions { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+/* A refused write, not a warning about one: it keeps the money-red weight of the conflict banner and
+   carries the only action that resolves it. */
+.wf-editor__stale { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 12px 16px; margin-bottom: 14px; border-radius: 10px; background: rgba(239, 68, 68, 0.1); color: #b91c1c; font-size: 0.86rem; }
 
 .wf-page__validation { margin-top: 24px; }
 .wf-page__section-title { font-size: 1.05rem; font-weight: 600; color: #292c34; margin: 0 0 6px; }

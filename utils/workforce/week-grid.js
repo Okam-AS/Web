@@ -134,11 +134,32 @@ function pad2 (n) {
   return String(n).padStart(2, '0');
 }
 
+// The instant re-expressed as if the store's wall clock were UTC, so the `getUTC*` accessors read out
+// store-local calendar and clock fields. The offset is the one the SERVER stamped on this assignment,
+// resolved at that instant, so a shift either side of a DST change reads correctly.
+function shiftIntoZone (instant, offsetMinutes) {
+  return instant ? new Date(instant.getTime() + (offsetMinutes || 0) * MINUTE_MS) : null;
+}
+
 /** Wall-clock `HH:mm` in the store zone, from the instant plus the offset the server stamped on it. */
 function localClock (instant, offsetMinutes) {
-  if (!instant) { return null; }
-  const shifted = new Date(instant.getTime() + (offsetMinutes || 0) * MINUTE_MS);
-  return pad2(shifted.getUTCHours()) + ':' + pad2(shifted.getUTCMinutes());
+  const shifted = shiftIntoZone(instant, offsetMinutes);
+  return shifted ? pad2(shifted.getUTCHours()) + ':' + pad2(shifted.getUTCMinutes()) : null;
+}
+
+/**
+ * The same wall clock as a full `YYYY-MM-DDTHH:mm:ss` stamp — endpoint 18's `localStart`/`localEnd`
+ * format, which is STORE-LOCAL wall clock and not UTC.
+ *
+ * Carried on every shift so an edit can round-trip the times the server already resolved rather than
+ * re-deriving them: re-saving an untouched shift then cannot move it by a rounding or an offset, and
+ * the DST-fold offset stays attached to the one instant it describes (see `toAssignmentInput`).
+ */
+export function wallClockStamp (instant, offsetMinutes) {
+  const shifted = shiftIntoZone(instant, offsetMinutes);
+  if (!shifted) { return null; }
+  return isoDate(shifted.getUTCFullYear(), shifted.getUTCMonth() + 1, shifted.getUTCDate()) +
+    'T' + pad2(shifted.getUTCHours()) + ':' + pad2(shifted.getUTCMinutes()) + ':' + pad2(shifted.getUTCSeconds());
 }
 
 /**
@@ -169,6 +190,9 @@ export function paidMinutesOf (assignment) {
  * forbids. See `buildRoleGrid` and `month-grid.js` for the two refusals.
  */
 export function toShift (assignment, cost) {
+  // `parseApiInstant` and not `new Date`: the batch response mixes the two serialisations ON THE SAME
+  // DOCUMENT — a row this very edit created carries `DateTimeKind.Utc` and serialises with a `Z`,
+  // while a row loaded from the column comes back `Unspecified` and serialises bare. Both denote UTC.
   const starts = parseApiInstant(assignment.startsUtc);
   const ends = parseApiInstant(assignment.endsUtc);
   return {
@@ -193,6 +217,19 @@ export function toShift (assignment, cost) {
     startsMs: starts ? starts.getTime() : null,
     endsMs: ends ? ends.getTime() : null,
     paidMinutes: paidMinutesOf(assignment),
+    // Carried so an EDIT can round-trip them. Endpoint 18's item is a full replace, not a patch: a
+    // field left off is written as its default, so a move that forgot the breaks would silently
+    // lengthen the shift's paid time — and with it the wage the backend prices from it.
+    paidBreakMinutes: numberOr(assignment.paidBreakMinutes, 0),
+    unpaidBreakMinutes: numberOr(assignment.unpaidBreakMinutes, 0),
+    // The store-local wall clock the server resolved this shift to, in endpoint 18's input format.
+    // An edit resubmits these rather than re-deriving them from the instants, so re-saving an
+    // untouched shift cannot move it — and so the fold offset below stays tied to the instant it
+    // describes rather than becoming a guess (see `toAssignmentInput`).
+    startWall: wallClockStamp(starts, assignment.startOffsetMinutes),
+    endWall: wallClockStamp(ends, assignment.endOffsetMinutes),
+    startOffsetMinutes: numberOr(assignment.startOffsetMinutes, null),
+    endOffsetMinutes: numberOr(assignment.endOffsetMinutes, null),
     // An assignment whose end falls on a later local date than its business date is an overnight
     // shift; it stays in its business-date column (the server's own day attribution) and says so.
     crossesMidnight: !!(ends && starts &&
@@ -203,6 +240,106 @@ export function toShift (assignment, cost) {
     // naming this shift in a 409 it already refused.
     hasExternalClash: false
   };
+}
+
+// --- authoring: what a write needs, derived from what the read answered ------------------------
+//
+// Everything below is PURE. It turns a manager's intent into endpoint 18's `ScheduleAssignmentInput`
+// and nothing else — no network, no optimism, and above all no arithmetic on money. A batch is a
+// DELTA: the items it carries are the only assignments the server touches, and what comes back is
+// the server's own recomputed week, which the caller adopts whole.
+
+/**
+ * The range ETag — the token every batch edit must echo in `If-Match`, and the whole of this
+ * surface's two-manager safety.
+ *
+ * READ OFF THE BODY, NOT THE `ETag` RESPONSE HEADER. The controller does set the header, but the
+ * API's default CORS policy exposes no custom response header and `ETag` is not on the CORS
+ * safelist — a browser cannot read it cross-origin at all, so the body is the only source there is.
+ *
+ * The wire name is `eTag`. The API serialises through ASP.NET Core's Newtonsoft defaults, whose
+ * camel-case strategy lowercases the leading run of capitals only up to the one followed by a
+ * lowercase letter, so `ETag` becomes `eTag` rather than `etag`. The other two spellings are read as
+ * well because getting this wrong does NOT fail loudly: a missing token reads as "unknown", the page
+ * then refuses to author at all, and a manager meets a grid that silently cannot be edited instead
+ * of an error. Exactly one of the three can ever be present.
+ */
+export function readETag (range) {
+  if (!range || typeof range !== 'object') { return null; }
+  const value = range.eTag || range.etag || range.ETag;
+  return typeof value === 'string' && value ? value : null;
+}
+
+/** The next `YYYY-MM-DD` after a day key, stepped as a CIVIL date (no 24h arithmetic). */
+function nextDayKey (dayKey) {
+  const parts = String(dayKey).split('-');
+  const next = new Date(Date.UTC(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]) + 1));
+  return isoDate(next.getUTCFullYear(), next.getUTCMonth() + 1, next.getUTCDate());
+}
+
+/** `HH:mm`, and nothing else. Anything the manager could not finish typing is not a time. */
+function isClock (value) {
+  return typeof value === 'string' && /^([01]\d|2[0-3]):[0-5]\d$/.test(value);
+}
+
+/**
+ * Whether an edit is complete enough to be a request at all. Deliberately NOT a re-implementation of
+ * the server's rules: breaks fitting inside the shift, the staff member's active window, the role's
+ * effective window and the revision's date range are all decided server-side and answered as a typed
+ * 422 naming the offending field. This asks only whether a payload can be built.
+ */
+export function isAuthorable (edit) {
+  const e = edit || {};
+  return !!e.dayKey && isClock(e.start) && isClock(e.end) && e.start !== e.end;
+}
+
+/**
+ * One authored shift as endpoint 18's `ScheduleAssignmentInput`.
+ *
+ * TIMES ARE STORE-LOCAL WALL CLOCK, NOT UTC — `localStart`/`localEnd` bind as bare `DateTime` and are
+ * resolved against the store's own zone server-side. Two consequences the whole placement rests on:
+ * the day column a manager drops a shift into IS its business date (the server takes
+ * `LocalBusinessDate` from `localStart.Date`), and an end that is not after the start belongs to the
+ * NEXT local date — which is how a 22:00–02:00 closing shift stays filed under the evening it
+ * belongs to. Converting to UTC here would move the shift a whole offset and file it on the wrong day.
+ *
+ * THE FOLD OFFSET IS ECHOED ONLY WHEN THE WALL CLOCK IS UNCHANGED. The server consults an explicit
+ * offset for one case only — a wall time that occurs twice on a fall-back day — and refuses one that
+ * is not valid for that fold. Echoing the shift's stored offset when its clock has not moved is
+ * therefore preservation: the offset is a fact about that very instant. Echoing it after a move would
+ * be a guess about which of the two hours a manager meant, so the offset is dropped and the server
+ * asks, which is the honest answer.
+ */
+export function toAssignmentInput (edit) {
+  const e = edit || {};
+  const localStart = e.dayKey + 'T' + e.start + ':00';
+  const localEnd = (e.end > e.start ? e.dayKey : nextDayKey(e.dayKey)) + 'T' + e.end + ':00';
+  const current = e.current || null;
+
+  return {
+    // Null creates; an existing id edits. The server mints the new id and it is only knowable from
+    // the response's assignment set, which is why nothing here invents or predicts one.
+    shiftAssignmentId: e.shiftAssignmentId || null,
+    delete: false,
+    // Null IS the open shift — a first-class planning state, not an absent value.
+    staffMemberId: e.staffMemberId || null,
+    roleId: e.roleId || null,
+    localStart,
+    localEnd,
+    startOffsetMinutes: current && current.startWall === localStart ? current.startOffsetMinutes : null,
+    endOffsetMinutes: current && current.endWall === localEnd ? current.endOffsetMinutes : null,
+    paidBreakMinutes: numberOr(e.paidBreakMinutes, 0),
+    unpaidBreakMinutes: numberOr(e.unpaidBreakMinutes, 0),
+    note: e.note || null
+  };
+}
+
+/**
+ * A removal. Server-side it is a CANCEL that keeps the row for lineage, so the shift leaves the grid
+ * and reappears in the response's `tombstones` — which is why nothing here calls it a hard delete.
+ */
+export function toDeleteInput (shiftAssignmentId) {
+  return { shiftAssignmentId, delete: true };
 }
 
 /**
@@ -596,6 +733,11 @@ export function buildWeekGrid (options) {
     revisionNumber: (range && typeof range.revisionNumber === 'number') ? range.revisionNumber : null,
     publicationNumber: (range && typeof range.publicationNumber === 'number') ? range.publicationNumber : null,
     scheduleRevisionId: (range && range.scheduleRevisionId) || null,
+    // The `If-Match` token for THIS revision, and only when a revision actually resolved: the read
+    // answers a placeholder checksum for a range holding no revision, and echoing that as a
+    // precondition would be asserting a base state that does not exist. Null disables authoring
+    // rather than letting a write be attempted against nothing.
+    etag: counted ? readETag(range) : null,
     timeZoneId: (range && range.timeZoneId) || null,
     asOfUtc: (range && range.asOfUtc) || null,
     hiddenConflict,

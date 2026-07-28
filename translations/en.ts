@@ -2429,6 +2429,45 @@ export default {
   wf_published_ok: 'Published to {count} recipients.',
   wf_generic_error: 'Something went wrong.',
 
+  // Authoring shifts. Every string below belongs to ONE write: PUT .../assignments:batch. None of
+  // them promises an amount — the wage is priced by the service and read off its answer.
+  wf_add_shift_for: 'Add a shift for {name}',
+  wf_add_open_shift: 'Add an open shift',
+  wf_new_shift: 'New shift',
+  wf_edit_shift: 'Edit shift',
+  wf_field_person: 'Employee',
+  wf_field_role: 'Role',
+  wf_field_day: 'Day',
+  wf_field_start: 'From',
+  wf_field_end: 'To',
+  wf_field_unpaid_break: 'Unpaid break (min)',
+  wf_field_note: 'Note',
+  wf_open_option: 'Open shift (nobody assigned)',
+  wf_editor_roles_unknown: 'The role list was not fetched. The list above may therefore be shorter than the store\'s — it is not empty because the store has no roles.',
+  wf_overnight_hint: 'The shift runs past midnight and belongs to the day you placed it on.',
+  wf_save_shift: 'Save shift',
+  wf_delete_shift: 'Delete shift',
+  wf_cancel: 'Cancel',
+  wf_shift_created: 'The shift was added.',
+  wf_shift_saved: 'The shift was saved.',
+  wf_shift_moved: 'The shift was moved.',
+  wf_shift_deleted: 'The shift was removed.',
+  wf_move_unavailable: 'The shift has no usable times and cannot be moved until they are set again.',
+  wf_author_employees_only: 'Shifts are authored in the employee view — a shift belongs to a person and a day, and the role view has no day rows to place one in.',
+
+  // A refused write. The service compares your draft against what is actually stored and refuses the
+  // WHOLE change if somebody else got there first. Nothing is resubmitted automatically: an
+  // automatic retry would overwrite their edit.
+  wf_stale_title: 'The change was not saved',
+  wf_stale_detail: 'Somebody else changed this week since you opened it. Your change was not saved, and nothing was overwritten. Fetch the week again to see what is there now, then make your change once more.',
+  wf_stale_reload: 'Fetch the week again',
+  wf_conflict_frozen_title: 'The week is published',
+  wf_conflict_frozen: 'This revision is published and cannot be changed. Create a new draft for the week to make changes.',
+  wf_conflict_invalid_title: 'The shift cannot be saved',
+  wf_conflict_dst_title: 'That clock time is not unambiguous',
+  wf_conflict_dst_ambiguous: 'That clock time occurs twice on this night (the clocks go back). Pick a time outside that hour.',
+  wf_conflict_dst_gap: 'That clock time does not exist on this night (the clocks go forward). Pick a time outside that hour.',
+
   // Workforce — the three views of the same week/month. Planday's third tab ("staff groups") is
   // deliberately absent: the role a shift is scheduled as IS the grouping axis.
   wf_pivot_employees: 'Employees',
