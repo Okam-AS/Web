@@ -86,6 +86,14 @@
           <span>{{ conflictDetail }}</span>
         </div>
 
+        <!-- The same guard, asked EARLY. Until this read existed the manager only met a cross-store
+             double booking as the opaque 409 above, at publish, after the week was built. This says
+             it while there is still something to do about it — and says it with the same opacity the
+             refusal has: how many shifts collide and when, never which store the person is at. -->
+        <div v-if="externalClashNotice" class="wf-page__notice wf-page__notice--warn">
+          {{ externalClashNotice }}
+        </div>
+
         <div v-if="stateNotice" class="wf-page__notice">
           {{ stateNotice }}
         </div>
@@ -124,8 +132,9 @@
 <script>
 import AdminPage from '~/components/organisms/AdminPage.vue';
 import WorkforceWeekGrid from '~/components/admin/workforce/WorkforceWeekGrid.vue';
-import { WorkforceScheduleService, isWorkforceApiError } from '~/utils/workforce/schedule-client';
-import { weekRange, toRangeParam, isoWeekNumber } from '~/utils/workforce/week-range';
+import { isWorkforceApiError, toUtcRangeParam } from '~/utils/workforce/api-client';
+import { WorkforceScheduleService } from '~/utils/workforce/schedule-client';
+import { weekRange, isoWeekNumber } from '~/utils/workforce/week-range';
 import { buildWeekGrid, markersFromRequests, DATA_UNKNOWN, DATA_NO_PLAN } from '~/utils/workforce/week-grid';
 
 const VIEW_DRAFT = 'draft';
@@ -150,6 +159,7 @@ export default {
       range: null,
       staff: null,
       markers: null,
+      external: null,
       validation: null,
       conflict: null,
       toast: { show: false, message: '', type: 'success' },
@@ -187,6 +197,7 @@ export default {
         range: this.range,
         staff: this.staff,
         markers: this.markers,
+        external: this.external,
         conflict: this.conflict
       });
     },
@@ -225,6 +236,16 @@ export default {
       if (this.grid.dataState === DATA_UNKNOWN) { return this.$i('wf_unknown_range'); }
       if (this.grid.dataState !== DATA_NO_PLAN) { return ''; }
       return this.view === VIEW_PUBLISHED ? this.$i('wf_no_publication') : this.$i('wf_no_plan');
+    },
+    // Silent unless there is something to say. A zero here is a real zero — the overlay answered and
+    // nothing collides — so it gets no banner; an overlay that did NOT answer says so in the grid's
+    // own caveat instead, which is a different sentence.
+    externalClashNotice () {
+      const count = this.grid.externalClashCount;
+      if (!count) { return ''; }
+      return count === 1
+        ? this.$i('wf_external_clash_notice_one')
+        : this.$i('wf_external_clash_notice', { count });
     },
     // The surface has a whole family of typed conflicts (stale revision, unvalidated publish,
     // reused idempotency key). Only two of them are double-bookings, so the other kinds keep a
@@ -290,21 +311,27 @@ export default {
       this.range = null;
       this.staff = null;
       this.markers = null;
+      this.external = null;
 
-      const from = toRangeParam(this.week.startUtc);
-      const to = toRangeParam(this.week.endUtc);
+      const from = toUtcRangeParam(this.week.startUtc);
+      const to = toUtcRangeParam(this.week.endUtc);
 
-      const [range, staff, requests] = await Promise.all([
+      const [range, staff, requests, external] = await Promise.all([
         this._workforceScheduleService.GetRange(this.storeId, from, to, this.view).catch((e) => { this.notifyError(e); return null; }),
         this._workforceScheduleService.ListStaff(this.storeId).catch(() => null),
         // The absence read needs WorkforceManager. A scheduler-only caller gets a 403 here, and the
         // grid then says the absences are unknown rather than drawing everyone as available.
-        this._workforceScheduleService.ListRequests(this.storeId, null, 'all').catch(() => null)
+        this._workforceScheduleService.ListRequests(this.storeId, null, 'all').catch(() => null),
+        // The cross-store overlay. Failing quietly on purpose: it is advisory, and the guard it
+        // previews still runs server-side at publish either way. The grid then says the check did
+        // not answer, which is not the same claim as "nobody is committed elsewhere".
+        this._workforceScheduleService.GetExternalCommitments(this.storeId, from, to).catch(() => null)
       ]);
 
       this.range = range;
       this.staff = Array.isArray(staff) ? staff : null;
       this.markers = requests && Array.isArray(requests.items) ? markersFromRequests(requests.items) : null;
+      this.external = external && Array.isArray(external.items) ? external : null;
       this.loading = false;
     },
 
@@ -324,9 +351,9 @@ export default {
       try {
         const previous = weekRange(this.timeZoneId, new Date(), this.weekOffset - 1);
         const result = await this._workforceScheduleService.CreateDraft(this.storeId, {
-          rangeStartUtc: toRangeParam(this.week.startUtc),
-          rangeEndUtc: toRangeParam(this.week.endUtc),
-          copyFromRangeStartUtc: this.copyPreviousWeek ? toRangeParam(previous.startUtc) : null
+          rangeStartUtc: toUtcRangeParam(this.week.startUtc),
+          rangeEndUtc: toUtcRangeParam(this.week.endUtc),
+          copyFromRangeStartUtc: this.copyPreviousWeek ? toUtcRangeParam(previous.startUtc) : null
         });
         this.notify(this.copyPreviousWeek
           ? this.$i('wf_copied', { count: (result && result.copiedAssignmentCount) || 0 })
@@ -441,6 +468,7 @@ export default {
 
 .wf-page__conflict { display: flex; flex-direction: column; gap: 3px; padding: 12px 16px; border-radius: 10px; background: rgba(239, 68, 68, 0.1); color: #b91c1c; margin-bottom: 12px; font-size: 0.86rem; }
 .wf-page__notice { padding: 10px 16px; border-radius: 10px; background: #f8f9fa; border: 1px dashed #e2e8f0; color: #64748b; margin-bottom: 12px; font-size: 0.86rem; }
+.wf-page__notice--warn { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
 
 .wf-page__validation { margin-top: 24px; }
 .wf-page__section-title { font-size: 1.05rem; font-weight: 600; color: #292c34; margin: 0 0 6px; }

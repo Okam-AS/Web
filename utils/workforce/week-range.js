@@ -111,17 +111,10 @@ export function isoWeekNumber (year, month, day) {
   };
 }
 
-/**
- * The wire format for the schedule range bounds.
- *
- * `GET /schedules?from&to` binds plain `DateTime` parameters and compares them against UTC columns,
- * so only the numeric value matters. A trailing `Z` invites the query-string binder to convert into
- * the server's Oslo local time and shift the window by the offset; a bare `YYYY-MM-DDTHH:mm:ss` is
- * converted by nothing, under any binder setting, and therefore arrives as the exact instant meant.
- */
-export function toRangeParam (instant) {
-  return instant.toISOString().slice(0, 19);
-}
+// The wire format for the range bounds (`toUtcRangeParam`) used to live here. It is a property of
+// the HTTP surface rather than of calendar arithmetic, and the worker lane had grown an identical
+// copy, so it now lives once in `~/utils/workforce/api-client` — which keeps this module free of any
+// network dependency.
 
 /**
  * Parses an instant off the workforce API.

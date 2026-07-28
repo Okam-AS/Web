@@ -713,6 +713,7 @@ export default {
   nav_employees: 'Ansatte',
   nav_goods: 'Varer og tjenester',
   nav_group_administration: 'Administrasjon',
+  nav_group_me: 'Min side',
   nav_group_delivery: 'Levering',
   nav_group_economy: 'Økonomi',
   nav_group_kam: 'KAM',
@@ -2423,6 +2424,21 @@ export default {
   wf_conflict_generic_title: 'Konflikt',
   wf_conflict_hidden_title: 'Konflikt i en annen butikk',
   wf_conflict_hidden: 'Personen har en vakt i en butikk du ikke har innsyn i. Systemet oppgir verken butikk eller tidspunkt.',
+
+  // Forpliktelser i en annen butikk. Ingen av tekstene under kan nevne HVILKEN butikk — tjenesten
+  // oppgir det ikke, av samme grunn som avvisningen ved publisering ikke gjør det.
+  wf_external_busy: 'Opptatt annet sted',
+  wf_external_busy_clash: 'Opptatt annet sted – kolliderer',
+  wf_external_kind_shift: 'Personen har en publisert vakt i en annen butikk.',
+  wf_external_kind_unknown: 'Personen har en registrert forpliktelse i en annen butikk.',
+  wf_external_no_store: 'Hvilken butikk det gjelder, oppgis ikke.',
+  wf_external_spans: 'Går over midnatt.',
+  wf_external_clash: 'Overlapper en vakt du har lagt inn her.',
+  wf_external_unknown: 'Vi fikk ikke sjekket om noen er opptatt i en annen butikk denne uken. En rute uten merke betyr derfor ikke at personen er ledig andre steder.',
+  wf_external_unplaced_one: 'Én forpliktelse fra en annen butikk kunne ikke plasseres i rutenettet.',
+  wf_external_unplaced: '{count} forpliktelser fra en annen butikk kunne ikke plasseres i rutenettet.',
+  wf_external_clash_notice_one: 'Én vakt du har lagt inn overlapper en forpliktelse personen har i en annen butikk. Den blir avvist ved publisering.',
+  wf_external_clash_notice: '{count} vakter du har lagt inn overlapper forpliktelser personene har i andre butikker. De blir avvist ved publisering.',
   wf_validation_title: 'Valideringsresultat',
   wf_validation_note: 'Regelsettet er rådgivende — et resultat stopper ikke publisering.',
   wf_validation_structural_ok: 'Utkastet er strukturelt gyldig.',
@@ -2435,5 +2451,84 @@ export default {
   wf_draft_created: 'Utkast opprettet.',
   wf_copied: '{count} vakter kopiert fra forrige uke.',
   wf_published_ok: 'Publisert til {count} mottakere.',
-  wf_generic_error: 'Noe gikk galt.'
+  wf_generic_error: 'Noe gikk galt.',
+
+  // Bemanning — arbeidstakerens egen side (/workforce/me)
+  nav_workforce_me: 'Mine vakter',
+  wfme_page_title: 'Mine vakter',
+  wfme_page_intro: 'Vaktene du står på, vaktene du kan be om, og det du har bedt om.',
+  wfme_loading: 'Henter …',
+  wfme_reload: 'Prøv igjen',
+  wfme_store_fallback: 'Butikk {id}',
+  wfme_tab_shifts: 'Vaktene mine',
+  wfme_tab_open: 'Ledige vakter',
+  wfme_tab_asks: 'Bedt om',
+  wfme_window: 'Viser de neste {days} dagene.',
+
+  // Tilgang og henting
+  wfme_no_engagement: 'Du er ikke registrert som ansatt i bemanning i noen butikk. Lederen din må legge deg inn før vaktplanen din vises her.',
+  wfme_memberships_failed: 'Kunne ikke hente arbeidsforholdene dine. Vi vet derfor ikke hva du står på — det betyr ikke at du er uten vakter.',
+  wfme_inbox_failed: 'Varslene dine kunne ikke hentes. Nye publiserte vaktplaner vises derfor ikke her nå.',
+
+  // Vaktene mine — fire ulike tomme skjermer, fordi de påstår fire ulike ting
+  wfme_schedule_never_published: 'Ingen vaktplan er publisert til deg ennå.',
+  wfme_schedule_none_in_window: 'Du har ingen vakter i denne perioden.',
+  wfme_schedule_none_unverified: 'Ingen vakter å vise. Vi fikk ikke hentet varslene dine, så vi vet ikke om det er fordi ingen vaktplan er publisert til deg, eller fordi du ikke står på den som er publisert.',
+  wfme_schedule_unknown: 'Vaktene dine kunne ikke hentes.',
+  wfme_schedule_unknown_hint: 'Det er ikke det samme som at du ikke har vakter — vi vet rett og slett ikke.',
+  wfme_draft_never_shown: 'Vaktplaner som ikke er publisert ennå, vises aldri her.',
+
+  // Vaktkort
+  wfme_role_none: 'Uten rolle',
+  wfme_paid_time: 'Betalt tid {time}',
+  wfme_overnight: 'Over midnatt',
+  wfme_zone_unknown: 'Tider i UTC',
+  wfme_from_publication: 'Fra publisering {number}',
+
+  // Ledige vakter
+  wfme_open_window: 'Ledige vakter de neste {days} dagene.',
+  wfme_open_unknown: 'Ledige vakter kunne ikke hentes for denne butikken.',
+  wfme_open_none: 'Ingen ledige vakter nå.',
+  wfme_open_none_hint: 'Vakter dukker opp her når lederen legger ut en vakt uten ansatt, eller når en kollega gir fra seg sin.',
+  wfme_open_asked: 'Du har spurt',
+  wfme_open_from_coworker: 'Gitt fra en kollega',
+  wfme_open_unassigned: 'Uten ansatt',
+  wfme_open_contest_none: 'Ingen har spurt om denne ennå.',
+  wfme_open_contest_one: 'Én har spurt om denne.',
+  wfme_open_contest_many: '{count} har spurt om denne.',
+  wfme_open_contest_unknown: 'Vi vet ikke hvor mange som har spurt.',
+  wfme_open_ask: 'Be om vakten',
+  wfme_open_sending: 'Sender …',
+  wfme_open_withdraw: 'Trekk forespørselen',
+  wfme_open_withdraw_unavailable: 'Forespørselen kan ikke trekkes herfra.',
+
+  // Svar på å be om en vakt. Å tape er et normalt utfall, ikke en feil.
+  wfme_claim_sent: 'Forespørselen er sendt. Lederen tildeler vakten.',
+  wfme_claim_withdrawn: 'Forespørselen er trukket.',
+  wfme_claim_award_taken: 'Vakten er allerede tildelt en annen.',
+  wfme_claim_already_requested: 'Du har allerede spurt om denne vakten.',
+  wfme_claim_not_decidable: 'Forespørselen er allerede avgjort.',
+  wfme_claim_gone: 'Vakten er ikke lenger ledig for deg.',
+  wfme_claim_invalid: 'Du kan ikke be om denne vakten — den er enten din egen eller allerede i gang.',
+  wfme_claim_forbidden: 'Du har ikke tilgang til å be om vakter i denne butikken.',
+  wfme_claim_error: 'Noe gikk galt. Forespørselen ble ikke sendt.',
+
+  // Bedt om
+  wfme_asks_none: 'Du har ingen forespørsler ute.',
+  wfme_asks_unknown: 'Vi fikk ikke hentet alle forespørslene dine, så listen vises ikke.',
+  wfme_asks_pending_note: 'Lederen tildeler vakten. Nøyaktig én får den.',
+  wfme_asks_scope: 'Listen viser forespørsler om ledige vakter. Søknader om fri og vaktbytter har ingen egen visning her ennå — spør lederen din.',
+
+  // Publisert vaktplan: lest-markering og mottakskvittering
+  wfme_pub_title_one: 'Ny vaktplan publisert',
+  wfme_pub_title_many: '{count} nye vaktplaner publisert',
+  wfme_pub_lede: 'Du har ikke åpnet denne ennå. Lederen ser hvem som har lest.',
+  wfme_pub_published: 'Kom {time}',
+  wfme_pub_mark_read: 'Marker som lest',
+  wfme_pub_acknowledge: 'Bekreft mottatt',
+  wfme_pub_receipt_new: 'Bekreftet mottatt {time}.',
+  wfme_pub_receipt_already: 'Allerede bekreftet {time}.',
+  wfme_pub_disclaimer: 'Bekreftelsen er en kvittering på at du har sett planen. Den er ikke en godkjenning av vaktene.',
+  wfme_pub_mark_read_failed: 'Kunne ikke markere som lest.',
+  wfme_pub_acknowledge_failed: 'Kunne ikke bekrefte mottak.'
 }

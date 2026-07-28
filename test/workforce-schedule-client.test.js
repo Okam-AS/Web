@@ -1,4 +1,5 @@
-import { WorkforceScheduleService, isWorkforceApiError } from '~/utils/workforce/schedule-client'
+import { isWorkforceApiError } from '~/utils/workforce/api-client'
+import { WorkforceScheduleService } from '~/utils/workforce/schedule-client'
 
 // The client is route-for-route with the backend, so these assert the wire contract: the exact paths
 // and query the controllers bind, the Idempotency-Key every workforce mutation requires, and the
@@ -36,6 +37,18 @@ describe('WorkforceScheduleService', () => {
     expect(url).toBe('/workforce/stores/42/schedules?from=2026-07-26T22%3A00%3A00&to=2026-08-02T22%3A00%3A00&view=published')
     expect(init.method).toBe('GET')
     expect(init.headers.Authorization).toBe('Bearer tok-123')
+  })
+
+  // The read that lets the grid show a cross-store clash while planning rather than at publish.
+  test('GetExternalCommitments hits the advisory overlay route with just the range', async () => {
+    respondWith(200, { storeId: 42, timeZoneId: 'Europe/Oslo', items: [] })
+    await service().GetExternalCommitments(42, '2026-07-26T22:00:00', '2026-08-02T22:00:00')
+
+    const [url, init] = global.fetch.mock.calls[0]
+    expect(url).toBe('/workforce/stores/42/schedules/external-commitments?from=2026-07-26T22%3A00%3A00&to=2026-08-02T22%3A00%3A00')
+    expect(init.method).toBe('GET')
+    // No `view`: the overlay is PUBLISHED-only by construction, matching the write path's rule.
+    expect(url).not.toContain('view')
   })
 
   test('ListRequests asks for every state, so decided absences are included', async () => {

@@ -696,6 +696,7 @@ export default {
   nav_employees: 'Mitarbeiter',
   nav_goods: 'Waren & Dienstleistungen',
   nav_group_administration: 'Verwaltung',
+  nav_group_me: 'Meine Seite',
   nav_group_delivery: 'Lieferung',
   nav_group_economy: 'Finanzen',
   nav_group_kam: 'KAM',
@@ -2383,6 +2384,21 @@ export default {
   wf_conflict_generic_title: 'Konflikt',
   wf_conflict_hidden_title: 'Konflikt in einem anderen Betrieb',
   wf_conflict_hidden: 'Diese Person hat eine Schicht in einem Betrieb, in den Sie keinen Einblick haben. Das System nennt weder Betrieb noch Zeitpunkt.',
+
+  // Verpflichtungen in einem anderen Betrieb. Keiner der Texte unten darf nennen, WELCHER Betrieb —
+  // der Dienst gibt das nicht preis, aus demselben Grund wie die Ablehnung beim Veröffentlichen.
+  wf_external_busy: 'Anderswo verplant',
+  wf_external_busy_clash: 'Anderswo verplant – Kollision',
+  wf_external_kind_shift: 'Diese Person hat eine veröffentlichte Schicht in einem anderen Betrieb.',
+  wf_external_kind_unknown: 'Für diese Person ist eine Verpflichtung in einem anderen Betrieb erfasst.',
+  wf_external_no_store: 'Welcher Betrieb das ist, wird nicht genannt.',
+  wf_external_spans: 'Geht über Mitternacht.',
+  wf_external_clash: 'Überschneidet sich mit einer hier geplanten Schicht.',
+  wf_external_unknown: 'Wir konnten nicht prüfen, ob jemand diese Woche in einem anderen Betrieb verplant ist. Ein Feld ohne Markierung bedeutet daher nicht, dass die Person anderswo frei ist.',
+  wf_external_unplaced_one: 'Eine Verpflichtung aus einem anderen Betrieb konnte im Raster nicht platziert werden.',
+  wf_external_unplaced: '{count} Verpflichtungen aus einem anderen Betrieb konnten im Raster nicht platziert werden.',
+  wf_external_clash_notice_one: 'Eine von Ihnen geplante Schicht überschneidet sich mit einer Verpflichtung der Person in einem anderen Betrieb. Sie wird beim Veröffentlichen abgelehnt.',
+  wf_external_clash_notice: '{count} von Ihnen geplante Schichten überschneiden sich mit Verpflichtungen der Personen in anderen Betrieben. Sie werden beim Veröffentlichen abgelehnt.',
   wf_validation_title: 'Validierungsergebnis',
   wf_validation_note: 'Das Regelwerk ist beratend — kein Ergebnis verhindert die Veröffentlichung.',
   wf_validation_structural_ok: 'Der Entwurf ist strukturell gültig.',
@@ -2395,5 +2411,84 @@ export default {
   wf_draft_created: 'Entwurf erstellt.',
   wf_copied: '{count} Schichten aus der Vorwoche kopiert.',
   wf_published_ok: 'An {count} Empfänger veröffentlicht.',
-  wf_generic_error: 'Etwas ist schiefgelaufen.'
+  wf_generic_error: 'Etwas ist schiefgelaufen.',
+
+  // Personaleinsatz — die eigene Seite der Mitarbeitenden (/workforce/me)
+  nav_workforce_me: 'Meine Schichten',
+  wfme_page_title: 'Meine Schichten',
+  wfme_page_intro: 'Die Schichten, auf denen du stehst, die du anfragen kannst, und das, was du angefragt hast.',
+  wfme_loading: 'Wird geladen …',
+  wfme_reload: 'Erneut versuchen',
+  wfme_store_fallback: 'Filiale {id}',
+  wfme_tab_shifts: 'Meine Schichten',
+  wfme_tab_open: 'Freie Schichten',
+  wfme_tab_asks: 'Angefragt',
+  wfme_window: 'Zeigt die nächsten {days} Tage.',
+
+  // Zugriff und Laden
+  wfme_no_engagement: 'Du bist in keiner Filiale als Personal erfasst. Deine Vorgesetzte oder dein Vorgesetzter muss dich zuerst anlegen.',
+  wfme_memberships_failed: 'Deine Anstellungen konnten nicht geladen werden. Wir wissen daher nicht, worauf du stehst — das heisst nicht, dass du keine Schichten hast.',
+  wfme_inbox_failed: 'Deine Benachrichtigungen konnten nicht geladen werden. Neu veröffentlichte Pläne werden hier deshalb gerade nicht angezeigt.',
+
+  // Meine Schichten — vier verschiedene leere Ansichten, weil sie vier verschiedene Dinge behaupten
+  wfme_schedule_never_published: 'Es wurde dir noch kein Dienstplan veröffentlicht.',
+  wfme_schedule_none_in_window: 'Du hast in diesem Zeitraum keine Schichten.',
+  wfme_schedule_none_unverified: 'Keine Schichten anzuzeigen. Deine Benachrichtigungen konnten nicht geladen werden, daher wissen wir nicht, ob dir noch kein Plan veröffentlicht wurde oder ob du nicht auf dem veröffentlichten stehst.',
+  wfme_schedule_unknown: 'Deine Schichten konnten nicht geladen werden.',
+  wfme_schedule_unknown_hint: 'Das ist nicht dasselbe wie keine Schichten zu haben — wir wissen es schlicht nicht.',
+  wfme_draft_never_shown: 'Noch nicht veröffentlichte Dienstpläne werden hier nie angezeigt.',
+
+  // Schichtkarte
+  wfme_role_none: 'Ohne Rolle',
+  wfme_paid_time: 'Bezahlte Zeit {time}',
+  wfme_overnight: 'Über Mitternacht',
+  wfme_zone_unknown: 'Zeiten in UTC',
+  wfme_from_publication: 'Aus Veröffentlichung {number}',
+
+  // Freie Schichten
+  wfme_open_window: 'Freie Schichten in den nächsten {days} Tagen.',
+  wfme_open_unknown: 'Freie Schichten konnten für diese Filiale nicht geladen werden.',
+  wfme_open_none: 'Zurzeit keine freien Schichten.',
+  wfme_open_none_hint: 'Schichten erscheinen hier, wenn eine Schicht ohne Person ausgeschrieben wird oder eine Kollegin oder ein Kollege ihre abgibt.',
+  wfme_open_asked: 'Angefragt',
+  wfme_open_from_coworker: 'Von einer Kollegin oder einem Kollegen abgegeben',
+  wfme_open_unassigned: 'Niemand zugeteilt',
+  wfme_open_contest_none: 'Bisher hat niemand danach gefragt.',
+  wfme_open_contest_one: 'Eine Person hat danach gefragt.',
+  wfme_open_contest_many: '{count} Personen haben danach gefragt.',
+  wfme_open_contest_unknown: 'Wir wissen nicht, wie viele gefragt haben.',
+  wfme_open_ask: 'Schicht anfragen',
+  wfme_open_sending: 'Wird gesendet …',
+  wfme_open_withdraw: 'Anfrage zurückziehen',
+  wfme_open_withdraw_unavailable: 'Diese Anfrage kann hier nicht zurückgezogen werden.',
+
+  // Antworten auf eine Schichtanfrage. Zu verlieren ist ein normales Ergebnis, kein Fehler.
+  wfme_claim_sent: 'Anfrage gesendet. Die Zuteilung erfolgt durch die Leitung.',
+  wfme_claim_withdrawn: 'Anfrage zurückgezogen.',
+  wfme_claim_award_taken: 'Diese Schicht wurde bereits an jemand anderen vergeben.',
+  wfme_claim_already_requested: 'Du hast diese Schicht bereits angefragt.',
+  wfme_claim_not_decidable: 'Diese Anfrage ist bereits entschieden.',
+  wfme_claim_gone: 'Diese Schicht ist für dich nicht mehr frei.',
+  wfme_claim_invalid: 'Diese Schicht kannst du nicht anfragen — sie ist entweder deine eigene oder bereits im Gang.',
+  wfme_claim_forbidden: 'Du hast keine Berechtigung, in dieser Filiale Schichten anzufragen.',
+  wfme_claim_error: 'Etwas ist schiefgelaufen. Die Anfrage wurde nicht gesendet.',
+
+  // Angefragt
+  wfme_asks_none: 'Du hast keine offenen Anfragen.',
+  wfme_asks_unknown: 'Es konnten nicht alle deine Anfragen geladen werden, daher wird die Liste nicht angezeigt.',
+  wfme_asks_pending_note: 'Die Leitung teilt die Schicht zu. Genau eine Person erhält sie.',
+  wfme_asks_scope: 'Diese Liste zeigt Anfragen für freie Schichten. Urlaubsanträge und Schichttausche haben hier noch keine eigene Ansicht — frag deine Leitung.',
+
+  // Veröffentlichter Dienstplan: Lesemarkierung und Empfangsbestätigung
+  wfme_pub_title_one: 'Neuer Dienstplan veröffentlicht',
+  wfme_pub_title_many: '{count} neue Dienstpläne veröffentlicht',
+  wfme_pub_lede: 'Du hast ihn noch nicht geöffnet. Die Leitung sieht, wer gelesen hat.',
+  wfme_pub_published: 'Eingegangen {time}',
+  wfme_pub_mark_read: 'Als gelesen markieren',
+  wfme_pub_acknowledge: 'Empfang bestätigen',
+  wfme_pub_receipt_new: 'Empfang bestätigt {time}.',
+  wfme_pub_receipt_already: 'Bereits bestätigt {time}.',
+  wfme_pub_disclaimer: 'Die Bestätigung belegt, dass du den Plan gesehen hast. Sie ist keine Zustimmung zu den Schichten.',
+  wfme_pub_mark_read_failed: 'Konnte nicht als gelesen markiert werden.',
+  wfme_pub_acknowledge_failed: 'Empfang konnte nicht bestätigt werden.'
 }

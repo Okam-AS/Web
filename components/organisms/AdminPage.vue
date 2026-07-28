@@ -49,6 +49,22 @@ export default {
       type: Boolean,
       default: false,
     },
+    // Opt out of the STORE-ADMIN membership requirement — not out of authentication.
+    //
+    // The shell's default is that a signed-in user with an empty `adminIn` is not an admin of
+    // anything and is sent to /registrer. That is right for all 46 pages that read or write a
+    // store's data. It is wrong for a page whose content the BACKEND authorises per caller from the
+    // token: `/workforce/me` resolves the worker's own engagements and never takes a store id, so a
+    // shop assistant with no admin membership anywhere is precisely that page's intended user — and
+    // the shell was bouncing them before they saw it.
+    //
+    // Defaults to false, so every existing page keeps the identical code path. Login, the redirect
+    // dance and the LoginModal are untouched by this flag: an anonymous visitor to a page that sets
+    // it is still sent to /admin?redirect=… exactly as before.
+    allowNonAdmin: {
+      type: Boolean,
+      default: false,
+    },
   },
   data: () => ({
     showLogin: false,
@@ -85,6 +101,9 @@ export default {
       }
     } else {
       await this._userService.Reload();
+      if (this.allowNonAdmin) {
+        return;
+      }
       const adminIn = this.$store.state.currentUser?.adminIn;
       if (!adminIn || adminIn.length === 0) {
         this.$router.replace("/registrer");

@@ -696,6 +696,7 @@ export default {
   nav_employees: 'Employees',
   nav_goods: 'Goods & services',
   nav_group_administration: 'Administration',
+  nav_group_me: 'My page',
   nav_group_delivery: 'Delivery',
   nav_group_economy: 'Finance',
   nav_group_kam: 'KAM',
@@ -2383,6 +2384,21 @@ export default {
   wf_conflict_generic_title: 'Conflict',
   wf_conflict_hidden_title: 'Conflict in another store',
   wf_conflict_hidden: 'This person has a shift in a store you cannot see. The system discloses neither the store nor the time.',
+
+  // Commitments at another store. None of the strings below may name WHICH store — the service does
+  // not disclose it, for the same reason the refusal at publish does not.
+  wf_external_busy: 'Committed elsewhere',
+  wf_external_busy_clash: 'Committed elsewhere – collides',
+  wf_external_kind_shift: 'This person has a published shift at another store.',
+  wf_external_kind_unknown: 'This person has a recorded commitment at another store.',
+  wf_external_no_store: 'Which store is not disclosed.',
+  wf_external_spans: 'Crosses midnight.',
+  wf_external_clash: 'Overlaps a shift you have planned here.',
+  wf_external_unknown: 'We could not check whether anyone is committed at another store this week. A cell without a mark therefore does not mean the person is free elsewhere.',
+  wf_external_unplaced_one: 'One commitment from another store could not be placed in the grid.',
+  wf_external_unplaced: '{count} commitments from another store could not be placed in the grid.',
+  wf_external_clash_notice_one: 'One shift you have planned overlaps a commitment the person has at another store. It will be refused at publish.',
+  wf_external_clash_notice: '{count} shifts you have planned overlap commitments the people have at other stores. They will be refused at publish.',
   wf_validation_title: 'Validation result',
   wf_validation_note: 'The rule pack is advisory — no result prevents publication.',
   wf_validation_structural_ok: 'The draft is structurally valid.',
@@ -2395,5 +2411,84 @@ export default {
   wf_draft_created: 'Draft created.',
   wf_copied: '{count} shifts copied from last week.',
   wf_published_ok: 'Published to {count} recipients.',
-  wf_generic_error: 'Something went wrong.'
+  wf_generic_error: 'Something went wrong.',
+
+  // Workforce — the worker's own page (/workforce/me)
+  nav_workforce_me: 'My shifts',
+  wfme_page_title: 'My shifts',
+  wfme_page_intro: 'The shifts you are on, the shifts you can ask for, and what you have asked for.',
+  wfme_loading: 'Loading …',
+  wfme_reload: 'Try again',
+  wfme_store_fallback: 'Store {id}',
+  wfme_tab_shifts: 'My shifts',
+  wfme_tab_open: 'Open shifts',
+  wfme_tab_asks: 'Asked for',
+  wfme_window: 'Showing the next {days} days.',
+
+  // Access and loading
+  wfme_no_engagement: 'You are not registered as workforce staff in any store. Your manager has to add you before your schedule appears here.',
+  wfme_memberships_failed: 'Could not load your engagements. We therefore do not know what you are on — it does not mean you have no shifts.',
+  wfme_inbox_failed: 'Your notifications could not be loaded, so newly published schedules are not shown here right now.',
+
+  // My shifts — four different empty screens, because they claim four different things
+  wfme_schedule_never_published: 'No schedule has been published to you yet.',
+  wfme_schedule_none_in_window: 'You have no shifts in this period.',
+  wfme_schedule_none_unverified: 'No shifts to show. We could not load your notifications, so we do not know whether that is because no schedule has been published to you, or because you are not on the one that has.',
+  wfme_schedule_unknown: 'Your shifts could not be loaded.',
+  wfme_schedule_unknown_hint: 'That is not the same as having no shifts — we simply do not know.',
+  wfme_draft_never_shown: 'Schedules that are not published yet are never shown here.',
+
+  // Shift card
+  wfme_role_none: 'No role',
+  wfme_paid_time: 'Paid time {time}',
+  wfme_overnight: 'Crosses midnight',
+  wfme_zone_unknown: 'Times in UTC',
+  wfme_from_publication: 'From publication {number}',
+
+  // Open shifts
+  wfme_open_window: 'Open shifts in the next {days} days.',
+  wfme_open_unknown: 'Open shifts could not be loaded for this store.',
+  wfme_open_none: 'No open shifts right now.',
+  wfme_open_none_hint: 'Shifts appear here when a manager posts one with nobody on it, or when a colleague gives theirs away.',
+  wfme_open_asked: 'You asked',
+  wfme_open_from_coworker: 'Given up by a colleague',
+  wfme_open_unassigned: 'Nobody assigned',
+  wfme_open_contest_none: 'Nobody has asked for this yet.',
+  wfme_open_contest_one: 'One person has asked for this.',
+  wfme_open_contest_many: '{count} people have asked for this.',
+  wfme_open_contest_unknown: 'We do not know how many have asked.',
+  wfme_open_ask: 'Ask for this shift',
+  wfme_open_sending: 'Sending …',
+  wfme_open_withdraw: 'Withdraw request',
+  wfme_open_withdraw_unavailable: 'This request cannot be withdrawn from here.',
+
+  // Answers to asking for a shift. Losing is a normal outcome, not an error.
+  wfme_claim_sent: 'Your request was sent. A manager awards the shift.',
+  wfme_claim_withdrawn: 'Your request was withdrawn.',
+  wfme_claim_award_taken: 'This shift has already gone to someone else.',
+  wfme_claim_already_requested: 'You have already asked for this shift.',
+  wfme_claim_not_decidable: 'This request has already been decided.',
+  wfme_claim_gone: 'This shift is no longer open to you.',
+  wfme_claim_invalid: 'You cannot ask for this shift — it is either your own or already under way.',
+  wfme_claim_forbidden: 'You do not have access to ask for shifts in this store.',
+  wfme_claim_error: 'Something went wrong. Your request was not sent.',
+
+  // Asked for
+  wfme_asks_none: 'You have no outstanding requests.',
+  wfme_asks_unknown: 'We could not load all of your requests, so the list is not shown.',
+  wfme_asks_pending_note: 'A manager awards the shift. Exactly one person gets it.',
+  wfme_asks_scope: 'This list shows requests for open shifts. Time-off requests and shift swaps have no view of their own here yet — ask your manager.',
+
+  // Published schedule: read marker and acknowledgement receipt
+  wfme_pub_title_one: 'New schedule published',
+  wfme_pub_title_many: '{count} new schedules published',
+  wfme_pub_lede: 'You have not opened this yet. Your manager can see who has read it.',
+  wfme_pub_published: 'Arrived {time}',
+  wfme_pub_mark_read: 'Mark as read',
+  wfme_pub_acknowledge: 'Confirm receipt',
+  wfme_pub_receipt_new: 'Receipt confirmed {time}.',
+  wfme_pub_receipt_already: 'Already confirmed {time}.',
+  wfme_pub_disclaimer: 'The confirmation is a receipt that you have seen the schedule. It is not approval of the shifts.',
+  wfme_pub_mark_read_failed: 'Could not mark as read.',
+  wfme_pub_acknowledge_failed: 'Could not confirm receipt.'
 }

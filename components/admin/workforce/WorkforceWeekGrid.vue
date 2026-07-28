@@ -84,13 +84,13 @@
               v-for="cell in row.cells"
               :key="cell.isoDate"
               class="wf-grid__cell"
-              :class="{ 'is-conflict': cell.hasConflict }"
+              :class="{ 'is-conflict': cell.hasConflict, 'is-external-clash': cell.hasExternalClash }"
             >
               <span
                 v-for="shift in cell.shifts"
                 :key="shift.id"
                 class="wf-grid__shift"
-                :class="{ 'is-conflict': shift.isConflicting }"
+                :class="{ 'is-conflict': shift.isConflicting, 'is-external-clash': shift.hasExternalClash }"
                 :title="shiftTitle(shift)"
               >
                 <span class="wf-grid__shift-time">{{ shiftTime(shift) }}</span>
@@ -102,6 +102,20 @@
                 class="wf-grid__marker"
                 :class="'wf-grid__marker--' + marker"
               >{{ markerLabel(marker) }}</span>
+              <!-- The cross-store overlay. It says a commitment EXISTS elsewhere and when — never
+                   where. The response carries no store id, name or assignment id for exactly this
+                   reason (the write path's refusal names none either), so there is nothing here to
+                   render a store from, and nothing may be inferred to stand in for one. -->
+              <span
+                v-for="item in cell.external"
+                :key="item.key"
+                class="wf-grid__external"
+                :class="{ 'is-clash': item.isClashing }"
+                :title="externalTitle(item)"
+              >
+                <span class="wf-grid__external-time">{{ externalTime(item) }}</span>
+                <span class="wf-grid__external-label">{{ externalLabel(item) }}</span>
+              </span>
             </td>
             <td class="wf-grid__num">
               {{ hours(row.totals.minutes) }}
@@ -148,11 +162,19 @@
     <p v-if="!grid.markersKnown" class="wf-grid__caveat">
       {{ $i('wf_markers_unknown') }}
     </p>
+    <!-- Three separate sentences, never collapsed: the check did not answer / it answered but some
+         rows could not be placed / it answered and everything is on screen (which says nothing). -->
+    <p v-if="!grid.externalKnown" class="wf-grid__caveat">
+      {{ $i('wf_external_unknown') }}
+    </p>
+    <p v-else-if="grid.externalUnplaced" class="wf-grid__caveat">
+      {{ externalUnplacedLabel }}
+    </p>
   </div>
 </template>
 
 <script>
-import { DATA_COUNTED, formatMinutes } from '~/utils/workforce/week-grid';
+import { DATA_COUNTED, EXTERNAL_PUBLISHED_SHIFT, formatMinutes } from '~/utils/workforce/week-grid';
 
 // The week grid: seven store-local day columns, one row per employee, the open-shift row pinned on
 // top, and a totals band. Purely presentational — it renders the model `buildWeekGrid` produced and
@@ -179,6 +201,12 @@ export default {
   computed: {
     isCounted () {
       return this.grid.dataState === DATA_COUNTED;
+    },
+    externalUnplacedLabel () {
+      const count = this.grid.externalUnplaced;
+      return count === 1
+        ? this.$i('wf_external_unplaced_one')
+        : this.$i('wf_external_unplaced', { count });
     }
   },
   methods: {
@@ -213,7 +241,33 @@ export default {
       if (shift.crossesMidnight) { parts.push(this.$i('wf_overnight')); }
       if (shift.note) { parts.push(shift.note); }
       if (shift.isConflicting) { parts.push(this.$i('wf_conflict_shift')); }
+      if (shift.hasExternalClash) { parts.push(this.$i('wf_external_clash')); }
       return parts.join(' · ');
+    },
+
+    // --- the cross-store overlay -------------------------------------------------------------
+    // Every string below describes a commitment's KIND and TIME. None of them has a store to name,
+    // and none may acquire one: the backend withholds the other store's identity on this read
+    // because its refusal on the write path withholds it too.
+
+    externalTime (item) {
+      if (!item.start || !item.end) { return this.unknownMark; }
+      return item.start + '–' + item.end + (item.crossesMidnight ? '⁺' : '');
+    },
+    externalLabel (item) {
+      return item.isClashing ? this.$i('wf_external_busy_clash') : this.$i('wf_external_busy');
+    },
+    externalTitle (item) {
+      const parts = [];
+      // A closed vocabulary server-side: an unrecognised kind gets the vaguer sentence rather than
+      // being described as a published shift we have not been told it is.
+      parts.push(item.kind === EXTERNAL_PUBLISHED_SHIFT
+        ? this.$i('wf_external_kind_shift')
+        : this.$i('wf_external_kind_unknown'));
+      parts.push(this.$i('wf_external_no_store'));
+      if (item.crossesMidnight) { parts.push(this.$i('wf_external_spans')); }
+      if (item.isClashing) { parts.push(this.$i('wf_external_clash')); }
+      return parts.join(' ');
     },
     markerLabel (marker) {
       return this.$i('wf_marker_' + marker.replace(/-/g, '_'));
@@ -256,10 +310,12 @@ export default {
 .wf-grid__person-flag { display: inline-block; margin-top: 3px; padding: 1px 6px; border-radius: 6px; background: #fef3c7; color: #92400e; font-size: 0.68rem; font-weight: 600; }
 
 .wf-grid__cell { padding: 8px; vertical-align: top; border-left: 1px solid #f1f5f9; }
+.wf-grid__cell.is-external-clash { background: #fffbeb; }
 .wf-grid__cell.is-conflict { background: rgba(239, 68, 68, 0.1); }
 
 .wf-grid__shift { display: block; margin-bottom: 4px; padding: 5px 8px; border-radius: 6px; background: rgba(27, 183, 118, 0.12); border-left: 3px solid #1bb776; }
 .wf-grid__shift--open { background: #fff; border: 1px dashed #cbd5e0; border-left: 3px dashed #94a3b8; }
+.wf-grid__shift.is-external-clash { border-left-color: #d97706; }
 .wf-grid__shift.is-conflict { background: rgba(239, 68, 68, 0.14); border-left-color: #ef4444; }
 .wf-grid__shift-time { display: block; color: #292c34; font-size: 0.82rem; font-weight: 600; }
 .wf-grid__shift-role { display: block; color: #64748b; font-size: 0.72rem; }
@@ -269,6 +325,15 @@ export default {
 .wf-grid__marker--prefer-not { background: #f8f9fa; color: #94a3b8; border-left: 3px solid #cbd5e0; }
 .wf-grid__marker--time-off { background: #fef3c7; color: #92400e; border-left: 3px solid #d97706; }
 .wf-grid__marker--time-off-pending { background: #fffbeb; color: #92400e; border-left: 3px dashed #d97706; }
+
+/* Advisory, not a refusal: a muted chip, and the amber of a warning only when it collides with a
+   shift planned here. It carries no store, so it is styled as a fact about the person's time. */
+.wf-grid__external { display: block; margin-bottom: 4px; padding: 4px 8px; border-radius: 6px; background: #f8f9fa; border-left: 3px dotted #94a3b8; }
+.wf-grid__external.is-clash { background: #fef3c7; border-left: 3px solid #d97706; }
+.wf-grid__external-time { display: block; color: #64748b; font-size: 0.78rem; font-weight: 600; }
+.wf-grid__external.is-clash .wf-grid__external-time { color: #92400e; }
+.wf-grid__external-label { display: block; color: #94a3b8; font-size: 0.7rem; }
+.wf-grid__external.is-clash .wf-grid__external-label { color: #92400e; }
 
 .wf-grid__num { text-align: right; padding: 10px 12px; color: #292c34; font-size: 0.86rem; white-space: nowrap; border-left: 1px solid #f1f5f9; }
 .wf-grid__num--cost { color: #cbd5e0; }

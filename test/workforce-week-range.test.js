@@ -3,7 +3,6 @@ import {
   zonedMidnightToUtc,
   weekRange,
   isoWeekNumber,
-  toRangeParam,
   parseApiInstant,
   businessDateKey
 } from '~/utils/workforce/week-range'
@@ -89,14 +88,6 @@ describe('isoWeekNumber', () => {
 
   test('late December can belong to the next ISO year', () => {
     expect(isoWeekNumber(2025, 12, 29)).toEqual({ week: 1, year: 2026 })
-  })
-})
-
-describe('toRangeParam', () => {
-  // A trailing Z invites the query-string binder to convert into the server's local zone; a bare
-  // local-looking string is converted by nothing and therefore arrives as the instant meant.
-  test('emits second precision with no zone designator', () => {
-    expect(toRangeParam(new Date('2026-07-26T22:00:00.000Z'))).toBe('2026-07-26T22:00:00')
   })
 })
 
