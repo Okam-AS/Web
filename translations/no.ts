@@ -2869,5 +2869,55 @@ export default {
   mrg_err_not_draft: 'Bare et utkast kan endres. Lag et nytt utkast og aktiver det forover.',
   mrg_err_no_active: 'Oppskriften har ingen aktiv versjon.',
   mrg_err_missing_revision: 'Vi manglet revisjonsnøkkelen, så vi sendte ingenting. Last siden på nytt.',
-  mrg_err_generic: 'Noe gikk galt. Ingenting ble lagret.'
+  mrg_err_generic: 'Noe gikk galt. Ingenting ble lagret.',
+
+  // ---- Meals (bedriftsavtaler) — MODULE BLOCK, appended contiguously; do not interleave ----------
+  // Butikkens Company Meals-flate: avtalene som gjelder her, og ordrene som er finansiert på dem.
+  nav_meals: 'Bedriftsavtaler',
+  meals_page_title: 'Bedriftsavtaler',
+  meals_page_intro: 'Bedriftene som har avtale med dette utsalgsstedet, og ordrene som er finansiert på bedriftskonto.',
+  meals_reload: 'Hent på nytt',
+
+  meals_agreements_title: 'Avtaler ved dette utsalgsstedet',
+  meals_agreements_none: 'Dette utsalgsstedet har ingen bedriftsavtaler.',
+  meals_col_company: 'Bedrift',
+  meals_col_orgnr: 'Org.nr.',
+  meals_col_agreement: 'Avtale',
+  meals_col_currency: 'Valuta',
+  meals_col_members: 'Aktive medlemmer',
+  meals_col_orders: 'Ordrer',
+  meals_company_archived: 'Bedriften er arkivert',
+  meals_agreement_active: 'Aktiv',
+  meals_agreement_ended: 'Avsluttet',
+
+  meals_orders_title: 'Finansierte ordrer',
+  meals_orders_title_for: 'Finansierte ordrer — {company}',
+  meals_orders_pick: 'Velg en avtale over for å se ordrene som er finansiert på den.',
+  meals_orders_none: 'Ingen ordrer er finansiert på denne avtalen ved dette utsalgsstedet.',
+  meals_col_order: 'Ordre',
+  meals_col_state: 'Tilstand',
+  meals_col_cap: 'Reservert ramme',
+  meals_col_bound: 'Bundet handlekurv',
+  meals_col_captured: 'Fanget',
+  meals_col_bound_at: 'Bundet (din tid)',
+  meals_col_captured_at: 'Fanget (din tid)',
+  meals_state_reserved: 'Reservert',
+  meals_state_bound: 'Bundet',
+  meals_state_captured: 'Fanget',
+  meals_state_released: 'Frigitt',
+  meals_capture_none: 'Ingenting er fanget på denne ordren ennå.',
+  meals_capture_unknown: 'Vi fikk ikke noe beløp fra serveren for denne ordren.',
+
+  // Avslag. Hver av dem er en egen påstand og skal aldri leses som «ingen avtaler».
+  meals_refusal_dark: 'Company Meals er ikke slått på for dette utsalgsstedet. Modulen svarte, men viser ingenting her.',
+  meals_refusal_absent: 'Denne serveren svarte ikke som Company Meals. Vi vet ikke om modulen finnes her.',
+  meals_refusal_forbidden: 'Du er ikke butikkadministrator for dette utsalgsstedet, så listen kan ikke hentes.',
+  meals_refusal_unauthenticated: 'Innloggingen ble ikke godtatt. Logg inn på nytt.',
+  meals_refusal_unknown: 'Vi fikk ikke lest dette. Listen vises ikke — det betyr ikke at den er tom.',
+  meals_refusal_not_read: 'Ikke hentet ennå.',
+
+  meals_unlisted_company_one: 'Én ordre er ført på en bedriftskonto som ikke står i avtalelisten over.',
+  meals_unlisted_company: '{count} bedriftskontoer som ikke står i avtalelisten over, har ordrer ved dette utsalgsstedet.',
+
+  meals_footnote_no_totals: 'Beløpene er hentet fra serveren, ett per ordre. Vi summerer dem ikke: en total på kredittsalg hører hjemme på månedsoppgaven, som serveren regner ut og fryser.'
 }

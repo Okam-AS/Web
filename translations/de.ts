@@ -2825,5 +2825,55 @@ export default {
   mrg_err_not_draft: 'Nur ein Entwurf lässt sich bearbeiten. Lege einen neuen Entwurf an und aktiviere ihn vorwärts.',
   mrg_err_no_active: 'Das Rezept hat keine aktive Version.',
   mrg_err_missing_revision: 'Uns fehlte das Revisions-Token, deshalb haben wir nichts gesendet. Lade die Seite neu.',
-  mrg_err_generic: 'Etwas ist schiefgelaufen. Es wurde nichts gespeichert.'
+  mrg_err_generic: 'Etwas ist schiefgelaufen. Es wurde nichts gespeichert.',
+
+  // ---- Meals (Firmenvereinbarungen) — MODULBLOCK, zusammenhängend angehängt; nicht verschachteln --
+  // Die Company-Meals-Ansicht des Betriebs: die hier geltenden Vereinbarungen und die darauf finanzierten Bestellungen.
+  nav_meals: 'Firmenessen',
+  meals_page_title: 'Firmenvereinbarungen',
+  meals_page_intro: 'Die Firmen mit einer Vereinbarung an diesem Standort und die über ein Firmenkonto finanzierten Bestellungen.',
+  meals_reload: 'Neu laden',
+
+  meals_agreements_title: 'Vereinbarungen an diesem Standort',
+  meals_agreements_none: 'Dieser Standort hat keine Firmenvereinbarungen.',
+  meals_col_company: 'Firma',
+  meals_col_orgnr: 'Firmennummer',
+  meals_col_agreement: 'Vereinbarung',
+  meals_col_currency: 'Währung',
+  meals_col_members: 'Aktive Mitglieder',
+  meals_col_orders: 'Bestellungen',
+  meals_company_archived: 'Firma ist archiviert',
+  meals_agreement_active: 'Aktiv',
+  meals_agreement_ended: 'Beendet',
+
+  meals_orders_title: 'Finanzierte Bestellungen',
+  meals_orders_title_for: 'Finanzierte Bestellungen — {company}',
+  meals_orders_pick: 'Wähle oben eine Vereinbarung, um die darauf finanzierten Bestellungen zu sehen.',
+  meals_orders_none: 'Auf dieser Vereinbarung ist an diesem Standort keine Bestellung finanziert.',
+  meals_col_order: 'Bestellung',
+  meals_col_state: 'Zustand',
+  meals_col_cap: 'Reservierter Rahmen',
+  meals_col_bound: 'Gebundener Warenkorb',
+  meals_col_captured: 'Erfasst',
+  meals_col_bound_at: 'Gebunden (deine Zeit)',
+  meals_col_captured_at: 'Erfasst (deine Zeit)',
+  meals_state_reserved: 'Reserviert',
+  meals_state_bound: 'Gebunden',
+  meals_state_captured: 'Erfasst',
+  meals_state_released: 'Freigegeben',
+  meals_capture_none: 'Auf dieser Bestellung wurde noch nichts erfasst.',
+  meals_capture_unknown: 'Der Server hat für diese Bestellung keinen Betrag geliefert.',
+
+  // Ablehnungen. Jede ist eine eigene Aussage und darf nie als «keine Vereinbarungen» gelesen werden.
+  meals_refusal_dark: 'Company Meals ist für diesen Standort nicht eingeschaltet. Das Modul hat geantwortet, zeigt hier aber nichts.',
+  meals_refusal_absent: 'Dieser Server hat nicht als Company Meals geantwortet. Wir wissen nicht, ob das Modul hier vorhanden ist.',
+  meals_refusal_forbidden: 'Du bist für diesen Standort keine Filialadministration, daher kann die Liste nicht gelesen werden.',
+  meals_refusal_unauthenticated: 'Die Anmeldung wurde nicht akzeptiert. Bitte melde dich erneut an.',
+  meals_refusal_unknown: 'Wir konnten das nicht lesen. Die Liste wird nicht angezeigt — das heisst nicht, dass sie leer ist.',
+  meals_refusal_not_read: 'Noch nicht geladen.',
+
+  meals_unlisted_company_one: 'Eine Bestellung ist auf ein Firmenkonto gebucht, das oben nicht in der Vereinbarungsliste steht.',
+  meals_unlisted_company: '{count} Firmenkonten, die oben nicht in der Vereinbarungsliste stehen, haben Bestellungen an diesem Standort.',
+
+  meals_footnote_no_totals: 'Die Beträge stammen vom Server, einer pro Bestellung. Wir addieren sie nicht: eine Summe über Kreditverkäufe gehört auf die Monatsabrechnung, die der Server berechnet und einfriert.'
 }

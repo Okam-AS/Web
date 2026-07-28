@@ -2823,5 +2823,55 @@ export default {
   mrg_err_not_draft: 'Only a draft can be edited. Author a new draft and activate it forward.',
   mrg_err_no_active: 'The recipe has no active version.',
   mrg_err_missing_revision: 'We were missing the revision token, so we sent nothing. Reload the page.',
-  mrg_err_generic: 'Something went wrong. Nothing was saved.'
+  mrg_err_generic: 'Something went wrong. Nothing was saved.',
+
+  // ---- Meals (company agreements) — MODULE BLOCK, appended contiguously; do not interleave -------
+  // The venue's Company Meals surface: the agreements that apply here, and the orders funded on them.
+  nav_meals: 'Company meals',
+  meals_page_title: 'Company agreements',
+  meals_page_intro: 'The companies with an agreement at this venue, and the orders funded on a company account.',
+  meals_reload: 'Reload',
+
+  meals_agreements_title: 'Agreements at this venue',
+  meals_agreements_none: 'This venue has no company agreements.',
+  meals_col_company: 'Company',
+  meals_col_orgnr: 'Org. no.',
+  meals_col_agreement: 'Agreement',
+  meals_col_currency: 'Currency',
+  meals_col_members: 'Active members',
+  meals_col_orders: 'Orders',
+  meals_company_archived: 'Company is archived',
+  meals_agreement_active: 'Active',
+  meals_agreement_ended: 'Ended',
+
+  meals_orders_title: 'Funded orders',
+  meals_orders_title_for: 'Funded orders — {company}',
+  meals_orders_pick: 'Pick an agreement above to see the orders funded on it.',
+  meals_orders_none: 'No orders are funded on this agreement at this venue.',
+  meals_col_order: 'Order',
+  meals_col_state: 'State',
+  meals_col_cap: 'Reserved cap',
+  meals_col_bound: 'Bound cart',
+  meals_col_captured: 'Captured',
+  meals_col_bound_at: 'Bound (your time)',
+  meals_col_captured_at: 'Captured (your time)',
+  meals_state_reserved: 'Reserved',
+  meals_state_bound: 'Bound',
+  meals_state_captured: 'Captured',
+  meals_state_released: 'Released',
+  meals_capture_none: 'Nothing has been captured on this order yet.',
+  meals_capture_unknown: 'The server sent no amount for this order.',
+
+  // Refusals. Each is its own claim and must never be read as "no agreements".
+  meals_refusal_dark: 'Company Meals is not switched on for this venue. The module answered, but shows nothing here.',
+  meals_refusal_absent: 'This server did not answer as Company Meals. We do not know whether the module is here.',
+  meals_refusal_forbidden: 'You are not a store administrator for this venue, so the list cannot be read.',
+  meals_refusal_unauthenticated: 'The sign-in was not accepted. Please sign in again.',
+  meals_refusal_unknown: 'We could not read this. The list is not shown — that does not mean it is empty.',
+  meals_refusal_not_read: 'Not read yet.',
+
+  meals_unlisted_company_one: 'One order is booked to a company account that is not in the agreement list above.',
+  meals_unlisted_company: '{count} company accounts that are not in the agreement list above have orders at this venue.',
+
+  meals_footnote_no_totals: 'The amounts come from the server, one per order. We do not add them up: a total on credit sales belongs on the monthly statement, which the server computes and freezes.'
 }
