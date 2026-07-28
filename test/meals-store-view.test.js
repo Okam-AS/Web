@@ -110,8 +110,10 @@ describe('timestamps — parsed as the instants they are, never as browser-local
     const naive = new Date('2026-07-28T22:30:00')
     expect(naive.getTime()).not.toBe(row.boundAt.getTime())
     // Spelled out: this fixture actually exercises an offset. If the suite were ever run in UTC the
-    // line above would silently stop proving anything, so the offset itself is asserted.
-    expect(Math.abs(naive.getTime() - row.boundAt.getTime())).toBe(2 * 3600 * 1000)
+    // line above would silently stop proving anything, so the offset itself is asserted -- but as
+    // NON-ZERO, not as a specific number. Pinning it to 2h asserted "the runner is in Oslo in July",
+    // which is a fact about the machine rather than about the code, and failed in every other zone.
+    expect(naive.getTimezoneOffset()).not.toBe(0)
   })
 
   test('an already-zoned stamp is not double-shifted', () => {
