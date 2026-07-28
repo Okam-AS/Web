@@ -118,15 +118,20 @@ export class WorkforceClientBase {
   /**
    * Every Workforce mutation carries an `Idempotency-Key`; the surface rejects one without it.
    *
-   * `extraHeaders` carries the preconditions an individual route adds on top — today only the batch
-   * assignment edit's `If-Match`. It is threaded through here rather than built at the call site so
-   * there stays exactly ONE place that decides what a workforce mutation's headers are; a second
-   * place is how the two lanes' duplicated discriminator drifted apart before this file existed.
+   * `extraHeaders` carries the preconditions an individual route adds on top of that. TWO routes
+   * need one today, and they arrived from two independent lanes that each reached for the same
+   * shape: the schedule's batch assignment edit sends an `If-Match` carrying the draft checksum,
+   * and the management surface's `PATCH /staff/{id}` sends an `If-Match` carrying the aggregate's
+   * opaque revision (a plain 400 without it). One optional argument serves both — there is no
+   * second mechanism, and no second `_mutate` in either client.
+   *
+   * It is threaded through here rather than assembled at the call site because the idempotency rule
+   * is the thing this base exists to hold exactly once. A caller that built its own header bag would
+   * be the start of the second copy this file's header warns about — which is how the two lanes'
+   * duplicated discriminator drifted apart before this file existed.
    */
   _mutate (method, path, body, extraHeaders) {
-    return this._request(method, path, {
-      body,
-      headers: Object.assign({ 'Idempotency-Key': newGuid() }, extraHeaders || {})
-    });
+    const headers = Object.assign({ 'Idempotency-Key': newGuid() }, extraHeaders || {});
+    return this._request(method, path, { body, headers });
   }
 }
