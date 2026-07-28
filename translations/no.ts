@@ -2772,6 +2772,7 @@ export default {
   // ---------------------------------------------------------------------------------------------
   // MARGIN — oppskrift inn, kostpris ut (/admin/margin-recipes)
   // ---------------------------------------------------------------------------------------------
+  nav_margin_recipes: 'Oppskrifter',
   mrg_page_title: 'Oppskrifter og kostpris',
   mrg_page_intro: 'Legg inn en oppskrift og se hva den koster å lage.',
   mrg_module_off: 'Margin-modulen er ikke slått på for denne butikken.',
@@ -3039,6 +3040,7 @@ export default {
   growth_error_test_address_required: 'En testadresse er påkrevd.',
 
   // Selskap og arrangement — bevisflate for reisen fra forespørsel til oppgjort
+  nav_events: 'Selskap',
   ev_page_title: 'Selskap og arrangement',
   ev_page_intro: 'Én forespørsel, fulgt så langt denne backend-en faktisk går. Alle beløp leses fra serveren; ingenting summeres her.',
   ev_pipeline_heading: 'Forespørsler',

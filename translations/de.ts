@@ -2728,6 +2728,7 @@ export default {
   // ---------------------------------------------------------------------------------------------
   // MARGIN — Rezept rein, Tellerkosten raus (/admin/margin-recipes)
   // ---------------------------------------------------------------------------------------------
+  nav_margin_recipes: 'Rezepte',
   mrg_page_title: 'Rezepte und Tellerkosten',
   mrg_page_intro: 'Gib ein Rezept ein und sieh, was es in der Herstellung kostet.',
   mrg_module_off: 'Das Margin-Modul ist für diesen Betrieb nicht eingeschaltet.',
@@ -2996,6 +2997,7 @@ export default {
   growth_error_test_address_required: 'Eine Testadresse ist erforderlich.',
 
   // Events — die Nachweisfläche für den Weg von der Anfrage bis zur Abrechnung
+  nav_events: 'Events',
   ev_page_title: 'Events',
   ev_page_intro: 'Eine Anfrage, verfolgt so weit, wie dieses Backend tatsächlich reicht. Jeder Betrag wird vom Server gelesen; hier wird nichts summiert.',
   ev_pipeline_heading: 'Anfragen',

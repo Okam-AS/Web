@@ -241,7 +241,11 @@ const icons = {
   posReports: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>',
   workforceSchedule: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M4 11h16M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 15h3m2 0h3" /></svg>',
   workforceMe: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 16l2 2 4-4" /></svg>',
-  workforceRoster: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>'
+  workforceRoster: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>',
+  marginRecipes: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>',
+  mealsAgreements: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>',
+  growthNewsletter: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>',
+  eventsPipeline: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>'
 };
 
 export default {
@@ -309,7 +313,12 @@ export default {
               { label: this.$i('nav_products'), path: '/admin/products', icon: icons.products },
               { label: this.$i('nav_categories'), path: '/admin/categories', icon: icons.categories },
               { label: this.$i('nav_allergens'), path: '/admin/allergens', icon: icons.allergens },
-              { label: this.$i('nav_import'), path: '/admin/import', icon: icons.import }
+              { label: this.$i('nav_import'), path: '/admin/import', icon: icons.import },
+              // Margin. A recipe is authored out of the products this group already administers and
+              // priced against them, so it is menu work rather than finance work: the number it
+              // produces is a cost per dish, not a settlement. Store-admin, and store-scoped off
+              // `selectedAdminStore` like everything else here.
+              { label: this.$i('nav_margin_recipes'), path: '/admin/margin-recipes', icon: icons.marginRecipes, isNew: true }
             ]
           },
           {
@@ -324,7 +333,14 @@ export default {
             items: [
               { label: this.$i('nav_send_invoice'), path: '/admin/kravia-invoice', icon: icons.invoice, isNew: true },
               { label: this.$i('nav_rewards'), path: '/admin/rewards', icon: icons.rewards },
-              { label: this.$i('nav_discounts'), path: '/admin/discounts', icon: icons.discounts }
+              { label: this.$i('nav_discounts'), path: '/admin/discounts', icon: icons.discounts },
+              // Growth. The lane left the group to the merge, so it is chosen here rather than
+              // inherited: this is a store sending marketing mail to its own consenting customers,
+              // which is what "Salg & marked" already collects (invoices out, rewards, discounts).
+              // It is NOT the PowerUser `/admin/poweruser-growth` next to it in the role group —
+              // that one is Okam's own growth tooling, not a venue's newsletter. Being a store-admin
+              // link, its path is pinned in `test/admin-nav-access.test.js` with the rest.
+              { label: this.$i('nav_growth_newsletter'), path: '/admin/growth-newsletter', icon: icons.growthNewsletter, isNew: true }
             ]
           },
           {
@@ -339,7 +355,11 @@ export default {
             title: this.$i('nav_group_administration'),
             items: [
               { label: this.$i('nav_customers'), path: '/admin/customers', icon: icons.customers },
-              { label: this.$i('nav_employees'), path: '/admin/employees', icon: icons.employees }
+              { label: this.$i('nav_employees'), path: '/admin/employees', icon: icons.employees },
+              // Meals. A company agreement is a customer relationship — a firm that funds its
+              // people's orders — so it sits beside the customer register rather than in sales.
+              // It is appended BEFORE the onboarding push below, which still lands last.
+              { label: this.$i('nav_meals'), path: '/admin/meals-agreements', icon: icons.mealsAgreements, isNew: true }
             ]
           }
         );
@@ -389,14 +409,20 @@ export default {
             { label: this.$i('nav_kitchen'), path: '/admin/kitchen', icon: icons.kitchen },
             { label: this.$i('nav_tables'), path: '/admin/tables', icon: icons.tables },
             { label: this.$i('nav_reservations'), path: '/admin/reservations', icon: icons.reservations },
+            // Events. Beside reservations because both turn an enquiry into a booked table, and in
+            // the ROLE-GATED group for the same reason the roster is: the store-admin links are
+            // pinned as an exact set by `test/admin-nav-access.test.js`, and a role group is
+            // outside that set. The page does not opt out of the store-admin guard, so it must
+            // not be offered to a worker either — the PowerUser group is never shown to one.
+            { label: this.$i('nav_events'), path: '/admin/events-pipeline', icon: icons.eventsPipeline },
             { label: this.$i('nav_pos_settings'), path: '/admin/pos-settings', icon: icons.posSettings },
             { label: this.$i('nav_pos_reports'), path: '/admin/pos-reports', icon: icons.posReports },
             { label: this.$i('nav_workforce_schedule'), path: '/admin/workforce-schedule', icon: icons.workforceSchedule },
             // Beside the schedule, and gated the same way, because it is the same module's other
             // half: the schedule plans a week for people the roster is what creates. It is NOT in a
-            // store-admin group — those eighteen links are pinned by `test/admin-nav-access.test.js`
-            // as the exact set, and this page is store-admin work that does not opt out of the
-            // shell's guard, so it belongs in neither the worker group nor that pinned list.
+            // store-admin group — those links are pinned by `test/admin-nav-access.test.js` as an
+            // exact set, and this page is store-admin work that does not opt out of the shell's
+            // guard, so it belongs in neither the worker group nor that pinned list.
             { label: this.$i('nav_workforce_roster'), path: '/admin/workforce-roster', icon: icons.workforceRoster },
             { label: this.$i('nav_okam_growth'), path: '/admin/poweruser-growth', icon: icons.growth },
             { label: this.$i('nav_dintero'), path: '/admin/dintero', icon: icons.dintero },

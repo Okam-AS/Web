@@ -2726,6 +2726,7 @@ export default {
   // ---------------------------------------------------------------------------------------------
   // MARGIN — a recipe in, a plate cost out (/admin/margin-recipes)
   // ---------------------------------------------------------------------------------------------
+  nav_margin_recipes: 'Recipes',
   mrg_page_title: 'Recipes and plate cost',
   mrg_page_intro: 'Enter a recipe and see what it costs to make.',
   mrg_module_off: 'The Margin module is not switched on for this store.',
@@ -2993,6 +2994,7 @@ export default {
   growth_error_test_address_required: 'A test address is required.',
 
   // Events — the proving surface for the journey from enquiry to settled
+  nav_events: 'Events',
   ev_page_title: 'Events',
   ev_page_intro: 'One enquiry, followed as far as this backend actually goes. Every amount is read from the server; nothing is added up here.',
   ev_pipeline_heading: 'Enquiries',
