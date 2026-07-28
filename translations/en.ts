@@ -2873,5 +2873,122 @@ export default {
   meals_unlisted_company_one: 'One order is booked to a company account that is not in the agreement list above.',
   meals_unlisted_company: '{count} company accounts that are not in the agreement list above have orders at this venue.',
 
-  meals_footnote_no_totals: 'The amounts come from the server, one per order. We do not add them up: a total on credit sales belongs on the monthly statement, which the server computes and freezes.'
+  meals_footnote_no_totals: 'The amounts come from the server, one per order. We do not add them up: a total on credit sales belongs on the monthly statement, which the server computes and freezes.',
+
+  // Growth — capture to a lawful send (/admin/growth-newsletter). The whole surface exists to make
+  // an unlawful send impossible and a lawful one provable, so the copy names refusals plainly and
+  // never implies a permission the backend has not given.
+  nav_growth_newsletter: 'Newsletter',
+  growth_page_title: 'Newsletter',
+  growth_page_intro: 'From what your guests consented to, to a send you can stand behind. Every step below is checked against the consent record — nothing here can grant permission on a guest\'s behalf.',
+
+  // Consent standing (#8) — counts only, and never an audience.
+  growth_standing_title: 'Consent standing',
+  growth_standing_intro: 'What your guests have agreed to, as counts. These are not recipients.',
+  growth_standing_unknown: 'We could not read the consent record. This does not mean there are no consents — it means we do not know, and nothing may be sent until we do.',
+  growth_standing_consented: 'Consented',
+  growth_standing_withdrawn: 'Withdrawn',
+  growth_standing_suppressed: 'Suppressed',
+  growth_standing_pending: 'Awaiting confirmation',
+  growth_standing_reasons: 'Why contacts are suppressed',
+  growth_standing_no_suppressions: 'No suppressions recorded.',
+  growth_standing_scope_note: 'Suppression reasons are shown as recorded. How far each one reaches is not shown here, because that is not yet settled.',
+  growth_standing_no_grant_note: 'There is no way to add a subscriber or grant consent from this screen. Consent comes from the guest, through double opt-in, or it does not exist.',
+
+  // Audience (#10/#11) — the only lawful recipient count.
+  growth_audience_title: 'Audience',
+  growth_audience_intro: 'A fixed, unchangeable list of who may receive this send, worked out from the consent record at the moment you compute it.',
+  growth_audience_compute: 'Compute audience',
+  growth_audience_computing: 'Computing …',
+  growth_audience_computed: 'Audience computed.',
+  growth_audience_none: 'No audience has been computed yet, so there is no recipient count to show. We will not estimate one.',
+  growth_audience_included: 'Will receive',
+  growth_audience_excluded: 'Excluded',
+  growth_audience_exclusions: 'Why contacts are excluded',
+  growth_audience_computed_at: 'Computed',
+  growth_audience_watermark: 'Source fingerprint',
+  growth_audience_immutable_note: 'This list does not change after it is computed. Recomputing over an unchanged consent record returns the same list, not a new one.',
+
+  // Newsletter authoring (#12–#15).
+  growth_draft_title: 'The newsletter',
+  growth_draft_intro: 'Each save creates a new, unchangeable version. Editing an approved newsletter withdraws its approval — a review can never green-light content it did not see.',
+  growth_draft_new: 'New newsletter',
+  growth_draft_needs_audience: 'Compute an audience first. A newsletter is bound to the audience it will be sent to, so it cannot be written before one exists.',
+  growth_draft_subject: 'Subject',
+  growth_draft_content: 'Content',
+  growth_draft_plain: 'Plain-text alternative',
+  growth_draft_create: 'Create draft',
+  growth_draft_save: 'Save new version',
+  growth_draft_saved: 'Saved.',
+  growth_draft_version: 'Version {version}',
+
+  // Test send (#16).
+  growth_test_title: 'Send yourself a test',
+  growth_test_intro: 'Sends the current version to one address you name, through the provider\'s test route. It reaches no guest and touches no consent record.',
+  growth_test_address: 'your@address.com',
+  growth_test_send: 'Send test',
+  growth_test_sending: 'Sending …',
+  growth_test_result: 'Test submitted. The provider answered: {status}. That is a submission status, not a delivery confirmation.',
+
+  // Approval (#17).
+  growth_approval_title: 'Approval',
+  growth_approval_intro: 'Approval pins this exact version, its content and its audience. If any of the three changes, the approval falls away and must be given again.',
+  growth_approval_state_live: 'Approved',
+  growth_approval_state_none: 'Not approved',
+  growth_approval_state_superseded: 'Approval out of date',
+  growth_approval_state_unknown: 'Unknown',
+  growth_approval_approve: 'Approve this version',
+  growth_approval_approving: 'Approving …',
+  growth_approval_approved_at: 'Approved {time}',
+  growth_approval_done: 'Approved.',
+
+  // The gate — the one place a send can start.
+  growth_gate_title: 'Ready to send?',
+  growth_gate_intro: 'A send happens only when every condition below is met. Anything unresolved stops it, including anything we could not check.',
+  growth_gate_state_ready: 'Ready',
+  growth_gate_state_blocked: 'Blocked',
+  growth_gate_state_unknown: 'Unresolved',
+  growth_gate_state_dispatched: 'Sent',
+  growth_gate_recipients: 'Recipients',
+  growth_gate_send: 'Send newsletter',
+  growth_gate_sending: 'Sending …',
+  growth_gate_dispatched_note: 'This version has already been sent. Sending again would not send a second time — there is one send per approved version.',
+  growth_gate_dispatched_toast: 'The newsletter was sent.',
+
+  // Why a send is refused. Each is a fact about this send, never a general warning.
+  growth_block_consent_unreadable: 'We could not read the consent record, so we cannot confirm anyone may be mailed.',
+  growth_block_no_audience: 'No audience has been computed, so there is no confirmed list of who may receive this.',
+  growth_block_empty_audience: 'Nobody in the audience may currently be mailed.',
+  growth_block_no_content: 'This newsletter has no saved content.',
+  growth_block_not_approved: 'This version has not been approved by a person.',
+  growth_block_approval_superseded: 'The approval was given for an earlier version and no longer covers this one.',
+  growth_block_no_unsubscribe: 'Recipients would have no working way to unsubscribe. Sending marketing mail without one is not lawful, so this send is refused.',
+
+  // The run — truthful counts, never blended.
+  growth_run_title: 'What happened',
+  growth_run_final_eligible: 'Eligible at send',
+  growth_run_suppressed: 'Stopped at send',
+  growth_run_accepted: 'Accepted by provider',
+  growth_run_delivered: 'Delivered',
+  growth_run_failed: 'Failed',
+  growth_run_ambiguous: 'Needs review',
+  growth_run_opened: 'Opens',
+  growth_run_open_rate: 'Open rate',
+  growth_run_truth_note: 'Accepted and delivered are counted separately. The provider taking a message for sending is not the same as it arriving.',
+  growth_run_started: 'Started',
+  growth_run_completed: 'Finished',
+
+  // Failures, keyed on the stable growth.* code the API returns.
+  growth_error_generic: 'Something went wrong. Nothing was sent.',
+  growth_error_forbidden: 'You do not have access to this store\'s newsletters.',
+  growth_error_not_found: 'That is not available.',
+  growth_error_no_live_approval: 'This newsletter has not been approved, so it cannot be sent.',
+  growth_error_approval_stale: 'The approval no longer matches this version. Approve it again.',
+  growth_error_stale_version: 'Somebody else saved a newer version. Reload before saving.',
+  growth_error_unattributed: 'We could not tell who you are, so this was not recorded.',
+  growth_error_newsletter_not_editable: 'This newsletter has started sending and can no longer be edited.',
+  growth_error_newsletter_not_approvable: 'This newsletter has started sending and can no longer be approved.',
+  growth_error_subject_required: 'A subject is required.',
+  growth_error_content_required: 'Content is required.',
+  growth_error_test_address_required: 'A test address is required.'
 }

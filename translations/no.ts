@@ -2919,5 +2919,122 @@ export default {
   meals_unlisted_company_one: 'Én ordre er ført på en bedriftskonto som ikke står i avtalelisten over.',
   meals_unlisted_company: '{count} bedriftskontoer som ikke står i avtalelisten over, har ordrer ved dette utsalgsstedet.',
 
-  meals_footnote_no_totals: 'Beløpene er hentet fra serveren, ett per ordre. Vi summerer dem ikke: en total på kredittsalg hører hjemme på månedsoppgaven, som serveren regner ut og fryser.'
+  meals_footnote_no_totals: 'Beløpene er hentet fra serveren, ett per ordre. Vi summerer dem ikke: en total på kredittsalg hører hjemme på månedsoppgaven, som serveren regner ut og fryser.',
+
+  // Growth — fra samtykke til lovlig utsendelse (/admin/growth-newsletter). Hele flaten finnes for
+  // å gjøre en ulovlig utsendelse umulig og en lovlig etterprøvbar, så teksten sier tydelig fra om
+  // hvorfor noe stoppes og lover aldri en tillatelse backend ikke har gitt.
+  nav_growth_newsletter: 'Nyhetsbrev',
+  growth_page_title: 'Nyhetsbrev',
+  growth_page_intro: 'Fra det gjestene har samtykket til, til en utsendelse du kan stå for. Hvert steg under kontrolleres mot samtykkeloggen — ingenting her kan gi samtykke på vegne av en gjest.',
+
+  // Samtykkestatus (#8) — bare tall, aldri en mottakerliste.
+  growth_standing_title: 'Samtykkestatus',
+  growth_standing_intro: 'Hva gjestene har sagt ja til, som tall. Dette er ikke mottakere.',
+  growth_standing_unknown: 'Vi klarte ikke å lese samtykkeloggen. Det betyr ikke at det ikke finnes samtykker — det betyr at vi ikke vet, og ingenting kan sendes før vi gjør det.',
+  growth_standing_consented: 'Samtykket',
+  growth_standing_withdrawn: 'Trukket tilbake',
+  growth_standing_suppressed: 'Sperret',
+  growth_standing_pending: 'Venter på bekreftelse',
+  growth_standing_reasons: 'Hvorfor kontakter er sperret',
+  growth_standing_no_suppressions: 'Ingen sperringer registrert.',
+  growth_standing_scope_note: 'Sperregrunnene vises slik de er registrert. Hvor langt hver av dem rekker vises ikke her, fordi det ikke er avklart ennå.',
+  growth_standing_no_grant_note: 'Det finnes ingen måte å legge til en abonnent eller gi samtykke fra denne skjermen. Samtykke kommer fra gjesten, gjennom dobbel bekreftelse, eller så finnes det ikke.',
+
+  // Målgruppe (#10/#11) — den eneste lovlige mottakerkosten.
+  growth_audience_title: 'Målgruppe',
+  growth_audience_intro: 'En fast, uforanderlig liste over hvem som kan motta denne utsendelsen, regnet ut fra samtykkeloggen i det øyeblikket du beregner den.',
+  growth_audience_compute: 'Beregn målgruppe',
+  growth_audience_computing: 'Beregner …',
+  growth_audience_computed: 'Målgruppen er beregnet.',
+  growth_audience_none: 'Ingen målgruppe er beregnet ennå, så det finnes ikke noe mottakertall å vise. Vi gjetter ikke på et.',
+  growth_audience_included: 'Vil motta',
+  growth_audience_excluded: 'Utelatt',
+  growth_audience_exclusions: 'Hvorfor kontakter er utelatt',
+  growth_audience_computed_at: 'Beregnet',
+  growth_audience_watermark: 'Kildesignatur',
+  growth_audience_immutable_note: 'Denne listen endrer seg ikke etter at den er beregnet. Ny beregning mot en uendret samtykkelogg gir den samme listen, ikke en ny.',
+
+  // Redigering av nyhetsbrev (#12–#15).
+  growth_draft_title: 'Nyhetsbrevet',
+  growth_draft_intro: 'Hver lagring lager en ny, uforanderlig versjon. Å redigere et godkjent nyhetsbrev trekker godkjenningen — en gjennomgang kan aldri godkjenne innhold den ikke har sett.',
+  growth_draft_new: 'Nytt nyhetsbrev',
+  growth_draft_needs_audience: 'Beregn en målgruppe først. Et nyhetsbrev er bundet til målgruppen det skal sendes til, så det kan ikke skrives før den finnes.',
+  growth_draft_subject: 'Emne',
+  growth_draft_content: 'Innhold',
+  growth_draft_plain: 'Rentekst-alternativ',
+  growth_draft_create: 'Opprett utkast',
+  growth_draft_save: 'Lagre ny versjon',
+  growth_draft_saved: 'Lagret.',
+  growth_draft_version: 'Versjon {version}',
+
+  // Testutsendelse (#16).
+  growth_test_title: 'Send deg selv en test',
+  growth_test_intro: 'Sender gjeldende versjon til én adresse du oppgir, gjennom leverandørens testrute. Den når ingen gjest og rører ingen samtykkelogg.',
+  growth_test_address: 'din@adresse.no',
+  growth_test_send: 'Send test',
+  growth_test_sending: 'Sender …',
+  growth_test_result: 'Testen er sendt inn. Leverandøren svarte: {status}. Det er en innsendingsstatus, ikke en leveringsbekreftelse.',
+
+  // Godkjenning (#17).
+  growth_approval_title: 'Godkjenning',
+  growth_approval_intro: 'Godkjenningen låser nøyaktig denne versjonen, innholdet og målgruppen. Endres én av de tre, faller godkjenningen bort og må gis på nytt.',
+  growth_approval_state_live: 'Godkjent',
+  growth_approval_state_none: 'Ikke godkjent',
+  growth_approval_state_superseded: 'Godkjenningen er utdatert',
+  growth_approval_state_unknown: 'Ukjent',
+  growth_approval_approve: 'Godkjenn denne versjonen',
+  growth_approval_approving: 'Godkjenner …',
+  growth_approval_approved_at: 'Godkjent {time}',
+  growth_approval_done: 'Godkjent.',
+
+  // Porten — det ene stedet en utsendelse kan starte.
+  growth_gate_title: 'Klar til å sende?',
+  growth_gate_intro: 'En utsendelse skjer bare når alle vilkårene under er oppfylt. Alt som er uavklart stopper den, også det vi ikke fikk kontrollert.',
+  growth_gate_state_ready: 'Klar',
+  growth_gate_state_blocked: 'Stoppet',
+  growth_gate_state_unknown: 'Uavklart',
+  growth_gate_state_dispatched: 'Sendt',
+  growth_gate_recipients: 'Mottakere',
+  growth_gate_send: 'Send nyhetsbrev',
+  growth_gate_sending: 'Sender …',
+  growth_gate_dispatched_note: 'Denne versjonen er allerede sendt. Å sende igjen ville ikke sende på nytt — det er én utsendelse per godkjent versjon.',
+  growth_gate_dispatched_toast: 'Nyhetsbrevet ble sendt.',
+
+  // Hvorfor en utsendelse stoppes. Hvert punkt er et faktum om denne utsendelsen, ikke en advarsel.
+  growth_block_consent_unreadable: 'Vi klarte ikke å lese samtykkeloggen, så vi kan ikke bekrefte at noen kan få e-post.',
+  growth_block_no_audience: 'Ingen målgruppe er beregnet, så det finnes ingen bekreftet liste over hvem som kan motta dette.',
+  growth_block_empty_audience: 'Ingen i målgruppen kan få e-post nå.',
+  growth_block_no_content: 'Dette nyhetsbrevet har ikke lagret innhold.',
+  growth_block_not_approved: 'Denne versjonen er ikke godkjent av et menneske.',
+  growth_block_approval_superseded: 'Godkjenningen ble gitt for en tidligere versjon og dekker ikke denne.',
+  growth_block_no_unsubscribe: 'Mottakerne ville ikke hatt noen fungerende måte å melde seg av på. Å sende markedsføring uten det er ikke lovlig, så utsendelsen stoppes.',
+
+  // Utsendelsen — ærlige tall, aldri blandet sammen.
+  growth_run_title: 'Hva skjedde',
+  growth_run_final_eligible: 'Kvalifisert ved utsending',
+  growth_run_suppressed: 'Stoppet ved utsending',
+  growth_run_accepted: 'Tatt imot av leverandør',
+  growth_run_delivered: 'Levert',
+  growth_run_failed: 'Mislyktes',
+  growth_run_ambiguous: 'Må gjennomgås',
+  growth_run_opened: 'Åpninger',
+  growth_run_open_rate: 'Åpningsrate',
+  growth_run_truth_note: 'Tatt imot og levert telles hver for seg. At leverandøren tar imot en melding er ikke det samme som at den kommer fram.',
+  growth_run_started: 'Startet',
+  growth_run_completed: 'Fullført',
+
+  // Feil, nøklet på den stabile growth.*-koden API-et returnerer.
+  growth_error_generic: 'Noe gikk galt. Ingenting ble sendt.',
+  growth_error_forbidden: 'Du har ikke tilgang til nyhetsbrevene til denne butikken.',
+  growth_error_not_found: 'Dette er ikke tilgjengelig.',
+  growth_error_no_live_approval: 'Dette nyhetsbrevet er ikke godkjent, så det kan ikke sendes.',
+  growth_error_approval_stale: 'Godkjenningen passer ikke lenger til denne versjonen. Godkjenn på nytt.',
+  growth_error_stale_version: 'Noen andre lagret en nyere versjon. Last inn på nytt før du lagrer.',
+  growth_error_unattributed: 'Vi klarte ikke å se hvem du er, så dette ble ikke registrert.',
+  growth_error_newsletter_not_editable: 'Dette nyhetsbrevet har begynt å sendes og kan ikke redigeres lenger.',
+  growth_error_newsletter_not_approvable: 'Dette nyhetsbrevet har begynt å sendes og kan ikke godkjennes lenger.',
+  growth_error_subject_required: 'Emne er påkrevd.',
+  growth_error_content_required: 'Innhold er påkrevd.',
+  growth_error_test_address_required: 'En testadresse er påkrevd.'
 }

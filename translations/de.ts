@@ -2875,5 +2875,123 @@ export default {
   meals_unlisted_company_one: 'Eine Bestellung ist auf ein Firmenkonto gebucht, das oben nicht in der Vereinbarungsliste steht.',
   meals_unlisted_company: '{count} Firmenkonten, die oben nicht in der Vereinbarungsliste stehen, haben Bestellungen an diesem Standort.',
 
-  meals_footnote_no_totals: 'Die Beträge stammen vom Server, einer pro Bestellung. Wir addieren sie nicht: eine Summe über Kreditverkäufe gehört auf die Monatsabrechnung, die der Server berechnet und einfriert.'
+  meals_footnote_no_totals: 'Die Beträge stammen vom Server, einer pro Bestellung. Wir addieren sie nicht: eine Summe über Kreditverkäufe gehört auf die Monatsabrechnung, die der Server berechnet und einfriert.',
+
+  // Growth — von der Einwilligung zum rechtmässigen Versand (/admin/growth-newsletter). Die ganze
+  // Oberfläche gibt es, um einen unrechtmässigen Versand unmöglich und einen rechtmässigen belegbar
+  // zu machen; der Text benennt Ablehnungen klar und verspricht nie eine Erlaubnis, die das Backend
+  // nicht erteilt hat.
+  nav_growth_newsletter: 'Newsletter',
+  growth_page_title: 'Newsletter',
+  growth_page_intro: 'Von dem, wozu deine Gäste eingewilligt haben, bis zu einem Versand, für den du geradestehen kannst. Jeder Schritt unten wird gegen das Einwilligungsprotokoll geprüft — nichts hier kann stellvertretend für einen Gast einwilligen.',
+
+  // Einwilligungsstand (#8) — nur Zahlen, nie eine Empfängerliste.
+  growth_standing_title: 'Einwilligungsstand',
+  growth_standing_intro: 'Wozu deine Gäste zugestimmt haben, als Zahlen. Das sind keine Empfänger.',
+  growth_standing_unknown: 'Wir konnten das Einwilligungsprotokoll nicht lesen. Das heisst nicht, dass es keine Einwilligungen gibt — es heisst, dass wir es nicht wissen, und bis dahin darf nichts versendet werden.',
+  growth_standing_consented: 'Eingewilligt',
+  growth_standing_withdrawn: 'Widerrufen',
+  growth_standing_suppressed: 'Gesperrt',
+  growth_standing_pending: 'Wartet auf Bestätigung',
+  growth_standing_reasons: 'Warum Kontakte gesperrt sind',
+  growth_standing_no_suppressions: 'Keine Sperren erfasst.',
+  growth_standing_scope_note: 'Die Sperrgründe werden so gezeigt, wie sie erfasst wurden. Wie weit jeder davon reicht, wird hier nicht gezeigt, weil das noch nicht entschieden ist.',
+  growth_standing_no_grant_note: 'Von diesem Bildschirm aus lässt sich kein Abonnent hinzufügen und keine Einwilligung erteilen. Einwilligung kommt vom Gast, über die doppelte Bestätigung, oder es gibt sie nicht.',
+
+  // Zielgruppe (#10/#11) — die einzige rechtmässige Empfängerzahl.
+  growth_audience_title: 'Zielgruppe',
+  growth_audience_intro: 'Eine feste, unveränderliche Liste derer, die diesen Versand erhalten dürfen, ermittelt aus dem Einwilligungsprotokoll im Moment der Berechnung.',
+  growth_audience_compute: 'Zielgruppe berechnen',
+  growth_audience_computing: 'Wird berechnet …',
+  growth_audience_computed: 'Zielgruppe berechnet.',
+  growth_audience_none: 'Es wurde noch keine Zielgruppe berechnet, daher gibt es keine Empfängerzahl zu zeigen. Wir schätzen keine.',
+  growth_audience_included: 'Erhält den Versand',
+  growth_audience_excluded: 'Ausgeschlossen',
+  growth_audience_exclusions: 'Warum Kontakte ausgeschlossen sind',
+  growth_audience_computed_at: 'Berechnet',
+  growth_audience_watermark: 'Quellsignatur',
+  growth_audience_immutable_note: 'Diese Liste ändert sich nach der Berechnung nicht mehr. Eine erneute Berechnung über ein unverändertes Protokoll ergibt dieselbe Liste, keine neue.',
+
+  // Newsletter verfassen (#12–#15).
+  growth_draft_title: 'Der Newsletter',
+  growth_draft_intro: 'Jedes Speichern erzeugt eine neue, unveränderliche Version. Das Bearbeiten eines freigegebenen Newsletters zieht die Freigabe zurück — eine Prüfung kann nie Inhalte freigeben, die sie nicht gesehen hat.',
+  growth_draft_new: 'Neuer Newsletter',
+  growth_draft_needs_audience: 'Berechne zuerst eine Zielgruppe. Ein Newsletter ist an die Zielgruppe gebunden, an die er geht, und lässt sich davor nicht verfassen.',
+  growth_draft_subject: 'Betreff',
+  growth_draft_content: 'Inhalt',
+  growth_draft_plain: 'Nur-Text-Alternative',
+  growth_draft_create: 'Entwurf anlegen',
+  growth_draft_save: 'Neue Version speichern',
+  growth_draft_saved: 'Gespeichert.',
+  growth_draft_version: 'Version {version}',
+
+  // Testversand (#16).
+  growth_test_title: 'Test an dich selbst',
+  growth_test_intro: 'Sendet die aktuelle Version an eine von dir genannte Adresse über die Testroute des Anbieters. Sie erreicht keinen Gast und berührt kein Einwilligungsprotokoll.',
+  growth_test_address: 'deine@adresse.ch',
+  growth_test_send: 'Test senden',
+  growth_test_sending: 'Wird gesendet …',
+  growth_test_result: 'Test eingereicht. Der Anbieter antwortete: {status}. Das ist ein Einreichungsstatus, keine Zustellbestätigung.',
+
+  // Freigabe (#17).
+  growth_approval_title: 'Freigabe',
+  growth_approval_intro: 'Die Freigabe fixiert genau diese Version, ihren Inhalt und ihre Zielgruppe. Ändert sich eines der drei, entfällt die Freigabe und muss erneut erteilt werden.',
+  growth_approval_state_live: 'Freigegeben',
+  growth_approval_state_none: 'Nicht freigegeben',
+  growth_approval_state_superseded: 'Freigabe veraltet',
+  growth_approval_state_unknown: 'Unbekannt',
+  growth_approval_approve: 'Diese Version freigeben',
+  growth_approval_approving: 'Wird freigegeben …',
+  growth_approval_approved_at: 'Freigegeben {time}',
+  growth_approval_done: 'Freigegeben.',
+
+  // Das Tor — die einzige Stelle, an der ein Versand starten kann.
+  growth_gate_title: 'Bereit zum Versand?',
+  growth_gate_intro: 'Ein Versand findet nur statt, wenn jede Bedingung unten erfüllt ist. Alles Ungeklärte hält ihn auf, auch das, was wir nicht prüfen konnten.',
+  growth_gate_state_ready: 'Bereit',
+  growth_gate_state_blocked: 'Gestoppt',
+  growth_gate_state_unknown: 'Ungeklärt',
+  growth_gate_state_dispatched: 'Versendet',
+  growth_gate_recipients: 'Empfänger',
+  growth_gate_send: 'Newsletter senden',
+  growth_gate_sending: 'Wird gesendet …',
+  growth_gate_dispatched_note: 'Diese Version wurde bereits versendet. Ein erneuter Versand würde nicht doppelt senden — es gibt einen Versand pro freigegebener Version.',
+  growth_gate_dispatched_toast: 'Der Newsletter wurde versendet.',
+
+  // Warum ein Versand abgelehnt wird. Jeder Punkt ist eine Tatsache über diesen Versand, keine Warnung.
+  growth_block_consent_unreadable: 'Wir konnten das Einwilligungsprotokoll nicht lesen und können daher nicht bestätigen, dass jemand angeschrieben werden darf.',
+  growth_block_no_audience: 'Es wurde keine Zielgruppe berechnet, daher gibt es keine bestätigte Liste, wer dies erhalten darf.',
+  growth_block_empty_audience: 'Niemand in der Zielgruppe darf derzeit angeschrieben werden.',
+  growth_block_no_content: 'Dieser Newsletter hat keinen gespeicherten Inhalt.',
+  growth_block_not_approved: 'Diese Version wurde von keinem Menschen freigegeben.',
+  growth_block_approval_superseded: 'Die Freigabe galt einer früheren Version und deckt diese nicht ab.',
+  growth_block_no_unsubscribe: 'Empfänger hätten keine funktionierende Möglichkeit, sich abzumelden. Werbe-E-Mails ohne diese zu senden ist nicht rechtmässig, daher wird der Versand abgelehnt.',
+
+  // Der Versand — ehrliche Zahlen, nie vermischt.
+  growth_run_title: 'Was geschehen ist',
+  growth_run_final_eligible: 'Beim Versand berechtigt',
+  growth_run_suppressed: 'Beim Versand gestoppt',
+  growth_run_accepted: 'Vom Anbieter angenommen',
+  growth_run_delivered: 'Zugestellt',
+  growth_run_failed: 'Fehlgeschlagen',
+  growth_run_ambiguous: 'Zu prüfen',
+  growth_run_opened: 'Öffnungen',
+  growth_run_open_rate: 'Öffnungsrate',
+  growth_run_truth_note: 'Angenommen und zugestellt werden getrennt gezählt. Dass der Anbieter eine Nachricht annimmt, ist nicht dasselbe wie ihre Ankunft.',
+  growth_run_started: 'Gestartet',
+  growth_run_completed: 'Abgeschlossen',
+
+  // Fehler, nach dem stabilen growth.*-Code des API geschlüsselt.
+  growth_error_generic: 'Etwas ist schiefgelaufen. Es wurde nichts versendet.',
+  growth_error_forbidden: 'Du hast keinen Zugriff auf die Newsletter dieses Standorts.',
+  growth_error_not_found: 'Das ist nicht verfügbar.',
+  growth_error_no_live_approval: 'Dieser Newsletter ist nicht freigegeben und kann daher nicht versendet werden.',
+  growth_error_approval_stale: 'Die Freigabe passt nicht mehr zu dieser Version. Gib sie erneut frei.',
+  growth_error_stale_version: 'Jemand anderes hat eine neuere Version gespeichert. Lade neu, bevor du speicherst.',
+  growth_error_unattributed: 'Wir konnten nicht erkennen, wer du bist, daher wurde dies nicht erfasst.',
+  growth_error_newsletter_not_editable: 'Dieser Newsletter wird bereits versendet und kann nicht mehr bearbeitet werden.',
+  growth_error_newsletter_not_approvable: 'Dieser Newsletter wird bereits versendet und kann nicht mehr freigegeben werden.',
+  growth_error_subject_required: 'Ein Betreff ist erforderlich.',
+  growth_error_content_required: 'Inhalt ist erforderlich.',
+  growth_error_test_address_required: 'Eine Testadresse ist erforderlich.'
 }
