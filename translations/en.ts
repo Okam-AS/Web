@@ -2429,6 +2429,46 @@ export default {
   wf_published_ok: 'Published to {count} recipients.',
   wf_generic_error: 'Something went wrong.',
 
+  // Workforce — the three views of the same week/month. Planday's third tab ("staff groups") is
+  // deliberately absent: the role a shift is scheduled as IS the grouping axis.
+  wf_pivot_employees: 'Employees',
+  wf_pivot_roles: 'Roles',
+  wf_pivot_month: 'Month',
+
+  wf_col_role: 'Role',
+  wf_col_people: 'People',
+  wf_role_none: 'No role',
+  wf_role_none_hint: 'Shifts scheduled without a role',
+  wf_role_unnamed: 'Unknown role',
+  wf_role_unlisted: 'Not in the role list',
+  wf_role_retired: 'Retired',
+  wf_role_unknown_person: 'Unknown person',
+  wf_roles_empty: 'This store has no roles registered, and no shifts are scheduled this week.',
+  wf_roles_unknown: 'The role list was not fetched, and no shifts are scheduled this week.',
+  wf_roles_list_unknown: 'The role list was not fetched. The rows below only show roles that have shifts — a role with no shifts is therefore missing here, which does not mean the store does not have it.',
+  wf_role_unresolved_one: 'One shift points at a role that is not in the store\'s role list. It gets its own row rather than being folded into "No role".',
+  wf_role_unresolved: '{count} shifts point at roles that are not in the store\'s role list. They get their own rows rather than being folded into "No role".',
+  wf_role_hidden_one: 'One retired role with no shifts this week is not shown.',
+  wf_role_hidden: '{count} retired roles with no shifts this week are not shown.',
+  // Why this pivot has no wage column at all. The cost figures are totalled per shift, per day and
+  // per week, never per role, so a role wage could only be an addition of rounded shift amounts —
+  // which would disagree with the week total on the employee view.
+  wf_roles_cost_elsewhere: 'Wages are totalled per day and per week, not per role. The wage sum for the week is on the Employees view.',
+
+  wf_col_week: 'Week',
+  wf_week_short: 'Week {week}',
+  wf_month_state_planned: 'Planned',
+  wf_month_weekday_total: 'Total per weekday',
+  wf_month_of_days: '{counted} of {total} days',
+  wf_month_average: 'Avg {time}',
+  wf_month_col_days: 'The total covers {counted} of {total} days',
+  wf_month_col_noplan: '{count} days with no plan',
+  wf_month_col_unknown: '{count} days we could not fetch',
+  wf_month_unknown_weeks: '{count} weeks were not fetched. Their days are unknown — not empty — and are not counted in the totals.',
+  wf_month_unplanned_weeks: '{count} weeks have no plan. Their days are not counted in the totals.',
+  wf_month_partial_total: 'The month total covers {counted} of {total} days.',
+  wf_month_this_month: 'This month',
+
   // Workforce — the worker's own page (/workforce/me)
   nav_workforce_me: 'My shifts',
   wfme_page_title: 'My shifts',

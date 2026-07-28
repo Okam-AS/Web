@@ -39,6 +39,20 @@ describe('WorkforceScheduleService', () => {
     expect(init.headers.Authorization).toBe('Bearer tok-123')
   })
 
+  // The role axis. It takes NO parameters — not a range, not an `includeInactive` — so a client
+  // that grew one would be inventing surface the controller does not bind.
+  test('ListRoles hits GET /roles with no query at all', async () => {
+    respondWith(200, [])
+    await service().ListRoles(42)
+
+    const [url, init] = global.fetch.mock.calls[0]
+    expect(url).toBe('/workforce/stores/42/roles')
+    expect(init.method).toBe('GET')
+    expect(init.headers.Authorization).toBe('Bearer tok-123')
+    // A read, so no Idempotency-Key is sent.
+    expect(init.headers['Idempotency-Key']).toBeUndefined()
+  })
+
   // The read that lets the grid show a cross-store clash while planning rather than at publish.
   test('GetExternalCommitments hits the advisory overlay route with just the range', async () => {
     respondWith(200, { storeId: 42, timeZoneId: 'Europe/Oslo', items: [] })

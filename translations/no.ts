@@ -2472,6 +2472,49 @@ export default {
   wf_published_ok: 'Publisert til {count} mottakere.',
   wf_generic_error: 'Noe gikk galt.',
 
+  // Bemanning — de tre visningene av samme uke/måned.
+  // Planday har en tredje fane, «Personalgrupper». Okam har den bevisst ikke: funksjonen (rollen)
+  // en vakt settes opp med ER gruppeaksen, og to lister ville måtte holdes i sync for hånd.
+  wf_pivot_employees: 'Medarbeidere',
+  wf_pivot_roles: 'Funksjoner',
+  wf_pivot_month: 'Måned',
+
+  // Funksjonsvisningen
+  wf_col_role: 'Funksjon',
+  wf_col_people: 'Personer',
+  wf_role_none: 'Uten funksjon',
+  wf_role_none_hint: 'Vakter satt opp uten funksjon',
+  wf_role_unnamed: 'Ukjent funksjon',
+  wf_role_unlisted: 'Ikke i funksjonslisten',
+  wf_role_retired: 'Utgått',
+  wf_role_unknown_person: 'Ukjent person',
+  wf_roles_empty: 'Butikken har ingen funksjoner registrert, og ingen vakter er satt opp denne uken.',
+  wf_roles_unknown: 'Funksjonslisten er ikke hentet, og ingen vakter er satt opp denne uken.',
+  wf_roles_list_unknown: 'Funksjonslisten er ikke hentet. Radene under viser bare funksjoner som har vakter — en funksjon uten vakter mangler derfor her, og det betyr ikke at butikken ikke har den.',
+  wf_role_unresolved_one: 'Én vakt peker på en funksjon som ikke ligger i butikkens funksjonsliste. Den får sin egen rad, ikke plass under «Uten funksjon».',
+  wf_role_unresolved: '{count} vakter peker på funksjoner som ikke ligger i butikkens funksjonsliste. De får egne rader, ikke plass under «Uten funksjon».',
+  wf_role_hidden_one: 'Én utgått funksjon uten vakter denne uken vises ikke.',
+  wf_role_hidden: '{count} utgåtte funksjoner uten vakter denne uken vises ikke.',
+  // Hvorfor denne visningen ikke har lønnskolonne. Lønn summeres per vakt, per dag og per uke —
+  // aldri per funksjon — så en funksjonslønn måtte ha vært en sum av avrundede vaktbeløp, og den
+  // ville ikke stemme med ukesummen på medarbeidervisningen.
+  wf_roles_cost_elsewhere: 'Lønn summeres per dag og per uke, ikke per funksjon. Lønnssummen for uken står på Medarbeidere.',
+
+  // Månedsvisningen
+  wf_col_week: 'Uke',
+  wf_week_short: 'Uke {week}',
+  wf_month_state_planned: 'Planlagt',
+  wf_month_weekday_total: 'Sum per ukedag',
+  wf_month_of_days: '{counted} av {total} dager',
+  wf_month_average: 'Snitt {time}',
+  wf_month_col_days: 'Summen dekker {counted} av {total} dager',
+  wf_month_col_noplan: '{count} dager uten plan',
+  wf_month_col_unknown: '{count} dager vi ikke fikk hentet',
+  wf_month_unknown_weeks: '{count} uker ble ikke hentet. Dagene deres er ukjente — ikke tomme — og teller ikke med i summene.',
+  wf_month_unplanned_weeks: '{count} uker har ingen plan. Dagene deres teller ikke med i summene.',
+  wf_month_partial_total: 'Månedssummen dekker {counted} av {total} dager.',
+  wf_month_this_month: 'Denne måneden',
+
   // Bemanning — arbeidstakerens egen side (/workforce/me)
   nav_workforce_me: 'Mine vakter',
   wfme_page_title: 'Mine vakter',

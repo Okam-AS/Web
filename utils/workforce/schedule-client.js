@@ -7,6 +7,7 @@
 //
 //   GET  /workforce/stores/{storeId}/context                                #1   WorkforceStaffController
 //   GET  /workforce/stores/{storeId}/staff                                  #2   WorkforceStaffController
+//   GET  /workforce/stores/{storeId}/roles                                  #8   WorkforceStaffController
 //   GET  /workforce/stores/{storeId}/schedules?from&to&view                 #17  WorkforceSchedulesController
 //   GET  /workforce/stores/{storeId}/schedules/external-commitments?from&to  #23  WorkforceSchedulesController
 //   GET  /workforce/stores/{storeId}/requests?kind&state                    #23  WorkforceRequestsController
@@ -27,6 +28,24 @@ export class WorkforceScheduleService extends WorkforceClientBase {
 
   ListStaff (storeId) {
     return this._request('GET', '/workforce/stores/' + storeId + '/staff');
+  }
+
+  /**
+   * #8: the store's `WorkforceRole` list — the axis the role pivot groups on.
+   *
+   * Takes NO parameters: not a range, not a paging cursor, not an `includeInactive`. The server
+   * returns every role the store has ever defined, already ordered by `sortOrder` then `name`, and
+   * that order is preserved rather than re-sorted here.
+   *
+   * There is no role deletion in this surface (no `DELETE` verb, no `isActive` flag). The only
+   * retire lever is `effectiveToUtc`, and this read does NOT filter on it — so a role retired last
+   * year still comes back and the client decides what to say about it.
+   *
+   * Same capability as the range read (`WorkforceScheduler`), so a caller who can draw the week can
+   * read the roles; a failure here means the role axis is UNKNOWN, never that the store has none.
+   */
+  ListRoles (storeId) {
+    return this._request('GET', '/workforce/stores/' + storeId + '/roles');
   }
 
   // `from`/`to` are the range params produced by `toUtcRangeParam` (see api-client.js for why they

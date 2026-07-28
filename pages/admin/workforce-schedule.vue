@@ -22,7 +22,9 @@
 
       <template v-else>
         <div class="wf-page__controls">
-          <div class="wf-page__weeknav">
+          <!-- The stepper moves whatever scale is on screen. Week and month keep SEPARATE offsets,
+               so stepping through a month and switching back does not silently move the week. -->
+          <div v-if="!isMonth" class="wf-page__weeknav">
             <button class="wf-page__step" :disabled="loading" @click="stepWeek(-1)">
               ‹
             </button>
@@ -32,6 +34,32 @@
             </button>
             <button class="wf-page__btn wf-page__btn--ghost" :disabled="loading || weekOffset === 0" @click="goToThisWeek">
               {{ $i('wf_this_week') }}
+            </button>
+          </div>
+          <div v-else class="wf-page__weeknav">
+            <button class="wf-page__step" :disabled="loading" @click="stepMonth(-1)">
+              ‹
+            </button>
+            <span class="wf-page__week">{{ monthLabel }}</span>
+            <button class="wf-page__step" :disabled="loading" @click="stepMonth(1)">
+              ›
+            </button>
+            <button class="wf-page__btn wf-page__btn--ghost" :disabled="loading || monthOffset === 0" @click="goToThisMonth">
+              {{ $i('wf_month_this_month') }}
+            </button>
+          </div>
+
+          <!-- The same schedule, three ways. -->
+          <div class="wf-page__views wf-page__views--pivot">
+            <button
+              v-for="option in pivotOptions"
+              :key="option.key"
+              class="wf-page__view"
+              :class="{ 'is-active': pivot === option.key }"
+              :disabled="loading"
+              @click="setPivot(option.key)"
+            >
+              {{ option.label }}
             </button>
           </div>
 
@@ -62,13 +90,15 @@
             <button v-if="canPublish" class="wf-page__btn" :disabled="busy" @click="publish">
               {{ $i('wf_publish') }}
             </button>
-            <button class="wf-page__btn wf-page__btn--ghost" :disabled="loading" @click="load">
+            <button class="wf-page__btn wf-page__btn--ghost" :disabled="loading" @click="reload">
               {{ $i('wf_reload') }}
             </button>
           </div>
         </div>
 
-        <div class="wf-page__state">
+        <!-- Revision, publication and timezone all belong to ONE revision. A month spans several, so
+             the band is week-scale only rather than showing the state of an arbitrary one. -->
+        <div v-if="!isMonth" class="wf-page__state">
           <span class="wf-page__badge" :class="'wf-page__badge--' + stateBadge.tone">{{ stateBadge.label }}</span>
           <span v-if="grid.revisionNumber !== null" class="wf-page__meta">{{ $i('wf_revision', { number: grid.revisionNumber }) }}</span>
           <span v-if="grid.publicationNumber !== null" class="wf-page__meta">{{ $i('wf_publication', { number: grid.publicationNumber }) }}</span>
@@ -90,17 +120,23 @@
              double booking as the opaque 409 above, at publish, after the week was built. This says
              it while there is still something to do about it — and says it with the same opacity the
              refusal has: how many shifts collide and when, never which store the person is at. -->
-        <div v-if="externalClashNotice" class="wf-page__notice wf-page__notice--warn">
+        <div v-if="!isMonth && externalClashNotice" class="wf-page__notice wf-page__notice--warn">
           {{ externalClashNotice }}
         </div>
 
-        <div v-if="stateNotice" class="wf-page__notice">
+        <div v-if="!isMonth && stateNotice" class="wf-page__notice">
           {{ stateNotice }}
         </div>
 
-        <WorkforceWeekGrid :grid="grid" :locale="locale" :currency="currency" />
+        <!-- Only the employee pivot takes `currency`, because it is the only one that prints money.
+             The role and month pivots are given none: the API totals cost per shift, per day and per
+             range, never per role and never per month, and a pivot handed a formatter but no server
+             figure is one refactor away from summing the chips itself. -->
+        <WorkforceWeekGrid v-if="isEmployees" :grid="grid" :locale="locale" :currency="currency" />
+        <WorkforceRoleGrid v-else-if="isRoles" :grid="roleGrid" :locale="locale" />
+        <WorkforceMonthGrid v-else :grid="monthGrid" :locale="locale" />
 
-        <section v-if="validation" class="wf-page__validation">
+        <section v-if="!isMonth && validation" class="wf-page__validation">
           <h2 class="wf-page__section-title">
             {{ $i('wf_validation_title') }}
           </h2>
@@ -132,25 +168,38 @@
 <script>
 import AdminPage from '~/components/organisms/AdminPage.vue';
 import WorkforceWeekGrid from '~/components/admin/workforce/WorkforceWeekGrid.vue';
+import WorkforceRoleGrid from '~/components/admin/workforce/WorkforceRoleGrid.vue';
+import WorkforceMonthGrid from '~/components/admin/workforce/WorkforceMonthGrid.vue';
 import { isWorkforceApiError, toUtcRangeParam } from '~/utils/workforce/api-client';
 import { WorkforceScheduleService } from '~/utils/workforce/schedule-client';
-import { weekRange, isoWeekNumber } from '~/utils/workforce/week-range';
-import { buildWeekGrid, markersFromRequests, DATA_UNKNOWN, DATA_NO_PLAN } from '~/utils/workforce/week-grid';
+import { weekRange, monthRange, isoWeekNumber } from '~/utils/workforce/week-range';
+import { buildWeekGrid, buildRoleGrid, markersFromRequests, DATA_UNKNOWN, DATA_NO_PLAN } from '~/utils/workforce/week-grid';
+import { buildMonthGrid } from '~/utils/workforce/month-grid';
 
 const VIEW_DRAFT = 'draft';
 const VIEW_PUBLISHED = 'published';
+
+// The same schedule, three ways. Planday shows four tabs; this is three, and the missing one is a
+// decision rather than a gap: its "Personalgrupper" axis is a staff-group object parallel to the
+// role a shift is scheduled as, and a venue keeping both would be aligning two lists by hand.
+// `WorkforceRole` is already on every assignment, so it IS the group axis here.
+const PIVOT_EMPLOYEES = 'employees';
+const PIVOT_ROLES = 'roles';
+const PIVOT_MONTH = 'month';
 
 // The Workforce week grid page. Reads only; the schedule state machine (draft → validate → publish)
 // is driven from here because those three routes are what make the draft/published distinction on
 // screen real, and because publish is where the cross-store double-booking guard answers.
 export default {
   name: 'AdminWorkforceSchedule',
-  components: { AdminPage, WorkforceWeekGrid },
+  components: { AdminPage, WorkforceWeekGrid, WorkforceRoleGrid, WorkforceMonthGrid },
   data () {
     return {
       loading: false,
       busy: false,
+      pivot: PIVOT_EMPLOYEES,
       weekOffset: 0,
+      monthOffset: 0,
       view: VIEW_DRAFT,
       copyPreviousWeek: false,
       timeZoneId: null,
@@ -158,8 +207,12 @@ export default {
       contextError: '',
       range: null,
       staff: null,
+      roles: null,
       markers: null,
       external: null,
+      // One `GET /schedules` body per ISO week of the month, or null where that week's read failed.
+      // See month-grid.js: the range read resolves to a single revision, so a month is N week reads.
+      monthWeeks: null,
       validation: null,
       conflict: null,
       toast: { show: false, message: '', type: 'success' },
@@ -185,17 +238,44 @@ export default {
     _workforceScheduleService () {
       return new WorkforceScheduleService(this._coreInitializer);
     },
+    isEmployees () {
+      return this.pivot === PIVOT_EMPLOYEES;
+    },
+    isRoles () {
+      return this.pivot === PIVOT_ROLES;
+    },
+    isMonth () {
+      return this.pivot === PIVOT_MONTH;
+    },
     week () {
       // Without the store's own timezone the week cannot be placed, so nothing is guessed: the page
       // blocks on the context read instead of falling back to the browser's zone.
       if (!this.timeZoneId) { return null; }
       return weekRange(this.timeZoneId, new Date(), this.weekOffset);
     },
+    // Same rule, same zone. The month's weeks come from `weekRange` itself, so the two scales can
+    // never disagree about where a week starts.
+    month () {
+      if (!this.timeZoneId) { return null; }
+      return monthRange(this.timeZoneId, new Date(), this.monthOffset);
+    },
     weekLabel () {
       if (!this.week) { return '—'; }
       const first = this.week.days[0];
       const iso = isoWeekNumber(first.year, first.month, first.day);
       return this.$i('wf_week', { week: iso.week, year: iso.year });
+    },
+    monthLabel () {
+      if (!this.month) { return '—'; }
+      return new Intl.DateTimeFormat(this.locale, { month: 'long', year: 'numeric', timeZone: 'UTC' })
+        .format(new Date(Date.UTC(this.month.year, this.month.month - 1, 1)));
+    },
+    pivotOptions () {
+      return [
+        { key: PIVOT_EMPLOYEES, label: this.$i('wf_pivot_employees') },
+        { key: PIVOT_ROLES, label: this.$i('wf_pivot_roles') },
+        { key: PIVOT_MONTH, label: this.$i('wf_pivot_month') }
+      ];
     },
     grid () {
       return buildWeekGrid({
@@ -204,6 +284,26 @@ export default {
         staff: this.staff,
         markers: this.markers,
         external: this.external,
+        conflict: this.conflict
+      });
+    },
+    // The same week's reads, grouped by role instead of by person — deliberately the SAME `range`
+    // and `external` objects, so the two pivots cannot show different weeks.
+    roleGrid () {
+      return buildRoleGrid({
+        days: this.week ? this.week.days : [],
+        range: this.range,
+        roles: this.roles,
+        external: this.external,
+        conflict: this.conflict,
+        windowStartUtc: this.week ? this.week.startUtc : null,
+        windowEndUtc: this.week ? this.week.endUtc : null
+      });
+    },
+    monthGrid () {
+      return buildMonthGrid({
+        month: this.month || { days: [], weeks: [] },
+        weekRanges: this.monthWeeks || [],
         conflict: this.conflict
       });
     },
@@ -219,14 +319,16 @@ export default {
     isManager () {
       return this.capabilities.includes('WorkforceManager');
     },
+    // The draft → validate → publish actions are all scoped to ONE revision, and a month spans
+    // several. They are withheld in the month pivot rather than guessing which week they meant.
     canCreateDraft () {
-      return this.isScheduler && this.view === VIEW_DRAFT && this.grid.dataState === DATA_NO_PLAN;
+      return !this.isMonth && this.isScheduler && this.view === VIEW_DRAFT && this.grid.dataState === DATA_NO_PLAN;
     },
     canValidate () {
-      return this.isScheduler && this.view === VIEW_DRAFT && !!this.grid.scheduleRevisionId;
+      return !this.isMonth && this.isScheduler && this.view === VIEW_DRAFT && !!this.grid.scheduleRevisionId;
     },
     canPublish () {
-      return this.isManager && this.view === VIEW_DRAFT && this.grid.state === 'Validated';
+      return !this.isMonth && this.isManager && this.view === VIEW_DRAFT && this.grid.state === 'Validated';
     },
     stateBadge () {
       if (this.grid.dataState === DATA_UNKNOWN) { return { label: this.$i('wf_state_unknown'), tone: 'unknown' }; }
@@ -276,7 +378,11 @@ export default {
   watch: {
     storeId () { this.init(); },
     weekOffset () { this.load(); },
-    view () { this.load(); }
+    monthOffset () { this.loadMonth(); },
+    view () { this.reload(); },
+    // Switching pivot changes WHICH reads are needed (roles only for the role pivot, N week reads
+    // for the month), so it reloads rather than re-slicing what happens to be in hand.
+    pivot () { this.reload(); }
   },
   mounted () {
     this.init();
@@ -304,7 +410,12 @@ export default {
           : this.$i('wf_context_failed');
         return;
       }
-      await this.load();
+      await this.reload();
+    },
+
+    /** The one entry point that knows which scale the visible pivot is on. */
+    reload () {
+      return this.isMonth ? this.loadMonth() : this.load();
     },
 
     async load () {
@@ -316,15 +427,24 @@ export default {
       // week, which is a different claim.
       this.range = null;
       this.staff = null;
+      this.roles = null;
       this.markers = null;
       this.external = null;
+      this.monthWeeks = null;
 
       const from = toUtcRangeParam(this.week.startUtc);
       const to = toUtcRangeParam(this.week.endUtc);
 
-      const [range, staff, requests, external] = await Promise.all([
+      const [range, staff, roles, requests, external] = await Promise.all([
         this._workforceScheduleService.GetRange(this.storeId, from, to, this.view).catch((e) => { this.notifyError(e); return null; }),
         this._workforceScheduleService.ListStaff(this.storeId).catch(() => null),
+        // Only the role pivot needs the role axis, and it is the only pivot that can render an
+        // UNSTAFFED role — which is precisely why it must not silently fall back to the roles that
+        // happen to appear on shifts. A failure leaves it null, and the pivot says the list is
+        // unknown rather than showing a shorter one.
+        this.pivot === PIVOT_ROLES
+          ? this._workforceScheduleService.ListRoles(this.storeId).catch(() => null)
+          : Promise.resolve(null),
         // The absence read needs WorkforceManager. A scheduler-only caller gets a 403 here, and the
         // grid then says the absences are unknown rather than drawing everyone as available.
         this._workforceScheduleService.ListRequests(this.storeId, null, 'all').catch(() => null),
@@ -336,19 +456,61 @@ export default {
 
       this.range = range;
       this.staff = Array.isArray(staff) ? staff : null;
+      this.roles = Array.isArray(roles) ? roles : null;
       this.markers = requests && Array.isArray(requests.items) ? markersFromRequests(requests.items) : null;
       this.external = external && Array.isArray(external.items) ? external : null;
+      this.loading = false;
+    },
+
+    /**
+     * The month, fetched one ISO week at a time.
+     *
+     * NOT one 31-day call. `GET /schedules?from&to` resolves the range to a SINGLE revision — the
+     * latest-starting one that overlaps — and returns that revision's whole assignment set, so a
+     * month-wide range would answer with one week and silently drop the rest.
+     *
+     * A week that fails stays null and becomes an UNKNOWN week in the grid, which is excluded from
+     * every total and named in the caveat. One failed week must never quietly shrink a month total.
+     */
+    async loadMonth () {
+      if (!this.month || !this.storeId) { return; }
+      this.loading = true;
+      this.conflict = null;
+      this.validation = null;
+      this.monthWeeks = null;
+
+      const weeks = await Promise.all(this.month.weeks.map(week =>
+        this._workforceScheduleService
+          .GetRange(
+            this.storeId,
+            toUtcRangeParam(week.startUtc),
+            toUtcRangeParam(week.endUtc),
+            this.view
+          )
+          .catch(() => null)
+      ));
+
+      this.monthWeeks = weeks;
       this.loading = false;
     },
 
     setView (view) {
       if (this.view !== view) { this.view = view; }
     },
+    setPivot (pivot) {
+      if (this.pivot !== pivot) { this.pivot = pivot; }
+    },
     stepWeek (delta) {
       this.weekOffset += delta;
     },
     goToThisWeek () {
       this.weekOffset = 0;
+    },
+    stepMonth (delta) {
+      this.monthOffset += delta;
+    },
+    goToThisMonth () {
+      this.monthOffset = 0;
     },
 
     async createDraft () {
@@ -454,6 +616,10 @@ export default {
 .wf-page__step:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .wf-page__views { display: flex; gap: 4px; background: #f1f5f9; padding: 3px; border-radius: 9px; }
+/* The pivot switch is the primary control on this page and the draft/published switch is a filter
+   on top of it, so the pivot reads a shade stronger rather than as a second identical pill row. */
+.wf-page__views--pivot { background: #eef2f6; }
+.wf-page__views--pivot .wf-page__view.is-active { color: #292c34; }
 .wf-page__view { border: none; background: none; padding: 7px 16px; border-radius: 7px; font-weight: 600; color: #64748b; cursor: pointer; font-size: 0.86rem; }
 .wf-page__view.is-active { background: #fff; color: #159f63; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); }
 .wf-page__view:disabled { cursor: not-allowed; }

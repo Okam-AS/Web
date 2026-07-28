@@ -71,8 +71,11 @@
         </button>
       </div>
 
-      <!-- Store selector -->
-      <div class="admin-nav__store store-selector-container">
+      <!-- Store selector. Same three-state rule as the nav groups: it is a control for picking which
+           store you administer, so it is withheld only from someone we KNOW administers none —
+           where it would otherwise render an empty name over an empty dropdown. While the answer is
+           unknown it renders exactly as it always has. -->
+      <div v-if="showsStoreAdminNav" class="admin-nav__store store-selector-container">
         <div v-if="adminStores.length === 1" class="store-display">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="store-icon">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -201,6 +204,7 @@
 
 <script>
 import LanguageSwitcher from '~/components/admin/LanguageSwitcher.vue';
+import { storeAdminAccess, showsStoreAdminNav } from '~/utils/admin/nav-access';
 
 const icons = {
   dashboard: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>',
@@ -271,71 +275,91 @@ export default {
     adminStores () {
       return this.$store.state.currentUser?.adminIn || [];
     },
+    // Three-state, never a boolean: `unknown` must not read as `no access`. See nav-access.js.
+    storeAdminAccess () {
+      return storeAdminAccess(this.$store.state.currentUser);
+    },
+    // True for a store admin AND while the answer is still unknown, so the async `Reload()` in
+    // `AdminPage.initAuth` can never blank and refill an admin's sidebar.
+    showsStoreAdminNav () {
+      return showsStoreAdminNav(this.storeAdminAccess);
+    },
     navGroups () {
-      const groups = [
-        {
-          title: this.$i('nav_group_operations'),
-          items: [
-            { label: this.$i('nav_dashboard'), path: '/admin', icon: icons.dashboard },
-            { label: this.$i('nav_ongoing'), path: '/admin/ongoing', icon: icons.ongoing },
-            { label: this.$i('nav_history'), path: '/admin/orders', icon: icons.orders },
-            { label: this.$i('nav_statistics'), path: '/admin/statistics', icon: icons.statistics }
-          ]
-        },
-        {
-          title: this.$i('nav_group_menu'),
-          items: [
-            { label: this.$i('nav_products'), path: '/admin/products', icon: icons.products },
-            { label: this.$i('nav_categories'), path: '/admin/categories', icon: icons.categories },
-            { label: this.$i('nav_allergens'), path: '/admin/allergens', icon: icons.allergens },
-            { label: this.$i('nav_import'), path: '/admin/import', icon: icons.import }
-          ]
-        },
-        {
-          title: this.$i('nav_group_delivery'),
-          items: [
-            { label: this.$i('nav_delivery'), path: '/admin/delivery', icon: icons.delivery },
-            { label: this.$i('nav_wolt'), path: '/admin/wolt', icon: icons.wolt }
-          ]
-        },
-        {
-          title: this.$i('nav_group_sales'),
-          items: [
-            { label: this.$i('nav_send_invoice'), path: '/admin/kravia-invoice', icon: icons.invoice, isNew: true },
-            { label: this.$i('nav_rewards'), path: '/admin/rewards', icon: icons.rewards },
-            { label: this.$i('nav_discounts'), path: '/admin/discounts', icon: icons.discounts }
-          ]
-        },
-        {
-          title: this.$i('nav_group_economy'),
-          items: [
-            { label: this.$i('nav_payment'), path: '/admin/payment', icon: icons.payment },
-            { label: this.$i('nav_settlements'), path: '/admin/settlements', icon: icons.settlements },
-            { label: this.$i('nav_terminals'), path: '/admin/terminals', icon: icons.terminals }
-          ]
-        },
-        {
-          title: this.$i('nav_group_administration'),
-          items: [
-            { label: this.$i('nav_customers'), path: '/admin/customers', icon: icons.customers },
-            { label: this.$i('nav_employees'), path: '/admin/employees', icon: icons.employees }
-          ]
-        }
-      ];
+      const groups = [];
 
-      if (this.onboardingInProgress) {
-        groups[groups.length - 1].items.push({
-          label: this.$i('nav_onboarding'),
-          path: '/admin/onboarding',
-          icon: icons.onboarding
-        });
+      // Every group in this block reads or writes a STORE's data, and `AdminPage` bounces a caller
+      // with no store-admin membership off every one of those pages. Offering them to someone we
+      // know has no membership is offering a menu of dead ends, so they are withheld — but only on
+      // a positive `worker`, never on `unknown`.
+      if (this.showsStoreAdminNav) {
+        groups.push(
+          {
+            title: this.$i('nav_group_operations'),
+            items: [
+              { label: this.$i('nav_dashboard'), path: '/admin', icon: icons.dashboard },
+              { label: this.$i('nav_ongoing'), path: '/admin/ongoing', icon: icons.ongoing },
+              { label: this.$i('nav_history'), path: '/admin/orders', icon: icons.orders },
+              { label: this.$i('nav_statistics'), path: '/admin/statistics', icon: icons.statistics }
+            ]
+          },
+          {
+            title: this.$i('nav_group_menu'),
+            items: [
+              { label: this.$i('nav_products'), path: '/admin/products', icon: icons.products },
+              { label: this.$i('nav_categories'), path: '/admin/categories', icon: icons.categories },
+              { label: this.$i('nav_allergens'), path: '/admin/allergens', icon: icons.allergens },
+              { label: this.$i('nav_import'), path: '/admin/import', icon: icons.import }
+            ]
+          },
+          {
+            title: this.$i('nav_group_delivery'),
+            items: [
+              { label: this.$i('nav_delivery'), path: '/admin/delivery', icon: icons.delivery },
+              { label: this.$i('nav_wolt'), path: '/admin/wolt', icon: icons.wolt }
+            ]
+          },
+          {
+            title: this.$i('nav_group_sales'),
+            items: [
+              { label: this.$i('nav_send_invoice'), path: '/admin/kravia-invoice', icon: icons.invoice, isNew: true },
+              { label: this.$i('nav_rewards'), path: '/admin/rewards', icon: icons.rewards },
+              { label: this.$i('nav_discounts'), path: '/admin/discounts', icon: icons.discounts }
+            ]
+          },
+          {
+            title: this.$i('nav_group_economy'),
+            items: [
+              { label: this.$i('nav_payment'), path: '/admin/payment', icon: icons.payment },
+              { label: this.$i('nav_settlements'), path: '/admin/settlements', icon: icons.settlements },
+              { label: this.$i('nav_terminals'), path: '/admin/terminals', icon: icons.terminals }
+            ]
+          },
+          {
+            title: this.$i('nav_group_administration'),
+            items: [
+              { label: this.$i('nav_customers'), path: '/admin/customers', icon: icons.customers },
+              { label: this.$i('nav_employees'), path: '/admin/employees', icon: icons.employees }
+            ]
+          }
+        );
+
+        // Still appended to the Administration group — the last of the six above, which is why this
+        // block stays INSIDE the same branch. Outside it, `groups[groups.length - 1]` would be the
+        // worker group (or nothing at all) and onboarding would land in the wrong place.
+        if (this.onboardingInProgress) {
+          groups[groups.length - 1].items.push({
+            label: this.$i('nav_onboarding'),
+            path: '/admin/onboarding',
+            icon: icons.onboarding
+          });
+        }
       }
 
       // The worker's own page. Every group above is store-admin work; this one is about the signed-in
       // person, so it is not gated on PowerUser (where the lane that built the page had parked it) —
       // a shop assistant is never a PowerUser, and gating it there left the page's actual reader with
-      // no way in. Pushed AFTER the onboarding block on purpose: that block appends to
-      // `groups[groups.length - 1]`, so adding a group before it would swallow the onboarding entry.
+      // no way in. It is also the ONE group not gated on store-admin membership, which is what makes
+      // a pure worker's sidebar a menu of one working link instead of forty dead ones.
       groups.push({
         title: this.$i('nav_group_me'),
         items: [

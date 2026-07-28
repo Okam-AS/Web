@@ -2429,6 +2429,47 @@ export default {
   wf_published_ok: 'An {count} Empfänger veröffentlicht.',
   wf_generic_error: 'Etwas ist schiefgelaufen.',
 
+  // Workforce — die drei Ansichten derselben Woche bzw. desselben Monats. Plandays dritter Reiter
+  // («Personalgruppen») fehlt bewusst: die Funktion, für die eine Schicht geplant wird, IST die
+  // Gruppierungsachse.
+  wf_pivot_employees: 'Mitarbeitende',
+  wf_pivot_roles: 'Funktionen',
+  wf_pivot_month: 'Monat',
+
+  wf_col_role: 'Funktion',
+  wf_col_people: 'Personen',
+  wf_role_none: 'Ohne Funktion',
+  wf_role_none_hint: 'Schichten ohne Funktion geplant',
+  wf_role_unnamed: 'Unbekannte Funktion',
+  wf_role_unlisted: 'Nicht in der Funktionsliste',
+  wf_role_retired: 'Ausgelaufen',
+  wf_role_unknown_person: 'Unbekannte Person',
+  wf_roles_empty: 'Für diesen Store sind keine Funktionen hinterlegt, und diese Woche sind keine Schichten geplant.',
+  wf_roles_unknown: 'Die Funktionsliste wurde nicht geladen, und diese Woche sind keine Schichten geplant.',
+  wf_roles_list_unknown: 'Die Funktionsliste wurde nicht geladen. Die Zeilen unten zeigen nur Funktionen mit Schichten — eine Funktion ohne Schichten fehlt hier also, was nicht heisst, dass der Store sie nicht hat.',
+  wf_role_unresolved_one: 'Eine Schicht verweist auf eine Funktion, die nicht in der Funktionsliste des Stores steht. Sie erhält eine eigene Zeile und wird nicht unter «Ohne Funktion» einsortiert.',
+  wf_role_unresolved: '{count} Schichten verweisen auf Funktionen, die nicht in der Funktionsliste des Stores stehen. Sie erhalten eigene Zeilen und werden nicht unter «Ohne Funktion» einsortiert.',
+  wf_role_hidden_one: 'Eine ausgelaufene Funktion ohne Schichten in dieser Woche wird nicht angezeigt.',
+  wf_role_hidden: '{count} ausgelaufene Funktionen ohne Schichten in dieser Woche werden nicht angezeigt.',
+  // Warum diese Ansicht gar keine Lohnspalte hat. Der Lohn wird pro Schicht, pro Tag und pro Woche
+  // summiert — nie pro Funktion — ein Funktionslohn wäre also eine Summe gerundeter Schichtbeträge
+  // und würde der Wochensumme in der Mitarbeitenden-Ansicht widersprechen.
+  wf_roles_cost_elsewhere: 'Der Lohn wird pro Tag und pro Woche summiert, nicht pro Funktion. Die Lohnsumme der Woche steht unter Mitarbeitende.',
+
+  wf_col_week: 'Woche',
+  wf_week_short: 'KW {week}',
+  wf_month_state_planned: 'Geplant',
+  wf_month_weekday_total: 'Summe pro Wochentag',
+  wf_month_of_days: '{counted} von {total} Tagen',
+  wf_month_average: 'Ø {time}',
+  wf_month_col_days: 'Die Summe deckt {counted} von {total} Tagen ab',
+  wf_month_col_noplan: '{count} Tage ohne Plan',
+  wf_month_col_unknown: '{count} Tage, die wir nicht laden konnten',
+  wf_month_unknown_weeks: '{count} Wochen wurden nicht geladen. Ihre Tage sind unbekannt — nicht leer — und zählen nicht in die Summen.',
+  wf_month_unplanned_weeks: '{count} Wochen haben keinen Plan. Ihre Tage zählen nicht in die Summen.',
+  wf_month_partial_total: 'Die Monatssumme deckt {counted} von {total} Tagen ab.',
+  wf_month_this_month: 'Dieser Monat',
+
   // Personaleinsatz — die eigene Seite der Mitarbeitenden (/workforce/me)
   nav_workforce_me: 'Meine Schichten',
   wfme_page_title: 'Meine Schichten',

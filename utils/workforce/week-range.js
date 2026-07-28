@@ -93,6 +93,68 @@ export function weekRange (timeZoneId, anchor, weekOffset = 0) {
 }
 
 /**
+ * The store-local calendar month containing `anchor`, stepped by `monthOffset` whole months, plus
+ * the ISO weeks that cover it.
+ *
+ * `weeks` is produced by calling `weekRange` itself rather than by re-deriving Mondays here, so the
+ * month view and the week view can never disagree about where a week begins, and the DST-safe
+ * midnight resolution is inherited rather than reimplemented.
+ *
+ * WHY THE WEEKS ARE PART OF THE MONTH AT ALL. `GET /schedules?from&to` does not return the
+ * assignments in a range: it resolves the range to ONE schedule revision — the latest-starting one
+ * that overlaps — and returns that revision's whole set. A single 31-day read would therefore answer
+ * with one week's revision and silently omit the other four. A month is fetched as N week reads,
+ * which is why the weeks are enumerated here.
+ *
+ * Month arithmetic is done on `Date.UTC(year, month - 1 + offset, 1)`, which normalises December →
+ * January and negative offsets without a special case.
+ */
+export function monthRange (timeZoneId, anchor, monthOffset = 0) {
+  const local = partsInZone(timeZoneId, anchor);
+  const first = new Date(Date.UTC(local.year, local.month - 1 + monthOffset, 1));
+  const year = first.getUTCFullYear();
+  const month = first.getUTCMonth() + 1;
+  // Day 0 of the NEXT month is the last day of this one — no leap-year table needed.
+  const dayCount = new Date(Date.UTC(year, month, 0)).getUTCDate();
+
+  const days = [];
+  for (let d = 1; d <= dayCount; d++) {
+    const civil = new Date(Date.UTC(year, month - 1, d));
+    days.push({
+      year,
+      month,
+      day: d,
+      isoDate: isoDate(year, month, d),
+      // ISO weekday, 1 = Monday … 7 = Sunday. The month grid's columns are keyed on this. Same
+      // Monday-first rotation `weekRange` uses, so Sunday sorts last rather than first.
+      weekday: ((civil.getUTCDay() + DAYS_PER_WEEK - WEEKDAY_MONDAY) % DAYS_PER_WEEK) + 1
+    });
+  }
+
+  const anchorInstant = zonedMidnightToUtc(timeZoneId, year, month, 1);
+  const leadingBlanks = (first.getUTCDay() + DAYS_PER_WEEK - WEEKDAY_MONDAY) % DAYS_PER_WEEK;
+  const weekCount = Math.ceil((leadingBlanks + dayCount) / DAYS_PER_WEEK);
+
+  const weeks = [];
+  for (let i = 0; i < weekCount; i++) {
+    const week = weekRange(timeZoneId, anchorInstant, i);
+    const firstDay = week.days[0];
+    weeks.push(Object.assign({ isoWeek: isoWeekNumber(firstDay.year, firstDay.month, firstDay.day) }, week));
+  }
+
+  return {
+    year,
+    month,
+    days,
+    weeks,
+    // How many empty cells precede the 1st in a Monday-first calendar.
+    leadingBlanks,
+    startUtc: weeks[0].startUtc,
+    endUtc: weeks[weeks.length - 1].endUtc
+  };
+}
+
+/**
  * The ISO-8601 week number of a civil date, with its ISO week-year. Derived from the week's Thursday
  * so the turn of the year lands correctly: 1 January can belong to week 52/53 of the previous year,
  * and 29 December to week 1 of the next.

@@ -154,7 +154,21 @@ export function paidMinutesOf (assignment) {
   return Math.max(0, span - (assignment.unpaidBreakMinutes || 0));
 }
 
-function toShift (assignment, cost) {
+/**
+ * One assignment, placed. THE shared shift primitive: the employee pivot, the role pivot and the
+ * month view all draw this same object, so a placement rule fixed here is fixed everywhere.
+ *
+ * `roleId` and `staffName` are carried even though the employee grid renders neither — they are what
+ * the role pivot groups on and what its cells label, and deriving them a second time somewhere else
+ * is exactly the drift this file exists to prevent.
+ *
+ * `cost` is OPTIONAL and is passed only by the employee week grid, which is the one pivot whose
+ * money the API actually answers (per shift, per day, per range). The role and month pivots call
+ * this with one argument and get `cost: null` — not because the chip is unavailable to them, but
+ * because a pivot that showed chips it may not add up would invite exactly the sum this layer
+ * forbids. See `buildRoleGrid` and `month-grid.js` for the two refusals.
+ */
+export function toShift (assignment, cost) {
   const starts = parseApiInstant(assignment.startsUtc);
   const ends = parseApiInstant(assignment.endsUtc);
   return {
@@ -163,7 +177,13 @@ function toShift (assignment, cost) {
     // cost overlay is not on the response at all. It is a chip figure and nothing else: summing
     // these does not produce the day or the week (see `buildCostIndex`).
     cost: cost || null,
+    // Nullable server-side. Null is a real answer — "this shift has no role" — and must never be
+    // confused with a role id we merely failed to resolve.
+    roleId: assignment.roleId || null,
     roleName: assignment.roleName || null,
+    staffMemberId: assignment.staffMemberId || null,
+    staffName: assignment.staffDisplayName || null,
+    isOpen: !!(assignment.isOpenShift || !assignment.staffMemberId),
     note: assignment.note || null,
     state: assignment.state || null,
     start: localClock(starts, assignment.startOffsetMinutes),
@@ -336,9 +356,45 @@ function overlaps (aStart, aEnd, bStart, bEnd) {
   return aStart < bEnd && bStart < aEnd;
 }
 
-function resolveDataState (range) {
+/**
+ * Which of the three data states a `GET /schedules` body is in. Shared by every pivot: the state is
+ * a property of the READ, not of how the answer is grouped afterwards.
+ */
+export function resolveDataState (range) {
   if (!range) { return DATA_UNKNOWN; }
   return range.scheduleRevisionId ? DATA_COUNTED : DATA_NO_PLAN;
+}
+
+/**
+ * The advisory clash pass: does a shift PLANNED HERE overlap a commitment the person already has
+ * elsewhere? That is the question the §3.8.4 guard only ever answered on write, as an opaque 409 at
+ * publish. Answering it while planning is the whole point of the overlay.
+ *
+ * Compared on UTC instants across the WHOLE week rather than within a day column, because the two
+ * sides are bucketed by different days on purpose: this store's shifts sit under their stored
+ * business date, the commitments under the route-local day of their start.
+ *
+ * Mutates in place (`shift.hasExternalClash`, `item.isClashing`) and returns how many DISTINCT
+ * shifts were flagged. Extracted so the employee and role pivots cannot answer it differently — a
+ * shift that clashes must clash in every view that draws it.
+ */
+export function markExternalClashes (shiftsByStaff, external) {
+  let flagged = 0;
+  for (const staffMemberId of Object.keys(external.byStaff || {})) {
+    const shifts = shiftsByStaff[staffMemberId] || [];
+    for (const item of external.byStaff[staffMemberId]) {
+      for (const shift of shifts) {
+        if (shift.startsMs === null || shift.endsMs === null) { continue; }
+        if (!overlaps(shift.startsMs, shift.endsMs, item.startsMs, item.endsMs)) { continue; }
+        item.isClashing = true;
+        if (!shift.hasExternalClash) {
+          shift.hasExternalClash = true;
+          flagged += 1;
+        }
+      }
+    }
+  }
+  return flagged;
 }
 
 /**
@@ -446,28 +502,7 @@ export function buildWeekGrid (options) {
     perDayCount[dayKey]++;
   }
 
-  // The advisory clash pass: does a shift PLANNED HERE overlap a commitment the person already has
-  // elsewhere? That is the question the §3.8.4 guard only ever answered on write, as an opaque 409 at
-  // publish. Answering it here, while planning, is the whole point of the overlay.
-  //
-  // Compared on UTC instants across the WHOLE week rather than within a day column, because the two
-  // sides are bucketed by different days on purpose: this store's shifts sit under their stored
-  // business date, the commitments under the route-local day of their start.
-  let externalClashCount = 0;
-  for (const staffMemberId of Object.keys(external.byStaff)) {
-    const shifts = shiftsByStaff[staffMemberId] || [];
-    for (const item of external.byStaff[staffMemberId]) {
-      for (const shift of shifts) {
-        if (shift.startsMs === null || shift.endsMs === null) { continue; }
-        if (!overlaps(shift.startsMs, shift.endsMs, item.startsMs, item.endsMs)) { continue; }
-        item.isClashing = true;
-        if (!shift.hasExternalClash) {
-          shift.hasExternalClash = true;
-          externalClashCount += 1;
-        }
-      }
-    }
-  }
+  const externalClashCount = markExternalClashes(shiftsByStaff, external);
 
   const buildRow = (key, name, meta) => {
     // The open row is a shift without a person, so no person can be committed elsewhere on it.
@@ -587,6 +622,280 @@ export function buildWeekGrid (options) {
       // amounts. Deliberately not `sum(days)` and not `sum(chips)` — both drift, and both would put
       // a number on screen that disagrees with the one the backend calls true.
       cost: readCost(counted ? range.cost : null)
+    }
+  };
+}
+
+// ---------------------------------------------------------------------------------------------
+// The ROLE pivot — the same week, grouped by what the shift is rather than by who works it.
+// ---------------------------------------------------------------------------------------------
+//
+// WHY `WorkforceRole` AND NOT A NEW AXIS. Planday calls this tab "Personalgrupper" and backs it with
+// a staff-group object of its own, separate from the role a shift is scheduled as. Okam deliberately
+// does not: a venue that kept both would have to keep two lists aligned by hand, and the day they
+// drift the schedule and the group totals stop describing the same thing. `WorkforceRole` is already
+// on every assignment (`roleId`) and already has a store-level list, so it IS the axis.
+//
+// THE THREE ROLE-ISH THINGS A SHIFT CAN BE, kept apart for the same reason the data states are:
+//
+//   a resolved role   — `roleId` is set and appears in `GET /roles`. A normal row.
+//   no role at all    — `roleId` is null. A real, common state (a shift can be scheduled without
+//                       one), and its own row — but only when something is in it, because "no role"
+//                       is not an object a manager defined.
+//   an unresolved id  — `roleId` is set and does NOT appear in the role list. One row PER id, never
+//                       merged with each other or with "no role". Since the surface has no role
+//                       deletion, this means the list read was partial, the role was created after
+//                       it, or (in `view=published`) the shift carries a snapshot id. The server's
+//                       frozen `roleName` is shown when there is one and the row says the role is
+//                       not in the store's list; with no name it is an id and nothing else, and the
+//                       row says that instead of inventing a label.
+
+// Rows are keyed by `roleId` directly; this is the one key that is not an id, and it is namespaced
+// so it can never collide with a Guid.
+export const ROLE_NONE_KEY = 'role:none';
+
+/**
+ * Whether a role's `[effectiveFromUtc, effectiveToUtc)` window overlaps the week on screen.
+ *
+ * There is no role deletion and no `isActive` flag in this surface — `effectiveToUtc` is the only
+ * retire lever, and `GET /roles` does not filter on it, so every role the store ever defined comes
+ * back on every read. Without this a week in 2026 would carry a row for a role retired in 2024,
+ * forever.
+ */
+function roleIsEffective (role, windowStartMs, windowEndMs) {
+  const from = parseApiInstant(role.effectiveFromUtc);
+  const to = parseApiInstant(role.effectiveToUtc);
+  if (from && windowEndMs !== null && from.getTime() >= windowEndMs) { return false; }
+  if (to && windowStartMs !== null && to.getTime() <= windowStartMs) { return false; }
+  return true;
+}
+
+/**
+ * Builds the role pivot for one week.
+ *
+ * `days`, `range`, `external` and `conflict` are the same inputs `buildWeekGrid` takes and are read
+ * the same way — the day bucketing, the shift shape and the clash pass are the shared functions
+ * above, not copies.
+ *
+ * `roles` is the `GET /roles` body, or null/undefined while unknown.
+ * `windowStartUtc`/`windowEndUtc` bound the week, for the effectiveness test.
+ *
+ * AN EMPTY ROLE STILL GETS A ROW. That row is the answer to "is anyone on the bar this week?", and
+ * a row that disappears when the answer is "no" deletes the question. It reads `0t / 0 vakter` when
+ * the week is counted — a true zero — and the unknown mark when it is not.
+ */
+export function buildRoleGrid (options) {
+  const opts = options || {};
+  const days = opts.days || [];
+  const range = opts.range;
+  const conflict = opts.conflict;
+  const dataState = resolveDataState(range);
+  const counted = dataState === DATA_COUNTED;
+
+  const assignments = (range && range.assignments) || [];
+  const rolesKnown = Array.isArray(opts.roles);
+  const roles = rolesKnown ? opts.roles : [];
+
+  const windowStartMs = opts.windowStartUtc ? new Date(opts.windowStartUtc).getTime() : null;
+  const windowEndMs = opts.windowEndUtc ? new Date(opts.windowEndUtc).getTime() : null;
+
+  const conflictingId = conflict && conflict.conflictKind === 'assignment-overlap'
+    ? conflict.conflictingAssignmentId
+    : null;
+
+  const dayKeys = days.map(d => d.isoDate);
+  const inGrid = {};
+  for (const key of dayKeys) { inGrid[key] = true; }
+
+  const external = placeExternalCommitments(opts.external, dayKeys);
+
+  // Bucket by (role row, day). Same business-date attribution as the employee pivot — re-deriving a
+  // date off `startsUtc` here would put the two pivots of the SAME week on different days.
+  const buckets = {};
+  const shiftsByStaff = {};
+  const unresolvedNames = {};
+  let noRoleShiftCount = 0;
+
+  for (const assignment of assignments) {
+    const dayKey = businessDateKey(assignment.localBusinessDate);
+    if (dayKey === null || !inGrid[dayKey]) { continue; }
+
+    const shift = toShift(assignment);
+    if (conflictingId && shift.id === conflictingId) { shift.isConflicting = true; }
+
+    let rowKey;
+    if (!shift.roleId) {
+      rowKey = ROLE_NONE_KEY;
+      noRoleShiftCount += 1;
+    } else {
+      rowKey = shift.roleId;
+      // Provisional: resolved against the role list below. Remembering the server's name here is
+      // what lets an unresolved row still be labelled rather than shown as a bare id.
+      if (!unresolvedNames[shift.roleId]) { unresolvedNames[shift.roleId] = shift.roleName || null; }
+    }
+
+    if (!buckets[rowKey]) { buckets[rowKey] = {}; }
+    if (!buckets[rowKey][dayKey]) { buckets[rowKey][dayKey] = []; }
+    buckets[rowKey][dayKey].push(shift);
+
+    if (shift.staffMemberId) {
+      if (!shiftsByStaff[shift.staffMemberId]) { shiftsByStaff[shift.staffMemberId] = []; }
+      shiftsByStaff[shift.staffMemberId].push(shift);
+    }
+  }
+
+  const externalClashCount = markExternalClashes(shiftsByStaff, external);
+
+  const buildRow = (key, name, meta) => {
+    const cells = days.map((day) => {
+      const cell = emptyCell(day.isoDate);
+      const shifts = (buckets[key] && buckets[key][day.isoDate]) || [];
+      // Sorted by clock, then by person, so two shifts starting together have a stable order
+      // instead of whatever the response happened to hold.
+      cell.shifts = shifts.slice().sort((a, b) =>
+        String(a.start).localeCompare(String(b.start)) || String(a.staffName).localeCompare(String(b.staffName)));
+      cell.hasConflict = cell.shifts.some(s => s.isConflicting);
+      cell.hasExternalClash = cell.shifts.some(s => s.hasExternalClash);
+      return cell;
+    });
+
+    const shiftCount = counted ? cells.reduce((sum, c) => sum + c.shifts.length, 0) : null;
+    const minutes = counted
+      ? cells.reduce((sum, c) => sum + c.shifts.reduce((s, shift) => s + shift.paidMinutes, 0), 0)
+      : null;
+
+    // How many DISTINCT people cover this role in the week. A role staffed by one person for 40
+    // hours and one staffed by five for 8 each are different facts about a rota.
+    const staffIds = {};
+    let openShiftCount = 0;
+    for (const cell of cells) {
+      for (const shift of cell.shifts) {
+        if (shift.isOpen) { openShiftCount += 1; } else if (shift.staffMemberId) { staffIds[shift.staffMemberId] = true; }
+      }
+    }
+
+    return Object.assign({
+      key,
+      name,
+      cells,
+      hasConflict: cells.some(c => c.hasConflict),
+      hasExternalClash: cells.some(c => c.hasExternalClash),
+      totals: {
+        shiftCount,
+        minutes,
+        staffCount: counted ? Object.keys(staffIds).length : null,
+        openShiftCount: counted ? openShiftCount : null,
+        // PERMANENTLY NULL, and not because the money is missing. `WorkforceScheduleCostModel`
+        // totals per shift, per day and for the range — there is no per-role node, and there is no
+        // per-employee one either, which is why the week grid's person rows are a dash for the same
+        // reason. The only figure obtainable here is `sum(this role's rounded chips)`, and that is
+        // the one sum the backend forbids: it drifts from the range total by up to an øre per shift.
+        // A number here would disagree with the footer of the very same week on the next tab.
+        cost: null
+      }
+    }, meta || {});
+  };
+
+  const rows = [];
+  const listedRoleIds = {};
+  let hiddenRetiredCount = 0;
+
+  for (const role of roles) {
+    if (!role || !role.roleId) { continue; }
+    listedRoleIds[role.roleId] = true;
+    const hasShifts = !!buckets[role.roleId];
+    // A role outside its effective window occupies a row only while it still holds shifts. Hiding
+    // it otherwise keeps a decade of retired roles off a manager's screen; COUNTING what was hidden
+    // keeps that from being a silent omission.
+    if (!hasShifts && !roleIsEffective(role, windowStartMs, windowEndMs)) {
+      hiddenRetiredCount += 1;
+      continue;
+    }
+    rows.push(buildRow(role.roleId, role.name || null, {
+      roleId: role.roleId,
+      station: role.station || null,
+      color: role.color || null,
+      isListed: true,
+      isEffective: roleIsEffective(role, windowStartMs, windowEndMs)
+    }));
+  }
+
+  // Shifts whose role id the list did not account for. One row each — two vanished roles are two
+  // facts — and appended after the listed roles rather than dropped, because dropping them would
+  // delete real scheduled shifts from the pivot.
+  //
+  // `isListed` is FALSE only when the list actually answered and did not contain the id. When the
+  // list itself is unknown it is NULL: we have not been told these roles are missing from it, and a
+  // row that said "not in the role list" on the strength of a read that never happened would be
+  // asserting the very thing we failed to find out.
+  const unresolvedRows = [];
+  for (const roleId of Object.keys(buckets)) {
+    if (roleId === ROLE_NONE_KEY || listedRoleIds[roleId]) { continue; }
+    unresolvedRows.push(buildRow(roleId, unresolvedNames[roleId] || null, {
+      roleId,
+      station: null,
+      color: null,
+      isListed: rolesKnown ? false : null,
+      isEffective: null
+    }));
+  }
+  unresolvedRows.sort((a, b) => String(a.name).localeCompare(String(b.name)));
+
+  // "No role" is not a role, so it is pinned last and appears only when it holds something — unlike
+  // an empty listed role, which is exactly the row a manager came to see.
+  const noRoleRow = buckets[ROLE_NONE_KEY]
+    ? buildRow(ROLE_NONE_KEY, null, { roleId: null, station: null, color: null, isListed: false, isEffective: null, isNoRole: true })
+    : null;
+
+  const allRows = rows.concat(unresolvedRows);
+
+  return {
+    dataState,
+    // Three states again: `rolesKnown === false` is "the role list did not answer", which is not the
+    // same fact as a store that has defined no roles.
+    rolesKnown,
+    hiddenRetiredCount: rolesKnown ? hiddenRetiredCount : null,
+    // Only countable against a list that answered. Without one, every role-bearing shift would be
+    // "unresolved" and the count would be measuring our own failed read.
+    unresolvedCount: rolesKnown ? unresolvedRows.length : null,
+    noRoleShiftCount: counted ? noRoleShiftCount : null,
+    externalKnown: external.known,
+    externalClashCount: external.known ? externalClashCount : null,
+    view: (range && range.view) || null,
+    state: (range && range.state) || null,
+    revisionNumber: (range && typeof range.revisionNumber === 'number') ? range.revisionNumber : null,
+    timeZoneId: (range && range.timeZoneId) || null,
+    days: days.map(day => ({
+      isoDate: day.isoDate,
+      year: day.year,
+      month: day.month,
+      day: day.day,
+      shiftCount: counted
+        ? allRows.concat(noRoleRow ? [noRoleRow] : [])
+          .reduce((sum, row) => sum + row.cells.filter(c => c.isoDate === day.isoDate)
+            .reduce((s, c) => s + c.shifts.length, 0), 0)
+        : null
+    })),
+    rows: allRows,
+    noRoleRow,
+    totals: {
+      shiftCount: counted
+        ? allRows.concat(noRoleRow ? [noRoleRow] : []).reduce((sum, r) => sum + (r.totals.shiftCount || 0), 0)
+        : null,
+      minutes: counted
+        ? allRows.concat(noRoleRow ? [noRoleRow] : []).reduce((sum, r) => sum + (r.totals.minutes || 0), 0)
+        : null,
+      // Minutes and counts above are summed here because they are exact integers and every shift is
+      // in exactly one row, so the arithmetic is lossless. MONEY IS NOT, so it is not summed and not
+      // shown. The week's real wage sum does exist — it is `range.cost`, the same node the employee
+      // pivot's footer reads, and it is grouping-independent, so this footer COULD read it. It
+      // deliberately does not: rendering it honestly means reproducing the whole refusal vocabulary
+      // (`Ingen sum` on `costComplete:false`, the `minst` floor prefix and its vacancy caveat, the
+      // two currency-clash sentences, the ISO-code fallback for a foreign currency) in a second
+      // component. Two copies of the money rules is how two tabs of the same week end up printing
+      // different money. Until that render is one shared thing, this pivot shows none — the wage
+      // sum has one home, and the caveat under the table says where.
+      cost: null
     }
   };
 }
