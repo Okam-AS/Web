@@ -3,9 +3,15 @@ import {
   markersFromRequests,
   paidMinutesOf,
   formatMinutes,
+  readCost,
+  readShiftCost,
   DATA_UNKNOWN,
   DATA_NO_PLAN,
   DATA_COUNTED,
+  COST_UNKNOWN,
+  COST_REFUSED,
+  COST_TOTALLED,
+  COST_OPEN,
   OPEN_ROW_KEY
 } from '~/utils/workforce/week-grid'
 import { weekRange } from '~/utils/workforce/week-range'
@@ -354,5 +360,217 @@ describe('paidMinutesOf / formatMinutes', () => {
   test('an unknown total formats as null so the view can show a dash instead of 0t', () => {
     expect(formatMinutes(null)).toBeNull()
     expect(formatMinutes(undefined)).toBeNull()
+  })
+})
+
+// --- the money axis -----------------------------------------------------------------------------
+
+function totals (over) {
+  return Object.assign({
+    costComplete: true,
+    totalMinor: 0,
+    currency: 'NOK',
+    incompleteCode: null,
+    incompleteDetail: null,
+    paidMinutes: 0,
+    pricedShiftCount: 0,
+    unpricedShiftCount: 0,
+    openShiftCount: 0,
+    openShiftMinutes: 0
+  }, over)
+}
+
+describe('readCost', () => {
+  test('no node at all is unknown, which is not a state of the money but the absence of a reading', () => {
+    expect(readCost(null)).toBeNull()
+    expect(readCost(undefined)).toBeNull()
+  })
+
+  test('a complete cost carries the total the backend rounded once', () => {
+    const cost = readCost(totals({ totalMinor: 2001, pricedShiftCount: 2, paidMinutes: 900 }))
+
+    expect(cost.state).toBe(COST_TOTALLED)
+    expect(cost.totalMinor).toBe(2001)
+    expect(cost.currency).toBe('NOK')
+    expect(cost.isFloor).toBe(false)
+  })
+
+  test('an incomplete cost has no total — and none is reconstructed from the counts', () => {
+    const cost = readCost(totals({
+      costComplete: false,
+      totalMinor: null,
+      pricedShiftCount: 4,
+      unpricedShiftCount: 2,
+      incompleteCode: 'workforce.rate-unresolved',
+      incompleteDetail: 'No rate for staff member over 2026-07-28T06:00:00 – 2026-07-28T14:00:00.'
+    }))
+
+    expect(cost.state).toBe(COST_REFUSED)
+    expect(cost.totalMinor).toBeNull()
+    expect(cost.unpricedShiftCount).toBe(2)
+    expect(cost.incompleteCode).toBe('workforce.rate-unresolved')
+    expect(cost.incompleteDetail).toContain('2026-07-28T06:00:00')
+  })
+
+  // The flag is the refusal; the null is only its wire form. A body carrying both must not be read
+  // as a total, because that is exactly the partial sum the backend refuses to compute.
+  test('the completeness flag wins over a number that arrived beside a false flag', () => {
+    const cost = readCost(totals({ costComplete: false, totalMinor: 12345 }))
+
+    expect(cost.state).toBe(COST_REFUSED)
+    expect(cost.totalMinor).toBeNull()
+  })
+
+  test('a complete cost with no readable number stays unknown rather than becoming zero', () => {
+    const cost = readCost(totals({ totalMinor: null }))
+
+    expect(cost.state).toBe(COST_UNKNOWN)
+    expect(cost.totalMinor).toBeNull()
+  })
+
+  // Rule 3: a vacancy is a planning state, not a data defect. It does not make the cost incomplete,
+  // it is excluded from the total, and the total it sits beside is therefore a floor.
+  test('open shifts leave the cost complete and mark the total as a floor', () => {
+    const cost = readCost(totals({
+      totalMinor: 124000,
+      pricedShiftCount: 1,
+      openShiftCount: 2,
+      openShiftMinutes: 900
+    }))
+
+    expect(cost.state).toBe(COST_TOTALLED)
+    expect(cost.totalMinor).toBe(124000)
+    expect(cost.unpricedShiftCount).toBe(0)
+    expect(cost.isFloor).toBe(true)
+    expect(cost.openShiftCount).toBe(2)
+    expect(cost.openShiftMinutes).toBe(900)
+  })
+
+  test('a currency clash refuses the range without counting an unpriced shift', () => {
+    const cost = readCost(totals({
+      costComplete: false,
+      totalMinor: null,
+      pricedShiftCount: 2,
+      unpricedShiftCount: 0,
+      incompleteCode: 'workforce.cost-currency-mismatch',
+      incompleteDetail: 'The shifts in this range are priced in different currencies (NOK, CHF).'
+    }))
+
+    expect(cost.state).toBe(COST_REFUSED)
+    expect(cost.incompleteCode).toBe('workforce.cost-currency-mismatch')
+    expect(cost.unpricedShiftCount).toBe(0)
+  })
+})
+
+describe('readShiftCost', () => {
+  test('a priced shift carries its own once-rounded figure', () => {
+    const cost = readShiftCost({ shiftAssignmentId: 'a1', isOpenShift: false, costComplete: true, totalMinor: 1001, currency: 'NOK' })
+
+    expect(cost.state).toBe(COST_TOTALLED)
+    expect(cost.totalMinor).toBe(1001)
+  })
+
+  test('a vacancy takes its own state — neither a refusal nor a zero', () => {
+    const cost = readShiftCost({ shiftAssignmentId: 'o1', isOpenShift: true, costComplete: false, totalMinor: null, currency: null })
+
+    expect(cost.state).toBe(COST_OPEN)
+    expect(cost.isOpenShift).toBe(true)
+    expect(cost.totalMinor).toBeNull()
+    expect(cost.refusalCode).toBeNull()
+  })
+
+  test('a refused shift names the code the manager can act on', () => {
+    const cost = readShiftCost({
+      shiftAssignmentId: 'a2',
+      isOpenShift: false,
+      costComplete: false,
+      totalMinor: null,
+      refusalCode: 'workforce.rate-unresolved',
+      refusalDetail: 'No rate.'
+    })
+
+    expect(cost.state).toBe(COST_REFUSED)
+    expect(cost.refusalCode).toBe('workforce.rate-unresolved')
+  })
+})
+
+describe('buildWeekGrid — money', () => {
+  function cost (over, days) {
+    return Object.assign(totals(over), { days: days || [] })
+  }
+  function costDay (date, over, shifts) {
+    return Object.assign(totals(over), { localBusinessDate: date, shifts: shifts || [] })
+  }
+
+  test('the day and week figures are READ, never summed from the shift chips', () => {
+    const twoShifts = [shift(), shift({ shiftAssignmentId: 'a2', startsUtc: '2026-07-28T14:00:00', endsUtc: '2026-07-28T22:00:00' })]
+    const chips = [
+      { shiftAssignmentId: 'a1', staffMemberId: ANNA, isOpenShift: false, costComplete: true, totalMinor: 1001, currency: 'NOK', paidMinutes: 450 },
+      { shiftAssignmentId: 'a2', staffMemberId: ANNA, isOpenShift: false, costComplete: true, totalMinor: 1001, currency: 'NOK', paidMinutes: 450 }
+    ]
+    const dayAndWeek = { totalMinor: 2001, pricedShiftCount: 2, paidMinutes: 900 }
+
+    const grid = buildWeekGrid({
+      days: WEEK.days,
+      staff,
+      markers: [],
+      range: Object.assign(draftRange(twoShifts), {
+        cost: cost(dayAndWeek, [costDay('2026-07-28T00:00:00', dayAndWeek, chips)])
+      })
+    })
+
+    // Each shift is rounded once, and so are the day and the week — over the UNROUNDED amounts. The
+    // two disagree by an øre per shift, on purpose, and the model must carry the backend's figure.
+    const tuesday = grid.days.find(d => d.isoDate === '2026-07-28')
+    const sumOfChips = chips.reduce((sum, c) => sum + c.totalMinor, 0)
+
+    expect(sumOfChips).toBe(2002)
+    expect(tuesday.cost.totalMinor).toBe(2001)
+    expect(grid.totals.cost.totalMinor).toBe(2001)
+    expect(tuesday.cost.totalMinor).not.toBe(sumOfChips)
+    expect(grid.totals.cost.totalMinor).not.toBe(sumOfChips)
+  })
+
+  test('a shift chip carries its own cost, keyed on the assignment id', () => {
+    const grid = buildWeekGrid({
+      days: WEEK.days,
+      staff,
+      markers: [],
+      range: Object.assign(draftRange([shift()]), {
+        cost: cost({ totalMinor: 124000, pricedShiftCount: 1 }, [
+          costDay('2026-07-28T00:00:00', { totalMinor: 124000, pricedShiftCount: 1 }, [
+            { shiftAssignmentId: 'a1', staffMemberId: ANNA, isOpenShift: false, costComplete: true, totalMinor: 124000, currency: 'NOK', paidMinutes: 450 }
+          ])
+        ])
+      })
+    })
+
+    const annaRow = grid.rows.find(r => r.staffMemberId === ANNA)
+    expect(annaRow.cells[1].shifts[0].cost.totalMinor).toBe(124000)
+    // And still no per-person total: the API rolls up per day and per range only.
+    expect(annaRow.totals.cost).toBeNull()
+  })
+
+  test('a range with no revision produces no money, even though the read carries a zero cost', () => {
+    const grid = buildWeekGrid({
+      days: WEEK.days,
+      staff,
+      markers: [],
+      range: { view: 'draft', scheduleRevisionId: null, assignments: [], cost: cost({ totalMinor: 0 }, []) }
+    })
+
+    expect(grid.dataState).toBe(DATA_NO_PLAN)
+    expect(grid.costKnown).toBe(false)
+    expect(grid.totals.cost).toBeNull()
+    expect(grid.days.every(d => d.cost === null)).toBe(true)
+  })
+
+  test('a response without the cost overlay is unknown money, not zero money', () => {
+    const grid = buildWeekGrid({ days: WEEK.days, staff, markers: [], range: draftRange([shift()]) })
+
+    expect(grid.dataState).toBe(DATA_COUNTED)
+    expect(grid.costKnown).toBe(false)
+    expect(grid.totals.cost).toBeNull()
+    expect(grid.rows[0].cells[1].shifts.every(s => s.cost === null)).toBe(true)
   })
 })

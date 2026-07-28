@@ -98,7 +98,7 @@
           {{ stateNotice }}
         </div>
 
-        <WorkforceWeekGrid :grid="grid" :locale="locale" />
+        <WorkforceWeekGrid :grid="grid" :locale="locale" :currency="currency" />
 
         <section v-if="validation" class="wf-page__validation">
           <h2 class="wf-page__section-title">
@@ -175,6 +175,12 @@ export default {
     },
     locale () {
       return this.$store.state.adminLocale || 'no';
+    },
+    // The market is the single source for currency (`marketConfig`), and it is what `priceLabel`
+    // already formats in. Passed down so the grid can tell a figure it CAN print in that currency
+    // from one the rates priced in another — it refuses the symbol rather than relabel the money.
+    currency () {
+      return (this.marketConfig && this.marketConfig.currency) || null;
     },
     _workforceScheduleService () {
       return new WorkforceScheduleService(this._coreInitializer);

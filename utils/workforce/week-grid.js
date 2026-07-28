@@ -10,6 +10,11 @@
 //
 // Only `counted` produces numbers. `unknown` and `no-plan` produce nulls, which the grid renders as
 // an em dash rather than as a confident "0 vakter".
+//
+// MONEY IS A FOURTH AXIS, not a fourth value of the one above. A week can be fully `counted` and
+// still have no wage sum (a shift with no rate), and it can have a wage sum that is only a FLOOR (an
+// unfilled vacancy). Those are different sentences from "the read failed" and from "there is no
+// plan", so `readCost` below produces its own state and neither axis collapses the other.
 
 import { parseApiInstant, businessDateKey, isoDate, partsInZone, offsetMinutesAt } from '~/utils/workforce/week-range';
 
@@ -18,6 +23,97 @@ export const DATA_NO_PLAN = 'no-plan';
 export const DATA_COUNTED = 'counted';
 
 export const OPEN_ROW_KEY = 'open';
+
+// --- the money axis --------------------------------------------------------------------------
+//
+// The states a cost node can be in. `refused` is the wire's `costComplete:false`: the backend
+// deliberately withholds the total rather than hand over a partial sum, so there is no number to
+// show and none may be reconstructed. `open` belongs to a single shift and is NOT a refusal — see
+// `readShiftCost`.
+
+/** No cost was read (or the week is not `counted`): nothing is known about the money. */
+export const COST_UNKNOWN = 'unknown';
+/** `costComplete:false` — a total does not exist. `incompleteCode` says why. */
+export const COST_REFUSED = 'refused';
+/** A real total in `totalMinor`. It is a FLOOR when `openShiftCount` is above zero. */
+export const COST_TOTALLED = 'totalled';
+/** One shift only: a vacancy. Never priced, never zero, never a defect. */
+export const COST_OPEN = 'open';
+
+// The `workforce.*` codes that reach a cost node's `incompleteCode`. Rendering keys on these, never
+// on `incompleteDetail`, which is server prose.
+export const COST_CURRENCY_MISMATCH = 'workforce.cost-currency-mismatch';
+export const RATE_CURRENCY_MISMATCH = 'workforce.rate-currency-mismatch';
+export const RATE_UNRESOLVED = 'workforce.rate-unresolved';
+
+function numberOr (value, fallback) {
+  return typeof value === 'number' && isFinite(value) ? value : fallback;
+}
+
+/**
+ * Reads one totals node (`cost`, or one of `cost.days[]`) into the money axis.
+ *
+ * THE TWO RULES THE BACKEND'S SHAPE IMPOSES, both enforced here rather than at each call site:
+ *
+ * 1. `totalMinor` IS READ ONLY BEHIND `costComplete`. On the wire it is null exactly when the cost
+ *    is incomplete, and the backend's own aggregator THROWS rather than expose the partial sum. A
+ *    consumer that treated the null as 0 would reinvent the bug the whole layer exists to prevent,
+ *    so the flag wins here even over a number that somehow arrived beside a false flag.
+ * 2. AN OPEN SHIFT IS NOT AN INCOMPLETENESS. Vacancies are counted separately and excluded from the
+ *    total, so a week holding them has a real cost that is a FLOOR. `isFloor` says so; it never
+ *    suppresses the total, and the vacancy is never priced at a stand-in rate.
+ *
+ * Returns null when there is nothing to read at all, which the caller renders as unknown.
+ */
+export function readCost (node) {
+  if (!node || typeof node !== 'object') { return null; }
+
+  const complete = node.costComplete === true;
+  const totalMinor = complete ? numberOr(node.totalMinor, null) : null;
+  const openShiftCount = numberOr(node.openShiftCount, 0);
+
+  return {
+    // `complete` with no readable number is not a total — it stays unknown rather than becoming 0.
+    state: complete ? (totalMinor === null ? COST_UNKNOWN : COST_TOTALLED) : COST_REFUSED,
+    totalMinor,
+    currency: node.currency || null,
+    incompleteCode: complete ? null : (node.incompleteCode || null),
+    incompleteDetail: complete ? null : (node.incompleteDetail || null),
+    pricedShiftCount: numberOr(node.pricedShiftCount, 0),
+    unpricedShiftCount: numberOr(node.unpricedShiftCount, 0),
+    openShiftCount,
+    openShiftMinutes: numberOr(node.openShiftMinutes, 0),
+    // A total that vacancies will only add to. True even of a 0: a week of nothing but open shifts
+    // costs "at least nothing", which is a very different claim from "this week is free".
+    isFloor: openShiftCount > 0
+  };
+}
+
+/**
+ * Reads one shift's cost. A vacancy takes its OWN state: the backend refuses to price it because
+ * there is no engagement to price and a role default would invent a stand-in for someone not yet
+ * chosen. Folding it into the refusal would call a deliberate planning state a data defect; folding
+ * it into a total would call it free.
+ */
+export function readShiftCost (node) {
+  if (!node || typeof node !== 'object') { return null; }
+
+  const isOpenShift = node.isOpenShift === true;
+  const complete = !isOpenShift && node.costComplete === true;
+  const totalMinor = complete ? numberOr(node.totalMinor, null) : null;
+
+  let state = COST_REFUSED;
+  if (isOpenShift) { state = COST_OPEN; } else if (complete) { state = totalMinor === null ? COST_UNKNOWN : COST_TOTALLED; }
+
+  return {
+    state,
+    isOpenShift,
+    totalMinor,
+    currency: node.currency || null,
+    refusalCode: state === COST_REFUSED ? (node.refusalCode || null) : null,
+    refusalDetail: state === COST_REFUSED ? (node.refusalDetail || null) : null
+  };
+}
 
 /**
  * The only member of the backend's closed `WorkforceExternalCommitmentKinds` vocabulary. It is
@@ -58,11 +154,15 @@ export function paidMinutesOf (assignment) {
   return Math.max(0, span - (assignment.unpaidBreakMinutes || 0));
 }
 
-function toShift (assignment) {
+function toShift (assignment, cost) {
   const starts = parseApiInstant(assignment.startsUtc);
   const ends = parseApiInstant(assignment.endsUtc);
   return {
     id: assignment.shiftAssignmentId,
+    // What THIS shift costs, rounded once by the backend over its own rate segments. Null when the
+    // cost overlay is not on the response at all. It is a chip figure and nothing else: summing
+    // these does not produce the day or the week (see `buildCostIndex`).
+    cost: cost || null,
     roleName: assignment.roleName || null,
     note: assignment.note || null,
     state: assignment.state || null,
@@ -242,6 +342,35 @@ function resolveDataState (range) {
 }
 
 /**
+ * Indexes the cost overlay by shift and by local business date.
+ *
+ * THE RULE THIS INDEX EXISTS TO KEEP: THE DAY AND WEEK FIGURES ARE READ, NEVER SUMMED. The backend
+ * rounds each shift once, and rounds each day and the week once over the UNROUNDED amounts — so
+ * `sum(shift chips) !== day total` by up to an øre per shift, and the discrepancy grows with the
+ * week. The day and the week are therefore taken from their own nodes and nothing here adds a chip
+ * to anything.
+ *
+ * A day with no shifts is simply absent from `cost.days`; that is a real "nothing was planned", not
+ * an unknown, so it resolves to null here and the caller renders it against the shift count it
+ * already has.
+ */
+function buildCostIndex (cost) {
+  const byShift = {};
+  const byDay = {};
+  if (!cost || typeof cost !== 'object') { return { byShift, byDay, known: false }; }
+
+  for (const day of cost.days || []) {
+    const dayKey = businessDateKey(day && day.localBusinessDate);
+    if (dayKey !== null) { byDay[dayKey] = readCost(day); }
+    for (const shift of (day && day.shifts) || []) {
+      if (shift && shift.shiftAssignmentId) { byShift[shift.shiftAssignmentId] = readShiftCost(shift); }
+    }
+  }
+
+  return { byShift, byDay, known: true };
+}
+
+/**
  * Builds the week grid.
  *
  * `days`      — the seven store-local dates from `weekRange`.
@@ -280,6 +409,12 @@ export function buildWeekGrid (options) {
 
   const external = placeExternalCommitments(opts.external, dayKeys);
 
+  // Gated on `counted` on purpose. The range read carries a cost even with no revision — the
+  // backend says so: "a range with no revision costs 0 over no days, which is a different statement
+  // from 'no total'". Rendering that 0 would turn "there is no plan" into "the plan costs nothing",
+  // which is the same collapse the shift counts are already forbidden to make.
+  const costs = buildCostIndex(counted ? range.cost : null);
+
   // Bucket assignments by row and day. The day comes from the server's `localBusinessDate`, never
   // from re-deriving a date off `startsUtc` here: the business date is what the backend attributes
   // the shift to (and what an overnight shift is counted under), so re-deriving it would put the
@@ -298,7 +433,7 @@ export function buildWeekGrid (options) {
       seenStaff[rowKey] = assignment.staffDisplayName || null;
     }
 
-    const shift = toShift(assignment);
+    const shift = toShift(assignment, costs.byShift[assignment.shiftAssignmentId]);
     if (conflictingId && shift.id === conflictingId) { shift.isConflicting = true; }
 
     if (!buckets[rowKey]) { buckets[rowKey] = {}; }
@@ -365,6 +500,10 @@ export function buildWeekGrid (options) {
       // Null rather than 0 when the overlay did not answer: "nobody is committed elsewhere" and "we
       // do not know" are the same blank cell otherwise.
       externalCount: external.known ? distinctCommitments(commitments) : null,
+      // PER PERSON THERE IS NO TOTAL, and none is manufactured. The cost overlay rolls up per shift,
+      // per day and for the range — never per staff member — and adding a row's rounded chips would
+      // produce a figure that disagrees with the footer by an øre per shift. The row cell says it
+      // does not know rather than showing a number the API never stated.
       totals: { shiftCount, minutes, cost: null }
     }, meta || {});
   };
@@ -425,12 +564,17 @@ export function buildWeekGrid (options) {
     timeZoneId: (range && range.timeZoneId) || null,
     asOfUtc: (range && range.asOfUtc) || null,
     hiddenConflict,
+    // True when the response carried a cost overlay at all, so "the money is not on this response"
+    // stays distinguishable from "the money is on it and it refuses to total".
+    costKnown: costs.known,
     days: days.map(day => ({
       isoDate: day.isoDate,
       year: day.year,
       month: day.month,
       day: day.day,
-      shiftCount: counted ? perDayCount[day.isoDate] : null
+      shiftCount: counted ? perDayCount[day.isoDate] : null,
+      // Read from the day's own node, never summed from the chips above it.
+      cost: costs.byDay[day.isoDate] || null
     })),
     openRow,
     rows,
@@ -439,8 +583,10 @@ export function buildWeekGrid (options) {
       minutes: counted
         ? [openRow].concat(rows).reduce((sum, r) => sum + (r.totals.minutes || 0), 0)
         : null,
-      // The money lane owns this. It stays null until a rate resolves; it is never a 0.
-      cost: null
+      // THE footer figure: the range node, rounded once by the backend over the unrounded shift
+      // amounts. Deliberately not `sum(days)` and not `sum(chips)` — both drift, and both would put
+      // a number on screen that disagrees with the one the backend calls true.
+      cost: readCost(counted ? range.cost : null)
     }
   };
 }
