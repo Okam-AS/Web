@@ -2723,5 +2723,107 @@ export default {
   wfr_panel_reactivate: 'Wieder eröffnen',
   wfr_reactivate_hint: 'Diese Anstellung ist beendet. Nichts wurde gelöscht — Berechtigungen, Funktionen, Konditionen und Historie sind unverändert.',
   wfr_reactivate_capped: 'Diese Anstellung hat das Enddatum {date} und es lässt sich nicht entfernen. Ein Wiedereröffnen macht die Person aktiv, aber über dieses Datum hinaus nicht mehr planbar.',
-  wfr_reactivate_submit: 'Wieder eröffnen'
+  wfr_reactivate_submit: 'Wieder eröffnen',
+
+  // ---------------------------------------------------------------------------------------------
+  // MARGIN — Rezept rein, Tellerkosten raus (/admin/margin-recipes)
+  // ---------------------------------------------------------------------------------------------
+  mrg_page_title: 'Rezepte und Tellerkosten',
+  mrg_page_intro: 'Gib ein Rezept ein und sieh, was es in der Herstellung kostet.',
+  mrg_module_off: 'Das Margin-Modul ist für diesen Betrieb nicht eingeschaltet.',
+  mrg_status_unknown: 'Der Status des Margin-Moduls konnte nicht gelesen werden. Wir wissen nicht, ob es an ist, deshalb zeigt die Seite nichts.',
+
+  // Zutaten
+  mrg_ingredients_title: 'Zutaten',
+  mrg_ingredients_unknown: 'Die Zutatenliste konnte nicht geladen werden. Sie ist unbekannt — nicht leer.',
+  mrg_ingredients_count: '{count} Zutaten in diesem Betrieb.',
+  mrg_ingredients_empty: 'Dieser Betrieb hat noch keine Zutaten. Eine Rezeptzeile muss auf eine Zutat zeigen, also fang hier an.',
+  mrg_starters_lede: 'Aus der Startbibliothek kopieren:',
+
+  // Formular
+  mrg_form_title: 'Neues Rezept',
+  mrg_form_name: 'Name',
+  mrg_form_yield: 'Ausbeute',
+  mrg_form_yield_unit: 'Einheit',
+  mrg_form_portions: 'Portionen',
+  mrg_form_components: 'Zeilen',
+  mrg_form_submit: 'Speichern und berechnen',
+  mrg_form_saving: 'Wird gespeichert …',
+  mrg_components_blocked_unknown: 'Wir wissen nicht, welche Zutaten dieser Betrieb hat, deshalb lassen sich gerade keine Zeilen hinzufügen.',
+  mrg_components_blocked_empty: 'Füge mindestens eine Zutat hinzu, bevor du Zeilen eingibst.',
+  mrg_component_pick: 'Zutat wählen',
+  mrg_component_add: '+ Zeile hinzufügen',
+
+  // Liste
+  mrg_list_title: 'Rezepte',
+  mrg_list_unknown: 'Die Rezepte konnten nicht geladen werden. Die Liste ist unbekannt — nicht leer.',
+  mrg_list_empty: 'Noch keine Rezepte.',
+  mrg_row_active: 'Aktiv v{number}',
+  mrg_row_no_active: 'Keine aktive Version',
+  mrg_row_drafts: '{count} Entwürfe',
+  mrg_row_linked: 'Mit {count} Produkt verknüpft',
+  mrg_row_unlinked: 'Mit keinem Produkt verknüpft',
+
+  // Aktivierung
+  mrg_activate_lede: 'Entwurf v{number} ist noch nicht in Gebrauch. Aktiviere ihn, damit Verkäufe gegen diese Version kalkuliert werden.',
+  mrg_activate: 'Entwurf aktivieren',
+  mrg_activate_running: 'Wird aktiviert …',
+  mrg_activate_no_revision: 'Diese Version trägt kein Revisions-Token, deshalb können wir sie nicht sicher aktivieren. Lade die Seite neu.',
+
+  // Einheiten
+  mrg_unit_gram: 'Gramm',
+  mrg_unit_kilogram: 'Kilo',
+  mrg_unit_milliliter: 'Milliliter',
+  mrg_unit_liter: 'Liter',
+  mrg_unit_piece: 'Stk',
+
+  // Das Kostenpanel
+  mrg_cost_title: 'Tellerkosten',
+  mrg_cost_nothing_selected: 'Wähle ein Rezept oder gib ein neues ein, um die Kosten zu sehen.',
+  mrg_cost_priced_at: 'Bepreist {time}',
+  mrg_cost_batch: 'Die ganze Ausbeute',
+  mrg_cost_per_portion: 'Pro Portion',
+  mrg_cost_yield: 'für {quantity} {unit}',
+  mrg_cost_portions: 'geteilt durch {count} Portionen',
+  mrg_cost_at_least: 'mindestens {amount}',
+  mrg_version_active: 'Aktiv v{number}',
+  mrg_version_draft: 'Entwurf v{number}',
+  mrg_version_unknown: 'Unbekannte Version',
+  mrg_cost_unknown: 'Die Kosten wurden nicht gelesen.',
+  mrg_cost_not_costed: 'Dieses Rezept hat keine Version, die bepreist werden kann. Ein stillgelegtes Rezept ohne Entwurf sieht so aus.',
+  mrg_cost_none_priced: 'Keine der {count} Zeilen hat einen Preis, deshalb sind die Kosten unbekannt — nicht null. Die Zutaten brauchen einen Lieferantenartikel mit gültigem Preis, bevor etwas berechnet werden kann.',
+  mrg_cost_floor_notice: '{unpriced} von {total} Zeilen haben keinen Preis. Die Beträge sind Untergrenzen — die echten Kosten sind höher.',
+  mrg_cost_no_sum_caveat: 'Die Spalte ergibt in der Summe nicht die Gesamtsumme. Der Server rundet jede Zeile und die Summe getrennt, und die Summe ist die maßgebliche.',
+
+  // Die Marge, die wir nicht zeigen können — ausgesprochen statt weggelassen
+  mrg_margin_label: 'Marge gegen den Menüpreis',
+  mrg_margin_unavailable: 'Kann nicht gezeigt werden. Die API liefert keinen Nettopreis ohne MwSt. für das Gericht, und ihn hier zu berechnen ergäbe eine Zahl, die nicht zur Kasse passt.',
+
+  // Zeilen
+  mrg_line_component: 'Zeile',
+  mrg_line_quantity: 'Menge',
+  mrg_line_cost: 'Kosten',
+  mrg_line_sub_recipe: 'Unterrezept',
+  mrg_line_orphan: 'Ungültige Zeile',
+  mrg_line_unnamed: 'Ohne Namen',
+  mrg_line_ingredient_gone: 'Diese Zutat steht nicht mehr in der Liste',
+  mrg_line_ingredient_unknown: 'Unbekannte Zutat',
+  mrg_line_flag_no_price: 'Kein gültiger Preis',
+  mrg_line_flag_sub_recipe: 'Keine aktive Version zum Bepreisen',
+  mrg_line_flag_orphan: 'Die Zeile zeigt weder auf eine Zutat noch auf ein Unterrezept',
+
+  // Fehler, gewählt nach dem Maschinencode des Servers — nie nach seinem Fließtext
+  mrg_err_not_found: 'Wir haben das nicht gefunden. Entweder existiert es nicht, oder der Betrieb liegt außerhalb deines Zugriffs — die Antwort unterscheidet das nicht.',
+  mrg_err_forbidden: 'Du hast keinen Zugriff, um diesen Betrieb zu verwalten.',
+  mrg_err_stale: 'Jemand anderes hat das geändert, während du gearbeitet hast. Lade die Seite neu und versuche es erneut.',
+  mrg_err_name_conflict: 'Dieser Betrieb hat bereits ein Rezept mit diesem Namen.',
+  mrg_err_version_input: 'Name, Ausbeute und Portionen sind erforderlich, und Ausbeute und Portionen müssen größer als null sein.',
+  mrg_err_component: 'Einer Zeile fehlt die Zutat, die Menge oder die Einheit.',
+  mrg_err_too_many: 'Das Rezept hat zu viele Zeilen. Das Maximum ist 200.',
+  mrg_err_cycle: 'Das Rezept verweist über ein Unterrezept auf sich selbst.',
+  mrg_err_depth: 'Die Unterrezepte sind tiefer als fünf Ebenen verschachtelt.',
+  mrg_err_not_draft: 'Nur ein Entwurf lässt sich bearbeiten. Lege einen neuen Entwurf an und aktiviere ihn vorwärts.',
+  mrg_err_no_active: 'Das Rezept hat keine aktive Version.',
+  mrg_err_missing_revision: 'Uns fehlte das Revisions-Token, deshalb haben wir nichts gesendet. Lade die Seite neu.',
+  mrg_err_generic: 'Etwas ist schiefgelaufen. Es wurde nichts gespeichert.'
 }

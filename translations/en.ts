@@ -2721,5 +2721,107 @@ export default {
   wfr_panel_reactivate: 'Reopen',
   wfr_reactivate_hint: 'This engagement has ended. Nothing was deleted — capabilities, roles, terms and history are all as they were.',
   wfr_reactivate_capped: 'This engagement has an end date of {date} and it cannot be removed. Reopening makes the person active but unschedulable past that date.',
-  wfr_reactivate_submit: 'Reopen'
+  wfr_reactivate_submit: 'Reopen',
+
+  // ---------------------------------------------------------------------------------------------
+  // MARGIN — a recipe in, a plate cost out (/admin/margin-recipes)
+  // ---------------------------------------------------------------------------------------------
+  mrg_page_title: 'Recipes and plate cost',
+  mrg_page_intro: 'Enter a recipe and see what it costs to make.',
+  mrg_module_off: 'The Margin module is not switched on for this store.',
+  mrg_status_unknown: 'We could not read the Margin module status. We do not know whether it is on, so the page shows nothing.',
+
+  // Ingredients
+  mrg_ingredients_title: 'Ingredients',
+  mrg_ingredients_unknown: 'We could not fetch the ingredient list. It is unknown — not empty.',
+  mrg_ingredients_count: '{count} ingredients in this store.',
+  mrg_ingredients_empty: 'This store has no ingredients yet. A recipe line must point at an ingredient, so start here.',
+  mrg_starters_lede: 'Copy from the starter library:',
+
+  // Form
+  mrg_form_title: 'New recipe',
+  mrg_form_name: 'Name',
+  mrg_form_yield: 'Yield',
+  mrg_form_yield_unit: 'Unit',
+  mrg_form_portions: 'Portions',
+  mrg_form_components: 'Lines',
+  mrg_form_submit: 'Save and cost it',
+  mrg_form_saving: 'Saving …',
+  mrg_components_blocked_unknown: 'We do not know which ingredients this store has, so lines cannot be added right now.',
+  mrg_components_blocked_empty: 'Add at least one ingredient before entering lines.',
+  mrg_component_pick: 'Pick an ingredient',
+  mrg_component_add: '+ Add a line',
+
+  // List
+  mrg_list_title: 'Recipes',
+  mrg_list_unknown: 'We could not fetch the recipes. The list is unknown — not empty.',
+  mrg_list_empty: 'No recipes yet.',
+  mrg_row_active: 'Active v{number}',
+  mrg_row_no_active: 'No active version',
+  mrg_row_drafts: '{count} drafts',
+  mrg_row_linked: 'Linked to {count} product',
+  mrg_row_unlinked: 'Not linked to any product',
+
+  // Activation
+  mrg_activate_lede: 'Draft v{number} is not in use yet. Activate it to make it the version sales are costed against.',
+  mrg_activate: 'Activate the draft',
+  mrg_activate_running: 'Activating …',
+  mrg_activate_no_revision: 'This version carries no revision token, so we cannot activate it safely. Reload the page.',
+
+  // Units
+  mrg_unit_gram: 'grams',
+  mrg_unit_kilogram: 'kilos',
+  mrg_unit_milliliter: 'millilitres',
+  mrg_unit_liter: 'litres',
+  mrg_unit_piece: 'pcs',
+
+  // The cost panel
+  mrg_cost_title: 'Plate cost',
+  mrg_cost_nothing_selected: 'Pick a recipe, or enter a new one, to see its cost.',
+  mrg_cost_priced_at: 'Priced {time}',
+  mrg_cost_batch: 'The whole yield',
+  mrg_cost_per_portion: 'Per portion',
+  mrg_cost_yield: 'for {quantity} {unit}',
+  mrg_cost_portions: 'divided by {count} portions',
+  mrg_cost_at_least: 'at least {amount}',
+  mrg_version_active: 'Active v{number}',
+  mrg_version_draft: 'Draft v{number}',
+  mrg_version_unknown: 'Unknown version',
+  mrg_cost_unknown: 'The cost has not been read.',
+  mrg_cost_not_costed: 'This recipe has no version to price. A retired recipe with no draft looks like this.',
+  mrg_cost_none_priced: 'Not one of the {count} lines has a price, so the cost is unknown — not zero. The ingredients need a supplier item with a valid price before anything can be worked out.',
+  mrg_cost_floor_notice: '{unpriced} of {total} lines have no price. The amounts are lower bounds — the real cost is higher.',
+  mrg_cost_no_sum_caveat: 'The column does not add up to the total. The server rounds every line and the total separately, and the total is the one that counts.',
+
+  // The margin we cannot show, said out loud rather than left out
+  mrg_margin_label: 'Margin against the menu price',
+  mrg_margin_unavailable: 'Cannot be shown. The API exposes no ex-VAT net price for the dish, and working one out here would produce a figure that disagrees with the till.',
+
+  // Lines
+  mrg_line_component: 'Line',
+  mrg_line_quantity: 'Quantity',
+  mrg_line_cost: 'Cost',
+  mrg_line_sub_recipe: 'Sub-recipe',
+  mrg_line_orphan: 'Invalid line',
+  mrg_line_unnamed: 'Unnamed',
+  mrg_line_ingredient_gone: 'This ingredient is no longer in the list',
+  mrg_line_ingredient_unknown: 'Unknown ingredient',
+  mrg_line_flag_no_price: 'No valid price',
+  mrg_line_flag_sub_recipe: 'No active version to price',
+  mrg_line_flag_orphan: 'The line points at neither an ingredient nor a sub-recipe',
+
+  // Errors, chosen on the machine code from the server — never on its prose
+  mrg_err_not_found: 'We could not find this. Either it does not exist, or the store is outside your access — the answer does not distinguish them.',
+  mrg_err_forbidden: 'You do not have access to administer this store.',
+  mrg_err_stale: 'Somebody else changed this while you were working. Reload the page and try again.',
+  mrg_err_name_conflict: 'This store already has a recipe with that name.',
+  mrg_err_version_input: 'Name, yield and portions are required, and yield and portions must be greater than zero.',
+  mrg_err_component: 'A line is missing its ingredient, quantity or unit.',
+  mrg_err_too_many: 'The recipe has too many lines. The maximum is 200.',
+  mrg_err_cycle: 'The recipe refers back to itself through a sub-recipe.',
+  mrg_err_depth: 'The sub-recipes are nested deeper than five levels.',
+  mrg_err_not_draft: 'Only a draft can be edited. Author a new draft and activate it forward.',
+  mrg_err_no_active: 'The recipe has no active version.',
+  mrg_err_missing_revision: 'We were missing the revision token, so we sent nothing. Reload the page.',
+  mrg_err_generic: 'Something went wrong. Nothing was saved.'
 }

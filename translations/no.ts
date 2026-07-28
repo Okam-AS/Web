@@ -2767,5 +2767,107 @@ export default {
   wfr_panel_reactivate: 'Gjenåpne',
   wfr_reactivate_hint: 'Engasjementet er avsluttet. Ingenting er slettet — fullmakter, funksjoner, vilkår og historikk står som før.',
   wfr_reactivate_capped: 'Engasjementet har sluttdato {date}, og den kan ikke fjernes. Gjenåpnes det, blir personen aktiv, men kan ikke settes opp på vakter etter denne datoen.',
-  wfr_reactivate_submit: 'Gjenåpne'
+  wfr_reactivate_submit: 'Gjenåpne',
+
+  // ---------------------------------------------------------------------------------------------
+  // MARGIN — oppskrift inn, kostpris ut (/admin/margin-recipes)
+  // ---------------------------------------------------------------------------------------------
+  mrg_page_title: 'Oppskrifter og kostpris',
+  mrg_page_intro: 'Legg inn en oppskrift og se hva den koster å lage.',
+  mrg_module_off: 'Margin-modulen er ikke slått på for denne butikken.',
+  mrg_status_unknown: 'Vi fikk ikke lest statusen til Margin-modulen. Vi vet ikke om den er på, så siden viser ingenting.',
+
+  // Råvarer
+  mrg_ingredients_title: 'Råvarer',
+  mrg_ingredients_unknown: 'Vi fikk ikke hentet råvarelisten. Den er ukjent — ikke tom.',
+  mrg_ingredients_count: '{count} råvarer i butikken.',
+  mrg_ingredients_empty: 'Butikken har ingen råvarer ennå. En oppskriftslinje må peke på en råvare, så begynn her.',
+  mrg_starters_lede: 'Kopier fra startbiblioteket:',
+
+  // Skjema
+  mrg_form_title: 'Ny oppskrift',
+  mrg_form_name: 'Navn',
+  mrg_form_yield: 'Utbytte',
+  mrg_form_yield_unit: 'Enhet',
+  mrg_form_portions: 'Porsjoner',
+  mrg_form_components: 'Linjer',
+  mrg_form_submit: 'Lagre og regn ut',
+  mrg_form_saving: 'Lagrer …',
+  mrg_components_blocked_unknown: 'Vi vet ikke hvilke råvarer butikken har, så linjer kan ikke legges til nå.',
+  mrg_components_blocked_empty: 'Legg til minst én råvare før du legger inn linjer.',
+  mrg_component_pick: 'Velg råvare',
+  mrg_component_add: '+ Legg til linje',
+
+  // Liste
+  mrg_list_title: 'Oppskrifter',
+  mrg_list_unknown: 'Vi fikk ikke hentet oppskriftene. Listen er ukjent — ikke tom.',
+  mrg_list_empty: 'Ingen oppskrifter ennå.',
+  mrg_row_active: 'Aktiv v{number}',
+  mrg_row_no_active: 'Ingen aktiv versjon',
+  mrg_row_drafts: '{count} utkast',
+  mrg_row_linked: 'Koblet til {count} produkt',
+  mrg_row_unlinked: 'Ikke koblet til noe produkt',
+
+  // Aktivering
+  mrg_activate_lede: 'Utkast v{number} er ikke i bruk ennå. Aktiver det for å gjøre det til versjonen salget kostes mot.',
+  mrg_activate: 'Aktiver utkastet',
+  mrg_activate_running: 'Aktiverer …',
+  mrg_activate_no_revision: 'Denne versjonen har ingen revisjonsnøkkel, så vi kan ikke aktivere den trygt. Last siden på nytt.',
+
+  // Enheter
+  mrg_unit_gram: 'gram',
+  mrg_unit_kilogram: 'kilo',
+  mrg_unit_milliliter: 'milliliter',
+  mrg_unit_liter: 'liter',
+  mrg_unit_piece: 'stk',
+
+  // Kostpanelet
+  mrg_cost_title: 'Kostpris',
+  mrg_cost_nothing_selected: 'Velg en oppskrift, eller legg inn en ny, for å se kostprisen.',
+  mrg_cost_priced_at: 'Priset {time}',
+  mrg_cost_batch: 'Hele utbyttet',
+  mrg_cost_per_portion: 'Per porsjon',
+  mrg_cost_yield: 'for {quantity} {unit}',
+  mrg_cost_portions: 'delt på {count} porsjoner',
+  mrg_cost_at_least: 'minst {amount}',
+  mrg_version_active: 'Aktiv v{number}',
+  mrg_version_draft: 'Utkast v{number}',
+  mrg_version_unknown: 'Ukjent versjon',
+  mrg_cost_unknown: 'Kostprisen er ikke hentet.',
+  mrg_cost_not_costed: 'Denne oppskriften har ingen versjon å prise. En pensjonert oppskrift uten utkast ser slik ut.',
+  mrg_cost_none_priced: 'Ingen av de {count} linjene har en pris, så kostprisen er ukjent — ikke null. Råvarene må ha en leverandørvare med gyldig pris før noe kan regnes ut.',
+  mrg_cost_floor_notice: '{unpriced} av {total} linjer mangler pris. Beløpene er nedre grenser — den ekte kostprisen er høyere.',
+  mrg_cost_no_sum_caveat: 'Kolonnen summerer seg ikke til totalen. Serveren runder av hver linje og totalen hver for seg, og totalen er den som gjelder.',
+
+  // Marginen vi ikke kan vise, sagt høyt i stedet for utelatt
+  mrg_margin_label: 'Margin mot menypris',
+  mrg_margin_unavailable: 'Kan ikke vises. API-et gir ingen nettopris uten mva. for retten, og å regne den ut her ville gitt et tall som ikke stemmer med kassa.',
+
+  // Linjer
+  mrg_line_component: 'Linje',
+  mrg_line_quantity: 'Mengde',
+  mrg_line_cost: 'Kost',
+  mrg_line_sub_recipe: 'Underoppskrift',
+  mrg_line_orphan: 'Ugyldig linje',
+  mrg_line_unnamed: 'Uten navn',
+  mrg_line_ingredient_gone: 'Råvaren er ikke i listen lenger',
+  mrg_line_ingredient_unknown: 'Ukjent råvare',
+  mrg_line_flag_no_price: 'Ingen gyldig pris',
+  mrg_line_flag_sub_recipe: 'Ingen aktiv versjon å prise',
+  mrg_line_flag_orphan: 'Linjen peker verken på råvare eller underoppskrift',
+
+  // Feil, valgt på maskinkoden fra serveren — aldri på teksten
+  mrg_err_not_found: 'Vi fant ikke dette. Enten finnes det ikke, eller så er butikken utenfor tilgangen din — svaret skiller ikke.',
+  mrg_err_forbidden: 'Du har ikke tilgang til å administrere denne butikken.',
+  mrg_err_stale: 'Noen andre endret dette mens du jobbet. Last siden på nytt og prøv igjen.',
+  mrg_err_name_conflict: 'Butikken har allerede en oppskrift med dette navnet.',
+  mrg_err_version_input: 'Navn, utbytte og porsjoner må fylles ut, og utbytte og porsjoner må være større enn null.',
+  mrg_err_component: 'En linje mangler råvare, mengde eller enhet.',
+  mrg_err_too_many: 'Oppskriften har for mange linjer. Maksimum er 200.',
+  mrg_err_cycle: 'Oppskriften viser til seg selv gjennom en underoppskrift.',
+  mrg_err_depth: 'Underoppskriftene er nøstet dypere enn fem nivåer.',
+  mrg_err_not_draft: 'Bare et utkast kan endres. Lag et nytt utkast og aktiver det forover.',
+  mrg_err_no_active: 'Oppskriften har ingen aktiv versjon.',
+  mrg_err_missing_revision: 'Vi manglet revisjonsnøkkelen, så vi sendte ingenting. Last siden på nytt.',
+  mrg_err_generic: 'Noe gikk galt. Ingenting ble lagret.'
 }
