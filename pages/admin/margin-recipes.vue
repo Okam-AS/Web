@@ -182,6 +182,30 @@
             <template v-else>
               <MarginCostPanel :cost="cost" :currency="currency" :locale="locale" />
 
+              <!-- STEP 4 — what the dish EARNS, against the price the till would charge. A different
+                   read from the cost panel above, and a different version resolution: the cost panel
+                   previews the Active version or falls back to the latest Draft, while the menu
+                   margin costs only the version active at the read instant. -->
+              <MarginMenuMarginPanel
+                :menu-margin="menuMargin"
+                :recipe-id="selectedRecipeId"
+                :recipe-kind="selectedRecipeKind"
+                :currency="currency"
+                :locale="locale"
+              />
+
+              <!-- STEP 5 — and the step without which STEP 4 has nothing to answer: a recipe linked
+                   to no product has a cost and no price, so it earns no margin at all. -->
+              <MarginProductLinkPanel
+                v-if="selectedRecipeId"
+                :links="productLinks"
+                :products="catalogProducts"
+                :recipe-id="selectedRecipeId"
+                :busy="busy"
+                :saving="linking"
+                @save="saveLinks"
+              />
+
               <div v-if="activatable" class="mrg-card mrg-activate">
                 <p class="mrg-card__note">
                   {{ $i('mrg_activate_lede', { number: activatable.versionNumber }) }}
@@ -204,6 +228,8 @@
 <script>
 import AdminPage from '~/components/organisms/AdminPage.vue';
 import MarginCostPanel from '~/components/admin/margin/MarginCostPanel.vue';
+import MarginMenuMarginPanel from '~/components/admin/margin/MarginMenuMarginPanel.vue';
+import MarginProductLinkPanel from '~/components/admin/margin/MarginProductLinkPanel.vue';
 import { MarginRecipeService } from '~/utils/margin/recipe-client';
 import {
   isMarginApiError,
@@ -217,9 +243,11 @@ import {
   MARGIN_RECIPE_CYCLE,
   MARGIN_RECIPE_DEPTH_EXCEEDED,
   MARGIN_VERSION_NOT_DRAFT,
-  MARGIN_NO_ACTIVE_VERSION
+  MARGIN_NO_ACTIVE_VERSION,
+  MARGIN_PRODUCT_LINK_INVALID
 } from '~/utils/margin/api-client';
 import { readCostPreview, readRecipeRow, ingredientNames, activatableDraft } from '~/utils/margin/cost-preview';
+import { readMenuMargin, readProductLinks } from '~/utils/margin/menu-margin';
 import { BASE_UNITS, unitCodesFor, defaultUnitCodeFor } from '~/utils/margin/units';
 
 const STATUS_UNKNOWN = 'unknown';
@@ -240,23 +268,27 @@ const ERROR_KEYS = {
   [MARGIN_RECIPE_DEPTH_EXCEEDED]: 'mrg_err_depth',
   [MARGIN_VERSION_NOT_DRAFT]: 'mrg_err_not_draft',
   [MARGIN_NO_ACTIVE_VERSION]: 'mrg_err_no_active',
+  [MARGIN_PRODUCT_LINK_INVALID]: 'mrg_err_product_link',
   'margin.client-missing-revision': 'mrg_err_missing_revision'
 };
 
 /**
- * Enter a recipe, see what it costs.
+ * Enter a recipe, cost it, sell it as a dish, and see what that dish earns.
  *
- * THIS PAGE STOPS SHORT OF A MARGIN, AND SAYS SO ON SCREEN. The read that answers "what is this
- * dish's margin against its menu price" — `GET /margin/menu-margin` — is not built; its own oracle
- * test in the backend says so. Everything from the plate cost onward is here; the margin row is a
- * visible refusal rather than an omission, because a plate cost sitting alone under a heading about
- * margin is exactly what somebody would mistake for one.
+ * The journey is five steps and each one is a precondition of the next: an ingredient master, a
+ * recipe, an active version, a product link, and only then a margin. The page keeps them in that
+ * order because a missing step is the usual reason a margin is absent, and a screen that showed the
+ * absence without the cause would send a venue looking in the wrong place.
  *
- * NOTHING ON THIS PAGE ADDS MONEY UP. See `MarginCostPanel` and `utils/margin/cost-preview.js`.
+ * NOTHING ON THIS PAGE ADDS MONEY UP OR TAKES IT AWAY. Every figure is one field off the wire — see
+ * `utils/margin/cost-preview.js` and `utils/margin/menu-margin.js`, where the reasons are written out
+ * in full. In particular the contribution is not `net − plate` computed here, even though it looks
+ * like it: the backend rounds once, and a margin that disagrees with the till is the one number
+ * nobody may print.
  */
 export default {
   name: 'MarginRecipesPage',
-  components: { AdminPage, MarginCostPanel },
+  components: { AdminPage, MarginCostPanel, MarginMenuMarginPanel, MarginProductLinkPanel },
   data () {
     return {
       statusState: STATUS_UNKNOWN,
@@ -264,11 +296,18 @@ export default {
       // would render a failed read as "this store has no recipes".
       recipes: null,
       ingredients: null,
+      // The store-wide menu-margin answer, read once per load. Null means UNKNOWN for the same reason
+      // as the two above: a failed read must not render as "no dish earns anything".
+      menuMargin: null,
+      // The selected recipe's ACTIVE product links, null while unknown. The link editor refuses to
+      // open on an unknown set, because its save is a replace-set.
+      productLinks: null,
       selectedRecipeId: null,
       detail: null,
       detailUnknown: false,
       saving: false,
       activating: false,
+      linking: false,
       loading: false,
       failure: '',
       formError: '',
@@ -302,7 +341,7 @@ export default {
       return new MarginRecipeService(this._coreInitializer);
     },
     busy () {
-      return this.saving || this.activating || this.loading;
+      return this.saving || this.activating || this.linking || this.loading;
     },
     blocker () {
       if (this.statusState === STATUS_MODULE_OFF) { return this.$i('mrg_module_off'); }
@@ -332,6 +371,23 @@ export default {
     /** The latest Draft, when there is one. Its OWN revision is what activation must carry. */
     activatable () {
       return activatableDraft(this.detail);
+    },
+    /**
+     * The store's product catalog, taken from the menu-margin answer — the module owns no product
+     * endpoint of its own, and that answer already carries every product with its name, goods group
+     * and current recipe claim.
+     */
+    catalogProducts () {
+      return (this.menuMargin && this.menuMargin.products) || [];
+    },
+    /**
+     * `Sellable` or `Component`. A component recipe is deliberately left out of the read's unsold
+     * list, so without this the margin panel could not tell "nobody sells this dish" from "this is
+     * not a dish".
+     */
+    selectedRecipeKind () {
+      const row = this.recipeRows.find(r => r.recipeId === this.selectedRecipeId);
+      return row ? row.kind : null;
     }
   },
   watch: {
@@ -348,6 +404,7 @@ export default {
       this.detail = null;
       this.detailUnknown = false;
       this.selectedRecipeId = null;
+      this.productLinks = null;
 
       try {
         const status = await this._marginService.GetStatus(this.storeId);
@@ -376,29 +433,73 @@ export default {
       // store, which is a different claim.
       this.recipes = null;
       this.ingredients = null;
+      this.menuMargin = null;
 
-      const [recipes, ingredients] = await Promise.all([
+      const [recipes, ingredients, menuMargin] = await Promise.all([
         this._marginService.ListRecipes(this.storeId).catch((e) => { this.fail(e); return null; }),
         // The ingredient list is what NAMES the cost lines. A failure leaves it null and the panel
         // says the names are unknown, rather than claiming the ingredients are gone.
-        this._marginService.ListIngredients(this.storeId).catch(() => null)
+        this._marginService.ListIngredients(this.storeId).catch(() => null),
+        // The margin read. A failure leaves the model in its UNKNOWN state and the panel says the
+        // read did not answer — never that a dish earns nothing.
+        this._marginService.GetMenuMargin(this.storeId).catch(() => null)
       ]);
 
       this.recipes = Array.isArray(recipes) ? recipes : null;
       this.ingredients = ingredients && Array.isArray(ingredients.ingredients) ? ingredients : null;
+      this.menuMargin = readMenuMargin(menuMargin);
       this.loading = false;
+    },
+
+    /** Re-read after anything that can move a margin: an activation, or a link change. */
+    async reloadMenuMargin () {
+      const response = await this._marginService.GetMenuMargin(this.storeId).catch(() => null);
+      this.menuMargin = readMenuMargin(response);
     },
 
     async selectRecipe (recipeId) {
       this.selectedRecipeId = recipeId;
       this.detail = null;
       this.detailUnknown = true;
+      this.productLinks = null;
       this.failure = '';
       try {
         this.detail = await this._marginService.GetRecipe(this.storeId, recipeId);
       } catch (e) {
         this.fail(e);
       }
+      await this.loadLinks(recipeId);
+    },
+
+    /**
+     * The recipe's own link set, read separately from the menu margin ON PURPOSE: the menu margin is
+     * built from the catalog, so a link pointing at a product the catalog no longer has produces no
+     * row there. Seeding the editor from the menu margin would make the next replace-set save delete
+     * that link without anyone seeing it.
+     */
+    async loadLinks (recipeId) {
+      const response = await this._marginService.GetProductLinks(this.storeId, recipeId).catch(() => null);
+      // Null on failure, so the editor stays shut rather than opening on an empty set it would then
+      // offer to save over the real one.
+      this.productLinks = readProductLinks(response);
+    },
+
+    /**
+     * The replace-set save. Its response IS the fresh link set, so nothing is re-read for the editor
+     * — but the menu margin is, because linking a dish is exactly what turns "no margin" into one.
+     */
+    async saveLinks (links) {
+      this.linking = true;
+      this.failure = '';
+      try {
+        const response = await this._marginService.SetProductLinks(this.storeId, this.selectedRecipeId, links);
+        this.productLinks = readProductLinks(response);
+        this.recipes = await this._marginService.ListRecipes(this.storeId).catch(() => null);
+        await this.reloadMenuMargin();
+      } catch (e) {
+        this.fail(e);
+      }
+      this.linking = false;
     },
 
     addComponent () {
@@ -494,6 +595,11 @@ export default {
         this.form.name = '';
         this.form.components = [];
         this.recipes = await this._marginService.ListRecipes(this.storeId).catch(() => null);
+        // A brand-new recipe is sold by nobody, and the read is what SAYS so. Without this re-read the
+        // margin panel would fall through to "no rows", which is the state that means we cannot
+        // explain the absence — here we can.
+        await this.loadLinks(this.selectedRecipeId);
+        await this.reloadMenuMargin();
       } catch (e) {
         this.fail(e);
       }
@@ -517,6 +623,10 @@ export default {
         await this._marginService.ActivateVersion(this.storeId, this.selectedRecipeId, draft.recipeVersionId, draft.revision);
         this.detail = await this._marginService.GetRecipe(this.storeId, this.selectedRecipeId);
         this.recipes = await this._marginService.ListRecipes(this.storeId).catch(() => null);
+        // The menu margin costs the version ACTIVE at the read instant, so before this activation it
+        // had no cost side for this recipe at all. It has one now, and the old answer would still be
+        // showing a dash.
+        await this.reloadMenuMargin();
       } catch (e) {
         this.fail(e);
       }

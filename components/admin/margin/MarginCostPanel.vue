@@ -8,8 +8,9 @@
       <span v-if="cost.pricedAt" class="mrg-cost__meta">{{ $i('mrg_cost_priced_at', { time: pricedAtLabel }) }}</span>
     </header>
 
-    <!-- The two figures the venue came for, and the one it cannot have. Each is READ from its own
-         node on the wire; nothing on this screen adds anything up. -->
+    <!-- What it costs to make. Each figure is READ from its own node on the wire; nothing on this
+         screen adds anything up. What it EARNS is the panel below (`MarginMenuMarginPanel`), which is
+         a different read against the price the till would charge. -->
     <div class="mrg-cost__figures">
       <div class="mrg-cost__figure" :class="{ 'is-unknown': !hasAmounts }">
         <span class="mrg-cost__label">{{ $i('mrg_cost_batch') }}</span>
@@ -21,15 +22,6 @@
         <span class="mrg-cost__label">{{ $i('mrg_cost_per_portion') }}</span>
         <strong class="mrg-cost__value" data-test="portion-cost">{{ portionLabel }}</strong>
         <span v-if="portionSub" class="mrg-cost__sub">{{ portionSub }}</span>
-      </div>
-
-      <!-- THE MARGIN. Permanently withheld, and shown rather than omitted so that nobody reads the
-           plate cost as the margin. `GET /margin/menu-margin` is not built; deriving the dish's
-           ex-VAT net price in the browser would produce a percentage that disagrees with the till. -->
-      <div class="mrg-cost__figure is-refused" data-test="menu-margin" :data-refusal="menuMarginRefusal">
-        <span class="mrg-cost__label">{{ $i('mrg_margin_label') }}</span>
-        <strong class="mrg-cost__value">{{ unknownMark }}</strong>
-        <span class="mrg-cost__sub">{{ $i('mrg_margin_unavailable') }}</span>
       </div>
     </div>
 
@@ -69,6 +61,7 @@
 </template>
 
 <script>
+import { marginMoney } from '~/utils/margin/money';
 import {
   COST_UNKNOWN,
   COST_NOT_COSTED,
@@ -76,8 +69,7 @@ import {
   COST_FLOOR,
   COST_EXACT,
   NAME_RESOLVED,
-  NAME_UNRESOLVED,
-  MENU_MARGIN_UNAVAILABLE
+  NAME_UNRESOLVED
 } from '~/utils/margin/cost-preview';
 
 /**
@@ -88,37 +80,20 @@ import {
  * and the batch figure are allowed to differ by up to half an øre per line — and they do. Adding the
  * column up here would put a number on screen that the backend calls false, in the one module where
  * that number is what a dish gets priced on.
+ *
+ * This panel answers "what does it cost to make". "What does it earn" is `MarginMenuMarginPanel`,
+ * against a different read and a different version resolution — the two are kept apart so a plate
+ * cost is never read as a margin.
  */
 export default {
   name: 'MarginCostPanel',
+  mixins: [marginMoney],
   props: {
     /** The model from `readCostPreview`. */
     cost: {
       type: Object,
       required: true
-    },
-    /**
-     * The ISO code this admin's money formatter prints (the market's own currency, from
-     * `marketConfig`). Money the API priced in ANY OTHER currency is rendered with its code and
-     * without a symbol — a wrong symbol is a wrong amount.
-     */
-    currency: {
-      type: String,
-      default: null
-    },
-    locale: {
-      type: String,
-      default: 'no'
     }
-  },
-  data () {
-    return {
-      unknownMark: '—',
-      // Stamped on the margin slot as `data-refusal`, so the reason this figure is absent is
-      // machine-greppable rather than only prose: when `GET /margin/menu-margin` lands, searching
-      // for this constant finds every place that has to change.
-      menuMarginRefusal: MENU_MARGIN_UNAVAILABLE
-    };
   },
   computed: {
     hasAmounts () {
@@ -182,26 +157,13 @@ export default {
   },
   methods: {
     /**
-     * Integer øre through the admin's OWN money formatter — `priceLabel` on the global mixin, which
-     * resolves to core's `priceLabel` for kroner and `formatChf` for francs. No formatting is
-     * reimplemented here. When the API priced in some other currency the symbol is withheld and the
-     * ISO code shown instead, using the same digit helpers.
-     */
-    amount (minor) {
-      const wire = this.cost.currency;
-      if (wire && this.currency && wire !== this.currency) {
-        return this.wholeAmount(minor) + ',' + this.fractionAmount(minor) + ' ' + wire;
-      }
-      return this.priceLabel(minor);
-    },
-    /**
      * An amount, or the unknown mark. Null NEVER becomes 0, and an incomplete cost is shown as the
-     * lower bound it is rather than as a total — the same "at least X" semantic the menu-margin
-     * oracle fixes for plate cost.
+     * lower bound it is rather than as a total — the same "at least X" semantic the menu-margin read
+     * fixes for plate cost.
      */
     amountOrMark (minor) {
       if (minor === null || minor === undefined) { return this.unknownMark; }
-      const amount = this.amount(minor);
+      const amount = this.amount(minor, this.cost.currency);
       return this.cost.isFloor ? this.$i('mrg_cost_at_least', { amount }) : amount;
     },
     componentLabel (line) {
@@ -220,14 +182,11 @@ export default {
     },
     /** An unpriced line is a dash and a reason, never `kr 0,00`. The wire's 0 there means unknown. */
     lineCostLabel (line) {
-      return line.lineCostMinor === null ? this.unknownMark : this.amount(line.lineCostMinor);
+      return line.lineCostMinor === null ? this.unknownMark : this.amount(line.lineCostMinor, this.cost.currency);
     },
     lineFlag (line) {
       if (line.isOrphan) { return this.$i('mrg_line_flag_orphan'); }
       return line.isSubRecipe ? this.$i('mrg_line_flag_sub_recipe') : this.$i('mrg_line_flag_no_price');
-    },
-    number (value) {
-      return new Intl.NumberFormat(this.locale, { maximumFractionDigits: 3 }).format(value);
     },
     numberOrMark (value) {
       return value === null || value === undefined ? this.unknownMark : String(value);
@@ -290,8 +249,7 @@ export default {
   border-radius: 8px;
   padding: 16px;
 
-  &.is-unknown,
-  &.is-refused {
+  &.is-unknown {
     background: #fff;
     border: 1px dashed #e2e8f0;
   }

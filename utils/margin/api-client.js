@@ -78,6 +78,14 @@ export const MARGIN_RECIPE_CYCLE = 'margin.recipe-cycle';
 export const MARGIN_RECIPE_DEPTH_EXCEEDED = 'margin.recipe-depth-exceeded';
 export const MARGIN_VERSION_NOT_DRAFT = 'margin.version-not-draft';
 export const MARGIN_NO_ACTIVE_VERSION = 'margin.no-active-version';
+/**
+ * A product-link set the server refused: a product named twice, a quantity that is not greater than
+ * zero, a product outside this store, or — the one a venue meets — a product already actively linked
+ * to ANOTHER recipe. The backend allows at most one active link per product
+ * (`MarginProductLinkService`), and its `detail` names the offending product by raw Guid, which is
+ * why this renders from the code and not from the prose.
+ */
+export const MARGIN_PRODUCT_LINK_INVALID = 'margin.product-link-invalid';
 
 /**
  * Raised BEFORE any request when a mutation that needs a revision has none to send.

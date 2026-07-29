@@ -22,10 +22,10 @@
 //                  floor derived from zero knowledge carries no information about the dish and reads
 //                  as "this is free". Rendered as unknown, never as an amount.
 //   floor        — some lines priced, some did not (`complete: false`). The totals are LOWER BOUNDS.
-//                  This is the contracted semantic: the menu-margin oracle
-//                  (`MarginMenuMarginReadTests`) fixes plate cost as "a LOWER BOUND ('at least X')
-//                  when CostComplete is false", and this module keeps the same meaning so the two
-//                  surfaces cannot disagree the day that read lands.
+//                  This is the contracted semantic: the menu-margin read (`MarginMenuMarginReadTests`,
+//                  now its acceptance suite rather than its oracle) fixes plate cost as "a LOWER BOUND
+//                  ('at least X') when CostComplete is false", and this module keeps the same meaning
+//                  so the two surfaces cannot disagree. `utils/margin/menu-margin.js` reads it.
 //   exact        — every line priced (`complete: true`). The totals are the totals.
 //
 // Only `floor` and `exact` produce numbers. The other three produce nulls, which the panel renders as
@@ -55,25 +55,6 @@ export const COST_FLOOR = 'floor';
 /** Every line priced. The totals are exact. */
 export const COST_EXACT = 'exact';
 
-/**
- * Why this surface shows no margin against the menu price.
- *
- * `GET /margin/menu-margin` — the read that would answer it — IS NOT BUILT. Its own oracle test says
- * so verbatim (`WebApi.Tests/Margin/MarginMenuMarginReadTests.cs:19`) and fixes the field list it
- * will carry when it lands: `{netPriceMinor, plateCostMinor, contributionMinor, foodCostPercent,
- * priceBasis, costComplete}`.
- *
- * The margin is NOT reconstructed here from a catalog price, and the reason is not squeamishness.
- * `netPriceMinor` is the dish's price EX VAT, and getting from the catalog's gross price to it
- * requires the VAT rate that `Product.SelectedTax(deliveryType)` resolves — goods-group profile
- * first, then the legacy per-basis gates — and then `AccountingHelper.GetVatAmount`, so that the
- * margin's net matches the net the till and the accounting export already use. It also requires
- * knowing WHICH surcharges are stamped on the line, a decision that lives inline in a private POS
- * line builder. A frontend cannot do any of that. A frontend that tried would produce a percentage
- * that disagrees with the till, and someone would price a dish off it.
- */
-export const MENU_MARGIN_UNAVAILABLE = 'margin.menu-margin-read-not-built';
-
 /** The ingredient list answered and named this line. */
 export const NAME_RESOLVED = 'resolved';
 /** The ingredient list answered and did NOT contain this id (archived, or removed since). */
@@ -81,7 +62,14 @@ export const NAME_UNRESOLVED = 'unresolved';
 /** The ingredient list did not answer. We have not been told anything about this id. */
 export const NAME_UNKNOWN = 'unknown';
 
-function numberOrNull (value) {
+/**
+ * A wire number, or null.
+ *
+ * Exported because `utils/margin/menu-margin.js` needs the SAME reader: both modules depend on the
+ * wire's `null` and the wire's `0` staying distinguishable, and the usual `Number(x) || 0` idiom
+ * destroys exactly that. One implementation, so the two surfaces cannot drift apart on it.
+ */
+export function numberOrNull (value) {
   return typeof value === 'number' && isFinite(value) ? value : null;
 }
 

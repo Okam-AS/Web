@@ -11,16 +11,12 @@
 //   POST /margin/recipes?storeId                                      MarginRecipesController
 //   GET  /margin/recipes/{recipeId}?storeId                           MarginRecipesController
 //   POST /margin/recipes/{recipeId}/versions/{versionId}/activate     MarginRecipesController (If-Match)
+//   GET  /margin/recipes/{recipeId}/product-links?storeId             MarginRecipesController
+//   PUT  /margin/recipes/{recipeId}/product-links?storeId             MarginRecipesController
+//   GET  /margin/menu-margin?storeId                                  MarginMenuMarginController
 //
 // WHAT IS DELIBERATELY ABSENT, so its absence is not read as an oversight:
 //
-//  • `GET /margin/menu-margin` — the read that would answer "what is this dish's margin against its
-//    menu price". IT DOES NOT EXIST. `WebApi.Tests/Margin/MarginMenuMarginReadTests.cs:19` says so in
-//    its own words ("is NOT BUILT; this file is its ORACLE") and fixes the contracted field list
-//    `{netPriceMinor, plateCostMinor, contributionMinor, foodCostPercent, priceBasis, costComplete}`
-//    for whenever it lands. Nothing here reconstructs it: the net price is gross minus VAT, and the
-//    VAT rate is resolved server-side from the goods-group profile plus the delivery-type basis
-//    (`Helpers/ProductExtensions.cs`), so a client-side net price would be a guess dressed as money.
 //  • `/margin/statements` and `/margin/coverage` — both read the projected sales facts, and the
 //    projector currently labels the journal's Oslo wall-clock stamp as UTC
 //    (`MarginBusinessDateEpochPinTests`, red and pinned). A surface whose correctness rests on that
@@ -104,6 +100,59 @@ export class MarginRecipeService extends MarginClientBase {
     const path = '/margin/recipes/' + encodeURIComponent(recipeId) +
       '/versions/' + encodeURIComponent(versionId) + '/activate';
     return this._mutateWithRevision('POST', scoped(path, storeId), {}, revision);
+  }
+
+  /**
+   * The recipe's product links — the dishes it is sold as.
+   *
+   * Read even though `GET /margin/menu-margin` already reports a link per row: the menu margin is
+   * built from the CATALOG, so a link pointing at a product the catalog no longer has produces no row
+   * there at all. This surface reports it, flagged broken (spec §7 C2, gate F2). The editor is seeded
+   * from THIS list, because the save below is a replace-set and seeding it from the menu margin would
+   * silently drop a link nobody was shown.
+   */
+  GetProductLinks (storeId, recipeId) {
+    return this._request('GET', scoped(this._linksPath(recipeId), storeId));
+  }
+
+  /**
+   * REPLACE-SET: the body is the recipe's complete desired set of active links, not a delta. Sending
+   * `{ links: [] }` clears them.
+   *
+   * NO `If-Match`. This one is not an aggregate mutation — the controller routes it through `Run`
+   * rather than `RunWithIfMatch` and asks for no header — so sending a revision would be a guard the
+   * server does not check, which reads as a guarantee and is not one. Its own concurrency defence is
+   * the filtered unique index behind the single-active-link rule; a race there comes back as
+   * `margin.stale-revision` from the server, not from a header this client sent.
+   *
+   * `EffectiveFrom` is deliberately omitted, exactly as on activate: it defaults to the server's
+   * injected clock, and a client-supplied instant has no business entering a module whose journal
+   * epoch is an open defect.
+   */
+  SetProductLinks (storeId, recipeId, links) {
+    return this._mutate('PUT', scoped(this._linksPath(recipeId), storeId), {
+      links: links.map(link => ({
+        productId: link.productId,
+        quantityPerSoldUnit: link.quantityPerSoldUnit
+      }))
+    });
+  }
+
+  /**
+   * Every dish in the store's catalog, its plate cost, and the margin it earns against the price the
+   * till would actually charge — ONE ROW PER PRICE BASIS, because a dish has one plate cost and up to
+   * three prices at up to three VAT rates.
+   *
+   * Store-wide rather than per recipe: the read has no per-dish route, and its answer also carries
+   * the product catalog this module has no endpoint of its own for. See `~/utils/margin/menu-margin`,
+   * where the row model and its honest states live.
+   */
+  GetMenuMargin (storeId) {
+    return this._request('GET', scoped('/margin/menu-margin', storeId));
+  }
+
+  _linksPath (recipeId) {
+    return '/margin/recipes/' + encodeURIComponent(recipeId) + '/product-links';
   }
 }
 

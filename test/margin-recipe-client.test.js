@@ -50,6 +50,80 @@ describe('MarginRecipeService', () => {
       await service().ListIngredients(STORE)
       expect(global.fetch.mock.calls[0][0]).toBe('/margin/ingredients?storeId=42')
     })
+
+    test('GetMenuMargin hits GET /margin/menu-margin, store-scoped and with no per-recipe filter', async () => {
+      respondWith(200, { storeId: STORE, rows: [] })
+      await service().GetMenuMargin(STORE)
+
+      const [url, init] = global.fetch.mock.calls[0]
+      // The read has no per-dish or per-recipe route: it answers for the whole store and the caller
+      // selects. A client that invented `&recipeId=` would be sending a filter the server ignores.
+      expect(url).toBe('/margin/menu-margin?storeId=42')
+      expect(init.method).toBe('GET')
+    })
+
+    test('GetProductLinks hits the recipe-scoped link surface', async () => {
+      respondWith(200, { recipeId: RECIPE, links: [] })
+      await service().GetProductLinks(STORE, RECIPE)
+      expect(global.fetch.mock.calls[0][0]).toBe('/margin/recipes/' + RECIPE + '/product-links?storeId=42')
+    })
+  })
+
+  describe('the product-link save is a PUT replace-set, and carries neither header', () => {
+    test('the whole desired set travels in the body', async () => {
+      respondWith(200, { recipeId: RECIPE, links: [] })
+      await service().SetProductLinks(STORE, RECIPE, [
+        { productId: 'p-1', quantityPerSoldUnit: 0.25 },
+        { productId: 'p-2', quantityPerSoldUnit: 1 }
+      ])
+
+      const [url, init] = global.fetch.mock.calls[0]
+      expect(url).toBe('/margin/recipes/' + RECIPE + '/product-links?storeId=42')
+      expect(init.method).toBe('PUT')
+      expect(JSON.parse(init.body).links).toEqual([
+        { productId: 'p-1', quantityPerSoldUnit: 0.25 },
+        { productId: 'p-2', quantityPerSoldUnit: 1 }
+      ])
+    })
+
+    // The controller routes this action through `Run`, not `RunWithIfMatch`: it asks for no revision
+    // and checks none. Sending one would be a guard the server does not apply, which reads as a
+    // guarantee and is not one — the same reasoning that keeps `Idempotency-Key` off this client.
+    test('no If-Match and no Idempotency-Key are sent', async () => {
+      respondWith(200, { recipeId: RECIPE, links: [] })
+      await service().SetProductLinks(STORE, RECIPE, [])
+
+      const init = global.fetch.mock.calls[0][1]
+      expect(init.headers['If-Match']).toBeUndefined()
+      expect(init.headers['Idempotency-Key']).toBeUndefined()
+      expect(init.headers['Content-Type']).toBe('application/json')
+    })
+
+    // CONTROL for the row above: an AGGREGATE mutation on the same client DOES send `If-Match`, so
+    // the absence asserted there is a contract difference rather than a client that never sends one.
+    test('CONTROL: the aggregate mutation on the same client still sends If-Match', async () => {
+      respondWith(200, {})
+      await service().ActivateVersion(STORE, RECIPE, VERSION, 'rev-1')
+      expect(global.fetch.mock.calls[0][1].headers['If-Match']).toBe('"rev-1"')
+    })
+
+    // Exactly as on activate: the server's injected clock decides. A client-supplied instant has no
+    // business entering a module whose journal epoch is an open defect.
+    test('no EffectiveFrom is sent, even when the caller has one', async () => {
+      respondWith(200, { recipeId: RECIPE, links: [] })
+      await service().SetProductLinks(STORE, RECIPE, [
+        { productId: 'p-1', quantityPerSoldUnit: 1, effectiveFrom: '2020-01-01T00:00:00Z' }
+      ])
+      expect(JSON.parse(global.fetch.mock.calls[0][1].body)).toEqual({
+        links: [{ productId: 'p-1', quantityPerSoldUnit: 1 }]
+      })
+    })
+
+    test('an empty set is sent as an empty list — the way a recipe is unlinked', async () => {
+      respondWith(200, { recipeId: RECIPE, links: [] })
+      await service().SetProductLinks(STORE, RECIPE, [])
+      expect(JSON.parse(global.fetch.mock.calls[0][1].body)).toEqual({ links: [] })
+    })
   })
 
   // THE PAIR. Margin's mutation contract is not uniform: a create has no prior revision to guard and

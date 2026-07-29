@@ -214,22 +214,21 @@ describe('the three ways an incomplete cost can end', () => {
   })
 })
 
-describe('the margin against the menu price is refused visibly, on every screen', () => {
-  // Rendered on a FULLY COMPLETE cost, so the refusal cannot be mistaken for "everything here is
-  // blank". The panel proves it can print money in the very same test.
-  test('a complete plate cost still shows no margin, and says why', () => {
+describe('this panel is about COST, and says nothing about the margin', () => {
+  // `GET /margin/menu-margin` is now built and `MarginMenuMarginPanel` renders it against the price
+  // the till would charge, resolving the version active at the read instant. THIS panel previews the
+  // Active version or falls back to the latest Draft, which is a different document — so the two must
+  // not share a slot, and a plate cost must never appear under a heading about margin.
+  test('no margin figure and no menu price appear beside the plate cost', () => {
     const wrapper = render()
-    const slot = wrapper.find('[data-test="menu-margin"]')
 
     expect(wrapper.find('[data-test="batch-cost"]').text()).toBe(priceLabel(226))
-    expect(slot.text()).toContain('—')
-    expect(slot.text()).toContain(translations.no.mrg_margin_unavailable)
-    // The machine-readable reason, so the boundary is greppable when the read lands.
-    expect(slot.attributes('data-refusal')).toBe('margin.menu-margin-read-not-built')
+    expect(wrapper.find('[data-test="menu-margin"]').exists()).toBe(false)
+    expect(wrapper.text()).not.toContain(translations.no.mrg_margin_title)
   })
 
-  // A percentage is what a margin looks like. There is no read that produces one, so none may appear
-  // — a food-cost percent invented in the browser is the exact figure someone would price a dish on.
+  // A percentage is what a margin looks like. Nothing on the cost panel produces one, and a food-cost
+  // percent invented beside a plate cost is the exact figure someone would price a dish on.
   test('no percentage is rendered anywhere on the panel', () => {
     expect(render().text()).not.toContain('%')
     expect(render({ detail: detail({ complete: false, totalCostMinor: 188, lines: [LINES[0], Object.assign({}, LINES[1], { incomplete: true, lineCostMinor: 0 })] }) }).text()).not.toContain('%')

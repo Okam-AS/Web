@@ -45,6 +45,25 @@ jest.mock('~/utils/margin/recipe-client', () => ({
       calls.push(['ActivateVersion', recipeId, versionId, revision])
       return Promise.resolve({ recipeVersionId: versionId, state: 'Active' })
     }
+
+    GetMenuMargin (storeId) {
+      calls.push(['GetMenuMargin', storeId])
+      return script.menuMargin
+        ? script.menuMargin()
+        : Promise.resolve({ storeId, currency: 'NOK', pricedAtUtc: '2026-03-01T12:00:00Z', rows: [], unlinkedRecipes: [] })
+    }
+
+    GetProductLinks (_storeId, recipeId) {
+      calls.push(['GetProductLinks', recipeId])
+      return script.links ? script.links() : Promise.resolve({ recipeId, links: [] })
+    }
+
+    SetProductLinks (_storeId, recipeId, links) {
+      calls.push(['SetProductLinks', recipeId, links])
+      return script.setLinks
+        ? script.setLinks(links)
+        : Promise.resolve({ recipeId, links: links.map((l, i) => Object.assign({ id: 'l-' + i, isActive: true, isBroken: false }, l)) })
+    }
   }
 }))
 
@@ -74,12 +93,13 @@ describe('the module gate is asked first, and its three answers are three screen
   beforeEach(() => { calls.length = 0; for (const k of Object.keys(script)) { delete script[k] } })
 
   // CONTROL for the two refusals below: with the module ON the page proceeds and reads.
-  test('module ON: no blocker, and the two reads are issued', async () => {
+  test('module ON: no blocker, and the three reads are issued', async () => {
     const wrapper = mountPage()
     await settled()
     expect(wrapper.find('[data-test="blocker"]').exists()).toBe(false)
     expect(named('ListRecipes')).toHaveLength(1)
     expect(named('ListIngredients')).toHaveLength(1)
+    expect(named('GetMenuMargin')).toHaveLength(1)
   })
 
   test('module OFF: the page blocks and reads nothing', async () => {
@@ -88,6 +108,9 @@ describe('the module gate is asked first, and its three answers are three screen
     await settled()
     expect(wrapper.find('[data-test="blocker"]').text()).toBe('mrg_module_off')
     expect(named('ListRecipes')).toHaveLength(0)
+    // The margin read is behind the same gate. With the module off every route answers the same
+    // opaque 404, so issuing it would decorate a deliberate screen with a failure about it.
+    expect(named('GetMenuMargin')).toHaveLength(0)
   })
 
   // The distinction the whole gate exists for. Every OTHER margin route answers the same opaque 404
@@ -308,5 +331,155 @@ describe('activating a draft carries the DRAFT revision, not the recipe header o
     await settled()
 
     expect(wrapper.find('[data-test="no-revision"]').exists()).toBe(true)
+  })
+
+  // Activation changes which version the menu margin costs: the read resolves the version ACTIVE at
+  // its instant, so before this call the dish had no cost side at all.
+  test('activation re-reads the menu margin, not just the recipe', async () => {
+    script.recipe = () => Promise.resolve(withDrafts)
+    const wrapper = mountPage()
+    await settled()
+    await wrapper.vm.selectRecipe('r-1')
+    await settled()
+    calls.length = 0
+
+    await wrapper.vm.activate()
+    await settled()
+    expect(named('GetMenuMargin')).toHaveLength(1)
+  })
+})
+
+describe('the margin read is unknown when it fails, never an empty menu', () => {
+  beforeEach(() => { calls.length = 0; for (const k of Object.keys(script)) { delete script[k] } })
+
+  // The pair. The two fixtures differ ONLY in whether the read resolved or rejected, and they must
+  // not produce the same model: one says nothing about any dish, the other says every dish's margin
+  // is unknown.
+  test('a failed menu-margin read leaves the model UNKNOWN', async () => {
+    script.menuMargin = () => Promise.reject(new MarginApiError(500, {}))
+    const wrapper = mountPage()
+    await settled()
+    expect(wrapper.vm.menuMargin.state).toBe('unknown')
+    expect(wrapper.vm.catalogProducts).toEqual([])
+  })
+
+  test('CONTROL: an answered read is READY, and its rows reach the page', async () => {
+    script.menuMargin = () => Promise.resolve({
+      storeId: 42,
+      currency: 'NOK',
+      pricedAtUtc: '2026-03-01T12:00:00Z',
+      rows: [{
+        productId: 'p-1',
+        productName: 'Tomatsuppe',
+        recipeId: 'r-1',
+        priceBasis: 'Base',
+        vatPercent: 15,
+        grossPriceMinor: 14900,
+        depositMinor: 0,
+        netPriceMinor: 12957,
+        plateCostMinor: 905,
+        contributionMinor: 12052,
+        foodCostPercent: 6.98464,
+        costComplete: true
+      }],
+      unlinkedRecipes: []
+    })
+    const wrapper = mountPage()
+    await settled()
+
+    expect(wrapper.vm.menuMargin.state).toBe('ready')
+    expect(wrapper.vm.menuMargin.rows[0].contributionMinor).toBe(12052)
+    // The same answer is the module's only product catalog — Margin owns no product endpoint.
+    expect(wrapper.vm.catalogProducts.map(p => p.productId)).toEqual(['p-1'])
+  })
+})
+
+describe('linking a recipe to the dishes it is sold as', () => {
+  beforeEach(() => { calls.length = 0; for (const k of Object.keys(script)) { delete script[k] } })
+
+  test('selecting a recipe reads its own link set', async () => {
+    const wrapper = mountPage()
+    await settled()
+    calls.length = 0
+
+    await wrapper.vm.selectRecipe('r-1')
+    await settled()
+
+    expect(named('GetProductLinks')).toHaveLength(1)
+    expect(wrapper.vm.productLinks).toEqual([])
+  })
+
+  // The save is a REPLACE-SET, so an editor opened on an unknown starting set would offer to save an
+  // empty list over the venue's real links. A failed read therefore leaves it null and shut.
+  test('a failed link read leaves the set UNKNOWN rather than empty', async () => {
+    script.links = () => Promise.reject(new MarginApiError(500, {}))
+    const wrapper = mountPage()
+    await settled()
+
+    await wrapper.vm.selectRecipe('r-1')
+    await settled()
+    expect(wrapper.vm.productLinks).toBeNull()
+  })
+
+  test('saving sends the whole desired set and re-reads the margin it just changed', async () => {
+    const wrapper = mountPage()
+    await settled()
+    await wrapper.vm.selectRecipe('r-1')
+    await settled()
+    calls.length = 0
+
+    await wrapper.vm.saveLinks([{ productId: 'p-1', quantityPerSoldUnit: 0.25 }])
+    await settled()
+
+    const [, recipeId, links] = named('SetProductLinks')[0]
+    expect(recipeId).toBe('r-1')
+    expect(links).toEqual([{ productId: 'p-1', quantityPerSoldUnit: 0.25 }])
+    // Linking a dish is exactly what turns "no margin" into one, so the stale answer may not stay.
+    expect(named('GetMenuMargin')).toHaveLength(1)
+    // The save's own response IS the fresh set — no second link read.
+    expect(named('GetProductLinks')).toHaveLength(0)
+    expect(wrapper.vm.productLinks).toEqual([{
+      productId: 'p-1',
+      quantityPerSoldUnit: 0.25,
+      productName: null,
+      goodsGroupName: null,
+      productHidden: false,
+      isBroken: false
+    }])
+  })
+
+  test('a server refusal renders from its CODE, not its prose', async () => {
+    script.setLinks = () => Promise.reject(new MarginApiError(400, {
+      code: 'margin.product-link-invalid',
+      detail: 'Product 3f2504e0-4f89-11d3-9a0c-0305e82c3301 is already actively linked to another recipe.'
+    }))
+    const wrapper = mountPage()
+    await settled()
+    await wrapper.vm.selectRecipe('r-1')
+    await settled()
+
+    await wrapper.vm.saveLinks([{ productId: 'p-1', quantityPerSoldUnit: 1 }])
+    await settled()
+
+    expect(wrapper.find('[data-test="failure"]').text()).toBe('mrg_err_product_link')
+    // The server's prose embeds a raw Guid. A venue cannot read a Guid, so it stays off the screen.
+    expect(wrapper.text()).not.toContain('3f2504e0')
+  })
+
+  // A brand-new recipe is sold by nobody, and the READ is what says so. Without the re-read the
+  // margin panel would fall through to "we do not know why there are no rows", which is a weaker and
+  // less true answer than the one available.
+  test('creating a recipe re-reads the margin so the new recipe can be named as unsold', async () => {
+    script.create = () => Promise.resolve({ recipeId: 'r-new', draftVersions: [], costPreview: null })
+    const wrapper = mountPage()
+    await settled()
+    calls.length = 0
+
+    wrapper.setData({ form: { name: 'Fiskesuppe', yieldQuantity: '4', yieldUnit: 'Liter', portionCount: '20', components: [] } })
+    await wrapper.vm.createRecipe()
+    await settled()
+
+    expect(named('GetMenuMargin')).toHaveLength(1)
+    expect(named('GetProductLinks')).toHaveLength(1)
   })
 })
