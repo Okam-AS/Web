@@ -1,0 +1,235 @@
+// The shared look of the six Training panels.
+//
+// It lives here rather than being copied into each `<style scoped>` block because the panels are six
+// variations on one shape — a heading, a three-state note, a table, a form — and six copies of the
+// same forty rules is the duplication the quality gate exists to stop. Scoping still works: each
+// component's own scoped block imports this, so the rules are emitted under that component's own
+// data attribute.
+//
+// Colours and radii are the admin design system's (see the repo's CLAUDE.md ledger), not new ones.
+
+$trn-ink: #292c34;
+$trn-muted: #64748b;
+$trn-border: #e2e8f0;
+$trn-surface: #f8f9fa;
+$trn-green: #1bb776;
+
+// A placeholder rather than a class: it emits nothing of its own, so each panel's own heading
+// selector is the only thing in the compiled output.
+%trn-panel-title {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: $trn-ink;
+  margin: 0 0 12px;
+}
+
+.trn-note {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  margin: 0 0 16px;
+  background: $trn-surface;
+  color: $trn-muted;
+}
+
+// Three visually distinct notes for three different claims. They are never interchangeable: unknown
+// is "we did not hear back", refused is "the server declined and did not say why", blocked is "the
+// server told us this write is off".
+.trn-note--unknown {
+  background: #eef2f7;
+  color: #475569;
+}
+
+.trn-note--refused {
+  background: #fff8e6;
+  color: #92400e;
+}
+
+.trn-note--blocked {
+  background: #fdf2f2;
+  color: #b91c1c;
+}
+
+.trn-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+  margin-bottom: 16px;
+
+  th {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 2px solid $trn-border;
+    color: $trn-muted;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 10px;
+    border-bottom: 1px solid $trn-border;
+    color: $trn-ink;
+    vertical-align: top;
+  }
+}
+
+.trn-table__row {
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: $trn-surface;
+  }
+
+  &.is-selected {
+    background: rgba(27, 183, 118, 0.08);
+  }
+}
+
+.trn-ref {
+  font-family: 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: 0.85em;
+  word-break: break-all;
+}
+
+.trn-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 0.75em;
+  font-weight: 600;
+  background: $trn-surface;
+  color: $trn-muted;
+}
+
+.trn-badge--on {
+  background: rgba(27, 183, 118, 0.12);
+  color: #0f7a4d;
+}
+
+.trn-badge--warn {
+  background: #fff8e6;
+  color: #92400e;
+}
+
+.trn-badge--off {
+  background: #fdf2f2;
+  color: #b91c1c;
+}
+
+.trn-flag {
+  margin-left: 6px;
+  font-size: 0.75em;
+  color: $trn-muted;
+  font-style: italic;
+}
+
+.trn-form {
+  background: $trn-surface;
+  border: 1px solid $trn-border;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.trn-form__title {
+  font-size: 0.95em;
+  font-weight: 600;
+  color: $trn-ink;
+  margin: 0 0 12px;
+}
+
+.trn-form__label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 0.8em;
+  font-weight: 600;
+  color: $trn-ink;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.trn-form__input,
+.trn-form__select,
+.trn-form__area {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px;
+  border: 2px solid $trn-border;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 0.95em;
+  color: $trn-ink;
+  text-transform: none;
+  letter-spacing: normal;
+
+  &:focus {
+    outline: none;
+    border-color: $trn-green;
+  }
+}
+
+.trn-form__area {
+  min-height: 72px;
+  font-family: 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: 0.85em;
+}
+
+.trn-form__check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 0.85em;
+  color: $trn-ink;
+}
+
+.trn-form__hint {
+  margin: 0 0 12px;
+  font-size: 0.8em;
+  color: $trn-muted;
+  font-style: italic;
+}
+
+.trn-btn {
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9em;
+  cursor: pointer;
+  border: 2px solid $trn-border;
+  background: #fff;
+  color: $trn-ink;
+  transition: all 0.2s ease;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.trn-btn--primary {
+  background: $trn-green;
+  border-color: $trn-green;
+  color: #fff;
+
+  &:hover:not(:disabled) {
+    background: #159f63;
+    border-color: #159f63;
+  }
+}
+
+.trn-btn--danger {
+  color: #b91c1c;
+  border-color: #fca5a5;
+
+  &:hover:not(:disabled) {
+    background: #fdf2f2;
+  }
+}
+
+.trn-btn--small {
+  padding: 6px 12px;
+  font-size: 0.8em;
+}

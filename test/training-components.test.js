@@ -1,0 +1,470 @@
+import { mount } from '@vue/test-utils'
+import TrainingContextPanel from '~/components/admin/training/TrainingContextPanel.vue'
+import TrainingCourseList from '~/components/admin/training/TrainingCourseList.vue'
+import TrainingVersionPanel from '~/components/admin/training/TrainingVersionPanel.vue'
+import TrainingAssignmentPanel from '~/components/admin/training/TrainingAssignmentPanel.vue'
+import TrainingCompletionPanel from '~/components/admin/training/TrainingCompletionPanel.vue'
+import TrainingCertificatePanel from '~/components/admin/training/TrainingCertificatePanel.vue'
+import TrainingHoldingsPanel from '~/components/admin/training/TrainingHoldingsPanel.vue'
+import { readListing, readCourseDetail, readHoldings } from '~/utils/training/journey'
+import { WorkforceApiError } from '~/utils/workforce/api-client'
+import translations from '~/translations'
+
+// The real Norwegian dictionary, resolved the way `plugins/i18n.js` resolves it, so these assert the
+// copy a venue actually sees — and fail if a key was never added.
+const $i = (key, params) => {
+  const str = translations.no[key] || key
+  return params ? str.replace(/\{(\w+)\}/g, (m, token) => (params[token] != null ? params[token] : m)) : str
+}
+
+const mocks = { $i }
+const PERSON = '44444444-4444-4444-4444-444444444444'
+const refusal = (status, code) => new WorkforceApiError(status, { code, detail: 'prose' })
+
+const answered = (key, rows, asOfUtc) => readListing({ [key]: rows, asOfUtc }, null, key)
+const refused = key => readListing(null, refusal(404, 'training.not-found'), key)
+const unknown = key => readListing(null, new Error('network'), key)
+
+describe('TrainingContextPanel — what the server said, not what we inferred', () => {
+  const mountPanel = context => mount(TrainingContextPanel, { mocks, propsData: { context } })
+
+  test('the flag list is the SERVER\'S map, so a flag it did not report is simply not shown', () => {
+    const wrapper = mountPanel({ featureFlags: { 'training.setup': true, 'training.assignments': false } })
+    const rendered = wrapper.findAll('.trn-context__flag')
+    expect(rendered).toHaveLength(2)
+    expect(wrapper.find('[data-test="flag-training.setup"]').text()).toBe(translations.no.trn_flag_on)
+    expect(wrapper.find('[data-test="flag-training.assignments"]').text()).toBe(translations.no.trn_flag_off)
+  })
+
+  test('a flag whose value is not a boolean is UNKNOWN, never off', () => {
+    const wrapper = mountPanel({ featureFlags: { 'training.setup': 'yes' } })
+    expect(wrapper.find('[data-test="flag-training.setup"]').text()).toBe(translations.no.trn_flag_unknown)
+  })
+
+  test('THE DISTINCTION, varied: on, off and unknown render three different words', () => {
+    const wrapper = mountPanel({
+      featureFlags: { 'training.setup': true, 'training.assignments': false, 'training.reminders': null }
+    })
+    const words = [
+      wrapper.find('[data-test="flag-training.setup"]').text(),
+      wrapper.find('[data-test="flag-training.assignments"]').text(),
+      wrapper.find('[data-test="flag-training.reminders"]').text()
+    ]
+    expect(new Set(words).size).toBe(3)
+  })
+
+  test('an unreported flag family renders no flags at all rather than seven fabricated OFFs', () => {
+    expect(mountPanel(null).findAll('.trn-context__flag')).toHaveLength(0)
+  })
+
+  test('the competency seam is three-valued too', () => {
+    expect(mountPanel({ competencySeamBound: true }).find('[data-test="context-seam"]').text()).toBe(translations.no.trn_seam_bound)
+    expect(mountPanel({ competencySeamBound: false }).find('[data-test="context-seam"]').text()).toBe(translations.no.trn_seam_unbound)
+    expect(mountPanel({}).find('[data-test="context-seam"]').text()).toBe(translations.no.trn_flag_unknown)
+  })
+
+  test('a zone the server declared a FALLBACK is marked as one', () => {
+    const own = mountPanel({ timeZone: { id: 'Europe/Oslo', isFallback: false } })
+    const fallback = mountPanel({ timeZone: { id: 'Europe/Oslo', isFallback: true } })
+    expect(own.find('[data-test="context-zone-fallback"]').exists()).toBe(false)
+    expect(fallback.find('[data-test="context-zone-fallback"]').exists()).toBe(true)
+    // Both still name the same zone, so the marker is the only thing that varied.
+    expect(own.find('[data-test="context-zone"]').text()).toContain('Europe/Oslo')
+    expect(fallback.find('[data-test="context-zone"]').text()).toContain('Europe/Oslo')
+  })
+})
+
+describe('TrainingCourseList — unknown, refused and empty are three screens', () => {
+  const course = over => Object.assign({
+    courseId: 'c-1',
+    title: 'Internkontroll grunnkurs',
+    category: 'IK',
+    competencyKey: 'food-hygiene',
+    isActive: true,
+    versionCount: 2,
+    hasPublishedVersion: true,
+    createdAtUtc: '2026-07-01T09:00:00'
+  }, over)
+
+  const mountPanel = (listing, over) => mount(TrainingCourseList, {
+    mocks,
+    propsData: Object.assign({ listing, zoneId: 'Europe/Oslo' }, over)
+  })
+
+  test('THE DISTINCTION, varied: the three states render three different notices', () => {
+    const seen = [
+      mountPanel(unknown('courses')).find('[data-test="courses-unknown"]').text(),
+      mountPanel(refused('courses')).find('[data-test="courses-refused"]').text(),
+      mountPanel(answered('courses', [])).find('[data-test="courses-empty"]').text()
+    ]
+    expect(new Set(seen).size).toBe(3)
+  })
+
+  test('neither an unknown nor a refused read renders a table, so neither can read as "no courses"', () => {
+    expect(mountPanel(unknown('courses')).find('[data-test="courses-table"]').exists()).toBe(false)
+    expect(mountPanel(refused('courses')).find('[data-test="courses-table"]').exists()).toBe(false)
+    // POSITIVE CONTROL: an answered read with a row genuinely does render one.
+    expect(mountPanel(answered('courses', [course()])).find('[data-test="courses-table"]').exists()).toBe(true)
+  })
+
+  test('a course with zero versions shows 0, not a dash', () => {
+    const wrapper = mountPanel(answered('courses', [course({ versionCount: 0, hasPublishedVersion: false })]))
+    const cells = wrapper.find('[data-test="course-row"]').findAll('td')
+    expect(cells.at(3).text()).toBe('0')
+  })
+
+  test('a course carrying no competency key shows a dash with the reason, not an empty cell', () => {
+    const wrapper = mountPanel(answered('courses', [course({ competencyKey: null })]))
+    const cell = wrapper.find('[data-test="course-row"]').findAll('td').at(2)
+    expect(cell.text()).toBe('—')
+    expect(cell.find('span').attributes('title')).toBe(translations.no.trn_course_no_competency)
+  })
+
+  test('the write is blocked only when the server SAID the flag is off', () => {
+    expect(mountPanel(answered('courses', []), { setupFlag: false }).find('[data-test="course-write-blocked"]').exists()).toBe(true)
+    // Unknown must not disable anything: that would report a module as switched off on the strength
+    // of a read that never came back.
+    expect(mountPanel(answered('courses', []), { setupFlag: null }).find('[data-test="course-write-blocked"]').exists()).toBe(false)
+    expect(mountPanel(answered('courses', []), { setupFlag: true }).find('[data-test="course-write-blocked"]').exists()).toBe(false)
+  })
+
+  test('creating a course emits the trimmed body, with an empty competency key sent as null', async () => {
+    const wrapper = mountPanel(answered('courses', []))
+    wrapper.find('[data-test="course-title"]').setValue('  Internkontroll  ')
+    wrapper.find('[data-test="course-category"]').setValue('IK')
+    await wrapper.vm.$nextTick()
+    wrapper.find('[data-test="course-form"]').trigger('submit')
+
+    expect(wrapper.emitted().create[0][0]).toEqual({ title: 'Internkontroll', category: 'IK', competencyKey: null })
+  })
+
+  test('a course with no title cannot be submitted — the server refuses it with a 400', async () => {
+    const wrapper = mountPanel(answered('courses', []))
+    wrapper.find('[data-test="course-title"]').setValue('   ')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('[data-test="course-submit"]').attributes('disabled')).toBeTruthy()
+  })
+})
+
+describe('TrainingVersionPanel — publishing is the hinge, and only a draft can be published', () => {
+  const detail = versions => readCourseDetail({ courseId: 'c-1', versions }, null)
+
+  const mountPanel = (view, over) => mount(TrainingVersionPanel, {
+    mocks,
+    propsData: Object.assign({ detail: view, selectedCourseId: 'c-1', zoneId: 'Europe/Oslo' }, over)
+  })
+
+  test('no course selected is its own screen, not an unknown read', () => {
+    const wrapper = mount(TrainingVersionPanel, {
+      mocks,
+      propsData: { detail: readCourseDetail(null, null), selectedCourseId: null }
+    })
+    expect(wrapper.find('[data-test="versions-no-course"]').exists()).toBe(true)
+    expect(wrapper.find('[data-test="versions-unknown"]').exists()).toBe(false)
+  })
+
+  test('the publish button appears on the draft row and on no other', () => {
+    const wrapper = mountPanel(detail([
+      { courseVersionId: 'v1', versionNo: 1, state: 'Published', passThresholdPercent: 80, contentHash: 'abcdef0123456789ff', publishedAtUtc: '2026-07-02T09:00:00' },
+      { courseVersionId: 'v2', versionNo: 2, state: 'Draft', passThresholdPercent: 70, contentHash: 'ffee0011', publishedAtUtc: null },
+      { courseVersionId: 'v3', versionNo: 3, state: 'Retired', passThresholdPercent: 60, contentHash: '00112233', publishedAtUtc: '2026-06-01T09:00:00' }
+    ]))
+    const rows = wrapper.findAll('[data-test="version-row"]')
+    expect(rows).toHaveLength(3)
+    expect(rows.at(0).find('[data-test="version-publish"]').exists()).toBe(false)
+    expect(rows.at(1).find('[data-test="version-publish"]').exists()).toBe(true)
+    expect(rows.at(2).find('[data-test="version-publish"]').exists()).toBe(false)
+  })
+
+  test('publishing emits the version NUMBER, which is what the route binds', () => {
+    const wrapper = mountPanel(detail([{ courseVersionId: 'v2', versionNo: 7, state: 'Draft', passThresholdPercent: 70, contentHash: 'x' }]))
+    wrapper.find('[data-test="version-publish"]').trigger('click')
+    expect(wrapper.emitted().publish[0]).toEqual([7])
+  })
+
+  test('the version\'s OWN authored threshold is shown on the version', () => {
+    const wrapper = mountPanel(detail([{ courseVersionId: 'v1', versionNo: 1, state: 'Published', passThresholdPercent: 80, contentHash: 'x' }]))
+    expect(wrapper.find('[data-test="version-row"]').findAll('td').at(2).text()).toBe('80%')
+  })
+
+  test('a threshold outside 0-100 cannot be submitted', async () => {
+    const wrapper = mountPanel(detail([]))
+    wrapper.find('[data-test="version-threshold"]').setValue('101')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('[data-test="version-submit"]').attributes('disabled')).toBeTruthy()
+
+    wrapper.find('[data-test="version-threshold"]').setValue('80')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('[data-test="version-submit"]').attributes('disabled')).toBeFalsy()
+  })
+})
+
+describe('TrainingAssignmentPanel — only a published version is offered', () => {
+  const mountPanel = (listing, over) => mount(TrainingAssignmentPanel, {
+    mocks,
+    propsData: Object.assign({ listing, versions: [], zoneId: 'Europe/Oslo' }, over)
+  })
+
+  test('with no published version the form explains itself instead of offering an empty picker', () => {
+    const wrapper = mountPanel(answered('assignments', []), { versions: [] })
+    expect(wrapper.find('[data-test="assignment-no-published"]').exists()).toBe(true)
+    expect(wrapper.find('[data-test="assignment-version"]').exists()).toBe(false)
+
+    // POSITIVE CONTROL: with one, the picker is there.
+    const withOne = mountPanel(answered('assignments', []), {
+      versions: [{ courseVersionId: 'v-pub', versionNo: 2, state: 'Published' }]
+    })
+    expect(withOne.find('[data-test="assignment-version"]').exists()).toBe(true)
+    expect(withOne.find('[data-test="assignment-no-published"]').exists()).toBe(false)
+  })
+
+  test('a row shows the reference its own scope names', () => {
+    const wrapper = mountPanel(answered('assignments', [
+      { assignmentId: 'a-1', scope: 'Role', roleRef: 'role-9', personRef: null, courseTitle: 'IK', versionNo: 2, createdAtUtc: '2026-07-01T09:00:00' },
+      { assignmentId: 'a-2', scope: 'Person', roleRef: null, personRef: PERSON, courseTitle: 'IK', versionNo: 2, createdAtUtc: '2026-07-01T09:00:00' }
+    ]))
+    const rows = wrapper.findAll('[data-test="assignment-row"]')
+    expect(rows.at(0).findAll('td').at(2).text()).toBe('role-9')
+    expect(rows.at(1).findAll('td').at(2).text()).toBe(PERSON)
+  })
+
+  test('a due date is the authored day, and an absent one is a dash', () => {
+    const wrapper = mountPanel(answered('assignments', [
+      { assignmentId: 'a-1', scope: 'Role', roleRef: 'r', dueDateUtc: '2026-09-01T00:00:00' },
+      { assignmentId: 'a-2', scope: 'Role', roleRef: 'r', dueDateUtc: null }
+    ]))
+    const rows = wrapper.findAll('[data-test="assignment-row"]')
+    expect(rows.at(0).findAll('td').at(3).text()).toBe('2026-09-01')
+    expect(rows.at(1).findAll('td').at(3).text()).toBe('—')
+  })
+
+  test('the by-value warning is on the form, because nothing validates the reference', () => {
+    const wrapper = mountPanel(answered('assignments', []), {
+      versions: [{ courseVersionId: 'v-pub', versionNo: 2, state: 'Published' }]
+    })
+    expect(wrapper.text()).toContain(translations.no.trn_reference_by_value)
+  })
+
+  test('the emitted body sets exactly the reference the scope names and nulls the other', async () => {
+    const wrapper = mountPanel(answered('assignments', []), {
+      versions: [{ courseVersionId: 'v-pub', versionNo: 2, state: 'Published' }]
+    })
+    wrapper.find('[data-test="assignment-version"]').setValue('v-pub')
+    wrapper.find('[data-test="assignment-reference"]').setValue(' role-9 ')
+    await wrapper.vm.$nextTick()
+    wrapper.find('[data-test="assignment-form"]').trigger('submit')
+
+    expect(wrapper.emitted()['create-assignment'][0][0]).toEqual({
+      courseVersionId: 'v-pub', scope: 'Role', roleRef: 'role-9', personRef: null, dueDateUtc: null
+    })
+  })
+})
+
+describe('TrainingCompletionPanel — the ledger, and the grading it refuses to do', () => {
+  const mountPanel = (listing, over) => mount(TrainingCompletionPanel, {
+    mocks,
+    propsData: Object.assign({ listing, versions: [{ courseVersionId: 'v-pub', versionNo: 2, state: 'Published' }], zoneId: 'Europe/Oslo' }, over)
+  })
+
+  test('a 0% score renders as 0%, not as a dash', () => {
+    // Truthiness here would erase every failed attempt from an evidence ledger.
+    const wrapper = mountPanel(answered('completions', [
+      { completionId: 'x-1', personRef: PERSON, scorePercent: 0, passed: false, source: 'ManagerRecorded', versionContentHash: 'abc', completedAtUtc: '2026-07-01T09:00:00' }
+    ]))
+    expect(wrapper.find('[data-test="completion-row"]').findAll('td').at(1).text()).toBe('0%')
+  })
+
+  test('a score the server did not give is a dash, which is a different cell from 0%', () => {
+    const wrapper = mountPanel(answered('completions', [
+      { completionId: 'x-1', personRef: PERSON, passed: true, source: 'ManagerRecorded' },
+      { completionId: 'x-2', personRef: PERSON, scorePercent: 0, passed: false, source: 'ManagerRecorded' }
+    ]))
+    const rows = wrapper.findAll('[data-test="completion-row"]')
+    expect(rows.at(0).findAll('td').at(1).text()).toBe('—')
+    expect(rows.at(1).findAll('td').at(1).text()).toBe('0%')
+  })
+
+  test('THE REFUSAL: a 0% row ticked as passed is shown exactly as it was filed, with no verdict drawn', () => {
+    // TR-B1 is open — the server stores `passed` as sent and never checks it against the version's
+    // threshold. The panel does not check it either, and the note says so on the form.
+    const wrapper = mountPanel(answered('completions', [
+      { completionId: 'x-1', personRef: PERSON, scorePercent: 0, passed: true, source: 'ManagerRecorded' }
+    ]))
+    const cells = wrapper.find('[data-test="completion-row"]').findAll('td')
+    expect(cells.at(1).text()).toBe('0%')
+    expect(cells.at(2).text()).toBe(translations.no.trn_result_passed)
+    expect(wrapper.find('[data-test="completion-grading-note"]').text()).toBe(translations.no.trn_completion_grading_note)
+  })
+
+  test('passed and not-passed are two different words, and an absent flag is a dash', () => {
+    const wrapper = mountPanel(answered('completions', [
+      { completionId: 'x-1', personRef: PERSON, scorePercent: 90, passed: true },
+      { completionId: 'x-2', personRef: PERSON, scorePercent: 40, passed: false },
+      { completionId: 'x-3', personRef: PERSON, scorePercent: 40 }
+    ]))
+    const results = wrapper.findAll('[data-test="completion-row"]').wrappers.map(r => r.findAll('td').at(2).text())
+    expect(results).toEqual([translations.no.trn_result_passed, translations.no.trn_result_failed, '—'])
+  })
+
+  test('with no frozen version the form explains itself instead of offering an empty picker', () => {
+    const wrapper = mountPanel(answered('completions', []), { versions: [] })
+    expect(wrapper.find('[data-test="completion-no-frozen"]').exists()).toBe(true)
+    expect(wrapper.find('[data-test="completion-version"]').exists()).toBe(false)
+  })
+
+  test('the emitted body carries the score and the tick as two separate assertions', async () => {
+    const wrapper = mountPanel(answered('completions', []))
+    wrapper.find('[data-test="completion-person"]').setValue(PERSON)
+    wrapper.find('[data-test="completion-version"]').setValue('v-pub')
+    wrapper.find('[data-test="completion-score"]').setValue('55')
+    wrapper.find('[data-test="completion-passed"]').setChecked(true)
+    await wrapper.vm.$nextTick()
+    wrapper.find('[data-test="completion-form"]').trigger('submit')
+
+    expect(wrapper.emitted()['record-completion'][0][0]).toEqual({
+      personRef: PERSON, courseVersionId: 'v-pub', scorePercent: 55, passed: true
+    })
+  })
+})
+
+describe('TrainingCertificatePanel — dated evidence', () => {
+  const cert = over => Object.assign({
+    certificateId: 'c-1',
+    personRef: PERSON,
+    type: 'food-handler',
+    issuer: 'Mattilsynet',
+    issueDateUtc: '2026-01-10T00:00:00',
+    expiryDateUtc: '2028-01-10T00:00:00',
+    status: 'Valid',
+    createdAtUtc: '2026-01-10T09:00:00'
+  }, over)
+
+  const mountPanel = (listing, over) => mount(TrainingCertificatePanel, {
+    mocks,
+    propsData: Object.assign({ listing, zoneId: 'Europe/Oslo' }, over)
+  })
+
+  test('both dates are the authored day, unconverted', () => {
+    // The suite runs under Europe/Oslo. A converted midnight would show as 10.01 02:00 at best and
+    // as the PREVIOUS day for a reader west of UTC; the sliced day is the same everywhere.
+    const wrapper = mountPanel(answered('certificates', [cert()]))
+    const cells = wrapper.find('[data-test="certificate-row"]').findAll('td')
+    expect(cells.at(3).text()).toBe('2026-01-10')
+    expect(cells.at(4).text()).toBe('2028-01-10')
+  })
+
+  test('no expiry is a dash carrying the reason, and it is not the same as a missing value', () => {
+    const wrapper = mountPanel(answered('certificates', [cert({ expiryDateUtc: null })]))
+    const cell = wrapper.find('[data-test="certificate-row"]').findAll('td').at(4)
+    expect(cell.text()).toBe('—')
+    expect(cell.find('span').attributes('title')).toBe(translations.no.trn_cert_no_expiry)
+  })
+
+  test('the server\'s derived status is shown as given, and the moment it was derived is printed with it', () => {
+    const wrapper = mountPanel(answered('certificates', [cert({ status: 'Expiring' })], '2026-07-29T08:00:00Z'))
+    expect(wrapper.find('[data-test="certificate-row"]').findAll('td').at(5).text()).toBe(translations.no.trn_status_expiring)
+    expect(wrapper.find('[data-test="certificates-status-note"]').text()).toContain('29')
+  })
+
+  test('THE DISTINCTION, varied: the three statuses render three different words', () => {
+    const wrapper = mountPanel(answered('certificates', [
+      cert({ certificateId: 'a', status: 'Valid' }),
+      cert({ certificateId: 'b', status: 'Expiring' }),
+      cert({ certificateId: 'c', status: 'Expired' })
+    ]))
+    const words = wrapper.findAll('[data-test="certificate-row"]').wrappers.map(r => r.findAll('td').at(5).text())
+    expect(new Set(words).size).toBe(3)
+  })
+
+  test('a status the server did not give is a dash, never assumed valid', () => {
+    const wrapper = mountPanel(answered('certificates', [cert({ status: null })]))
+    expect(wrapper.find('[data-test="certificate-row"]').findAll('td').at(5).text()).toBe('—')
+  })
+
+  test('with no asOf on the answer the note says the moment is unknown rather than using the browser clock', () => {
+    const wrapper = mountPanel(answered('certificates', [cert()]))
+    expect(wrapper.find('[data-test="certificates-status-note"]').text()).toBe(translations.no.trn_certs_status_asof_unknown)
+  })
+
+  test('the form states that the person reference is not checked', () => {
+    const wrapper = mountPanel(answered('certificates', []))
+    expect(wrapper.find('[data-test="certificate-person-note"]').text()).toBe(translations.no.trn_cert_person_unchecked)
+  })
+
+  test('an empty expiry is emitted as null — a certificate that never expires, not an unknown one', async () => {
+    const wrapper = mountPanel(answered('certificates', []))
+    wrapper.find('[data-test="certificate-person"]').setValue(PERSON)
+    wrapper.find('[data-test="certificate-type"]').setValue('food-handler')
+    wrapper.find('[data-test="certificate-issue"]').setValue('2026-01-10')
+    await wrapper.vm.$nextTick()
+    wrapper.find('[data-test="certificate-form"]').trigger('submit')
+
+    expect(wrapper.emitted()['register-certificate'][0][0]).toEqual({
+      personRef: PERSON,
+      type: 'food-handler',
+      issuer: null,
+      issueDateUtc: '2026-01-10T00:00:00',
+      expiryDateUtc: null,
+      documentReference: null
+    })
+  })
+})
+
+describe('TrainingHoldingsPanel — four states, and none of them is a verdict', () => {
+  const mountPanel = holdings => mount(TrainingHoldingsPanel, { mocks, propsData: { holdings } })
+
+  test('THE DISTINCTION, varied: idle, unknown, refused and answered-empty are four screens', () => {
+    const idle = mountPanel({ state: 'idle' })
+    const unanswered = mountPanel(readHoldings(null, new Error('network')))
+    const declined = mountPanel(readHoldings(null, refusal(404, 'training.not-found')))
+    const empty = mountPanel(readHoldings({ personRef: PERSON, heldCompetencyKeys: [], certificates: [] }, null))
+
+    expect(idle.find('[data-test="holdings-idle"]').exists()).toBe(true)
+    expect(unanswered.find('[data-test="holdings-unknown"]').exists()).toBe(true)
+    expect(declined.find('[data-test="holdings-refused"]').exists()).toBe(true)
+    expect(empty.find('[data-test="holdings-answer"]').exists()).toBe(true)
+
+    const seen = [
+      idle.find('[data-test="holdings-idle"]').text(),
+      unanswered.find('[data-test="holdings-unknown"]').text(),
+      declined.find('[data-test="holdings-refused"]').text(),
+      empty.find('[data-test="holdings-no-keys"]').text()
+    ]
+    expect(new Set(seen).size).toBe(4)
+  })
+
+  test('an answered-empty holding says nothing is on record, and says it is not a judgement', () => {
+    const wrapper = mountPanel(readHoldings({ personRef: PERSON, heldCompetencyKeys: [], certificates: [] }, null))
+    expect(wrapper.find('[data-test="holdings-no-keys"]').text()).toBe(translations.no.trn_holdings_no_keys)
+    expect(wrapper.find('[data-test="holdings-not-a-verdict"]').text()).toBe(translations.no.trn_holdings_not_a_verdict)
+  })
+
+  test('held keys and valid certificates are both rendered', () => {
+    const wrapper = mountPanel(readHoldings({
+      personRef: PERSON,
+      heldCompetencyKeys: ['food-hygiene', 'allergens'],
+      certificates: [{ type: 'food-handler', issuer: 'Mattilsynet', issueDateUtc: '2026-01-10T00:00:00', expiryDateUtc: '2028-01-10T00:00:00', status: 'Valid' }],
+      asOfUtc: '2026-07-29T08:00:00Z'
+    }, null))
+
+    expect(wrapper.findAll('[data-test="holdings-keys"] li').wrappers.map(w => w.text())).toEqual(['food-hygiene', 'allergens'])
+    const cells = wrapper.find('[data-test="holdings-cert-row"]').findAll('td')
+    expect(cells.at(0).text()).toBe('food-handler')
+    expect(cells.at(3).text()).toBe('2028-01-10')
+    expect(cells.at(4).text()).toBe(translations.no.trn_status_valid)
+  })
+
+  test('a refused lookup renders no key list at all, so absence cannot be read off it', () => {
+    const wrapper = mountPanel(readHoldings(null, refusal(403, 'training.forbidden')))
+    expect(wrapper.find('[data-test="holdings-keys"]').exists()).toBe(false)
+    expect(wrapper.find('[data-test="holdings-no-keys"]').exists()).toBe(false)
+  })
+
+  test('the lookup emits the trimmed reference', async () => {
+    const wrapper = mountPanel({ state: 'idle' })
+    wrapper.find('[data-test="holdings-person"]').setValue('  ' + PERSON + '  ')
+    await wrapper.vm.$nextTick()
+    wrapper.find('[data-test="holdings-form"]').trigger('submit')
+    expect(wrapper.emitted().lookup[0]).toEqual([PERSON])
+  })
+})
