@@ -1,5 +1,5 @@
 <template>
-  <aside class="check-panel">
+  <aside class="check-panel" :class="{ 'is-table': onTable, 'is-loose': !!check && !onTable }">
     <!-- Parked checks: a slim, always-in-the-same-place bar at the top of the order column. -->
     <button
       v-if="parkedCount > 0"
@@ -13,14 +13,22 @@
     </button>
 
     <header class="check-panel__head">
+      <!-- What this check is attached to, stated rather than implied: a table icon and the green
+           rail down the panel for a seated check, a cart and a grey rail for a loose one. It is the
+           difference between "this belongs to table 5" and "this belongs to whoever is at the
+           counter", and every leave-the-check decision depends on knowing which. -->
       <div class="check-panel__title-row">
-        <span class="check-panel__title">{{ headerTitle }}</span>
+        <span class="check-panel__title">
+          <svg v-if="onTable" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6h16M6 6v3a6 6 0 006 6 6 6 0 006-6V6M12 15v5m-3 0h6" /></svg>
+          <svg v-else-if="check" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+          <span>{{ headerTitle }}</span>
+        </span>
         <span v-if="check" class="check-panel__delivery">{{ deliveryLabel }}</span>
       </div>
 
       <!-- Guest count for a table check: a chip that opens an inline stepper. Set it whenever;
            not required to open the check. -->
-      <div v-if="check && check.tableId" class="check-panel__guests">
+      <div v-if="onTable" class="check-panel__guests">
         <button
           v-if="!editingCouverts"
           type="button"
@@ -76,10 +84,13 @@
           v-for="g in section.groups"
           :key="g.key"
           :group="g"
+          :selected="isSelected(g)"
           :coursing="coursingEnabled"
           :seating="seating"
+          @select="toggleSelected(g)"
           @inc="$emit('inc', g)"
           @dec="$emit('dec', g)"
+          @quantity="$emit('quantity', g)"
           @remove="$emit('remove', g)"
           @note="$emit('note', g)"
           @seat="$emit('seat', g)"
@@ -123,10 +134,11 @@
         </div>
       </div>
 
-      <!-- Send newly added ("Ny") lines to the kitchen. Table checks only, and only when there is
-           something new to send. -->
+      <!-- Send newly added ("Ny") lines to the kitchen. Offered whenever the check carries un-sent
+           lines the kitchen will actually see — a counter sale of a burger needs cooking just as
+           much as a table one, and the server has never required a table for this. -->
       <button
-        v-if="coursingEnabled && pendingCount > 0"
+        v-if="pendingCount > 0"
         type="button"
         class="check-panel__send"
         @click="$emit('send-to-kitchen')"
@@ -136,7 +148,20 @@
       </button>
 
       <div class="check-panel__actions">
-        <button type="button" class="check-panel__action" :disabled="!check" @click="$emit('park')">
+        <!-- A seated check is never parked from here: parking would take it off its table. What the
+             operator wants is to put it down and serve the next customer, so that is the button —
+             the check stays open on its table and the screen comes back empty. The floor plan is a
+             top-bar mode, so it needs no second door here. Park still leads for a table-less check,
+             which has nowhere to wait and for which parking IS starting the next sale. -->
+        <button
+          v-if="onTable"
+          type="button"
+          class="check-panel__action"
+          @click="$emit('new-sale')"
+        >
+          {{ $i('pos_new_sale') }}
+        </button>
+        <button v-else type="button" class="check-panel__action" :disabled="!check" @click="$emit('park')">
           {{ $i('pos_park') }}
         </button>
         <button type="button" class="check-panel__action" :disabled="!hasItems" @click="$emit('discount')">
@@ -190,7 +215,14 @@ export default {
   data () {
     return {
       editingCouverts: false,
-      couvertsDraft: 1
+      couvertsDraft: 1,
+      // The row whose action panel is open, held as one of its line ids rather than its group key.
+      // The key is content-derived — it carries the line's status — so the six-second board poll
+      // flipping the selected row Ny→Sendt (or Fyrt→Klar) rewrote the key and closed the panel
+      // under the operator's thumb, shifting every row below it up mid-tap. A line id survives
+      // anything that happens to the line short of it leaving the bill. One row at a time: two open
+      // panels would push the bill around and make it unclear which row a tap belongs to.
+      selectedLineId: null
     };
   },
   watch: {
@@ -202,17 +234,46 @@ export default {
           if (el) { el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' }); }
         });
       }
-    }
+    },
+    // A selection only means something while the row it points at is on the bill. The key encodes
+    // quantity-independent identity but not much else, so anything that rewrites the row (a note, a
+    // discount, a guest, the check being swapped for another table's) leaves the panel open against
+    // a row that no longer exists — closing it is both correct and the honest signal that the edit
+    // landed.
+    // The selection only means something while the line it points at is still on the bill. Removing
+    // the row (or paying, or a reconcile taking it) closes the panel; a note, a discount, a guest or
+    // a status change no longer does, because the line is still there and the operator is still
+    // working on it.
+    groups (next) {
+      if (this.selectedLineId && !next.some(g => g.lineIds.includes(this.selectedLineId))) {
+        this.selectedLineId = null;
+      }
+    },
+    // Belt and braces next to the watcher above: a different check is always a fresh selection,
+    // whether or not anything about its rows happens to look familiar.
+    checkId () { this.selectedLineId = null; }
   },
   computed: {
+    checkId () { return this.check ? this.check.orderId : null; },
     items () { return (this.check && this.check.items) || []; },
     hasItems () { return this.items.length > 0; },
-    // Coursing (line status, course tags, the send button) is a table-service concept; a quick sale
-    // has no tableId and no kitchen round.
-    coursingEnabled () { return !!(this.check && this.check.tableId); },
-    // New ("Ny") lines waiting to be sent to the kitchen. The server decides which actually print
-    // (drinks may not); this is the count the operator sees as still un-sent.
-    pendingCount () { return this.items.filter(i => i.status === 'Pending').length; },
+    // Coursing (course sections and their fire/serve actions) is a table-service concept; a quick
+    // sale has no tableId and no courses. The kitchen round itself is NOT gated on this — see
+    // pendingCount.
+    coursingEnabled () { return this.onTable; },
+    // New ("Ny") lines waiting to be sent to the kitchen. Only lines the kitchen will actually see
+    // count: the server resolves kitchenPrintEnabled per line (product override, else its
+    // categories, else relevant) and moves only those out of "Ny". Counting every Pending line
+    // promised a send that could not happen — a check of nothing but drinks showed
+    // "Send til kjøkken (1)" that stayed at (1) however many times it was tapped.
+    //
+    // Only an explicit false excludes a line. A missing field (an endpoint that does not populate
+    // it) must not read as "no line reaches the kitchen": that silently removes the send button,
+    // the Ny/Sendt tags and Serve from every row, with nothing on screen to say the kitchen flow
+    // is gone. Absent means unknown, and unknown falls back to the pre-flag behaviour.
+    pendingCount () {
+      return this.items.filter(i => i.status === 'Pending' && i.kitchenPrintEnabled !== false).length;
+    },
     groups () {
       const map = {};
       const order = [];
@@ -248,6 +309,11 @@ export default {
             courseSequence: line.courseSequence,
             seatNumber: line.seatNumber != null ? line.seatNumber : null,
             status: line.status,
+            // Server-resolved: does this line reach the kitchen screen at all. Drives whether the
+            // row carries a Ny / Sendt status at all — a bottle of Farris that can never leave "Ny"
+            // must not wear the tag. Same product always resolves the same way, so it needs no
+            // place in the group key.
+            kitchenPrintEnabled: line.kitchenPrintEnabled !== false,
             unitAmount: line.unitAmount,
             tax: line.tax,
             quantity: 0,
@@ -292,8 +358,11 @@ export default {
     totalDiscount () {
       return this.groups.reduce((sum, g) => sum + (g.discountAmount || 0), 0);
     },
+    // Seated: the check belongs to a table and stays there when the operator moves on. Drives the
+    // panel's identity styling and which of park / floor-plan is offered.
+    onTable () { return !!(this.check && this.check.tableId); },
     headerTitle () {
-      if (this.check && this.check.tableId) { return this.check.tableName || this.$i('pos_table'); }
+      if (this.onTable) { return this.check.tableName || this.$i('pos_table'); }
       return this.$i('pos_quick_sale');
     },
     deliveryLabel () {
@@ -303,6 +372,14 @@ export default {
     }
   },
   methods: {
+    // Tapping the open row closes it again, so the operator always has a way out of the panel that
+    // is the same gesture that opened it.
+    isSelected (group) {
+      return !!this.selectedLineId && group.lineIds.includes(this.selectedLineId);
+    },
+    toggleSelected (group) {
+      this.selectedLineId = this.isSelected(group) ? null : (group.lineIds[0] || null);
+    },
     startEditCouverts () {
       this.couvertsDraft = (this.check && this.check.couverts) || 2;
       this.editingCouverts = true;
@@ -325,6 +402,10 @@ export default {
   flex-direction: column;
   height: 100%;
 }
+/* The rail carries the check's attachment at a glance, in the same green the board paints an
+   occupied table with — so "this is table 5's bill" is readable from across the counter. */
+.check-panel.is-table { border-left: 4px solid var(--pos-primary, #1bb776); }
+.check-panel.is-loose { border-left: 4px solid #cbd5e0; }
 
 .check-panel__parked {
   display: flex;
@@ -348,7 +429,19 @@ export default {
   border-bottom: 1px solid #eef1f5;
 }
 .check-panel__title-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.check-panel__title { font-size: 1.15rem; font-weight: 700; color: var(--pos-ink, #292c34); }
+.check-panel__title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--pos-ink, #292c34);
+}
+.check-panel__title svg { width: 19px; height: 19px; flex-shrink: 0; }
+.check-panel.is-table .check-panel__title svg { color: var(--pos-primary-dark, #159f63); }
+.check-panel.is-loose .check-panel__title svg { color: #94a3b8; }
+.check-panel__title span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .check-panel__delivery {
   font-size: 0.72rem;
   font-weight: 700;

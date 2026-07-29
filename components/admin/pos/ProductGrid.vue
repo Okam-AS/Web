@@ -37,71 +37,80 @@
       </div>
     </div>
 
-    <!-- Course context (new lines are placed on the selected course). Table checks only; a quick
-         sale has no coursing. -->
-    <div v-if="coursingEnabled" class="product-grid__course">
-      <span class="product-grid__course-label">{{ $i('pos_course') }}</span>
-      <button
-        type="button"
-        class="product-grid__course-btn"
-        :class="{ 'is-active': currentCourse === null }"
-        @click="$emit('set-course', null)"
-      >
-        {{ $i('pos_course_none') }}
-      </button>
-      <button
-        v-for="n in 3"
-        :key="n"
-        type="button"
-        class="product-grid__course-btn"
-        :class="{ 'is-active': currentCourse === n }"
-        @click="$emit('set-course', n)"
-      >
-        {{ n }}
-      </button>
-    </div>
+    <!-- Where new lines land. Course and guest are both sticky modes that hold until they are
+         changed, so they are stated once, together, as a sentence the operator can read off in a
+         glance — "Nye varer → Rett 2 · Gjest 3". They used to be two look-alike chip rows sitting
+         directly above a third (an armed quantity multiplier) that looked identical but self-cleared
+         after one tap; that row is gone, and quantity is now changed on the check row itself. -->
+    <div v-if="coursingEnabled || seatingEnabled" class="product-grid__context">
+      <span class="product-grid__context-lead">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M13 7l5 5-5 5M6 7l5 5-5 5" /></svg>
+        {{ $i('pos_context_new_lines') }}
+      </span>
 
-    <!-- Guest (seat) context: new lines are tagged to the selected guest, mirroring coursing. Only
-         shown once seating is in play (a table with guests, or a check that already carries seats),
-         so a waiter who ignores it has an unchanged flow. -->
-    <div v-if="seatingEnabled" class="product-grid__seat">
-      <span class="product-grid__seat-label">{{ $i('pos_seat_label') }}</span>
-      <button
-        type="button"
-        class="product-grid__seat-btn"
-        :class="{ 'is-active': currentSeat === null }"
-        @click="$emit('set-seat', null)"
-      >
-        {{ $i('pos_seat_shared') }}
-      </button>
-      <button
-        v-for="n in seatChipCount"
-        :key="n"
-        type="button"
-        class="product-grid__seat-btn"
-        :class="{ 'is-active': currentSeat === n }"
-        @click="$emit('set-seat', n)"
-      >
-        {{ n }}
-        <span v-if="seatCounts[n]" class="product-grid__seat-count">{{ seatCounts[n] }}</span>
-      </button>
-      <button
-        type="button"
-        class="product-grid__seat-add"
-        :title="$i('pos_seat_add')"
-        @click="$emit('add-seat')"
-      >
-        +
-      </button>
-      <button
-        v-if="seatRemovable"
-        type="button"
-        class="product-grid__seat-remove"
-        :title="$i('pos_seat_remove')"
-        @click="$emit('remove-seat')"
-      >
-        −
-      </button>
+      <div v-if="coursingEnabled" class="product-grid__context-group">
+        <span class="product-grid__context-label">{{ $i('pos_course') }}</span>
+        <button
+          type="button"
+          class="product-grid__context-btn"
+          :class="{ 'is-active': currentCourse === null }"
+          @click="$emit('set-course', null)"
+        >
+          {{ $i('pos_course_none') }}
+        </button>
+        <button
+          v-for="n in 3"
+          :key="n"
+          type="button"
+          class="product-grid__context-btn"
+          :class="{ 'is-active': currentCourse === n }"
+          @click="$emit('set-course', n)"
+        >
+          {{ n }}
+        </button>
+      </div>
+
+      <!-- Guest (seat) context. Only shown once seating is in play (a table with guests, or a check
+           that already carries seats), so a waiter who ignores it has an unchanged flow. -->
+      <div v-if="seatingEnabled" class="product-grid__context-group">
+        <span class="product-grid__context-label">{{ $i('pos_seat_label') }}</span>
+        <button
+          type="button"
+          class="product-grid__context-btn"
+          :class="{ 'is-active': currentSeat === null }"
+          @click="$emit('set-seat', null)"
+        >
+          {{ $i('pos_seat_shared') }}
+        </button>
+        <button
+          v-for="n in seatChipCount"
+          :key="n"
+          type="button"
+          class="product-grid__context-btn"
+          :class="{ 'is-active': currentSeat === n }"
+          @click="$emit('set-seat', n)"
+        >
+          {{ n }}
+          <span v-if="seatCounts[n]" class="product-grid__context-count">{{ seatCounts[n] }}</span>
+        </button>
+        <button
+          type="button"
+          class="product-grid__context-btn product-grid__context-btn--ghost"
+          :title="$i('pos_seat_add')"
+          @click="$emit('add-seat')"
+        >
+          +
+        </button>
+        <button
+          v-if="seatRemovable"
+          type="button"
+          class="product-grid__context-btn product-grid__context-btn--ghost product-grid__context-btn--remove"
+          :title="$i('pos_seat_remove')"
+          @click="$emit('remove-seat')"
+        >
+          −
+        </button>
+      </div>
     </div>
 
     <!-- Category tabs. The row used to disappear entirely while searching, which cost the operator
@@ -119,27 +128,6 @@
         {{ cat.name }}
       </button>
       <span v-if="query" class="product-grid__tabs-count">{{ $i('pos_search_results', { count: visibleProducts.length }) }}</span>
-    </div>
-
-    <!-- Quantity multiplier: arm a count, then tap the product once. Ringing six coffees was six
-         taps (and six round trips); it is now two. Deliberately self-clearing after the next tile
-         so an armed ×6 can never leak into the following item — and the banner makes the armed
-         state impossible to miss while it lasts. -->
-    <div class="product-grid__multiplier">
-      <span class="product-grid__multiplier-label">{{ $i('pos_multiplier') }}</span>
-      <button
-        v-for="n in multiplierSteps"
-        :key="n"
-        type="button"
-        class="product-grid__multiplier-btn"
-        :class="{ 'is-active': multiplier === n }"
-        @click="setMultiplier(n)"
-      >
-        ×{{ n }}
-      </button>
-      <span v-if="multiplier > 1" class="product-grid__multiplier-armed">
-        {{ $i('pos_multiplier_armed', { count: multiplier }) }}
-      </span>
     </div>
 
     <!-- Tiles -->
@@ -197,10 +185,7 @@ export default {
   data () {
     return {
       query: '',
-      activeCategoryId: null,
-      // Armed quantity for the next tile tap; always falls back to 1 once it has been used.
-      multiplier: 1,
-      multiplierSteps: [2, 3, 5, 10]
+      activeCategoryId: null
     };
   },
   computed: {
@@ -273,9 +258,7 @@ export default {
       const value = this.query.trim();
       if (!value) { return; }
       if (/^\d{6,}$/.test(value)) {
-        // A scan consumes the multiplier too: the banner promises the NEXT item goes in ×n, and
-        // leaving it armed would silently apply it to whatever the operator taps afterwards.
-        this.$emit('scan', value, this.consumeMultiplier());
+        this.$emit('scan', value, 1);
         this.query = '';
         return;
       }
@@ -289,7 +272,7 @@ export default {
           this.$emit('sold-out', matches[0]);
           return;
         }
-        this.$emit('select', matches[0], this.consumeMultiplier());
+        this.$emit('select', matches[0], 1);
         this.query = '';
         return;
       }
@@ -297,28 +280,15 @@ export default {
       // letters, a short PLU, a code with a check character. Let the barcode lookup have it, so
       // the operator gets "ukjent strekkode" rather than a keypress that does nothing at all.
       if (!matches.length) {
-        this.$emit('scan', value, this.consumeMultiplier());
+        this.$emit('scan', value, 1);
         this.query = '';
       }
     },
-    // Tapping the armed step again disarms it, so a mis-tap costs one tap to undo.
-    setMultiplier (n) {
-      this.multiplier = this.multiplier === n ? 1 : n;
-    },
-    // Puts a spent multiplier back: the tile tap consumed it, but the option picker it opened was
-    // cancelled, so nothing was actually rung in.
-    armMultiplier (n) {
-      this.multiplier = Math.max(1, n || 1);
-    },
-    // Every path that rings something in takes the multiplier through here, so it is spent exactly
-    // once and the banner never keeps promising a quantity that has already been used.
-    consumeMultiplier () {
-      const quantity = this.multiplier;
-      this.multiplier = 1;
-      return quantity;
-    },
+    // A tile tap is always exactly one item. The register has no quantity mode to be in, so there
+    // is nothing to check before tapping and nothing left armed afterwards; more of the same is a
+    // tap on the row's own count in the check panel.
     onTileSelect (product) {
-      this.$emit('select', product, this.consumeMultiplier());
+      this.$emit('select', product, 1);
     },
     // While searching, a tab is the way back out: clear the query and show that category.
     onTabClick (cat) {
@@ -403,30 +373,70 @@ export default {
 }
 .product-grid__delivery-btn.is-active { background: #ffffff; color: var(--pos-ink, #292c34); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
 
-.product-grid__course {
+/* One bar, one meaning: everything in here is a sticky mode that holds until it is changed. It is
+   deliberately not styled like the category tabs or the tiles below it — tinted, inset, with a
+   leading arrow — so it reads as standing context rather than as one more row of things to press. */
+.product-grid__context {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 0 16px 10px;
-  flex-shrink: 0;
-}
-.product-grid__course-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: #94a3b8; margin-right: 4px; }
-.product-grid__course-btn { border: 1px solid #e2e8f0; background: #fff; color: #64748b; min-width: 34px; height: 30px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; padding: 0 10px; }
-.product-grid__course-btn.is-active { background: var(--pos-primary, #1bb776); border-color: var(--pos-primary, #1bb776); color: #fff; }
-
-.product-grid__seat {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0 16px 10px;
-  flex-shrink: 0;
+  gap: 14px;
   flex-wrap: wrap;
+  margin: 0 16px 10px;
+  padding: 8px 12px;
+  flex-shrink: 0;
+  background: rgba(27, 183, 118, 0.07);
+  border: 1px solid rgba(27, 183, 118, 0.22);
+  border-left: 3px solid var(--pos-primary, #1bb776);
+  border-radius: 10px;
 }
-.product-grid__seat-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: #94a3b8; margin-right: 4px; }
-.product-grid__seat-btn { position: relative; border: 1px solid #e2e8f0; background: #fff; color: #64748b; min-width: 34px; height: 30px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; padding: 0 10px; }
-.product-grid__seat-btn.is-active { background: var(--pos-primary, #1bb776); border-color: var(--pos-primary, #1bb776); color: #fff; }
+.product-grid__context-lead {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--pos-primary-dark, #159f63);
+}
+.product-grid__context-lead svg { width: 14px; height: 14px; }
+
+.product-grid__context-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.product-grid__context-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #64748b;
+  margin-right: 2px;
+}
+.product-grid__context-btn {
+  position: relative;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #64748b;
+  min-width: 36px;
+  height: 34px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0 10px;
+}
+.product-grid__context-btn:hover { border-color: #cbd5e0; }
+.product-grid__context-btn.is-active {
+  background: var(--pos-primary, #1bb776);
+  border-color: var(--pos-primary, #1bb776);
+  color: #fff;
+}
+/* Adding or removing a guest slot is housekeeping, not a mode — dashed so it never reads as one
+   of the selectable values beside it. */
+.product-grid__context-btn--ghost { border-style: dashed; font-size: 1rem; }
+.product-grid__context-btn--ghost:hover { border-color: var(--pos-primary, #1bb776); color: var(--pos-primary-dark, #159f63); }
+.product-grid__context-btn--remove:hover { border-color: #ef4444; color: #ef4444; }
+
 /* Subtle badge of how many items a guest already has, so the waiter sees at a glance who is served. */
-.product-grid__seat-count {
+.product-grid__context-count {
   position: absolute;
   top: -6px;
   right: -6px;
@@ -441,52 +451,7 @@ export default {
   line-height: 16px;
   text-align: center;
 }
-.product-grid__seat-btn.is-active .product-grid__seat-count { background: var(--pos-primary-dark, #159f63); }
-.product-grid__seat-add { border: 1px dashed #cbd5e0; background: #fff; color: #64748b; min-width: 34px; height: 30px; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; padding: 0 10px; }
-.product-grid__seat-add:hover { border-color: var(--pos-primary, #1bb776); color: var(--pos-primary-dark, #159f63); }
-.product-grid__seat-remove { border: 1px dashed #cbd5e0; background: #fff; color: #64748b; min-width: 34px; height: 30px; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; padding: 0 10px; }
-.product-grid__seat-remove:hover { border-color: #ef4444; color: #ef4444; }
-
-.product-grid__multiplier {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 0 16px 10px;
-  flex-shrink: 0;
-  flex-wrap: wrap;
-}
-.product-grid__multiplier-label {
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  color: #64748b;
-}
-.product-grid__multiplier-btn {
-  min-width: 52px;
-  min-height: 44px;
-  padding: 0 12px;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  background: #fff;
-  color: #475569;
-  font-weight: 700;
-  font-size: 0.9rem;
-  cursor: pointer;
-}
-.product-grid__multiplier-btn:hover { border-color: #cbd5e0; }
-.product-grid__multiplier-btn.is-active {
-  background: var(--pos-primary, #1bb776);
-  border-color: var(--pos-primary, #1bb776);
-  color: #fff;
-}
-/* An armed multiplier changes what the next tap does, so it says so in words — a highlighted
-   chip alone is too easy to miss on a busy screen. */
-.product-grid__multiplier-armed {
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: var(--pos-primary-dark, #159f63);
-}
+.product-grid__context-btn.is-active .product-grid__context-count { background: var(--pos-primary-dark, #159f63); }
 
 .product-grid__tabs {
   display: flex;

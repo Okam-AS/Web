@@ -1,8 +1,13 @@
 <template>
   <div class="sell" :class="{ 'sell--training': pos.trainingMode }">
     <div v-if="pos.trainingMode" class="sell__training-banner">{{ $i('pos_training_banner') }}</div>
+    <!-- The left column is the only thing that swaps: floor plan or products. The check panel on the
+         right never leaves, so the operator can read the bill they are working on while picking the
+         next table, and picking one puts the products straight back without a screen change. -->
     <div class="sell__grid">
+      <BoardView v-if="boardMode" />
       <ProductGrid
+        v-else
         ref="grid"
         :categories="catalog"
         :catalog-error="catalogError"
@@ -70,8 +75,10 @@
       @open-price="showOpenPrice = true"
       @inc="onInc"
       @dec="onDec"
+      @quantity="onQuantity"
       @remove="onRemove"
       @park="onPark"
+      @new-sale="onNewSale"
       @discount="onDiscount"
       @remove-discount="onRemoveDiscount"
       @line-discount="onLineDiscount"
@@ -86,6 +93,18 @@
       @seat="onSeat"
       @more="onMore"
       @pay="onPay"
+    />
+
+    <!-- The removal that would empty the bill: it voids the check (journalled VOIDTRANS), so it is
+         confirmed rather than left to be discovered in the toast afterwards. -->
+    <PosConfirm
+      v-if="emptyConfirm"
+      :title="$i('pos_void_check')"
+      :text="$i('pos_empty_void_confirm')"
+      :confirm-label="$i('pos_void_check')"
+      danger
+      @confirm="runEmptyConfirm"
+      @cancel="emptyConfirm = null"
     />
 
     <PosConfirm
@@ -114,6 +133,17 @@
       :vat-context="effectiveDeliveryType"
       @confirm="onOpenPriceConfirm"
       @close="showOpenPrice = false"
+    />
+
+    <QuantityModal
+      v-if="qtyGroup"
+      :initial-quantity="qtyGroup.quantity"
+      :target-name="qtyGroup.name"
+      :busy="busy"
+      :adds-as-new="!!qtyGroup.status && qtyGroup.status !== 'Pending'"
+      :discounted="qtyGroup.discountAmount > 0 || !!qtyGroup.discountReason"
+      @confirm="onQuantityConfirm"
+      @close="qtyGroup = null"
     />
 
     <LineNoteModal
@@ -232,6 +262,7 @@
 
 <script>
 import ProductGrid from '~/components/admin/pos/ProductGrid.vue';
+import BoardView from '~/components/admin/pos/BoardView.vue';
 import CheckPanel from '~/components/admin/pos/CheckPanel.vue';
 import OptionPicker from '~/components/admin/pos/OptionPicker.vue';
 import OpenPriceModal from '~/components/admin/pos/OpenPriceModal.vue';
@@ -239,6 +270,7 @@ import PaymentScreen from '~/components/admin/pos/PaymentScreen.vue';
 import DiscountModal from '~/components/admin/pos/DiscountModal.vue';
 import VoidModal from '~/components/admin/pos/VoidModal.vue';
 import LineNoteModal from '~/components/admin/pos/LineNoteModal.vue';
+import QuantityModal from '~/components/admin/pos/QuantityModal.vue';
 import SeatPickerModal from '~/components/admin/pos/SeatPickerModal.vue';
 import ReturnBuilder from '~/components/admin/pos/ReturnBuilder.vue';
 import PosReceiptView from '~/components/admin/pos/PosReceiptView.vue';
@@ -254,7 +286,7 @@ const PENDING_VISIBLE_AFTER_MS = 450;
 // payment screen (not here), so a single tap on Pay reaches every way to settle.
 export default {
   name: 'SellScreen',
-  components: { ProductGrid, CheckPanel, OptionPicker, OpenPriceModal, PaymentScreen, DiscountModal, VoidModal, LineNoteModal, SeatPickerModal, ReturnBuilder, PosReceiptView, PosConfirm },
+  components: { ProductGrid, BoardView, CheckPanel, OptionPicker, OpenPriceModal, PaymentScreen, DiscountModal, VoidModal, LineNoteModal, QuantityModal, SeatPickerModal, ReturnBuilder, PosReceiptView, PosConfirm },
   inject: ['pos'],
   data () {
     return {
@@ -267,7 +299,7 @@ export default {
       // The check group whose guest is being edited (opens SeatPickerModal); null when closed.
       seatGroup: null,
       optionProduct: null,
-      // Quantity the option picker opens with (an armed grid multiplier).
+      // Quantity the option picker's own stepper opens on.
       optionQuantity: 1,
       showOpenPrice: false,
       showPayment: false,
@@ -293,8 +325,13 @@ export default {
       negativeSalePrefill: null,
       showParked: false,
       showVoidAllConfirm: false,
+      // The pending "this empties the bill" removal, held as the thunk that performs it. Null when
+      // no such confirmation is up.
+      emptyConfirm: null,
       // The check group whose note is being edited (opens LineNoteModal); null when closed.
       noteGroup: null,
+      // The check group whose quantity is being typed (opens QuantityModal); null when closed.
+      qtyGroup: null,
       // Items rung in but not yet acknowledged by the server (queue + the one in flight), and the
       // name of the one currently going up — together they drive the check panel's ghost row.
       pendingAdds: 0,
@@ -331,13 +368,19 @@ export default {
     },
     checkItems () { return (this.check && this.check.items) || []; },
     checkHasLines () { return this.checkItems.length > 0; },
+    // The floor plan has taken the left column. The check panel is still live, so this is a view
+    // swap rather than another screen — but the grid is gone, and everything aimed at it stands down.
+    boardMode () { return this.pos.mode === 'board'; },
     // Anything rendered on top of the sales screen. Keyboard shortcuts that act on the grid stand
     // down while one is up: the grid is not what the operator is looking at.
     overlayOpen () {
-      return !!(this.optionProduct || this.showPayment || this.showOpenPrice || this.showDiscount ||
-        this.showVoid || this.showNegativeSale || this.noteGroup || this.seatGroup ||
+      // boardMode counts: the grid is not rendered at all there, so "/" would focus nothing and a
+      // scan would ring into a check the operator is not looking at.
+      return !!(this.boardMode ||
+        this.optionProduct || this.showPayment || this.showOpenPrice || this.showDiscount ||
+        this.showVoid || this.showNegativeSale || this.noteGroup || this.qtyGroup || this.seatGroup ||
         this.unpaidReceipt || this.showMoveMerge || this.showMore || this.showParked ||
-        this.showVoidAllConfirm);
+        this.showVoidAllConfirm || this.emptyConfirm);
     },
     discountTargetName () { return this.discountGroup ? this.discountGroup.name : ''; },
     // A product-restricted discount is only offered for a row whose product passes the restriction
@@ -411,13 +454,22 @@ export default {
     checkId () { return this.check ? this.check.orderId : null; }
   },
   watch: {
-    // A new check is a new customer: per-line intent from the previous one must not carry over.
-    // The multiplier lives in the grid, which is never remounted, so ×6 armed before a sale would
-    // otherwise be spent on the next customer's first tap.
+    // A new check is a new customer: the standing course and guest context from the previous one
+    // must not carry over. The grid is never remounted, so nothing resets these on its own.
     checkId () {
       this.currentSeat = null;
+      this.currentCourse = null;
       this.seatExtra = 0;
-      if (this.$refs.grid && this.$refs.grid.armMultiplier) { this.$refs.grid.armMultiplier(1); }
+      // The quantity pad is bound to one row of ONE check and reads its starting value once, in
+      // data(). If the check goes away underneath it (settled, voided, reconciled off the board)
+      // the pad keeps showing the old count and confirming it silently does nothing —
+      // presentLinesOf finds no lines and returns. Closing it is the honest answer.
+      this.qtyGroup = null;
+      // Same reasoning, and sharper: this one holds a closure over a row of the OLD check but its
+      // body reads this.check for the order id. Left standing across a swap, confirming it fires
+      // RemoveLine(newOrderId, oldLineId) — a destructive call against a check the operator never
+      // had in mind.
+      this.emptyConfirm = null;
     }
   },
   mounted () {
@@ -629,8 +681,8 @@ export default {
       const hasOptions = product.productVariantEnabled &&
         Array.isArray(product.productVariants) && product.productVariants.length > 0;
       if (hasOptions) {
-        // An armed multiplier carries into the picker's own stepper rather than being lost —
-        // "six of these, with oat milk" stays one decision.
+        // The picker carries its own stepper, so "six of these, with oat milk" is still one
+        // decision — it just gets made in the picker rather than armed beforehand.
         this.optionQuantity = Math.max(1, quantity || 1);
         this.optionProduct = product;
       } else {
@@ -642,14 +694,9 @@ export default {
       this.optionProduct = null;
       this.addProduct(product, selectedOptionIds, quantity);
     },
-    // Backing out of the picker rings in nothing, so the multiplier the tile tap spent has to go
-    // back on the banner — otherwise "×6" is silently gone and the next tap adds one.
+    // Backing out of the picker rings in nothing and leaves nothing behind to clean up.
     onOptionCancel () {
-      const quantity = this.optionQuantity;
       this.optionProduct = null;
-      if (quantity > 1 && this.$refs.grid && this.$refs.grid.armMultiplier) {
-        this.$refs.grid.armMultiplier(quantity);
-      }
     },
     // Ringing an item in never blocks. A tap that arrives while a previous AddLine is still in
     // flight used to be dropped in silence — on a slow connection three quick taps produced one
@@ -679,10 +726,12 @@ export default {
         const names = this.optionNames(product, selectedOptionIds);
         this.recipes['p|' + product.id + '|' + names.slice().sort().join(',')] = request;
       }
-      // The active guest is a per-line choice, not a sticky mode: it falls back to Felles as soon
-      // as the item is on its way, so the next one is never silently tagged to the previous guest.
-      // A row-repeat ("+" on a check line) passes an explicit seatOverride and must not disturb it.
-      if (seatOverride === undefined) { this.currentSeat = null; }
+      // The active guest holds until it is changed, like the course beside it. An order is taken
+      // guest by guest — "for gjest 2: suppe, entrecôte, cola" — so clearing it after every item
+      // made the waiter re-pick the same guest three times, and made the two chips in the same
+      // context bar behave differently for no reason the operator could see. It clears on the
+      // Felles chip, and on a new check. Each line carries its guest tag, so a wrong one is
+      // visible on the bill rather than only at split time.
       this.queueAdd(request, product.name, quantity);
     },
 
@@ -823,8 +872,6 @@ export default {
         };
         this.recipes['o|' + (openPricePresetId ? 'p' + openPricePresetId : name) + '|' + amount + '|' + (tax || 0)] = request;
         this.pos.applyCheck(await this.pos.checkSvc().AddLine(check.orderId, request));
-        // Fall back to Felles after the line lands, as for a product line.
-        this.currentSeat = null;
       } catch (e) {
         this.notify(this.pos.errMsg(e), 'error');
       } finally {
@@ -838,22 +885,16 @@ export default {
       try {
         const product = await this.pos._productService.GetByBarcode(this.pos.storeId, barcode);
         if (!product || !product.id) {
-          this.failedScan(barcode, quantity);
+          this.failedScan(barcode);
           return;
         }
         this.onSelect(product, quantity);
       } catch (e) {
-        this.failedScan(barcode, quantity);
+        this.failedScan(barcode);
       }
     },
-    // The scan consumed the multiplier on the way out. Nothing was rung in, so give it back —
-    // same as backing out of the option picker; otherwise an armed x6 vanishes on a mistyped code
-    // and the next tap quietly rings in one.
-    failedScan (barcode, quantity) {
+    failedScan (barcode) {
       this.notify(this.$i('pos_barcode_not_found', { code: barcode }), 'error');
-      if (quantity > 1 && this.$refs.grid && this.$refs.grid.armMultiplier) {
-        this.$refs.grid.armMultiplier(quantity);
-      }
     },
     // Enter picked the only match and it is sold out: say so instead of doing nothing. The query
     // is left alone so the operator can edit it rather than retype.
@@ -863,36 +904,158 @@ export default {
 
     // ---- Quantity ----
     async onInc (group) {
-      if (this.blockedByBusy()) { return; }
-      // "+" adds one more of this exact row, so the new line inherits the row's guest — never the
-      // stale recipe seat and never the currently active guest.
-      const rowSeat = group.seatNumber != null ? group.seatNumber : null;
-      // Simple catalog line: rebuild straight from the catalog.
-      if (!group.isOpenPrice && (!group.options || !group.options.length)) {
-        const product = this.findCatalogProduct(group.productId);
-        if (product) { return this.addProduct(product, [], 1, rowSeat); }
+      if (!this.check || this.blockedByBusy()) { return; }
+      // The same refusal the quantity pad makes, for the same reason: a copy of a discounted row is
+      // rung in at full price (nothing in the check says which discount was granted) and lands as a
+      // SECOND row, because discountReason is part of the row key. These two controls sit 8 px apart
+      // and must not disagree about what "one more of this" means.
+      if (group.discountAmount > 0 || group.discountReason) {
+        this.notify(this.$i('pos_quantity_discounted'), 'error');
+        return;
       }
+      // "+" means one more of THIS row, so the copy carries the row's own note, course and guest —
+      // not the currently active context, and never a blank note. Getting this wrong split the row:
+      // all three are part of the group key, so a note-less copy of "Burger — uten løk" appeared as
+      // its own row while the row under the operator's thumb still read 1.
+      const rowContext = {
+        seatNumber: group.seatNumber != null ? group.seatNumber : null,
+        notes: group.notes || '',
+        courseSequence: group.courseSequence != null ? group.courseSequence : null
+      };
+      // The recipe is the most faithful rebuild where we have one (exact option ids, open-price
+      // preset id); restoreRequestFor covers everything else, including the plain catalog line.
       const key = group.isOpenPrice
         ? 'o|' + group.name + '|' + group.unitAmount + '|' + group.tax
         : 'p|' + group.productId + '|' + group.options.map(o => o.name).slice().sort().join(',');
       const recipe = this.recipes[key];
+      const request = recipe ? { ...recipe, ...rowContext } : this.restoreRequestFor(group);
+      // Queued like a tile tap, so "+" is ordered behind any drain in flight and shows the ghost row
+      // while the copy is on its way instead of blocking the screen on one round trip.
+      if (request) { return this.queueAdd(request, group.name, 1); }
+      // Not rebuildable here (the product left the catalog, an option name no longer resolves to a
+      // variant id): the server still has the line and can copy it, notes and all.
+      if (!group.lineIds.length) { return; }
       this.busy = true;
       try {
-        if (recipe) {
-          this.pos.applyCheck(await this.pos.checkSvc().AddLine(this.check.orderId, { ...recipe, seatNumber: rowSeat }));
-        } else if (group.lineIds.length) {
-          // No client-side recipe (resumed or refreshed check): copy the existing line server-side.
-          const lineId = group.lineIds[group.lineIds.length - 1];
-          this.pos.applyCheck(await this.pos.checkSvc().DuplicateLine(this.check.orderId, lineId));
-        }
+        const lineId = group.lineIds[group.lineIds.length - 1];
+        this.pos.applyCheck(await this.pos.checkSvc().DuplicateLine(this.check.orderId, lineId));
       } catch (e) {
         this.notify(this.pos.errMsg(e), 'error');
       } finally {
         this.busy = false;
       }
     },
-    async onDec (group) {
+    // Tapping the count on a row: type what the row should end at. This is what the armed "×n then
+    // tap a tile" prefix used to buy, without the mode — the operator is already looking at the row
+    // they mean, so there is nothing to arm, nothing to remember and nothing to leak into the next
+    // item.
+    //
+    // Refused while a drain is running, unlike the note or seat pads. The row captured here holds
+    // the line ids it had at this moment, and a queued add landing for the same row afterwards
+    // carries an id this group has never heard of: the confirm below would then read the row as
+    // smaller than it visibly is and add the difference on top of the line that just arrived —
+    // "make it 3" on a row that reached 2 while the pad was open ends at 4, and the customer is
+    // overcharged. blockedByBusy says why rather than letting the tap do nothing.
+    onQuantity (group) {
+      if (!this.check || !group.lineIds.length || this.blockedByBusy()) { return; }
+      this.qtyGroup = group;
+    },
+    // Applies an absolute quantity to a row by adding or removing whole lines, because the backend
+    // never merges lines: a row of 3 is three line items, and 3 -> 6 is three more copies of it.
+    async onQuantityConfirm (quantity) {
+      const group = this.qtyGroup;
+      this.qtyGroup = null;
+      if (!group || !this.check) { return; }
+      // Re-read the row off the live check rather than trusting the quantity the pad opened with:
+      // the check can still have gone away underneath it (settled, voided, reconciled off the
+      // board). If the row is gone, do nothing.
+      const present = this.presentLinesOf(group);
+      if (!present.length) { return; }
+      const current = present.reduce((sum, i) => sum + i.quantity, 0);
+      const delta = quantity - current;
+      if (delta === 0) { return; }
+      // Zero means "this row should not be on the bill" — the same thing the bin icon does, and it
+      // goes down the same path so it is equally undoable and equally voids an emptied check.
+      if (quantity === 0) { return this.onRemove(group); }
+      if (delta > 0) {
+        // Never ring in more of a discounted row. restoreRequestFor rebuilds a line at its
+        // pre-discount price on purpose (the safe direction for an undo), and the check does not
+        // say which discount was granted, so there is nothing to re-apply: the copies would go on
+        // at full price AND split into a second row, because discountReason is part of the row key.
+        // The pad already greys Confirm out for this; re-checked against the LIVE lines because a
+        // discount can land while the pad is open.
+        if (present.some(i => (i.discountAmount || 0) > 0 || i.discountReason)) {
+          this.notify(this.$i('pos_quantity_discounted'), 'error');
+          return;
+        }
+        // Goes through the add queue like a tile tap: ordered behind any drain in flight, ghost row
+        // while the copies are on their way, and one failure toast if the server refuses.
+        const request = this.restoreRequestFor(group);
+        if (!request) {
+          // No rebuildable recipe (the product left the catalog, an option no longer resolves):
+          // repeating "+" would be the honest fallback, but it copies server-side one call at a
+          // time, so say so rather than half-applying.
+          this.notify(this.$i('pos_quantity_unavailable'), 'error');
+          return;
+        }
+        this.queueAdd(request, group.name, delta);
+        return;
+      }
+      // Removing: peel member lines off the newest end, so an older line the kitchen has already
+      // seen survives in preference to one rung in a moment ago. Counted in quantity, not in lines:
+      // every add path here rings in quantity 1, but the panel sums line quantities rather than
+      // counting lines and the server accepts up to 1000 on one line, so treating a line of 2 as
+      // one unit would take twice off what was asked. A line too big to fit inside the reduction is
+      // skipped, not fatal — RemoveLine is all-or-nothing per line, so it can never be part of this
+      // reduction, but an older, smaller line still can. Stopping at the first oversized line failed
+      // a request that was perfectly satisfiable: a row of 4 made of a line of 1 and a newer line of
+      // 3 refused to go to 3 at all.
+      if (this.blockedByBusy()) { return; }
+      let remaining = -delta;
+      const lineIds = [];
+      for (let i = present.length - 1; i >= 0 && remaining > 0; i--) {
+        if (present[i].quantity > remaining) { continue; }
+        remaining -= present[i].quantity;
+        lineIds.push(present[i].orderLineItemId);
+      }
+      if (remaining > 0 || !lineIds.length) {
+        this.notify(this.$i('pos_quantity_unavailable'), 'error');
+        return;
+      }
+      this.busy = true;
+      try {
+        // Applied as each removal lands, not once after the loop: reducing a row of 4 to 1 is three
+        // calls, and if the second is refused the first line is already gone server-side. Holding
+        // the result back left the panel — and the amount the customer is asked for — showing lines
+        // that no longer exist, with only a generic error to go on.
+        for (const lineId of lineIds) {
+          this.pos.applyCheck(await this.pos.checkSvc().RemoveLine(this.check.orderId, lineId));
+        }
+        await this.voidIfEmptied();
+      } catch (e) {
+        this.notify(this.pos.errMsg(e), 'error');
+      } finally {
+        this.busy = false;
+      }
+    },
+    // The row's member lines as the check has them now, in check order. Empty when the row is gone.
+    presentLinesOf (group) {
+      return this.checkItems.filter(i => group.lineIds.includes(i.orderLineItemId));
+    },
+    // Taking the last item off the bill is not "one less of this" — it voids the whole check, and a
+    // VOIDTRANS cannot be taken back. So the two are separated: an ordinary decrement runs, the one
+    // that empties the check asks first. This is the tap that voided a resumed table check with a
+    // single row on it.
+    onDec (group) {
       if (!group.lineIds.length || this.blockedByBusy()) { return; }
+      if (this.checkItems.length <= 1) {
+        this.emptyConfirm = () => this.applyDec(group);
+        return;
+      }
+      return this.applyDec(group);
+    },
+    async applyDec (group) {
+      if (!this.check || !group.lineIds.length || this.blockedByBusy()) { return; }
       this.busy = true;
       try {
         const lineId = group.lineIds[group.lineIds.length - 1];
@@ -908,7 +1071,17 @@ export default {
     // fire by mistake. It stays immediate (the totals must never lie about what the customer owes)
     // and is instead made reversible: the row is rebuilt from the recipe below if the operator
     // taps Angre within the toast's lifetime.
-    async onRemove (group) {
+    onRemove (group) {
+      if (!this.check || !group.lineIds.length || this.blockedByBusy()) { return; }
+      // Same rule as the decrement: if this row IS the bill, removing it voids the check, and that
+      // is asked for rather than discovered afterwards in a toast.
+      if (group.lineIds.length >= this.checkItems.length) {
+        this.emptyConfirm = () => this.applyRemove(group);
+        return;
+      }
+      return this.applyRemove(group);
+    },
+    async applyRemove (group) {
       // The check has to exist before anything is read off it: the capture below runs outside the
       // try, so a check dropped by the board reconcile would throw where nothing catches it.
       if (!this.check || !group.lineIds.length || this.blockedByBusy()) { return; }
@@ -921,11 +1094,11 @@ export default {
       const orderId = this.check.orderId;
       this.busy = true;
       try {
-        let result = this.check;
+        // Each result applied as it lands — see onQuantityConfirm. A multi-line row that fails
+        // half-way must leave the panel agreeing with the server about what is still on the bill.
         for (const lineId of group.lineIds) {
-          result = await this.pos.checkSvc().RemoveLine(this.check.orderId, lineId);
+          this.pos.applyCheck(await this.pos.checkSvc().RemoveLine(this.check.orderId, lineId));
         }
-        this.pos.applyCheck(result);
         const emptied = await this.voidIfEmptied();
         // Removing the last row voids the check (VOIDTRANS is journalled), and that cannot be
         // taken back — voidIfEmptied already says so in its own toast.
@@ -1041,12 +1214,15 @@ export default {
     async onPark () {
       if (!this.check || this.blockedByBusy()) { return; }
       this.busy = true;
+      // Held before the check is cleared: the confirmation (and its undo) needs the table it was
+      // taken off, which is gone from `this.check` the moment the active check drops.
+      const parked = this.check;
       try {
-        await this.pos.checkSvc().Park(this.check.orderId);
+        await this.pos.checkSvc().Park(parked.orderId);
         this.pos.clearActiveCheck();
         // Reflect the new parked check immediately; the next board poll confirms it.
         this.pos.refreshBoard();
-        this.notify(this.$i('pos_parked'), 'success');
+        this.pos.notifyParked(parked);
       } catch (e) {
         this.notify(this.pos.errMsg(e), 'error');
       } finally {
@@ -1345,6 +1521,17 @@ export default {
     onMore () {
       if (!this.check) { return; }
       this.showMore = true;
+    },
+    runEmptyConfirm () {
+      const run = this.emptyConfirm;
+      this.emptyConfirm = null;
+      if (run) { run(); }
+    },
+    // Put this check down and start the next one. The shell owns the decision (a seated check is
+    // simply left open on its table), so this only defers to it.
+    async onNewSale () {
+      if (this.blockedByBusy()) { return; }
+      await this.pos.startNewSale();
     },
     // Produce a provisional bill ("regning") for the customer before payment. It is a PROREC
     // (journalled, "not proof of purchase"), so it does not settle the check.

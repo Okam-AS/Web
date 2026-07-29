@@ -22,8 +22,11 @@
       <PosTopBar v-if="cashPoint && session" />
 
       <main class="pos-body">
-        <SellScreen v-if="mode === 'sell'" v-show="canOperate" />
-        <BoardView v-else-if="mode === 'board'" />
+        <!-- Sell and Board are one screen: the check panel is always mounted on the right and only
+             the left column swaps between the floor plan and the products. Rendering the board as a
+             separate screen tore the open check off the display every time the operator glanced at
+             the floor. -->
+        <SellScreen v-if="mode === 'sell' || mode === 'board'" v-show="canOperate" />
         <DayFlow v-else-if="mode === 'day'" />
         <ReceiptsView v-else-if="mode === 'receipts'" />
       </main>
@@ -49,10 +52,23 @@
       <!-- Park-or-void prompt when the operator leaves a check that still carries items. -->
       <div v-if="abandonPrompt" class="pos-abandon" @click.self="abandonBusy || onAbandonChoice('cancel')">
         <div class="pos-abandon__panel">
-          <h3 class="pos-abandon__title">{{ abandonPrompt.check.tableName || $i('pos_quick_sale') }}</h3>
+          <h3 class="pos-abandon__title">{{ abandonName }}</h3>
           <p class="pos-abandon__text">
-            {{ $i('pos_abandon_prompt', { name: abandonPrompt.check.tableName || $i('pos_quick_sale'), amount: priceLabel(abandonPrompt.check.finalAmount) }) }}
+            {{ $i(abandonOnTable ? 'pos_abandon_prompt_table' : 'pos_abandon_prompt', { name: abandonName, amount: priceLabel(abandonPrompt.check.finalAmount) }) }}
           </p>
+
+          <!-- A seated check's answer is almost always "leave it where the guests are sitting", and
+               that answer costs nothing: it is already open on that table. It leads, and it is the
+               only option here that sends nothing at all. -->
+          <button
+            v-if="abandonOnTable && !abandonTablePick"
+            type="button"
+            class="pos-abandon__park"
+            :disabled="abandonBusy"
+            @click="onAbandonChoice('keep')"
+          >
+            {{ $i('pos_keep_on_table', { name: abandonName }) }}
+          </button>
           <!-- Placing the check on a table is the mirror image of parking it (Park clears the table,
                Move sets one), so it belongs in the same decision — otherwise a quick sale that turned
                out to be a table's order has to be parked and resumed onto the table afterwards.
@@ -62,29 +78,32 @@
             <button
               v-if="abandonTargetTable"
               type="button"
-              class="pos-abandon__park"
+              :class="abandonOnTable ? 'pos-abandon__secondary' : 'pos-abandon__park'"
               :disabled="abandonBusy"
               @click="onAbandonPlace(abandonTargetTable)"
             >
-              {{ $i('pos_place_on_table_named', { name: tableLabel(abandonTargetTable) }) }}
+              {{ $i(abandonOnTable ? 'pos_move_to_table_named' : 'pos_place_on_table_named', { name: tableLabel(abandonTargetTable) }) }}
             </button>
             <button
               v-else-if="abandonTables.length"
               type="button"
-              class="pos-abandon__park"
+              :class="abandonOnTable ? 'pos-abandon__secondary' : 'pos-abandon__park'"
+              :disabled="abandonBusy"
               @click="abandonTablePick = true"
             >
-              {{ $i('pos_place_on_table') }}
+              {{ $i(abandonOnTable ? 'pos_move_to_other_table' : 'pos_place_on_table') }}
             </button>
-            <!-- All three are disabled mid-move: a void firing on a check that is being moved
-                 would settle it twice and resolve the pending promise from two places. -->
+            <!-- All of them are disabled mid-move: a void firing on a check that is being moved
+                 would settle it twice and resolve the pending promise from two places.
+                 On a seated check the label spells out the part "Park" never said — the table is
+                 freed and the check leaves the floor plan for the parked strip. -->
             <button
               type="button"
-              :class="(abandonTargetTable || abandonTables.length) ? 'pos-abandon__secondary' : 'pos-abandon__park'"
+              :class="(abandonOnTable || abandonTargetTable || abandonTables.length) ? 'pos-abandon__secondary' : 'pos-abandon__park'"
               :disabled="abandonBusy"
               @click="onAbandonChoice('park')"
             >
-              {{ $i('pos_park_check') }}
+              {{ abandonOnTable ? $i('pos_unseat_park', { name: abandonName }) : $i('pos_park_check') }}
             </button>
             <button type="button" class="pos-abandon__cancel" :disabled="abandonBusy" @click="onAbandonChoice('cancel')">
               {{ $i('common_cancel') }}
@@ -151,7 +170,6 @@
 <script>
 import PosTopBar from '~/components/admin/pos/PosTopBar.vue';
 import SellScreen from '~/components/admin/pos/SellScreen.vue';
-import BoardView from '~/components/admin/pos/BoardView.vue';
 import DayFlow from '~/components/admin/pos/DayFlow.vue';
 import ReceiptsView from '~/components/admin/pos/ReceiptsView.vue';
 import CashPointPicker from '~/components/admin/pos/CashPointPicker.vue';
@@ -169,7 +187,6 @@ export default {
   components: {
     PosTopBar,
     SellScreen,
-    BoardView,
     DayFlow,
     ReceiptsView,
     CashPointPicker,
@@ -252,6 +269,16 @@ export default {
         this.mode !== 'day' && this.mode !== 'receipts';
     },
     canOperate () { return !!this.cashPoint && !!this.session && this.dayOpen; },
+    // Whether the check in the prompt is seated. A seated check has somewhere to stay, so the whole
+    // prompt reads differently: keeping it is the headline answer and parking becomes the option
+    // that has to explain itself.
+    abandonOnTable () { return !!(this.abandonPrompt && this.abandonPrompt.check.tableId); },
+    abandonName () {
+      if (!this.abandonPrompt) { return ''; }
+      const check = this.abandonPrompt.check;
+      if (!check.tableId) { return this.$i('pos_quick_sale'); }
+      return check.tableName || this.$i('pos_table');
+    },
     // Free tables the abandoned check can be placed on. Occupied ones are left out on purpose:
     // dropping a check onto a table that already has one is a merge, and a merge consumes a check —
     // too big a decision to hide behind a table tap in a leave-the-screen prompt.
@@ -531,8 +558,10 @@ export default {
     // ---- Cash point ----
     async selectCashPoint (cp) {
       // A check belongs to the cash point it was opened on — settle its fate (park/void)
-      // before switching, or the sale would land in the new cash point's drawer/report.
-      if (!(await this.prepareForNewActiveCheck(null))) { return; }
+      // before switching, or the sale would land in the new cash point's drawer/report. A table
+      // check is asked about here too (tableNeedsDecision): leaving it on the table is allowed,
+      // but it has to be the operator's stated choice, not a silent consequence of the switch.
+      if (!(await this.prepareForNewActiveCheck(null, null, true))) { return; }
       this.activeCheck = null;
       this.clearSavedActiveOrder();
       this.cashPoint = cp;
@@ -549,7 +578,7 @@ export default {
 
     async requestCashPointChange () {
       // Same guard as selectCashPoint: never carry an open check across cash points.
-      if (!(await this.prepareForNewActiveCheck(null))) { return; }
+      if (!(await this.prepareForNewActiveCheck(null, null, true))) { return; }
       this.activeCheck = null;
       this.clearSavedActiveOrder();
       this.stopPolling();
@@ -572,11 +601,24 @@ export default {
     // (stays open, resumable) or void it (VOIDTRANS — an abandoned started sale is an
     // "avbrutt salg" the X/Z report must count, so it can never just be deleted). An empty
     // draft is discarded silently. Resolves false when the operator backs out.
-    resolvePreviousCheck (previous, targetTableId = null) {
+    resolvePreviousCheck (previous, targetTableId = null, tableNeedsDecision = false) {
       if (!previous) { return Promise.resolve(true); }
       const items = previous.items || [];
       if (items.length === 0) {
         this.discardCheckIfEmpty(previous);
+        return Promise.resolve(true);
+      }
+      // A check that sits on a table already has a home: it stays open on that table and the board
+      // shows it there. Walking away from it (another table, a new sale, the floor plan) is
+      // navigation, not abandonment, so it asks nothing — parking it would be the one thing that
+      // actually loses it, by taking it off the table and into the parked strip.
+      // Only the fiscal exits (cash point change, leaving the register) still make the operator
+      // decide, and they pass tableNeedsDecision so the prompt offers "keep on table" first.
+      if (previous.tableId && !tableNeedsDecision) {
+        // Cleared here, not left for the caller: the callers that throw on their way to the new
+        // check (Resume taken by another register, OpenCheck failing) would otherwise keep
+        // rendering and persisting a check the operator has already left behind.
+        this.clearActiveCheck();
         return Promise.resolve(true);
       }
       return new Promise((resolve) => {
@@ -588,7 +630,9 @@ export default {
         // A void confirmation left standing would re-render against the NEW prompt's check and
         // void a check the operator never picked.
         this.abandonVoidConfirm = false;
-        this.abandonPrompt = { check: previous, resolve, targetTableId };
+        // Carried so the park branch knows the register is being left behind (cash point change,
+        // exit) and must not offer an undo it cannot honour — see onAbandonChoice.
+        this.abandonPrompt = { check: previous, resolve, targetTableId, leavingRegister: tableNeedsDecision };
       });
     },
 
@@ -637,6 +681,16 @@ export default {
     async onAbandonChoice (choice) {
       const prompt = this.abandonPrompt;
       if (!prompt || this.abandonBusy) { return; }
+      // "Keep on table": the check is already open on its table server-side, so this is purely
+      // local — drop it as the active check and let the caller proceed. Nothing goes over the
+      // wire, which is exactly why it is the primary answer for a seated check.
+      if (choice === 'keep') {
+        this.abandonPrompt = null;
+        this.abandonTablePick = false;
+        this.clearActiveCheck();
+        prompt.resolve(true);
+        return;
+      }
       // Cancel settles instantly — nothing is sent, so there is nothing to wait for.
       if (choice !== 'park' && choice !== 'void') {
         this.abandonPrompt = null;
@@ -658,6 +712,12 @@ export default {
         this.abandonPrompt = null;
         this.abandonTablePick = false;
         this.abandonVoidConfirm = false;
+        // After the dialog is down, so the confirmation (and its undo) is not raised behind it.
+        // Undo is withheld on the ways out of the register: on exit the caller routes away in the
+        // same tick and takes the toast with it, and after a cash point change the undo's Resume
+        // would go out stamped with an operator session that no longer exists. A button that
+        // cannot work is worse than no button — the notice itself still says what happened.
+        if (choice === 'park') { this.notifyParked(prompt.check, !prompt.leavingRegister); }
         this.refreshBoard();
         prompt.resolve(true);
       } catch (e) {
@@ -671,6 +731,57 @@ export default {
         // Re-deciding to void has to be a fresh, deliberate confirmation.
         this.abandonVoidConfirm = false;
       }
+    },
+
+    // Park confirmation. Parking a check that sat on a table takes it OFF that table — the tile goes
+    // free and the check moves into the parked strip — which is the one thing about park an operator
+    // is not told by its name. So the seated case says what happened and offers a real undo for as
+    // long as the toast lives; a table-less park keeps the plain notice it always had.
+    // undoable=false for the paths that leave the register behind: the toast would either be torn
+    // down before it can be read, or its Resume would go out on a dead operator session.
+    notifyParked (check, undoable = true) {
+      if (!check || !check.tableId) {
+        this.notify(this.$i('pos_parked'), 'success');
+        return;
+      }
+      const name = check.tableName || this.$i('pos_table');
+      this.notify(this.$i('pos_parked_off_table', { name }), 'info', {
+        timeout: 8000,
+        actionLabel: undoable ? this.$i('pos_undo') : '',
+        // Deliberately un-owned: the undo closes over nothing but the shell and the orderId, so it
+        // is safe (and useful) for it to outlive the screen the park was fired from.
+        onAction: undoable ? () => this.undoParkToTable(check) : null
+      });
+    },
+    // Resume un-parks and re-seats in one call, so the undo restores exactly the prior state: the
+    // check open on its table again. It is NOT adopted as the active check — the operator parked it
+    // to move on, and may already be ringing into another one.
+    async undoParkToTable (check) {
+      try {
+        await this.checkSvc().Resume(check.orderId, { tableId: check.tableId });
+        this.refreshBoard();
+        this.notify(this.$i('pos_back_on_table', { name: check.tableName || this.$i('pos_table') }), 'success');
+      } catch (e) {
+        this.notify(this.errMsg(e), 'error');
+      }
+    },
+
+    // Starts the next customer's sale without touching the current check. A seated check is left
+    // open on its table (resolvePreviousCheck answers silently); a table-less one still has nowhere
+    // to live, so it gets the park-or-void prompt as before. This is the button that makes "Park"
+    // unnecessary as a way to merely get the screen free.
+    async startNewSale () {
+      if (this.addsPending > 0) {
+        this.notify(this.$i('pos_wait_for_adds'), 'info', { replaceKey: 'wait-busy', timeout: 2000 });
+        return;
+      }
+      if (!(await this.prepareForNewActiveCheck(null))) { return; }
+      // The prompt's park/void branches leave activeCheck standing (their callers normally
+      // overwrite it); here nothing follows, so clear it explicitly. A silent keep-on-table
+      // already cleared it — clearing twice is a no-op.
+      this.activeCheck = null;
+      this.persist();
+      this.mode = 'sell';
     },
 
     // One-tap void: the backend journals VOIDTRANS regardless; the § 5-3-7 reason is only
@@ -705,7 +816,7 @@ export default {
     // Callers that mutate server state to obtain the new check (e.g. Resume, which un-parks)
     // MUST call this first, so a cancelled prompt doesn't leave the new check dangling —
     // neither parked nor active.
-    prepareForNewActiveCheck (nextOrderId, targetTableId = null) {
+    prepareForNewActiveCheck (nextOrderId, targetTableId = null, tableNeedsDecision = false) {
       // A restore that failed on transport may still reference a live check. Before adopting
       // a different one (which overwrites the saved id), park the referenced check server-side
       // (best effort) so it stays visible on the board instead of becoming an orphan.
@@ -718,7 +829,7 @@ export default {
       }
       const previous = this.activeCheck;
       if (previous && (!nextOrderId || previous.orderId !== nextOrderId)) {
-        return this.resolvePreviousCheck(previous, targetTableId);
+        return this.resolvePreviousCheck(previous, targetTableId, tableNeedsDecision);
       }
       return Promise.resolve(true);
     },
@@ -760,17 +871,24 @@ export default {
 
     // ---- Mode / navigation ----
     setMode (mode) {
-      // A mode switch unmounts the sell screen and takes its add queue with it. Lines the
-      // operator already rang in would never reach the check — it comes back short, and a bill
-      // settled in that state undercharges. beforeDestroy reports the loss, but preventing it is
-      // better than explaining it.
-      if (mode !== 'sell' && this.addsPending > 0) {
+      // Sell and Board are ONE mounted screen — only its left column swaps — so moving between them
+      // tears nothing down and must trigger neither guard below. Both used to fire on any
+      // mode !== 'sell', which after the merge meant a glance at the floor plan discarded the table
+      // the operator had just opened (releasing it server-side) and blocked the switch mid-drain for
+      // a queue that was never at risk. Only leaving the pair for Dag / Kvitteringer unmounts it.
+      const leavingSellScreen = mode !== 'sell' && mode !== 'board';
+      const onSellScreen = this.mode === 'sell' || this.mode === 'board';
+      // The unmount takes the sell screen's add queue with it. Lines the operator already rang in
+      // would never reach the check — it comes back short, and a bill settled in that state
+      // undercharges. beforeDestroy reports the loss, but preventing it is better than explaining it.
+      if (leavingSellScreen && this.addsPending > 0) {
         this.notify(this.$i('pos_wait_for_adds'), 'info', { replaceKey: 'wait-busy', timeout: 2000 });
         return;
       }
-      // Leaving the sell screen with an empty draft active (a table opened but nothing rung in)
-      // discards it so it never lingers on the board or blocks the day close.
-      if (mode !== 'sell' && this.mode === 'sell' && this.activeCheck && (this.activeCheck.items || []).length === 0) {
+      // Leaving with an empty draft active (a table opened but nothing rung in) discards it so it
+      // never lingers on the board or blocks the day close. Opening another check goes through
+      // prepareForNewActiveCheck, which discards an empty predecessor the same way.
+      if (leavingSellScreen && onSellScreen && this.activeCheck && (this.activeCheck.items || []).length === 0) {
         this.discardCheckIfEmpty(this.activeCheck);
         this.activeCheck = null;
         this.persist();
@@ -804,8 +922,10 @@ export default {
     },
     async onExitConfirmed () {
       this.exitConfirm = false;
-      // Same park-or-void decision as everywhere else; backing out of it cancels the exit.
-      if (!(await this.prepareForNewActiveCheck(null))) { return; }
+      // Same park-or-void decision as everywhere else; backing out of it cancels the exit. A table
+      // check is included: walking out of the register is not navigation, and the operator should
+      // see what they are leaving behind before the screen is gone.
+      if (!(await this.prepareForNewActiveCheck(null, null, true))) { return; }
       this.activeCheck = null;
       this.clearSavedActiveOrder();
       this.exit();

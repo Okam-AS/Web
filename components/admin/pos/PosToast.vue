@@ -69,21 +69,48 @@ export default {
 
 <style scoped>
 /* The host itself never intercepts taps — only the toasts inside it do, so the register stays
-   fully usable while a notice is up. */
-.pos-toasts { position: fixed; inset: 0; pointer-events: none; z-index: 2300; }
+   fully usable while a notice is up. Everything lives in the bottom-left corner: it is the one
+   part of the register no screen puts a primary control in, so a toast there never lands on the
+   product grid, the check panel or the pay button. The safe-area insets keep it clear of the home
+   indicator on a tablet running full screen. */
+.pos-toasts {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2300;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 16px calc(16px + env(safe-area-inset-right)) calc(20px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
+}
 
 .pos-toasts__stack {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  /* Relative so a leaving toast (taken out of flow by the transition) resolves against its own
+     stack instead of jumping to the far corner of the full-screen host. */
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 8px;
   width: max-content;
-  max-width: min(92vw, 560px);
+  max-width: min(100%, 420px);
 }
-.pos-toasts__stack--top { top: 16px; }
-.pos-toasts__stack--bottom { bottom: 24px; }
+/* Notices sit closest to the corner — the fixed spot the operator learns to look at. The calm
+   food-ready nudge stacks above them, so a kitchen signal can never push an error out of place. */
+.pos-toasts__stack--bottom { order: -1; }
+
+/* Phone-width: a toast that has to wrap reads better spanning the column than shrink-wrapped. */
+@media (max-width: 560px) {
+  .pos-toasts { padding: 12px calc(12px + env(safe-area-inset-right)) calc(14px + env(safe-area-inset-bottom)) calc(12px + env(safe-area-inset-left)); }
+  .pos-toasts__stack { width: 100%; max-width: 100%; }
+}
+/* Short landscape (a POS tablet on its side): trim the vertical breathing room so a two-toast
+   stack cannot reach the working area. */
+@media (max-height: 520px) {
+  .pos-toasts { gap: 6px; padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
+  .pos-toasts__stack { gap: 6px; }
+}
 
 .pos-toast {
   pointer-events: auto;
@@ -151,9 +178,12 @@ export default {
 .pos-toast__icon { color: var(--pos-primary-dark, #159f63); display: inline-flex; flex-shrink: 0; }
 .pos-toast__icon svg { width: 22px; height: 22px; }
 
+/* In from the edge it is anchored to: a short slide from the left reads as "this arrived from the
+   corner", where the old drop-from-above now would read as falling out of the working area. */
 .pos-toast-enter-active, .pos-toast-leave-active { transition: opacity 0.22s ease, transform 0.22s ease; }
 .pos-toast-leave-active { position: absolute; }
-.pos-toast-enter, .pos-toast-leave-to { opacity: 0; transform: translateY(-8px); }
-.pos-toasts__stack--bottom .pos-toast-enter,
-.pos-toasts__stack--bottom .pos-toast-leave-to { transform: translateY(12px); }
+.pos-toast-enter, .pos-toast-leave-to { opacity: 0; transform: translateX(-14px); }
+@media (prefers-reduced-motion: reduce) {
+  .pos-toast-enter, .pos-toast-leave-to { transform: none; }
+}
 </style>

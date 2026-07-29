@@ -123,6 +123,11 @@
             @click="resumeParked(p)"
           >
             <span class="board__parked-name">{{ p.tableName || $i('pos_quick_sale') }}</span>
+            <!-- Stated on the card, not just implied by which strip it landed in: nobody should go
+                 looking for this one on the floor plan. Only when the check really has no table —
+                 one parked with its tableId intact still carries the table's name above, and the
+                 two together would contradict each other. -->
+            <span v-if="!p.tableId" class="board__parked-tag">{{ $i('pos_no_table') }}</span>
             <span v-if="parkedMeta(p)" class="board__parked-meta">{{ parkedMeta(p) }}</span>
             <span class="board__parked-amount">{{ priceLabel(p.finalAmount) }}</span>
             <span class="board__parked-resume">{{ $i('pos_board_resume') }}</span>
@@ -444,6 +449,17 @@ export default {
   background: var(--pos-primary, #1bb776);
   padding: 2px 7px;
   border-radius: 5px;
+}
+.board__parked-tag {
+  align-self: flex-start;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #64748b;
+  background: #f1f5f9;
+  border-radius: 5px;
+  padding: 2px 6px;
 }
 .board__parked-meta { font-size: 0.75rem; color: #64748b; }
 .board__parked-amount { font-weight: 800; color: var(--pos-primary-dark, #159f63); }

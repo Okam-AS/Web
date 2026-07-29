@@ -66,8 +66,8 @@ export default {
   name: 'OptionPicker',
   props: {
     product: { type: Object, required: true },
-    // Quantity the stepper opens on — carries an armed grid multiplier into the picker so
-    // "six of these, with oat milk" stays a single decision.
+    // Quantity the stepper opens on. The picker owns the count for a product with options, so
+    // "six of these, with oat milk" stays a single decision made in one place.
     initialQuantity: { type: Number, default: 1 }
   },
   data () {
