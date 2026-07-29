@@ -302,11 +302,20 @@ describe('the Growth page — the send, as shipped', () => {
 })
 
 describe('the shipped platform capability', () => {
-  test('UNSUBSCRIBE_MECHANISM ships as absent, and that is the state of the backend', () => {
-    // Read past the mock. If somebody flips this constant, this test says so out loud — the flip
-    // must be accompanied by a production path that mints a preference token, composes the
-    // List-Unsubscribe pair, and an endpoint that accepts the RFC 8058 form-encoded body.
+  test('UNSUBSCRIBE_MECHANISM ships as present, and that is the state of the backend', () => {
+    // Read past the mock. This test exists to make the value a DELIBERATE statement about the
+    // backend rather than a default nobody re-examines — so it is updated, never deleted, whenever
+    // the backend's answer changes.
+    //
+    // It shipped as `absent` and was flipped at backend 4e2e3147, which closed all three conditions
+    // the previous version of this comment demanded: the dispatcher now mints a per-recipient token
+    // on the production path, composes the List-Unsubscribe pair and attaches it before the
+    // irreversible Submitting transition, and an input formatter accepts the RFC 8058 form-encoded
+    // body so the endpoint is no longer a 415. The backend's own 415 pin was inverted rather than
+    // deleted, so reverting that action turns it red there.
+    //
+    // Flipping this back to absent is equally a statement, and equally requires evidence.
     const actual = jest.requireActual('~/utils/growth/platform-capability')
-    expect(actual.UNSUBSCRIBE_MECHANISM).toBe(UNSUBSCRIBE_ABSENT)
+    expect(actual.UNSUBSCRIBE_MECHANISM).toBe(UNSUBSCRIBE_PRESENT)
   })
 })
