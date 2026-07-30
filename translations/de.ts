@@ -2590,7 +2590,9 @@ export default {
   wfme_pub_acknowledge_failed: 'Empfang konnte nicht bestätigt werden.',
 
   // Personaleinsatz — die Mitarbeiterliste (Personen, Anstellungen, Berechtigungen, Funktionen, Konditionen)
-  nav_workforce_roster: 'Mitarbeitende',
+  // Die Menü-Bezeichnung ist das eigene Wort des Moduls, nicht der Seitentitel: `nav_employees` heisst
+  // 'Mitarbeiter', und 'Mitarbeitende' eine Zeile darunter unterscheidet sich im Menü um eine Endung.
+  nav_workforce_roster: 'Personaleinsatz',
   wfr_page_title: 'Mitarbeitende',
   wfr_page_intro: 'Wer in diesem Betrieb angestellt ist, wozu die einzelnen Personen berechtigt sind und wie eine Anstellung endet.',
 
@@ -3213,6 +3215,9 @@ export default {
   ev_toast_reconciled: 'Die Abrechnung wurde abgestimmt.',
   ev_toast_settled: 'Die Abrechnung wurde geschlossen.',
 
+  // Absichtlich kürzer als der Seitentitel: 'Schulung und Eigenkontrolle' ist, was die Seite tut,
+  // 'Schulung' ist, wonach man im Menü sucht.
+  nav_training_courses: 'Schulung',
   trn_page_title: 'Schulung und Eigenkontrolle',
   trn_page_intro: 'Aus einem Kurs wird ein Nachweis: Kurs anlegen, eine Version veröffentlichen, zuweisen, den Abschluss erfassen — und dann nachschlagen, was die Person tatsächlich besitzt.',
   trn_reload: 'Neu laden',
@@ -3389,6 +3394,7 @@ export default {
   trn_holdings_asof: 'Der Server hat das um {asOf} berechnet.',
   trn_holdings_asof_unknown: 'Der Zeitpunkt, zu dem der Server das berechnet hat, kam nicht mit der Antwort zurück.',
   // --- Workforce: Sätze und Stunden (pages/admin/workforce-rates.vue) ---
+  nav_workforce_rates: 'Sätze und Stunden',
   wfrt_page_title: 'Sätze und Stunden',
   wfrt_page_intro: 'Was eine Stunde kostet, was tatsächlich gearbeitet wurde, und die Datei, die die Stunden an die Lohnbuchhaltung weitergibt.',
   wfrt_context_failed: 'Zeitzone und Berechtigungen des Betriebs konnten nicht gelesen werden. Die Seite zeigt lieber nichts, als zu raten.',

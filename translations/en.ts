@@ -2588,7 +2588,9 @@ export default {
   wfme_pub_acknowledge_failed: 'Could not confirm receipt.',
 
   // Workforce — the roster (people, engagements, capabilities, roles, terms)
-  nav_workforce_roster: 'Staff',
+  // The sidebar label is the module's own word rather than the page title: `nav_employees` is
+  // already 'Employees', and 'Staff' one line below it in the same group says the same thing twice.
+  nav_workforce_roster: 'Roster',
   wfr_page_title: 'Staff',
   wfr_page_intro: 'Who is engaged at this store, what each of them is allowed to do, and how an engagement ends.',
 
@@ -3210,6 +3212,9 @@ export default {
   ev_toast_reconciled: 'The settlement was reconciled.',
   ev_toast_settled: 'The settlement was closed.',
 
+  // Deliberately shorter than the page title: 'Training and internal control' is what the page does,
+  // 'Training' is what you look for in a menu.
+  nav_training_courses: 'Training',
   trn_page_title: 'Training and internal control',
   trn_page_intro: 'One course becomes evidence: author it, publish a version, assign it, file the completion — then look up what the person actually holds.',
   trn_reload: 'Reload',
@@ -3386,6 +3391,7 @@ export default {
   trn_holdings_asof: 'The server computed this at {asOf}.',
   trn_holdings_asof_unknown: 'The moment the server computed this did not come back with the answer.',
   // --- Workforce: rates and hours (pages/admin/workforce-rates.vue) ---
+  nav_workforce_rates: 'Rates and hours',
   wfrt_page_title: 'Rates and hours',
   wfrt_page_intro: 'What an hour costs, what was actually worked, and the file that carries the hours out to payroll.',
   wfrt_context_failed: 'We could not read this store\'s timezone and capabilities. The page shows nothing rather than guess.',

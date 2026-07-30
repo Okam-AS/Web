@@ -2,6 +2,9 @@ import fs from 'fs'
 import path from 'path'
 import { shallowMount } from '@vue/test-utils'
 import AdminPageHeader from '~/components/organisms/AdminPageHeader.vue'
+import no from '~/translations/no'
+import en from '~/translations/en'
+import de from '~/translations/de'
 import {
   storeAdminAccess,
   showsStoreAdminNav,
@@ -61,69 +64,88 @@ describe('storeAdminAccess — unknown is a state, not a refusal', () => {
 // itself".
 //
 // Order matters: this is compared with `toEqual` against the flattened `navGroups`, so a link added
-// to a group must be added at the same position here. The five module surfaces merged in together
-// split four/one on this list, and the split is the point:
+// to a group must be added at the same position here. All EIGHT store-admin module surfaces are on
+// this list now, and every one of them being here is the point:
 //
-//   store-admin — `/admin/margin-recipes` (Menu), `/admin/growth-newsletter` and
-//                 `/admin/events-pipeline` (Sales & marketing), `/admin/workforce-schedule` and
-//                 `/admin/meals-agreements` (Administration) are offered to every store admin, so
-//                 they are pinned here like the eighteen before them.
-//   role-gated  — `/admin/workforce-roster` alone still lives in the PowerUser group, which hangs
-//                 off `isPowerUser` rather than off membership. It is deliberately ABSENT: adding it
-//                 would make this list assert a set that a plain store admin never sees, and the
-//                 `role-gated groups are untouched` test below is what keeps it honest instead.
+//   `/admin/margin-recipes` (Menu); `/admin/growth-newsletter` and `/admin/events-pipeline` (Sales &
+//   marketing); `/admin/workforce-schedule`, `/admin/workforce-roster`, `/admin/workforce-rates`,
+//   `/admin/training-courses` and `/admin/meals-agreements` (Administration). No module surface is
+//   role-gated any more, and none is unlinked.
 //
-// THE MOVE THE LAST TWO ENTRIES RECORD. Schedule and events were shipped inside that PowerUser group
-// by the lanes that built them, and the group is the wrong gate for both: each page mounts
-// `AdminPage` with no `allow-non-admin` and reads no role flag, so its authorisation has always been
-// store-admin membership at the selected store. The manager was authorised and unlinked — a page
-// only reachable by typing its URL. Signing in as the PowerUser was not an escape either: that
-// account administers no store, so the same shell bounces it to /registrer. Moving the links widens
-// nothing; it points them at the role that already passed the guard.
+// WHAT THE LAST FIVE ENTRIES RECORD, because it is one defect wearing two masks. Every one of these
+// pages mounts `AdminPage` with no `allow-non-admin` and reads no role flag, so what admits a caller
+// has always been store-admin membership at the selected store. The sidebar disagreed in two ways:
+//
+//   the wrong gate  — schedule, roster and events shipped inside the PowerUser group. The manager was
+//                     authorised and unlinked. Signing in as the PowerUser was no escape either: that
+//                     account administers no store, so the same shell bounces it to /registrer, which
+//                     made the only visible link a dead end for the only user who could see it.
+//   no gate at all  — `/admin/workforce-rates` and `/admin/training-courses` had no link in ANY group.
+//                     A page nobody is offered is a page reachable only by typing its URL.
+//
+// Moving and adding links widens nothing; it points them at the role that already passed the guard.
+// The second mask is why `THE CONVERSE WALK` at the bottom of this file exists: the original static
+// walk checked links → pages and could not see a page → no link.
 const STORE_ADMIN_PATHS = [
   '/admin', '/admin/ongoing', '/admin/orders', '/admin/statistics',
   '/admin/products', '/admin/categories', '/admin/allergens', '/admin/import', '/admin/margin-recipes',
   '/admin/delivery', '/admin/wolt',
   '/admin/kravia-invoice', '/admin/rewards', '/admin/discounts', '/admin/growth-newsletter', '/admin/events-pipeline',
   '/admin/payment', '/admin/settlements', '/admin/terminals',
-  '/admin/customers', '/admin/employees', '/admin/workforce-schedule', '/admin/meals-agreements'
+  '/admin/customers', '/admin/employees',
+  '/admin/workforce-schedule', '/admin/workforce-roster', '/admin/workforce-rates', '/admin/training-courses',
+  '/admin/meals-agreements'
 ]
 
 const WORKER_PATHS = ['/admin/workforce-me']
 
-// The two links this file's `MANAGER-REACHABLE` tests are about, named once so the assertions below
-// cannot drift apart from each other.
-const MANAGER_MODULE_PATHS = ['/admin/workforce-schedule', '/admin/events-pipeline']
+// The five links this file's `MANAGER-REACHABLE` tests are about — the ones a manager could not reach
+// by navigating — named once so the assertions below cannot drift apart from each other.
+const MANAGER_MODULE_PATHS = [
+  '/admin/workforce-schedule', '/admin/workforce-roster', '/admin/workforce-rates',
+  '/admin/training-courses', '/admin/events-pipeline'
+]
+
+// The three languages `LanguageSwitcher` offers, so the three sidebars that actually get rendered.
+const DICTIONARIES = { no, en, de }
+
+// Mounting the real sidebar is shared by both halves of this file: the behavioural tests read the
+// links it offers each kind of user, and the static walk at the bottom compares the pages on disk
+// against that same render rather than against a list, so a link deleted from the component cannot be
+// covered for by a list that still mentions it.
+//
+// `dictionary` is normally omitted, and then `$i` returns the key — every path assertion here reads
+// keys, not prose. The locale tests pass a real translation dictionary instead, because a duplicate
+// LABEL is invisible to a test that only ever sees key names.
+function mountNav (currentUser, dictionary) {
+  const wrapper = shallowMount(AdminPageHeader, {
+    mocks: {
+      $i: key => (dictionary ? (dictionary[key] || key) : key),
+      $store: {
+        // The whole sidebar hangs off this getter, so it is mocked truthfully rather than to a
+        // constant: an anonymous visitor renders no nav at all.
+        getters: { userIsLoggedIn: !!(currentUser && currentUser.id) },
+        state: { currentUser, selectedAdminStore: 7, adminLocale: 'no' },
+        dispatch: jest.fn(),
+        commit: jest.fn()
+      },
+      $route: { path: '/admin/workforce-me', query: {} },
+      $router: { replace: jest.fn() },
+      _userService: { Logout: jest.fn() }
+    },
+    stubs: { LanguageSwitcher: true }
+  })
+  return wrapper
+}
+
+const pathsOf = wrapper => wrapper.vm.navGroups
+  .reduce((acc, group) => acc.concat(group.items.map(item => item.path)), [])
+
+const admin = { id: 9, adminIn: [{ id: 7, name: 'Kafé Nord' }] }
+const worker = { id: 4, adminIn: [] }
+const notYetKnown = { id: 4 }
 
 describe('AdminPageHeader — which links each kind of user is offered', () => {
-  function mountNav (currentUser) {
-    const wrapper = shallowMount(AdminPageHeader, {
-      mocks: {
-        $i: key => key,
-        $store: {
-          // The whole sidebar hangs off this getter, so it is mocked truthfully rather than to a
-          // constant: an anonymous visitor renders no nav at all.
-          getters: { userIsLoggedIn: !!(currentUser && currentUser.id) },
-          state: { currentUser, selectedAdminStore: 7, adminLocale: 'no' },
-          dispatch: jest.fn(),
-          commit: jest.fn()
-        },
-        $route: { path: '/admin/workforce-me', query: {} },
-        $router: { replace: jest.fn() },
-        _userService: { Logout: jest.fn() }
-      },
-      stubs: { LanguageSwitcher: true }
-    })
-    return wrapper
-  }
-
-  const pathsOf = wrapper => wrapper.vm.navGroups
-    .reduce((acc, group) => acc.concat(group.items.map(item => item.path)), [])
-
-  const admin = { id: 9, adminIn: [{ id: 7, name: 'Kafé Nord' }] }
-  const worker = { id: 4, adminIn: [] }
-  const notYetKnown = { id: 4 }
-
   test('a store admin is offered every store-admin link, exactly as before', () => {
     expect(pathsOf(mountNav(admin))).toEqual(STORE_ADMIN_PATHS.concat(WORKER_PATHS))
   })
@@ -166,25 +188,17 @@ describe('AdminPageHeader — which links each kind of user is offered', () => {
     expect(pathsOf(mountNav(powerUser))).toContain('/admin/pos')
   })
 
-  test('the one remaining role-gated module surface is absent for a plain admin and present for a PowerUser', () => {
-    // The other half of the STORE_ADMIN_PATHS split. The roster is store-admin WORK behind a role
-    // flag, so it must not appear in the pinned list — but "not in the list" would also be satisfied
-    // by a link nobody can ever reach, which is the failure this catches.
-    expect(pathsOf(mountNav(admin))).not.toContain('/admin/workforce-roster')
-
-    const powerUser = { id: 9, adminIn: [{ id: 7 }], isPowerUser: true }
-    expect(pathsOf(mountNav(powerUser))).toContain('/admin/workforce-roster')
-  })
-
-  // MANAGER-REACHABLE. The defect these three tests exist for: both pages authorise a store admin and
-  // neither was linked for one. Stated three ways because each way alone has a cheap wrong fix that
-  // satisfies it — present at all, present outside the role gate, and present exactly once.
-  test('MANAGER-REACHABLE: a plain store admin — no role flags — is offered the schedule and the events pipeline', () => {
+  // MANAGER-REACHABLE. The defect these tests exist for: all five pages authorise a store admin and
+  // none of them was linked for one — three behind a role flag their own guard never checks, two
+  // behind no link at all. Stated four ways because each way alone has a cheap wrong fix that
+  // satisfies it: present at all, present outside the role gate, present exactly once, and still
+  // withheld from the worker the pages would bounce.
+  test('MANAGER-REACHABLE: a plain store admin — no role flags — is offered all five module surfaces', () => {
     const adminPaths = pathsOf(mountNav(admin))
     MANAGER_MODULE_PATHS.forEach(p => expect(adminPaths).toContain(p))
   })
 
-  test('MANAGER-REACHABLE: neither link sits in a role-gated group, so no role flag can be what reveals it', () => {
+  test('MANAGER-REACHABLE: no link sits in a role-gated group, so no role flag can be what reveals it', () => {
     // Guards the fix against being re-satisfied by duplicating the links into the PowerUser group:
     // that would put them back on `isPowerUser` for the accounts that have it while leaving the
     // manager's copy dependent on nothing but this file noticing.
@@ -208,12 +222,43 @@ describe('AdminPageHeader — which links each kind of user is offered', () => {
     })
   })
 
-  test('MANAGER-REACHABLE: a pure worker is still offered neither — they are store-admin pages', () => {
-    // The links moved into groups withheld from a worker, so the guard that bounces a worker off
-    // these pages is still matched by the menu. This is the invariant the whole file was written for,
-    // restated for the two paths that changed group.
+  test('MANAGER-REACHABLE: a pure worker is still offered none of them — they are store-admin pages', () => {
+    // The links landed in groups withheld from a worker, so the guard that bounces a worker off these
+    // pages is still matched by the menu. This is the invariant the whole file was written for,
+    // restated for the five paths that changed group or gained one.
     const workerPaths = pathsOf(mountNav(worker))
     MANAGER_MODULE_PATHS.forEach(p => expect(workerPaths).not.toContain(p))
+  })
+
+  // THE LABELS, in the three languages the sidebar actually renders. Every other test in this file
+  // asserts on paths, and a path collision is impossible — but two links can carry the SAME WORDS
+  // while their paths differ, and then the manager is choosing between two identical rows. That was
+  // live: `nav_employees` and `nav_workforce_roster` were both 'Ansatte', harmless only while the
+  // roster was PowerUser-only, and put side by side in one group the moment it stopped being.
+  //
+  // A key-returning `$i` cannot see this, which is why these mount against the real dictionaries.
+  Object.keys(DICTIONARIES).forEach((locale) => {
+    test(`LABELS (${locale}): no two links in one store admin's sidebar read the same`, () => {
+      const dictionary = DICTIONARIES[locale]
+      const labels = mountNav(admin, dictionary).vm.navGroups
+        .reduce((acc, group) => acc.concat(group.items.map(item => item.label)), [])
+
+      // Untranslated keys would defeat the check by being unique strings, so they fail here too: a
+      // label that still looks like `nav_…` never made it into this locale's dictionary.
+      expect(labels.filter(label => label.startsWith('nav_'))).toEqual([])
+      expect(labels.filter((label, i) => labels.indexOf(label) !== i)).toEqual([])
+    })
+
+    test(`LABELS (${locale}): and a PowerUser store admin, who sees the most links of anyone`, () => {
+      // The account that had the 'Ansatte'/'Ansatte' pair on screen before this lane, and the widest
+      // sidebar there is: both role groups plus all six store-admin ones.
+      const powerUser = { id: 9, adminIn: [{ id: 7 }], isPowerUser: true, isKeyAccountManager: true }
+      const labels = mountNav(powerUser, DICTIONARIES[locale]).vm.navGroups
+        .reduce((acc, group) => acc.concat(group.items.map(item => item.label)), [])
+
+      expect(labels.filter(label => label.startsWith('nav_'))).toEqual([])
+      expect(labels.filter((label, i) => labels.indexOf(label) !== i)).toEqual([])
+    })
   })
 })
 
@@ -261,17 +306,59 @@ describe('no link the sidebar offers is a link the shell will bounce', () => {
     expect(optedOut).toEqual([])
   })
 
-  test('the role-gated module link resolves to a real, still-guarded page too', () => {
-    // `STORE_ADMIN_PATHS` cannot cover this one — it is not offered to a plain store admin — so the
-    // walk is pointed at it explicitly. Same two obligations: the page exists, and it does NOT opt
-    // out of the store-admin guard (a role group is shown to PowerUsers, never to workers, so an
-    // opt-out here would be a page reachable by neither list's rules).
-    const roleGated = ['/admin/workforce-roster']
-    expect(roleGated.filter(p => !fs.existsSync(pageFor(p)))).toEqual([])
-    expect(roleGated.filter(p => /allow-non-admin|allowNonAdmin/.test(fs.readFileSync(pageFor(p), 'utf8')))).toEqual([])
+  // THE CONVERSE WALK — the direction the original static half could not see.
+  //
+  // Every test above walks LINKS → PAGES: take what the sidebar offers and check the page honours it.
+  // None of them can notice a page that no link points at, and that is how `/admin/workforce-rates`
+  // and `/admin/training-courses` shipped: built, tested, wired, and reachable only by typing a URL.
+  // A suite stays entirely green while that is true, because nothing ever asks the question.
+  //
+  // So this walks PAGES → LINKS. It is scoped by PREFIX rather than by a list of pages, which is what
+  // makes it a rule instead of a snapshot: a sixth module page dropped into `pages/admin/` tomorrow is
+  // covered the moment it is named, without anybody remembering to add it here. The prefixes are the
+  // five restaurant modules — the legacy unlinked pages (`payouts`, `brev`, `dinehome`, `wolt-menu`,
+  // `lang`, `wolt-calc`) are outside it and stay outside it; they are a separate, older question.
+  const MODULE_PAGE_PREFIXES = ['events-', 'growth-', 'margin-', 'meals-', 'training-', 'workforce-']
+
+  const modulePages = () => adminPages(pagesDir)
+    .map(file => path.basename(file, '.vue'))
+    .filter(name => MODULE_PAGE_PREFIXES.some(prefix => name.startsWith(prefix)))
+
+  test('THE CONVERSE WALK: every module page under pages/admin/ is offered by the sidebar', () => {
+    // Compared against what the component RENDERS, not against `STORE_ADMIN_PATHS`. Using the pinned
+    // list would make this test pass on a sidebar that had dropped the link, as long as the list still
+    // named it — and the pinned list is maintained by hand, so that is not a hypothetical.
+    //
+    // A plain store admin and a pure worker between them see every non-role group there is, so a page
+    // linked ONLY from the KAM or PowerUser group is unlinked as far as this test is concerned. That is
+    // deliberate: a role group cannot be the answer for a page whose own guard is membership.
+    const adminPaths = pathsOf(mountNav(admin))
+    const workerPaths = pathsOf(mountNav(worker))
+
+    const unlinked = modulePages().filter((name) => {
+      const navPath = '/admin/' + name
+      const optsOut = /allow-non-admin|allowNonAdmin/.test(fs.readFileSync(path.join(pagesDir, name + '.vue'), 'utf8'))
+      // Offered to the right person, not merely offered: a page that opts out of the membership guard
+      // belongs in the worker's group, and one that does not must be in a store-admin group — which is
+      // exactly "the admin is offered it and the worker is not", since the worker's whole sidebar is
+      // the one group they share.
+      return optsOut
+        ? !workerPaths.includes(navPath)
+        : !(adminPaths.includes(navPath) && !workerPaths.includes(navPath))
+    })
+    expect(unlinked).toEqual([])
   })
 
-  test('THE CONVERSE OF THE MOVE: neither moved page asks for a role flag the sidebar no longer supplies', () => {
+  test('and the walk is not vacuous: the prefixes still match the module pages that exist', () => {
+    // If a rename or a typo'd prefix ever empties `modulePages()`, the test above would pass by
+    // checking nothing at all. Nine is what the five modules ship today; the assertion is a floor, so
+    // adding a tenth does not need a number changed here.
+    expect(modulePages().length).toBeGreaterThanOrEqual(9)
+    expect(modulePages()).toContain('workforce-rates')
+    expect(modulePages()).toContain('training-courses')
+  })
+
+  test('THE CONVERSE OF THE MOVE: no moved page asks for a role flag the sidebar no longer supplies', () => {
     // The move is only correct if the pages' own authorisation is membership and nothing else. If
     // either page ever starts reading `isPowerUser` — a role check the store-admin groups do not
     // satisfy — its link would be offered to managers it then refuses, and this fails instead.

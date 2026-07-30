@@ -245,7 +245,11 @@ const icons = {
   marginRecipes: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>',
   mealsAgreements: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>',
   growthNewsletter: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>',
-  eventsPipeline: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>'
+  eventsPipeline: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>',
+  // A clock, not a coin: this page is hours first — the rate is what the hours are multiplied by. It
+  // has to read differently from `workforceSchedule` (a calendar) beside it in the same group.
+  workforceRates: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
+  training: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" /></svg>'
 };
 
 export default {
@@ -366,15 +370,27 @@ export default {
             items: [
               { label: this.$i('nav_customers'), path: '/admin/customers', icon: icons.customers },
               { label: this.$i('nav_employees'), path: '/admin/employees', icon: icons.employees },
-              // Workforce. Moved here out of the PowerUser group for the same reason as events: the
-              // page's real gate is the store-admin shell (no `allow-non-admin`, no role flag), and
-              // the manager who staffs the week is exactly who it locks out when the only link to it
-              // hangs off `isPowerUser`. Nor was the PowerUser group a workaround: that account
-              // administers no store, so the shell bounces it to /registrer and the link was a dead
-              // end for the only user who could see it. It goes beside the employee register because
-              // the week it plans is a week for those people, and a store admin without the
-              // `WorkforceScheduler` capability gets the page's own `wf_no_capability` blocker.
+              // WORKFORCE, four links, all four store-admin work and none of it gated on a role.
+              //
+              // The schedule and the roster came out of the PowerUser group, which was the wrong gate
+              // for both: each page mounts `AdminPage` with no `allow-non-admin` and reads no role
+              // flag, so what admits a caller is store-admin membership at the selected store. Nor was
+              // that group a workaround — the PowerUser account administers no store, so the shell
+              // bounces it to /registrer and the link was a dead end for the only user who could see
+              // it. Rates and training had no link at ALL, in any group: shipped reachable only by
+              // typing the URL, which no test could see because the sidebar was only ever checked
+              // link-by-link against the pages, never page-by-page against the links.
+              //
+              // They sit after the employee register because that is who they are all about, and they
+              // stay contiguous and in workflow order — plan the week, staff it, price it, certify the
+              // people doing it. Each page holds its own capability refusal (`wf_no_capability`, the
+              // roster's read-only mode, `wfrt_rate_no_capability`, the training gate), so a store
+              // admin the backend has not granted the capability is told so on the page instead of
+              // being denied the door.
               { label: this.$i('nav_workforce_schedule'), path: '/admin/workforce-schedule', icon: icons.workforceSchedule, isNew: true },
+              { label: this.$i('nav_workforce_roster'), path: '/admin/workforce-roster', icon: icons.workforceRoster, isNew: true },
+              { label: this.$i('nav_workforce_rates'), path: '/admin/workforce-rates', icon: icons.workforceRates, isNew: true },
+              { label: this.$i('nav_training_courses'), path: '/admin/training-courses', icon: icons.training, isNew: true },
               // Meals. A company agreement is a customer relationship — a firm that funds its
               // people's orders — so it sits beside the customer register rather than in sales.
               // It is appended BEFORE the onboarding push below, which still lands last.
@@ -430,12 +446,6 @@ export default {
             { label: this.$i('nav_reservations'), path: '/admin/reservations', icon: icons.reservations },
             { label: this.$i('nav_pos_settings'), path: '/admin/pos-settings', icon: icons.posSettings },
             { label: this.$i('nav_pos_reports'), path: '/admin/pos-reports', icon: icons.posReports },
-            // The roster stayed behind when the schedule and the events pipeline moved into the
-            // store-admin groups above. That is a known remaining disagreement, not a decision: this
-            // page's gate is the store-admin shell too, so a manager still has to type the URL. It is
-            // left for the lane that owns it rather than swept along here, and it is what the
-            // remaining role-gated assertions in `test/admin-nav-access.test.js` are pointed at.
-            { label: this.$i('nav_workforce_roster'), path: '/admin/workforce-roster', icon: icons.workforceRoster },
             { label: this.$i('nav_okam_growth'), path: '/admin/poweruser-growth', icon: icons.growth },
             { label: this.$i('nav_dintero'), path: '/admin/dintero', icon: icons.dintero },
             { label: this.$i('nav_surfboard'), path: '/admin/surfboard', icon: icons.surfboard },
