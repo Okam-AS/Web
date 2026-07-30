@@ -2,17 +2,21 @@
 // the page draws. No Vue, no network — so every rule below is testable on its own.
 //
 // THE LAW THIS FILE EXISTS TO KEEP, in the same spirit as `utils/workforce/week-grid.js`: UNKNOWN IS
-// NOT EMPTY AND NEITHER IS ZERO. An Events surface has FOUR ways to know nothing, and a venue reads
-// them as four different sentences:
+// NOT EMPTY AND NEITHER IS ZERO. An Events surface has three ways to know nothing, and a venue reads
+// them as three different sentences:
 //
 //   unknown        — the read failed or has not answered. Nothing may be claimed.
 //   disabled       — the server answered 404 EVENTS_DISABLED. The module is dark for this venue.
 //                    That is a configuration fact, not "this venue has no enquiries".
 //   forbidden      — 403. The caller is not an admin of this store. Also not "no enquiries".
-//   no-read-endpoint — the backend exposes no route that could answer. Not a failure at all, and the
-//                    one state a client is most tempted to launder into a stale cached value.
 //
 // Only a read that ANSWERED produces rows, and an answered read holding no rows is a true empty.
+//
+// There used to be a fourth, `no-read-endpoint`: the backend exposed no route that could answer, so
+// the deposit and the settlement could be neither confirmed nor denied. Both routes landed in
+// `86cb4d25` and the state went with them. It is recorded here because deleting it was the point:
+// a state that outlives its cause does not decay into a harmless leftover — it keeps a surface built
+// on the answer to the last mutation, which is a copy of the truth and not the truth.
 //
 // MONEY IS READ, NEVER COMPUTED. Nothing in this file adds two amounts together. Where the backend
 // exposes a figure it is passed through as the integer minor units it already is; where it does not,
@@ -82,51 +86,79 @@ function detailOf (error) {
   return (error && error.message) || null;
 }
 
-// ---- facets the backend has no read for -------------------------------------------------------
+// ---- the three readable facets ----------------------------------------------------------------
+//
+// The deposit, the settlement and the run sheet each have an idempotent admin GET, and each says
+// "there is none" in a different dialect: the run sheet 404s with its own code, the settlement
+// answers 200 with a null field, and the deposits answer an empty list. Three readers rather than one
+// because the differences are on the WIRE — a single reader would have to guess which dialect it was
+// looking at, and guessing wrong turns an absence into an unknown or, far worse, the reverse.
 
-/**
- * The deposit and the settlement have NO admin GET (see the note at the foot of
- * `~/utils/events/events-client`). This is their own axis, because "the backend cannot tell us" is a
- * different sentence from "the read failed" and a very different one from "there is none".
- */
-export const FACET_NO_READ_ENDPOINT = 'no-read-endpoint';
-/** A mutation answered and its projection is in hand — for this tab, until it is reloaded. */
+/** A read ANSWERED and there is one; its projection is in hand. */
 export const FACET_HELD = 'held';
 /** 404 `EVENTS_DISABLED` from the facet's own gate (the settlement machine's `Events.Settlement` flag). */
 export const FACET_GATED = 'gated';
-/** A call was made and refused for some other reason; the facet's real state stays unknown. */
+/** A call was made and refused for some other reason, or none has been made yet. Nothing is claimed. */
 export const FACET_UNKNOWN = 'unknown';
-/**
- * The read ANSWERED and there is genuinely none. Only the run sheet can reach this state, because the
- * run sheet is the only one of the three facets the backend lets an admin read
- * (`GET .../run-sheet` → `EVENTS_RUNSHEET_NOT_FOUND`). The deposit and the settlement can never reach
- * it: with no route to ask, no absence is ever established.
- */
+/** The read ANSWERED and there is genuinely none. An established absence, never an assumed one. */
 export const FACET_NONE = 'none';
 
 /**
- * Reads a facet whose only source is the answer to a mutation.
+ * The settlement read (`GET .../settlement` → `EventsSettlementReadView`).
  *
- * With neither a view nor an error the answer is `no-read-endpoint`, NOT "none" — nothing has been
- * asked, and nothing could have been asked, so no absence has been established.
+ * Its absence dialect is a 200 whose `settlement` field is null, which the server documents as "none
+ * exists, never unknown" — so it is `none` and not `unknown`. A 200 that is not that shape at all IS
+ * unknown: the read did not answer the question asked, and an unrecognised body must never be read as
+ * an empty settlement.
+ *
+ * 404 `EVENTS_DISABLED` is `gated` and says nothing about whether a settlement exists — the flag
+ * gates the read and the writes together, so a gated store cannot even be asked.
  */
-export function readFacet (view, error) {
+export function readSettlement (payload, error) {
   if (error) {
     if (error.code === 'EVENTS_DISABLED') {
       return { state: FACET_GATED, view: null, code: error.code, detail: detailOf(error) };
     }
     return { state: FACET_UNKNOWN, view: null, code: codeOf(error), detail: detailOf(error) };
   }
-  if (view) { return { state: FACET_HELD, view, code: null, detail: null }; }
-  return { state: FACET_NO_READ_ENDPOINT, view: null, code: null, detail: null };
+  if (!payload || typeof payload !== 'object') {
+    return { state: FACET_UNKNOWN, view: null, code: null, detail: null };
+  }
+  return payload.settlement
+    ? { state: FACET_HELD, view: payload.settlement, code: null, detail: null }
+    : { state: FACET_NONE, view: null, code: null, detail: null };
 }
 
 /**
- * The run sheet, which — unlike the deposit and the settlement — HAS an admin GET.
+ * The deposit read (`GET .../deposits` → a LIST).
  *
- * That one difference is the whole reason this is a second function: `EVENTS_RUNSHEET_NOT_FOUND` is a
- * real answer meaning there is no sheet yet, and it must not be collapsed into the deposit's
- * "we cannot ask". Not-yet-asked is `unknown`, asked-and-none is `none`, and they are two sentences.
+ * A list, not a view, and it is kept as one: an event accumulates deposits across a
+ * cancel-and-reissue, and the server returns the whole history rather than naming a current one.
+ * Collapsing it to `rows[0]` here would pick by position — which is how a cancelled deposit ends up
+ * being shown as the live one.
+ *
+ * `[]` is `none`: the read answered and this event has never had a deposit. Anything that is not an
+ * array is `unknown`, for the same reason as above.
+ */
+export function readDeposits (payload, error) {
+  if (error) {
+    if (error.code === 'EVENTS_DISABLED') {
+      return { state: FACET_GATED, rows: null, code: error.code, detail: detailOf(error) };
+    }
+    return { state: FACET_UNKNOWN, rows: null, code: codeOf(error), detail: detailOf(error) };
+  }
+  if (!Array.isArray(payload)) {
+    return { state: FACET_UNKNOWN, rows: null, code: null, detail: null };
+  }
+  return payload.length
+    ? { state: FACET_HELD, rows: payload, code: null, detail: null }
+    : { state: FACET_NONE, rows: [], code: null, detail: null };
+}
+
+/**
+ * The run sheet, whose absence dialect is a code: `EVENTS_RUNSHEET_NOT_FOUND` is a real answer
+ * meaning there is no sheet yet. Not-yet-asked stays `unknown`, asked-and-none is `none`, and they
+ * are two sentences.
  */
 export function readRunSheet (view, error) {
   if (error) {
@@ -140,6 +172,58 @@ export function readRunSheet (view, error) {
   }
   if (view) { return { state: FACET_HELD, view, code: null, detail: null }; }
   return { state: FACET_UNKNOWN, view: null, code: null, detail: null };
+}
+
+/**
+ * The store's guest-notification health (`GET .../notifications/health`).
+ *
+ * The envelope is the answer, not the list inside it: an empty `deadLettered` means "every guest was
+ * reached" with `dispatchEnabled` true and "nothing has been delivered at all" with it false, and a
+ * surface that rendered "0 problems" for the second would assert the exact falsehood the read exists
+ * to prevent. So there is no `none` state here — an answered read is HELD whatever it contains, and
+ * the panel reads the envelope.
+ */
+export function readNotificationHealth (payload, error) {
+  if (error) {
+    if (error.code === 'EVENTS_DISABLED') {
+      return { state: FACET_GATED, view: null, code: error.code, detail: detailOf(error) };
+    }
+    return { state: FACET_UNKNOWN, view: null, code: codeOf(error), detail: detailOf(error) };
+  }
+  if (!payload || typeof payload !== 'object' || typeof payload.dispatchEnabled !== 'boolean') {
+    return { state: FACET_UNKNOWN, view: null, code: null, detail: null };
+  }
+  return { state: FACET_HELD, view: payload, code: null, detail: null };
+}
+
+// ---- which deposit an action applies to --------------------------------------------------------
+//
+// Chosen by STATUS off the read, never by position in the list and never from the EVENT's own
+// lifecycle status, which moves independently of the deposit's. Both lists mirror a server guard
+// exactly (`EventsDepositService.CancelAsync` / `RefundAsync`); they narrow nothing and widen
+// nothing, so the server's refusal is still the one that decides.
+
+/** `CancelAsync` accepts an UNPAID request only. */
+export const CANCELLABLE_DEPOSIT_STATUSES = ['Requested', 'Pending'];
+
+/**
+ * `RefundAsync` accepts a paid or partially-refunded deposit, and a `Quarantined` one — the
+ * late-payment row whose whole purpose is to be resolved by hand.
+ */
+export const REFUNDABLE_DEPOSIT_STATUSES = ['Paid', 'PartiallyRefunded', 'Quarantined'];
+
+/**
+ * The one deposit an action applies to, or null.
+ *
+ * Null when the read has not answered: with no rows there is no deposit to name, and an id may not be
+ * guessed from the event. Null too when more than one row matches — the server's invariant is one
+ * active deposit at a time, so two would mean the invariant broke, and picking one of them would hide
+ * that rather than surface it.
+ */
+export function actionableDeposit (rows, statuses) {
+  if (!Array.isArray(rows)) { return null; }
+  const matches = rows.filter(row => row && statuses.includes(row.status));
+  return matches.length === 1 ? matches[0] : null;
 }
 
 // ---- the lifecycle ----------------------------------------------------------------------------

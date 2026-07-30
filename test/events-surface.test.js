@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils'
 import translations from '~/translations'
 import EventsPipeline from '~/components/admin/events/EventsPipeline.vue'
 import EventsJourney from '~/components/admin/events/EventsJourney.vue'
-import { readListing, readFacet, readRunSheet } from '~/utils/events/journey'
+import { readListing, readDeposits, readSettlement, readRunSheet } from '~/utils/events/journey'
 
 // The real Norwegian dictionary, resolved the way plugins/i18n.js resolves it, so these tests assert
 // the copy a venue actually sees — and fail if a key was never added to no.ts.
@@ -174,13 +174,16 @@ function version (over) {
   }, over)
 }
 
+// A settlement read as the server shapes it: the envelope, with the settlement inside or null.
+const settlementRead = settlement => ({ publicId: 'p', eventStatus: 'Settling', settlement })
+
 function journey (over) {
   const opts = over || {}
   return mount(EventsJourney, {
     propsData: {
       detail: opts.detail || detail(),
-      deposit: opts.deposit || readFacet(null, null),
-      settlement: opts.settlement || readFacet(null, null),
+      deposits: opts.deposits || readDeposits([], null),
+      settlement: opts.settlement || readSettlement(settlementRead(null), null),
       runSheet: opts.runSheet || readRunSheet(null, null),
       locale: 'no',
       currency: opts.currency === undefined ? 'NOK' : opts.currency
@@ -189,17 +192,19 @@ function journey (over) {
   })
 }
 
-describe('a facet with no read endpoint says so, rather than showing an empty panel', () => {
-  test('the deposit and the settlement both start unreadable, not absent', () => {
+describe('an ANSWERED absence is a different sentence from every way of not knowing', () => {
+  // Both facets now have an idempotent GET, so "there is none" is a claim the server made. It must
+  // still be told apart from the gate and from a read that fell over.
+  test('an answered read with nothing in it says so, and names the absence', () => {
     const text = journey().text()
-    expect(text).toContain(translations.no.ev_deposit_no_read)
-    expect(text).toContain(translations.no.ev_settlement_no_read)
+    expect(text).toContain(translations.no.ev_deposit_none)
+    expect(text).toContain(translations.no.ev_settlement_none)
   })
 
-  // The positive control: handed a projection, the same panels DO render the figures.
-  test('a deposit a mutation returned is rendered in full', () => {
+  // The positive control: handed a read that DID hold rows, the same panels render the figures.
+  test('a deposit the read returned is rendered in full', () => {
     const text = journey({
-      deposit: readFacet({
+      deposits: readDeposits([{
         id: 9,
         status: 'Paid',
         amountMinor: 150000,
@@ -211,24 +216,38 @@ describe('a facet with no read endpoint says so, rather than showing an empty pa
         paidAtUtc: '2026-07-03T10:00:00',
         refundedMinor: 0,
         receipts: []
-      }, null)
+      }], null)
     }).text()
     expect(text).toContain('kr 1 500,00')
     expect(text).toContain('Vipps')
-    expect(text).not.toContain(translations.no.ev_deposit_no_read)
+    expect(text).not.toContain(translations.no.ev_deposit_none)
   })
 
-  test('the settlement machine being GATED is not the same sentence as having no read for it', () => {
-    const text = journey({ settlement: readFacet(null, problem(404, 'EVENTS_DISABLED')) }).text()
+  // The whole history, because a withdrawn request and its replacement are two facts and the newest
+  // is not automatically the relevant one.
+  test('every deposit the enquiry has had is drawn, not just the newest', () => {
+    const wrapper = journey({
+      deposits: readDeposits([
+        { id: 8, status: 'Cancelled', amountMinor: 150000, currencyCode: 'NOK', paymentType: 'Vipps', refundedMinor: 0, receipts: [] },
+        { id: 9, status: 'Paid', amountMinor: 150000, currencyCode: 'NOK', paymentType: 'Vipps', refundedMinor: 0, receipts: [] }
+      ], null)
+    })
+    expect(wrapper.text()).toContain('Cancelled')
+    expect(wrapper.text()).toContain('Paid')
+  })
+
+  test('the settlement machine being GATED is not the same sentence as there being none', () => {
+    const text = journey({ settlement: readSettlement(null, problem(404, 'EVENTS_DISABLED')) }).text()
     expect(text).toContain(translations.no.ev_settlement_gated)
-    expect(text).not.toContain(translations.no.ev_settlement_no_read)
-    expect(translations.no.ev_settlement_gated).not.toBe(translations.no.ev_settlement_no_read)
+    expect(text).not.toContain(translations.no.ev_settlement_none)
+    expect(translations.no.ev_settlement_gated).not.toBe(translations.no.ev_settlement_none)
   })
 
   test('and neither is the same sentence as a failed call', () => {
-    const text = journey({ settlement: readFacet(null, problem(409, 'EVENTS_CONFLICT')) }).text()
+    const text = journey({ settlement: readSettlement(null, problem(409, 'EVENTS_CONFLICT')) }).text()
     expect(text).toContain(translations.no.ev_settlement_unknown)
     expect(text).not.toContain(translations.no.ev_settlement_gated)
+    expect(text).not.toContain(translations.no.ev_settlement_none)
   })
 
   // The run sheet is the one facet that can be asked, so it is the one that can answer "none yet".
@@ -278,7 +297,7 @@ describe('money is read, never assembled', () => {
 
   test('a settlement line with no truth yet is a dash — while a truth of ZERO is money', () => {
     const text = journey({
-      settlement: readFacet({
+      settlement: readSettlement(settlementRead({
         id: 3,
         status: 'Draft',
         statementTotalMinor: 150000,
@@ -290,10 +309,10 @@ describe('money is read, never assembled', () => {
           { lineNo: 1, kind: 'DepositApplied', sourceKind: 'Deposit', sourceReference: '9', amountMinor: 150000, truthAmountMinor: null, matchState: 'Unverified', note: null, adjustmentReason: null },
           { lineNo: 2, kind: 'PosCheck', sourceKind: 'OrderRef', sourceReference: 'ord-1', amountMinor: 0, truthAmountMinor: 0, matchState: 'Matched', note: null, adjustmentReason: null }
         ]
-      }, null)
+      }), null)
     }).text()
     const cells = journey({
-      settlement: readFacet({
+      settlement: readSettlement(settlementRead({
         id: 3,
         status: 'Draft',
         statementTotalMinor: 150000,
@@ -305,7 +324,7 @@ describe('money is read, never assembled', () => {
           { lineNo: 1, kind: 'DepositApplied', sourceKind: 'Deposit', sourceReference: '9', amountMinor: 150000, truthAmountMinor: null, matchState: 'Unverified' },
           { lineNo: 2, kind: 'PosCheck', sourceKind: 'OrderRef', sourceReference: 'ord-1', amountMinor: 0, truthAmountMinor: 0, matchState: 'Matched' }
         ]
-      }, null)
+      }), null)
     }).findAll('tbody tr')
 
     // An unverified line must not read as matched at its own recorded amount, and must not read as 0.
@@ -316,7 +335,7 @@ describe('money is read, never assembled', () => {
 
   test('the statement total is shown, and no balance is netted off it', () => {
     const wrapper = journey({
-      settlement: readFacet({
+      settlement: readSettlement(settlementRead({
         id: 3,
         status: 'Draft',
         statementTotalMinor: 150000,
@@ -325,7 +344,7 @@ describe('money is read, never assembled', () => {
         closedByUserId: null,
         revision: null,
         lines: []
-      }, null)
+      }), null)
     })
     expect(wrapper.text()).toContain('kr 1 500,00')
     expect(wrapper.text()).toContain(translations.no.ev_settlement_no_balance)
@@ -333,7 +352,7 @@ describe('money is read, never assembled', () => {
 
   test('and no outstanding deposit figure is worked out either', () => {
     const wrapper = journey({
-      deposit: readFacet({
+      deposits: readDeposits([{
         id: 9,
         status: 'PartiallyRefunded',
         amountMinor: 150000,
@@ -345,7 +364,7 @@ describe('money is read, never assembled', () => {
         paidAtUtc: '2026-07-03T10:00:00',
         refundedMinor: 50000,
         receipts: []
-      }, null)
+      }], null)
     })
     expect(wrapper.text()).toContain('kr 1 500,00')
     expect(wrapper.text()).toContain('kr 500,00')
@@ -388,7 +407,7 @@ describe('an event is a dated thing', () => {
 })
 
 describe('an absent author renders honestly', () => {
-  const settlementWith = closedByUserId => readFacet({
+  const settlementWith = closedByUserId => readSettlement(settlementRead({
     id: 3,
     status: 'Closed',
     statementTotalMinor: 0,
@@ -397,7 +416,7 @@ describe('an absent author renders honestly', () => {
     closedByUserId,
     revision: null,
     lines: []
-  }, null)
+  }), null)
 
   // Rows written before the claim fix in a69edf41 carry a null author while their action genuinely
   // happened, so this is an ordinary value — not a defect to dress up as a user.
@@ -474,7 +493,8 @@ describe('every ev_ key exists in all three dictionaries', () => {
   test('the honest-state sentences are all distinct in all three languages', () => {
     const distinguishing = [
       'ev_pipeline_empty', 'ev_pipeline_disabled', 'ev_pipeline_forbidden', 'ev_pipeline_unknown',
-      'ev_settlement_no_read', 'ev_settlement_gated', 'ev_settlement_unknown',
+      'ev_settlement_none', 'ev_settlement_gated', 'ev_settlement_unknown',
+      'ev_deposit_none', 'ev_deposit_gated', 'ev_deposit_unknown',
       'ev_runsheet_none', 'ev_runsheet_unknown'
     ]
     for (const locale of ['no', 'en', 'de']) {
