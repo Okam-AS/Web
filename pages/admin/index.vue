@@ -369,6 +369,11 @@
                 {{ notification.message }}
               </div>
             </div>
+
+            <!-- Market Card — country, the currency it implies, and the zone the venue's business
+                 dates are cut in. It reads and writes its own state (GET/PUT /stores/{id}/market),
+                 which is why it is a component and not more inline markup here. -->
+            <StoreMarketCard :store-id="selectedStore" />
           </div>
         </div>
       </div>
@@ -381,9 +386,10 @@ import VueQrcode from '@chenfengyuan/vue-qrcode';
 import AdminPage from '~/components/organisms/AdminPage.vue';
 import Loading from '~/components/atoms/Loading.vue';
 import MultiDateCalendar from '~/components/admin/MultiDateCalendar.vue';
+import StoreMarketCard from '~/components/admin/StoreMarketCard.vue';
 
 export default {
-  components: { AdminPage, Loading, VueQrcode, MultiDateCalendar },
+  components: { AdminPage, Loading, VueQrcode, MultiDateCalendar, StoreMarketCard },
   data: () => ({
     isLoading: false,
     storeName: '',
