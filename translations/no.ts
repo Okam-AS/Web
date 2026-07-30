@@ -2634,7 +2634,10 @@ export default {
   wfme_pub_acknowledge_failed: 'Kunne ikke bekrefte mottak.',
 
   // Bemanning — ansattlisten (personer, engasjementer, fullmakter, funksjoner, vilkår)
-  nav_workforce_roster: 'Ansatte',
+  // Sidemeny-etiketten er modulens eget ord, ikke sidens tittel: `nav_employees` heter allerede
+  // 'Ansatte', og nå som denne lenken ligger i samme gruppe ville to identiske etiketter stått rett
+  // under hverandre i menyen til én og samme daglige leder.
+  nav_workforce_roster: 'Bemanning',
   wfr_page_title: 'Ansatte',
   wfr_page_intro: 'Hvem som er ansatt i denne butikken, hva hver enkelt har fullmakt til, og hvordan et ansettelsesforhold avsluttes.',
 
@@ -3255,6 +3258,9 @@ export default {
   ev_toast_reconciled: 'Oppgjøret er avstemt.',
   ev_toast_settled: 'Oppgjøret er lukket.',
 
+  // Kortere enn sidetittelen med vilje: 'Opplæring og internkontroll' er hva siden gjør, 'Opplæring'
+  // er hva du leter etter i menyen.
+  nav_training_courses: 'Opplæring',
   trn_page_title: 'Opplæring og internkontroll',
   trn_page_intro: 'Ett kurs blir til dokumentasjon: lag kurset, publiser en versjon, tildel den, før gjennomføringen — og slå opp hva personen faktisk innehar.',
   trn_reload: 'Les inn på nytt',
@@ -3431,6 +3437,7 @@ export default {
   trn_holdings_asof: 'Serveren regnet dette ut {asOf}.',
   trn_holdings_asof_unknown: 'Tidspunktet serveren regnet dette ut på, fulgte ikke med svaret.',
   // --- Workforce: satser og timer (pages/admin/workforce-rates.vue) ---
+  nav_workforce_rates: 'Satser og timer',
   wfrt_page_title: 'Satser og timer',
   wfrt_page_intro: 'Hva en time koster, hva som faktisk ble jobbet, og filen som tar timene videre til lønn.',
   wfrt_context_failed: 'Vi fikk ikke lest butikkens tidssone og fullmakter. Siden viser ingenting framfor å gjette.',
