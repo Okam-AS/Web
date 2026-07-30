@@ -236,6 +236,8 @@ import {
   MARGIN_NOT_FOUND,
   MARGIN_FORBIDDEN,
   MARGIN_STALE_REVISION,
+  MARGIN_REVISION_REQUIRED,
+  MARGIN_REVISION_INVALID,
   MARGIN_RECIPE_NAME_CONFLICT,
   MARGIN_VERSION_INPUT_INVALID,
   MARGIN_COMPONENT_INVALID,
@@ -255,11 +257,21 @@ const STATUS_MODULE_OFF = 'module-off';
 const STATUS_ON = 'on';
 
 // Every `margin.*` code this surface can meet, mapped to copy. Keyed on `code` and never on the
-// server's `detail`, which is English prose written for a developer.
+// server's `detail`, which is English prose written for a developer — and never on the STATUS, which
+// is why the concurrency split below cost this page nothing: two of its three arms changed status.
+//
+// A code that is not in this map falls through to `mrg_err_generic` — "Something went wrong. Nothing
+// was saved." That sentence is correct for a surprise and wrong for anything a venue could fix, so a
+// new server code is not a cosmetic omission here: it turns an instruction into an alarm.
 const ERROR_KEYS = {
   [MARGIN_NOT_FOUND]: 'mrg_err_not_found',
   [MARGIN_FORBIDDEN]: 'mrg_err_forbidden',
+  // The three concurrency arms, three sentences. `stale` is now unambiguously a lost race — before
+  // the backend split it also carried the two cases below, which is why its copy could only say
+  // "try again" and never why.
   [MARGIN_STALE_REVISION]: 'mrg_err_stale',
+  [MARGIN_REVISION_REQUIRED]: 'mrg_err_revision_required',
+  [MARGIN_REVISION_INVALID]: 'mrg_err_revision_invalid',
   [MARGIN_RECIPE_NAME_CONFLICT]: 'mrg_err_name_conflict',
   [MARGIN_VERSION_INPUT_INVALID]: 'mrg_err_version_input',
   [MARGIN_COMPONENT_INVALID]: 'mrg_err_component',

@@ -3,7 +3,6 @@ import {
   READ_DISABLED,
   READ_FORBIDDEN,
   READ_ANSWERED,
-  FACET_NO_READ_ENDPOINT,
   FACET_GATED,
   FACET_UNKNOWN,
   FACET_HELD,
@@ -16,10 +15,15 @@ import {
   PHASE_SEQUENCE,
   DEPOSIT_RAILS_WIRED,
   DEPOSIT_RAILS_UNWIRED,
+  CANCELLABLE_DEPOSIT_STATUSES,
+  REFUNDABLE_DEPOSIT_STATUSES,
   readListing,
   readDetail,
-  readFacet,
+  readDeposits,
+  readSettlement,
+  readNotificationHealth,
   readRunSheet,
+  actionableDeposit,
   readEventStatus,
   buildPhaseRail,
   readAuthor,
@@ -88,47 +92,142 @@ describe('readDetail — the same axis for a single object', () => {
   })
 })
 
-// The load-bearing one for this module. The backend has no admin GET for a deposit and none for a
-// settlement, so "we never asked" is a state — and it is the state a client is most tempted to
-// launder into a stale value or into "there is none".
-describe('a facet the backend has no read for', () => {
-  test('nothing asked and nothing refused is NOT "there is none"', () => {
-    const facet = readFacet(null, null)
-    expect(facet.state).toBe(FACET_NO_READ_ENDPOINT)
-    expect(facet.view).toBeNull()
-  })
+// The settlement's absence dialect is a 200 whose `settlement` field is null. That is the server's
+// own statement that there is none — as distinct from the gate, from a failure, and from not having
+// asked, which are three ways of not knowing.
+describe('the settlement read', () => {
+  const envelope = settlement => ({ publicId: 'p', eventStatus: 'Settling', settlement })
 
-  // The positive control: given an actual projection, the same function DOES hold it.
-  test('a projection a mutation returned is held', () => {
-    const facet = readFacet({ id: 7, status: 'Paid' }, null)
+  test('a 200 carrying a settlement holds it, with its revision', () => {
+    const facet = readSettlement(envelope({ id: 3, status: 'Draft', revision: 'rev-1' }), null)
     expect(facet.state).toBe(FACET_HELD)
-    expect(facet.view.id).toBe(7)
+    expect(facet.view.revision).toBe('rev-1')
   })
 
-  test('EVENTS_DISABLED on the facet is "gated", which is not "unknown"', () => {
-    expect(readFacet(null, problem(404, 'EVENTS_DISABLED')).state).toBe(FACET_GATED)
-    expect(readFacet(null, problem(409, 'EVENTS_CONFLICT')).state).toBe(FACET_UNKNOWN)
+  test('a 200 whose settlement is null is NONE — an answered absence, not an unknown', () => {
+    const facet = readSettlement(envelope(null), null)
+    expect(facet.state).toBe(FACET_NONE)
+    expect(facet.view).toBeNull()
+    expect(FACET_NONE).not.toBe(FACET_UNKNOWN)
+  })
+
+  // A null revision is what a SQLite host answers, and it is ordinary. The settlement is still HELD:
+  // treating a missing rowversion as "no settlement" would blank the whole tab on every local run.
+  test('a settlement whose revision is null is still a settlement', () => {
+    const facet = readSettlement(envelope({ id: 3, status: 'Draft', revision: null }), null)
+    expect(facet.state).toBe(FACET_HELD)
+    expect(facet.view.revision).toBeNull()
+  })
+
+  test('not yet asked is unknown, and so is a 200 that is not this shape at all', () => {
+    expect(readSettlement(null, null).state).toBe(FACET_UNKNOWN)
+    expect(readSettlement('nonsense', null).state).toBe(FACET_UNKNOWN)
+  })
+
+  test('EVENTS_DISABLED is gated, and any other refusal is unknown', () => {
+    expect(readSettlement(null, problem(404, 'EVENTS_DISABLED')).state).toBe(FACET_GATED)
+    expect(readSettlement(null, problem(409, 'EVENTS_CONFLICT')).state).toBe(FACET_UNKNOWN)
     expect(FACET_GATED).not.toBe(FACET_UNKNOWN)
   })
 
   test('an error never leaves a view behind', () => {
-    expect(readFacet({ id: 7 }, problem(409, 'EVENTS_CONFLICT')).view).toBeNull()
+    expect(readSettlement({ settlement: { id: 3 } }, problem(409, 'EVENTS_CONFLICT')).view).toBeNull()
   })
 })
 
-describe('the run sheet is the one facet that CAN say "there is none"', () => {
+// The deposit's dialect is an empty list, and the list is kept as one.
+describe('the deposit read', () => {
+  test('an empty list is NONE, and a populated one is HELD with every row', () => {
+    expect(readDeposits([], null).state).toBe(FACET_NONE)
+    const held = readDeposits([{ id: 8, status: 'Cancelled' }, { id: 9, status: 'Paid' }], null)
+    expect(held.state).toBe(FACET_HELD)
+    expect(held.rows).toHaveLength(2)
+  })
+
+  test('an empty list still carries an array, so a caller can count zero without a null check', () => {
+    expect(readDeposits([], null).rows).toEqual([])
+    // …whereas not knowing carries no array at all, so "0 deposits" cannot be printed over it.
+    expect(readDeposits(null, null).rows).toBeNull()
+    expect(readDeposits(null, problem(500, null)).rows).toBeNull()
+  })
+
+  test('a 200 that is not an array is unknown, never an empty list', () => {
+    expect(readDeposits({ id: 9 }, null).state).toBe(FACET_UNKNOWN)
+  })
+
+  test('EVENTS_DISABLED is gated', () => {
+    expect(readDeposits(null, problem(404, 'EVENTS_DISABLED')).state).toBe(FACET_GATED)
+  })
+})
+
+// Which deposit an action applies to is decided by STATUS, never by position.
+describe('the deposit an action applies to', () => {
+  const rows = [
+    { id: 8, status: 'Cancelled' },
+    { id: 9, status: 'Pending' },
+    { id: 10, status: 'Expired' }
+  ]
+
+  test('cancel finds the unpaid request wherever it sits in the history', () => {
+    expect(actionableDeposit(rows, CANCELLABLE_DEPOSIT_STATUSES).id).toBe(9)
+    // The newest row is Expired. Picking by position would have named it.
+    expect(rows[rows.length - 1].id).toBe(10)
+  })
+
+  test('refund finds a paid, partially refunded or quarantined one — and nothing else', () => {
+    for (const status of ['Paid', 'PartiallyRefunded', 'Quarantined']) {
+      expect(actionableDeposit([{ id: 1, status }], REFUNDABLE_DEPOSIT_STATUSES).id).toBe(1)
+    }
+    for (const status of ['Pending', 'Refunded', 'Forfeited', 'Expired', 'Failed']) {
+      expect(actionableDeposit([{ id: 1, status }], REFUNDABLE_DEPOSIT_STATUSES)).toBeNull()
+    }
+  })
+
+  test('no rows, or rows not yet read, name nothing — an id is never guessed', () => {
+    expect(actionableDeposit([], CANCELLABLE_DEPOSIT_STATUSES)).toBeNull()
+    expect(actionableDeposit(null, CANCELLABLE_DEPOSIT_STATUSES)).toBeNull()
+  })
+
+  // The server's invariant is one active deposit at a time. Two matching rows means it broke, and
+  // choosing one of them would act on money while hiding that.
+  test('two candidates name none rather than picking one', () => {
+    const twoPending = [{ id: 9, status: 'Pending' }, { id: 11, status: 'Pending' }]
+    expect(actionableDeposit(twoPending, CANCELLABLE_DEPOSIT_STATUSES)).toBeNull()
+  })
+})
+
+// The envelope is the answer. An empty dead-letter list means two opposite things depending on
+// whether the drain is running at all, so there is no NONE state here to collapse them into.
+describe('the notification health read', () => {
+  test('an answered read is held whatever it contains, including empty', () => {
+    const off = readNotificationHealth({ dispatchEnabled: false, queuedCount: 12, deadLetteredCount: 0, deadLettered: [] }, null)
+    expect(off.state).toBe(FACET_HELD)
+    expect(off.view.dispatchEnabled).toBe(false)
+    expect(off.view.queuedCount).toBe(12)
+  })
+
+  test('a body without the dispatch flag is unknown — the flag is what makes an empty list legible', () => {
+    expect(readNotificationHealth({ deadLettered: [] }, null).state).toBe(FACET_UNKNOWN)
+    expect(readNotificationHealth(null, null).state).toBe(FACET_UNKNOWN)
+  })
+
+  test('EVENTS_DISABLED is gated, not "nothing is wrong"', () => {
+    expect(readNotificationHealth(null, problem(404, 'EVENTS_DISABLED')).state).toBe(FACET_GATED)
+  })
+})
+
+describe('the run sheet says "there is none" with a code of its own', () => {
   test('EVENTS_RUNSHEET_NOT_FOUND is an answer, not a failure', () => {
     expect(readRunSheet(null, problem(404, 'EVENTS_RUNSHEET_NOT_FOUND')).state).toBe(FACET_NONE)
   })
 
-  // The distinction this whole second function exists for: the SAME error means different things on
-  // a facet that can be asked and one that cannot.
-  test('and the deposit facet would call the same shape merely unknown', () => {
-    const asRunSheet = readRunSheet(null, problem(404, 'EVENTS_RUNSHEET_NOT_FOUND')).state
-    const asDeposit = readFacet(null, problem(404, 'EVENTS_RUNSHEET_NOT_FOUND')).state
-    expect(asRunSheet).toBe(FACET_NONE)
-    expect(asDeposit).toBe(FACET_UNKNOWN)
-    expect(asRunSheet).not.toBe(asDeposit)
+  // The three facets answer "there is none" in three different dialects, and one reader cannot serve
+  // them all: the run sheet's own 404 code means nothing to the other two.
+  test('the run sheet code means nothing to the settlement or the deposit reader', () => {
+    const notFound = problem(404, 'EVENTS_RUNSHEET_NOT_FOUND')
+    expect(readRunSheet(null, notFound).state).toBe(FACET_NONE)
+    expect(readSettlement(null, notFound).state).toBe(FACET_UNKNOWN)
+    expect(readDeposits(null, notFound).state).toBe(FACET_UNKNOWN)
   })
 
   test('not yet asked is unknown, not none — an absence must be established, not assumed', () => {

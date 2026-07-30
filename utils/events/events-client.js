@@ -1,11 +1,14 @@
-// The Events admin API client — route-for-route with the four `/events` controllers.
+// The Events admin API client — route-for-route with the five `/events` controllers.
 //
 // It adds nothing the backend does not have. Every method below maps to an action that exists in
-// `Controllers/EventsController.cs`, `EventsDepositsController.cs`, `EventsRunSheetController.cs` or
-// `EventsSettlementController.cs`; the comment beside each is the route those files declare. A method
-// with no controller action is a method that does not belong here — the two facts this surface most
-// has to be honest about are both *absences*, and they are recorded at the bottom of this file rather
-// than papered over with a client-side reconstruction.
+// `Controllers/EventsController.cs`, `EventsDepositsController.cs`, `EventsNotificationsController.cs`,
+// `EventsRunSheetController.cs` or `EventsSettlementController.cs`; the comment beside each is the route
+// those files declare. A method with no controller action is a method that does not belong here.
+//
+// EVERY FACET OF AN EVENT IS READABLE. The deposit and the settlement each have an idempotent admin GET
+// (`86cb4d25`), so nothing on this surface has to be reconstructed from the answer to the last mutation
+// — which is what a client does when it is told a read does not exist, and it is why that claim, once
+// it stops being true, is more dangerous than no claim at all.
 //
 // The HTTP layer is `WorkforceClientBase` (`~/utils/workforce/api-client`), reused rather than copied:
 // it is deliberately route-agnostic (its own header says so) and owns the one thing worth having once
@@ -60,6 +63,23 @@ export const EVENTS_RUNSHEET_NOT_FOUND = 'EVENTS_RUNSHEET_NOT_FOUND';
 export const EVENTS_STATE = 'EVENTS_STATE';
 export const EVENTS_PAYMENT_PROVIDER = 'EVENTS_PAYMENT_PROVIDER';
 export const EVENTS_SETTLEMENT_NOT_RECONCILED = 'EVENTS_SETTLEMENT_NOT_RECONCILED';
+export const EVENTS_NOTIFICATION_ALREADY_SENT = 'EVENTS_NOTIFICATION_ALREADY_SENT';
+
+/**
+ * 400 — a settlement mutation arrived with no `If-Match` while the server row HAS a revision.
+ *
+ * It is separated from `EVENTS_CONFLICT` at the source (`EventsSettlementConcurrency.GuardIfMatch`)
+ * and the separation is the whole point: `EVENTS_CONFLICT` carries `retryable: true` and means
+ * "re-read and retry", advice a caller that is not sending the header at all can never act on — the
+ * retry fails identically, forever. This code means "fetch the revision first", and the recovery is a
+ * DIFFERENT request: `GetSettlement`.
+ */
+export const EVENTS_REVISION_REQUIRED = 'EVENTS_REVISION_REQUIRED';
+
+/**
+ * 409 — a genuine lost race: the `If-Match` sent was well-formed and no longer current. Retryable,
+ * and now ONLY this. A malformed token is `EVENTS_VALIDATION`, an absent one is the code above.
+ */
 export const EVENTS_CONFLICT = 'EVENTS_CONFLICT';
 
 export class EventsService extends WorkforceClientBase {
@@ -112,7 +132,8 @@ export class EventsService extends WorkforceClientBase {
    * GET /events/admin/{storeId}/events/{eventId} — the admin detail.
    *
    * Returns the event, its proposal versions (with lines) and its append-only transitions. It carries
-   * NO deposit and NO settlement: see the absences recorded at the bottom of this file.
+   * NO deposit and NO settlement — `EventsViewMapper.ToDetail` projects neither — so those two are
+   * their own reads (`ListDeposits`, `GetSettlement`) and are never inferred from this one.
    */
   GetEvent (storeId, eventId) {
     return this._events('GET', this._event(storeId, eventId));
@@ -138,6 +159,22 @@ export class EventsService extends WorkforceClientBase {
   // ---- deposit ----------------------------------------------------------------------------------
 
   /**
+   * GET .../deposits — the idempotent admin deposit read.
+   *
+   * Answers a LIST, not "the current deposit", and the list is the reason this is not a single view:
+   * an event accumulates deposits across a cancel-and-reissue, and the server returns the whole
+   * history rather than guessing which one is meant. Which one an action applies to is decided from
+   * the STATUS on each row, never from its position.
+   *
+   * An event with no deposits answers `[]` — an answered absence, which is a different fact from a
+   * read that failed. Gated on the same `Events.Core` flag as the deposit mutations beside it, so the
+   * read and the writes of one resource never answer to different switches.
+   */
+  ListDeposits (storeId, eventId) {
+    return this._events('GET', this._event(storeId, eventId) + '/deposits');
+  }
+
+  /**
    * POST .../deposits — issue a deposit request (T7).
    *
    * The body carries ONLY `paymentType`. The amount is not client-supplied: the server takes it from
@@ -152,6 +189,21 @@ export class EventsService extends WorkforceClientBase {
   /** POST .../deposits/{depositId}/cancel — T10, an UNPAID request only (Requested/Pending). */
   CancelDeposit (storeId, eventId, depositId) {
     return this._events('POST', this._event(storeId, eventId) + '/deposits/' + depositId + '/cancel');
+  }
+
+  /**
+   * POST .../deposits/{depositId}/refund — money back to the guest (part of T14/T15, or resolving a
+   * `Quarantined` late payment).
+   *
+   * The body is `{ amountMinor }` and the amount is the CALLER's: unlike the deposit's own amount,
+   * which the server takes from the accepted proposal, a refund can be partial. It must be a positive
+   * integer in minor units, and the server refuses `RefundedMinor + amountMinor > AmountMinor` with
+   * `EVENTS_REFUND_EXCEEDS_PAID`. Nothing is clamped here — a clamp would silently refund a different
+   * figure from the one the operator typed.
+   */
+  RefundDeposit (storeId, eventId, depositId, request) {
+    return this._events(
+      'POST', this._event(storeId, eventId) + '/deposits/' + depositId + '/refund', { body: request });
   }
 
   // ---- run sheet --------------------------------------------------------------------------------
@@ -175,13 +227,74 @@ export class EventsService extends WorkforceClientBase {
   }
 
   /**
+   * POST .../cancel — T14/T15. The body is `{ reason, resolution }`.
+   *
+   * `resolution` (`Refund` / `Forfeit`) is what the server does with a PAID deposit, and it is
+   * mandatory in exactly that case: cancelling with money held and no instruction is refused with
+   * `EVENTS_DEPOSIT_UNRESOLVED` rather than the money being quietly kept or quietly returned. There
+   * is no client-side default, because either default would be someone else's decision about a
+   * guest's money.
+   */
+  CancelEvent (storeId, eventId, request) {
+    return this._events('POST', this._event(storeId, eventId) + '/cancel', { body: request });
+  }
+
+  /**
    * POST .../close — T12: `InService` → `Settling`, and the settlement draft is generated.
    *
-   * This and the two below sit behind the store-scoped `Events.Settlement` flag as well as
-   * `Events.Core`. See the second absence at the bottom of this file for what that means today.
+   * This and the three below sit behind the store-scoped `Events.Settlement` flag as well as
+   * `Events.Core`. The flag has a real lever as of `86cb4d25` (the same per-store feature-flag table
+   * `Events.Core` uses, `defaultEnabled: false`), so a 404 `EVENTS_DISABLED` from any of them means
+   * the venue has not been switched on — not that the module cannot be switched on.
    */
   CloseEvent (storeId, eventId) {
     return this._events('POST', this._event(storeId, eventId) + '/close');
+  }
+
+  /**
+   * GET .../settlement — the idempotent settlement read, and THE PLACE THE `If-Match` TOKEN COMES
+   * FROM.
+   *
+   * Read `settlement.revision` off the body; the `ETag` response header mirrors it, and the body is
+   * used because a header is not reachable through this transport (`_request` returns the parsed
+   * payload). This read sends no precondition of its own — it is the call a client with no token has
+   * to be able to make.
+   *
+   * Three distinguishable answers, and they must not be collapsed:
+   *   • 200 with `settlement` — there is one;
+   *   • 200 with `settlement: null` — the event genuinely has none yet (it has not been closed);
+   *   • 404 `EVENTS_DISABLED` — the settlement machine is off for this store, which says nothing at
+   *     all about whether a settlement exists.
+   *
+   * `revision` IS NULL ON A SQLITE HOST. It is a SQL Server `rowversion`, the column does not exist
+   * under SQLite, and `EventsSettlementConcurrency.GuardIfMatch` is deliberately lenient there — it
+   * demands a token only when the server row carries one. So a null revision is an ordinary value to
+   * be passed straight back through `ifMatchHeader`, which omits the header entirely. A client that
+   * REFUSED to mutate without one would work in production and look broken on every local host.
+   */
+  GetSettlement (storeId, eventId) {
+    return this._events('GET', this._event(storeId, eventId) + '/settlement');
+  }
+
+  /**
+   * POST .../settlement/lines — add one `Invoice` or `Adjustment` line to the statement.
+   *
+   * The only way to put a hand-entered figure on a settlement: `DepositApplied` and `PosCheck` lines
+   * are generated by close and by pos-links, and asking for either here is refused with
+   * `EVENTS_SETTLEMENT_STATE`. An `Adjustment` requires a non-empty `adjustmentReason`.
+   *
+   * `sourceKind` is DERIVED by the server from `kind` (`InvoiceRef` for an Invoice, `Manual` for an
+   * Adjustment) and any value sent for it is discarded, so it is not sent: a field on the wire that
+   * the server overwrites reads as a choice the caller made and did not.
+   *
+   * Carries the `If-Match` precondition — see `GetSettlement` for where the token comes from and why
+   * a null one is sent as no header rather than as an empty one.
+   */
+  AddSettlementLine (storeId, eventId, request, ifMatch) {
+    return this._events(
+      'POST',
+      this._event(storeId, eventId) + '/settlement/lines',
+      { body: request, headers: ifMatchHeader(ifMatch) });
   }
 
   /**
@@ -200,33 +313,54 @@ export class EventsService extends WorkforceClientBase {
     return this._events(
       'POST', this._event(storeId, eventId) + '/settlement/close', { headers: ifMatchHeader(ifMatch) });
   }
+
+  // ---- guest notifications ----------------------------------------------------------------------
+
+  /**
+   * GET /events/admin/{storeId}/notifications/health — the store-wide "a guest was never told" read.
+   *
+   * Store-scoped, not event-scoped: a dead-lettered link is discovered by watching the store, not by
+   * opening the one event that happens to own it.
+   *
+   * The answer is an ENVELOPE and not a bare list, and the envelope is load-bearing: an empty
+   * `deadLettered` means "everyone was reached" when `dispatchEnabled` is true and "nothing has been
+   * delivered at all" when it is false. `queuedCount` is what makes the second legible. It carries no
+   * token and no recipient address by design — the remedy is `RequeueNotification`, not handing a
+   * bearer link around.
+   */
+  GetNotificationHealth (storeId) {
+    return this._events('GET', this._admin(storeId) + '/notifications/health');
+  }
+
+  /**
+   * POST /events/admin/{storeId}/notifications/{notificationOutboxId}/requeue — put an undelivered
+   * link back in the drain's way. The id is the outbox row's GUID off the health read.
+   *
+   * The result's `requeued` is false on an idempotent replay (the row was already queued), which is a
+   * success and not a failure — a double-clicked button must be able to say "already in flight". A
+   * row the guest DID receive is refused with `EVENTS_NOTIFICATION_ALREADY_SENT` rather than replayed,
+   * because delivery is not idempotent and the payload is a live credential.
+   */
+  RequeueNotification (storeId, notificationOutboxId) {
+    return this._events(
+      'POST', this._admin(storeId) + '/notifications/' + notificationOutboxId + '/requeue');
+  }
 }
 
 // `If-Match` is sent only when there is a revision to send. An empty header is not a weaker
 // precondition than a correct one — `EventsSettlementConcurrency.GuardIfMatch` treats a blank token as
-// "no token", so sending `If-Match: ""` against a SQL Server row would raise `EVENTS_CONFLICT` on the
-// first try and look like someone else had edited the settlement.
+// "no token", so sending `If-Match: ""` against a SQL Server row now raises 400
+// `EVENTS_REVISION_REQUIRED`, and before that split it raised a 409 advising a retry that could never
+// succeed. Omitting the header is also what makes a SQLite host work: there the row carries no
+// rowversion, the guard demands nothing, and there is nothing to send.
 function ifMatchHeader (ifMatch) {
   return ifMatch ? { 'If-Match': ifMatch } : undefined;
 }
 
-// ---- the two absences -------------------------------------------------------------------------
+// ---- what this client still cannot do ----------------------------------------------------------
 //
-// These are recorded here, next to the routes, because both are the kind of gap a client "fixes" by
-// accident — by keeping a stale copy of the last mutation's answer and calling it a read.
-//
-// 1. THERE IS NO ADMIN READ FOR A DEPOSIT. `EventsDepositView` is returned only by the three deposit
-//    MUTATIONS (issue / cancel / refund) and by the guest's tokenised page, which needs the token.
-//    `EventsEventDetailView` carries no deposit field at all (`EventsViewMapper.ToDetail`). So a
-//    deposit's status, its id, its `publicToken` and its receipt trail exist on screen only for as long
-//    as the tab that issued it lives. After a reload they are not "none" and not "zero" — they are
-//    unreadable, and the surface says exactly that.
-//
-// 2. THERE IS NO ADMIN READ FOR A SETTLEMENT. Same shape: `EventsSettlementView` comes back only on a
-//    lifecycle result (start-service / close / reconcile / close-settlement / cancel). There is no GET.
-//    No mutation may be fired to fake one: `StartServiceAsync` is the only idempotent-ish call and it
-//    still transitions a `Confirmed` event, so calling it to "read" would move the lifecycle.
-//
-// Neither is reconstructible from the detail read, so neither is reconstructed.
+// TWO STEPS OF THE JOURNEY ARE THE GUEST'S, and no admin route exists for either: accepting a
+// proposal (T5) and paying a deposit (T8/T9) happen on the anonymous tokenised pages. They are absent
+// here because they are absent from the admin API — not because a read is missing.
 
 export default EventsService;

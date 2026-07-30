@@ -111,61 +111,64 @@
       </div>
     </section>
 
-    <!-- ---- deposit ------------------------------------------------------------------------ -->
+    <!-- ---- deposits ----------------------------------------------------------------------- -->
     <section class="ev-journey__section">
       <h3>{{ $i('ev_deposit_heading') }}</h3>
-      <p v-if="deposit.state === FACET_NO_READ_ENDPOINT" class="ev-journey__notice">
-        {{ $i('ev_deposit_no_read') }}
+      <p v-if="deposits.state === FACET_NONE" class="ev-journey__notice">
+        {{ $i('ev_deposit_none') }}
       </p>
-      <p v-else-if="deposit.state === FACET_GATED" class="ev-journey__notice">
+      <p v-else-if="deposits.state === FACET_GATED" class="ev-journey__notice">
         {{ $i('ev_deposit_gated') }}
       </p>
-      <p v-else-if="deposit.state === FACET_UNKNOWN" class="ev-journey__notice ev-journey__notice--warn">
-        {{ $i('ev_deposit_unknown') }}<span v-if="deposit.detail"> {{ deposit.detail }}</span>
+      <p v-else-if="deposits.state === FACET_UNKNOWN" class="ev-journey__notice ev-journey__notice--warn">
+        {{ $i('ev_deposit_unknown') }}<span v-if="deposits.detail"> {{ deposits.detail }}</span>
       </p>
-      <!-- Only a HELD projection is drawn. An unhandled state renders nothing rather than
-           reaching for a view that is not there. -->
-      <template v-else-if="deposit.state === FACET_HELD">
-        <dl class="ev-journey__facts">
-          <div><dt>{{ $i('ev_deposit_status') }}</dt><dd>{{ deposit.view.status || unknownMark }}</dd></div>
-          <div><dt>{{ $i('ev_deposit_rail') }}</dt><dd>{{ deposit.view.paymentType || unknownMark }}</dd></div>
-          <!-- Requested and refunded, side by side. The difference between them is the outstanding
-               sum, which the API does not expose; see ev_deposit_no_net. -->
-          <div><dt>{{ $i('ev_deposit_amount') }}</dt><dd>{{ amount(deposit.view.amountMinor, deposit.view.currencyCode) }}</dd></div>
-          <div><dt>{{ $i('ev_deposit_refunded') }}</dt><dd>{{ amount(deposit.view.refundedMinor, deposit.view.currencyCode) }}</dd></div>
-          <div><dt>{{ $i('ev_deposit_paid') }}</dt><dd>{{ instant(deposit.view.paidAtUtc) }}</dd></div>
-          <div><dt>{{ $i('ev_deposit_expires') }}</dt><dd>{{ instant(deposit.view.expiresAtUtc) }}</dd></div>
-        </dl>
-        <p class="ev-journey__hint">
-          {{ $i('ev_deposit_no_net') }}
-        </p>
-        <p v-if="deposit.view.publicToken" class="ev-journey__handover">
-          <span class="ev-journey__handover-label">{{ $i('ev_deposit_token') }}</span>
-          <code>{{ deposit.view.publicToken }}</code>
-          <span class="ev-journey__hint">{{ $i('ev_handover_note') }}</span>
-        </p>
-        <table v-if="receipts.length" class="ev-journey__table">
-          <thead>
-            <tr>
-              <th>{{ $i('ev_receipt_kind') }}</th>
-              <th>{{ $i('ev_receipt_ref') }}</th>
-              <th class="ev-journey__num">
-                {{ $i('ev_receipt_amount') }}
-              </th>
-              <th>{{ $i('ev_receipt_at') }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(receipt, index) in receipts" :key="index">
-              <td>{{ receipt.kind || unknownMark }}</td>
-              <td><code>{{ receipt.providerReference || unknownMark }}</code></td>
-              <td class="ev-journey__num">
-                {{ amount(receipt.amountMinor, deposit.view.currencyCode) }}
-              </td>
-              <td>{{ instant(receipt.createdAtUtc) }}</td>
-            </tr>
-          </tbody>
-        </table>
+      <!-- Only a HELD read is drawn. An unhandled state renders nothing rather than reaching for
+           rows that are not there. The WHOLE history is drawn, not "the current one": a cancelled
+           request and its reissue are two facts, and showing only the newest hides the first. -->
+      <template v-else-if="deposits.state === FACET_HELD">
+        <div v-for="deposit in deposits.rows" :key="deposit.id" class="ev-journey__version">
+          <dl class="ev-journey__facts">
+            <div><dt>{{ $i('ev_deposit_status') }}</dt><dd>{{ deposit.status || unknownMark }}</dd></div>
+            <div><dt>{{ $i('ev_deposit_rail') }}</dt><dd>{{ deposit.paymentType || unknownMark }}</dd></div>
+            <!-- Requested and refunded, side by side. The difference between them is the outstanding
+                 sum, which the API does not expose; see ev_deposit_no_net. -->
+            <div><dt>{{ $i('ev_deposit_amount') }}</dt><dd>{{ amount(deposit.amountMinor, deposit.currencyCode) }}</dd></div>
+            <div><dt>{{ $i('ev_deposit_refunded') }}</dt><dd>{{ amount(deposit.refundedMinor, deposit.currencyCode) }}</dd></div>
+            <div><dt>{{ $i('ev_deposit_paid') }}</dt><dd>{{ instant(deposit.paidAtUtc) }}</dd></div>
+            <div><dt>{{ $i('ev_deposit_expires') }}</dt><dd>{{ instant(deposit.expiresAtUtc) }}</dd></div>
+          </dl>
+          <p class="ev-journey__hint">
+            {{ $i('ev_deposit_no_net') }}
+          </p>
+          <p v-if="deposit.publicToken" class="ev-journey__handover">
+            <span class="ev-journey__handover-label">{{ $i('ev_deposit_token') }}</span>
+            <code>{{ deposit.publicToken }}</code>
+            <span class="ev-journey__hint">{{ $i('ev_handover_note') }}</span>
+          </p>
+          <table v-if="receiptsOf(deposit).length" class="ev-journey__table">
+            <thead>
+              <tr>
+                <th>{{ $i('ev_receipt_kind') }}</th>
+                <th>{{ $i('ev_receipt_ref') }}</th>
+                <th class="ev-journey__num">
+                  {{ $i('ev_receipt_amount') }}
+                </th>
+                <th>{{ $i('ev_receipt_at') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(receipt, index) in receiptsOf(deposit)" :key="index">
+                <td>{{ receipt.kind || unknownMark }}</td>
+                <td><code>{{ receipt.providerReference || unknownMark }}</code></td>
+                <td class="ev-journey__num">
+                  {{ amount(receipt.amountMinor, deposit.currencyCode) }}
+                </td>
+                <td>{{ instant(receipt.createdAtUtc) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </template>
     </section>
 
@@ -210,8 +213,8 @@
     <!-- ---- settlement --------------------------------------------------------------------- -->
     <section class="ev-journey__section">
       <h3>{{ $i('ev_settlement_heading') }}</h3>
-      <p v-if="settlement.state === FACET_NO_READ_ENDPOINT" class="ev-journey__notice">
-        {{ $i('ev_settlement_no_read') }}
+      <p v-if="settlement.state === FACET_NONE" class="ev-journey__notice">
+        {{ $i('ev_settlement_none') }}
       </p>
       <p v-else-if="settlement.state === FACET_GATED" class="ev-journey__notice ev-journey__notice--warn">
         {{ $i('ev_settlement_gated') }}
@@ -290,7 +293,6 @@
 
 <script>
 import {
-  FACET_NO_READ_ENDPOINT,
   FACET_GATED,
   FACET_UNKNOWN,
   FACET_HELD,
@@ -311,8 +313,9 @@ import {
 // component owns no fetching and no actions, so the honesty rules it draws are testable without a
 // network and without a click.
 //
-// Two of the five panels below can never be filled by a fresh page load, because the backend has no
-// read for them. That is drawn as its own sentence rather than as an empty panel.
+// Every panel below is filled by a READ, so a fresh page load shows the same thing the tab that made
+// the change shows. An absence drawn here is one the server established, not one assumed from having
+// nothing in hand.
 export default {
   name: 'EventsJourney',
   props: {
@@ -321,11 +324,13 @@ export default {
       type: Object,
       required: true
     },
-    // `readFacet` shapes: `{ state, view, code, detail }`.
-    deposit: {
+    // `readDeposits` shape: `{ state, rows, code, detail }` — a LIST, because an event accumulates
+    // deposits across a cancel-and-reissue and the newest is not automatically the relevant one.
+    deposits: {
       type: Object,
       required: true
     },
+    // `readSettlement` / `readRunSheet` shapes: `{ state, view, code, detail }`.
     settlement: {
       type: Object,
       required: true
@@ -349,7 +354,6 @@ export default {
   data () {
     return {
       unknownMark: '—',
-      FACET_NO_READ_ENDPOINT,
       FACET_GATED,
       FACET_UNKNOWN,
       FACET_HELD,
@@ -370,10 +374,6 @@ export default {
     },
     transitions () {
       return Array.isArray(this.detail.transitions) ? this.detail.transitions : [];
-    },
-    receipts () {
-      const view = this.deposit.view;
-      return view && Array.isArray(view.receipts) ? view.receipts : [];
     },
     settlementLines () {
       const view = this.settlement.view;
@@ -416,6 +416,9 @@ export default {
     },
     linesOf (version) {
       return Array.isArray(version.lines) ? version.lines : [];
+    },
+    receiptsOf (deposit) {
+      return Array.isArray(deposit.receipts) ? deposit.receipts : [];
     },
 
     /**

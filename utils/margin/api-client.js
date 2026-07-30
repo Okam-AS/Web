@@ -69,7 +69,36 @@ export function isMarginApiError (error) {
 /** The `margin.*` codes this surface renders on. Rendering keys on these, never on `detail`. */
 export const MARGIN_NOT_FOUND = 'margin.not-found';
 export const MARGIN_FORBIDDEN = 'margin.forbidden';
+
+/**
+ * 409, and now ONLY this: the precondition sent was well formed and the resource has moved since.
+ * It is the one arm of the three that carries `retryable: true`, and the one where a re-read and a
+ * second attempt genuinely help.
+ *
+ * It used to answer two further cases — no precondition at all, and one the codec cannot read — and
+ * that was harmful rather than imprecise: both were told to "refetch and retry", which for them fails
+ * identically, forever.
+ */
 export const MARGIN_STALE_REVISION = 'margin.stale-revision';
+
+/**
+ * 400: a mutation reached the server with no `If-Match` while the row carries a revision. A
+ * PERMANENT, caller-fixable input error — the recovery is a DIFFERENT request (GET the resource for
+ * its revision), never the same one again.
+ *
+ * NOTE THAT THIS CLIENT SHOULD NOT PRODUCE IT. `_mutateWithRevision` refuses before the request when
+ * it holds no revision (`MarginMissingRevisionError`), so this code arriving means a mutation left
+ * this repo through some other path — which is exactly why it is rendered rather than assumed away.
+ */
+export const MARGIN_REVISION_REQUIRED = 'margin.revision-required';
+
+/**
+ * 400: an `If-Match` was supplied whose value is not a decodable revision token. Distinct from the
+ * two above because the correction is a third thing again — one caller must start sending the header,
+ * this one must stop mangling it — and refused on EVERY provider, because mapping unreadable base64
+ * to "no token" is the codec's behaviour and not the database's.
+ */
+export const MARGIN_REVISION_INVALID = 'margin.revision-invalid';
 export const MARGIN_RECIPE_NAME_CONFLICT = 'margin.recipe-name-conflict';
 export const MARGIN_VERSION_INPUT_INVALID = 'margin.version-input-invalid';
 export const MARGIN_COMPONENT_INVALID = 'margin.component-invalid';
@@ -90,11 +119,14 @@ export const MARGIN_PRODUCT_LINK_INVALID = 'margin.product-link-invalid';
 /**
  * Raised BEFORE any request when a mutation that needs a revision has none to send.
  *
- * The server strips the quotes off `If-Match` and then decodes the token, so an empty or invented
- * value is not refused at the door — it is decoded, compared against the row, and under a provider
- * with no rowversion (SQLite) it is accepted. Sending a placeholder would therefore be a real
- * concurrency guard silently downgraded to none, on the one class of write this module cares about.
- * The client refuses instead, and the surface says which version it could not act on.
+ * The server strips the quotes off `If-Match` and then decodes the token. An INVENTED value is now
+ * refused at the door on every provider — an undecodable token is `margin.revision-invalid` (400) —
+ * but an EMPTY one is only refused where the row has a revision to demand (`margin.revision-required`,
+ * 400); under a provider with no rowversion (SQLite) there is nothing to compare and the write goes
+ * through unguarded. Sending a placeholder would therefore still be a real concurrency guard silently
+ * downgraded to none on the local host, on the one class of write this module cares about — and would
+ * turn a knowable client-side gap into a server round trip. The client refuses instead, and the
+ * surface says which version it could not act on.
  */
 export class MarginMissingRevisionError extends Error {
   constructor () {
@@ -161,8 +193,17 @@ export class MarginClientBase {
 
   /**
    * An AGGREGATE mutation: the resource's opaque rowversion travels in `If-Match`, and the server
-   * rejects the request outright when it is absent (a plain 400) or stale (`margin.stale-revision`,
-   * 409). Quoted per RFC 9110 §13.1.1; the server trims quotes either way.
+   * answers one of THREE refusals, which are three different problems with three different fixes
+   * (`MarginContractSupport.TryReadIfMatch`):
+   *
+   *   • absent, while the row has a revision → 400 `margin.revision-required`, not retryable;
+   *   • present but not decodable            → 400 `margin.revision-invalid`, not retryable;
+   *   • present, decodable, no longer current → 409 `margin.stale-revision`, RETRYABLE.
+   *
+   * Only the last is a lost race. Nothing here keys on the status — the two 400s used to be 409s, and
+   * a status-keyed caller would have changed meaning silently when they moved.
+   *
+   * Quoted per RFC 9110 §13.1.1; the server trims quotes either way.
    */
   // The guard REJECTS rather than throwing synchronously. A method that sometimes throws and
   // sometimes rejects is a trap: `service.Activate(…).catch(render)` would render the stale-revision

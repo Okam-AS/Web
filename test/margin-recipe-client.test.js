@@ -1,5 +1,12 @@
 import { MarginRecipeService } from '~/utils/margin/recipe-client'
-import { isMarginApiError, MarginApiError, MARGIN_NOT_FOUND } from '~/utils/margin/api-client'
+import {
+  isMarginApiError,
+  MarginApiError,
+  MARGIN_NOT_FOUND,
+  MARGIN_STALE_REVISION,
+  MARGIN_REVISION_REQUIRED,
+  MARGIN_REVISION_INVALID
+} from '~/utils/margin/api-client'
 
 // The client is route-for-route with the backend, so these assert the wire contract: the exact paths
 // and query the Margin controllers bind, the `If-Match` revision an AGGREGATE mutation must carry and
@@ -202,6 +209,29 @@ describe('MarginRecipeService', () => {
         code: MARGIN_NOT_FOUND,
         isMarginApiError: true
       })
+    })
+
+    // The backend split one code into three, and the split is only usable if the client exports all
+    // three as distinct constants — an `ERROR_KEYS` map built on two of them silently sends the third
+    // to the generic failure.
+    test('the three concurrency codes are three distinct exported constants', () => {
+      expect(MARGIN_REVISION_REQUIRED).toBe('margin.revision-required')
+      expect(MARGIN_REVISION_INVALID).toBe('margin.revision-invalid')
+      expect(MARGIN_STALE_REVISION).toBe('margin.stale-revision')
+      expect(new Set([MARGIN_REVISION_REQUIRED, MARGIN_REVISION_INVALID, MARGIN_STALE_REVISION]).size).toBe(3)
+    })
+
+    // Only ONE of the three is retryable now, and the client must carry the server's own word for it
+    // rather than inferring retryability from the status.
+    test('only the lost race arrives retryable', async () => {
+      respondWith(400, { code: MARGIN_REVISION_REQUIRED, detail: 'x', retryable: false })
+      await expect(service().ListRecipes(STORE)).rejects.toMatchObject({ retryable: false, status: 400 })
+
+      respondWith(400, { code: MARGIN_REVISION_INVALID, detail: 'x', retryable: false })
+      await expect(service().ListRecipes(STORE)).rejects.toMatchObject({ retryable: false, status: 400 })
+
+      respondWith(409, { code: MARGIN_STALE_REVISION, detail: 'x', retryable: true })
+      await expect(service().ListRecipes(STORE)).rejects.toMatchObject({ retryable: true, status: 409 })
     })
 
     // CONTROL for the discriminator: it must not answer true for anything that merely failed.

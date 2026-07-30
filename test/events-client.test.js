@@ -1,4 +1,12 @@
-import { EventsService, EventsApiError, isEventsApiError } from '~/utils/events/events-client'
+import fs from 'fs'
+import path from 'path'
+import {
+  EventsService,
+  EventsApiError,
+  isEventsApiError,
+  EVENTS_CONFLICT,
+  EVENTS_REVISION_REQUIRED
+} from '~/utils/events/events-client'
 
 // `fetch` is stubbed at the global, the same way `test/workforce-schedule-client.test.js` does it, so
 // the exact URL, method and headers each method builds are the thing under test — the part of this
@@ -72,6 +80,40 @@ describe('the routes are the controllers routes', () => {
 
     await service().CancelDeposit(42, 7, 9)
     expect(lastCall().url).toBe('/events/admin/42/events/7/deposits/9/cancel')
+
+    await service().ListDeposits(42, 7)
+    expect(lastCall().url).toBe('/events/admin/42/events/7/deposits')
+    expect(lastCall().init.method).toBe('GET')
+
+    await service().RefundDeposit(42, 7, 9, { amountMinor: 50000 })
+    expect(lastCall().url).toBe('/events/admin/42/events/7/deposits/9/refund')
+    expect(lastCall().init.method).toBe('POST')
+    expect(JSON.parse(lastCall().init.body)).toEqual({ amountMinor: 50000 })
+  })
+
+  test('the settlement read, the line write, and cancel', async () => {
+    await service().GetSettlement(42, 7)
+    expect(lastCall().url).toBe('/events/admin/42/events/7/settlement')
+    expect(lastCall().init.method).toBe('GET')
+
+    await service().AddSettlementLine(42, 7, { kind: 'Invoice', amountMinor: 120000 }, 'rev-1')
+    expect(lastCall().url).toBe('/events/admin/42/events/7/settlement/lines')
+    expect(lastCall().init.method).toBe('POST')
+    expect(JSON.parse(lastCall().init.body)).toEqual({ kind: 'Invoice', amountMinor: 120000 })
+
+    await service().CancelEvent(42, 7, { reason: 'Guest cancelled', resolution: 'Refund' })
+    expect(lastCall().url).toBe('/events/admin/42/events/7/cancel')
+    expect(JSON.parse(lastCall().init.body)).toEqual({ reason: 'Guest cancelled', resolution: 'Refund' })
+  })
+
+  test('the notification health routes are store-scoped, not event-scoped', async () => {
+    await service().GetNotificationHealth(42)
+    expect(lastCall().url).toBe('/events/admin/42/notifications/health')
+    expect(lastCall().init.method).toBe('GET')
+
+    await service().RequeueNotification(42, 'd0000000-0000-0000-0000-000000000001')
+    expect(lastCall().url).toBe('/events/admin/42/notifications/d0000000-0000-0000-0000-000000000001/requeue')
+    expect(lastCall().init.method).toBe('POST')
   })
 
   test('the run-sheet routes, and its optional version', async () => {
@@ -124,6 +166,9 @@ describe('headers', () => {
 
     await service().CloseSettlement(42, 7, 'AAAAAAAAB9E=')
     expect(lastCall().init.headers['If-Match']).toBe('AAAAAAAAB9E=')
+
+    await service().AddSettlementLine(42, 7, { kind: 'Invoice', amountMinor: 1 }, 'AAAAAAAAB9E=')
+    expect(lastCall().init.headers['If-Match']).toBe('AAAAAAAAB9E=')
   })
 
   // `GuardIfMatch` treats a blank token as "no token", so a blank header is not a weaker
@@ -133,7 +178,46 @@ describe('headers', () => {
     for (const none of [null, undefined, '']) {
       await service().ReconcileSettlement(42, 7, none)
       expect(lastCall().init.headers['If-Match']).toBeUndefined()
+
+      await service().AddSettlementLine(42, 7, { kind: 'Invoice', amountMinor: 1 }, none)
+      expect(lastCall().init.headers['If-Match']).toBeUndefined()
     }
+  })
+
+  // The read is where the token comes from, so it must not itself demand one: a client holding no
+  // revision would be locked out of the only call that can hand it one.
+  test('the settlement READ sends no If-Match of its own', async () => {
+    await service().GetSettlement(42, 7)
+    expect(lastCall().init.headers['If-Match']).toBeUndefined()
+  })
+})
+
+// `revision` is a SQL Server `rowversion`. On a SQLite host the column does not exist, the server
+// sends no ETag, and `settlement.revision` is null — and the guard is lenient there precisely because
+// there was never a token to hand out. A client that REQUIRED one would refuse every local mutation.
+describe('the revision comes off the settlement read', () => {
+  test('it is read from the body, which mirrors the ETag header', async () => {
+    respondWith(200, {
+      publicId: 'a1', eventStatus: 'Settling', settlement: { id: 3, status: 'Draft', revision: 'rev-9', lines: [] }
+    })
+    const read = await service().GetSettlement(42, 7)
+    expect(read.settlement.revision).toBe('rev-9')
+
+    await service().AddSettlementLine(42, 7, { kind: 'Invoice', amountMinor: 1 }, read.settlement.revision)
+    expect(lastCall().init.headers['If-Match']).toBe('rev-9')
+  })
+
+  test('a null revision (the SQLite host) still mutates, with no header at all', async () => {
+    respondWith(200, {
+      publicId: 'a1', eventStatus: 'Settling', settlement: { id: 3, status: 'Draft', revision: null, lines: [] }
+    })
+    const read = await service().GetSettlement(42, 7)
+    expect(read.settlement.revision).toBeNull()
+
+    await service().AddSettlementLine(42, 7, { kind: 'Invoice', amountMinor: 1 }, read.settlement.revision)
+    expect(lastCall().init.headers['If-Match']).toBeUndefined()
+    // And the call was made: a missing revision is not a client-side refusal on this surface.
+    expect(lastCall().url).toBe('/events/admin/42/events/7/settlement/lines')
   })
 })
 
@@ -174,11 +258,64 @@ describe('a refusal arrives typed', () => {
     }
   })
 
+  // The absent-precondition arm used to arrive as a RETRYABLE 409 advising a re-read and a retry —
+  // advice a caller that is not sending the header can never act on, so it looped. It is now its own
+  // 400 code, and the client must carry it as the permanent, caller-fixable input error it is.
+  test('EVENTS_REVISION_REQUIRED is a 400 that does NOT claim to be retryable', async () => {
+    respondWith(400, {
+      detail: 'An If-Match header carrying the settlement revision is required for this mutation.',
+      code: 'EVENTS_REVISION_REQUIRED',
+      retryable: false
+    })
+
+    expect.assertions(3)
+    try {
+      await service().AddSettlementLine(42, 7, { kind: 'Invoice', amountMinor: 1 }, null)
+    } catch (e) {
+      expect(e.code).toBe(EVENTS_REVISION_REQUIRED)
+      expect(e.status).toBe(400)
+      expect(e.retryable).toBe(false)
+    }
+  })
+
+  test('and it is a DIFFERENT code from the lost race, which is retryable', async () => {
+    expect(EVENTS_REVISION_REQUIRED).not.toBe(EVENTS_CONFLICT)
+    respondWith(409, { code: 'EVENTS_CONFLICT', detail: 'modified concurrently', retryable: true })
+
+    expect.assertions(4)
+    try {
+      await service().CloseSettlement(42, 7, 'stale')
+    } catch (e) {
+      expect(e.code).toBe(EVENTS_CONFLICT)
+      expect(e.status).toBe(409)
+      expect(e.retryable).toBe(true)
+    }
+  })
+
   test('the discriminator survives a transpile, so a typed refusal is never mistaken for a crash', () => {
     const error = new EventsApiError(409, { code: 'EVENTS_CONFLICT' })
     expect(error.isEventsApiError).toBe(true)
     expect(isEventsApiError(error)).toBe(true)
     expect(isEventsApiError(new Error('boom'))).toBe(false)
     expect(isEventsApiError(null)).toBe(false)
+  })
+})
+
+// The file used to end with a block declaring that neither the deposit nor the settlement had an
+// admin read. Both routes landed in 86cb4d25, and the comment outlived them — which is worse than no
+// comment, because a surface built on it holds the last mutation's answer and calls it a read. The
+// claim is pinned as gone so it cannot be reinstated by a merge that takes the older side.
+describe('the client no longer documents absences that ended', () => {
+  const source = fs.readFileSync(
+    path.join(__dirname, '..', 'utils', 'events', 'events-client.js'), 'utf8')
+
+  test('it does not claim there is no admin read for a deposit or a settlement', () => {
+    expect(source.toUpperCase()).not.toContain('NO ADMIN READ')
+  })
+
+  test('and it names both routes instead', () => {
+    expect(source).toContain('/settlement');
+    expect(typeof EventsService.prototype.GetSettlement).toBe('function')
+    expect(typeof EventsService.prototype.ListDeposits).toBe('function')
   })
 })

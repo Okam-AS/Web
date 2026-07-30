@@ -2,6 +2,7 @@ import { shallowMount } from '@vue/test-utils'
 // eslint-disable-next-line import/first -- the mock must be registered before the page is imported,
 // and `jest.mock` is hoisted above imports while the page import is not.
 import MarginRecipesPage from '~/pages/admin/margin-recipes.vue'
+import translations from '~/translations'
 import { MarginApiError } from '~/utils/margin/api-client'
 
 const calls = []
@@ -266,6 +267,71 @@ describe('entering a recipe', () => {
     await settled()
 
     expect(wrapper.find('[data-test="failure"]').text()).toBe('mrg_err_name_conflict')
+  })
+})
+
+// The backend split one concurrency answer into three (`MarginContractSupport.TryReadIfMatch`), and
+// two of the three arrive on statuses this page never looked at — it dispatches on `code` only, so
+// the status move is free. What is NOT free is the codes: an unmapped one falls through to
+// `mrg_err_generic` ("Something went wrong. Nothing was saved."), which for a fixable input problem is
+// both wrong and alarming, and tells a venue nothing about what to do next.
+describe('the three concurrency arms are three different sentences', () => {
+  beforeEach(() => { calls.length = 0; for (const k of Object.keys(script)) { delete script[k] } })
+
+  const failWith = async (status, code) => {
+    script.create = () => Promise.reject(new MarginApiError(status, { code, detail: 'server prose' }))
+    const wrapper = mountPage()
+    await settled()
+    wrapper.setData({ form: { name: 'Fiskesuppe', yieldQuantity: '4', yieldUnit: 'Liter', portionCount: '20', components: [] } })
+    await wrapper.vm.createRecipe()
+    await settled()
+    return wrapper.find('[data-test="failure"]').text()
+  }
+
+  test('an absent precondition is its own message, not the generic one', async () => {
+    expect(await failWith(400, 'margin.revision-required')).toBe('mrg_err_revision_required')
+  })
+
+  test('a mangled precondition is its own message too', async () => {
+    expect(await failWith(400, 'margin.revision-invalid')).toBe('mrg_err_revision_invalid')
+  })
+
+  test('and the lost race keeps its own, which is now the ONLY one advising a retry', async () => {
+    expect(await failWith(409, 'margin.stale-revision')).toBe('mrg_err_stale')
+  })
+
+  test('none of the three falls through to the generic failure', async () => {
+    for (const [status, code] of [[400, 'margin.revision-required'], [400, 'margin.revision-invalid'], [409, 'margin.stale-revision']]) {
+      expect(await failWith(status, code)).not.toBe('mrg_err_generic')
+    }
+    // The positive control: a code the page genuinely does not know DOES fall through, so the
+    // assertions above are a real distinction and not a dead branch.
+    expect(await failWith(500, 'margin.something-new')).toBe('mrg_err_generic')
+  })
+
+  // Dispatch is on `code` alone — deliberately, because the split moved two of these off 409 and any
+  // status-keyed branch would have silently changed meaning on the day the backend landed.
+  test('the code decides, and the status does not', async () => {
+    expect(await failWith(409, 'margin.revision-required')).toBe('mrg_err_revision_required')
+    expect(await failWith(400, 'margin.stale-revision')).toBe('mrg_err_stale')
+  })
+
+  test('the copy exists in all three dictionaries and says three different things', () => {
+    const keys = ['mrg_err_revision_required', 'mrg_err_revision_invalid', 'mrg_err_stale']
+    for (const locale of ['no', 'en', 'de']) {
+      for (const key of keys) { expect(typeof translations[locale][key]).toBe('string') }
+      expect(new Set(keys.map(k => translations[locale][k])).size).toBe(keys.length)
+    }
+  })
+
+  // `mrg_err_stale` used to cover malformed input as well as a lost race, so it could not say what
+  // had happened. It now covers exactly one thing, and the copy has to name it: somebody else got
+  // there first. A message that still merely says "try again" would be the old ambiguity surviving
+  // the split.
+  test('the lost-race copy names the race, and the two 400s do not tell anyone to just retry', () => {
+    expect(translations.en.mrg_err_stale.toLowerCase()).toContain('somebody else')
+    expect(translations.en.mrg_err_revision_required.toLowerCase()).not.toContain('somebody else')
+    expect(translations.en.mrg_err_revision_invalid.toLowerCase()).not.toContain('somebody else')
   })
 })
 
