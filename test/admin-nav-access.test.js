@@ -86,15 +86,20 @@ describe('storeAdminAccess — unknown is a state, not a refusal', () => {
 // Moving and adding links widens nothing; it points them at the role that already passed the guard.
 // The second mask is why `THE CONVERSE WALK` at the bottom of this file exists: the original static
 // walk checked links → pages and could not see a page → no link.
+// Ordered, and the order is the assertion: `toEqual` below pins the sidebar a store admin actually
+// renders. The eight module links were moved OUT of Menu / Sales / Administration into one `Moduler`
+// group by the owner's instruction — filed by subject matter they were correct and unfindable, and the
+// six restaurant modules are the surfaces under active acceptance. Same store-admin gate as the groups
+// they came from, so this reorder moves no link between audiences; only its position changed.
 const STORE_ADMIN_PATHS = [
   '/admin', '/admin/ongoing', '/admin/orders', '/admin/statistics',
-  '/admin/products', '/admin/categories', '/admin/allergens', '/admin/import', '/admin/margin-recipes',
-  '/admin/delivery', '/admin/wolt',
-  '/admin/kravia-invoice', '/admin/rewards', '/admin/discounts', '/admin/growth-newsletter', '/admin/events-pipeline',
-  '/admin/payment', '/admin/settlements', '/admin/terminals',
-  '/admin/customers', '/admin/employees',
   '/admin/workforce-schedule', '/admin/workforce-roster', '/admin/workforce-rates', '/admin/training-courses',
-  '/admin/meals-agreements'
+  '/admin/margin-recipes', '/admin/meals-agreements', '/admin/events-pipeline', '/admin/growth-newsletter',
+  '/admin/products', '/admin/categories', '/admin/allergens', '/admin/import',
+  '/admin/delivery', '/admin/wolt',
+  '/admin/kravia-invoice', '/admin/rewards', '/admin/discounts',
+  '/admin/payment', '/admin/settlements', '/admin/terminals',
+  '/admin/customers', '/admin/employees'
 ]
 
 const WORKER_PATHS = ['/admin/workforce-me']

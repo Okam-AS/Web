@@ -712,6 +712,7 @@ export default {
   nav_discounts: 'Rabatter',
   nav_employees: 'Ansatte',
   nav_goods: 'Varer og tjenester',
+      nav_group_modules: 'Moduler',
   nav_group_administration: 'Administrasjon',
   nav_group_me: 'Min side',
   nav_group_delivery: 'Levering',
@@ -3258,10 +3259,13 @@ export default {
   ev_toast_reconciled: 'Oppgjøret er avstemt.',
   ev_toast_settled: 'Oppgjøret er lukket.',
 
-  // Kortere enn sidetittelen med vilje: 'Opplæring og internkontroll' er hva siden gjør, 'Opplæring'
-  // er hva du leter etter i menyen.
+  // Ordet 'internkontroll' er BANNLYST fra alle brukerflater, prising og markedsføring til TR8/TR-B6
+  // er levert (OD-6). HACCP-fareanalyse, sporbarhet og allergeninformasjon finnes ikke i domenemodellen
+  // engang ved full spesifikasjon, og skjenkebevillingens internkontroll (alkoholforskriften kap. 8) er
+  // et helt annet regime — så tittelen ville lovet noe produktet ikke kan innfri. Når TR8/TR-B6 lander
+  // blir visningsnavnet 'Opplæring og rutiner', og påstanden snevres til dokumentasjonsSTØTTE.
   nav_training_courses: 'Opplæring',
-  trn_page_title: 'Opplæring og internkontroll',
+  trn_page_title: 'Opplæring',
   trn_page_intro: 'Ett kurs blir til dokumentasjon: lag kurset, publiser en versjon, tildel den, før gjennomføringen — og slå opp hva personen faktisk innehar.',
   trn_reload: 'Les inn på nytt',
 

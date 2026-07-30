@@ -695,6 +695,7 @@ export default {
   nav_discounts: 'Rabatte',
   nav_employees: 'Mitarbeiter',
   nav_goods: 'Waren & Dienstleistungen',
+      nav_group_modules: 'Module',
   nav_group_administration: 'Verwaltung',
   nav_group_me: 'Meine Seite',
   nav_group_delivery: 'Lieferung',
@@ -3218,7 +3219,10 @@ export default {
   // Absichtlich kürzer als der Seitentitel: 'Schulung und Eigenkontrolle' ist, was die Seite tut,
   // 'Schulung' ist, wonach man im Menü sucht.
   nav_training_courses: 'Schulung',
-  trn_page_title: 'Schulung und Eigenkontrolle',
+  // "Eigenkontrolle" ist dieselbe Behauptung, die OD-6 auf Norwegisch verbietet ("internkontroll"),
+  // also entfällt sie ebenfalls: HACCP-Gefahrenanalyse, Rückverfolgbarkeit und Allergeninformationen
+  // fehlen im Domänenmodell selbst bei vollem Umfang. Wird 'Training & Routines' mit TR8/TR-B6.
+  trn_page_title: 'Schulung',
   trn_page_intro: 'Aus einem Kurs wird ein Nachweis: Kurs anlegen, eine Version veröffentlichen, zuweisen, den Abschluss erfassen — und dann nachschlagen, was die Person tatsächlich besitzt.',
   trn_reload: 'Neu laden',
 

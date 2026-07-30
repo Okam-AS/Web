@@ -311,18 +311,33 @@ export default {
               { label: this.$i('nav_statistics'), path: '/admin/statistics', icon: icons.statistics }
             ]
           },
+          // The six restaurant modules, in ONE group, by the owner's instruction: they were previously
+          // spread across Menu (recipes), Sales (newsletter, events) and Administration (the four
+          // workforce links plus company agreements), which is correct by subject matter and useless
+          // for finding them. They are the newest surfaces and the ones under active acceptance, so
+          // being locatable beats being filed. Every gate is store-admin — identical to the groups
+          // they came from — so nothing here widens or narrows who is admitted; each page still
+          // renders its own capability refusal when the backend withholds one.
+          {
+            title: this.$i('nav_group_modules'),
+            items: [
+              { label: this.$i('nav_workforce_schedule'), path: '/admin/workforce-schedule', icon: icons.workforceSchedule, isNew: true },
+              { label: this.$i('nav_workforce_roster'), path: '/admin/workforce-roster', icon: icons.workforceRoster, isNew: true },
+              { label: this.$i('nav_workforce_rates'), path: '/admin/workforce-rates', icon: icons.workforceRates, isNew: true },
+              { label: this.$i('nav_training_courses'), path: '/admin/training-courses', icon: icons.training, isNew: true },
+              { label: this.$i('nav_margin_recipes'), path: '/admin/margin-recipes', icon: icons.marginRecipes, isNew: true },
+              { label: this.$i('nav_meals'), path: '/admin/meals-agreements', icon: icons.mealsAgreements, isNew: true },
+              { label: this.$i('nav_events'), path: '/admin/events-pipeline', icon: icons.eventsPipeline, isNew: true },
+              { label: this.$i('nav_growth_newsletter'), path: '/admin/growth-newsletter', icon: icons.growthNewsletter, isNew: true }
+            ]
+          },
           {
             title: this.$i('nav_group_menu'),
             items: [
               { label: this.$i('nav_products'), path: '/admin/products', icon: icons.products },
               { label: this.$i('nav_categories'), path: '/admin/categories', icon: icons.categories },
               { label: this.$i('nav_allergens'), path: '/admin/allergens', icon: icons.allergens },
-              { label: this.$i('nav_import'), path: '/admin/import', icon: icons.import },
-              // Margin. A recipe is authored out of the products this group already administers and
-              // priced against them, so it is menu work rather than finance work: the number it
-              // produces is a cost per dish, not a settlement. Store-admin, and store-scoped off
-              // `selectedAdminStore` like everything else here.
-              { label: this.$i('nav_margin_recipes'), path: '/admin/margin-recipes', icon: icons.marginRecipes, isNew: true }
+              { label: this.$i('nav_import'), path: '/admin/import', icon: icons.import }
             ]
           },
           {
@@ -337,24 +352,7 @@ export default {
             items: [
               { label: this.$i('nav_send_invoice'), path: '/admin/kravia-invoice', icon: icons.invoice, isNew: true },
               { label: this.$i('nav_rewards'), path: '/admin/rewards', icon: icons.rewards },
-              { label: this.$i('nav_discounts'), path: '/admin/discounts', icon: icons.discounts },
-              // Growth. The lane left the group to the merge, so it is chosen here rather than
-              // inherited: this is a store sending marketing mail to its own consenting customers,
-              // which is what "Salg & marked" already collects (invoices out, rewards, discounts).
-              // It is NOT the PowerUser `/admin/poweruser-growth` next to it in the role group —
-              // that one is Okam's own growth tooling, not a venue's newsletter. Being a store-admin
-              // link, its path is pinned in `test/admin-nav-access.test.js` with the rest.
-              { label: this.$i('nav_growth_newsletter'), path: '/admin/growth-newsletter', icon: icons.growthNewsletter, isNew: true },
-              // Events. Moved here out of the PowerUser group, which was the wrong gate: the page
-              // mounts `AdminPage` with no `allow-non-admin` and checks no role flag, so its actual
-              // authorisation is store-admin membership at the selected store — the venue manager,
-              // who was the one person the sidebar refused to show it to. Selling a party is the
-              // same work as the rest of this group (an enquiry becomes a quote, a deposit and an
-              // invoice), so it sits with the invoices and the newsletter rather than beside the
-              // POS. A store admin whose token lacks the backend's events capability still sees the
-              // page's own READ_FORBIDDEN notice; that is a refusal it renders honestly, not a
-              // reason to hide the door.
-              { label: this.$i('nav_events'), path: '/admin/events-pipeline', icon: icons.eventsPipeline, isNew: true }
+              { label: this.$i('nav_discounts'), path: '/admin/discounts', icon: icons.discounts }
             ]
           },
           {
@@ -369,32 +367,7 @@ export default {
             title: this.$i('nav_group_administration'),
             items: [
               { label: this.$i('nav_customers'), path: '/admin/customers', icon: icons.customers },
-              { label: this.$i('nav_employees'), path: '/admin/employees', icon: icons.employees },
-              // WORKFORCE, four links, all four store-admin work and none of it gated on a role.
-              //
-              // The schedule and the roster came out of the PowerUser group, which was the wrong gate
-              // for both: each page mounts `AdminPage` with no `allow-non-admin` and reads no role
-              // flag, so what admits a caller is store-admin membership at the selected store. Nor was
-              // that group a workaround — the PowerUser account administers no store, so the shell
-              // bounces it to /registrer and the link was a dead end for the only user who could see
-              // it. Rates and training had no link at ALL, in any group: shipped reachable only by
-              // typing the URL, which no test could see because the sidebar was only ever checked
-              // link-by-link against the pages, never page-by-page against the links.
-              //
-              // They sit after the employee register because that is who they are all about, and they
-              // stay contiguous and in workflow order — plan the week, staff it, price it, certify the
-              // people doing it. Each page holds its own capability refusal (`wf_no_capability`, the
-              // roster's read-only mode, `wfrt_rate_no_capability`, the training gate), so a store
-              // admin the backend has not granted the capability is told so on the page instead of
-              // being denied the door.
-              { label: this.$i('nav_workforce_schedule'), path: '/admin/workforce-schedule', icon: icons.workforceSchedule, isNew: true },
-              { label: this.$i('nav_workforce_roster'), path: '/admin/workforce-roster', icon: icons.workforceRoster, isNew: true },
-              { label: this.$i('nav_workforce_rates'), path: '/admin/workforce-rates', icon: icons.workforceRates, isNew: true },
-              { label: this.$i('nav_training_courses'), path: '/admin/training-courses', icon: icons.training, isNew: true },
-              // Meals. A company agreement is a customer relationship — a firm that funds its
-              // people's orders — so it sits beside the customer register rather than in sales.
-              // It is appended BEFORE the onboarding push below, which still lands last.
-              { label: this.$i('nav_meals'), path: '/admin/meals-agreements', icon: icons.mealsAgreements, isNew: true }
+              { label: this.$i('nav_employees'), path: '/admin/employees', icon: icons.employees }
             ]
           }
         );

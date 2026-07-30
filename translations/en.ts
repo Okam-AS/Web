@@ -695,6 +695,7 @@ export default {
   nav_discounts: 'Discounts',
   nav_employees: 'Employees',
   nav_goods: 'Goods & services',
+      nav_group_modules: 'Modules',
   nav_group_administration: 'Administration',
   nav_group_me: 'My page',
   nav_group_delivery: 'Delivery',
@@ -3215,7 +3216,10 @@ export default {
   // Deliberately shorter than the page title: 'Training and internal control' is what the page does,
   // 'Training' is what you look for in a menu.
   nav_training_courses: 'Training',
-  trn_page_title: 'Training and internal control',
+  // "internal control" is the same claim OD-6 bans in Norwegian ("internkontroll"), so it goes too:
+  // HACCP hazard analysis, traceability and allergen information are absent from the domain model even
+  // at full spec. Becomes 'Training & Routines' when TR8/TR-B6 ships.
+  trn_page_title: 'Training',
   trn_page_intro: 'One course becomes evidence: author it, publish a version, assign it, file the completion — then look up what the person actually holds.',
   trn_reload: 'Reload',
 
