@@ -23,6 +23,12 @@ import {
 //   2. STATIC — walk `pages/admin/` and check that every link the sidebar offers a worker lands on a
 //      page that actually lets a worker in. The same walk-every-page discipline the membership guard
 //      shipped with, pointed at the menu instead of at the shell.
+//
+// The `MANAGER-REACHABLE` tests are the mirror image of that gap, and the same question asked in the
+// other direction: not "is this link a dead end for the person offered it" but "is this page a page
+// nobody is offered". A page whose only link hangs off a role flag its own guard never checks is
+// reachable only by typing its URL, and a suite can be entirely green while that is true — the page
+// renders, its client works, and no test ever asks whether a menu leads to it.
 
 describe('storeAdminAccess — unknown is a state, not a refusal', () => {
   test('no user at all is unknown', () => {
@@ -56,26 +62,38 @@ describe('storeAdminAccess — unknown is a state, not a refusal', () => {
 //
 // Order matters: this is compared with `toEqual` against the flattened `navGroups`, so a link added
 // to a group must be added at the same position here. The five module surfaces merged in together
-// split three/two on this list, and the split is the point:
+// split four/one on this list, and the split is the point:
 //
-//   store-admin — `/admin/margin-recipes` (Menu), `/admin/growth-newsletter` (Sales & marketing)
-//                 and `/admin/meals-agreements` (Administration) are offered to every store admin,
-//                 so they are pinned here like the eighteen before them.
-//   role-gated  — `/admin/workforce-roster` and `/admin/events-pipeline` live in the PowerUser
-//                 group, which hangs off `isPowerUser` rather than off membership. They are
-//                 deliberately ABSENT: adding them would make this list assert a set that a plain
-//                 store admin never sees, and the `role-gated groups are untouched` test below is
-//                 what keeps them honest instead.
+//   store-admin — `/admin/margin-recipes` (Menu), `/admin/growth-newsletter` and
+//                 `/admin/events-pipeline` (Sales & marketing), `/admin/workforce-schedule` and
+//                 `/admin/meals-agreements` (Administration) are offered to every store admin, so
+//                 they are pinned here like the eighteen before them.
+//   role-gated  — `/admin/workforce-roster` alone still lives in the PowerUser group, which hangs
+//                 off `isPowerUser` rather than off membership. It is deliberately ABSENT: adding it
+//                 would make this list assert a set that a plain store admin never sees, and the
+//                 `role-gated groups are untouched` test below is what keeps it honest instead.
+//
+// THE MOVE THE LAST TWO ENTRIES RECORD. Schedule and events were shipped inside that PowerUser group
+// by the lanes that built them, and the group is the wrong gate for both: each page mounts
+// `AdminPage` with no `allow-non-admin` and reads no role flag, so its authorisation has always been
+// store-admin membership at the selected store. The manager was authorised and unlinked — a page
+// only reachable by typing its URL. Signing in as the PowerUser was not an escape either: that
+// account administers no store, so the same shell bounces it to /registrer. Moving the links widens
+// nothing; it points them at the role that already passed the guard.
 const STORE_ADMIN_PATHS = [
   '/admin', '/admin/ongoing', '/admin/orders', '/admin/statistics',
   '/admin/products', '/admin/categories', '/admin/allergens', '/admin/import', '/admin/margin-recipes',
   '/admin/delivery', '/admin/wolt',
-  '/admin/kravia-invoice', '/admin/rewards', '/admin/discounts', '/admin/growth-newsletter',
+  '/admin/kravia-invoice', '/admin/rewards', '/admin/discounts', '/admin/growth-newsletter', '/admin/events-pipeline',
   '/admin/payment', '/admin/settlements', '/admin/terminals',
-  '/admin/customers', '/admin/employees', '/admin/meals-agreements'
+  '/admin/customers', '/admin/employees', '/admin/workforce-schedule', '/admin/meals-agreements'
 ]
 
 const WORKER_PATHS = ['/admin/workforce-me']
+
+// The two links this file's `MANAGER-REACHABLE` tests are about, named once so the assertions below
+// cannot drift apart from each other.
+const MANAGER_MODULE_PATHS = ['/admin/workforce-schedule', '/admin/events-pipeline']
 
 describe('AdminPageHeader — which links each kind of user is offered', () => {
   function mountNav (currentUser) {
@@ -142,20 +160,60 @@ describe('AdminPageHeader — which links each kind of user is offered', () => {
     expect(paths).not.toContain('/admin/pos')
 
     const powerUser = { id: 9, adminIn: [{ id: 7 }], isPowerUser: true }
-    expect(pathsOf(mountNav(powerUser))).toContain('/admin/workforce-schedule')
+    // `/admin/pos` rather than one of the module surfaces: a PowerUser is also a store admin here, so
+    // asserting a moved link "is present for a PowerUser" would now pass through the store-admin
+    // groups and prove nothing about the role gate. The POS register is PowerUser-only either way.
+    expect(pathsOf(mountNav(powerUser))).toContain('/admin/pos')
   })
 
-  test('the two role-gated module surfaces are absent for a plain admin and present for a PowerUser', () => {
-    // The other half of the STORE_ADMIN_PATHS split. Roster and events are store-admin WORK behind a
-    // role flag, so they must not appear in the pinned list — but "not in the list" would also be
-    // satisfied by a link nobody can ever reach, which is the failure this catches.
-    const roleGated = ['/admin/workforce-roster', '/admin/events-pipeline']
-    const adminPaths = pathsOf(mountNav(admin))
-    roleGated.forEach(p => expect(adminPaths).not.toContain(p))
+  test('the one remaining role-gated module surface is absent for a plain admin and present for a PowerUser', () => {
+    // The other half of the STORE_ADMIN_PATHS split. The roster is store-admin WORK behind a role
+    // flag, so it must not appear in the pinned list — but "not in the list" would also be satisfied
+    // by a link nobody can ever reach, which is the failure this catches.
+    expect(pathsOf(mountNav(admin))).not.toContain('/admin/workforce-roster')
 
     const powerUser = { id: 9, adminIn: [{ id: 7 }], isPowerUser: true }
+    expect(pathsOf(mountNav(powerUser))).toContain('/admin/workforce-roster')
+  })
+
+  // MANAGER-REACHABLE. The defect these three tests exist for: both pages authorise a store admin and
+  // neither was linked for one. Stated three ways because each way alone has a cheap wrong fix that
+  // satisfies it — present at all, present outside the role gate, and present exactly once.
+  test('MANAGER-REACHABLE: a plain store admin — no role flags — is offered the schedule and the events pipeline', () => {
+    const adminPaths = pathsOf(mountNav(admin))
+    MANAGER_MODULE_PATHS.forEach(p => expect(adminPaths).toContain(p))
+  })
+
+  test('MANAGER-REACHABLE: neither link sits in a role-gated group, so no role flag can be what reveals it', () => {
+    // Guards the fix against being re-satisfied by duplicating the links into the PowerUser group:
+    // that would put them back on `isPowerUser` for the accounts that have it while leaving the
+    // manager's copy dependent on nothing but this file noticing.
+    const roleGatedPaths = group => (group.role ? group.items.map(i => i.path) : [])
+    const powerUser = { id: 9, adminIn: [{ id: 7 }], isPowerUser: true, isKeyAccountManager: true }
+    const gated = mountNav(powerUser).vm.navGroups.reduce((acc, g) => acc.concat(roleGatedPaths(g)), [])
+
+    MANAGER_MODULE_PATHS.forEach(p => expect(gated).not.toContain(p))
+    // The same walk still sees the role groups it is meant to see, so an empty `gated` cannot be what
+    // makes this pass.
+    expect(gated).toContain('/admin/pos')
+    expect(gated).toContain('/admin/offers')
+  })
+
+  test('MANAGER-REACHABLE: a PowerUser who is also a store admin is offered each link exactly once', () => {
+    // The move was a move, not a copy. A duplicate renders the same label twice in one sidebar.
+    const powerUser = { id: 9, adminIn: [{ id: 7 }], isPowerUser: true, isKeyAccountManager: true }
     const powerPaths = pathsOf(mountNav(powerUser))
-    roleGated.forEach(p => expect(powerPaths).toContain(p))
+    MANAGER_MODULE_PATHS.forEach((p) => {
+      expect(powerPaths.filter(candidate => candidate === p)).toEqual([p])
+    })
+  })
+
+  test('MANAGER-REACHABLE: a pure worker is still offered neither — they are store-admin pages', () => {
+    // The links moved into groups withheld from a worker, so the guard that bounces a worker off
+    // these pages is still matched by the menu. This is the invariant the whole file was written for,
+    // restated for the two paths that changed group.
+    const workerPaths = pathsOf(mountNav(worker))
+    MANAGER_MODULE_PATHS.forEach(p => expect(workerPaths).not.toContain(p))
   })
 })
 
@@ -203,14 +261,22 @@ describe('no link the sidebar offers is a link the shell will bounce', () => {
     expect(optedOut).toEqual([])
   })
 
-  test('the role-gated module links resolve to real, still-guarded pages too', () => {
-    // `STORE_ADMIN_PATHS` cannot cover these — they are not offered to a plain store admin — so the
-    // walk is pointed at them explicitly. Same two obligations: the page exists, and it does NOT opt
+  test('the role-gated module link resolves to a real, still-guarded page too', () => {
+    // `STORE_ADMIN_PATHS` cannot cover this one — it is not offered to a plain store admin — so the
+    // walk is pointed at it explicitly. Same two obligations: the page exists, and it does NOT opt
     // out of the store-admin guard (a role group is shown to PowerUsers, never to workers, so an
     // opt-out here would be a page reachable by neither list's rules).
-    const roleGated = ['/admin/workforce-roster', '/admin/events-pipeline']
+    const roleGated = ['/admin/workforce-roster']
     expect(roleGated.filter(p => !fs.existsSync(pageFor(p)))).toEqual([])
     expect(roleGated.filter(p => /allow-non-admin|allowNonAdmin/.test(fs.readFileSync(pageFor(p), 'utf8')))).toEqual([])
+  })
+
+  test('THE CONVERSE OF THE MOVE: neither moved page asks for a role flag the sidebar no longer supplies', () => {
+    // The move is only correct if the pages' own authorisation is membership and nothing else. If
+    // either page ever starts reading `isPowerUser` — a role check the store-admin groups do not
+    // satisfy — its link would be offered to managers it then refuses, and this fails instead.
+    const roleChecking = MANAGER_MODULE_PATHS.filter(p => /isPowerUser|isKeyAccountManager/.test(fs.readFileSync(pageFor(p), 'utf8')))
+    expect(roleChecking).toEqual([])
   })
 
   test('the admin surface is still the size the membership guard assumes', () => {

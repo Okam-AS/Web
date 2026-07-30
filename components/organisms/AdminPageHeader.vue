@@ -340,7 +340,17 @@ export default {
               // It is NOT the PowerUser `/admin/poweruser-growth` next to it in the role group —
               // that one is Okam's own growth tooling, not a venue's newsletter. Being a store-admin
               // link, its path is pinned in `test/admin-nav-access.test.js` with the rest.
-              { label: this.$i('nav_growth_newsletter'), path: '/admin/growth-newsletter', icon: icons.growthNewsletter, isNew: true }
+              { label: this.$i('nav_growth_newsletter'), path: '/admin/growth-newsletter', icon: icons.growthNewsletter, isNew: true },
+              // Events. Moved here out of the PowerUser group, which was the wrong gate: the page
+              // mounts `AdminPage` with no `allow-non-admin` and checks no role flag, so its actual
+              // authorisation is store-admin membership at the selected store — the venue manager,
+              // who was the one person the sidebar refused to show it to. Selling a party is the
+              // same work as the rest of this group (an enquiry becomes a quote, a deposit and an
+              // invoice), so it sits with the invoices and the newsletter rather than beside the
+              // POS. A store admin whose token lacks the backend's events capability still sees the
+              // page's own READ_FORBIDDEN notice; that is a refusal it renders honestly, not a
+              // reason to hide the door.
+              { label: this.$i('nav_events'), path: '/admin/events-pipeline', icon: icons.eventsPipeline, isNew: true }
             ]
           },
           {
@@ -356,6 +366,15 @@ export default {
             items: [
               { label: this.$i('nav_customers'), path: '/admin/customers', icon: icons.customers },
               { label: this.$i('nav_employees'), path: '/admin/employees', icon: icons.employees },
+              // Workforce. Moved here out of the PowerUser group for the same reason as events: the
+              // page's real gate is the store-admin shell (no `allow-non-admin`, no role flag), and
+              // the manager who staffs the week is exactly who it locks out when the only link to it
+              // hangs off `isPowerUser`. Nor was the PowerUser group a workaround: that account
+              // administers no store, so the shell bounces it to /registrer and the link was a dead
+              // end for the only user who could see it. It goes beside the employee register because
+              // the week it plans is a week for those people, and a store admin without the
+              // `WorkforceScheduler` capability gets the page's own `wf_no_capability` blocker.
+              { label: this.$i('nav_workforce_schedule'), path: '/admin/workforce-schedule', icon: icons.workforceSchedule, isNew: true },
               // Meals. A company agreement is a customer relationship — a firm that funds its
               // people's orders — so it sits beside the customer register rather than in sales.
               // It is appended BEFORE the onboarding push below, which still lands last.
@@ -409,20 +428,13 @@ export default {
             { label: this.$i('nav_kitchen'), path: '/admin/kitchen', icon: icons.kitchen },
             { label: this.$i('nav_tables'), path: '/admin/tables', icon: icons.tables },
             { label: this.$i('nav_reservations'), path: '/admin/reservations', icon: icons.reservations },
-            // Events. Beside reservations because both turn an enquiry into a booked table, and in
-            // the ROLE-GATED group for the same reason the roster is: the store-admin links are
-            // pinned as an exact set by `test/admin-nav-access.test.js`, and a role group is
-            // outside that set. The page does not opt out of the store-admin guard, so it must
-            // not be offered to a worker either — the PowerUser group is never shown to one.
-            { label: this.$i('nav_events'), path: '/admin/events-pipeline', icon: icons.eventsPipeline },
             { label: this.$i('nav_pos_settings'), path: '/admin/pos-settings', icon: icons.posSettings },
             { label: this.$i('nav_pos_reports'), path: '/admin/pos-reports', icon: icons.posReports },
-            { label: this.$i('nav_workforce_schedule'), path: '/admin/workforce-schedule', icon: icons.workforceSchedule },
-            // Beside the schedule, and gated the same way, because it is the same module's other
-            // half: the schedule plans a week for people the roster is what creates. It is NOT in a
-            // store-admin group — those links are pinned by `test/admin-nav-access.test.js` as an
-            // exact set, and this page is store-admin work that does not opt out of the shell's
-            // guard, so it belongs in neither the worker group nor that pinned list.
+            // The roster stayed behind when the schedule and the events pipeline moved into the
+            // store-admin groups above. That is a known remaining disagreement, not a decision: this
+            // page's gate is the store-admin shell too, so a manager still has to type the URL. It is
+            // left for the lane that owns it rather than swept along here, and it is what the
+            // remaining role-gated assertions in `test/admin-nav-access.test.js` are pointed at.
             { label: this.$i('nav_workforce_roster'), path: '/admin/workforce-roster', icon: icons.workforceRoster },
             { label: this.$i('nav_okam_growth'), path: '/admin/poweruser-growth', icon: icons.growth },
             { label: this.$i('nav_dintero'), path: '/admin/dintero', icon: icons.dintero },
