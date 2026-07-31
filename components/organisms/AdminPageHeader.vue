@@ -244,6 +244,9 @@ const icons = {
   workforceRoster: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>',
   marginRecipes: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>',
   mealsAgreements: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>',
+  // An office block with people beside it, distinct from `mealsAgreements` (a plain building) in the
+  // same group: that page monitors this venue's agreements, this one sets a company account up.
+  mealsCompanies: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21h8V3H3v18zm0 0h18M14 21h7V9h-7v12zM6 7h2M6 11h2M6 15h2M17 13h1m-1 4h1" /></svg>',
   growthNewsletter: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>',
   eventsPipeline: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>',
   // A clock, not a coin: this page is hours first — the rate is what the hours are multiplied by. It
@@ -327,6 +330,13 @@ export default {
               { label: this.$i('nav_training_courses'), path: '/admin/training-courses', icon: icons.training, isNew: true },
               { label: this.$i('nav_margin_recipes'), path: '/admin/margin-recipes', icon: icons.marginRecipes, isNew: true },
               { label: this.$i('nav_meals'), path: '/admin/meals-agreements', icon: icons.mealsAgreements, isNew: true },
+              // Beside the venue's Meals page rather than in a group of its own: same module, and
+              // the two are read together (what this venue has, and setting the next one up). Same
+              // store-admin gate as every other link here — the concierge and company-admin
+              // authorities the page's own controls need are resolved by the backend and refused on
+              // screen, never by hiding the link, which would leave the pages that DO admit somebody
+              // reachable only by typing a URL.
+              { label: this.$i('nav_meals_companies'), path: '/admin/meals-companies', icon: icons.mealsCompanies, isNew: true },
               { label: this.$i('nav_events'), path: '/admin/events-pipeline', icon: icons.eventsPipeline, isNew: true },
               { label: this.$i('nav_growth_newsletter'), path: '/admin/growth-newsletter', icon: icons.growthNewsletter, isNew: true }
             ]

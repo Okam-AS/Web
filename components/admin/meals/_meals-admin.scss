@@ -1,0 +1,321 @@
+// The shared look of the Company Meals SETUP panels.
+//
+// Same arrangement as `components/admin/training/_training-panel.scss`, and for the same reason: the
+// panels are variations on one shape — a heading, a three-state note, a table, a form — and five
+// copies of the same forty rules is the duplication the quality gate exists to stop. Scoping still
+// works: each component's own scoped block imports this, so the rules are emitted under that
+// component's own data attribute.
+//
+// Colours and radii are the admin design system's (see the repo's CLAUDE.md ledger), not new ones,
+// and the three note tints match the venue Meals page's existing ones so a caveat looks the same on
+// both Meals surfaces.
+
+$mls-ink: #292c34;
+$mls-muted: #64748b;
+$mls-border: #e2e8f0;
+$mls-surface: #f8f9fa;
+$mls-green: #1bb776;
+$mls-amber-ink: #92400e;
+$mls-amber-bg: #fff8e6;
+
+.mls-title {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: $mls-ink;
+  margin: 0 0 12px;
+}
+
+.mls-subtitle {
+  font-size: 0.95em;
+  font-weight: 600;
+  color: $mls-ink;
+  margin: 24px 0 12px;
+}
+
+.mls-intro,
+.mls-hint {
+  margin: 0 0 12px;
+  font-size: 0.85em;
+  color: $mls-muted;
+}
+
+// Three visually distinct notes for three different claims, never interchangeable: plain is neutral
+// information, warn is a caveat about what we do or do not know, danger is a consequence somebody is
+// about to cause that cannot be undone.
+.mls-note {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  margin: 0 0 16px;
+  background: $mls-surface;
+  color: $mls-muted;
+}
+
+.mls-note--warn {
+  background: $mls-amber-bg;
+  color: $mls-amber-ink;
+}
+
+.mls-note--danger {
+  background: #fdf2f2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+}
+
+.mls-note__title {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.mls-error {
+  margin: 0 0 12px;
+  font-size: 0.85em;
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+.mls-detail {
+  margin: 0 0 12px;
+  font-size: 0.8em;
+  color: $mls-muted;
+  font-style: italic;
+}
+
+.mls-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+  margin-bottom: 16px;
+
+  th {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 2px solid $mls-border;
+    color: $mls-muted;
+    font-weight: 600;
+    white-space: nowrap;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  td {
+    padding: 10px;
+    border-bottom: 1px solid $mls-border;
+    color: $mls-ink;
+    vertical-align: top;
+  }
+}
+
+.mls-row {
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover,
+  &:focus {
+    background: $mls-surface;
+  }
+
+  &.is-selected {
+    background: rgba(27, 183, 118, 0.08);
+  }
+}
+
+.mls-ref {
+  font-family: 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: 0.85em;
+  word-break: break-all;
+}
+
+.mls-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 0.75em;
+  font-weight: 600;
+  background: $mls-surface;
+  color: $mls-muted;
+}
+
+.mls-badge--on {
+  background: rgba(27, 183, 118, 0.12);
+  color: #0f7a4d;
+}
+
+.mls-badge--warn {
+  background: $mls-amber-bg;
+  color: $mls-amber-ink;
+}
+
+.mls-badge--off {
+  background: #fdf2f2;
+  color: #b91c1c;
+}
+
+.mls-form {
+  background: $mls-surface;
+  border: 1px solid $mls-border;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.mls-form__title {
+  font-size: 0.95em;
+  font-weight: 600;
+  color: $mls-ink;
+  margin: 0 0 12px;
+}
+
+.mls-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.mls-label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 0.8em;
+  font-weight: 600;
+  color: $mls-ink;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.mls-input,
+.mls-select {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px;
+  border: 2px solid $mls-border;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 0.95em;
+  color: $mls-ink;
+  text-transform: none;
+  letter-spacing: normal;
+
+  &:focus {
+    outline: none;
+    border-color: $mls-green;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+  }
+}
+
+.mls-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 0.85em;
+  color: $mls-ink;
+  cursor: pointer;
+}
+
+.mls-fieldset {
+  border: 1px solid $mls-border;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 0 0 16px;
+}
+
+.mls-weekdays {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.mls-weekday {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85em;
+  cursor: pointer;
+}
+
+.mls-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin: 0 0 12px;
+
+  dt {
+    font-size: 0.75em;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: $mls-muted;
+    font-weight: 600;
+  }
+
+  dd {
+    margin: 2px 0 0;
+    font-size: 0.9em;
+    color: $mls-ink;
+  }
+}
+
+.mls-btn {
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9em;
+  cursor: pointer;
+  border: 2px solid $mls-border;
+  background: #fff;
+  color: $mls-ink;
+  transition: all 0.2s ease;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.mls-btn--primary {
+  background: $mls-green;
+  border-color: $mls-green;
+  color: #fff;
+
+  &:hover:not(:disabled) {
+    background: #159f63;
+    border-color: #159f63;
+  }
+}
+
+.mls-btn--danger {
+  color: #b91c1c;
+  border-color: #fca5a5;
+
+  &:hover:not(:disabled) {
+    background: #fdf2f2;
+  }
+}
+
+.mls-btn--small {
+  padding: 6px 12px;
+  font-size: 0.8em;
+}
+
+// The once-only handover box. Monospace, selectable, and visually unlike every other field on the
+// page, because it is the only value here that cannot be read again after this render.
+.mls-token {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  border: 2px dashed $mls-amber-ink;
+  border-radius: 8px;
+  background: #fff;
+  font-family: 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: 0.95em;
+  color: $mls-ink;
+  word-break: break-all;
+  margin: 0 0 12px;
+}

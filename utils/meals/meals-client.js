@@ -7,10 +7,15 @@
 //   GET /v1/stores/{storeId}/meals/companies       #—   MealsCompanyController.ListForStore
 //   GET /v1/stores/{storeId}/meals/orders          #16  MealsReconciliationController.ListStoreOrders
 //
-// WHY ONLY TWO. Every other Meals route is either company-scoped or behind a sub-flag, and neither
-// is reachable from a venue's admin today — see the notes in `pages/admin/meals-agreements.vue`.
-// Adding a method for a route this surface cannot exercise would be the "four client functions
-// calling routes that never existed" defect the workforce lane already paid for.
+// WHY ONLY TWO HERE. These are the STORE-scoped reads, and they are all of them. The company-scoped
+// surface — the company account, corridor signing, programmes, policy versions, invitations and
+// memberships — is bound by `utils/meals/admin-client.js`, which is a separate file because it sits
+// behind a separate gate (the module-wide `Features:Meals` config rather than the per-store
+// `meals.module` override) and a separate authority (Okam concierge / company admin rather than
+// StoreAdmin). The remaining families — funding, reconciliation and statements — are behind their
+// own sub-flags and belong to surfaces that do not exist yet; a client method for a route no screen
+// can exercise would be the "four client functions calling routes that never existed" defect the
+// workforce lane already paid for.
 //
 // TRANSPORT IS SHARED, NOT COPIED. `WorkforceClientBase` is the repo's one HTTP layer: base URL,
 // bearer header, JSON handling and the typed problem+json error. Nothing in it is workforce-specific
@@ -87,11 +92,13 @@ export function refusalOf (error) {
 /**
  * The store-scoped Meals reads.
  *
- * Both are GETs and neither carries an `Idempotency-Key`; there is no mutation on this surface, so
- * `_mutate` is deliberately never called. The one store-scoped Meals mutation that exists
+ * Both are GETs and neither carries an `Idempotency-Key`; there is no mutation on THIS service, so
+ * `_mutate` is deliberately never called here (`MealsAdminService` calls it for every one of its
+ * writes). The one store-scoped Meals mutation that exists
  * (`POST /v1/meals/reconciliation/{exceptionId}/resolve`) gates on the module-wide config flag
- * rather than the per-store one, so it is unreachable wherever these two reads are reachable — see
- * the page's notes. It is absent here rather than present and broken.
+ * rather than the per-store one, so it can be dark while these two reads answer — and resolving a
+ * reconciliation exception is a different surface's job either way. It is absent here rather than
+ * present and broken.
  */
 export class MealsStoreService extends WorkforceClientBase {
   /**

@@ -51,24 +51,30 @@ import { buildStoreView } from '~/utils/meals/store-view';
  * THE VENUE'S COMPANY MEALS SURFACE — one journey, end to end: an agreement, and a funded order.
  *
  * WHAT THIS IS NOT. It is not the Meals module's admin experience. Meals has 23 endpoints; this
- * page binds two. The other twenty-one are unreachable from a venue's admin today, and the reason
- * is worth writing down rather than rediscovering:
+ * page binds two — the two a VENUE needs to answer "who buys here, and what have they spent".
+ * Setting a company up is `/admin/meals-companies`, which is a different page because it is a
+ * different authority (Okam concierge / company admin, never StoreAdmin) behind a different gate:
  *
  *   • The COMPANY-scoped surface (the company account, memberships, invitations, programs, policy
  *     versions, program membership) and the STATEMENT surface (draft/finalize/list/get/export) gate
  *     on `IMealsFeatureGate`, which reads the `Features:Meals` configuration section through
- *     `IOptionsMonitor<MealsFeatureSettings>`. Nothing in `Program.cs` ever calls
- *     `Configure<MealsFeatureSettings>`, so that section is never bound and `CurrentValue` is a
- *     default-constructed instance with every flag false. Those endpoints answer an opaque 404 in
- *     every deployment, whatever the config file says. (Sven's open-decision list carries this.)
+ *     `IOptionsMonitor<MealsFeatureSettings>`. That section IS bound now —
+ *     `Program.cs` calls `services.AddMealsFeatureOptions()`
+ *     (`Helpers/Meals/MealsModuleServiceCollectionExtensions.cs`) — so `Features__Meals__Module`
+ *     reaches the gate. It did not use to: nothing called `Configure<MealsFeatureSettings>`, and
+ *     `IOptionsMonitor<T>` over an unbound `T` hands back a default-constructed instance, so that
+ *     whole family answered an opaque 404 in every deployment whatever the config said. Binding
+ *     enables nothing by itself — every flag still defaults to false.
  *   • The STORE-scoped reads this page binds gate on `IMealsStoreFeatureFlags`, which consults the
- *     shared per-store feature-flag override FIRST and falls back to that same unbound config gate.
- *     `meals.module` is in the published flag catalog, so a row set through the platform's own
- *     per-store flag endpoint turns this venue's Meals surface on. That is why exactly these two
- *     reads are reachable and the rest are not.
+ *     shared per-store feature-flag override FIRST and falls back to that config gate. `meals.module`
+ *     is in the published flag catalog, so a row set through the platform's own per-store flag
+ *     endpoint turns this venue's Meals surface on — independently of the config switch above. The
+ *     two gates can disagree in either direction, which is why the two pages carry different
+ *     "switched off" sentences.
  *   • The one store-scoped MUTATION — resolving a reconciliation exception — is the odd one out: the
  *     queue read gates per-store but `ResolveAsync` calls `RequireVisible()`, which is the config
- *     gate. It is readable and not resolvable. No button here pretends otherwise.
+ *     gate. The two can disagree, so it can be readable and not resolvable. No button here pretends
+ *     otherwise.
  *
  * THE READS ARE INDEPENDENT AND FAIL INDEPENDENTLY. Neither `catch` is allowed to become the
  * other's answer: an orders read that fails leaves the orders UNKNOWN, and the agreements that were
