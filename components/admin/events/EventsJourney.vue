@@ -99,13 +99,16 @@
           </tbody>
         </table>
 
-        <!-- The handover. Nothing delivers this link: `DeferredEventsNotificationOutbox.EnqueueAsync`
-             accepts the command and returns, so the guest is never emailed and the venue must hand the
-             token over itself. Saying so is the difference between a surface that works and one that
-             looks like it sent something. -->
+        <!-- The handover, as the ADDRESS the guest opens rather than as a bare identifier. The path
+             is not a choice made here: `EventsEmailNotificationDelivery.ComposeLink` mails
+             `{PublicBaseUrl}/events/proposal/{token}`, and `pages/events/proposal/_token.vue` is the
+             page that answers it. Before that page existed there was nothing to link to, which is
+             why this used to print the token alone. -->
         <p v-if="version.publicToken" class="ev-journey__handover">
           <span class="ev-journey__handover-label">{{ $i('ev_version_token') }}</span>
-          <code>{{ version.publicToken }}</code>
+          <a :href="guestLink('proposal', version.publicToken)" target="_blank" rel="noopener">
+            <code>{{ guestLink('proposal', version.publicToken) }}</code>
+          </a>
           <span class="ev-journey__hint">{{ $i('ev_handover_note') }}</span>
         </p>
       </div>
@@ -143,7 +146,9 @@
           </p>
           <p v-if="deposit.publicToken" class="ev-journey__handover">
             <span class="ev-journey__handover-label">{{ $i('ev_deposit_token') }}</span>
-            <code>{{ deposit.publicToken }}</code>
+            <a :href="guestLink('deposit', deposit.publicToken)" target="_blank" rel="noopener">
+              <code>{{ guestLink('deposit', deposit.publicToken) }}</code>
+            </a>
             <span class="ev-journey__hint">{{ $i('ev_handover_note') }}</span>
           </p>
           <table v-if="receiptsOf(deposit).length" class="ev-journey__table">
@@ -413,6 +418,20 @@ export default {
   methods: {
     count (value) {
       return value === null || value === undefined ? this.unknownMark : String(value);
+    },
+
+    /**
+     * The guest-facing address for a token, as an ABSOLUTE url when this build knows its own origin
+     * and as a bare path when it does not (server render, or a test host with no `window`).
+     *
+     * The origin is the BROWSER's, not `EventsSettings.PublicBaseUrl`: that setting is the mail
+     * composer's and is not exposed by any API this surface can read. They agree in a normal
+     * deployment, and where they do not, the address a member of staff can copy out of their own
+     * browser is the one that works for the venue that is looking at it.
+     */
+    guestLink (kind, token) {
+      const origin = typeof window !== 'undefined' && window.location ? window.location.origin : '';
+      return origin + '/events/' + kind + '/' + token;
     },
     linesOf (version) {
       return Array.isArray(version.lines) ? version.lines : [];

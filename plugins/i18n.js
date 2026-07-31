@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import translations from '~/translations'
+import { translate } from '~/utils/i18n'
 
 // `$i` — native-ConsumerApp-style translation helper, available in every
 // component on both server and client. Reads the active admin locale from the
@@ -15,33 +15,8 @@ import translations from '~/translations'
 //
 // Resolution order: active locale → Norwegian → English → German → the key
 // itself (so a missing translation degrades gracefully and is easy to spot).
-const FALLBACK_ORDER = ['no', 'en', 'de']
-
-function lookup (locale, key) {
-  const dict = translations[locale]
-  if (dict && dict[key]) { return dict[key] }
-
-  for (const lang of FALLBACK_ORDER) {
-    const fallback = translations[lang]
-    if (fallback && fallback[key]) { return fallback[key] }
-  }
-
-  return key
-}
-
-function translate (locale, key, params) {
-  if (!key) { return '' }
-
-  const str = lookup(locale, key)
-
-  if (params) {
-    return str.replace(/\{(\w+)\}/g, (match, token) =>
-      (params[token] != null ? params[token] : match)
-    )
-  }
-
-  return str
-}
+// The lookup itself lives in `~/utils/i18n` because the GUEST surface needs the
+// same dictionary against a locale that is not the operator's — see that file.
 
 Vue.mixin({
   methods: {

@@ -362,5 +362,11 @@ function ifMatchHeader (ifMatch) {
 // TWO STEPS OF THE JOURNEY ARE THE GUEST'S, and no admin route exists for either: accepting a
 // proposal (T5) and paying a deposit (T8/T9) happen on the anonymous tokenised pages. They are absent
 // here because they are absent from the admin API — not because a read is missing.
+//
+// Those anonymous routes now have a client of their own, `~/utils/events/events-guest-client`, and
+// pages behind it (`pages/events/proposal/_token.vue`, `pages/events/deposit/_token.vue`,
+// `pages/events/inquiry/_store.vue`). It is a SEPARATE client and not an addition here: it must send
+// no bearer token, and a class that carries one for its admin methods would carry it for the guest
+// ones too.
 
 export default EventsService;
