@@ -25,10 +25,13 @@
             <th class="wf-grid__head wf-grid__head--num">
               {{ $i('wf_col_shifts') }}
             </th>
-            <!-- Base rates only: no evening/weekend/night supplement and no employer's national
-                 insurance are in any figure in this column. The backend excludes them, so the
-                 surface has to say so rather than let the number read as the full cost. -->
-            <th class="wf-grid__head wf-grid__head--num wf-grid__head--cost" :title="$i('wf_cost_base_rates')">
+            <!-- What is in this column and what is not. It was a constant sentence — base rates
+                 only — until the backend started pricing the tillegg a store's rule pack declares;
+                 now the answer is per store and comes off the wire, so the header echoes whatever
+                 `cost.basis` said rather than asserting one of the two. Employer's national
+                 insurance is outside the figure on every basis, and the sentence says so in all
+                 three states. -->
+            <th class="wf-grid__head wf-grid__head--num wf-grid__head--cost" :title="basisNote">
               {{ $i('wf_col_cost') }}
             </th>
           </tr>
@@ -236,7 +239,10 @@
           </tr>
           <tr class="wf-grid__band-notes">
             <td :colspan="grid.days.length + 4">
-              <span class="wf-grid__band-note">{{ $i('wf_cost_base_rates') }}</span>
+              <span
+                class="wf-grid__band-note"
+                :class="{ 'is-unknown': isBasisUnknown }"
+              >{{ basisNote }}</span>
               <span class="wf-grid__band-note">{{ $i('wf_band_note') }}</span>
             </td>
           </tr>
@@ -256,6 +262,19 @@
          be the same fabrication one layer up. -->
     <p v-if="costFloorNotice" class="wf-grid__caveat">
       {{ costFloorNotice }}
+    </p>
+    <!-- A PUBLISHED week's wage figure is not the figure that was published. The backend re-prices
+         it on every read: the rate rows are effective-dated and resolved at each shift's own
+         instants, and the rule pack is whichever one is in force NOW — so a back-dated rate
+         correction or a pack that started declaring tillegg moves a total a manager already
+         communicated, with nothing on screen to mark that it moved.
+
+         This says the figure is live rather than settled. It deliberately does NOT say what the
+         number used to be: no publication stores its own cost (the projection is a pure function
+         with no table), so the previous figure does not exist anywhere to be read, and printing a
+         difference we reconstructed would be a fabricated history dressed as an audit trail. -->
+    <p v-if="showRepriceNotice" class="wf-grid__caveat">
+      {{ $i('wf_cost_published_reprice') }}
     </p>
     <p v-if="!grid.markersKnown" class="wf-grid__caveat">
       {{ $i('wf_markers_unknown') }}
@@ -280,6 +299,9 @@ import {
   COST_OPEN,
   COST_CURRENCY_MISMATCH,
   RATE_CURRENCY_MISMATCH,
+  BASIS_BASE_ONLY,
+  BASIS_WITH_SUPPLEMENTS,
+  VIEW_PUBLISHED,
   formatMinutes
 } from '~/utils/workforce/week-grid';
 
@@ -340,6 +362,40 @@ export default {
       return count === 1
         ? this.$i('wf_external_unplaced_one')
         : this.$i('wf_external_unplaced', { count });
+    },
+
+    /**
+     * The sentence under the wage column, chosen by what the backend said it priced on.
+     *
+     * THREE OUTCOMES AND NO DEFAULT. `with-supplements` drops the claim that the tillegg are absent,
+     * because for a store whose rule pack declares `paySupplements` that claim is now false — the
+     * same four hours cost 860,00 on a Tuesday afternoon and 941,00 in the evening. `base-only`
+     * keeps the sentence that has always been there, because for a pack that is silent (or a store
+     * that names no country, which the resolver refuses to treat as Norway) it is still exactly
+     * right. Anything else is UNKNOWN and says so: this surface does not render an unknown as
+     * whichever of the two answers happens to be more familiar.
+     *
+     * Nothing here reads `basis.basis`. That token stays `base-rate` in both cases on purpose, so
+     * keying on it would print "no supplements" over a figure that has them.
+     */
+    basisNote () {
+      if (this.grid.costBasis === BASIS_WITH_SUPPLEMENTS) { return this.$i('wf_cost_with_supplements'); }
+      if (this.grid.costBasis === BASIS_BASE_ONLY) { return this.$i('wf_cost_base_rates'); }
+      return this.$i('wf_cost_basis_unknown');
+    },
+    isBasisUnknown () {
+      return this.grid.costBasis !== BASIS_WITH_SUPPLEMENTS && this.grid.costBasis !== BASIS_BASE_ONLY;
+    },
+
+    /**
+     * Said on the PUBLISHED view only, and only once there is a cost overlay to caveat.
+     *
+     * On a draft there is no published figure for a re-price to contradict, and on a response that
+     * carried no cost at all there is no figure on screen at all — in both cases the sentence would
+     * be a warning about money nobody has been shown.
+     */
+    showRepriceNotice () {
+      return this.grid.view === VIEW_PUBLISHED && this.grid.costKnown;
     },
 
     /**
@@ -692,6 +748,10 @@ export default {
 .wf-grid__band .wf-grid__num.is-floor { color: #159f63; }
 .wf-grid__band-notes td { padding: 8px 12px; border-top: 1px solid #e2e8f0; background: #fff; }
 .wf-grid__band-note { display: block; color: #94a3b8; font-size: 0.76rem; }
+/* An unstated basis is not a quieter version of a stated one. It takes the same warning colour the
+   refusal caveats use, so a sentence admitting we do not know what is in the money cannot be read
+   at a glance as the settled note that used to sit here. */
+.wf-grid__band-note.is-unknown { color: #92400e; }
 
 .wf-grid__caveat { margin: 10px 2px 0; color: #94a3b8; font-size: 0.78rem; }
 .wf-grid__caveat--warn { color: #92400e; }

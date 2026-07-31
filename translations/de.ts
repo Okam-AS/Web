@@ -2361,7 +2361,12 @@ export default {
   wf_conflict_shift: 'Doppelbelegung',
   wf_band_total: 'Summe Woche',
   wf_band_note: 'Lohnquote, Umsatz und Abweichung zum Ziel folgen, sobald der Umsatz je Geschäftstag lesbar ist.',
+  // Grundlage der Lohnzahlen. DREI Sätze, nie zwei — Begründung siehe `no.ts`. Der Teil zu den
+  // Arbeitgeberbeiträgen gilt unabhängig davon und steht deshalb in allen dreien.
   wf_cost_base_rates: 'Grundsatz – ohne Abend-, Wochenend- und Nachtzuschläge und ohne Arbeitgeberbeiträge.',
+  wf_cost_with_supplements: 'Grundsatz plus die Zuschläge, die das Regelwerk dieses Betriebs angibt – Abend-, Nacht- und Wochenend-/Sonntagszuschlag. Weiterhin ohne Arbeitgeberbeiträge.',
+  wf_cost_basis_unknown: 'Die Grundlage ist unbekannt: es ist nicht angegeben, ob Abend-, Nacht- oder Wochenendzuschläge enthalten sind. Arbeitgeberbeiträge sind in jedem Fall nicht enthalten.',
+  wf_cost_published_reprice: 'Eine veröffentlichte Woche wird bei jedem Öffnen neu berechnet, mit den Sätzen und dem Regelwerk, die jetzt gelten. Diese Summe kann daher von der abweichen, die beim Veröffentlichen angezeigt wurde. Es ist eine Planungszahl, keine Lohnabrechnung.',
   wf_cost_no_total: 'Keine Summe',
   wf_cost_floor: 'mindestens {amount}',
   wf_cost_floor_hint: 'Offene Schichten werden nicht bewertet, die Summe ist daher ein Mindestwert.',
