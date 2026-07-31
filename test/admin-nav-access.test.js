@@ -98,7 +98,7 @@ const STORE_ADMIN_PATHS = [
   '/admin/workforce-rates', '/admin/workforce-personnel-list', '/admin/training-courses',
   '/admin/margin-recipes', '/admin/margin-suppliers', '/admin/margin-price-imports',
   '/admin/margin-statements',
-  '/admin/meals-agreements', '/admin/events-pipeline', '/admin/growth-newsletter',
+  '/admin/meals-agreements', '/admin/meals-companies', '/admin/events-pipeline', '/admin/growth-newsletter',
   '/admin/products', '/admin/categories', '/admin/allergens', '/admin/import',
   '/admin/delivery', '/admin/wolt',
   '/admin/kravia-invoice', '/admin/rewards', '/admin/discounts',
