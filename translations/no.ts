@@ -3015,6 +3015,12 @@ export default {
   growth_draft_save: 'Lagre ny versjon',
   growth_draft_saved: 'Lagret.',
   growth_draft_version: 'Versjon {version}',
+  growth_draft_body_hidden_title: 'Innholdet i versjon {version} vises ikke',
+  growth_draft_body_hidden: 'API-et gir oss emnet og et fingeravtrykk av innholdet, men ikke selve innholdet. Det lagrede innholdet kan derfor ikke redigeres herfra — bare erstattes. Lagrer du, blir det som står i feltene under en ny, uforanderlig versjon, og det gamle innholdet er ikke lenger det som sendes. Vil du se hva versjonen faktisk inneholder, send deg selv en test lenger nede.',
+  growth_draft_content_hidden_placeholder: 'Tomt fordi det lagrede innholdet ikke kan hentes fram. Skriv hele innholdet på nytt.',
+  growth_draft_replace_ack: 'Jeg vil erstatte innholdet i versjon {version} med det som står i feltene over.',
+  growth_draft_replace: 'Erstatt innholdet og lagre ny versjon',
+  growth_draft_replaced: 'Lagret som ny versjon. Innholdet er erstattet med det som sto i feltene.',
 
   // Testutsendelse (#16).
   growth_test_title: 'Send deg selv en test',
@@ -3023,6 +3029,7 @@ export default {
   growth_test_send: 'Send test',
   growth_test_sending: 'Sender …',
   growth_test_result: 'Testen er sendt inn. Leverandøren svarte: {status}. Det er en innsendingsstatus, ikke en leveringsbekreftelse.',
+  growth_test_module_off: 'Nyhetsbrevmodulen er slått av for denne butikken (growth.module), så testruten svarer ikke. En plattformansvarlig må slå den på.',
 
   // Godkjenning (#17).
   growth_approval_title: 'Godkjenning',
@@ -3035,19 +3042,26 @@ export default {
   growth_approval_approving: 'Godkjenner …',
   growth_approval_approved_at: 'Godkjent {time}',
   growth_approval_done: 'Godkjent.',
+  growth_approval_unseen_body: 'Denne skjermen kan ikke vise innholdet i den lagrede versjonen. Send deg selv en test først, så godkjenner du noe du faktisk har sett.',
 
   // Porten — det ene stedet en utsendelse kan starte.
   growth_gate_title: 'Klar til å sende?',
   growth_gate_intro: 'En utsendelse skjer bare når alle vilkårene under er oppfylt. Alt som er uavklart stopper den, også det vi ikke fikk kontrollert.',
-  growth_gate_state_ready: 'Klar',
+  growth_gate_state_ready: 'Vilkårene er oppfylt',
   growth_gate_state_blocked: 'Stoppet',
   growth_gate_state_unknown: 'Uavklart',
-  growth_gate_state_dispatched: 'Sendt',
+  growth_gate_state_dispatched: 'Sendt inn',
   growth_gate_recipients: 'Mottakere',
   growth_gate_send: 'Send nyhetsbrev',
   growth_gate_sending: 'Sender …',
-  growth_gate_dispatched_note: 'Denne versjonen er allerede sendt. Å sende igjen ville ikke sende på nytt — det er én utsendelse per godkjent versjon.',
-  growth_gate_dispatched_toast: 'Nyhetsbrevet ble sendt.',
+  growth_gate_ready_caveat: 'Alt vi kan kontrollere herfra er i orden. Én ting kan vi ikke se: den installasjonsomfattende bryteren Growth:Enabled rapporteres ikke av noe endepunkt, så en utsendelse kan fortsatt bli avvist av den.',
+  growth_gate_mail_path: 'Utsendingsvei',
+  growth_gate_mail_unknown: 'Vi klarte ikke å lese leverandøroppsettet for denne butikken.',
+  growth_gate_mail_none: 'Ingen leverandørkonto er registrert for denne butikken.',
+  growth_gate_mail_paused: 'På pause',
+  growth_gate_mail_binding_note: 'Dette er leverandørkontoene butikken har fått opprettet. Hvilken e-postmotor serveren faktisk kjører rapporteres ikke av noe endepunkt og kan ikke leses herfra.',
+  growth_gate_dispatched_note: 'Denne versjonen er allerede sendt inn. Å sende igjen ville ikke sende på nytt — det er én utsendelse per godkjent versjon.',
+  growth_gate_dispatched_toast: 'Utsendelsen er kjørt. Leverandøren tok imot {accepted} av {eligible} mottakere. Levering bekreftes først når leverandøren melder tilbake — se «Hva skjedde» under.',
 
   // Hvorfor en utsendelse stoppes. Hvert punkt er et faktum om denne utsendelsen, ikke en advarsel.
   growth_block_consent_unreadable: 'Vi klarte ikke å lese samtykkeloggen, så vi kan ikke bekrefte at noen kan få e-post.',
@@ -3057,6 +3071,10 @@ export default {
   growth_block_not_approved: 'Denne versjonen er ikke godkjent av et menneske.',
   growth_block_approval_superseded: 'Godkjenningen ble gitt for en tidligere versjon og dekker ikke denne.',
   growth_block_no_unsubscribe: 'Mottakerne ville ikke hatt noen fungerende måte å melde seg av på. Å sende markedsføring uten det er ikke lovlig, så utsendelsen stoppes.',
+  growth_block_module_off: 'Nyhetsbrevmodulen er slått av for denne butikken (growth.module), så utsendingsruten svarer ikke i det hele tatt. En plattformansvarlig må slå den på.',
+  growth_block_dispatch_off: 'Nødbryteren for utsendelse er slått av for denne butikken (growth.dispatch). Ingenting blir opprettet og ingenting blir sendt før den slås på igjen.',
+  growth_block_provider_paused: 'En leverandørkonto for denne butikken står på pause. Så lenge den gjør det, sendes ingenting.',
+  growth_block_platform_unreadable: 'Vi klarte ikke å lese butikkens brytere for nyhetsbrev og utsendelse, så vi vet ikke om en utsendelse ville nå fram i det hele tatt. Last inn siden på nytt.',
 
   // Utsendelsen — ærlige tall, aldri blandet sammen.
   growth_run_title: 'Hva skjedde',
@@ -3071,6 +3089,15 @@ export default {
   growth_run_truth_note: 'Tatt imot og levert telles hver for seg. At leverandøren tar imot en melding er ikke det samme som at den kommer fram.',
   growth_run_started: 'Startet',
   growth_run_completed: 'Fullført',
+  growth_run_state_pending: 'Kjøringen er opprettet, men ingen sending er hentet ut ennå. Tallene under er ikke endelige.',
+  growth_run_state_in_progress: 'Kjøringen sender fortsatt. Tallene under er ikke endelige.',
+  growth_run_state_completed: 'Hver sending har nådd et endelig utfall. Tallene under er endelige — bortsett fra åpninger, som fortsetter å komme inn.',
+  growth_run_state_reconciliation: 'Minst én sending står til gjennomgang, så kjøringen kan ikke avsluttes sannferdig ennå.',
+  growth_run_refresh: 'Hent tallene på nytt',
+  growth_run_refreshing: 'Henter …',
+  growth_run_read_at: 'Lest fra serveren {time}',
+  growth_run_read_unknown: 'Ikke lest fra serveren i denne økten.',
+  growth_run_refresh_note: 'Tallene oppdaterer seg ikke av seg selv. Levering, feil og åpninger registreres når leverandøren melder tilbake, altså etter at utsendelsen ble kjørt.',
 
   // Feil, nøklet på den stabile growth.*-koden API-et returnerer.
   growth_error_generic: 'Noe gikk galt. Ingenting ble sendt.',
@@ -3085,6 +3112,10 @@ export default {
   growth_error_subject_required: 'Emne er påkrevd.',
   growth_error_content_required: 'Innhold er påkrevd.',
   growth_error_test_address_required: 'En testadresse er påkrevd.',
+  growth_error_dispatch_disabled: 'Nødbryteren for utsendelse er slått av for denne butikken (growth.dispatch). Ingenting ble opprettet og ingenting ble sendt. En plattformansvarlig må slå den på.',
+  growth_error_provider_paused: 'Leverandørkontoen til denne butikken står på pause. Ingenting ble opprettet og ingenting ble sendt. Fjern pausen før du prøver igjen.',
+  growth_error_unsubscribe_unconfigured: 'Denne installasjonen kan ikke lage en fungerende avmeldingslenke (Growth:PublicApiBaseUrl mangler eller er ikke en https-adresse). Ingenting ble sendt — et nyhetsbrev uten avmelding skal ikke sendes.',
+  growth_error_preference_centre_unconfigured: 'Denne installasjonen kan ikke lage en lenke til preferansesenteret (Growth:PreferenceCentreBaseUrl mangler eller er ikke en https-adresse). Ingenting ble sendt — mottakerne ville ikke hatt noen vei til å trekke samtykke eller be om innsyn.',
 
   // Selskap og arrangement — bevisflate for reisen fra forespørsel til oppgjort
   nav_events: 'Selskap',

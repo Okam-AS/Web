@@ -5,7 +5,7 @@ import GrowthSendGate from '~/components/admin/growth/GrowthSendGate.vue'
 import GrowthRunOutcome from '~/components/admin/growth/GrowthRunOutcome.vue'
 import translations from '~/translations'
 import {
-  readConsentStanding, readAudience, readRun, resolveSendGate,
+  readConsentStanding, readAudience, readRun, readModuleFlags, readMailPath, resolveSendGate,
   UNKNOWN, APPROVAL_LIVE,
   UNSUBSCRIBE_PRESENT, UNSUBSCRIBE_ABSENT,
   GATE_READY, GATE_BLOCKED
@@ -55,6 +55,16 @@ const RUN = {
   completedAt: '2026-07-20T11:02:00+00:00'
 }
 
+// The two platform reads, transcribed from `StoreFeatureFlagState` and `GrowthDeliveryHealthResponse`.
+const FLAGS_ON = [
+  { flagKey: 'growth.module', module: 'Growth', title: 'Module (guest capture)', defaultEnabled: false, isOverridden: true, overrideEnabled: true, effective: true },
+  { flagKey: 'growth.dispatch', module: 'Growth', title: 'Live newsletter dispatch (kill switch)', defaultEnabled: false, isOverridden: true, overrideEnabled: true, effective: true }
+]
+const HEALTH = {
+  storeId: 90100,
+  providers: [{ providerKey: 'sandbox', sendingDomain: 'mail.virksomheten.no', paused: false }]
+}
+
 // Every input satisfied. Each gate test flips exactly one, so the untouched baseline is the positive
 // control proving the component can reach an enabled button at all.
 function gateFor (overrides) {
@@ -64,7 +74,9 @@ function gateFor (overrides) {
     approval: { state: APPROVAL_LIVE, approvalId: 7002, approvedAt: null, invalidatedAt: null },
     run: { state: UNKNOWN },
     unsubscribeMechanism: UNSUBSCRIBE_PRESENT,
-    hasContent: true
+    hasContent: true,
+    moduleFlags: readModuleFlags(FLAGS_ON),
+    mailPath: readMailPath(HEALTH)
   }, overrides || {}))
 }
 
@@ -149,8 +161,8 @@ describe('GrowthAudiencePanel — no count is better than a wrong one', () => {
 })
 
 describe('GrowthSendGate — the button cannot be walked around', () => {
-  const render = (gate, busy) => mount(GrowthSendGate, {
-    propsData: { gate, busy: busy === true }, mocks: { $i }
+  const render = (gate, busy, mailPath) => mount(GrowthSendGate, {
+    propsData: { gate, busy: busy === true, mailPath: mailPath || readMailPath(HEALTH) }, mocks: { $i }
   })
 
   test('POSITIVE CONTROL: with everything satisfied the send button is enabled and emits', () => {
@@ -212,6 +224,41 @@ describe('GrowthSendGate — the button cannot be walked around', () => {
     expect(wrapper.find('.growth-gate__send').attributes('disabled')).toBe('disabled')
     expect(wrapper.text()).toContain(translations.no.growth_gate_dispatched_note)
   })
+
+  test('a ready gate does not claim the send will land — it names what it cannot see', () => {
+    // READY is "nothing we can see refuses this". The deployment-wide `Growth:Enabled` switch is not
+    // reported by any endpoint, so the badge must not be left to imply the stronger claim.
+    const wrapper = render(gateFor())
+    expect(wrapper.props('gate').state).toBe(GATE_READY)
+    expect(wrapper.text()).toContain(translations.no.growth_gate_ready_caveat)
+    // And the badge itself does not read as a promise.
+    expect(wrapper.find('.growth-gate__badge').text()).toBe(translations.no.growth_gate_state_ready)
+  })
+
+  test('a store with no provider account says so, and says what that does NOT tell you', () => {
+    const wrapper = render(gateFor(), false, readMailPath({ storeId: 90100, providers: [] }))
+    expect(wrapper.text()).toContain(translations.no.growth_gate_mail_none)
+    // The inference an operator would otherwise draw is closed off in words: an empty account list
+    // is provisioning, and the running mail adapter is not reported by anything.
+    expect(wrapper.text()).toContain(translations.no.growth_gate_mail_binding_note)
+  })
+
+  test('a provider account is printed with its pause state, and the binding caveat stays', () => {
+    const wrapper = render(gateFor(), false, readMailPath({
+      storeId: 90100,
+      providers: [{ providerKey: 'sandbox', sendingDomain: 'mail.example', paused: true }]
+    }))
+    expect(wrapper.text()).toContain('sandbox')
+    expect(wrapper.text()).toContain('mail.example')
+    expect(wrapper.text()).toContain(translations.no.growth_gate_mail_paused)
+    expect(wrapper.text()).toContain(translations.no.growth_gate_mail_binding_note)
+  })
+
+  test('an unreadable mail path shows no provider list at all, and no zero', () => {
+    const wrapper = render(gateFor(), false, readMailPath(null))
+    expect(wrapper.text()).toContain(translations.no.growth_gate_mail_unknown)
+    expect(wrapper.findAll('.growth-gate__mail-list').length).toBe(0)
+  })
 })
 
 describe('GrowthRunOutcome — accepted is not delivered', () => {
@@ -239,5 +286,47 @@ describe('GrowthRunOutcome — accepted is not delivered', () => {
     // The server sends the label because the figure is event-deduped rather than per-recipient.
     // Dropping it would let a venue read a 50 % as "half of recipients opened it".
     expect(render(readRun(RUN)).text()).toContain('event-deduped')
+  })
+
+  test('a run still in flight says its figures are not final', () => {
+    const pending = render(readRun(Object.assign({}, RUN, { state: 'Pending' })))
+    expect(pending.text()).toContain(translations.no.growth_run_state_pending)
+    // POSITIVE CONTROL: a finished run says the opposite through the same component.
+    expect(render(readRun(RUN)).text()).toContain(translations.no.growth_run_state_completed)
+  })
+
+  test('a run parked for review is drawn apart from a finished one', () => {
+    const parked = render(readRun(Object.assign({}, RUN, { state: 'ReconciliationRequired' })))
+    expect(parked.text()).toContain(translations.no.growth_run_state_reconciliation)
+    expect(parked.text()).not.toContain(translations.no.growth_run_state_completed)
+  })
+
+  test('a run state this surface has not been taught renders NO note rather than an invented one', () => {
+    const wrapper = render(readRun(Object.assign({}, RUN, { state: 'SomethingNew' })))
+    expect(wrapper.findAll('.growth-run__note--state').length).toBe(0)
+    // The raw state is still shown, so the operator sees the unfamiliar word rather than nothing.
+    expect(wrapper.find('.growth-run__state').text()).toBe('SomethingNew')
+  })
+
+  test('the counters carry a refresh control and say when they were read', () => {
+    // The figures freeze at the read: delivery and opens are written by webhooks arriving later.
+    const wrapper = mount(GrowthRunOutcome, {
+      propsData: { run: readRun(RUN), locale: 'nb-NO', readAt: new Date('2026-07-20T11:05:00Z') },
+      mocks: { $i }
+    })
+    expect(wrapper.text()).toContain(translations.no.growth_run_refresh_note)
+    expect(wrapper.text()).toContain('Lest fra serveren')
+    wrapper.find('.growth-run__refresh-btn').trigger('click')
+    expect(wrapper.emitted().refresh).toHaveLength(1)
+  })
+
+  test('a refresh in flight holds the button', () => {
+    const wrapper = mount(GrowthRunOutcome, {
+      propsData: { run: readRun(RUN), locale: 'nb-NO', busy: true },
+      mocks: { $i }
+    })
+    expect(wrapper.find('.growth-run__refresh-btn').attributes('disabled')).toBe('disabled')
+    // And with no read stamp it says so rather than printing an empty time.
+    expect(wrapper.text()).toContain(translations.no.growth_run_read_unknown)
   })
 })

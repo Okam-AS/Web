@@ -68,27 +68,54 @@
           </p>
 
           <template v-else>
+            <!-- THE SAVED BODY IS NOT ON SCREEN, and saying so is the whole guard. The detail read
+                 returns the subject and a content FINGERPRINT, never the content itself, so an open
+                 newsletter's body cannot be shown and cannot be edited — only replaced wholesale. An
+                 operator who is not told that will type a subject fix into an empty form and append a
+                 version whose body is whatever the boxes happened to hold. -->
+            <div v-if="bodyIsHidden" class="growth-page__warn">
+              <p class="growth-page__warn-title">
+                {{ $i('growth_draft_body_hidden_title', { version: detail.currentVersion.versionNo }) }}
+              </p>
+              <p class="growth-page__warn-body">
+                {{ $i('growth_draft_body_hidden') }}
+              </p>
+            </div>
+
             <label class="growth-page__field">
               <span>{{ $i('growth_draft_subject') }}</span>
               <input v-model="form.subject" type="text" :disabled="busy.any">
             </label>
             <label class="growth-page__field">
               <span>{{ $i('growth_draft_content') }}</span>
-              <textarea v-model="form.contentJson" rows="6" :disabled="busy.any" />
+              <textarea
+                v-model="form.contentJson"
+                rows="6"
+                :disabled="busy.any"
+                :placeholder="bodyIsHidden ? $i('growth_draft_content_hidden_placeholder') : ''"
+              />
             </label>
             <label class="growth-page__field">
               <span>{{ $i('growth_draft_plain') }}</span>
               <textarea v-model="form.plainTextAlternative" rows="3" :disabled="busy.any" />
             </label>
 
+            <!-- The consent to destroy. It is not a nag: with the body invisible, this is the only
+                 moment at which the operator can be told what the save will overwrite, and an
+                 append-only chain gives them no second chance afterwards. -->
+            <label v-if="bodyIsHidden" class="growth-page__ack">
+              <input v-model="replaceBodyAck" type="checkbox" :disabled="busy.any">
+              <span>{{ $i('growth_draft_replace_ack', { version: detail.currentVersion.versionNo }) }}</span>
+            </label>
+
             <div class="growth-page__actions">
               <button
                 type="button"
                 class="growth-page__btn growth-page__btn--primary"
-                :disabled="busy.any || !form.subject || !form.contentJson"
+                :disabled="!canSave"
                 @click="saveDraft"
               >
-                {{ selectedId ? $i('growth_draft_save') : $i('growth_draft_create') }}
+                {{ saveLabel }}
               </button>
               <span v-if="detail" class="growth-page__version">
                 {{ $i('growth_draft_version', { version: detail.currentVersion.versionNo }) }}
@@ -106,18 +133,25 @@
             <p class="growth-page__panel-intro">
               {{ $i('growth_test_intro') }}
             </p>
+            <!-- The test-send route carries the SAME module gate as the dispatch route, so with
+                 `growth.module` off it answers an opaque 404 too. Held only on a flag read as
+                 explicitly off — an unreadable flag leaves the button live, because a test to the
+                 operator's own address is a cheap thing to have refused, unlike a dispatch. -->
+            <p v-if="moduleIsOff" class="growth-page__hint">
+              {{ $i('growth_test_module_off') }}
+            </p>
             <div class="growth-page__actions">
               <input
                 v-model="testAddress"
                 type="email"
                 class="growth-page__input"
                 :placeholder="$i('growth_test_address')"
-                :disabled="busy.any"
+                :disabled="busy.any || moduleIsOff"
               >
               <button
                 type="button"
                 class="growth-page__btn"
-                :disabled="busy.any || !testAddress"
+                :disabled="busy.any || !testAddress || moduleIsOff"
                 @click="sendTest"
               >
                 {{ busy.test ? $i('growth_test_sending') : $i('growth_test_send') }}
@@ -140,6 +174,13 @@
                 {{ $i('growth_approval_state_' + approval.state) }}
               </span>
             </header>
+            <!-- Approval's own promise is that a review never green-lights content it did not see.
+                 This screen cannot show the body, so it does not pretend the approval is informed —
+                 it names the one route that does show it. Not a block: the test-send exists, and
+                 refusing the approval outright would leave no way through at all. -->
+            <p v-if="bodyIsHidden" class="growth-page__warn">
+              <span class="growth-page__warn-body">{{ $i('growth_approval_unseen_body') }}</span>
+            </p>
             <div class="growth-page__actions">
               <button
                 type="button"
@@ -156,10 +197,17 @@
           </section>
 
           <!-- 6. The gate, and the only send button on this page. -->
-          <GrowthSendGate :gate="gate" :busy="busy.dispatch" @send="dispatch" />
+          <GrowthSendGate :gate="gate" :mail-path="mailPath" :busy="busy.dispatch" @send="dispatch" />
 
           <!-- 7. The run, once one exists. -->
-          <GrowthRunOutcome v-if="run.state !== 'unknown'" :run="run" :locale="intlLocale" />
+          <GrowthRunOutcome
+            v-if="run.state !== 'unknown'"
+            :run="run"
+            :locale="intlLocale"
+            :read-at="runReadAt"
+            :busy="busy.run"
+            @refresh="refreshRun"
+          />
         </template>
       </template>
     </div>
@@ -172,11 +220,11 @@ import GrowthConsentStanding from '~/components/admin/growth/GrowthConsentStandi
 import GrowthAudiencePanel from '~/components/admin/growth/GrowthAudiencePanel.vue';
 import GrowthSendGate from '~/components/admin/growth/GrowthSendGate.vue';
 import GrowthRunOutcome from '~/components/admin/growth/GrowthRunOutcome.vue';
-import { GrowthService, NEWSLETTER_SUBSCRIBERS } from '~/utils/growth/growth-client';
+import { GrowthService, StoreFeatureFlagReader, NEWSLETTER_SUBSCRIBERS } from '~/utils/growth/growth-client';
 import { isGrowthApiError } from '~/utils/growth/api-client';
 import {
-  readConsentStanding, readAudience, readApproval, readRun, resolveSendGate,
-  APPROVAL_LIVE, UNKNOWN
+  readConsentStanding, readAudience, readApproval, readRun, readModuleFlags, readMailPath,
+  resolveSendGate, APPROVAL_LIVE, UNKNOWN, READ
 } from '~/utils/growth/send-gate';
 import { UNSUBSCRIBE_MECHANISM } from '~/utils/growth/platform-capability';
 
@@ -187,6 +235,13 @@ const LOCALES = { no: 'nb-NO', en: 'en-GB', de: 'de-DE' };
 // a route reachable from this page actually throws (`GrowthApiException` factories in
 // `Services/Growth/GrowthApiException.cs` plus the newsletter/dispatch call sites). A code not
 // listed here falls to the generic message rather than rendering a missing key.
+//
+// THE FOUR AT THE BOTTOM are every remaining refusal `CreateOrGetRunAsync` can raise, and all four
+// used to land on «Something went wrong. Nothing was sent.» — a sentence that tells an operator to
+// retry when the fix is a switch, a config value or a paused account. They were re-derived by
+// enumerating the `"growth.*"` literals in `Services/Growth/` and `Controllers/Growth*.cs` and
+// keeping the ones on a route THIS page calls; the rest belong to capture, the preference centre and
+// the privacy-request surfaces, and are deliberately still unlisted.
 const ERROR_KEYS = {
   'growth.not_found': 'growth_error_not_found',
   'growth.no_live_approval': 'growth_error_no_live_approval',
@@ -197,7 +252,13 @@ const ERROR_KEYS = {
   'growth.newsletter_not_approvable': 'growth_error_newsletter_not_approvable',
   'growth.subject_required': 'growth_error_subject_required',
   'growth.content_required': 'growth_error_content_required',
-  'growth.test_address_required': 'growth_error_test_address_required'
+  'growth.test_address_required': 'growth_error_test_address_required',
+  // Dispatch preflight (`GrowthDispatchService`): nothing is created and nothing is sent for any of
+  // these, and each is undone in a different place by a different person.
+  'growth.dispatch_disabled': 'growth_error_dispatch_disabled',
+  'growth.provider_paused': 'growth_error_provider_paused',
+  'growth.unsubscribe_unconfigured': 'growth_error_unsubscribe_unconfigured',
+  'growth.preference_centre_unconfigured': 'growth_error_preference_centre_unconfigured'
 };
 
 // The Growth admin proving surface: capture to a lawful send, on one screen.
@@ -224,11 +285,26 @@ export default {
       summary: null,
       snapshot: null,
       detail: null,
+      flagStates: null,
+      health: null,
       newsletters: [],
       selectedId: null,
       form: { subject: '', contentJson: '', plainTextAlternative: '' },
+      /**
+       * The version id whose body is in the content boxes, or `null`.
+       *
+       * This exists because the detail read does not return the body (see `selectNewsletter`), so
+       * "what is in the textarea" and "what the server holds for this version" are two different
+       * things that the form alone cannot tell apart. Only a save this session performed puts them
+       * in agreement, and only for the version that save produced.
+       */
+      loadedBodyVersionId: null,
+      /** The operator has confirmed, in words, that saving replaces a body they cannot see. */
+      replaceBodyAck: false,
       testAddress: '',
-      busy: { audience: false, draft: false, test: false, approve: false, dispatch: false, any: false },
+      /** When this screen last read the run off the server. A client fact, rendered as one. */
+      runReadAt: null,
+      busy: { audience: false, draft: false, test: false, approve: false, dispatch: false, run: false, any: false },
       blocker: '',
       toast: { show: false, message: '', type: 'success' },
       toastTimer: null
@@ -249,6 +325,9 @@ export default {
     },
     _growthService () {
       return new GrowthService(this._coreInitializer);
+    },
+    _flagReader () {
+      return new StoreFeatureFlagReader(this._coreInitializer);
     },
     standing () {
       return readConsentStanding(this.summary);
@@ -275,10 +354,43 @@ export default {
     run () {
       return readRun(this.detail && this.detail.run);
     },
+    moduleFlags () {
+      return readModuleFlags(this.flagStates);
+    },
+    mailPath () {
+      return readMailPath(this.health);
+    },
+    // Only an explicitly-read `false` holds a control. An unreadable flag is not an off flag.
+    moduleIsOff () {
+      return this.moduleFlags.state === READ && this.moduleFlags.module === false;
+    },
     // A content hash exists only when the server holds content for the current version, so it is
     // server-vouched rather than a guess from the form's own fields.
     hasContent () {
       return !!(this.detail && this.detail.currentVersion && this.detail.currentVersion.contentHash);
+    },
+    /**
+     * A stored version exists whose body is NOT what the boxes hold.
+     *
+     * True for every newsletter opened from the dropdown, because the detail read carries no body;
+     * false immediately after a save, because then the boxes ARE the version that was just written.
+     * Everything the save control does differently in the dangerous case keys on this one fact.
+     */
+    bodyIsHidden () {
+      if (!this.detail || !this.detail.currentVersion) { return false; }
+      return this.loadedBodyVersionId !== this.detail.currentVersion.versionId;
+    },
+    canSave () {
+      if (this.busy.any) { return false; }
+      if (!this.form.subject || !this.form.contentJson) { return false; }
+      // The body is invisible and the operator has not said they mean to replace it.
+      return !(this.bodyIsHidden && !this.replaceBodyAck);
+    },
+    // A save over a hidden body is a replacement, and the button says the word rather than the
+    // neutral "save new version", which reads as if it were preserving something.
+    saveLabel () {
+      if (!this.selectedId) { return this.$i('growth_draft_create'); }
+      return this.bodyIsHidden ? this.$i('growth_draft_replace') : this.$i('growth_draft_save');
     },
     gate () {
       return resolveSendGate({
@@ -287,7 +399,9 @@ export default {
         approval: this.approval,
         run: this.run,
         unsubscribeMechanism: UNSUBSCRIBE_MECHANISM,
-        hasContent: this.hasContent
+        hasContent: this.hasContent,
+        moduleFlags: this.moduleFlags,
+        mailPath: this.mailPath
       });
     },
     // Authoring needs a snapshot id to bind to; the backend requires one at creation.
@@ -316,17 +430,31 @@ export default {
       this.summary = null;
       this.snapshot = null;
       this.detail = null;
+      this.flagStates = null;
+      this.health = null;
       this.selectedId = null;
+      this.loadedBodyVersionId = null;
+      this.replaceBodyAck = false;
+      this.runReadAt = null;
       this.newsletters = [];
 
       // Each read fails independently. A consent read that fails leaves the standing UNKNOWN — which
       // the gate treats as a refusal to send — rather than failing the whole page.
-      const [summary, list] = await Promise.all([
+      //
+      // The two platform reads are caught PLAINLY rather than through `recordRead`: the flag route
+      // answers 403 (`Forbid()`) where the Growth routes answer 404, and letting that 403 raise the
+      // store-level blocker would black out a page the operator can otherwise use in full. A failure
+      // there leaves the platform UNKNOWN, which the gate already refuses on, by name.
+      const [summary, list, flagStates, health] = await Promise.all([
         this._growthService.GetConsentSummary(this.storeId).catch(e => this.recordRead(e)),
-        this._growthService.ListNewsletters(this.storeId).catch(e => this.recordRead(e))
+        this._growthService.ListNewsletters(this.storeId).catch(e => this.recordRead(e)),
+        this._flagReader.GetStoreFlags(this.storeId).catch(() => null),
+        this._growthService.GetDeliveryHealth(this.storeId).catch(() => null)
       ]);
       this.summary = summary || null;
       this.newsletters = (list && list.items) || [];
+      this.flagStates = flagStates || null;
+      this.health = health || null;
     },
 
     // A 403/404 on the first read is the store-level answer and blocks the page; anything else
@@ -348,21 +476,34 @@ export default {
     async selectNewsletter (value) {
       const id = value ? Number(value) : null;
       this.selectedId = id;
+      this.replaceBodyAck = false;
+      this.loadedBodyVersionId = null;
+      this.runReadAt = null;
       if (!id) {
         this.detail = null;
         this.form = { subject: '', contentJson: '', plainTextAlternative: '' };
         return;
       }
+      // THE BODY IS CLEARED, NOT LEFT. `GrowthNewsletterVersionSummary` carries the subject and a
+      // content HASH and nothing else, so there is no body to restore — and whatever the boxes held a
+      // moment ago belongs to a DIFFERENT newsletter. Leaving it there is how one newsletter's body
+      // gets appended as another's next immutable version. `loadedBodyVersionId` stays null, which is
+      // what makes `bodyIsHidden` true and puts the warning and the acknowledgement in the way.
+      this.form.contentJson = '';
+      this.form.plainTextAlternative = '';
       await this.run_('draft', async () => {
         this.detail = await this._growthService.GetNewsletter(this.storeId, id);
-        // The detail carries the subject but not the body — the body is only ever sent, never read
-        // back — so the editor shows what the server vouches for and leaves the rest blank rather
-        // than inventing it.
         this.form.subject = this.detail.currentVersion.subject || '';
+        if (this.detail.run) { this.runReadAt = new Date(); }
       });
     },
 
     async saveDraft () {
+      // Re-asserted here, not merely in the button's `disabled`. A disabled attribute is a rendering;
+      // this method is the only caller of the write, and the write is irreversible — the version it
+      // appends can never be edited, only superseded.
+      if (!this.canSave) { return; }
+      const replacingHiddenBody = this.bodyIsHidden;
       await this.run_('draft', async () => {
         if (this.selectedId) {
           this.detail = await this._growthService.EditDraft(this.storeId, this.selectedId, {
@@ -382,8 +523,12 @@ export default {
           });
           this.selectedId = this.detail.id;
         }
+        // The boxes and the server now agree, for exactly this version — the one case in which the
+        // page may say the body on screen is the body that will be sent.
+        this.loadedBodyVersionId = this.detail.currentVersion.versionId;
+        this.replaceBodyAck = false;
         await this.refreshList();
-        this.notify(this.$i('growth_draft_saved'));
+        this.notify(this.$i(replacingHiddenBody ? 'growth_draft_replaced' : 'growth_draft_saved'));
       });
     },
 
@@ -414,8 +559,35 @@ export default {
       await this.run_('dispatch', async () => {
         await this._growthService.Dispatch(this.storeId, this.selectedId);
         this.detail = await this._growthService.GetNewsletter(this.storeId, this.selectedId);
+        this.runReadAt = new Date();
         await this.refreshList();
-        this.notify(this.$i('growth_gate_dispatched_toast'));
+        // WHAT THIS SCREEN MAY CLAIM. It used to say «The newsletter was sent.» — a delivery claim,
+        // made from a response that contains no delivery. What the server actually reported is a run
+        // and two counts: how many recipients were eligible at the irreversible transition, and how
+        // many the provider ACCEPTED for sending. Accepted is a submission outcome, and the whole
+        // module is built on not folding it into delivered (GRW-TRUTH-001), so the toast reports
+        // exactly those two figures and says where delivery will come from instead.
+        //
+        // It also does not say WHICH provider accepted them, because the running mail adapter is a
+        // DI binding (`Program.cs` → `GrowthFakeMailProvider` today) and no endpoint reports it. The
+        // sentence is true whichever adapter is bound, which is the only kind of sentence this screen
+        // is entitled to.
+        this.notify(this.$i('growth_gate_dispatched_toast', {
+          accepted: this.figure(this.run.providerAccepted),
+          eligible: this.figure(this.run.finalEligible)
+        }));
+      });
+    },
+
+    // The counters are a read, not a feed: delivery/failure/open figures are written by provider
+    // webhooks that arrive after the dispatch response, so the numbers freeze the moment they are
+    // fetched. This is the control that un-freezes them, and it re-reads rather than polls so the
+    // "read at" stamp beside it keeps meaning something.
+    async refreshRun () {
+      if (!this.selectedId) { return; }
+      await this.run_('run', async () => {
+        this.detail = await this._growthService.GetNewsletter(this.storeId, this.selectedId);
+        this.runReadAt = new Date();
       });
     },
 
@@ -458,6 +630,12 @@ export default {
       }).format(value);
     },
 
+    // The same rule the panels follow: a count the server did not vouch for is a dash and never a 0,
+    // including inside a sentence.
+    figure (value) {
+      return value === null || value === undefined ? '—' : String(value);
+    },
+
     notify (message) { this.showToast(message, 'success'); },
     notifyError (message) { this.showToast(message, 'error'); },
     showToast (message, type) {
@@ -485,7 +663,12 @@ export default {
 .growth-page__panel-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 12px; }
 .growth-page__panel-title { font-size: 16px; font-weight: 600; color: #292c34; margin: 0 0 4px; }
 .growth-page__panel-intro { font-size: 13px; color: #64748b; margin: 0; max-width: 60ch; line-height: 1.5; }
-.growth-page__hint { font-size: 13px; color: #64748b; background: #f8f9fa; border: 1px dashed #cbd5e0; border-radius: 8px; padding: 12px; margin: 0; }
+.growth-page__hint { font-size: 13px; color: #64748b; background: #f8f9fa; border: 1px dashed #cbd5e0; border-radius: 8px; padding: 12px; margin: 0 0 12px; }
+.growth-page__warn { border: 1px solid #fde68a; background: #fffbeb; border-radius: 8px; padding: 12px; margin: 0 0 12px; }
+.growth-page__warn-title { font-size: 13px; font-weight: 600; color: #92400e; margin: 0 0 4px; }
+.growth-page__warn-body { display: block; font-size: 13px; color: #92400e; margin: 0; line-height: 1.5; }
+.growth-page__ack { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: #292c34; line-height: 1.5; margin: 0 0 12px; cursor: pointer; }
+.growth-page__ack input { margin-top: 2px; flex: 0 0 auto; }
 .growth-page__field { display: block; margin-bottom: 12px; }
 .growth-page__field span { display: block; font-size: 12px; color: #64748b; margin-bottom: 4px; }
 .growth-page__field input, .growth-page__field textarea { width: 100%; border: 1px solid #cbd5e0; border-radius: 8px; padding: 8px 10px; font-size: 13px; font-family: inherit; color: #292c34; }

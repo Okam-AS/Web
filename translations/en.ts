@@ -2969,6 +2969,12 @@ export default {
   growth_draft_save: 'Save new version',
   growth_draft_saved: 'Saved.',
   growth_draft_version: 'Version {version}',
+  growth_draft_body_hidden_title: 'The content of version {version} is not shown',
+  growth_draft_body_hidden: 'The API gives us the subject and a fingerprint of the content, but not the content itself. The saved content therefore cannot be edited from here — only replaced. If you save, whatever is in the boxes below becomes a new, unchangeable version, and the old content is no longer what gets sent. To see what this version actually contains, send yourself a test further down.',
+  growth_draft_content_hidden_placeholder: 'Empty because the saved content cannot be retrieved. Write the whole content again.',
+  growth_draft_replace_ack: 'I want to replace the content of version {version} with what is in the boxes above.',
+  growth_draft_replace: 'Replace the content and save a new version',
+  growth_draft_replaced: 'Saved as a new version. The content was replaced with what was in the boxes.',
 
   // Test send (#16).
   growth_test_title: 'Send yourself a test',
@@ -2977,6 +2983,7 @@ export default {
   growth_test_send: 'Send test',
   growth_test_sending: 'Sending …',
   growth_test_result: 'Test submitted. The provider answered: {status}. That is a submission status, not a delivery confirmation.',
+  growth_test_module_off: 'The newsletter module is switched off for this store (growth.module), so the test route does not answer. A platform operator has to switch it on.',
 
   // Approval (#17).
   growth_approval_title: 'Approval',
@@ -2989,19 +2996,26 @@ export default {
   growth_approval_approving: 'Approving …',
   growth_approval_approved_at: 'Approved {time}',
   growth_approval_done: 'Approved.',
+  growth_approval_unseen_body: 'This screen cannot show the content of the saved version. Send yourself a test first, so you approve something you have actually seen.',
 
   // The gate — the one place a send can start.
   growth_gate_title: 'Ready to send?',
   growth_gate_intro: 'A send happens only when every condition below is met. Anything unresolved stops it, including anything we could not check.',
-  growth_gate_state_ready: 'Ready',
+  growth_gate_state_ready: 'Conditions met',
   growth_gate_state_blocked: 'Blocked',
   growth_gate_state_unknown: 'Unresolved',
-  growth_gate_state_dispatched: 'Sent',
+  growth_gate_state_dispatched: 'Submitted',
   growth_gate_recipients: 'Recipients',
   growth_gate_send: 'Send newsletter',
   growth_gate_sending: 'Sending …',
-  growth_gate_dispatched_note: 'This version has already been sent. Sending again would not send a second time — there is one send per approved version.',
-  growth_gate_dispatched_toast: 'The newsletter was sent.',
+  growth_gate_ready_caveat: 'Everything we can check from here is in order. One thing we cannot see: the deployment-wide Growth:Enabled switch is not reported by any endpoint, so a send can still be refused by it.',
+  growth_gate_mail_path: 'Mail path',
+  growth_gate_mail_unknown: 'We could not read this store\'s provider setup.',
+  growth_gate_mail_none: 'No provider account is registered for this store.',
+  growth_gate_mail_paused: 'Paused',
+  growth_gate_mail_binding_note: 'These are the provider accounts this store has been given. Which mail engine the server is actually running is not reported by any endpoint and cannot be read from here.',
+  growth_gate_dispatched_note: 'This version has already been submitted. Sending again would not send a second time — there is one send per approved version.',
+  growth_gate_dispatched_toast: 'The send ran. The provider accepted {accepted} of {eligible} recipients. Delivery is only confirmed once the provider reports back — see “What happened” below.',
 
   // Why a send is refused. Each is a fact about this send, never a general warning.
   growth_block_consent_unreadable: 'We could not read the consent record, so we cannot confirm anyone may be mailed.',
@@ -3011,6 +3025,10 @@ export default {
   growth_block_not_approved: 'This version has not been approved by a person.',
   growth_block_approval_superseded: 'The approval was given for an earlier version and no longer covers this one.',
   growth_block_no_unsubscribe: 'Recipients would have no working way to unsubscribe. Sending marketing mail without one is not lawful, so this send is refused.',
+  growth_block_module_off: 'The newsletter module is switched off for this store (growth.module), so the send route does not answer at all. A platform operator has to switch it on.',
+  growth_block_dispatch_off: 'The dispatch kill switch is off for this store (growth.dispatch). Nothing is created and nothing is sent until it is switched back on.',
+  growth_block_provider_paused: 'A provider account for this store is paused. While it is, nothing is sent.',
+  growth_block_platform_unreadable: 'We could not read this store\'s newsletter and dispatch switches, so we do not know whether a send would reach anything at all. Reload the page.',
 
   // The run — truthful counts, never blended.
   growth_run_title: 'What happened',
@@ -3025,6 +3043,15 @@ export default {
   growth_run_truth_note: 'Accepted and delivered are counted separately. The provider taking a message for sending is not the same as it arriving.',
   growth_run_started: 'Started',
   growth_run_completed: 'Finished',
+  growth_run_state_pending: 'The run has been created, but no send has been picked up yet. The figures below are not final.',
+  growth_run_state_in_progress: 'The run is still sending. The figures below are not final.',
+  growth_run_state_completed: 'Every send reached a final outcome. The figures below are final — apart from opens, which keep arriving.',
+  growth_run_state_reconciliation: 'At least one send is parked for review, so the run cannot yet be closed truthfully.',
+  growth_run_refresh: 'Fetch the figures again',
+  growth_run_refreshing: 'Fetching …',
+  growth_run_read_at: 'Read from the server {time}',
+  growth_run_read_unknown: 'Not read from the server in this session.',
+  growth_run_refresh_note: 'These figures do not update themselves. Delivery, failures and opens are recorded when the provider reports back, which is after the send ran.',
 
   // Failures, keyed on the stable growth.* code the API returns.
   growth_error_generic: 'Something went wrong. Nothing was sent.',
@@ -3039,6 +3066,10 @@ export default {
   growth_error_subject_required: 'A subject is required.',
   growth_error_content_required: 'Content is required.',
   growth_error_test_address_required: 'A test address is required.',
+  growth_error_dispatch_disabled: 'The dispatch kill switch is off for this store (growth.dispatch). Nothing was created and nothing was sent. A platform operator has to switch it on.',
+  growth_error_provider_paused: 'This store\'s provider account is paused. Nothing was created and nothing was sent. Unpause it before trying again.',
+  growth_error_unsubscribe_unconfigured: 'This deployment cannot build a working unsubscribe link (Growth:PublicApiBaseUrl is missing or is not an https origin). Nothing was sent — a newsletter without an unsubscribe must not go out.',
+  growth_error_preference_centre_unconfigured: 'This deployment cannot build a preference-centre link (Growth:PreferenceCentreBaseUrl is missing or is not an https origin). Nothing was sent — recipients would have had no route to withdraw consent or ask for access.',
 
   // Events — the proving surface for the journey from enquiry to settled
   nav_events: 'Events',
