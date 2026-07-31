@@ -456,6 +456,24 @@ describe('the rail refuses to guess', () => {
   })
 })
 
+describe('the dietary field says unanswered, never "none"', () => {
+  test('an empty field reads as nobody having answered, and names it as not a confirmation', () => {
+    const text = journey().text()
+    expect(text).toContain(translations.no.ev_dietary_unstated)
+    // The sentence the run sheet used to print unconditionally, in any language, must not appear.
+    expect(text).not.toContain('Ingen allergier')
+    expect(text).not.toContain('No dietary')
+  })
+
+  test('a recorded statement is shown whole, beside the sheet it will print on', () => {
+    const text = journey({
+      detail: detail({ dietary: { eventId: 7, statement: 'Coeliac + nut allergy (EpiPen), table 3.', statedAtUtc: '2026-08-01T09:00:00Z' } })
+    }).text()
+    expect(text).toContain('Coeliac + nut allergy (EpiPen), table 3.')
+    expect(text).not.toContain(translations.no.ev_dietary_unstated)
+  })
+})
+
 describe('the proposal link is a handover, because nothing sends it', () => {
   test('the token is shown with the reason it has to be handed over', () => {
     const text = journey({ detail: detail({ versions: [version()] }) }).text()

@@ -33,7 +33,7 @@ jest.mock('~/utils/events/events-client', () => {
     'MarkLost', 'IssueDeposit', 'CancelDeposit', 'ListDeposits', 'RefundDeposit', 'GetRunSheet',
     'GenerateRunSheet', 'StartService', 'CloseEvent', 'GetSettlement', 'AddSettlementLine',
     'ReconcileSettlement', 'CloseSettlement', 'CancelEvent', 'GetNotificationHealth',
-    'RequeueNotification'
+    'RequeueNotification', 'RecordDietaryStatement'
   ]) {
     MockEventsService.prototype[name] = record(name)
   }
@@ -674,6 +674,55 @@ describe('a refused action answers with the server truth, not a local guess', ()
     await wrapper.vm.generateRunSheet()
     await settled()
     expect(wrapper.vm.refusal).toBeNull()
+  })
+})
+
+// The run sheet printed "No dietary or allergen requirements recorded." on every sheet ever generated,
+// having never asked. The field behind these tests is the ask; this page is the only place it exists.
+describe('recording what the venue was told about allergies', () => {
+  test('the statement goes on the wire and the run sheet is re-read, because saving made it stale', async () => {
+    mockAnswers.RecordDietaryStatement = { eventId: 7, statement: 'One coeliac.', statedAtUtc: '2026-08-01T09:00:00Z' }
+    const wrapper = mountPage()
+    await settled()
+    await wrapper.vm.selectEvent(7)
+    await settled()
+    mockCalls.length = 0
+
+    wrapper.setData({ draftDietary: '  One coeliac.  ' })
+    await wrapper.vm.recordDietary()
+    await settled()
+
+    // Trimmed, and sent as the whole statement — this field replaces, it does not append.
+    expect(callsOf('RecordDietaryStatement')[0]).toEqual(
+      ['RecordDietaryStatement', 42, 7, { statement: 'One coeliac.' }])
+    // The printed sheet is now out of date, and the operator has to be able to SEE that.
+    expect(callsOf('GetRunSheet')).toHaveLength(1)
+  })
+
+  test('an empty statement is never sent — a blank field is "nobody asked", not "no requirements"', async () => {
+    const wrapper = mountPage()
+    await settled()
+    await wrapper.vm.selectEvent(7)
+    mockCalls.length = 0
+
+    wrapper.setData({ draftDietary: '   ' })
+    const result = await wrapper.vm.recordDietary()
+
+    expect(result).toBeNull()
+    expect(callsOf('RecordDietaryStatement')).toHaveLength(0)
+  })
+
+  test('the form opens on what is already recorded, so an edit cannot silently shorten it', async () => {
+    mockAnswers.GetEvent = Object.assign({}, DETAIL, {
+      dietary: { eventId: 7, statement: 'Severe nut allergy, table 3.', statedAtUtc: '2026-08-01T09:00:00Z' }
+    })
+    const wrapper = mountPage()
+    await settled()
+    await wrapper.vm.selectEvent(7)
+    await settled()
+
+    wrapper.vm.toggleDietary()
+    expect(wrapper.vm.draftDietary).toBe('Severe nut allergy, table 3.')
   })
 })
 

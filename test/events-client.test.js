@@ -128,6 +128,13 @@ describe('the routes are the controllers routes', () => {
     expect(lastCall().init.method).toBe('PUT')
   })
 
+  test('the dietary statement is a PUT on the event, carrying only the words', async () => {
+    await service().RecordDietaryStatement(42, 7, { statement: 'One coeliac, one nut allergy.' })
+    expect(lastCall().url).toBe('/events/admin/42/events/7/dietary')
+    expect(lastCall().init.method).toBe('PUT')
+    expect(JSON.parse(lastCall().init.body)).toEqual({ statement: 'One coeliac, one nut allergy.' })
+  })
+
   test('the lifecycle tail', async () => {
     await service().StartService(42, 7)
     expect(lastCall().url).toBe('/events/admin/42/events/7/start-service')

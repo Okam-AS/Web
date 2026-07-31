@@ -222,6 +222,11 @@
               >
                 {{ $i('ev_action_start_service') }}
               </button>
+              <!-- Offered in every state, like the note log and for the same reason: the allergy that
+                   arrives on the morning of service arrives long after the last transition. -->
+              <button class="ev-page__btn ev-page__btn--ghost" :disabled="busy" @click="toggleDietary">
+                {{ $i('ev_action_dietary') }}
+              </button>
               <button class="ev-page__btn ev-page__btn--ghost" :disabled="busy" @click="generateRunSheet">
                 {{ $i('ev_action_runsheet') }}
               </button>
@@ -301,6 +306,29 @@
             </p>
             <button class="ev-page__btn" type="submit" :disabled="busy || !!lineBlocked">
               {{ $i('ev_action_add_settlement_line_submit') }}
+            </button>
+          </form>
+
+          <!-- ---- dietary requirement ----------------------------------------------------- -->
+          <form v-if="showDietary" class="ev-page__form" @submit.prevent="recordDietary">
+            <h3>{{ $i('ev_dietary_heading') }}</h3>
+            <!-- The rule the field is useless without: a blank is "never asked", so an absence has to
+                 be written in words. The server refuses an empty statement; this says why first. -->
+            <p class="ev-page__hint">
+              {{ $i('ev_dietary_note') }}
+            </p>
+            <label class="ev-page__field">
+              <span>{{ $i('ev_dietary_statement') }}</span>
+              <textarea v-model="draftDietary" rows="3" data-test="dietary-statement" />
+            </label>
+            <p v-if="dietaryStatedAt" class="ev-page__hint" data-test="dietary-stated">
+              {{ $i('ev_dietary_stated', { at: dietaryStatedAt }) }}
+            </p>
+            <p class="ev-page__hint">
+              {{ $i('ev_dietary_reissue_note') }}
+            </p>
+            <button class="ev-page__btn" type="submit" :disabled="busy || !draftDietary.trim()">
+              {{ $i('ev_action_dietary_submit') }}
             </button>
           </form>
 
@@ -462,6 +490,8 @@ export default {
       showProposal: false,
       showLine: false,
       showCancel: false,
+      showDietary: false,
+      draftDietary: '',
       filters: { status: '', from: '', to: '' },
       listing: { state: READ_UNKNOWN, rows: null, code: null, detail: null },
       selectedId: null,
@@ -558,6 +588,15 @@ export default {
     },
     venueZone () {
       return this.detail ? this.detail.timeZoneId : null;
+    },
+    // What the venue currently has on record. Null means NOBODY HAS STATED ANYTHING — it is never
+    // rendered as "no requirements", which is the claim this field exists to stop the sheet making.
+    dietaryStatement () {
+      return this.detail && this.detail.dietary ? this.detail.dietary.statement : null;
+    },
+    dietaryStatedAt () {
+      const stated = this.detail && this.detail.dietary ? this.detail.dietary.statedAtUtc : null;
+      return stated ? new Date(stated).toLocaleString(this.locale === 'no' ? 'nb-NO' : this.locale) : null;
     },
     // The newest Draft version, which is the one `send` (T3) would act on. Null when there is none —
     // the send button then has nothing to name and is not offered.
@@ -950,6 +989,33 @@ export default {
     startService () {
       return this.runSettlement(this.$i('ev_toast_in_service'), () =>
         this._eventsService.StartService(this.storeId, this.selectedId));
+    },
+
+    /**
+     * Opens the dietary form on what is ALREADY recorded, so an operator editing a statement starts
+     * from the words that are on the sheet today. Starting from blank would invite a shorter
+     * replacement of a longer requirement — an allergy lost to a fresh text box.
+     */
+    toggleDietary () {
+      this.showDietary = !this.showDietary;
+      if (this.showDietary) {
+        this.draftDietary = this.dietaryStatement || '';
+      }
+    },
+
+    /**
+     * Records what the venue was told. The run sheet is re-read afterwards because this write is what
+     * makes an already-printed sheet stale — the operator has to see that the paper on the pass is now
+     * out of date, which is the whole point of recording it before service.
+     */
+    async recordDietary () {
+      const statement = this.draftDietary.trim();
+      if (!statement) { return null; }
+      const result = await this.run(this.$i('ev_toast_dietary'), () =>
+        this._eventsService.RecordDietaryStatement(this.storeId, this.selectedId, { statement }));
+      await this.loadRunSheet();
+      if (result) { this.showDietary = false; }
+      return result;
     },
 
     async generateRunSheet () {

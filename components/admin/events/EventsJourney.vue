@@ -180,6 +180,19 @@
     <!-- ---- run sheet ---------------------------------------------------------------------- -->
     <section class="ev-journey__section">
       <h3>{{ $i('ev_runsheet_heading') }}</h3>
+
+      <!-- What the venue has on record about allergies and diets, above the sheet because it is what
+           the sheet prints. An empty field is rendered as UNANSWERED, never as "no requirements":
+           nobody has been asked, and a kitchen reading an absence here would stop asking too. -->
+      <p v-if="dietaryStatement" class="ev-journey__notice" data-test="dietary-recorded">
+        <strong>{{ $i('ev_dietary_recorded') }}</strong> {{ dietaryStatement }}
+        <span v-if="detail.dietary && detail.dietary.statedAtUtc" class="ev-journey__hint">
+          {{ $i('ev_dietary_stated', { at: instant(detail.dietary.statedAtUtc) }) }}
+        </span>
+      </p>
+      <p v-else class="ev-journey__notice ev-journey__notice--warn" data-test="dietary-unstated">
+        {{ $i('ev_dietary_unstated') }}
+      </p>
       <!-- The run sheet is the ONE facet with an admin GET, so it is the one that can honestly say
            "there is none yet" — `EVENTS_RUNSHEET_NOT_FOUND` is an answer. Not-yet-asked stays unknown. -->
       <p v-if="runSheet.state === FACET_NONE" class="ev-journey__notice">
@@ -387,6 +400,9 @@ export default {
     runSheetItems () {
       const view = this.runSheet.view;
       return view && Array.isArray(view.items) ? view.items : [];
+    },
+    dietaryStatement () {
+      return this.detail.dietary ? this.detail.dietary.statement : null;
     },
     // The venue's own zone, off the event. There is no fallback to the browser's: an instant this
     // surface cannot place is left unplaced rather than shown in whatever zone the laptop is set to.

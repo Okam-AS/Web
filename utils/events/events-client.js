@@ -219,6 +219,25 @@ export class EventsService extends WorkforceClientBase {
     return this._events('PUT', this._event(storeId, eventId) + '/run-sheet');
   }
 
+  /**
+   * PUT .../dietary — record what the venue was told about allergies and diets, as `{ statement }`.
+   *
+   * The statement REPLACES whatever was there: a requirement is what is true now, and two of them side
+   * by side would make the kitchen choose. It is free text on purpose — a picklist forces a venue to
+   * drop the requirement it cannot encode, which is how a coeliac becomes an unrecorded one.
+   *
+   * An empty statement is refused by the server with `EVENTS_VALIDATION`, and nothing here softens
+   * that: a blank field is how the module records that nobody has been asked, so storing one would
+   * turn "we never asked" into "there are none" — the exact claim the run sheet used to print
+   * unconditionally. A venue that asked and was told nothing writes that sentence itself.
+   *
+   * Recording re-dates the field, which marks an already-printed run sheet STALE; the sheet only
+   * carries the new requirement after `GenerateRunSheet` reissues it.
+   */
+  RecordDietaryStatement (storeId, eventId, request) {
+    return this._events('PUT', this._event(storeId, eventId) + '/dietary', { body: request });
+  }
+
   // ---- lifecycle tail ---------------------------------------------------------------------------
 
   /** POST .../start-service — T11. Idempotent once the event is already `InService`. */
