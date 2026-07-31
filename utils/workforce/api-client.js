@@ -72,6 +72,30 @@ export function toUtcRangeParam (instant) {
   return instant.toISOString().slice(0, 19);
 }
 
+const LOCAL_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
+/**
+ * The wire guard on every VENUE CALENDAR DATE a Workforce surface takes: `yyyy-MM-dd` and nothing
+ * else. Throws rather than coercing.
+ *
+ * A client that quietly turned a `Date` into a date string would be choosing the zone that
+ * conversion happens in — which is the browser's — and the whole reason these parameters are civil
+ * dates is that the STORE's zone is the only one entitled to make them. A page therefore never holds
+ * a `Date` for such a value at all, and this is the check that keeps it honest.
+ *
+ * It sits in the shared HTTP layer rather than in one route file because THREE surfaces now take a
+ * venue date on the wire — the hours export (`from`/`to`), the rate statement
+ * (`effectiveFromLocalDate`) and the personalliste (`businessDate`) — and the second copy of a wire
+ * rule is where the two start drifting. `utils/workforce-rates/rates-client.js` re-exports it so its
+ * own callers are unchanged.
+ */
+export function assertBusinessDate (value, field) {
+  if (typeof value !== 'string' || !LOCAL_DATE.test(value)) {
+    throw new TypeError(field + ' must be the venue calendar date as yyyy-MM-dd, never a DateTime.');
+  }
+  return value;
+}
+
 /**
  * The shared request/mutate base. Subclasses add routes and nothing else.
  *

@@ -26,9 +26,12 @@
 // and silently answers for the wrong window. They are therefore bound in two different clients with
 // two differently-shaped signatures, and `GetHoursExport` refuses anything that is not a plain date.
 
-import { WorkforceApiError, WorkforceClientBase } from '~/utils/workforce/api-client';
+import { WorkforceApiError, WorkforceClientBase, assertBusinessDate } from '~/utils/workforce/api-client';
 
-const LOCAL_DATE = /^\d{4}-\d{2}-\d{2}$/;
+// The `yyyy-MM-dd` wire guard moved to the shared HTTP layer when the personalliste became the third
+// surface to take a venue calendar date on the wire. Re-exported here so this file's callers and its
+// tests keep importing it from the client that first needed it.
+export { assertBusinessDate };
 
 /**
  * The download name the server chose, off `Content-Disposition`.
@@ -163,14 +166,6 @@ export function assertRateRequest (request) {
   }
 
   return body;
-}
-
-/** `yyyy-MM-dd` or nothing. Used by both the export range and the rate statement. */
-export function assertBusinessDate (value, field) {
-  if (typeof value !== 'string' || !LOCAL_DATE.test(value)) {
-    throw new TypeError(field + ' must be the venue calendar date as yyyy-MM-dd, never a DateTime.');
-  }
-  return value;
 }
 
 export default WorkforceRatesService;

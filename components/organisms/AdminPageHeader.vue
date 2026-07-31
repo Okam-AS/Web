@@ -249,6 +249,9 @@ const icons = {
   // A clock, not a coin: this page is hours first — the rate is what the hours are multiplied by. It
   // has to read differently from `workforceSchedule` (a calendar) beside it in the same group.
   workforceRates: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
+  // A clipboard, not people and not a calendar: the personalliste is the DOCUMENT an inspector asks
+  // for, and the two workforce icons already in this group are a calendar and a group of people.
+  workforcePersonnelList: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9h6m-6 4h4" /></svg>',
   training: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" /></svg>'
 };
 
@@ -324,6 +327,7 @@ export default {
               { label: this.$i('nav_workforce_schedule'), path: '/admin/workforce-schedule', icon: icons.workforceSchedule, isNew: true },
               { label: this.$i('nav_workforce_roster'), path: '/admin/workforce-roster', icon: icons.workforceRoster, isNew: true },
               { label: this.$i('nav_workforce_rates'), path: '/admin/workforce-rates', icon: icons.workforceRates, isNew: true },
+              { label: this.$i('nav_workforce_personnel_list'), path: '/admin/workforce-personnel-list', icon: icons.workforcePersonnelList, isNew: true },
               { label: this.$i('nav_training_courses'), path: '/admin/training-courses', icon: icons.training, isNew: true },
               { label: this.$i('nav_margin_recipes'), path: '/admin/margin-recipes', icon: icons.marginRecipes, isNew: true },
               { label: this.$i('nav_meals'), path: '/admin/meals-agreements', icon: icons.mealsAgreements, isNew: true },
