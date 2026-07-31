@@ -4,12 +4,23 @@ const OKAM_EDITION = process.env.OKAM_EDITION || 'no'
 const isCh = OKAM_EDITION === 'ch'
 // Swiss-only routes: keep them out of the Norwegian sitemap so they're not
 // discoverable on okam.no (they're only relevant to the Swiss edition).
+// The Growth guest pages that are entered by spending a one-time credential. They are static routes,
+// so the sitemap would otherwise advertise them; without a token every one of them is a page that can
+// only say "this link is incomplete", which is not a search result worth having. Each page also
+// declares `noindex` itself (`~/utils/growth/guest-head`) — the two are belt and braces, because the
+// sitemap covers only what the generator emits and the meta tag covers a URL however it was found.
+// `/subscribe/{store}` is deliberately NOT here: it is the public capture page a venue links to.
+const growthGuestTokenPages = [
+  '/subscribe/confirm', '/en/subscribe/confirm',
+  '/preferences/**', '/en/preferences/**'
+]
+
 const sitemapExclude = isCh
-  ? ['/admin/**', '/import']
+  ? ['/admin/**', '/import'].concat(growthGuestTokenPages)
   : ['/admin/**', '/import',
      '/impressum', '/en/impressum',
      '/datenschutz', '/en/datenschutz',
-     '/agb', '/en/agb']
+     '/agb', '/en/agb'].concat(growthGuestTokenPages)
 
 export default {
   debug: true,

@@ -118,16 +118,28 @@ export class WorkforceClientBase {
     return headers;
   }
 
+  /**
+   * `options.credentials` is threaded to `fetch` and is OMITTED unless a caller asks for it, so every
+   * existing surface keeps the default (`same-origin`) it has always had.
+   *
+   * ONE caller needs it: the Growth preference centre. Its session is an HttpOnly cookie the API sets
+   * (`GrowthPreferenceController`), which the browser will not attach to a cross-origin request unless
+   * the request is credentialed. Every other surface in this app authenticates with a bearer header and
+   * must NOT start sending cookies — that is why this is opt-in per request rather than a default.
+   */
   async _request (method, path, options) {
     const opts = options || {};
     const headers = this._headers(opts.headers);
     if (opts.body !== undefined) { headers['Content-Type'] = 'application/json'; }
 
-    const response = await fetch(this._baseUrl + path, {
+    const init = {
       method,
       headers,
       body: opts.body === undefined ? undefined : JSON.stringify(opts.body)
-    });
+    };
+    if (opts.credentials) { init.credentials = opts.credentials; }
+
+    const response = await fetch(this._baseUrl + path, init);
 
     const text = await response.text();
     let payload = null;
