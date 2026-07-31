@@ -65,11 +65,12 @@ describe('WorkforceScheduleService', () => {
     expect(url).not.toContain('view')
   })
 
-  test('ListRequests asks for every state, so decided absences are included', async () => {
-    respondWith(200, { items: [] })
-    await service().ListRequests(42, null, 'all')
-
-    expect(global.fetch.mock.calls[0][0]).toBe('/workforce/stores/42/requests?state=all')
+  // `GET /requests` is NOT bound here: it belongs to WorkforceRequestsController and lives on
+  // `requests-client.js` with the decision that shares its aggregate. See that client's test.
+  test('the schedule client binds no route of the requests controller', () => {
+    const bound = Object.getOwnPropertyNames(WorkforceScheduleService.prototype)
+    expect(bound).not.toContain('ListRequests')
+    expect(bound).not.toContain('DecideRequest')
   })
 
   test('the roster and context reads hit their own routes', async () => {

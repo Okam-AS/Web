@@ -10,7 +10,6 @@
 //   GET  /workforce/stores/{storeId}/roles                                  #8   WorkforceStaffController
 //   GET  /workforce/stores/{storeId}/schedules?from&to&view                 #17  WorkforceSchedulesController
 //   GET  /workforce/stores/{storeId}/schedules/external-commitments?from&to  #23  WorkforceSchedulesController
-//   GET  /workforce/stores/{storeId}/requests?kind&state                    #23  WorkforceRequestsController
 //   POST /workforce/stores/{storeId}/schedules/drafts                       #16  WorkforceSchedulesController
 //   PUT  /workforce/stores/{storeId}/schedules/{revisionId}/assignments:batch #18 WorkforceSchedulesController
 //   POST /workforce/stores/{storeId}/schedules/{revisionId}/validate        #19  WorkforceSchedulesController
@@ -19,6 +18,11 @@
 //
 // The error type, the `Idempotency-Key` mutation rule and the range wire format live one level up in
 // `~/utils/workforce/api-client`, shared with the worker surface.
+//
+// `GET /requests` (#23, WorkforceRequestsController) used to be bound here for the grid's absence
+// markers. It moved to `~/utils/workforce/requests-client`, which owns that controller's read AND its
+// decision (#24): a route bound in two clients is the shape that drifts, and the decision could not
+// live here — its `If-Match` is the REQUEST's revision, not this surface's draft checksum.
 
 import { WorkforceClientBase } from '~/utils/workforce/api-client';
 
@@ -73,16 +77,6 @@ export class WorkforceScheduleService extends WorkforceClientBase {
   GetExternalCommitments (storeId, from, to) {
     const query = '?from=' + encodeURIComponent(from) + '&to=' + encodeURIComponent(to);
     return this._request('GET', '/workforce/stores/' + storeId + '/schedules/external-commitments' + query);
-  }
-
-  // `state=all` rather than the default in-flight inbox: an APPROVED time-off is decided, so the
-  // default projection omits it — and an approved absence is exactly what the grid must show.
-  ListRequests (storeId, kind, state) {
-    const params = [];
-    if (kind) { params.push('kind=' + encodeURIComponent(kind)); }
-    if (state) { params.push('state=' + encodeURIComponent(state)); }
-    const query = params.length ? '?' + params.join('&') : '';
-    return this._request('GET', '/workforce/stores/' + storeId + '/requests' + query);
   }
 
   CreateDraft (storeId, request) {

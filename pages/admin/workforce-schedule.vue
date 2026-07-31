@@ -293,6 +293,7 @@ import WorkforceWeekGrid from '~/components/admin/workforce/WorkforceWeekGrid.vu
 import WorkforceRoleGrid from '~/components/admin/workforce/WorkforceRoleGrid.vue';
 import WorkforceMonthGrid from '~/components/admin/workforce/WorkforceMonthGrid.vue';
 import { isWorkforceApiError, toUtcRangeParam } from '~/utils/workforce/api-client';
+import { WorkforceRequestsService } from '~/utils/workforce/requests-client';
 import { WorkforceScheduleService } from '~/utils/workforce/schedule-client';
 import { weekRange, monthRange, isoWeekNumber } from '~/utils/workforce/week-range';
 import {
@@ -372,6 +373,11 @@ export default {
     },
     _workforceScheduleService () {
       return new WorkforceScheduleService(this._coreInitializer);
+    },
+    // The absence markers come off the REQUESTS controller, which has its own client. The grid reads
+    // that surface; deciding on it is the inbox page's job (/admin/workforce-requests).
+    _workforceRequestsService () {
+      return new WorkforceRequestsService(this._coreInitializer);
     },
     isEmployees () {
       return this.pivot === PIVOT_EMPLOYEES;
@@ -673,7 +679,9 @@ export default {
           : Promise.resolve(null),
         // The absence read needs WorkforceManager. A scheduler-only caller gets a 403 here, and the
         // grid then says the absences are unknown rather than drawing everyone as available.
-        this._workforceScheduleService.ListRequests(this.storeId, null, 'all').catch(() => null),
+        // `state=all` rather than the default in-flight inbox: an APPROVED time-off is decided, so
+        // the default projection omits it — and an approved absence is exactly what the grid shows.
+        this._workforceRequestsService.ListRequests(this.storeId, null, 'all').catch(() => null),
         // The cross-store overlay. Failing quietly on purpose: it is advisory, and the guard it
         // previews still runs server-side at publish either way. The grid then says the check did
         // not answer, which is not the same claim as "nobody is committed elsewhere".

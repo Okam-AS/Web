@@ -246,6 +246,9 @@ const icons = {
   mealsAgreements: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>',
   growthNewsletter: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>',
   eventsPipeline: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>',
+  // An inbox tray, not a calendar and not people: this page is a QUEUE of decisions waiting on the
+  // manager, and it sits between the schedule and the roster in the same group.
+  workforceRequests: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-4l-1 2H9l-1-2H4" /></svg>',
   // A clock, not a coin: this page is hours first — the rate is what the hours are multiplied by. It
   // has to read differently from `workforceSchedule` (a calendar) beside it in the same group.
   workforceRates: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
@@ -322,6 +325,11 @@ export default {
             title: this.$i('nav_group_modules'),
             items: [
               { label: this.$i('nav_workforce_schedule'), path: '/admin/workforce-schedule', icon: icons.workforceSchedule, isNew: true },
+              // Next to the schedule, not inside it. The inbox decides on a different aggregate under
+              // a different precondition, and its requests are not week-scoped — an October request is
+              // decided in July. It is store-admin gated like every sibling; the page still refuses
+              // itself when the backend withholds WorkforceManager.
+              { label: this.$i('nav_workforce_requests'), path: '/admin/workforce-requests', icon: icons.workforceRequests, isNew: true },
               { label: this.$i('nav_workforce_roster'), path: '/admin/workforce-roster', icon: icons.workforceRoster, isNew: true },
               { label: this.$i('nav_workforce_rates'), path: '/admin/workforce-rates', icon: icons.workforceRates, isNew: true },
               { label: this.$i('nav_training_courses'), path: '/admin/training-courses', icon: icons.training, isNew: true },

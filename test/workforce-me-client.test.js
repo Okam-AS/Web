@@ -67,9 +67,27 @@ describe('the client is route-for-route with /workforce/me', () => {
       'GetMemberships',
       'GetOpenAssignments',
       'GetSchedule',
+      'GetStoreContext',
       'MarkInboxRead',
-      'RequestOpenShift'
+      'RequestOpenShift',
+      'RequestTimeOff',
+      'SetAvailability',
+      'WithdrawRequest'
     ])
+  })
+
+  test('the self-service writes hit the routes the controller declares', async () => {
+    const svc = service()
+
+    await svc.SetAvailability('sm-1', { rules: [], exceptions: [] })
+    expect(lastCall().url).toBe('/workforce/me/staff-memberships/sm-1/availability')
+    expect(lastCall().options.method).toBe('PUT')
+
+    await svc.RequestTimeOff('sm-1', { startsUtc: 'a', endsUtc: 'b' })
+    expect(lastCall().url).toBe('/workforce/me/staff-memberships/sm-1/time-off')
+
+    await svc.WithdrawRequest('sm-1', 'req-9')
+    expect(lastCall().url).toBe('/workforce/me/staff-memberships/sm-1/requests/req-9/withdraw')
   })
 
   test('the manager decision inbox is never called from the worker surface', async () => {
@@ -77,9 +95,14 @@ describe('the client is route-for-route with /workforce/me', () => {
     await svc.GetInbox()
     await svc.GetMemberships()
     await svc.GetSchedule()
+    // The ONE store-scoped route this client binds is #1, read for the store's timezone: it admits
+    // any capability grant, so a WorkforceSelf engagement may call it.
+    await svc.GetStoreContext(42)
+    expect(lastCall().url).toBe('/workforce/stores/42/context')
+
     // #23 GET /workforce/stores/{id}/requests needs WorkforceManager. A worker page asking for it
     // would be asking for a 403 at best and a coworker's data at worst.
-    calls.forEach(call => expect(call.url).not.toContain('/workforce/stores/'))
+    calls.forEach(call => expect(call.url).not.toContain('/requests'))
   })
 })
 

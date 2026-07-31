@@ -102,21 +102,27 @@
           </div>
         </section>
 
+        <!-- The engagement picker. Shown on every per-engagement tab, because availability and a
+             time-off request are filed against ONE engagement in ONE store, exactly as an open-shift
+             claim is — and a worker with two jobs must be able to see which one they are editing. -->
+        <div
+          v-if="isEngagementTab && selfMemberships && selfMemberships.length > 1"
+          class="wfme__stores"
+        >
+          <button
+            v-for="membership in selfMemberships"
+            :key="membership.staffMemberId"
+            class="wfme__store"
+            :class="{ 'is-active': activeStaffMemberId === membership.staffMemberId }"
+            @click="activeStaffMemberId = membership.staffMemberId"
+          >
+            {{ storeLabel(membership.storeId) }}
+            <span v-if="roleSummary(membership)" class="wfme__storerole">{{ roleSummary(membership) }}</span>
+          </button>
+        </div>
+
         <!-- ---------------- Open shifts ---------------- -->
         <section v-if="tab === 'open'" class="wfme__panel">
-          <div v-if="selfMemberships && selfMemberships.length > 1" class="wfme__stores">
-            <button
-              v-for="membership in selfMemberships"
-              :key="membership.staffMemberId"
-              class="wfme__store"
-              :class="{ 'is-active': activeStaffMemberId === membership.staffMemberId }"
-              @click="activeStaffMemberId = membership.staffMemberId"
-            >
-              {{ storeLabel(membership.storeId) }}
-              <span v-if="roleSummary(membership)" class="wfme__storerole">{{ roleSummary(membership) }}</span>
-            </button>
-          </div>
-
           <p class="wfme__window">
             {{ $i('wfme_open_window', { days: WINDOW_DAYS }) }}
           </p>
@@ -196,11 +202,38 @@
           </div>
 
           <!-- Scope disclosure, permanent and deliberate: this list is derived from the open-shift
-               read, so it covers open-shift asks only. Time-off and swaps have no worker-side read at
-               all, and a tab that quietly omitted them would read as "you have asked for nothing". -->
+               read, so it covers open-shift asks only. Shift swaps have no worker-side read at all,
+               and a tab that quietly omitted them would read as "you have asked for nothing".
+               Time-off now has its own tab, which carries its own, narrower disclosure. -->
           <p class="wfme__note wfme__note--muted">
             {{ $i('wfme_asks_scope') }}
           </p>
+        </section>
+
+        <!-- ---------------- Availability ---------------- -->
+        <section v-if="tab === 'availability'" class="wfme__panel">
+          <WorkforceAvailabilityForm
+            :key="activeStaffMemberId"
+            ref="availabilityForm"
+            :time-zone-id="activeTimeZoneId"
+            :busy="busyKey === 'availability'"
+            :saved="savedAvailability[activeStaffMemberId] || null"
+            @save="saveAvailability"
+          />
+        </section>
+
+        <!-- ---------------- Time off ---------------- -->
+        <section v-if="tab === 'timeoff'" class="wfme__panel">
+          <WorkforceTimeOffForm
+            :key="activeStaffMemberId"
+            ref="timeOffForm"
+            :time-zone-id="activeTimeZoneId"
+            :locale="locale"
+            :busy="busyKey === 'timeoff'"
+            :submitted="submittedTimeOff"
+            @request="requestTimeOff"
+            @withdraw="withdrawTimeOff"
+          />
         </section>
       </template>
     </div>
@@ -209,15 +242,20 @@
 
 <script>
 import AdminPage from '~/components/organisms/AdminPage.vue';
+import WorkforceAvailabilityForm from '~/components/admin/workforce-me/WorkforceAvailabilityForm.vue';
 import WorkforceOpenShiftCard from '~/components/admin/workforce-me/WorkforceOpenShiftCard.vue';
 import WorkforcePublicationNotice from '~/components/admin/workforce-me/WorkforcePublicationNotice.vue';
 import WorkforceShiftCard from '~/components/admin/workforce-me/WorkforceShiftCard.vue';
+import WorkforceTimeOffForm from '~/components/admin/workforce-me/WorkforceTimeOffForm.vue';
 import { WorkforceMeService } from '~/utils/workforce-me/me-client';
 import {
   classifyClaimFailure, isNormalOutcome, outcomeMessageKey, requiresRefresh
 } from '~/utils/workforce-me/claim-outcome';
 import { publicationCount, unreadPublications } from '~/utils/workforce-me/inbox-filter';
 import { roleSummary, selfServiceMemberships } from '~/utils/workforce-me/memberships';
+import {
+  SELF_ALREADY_DECIDED, classifySelfFailure, selfFailureMessageKey
+} from '~/utils/workforce-me/self-requests';
 import {
   SCHEDULE_UNKNOWN, formatBusinessDate, groupByBusinessDate, scheduleState, scheduleStateMessageKey
 } from '~/utils/workforce-me/shift-view';
@@ -234,7 +272,14 @@ const LOCALES = { no: 'nb-NO', en: 'en-GB', de: 'de-DE' };
 // is ever sent, because /workforce/me resolves the engagement from the token.
 export default {
   name: 'AdminWorkforceMe',
-  components: { AdminPage, WorkforceOpenShiftCard, WorkforcePublicationNotice, WorkforceShiftCard },
+  components: {
+    AdminPage,
+    WorkforceAvailabilityForm,
+    WorkforceOpenShiftCard,
+    WorkforcePublicationNotice,
+    WorkforceShiftCard,
+    WorkforceTimeOffForm
+  },
   data () {
     return {
       WINDOW_DAYS,
@@ -252,6 +297,14 @@ export default {
       inboxFailed: false,
       // staffMemberId -> { items, failed }. Replaced wholesale rather than mutated, so Vue 2 sees it.
       openByStaff: {},
+      // storeId -> the store's IANA zone from #1, or null where that read failed. It is the ONLY
+      // source a worker has for a store zone, and both date forms are withheld without it.
+      zoneByStore: {},
+      // staffMemberId -> the last #36 response. There is no read for availability, so this is the
+      // only canonical state a worker can be shown, and only for as long as the page is open.
+      savedAvailability: {},
+      // staffMemberId -> the time-off requests this session has sent, as the server answered them.
+      timeOffByStaff: {},
       activeStaffMemberId: null,
       ackReceipts: {},
       toast: { show: false, message: '', type: 'success' },
@@ -272,8 +325,14 @@ export default {
       return [
         { key: 'shifts', label: this.$i('wfme_tab_shifts') },
         { key: 'open', label: this.$i('wfme_tab_open') },
-        { key: 'asks', label: this.$i('wfme_tab_asks') }
+        { key: 'asks', label: this.$i('wfme_tab_asks') },
+        { key: 'availability', label: this.$i('wfme_tab_availability') },
+        { key: 'timeoff', label: this.$i('wfme_tab_timeoff') }
       ];
+    },
+    /** The tabs that act on ONE engagement, and therefore need the engagement picker above them. */
+    isEngagementTab () {
+      return this.tab === 'open' || this.tab === 'availability' || this.tab === 'timeoff';
     },
 
     // --- engagements -------------------------------------------------------------------------
@@ -284,10 +343,16 @@ export default {
       if (!this.selfMemberships) { return null; }
       return this.selfMemberships.find(m => m.staffMemberId === this.activeStaffMemberId) || null;
     },
-    // #39 items carry no zone of their own. The schedule read does, per store, so it is borrowed from
-    // there when this store has a published shift — and left null otherwise rather than guessed.
+    // #39 items carry no zone of their own, and #31 carries none either. The store context (#1) is
+    // the authoritative source and is read for every engagement; the published schedule's per-item
+    // zone is the fallback for a store whose context read failed. Null when neither answered — the
+    // cards then say the times are UTC, and both date forms refuse to render at all.
     activeTimeZoneId () {
       return this.activeMembership ? this.zoneForStore(this.activeMembership.storeId) : null;
+    },
+    /** The time-off requests sent from this page for the engagement on screen. */
+    submittedTimeOff () {
+      return this.timeOffByStaff[this.activeStaffMemberId] || [];
     },
 
     // --- my shifts ---------------------------------------------------------------------------
@@ -358,8 +423,39 @@ export default {
       this.loading = true;
       // The three top-level reads are independent; one failing must not blank the other two.
       await Promise.all([this.loadMemberships(), this.loadSchedule(), this.loadInbox()]);
-      await this.loadOpenAssignments();
+      await Promise.all([this.loadOpenAssignments(), this.loadStoreZones()]);
       this.loading = false;
+    },
+
+    /**
+     * The store zone, per engagement, from `GET /workforce/stores/{id}/context` (#1).
+     *
+     * Read on the WORKER surface because nothing on `/workforce/me` carries a zone and both date
+     * forms need one: the server derives a request's local business dates from the instants sent, so
+     * a date placed with the phone's zone is a request filed on the wrong days. #1 admits any
+     * capability grant, so a `WorkforceSelf` engagement is enough to read it.
+     *
+     * Per store, and failing quietly per store: one venue's outage must not withhold the forms for
+     * the other. A store that did not answer is left absent, and the forms say why.
+     */
+    async loadStoreZones () {
+      const memberships = selfServiceMemberships(this.memberships);
+      if (!memberships) { this.zoneByStore = {}; return; }
+
+      const storeIds = [];
+      memberships.forEach((membership) => {
+        if (!storeIds.includes(membership.storeId)) { storeIds.push(membership.storeId); }
+      });
+
+      const results = await Promise.all(storeIds.map(storeId =>
+        this._workforceMeService.GetStoreContext(storeId)
+          .then(context => ({ storeId, zone: (context && context.timeZone && context.timeZone.id) || null }))
+          .catch(() => ({ storeId, zone: null }))
+      ));
+
+      const next = {};
+      results.forEach((result) => { next[result.storeId] = result.zone; });
+      this.zoneByStore = next;
     },
 
     async loadMemberships () {
@@ -463,6 +559,92 @@ export default {
       if (requiresRefresh(outcome)) { await this.loadOpenAssignments(); }
     },
 
+    /**
+     * #36: replace this engagement's availability with the whole week the form holds.
+     *
+     * The response IS the canonical state and is kept, because nothing on the worker surface can read
+     * it back: `PUT /me/.../availability` has no GET sibling, and the manager's #14 needs
+     * WorkforceScheduler. Keeping it is what lets the form show what was stored instead of going
+     * blank the moment it succeeds.
+     */
+    async saveAvailability (body) {
+      if (!this.activeStaffMemberId || this.busyKey) { return; }
+
+      this.busyKey = 'availability';
+      try {
+        const saved = await this._workforceMeService.SetAvailability(this.activeStaffMemberId, body);
+        this.savedAvailability = Object.assign({}, this.savedAvailability, {
+          [this.activeStaffMemberId]: saved
+        });
+        this.notify(this.$i('wfme_avail_saved'), 'success');
+      } catch (e) {
+        this.notifySelfFailure(e, 'availability');
+      } finally {
+        this.busyKey = null;
+      }
+    },
+
+    /** #37: ask to be off. The manager decides; this is a request and the screen never calls it leave. */
+    async requestTimeOff (body) {
+      if (!this.activeStaffMemberId || this.busyKey) { return; }
+
+      const staffMemberId = this.activeStaffMemberId;
+      this.busyKey = 'timeoff';
+      try {
+        const request = await this._workforceMeService.RequestTimeOff(staffMemberId, body);
+        this.recordTimeOff(staffMemberId, request);
+        if (this.$refs.timeOffForm) { this.$refs.timeOffForm.reset(); }
+        this.notify(this.$i('wfme_timeoff_sent'), 'success');
+      } catch (e) {
+        this.notifySelfFailure(e, 'timeoff');
+      } finally {
+        this.busyKey = null;
+      }
+    },
+
+    /**
+     * #38: withdraw a request this session sent.
+     *
+     * A request a manager has already decided answers `409 workforce.request-not-decidable`. That is
+     * a normal outcome — the worker asked a legitimate question and the answer is that it is settled
+     * — so it gets the informational tone and no retry, and the row is replaced with whatever the
+     * withdrawal could not change.
+     */
+    async withdrawTimeOff (request) {
+      if (!this.activeStaffMemberId || this.busyKey) { return; }
+
+      const staffMemberId = this.activeStaffMemberId;
+      this.busyKey = 'timeoff';
+      try {
+        const updated = await this._workforceMeService.WithdrawRequest(staffMemberId, request.timeOffRequestId);
+        this.recordTimeOff(staffMemberId, updated);
+        this.notify(this.$i('wfme_timeoff_withdrawn'), 'success');
+      } catch (e) {
+        this.notifySelfFailure(e, 'timeoff');
+      } finally {
+        this.busyKey = null;
+      }
+    },
+
+    // Replaces the request with the same id, or appends it. The server's answer is the row — nothing
+    // here patches a status this page guessed at.
+    recordTimeOff (staffMemberId, request) {
+      if (!request) { return; }
+      const existing = this.timeOffByStaff[staffMemberId] || [];
+      const without = existing.filter(item => item.timeOffRequestId !== request.timeOffRequestId);
+      this.timeOffByStaff = Object.assign({}, this.timeOffByStaff, {
+        [staffMemberId]: without.concat([request])
+      });
+    },
+
+    notifySelfFailure (error, action) {
+      const outcome = classifySelfFailure(error);
+      // A request that was already decided is a truthful answer, not a malfunction: informational
+      // tone, the same call `claim-outcome.js` makes for a lost open shift.
+      this.notify(this.$i(selfFailureMessageKey(outcome, action)),
+        outcome === SELF_ALREADY_DECIDED ? 'info' : 'error');
+    },
+
     async markRead (item) {
       this.busyKey = item.inboxItemId;
       try {
@@ -500,10 +682,12 @@ export default {
       return new Date(Date.now() + (WINDOW_DAYS * 24 * 60 * 60 * 1000));
     },
 
-    // The store's zone, taken from a published shift in that store (#33 carries it per item). Null
-    // when this worker has no published shift there — the cards then say the times are UTC rather
-    // than quietly showing the phone's zone.
+    // The store's zone. The context read (#1) is authoritative and covers every engagement; the
+    // published schedule's per-item zone (#33) is the fallback for a store whose context did not
+    // answer. Null when neither did — the cards then say the times are UTC rather than quietly
+    // showing the phone's zone, and the date forms withhold their pickers.
     zoneForStore (storeId) {
+      if (this.zoneByStore[storeId]) { return this.zoneByStore[storeId]; }
       const items = (this.schedule && this.schedule.items) || [];
       const match = items.find(item => item.storeId === storeId && item.timeZoneId);
       return match ? match.timeZoneId : null;
