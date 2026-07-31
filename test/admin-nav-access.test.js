@@ -64,13 +64,14 @@ describe('storeAdminAccess — unknown is a state, not a refusal', () => {
 // itself".
 //
 // Order matters: this is compared with `toEqual` against the flattened `navGroups`, so a link added
-// to a group must be added at the same position here. All EIGHT store-admin module surfaces are on
+// to a group must be added at the same position here. All NINE store-admin module surfaces are on
 // this list now, and every one of them being here is the point:
 //
-//   `/admin/margin-recipes` (Menu); `/admin/growth-newsletter` and `/admin/events-pipeline` (Sales &
-//   marketing); `/admin/workforce-schedule`, `/admin/workforce-roster`, `/admin/workforce-rates`,
-//   `/admin/training-courses` and `/admin/meals-agreements` (Administration). No module surface is
-//   role-gated any more, and none is unlinked.
+//   `/admin/margin-recipes` and `/admin/margin-statements` (Menu); `/admin/growth-newsletter` and
+//   `/admin/events-pipeline` (Sales & marketing); `/admin/workforce-schedule`,
+//   `/admin/workforce-roster`, `/admin/workforce-rates`, `/admin/training-courses` and
+//   `/admin/meals-agreements` (Administration). No module surface is role-gated any more, and none is
+//   unlinked.
 //
 // WHAT THE LAST FIVE ENTRIES RECORD, because it is one defect wearing two masks. Every one of these
 // pages mounts `AdminPage` with no `allow-non-admin` and reads no role flag, so what admits a caller
@@ -94,7 +95,7 @@ describe('storeAdminAccess — unknown is a state, not a refusal', () => {
 const STORE_ADMIN_PATHS = [
   '/admin', '/admin/ongoing', '/admin/orders', '/admin/statistics',
   '/admin/workforce-schedule', '/admin/workforce-roster', '/admin/workforce-rates', '/admin/training-courses',
-  '/admin/margin-recipes', '/admin/meals-agreements', '/admin/events-pipeline', '/admin/growth-newsletter',
+  '/admin/margin-recipes', '/admin/margin-statements', '/admin/meals-agreements', '/admin/events-pipeline', '/admin/growth-newsletter',
   '/admin/products', '/admin/categories', '/admin/allergens', '/admin/import',
   '/admin/delivery', '/admin/wolt',
   '/admin/kravia-invoice', '/admin/rewards', '/admin/discounts',
