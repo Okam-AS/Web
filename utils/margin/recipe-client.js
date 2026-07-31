@@ -17,11 +17,16 @@
 //
 // WHAT IS DELIBERATELY ABSENT, so its absence is not read as an oversight:
 //
-//  • `/margin/statements` and `/margin/coverage` — both read the projected sales facts, and the
-//    projector currently labels the journal's Oslo wall-clock stamp as UTC
-//    (`MarginBusinessDateEpochPinTests`, red and pinned). A surface whose correctness rests on that
-//    is a surface that is wrong every evening, so this one does not touch it.
+//  • `/margin/statements` and `/margin/coverage` — bound by `~/utils/margin/statement-client`, which
+//    owns the weekly reconciliation journey. They used to be absent from this repo entirely because
+//    the projector labelled the journal's Oslo wall-clock stamp as UTC and a surface resting on that
+//    is wrong every evening; the epoch ruling has since landed (the projector takes its business date
+//    from `IKassaBusinessDateResolver`, and `MarginBusinessDateEpochSwitchTests` is the after picture
+//    with the legacy relabel kept as its discriminating control), so the block is lifted.
 //  • the draft edit, retire, product-link, supplier, price and import surfaces — other journeys.
+//    `GET /margin/suppliers` is bound by the statement client, which needs it to NAME the supplier a
+//    purchase-spend line is attributed to; the rest of that controller belongs to a surface nobody
+//    has built yet.
 
 import { MarginClientBase } from '~/utils/margin/api-client';
 
