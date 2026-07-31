@@ -18,6 +18,8 @@
 // on this surface and they are handled differently on purpose — see `civilDateOf` and `instantOf`.
 
 import { parseApiInstant, businessDateKey } from '~/utils/workforce/week-range';
+import { isWorkforceApiError } from '~/utils/workforce/api-client';
+import { buildRoster, buildRoles, ROSTER_UNKNOWN } from '~/utils/workforce/roster';
 
 // ---- how a read can have gone ------------------------------------------------------------------
 
@@ -96,6 +98,123 @@ function trainingCodeOf (error) {
   return (error && typeof error.code === 'string' && error.code.indexOf('training.') === 0)
     ? error.code
     : null;
+}
+
+// ---- who a reference can name -------------------------------------------------------------------
+//
+// `personRef` and `roleRef` are `Workforce*` GUIDs carried BY VALUE. Training holds no foreign key to
+// either and has no route that lists people or roles, so the only place a name for one can come from
+// is the Workforce surface itself — a DIFFERENT module, with its OWN authorization.
+//
+// THAT IS WHY THE DIRECTORY IS THREE-STATE LIKE EVERY OTHER READ ON THIS PAGE, and why a missing one
+// never closes a field. `GET /workforce/…/staff` needs the caller's own ACTIVE engagement to hold
+// `WorkforceScheduler` (`WorkforceAuthorizationService.RequireCapabilityAsync`), which is resolved
+// from engagement grant bits and CANNOT be satisfied by StoreAdmin or PowerUser. A Training manager
+// who administers this store may therefore hold nothing at all in Workforce and get a 403 — while
+// still being perfectly entitled to file the evidence. So the directory assists typing and never
+// replaces it: every reference field keeps its text input under every one of these states.
+//
+// The suggestions are also NOT the set the server will accept. `TrainingPersonBinding
+// .RequireKnownPersonAsync` checks that a `WorkforcePersonId` EXISTS — estate-wide, every person
+// state, explicitly not an employment check — so a person engaged at another store in the chain, or
+// one still `Invited`, is accepted and will never appear in this store's roster. An id absent from
+// the list is therefore unrecognised HERE, which is not the same claim as invalid.
+
+/** The directory read has not answered, or failed in a way that says nothing about the roster. */
+export const DIRECTORY_UNKNOWN = 'unknown';
+
+/** Workforce declined: no `WorkforceScheduler` grant in this store, or the module is off here. */
+export const DIRECTORY_REFUSED = 'refused';
+
+/** The directory answered. `options` may legitimately be empty, and empty then means empty. */
+export const DIRECTORY_ANSWERED = 'answered';
+
+/**
+ * A Workforce failure that is a REFUSAL rather than a non-answer.
+ *
+ * 403 is "you hold no capability in this store" and 404 is the module gate's opaque answer; both are
+ * the server declining. Anything else — a network failure, a 500 — says nothing, and is kept apart so
+ * the copy can say "we did not hear back" instead of "you may not see this".
+ */
+function directoryStateOf (error) {
+  return (isWorkforceApiError(error) && (error.status === 403 || error.status === 404))
+    ? DIRECTORY_REFUSED
+    : DIRECTORY_UNKNOWN;
+}
+
+/**
+ * The store's people, as reference suggestions keyed on `workforcePersonId`.
+ *
+ * PER PERSON, NOT PER ENGAGEMENT. `GET /staff` returns one row per engagement and the same human can
+ * hold two (a rehire, or two legal employers), while `personRef` names the PERSON — so two rows that
+ * share a person id are one suggestion, and it counts as current when ANY of them is active. An
+ * engagement that has ended still names a real person whose historical evidence is filed the same
+ * way, so it is marked rather than dropped.
+ */
+export function personDirectory (staff, error) {
+  if (error) { return { state: directoryStateOf(error), options: [] }; }
+
+  const roster = buildRoster(staff);
+  if (roster.state === ROSTER_UNKNOWN) { return { state: DIRECTORY_UNKNOWN, options: [] }; }
+
+  const byPerson = new Map();
+  for (const row of roster.rows) {
+    if (!row.workforcePersonId) { continue; }
+    const existing = byPerson.get(row.workforcePersonId);
+    if (existing) {
+      existing.ended = existing.ended && !row.isActive;
+      continue;
+    }
+    byPerson.set(row.workforcePersonId, {
+      id: row.workforcePersonId,
+      label: row.displayName || row.workforcePersonId,
+      ended: !row.isActive
+    });
+  }
+
+  return { state: DIRECTORY_ANSWERED, options: Array.from(byPerson.values()) };
+}
+
+/**
+ * The store's job roles, as reference suggestions keyed on `roleId`.
+ *
+ * `GET /roles` returns every role the store has ever defined — there is no deletion, only
+ * `effectiveToUtc` — so a retired role is MARKED rather than hidden. Hiding one would make the
+ * assignments that still name it look like they point at nothing.
+ */
+export function roleDirectory (roles, error, asOf) {
+  if (error) { return { state: directoryStateOf(error), options: [] }; }
+
+  const built = buildRoles(roles, asOf || new Date());
+  if (built === null) { return { state: DIRECTORY_UNKNOWN, options: [] }; }
+
+  return {
+    state: DIRECTORY_ANSWERED,
+    options: built.filter(r => r.roleId).map(role => ({
+      id: role.roleId,
+      label: role.station ? role.name + ' · ' + role.station : (role.name || role.roleId),
+      ended: role.retired
+    }))
+  };
+}
+
+/** The suggestion whose id is exactly `reference`, or null. Used to name what an operator typed. */
+export function directoryMatch (directory, reference) {
+  const wanted = String(reference || '').trim().toLowerCase();
+  if (!wanted || !directory || directory.state !== DIRECTORY_ANSWERED) { return null; }
+  return directory.options.find(o => String(o.id).toLowerCase() === wanted) || null;
+}
+
+/**
+ * Whether a typed reference is a well-formed GUID.
+ *
+ * Every `*Ref` on this surface binds to a `Guid` on the server, so anything else fails MODEL BINDING
+ * — a framework 400 that carries no `training.*` code at all and therefore cannot be explained by
+ * this page. The forms refuse it before sending, the same way they already refuse a score outside
+ * 0–100: a control whose only outcome is a refusal is not a control.
+ */
+export function isReferenceId (value) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(value || '').trim());
 }
 
 // ---- the feature-flag family -------------------------------------------------------------------
@@ -261,10 +380,17 @@ export function certificateRow (certificate) {
 /**
  * A completion row.
  *
- * `passed` and `scorePercent` are carried side by side and NEVER compared with each other or with a
- * version's pass threshold. `TrainingCompletionService` stores `Passed` exactly as the client sent
- * it and never consults `PassThresholdPercent` — TR-B1, open. Deriving a verdict here would invent a
- * grading rule the ledger does not have, in the browser, on an append-only record.
+ * `passed` IS THE SERVER'S OWN VERDICT AND IS READ, NEVER RECOMPUTED. TR-B1 is settled:
+ * `RecordTrainingCompletionRequest` carries no verdict field at all, and
+ * `TrainingCompletionService.RecordCompletionAsync` writes
+ * `Passed = TrainingGrading.IsPass(request.ScorePercent, version.PassThresholdPercent)` against the
+ * exact immutable version the attempt was recorded against.
+ *
+ * So the score and the verdict are still carried side by side and still never compared HERE. The
+ * reason has changed rather than gone away: the row is append-only statutory evidence, the threshold
+ * that graded it is the one frozen into that version, and a browser recomputing the comparison — off
+ * a threshold read from a later version, or with a rounding the server does not do — would print a
+ * second opinion about the same record.
  */
 export function completionRow (completion) {
   const c = completion || {};

@@ -3295,6 +3295,9 @@ export default {
   trn_err_immutable: 'Die Version ist kein Entwurf. Der Inhalt einer veröffentlichten Version ist eingefroren — eine Änderung ist eine neue Version.',
   trn_err_flag_off: 'Dieser Bereich ist für den Betrieb ausgeschaltet. Lesen antwortet weiterhin, Schreiben nicht.',
   trn_err_unknown: 'Etwas ist schiefgelaufen, und der Fehler kam nicht vom Schulungsmodul.',
+  // Nur für die beiden Schreibvorgänge, die eine Person binden. Jede andere 400 dieser Routen
+  // verhindert das Formular vor dem Senden, also bleibt genau diese Ursache übrig — siehe `fail`.
+  trn_err_person_unknown: 'Die ID bezeichnet keine bekannte Person, es wurde nichts abgelegt. Prüfen Sie sie gegen die Mitarbeiterliste oder gegen die Personen-ID, die die Personalplanung anzeigt.',
 
   trn_context_title: 'Modulstatus',
   trn_context_zone: 'Zeitzone',
@@ -3319,7 +3322,30 @@ export default {
 
   trn_writes_blocked_setup: 'Der Server meldet, dass Kurse und Zertifikate für diesen Betrieb ausgeschaltet sind. Schreibvorgänge werden abgelehnt.',
   trn_writes_blocked_assignments: 'Der Server meldet, dass Zuweisung und Abschluss für diesen Betrieb ausgeschaltet sind. Schreibvorgänge werden abgelehnt.',
-  trn_reference_by_value: 'Die Referenz ist eine Personen- oder Rollen-ID aus der Personalplanung, als Wert geführt. Das Schulungsmodul führt kein Personenverzeichnis und prüft nicht, ob die ID zu jemandem gehört, der hier arbeitet.',
+  // Gilt NUR für Zuweisungen. Abschluss und Zertifikat binden die Person und sagen das mit eigenen
+  // Hinweisen — diese drei Sätze dürfen nicht zusammengefasst werden.
+  trn_reference_by_value: 'Die Referenz ist eine Personen- oder Rollen-ID aus der Personalplanung, als Wert geführt. Bei einer Zuweisung prüft sie nichts: eine ID, die niemanden bezeichnet, wird genauso angenommen wie eine, die jemanden bezeichnet.',
+  trn_reference_malformed: 'Das ist keine ID. Eine Referenz ist ein 36 Zeichen langer Bezeichner der Form 0f9c1a5e-4b2d-4c7a-9e10-3d5f8b6a1c24. Etwas anderes kann der Server nicht lesen, und seine Ablehnung würde den Grund nicht nennen.',
+
+  // Das Verzeichnis der Personalplanung als Hilfe an jedem Referenzfeld. Es ist der Aufruf eines
+  // ANDEREN Moduls mit einer anderen Berechtigung, deshalb bekommt jeder Zustand einen eigenen Satz
+  // — und KEINER von ihnen schließt das Textfeld.
+  trn_pick_person: 'Aus der Mitarbeiterliste wählen',
+  trn_pick_role: 'Aus der Rollenliste wählen',
+  trn_pick_placeholder: 'Wählen …',
+  trn_directory_match: 'Diese ID ist {name}.',
+  trn_directory_person_ended: '{name} (Beschäftigung beendet)',
+  trn_directory_role_retired: '{name} (stillgelegt)',
+  trn_directory_people_unknown: 'Die Mitarbeiterliste hat nicht geantwortet, es gibt also keine Namen zur Auswahl. Geben Sie stattdessen die Personen-ID ein.',
+  trn_directory_people_refused: 'Sie dürfen die Mitarbeiterliste dieses Betriebs nicht lesen, es gibt also keine Namen zur Auswahl — dafür ist eine Berechtigung in der Personalplanung nötig, die die Verwaltung des Betriebs nicht verleiht. Geben Sie stattdessen die Personen-ID ein.',
+  trn_directory_people_empty: 'In diesem Betrieb ist niemand beschäftigt, es gibt also nichts zur Auswahl. Geben Sie stattdessen die Personen-ID ein: Nachweise lassen sich auch für eine Person ablegen, die hier nie beschäftigt war.',
+  trn_directory_people_pick: 'Wählen Sie jemanden aus der Liste, oder geben Sie die Personen-ID ein.',
+  trn_directory_people_no_match: 'Diese ID steht nicht auf der Mitarbeiterliste dieses Betriebs. Sie kann trotzdem angenommen werden — der Server prüft, ob die Person überhaupt existiert, nicht ob sie hier arbeitet.',
+  trn_directory_roles_unknown: 'Die Rollenliste hat nicht geantwortet, es gibt also keine Namen zur Auswahl. Geben Sie stattdessen die Rollen-ID ein.',
+  trn_directory_roles_refused: 'Sie dürfen die Rollenliste dieses Betriebs nicht lesen, es gibt also keine Namen zur Auswahl — dafür ist eine Berechtigung in der Personalplanung nötig, die die Verwaltung des Betriebs nicht verleiht. Geben Sie stattdessen die Rollen-ID ein.',
+  trn_directory_roles_empty: 'Dieser Betrieb hat keine Rollen, es gibt also nichts zur Auswahl. Geben Sie stattdessen die Rollen-ID ein.',
+  trn_directory_roles_pick: 'Wählen Sie eine Rolle aus der Liste, oder geben Sie die Rollen-ID ein.',
+  trn_directory_roles_no_match: 'Diese ID ist keine der Rollen dieses Betriebs. Sie wird trotzdem angenommen — eine Rollenreferenz prüft nichts.',
 
   trn_courses_title: '1. Kurse',
   trn_courses_unknown: 'Die Kursliste hat nicht geantwortet. Wir wissen nicht, welche Kurse dieser Betrieb hat.',
@@ -3357,7 +3383,7 @@ export default {
   trn_version_publish_note: 'Das Veröffentlichen friert den Inhalt ein und erzeugt die Signatur. Jeder danach erfasste Abschluss wird damit gestempelt, und dieser Stempel zeigt später, welches Material die Person tatsächlich bestanden hat.',
   trn_version_new_title: 'Neuer Entwurf',
   trn_version_content: 'Inhaltsseiten (JSON)',
-  trn_version_quiz: 'Quiz (JSON)',
+  trn_version_quiz_absent: 'Hier wird kein Quiz erstellt. Niemand könnte es ablegen: die Mitarbeiter-App, in der ein Quiz bearbeitet würde, existiert in dieser Version nicht. Und der Quiz-Inhalt geht in den Hash ein, den das Veröffentlichen endgültig einfriert — eine jetzt geratene Form wäre damit in jedem Abschluss festgeschrieben, der gegen diese Version erfasst wird. Hier erstellte Versionen tragen kein Quiz.',
   trn_version_threshold: 'Bestehensgrenze (%)',
   trn_version_new_submit: 'Entwurf anlegen',
 
@@ -3395,14 +3421,16 @@ export default {
   trn_result_failed: 'Nicht bestanden',
   trn_result_unknown: 'Der Server hat nicht angegeben, ob dieser Abschluss bestanden wurde.',
   trn_source_manager: 'Von einer Führungskraft erfasst',
-  trn_source_quiz: 'Quiz in der App',
+  trn_source_quiz: 'Quiz',
+  trn_source_quiz_note: 'Als Quiz-Versuch erfasst. Nichts in dieser Version kann so etwas erzeugen — diese Zeile wurde von etwas außerhalb geschrieben.',
   trn_completion_new_title: 'Abschluss erfassen',
   trn_completion_no_frozen: 'Keine eingefrorene Version zum Erfassen. Ein Abschluss muss gegen eine veröffentlichte oder stillgelegte Version gestempelt werden.',
   trn_completion_person: 'Personen-ID',
+  trn_completion_person_known: 'Die Person muss in der Personalplanung bereits existieren — der Server lehnt eine ID ab, die er nicht kennt, und legt nichts ab. Er prüft, dass die Person existiert, in jedem Zustand, nicht dass sie in diesem Betrieb arbeitet.',
   trn_completion_version: 'Version',
   trn_completion_score: 'Punkte (%)',
-  trn_completion_passed: 'Bestanden',
-  trn_completion_grading_note: 'Bestanden wird genau so gespeichert, wie es hier angekreuzt wird. Der Server vergleicht es nicht mit der Bestehensgrenze der Version, und der Eintrag lässt sich danach nicht mehr ändern — das Kreuz ist also die eigene Aussage der Führungskraft, keine Berechnung.',
+  trn_completion_grading_note: 'Über bestanden oder nicht entscheidet der Server. Er vergleicht die hier erfassten Punkte mit der Bestehensgrenze der Version, gegen die erfasst wird — genau auf der Grenze ist bestanden, und es wird vorher nichts gerundet. Es gibt kein Bestanden-Kreuz, weil der Eintrag danach nicht mehr änderbar ist und ein Bestanden, das die Punkte nicht decken, nie korrigiert werden könnte.',
+  trn_completion_threshold_note: 'Diese Version ist ab {threshold}% bestanden.',
   trn_completion_submit: 'Abschluss erfassen',
 
   trn_certs_title: '5. Zertifikate',
@@ -3423,13 +3451,14 @@ export default {
   trn_certs_status_asof_unknown: 'Den Status hat der Server berechnet. Der Zeitpunkt der Berechnung kam nicht mit der Antwort zurück.',
   trn_cert_new_title: 'Zertifikat erfassen',
   trn_cert_person: 'Personen-ID',
-  trn_cert_person_unchecked: 'Der Server prüft nur, dass die ID nicht leer ist. Er prüft nicht, ob die Person hier arbeitet — eine vertippte ID wird als Nachweis über jemanden abgelegt, den dieser Betrieb nicht kennt.',
+  trn_cert_person_known: 'Die Person muss in der Personalplanung bereits existieren — der Server lehnt eine ID ab, die er nicht kennt, und registriert nichts. Er prüft, dass die Person existiert, auch eine nur eingeladene, nicht dass sie in diesem Betrieb arbeitet.',
   trn_cert_type: 'Typ',
   trn_cert_type_hint: 'Der Typ ist zugleich der Kompetenzschlüssel, den das Zertifikat verleiht.',
   trn_cert_issuer: 'Aussteller',
   trn_cert_issue: 'Ausgestellt',
   trn_cert_expiry: 'Läuft ab',
   trn_cert_expiry_hint: 'Ein leeres Ablaufdatum bedeutet ein Zertifikat ohne Ablauf, das der Server als dauerhaft gültig behandelt.',
+  trn_cert_expiry_before_issue: 'Das Ablaufdatum liegt vor dem Ausstellungsdatum. Der Server lehnt das ab, also wird es nicht gesendet.',
   trn_cert_document: 'Dokumentreferenz',
   trn_cert_submit: 'Erfassen',
 

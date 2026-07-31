@@ -27,7 +27,7 @@
       <tbody>
         <tr v-for="row in rows" :key="row.completionId" data-test="completion-row">
           <td>
-            <span class="trn-ref">{{ row.personRef || dash }}</span>
+            <span class="trn-ref" :title="row.personRef">{{ personName(row.personRef) }}</span>
           </td>
           <!-- A score of 0 is a score, not a missing value; only a null prints as a dash. -->
           <td>{{ row.scorePercent === null ? dash : row.scorePercent + '%' }}</td>
@@ -37,7 +37,9 @@
               {{ row.passed ? $i('trn_result_passed') : $i('trn_result_failed') }}
             </span>
           </td>
-          <td>{{ sourceLabel(row.source) }}</td>
+          <td>
+            <span :title="sourceTitle(row.source)">{{ sourceLabel(row.source) }}</span>
+          </td>
           <td>
             <span class="trn-ref" :title="row.versionContentHash">{{ shortHash(row.versionContentHash) }}</span>
           </td>
@@ -55,12 +57,19 @@
         {{ $i('trn_completion_no_frozen') }}
       </p>
       <template v-else>
-        <label class="trn-form__label">
-          {{ $i('trn_completion_person') }}
-          <input v-model="form.personRef" class="trn-form__input" type="text" data-test="completion-person">
-        </label>
-        <p class="trn-form__hint">
-          {{ $i('trn_reference_by_value') }}
+        <TrainingReferenceField
+          v-model="form.personRef"
+          :label="$i('trn_completion_person')"
+          :directory="peopleDirectory"
+          kind="person"
+          test-id="completion-person"
+          :disabled="busy"
+        />
+        <p class="trn-form__hint" data-test="completion-person-note">
+          {{ $i('trn_completion_person_known') }}
+        </p>
+        <p v-if="referenceMalformed" class="trn-note trn-note--blocked" data-test="completion-person-malformed">
+          {{ $i('trn_reference_malformed') }}
         </p>
         <label class="trn-form__label">
           {{ $i('trn_completion_version') }}
@@ -84,14 +93,13 @@
             data-test="completion-score"
           >
         </label>
-        <label class="trn-form__check">
-          <input v-model="form.passed" type="checkbox" data-test="completion-passed">
-          {{ $i('trn_completion_passed') }}
-        </label>
-        <!-- TR-B1, stated to the person filling the form in. The pass box and the score are two
-             separate assertions on the wire and the server keeps them that way. -->
+        <!-- The rule the SERVER runs, stated to the person filling the form in. There is no verdict
+             control here to contradict it — see the panel note. -->
         <p class="trn-form__hint" data-test="completion-grading-note">
           {{ $i('trn_completion_grading_note') }}
+        </p>
+        <p v-if="selectedThreshold !== null" class="trn-form__hint" data-test="completion-threshold-note">
+          {{ $i('trn_completion_threshold_note', { threshold: selectedThreshold }) }}
         </p>
         <button class="trn-btn trn-btn--primary" type="submit" :disabled="!canSubmit" data-test="completion-submit">
           {{ $i('trn_completion_submit') }}
@@ -106,24 +114,32 @@
 </template>
 
 <script>
-import { completionRow, versionLabel, instantLabel } from '~/utils/training/journey';
+import TrainingReferenceField from '~/components/admin/training/TrainingReferenceField.vue';
+import { completionRow, versionLabel, instantLabel, directoryMatch, isReferenceId } from '~/utils/training/journey';
 
 const SHORT_HASH = 12;
 
 /**
  * The completion ledger, and the one write that appends to it.
  *
- * THIS PANEL DOES NOT GRADE, AND THE REFUSAL IS DELIBERATE. `TrainingCompletionService` writes
- * `Passed = request.Passed` and never compares the score against the version's
- * `passThresholdPercent` — TR-B1, an open ruling on Sven's list. The tempting fix is to tick the box
- * from the score in the browser. That would be worse than the gap it papers over: the ledger is
- * append-only, so a pass written from a client-side rule can never be corrected, and the rule itself
- * would live where no inspection could find it. So the box is the manager's own assertion, the hint
- * says exactly that, and nothing here compares the two numbers.
+ * THERE IS NO PASS CHECKBOX, AND ITS ABSENCE IS THE POINT. TR-B1 is settled in the server's favour:
+ * `RecordTrainingCompletionRequest` carries `PersonRef`, `CourseVersionId` and `ScorePercent` and NO
+ * verdict field, and `TrainingCompletionService` writes
+ * `Passed = TrainingGrading.IsPass(request.ScorePercent, version.PassThresholdPercent)` against the
+ * frozen version the attempt is stamped to. This panel used to render a «Passed» box whose value the
+ * server discarded, under a hint that said the opposite — so a manager could tick it, enter 55
+ * against a threshold of 80, and get «Not passed» back in the row they had just filed.
  *
- * NOR DOES THE TABLE. A row shows the score and the result side by side and draws no conclusion from
- * their combination; the version's threshold is rendered one panel up, on the version that carries
- * it, and the two are never brought together.
+ * Deriving the tick client-side would have been the wrong repair, and so would sending it: the ledger
+ * is append-only under a SQL trigger, so a verdict a client could assert is a permanent false
+ * qualification that no correction can reach. A manager states the observation — the score — and the
+ * published threshold decides what it means. What the form owes the operator instead is the rule and
+ * the selected version's own threshold, both stated before they submit.
+ *
+ * THE TABLE STILL DRAWS NO CONCLUSION. `passed` is printed as the server derived it and is never
+ * recomputed here: the threshold that graded a row is the one frozen into ITS version, and a browser
+ * comparing the score against a later version's threshold — or rounding where the server's exact
+ * decimal comparison does not — would be a second opinion about the same statutory record.
  *
  * WHY BOTH PUBLISHED AND RETIRED VERSIONS ARE OFFERED: what a completion needs is a frozen content
  * hash to be stamped against, and retiring a version freezes it further. A venue that withdraws a
@@ -131,11 +147,14 @@ const SHORT_HASH = 12;
  */
 export default {
   name: 'TrainingCompletionPanel',
+  components: { TrainingReferenceField },
   props: {
     /** `readListing(payload, error, 'completions')`. */
     listing: { type: Object, required: true },
     /** `recordableVersions(detail)` — Published or Retired. */
     versions: { type: Array, default: () => [] },
+    /** `personDirectory(...)` — an assist for the reference field, never a gate on it. */
+    peopleDirectory: { type: Object, default: () => ({ state: 'unknown', options: [] }) },
     locale: { type: String, default: 'no' },
     zoneId: { type: String, default: null },
     /** `training.assignments`: true, false, or null for UNKNOWN. Null never disables a control. */
@@ -143,7 +162,7 @@ export default {
     busy: { type: Boolean, default: false }
   },
   data () {
-    return { form: { personRef: '', courseVersionId: '', scorePercent: '', passed: false } };
+    return { form: { personRef: '', courseVersionId: '', scorePercent: '' } };
   },
   computed: {
     dash () { return '—'; },
@@ -160,9 +179,26 @@ export default {
       if (!Number.isFinite(parsed) || parsed < 0 || parsed > 100) { return null; }
       return parsed;
     },
+    /**
+     * Something has been typed, and it is not a GUID. `PersonRef` binds to a `Guid`, so this would
+     * fail MODEL BINDING — a framework 400 carrying no `training.*` code, which the page could not
+     * explain. Said here, where the cause is known, rather than sent and mistranslated.
+     */
+    referenceMalformed () {
+      const typed = this.form.personRef.trim();
+      return !!typed && !isReferenceId(typed);
+    },
+    /**
+     * The selected version's OWN authored threshold — the number the server will compare against.
+     * Read off the same document the picker was built from; never carried over from another version.
+     */
+    selectedThreshold () {
+      const version = this.versions.find(v => v.courseVersionId === this.form.courseVersionId);
+      return version && typeof version.passThresholdPercent === 'number' ? version.passThresholdPercent : null;
+    },
     canSubmit () {
       return !this.busy &&
-        !!this.form.personRef.trim() &&
+        isReferenceId(this.form.personRef) &&
         !!this.form.courseVersionId &&
         this.scoreValue !== null;
     }
@@ -172,16 +208,25 @@ export default {
     stamp (instant) {
       return instantLabel(instant, this.locale, this.zoneId) || this.dash;
     },
+    /** A filed reference named, when the directory can name it. The id stays on the title either way. */
+    personName (personRef) {
+      const match = directoryMatch(this.peopleDirectory, personRef);
+      return match ? match.label : (personRef || this.dash);
+    },
     /**
-     * The only two sources the enum has. `ManagerRecorded` is the only one this surface can produce
-     * — `Quiz` requires the §5.2 worker self-service surface, which does not exist in this wave — so
-     * a `Quiz` row appearing here would mean something changed on the backend, and it is labelled
-     * rather than silently folded into "recorded".
+     * The two sources the enum has, of which only one can be produced anywhere.
+     * `TrainingCompletionService` hardcodes `ManagerRecorded`, and NO production code writes `Quiz` —
+     * the §5.2 worker self-service surface where somebody would take one does not exist in this wave.
+     * A `Quiz` row therefore means the backend changed, so it is labelled plainly and the title says
+     * what this build knows, rather than being folded into "recorded" or dressed up as an app feature.
      */
     sourceLabel (source) {
       if (source === 'ManagerRecorded') { return this.$i('trn_source_manager'); }
       if (source === 'Quiz') { return this.$i('trn_source_quiz'); }
       return source || this.dash;
+    },
+    sourceTitle (source) {
+      return source === 'Quiz' ? this.$i('trn_source_quiz_note') : null;
     },
     shortHash (hash) {
       if (!hash) { return this.dash; }
@@ -192,8 +237,7 @@ export default {
       this.$emit('record-completion', {
         personRef: this.form.personRef.trim(),
         courseVersionId: this.form.courseVersionId,
-        scorePercent: this.scoreValue,
-        passed: this.form.passed === true
+        scorePercent: this.scoreValue
       });
     }
   }

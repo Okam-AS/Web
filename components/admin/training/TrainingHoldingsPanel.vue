@@ -8,10 +8,17 @@
     </p>
 
     <form class="trn-form" data-test="holdings-form" @submit.prevent="submit">
-      <label class="trn-form__label">
-        {{ $i('trn_holdings_person') }}
-        <input v-model="personRef" class="trn-form__input" type="text" data-test="holdings-person">
-      </label>
+      <TrainingReferenceField
+        v-model="personRef"
+        :label="$i('trn_holdings_person')"
+        :directory="peopleDirectory"
+        kind="person"
+        test-id="holdings-person"
+        :disabled="busy"
+      />
+      <p v-if="referenceMalformed" class="trn-note trn-note--blocked" data-test="holdings-person-malformed">
+        {{ $i('trn_reference_malformed') }}
+      </p>
       <button class="trn-btn trn-btn--primary" type="submit" :disabled="!canSubmit" data-test="holdings-lookup">
         {{ $i('trn_holdings_lookup') }}
       </button>
@@ -82,7 +89,8 @@
 </template>
 
 <script>
-import { certificateRow, instantLabel } from '~/utils/training/journey';
+import TrainingReferenceField from '~/components/admin/training/TrainingReferenceField.vue';
+import { certificateRow, instantLabel, isReferenceId } from '~/utils/training/journey';
 
 /**
  * THE END OF THE JOURNEY, and the only panel that proves the rest of it did anything.
@@ -106,6 +114,7 @@ import { certificateRow, instantLabel } from '~/utils/training/journey';
  */
 export default {
   name: 'TrainingHoldingsPanel',
+  components: { TrainingReferenceField },
   props: {
     /**
      * `readHoldings(payload, error)`, or `{ state: 'idle' }` before anybody has asked. Idle is a
@@ -113,6 +122,8 @@ export default {
      * not render as one.
      */
     holdings: { type: Object, required: true },
+    /** `personDirectory(...)` — an assist for the reference field, never a gate on it. */
+    peopleDirectory: { type: Object, default: () => ({ state: 'unknown', options: [] }) },
     locale: { type: String, default: 'no' },
     zoneId: { type: String, default: null },
     busy: { type: Boolean, default: false }
@@ -129,8 +140,17 @@ export default {
       const asOf = instantLabel(this.holdings.asOf, this.locale, this.zoneId);
       return asOf ? this.$i('trn_holdings_asof', { asOf }) : this.$i('trn_holdings_asof_unknown');
     },
+    /**
+     * Typed, and not a GUID. `GET …/competency/holdings?person=` binds a `Guid` query parameter, so
+     * anything else is a framework 400 carrying no `training.*` code — indistinguishable, from the
+     * page's error mapping, from a network failure.
+     */
+    referenceMalformed () {
+      const typed = this.personRef.trim();
+      return !!typed && !isReferenceId(typed);
+    },
     canSubmit () {
-      return !this.busy && !!this.personRef.trim();
+      return !this.busy && isReferenceId(this.personRef);
     }
   },
   methods: {

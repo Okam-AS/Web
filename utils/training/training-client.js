@@ -187,10 +187,17 @@ function hasTrainingCode (error) {
  * The store-scoped Training surface.
  *
  * Every method here maps to a controller action that exists today. The three the journey would also
- * want — a person directory, a role directory, and a worker's own quiz submission — have no route on
- * this surface at all, so there is no method for them: `PersonRef`/`RoleRef` are `Workforce*` ids
- * carried BY VALUE with no FK and no cross-module read (spec §7), and the §5.2 self-service surface
- * is explicitly not in this wave. See the page for what that costs the operator.
+ * want have no route on THIS surface, so there is no method for them here, and two of the three are
+ * answered elsewhere:
+ *
+ *   • A PERSON DIRECTORY and a ROLE DIRECTORY exist on the WORKFORCE surface, and the page reads them
+ *     through `WorkforceRosterService` to name references and populate pickers. They are not proxied
+ *     into this client: it is route-for-route with `TrainingController` and adding a foreign route
+ *     would hide that the read carries a different module's authorization (`WorkforceScheduler`, not
+ *     StoreAdmin) and can be refused on its own.
+ *   • A WORKER'S OWN QUIZ SUBMISSION has no route anywhere. The §5.2 self-service surface is not in
+ *     this wave, which is why every completion filed here is `ManagerRecorded` and why the version
+ *     panel authors no quiz content.
  */
 export class TrainingStoreService extends WorkforceClientBase {
   /** #1: capabilities, store timezone, the full `training.*` flag family, competency-seam binding. */
@@ -262,11 +269,20 @@ export class TrainingStoreService extends WorkforceClientBase {
   /**
    * #11: record a manager-observed completion against a frozen (Published or Retired) version.
    *
-   * `passed` IS SENT BY THE CLIENT AND STORED AS SENT. `TrainingCompletionService.RecordCompletionAsync`
-   * writes `Passed = request.Passed` and never compares `scorePercent` against the version's
-   * `passThresholdPercent` — TR-B1, an open ruling on Sven's list. This client does not derive
-   * `passed` from the score, because deriving it would put a grading rule in the browser that the
-   * evidence ledger does not have, and would pre-empt the ruling that decides where it belongs.
+   * THE REQUEST CARRIES NO VERDICT. `RecordTrainingCompletionRequest` is `PersonRef`,
+   * `CourseVersionId` and `ScorePercent` — nothing else — and the server derives the verdict itself:
+   * `Passed = TrainingGrading.IsPass(request.ScorePercent, version.PassThresholdPercent)` against the
+   * exact frozen version the attempt is stamped to (exactly at the threshold passes; the comparison
+   * is exact decimal with no rounding). TR-B1 settled that way because the ledger is append-only
+   * under a SQL trigger, so a verdict a client could assert would be an uncorrectable false
+   * qualification. Do not add a `passed` field back: it would be silently ignored, which is precisely
+   * the defect this surface used to ship.
+   *
+   * `personRef` IS BOUND, not merely non-empty. `TrainingPersonBinding.RequireKnownPersonAsync`
+   * refuses an id identifying no `WorkforcePerson` with a 400 (`training.validation`). It is an
+   * existence check across every person state, estate-wide, and explicitly NOT an employment check.
+   * It runs AFTER the store-scoped version resolution, so a cross-store probe still receives the same
+   * opaque 404 and this refusal is no existence oracle.
    *
    * Same store-scoped resolution as the assignment: `courseVersionId` from another store is an
    * opaque 404.
@@ -283,11 +299,15 @@ export class TrainingStoreService extends WorkforceClientBase {
   /**
    * #12: register an externally-issued certificate for a person by value.
    *
-   * THE SERVER CHECKS ONLY THAT `personRef` IS NOT `Guid.Empty`
-   * (`TrainingCertificateService.RegisterCertificateAsync`). There is no employment check, so any
-   * well-formed GUID is accepted and filed as statutory evidence about a person who may not work
-   * here. That gap is reported and deliberately unfixed upstream — a check would refuse writes that
-   * succeed today — so nothing built on this method may present the reference as validated.
+   * `personRef` IS BOUND, exactly as on the completion write: `RegisterCertificateAsync` calls
+   * `TrainingPersonBinding.RequireKnownPersonAsync`, so an id identifying no `WorkforcePerson` is
+   * refused with a 400 and nothing is filed.
+   *
+   * WHAT IT DOES NOT CHECK is employment. A `WorkforcePerson` is not store-scoped and every state
+   * binds — `Invited` is what a certificate filed before the engagement exists looks like, `Archived`
+   * is what late filing of historical evidence looks like — so a known person who has never worked
+   * at this store is accepted. Nothing built on this method may present the reference as belonging
+   * to somebody employed here.
    */
   RegisterCertificate (storeId, request) {
     return this._mutate('POST', this._base(storeId) + '/certificates', request);

@@ -3337,6 +3337,9 @@ export default {
   trn_err_immutable: 'Versjonen er ikke et utkast. Innholdet i en publisert versjon er låst — en endring er en ny versjon.',
   trn_err_flag_off: 'Denne delen er slått av for butikken. Lesing virker, skriving gjør det ikke.',
   trn_err_unknown: 'Noe gikk galt, og feilen kom ikke fra opplæringsmodulen.',
+  // Bare for de to skrivingene som binder en person. Alle andre 400-er de rutene kan kaste, hindrer
+  // skjemaet før sending, så dette er den ene årsaken som står igjen — se `fail` på siden.
+  trn_err_person_unknown: 'ID-en peker ikke på en kjent person, så ingenting ble ført. Kontroller den mot ansattlisten, eller mot person-ID-en bemanningsmodulen viser.',
 
   trn_context_title: 'Modulstatus',
   trn_context_zone: 'Tidssone',
@@ -3361,7 +3364,30 @@ export default {
 
   trn_writes_blocked_setup: 'Serveren melder at kurs og sertifikater er slått av for butikken. Skriving vil bli avvist.',
   trn_writes_blocked_assignments: 'Serveren melder at tildeling og gjennomføring er slått av for butikken. Skriving vil bli avvist.',
-  trn_reference_by_value: 'Referansen er en person- eller rolle-ID fra bemanningsmodulen, ført som en verdi. Opplæringsmodulen har ingen personliste og kontrollerer ikke at ID-en hører til noen som jobber her.',
+  // Gjelder BARE tildelinger. Gjennomføring og sertifikat binder personen og sier det med sine egne
+  // hint — disse tre setningene skal ikke slås sammen.
+  trn_reference_by_value: 'Referansen er en person- eller rolle-ID fra bemanningsmodulen, ført som en verdi. Ingenting kontrollerer den på en tildeling: en ID som ikke peker på noen, godtas nøyaktig som en som gjør det.',
+  trn_reference_malformed: 'Dette er ikke en ID. En referanse er en 36 tegn lang identifikator på formen 0f9c1a5e-4b2d-4c7a-9e10-3d5f8b6a1c24. Serveren kan ikke lese noe annet, og avvisningen ville ikke si hvorfor.',
+
+  // Katalogen fra bemanningsmodulen, som hjelp på hvert referansefelt. Det er en annen moduls kall
+  // med en annen moduls tilgangsstyring, så hver tilstand får sin egen setning — og INGEN av dem
+  // stenger tekstfeltet.
+  trn_pick_person: 'Velg fra ansattlisten',
+  trn_pick_role: 'Velg fra rollelisten',
+  trn_pick_placeholder: 'Velg …',
+  trn_directory_match: 'Denne ID-en er {name}.',
+  trn_directory_person_ended: '{name} (arbeidsforholdet er avsluttet)',
+  trn_directory_role_retired: '{name} (pensjonert)',
+  trn_directory_people_unknown: 'Ansattlisten svarte ikke, så det finnes ingen navn å velge blant. Skriv inn person-ID-en i stedet.',
+  trn_directory_people_refused: 'Du får ikke lese ansattlisten for denne butikken, så det finnes ingen navn å velge blant — det krever en rettighet i bemanningsmodulen som det å administrere butikken ikke gir. Skriv inn person-ID-en i stedet.',
+  trn_directory_people_empty: 'Ingen er ansatt i denne butikken, så det er ingenting å velge blant. Skriv inn person-ID-en i stedet: dokumentasjon kan føres på en person butikken aldri har hatt ansatt.',
+  trn_directory_people_pick: 'Velg en person fra listen, eller skriv inn person-ID-en.',
+  trn_directory_people_no_match: 'ID-en står ikke på ansattlisten til denne butikken. Den kan likevel bli godtatt — serveren sjekker at personen finnes i det hele tatt, ikke at hun jobber her.',
+  trn_directory_roles_unknown: 'Rollelisten svarte ikke, så det finnes ingen navn å velge blant. Skriv inn rolle-ID-en i stedet.',
+  trn_directory_roles_refused: 'Du får ikke lese rollelisten for denne butikken, så det finnes ingen navn å velge blant — det krever en rettighet i bemanningsmodulen som det å administrere butikken ikke gir. Skriv inn rolle-ID-en i stedet.',
+  trn_directory_roles_empty: 'Butikken har ingen roller, så det er ingenting å velge blant. Skriv inn rolle-ID-en i stedet.',
+  trn_directory_roles_pick: 'Velg en rolle fra listen, eller skriv inn rolle-ID-en.',
+  trn_directory_roles_no_match: 'ID-en er ikke en av rollene til denne butikken. Den blir godtatt uansett — ingenting kontrollerer en rollereferanse.',
 
   trn_courses_title: '1. Kurs',
   trn_courses_unknown: 'Kurslisten svarte ikke. Vi vet ikke hvilke kurs butikken har.',
@@ -3399,7 +3425,7 @@ export default {
   trn_version_publish_note: 'Publisering låser innholdet og lager signaturen. Hver gjennomføring som føres etterpå stemples med den, og det er den som senere viser hvilket materiale personen faktisk besto.',
   trn_version_new_title: 'Nytt utkast',
   trn_version_content: 'Innholdssider (JSON)',
-  trn_version_quiz: 'Quiz (JSON)',
+  trn_version_quiz_absent: 'Her lages det ingen quiz. Ingen kunne tatt den: appen der en quiz skulle vært gjennomført, finnes ikke i denne versjonen. Og quiz-innholdet inngår i hashen som publisering låser for godt, så en form gjettet nå ville blitt låst inn i hver eneste gjennomføring ført mot denne versjonen. Versjoner laget her bærer ingen quiz.',
   trn_version_threshold: 'Beståttgrense (%)',
   trn_version_new_submit: 'Lag utkast',
 
@@ -3437,14 +3463,16 @@ export default {
   trn_result_failed: 'Ikke bestått',
   trn_result_unknown: 'Serveren oppga ikke om gjennomføringen var bestått.',
   trn_source_manager: 'Ført av leder',
-  trn_source_quiz: 'Quiz i appen',
+  trn_source_quiz: 'Quiz',
+  trn_source_quiz_note: 'Ført som et quiz-forsøk. Ingenting i denne versjonen kan lage et slikt, så raden er skrevet av noe utenfor den.',
   trn_completion_new_title: 'Før en gjennomføring',
   trn_completion_no_frozen: 'Ingen låst versjon å føre mot. En gjennomføring må stemples mot en publisert eller pensjonert versjon.',
   trn_completion_person: 'Person-ID',
+  trn_completion_person_known: 'Personen må allerede finnes i bemanningsmodulen — serveren avviser en ID den ikke kjenner igjen, og fører ingenting. Den kontrollerer at personen finnes, uansett tilstand, ikke at hun jobber i denne butikken.',
   trn_completion_version: 'Versjon',
   trn_completion_score: 'Poeng (%)',
-  trn_completion_passed: 'Bestått',
-  trn_completion_grading_note: 'Bestått lagres nøyaktig slik det krysses av her. Serveren sammenligner det ikke med beståttgrensen på versjonen, og journalen kan ikke endres etterpå — så avkryssingen er lederens egen påstand, ikke en beregning.',
+  trn_completion_grading_note: 'Serveren avgjør bestått eller ikke. Den sammenligner poengsummen som føres her, med beståttgrensen på versjonen det føres mot — nøyaktig på grensen er bestått, og ingenting rundes av først. Det finnes ingen bestått-avkryssing, fordi journalen ikke kan endres etterpå og et bestått som poengsummen ikke dekker, aldri kunne blitt rettet.',
+  trn_completion_threshold_note: 'Denne versjonen er bestått fra {threshold}% og opp.',
   trn_completion_submit: 'Før gjennomføring',
 
   trn_certs_title: '5. Sertifikater',
@@ -3465,13 +3493,14 @@ export default {
   trn_certs_status_asof_unknown: 'Status er regnet ut av serveren. Tidspunktet den ble regnet ut på, fulgte ikke med svaret.',
   trn_cert_new_title: 'Registrer sertifikat',
   trn_cert_person: 'Person-ID',
-  trn_cert_person_unchecked: 'Serveren kontrollerer bare at ID-en ikke er tom. Den sjekker ikke at personen jobber her, så en feilskrevet ID blir lagret som dokumentasjon på en person butikken ikke kjenner.',
+  trn_cert_person_known: 'Personen må allerede finnes i bemanningsmodulen — serveren avviser en ID den ikke kjenner igjen, og registrerer ingenting. Den kontrollerer at personen finnes, også en som bare er invitert, ikke at hun jobber i denne butikken.',
   trn_cert_type: 'Type',
   trn_cert_type_hint: 'Typen er også kompetansenøkkelen sertifikatet gir.',
   trn_cert_issuer: 'Utsteder',
   trn_cert_issue: 'Utstedt',
   trn_cert_expiry: 'Utløper',
   trn_cert_expiry_hint: 'Tom utløpsdato betyr et sertifikat uten utløp, som serveren regner som varig gyldig.',
+  trn_cert_expiry_before_issue: 'Utløpsdatoen er før utstedelsesdatoen. Serveren avviser det, så det sendes ikke.',
   trn_cert_document: 'Dokumentreferanse',
   trn_cert_submit: 'Registrer',
 

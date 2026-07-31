@@ -16,6 +16,10 @@ import {
   completionRow,
   assignmentRow,
   courseRow,
+  personDirectory,
+  roleDirectory,
+  directoryMatch,
+  isReferenceId,
   READ_UNKNOWN,
   READ_REFUSED,
   READ_ANSWERED
@@ -267,12 +271,17 @@ describe('rows — nulls are dashes, and a zero is a zero', () => {
     expect(row.completed).toBeNull()
   })
 
-  test('the score and the pass flag are carried side by side and never compared', () => {
-    // TR-B1: the server stores `passed` as sent and never checks it against a threshold. A row that
-    // scored 0 and was ticked as passed comes through exactly as it was filed.
+  test('the score and the SERVER\'S verdict are carried side by side and never compared here', () => {
+    // TR-B1 is settled: the server derives `passed` from the score against the frozen version's own
+    // threshold. This row builder still refuses to recompute it — the threshold that graded a row is
+    // the one inside ITS version, which this function does not hold.
     const row = completionRow({ scorePercent: 0, passed: true })
     expect(row.scorePercent).toBe(0)
     expect(row.passed).toBe(true)
+
+    const inverse = completionRow({ scorePercent: 100, passed: false })
+    expect(inverse.scorePercent).toBe(100)
+    expect(inverse.passed).toBe(false)
   })
 
   test('a certificate with no expiry is flagged as such rather than looking like a missing date', () => {
@@ -308,5 +317,83 @@ describe('rows — nulls are dashes, and a zero is a zero', () => {
     expect(courseRow({ versionCount: 0, hasPublishedVersion: false }).versionCount).toBe(0)
     expect(courseRow({}).versionCount).toBeNull()
     expect(courseRow({ hasPublishedVersion: true }).hasPublishedVersion).toBe(true)
+  })
+})
+
+describe('the reference directories — three states, and suggestions that are not the accepted set', () => {
+  const PERSON_A = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'
+  const PERSON_B = 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'
+  const ROLE_A = 'cccccccc-cccc-cccc-cccc-cccccccccccc'
+  const staffRow = over => Object.assign({
+    staffMemberId: 's-1', workforcePersonId: PERSON_A, displayName: 'Kari', isActive: true, capabilities: []
+  }, over)
+
+  test('THE DISTINCTION: refused, unknown and answered-empty are three different answers', () => {
+    // A 403 is the ordinary outcome for a Training manager with no Workforce capability, and a
+    // network failure says nothing at all. Neither is "this store engages nobody".
+    expect(personDirectory(null, new WorkforceApiError(403, { code: 'workforce.forbidden' })).state).toBe('refused')
+    expect(personDirectory(null, new WorkforceApiError(404, {})).state).toBe('refused')
+    expect(personDirectory(null, new Error('network')).state).toBe('unknown')
+    expect(personDirectory(null, new WorkforceApiError(500, {})).state).toBe('unknown')
+    expect(personDirectory([], null)).toEqual({ state: 'answered', options: [] })
+  })
+
+  test('a body that is not a list is UNKNOWN, never an empty roster', () => {
+    expect(personDirectory(null, null).state).toBe('unknown')
+    expect(personDirectory({ staff: [] }, null).state).toBe('unknown')
+    expect(roleDirectory(null, null).state).toBe('unknown')
+  })
+
+  test('two engagements of the SAME human are one suggestion, current if either is', () => {
+    // `personRef` names the PERSON; `GET /staff` returns one row per engagement, and a rehire is two
+    // rows for one human. Offering them twice would read as two people.
+    const directory = personDirectory([
+      staffRow({ staffMemberId: 's-1', isActive: false }),
+      staffRow({ staffMemberId: 's-2', isActive: true }),
+      staffRow({ staffMemberId: 's-3', workforcePersonId: PERSON_B, displayName: 'Ola', isActive: false })
+    ], null)
+
+    expect(directory.options).toEqual([
+      { id: PERSON_A, label: 'Kari', ended: false },
+      { id: PERSON_B, label: 'Ola', ended: true }
+    ])
+  })
+
+  test('a person with no display name falls back to the id rather than rendering blank', () => {
+    expect(personDirectory([staffRow({ displayName: null })], null).options[0].label).toBe(PERSON_A)
+  })
+
+  test('a retired role is MARKED rather than dropped, so assignments naming it still read', () => {
+    const past = '2020-01-01T00:00:00'
+    const directory = roleDirectory([
+      { roleId: ROLE_A, name: 'Kokk', station: 'Kjøkken', sortOrder: 1, effectiveFromUtc: past, effectiveToUtc: null },
+      { roleId: PERSON_B, name: 'Vakt', station: null, sortOrder: 2, effectiveFromUtc: past, effectiveToUtc: past }
+    ], null, new Date('2026-07-30T00:00:00Z'))
+
+    expect(directory.options).toEqual([
+      { id: ROLE_A, label: 'Kokk · Kjøkken', ended: false },
+      { id: PERSON_B, label: 'Vakt', ended: true }
+    ])
+  })
+
+  test('a match is found case-insensitively and only in an ANSWERED directory', () => {
+    const answered = personDirectory([staffRow()], null)
+    expect(directoryMatch(answered, PERSON_A.toUpperCase()).label).toBe('Kari')
+    expect(directoryMatch(answered, '  ' + PERSON_A + '  ').label).toBe('Kari')
+    expect(directoryMatch(answered, PERSON_B)).toBeNull()
+    expect(directoryMatch(answered, '')).toBeNull()
+    // A refused directory can never produce a match, so nothing can print a name off one.
+    expect(directoryMatch(personDirectory(null, new WorkforceApiError(403, {})), PERSON_A)).toBeNull()
+  })
+
+  test('a reference is a GUID or it is nothing the server could bind', () => {
+    expect(isReferenceId(PERSON_A)).toBe(true)
+    expect(isReferenceId(PERSON_A.toUpperCase())).toBe(true)
+    expect(isReferenceId('  ' + PERSON_A + '  ')).toBe(true)
+    expect(isReferenceId('role-9')).toBe(false)
+    expect(isReferenceId('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa')).toBe(false)
+    expect(isReferenceId('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaaa')).toBe(false)
+    expect(isReferenceId('')).toBe(false)
+    expect(isReferenceId(null)).toBe(false)
   })
 })
