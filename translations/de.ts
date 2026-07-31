@@ -2973,6 +2973,12 @@ export default {
   growth_draft_save: 'Neue Version speichern',
   growth_draft_saved: 'Gespeichert.',
   growth_draft_version: 'Version {version}',
+  growth_draft_body_hidden_title: 'Der Inhalt von Version {version} wird nicht angezeigt',
+  growth_draft_body_hidden: 'Die API liefert uns den Betreff und einen Fingerabdruck des Inhalts, aber nicht den Inhalt selbst. Der gespeicherte Inhalt lässt sich von hier aus deshalb nicht bearbeiten — nur ersetzen. Beim Speichern wird das, was in den Feldern unten steht, zu einer neuen, unveränderlichen Version, und der alte Inhalt ist nicht mehr das, was versendet wird. Um zu sehen, was diese Version tatsächlich enthält, sende dir weiter unten einen Test.',
+  growth_draft_content_hidden_placeholder: 'Leer, weil der gespeicherte Inhalt nicht abrufbar ist. Schreibe den gesamten Inhalt neu.',
+  growth_draft_replace_ack: 'Ich will den Inhalt von Version {version} durch das ersetzen, was in den Feldern oben steht.',
+  growth_draft_replace: 'Inhalt ersetzen und neue Version speichern',
+  growth_draft_replaced: 'Als neue Version gespeichert. Der Inhalt wurde durch das ersetzt, was in den Feldern stand.',
 
   // Testversand (#16).
   growth_test_title: 'Test an dich selbst',
@@ -2981,6 +2987,7 @@ export default {
   growth_test_send: 'Test senden',
   growth_test_sending: 'Wird gesendet …',
   growth_test_result: 'Test eingereicht. Der Anbieter antwortete: {status}. Das ist ein Einreichungsstatus, keine Zustellbestätigung.',
+  growth_test_module_off: 'Das Newsletter-Modul ist für diesen Standort ausgeschaltet (growth.module), daher antwortet die Testroute nicht. Ein Plattformbetreiber muss es einschalten.',
 
   // Freigabe (#17).
   growth_approval_title: 'Freigabe',
@@ -2993,19 +3000,26 @@ export default {
   growth_approval_approving: 'Wird freigegeben …',
   growth_approval_approved_at: 'Freigegeben {time}',
   growth_approval_done: 'Freigegeben.',
+  growth_approval_unseen_body: 'Dieser Bildschirm kann den Inhalt der gespeicherten Version nicht anzeigen. Sende dir zuerst einen Test, damit du etwas freigibst, das du tatsächlich gesehen hast.',
 
   // Das Tor — die einzige Stelle, an der ein Versand starten kann.
   growth_gate_title: 'Bereit zum Versand?',
   growth_gate_intro: 'Ein Versand findet nur statt, wenn jede Bedingung unten erfüllt ist. Alles Ungeklärte hält ihn auf, auch das, was wir nicht prüfen konnten.',
-  growth_gate_state_ready: 'Bereit',
+  growth_gate_state_ready: 'Bedingungen erfüllt',
   growth_gate_state_blocked: 'Gestoppt',
   growth_gate_state_unknown: 'Ungeklärt',
-  growth_gate_state_dispatched: 'Versendet',
+  growth_gate_state_dispatched: 'Übermittelt',
   growth_gate_recipients: 'Empfänger',
   growth_gate_send: 'Newsletter senden',
   growth_gate_sending: 'Wird gesendet …',
-  growth_gate_dispatched_note: 'Diese Version wurde bereits versendet. Ein erneuter Versand würde nicht doppelt senden — es gibt einen Versand pro freigegebener Version.',
-  growth_gate_dispatched_toast: 'Der Newsletter wurde versendet.',
+  growth_gate_ready_caveat: 'Alles, was wir von hier aus prüfen können, ist in Ordnung. Eines können wir nicht sehen: Der installationsweite Schalter Growth:Enabled wird von keinem Endpunkt gemeldet, ein Versand kann also weiterhin daran scheitern.',
+  growth_gate_mail_path: 'Versandweg',
+  growth_gate_mail_unknown: 'Wir konnten die Anbieter-Konfiguration dieses Standorts nicht lesen.',
+  growth_gate_mail_none: 'Für diesen Standort ist kein Anbieterkonto registriert.',
+  growth_gate_mail_paused: 'Pausiert',
+  growth_gate_mail_binding_note: 'Das sind die Anbieterkonten, die dieser Standort erhalten hat. Welche Mail-Engine der Server tatsächlich betreibt, meldet kein Endpunkt und lässt sich von hier aus nicht lesen.',
+  growth_gate_dispatched_note: 'Diese Version wurde bereits übermittelt. Ein erneuter Versand würde nicht doppelt senden — es gibt einen Versand pro freigegebener Version.',
+  growth_gate_dispatched_toast: 'Der Versand wurde ausgeführt. Der Anbieter hat {accepted} von {eligible} Empfängern angenommen. Die Zustellung ist erst bestätigt, wenn der Anbieter zurückmeldet — siehe „Was geschehen ist“ unten.',
 
   // Warum ein Versand abgelehnt wird. Jeder Punkt ist eine Tatsache über diesen Versand, keine Warnung.
   growth_block_consent_unreadable: 'Wir konnten das Einwilligungsprotokoll nicht lesen und können daher nicht bestätigen, dass jemand angeschrieben werden darf.',
@@ -3015,6 +3029,10 @@ export default {
   growth_block_not_approved: 'Diese Version wurde von keinem Menschen freigegeben.',
   growth_block_approval_superseded: 'Die Freigabe galt einer früheren Version und deckt diese nicht ab.',
   growth_block_no_unsubscribe: 'Empfänger hätten keine funktionierende Möglichkeit, sich abzumelden. Werbe-E-Mails ohne diese zu senden ist nicht rechtmässig, daher wird der Versand abgelehnt.',
+  growth_block_module_off: 'Das Newsletter-Modul ist für diesen Standort ausgeschaltet (growth.module), daher antwortet die Versandroute überhaupt nicht. Ein Plattformbetreiber muss es einschalten.',
+  growth_block_dispatch_off: 'Der Not-Aus für den Versand ist für diesen Standort ausgeschaltet (growth.dispatch). Es wird nichts angelegt und nichts gesendet, bis er wieder eingeschaltet wird.',
+  growth_block_provider_paused: 'Ein Anbieterkonto dieses Standorts ist pausiert. Solange das so ist, wird nichts gesendet.',
+  growth_block_platform_unreadable: 'Wir konnten die Newsletter- und Versandschalter dieses Standorts nicht lesen und wissen daher nicht, ob ein Versand überhaupt ankäme. Lade die Seite neu.',
 
   // Der Versand — ehrliche Zahlen, nie vermischt.
   growth_run_title: 'Was geschehen ist',
@@ -3029,6 +3047,15 @@ export default {
   growth_run_truth_note: 'Angenommen und zugestellt werden getrennt gezählt. Dass der Anbieter eine Nachricht annimmt, ist nicht dasselbe wie ihre Ankunft.',
   growth_run_started: 'Gestartet',
   growth_run_completed: 'Abgeschlossen',
+  growth_run_state_pending: 'Der Lauf ist angelegt, aber noch keine Sendung wurde übernommen. Die Zahlen unten sind nicht endgültig.',
+  growth_run_state_in_progress: 'Der Lauf sendet noch. Die Zahlen unten sind nicht endgültig.',
+  growth_run_state_completed: 'Jede Sendung hat ein endgültiges Ergebnis erreicht. Die Zahlen unten sind endgültig — ausser den Öffnungen, die weiter eintreffen.',
+  growth_run_state_reconciliation: 'Mindestens eine Sendung liegt zur Prüfung, daher lässt sich der Lauf noch nicht wahrheitsgemäss abschliessen.',
+  growth_run_refresh: 'Zahlen neu abrufen',
+  growth_run_refreshing: 'Wird abgerufen …',
+  growth_run_read_at: 'Vom Server gelesen {time}',
+  growth_run_read_unknown: 'In dieser Sitzung nicht vom Server gelesen.',
+  growth_run_refresh_note: 'Diese Zahlen aktualisieren sich nicht von selbst. Zustellung, Fehlschläge und Öffnungen werden erfasst, wenn der Anbieter zurückmeldet — also nach dem Versand.',
 
   // Fehler, nach dem stabilen growth.*-Code des API geschlüsselt.
   growth_error_generic: 'Etwas ist schiefgelaufen. Es wurde nichts versendet.',
@@ -3043,6 +3070,10 @@ export default {
   growth_error_subject_required: 'Ein Betreff ist erforderlich.',
   growth_error_content_required: 'Inhalt ist erforderlich.',
   growth_error_test_address_required: 'Eine Testadresse ist erforderlich.',
+  growth_error_dispatch_disabled: 'Der Not-Aus für den Versand ist für diesen Standort ausgeschaltet (growth.dispatch). Es wurde nichts angelegt und nichts gesendet. Ein Plattformbetreiber muss ihn einschalten.',
+  growth_error_provider_paused: 'Das Anbieterkonto dieses Standorts ist pausiert. Es wurde nichts angelegt und nichts gesendet. Hebe die Pause auf, bevor du es erneut versuchst.',
+  growth_error_unsubscribe_unconfigured: 'Diese Installation kann keinen funktionierenden Abmeldelink erzeugen (Growth:PublicApiBaseUrl fehlt oder ist kein https-Ursprung). Es wurde nichts gesendet — ein Newsletter ohne Abmeldung darf nicht hinausgehen.',
+  growth_error_preference_centre_unconfigured: 'Diese Installation kann keinen Link zum Präferenzzentrum erzeugen (Growth:PreferenceCentreBaseUrl fehlt oder ist kein https-Ursprung). Es wurde nichts gesendet — Empfänger hätten keinen Weg, die Einwilligung zu widerrufen oder Auskunft zu verlangen.',
 
   // Events — die Nachweisfläche für den Weg von der Anfrage bis zur Abrechnung
   nav_events: 'Events',

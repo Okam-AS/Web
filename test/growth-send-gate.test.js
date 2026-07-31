@@ -3,6 +3,8 @@ import {
   readAudience,
   readApproval,
   readRun,
+  readModuleFlags,
+  readMailPath,
   resolveSendGate,
   maySend,
   UNKNOWN,
@@ -23,7 +25,11 @@ import {
   BLOCK_NO_CONTENT,
   BLOCK_NOT_APPROVED,
   BLOCK_APPROVAL_SUPERSEDED,
-  BLOCK_NO_UNSUBSCRIBE
+  BLOCK_NO_UNSUBSCRIBE,
+  BLOCK_MODULE_OFF,
+  BLOCK_DISPATCH_OFF,
+  BLOCK_PROVIDER_PAUSED,
+  BLOCK_PLATFORM_UNREADABLE
 } from '~/utils/growth/send-gate'
 
 // ---------------------------------------------------------------------------------------------
@@ -118,6 +124,35 @@ const SNAPSHOT = {
   exclusionReasonBreakdown: { Suppressed: 3, Unverified: 2, FrequencyCapped: 1 }
 }
 
+// `GET /stores/{storeId}/feature-flags`, transcribed from `StoreFeatureFlagState` through the
+// estate's camelCase wire law. The two Growth rows are the only ones this surface reads; the
+// Workforce row is kept so the reader is exercised against a catalog it must search rather than a
+// two-element list that would pass by accident.
+const FLAGS_ON = [
+  { flagKey: 'workforce.module', module: 'Workforce', title: 'Module', defaultEnabled: false, isOverridden: true, overrideEnabled: true, effective: true },
+  { flagKey: 'growth.module', module: 'Growth', title: 'Module (guest capture)', defaultEnabled: false, isOverridden: true, overrideEnabled: true, effective: true },
+  { flagKey: 'growth.dispatch', module: 'Growth', title: 'Live newsletter dispatch (kill switch)', defaultEnabled: false, isOverridden: true, overrideEnabled: true, effective: true }
+]
+
+function flagsWith (overrides) {
+  return FLAGS_ON.map(row => Object.assign({}, row, overrides[row.flagKey] || {}))
+}
+
+// `GET /v1/growth/stores/{storeId}/delivery-health`, transcribed from `GrowthDeliveryHealthResponse`.
+// Only `providers` is read by this surface.
+const HEALTH = {
+  storeId: 90100,
+  queuedCount: 0,
+  oldestQueuedAgeSeconds: null,
+  deliveryStateCounts: {},
+  attemptedCount: 0,
+  bounceRate: 0,
+  complaintRate: 0,
+  failureRate: 0,
+  suppressionInflowLast24h: 0,
+  providers: [{ providerKey: 'sandbox', sendingDomain: 'mail.virksomheten.no', paused: false }]
+}
+
 // A gate whose every input is satisfied. Each test below flips exactly ONE field, so a refusal is
 // attributable to that field and to nothing else — and the untouched baseline is the positive
 // control proving the probe can reach READY at all.
@@ -128,7 +163,9 @@ function readyInputs (overrides) {
     approval: readApproval(NEWSLETTER_DETAIL),
     run: { state: UNKNOWN },
     unsubscribeMechanism: UNSUBSCRIBE_PRESENT,
-    hasContent: true
+    hasContent: true,
+    moduleFlags: readModuleFlags(FLAGS_ON),
+    mailPath: readMailPath(HEALTH)
   }, overrides || {})
 }
 
@@ -391,5 +428,124 @@ describe('resolveSendGate — the send is lawful or it does not happen', () => {
     expect(gate.state).toBe(GATE_UNKNOWN)
     expect(maySend(gate)).toBe(false)
     expect(gate.recipientCount).toBeNull()
+  })
+})
+
+describe('readModuleFlags — the switches no Growth endpoint reports', () => {
+  test('a read that never answered is UNKNOWN with null switches, never off', () => {
+    // "We could not read the flags" and "the flags are off" send an operator to two different
+    // places, so they may not collapse into one another.
+    const flags = readModuleFlags(null)
+    expect(flags.state).toBe(UNKNOWN)
+    expect(flags.module).toBeNull()
+    expect(flags.dispatch).toBeNull()
+  })
+
+  test('the two Growth rows are found by key inside the full catalog', () => {
+    const flags = readModuleFlags(FLAGS_ON)
+    expect(flags.state).toBe(READ)
+    expect(flags.module).toBe(true)
+    expect(flags.dispatch).toBe(true)
+  })
+
+  test('a catalog that does not carry a Growth flag leaves it null, not false', () => {
+    // A deployment that does not advertise the flag has not told us it is off.
+    const flags = readModuleFlags([FLAGS_ON[0]])
+    expect(flags.state).toBe(READ)
+    expect(flags.module).toBeNull()
+    expect(flags.dispatch).toBeNull()
+  })
+
+  test('`effective` is read, not `overrideEnabled` — the row is not the whole answer', () => {
+    // The backend's own contract: `effective` is what the module's gate resolves; an override row
+    // read on its own can disagree with it.
+    const flags = readModuleFlags(flagsWith({
+      'growth.dispatch': { overrideEnabled: true, effective: false }
+    }))
+    expect(flags.dispatch).toBe(false)
+  })
+})
+
+describe('readMailPath — provisioning, and not the running adapter', () => {
+  test('a read that never answered is UNKNOWN with a null pause state', () => {
+    const path = readMailPath(null)
+    expect(path.state).toBe(UNKNOWN)
+    expect(path.providers).toEqual([])
+    expect(path.anyPaused).toBeNull()
+  })
+
+  test('a store with no provider account reads as a real empty list, not as unknown', () => {
+    const path = readMailPath(Object.assign({}, HEALTH, { providers: [] }))
+    expect(path.state).toBe(READ)
+    expect(path.providers).toEqual([])
+    expect(path.anyPaused).toBe(false)
+  })
+
+  test('ANY paused account marks the store paused — the dispatcher stops on any of them', () => {
+    const path = readMailPath(Object.assign({}, HEALTH, {
+      providers: [
+        { providerKey: 'a', sendingDomain: 'a.example', paused: false },
+        { providerKey: 'b', sendingDomain: 'b.example', paused: true }
+      ]
+    }))
+    expect(path.anyPaused).toBe(true)
+  })
+})
+
+describe('the gate reconciles its badge with what the send route will actually do', () => {
+  test('growth.module off BLOCKS — the send would 404 while the gate said ready', () => {
+    // THE DEFECT: every lawfulness condition here is satisfied, and the dispatch route still answers
+    // an opaque 404 because the store-level module gate is off.
+    const gate = resolveSendGate(readyInputs({
+      moduleFlags: readModuleFlags(flagsWith({ 'growth.module': { effective: false } }))
+    }))
+    expect(gate.state).toBe(GATE_BLOCKED)
+    expect(gate.blocked).toContain(BLOCK_MODULE_OFF)
+    // POSITIVE CONTROL: the only change is the flag.
+    expect(resolveSendGate(readyInputs()).state).toBe(GATE_READY)
+  })
+
+  test('growth.dispatch off BLOCKS with its OWN reason — the two switches are undone differently', () => {
+    const gate = resolveSendGate(readyInputs({
+      moduleFlags: readModuleFlags(flagsWith({ 'growth.dispatch': { effective: false } }))
+    }))
+    expect(gate.state).toBe(GATE_BLOCKED)
+    expect(gate.blocked).toContain(BLOCK_DISPATCH_OFF)
+    expect(gate.blocked).not.toContain(BLOCK_MODULE_OFF)
+  })
+
+  test('a paused provider account BLOCKS', () => {
+    const gate = resolveSendGate(readyInputs({
+      mailPath: readMailPath(Object.assign({}, HEALTH, {
+        providers: [{ providerKey: 'sandbox', sendingDomain: 'mail.example', paused: true }]
+      }))
+    }))
+    expect(gate.state).toBe(GATE_BLOCKED)
+    expect(gate.blocked).toContain(BLOCK_PROVIDER_PAUSED)
+  })
+
+  test('an unreadable platform is UNKNOWN, and says unreadable rather than off', () => {
+    const gate = resolveSendGate(readyInputs({ moduleFlags: readModuleFlags(null) }))
+    expect(gate.state).toBe(GATE_UNKNOWN)
+    expect(gate.unknown).toContain(BLOCK_PLATFORM_UNREADABLE)
+    // Not knowing is never reported as a switch being off — that would send the operator to a
+    // control that is already in the right position.
+    expect(gate.blocked).not.toContain(BLOCK_MODULE_OFF)
+    expect(gate.blocked).not.toContain(BLOCK_DISPATCH_OFF)
+  })
+
+  test('both platform reads failing says it once, not twice', () => {
+    const gate = resolveSendGate(readyInputs({
+      moduleFlags: readModuleFlags(null),
+      mailPath: readMailPath(null)
+    }))
+    expect(gate.unknown.filter(c => c === BLOCK_PLATFORM_UNREADABLE)).toHaveLength(1)
+  })
+
+  test('a flag the catalog did not carry is UNKNOWN, never treated as enabled', () => {
+    // The dangerous direction: an absent row must not be read as permission to promise a send.
+    const gate = resolveSendGate(readyInputs({ moduleFlags: readModuleFlags([FLAGS_ON[0]]) }))
+    expect(gate.state).toBe(GATE_UNKNOWN)
+    expect(gate.unknown).toContain(BLOCK_PLATFORM_UNREADABLE)
   })
 })

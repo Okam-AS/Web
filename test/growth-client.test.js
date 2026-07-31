@@ -1,4 +1,4 @@
-import { GrowthService, NEWSLETTER_SUBSCRIBERS } from '~/utils/growth/growth-client'
+import { GrowthService, StoreFeatureFlagReader, NEWSLETTER_SUBSCRIBERS } from '~/utils/growth/growth-client'
 import { GrowthApiError, isGrowthApiError } from '~/utils/growth/api-client'
 import { WorkforceApiError } from '~/utils/workforce/api-client'
 
@@ -35,6 +35,23 @@ describe('GrowthService — route-for-route with the Growth controllers', () => 
 
     await service().GetNewsletter(42, 1002)
     expect(lastUrl()).toBe('/v1/growth/stores/42/newsletters/1002')
+
+    await service().GetDeliveryHealth(42)
+    expect(lastUrl()).toBe('/v1/growth/stores/42/delivery-health')
+    expect(lastInit().method).toBe('GET')
+  })
+
+  test('the store flag read is the ONE route outside /v1/growth, and it is a separate client', () => {
+    // `GrowthService` promises to be route-for-route with the Growth controllers; the platform flag
+    // route is not one of them, so it lives on its own class rather than quietly breaking that.
+    expect(typeof GrowthService.prototype.GetStoreFlags).toBe('undefined')
+  })
+
+  test('the flag reader hits the platform store-flag route', async () => {
+    respond([])
+    await new StoreFeatureFlagReader({ bearerToken: 'tok-123' }).GetStoreFlags(42)
+    expect(lastUrl()).toBe('/stores/42/feature-flags')
+    expect(lastInit().method).toBe('GET')
   })
 
   test('the segment key is encoded into the snapshot path', async () => {

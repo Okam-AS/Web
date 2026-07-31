@@ -15,14 +15,22 @@
 //   POST /v1/growth/stores/{storeId}/newsletters/{id}/test-sends              #16  GrowthNewslettersController
 //   POST /v1/growth/stores/{storeId}/newsletters/{id}/approval                #17  GrowthNewslettersController
 //   POST /v1/growth/stores/{storeId}/newsletters/{id}/dispatch                #18  GrowthNewslettersController
+//   GET  /v1/growth/stores/{storeId}/delivery-health                          #19  GrowthDeliveryHealthController
 //
 // DELIBERATELY ABSENT, and each absence is a decision rather than an oversight:
 //
 //   #9  consent-timeline  — per-contact PII, gated on `growth.contact_pii.read` (PowerUser only).
 //                           The capture-to-send journey never needs a named individual, and a lane
 //                           is currently repairing that route's accessor attribution. Not surfaced.
-//   #19 delivery-health   — post-send operations, a different journey from authoring a lawful send.
 //   #20/#21 privacy-requests — the guest's own rights journey, not the venue's send journey.
+//
+// #19 WAS on that list ("post-send operations, a different journey"). It is read now, for ONE narrow
+// purpose that belongs to the send journey rather than to operations: it is the only StoreAdmin read
+// that reports which mail-provider accounts a store has and whether any is PAUSED. The pause is one
+// of the two kill switches the dispatch route checks before it creates anything
+// (`GrowthDispatchService.EnsureDispatchIsPermittedAsync`), so without it the send gate cannot tell an
+// operator that their send will 409. The rates/queue-age half of the response is still the operations
+// journey and is still not surfaced here.
 //
 // The error type and the transport live in `~/utils/growth/api-client`.
 
@@ -120,6 +128,56 @@ export class GrowthService extends GrowthClientBase {
   Dispatch (storeId, newsletterId) {
     return this._send('POST',
       '/v1/growth/stores/' + storeId + '/newsletters/' + newsletterId + '/dispatch');
+  }
+
+  /**
+   * #19: delivery health. Read here for the PROVIDER ACCOUNTS half only — see the header comment.
+   *
+   * `providers[]` is `{ providerKey, sendingDomain, paused }`. It reports the store's provisioned
+   * accounts; it does NOT report which `IGrowthMailProvider` implementation the server has bound, and
+   * no endpoint does (see `GrowthDeliveryHealthController` — the binding is a DI decision in
+   * `Program.cs`, not a read). Callers must not infer the adapter from this list.
+   */
+  GetDeliveryHealth (storeId) {
+    return this._request('GET', '/v1/growth/stores/' + storeId + '/delivery-health');
+  }
+}
+
+/**
+ * The ONE route this surface calls that is not under `/v1/growth`.
+ *
+ * WHY IT IS HERE AT ALL. Two store-scoped switches decide whether a dispatch can happen, and neither
+ * is reported by any Growth endpoint:
+ *
+ *   growth.module   — off ⇒ `POST .../dispatch` and `POST .../test-sends` answer an opaque 404
+ *                     (`GrowthNewslettersController.ModuleIsLiveAsync`). Deny-closed by default.
+ *   growth.dispatch — off ⇒ 409 `growth.dispatch_disabled` before any run is created
+ *                     (`GrowthDispatchService.EnsureDispatchIsPermittedAsync`). Deny-closed by default.
+ *
+ * Without them the send gate could only say "ready" and let the operator discover the refusal by
+ * pressing the button — which is the defect this reader exists to remove.
+ *
+ * WHY IT IS A SEPARATE CLASS. `GrowthService` documents itself as route-for-route with the Growth
+ * controllers and adds nothing; hanging a platform route off it would quietly break that promise.
+ * The transport is shared (same base URL, same bearer), so nothing is duplicated but the route.
+ *
+ * WHAT `effective` DOES AND DOES NOT MEAN — read this before trusting a `true`:
+ * `StoreFeatureFlagsController` resolves `effective` as "the override when present, otherwise the
+ * module default", UNLESS the owning module registered an `IStoreFeatureFlagEffectiveResolver`.
+ * Workforce and Margin register one. GROWTH DOES NOT. But Growth's real gate
+ * (`StoreBackedGrowthFeatureFlags`) is TWO layers: the deployment-wide `Growth:Enabled` config switch
+ * AND the per-store row, and both must say yes. So:
+ *
+ *   effective === false  ⇒ the gate WILL refuse. Reliable, and the client may act on it.
+ *   effective === true   ⇒ the gate MAY still refuse, because `Growth:Enabled` is invisible here.
+ *
+ * The asymmetry is load-bearing: this client may use a `false` to block, and must never use a `true`
+ * to promise. (Backend follow-up: Growth declaring its own effective resolver would close the gap.)
+ */
+export class StoreFeatureFlagReader extends GrowthClientBase {
+  /** Every catalog flag for the store, each with `flagKey`, `defaultEnabled`, `isOverridden`, `effective`. */
+  GetStoreFlags (storeId) {
+    return this._request('GET', '/stores/' + storeId + '/feature-flags');
   }
 }
 

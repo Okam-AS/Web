@@ -58,7 +58,16 @@ export const UNSUBSCRIBE_UNKNOWN = 'unknown';
 export const GATE_UNKNOWN = 'unknown';
 /** Everything answered, and at least one condition refuses the send. */
 export const GATE_BLOCKED = 'blocked';
-/** Every condition is satisfied. A send here is the lawful one the backend will also accept. */
+/**
+ * Every condition THIS SURFACE CAN CHECK is satisfied.
+ *
+ * It is deliberately not "the send will succeed", and the copy bound to it must not say so. One
+ * precondition remains invisible from a browser: Growth's real gate ANDs the per-store flag with the
+ * deployment-wide `Growth:Enabled` config switch (`StoreBackedGrowthFeatureFlags`), and no endpoint
+ * reports that switch. A store row read as effective:true can still sit under a dark deployment.
+ * READY therefore means "nothing we can see refuses this", and `growth_gate_ready_caveat` says the
+ * rest out loud rather than letting the badge imply it.
+ */
 export const GATE_READY = 'ready';
 /** A dispatch run already exists for this version. Dispatch is idempotent; there is nothing to do. */
 export const GATE_DISPATCHED = 'dispatched';
@@ -71,6 +80,14 @@ export const BLOCK_NO_CONTENT = 'growth.gate.no_content';
 export const BLOCK_NOT_APPROVED = 'growth.gate.not_approved';
 export const BLOCK_APPROVAL_SUPERSEDED = 'growth.gate.approval_superseded';
 export const BLOCK_NO_UNSUBSCRIBE = 'growth.gate.no_unsubscribe_mechanism';
+/** `growth.module` is off for this store, so the send route answers an opaque 404. */
+export const BLOCK_MODULE_OFF = 'growth.gate.module_off';
+/** `growth.dispatch` — the kill switch — is off, so the send route answers 409 `growth.dispatch_disabled`. */
+export const BLOCK_DISPATCH_OFF = 'growth.gate.dispatch_off';
+/** A provider account for this store is paused, so the send route answers 409 `growth.provider_paused`. */
+export const BLOCK_PROVIDER_PAUSED = 'growth.gate.provider_paused';
+/** The platform switches / mail path could not be read, so what the send route would do is unknown. */
+export const BLOCK_PLATFORM_UNREADABLE = 'growth.gate.platform_unreadable';
 
 // --- approval states -----------------------------------------------------------------------------
 
@@ -229,6 +246,79 @@ export function readRun (run) {
   };
 }
 
+// --- the platform switches the send route checks before any Growth rule ---------------------------
+
+/** The store-level visibility master. Off ⇒ the send + test-send routes answer an opaque 404. */
+export const FLAG_MODULE = 'growth.module';
+/** The dispatch kill switch. Off ⇒ 409 `growth.dispatch_disabled` before a run is created. */
+export const FLAG_DISPATCH = 'growth.dispatch';
+
+/**
+ * Reads `GET /stores/{storeId}/feature-flags` into the two switches that decide whether a dispatch
+ * can happen at all.
+ *
+ * Both are deny-closed by default in the backend, and NEITHER is reported by any Growth endpoint —
+ * which is why the gate used to say "ready" for a store whose send would 404. A flag the catalog did
+ * not return is `null` (unknown), never `false`: "this deployment does not advertise the flag" and
+ * "this store has it switched off" are different sentences.
+ *
+ * ASYMMETRY, and it matters. `effective: false` is reliable — Growth's gate ANDs the per-store row
+ * with the deployment-wide `Growth:Enabled` switch, so a false row refuses whatever the switch says.
+ * `effective: true` is NOT a promise: this endpoint has no Growth effective-resolver, so it cannot
+ * see `Growth:Enabled` (see `StoreFeatureFlagReader`'s doc). The gate therefore uses a `false` to
+ * block and never uses a `true` to claim the send will land.
+ */
+export function readModuleFlags (states) {
+  // An empty catalog is UNKNOWN rather than READ-with-no-flags: the catalog always carries every
+  // declared flag, so nothing back is a read that did not really answer.
+  if (!Array.isArray(states) || !states.length) {
+    return { state: UNKNOWN, module: null, dispatch: null };
+  }
+
+  function effective (key) {
+    for (let i = 0; i < states.length; i += 1) {
+      const row = states[i];
+      if (row && row.flagKey === key) {
+        return typeof row.effective === 'boolean' ? row.effective : null;
+      }
+    }
+    return null;
+  }
+
+  return { state: READ, module: effective(FLAG_MODULE), dispatch: effective(FLAG_DISPATCH) };
+}
+
+/**
+ * Reads the provider-account half of the delivery-health read (#19) into the store's mail path.
+ *
+ * WHAT IT REPORTS: which provider accounts the store has provisioned, and whether any is paused —
+ * the second kill switch the dispatcher checks (`IsAnyProviderAccountPausedAsync`: ANY paused account
+ * stops the store).
+ *
+ * WHAT IT DOES NOT REPORT, and nothing else does either: which `IGrowthMailProvider` the server has
+ * bound. That is a DI decision in `Program.cs`, not a read, and today it is the in-memory
+ * `GrowthFakeMailProvider`. An empty `providers` list is therefore evidence about PROVISIONING and
+ * not about the adapter, and the copy bound to it must say which of the two it is talking about.
+ */
+export function readMailPath (health) {
+  if (!health || typeof health !== 'object') {
+    return { state: UNKNOWN, providers: [], anyPaused: null };
+  }
+
+  const rows = health.providers || [];
+  const providers = rows.map(row => ({
+    providerKey: (row && row.providerKey) || null,
+    sendingDomain: (row && row.sendingDomain) || null,
+    paused: !!(row && row.paused === true)
+  }));
+
+  return {
+    state: READ,
+    providers,
+    anyPaused: providers.some(p => p.paused)
+  };
+}
+
 /**
  * THE GATE. Resolves whether this newsletter may lawfully be dispatched, and if not, every reason.
  *
@@ -241,6 +331,16 @@ export function readRun (run) {
  *
  * Evaluation order is fixed so the reasons read as a checklist, but every condition is evaluated —
  * there is no short-circuit that could hide a second breach behind the first.
+ *
+ * TWO CLASSES OF CONDITION, both returned in the same two lists because both stop the send and an
+ * operator does not care which family a refusal came from:
+ *
+ *   1–5  LAWFULNESS — consent, audience, content, human approval, unsubscribe. These are the ones a
+ *        venue can breach, and the reason the file exists.
+ *   6    REACHABILITY — the store's `growth.module` / `growth.dispatch` switches and its provider
+ *        pause state. These decide whether the route will answer at all. They are not a lawful-basis
+ *        question, but a gate that reports "ready" for a send that will 404 is lying about the one
+ *        thing the badge is for.
  */
 export function resolveSendGate (options) {
   const opts = options || {};
@@ -250,9 +350,16 @@ export function resolveSendGate (options) {
   const run = opts.run || { state: UNKNOWN };
   const unsubscribe = opts.unsubscribeMechanism || UNSUBSCRIBE_UNKNOWN;
   const hasContent = opts.hasContent === true;
+  const flags = opts.moduleFlags || { state: UNKNOWN, module: null, dispatch: null };
+  const mailPath = opts.mailPath || { state: UNKNOWN, providers: [], anyPaused: null };
 
   const blocked = [];
   const unknown = [];
+  // Two independent reads can each leave the platform unreadable; the operator needs the sentence
+  // once, not twice.
+  function unknownOnce (code) {
+    if (!unknown.includes(code)) { unknown.push(code); }
+  }
 
   // 1. The unsubscribe obligation. Only an explicit `present` passes; `unknown` fails closed with
   //    the same force as `absent`, because not knowing is not a lawful basis.
@@ -291,6 +398,30 @@ export function resolveSendGate (options) {
     blocked.push(BLOCK_APPROVAL_SUPERSEDED);
   } else if (approval.state !== APPROVAL_LIVE) {
     blocked.push(BLOCK_NOT_APPROVED);
+  }
+
+  // 6. The platform switches the send route checks BEFORE any Growth rule.
+  //
+  // These are not lawful-basis conditions; they are "what will actually happen when the button is
+  // pressed". They are here because the gate's whole promise is that an operator is never offered a
+  // button whose only outcome is a refusal, and a store with `growth.module` off gets an opaque 404
+  // from the send route with no explanation attached to it.
+  //
+  // Unknown fails closed, for the same reason as everywhere else in this file: a gate that says
+  // "ready" while it cannot tell whether the route exists is making a claim it cannot back. The
+  // reason code says the platform is UNREADABLE rather than off, so the two are never conflated.
+  if (flags.state !== READ || flags.module === null || flags.dispatch === null) {
+    unknownOnce(BLOCK_PLATFORM_UNREADABLE);
+  } else {
+    // Only an explicit `false` blocks. A `true` is not treated as a promise — see `readModuleFlags`.
+    if (flags.module === false) { blocked.push(BLOCK_MODULE_OFF); }
+    if (flags.dispatch === false) { blocked.push(BLOCK_DISPATCH_OFF); }
+  }
+
+  if (mailPath.state !== READ) {
+    unknownOnce(BLOCK_PLATFORM_UNREADABLE);
+  } else if (mailPath.anyPaused === true) {
+    blocked.push(BLOCK_PROVIDER_PAUSED);
   }
 
   // The recipient count is emitted only from a computed audience — never from consent standing.

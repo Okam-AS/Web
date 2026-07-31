@@ -36,6 +36,32 @@
       </strong>
     </div>
 
+    <!-- WHAT MAIL PATH THIS STORE HAS, as the API reports it — and, in the same breath, what the API
+         does not report. The provider-account list is provisioning; the running mail adapter is a
+         server-side binding no endpoint exposes, so the note names that limit instead of letting an
+         empty list be read as "this is a stub" or a full one as "this is real mail". -->
+    <div class="growth-gate__mail">
+      <span class="growth-gate__mail-label">{{ $i('growth_gate_mail_path') }}</span>
+      <p v-if="mailPath.state !== 'read'" class="growth-gate__mail-value is-unknown">
+        {{ $i('growth_gate_mail_unknown') }}
+      </p>
+      <p v-else-if="!mailPath.providers.length" class="growth-gate__mail-value">
+        {{ $i('growth_gate_mail_none') }}
+      </p>
+      <ul v-else class="growth-gate__mail-list">
+        <li v-for="provider in mailPath.providers" :key="provider.providerKey">
+          <span>{{ provider.providerKey }}</span>
+          <span class="growth-gate__mail-domain">{{ provider.sendingDomain || unknownMark }}</span>
+          <span v-if="provider.paused" class="growth-gate__mail-paused">
+            {{ $i('growth_gate_mail_paused') }}
+          </span>
+        </li>
+      </ul>
+      <p class="growth-gate__note">
+        {{ $i('growth_gate_mail_binding_note') }}
+      </p>
+    </div>
+
     <button
       type="button"
       class="growth-gate__send"
@@ -44,6 +70,13 @@
     >
       {{ busy ? $i('growth_gate_sending') : $i('growth_gate_send') }}
     </button>
+
+    <!-- READY is "nothing we can see refuses this", never "this will send". One precondition is
+         invisible from a browser (the deployment-wide `Growth:Enabled` switch), so the badge is
+         qualified in words rather than left to imply the stronger claim. -->
+    <p v-if="gate.state === 'ready'" class="growth-gate__note">
+      {{ $i('growth_gate_ready_caveat') }}
+    </p>
 
     <p v-if="gate.state === 'dispatched'" class="growth-gate__note">
       {{ $i('growth_gate_dispatched_note') }}
@@ -60,7 +93,11 @@ import {
   BLOCK_NO_CONTENT,
   BLOCK_NOT_APPROVED,
   BLOCK_APPROVAL_SUPERSEDED,
-  BLOCK_NO_UNSUBSCRIBE
+  BLOCK_NO_UNSUBSCRIBE,
+  BLOCK_MODULE_OFF,
+  BLOCK_DISPATCH_OFF,
+  BLOCK_PROVIDER_PAUSED,
+  BLOCK_PLATFORM_UNREADABLE
 } from '~/utils/growth/send-gate';
 
 // Rendering keys on the gate's stable codes, never on prose. A code with no entry here would render
@@ -72,7 +109,11 @@ const LABELS = {
   [BLOCK_NO_CONTENT]: 'growth_block_no_content',
   [BLOCK_NOT_APPROVED]: 'growth_block_not_approved',
   [BLOCK_APPROVAL_SUPERSEDED]: 'growth_block_approval_superseded',
-  [BLOCK_NO_UNSUBSCRIBE]: 'growth_block_no_unsubscribe'
+  [BLOCK_NO_UNSUBSCRIBE]: 'growth_block_no_unsubscribe',
+  [BLOCK_MODULE_OFF]: 'growth_block_module_off',
+  [BLOCK_DISPATCH_OFF]: 'growth_block_dispatch_off',
+  [BLOCK_PROVIDER_PAUSED]: 'growth_block_provider_paused',
+  [BLOCK_PLATFORM_UNREADABLE]: 'growth_block_platform_unreadable'
 };
 
 /**
@@ -91,6 +132,8 @@ export default {
   props: {
     /** The `resolveSendGate` outcome. */
     gate: { type: Object, required: true },
+    /** The `readMailPath` projection — the store's provisioned provider accounts, or unknown. */
+    mailPath: { type: Object, default: () => ({ state: 'unknown', providers: [], anyPaused: null }) },
     /** A dispatch is in flight. */
     busy: { type: Boolean, default: false }
   },
@@ -139,6 +182,14 @@ export default {
 .growth-gate__recipients-label { font-size: 13px; color: #64748b; }
 .growth-gate__recipients strong { font-size: 22px; color: #292c34; font-variant-numeric: tabular-nums; }
 .growth-gate__recipients strong.is-unknown { color: #94a3b8; font-weight: 400; }
+.growth-gate__mail { border-top: 1px solid #e2e8f0; padding-top: 12px; margin-bottom: 16px; }
+.growth-gate__mail-label { display: block; font-size: 13px; color: #64748b; margin-bottom: 6px; }
+.growth-gate__mail-value { font-size: 13px; color: #292c34; margin: 0; }
+.growth-gate__mail-value.is-unknown { color: #94a3b8; }
+.growth-gate__mail-list { list-style: none; margin: 0; padding: 0; }
+.growth-gate__mail-list li { display: flex; gap: 8px; align-items: baseline; font-size: 13px; color: #292c34; padding: 2px 0; }
+.growth-gate__mail-domain { color: #64748b; }
+.growth-gate__mail-paused { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; background: #fde68a; color: #92400e; border-radius: 999px; padding: 2px 8px; }
 .growth-gate__send { width: 100%; border: 0; border-radius: 8px; background: #1bb776; color: #fff; padding: 12px 16px; font-size: 14px; font-weight: 600; cursor: pointer; }
 .growth-gate__send:hover:not(:disabled) { background: #159f63; }
 .growth-gate__send:disabled { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; }
