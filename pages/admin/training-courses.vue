@@ -53,6 +53,7 @@
             />
             <TrainingCertificatePanel
               :listing="certificatesListing"
+              :people-directory="peopleDirectory"
               :locale="locale"
               :zone-id="zoneId"
               :setup-flag="setupFlag"
@@ -65,6 +66,8 @@
             <TrainingAssignmentPanel
               :listing="assignmentsListing"
               :versions="assignable"
+              :people-directory="peopleDirectory"
+              :roles-directory="rolesDirectory"
               :locale="locale"
               :zone-id="zoneId"
               :assignments-flag="assignmentsFlag"
@@ -75,6 +78,7 @@
             <TrainingCompletionPanel
               :listing="completionsListing"
               :versions="recordable"
+              :people-directory="peopleDirectory"
               :locale="locale"
               :zone-id="zoneId"
               :assignments-flag="assignmentsFlag"
@@ -83,6 +87,7 @@
             />
             <TrainingHoldingsPanel
               :holdings="holdings"
+              :people-directory="peopleDirectory"
               :locale="locale"
               :zone-id="zoneId"
               :busy="busy"
@@ -129,6 +134,7 @@ import {
   TRAINING_COURSE_VERSION_IMMUTABLE,
   TRAINING_FLAG_DISABLED_READ_ONLY
 } from '~/utils/training/training-client';
+import { WorkforceRosterService } from '~/utils/workforce/roster-client';
 import {
   readListing,
   readCourseDetail,
@@ -137,11 +143,16 @@ import {
   zoneIdOf,
   zoneIsFallback,
   assignableVersions,
-  recordableVersions
+  recordableVersions,
+  personDirectory,
+  roleDirectory
 } from '~/utils/training/journey';
 
 const SETUP_FLAG = 'training.setup';
 const ASSIGNMENTS_FLAG = 'training.assignments';
+
+/** The `training.validation` sentence for the two writes that bind a person. See `fail`. */
+const PERSON_UNKNOWN_KEY = 'trn_err_person_unknown';
 
 // Every `training.*` code this surface can meet, mapped to copy. Keyed on `code` and never on the
 // server's `detail`, which is English prose written for a developer.
@@ -179,22 +190,27 @@ const GATE_KEYS = {
  * self-service surface where somebody actually takes a quiz, does not exist in this wave, which is
  * why every completion filed here is `ManagerRecorded`.
  *
- * WHERE THE JOURNEY STOPS, AND IT IS WORTH BEING PRECISE ABOUT IT. `personRef` and `roleRef` are
- * `Workforce*` identifiers carried BY VALUE — no foreign key, no cross-module read, no directory on
- * this surface at all. Training therefore cannot offer a picker of this store's people, and the
- * register-certificate write does not even check that the reference belongs to somebody employed
- * here (only that it is not `Guid.Empty`). So the three fields that name a human are typed
- * references, and the panels say so rather than implying a check that is not there.
+ * WHO A REFERENCE NAMES, AND WHERE THE NAME COMES FROM. `personRef` and `roleRef` are `Workforce*`
+ * identifiers carried BY VALUE — no foreign key, and no Training route that lists people or roles. So
+ * the names on this page are read from the WORKFORCE surface (`GET …/staff`, `GET …/roles`) purely to
+ * populate the pickers and to label the ids in the tables. That read is another module's, with
+ * another module's authorization: it needs `WorkforceScheduler` on the caller's own active
+ * engagement, which StoreAdmin does not confer, so a Training manager may be refused it while still
+ * being entitled to file the evidence. It is therefore three-state like everything else here, and
+ * every reference field keeps a text input under all three. See `TrainingReferenceField`.
  *
- * TWO OPEN RULINGS SHAPE WHAT IS ON SCREEN, AND NEITHER IS PRE-EMPTED HERE:
+ * TR-B1 IS SETTLED AND THE SURFACE MOVED WITH IT. A completion carries no verdict field:
+ * `RecordTrainingCompletionRequest` is `PersonRef`/`CourseVersionId`/`ScorePercent`, and the server
+ * derives `Passed` from the score against the FROZEN version's own threshold
+ * (`TrainingGrading.IsPass`). Both evidence writes additionally bind the person through
+ * `TrainingPersonBinding.RequireKnownPersonAsync`, which refuses an unknown id with a 400. The
+ * assignment write does NOT — it checks neither reference — and the panels keep that difference
+ * visible rather than harmonising their copy.
  *
- *   TR-B1 — a completion's `passed` is stored exactly as the client sent it and is never compared
- *   against the version's pass threshold. This page does not compare them either. See
- *   `TrainingCompletionPanel`.
- *   TR-B3 — whether a certificate's stored expiry denotes UTC or the store's own local midnight is
- *   an open module-epoch question. So the authored day is sliced and shown, never converted, and the
- *   `withinDays` expiry feed — the one screen whose correctness would turn on the answer — is not
- *   bound at all. See `civilDateOf` in `utils/training/journey.js`.
+ * TR-B3 IS STILL OPEN AND IS NOT PRE-EMPTED HERE. Whether a certificate's stored expiry denotes UTC
+ * or the store's own local midnight is an open module-epoch question. So the authored day is sliced
+ * and shown, never converted, and the `withinDays` expiry feed — the one screen whose correctness
+ * would turn on the answer — is not bound at all. See `civilDateOf` in `utils/training/journey.js`.
  *
  * EVERY REFUSAL PAST THE GATE IS OPAQUE, AND THE UI DOES NOT PRETEND OTHERWISE. Training answers the
  * same 404 for a resource that is absent, one that belongs to another employer, and a module that
@@ -232,6 +248,13 @@ export default {
       completionsError: null,
       certificates: null,
       certificatesError: null,
+      // The two WORKFORCE reads that give the references names. Same null-is-unknown rule, and their
+      // failures are kept apart from the Training ones: a refused roster says nothing whatever about
+      // this store's training records.
+      staff: null,
+      staffError: null,
+      roles: null,
+      rolesError: null,
       detail: null,
       detailError: null,
       selectedCourseId: null,
@@ -257,6 +280,9 @@ export default {
     _trainingService () {
       return new TrainingStoreService(this._coreInitializer);
     },
+    _rosterService () {
+      return new WorkforceRosterService(this._coreInitializer);
+    },
     busy () {
       return this.loading || this.writing;
     },
@@ -271,6 +297,8 @@ export default {
     completionsListing () { return readListing(this.completions, this.completionsError, 'completions'); },
     certificatesListing () { return readListing(this.certificates, this.certificatesError, 'certificates'); },
     detailView () { return readCourseDetail(this.detail, this.detailError); },
+    peopleDirectory () { return personDirectory(this.staff, this.staffError); },
+    rolesDirectory () { return roleDirectory(this.roles, this.rolesError); },
     holdings () {
       if (!this.holdingsAsked) { return { state: 'idle' }; }
       return readHoldings(this.holdingsPayload, this.holdingsError);
@@ -333,11 +361,19 @@ export default {
     },
 
     /**
-     * The four store-wide reads, issued together and failing independently.
+     * The four store-wide Training reads plus the two Workforce directory reads, issued together and
+     * failing independently.
      *
      * No `catch` here is allowed to become another's answer: a certificate read that fails leaves
      * the certificates UNKNOWN, and the courses that were successfully read stay on screen saying
      * exactly what they said.
+     *
+     * THE TWO WORKFORCE READS ARE THE SAME KIND OF INDEPENDENT, and it matters more here than
+     * anywhere: they belong to a DIFFERENT module with a different authorization, so a 403 on the
+     * roster is an ordinary outcome for a caller who administers this store and holds no Workforce
+     * capability. It must not touch the Training banner, the gate, or any Training list — the only
+     * thing it changes is that the reference fields have no names to suggest, which they say
+     * themselves.
      */
     async load () {
       // Cleared to unknown, not to empty. A reload in flight must not render as a store that has
@@ -350,18 +386,26 @@ export default {
       this.completionsError = null;
       this.certificates = null;
       this.certificatesError = null;
+      this.staff = null;
+      this.staffError = null;
+      this.roles = null;
+      this.rolesError = null;
 
-      const [courses, assignments, completions, certificates] = await Promise.all([
+      const [courses, assignments, completions, certificates, staff, roles] = await Promise.all([
         this._trainingService.ListCourses(this.storeId).catch((e) => { this.coursesError = e; return null; }),
         this._trainingService.ListAssignments(this.storeId).catch((e) => { this.assignmentsError = e; return null; }),
         this._trainingService.ListCompletions(this.storeId).catch((e) => { this.completionsError = e; return null; }),
-        this._trainingService.ListCertificates(this.storeId).catch((e) => { this.certificatesError = e; return null; })
+        this._trainingService.ListCertificates(this.storeId).catch((e) => { this.certificatesError = e; return null; }),
+        this._rosterService.ListStaff(this.storeId).catch((e) => { this.staffError = e; return null; }),
+        this._rosterService.ListRoles(this.storeId).catch((e) => { this.rolesError = e; return null; })
       ]);
 
       this.courses = courses;
       this.assignments = assignments;
       this.completions = completions;
       this.certificates = certificates;
+      this.staff = staff;
+      this.roles = roles;
     },
 
     /** Clicking the selected course clears it, so a venue can get back to "nothing selected". */
@@ -430,14 +474,16 @@ export default {
     async recordCompletion (request) {
       await this.write(
         () => this._trainingService.RecordCompletion(this.storeId, request),
-        () => this.reloadCompletions()
+        () => this.reloadCompletions(),
+        PERSON_UNKNOWN_KEY
       );
     },
 
     async registerCertificate (request) {
       await this.write(
         () => this._trainingService.RegisterCertificate(this.storeId, request),
-        () => this.reloadCertificates()
+        () => this.reloadCertificates(),
+        PERSON_UNKNOWN_KEY
       );
     },
 
@@ -461,14 +507,14 @@ export default {
      * cleared, no state is guessed, and the re-read is not run. A 409 because the flag is off must
      * leave the screen exactly as it was, because everything on it is still true.
      */
-    async write (mutate, reread) {
+    async write (mutate, reread, validationKey) {
       this.writing = true;
       this.failure = '';
       try {
         await mutate();
         await reread();
       } catch (e) {
-        this.fail(e);
+        this.fail(e, validationKey);
       }
       this.writing = false;
     },
@@ -500,9 +546,29 @@ export default {
      * A failure with no `training.*` code did not come from this module — a network failure, a
      * gateway, a 500 — and gets the generic sentence rather than being attributed to a rule Training
      * does not have.
+     *
+     * `validationKey` NAMES THE CAUSE OF A 400 ON THE TWO WRITES THAT BIND A PERSON, and it is a
+     * derivation rather than a guess. `training.validation` carries no discriminator (the server's
+     * `detail` is developer prose and this page is forbidden from keying on it), so the cause is
+     * established by ELIMINATION: the panel refuses every other 400 the route can throw before
+     * sending. For a completion those are an absent body, an empty or non-GUID person reference, a
+     * score outside 0–100 and a draft version — none reachable from the form. For a certificate,
+     * an absent body, an empty or non-GUID person reference, a blank type and an expiry preceding
+     * the issue date — likewise. The unknown person is the only one left, and it is the only one no
+     * client could check. A missing `Idempotency-Key` is not in the set: it is answered by
+     * `ModuleProblem`, which emits no `code` at all, so it lands on the unknown sentence.
+     *
+     * Nothing else on this page passes a key, and the assignment write deliberately does not: its
+     * published-version check is a real race (a version can be retired between the read and the
+     * write) and its scope rules are separate causes, so a 400 there stays unattributed.
      */
-    fail (error) {
-      const key = ERROR_KEYS[codeOf(error)];
+    fail (error, validationKey) {
+      const code = codeOf(error);
+      if (validationKey && code === TRAINING_VALIDATION) {
+        this.failure = this.$i(validationKey);
+        return;
+      }
+      const key = ERROR_KEYS[code];
       this.failure = key ? this.$i(key) : this.$i('trn_err_unknown');
     }
   }

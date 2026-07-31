@@ -28,7 +28,7 @@
         <tbody>
           <tr v-for="row in rows" :key="row.certificateId" data-test="certificate-row">
             <td>
-              <span class="trn-ref">{{ row.personRef || dash }}</span>
+              <span class="trn-ref" :title="row.personRef">{{ personName(row.personRef) }}</span>
             </td>
             <td>{{ row.type || dash }}</td>
             <td>{{ row.issuer || dash }}</td>
@@ -55,12 +55,19 @@
       <h3 class="trn-form__title">
         {{ $i('trn_cert_new_title') }}
       </h3>
-      <label class="trn-form__label">
-        {{ $i('trn_cert_person') }}
-        <input v-model="form.personRef" class="trn-form__input" type="text" data-test="certificate-person">
-      </label>
+      <TrainingReferenceField
+        v-model="form.personRef"
+        :label="$i('trn_cert_person')"
+        :directory="peopleDirectory"
+        kind="person"
+        test-id="certificate-person"
+        :disabled="busy"
+      />
       <p class="trn-form__hint" data-test="certificate-person-note">
-        {{ $i('trn_cert_person_unchecked') }}
+        {{ $i('trn_cert_person_known') }}
+      </p>
+      <p v-if="referenceMalformed" class="trn-note trn-note--blocked" data-test="certificate-person-malformed">
+        {{ $i('trn_reference_malformed') }}
       </p>
       <label class="trn-form__label">
         {{ $i('trn_cert_type') }}
@@ -84,6 +91,9 @@
       <p class="trn-form__hint">
         {{ $i('trn_cert_expiry_hint') }}
       </p>
+      <p v-if="expiryBeforeIssue" class="trn-note trn-note--blocked" data-test="certificate-expiry-order">
+        {{ $i('trn_cert_expiry_before_issue') }}
+      </p>
       <label class="trn-form__label">
         {{ $i('trn_cert_document') }}
         <input v-model="form.documentReference" class="trn-form__input" type="text" data-test="certificate-document">
@@ -99,7 +109,8 @@
 </template>
 
 <script>
-import { certificateRow, instantLabel, toApiDate } from '~/utils/training/journey';
+import TrainingReferenceField from '~/components/admin/training/TrainingReferenceField.vue';
+import { certificateRow, instantLabel, toApiDate, directoryMatch, isReferenceId } from '~/utils/training/journey';
 
 /**
  * The certificate vault — externally-issued competence, filed as dated evidence.
@@ -117,18 +128,29 @@ import { certificateRow, instantLabel, toApiDate } from '~/utils/training/journe
  * screen whose correctness would turn on that ruling, so this one lists the vault and lets the
  * server's own status speak, rather than building a countdown on an unsettled epoch.
  *
- * THE PERSON REFERENCE IS NOT VALIDATED, AND THE FORM SAYS SO.
- * `TrainingCertificateService.RegisterCertificateAsync` checks only that `personRef` is not
- * `Guid.Empty`; there is no employment check, so any well-formed GUID is accepted and filed as
- * statutory evidence. That gap is known and deliberately unfixed upstream (adding the check would
- * refuse writes that succeed today), so this panel states it rather than implying a check by
- * offering a picker.
+ * THE PERSON REFERENCE IS BOUND, AND THE FORM SAYS THAT INSTEAD. It used to say the server checks
+ * only that the id is non-empty — that stopped being true when `RegisterCertificateAsync` started
+ * calling `TrainingPersonBinding.RequireKnownPersonAsync`, which refuses an id that identifies no
+ * `WorkforcePerson` with a 400 and files nothing. The check is EXISTENCE, estate-wide and across
+ * every person state, and deliberately not employment: `Invited` is what a certificate filed before
+ * the engagement exists looks like, and `Archived` is what late filing of historical evidence looks
+ * like. So the hint says a known person is required and does not overclaim that the person works
+ * here — which the server still does not check.
+ *
+ * THE FORM PRE-EMPTS EVERY OTHER 400 THIS ROUTE CAN THROW, which is what lets the page attribute the
+ * remaining one. `RegisterCertificateAsync` refuses a missing body (always sent), an empty person
+ * reference and a non-GUID one (`isReferenceId`), a blank type (required), an expiry preceding the
+ * issue date (`expiryBeforeIssue`) — and an unknown person, which no client can check. The last is
+ * therefore the only `training.validation` this form can still produce, and the page names it.
  */
 export default {
   name: 'TrainingCertificatePanel',
+  components: { TrainingReferenceField },
   props: {
     /** `readListing(payload, error, 'certificates')`. */
     listing: { type: Object, required: true },
+    /** `personDirectory(...)` — an assist for the reference field, never a gate on it. */
+    peopleDirectory: { type: Object, default: () => ({ state: 'unknown', options: [] }) },
     locale: { type: String, default: 'no' },
     zoneId: { type: String, default: null },
     /** `training.setup`: true, false, or null for UNKNOWN. Null never disables a control. */
@@ -157,14 +179,35 @@ export default {
     writeBlocked () {
       return this.setupFlag === false ? this.$i('trn_writes_blocked_setup') : '';
     },
+    /** Typed, and not a GUID: `PersonRef` binds to a `Guid`, so this would fail model binding. */
+    referenceMalformed () {
+      const typed = this.form.personRef.trim();
+      return !!typed && !isReferenceId(typed);
+    },
+    /**
+     * The server slices BOTH dates to midnight before comparing, so the same day is never out of
+     * order. The comparison here is between two `YYYY-MM-DD` strings, which is that same day-level
+     * comparison and — unlike a `Date` round trip — carries no zone at all.
+     */
+    expiryBeforeIssue () {
+      const issue = this.form.issueDate;
+      const expiry = this.form.expiryDate;
+      return !!issue && !!expiry && expiry < issue;
+    },
     canSubmit () {
       return !this.busy &&
-        !!this.form.personRef.trim() &&
+        isReferenceId(this.form.personRef) &&
         !!this.form.type.trim() &&
-        !!toApiDate(this.form.issueDate);
+        !!toApiDate(this.form.issueDate) &&
+        !this.expiryBeforeIssue;
     }
   },
   methods: {
+    /** A filed reference named, when the directory can name it. The id stays on the title either way. */
+    personName (personRef) {
+      const match = directoryMatch(this.peopleDirectory, personRef);
+      return match ? match.label : (personRef || this.dash);
+    },
     statusLabel (status) {
       const key = { Valid: 'trn_status_valid', Expiring: 'trn_status_expiring', Expired: 'trn_status_expired' }[status];
       return key ? this.$i(key) : status;

@@ -8,11 +8,18 @@ const COURSE = '11111111-1111-1111-1111-111111111111'
 const PUBLISHED_V = '22222222-2222-2222-2222-222222222222'
 const DRAFT_V = '33333333-3333-3333-3333-333333333333'
 const PERSON = '44444444-4444-4444-4444-444444444444'
+const ROLE = '99999999-9999-9999-9999-999999999999'
 
 // Both are `mock`-prefixed because `jest.mock`'s factory is hoisted above them and only
 // mock-prefixed identifiers may be referenced from inside it.
 const mockCalls = []
 let mockAnswers = {}
+
+function mockRoster (name, args) {
+  mockCalls.push([name].concat(args))
+  const answer = mockAnswers[name]
+  return typeof answer === 'function' ? answer.apply(null, args) : Promise.resolve(answer)
+}
 
 // The page builds its client in a computed, so the module is mocked rather than the instance. Every
 // call is recorded so the tests can assert WHICH calls the page issues — the part of this page that
@@ -47,6 +54,16 @@ jest.mock('~/utils/training/training-client', () => {
     }
   })
 })
+
+// The WORKFORCE roster/role reads the page makes purely to name references. Mocked separately from
+// the Training client because the whole point of them is that they are ANOTHER module's calls with
+// another module's authorization, and can be refused on their own.
+jest.mock('~/utils/workforce/roster-client', () => ({
+  WorkforceRosterService: class {
+    ListStaff (...a) { return mockRoster('ListStaff', a) }
+    ListRoles (...a) { return mockRoster('ListRoles', a) }
+  }
+}))
 
 const settled = () => new Promise(resolve => setTimeout(resolve, 0))
 
@@ -101,7 +118,13 @@ function defaults () {
     RevokeAssignment: null,
     RecordCompletion: {},
     RegisterCertificate: {},
-    GetHoldings: { storeId: 42, personRef: PERSON, heldCompetencyKeys: ['food-hygiene'], certificates: [], asOfUtc: '2026-07-29T08:00:00Z' }
+    GetHoldings: { storeId: 42, personRef: PERSON, heldCompetencyKeys: ['food-hygiene'], certificates: [], asOfUtc: '2026-07-29T08:00:00Z' },
+    ListStaff: [
+      { staffMemberId: 's-1', workforcePersonId: PERSON, displayName: 'Kari Nordmann', isActive: true, capabilities: [] }
+    ],
+    ListRoles: [
+      { roleId: ROLE, name: 'Kokk', station: 'Kjøkken', sortOrder: 1, effectiveFromUtc: '2026-01-01T00:00:00', effectiveToUtc: null }
+    ]
   }
 }
 
@@ -132,10 +155,10 @@ beforeEach(() => {
 })
 
 describe('which calls the page issues', () => {
-  test('the context read first, then the four store-wide lists, once each, for the selected store', async () => {
+  test('the context read first, then the four Training lists and the two directory reads, once each', async () => {
     mountPage()
     await settled()
-    expect(names()).toEqual(['GetContext', 'ListCourses', 'ListAssignments', 'ListCompletions', 'ListCertificates'])
+    expect(names()).toEqual(['GetContext', 'ListCourses', 'ListAssignments', 'ListCompletions', 'ListCertificates', 'ListStaff', 'ListRoles'])
     mockCalls.forEach(call => expect(call[1]).toBe(42))
   })
 
@@ -188,11 +211,11 @@ describe('the gate — the only refusal on this page that says anything', () => 
     expect(names()).toEqual(['GetContext'])
   })
 
-  test('POSITIVE CONTROL: with the gate open the same four reads DO fire', async () => {
+  test('POSITIVE CONTROL: with the gate open the same reads DO fire', async () => {
     // Without this the assertion above would pass on a page that never read anything.
     mountPage()
     await settled()
-    expect(names()).toEqual(['GetContext', 'ListCourses', 'ListAssignments', 'ListCompletions', 'ListCertificates'])
+    expect(names()).toEqual(['GetContext', 'ListCourses', 'ListAssignments', 'ListCompletions', 'ListCertificates', 'ListStaff', 'ListRoles'])
   })
 
   test('a 403 is reported as a refusal that does NOT name a reason', async () => {
@@ -359,15 +382,121 @@ describe('the writes', () => {
     expect(new Set(said).size).toBe(3)
   })
 
-  test('a successful write re-reads only what it changed', async () => {
+  test('a successful write re-reads only what it changed, and never re-reads the directory', async () => {
     const wrapper = mountPage()
     await settled()
     mockCalls.length = 0
 
-    await wrapper.vm.recordCompletion({ personRef: PERSON, courseVersionId: PUBLISHED_V, scorePercent: 90, passed: true })
+    await wrapper.vm.recordCompletion({ personRef: PERSON, courseVersionId: PUBLISHED_V, scorePercent: 90 })
     await settled()
 
+    // A completion does not change who works here.
     expect(names()).toEqual(['RecordCompletion', 'ListCompletions'])
+  })
+
+  test('a 400 on the two writes that BIND a person names the cause instead of shrugging', async () => {
+    // `training.validation` carries no discriminator and the page may not key on `detail`, so the
+    // cause is established by elimination — the panels refuse every other 400 these routes can
+    // throw before sending. See `fail` on the page.
+    const wrapper = mountPage()
+    await settled()
+
+    mockAnswers.RecordCompletion = () => Promise.reject(new WorkforceApiError(400, { code: 'training.validation' }))
+    await wrapper.vm.recordCompletion({ personRef: PERSON, courseVersionId: PUBLISHED_V, scorePercent: 90 })
+    await settled()
+    expect(wrapper.vm.failure).toBe('trn_err_person_unknown')
+
+    mockAnswers.RegisterCertificate = () => Promise.reject(new WorkforceApiError(400, { code: 'training.validation' }))
+    await wrapper.vm.registerCertificate({ personRef: PERSON, type: 'food-handler' })
+    await settled()
+    expect(wrapper.vm.failure).toBe('trn_err_person_unknown')
+  })
+
+  test('the SAME code on a write that does not bind a person stays unattributed', async () => {
+    // `CreateAssignmentAsync` has several reachable 400s — the published-version check is a genuine
+    // race — and no TrainingPersonBinding call at all. Naming a cause there would be a guess.
+    const wrapper = mountPage()
+    await settled()
+    mockAnswers.CreateAssignment = () => Promise.reject(new WorkforceApiError(400, { code: 'training.validation' }))
+    await wrapper.vm.createAssignment({ courseVersionId: PUBLISHED_V, scope: 'Role', roleRef: ROLE })
+    await settled()
+    expect(wrapper.vm.failure).toBe('trn_err_validation')
+  })
+
+  test('only the VALIDATION code is redirected — every other refusal on those writes is unchanged', async () => {
+    const wrapper = mountPage()
+    await settled()
+    mockAnswers.RecordCompletion = () => Promise.reject(new WorkforceApiError(409, { code: 'training.flag-disabled-read-only' }))
+    await wrapper.vm.recordCompletion({ personRef: PERSON, courseVersionId: PUBLISHED_V, scorePercent: 90 })
+    await settled()
+    expect(wrapper.vm.failure).toBe('trn_err_flag_off')
+
+    // A 400 carrying no training code did not come from this module and is not the person rule: a
+    // missing Idempotency-Key is answered by `ModuleProblem`, which emits no code at all.
+    mockAnswers.RecordCompletion = () => Promise.reject(new WorkforceApiError(400, {}))
+    await wrapper.vm.recordCompletion({ personRef: PERSON, courseVersionId: PUBLISHED_V, scorePercent: 90 })
+    await settled()
+    expect(wrapper.vm.failure).toBe('trn_err_unknown')
+  })
+})
+
+describe('the reference directories — another module\'s read, and its failures stay its own', () => {
+  test('the roster and the role catalogue become the two pickers', async () => {
+    const wrapper = mountPage()
+    await settled()
+    expect(wrapper.vm.peopleDirectory).toEqual({
+      state: 'answered',
+      options: [{ id: PERSON, label: 'Kari Nordmann', ended: false }]
+    })
+    expect(wrapper.vm.rolesDirectory.state).toBe('answered')
+    expect(wrapper.vm.rolesDirectory.options[0]).toEqual({ id: ROLE, label: 'Kokk · Kjøkken', ended: false })
+  })
+
+  test('THE ORDINARY CASE: a 403 on the roster is REFUSED and touches nothing on the Training side', async () => {
+    // Workforce capability is resolved from the caller's own engagement grant bits and cannot be
+    // satisfied by StoreAdmin, so a Training manager being refused the roster is normal — not an
+    // error state, and not a claim about this store's training records.
+    mockAnswers.ListStaff = () => Promise.reject(new WorkforceApiError(403, { code: 'workforce.forbidden' }))
+    const wrapper = mountPage()
+    await settled()
+
+    expect(wrapper.vm.peopleDirectory.state).toBe('refused')
+    expect(wrapper.vm.peopleDirectory.options).toEqual([])
+    // Everything Training answered still says exactly what it said.
+    expect(wrapper.vm.gate).toBe('open')
+    expect(wrapper.vm.failure).toBe('')
+    expect(wrapper.vm.coursesListing.state).toBe('answered')
+    expect(wrapper.vm.rolesDirectory.state).toBe('answered')
+  })
+
+  test('THE DISTINCTION: a refusal and a non-answer are two states, and neither is an empty roster', async () => {
+    mockAnswers.ListStaff = () => Promise.reject(new Error('network down'))
+    const unanswered = mountPage()
+    await settled()
+    expect(unanswered.vm.peopleDirectory.state).toBe('unknown')
+
+    mockAnswers.ListStaff = () => Promise.reject(new WorkforceApiError(404, { code: 'workforce.not-found' }))
+    const declined = mountPage()
+    await settled()
+    expect(declined.vm.peopleDirectory.state).toBe('refused')
+
+    // POSITIVE CONTROL: a store that genuinely engages nobody is a third, ANSWERED state.
+    mockAnswers.ListStaff = []
+    const empty = mountPage()
+    await settled()
+    expect(empty.vm.peopleDirectory).toEqual({ state: 'answered', options: [] })
+  })
+
+  test('a reload clears the directories to UNKNOWN, never to empty', async () => {
+    const wrapper = mountPage()
+    await settled()
+    let resolveStaff
+    mockAnswers.ListStaff = () => new Promise((resolve) => { resolveStaff = resolve })
+
+    wrapper.vm.init()
+    await settled()
+    expect(wrapper.vm.peopleDirectory.state).toBe('unknown')
+    resolveStaff([])
   })
 })
 

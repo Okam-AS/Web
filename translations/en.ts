@@ -3291,6 +3291,9 @@ export default {
   trn_err_immutable: 'The version is not a draft. A published version\'s content is frozen — a change is a new version.',
   trn_err_flag_off: 'This area is switched off for the store. Reads still answer; writes do not.',
   trn_err_unknown: 'Something went wrong, and the failure did not come from the Training module.',
+  // Only for the two writes that bind a person. Every other 400 those routes can throw is prevented
+  // by the form before sending, so this is the one cause left — see `fail` on the page.
+  trn_err_person_unknown: 'The id does not identify a known person, so nothing was filed. Check it against the staff list, or against the person id Workforce shows.',
 
   trn_context_title: 'Module status',
   trn_context_zone: 'Timezone',
@@ -3315,7 +3318,30 @@ export default {
 
   trn_writes_blocked_setup: 'The server reports that courses and certificates are switched off for this store. Writes will be refused.',
   trn_writes_blocked_assignments: 'The server reports that assignment and completion are switched off for this store. Writes will be refused.',
-  trn_reference_by_value: 'The reference is a Workforce person or role id, carried as a value. Training holds no directory of people and does not check that the id belongs to anyone who works here.',
+  // Assignments only. The completion and certificate writes DO bind the person, and say so with
+  // their own hints — do not merge these three into one sentence.
+  trn_reference_by_value: 'The reference is a Workforce person or role id, carried as a value. Nothing checks it on an assignment: an id naming nobody is accepted exactly as one that names somebody.',
+  trn_reference_malformed: 'That is not an id. A reference is a 36-character identifier of the form 0f9c1a5e-4b2d-4c7a-9e10-3d5f8b6a1c24. The server cannot read anything else, and its refusal would not say why.',
+
+  // The Workforce directory, as an assist on every reference field. It is another module\'s read with
+  // another module\'s authorization, so each of its states gets its own sentence and NONE of them
+  // closes the text input.
+  trn_pick_person: 'Pick from the staff list',
+  trn_pick_role: 'Pick from the role list',
+  trn_pick_placeholder: 'Pick …',
+  trn_directory_match: 'That id is {name}.',
+  trn_directory_person_ended: '{name} (engagement ended)',
+  trn_directory_role_retired: '{name} (retired)',
+  trn_directory_people_unknown: 'The staff list did not answer, so there are no names to pick from. Type the person id instead.',
+  trn_directory_people_refused: 'You cannot read this store\'s staff list, so there are no names to pick from — it needs a workforce capability that administering the store does not confer. Type the person id instead.',
+  trn_directory_people_empty: 'Nobody is engaged at this store, so there is nothing to pick from. Type the person id instead: evidence can be filed for a person this store has never engaged.',
+  trn_directory_people_pick: 'Pick somebody from the list, or type the person id.',
+  trn_directory_people_no_match: 'That id is not on this store\'s staff list. It may still be accepted — the server checks that the person exists at all, not that they work here.',
+  trn_directory_roles_unknown: 'The role list did not answer, so there are no names to pick from. Type the role id instead.',
+  trn_directory_roles_refused: 'You cannot read this store\'s role list, so there are no names to pick from — it needs a workforce capability that administering the store does not confer. Type the role id instead.',
+  trn_directory_roles_empty: 'This store has no roles, so there is nothing to pick from. Type the role id instead.',
+  trn_directory_roles_pick: 'Pick a role from the list, or type the role id.',
+  trn_directory_roles_no_match: 'That id is not one of this store\'s roles. It will be accepted anyway — nothing checks a role reference.',
 
   trn_courses_title: '1. Courses',
   trn_courses_unknown: 'The course list did not answer. We do not know which courses this store has.',
@@ -3353,7 +3379,7 @@ export default {
   trn_version_publish_note: 'Publishing freezes the content and mints the hash. Every completion filed afterwards is stamped with it, and that stamp is what later shows which material the person actually passed.',
   trn_version_new_title: 'New draft',
   trn_version_content: 'Content pages (JSON)',
-  trn_version_quiz: 'Quiz (JSON)',
+  trn_version_quiz_absent: 'No quiz is authored here. Nobody could take one: the worker app where a quiz would be sat does not exist in this version. And quiz content is part of the hash that publishing freezes for good, so a shape guessed now would be locked into every completion filed against this version. Versions created here carry no quiz.',
   trn_version_threshold: 'Pass threshold (%)',
   trn_version_new_submit: 'Create draft',
 
@@ -3391,14 +3417,16 @@ export default {
   trn_result_failed: 'Not passed',
   trn_result_unknown: 'The server did not say whether this completion passed.',
   trn_source_manager: 'Recorded by a manager',
-  trn_source_quiz: 'Quiz in the app',
+  trn_source_quiz: 'Quiz',
+  trn_source_quiz_note: 'Filed as a quiz attempt. Nothing in this version can produce one, so this row was written by something outside it.',
   trn_completion_new_title: 'File a completion',
   trn_completion_no_frozen: 'No frozen version to file against. A completion must be stamped against a published or retired version.',
   trn_completion_person: 'Person id',
+  trn_completion_person_known: 'The person must already exist in Workforce — the server refuses an id it does not recognise and files nothing. It checks that the person exists, in any state, not that they work at this store.',
   trn_completion_version: 'Version',
   trn_completion_score: 'Score (%)',
-  trn_completion_passed: 'Passed',
-  trn_completion_grading_note: 'Passed is stored exactly as ticked here. The server does not compare it against the version\'s pass threshold, and the record cannot be changed afterwards — so the tick is the manager\'s own assertion, not a calculation.',
+  trn_completion_grading_note: 'The server decides pass or fail. It compares the score entered here against the pass threshold of the version filed against — exactly at the threshold passes, and nothing is rounded first. There is no pass box because the record cannot be changed afterwards, and a pass the score does not support could never be corrected.',
+  trn_completion_threshold_note: 'This version passes at {threshold}% or above.',
   trn_completion_submit: 'File completion',
 
   trn_certs_title: '5. Certificates',
@@ -3419,13 +3447,14 @@ export default {
   trn_certs_status_asof_unknown: 'Status was computed by the server. The moment it was computed did not come back with the answer.',
   trn_cert_new_title: 'Register a certificate',
   trn_cert_person: 'Person id',
-  trn_cert_person_unchecked: 'The server checks only that the id is not empty. It does not check that the person works here, so a mistyped id is filed as evidence about somebody this store does not know.',
+  trn_cert_person_known: 'The person must already exist in Workforce — the server refuses an id it does not recognise and registers nothing. It checks that the person exists, including one who has only been invited, not that they work at this store.',
   trn_cert_type: 'Type',
   trn_cert_type_hint: 'The type doubles as the competency key the certificate confers.',
   trn_cert_issuer: 'Issuer',
   trn_cert_issue: 'Issued',
   trn_cert_expiry: 'Expires',
   trn_cert_expiry_hint: 'An empty expiry means a certificate with no expiry, which the server treats as permanently valid.',
+  trn_cert_expiry_before_issue: 'The expiry is before the issue date. The server refuses that, so it is not sent.',
   trn_cert_document: 'Document reference',
   trn_cert_submit: 'Register',
 

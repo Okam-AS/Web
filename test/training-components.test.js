@@ -6,6 +6,7 @@ import TrainingAssignmentPanel from '~/components/admin/training/TrainingAssignm
 import TrainingCompletionPanel from '~/components/admin/training/TrainingCompletionPanel.vue'
 import TrainingCertificatePanel from '~/components/admin/training/TrainingCertificatePanel.vue'
 import TrainingHoldingsPanel from '~/components/admin/training/TrainingHoldingsPanel.vue'
+import TrainingReferenceField from '~/components/admin/training/TrainingReferenceField.vue'
 import { readListing, readCourseDetail, readHoldings } from '~/utils/training/journey'
 import { WorkforceApiError } from '~/utils/workforce/api-client'
 import translations from '~/translations'
@@ -19,6 +20,8 @@ const $i = (key, params) => {
 
 const mocks = { $i }
 const PERSON = '44444444-4444-4444-4444-444444444444'
+const OTHER_PERSON = '55555555-5555-5555-5555-555555555555'
+const ROLE = '99999999-9999-9999-9999-999999999999'
 const refusal = (status, code) => new WorkforceApiError(status, { code, detail: 'prose' })
 
 const answered = (key, rows, asOfUtc) => readListing({ [key]: rows, asOfUtc }, null, key)
@@ -197,6 +200,26 @@ describe('TrainingVersionPanel — publishing is the hinge, and only a draft can
     await wrapper.vm.$nextTick()
     expect(wrapper.find('[data-test="version-submit"]').attributes('disabled')).toBeFalsy()
   })
+
+  test('THE UNTAKEABLE FIELD IS GONE, and its absence is stated rather than left to be noticed', () => {
+    // No worker surface can serve a quiz in this wave, and `QuizJson` feeds the content hash that
+    // publishing freezes under a SQL trigger — so a guessed schema would be permanent.
+    const wrapper = mountPanel(detail([]))
+    expect(wrapper.find('[data-test="version-quiz"]').exists()).toBe(false)
+    expect(wrapper.findAll('textarea')).toHaveLength(1)
+    expect(wrapper.find('[data-test="version-quiz-absent"]').text()).toBe(translations.no.trn_version_quiz_absent)
+  })
+
+  test('the draft body sends an explicit null quiz, which hashes identically to the empty box it replaces', async () => {
+    const wrapper = mountPanel(detail([]))
+    wrapper.find('[data-test="version-content"]').setValue('[{"title":"Side 1"}]')
+    await wrapper.vm.$nextTick()
+    wrapper.find('[data-test="version-form"]').trigger('submit')
+
+    expect(wrapper.emitted()['create-version'][0][0]).toEqual({
+      contentPagesJson: '[{"title":"Side 1"}]', quizJson: null, passThresholdPercent: 80
+    })
+  })
 })
 
 describe('TrainingAssignmentPanel — only a published version is offered', () => {
@@ -238,11 +261,14 @@ describe('TrainingAssignmentPanel — only a published version is offered', () =
     expect(rows.at(1).findAll('td').at(3).text()).toBe('—')
   })
 
-  test('the by-value warning is on the form, because nothing validates the reference', () => {
+  test('the by-value warning STAYS on this form, because this write really does validate nothing', () => {
+    // Unlike the completion and certificate writes, `CreateAssignmentAsync` never calls
+    // TrainingPersonBinding. This hint must not be harmonised with the other two panels'.
     const wrapper = mountPanel(answered('assignments', []), {
       versions: [{ courseVersionId: 'v-pub', versionNo: 2, state: 'Published' }]
     })
-    expect(wrapper.text()).toContain(translations.no.trn_reference_by_value)
+    expect(wrapper.find('[data-test="assignment-reference-note"]').text()).toBe(translations.no.trn_reference_by_value)
+    expect(wrapper.text()).not.toContain(translations.no.trn_completion_person_known)
   })
 
   test('the emitted body sets exactly the reference the scope names and nulls the other', async () => {
@@ -250,20 +276,70 @@ describe('TrainingAssignmentPanel — only a published version is offered', () =
       versions: [{ courseVersionId: 'v-pub', versionNo: 2, state: 'Published' }]
     })
     wrapper.find('[data-test="assignment-version"]').setValue('v-pub')
-    wrapper.find('[data-test="assignment-reference"]').setValue(' role-9 ')
+    wrapper.find('[data-test="assignment-reference"]').setValue(' ' + ROLE + ' ')
     await wrapper.vm.$nextTick()
     wrapper.find('[data-test="assignment-form"]').trigger('submit')
 
     expect(wrapper.emitted()['create-assignment'][0][0]).toEqual({
-      courseVersionId: 'v-pub', scope: 'Role', roleRef: 'role-9', personRef: null, dueDateUtc: null
+      courseVersionId: 'v-pub', scope: 'Role', roleRef: ROLE, personRef: null, dueDateUtc: null
     })
+  })
+
+  test('switching the scope REMOUNTS the field, so a role id cannot be sent as a person reference', async () => {
+    const wrapper = mountPanel(answered('assignments', []), {
+      versions: [{ courseVersionId: 'v-pub', versionNo: 2, state: 'Published' }]
+    })
+    wrapper.find('[data-test="assignment-reference"]').setValue(ROLE)
+    await wrapper.vm.$nextTick()
+    wrapper.find('[data-test="assignment-scope"]').setValue('Person')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('[data-test="assignment-reference"]').element.value).toBe('')
+  })
+
+  test('a reference that is not a GUID cannot be submitted — the server could not bind it', async () => {
+    const wrapper = mountPanel(answered('assignments', []), {
+      versions: [{ courseVersionId: 'v-pub', versionNo: 2, state: 'Published' }]
+    })
+    wrapper.find('[data-test="assignment-version"]').setValue('v-pub')
+    wrapper.find('[data-test="assignment-reference"]').setValue('role-9')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('[data-test="assignment-reference-malformed"]').exists()).toBe(true)
+    expect(wrapper.find('[data-test="assignment-submit"]').attributes('disabled')).toBeTruthy()
+  })
+
+  test('a row\'s reference is named from the directory ITS OWN SCOPE points at', () => {
+    const wrapper = mountPanel(answered('assignments', [
+      { assignmentId: 'a-1', scope: 'Role', roleRef: ROLE, courseTitle: 'Kurs', versionNo: 2 },
+      { assignmentId: 'a-2', scope: 'Person', personRef: PERSON, courseTitle: 'Kurs', versionNo: 2 }
+    ]), {
+      versions: [],
+      peopleDirectory: { state: 'answered', options: [{ id: PERSON, label: 'Kari Nordmann', ended: false }] },
+      // Deliberately also holds the PERSON id under a role's name. Looking a reference up in the
+      // wrong directory would print "Feil oppslag" for a person, and that must not happen.
+      rolesDirectory: {
+        state: 'answered',
+        options: [
+          { id: ROLE, label: 'Kokk', ended: false },
+          { id: PERSON, label: 'Feil oppslag', ended: false }
+        ]
+      }
+    })
+    const rows = wrapper.findAll('[data-test="assignment-row"]')
+    expect(rows.at(0).findAll('td').at(2).text()).toBe('Kokk')
+    expect(rows.at(1).findAll('td').at(2).text()).toBe('Kari Nordmann')
+    // The id itself is never lost — it stays on the title, which is what an operator copies.
+    expect(rows.at(1).findAll('td').at(2).find('span').attributes('title')).toBe(PERSON)
   })
 })
 
-describe('TrainingCompletionPanel — the ledger, and the grading it refuses to do', () => {
+describe('TrainingCompletionPanel — the ledger, and the grading it leaves to the server', () => {
   const mountPanel = (listing, over) => mount(TrainingCompletionPanel, {
     mocks,
-    propsData: Object.assign({ listing, versions: [{ courseVersionId: 'v-pub', versionNo: 2, state: 'Published' }], zoneId: 'Europe/Oslo' }, over)
+    propsData: Object.assign({
+      listing,
+      versions: [{ courseVersionId: 'v-pub', versionNo: 2, state: 'Published', passThresholdPercent: 80 }],
+      zoneId: 'Europe/Oslo'
+    }, over)
   })
 
   test('a 0% score renders as 0%, not as a dash', () => {
@@ -284,16 +360,83 @@ describe('TrainingCompletionPanel — the ledger, and the grading it refuses to 
     expect(rows.at(1).findAll('td').at(1).text()).toBe('0%')
   })
 
-  test('THE REFUSAL: a 0% row ticked as passed is shown exactly as it was filed, with no verdict drawn', () => {
-    // TR-B1 is open — the server stores `passed` as sent and never checks it against the version's
-    // threshold. The panel does not check it either, and the note says so on the form.
-    const wrapper = mountPanel(answered('completions', [
-      { completionId: 'x-1', personRef: PERSON, scorePercent: 0, passed: true, source: 'ManagerRecorded' }
-    ]))
-    const cells = wrapper.find('[data-test="completion-row"]').findAll('td')
-    expect(cells.at(1).text()).toBe('0%')
-    expect(cells.at(2).text()).toBe(translations.no.trn_result_passed)
+  test('THE DEAD CONTROL IS GONE: there is no pass box, because the server never read one', () => {
+    // The removed defect. `RecordTrainingCompletionRequest` carries PersonRef/CourseVersionId/
+    // ScorePercent and no verdict field, and TrainingCompletionService derives `Passed` through
+    // TrainingGrading.IsPass. The box that used to be here was discarded on arrival, under a hint
+    // that claimed the opposite.
+    const wrapper = mountPanel(answered('completions', []))
+    expect(wrapper.find('[data-test="completion-passed"]').exists()).toBe(false)
+    expect(wrapper.find('input[type="checkbox"]').exists()).toBe(false)
     expect(wrapper.find('[data-test="completion-grading-note"]').text()).toBe(translations.no.trn_completion_grading_note)
+  })
+
+  test('the form states the rule and the SELECTED version\'s own threshold, so 55-against-80 is no surprise', async () => {
+    const wrapper = mountPanel(answered('completions', []), {
+      versions: [
+        { courseVersionId: 'v-pub', versionNo: 2, state: 'Published', passThresholdPercent: 80 },
+        { courseVersionId: 'v-ret', versionNo: 1, state: 'Retired', passThresholdPercent: 50 }
+      ]
+    })
+    // Nothing is claimed before a version is chosen: the threshold belongs to a version.
+    expect(wrapper.find('[data-test="completion-threshold-note"]').exists()).toBe(false)
+
+    wrapper.find('[data-test="completion-version"]').setValue('v-pub')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('[data-test="completion-threshold-note"]').text()).toContain('80')
+
+    // The OTHER version's threshold, not the first one carried over.
+    wrapper.find('[data-test="completion-version"]').setValue('v-ret')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('[data-test="completion-threshold-note"]').text()).toContain('50')
+  })
+
+  test('a row is shown exactly as the server graded it, and the panel recomputes nothing', () => {
+    // The table must never second-guess the ledger: the threshold that graded a row is the one
+    // frozen into ITS version, which this panel does not hold.
+    const wrapper = mountPanel(answered('completions', [
+      { completionId: 'x-1', personRef: PERSON, scorePercent: 0, passed: true, source: 'ManagerRecorded' },
+      { completionId: 'x-2', personRef: PERSON, scorePercent: 100, passed: false, source: 'ManagerRecorded' }
+    ]))
+    const rows = wrapper.findAll('[data-test="completion-row"]')
+    expect(rows.at(0).findAll('td').at(2).text()).toBe(translations.no.trn_result_passed)
+    expect(rows.at(1).findAll('td').at(2).text()).toBe(translations.no.trn_result_failed)
+  })
+
+  test('a Quiz-sourced row is labelled plainly and titled with what this build knows', () => {
+    // No production code writes `Quiz`; a row carrying it came from outside this version.
+    const wrapper = mountPanel(answered('completions', [
+      { completionId: 'x-1', personRef: PERSON, scorePercent: 90, passed: true, source: 'Quiz' }
+    ]))
+    const cell = wrapper.find('[data-test="completion-row"]').findAll('td').at(3)
+    expect(cell.text()).toBe(translations.no.trn_source_quiz)
+    expect(cell.find('span').attributes('title')).toBe(translations.no.trn_source_quiz_note)
+    // POSITIVE CONTROL: the source this surface actually produces carries no such title.
+    const manager = mountPanel(answered('completions', [
+      { completionId: 'x-2', personRef: PERSON, scorePercent: 90, passed: true, source: 'ManagerRecorded' }
+    ]))
+    expect(manager.find('[data-test="completion-row"]').findAll('td').at(3).find('span').attributes('title')).toBeUndefined()
+  })
+
+  test('the person hint says a KNOWN person is required, which is what the server now checks', () => {
+    const wrapper = mountPanel(answered('completions', []))
+    expect(wrapper.find('[data-test="completion-person-note"]').text()).toBe(translations.no.trn_completion_person_known)
+  })
+
+  test('a reference that is not a GUID is refused here, where the cause is known', async () => {
+    const wrapper = mountPanel(answered('completions', []))
+    wrapper.find('[data-test="completion-person"]').setValue('not-a-guid')
+    wrapper.find('[data-test="completion-version"]').setValue('v-pub')
+    wrapper.find('[data-test="completion-score"]').setValue('90')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('[data-test="completion-person-malformed"]').exists()).toBe(true)
+    expect(wrapper.find('[data-test="completion-submit"]').attributes('disabled')).toBeTruthy()
+
+    // POSITIVE CONTROL: a real id clears both.
+    wrapper.find('[data-test="completion-person"]').setValue(PERSON)
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('[data-test="completion-person-malformed"]').exists()).toBe(false)
+    expect(wrapper.find('[data-test="completion-submit"]').attributes('disabled')).toBeFalsy()
   })
 
   test('passed and not-passed are two different words, and an absent flag is a dash', () => {
@@ -312,18 +455,19 @@ describe('TrainingCompletionPanel — the ledger, and the grading it refuses to 
     expect(wrapper.find('[data-test="completion-version"]').exists()).toBe(false)
   })
 
-  test('the emitted body carries the score and the tick as two separate assertions', async () => {
+  test('THE WIRE BODY CARRIES NO VERDICT — the score is the whole assertion', async () => {
     const wrapper = mountPanel(answered('completions', []))
     wrapper.find('[data-test="completion-person"]').setValue(PERSON)
     wrapper.find('[data-test="completion-version"]').setValue('v-pub')
     wrapper.find('[data-test="completion-score"]').setValue('55')
-    wrapper.find('[data-test="completion-passed"]').setChecked(true)
     await wrapper.vm.$nextTick()
     wrapper.find('[data-test="completion-form"]').trigger('submit')
 
-    expect(wrapper.emitted()['record-completion'][0][0]).toEqual({
-      personRef: PERSON, courseVersionId: 'v-pub', scorePercent: 55, passed: true
-    })
+    const body = wrapper.emitted()['record-completion'][0][0]
+    expect(body).toEqual({ personRef: PERSON, courseVersionId: 'v-pub', scorePercent: 55 })
+    // Named explicitly: a `passed` reappearing here would be silently discarded by the server, which
+    // is exactly the defect that shipped.
+    expect('passed' in body).toBe(false)
   })
 })
 
@@ -386,9 +530,39 @@ describe('TrainingCertificatePanel — dated evidence', () => {
     expect(wrapper.find('[data-test="certificates-status-note"]').text()).toBe(translations.no.trn_certs_status_asof_unknown)
   })
 
-  test('the form states that the person reference is not checked', () => {
+  test('the form states that a KNOWN person is required — the check the server actually runs now', () => {
     const wrapper = mountPanel(answered('certificates', []))
-    expect(wrapper.find('[data-test="certificate-person-note"]').text()).toBe(translations.no.trn_cert_person_unchecked)
+    expect(wrapper.find('[data-test="certificate-person-note"]').text()).toBe(translations.no.trn_cert_person_known)
+  })
+
+  test('an expiry before the issue date is refused here, so it never becomes an unexplained 400', async () => {
+    // The server refuses it (`The expiry date cannot precede the issue date.`) with the SAME
+    // `training.validation` code as an unknown person. Pre-empting it here is what leaves the
+    // unknown person as the only cause the page then has to name.
+    const wrapper = mountPanel(answered('certificates', []))
+    wrapper.find('[data-test="certificate-person"]').setValue(PERSON)
+    wrapper.find('[data-test="certificate-type"]').setValue('food-handler')
+    wrapper.find('[data-test="certificate-issue"]').setValue('2026-01-10')
+    wrapper.find('[data-test="certificate-expiry"]').setValue('2025-12-31')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('[data-test="certificate-expiry-order"]').exists()).toBe(true)
+    expect(wrapper.find('[data-test="certificate-submit"]').attributes('disabled')).toBeTruthy()
+
+    // POSITIVE CONTROL: the same day is in order, and the server slices both to midnight too.
+    wrapper.find('[data-test="certificate-expiry"]').setValue('2026-01-10')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('[data-test="certificate-expiry-order"]').exists()).toBe(false)
+    expect(wrapper.find('[data-test="certificate-submit"]').attributes('disabled')).toBeFalsy()
+  })
+
+  test('a person reference that is not a GUID cannot be submitted', async () => {
+    const wrapper = mountPanel(answered('certificates', []))
+    wrapper.find('[data-test="certificate-person"]').setValue('44444444')
+    wrapper.find('[data-test="certificate-type"]').setValue('food-handler')
+    wrapper.find('[data-test="certificate-issue"]').setValue('2026-01-10')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('[data-test="certificate-person-malformed"]').exists()).toBe(true)
+    expect(wrapper.find('[data-test="certificate-submit"]').attributes('disabled')).toBeTruthy()
   })
 
   test('an empty expiry is emitted as null — a certificate that never expires, not an unknown one', async () => {
@@ -466,5 +640,116 @@ describe('TrainingHoldingsPanel — four states, and none of them is a verdict',
     await wrapper.vm.$nextTick()
     wrapper.find('[data-test="holdings-form"]').trigger('submit')
     expect(wrapper.emitted().lookup[0]).toEqual([PERSON])
+  })
+
+  test('a reference that could not bind is refused before the query is built', async () => {
+    // The route takes `?person=` as a Guid; anything else is a framework 400 with no training code,
+    // which this page could only report as "something went wrong".
+    const wrapper = mountPanel({ state: 'idle' })
+    wrapper.find('[data-test="holdings-person"]').setValue('kari')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.find('[data-test="holdings-person-malformed"]').exists()).toBe(true)
+    expect(wrapper.find('[data-test="holdings-lookup"]').attributes('disabled')).toBeTruthy()
+  })
+})
+
+describe('TrainingReferenceField — a picker that assists typing and never replaces it', () => {
+  const mountField = (directory, over) => mount(TrainingReferenceField, {
+    mocks,
+    propsData: Object.assign({ label: 'Person-ID', directory, testId: 'ref' }, over)
+  })
+
+  const people = [
+    { id: PERSON, label: 'Kari Nordmann', ended: false },
+    { id: OTHER_PERSON, label: 'Ola Nordmann', ended: true }
+  ]
+
+  test('THE INPUT SURVIVES EVERY STATE OF THE DIRECTORY — including the one where it answered', () => {
+    // A refused roster is an ordinary outcome for a Training manager with no Workforce capability,
+    // and the suggestions are not the accepted set even when it answers. Closing the field would
+    // refuse writes the server takes.
+    const states = [
+      { state: 'unknown', options: [] },
+      { state: 'refused', options: [] },
+      { state: 'answered', options: [] },
+      { state: 'answered', options: people }
+    ]
+    for (const directory of states) {
+      expect(mountField(directory).find('[data-test="ref"]').exists()).toBe(true)
+    }
+  })
+
+  test('THE DISTINCTION, varied: unknown, refused, answered-empty and answered give four sentences', () => {
+    const seen = [
+      mountField({ state: 'unknown', options: [] }).find('[data-test="ref-directory"]').text(),
+      mountField({ state: 'refused', options: [] }).find('[data-test="ref-directory"]').text(),
+      mountField({ state: 'answered', options: [] }).find('[data-test="ref-directory"]').text(),
+      mountField({ state: 'answered', options: people }).find('[data-test="ref-directory"]').text()
+    ]
+    expect(new Set(seen).size).toBe(4)
+  })
+
+  test('the picker appears ONLY when the directory answered with somebody', () => {
+    expect(mountField({ state: 'unknown', options: [] }).find('[data-test="ref-picker"]').exists()).toBe(false)
+    expect(mountField({ state: 'refused', options: [] }).find('[data-test="ref-picker"]').exists()).toBe(false)
+    expect(mountField({ state: 'answered', options: [] }).find('[data-test="ref-picker"]').exists()).toBe(false)
+    expect(mountField({ state: 'answered', options: people }).find('[data-test="ref-picker"]').exists()).toBe(true)
+  })
+
+  test('picking somebody emits their id, so the text field stays the single source of truth', () => {
+    const wrapper = mountField({ state: 'answered', options: people })
+    wrapper.find('[data-test="ref-picker"]').setValue(PERSON)
+    expect(wrapper.emitted().input[0]).toEqual([PERSON])
+  })
+
+  test('re-selecting the placeholder does NOT wipe a reference that is already typed', () => {
+    const wrapper = mountField({ state: 'answered', options: people }, { value: PERSON })
+    wrapper.find('[data-test="ref-picker"]').setValue('')
+    expect(wrapper.emitted().input).toBeUndefined()
+  })
+
+  test('the picker reflects the TYPED value, so it doubles as confirmation that a pasted id names somebody', () => {
+    const matched = mountField({ state: 'answered', options: people }, { value: PERSON })
+    expect(matched.find('[data-test="ref-picker"]').element.value).toBe(PERSON)
+    expect(matched.find('[data-test="ref-directory"]').text()).toContain('Kari Nordmann')
+
+    // An id nobody on the roster holds falls back to the placeholder rather than showing a stale pick.
+    const unmatched = mountField({ state: 'answered', options: people }, { value: '11111111-1111-1111-1111-111111111111' })
+    expect(unmatched.find('[data-test="ref-picker"]').element.value).toBe('')
+  })
+
+  test('an unrecognised id says it may still be accepted, because the server\'s check is estate-wide', () => {
+    // TrainingPersonBinding checks that a WorkforcePerson EXISTS, in any state, anywhere — not that
+    // they are engaged at this store. "Not on this roster" is a weaker claim than "invalid".
+    const wrapper = mountField({ state: 'answered', options: people }, { value: '11111111-1111-1111-1111-111111111111' })
+    expect(wrapper.find('[data-test="ref-directory"]').text()).toBe(translations.no.trn_directory_people_no_match)
+  })
+
+  test('a half-typed id does not fire the unrecognised warning on every keystroke', () => {
+    const wrapper = mountField({ state: 'answered', options: people }, { value: '1111' })
+    expect(wrapper.find('[data-test="ref-directory"]').text()).toBe(translations.no.trn_directory_people_pick)
+  })
+
+  test('an ended engagement is MARKED rather than dropped — the person is still real', () => {
+    const wrapper = mountField({ state: 'answered', options: people })
+    const labels = wrapper.findAll('[data-test="ref-picker"] option').wrappers.map(w => w.text())
+    expect(labels).toHaveLength(3)
+    expect(labels[1]).toBe('Kari Nordmann')
+    expect(labels[2]).toContain('Ola Nordmann')
+    expect(labels[2]).not.toBe('Ola Nordmann')
+  })
+
+  test('an ABSENT directory reads as unknown, never as refused — refused is a positive claim', () => {
+    const wrapper = mount(TrainingReferenceField, { mocks, propsData: { label: 'Person-ID', testId: 'ref', directory: null } })
+    expect(wrapper.find('[data-test="ref-directory"]').text()).toBe(translations.no.trn_directory_people_unknown)
+    expect(wrapper.find('[data-test="ref"]').exists()).toBe(true)
+  })
+
+  test('the role variant says something different from the person variant in every state', () => {
+    const asPerson = s => mountField(s, { kind: 'person' }).find('[data-test="ref-directory"]').text()
+    const asRole = s => mountField(s, { kind: 'role' }).find('[data-test="ref-directory"]').text()
+    for (const state of [{ state: 'unknown', options: [] }, { state: 'refused', options: [] }, { state: 'answered', options: [] }]) {
+      expect(asPerson(state)).not.toBe(asRole(state))
+    }
   })
 })
