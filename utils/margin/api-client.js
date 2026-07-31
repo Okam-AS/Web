@@ -71,6 +71,18 @@ export const MARGIN_NOT_FOUND = 'margin.not-found';
 export const MARGIN_FORBIDDEN = 'margin.forbidden';
 
 /**
+ * 401: the request passed authorization but carries no identity the server can resolve, so a write
+ * that stamps an actor would have stamped nobody. Margin refuses rather than records it, and the
+ * price surface is exactly where that matters: `MarginSupplierItemPrices` is append-only with no
+ * retraction path, so an application nobody can be named for could never be undone either.
+ *
+ * Reached from `POST /margin/price-imports/{id}/approve`. The upload endpoint refuses the same
+ * condition through `ModuleProblem(…, 401)`, which carries NO code — see `describeMarginFailure`,
+ * which renders that one from the server's own prose.
+ */
+export const MARGIN_UNATTRIBUTED = 'margin.unattributed';
+
+/**
  * 409, and now ONLY this: the precondition sent was well formed and the resource has moved since.
  * It is the one arm of the three that carries `retryable: true`, and the one where a re-read and a
  * second attempt genuinely help.
@@ -165,13 +177,20 @@ export class MarginClientBase {
   async _request (method, path, options) {
     const opts = options || {};
     const headers = this._headers(opts.headers);
-    if (opts.body !== undefined) { headers['Content-Type'] = 'application/json'; }
 
-    const response = await fetch(this._baseUrl + path, {
-      method,
-      headers,
-      body: opts.body === undefined ? undefined : JSON.stringify(opts.body)
-    });
+    let body;
+    if (opts.form !== undefined) {
+      // MULTIPART: no `Content-Type` is set, deliberately. The browser writes
+      // `multipart/form-data; boundary=…` itself, and a hand-written header omits the boundary —
+      // after which ASP.NET Core's form binder finds no file and `POST /margin/price-imports`
+      // answers "A CSV file is required." A refusal about the file, caused by the header.
+      body = opts.form;
+    } else if (opts.body !== undefined) {
+      headers['Content-Type'] = 'application/json';
+      body = JSON.stringify(opts.body);
+    }
+
+    const response = await fetch(this._baseUrl + path, { method, headers, body });
 
     const text = await response.text();
     let payload = null;
@@ -179,8 +198,19 @@ export class MarginClientBase {
       try { payload = JSON.parse(text); } catch (e) { payload = { detail: text }; }
     }
 
+    // Parsed unconditionally, including for a `text` request: a FAILED download is still
+    // problem+json, and a caller that saved the refusal as a .csv would hand the venue an error
+    // document named like a price list.
     if (!response.ok) { throw new MarginApiError(response.status, payload); }
-    return payload;
+
+    // `text: true` is for the one endpoint whose SUCCESS body is not JSON — the import template,
+    // which the server returns as `text/csv`.
+    return opts.text ? text : payload;
+  }
+
+  /** A multipart POST (the CSV upload). See the `form` branch above for why no header is set. */
+  _upload (path, form) {
+    return this._request('POST', path, { form });
   }
 
   /**

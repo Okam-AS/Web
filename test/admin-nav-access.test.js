@@ -94,7 +94,8 @@ describe('storeAdminAccess — unknown is a state, not a refusal', () => {
 const STORE_ADMIN_PATHS = [
   '/admin', '/admin/ongoing', '/admin/orders', '/admin/statistics',
   '/admin/workforce-schedule', '/admin/workforce-roster', '/admin/workforce-rates', '/admin/training-courses',
-  '/admin/margin-recipes', '/admin/meals-agreements', '/admin/events-pipeline', '/admin/growth-newsletter',
+  '/admin/margin-recipes', '/admin/margin-suppliers', '/admin/margin-price-imports',
+  '/admin/meals-agreements', '/admin/events-pipeline', '/admin/growth-newsletter',
   '/admin/products', '/admin/categories', '/admin/allergens', '/admin/import',
   '/admin/delivery', '/admin/wolt',
   '/admin/kravia-invoice', '/admin/rewards', '/admin/discounts',

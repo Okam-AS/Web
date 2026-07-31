@@ -21,28 +21,17 @@
 //    projector currently labels the journal's Oslo wall-clock stamp as UTC
 //    (`MarginBusinessDateEpochPinTests`, red and pinned). A surface whose correctness rests on that
 //    is a surface that is wrong every evening, so this one does not touch it.
-//  • the draft edit, retire, product-link, supplier, price and import surfaces — other journeys.
+//  • the draft edit and retire surfaces — other journeys.
+//
+// The supplier, price and import surfaces now exist, as `~/utils/margin/supplier-client`,
+// `~/utils/margin/ingredient-client` and `~/utils/margin/price-import-client`. They are separate
+// clients rather than more methods here for the reason this file is organised the way it is: one
+// client per controller, so the two can be diffed by eye.
 
-import { MarginClientBase } from '~/utils/margin/api-client';
+import { MarginModuleClient, scoped } from '~/utils/margin/module-client';
 
-/** `?storeId=` is the authoritative tenant scope on every Margin route; body tenant ids are ignored. */
-function scoped (path, storeId) {
-  return path + (path.includes('?') ? '&' : '?') + 'storeId=' + encodeURIComponent(storeId);
-}
-
-export class MarginRecipeService extends MarginClientBase {
-  /**
-   * The module's own self-report: the resolved `Margin.*` flag states, the active recipe count and
-   * (once the projector has run) the sales-projection lag.
-   *
-   * Called FIRST and used only to tell "the module is off for this store" from "the module is on and
-   * the read failed". Both answer 404 on every other route — the module is uniformly invisible when
-   * off, by design — so without this read the page would have to guess which one it was looking at.
-   */
-  GetStatus (storeId) {
-    return this._request('GET', scoped('/margin/status', storeId));
-  }
-
+/** `GetStatus` and the `?storeId=` scoping come from `MarginModuleClient` — see that file. */
+export class MarginRecipeService extends MarginModuleClient {
   /**
    * The store's ingredient master, PLUS the starter-library copy candidates.
    *

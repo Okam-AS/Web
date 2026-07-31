@@ -29,6 +29,14 @@
       {{ stateNotice }}
     </p>
 
+    <!-- The notice above tells a venue the lines have no price and that they need a supplier item
+         with a valid one. Until the supplier surface existed that was an instruction with nowhere to
+         carry it out, which is the whole reason a plate cost could read "unknown" forever. This is
+         the way there, offered exactly on the two states it can fix. -->
+    <p v-if="pricesFixable" class="mrg-cost__fix" data-test="cost-fix-link">
+      <a href="/admin/margin-suppliers">{{ $i('mrg_cost_fix_prices') }}</a>
+    </p>
+
     <table v-if="cost.lines.length" class="mrg-cost__lines">
       <thead>
         <tr>
@@ -153,6 +161,14 @@ export default {
     },
     noticeTone () {
       return this.cost.state === COST_FLOOR || this.cost.state === COST_NONE_PRICED ? 'warn' : 'plain';
+    },
+    /**
+     * The two states a venue can act on by adding price data, and ONLY those two. `unknown` is a
+     * failed read and `not-costed` is a recipe with no version — neither is fixed on the supplier
+     * page, and sending someone there for them would be sending them to the wrong screen.
+     */
+    pricesFixable () {
+      return this.cost.state === COST_NONE_PRICED || this.cost.state === COST_FLOOR;
     }
   },
   methods: {
@@ -320,6 +336,16 @@ export default {
   display: block;
   font-size: 0.75em;
   color: #92400e;
+}
+
+.mrg-cost__fix {
+  margin: 0 0 20px 0;
+  font-size: 0.9em;
+
+  a {
+    color: #159f63;
+    font-weight: 600;
+  }
 }
 
 .mrg-cost__caveat {
