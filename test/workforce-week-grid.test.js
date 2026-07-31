@@ -5,6 +5,7 @@ import {
   formatMinutes,
   readCost,
   readShiftCost,
+  readCostBasis,
   DATA_UNKNOWN,
   DATA_NO_PLAN,
   DATA_COUNTED,
@@ -12,6 +13,9 @@ import {
   COST_REFUSED,
   COST_TOTALLED,
   COST_OPEN,
+  BASIS_UNKNOWN,
+  BASIS_BASE_ONLY,
+  BASIS_WITH_SUPPLEMENTS,
   OPEN_ROW_KEY
 } from '~/utils/workforce/week-grid'
 import { weekRange } from '~/utils/workforce/week-range'
@@ -572,5 +576,114 @@ describe('buildWeekGrid — money', () => {
     expect(grid.costKnown).toBe(false)
     expect(grid.totals.cost).toBeNull()
     expect(grid.rows[0].cells[1].shifts.every(s => s.cost === null)).toBe(true)
+  })
+})
+
+// --- the basis axis -----------------------------------------------------------------------------
+//
+// Whether a wage figure carries the kveld/natt/helg tillegg a store's rule pack declares. It used
+// to be a constant "no" everywhere in this estate; it is now a per-store fact the backend answers
+// on `cost.basis`, and reading it wrong is a wage bill misstated in one direction or the other.
+
+describe('readCostBasis', () => {
+  function basis (over) {
+    return {
+      basis: 'base-rate',
+      supplementsIncluded: false,
+      excludes: ['shift-supplements', 'employer-national-insurance'],
+      statement: 'Base hourly rates only, excluding shift supplements.',
+      ...over
+    }
+  }
+
+  test('a declared pack puts the tillegg inside the figure', () => {
+    expect(readCostBasis({ basis: basis({ supplementsIncluded: true }) })).toBe(BASIS_WITH_SUPPLEMENTS)
+  })
+
+  test('a silent pack leaves them outside it', () => {
+    expect(readCostBasis({ basis: basis() })).toBe(BASIS_BASE_ONLY)
+  })
+
+  // THE TOKEN IS HELD AT `base-rate` IN BOTH CASES, deliberately: a second one would refuse every
+  // labour-percentage target a venue had already set, on the day their pack changed. So the token
+  // carries no information at all here and the boolean carries all of it.
+  test('the token says base-rate either way and is not what decides', () => {
+    const included = { basis: basis({ supplementsIncluded: true }) }
+    const excluded = { basis: basis({ supplementsIncluded: false }) }
+
+    expect(included.basis.basis).toBe(excluded.basis.basis)
+    expect(readCostBasis(included)).not.toBe(readCostBasis(excluded))
+  })
+
+  test('no cost, no basis block and no flag are all UNKNOWN — never one of the two answers', () => {
+    expect(readCostBasis(null)).toBe(BASIS_UNKNOWN)
+    expect(readCostBasis(undefined)).toBe(BASIS_UNKNOWN)
+    expect(readCostBasis({})).toBe(BASIS_UNKNOWN)
+    expect(readCostBasis({ basis: null })).toBe(BASIS_UNKNOWN)
+    expect(readCostBasis({ basis: 'base-rate' })).toBe(BASIS_UNKNOWN)
+    expect(readCostBasis({ basis: { basis: 'base-rate' } })).toBe(BASIS_UNKNOWN)
+  })
+
+  // A truthy non-boolean must not read as true and a falsy one must not read as false. Both would
+  // be this layer deciding a fact about somebody's employment agreement on a coercion.
+  test('a flag that is not a boolean is unknown, not coerced', () => {
+    expect(readCostBasis({ basis: basis({ supplementsIncluded: 'true' }) })).toBe(BASIS_UNKNOWN)
+    expect(readCostBasis({ basis: basis({ supplementsIncluded: 1 }) })).toBe(BASIS_UNKNOWN)
+    expect(readCostBasis({ basis: basis({ supplementsIncluded: 0 }) })).toBe(BASIS_UNKNOWN)
+    expect(readCostBasis({ basis: basis({ supplementsIncluded: undefined }) })).toBe(BASIS_UNKNOWN)
+  })
+})
+
+describe('buildWeekGrid — the basis reaches the grid', () => {
+  function rangeWith (basisBlock, over) {
+    return Object.assign(draftRange([shift()]), {
+      cost: {
+        costComplete: true,
+        totalMinor: 94100,
+        currency: 'NOK',
+        paidMinutes: 240,
+        pricedShiftCount: 1,
+        unpricedShiftCount: 0,
+        openShiftCount: 0,
+        openShiftMinutes: 0,
+        basis: basisBlock,
+        days: []
+      }
+    }, over)
+  }
+
+  test('the grid carries what the wire said the money was priced on', () => {
+    expect(buildWeekGrid({ days: WEEK.days, staff, markers: [], range: rangeWith({ basis: 'base-rate', supplementsIncluded: true }) }).costBasis)
+      .toBe(BASIS_WITH_SUPPLEMENTS)
+    expect(buildWeekGrid({ days: WEEK.days, staff, markers: [], range: rangeWith({ basis: 'base-rate', supplementsIncluded: false }) }).costBasis)
+      .toBe(BASIS_BASE_ONLY)
+  })
+
+  test('a response with no cost overlay leaves the basis unknown', () => {
+    const grid = buildWeekGrid({ days: WEEK.days, staff, markers: [], range: draftRange([shift()]) })
+
+    expect(grid.costKnown).toBe(false)
+    expect(grid.costBasis).toBe(BASIS_UNKNOWN)
+  })
+
+  // The money gate and the basis are different questions. A range with no revision is not allowed
+  // to show a 0 — that would turn "there is no plan" into "the plan costs nothing" — but the wage
+  // column still MEANS something, and reporting our own gate as the server's silence would put an
+  // "unknown basis" warning under a week the server answered perfectly well.
+  test('a week with no revision shows no money but still knows the basis', () => {
+    const grid = buildWeekGrid({
+      days: WEEK.days,
+      staff,
+      markers: [],
+      range: rangeWith({ basis: 'base-rate', supplementsIncluded: true }, { scheduleRevisionId: null })
+    })
+
+    expect(grid.totals.cost).toBeNull()
+    expect(grid.costKnown).toBe(false)
+    expect(grid.costBasis).toBe(BASIS_WITH_SUPPLEMENTS)
+  })
+
+  test('an unread week knows nothing, basis included', () => {
+    expect(buildWeekGrid({ days: WEEK.days, staff, markers: [], range: null }).costBasis).toBe(BASIS_UNKNOWN)
   })
 })

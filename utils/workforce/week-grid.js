@@ -44,6 +44,55 @@ export const COST_OPEN = 'open';
 // on `incompleteDetail`, which is server prose.
 export const COST_CURRENCY_MISMATCH = 'workforce.cost-currency-mismatch';
 export const RATE_CURRENCY_MISMATCH = 'workforce.rate-currency-mismatch';
+
+// --- the basis axis --------------------------------------------------------------------------
+//
+// WHAT THE MONEY IS MEASURED ON. Every wage figure this surface prints used to be base rates and
+// nothing else, so the grid stated that in a hard-coded footnote. It is no longer a constant: the
+// backend resolves the store's jurisdiction, the rule pack in force and the store's zone, and
+// prices the `paySupplements` that pack declares — an evening, night or weekend tillegg is now
+// inside the number for a store whose pack declares one, and still outside it for a store whose
+// pack is silent or whose store row names no country.
+//
+// SO THE FOOTNOTE IS READ, NOT ASSERTED. `cost.basis` comes off the wire from the policy that
+// actually priced the figure (`WorkforceScheduleCostModel.Basis`, and the same block on the labour
+// band). It is present on the range read, the validation receipt and the publication.
+//
+// THE TOKEN IS NOT THE ANSWER. `basis.basis` is the string `base-rate` in BOTH cases and stays that
+// way deliberately — minting a second token would refuse every labour-percentage target a venue has
+// already set, on the day their pack changed. The BOOLEAN `supplementsIncluded` is the only thing
+// that says which of the two figures is on screen, so nothing here parses the token.
+
+/** The wire did not say. Never rendered as either of the two answers below. */
+export const BASIS_UNKNOWN = 'unknown';
+/** `supplementsIncluded:false` — base hourly rates, no tillegg of any kind in the figure. */
+export const BASIS_BASE_ONLY = 'base-only';
+/** `supplementsIncluded:true` — the figure carries the tillegg this store's rule pack declares. */
+export const BASIS_WITH_SUPPLEMENTS = 'with-supplements';
+
+/** The `view` a published range read echoes. The draft view echoes `draft`. */
+export const VIEW_PUBLISHED = 'published';
+
+/**
+ * Which basis a cost overlay was priced on — three states, and the third is not a shade of either.
+ *
+ * A missing `basis` block, a missing flag, or a flag that is not a boolean all give UNKNOWN. That
+ * matters in both directions and is why nothing here defaults: telling a manager "no tillegg" about
+ * a figure that carries them understates the wage bill by a fifth of a Sunday, and telling them the
+ * opposite about a base-rate figure overstates it. Neither is a safer guess than saying nothing.
+ *
+ * Deliberately NOT gated on the week being `counted`. This is a fact about the store's rule pack and
+ * about what the wage column MEANS, not about this week's money — the backend answers it even for a
+ * range holding no revision, and reading it puts no figure on screen.
+ */
+export function readCostBasis (cost) {
+  if (!cost || typeof cost !== 'object') { return BASIS_UNKNOWN; }
+  const basis = cost.basis;
+  if (!basis || typeof basis !== 'object') { return BASIS_UNKNOWN; }
+  if (basis.supplementsIncluded === true) { return BASIS_WITH_SUPPLEMENTS; }
+  if (basis.supplementsIncluded === false) { return BASIS_BASE_ONLY; }
+  return BASIS_UNKNOWN;
+}
 export const RATE_UNRESOLVED = 'workforce.rate-unresolved';
 
 function numberOr (value, fallback) {
@@ -744,6 +793,10 @@ export function buildWeekGrid (options) {
     // True when the response carried a cost overlay at all, so "the money is not on this response"
     // stays distinguishable from "the money is on it and it refuses to total".
     costKnown: costs.known,
+    // What the wage column is measured on. Read from `range.cost` and NOT from `costs`, which is
+    // gated on `counted`: a week with no revision still has a wage column with a meaning, and
+    // blanking the caveat to "unknown" there would report our own gate as the server's silence.
+    costBasis: readCostBasis(range && range.cost),
     days: days.map(day => ({
       isoDate: day.isoDate,
       year: day.year,

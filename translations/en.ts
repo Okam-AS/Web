@@ -2361,7 +2361,12 @@ export default {
   wf_conflict_shift: 'Double booking',
   wf_band_total: 'Week total',
   wf_band_note: 'Wage percentage, revenue and variance to target arrive once revenue can be read per business day.',
+  // What the wage figures are measured on. THREE sentences, never two — see `no.ts` for the reason.
+  // The employer's-national-insurance half is unconditional: it is excluded on every basis.
   wf_cost_base_rates: 'Base rates — no evening, weekend or night supplement, and no employer\'s national insurance.',
+  wf_cost_with_supplements: 'Base rates plus the supplements this store\'s rule pack declares — evening, night and weekend/Sunday. Still no employer\'s national insurance.',
+  wf_cost_basis_unknown: 'The basis is unknown: it has not been stated whether evening, night or weekend supplements are included. Employer\'s national insurance is excluded either way.',
+  wf_cost_published_reprice: 'A published week is priced again every time it is opened, using the rates and the rule pack in force now. This total can therefore differ from the one shown when the week was published. It is a planning figure, not a payroll run.',
   wf_cost_no_total: 'No total',
   wf_cost_floor: 'at least {amount}',
   wf_cost_floor_hint: 'Open shifts are not priced, so the total is a floor.',

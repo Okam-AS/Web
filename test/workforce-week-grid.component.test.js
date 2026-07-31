@@ -88,8 +88,25 @@ function totals (over) {
   }, over)
 }
 
-function cost (over, days) {
-  return Object.assign(totals(over), { days: days || [] })
+// The RANGE node, which is the only one carrying a basis block — the day, staff and shift nodes do
+// not, because what the money is measured on is a property of the store's rule pack rather than of
+// one day of it. `supplementsIncluded:false` is the fixture default because that is the pre-existing
+// world every other test here was written against; the supplemented and unstated worlds are built
+// explicitly, below, where they are the thing under test.
+function cost (over, days, basis) {
+  const node = Object.assign(totals(over), { days: days || [] })
+  // `null` means the wire carried no basis block at all — the unknown case, built by omitting the
+  // key rather than by setting it to something, which is how a response that predates the field
+  // (or one a gateway trimmed) actually arrives.
+  if (basis !== null) {
+    node.basis = Object.assign({
+      basis: 'base-rate',
+      supplementsIncluded: false,
+      excludes: ['shift-supplements', 'employer-national-insurance', 'holiday-pay', 'occupational-pension', 'occupational-injury-insurance'],
+      statement: 'Base hourly rates only, excluding shift supplements.'
+    }, basis || {})
+  }
+  return node
 }
 
 function costDay (date, over, shifts) {
@@ -495,5 +512,114 @@ describe('WorkforceWeekGrid — money', () => {
 
     expect(wrapper.find('.wf-grid__band-cost').text()).toBe('—')
     expect(wrapper.findAll('.wf-grid__band-day').wrappers.every(w => w.text() === '—')).toBe(true)
+  })
+})
+
+// The sentence under the wage column used to be a constant, and it was true for exactly as long as
+// no deployed shift cost carried a tillegg. It does now: the same four hours at 215,00 kr/h in Oslo
+// cost 860,00 on a Tuesday afternoon and 941,00 in the evening for a store whose rule pack declares
+// `paySupplements`. What the column is measured on is therefore a per-store fact that has to be
+// READ, and the three answers it can take are three different sentences.
+describe('WorkforceWeekGrid — what the money is measured on', () => {
+  const priced = { totalMinor: 94100, pricedShiftCount: 1, paidMinutes: 240 }
+
+  function renderBasis (basis, view) {
+    const range = draftRange([shift()], cost(priced, [
+      costDay(TUESDAY, priced, [shiftCost('a1', { totalMinor: 94100 })])
+    ], basis))
+    if (view) { range.view = view }
+    return render({ range })
+  }
+
+  const note = wrapper => wrapper.findAll('.wf-grid__band-note').at(0)
+
+  test('a store whose pack declares tillegg is told they are IN the figure', () => {
+    const text = note(renderBasis({ supplementsIncluded: true })).text()
+
+    expect(text).toContain('kveldstillegg')
+    expect(text).toContain('nattillegg')
+    expect(text).toContain('helge-/søndagstillegg')
+    // The whole point: the old sentence claimed the opposite, and for this store it is now false.
+    expect(text).not.toContain('uten kvelds-')
+  })
+
+  test('a store whose pack is silent keeps the sentence that is still correct', () => {
+    const text = note(renderBasis({ supplementsIncluded: false })).text()
+
+    expect(text).toBe('Grunnsats – uten kvelds-, helge- og natt-tillegg, og uten arbeidsgiveravgift.')
+  })
+
+  // A supplement is owed under an AGREEMENT, so the backend deliberately answers NotDeclared for a
+  // store that has not said where it operates rather than handing it Norway's pack. When nothing
+  // reaches the wire at all, this surface must not pick whichever of the two answers looks tidier:
+  // "no tillegg" understates a Sunday by a fifth, and the opposite overstates a base-rate week.
+  test('an unstated basis says it is unknown and asserts NEITHER answer', () => {
+    const text = note(renderBasis(null)).text()
+
+    expect(text).toContain('Grunnlaget er ukjent')
+    expect(text).not.toBe('Grunnsats – uten kvelds-, helge- og natt-tillegg, og uten arbeidsgiveravgift.')
+    expect(text).not.toContain('Grunnsats pluss')
+    expect(note(renderBasis(null)).classes()).toContain('is-unknown')
+  })
+
+  test('a flag that is not a boolean is unknown, not false', () => {
+    expect(note(renderBasis({ supplementsIncluded: 'true' })).text()).toContain('Grunnlaget er ukjent')
+    expect(note(renderBasis({ supplementsIncluded: null })).text()).toContain('Grunnlaget er ukjent')
+  })
+
+  // The backend holds the token at `base-rate` in BOTH cases on purpose: minting a second one would
+  // refuse every labour-percentage target a venue has already set, on the day their pack changed.
+  // A surface that keyed on the token would print "no tillegg" over a figure that has them.
+  test('the basis TOKEN is not read — the boolean is', () => {
+    const text = note(renderBasis({ basis: 'base-rate', supplementsIncluded: true })).text()
+
+    expect(text).toContain('Grunnsats pluss')
+    expect(text).not.toContain('uten kvelds-')
+  })
+
+  // Employer's national insurance is outside the figure on every basis — this system models none of
+  // it — so that half of the sentence survives all three states.
+  test('arbeidsgiveravgift is still excluded whichever basis applies', () => {
+    expect(note(renderBasis({ supplementsIncluded: true })).text()).toContain('arbeidsgiveravgift')
+    expect(note(renderBasis({ supplementsIncluded: false })).text()).toContain('arbeidsgiveravgift')
+    expect(note(renderBasis(null)).text()).toContain('Arbeidsgiveravgift')
+  })
+
+  test('the wage column header says the same thing the footnote does', () => {
+    const wrapper = renderBasis({ supplementsIncluded: true })
+
+    expect(wrapper.find('.wf-grid__head--cost').attributes('title')).toBe(note(wrapper).text())
+  })
+
+  // A published week is re-priced on READ: the rate rows are effective-dated and resolved at each
+  // shift's own instants, and the rule pack is the one in force now. So the total a manager
+  // published on Tuesday is not necessarily the total they open on Thursday.
+  test('a published week says its total is re-priced on every read', () => {
+    const text = renderBasis({ supplementsIncluded: true }, 'published').text()
+
+    expect(text).toContain('prises på nytt hver gang den åpnes')
+    expect(text).toContain('planleggingstall')
+  })
+
+  // Nothing anywhere stores what a publication cost — the projection is a pure function with no
+  // table — so the previous figure does not exist to be read. The notice says the number is live;
+  // it must never name an old one, because any old one it named would be invented.
+  test('the notice names no previous figure, because none is kept', () => {
+    const text = renderBasis({ supplementsIncluded: true }, 'published').find('.wf-grid__caveat').text()
+
+    expect(text).not.toMatch(/kr\s/)
+    expect(text).not.toMatch(/\d/)
+  })
+
+  test('a draft says nothing about re-pricing — no figure has been communicated yet', () => {
+    expect(renderBasis({ supplementsIncluded: true }, 'draft').text()).not.toContain('prises på nytt')
+  })
+
+  test('a published response with no cost overlay caveats no money, because none is shown', () => {
+    const wrapper = render({
+      range: { view: 'published', scheduleRevisionId: 'rev-1', assignments: [shift()], cost: null }
+    })
+
+    expect(wrapper.text()).not.toContain('prises på nytt')
   })
 })

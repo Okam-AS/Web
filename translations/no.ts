@@ -2404,7 +2404,18 @@ export default {
   // det ikke: de krever omsetning avgrenset per virksomhetsdag, som ennå ikke kan leses riktig ved
   // dagsoppgjør. Ingenting regner ut en lønnsprosent av noe annet i mellomtiden.
   wf_band_note: 'Lønnsprosent, omsetning og forskjell til mål kommer når omsetning kan leses per virksomhetsdag.',
+  // Grunnlaget for lønnstallene. TRE setninger, aldri to: backend prises nå med tilleggene
+  // regelpakken til butikken oppgir, og sier på wire (`cost.basis.supplementsIncluded`) om den
+  // gjorde det. Er de med, er den gamle setningen direkte feil; er de ikke med, står den; sier
+  // wire ingenting, sier vi at grunnlaget er ukjent i stedet for å gjette på ett av svarene.
+  // Arbeidsgiveravgift er utenfor uansett, og det halve av setningen står i alle tre.
   wf_cost_base_rates: 'Grunnsats – uten kvelds-, helge- og natt-tillegg, og uten arbeidsgiveravgift.',
+  wf_cost_with_supplements: 'Grunnsats pluss tilleggene regelpakken til butikken oppgir – kveldstillegg, nattillegg og helge-/søndagstillegg. Fortsatt uten arbeidsgiveravgift.',
+  wf_cost_basis_unknown: 'Grunnlaget er ukjent: det er ikke oppgitt om kveldstillegg, nattillegg eller helgetillegg er regnet med. Arbeidsgiveravgift er uansett ikke med.',
+  // Publiserte uker prises på nytt ved lesing – satsene er datostyrte og hentes ved vakten, mens
+  // regelpakken er den som gjelder NÅ. Vi sier at tallet kan ha endret seg; vi sier ikke hva det
+  // var, for det er ikke lagret noe sted og et tall vi fant på ville vært verre enn ingenting.
+  wf_cost_published_reprice: 'En publisert uke prises på nytt hver gang den åpnes, med satsene og regelpakken som gjelder nå. Summen kan derfor være en annen enn den som sto her da uken ble publisert. Dette er et planleggingstall, ikke en lønnskjøring.',
   wf_cost_no_total: 'Ingen sum',
   wf_cost_floor: 'minst {amount}',
   wf_cost_floor_hint: 'Ledige vakter er ikke priset, så summen er et minimum.',
