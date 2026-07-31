@@ -93,7 +93,8 @@ describe('storeAdminAccess — unknown is a state, not a refusal', () => {
 // they came from, so this reorder moves no link between audiences; only its position changed.
 const STORE_ADMIN_PATHS = [
   '/admin', '/admin/ongoing', '/admin/orders', '/admin/statistics',
-  '/admin/workforce-schedule', '/admin/workforce-roster', '/admin/workforce-rates', '/admin/training-courses',
+  '/admin/workforce-schedule', '/admin/workforce-roster', '/admin/workforce-rates',
+  '/admin/workforce-personnel-list', '/admin/training-courses',
   '/admin/margin-recipes', '/admin/meals-agreements', '/admin/events-pipeline', '/admin/growth-newsletter',
   '/admin/products', '/admin/categories', '/admin/allergens', '/admin/import',
   '/admin/delivery', '/admin/wolt',
