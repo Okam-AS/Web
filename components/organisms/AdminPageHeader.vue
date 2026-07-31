@@ -247,6 +247,11 @@ const icons = {
   // recipes say the week should have cost against what the venue actually bought), and it has to read
   // differently from `marginRecipes` — the clipboard — directly above it in the same group.
   marginStatements: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" /></svg>',
+  // A delivery truck, not another document: this page is about who you buy from, and it sits
+  // directly under `marginRecipes` (a document) in the same group.
+  marginSuppliers: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1" /></svg>',
+  // An upload arrow: the whole page is a file going in.
+  marginPriceImports: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>',
   mealsAgreements: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>',
   growthNewsletter: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>',
   eventsPipeline: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>',
@@ -342,6 +347,12 @@ export default {
               { label: this.$i('nav_workforce_personnel_list'), path: '/admin/workforce-personnel-list', icon: icons.workforcePersonnelList, isNew: true },
               { label: this.$i('nav_training_courses'), path: '/admin/training-courses', icon: icons.training, isNew: true },
               { label: this.$i('nav_margin_recipes'), path: '/admin/margin-recipes', icon: icons.marginRecipes, isNew: true },
+              // The two surfaces that make the recipe page's plate cost possible at all: a plate
+              // cost is only ever built from supplier price data, and these are the only screens
+              // that can create any. Adjacent to the recipes link, in that order, because that is
+              // the order the backend requires — ingredient, supplier, article, price, cost.
+              { label: this.$i('nav_margin_suppliers'), path: '/admin/margin-suppliers', icon: icons.marginSuppliers, isNew: true },
+              { label: this.$i('nav_margin_price_imports'), path: '/admin/margin-price-imports', icon: icons.marginPriceImports, isNew: true },
               { label: this.$i('nav_margin_statements'), path: '/admin/margin-statements', icon: icons.marginStatements, isNew: true },
               { label: this.$i('nav_meals'), path: '/admin/meals-agreements', icon: icons.mealsAgreements, isNew: true },
               { label: this.$i('nav_events'), path: '/admin/events-pipeline', icon: icons.eventsPipeline, isNew: true },

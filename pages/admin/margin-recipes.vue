@@ -10,6 +10,18 @@
         </p>
       </div>
 
+      <!-- CAUSE AND EFFECT. A cost preview is computed on read, so a price entered on the supplier
+           page changes this page's answer — but only at the next read, and a venue that fixed the
+           prices in another tab would otherwise still be looking at "no line has a price". This
+           re-runs the reads, including the selected recipe's own, so the change is visible where
+           the complaint was. -->
+      <div v-if="!blocker" class="mrg-page__toolbar">
+        <button class="mrg-btn mrg-btn--ghost" :disabled="busy" @click="refresh">
+          {{ loading ? $i('mrg_refresh_running') : $i('mrg_refresh') }}
+        </button>
+        <span class="mrg-page__toolbar-note">{{ $i('mrg_refresh_hint') }}</span>
+      </div>
+
       <div v-if="blocker" class="mrg-page__blocker" data-test="blocker">
         {{ blocker }}
       </div>
@@ -463,6 +475,20 @@ export default {
       this.loading = false;
     },
 
+    /**
+     * Re-run every read this page makes, including the selected recipe's own detail.
+     *
+     * The detail is the point: the cost preview is computed at READ TIME from whatever supplier
+     * prices exist at that instant, so the fix for "none of the 3 lines has a price" happens on a
+     * different screen and lands here only when this document is fetched again. `load()` alone would
+     * refresh the lists and leave the costed recipe showing its old answer.
+     */
+    async refresh () {
+      const selected = this.selectedRecipeId;
+      await this.load();
+      if (selected) { await this.selectRecipe(selected); }
+    },
+
     /** Re-read after anything that can move a margin: an activation, or a link change. */
     async reloadMenuMargin () {
       const response = await this._marginService.GetMenuMargin(this.storeId).catch(() => null);
@@ -697,6 +723,19 @@ export default {
   background: #fff7ed;
   color: #92400e;
   margin-bottom: 24px;
+}
+
+.mrg-page__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.mrg-page__toolbar-note {
+  font-size: 0.8em;
+  color: #64748b;
 }
 
 .mrg-page__columns {
