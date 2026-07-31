@@ -363,6 +363,28 @@ describe('the deposit page', () => {
     expect(wrapper.html()).not.toContain('pi_1_secret_x')
   })
 
+  // Every state the machine can reach is said in words a guest can act on, so the enum name adds
+  // nothing. A state this page has no wording for is the exception: the word itself is what the
+  // guest quotes to the venue.
+  test('the raw status is printed only when there is no sentence for it', async () => {
+    mockAnswers.GetDeposit = {
+      status: 'Requested',
+      amountMinor: 1000000,
+      currencyCode: 'NOK',
+      paymentType: 'Vipps',
+      providerRedirectUrl: 'https://vipps.example/pay/1'
+    }
+    const plain = mountDeposit()
+    await settled()
+    expect(plain.find('[data-test="status-verbatim"]').exists()).toBe(false)
+
+    mockAnswers.GetDeposit = { status: 'Marinating', amountMinor: 1000000, currencyCode: 'NOK' }
+    const strange = mountDeposit()
+    await settled()
+    expect(strange.find('[data-test="status-verbatim"]').text()).toContain('Marinating')
+    expect(strange.find('[data-test="stance"]').text()).toBe(no('ev_guest_deposit_status_unknown'))
+  })
+
   test('a deposit link that matches nothing is its own sentence', async () => {
     mockAnswers.GetDeposit = refuse(404, { code: 'EVENTS_DEPOSIT_NOT_FOUND', detail: 'No such deposit.' })
     const wrapper = mountDeposit()

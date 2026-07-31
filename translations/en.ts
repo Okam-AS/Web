@@ -3381,7 +3381,6 @@ export default {
   ev_guest_deposit_status_unknown: 'We cannot say what is happening with this deposit. Get in touch with the venue.',
   ev_guest_deposit_pay: 'Pay with {provider}',
   ev_guest_deposit_pay_note: 'You will be sent to {provider} to pay. Come back here afterwards to see the status.',
-  ev_guest_deposit_status_label: 'Status',
   ev_guest_deposit_rail_label: 'Paid with',
   ev_guest_deposit_rail_unnamed: 'the payment provider',
   ev_guest_deposit_no_event: 'This page shows the deposit only. The details of the event are in the offer you were sent.',

@@ -43,16 +43,21 @@
           {{ t('ev_guest_deposit_pay_note', { provider: providerLabel }) }}
         </p>
 
-        <dl class="eg-facts">
+        <dl v-if="view.paymentType" class="eg-facts">
           <div>
-            <dt>{{ t('ev_guest_deposit_status_label') }}</dt>
-            <dd>{{ view.status || dash }}</dd>
-          </div>
-          <div v-if="view.paymentType">
             <dt>{{ t('ev_guest_deposit_rail_label') }}</dt>
             <dd>{{ providerLabel }}</dd>
           </div>
         </dl>
+
+        <!-- The raw status, and ONLY when this page has no sentence of its own for it. Every state
+             the deposit machine can reach is said above in words a guest can act on, so printing
+             `Requested` beside "not paid yet" would be a system word doing no work. When the server
+             names a state we have no wording for, the word itself is the useful thing: the guest can
+             quote it to the venue instead of being told a state that was invented for them. -->
+        <p v-if="statusIsUnexplained" class="eg-detail" data-test="status-verbatim">
+          {{ t('ev_guest_status_verbatim', { status: view.status || '?' }) }}
+        </p>
 
         <!-- The deposit page carries no event and no contact detail by design (spec §5), so this
              page cannot name the arrangement, the venue or the guest. Saying so beats a blank space
@@ -180,6 +185,9 @@ export default {
     },
     stanceSentence () {
       return STANCE_SENTENCES[depositStance(this.view)] || 'ev_guest_deposit_status_unknown';
+    },
+    statusIsUnexplained () {
+      return !STANCE_SENTENCES[depositStance(this.view)];
     },
     paymentUrl () {
       return depositPaymentUrl(this.view);

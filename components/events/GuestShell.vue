@@ -28,12 +28,18 @@
       </main>
 
       <footer class="eg-shell__foot">
-        <p v-if="privateLink" class="eg-shell__note">
-          {{ t('ev_guest_link_private') }}
-        </p>
-        <p class="eg-shell__note">
-          {{ t('ev_guest_footer_help') }}
-        </p>
+        <!-- Both lines belong to a page the guest reached from a message the venue sent them: one
+             says not to forward the credential in the address bar, the other says where to reply.
+             Neither is true of the open enquiry form, which a guest reaches from the venue's own
+             website with no message behind it, so both are gated on the same fact. -->
+        <template v-if="privateLink">
+          <p class="eg-shell__note">
+            {{ t('ev_guest_link_private') }}
+          </p>
+          <p class="eg-shell__note">
+            {{ t('ev_guest_footer_help') }}
+          </p>
+        </template>
         <p class="eg-shell__mark">
           {{ t('ev_guest_footer_mark') }}
         </p>

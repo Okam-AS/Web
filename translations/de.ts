@@ -3386,7 +3386,6 @@ export default {
   ev_guest_deposit_status_unknown: 'Wir können nicht sagen, was mit diesem Depot geschieht. Melden Sie sich beim Lokal.',
   ev_guest_deposit_pay: 'Mit {provider} bezahlen',
   ev_guest_deposit_pay_note: 'Sie werden zu {provider} weitergeleitet. Kommen Sie danach hierher zurück, um den Status zu sehen.',
-  ev_guest_deposit_status_label: 'Status',
   ev_guest_deposit_rail_label: 'Bezahlt mit',
   ev_guest_deposit_rail_unnamed: 'dem Zahlungsdienst',
   ev_guest_deposit_no_event: 'Diese Seite zeigt nur das Depot. Die Einzelheiten zum Anlass stehen im Angebot, das Sie erhalten haben.',

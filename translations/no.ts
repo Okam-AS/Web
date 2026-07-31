@@ -3428,7 +3428,6 @@ export default {
   ev_guest_deposit_status_unknown: 'Vi kan ikke si hva som skjer med dette depositumet nå. Ta kontakt med stedet.',
   ev_guest_deposit_pay: 'Betal med {provider}',
   ev_guest_deposit_pay_note: 'Du blir sendt til {provider} for å betale. Kom tilbake hit etterpå for å se status.',
-  ev_guest_deposit_status_label: 'Status',
   ev_guest_deposit_rail_label: 'Betales med',
   ev_guest_deposit_rail_unnamed: 'betalingsløsningen',
   ev_guest_deposit_no_event: 'Denne siden viser bare selve depositumet. Detaljene om arrangementet står i tilbudet du fikk.',

@@ -178,10 +178,10 @@
           {{ t('ev_guest_terms_heading') }}
         </h2>
         <!-- Interpolated as text, never as markup: the string is venue-authored and this is a public
-             page. `white-space: pre-wrap` keeps the venue's own line breaks. -->
-        <p v-if="termsText" class="eg-terms">
-          {{ termsText }}
-        </p>
+             page. `white-space: pre-wrap` keeps the venue's own line breaks, which is also why the
+             interpolation sits tight against its tag: with pre-wrap, the template's own indentation
+             would be rendered as an indent on the venue's first line. -->
+        <p v-if="termsText" class="eg-terms" v-text="termsText" />
         <p v-else class="eg-quiet">
           {{ t('ev_guest_terms_none') }}
         </p>
