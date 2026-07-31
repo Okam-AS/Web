@@ -91,4 +91,16 @@ sw.*
 # Vim swap files
 *.swp
 
+# Browser-journey evidence. The FILES are a record of a run, not source, so they are not committed —
+# but the CONTRACT is (test/e2e/support/journey.js): the path artifacts/journeys/<name>.playwright.json
+# and the JSON shape are stable, because probes read them. Delete this directory and the next run
+# rebuilds it; change the path or the shape and every probe breaks.
+artifacts/
+
+# Playwright's own caches
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
 .claude

@@ -4,6 +4,13 @@ module.exports = {
     '^~/(.*)$': '<rootDir>/$1',
     '^vue$': 'vue/dist/vue.common.js'
   },
+  // The browser journeys are also `*.spec.js`, and Jest's default testMatch would happily pick them
+  // up, load `@playwright/test` outside a Playwright runner and fail the whole suite. They are run
+  // by `npm run test:e2e`.
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '<rootDir>/test/e2e/'
+  ],
   moduleFileExtensions: [
     'ts',
     'js',
