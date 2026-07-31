@@ -161,6 +161,132 @@ export function writeFailureKey (error, scope) {
   return 'meals_write_unknown';
 }
 
+// ---- The invitee's refusals ----------------------------------------------------------------------
+//
+// A THIRD question, and the one with the least forgiving reader. `refusalKey` answers "why is there
+// nothing on screen" and `writeFailureKey` answers "what happened to the thing I just tried to do",
+// both for an OPERATOR who works in this product daily. These answer the same second question for an
+// employee who has never seen it, is on a phone, opened a code somebody messaged them, and has no
+// idea what a company agreement or a feature gate is.
+//
+// That changes three things about the copy, which is why these are their own family rather than more
+// entries in `WRITE_CODE_LABELS`:
+//
+//   1. EVERY REFUSAL NEEDS A NEXT STEP. An operator can be told "stale revision" and will re-read.
+//      An employee must be told who to go and ask, because on this surface almost every refusal is
+//      resolved by another person — their employer reissues, withdraws, or named a different
+//      contact. So each entry is a HEADING plus a BODY that ends in something to do, not one
+//      sentence.
+//   2. THE HEADING MUST NOT BE A DIAGNOSIS. "409 conflict", "not claimable" and "contact mismatch"
+//      are the server's vocabulary. The headings below are the employee's.
+//   3. ONE OF THEM MUST DELIBERATELY WITHHOLD. The contact-mismatch 403 knows which address the
+//      invitation named and must never say it — a forwarded token in the wrong hands would otherwise
+//      be told exactly which account to go and acquire. `MealsProblemCodes.InvitationContactMismatch`
+//      makes this the server's rule ("deliberately does NOT echo the intended contact"); the copy
+//      keeps it, and says that it is withholding rather than being vague by accident.
+//
+// WHAT THE WIRE CANNOT DISTINGUISH, and where the copy must therefore stay honest: a token that maps
+// to no invitation and a module that is switched off are the SAME response — `meals.not-found`, 404,
+// from `_authorization.NotFound()` and `RequireVisible()` respectively. There is no extension
+// separating them. `meals_claim_unknown_*` therefore names both possibilities instead of asserting
+// either, which is the same discipline `REFUSAL_DARK` keeps about what a 404 is allowed to claim.
+
+// There is deliberately no `SCOPE_CLAIM` beside the three scope constants above. A scope selects
+// between wordings of the SAME refusal for different gates, and the invitee surface has one gate
+// (the module-wide `Features:Meals`) and one authority ("the person the token named"). Every
+// sentence below is unconditional, so a scope key would be a parameter nothing ever varies on.
+
+/** Nothing more to try here; the recovery is a conversation with the employer. */
+const NO_ACTION = null;
+
+/** Offer the sign-in control: the caller has no usable token, or none at all. */
+export const CLAIM_ACTION_SIGN_IN = 'sign-in';
+
+/** Offer a way to come back as somebody else: right code, wrong account. */
+export const CLAIM_ACTION_SWITCH_ACCOUNT = 'switch-account';
+
+/** Offer the button again: the command may never have reached the server. */
+export const CLAIM_ACTION_RETRY = 'retry';
+
+function refusal (heading, body, action) {
+  return { heading, body, action: action || NO_ACTION };
+}
+
+// Keyed on the typed `meals.*` code. `invitation-not-claimable` is absent because it is the one code
+// whose sentence depends on an EXTENSION rather than the code alone (see below).
+const CLAIM_CODE_REFUSALS = {
+  'meals.invitation-contact-mismatch': refusal(
+    'meals_claim_wrong_account_title', 'meals_claim_wrong_account_body', CLAIM_ACTION_SWITCH_ACCOUNT),
+  'meals.already-member': refusal('meals_claim_already_member_title', 'meals_claim_already_member_body'),
+  'meals.invitation-expired': refusal('meals_claim_expired_title', 'meals_claim_expired_body'),
+  'meals.not-found': refusal('meals_claim_unknown_title', 'meals_claim_unknown_body'),
+  'meals.validation': refusal('meals_claim_no_code_title', 'meals_claim_no_code_body'),
+  // A blank caller id. Reachable only with a token the server accepted but that names nobody, which
+  // from the employee's side is indistinguishable from having been signed out.
+  'meals.forbidden': refusal('meals_claim_signed_out_title', 'meals_claim_signed_out_body', CLAIM_ACTION_SIGN_IN),
+  'meals.idempotency-in-progress': refusal(
+    'meals_claim_in_progress_title', 'meals_claim_in_progress_body', CLAIM_ACTION_RETRY),
+  // Retryable, but only because the CALLER makes it so: the page mints a fresh key before the next
+  // attempt (see `claim`). Repeating the same command under the same key would collide identically
+  // forever, so this action is a promise about the client's behaviour, not about the server's.
+  'meals.idempotency-payload-mismatch': refusal(
+    'meals_claim_collision_title', 'meals_claim_collision_body', CLAIM_ACTION_RETRY)
+};
+
+// `meals.invitation-not-claimable` carries `currentState`, and the three states behind it are three
+// different conversations for the employee: somebody already used this code (possibly them), their
+// employer withdrew it, or it ran out of time. Collapsing them into "no longer claimable" would send
+// a person to ask for a reissue when they are in fact already a member, and vice versa. The state is
+// on the wire, so it is used.
+const CLAIM_STATE_REFUSALS = {
+  Claimed: refusal('meals_claim_used_title', 'meals_claim_used_body'),
+  Revoked: refusal('meals_claim_withdrawn_title', 'meals_claim_withdrawn_body'),
+  Expired: refusal('meals_claim_expired_title', 'meals_claim_expired_body')
+};
+
+// A state this client has not heard of: neutral, and it does not invent which of the three it was.
+const CLAIM_UNKNOWN_STATE = refusal('meals_claim_closed_title', 'meals_claim_closed_body');
+
+/**
+ * The heading, body and offered next step for a failed session-open or claim.
+ *
+ * Returns `{ heading, body, action }` where `heading` and `body` are translation keys and `action`
+ * is one of the `CLAIM_ACTION_*` constants or null. Never returns null itself: an unrecognised
+ * failure gets the transport sentence, which is the only honest thing to say about a response this
+ * client could not classify — it states that we do not know whether anything was saved, rather than
+ * a generic apology that states nothing.
+ */
+export function claimRefusal (error) {
+  if (!error) { return null; }
+
+  // Not a typed problem document at all — a dropped connection, a body that did not parse. The
+  // request may never have arrived, which is a different fact from a refusal and the only one that
+  // makes a retry safe to offer.
+  if (!isWorkforceApiError(error)) {
+    return refusal('meals_claim_offline_title', 'meals_claim_offline_body', CLAIM_ACTION_RETRY);
+  }
+
+  if (error.status === 401) {
+    return refusal('meals_claim_signed_out_title', 'meals_claim_signed_out_body', CLAIM_ACTION_SIGN_IN);
+  }
+
+  if (error.code === 'meals.invitation-not-claimable') {
+    const state = (error.problem && error.problem.currentState) || null;
+    return CLAIM_STATE_REFUSALS[state] || CLAIM_UNKNOWN_STATE;
+  }
+
+  const byCode = CLAIM_CODE_REFUSALS[error.code];
+  if (byCode) { return byCode; }
+
+  // A 404 with no `meals.*` code is not this module answering at all (the wire test's empty-bodied
+  // routing 404). Nothing may be claimed about the invitation from it — not even that it is unknown.
+  if (error.status === 404) {
+    return refusal('meals_claim_no_module_title', 'meals_claim_no_module_body', CLAIM_ACTION_RETRY);
+  }
+
+  return refusal('meals_claim_offline_title', 'meals_claim_offline_body', CLAIM_ACTION_RETRY);
+}
+
 /**
  * The server's own words for a failure, or null.
  *

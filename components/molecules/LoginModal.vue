@@ -17,7 +17,7 @@
             {{ $t("login") }}
           </h1>
           <p class="login-modal__subtitle">
-            Okam Admin Web Portal
+            {{ subtitle }}
           </p>
         </div>
 
@@ -134,6 +134,19 @@ import Loading from "~/components/atoms/Loading.vue";
 
 export default {
   components: { Modal, OtpInput, Loading },
+  props: {
+    // What this sign-in is FOR, under the heading. It defaults to the string that was hard-coded
+    // here, so all 47 admin pages read exactly as before.
+    //
+    // It became a prop when the Company Meals claim page (`pages/meals/join.vue`) started mounting
+    // this modal: its reader is an invited employee who administers nothing, and telling them they
+    // are signing in to an "Admin Web Portal" would be false about the page they are on and enough
+    // to make a reasonable person close it.
+    subtitle: {
+      type: String,
+      default: "Okam Admin Web Portal",
+    },
+  },
   data: () => ({
     isLoading: true,
     countryCode: "+47",
