@@ -26,7 +26,6 @@ jest.mock('~/utils/workforce/schedule-client', () => ({
 
     ListStaff () { calls.push(['ListStaff']); return Promise.resolve(staffRoster()) }
     ListRoles () { calls.push(['ListRoles']); return Promise.resolve(roleList()) }
-    ListRequests () { calls.push(['ListRequests']); return Promise.resolve({ items: [] }) }
     GetExternalCommitments () { calls.push(['GetExternalCommitments']); return Promise.resolve({ items: [], timeZoneId: 'Europe/Oslo' }) }
 
     GetRange (_storeId, from, to, view) {
@@ -38,6 +37,14 @@ jest.mock('~/utils/workforce/schedule-client', () => ({
       calls.push(['BatchAssignments', storeId, revisionId, etag, request])
       return typeof mockBatchResult === 'function' ? mockBatchResult() : Promise.resolve(mockBatchResult)
     }
+  }
+}))
+
+// The absence markers moved to the requests client with the decision inbox. Mocked so the page's
+// reads stay hermetic.
+jest.mock('~/utils/workforce/requests-client', () => ({
+  WorkforceRequestsService: class {
+    ListRequests () { calls.push(['ListRequests']); return Promise.resolve({ items: [] }) }
   }
 }))
 

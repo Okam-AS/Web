@@ -20,13 +20,20 @@ jest.mock('~/utils/workforce/schedule-client', () => ({
 
     ListStaff () { calls.push(['ListStaff']); return Promise.resolve([]) }
     ListRoles () { calls.push(['ListRoles']); return Promise.resolve([]) }
-    ListRequests () { calls.push(['ListRequests']); return Promise.resolve({ items: [] }) }
     GetExternalCommitments () { calls.push(['GetExternalCommitments']); return Promise.resolve({ items: [], timeZoneId: 'Europe/Oslo' }) }
 
     GetRange (_storeId, from, to, view) {
       calls.push(['GetRange', from, to, view])
       return Promise.resolve({ view, assignments: [] })
     }
+  }
+}))
+
+// The absence markers come off the REQUESTS controller, which has its own client since the decision
+// inbox was built on it. Mocked here too, so the page stays hermetic.
+jest.mock('~/utils/workforce/requests-client', () => ({
+  WorkforceRequestsService: class {
+    ListRequests () { calls.push(['ListRequests']); return Promise.resolve({ items: [] }) }
   }
 }))
 
