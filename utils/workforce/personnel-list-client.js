@@ -48,6 +48,29 @@ export class WorkforcePersonnelListService extends WorkforceClientBase {
       : '?businessDate=' + encodeURIComponent(assertBusinessDate(businessDate, 'businessDate'));
     return this._request('GET', '/workforce/stores/' + storeId + '/personnel-list' + query);
   }
+
+  /**
+   * The KODEOVERSIKT for one venue business day — the code overview `§ 8-5-6` requires wherever the
+   * list substitutes a code for a person's fødselsnummer. Answers `text/csv`, so it returns
+   * `{ text, fileName }` rather than a parsed body.
+   *
+   *   GET /workforce/stores/{storeId}/personnel-list/code-register?businessDate=
+   *
+   * WHAT COMES BACK IS A TEMPLATE, NOT A REGISTER. Okam collects no fødselsnummer, so the file
+   * carries every code the day's list used and leaves the national-id column empty for the venue to
+   * complete. The document says so on its own face; this client adds nothing to it and reads nothing
+   * out of it.
+   *
+   * The date takes the same bare `yyyy-MM-dd` and for the same reason as the read above — omitted,
+   * the SERVER resolves the venue's today in the store's own zone. It must be the day already on
+   * screen: an overview for one day handed over beside a list for another is worse than none.
+   */
+  GetIdentityCodeRegister (storeId, businessDate) {
+    const query = businessDate === null || businessDate === undefined
+      ? ''
+      : '?businessDate=' + encodeURIComponent(assertBusinessDate(businessDate, 'businessDate'));
+    return this._requestCsv('/workforce/stores/' + storeId + '/personnel-list/code-register' + query);
+  }
 }
 
 export default WorkforcePersonnelListService;

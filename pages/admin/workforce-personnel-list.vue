@@ -67,8 +67,20 @@
             <button class="wfpl-page__btn wfpl-page__btn--print" :disabled="!canPrint" @click="printSheet">
               {{ $i('wfpl_print') }}
             </button>
+            <!-- The § 8-5-6 kodeoversikt. Enabled whenever the day has ANSWERED, including a day
+                 nobody worked: an empty overview for an empty day is a true statement, and the
+                 manager who asked for it is entitled to file it. -->
+            <button class="wfpl-page__btn wfpl-page__btn--register" :disabled="!canIssueRegister" @click="downloadCodeRegister">
+              {{ issuing ? $i('wfpl_coderegister_working') : $i('wfpl_coderegister') }}
+            </button>
           </div>
         </div>
+
+        <!-- WHERE THE OBLIGATION IS STATED ON SCREEN. The sheet says the codes cannot be resolved
+             here; this says what the venue does about it, next to the control that does it. -->
+        <p class="wfpl-page__procedure">
+          {{ $i('wfpl_coderegister_procedure') }}
+        </p>
 
         <p v-if="loading" class="wfpl-page__loading">
           {{ $i('wfpl_loading') }}
@@ -128,6 +140,7 @@ export default {
       // frame claiming nobody was at work.
       response: null,
       loading: false,
+      issuing: false,
 
       toast: { show: false, message: '', type: 'success' },
       toastTimer: null
@@ -163,6 +176,16 @@ export default {
     /** Nothing is offered for printing until there is a register to print. */
     canPrint () {
       return !this.loading && this.sheet.state !== SHEET_UNKNOWN;
+    },
+    /**
+     * The overview is offered for a day the SERVER has answered for, and no other.
+     *
+     * `sheet.businessDate` is that echo. Issuing against `this.selectedDate` would let a manager
+     * produce an overview for a day the screen never showed — and the whole value of the document is
+     * that it decodes the list beside it.
+     */
+    canIssueRegister () {
+      return !this.loading && !this.issuing && !!this.sheet.businessDate;
     }
   },
   watch: {
@@ -280,6 +303,45 @@ export default {
       window.print();
     },
 
+    /**
+     * The § 8-5-6 kodeoversikt, fetched and handed to the browser.
+     *
+     * It is fetched for the day the SERVER answered for, never for whatever is in the picker: an
+     * overview headed by one date, filed beside a list headed by another, decodes nothing.
+     *
+     * A browser that cannot make an object URL is TOLD, and the fetched bytes are dropped rather
+     * than a control silently doing nothing — the failure this page was built to avoid. The file is
+     * not re-fetched on a retry either; each fetch is a separate issue on the backend's record, and
+     * a silent second one would make that record disagree with what the venue actually holds.
+     */
+    async downloadCodeRegister () {
+      if (!this.canIssueRegister) { return; }
+
+      if (typeof URL === 'undefined' || typeof URL.createObjectURL !== 'function' || typeof document === 'undefined') {
+        this.notify(this.$i('wfpl_coderegister_unavailable'), 'error');
+        return;
+      }
+
+      const day = this.sheet.businessDate;
+      this.issuing = true;
+      try {
+        const file = await this._personnelService.GetIdentityCodeRegister(this.storeId, day);
+        const url = URL.createObjectURL(new Blob([file.text], { type: 'text/csv;charset=utf-8' }));
+        const link = document.createElement('a');
+        link.href = url;
+        // The server's own name when it exposed one; otherwise a local fallback that is clearly a
+        // fallback rather than a second copy of the server's naming scheme.
+        link.download = file.fileName || ('okam-kodeoversikt-' + this.storeId + '-' + day + '.csv');
+        link.click();
+        if (typeof URL.revokeObjectURL === 'function') { URL.revokeObjectURL(url); }
+        this.notify(this.$i('wfpl_coderegister_done', { date: day }), 'success');
+      } catch (e) {
+        this.notifyError(e, 'wfpl_coderegister_failed');
+      } finally {
+        this.issuing = false;
+      }
+    },
+
     notify (message, type = 'success') {
       this.toast = { show: true, message, type };
       if (this.toastTimer) { clearTimeout(this.toastTimer); }
@@ -318,6 +380,9 @@ export default {
 .wfpl-page__btn { background: #fff; border: 2px solid #e2e8f0; border-radius: 8px; padding: 9px 14px; font-size: 0.85rem; color: #292c34; cursor: pointer; }
 .wfpl-page__btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .wfpl-page__btn--print { border-color: #1bb776; color: #159f63; font-weight: 600; }
+.wfpl-page__btn--register { border-color: #1bb776; color: #159f63; font-weight: 600; }
+
+.wfpl-page__procedure { font-size: 0.82rem; line-height: 1.45; color: #92400e; background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px; padding: 12px 14px; margin: 0 0 18px; }
 
 .wfpl-page__loading { font-size: 0.85rem; color: #64748b; margin: 0 0 12px; }
 
@@ -327,6 +392,7 @@ export default {
   .wfpl-page { max-width: none; margin: 0; padding: 0; }
   .wfpl-page__header,
   .wfpl-page__controls,
+  .wfpl-page__procedure,
   .wfpl-page__toast,
   .wfpl-page__loading { display: none !important; }
 }

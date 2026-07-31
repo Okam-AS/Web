@@ -97,6 +97,27 @@ export function assertBusinessDate (value, field) {
 }
 
 /**
+ * The download name the server chose, off `Content-Disposition`.
+ *
+ * Returns null rather than a guess when the header is absent or unreadable — a cross-origin fetch
+ * only exposes it when the server lists it in `Access-Control-Expose-Headers`, and inventing the
+ * server's own naming scheme here would be a second copy of it that silently stops matching.
+ * The caller supplies its own fallback and knows it is a fallback.
+ */
+export function workforceFileNameFrom (headers) {
+  if (!headers || typeof headers.get !== 'function') { return null; }
+  const disposition = headers.get('Content-Disposition') || headers.get('content-disposition');
+  if (!disposition) { return null; }
+  // RFC 6266: `filename*=UTF-8''…` wins over the plain `filename=…` when both are present.
+  const extended = /filename\*\s*=\s*UTF-8''([^;]+)/i.exec(disposition);
+  if (extended) {
+    try { return decodeURIComponent(extended[1].trim()); } catch (e) { return extended[1].trim(); }
+  }
+  const plain = /filename\s*=\s*"?([^";]+)"?/i.exec(disposition);
+  return plain ? plain[1].trim() : null;
+}
+
+/**
  * The shared request/mutate base. Subclasses add routes and nothing else.
  *
  * `initializer` is the Core initializer the pages already hold (`this._coreInitializer`); only its
@@ -169,5 +190,38 @@ export class WorkforceClientBase {
   _mutate (method, path, body, extraHeaders) {
     const headers = Object.assign({ 'Idempotency-Key': newGuid() }, extraHeaders || {});
     return this._request(method, path, { body, headers });
+  }
+
+  /**
+   * A `text/csv` read, returning `{ text, fileName }`.
+   *
+   * Deliberately NOT `_request`, which parses every body as JSON and would hand a caller the CSV
+   * wrapped in `{ detail }` — a shape that happens to work only because a CSV never parses as JSON,
+   * which is not a contract.
+   *
+   * It lives on the base rather than on one service because TWO surfaces now read a CSV off this API
+   * — the payroll hours export and the personalliste kodeoversikt — and this file exists precisely
+   * because the second copy of a wire rule is where the two start drifting. The failure path is
+   * byte-for-byte `_request`'s, so there is exactly one workforce error family: a problem+json body
+   * becomes `WorkforceApiError` with its `code`, and a non-JSON body becomes one carrying the text
+   * as `detail`.
+   */
+  async _requestCsv (path) {
+    const response = await fetch(this._baseUrl + path, {
+      method: 'GET',
+      headers: this._headers({ Accept: 'text/csv' })
+    });
+
+    const text = await response.text();
+
+    if (!response.ok) {
+      let payload = null;
+      if (text) {
+        try { payload = JSON.parse(text); } catch (e) { payload = { detail: text }; }
+      }
+      throw new WorkforceApiError(response.status, payload);
+    }
+
+    return { text, fileName: workforceFileNameFrom(response.headers) };
   }
 }

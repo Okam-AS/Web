@@ -4722,6 +4722,12 @@ export default {
   wfpl_reload: 'Erneut lesen',
   wfpl_print: 'Drucken',
   wfpl_print_unavailable: 'Dieser Browser bietet hier keinen Druckbefehl. Verwenden Sie den Druck des Browsers (Strg/Cmd + P).',
+  wfpl_coderegister: 'Code-Übersicht herunterladen',
+  wfpl_coderegister_working: 'Code-Übersicht wird erstellt …',
+  wfpl_coderegister_procedure: 'CODE-ÜBERSICHT (§ 8-5-6): Die Liste verwendet einen Identitätscode anstelle der fødselsnummer. Das ist nur zulässig, wenn der Betrieb eine Übersicht der Codes mit den zugehörigen Geburts- bzw. D-Nummern führt. Okam erhebt keine Geburtsnummern und kann diese Übersicht daher nicht für Sie führen. Laden Sie die Code-Übersicht des Tages herunter, tragen Sie zu jedem Code die Geburts- bzw. D-Nummer ein und bewahren Sie sie zusammen mit der Personalliste drei Jahre und sechs Monate nach Ende des Geschäftsjahres auf. Die Datei nennt diese Frist selbst.',
+  wfpl_coderegister_done: 'Die Code-Übersicht für {date} wurde heruntergeladen. Tragen Sie die Geburts- bzw. D-Nummern ein und bewahren Sie sie zusammen mit der Personalliste auf.',
+  wfpl_coderegister_failed: 'Die Code-Übersicht konnte nicht erstellt werden. Es wurde nichts heruntergeladen.',
+  wfpl_coderegister_unavailable: 'Dieser Browser kann hier keine Dateien herunterladen. Die Code-Übersicht wurde nicht heruntergeladen.',
   wfpl_loading: 'Personalliste wird gelesen …',
   wfpl_read_failed: 'Die Personalliste wurde nicht abgerufen.',
   wfpl_date_invalid: 'Das Datum muss ein Kalenderdatum in der Form JJJJ-MM-TT sein.',
@@ -4734,7 +4740,7 @@ export default {
   wfpl_f_zone: 'Zeitzone',
   // Steht auf dem Blatt, auch im Ausdruck. Genau darum geht es: Die Liste darf nicht so aussehen, als
   // erfülle sie eine Anforderung, die sie nicht erfüllt.
-  wfpl_identity_gap: 'IDENTIFIZIERUNG: § 8-5-6 verlangt Name und fødselsnummer (norwegische Geburtsnummer) bzw. D-Nummer jeder Person. Diese Nummern dürfen durch eindeutige Codes ersetzt werden, jedoch nur, wenn eine Übersicht der verwendeten Codes mit den zugehörigen Geburts- bzw. D-Nummern geführt wird. Okam erhebt und speichert keine Geburts- oder D-Nummern und führt keine solche Code-Übersicht. Die Codes unten lassen sich hier daher keiner Geburtsnummer zuordnen. Die Liste deckt Namen, Zeitpunkte und Unternehmensangaben ab, nicht jedoch die Identifizierungsanforderung für sich allein — der Betrieb muss die Code-Übersicht selbst führen, oder die Liste ist um die Geburts- bzw. D-Nummern zu ergänzen.',
+  wfpl_identity_gap: 'IDENTIFIZIERUNG: § 8-5-6 verlangt Name und fødselsnummer (norwegische Geburtsnummer) bzw. D-Nummer jeder Person. Diese Nummern dürfen durch eindeutige Codes ersetzt werden, jedoch nur, wenn eine Übersicht der Codes mit den zugehörigen Geburts- bzw. D-Nummern geführt wird. Okam erhebt und speichert keine Geburtsnummern, die Codes unten lassen sich im System daher keiner zuordnen. Die Code-Übersicht dieses Tages wird auf der Personallisten-Seite heruntergeladen — vorausgefüllt mit Codes, Namen und Aufbewahrungsfrist, das Feld für die Geburtsnummer bleibt offen. Der Betrieb trägt sie ein und bewahrt die Übersicht zusammen mit der Personalliste drei Jahre und sechs Monate nach Ende des Geschäftsjahres auf. Ohne diese ausgefüllte Übersicht ist diese Liste keine vollständige Identifizierung.',
   wfpl_business_mixed: 'Die Einträge dieses Tages wurden unter {count} verschiedenen buchführungspflichtigen Unternehmen erfasst. Das Feld «Arbeitsort» bleibt deshalb leer: Die Liste kann nicht mit einem Namen und einer Organisationsnummer antworten, wenn die Zeilen zu mehreren gehören.',
   wfpl_zone_fallback: 'Der Betrieb hat keine gültige Zeitzone. Die Uhrzeiten unten werden in {zone} angezeigt, weil das der Standard der Plattform ist — nicht weil jemand sie für diesen Arbeitsort festgelegt hat.',
   wfpl_zone_unusable: 'Die Zeitzone «{zone}» kann von diesem Browser nicht gelesen werden, daher lassen sich die Uhrzeiten nicht in die Zeit des Arbeitsorts setzen. Die Liste wird zurückgehalten, statt sie gegen die falsche Uhr zu zeigen.',

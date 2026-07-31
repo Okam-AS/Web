@@ -98,14 +98,29 @@ describe('the sheet never claims an identification it does not have', () => {
     }).text()).toContain(gap)
   })
 
-  test('the notice names the condition the substitution depends on, and says it is unmet', () => {
+  test('the notice names the condition the substitution depends on, and who has to meet it', () => {
     const gap = translations.no.wfpl_identity_gap
 
     // The paragraph permits codes INSTEAD of fødselsnummer only together with an overview mapping
-    // them back. There is no such overview in this system, and the sheet says exactly that.
+    // them back. Since D-IDCODE (venue-procedure-template) that overview is PRODUCIBLE — Okam
+    // downloads it pre-filled with the codes — but Okam still collects no fødselsnummer, so the
+    // overview is only a template until the venue completes it. The sheet has to say all three
+    // things, because the one that goes missing is always the venue's own obligation.
     expect(gap).toContain('fødselsnummer')
     expect(gap).toContain('oversikt')
-    expect(gap).toContain('fører ingen slik kodeoversikt')
+    // 1. the system cannot resolve a code by itself
+    expect(gap).toContain('kodene under kan ikke slås opp i et fødselsnummer i systemet')
+    // 2. where the overview comes from
+    expect(gap).toContain('Kodeoversikten for denne dagen lastes ned')
+    // 3. whose duty it is to complete and keep it, and for how long
+    expect(gap).toContain('Virksomheten fyller det inn og oppbevarer oversikten')
+    expect(gap).toContain('tre år og seks måneder etter regnskapsårets slutt')
+  })
+
+  test('the sheet still refuses to call itself full identification on its own', () => {
+    // The overview being producible must never read as the identification requirement being met on
+    // this sheet: the completed overview is what meets it, and it lives with the venue.
+    expect(translations.no.wfpl_identity_gap).toContain('ikke fullstendig identifikasjon')
   })
 
   test('nowhere does the sheet call itself compliant, complete or approved', () => {

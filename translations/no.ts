@@ -4769,6 +4769,12 @@ export default {
   wfpl_reload: 'Hent på nytt',
   wfpl_print: 'Skriv ut',
   wfpl_print_unavailable: 'Nettleseren tilbyr ingen utskriftskommando her. Bruk nettleserens egen utskrift (Ctrl/Cmd + P).',
+  wfpl_coderegister: 'Last ned kodeoversikt',
+  wfpl_coderegister_working: 'Lager kodeoversikt …',
+  wfpl_coderegister_procedure: 'KODEOVERSIKT (§ 8-5-6): Listen bruker en identitetskode i stedet for fødselsnummer. Det er tillatt bare dersom virksomheten fører en oversikt over kodene med tilhørende fødselsnummer eller D-nummer. Okam samler ikke inn fødselsnummer og kan derfor ikke føre oversikten for deg. Last ned kodeoversikten for dagen, fyll inn fødselsnummer eller D-nummer for hver kode, og oppbevar den sammen med personallisten i tre år og seks måneder etter regnskapsårets slutt. Filen viser selv fristen.',
+  wfpl_coderegister_done: 'Kodeoversikten for {date} er lastet ned. Fyll inn fødselsnummer eller D-nummer og oppbevar den sammen med personallisten.',
+  wfpl_coderegister_failed: 'Vi fikk ikke laget kodeoversikten. Ingenting er lastet ned.',
+  wfpl_coderegister_unavailable: 'Nettleseren kan ikke laste ned filer her. Kodeoversikten ble ikke lastet ned.',
   wfpl_loading: 'Henter personallisten …',
   wfpl_read_failed: 'Personallisten ble ikke hentet.',
   wfpl_date_invalid: 'Datoen må være en kalenderdato på formen ÅÅÅÅ-MM-DD.',
@@ -4781,7 +4787,7 @@ export default {
   wfpl_f_zone: 'Tidssone',
   // Står på arket, også i utskrift. Det er selve poenget: listen skal ikke se ut som om den oppfyller
   // et krav den ikke oppfyller.
-  wfpl_identity_gap: 'IDENTIFISERING: § 8-5-6 krever navn og fødselsnummer eller D-nummer for hver person. Numrene kan erstattes av unike koder, men bare dersom det utarbeides en oversikt over kodene med tilhørende fødselsnummer eller D-nummer. Okam samler verken inn eller lagrer fødselsnummer eller D-nummer, og fører ingen slik kodeoversikt. Kodene under kan derfor ikke slås opp i et fødselsnummer her. Listen dekker navn, tidspunkt og virksomhet, men ikke identifiseringskravet alene — virksomheten må selv føre kodeoversikten, eller listen må suppleres med fødselsnummer eller D-nummer.',
+  wfpl_identity_gap: 'IDENTIFISERING: § 8-5-6 krever navn og fødselsnummer eller D-nummer for hver person. Numrene kan erstattes av unike koder, men bare dersom det føres en oversikt over kodene med tilhørende fødselsnummer eller D-nummer. Okam samler verken inn eller lagrer fødselsnummer, så kodene under kan ikke slås opp i et fødselsnummer i systemet. Kodeoversikten for denne dagen lastes ned fra personallistesiden — ferdig utfylt med kodene, navnene og fristen, med feltet for fødselsnummer åpent. Virksomheten fyller det inn og oppbevarer oversikten sammen med personallisten i tre år og seks måneder etter regnskapsårets slutt. Uten den utfylte oversikten er denne listen ikke fullstendig identifikasjon.',
   wfpl_business_mixed: 'Oppføringene denne dagen er ført under {count} ulike bokføringspliktige. Feltet «Arbeidssted» står derfor tomt: listen kan ikke svare med ett navn og ett organisasjonsnummer når radene tilhører flere.',
   wfpl_zone_fallback: 'Butikken har ingen gyldig tidssone. Klokkeslettene under vises i {zone} fordi det er plattformens standard — ikke fordi noen har bestemt den for dette arbeidsstedet.',
   wfpl_zone_unusable: 'Tidssonen «{zone}» kan ikke leses av nettleseren, så klokkeslettene kan ikke settes i arbeidsstedets tid. Listen vises ikke framfor å vise feil klokke.',
