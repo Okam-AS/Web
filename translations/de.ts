@@ -4696,7 +4696,7 @@ export default {
   meals_claim_no_module_title: 'Wir haben das Verpflegungsangebot nicht erreicht',
   meals_claim_no_module_body: 'Der Server hat geantwortet, aber nicht als Verpflegungsangebot — wir wissen daher nichts über Ihre Einladung. Es hat sich nichts geändert. Versuchen Sie es gleich nochmals und sagen Sie der Person Bescheid, die Ihnen den Code gegeben hat, falls es so bleibt.',
   meals_claim_offline_title: 'Wir haben keine Antwort erhalten',
-  meals_claim_offline_body: 'Unterwegs ist etwas schiefgegangen, und wir können nicht sagen, ob die Anfrage angekommen ist. Prüfen Sie Ihre Verbindung und versuchen Sie es nochmals: Sie werden dadurch nicht zweimal Mitglied, und der Code geht durch einen Versuch, der nie ankam, nicht verloren.'
+  meals_claim_offline_body: 'Unterwegs ist etwas schiefgegangen, und wir können nicht sagen, ob die Anfrage angekommen ist. Prüfen Sie Ihre Verbindung und versuchen Sie es nochmals: Sie werden dadurch nicht zweimal Mitglied, und der Code geht durch einen Versuch, der nie ankam, nicht verloren.',
   // ---- Growth: die Gästeoberfläche (`/subscribe/*`, `/preferences/*`) ------------------------
   // Aus dem Norwegischen übersetzt, das die Quelle ist. Wo ein Satz dazu da ist, nichts zu
   // behaupten, was der Server nicht gesagt hat — dass eine E-Mail verschickt wurde, dass eine

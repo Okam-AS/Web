@@ -4743,7 +4743,7 @@ export default {
   meals_claim_no_module_title: 'Vi fikk ikke kontakt med matordningen',
   meals_claim_no_module_body: 'Serveren svarte, men ikke som matordningen, så vi vet ingenting om invitasjonen din. Ingenting er endret. Prøv igjen om litt, og si fra til den som ga deg koden hvis det fortsetter.',
   meals_claim_offline_title: 'Vi fikk ikke svar',
-  meals_claim_offline_body: 'Noe gikk galt på veien, og vi vet ikke om forespørselen rakk fram. Sjekk at du er på nett og prøv igjen: du blir ikke medlem to ganger, og koden går ikke tapt av et forsøk som aldri kom fram.'
+  meals_claim_offline_body: 'Noe gikk galt på veien, og vi vet ikke om forespørselen rakk fram. Sjekk at du er på nett og prøv igjen: du blir ikke medlem to ganger, og koden går ikke tapt av et forsøk som aldri kom fram.',
   // ---- Growth: the guest surface (`/subscribe/*`, `/preferences/*`) --------------------------
   // NORWEGIAN IS THE SOURCE. These four pages are consent surfaces read by members of the public,
   // and every sentence is written to survive the two facts the module currently lives with: the

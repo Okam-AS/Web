@@ -4691,7 +4691,7 @@ export default {
   meals_claim_no_module_title: 'We could not reach the meal scheme',
   meals_claim_no_module_body: 'The server answered, but not as the meal scheme, so we know nothing about your invitation. Nothing has changed. Try again shortly, and tell whoever gave you the code if it keeps happening.',
   meals_claim_offline_title: 'We got no answer',
-  meals_claim_offline_body: 'Something went wrong on the way and we cannot tell whether the request arrived. Check that you are online and try again: it will not make you a member twice, and the code is not lost by an attempt that never landed.'
+  meals_claim_offline_body: 'Something went wrong on the way and we cannot tell whether the request arrived. Check that you are online and try again: it will not make you a member twice, and the code is not lost by an attempt that never landed.',
   // ---- Growth: the guest surface (`/subscribe/*`, `/preferences/*`) --------------------------
   // Translated from the Norwegian, which is the source. Where a sentence exists to avoid claiming
   // something the backend did not say — that mail was sent, that an address is already known, that
