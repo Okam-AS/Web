@@ -53,8 +53,12 @@
       <p class="mls-hint">
         {{ $i('meals_token_bearer_note') }}
       </p>
+      <!-- WHERE THE CODE GOES. This sentence used to say that no screen in the estate accepted one,
+           which was true and is no longer: `pages/meals/join.vue` is the invitee's surface. It names
+           the address rather than merely asserting a screen exists, because the operator is about to
+           relay a bare string in a message and the recipient has to be told where to put it. -->
       <p class="mls-hint">
-        {{ $i('meals_token_no_claim_screen') }}
+        {{ $i('meals_token_claim_screen', { link: claimLink }) }}
       </p>
 
       <button class="mls-btn" type="button" @click="copyToken">
@@ -313,6 +317,19 @@ export default {
     issuedContact () {
       if (!this.issued) { return this.dash; }
       return this.issued.intendedContactEmail || this.issued.intendedContactPhone || this.dash;
+    },
+    /**
+     * Where to send the person the code is for.
+     *
+     * Built from the browser's own origin rather than from configuration: this app serves the
+     * marketing site and `/admin` from one host, so the origin the operator is reading this on IS
+     * the host the claim page is served from. It deliberately carries NO token — the claim page
+     * accepts the code as a paste, and a link with the credential in it is a link an operator would
+     * reasonably forward, which is the thing the note above tells them not to do.
+     */
+    claimLink () {
+      const origin = (typeof window !== 'undefined' && window.location && window.location.origin) || '';
+      return origin + '/meals/join';
     },
     issuedRoleLabel () {
       return this.issued ? this.roleLabel(this.issued.intendedRole) : this.dash;

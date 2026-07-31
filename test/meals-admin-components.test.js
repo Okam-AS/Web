@@ -404,7 +404,18 @@ describe('MealsPeoplePanel — the two places this module\'s honesty is hardest'
     const wrapper = mountPanel({ issued })
     expect(wrapper.text()).toContain('meals_token_once_note')
     expect(wrapper.text()).toContain('meals_token_bearer_note')
-    expect(wrapper.text()).toContain('meals_token_no_claim_screen')
+  })
+
+  // The panel used to say that no screen in the estate accepted one of these codes. `/meals/join`
+  // is that screen, so the sentence had to change or become a lie — and it has to carry the ADDRESS,
+  // because nothing delivers the code and the recipient is otherwise told a page exists without
+  // being told where.
+  test('the handover names where the code is redeemed, and does not carry the token in that address', () => {
+    const wrapper = mountPanel({ issued })
+    expect(wrapper.text()).toContain('meals_token_claim_screen')
+    expect(wrapper.text()).not.toContain('meals_token_no_claim_screen')
+    expect(wrapper.vm.claimLink).toMatch(/\/meals\/join$/)
+    expect(wrapper.vm.claimLink).not.toContain(issued.token)
   })
 
   test('dismissing it is an explicit act by the operator, not a timeout', async () => {
