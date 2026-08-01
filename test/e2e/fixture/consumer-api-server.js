@@ -42,6 +42,9 @@ function freshState (allowanceMinor) {
     // Idempotency-Key -> reservationId, so a replayed key re-derives the SAME token.
     quoteKeys: {},
     orders: {},
+    // Server-side order events, the shape CartService writes into EventLogs. A refused funding bind
+    // lands here, which is where a reader learns WHY a cancelled order was cancelled.
+    events: [],
     cart: null,
     seq: 0,
     // Every request this fixture answered, and how many. The journey's wrong-world guard reads the
@@ -194,7 +197,7 @@ const server = http.createServer(async (req, res) => {
   if (method === 'OPTIONS') { return send(res, 204); }
 
   if (path === '/__fixture/health') { return send(res, 200, { ok: true }); }
-  if (path === '/__fixture/stats') { return send(res, 200, { served: state.served, requests: state.requests, remainingAllowanceMinor: state.remainingAllowanceMinor, reservations: Object.values(state.reservations).map((r) => ({ id: r.reservationId, state: r.state, cap: r.reservedCapMinor, order: r.boundOrderId })) }); }
+  if (path === '/__fixture/stats') { return send(res, 200, { served: state.served, requests: state.requests, remainingAllowanceMinor: state.remainingAllowanceMinor, orders: Object.values(state.orders), events: state.events, reservations: Object.values(state.reservations).map((r) => ({ id: r.reservationId, state: r.state, cap: r.reservedCapMinor, boundTotal: r.boundCartTotalMinor === undefined ? null : r.boundCartTotalMinor, order: r.boundOrderId })) }); }
   if (path === '/__fixture/reset') {
     // `allowanceMinor` lets a journey stand the world up with a company budget too small for the
     // cart, which is the only way to walk the v1 "funds fully or not at all" refusal from the UI.
@@ -238,7 +241,14 @@ const server = http.createServer(async (req, res) => {
       state.orders[orderId] = { id: orderId, status: 'Pending', storeId: STORE_ID };
       const reason = bind(url.searchParams.get('reservationToken'), orderId, cart.calculations.finalAmount);
       if (reason) {
+        // ATTRIBUTION. The store cancelled nothing — the funding authority refused the bind — so the
+        // cancelled row is NOT flagged as the store's, and the reason code is recorded against the
+        // order so the refusal is distinguishable in the data from a store that genuinely cancelled.
+        // CartService.PromoteToOrder writes exactly this pair (CanceledByStore = false plus an
+        // EventLog naming MEALS_*); it used to write CanceledByStore = true.
         state.orders[orderId].status = 'Canceled';
+        state.orders[orderId].canceledByStore = false;
+        state.events.push({ eventName: 'MealsFundingRefused', eventValue: reason, orderId, storeId: STORE_ID });
         return appException(res, reason);
       }
     }
@@ -275,6 +285,10 @@ const server = http.createServer(async (req, res) => {
   if (method === 'PUT' && path === '/carts') {
     const incoming = body || {};
     const cart = currentCart();
+    // The client PUTs the WHOLE cart, so a percent change arrives alongside the tip amount the previous
+    // percent produced. Clearing it here is what makes "back to 0%" mean no tip rather than "keep the
+    // last derived amount".
+    if ('tipPercent' in incoming && Number(incoming.tipPercent) !== Number(cart.tipPercent)) { cart.tipAmount = 0; incoming.tipAmount = 0; }
     ['deliveryType', 'paymentType', 'tipAmount', 'tipPercent', 'comment', 'discountCode', 'fullAddress', 'zipCode', 'city', 'tableName', 'requestedCompletion', 'useReward'].forEach((key) => {
       if (key in incoming) { cart[key] = incoming[key]; }
     });

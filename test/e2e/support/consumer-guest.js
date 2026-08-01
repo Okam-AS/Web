@@ -65,6 +65,42 @@ async function cutExternalNetwork (page, rewrite) {
   });
 }
 
+/**
+ * Holds every matching request open until the journey lets it go, and says how many it caught.
+ *
+ * WHY A GATE AND NOT A SLEEP. The behaviour under test is a race — a guest pressing pay while a
+ * debounced re-quote has not come back — and a journey that reproduced it by racing the same 400ms
+ * timer would be the exact instrument this estate has been burned by: it passes when the assertion
+ * happens to run after the timer, and nobody can tell a real fix from a lucky schedule. Holding the
+ * re-quote open makes the window a FACT rather than a hope: while the gate is shut the client
+ * provably does not have a fresh reservation, whatever its timers did, and what it does with the
+ * stale one is then a property of the code rather than of the machine it ran on.
+ *
+ * Must be installed AFTER `cutExternalNetwork`: Playwright runs the most recently registered handler
+ * first, and this one defers to that one with `route.fallback()` once released.
+ */
+async function holdRequests (page, matches) {
+  const gate = { held: 0, released: false };
+  let open;
+  const opened = new Promise((resolve) => { open = resolve; });
+  gate.release = () => { gate.released = true; open(); };
+  gate.waitUntilHeld = async (count = 1, timeoutMs = 15000) => {
+    const deadline = Date.now() + timeoutMs;
+    while (gate.held < count) {
+      if (Date.now() > deadline) { throw new Error('no request reached the gate within ' + timeoutMs + 'ms'); }
+      await new Promise((resolve) => setTimeout(resolve, 25));
+    }
+    return gate.held;
+  };
+  await page.route('**/*', async (route) => {
+    if (!matches(route.request())) { return route.fallback(); }
+    gate.held++;
+    await opened;
+    return route.fallback();
+  });
+  return gate;
+}
+
 /** Every request the page made to the fixture, for the assertions that read what was actually sent. */
 function recordApiCalls (page) {
   const calls = [];
@@ -77,4 +113,4 @@ function recordApiCalls (page) {
   return calls;
 }
 
-module.exports = { CONSUMER_ROOT, fixtureOrigin, underTest, seedGuest, cutExternalNetwork, recordApiCalls, world };
+module.exports = { CONSUMER_ROOT, fixtureOrigin, underTest, seedGuest, cutExternalNetwork, holdRequests, recordApiCalls, world };

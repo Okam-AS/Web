@@ -32,6 +32,10 @@ const store = () => ({
   payment: { stripeEnabled: true },
   deliveryMethods: [],
   openingHours: [],
+  // The tip percentage strip is the cheapest lever a guest has for changing the total ON the checkout
+  // page, which is what the stale-reservation journeys need: the cart is re-priced without leaving the
+  // page the reservation was minted on. CheckoutTip renders nothing unless the store enables it.
+  tip: { percentEnabled: true, heading: '' },
   tips: []
 });
 
@@ -58,7 +62,14 @@ function lineItem (id, name, amount, quantity) {
 
 function withCalculations (cart) {
   const itemsAmount = (cart.items || []).reduce((total, item) => total + (item.product.amount * item.quantity), 0);
-  const tip = Number(cart.tipAmount) || 0;
+  // A tip PERCENT is priced by the server, not by the client: the checkout sends `tipPercent` and reads
+  // the re-priced cart back. Modelled here because a journey that changed the total by writing
+  // `tipAmount` from the browser would be driving a path no guest takes. A percent of zero falls back
+  // to the custom amount — the PUT handler clears that whenever the percent itself changed, so
+  // switching back to 0% removes the tip instead of leaving the last derived amount standing.
+  const percent = Number(cart.tipPercent) || 0;
+  const tip = percent > 0 ? Math.round(itemsAmount * percent / 100) : (Number(cart.tipAmount) || 0);
+  cart.tipAmount = tip;
   cart.calculations = {
     itemsAmount,
     itemsAmountLineThrough: 0,

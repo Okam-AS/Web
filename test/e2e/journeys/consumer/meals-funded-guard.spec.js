@@ -20,7 +20,7 @@ test(
   'the same order without its reservation token is refused and nothing is funded',
   journeyDetails({
     journey: 'meals-funded-guard',
-    capabilities: ['meals.funding.guard.untokened'],
+    capabilities: ['meals.funding.guard.untokened', 'meals.refusal.attribution'],
     surface: 'consumer',
     underTest: underTest()
   }),
@@ -69,6 +69,28 @@ test(
       expect(after.reservations[0].order).toBeFalsy();
       return 'reservation still Reserved; allowance ' + after.remainingAllowanceMinor + ' minor';
     });
+
+    await journey.step('the cancelled order is not attributed to the store', async () => {
+      const after = await (await request.get(FIXTURE + '/__fixture/stats')).json();
+      const cancelled = after.orders.filter((o) => o.status === 'Canceled');
+      expect(cancelled.length, 'the order the guard had to create is cancelled').toBe(1);
+      // The store never saw this order — it was refused before it had a line item — so it must not
+      // count as a store cancellation. `false` here is what CartService.PromoteToOrder now writes; it
+      // wrote `true` until this lane, and that fed store-cancellation statistics.
+      expect(cancelled[0].canceledByStore, 'the store cancelled nothing').toBe(false);
+      const refusal = after.events.filter((e) => e.eventName === 'MealsFundingRefused');
+      expect(refusal.length, 'and the real cause is recorded against the order').toBe(1);
+      expect(refusal[0].orderId).toBe(cancelled[0].id);
+      expect(refusal[0].eventValue).toBe('MEALS_RESERVATION_NOT_FOUND');
+      return 'order ' + cancelled[0].id + ' cancelled, canceledByStore=false, cause ' + refusal[0].eventValue;
+    });
+
+    journey.finding('note', 'the attribution above is the fixture answering, and the backend is proven separately',
+      'This journey can only show the contract the client and the fixture agree on. The BACKEND writing ' +
+      'CanceledByStore = false plus an EventLog naming the MEALS_* reason against the order id is proven ' +
+      'by WebApi.Tests/Meals/CheckoutCompanyAccountGuardTests and WebApi.Tests/Wire/' +
+      'MealsFundedCheckoutWireTests, both red against the previous code and green against the new. ' +
+      'Nobody has driven this path against a live .NET API.');
 
     journey.finding('note', 'the refusal reason reaches the guest as prose, not as a code',
       'The backend answers an AppException whose message IS the MEALS_* reason code ' +
