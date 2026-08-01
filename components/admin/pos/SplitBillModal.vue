@@ -182,6 +182,7 @@
 </template>
 
 <script>
+import bodyScrollLock from '~/utils/body-scroll-lock';
 import CashPad from '~/components/admin/pos/CashPad.vue';
 
 // Splits an open check into parts (equal shares or by assigning items), each part becoming its own
@@ -189,6 +190,7 @@ import CashPad from '~/components/admin/pos/CashPad.vue';
 // on the part's settlement). Card-per-part shares the split-tender terminal gap and is deferred.
 export default {
   name: 'SplitBillModal',
+  mixins: [bodyScrollLock],
   components: { CashPad },
   inject: ['pos'],
   props: {

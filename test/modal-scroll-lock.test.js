@@ -84,9 +84,19 @@ describe('the class the scroll lock rides on', () => {
       path.join(__dirname, '..', 'components', 'atoms', 'Modal.vue'), 'utf8'
     )
     expect(stripComments(source)).not.toMatch(/document\.body\.classList/)
-    expect(source).toMatch(/head\s*\(\)/)
 
-    expect(Modal.head.call({})).toEqual({ bodyAttrs: { class: ['noscroll'] } })
+    // The declaration moved into `~/utils/body-scroll-lock` when the OTHER ten writers of the body
+    // lock were migrated onto it (lane/modal-seven) — this component no longer owns a `head()` of
+    // its own, and must not grow one back: vue-meta installs no merge strategy for the key, so a
+    // local `head()` would REPLACE the mixin's rather than add to it and the lock would vanish.
+    // What is asserted here is therefore the mixin's declaration, reached the way this component
+    // reaches it.
+    expect(stripComments(source)).toMatch(/mixins:\s*\[bodyScrollLock\]/)
+    expect(stripComments(source)).not.toMatch(/\n\s*head\s*\(\s*\)\s*\{/)
+
+    const lock = Modal.mixins.find(mixin => typeof mixin.head === 'function')
+    expect(lock.head.call({ bodyScrollLocked: true, bodyScrollLockClasses: ['noscroll'] }))
+      .toEqual({ bodyAttrs: { class: ['noscroll'] } })
   })
 
   test('reaches the body for real once vue-meta is the one writing it', () => {

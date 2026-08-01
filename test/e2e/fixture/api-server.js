@@ -420,6 +420,40 @@ async function route (req, res, url) {
       address: { fullAddress: 'Storgata 1', zipCode: '0155', city: 'Oslo' }
     });
   }
+  // ---- the ongoing-orders board ----------------------------------------------------------------
+  //
+  // `OrderService.GetAllOngoing()` — the one call `/admin/ongoing` makes, and the reason that page is
+  // reachable from this fixture at all. It is READ-ONLY here: the journey that uses it opens and
+  // closes modals and never advances an order, so there is no state machine to model and pretending
+  // otherwise would be a fixture claiming rules it does not hold.
+  if (path === '/orders/ongoing' && req.method === 'GET') {
+    return send(res, 200, world.ONGOING_ORDERS);
+  }
+
+  // What `CustomerInfoModal` fetches on mount. Answered rather than left to 404 for the reason the
+  // store reads above are: an unrouted request lands in the artifact's `failedRequests` and reads as
+  // a product defect, and a noisy artifact is one nobody reads.
+  const userForStore = /^\/user\/(\d+)\/([^/]+)$/.exec(path);
+  if (userForStore && req.method === 'GET') {
+    const guest = world.ONGOING_ORDERS.find(order => order.userId === userForStore[2]);
+    return send(res, 200, {
+      id: userForStore[2],
+      firstName: guest ? guest.userFullName.split(' ')[0] : 'Ukjent',
+      lastName: guest ? guest.userFullName.split(' ').slice(1).join(' ') : '',
+      phoneNumber: guest ? guest.user.phoneNumber : '',
+      email: 'gjest@example.test',
+      data: [
+        { key: 'Kunde siden', value: '2025-03-04' },
+        { key: 'Sist bestilt', value: '2026-07-31' },
+        { key: 'Antall bestillinger', value: '7' }
+      ]
+    });
+  }
+  const rewardCards = /^\/rewards\/members\/(\d+)\/([^/]+)$/.exec(path);
+  if (rewardCards && req.method === 'GET') {
+    return send(res, 200, []);
+  }
+
   const specialHours = /^\/stores\/(\d+)\/specialopeninghours$/.exec(path);
   if (specialHours && req.method === 'GET') {
     return send(res, 200, []);

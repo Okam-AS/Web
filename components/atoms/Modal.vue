@@ -31,6 +31,7 @@
 <script>
 import FocusTrap from '~/components/molecules/FocusTrap'
 import CloseButton from '~/components/atoms/CloseButton'
+import bodyScrollLock from '~/utils/body-scroll-lock'
 
 // ---- THE SCROLL LOCK, AND WHY IT IS DECLARED RATHER THAN ADDED --------------------------------
 //
@@ -65,12 +66,17 @@ import CloseButton from '~/components/atoms/CloseButton'
 //
 // The class stays shared state, but it stops being MUTABLE shared state: it now has exactly one
 // writer, and its value is derived rather than accumulated.
-const BODY_SCROLL_LOCK_CLASS = 'noscroll'
-
+//
+// The declaration itself now lives in `~/utils/body-scroll-lock`, because this was never the only
+// modal in the estate: ten other places locked the body by setting `document.body.style.overflow`
+// directly, on a channel vue-meta does not own, and none of them reference-counted. They all use
+// this same mixin now, so there is one mechanism and one class rather than two channels and eleven
+// writers. The reasoning above is the reason that mixin has the shape it does.
 export default {
   components: {
     CloseButton, FocusTrap
   },
+  mixins: [bodyScrollLock],
   props: {
     hideCloseBtn: {
       type: Boolean,
@@ -110,19 +116,10 @@ export default {
         this.close()
       }
     }
-  },
-
-  /**
-   * The scroll lock. Declared, never added — see `BODY_SCROLL_LOCK_CLASS` above for what happened
-   * the other way round, and why the value is an array.
-   */
-  head () {
-    return {
-      bodyAttrs: {
-        class: [BODY_SCROLL_LOCK_CLASS]
-      }
-    }
   }
+  // NO `head()` HERE. The mixin declares the lock, and vue-meta installs no merge strategy for the
+  // key — a `head()` on this component would REPLACE the mixin's rather than add to it, and the lock
+  // would disappear without a word. Guarded in test/modal-scroll-lock-estate.test.js.
 }
 </script>
 

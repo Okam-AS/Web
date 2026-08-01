@@ -32,11 +32,13 @@
 </template>
 
 <script>
+import bodyScrollLock from '~/utils/body-scroll-lock';
 import AmountPad from '~/components/admin/pos/AmountPad.vue';
 
 // Records a manual cash movement (deposit / withdrawal) against the open trading day.
 export default {
   name: 'DrawerTransactionModal',
+  mixins: [bodyScrollLock],
   components: { AmountPad },
   props: {
     type: { type: String, required: true },

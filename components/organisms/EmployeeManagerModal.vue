@@ -16,10 +16,12 @@
 
 <script>
 import EmployeeManager from '~/components/molecules/EmployeeManager.vue'
+import bodyScrollLock from '~/utils/body-scroll-lock'
 
 export default {
   name: 'EmployeeManagerModal',
   components: { EmployeeManager },
+  mixins: [bodyScrollLock],
   props: {
     storeId: {
       type: Number,
@@ -30,15 +32,8 @@ export default {
       default: '',
     },
   },
-  mounted() {
-    document.body.style.overflow = 'hidden'
-  },
-  beforeDestroy() {
-    document.body.style.overflow = ''
-  },
   methods: {
     closeModal() {
-      document.body.style.overflow = ''
       this.$emit('close')
     },
   },

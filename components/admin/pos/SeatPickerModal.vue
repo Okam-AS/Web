@@ -49,11 +49,13 @@
 </template>
 
 <script>
+import bodyScrollLock from '~/utils/body-scroll-lock'
 // Assigns a check line group to a guest (seat), mirroring the note modal's overlay/panel pattern.
 // The chip grid runs [Felles] [1] .. [N] [+]; a tap confirms straight away. The parent persists the
 // choice on every member line of the group so the row stays together.
 export default {
   name: 'SeatPickerModal',
+  mixins: [bodyScrollLock],
   props: {
     targetName: { type: String, default: '' },
     busy: { type: Boolean, default: false },

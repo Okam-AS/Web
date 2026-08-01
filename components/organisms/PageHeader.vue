@@ -106,13 +106,31 @@
 </template>
 
 <script>
+import bodyScrollLock from "~/utils/body-scroll-lock";
+
 export default {
+  // Not a modal, but the same lock on the same body: the mobile nav drawer covers the page. It
+  // matters that it goes through the same mechanism rather than the inline style, because
+  // `closeMenu()` released `document.body.style.overflow` unconditionally — from the marketing
+  // site's header, over whatever else happened to be holding it.
+  mixins: [bodyScrollLock],
+
   data: () => ({
     isMenuOpen: false,
     isScrolled: false,
   }),
 
   computed: {
+    /**
+     * Conditional, and reactive: vue-meta coerces `head()` to a computed and watches it, so opening
+     * and closing the drawer is all that is needed. This component is on every marketing page,
+     * INCLUDING the Swiss ones — which is why the declared class has to be an array, or `okam-ch`
+     * would come off the body for as long as the menu was open.
+     */
+    bodyScrollLocked() {
+      return this.isMenuOpen;
+    },
+
     links() {
       if (this.isCh) {
         return [
@@ -152,12 +170,10 @@ export default {
   methods: {
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen;
-      document.body.style.overflow = this.isMenuOpen ? "hidden" : "";
     },
 
     closeMenu() {
       this.isMenuOpen = false;
-      document.body.style.overflow = "";
     },
 
     handleScroll() {

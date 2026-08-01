@@ -194,7 +194,26 @@
   }
 }
 
+// ---- THE BODY SCROLL LOCK ---------------------------------------------------------------------
+//
+// These two classes are the whole mechanism. Nothing in this application sets
+// `document.body.style.overflow`; everything that needs to stop the page behind it from moving
+// DECLARES one of these through `~/utils/body-scroll-lock`, and vue-meta derives `body.class` from
+// the live component tree — which is what makes two open modals hold the lock and one closing not
+// release it. See that file for why it is declared rather than written.
 .noscroll {
   height: 100%;
   overflow: hidden;
+}
+
+// The mobile-only variant, for a surface that is a full-screen sheet on a phone and an ordinary
+// side panel on a desktop — `pages/admin/products.vue`'s product editor is the one such surface.
+// 768px is the literal that page's own media queries use; the two have to agree, which is the
+// reason for putting the breakpoint here rather than in a `window.innerWidth` test that only runs
+// at the moment the panel opens.
+@media (max-width: 768px) {
+  .noscroll-mobile {
+    height: 100%;
+    overflow: hidden;
+  }
 }

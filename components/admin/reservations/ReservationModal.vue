@@ -119,6 +119,7 @@
 </template>
 
 <script>
+import bodyScrollLock from '~/utils/body-scroll-lock'
 const STATUS_KEYS = {
   requested: 'res_status_requested',
   confirmed: 'res_status_confirmed',
@@ -130,6 +131,7 @@ const STATUS_KEYS = {
 
 export default {
   name: 'ReservationModal',
+  mixins: [bodyScrollLock],
   props: {
     reservation: { type: Object, required: true },
     isNew: { type: Boolean, default: false },

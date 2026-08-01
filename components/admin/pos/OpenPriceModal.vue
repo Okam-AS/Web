@@ -106,12 +106,14 @@
 </template>
 
 <script>
+import bodyScrollLock from '~/utils/body-scroll-lock';
 import AmountPad from '~/components/admin/pos/AmountPad.vue';
 
 // Open-price line entry. The backend requires a name, a positive amount and a goods group (SAF-T),
 // so all three are enforced before the line can be added. Tax is a whole-percent VAT rate.
 export default {
   name: 'OpenPriceModal',
+  mixins: [bodyScrollLock],
   components: { AmountPad },
   props: {
     goodsGroups: { type: Array, default: () => [] },

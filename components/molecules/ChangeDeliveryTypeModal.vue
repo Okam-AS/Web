@@ -79,8 +79,11 @@
 </template>
 
 <script>
+import bodyScrollLock from '~/utils/body-scroll-lock';
+
 export default {
   name: 'ChangeDeliveryTypeModal',
+  mixins: [bodyScrollLock],
   props: {
     order: {
       type: Object,
@@ -92,14 +95,6 @@ export default {
       isLoading: false,
       selectedDeliveryType: null
     }
-  },
-  mounted() {
-    // Prevent body scroll
-    document.body.style.overflow = 'hidden';
-  },
-  beforeDestroy() {
-    // Restore body scroll
-    document.body.style.overflow = '';
   },
   computed: {
     deliveryTypes() {

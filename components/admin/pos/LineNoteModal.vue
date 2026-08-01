@@ -46,11 +46,13 @@
 </template>
 
 <script>
+import bodyScrollLock from '~/utils/body-scroll-lock'
 // A free-text note per check line, with quick-pick chips for the common cases (allergies,
 // modifiers). The note is descriptive and available on every check (quick sale and table), not just
 // coursing. Confirm emits the trimmed note string; the parent persists it over the group's lines.
 export default {
   name: 'LineNoteModal',
+  mixins: [bodyScrollLock],
   props: {
     initialNote: { type: String, default: '' },
     targetName: { type: String, default: '' },

@@ -67,7 +67,10 @@
 </template>
 
 <script>
+import bodyScrollLock from '~/utils/body-scroll-lock';
+
 export default {
+  mixins: [bodyScrollLock],
   props: {
     order: {
       type: Object,
@@ -88,12 +91,6 @@ export default {
     if (savedNumber) {
       this.phoneNumber = savedNumber;
     }
-    // Prevent body scroll
-    document.body.style.overflow = 'hidden';
-  },
-  beforeDestroy() {
-    // Restore body scroll
-    document.body.style.overflow = '';
   },
   methods: {
     async sendSms() {

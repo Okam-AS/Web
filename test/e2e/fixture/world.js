@@ -150,7 +150,43 @@ const CULTURES = [
   { code: 'en', name: 'English', nativeName: 'English', translations: translationsFor('Text') }
 ];
 
+// ---- ONGOING ORDERS: the one page that hosts six different modals ------------------------------
+//
+// `/admin/ongoing` renders a card per live order and mounts SIX modal components over one shared
+// `currentOrder` — OrderProcessing, Receipt, TransferOrder, ChangeDeliveryType, SmsDriver and
+// CustomerInfo. That is what the estate scroll-lock journey needs and `/admin/lang` cannot give it:
+// the previous journey could only ever open two instances of the SAME component, and the defect
+// being closed here is what happens when two DIFFERENT modals, each with its own idea of when to
+// release the body, are open at once.
+//
+// Enough of them to make the "new" column taller than the viewport, for the same reason the culture
+// keys exist: "the page behind does not scroll" cannot be proven on a page with nothing to scroll.
+// The shape is the one `components/molecules/OrderCard.vue` reads, not a copy of the API's model.
+const ONGOING_ORDER_COUNT = 14;
+
+const ONGOING_ORDERS = Array.from({ length: ONGOING_ORDER_COUNT }, (_, i) => ({
+  id: 'order-' + (i + 1),
+  friendlyOrderId: String(1000 + i + 1),
+  storeId: STORE_ID,
+  storeLegalName: STORE_NAME,
+  status: 'Accepted',
+  deliveryType: 'SelfPickup',
+  platform: 'Web',
+  created: new Date(Date.UTC(2026, 7, 1, 9, i)).toISOString(),
+  requestedCompletion: null,
+  userFullName: 'Gjest ' + (i + 1),
+  userId: 'user-guest-' + (i + 1),
+  userIsMember: false,
+  user: { id: 'user-guest-' + (i + 1), phoneNumber: '+479000' + String(1000 + i) },
+  totalAmount: 249 + i,
+  currencyCode: CURRENCY,
+  items: [
+    { id: 'line-' + (i + 1), name: 'Dagens rett', amount: 1, price: 249 + i, comment: '' }
+  ]
+}));
+
 module.exports = {
+  ONGOING_ORDERS,
   MANAGER_PHONE,
   WORKER_PHONE,
   OTP,

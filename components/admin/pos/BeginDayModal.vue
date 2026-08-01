@@ -31,12 +31,14 @@
 </template>
 
 <script>
+import bodyScrollLock from '~/utils/body-scroll-lock';
 import AmountPad from '~/components/admin/pos/AmountPad.vue';
 
 // Blocking first step when a cash point has no open trading day (POSSTART requires an opening
 // float). Sales are gated until the day is opened. Calls pos.beginDay(startFloatØre).
 export default {
   name: 'BeginDayModal',
+  mixins: [bodyScrollLock],
   components: { AmountPad },
   inject: ['pos'],
   data () {
