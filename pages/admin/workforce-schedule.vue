@@ -114,6 +114,13 @@
         <div v-if="conflict && !(staleWrite && editor)" class="wf-page__conflict">
           <strong>{{ conflictHeadline }}</strong>
           <span>{{ conflictDetail }}</span>
+          <!-- The one refusal on this surface an operator can act on WITHOUT calling anybody: the
+               stage flag has a lever, and it is a page in this admin. The link is drawn only for
+               that refusal, because every other conflict here is about the roster or a race and
+               sending somebody to the switchboard for one would be a wrong instruction. -->
+          <nuxt-link v-if="conflictFlag" class="wf-page__conflict-link" to="/admin/feature-flags">
+            {{ $i('wf_conflict_flag_link') }}
+          </nuxt-link>
         </div>
 
         <!-- The same guard, asked EARLY. Until this read existed the manager only met a cross-store
@@ -505,6 +512,25 @@ export default {
       return !!(this.conflict && this.conflict.conflictKind === 'stale-revision');
     },
 
+    /**
+     * The §9.2 stage flag that refused the last write, or null.
+     *
+     * The backend carries the key in `flag` on the problem body precisely so a client can name it:
+     * the family has eight stage flags, and "a workforce feature is disabled" does not tell an
+     * operator which lever to pull. It is read off `problem` rather than off a named field on the
+     * error because `WorkforceApiError` promotes only the conflict family's shared extensions, and
+     * this one belongs to a single refusal.
+     *
+     * ALL FOUR schedule writes are gated on the SAME flag (`workforce.publication` — draft creation,
+     * the batch edit, validation and publish all pass it to `RequireWriteCapabilityAsync`), so the
+     * refusal is not specific to the publish button; it is what the whole authoring surface answers
+     * while that flag is down. The banner therefore names the flag rather than the button.
+     */
+    conflictFlag () {
+      if (!this.conflict || this.conflict.conflictKind !== 'flag-disabled-read-only') { return null; }
+      return (this.conflict.problem && this.conflict.problem.flag) || null;
+    },
+
     // The same people the grid draws, in the same order — including anyone off the roster who already
     // holds a shift, because a person the grid shows must be a person the editor can name.
     personOptions () {
@@ -581,6 +607,7 @@ export default {
       case 'hidden-engagement-conflict': return this.$i('wf_conflict_hidden_title');
       case 'assignment-overlap': return this.$i('wf_conflict_overlap_title');
       case 'stale-revision': return this.$i('wf_stale_title');
+      case 'flag-disabled-read-only': return this.$i('wf_conflict_flag_title');
       case 'revision-not-editable': return this.$i('wf_conflict_frozen_title');
       case 'assignment-invalid': return this.$i('wf_conflict_invalid_title');
       case 'dst-ambiguous-offset-required':
@@ -594,6 +621,11 @@ export default {
       case 'hidden-engagement-conflict': return this.$i('wf_conflict_hidden');
       case 'assignment-overlap': return this.$i('wf_conflict_overlap');
       case 'stale-revision': return this.$i('wf_stale_detail');
+      // The flag key is the actionable part, so it is in the sentence. A refusal that carried no key
+      // says so rather than leaving a blank where a lever's name belongs.
+      case 'flag-disabled-read-only': return this.conflictFlag
+        ? this.$i('wf_conflict_flag', { flag: this.conflictFlag })
+        : this.$i('wf_conflict_flag_unnamed');
       case 'revision-not-editable': return this.$i('wf_conflict_frozen');
       // The server names the offending field and says why in prose it wrote for this purpose. It is
       // shown verbatim rather than mapped to a second, thinner sentence per field.
@@ -1027,7 +1059,8 @@ export default {
 .wf-page__badge--none, .wf-page__badge--unknown { background: #f8f9fa; color: #94a3b8; border: 1px dashed #cbd5e0; }
 .wf-page__meta { color: #94a3b8; font-size: 0.78rem; }
 
-.wf-page__conflict { display: flex; flex-direction: column; gap: 3px; padding: 12px 16px; border-radius: 10px; background: rgba(239, 68, 68, 0.1); color: #b91c1c; margin-bottom: 12px; font-size: 0.86rem; }
+.wf-page__conflict { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; padding: 12px 16px; border-radius: 10px; background: rgba(239, 68, 68, 0.1); color: #b91c1c; margin-bottom: 12px; font-size: 0.86rem; }
+.wf-page__conflict-link { margin-top: 6px; color: #b91c1c; font-weight: 600; text-decoration: underline; }
 .wf-page__notice { padding: 10px 16px; border-radius: 10px; background: #f8f9fa; border: 1px dashed #e2e8f0; color: #64748b; margin-bottom: 12px; font-size: 0.86rem; }
 .wf-page__notice--warn { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
 

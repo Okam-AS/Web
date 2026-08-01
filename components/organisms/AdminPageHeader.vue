@@ -267,7 +267,11 @@ const icons = {
   // A clipboard, not people and not a calendar: the personalliste is the DOCUMENT an inspector asks
   // for, and the two workforce icons already in this group are a calendar and a group of people.
   workforcePersonnelList: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9h6m-6 4h4" /></svg>',
-  training: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" /></svg>'
+  training: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" /></svg>',
+  // Two toggle switches, not the settings cog: `posSettings` is already a cog in the PowerUser group,
+  // and this page is not configuration — it is the row of kill switches somebody reaches for during
+  // an incident. It sits last in the modules group because it governs every link above it.
+  featureFlags: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="2" y="4" width="20" height="7" rx="3.5" stroke-width="2" /><circle cx="17" cy="7.5" r="2" fill="currentColor" stroke="none" /><rect x="2" y="13" width="20" height="7" rx="3.5" stroke-width="2" /><circle cx="7" cy="16.5" r="2" fill="currentColor" stroke="none" /></svg>'
 };
 
 export default {
@@ -366,7 +370,13 @@ export default {
               // reachable only by typing a URL.
               { label: this.$i('nav_meals_companies'), path: '/admin/meals-companies', icon: icons.mealsCompanies, isNew: true },
               { label: this.$i('nav_events'), path: '/admin/events-pipeline', icon: icons.eventsPipeline, isNew: true },
-              { label: this.$i('nav_growth_newsletter'), path: '/admin/growth-newsletter', icon: icons.growthNewsletter, isNew: true }
+              { label: this.$i('nav_growth_newsletter'), path: '/admin/growth-newsletter', icon: icons.growthNewsletter, isNew: true },
+              // Last in this group, and in this group rather than under Administration, because it
+              // is the switchboard for every link above it: each of those six modules gates its
+              // write surfaces on deny-closed per-store flags, and until this page existed the only
+              // way to move one was a curl against `PUT /stores/{id}/feature-flags`. Store-admin
+              // gated like its siblings — the API answers 403 to anyone else and the page says so.
+              { label: this.$i('nav_feature_flags'), path: '/admin/feature-flags', icon: icons.featureFlags, isNew: true }
             ]
           },
           {

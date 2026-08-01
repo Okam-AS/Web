@@ -144,10 +144,10 @@ export class GrowthService extends GrowthClientBase {
 }
 
 /**
- * The ONE route this surface calls that is not under `/v1/growth`.
+ * The ONE route this surface calls that is not under `/v1/growth`, RE-EXPORTED rather than defined.
  *
- * WHY IT IS HERE AT ALL. Two store-scoped switches decide whether a dispatch can happen, and neither
- * is reported by any Growth endpoint:
+ * WHY GROWTH READS IT AT ALL. Two store-scoped switches decide whether a dispatch can happen, and
+ * neither is reported by any Growth endpoint:
  *
  *   growth.module   — off ⇒ `POST .../dispatch` and `POST .../test-sends` answer an opaque 404
  *                     (`GrowthNewslettersController.ModuleIsLiveAsync`). Deny-closed by default.
@@ -157,28 +157,19 @@ export class GrowthService extends GrowthClientBase {
  * Without them the send gate could only say "ready" and let the operator discover the refusal by
  * pressing the button — which is the defect this reader exists to remove.
  *
- * WHY IT IS A SEPARATE CLASS. `GrowthService` documents itself as route-for-route with the Growth
- * controllers and adds nothing; hanging a platform route off it would quietly break that promise.
- * The transport is shared (same base URL, same bearer), so nothing is duplicated but the route.
+ * WHY THE CLASS ITSELF MOVED to `~/utils/platform/feature-flags-client`. It was written here because
+ * Growth was the first caller that needed it, and this file's header called it "the ONE route this
+ * surface calls that is not under /v1/growth". Six modules later that is no longer a Growth detail:
+ * `StoreFeatureFlagsController` owns the flags of all six, and the operator screen at
+ * `/admin/feature-flags` writes the same route. Two definitions of one route is where the drift
+ * starts, so there is one, in the namespace the route actually belongs to. Callers here are
+ * unchanged; the import path they use is not the point, the single definition is.
  *
- * WHAT `effective` DOES AND DOES NOT MEAN — read this before trusting a `true`:
- * `StoreFeatureFlagsController` resolves `effective` as "the override when present, otherwise the
- * module default", UNLESS the owning module registered an `IStoreFeatureFlagEffectiveResolver`.
- * Workforce and Margin register one. GROWTH DOES NOT. But Growth's real gate
- * (`StoreBackedGrowthFeatureFlags`) is TWO layers: the deployment-wide `Growth:Enabled` config switch
- * AND the per-store row, and both must say yes. So:
- *
- *   effective === false  ⇒ the gate WILL refuse. Reliable, and the client may act on it.
- *   effective === true   ⇒ the gate MAY still refuse, because `Growth:Enabled` is invisible here.
- *
- * The asymmetry is load-bearing: this client may use a `false` to block, and must never use a `true`
- * to promise. (Backend follow-up: Growth declaring its own effective resolver would close the gap.)
+ * The re-export also changes the error type this reader throws from `GrowthApiError` to
+ * `PlatformApiError`, which is the correct one: this controller answers `Forbid()` and
+ * `BadRequest(new { message })`, not the Growth `{ error: { code, message } }` envelope, so a
+ * `GrowthApiError` read `code: null` off every one of its refusals.
  */
-export class StoreFeatureFlagReader extends GrowthClientBase {
-  /** Every catalog flag for the store, each with `flagKey`, `defaultEnabled`, `isOverridden`, `effective`. */
-  GetStoreFlags (storeId) {
-    return this._request('GET', '/stores/' + storeId + '/feature-flags');
-  }
-}
+export { StoreFeatureFlagReader } from '~/utils/platform/feature-flags-client';
 
 export default GrowthService;

@@ -99,6 +99,10 @@ const STORE_ADMIN_PATHS = [
   '/admin/margin-recipes', '/admin/margin-suppliers', '/admin/margin-price-imports',
   '/admin/margin-statements',
   '/admin/meals-agreements', '/admin/meals-companies', '/admin/events-pipeline', '/admin/growth-newsletter',
+  // Last in the modules group, and the switchboard for every link above it: each of those modules
+  // gates its writes on deny-closed per-store flags, and until this page existed the only way to move
+  // one was a curl against `PUT /stores/{id}/feature-flags`. Store-admin gated like its siblings.
+  '/admin/feature-flags',
   '/admin/products', '/admin/categories', '/admin/allergens', '/admin/import',
   '/admin/delivery', '/admin/wolt',
   '/admin/kravia-invoice', '/admin/rewards', '/admin/discounts',
@@ -329,7 +333,12 @@ describe('no link the sidebar offers is a link the shell will bounce', () => {
   // covered the moment it is named, without anybody remembering to add it here. The prefixes are the
   // five restaurant modules — the legacy unlinked pages (`payouts`, `brev`, `dinehome`, `wolt-menu`,
   // `lang`, `wolt-calc`) are outside it and stay outside it; they are a separate, older question.
-  const MODULE_PAGE_PREFIXES = ['events-', 'growth-', 'margin-', 'meals-', 'training-', 'workforce-']
+  // `feature-` is not a sixth module: it is the PLATFORM switchboard the six share
+  // (`/admin/feature-flags`, the only caller of `PUT /stores/{id}/feature-flags`). It is inside the
+  // rule because it is the page whose unlinking would be worst — every module surface above it
+  // renders a module-off blocker until somebody flips a switch, and a switchboard reachable only by
+  // typing a URL is the same defect this walk exists to catch, one level up.
+  const MODULE_PAGE_PREFIXES = ['events-', 'feature-', 'growth-', 'margin-', 'meals-', 'training-', 'workforce-']
 
   const modulePages = () => adminPages(pagesDir)
     .map(file => path.basename(file, '.vue'))

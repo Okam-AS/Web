@@ -49,6 +49,25 @@ test(
       return 'landed back on /admin/workforce-schedule';
     });
 
+    await journey.step('turn the schedule publication switch on for this store', async () => {
+      // NOT scope creep, and not a workaround: `workforce.publication` gates all four schedule
+      // writes (`CreateDraftAsync`, `BatchAssignmentsAsync`, `ValidateAsync`, `PublishAsync` each
+      // pass it to `RequireWriteCapabilityAsync`) and it is deny-closed. Every step below would be
+      // refused with 409 `workforce.flag-disabled-read-only` on a real store that has not had it
+      // flipped. This journey passed before only because the fixture modelled no flags at all —
+      // which is precisely the "fixture that accepts anything" its own world.js warns against.
+      //
+      // It goes through the operator's page rather than a fixture backdoor, because until
+      // `/admin/feature-flags` existed there was NO way to do this from a browser: the write route
+      // had no caller in the frontend, and this journey's whole subject was therefore reachable only
+      // by curl.
+      await page.goto('/admin/feature-flags');
+      await page.locator('[data-flag-on="workforce.publication"]').click();
+      await expect(page.locator('.ff-page__toast')).toContainText('workforce.publication', { timeout: 15000 });
+      await page.goto('/admin/workforce-schedule');
+      return 'workforce.publication on for store 42';
+    });
+
     await journey.step('the week reads as having no plan, and offers to create one', async () => {
       await expect(page.locator('.wf-page__title')).toHaveText('Vaktplan');
       // `wf_state_none` — the range read answered and resolved no revision. This is the state that is
