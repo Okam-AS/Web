@@ -19,6 +19,9 @@
 //   • `Authorization: Bearer <token>` on every route here. Missing -> 401.
 //   • A quote is refused when the cart total exceeds the remaining allowance. v1 funds an order
 //     FULLY or not at all — there is no split tender in the backend and there is none here.
+//   • `supersedesToken` on a re-quote releases the reservation it names — and ONLY when that token is
+//     this user's, still Reserved and unexpired. A quote that names nothing releases nothing, which is
+//     what keeps a genuine second cart paying for the allowance it takes.
 //
 // WHAT IT DOES NOT DO: it is not a model of the backend. It holds no menu, no pricing engine, no
 // journal, no statement run. Anything a journey wants true it seeds here explicitly.
@@ -138,11 +141,37 @@ const contextFor = () => ({
 /** The API returns the token once and stores only its hash; the fixture keeps the same shape. */
 const hashToken = (token) => crypto.createHash('sha256').update(token).digest('hex');
 
+/**
+ * The reservation a re-quote supersedes, released before the new one is priced.
+ *
+ * WHY THE CALLER NAMES IT rather than the server releasing "this caller's previous reservation": at
+ * this endpoint a re-quote and a second independent cart are the same request — same user, same store,
+ * a new hash and a new key. Inferring it would break the two guarantees the backend suite pins from the
+ * other side (a 15000 quote followed by a 10000 one against a 20000 allowance must still be refused,
+ * and N concurrent quotes must still produce exactly allowance/cap winners). Modelled here because the
+ * whole point of this fixture is to hold the contract the client depends on, not just its shapes.
+ *
+ * Silent on every mismatch — unknown, already released, bound, captured, expired, another user's — so a
+ * re-quote never fails because the hold it replaced had already gone. Expired is deliberately excluded:
+ * that one belongs to the backend's reconciliation sweep, under its own reason code.
+ */
+function resolveSuperseded (supersedesToken) {
+  if (!supersedesToken) { return null; }
+  const hash = hashToken(supersedesToken);
+  const superseded = Object.values(state.reservations).find((r) => r.tokenHash === hash);
+  if (!superseded) { return null; }
+  if (superseded.state !== 'Reserved') { return null; }
+  if (superseded.userId !== USER_ID) { return null; }
+  if (Date.parse(superseded.expiresAtUtc) <= Date.now()) { return null; }
+  return superseded;
+}
+
 function createQuote (body, idempotencyKey) {
   const replayed = state.quoteKeys[idempotencyKey];
   if (replayed) {
     const prior = state.reservations[replayed];
-    // Idempotent replay re-derives the SAME token verbatim and reserves nothing further.
+    // Idempotent replay re-derives the SAME token verbatim, reserves nothing further and — because it
+    // returns before the release below — gives nothing further back either.
     return { ok: true, reservation: prior, token: prior.token };
   }
 
@@ -156,8 +185,21 @@ function createQuote (body, idempotencyKey) {
   if (!body?.quoteHash) {
     return { ok: false, status: 400, code: 'MEALS_MODULE_UNAVAILABLE', detail: 'A quoteHash is required.' };
   }
-  if (total > state.remainingAllowanceMinor) {
+  // The release and the new hold are ONE transaction in MealsQuoteService.CreateQuoteAsync: the
+  // supersede is applied before the compare-and-increment (or the re-quote is refused on a budget that
+  // fits one lunch but not two — the defect, not the fix), and a refused quote rolls it back with it, so
+  // the guest keeps the hold they had rather than being left with nothing. Modelled by deciding first
+  // and committing only on success.
+  const superseded = resolveSuperseded(body?.supersedesToken);
+  const freed = superseded ? superseded.reservedCapMinor : 0;
+  if (total > state.remainingAllowanceMinor + freed) {
     return { ok: false, code: 'MEALS_ALLOWANCE_EXCEEDED', detail: 'The remaining company contribution for this period is lower than the cart total.' };
+  }
+
+  if (superseded) {
+    superseded.state = 'Released';
+    superseded.releaseReasonCode = 'MEALS_RELEASED_SUPERSEDED';
+    state.remainingAllowanceMinor += superseded.reservedCapMinor;
   }
 
   const token = 'mealtok_' + crypto.randomBytes(24).toString('hex');
@@ -235,7 +277,7 @@ const server = http.createServer(async (req, res) => {
   if (method === 'OPTIONS') { return send(res, 204); }
 
   if (path === '/__fixture/health') { return send(res, 200, { ok: true }); }
-  if (path === '/__fixture/stats') { return send(res, 200, { served: state.served, requests: state.requests, remainingAllowanceMinor: state.remainingAllowanceMinor, orders: Object.values(state.orders), events: state.events, reservations: Object.values(state.reservations).map((r) => ({ id: r.reservationId, state: r.state, cap: r.reservedCapMinor, boundTotal: r.boundCartTotalMinor === undefined ? null : r.boundCartTotalMinor, order: r.boundOrderId })) }); }
+  if (path === '/__fixture/stats') { return send(res, 200, { served: state.served, requests: state.requests, remainingAllowanceMinor: state.remainingAllowanceMinor, orders: Object.values(state.orders), events: state.events, reservations: Object.values(state.reservations).map((r) => ({ id: r.reservationId, state: r.state, cap: r.reservedCapMinor, boundTotal: r.boundCartTotalMinor === undefined ? null : r.boundCartTotalMinor, order: r.boundOrderId, releaseReasonCode: r.releaseReasonCode || null })) }); }
   if (path === '/__fixture/reset') {
     // `allowanceMinor` lets a journey stand the world up with a company budget too small for the
     // cart, which is the only way to walk the v1 "funds fully or not at all" refusal from the UI.

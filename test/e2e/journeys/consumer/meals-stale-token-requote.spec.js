@@ -24,10 +24,13 @@ const { world, fixtureOrigin, underTest, seedGuest, cutExternalNetwork, holdRequ
 
 const FIXTURE = fixtureOrigin();
 
-// Two reservations have to fit side by side for this journey to reach a confirmation at all, because
-// nothing releases the superseded one — see the defect finding at the end, and the sibling journey
-// meals-stale-token-refused, which walks the same clicks against an ordinary allowance.
-const ALLOWANCE_MINOR = 50000;
+// THE MEASURE, AND THE REASON IT IS THIS NUMBER. This used to read 50000: two reservations had to fit
+// side by side, because nothing gave the superseded one back, so buying one 206,80 lunch cost the guest
+// 355,80 of company budget. 25000 is under that doubled figure and over a single tipped cart, so it
+// funds this journey ONLY if the re-quote released what it replaced — the assertion is the fixture
+// value itself. Shrunk when L-MEALS-REQUOTE-RELEASE closed the defect; a regression puts the second
+// quote over the allowance and the confirmation never arrives.
+const ALLOWANCE_MINOR = 25000;
 const TIP_PERCENT = 10;
 const TIPPED_TOTAL_MINOR = world.CART_TOTAL_MINOR + Math.round(world.CART_TOTAL_MINOR * TIP_PERCENT / 100);
 
@@ -124,27 +127,55 @@ test(
       return 'bound ' + bound[0].cap + ' minor to ' + bound[0].order + '; ' + funded;
     });
 
-    await journey.step('the superseded reservation is still holding the allowance', async () => {
+    await journey.step('the superseded reservation was given back, so the lunch cost the allowance once', async () => {
       const after = await stats(request);
-      const stranded = after.reservations.filter((r) => r.state === 'Reserved');
-      expect(stranded.length, 'the pre-tip reservation was never given back').toBe(1);
-      expect(after.remainingAllowanceMinor)
-        .toBe(ALLOWANCE_MINOR - world.CART_TOTAL_MINOR - TIPPED_TOTAL_MINOR);
-      return 'one ' + stranded[0].cap + ' minor reservation stranded; allowance ' +
+
+      // Nothing is left holding budget for a cart that no longer exists.
+      expect(after.reservations.filter((r) => r.state === 'Reserved').length, 'no stranded pre-tip reservation').toBe(0);
+
+      const released = after.reservations.filter((r) => r.state === 'Released');
+      expect(released.length, 'exactly the pre-tip reservation was released').toBe(1);
+      expect(released[0].cap).toBe(world.CART_TOTAL_MINOR);
+
+      // Released as SUPERSEDED, not as expired: a re-quote is not a timeout, and the reconciliation
+      // sweep's counts depend on the difference.
+      expect(released[0].releaseReasonCode).toBe('MEALS_RELEASED_SUPERSEDED');
+
+      // THE WHOLE POINT, IN ONE NUMBER. The guest's remaining budget is short by the tipped cart and
+      // nothing else — it used to be short by the untipped cart as well, for the same one lunch.
+      expect(after.remainingAllowanceMinor).toBe(ALLOWANCE_MINOR - TIPPED_TOTAL_MINOR);
+
+      return 'released ' + released[0].cap + ' minor as ' + released[0].releaseReasonCode + '; allowance ' +
         ALLOWANCE_MINOR + ' -> ' + after.remainingAllowanceMinor + ' minor for a ' + TIPPED_TOTAL_MINOR + ' minor lunch';
     });
 
-    journey.finding('defect', 'a superseded reservation is never released, and no endpoint can release it',
+    // 'note', not 'defect': the double-hold this journey was built to measure is closed, and the
+    // fixture allowance above is the measurement.
+    journey.finding('note', 'a re-quote now releases the reservation it supersedes',
       'Every quote adds its cap to the member\'s MealsBudgetGuards.ReservedMinor (MealsQuoteService ' +
       'CreateQuoteAsync: "SET ReservedMinor = ReservedMinor + cap ... AND ReservedMinor + cap <= ' +
-      'AllowanceMinor"), and the reservation only leaves that total by being bound and captured, by ' +
-      'expiring after 15 minutes, or through IMealsFundingAuthority.ReleaseAsync — which no controller ' +
-      'action reaches. MealsFundingController exposes companies, context, quotes and orders, and ' +
-      'nothing else. So re-quoting costs the guest their allowance twice for one lunch: this journey ' +
-      'needed ' + ALLOWANCE_MINOR + ' minor of budget to buy a ' + TIPPED_TOTAL_MINOR + ' minor meal. ' +
-      'With an ordinary allowance the re-quote is refused outright — meals-stale-token-refused walks ' +
-      'that. The fix is a release route the client calls when it supersedes a reservation; it is ' +
-      'backend work and is NOT in this lane.');
+      'AllowanceMinor"), and a superseded reservation used to leave that total only by being bound and ' +
+      'captured or by expiring after 15 minutes — IMealsFundingAuthority.ReleaseAsync existed but no ' +
+      'controller action reached it. So one lunch cost the allowance twice, and this journey needed ' +
+      '50000 minor of budget to buy a ' + TIPPED_TOTAL_MINOR + ' minor meal; it now runs on ' +
+      ALLOWANCE_MINOR + '. L-MEALS-REQUOTE-RELEASE put the release in CreateQuoteAsync itself, before ' +
+      'the compare-and-increment and inside its transaction, keyed on an optional supersedesToken the ' +
+      'client sends. NOT a new release route, and NOT inferred from the caller: at this endpoint a ' +
+      're-quote and a second independent cart are the same request, so releasing "the caller\'s ' +
+      'previous reservation" would have silently broken two money guarantees the backend suite pins — ' +
+      'a 15000 quote followed by a 10000 one against a 20000 allowance must still be refused, and N ' +
+      'concurrent quotes must still produce exactly allowance/cap winners. Because it lives on the ' +
+      'server, a direct API caller gets it too; because it is opt-in, nothing that does not ask is ' +
+      'changed. Expired reservations are deliberately left to the reconciliation sweep under its own ' +
+      'reason code.');
+
+    journey.finding('note', 'switching away from the company tender still strands its reservation',
+      'clearCompanyAccountTender drops the token client-side, so a guest who picks the company ' +
+      'account and then changes to a card leaves the reservation holding budget until it expires 15 ' +
+      'minutes later. The supersede above cannot reach it: there is no next quote to name it, and ' +
+      'still no release route for a client that is abandoning the tender rather than replacing it. ' +
+      'Lower severity than the re-quote double-hold — it costs the allowance once, not twice, and only ' +
+      'until the sweep runs — but it is the same missing capability and it is not in this lane.');
 
     // 'note', not 'defect': the artifact's documented severities are defect|note, and this one is
     // closed. Left in the journey because this is where it was found and where it is now proven.
