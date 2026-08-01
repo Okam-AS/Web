@@ -1,0 +1,178 @@
+FAIL test/core-price-label.test.js
+  the no-øre suffix stands in place of the øre, never beside them
+    ✕ a total carrying øre does not claim to have none (2 ms)
+    ✓ a whole-krone total keeps the suffix, which is what it is for
+    ✕ spelling the two zero øre out loud is still not "and no øre"
+    ✕ øre and the no-øre notation are mutually exclusive in every case
+  a total under one krone still carries øre
+    ✕ single-digit øre are padded, not erased (1 ms)
+    ✕ one øre is a price with øre
+  boundaries
+    ✕ zero
+    ✓ a negative whole-krone amount keeps its sign and its suffix
+    ✕ a negative amount under one krone is malformed, and that is pinned, not fixed here
+    ✕ a float minor amount renders its own representation, and never claims no øre (1 ms)
+    ✕ thousands grouping is untouched
+    ✓ hidePrefixAndSuffix drops the no-øre notation with everything else
+  no client that installs its own format regresses
+    ✓ the admin prefix format is byte-for-byte what it was
+    ✓ a Swiss store is unaffected — it has no suffix to suppress
+
+  ● the no-øre suffix stands in place of the øre, never beside them › a total carrying øre does not claim to have none
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "206,80"
+    Received: "206,80,–"
+
+      29 |   test('a total carrying øre does not claim to have none', () => {
+      30 |     // The confirmation page of the funded checkout: a 179,83 cart plus a 15% tip.
+    > 31 |     expect(priceLabel(20680, true)).toBe('206,80')
+         |                                     ^
+      32 |     expect(priceLabel(20680, false)).toBe('206,80')
+      33 |   })
+      34 |
+
+      at Object.<anonymous> (test/core-price-label.test.js:31:37)
+
+  ● the no-øre suffix stands in place of the øre, never beside them › spelling the two zero øre out loud is still not "and no øre"
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "188,00"
+    Received: "188,00,–"
+
+      40 |     // hideFractionIfZero=false asks for the fraction to be PRINTED. Printing ",00,–" says the
+      41 |     // amount both has two øre digits and has no øre.
+    > 42 |     expect(priceLabel(18800, false)).toBe('188,00')
+         |                                      ^
+      43 |   })
+      44 |
+      45 |   test('øre and the no-øre notation are mutually exclusive in every case', () => {
+
+      at Object.<anonymous> (test/core-price-label.test.js:42:38)
+
+  ● the no-øre suffix stands in place of the øre, never beside them › øre and the no-øre notation are mutually exclusive in every case
+
+    expect(received).not.toMatch(expected)
+
+    Expected pattern: not /,–$/
+    Received string:      "0,–"
+
+      45 |   test('øre and the no-øre notation are mutually exclusive in every case', () => {
+      46 |     for (const minor of [1, 9, 50, 99, 20680, 1234567, 100001]) {
+    > 47 |       expect(priceLabel(minor, true)).not.toMatch(/,–$/)
+         |                                           ^
+      48 |       expect(priceLabel(minor, false)).not.toMatch(/,–$/)
+      49 |     }
+      50 |     for (const minor of [100, 18800, 1234500]) {
+
+      at Object.<anonymous> (test/core-price-label.test.js:47:43)
+
+  ● a total under one krone still carries øre › single-digit øre are padded, not erased
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "01"
+    Received: "00"
+
+      61 |   // this is the shipped helper being brought into line with what those tests assert about it.
+      62 |   test('single-digit øre are padded, not erased', () => {
+    > 63 |     expect(fractionAmount(1)).toBe('01')
+         |                               ^
+      64 |     expect(fractionAmount(4)).toBe('04')
+      65 |     expect(fractionAmount(9)).toBe('09')
+      66 |     expect(fractionAmount(50)).toBe('50')
+
+      at Object.<anonymous> (test/core-price-label.test.js:63:31)
+
+  ● a total under one krone still carries øre › one øre is a price with øre
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "0,01"
+    Received: "0,–"
+
+      68 |
+      69 |   test('one øre is a price with øre', () => {
+    > 70 |     expect(priceLabel(1, true)).toBe('0,01')
+         |                                 ^
+      71 |     expect(priceLabel(9, false)).toBe('0,09')
+      72 |     expect(priceLabel(50, true)).toBe('0,50')
+      73 |   })
+
+      at Object.<anonymous> (test/core-price-label.test.js:70:33)
+
+  ● boundaries › zero
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "0,00"
+    Received: "0,00,–"
+
+      78 |     // Nothing owed is exactly the case the suffix was invented for.
+      79 |     expect(priceLabel(0, true)).toBe('0,–')
+    > 80 |     expect(priceLabel(0, false)).toBe('0,00')
+         |                                  ^
+      81 |   })
+      82 |
+      83 |   test('a negative whole-krone amount keeps its sign and its suffix', () => {
+
+      at Object.<anonymous> (test/core-price-label.test.js:80:34)
+
+  ● boundaries › a negative amount under one krone is malformed, and that is pinned, not fixed here
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "-,50"
+    Received: "-,50,–"
+
+      90 |     // positive minor amount (see the "−" + priceLabel(...) assertions in the margin panel tests), so
+      91 |     // nothing on screen depends on this. Pinned so a later lane that fixes it has to notice it did.
+    > 92 |     expect(priceLabel(-50, true)).toBe('-,50')
+         |                                   ^
+      93 |     // What it must NOT do, either way, is claim there are no øre.
+      94 |     expect(priceLabel(-50, true)).not.toMatch(/,–$/)
+      95 |   })
+
+      at Object.<anonymous> (test/core-price-label.test.js:92:35)
+
+  ● boundaries › a float minor amount renders its own representation, and never claims no øre
+
+    expect(received).not.toMatch(expected)
+
+    Expected pattern: not /,–$/
+    Received string:      "20 680.0 000 000 000,04,–"
+
+      100 |     // silently change what every such caller renders, which is a money change and not this one.
+      101 |     // What IS this lane's: the suffix decision must survive it.
+    > 102 |     expect(priceLabel(20680.000000000004, true)).not.toMatch(/,–$/)
+          |                                                      ^
+      103 |     expect(priceLabel(6.98, true)).not.toMatch(/,–$/)
+      104 |     expect(priceLabel(20680.000000000004, true)).toBe('20 680.0 000 000 000,04')
+      105 |   })
+
+      at Object.<anonymous> (test/core-price-label.test.js:102:54)
+
+  ● boundaries › thousands grouping is untouched
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "12 345,67"
+    Received: "12 345,67,–"
+
+      106 |
+      107 |   test('thousands grouping is untouched', () => {
+    > 108 |     expect(priceLabel(1234567, true)).toBe('12 345,67')
+          |                                       ^
+      109 |     expect(priceLabel(1234500, true)).toBe('12 345,–')
+      110 |   })
+      111 |
+
+      at Object.<anonymous> (test/core-price-label.test.js:108:39)
+
+Test Suites: 1 failed, 1 total
+Tests:       9 failed, 5 passed, 14 total
+Snapshots:   0 total
+Time:        0.871 s
+Ran all test suites matching /test\/core-price-label.test.js/i.

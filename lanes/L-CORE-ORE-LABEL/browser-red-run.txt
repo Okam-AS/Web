@@ -1,0 +1,45 @@
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  getByTestId('order-total')
+    Expected: "206,80"
+    Received: "206,80,–"
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveText" with timeout 15000ms
+      - waiting for getByTestId('order-total')
+        34 × locator resolved to <p data-testid="order-total">206,80,–</p>
+           - unexpected value "206,80,–"
+
+
+       98 |       // L-CORE-ORE-LABEL fixed it in Core. The whole-krone line items on this same page still read
+       99 |       // '149,–' and '39,–', which is the other half of the fix and is asserted below.
+    > 100 |       await expect(page.getByTestId('order-total')).toHaveText('206,80');
+          |                                                     ^
+      101 |       await expect(page.getByText('149,–')).toBeVisible();
+      102 |       await expect(page.getByText('39,–')).toBeVisible();
+      103 |       await expect(page.getByTestId('checkout-error')).toHaveCount(0);
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/consumer/meals-stale-token-requote.spec.js:100:53
+        at JourneyRecorder.step (/Users/svendaneel/okam/Web-modules/test/e2e/support/journey.js:151:22)
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/consumer/meals-stale-token-requote.spec.js:92:20
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output-consumer/meals-stale-token-requote--9e8cd--minted-for-the-tipped-cart-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/meals-stale-token-requote.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output-consumer/meals-stale-token-requote--9e8cd--minted-for-the-tipped-cart-chromium/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output-consumer/meals-stale-token-requote--9e8cd--minted-for-the-tipped-cart-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output-consumer/meals-stale-token-requote--9e8cd--minted-for-the-tipped-cart-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › test/e2e/journeys/consumer/meals-stale-token-requote.spec.js:36:1 › a tip added a moment before pay is funded by a reservation minted for the tipped cart @fixture 

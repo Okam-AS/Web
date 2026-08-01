@@ -1,0 +1,25 @@
+PASS test/core-price-label.test.js
+  the no-øre suffix stands in place of the øre, never beside them
+    ✓ a total carrying øre does not claim to have none (1 ms)
+    ✓ a whole-krone total keeps the suffix, which is what it is for
+    ✓ spelling the two zero øre out loud is still not "and no øre"
+    ✓ øre and the no-øre notation are mutually exclusive in every case (1 ms)
+  a total under one krone still carries øre
+    ✓ single-digit øre are padded, not erased
+    ✓ one øre is a price with øre
+  boundaries
+    ✓ zero
+    ✓ a negative whole-krone amount keeps its sign and its suffix
+    ✓ a negative amount under one krone is malformed, and that is pinned, not fixed here
+    ✓ a float minor amount renders its own representation, and never claims no øre
+    ✓ thousands grouping is untouched
+    ✓ hidePrefixAndSuffix drops the no-øre notation with everything else
+  no client that installs its own format regresses
+    ✓ the admin prefix format is byte-for-byte what it was (1 ms)
+    ✓ a Swiss store is unaffected — it has no suffix to suppress
+
+Test Suites: 1 passed, 1 total
+Tests:       14 passed, 14 total
+Snapshots:   0 total
+Time:        1.235 s
+Ran all test suites matching /test\/core-price-label.test.js/i.

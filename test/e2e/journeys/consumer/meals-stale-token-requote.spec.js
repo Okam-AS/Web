@@ -93,8 +93,13 @@ test(
       gate.release();
       await page.waitForURL(/\/confirmation/, { timeout: 30000 });
       await expect(page.getByTestId('confirmation-heading')).toBeVisible();
-      // Asserted verbatim, malformation included — see the price-label finding below.
-      await expect(page.getByTestId('order-total')).toHaveText('206,80,–');
+      // A total with øre, printed as one. This line used to read '206,80,–' — the øre followed by the
+      // notation that means there are none — and was asserted verbatim, malformation included, until
+      // L-CORE-ORE-LABEL fixed it in Core. The whole-krone line items on this same page still read
+      // '149,–' and '39,–', which is the other half of the fix and is asserted below.
+      await expect(page.getByTestId('order-total')).toHaveText('206,80');
+      await expect(page.getByText('149,–')).toBeVisible();
+      await expect(page.getByText('39,–')).toBeVisible();
       await expect(page.getByTestId('checkout-error')).toHaveCount(0);
       await journey.shot('order confirmed at the tipped total');
 
@@ -141,14 +146,27 @@ test(
       'that. The fix is a release route the client calls when it supersedes a reservation; it is ' +
       'backend work and is NOT in this lane.');
 
-    journey.finding('defect', 'a total with øre prints as "206,80,–"',
-      'core/helpers/tools.ts priceLabelTool appends the currency suffix unconditionally, and for NOK ' +
-      'that suffix is ",–" — the notation that MEANS "and no øre". A whole-kroner total reads "188,–" ' +
-      'correctly; the moment a tip, a percentage discount or a Swiss price produces a fraction it ' +
-      'reads "206,80,–", which is not a price in any locale. Seen on the confirmation, and it is the ' +
-      'same helper the cart, the checkout button and the payer strip use. Not this lane\'s to fix — ' +
-      'it is a Core formatting change that touches every amount in every client — but it is on screen ' +
-      'today and the funded-checkout journey did not see it because its cart had no øre.');
+    // 'note', not 'defect': the artifact's documented severities are defect|note, and this one is
+    // closed. Left in the journey because this is where it was found and where it is now proven.
+    journey.finding('note', 'a total with øre no longer prints as "206,80,–"',
+      'core/helpers/tools.ts priceLabelTool appended the currency suffix unconditionally, and for NOK ' +
+      'that suffix is ",–" — the notation that MEANS "and no øre" — so the moment a tip, a percentage ' +
+      'discount or a Swiss price produced a fraction the total read "206,80,–". L-CORE-ORE-LABEL made ' +
+      'the suffix and the fraction mutually exclusive in Core, and padded single-digit øre (4 øre used ' +
+      'to print "0,–": the amount erased AND the claim wrong). This journey is the browser evidence: ' +
+      'the run before the fix resolved <p data-testid="order-total">206,80,–</p>, and the total now ' +
+      'reads "206,80" while the whole-krone lines on the same confirmation still read "149,–" and ' +
+      '"39,–" — both halves of the rule in one screenshot. Landed in ConsumerWeb\'s Core pin and in ' +
+      'Web-modules\' Core pin; ConsumerApp and AdminApp pin different Core commits and still carry it.');
+
+    journey.finding('note', 'what the price helper still gets wrong, and why it was left alone',
+      'Two malformations survive the øre fix and are pinned rather than changed in test/core-price-' +
+      'label.test.js. A negative amount under one krone renders "-,50", because wholeAmountTool slices ' +
+      'the string and "-50" has no whole part left — and OrderSummary.vue reaches that path directly ' +
+      '(`priceLabel(item.amount * item.quantity * (item.negativeAmount ? -1 : 1), true)`), so a ' +
+      'sub-krone discount line would show it. And a non-integer minor amount renders its float ' +
+      'expansion grouped as digits ("6.,98"). Rounding or sign handling in the shared helper changes ' +
+      'what every caller renders, which is a money change and needs its own lane.');
 
     journey.finding('note', 'the client only re-quotes when the held cap can no longer fund the cart',
       'A reservation is a cap, not a price, and the bind never compares the quote hash, so a cart ' +

@@ -1,0 +1,32 @@
+Core submodule checkouts on this machine, and which of them could ever print the defect.
+Measured 2026-08-01 by L-CORE-ORE-LABEL, from `git submodule status` in each client and the one
+setCurrencyFormat call site each of them has.
+
+`,–` can only appear where a client leaves the suffix non-empty. Three of the five overwrite it with
+"" at startup, so the defect was never on their screens; the two consumer clients re-apply Core's
+Norwegian default verbatim, and those are the two that rendered "206,80,–".
+
+client        core path   pin BEFORE  pin AFTER   Core branch             suffix installed at runtime      rendered it
+------------------------------------------------------------------------------------------------------------------------
+Web-modules   core        cd1cc864    4f31003c    feature/POS (detached)  ""    plugins/global-mixin.js:55  no
+Web           core        cd1cc864    cd1cc864    feature/POS (detached)  ""    plugins/global-mixin.js:55  no
+ConsumerWeb   core        c339a1b6    c0d70a40    feature/swiss (local)   ",–"  plugins/1.currency-format   YES
+ConsumerApp   core        c8799356    c8799356    feature/swiss (local)   ",–"  src/app.ts:79               YES
+AdminApp      app/core    cdae43de    cdae43de    master-8-gcdae43d       ""    app/main.ts:246             no
+
+Four distinct pins across three Core branches. The two feature/swiss checkouts are not the same
+history: ConsumerApp's c8799356 is not even an object in ConsumerWeb/core, and both carry commits
+with identical subjects under different shas. So there is no single Core commit that reaches every
+client — the fix has to land on each branch, and each product repo has to move its own pin.
+
+Web-modules and ConsumerWeb are moved here. Web shares Web-modules' pin and is the same app, so it
+inherits when that pin is taken. ConsumerApp and AdminApp are separate product repos on separate Core
+branches: reaching them is a pin decision this lane cannot make, which is what it returns blocked on.
+
+Of the two that were never moved, only ConsumerApp renders the defect. AdminApp does not, because it
+installs an empty suffix — but it does still carry the 1-9 øre half of the fix (4 øre printing as
+"0,00" rather than "0,04"), and so do Web and AdminApp's own local copies of wholeAmount/
+fractionAmount in app/main.ts, which are hand-written duplicates and were not touched.
+
+Neither Core commit is pushed, and neither pin bump is pushed. Both pins resolve only in this
+working tree until the Core branches go up.

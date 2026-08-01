@@ -1,0 +1,27 @@
+[WebServer] [consumer-fixture] listening on http://127.0.0.1:4020
+[WebServer] [ nuxi ] Nuxt 3.16.2 with Nitro 2.11.8
+[WebServer] 
+[WebServer]   ➜ Local:    http://localhost:3020/
+[WebServer]   ➜ Network:  use --host to expose
+[WebServer] 
+[WebServer]   ➜ DevTools: press Shift + Option + D in the browser (v2.3.2)
+[WebServer] 
+[WebServer] ✔ Vite client built in 20ms
+[WebServer] 
+[WebServer]  WARN  Browserslist: browsers data (caniuse-lite) is 9 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[WebServer] 
+[WebServer] ✔ Vite server built in 221ms
+[WebServer] [nitro] ✔ Nuxt Nitro server built in 234ms
+[WebServer] ℹ Vite client warmed up in 1ms
+
+Running 5 tests using 1 worker
+
+  ✓  1 [chromium] › test/e2e/journeys/consumer/meals-funded-checkout.spec.js:25:1 › a guest puts lunch on the company tab and the company budget pays for it @fixture (1.4s)
+  ✓  2 [chromium] › test/e2e/journeys/consumer/meals-funded-guard.spec.js:19:1 › the same order without its reservation token is refused and nothing is funded @fixture (595ms)
+  ✓  3 [chromium] › test/e2e/journeys/consumer/meals-funded-over-allowance.spec.js:22:1 › a cart above the company allowance is refused before the guest commits, not after @fixture (590ms)
+  ✓  4 [chromium] › test/e2e/journeys/consumer/meals-stale-token-refused.spec.js:23:1 › a stale reservation is never sent, and the refusal happens before an order exists to cancel @fixture (2.5s)
+  ✓  5 [chromium] › test/e2e/journeys/consumer/meals-stale-token-requote.spec.js:36:1 › a tip added a moment before pay is funded by a reservation minted for the tipped cart @fixture (2.9s)
+
+  5 passed (11.5s)
