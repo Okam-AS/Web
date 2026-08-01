@@ -89,6 +89,17 @@
               </template>
             </p>
 
+            <!-- What must already be true before this switch goes on — printed on the row, directly
+                 above the control, because that is the moment it is read. It is a DISCLOSURE: the
+                 API enforces none of it, and neither does this page. -->
+            <p
+              v-if="preconditionKey(row)"
+              class="ff-row__precondition"
+              :data-precondition="row.flagKey"
+            >
+              {{ $i(preconditionKey(row)) }}
+            </p>
+
             <!-- A key the catalog does not carry is not writable: the PUT answers 400 for it. No
                  toggle is drawn, because an affordance certain to be refused is worse than none. -->
             <p v-if="row.writable === false" class="ff-row__warn">
@@ -164,6 +175,26 @@ import { buildBoard, isOverruled, BOARD_UNKNOWN } from '~/utils/platform/flag-bo
 // (`Growth:Enabled`, `Events:Enabled`, `Margin` config): those are `appsettings`/environment, not
 // data, and no endpoint exposes them. Their invisibility is exactly why `effective: true` is not a
 // promise on this surface, which is stated on screen rather than left to be discovered.
+
+// Flags whose OWNER states a precondition that must hold before the switch goes on, and that nothing
+// in the estate enforces.
+//
+// `Events.Deposits` is the only one today. `EventsFeatureFlags.Deposits` says, in the backend's own
+// words, that a store may be given the deposit money path only once its payment-provider
+// configuration has already processed live orders — deposits reuse proven merchant config and
+// configure nothing of their own — and that enabling it for a store that never took a live payment
+// "is currently possible and is a procedural failure, not a technical one". Before this page that
+// arming was a curl; it is now one click, so the sentence has to be where the click happens.
+//
+// IT IS A DISCLOSURE, NOT A GATE. There is no notion of "proven merchant configuration" in the code
+// and no ruling that says arming should be refused without one, so nothing here blocks, warns
+// conditionally, or claims the API will refuse — all three would be inventions. A flag absent from
+// this map carries no precondition text at all rather than a generic one; a blanket note at the top
+// of the page would be read as covering all eighteen rows, which is a different and false claim.
+const FLAG_PRECONDITIONS = {
+  'Events.Deposits': 'ff_precondition_events_deposits'
+};
+
 export default {
   name: 'AdminFeatureFlags',
   components: { AdminPage },
@@ -324,6 +355,17 @@ export default {
     overruled (row) {
       return isOverruled(row);
     },
+    /**
+     * The i18n key of this flag's arming precondition, or null when its owner states none. Keyed on
+     * the exact catalog key: `Events.Deposits` is a rollout contract the backend documents as having
+     * to stay stable, so an exact match is the right strictness — a prefix match would silently put
+     * the deposit sentence on a future `Events.DepositsSomethingElse` that never claimed it.
+     */
+    preconditionKey (row) {
+      return (row && Object.prototype.hasOwnProperty.call(FLAG_PRECONDITIONS, row.flagKey))
+        ? FLAG_PRECONDITIONS[row.flagKey]
+        : null;
+    },
     stateLabel (row) {
       if (row.state === null) { return this.$i('ff_state_unknown'); }
       return row.state ? this.$i('ff_state_on') : this.$i('ff_state_off');
@@ -403,6 +445,11 @@ export default {
 .ff-row__fact { color: #94a3b8; font-size: 0.78rem; }
 .ff-row__fact.is-warn { color: #92400e; }
 .ff-row__warn { margin: 8px 0 0; padding: 8px 12px; border-radius: 8px; background: #fffbeb; border: 1px solid #fde68a; color: #92400e; font-size: 0.82rem; }
+/* Deliberately NOT `ff-row__warn`. A warn box on this page means the server told us something is
+   wrong right now; this is a standing condition that is true whatever the row says, and reading the
+   two as the same thing is what makes a permanent banner invisible. Same amber family so it still
+   reads as caution on a money path, a left rule instead of a filled box so it reads as standing. */
+.ff-row__precondition { margin: 10px 0 0; padding: 8px 12px; border-left: 3px solid #92400e; background: #fffdf5; color: #92400e; font-size: 0.82rem; line-height: 1.45; }
 .ff-row__meta { margin: 8px 0 0; color: #94a3b8; font-size: 0.78rem; }
 
 .ff-row__note { display: flex; flex-direction: column; gap: 4px; margin-top: 10px; }

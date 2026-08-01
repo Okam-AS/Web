@@ -4970,6 +4970,9 @@ export default {
   ff_overruled: 'Bryteren står på, men modulens port svarer likevel av. Noe annet holder modulen nede — en hovedbryter eller en driftsbryter i serveroppsettet. Å skru denne av og på igjen endrer ingenting.',
   ff_state_unknown_row: 'Denne nøkkelen finnes i katalogen, men butikkens svar inneholdt den ikke. Hva den står på her, vet vi ikke.',
   ff_not_writable: 'Katalogen har ikke denne nøkkelen, så tjenesten avviser å skrive den. Ingen bryter tilbys.',
+  // Forutsetningen som gjelder FØR bryteren slås på, og som ingen kode håndhever. Den står på raden
+  // fordi det er der noen slår den på — ikke i et notat øverst som gjelder alle de atten bryterne.
+  ff_precondition_events_deposits: 'Før denne slås på: butikken må allerede ha tatt imot ekte bestillinger gjennom sitt eget betalingsoppsett. Depositum trekkes gjennom nøyaktig det samme oppsettet og setter ikke opp noe eget. Ingenting her sjekker det — å slå den på for en butikk som aldri har tatt imot en ekte betaling går gjennom, og er en svikt i rutinen, ikke i programvaren.',
   ff_note_label: 'Begrunnelse',
   ff_note_placeholder: 'Hvorfor endres denne nå?',
   ff_updated_by: 'Sist endret av {actor}',

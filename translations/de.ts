@@ -4920,6 +4920,9 @@ export default {
   ff_overruled: 'Der Schalter ist an, die Prüfung des Moduls antwortet trotzdem aus. Etwas anderes hält das Modul unten — ein Hauptschalter oder ein Betriebsschalter in der Serverkonfiguration. Diesen aus- und wieder einzuschalten ändert nichts.',
   ff_state_unknown_row: 'Dieser Schlüssel steht im Katalog, aber die Antwort des Lokals enthielt ihn nicht. Worauf er hier steht, wissen wir nicht.',
   ff_not_writable: 'Der Katalog führt diesen Schlüssel nicht, der Dienst lehnt das Schreiben also ab. Es wird kein Schalter angeboten.',
+  // Die Voraussetzung, die VOR dem Einschalten gilt und die kein Code erzwingt. Sie steht auf der
+  // Zeile, weil dort jemand den Schalter umlegt — nicht in einem Hinweis über allen achtzehn.
+  ff_precondition_events_deposits: 'Bevor dieser Schalter umgelegt wird: das Lokal muss bereits echte Bestellungen über seine eigene Zahlungskonfiguration abgewickelt haben. Anzahlungen laufen über genau diese Konfiguration und richten nichts Eigenes ein. Hier wird das nicht geprüft — für ein Lokal, das noch nie eine echte Zahlung angenommen hat, geht das Einschalten trotzdem durch, und das ist ein Fehler im Verfahren, nicht in der Software.',
   ff_note_label: 'Begründung',
   ff_note_placeholder: 'Warum wird das jetzt geändert?',
   ff_updated_by: 'Zuletzt geändert von {actor}',

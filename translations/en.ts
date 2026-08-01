@@ -4915,6 +4915,9 @@ export default {
   ff_overruled: 'The switch is on, but the module\'s gate still answers off. Something else is holding the module down — a master flag or a deployment switch in the server configuration. Turning this off and on again changes nothing.',
   ff_state_unknown_row: 'This key is in the catalogue, but the store\'s answer did not carry it. We do not know what it is set to here.',
   ff_not_writable: 'The catalogue does not carry this key, so the service refuses to write it. No switch is offered.',
+  // The precondition that holds BEFORE the switch goes on, and that no code enforces. It sits on the
+  // row because that is where somebody arms it — not in a note at the top that covers all eighteen.
+  ff_precondition_events_deposits: 'Before this is switched on: the store must already have taken live orders through its own payment setup. Deposits are charged through exactly that merchant configuration and set nothing up of their own. Nothing here checks it — switching this on for a store that has never taken a live payment will succeed, and it is a failure of procedure, not of the software.',
   ff_note_label: 'Reason',
   ff_note_placeholder: 'Why is this being changed now?',
   ff_updated_by: 'Last changed by {actor}',

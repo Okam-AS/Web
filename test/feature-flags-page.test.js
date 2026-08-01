@@ -74,8 +74,37 @@ const STATES = [
   }
 ]
 
+// The Events deposit flag, added through per-test overrides rather than to the shared fixtures above,
+// so the row counts the sibling tests assert stay the numbers those tests chose.
+const DEPOSITS_KEY = 'Events.Deposits'
+const DEPOSITS_CATALOG = CATALOG.concat([
+  { flagKey: DEPOSITS_KEY, module: 'Events', title: 'Deposit money path', defaultEnabled: false }
+])
+const DEPOSITS_STATES = STATES.concat([
+  {
+    flagKey: DEPOSITS_KEY,
+    module: 'Events',
+    title: 'Deposit money path',
+    defaultEnabled: false,
+    isOverridden: false,
+    overrideEnabled: false,
+    effective: false,
+    updatedByReference: null,
+    updatedAtUtc: null,
+    note: null
+  }
+])
+
+const withDeposits = () => {
+  behaviour.GetCatalog = () => Promise.resolve(DEPOSITS_CATALOG)
+  behaviour.GetStoreFlags = () => Promise.resolve(DEPOSITS_STATES)
+}
+
 const settled = () => new Promise(resolve => setTimeout(resolve, 0))
 const callsTo = name => calls.filter(c => c[0] === name)
+/** The one `.ff-row` whose key cell is `flagKey`. */
+const rowFor = (wrapper, flagKey) =>
+  wrapper.findAll('.ff-row').wrappers.find(row => row.find('.ff-row__key').text() === flagKey)
 
 // A refusal in the shape `PlatformApiError` produces: a real Error (so the page's own `e.message`
 // path is the one under test) carrying the transpile-proof discriminator and the status.
@@ -279,6 +308,89 @@ describe('what it refuses to claim', () => {
   })
 })
 
+// Arming `Events.Deposits` opens a money path, and its owner (`EventsFeatureFlags.Deposits`) states a
+// precondition nothing enforces: the store's payment-provider configuration must already have
+// processed live orders, and arming it for one that never took a live payment "is currently possible
+// and is a procedural failure, not a technical one". That was tolerable while the only way to arm it
+// was a curl. This page made it one click, so the sentence has to be on the row.
+describe('the deposit switch names what must be true before it is thrown', () => {
+  test('the precondition is on the deposits row, above that row\'s own switch', async () => {
+    withDeposits()
+    const wrapper = mountPage()
+    await settled()
+
+    const row = rowFor(wrapper, DEPOSITS_KEY)
+    expect(row).toBeDefined()
+    const note = row.find('[data-precondition="' + DEPOSITS_KEY + '"]')
+    expect(note.exists()).toBe(true)
+    expect(note.text()).toBe('ff_precondition_events_deposits')
+
+    // ABOVE the control, not below it: an operator who has already clicked has not been told
+    // anything. Order within the row's own markup, so it cannot be satisfied by a note elsewhere.
+    const html = row.html()
+    expect(html.indexOf('data-precondition')).toBeGreaterThan(-1)
+    expect(html.indexOf('data-flag-on')).toBeGreaterThan(-1)
+    expect(html.indexOf('data-precondition')).toBeLessThan(html.indexOf('data-flag-on'))
+  })
+
+  // A sentence printed on every row is a sentence nobody reads, and on seventeen of them it would be
+  // a false claim about a flag whose owner states no such precondition.
+  test('no other flag row claims a precondition', async () => {
+    withDeposits()
+    const wrapper = mountPage()
+    await settled()
+
+    expect(wrapper.findAll('[data-precondition]')).toHaveLength(1)
+    expect(rowFor(wrapper, 'workforce.publication').find('[data-precondition]').exists()).toBe(false)
+    expect(rowFor(wrapper, 'Margin.Module').find('[data-precondition]').exists()).toBe(false)
+  })
+
+  // The row still renders it when the store read did not carry the key (state unknown) — the
+  // precondition is a property of the FLAG, not of a value this store happens to have.
+  test('the precondition survives a store read that never mentioned the flag', async () => {
+    behaviour.GetCatalog = () => Promise.resolve(DEPOSITS_CATALOG)
+    behaviour.GetStoreFlags = () => Promise.resolve(STATES)
+    const wrapper = mountPage()
+    await settled()
+
+    const row = rowFor(wrapper, DEPOSITS_KEY)
+    expect(row.text()).toContain('ff_state_unknown_row')
+    expect(row.find('[data-precondition="' + DEPOSITS_KEY + '"]').exists()).toBe(true)
+  })
+
+  // The copy itself, in every locale, asserted on its CONTENT. Three obligations, and the third is
+  // the one that keeps this a disclosure: the page must not promise a refusal the API will not make.
+  // Nothing in the estate defines "proven merchant configuration", so no code — here or in the API —
+  // can block this write, and saying otherwise would be inventing a ruling nobody has made.
+  const PRECONDITION_SAYS = {
+    no: {
+      'names the precondition': [/ekte bestillinger/i, /betalingsoppsett/i],
+      'says nothing here checks it': [/ingenting her sjekker det/i],
+      'says arming it anyway still goes through': [/går gjennom/i]
+    },
+    en: {
+      'names the precondition': [/live orders/i, /payment setup/i],
+      'says nothing here checks it': [/nothing here checks it/i],
+      'says arming it anyway still goes through': [/will succeed/i]
+    },
+    de: {
+      'names the precondition': [/echte Bestellungen/i, /Zahlungskonfiguration/i],
+      'says nothing here checks it': [/nicht geprüft/i],
+      'says arming it anyway still goes through': [/geht das Einschalten trotzdem durch/i]
+    }
+  }
+
+  test.each(['no', 'en', 'de'])('%s states the precondition, that it is unchecked, and that arming still succeeds', (locale) => {
+    const text = translations[locale].ff_precondition_events_deposits
+    expect(typeof text).toBe('string')
+    Object.keys(PRECONDITION_SAYS[locale]).forEach((obligation) => {
+      PRECONDITION_SAYS[locale][obligation].forEach((pattern) => {
+        expect({ obligation, text }).toEqual({ obligation, text: expect.stringMatching(pattern) })
+      })
+    })
+  })
+})
+
 describe('every key this page prints exists in all three locales', () => {
   // The repo has shipped a missing-translation defect before, and a kill-switch page rendering a raw
   // key during an incident is the worst possible time to find one.
@@ -287,7 +399,8 @@ describe('every key this page prints exists in all three locales', () => {
     'ff_withheld_note', 'ff_catalog_unknown', 'ff_read_failed', 'ff_forbidden', 'ff_module_unknown',
     'ff_state_on', 'ff_state_off', 'ff_state_unknown', 'ff_default_on', 'ff_default_off',
     'ff_overridden', 'ff_not_overridden', 'ff_override_unknown', 'ff_effective_on', 'ff_effective_off',
-    'ff_effective_unknown', 'ff_overruled', 'ff_state_unknown_row', 'ff_not_writable', 'ff_note_label',
+    'ff_effective_unknown', 'ff_overruled', 'ff_state_unknown_row', 'ff_not_writable',
+    'ff_precondition_events_deposits', 'ff_note_label',
     'ff_note_placeholder', 'ff_updated_by', 'ff_actor_unknown', 'ff_turn_on', 'ff_turn_off', 'ff_clear',
     'ff_saved_on', 'ff_saved_off', 'ff_cleared', 'ff_clear_none', 'ff_generic_error',
     'wf_conflict_flag_title', 'wf_conflict_flag', 'wf_conflict_flag_unnamed', 'wf_conflict_flag_link'
