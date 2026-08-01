@@ -213,9 +213,31 @@
           <div><dt>{{ $i('ev_runsheet_from') }}</dt><dd>{{ count(runSheet.view.generatedFromProposalVersionNo) }}</dd></div>
           <div><dt>{{ $i('ev_runsheet_issued_by') }}</dt><dd>{{ authorLabel(runSheet.view.issuedByUserId) }}</dd></div>
           <div><dt>{{ $i('ev_runsheet_issued_at') }}</dt><dd>{{ instant(runSheet.view.issuedAtUtc) }}</dd></div>
+          <!-- The stamp the staleness rule actually compares against, which is NOT the issue time
+               beside it. Without it on screen the dietary line below asserts a comparison against a
+               value nobody can see. -->
+          <div><dt>{{ $i('ev_runsheet_composed') }}</dt><dd>{{ instant(runSheet.view.createdAtUtc) }}</dd></div>
         </dl>
-        <p v-if="runSheet.view.isStale" class="ev-journey__notice ev-journey__notice--warn">
+        <p v-if="runSheet.view.isStale" class="ev-journey__notice ev-journey__notice--warn" data-test="runsheet-stale">
           {{ $i('ev_runsheet_stale') }}
+        </p>
+        <!-- The dietary cause, named separately, because the line above names only one of the four
+             the server folds into `isStale` — and this is the one a kitchen might reasonably decide
+             is safe to ignore if it were labelled as a version bump. Shown on its own evidence, not
+             on `isStale`, so it neither hides nor is hidden by the sentence above. -->
+        <p
+          v-if="dietaryDrift.state === DIETARY_DRIFT_STATEMENT"
+          class="ev-journey__notice ev-journey__notice--warn"
+          data-test="runsheet-stale-dietary"
+        >
+          {{ $i('ev_runsheet_stale_dietary', { at: instant(dietaryDrift.statedAtUtc) }) }}
+        </p>
+        <p
+          v-else-if="dietaryDrift.state === DIETARY_DRIFT_NOTE"
+          class="ev-journey__notice ev-journey__notice--warn"
+          data-test="runsheet-stale-note"
+        >
+          {{ $i('ev_runsheet_stale_note', { count: dietaryDrift.laterNoteCount }) }}
         </p>
         <ul v-if="runSheetItems.length" class="ev-journey__items">
           <li v-for="(item, index) in runSheetItems" :key="index">
@@ -318,9 +340,12 @@ import {
   STATUS_ABSENT,
   STATUS_UNRECOGNISED,
   AUTHOR_NONE,
+  DIETARY_DRIFT_STATEMENT,
+  DIETARY_DRIFT_NOTE,
   buildPhaseRail,
   readEventStatus,
   readAuthor,
+  readDietaryDrift,
   readMinor,
   eventDateKey,
   clockLabel,
@@ -377,7 +402,9 @@ export default {
       FACET_HELD,
       FACET_NONE,
       STATUS_ABSENT,
-      STATUS_UNRECOGNISED
+      STATUS_UNRECOGNISED,
+      DIETARY_DRIFT_STATEMENT,
+      DIETARY_DRIFT_NOTE
     };
   },
   computed: {
@@ -403,6 +430,15 @@ export default {
     },
     dietaryStatement () {
       return this.detail.dietary ? this.detail.dietary.statement : null;
+    },
+    /**
+     * Whether what the sheet's dietary section reads has moved since the sheet was composed.
+     *
+     * Only a HELD sheet is passed: for any other state there is no composition stamp to compare
+     * against, and `readDietaryDrift` answers UNKNOWN rather than assuming the paper is current.
+     */
+    dietaryDrift () {
+      return readDietaryDrift(this.detail, this.runSheet.state === FACET_HELD ? this.runSheet.view : null);
     },
     // The venue's own zone, off the event. There is no fallback to the browser's: an instant this
     // surface cannot place is left unplaced rather than shown in whatever zone the laptop is set to.

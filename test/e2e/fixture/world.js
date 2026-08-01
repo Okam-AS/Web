@@ -265,6 +265,117 @@ const PROPOSALS = {
   })
 };
 
+// ---- Events: the venue's own pipeline ------------------------------------------------------------
+//
+// TWO ENQUIRIES, AND THE SECOND ONE IS THE POINT OF HAVING TWO. `EventsRunSheetService.Map` folds
+// FOUR causes into the single `isStale` boolean — superseded, no operative version, a source version
+// that is not the operative one, and a dietary input recorded after the sheet was composed — and the
+// wire says nothing about which. So the world models the two readings that must not look alike:
+//
+//   EVENT_VERSION_STALE   the sheet was generated from v1 and v2 is now operative. Version drift and
+//                         nothing else: no statement, no note, later than the sheet.
+//   EVENT_DIETARY_STALE   the sheet IS from the operative version and nothing about the proposal has
+//                         moved. The only thing that changed is an allergy the venue wrote down two
+//                         hours after the paper was printed.
+//
+// Both answer `isStale: true` and are indistinguishable on the wire; a surface that renders the same
+// sentence for both tells a kitchen the second one is version bookkeeping.
+
+const EVENT_VERSION_STALE = 71;
+const EVENT_DIETARY_STALE = 72;
+
+/** A fixed day for the two enquiries — far enough out that no clock makes them fall in the past. */
+const EVENT_DATE = '2026-12-12';
+
+/** Composition, issue, and the moment the allergy was written down. Bare, as the wire carries them. */
+const RUNSHEET_COMPOSED_AT = '2026-12-01T09:00:00';
+const RUNSHEET_ISSUED_AT = '2026-12-01T09:05:00';
+const DIETARY_STATED_AT = '2026-12-01T11:20:00';
+
+function eventRow (id, title, over) {
+  return Object.assign({
+    id,
+    publicId: '00000000-0000-0000-0000-0000000000' + id,
+    status: 'Confirmed',
+    title,
+    eventDate: EVENT_DATE + 'T00:00:00',
+    guestCountPlanned: 40,
+    contactName: 'Kari Nordmann',
+    acceptedProposalVersionNo: 1,
+    createdAtUtc: '2026-11-01T09:00:00'
+  }, over);
+}
+
+const EVENT_ROWS = [
+  eventRow(EVENT_VERSION_STALE, 'Julebord — Nordane AS', { acceptedProposalVersionNo: 2 }),
+  eventRow(EVENT_DIETARY_STALE, 'Bursdag — Familien Hansen')
+];
+
+function eventDetail (eventId) {
+  const row = EVENT_ROWS.find(e => e.id === eventId);
+  if (!row) { return null; }
+  const dietary = eventId === EVENT_DIETARY_STALE
+    ? {
+      eventId,
+      statement: 'Gjest 12: nøtteallergi, EpiPen ved bordet. Gjest 3: cøliaki.',
+      statedAtUtc: DIETARY_STATED_AT,
+      statedByUserId: 'user-manager'
+    }
+    // Null statement is "nobody has been asked", which the surface renders as unanswered. It is not
+    // "no requirements", and the difference is the whole reason the field exists.
+    : { eventId, statement: null, statedAtUtc: null, statedByUserId: null };
+
+  return Object.assign({}, row, {
+    storeId: STORE_ID,
+    startTime: '18:30:00',
+    endTime: '23:00:00',
+    timeZoneId: TIME_ZONE,
+    contactEmail: 'kari@example.no',
+    contactPhone: '+4790000002',
+    companyName: eventId === EVENT_VERSION_STALE ? 'Nordane AS' : null,
+    companyOrgNumber: eventId === EVENT_VERSION_STALE ? '912345678' : null,
+    source: 'Manual',
+    versions: [],
+    transitions: [],
+    // Every note predates the sheet in both worlds. A later note produces the OTHER, weaker line, and
+    // a fixture that quietly triggered it would make the dietary assertion pass for the wrong reason.
+    notes: [{ id: 1, authorUserId: null, body: 'Kan vi ha bordplassering?', createdAtUtc: '2026-11-01T09:05:00' }],
+    dietary
+  });
+}
+
+function eventRunSheet (eventId) {
+  const row = EVENT_ROWS.find(e => e.id === eventId);
+  if (!row) { return null; }
+  return {
+    versionNo: 1,
+    status: 'Issued',
+    // The version-drift world: the sheet came off v1 and v2 is now operative. The dietary world's
+    // sheet came off the version that is still operative, so its staleness has ONE cause.
+    generatedFromProposalVersionNo: 1,
+    operativeProposalVersionNo: row.acceptedProposalVersionNo,
+    isStale: true,
+    issuedByUserId: 'user-manager',
+    createdAtUtc: RUNSHEET_COMPOSED_AT,
+    issuedAtUtc: RUNSHEET_ISSUED_AT,
+    items: [
+      { section: 'Timeline', sortOrder: 1, timeLabel: '18:30', body: 'Gjestene ankommer', quantityLabel: null },
+      { section: 'Menu', sortOrder: 2, timeLabel: null, body: 'Julebordmeny', quantityLabel: '40' },
+      {
+        section: 'Dietary',
+        sortOrder: 3,
+        timeLabel: null,
+        // What the sheet printed AT COMPOSITION. In the dietary world the statement below it was made
+        // two hours later, so this line is what is actually on the paper at the pass.
+        body: 'Dietary and allergen requirements are not captured as structured data, so this sheet ' +
+          'cannot confirm that there are none.',
+        quantityLabel: null
+      },
+      { section: 'Staffing', sortOrder: 4, timeLabel: null, body: 'Plan staffing for 40 guests.', quantityLabel: null }
+    ]
+  };
+}
+
 module.exports = {
   MANAGER_PHONE,
   WORKER_PHONE,
@@ -282,5 +393,14 @@ module.exports = {
   BUSINESS_NAME,
   ORGANIZATION_NUMBER,
   HIRED_IN_ORGANIZATION_NUMBER,
-  personnelList
+  personnelList,
+  EVENT_VERSION_STALE,
+  EVENT_DIETARY_STALE,
+  EVENT_DATE,
+  RUNSHEET_COMPOSED_AT,
+  RUNSHEET_ISSUED_AT,
+  DIETARY_STATED_AT,
+  EVENT_ROWS,
+  eventDetail,
+  eventRunSheet
 };

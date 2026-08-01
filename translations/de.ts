@@ -4010,6 +4010,9 @@ export default {
   ev_runsheet_issued_by: 'Ausgestellt von',
   ev_runsheet_issued_at: 'Ausgestellt',
   ev_runsheet_stale: 'Dieser Ablaufplan stammt nicht aus der gültigen Angebotsversion. Erzeuge ihn vor dem Service neu.',
+  ev_runsheet_composed: 'Zusammengestellt',
+  ev_runsheet_stale_dietary: 'Eine Angabe zu Allergien oder Ernährung wurde {at} zu dieser Buchung erfasst — nach dem Zusammenstellen dieses Ablaufplans. Sie steht nicht auf dem Ausdruck am Pass. Erzeuge den Ablaufplan vor dem Service neu.',
+  ev_runsheet_stale_note: 'Das Notizprotokoll dieser Buchung wurde nach dem Zusammenstellen dieses Ablaufplans ergänzt ({count} neue Notizen). Der Ernährungsteil des Ablaufplans liest dieses Protokoll, dem Ausdruck am Pass kann also etwas fehlen. Lies das Protokoll und erzeuge den Ablaufplan vor dem Service neu.',
   ev_action_runsheet: 'Ablaufplan erzeugen',
 
   ev_dietary_heading: 'Allergien und Diäten',
@@ -4592,6 +4595,7 @@ export default {
   // Steht auf dem Blatt, auch im Ausdruck. Genau darum geht es: Die Liste darf nicht so aussehen, als
   // erfülle sie eine Anforderung, die sie nicht erfüllt.
   wfpl_identity_gap: 'IDENTIFIZIERUNG: § 8-5-6 verlangt Name und fødselsnummer (norwegische Geburtsnummer) bzw. D-Nummer jeder Person. Diese Nummern dürfen durch eindeutige Codes ersetzt werden, jedoch nur, wenn eine Übersicht der verwendeten Codes mit den zugehörigen Geburts- bzw. D-Nummern geführt wird. Okam erhebt und speichert keine Geburts- oder D-Nummern und führt keine solche Code-Übersicht. Die Codes unten lassen sich hier daher keiner Geburtsnummer zuordnen. Die Liste deckt Namen, Zeitpunkte und Unternehmensangaben ab, nicht jedoch die Identifizierungsanforderung für sich allein — der Betrieb muss die Code-Übersicht selbst führen, oder die Liste ist um die Geburts- bzw. D-Nummern zu ergänzen.',
+  wfpl_category_gap: 'VERHÄLTNIS: Diese Liste kann ausschliesslich Angestellte erfassen. Die Spalte «Verhältnis» kennt vier Werte — Angestellt, Mitarbeitende Inhaberin oder Leitung, Unbezahlt und Entliehen — ein Eintrag entsteht jedoch nur, wenn eine angestellte Person einstempelt, und er wird immer als «Angestellt» geführt. Waren an diesem Tag eine mitarbeitende Inhaberin, eine unbezahlte oder eine ausgeliehene Person am Arbeitsort, stehen sie nicht auf dieser Liste, und der Liste ist nicht anzusehen, dass sie unvollständig ist. Der Betrieb muss diese Personen selbst erfassen, zusätzlich zu dieser Liste.',
   wfpl_business_mixed: 'Die Einträge dieses Tages wurden unter {count} verschiedenen buchführungspflichtigen Unternehmen erfasst. Das Feld «Arbeitsort» bleibt deshalb leer: Die Liste kann nicht mit einem Namen und einer Organisationsnummer antworten, wenn die Zeilen zu mehreren gehören.',
   wfpl_zone_fallback: 'Der Betrieb hat keine gültige Zeitzone. Die Uhrzeiten unten werden in {zone} angezeigt, weil das der Standard der Plattform ist — nicht weil jemand sie für diesen Arbeitsort festgelegt hat.',
   wfpl_zone_unusable: 'Die Zeitzone «{zone}» kann von diesem Browser nicht gelesen werden, daher lassen sich die Uhrzeiten nicht in die Zeit des Arbeitsorts setzen. Die Liste wird zurückgehalten, statt sie gegen die falsche Uhr zu zeigen.',

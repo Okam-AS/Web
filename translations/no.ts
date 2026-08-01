@@ -4058,6 +4058,9 @@ export default {
   ev_runsheet_issued_by: 'Utstedt av',
   ev_runsheet_issued_at: 'Utstedt',
   ev_runsheet_stale: 'Denne kjøreplanen er ikke laget fra den gjeldende tilbudsversjonen. Lag den på nytt før service.',
+  ev_runsheet_composed: 'Satt sammen',
+  ev_runsheet_stale_dietary: 'Det ble ført en opplysning om allergi eller kosthold på denne bestillingen {at} — etter at kjøreplanen ble satt sammen. Den står ikke på arket som ligger på passet. Lag kjøreplanen på nytt før service.',
+  ev_runsheet_stale_note: 'Notatloggen på denne bestillingen er skrevet i etter at kjøreplanen ble satt sammen ({count} nye notater). Kjøreplanens kostholdsdel leser notatloggen, så arket på passet kan mangle noe. Les loggen, og lag kjøreplanen på nytt før service.',
   ev_action_runsheet: 'Lag kjøreplan',
 
   ev_dietary_heading: 'Allergi og diett',
@@ -4639,6 +4642,7 @@ export default {
   // Står på arket, også i utskrift. Det er selve poenget: listen skal ikke se ut som om den oppfyller
   // et krav den ikke oppfyller.
   wfpl_identity_gap: 'IDENTIFISERING: § 8-5-6 krever navn og fødselsnummer eller D-nummer for hver person. Numrene kan erstattes av unike koder, men bare dersom det utarbeides en oversikt over kodene med tilhørende fødselsnummer eller D-nummer. Okam samler verken inn eller lagrer fødselsnummer eller D-nummer, og fører ingen slik kodeoversikt. Kodene under kan derfor ikke slås opp i et fødselsnummer her. Listen dekker navn, tidspunkt og virksomhet, men ikke identifiseringskravet alene — virksomheten må selv føre kodeoversikten, eller listen må suppleres med fødselsnummer eller D-nummer.',
+  wfpl_category_gap: 'TILKNYTNING: Denne listen kan bare føre ansatte. Kolonnen «Tilknytning» har fire verdier — ansatt, arbeidende eier eller leder, ulønnet og innleid — men en oppføring blir bare til når en ansatt stempler inn, og den føres alltid som «Ansatt». Var en arbeidende eier, en ulønnet eller en innleid til stede på arbeidsstedet denne dagen, står vedkommende ikke her, og listen er ufullstendig uten at det synes på den. Virksomheten må da føre disse personene selv, i tillegg til denne listen.',
   wfpl_business_mixed: 'Oppføringene denne dagen er ført under {count} ulike bokføringspliktige. Feltet «Arbeidssted» står derfor tomt: listen kan ikke svare med ett navn og ett organisasjonsnummer når radene tilhører flere.',
   wfpl_zone_fallback: 'Butikken har ingen gyldig tidssone. Klokkeslettene under vises i {zone} fordi det er plattformens standard — ikke fordi noen har bestemt den for dette arbeidsstedet.',
   wfpl_zone_unusable: 'Tidssonen «{zone}» kan ikke leses av nettleseren, så klokkeslettene kan ikke settes i arbeidsstedets tid. Listen vises ikke framfor å vise feil klokke.',

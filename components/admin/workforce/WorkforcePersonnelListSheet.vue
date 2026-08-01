@@ -38,6 +38,19 @@
       {{ $i('wfpl_identity_gap') }}
     </p>
 
+    <!-- THE SECOND GAP, ALSO PRINTED, AND FOR THE SAME REASON.
+         The «Tilknytning» column below offers four relationships to the business and this register
+         can record exactly one of them. A participant row is created in exactly one place —
+         `WorkforcePersonnelListProjection.ResolveOrCreateEmployeeParticipantAsync`, off an employee's
+         clock punch — and it writes `Employee` literally; nothing in the product creates a working
+         owner, an unpaid participant or a hired-in worker. So a venue where any of those three were
+         on site files a list that LOOKS complete: every column filled, every time recorded, and
+         people missing. That reading is the harm, which is why the sentence is on the paper rather
+         than in a release note, and why it names what the venue must do instead. -->
+    <p class="wfpl-sheet__coverage">
+      {{ $i('wfpl_category_gap') }}
+    </p>
+
     <p v-if="sheet.hasMixedBusinessIdentity" class="wfpl-sheet__flag">
       {{ $i('wfpl_business_mixed', { count: sheet.businesses.length }) }}
       <span class="wfpl-sheet__flag-list">{{ mixedBusinessList }}</span>
@@ -270,6 +283,9 @@ export default {
 .wfpl-sheet__fact dd { font-size: 0.92rem; font-weight: 600; margin: 0; }
 
 .wfpl-sheet__gap { font-size: 0.82rem; line-height: 1.45; color: #92400e; background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 12px; margin: 0 0 14px; }
+/* Same weight as the identity gap — it is the same kind of statement — but its own class, so a
+   selector that means "the identity caveat" cannot silently start matching two paragraphs. */
+.wfpl-sheet__coverage { font-size: 0.82rem; line-height: 1.45; color: #92400e; background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 12px; margin: 0 0 14px; }
 .wfpl-sheet__flag { font-size: 0.82rem; color: #92400e; margin: 0 0 12px; }
 .wfpl-sheet__flag-list { display: block; color: #64748b; }
 
@@ -306,7 +322,8 @@ export default {
   .wfpl-sheet__head { border-bottom: 1.5pt solid #000; }
   .wfpl-sheet__identity { grid-template-columns: repeat(2, minmax(140px, auto)); }
 
-  .wfpl-sheet__gap { color: #000; background: transparent; border: 1pt solid #000; font-size: 8.5pt; }
+  .wfpl-sheet__gap,
+  .wfpl-sheet__coverage { color: #000; background: transparent; border: 1pt solid #000; font-size: 8.5pt; }
   .wfpl-sheet__flag,
   .wfpl-sheet__flag-list,
   .wfpl-sheet__note,
@@ -328,6 +345,7 @@ export default {
   /* A person's row is never split across two sheets of paper. */
   .wfpl-sheet__table tr { break-inside: avoid; page-break-inside: avoid; }
   .wfpl-sheet__head,
-  .wfpl-sheet__gap { break-inside: avoid; page-break-inside: avoid; }
+  .wfpl-sheet__gap,
+  .wfpl-sheet__coverage { break-inside: avoid; page-break-inside: avoid; }
 }
 </style>

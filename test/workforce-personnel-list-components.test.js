@@ -125,6 +125,51 @@ describe('the sheet never claims an identification it does not have', () => {
   })
 })
 
+// THE SECOND HONEST HALF. The «Tilknytning» column offers four relationships to the business and one
+// production site writes a participant — off an employee's clock punch, always as `Employee`. So a
+// venue with a working owner, an unpaid helper or a hired-in worker on site files a list that reads
+// as complete and is not, and nothing on the paper said so.
+describe('the sheet says which of the four categories it can actually record', () => {
+  test('the coverage notice is on every sheet — with rows, without rows, and unread', () => {
+    const notice = translations.no.wfpl_category_gap
+
+    expect(mountSheet().text()).toContain(notice)
+    expect(mountSheet({ rows: [] }).text()).toContain(notice)
+    // Including the unread state. What the register can record does not depend on today's read.
+    expect(mount(WorkforcePersonnelListSheet, {
+      mocks: { $i: translator('no') },
+      propsData: { sheet: buildPersonnelSheet(null, {}) }
+    }).text()).toContain(notice)
+  })
+
+  test('it names the limit, the three categories it cannot produce, and whose job the rest is', () => {
+    const notice = translations.no.wfpl_category_gap
+
+    expect(notice).toContain('bare føre ansatte')
+    for (const category of ['arbeidende eier', 'ulønnet', 'innleid']) {
+      expect(notice.toLowerCase()).toContain(category)
+    }
+    // The alternative, stated the way the identity gap states it: not "we are working on it", but
+    // what the venue has to do instead, today.
+    expect(notice).toContain('Virksomheten må da føre disse personene selv')
+  })
+
+  // C6 and this lane's own rule: a statutory reference is a promise that the same change produces
+  // what the provision requires. This change produces a caveat, so it names no paragraph — the
+  // sheet's own subtitle already carries the reference for the document as a whole.
+  test('it names no paragraph, because it produces nothing a paragraph asks for', () => {
+    for (const locale of ['no', 'en', 'de']) {
+      expect(translations[locale].wfpl_category_gap).not.toMatch(/§/)
+    }
+  })
+
+  test('it is its own paragraph, not folded into the identity notice', () => {
+    const wrapper = mountSheet()
+    expect(wrapper.findAll('.wfpl-sheet__gap')).toHaveLength(1)
+    expect(wrapper.find('.wfpl-sheet__coverage').text()).toBe(translations.no.wfpl_category_gap)
+  })
+})
+
 describe('arrival and departure, and the two readings of a missing departure', () => {
   test('both times are printed in the venue\'s clock', () => {
     const cells = mountSheet().findAll('.wfpl-sheet__time')
@@ -227,6 +272,7 @@ describe('the three languages the sidebar actually offers', () => {
       }, locale)
 
       expect(wrapper.text()).toContain(translations[locale].wfpl_identity_gap)
+      expect(wrapper.text()).toContain(translations[locale].wfpl_category_gap)
       expect(wrapper.text()).not.toMatch(/wfpl_[a-z_]+/)
     })
   })
