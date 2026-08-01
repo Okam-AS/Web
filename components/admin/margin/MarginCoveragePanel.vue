@@ -115,6 +115,53 @@
         </table>
       </template>
 
+      <!-- WHAT THE KITCHEN THREW AWAY. An ADDITIVE bucket, not a correction of anything above it:
+           everything above is net SALES and which recipes explain them, this is money the venue
+           bought and never sold. It sits here because this panel is already the answer to "and what
+           is the rest of the week", and waste is the part of the theoretical-vs-actual gap a venue
+           can explain without counting stock. -->
+      <h3 class="mcv__subtitle">
+        {{ $i('mrgs_waste_coverage_title') }}
+      </h3>
+      <p v-if="!coverage.waste.entryCount" class="mcv__note" data-test="waste-none">
+        {{ $i('mrgs_waste_coverage_none') }}
+      </p>
+      <template v-else>
+        <p class="mcv__note" data-test="waste-total">
+          {{ $i('mrgs_waste_coverage_total', { total: money(coverage.waste.valuedMinor) }) }}
+        </p>
+        <!-- The total is a FLOOR while any entry could not be priced. Said in words rather than left
+             to a footnote: an understated waste figure understates the very gap it exists to explain,
+             and that is the direction nobody investigates. -->
+        <p v-if="coverage.waste.unvaluedEntryCount" class="mcv__notice" data-test="waste-unvalued">
+          {{ $i('mrgs_waste_coverage_unvalued', { count: coverage.waste.unvaluedEntryCount }) }}
+        </p>
+        <table class="mcv__table">
+          <thead>
+            <tr>
+              <th>{{ $i('mrgs_waste_reason') }}</th>
+              <th class="mcv__num">
+                {{ $i('mrgs_coverage_lines') }}
+              </th>
+              <th class="mcv__num">
+                {{ $i('mrgs_waste_value') }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="line in coverage.waste.byReason" :key="line.reason" data-test="waste-row">
+              <td>{{ reasonLabel(line.reason) }}</td>
+              <td class="mcv__num">
+                {{ number(line.entryCount) }}
+              </td>
+              <td class="mcv__num">
+                {{ money(line.valuedMinor) }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </template>
+
       <p class="mcv__watermark" data-test="coverage-watermark">
         {{ $i('mrgs_prov_watermark') }}:
         {{ coverage.projectionWatermark === null ? unknownMark : String(coverage.projectionWatermark) }}
@@ -125,6 +172,7 @@
 
 <script>
 import { marginMoney } from '~/utils/margin/money';
+import { WASTE_REASON_KEYS } from '~/utils/margin/waste-reasons';
 
 /**
  * What the statement's coverage percentage is MADE OF, for the same week.
@@ -180,6 +228,15 @@ export default {
       return line.priceAgeDays === null
         ? this.$i('mrgs_coverage_never_priced')
         : this.$i('mrgs_coverage_days', { count: line.priceAgeDays });
+    },
+    /**
+     * A reason code the server sent that this build has no word for is printed AS THE CODE, never
+     * dropped and never relabelled "Other" — the venue picked something, and a bucket renamed to the
+     * one bucket that means "none of the above" would be a lie about their own record.
+     */
+    reasonLabel (reason) {
+      const key = WASTE_REASON_KEYS[reason];
+      return key ? this.$i(key) : (reason || this.unknownMark);
     }
   }
 };

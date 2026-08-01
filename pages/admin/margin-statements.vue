@@ -189,6 +189,20 @@
                 @save="saveInputs"
               />
 
+              <MarginWastePanel
+                ref="wastePanel"
+                :entries="wasteEntries"
+                :ingredients="ingredients"
+                :frozen="statementFinalized"
+                :default-date="statement.periodStart"
+                :busy="busy"
+                :recording="recordingWaste"
+                :currency="currency"
+                :locale="locale"
+                @record="recordWaste"
+                @remove="removeWaste"
+              />
+
               <MarginCoveragePanel :coverage="coverage" :currency="currency" :locale="locale" />
             </template>
           </div>
@@ -203,7 +217,10 @@ import AdminPage from '~/components/organisms/AdminPage.vue';
 import MarginStatementFiguresPanel from '~/components/admin/margin/MarginStatementFiguresPanel.vue';
 import MarginSpendPanel from '~/components/admin/margin/MarginSpendPanel.vue';
 import MarginCoveragePanel from '~/components/admin/margin/MarginCoveragePanel.vue';
+import MarginWastePanel from '~/components/admin/margin/MarginWastePanel.vue';
 import { MarginRecipeService } from '~/utils/margin/recipe-client';
+import { MarginWasteService } from '~/utils/margin/waste-client';
+import { MarginIngredientService } from '~/utils/margin/ingredient-client';
 import { MarginStatementService, isMondayDate, mondayOfWeek, isUncodedRefusal } from '~/utils/margin/statement-client';
 import {
   isMarginApiError,
@@ -218,6 +235,7 @@ import {
   readStatementRows,
   readCoverage,
   readSupplierNames,
+  readWasteEntries,
   STATEMENT_FINALIZED
 } from '~/utils/margin/statement-view';
 
@@ -268,7 +286,7 @@ const ERROR_KEYS = {
  */
 export default {
   name: 'MarginStatementsPage',
-  components: { AdminPage, MarginStatementFiguresPanel, MarginSpendPanel, MarginCoveragePanel },
+  components: { AdminPage, MarginStatementFiguresPanel, MarginSpendPanel, MarginCoveragePanel, MarginWastePanel },
   data () {
     return {
       statusState: STATUS_UNKNOWN,
@@ -280,6 +298,10 @@ export default {
       selectedStatementId: null,
       statement: null,
       coverage: null,
+      // null means UNKNOWN for both, never `[]`: a failed read must not render as "this venue threw
+      // nothing away" or as "this store masters no ingredients".
+      wasteEntries: null,
+      ingredients: null,
       weekStart: '',
       loading: false,
       creating: false,
@@ -288,6 +310,7 @@ export default {
       finalizing: false,
       exporting: false,
       rebuilding: false,
+      recordingWaste: false,
       exportResult: null,
       failure: ''
     };
@@ -317,9 +340,15 @@ export default {
     _statementService () {
       return new MarginStatementService(this._coreInitializer);
     },
+    _wasteService () {
+      return new MarginWasteService(this._coreInitializer);
+    },
+    _ingredientService () {
+      return new MarginIngredientService(this._coreInitializer);
+    },
     busy () {
       return this.loading || this.creating || this.savingInputs || this.recalculating ||
-        this.finalizing || this.exporting || this.rebuilding;
+        this.finalizing || this.exporting || this.rebuilding || this.recordingWaste;
     },
     blocker () {
       if (this.statusState === STATUS_MODULE_OFF) { return this.$i('mrgs_module_off'); }
@@ -385,6 +414,7 @@ export default {
       this.failure = '';
       this.statement = null;
       this.coverage = null;
+      this.wasteEntries = null;
       this.selectedStatementId = null;
       this.exportResult = null;
       this.projection = null;
@@ -428,6 +458,7 @@ export default {
 
       this.rows = readStatementRows(list);
       this.supplierNames = readSupplierNames(suppliers);
+      await this.loadIngredients();
       this.loading = false;
     },
 
@@ -435,6 +466,7 @@ export default {
       this.selectedStatementId = statementId;
       this.statement = null;
       this.coverage = null;
+      this.wasteEntries = null;
       this.exportResult = null;
       this.failure = '';
 
@@ -447,7 +479,81 @@ export default {
       }
 
       this.statement = readStatement(detail);
-      await this.loadCoverage();
+      await Promise.all([this.loadCoverage(), this.loadWaste()]);
+    },
+
+    /**
+     * The selected week's waste entries. A separate read from the coverage one on purpose: coverage
+     * carries the per-reason TOTALS and this carries the ENTRIES the venue edits, and the panel that
+     * records them has to keep working when the coverage read (behind a different gate) fails.
+     *
+     * A failure leaves the model null and the panel says the read did not answer — never `[]`, which
+     * is the claim that this venue threw nothing away.
+     */
+    async loadWaste () {
+      const period = this.statement;
+      if (!period || !period.periodStart || !period.periodEnd) { this.wasteEntries = null; return; }
+      const response = await this._wasteService
+        .ListWaste(this.storeId, period.periodStart, period.periodEnd)
+        .catch(() => null);
+      this.wasteEntries = readWasteEntries(response);
+    },
+
+    /**
+     * The ingredient master, for the waste form's optional picker — the path that lets the module
+     * price a loss from the same supplier prices the theoretical cost is built on.
+     *
+     * Archived ingredients are excluded, like every other pick-list in the module: a venue should not
+     * newly attribute a loss to an ingredient it has retired. A failure leaves the list null and the
+     * form falls back to free text, which is a working entry rather than a blocked one.
+     */
+    async loadIngredients () {
+      const response = await this._ingredientService.ListIngredients(this.storeId).catch(() => null);
+      const list = response && Array.isArray(response.ingredients) ? response.ingredients : null;
+      this.ingredients = list === null
+        ? null
+        : list
+          .filter(ingredient => ingredient.status !== 'Archived')
+          .map(ingredient => ({
+            id: ingredient.ingredientId,
+            name: ingredient.name,
+            baseUnit: ingredient.baseUnit || null
+          }));
+    },
+
+    /**
+     * Records one entry, then re-reads BOTH the list and the coverage totals: the breakdown on the
+     * coverage panel is the server's own and would otherwise disagree with the row that just landed.
+     */
+    async recordWaste (entry) {
+      this.recordingWaste = true;
+      this.failure = '';
+      try {
+        await this._wasteService.RecordWaste(this.storeId, entry);
+        // Cleared only once the server has accepted it, so a refused write keeps what was typed. The
+        // panel is conditionally rendered (there is none until a week is selected), so the ref is
+        // checked rather than assumed.
+        const panel = this.$refs.wastePanel;
+        if (panel && typeof panel.reset === 'function') { panel.reset(); }
+        await Promise.all([this.loadWaste(), this.loadCoverage()]);
+      } catch (e) {
+        this.fail(e);
+      }
+      this.recordingWaste = false;
+    },
+
+    /** Removes a mis-keyed entry while its week is open. Its own revision guards the delete. */
+    async removeWaste (entry) {
+      if (!entry || !entry.revision) { return; }
+      this.recordingWaste = true;
+      this.failure = '';
+      try {
+        await this._wasteService.DeleteWaste(this.storeId, entry.wasteEntryId, entry.revision);
+        await Promise.all([this.loadWaste(), this.loadCoverage()]);
+      } catch (e) {
+        this.fail(e);
+      }
+      this.recordingWaste = false;
     },
 
     /**
@@ -536,7 +642,9 @@ export default {
           this.storeId, this.statement.statementId, this.statement.revision);
         this.statement = readStatement(detail);
         this.exportResult = null;
-        await this.refreshList();
+        // The week's waste is frozen by the same act, so the rows are re-read: their `frozen` flag is
+        // the server's answer and is what removes the per-row delete control.
+        await Promise.all([this.refreshList(), this.loadWaste()]);
       } catch (e) {
         this.fail(e);
       }

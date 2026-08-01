@@ -10,6 +10,36 @@ const calls = []
 // are mocked rather than the instances.
 const script = {}
 
+jest.mock('~/utils/margin/waste-client', () => ({
+  MarginWasteService: class {
+    ListWaste (_storeId, from, to) {
+      calls.push(['ListWaste', from, to])
+      return script.waste ? script.waste() : Promise.resolve({ entries: [] })
+    }
+
+    RecordWaste (_storeId, entry) {
+      calls.push(['RecordWaste', entry])
+      return script.recordWaste ? script.recordWaste() : Promise.resolve({ wasteEntryId: 'w-1' })
+    }
+
+    DeleteWaste (_storeId, wasteEntryId, revision) {
+      calls.push(['DeleteWaste', wasteEntryId, revision])
+      return script.deleteWaste ? script.deleteWaste() : Promise.resolve(undefined)
+    }
+  }
+}))
+
+jest.mock('~/utils/margin/ingredient-client', () => ({
+  MarginIngredientService: class {
+    ListIngredients (_storeId) {
+      calls.push(['ListIngredients'])
+      return script.ingredients
+        ? script.ingredients()
+        : Promise.resolve({ ingredients: [{ ingredientId: 'i-1', name: 'Tomat', baseUnit: 'Gram', status: 'Active' }] })
+    }
+  }
+}))
+
 jest.mock('~/utils/margin/recipe-client', () => ({
   MarginRecipeService: class {
     GetStatus (storeId) {
@@ -292,6 +322,71 @@ describe('the proven journey, step by step', () => {
   test('selecting a statement also reads the coverage for its OWN week', async () => {
     await openStatement()
     expect(named('GetCoverage')).toEqual([['GetCoverage', MONDAY, '2026-07-12']])
+  })
+
+  // REACHABILITY, not decoration: the waste routes exist only if this page calls them. A service with
+  // a controller and a DI registration that no screen reaches is the exact shape this estate has
+  // shipped four times in one day.
+  test('selecting a statement reads the SAME week\'s waste as its coverage', async () => {
+    await openStatement()
+    expect(named('ListWaste')).toEqual([['ListWaste', MONDAY, '2026-07-12']])
+  })
+
+  test('the ingredient master is read once, for the form that lets the module price a loss', async () => {
+    mountPage()
+    await settled()
+    expect(named('ListIngredients')).toHaveLength(1)
+  })
+
+  test('an archived ingredient is kept out of the pick-list', async () => {
+    script.ingredients = () => Promise.resolve({
+      ingredients: [
+        { ingredientId: 'i-1', name: 'Tomat', baseUnit: 'Gram', status: 'Active' },
+        { ingredientId: 'i-2', name: 'Gammel', baseUnit: 'Gram', status: 'Archived' }
+      ]
+    })
+    const wrapper = mountPage()
+    await settled()
+    expect(wrapper.vm.ingredients.map(i => i.id)).toEqual(['i-1'])
+  })
+
+  test('a failed ingredient read leaves the list UNKNOWN rather than empty', async () => {
+    script.ingredients = () => Promise.reject(new MarginApiError(500, {}))
+    const wrapper = mountPage()
+    await settled()
+    expect(wrapper.vm.ingredients).toBeNull()
+  })
+
+  test('recording waste re-reads BOTH the entries and the coverage totals', async () => {
+    const wrapper = await openStatement()
+    calls.length = 0
+    wrapper.vm.recordWaste({ wasteDate: '2026-07-08', reason: 'Spoilage', ingredientId: 'i-1', quantity: 2500, valueMinor: null, description: null, note: null })
+    await settled()
+
+    expect(named('RecordWaste')).toHaveLength(1)
+    // The per-reason breakdown is the SERVER's, so it would otherwise disagree with the row that just
+    // landed beside it.
+    expect(named('ListWaste')).toHaveLength(1)
+    expect(named('GetCoverage')).toHaveLength(1)
+  })
+
+  test('removing an entry carries its OWN revision, not the statement\'s', async () => {
+    const wrapper = await openStatement()
+    calls.length = 0
+    wrapper.vm.removeWaste({ wasteEntryId: 'w-1', revision: 'wrev-1' })
+    await settled()
+
+    expect(named('DeleteWaste')).toEqual([['DeleteWaste', 'w-1', 'wrev-1']])
+  })
+
+  test('finalising re-reads the waste, because the same act freezes it', async () => {
+    script.finalize = () => Promise.resolve(detail({ state: 'Finalized', finalizedAtUtc: '2026-07-13T10:00:00Z', revision: 'rev-2' }))
+    const wrapper = await openStatement()
+    calls.length = 0
+    wrapper.find('[data-test="finalize"]').trigger('click')
+    await settled()
+
+    expect(named('ListWaste')).toHaveLength(1)
   })
 
   test('saving the spend carries the statement revision in the client contract', async () => {

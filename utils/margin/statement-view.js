@@ -299,8 +299,63 @@ export function readCoverage (response) {
       itemsWithPrice: longOrNull(line.itemsWithPrice),
       itemsWithoutPrice: longOrNull(line.itemsWithoutPrice)
     })),
-    projectionWatermark: longOrNull(response.projectionWatermark)
+    projectionWatermark: longOrNull(response.projectionWatermark),
+    waste: readWasteSummary(response.waste)
   };
+}
+
+/**
+ * The reason-coded waste breakdown that rides on the coverage read.
+ *
+ * `valuedMinor` is a FLOOR whenever `unvaluedEntryCount` is non-zero: an entry nothing could price is
+ * stored with a null value rather than a zero, so the total is short by an unknown amount and the
+ * count is the only thing that says so. Both are passed through and neither is folded into the other.
+ *
+ * An absent block reads as "nothing recorded" (an empty summary) and never as unknown: the server
+ * always sends it, and treating a missing one as unknown would put a permanent "we could not tell"
+ * on a panel for a store that simply has no waste.
+ */
+export function readWasteSummary (waste) {
+  const block = waste && typeof waste === 'object' ? waste : {};
+  return {
+    valuedMinor: longOrNull(block.valuedMinor) || 0,
+    entryCount: longOrNull(block.entryCount) || 0,
+    unvaluedEntryCount: longOrNull(block.unvaluedEntryCount) || 0,
+    // Rendered in the server's own value-descending order; the panel never re-sorts.
+    byReason: (block.byReason || []).map(line => ({
+      reason: line.reason || null,
+      valuedMinor: longOrNull(line.valuedMinor) || 0,
+      entryCount: longOrNull(line.entryCount) || 0,
+      unvaluedEntryCount: longOrNull(line.unvaluedEntryCount) || 0
+    }))
+  };
+}
+
+/**
+ * The waste entries themselves, for the recording panel.
+ *
+ * `valueMinor` stays NULL when nothing could price the entry — never coerced to 0, which would render
+ * a loss the module could not value as a free one. `frozen` is the server's answer about the week the
+ * entry falls in, not something recomputed here from the statement on screen: an entry can belong to a
+ * different week than the one the page has selected.
+ */
+export function readWasteEntries (response) {
+  if (!response || !Array.isArray(response.entries)) { return null; }
+  return response.entries.map(entry => ({
+    wasteEntryId: entry.wasteEntryId || null,
+    wasteDate: readCalendarDate(entry.wasteDate),
+    reason: entry.reason || null,
+    ingredientId: entry.ingredientId || null,
+    ingredientName: entry.ingredientName || null,
+    quantity: numberOrNull(entry.quantity),
+    description: entry.description || null,
+    valueMinor: longOrNull(entry.valueMinor),
+    currency: entry.currency || null,
+    valuationSource: entry.valuationSource || null,
+    note: entry.note || null,
+    frozen: entry.frozen === true,
+    revision: entry.revision || null
+  }));
 }
 
 /**
