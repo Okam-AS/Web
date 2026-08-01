@@ -133,6 +133,21 @@ function problem (res, status, code, detail, extra) {
   }, extra || {}));
 }
 
+/**
+ * The single refusal every Events gate collapses to.
+ *
+ * 404 and not 403, and the same 404 for all three `Events.*` flags: `EventsProblemException.Disabled()`
+ * carries `EVENTS_DISABLED` and NOTHING that says which switch is down, so a client cannot tell "the
+ * module is off for this store" from "the settlement flag is off" from "no such store". That is the
+ * opposite of the workforce refusal, which names its flag on a `flag` extension — and it is why an
+ * Events journey cannot render "pull this lever" the way the schedule page can. Reproduced faithfully
+ * rather than improved, because a fixture that added the key would make a page that reads it pass here
+ * and fail against the real API.
+ */
+function eventsDisabled (res) {
+  return problem(res, 404, 'EVENTS_DISABLED', 'Events is not enabled for this store.');
+}
+
 // ---- workforce documents -----------------------------------------------------------------------
 
 function costFor (revision) {
@@ -458,7 +473,23 @@ async function route (req, res, url) {
   // the honest answer for a contract this fixture does not hold.
   const eventsAdmin = /^\/events\/admin\/([^/]+)(\/.*)?$/.exec(path);
   if (eventsAdmin && req.method === 'GET') {
+    const eventsStoreId = eventsAdmin[1];
     const rest = eventsAdmin[2] || '';
+
+    // THE Events.Core STORE GATE, and it covers the READS — which is the whole difference between
+    // this module and Workforce. Every store-scoped Events route resolves through
+    // `IEventsModuleGate.IsStoreEnabledAsync` (`EventsController.GuardStoreAsync`,
+    // `EventsRunSheetController.GuardStoreAsync`, both `AuthorizeStoreAsync` helpers), and
+    // `Events.Core` is deny-closed. §9's rule for Events is INVISIBLE, not read-only: a store that
+    // has not been switched on sees no pipeline, no event, no run sheet and no notification health.
+    //
+    // Enforced here once, before the routing below, because a fixture that gated only some of the
+    // five reads would let the pipeline page ship half-lit — and because until this landed both
+    // run-sheet journeys were green against a world in which every one of these reads would have
+    // answered 404 on a real venue.
+    if (!flagEffective(eventsStoreId, world.EVENTS_CORE_FLAG)) {
+      return eventsDisabled(res);
+    }
 
     if (rest === '/events') {
       // The page sends `status`/`from`/`to` as filters. The journey uses none of them, and a fixture
@@ -480,9 +511,19 @@ async function route (req, res, url) {
       }
       const facet = one[2] || '';
       if (facet === '') { return send(res, 200, world.ADMIN_EVENT_DETAIL); }
+      // Core is enough for the deposit READ: only the deposit ISSUE passes `requireDepositsFlag`, so
+      // `Events.Deposits` gates minting a new obligation and never reading an existing one. Copied
+      // deliberately — a fixture that also gated the read would hide a guest's paid deposit behind a
+      // switch, which is the case `EventsDepositsController` says out loud it must not do.
       if (facet === '/deposits') { return send(res, 200, world.ADMIN_DEPOSITS); }
       if (facet === '/run-sheet') { return send(res, 200, world.ADMIN_RUN_SHEET); }
-      if (facet === '/settlement') { return send(res, 200, world.ADMIN_SETTLEMENT); }
+      if (facet === '/settlement') {
+        // The one facet with a second gate. `Events.Settlement` is deny-closed and gates the GET, so
+        // "Core on, settlement closed" — the ordinary state of a venue running events without the
+        // money machine — answers `EVENTS_DISABLED` here rather than a document.
+        if (!flagEffective(eventsStoreId, world.EVENTS_SETTLEMENT_FLAG)) { return eventsDisabled(res); }
+        return send(res, 200, world.ADMIN_SETTLEMENT);
+      }
     }
   }
 

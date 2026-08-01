@@ -31,9 +31,16 @@ const fs = require('fs');
 const path = require('path');
 const { test, journeyDetails, expect, ARTIFACT_DIR } = require('../support/journey');
 const { signIn } = require('../support/admin');
+const { turnOn } = require('../support/flags');
 const world = require('../fixture/world');
 
 const JOURNEY = 'events-runsheet-print';
+
+// The sentence a venue that has not been switched on reads instead of its pipeline (`ev_pipeline_disabled`).
+// Matched on the copy rather than on the key, so this reds when the venue's experience changes and not
+// when a translation key is renamed. A fragment, because the full sentence carries a second clause
+// about enquiry counts that is not the claim here.
+const NOT_ENABLED = 'ikke slått på for dette utsalgsstedet';
 
 // The full guest address as it is rendered on screen — origin + path. Built from the fixture's own
 // token so this cannot drift away from what the page actually shows.
@@ -76,7 +83,12 @@ test(
     capabilities: [
       'events.runsheet.read',
       'events.runsheet.print',
-      'events.dietary.read'
+      'events.dietary.read',
+      // What the two steps below are evidence for: the store gate really refuses, and the operator
+      // lever really lifts it. Declared so this run counts as evidence for them and not only for the
+      // print, which is the thing the journey was named after.
+      'events.module.store-gate',
+      'platform.feature-flags.write'
     ]
   }),
   async ({ page, journey, baseURL }) => {
@@ -91,6 +103,46 @@ test(
     await journey.step('sign in as the host (99999999 / 123123)', async () => {
       await signIn(page, { phone: '99999999', code: '123123', expectPath: '/admin/events-pipeline' });
       return 'landed back on /admin/events-pipeline';
+    });
+
+    // ---- the switch, and the proof it is doing something -----------------------------------------
+    //
+    // `Events.Core` gates every store-scoped Events route and it gates the READS: the pipeline list,
+    // the event detail, the deposits, the run sheet and the notification health all resolve through
+    // `IEventsModuleGate.IsStoreEnabledAsync` and answer 404 `EVENTS_DISABLED` for a store that has
+    // not been switched on. It is deny-closed, so that is EVERY store until an operator flips it.
+    //
+    // This journey used to open the pipeline and find an event there, which on a real venue could not
+    // have happened. The refusal is asserted FIRST, before the lever is pulled, and that ordering is
+    // the whole point: a journey that only turned the switch on would pass identically against a
+    // fixture that had no gate at all — which is the defect this sweep exists to close, reproduced
+    // one level up. Seeing the venue dark is what makes the flip mean something.
+    await journey.step('before any switch is flipped, the venue is dark', async () => {
+      const notice = page.locator('.ev-pipeline__notice');
+      await expect(notice).toBeVisible({ timeout: 30000 });
+      await expect(notice).toContainText(NOT_ENABLED);
+      // Not merely "the notice is present": there is no pipeline behind it either. A page that
+      // printed the sentence above a table of events would satisfy the locator and refuse nothing.
+      await expect(page.locator('.ev-pipeline__row')).toHaveCount(0);
+      return 'the pipeline reads: ' + (await notice.textContent()).replace(/\s+/g, ' ').trim();
+    });
+
+    await journey.shot('the venue before Events is switched on');
+
+    await journey.step('the host switches Events on for this venue', async () => {
+      // Through `/admin/feature-flags` — the product's own lever, and the only caller of
+      // `PUT /stores/{id}/feature-flags` there is. A journey that wrote the row itself would prove
+      // the fixture can hold it, not that a host can pull it.
+      //
+      // `Events.Core` ONLY. `Events.Deposits` and `Events.Settlement` stay down, which is the
+      // ordinary posture of a venue running events without the money machine — and it means the
+      // settlement facet below answers `EVENTS_DISABLED` while the run sheet reads fine. That the
+      // page survives one of its four facet reads being refused is a property this journey now
+      // carries and nothing else did.
+      await turnOn(page, world.EVENTS_CORE_FLAG);
+      await page.goto('/admin/events-pipeline');
+      return world.EVENTS_CORE_FLAG + ' on for store ' + world.STORE_ID +
+        '; ' + world.EVENTS_SETTLEMENT_FLAG + ' deliberately left off';
     });
 
     await journey.step('open the confirmed event', async () => {
@@ -235,6 +287,19 @@ test(
         'present, no guest address, no page chrome; leftmost text at ' + leftmost.toFixed(1) +
         'pt (inside the 14mm page box, not in the sidebar gutter)';
     });
+
+    journey.finding(
+      'note',
+      'the three 404s in this run are refusals the journey asked for',
+      'A reader of `failedRequests` will see three. Two are BEFORE the switch was flipped — the ' +
+      'pipeline list and the notification health, both refused `EVENTS_DISABLED` because ' +
+      '`Events.Core` was still down, which is the control this journey now opens with. The third is ' +
+      'the settlement facet AFTER the flip: `Events.Settlement` is a separate deny-closed money flag ' +
+      'and it gates the GET as well as every mutation, so a venue running events without the ' +
+      'settlement machine reads exactly this. None of the three is a fault, and the page renders the ' +
+      'run sheet through all of them — which is the property a store in the ordinary pilot posture ' +
+      'needs and which nothing had walked before.'
+    );
 
     journey.finding(
       'note',

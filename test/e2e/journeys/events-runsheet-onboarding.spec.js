@@ -42,9 +42,14 @@ const path = require('path');
 const { spawnSync } = require('child_process');
 const { test, journeyDetails, expect, ARTIFACT_DIR } = require('../support/journey');
 const { signIn } = require('../support/admin');
+const { turnOn } = require('../support/flags');
 const world = require('../fixture/world');
 
 const JOURNEY = 'events-runsheet-onboarding';
+
+// The sentence a venue that has not been switched on reads instead of its pipeline (`ev_pipeline_disabled`).
+// See the sibling journey: matched on the copy a host reads, not on the translation key.
+const NOT_ENABLED = 'ikke slått på for dette utsalgsstedet';
 
 // The banner's own copy, which is hardcoded in the component rather than translated. Three separate
 // fragments — the sentence, the step counter and the button label — because any one of them alone
@@ -95,7 +100,9 @@ test(
     surface: 'admin',
     capabilities: [
       'events.runsheet.print',
-      'events.runsheet.read'
+      'events.runsheet.read',
+      'events.module.store-gate',
+      'platform.feature-flags.write'
     ]
   }),
   async ({ page, journey }) => {
@@ -121,6 +128,31 @@ test(
     await journey.step('sign in as the host (99999999 / 123123)', async () => {
       await signIn(page, { phone: '99999999', code: '123123', expectPath: '/admin/events-pipeline' });
       return 'landed back on /admin/events-pipeline';
+    });
+
+    // ---- CONTROL 0. The venue is dark until it is switched on. -----------------------------------
+    //
+    // A store still in onboarding is exactly the store least likely to have had `Events.Core` flipped,
+    // so this journey walking straight into a populated pipeline was the least believable world of the
+    // two run-sheet journeys. `Events.Core` gates the reads as well as the writes, so before the flip
+    // there is no pipeline to open — asserted rather than assumed, because a flip whose effect is not
+    // observed proves only that the button exists.
+    await journey.step('before any switch is flipped, the venue is dark', async () => {
+      const notice = page.locator('.ev-pipeline__notice');
+      await expect(notice).toBeVisible({ timeout: 30000 });
+      await expect(notice).toContainText(NOT_ENABLED);
+      await expect(page.locator('.ev-pipeline__row')).toHaveCount(0);
+      return 'the pipeline reads: ' + (await notice.textContent()).replace(/\s+/g, ' ').trim();
+    });
+
+    await journey.step('the host switches Events on for this venue', async () => {
+      // Through the product's own lever, and NOT through a fixture write — see support/flags.js.
+      // The setup banner rides along: `/admin/feature-flags` is an admin page too, so the store's
+      // unfinished onboarding is on screen there as well. That is incidental to this step and is the
+      // subject of the one below.
+      await turnOn(page, world.EVENTS_CORE_FLAG);
+      await page.goto('/admin/events-pipeline');
+      return world.EVENTS_CORE_FLAG + ' on for store ' + world.STORE_ID;
     });
 
     await journey.step('open the confirmed event', async () => {
@@ -238,5 +270,14 @@ test(
         'present, no setup banner, first line on the page is "' + firstLine + '" at ' +
         topmost.toFixed(1) + 'pt from the top';
     });
+
+    journey.finding(
+      'note',
+      'the 404s in this run are refusals the journey asked for',
+      'Two before the switch was flipped — the pipeline list and the notification health, refused ' +
+      '`EVENTS_DISABLED` while `Events.Core` was still down, which is the control this journey now ' +
+      'opens with. One after — the settlement facet, behind the separate deny-closed ' +
+      '`Events.Settlement` money flag, which gates that GET as well as its mutations. None is a fault.'
+    );
   }
 );

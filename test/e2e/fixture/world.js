@@ -130,7 +130,40 @@ const FEATURE_FLAG_CATALOG = [
  */
 const SCHEDULE_WRITE_FLAG = 'workforce.publication';
 
+/**
+ * The stage flag every Events ADMIN route is gated on — reads included.
+ *
+ * `EventsController.GuardStoreAsync`, `EventsRunSheetController.GuardStoreAsync`,
+ * `EventsNotificationsController.AuthorizeStoreAsync` and `EventsDepositsController.AuthorizeStoreAsync`
+ * all call `IEventsModuleGate.IsStoreEnabledAsync`, which is `Events.Core` for the route's store. So
+ * this one key decides whether the pipeline page can see ANYTHING — unlike `workforce.publication`,
+ * which leaves the reads answering and stops only the writes. Named once here for the same reason
+ * the workforce one is: five fixture routes enforce it and they must not drift apart.
+ */
+const EVENTS_CORE_FLAG = 'Events.Core';
+
+/**
+ * The money flag the SETTLEMENT read additionally sits behind.
+ *
+ * `EventsSettlementController.AuthorizeSettlementAsync` requires `Events.Settlement` on top of
+ * `Events.Core`, and it gates the GET as well as every mutation — deliberately, so a venue that has
+ * not opened the settlement machine cannot read a half-built statement. It is modelled because the
+ * pipeline page fans four facet reads out at once and one of them answering `EVENTS_DISABLED` is the
+ * NORMAL state of a pilot venue: Core on, money paths still closed. A fixture that answered a
+ * settlement document to every store would never let that state be walked.
+ */
+const EVENTS_SETTLEMENT_FLAG = 'Events.Settlement';
+
 // ---- Events: the guest surface -----------------------------------------------------------------
+//
+// NOT GATED PER STORE, and that is the backend's shape rather than an omission here. The three public
+// proposal routes (`EventsController.GetProposal/AcceptProposal/DeclineProposal`) are `[AllowAnonymous]`
+// and carry only the controller-wide action filter on `IEventsModuleGate.IsEnabled` — the
+// deployment-wide `Events:Enabled` CONFIG switch, which is not a per-store flag, has no row, and no
+// lever on `/admin/feature-flags` can move it. `EventsProposalService` takes no gate at all: it has no
+// `IEventsModuleGate` dependency, and `GetPublicAsync` performs no store refinement. So a guest
+// journey has no switch of its own to turn on, and modelling one here would assert a gate the product
+// does not have.
 //
 // Two tokens, and the second one is the point of having two. `EventsProposalService.GetPublicAsync`
 // answers a SUPERSEDED version with its own content and `isActionable:false` rather than a 404, so
@@ -321,6 +354,8 @@ module.exports = {
   ROLES,
   FEATURE_FLAG_CATALOG,
   SCHEDULE_WRITE_FLAG,
+  EVENTS_CORE_FLAG,
+  EVENTS_SETTLEMENT_FLAG,
   OPEN_PROPOSAL_TOKEN,
   SUPERSEDED_PROPOSAL_TOKEN,
   PROPOSALS,

@@ -19,6 +19,36 @@ const PRICE_COFFEE = 3900;
 const CART_TOTAL_MINOR = PRICE_SALAD + PRICE_COFFEE;
 const ALLOWANCE_MINOR = 25000;
 
+// ---- the Meals feature gate this world runs under -----------------------------------------------
+//
+// The whole Company Meals surface is deny-closed, and it is worth being exact about WHERE, because it
+// is not where the other five modules put their switches.
+//
+//   `MealsFeatureGate` is bound to the HOST CONFIG section `Features:Meals` through
+//   `IOptionsMonitor<MealsFeatureSettings>`, and both keys default false. Every route these journeys
+//   walk resolves through it and nothing else: `GET /v1/meals/me/companies` and
+//   `GET /v1/meals/me/context` call `RequireVisible()` -> `IsModuleEnabled`;
+//   `POST /v1/stores/{id}/meals/quotes` calls `RequireOrderingVisible()` -> `IsOrderingEnabled`; and
+//   the funding bind inside `POST /carts/complete/{id}` checks `IsOrderingEnabled` again.
+//   `IsOrderingEnabled` is `Module && Ordering`, so the money flag REQUIRES the module flag.
+//
+// THERE IS NO PER-STORE LEVER FOR ANY OF IT. `meals.module` is the module's only catalog entry and
+// `StoreBackedMealsFeatureFlags` — the only thing that reads a per-store row — is consulted at three
+// store-addressable ADMIN routes, none of which is on this path. `meals.ordering` is WITHHELD from
+// the catalog outright, with the reason written down in `MealsFeatureFlags.Withheld`: the §7
+// precondition (a company may fund a checkout only once its billing terms are signed) is not
+// something a generic per-store toggle can enforce. So `/admin/feature-flags` cannot move either
+// switch, and neither can a guest — which is why the consumer journeys DECLARE this posture rather
+// than flipping it through a page, and why the mutation that proves the gate bites is a journey of
+// its own (`meals-module-dark`) rather than a step inside these.
+//
+// Modelled ON here because that is the deployment every other consumer journey is claiming to run
+// against: a venue whose Company Meals pilot is live. Before this was modelled, those journeys were
+// green against a world with no gate in it at all — the same defect the workforce schedule journey
+// had, and the reason for this sweep.
+const MEALS_MODULE_ENABLED = true;
+const MEALS_ORDERING_ENABLED = true;
+
 const store = () => ({
   id: STORE_ID,
   name: 'Kantina Vulkan',
@@ -120,5 +150,6 @@ const company = () => ({
 module.exports = {
   BEARER, USER_ID, STORE_ID, COMPANY_ID, CURRENCY,
   PRICE_SALAD, PRICE_COFFEE, CART_TOTAL_MINOR, ALLOWANCE_MINOR,
+  MEALS_MODULE_ENABLED, MEALS_ORDERING_ENABLED,
   store, user, seedCart, withCalculations, company
 };

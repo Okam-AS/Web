@@ -31,10 +31,18 @@ const world = require('./consumer-world');
 
 const PORT = Number(process.env.E2E_CONSUMER_FIXTURE_PORT || 4020);
 
-const { BEARER, USER_ID, STORE_ID, COMPANY_ID, CURRENCY, ALLOWANCE_MINOR, store, user, seedCart, withCalculations, company } = world;
+const { BEARER, USER_ID, STORE_ID, COMPANY_ID, CURRENCY, ALLOWANCE_MINOR, MEALS_MODULE_ENABLED, MEALS_ORDERING_ENABLED, store, user, seedCart, withCalculations, company } = world;
 
-function freshState (allowanceMinor) {
+function freshState (allowanceMinor, gate) {
   return {
+    // The `Features:Meals` host-config gate every route below resolves through. See consumer-world.js
+    // for why it is host config and not a per-store flag, and why no page can move it. `ordering` is
+    // ANDed with `module` on read, exactly as `MealsFeatureGate.IsOrderingEnabled` does, so a world
+    // that turned ordering on over a dark module is not a world this fixture can be put into.
+    meals: {
+      module: gate && gate.module !== undefined ? !!gate.module : MEALS_MODULE_ENABLED,
+      ordering: gate && gate.ordering !== undefined ? !!gate.ordering : MEALS_ORDERING_ENABLED
+    },
     // The member's remaining company contribution for the period. A quote reserves against it.
     remainingAllowanceMinor: Number.isFinite(allowanceMinor) ? allowanceMinor : ALLOWANCE_MINOR,
     // reservationId -> reservation. `token` is held so the fixture can hash-match like the API does.
@@ -84,6 +92,25 @@ function problem (res, status, code, detail) {
 
 /** The `{ message }` body CartsController answers an AppException with — the shape core reads. */
 const appException = (res, message) => send(res, 400, { message });
+
+// ---- the Features:Meals gate -------------------------------------------------------------------
+//
+// Two predicates and one refusal, matching `MealsFeatureGate` exactly.
+//
+// `isOrderingVisible` ANDs the module in rather than reading `ordering` alone, because that is what
+// the gate does (`IsOrderingEnabled => current.Module && current.Ordering`). Spelling it here rather
+// than trusting the seed is the difference between modelling the hierarchy and assuming nobody will
+// construct the impossible world.
+//
+// The refusal is 404 `MEALS_NOT_FOUND` — `MealsProblemException.FundingNotFound()`, the same opaque
+// answer a guest who belongs to no company gets. That collapse is deliberate on the backend's side
+// and load-bearing on the client's: `loadMealsCompanies` swallows it silently so a guest on a
+// deployment with the module dark sees an ordinary checkout instead of an error about a feature they
+// have never heard of. A fixture that answered a distinguishable code here would let a client start
+// telling those two cases apart and pass, against an API that cannot.
+const isModuleVisible = () => state.meals.module;
+const isOrderingVisible = () => state.meals.module && state.meals.ordering;
+const fundingNotFound = (res) => problem(res, 404, 'MEALS_NOT_FOUND', 'Not found.');
 
 const currentCart = () => (state.cart || (state.cart = seedCart()));
 
@@ -159,6 +186,17 @@ function createQuote (body, idempotencyKey) {
  * state, owner, store, currency, expiry, cap. Returns a MEALS_* reason or null when it binds.
  */
 function bind (token, orderId, cartTotalMinor) {
+  // THE GATE, FIRST — before the token is even hashed. `MealsFundingAuthority.ValidateAndBindAsync`
+  // checks `IsOrderingEnabled` at its head and denies with `MEALS_MODULE_UNAVAILABLE`, and the
+  // fail-closed default binding is `DenyClosedMealsFundingAuthority`, so a deployment that never
+  // registered the real one refuses every bind. That ordering matters here rather than being tidy:
+  // a live reservation token minted before the switch went down must NOT bind afterwards, and a
+  // fixture that checked the token first would answer a token error for a module that is simply off.
+  //
+  // `MEALS_MODULE_UNAVAILABLE` and not `MEALS_NOT_FOUND`: the checkout deny is not problem+json at
+  // all — it leaves through `CartsController`'s legacy `AppException` path as a 400 `{message}` — and
+  // it is the one MEALS_* code the consumer app maps to copy of its own (`checkoutPage_mealsUnavailable`).
+  if (!isOrderingVisible()) { return 'MEALS_MODULE_UNAVAILABLE'; }
   if (!token) { return 'MEALS_RESERVATION_NOT_FOUND'; }
   const hash = hashToken(token);
   const reservation = Object.values(state.reservations).find((r) => r.tokenHash === hash);
@@ -202,8 +240,21 @@ const server = http.createServer(async (req, res) => {
     // `allowanceMinor` lets a journey stand the world up with a company budget too small for the
     // cart, which is the only way to walk the v1 "funds fully or not at all" refusal from the UI.
     const requested = url.searchParams.get('allowanceMinor');
-    state = freshState(requested === null ? undefined : Number(requested));
-    return send(res, 200, { ok: true, remainingAllowanceMinor: state.remainingAllowanceMinor });
+    // ...and `mealsModule` / `mealsOrdering` let one stand it up with the `Features:Meals` gate down.
+    // That is the ONLY way to walk a dark deployment from the UI, because neither switch has a lever
+    // in any product surface — see consumer-world.js. `'0'` and `'false'` both read as off, since a
+    // query string carries neither a boolean nor a type.
+    const asBool = (name) => {
+      const raw = url.searchParams.get(name);
+      return raw === null ? undefined : !(raw === '0' || raw.toLowerCase() === 'false');
+    };
+    state = freshState(requested === null ? undefined : Number(requested),
+      { module: asBool('mealsModule'), ordering: asBool('mealsOrdering') });
+    return send(res, 200, {
+      ok: true,
+      remainingAllowanceMinor: state.remainingAllowanceMinor,
+      meals: state.meals
+    });
   }
 
   state.served++;
@@ -310,16 +361,27 @@ const server = http.createServer(async (req, res) => {
   }
 
   // ---- Company Meals (spec 20 §5, ops 13/14 + the my-companies entry read) ----------------------
+  // `RequireVisible()` — the module gate, ahead of every other check on these two reads, exactly as
+  // `MealsFundingController` runs it ahead of the companyId validation. Gate before precondition is
+  // stated in `MealsControllerBase` as a disclosure control, not a style choice: a dark module must
+  // not answer differently for a known company than for an unknown one.
   if (method === 'GET' && path === '/v1/meals/me/companies') {
+    if (!isModuleVisible()) { return fundingNotFound(res); }
     return send(res, 200, { companies: [company()] });
   }
 
   if (method === 'GET' && path === '/v1/meals/me/context') {
+    if (!isModuleVisible()) { return fundingNotFound(res); }
     if (url.searchParams.get('companyId') !== COMPANY_ID) { return problem(res, 404, 'MEALS_MODULE_UNAVAILABLE', 'Not found.'); }
     return send(res, 200, contextFor());
   }
 
   if (method === 'POST' && /^\/v1\/stores\/\d+\/meals\/quotes$/.test(path)) {
+    // `RequireOrderingVisible()`, and it is a DIFFERENT gate from the two reads above: a deployment
+    // can have the module up and the money path still closed, which is precisely the state a pilot
+    // sits in between the agreement being signed and the billing terms being countersigned. In that
+    // world the guest sees the company on the checkout and cannot mint a quote against it.
+    if (!isOrderingVisible()) { return fundingNotFound(res); }
     const key = (req.headers['idempotency-key'] || '').toString().trim();
     if (!key) { return problem(res, 400, 'MEALS_MODULE_UNAVAILABLE', 'An Idempotency-Key header is required for this mutation.'); }
     const result = createQuote(body, key);
