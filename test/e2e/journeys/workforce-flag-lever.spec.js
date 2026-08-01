@@ -59,15 +59,40 @@ test(
       await expect(page.locator('.ff-page__title')).toHaveText('Modulbrytere');
       const rows = page.locator('.ff-row');
       await expect(rows.first()).toBeVisible();
-      const count = await rows.count();
       // Six modules, one page. The whole point of scoping this to the catalog rather than to
       // Workforce: the other five gain the same lever from the same screen.
       const modules = (await page.locator('.ff-module__title').allTextContents()).map(text => text.trim());
       expect(modules).toEqual(['Events', 'Growth', 'Margin', 'Meals', 'Training', 'Workforce']);
+
+      // ...AND EVERY FLAG, NOT ONE PER MODULE. Those six titles were, until now, the only thing this
+      // step compared to anything: `const count = await rows.count()` was read and then spent in the
+      // returned prose, never asserted. A catalog that shrank to one flag per module — six rows, six
+      // titles, twelve levers silently gone — stayed green, which is the same class of defect the
+      // page itself exists to remove one level down. The whole set is pinned, in render order.
+      //
+      // TRANSCRIBED, NOT DERIVED. This list is written out rather than read from
+      // `world.FEATURE_FLAG_CATALOG`, deliberately: an expectation computed from the same fixture the
+      // API serves agrees with it by construction, so deleting a flag would delete it from both sides
+      // in one edit and prove nothing. Written down, a shrunk or renamed catalog reds here.
+      //
+      // Order is the board's own: module name, then flag key, both `localeCompare` — see `buildBoard`.
+      const CATALOG_KEYS = [
+        'Events.Core', 'Events.Deposits', 'Events.Settlement',
+        'growth.dispatch', 'growth.module',
+        'Margin.Module', 'Margin.PriceImport', 'Margin.Statements',
+        'meals.module',
+        'training.assignments', 'training.setup',
+        'workforce.clock', 'workforce.dispatch', 'workforce.exchange', 'workforce.module',
+        'workforce.publication', 'workforce.selfservice', 'workforce.setup'
+      ];
+      await expect(rows).toHaveCount(CATALOG_KEYS.length);
+      const keys = (await page.locator('.ff-row__key').allTextContents()).map(text => text.trim());
+      expect(keys).toEqual(CATALOG_KEYS);
+
       // The publication switch starts OFF, because the module ships it off and nobody has flipped it.
       const publication = page.locator('.ff-row', { has: page.locator('code', { hasText: PUBLICATION }) });
       await expect(publication.locator('.ff-row__badge')).toHaveText('Av');
-      return count + ' flags across ' + modules.length + ' modules; ' + PUBLICATION + ' reads "Av"';
+      return CATALOG_KEYS.length + ' flags across ' + modules.length + ' modules; ' + PUBLICATION + ' reads "Av"';
     });
 
     await journey.shot('the switchboard, everything deny-closed');

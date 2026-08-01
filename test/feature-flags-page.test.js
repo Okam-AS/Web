@@ -297,14 +297,100 @@ describe('what it refuses to claim', () => {
     expect(wrapper.vm.toast.type).toBe('error')
     expect(wrapper.vm.board.rows.find(r => r.flagKey === 'workforce.publication').state).toBe(false)
   })
+})
 
-  // The standing honesty statement. `effective: true` is not a promise for the modules that also sit
-  // under a deployment-wide config switch this API cannot see (Growth, Events), so the page says so
-  // once rather than leaving every operator to discover it by pressing a button.
-  test('the page states, in all three locales, that an effective:true is not a promise', () => {
-    expect(translations.no.ff_effective_note).toBeTruthy()
-    expect(translations.en.ff_effective_note).toBeTruthy()
-    expect(translations.de.ff_effective_note).toBeTruthy()
+// The standing honesty statement. `effective` is the module gate's answer and it is ASYMMETRIC: an
+// `effective: off` can be relied on, an `effective: on` cannot, because some modules also sit under a
+// deployment-wide config switch (`Growth:Enabled`, `Events:Enabled`, `Margin` config) that no
+// endpoint exposes and this page therefore cannot see. The page says that once, at the top, rather
+// than leaving every operator to discover it by pressing a button.
+//
+// WHY THIS IS ASSERTED ON CONTENT. The test that stood here read
+// `expect(translations.no.ff_effective_note).toBeTruthy()` in three locales — an assertion with no
+// way to fail. A non-empty string is all it ever wanted, so it stayed green through both of the only
+// two ways this note can go wrong: reworded to claim the OPPOSITE (that an `effective: on` is the
+// dependable one), and removed from the template entirely. Both are pinned below, and the direction
+// of the claim is pinned to the VALUE it is made about, so swapping "on" and "off" reds it.
+describe('the standing honesty statement is on the screen, and says what it says', () => {
+  // Each locale's copy, by the obligation it carries. The last two are the load-bearing ones: they
+  // bind "can be relied on" to OFF and "is not a promise" to ON, as adjacent text, so a rewrite that
+  // keeps every word and only exchanges the two values cannot satisfy them.
+  const EFFECTIVE_NOTE_SAYS = {
+    no: {
+      'says whose answer «faktisk» is': [/modulens egen port/i],
+      'names the switch this page cannot see': [/driftsbryter/i, /serveroppsettet/i, /ikke ser/i],
+      'binds "can be relied on" to OFF': [/«faktisk: av» til å stole på/i],
+      'binds "is not a promise" to ON': [/«faktisk: på» ikke er et løfte/i]
+    },
+    en: {
+      'says whose answer "effective" is': [/module's own gate/i],
+      'names the switch this page cannot see': [/deployment switch/i, /server configuration/i, /cannot see/i],
+      'binds "can be relied on" to OFF': [/"effective: off" can be relied on/i],
+      'binds "is not a promise" to ON': [/"effective: on" is not a promise/i]
+    },
+    de: {
+      'says whose answer «effektiv» is': [/modul-eigenen Prüfung/i],
+      'names the switch this page cannot see': [/Betriebsschalter/i, /Serverkonfiguration/i, /nicht sieht/i],
+      'binds "can be relied on" to OFF': [/«Effektiv: aus» ist deshalb verlässlich/i],
+      'binds "is not a promise" to ON': [/«effektiv: an» dagegen kein Versprechen/i]
+    }
+  }
+
+  test.each(['no', 'en', 'de'])('%s says an effective:off is dependable and an effective:on is not', (locale) => {
+    const text = translations[locale].ff_effective_note
+    expect(typeof text).toBe('string')
+    Object.keys(EFFECTIVE_NOTE_SAYS[locale]).forEach((obligation) => {
+      EFFECTIVE_NOTE_SAYS[locale][obligation].forEach((pattern) => {
+        expect({ obligation, text }).toEqual({ obligation, text: expect.stringMatching(pattern) })
+      })
+    })
+  })
+
+  // Copy nobody renders is copy nobody reads. The three locale tests above pass on the translation
+  // file alone, so this one mounts the page and looks for the sentence in the DOM.
+  test('the page actually renders the note, above the first row', async () => {
+    const wrapper = mountPage()
+    await settled()
+
+    const notice = wrapper.findAll('.ff-page__notice').wrappers
+      .find(p => p.text() === 'ff_effective_note')
+    expect(notice).toBeDefined()
+
+    // BEFORE the rows, not after them: an operator who has already read a badge has drawn the
+    // conclusion this sentence exists to prevent.
+    const html = wrapper.html()
+    expect(wrapper.findAll('.ff-row').length).toBeGreaterThan(0)
+    expect(html.indexOf('ff_effective_note')).toBeGreaterThan(-1)
+    expect(html.indexOf('ff_effective_note')).toBeLessThan(html.indexOf('ff-row'))
+  })
+
+  // It is the PAGE's statement about what `effective` means, not a property of any one flag. Printed
+  // per row it would be eighteen repetitions of a sentence nobody would then read — the same reason
+  // the deposits precondition is on exactly one row and not on all of them.
+  test('the note is stated once, and never on a row', async () => {
+    withDeposits()
+    const wrapper = mountPage()
+    await settled()
+
+    expect(wrapper.html().split('ff_effective_note')).toHaveLength(2)
+    wrapper.findAll('.ff-row').wrappers.forEach((row) => {
+      expect(row.text()).not.toContain('ff_effective_note')
+    })
+  })
+
+  // The moment the note matters most is the one where the board is empty: a store read that failed
+  // leaves every value unknown, and an operator staring at no rows still has to know that the values
+  // this page would have shown are asymmetric. A note that renders only on the happy path is a note
+  // missing from every incident.
+  test('the note survives a failed store read, when no row is drawn at all', async () => {
+    behaviour.GetStoreFlags = () => Promise.reject(refusal(500, 'boom'))
+    const wrapper = mountPage()
+    await settled()
+
+    expect(wrapper.findAll('.ff-row')).toHaveLength(0)
+    expect(wrapper.text()).toContain('ff_read_failed')
+    expect(wrapper.findAll('.ff-page__notice').wrappers
+      .some(p => p.text() === 'ff_effective_note')).toBe(true)
   })
 })
 
