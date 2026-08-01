@@ -17,8 +17,9 @@
 //   • It reads the real route with a real bearer through the real client. The fixture 401s a call
 //     with no token and answers the Growth CONCEALMENT 404 — not a 403 — for a store the caller does
 //     not administer.
-//   • The overdue erasure is on screen, at the TOP, with the deadline counted. The server sends
-//     newest-first, which buries it.
+//   • The overdue erasure is on screen, at the TOP, with the art. 12 deadline the SERVER answered
+//     with actually rendered — the date and the order both arrive on the wire, and the only way to
+//     know they survive the read intact is to look at the screen.
 //   • Another store's request is NOT on screen. Seeded precisely so that «scoped to this store» has
 //     something to be wrong about.
 //   • Resolving it from the queue moves it, and the row then reports what the transport ACCEPTED
@@ -108,8 +109,10 @@ test(
     await journey.step('the guest\'s overdue erasure is on screen, at the top of the queue', async () => {
       const rows = page.locator('[data-request]');
       await expect(rows).toHaveCount(2);
-      // Most urgent FIRST. The fixture serves newest-first the way `ListAsync` does, so this order is
-      // the page's own work; keeping the wire order would put the overdue erasure second.
+      // Most urgent FIRST, and that order is the SERVER's: `ListAsync` returns the open group
+      // soonest-deadline-first and the page renders it. The world seeds the overdue erasure second,
+      // after a three-day-old request, so a list served in seed order would put it last — the order
+      // on screen is therefore something the round trip produced rather than the shape of the seed.
       const order = await rows.evaluateAll(nodes => nodes.map(n => n.getAttribute('data-request')));
       expect(order).toEqual([OVERDUE, FRESH]);
 
@@ -118,8 +121,9 @@ test(
       // The reference the guest was given. `gr_guest_request_reference` prints the same id at them,
       // so a guest who phones and quotes it can be matched to this row.
       await expect(overdue.locator('[data-test="reference"]')).toContainText('Referanse ' + OVERDUE);
-      // The deadline, counted. This is the number the guest was promised and nothing on the wire
-      // carries — it exists only because the page derives it.
+      // The deadline, counted. The date is `GrowthPrivacyRequestListItem.dueAt` — the server's answer
+      // to art. 12 and the one the guest was promised. A response that stopped carrying it would
+      // leave this sentence reading «ukjent frist» and this step red.
       await expect(overdue.locator('[data-test="clock"]')).toContainText('Fristen gikk ut for');
       return 'request ' + OVERDUE + ' is first, art. 17, and past its one-month deadline';
     });

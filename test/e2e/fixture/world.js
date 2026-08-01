@@ -390,9 +390,9 @@ function growthPrivacyRequests () {
     },
     {
       // THE SUBJECT OF THE JOURNEY: an art. 17 erasure filed 41 days ago, so the one-month deadline
-      // the guest was shown has already run out. Filed SECOND here on purpose — `ListAsync` orders
-      // by `receivedAt` descending, which puts the most urgent request last, and a queue that kept
-      // the wire order would bury it.
+      // the guest was shown has already run out. Seeded SECOND on purpose, and after a request that
+      // is three days old, so that a list served in seed order would bury the one about to run out
+      // of month — the fixture has to sort by deadline to put it first, exactly as `ListAsync` does.
       storeId: STORE_ID,
       requestId: GROWTH_PRIVACY_OVERDUE_ID,
       contactPointId: 5501,

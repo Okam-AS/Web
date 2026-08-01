@@ -1,22 +1,29 @@
-// The venue's privacy queue, derived. No HTTP, no rendering, no Vue.
+// The venue's privacy queue, read. No HTTP, no rendering, no Vue.
 //
-// WHY IT IS A MODULE AND NOT PAGE CODE — the same reason `send-gate.js` is one. Two of the three
-// things this surface has to get right are judgements rather than layout:
+// WHAT IT IS FOR. Two things this surface has to get right are judgements rather than layout:
 //
-//   • WHEN THE ANSWER IS DUE. The guest is told, in `gr_guest_request_deadline`, that «the venue has
-//     one month to answer you. That follows from GDPR article 12.» Nothing in the wire carries that
-//     date — `GrowthPrivacyRequestListItem` reports `receivedAt` and nothing else about time — so the
-//     deadline the guest was promised exists only if something derives it. That is `dueAt` below, and
-//     it is the whole reason this queue is more than a table.
+//   • WHAT THE SERVER'S ANSWER MEANS. A list that did not answer is UNKNOWN and never an empty queue;
+//     an unreadable state is not an open request; `noticeDelivery: null` is not a fourth state. Those
+//     readings are one place so the page cannot hold a second opinion about them.
 //   • WHETHER A RESOLUTION MAY BE SENT AT ALL. `GrowthPrivacyRequestService.ResolveAsync` refuses an
 //     outcome that is not one of the two terminal states (`growth.invalid_resolution`) and a rejection
 //     with no reason (`growth.reason_required`). Both are re-asserted here so the page refuses before
 //     the write instead of discovering it — a resolution is irreversible, and «try it and see» is not
 //     an acceptable way to find out that a required field was blank.
 //
-// WHAT IT WILL NOT DO. It does not decide anything the server has not said. A list that did not
-// answer is UNKNOWN and never an empty queue; a request with no `receivedAt` has no deadline rather
-// than a deadline of today; and nothing here claims an address was destroyed — see `noticeDelivery`.
+// WHAT IT NO LONGER DOES, AND WHY THAT IS THE POINT. It does not work out when the answer is due, and
+// it does not decide which request is the pressing one. Both are properties of the OBLIGATION rather
+// than of this page: the guest is told, in `gr_guest_request_deadline`, that «the venue has one month
+// to answer you. That follows from GDPR article 12», and the date that promise resolves to is what
+// the venue is legally held to. So the server computes it once — `GrowthPrivacyObligation.DueAt`, one
+// calendar month from receipt with the Reg. 1182/71 art. 3(2)(c) end-of-month clamp — and sends it as
+// `dueAt`, already ordered by urgency. This module reads both and re-derives neither. A deadline
+// recomputed here would be a second answer to a legal question, free to drift from the first the
+// moment either side changed, and with exactly one client today nothing would notice that it had.
+//
+// WHAT IT WILL NOT DO. It does not decide anything the server has not said. A request whose `dueAt`
+// cannot be read has no deadline rather than a deadline of today, and nothing here claims an address
+// was destroyed — see `noticeDelivery`.
 
 /** The list read has not answered. NOT "this store has no privacy requests". */
 export const QUEUE_UNKNOWN = 'unknown';
@@ -43,45 +50,10 @@ export const TYPE_ERASURE = 'Erasure';
 export const REFUSAL_INVALID_OUTCOME = 'growth.invalid_resolution';
 export const REFUSAL_REASON_REQUIRED = 'growth.reason_required';
 
-/**
- * GDPR art. 12(3): «without undue delay and in any event within one month of receipt of the request».
- *
- * ONE CALENDAR MONTH, not thirty days. Reg. (EEC, Euratom) 1182/71 art. 3(2)(c) — the counting rules
- * the GDPR's periods run on — puts a period expressed in months at the same day-number of the last
- * month, and where that day does not exist, on that month's LAST day. So 31 January + one month is
- * 28 February, not 3 March, and `addOneMonth` clamps rather than letting the Date rollover invent two
- * extra days of headroom against a statutory deadline.
- */
-export const RESPONSE_WINDOW_MONTHS = 1;
-
 function toDate (value) {
   if (!value) { return null; }
   const parsed = value instanceof Date ? value : new Date(value);
   return isNaN(parsed.getTime()) ? null : parsed;
-}
-
-/** One calendar month later, clamped to the last day of the target month (see RESPONSE_WINDOW_MONTHS). */
-function addOneMonth (date) {
-  const month = date.getUTCMonth();
-  const shifted = new Date(Date.UTC(
-    date.getUTCFullYear(), month + 1, date.getUTCDate(),
-    date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds(), date.getUTCMilliseconds()
-  ));
-  // The day-number did not exist in the target month and rolled into the next one. Step back to the
-  // last day of the month that was meant: `setUTCDate(0)` is the previous month's final day.
-  if (shifted.getUTCMonth() !== (month + 1) % 12) { shifted.setUTCDate(0); }
-  return shifted;
-}
-
-/**
- * The date the answer is due, or `null` when the request carries no readable receipt time.
- *
- * Null and never "now": a deadline invented from a timestamp we could not read would be printed with
- * the same confidence as a real one, and the one the guest was promised is the only one that counts.
- */
-export function dueAt (receivedAt) {
-  const received = toDate(receivedAt);
-  return received ? addOneMonth(received) : null;
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -101,8 +73,11 @@ const DAY_MS = 24 * 60 * 60 * 1000;
  * would be claiming, from a response that does not contain it, the one thing art. 17 is about.
  */
 function readRow (item, now) {
-  const received = toDate(item.receivedAt);
-  const due = received ? addOneMonth(received) : null;
+  // THE SERVER'S DATE, PARSED — never recomputed from `receivedAt`. `GrowthPrivacyRequestListItem`
+  // carries `dueAt`, and it is the deadline the venue is held to; there is deliberately no local
+  // fallback for a response that omits it, because a fallback is precisely the divergence this
+  // module gave up its own arithmetic to remove. A row with no readable deadline says so.
+  const due = toDate(item.dueAt);
   const state = item.state || null;
   const isOpen = OPEN_STATES.includes(state);
 
@@ -116,7 +91,7 @@ function readRow (item, now) {
     type: item.requestType || null,
     state,
     isOpen,
-    receivedAt: received,
+    receivedAt: toDate(item.receivedAt),
     resolvedAt: toDate(item.resolvedAt),
     dueAt: due,
     // WHOLE days, truncated TOWARDS ZERO, and negative once the month has run out. Null when there
@@ -143,7 +118,7 @@ function readRow (item, now) {
  * The wire list -> the two queues the venue works from.
  *
  * @param body `GrowthPrivacyRequestListResponse`, or null/undefined for a read that did not answer
- * @param now  the clock, injected so the deadline arithmetic is testable rather than ambient
+ * @param now  the clock, injected so the countdown is testable rather than ambient
  */
 export function readQueue (body, now) {
   if (!body || !Array.isArray(body.requests)) {
@@ -154,28 +129,20 @@ export function readQueue (body, now) {
 
   const at = toDate(now) || new Date();
   const rows = body.requests.filter(Boolean).map(item => readRow(item, at));
-  const open = rows.filter(row => row.isOpen);
-  const resolved = rows.filter(row => !row.isOpen);
 
   return {
     state: QUEUE_READ,
     storeId: body.storeId === undefined ? null : body.storeId,
-    // OPEN IS SORTED BY DEADLINE, ASCENDING — deliberately NOT the order the wire arrived in. The
-    // server orders by `receivedAt` descending, which is the right default for a log and exactly
-    // wrong for a work queue: it puts the request with the most time left at the top and buries the
-    // one about to run out of month. A row with no readable receipt time sorts last rather than
-    // first, because an unknown deadline is not an urgent one.
-    open: open.slice().sort((a, b) => {
-      if (a.dueAt && b.dueAt) { return a.dueAt.getTime() - b.dueAt.getTime(); }
-      if (a.dueAt) { return -1; }
-      if (b.dueAt) { return 1; }
-      return 0;
-    }),
-    // Resolved keeps the server's newest-first order: it is a record, and the most recent decision is
-    // the one somebody is usually looking for.
-    resolved,
+    // SPLIT ONLY — the wire's order is kept, and this page chooses none of its own. `ListAsync`
+    // returns every request that still owes an answer first, soonest `dueAt` first, then the settled
+    // ones newest-received first; `filter` is stable, so both groups come out of here in the order
+    // the server put them in. Which obligation is the pressing one is the server's ruling for the
+    // same reason the deadline is: a work queue re-sorted per client is a work queue that can rank
+    // the same two legal duties differently on two screens.
+    open: rows.filter(row => row.isOpen),
+    resolved: rows.filter(row => !row.isOpen),
     total: rows.length,
-    overdueCount: open.filter(row => row.isOverdue).length
+    overdueCount: rows.filter(row => row.isOpen && row.isOverdue).length
   };
 }
 

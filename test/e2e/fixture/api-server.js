@@ -189,8 +189,36 @@ function growthNotFound (res) {
   return growthError(res, 404, 'growth.not_found', 'Not found.');
 }
 
-/** The list projection: the wire item, without the fixture's own `storeId` bookkeeping field. */
-function privacyItem (row) {
+/**
+ * The art. 12 deadline the real endpoint answers with — `GrowthPrivacyObligation.DueAt`, one CALENDAR
+ * month from receipt clamped to the last day of the target month (Reg. 1182/71 art. 3(2)(c)).
+ *
+ * Reproduced here because this fixture stands in for the server and the page no longer works this out
+ * for itself; a fixture that omitted `dueAt` would darken the whole deadline column and the journey
+ * would be asserting against a response the real endpoint does not send. It is NOT a second copy of
+ * product logic — nothing outside this fake reads it.
+ */
+function privacyDueAt (receivedAt) {
+  const received = new Date(receivedAt);
+  const month = received.getUTCMonth();
+  const due = new Date(Date.UTC(
+    received.getUTCFullYear(), month + 1, received.getUTCDate(),
+    received.getUTCHours(), received.getUTCMinutes(), received.getUTCSeconds(), received.getUTCMilliseconds()
+  ));
+  if (due.getUTCMonth() !== (month + 1) % 12) { due.setUTCDate(0); }
+  return due.toISOString();
+}
+
+/** Is the request still owed an answer? The two non-terminal `GrowthPrivacyRequestState` members. */
+function privacyIsOpen (row) {
+  return row.state === 'Received' || row.state === 'InProgress';
+}
+
+/**
+ * Endpoint 21's projection (`GrowthPrivacyRequestResponse`), without the fixture's own `storeId`
+ * bookkeeping field.
+ */
+function privacyRequestItem (row) {
   return {
     requestId: row.requestId,
     // MASKED — the internal contact id and never an address (spec §3 invariant 11). There is no
@@ -203,6 +231,18 @@ function privacyItem (row) {
     resolvedAt: row.resolvedAt,
     noticeDelivery: row.noticeDelivery
   };
+}
+
+/**
+ * Endpoint 20's projection (`GrowthPrivacyRequestListItem`).
+ *
+ * It is the LIST item and only the list item that carries `dueAt`: the deadline is what the venue's
+ * queue is ordered and drawn by, and endpoint 21's response is a different DTO that does not answer
+ * with one. Serving it from both would let a page come to depend on a field the real resolution
+ * route does not send.
+ */
+function privacyItem (row) {
+  return Object.assign(privacyRequestItem(row), { dueAt: privacyDueAt(row.receivedAt) });
 }
 
 // ---- workforce documents -----------------------------------------------------------------------
@@ -681,13 +721,17 @@ async function route (req, res, url) {
     // `Where(p => p.StoreId == storeId)`). The world deliberately holds a request belonging to
     // another store so that removing this filter is a change something can catch.
     //
-    // Ordered by `receivedAt` DESCENDING, the way the service orders it — newest first. That is the
-    // wrong order for a work queue, and the page is required to re-order it; sending the rows
-    // already sorted by urgency would make that requirement unprovable.
-    const rows = state.privacyRequests
-      .filter(row => String(row.storeId) === String(privacyStoreId))
-      .slice()
-      .sort((a, b) => Date.parse(b.receivedAt) - Date.parse(a.receivedAt));
+    // ORDERED BY OBLIGATION, the way `ListAsync` orders it: everything still owing an answer first
+    // and soonest deadline first, then the settled ones newest-received first. The page renders this
+    // order rather than choosing one, so the fixture has to serve the real one — sending the rows
+    // in an arbitrary order here would let a journey pass against a list no server produces.
+    const scoped = state.privacyRequests.filter(row => String(row.storeId) === String(privacyStoreId));
+    const byDeadline = (a, b) =>
+      (Date.parse(privacyDueAt(a.receivedAt)) - Date.parse(privacyDueAt(b.receivedAt))) || (a.requestId - b.requestId);
+    const newestFirst = (a, b) =>
+      (Date.parse(b.receivedAt) - Date.parse(a.receivedAt)) || (b.requestId - a.requestId);
+    const rows = scoped.filter(privacyIsOpen).slice().sort(byDeadline)
+      .concat(scoped.filter(row => !privacyIsOpen(row)).slice().sort(newestFirst));
     return growthOk(res, { storeId: Number(privacyStoreId), requests: rows.map(privacyItem) });
   }
 
@@ -715,7 +759,7 @@ async function route (req, res, url) {
     // Idempotent: an already-terminal request answers its canonical row WITHOUT re-executing the
     // irreversible §13 steps. Checked before the outcome is validated, the way the service does it.
     if (row.state === 'Fulfilled' || row.state === 'RejectedWithReason') {
-      return growthOk(res, privacyItem(row));
+      return growthOk(res, privacyRequestItem(row));
     }
 
     if (body.outcome !== 'Fulfilled' && body.outcome !== 'RejectedWithReason') {
@@ -734,7 +778,7 @@ async function route (req, res, url) {
       // subject no art. 15 export and no erasure completion notice, and recording one of the three
       // delivery states here would be inventing a receipt.
       row.noticeDelivery = null;
-      return growthOk(res, privacyItem(row));
+      return growthOk(res, privacyRequestItem(row));
     }
 
     // Fulfilled. The notice to the subject goes out BEFORE anything irreversible happens, and what
@@ -745,7 +789,7 @@ async function route (req, res, url) {
     // NOTHING here records whether the address was destroyed or the shred deferred, because the wire
     // item has no field for it. A fixture that added one would let a page ship that claims a
     // destruction the real response cannot support.
-    return growthOk(res, privacyItem(row));
+    return growthOk(res, privacyRequestItem(row));
   }
 
   const storeMarket = /^\/stores\/(\d+)\/market$/.exec(path);

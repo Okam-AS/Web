@@ -29,9 +29,10 @@ jest.mock('~/utils/growth/growth-client', () => ({
 // are the ones the assertions name rather than whatever day the suite runs on.
 const NOW = new Date('2026-08-01T10:00:00Z')
 
-// Store 42's queue, IN THE ORDER THE SERVER SENDS IT — `ListAsync` orders by `receivedAt`
-// descending. The page must not keep that order for the open rows, and it cannot be caught doing so
-// unless the fixture arrives wrong-way-round.
+// Store 42's queue, IN THE ORDER AND WITH THE DEADLINES THE SERVER SENDS — `ListAsync` returns
+// everything still owing an answer first, soonest `dueAt` first, then the settled rows. `dueAt` is a
+// FIELD on every row because it is the wire's, computed by `GrowthPrivacyObligation`; this page does
+// not work it out, so a fixture that omitted it would darken the whole deadline column.
 //
 // Written as ONE self-contained literal on purpose: `babel-plugin-jest-hoist` lifts the ALL-CAPS
 // consts a `jest.mock` factory references to the top of the module, so a `LIST` assembled from
@@ -40,11 +41,12 @@ const NOW = new Date('2026-08-01T10:00:00Z')
 const LIST = {
   storeId: 42,
   requests: [
+    // A guest's ERASURE, filed 20 June, due 20 July — already past. The journey this lane exists for,
+    // and the row the server puts at the top because it is the one about to cost the venue.
+    { requestId: 9001, contactPointId: 5501, requestType: 'Erasure', state: 'Received', receivedAt: '2026-06-20T08:00:00Z', dueAt: '2026-07-20T08:00:00Z', resolvedAt: null, noticeDelivery: null },
     // Filed 28 July — the newest, and the one with the most time left.
-    { requestId: 9002, contactPointId: 5502, requestType: 'Access', state: 'Received', receivedAt: '2026-07-28T08:00:00Z', resolvedAt: null, noticeDelivery: null },
-    // A guest's ERASURE, filed 20 June, due 20 July — already past. The journey this lane exists for.
-    { requestId: 9001, contactPointId: 5501, requestType: 'Erasure', state: 'Received', receivedAt: '2026-06-20T08:00:00Z', resolvedAt: null, noticeDelivery: null },
-    { requestId: 9000, contactPointId: 5500, requestType: 'Access', state: 'Fulfilled', receivedAt: '2026-06-01T08:00:00Z', resolvedAt: '2026-06-03T08:00:00Z', noticeDelivery: 'SubmittedToTransport' }
+    { requestId: 9002, contactPointId: 5502, requestType: 'Access', state: 'Received', receivedAt: '2026-07-28T08:00:00Z', dueAt: '2026-08-28T08:00:00Z', resolvedAt: null, noticeDelivery: null },
+    { requestId: 9000, contactPointId: 5500, requestType: 'Access', state: 'Fulfilled', receivedAt: '2026-06-01T08:00:00Z', dueAt: '2026-07-01T08:00:00Z', resolvedAt: '2026-06-03T08:00:00Z', noticeDelivery: 'SubmittedToTransport' }
   ]
 }
 
@@ -146,11 +148,31 @@ describe('what the venue is shown', () => {
     expect(wrapper.vm.queue.open.map(r => r.requestId)).toContain(9001)
   })
 
-  test('the most urgent request is drawn first, not the newest', async () => {
+  test('the request about to run out of month is drawn first, in the order the server sent', async () => {
     const wrapper = await openPage()
-    // 9001 was received 20 June (due 20 July, already past); 9002 on 28 July. The server sends
-    // newest-first; the queue must not.
+    // 9001 is due 20 July and already past; 9002 is due 28 August. `ListAsync` puts them in that
+    // order because urgency is a property of the obligation, and the page RENDERS it rather than
+    // choosing one of its own.
     expect(wrapper.vm.queue.open.map(r => r.requestId)).toEqual([9001, 9002])
+    // And the markup agrees with the queue, so this is the order an operator actually sees rather
+    // than one that only exists in a computed.
+    expect(wrapper.findAll('[data-request]').wrappers.map(w => w.attributes('data-request')))
+      .toEqual(['9001', '9002'])
+  })
+
+  test('the deadline printed on a row is the wire\'s, not one recomputed from the receipt', async () => {
+    // Fed a deadline that no rule applied to `receivedAt` would produce. Whatever the server says is
+    // the date the venue is held to, and the page must print that and nothing else — a module that
+    // had kept its own arithmetic would answer 20 August here.
+    const wrapper = await openPage()
+    wrapper.vm.list = {
+      storeId: 42,
+      requests: [Object.assign({}, LIST.requests[1], { dueAt: '2026-09-04T11:30:00Z' })]
+    }
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.queue.open[0].dueAt.toISOString()).toBe('2026-09-04T11:30:00.000Z')
+    expect(paramsFor('gp_due').when).toBe(wrapper.vm.stamp(new Date('2026-09-04T11:30:00Z')))
   })
 
   test('the overdue banner counts only what is still open', async () => {

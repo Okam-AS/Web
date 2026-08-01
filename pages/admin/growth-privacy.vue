@@ -252,10 +252,13 @@ const STATE_KEYS = {
 // table no human at the venue could see. The deadline was printed at a guest; nothing at the venue
 // counted it, and nobody could answer even if they had wanted to.
 //
-// EVERY JUDGEMENT LIVES IN `utils/growth/privacy-queue`, not here: the one-month deadline, the
-// open/resolved split, the urgency order, and the two preconditions on a resolution. This page reads,
-// renders and calls. That is the same division the send gate uses, for the same reason — a second
-// opinion about a statutory deadline is a second opinion that can drift from the first.
+// THE DEADLINE AND THE ORDER ARE THE SERVER'S ANSWER. `GrowthPrivacyRequestListItem.dueAt` is the
+// art. 12 date the venue is held to, computed once by `GrowthPrivacyObligation.DueAt`, and the list
+// arrives ordered with the request nearest to running out of month at the top. This page renders
+// both; it derives neither. What is left to `utils/growth/privacy-queue` is reading that answer —
+// the open/resolved split, the countdown against the viewer's clock, and the two preconditions on a
+// resolution. This page reads, renders and calls. That is the same division the send gate uses, for
+// the same reason: a second opinion about a statutory obligation can drift from the first.
 //
 // NO GATE, AND THAT IS THE BACKEND'S SHAPE. `GrowthConsentAdminController` resolves StoreAdmin and
 // nothing else: unlike `GrowthNewslettersController`, it has no `ModuleIsLiveAsync`, so these two
