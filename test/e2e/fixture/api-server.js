@@ -477,6 +477,22 @@ async function route (req, res, url) {
       return problem(res, 403, 'workforce.forbidden', 'No workforce capability at this store.');
     }
 
+    // The statutory personalliste — endpoint 30. `WorkforceManager` on the engagement is the only
+    // grant that admits a caller, which the `administers` gate above already stands for here.
+    //
+    // `businessDate` is echoed back rather than only honoured: the page sends NO date on first load
+    // precisely so the SERVER resolves the venue's today, and the picker then follows the echo. A
+    // fixture that answered a day without saying which day it answered for would leave the page
+    // showing an empty date box over a populated register.
+    if (rest === '/personnel-list' && req.method === 'GET') {
+      const asked = url.searchParams.get('businessDate');
+      if (asked !== null && !/^\d{4}-\d{2}-\d{2}$/.test(asked)) {
+        return problem(res, 400, 'workforce.business-date-invalid',
+          'businessDate must be a bare yyyy-MM-dd calendar date.');
+      }
+      return send(res, 200, world.personnelList(storeId, asked));
+    }
+
     if (rest === '/staff' && req.method === 'GET') { return send(res, 200, world.STAFF); }
     if (rest === '/roles' && req.method === 'GET') { return send(res, 200, world.ROLES); }
     if (rest === '/requests' && req.method === 'GET') { return send(res, 200, { items: state.requests }); }
