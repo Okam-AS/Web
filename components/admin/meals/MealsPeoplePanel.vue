@@ -4,20 +4,21 @@
       {{ $i('meals_people_title') }}
     </h2>
 
-    <!-- LEDGER ENTRY MIG-17, stated before anything can be issued.
-         `MealsInvitation.EmployeeReference` and `MealsMembership.EmployeeReference` do not exist yet.
-         The reference is company-supplied and can only be captured AT INVITATION — the company is in
-         the loop at that moment and nowhere else — so a membership claimed without one can never
-         acquire it: the invitation that would have carried it is Claimed, and finalized statement
-         lines are immutable by trigger. `MealsStatementService` writes
-         `MemberDisplayRef = MembershipId.ToString()`, so every line of that person's monthly bill
-         names them by a bare identifier, permanently.
+    <!-- LEDGER ENTRY MIG-17 / decision D-MEALS-EMPREF, stated before anything can be issued.
+         `MealsInvitation.EmployeeReference` and `MealsMembership.EmployeeReference` now exist and the
+         form below captures one. What has NOT changed is the consequence of leaving it empty: the
+         reference is company-supplied and can only be captured AT INVITATION — the company is in the
+         loop at that moment and nowhere else — so a membership claimed without one can never acquire
+         it. The invitation that would have carried it is Claimed, and finalized statement lines are
+         immutable by trigger. `MealsStatementService` then falls back to the membership id, so every
+         line of that person's monthly bill names them by a bare identifier, permanently.
 
-         This is a danger note rather than a hint, and the issue button is gated on an explicit
-         acknowledgement rather than merely warned about. It is not a block: the server permits the
-         write, and a client inventing a ban the platform has not decided is not this screen's call.
-         What the screen owes is that nobody does it unaware. -->
-    <div class="mls-note mls-note--danger">
+         Hence the note is shown only while the field is EMPTY, and the acknowledgement is required
+         only then. A warning that stayed up after the operator did the right thing would be the kind
+         of notice people learn to click past, and the acknowledgement exists so that nobody does this
+         unaware — not as a ritual. It is still not a block: the server permits the write, and a client
+         inventing a ban the platform has not decided is not this screen's call. -->
+    <div v-if="!employeeReferenceSupplied" class="mls-note mls-note--danger">
       <span class="mls-note__title">{{ $i('meals_mig17_title') }}</span>
       <span>{{ $i('meals_mig17_body') }}</span>
     </div>
@@ -111,9 +112,24 @@
             :disabled="busy"
           >
         </label>
+        <!-- THE FIELD THE WHOLE NOTE IS ABOUT. Spans the grid because it is not a fourth attribute of
+             equal weight: it is the one input on this form that cannot be supplied later. The server
+             refuses a fødselsnummer here (decision D-d); this value is copied into an export the
+             restaurant hands the buying company. -->
+        <label class="mls-label mls-label--wide">
+          {{ $i('meals_field_employee_ref') }}
+          <input
+            v-model="invite.employeeReference"
+            class="mls-input"
+            type="text"
+            maxlength="64"
+            :disabled="busy"
+          >
+          <span class="mls-hint">{{ $i('meals_field_employee_ref_hint') }}</span>
+        </label>
       </div>
 
-      <label class="mls-check">
+      <label v-if="!employeeReferenceSupplied" class="mls-check">
         <input v-model="acknowledged" type="checkbox" :disabled="busy">
         <span>{{ $i('meals_mig17_ack') }}</span>
       </label>
@@ -124,7 +140,7 @@
 
       <MealsWriteFailure :failure-key="inviteFailureKey" :detail="inviteFailureDetail" />
 
-      <button class="mls-btn mls-btn--primary" type="submit" :disabled="busy || !acknowledged">
+      <button class="mls-btn mls-btn--primary" type="submit" :disabled="busy || !canIssue">
         {{ busy ? $i('meals_saving') : $i('meals_invite_action') }}
       </button>
     </form>
@@ -221,9 +237,13 @@
           <tr v-for="row in members.rows" :key="row.membershipId">
             <!-- This column is not an implementation detail on display. It is verbatim what
                  `MealsStatementService` writes into `MemberDisplayRef` on every statement line, so
-                 it is what the buying company's accountant will be reconciling against. -->
+                 it is what the buying company's accountant will be reconciling against — the
+                 company's own reference where one was supplied, and the membership id where the
+                 invitation was issued without one. The fallback rows are marked because they are the
+                 ones nothing can fix, not because a GUID is ugly. -->
             <td class="mls-ref">
-              {{ row.membershipId || dash }}
+              {{ row.statementRef || dash }}
+              <span v-if="!row.hasEmployeeReference" class="mls-badge mls-badge--warn">{{ $i('meals_member_ref_missing') }}</span>
             </td>
             <td class="mls-ref">
               {{ row.applicationUserId || dash }}
@@ -297,11 +317,21 @@ export default {
         email: '',
         phone: '',
         role: 'Employee',
-        expiresInDays: 14
+        expiresInDays: 14,
+        employeeReference: ''
       }
     };
   },
   computed: {
+    /** Whether the one irreversible field has been filled in. Drives the note, the acknowledgement
+     *  and the submit gate, so those three can never disagree with each other. */
+    employeeReferenceSupplied () {
+      return String(this.invite.employeeReference || '').trim() !== '';
+    },
+    /** Issue when the reference is there, or when its absence has been acknowledged. */
+    canIssue () {
+      return this.employeeReferenceSupplied || this.acknowledged;
+    },
     invitationsUnknown () {
       return this.invitations.state === DATA_UNKNOWN;
     },
@@ -436,12 +466,21 @@ export default {
 
       const days = Number(this.invite.expiresInDays);
       if (!Number.isInteger(days) || days < 1 || days > 90) { this.inviteError = 'meals_err_expires_range'; return; }
-      if (!this.acknowledged) { this.inviteError = 'meals_err_ack_required'; return; }
+      // The disabled attribute is not the only guard: an issue without the reference and without the
+      // acknowledgement is refused here too, so a programmatic submit cannot slip past the one
+      // decision on this form that nothing downstream can undo.
+      if (!this.canIssue) { this.inviteError = 'meals_err_ack_required'; return; }
+
+      const employeeReference = String(this.invite.employeeReference || '').trim();
 
       this.$emit('create-invitation', {
         intendedContactEmail: email || null,
         intendedContactPhone: phone || null,
         intendedRole: this.invite.role,
+        // null, never '' — an empty string would reach the server as a supplied-but-blank reference,
+        // and the column's honest absent value is NULL. The server normalizes blank to null as well;
+        // sending null means both ends agree without depending on that.
+        employeeReference: employeeReference || null,
         expiresInDays: days
       });
     },
@@ -450,6 +489,9 @@ export default {
     resetInvitation () {
       this.invite.email = '';
       this.invite.phone = '';
+      // Cleared with the contact: a reference is per-person, and carrying the previous hire's payroll
+      // number into the next invitation would attach it to the wrong member permanently.
+      this.invite.employeeReference = '';
       this.acknowledged = false;
       this.inviteError = null;
     }

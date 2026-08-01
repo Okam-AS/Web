@@ -193,6 +193,43 @@ describe('invitations and memberships', () => {
     expect(view.members.rows[0]).toMatchObject({ membershipId: 'm-1', applicationUserId: 'u-9' })
     expect(view.members.rows[0].displayName).toBeUndefined()
   })
+
+  // `statementRef` mirrors the server's own rule (MealsStatementService: the company-supplied
+  // employeeReference, or the membership id). Computed once here so the screen and the bill cannot
+  // disagree — the whole point of decision D-MEALS-EMPREF is that the operator sees, at invitation
+  // time, what the accountant will read at month end.
+  test('a member with a company reference reads as that reference on the statement', () => {
+    const view = buildAdminView({
+      members: [{ membershipId: 'm-1', applicationUserId: 'u-9', employeeReference: 'ANS-1042', role: 'Employee', state: 'Active' }]
+    })
+    expect(view.members.rows[0].statementRef).toBe('ANS-1042')
+    expect(view.members.rows[0].hasEmployeeReference).toBe(true)
+  })
+
+  test('a member whose invitation carried none falls back to the id, and is flagged as unfixable', () => {
+    const view = buildAdminView({
+      members: [{ membershipId: 'm-1', applicationUserId: 'u-9', role: 'Employee', state: 'Active' }]
+    })
+    expect(view.members.rows[0].statementRef).toBe('m-1')
+    expect(view.members.rows[0].hasEmployeeReference).toBe(false)
+  })
+
+  // A blank string is not a reference. It has to normalize to the same absent value a missing field
+  // does, or the screen would show an empty cell with no flag on a row that bills as an identifier.
+  test('a blank reference is absent, not supplied', () => {
+    const view = buildAdminView({
+      members: [{ membershipId: 'm-1', applicationUserId: 'u-9', employeeReference: '', role: 'Employee', state: 'Active' }]
+    })
+    expect(view.members.rows[0].statementRef).toBe('m-1')
+    expect(view.members.rows[0].hasEmployeeReference).toBe(false)
+  })
+
+  test('an invitation carries the reference it was issued with', () => {
+    const view = buildAdminView({
+      invitations: [{ invitationId: 'i-1', state: 'Pending', employeeReference: 'ANS-1042' }]
+    })
+    expect(view.invitations.rows[0].employeeReference).toBe('ANS-1042')
+  })
 })
 
 describe('the policy window conversions', () => {

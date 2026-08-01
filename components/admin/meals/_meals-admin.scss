@@ -185,6 +185,13 @@ $mls-amber-bg: #fff8e6;
   letter-spacing: 0.3px;
 }
 
+// A field that spans the whole grid row rather than sitting in a column. Used for the Meals employee
+// reference: it is the only input on that form whose value cannot be supplied later, so it does not
+// read as a fourth attribute of equal weight beside the contact and the expiry.
+.mls-label--wide {
+  grid-column: 1 / -1;
+}
+
 .mls-input,
 .mls-select {
   display: block;

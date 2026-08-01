@@ -108,6 +108,9 @@ function invitationRow (source) {
     intendedRole: text(s.intendedRole),
     state: text(s.state),
     expiresAtUtc: text(s.expiresAtUtc),
+    // The company's own reference for the invitee, if it supplied one. Empty means the membership
+    // this invitation produces will bill as a bare identifier, and nothing can change that afterwards.
+    employeeReference: text(s.employeeReference),
     revision: text(s.revision),
     // Only a Pending invitation can be revoked; a Claimed one is refused by the server because its
     // membership already exists. Computed here so no component decides it a second time.
@@ -119,17 +122,22 @@ function invitationRow (source) {
  * One membership.
  *
  * `applicationUserId` is the whole of the identity this module holds — it owns no identity display
- * and resolves no names (spec §7). That is not a rendering inconvenience: `MealsStatementService`
- * writes `MemberDisplayRef = MembershipId.ToString()` onto every statement line, so the bare
- * identifier is what an accountant reconciling a company's monthly bill actually sees. Ledger entry
- * MIG-17 is the fix and it has not landed; see `MealsPeoplePanel.vue` for what the screen owes
- * somebody about to issue an invitation.
+ * and resolves no names (spec §7). What an accountant reconciling the company's monthly bill sees is
+ * `statementRef`: `MealsStatementService` writes the company-supplied `employeeReference` onto every
+ * statement line, or the membership id when the invitation carried none. It is computed here, once,
+ * from the same rule the server applies, so no component invents a second answer — and a member whose
+ * invitation was issued without a reference reads as an identifier on this screen precisely because
+ * that is what the bill will read. Ledger entry MIG-17 / decision D-MEALS-EMPREF.
  */
 function memberRow (source) {
   const s = source || {};
+  const employeeReference = text(s.employeeReference);
   return {
     membershipId: text(s.membershipId),
     applicationUserId: text(s.applicationUserId),
+    employeeReference,
+    statementRef: employeeReference || text(s.membershipId),
+    hasEmployeeReference: employeeReference !== null,
     role: text(s.role),
     state: text(s.state),
     claimedFromInvitationId: text(s.claimedFromInvitationId),

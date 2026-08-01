@@ -356,7 +356,27 @@ describe('MealsPeoplePanel — the two places this module\'s honesty is hardest'
     expect(wrapper.findAll('.mls-note--danger')).toHaveLength(1)
   })
 
-  test('the issue button is dead until the consequence is acknowledged', async () => {
+  // The field exists now (decision D-MEALS-EMPREF), so the warning is about LEAVING IT EMPTY rather
+  // than about a missing column. Once it is filled the note and the acknowledgement both go — a
+  // warning that stayed up after the operator did the right thing is one people learn to click past.
+  test('filling in the employee reference retires both the warning and the acknowledgement', async () => {
+    const wrapper = mountPanel()
+    await wrapper.setData({ invite: Object.assign({}, wrapper.vm.invite, { employeeReference: 'ANS-1042' }) })
+
+    expect(wrapper.findAll('.mls-note--danger')).toHaveLength(0)
+    expect(wrapper.findAll('.mls-check')).toHaveLength(0)
+    expect(wrapper.find('form button[type="submit"]').attributes('disabled')).toBeFalsy()
+  })
+
+  test('whitespace is not a reference — the warning stands', async () => {
+    const wrapper = mountPanel()
+    await wrapper.setData({ invite: Object.assign({}, wrapper.vm.invite, { employeeReference: '   ' }) })
+
+    expect(wrapper.findAll('.mls-note--danger')).toHaveLength(1)
+    expect(wrapper.find('form button[type="submit"]').attributes('disabled')).toBeTruthy()
+  })
+
+  test('with no reference the issue button is dead until the consequence is acknowledged', async () => {
     const wrapper = mountPanel()
     expect(wrapper.find('form button[type="submit"]').attributes('disabled')).toBeTruthy()
 
@@ -372,11 +392,17 @@ describe('MealsPeoplePanel — the two places this module\'s honesty is hardest'
     expect(wrapper.vm.inviteError).toBe('meals_err_ack_required')
   })
 
-  test('the member list shows the identifier the statement will carry, and names why', () => {
+  test('the member list shows what the statement will carry, and flags the rows nothing can fix', () => {
     const wrapper = mountPanel({
-      members: loaded([{ membershipId: 'm-1', applicationUserId: 'u-9', role: 'Employee', state: 'Active' }])
+      members: loaded([
+        { membershipId: 'm-1', applicationUserId: 'u-9', statementRef: 'ANS-1042', hasEmployeeReference: true, role: 'Employee', state: 'Active' },
+        { membershipId: 'm-2', applicationUserId: 'u-8', statementRef: 'm-2', hasEmployeeReference: false, role: 'Employee', state: 'Active' }
+      ])
     })
-    expect(wrapper.text()).toContain('m-1')
+    expect(wrapper.text()).toContain('ANS-1042')
+    expect(wrapper.text()).toContain('m-2')
+    // Exactly one row is marked: the one whose bill will name a bare identifier for good.
+    expect(wrapper.findAll('.mls-ref .mls-badge--warn')).toHaveLength(1)
     expect(wrapper.text()).toContain('meals_members_display_note')
   })
 
@@ -451,15 +477,32 @@ describe('MealsPeoplePanel — the two places this module\'s honesty is hardest'
     const wrapper = mountPanel()
     wrapper.setData({
       acknowledged: true,
-      invite: { email: 'kari@acme.no', phone: '', role: 'Employee', expiresInDays: 30 }
+      invite: { email: 'kari@acme.no', phone: '', role: 'Employee', expiresInDays: 30, employeeReference: '' }
     })
     wrapper.vm.submitInvitation()
     expect(wrapper.emitted('create-invitation')[0][0]).toEqual({
       intendedContactEmail: 'kari@acme.no',
       intendedContactPhone: null,
       intendedRole: 'Employee',
+      // null rather than '': the column's honest absent value is NULL, and an empty string would
+      // reach the server as a supplied-but-blank reference.
+      employeeReference: null,
       expiresInDays: 30
     })
+  })
+
+  test('a supplied reference is trimmed onto the body, and cleared with the contact afterwards', () => {
+    const wrapper = mountPanel()
+    wrapper.setData({
+      invite: { email: 'kari@acme.no', phone: '', role: 'Employee', expiresInDays: 14, employeeReference: '  ANS-1042 ' }
+    })
+    wrapper.vm.submitInvitation()
+    expect(wrapper.emitted('create-invitation')[0][0].employeeReference).toBe('ANS-1042')
+
+    // A reference is per-person: carrying the previous hire's payroll number into the next
+    // invitation would attach it to the wrong member, permanently.
+    wrapper.vm.resetInvitation()
+    expect(wrapper.vm.invite.employeeReference).toBe('')
   })
 
   test('an out-of-range expiry and a missing contact are refused before the round trip', () => {
