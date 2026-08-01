@@ -178,8 +178,28 @@
     </section>
 
     <!-- ---- run sheet ---------------------------------------------------------------------- -->
-    <section class="ev-journey__section">
+    <!-- THE ONE SECTION THAT GOES ON PAPER, and it is marked so the print rules at the foot of this
+         file can name it. Those rules are DEFAULT-DENY: every other section this component draws is
+         taken off the paper and this one is named back in. The polarity is the point — the proposal
+         and deposit sections each print a live guest bearer link on screen, on purpose, because
+         email dispatch is dark by default, and a section somebody adds next month may print another
+         one. Default-deny keeps all of them off the kitchen sheet without anybody having to
+         remember; a hide-list would only ever cover the two that exist today. -->
+    <section class="ev-journey__section ev-journey__section--sheet">
       <h3>{{ $i('ev_runsheet_heading') }}</h3>
+
+      <!-- Paper only. On screen these same facts are three sections up, so showing them here would
+           be a duplicate; on paper their absence would make the sheet a list of instructions about
+           no event in particular, handed to a kitchen cooking several that day. -->
+      <div class="ev-journey__sheet-head">
+        <p class="ev-journey__sheet-title">
+          {{ $i('ev_runsheet_print_title') }}
+        </p>
+        <p class="ev-journey__sheet-facts">
+          {{ detail.title || unknownMark }} · {{ dayLabel }} · {{ timeLabel }}
+          · {{ $i('ev_field_guests') }}: {{ count(detail.guestCountPlanned) }}
+        </p>
+      </div>
 
       <!-- What the venue has on record about allergies and diets, above the sheet because it is what
            the sheet prints. An empty field is rendered as UNANSWERED, never as "no requirements":
@@ -207,6 +227,22 @@
       <!-- Only a HELD projection is drawn. An unhandled state renders nothing rather than
            reaching for a view that is not there. -->
       <template v-else-if="runSheet.state === FACET_HELD">
+        <!-- The print path, and it is offered only against a sheet the server actually holds: a
+             button that prints the sentence "no run sheet has been generated yet" is worse than no
+             button. It is a first-class control rather than a hint to use the browser's own File →
+             Print, because that prints the whole pipeline page — with the guest's proposal and
+             deposit links on it. -->
+        <p class="ev-journey__sheet-actions">
+          <button
+            class="ev-journey__btn ev-journey__btn--print"
+            type="button"
+            data-test="runsheet-print"
+            @click="printSheet"
+          >
+            {{ $i('ev_runsheet_print') }}
+          </button>
+          <span class="ev-journey__hint">{{ $i('ev_runsheet_print_note') }}</span>
+        </p>
         <dl class="ev-journey__facts">
           <div><dt>{{ $i('ev_runsheet_version') }}</dt><dd>{{ count(runSheet.view.versionNo) }}</dd></div>
           <div><dt>{{ $i('ev_runsheet_status') }}</dt><dd>{{ runSheet.view.status || unknownMark }}</dd></div>
@@ -449,6 +485,28 @@ export default {
       const origin = typeof window !== 'undefined' && window.location ? window.location.origin : '';
       return origin + '/events/' + kind + '/' + token;
     },
+
+    /**
+     * The kitchen's copy.
+     *
+     * `window.print()` is what produces the artifact; the `@media print` block at the foot of this
+     * file is what makes that artifact a run sheet rather than a photograph of an admin screen —
+     * above all by keeping `.ev-journey__handover`, the guest's proposal and deposit addresses, off
+     * the paper that gets carried to the pass. This component is still purely presentational: it
+     * asks the browser to print what is already rendered and fetches nothing.
+     *
+     * A browser that exposes no print command is reported out loud instead of the button silently
+     * doing nothing. The page owns the wording and the toast, so the refusal is emitted rather than
+     * rendered here — a control that appears to work and does not is exactly the failure this is
+     * meant to remove.
+     */
+    printSheet () {
+      if (typeof window === 'undefined' || typeof window.print !== 'function') {
+        this.$emit('print-unavailable');
+        return;
+      }
+      window.print();
+    },
     linesOf (version) {
       return Array.isArray(version.lines) ? version.lines : [];
     },
@@ -527,4 +585,62 @@ export default {
 .ev-journey__items { list-style: none; margin: 0; padding: 0; font-size: 0.85em; }
 .ev-journey__items li { padding: 6px 0; border-bottom: 1px solid #f1f5f9; }
 .ev-journey__item-time { color: #64748b; margin-right: 8px; }
+
+.ev-journey__sheet-actions { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin: 0 0 12px; }
+.ev-journey__btn { background: #fff; border: 2px solid #e2e8f0; border-radius: 8px; padding: 9px 14px; font-size: 0.85em; color: #292c34; cursor: pointer; }
+.ev-journey__btn--print { border-color: #1bb776; color: #159f63; font-weight: 600; }
+/* Paper only — see the template. Revealed by the print block below and nowhere else. */
+.ev-journey__sheet-head { display: none; }
+
+/* ---- THE KITCHEN'S COPY ----------------------------------------------------------------------
+   SCOPED, AND THAT IS THE GUARD. Every selector below carries this component's own `data-v-`
+   attribute, so it can only ever match an element this component rendered and it is dead the moment
+   the component unmounts. That is deliberate rather than incidental: an UNSCOPED `@media print`
+   block would outlive the page in a Nuxt build — a chunk's CSS is not unloaded on navigation — and
+   would quietly restyle the printing of every other admin screen. The estate has already shipped one
+   print stylesheet whose guard was a class set imperatively on `document.body`, which vue-meta
+   rebuilds from its own map; the class was wiped, the rules stayed in the file, and the document
+   printed with the admin shell on it. Nothing here depends on a class anyone has to apply, so there
+   is no guard left to fail.
+
+   DEFAULT-DENY. Everything this component draws comes off the paper and the run sheet section is
+   named back in. `.ev-journey__handover` — the guest's proposal and deposit addresses, shown on
+   screen on purpose because email dispatch is dark by default — is therefore already gone, and it is
+   ALSO hidden by name below. Twice on purpose: the default-deny is what covers a section added next
+   month, and the named rule is what a reviewer grepping for the leak actually finds. */
+@media print {
+  .ev-journey > * { display: none !important; }
+  .ev-journey__section--sheet { display: block !important; margin: 0; page: ev-runsheet; }
+
+  /* Never relaxed. A live bearer link on a sheet left on the pass is the whole reason this exists. */
+  .ev-journey__handover { display: none !important; }
+
+  /* A control is not part of the document it produces. */
+  .ev-journey__sheet-actions { display: none !important; }
+
+  /* Paper only, so the sheet says which event a kitchen is cooking. */
+  .ev-journey__sheet-head { display: block !important; border-bottom: 1.5pt solid #000; margin-bottom: 10pt; padding-bottom: 6pt; }
+  .ev-journey__sheet-title { font-size: 15pt; font-weight: 600; margin: 0 0 4pt; }
+  .ev-journey__sheet-facts { font-size: 10pt; margin: 0; }
+
+  /* Black on white, and the screen's grey-on-grey notices become readable text rather than a
+     photocopy of a panel. The dietary statement is one of these, and it is the sentence the whole
+     sheet exists to carry — so it is set at body weight and never in a tint. */
+  .ev-journey__section--sheet,
+  .ev-journey__notice,
+  .ev-journey__hint,
+  .ev-journey__chip,
+  .ev-journey__item-time,
+  .ev-journey__facts dt,
+  .ev-journey__facts dd { color: #000; background: transparent; }
+  .ev-journey__section--sheet h3 { font-size: 12pt; }
+  .ev-journey__notice { padding: 0 0 6pt; font-size: 10pt; }
+  .ev-journey__notice--warn { border-left: 2pt solid #000; padding-left: 6pt; }
+  .ev-journey__hint { font-style: normal; font-size: 9pt; }
+  .ev-journey__facts { font-size: 10pt; }
+  .ev-journey__chip { border: 1pt solid #000; padding: 0 4pt; font-size: 9pt; }
+  .ev-journey__items { font-size: 10pt; }
+  /* An instruction to the kitchen is never split across two sheets of paper. */
+  .ev-journey__items li { break-inside: avoid; page-break-inside: avoid; border-bottom: 0.5pt solid #666; }
+}
 </style>

@@ -2467,6 +2467,13 @@ export default {
   wf_stale_title: 'The change was not saved',
   wf_stale_detail: 'Somebody else changed this week since you opened it. Your change was not saved, and nothing was overwritten. Fetch the week again to see what is there now, then make your change once more.',
   wf_stale_reload: 'Fetch the week again',
+  // Refused because the stage flag is off. All four schedule writes — create draft, edit a shift,
+  // validate and publish — sit behind the SAME flag, so the copy names the flag rather than the
+  // button. The key comes from the server; it is never guessed here.
+  wf_conflict_flag_title: 'The schedule is read-only',
+  wf_conflict_flag: 'The {flag} switch is off for this store, so the schedule can be read but not changed or published. Turn it on under Module switches to publish.',
+  wf_conflict_flag_unnamed: 'A stage switch is off for this store, so the schedule can be read but not changed or published. The server did not say which one.',
+  wf_conflict_flag_link: 'Go to Module switches',
   wf_conflict_frozen_title: 'The week is published',
   wf_conflict_frozen: 'This revision is published and cannot be changed. Create a new draft for the week to make changes.',
   wf_conflict_invalid_title: 'The shift cannot be saved',
@@ -4006,6 +4013,10 @@ export default {
   ev_runsheet_issued_by: 'Issued by',
   ev_runsheet_issued_at: 'Issued',
   ev_runsheet_stale: 'This run sheet was not generated from the operative proposal version. Reissue it before service.',
+  ev_runsheet_print: 'Print the run sheet',
+  ev_runsheet_print_note: 'The print carries what is recorded about allergies and diets. The guest links stay off the paper.',
+  ev_runsheet_print_title: 'Run sheet for the kitchen',
+  ev_runsheet_print_unavailable: 'Your browser offers no print command, so the sheet was not produced.',
   ev_action_runsheet: 'Generate the run sheet',
 
   ev_dietary_heading: 'Dietary and allergen requirement',
@@ -4875,6 +4886,46 @@ export default {
   gr_guest_unsub_dead_next: 'Use the link at the bottom of the most recent email you have. There you can also stop the mailings and ask to be erased.',
   gr_guest_unsub_notoken_heading: 'The link is incomplete',
   gr_guest_unsub_notoken_body: 'This page needs the whole link to know who to unsubscribe.',
-  gr_guest_unsub_unknown_body: 'We got no answer, so you are probably NOT unsubscribed. Try again.'
+  gr_guest_unsub_unknown_body: 'We got no answer, so you are probably NOT unsubscribed. Try again.',
+
+  // Module switches (/admin/feature-flags) — the one page that turns modules on and off for a store.
+  // Every string here is about what a value does NOT mean: a switch that is on is not the same as a
+  // module that is running, and an empty list is not the same as no switches.
+  nav_feature_flags: 'Module switches',
+  ff_page_title: 'Module switches',
+  ff_page_intro: 'The switches that decide what the six modules may write for this store. Everything is off to begin with: a switch that is not on refuses writes — reads and exports of what is already recorded keep working.',
+  ff_reload: 'Read again',
+  ff_effective_note: '"Effective" is the answer the module\'s own gate gives. Some modules also sit under a deployment switch in the server configuration that this page cannot see. So "effective: off" can be relied on, while "effective: on" is not a promise that the write will go through.',
+  ff_withheld_note: 'The list is the catalogue the service reports. A module may have stages deliberately not offered here — they would have no effect whatever they were set to, and a switch that does nothing is worse than no switch.',
+  ff_catalog_unknown: 'We could not read the catalogue, so we do not know for certain which keys the service accepts. The switches below may therefore be refused.',
+  ff_read_failed: 'We could not read this store\'s switches. Nothing below is known — it does not mean everything is off.',
+  ff_forbidden: 'You are not a store admin for this store. The service does not say whether the store exists.',
+  ff_module_unknown: 'No module',
+  ff_state_on: 'On',
+  ff_state_off: 'Off',
+  ff_state_unknown: 'Unknown',
+  ff_default_on: 'Default: on',
+  ff_default_off: 'Default: off',
+  ff_overridden: 'Overridden for the store',
+  ff_not_overridden: 'Not overridden',
+  ff_override_unknown: 'Override unknown',
+  ff_effective_on: 'Effective: on',
+  ff_effective_off: 'Effective: off',
+  ff_effective_unknown: 'Effective: unknown',
+  ff_overruled: 'The switch is on, but the module\'s gate still answers off. Something else is holding the module down — a master flag or a deployment switch in the server configuration. Turning this off and on again changes nothing.',
+  ff_state_unknown_row: 'This key is in the catalogue, but the store\'s answer did not carry it. We do not know what it is set to here.',
+  ff_not_writable: 'The catalogue does not carry this key, so the service refuses to write it. No switch is offered.',
+  ff_note_label: 'Reason',
+  ff_note_placeholder: 'Why is this being changed now?',
+  ff_updated_by: 'Last changed by {actor}',
+  ff_actor_unknown: 'unknown',
+  ff_turn_on: 'Turn on',
+  ff_turn_off: 'Turn off',
+  ff_clear: 'Remove override',
+  ff_saved_on: '{flag} is on for this store.',
+  ff_saved_off: '{flag} is off for this store.',
+  ff_cleared: 'The override on {flag} is removed. The module default applies again.',
+  ff_clear_none: '{flag} was not overridden. Nothing changed.',
+  ff_generic_error: 'The change was not saved.'
 
 }

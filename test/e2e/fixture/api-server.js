@@ -82,6 +82,11 @@ function freshState () {
     // seen by another.
     proposals: JSON.parse(JSON.stringify(world.PROPOSALS)),
     acceptances: {},
+    // The shared per-store feature-flag OVERRIDE store: `${storeId}|${flagKey}` -> one row. Empty on
+    // purpose. Every module flag is deny-closed by default, and a fixture that started with them on
+    // would hide the one fact this whole surface exists for — that a store which has not had a
+    // switch flipped cannot write through the module it gates.
+    flags: {},
     seq: 0,
     requests: [],
     // How many requests this fixture has answered since the last reset. Read by the journey fixture
@@ -209,6 +214,57 @@ function rangeDocument (revision, view) {
     asOfUtc: nowUtc(),
     assignments: revision.assignments.slice(),
     cost: costFor(revision)
+  };
+}
+
+// ---- the shared per-store feature-flag store ---------------------------------------------------
+//
+// Three routes on ONE controller that owns the flags of all six modules. The fixture holds the two
+// rules that make the surface what it is, because both are claims the operator screen relies on:
+//
+//   • DENY-CLOSED WRITES. `Set` and `Clear` look the key up in the catalog first and answer 400
+//     `{ message: "Unknown feature flag: …" }` for anything it does not carry. That is what makes a
+//     WITHHELD flag unwritable as well as un-togglable.
+//   • CONCEALMENT. Every store-scoped action answers 403 — never 404 — for a caller who is not a
+//     StoreAdmin of the target store, so the API never leaks whether the store exists. The page has
+//     one sentence for both meanings, and this is what keeps it honest.
+//
+// WHAT IT DOES NOT MODEL: `IStoreFeatureFlagEffectiveResolver`. Two modules register one (Workforce
+// for `workforce.module`, Margin for its family) so that `effective` reflects a data probe or a
+// config master rather than the advertised default. No flag these journeys touch has a resolver, so
+// `effective` here is the plain `override ?? default` the controller falls back to. A fixture that
+// invented resolver behaviour would be asserting our guess about the backend, not the backend.
+
+function flagDescriptor (flagKey) {
+  return world.FEATURE_FLAG_CATALOG.find(entry => entry.flagKey === flagKey) || null;
+}
+
+function flagRow (storeId, flagKey) {
+  return state.flags[storeId + '|' + flagKey] || null;
+}
+
+/** The value the module's gate resolves: the override when there is one, otherwise the default. */
+function flagEffective (storeId, flagKey) {
+  const row = flagRow(storeId, flagKey);
+  if (row) { return row.enabled; }
+  const descriptor = flagDescriptor(flagKey);
+  return !!(descriptor && descriptor.defaultEnabled);
+}
+
+/** One flag as `StoreFeatureFlagState` — the shape `GET`/`PUT` both answer in. */
+function flagState (storeId, descriptor) {
+  const row = flagRow(storeId, descriptor.flagKey);
+  return {
+    flagKey: descriptor.flagKey,
+    module: descriptor.module,
+    title: descriptor.title,
+    defaultEnabled: descriptor.defaultEnabled,
+    isOverridden: !!row,
+    overrideEnabled: !!row && row.enabled,
+    effective: flagEffective(storeId, descriptor.flagKey),
+    updatedByReference: row ? row.updatedByReference : null,
+    updatedAtUtc: row ? row.updatedAtUtc : null,
+    note: row ? row.note : null
   };
 }
 
@@ -394,6 +450,42 @@ async function route (req, res, url) {
       'Every workforce mutation must carry an Idempotency-Key.');
   }
 
+  // ---- Events: the ADMIN reads the pipeline page issues -----------------------------------------
+  //
+  // GET only. The run-sheet print journey opens an event and prints what is already there; it writes
+  // nothing, so this fixture answers the five reads `selectEvent` fans out and no mutation. A POST or
+  // PUT to any of these falls through to the 404 below rather than being quietly accepted, which is
+  // the honest answer for a contract this fixture does not hold.
+  const eventsAdmin = /^\/events\/admin\/([^/]+)(\/.*)?$/.exec(path);
+  if (eventsAdmin && req.method === 'GET') {
+    const rest = eventsAdmin[2] || '';
+
+    if (rest === '/events') {
+      // The page sends `status`/`from`/`to` as filters. The journey uses none of them, and a fixture
+      // that silently ignored a filter it was sent would let a broken query string pass — so an
+      // unsupported filter answers an empty list rather than the row.
+      const status = url.searchParams.get('status');
+      const rows = (status && status !== world.ADMIN_EVENT_ROW.status) ? [] : [world.ADMIN_EVENT_ROW];
+      return send(res, 200, rows);
+    }
+
+    if (rest === '/notifications/health') {
+      return send(res, 200, world.ADMIN_NOTIFICATION_HEALTH);
+    }
+
+    const one = /^\/events\/([^/]+)(\/.*)?$/.exec(rest);
+    if (one) {
+      if (String(one[1]) !== String(world.ADMIN_EVENT_ID)) {
+        return problem(res, 404, 'EVENTS_NOT_FOUND', 'No event with that id in this fixture.');
+      }
+      const facet = one[2] || '';
+      if (facet === '') { return send(res, 200, world.ADMIN_EVENT_DETAIL); }
+      if (facet === '/deposits') { return send(res, 200, world.ADMIN_DEPOSITS); }
+      if (facet === '/run-sheet') { return send(res, 200, world.ADMIN_RUN_SHEET); }
+      if (facet === '/settlement') { return send(res, 200, world.ADMIN_SETTLEMENT); }
+    }
+  }
+
   // ---- the store the admin landing page reads --------------------------------------------------
   //
   // Neither of these is on a journey's critical path: they are what `/admin` itself fetches while
@@ -416,6 +508,63 @@ async function route (req, res, url) {
   if (specialHours && req.method === 'GET') {
     return send(res, 200, []);
   }
+  // ---- the shared feature-flag surface ---------------------------------------------------------
+  //
+  // The catalog admits ANY authenticated caller — it carries no store and no state, only the set of
+  // keys the write side will accept.
+  if (path === '/feature-flags/catalog' && req.method === 'GET') {
+    return send(res, 200, world.FEATURE_FLAG_CATALOG.map(entry => ({
+      flagKey: entry.flagKey,
+      module: entry.module,
+      title: entry.title,
+      defaultEnabled: entry.defaultEnabled
+    })));
+  }
+
+  const storeFlags = /^\/stores\/(\d+)\/feature-flags$/.exec(path);
+  if (storeFlags) {
+    const flagStoreId = storeFlags[1];
+    // 403 and never 404, for a non-admin AND for a store that does not exist: the API answers the
+    // same refusal to both so that neither can be told apart from the other.
+    if (!(caller.adminIn || []).some(s => String(s.id) === String(flagStoreId))) {
+      return problem(res, 403, 'FORBIDDEN', 'Not a store admin of this store.');
+    }
+
+    if (req.method === 'GET') {
+      return send(res, 200, world.FEATURE_FLAG_CATALOG.map(entry => flagState(flagStoreId, entry)));
+    }
+
+    if (req.method === 'PUT') {
+      const flagKey = body && body.flagKey;
+      if (!flagKey) { return send(res, 400, { message: 'flagKey is required' }); }
+      const descriptor = flagDescriptor(flagKey);
+      // Deny-closed. A key the catalog does not carry — a typo, or a flag its own module withheld
+      // because it can gate nothing — is refused rather than persisted as an unconsumed row.
+      if (!descriptor) { return send(res, 400, { message: 'Unknown feature flag: ' + flagKey }); }
+
+      state.flags[flagStoreId + '|' + flagKey] = {
+        enabled: body.enabled === true,
+        // Resolved from the CALLER's own identity. The client sends no actor and must not: a
+        // client-supplied one would be an unverified claim about who flipped a kill switch.
+        updatedByReference: caller.id,
+        updatedAtUtc: nowUtc() + 'Z',
+        note: body.note || null
+      };
+      return send(res, 200, flagState(flagStoreId, descriptor));
+    }
+
+    if (req.method === 'DELETE') {
+      const flagKey = url.searchParams.get('flagKey');
+      if (!flagKey) { return send(res, 400, { message: 'flagKey is required' }); }
+      if (!flagDescriptor(flagKey)) { return send(res, 400, { message: 'Unknown feature flag: ' + flagKey }); }
+      const key = flagStoreId + '|' + flagKey;
+      const removed = Object.prototype.hasOwnProperty.call(state.flags, key);
+      delete state.flags[key];
+      // `{ flagKey, cleared }` and NOT the resulting state — which is why the client re-reads.
+      return send(res, 200, { flagKey, cleared: removed });
+    }
+  }
+
   const storeMarket = /^\/stores\/(\d+)\/market$/.exec(path);
   if (storeMarket && req.method === 'GET') {
     return send(res, 200, {
@@ -475,6 +624,27 @@ async function route (req, res, url) {
 
     if (!administers) {
       return problem(res, 403, 'workforce.forbidden', 'No workforce capability at this store.');
+    }
+
+    // THE §9.2 KILL SWITCH. All four schedule writes — create draft, batch edit, validate, publish —
+    // pass `WorkforceFeatureFlags.Publication` to `RequireWriteCapabilityAsync`, and
+    // `WorkforceModuleGate.EnsureStageWriteEnabledAsync` refuses a disabled one with
+    // `FlagDisabledReadOnly(flag)`. Enforced here, once, for all four, because a fixture that gated
+    // only publish would let a page ship that offers a draft button the real API refuses.
+    //
+    // READS ARE NEVER GATED, and that is the rule rather than an omission: §9.2 says the surface goes
+    // READ-ONLY, so the week, the roster and the exports keep answering while the switch is down.
+    // A fixture that darkened the reads too would prove a product this one is not.
+    if (req.method !== 'GET' && /^\/schedules(\/|$)/.test(rest) &&
+        !flagEffective(storeId, world.SCHEDULE_WRITE_FLAG)) {
+      return problem(res, 409, 'workforce.flag-disabled-read-only',
+        'The workforce feature is disabled for this store; the surface is read-only.', {
+          conflictKind: 'flag-disabled-read-only',
+          // The key is what makes the refusal actionable: the family has eight stage flags, and a
+          // client told only "a workforce feature is disabled" cannot name the lever to pull.
+          flag: world.SCHEDULE_WRITE_FLAG,
+          retryable: false
+        });
     }
 
     if (rest === '/staff' && req.method === 'GET') { return send(res, 200, world.STAFF); }

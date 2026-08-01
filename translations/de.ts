@@ -2468,6 +2468,13 @@ export default {
   wf_stale_title: 'Die Änderung wurde nicht gespeichert',
   wf_stale_detail: 'Jemand anderes hat diese Woche geändert, seit Sie sie geöffnet haben. Ihre Änderung wurde nicht gespeichert, und nichts wurde überschrieben. Laden Sie die Woche neu, um den aktuellen Stand zu sehen, und nehmen Sie Ihre Änderung erneut vor.',
   wf_stale_reload: 'Woche neu laden',
+  // Abgelehnt, weil der Stufenschalter aus ist. Alle vier Schreibvorgänge des Dienstplans — Entwurf
+  // anlegen, Schicht ändern, prüfen und veröffentlichen — liegen hinter DEMSELBEN Schalter, deshalb
+  // benennt der Text den Schalter und nicht die Schaltfläche. Der Schlüssel kommt vom Server.
+  wf_conflict_flag_title: 'Der Dienstplan ist schreibgeschützt',
+  wf_conflict_flag: 'Der Schalter {flag} ist für dieses Lokal aus, der Dienstplan lässt sich also lesen, aber nicht ändern oder veröffentlichen. Schalte ihn unter Modulschalter ein, um zu veröffentlichen.',
+  wf_conflict_flag_unnamed: 'Ein Stufenschalter ist für dieses Lokal aus, der Dienstplan lässt sich also lesen, aber nicht ändern oder veröffentlichen. Der Server hat nicht gesagt, welcher.',
+  wf_conflict_flag_link: 'Zu den Modulschaltern',
   wf_conflict_frozen_title: 'Die Woche ist veröffentlicht',
   wf_conflict_frozen: 'Diese Revision ist veröffentlicht und unveränderlich. Legen Sie einen neuen Entwurf für die Woche an, um Änderungen vorzunehmen.',
   wf_conflict_invalid_title: 'Die Schicht kann nicht gespeichert werden',
@@ -4010,6 +4017,10 @@ export default {
   ev_runsheet_issued_by: 'Ausgestellt von',
   ev_runsheet_issued_at: 'Ausgestellt',
   ev_runsheet_stale: 'Dieser Ablaufplan stammt nicht aus der gültigen Angebotsversion. Erzeuge ihn vor dem Service neu.',
+  ev_runsheet_print: 'Ablaufplan drucken',
+  ev_runsheet_print_note: 'Der Ausdruck enthält, was zu Allergien und Diäten erfasst ist. Die Gästelinks kommen nicht aufs Blatt.',
+  ev_runsheet_print_title: 'Ablaufplan für die Küche',
+  ev_runsheet_print_unavailable: 'Dein Browser bietet keinen Druckbefehl, der Ausdruck wurde nicht erzeugt.',
   ev_action_runsheet: 'Ablaufplan erzeugen',
 
   ev_dietary_heading: 'Allergien und Diäten',
@@ -4880,6 +4891,46 @@ export default {
   gr_guest_unsub_dead_next: 'Nehmen Sie den Link unten in Ihrer neuesten E-Mail. Dort können Sie auch die Zusendungen stoppen und die Löschung verlangen.',
   gr_guest_unsub_notoken_heading: 'Der Link ist unvollständig',
   gr_guest_unsub_notoken_body: 'Diese Seite braucht den ganzen Link, um zu wissen, wer abgemeldet werden soll.',
-  gr_guest_unsub_unknown_body: 'Wir haben keine Antwort erhalten, Sie sind also wahrscheinlich NICHT abgemeldet. Versuchen Sie es nochmals.'
+  gr_guest_unsub_unknown_body: 'Wir haben keine Antwort erhalten, Sie sind also wahrscheinlich NICHT abgemeldet. Versuchen Sie es nochmals.',
+
+  // Modulschalter (/admin/feature-flags) — die eine Seite, die Module für ein Lokal ein- und
+  // ausschaltet. Jeder Text hier sagt, was ein Wert NICHT bedeutet: ein eingeschalteter Schalter ist
+  // nicht dasselbe wie ein laufendes Modul, und eine leere Liste nicht dasselbe wie keine Schalter.
+  nav_feature_flags: 'Modulschalter',
+  ff_page_title: 'Modulschalter',
+  ff_page_intro: 'Die Schalter, die bestimmen, was die sechs Module für dieses Lokal schreiben dürfen. Alles ist zunächst aus: ein Schalter, der nicht an ist, lehnt Schreibvorgänge ab — Lesen und Exportieren von bereits Erfasstem läuft weiter.',
+  ff_reload: 'Neu laden',
+  ff_effective_note: '«Effektiv» ist die Antwort der modul-eigenen Prüfung. Manche Module liegen zusätzlich unter einem Betriebsschalter in der Serverkonfiguration, den diese Seite nicht sieht. «Effektiv: aus» ist deshalb verlässlich, «effektiv: an» dagegen kein Versprechen, dass der Schreibvorgang durchgeht.',
+  ff_withheld_note: 'Die Liste ist der Katalog, den der Dienst meldet. Ein Modul kann Stufen haben, die hier bewusst nicht angeboten werden — sie hätten keinerlei Wirkung, und ein Schalter ohne Wirkung ist schlimmer als kein Schalter.',
+  ff_catalog_unknown: 'Wir konnten den Katalog nicht lesen und wissen daher nicht sicher, welche Schlüssel der Dienst zum Schreiben annimmt. Die Schalter unten können abgelehnt werden.',
+  ff_read_failed: 'Wir konnten die Schalter dieses Lokals nicht lesen. Nichts darunter ist bekannt — das heisst nicht, dass alles aus ist.',
+  ff_forbidden: 'Du bist für dieses Lokal kein Lokal-Administrator. Der Dienst sagt nicht, ob das Lokal existiert.',
+  ff_module_unknown: 'Ohne Modul',
+  ff_state_on: 'An',
+  ff_state_off: 'Aus',
+  ff_state_unknown: 'Unbekannt',
+  ff_default_on: 'Standard: an',
+  ff_default_off: 'Standard: aus',
+  ff_overridden: 'Für das Lokal übersteuert',
+  ff_not_overridden: 'Nicht übersteuert',
+  ff_override_unknown: 'Übersteuerung unbekannt',
+  ff_effective_on: 'Effektiv: an',
+  ff_effective_off: 'Effektiv: aus',
+  ff_effective_unknown: 'Effektiv: unbekannt',
+  ff_overruled: 'Der Schalter ist an, die Prüfung des Moduls antwortet trotzdem aus. Etwas anderes hält das Modul unten — ein Hauptschalter oder ein Betriebsschalter in der Serverkonfiguration. Diesen aus- und wieder einzuschalten ändert nichts.',
+  ff_state_unknown_row: 'Dieser Schlüssel steht im Katalog, aber die Antwort des Lokals enthielt ihn nicht. Worauf er hier steht, wissen wir nicht.',
+  ff_not_writable: 'Der Katalog führt diesen Schlüssel nicht, der Dienst lehnt das Schreiben also ab. Es wird kein Schalter angeboten.',
+  ff_note_label: 'Begründung',
+  ff_note_placeholder: 'Warum wird das jetzt geändert?',
+  ff_updated_by: 'Zuletzt geändert von {actor}',
+  ff_actor_unknown: 'unbekannt',
+  ff_turn_on: 'Einschalten',
+  ff_turn_off: 'Ausschalten',
+  ff_clear: 'Übersteuerung entfernen',
+  ff_saved_on: '{flag} ist für dieses Lokal an.',
+  ff_saved_off: '{flag} ist für dieses Lokal aus.',
+  ff_cleared: 'Die Übersteuerung von {flag} ist entfernt. Der Modulstandard gilt wieder.',
+  ff_clear_none: '{flag} war nicht übersteuert. Es wurde nichts geändert.',
+  ff_generic_error: 'Die Änderung wurde nicht gespeichert.'
 
 }

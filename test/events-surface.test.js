@@ -482,6 +482,88 @@ describe('the proposal link is a handover, because nothing sends it', () => {
   })
 })
 
+// ---- the print control -------------------------------------------------------------------------
+//
+// WHAT THESE TESTS CAN AND CANNOT SAY. They cover the CONTROL: that it is offered only against a
+// sheet the server actually holds, that pressing it asks the browser to print, and that a browser
+// with no print command is reported rather than ignored. They say NOTHING about what lands on the
+// paper — jsdom has no print media and no cascade for `@media print`, so an assertion here that the
+// guest link is hidden would pass against a stylesheet that does nothing at all. That measurement
+// belongs to `test/e2e/journeys/events-runsheet-print.spec.js`, which reads the real browser's
+// computed styles under emulated print media. The split is deliberate: this estate has already
+// shipped an inert print stylesheet under a green suite.
+
+const heldSheet = () => readRunSheet({
+  versionNo: 3,
+  status: 'Issued',
+  generatedFromProposalVersionNo: 2,
+  issuedByUserId: 'user-1',
+  issuedAtUtc: '2026-07-10T12:00:00',
+  isStale: false,
+  items: [{ section: 'Dietary', body: 'To gjester har cøliaki.', timeLabel: null, quantityLabel: null }]
+}, null)
+
+describe('the run sheet can be sent to a printer', () => {
+  test('the control is offered against a sheet the server holds', () => {
+    const wrapper = journey({ runSheet: heldSheet() })
+    const button = wrapper.find('[data-test="runsheet-print"]')
+    expect(button.exists()).toBe(true)
+    expect(button.text()).toBe(translations.no.ev_runsheet_print)
+  })
+
+  // The three ways there is nothing to print. A control that prints "no run sheet has been generated
+  // yet" is worse than no control, so its absence here is the assertion — and the test above is the
+  // positive control that makes these three mean something.
+  test('no control is offered when there is no sheet, the module is off, or the read failed', () => {
+    const none = journey({ runSheet: readRunSheet(null, problem(404, 'EVENTS_RUNSHEET_NOT_FOUND')) })
+    const gated = journey({ runSheet: readRunSheet(null, problem(404, 'EVENTS_DISABLED')) })
+    const unknown = journey({ runSheet: readRunSheet(null, problem(500, 'EVENTS_OOPS')) })
+    expect(none.find('[data-test="runsheet-print"]').exists()).toBe(false)
+    expect(gated.find('[data-test="runsheet-print"]').exists()).toBe(false)
+    expect(unknown.find('[data-test="runsheet-print"]').exists()).toBe(false)
+  })
+
+  test('pressing it asks the browser to print', () => {
+    const original = window.print
+    window.print = jest.fn()
+    try {
+      const wrapper = journey({ runSheet: heldSheet() })
+      wrapper.find('[data-test="runsheet-print"]').trigger('click')
+      expect(window.print).toHaveBeenCalledTimes(1)
+    } finally {
+      window.print = original
+    }
+  })
+
+  // A browser that exposes no print command is told about out loud. The component owns no toast, so
+  // the refusal travels as an event and the PAGE says it — asserted here as the emission, and the
+  // page's handler is what turns it into `ev_runsheet_print_unavailable`.
+  test('a browser with no print command is reported, not silently ignored', () => {
+    const original = window.print
+    window.print = undefined
+    try {
+      const wrapper = journey({ runSheet: heldSheet() })
+      wrapper.find('[data-test="runsheet-print"]').trigger('click')
+      expect(wrapper.emitted('print-unavailable')).toBeTruthy()
+      expect(wrapper.emitted('print-unavailable').length).toBe(1)
+    } finally {
+      window.print = original
+    }
+  })
+
+  // The sheet has to say which event a kitchen is cooking. It is hidden on screen by CSS, so what is
+  // asserted here is that the FACTS are rendered into the document at all — whether they are visible
+  // on paper is the browser journey's measurement, not this one's.
+  test('the sheet carries the event it belongs to', () => {
+    const wrapper = journey({ runSheet: heldSheet() })
+    const head = wrapper.find('.ev-journey__sheet-head')
+    expect(head.exists()).toBe(true)
+    expect(head.text()).toContain(translations.no.ev_runsheet_print_title)
+    expect(head.text()).toContain('Julebord')
+    expect(head.text()).toContain('40')
+  })
+})
+
 // ---- the copy ----------------------------------------------------------------------------------
 
 describe('every ev_ key exists in all three dictionaries', () => {

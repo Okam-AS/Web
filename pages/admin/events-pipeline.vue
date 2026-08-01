@@ -143,7 +143,10 @@
       </div>
 
       <!-- ---- one event ------------------------------------------------------------------- -->
-      <div v-if="selectedId" class="ev-page__panel">
+      <!-- `--journey` is not decoration: it is the one panel the print rules at the foot of this
+           file let through, and everything else on the page — including the notification panel,
+           which lists guests whose link never arrived — is taken off the paper by default. -->
+      <div v-if="selectedId" class="ev-page__panel ev-page__panel--journey">
         <h2>{{ $i('ev_journey_heading') }}</h2>
 
         <p v-if="detailRead.state === READ_UNKNOWN" class="ev-page__notice ev-page__notice--warn">
@@ -164,6 +167,7 @@
             :run-sheet="runSheetFacet"
             :locale="locale"
             :currency="currency"
+            @print-unavailable="notify($i('ev_runsheet_print_unavailable'), 'error')"
           />
 
           <!-- ---- actions --------------------------------------------------------------- -->
@@ -1171,4 +1175,59 @@ function newCancelForm () {
 .ev-page__deadletters li { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f1f5f9; }
 .ev-page__toast { padding: 12px 16px; border-radius: 8px; background: #dcfce7; color: #166534; margin-bottom: 16px; }
 .ev-page__toast--error { background: #fee2e2; color: #991b1b; }
+
+/* ---- THE PAGE HALF OF THE PRINT PATH -----------------------------------------------------------
+   The component half lives in `EventsJourney.vue` and decides what of ONE event reaches the paper.
+   This half decides that nothing else on the page does.
+
+   SCOPED, like the other half, and for the same reason: these selectors carry this page's `data-v-`
+   attribute, so they cannot reach a screen this page did not render even though the chunk's CSS
+   stays loaded after navigation. No body class, no `head()`, nothing to apply and therefore nothing
+   to forget — the estate's previous print stylesheet was guarded by an imperative body class that
+   vue-meta rebuilt away, and it printed the admin shell for as long as nobody looked.
+
+   DEFAULT-DENY, again. `.ev-page > *` takes the whole page off the paper and the selected event's
+   panel is named back in; inside it, the same trick admits only the journey component. So the
+   filters, the create form, the action buttons, the refusal banner and the undelivered-notification
+   list are all off the kitchen sheet, and so is whatever a later lane adds beside them.
+
+   Vue applies THIS page's scope id to a child component's root element, which is why
+   `.ev-journey` — `EventsJourney`'s root — is reachable from here and its innards are not. That is
+   the correct seam: what happens inside the sheet is the component's business. */
+@media print {
+  .ev-page { max-width: none; margin: 0; padding: 0; }
+  .ev-page > * { display: none !important; }
+  .ev-page__panel--journey { display: block !important; border: 0; padding: 0; margin: 0; background: transparent; }
+  .ev-page__panel--journey > * { display: none !important; }
+  .ev-page__panel--journey > .ev-journey { display: block !important; }
+}
+</style>
+
+<style>
+/* A NAMED page box, claimed by `.ev-journey__section--sheet` in the component's own print rules.
+   Named rather than a bare `@page`, which carries no selector at all and therefore cannot be scoped
+   or guarded by anything: a bare one would put a 14 mm A4 margin on every other document this admin
+   prints for the rest of the session, since this page's CSS and theirs coexist once both have been
+   visited. Named, it is inert until something claims it — and the only thing that claims it is a
+   rule that already carries the component's scope attribute.
+   A browser without named-page support ignores both halves and prints the sheet at its own default
+   margins: readable, just not exactly 14 mm. */
+@page ev-runsheet {
+  size: A4 portrait;
+  margin: 14mm;
+}
+
+/* WHAT IS DELIBERATELY *NOT* HERE. There is no rule that reaches the admin shell — no
+   `.admin__main`, no `.admin__content`, no body-class contributor. Two reasons, and the second one
+   is the one that settled it:
+     • Those elements are ANCESTORS of this page's scope, so reaching them means an UNSCOPED rule,
+       which is the thing this whole change is arranged to avoid.
+     • It would fix nothing measurable. The shell reserves a 264px gutter for the sidebar it hides
+       when printing, and that gutter IS visible in a viewport screenshot taken under emulated print
+       media — but it is absent from the A4 document the browser actually produces, which was checked
+       by measuring the text's position in the printed PDF rather than assumed. A rule whose effect
+       cannot be observed in the artifact is a rule that gets kept forever because nobody can tell
+       whether it still does anything.
+   The one shell element that WOULD print is the onboarding banner, and only for a store still in
+   onboarding. That residue is recorded in the lane's RETURN rather than papered over here. */
 </style>

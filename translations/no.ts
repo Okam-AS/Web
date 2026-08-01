@@ -2518,6 +2518,14 @@ export default {
   wf_stale_reload: 'Hent uken på nytt',
   wf_conflict_frozen_title: 'Uken er publisert',
   wf_conflict_frozen: 'Denne revisjonen er publisert og kan ikke endres. Opprett et nytt utkast for uken for å gjøre endringer.',
+
+  // Avvist fordi trinnbryteren står av. Alle fire skrivingene på vaktplanen — opprett utkast,
+  // endre vakt, valider og publiser — ligger bak den SAMME bryteren, så teksten navngir bryteren
+  // og ikke knappen. Nøkkelen kommer fra tjenesten; den gjettes ikke her.
+  wf_conflict_flag_title: 'Vaktplanen er skrivebeskyttet',
+  wf_conflict_flag: 'Bryteren {flag} står av for denne butikken, så vaktplanen kan leses, men ikke endres eller publiseres. Slå den på under Modulbrytere for å publisere.',
+  wf_conflict_flag_unnamed: 'En trinnbryter står av for denne butikken, så vaktplanen kan leses, men ikke endres eller publiseres. Tjenesten oppga ikke hvilken.',
+  wf_conflict_flag_link: 'Gå til Modulbrytere',
   wf_conflict_invalid_title: 'Vakten kan ikke lagres',
   wf_conflict_dst_title: 'Klokkeslettet finnes ikke entydig',
   wf_conflict_dst_ambiguous: 'Klokkeslettet finnes to ganger denne natten (vintertid settes tilbake). Velg et tidspunkt utenfor den timen.',
@@ -4058,6 +4066,10 @@ export default {
   ev_runsheet_issued_by: 'Utstedt av',
   ev_runsheet_issued_at: 'Utstedt',
   ev_runsheet_stale: 'Denne kjøreplanen er ikke laget fra den gjeldende tilbudsversjonen. Lag den på nytt før service.',
+  ev_runsheet_print: 'Skriv ut kjøreplanen',
+  ev_runsheet_print_note: 'Utskriften tar med det som er registrert om allergi og diett. Gjestelenkene blir ikke med på arket.',
+  ev_runsheet_print_title: 'Kjøreplan for kjøkkenet',
+  ev_runsheet_print_unavailable: 'Nettleseren din tilbyr ingen utskrift, så vi fikk ikke laget arket.',
   ev_action_runsheet: 'Lag kjøreplan',
 
   ev_dietary_heading: 'Allergi og diett',
@@ -4929,6 +4941,46 @@ export default {
   gr_guest_unsub_dead_next: 'Bruk lenken nederst i den nyeste e-posten du har fått. Der kan du også stoppe utsendelsene og be om å bli slettet.',
   gr_guest_unsub_notoken_heading: 'Lenken er ufullstendig',
   gr_guest_unsub_notoken_body: 'Denne siden trenger hele lenken for å vite hvem som skal meldes av.',
-  gr_guest_unsub_unknown_body: 'Vi fikk ikke svar, så du er sannsynligvis IKKE meldt av. Prøv på nytt.'
+  gr_guest_unsub_unknown_body: 'Vi fikk ikke svar, så du er sannsynligvis IKKE meldt av. Prøv på nytt.',
+
+  // Modulbrytere (/admin/feature-flags) — den ene siden som slår moduler av og på for butikken.
+  // Hver eneste tekst her handler om hva en verdi IKKE betyr: en bryter som står på er ikke det
+  // samme som en modul som er i drift, og en tom liste er ikke det samme som ingen brytere.
+  nav_feature_flags: 'Modulbrytere',
+  ff_page_title: 'Modulbrytere',
+  ff_page_intro: 'Bryterne som avgjør hva de seks modulene får lov til å skrive for denne butikken. Alt er avslått som utgangspunkt: en bryter som ikke står på, avviser skrivinger — lesing og eksport av det som allerede er registrert, fortsetter.',
+  ff_reload: 'Hent på nytt',
+  ff_effective_note: '«Faktisk» er svaret modulens egen port gir. Noen moduler ligger i tillegg under en driftsbryter i serveroppsettet som denne siden ikke ser. Derfor er «faktisk: av» til å stole på, mens «faktisk: på» ikke er et løfte om at skrivingen går gjennom.',
+  ff_withheld_note: 'Listen er katalogen tjenesten oppgir. En modul kan ha trinn som med vilje ikke tilbys her — de gir ingen effekt uansett hva de settes til, og en bryter som ikke gjør noe er verre enn ingen bryter.',
+  ff_catalog_unknown: 'Vi fikk ikke lest katalogen, så vi vet ikke sikkert hvilke nøkler tjenesten godtar å skrive. Bryterne under kan derfor bli avvist.',
+  ff_read_failed: 'Vi fikk ikke lest bryterne for denne butikken. Ingenting under er kjent — det betyr ikke at alt er avslått.',
+  ff_forbidden: 'Du er ikke butikkadministrator for denne butikken. Tjenesten oppgir ikke om butikken finnes.',
+  ff_module_unknown: 'Uten modul',
+  ff_state_on: 'På',
+  ff_state_off: 'Av',
+  ff_state_unknown: 'Ukjent',
+  ff_default_on: 'Standard: på',
+  ff_default_off: 'Standard: av',
+  ff_overridden: 'Overstyrt for butikken',
+  ff_not_overridden: 'Ikke overstyrt',
+  ff_override_unknown: 'Overstyring ukjent',
+  ff_effective_on: 'Faktisk: på',
+  ff_effective_off: 'Faktisk: av',
+  ff_effective_unknown: 'Faktisk: ukjent',
+  ff_overruled: 'Bryteren står på, men modulens port svarer likevel av. Noe annet holder modulen nede — en hovedbryter eller en driftsbryter i serveroppsettet. Å skru denne av og på igjen endrer ingenting.',
+  ff_state_unknown_row: 'Denne nøkkelen finnes i katalogen, men butikkens svar inneholdt den ikke. Hva den står på her, vet vi ikke.',
+  ff_not_writable: 'Katalogen har ikke denne nøkkelen, så tjenesten avviser å skrive den. Ingen bryter tilbys.',
+  ff_note_label: 'Begrunnelse',
+  ff_note_placeholder: 'Hvorfor endres denne nå?',
+  ff_updated_by: 'Sist endret av {actor}',
+  ff_actor_unknown: 'ukjent',
+  ff_turn_on: 'Slå på',
+  ff_turn_off: 'Slå av',
+  ff_clear: 'Fjern overstyring',
+  ff_saved_on: '{flag} er slått på for butikken.',
+  ff_saved_off: '{flag} er slått av for butikken.',
+  ff_cleared: 'Overstyringen av {flag} er fjernet. Modulens standard gjelder igjen.',
+  ff_clear_none: '{flag} var ikke overstyrt. Ingenting ble endret.',
+  ff_generic_error: 'Endringen ble ikke lagret.'
 
 }
