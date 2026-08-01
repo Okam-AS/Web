@@ -332,6 +332,14 @@ async function route (req, res, url) {
     return send(res, 200, userPayload(user));
   }
 
+  // `CultureService.GetAll`. Serves `/admin/lang`, which the scroll-lock journey uses because it is
+  // the one fixture-reachable admin page that is both taller than the viewport and opens a real
+  // `atoms/Modal` — see world.CULTURES.
+  if (path === '/culture' && req.method === 'GET') {
+    if (!userForToken(bearer(req))) { return problem(res, 401, 'AUTH_REQUIRED', 'No bearer token.'); }
+    return send(res, 200, world.CULTURES);
+  }
+
   // ---- Events: anonymous. NO token is required and none is looked at. --------------------------
   const proposalRead = /^\/events\/proposals\/([^/]+)$/.exec(path);
   if (proposalRead && req.method === 'GET') {
