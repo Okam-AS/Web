@@ -48,7 +48,7 @@ import {
 } from '~/core/services'
 import { AdminUserService, AdminCartService } from '~/plugins/admin-core-services'
 import { wholeAmount, fractionAmount, priceLabel, formatString, setCurrencyFormat } from '~/core/helpers/tools'
-import { formatChf } from '~/utils/price'
+import { formatChf, isAmountStated, UNKNOWN_AMOUNT } from '~/utils/price'
 
 // Unified core formats prices via currencyInfo (consumer default "100,–").
 // Admin web keeps the legacy "kr 100" prefix format.
@@ -150,12 +150,29 @@ const mixin = {
     formatDate (dateTime) {
       return (!dateTime) ? '' : dayjs(dateTime).format('DD.MM.YY HH:mm')
     },
+    // The one money label every screen in this app renders through, and therefore the one place the
+    // difference between "costs nothing" and "nobody said" can be kept.
+    //
+    // The gate is HERE, in front of both formatters, rather than inside either: `Number(null)` is 0
+    // on the Swiss side and core's own helper answers "0" to any falsy amount on the Norwegian side,
+    // so BOTH branches turned an absent figure into a real price indistinguishable from a genuine
+    // zero — the card-terminal screen saying kr 0 while a customer's card is in the reader, a cash
+    // point claiming it tolerates no difference at all. Core is a submodule pinned by four other
+    // checkouts (+D-CORE-PIN), so this repo's screens cannot wait on a fix landing there.
+    //
+    // Zero still prints as zero. Only the unstated is withheld.
     priceLabel (totalPrice, hideFractionIfZero) {
+      if (!isAmountStated(totalPrice)) { return UNKNOWN_AMOUNT }
       if (this.isCh) {
         return formatChf(totalPrice)
       }
       return priceLabel(totalPrice, hideFractionIfZero)
     },
+    // NOT gated, deliberately. These two are digit helpers, not labels: `pages/admin/delivery.vue`
+    // seeds the two halves of a money INPUT from them, so answering "—" here would type a dash into
+    // a field the operator then saves. Their display use is the cross-currency composition in the
+    // module mixins (`wholeAmount + ',' + fractionAmount + ' ' + code`), and every one of those call
+    // sites already refuses an absent figure before it composes.
     wholeAmount (amount) {
       return wholeAmount(amount)
     },
@@ -240,3 +257,9 @@ const mixin = {
 }
 
 Vue.mixin(mixin)
+
+// Named export ONLY, and only so a test can pin the shipped methods rather than a hand-written
+// stand-in — every component test in this repo mocks `priceLabel`, so nothing else in the suite ever
+// exercises the real one. Nuxt registers a plugin by calling its DEFAULT export when that export is a
+// function; there is none here and this adds none, so the plugin still runs exactly as before.
+export { mixin as globalMixin }

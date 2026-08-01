@@ -1,0 +1,16 @@
+The admin's own money formatter (plugins/global-mixin.js priceLabel), asked the same six
+questions before and after this lane. Both columns are the shipped code, not a stand-in:
+the BEFORE column was produced by putting the two gates back and re-running.
+
+  value               BEFORE no     AFTER no      BEFORE ch     AFTER ch
+  --------------------------------------------------------------------------
+  null                kr 0,00       —             CHF 0.00      —
+  undefined           kr 0,00       —             CHF 0.00      —
+  ''                  kr 0,00       —             CHF 0.00      —
+  NaN                 kr 0,00       —             CHF 0.00      —
+  0 (a real zero)     kr 0,00       kr 0,00       CHF 0.00      CHF 0.00
+  20680 (kr 206,80)   kr 206,80     kr 206,80     CHF 206.80    CHF 206.80
+
+Before, the first four rows were indistinguishable from the fifth: an amount nobody stated
+and an amount somebody computed as zero printed the same characters. After, only the amount
+somebody stated is a price.

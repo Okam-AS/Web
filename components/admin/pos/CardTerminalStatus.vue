@@ -42,7 +42,11 @@ export default {
   name: 'CardTerminalStatus',
   props: {
     state: { type: String, default: 'initiating' },
-    amount: { type: Number, default: 0 },
+    // No default amount. This screen is on while a customer's card is in the reader, and `default: 0`
+    // meant a check whose total had not arrived was announced to the operator as kr 0 — a figure
+    // nobody computed, shown in the place the charged amount goes. Absent is now rendered as absent
+    // by the money formatter; the terminal state beside it already says what is happening.
+    amount: { type: Number, default: null },
     message: { type: String, default: '' }
   },
   computed: {

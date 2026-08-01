@@ -1,0 +1,37 @@
+BASELINE (fix in place): Tests:       19 passed, 19 total
+
+M1  formatChf's gate removed -> back to the shipped `Number(amountMinor) || 0`
+  Tests:       2 failed, 17 passed, 19 total
+    ● an amount nobody stated does not render as a price › the Swiss formatter withholds it too, with no currency on it
+    ● formatChf › an amount nobody stated is withheld, not printed as zero francs
+
+M2  the mixin's gate removed -> both formatters see the absent value again
+  Tests:       4 failed, 15 passed, 19 total
+    ● an amount nobody stated does not render as a price › the Norwegian formatter withholds it instead of answering zero
+    ● a real zero is still a real price › absent, zero and a genuine amount are three different renderings
+    ● the card terminal screen, in a real DOM › a check whose total has not arrived does not announce kr 0
+    ● the card terminal screen, in a real DOM › and neither does one where the amount was never passed at all
+
+M3  CardTerminalStatus' amount prop defaults back to 0
+  Tests:       1 failed, 18 passed, 19 total
+    ● the card terminal screen, in a real DOM › and neither does one where the amount was never passed at all
+
+M4  the gate over-reaches: a genuine ZERO is called unstated too
+  Tests:       6 failed, 13 passed, 19 total
+    ● a real zero is still a real price › nothing about zero changed, in either market
+    ● a real zero is still a real price › absent, zero and a genuine amount are three different renderings
+    ● what still counts as an amount somebody stated › zero, negatives and fractions are all stated figures
+    ● the card terminal screen, in a real DOM › a genuine zero charge is still shown as zero
+    ● formatChf › formats zero
+    ● formatChf › an amount nobody stated is withheld, not printed as zero francs
+
+M5  the gate over-reaches the other way: a client-computed float is refused
+  Tests:       2 failed, 17 passed, 19 total
+    ● what still counts as an amount somebody stated › zero, negatives and fractions are all stated figures
+    ● what still counts as an amount somebody stated › a client-computed float still reaches the formatter — the offer document depends on it
+
+M6  the unknown mark becomes a hyphen instead of the estate's em dash
+  Tests:       1 failed, 18 passed, 19 total
+    ● an amount nobody stated does not render as a price › the mark is the one every other surface already uses for a fact it does not have
+
+RESTORED: Tests:       19 passed, 19 total
