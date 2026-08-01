@@ -87,6 +87,10 @@ function freshState () {
     // would hide the one fact this whole surface exists for — that a store which has not had a
     // switch flipped cannot write through the module it gates.
     flags: {},
+    // The venue's privacy queue, cloned from the world so a resolution in one journey cannot be seen
+    // by another. Mutable: `POST .../resolution` rewrites the row's state, resolvedAt and notice
+    // receipt in place, which is what makes the queue a queue rather than a table.
+    privacyRequests: world.growthPrivacyRequests(),
     seq: 0,
     requests: [],
     // How many requests this fixture has answered since the last reset. Read by the journey fixture
@@ -146,6 +150,59 @@ function problem (res, status, code, detail, extra) {
  */
 function eventsDisabled (res) {
   return problem(res, 404, 'EVENTS_DISABLED', 'Events is not enabled for this store.');
+}
+
+/**
+ * The Growth error envelope, which is NOT problem+json.
+ *
+ * `Models/Growth/GrowthErrorEnvelope.cs` pins `{ "error": { code, message, traceId } }` while every
+ * Workforce and Events surface answers RFC 9457 with a top-level `code`. `GrowthApiError` reads
+ * `body.error.code`, so a fixture that reused `problem()` here would hand the page `code: null` for
+ * every Growth refusal — and the page keys its sentences on the code, so all of them would collapse
+ * into the generic one. The two envelopes are modelled separately for the same reason the client has
+ * two error types.
+ *
+ * `Referrer-Policy: no-referrer` rides along because `ApplySensitiveResponseHeaders` stamps it on
+ * every Growth response that reflects consent state, refusals included.
+ */
+function growthError (res, status, code, message) {
+  send(res, status, {
+    error: { code, message, traceId: 'fixture-' + Date.now() }
+  }, { 'Referrer-Policy': 'no-referrer' });
+}
+
+/** A Growth 200, with the sensitive-response headers the real surface stamps. */
+function growthOk (res, body) {
+  send(res, 200, body, { 'Referrer-Policy': 'no-referrer' });
+}
+
+/**
+ * The concealment refusal every Growth admin route collapses to.
+ *
+ * 404 and never 403, and the SAME 404 for a store that does not exist and one the caller does not
+ * administer — `GrowthControllerBase.ResolveStoreAdminAsync` returns false for both and every action
+ * answers `GrowthApiException.NotFound()`. That is the opposite of the feature-flag controller
+ * beside it, which answers 403; reproducing the difference matters because the privacy page's
+ * blocker branch is written against the 404 and would never be reached if this said 403.
+ */
+function growthNotFound (res) {
+  return growthError(res, 404, 'growth.not_found', 'Not found.');
+}
+
+/** The list projection: the wire item, without the fixture's own `storeId` bookkeeping field. */
+function privacyItem (row) {
+  return {
+    requestId: row.requestId,
+    // MASKED — the internal contact id and never an address (spec §3 invariant 11). There is no
+    // address anywhere in this fixture's privacy world, so a page that started printing one would
+    // have had to invent it.
+    contactPointId: row.contactPointId,
+    requestType: row.requestType,
+    state: row.state,
+    receivedAt: row.receivedAt,
+    resolvedAt: row.resolvedAt,
+    noticeDelivery: row.noticeDelivery
+  };
 }
 
 // ---- workforce documents -----------------------------------------------------------------------
@@ -604,6 +661,91 @@ async function route (req, res, url) {
       // `{ flagKey, cleared }` and NOT the resulting state — which is why the client re-reads.
       return send(res, 200, { flagKey, cleared: removed });
     }
+  }
+
+  // ---- Growth: the venue's privacy queue (spec §5 endpoints 20 and 21) --------------------------
+  //
+  // NO MODULE GATE, and that is the controller's actual shape rather than an omission here.
+  // `GrowthNewslettersController` checks `ModuleIsLiveAsync` before it will dispatch or test-send;
+  // `GrowthConsentAdminController` checks nothing but StoreAdmin. A venue that has never switched
+  // Growth on can still be asked to erase somebody's data, and art. 12 does not stop applying
+  // because marketing is off — so a fixture that gated these behind `growth.module` would model an
+  // obligation that can be switched off, which is the opposite of the one that exists.
+  const privacyList = /^\/v1\/growth\/stores\/(\d+)\/privacy-requests$/.exec(path);
+  if (privacyList && req.method === 'GET') {
+    const privacyStoreId = privacyList[1];
+    if (!(caller.adminIn || []).some(s => String(s.id) === String(privacyStoreId))) {
+      return growthNotFound(res);
+    }
+    // FILTERED BY STORE, which is the whole tenancy boundary on this route (`ListAsync` is
+    // `Where(p => p.StoreId == storeId)`). The world deliberately holds a request belonging to
+    // another store so that removing this filter is a change something can catch.
+    //
+    // Ordered by `receivedAt` DESCENDING, the way the service orders it — newest first. That is the
+    // wrong order for a work queue, and the page is required to re-order it; sending the rows
+    // already sorted by urgency would make that requirement unprovable.
+    const rows = state.privacyRequests
+      .filter(row => String(row.storeId) === String(privacyStoreId))
+      .slice()
+      .sort((a, b) => Date.parse(b.receivedAt) - Date.parse(a.receivedAt));
+    return growthOk(res, { storeId: Number(privacyStoreId), requests: rows.map(privacyItem) });
+  }
+
+  const privacyResolve = /^\/v1\/growth\/stores\/(\d+)\/privacy-requests\/(\d+)\/resolution$/.exec(path);
+  if (privacyResolve && req.method === 'POST') {
+    const privacyStoreId = privacyResolve[1];
+    const requestId = Number(privacyResolve[2]);
+
+    // The store gate runs BEFORE the body check, exactly as the controller documents: reversed, a
+    // caller could tell a real store from an absent one by sending no body, because the 400 is a
+    // shape the opaque 404 exists to withhold.
+    if (!(caller.adminIn || []).some(s => String(s.id) === String(privacyStoreId))) {
+      return growthNotFound(res);
+    }
+    if (!body) {
+      return growthError(res, 400, 'growth.body_required', 'A request body is required.');
+    }
+
+    const row = state.privacyRequests
+      .find(r => r.requestId === requestId && String(r.storeId) === String(privacyStoreId));
+    // Concealment again: a request that does not exist and one belonging to another store are the
+    // same answer.
+    if (!row) { return growthNotFound(res); }
+
+    // Idempotent: an already-terminal request answers its canonical row WITHOUT re-executing the
+    // irreversible §13 steps. Checked before the outcome is validated, the way the service does it.
+    if (row.state === 'Fulfilled' || row.state === 'RejectedWithReason') {
+      return growthOk(res, privacyItem(row));
+    }
+
+    if (body.outcome !== 'Fulfilled' && body.outcome !== 'RejectedWithReason') {
+      return growthError(res, 400, 'growth.invalid_resolution',
+        'The resolution outcome must be Fulfilled or RejectedWithReason.');
+    }
+
+    if (body.outcome === 'RejectedWithReason') {
+      if (!String(body.reason || '').trim()) {
+        return growthError(res, 400, 'growth.reason_required',
+          'A reason is required to reject a privacy request.');
+      }
+      row.state = 'RejectedWithReason';
+      row.resolvedAt = nowUtc() + 'Z';
+      // `ForRejected` writes no notice field, so `NoticeDeliveryOf` reads null. A rejection owes the
+      // subject no art. 15 export and no erasure completion notice, and recording one of the three
+      // delivery states here would be inventing a receipt.
+      row.noticeDelivery = null;
+      return growthOk(res, privacyItem(row));
+    }
+
+    // Fulfilled. The notice to the subject goes out BEFORE anything irreversible happens, and what
+    // is recorded is what the TRANSPORT reported — submission, never delivery.
+    row.state = 'Fulfilled';
+    row.resolvedAt = nowUtc() + 'Z';
+    row.noticeDelivery = 'SubmittedToTransport';
+    // NOTHING here records whether the address was destroyed or the shred deferred, because the wire
+    // item has no field for it. A fixture that added one would let a page ship that claims a
+    // destruction the real response cannot support.
+    return growthOk(res, privacyItem(row));
   }
 
   const storeMarket = /^\/stores\/(\d+)\/market$/.exec(path);

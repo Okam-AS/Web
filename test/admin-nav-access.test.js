@@ -99,6 +99,10 @@ const STORE_ADMIN_PATHS = [
   '/admin/margin-recipes', '/admin/margin-suppliers', '/admin/margin-price-imports',
   '/admin/margin-statements',
   '/admin/meals-agreements', '/admin/meals-companies', '/admin/events-pipeline', '/admin/growth-newsletter',
+  // Growth's other half, beside the newsletter link. The guest is told on screen that this venue
+  // answers a privacy request within one month (GDPR art. 12); the two routes that let anybody answer
+  // had no caller in this app at all, so the promise was printed on one surface and keepable on none.
+  '/admin/growth-privacy',
   // Last in the modules group, and the switchboard for every link above it: each of those modules
   // gates its writes on deny-closed per-store flags, and until this page existed the only way to move
   // one was a curl against `PUT /stores/{id}/feature-flags`. Store-admin gated like its siblings.

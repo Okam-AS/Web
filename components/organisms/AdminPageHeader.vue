@@ -257,6 +257,10 @@ const icons = {
   // same group: that page monitors this venue's agreements, this one sets a company account up.
   mealsCompanies: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21h8V3H3v18zm0 0h18M14 21h7V9h-7v12zM6 7h2M6 11h2M6 15h2M17 13h1m-1 4h1" /></svg>',
   growthNewsletter: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>',
+  // A shield, not the envelope beside it: this page is the venue's obligation to the guest, and it
+  // must not read as a second mailing screen. Deliberately NOT a padlock — nothing here is locked;
+  // it is a duty with a one-month clock on it.
+  growthPrivacy: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3l7 3v5.5c0 4.28-2.99 8.28-7 9.5-4.01-1.22-7-5.22-7-9.5V6l7-3z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8.5v3.2l2 1.3" /></svg>',
   eventsPipeline: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>',
   // An inbox tray, not a calendar and not people: this page is a QUEUE of decisions waiting on the
   // manager, and it sits between the schedule and the roster in the same group.
@@ -371,6 +375,14 @@ export default {
               { label: this.$i('nav_meals_companies'), path: '/admin/meals-companies', icon: icons.mealsCompanies, isNew: true },
               { label: this.$i('nav_events'), path: '/admin/events-pipeline', icon: icons.eventsPipeline, isNew: true },
               { label: this.$i('nav_growth_newsletter'), path: '/admin/growth-newsletter', icon: icons.growthNewsletter, isNew: true },
+              // Immediately after the newsletter link, because it is the same module's other half and
+              // the one with a statutory clock on it. The guest is already told on screen that this
+              // venue answers a privacy request within a month (`gr_guest_request_deadline`); until
+              // this entry existed the two routes that let anybody answer had no caller at all, so the
+              // promise was made on a surface and kept on none. Same store-admin gate as its siblings
+              // — the API answers an opaque 404 to anyone else and the page says so, rather than the
+              // link being hidden, which would leave the page reachable only by typing a URL.
+              { label: this.$i('nav_growth_privacy'), path: '/admin/growth-privacy', icon: icons.growthPrivacy, isNew: true },
               // Last in this group, and in this group rather than under Administration, because it
               // is the switchboard for every link above it: each of those six modules gates its
               // write surfaces on deny-closed per-store flags, and until this page existed the only

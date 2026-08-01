@@ -341,6 +341,92 @@ const ADMIN_NOTIFICATION_HEALTH = {
   deadLettered: []
 };
 
+// ---- Growth: the venue's privacy queue ----------------------------------------------------------
+//
+// The rows a guest's own rights journey leaves behind. `GrowthPrivacyRequests` is written by
+// `POST /v1/growth/preference-session/privacy-requests` — the button on
+// `pages/preferences/communications.vue`, which then tells the guest, verbatim, that «the venue has
+// one month to answer you. That follows from GDPR article 12.»
+//
+// WHY THE FILING IS SEEDED AND NOT DRIVEN. The guest half of that journey cannot be walked in a
+// browser against this fixture, and the obstacle is a real deployment defect rather than a gap here:
+// the preference session is an HttpOnly cookie, so endpoints 4/5/7 are sent `credentials: 'include'`
+// — and a browser refuses to attach credentials to a response carrying
+// `Access-Control-Allow-Origin: *`, which is what `Program.cs` builds and what `send()` below
+// reproduces. Teaching this fixture to echo the origin would model a backend that does not exist and
+// would make a page that only works here pass. So the row is seeded in the state the guest's filing
+// leaves it in, and the venue's half — the half with no surface at all until now — is what the
+// browser drives.
+//
+// NOT LITERAL DATES, because the whole subject is a countdown. A hard-coded `receivedAt` would be
+// overdue by a different number of days every day the suite runs and eventually stop being a
+// countdown at all. Computed from the clock at reset so «past the one-month deadline» and «filed
+// this week» stay true facts about the world rather than about the calendar.
+const GROWTH_PRIVACY_OVERDUE_ID = 9101;
+const GROWTH_PRIVACY_FRESH_ID = 9102;
+const GROWTH_PRIVACY_CLOSED_ID = 9100;
+
+// The row belonging to a store this caller does not administer. It exists so that «only this store's
+// requests are shown» is a claim with something to be wrong about: a list route that stopped
+// filtering by store would surface it, and a single-store fixture could never notice.
+const GROWTH_PRIVACY_FOREIGN_STORE_ID = 99;
+const GROWTH_PRIVACY_FOREIGN_ID = 9900;
+
+function daysAgo (days) {
+  return new Date(Date.now() - days * 24 * 3600 * 1000).toISOString();
+}
+
+function growthPrivacyRequests () {
+  return [
+    {
+      storeId: STORE_ID,
+      requestId: GROWTH_PRIVACY_FRESH_ID,
+      contactPointId: 5502,
+      requestType: 'Access',
+      state: 'Received',
+      receivedAt: daysAgo(3),
+      resolvedAt: null,
+      noticeDelivery: null
+    },
+    {
+      // THE SUBJECT OF THE JOURNEY: an art. 17 erasure filed 41 days ago, so the one-month deadline
+      // the guest was shown has already run out. Filed SECOND here on purpose — `ListAsync` orders
+      // by `receivedAt` descending, which puts the most urgent request last, and a queue that kept
+      // the wire order would bury it.
+      storeId: STORE_ID,
+      requestId: GROWTH_PRIVACY_OVERDUE_ID,
+      contactPointId: 5501,
+      requestType: 'Erasure',
+      state: 'Received',
+      receivedAt: daysAgo(41),
+      resolvedAt: null,
+      noticeDelivery: null
+    },
+    {
+      storeId: STORE_ID,
+      requestId: GROWTH_PRIVACY_CLOSED_ID,
+      contactPointId: 5500,
+      requestType: 'Access',
+      state: 'Fulfilled',
+      receivedAt: daysAgo(70),
+      resolvedAt: daysAgo(68),
+      // What the TRANSPORT reported, never a delivery. There is deliberately no `Delivered` member
+      // in the enum this models.
+      noticeDelivery: 'SubmittedToTransport'
+    },
+    {
+      storeId: GROWTH_PRIVACY_FOREIGN_STORE_ID,
+      requestId: GROWTH_PRIVACY_FOREIGN_ID,
+      contactPointId: 7700,
+      requestType: 'Erasure',
+      state: 'Received',
+      receivedAt: daysAgo(50),
+      resolvedAt: null,
+      noticeDelivery: null
+    }
+  ];
+}
+
 module.exports = {
   MANAGER_PHONE,
   WORKER_PHONE,
@@ -367,5 +453,11 @@ module.exports = {
   ADMIN_DEPOSITS,
   ADMIN_RUN_SHEET,
   ADMIN_SETTLEMENT,
-  ADMIN_NOTIFICATION_HEALTH
+  ADMIN_NOTIFICATION_HEALTH,
+  GROWTH_PRIVACY_OVERDUE_ID,
+  GROWTH_PRIVACY_FRESH_ID,
+  GROWTH_PRIVACY_CLOSED_ID,
+  GROWTH_PRIVACY_FOREIGN_STORE_ID,
+  GROWTH_PRIVACY_FOREIGN_ID,
+  growthPrivacyRequests
 };

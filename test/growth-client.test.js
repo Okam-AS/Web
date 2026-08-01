@@ -100,6 +100,32 @@ describe('GrowthService — route-for-route with the Growth controllers', () => 
     expect(JSON.parse(lastInit().body)).toEqual({})
   })
 
+  test('the privacy-request list is store-scoped in the PATH — the whole tenancy boundary', async () => {
+    // `ListAsync` filters on `p.StoreId == storeId` and `AuthorizeStoreAsync` refuses a store the
+    // caller does not administer, so the id in this path is what decides whose queue comes back.
+    // A client that dropped it, or reused another store's, would show the wrong venue's data
+    // subjects — and a list route with a hard-coded store passes every single-store test there is.
+    respond({})
+    await service().ListPrivacyRequests(42)
+    expect(lastUrl()).toBe('/v1/growth/stores/42/privacy-requests')
+    expect(lastInit().method).toBe('GET')
+
+    await service().ListPrivacyRequests(77)
+    expect(lastUrl()).toBe('/v1/growth/stores/77/privacy-requests')
+  })
+
+  test('a resolution posts the store, the request and the outcome the server accepts', async () => {
+    respond({})
+    await service().ResolvePrivacyRequest(42, 9001, { outcome: 'Fulfilled', reason: null })
+    expect(lastUrl()).toBe('/v1/growth/stores/42/privacy-requests/9001/resolution')
+    expect(lastInit().method).toBe('POST')
+    expect(JSON.parse(lastInit().body)).toEqual({ outcome: 'Fulfilled', reason: null })
+
+    await service().ResolvePrivacyRequest(42, 9002, { outcome: 'RejectedWithReason', reason: 'Not the data subject.' })
+    expect(lastUrl()).toBe('/v1/growth/stores/42/privacy-requests/9002/resolution')
+    expect(JSON.parse(lastInit().body).reason).toBe('Not the data subject.')
+  })
+
   test('the bearer token rides every request', async () => {
     respond({})
     await service().GetConsentSummary(42)

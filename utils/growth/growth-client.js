@@ -16,13 +16,26 @@
 //   POST /v1/growth/stores/{storeId}/newsletters/{id}/approval                #17  GrowthNewslettersController
 //   POST /v1/growth/stores/{storeId}/newsletters/{id}/dispatch                #18  GrowthNewslettersController
 //   GET  /v1/growth/stores/{storeId}/delivery-health                          #19  GrowthDeliveryHealthController
+//   GET  /v1/growth/stores/{storeId}/privacy-requests                         #20  GrowthConsentAdminController
+//   POST /v1/growth/stores/{storeId}/privacy-requests/{id}/resolution         #21  GrowthConsentAdminController
 //
-// DELIBERATELY ABSENT, and each absence is a decision rather than an oversight:
+// DELIBERATELY ABSENT, and the absence is a decision rather than an oversight:
 //
 //   #9  consent-timeline  — per-contact PII, gated on `growth.contact_pii.read` (PowerUser only).
-//                           The capture-to-send journey never needs a named individual, and a lane
-//                           is currently repairing that route's accessor attribution. Not surfaced.
-//   #20/#21 privacy-requests — the guest's own rights journey, not the venue's send journey.
+//                           The capture-to-send journey never needs a named individual, and neither
+//                           does resolving a request: the art. 15 export is built and delivered
+//                           SERVER-SIDE by `ExecuteAccessAsync`, so no admin screen has to read a
+//                           named individual's history to discharge the obligation. The privacy
+//                           queue is nonetheless the only surface in the product from which a
+//                           `contactPointId` is discoverable, so #9 becomes reachable the day a
+//                           PowerUser surface wants it. Not surfaced here.
+//
+// #20/#21 WERE on that list ("the guest's own rights journey, not the venue's send journey"). That
+// reading was wrong, and expensively so: `gr_guest_request_deadline` tells the guest on screen that
+// the venue has one month to answer them under GDPR art. 12, the request row is written — and with
+// no caller for these two routes there was no surface at which any human at the venue could see the
+// request, let alone answer it. A statutory promise with nothing behind it is worse than a missing
+// feature. `pages/admin/growth-privacy.vue` is the surface; these two methods are its wire.
 //
 // #19 WAS on that list ("post-send operations, a different journey"). It is read now, for ONE narrow
 // purpose that belongs to the send journey rather than to operations: it is the only StoreAdmin read
@@ -140,6 +153,48 @@ export class GrowthService extends GrowthClientBase {
    */
   GetDeliveryHealth (storeId) {
     return this._request('GET', '/v1/growth/stores/' + storeId + '/delivery-health');
+  }
+
+  /**
+   * #20: the store's data-subject requests — the art. 15 and art. 17 ones a guest has filed.
+   *
+   * SCOPED TO THE ROUTE'S STORE BY THE SERVER, not by the caller: `ListAsync` filters on
+   * `p.StoreId == storeId` and `AuthorizeStoreAsync` refuses a store the caller does not administer
+   * with the same opaque 404 it gives an absent one. So the store id in this path is the whole of the
+   * tenancy boundary, and a caller that sent the wrong one would be shown another venue's queue if
+   * it held that store and nothing at all if it did not — never a silently unfiltered list.
+   *
+   * The contact is MASKED: every item carries `contactPointId` and no address, by design (spec §3
+   * invariant 11). A failure here means the queue is UNKNOWN, never that nobody has asked.
+   */
+  ListPrivacyRequests (storeId) {
+    return this._request('GET', '/v1/growth/stores/' + storeId + '/privacy-requests');
+  }
+
+  /**
+   * #21: records the resolution, and — for `Fulfilled` — EXECUTES it.
+   *
+   * This is not a status update. `Fulfilled` runs the spec §13 steps in the same call: an erasure
+   * sends the subject their completion notice and then crypto-shreds the address (or defers the shred
+   * while another controller still holds live consent), and an access request builds the subject's
+   * export and mails it. None of that can be taken back, which is why the page re-asserts the
+   * preconditions at the call site rather than trusting a disabled button.
+   *
+   * `RejectedWithReason` requires a reason and records it. Idempotent: a request already in a terminal
+   * state answers its canonical row without re-executing anything.
+   *
+   * The refusals this raises, all of them typed:
+   *   growth.body_required          400  no body
+   *   growth.invalid_resolution     400  outcome was neither terminal state
+   *   growth.reason_required        400  a rejection with no reason
+   *   growth.not_found              404  concealment — absent OR another store's request
+   *   growth.unattributed           401  no resolvable identity; nothing is destroyed on nobody's word
+   *   growth.notice_undeliverable   503  the transport would not take the subject's notice, so the
+   *                                      request stays OPEN and the address is intact — retryable
+   */
+  ResolvePrivacyRequest (storeId, requestId, resolution) {
+    return this._send('POST',
+      '/v1/growth/stores/' + storeId + '/privacy-requests/' + requestId + '/resolution', resolution);
   }
 }
 
