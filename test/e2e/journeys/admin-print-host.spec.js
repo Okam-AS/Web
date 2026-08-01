@@ -113,12 +113,24 @@ test(
       expect(text).toContain('virksomheten må selv føre kodeoversikten');
       await expect(page.locator('.wfpl-sheet__identity')).toBeVisible();
       await expect(page.locator('.wfpl-sheet__foot')).toBeVisible();
-      // The organisation number § 8-5-6 asks for, and the correction lineage it also asks for. Both
-      // were being clipped off the right edge of the paper before this lane.
+      // The organisation number § 8-5-6 asks for, and the rightmost column of the table. Both were
+      // being clipped off the right edge of the paper before this lane.
       await expect(page.locator('.wfpl-sheet__identity dd').nth(1))
         .toHaveText(/\d{3} \d{3} \d{3}/);
-      await expect(page.locator('.wfpl-sheet__note-line').first()).toBeVisible();
-      return text.slice(0, 80) + '…';
+      // The note CELL, not a note line inside it. The only two things that ever put a line in this
+      // column — a correction and a hired-in organisation number — are shapes no production caller
+      // writes, so `lane/statute-evidence-world` took them out of the fixture rather than keep
+      // printing an inspector's document the product cannot produce. What has to survive onto the
+      // paper is the column itself, whatever it happens to contain, and measuring its right edge
+      // against the page box is a stricter reading of the defect than "a span is visible" was.
+      const note = page.locator('.wfpl-sheet__note').last();
+      await expect(note).toBeVisible();
+      const edge = await note.evaluate(el => ({
+        right: Math.round(el.getBoundingClientRect().right),
+        docWidth: document.documentElement.clientWidth
+      }));
+      expect(edge.right).toBeLessThanOrEqual(edge.docWidth);
+      return text.slice(0, 80) + '… (note column ends at ' + edge.right + '/' + edge.docWidth + 'px)';
     });
 
     // DEFECTS 2 and 3, in the regime where the gutter bites: a page box wider than the shell's

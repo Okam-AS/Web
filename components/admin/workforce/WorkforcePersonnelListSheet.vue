@@ -152,6 +152,7 @@
 
 <script>
 import {
+  CATEGORY_LABEL_KEYS,
   SHEET_EMPTY,
   SHEET_UNKNOWN,
   STATUS_COMPLETED,
@@ -170,12 +171,10 @@ import {
 // zone by `buildPersonnelSheet`, and the freshness stamp is the server's `asOfUtc`. A browser-made
 // "printed at" would be a second clock nobody asked for, and on a statutory register a second clock
 // is a second version of when.
-const CATEGORY_KEYS = {
-  Employee: 'wfpl_cat_employee',
-  WorkingOwnerManager: 'wfpl_cat_owner',
-  Unpaid: 'wfpl_cat_unpaid',
-  HiredIn: 'wfpl_cat_hiredin'
-};
+//
+// The category labels are NOT declared here. They come from `CATEGORY_LABEL_KEYS`, the one list the
+// coverage caveat above the column is checked against — a copy kept here would let the column grow a
+// relationship the printed caveat still says cannot appear.
 
 export default {
   name: 'WorkforcePersonnelListSheet',
@@ -240,7 +239,7 @@ export default {
       if (!row.category) { return this.dash; }
       // An unrecognised category is printed verbatim. Folding it into a known one would state a
       // relationship to the business that the register never recorded.
-      return row.categoryIsKnown ? this.$i(CATEGORY_KEYS[row.category]) : row.category;
+      return row.categoryIsKnown ? this.$i(CATEGORY_LABEL_KEYS[row.category]) : row.category;
     },
     hiredInOrgnr (row) {
       return formatOrganizationNumber(row.hiredInOrganizationNumber) || row.hiredInOrganizationNumber;

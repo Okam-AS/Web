@@ -81,19 +81,44 @@ const ROLES = [
 // frozen on some past date would only ever produce the second reading. A print journey that never
 // rendered an open window would be printing a document the venue does not have on the day it matters.
 //
-// Four rows, each one a § 8-5-6 field that has to survive onto paper:
+// ONLY WHAT THE PRODUCT CAN WRITE. This world used to seed a working-owner row, a hired-in row with
+// its own organisation number, and a manager correction — three shapes that read beautifully on
+// paper and that NO production caller can produce. The printed sheet then argued with the caveat
+// printed above it ("denne listen kan bare føre ansatte … står vedkommende ikke her") two rows
+// further down the same page, and nothing red, because a fixture is free to write what a service
+// cannot. An inspector-facing document that contradicts its own disclaimer is worse evidence than no
+// document, so the world is now held to the write paths that exist:
+//
+//   • CATEGORY. One production site creates a participant —
+//     `WorkforcePersonnelListProjection.ResolveOrCreateEmployeeParticipantAsync` (:203–:215), off an
+//     employee's clock punch — and it assigns `WorkforcePersonnelParticipantCategory.Employee`
+//     literally. The other three enum values are reachable from test fixtures only.
+//   • HIRED-IN ORGANISATION NUMBER. Never assigned outside `WebApi.Tests`; the participant that one
+//     production site builds leaves it null.
+//   • CORRECTION. Both entry writes (`:117` open, `:133` close) pass `correctionActor: null,
+//     correctedAtUtc: null`, and `WorkforcePersonnelListController` exposes a single read action —
+//     nothing in the product can correct an entry, so nothing can name who corrected it.
+//
+// Marit Leder is the venue's daglig leder and is on this list as «Ansatt». That is not a fixture
+// slip: it is exactly what the caveat says happens, and the sheet now demonstrates the limit it
+// declares instead of disproving it.
+//
+// Four rows, each one a § 8-5-6 field that has to survive onto paper — and each one producible:
 //   1. a completed window            — arrival AND departure
 //   2. an open window on today       — `wfpl_status_present`
-//   3. a corrected entry             — "hvem som har foretatt rettelsen og tidspunkt"
-//   4. a hired-in person             — the other organisation number the paragraph asks for
+//   3. a second completed window     — an early shift, from the person signing in
+//   4. a fourth participant          — so the day is a list, not a pair
 //
 // ONE business identity across all four, deliberately: with two, the sheet header refuses to name a
 // single bokføringspliktig and prints `wfpl_business_mixed` instead. That is correct behaviour and a
 // different document; this one is the ordinary case.
+//
+// The categories, notes and corrections this world may NOT carry are pinned by
+// `test/workforce-personnel-list-evidence-world.test.js`, which reds if a row here ever says
+// otherwise.
 
 const BUSINESS_NAME = 'Fixture Kafé AS';
 const ORGANIZATION_NUMBER = '923456789';
-const HIRED_IN_ORGANIZATION_NUMBER = '998877665';
 
 /** The venue's civil date, in the store's own zone, for a given instant. */
 function venueDate (ms) {
@@ -177,22 +202,23 @@ function personnelList (storeId, businessDate) {
     }, common),
     Object.assign({
       personnelListEntryId: 'ple-3',
+      // The daglig leder, recorded as an employee because that is the only relationship a clock
+      // punch can write. The caveat above the table says so; this row is what it looks like.
       participantName: 'Marit Leder',
       protectedIdentityCodeRef: 'wf-person:4d3a9e11-2c6f-4b88-8f52-70ab1d9c6e34',
-      category: 'WorkingOwnerManager',
+      category: 'Employee',
       hiredInOrganizationNumber: null,
       onSiteStartUtc: atVenueHour(day, 6, 40),
       onSiteEndUtc: atVenueHour(day, 14, 15),
-      // § 8-5-6: a correction must name who made it and when.
-      correctionActorReference: 'Marit Leder (daglig leder)',
-      correctedAtUtc: atVenueHour(day, 16, 5)
+      correctionActorReference: null,
+      correctedAtUtc: null
     }, common),
     Object.assign({
       personnelListEntryId: 'ple-4',
       participantName: 'Jonas Vikar',
       protectedIdentityCodeRef: 'wf-person:c07f6b23-9a41-4d70-b5e8-25f1a83c9d60',
-      category: 'HiredIn',
-      hiredInOrganizationNumber: HIRED_IN_ORGANIZATION_NUMBER,
+      category: 'Employee',
+      hiredInOrganizationNumber: null,
       onSiteStartUtc: atVenueHour(day, 11, 0),
       onSiteEndUtc: atVenueHour(day, 18, 45),
       correctionActorReference: null,
@@ -392,7 +418,6 @@ module.exports = {
   PROPOSALS,
   BUSINESS_NAME,
   ORGANIZATION_NUMBER,
-  HIRED_IN_ORGANIZATION_NUMBER,
   personnelList,
   EVENT_VERSION_STALE,
   EVENT_DIETARY_STALE,

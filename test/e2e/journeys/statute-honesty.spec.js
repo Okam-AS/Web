@@ -13,6 +13,14 @@
 //      was inert in the running app until an hour before this was written, so a caveat verified on
 //      screen would be a caveat verified nowhere.
 //
+//      AND THE PAPER NOW AGREES WITH IT. The first version of this journey seeded a working-owner
+//      row and a hired-in row into the fixture world and asserted that they rendered — so the
+//      committed PDF printed «Arbeidende eier eller leder» and «Innleid» two lines under a
+//      paragraph saying such a person "står vedkommende ikke her". The rows were model-truth: no
+//      production caller writes them, and neither does any caller write the manager correction the
+//      third row carried. The world holds only producible shapes now, and the categories are pinned
+//      row by row here and in `test/workforce-personnel-list-evidence-world.test.js`.
+//
 //   2. THE RUN SHEET. `EventsRunSheetService.Map` folds FOUR causes into one `isStale` boolean, and
 //      the one sentence a kitchen sees names the third of them: "not generated from the operative
 //      proposal version. Reissue before service." When the real cause is an allergy written down
@@ -89,12 +97,23 @@ test(
       return 'businessDate ' + (await page.locator('.wfpl-sheet__fact dd').nth(2).textContent()).trim();
     });
 
-    // The register renders all four categories — the fixture seeds a hired-in row — while the
-    // product can produce only one of them. That contrast is what the caveat exists to name.
-    await journey.step('the sheet shows a category the product cannot actually record', async () => {
-      const categories = await page.locator('.wfpl-sheet__table tbody tr td:nth-child(3)').allTextContents();
-      const shown = categories.map(c => c.trim());
-      expect(shown).toContain('Innleid');
+    // THE SHEET AND ITS OWN CAVEAT HAVE TO AGREE. This step used to assert the opposite — that the
+    // register renders «Innleid», a relationship no production caller can write — and the PDF that
+    // came out of this journey printed that row two lines under a paragraph saying such a person
+    // "står vedkommende ikke her". A document handed to an inspector that contradicts its own
+    // disclaimer is worse evidence than none, so the world now holds only what the product writes
+    // and the paper is pinned row by row: the frontend half of the pin the backend's kodeoversikt
+    // already had.
+    await journey.step('every row on the paper is a relationship the product can actually record', async () => {
+      const cells = page.locator('.wfpl-sheet__table tbody tr td:nth-child(3)');
+      const shown = (await cells.allTextContents()).map(c => c.trim());
+      // Counted against the ROWS, not against a literal: a relationship column that stopped
+      // rendering would satisfy "nothing excluded appears" perfectly.
+      expect(shown).toHaveLength(await page.locator('.wfpl-sheet__table tbody tr').count());
+      expect(shown).toEqual(shown.map(() => 'Ansatt'));
+      // The note column carries neither of the two other things nothing in the product writes: a
+      // hired-in organisation number and a correction naming who made it.
+      await expect(page.locator('.wfpl-sheet__note-line')).toHaveCount(0);
       return 'rendered categories: ' + shown.join(', ');
     });
 
@@ -184,6 +203,17 @@ test(
       '`EventsRunSheetView`, set where `EventsRunSheetService.Map` already computes all four. ' +
       'Suppressing the sentence from the client instead would mean deriving the version cause here ' +
       'from two published numbers, and a mistake in that derivation shows a stale sheet as current.');
+
+    journey.finding('defect', 'nothing in the product can correct a personalliste entry, so § 8-5-6\'s correction requirement has no path',
+      'The paragraph requires that "dersom det foretas rettelser i personallisten, skal det fremgå ' +
+      'hvem som har foretatt rettelsen og tidspunkt for når det er gjort". The sheet renders both ' +
+      'fields when an entry carries them — and no entry ever can. Both writes in ' +
+      '`WorkforcePersonnelListProjection` (:117 open, :133 close) pass `correctionActor: null, ' +
+      'correctedAtUtc: null`, and `WorkforcePersonnelListController` exposes one read action and no ' +
+      'write. A venue that punches the wrong person in has no way to correct the register and no ' +
+      'way to show that it did. Found while removing the fixture\'s manager correction, which was ' +
+      'the only reason this looked solved. Unlike the category gap, the sheet prints NO caveat ' +
+      'about it — closing it needs a correction path in the backend, not another paragraph here.')
 
     journey.finding('note', 'the printed evidence is committed, unlike every other artifact here',
       'artifacts/ is gitignored as run state. The PDF under artifacts/journeys/' + JOURNEY + '/ is ' +
