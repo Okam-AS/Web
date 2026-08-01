@@ -30,6 +30,7 @@
 //   "baseUrl":       "http://127.0.0.1:3010",
 //   "apiBaseUrl":    "http://127.0.0.1:4010",
 //   "commit":        "fc25ff3…",                     // the tree this evidence describes
+//   "underTest":     "ConsumerWeb@e5fee1c core@8931bc3",  // when the app driven is NOT this repo
 //   "browser":       "chromium",
 //   "steps": [
 //     { "n": 1, "name": "sign in as the manager",
@@ -71,6 +72,26 @@ function commitSha () {
   }
 }
 
+// Some of these URLs carry a bearer of value in the query string: the Company Meals funding
+// authorization travels as `?reservationToken=` on cart completion (the API exposes no other
+// inbound path for it). The artifact is a file on disk that gets read, copied and pasted into
+// reviews, so a refused completion must not write a live token into it. Redacted by NAME, so a
+// token added to another route is covered the day it is named here rather than the day it leaks.
+const SECRET_QUERY_PARAMS = ['reservationToken', 'token', 'accessToken', 'code', 'secret'];
+
+function redactUrl (url) {
+  try {
+    const parsed = new URL(url);
+    let touched = false;
+    SECRET_QUERY_PARAMS.forEach((name) => {
+      if (parsed.searchParams.has(name)) { parsed.searchParams.set(name, '***redacted***'); touched = true; }
+    });
+    return touched ? parsed.toString() : url;
+  } catch (e) {
+    return url;
+  }
+}
+
 function slug (text) {
   return String(text).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48);
 }
@@ -97,11 +118,11 @@ class JourneyRecorder {
       this.consoleErrors.push('pageerror: ' + (error && error.message));
     });
     page.on('requestfailed', (request) => {
-      this.failedRequests.push({ method: request.method(), url: request.url(), status: null, failure: (request.failure() || {}).errorText || null });
+      this.failedRequests.push({ method: request.method(), url: redactUrl(request.url()), status: null, failure: (request.failure() || {}).errorText || null });
     });
     page.on('response', (response) => {
       if (response.status() >= 400) {
-        this.failedRequests.push({ method: response.request().method(), url: response.url(), status: response.status() });
+        this.failedRequests.push({ method: response.request().method(), url: redactUrl(response.url()), status: response.status() });
       }
     });
   }
@@ -171,6 +192,7 @@ class JourneyRecorder {
       baseUrl: this.meta.baseUrl,
       apiBaseUrl: this.meta.apiBaseUrl,
       commit: this.meta.commit,
+      underTest: this.meta.underTest || null,
       browser: this.meta.browser,
       steps: this.steps,
       findings: this.findings,
@@ -219,6 +241,11 @@ const test = base.test.extend({
       baseUrl: baseURL || null,
       apiBaseUrl: process.env.E2E_API_BASE_URL || ('http://127.0.0.1:' + (process.env.E2E_FIXTURE_PORT || 4010)),
       commit: commitSha(),
+      // The app a journey drives is not always THIS repo: the consumer checkout lives in the
+      // sibling ConsumerWeb (see playwright.consumer.config.js). `commit` would then name the tree
+      // the HARNESS came from and say nothing about the code under test, so a journey that crosses
+      // a repo boundary declares what it actually drove and the artifact carries both.
+      underTest: annotation('under-test') || null,
       browser: browserName
     };
 
@@ -277,7 +304,7 @@ const test = base.test.extend({
  * `journey` is the artifact's name and a probe's join key, `capabilities` is what a passing run is
  * evidence FOR, and `surface` says whether it went through authentication.
  */
-function journeyDetails ({ journey, capabilities, surface, tag }) {
+function journeyDetails ({ journey, capabilities, surface, tag, underTest }) {
   return {
     // `@fixture` means "this journey depends on state only the fixture backend has". It is what a
     // live-backend run filters OUT — see playwright.config.js.
@@ -285,7 +312,8 @@ function journeyDetails ({ journey, capabilities, surface, tag }) {
     annotation: [
       { type: 'journey', description: journey },
       { type: 'capabilities', description: (capabilities || []).join(',') },
-      { type: 'surface', description: surface || 'unknown' }
+      { type: 'surface', description: surface || 'unknown' },
+      { type: 'under-test', description: underTest || '' }
     ]
   };
 }

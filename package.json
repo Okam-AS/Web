@@ -12,6 +12,7 @@
     "generate": "NODE_ENV=production nuxt-ts generate",
     "test": "jest",
     "test:e2e": "playwright test",
+    "test:e2e:consumer": "playwright test -c playwright.consumer.config.js",
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:install": "playwright install --with-deps chromium",

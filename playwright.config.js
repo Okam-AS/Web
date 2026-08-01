@@ -80,6 +80,11 @@ const webServer = {
 module.exports = defineConfig({
   testDir: './test/e2e/journeys',
   testMatch: '**/*.spec.js',
+  // `journeys/consumer/` drives a DIFFERENT app — the sibling ConsumerWeb checkout — against a
+  // different fixture on different ports. Run here it would open this repo's admin app and find no
+  // checkout at all, so it belongs to playwright.consumer.config.js and is excluded by path rather
+  // than by a tag, because a tag can be forgotten on the next spec somebody adds to that folder.
+  testIgnore: '**/journeys/consumer/**',
   outputDir: './artifacts/playwright-output',
   globalTeardown: './test/e2e/scripts/global-teardown.js',
 
