@@ -214,11 +214,16 @@
 <script>
 import axios from "axios";
 import CustomerInfoModal from "~/components/molecules/CustomerInfoModal.vue";
+import bodyScrollLock from "~/utils/body-scroll-lock";
 
 export default {
   components: {
     CustomerInfoModal,
   },
+  // This component NESTS `CustomerInfoModal`, and the nesting is where the old inline-style lock
+  // broke: the customer card's own close released `document.body.style.overflow` while this modal
+  // was still on screen. Both declare the lock now, so it is held while either is mounted.
+  mixins: [bodyScrollLock],
   props: {
     orderCode: {
       type: String,
@@ -248,12 +253,7 @@ export default {
     },
   },
   async mounted() {
-    document.body.style.overflow = "hidden";
     await this.fetchOrder();
-  },
-
-  beforeDestroy() {
-    document.body.style.overflow = "";
   },
   methods: {
     async fetchOrder() {
@@ -271,7 +271,6 @@ export default {
       }
     },
     closeModal() {
-      document.body.style.overflow = "";
       this.$emit("close");
     },
     openCustomerModal() {

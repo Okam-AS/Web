@@ -179,19 +179,16 @@
 </template>
 
 <script>
+import bodyScrollLock from '~/utils/body-scroll-lock';
+
 export default {
   name: 'ReceiptModal',
+  mixins: [bodyScrollLock],
   props: {
     order: {
       type: Object,
       required: true
     }
-  },
-  mounted() {
-    document.body.style.overflow = 'hidden';
-  },
-  beforeDestroy() {
-    document.body.style.overflow = '';
   },
   computed: {
     items() {

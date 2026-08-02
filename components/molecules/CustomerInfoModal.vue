@@ -123,7 +123,10 @@
 </template>
 
 <script>
+import bodyScrollLock from "~/utils/body-scroll-lock";
+
 export default {
+  mixins: [bodyScrollLock],
   props: {
     userId: {
       type: [String, Number],
@@ -178,13 +181,6 @@ export default {
   },
   mounted() {
     this.fetchCustomerInfo();
-    // Disable scroll on body when modal is open
-    document.body.style.overflow = "hidden";
-  },
-
-  beforeDestroy() {
-    // Re-enable scroll on body when modal is destroyed
-    document.body.style.overflow = "";
   },
   methods: {
     async fetchCustomerInfo() {
@@ -287,8 +283,9 @@ export default {
     },
 
     closeModal() {
-      // Re-enable scroll on body when modal is closed
-      document.body.style.overflow = "";
+      // No scroll release here. This modal is opened from INSIDE OrderModal, which is still on
+      // screen when this one closes — releasing the lock here is what let the page behind both of
+      // them scroll. The lock is now derived from what is mounted; unmounting is the release.
       this.$emit("close");
     },
 

@@ -127,11 +127,13 @@
 </template>
 
 <script>
+import bodyScrollLock from '~/utils/body-scroll-lock'
 import Loading from '~/components/atoms/Loading.vue'
 import StoreSelector from '~/components/admin/StoreSelector.vue'
 
 export default {
   name: 'ProductSelectorModal',
+  mixins: [bodyScrollLock],
   components: {
     Loading,
     StoreSelector
@@ -156,6 +158,12 @@ export default {
     }
   },
   computed: {
+    // THIS COMPONENT IS ALWAYS MOUNTED and hides itself with `v-if="isOpen"` on its own root, so
+    // "mounted" is not the same thing as "on screen" here. Without this override the mixin's default
+    // would hold the lock for the entire life of the page.
+    bodyScrollLocked () {
+      return this.isOpen
+    },
     filteredProducts() {
       // When using cross-store search with multiple stores, filtering is done server-side
       if (this.hasMultipleStores && this.selectedStoreIds.length > 1 && this.searchQuery) {

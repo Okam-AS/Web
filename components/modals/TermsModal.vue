@@ -23,16 +23,27 @@
 
 <script>
 import TermsContent from "~/components/shared/TermsContent.vue";
+import bodyScrollLock from "~/utils/body-scroll-lock";
 
 export default {
   name: "TermsModal",
   components: {
     TermsContent,
   },
+  mixins: [bodyScrollLock],
   props: {
     isVisible: {
       type: Boolean,
       default: false,
+    },
+  },
+  computed: {
+    // Always mounted, hidden by `v-if="isVisible"` on its own root — so the lock follows the prop
+    // rather than the component's lifetime. This modal is on the signup page, which is a marketing
+    // page and therefore also a Swiss page: the declared class must stay an array or `okam-ch`
+    // comes off the body while the terms are open.
+    bodyScrollLocked() {
+      return this.isVisible;
     },
   },
   methods: {

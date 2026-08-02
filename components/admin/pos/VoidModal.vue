@@ -35,12 +35,14 @@
 </template>
 
 <script>
+import bodyScrollLock from '~/utils/body-scroll-lock';
 import ReasonPicker from '~/components/admin/pos/ReasonPicker.vue';
 
 // Voids an entire open check with a one-tap reason, authorised by the acting operator. The void is
 // journalled (VOIDTRANS) and produces no receipt.
 export default {
   name: 'VoidModal',
+  mixins: [bodyScrollLock],
   components: { ReasonPicker },
   props: {
     busy: { type: Boolean, default: false },

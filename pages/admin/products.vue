@@ -784,6 +784,7 @@ import Loading from "~/components/atoms/Loading.vue";
 import axios from "axios";
 import $config from "~/core/helpers/configuration";
 import { mergeVariantByName } from "~/core/helpers/variant-copy";
+import bodyScrollLock, { BODY_SCROLL_LOCK_CLASS_MOBILE } from "~/utils/body-scroll-lock";
 
 export default {
   components: {
@@ -794,6 +795,7 @@ export default {
     LoadingSkeleton,
     Loading
   },
+  mixins: [bodyScrollLock],
   data: () => ({
     products: [],
     categories: [],
@@ -832,6 +834,27 @@ export default {
   }),
 
   computed: {
+    // ---- THE EDITOR'S SCROLL LOCK -------------------------------------------------------------
+    //
+    // The editor is a side panel on a desktop and a full-screen sheet on a phone, so it locks the
+    // page only under the 768px breakpoint — the same breakpoint the panel's own CSS uses.
+    //
+    // That used to be decided in JavaScript, by reading `window.innerWidth` at the instant the
+    // editor opened AND at the instant it closed. Two things were wrong with that. It is not
+    // reactive, so a window that crossed the breakpoint while the editor was open got the wrong
+    // answer; and because the release was inside the same width test, opening the editor on a narrow
+    // window and closing it on a wide one skipped the release entirely and left the page locked with
+    // nothing on screen to explain why.
+    //
+    // Declaring a MEDIA-SCOPED class instead moves the breakpoint into the stylesheet, where the
+    // browser re-evaluates it on every resize for free.
+    bodyScrollLocked() {
+      return !!this.selectedProduct;
+    },
+    bodyScrollLockClasses() {
+      return [BODY_SCROLL_LOCK_CLASS_MOBILE];
+    },
+
     selectedStore() {
       return this.$store.state.selectedAdminStore;
     },
@@ -1012,10 +1035,8 @@ export default {
     },
 
     selectedProduct(newVal, oldVal) {
-      // Only lock body scroll on mobile
-      if (window.innerWidth <= 768) {
-        document.body.style.overflow = newVal ? "hidden" : "";
-      }
+      // The body scroll lock is DECLARED — see `bodyScrollLocked` above — so there is nothing to do
+      // for it here.
 
       // Toggle class for container adjustment
       const container = document.querySelector(".container");

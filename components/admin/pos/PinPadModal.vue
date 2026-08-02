@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import bodyScrollLock from '~/utils/body-scroll-lock';
 import PosNumpad from '~/components/admin/pos/PosNumpad.vue';
 
 // A PIN is always exactly four digits, so the pad has no submit button: the fourth digit
@@ -66,6 +67,7 @@ const PIN_LENGTH = 4;
 // submit call and sets `error`/`busy` so backend messages surface next to the pad.
 export default {
   name: 'PinPadModal',
+  mixins: [bodyScrollLock],
   components: { PosNumpad },
   props: {
     title: { type: String, required: true },

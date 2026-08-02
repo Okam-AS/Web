@@ -1,0 +1,101 @@
+{
+  "journey": "modal-estate-scroll-lock",
+  "title": "Two different modals hold the page, and closing one does not let go",
+  "status": "passed",
+  "startedAtUtc": "2026-08-01T16:15:46.889Z",
+  "finishedAtUtc": "2026-08-01T16:15:54.887Z",
+  "durationMs": 7998,
+  "capabilities": [
+    "ui.modal.scroll-lock"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3325",
+  "apiBaseUrl": "http://127.0.0.1:4390",
+  "commit": "178c89510a8dba3a63275bf4f8f8a122b9eef710",
+  "underTest": null,
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in and land on the live orders board",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T16:15:46.890Z",
+      "durationMs": 1038,
+      "detail": "on /admin/ongoing, 2254px of board in a 720px viewport; nothing locked",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "with no modal open, a wheel moves the page — the control",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T16:15:47.928Z",
+      "durationMs": 621,
+      "detail": "wheel 600 moved the page 900 -> 1236",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "OPEN THE RECEIPT MODAL BY CLICKING IT, and the wheel stops working",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T16:15:48.549Z",
+      "durationMs": 1753,
+      "detail": "body class \"noscroll\", computed overflow hidden, inline overflow \"\"; wheel 600 then 3000 left the page at 900",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "A SECOND, DIFFERENT MODAL OPENS — the customer card",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T16:15:50.388Z",
+      "durationMs": 986,
+      "detail": "two overlays on screen, body \"noscroll noscroll\", page still at 900",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "CLOSE ONE OF THEM AND THE PAGE IS STILL LOCKED — the defect",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T16:15:51.374Z",
+      "durationMs": 1078,
+      "detail": "closed one of two; body still \"noscroll\" / hidden, wheel 3000 left the page at 900",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "a navigation with a modal still open does not release it",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T16:15:52.535Z",
+      "durationMs": 1083,
+      "detail": "after $router.replace the body is still \"noscroll\" and the board has not moved",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "closing the LAST one releases it, and the wheel works again",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T16:15:53.618Z",
+      "durationMs": 1183,
+      "detail": "lock released, board resumed at 900 and wheeled to 1500",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "note",
+      "summary": "a signed-out visitor sees two login modals stacked until the redirect lands",
+      "detail": "Asking for /admin/ongoing while signed out renders `.login-modal` TWICE for as long as the requested page is still mounted: components/organisms/AdminPage.vue opens one in `initAuth`, and pages/admin/ongoing.vue mounts its own `<LoginModal v-if=\"showLogin\">` on the same condition in its own `mounted`. Ten admin pages carry that duplicate handling. Measured here as a strict-mode violation on `.login-modal` (2 elements) before `$router.replace` completes. Transient and pre-existing, unrelated to the scroll lock, not fixed by this lane."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fongoing\" to \"/admin?redirect=%2Fadmin%2Fongoing&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fongoing\" to \"/admin?redirect=%2Fadmin%2Fongoing&storeId=42\" with a new navigation."
+  ],
+  "failedRequests": [],
+  "screenshots": [
+    "modal-estate-scroll-lock/01-receipt-modal-open-board-behind-held.png",
+    "modal-estate-scroll-lock/02-one-of-two-closed-board-still-held.png",
+    "modal-estate-scroll-lock/03-all-modals-closed-board-free-again.png"
+  ],
+  "error": null
+}

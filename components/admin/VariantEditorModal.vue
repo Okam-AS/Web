@@ -148,6 +148,7 @@
 
 <script>
 import draggable from 'vuedraggable'
+import bodyScrollLock from '~/utils/body-scroll-lock'
 import Loading from '~/components/atoms/Loading.vue'
 
 let optionKeyCounter = 0
@@ -165,6 +166,7 @@ const NAME_SUGGESTION_KEYS = [
 
 export default {
   name: 'VariantEditorModal',
+  mixins: [bodyScrollLock],
 
   components: {
     draggable,
@@ -195,6 +197,12 @@ export default {
   },
 
   computed: {
+    // THIS COMPONENT IS ALWAYS MOUNTED and hides itself with `v-if="isOpen"` on its own root, so
+    // "mounted" is not the same thing as "on screen" here. Without this override the mixin's default
+    // would hold the lock for the entire life of the page.
+    bodyScrollLocked () {
+      return this.isOpen
+    },
     nameSuggestions() {
       return NAME_SUGGESTION_KEYS.map((key) => this.$i(key))
     },

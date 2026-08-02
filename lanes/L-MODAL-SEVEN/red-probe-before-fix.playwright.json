@@ -1,0 +1,75 @@
+{
+  "journey": "zz-red-probe",
+  "title": "Two different modals hold the page, and closing one does not let go",
+  "status": "failed",
+  "startedAtUtc": "2026-08-01T16:09:30.454Z",
+  "finishedAtUtc": "2026-08-01T16:09:58.785Z",
+  "durationMs": 28331,
+  "capabilities": [
+    "ui.modal.scroll-lock"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3325",
+  "apiBaseUrl": "http://127.0.0.1:4390",
+  "commit": "178c89510a8dba3a63275bf4f8f8a122b9eef710",
+  "underTest": null,
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in and land on the live orders board",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T16:09:30.456Z",
+      "durationMs": 24132,
+      "detail": "on /admin/ongoing, 2254px of board in a 720px viewport; nothing locked",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "with no modal open, a wheel moves the page — the control",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T16:09:54.588Z",
+      "durationMs": 626,
+      "detail": "wheel 600 moved the page 900 -> 1236",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "OPEN THE RECEIPT MODAL BY CLICKING IT, and the wheel stops working",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T16:09:55.214Z",
+      "durationMs": 1750,
+      "detail": "body class \"null\", computed overflow hidden, inline overflow \"hidden\"; wheel 600 then 3000 left the page at 900",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "A SECOND, DIFFERENT MODAL OPENS — the customer card",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T16:09:57.057Z",
+      "durationMs": 990,
+      "detail": "two overlays on screen, body \"null\", page still at 900",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "CLOSE ONE OF THEM AND THE PAGE IS STILL LOCKED — the defect",
+      "status": "failed",
+      "startedAtUtc": "2026-08-01T16:09:58.047Z",
+      "durationMs": 713,
+      "detail": null,
+      "error": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"hidden\"\u001b[39m\nReceived: \u001b[31m\"visible\"\u001b[39m"
+    }
+  ],
+  "findings": [],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fongoing\" to \"/admin?redirect=%2Fadmin%2Fongoing&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fongoing\" to \"/admin?redirect=%2Fadmin%2Fongoing&storeId=42\" with a new navigation."
+  ],
+  "failedRequests": [],
+  "screenshots": [
+    "zz-red-probe/01-receipt-modal-open-board-behind-held.png"
+  ],
+  "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"hidden\"\u001b[39m\nReceived: \u001b[31m\"visible\"\u001b[39m"
+}

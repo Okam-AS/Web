@@ -162,10 +162,12 @@
 </template>
 
 <script>
+import bodyScrollLock from '~/utils/body-scroll-lock'
 import Loading from '~/components/atoms/Loading.vue'
 
 export default {
   name: 'VariantSelectorModal',
+  mixins: [bodyScrollLock],
   components: {
     Loading
   },
@@ -191,6 +193,12 @@ export default {
     }
   },
   computed: {
+    // THIS COMPONENT IS ALWAYS MOUNTED and hides itself with `v-if="isOpen"` on its own root, so
+    // "mounted" is not the same thing as "on screen" here. Without this override the mixin's default
+    // would hold the lock for the entire life of the page.
+    bodyScrollLocked () {
+      return this.isOpen
+    },
     selectedCountLabel() {
       const count = this.selectedVariantIds.length
       return count === 1

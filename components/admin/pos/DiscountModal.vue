@@ -39,10 +39,12 @@
 </template>
 
 <script>
+import bodyScrollLock from '~/utils/body-scroll-lock'
 // Applies a catalogue discount (the store's RegularDiscount entries flagged ShowInPos) to a line or
 // the whole order under the acting operator. A fixed amount is stored in kroner, so it is scaled.
 export default {
   name: 'DiscountModal',
+  mixins: [bodyScrollLock],
   props: {
     reasons: { type: Array, default: () => [] },
     scope: { type: String, default: 'order' },

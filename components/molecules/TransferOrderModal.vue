@@ -68,8 +68,11 @@
 </template>
 
 <script>
+import bodyScrollLock from '~/utils/body-scroll-lock';
+
 export default {
   name: 'TransferOrderModal',
+  mixins: [bodyScrollLock],
   props: {
     order: {
       type: Object,
@@ -85,14 +88,6 @@ export default {
       isLoading: false,
       selectedStoreId: null
     }
-  },
-  mounted() {
-    // Prevent body scroll
-    document.body.style.overflow = 'hidden';
-  },
-  beforeDestroy() {
-    // Restore body scroll
-    document.body.style.overflow = '';
   },
   computed: {
     availableStores() {

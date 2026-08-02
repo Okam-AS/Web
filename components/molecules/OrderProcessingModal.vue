@@ -104,8 +104,11 @@
 </template>
 
 <script>
+import bodyScrollLock from '~/utils/body-scroll-lock';
+
 export default {
   name: 'OrderProcessingModal',
+  mixins: [bodyScrollLock],
   props: {
     order: {
       type: Object,
@@ -159,12 +162,6 @@ export default {
       this.selectPredefinedTime(20)
     }
     this.updateTimeInput()
-    // Prevent body scroll
-    document.body.style.overflow = 'hidden';
-  },
-  beforeDestroy() {
-    // Restore body scroll
-    document.body.style.overflow = '';
   },
   methods: {
     readyAtRequestedDateTime() {

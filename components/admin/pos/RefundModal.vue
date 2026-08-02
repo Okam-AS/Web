@@ -88,6 +88,7 @@
 </template>
 
 <script>
+import bodyScrollLock from '~/utils/body-scroll-lock';
 import AmountPad from '~/components/admin/pos/AmountPad.vue';
 import SignaturePad from '~/components/admin/pos/SignaturePad.vue';
 import PosReceiptView from '~/components/admin/pos/PosReceiptView.vue';
@@ -105,6 +106,7 @@ const CARD_TIMEOUT_MS = 130000;
 // the refund.
 export default {
   name: 'RefundModal',
+  mixins: [bodyScrollLock],
   components: { AmountPad, SignaturePad, PosReceiptView, ReasonPicker, PhonePad },
   inject: ['pos'],
   props: {

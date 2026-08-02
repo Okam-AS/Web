@@ -58,8 +58,20 @@
 </template>
 
 <script>
+import bodyScrollLock from '~/utils/body-scroll-lock'
+
 export default {
   name: 'CopyProductToStoresModal',
+  mixins: [bodyScrollLock],
+
+  computed: {
+    // THIS COMPONENT IS ALWAYS MOUNTED and hides itself with `v-if="isOpen"` on its own root, so
+    // "mounted" is not the same thing as "on screen" here. Without this override the mixin's default
+    // would hold the lock for the entire life of the page.
+    bodyScrollLocked() {
+      return this.isOpen
+    }
+  },
 
   data() {
     return {
