@@ -175,6 +175,31 @@ describe('what the venue is shown', () => {
     expect(paramsFor('gp_due').when).toBe(wrapper.vm.stamp(new Date('2026-09-04T11:30:00Z')))
   })
 
+  test('a row the response sent no deadline for says THAT — its receipt time is readable and printed', async () => {
+    const wrapper = await openPage()
+    // The same open row with `dueAt` dropped and NOTHING else touched. This is what the null case
+    // MEANS since the deadline moved to the wire: the response carried no date. The receipt time is
+    // perfectly readable — the row prints it, below — so copy blaming the receipt time would send an
+    // operator to inspect a timestamp that is fine, and copy about a deadline that could not be
+    // worked out would describe arithmetic this page no longer does.
+    const withoutDue = Object.assign({}, LIST.requests[1])
+    delete withoutDue.dueAt
+    i18nCalls.length = 0
+    wrapper.vm.list = { storeId: 42, requests: [withoutDue] }
+    await wrapper.vm.$nextTick()
+
+    const row = wrapper.vm.queue.open[0]
+    expect(row.dueAt).toBeNull()
+    expect(row.daysLeft).toBeNull()
+    // Readable, and read: the filed stamp drawn on the row is the instant the fixture sent.
+    expect(row.receivedAt.toISOString()).toBe('2026-07-28T08:00:00.000Z')
+    expect(paramsFor('gp_reference').when).toBe(wrapper.vm.stamp(new Date('2026-07-28T08:00:00Z')))
+    // What the operator actually reads on the row, not what a method returns off screen.
+    expect(wrapper.find('[data-request="9002"] [data-test="clock"]').text()).toBe('gp_due_unknown')
+    // And no «Due …» fact beside it: with no fallback left, nothing here has a date to draw.
+    expect(i18nCalls.filter(c => c[0] === 'gp_due')).toEqual([])
+  })
+
   test('the overdue banner counts only what is still open', async () => {
     const wrapper = await openPage()
     expect(wrapper.vm.queue.overdueCount).toBe(1)
@@ -189,15 +214,49 @@ describe('what the venue is shown', () => {
     expect(wrapper.find('[data-resolved="9000"] [data-test="fulfil-open"]').exists()).toBe(false)
   })
 
-  test('the page NEVER prints an address, and never claims one was destroyed', async () => {
+  test('the page NEVER prints an address, and never claims one was destroyed — in any of the three locales', async () => {
     const wrapper = await openPage()
-    const html = wrapper.html()
-    expect(html).not.toMatch(/@/)
-    // `gp_notice_*` says what the TRANSPORT reported. There is no key claiming destruction, because
-    // a fulfilled erasure may have been deferred and this list cannot tell the two apart.
-    const no = translations.no
-    Object.keys(no).filter(k => k.indexOf('gp_') === 0).forEach((key) => {
-      expect(String(no[key])).not.toMatch(/adressen er slettet|adressen ble slettet/i)
+    expect(wrapper.html()).not.toMatch(/@/)
+
+    // `gp_notice_*` says what the TRANSPORT reported. No key claims destruction, because a fulfilled
+    // erasure may have been DEFERRED and this list has no field that tells the two apart.
+    //
+    // ALL THREE LOCALES. The copy is written three times and the claim only has to appear once to be
+    // read by somebody, so a guard that greps one language would let an English «the address was
+    // deleted» through. Each pattern carries its own proof that it fires, and its own proof that it
+    // does not fire on the one sentence that legitimately mentions an address already gone —
+    // `gp_notice_notattempted`, where the SERVICE reported that no notice could be attempted. Both
+    // controls are literals rather than reads of `translations`, so they cannot shrink alongside the
+    // copy they are meant to police.
+    const FORBIDDEN = {
+      no: {
+        pattern: /adressen (er|ble) slettet/i,
+        catches: 'Adressen er slettet.',
+        allows: 'Adressen var allerede slettet, så det fantes ingen å sende til.'
+      },
+      en: {
+        pattern: /the address (was|has been) (deleted|erased|destroyed)/i,
+        catches: 'The address was deleted.',
+        allows: 'The address had already been destroyed, so there was nobody to send to.'
+      },
+      de: {
+        pattern: /die adresse (wurde|ist) (gelöscht|vernichtet)/i,
+        catches: 'Die Adresse wurde gelöscht.',
+        allows: 'Die Adresse war bereits gelöscht, es gab niemanden mehr zu benachrichtigen.'
+      }
+    }
+
+    expect(Object.keys(FORBIDDEN)).toEqual(['no', 'en', 'de'])
+    Object.keys(FORBIDDEN).forEach((locale) => {
+      const { pattern, catches, allows } = FORBIDDEN[locale]
+      expect(catches).toMatch(pattern)
+      expect(allows).not.toMatch(pattern)
+
+      const keys = Object.keys(translations[locale]).filter(k => k.indexOf('gp_') === 0)
+      // A locale renamed or a prefix changed would leave the loop scanning nothing and reporting
+      // green over copy it never read.
+      expect(keys.length).toBeGreaterThan(40)
+      expect(keys.filter(k => pattern.test(String(translations[locale][k])))).toEqual([])
     })
   })
 
@@ -371,6 +430,23 @@ describe('the copy exists in all three locales', () => {
       })
     })
     expect(missing).toEqual([])
+  })
+
+  test('the unknown-deadline sentence names the RESPONSE as the cause, in all three', () => {
+    // Paired with the rendering test above, which draws that very sentence on a row whose receipt
+    // time is readable and printed. Each locale must name who did not answer, and must not name the
+    // receipt time — the cause the copy asserted before the deadline moved to the wire.
+    expect(translations.no.gp_due_unknown).toMatch(/[Tt]jenesten/)
+    expect(translations.no.gp_due_unknown).toMatch(/ingen frist/i)
+    expect(translations.no.gp_due_unknown).not.toMatch(/mottakstid/i)
+
+    expect(translations.en.gp_due_unknown).toMatch(/[Ss]ervice/)
+    expect(translations.en.gp_due_unknown).toMatch(/no deadline/i)
+    expect(translations.en.gp_due_unknown).not.toMatch(/receipt time|time it was received/i)
+
+    expect(translations.de.gp_due_unknown).toMatch(/[Dd]ienst/)
+    expect(translations.de.gp_due_unknown).toMatch(/keine Frist/i)
+    expect(translations.de.gp_due_unknown).not.toMatch(/Eingangszeitpunkt/i)
   })
 
   test('the deadline note names the article the guest was shown', () => {

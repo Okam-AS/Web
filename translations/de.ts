@@ -4941,7 +4941,7 @@ export default {
   // Gast bereits gelesen hat. `gr_guest_request_deadline` sagt dem Gast, das Lokal habe einen Monat
   // Zeit zu antworten; bis es diese Seite gab, konnte niemand im Lokal auf irgendeinem Bildschirm
   // sehen, dass überhaupt jemand gefragt hat. Der Text hält drei Unterscheidungen: eine Frist, die
-  // wir aus dem Eingangszeitpunkt BERECHNET und nicht mitgeteilt bekommen haben, eine Nachricht, die
+  // der DIENST mitgeteilt hat und die diese Seite nicht selbst berechnet, eine Nachricht, die
   // ein Transport ANGENOMMEN und nicht zugestellt hat, und eine Löschung, die entweder ausgeführt
   // oder aufgeschoben wurde — was diese Liste nicht unterscheiden kann.
   nav_growth_privacy: 'Datenschutz',
@@ -4975,7 +4975,7 @@ export default {
   gp_overdue_by: 'Die Frist ist vor {days} Tagen abgelaufen.',
   gp_overdue_today: 'Die Frist ist heute abgelaufen.',
   gp_overdue_by_one: 'Die Frist ist gestern abgelaufen.',
-  gp_due_unknown: 'Der Eingangszeitpunkt ist nicht lesbar, daher lässt sich die Frist nicht berechnen.',
+  gp_due_unknown: 'Der Dienst hat für diese Anfrage keine Frist mitgeteilt, deshalb wird keine angezeigt. Diese Seite berechnet sie nicht selbst — ein erfundenes Datum könnte von dem abweichen, das dem Gast zugesagt wurde. Laden Sie neu und behandeln Sie die Anfrage bis dahin als dringend.',
   gp_resolved_at: 'Abgeschlossen {when}',
   gp_notice_submittedtotransport: 'Der Mailanbieter hat die Nachricht an den Gast angenommen. Ob sie angekommen ist, wissen wir nicht — das kann nur der Anbieter sagen.',
   gp_notice_notattempted: 'Es wurde keine Nachricht gesendet. Die Adresse war bereits gelöscht, es gab niemanden mehr zu benachrichtigen.',

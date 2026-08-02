@@ -4990,9 +4990,9 @@ export default {
   // Personvernforespørsler (/admin/growth-privacy) — stedets side av løftet gjesten allerede har
   // fått lese. `gr_guest_request_deadline` sier til gjesten at «stedet har én måned på seg til å
   // svare deg», og fram til denne siden fantes var det ingen skjerm der noe menneske på stedet kunne
-  // se at noen hadde spurt. Teksten her holder tre skiller: en frist vi har regnet ut av mottakstiden
-  // og ikke fått oppgitt, en beskjed leverandøren har TATT IMOT og ikke levert, og en sletting som
-  // enten er gjennomført eller utsatt — der listen ikke sier hvilken.
+  // se at noen hadde spurt. Teksten her holder tre skiller: en frist TJENESTEN har oppgitt og ikke en
+  // siden har regnet ut selv, en beskjed leverandøren har TATT IMOT og ikke levert, og en sletting
+  // som enten er gjennomført eller utsatt — der listen ikke sier hvilken.
   nav_growth_privacy: 'Personvern',
   gp_page_title: 'Personvernforespørsler',
   gp_page_intro: 'Gjester som har bedt om innsyn eller sletting hos denne butikken. Gjesten har fått beskjed på skjermen om at dere svarer innen én måned, så en forespørsel som blir liggende her er et løfte som ikke blir holdt.',
@@ -5024,7 +5024,7 @@ export default {
   gp_overdue_by: 'Fristen gikk ut for {days} dager siden.',
   gp_overdue_today: 'Fristen gikk ut tidligere i dag.',
   gp_overdue_by_one: 'Fristen gikk ut i går.',
-  gp_due_unknown: 'Mottakstiden er ikke lesbar, så vi kan ikke regne ut fristen.',
+  gp_due_unknown: 'Tjenesten oppga ingen frist for denne forespørselen, så ingen vises. Denne siden regner den ikke ut selv — en oppdiktet dato kan avvike fra den gjesten fikk løfte om. Hent på nytt, og regn forespørselen som hastende til fristen kommer med.',
   gp_resolved_at: 'Avsluttet {when}',
   gp_notice_submittedtotransport: 'Beskjeden til gjesten ble tatt imot av e-postleverandøren. At den kom fram, vet vi ikke — det kan bare leverandøren fortelle.',
   gp_notice_notattempted: 'Ingen beskjed ble sendt. Adressen var allerede slettet, så det fantes ingen å sende til.',

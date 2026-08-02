@@ -27,10 +27,11 @@
           </button>
         </div>
 
-        <!-- The two facts an operator must hold before reading a row. The first is where the deadline
-             comes from — it is derived here, not reported by the API, and printing it as if the
-             server had said it would be inventing authority. The second is why no name appears
-             anywhere on this page. -->
+        <!-- The two facts an operator must hold before reading a row. The first is what the deadline
+             below IS — the service's own answer under art. 12(3), computed once by
+             `GrowthPrivacyObligation.DueAt` and rendered here unchanged. This page works out no date
+             of its own, and a row the response sent none for stays blank rather than being filled in
+             from the receipt time. The second is why no name appears anywhere on this page. -->
         <p class="gp-page__note">
           {{ $i('gp_deadline_note') }}
         </p>
@@ -442,11 +443,11 @@ export default {
     },
 
     /**
-     * The countdown, in whole days.
+     * The countdown, in whole days, against the VIEWER's clock — never the deadline itself.
      *
-     * A deadline we could not derive says so instead of printing a number: an invented date on this
-     * screen would be indistinguishable from the real one, and the real one is the one the guest was
-     * promised.
+     * A row the response carried no `dueAt` for says so instead of printing a number. There is no
+     * fallback to count from: an invented date on this screen would be indistinguishable from the
+     * real one, and the real one is the one the guest was promised.
      */
     clockLabel (row) {
       if (row.daysLeft === null) { return this.$i('gp_due_unknown'); }

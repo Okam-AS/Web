@@ -4935,9 +4935,9 @@ export default {
   // Privacy requests (/admin/growth-privacy) — the venue's side of a promise the guest has already
   // been shown. `gr_guest_request_deadline` tells the guest «the venue has one month to answer you»,
   // and until this page existed there was no screen on which any human at the venue could see that
-  // anybody had asked. The copy holds three distinctions: a deadline we DERIVED from the receipt time
-  // rather than were told, a notice a transport ACCEPTED rather than delivered, and an erasure that
-  // was either carried out or deferred — which this list cannot tell apart.
+  // anybody had asked. The copy holds three distinctions: a deadline the SERVICE reported rather than
+  // one this page worked out, a notice a transport ACCEPTED rather than delivered, and an erasure
+  // that was either carried out or deferred — which this list cannot tell apart.
   nav_growth_privacy: 'Privacy',
   gp_page_title: 'Privacy requests',
   gp_page_intro: 'Guests who have asked this store for access to their data or for its erasure. The guest was told on screen that you answer within one month, so a request left sitting here is a promise going unkept.',
@@ -4969,7 +4969,7 @@ export default {
   gp_overdue_by: 'The deadline ran out {days} days ago.',
   gp_overdue_today: 'The deadline ran out earlier today.',
   gp_overdue_by_one: 'The deadline ran out yesterday.',
-  gp_due_unknown: 'The receipt time cannot be read, so we cannot work out the deadline.',
+  gp_due_unknown: 'The service sent no deadline for this request, so none is shown. This page does not work one out — an invented date could differ from the one the guest was promised. Reload, and until it comes back treat the request as pressing.',
   gp_resolved_at: 'Closed {when}',
   gp_notice_submittedtotransport: 'The mail provider accepted the notice to the guest. Whether it arrived we do not know — only the provider can say.',
   gp_notice_notattempted: 'No notice was sent. The address had already been destroyed, so there was nobody to send to.',
