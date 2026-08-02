@@ -97,6 +97,18 @@ function freshState () {
     // by another. Mutable: `POST .../resolution` rewrites the row's state, resolvedAt and notice
     // receipt in place, which is what makes the queue a queue rather than a table.
     privacyRequests: world.growthPrivacyRequests(),
+    // THE MUTABLE HALF OF AN ACCOUNT: `userId -> { email, emailConfirmed }`, empty until something
+    // writes one, and overlaid on the world's user by `userForToken`.
+    //
+    // It lives in `state` rather than on `world.USERS` because the world is a module-level constant
+    // — a confirmation written into it would survive `/__fixture/reset` and every later journey
+    // would start from an account a previous journey had confirmed. That is the exact shape of flake
+    // that reads as a product defect: the second run of the suite passes a step the first run earned.
+    accounts: {},
+    // What the confirmation mails WOULD have been, if anything in this process sent mail. A journey
+    // reads its own code from here the way a person reads it from their inbox — see
+    // `/__fixture/confirmation-code` below for why it is not simply asserted.
+    confirmationMails: [],
     seq: 0,
     requests: [],
     // How many requests this fixture has answered since the last reset. Read by the journey fixture
@@ -471,8 +483,20 @@ function bearer (req) {
   return header.startsWith('Bearer ') ? header.slice(7) : null;
 }
 
+/**
+ * The caller behind a bearer token, with anything a journey has since written to their account
+ * overlaid on top.
+ *
+ * The overlay is the whole reason this is not a plain lookup. `world.USERS` describes the account as
+ * it was CREATED; `state.accounts` describes what confirming an address did to it. Every reader of a
+ * caller — `GET /user`, and the Growth test-send guard through `ctx.caller` — has to see the same
+ * merged answer, or the page would report an address as confirmed while the guard still refused it.
+ */
 function userForToken (token) {
-  return Object.values(world.USERS).find(u => u.token === token) || null;
+  const user = Object.values(world.USERS).find(u => u.token === token) || null;
+  if (!user) { return null; }
+  const overlay = state.accounts[user.id];
+  return overlay ? Object.assign({}, user, overlay) : user;
 }
 
 /** The user payload `GET /user` answers: everything except the token, which the app re-stamps. */
@@ -514,6 +538,10 @@ const WORKFORCE_STORE = /^\/workforce\/stores\/([^/]+)(\/.*)?$/;
 
 async function route (req, res, url) {
   const path = url.pathname;
+  // The same path with any trailing slash removed, for the routes whose CLIENT sends one. Kept as a
+  // second name rather than applied to `path` itself, so every existing route keeps matching the
+  // exact string it always matched and this cannot quietly widen forty of them.
+  const unslashed = path.length > 1 ? path.replace(/\/+$/, '') : path;
   const body = (req.method === 'POST' || req.method === 'PUT' || req.method === 'PATCH')
     ? await readBody(req)
     : null;
@@ -528,6 +556,23 @@ async function route (req, res, url) {
   }
   if (path === '/__fixture/stats') {
     return send(res, 200, { served: state.served });
+  }
+  // THE JOURNEY'S MAILBOX, and the reason it is a control-surface route rather than an assertion.
+  //
+  // A confirmation code arrives by mail. There is no mail here, so the journey has to read the code
+  // from somewhere — but it must read it as a RECIPIENT does, not derive it. So this answers what
+  // was ordered for one address and nothing else: the journey learns the six digits it would have
+  // read in its inbox and learns nothing about whether the code is correct, which is the fact the
+  // product is supposed to establish.
+  //
+  // It is on the `/__fixture` control surface, which means it is NOT counted in `served` and is not
+  // routed for any caller — a journey fetches it from Node, never through the browser, so the code
+  // never enters page state, never appears in `backendSample`, and cannot reach the artifact (C7).
+  if (path === '/__fixture/confirmation-code') {
+    const forAddress = (url.searchParams.get('address') || '').trim().toLowerCase();
+    const mails = state.confirmationMails.filter(m => m.to === forAddress);
+    const latest = mails.length ? mails[mails.length - 1] : null;
+    return send(res, 200, { code: latest ? latest.code : null, ordered: mails.length });
   }
 
   state.served += 1;
@@ -551,6 +596,58 @@ async function route (req, res, url) {
     const user = userForToken(bearer(req));
     if (!user) { return problem(res, 401, 'AUTH_REQUIRED', 'No bearer token.'); }
     return send(res, 200, userPayload(user));
+  }
+
+  // ---- the account's own address, and the confirmation of it -----------------------------------
+  //
+  // Modelled on `UserService.SendEmailConfirmationCodeAsync` / `ConfirmEmailAsync`, because these two
+  // routes are what makes the Growth test-send refusal a door rather than a wall. Both answer a bare
+  // boolean: `RequestService.TryParseResponse` accepts status 200 only and `core/services/user-service`
+  // reads the body as a boolean, so any other shape strands the page silently.
+  // MATCHED WITH AND WITHOUT THE TRAILING SLASH, which is not pedantry: `core/services/user-service.ts`
+  // posts to `/user/send-email-confirmation-code/` and `/user/confirm-email/` — both WITH one, unlike
+  // every other route in that file — while ASP.NET's attribute routing matches either form, so the
+  // real API never notices. A fixture that matched only the bare path answers 404 to the shipped
+  // client, and the page then reports "we could not order a code" against a backend that is fine.
+  // Found by the browser journey; no mocked-service unit test can see it.
+  if (unslashed === '/user/send-email-confirmation-code' && req.method === 'POST') {
+    const user = userForToken(bearer(req));
+    if (!user) { return problem(res, 401, 'AUTH_REQUIRED', 'No bearer token.'); }
+    const address = String((body && body.email) || '').trim();
+    if (!address) {
+      // The real service treats an empty address as "clear the address", and answers true.
+      state.accounts[user.id] = { email: null, emailConfirmed: false };
+      return send(res, 200, true);
+    }
+    // SETTING THE ADDRESS UN-CONFIRMS IT, exactly as the service does. Without this an account could
+    // be pointed at a new mailbox while keeping a confirmation earned by the old one — which is the
+    // whole thing the Growth guard leans on.
+    const code = String(100000 + (state.confirmationMails.length * 7919) % 899999);
+    state.accounts[user.id] = { email: address, emailConfirmed: false };
+    state.confirmationMails.push({ to: address.toLowerCase(), code });
+    // The real send is fire-and-forget: the service hands the mail to a task it does not await and
+    // answers true whether or not the provider ever accepts it. Answering true here without having
+    // proved any delivery is the same contract, which is what the page's «the code has been ordered»
+    // wording is written against.
+    return send(res, 200, true);
+  }
+
+  if (unslashed === '/user/confirm-email' && req.method === 'POST') {
+    const user = userForToken(bearer(req));
+    if (!user) { return problem(res, 401, 'AUTH_REQUIRED', 'No bearer token.'); }
+    const submitted = String((body && body.code) || '').trim();
+    const address = user.email;
+    const mails = state.confirmationMails.filter(m => m.to === String(address || '').toLowerCase());
+    const outstanding = mails.length ? mails[mails.length - 1] : null;
+    if (!outstanding || !submitted || submitted !== outstanding.code) {
+      // FALSE, AND THE CODE SURVIVES. `ConfirmEmailAsync` clears `EmailConfirmationCode` only on
+      // success — a wrong guess costs the guesser nothing, there is no attempt counter and no
+      // lockout on this path. That is modelled rather than hidden, because a fixture that expired
+      // the code on a wrong guess would let a screen claim a protection the product does not have.
+      return send(res, 200, false);
+    }
+    state.accounts[user.id] = { email: address, emailConfirmed: true };
+    return send(res, 200, true);
   }
 
   // ---- Events: anonymous. NO token is required and none is looked at. --------------------------

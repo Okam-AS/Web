@@ -2521,6 +2521,9 @@ export default {
   wf_month_partial_total: 'The month total covers {counted} of {total} days.',
   wf_month_this_month: 'This month',
 
+  // My page — the signed-in person's own email address (/admin/account-email)
+  nav_account_email: 'My email address',
+
   // Workforce — the worker's own page (/workforce/me)
   nav_workforce_me: 'My shifts',
   wfme_page_title: 'My shifts',
@@ -3874,7 +3877,7 @@ export default {
   growth_error_subject_required: 'A subject is required.',
   growth_error_content_required: 'Content is required.',
   growth_error_test_address_required: 'A test address is required.',
-  growth_error_test_address_not_own: 'A test send can only go to the email address on your own account. If your account has no email address on file, you cannot send a test at all.',
+  growth_error_test_address_not_own: 'A test send can only go to the email address on your own account, and that address has to be confirmed. If your account has no email address on file, or the one it has is not confirmed, you cannot send a test until you confirm one. You do that under «My email address».',
   growth_error_dispatch_disabled: 'The dispatch kill switch is off for this store (growth.dispatch). Nothing was created and nothing was sent. A platform operator has to switch it on.',
   growth_error_provider_paused: 'This store\'s provider account is paused. Nothing was created and nothing was sent. Unpause it before trying again.',
   growth_error_unsubscribe_unconfigured: 'This deployment cannot build a working unsubscribe link (Growth:PublicApiBaseUrl is missing or is not an https origin). Nothing was sent — a newsletter without an unsubscribe must not go out.',
@@ -4993,6 +4996,41 @@ export default {
   gp_error_unattributed: 'We could not establish who you are. An erasure is never recorded without naming who ordered it, so nothing was done.',
   gp_error_notice_undeliverable: 'The mail provider would not accept the notice the guest is owed. Nothing was destroyed, the request is still open, and you can try again.',
   gp_error_body_required: 'The request carried no content. Nothing was saved.',
-  gp_error_generic: 'Something went wrong. Nothing was saved.'
+  gp_error_generic: 'Something went wrong. Nothing was saved.',
+
+  // ---- My account: email address ---------------------------------------------------------------
+  //
+  // The screen that makes the confirmation REACHABLE from admin. No string here carries a {slot} for
+  // the address or the code: an error message is a response body and a log line waiting to happen
+  // (C7), and the code is a credential in the same sense a password is.
+  ae_page_title: 'Your email address',
+  ae_page_intro: 'The address on your own account, and its confirmation. It is used wherever the platform has to know an address really is yours — for instance before you can send yourself a test of a newsletter.',
+  ae_status_label: 'Status',
+  ae_status_confirmed: 'Confirmed',
+  ae_status_unconfirmed: 'Not confirmed',
+  ae_status_missing: 'No address on file',
+  ae_status_confirmed_body: 'The address is confirmed. You can send yourself a test of a newsletter.',
+  ae_status_unconfirmed_body: 'The account has an address, but it is not confirmed. Until it is, the platform does not treat it as yours.',
+  ae_status_missing_body: 'The account has no email address. That is the usual case when you signed up with a phone number.',
+  ae_address_label: 'Email address',
+  ae_address_placeholder: 'name@business.com',
+  ae_address_invalid: 'That does not look like an email address. Nothing was sent.',
+  ae_send_code: 'Send confirmation code',
+  ae_send_code_again: 'Send a new code',
+  ae_sending: 'Sending …',
+  // HONEST ABOUT WHAT WE DO NOT KNOW. The service hands the send to a task it does not wait for, so
+  // an "ok" means the code was ordered — not that the mail arrived. The screen says exactly that.
+  ae_code_requested: 'The code has been ordered. We do not get to know whether the mail arrived, so if nothing turns up within a couple of minutes, send a new one.',
+  ae_code_label: 'Confirmation code',
+  ae_code_help: 'Six digits from the mail. The code is valid for 15 minutes.',
+  ae_code_invalid: 'The code has to be six digits.',
+  ae_confirm: 'Confirm the address',
+  ae_confirming: 'Confirming …',
+  ae_confirm_failed: 'The code was not accepted. Check the digits, or ask for a new one.',
+  ae_confirmed_toast: 'The address is confirmed.',
+  ae_send_failed: 'We could not order a code. Nothing was changed.',
+  ae_next_testsend: 'Send yourself a test of the newsletter',
+  ae_change_address: 'Change address',
+  ae_signed_out: 'You have to be signed in to see the address on your account.'
 
 }

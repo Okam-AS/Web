@@ -99,16 +99,31 @@ describe('no existing admin page changed behaviour', () => {
     expect(files.length).toBeGreaterThan(40)
   })
 
-  test('exactly one page opts out of the store-admin requirement', () => {
+  // The pages whose reader is not an admin of anything, named WHOLE rather than counted: these are
+  // the two in `nav_group_me`, the only nav group not gated on store-admin membership. Both are
+  // about the SIGNED-IN PERSON and take no store id, so the shell's default — bounce anyone with an
+  // empty `adminIn` to /registrer — is wrong for them and right for all the rest.
+  //
+  // `account-email.vue` is the account's own address and the confirmation of it. It had to exist
+  // because the newsletter test-send requires the acting administrator's address to be CONFIRMED
+  // (markedsføringsloven § 15), and the only UI call site for either confirmation route in the whole
+  // estate was the consumer app — so an administrator refused by an admin screen had no admin route
+  // to the remedy. A worker has an account address like anybody else.
+  //
+  // Asserted as a list and not as a count, so a THIRD page quietly opting out still reds here.
+  const NON_ADMIN_PAGES = ['account-email.vue', 'workforce-me.vue']
+
+  test('only the pages about the signed-in person opt out of the store-admin requirement', () => {
     const optedIn = files
       .filter(file => /allow-non-admin|allowNonAdmin/.test(fs.readFileSync(file, 'utf8')))
       .map(file => path.relative(pagesDir, file))
+      .sort()
 
-    expect(optedIn).toEqual(['workforce-me.vue'])
+    expect(optedIn).toEqual(NON_ADMIN_PAGES)
   })
 
   test('every other admin page renders the shell with the guard intact', () => {
-    const others = files.filter(file => path.basename(file) !== 'workforce-me.vue')
+    const others = files.filter(file => !NON_ADMIN_PAGES.includes(path.basename(file)))
     const untouched = others.filter(file => !/allow-non-admin|allowNonAdmin/.test(fs.readFileSync(file, 'utf8')))
     expect(untouched.length).toBe(others.length)
   })

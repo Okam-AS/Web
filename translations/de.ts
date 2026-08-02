@@ -2523,6 +2523,9 @@ export default {
   wf_month_partial_total: 'Die Monatssumme deckt {counted} von {total} Tagen ab.',
   wf_month_this_month: 'Dieser Monat',
 
+  // Meine Seite — die eigene E-Mail-Adresse der angemeldeten Person (/admin/account-email)
+  nav_account_email: 'Meine E-Mail-Adresse',
+
   // Personaleinsatz — die eigene Seite der Mitarbeitenden (/workforce/me)
   nav_workforce_me: 'Meine Schichten',
   wfme_page_title: 'Meine Schichten',
@@ -3878,7 +3881,7 @@ export default {
   growth_error_subject_required: 'Ein Betreff ist erforderlich.',
   growth_error_content_required: 'Inhalt ist erforderlich.',
   growth_error_test_address_required: 'Eine Testadresse ist erforderlich.',
-  growth_error_test_address_not_own: 'Ein Testversand kann nur an die E-Mail-Adresse deines eigenen Kontos gehen. Ist bei deinem Konto keine E-Mail-Adresse hinterlegt, kannst du überhaupt keinen Test senden.',
+  growth_error_test_address_not_own: 'Ein Testversand kann nur an die E-Mail-Adresse deines eigenen Kontos gehen, und sie muss bestätigt sein. Ist bei deinem Konto keine E-Mail-Adresse hinterlegt oder ist sie nicht bestätigt, kannst du keinen Test senden, bevor du eine bestätigt hast. Das geht unter «Meine E-Mail-Adresse».',
   growth_error_dispatch_disabled: 'Der Not-Aus für den Versand ist für diesen Standort ausgeschaltet (growth.dispatch). Es wurde nichts angelegt und nichts gesendet. Ein Plattformbetreiber muss ihn einschalten.',
   growth_error_provider_paused: 'Das Anbieterkonto dieses Standorts ist pausiert. Es wurde nichts angelegt und nichts gesendet. Hebe die Pause auf, bevor du es erneut versuchst.',
   growth_error_unsubscribe_unconfigured: 'Diese Installation kann keinen funktionierenden Abmeldelink erzeugen (Growth:PublicApiBaseUrl fehlt oder ist kein https-Ursprung). Es wurde nichts gesendet — ein Newsletter ohne Abmeldung darf nicht hinausgehen.',
@@ -4999,6 +5002,41 @@ export default {
   gp_error_unattributed: 'Wir konnten nicht feststellen, wer Sie sind. Eine Löschung wird nie ohne den Namen der anordnenden Person erfasst, daher wurde nichts getan.',
   gp_error_notice_undeliverable: 'Der Mailanbieter hat die dem Gast geschuldete Nachricht nicht angenommen. Es wurde nichts gelöscht, die Anfrage bleibt offen, und Sie können es erneut versuchen.',
   gp_error_body_required: 'Die Anfrage enthielt keinen Inhalt. Es wurde nichts gespeichert.',
-  gp_error_generic: 'Etwas ist schiefgelaufen. Es wurde nichts gespeichert.'
+  gp_error_generic: 'Etwas ist schiefgelaufen. Es wurde nichts gespeichert.',
+
+  // ---- Mein Konto: E-Mail-Adresse ---------------------------------------------------------------
+  //
+  // Der Bildschirm, der die Bestätigung aus dem Admin heraus ERREICHBAR macht. Keine Zeichenkette
+  // hier hat einen {slot} für die Adresse oder den Code: eine Fehlermeldung ist ein Antworttext und
+  // eine wartende Logzeile (C7), und der Code ist eine Zugangsberechtigung wie ein Passwort.
+  ae_page_title: 'Ihre E-Mail-Adresse',
+  ae_page_intro: 'Die Adresse Ihres eigenen Kontos und deren Bestätigung. Sie wird überall dort verwendet, wo die Plattform wissen muss, dass eine Adresse wirklich Ihnen gehört — etwa bevor Sie sich selbst einen Test eines Newsletters senden können.',
+  ae_status_label: 'Status',
+  ae_status_confirmed: 'Bestätigt',
+  ae_status_unconfirmed: 'Nicht bestätigt',
+  ae_status_missing: 'Keine Adresse hinterlegt',
+  ae_status_confirmed_body: 'Die Adresse ist bestätigt. Sie können sich selbst einen Test eines Newsletters senden.',
+  ae_status_unconfirmed_body: 'Das Konto hat eine Adresse, aber sie ist nicht bestätigt. Bis dahin behandelt die Plattform sie nicht als Ihre.',
+  ae_status_missing_body: 'Das Konto hat keine E-Mail-Adresse. Das ist der Normalfall, wenn Sie sich mit einer Telefonnummer registriert haben.',
+  ae_address_label: 'E-Mail-Adresse',
+  ae_address_placeholder: 'name@unternehmen.de',
+  ae_address_invalid: 'Das sieht nicht nach einer E-Mail-Adresse aus. Es wurde nichts gesendet.',
+  ae_send_code: 'Bestätigungscode senden',
+  ae_send_code_again: 'Neuen Code senden',
+  ae_sending: 'Wird gesendet …',
+  // EHRLICH ÜBER DAS, WAS WIR NICHT WISSEN. Der Dienst übergibt den Versand an eine Aufgabe, auf die
+  // er nicht wartet: Ein «ok» heißt, der Code wurde bestellt — nicht, dass die Mail ankam.
+  ae_code_requested: 'Der Code wurde bestellt. Wir erfahren nicht, ob die Mail angekommen ist. Kommt innerhalb weniger Minuten nichts an, senden Sie einen neuen.',
+  ae_code_label: 'Bestätigungscode',
+  ae_code_help: 'Sechs Ziffern aus der Mail. Der Code ist 15 Minuten gültig.',
+  ae_code_invalid: 'Der Code muss sechs Ziffern haben.',
+  ae_confirm: 'Adresse bestätigen',
+  ae_confirming: 'Wird bestätigt …',
+  ae_confirm_failed: 'Der Code wurde nicht akzeptiert. Prüfen Sie die Ziffern oder fordern Sie einen neuen an.',
+  ae_confirmed_toast: 'Die Adresse ist bestätigt.',
+  ae_send_failed: 'Wir konnten keinen Code bestellen. Es wurde nichts geändert.',
+  ae_next_testsend: 'Senden Sie sich selbst einen Test des Newsletters',
+  ae_change_address: 'Adresse wechseln',
+  ae_signed_out: 'Sie müssen angemeldet sein, um die Adresse Ihres Kontos zu sehen.'
 
 }

@@ -114,7 +114,17 @@ const STORE_ADMIN_PATHS = [
   '/admin/customers', '/admin/employees'
 ]
 
-const WORKER_PATHS = ['/admin/workforce-me']
+// The `nav_group_me` group: the pages about the SIGNED-IN PERSON rather than about a store, and the
+// only group not gated on store-admin membership. Both opt out of the store-admin guard, which the
+// invariant below checks rather than assumes.
+//
+// `/admin/account-email` is the account's own address and the confirmation of it. It is here because
+// the newsletter test-send now requires the acting administrator's address to be CONFIRMED
+// (markedsføringsloven § 15), and until it existed the only UI call site for either confirmation
+// route in the whole estate was the consumer app — so an administrator refused by an admin screen had
+// nowhere in admin to go about it. It takes no store id and a worker has an account address like
+// anybody else, so it is offered to both audiences.
+const WORKER_PATHS = ['/admin/workforce-me', '/admin/account-email']
 
 // The links this file's `MANAGER-REACHABLE` tests are about — the ones a manager could not reach by
 // navigating — named once so the assertions below cannot drift apart from each other. The decision
@@ -175,7 +185,7 @@ describe('AdminPageHeader — which links each kind of user is offered', () => {
     expect(pathsOf(mountNav(notYetKnown))).toEqual(pathsOf(mountNav(admin)))
   })
 
-  test('a pure worker is offered only their own page', () => {
+  test('a pure worker is offered only the pages that are about them', () => {
     expect(pathsOf(mountNav(worker))).toEqual(WORKER_PATHS)
   })
 

@@ -20,6 +20,13 @@
 
 const MANAGER_PHONE = '+4799999999';
 const WORKER_PHONE = '+4790000001';
+// The administrator who signed up BY PHONE and therefore has no email address at all. She is the
+// whole subject of the account-email journey: the newsletter test-send binds to the acting
+// administrator's own account address and requires it CONFIRMED, so she is refused by a screen she
+// otherwise administers, and until an admin surface could confirm an address her only ways out were
+// the consumer app or curl. A third identity rather than a flip of the manager's, because the
+// manager's confirmed address is what `growth-newsletter-send-gate` test-sends to.
+const PHONE_SIGNUP_ADMIN_PHONE = '+4790000002';
 const OTP = '123123';
 
 const STORE_ID = 42;
@@ -60,6 +67,26 @@ const USERS = {
     // `undefined` would be ACCESS_UNKNOWN, which deliberately renders the admin nav, so a fixture
     // that omitted the field would prove the opposite of what the journey claims.
     adminIn: []
+  },
+  [PHONE_SIGNUP_ADMIN_PHONE]: {
+    id: 'user-phone-admin',
+    token: 'fixture-token-phone-admin',
+    phoneNumber: PHONE_SIGNUP_ADMIN_PHONE,
+    firstName: 'Kari',
+    lastName: 'Telefon',
+    // NULL, and null on purpose — this is what signing up with a phone number leaves behind, and it
+    // is the state `RequireOwnAccountAddressAsync` refuses first. `''` would be indistinguishable on
+    // screen but is a different thing in the account row, and the page's three-state status reads
+    // the row.
+    email: null,
+    emailConfirmed: false,
+    isPowerUser: false,
+    isKeyAccountManager: false,
+    favoriteProductIds: [],
+    // A FULL STORE ADMIN. The refusal this journey walks is not about authority — she administers
+    // the same store the manager does and may draft, approve and dispatch. It is about whether the
+    // platform can prove one mailbox is hers.
+    adminIn: [{ id: STORE_ID, name: STORE_NAME, address: 'Storgata 1, 0155 Oslo' }]
   }
 };
 
@@ -528,6 +555,7 @@ const MARGIN_WEEK = {
 module.exports = {
   MANAGER_PHONE,
   WORKER_PHONE,
+  PHONE_SIGNUP_ADMIN_PHONE,
   OTP,
   STORE_ID,
   STORE_NAME,

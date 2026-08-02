@@ -380,9 +380,10 @@ test(
       // suite, including ones that touch nothing this page touches. Filing it as a defect here would
       // send somebody to read this page looking for it.
       //
-      // The 400 is the foreign test address this journey provoked on purpose and asserted on
-      // screen. Excluded BY THIS JOURNEY ONLY.
-      const noise = /favicon|Download the Vue Devtools|status of 400/i;
+      // The 403 is the foreign test address this journey provoked on purpose and asserted on
+      // screen. Excluded BY THIS JOURNEY ONLY. It was a 400 until the fixture's test-send guard was
+      // brought level with `RequireOwnAccountAddressAsync`, which forbids rather than rejects.
+      const noise = /favicon|Download the Vue Devtools|status of 403/i;
       const shellRedirect = /Navigation cancelled from "\/admin\?redirect=/i;
       const errors = journey.consoleErrors.filter(text => !noise.test(text));
 

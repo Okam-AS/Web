@@ -241,6 +241,10 @@ const icons = {
   posReports: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>',
   workforceSchedule: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M4 11h16M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 15h3m2 0h3" /></svg>',
   workforceMe: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 16l2 2 4-4" /></svg>',
+  // An envelope with a tick, NOT the plain envelope `growthNewsletter` uses in the modules group:
+  // that page mails guests, this one is the signed-in person's own address and the confirmation of
+  // it. The tick is the whole difference and it is the subject of the page.
+  accountEmail: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h9M5 19a2 2 0 01-2-2V7a2 2 0 012-2h14a2 2 0 012 2v5" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l2 2 4-4" /></svg>',
   workforceRoster: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>',
   marginRecipes: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>',
   // A balance, not a second clipboard: this page weighs two totals against each other (what the
@@ -452,7 +456,19 @@ export default {
       groups.push({
         title: this.$i('nav_group_me'),
         items: [
-          { label: this.$i('nav_workforce_me'), path: '/admin/workforce-me', icon: icons.workforceMe, isNew: true }
+          { label: this.$i('nav_workforce_me'), path: '/admin/workforce-me', icon: icons.workforceMe, isNew: true },
+          // The account's own address, and the confirmation of it. IN THIS GROUP because it is about
+          // the signed-in person and takes no store id — the page sets `allow-non-admin` for the same
+          // reason its neighbour does, so a link here is never a dead end for a worker.
+          //
+          // WHY IT HAD TO EXIST. The newsletter test-send now requires the acting administrator's own
+          // account address AND requires it CONFIRMED (markedsføringsloven § 15,
+          // `RequireOwnAccountAddressAsync`). Confirming is a live product path — but until this entry
+          // the only UI call site for either confirmation route in the entire estate was the consumer
+          // app, so an administrator who signed up by phone could be refused a test-send by an admin
+          // screen and had nowhere in admin to go about it. A capability exists only when it is
+          // reachable (C3), and a page nothing links to is the defect this link closes.
+          { label: this.$i('nav_account_email'), path: '/admin/account-email', icon: icons.accountEmail, isNew: true }
         ]
       });
 

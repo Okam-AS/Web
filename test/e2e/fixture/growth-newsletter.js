@@ -292,11 +292,28 @@ function route (ctx) {
       if (!address) {
         return growthError(ctx, 400, 'growth.test_address_required', 'A test address is required.');
       }
-      // A test send may go ONLY to the caller's own account address. The refusal exists because the
-      // test route is otherwise a way to mail an arbitrary stranger from the venue's domain.
-      if (address.toLowerCase() !== String(ctx.caller.email || '').toLowerCase()) {
-        return growthError(ctx, 400, 'growth.test_address_not_own',
-          'A test send may only go to the address on your own account.');
+      // A test send may go ONLY to the caller's own account address, AND that address must be
+      // CONFIRMED. The refusal exists because the test route is otherwise a way to mail an arbitrary
+      // stranger from the venue's sending domain with no consent record behind it — a working route
+      // around markedsføringsloven § 15, which asks for the recipient's prior consent and which a
+      // test-send has no recipient it can name.
+      //
+      // FOUR REASONS, ONE ANSWER, mirroring `GrowthNewsletterService.RequireOwnAccountAddressAsync`:
+      // no account, an unconfirmed address, no address at all, or an address that is not the typed
+      // one all collapse into the same static 403 carrying NO address. The message is deliberately
+      // address-free — an error envelope is a response body and a log line waiting to happen, and the
+      // address is both personal data and the exact value being abused.
+      //
+      // THE CONFIRMATION CLAUSE IS THE POINT. Without it an account could hold an address it merely
+      // ASSERTS, which proves nothing about who reads that mailbox; the whole guard would rest on a
+      // string somebody typed into their own profile.
+      const confirmedOwnAddress = !!ctx.caller &&
+        ctx.caller.emailConfirmed === true &&
+        !!String(ctx.caller.email || '').trim();
+      if (!confirmedOwnAddress ||
+        address.toLowerCase() !== String(ctx.caller.email || '').trim().toLowerCase()) {
+        return growthError(ctx, 403, 'growth.test_address_not_own',
+          'A test-send may only be addressed to the signed-in administrator\'s own account address.');
       }
       // `status` IS A SUBMISSION STATUS AND NOT A DELIVERY. The page prints it and says so in the
       // same sentence, because the provider answering "Sent" means it accepted the handoff.

@@ -2574,6 +2574,9 @@ export default {
   wf_month_partial_total: 'Månedssummen dekker {counted} av {total} dager.',
   wf_month_this_month: 'Denne måneden',
 
+  // Min side — den innloggede personens egen e-postadresse (/admin/account-email)
+  nav_account_email: 'E-postadressen min',
+
   // Bemanning — arbeidstakerens egen side (/workforce/me)
   nav_workforce_me: 'Mine vakter',
   wfme_page_title: 'Mine vakter',
@@ -3927,7 +3930,7 @@ export default {
   growth_error_subject_required: 'Emne er påkrevd.',
   growth_error_content_required: 'Innhold er påkrevd.',
   growth_error_test_address_required: 'En testadresse er påkrevd.',
-  growth_error_test_address_not_own: 'En testsending kan bare gå til e-postadressen på din egen konto. Har kontoen din ingen e-postadresse registrert, kan du ikke sende test i det hele tatt.',
+  growth_error_test_address_not_own: 'En testsending kan bare gå til e-postadressen på din egen konto, og adressen må være bekreftet. Har kontoen din ingen e-postadresse registrert, eller er den ikke bekreftet, kan du ikke sende test før du har bekreftet en. Det gjør du under «E-postadressen min».',
   growth_error_dispatch_disabled: 'Nødbryteren for utsendelse er slått av for denne butikken (growth.dispatch). Ingenting ble opprettet og ingenting ble sendt. En plattformansvarlig må slå den på.',
   growth_error_provider_paused: 'Leverandørkontoen til denne butikken står på pause. Ingenting ble opprettet og ingenting ble sendt. Fjern pausen før du prøver igjen.',
   growth_error_unsubscribe_unconfigured: 'Denne installasjonen kan ikke lage en fungerende avmeldingslenke (Growth:PublicApiBaseUrl mangler eller er ikke en https-adresse). Ingenting ble sendt — et nyhetsbrev uten avmelding skal ikke sendes.',
@@ -5048,6 +5051,41 @@ export default {
   gp_error_unattributed: 'Vi klarte ikke å fastslå hvem du er. En sletting registreres aldri uten navnet på den som bestemte den, så ingenting ble gjort.',
   gp_error_notice_undeliverable: 'Beskjeden gjesten har krav på ble ikke tatt imot av e-postleverandøren. Ingenting ble slettet, forespørselen står fortsatt åpen, og du kan prøve igjen.',
   gp_error_body_required: 'Forespørselen manglet innhold. Ingenting ble lagret.',
-  gp_error_generic: 'Noe gikk galt. Ingenting ble lagret.'
+  gp_error_generic: 'Noe gikk galt. Ingenting ble lagret.',
+
+  // ---- Min konto: e-postadresse ---------------------------------------------------------------
+  //
+  // Skjermen som gjør bekreftelsen NÅBAR fra admin. Ingen streng her har en {slot} for adressen
+  // eller for koden: en feilmelding er et svarlegeme og en loggpost som venter på å skje (C7), og
+  // koden er en legitimasjon på linje med et passord.
+  ae_page_title: 'E-postadressen din',
+  ae_page_intro: 'Adressen på din egen konto, og bekreftelsen av den. Den brukes når plattformen må vite at en adresse virkelig er din — for eksempel før du kan sende deg selv en test av et nyhetsbrev.',
+  ae_status_label: 'Status',
+  ae_status_confirmed: 'Bekreftet',
+  ae_status_unconfirmed: 'Ikke bekreftet',
+  ae_status_missing: 'Ingen adresse registrert',
+  ae_status_confirmed_body: 'Adressen er bekreftet. Du kan sende deg selv en test av et nyhetsbrev.',
+  ae_status_unconfirmed_body: 'Kontoen har en adresse, men den er ikke bekreftet. Inntil den er det, regner plattformen den ikke som din.',
+  ae_status_missing_body: 'Kontoen har ingen e-postadresse. Det er det vanlige når du har registrert deg med telefonnummer.',
+  ae_address_label: 'E-postadresse',
+  ae_address_placeholder: 'navn@virksomheten.no',
+  ae_address_invalid: 'Dette ser ikke ut som en e-postadresse. Ingenting ble sendt.',
+  ae_send_code: 'Send bekreftelseskode',
+  ae_send_code_again: 'Send ny kode',
+  ae_sending: 'Sender …',
+  // ÆRLIG OM DET VI IKKE VET. Tjenesten legger utsendingen i en oppgave den ikke venter på, så
+  // svaret «ok» betyr at koden ble bestilt — ikke at e-posten kom fram. Skjermen sier akkurat det.
+  ae_code_requested: 'Koden er bestilt. Vi får ikke vite om e-posten kom fram, så kommer den ikke innen et par minutter: send en ny.',
+  ae_code_label: 'Bekreftelseskode',
+  ae_code_help: 'Seks siffer fra e-posten. Koden er gyldig i 15 minutter.',
+  ae_code_invalid: 'Koden må være seks siffer.',
+  ae_confirm: 'Bekreft adressen',
+  ae_confirming: 'Bekrefter …',
+  ae_confirm_failed: 'Koden ble ikke godtatt. Sjekk sifrene, eller be om en ny kode.',
+  ae_confirmed_toast: 'Adressen er bekreftet.',
+  ae_send_failed: 'Vi fikk ikke bestilt en kode. Ingenting ble endret.',
+  ae_next_testsend: 'Send deg selv en test av nyhetsbrevet',
+  ae_change_address: 'Bytt adresse',
+  ae_signed_out: 'Du må være innlogget for å se adressen på kontoen din.'
 
 }
