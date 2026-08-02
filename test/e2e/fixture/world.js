@@ -63,10 +63,32 @@ const USERS = {
   }
 };
 
+// `workforcePersonId` is NOT decoration and is not the same id as `staffMemberId`. Training's
+// `personRef` names the PERSON — a completion is filed against a human being, not against one of
+// their engagements, which is the whole reason the two ids are different — and the Training
+// completion write binds it to a `Guid`. A reference the fixture cannot resolve to one of these is
+// refused exactly as `TrainingPersonBinding.RequireKnownPersonAsync` refuses it. Both are real GUIDs
+// because every `*Ref` binds to a `Guid` server-side and the forms refuse anything else before
+// sending, so a made-up string would never leave the browser and would prove nothing.
 const STAFF = [
-  { staffMemberId: 'staff-1', displayName: 'Ola Ansatt', isActive: true, employmentNumber: '101' },
-  { staffMemberId: 'staff-2', displayName: 'Kari Hansen', isActive: true, employmentNumber: '102' }
+  {
+    staffMemberId: 'staff-1',
+    workforcePersonId: '0f7d2c1a-8b64-4f2e-9c31-1a5d6e7f8091',
+    displayName: 'Ola Ansatt',
+    isActive: true,
+    employmentNumber: '101'
+  },
+  {
+    staffMemberId: 'staff-2',
+    workforcePersonId: '3b91e40c-27af-4d5b-8e12-6c4f90ab7d23',
+    displayName: 'Kari Hansen',
+    isActive: true,
+    employmentNumber: '102'
+  }
 ];
+
+/** A well-formed person reference that names nobody. The completion refusal's subject. */
+const UNKNOWN_PERSON_REF = '11111111-2222-3333-4444-555555555555';
 
 const ROLES = [
   { roleId: 'role-bar', name: 'Barista', sortOrder: 1, station: 'Bar', color: '#1bb776' },
@@ -427,6 +449,82 @@ function growthPrivacyRequests () {
   ];
 }
 
+// ---- Margin: the ingredient master, the catalog, and the week ----------------------------------
+//
+// THE NUMBERS ARE CHOSEN SO A JOURNEY CAN ASSERT THEM AS TEXT. A browser walk that only checks "some
+// money appeared" cannot tell a plate cost from a menu price, so every figure below divides cleanly
+// through the whole chain: 500 g of flour at kr 24,00/kg plus 1 litre of milk at kr 18,00/l is
+// kr 30,00 for the batch and kr 3,00 for one of ten portions, and a take-away price of kr 34,50 at
+// 15 % VAT is exactly kr 30,00 net, which makes the food-cost ratio exactly 10,00 %. None of that is
+// arithmetic the PAGE performs — every one of those figures is computed in `fixture/margin.js` and
+// read off one field on the wire — but a journey asserting `kr 3,00` is asserting the field it meant.
+
+/**
+ * The starter library `GET /margin/ingredients` offers a store that has none. Copying one is an
+ * ordinary create, which is how an empty store reaches its first costed recipe.
+ *
+ * `pricePerBaseUnitMinor` is NOT on the wire — the real surface resolves a price through supplier
+ * items and their effective-price windows. It lives here because the cost preview is computed on
+ * read and this fixture has to compute one; the shape the client sees is the preview, never this.
+ */
+const MARGIN_STARTERS = [
+  { name: 'Hvetemel', baseUnit: 'Kilogram', notes: 'Siktet', pricePerBaseUnitMinor: 2400 },
+  { name: 'Melk', baseUnit: 'Liter', notes: 'Helmelk', pricePerBaseUnitMinor: 1800 },
+  { name: 'Kardemomme', baseUnit: 'Gram', notes: 'Malt', pricePerBaseUnitMinor: 12 }
+];
+
+/**
+ * The store's product catalog, as the menu-margin read reports it — ONE ROW PER PRICE BASIS, because
+ * a dish has one plate cost and up to three prices at up to three VAT rates.
+ *
+ * `Kaffe` is already claimed by the seeded `Kaffebrygg` recipe. That is deliberate: the backend
+ * allows at most one ACTIVE link per product, so a second recipe pointing at it is refused
+ * `margin.product-link-invalid` — a refusal no unit test can reach.
+ */
+const MARGIN_PRODUCTS = [
+  {
+    productId: 'prod-vaffel',
+    productName: 'Vaffel med rømme',
+    goodsGroupName: 'Mat',
+    bases: [
+      { priceBasis: 'Base', grossPriceMinor: 3450, vatPercent: 15, netPriceMinor: 3000 },
+      { priceBasis: 'Table', grossPriceMinor: 5000, vatPercent: 25, netPriceMinor: 4000 }
+    ]
+  },
+  {
+    productId: 'prod-kaffe',
+    productName: 'Kaffe',
+    goodsGroupName: 'Drikke',
+    bases: [
+      { priceBasis: 'Base', grossPriceMinor: 4000, vatPercent: 25, netPriceMinor: 3200 }
+    ]
+  }
+];
+
+/** The store's suppliers. Read only, so a spend line's attribution has a name. */
+const MARGIN_SUPPLIERS = [
+  { supplierId: 'sup-1', name: 'Bergen Storkjøkken AS' },
+  { supplierId: 'sup-2', name: 'Nordane Kaffe' }
+];
+
+/**
+ * The week the statement surface reconciles. Every figure is the SERVER's — the page adds nothing up
+ * — and they are chosen to make the ratios exact: 1 200 000 / 4 000 000 = 30,00 % theoretical.
+ */
+const MARGIN_WEEK = {
+  netFoodSalesMinor: 4000000,
+  theoreticalIngredientCostMinor: 1200000,
+  coveredNetSalesMinor: 3600000,
+  uncoveredNetSalesMinor: 400000,
+  projectionWatermark: 918273,
+  // A Monday, and the Sunday six days later. The page refuses to send a non-Monday and offers the
+  // Monday of the picked week as a one-click suggestion.
+  weekStart: '2026-07-20',
+  weekEnd: '2026-07-26',
+  // Deliberately NOT a Monday.
+  weekMidweek: '2026-07-22'
+};
+
 module.exports = {
   MANAGER_PHONE,
   WORKER_PHONE,
@@ -437,7 +535,12 @@ module.exports = {
   CURRENCY,
   USERS,
   STAFF,
+  UNKNOWN_PERSON_REF,
   ROLES,
+  MARGIN_STARTERS,
+  MARGIN_PRODUCTS,
+  MARGIN_SUPPLIERS,
+  MARGIN_WEEK,
   FEATURE_FLAG_CATALOG,
   SCHEDULE_WRITE_FLAG,
   EVENTS_CORE_FLAG,

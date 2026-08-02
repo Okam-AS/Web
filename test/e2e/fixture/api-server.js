@@ -27,6 +27,12 @@
 const http = require('http');
 const { URL } = require('url');
 const world = require('./world');
+// One file per module family, for the same reason the clients are one file per controller: the two
+// can be diffed by eye. Each exports `fresh()` — its slice of the reset state — and `route(ctx)`,
+// which returns true when it answered and false when the path was not its business.
+const marginFixture = require('./margin');
+const trainingFixture = require('./training');
+const growthNewsletterFixture = require('./growth-newsletter');
 
 const PORT = Number(process.env.E2E_FIXTURE_PORT || 4010);
 
@@ -98,7 +104,13 @@ function freshState () {
     // started, and if that one was pointed at the real API every journey would run green against
     // production data while claiming to be a fixture run. A journey that produced no traffic here
     // was not talking to this fixture, and that is a failure rather than a fast pass.
-    served: 0
+    served: 0,
+
+    // Each module family owns its own slice, so a journey in one cannot see another's writes and a
+    // reset cannot half-clear anything.
+    margin: marginFixture.fresh(),
+    training: trainingFixture.fresh(),
+    growthNewsletter: growthNewsletterFixture.fresh()
   };
 }
 
@@ -124,6 +136,21 @@ function send (res, status, body, extraHeaders) {
     'Cache-Control': 'no-store'
   }, extraHeaders || {}));
   res.end(payload);
+}
+
+/**
+ * A non-JSON body, for the one route that has one.
+ *
+ * `GET /margin/statements/{id}/export` answers `text/csv`; served as JSON it would download a quoted
+ * string and the page's own `Content-Type` check would be the thing under test rather than the export.
+ */
+function sendText (res, status, text, contentType) {
+  res.writeHead(status, {
+    'Content-Type': contentType || 'text/plain; charset=utf-8',
+    'Access-Control-Allow-Origin': '*',
+    'Cache-Control': 'no-store'
+  });
+  res.end(text);
 }
 
 /** RFC 9457 problem+json in the shape `WorkforceApiError` / `EventsApiError` parse. */
@@ -457,6 +484,32 @@ function userPayload (user) {
 
 // ---- routing -----------------------------------------------------------------------------------
 
+/**
+ * What a module fixture is handed. Everything it needs and no access to this file's internals.
+ *
+ * `flagEffective` is on it DELIBERATELY and is the reason these modules can be honest about their
+ * gates: the per-store override store lives here, is written by the operator switchboard's `PUT`, and
+ * is the same map `flagState` reports. A module that resolved its own flags would be answering about
+ * a world the switchboard cannot move, which is precisely the defect that made six journeys green
+ * against stores no venue is.
+ */
+function context (req, res, url, path, body, caller) {
+  return {
+    req,
+    res,
+    url,
+    path,
+    method: req.method,
+    body,
+    caller,
+    state,
+    flagEffective,
+    send: (status, payload, headers) => send(res, status, payload, headers),
+    sendText: (status, text, contentType) => sendText(res, status, text, contentType),
+    problem: (status, code, detail, extra) => problem(res, status, code, detail, extra)
+  };
+}
+
 const WORKFORCE_STORE = /^\/workforce\/stores\/([^/]+)(\/.*)?$/;
 
 async function route (req, res, url) {
@@ -557,10 +610,40 @@ async function route (req, res, url) {
   const caller = userForToken(bearer(req));
   if (!caller) { return problem(res, 401, 'AUTH_REQUIRED', 'No bearer token.'); }
 
-  if (req.method !== 'GET' && path.startsWith('/workforce/') && !req.headers['idempotency-key']) {
+  // The mandatory mutation header, and WHICH surfaces demand it is itself the contract. Workforce and
+  // Training both refuse a mutation without an `Idempotency-Key`
+  // (`TrainingControllerBase.TryGetIdempotencyKey`). MARGIN DOES NOT, and is deliberately absent from
+  // this list: it has no idempotency store, and a fixture demanding a header the server never reads
+  // would make the correct client look broken — the same mistake as accepting anything, in the other
+  // direction. What Margin requires instead is `If-Match`, which `fixture/margin.js` checks itself.
+  if (req.method !== 'GET' && !req.headers['idempotency-key'] && path.startsWith('/workforce/')) {
     return problem(res, 400, 'workforce.idempotency-key-required',
       'Every workforce mutation must carry an Idempotency-Key.');
   }
+  if (req.method !== 'GET' && !req.headers['idempotency-key'] && path.startsWith('/training/')) {
+    // NO `code`, and that asymmetry is the real surface's. Training answers the missing header
+    // through `ModuleProblem`, which emits a detail and a traceId and nothing else — which is why
+    // `training-courses.vue` says out loud that this refusal «lands on the unknown sentence». A
+    // fixture that helpfully added `training.idempotency-key-required` would let a page ship a
+    // sentence keyed on a code the server never sends.
+    return send(res, 400, {
+      type: 'about:blank',
+      title: 'Bad Request',
+      status: 400,
+      detail: 'Every Training mutation must carry an Idempotency-Key.',
+      traceId: 'fixture-trace'
+    });
+  }
+
+  // ---- the module families ---------------------------------------------------------------------
+  //
+  // Placed AFTER the auth wall and the header guard because every route in both is authenticated and
+  // store-scoped, and BEFORE the store reads below so that a `/margin/...` path is never mistaken for
+  // one. Each returns true when it answered.
+  const moduleCtx = context(req, res, url, path, body, caller);
+  if (marginFixture.route(moduleCtx)) { return; }
+  if (trainingFixture.route(moduleCtx)) { return; }
+  if (growthNewsletterFixture.route(moduleCtx)) { return; }
 
   // ---- Events: the ADMIN reads the pipeline page issues -----------------------------------------
   //
