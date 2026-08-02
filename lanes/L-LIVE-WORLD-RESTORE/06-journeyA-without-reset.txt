@@ -1,0 +1,53 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › test/e2e/journeys/workforce-flag-lever.spec.js:39:1 › an operator turns the schedule publication switch off and the publish becomes its typed refusal @live (11.8s)
+
+
+  1) [chromium] › test/e2e/journeys/workforce-flag-lever.spec.js:39:1 › an operator turns the schedule publication switch off and the publish becomes its typed refusal @live 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  locator('.ff-row').filter({ has: locator('code').filter({ hasText: 'workforce.publication' }) }).locator('.ff-row__badge')
+    Expected: "Av"
+    Received: "På"
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveText" with timeout 10000ms
+      - waiting for locator('.ff-row').filter({ has: locator('code').filter({ hasText: 'workforce.publication' }) }).locator('.ff-row__badge')
+        24 × locator resolved to <span data-v-61e9f747="" data-v-70f5b8c5="" class="ff-row__badge ff-row__badge--on">På</span>
+           - unexpected value "På"
+
+
+      102 |       // The publication switch starts OFF, because the module ships it off and nobody has flipped it.
+      103 |       const publication = page.locator('.ff-row', { has: page.locator('code', { hasText: PUBLICATION }) });
+    > 104 |       await expect(publication.locator('.ff-row__badge')).toHaveText('Av');
+          |                                                           ^
+      105 |       return CATALOG_KEYS.length + ' flags across ' + modules.length + ' modules; ' + PUBLICATION + ' reads "Av"';
+      106 |     });
+      107 |
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/workforce-flag-lever.spec.js:104:59
+        at JourneyRecorder.step (/Users/svendaneel/okam/Web-modules/test/e2e/support/journey.js:193:22)
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/workforce-flag-lever.spec.js:68:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/workforce-flag-lever-an-op-8d3ed-h-becomes-its-typed-refusal-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/workforce-flag-lever.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/workforce-flag-lever-an-op-8d3ed-h-becomes-its-typed-refusal-chromium/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/workforce-flag-lever-an-op-8d3ed-h-becomes-its-typed-refusal-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/workforce-flag-lever-an-op-8d3ed-h-becomes-its-typed-refusal-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › test/e2e/journeys/workforce-flag-lever.spec.js:39:1 › an operator turns the schedule publication switch off and the publish becomes its typed refusal @live 

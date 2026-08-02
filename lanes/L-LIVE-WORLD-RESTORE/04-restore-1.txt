@@ -1,0 +1,13 @@
+
+[1m== Restoring [OkamLiveRestore] to the image taken at 2026-08-02T11:31:44Z[0m
+Processed 2 pages for database 'OkamLiveRestore', file 'OkamLiveRestore_log' on file 1.
+RESTORE DATABASE successfully processed 1138 pages in 0.026 seconds (341.796 MB/sec).
+
+[1m== Verifying [OkamLiveRestore] is the world a journey needs[0m
+   catalog: 127 migrations, 211 tables, 25 triggers -- as imaged
+   C1: all 25 append-only triggers back, enabled, bodies identical to the image
+   after the reset: 0 revisions, 0 publications, 0 flag overrides, 3 engagements, store 1
+[31mFAILED: after the restore the manager's adminIn does not carry store 1;
+    the admin shell would redirect every page to /registrer.[0m
+SQL_CONTAINER=okam-lwr-sql SQL_PORT=15435 DB_NAME=OkamLiveRestore API_PORT=    0.33s user 0.30s system 6% cpu 8.996 total
+RESTORE_EXIT=1

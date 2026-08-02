@@ -53,13 +53,28 @@
 // header says exactly what made it eligible, and `test/e2e/support/journey.js` refuses to write a
 // live-labelled artifact for a run whose browser never reached the origin it names.
 //
-// ONE JOURNEY PER LIVE WORLD. Fixture mode gives every journey a clean backend (`/__fixture/reset`
-// in the recorder fixture); live mode has nothing of the kind, so `@live` journeys run in file order
-// against ONE database and inherit each other's writes. The two workforce ones each create and
-// publish the current week, and each begins by needing that week unplanned — so a live run that
-// selects both passes the first and fails the second, for a reason that has nothing to do with the
-// product. Select by path (`npm run test:e2e -- test/e2e/journeys/<one>.spec.js`) and rebuild the
-// world in between; live-world.sh prints the two commands.
+// ONE JOURNEY PER LIVE RUN, AND A RESET BETWEEN THEM — NOT ONE WORLD PER JOURNEY. Fixture mode gives
+// every journey a clean backend (`/__fixture/reset` in the recorder fixture); live mode has nothing of
+// the kind inside the harness, so `@live` journeys selected together run in file order against ONE
+// database and inherit each other's writes. `workforce-schedule-publish` leaves a
+// `workforce.publication` override behind, and `workforce-flag-lever` opens by asserting that flag
+// reads "Av" — so a live run that selects both passes the first and fails the second on the seed, for
+// a reason that has nothing to do with the product.
+//
+// The answer is NOT a world per journey. `test/e2e/scripts/live-world-reset.sh` images a freshly
+// seeded world and restores it between journeys in about nine seconds, against roughly forty-two for
+// a rebuild from empty — and the rebuild's expensive half, replaying 127 migrations, proves a
+// property of the BRANCH that needs proving once per session rather than once per journey. So:
+// select by path, and reset in between.
+//
+//   test/e2e/scripts/live-world.sh                                    # once
+//   test/e2e/scripts/live-world-reset.sh snapshot                     # once, on the seeded world
+//   npm run test:e2e -- test/e2e/journeys/<one>.spec.js
+//   test/e2e/scripts/live-world-reset.sh restore                      # ~9s, no migration replay
+//   npm run test:e2e -- test/e2e/journeys/<next>.spec.js
+//
+// The reset is not wired INTO this config on purpose: it needs docker and a SQL container, and a
+// config that reached for those would break the laptop case this file's header opens with.
 
 const { defineConfig, devices } = require('@playwright/test');
 

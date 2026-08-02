@@ -1,0 +1,189 @@
+{
+  "journey": "workforce-schedule-publish",
+  "title": "A manager creates a draft week, staffs a shift, validates it and publishes it",
+  "status": "passed",
+  "startedAtUtc": "2026-08-02T11:44:38.356Z",
+  "finishedAtUtc": "2026-08-02T11:44:43.079Z",
+  "durationMs": 4723,
+  "capabilities": [
+    "workforce.schedule.read",
+    "workforce.schedule.draft",
+    "workforce.schedule.author",
+    "workforce.schedule.validate",
+    "workforce.schedule.publish"
+  ],
+  "surface": "admin",
+  "backend": "live",
+  "baseUrl": "http://127.0.0.1:3961",
+  "apiBaseUrl": "http://127.0.0.1:5961",
+  "commit": "ddc27fa181e6fd557b8796b6e08b4db21c17827a",
+  "underTest": null,
+  "backendProbe": {
+    "url": "http://127.0.0.1:5961/health",
+    "status": 200,
+    "body": "Healthy"
+  },
+  "backendBuild": null,
+  "backendServed": 48,
+  "backendSample": [
+    "POST http://127.0.0.1:5961/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:5961/user/login -> 200",
+    "GET http://127.0.0.1:5961/user -> 200",
+    "GET http://127.0.0.1:5961/stores/1/market -> 200",
+    "GET http://127.0.0.1:5961/user -> 200",
+    "GET http://127.0.0.1:5961/feature-flags/catalog -> 200",
+    "GET http://127.0.0.1:5961/user -> 200",
+    "GET http://127.0.0.1:5961/feature-flags/catalog -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "open the schedule page as an anonymous visitor",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T11:44:38.359Z",
+      "durationMs": 943,
+      "detail": "redirected to ?redirect=%2Fadmin%2Fworkforce-schedule",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "sign in as the manager (99999999 / 123123)",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T11:44:39.302Z",
+      "durationMs": 264,
+      "detail": "landed back on /admin/workforce-schedule",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "turn the schedule publication switch on for this store",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T11:44:39.567Z",
+      "durationMs": 1490,
+      "detail": "workforce.publication on for this store",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "the week reads as having no plan, and offers to create one",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T11:44:41.057Z",
+      "durationMs": 59,
+      "detail": "state badge: \"Ingen plan\"",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "create the draft",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T11:44:41.207Z",
+      "durationMs": 297,
+      "detail": "Revisjon 1",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "add a shift for a named employee",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T11:44:41.504Z",
+      "durationMs": 375,
+      "detail": "saved 08:00–16:00, Barista, 30 min unpaid break",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "the saved shift is on the grid, with the wage the backend priced",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T11:44:41.879Z",
+      "durationMs": 31,
+      "detail": "08:00–16:00 · Barista · kr 1 650,00",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "the three pivots render each other's grids",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T11:44:41.990Z",
+      "durationMs": 337,
+      "detail": "2 rendering defects recorded",
+      "error": null
+    },
+    {
+      "n": 9,
+      "name": "validate the draft",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T11:44:42.327Z",
+      "durationMs": 275,
+      "detail": "11 rule results, state Validert",
+      "error": null
+    },
+    {
+      "n": 10,
+      "name": "publish it",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T11:44:42.602Z",
+      "durationMs": 364,
+      "detail": "Publisert til 1 mottakere.",
+      "error": null
+    },
+    {
+      "n": 11,
+      "name": "the published week is no longer authorable",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T11:44:42.966Z",
+      "durationMs": 26,
+      "detail": "no add buttons, no publish button, 1 shift still shown",
+      "error": null
+    },
+    {
+      "n": 12,
+      "name": "what the browser said while this ran",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T11:44:43.078Z",
+      "durationMs": 0,
+      "detail": "2 recorded as findings",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "defect",
+      "summary": "workforce schedule pivot rendering",
+      "detail": "the month grid renders on the employees pivot (pages/admin/workforce-schedule.vue:135-153 — `WorkforceMonthGrid v-else` binds to the roles chain, not to the week grid)"
+    },
+    {
+      "severity": "defect",
+      "summary": "workforce schedule pivot rendering",
+      "detail": "the roles pivot shows no grid at all while the week is editable (same chain: the authoring notice is the `v-if`, the role grid its `v-else-if`)"
+    },
+    {
+      "severity": "defect",
+      "summary": "browser error during the schedule journey",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-schedule\" to \"/admin?redirect=%2Fadmin%2Fworkforce-schedule&storeId=1\" with a new navigation."
+    },
+    {
+      "severity": "defect",
+      "summary": "browser error during the schedule journey",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-schedule\" to \"/admin?redirect=%2Fadmin%2Fworkforce-schedule&storeId=1\" with a new navigation."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-schedule\" to \"/admin?redirect=%2Fadmin%2Fworkforce-schedule&storeId=1\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-schedule\" to \"/admin?redirect=%2Fadmin%2Fworkforce-schedule&storeId=1\" with a new navigation."
+  ],
+  "failedRequests": [],
+  "screenshots": [
+    "workforce-schedule-publish/01-no-plan-for-this-week.png",
+    "workforce-schedule-publish/02-draft-with-one-shift.png",
+    "workforce-schedule-publish/03-published-week.png"
+  ],
+  "error": null,
+  "artifact": {
+    "key": "live-5961-unidentified",
+    "file": "artifacts/journeys/runs/workforce-schedule-publish.live-5961-unidentified.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "live-5961-unidentified",
+    "provisional": false
+  }
+}

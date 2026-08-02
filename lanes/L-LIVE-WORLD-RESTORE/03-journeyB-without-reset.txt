@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › test/e2e/journeys/workforce-schedule-publish.spec.js:26:1 › A manager creates a draft week, staffs a shift, validates it and publishes it @live (4.8s)
+
+  1 passed (5.5s)

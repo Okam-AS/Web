@@ -1,0 +1,100 @@
+L-LIVE-WORLD-RESTORE — run receipt
+==================================
+
+WORLD (all mine, nothing borrowed, nothing killed that I did not start)
+    SQL container   okam-lwr-sql            started by me, port 15435, MSSQL_MEMORY_LIMIT_MB=1200
+    catalog         OkamLiveRestore         127 migrations, 211 tables, 25 append-only triggers
+    backend         wt-lwr-api              git worktree of OkamAPI, detached at 3579bbbc
+                                            (= feature/restaurant-modules head)
+    API             http://127.0.0.1:5961
+    web             http://127.0.0.1:3961   test/e2e/scripts/dev-server.js, API_BASE_URL=:5961
+    frontend        Web-modules feature/restaurant-modules @ ddc27fa
+    built by        test/e2e/scripts/live-world.sh, sha256
+                    8f43a477 45cb0309 b6735037 a44f370c 1d0fa3b5 e62e1f0b b12008f4 1e0c8ddf
+                    (run from a frozen copy: the live file was being edited by a sibling lane)
+
+MEASURED, ON THIS HOST
+    rebuild from empty, cold worktree (dotnet build + 127 migrations + seed)   60.0 s
+    rebuild from empty, warm                                                   42.1 s
+    snapshot (BACKUP + manifest)                                                3.6 s
+    restore + verify                                                            8-11 s  (14.5 s once)
+    verify alone                                                                4.0 s
+    the RESTORE statement itself                                            0.03-0.12 s
+    migrations replayed by a reset                                                  0
+
+THE EXIT CRITERION
+    Two live journeys in sequence against ONE world, each getting the state it needs, with no
+    migration replay between them. Three, in fact: 09-chain-three-journeys.txt runs
+    events-deposit-precondition -> workforce-schedule-publish -> workforce-flag-lever with a
+    restore before each, all green, all "backend":"live" at :5961, and __EFMigrationsHistory
+    still reading 127 at the end because nothing replayed it.
+        chain-events-deposit-precondition.live.json   passed  backendServed 12
+        chain-workforce-schedule-publish.live.json    passed  backendServed 48
+        chain-workforce-flag-lever.live.json          passed  backendServed 80
+
+PROOF THE RESET CAN FAIL (an assertion that cannot fail proves nothing)
+    05  journey B (workforce-schedule-publish) on a freshly restored world       PASSED, "Revisjon 1"
+    06  journey A (workforce-flag-lever) immediately after, NO reset             FAILED, exit 1
+            expect(.ff-row__badge).toHaveText("Av")  ->  Received: "På"
+            i.e. the workforce.publication override journey B left behind
+    07  restore                                                                  exit 0
+    08  journey A again, same world, no rebuild                                  PASSED, backendServed 80
+    02  `live-world-reset.sh verify` run against a world a journey had just used  FAILED
+            "the world carries 1 schedule revision(s)"
+        — so verify is not a check that passes on anything; it reds on the used world and
+        greens on the restored one.
+
+WHAT I FOUND THAT THE BRIEF DID NOT SAY (and that contradicts the note in the two specs)
+    03  journey A -> journey B with NO reset PASSES. The documented collision ("each begins by
+        needing the current week unplanned") does not red in that direction: once the previous
+        revision is PUBLISHED the draft view resolves no revision, so the page badge reads
+        "Ingen plan", "Opprett utkast" is offered, and journey B creates *Revisjon 2*.
+        It does not fail — it produces weaker evidence than its header claims, about a week that
+        had already been planned and published. Compare 03 (Revisjon 2) with 05 (Revisjon 1).
+        The real one-directional collision is the FLAG, not the week (06).
+
+C1 — A RESTORE IS NOT AN UNPICK
+    No UPDATE and no DELETE anywhere in live-world-reset.sh, against a guarded table or any other.
+    The catalog is replaced whole, from an image, by the engine.
+    Every reset verifies the guards came back: all 25 non-shipped triggers present, none disabled,
+    and a SHA2_256 over (name | parent table | is_disabled | full body) identical to the image's —
+    1235fd1c1036754f43b512ac1ae880601dc718e5917072dc36e03e05dac87214 — on every one of the resets
+    logged here.
+    `snapshot` refuses a world that already carries a revision, a publication or a flag override,
+    so the image can never become a way to rewind a world somebody wrote a real answer into.
+
+C7 — the image never leaves the container. /var/opt/mssql/backup/OkamLiveRestore.livesnapshot.bak
+    (10 MB) and its manifest live inside okam-lwr-sql; the script refuses any path outside
+    /var/opt/mssql/. Nothing was docker cp'd out and nothing of the sort is committed.
+
+C2 — no migration authored. The chain on the branch is applied by live-world.sh and replayed only
+    when a world is built from empty.
+
+TWO THINGS THAT COST TIME AND ARE NOT MINE
+    a) THREE `nuxt dev` watchers were running out of this one checkout (pids 6601, 39821, 85915),
+       all writing the same .nuxt/. A sibling lane's recompile deleted .nuxt/views/app.template.html
+       under my server; webpack cached the failure and my server served a Html Webpack Plugin error
+       page until restarted. Two whole chain runs died that way — 08 and 09 in this directory show
+       the wrong-world guard catching it correctly every time ("backendServed": 0, exit 1), which is
+       the guard doing exactly its job.
+    b) THE CANONICAL ARTIFACT PATH WAS OVERWRITTEN UNDER ME, TWICE, WITHIN SECONDS OF MY RUN
+       FINISHING — by another lane running the SAME journey live against ITS world at
+       http://127.0.0.1:5956. Observed directly: my run printed `1 passed`, and
+       artifacts/journeys/workforce-flag-lever.playwright.json then read
+       "apiBaseUrl":"http://127.0.0.1:5956". Every artifact in this directory was therefore copied
+       only after checking its apiBaseUrl is :5961. This is L-ARTIFACT-PROVENANCE's defect,
+       reproduced live rather than argued.
+
+FILES HERE
+    01-workforce-flag-lever.live.json          first live pass, before any reset existed
+    02-verify-on-dirty-world.txt               verify RED on a used world
+    03-journeyB-without-reset.{txt,json}       A -> B with no reset: passes, Revisjon 2
+    04-restore-1.txt                           first restore (wire check red; retry loop added after)
+    05-workforce-schedule-publish.live.json    B on a restored world, Revisjon 1
+    06-journeyA-without-reset.{txt,json}       B -> A with no reset: RED on the flag badge, exit 1
+    07-restore-2.txt                           restore
+    08-workforce-flag-lever.live.json          A after the reset: green
+    08-journeyA-after-reset.txt
+    09-chain-three-journeys.txt                the three-journey chain, all green
+    chain-*.live.json                          its three artifacts
+    live-world.sha256                          which live-world.sh built the world

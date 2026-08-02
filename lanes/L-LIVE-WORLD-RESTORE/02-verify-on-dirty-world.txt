@@ -1,0 +1,7 @@
+
+[1m== Verifying [OkamLiveRestore] is the world a journey needs[0m
+   catalog: 127 migrations, 211 tables, 25 triggers -- as imaged
+   C1: all 25 append-only triggers back, enabled, bodies identical to the image
+[31mFAILED: after the reset: the world carries 1 schedule revision(s). Both workforce
+    journeys begin by needing the current week UNPLANNED, so this world answers their first question
+    for them.[0m

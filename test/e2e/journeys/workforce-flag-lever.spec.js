@@ -47,9 +47,16 @@ test(
     // need was a world with a roster — the grid draws one row per engagement and this journey
     // authors into the first of them — and `test/e2e/scripts/live-world.sh` now seeds one.
     //
-    // It needs its OWN live world, not a shared one: it creates and publishes the current week, and
-    // `workforce-schedule-publish` begins by asserting that week has no plan. See that script's
-    // closing banner for the two-command recipe.
+    // It does NOT need its own live world; it needs a RESET before it —
+    // `test/e2e/scripts/live-world-reset.sh restore`, about nine seconds against forty-two for a
+    // rebuild from empty. What it cannot inherit is a `workforce.publication` OVERRIDE: the second
+    // step below asserts that flag reads "Av", which is the module default, and
+    // `workforce-schedule-publish` turns it on and never clears it. Run after that journey with no
+    // reset, this one reds on exactly that badge ("Expected: Av / Received: På"); run after a
+    // restore, it is green. Both were reproduced — see lanes/L-LIVE-WORLD-RESTORE/.
+    //
+    // This journey leaves the world tidier than it found it on the flag (its last step clears its own
+    // override) but not on the week, which it publishes.
     tag: ['@live'],
     capabilities: [
       'platform.feature-flags.read',

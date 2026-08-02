@@ -35,9 +35,19 @@ test(
     // pick out of the select, and a rate so the chip is a number instead of a refusal.
     // `test/e2e/scripts/live-world.sh` seeds exactly those.
     //
-    // It needs its OWN live world. It begins by asserting the current week has NO plan, and
-    // `workforce-flag-lever` ends having published that same week — a live run has no
-    // `/__fixture/reset`, so the two cannot share a database. See that script's closing banner.
+    // It does NOT need its own live world; it needs a RESET before it, which is a different and much
+    // cheaper thing — `test/e2e/scripts/live-world-reset.sh restore`, about nine seconds against
+    // forty-two for a rebuild from empty. The earlier note here said the two workforce journeys could
+    // not share a database. Measured, that is not what happens, and the truth is worse: run after
+    // `workforce-flag-lever` has published this week, step 4 below STILL passes — the draft view
+    // resolves no revision once the previous one is published, so the badge reads "Ingen plan" and
+    // this journey quietly creates *Revisjon 2* instead of *Revisjon 1*. It does not red; it produces
+    // weaker evidence than its own header claims, about a week somebody had already planned. The
+    // reset is what makes the run mean what it says.
+    //
+    // The collision that DOES red is the other way round: this journey turns `workforce.publication`
+    // on in step 3 and never clears it, and `workforce-flag-lever` opens by asserting that flag reads
+    // "Av". Reproduced, then fixed by a restore, in lanes/L-LIVE-WORLD-RESTORE/.
     tag: ['@live'],
     capabilities: [
       'workforce.schedule.read',

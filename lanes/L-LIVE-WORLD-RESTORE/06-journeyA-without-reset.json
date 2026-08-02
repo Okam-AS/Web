@@ -1,0 +1,64 @@
+{
+  "journey": "workforce-flag-lever",
+  "title": "an operator turns the schedule publication switch off and the publish becomes its typed refusal",
+  "status": "failed",
+  "startedAtUtc": "2026-08-02T11:36:02.060Z",
+  "finishedAtUtc": "2026-08-02T11:36:13.745Z",
+  "durationMs": 11685,
+  "capabilities": [
+    "platform.feature-flags.read",
+    "platform.feature-flags.write",
+    "workforce.schedule.publish"
+  ],
+  "surface": "admin",
+  "backend": "live",
+  "baseUrl": "http://127.0.0.1:3961",
+  "apiBaseUrl": "http://127.0.0.1:5961",
+  "commit": "ddc27fa181e6fd557b8796b6e08b4db21c17827a",
+  "underTest": null,
+  "backendProbe": {
+    "url": "http://127.0.0.1:5961/health",
+    "status": 200,
+    "body": "Healthy"
+  },
+  "backendServed": 9,
+  "backendSample": [
+    "POST http://127.0.0.1:5961/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:5961/user/login -> 200",
+    "GET http://127.0.0.1:5961/user -> 200",
+    "GET http://127.0.0.1:5961/stores/1/market -> 200",
+    "GET http://127.0.0.1:5961/feature-flags/catalog -> 200",
+    "GET http://127.0.0.1:5961/user -> 200",
+    "GET http://127.0.0.1:5961/stores/1 -> 200",
+    "GET http://127.0.0.1:5961/stores/1/feature-flags -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in as the manager (99999999 / 123123)",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T11:36:02.061Z",
+      "durationMs": 1519,
+      "detail": "landed on /admin/feature-flags",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "the switchboard lists every module's flags, deny-closed",
+      "status": "failed",
+      "startedAtUtc": "2026-08-02T11:36:03.580Z",
+      "durationMs": 10126,
+      "detail": null,
+      "error": "\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.ff-row').filter({ has: locator('code').filter({ hasText: 'workforce.publication' }) }).locator('.ff-row__badge')\nExpected: \u001b[32m\"Av\"\u001b[39m\nReceived: \u001b[31m\"På\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.ff-row').filter({ has: locator('code').filter({ hasText: 'workforce.publication' }) }).locator('.ff-row__badge')\u001b[22m\n\u001b[2m    24 × locator resolved to <span data-v-61e9f747=\"\" data-v-70f5b8c5=\"\" class=\"ff-row__badge ff-row__badge--on\">På</span>\u001b[22m\n\u001b[2m       - unexpected value \"På\"\u001b[22m\n"
+    }
+  ],
+  "findings": [],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=1\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=1\" with a new navigation."
+  ],
+  "failedRequests": [],
+  "screenshots": [],
+  "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.ff-row').filter({ has: locator('code').filter({ hasText: 'workforce.publication' }) }).locator('.ff-row__badge')\nExpected: \u001b[32m\"Av\"\u001b[39m\nReceived: \u001b[31m\"På\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.ff-row').filter({ has: locator('code').filter({ hasText: 'workforce.publication' }) }).locator('.ff-row__badge')\u001b[22m\n\u001b[2m    24 × locator resolved to <span data-v-61e9f747=\"\" data-v-70f5b8c5=\"\" class=\"ff-row__badge ff-row__badge--on\">På</span>\u001b[22m\n\u001b[2m       - unexpected value \"På\"\u001b[22m\n"
+}

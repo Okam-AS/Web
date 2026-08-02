@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › test/e2e/journeys/workforce-flag-lever.spec.js:39:1 › an operator turns the schedule publication switch off and the publish becomes its typed refusal @live (10.0s)
+
+  1 passed (10.9s)
