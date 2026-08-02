@@ -32,6 +32,41 @@
 import FocusTrap from '~/components/molecules/FocusTrap'
 import CloseButton from '~/components/atoms/CloseButton'
 
+// ---- THE SCROLL LOCK, AND WHY IT IS DECLARED RATHER THAN ADDED --------------------------------
+//
+// `.noscroll` (assets/sass/_layout.scss) is what stops the page behind a modal from scrolling. It
+// used to be put on the body with `document.body.classList.add('noscroll')` in `mounted`, and IT DID
+// NOT WORK — not on one page, on every modal in the application.
+//
+// vue-meta owns `body.class`. `layouts/default.vue` declares `bodyAttrs`, and vue-meta's
+// `updateAttribute` rebuilds that attribute from its OWN internal map and writes it whole with
+// `setAttribute`. Anything else that touched the attribute is erased at the next head update — and
+// the layout's `head()` reads `this.$route`, so a navigation is one. Measured in a browser on
+// 2026-08-01 with the login modal open in the real `/admin/... -> /admin?redirect=...` flow: body
+// `class=""`, computed `overflow: visible`. Adding `noscroll` by hand at that moment gave
+// `overflow: hidden`; a single `$meta().refresh()` took it straight back off with the modal still
+// open. The stylesheet was never the problem. The write was.
+//
+// So the class is DECLARED here, through the same mechanism that was deleting it. Two consequences
+// are worth stating because both are the reason this shape was chosen:
+//
+//   • IT COMPOSES. The value is an ARRAY, and vue-meta merges array-valued attributes by
+//     concatenation (`_arrayMerge` -> `destination.concat(source)`) rather than by replacement. The
+//     layout contributes `okam-ch` on the Swiss market, a page may contribute its own, this modal
+//     contributes `noscroll`, and none of them clobbers the others. A STRING here would replace the
+//     layout's value and un-theme the whole Swiss site for as long as any modal was open. See the
+//     comment in layouts/default.vue; the invariant is enforced by test/modal-scroll-lock.test.js.
+//
+//   • IT NEEDS NO REFERENCE COUNT. The classic failure of a counted body-class lock is two modals
+//     open and one closing, which releases the lock behind the other. There is no counter to get
+//     wrong here: vue-meta recomputes the attribute by walking the LIVE component tree on every
+//     refresh, so the lock is held exactly while at least one Modal is mounted. The count IS the
+//     tree. Destroying one instance re-derives the class from the one that is left.
+//
+// The class stays shared state, but it stops being MUTABLE shared state: it now has exactly one
+// writer, and its value is derived rather than accumulated.
+const BODY_SCROLL_LOCK_CLASS = 'noscroll'
+
 export default {
   components: {
     CloseButton, FocusTrap
@@ -55,14 +90,12 @@ export default {
   }),
   emits: ['close'],
   mounted () {
-    document.body.classList.add('noscroll')
     window.addEventListener('keydown', this.escapeListener)
     setTimeout(() => {
       this.active = true
     }, 100)
   },
   beforeDestroy () {
-    document.body.classList.remove('noscroll')
     window.removeEventListener('keydown', this.escapeListener)
   },
   methods: {
@@ -75,6 +108,18 @@ export default {
     escapeListener (e) {
       if (e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27) {
         this.close()
+      }
+    }
+  },
+
+  /**
+   * The scroll lock. Declared, never added — see `BODY_SCROLL_LOCK_CLASS` above for what happened
+   * the other way round, and why the value is an array.
+   */
+  head () {
+    return {
+      bodyAttrs: {
+        class: [BODY_SCROLL_LOCK_CLASS]
       }
     }
   }

@@ -552,11 +552,36 @@ const MARGIN_WEEK = {
   weekMidweek: '2026-07-22'
 };
 
+// ---- CULTURES: a long page to put BEHIND a modal -----------------------------------------------
+//
+// `/admin/lang` renders one table row per translation key, and it is the only admin surface reachable
+// from this fixture that is TALLER THAN THE VIEWPORT while also opening a real `atoms/Modal`. That
+// combination is what the scroll-lock journey needs: a modal whose exit criterion is "the page behind
+// it does not scroll" cannot be proven on a page that had nothing to scroll.
+//
+// The keys are generated rather than copied out of `translations/no.ts`. Copying them would couple a
+// browser journey to a dictionary that changes weekly, and 60 synthetic rows make the page ~3x the
+// viewport, which is all the journey needs. NOTHING here claims to be the real dictionary.
+const CULTURE_KEYS = Array.from({ length: 60 }, (_, i) => 'fixture_key_' + String(i + 1).padStart(2, '0'));
+
+function translationsFor (prefix) {
+  return CULTURE_KEYS.reduce((acc, key) => {
+    acc[key] = prefix + ' ' + key;
+    return acc;
+  }, {});
+}
+
+const CULTURES = [
+  { code: 'no', name: 'Norwegian', nativeName: 'Norsk', translations: translationsFor('Tekst') },
+  { code: 'en', name: 'English', nativeName: 'English', translations: translationsFor('Text') }
+];
+
 module.exports = {
   MANAGER_PHONE,
   WORKER_PHONE,
   PHONE_SIGNUP_ADMIN_PHONE,
   OTP,
+  CULTURES,
   STORE_ID,
   STORE_NAME,
   TIME_ZONE,
