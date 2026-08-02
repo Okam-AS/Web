@@ -1,0 +1,73 @@
+   target: Server=localhost,15436;Database=OkamLiveJourneyVP;User Id=sa;Password=***;TrustServerCertificate=True;Encrypt=False;Connect Timeout=60
+
+[1m== 1/5  Stopping any API this script previously started on :5956[0m
+   :5956 is free
+
+[1m== 2/5  Recreating an EMPTY database [OkamLiveJourneyVP][0m
+   empty: 0 tables
+
+[1m== 3/5  Applying the migration chain from empty[0m
+   127 migrations, 211 tables, 25 append-only triggers
+   C1 checked on sys.triggers: the 3 directly-seeded tables carry none
+
+[1m== 4/5  Starting the API on http://127.0.0.1:5956[0m
+   healthy (pid 50207, log: /tmp/okam-live-world-OkamLiveJourneyVP.log)
+
+[1m== 5/5  Seeding the smallest world a journey can run against[0m
+   manager signed in: applicationUserId = b9e42d40-e2cc-4d1e-ae4f-2774b8967dcd
+   store 'Live Journey Kafé' = StoreId 1, registered through POST /Stores/register (unapproved), with the manager as its StoreAdmin
+   market NO / NOK / Europe/Oslo, set through PUT /stores/1/market under the manager's bearer
+
+[1m== 5b/5  The roster, employment terms and rates the two workforce journeys need[0m
+   legal employer + the manager's own engagement (bootstrap capabilities 6) — the 3 rows with no endpoint
+   capabilities 6 -> Self+Scheduler+Manager+PayrollApprover, granted by PATCH /staff under the manager's bearer
+   roles: Barista, Kjøkken  (workforce-schedule-publish picks 'Barista' by its label)
+   staff: Astrid Vik (ANS-002), Jonas Lie (ANS-003) — created through POST /staff, not INSERTed
+   employment terms for all three engagements (37.5h manager, 30h each colleague)
+   Barista role rate 220.00 NOK/h from 2024-01-01, written by the manager through PUT .../rates
+   the manager's adminIn carries store 1 -- the shell will let them in
+   GET /feature-flags/catalog -> 18 flags
+   GET /stores/1/feature-flags -> 18 states (the manager IS a StoreAdmin)
+   no flag overrides: every flag reads its module default, deny-closed
+   GET /context -> [WorkforceSelf,WorkforceScheduler,WorkforceManager,WorkforcePayrollApprover], timeZone Europe/Oslo
+   GET /staff -> 3 engagements; GET /roles -> [Barista,Kjøkken]
+   the current week 2026-07-27..2026-08-03 has no plan -- 'Opprett utkast' will be offered
+
+-------------------------------------------------------------------------------
+A LIVE world is up.
+
+    API        http://127.0.0.1:5956           (pid 50207, log /tmp/okam-live-world-OkamLiveJourneyVP.log)
+    database   OkamLiveJourneyVP on localhost,15436   (127 migrations, 211 tables)
+    store      1  "Live Journey Kafé"   registered through POST /Stores/register, org.nr 912345678
+    market     NO / NOK / Europe/Oslo   (PUT /stores/1/market; currency derived)
+    published  no -- Approved is left false, which is what registration produces; see the header
+    manager    99999999 / 123123   (the app prefixes +47 itself)
+    roster     Astrid Vik, Ingrid Moen (the manager), Jonas Lie
+    roles      Barista (220.00 NOK/h from 2024-01-01), Kjøkken
+    week       2026-07-27..2026-08-03, no plan
+
+Run ONE live journey against it:
+
+    cd /Users/svendaneel/okam/Web-modules
+    E2E_API_BASE_URL=http://127.0.0.1:5956 E2E_WEB_PORT=3956 \
+        npm run test:e2e -- test/e2e/journeys/events-deposit-precondition.spec.js
+
+ONE, and the file path is not a convenience. In fixture mode every journey gets a fresh backend from
+`POST /__fixture/reset`; a live world has no such thing, so the journeys share one database in the
+order Playwright runs them. `workforce-flag-lever` and `workforce-schedule-publish` each CONSUME the
+current week -- both create the draft, both publish it -- so whichever runs second finds a week that
+already has a plan and no "Opprett utkast" to press. They are not flaky together; they are
+incompatible, and each needs its own world:
+
+    test/e2e/scripts/live-world.sh   &&  npm run test:e2e -- test/e2e/journeys/workforce-flag-lever.spec.js
+    test/e2e/scripts/live-world.sh   &&  npm run test:e2e -- test/e2e/journeys/workforce-schedule-publish.spec.js
+
+(`events-deposit-precondition` is the exception: it removes the override it sets, so it leaves the
+world as it found it and can share one with either of the others, or be re-run against a used one.)
+
+Artifacts land in artifacts/journeys/ with "backend": "live" and this API's origin on "apiBaseUrl" --
+and support/journey.js FAILS a live run in which the browser never reached that origin, so the label
+cannot be produced without the traffic.
+
+Stop it with:   kill 50207
+-------------------------------------------------------------------------------

@@ -27,17 +27,62 @@
 #                journeys already type is real against a live backend — that was the cheapest of the
 #                three blockers and it turned out to already be solved.
 #
-#   the store    a `Stores` row and a `StoreAdmins` row, in SQL. These are the only two writes here
-#                that do not go through the product, and they are unavoidable rather than convenient:
-#                there is no admin create-store endpoint on this branch, and the Nuxt admin shell
-#                redirects a user whose `adminIn` is empty to /registrer — so without the membership
-#                row the manager cannot reach a single admin page. `Scripts/demo/seed-workforce-demo.sh`
-#                reached the same conclusion and says so in the same words.
+#   the store    `POST /Stores/register` under the manager's own bearer, then
+#                `PUT /stores/{id}/market`. THE SAME TWO CALLS A CUSTOMER MAKES: `pages/registrer.vue:525`
+#                through `core/services/store-service.ts:45` posts the first one (spelled
+#                `/stores/register` there — ASP.NET routing is case-insensitive and it is the same
+#                action), and the second is the only production writer of Country / CurrencyCode /
+#                TimeZone there is.
+#
+#                THIS SCRIPT USED TO SAY "there is no admin create-store endpoint on this branch" and
+#                INSERT both rows. That was false, and it was the load-bearing kind of false: the
+#                registration flow is the one journey nothing else in this repo exercises, so the
+#                seed's shortcut was also the reason a real defect in it could never surface here.
+#                `StoresController.Register` is `[AllowAnonymous]` and hands `User?.Identity?.Name` to
+#                `StoreService.RegisterAsync`, which creates the `Stores` row AND — when that name
+#                resolves to a user — the caller's own `StoreAdmins` row. The login JWT sets
+#                `unique_name` to the user id and ASP.NET's inbound map sends it to `Identity.Name`,
+#                so an authenticated register is exactly the store-plus-admin pair this world needs.
+#                It also does the things an INSERT silently skipped: an address, default opening
+#                hours, the standard allergen and goods-group sets.
+#
+#                Registration does NOT set country, timezone or currency — nothing on that path does —
+#                so `PUT /stores/{id}/market` follows, under StoreAdmin authorisation, and derives the
+#                currency from the country the way the market-authority law requires.
 #
 #   the roster   a legal employer, the manager's own engagement, two colleagues, a role, employment
 #                terms and hourly rates — everything `/admin/workforce-schedule` has to have before a
-#                week can be authored at all. THREE MORE SQL ROWS and then nothing but HTTP; see the
+#                week can be authored at all. THREE SQL ROWS and then nothing but HTTP; see the
 #                section head at step 5b for which three and why each of them has no endpoint.
+#
+# ---- AND THE STORE IS LEFT UNAPPROVED, WHICH IS THE POINT ------------------------------------
+#
+# A registered store is `Approved = false` until somebody publishes it, and the old INSERT set the
+# column to 1 — so the seeded world was in a state no registration can produce. It is left false now,
+# because NOTHING these journeys traverse reads it. That was checked rather than hoped, on the whole
+# path each journey actually walks:
+#
+#   the shell's gate   `adminIn` comes from `StoreService.GetUserRoles`, whose store query carries no
+#                      Approved filter at all — so an unapproved store still lets its admin in, and
+#                      `utils/admin/nav-access.js` still resolves `store-admin` rather than `worker`.
+#   both pages         `/admin/feature-flags` and `/admin/workforce-schedule` pick their store out of
+#                      that same `adminIn` list; neither reads `store.approved`.
+#   the flag routes    `StoreAdminAuthorizationHandler` succeeds on membership or PowerUser and never
+#                      looks at the column.
+#   the workforce API  authorises from `WorkforceStaffMember.CapabilityGrants` alone —
+#                      `WorkforceAuthorizationService` has no access to Store at all.
+#
+# `Store.Approved` gates the CONSUMER surface (`Stores/{id}/consumer` 404s, `CartService` refuses a
+# prepaid cart, the public store list hides it) and none of that is on these three journeys. The
+# assertion below is the falsifiable half of this paragraph: the register response is checked to come
+# back UNAPPROVED, so if registration ever starts approving, or a journey ever starts needing it, this
+# claim breaks here instead of being believed.
+#
+# AND APPROVAL IS NOT PowerUser-ONLY EITHER, if a later journey does need it. `POST /Stores/approve/{id}`
+# is `[Authorize(Roles = PowerUser)]`, but `POST /Stores/{id}/publish` sets the same column for a plain
+# StoreAdmin of the store — it is what `/admin/overview`'s publish toggle calls. So the next journey
+# that needs a published store adds one authenticated POST here; it does not need an elevated role and
+# it does not need SQL.
 #
 # NO FLAG OVERRIDE, and no money-path row written from here. Two journeys' own subject is the flag
 # board, so seeding a flag state would be seeding the answer — and the world does not need one:
@@ -86,11 +131,11 @@ MANAGER_PHONE="${MANAGER_PHONE:-+4799999999}"   # AppSettings.DemoPhoneNumber
 MANAGER_CODE="${MANAGER_CODE:-123123}"          # AppSettings.DemoVerificationCode
 STORE_NAME="${STORE_NAME:-Live Journey Kafé}"
 TZ_ID="${TZ_ID:-Europe/Oslo}"
-# Scratch paths carry the catalog name, so two worlds standing up at once (different SQL_CONTAINER,
-# different API_PORT, different DB_NAME) cannot overwrite each other's store id or each other's log.
-# They did share both, and a second world would then have printed the first one's numbers.
+# The log path carries the catalog name, so two worlds standing up at once (different SQL_CONTAINER,
+# different API_PORT, different DB_NAME) cannot overwrite each other's log. They did share it, and a
+# second world would then have printed into the first one's file. (There is no scratch file any more:
+# the store id used to come back through one from SCOPE_IDENTITY, and now comes off the wire.)
 LOG="${LOG:-/tmp/okam-live-world-$DB_NAME.log}"
-SCRATCH="/tmp/okam-live-world-$DB_NAME.tmp"
 
 API_BASE="http://127.0.0.1:$API_PORT"
 CONN="Server=localhost,${SQL_PORT};Database=${DB_NAME};User Id=sa;Password=${SQL_SA_PASSWORD};TrustServerCertificate=True;Encrypt=False;Connect Timeout=60"
@@ -105,6 +150,11 @@ safe_conn() { printf '%s' "$CONN" | sed 's/Password=[^;]*/Password=***/'; }
     migration chain and WebApi this world should be built from, e.g.
         OKAM_API_REPO=/Users/you/okam/OkamAPI $0"
 [ -f "$OKAM_API_REPO/WebApi.csproj" ] || die "no WebApi.csproj under OKAM_API_REPO=$OKAM_API_REPO"
+
+# Checked here rather than at first use: every seeding step below builds its request body with jq, and
+# a missing tool should stop the run before a database is dropped, not sixty seconds into it.
+command -v jq >/dev/null || die "jq is required (brew install jq)"
+command -v uuidgen >/dev/null || die "uuidgen is required"
 
 # -----------------------------------------------------------------------------------------------
 # THE ABSOLUTE RULE. Checked on the RESOLVED connection string, not on a variable somebody meant to
@@ -173,20 +223,23 @@ TABLES="$(sqld -Q "SET NOCOUNT ON; SELECT CAST(COUNT(*) AS varchar) FROM sys.tab
 TRIGGERS="$(sqld -Q "SET NOCOUNT ON; SELECT CAST(COUNT(*) AS varchar) FROM sys.triggers WHERE is_ms_shipped=0;" | tr -d ' \r\n')"
 note "$APPLIED migrations, $TABLES tables, $TRIGGERS append-only triggers"
 
-# C1, CHECKED AGAINST THE LIVE CATALOG RATHER THAN ASSUMED FROM THE DIFF. These five are every table
+# C1, CHECKED AGAINST THE LIVE CATALOG RATHER THAN ASSUMED FROM THE DIFF. These THREE are every table
 # this script writes with a direct INSERT; everything else it creates goes through the product. If any
 # of them ever gains an append-only guard, the seed below becomes a C1 violation the moment it runs --
 # so it is refused HERE, by asking the database, which is the one source that cannot be out of date.
 # (25 such triggers exist on this chain, four of them on Workforce tables -- WorkforceClockEvents,
 # WorkforceAuditEvents, WorkforceSchedulePublications and the personnel-list pair -- so the list this
 # check protects is a real neighbourhood, not a hypothetical one.)
-SEEDED_TABLES="'Stores','StoreAdmins','WorkforceLegalEmployers','WorkforcePersons','WorkforceStaffMembers'"
+#
+# It was FIVE. `Stores` and `StoreAdmins` left the list when the store pair moved onto POST /Stores/register
+# -- the list shrinks only when a table stops being INSERTed into, never because a guard was inconvenient.
+SEEDED_TABLES="'WorkforceLegalEmployers','WorkforcePersons','WorkforceStaffMembers'"
 GUARDED="$(sqld -Q "SET NOCOUNT ON;
     SELECT ISNULL(STRING_AGG(t.name, ','), '')
     FROM sys.triggers tr JOIN sys.tables t ON t.object_id = tr.parent_id
     WHERE tr.is_ms_shipped = 0 AND t.name IN ($SEEDED_TABLES);" | tr -d ' \r\n')"
 [ -z "$GUARDED" ] || die "C1: these tables now carry a trigger and must not be seeded directly: $GUARDED"
-note "C1 checked on sys.triggers: the 5 directly-seeded tables carry none"
+note "C1 checked on sys.triggers: the 3 directly-seeded tables carry none"
 
 say "4/5  Starting the API on $API_BASE"
 # No module config masters are set. This world exists for the feature-flag board, whose controller is
@@ -237,21 +290,73 @@ EXISTING="$(sqld -Q "SET NOCOUNT ON; SELECT ISNULL(CAST((SELECT TOP 1 StoreId FR
 [ -z "$EXISTING" ] || die "store '$STORE_NAME' already exists (StoreId $EXISTING) in $DB_NAME.
     Rebuild from empty instead of overwriting a world:   $0"
 
-sqld -Q "SET NOCOUNT ON;
--- Country is not decoration anywhere in this estate: several modules resolve a legal jurisdiction from
--- Stores.Country and answer a typed refusal rather than defaulting when it is blank. Workforce is the
--- sharpest case: publish resolves the working-time rule pack from it, and a blank country is a typed
--- 409 workforce.rule-pack-unresolved -- a world that can draft and validate a week but never publish.
-INSERT INTO Stores (Name, Country, TimeZone, VAT, SelfCheckout, Approved, Registered)
-VALUES (N'$STORE_NAME', N'NO', N'$TZ_ID', 15, 0, 1, SYSDATETIME());
-SELECT CAST(SCOPE_IDENTITY() AS int);" > "$SCRATCH"
-STORE_ID="$(tr -d ' \r\n' < "$SCRATCH")"
-rm -f "$SCRATCH"
-[ -n "$STORE_ID" ] || die "could not create the store"
+# ---- THE STORE AND ITS ADMIN, THROUGH THE PRODUCT'S OWN REGISTRATION PATH -----------------------
+#
+# `POST /Stores/register` answers a StoreModel on success and `{"message": ...}` with a 400 on refusal,
+# so BOTH are checked: the HTTP status separately from the body, because AppException is caught in the
+# controller and returned as a well-formed JSON 400 that curl reports as a perfectly successful request.
+http_json() { # http_json METHOD URL [BODY] -> sets HTTP_BODY, HTTP_CODE
+    local method="$1" url="$2" body="${3:-}" raw
+    local args=(-sS -w '\n%{http_code}' -X "$method" "$url"
+                -H "Authorization: Bearer $MGR_TOKEN" -H 'Content-Type: application/json')
+    [ -n "$body" ] && args+=(-d "$body")
+    raw="$(curl "${args[@]}")"
+    HTTP_CODE="${raw##*$'\n'}"
+    HTTP_BODY="${raw%$'\n'*}"
+}
 
-sqld -Q "SET NOCOUNT ON;
-INSERT INTO StoreAdmins (ApplicationUserId, StoreId) VALUES (N'$MGR_USERID', $STORE_ID);" >/dev/null
-note "store '$STORE_NAME' = StoreId $STORE_ID, with the manager as its StoreAdmin"
+# VAT is the ORGANISATION NUMBER on this model (`[Range(100000000, 999999999)]`), not a tax rate -- the
+# INSERT this replaced put 15 in that column, which was a nine-digit identifier holding the number 15.
+# It is the same number the legal employer below carries, so the two rows agree about who this is.
+STORE_ORGNR="${STORE_ORGNR:-912345678}"
+http_json POST "$API_BASE/Stores/register" "$(jq -nc \
+    --arg n "$STORE_NAME" --arg ln "$STORE_NAME AS" --argjson vat "$STORE_ORGNR" \
+    '{name:$n, legalName:$ln, vat:$vat, fullAddress:"Storgata 1", zipCode:"0155", city:"Oslo",
+      acceptedTerms:true}')"
+[ "$HTTP_CODE" = "200" ] || die "POST /Stores/register answered $HTTP_CODE: $HTTP_BODY"
+STORE_ID="$(printf '%s' "$HTTP_BODY" | jq -r '.id // empty')"
+[ -n "$STORE_ID" ] || die "POST /Stores/register answered 200 with no store id: $HTTP_BODY"
+
+# The register response is where the unapproved claim above is made falsifiable. `RegisterAsync` sets
+# Approved = false and no journey needs it otherwise; if that ever changes, this line is what says so.
+REG_APPROVED="$(printf '%s' "$HTTP_BODY" | jq -r '.approved')"
+[ "$REG_APPROVED" = "false" ] || die "registration answered approved=$REG_APPROVED. The seed's claim that
+    an unapproved store is enough for these journeys was written against approved=false; re-check the
+    Approved sweep in this file's header before changing this line."
+
+# The admin row is the product's, not this script's -- so it is READ BACK rather than assumed. A
+# registration made without a bearer would have created the store and NO membership (RegisterAsync only
+# adds the StoreAdmin when the caller resolves to a user, and then throws UserNotFound at the very end),
+# which would leave a store nobody administers and every journey bouncing to /registrer.
+ADMIN_COUNT="$(sqld -Q "SET NOCOUNT ON; SELECT CAST(COUNT(*) AS varchar) FROM StoreAdmins
+    WHERE StoreId = $STORE_ID AND ApplicationUserId = N'$MGR_USERID';" | tr -d ' \r\n')"
+[ "$ADMIN_COUNT" = "1" ] || die "POST /Stores/register created store $STORE_ID but no StoreAdmins row for
+    the manager ($ADMIN_COUNT found). Registration only writes that row when the caller is authenticated;
+    check that the Authorization header reached the API."
+note "store '$STORE_NAME' = StoreId $STORE_ID, registered through POST /Stores/register (unapproved), with the manager as its StoreAdmin"
+
+# ---- THE MARKET, THROUGH THE ONLY PRODUCTION WRITER THERE IS ------------------------------------
+#
+# Country is not decoration anywhere in this estate: several modules resolve a legal jurisdiction from
+# Stores.Country and answer a typed refusal rather than defaulting when it is blank. Workforce is the
+# sharpest case: publish resolves the working-time rule pack from it, and a blank country is a typed
+# 409 workforce.rule-pack-unresolved -- a world that can draft and validate a week but never publish.
+#
+# The currency is NOT sent. Under the market-authority law the country is the single source and
+# `UpdateStoreMarketModel` has no currency field at all; NOK is derived, and asserted back below.
+http_json PUT "$API_BASE/stores/$STORE_ID/market" \
+    "$(jq -nc --arg tz "$TZ_ID" '{country:"NO", timeZone:$tz}')"
+[ "$HTTP_CODE" = "200" ] || die "PUT /stores/$STORE_ID/market answered $HTTP_CODE: $HTTP_BODY"
+MKT_COUNTRY="$(printf '%s' "$HTTP_BODY" | jq -r '.country // empty')"
+MKT_CURRENCY="$(printf '%s' "$HTTP_BODY" | jq -r '.currencyCode // empty')"
+MKT_ZONE="$(printf '%s' "$HTTP_BODY" | jq -r '.timeZone // empty')"
+MKT_CONFIGURED="$(printf '%s' "$HTTP_BODY" | jq -r '.isConfigured')"
+[ "$MKT_COUNTRY" = "NO" ] && [ "$MKT_CURRENCY" = "NOK" ] && [ "$MKT_ZONE" = "$TZ_ID" ] \
+    && [ "$MKT_CONFIGURED" = "true" ] \
+    || die "PUT /stores/$STORE_ID/market answered 200 but the market did not take:
+    country=$MKT_COUNTRY currency=$MKT_CURRENCY zone=$MKT_ZONE configured=$MKT_CONFIGURED
+    (the currency is derived from the country, never sent; a blank one means the derivation failed)"
+note "market NO / $MKT_CURRENCY / $TZ_ID, set through PUT /stores/$STORE_ID/market under the manager's bearer"
 
 # ================================================================================================
 say "5b/5  The roster, employment terms and rates the two workforce journeys need"
@@ -266,12 +371,34 @@ say "5b/5  The roster, employment terms and rates the two workforce journeys nee
 # THREE ROWS GO IN AS SQL, and each is here because no endpoint can create it:
 #
 #   the legal employer   `CreateWorkforceStaffRequest` REQUIRES a `LegalEmployerId` and nothing in the
-#                        API mints one.
+#                        API mints one. Grepped rather than assumed: no `WorkforceLegalEmployers.Add`
+#                        and no `new WorkforceLegalEmployer` exists outside the test tree.
 #   the manager's person + engagement
 #                        `POST /staff` needs the WorkforceManager capability, and capabilities are
 #                        resolved from an EXISTING engagement at this store — so the first engagement
-#                        is unavoidably out of band. It is also what opens `workforce.module` for this
-#                        store through the gate's grandfather probe, with no override row.
+#                        is unavoidably out of band. `WorkforceAuthorizationService` reads
+#                        `CapabilityGrants` and nothing else; a PowerUser with no grant is forbidden
+#                        too, so there is no elevated way round it either. It is also what opens
+#                        `workforce.module` for this store through the gate's grandfather probe, with
+#                        no override row.
+#
+# THE GRANTS ON THAT ENGAGEMENT ARE THEMSELVES AN AUTHZ WRITE, and they do NOT all have to be made
+# here. The bootstrap needs exactly two bits and they are named by what they unlock:
+#
+#   WorkforceManager(4)    the capability `PATCH /staff/{id}` itself requires.
+#   WorkforceScheduler(2)  `GET /staff/{id}` requires it, and that read is the only way to obtain the
+#                          If-Match revision the PATCH will not proceed without.
+#
+# So the INSERT grants 6, and the product grants the rest: the PATCH below replaces the set with all
+# four under the manager's own bearer, with an If-Match precondition and the module's audit delta. The
+# two that move onto the product path are the ones worth moving — WorkforcePayrollApprover(8) is the
+# capability that gates wage on the read side and rate writes on the write side, i.e. exactly the
+# money-adjacent grant that should never appear in a database with no actor attached to it (C4).
+#
+# WORTH RECORDING WHILE IT IS TRUE: nothing in `UpdateStaffAsync` stops a manager patching their OWN
+# engagement, so this self-escalation 6 -> 15 is a path a real manager has too. That is the product's
+# behaviour, not this seed's shortcut; it is used here because it is real, and it is written down here
+# because a reader should not have to discover it from a seed script.
 #
 # EVERYTHING ELSE IS THE REAL HTTP API, under the manager's own bearer. That is not ceremony: it is
 # how the seeded world gets an actor on the rows that need one (C4), and it is how the write path gets
@@ -283,17 +410,12 @@ say "5b/5  The roster, employment terms and rates the two workforce journeys nee
 # first thing both journeys do and a seeded draft would be seeding their answer. The read-back below
 # asserts the week really is unplanned rather than trusting that nothing created one.
 
-command -v jq >/dev/null || die "jq is required (brew install jq)"
-command -v uuidgen >/dev/null || die "uuidgen is required"
-
 LEGAL_EMPLOYER_ID="$(uuidgen | tr 'A-Z' 'a-z')"
 MGR_PERSON_ID="$(uuidgen | tr 'A-Z' 'a-z')"
 MGR_STAFF_ID="$(uuidgen | tr 'A-Z' 'a-z')"
 
-# CapabilityGrants 15 = WorkforceSelf(1)|WorkforceScheduler(2)|WorkforceManager(4)|WorkforcePayrollApprover(8).
-# PayrollApprover is not optional decoration here: the wage fields are gated on it on the READ side too,
-# so without it the schedule range answers with no per-shift cost at all and the grid draws no wage chip
-# — which looks exactly like an unpriced shift and is not.
+# CapabilityGrants 6 = WorkforceScheduler(2)|WorkforceManager(4) — the bootstrap pair, and nothing else.
+# WorkforceSelf(1) and WorkforcePayrollApprover(8) are added by the PATCH below, through the product.
 sqld -Q "SET NOCOUNT ON;
 INSERT INTO WorkforceLegalEmployers (LegalEmployerId, OrganizationNumber, Name, EffectiveFromUtc, CreatedAtUtc)
 VALUES ('$LEGAL_EMPLOYER_ID', N'912345678', N'$STORE_NAME AS', '2020-01-01T00:00:00', SYSUTCDATETIME());
@@ -306,8 +428,8 @@ INSERT INTO WorkforceStaffMembers
    EmploymentNumber, CapabilityGrants, ActiveFromUtc, IsActive, CreatedAtUtc)
 VALUES
   ('$MGR_STAFF_ID', $STORE_ID, '$MGR_PERSON_ID', '$LEGAL_EMPLOYER_ID', '2020-01-01T00:00:00',
-   N'ANS-001', 15, '2020-01-01T00:00:00', 1, SYSUTCDATETIME());" >/dev/null
-note "legal employer + the manager's own engagement (capabilities 15) — the 3 rows with no endpoint"
+   N'ANS-001', 6, '2020-01-01T00:00:00', 1, SYSUTCDATETIME());" >/dev/null
+note "legal employer + the manager's own engagement (bootstrap capabilities 6) — the 3 rows with no endpoint"
 
 WF="$API_BASE/workforce/stores/$STORE_ID"
 
@@ -327,6 +449,30 @@ check() { # check JSON LABEL
         && die "$2 was refused: $1"
     return 0
 }
+
+# ---- 6 -> 15, THROUGH PATCH /staff/{id} ---------------------------------------------------------
+#
+# The read first, because its response carries the If-Match revision (an opaque base64 rowversion; it
+# is null under SQLite and non-null here, which is one more reason this world is SQL Server). The read
+# ALSO proves the bootstrap engagement took: a 403 here means the two grants did not land.
+MGR_DETAIL="$(curl -sS "$WF/staff/$MGR_STAFF_ID" -H "Authorization: Bearer $MGR_TOKEN")"
+MGR_REVISION="$(printf '%s' "$MGR_DETAIL" | jq -r '.revision // empty')"
+[ -n "$MGR_REVISION" ] || die "GET /staff/$MGR_STAFF_ID answered no revision, so the capability PATCH has
+    no If-Match to send. Either the bootstrap engagement did not take (WorkforceScheduler is what this
+    read requires) or the rowversion is null, which on SQL Server it never is: $MGR_DETAIL"
+
+MGR_PATCHED="$(curl -sS -X PATCH "$WF/staff/$MGR_STAFF_ID" \
+    -H "Authorization: Bearer $MGR_TOKEN" -H 'Content-Type: application/json' \
+    -H "Idempotency-Key: $(uuidgen)" -H "If-Match: $MGR_REVISION" \
+    -d '{"capabilities":["WorkforceSelf","WorkforceScheduler","WorkforceManager","WorkforcePayrollApprover"]}')"
+check "$MGR_PATCHED" "PATCH /staff/$MGR_STAFF_ID (capabilities)"
+# Read back off the RESPONSE, not off the request: a 200 that echoed the submitted set without applying
+# it would be indistinguishable from a working PATCH, and the whole point of this step is that the two
+# money-adjacent grants are now the server's write rather than the seed's.
+MGR_CAPS="$(printf '%s' "$MGR_PATCHED" | jq -r '[.capabilities // [] | .[]] | sort | join(",")')"
+[ "$MGR_CAPS" = "WorkforceManager,WorkforcePayrollApprover,WorkforceScheduler,WorkforceSelf" ] \
+    || die "PATCH /staff/$MGR_STAFF_ID did not grant all four capabilities. seen: [$MGR_CAPS]"
+note "capabilities 6 -> Self+Scheduler+Manager+PayrollApprover, granted by PATCH /staff under the manager's bearer"
 
 ROLES_JSON="$(api PUT "$WF/roles" "$(jq -nc '{roles:[
   {name:"Barista",  station:"Bar",     color:"#C2703D", sortOrder:1, effectiveFromUtc:"2020-01-01T00:00:00Z"},
@@ -478,7 +624,9 @@ A LIVE world is up.
 
     API        $API_BASE           (pid $API_PID, log $LOG)
     database   $DB_NAME on localhost,$SQL_PORT   ($APPLIED migrations, $TABLES tables)
-    store      $STORE_ID  "$STORE_NAME"
+    store      $STORE_ID  "$STORE_NAME"   registered through POST /Stores/register, org.nr $STORE_ORGNR
+    market     NO / $MKT_CURRENCY / $TZ_ID   (PUT /stores/$STORE_ID/market; currency derived)
+    published  no -- Approved is left false, which is what registration produces; see the header
     manager    ${MANAGER_PHONE#+47} / $MANAGER_CODE   (the app prefixes +47 itself)
     roster     Astrid Vik, Ingrid Moen (the manager), Jonas Lie
     roles      Barista (220.00 NOK/h from 2024-01-01), Kjøkken
