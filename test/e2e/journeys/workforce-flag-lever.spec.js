@@ -41,6 +41,16 @@ test(
   journeyDetails({
     journey: 'workforce-flag-lever',
     surface: 'admin',
+    // NOT `@fixture`. Nothing in this file names a fixture id: the catalog it pins is the eighteen
+    // keys `Program.cs` composes, the flag it flips is a real per-store override written by the
+    // browser, and the store comes from whatever `adminIn` the signed-in manager has. What it DID
+    // need was a world with a roster — the grid draws one row per engagement and this journey
+    // authors into the first of them — and `test/e2e/scripts/live-world.sh` now seeds one.
+    //
+    // It needs its OWN live world, not a shared one: it creates and publishes the current week, and
+    // `workforce-schedule-publish` begins by asserting that week has no plan. See that script's
+    // closing banner for the two-command recipe.
+    tag: ['@live'],
     capabilities: [
       'platform.feature-flags.read',
       'platform.feature-flags.write',
@@ -101,11 +111,17 @@ test(
       await flip(page, 'on', PUBLICATION, PUBLICATION);
       const publication = page.locator('.ff-row', { has: page.locator('code', { hasText: PUBLICATION }) });
       await expect(publication.locator('.ff-row__badge')).toHaveText('På');
-      // The audit stamp is the server's, not ours: the fixture resolves the actor from the bearer,
-      // the same way `ActorClaims.ResolveUserId` does. A flip nobody can be attributed to is not a
-      // kill switch anybody should trust.
-      await expect(publication.locator('.ff-row__meta')).toContainText('user-manager');
-      return 'override written, attributed to user-manager';
+      // The audit stamp is the server's, not ours: the actor is resolved from the bearer by
+      // `ActorClaims.ResolveUserId`, which means it is a user id against a real backend and the
+      // string `user-manager` against the fixture. Pinning either literal would make this journey
+      // true in exactly one world, so what is pinned is the CLAIM: somebody is named, and it is not
+      // the `ff_actor_unknown` fallback the page prints for a row that carries no actor at all.
+      // A flip nobody can be attributed to is not a kill switch anybody should trust.
+      const stamp = publication.locator('.ff-row__meta');
+      await expect(stamp).toHaveCount(1);
+      await expect(stamp).toContainText('Sist endret av');
+      await expect(stamp).not.toContainText('ukjent');
+      return 'override written, attributed: ' + (await stamp.textContent()).trim().replace(/\s+/g, ' ');
     });
 
     await journey.step('build a week and validate it', async () => {
@@ -140,7 +156,9 @@ test(
       await flip(page, 'off', PUBLICATION, PUBLICATION);
       const publication = page.locator('.ff-row', { has: page.locator('code', { hasText: PUBLICATION }) });
       await expect(publication.locator('.ff-row__badge')).toHaveText('Av');
-      return PUBLICATION + ' is off for store 42';
+      // The store is whichever one the signed-in manager administers, and this detail lands in an
+      // artifact somebody reads later — so it names no id rather than naming the fixture's.
+      return PUBLICATION + ' is off for this store';
     });
 
     // ---- THE EXIT CRITERION ----------------------------------------------------------------------

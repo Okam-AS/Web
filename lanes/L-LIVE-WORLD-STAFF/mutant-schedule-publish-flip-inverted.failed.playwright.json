@@ -1,0 +1,102 @@
+{
+  "journey": "workforce-schedule-publish",
+  "title": "A manager creates a draft week, staffs a shift, validates it and publishes it",
+  "status": "failed",
+  "startedAtUtc": "2026-08-02T09:45:14.379Z",
+  "finishedAtUtc": "2026-08-02T09:45:27.244Z",
+  "durationMs": 12865,
+  "capabilities": [
+    "workforce.schedule.read",
+    "workforce.schedule.draft",
+    "workforce.schedule.author",
+    "workforce.schedule.validate",
+    "workforce.schedule.publish"
+  ],
+  "surface": "admin",
+  "backend": "live",
+  "baseUrl": "http://127.0.0.1:3952",
+  "apiBaseUrl": "http://127.0.0.1:5952",
+  "commit": "174a550cad5934e0209da12da624e6627e06ac25",
+  "underTest": null,
+  "backendProbe": {
+    "url": "http://127.0.0.1:5952/health",
+    "status": 200,
+    "body": "Healthy"
+  },
+  "backendServed": 34,
+  "backendSample": [
+    "POST http://127.0.0.1:5952/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:5952/user/login -> 200",
+    "GET http://127.0.0.1:5952/user -> 200",
+    "GET http://127.0.0.1:5952/stores/1/market -> 200",
+    "GET http://127.0.0.1:5952/user -> 200",
+    "GET http://127.0.0.1:5952/feature-flags/catalog -> 200",
+    "GET http://127.0.0.1:5952/user -> 200",
+    "GET http://127.0.0.1:5952/feature-flags/catalog -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "open the schedule page as an anonymous visitor",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T09:45:14.379Z",
+      "durationMs": 1027,
+      "detail": "redirected to ?redirect=%2Fadmin%2Fworkforce-schedule",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "sign in as the manager (99999999 / 123123)",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T09:45:15.406Z",
+      "durationMs": 214,
+      "detail": "landed back on /admin/workforce-schedule",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "turn the schedule publication switch on for this store",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T09:45:15.620Z",
+      "durationMs": 1427,
+      "detail": "workforce.publication on for this store",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "the week reads as having no plan, and offers to create one",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T09:45:17.047Z",
+      "durationMs": 27,
+      "detail": "state badge: \"Ingen plan\"",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "create the draft",
+      "status": "failed",
+      "startedAtUtc": "2026-08-02T09:45:17.147Z",
+      "durationMs": 10079,
+      "detail": null,
+      "error": "\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.wf-page__toast')\nExpected substring: \u001b[32m\"Utkast opprettet\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.wf-page__toast')\u001b[22m\n"
+    }
+  ],
+  "findings": [],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-schedule\" to \"/admin?redirect=%2Fadmin%2Fworkforce-schedule&storeId=1\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-schedule\" to \"/admin?redirect=%2Fadmin%2Fworkforce-schedule&storeId=1\" with a new navigation.",
+    "Failed to load resource: the server responded with a status of 409 (Conflict)"
+  ],
+  "failedRequests": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:5952/workforce/stores/1/schedules/drafts",
+      "status": 409
+    }
+  ],
+  "screenshots": [
+    "workforce-schedule-publish/01-no-plan-for-this-week.png"
+  ],
+  "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.wf-page__toast')\nExpected substring: \u001b[32m\"Utkast opprettet\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.wf-page__toast')\u001b[22m\n"
+}

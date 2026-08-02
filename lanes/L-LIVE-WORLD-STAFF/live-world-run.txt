@@ -1,0 +1,202 @@
+   target: Server=localhost,15434;Database=OkamLiveJourneyStaff;User Id=sa;Password=***;TrustServerCertificate=True;Encrypt=False;Connect Timeout=60
+
+== 1/5  Stopping any API this script previously started on :5952
+   :5952 is free
+
+== 2/5  Recreating an EMPTY database [OkamLiveJourneyStaff]
+   empty: 0 tables
+
+== 3/5  Applying the migration chain from empty
+   127 migrations, 211 tables, 25 append-only triggers
+   C1 checked on sys.triggers: the 5 directly-seeded tables carry none
+
+== 4/5  Starting the API on http://127.0.0.1:5952
+   healthy (pid 37262, log: /tmp/okam-live-world-OkamLiveJourneyStaff.log)
+
+== 5/5  Seeding the smallest world a journey can run against
+   manager signed in: applicationUserId = 80ab49e9-2cbd-4f03-a9f4-b752b58de6af
+   store 'Live Journey Kafé' = StoreId 1, with the manager as its StoreAdmin
+
+== 5b/5  The roster, employment terms and rates the two workforce journeys need
+   legal employer + the manager's own engagement (capabilities 15) — the 3 rows with no endpoint
+   roles: Barista, Kjøkken  (workforce-schedule-publish picks 'Barista' by its label)
+   staff: Astrid Vik (ANS-002), Jonas Lie (ANS-003) — created through POST /staff, not INSERTed
+   employment terms for all three engagements (37.5h manager, 30h each colleague)
+   Barista role rate 220.00 NOK/h from 2024-01-01, written by the manager through PUT .../rates
+   the manager's adminIn carries store 1 -- the shell will let them in
+   GET /feature-flags/catalog -> 18 flags
+   GET /stores/1/feature-flags -> 18 states (the manager IS a StoreAdmin)
+   no flag overrides: every flag reads its module default, deny-closed
+   GET /context -> [WorkforceSelf,WorkforceScheduler,WorkforceManager,WorkforcePayrollApprover], timeZone Europe/Oslo
+   GET /staff -> 3 engagements; GET /roles -> [Barista,Kjøkken]
+   the current week 2026-07-27..2026-08-03 has no plan -- 'Opprett utkast' will be offered
+
+-------------------------------------------------------------------------------
+A LIVE world is up.
+
+    API        http://127.0.0.1:5952           (pid 37262, log /tmp/okam-live-world-OkamLiveJourneyStaff.log)
+    database   OkamLiveJourneyStaff on localhost,15434   (127 migrations, 211 tables)
+    store      1  "Live Journey Kafé"
+    manager    99999999 / 123123   (the app prefixes +47 itself)
+    roster     Astrid Vik, Ingrid Moen (the manager), Jonas Lie
+    roles      Barista (220.00 NOK/h from 2024-01-01), Kjøkken
+    week       2026-07-27..2026-08-03, no plan
+
+Run ONE live journey against it:
+
+    cd /Users/svendaneel/okam/Web-modules
+    E2E_API_BASE_URL=http://127.0.0.1:5952 E2E_WEB_PORT=3952 \
+        npm run test:e2e -- test/e2e/journeys/events-deposit-precondition.spec.js
+
+ONE, and the file path is not a convenience. In fixture mode every journey gets a fresh backend from
+`POST /__fixture/reset`; a live world has no such thing, so the journeys share one database in the
+order Playwright runs them. `workforce-flag-lever` and `workforce-schedule-publish` each CONSUME the
+current week -- both create the draft, both publish it -- so whichever runs second finds a week that
+already has a plan and no "Opprett utkast" to press. They are not flaky together; they are
+incompatible, and each needs its own world:
+
+    test/e2e/scripts/live-world.sh   &&  npm run test:e2e -- test/e2e/journeys/workforce-flag-lever.spec.js
+    test/e2e/scripts/live-world.sh   &&  npm run test:e2e -- test/e2e/journeys/workforce-schedule-publish.spec.js
+
+(`events-deposit-precondition` is the exception: it removes the override it sets, so it leaves the
+world as it found it and can share one with either of the others, or be re-run against a used one.)
+
+Artifacts land in artifacts/journeys/ with "backend": "live" and this API's origin on "apiBaseUrl" --
+and support/journey.js FAILS a live run in which the browser never reached that origin, so the label
+cannot be produced without the traffic.
+
+Stop it with:   kill 37262
+-------------------------------------------------------------------------------
+
+
+===============================================================================
+THE FOUR RUNS, in the order they were made.
+
+Everything below is this lane's own, started by this lane:
+
+  SQL   okam-lws-staff-sql  on localhost,15434
+        (okam-lws-sql belongs to L-LIVE-WORLD-SEED and zen_pasteur predates this
+         program; neither was touched.)
+  API   http://127.0.0.1:5952, built from a DETACHED WORKTREE of OkamAPI at
+        3579bbbc -- /Users/svendaneel/okam/wt-lws-staff-api -- rather than from
+        the seam lane's checkout, because that one's WebApi is still running on
+        :5951 for a human walk and MSBuild cannot overwrite a running binary.
+  web   http://127.0.0.1:3952, `nuxt dev` compiled with
+        API_BASE_URL=http://127.0.0.1:5952.
+
+The world is rebuilt FROM EMPTY before each journey. That is not tidiness: a
+live run has no `POST /__fixture/reset`, and both workforce journeys consume the
+current week.
+
+-------------------------------------------------------------------------------
+1. GUARD PROOF  (expected RED, and red)
+
+Before trusting any artifact of my own I checked the guard is the one 9a5900a
+fixed -- `support/journey.js:410`, which RE-THROWS after the artifact is written
+-- and then reproduced the failure it exists for.
+
+The browser was driven against :5952 while the run DECLARED :5951: a healthy
+real API, not the fixture, so neither preflight refused it. Every step of the
+journey passed. The run still failed, and playwright exited 1 -- which is the
+half that used to be broken: the artifact said "failed" and the runner printed
+"1 passed" and exited 0.
+
+  status=failed  backend=live  apiBaseUrl=http://127.0.0.1:5951  backendProbe=200  backendServed=0  commit=174a550cad59
+  steps: passed, passed, passed, passed, passed, passed
+  error: This journey is labelled live against http://127.0.0.1:5951, and the browser received NOT ONE response from that origin. Whatever it exercised, it was not that backend — ...
+
+-------------------------------------------------------------------------------
+2. workforce-flag-lever, LIVE  (green)
+
+  status=passed  backend=live  apiBaseUrl=http://127.0.0.1:5952  backendProbe=200  backendServed=80  commit=174a550cad59
+   1. sign in as the manager (99999999 / 123123)
+        landed on /admin/feature-flags
+   2. the switchboard lists every module's flags, deny-closed
+        18 flags across 6 modules; workforce.publication reads "Av"
+   3. turn schedule publication ON
+        override written, attributed: Sist endret av a83f5ce1-d036-4d63-914f-fd07496b858d — 02.08.2026, 11:42
+   4. build a week and validate it
+        one shift, revision Validert — publish is offered
+   5. turn the switch back OFF while the week waits to be published
+        workforce.publication is off for this store
+   6. the publish now answers its typed refusal, naming the flag
+        Vaktplanen er skrivebeskyttet Bryteren workforce.publication står av for denne butikken, så vaktplanen kan leses, men ikke endres eller publiseres. Slå den på u
+   7. READ-ONLY, not dark: the week is all still there
+        one shift, revision and state band all still rendered
+   8. turn it back ON and publish
+        Publisert til 1 mottakere.
+   9. removing the override reverts the flag to the module default
+        override removed; the flag reads the module default again
+  10. what the browser said while this ran
+        2 recorded as findings
+  findings: pageerror: Navigation cancelled from "/admin?redirect=%2Fadmin%2Ffeature-flags" to "/admin?redirect=%2Fadmin%2; pageerror: Navigation cancelled from "/admin?redirect=%2Fadmin%2Ffeature-flags" to "/admin?redirect=%2Fadmin%2
+  refused (the journey's own subject): POST /workforce/stores/1/schedules/d596e275-0903-447f-80bf-1ae7b4a967b4/publish -> 409
+
+-------------------------------------------------------------------------------
+3. MUTATION PROOF: the feature-flag flip is load-bearing LIVE  (expected RED, and red)
+
+`workforce-schedule-publish` is one of the six journeys a sweep found green only
+because the fixture modelled no feature flags, and it was fixed by making it
+flip its own switch through the product. Live that switch is real, so the thing
+worth proving is that a flip which SILENTLY fails is visible.
+
+Step 3 was inverted -- `data-flag-on` -> `data-flag-off` -- so the click still
+writes an override, the toast still names the flag, and step 3 still passes.
+The switch is simply left off. On a real store the very next write is refused:
+
+  status=failed   steps: passed, passed, passed, passed, failed
+  refused: POST /workforce/stores/1/schedules/drafts -> 409
+  stopped at: create the draft -- no `Utkast opprettet` toast ever appeared.
+  The spec was restored immediately; run 4 is the restored file on a fresh world.
+
+-------------------------------------------------------------------------------
+4. workforce-schedule-publish, LIVE  (green)
+
+  status=passed  backend=live  apiBaseUrl=http://127.0.0.1:5952  backendProbe=200  backendServed=48  commit=174a550cad59
+   1. open the schedule page as an anonymous visitor
+        redirected to ?redirect=%2Fadmin%2Fworkforce-schedule
+   2. sign in as the manager (99999999 / 123123)
+        landed back on /admin/workforce-schedule
+   3. turn the schedule publication switch on for this store
+        workforce.publication on for this store
+   4. the week reads as having no plan, and offers to create one
+        state badge: "Ingen plan"
+   5. create the draft
+        Revisjon 1
+   6. add a shift for a named employee
+        saved 08:00–16:00, Barista, 30 min unpaid break
+   7. the saved shift is on the grid, with the wage the backend priced
+        08:00–16:00 · Barista · kr 1 650,00
+   8. the three pivots render each other's grids
+        2 rendering defects recorded
+   9. validate the draft
+        11 rule results, state Validert
+  10. publish it
+        Publisert til 1 mottakere.
+  11. the published week is no longer authorable
+        no add buttons, no publish button, 1 shift still shown
+  12. what the browser said while this ran
+        2 recorded as findings
+  findings: the month grid renders on the employees pivot (pages/admin/workforce-schedule.vue:135-153 — `WorkforceMonthGri; the roles pivot shows no grid at all while the week is editable (same chain: the authoring notice is the `v-if; pageerror: Navigation cancelled from "/admin?redirect=%2Fadmin%2Fworkforce-schedule" to "/admin?redirect=%2Fad; pageerror: Navigation cancelled from "/admin?redirect=%2Fadmin%2Fworkforce-schedule" to "/admin?redirect=%2Fad
+  refused: (none)
+
+-------------------------------------------------------------------------------
+WHAT THE LIVE RUNS SAID THAT THE FIXTURE COULD NOT
+
+  * `kr 1 650,00` on the shift chip is the BACKEND's arithmetic over a rate this
+    seed wrote through `PUT /roles/{id}/rates` under the manager's bearer:
+    7.5 paid hours x 220.00 NOK. The fixture's figure was its own.
+  * `11 rule results` came from the real Norwegian working-time rule pack, which
+    `WorkforceRulePackSeed` installs at startup and which publish resolves from
+    `Stores.Country`. The fixture had a different number and no pack at all.
+  * The flag board's audit stamp reads a real ApplicationUserId, not the
+    fixture's `user-manager` literal.
+  * Both pivot-rendering defects `workforce-schedule-publish` records REPRODUCE
+    live, so they are product defects and not fixture artefacts.
+
+FIXTURE MODE IS UNCHANGED. Both journeys still run and pass against the throwaway
+fixture (own ports 3953/4953): `2 passed (27.9s)`. One assertion had to move to
+be true in both worlds -- the flag board's audit stamp pinned the literal
+`user-manager`, which is the fixture's actor. What is pinned now is the claim it
+was making: somebody is named, and it is not the `ff_actor_unknown` fallback.
+

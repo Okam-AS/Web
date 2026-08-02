@@ -28,6 +28,17 @@ test(
   journeyDetails({
     journey: 'workforce-schedule-publish',
     surface: 'admin',
+    // NOT `@fixture`. This journey asserts no fixture id: it types the demo sign-in (a real
+    // `AppSettings` value), lands on whatever store the manager administers, and every figure it
+    // reads back — the revision number, the wage chip, the recipient count — is one the server
+    // produced. What it needed was a world: a roster to draw rows from, a role called Barista to
+    // pick out of the select, and a rate so the chip is a number instead of a refusal.
+    // `test/e2e/scripts/live-world.sh` seeds exactly those.
+    //
+    // It needs its OWN live world. It begins by asserting the current week has NO plan, and
+    // `workforce-flag-lever` ends having published that same week — a live run has no
+    // `/__fixture/reset`, so the two cannot share a database. See that script's closing banner.
+    tag: ['@live'],
     capabilities: [
       'workforce.schedule.read',
       'workforce.schedule.draft',
@@ -65,7 +76,9 @@ test(
       await page.locator('[data-flag-on="workforce.publication"]').click();
       await expect(page.locator('.ff-page__toast')).toContainText('workforce.publication', { timeout: 15000 });
       await page.goto('/admin/workforce-schedule');
-      return 'workforce.publication on for store 42';
+      // Names no store id: this detail is read out of an artifact later, and against a live backend
+      // the store is whichever one the signed-in manager administers.
+      return 'workforce.publication on for this store';
     });
 
     await journey.step('the week reads as having no plan, and offers to create one', async () => {

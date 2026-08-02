@@ -48,10 +48,18 @@
 // wrong world.
 //
 // For a long time that exclusion selected EVERY journey, so live mode ran nothing at all — which was
-// the honest answer while no live world existed to run against. `events-deposit-precondition` now
-// carries `@live` and is the one journey selected here; its header says exactly what made it
-// eligible, and `test/e2e/support/journey.js` refuses to write a live-labelled artifact for a run
-// whose browser never reached the origin it names.
+// the honest answer while no live world existed to run against. Three journeys now carry `@live`
+// (`events-deposit-precondition`, `workforce-flag-lever`, `workforce-schedule-publish`); each
+// header says exactly what made it eligible, and `test/e2e/support/journey.js` refuses to write a
+// live-labelled artifact for a run whose browser never reached the origin it names.
+//
+// ONE JOURNEY PER LIVE WORLD. Fixture mode gives every journey a clean backend (`/__fixture/reset`
+// in the recorder fixture); live mode has nothing of the kind, so `@live` journeys run in file order
+// against ONE database and inherit each other's writes. The two workforce ones each create and
+// publish the current week, and each begins by needing that week unplanned — so a live run that
+// selects both passes the first and fails the second, for a reason that has nothing to do with the
+// product. Select by path (`npm run test:e2e -- test/e2e/journeys/<one>.spec.js`) and rebuild the
+// world in between; live-world.sh prints the two commands.
 
 const { defineConfig, devices } = require('@playwright/test');
 

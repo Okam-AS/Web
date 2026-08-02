@@ -13,11 +13,11 @@
 # pass against the wrong world while its artifact claimed `"backend": "live"`. Un-tagging a journey
 # without first building the world it needs is the one outcome worse than having no live run at all.
 #
-# This script builds that world. It is deliberately the SMALLEST one: it seeds what
-# `events-deposit-precondition` needs and nothing else, because the point is to prove the PATH — real
-# API, real database, real browser, an artifact naming the backend it reached — not to reproduce the
-# six-module demo. `OkamAPI/Scripts/demo/demo-up.sh` is the big world; this is the small one, and the
-# next journey to go live extends the seed section below rather than reinventing the plumbing.
+# This script builds that world. It is deliberately the SMALLEST one that the live-tagged journeys
+# need, because the point is to prove the PATH — real API, real database, real browser, an artifact
+# naming the backend it reached — not to reproduce the six-module demo.
+# `OkamAPI/Scripts/demo/demo-up.sh` is the big world; this is the small one, and the next journey to
+# go live extends the seed section below rather than reinventing the plumbing.
 #
 # ---- WHAT IT SEEDS, AND WHY SO LITTLE ---------------------------------------------------------
 #
@@ -34,11 +34,22 @@
 #                row the manager cannot reach a single admin page. `Scripts/demo/seed-workforce-demo.sh`
 #                reached the same conclusion and says so in the same words.
 #
-# NOTHING ELSE. No flag override, no money-path row, no projection. The journey's own subject is the
-# feature-flag board, so seeding a flag state would be seeding the answer; and a seed that constructed
-# a deposit, capture or settlement line would need an actor to name and would be the C4 violation it
-# was meant to guard against. The flag writes the journey makes are made BY THE BROWSER, under the
-# manager's own bearer token, which is what puts a real actor on them.
+#   the roster   a legal employer, the manager's own engagement, two colleagues, a role, employment
+#                terms and hourly rates — everything `/admin/workforce-schedule` has to have before a
+#                week can be authored at all. THREE MORE SQL ROWS and then nothing but HTTP; see the
+#                section head at step 5b for which three and why each of them has no endpoint.
+#
+# NO FLAG OVERRIDE, and no money-path row written from here. Two journeys' own subject is the flag
+# board, so seeding a flag state would be seeding the answer — and the world does not need one:
+# `workforce.setup` is the one flag in its family that ships ON (`WorkforceFeatureFlags.DefaultOn`),
+# and `workforce.module` opens for this store WITHOUT a row because `WorkforceModuleGate` falls back
+# to a data probe — "does this store already have an engagement" — precisely so that turning a gate on
+# cannot dark a store that is already using the module. Seeding the roster is therefore what opens the
+# module, and the flag board still reads deny-closed with zero overrides, which is checked below.
+#
+# Rates ARE a money path (a rate is what prices a payroll-bearing hour), and every one of them is
+# written by `PUT .../rates` under the manager's own bearer token — so the actor on the row is the
+# person who caused it, not this script (C4). Nothing here inserts a rate, a cost or a punch in SQL.
 #
 # ---- THE ABSOLUTE RULES -----------------------------------------------------------------------
 #
@@ -52,9 +63,12 @@
 #
 #   OKAM_API_REPO=/path/to/OkamAPI SQL_CONTAINER=my-sql SQL_PORT=15433 test/e2e/scripts/live-world.sh
 #
-# then, in another terminal, what it prints:
+# then, in another terminal, what it prints — ONE journey per world, for the reason the closing banner
+# gives in full: a live run has no `/__fixture/reset`, and the two workforce journeys each consume the
+# current week.
 #
-#   E2E_API_BASE_URL=http://127.0.0.1:5951 E2E_WEB_PORT=3951 npm run test:e2e
+#   E2E_API_BASE_URL=http://127.0.0.1:5951 E2E_WEB_PORT=3951 \
+#       npm run test:e2e -- test/e2e/journeys/workforce-flag-lever.spec.js
 #
 set -euo pipefail
 
@@ -72,7 +86,11 @@ MANAGER_PHONE="${MANAGER_PHONE:-+4799999999}"   # AppSettings.DemoPhoneNumber
 MANAGER_CODE="${MANAGER_CODE:-123123}"          # AppSettings.DemoVerificationCode
 STORE_NAME="${STORE_NAME:-Live Journey Kafé}"
 TZ_ID="${TZ_ID:-Europe/Oslo}"
-LOG="${LOG:-/tmp/okam-live-world-api.log}"
+# Scratch paths carry the catalog name, so two worlds standing up at once (different SQL_CONTAINER,
+# different API_PORT, different DB_NAME) cannot overwrite each other's store id or each other's log.
+# They did share both, and a second world would then have printed the first one's numbers.
+LOG="${LOG:-/tmp/okam-live-world-$DB_NAME.log}"
+SCRATCH="/tmp/okam-live-world-$DB_NAME.tmp"
 
 API_BASE="http://127.0.0.1:$API_PORT"
 CONN="Server=localhost,${SQL_PORT};Database=${DB_NAME};User Id=sa;Password=${SQL_SA_PASSWORD};TrustServerCertificate=True;Encrypt=False;Connect Timeout=60"
@@ -155,16 +173,20 @@ TABLES="$(sqld -Q "SET NOCOUNT ON; SELECT CAST(COUNT(*) AS varchar) FROM sys.tab
 TRIGGERS="$(sqld -Q "SET NOCOUNT ON; SELECT CAST(COUNT(*) AS varchar) FROM sys.triggers WHERE is_ms_shipped=0;" | tr -d ' \r\n')"
 note "$APPLIED migrations, $TABLES tables, $TRIGGERS append-only triggers"
 
-# C1, CHECKED AGAINST THE LIVE CATALOG RATHER THAN ASSUMED FROM THE DIFF. The only two tables this
-# script writes directly are Stores and StoreAdmins. If either ever gains an append-only guard, the
-# seed below becomes a C1 violation the moment it runs -- so it is refused HERE, by asking the
-# database, which is the one source that cannot be out of date.
+# C1, CHECKED AGAINST THE LIVE CATALOG RATHER THAN ASSUMED FROM THE DIFF. These five are every table
+# this script writes with a direct INSERT; everything else it creates goes through the product. If any
+# of them ever gains an append-only guard, the seed below becomes a C1 violation the moment it runs --
+# so it is refused HERE, by asking the database, which is the one source that cannot be out of date.
+# (25 such triggers exist on this chain, four of them on Workforce tables -- WorkforceClockEvents,
+# WorkforceAuditEvents, WorkforceSchedulePublications and the personnel-list pair -- so the list this
+# check protects is a real neighbourhood, not a hypothetical one.)
+SEEDED_TABLES="'Stores','StoreAdmins','WorkforceLegalEmployers','WorkforcePersons','WorkforceStaffMembers'"
 GUARDED="$(sqld -Q "SET NOCOUNT ON;
     SELECT ISNULL(STRING_AGG(t.name, ','), '')
     FROM sys.triggers tr JOIN sys.tables t ON t.object_id = tr.parent_id
-    WHERE tr.is_ms_shipped = 0 AND t.name IN ('Stores','StoreAdmins');" | tr -d ' \r\n')"
+    WHERE tr.is_ms_shipped = 0 AND t.name IN ($SEEDED_TABLES);" | tr -d ' \r\n')"
 [ -z "$GUARDED" ] || die "C1: these tables now carry a trigger and must not be seeded directly: $GUARDED"
-note "C1 checked on sys.triggers: Stores and StoreAdmins carry none"
+note "C1 checked on sys.triggers: the 5 directly-seeded tables carry none"
 
 say "4/5  Starting the API on $API_BASE"
 # No module config masters are set. This world exists for the feature-flag board, whose controller is
@@ -217,16 +239,151 @@ EXISTING="$(sqld -Q "SET NOCOUNT ON; SELECT ISNULL(CAST((SELECT TOP 1 StoreId FR
 
 sqld -Q "SET NOCOUNT ON;
 -- Country is not decoration anywhere in this estate: several modules resolve a legal jurisdiction from
--- Stores.Country and answer a typed refusal rather than defaulting when it is blank.
+-- Stores.Country and answer a typed refusal rather than defaulting when it is blank. Workforce is the
+-- sharpest case: publish resolves the working-time rule pack from it, and a blank country is a typed
+-- 409 workforce.rule-pack-unresolved -- a world that can draft and validate a week but never publish.
 INSERT INTO Stores (Name, Country, TimeZone, VAT, SelfCheckout, Approved, Registered)
 VALUES (N'$STORE_NAME', N'NO', N'$TZ_ID', 15, 0, 1, SYSDATETIME());
-SELECT CAST(SCOPE_IDENTITY() AS int);" > /tmp/okam-live-world-storeid.txt
-STORE_ID="$(tr -d ' \r\n' < /tmp/okam-live-world-storeid.txt)"
+SELECT CAST(SCOPE_IDENTITY() AS int);" > "$SCRATCH"
+STORE_ID="$(tr -d ' \r\n' < "$SCRATCH")"
+rm -f "$SCRATCH"
 [ -n "$STORE_ID" ] || die "could not create the store"
 
 sqld -Q "SET NOCOUNT ON;
 INSERT INTO StoreAdmins (ApplicationUserId, StoreId) VALUES (N'$MGR_USERID', $STORE_ID);" >/dev/null
 note "store '$STORE_NAME' = StoreId $STORE_ID, with the manager as its StoreAdmin"
+
+# ================================================================================================
+say "5b/5  The roster, employment terms and rates the two workforce journeys need"
+# ================================================================================================
+#
+# `workforce-flag-lever` and `workforce-schedule-publish` both author a shift on the schedule grid,
+# and the grid's rows ARE the roster: with no staff there is no row, so there is no `+` affordance and
+# both journeys stop at a selector. `workforce-schedule-publish` additionally picks the role "Barista"
+# out of a select the page fills from `GET /roles`, and reads the wage chip the SERVER priced onto the
+# saved shift — which exists only when a rate resolves for that shift's scope.
+#
+# THREE ROWS GO IN AS SQL, and each is here because no endpoint can create it:
+#
+#   the legal employer   `CreateWorkforceStaffRequest` REQUIRES a `LegalEmployerId` and nothing in the
+#                        API mints one.
+#   the manager's person + engagement
+#                        `POST /staff` needs the WorkforceManager capability, and capabilities are
+#                        resolved from an EXISTING engagement at this store — so the first engagement
+#                        is unavoidably out of band. It is also what opens `workforce.module` for this
+#                        store through the gate's grandfather probe, with no override row.
+#
+# EVERYTHING ELSE IS THE REAL HTTP API, under the manager's own bearer. That is not ceremony: it is
+# how the seeded world gets an actor on the rows that need one (C4), and it is how the write path gets
+# to PUSH BACK. `L-WF-DEMO-PRESENCE` learned this the useful way — routing seeded punches through the
+# real ingest surfaced that the ingest clocks the operator's own engagement, a fact an INSERT into the
+# projection would have hidden completely.
+#
+# AND NO SCHEDULE. The current week is left with no revision at all, because "Opprett utkast" is the
+# first thing both journeys do and a seeded draft would be seeding their answer. The read-back below
+# asserts the week really is unplanned rather than trusting that nothing created one.
+
+command -v jq >/dev/null || die "jq is required (brew install jq)"
+command -v uuidgen >/dev/null || die "uuidgen is required"
+
+LEGAL_EMPLOYER_ID="$(uuidgen | tr 'A-Z' 'a-z')"
+MGR_PERSON_ID="$(uuidgen | tr 'A-Z' 'a-z')"
+MGR_STAFF_ID="$(uuidgen | tr 'A-Z' 'a-z')"
+
+# CapabilityGrants 15 = WorkforceSelf(1)|WorkforceScheduler(2)|WorkforceManager(4)|WorkforcePayrollApprover(8).
+# PayrollApprover is not optional decoration here: the wage fields are gated on it on the READ side too,
+# so without it the schedule range answers with no per-shift cost at all and the grid draws no wage chip
+# — which looks exactly like an unpriced shift and is not.
+sqld -Q "SET NOCOUNT ON;
+INSERT INTO WorkforceLegalEmployers (LegalEmployerId, OrganizationNumber, Name, EffectiveFromUtc, CreatedAtUtc)
+VALUES ('$LEGAL_EMPLOYER_ID', N'912345678', N'$STORE_NAME AS', '2020-01-01T00:00:00', SYSUTCDATETIME());
+
+INSERT INTO WorkforcePersons (WorkforcePersonId, ApplicationUserId, State, DisplayName, ContactPhone, CreatedAtUtc)
+VALUES ('$MGR_PERSON_ID', N'$MGR_USERID', N'Claimed', N'Ingrid Moen', N'$MANAGER_PHONE', SYSUTCDATETIME());
+
+INSERT INTO WorkforceStaffMembers
+  (StaffMemberId, StoreId, WorkforcePersonId, LegalEmployerId, EmployerEffectiveFromUtc,
+   EmploymentNumber, CapabilityGrants, ActiveFromUtc, IsActive, CreatedAtUtc)
+VALUES
+  ('$MGR_STAFF_ID', $STORE_ID, '$MGR_PERSON_ID', '$LEGAL_EMPLOYER_ID', '2020-01-01T00:00:00',
+   N'ANS-001', 15, '2020-01-01T00:00:00', 1, SYSUTCDATETIME());" >/dev/null
+note "legal employer + the manager's own engagement (capabilities 15) — the 3 rows with no endpoint"
+
+WF="$API_BASE/workforce/stores/$STORE_ID"
+
+# Every mutation carries a fresh `Idempotency-Key`: the module refuses a write without one with a 400,
+# deliberately, so a seed that omitted it would fail at the first POST rather than silently double-write.
+api() { # api METHOD URL [BODY]
+    local method="$1" url="$2" body="${3:-}"
+    local args=(-sS -X "$method" "$url" -H "Authorization: Bearer $MGR_TOKEN"
+                -H 'Content-Type: application/json' -H "Idempotency-Key: $(uuidgen)")
+    [ -n "$body" ] && args+=(-d "$body")
+    curl "${args[@]}"
+}
+# A problem+json body is a 200-shaped FAILURE: curl exits 0, the JSON says 409, and a seed that only
+# checked curl's exit status would carry on and fail three steps later somewhere unrelated.
+check() { # check JSON LABEL
+    printf '%s' "$1" | jq -e 'type == "object" and (.status? // 0) >= 400' >/dev/null 2>&1 \
+        && die "$2 was refused: $1"
+    return 0
+}
+
+ROLES_JSON="$(api PUT "$WF/roles" "$(jq -nc '{roles:[
+  {name:"Barista",  station:"Bar",     color:"#C2703D", sortOrder:1, effectiveFromUtc:"2020-01-01T00:00:00Z"},
+  {name:"Kjøkken",  station:"Kjøkken", color:"#3D7AC2", sortOrder:2, effectiveFromUtc:"2020-01-01T00:00:00Z"}]}')")"
+check "$ROLES_JSON" "PUT /roles"
+# The upsert answers a bare ARRAY; accepted either way rather than assumed.
+ROLE_BARISTA="$(printf '%s' "$ROLES_JSON" | jq -r 'if type=="array" then .[] else .roles[] end | select(.name=="Barista") | .roleId')"
+[ -n "$ROLE_BARISTA" ] || die "PUT /roles did not answer a Barista role: $ROLES_JSON"
+note "roles: Barista, Kjøkken  (workforce-schedule-publish picks 'Barista' by its label)"
+
+# Named so that a COLLEAGUE, not the manager, is the first row of the grid: `GET /staff` orders by
+# display name and both journeys author into `addButtons.first()`. A world where the manager sorts
+# first would still pass, but every screenshot would show the manager rostered onto their own week.
+mkstaff() { # mkstaff DISPLAYNAME PHONE EMPNO
+    api POST "$WF/staff" "$(jq -nc --arg n "$1" --arg p "$2" --arg e "$3" --arg le "$LEGAL_EMPLOYER_ID" \
+        '{displayName:$n, contactPhone:$p, employmentNumber:$e, legalEmployerId:$le,
+          capabilities:["WorkforceSelf"], activeFromUtc:"2024-01-01T00:00:00Z",
+          employerEffectiveFromUtc:"2024-01-01T00:00:00Z"}')"
+}
+ASTRID_JSON="$(mkstaff "Astrid Vik" "+4790000101" "ANS-002")"; check "$ASTRID_JSON" "POST /staff (Astrid Vik)"
+JONAS_JSON="$(mkstaff  "Jonas Lie"  "+4790000102" "ANS-003")"; check "$JONAS_JSON"  "POST /staff (Jonas Lie)"
+ASTRID="$(printf '%s' "$ASTRID_JSON" | jq -r '.staffMemberId // empty')"
+JONAS="$(printf '%s' "$JONAS_JSON"   | jq -r '.staffMemberId // empty')"
+[ -n "$ASTRID" ] && [ -n "$JONAS" ] || die "POST /staff returned no staffMemberId"
+note "staff: Astrid Vik (ANS-002), Jonas Lie (ANS-003) — created through POST /staff, not INSERTed"
+
+for pair in "$ASTRID:$ROLE_BARISTA" "$JONAS:$ROLE_BARISTA"; do
+    R="$(api PUT "$WF/staff/${pair%%:*}/roles" \
+        "$(jq -nc --arg r "${pair##*:}" '{roles:[{roleId:$r, effectiveFromUtc:"2024-01-01T00:00:00Z"}]}')")"
+    check "$R" "PUT /staff/${pair%%:*}/roles"
+done
+
+# Employment terms are what make a rostered person a person with a CONTRACT: the working-time rules the
+# publish step evaluates are stated against contracted minutes, and a roster with none leaves those
+# rules with nothing to say.
+for pair in "$MGR_STAFF_ID:2250" "$ASTRID:1800" "$JONAS:1800"; do
+    R="$(api PUT "$WF/staff/${pair%%:*}/employment-terms" "$(jq -nc --argjson m "${pair##*:}" \
+        '{effectiveFromUtc:"2024-01-01T00:00:00Z", contractMinutesPerWeek:$m,
+          employmentCategory:"Fast", payCode:"100", costCenter:"SAL"}')")"
+    check "$R" "PUT /staff/${pair%%:*}/employment-terms"
+done
+note "employment terms for all three engagements (37.5h manager, 30h each colleague)"
+
+# THE MONEY PATH, AND THE ONE PLACE IN THIS SCRIPT THAT TOUCHES ONE. A rate is what prices a
+# payroll-bearing hour, so C4 applies in full: this is a `PUT` under the manager's bearer and the row
+# the server writes names them. An INSERT here would have been a seed writing money under no actor at
+# all, which is the violation the constraint exists to catch — and it would also have skipped the
+# effective-dating and the currency check that make the figure meaningful.
+#
+# ROLE default only, no engagement override: `workforce-schedule-publish` puts its shift on the Barista
+# role and reads the chip the server priced, so the role default is the scope actually under test. A
+# shift authored with NO role — which is what `workforce-flag-lever` does — resolves to no rate and
+# draws the honest "unpriced" chip instead of a zero. That is the product being right, not a gap.
+RATE_JSON="$(api PUT "$WF/roles/$ROLE_BARISTA/rates" \
+    "$(jq -nc '{effectiveFromLocalDate:"2024-01-01", hourlyRateMinor:22000, currency:"NOK"}')")"
+check "$RATE_JSON" "PUT /roles/$ROLE_BARISTA/rates"
+note "Barista role rate 220.00 NOK/h from 2024-01-01, written by the manager through PUT .../rates"
 
 # ---- READ THE WORLD BACK OFF THE WIRE ----------------------------------------------------------
 #
@@ -266,6 +423,54 @@ OVERRIDES="$(printf '%s' "$STATES" | jq -r '[ .[] | select(.isOverridden == true
     subject is the flag board must start from a store with none, or it is asserting the seed's answer."
 note "no flag overrides: every flag reads its module default, deny-closed"
 
+# ---- ...AND THE FOUR READS THE SCHEDULE PAGE MAKES ---------------------------------------------
+#
+# `init()` calls `GET /context` and refuses the whole page on a 403; `load()` then fires the range,
+# staff and (on the role pivot) roles reads together. Each is made here first, so a roster that did
+# not take says so in one sentence instead of as `.wf-grid__add` never becoming visible.
+
+CTX="$(curl -sS "$WF/context" -H "Authorization: Bearer $MGR_TOKEN")"
+CTX_CAPS="$(printf '%s' "$CTX" | jq -r '[.capabilities // [] | .[]] | join(",")')"
+case ",$CTX_CAPS," in
+    *,WorkforceScheduler,*) ;;
+    *) die "GET /context does not grant WorkforceScheduler, so the schedule page would refuse itself
+    with 'wf_no_capability'. capabilities seen: [$CTX_CAPS]" ;;
+esac
+case ",$CTX_CAPS," in
+    *,WorkforcePayrollApprover,*) ;;
+    # Not a nicety: the wage fields are gated on this capability on the READ side, so without it the
+    # range answers no per-shift cost and the grid draws no chip at all -- indistinguishable, on
+    # screen, from a shift nobody could price.
+    *) die "GET /context does not grant WorkforcePayrollApprover, so no wage chip would ever render.
+    capabilities seen: [$CTX_CAPS]" ;;
+esac
+note "GET /context -> [$CTX_CAPS], timeZone $(printf '%s' "$CTX" | jq -r '.timeZone.id // .timeZoneId // "?"')"
+
+STAFF_COUNT="$(curl -sS "$WF/staff" -H "Authorization: Bearer $MGR_TOKEN" | jq -r 'if type=="array" then length else empty end')"
+[ "${STAFF_COUNT:-0}" -ge 3 ] || die "GET /staff answered $STAFF_COUNT engagements; the grid draws one row
+    per engagement and both journeys author into the first of them."
+ROLE_NAMES="$(curl -sS "$WF/roles" -H "Authorization: Bearer $MGR_TOKEN" | jq -r 'if type=="array" then (map(.name)|join(",")) else empty end')"
+case ",$ROLE_NAMES," in
+    *,Barista,*) ;;
+    *) die "GET /roles does not offer 'Barista'. workforce-schedule-publish selects that option BY ITS
+    LABEL, so a renamed role fails there as a select timeout. roles seen: [$ROLE_NAMES]" ;;
+esac
+note "GET /staff -> $STAFF_COUNT engagements; GET /roles -> [$ROLE_NAMES]"
+
+# THE CURRENT WEEK MUST BE UNPLANNED. Both journeys open on it and their first act is `Opprett utkast`,
+# which the page offers only while the range read resolves NO revision. Computed in the store's own
+# zone, the same way `utils/workforce/week-range.js` does it, because a UTC Monday is a different day
+# in Oslo for two hours of the year and the whole assertion would then be about the wrong week.
+WEEK_FROM="$(TZ=$TZ_ID date -v-mon +%Y-%m-%d 2>/dev/null || date -d 'last monday' +%Y-%m-%d)"
+WEEK_TO="$(TZ=$TZ_ID date -j -v+7d -f %Y-%m-%d "$WEEK_FROM" +%Y-%m-%d 2>/dev/null || date -d "$WEEK_FROM + 7 day" +%Y-%m-%d)"
+RANGE="$(curl -sS "$WF/schedules?from=${WEEK_FROM}T00:00:00Z&to=${WEEK_TO}T00:00:00Z&view=draft" \
+    -H "Authorization: Bearer $MGR_TOKEN")"
+REVISION="$(printf '%s' "$RANGE" | jq -r '.scheduleRevisionId // empty')"
+[ -z "$REVISION" ] || die "the current week ($WEEK_FROM..$WEEK_TO) already carries revision $REVISION.
+    Both workforce journeys begin by CREATING that draft, so a week that already has one is a world
+    that answers their first question for them. Rebuild from empty:   $0"
+note "the current week $WEEK_FROM..$WEEK_TO has no plan -- 'Opprett utkast' will be offered"
+
 cat <<EOF
 
 -------------------------------------------------------------------------------
@@ -275,16 +480,32 @@ A LIVE world is up.
     database   $DB_NAME on localhost,$SQL_PORT   ($APPLIED migrations, $TABLES tables)
     store      $STORE_ID  "$STORE_NAME"
     manager    ${MANAGER_PHONE#+47} / $MANAGER_CODE   (the app prefixes +47 itself)
+    roster     Astrid Vik, Ingrid Moen (the manager), Jonas Lie
+    roles      Barista (220.00 NOK/h from 2024-01-01), Kjøkken
+    week       $WEEK_FROM..$WEEK_TO, no plan
 
-Run the live journeys against it:
+Run ONE live journey against it:
 
     cd $WEB_REPO
-    E2E_API_BASE_URL=$API_BASE E2E_WEB_PORT=$WEB_PORT npm run test:e2e
+    E2E_API_BASE_URL=$API_BASE E2E_WEB_PORT=$WEB_PORT \\
+        npm run test:e2e -- test/e2e/journeys/events-deposit-precondition.spec.js
 
-Playwright starts no fixture in that mode and runs only the journeys that do NOT carry \`@fixture\`.
-Their artifacts land in artifacts/journeys/ with "backend": "live" and this API's origin on
-"apiBaseUrl" -- and support/journey.js FAILS a live run in which the browser never reached that
-origin, so the label cannot be produced without the traffic.
+ONE, and the file path is not a convenience. In fixture mode every journey gets a fresh backend from
+\`POST /__fixture/reset\`; a live world has no such thing, so the journeys share one database in the
+order Playwright runs them. \`workforce-flag-lever\` and \`workforce-schedule-publish\` each CONSUME the
+current week -- both create the draft, both publish it -- so whichever runs second finds a week that
+already has a plan and no "Opprett utkast" to press. They are not flaky together; they are
+incompatible, and each needs its own world:
+
+    test/e2e/scripts/live-world.sh   &&  npm run test:e2e -- test/e2e/journeys/workforce-flag-lever.spec.js
+    test/e2e/scripts/live-world.sh   &&  npm run test:e2e -- test/e2e/journeys/workforce-schedule-publish.spec.js
+
+(\`events-deposit-precondition\` is the exception: it removes the override it sets, so it leaves the
+world as it found it and can share one with either of the others, or be re-run against a used one.)
+
+Artifacts land in artifacts/journeys/ with "backend": "live" and this API's origin on "apiBaseUrl" --
+and support/journey.js FAILS a live run in which the browser never reached that origin, so the label
+cannot be produced without the traffic.
 
 Stop it with:   kill $API_PID
 -------------------------------------------------------------------------------

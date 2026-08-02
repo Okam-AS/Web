@@ -1,0 +1,109 @@
+{
+  "journey": "events-deposit-precondition",
+  "title": "the operator reads the deposit precondition on the row before arming the money path",
+  "status": "failed",
+  "startedAtUtc": "2026-08-02T09:42:11.388Z",
+  "finishedAtUtc": "2026-08-02T09:42:13.150Z",
+  "durationMs": 1762,
+  "capabilities": [
+    "platform.feature-flags.read",
+    "platform.feature-flags.write",
+    "events.deposits.arming-precondition-disclosed"
+  ],
+  "surface": "admin",
+  "backend": "live",
+  "baseUrl": "http://127.0.0.1:3952",
+  "apiBaseUrl": "http://127.0.0.1:5951",
+  "commit": "174a550cad5934e0209da12da624e6627e06ac25",
+  "underTest": null,
+  "backendProbe": {
+    "url": "http://127.0.0.1:5951/health",
+    "status": 200,
+    "body": "Healthy"
+  },
+  "backendServed": 0,
+  "backendSample": [],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in as the manager (99999999 / 123123)",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T09:42:11.389Z",
+      "durationMs": 1342,
+      "detail": "landed on /admin/feature-flags",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "the deposits row states the precondition, above its own switch",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T09:42:12.731Z",
+      "durationMs": 77,
+      "detail": "Før denne slås på: butikken må allerede ha tatt imot ekte bestillinger gjennom sitt eget betalingsoppsett. Depositum trekkes gjennom nøyakti",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "no other flag on the board claims a precondition",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T09:42:12.945Z",
+      "durationMs": 17,
+      "detail": "1 precondition across 18 flag rows",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "the switch it sits above is live: arming still goes through",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T09:42:12.962Z",
+      "durationMs": 70,
+      "detail": "armed, nothing refused it — which is the unenforced precondition, not a defect",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "put the world back: remove the override",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T09:42:13.032Z",
+      "durationMs": 117,
+      "detail": "Events.Deposits back at its module default, off",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "what the browser said while this ran",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T09:42:13.150Z",
+      "durationMs": 0,
+      "detail": "2 recorded as findings",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "defect",
+      "summary": "browser error during the deposit-precondition journey",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=1\" with a new navigation."
+    },
+    {
+      "severity": "defect",
+      "summary": "browser error during the deposit-precondition journey",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=1\" with a new navigation."
+    },
+    {
+      "severity": "defect",
+      "summary": "live journey never reached the backend it names",
+      "detail": "This journey is labelled live against http://127.0.0.1:5951, and the browser received NOT ONE response from that origin. Whatever it exercised, it was not that backend — most likely a dev server already running on http://127.0.0.1:3952 that was adopted by `reuseExistingServer` and compiled against a different API_BASE_URL. Stop it and run again."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=1\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=1\" with a new navigation."
+  ],
+  "failedRequests": [],
+  "screenshots": [
+    "events-deposit-precondition/01-the-deposit-row-its-precondition-above-the-switc.png"
+  ],
+  "error": "This journey is labelled live against http://127.0.0.1:5951, and the browser received NOT ONE response from that origin. Whatever it exercised, it was not that backend — most likely a dev server already running on http://127.0.0.1:3952 that was adopted by `reuseExistingServer` and compiled against a different API_BASE_URL. Stop it and run again."
+}

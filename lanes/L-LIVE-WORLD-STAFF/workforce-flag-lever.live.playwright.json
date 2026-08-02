@@ -1,0 +1,158 @@
+{
+  "journey": "workforce-flag-lever",
+  "title": "an operator turns the schedule publication switch off and the publish becomes its typed refusal",
+  "status": "passed",
+  "startedAtUtc": "2026-08-02T09:42:33.715Z",
+  "finishedAtUtc": "2026-08-02T09:42:42.963Z",
+  "durationMs": 9248,
+  "capabilities": [
+    "platform.feature-flags.read",
+    "platform.feature-flags.write",
+    "workforce.schedule.publish"
+  ],
+  "surface": "admin",
+  "backend": "live",
+  "baseUrl": "http://127.0.0.1:3952",
+  "apiBaseUrl": "http://127.0.0.1:5952",
+  "commit": "174a550cad5934e0209da12da624e6627e06ac25",
+  "underTest": null,
+  "backendProbe": {
+    "url": "http://127.0.0.1:5952/health",
+    "status": 200,
+    "body": "Healthy"
+  },
+  "backendServed": 80,
+  "backendSample": [
+    "POST http://127.0.0.1:5952/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:5952/user/login -> 200",
+    "GET http://127.0.0.1:5952/user -> 200",
+    "GET http://127.0.0.1:5952/stores/1/market -> 200",
+    "GET http://127.0.0.1:5952/user -> 200",
+    "GET http://127.0.0.1:5952/stores/1 -> 200",
+    "GET http://127.0.0.1:5952/stores/1/feature-flags -> 200",
+    "GET http://127.0.0.1:5952/stores/1/specialopeninghours -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in as the manager (99999999 / 123123)",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T09:42:33.715Z",
+      "durationMs": 1126,
+      "detail": "landed on /admin/feature-flags",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "the switchboard lists every module's flags, deny-closed",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T09:42:34.841Z",
+      "durationMs": 57,
+      "detail": "18 flags across 6 modules; workforce.publication reads \"Av\"",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "turn schedule publication ON",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T09:42:35.027Z",
+      "durationMs": 169,
+      "detail": "override written, attributed: Sist endret av a83f5ce1-d036-4d63-914f-fd07496b858d — 02.08.2026, 11:42",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "build a week and validate it",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T09:42:35.196Z",
+      "durationMs": 2330,
+      "detail": "one shift, revision Validert — publish is offered",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "turn the switch back OFF while the week waits to be published",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T09:42:37.526Z",
+      "durationMs": 837,
+      "detail": "workforce.publication is off for this store",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "the publish now answers its typed refusal, naming the flag",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T09:42:38.363Z",
+      "durationMs": 1011,
+      "detail": "Vaktplanen er skrivebeskyttet Bryteren workforce.publication står av for denne butikken, så vaktplanen kan leses, men ikke endres eller publiseres. Slå den på u",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "READ-ONLY, not dark: the week is all still there",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T09:42:39.460Z",
+      "durationMs": 19,
+      "detail": "one shift, revision and state band all still rendered",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "turn it back ON and publish",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T09:42:39.479Z",
+      "durationMs": 2694,
+      "detail": "Publisert til 1 mottakere.",
+      "error": null
+    },
+    {
+      "n": 9,
+      "name": "removing the override reverts the flag to the module default",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T09:42:42.242Z",
+      "durationMs": 720,
+      "detail": "override removed; the flag reads the module default again",
+      "error": null
+    },
+    {
+      "n": 10,
+      "name": "what the browser said while this ran",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T09:42:42.962Z",
+      "durationMs": 1,
+      "detail": "2 recorded as findings",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "defect",
+      "summary": "browser error during the flag-lever journey",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=1\" with a new navigation."
+    },
+    {
+      "severity": "defect",
+      "summary": "browser error during the flag-lever journey",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=1\" with a new navigation."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=1\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=1\" with a new navigation.",
+    "Failed to load resource: the server responded with a status of 409 (Conflict)"
+  ],
+  "failedRequests": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:5952/workforce/stores/1/schedules/d596e275-0903-447f-80bf-1ae7b4a967b4/publish",
+      "status": 409
+    }
+  ],
+  "screenshots": [
+    "workforce-flag-lever/01-the-switchboard-everything-deny-closed.png",
+    "workforce-flag-lever/02-publish-refused-the-flag-named.png",
+    "workforce-flag-lever/03-published-with-the-switch-back-up.png"
+  ],
+  "error": null
+}
