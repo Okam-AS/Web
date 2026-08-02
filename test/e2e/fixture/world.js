@@ -27,6 +27,9 @@ const WORKER_PHONE = '+4790000001';
 // the consumer app or curl. A third identity rather than a flip of the manager's, because the
 // manager's confirmed address is what `growth-newsletter-send-gate` test-sends to.
 const PHONE_SIGNUP_ADMIN_PHONE = '+4790000002';
+// The platform PowerUser. A fourth identity rather than a flag on the manager's, because three
+// journeys assert refusals that are only refusals for somebody who is NOT one — see USERS below.
+const CONCIERGE_PHONE = '+4790000003';
 const OTP = '123123';
 
 const STORE_ID = 42;
@@ -86,6 +89,32 @@ const USERS = {
     // A FULL STORE ADMIN. The refusal this journey walks is not about authority — she administers
     // the same store the manager does and may draft, approve and dispatch. It is about whether the
     // platform can prove one mailbox is hers.
+    adminIn: [{ id: STORE_ID, name: STORE_NAME, address: 'Storgata 1, 0155 Oslo' }]
+  },
+  // THE ONLY PLATFORM POWERUSER IN THIS WORLD, and the reason one has to exist at all is that
+  // `isPowerUser` is a real authority boundary two surfaces draw on:
+  //
+  //   • the Company Meals concierge forms (`pages/admin/meals-companies.vue`) are not rendered for a
+  //     store admin, because company authority resolves from an active CompanyAdmin membership and
+  //     never from the role that created the company;
+  //   • the Margin projection repair rescans a store's whole journal, so a store admin meets a 403
+  //     from the framework's role filter before the module gate and the control is withheld.
+  //
+  // Every other identity here is `isPowerUser: false` and must stay that way — the refusal journeys
+  // are built on it — so this is the additive way to have both halves of that boundary walkable.
+  [CONCIERGE_PHONE]: {
+    id: 'user-concierge',
+    token: 'fixture-token-concierge',
+    phoneNumber: CONCIERGE_PHONE,
+    firstName: 'Ingrid',
+    lastName: 'Konsierge',
+    email: 'ingrid@okam.test',
+    emailConfirmed: true,
+    isPowerUser: true,
+    isKeyAccountManager: false,
+    favoriteProductIds: [],
+    // A store admin AS WELL, because the switchboard and the venue-scoped reads authorize on
+    // `IStoreAdminAccess` and a PowerUser who administered nothing could not open either.
     adminIn: [{ id: STORE_ID, name: STORE_NAME, address: 'Storgata 1, 0155 Oslo' }]
   }
 };
@@ -421,6 +450,69 @@ const GROWTH_PRIVACY_CLOSED_ID = 9100;
 const GROWTH_PRIVACY_FOREIGN_STORE_ID = 99;
 const GROWTH_PRIVACY_FOREIGN_ID = 9900;
 
+// ---- Growth: the consent wording a capture is pinned to -----------------------------------------
+//
+// ONE ROW, PLATFORM-GLOBAL, AND THE PAGE RENDERS IT VERBATIM. The version id travels in the same
+// response as the text precisely so a page cannot display one version and post another, and the
+// journey asserts the sentence on screen is this string character for character — a page that
+// summarised, translated or re-wrapped it would be showing a guest something other than what the
+// receipt will say they agreed to.
+const GROWTH_CONSENT = {
+  consentTextVersionId: 'cnst-v3-nb-no',
+  version: 3,
+  locale: 'nb-NO',
+  text: 'Ja, jeg vil ha nyhetsbrev på e-post fra denne bedriften. Jeg kan melde meg av når som helst, ' +
+    'og avmeldingslenken ligger i hver e-post.'
+};
+
+/**
+ * A second venue, used by the guest journey as the store nobody has ever switched Growth on for.
+ *
+ * It is NOT a special-cased dark store here: `fixture/growth.js` resolves `growth.module` out of the
+ * same per-store override table the operator switchboard writes, so this id is dark for the ordinary
+ * reason — deny-closed and never flipped — and store 42 is dark too until somebody pulls the lever.
+ * A hard-coded dark id would have modelled a world with no flags in it, which is the defect the
+ * journey sweep found in six other walks.
+ */
+const GROWTH_DARK_STORE_ID = 77;
+
+// ---- Meals: the company, its corridor, and the three invitation codes ---------------------------
+//
+// THE CONTACT ON THE GOOD CODE IS THE MANAGER'S EMAIL, AND THE CLAIM JOURNEY SIGNS IN AS THE WORKER
+// FIRST. That ordering is the whole point: `meals.invitation-contact-mismatch` is the refusal that a
+// forwarded token must meet, and it is the one refusal on the surface that has to withhold — the
+// server "deliberately does NOT echo the intended contact", so the page may not either, and the only
+// way to prove that is to be refused while holding a code that names somebody else.
+
+const MEALS_COMPANY_ID = 'comp-fixture-1';
+const MEALS_COMPANY_NAME = 'Nordane AS';
+
+/** Names the manager. A worker holding it is refused without being told whose it is. */
+const MEALS_INVITE_OK = 'mealsinv_fixture_open';
+/** Already spent — `meals.invitation-not-claimable` with `currentState: Claimed`. */
+const MEALS_INVITE_USED = 'mealsinv_fixture_used';
+/** Names nothing. Indistinguishable, by design, from a module that is switched off. */
+const MEALS_INVITE_UNKNOWN = 'mealsinv_fixture_nonexistent';
+
+const MEALS_INVITATIONS = {
+  [MEALS_INVITE_OK]: {
+    invitationId: 'inv-1',
+    contactEmail: 'marit@example.test',
+    contactPhone: null,
+    intendedRole: 'Employee',
+    state: 'Pending',
+    expiresAtUtc: '2026-12-31T22:59:59Z'
+  },
+  [MEALS_INVITE_USED]: {
+    invitationId: 'inv-2',
+    contactEmail: 'ola@example.test',
+    contactPhone: null,
+    intendedRole: 'Employee',
+    state: 'Claimed',
+    expiresAtUtc: '2026-12-31T22:59:59Z'
+  }
+};
+
 function daysAgo (days) {
   return new Date(Date.now() - days * 24 * 3600 * 1000).toISOString();
 }
@@ -616,6 +708,7 @@ module.exports = {
   MANAGER_PHONE,
   WORKER_PHONE,
   PHONE_SIGNUP_ADMIN_PHONE,
+  CONCIERGE_PHONE,
   OTP,
   CULTURES,
   STORE_ID,
@@ -651,5 +744,13 @@ module.exports = {
   GROWTH_PRIVACY_CLOSED_ID,
   GROWTH_PRIVACY_FOREIGN_STORE_ID,
   GROWTH_PRIVACY_FOREIGN_ID,
+  GROWTH_CONSENT,
+  GROWTH_DARK_STORE_ID,
+  MEALS_COMPANY_ID,
+  MEALS_COMPANY_NAME,
+  MEALS_INVITE_OK,
+  MEALS_INVITE_USED,
+  MEALS_INVITE_UNKNOWN,
+  MEALS_INVITATIONS,
   growthPrivacyRequests
 };

@@ -76,7 +76,14 @@
       </div>
       <div class="mst__ratio" :class="{ 'is-unknown': statement.coveragePercent === null }">
         <span class="mst__label">{{ $i('mrgs_ratio_coverage') }}</span>
-        <strong class="mst__ratiovalue" data-test="coverage-percent">{{ percent(statement.coveragePercent) }}</strong>
+        <!-- `statement-coverage-percent`, NOT `coverage-percent`. `MarginCoveragePanel` renders a
+             coverage percentage too and the two are different figures: this one is the statement's
+             own, frozen at its last calculation and frozen for good once finalized, while that one is
+             recomputed for the window at read time — so on a finalized week they can legitimately
+             disagree. They shared a hook until a browser journey hit the strict-mode violation; a
+             probe that had resolved "the first one" would have silently read whichever the DOM
+             happened to order first, on the module whose whole point is that figures agree. -->
+        <strong class="mst__ratiovalue" data-test="statement-coverage-percent">{{ percent(statement.coveragePercent) }}</strong>
       </div>
     </div>
 

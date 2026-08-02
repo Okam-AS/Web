@@ -32,7 +32,12 @@ const world = require('./world');
 // which returns true when it answered and false when the path was not its business.
 const marginFixture = require('./margin');
 const trainingFixture = require('./training');
+const mealsFixture = require('./meals');
 const growthNewsletterFixture = require('./growth-newsletter');
+// The Growth GUEST half, kept apart from the operator half above because the two sit on opposite
+// sides of the auth wall: `growth-newsletter.js` is a StoreAdmin surface, and every route in
+// `growth.js` is anonymous by contract. See where each is dispatched below.
+const growthGuestFixture = require('./growth');
 
 const PORT = Number(process.env.E2E_FIXTURE_PORT || 4010);
 
@@ -122,7 +127,9 @@ function freshState () {
     // reset cannot half-clear anything.
     margin: marginFixture.fresh(),
     training: trainingFixture.fresh(),
-    growthNewsletter: growthNewsletterFixture.fresh()
+    meals: mealsFixture.fresh(),
+    growthNewsletter: growthNewsletterFixture.fresh(),
+    growth: growthGuestFixture.fresh()
   };
 }
 
@@ -717,6 +724,15 @@ async function route (req, res, url) {
     return send(res, 200, { declinedVersionNo: proposal.versionNo, declinedAtUtc: nowUtc() });
   }
 
+  // ---- Growth's guest surface: anonymous, and matched ABOVE the wall on purpose ----------------
+  //
+  // `GrowthGuestService` is constructed with an empty initializer so it CANNOT attach a bearer — a
+  // venue's own staff open these links too, and a page that quietly rode their admin token would
+  // answer differently for them than for the guest it was built for. Matching these routes below the
+  // wall would 401 the guest and hide that property behind an auth failure. The fixture cannot prove
+  // the negative for the page, so the journey reads the request headers itself.
+  if (growthGuestFixture.route(context(req, res, url, path, body, null))) { return; }
+
   // ---- everything below is authenticated -------------------------------------------------------
   const caller = userForToken(bearer(req));
   if (!caller) { return problem(res, 401, 'AUTH_REQUIRED', 'No bearer token.'); }
@@ -745,6 +761,18 @@ async function route (req, res, url) {
       traceId: 'fixture-trace'
     });
   }
+  // Meals demands the header on its mutations like Workforce and Training do, with ONE exemption
+  // that is contract rather than convenience: `POST /v1/meals/invitations/session` is a POST only
+  // because the invitation token must travel in a body rather than in a URL that lands in a proxy
+  // log. It reads and writes nothing, so the server does not require a key for it, and a fixture
+  // that demanded one would make the correct client look broken on the first screen of the claim.
+  const MEALS_MUTATION = /^\/v1\/(meals\/|stores\/[^/]+\/meals\/)/;
+  const MEALS_IDEMPOTENCY_EXEMPT = /^\/v1\/meals\/invitations\/session$/;
+  if (req.method !== 'GET' && !req.headers['idempotency-key'] &&
+      MEALS_MUTATION.test(path) && !MEALS_IDEMPOTENCY_EXEMPT.test(path)) {
+    return problem(res, 400, 'meals.idempotency-key-required',
+      'Every Meals mutation must carry an Idempotency-Key.');
+  }
 
   // ---- the module families ---------------------------------------------------------------------
   //
@@ -754,6 +782,7 @@ async function route (req, res, url) {
   const moduleCtx = context(req, res, url, path, body, caller);
   if (marginFixture.route(moduleCtx)) { return; }
   if (trainingFixture.route(moduleCtx)) { return; }
+  if (mealsFixture.route(moduleCtx)) { return; }
   if (growthNewsletterFixture.route(moduleCtx)) { return; }
 
   // ---- Events: the ADMIN reads the pipeline page issues -----------------------------------------

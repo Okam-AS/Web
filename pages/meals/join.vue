@@ -375,6 +375,36 @@ export default {
     };
   },
   computed: {
+    /**
+     * The invitee client, REBUILT WHENEVER THE TOKEN MOVES — a computed, exactly as every other page
+     * in this repo builds its services (`_marginService`, `_trainingService`, `_mealsAdminService`).
+     *
+     * IT USED TO BE ASSIGNED IN `created()`, AND THAT MADE THIS PAGE DEAD. `_coreInitializer`
+     * (plugins/global-mixin.js) is a computed that returns a NEW PLAIN OBJECT snapshot of
+     * `$store.state.currentUser.token`; holding the object it hands back freezes whatever token
+     * existed at that instant. Two things then conspired:
+     *
+     *   • Vue runs `created()` before ANY `mounted()`, and the store is rehydrated from localStorage
+     *     in the global mixin's `mounted()`. So on EVERY load — signed in or not — the snapshot was
+     *     taken while `currentUser` was still null, and `bearerToken` was `''` for the life of the
+     *     component.
+     *   • Both invitee routes carry `[Authorize]` (`MealsMembershipController` has no opt-out), so
+     *     every call 401'd and `claimRefusal` rendered that as "Du er ikke logget inn lenger" — to
+     *     somebody who had just signed in through this page's own modal.
+     *
+     * The whole claim surface was unreachable: no invited employee could see or accept an
+     * invitation. It was invisible to the component suite because the suite supplies
+     * `_coreInitializer` as a ready-made mock, so the ordering that breaks it never happens there;
+     * it was found by driving the page and reading the request log
+     * (`test/e2e/journeys/meals-guest-claim.spec.js`).
+     *
+     * As a computed the token is read at CALL time, which also fixes the second half of the same
+     * bug: signing out and back in as somebody else now changes who the claim is filed as, rather
+     * than leaving the page naming one identity while the server answers another.
+     */
+    _service () {
+      return new MealsClaimService(this._coreInitializer);
+    },
     locales () {
       return LOCALES;
     },
@@ -427,9 +457,6 @@ export default {
     claimedRoleLabel () {
       return this.roleLabel(this.claimed && this.claimed.role);
     }
-  },
-  created () {
-    this._service = new MealsClaimService(this._coreInitializer);
   },
   mounted () {
     this.locale = LOCALES.includes(this.$i18n && this.$i18n.locale) ? this.$i18n.locale : 'no';

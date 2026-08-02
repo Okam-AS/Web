@@ -19,7 +19,13 @@
       <div class="mcv__figures">
         <div class="mcv__figure" :class="{ 'is-unknown': coverage.coveragePercent === null }">
           <span class="mcv__label">{{ $i('mrgs_ratio_coverage') }}</span>
-          <strong class="mcv__value" data-test="coverage-percent">{{ percent(coverage.coveragePercent) }}</strong>
+          <!-- `coverage-window-percent`, NOT `coverage-percent`. The statement's own figures panel
+               renders a coverage percentage too, and this one is a different number: it is
+               recomputed for the window at read time, while the statement's is frozen at its last
+               calculation — so on a finalized week the two legitimately disagree. Sharing one hook
+               made a probe resolve whichever the DOM ordered first, on the module whose whole point
+               is that figures agree. -->
+          <strong class="mcv__value" data-test="coverage-window-percent">{{ percent(coverage.coveragePercent) }}</strong>
         </div>
         <div class="mcv__figure" :class="{ 'is-unknown': coverage.coveredNetSalesMinor === null }">
           <span class="mcv__label">{{ $i('mrgs_figure_covered') }}</span>

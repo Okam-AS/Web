@@ -111,7 +111,16 @@ module.exports = defineConfig({
 
   forbidOnly: !!process.env.CI,
   retries: 0,
-  timeout: 60 * 1000,
+  // 120s rather than 60s, and `navigationTimeout` below is 90s rather than 30s, for ONE reason that
+  // is the harness's and not the product's: `nuxt dev` compiles a route the first time it is asked
+  // for and holds the request open until that bundle is ready. So the first navigation of a run
+  // against a cold `.nuxt` can sit for well over thirty seconds — observed on 2026-08-02 on both
+  // `/admin/margin-statements` and `/subscribe/:store`, each time with ZERO requests reaching the
+  // fixture, which reads exactly like a dead page and is not one. Widening these two changes no
+  // journey's meaning and costs nothing when the tree is warm; the alternative was a per-spec
+  // timeout in whichever journey happened to run first, which moves the flake rather than removing
+  // it.
+  timeout: 120 * 1000,
   expect: { timeout: 10 * 1000 },
 
   // In live mode the fixture-seeded journeys must not run — see the header.
@@ -129,7 +138,8 @@ module.exports = defineConfig({
     screenshot: 'only-on-failure',
     video: 'off',
     actionTimeout: 15 * 1000,
-    navigationTimeout: 30 * 1000
+    // See the note on `timeout` above — this is the cold on-demand compile, not a slow page.
+    navigationTimeout: 90 * 1000
   },
 
   projects: [

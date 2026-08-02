@@ -319,7 +319,7 @@ describe('MarginCoveragePanel', () => {
   test('a null read renders the unknown notice and no figures', () => {
     const w = coverage(null)
     expect(w.find('[data-test="coverage-unknown"]').exists()).toBe(true)
-    expect(w.find('[data-test="coverage-percent"]').exists()).toBe(false)
+    expect(w.find('[data-test="coverage-window-percent"]').exists()).toBe(false)
   })
 
   test('the open-price bucket is a first-class row and keeps its negative amount', () => {
@@ -338,7 +338,7 @@ describe('MarginCoveragePanel', () => {
 
   test('an undefined coverage percentage is a dash with the reason, never 0 %', () => {
     const w = coverage(readCoverage(Object.assign({}, response, { coveragePercent: null, netFoodSalesMinor: 0 })))
-    expect(w.find('[data-test="coverage-percent"]').text()).toBe(DASH)
+    expect(w.find('[data-test="coverage-window-percent"]').text()).toBe(DASH)
     expect(w.find('[data-test="coverage-undefined"]').exists()).toBe(true)
   })
 })
