@@ -604,12 +604,18 @@ async function route (req, res, url) {
   // routes are what makes the Growth test-send refusal a door rather than a wall. Both answer a bare
   // boolean: `RequestService.TryParseResponse` accepts status 200 only and `core/services/user-service`
   // reads the body as a boolean, so any other shape strands the page silently.
-  // MATCHED WITH AND WITHOUT THE TRAILING SLASH, which is not pedantry: `core/services/user-service.ts`
-  // posts to `/user/send-email-confirmation-code/` and `/user/confirm-email/` — both WITH one, unlike
-  // every other route in that file — while ASP.NET's attribute routing matches either form, so the
-  // real API never notices. A fixture that matched only the bare path answers 404 to the shipped
-  // client, and the page then reports "we could not order a code" against a backend that is fine.
-  // Found by the browser journey; no mocked-service unit test can see it.
+  // MATCHED WITH AND WITHOUT THE TRAILING SLASH, which is not pedantry. `core/services/user-service.ts`
+  // used to post `/user/send-email-confirmation-code/` and `/user/confirm-email/` — both WITH one,
+  // against a `UserController` that declares them bare — while ASP.NET's attribute routing matches
+  // either form, so the real API never noticed. This fixture could tell the difference: matching only
+  // the bare path answered 404 to the shipped client, and the page then reported "we could not order
+  // a code" against a backend that was fine. Found by the browser journey; no mocked-service unit
+  // test can see it, because every such test stubs the service and never reads the string it posts.
+  //
+  // The client now writes both paths bare, and `test/core-request-path-shape.test.js` reds if any
+  // request path in `core/services` diverges from that shape again — it was not one route but
+  // THIRTEEN, across seven services. The tolerance below stays anyway: a fixture pinned to one
+  // spelling of a route the framework spells two ways is a fixture that can fail a working client.
   if (unslashed === '/user/send-email-confirmation-code' && req.method === 'POST') {
     const user = userForToken(bearer(req));
     if (!user) { return problem(res, 401, 'AUTH_REQUIRED', 'No bearer token.'); }

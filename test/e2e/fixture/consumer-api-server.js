@@ -388,7 +388,14 @@ const server = http.createServer(async (req, res) => {
     return send(res, 200, withCalculations(cart));
   }
 
-  if (method === 'POST' && path === '/payment/paymentMethods/') {
+  // MATCHED WITH AND WITHOUT THE TRAILING SLASH. `PaymentController` declares the route bare —
+  // `[HttpPost("paymentMethods")]` — and ASP.NET matches either form, so the real API cannot tell
+  // the two apart; a fixture pinned to one spelling can, and answers 404 to the client that
+  // happens to write the other.
+  // This repo's `core/services/payment-service.ts` posts the bare path; ../ConsumerWeb carries its
+  // OWN `core` and still posts the slashed one, and this fixture serves that app. Pinning either
+  // spelling here would make one of the two clients look broken against a backend that is fine.
+  if (method === 'POST' && path.replace(/\/+$/, '') === '/payment/paymentMethods') {
     // A saved card, so the ordinary rail is present and the company tender has to be CHOSEN over it
     // rather than being the only thing on the page.
     return send(res, 200, [{ id: 'pm_card_fixture', paymentType: 'Stripe', brand: 'visa', last4: '4242', expMonth: 12, expYear: 2030 }]);
