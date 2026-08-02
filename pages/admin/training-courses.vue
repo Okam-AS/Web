@@ -93,6 +93,14 @@
               :busy="busy"
               @lookup="lookupHoldings"
             />
+            <TrainingDisclosurePanel
+              :log="disclosures"
+              :people-directory="peopleDirectory"
+              :locale="locale"
+              :zone-id="zoneId"
+              :busy="busy"
+              @lookup="lookupDisclosures"
+            />
           </div>
         </div>
 
@@ -116,6 +124,7 @@ import TrainingAssignmentPanel from '~/components/admin/training/TrainingAssignm
 import TrainingCompletionPanel from '~/components/admin/training/TrainingCompletionPanel.vue';
 import TrainingCertificatePanel from '~/components/admin/training/TrainingCertificatePanel.vue';
 import TrainingHoldingsPanel from '~/components/admin/training/TrainingHoldingsPanel.vue';
+import TrainingDisclosurePanel from '~/components/admin/training/TrainingDisclosurePanel.vue';
 import {
   TrainingStoreService,
   gateOf,
@@ -147,6 +156,7 @@ import {
   personDirectory,
   roleDirectory
 } from '~/utils/training/journey';
+import { readDisclosures } from '~/utils/training/disclosure';
 
 const SETUP_FLAG = 'training.setup';
 const ASSIGNMENTS_FLAG = 'training.assignments';
@@ -232,7 +242,8 @@ export default {
     TrainingAssignmentPanel,
     TrainingCompletionPanel,
     TrainingCertificatePanel,
-    TrainingHoldingsPanel
+    TrainingHoldingsPanel,
+    TrainingDisclosurePanel
   },
   data () {
     return {
@@ -262,6 +273,13 @@ export default {
       holdingsPayload: null,
       holdingsError: null,
       holdingsAsked: false,
+      // The disclosure log is asked for explicitly and never loaded with the page: the read APPENDS
+      // a row the subject will later see, so a panel that fetched on mount would write a permanent
+      // "your manager opened your access log" into an append-only ledger every time this page was
+      // opened for an unrelated reason.
+      disclosuresPayload: null,
+      disclosuresError: null,
+      disclosuresAsked: false,
       loading: false,
       writing: false,
       failure: ''
@@ -299,6 +317,10 @@ export default {
     detailView () { return readCourseDetail(this.detail, this.detailError); },
     peopleDirectory () { return personDirectory(this.staff, this.staffError); },
     rolesDirectory () { return roleDirectory(this.roles, this.rolesError); },
+    disclosures () {
+      if (!this.disclosuresAsked) { return { state: 'idle' }; }
+      return readDisclosures(this.disclosuresPayload, this.disclosuresError);
+    },
     holdings () {
       if (!this.holdingsAsked) { return { state: 'idle' }; }
       return readHoldings(this.holdingsPayload, this.holdingsError);
@@ -345,6 +367,9 @@ export default {
       this.holdingsAsked = false;
       this.holdingsPayload = null;
       this.holdingsError = null;
+      this.disclosuresAsked = false;
+      this.disclosuresPayload = null;
+      this.disclosuresError = null;
       this.loading = true;
 
       try {
@@ -485,6 +510,24 @@ export default {
         () => this.reloadCertificates(),
         PERSON_UNKNOWN_KEY
       );
+    },
+
+    /**
+     * Who has looked at one person's record here. A 403 is rendered as a refusal and never as an
+     * empty log — this route admits the record's SUBJECT as well as the store's admin, so its
+     * refusals mean something quite different from the rest of the page's.
+     */
+    async lookupDisclosures (personRef) {
+      this.disclosuresAsked = true;
+      this.disclosuresPayload = null;
+      this.disclosuresError = null;
+      this.loading = true;
+      try {
+        this.disclosuresPayload = await this._trainingService.GetDisclosures(this.storeId, personRef);
+      } catch (e) {
+        this.disclosuresError = e;
+      }
+      this.loading = false;
     },
 
     async lookupHoldings (personRef) {

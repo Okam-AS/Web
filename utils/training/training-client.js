@@ -18,6 +18,7 @@
 //   GET    /training/stores/{storeId}/certificates                                #12
 //   POST   /training/stores/{storeId}/certificates                                #12
 //   GET    /training/stores/{storeId}/competency/holdings?person=                 #15
+//   GET    /training/stores/{storeId}/evidence/disclosures[?personRef=]           #17
 //
 // THE FOUR ROUTES DELIBERATELY ABSENT, and why, so nobody adds them back by reflex:
 //
@@ -322,6 +323,33 @@ export class TrainingStoreService extends WorkforceClientBase {
    */
   GetHoldings (storeId, personRef) {
     return this._request('GET', this._base(storeId) + '/competency/holdings?person=' + encodeURIComponent(personRef));
+  }
+
+  /**
+   * #17: who has looked at one person's training record in this store, oldest first.
+   *
+   * OMIT `personRef` TO ASK ABOUT YOURSELF, and mean it. The route resolves an unnamed subject from
+   * the caller's own token, and that is the only way a worker reaches it — passing your own id
+   * instead would take the store-admin branch, which a worker does not hold, and be refused. So this
+   * method sends the parameter only when one is given, rather than sending an empty one.
+   *
+   * THIS IS THE ONE TRAINING READ A NON-ADMIN CAN MAKE. Everything else on this client needs the
+   * route store's manager capability; here the subject of the record is admitted too, on identity
+   * alone. A 403 therefore means "you are neither this person nor this store's admin" — it does NOT
+   * mean the log is empty, and nothing built on this may say it does.
+   *
+   * WHAT COMES BACK IS THE LEDGER, NOT A SUMMARY. Each entry carries the stored `eventType`,
+   * `actorReference`, `occurredAtUtc` and `payloadSnapshotJson` verbatim; `actorIsSubject` is the
+   * only derived field. The actor reference is a user id and is DELIBERATELY not resolved to a name
+   * — the server holds an id, and turning it into a colleague's name is a disclosure about the
+   * READER that nobody has authorised. Do not join it against a roster here to "improve" the screen.
+   *
+   * READING IT IS RECORDED. The route appends a `disclosure-log.read` of its own, so a caller must
+   * not poll it: every poll is a permanent row in an append-only ledger the subject will read.
+   */
+  GetDisclosures (storeId, personRef) {
+    const query = personRef ? '?personRef=' + encodeURIComponent(personRef) : '';
+    return this._request('GET', this._base(storeId) + '/evidence/disclosures' + query);
   }
 
   _base (storeId) {

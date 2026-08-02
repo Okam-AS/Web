@@ -94,10 +94,14 @@ beforeEach(() => {
 })
 
 describe('the worker surface now offers both halves of WFJ-08', () => {
-  test('the tabs include availability and time off', async () => {
+  // The `training` tab is the worker's own disclosure log — "who has looked at my training record".
+  // It sits here rather than on the manager page because the person the record is about is one of
+  // the two readers the route admits, and this is the only /admin page a pure worker can reach.
+  test('the tabs include availability, time off and the worker\'s own training disclosure log', async () => {
     const wrapper = mountPage()
     await settled()
-    expect(wrapper.vm.tabs.map(t => t.key)).toEqual(['shifts', 'open', 'asks', 'availability', 'timeoff'])
+    expect(wrapper.vm.tabs.map(t => t.key))
+      .toEqual(['shifts', 'open', 'asks', 'availability', 'timeoff', 'training'])
   })
 
   // The zone is read from #1 because nothing on /workforce/me carries one, and both date forms need

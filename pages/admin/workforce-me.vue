@@ -222,6 +222,37 @@
           />
         </section>
 
+        <!-- ---------------- Who has looked at my training record ----------------
+             The one worker-facing Training surface. Every read of a person's training file appends a
+             disclosure keyed to that person; this is where the person it concerns can read it back.
+             It is behind an explicit button rather than loaded with the tab because ASKING IS ITSELF
+             RECORDED — an auto-fetch would write a permanent row into an append-only ledger every
+             time the tab was clicked past. -->
+        <section v-if="tab === 'training'" class="wfme__panel">
+          <div v-if="!activeMembership" class="wfme__empty">
+            <p class="wfme__emptytitle">
+              {{ $i('wfme_training_no_store') }}
+            </p>
+          </div>
+          <template v-else>
+            <button
+              class="wfme__btn wfme__btn--ghost"
+              :disabled="busyKey === 'training'"
+              data-test="wfme-training-load"
+              @click="loadMyDisclosures"
+            >
+              {{ $i('wfme_training_load') }}
+            </button>
+            <TrainingDisclosurePanel
+              :log="myDisclosures"
+              :asks-for-a-person="false"
+              :locale="locale"
+              :zone-id="activeTimeZoneId"
+              :busy="busyKey === 'training'"
+            />
+          </template>
+        </section>
+
         <!-- ---------------- Time off ---------------- -->
         <section v-if="tab === 'timeoff'" class="wfme__panel">
           <WorkforceTimeOffForm
@@ -247,6 +278,9 @@ import WorkforceOpenShiftCard from '~/components/admin/workforce-me/WorkforceOpe
 import WorkforcePublicationNotice from '~/components/admin/workforce-me/WorkforcePublicationNotice.vue';
 import WorkforceShiftCard from '~/components/admin/workforce-me/WorkforceShiftCard.vue';
 import WorkforceTimeOffForm from '~/components/admin/workforce-me/WorkforceTimeOffForm.vue';
+import TrainingDisclosurePanel from '~/components/admin/training/TrainingDisclosurePanel.vue';
+import { TrainingStoreService } from '~/utils/training/training-client';
+import { readDisclosures } from '~/utils/training/disclosure';
 import { WorkforceMeService } from '~/utils/workforce-me/me-client';
 import {
   classifyClaimFailure, isNormalOutcome, outcomeMessageKey, requiresRefresh
@@ -278,7 +312,8 @@ export default {
     WorkforceOpenShiftCard,
     WorkforcePublicationNotice,
     WorkforceShiftCard,
-    WorkforceTimeOffForm
+    WorkforceTimeOffForm,
+    TrainingDisclosurePanel
   },
   data () {
     return {
@@ -306,6 +341,10 @@ export default {
       // staffMemberId -> the time-off requests this session has sent, as the server answered them.
       timeOffByStaff: {},
       activeStaffMemberId: null,
+      // storeId -> { payload, error }. Asked for explicitly, never on mount: the disclosure read
+      // APPENDS a row to the very log it returns, so a page that fetched it automatically would
+      // grow this worker's own access log every time they opened the page for anything else.
+      disclosuresByStore: {},
       ackReceipts: {},
       toast: { show: false, message: '', type: 'success' },
       toastTimer: null
@@ -321,18 +360,29 @@ export default {
     _workforceMeService () {
       return new WorkforceMeService(this._coreInitializer);
     },
+    /**
+     * The Training client, used here for ONE route. `GET .../evidence/disclosures` is the only
+     * Training read a non-admin can make: it admits the subject of the record as well as the store's
+     * admin, so this page reaches it with the worker's own token and no capability at all. Nothing
+     * else on that client will answer here, and nothing else is called.
+     */
+    _trainingService () {
+      return new TrainingStoreService(this._coreInitializer);
+    },
     tabs () {
       return [
         { key: 'shifts', label: this.$i('wfme_tab_shifts') },
         { key: 'open', label: this.$i('wfme_tab_open') },
         { key: 'asks', label: this.$i('wfme_tab_asks') },
         { key: 'availability', label: this.$i('wfme_tab_availability') },
-        { key: 'timeoff', label: this.$i('wfme_tab_timeoff') }
+        { key: 'timeoff', label: this.$i('wfme_tab_timeoff') },
+        { key: 'training', label: this.$i('wfme_tab_training') }
       ];
     },
     /** The tabs that act on ONE engagement, and therefore need the engagement picker above them. */
     isEngagementTab () {
-      return this.tab === 'open' || this.tab === 'availability' || this.tab === 'timeoff';
+      return this.tab === 'open' || this.tab === 'availability' || this.tab === 'timeoff' ||
+        this.tab === 'training';
     },
 
     // --- engagements -------------------------------------------------------------------------
@@ -350,6 +400,19 @@ export default {
     activeTimeZoneId () {
       return this.activeMembership ? this.zoneForStore(this.activeMembership.storeId) : null;
     },
+    /**
+     * Who has looked at this worker's training record in the store on screen. Idle until they ask —
+     * a fourth state, because "nobody has opened this yet" is not an unread that failed, and because
+     * asking is a write.
+     */
+    myDisclosures () {
+      const membership = this.activeMembership;
+      if (!membership) { return { state: 'idle' }; }
+      const asked = this.disclosuresByStore[membership.storeId];
+      if (!asked) { return { state: 'idle' }; }
+      return readDisclosures(asked.payload, asked.error);
+    },
+
     /** The time-off requests sent from this page for the engagement on screen. */
     submittedTimeOff () {
       return this.timeOffByStaff[this.activeStaffMemberId] || [];
@@ -492,6 +555,34 @@ export default {
         this.inbox = null;
         this.inboxFailed = true;
       }
+    },
+
+    /**
+     * Who has looked at this worker's training record in the store on screen.
+     *
+     * NO personRef IS SENT, and that is the whole point: the server resolves the subject from the
+     * token, so this cannot become a lookup of a colleague's log by any change on this page. Sending
+     * the worker's own id would instead take the store-admin branch, which they do not hold, and be
+     * refused.
+     *
+     * The failure is kept per store and next to the answer it replaces, so a refused read for one
+     * employer never renders as an empty log for another.
+     */
+    async loadMyDisclosures () {
+      const membership = this.activeMembership;
+      if (!membership) { return; }
+
+      const storeId = membership.storeId;
+      this.busyKey = 'training';
+      let result;
+      try {
+        result = { payload: await this._trainingService.GetDisclosures(storeId), error: null };
+      } catch (e) {
+        result = { payload: null, error: e };
+      }
+      // Replaced wholesale rather than mutated, so Vue 2 sees it.
+      this.disclosuresByStore = Object.assign({}, this.disclosuresByStore, { [storeId]: result });
+      this.busyKey = null;
     },
 
     async loadOpenAssignments () {

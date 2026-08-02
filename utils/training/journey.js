@@ -90,11 +90,18 @@ export function readHoldings (payload, error) {
   };
 }
 
-function stateOfError (error) {
+/**
+ * Refused vs unknown, for every three-state read on this surface. Exported so a read that lives in
+ * its own module (`utils/training/disclosure.js`) classifies failures with THIS function rather than
+ * a copy — two answers to "did the server refuse, or did we never hear" is how one of them quietly
+ * starts rendering an empty screen for a 403.
+ */
+export function stateOfError (error) {
   return trainingCodeOf(error) ? READ_REFUSED : READ_UNKNOWN;
 }
 
-function trainingCodeOf (error) {
+/** The `training.*` code an error carries, or null when it did not come from this module. */
+export function trainingCodeOf (error) {
   return (error && typeof error.code === 'string' && error.code.indexOf('training.') === 0)
     ? error.code
     : null;

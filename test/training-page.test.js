@@ -51,6 +51,7 @@ jest.mock('~/utils/training/training-client', () => {
       ListCertificates (...a) { return record('ListCertificates', a) }
       RegisterCertificate (...a) { return record('RegisterCertificate', a) }
       GetHoldings (...a) { return record('GetHoldings', a) }
+      GetDisclosures (...a) { return record('GetDisclosures', a) }
     }
   })
 })
@@ -572,6 +573,79 @@ describe('holdings — the step that proves the rest of the journey did anything
 
     expect(wrapper.vm.holdings.state).toBe('answered')
     expect(wrapper.vm.holdings.keys).toEqual([])
+  })
+})
+
+describe('the disclosure log — who has looked at one person\'s record', () => {
+  const LOG = {
+    storeId: 42,
+    personRef: PERSON,
+    readAsSubject: false,
+    asOfUtc: '2026-07-29T08:00:00Z',
+    disclosures: [
+      {
+        eventType: 'evidence.read',
+        actorReference: 'manager-one',
+        actorIsSubject: false,
+        occurredAtUtc: '2026-07-28T09:00:00Z',
+        payloadSnapshotJson: '{"disclosedCertificates":"1","disclosedCompletions":"2"}'
+      },
+      {
+        eventType: 'disclosure-log.read',
+        actorReference: 'manager-two',
+        actorIsSubject: false,
+        occurredAtUtc: '2026-07-28T10:00:00Z',
+        payloadSnapshotJson: '{"disclosedDisclosures":"1"}'
+      }
+    ]
+  }
+
+  test('nothing is read until somebody asks — the read APPENDS a row the subject will see', async () => {
+    const wrapper = mountPage()
+    await settled()
+    expect(names()).not.toContain('GetDisclosures')
+    expect(wrapper.vm.disclosures.state).toBe('idle')
+  })
+
+  test('a lookup asks for that person, and reports every reader that came back', async () => {
+    mockAnswers.GetDisclosures = LOG
+    const wrapper = mountPage()
+    await settled()
+    mockCalls.length = 0
+
+    await wrapper.vm.lookupDisclosures(PERSON)
+    await settled()
+
+    expect(mockCalls).toEqual([['GetDisclosures', 42, PERSON]])
+    expect(wrapper.vm.disclosures.state).toBe('answered')
+    expect(wrapper.vm.disclosures.entries.map(e => e.actorReference))
+      .toEqual(['manager-one', 'manager-two'])
+    expect(wrapper.vm.disclosures.entries.map(e => e.eventType))
+      .toEqual(['evidence.read', 'disclosure-log.read'])
+  })
+
+  test('a refused lookup is refused, NOT "nobody has looked at this record"', async () => {
+    mockAnswers.GetDisclosures = () => Promise.reject(new WorkforceApiError(403, { code: 'training.forbidden' }))
+    const wrapper = mountPage()
+    await settled()
+
+    await wrapper.vm.lookupDisclosures(PERSON)
+    await settled()
+
+    expect(wrapper.vm.disclosures.state).toBe('refused')
+    expect(wrapper.vm.disclosures.entries).toBeNull()
+  })
+
+  test('POSITIVE CONTROL: an answered lookup with no reader on record is a real empty', async () => {
+    mockAnswers.GetDisclosures = { storeId: 42, personRef: PERSON, readAsSubject: false, disclosures: [] }
+    const wrapper = mountPage()
+    await settled()
+
+    await wrapper.vm.lookupDisclosures(PERSON)
+    await settled()
+
+    expect(wrapper.vm.disclosures.state).toBe('answered')
+    expect(wrapper.vm.disclosures.entries).toEqual([])
   })
 })
 
