@@ -116,6 +116,25 @@ function findVersion (state, courseVersionId) {
   return null;
 }
 
+/**
+ * A completion, named. `TrainingCompletionService.ListCompletionsAsync` resolves the title and the
+ * version number on the READ, so this does too rather than stamping them at write time — a fixture
+ * that snapshotted them would answer a question the server answers differently and the journey would
+ * be proving the fixture.
+ *
+ * Resolved through the version's OWN id, never through the course's current version: a completion
+ * filed against v1 must keep saying v1 after v2 is published. The server's join is OUTER for the
+ * same reason this returns nulls instead of dropping the row — the ledger references its course by
+ * value, so an unresolvable one is a state and not an error.
+ */
+function named (state, completion) {
+  const found = findVersion(state, completion.courseVersionId);
+  return Object.assign({}, completion, {
+    courseTitle: found ? found.course.title : null,
+    versionNo: found ? found.version.versionNo : null
+  });
+}
+
 // ---- the two flags that actually gate something -------------------------------------------------
 //
 // READ-ONLY, NOT DARK, and that is Training's own shape rather than Margin's. `training-client.js`
@@ -335,7 +354,7 @@ function route (ctx) {
 
   // ---- #10/#11 completions ----------------------------------------------------------------------
   if (rest === '/completions' && method === 'GET') {
-    ctx.send(200, { completions: state.completions.slice(), asOfUtc: stamp() });
+    ctx.send(200, { completions: state.completions.map(c => named(state, c)), asOfUtc: stamp() });
     return true;
   }
 
@@ -372,7 +391,7 @@ function route (ctx) {
     // APPEND-ONLY. A retake is a second row; the first one survives, which is the whole reason the
     // ledger is not an upsert.
     state.completions.push(completion);
-    ctx.send(200, completion);
+    ctx.send(200, named(state, completion));
     return true;
   }
 

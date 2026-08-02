@@ -269,6 +269,22 @@ describe('rows — nulls are dashes, and a zero is a zero', () => {
     expect(row.scorePercent).toBeNull()
     expect(row.passed).toBeNull()
     expect(row.completed).toBeNull()
+    expect(row.courseTitle).toBeNull()
+    expect(row.versionNo).toBeNull()
+  })
+
+  test('what was completed is carried through from the wire and resolved nowhere else', () => {
+    // The server projects both off the exact version the attempt is stamped to. This builder holds
+    // no catalogue and must not acquire one: the completions read is store-wide, so anything it
+    // could reach for would be the wrong course for most rows.
+    const row = completionRow({ courseId: 'c-1', courseVersionId: 'v-1', courseTitle: 'Ansvarlig alkoholservering', versionNo: 1 })
+    expect(row.courseTitle).toBe('Ansvarlig alkoholservering')
+    expect(row.versionNo).toBe(1)
+
+    // A version number is checked by TYPE, like the score: a numbering that ever starts at zero must
+    // not fall through to "unnamed version".
+    expect(completionRow({ versionNo: 0 }).versionNo).toBe(0)
+    expect(completionRow({ versionNo: '2' }).versionNo).toBeNull()
   })
 
   test('the score and the SERVER\'S verdict are carried side by side and never compared here', () => {

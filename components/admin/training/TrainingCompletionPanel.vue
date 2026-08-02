@@ -16,6 +16,7 @@
     <table v-else class="trn-table" data-test="completions-table">
       <thead>
         <tr>
+          <th>{{ $i('trn_col_course') }}</th>
           <th>{{ $i('trn_col_person') }}</th>
           <th>{{ $i('trn_col_score') }}</th>
           <th>{{ $i('trn_col_result') }}</th>
@@ -26,6 +27,10 @@
       </thead>
       <tbody>
         <tr v-for="row in rows" :key="row.completionId" data-test="completion-row">
+          <td data-test="completion-course">
+            {{ row.courseTitle || dash }}
+            <span v-if="row.versionNo !== null" class="trn-flag">v{{ row.versionNo }}</span>
+          </td>
           <td>
             <span class="trn-ref" :title="row.personRef">{{ personName(row.personRef) }}</span>
           </td>
@@ -144,6 +149,14 @@ const SHORT_HASH = 12;
  * WHY BOTH PUBLISHED AND RETIRED VERSIONS ARE OFFERED: what a completion needs is a frozen content
  * hash to be stamped against, and retiring a version freezes it further. A venue that withdraws a
  * course must still be able to file the completions of the people who took it.
+ *
+ * THE ROW NAMES WHAT WAS COMPLETED, AND THE NAME COMES OFF THE WIRE. This table is store-WIDE — the
+ * page reads every completion in the venue, not the selected course's — so before the title and
+ * version number were carried it listed scores and pass/fail verdicts against nothing at all. The
+ * page could not have filled that in: `detail` is whichever course is expanded, so naming rows from
+ * it would name most of them wrong, and resolving a title from the course list would print what the
+ * catalogue holds TODAY rather than what the person was tested against. The server projects both off
+ * the exact version the attempt is stamped to, and an unresolvable one prints as a dash.
  */
 export default {
   name: 'TrainingCompletionPanel',

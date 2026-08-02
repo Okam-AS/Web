@@ -343,6 +343,11 @@ test(
     await journey.step('THE ROW COMES BACK NOT PASSED, and the UI did not decide that', async () => {
       const row = page.locator('[data-test="completion-row"]').first();
       await expect(row).toContainText('55%');
+      // WHAT IT IS EVIDENCE OF. This ledger is store-wide, so a row that named no course was a score
+      // and a verdict against nothing — the version number is the one the attempt was stamped to,
+      // not whichever the course currently offers.
+      await expect(row.locator('[data-test="completion-course"]')).toContainText('Allergenhåndtering');
+      await expect(row.locator('[data-test="completion-course"]')).toContainText('v1');
       // The server's verdict, printed as it derived it. There is no pass control on the form to have
       // contradicted it, and the table never recomputes the comparison: the threshold that graded
       // this row is the one frozen into ITS version, and a browser rounding where the server's exact

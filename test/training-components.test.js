@@ -342,12 +342,63 @@ describe('TrainingCompletionPanel — the ledger, and the grading it leaves to t
     }, over)
   })
 
+  // The completions read is store-WIDE, so before these the table listed scores and pass/fail
+  // verdicts against nothing at all — an evidence ledger that did not say what the evidence was of.
+  test('EVERY row names the course and the version the attempt was stamped to', () => {
+    const wrapper = mountPanel(answered('completions', [
+      { completionId: 'x-1', personRef: PERSON, courseTitle: 'Ansvarlig alkoholservering', versionNo: 1, scorePercent: 90, passed: true, source: 'ManagerRecorded' },
+      { completionId: 'x-2', personRef: OTHER_PERSON, courseTitle: 'Internkontroll mat', versionNo: 4, scorePercent: 55, passed: false, source: 'ManagerRecorded' }
+    ]))
+    const cells = wrapper.findAll('[data-test="completion-course"]')
+    expect(cells).toHaveLength(2)
+    // Two DIFFERENT courses, so a panel printing one course over the whole table fails here.
+    expect(cells.at(0).text()).toContain('Ansvarlig alkoholservering')
+    expect(cells.at(0).text()).toContain('v1')
+    expect(cells.at(1).text()).toContain('Internkontroll mat')
+    expect(cells.at(1).text()).toContain('v4')
+  })
+
+  test('the version shown is the one on the ROW, never the one the form happens to offer', () => {
+    // The picker offers v2 (see mountPanel). A row filed against v1 keeps saying v1 — a panel that
+    // named rows from the versions prop, or from the selected course, would print v2 here.
+    const wrapper = mountPanel(answered('completions', [
+      { completionId: 'x-1', personRef: PERSON, courseTitle: 'Ansvarlig alkoholservering', versionNo: 1, scorePercent: 90, passed: true, source: 'ManagerRecorded' }
+    ]))
+    expect(wrapper.find('[data-test="completion-course"]').text()).toContain('v1')
+    expect(wrapper.find('[data-test="completion-course"]').text()).not.toContain('v2')
+  })
+
+  test('a row the server could not name prints a dash and no version flag, rather than disappearing', () => {
+    // The ledger holds its course reference BY VALUE with no foreign key, so an unresolvable one is
+    // a real state. It is still evidence and still listed.
+    const wrapper = mountPanel(answered('completions', [
+      { completionId: 'x-1', personRef: PERSON, courseTitle: null, versionNo: null, scorePercent: 90, passed: true, source: 'ManagerRecorded' }
+    ]))
+    expect(wrapper.findAll('[data-test="completion-row"]')).toHaveLength(1)
+    expect(wrapper.find('[data-test="completion-course"]').text()).toBe('—')
+    expect(wrapper.find('[data-test="completion-course"]').find('.trn-flag').exists()).toBe(false)
+  })
+
+  test('the column heading is a defined Norwegian word in all three locales, not a raw key', () => {
+    // The mock falls back to the key, which is how a missing string ships green. Asserted against
+    // every dictionary the app can load rather than against the one this file mounts with.
+    const wrapper = mountPanel(answered('completions', [
+      { completionId: 'x-1', personRef: PERSON, courseTitle: 'Kurs', versionNo: 1, scorePercent: 90, passed: true, source: 'ManagerRecorded' }
+    ]))
+    expect(wrapper.find('[data-test="completions-table"] th').text()).toBe(translations.no.trn_col_course)
+    for (const locale of ['no', 'en', 'de']) {
+      expect(typeof translations[locale].trn_col_course).toBe('string')
+      expect(translations[locale].trn_col_course).not.toBe('trn_col_course')
+      expect(translations[locale].trn_col_course.trim()).not.toBe('')
+    }
+  })
+
   test('a 0% score renders as 0%, not as a dash', () => {
     // Truthiness here would erase every failed attempt from an evidence ledger.
     const wrapper = mountPanel(answered('completions', [
       { completionId: 'x-1', personRef: PERSON, scorePercent: 0, passed: false, source: 'ManagerRecorded', versionContentHash: 'abc', completedAtUtc: '2026-07-01T09:00:00' }
     ]))
-    expect(wrapper.find('[data-test="completion-row"]').findAll('td').at(1).text()).toBe('0%')
+    expect(wrapper.find('[data-test="completion-row"]').findAll('td').at(2).text()).toBe('0%')
   })
 
   test('a score the server did not give is a dash, which is a different cell from 0%', () => {
@@ -356,8 +407,8 @@ describe('TrainingCompletionPanel — the ledger, and the grading it leaves to t
       { completionId: 'x-2', personRef: PERSON, scorePercent: 0, passed: false, source: 'ManagerRecorded' }
     ]))
     const rows = wrapper.findAll('[data-test="completion-row"]')
-    expect(rows.at(0).findAll('td').at(1).text()).toBe('—')
-    expect(rows.at(1).findAll('td').at(1).text()).toBe('0%')
+    expect(rows.at(0).findAll('td').at(2).text()).toBe('—')
+    expect(rows.at(1).findAll('td').at(2).text()).toBe('0%')
   })
 
   test('THE DEAD CONTROL IS GONE: there is no pass box, because the server never read one', () => {
@@ -399,8 +450,8 @@ describe('TrainingCompletionPanel — the ledger, and the grading it leaves to t
       { completionId: 'x-2', personRef: PERSON, scorePercent: 100, passed: false, source: 'ManagerRecorded' }
     ]))
     const rows = wrapper.findAll('[data-test="completion-row"]')
-    expect(rows.at(0).findAll('td').at(2).text()).toBe(translations.no.trn_result_passed)
-    expect(rows.at(1).findAll('td').at(2).text()).toBe(translations.no.trn_result_failed)
+    expect(rows.at(0).findAll('td').at(3).text()).toBe(translations.no.trn_result_passed)
+    expect(rows.at(1).findAll('td').at(3).text()).toBe(translations.no.trn_result_failed)
   })
 
   test('a Quiz-sourced row is labelled plainly and titled with what this build knows', () => {
@@ -408,14 +459,14 @@ describe('TrainingCompletionPanel — the ledger, and the grading it leaves to t
     const wrapper = mountPanel(answered('completions', [
       { completionId: 'x-1', personRef: PERSON, scorePercent: 90, passed: true, source: 'Quiz' }
     ]))
-    const cell = wrapper.find('[data-test="completion-row"]').findAll('td').at(3)
+    const cell = wrapper.find('[data-test="completion-row"]').findAll('td').at(4)
     expect(cell.text()).toBe(translations.no.trn_source_quiz)
     expect(cell.find('span').attributes('title')).toBe(translations.no.trn_source_quiz_note)
     // POSITIVE CONTROL: the source this surface actually produces carries no such title.
     const manager = mountPanel(answered('completions', [
       { completionId: 'x-2', personRef: PERSON, scorePercent: 90, passed: true, source: 'ManagerRecorded' }
     ]))
-    expect(manager.find('[data-test="completion-row"]').findAll('td').at(3).find('span').attributes('title')).toBeUndefined()
+    expect(manager.find('[data-test="completion-row"]').findAll('td').at(4).find('span').attributes('title')).toBeUndefined()
   })
 
   test('the person hint says a KNOWN person is required, which is what the server now checks', () => {
@@ -445,7 +496,7 @@ describe('TrainingCompletionPanel — the ledger, and the grading it leaves to t
       { completionId: 'x-2', personRef: PERSON, scorePercent: 40, passed: false },
       { completionId: 'x-3', personRef: PERSON, scorePercent: 40 }
     ]))
-    const results = wrapper.findAll('[data-test="completion-row"]').wrappers.map(r => r.findAll('td').at(2).text())
+    const results = wrapper.findAll('[data-test="completion-row"]').wrappers.map(r => r.findAll('td').at(3).text())
     expect(results).toEqual([translations.no.trn_result_passed, translations.no.trn_result_failed, '—'])
   })
 

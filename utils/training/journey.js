@@ -398,6 +398,14 @@ export function certificateRow (certificate) {
  * that graded it is the one frozen into that version, and a browser recomputing the comparison — off
  * a threshold read from a later version, or with a rounding the server does not do — would print a
  * second opinion about the same record.
+ *
+ * WHAT WAS COMPLETED IS TAKEN FROM THE WIRE AND NEVER RESOLVED HERE. `courseTitle` and `versionNo`
+ * are the server's projection off the exact version the attempt was stamped to. The completions read
+ * is store-WIDE while the course detail on screen is one selected course, so naming a row from that
+ * detail would name most rows wrong — and joining a title client-side off whatever the catalogue
+ * currently holds is the live-read this evidence exists to avoid. A row the server could not name
+ * carries nulls, which print as a dash: the ledger references its course BY VALUE with no foreign
+ * key, so an unresolvable one is a real state and not a failed request.
  */
 export function completionRow (completion) {
   const c = completion || {};
@@ -406,6 +414,10 @@ export function completionRow (completion) {
     personRef: c.personRef || null,
     courseId: c.courseId || null,
     courseVersionId: c.courseVersionId || null,
+    courseTitle: c.courseTitle || null,
+    // `typeof`, not truthiness — the same reason the score below cannot use it. There is no v0 today,
+    // but a numbering that ever starts at zero must not print as "unnamed version".
+    versionNo: typeof c.versionNo === 'number' ? c.versionNo : null,
     // A score of 0 is a real score. `typeof` rather than truthiness, or every 0% would print as a dash.
     scorePercent: typeof c.scorePercent === 'number' ? c.scorePercent : null,
     passed: typeof c.passed === 'boolean' ? c.passed : null,
