@@ -3786,7 +3786,7 @@ export default {
 
   // Test send (#16).
   growth_test_title: 'Send yourself a test',
-  growth_test_intro: 'Sends the current version to one address you name, through the provider\'s test route. It reaches no guest and touches no consent record.',
+  growth_test_intro: 'Sends the current version to the email address on your own account, through the provider\'s test route. It reaches no guest and touches no consent record.',
   growth_test_address: 'your@address.com',
   growth_test_send: 'Send test',
   growth_test_sending: 'Sending …',
@@ -3874,6 +3874,7 @@ export default {
   growth_error_subject_required: 'A subject is required.',
   growth_error_content_required: 'Content is required.',
   growth_error_test_address_required: 'A test address is required.',
+  growth_error_test_address_not_own: 'A test send can only go to the email address on your own account. If your account has no email address on file, you cannot send a test at all.',
   growth_error_dispatch_disabled: 'The dispatch kill switch is off for this store (growth.dispatch). Nothing was created and nothing was sent. A platform operator has to switch it on.',
   growth_error_provider_paused: 'This store\'s provider account is paused. Nothing was created and nothing was sent. Unpause it before trying again.',
   growth_error_unsubscribe_unconfigured: 'This deployment cannot build a working unsubscribe link (Growth:PublicApiBaseUrl is missing or is not an https origin). Nothing was sent — a newsletter without an unsubscribe must not go out.',

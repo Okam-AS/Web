@@ -3790,7 +3790,7 @@ export default {
 
   // Testversand (#16).
   growth_test_title: 'Test an dich selbst',
-  growth_test_intro: 'Sendet die aktuelle Version an eine von dir genannte Adresse über die Testroute des Anbieters. Sie erreicht keinen Gast und berührt kein Einwilligungsprotokoll.',
+  growth_test_intro: 'Sendet die aktuelle Version an die E-Mail-Adresse deines eigenen Kontos über die Testroute des Anbieters. Sie erreicht keinen Gast und berührt kein Einwilligungsprotokoll.',
   growth_test_address: 'deine@adresse.ch',
   growth_test_send: 'Test senden',
   growth_test_sending: 'Wird gesendet …',
@@ -3878,6 +3878,7 @@ export default {
   growth_error_subject_required: 'Ein Betreff ist erforderlich.',
   growth_error_content_required: 'Inhalt ist erforderlich.',
   growth_error_test_address_required: 'Eine Testadresse ist erforderlich.',
+  growth_error_test_address_not_own: 'Ein Testversand kann nur an die E-Mail-Adresse deines eigenen Kontos gehen. Ist bei deinem Konto keine E-Mail-Adresse hinterlegt, kannst du überhaupt keinen Test senden.',
   growth_error_dispatch_disabled: 'Der Not-Aus für den Versand ist für diesen Standort ausgeschaltet (growth.dispatch). Es wurde nichts angelegt und nichts gesendet. Ein Plattformbetreiber muss ihn einschalten.',
   growth_error_provider_paused: 'Das Anbieterkonto dieses Standorts ist pausiert. Es wurde nichts angelegt und nichts gesendet. Hebe die Pause auf, bevor du es erneut versuchst.',
   growth_error_unsubscribe_unconfigured: 'Diese Installation kann keinen funktionierenden Abmeldelink erzeugen (Growth:PublicApiBaseUrl fehlt oder ist kein https-Ursprung). Es wurde nichts gesendet — ein Newsletter ohne Abmeldung darf nicht hinausgehen.',

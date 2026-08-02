@@ -242,6 +242,12 @@ const LOCALES = { no: 'nb-NO', en: 'en-GB', de: 'de-DE' };
 // enumerating the `"growth.*"` literals in `Services/Growth/` and `Controllers/Growth*.cs` and
 // keeping the ones on a route THIS page calls; the rest belong to capture, the preference centre and
 // the privacy-request surfaces, and are deliberately still unlisted.
+//
+// `growth.test_address_not_own` is the one entry whose thrower is not yet on the deployed backend —
+// it arrives with the test-send binding lane (OkamAPI `lane/gr-testsend-guard` @ 5719fc96, local and
+// unmerged at the time of writing). Mapping it early is safe in exactly one direction: until that
+// lane merges the code is never raised and the entry is dead, whereas the reverse order ships an
+// operator «Something went wrong.» for a refusal the server explained precisely.
 const ERROR_KEYS = {
   'growth.not_found': 'growth_error_not_found',
   'growth.no_live_approval': 'growth_error_no_live_approval',
@@ -253,6 +259,15 @@ const ERROR_KEYS = {
   'growth.subject_required': 'growth_error_subject_required',
   'growth.content_required': 'growth_error_content_required',
   'growth.test_address_required': 'growth_error_test_address_required',
+  // Test-send binding (`GrowthNewsletterService.RequireOwnAccountAddressAsync`, 403). ONE code, TWO
+  // situations, which is why the sentence has to name both: the typed address is not the one on the
+  // signed-in account, OR the account holds no address at all (an administrator who signed up by
+  // phone), in which case there is no address the platform can prove is theirs and no test-send is
+  // possible for them at all. Its copy carries NO address — the backend's refusal message is
+  // deliberately static for the same reason (spec §8 GRW-PII-001: the address is personal data and
+  // the exact value being abused), and an error string is a response body and a log line waiting to
+  // happen.
+  'growth.test_address_not_own': 'growth_error_test_address_not_own',
   // Dispatch preflight (`GrowthDispatchService`): nothing is created and nothing is sent for any of
   // these, and each is undone in a different place by a different person.
   'growth.dispatch_disabled': 'growth_error_dispatch_disabled',

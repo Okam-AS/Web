@@ -3839,7 +3839,7 @@ export default {
 
   // Testutsendelse (#16).
   growth_test_title: 'Send deg selv en test',
-  growth_test_intro: 'Sender gjeldende versjon til én adresse du oppgir, gjennom leverandørens testrute. Den når ingen gjest og rører ingen samtykkelogg.',
+  growth_test_intro: 'Sender gjeldende versjon til e-postadressen på din egen konto, gjennom leverandørens testrute. Den når ingen gjest og rører ingen samtykkelogg.',
   growth_test_address: 'din@adresse.no',
   growth_test_send: 'Send test',
   growth_test_sending: 'Sender …',
@@ -3927,6 +3927,7 @@ export default {
   growth_error_subject_required: 'Emne er påkrevd.',
   growth_error_content_required: 'Innhold er påkrevd.',
   growth_error_test_address_required: 'En testadresse er påkrevd.',
+  growth_error_test_address_not_own: 'En testsending kan bare gå til e-postadressen på din egen konto. Har kontoen din ingen e-postadresse registrert, kan du ikke sende test i det hele tatt.',
   growth_error_dispatch_disabled: 'Nødbryteren for utsendelse er slått av for denne butikken (growth.dispatch). Ingenting ble opprettet og ingenting ble sendt. En plattformansvarlig må slå den på.',
   growth_error_provider_paused: 'Leverandørkontoen til denne butikken står på pause. Ingenting ble opprettet og ingenting ble sendt. Fjern pausen før du prøver igjen.',
   growth_error_unsubscribe_unconfigured: 'Denne installasjonen kan ikke lage en fungerende avmeldingslenke (Growth:PublicApiBaseUrl mangler eller er ikke en https-adresse). Ingenting ble sendt — et nyhetsbrev uten avmelding skal ikke sendes.',

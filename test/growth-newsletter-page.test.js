@@ -544,6 +544,46 @@ describe('the Growth page — the send, as shipped', () => {
     }
   })
 
+  test('a test-send refused because the address is not the operator\'s own says so', async () => {
+    // The backend binds a test-send to the signed-in administrator's own account address
+    // (`GrowthNewsletterService.RequireOwnAccountAddressAsync`, 403 `growth.test_address_not_own`).
+    // Before this entry existed the operator who typed a colleague's address was told «Something
+    // went wrong. Nothing was sent.» — which invites a retry that will refuse identically forever.
+    mockUnsubscribe = UNSUBSCRIBE_PRESENT
+    behaviour.TestSend = () => Promise.reject(
+      new GrowthApiError(403, { error: { code: 'growth.test_address_not_own', message: 'server prose' } }))
+    const wrapper = mountPage()
+    await settled()
+    await wrapper.vm.selectNewsletter('1002')
+    wrapper.setData({ testAddress: 'kollega@virksomheten.no' })
+    await wrapper.vm.sendTest()
+    expect(wrapper.vm.toast.message).toBe('growth_error_test_address_not_own')
+    // An error toast, not a success one — a refused send must not read as a sent one.
+    expect(wrapper.vm.toast.type).toBe('error')
+  })
+
+  test('the refusal is rendered without the address that caused it', async () => {
+    // C7. The address is both personal data (spec §8 GRW-PII-001) and the exact value being abused,
+    // and a rendered string is a response body, a screenshot and a log line waiting to happen. The
+    // backend keeps its own refusal message static for this reason; the client must not undo that by
+    // "helpfully" interpolating the value back in.
+    mockUnsubscribe = UNSUBSCRIBE_PRESENT
+    const typed = 'kollega@virksomheten.no'
+    behaviour.TestSend = () => Promise.reject(
+      new GrowthApiError(403, { error: { code: 'growth.test_address_not_own', message: 'server prose' } }))
+    const wrapper = mountPage()
+    await settled()
+    await wrapper.vm.selectNewsletter('1002')
+    wrapper.setData({ testAddress: typed })
+    await wrapper.vm.sendTest()
+    // The address really WAS in play — it went to the server. Without this the assertion below would
+    // hold for a page that never had the value at all, which proves nothing.
+    expect(callsTo('TestSend')[0][3]).toBe(typed)
+    // And no rendering call carried it: not this refusal, not any other string built during the run.
+    const rendered = i18nCalls.filter(entry => JSON.stringify(entry[1] || {}).includes(typed))
+    expect(rendered).toEqual([])
+  })
+
   test('a code this surface does not know falls to the generic message, not a raw key', async () => {
     // POSITIVE CONTROL for the map above: an unrecognised code must not render
     // `growth_error_something_new` at an operator, and must not be mistaken for a known refusal.
@@ -579,6 +619,65 @@ describe('the copy itself — what the screen is allowed to assert', () => {
     expect(translations.en.growth_gate_dispatched_toast).not.toBe('The newsletter was sent.')
   })
 
+  test('the not-your-address refusal is its own sentence, and names both ways it happens', () => {
+    // ONE code covers TWO situations, so a sentence that only says "use your own address" sends the
+    // second operator hunting for a typo that does not exist: an administrator who signed up by
+    // phone has no address on file and cannot test-send at all. Both clauses are asserted, per
+    // locale, so a translation that keeps the shape and drops the second half reds.
+    const OWN_ACCOUNT = { no: 'din egen konto', en: 'your own account', de: 'deines eigenen Kontos' }
+    const NONE_ON_FILE = { no: 'ingen e-postadresse', en: 'no email address', de: 'keine E-Mail-Adresse' }
+    LOCALES.forEach((locale) => {
+      const copy = translations[locale].growth_error_test_address_not_own
+      expect(copy).toEqual(expect.stringContaining(OWN_ACCOUNT[locale]))
+      expect(copy).toEqual(expect.stringContaining(NONE_ON_FILE[locale]))
+      // No interpolation slot at all, so there is nowhere an address could ever be rendered in (C7).
+      expect(copy).not.toEqual(expect.stringContaining('{'))
+    })
+  })
+
+  test('the test-send intro no longer promises an address the operator names', () => {
+    // The screen used to say it sends to "one address you name". The backend now refuses every
+    // address but the operator's own, so that sentence was a promise the server breaks — and this
+    // page's own section comment had already assumed the narrower behaviour. The exact former text
+    // is pinned per locale so it cannot return as a "shorter" rewrite.
+    expect(translations.no.growth_test_intro).not.toBe(
+      'Sender gjeldende versjon til én adresse du oppgir, gjennom leverandørens testrute. Den når ingen gjest og rører ingen samtykkelogg.')
+    expect(translations.en.growth_test_intro).not.toBe(
+      'Sends the current version to one address you name, through the provider\'s test route. It reaches no guest and touches no consent record.')
+    expect(translations.de.growth_test_intro).not.toBe(
+      'Sendet die aktuelle Version an eine von dir genannte Adresse über die Testroute des Anbieters. Sie erreicht keinen Gast und berührt kein Einwilligungsprotokoll.')
+    // And positively: each locale now names whose address it is, so the operator knows before
+    // pressing rather than only after being refused.
+    const OWN_ACCOUNT = { no: 'din egen konto', en: 'your own account', de: 'deines eigenen Kontos' }
+    LOCALES.forEach((locale) => {
+      expect(translations[locale].growth_test_intro).toEqual(expect.stringContaining(OWN_ACCOUNT[locale]))
+    })
+  })
+
+  test('no growth_error_* sentence exists in one locale and not another', () => {
+    // DERIVED on purpose, from the UNION of the three files' own key sets: a refusal whose copy is
+    // added to one locale and forgotten in another renders as a raw key at an operator, and no
+    // hand-maintained list catches that reliably — the list below is the fifth one in this file.
+    //
+    // What it deliberately does NOT do is derive which CODES are mapped from the page's own map:
+    // that expectation would shrink in the same edit that drops an entry and would prove nothing.
+    // The mapping is pinned separately, by literal code name, in the send tests above.
+    const union = new Set()
+    LOCALES.forEach((locale) => {
+      Object.keys(translations[locale]).forEach((key) => {
+        if (key.indexOf('growth_error_') === 0) { union.add(key) }
+      })
+    })
+    // Vacuity guard: an empty or nearly-empty union would make every assertion below unreachable.
+    expect(union.size).toBeGreaterThan(10)
+    LOCALES.forEach((locale) => {
+      union.forEach((key) => {
+        expect(typeof translations[locale][key]).toBe('string')
+        expect(translations[locale][key].length).toBeGreaterThan(0)
+      })
+    })
+  })
+
   test('every key this page and its components render exists in all three locales', () => {
     // A missing key renders as the raw key at an operator, and the page-level mock cannot catch that
     // because it returns the key by design.
@@ -595,7 +694,8 @@ describe('the copy itself — what the screen is allowed to assert', () => {
       'growth_run_state_reconciliation', 'growth_run_refresh', 'growth_run_refreshing',
       'growth_run_read_at', 'growth_run_read_unknown', 'growth_run_refresh_note',
       'growth_error_dispatch_disabled', 'growth_error_provider_paused',
-      'growth_error_unsubscribe_unconfigured', 'growth_error_preference_centre_unconfigured'
+      'growth_error_unsubscribe_unconfigured', 'growth_error_preference_centre_unconfigured',
+      'growth_error_test_address_not_own', 'growth_test_intro'
     ]
     LOCALES.forEach((locale) => {
       keys.forEach((key) => {
