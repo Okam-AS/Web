@@ -1,0 +1,113 @@
+{
+  "journey": "events-deposit-precondition",
+  "title": "the operator reads the deposit precondition on the row before arming the money path",
+  "status": "passed",
+  "startedAtUtc": "2026-08-02T09:21:51.167Z",
+  "finishedAtUtc": "2026-08-02T09:22:09.087Z",
+  "durationMs": 17920,
+  "capabilities": [
+    "platform.feature-flags.read",
+    "platform.feature-flags.write",
+    "events.deposits.arming-precondition-disclosed"
+  ],
+  "surface": "admin",
+  "backend": "live",
+  "baseUrl": "http://127.0.0.1:3951",
+  "apiBaseUrl": "http://127.0.0.1:5951",
+  "commit": "7a2c789ba8f8efb908dedf23c72bab35be3d6481",
+  "underTest": null,
+  "backendProbe": {
+    "url": "http://127.0.0.1:5951/health",
+    "status": 200,
+    "body": "Healthy"
+  },
+  "backendServed": 12,
+  "backendSample": [
+    "POST http://127.0.0.1:5951/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:5951/user/login -> 200",
+    "GET http://127.0.0.1:5951/user -> 200",
+    "GET http://127.0.0.1:5951/stores/1/market -> 200",
+    "GET http://127.0.0.1:5951/stores/1 -> 200",
+    "GET http://127.0.0.1:5951/stores/1/specialopeninghours -> 200",
+    "GET http://127.0.0.1:5951/feature-flags/catalog -> 200",
+    "GET http://127.0.0.1:5951/user -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in as the manager (99999999 / 123123)",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T09:21:51.168Z",
+      "durationMs": 17489,
+      "detail": "landed on /admin/feature-flags",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "the deposits row states the precondition, above its own switch",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T09:22:08.657Z",
+      "durationMs": 126,
+      "detail": "Før denne slås på: butikken må allerede ha tatt imot ekte bestillinger gjennom sitt eget betalingsoppsett. Depositum trekkes gjennom nøyakti",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "no other flag on the board claims a precondition",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T09:22:08.926Z",
+      "durationMs": 23,
+      "detail": "1 precondition across 18 flag rows",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "the switch it sits above is live: arming still goes through",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T09:22:08.949Z",
+      "durationMs": 58,
+      "detail": "armed, nothing refused it — which is the unenforced precondition, not a defect",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "put the world back: remove the override",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T09:22:09.007Z",
+      "durationMs": 77,
+      "detail": "Events.Deposits back at its module default, off",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "what the browser said while this ran",
+      "status": "passed",
+      "startedAtUtc": "2026-08-02T09:22:09.084Z",
+      "durationMs": 1,
+      "detail": "2 recorded as findings",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "defect",
+      "summary": "browser error during the deposit-precondition journey",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=1\" with a new navigation."
+    },
+    {
+      "severity": "defect",
+      "summary": "browser error during the deposit-precondition journey",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=1\" with a new navigation."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=1\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=1\" with a new navigation."
+  ],
+  "failedRequests": [],
+  "screenshots": [
+    "events-deposit-precondition/01-the-deposit-row-its-precondition-above-the-switc.png"
+  ],
+  "error": null
+}

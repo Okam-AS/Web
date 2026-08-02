@@ -37,14 +37,21 @@
 //
 // ---- RUNNING AGAINST A REAL BACKEND -----------------------------------------------------------
 //
-//   E2E_API_BASE_URL=http://localhost:5080 npm run test:e2e
+//   test/e2e/scripts/live-world.sh          stands the world up and prints the next line
+//   E2E_API_BASE_URL=http://127.0.0.1:5951 E2E_WEB_PORT=3951 npm run test:e2e
 //
 // starts no fixture, points the app at the given origin, and AUTOMATICALLY excludes every journey
-// tagged `@fixture` — which today is all three, because each depends on state only the fixture has
-// (a proposal token, a store with no schedule this week, a phone number whose OTP is 123123). A
-// journey that can honestly run against a live API declares a different tag and is then the only
-// thing that runs in that mode. The tag is not decoration: it is the difference between evidence and
-// a test that quietly asserted against the wrong world.
+// tagged `@fixture`, because those depend on state only the fixture has — a proposal token, a store
+// with no schedule this week, four privacy-request ids. A journey that can honestly run against a
+// live API declares a different tag and is then the only thing that runs in that mode. The tag is not
+// decoration: it is the difference between evidence and a test that quietly asserted against the
+// wrong world.
+//
+// For a long time that exclusion selected EVERY journey, so live mode ran nothing at all — which was
+// the honest answer while no live world existed to run against. `events-deposit-precondition` now
+// carries `@live` and is the one journey selected here; its header says exactly what made it
+// eligible, and `test/e2e/support/journey.js` refuses to write a live-labelled artifact for a run
+// whose browser never reached the origin it names.
 
 const { defineConfig, devices } = require('@playwright/test');
 

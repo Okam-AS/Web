@@ -1,0 +1,43 @@
+   target: Server=localhost,15433;Database=OkamLiveJourney;User Id=sa;Password=***;TrustServerCertificate=True;Encrypt=False;Connect Timeout=60
+
+[1m== 1/5  Stopping any API this script previously started on :5951[0m
+   :5951 is free
+
+[1m== 2/5  Recreating an EMPTY database [OkamLiveJourney][0m
+   empty: 0 tables
+
+[1m== 3/5  Applying the migration chain from empty[0m
+   127 migrations, 211 tables, 25 append-only triggers
+   C1 checked on sys.triggers: Stores and StoreAdmins carry none
+
+[1m== 4/5  Starting the API on http://127.0.0.1:5951[0m
+   healthy (pid 67099, log: /tmp/okam-live-world-api.log)
+
+[1m== 5/5  Seeding the smallest world a journey can run against[0m
+   manager signed in: applicationUserId = efb3937c-7e94-4449-866b-fa9f26882bd0
+   store 'Live Journey Kafé' = StoreId 1, with the manager as its StoreAdmin
+   the manager's adminIn carries store 1 -- the shell will let them in
+   GET /feature-flags/catalog -> 18 flags
+   GET /stores/1/feature-flags -> 18 states (the manager IS a StoreAdmin)
+   no flag overrides: every flag reads its module default, deny-closed
+
+-------------------------------------------------------------------------------
+A LIVE world is up.
+
+    API        http://127.0.0.1:5951           (pid 67099, log /tmp/okam-live-world-api.log)
+    database   OkamLiveJourney on localhost,15433   (127 migrations, 211 tables)
+    store      1  "Live Journey Kafé"
+    manager    99999999 / 123123   (the app prefixes +47 itself)
+
+Run the live journeys against it:
+
+    cd /Users/svendaneel/okam/Web-modules
+    E2E_API_BASE_URL=http://127.0.0.1:5951 E2E_WEB_PORT=3951 npm run test:e2e
+
+Playwright starts no fixture in that mode and runs only the journeys that do NOT carry `@fixture`.
+Their artifacts land in artifacts/journeys/ with "backend": "live" and this API's origin on
+"apiBaseUrl" -- and support/journey.js FAILS a live run in which the browser never reached that
+origin, so the label cannot be produced without the traffic.
+
+Stop it with:   kill 67099
+-------------------------------------------------------------------------------

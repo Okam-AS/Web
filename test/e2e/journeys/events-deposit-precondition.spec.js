@@ -25,6 +25,32 @@
 // started — `Events.Deposits` at its module default, off. Two sibling Events journeys assert that
 // deposits and settlement stay down while `Events.Core` is up; leaving an override behind would
 // change the world underneath them.
+//
+// ---- WHY THIS IS THE ONE TAGGED `@live` -------------------------------------------------------
+//
+// It is the first journey in this repo that runs against a real API on a real database, and it was
+// chosen because its live world is the cheapest honestly seedable one — not because it is the most
+// important. Every OTHER journey here still carries `@fixture` and still means it. What made this
+// one reachable, checked against a live backend rather than assumed:
+//
+//   • THE CREDENTIAL IS REAL. `99999999 / 123123` is not a fixture invention: it is
+//     `AppSettings.DemoPhoneNumber` / `AppSettings.DemoVerificationCode`, one of exactly two no-SMS
+//     sign-ins the application has. The literal every admin journey types already exists live.
+//   • IT ASSERTS NO FIXTURE DATA. This spec imports nothing from `fixture/world.js`. The blocker for
+//     the others is that they assert a hard-coded store id, proposal token or request id that exists
+//     in no real database; this one asserts a flag key, a rendered Norwegian sentence and a geometric
+//     relation between two boxes, all of which are properties of the product.
+//   • THE CATALOG MATCHES. `Events.Deposits` is contributed by `EventsFeatureFlags.Describe()` and
+//     composed unconditionally in `Program.cs` — no `Events:Enabled` needed, because
+//     `StoreFeatureFlagsController` gates on StoreAdmin alone. Its advertised default is `false`, so
+//     a store with no override row really does read "Av" on a freshly migrated database.
+//   • THE WORLD IS TWO ROWS. `test/e2e/scripts/live-world.sh` seeds a `Stores` row and a
+//     `StoreAdmins` row and stops. It seeds NO flag override, deliberately: the flag board is this
+//     journey's subject, and a seeded flag state would be seeding the answer.
+//
+// The write this journey makes is a flag override, and it is made BY THE BROWSER under the manager's
+// own bearer token — so the row the server writes carries a resolved actor rather than a seed's
+// ambient one. The seed itself writes no money-path row at all.
 
 const { test, journeyDetails, expect } = require('../support/journey');
 const { signIn } = require('../support/admin');
@@ -41,6 +67,10 @@ test(
   journeyDetails({
     journey: 'events-deposit-precondition',
     surface: 'admin',
+    // NOT `@fixture`. The tag is the difference between evidence and a test that quietly asserted
+    // against the wrong world, so it is claimed only with the header above paid for. In live mode
+    // this is the only journey selected; in fixture mode it still runs alongside the rest.
+    tag: ['@live'],
     capabilities: [
       'platform.feature-flags.read',
       'platform.feature-flags.write',

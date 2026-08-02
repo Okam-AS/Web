@@ -31,6 +31,9 @@
 //   "apiBaseUrl":    "http://127.0.0.1:4010",
 //   "commit":        "fc25ff3…",                     // the tree this evidence describes
 //   "underTest":     "ConsumerWeb@e5fee1c core@8931bc3",  // when the app driven is NOT this repo
+//   "backendProbe":  { "url": "…/health", "status": 200, "body": "Healthy" },  // live only; see below
+//   "backendServed": 37,                             // responses the browser got FROM apiBaseUrl
+//   "backendSample": ["GET http://127.0.0.1:5951/feature-flags/catalog -> 200", …],
 //   "browser":       "chromium",
 //   "steps": [
 //     { "n": 1, "name": "sign in as the manager",
@@ -44,6 +47,21 @@
 //   "screenshots":   [ "workforce-schedule-publish/03-published.png" ],  // relative to artifacts/journeys
 //   "error":         null | "the assertion that ended it"
 // }
+//
+// ---- `backend` IS A CLAIM, AND CLAIMS GET CHECKED ---------------------------------------------
+//
+// `"backend": "live"` is the most consequential word in this file: it is what lets a capability leave
+// `built-unverified`, and for a long time it was produced by nothing more than an environment
+// variable being set. So both halves are now guarded, symmetrically:
+//
+//   fixture   the fixture is asked what it served; zero means the app talked to somebody else.
+//   live      the declared origin is probed before the browser opens (and refused outright if it
+//             answers `/__fixture/health`, i.e. if live mode has been pointed at the throwaway
+//             fixture), and afterwards the browser's own responses FROM that origin are counted.
+//             Zero fails the run.
+//
+// `backendServed` and `backendSample` are in the artifact so the claim is auditable by a reader who
+// was not there, rather than only by the process that wrote it.
 //
 // STATUS IS THE RUN'S, NOT THE PRODUCT'S. A journey that documents where a broken flow stops still
 // reports `passed` when it successfully documented that — the defect goes in `findings`, which is
@@ -96,6 +114,15 @@ function slug (text) {
   return String(text).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48);
 }
 
+/** The origin of a URL, or null when it is not one. Used to attribute traffic to the declared API. */
+function originOf (url) {
+  try {
+    return new URL(url).origin;
+  } catch (e) {
+    return null;
+  }
+}
+
 class JourneyRecorder {
   constructor (meta) {
     this.meta = meta;
@@ -105,6 +132,13 @@ class JourneyRecorder {
     this.consoleErrors = [];
     this.failedRequests = [];
     this.screenshots = [];
+    // What the browser actually got FROM the declared API origin. This is the live-mode counterpart of
+    // the fixture's `/__fixture/stats.served`: the one number that distinguishes a journey that talked
+    // to the backend its artifact names from one that never touched it. Kept per-origin-match rather
+    // than per-request-count so a run against a DIFFERENT origin cannot inflate it.
+    this.backendResponses = 0;
+    this.backendSample = [];
+    this._apiOrigin = originOf(meta.apiBaseUrl);
     this._page = null;
   }
 
@@ -121,6 +155,14 @@ class JourneyRecorder {
       this.failedRequests.push({ method: request.method(), url: redactUrl(request.url()), status: null, failure: (request.failure() || {}).errorText || null });
     });
     page.on('response', (response) => {
+      if (this._apiOrigin && originOf(response.url()) === this._apiOrigin) {
+        this.backendResponses += 1;
+        // A handful is enough to READ; the count is what is asserted on. Redacted like every other URL
+        // that reaches this file, because a funding token travels in a query string.
+        if (this.backendSample.length < 8) {
+          this.backendSample.push(response.request().method() + ' ' + redactUrl(response.url()) + ' -> ' + response.status());
+        }
+      }
       if (response.status() >= 400) {
         this.failedRequests.push({ method: response.request().method(), url: redactUrl(response.url()), status: response.status() });
       }
@@ -193,6 +235,13 @@ class JourneyRecorder {
       apiBaseUrl: this.meta.apiBaseUrl,
       commit: this.meta.commit,
       underTest: this.meta.underTest || null,
+      // WHAT MAKES `backend` CHECKABLE RATHER THAN A LABEL. `backendProbe` is what the declared API
+      // origin answered to a request this harness made itself before the browser opened; `backendServed`
+      // is how many responses the browser then got from that same origin. A reader who distrusts the
+      // word "live" can read both, and a run that produced the word without the traffic is failed below.
+      backendProbe: this.meta.backendProbe || null,
+      backendServed: this.backendResponses,
+      backendSample: this.backendSample,
       browser: this.meta.browser,
       steps: this.steps,
       findings: this.findings,
@@ -259,6 +308,49 @@ const test = base.test.extend({
       if (!response.ok) { throw new Error('fixture reset failed: HTTP ' + response.status); }
     }
 
+    // ---- THE LIVE PREFLIGHT ---------------------------------------------------------------------
+    //
+    // A live run has no `/__fixture/reset` to fail on, so until now it had NO check of any kind: set
+    // E2E_API_BASE_URL to anything at all and every artifact would say `"backend": "live"` regardless
+    // of what — if anything — was on the other end. The word has to cost something to say.
+    //
+    // Two things are established here, both BEFORE the browser opens, so a bad target fails with a
+    // sentence rather than as a selector timeout eighty lines into a journey:
+    //
+    //   1. Something is actually there, and its answer is recorded in the artifact.
+    //   2. It is NOT the throwaway fixture. Pointing live mode at `test/e2e/fixture/api-server.js`
+    //      would produce the single most dangerous artifact this instrument can emit: a file that
+    //      claims a live backend, names a real-looking origin, and describes a run against a
+    //      hard-coded store 42 that exists in no database. The fixture answers `/__fixture/health`
+    //      and a real WebApi has no such route, so the difference is one request.
+    if (meta.backend === 'live') {
+      const origin = meta.apiBaseUrl.replace(/\/+$/, '');
+      // THE FIXTURE TELL IS CHECKED FIRST, and the order is the whole point of it. The fixture serves
+      // no `/health`, so a health-first preflight would refuse this case with "that backend is not
+      // healthy" — true, useless, and pointing the reader at the wrong problem entirely.
+      const fixtureTell = await fetch(origin + '/__fixture/health').then(r => r.ok).catch(() => false);
+      if (fixtureTell) {
+        throw new Error(
+          'live mode is pointed at the THROWAWAY FIXTURE (' + meta.apiBaseUrl + ' answers /__fixture/health).\n' +
+          'Every artifact from this run would claim "backend": "live" while describing the fixture world — ' +
+          'the one result worse than having no live run at all. Point E2E_API_BASE_URL at a real API.');
+      }
+      const probeUrl = origin + '/health';
+      let probe;
+      try {
+        const response = await fetch(probeUrl);
+        probe = { url: probeUrl, status: response.status, body: (await response.text()).trim().slice(0, 120) };
+      } catch (error) {
+        throw new Error(
+          'live mode was asked for, but nothing answered ' + probeUrl + ' (' + ((error && error.message) || error) + ').\n' +
+          'Stand a world up first:  OKAM_API_REPO=<path> test/e2e/scripts/live-world.sh');
+      }
+      if (probe.status >= 400) {
+        throw new Error('live mode: ' + probeUrl + ' answered HTTP ' + probe.status + ' — that backend is not healthy.');
+      }
+      meta.backendProbe = probe;
+    }
+
     const recorder = new JourneyRecorder(meta);
     recorder.watch(page);
 
@@ -268,6 +360,12 @@ const test = base.test.extend({
     // the status 'passed' in some versions, and a journey with a failed expectation is not evidence.
     let failed = testInfo.status !== 'passed' || testInfo.errors.length > 0;
     let error = testInfo.errors.length ? testInfo.errors[0].message : null;
+    // Set by either wrong-world guard below, and RE-THROWN after the artifact is on disk. Marking the
+    // artifact was not enough: reproduced on 2026-08-02 by pointing a live-labelled run at a dev
+    // server compiled against the fixture, the run wrote `"status": "failed"` into the file and
+    // Playwright still printed `1 passed` and exited 0. A guard whose whole subject is "this run is
+    // not what it says it is" cannot leave the runner — and therefore CI — reporting success.
+    let wrongWorld = false;
 
     // THE WRONG-WORLD GUARD. `reuseExistingServer` adopts whatever is already on the port, so a dev
     // server somebody else started against the real API would be used silently — and the journeys
@@ -282,12 +380,34 @@ const test = base.test.extend({
           'talking to some other API — most likely a dev server already running on ' + meta.baseUrl +
           ' that was adopted by `reuseExistingServer`. Stop it and run again.';
         recorder.finding('defect', 'journey ran against the wrong backend', error);
+        wrongWorld = true;
       }
+    }
+
+    // THE SAME GUARD FROM THE LIVE SIDE. `reuseExistingServer` is just as willing to adopt a dev
+    // server built against the fixture, or against some other origin entirely — and the failure mode
+    // is identical: a green journey and an artifact naming a backend it never reached. The fixture
+    // half above asks the fixture what it served; there is nobody to ask here, so the browser's own
+    // traffic is the evidence, attributed by ORIGIN rather than counted in total.
+    if (meta.backend === 'live' && !failed && recorder.backendResponses === 0) {
+      failed = true;
+      error = 'This journey is labelled live against ' + meta.apiBaseUrl + ', and the browser received ' +
+        'NOT ONE response from that origin. Whatever it exercised, it was not that backend — most ' +
+        'likely a dev server already running on ' + meta.baseUrl + ' that was adopted by ' +
+        '`reuseExistingServer` and compiled against a different API_BASE_URL. Stop it and run again.';
+      recorder.finding('defect', 'live journey never reached the backend it names', error);
+      wrongWorld = true;
     }
     const file = recorder.write(failed ? 'failed' : 'passed', error);
     try {
       testInfo.attachments.push({ name: 'journey', path: file, contentType: 'application/json' });
     } catch (e) { /* the artifact on disk is the record; the HTML report link is a nicety */ }
+
+    // AFTER the artifact is written, never before: the record of a wrong-world run is the most useful
+    // thing this fixture can leave behind, and throwing first would destroy it. Only re-thrown when
+    // the journey itself was otherwise green — a run that already failed has its own error, and
+    // replacing it with this one would hide what actually broke.
+    if (wrongWorld) { throw new Error(error); }
   }, { auto: true }]
 });
 
