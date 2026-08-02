@@ -8,12 +8,23 @@
 //
 // ---- WHERE ------------------------------------------------------------------------------------
 //
-//   artifacts/journeys/<name>.playwright.json     one file per journey, overwritten each run
-//   artifacts/journeys/<name>/NN-<slug>.png       the screenshots that journey chose to take
+//   artifacts/journeys/<name>.playwright.json                    the STRONGEST run on record
+//   artifacts/journeys/runs/<name>.<backendKey>.playwright.json  this run, filed under its backend
+//   artifacts/journeys/runs/ledger.jsonl                         append-only, one line per run
+//   artifacts/journeys/<name>/<backendKey>/NN-<slug>.png         the screenshots that journey chose to take,
+//                                                                and the PDFs two of them print
 //
 // `<name>` is the journey's own id (the `journey` annotation on the test, see `journeyTest` below),
 // NOT the test title and NOT the file name — those are prose and will be reworded. The id is the
 // join key a probe reads.
+//
+// The canonical path and the JSON shape are unchanged, because probes and the plan log join on them.
+// What changed is that it is no longer whoever ran last: a run only ever overwrites the file of its
+// OWN backend, and the canonical slot is taken only by a run that ranks strictly higher (or by the
+// same backend's newer run). `test/e2e/support/artifact-store.js` holds that ruling and the reasons.
+// It exists because a fixture re-run had silently replaced the live pass of all three `@live`
+// journeys — `playwright.config.js` inverts its tag filter only in live mode, so the live-tagged
+// journeys run in fixture mode too, and used to write to the same name.
 //
 // ---- SHAPE ------------------------------------------------------------------------------------
 //
@@ -29,9 +40,16 @@
 //   "backend":       "fixture" | "live",
 //   "baseUrl":       "http://127.0.0.1:3010",
 //   "apiBaseUrl":    "http://127.0.0.1:4010",
-//   "commit":        "fc25ff3…",                     // the tree this evidence describes
+//   "commit":        "fc25ff3…",                     // the tree the HARNESS came from, i.e. this repo
 //   "underTest":     "ConsumerWeb@e5fee1c core@8931bc3",  // when the app driven is NOT this repo
 //   "backendProbe":  { "url": "…/health", "status": 200, "body": "Healthy" },  // live only; see below
+//   "backendBuild":  { "id": "OkamAPI@ddc27fa…", "source": "env:E2E_API_BUILD",
+//                      "short": "ddc27fa", "detail": "branch feature/…" } | null,   // WHICH BUILD ANSWERED
+//   "artifact":      { "key": "live-5961-ddc27fa",       // the backend this run is filed under
+//                      "file": "artifacts/journeys/runs/…",
+//                      "canonical": true,                // did it take <name>.playwright.json?
+//                      "canonicalHeldBy": "live-5961-ddc27fa",   // and if not, who holds it
+//                      "provisional": false },           // true = written at start, run not finished
 //   "backendServed": 37,                             // responses the browser got FROM apiBaseUrl
 //   "backendSample": ["GET http://127.0.0.1:5951/feature-flags/catalog -> 200", …],
 //   "browser":       "chromium",
@@ -54,7 +72,8 @@
 // `built-unverified`, and for a long time it was produced by nothing more than an environment
 // variable being set. So both halves are now guarded, symmetrically:
 //
-//   fixture   the fixture is asked what it served; zero means the app talked to somebody else.
+//   fixture   the fixture is asked what it served; zero — or a fixture that cannot be asked at all,
+//             because it died mid-run — means the app talked to somebody else.
 //   live      the declared origin is probed before the browser opens (and refused outright if it
 //             answers `/__fixture/health`, i.e. if live mode has been pointed at the throwaway
 //             fixture), and afterwards the browser's own responses FROM that origin are counted.
@@ -63,21 +82,42 @@
 // `backendServed` and `backendSample` are in the artifact so the claim is auditable by a reader who
 // was not there, rather than only by the process that wrote it.
 //
+// WHICH backend, though, is a separate question from whether one answered, and `/health` cannot
+// settle it: it is unauthenticated and its whole body is the word "Healthy", so a world built from a
+// stale checkout — or a different lane's world that has since taken the same port — satisfies it
+// identically. `backendBuild` is the answer, resolved at run time by `artifact-store.js` from
+// `E2E_API_BUILD`, else from `OKAM_API_REPO`'s own HEAD, else from the API's published route surface,
+// and left null rather than guessed. It is also part of the filename a run is stored under, so two
+// builds cannot overwrite each other's record.
+//
+//   E2E_API_BUILD="OkamAPI@$(git -C "$OKAM_API_REPO" rev-parse HEAD)" \
+//   E2E_API_BASE_URL=http://127.0.0.1:5951 E2E_WEB_PORT=3951 npm run test:e2e
+//
+// is the strongest form, and is what a world script should export about the checkout it built.
+//
 // STATUS IS THE RUN'S, NOT THE PRODUCT'S. A journey that documents where a broken flow stops still
 // reports `passed` when it successfully documented that — the defect goes in `findings`, which is
 // what a reader is meant to act on. `failed` means the journey itself did not complete: the page did
 // not do what it was asserted to do, and nobody has decided what that means yet.
 //
-// ---- WHY IT IS WRITTEN IN FIXTURE TEARDOWN ----------------------------------------------------
+// ---- WHY THE FINAL RECORD IS WRITTEN IN FIXTURE TEARDOWN --------------------------------------
 //
 // So that a FAILING journey still leaves a record. A try/finally in each spec would work until
 // somebody forgot one; a fixture cannot be forgotten, and Playwright runs its teardown whether the
 // body threw or not. `testInfo.status` and `testInfo.errors` are both settled by then.
+//
+// BUT TEARDOWN IS NOT GUARANTEED TO RUN AT ALL, and for a while that was the store's second lie: a
+// run that was killed, or timed out, or died asking a dead fixture what it served, wrote nothing —
+// and the PREVIOUS run's file stayed exactly where it was, labelled passed, reading as this run's
+// result. So a provisional record is now written BEFORE the browser opens, `"status": "running"`,
+// and it replaces its own backend's standing record. Whatever happens to the process afterwards, the
+// worst a reader can find is a run that visibly did not finish.
 
 const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
 const base = require('@playwright/test');
+const store = require('./artifact-store');
 
 const REPO_ROOT = path.resolve(__dirname, '..', '..', '..');
 const ARTIFACT_DIR = path.join(REPO_ROOT, 'artifacts', 'journeys');
@@ -86,6 +126,47 @@ function commitSha () {
   try {
     return execFileSync('git', ['rev-parse', 'HEAD'], { cwd: REPO_ROOT, encoding: 'utf8' }).trim();
   } catch (e) {
+    return null;
+  }
+}
+
+/**
+ * A build identity taken from the API ITSELF, for the case where nobody told us which checkout is
+ * running — which is every live run today, because `live-world.sh` exports nothing about the tree it
+ * built and `OKAM_API_REPO` lives in the shell that stood the world up, not the one running the test.
+ *
+ * The API's published route surface is the strongest thing available without its cooperation: the
+ * sorted list of `METHOD /path` it declares, hashed. Two checkouts whose routes differ hash
+ * differently, so they cannot overwrite each other's artifact. It is a SURFACE fingerprint and the
+ * record says so — a build that changed only behaviour behind an unchanged route set fingerprints
+ * identically, and a reader must not read this as a commit.
+ *
+ * Only the hash and the route count are kept. The document itself is never written to an artifact.
+ */
+async function fingerprintFromSwagger (origin) {
+  const url = origin + '/swagger/v1/swagger.json';
+  try {
+    // A real API that does not publish swagger must cost this preflight seconds, not minutes.
+    const response = await fetch(url, { signal: AbortSignal.timeout(4000) });
+    if (!response.ok) { return null; }
+    const document = await response.json();
+    const paths = (document && document.paths) || {};
+    const routes = [];
+    Object.keys(paths).sort().forEach((route) => {
+      Object.keys(paths[route] || {}).sort().forEach((method) => {
+        routes.push(method.toUpperCase() + ' ' + route);
+      });
+    });
+    if (!routes.length) { return null; }
+    const digest = store.sha(routes.join('\n'), 7);
+    const version = (document.info && document.info.version) || null;
+    return {
+      id: 'api-routes@' + digest + (version ? ' v' + version : ''),
+      source: 'probe:' + url,
+      short: digest,
+      detail: routes.length + ' published routes, hashed; a surface fingerprint, not a commit'
+    };
+  } catch (error) {
     return null;
   }
 }
@@ -138,6 +219,9 @@ class JourneyRecorder {
     // than per-request-count so a run against a DIFFERENT origin cannot inflate it.
     this.backendResponses = 0;
     this.backendSample = [];
+    // Computed once, and by the same function the store files the JSON with, so a run's pictures and
+    // its record can never end up under different names for the same backend.
+    this.backendKey = store.backendKeyFor(meta);
     this._apiOrigin = originOf(meta.apiBaseUrl);
     this._page = null;
   }
@@ -207,14 +291,29 @@ class JourneyRecorder {
     this.findings.push({ severity, summary, detail: detail || null });
   }
 
-  /** A screenshot, filed under this journey and referenced from its JSON. */
+  /**
+   * WHERE THIS RUN'S FILES GO — screenshots, and the PDFs two journeys print.
+   *
+   * Under the BACKEND KEY, for the same reason the JSON is: a fixture re-run used to overwrite the
+   * pixels a live artifact referenced, so the strongest record on disk could end up illustrated by the
+   * weakest run's screenshots while still saying `"backend": "live"`. Same lie, one level down.
+   */
+  get dir () {
+    return path.join(ARTIFACT_DIR, this.meta.journey, this.backendKey);
+  }
+
+  /** The same, written the way an artifact or a review should quote it — never an absolute path. */
+  get relativeDir () {
+    return 'artifacts/journeys/' + this.meta.journey + '/' + this.backendKey;
+  }
+
+  /** A screenshot, filed under this journey and this backend, and referenced from its JSON. */
   async shot (name) {
     if (!this._page) { return null; }
-    const dir = path.join(ARTIFACT_DIR, this.meta.journey);
-    fs.mkdirSync(dir, { recursive: true });
+    fs.mkdirSync(this.dir, { recursive: true });
     const file = String(this.screenshots.length + 1).padStart(2, '0') + '-' + slug(name) + '.png';
-    await this._page.screenshot({ path: path.join(dir, file), fullPage: true });
-    const relative = this.meta.journey + '/' + file;
+    await this._page.screenshot({ path: path.join(this.dir, file), fullPage: true });
+    const relative = this.meta.journey + '/' + this.backendKey + '/' + file;
     this.screenshots.push(relative);
     return relative;
   }
@@ -240,6 +339,10 @@ class JourneyRecorder {
       // is how many responses the browser then got from that same origin. A reader who distrusts the
       // word "live" can read both, and a run that produced the word without the traffic is failed below.
       backendProbe: this.meta.backendProbe || null,
+      // WHICH BUILD ANSWERED. `commit` above is this repo's HEAD and says nothing about the API — one
+      // live world on this branch was built from a detached worktree and its artifacts still named the
+      // frontend tree. Null when nothing could tell us, never inferred.
+      backendBuild: this.meta.backendBuild || null,
       backendServed: this.backendResponses,
       backendSample: this.backendSample,
       browser: this.meta.browser,
@@ -252,11 +355,22 @@ class JourneyRecorder {
     };
   }
 
+  /**
+   * Files the run. Returns what `artifact-store.writeRun` returned, so the caller can say whether this
+   * run took the canonical slot or was outranked by a stronger one already on record.
+   */
   write (status, error) {
     fs.mkdirSync(ARTIFACT_DIR, { recursive: true });
-    const file = path.join(ARTIFACT_DIR, this.meta.journey + '.playwright.json');
-    fs.writeFileSync(file, JSON.stringify(this.toJSON(status, error), null, 2) + '\n');
-    return file;
+    return store.writeRun(ARTIFACT_DIR, this.toJSON(status, error));
+  }
+
+  /**
+   * Files that the run has STARTED. Its own backend's standing record is replaced by a visibly
+   * unfinished one, so an interrupted run cannot leave its predecessor's pass reading as this result.
+   */
+  begin () {
+    fs.mkdirSync(ARTIFACT_DIR, { recursive: true });
+    return store.beginRun(ARTIFACT_DIR, this.toJSON('running', null));
   }
 }
 
@@ -295,6 +409,12 @@ const test = base.test.extend({
       // the HARNESS came from and say nothing about the code under test, so a journey that crosses
       // a repo boundary declares what it actually drove and the artifact carries both.
       underTest: annotation('under-test') || null,
+      // Which BUILD is on the other end of `apiBaseUrl`. Resolved for a LIVE backend only: the fixture
+      // is a node process inside this repo, so asking it the same question would put the FRONTEND's
+      // commit in `backendBuild` — the exact confusion this field exists to end. `null` when nothing
+      // can say, and null is not a failure; it is the honest answer, and it ranks this run below one
+      // that could be identified. See artifact-store.js.
+      backendBuild: null,
       browser: browserName
     };
 
@@ -349,10 +469,34 @@ const test = base.test.extend({
         throw new Error('live mode: ' + probeUrl + ' answered HTTP ' + probe.status + ' — that backend is not healthy.');
       }
       meta.backendProbe = probe;
+
+      // `/health` proves SOMETHING is there; it cannot prove WHICH. Its body is the word "Healthy" and
+      // it takes no credential, so a world built three releases ago — or another lane's world that has
+      // since taken this port — satisfies it exactly as well as the current one. Both of those were
+      // standing on this machine on 2026-08-02, on different ports, out of different api worktrees at
+      // different commits, and both answered "Healthy".
+      meta.backendBuild = store.resolveBackendBuild(process.env, meta.apiBaseUrl) ||
+        await fingerprintFromSwagger(origin);
+
+      if (!meta.backendBuild) {
+        // NOT a failure, and deliberately not treated as one: refusing the run would stop live evidence
+        // being produced at all on a machine where nothing can answer the question. But it is the
+        // difference between evidence and an anecdote, so it is said once, plainly, with the fix.
+        process.stdout.write(
+          '[journey] ' + meta.journey + ': NOTHING could say which BUILD is answering on ' + meta.apiBaseUrl + '.\n' +
+          '          This run will be filed as `unidentified` and will not outrank one that named its build.\n' +
+          '          Fix it in one line:  E2E_API_BUILD="OkamAPI@$(git -C "$OKAM_API_REPO" rev-parse HEAD)" ...\n');
+      }
     }
 
     const recorder = new JourneyRecorder(meta);
     recorder.watch(page);
+
+    // THE RUN IS ON RECORD BEFORE THE BROWSER OPENS. Placed after the preflight rather than before it
+    // so a run that was refused a backend files nothing — it never ran — and after `meta` is settled so
+    // the provisional lands under the same backend key the final record will. From here on the process
+    // may die any way it likes and the store still says "running", never a stale "passed".
+    recorder.begin();
 
     await use(recorder);
 
@@ -373,8 +517,25 @@ const test = base.test.extend({
     // sent this fixture no traffic at all did not talk to it, and a green run in that case is the
     // most dangerous result this instrument could produce.
     if (meta.backend === 'fixture' && !failed) {
-      const stats = await fetch(meta.apiBaseUrl + '/__fixture/stats').then(r => r.json());
-      if (!stats.served) {
+      // ASKED INSIDE A TRY, because this line used to be able to throw PAST the artifact write: a
+      // fixture that had died mid-run makes the fetch reject, the fixture teardown unwinds, nothing is
+      // written, and the previous run's file stays on disk labelled passed. A fixture that cannot be
+      // asked what it served is the same finding as one that served nothing — the run's backend claim
+      // is not checkable — so it lands in the same branch rather than as an exception.
+      let stats = null;
+      try {
+        stats = await fetch(meta.apiBaseUrl + '/__fixture/stats').then(r => r.json());
+      } catch (fetchError) {
+        stats = { served: 0, unreachable: (fetchError && fetchError.message) || String(fetchError) };
+      }
+      if (stats.unreachable) {
+        failed = true;
+        error = 'The fixture backend at ' + meta.apiBaseUrl + ' could not be asked what it served (' +
+          stats.unreachable + '). It died during this journey, or was never the thing the app was ' +
+          'talking to. Either way this run cannot support the claim its artifact would make.';
+        recorder.finding('defect', 'the fixture could not be asked what it served', error);
+        wrongWorld = true;
+      } else if (!stats.served) {
         failed = true;
         error = 'The fixture backend answered nothing during this journey. The app under test is ' +
           'talking to some other API — most likely a dev server already running on ' + meta.baseUrl +
@@ -398,10 +559,25 @@ const test = base.test.extend({
       recorder.finding('defect', 'live journey never reached the backend it names', error);
       wrongWorld = true;
     }
-    const file = recorder.write(failed ? 'failed' : 'passed', error);
+    const filed = recorder.write(failed ? 'failed' : 'passed', error);
     try {
-      testInfo.attachments.push({ name: 'journey', path: file, contentType: 'application/json' });
+      testInfo.attachments.push({ name: 'journey', path: filed.runFile, contentType: 'application/json' });
+      if (filed.canonicalFile) {
+        testInfo.attachments.push({ name: 'journey (canonical)', path: filed.canonicalFile, contentType: 'application/json' });
+      }
     } catch (e) { /* the artifact on disk is the record; the HTML report link is a nicety */ }
+
+    // SAID OUT LOUD, because a run that quietly did not take the canonical slot looks exactly like a
+    // run that did, and the reader who most needs to know is the one about to cite the canonical file
+    // as this run's evidence. It is not an error: the loser is on disk under its own backend key and in
+    // the ledger, and the slot is held by a run this one did not outrank.
+    if (!filed.canonical) {
+      process.stdout.write(
+        '[journey] ' + meta.journey + ': filed as ' + path.relative(REPO_ROOT, filed.runFile) + '.\n' +
+        '          artifacts/journeys/' + meta.journey + '.playwright.json still belongs to `' + filed.heldBy +
+        '`, which this run did not outrank.\n' +
+        '          To hand it over deliberately, delete that file and run again.\n');
+    }
 
     // AFTER the artifact is written, never before: the record of a wrong-world run is the most useful
     // thing this fixture can leave behind, and throwing first would destroy it. Only re-thrown when

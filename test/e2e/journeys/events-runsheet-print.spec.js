@@ -29,7 +29,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { test, journeyDetails, expect, ARTIFACT_DIR } = require('../support/journey');
+const { test, journeyDetails, expect } = require('../support/journey');
 const { signIn } = require('../support/admin');
 const { turnOn } = require('../support/flags');
 const world = require('../fixture/world');
@@ -227,7 +227,10 @@ test(
     // ---- the artifact itself, produced by the same print pipeline the rules above govern.
     // Kept out of the step so the step's `detail` can stay a RELATIVE description: an artifact that
     // is read in a review should not carry the absolute path of the laptop that produced it.
-    const pdfFile = path.join(ARTIFACT_DIR, JOURNEY, 'run-sheet.pdf');
+    // `journey.dir` rather than the journey's name: a printed artifact is filed under the BACKEND that
+    // produced it, exactly like the screenshots and the JSON, so a fixture re-run cannot overwrite the
+    // PDF a live artifact points at.
+    const pdfFile = path.join(journey.dir, 'run-sheet.pdf');
 
     await journey.step('produce the printed artifact', async () => {
       fs.mkdirSync(path.dirname(pdfFile), { recursive: true });
@@ -236,7 +239,7 @@ test(
       // A zero-length or trivially small PDF is a print that produced nothing, which would otherwise
       // pass every assertion above — those measure the DOM, this measures the output.
       expect(bytes).toBeGreaterThan(1000);
-      return 'artifacts/journeys/' + JOURNEY + '/run-sheet.pdf (' + bytes + ' bytes)';
+      return journey.relativeDir + '/run-sheet.pdf (' + bytes + ' bytes)';
     });
 
     // ---- and the same two questions asked of the FILE, not of the DOM.

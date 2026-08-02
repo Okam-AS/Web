@@ -40,7 +40,7 @@
 const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
-const { test, journeyDetails, expect, ARTIFACT_DIR } = require('../support/journey');
+const { test, journeyDetails, expect } = require('../support/journey');
 const { signIn } = require('../support/admin');
 const { turnOn } = require('../support/flags');
 const world = require('../fixture/world');
@@ -210,14 +210,15 @@ test(
 
     await journey.shot('the run sheet as it will print');
 
-    const pdfFile = path.join(ARTIFACT_DIR, JOURNEY, 'run-sheet-onboarding.pdf');
+    // Filed under the BACKEND that produced it — see the same line in events-runsheet-print.spec.js.
+    const pdfFile = path.join(journey.dir, 'run-sheet-onboarding.pdf');
 
     await journey.step('produce the printed artifact', async () => {
       fs.mkdirSync(path.dirname(pdfFile), { recursive: true });
       await page.pdf({ path: pdfFile, printBackground: false });
       const bytes = fs.statSync(pdfFile).size;
       expect(bytes).toBeGreaterThan(1000);
-      return 'artifacts/journeys/' + JOURNEY + '/run-sheet-onboarding.pdf (' + bytes + ' bytes)';
+      return journey.relativeDir + '/run-sheet-onboarding.pdf (' + bytes + ' bytes)';
     });
 
     // ---- THE EXIT. Asked of the file the printer would put on paper.
