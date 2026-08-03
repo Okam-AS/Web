@@ -509,6 +509,12 @@ const test = base.test.extend({
     // server compiled against the fixture, the run wrote `"status": "failed"` into the file and
     // Playwright still printed `1 passed` and exited 0. A guard whose whole subject is "this run is
     // not what it says it is" cannot leave the runner — and therefore CI — reporting success.
+    //
+    // `test/e2e/scripts/guard-proof.js` is the standing proof of that, and it is a proof rather than
+    // an assertion because the exit code is what was lying: it drives real `playwright test` children
+    // and reads their exit status, then repeats the two mislabelled runs against a copy of THIS file
+    // with the re-throw removed and requires them to go green again. Delete the re-throw below and
+    // that script goes red; change its shape and the script refuses to report success at all.
     let wrongWorld = false;
 
     // THE WRONG-WORLD GUARD. `reuseExistingServer` adopts whatever is already on the port, so a dev
