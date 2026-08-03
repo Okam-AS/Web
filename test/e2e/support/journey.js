@@ -58,6 +58,10 @@
 //                      // set when THIS run replaced a STRONGER record of its own backend: that record
 //                      // is kept whole at `file` instead of being overwritten. See artifact-store.js.
 //   "backendServed": 37,                             // responses the browser got FROM apiBaseUrl
+//   "backendSubjectServed": 31,                      // …of which were the journey's SUBJECT, i.e. xhr/fetch
+//                                                    // to a path that is not the sign-in/store shell
+//   "foreignSubjectServed": 0,                       // the same, answered by some OTHER origin
+//   "foreignSubjectSample": [],                      // …and who
 //   "backendSample": ["GET http://127.0.0.1:5951/feature-flags/catalog -> 200", …],
 //   "browser":       "chromium",
 //   "steps": [
@@ -85,6 +89,10 @@
 //             answers `/__fixture/health`, i.e. if live mode has been pointed at the throwaway
 //             fixture), and afterwards the browser's own responses FROM that origin are counted.
 //             Zero fails the run.
+//   both      and, because BOTH of those are floors at zero that SIGNING IN clears on its own, a run
+//             whose subject calls were all answered by a different origin fails too — see
+//             `judgeSubjectOrigin`. That is the case where the served count is honestly non-zero and
+//             the artifact's backend claim is still a lie.
 //
 // `backendServed` and `backendSample` are in the artifact so the claim is auditable by a reader who
 // was not there, rather than only by the process that wrote it.
@@ -125,6 +133,7 @@ const path = require('path');
 const { execFileSync } = require('child_process');
 const base = require('@playwright/test');
 const store = require('./artifact-store');
+const { isShellPath, judgeSubjectOrigin } = require('./journey-assertions');
 
 const REPO_ROOT = path.resolve(__dirname, '..', '..', '..');
 const ARTIFACT_DIR = path.join(REPO_ROOT, 'artifacts', 'journeys');
@@ -211,6 +220,29 @@ function originOf (url) {
   }
 }
 
+/** The path of a URL, query dropped — what `isShellPath` matches against. */
+function pathOf (url) {
+  try {
+    return new URL(url).pathname;
+  } catch (e) {
+    return '';
+  }
+}
+
+/**
+ * `resourceType()` is documented but is read here defensively: it is the discriminator the
+ * split-origin guard rests on, and a Playwright version that ever stopped answering it must make
+ * this classify nothing rather than throw inside an event handler, where the rejection would be
+ * unhandled and the run would fail for a reason unrelated to the product.
+ */
+function safeResourceType (response) {
+  try {
+    return response.request().resourceType();
+  } catch (e) {
+    return null;
+  }
+}
+
 class JourneyRecorder {
   constructor (meta) {
     this.meta = meta;
@@ -226,10 +258,22 @@ class JourneyRecorder {
     // than per-request-count so a run against a DIFFERENT origin cannot inflate it.
     this.backendResponses = 0;
     this.backendSample = [];
+    // ...AND WHICH OF THEM WERE THE JOURNEY'S SUBJECT. `backendResponses` counts everything the named
+    // origin answered, which signing in reaches on its own — so on its own it cannot tell a run that
+    // exercised the module from a run that only opened the door there and did the rest elsewhere.
+    // `isShellPath` splits the two, and the same split is applied to every OTHER origin the browser
+    // fetched from, because "nobody served the subject" and "somebody else did" are different
+    // findings and only the second is a lie about the backend. See `judgeSubjectOrigin`.
+    this.backendSubjectResponses = 0;
+    this.foreignSubjectResponses = 0;
+    this.foreignSubjectSample = [];
     // Computed once, and by the same function the store files the JSON with, so a run's pictures and
     // its record can never end up under different names for the same backend.
     this.backendKey = store.backendKeyFor(meta);
     this._apiOrigin = originOf(meta.apiBaseUrl);
+    // The app's own origin, so its documents, bundles and any same-origin call it makes are never
+    // mistaken for a second API.
+    this._appOrigin = originOf(meta.baseUrl);
     this._page = null;
   }
 
@@ -246,12 +290,26 @@ class JourneyRecorder {
       this.failedRequests.push({ method: request.method(), url: redactUrl(request.url()), status: null, failure: (request.failure() || {}).errorText || null });
     });
     page.on('response', (response) => {
-      if (this._apiOrigin && originOf(response.url()) === this._apiOrigin) {
+      const origin = originOf(response.url());
+      // `xhr` and `fetch` ONLY. A webfont, a favicon or a script from a CDN is not a call this
+      // journey made about its subject, and counting one would turn the split-origin guard below into
+      // a guard that reds on a page having assets — which is a guard somebody deletes.
+      const kind = safeResourceType(response);
+      const isApiCall = kind === 'xhr' || kind === 'fetch';
+      const subject = isApiCall && !isShellPath(pathOf(response.url()));
+
+      if (this._apiOrigin && origin === this._apiOrigin) {
         this.backendResponses += 1;
+        if (subject) { this.backendSubjectResponses += 1; }
         // A handful is enough to READ; the count is what is asserted on. Redacted like every other URL
         // that reaches this file, because a funding token travels in a query string.
         if (this.backendSample.length < 8) {
           this.backendSample.push(response.request().method() + ' ' + redactUrl(response.url()) + ' -> ' + response.status());
+        }
+      } else if (subject && origin && origin !== this._appOrigin) {
+        this.foreignSubjectResponses += 1;
+        if (this.foreignSubjectSample.length < 8) {
+          this.foreignSubjectSample.push(response.request().method() + ' ' + redactUrl(response.url()) + ' -> ' + response.status());
         }
       }
       if (response.status() >= 400) {
@@ -351,6 +409,13 @@ class JourneyRecorder {
       // frontend tree. Null when nothing could tell us, never inferred.
       backendBuild: this.meta.backendBuild || null,
       backendServed: this.backendResponses,
+      // FILED EVERY RUN, not only when a guard trips. `backendServed` alone reads as "the backend
+      // answered" when it may only mean "the login did"; these two say how much of what the journey
+      // is ABOUT reached the origin the artifact names, and how much of it went somewhere else. A
+      // number on the record is what stops the guard's threshold from quietly becoming slack.
+      backendSubjectServed: this.backendSubjectResponses,
+      foreignSubjectServed: this.foreignSubjectResponses,
+      foreignSubjectSample: this.foreignSubjectSample,
       backendSample: this.backendSample,
       browser: this.meta.browser,
       steps: this.steps,
@@ -578,6 +643,29 @@ const test = base.test.extend({
       recorder.finding('defect', 'live journey never reached the backend it names', error);
       wrongWorld = true;
     }
+
+    // THE SAME LIE, ONE STEP SHORTER OF TOTAL. Both branches above are floors at zero, and signing in
+    // clears both: `stats.served` counts the login, and so does `backendResponses`. So a build whose
+    // subject calls left for a different origin — a client with its own base URL, a half-adopted dev
+    // server — would reach the named backend for the door and nothing else, and file an artifact
+    // naming a backend that answered only `POST /user/login`. This is that case, and ONLY that case:
+    // it needs the named origin to have served none of the journey's subject WHILE another origin
+    // served some. Applied to both backend kinds, because neither floor could see it.
+    if (!failed) {
+      const split = judgeSubjectOrigin({
+        apiBaseUrl: meta.apiBaseUrl,
+        subjectFromBackend: recorder.backendSubjectResponses,
+        subjectFromElsewhere: recorder.foreignSubjectResponses,
+        elsewhereSample: recorder.foreignSubjectSample
+      });
+      if (split) {
+        failed = true;
+        error = split;
+        recorder.finding('defect', 'journey subject calls went to a different origin', error);
+        wrongWorld = true;
+      }
+    }
+
     const filed = recorder.write(failed ? 'failed' : 'passed', error);
     try {
       testInfo.attachments.push({ name: 'journey', path: filed.runFile, contentType: 'application/json' });

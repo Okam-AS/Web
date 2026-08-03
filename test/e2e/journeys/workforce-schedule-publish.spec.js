@@ -22,6 +22,17 @@
 
 const { test, journeyDetails, expect } = require('../support/journey');
 const { signIn } = require('../support/admin');
+const {
+  assertPricedWage,
+  impliedHourlyRate,
+  assertRulePackResults,
+  assertFirstRevision,
+  WORKFORCE_RULE_PACK_NO
+} = require('../support/journey-assertions');
+
+// 08:00–16:00 less a 30-minute unpaid break — the shift this journey types in, in paid minutes. Used
+// only to put an hourly rate in the step's detail, never asserted; see `impliedHourlyRate`.
+const PAID_MINUTES = 450;
 
 test(
   'A manager creates a draft week, staffs a shift, validates it and publishes it',
@@ -38,12 +49,17 @@ test(
     // It does NOT need its own live world; it needs a RESET before it, which is a different and much
     // cheaper thing — `test/e2e/scripts/live-world-reset.sh restore`, about nine seconds against
     // forty-two for a rebuild from empty. The earlier note here said the two workforce journeys could
-    // not share a database. Measured, that is not what happens, and the truth is worse: run after
+    // not share a database. Measured, that is not what happens, and the truth was worse: run after
     // `workforce-flag-lever` has published this week, step 4 below STILL passes — the draft view
     // resolves no revision once the previous one is published, so the badge reads "Ingen plan" and
-    // this journey quietly creates *Revisjon 2* instead of *Revisjon 1*. It does not red; it produces
-    // weaker evidence than its own header claims, about a week somebody had already planned. The
-    // reset is what makes the run mean what it says.
+    // this journey creates *Revisjon 2* instead of *Revisjon 1*, about a week somebody had already
+    // planned. It did not red; it produced weaker evidence than this header claims.
+    //
+    // IT REDS NOW. The create-draft step asserts the revision NUMBER (`assertFirstRevision`) rather
+    // than the word "Revisjon", so a run on an inherited world fails on the sentence "this draft
+    // opened as revision 2" instead of quietly filing a green artifact for a claim it did not walk.
+    // The reset is still what makes the run mean what it says; the difference is that skipping it is
+    // now a failure somebody reads rather than a weakening nobody sees.
     //
     // The collision that DOES red is the other way round: this journey turns `workforce.publication`
     // on in step 3 and never clears it, and `workforce-flag-lever` opens by asserting that flag reads
@@ -109,9 +125,16 @@ test(
       await expect(page.locator('.wf-page__toast')).toContainText('Utkast opprettet');
       await expect(page.locator('.wf-page__badge')).toHaveText('Utkast');
       // The revision number only renders once a revision resolved, so its presence is the read
-      // confirming what the mutation claimed.
+      // confirming what the mutation claimed — and its VALUE is what says the week was unplanned.
+      // `toContainText('Revisjon')` alone is satisfied by `Revisjon 2`, which is what this journey
+      // produces on a world `workforce-flag-lever` has already published into: the draft view
+      // resolves nothing once a revision is published, so step 4's badge still reads "Ingen plan"
+      // and this step quietly opens a second revision of a week somebody had already planned. That
+      // is the header's claim silently weakened, not a failure — until here.
       await expect(page.locator('.wf-page__meta').first()).toContainText('Revisjon');
-      return (await page.locator('.wf-page__meta').first().textContent()).trim();
+      const meta = (await page.locator('.wf-page__meta').first().textContent()).trim();
+      assertFirstRevision(meta);
+      return meta;
     });
 
     await journey.step('add a shift for a named employee', async () => {
@@ -146,13 +169,33 @@ test(
       await expect(shift).toBeVisible();
       const time = (await shift.locator('.wf-grid__shift-time').textContent()).trim();
       const role = (await shift.locator('.wf-grid__shift-role').textContent()).trim();
-      // The cost chip is the server's figure. Asserting it EXISTS and carries a currency; the value
-      // itself is the fixture's, so asserting the number would be asserting our own arithmetic.
-      const cost = await shift.locator('.wf-grid__shift-cost').textContent();
       expect(time).toBe('08:00–16:00');
       expect(role).toBe('Barista');
-      expect(cost).toMatch(/kr|NOK|\d/);
-      return time + ' · ' + role + ' · ' + cost.trim();
+
+      // THE COST CHIP IS THE SERVER'S FIGURE, AND IT HAS TO BE A WAGE.
+      //
+      // This used to be `expect(cost).toMatch(/kr|NOK|\d/)` — any digit-bearing string — on the
+      // reasoning that the amount is the world's and pinning it would pin the world. The reasoning
+      // holds; the assertion did not follow from it. `kr 0,00` carries a digit, and `kr 0,00` is
+      // EXACTLY what an unresolved hourly rate renders: `shiftCostLabel` sends any Totalled cost
+      // through `priceLabel(cost.totalMinor)`. So the one thing this step exists to catch — a wage
+      // the backend could not price — walked straight through it.
+      //
+      // What is asserted instead needs no knowledge of the world's rate: the server marked the shift
+      // TOTALLED (no `is-unpriced` class, which is `cost.state`), the chip is a whole money amount in
+      // one of the two shapes the component can render (anchored, so `Mangler sats` and a bare `—`
+      // are refused), and the amount is more than zero. The figure itself lands in the detail, with
+      // the hourly rate it implies, so a reader of the artifact can see the world's rate rather than
+      // take "there was a number" on trust.
+      const costChip = shift.locator('.wf-grid__shift-cost');
+      const wage = assertPricedWage({
+        label: await costChip.textContent(),
+        className: await costChip.getAttribute('class')
+      });
+      const rate = impliedHourlyRate(wage.minor, PAID_MINUTES);
+      return time + ' · ' + role + ' · ' + wage.label +
+        ' (' + (wage.minor / 100).toFixed(2) + ' for ' + (PAID_MINUTES / 60) + ' h' +
+        (rate ? ', implying ' + (rate / 100).toFixed(2) + ' per hour' : '') + ')';
     });
 
     await journey.shot('draft with one shift');
@@ -207,10 +250,23 @@ test(
       await page.getByRole('button', { name: 'Valider' }).click();
       await expect(page.locator('.wf-page__validation')).toBeVisible();
       await expect(page.locator('.wf-page__badge')).toHaveText('Validert');
-      const results = page.locator('.wf-page__result');
-      const count = await results.count();
-      expect(count).toBeGreaterThan(0);
-      return count + ' rule results, state Validert';
+
+      // THE WHOLE PACK ANSWERED, NAMED RULE BY NAMED RULE.
+      //
+      // What stood here was `expect(await page.locator('.wf-page__result').count()).toBeGreaterThan(0)`,
+      // and it could not fail: `pages/admin/workforce-schedule.vue` renders the EMPTY state
+      // (`wf_validation_no_results`) as an `<li class="wf-page__result">` as well, so that count is at
+      // least one whether eleven rules answered or none did. The pack's eleven were read into a
+      // variable, spent in the returned prose, and compared to nothing.
+      //
+      // TRANSCRIBED, NOT DERIVED — see `WORKFORCE_RULE_PACK_NO`, which is written out from
+      // `WorkforceRulePackSeed.cs` rather than read from any source this run also talks to. The ids
+      // come off `.wf-page__result-id`, which the empty-state row does not have, so the unfalsifiable
+      // case is now the loudest failure this step can produce.
+      const ids = (await page.locator('.wf-page__result-id').allTextContents()).map(text => text.trim());
+      assertRulePackResults(ids);
+      return ids.length + ' rule results (' + WORKFORCE_RULE_PACK_NO.length + ' expected: ' +
+        ids.join(', ') + '), state Validert';
     });
 
     await journey.step('publish it', async () => {

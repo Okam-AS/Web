@@ -49,4 +49,33 @@ async function signIn (page, { phone, code, expectPath }) {
   await expect(modal).toHaveCount(0, { timeout: 15000 });
 }
 
-module.exports = { signIn };
+/**
+ * WHO THE BROWSER IS SIGNED IN AS — the id `GET /user` answered with, as the app itself holds it.
+ *
+ * READ, never written, and the distinction is the whole reason the note at the top of this file
+ * rules seeding out: seeding `localStorage` would replace the door with an assumption, while reading
+ * it afterwards observes what the door produced. The Vuex store persists its whole state on every
+ * mutation (`plugins/global-mixin.js`), so `state.currentUser.id` is the account the modal signed in
+ * — the same value the API resolves from the bearer through `ActorClaims.ResolveUserId`, because
+ * `UserService.GenerateJwtTokenAsync` mints `unique_name` from `user.Id`.
+ *
+ * That equality is what lets a journey assert an audit stamp names THE RIGHT PERSON, in either
+ * world, without pinning a literal id that would only be true in one of them.
+ *
+ * Returns null when nothing is signed in; callers assert on that rather than papering over it.
+ */
+async function signedInUserId (page) {
+  return await page.evaluate(() => {
+    try {
+      const raw = window.localStorage.getItem('state');
+      if (!raw) { return null; }
+      const parsed = JSON.parse(raw);
+      const id = parsed && parsed.currentUser && parsed.currentUser.id;
+      return id === undefined || id === null || id === '' ? null : String(id);
+    } catch (e) {
+      return null;
+    }
+  });
+}
+
+module.exports = { signIn, signedInUserId };

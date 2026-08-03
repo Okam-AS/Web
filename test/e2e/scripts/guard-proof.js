@@ -66,6 +66,15 @@ const KEEP = !!process.env.GUARD_PROOF_KEEP;
 // honest outcome is a loud stop, not a quiet pass against a mutation that changed nothing.
 const RETHROW = 'if (wrongWorld) { throw new Error(error); }';
 
+// THE SECOND STATEMENT WITH THE SAME PROPERTY. Both wrong-world branches above are floors at ZERO,
+// and signing in clears both of them — so a build whose subject calls went to a different origin
+// than its authentication reaches the named backend for the door, fetches everything the journey is
+// about from elsewhere, and files an artifact naming a backend that served only `POST /user/login`.
+// `judgeSubjectOrigin` is what refuses that, and arms S1/S2 below are the runs it has to refuse.
+// Mutated the same way and for the same reason: an arm that would pass with the check deleted
+// measures nothing about the check.
+const SPLIT_BRANCH = 'if (split) {';
+
 // Written to the streams rather than through `console`, matching dev-server.js and journey.js — this
 // output is a report a person reads, and the repo lints `no-console` in this tree.
 function say (line) { process.stdout.write(line + '\n'); }
@@ -127,13 +136,24 @@ function fixtureApiServer (state) {
  * The one property that reproduces the defect is the one `nuxt dev` fixes at COMPILE time: the origin
  * the built bundle calls. A dev server already on the port — adopted by `reuseExistingServer` — calls
  * whatever IT was compiled against, whatever the run is labelled. `state.target` is that baked-in value.
+ *
+ * IT MAKES TWO CALLS, NOT ONE, and they are the two kinds every admin journey makes: `/user`, which
+ * `journey-assertions.SHELL_PATHS` classifies as the sign-in shell, and a module route, which it
+ * classifies as the journey's SUBJECT. `state.subjectTarget` is where the second one goes, and
+ * pointing it somewhere other than `state.target` is a split origin — an app whose door is one API
+ * and whose data is another. It defaults to `state.target`, so every arm written before this
+ * behaves exactly as it did.
  */
 function webServer (state) {
   return http.createServer((_req, res) => {
+    const shell = JSON.stringify(state.target);
+    const subject = JSON.stringify(state.subjectTarget || state.target);
     res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
     res.end('<!doctype html><meta charset="utf-8"><title>app</title>\n' +
       '<h1 id="h">loading</h1>\n<script>\n' +
-      'fetch(' + JSON.stringify(state.target) + ' + \'/ping\').then(r => r.json())\n' +
+      'fetch(' + shell + ' + \'/user\').then(r => r.json())\n' +
+      '  .then(() => fetch(' + subject + ' + \'/workforce/stores/1/context\'))\n' +
+      '  .then(r => r.json())\n' +
       '  .then(d => { document.getElementById(\'h\').textContent = \'served by \' + d.ping; })\n' +
       '  .catch(e => { document.getElementById(\'h\').textContent = \'no backend: \' + e.message; });\n' +
       '</script>');
@@ -194,10 +214,11 @@ function buildHarness (root, name, mutate) {
   fs.symlinkSync(path.join(REPO_ROOT, 'node_modules'), path.join(dir, 'node_modules'));
 
   fs.copyFileSync(path.join(SUPPORT, 'artifact-store.js'), path.join(dir, 'test/e2e/support/artifact-store.js'));
+  fs.copyFileSync(path.join(SUPPORT, 'journey-assertions.js'), path.join(dir, 'test/e2e/support/journey-assertions.js'));
   const journeyPath = path.join(dir, 'test/e2e/support/journey.js');
   let source = fs.readFileSync(path.join(SUPPORT, 'journey.js'), 'utf8');
 
-  if (mutate) {
+  if (mutate === 'rethrow') {
     if (!source.includes(RETHROW)) {
       throw new Error(
         'This proof mutates `journey.js` by removing:\n\n    ' + RETHROW + '\n\n' +
@@ -207,6 +228,18 @@ function buildHarness (root, name, mutate) {
         'after the artifact is written, or say plainly that nothing does.');
     }
     source = source.replace(RETHROW, '/* MUTANT: re-throw removed by guard-proof.js */');
+  }
+
+  if (mutate === 'split') {
+    if (!source.includes(SPLIT_BRANCH)) {
+      throw new Error(
+        'This proof mutates `journey.js` by disabling:\n\n    ' + SPLIT_BRANCH + '\n\n' +
+        'and that branch is no longer in test/e2e/support/journey.js. Refusing to report success:\n' +
+        'arms S1 and S2 would then be measuring nothing, and a split-origin run that goes green in\n' +
+        'both the pristine and the mutant harness proves the guard is absent, not present. Point the\n' +
+        'mutation at whatever now acts on `judgeSubjectOrigin`, or say plainly that nothing does.');
+    }
+    source = source.replace(SPLIT_BRANCH, 'if (false && split) { /* MUTANT: split-origin guard disabled */');
   }
   fs.writeFileSync(journeyPath, source);
   fs.writeFileSync(path.join(dir, 'test/e2e/journeys/guard-probe.spec.js'), SPEC);
@@ -273,12 +306,14 @@ async function main () {
   const fixtureOrigin = 'http://127.0.0.1:' + fixturePort;
 
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'journey-guard-proof-'));
-  const pristine = buildHarness(root, 'pristine', false);
-  const mutant = buildHarness(root, 'mutant', true);
+  const pristine = buildHarness(root, 'pristine', null);
+  const mutant = buildHarness(root, 'mutant', 'rethrow');
+  const splitMutant = buildHarness(root, 'split-mutant', 'split');
 
   say('journey.js under test  ' + sha256(path.join(SUPPORT, 'journey.js')));
   say('  pristine copy        ' + pristine.sha);
   say('  mutant copy          ' + mutant.sha + '   (re-throw removed)');
+  say('  split-mutant copy    ' + splitMutant.sha + '   (split-origin guard disabled)');
   say('stand-in live api      ' + liveOrigin);
   say('stand-in fixture       ' + fixtureOrigin);
   say('stand-in app           http://127.0.0.1:' + webPort + '\n');
@@ -331,6 +366,28 @@ async function main () {
       expect: 'zero',
       artifact: 'passed'
     },
+    // ---- THE SPLIT-ORIGIN ARMS. Both of these clear the served floor honestly — the named backend
+    // answered the sign-in — and are still lies about which API the journey exercised.
+    {
+      id: 'S1',
+      harness: pristine,
+      why: 'live-labelled; signs in at the named api, fetches its SUBJECT elsewhere',
+      target: liveOrigin,
+      subjectTarget: fixtureOrigin,
+      env: { E2E_API_BASE_URL: liveOrigin, E2E_WEB_PORT: String(webPort) },
+      expect: 'nonzero',
+      artifact: 'failed'
+    },
+    {
+      id: 'S2',
+      harness: pristine,
+      why: 'fixture-labelled; signs in at the fixture, fetches its SUBJECT elsewhere',
+      target: fixtureOrigin,
+      subjectTarget: liveOrigin,
+      env: { E2E_FIXTURE_PORT: String(fixturePort), E2E_WEB_PORT: String(webPort) },
+      expect: 'nonzero',
+      artifact: 'failed'
+    },
     {
       id: 'M1',
       harness: mutant,
@@ -348,12 +405,23 @@ async function main () {
       env: { E2E_FIXTURE_PORT: String(fixturePort), E2E_WEB_PORT: String(webPort) },
       expect: 'zero',
       artifact: 'failed'
+    },
+    {
+      id: 'M3',
+      harness: splitMutant,
+      why: 'arm S1 with the split-origin guard DISABLED — must go green again',
+      target: liveOrigin,
+      subjectTarget: fixtureOrigin,
+      env: { E2E_API_BASE_URL: liveOrigin, E2E_WEB_PORT: String(webPort) },
+      expect: 'zero',
+      artifact: 'passed'
     }
   ];
 
   const failures = [];
   for (const arm of arms) {
     webState.target = arm.target;
+    webState.subjectTarget = arm.subjectTarget || arm.target;
     fixtureState.served = 0;
     const result = await runArm(arm.harness, arm.env);
     const gotExit = result.code === 0 ? 'zero' : 'nonzero';
@@ -382,16 +450,19 @@ async function main () {
       say('---- arm ' + arm.id + ' (' + arm.why + ') ----');
       say(result.output.trim().split('\n').slice(-25).join('\n') + '\n');
     });
-    const mutantFailed = failures.some(f => f.arm.harness === mutant);
+    const mutantFailed = failures.some(f => f.arm.harness === mutant || f.arm.harness === splitMutant);
     if (mutantFailed) {
       say('A MUTANT ARM FAILED. That is not a guard regression — it means this proof is no longer\n' +
-        'measuring the re-throw, so the other arms prove nothing either. Fix the mutation first.\n');
+        'measuring the statement it removes, so the arms it backs prove nothing either. Fix the\n' +
+        'mutation first.\n');
     }
     process.exit(1);
   }
 
-  say('\nAll ' + arms.length + ' arms held. A mislabelled run fails the process; removing the\n' +
-    're-throw makes the same run green again, which is what makes the first five arms mean something.');
+  say('\nAll ' + arms.length + ' arms held. A mislabelled run fails the process, and so does one whose\n' +
+    'subject calls left for another origin behind an honest sign-in; removing the re-throw, or the\n' +
+    'split-origin branch, makes the matching run green again — which is what makes the rest mean\n' +
+    'something.');
 }
 
 main().catch((error) => {

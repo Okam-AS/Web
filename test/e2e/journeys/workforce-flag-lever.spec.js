@@ -26,7 +26,8 @@
 // exactly the shape of the incident this lever exists for.
 
 const { test, journeyDetails, expect } = require('../support/journey');
-const { signIn } = require('../support/admin');
+const { signIn, signedInUserId } = require('../support/admin');
+const { assertStampedActor } = require('../support/journey-assertions');
 
 const PUBLICATION = 'workforce.publication';
 
@@ -65,11 +66,19 @@ test(
     ]
   }),
   async ({ page, journey }) => {
+    // Who this run is, according to the app — captured at the door and compared against the audit
+    // stamp the server writes three steps down. Held here rather than re-read there so the value
+    // asserted against is the one the sign-in produced, not one a later navigation could have
+    // replaced.
+    let managerId = null;
+
     await journey.step('sign in as the manager (99999999 / 123123)', async () => {
       await page.goto('/admin/feature-flags');
       await page.waitForURL(/\/admin\?redirect=/, { timeout: 30000 });
       await signIn(page, { phone: '99999999', code: '123123', expectPath: '/admin/feature-flags' });
-      return 'landed on /admin/feature-flags';
+      managerId = await signedInUserId(page);
+      expect(managerId, 'the app knows which account it signed in as').toBeTruthy();
+      return 'landed on /admin/feature-flags as ' + managerId;
     });
 
     await journey.step('the switchboard lists every module\'s flags, deny-closed', async () => {
@@ -118,17 +127,30 @@ test(
       await flip(page, 'on', PUBLICATION, PUBLICATION);
       const publication = page.locator('.ff-row', { has: page.locator('code', { hasText: PUBLICATION }) });
       await expect(publication.locator('.ff-row__badge')).toHaveText('På');
-      // The audit stamp is the server's, not ours: the actor is resolved from the bearer by
-      // `ActorClaims.ResolveUserId`, which means it is a user id against a real backend and the
-      // string `user-manager` against the fixture. Pinning either literal would make this journey
-      // true in exactly one world, so what is pinned is the CLAIM: somebody is named, and it is not
-      // the `ff_actor_unknown` fallback the page prints for a row that carries no actor at all.
-      // A flip nobody can be attributed to is not a kill switch anybody should trust.
+      // THE FLIP IS ATTRIBUTED TO THE PERSON WHO FLIPPED IT.
+      //
+      // This step used to assert only that the row said "Sist endret av" and did not say "ukjent" —
+      // which passes for ANY named actor, the wrong one included, and a kill switch attributed to
+      // somebody who did not touch it is a worse audit trail than one attributed to nobody. The
+      // reasoning behind the weak form was sound and its conclusion was not: the actor is a user id
+      // against a live backend and the string `user-manager` against the fixture, so pinning either
+      // literal would make this journey true in exactly one world.
+      //
+      // It does not have to be pinned. The strong form holds in BOTH worlds, because both sides of
+      // it move together and neither is derived from the other: the stamp is `updatedByReference`,
+      // which the API resolves from the BEARER (`ActorClaims.ResolveUserId`) and never from anything
+      // the client sent, and `managerId` is what `GET /user` answered at the door. Live they are both
+      // the user id (`unique_name` is minted from `user.Id`); against the fixture they are both
+      // `user-manager`. An actor column that named anybody else now reds here.
       const stamp = publication.locator('.ff-row__meta');
       await expect(stamp).toHaveCount(1);
       await expect(stamp).toContainText('Sist endret av');
-      await expect(stamp).not.toContainText('ukjent');
-      return 'override written, attributed: ' + (await stamp.textContent()).trim().replace(/\s+/g, ' ');
+      const attributed = assertStampedActor({
+        stampText: await stamp.textContent(),
+        userId: managerId
+      });
+      return 'override written, attributed to the signed-in manager (' + attributed.userId + '): ' +
+        attributed.stamp;
     });
 
     await journey.step('build a week and validate it', async () => {
