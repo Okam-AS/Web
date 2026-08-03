@@ -183,6 +183,28 @@ function route (ctx) {
   }
 
   // ---- the invitee's two routes -----------------------------------------------------------------
+  //
+  // Anchored to the backend they stand in for, so `npm run test:e2e:fixture-divergence` can compare
+  // what these two answer against `MealsMembershipController` rather than a reader doing it by eye.
+  // The refusals Meals can give here and this fixture cannot are declared below with their reasons.
+  //
+  // @backend-unmodelled 403 meals.forbidden — the module gate and the company-admin gate are answered
+  //   by the api-server auth wall before a request reaches this file, so no handler here can produce
+  //   the module's own 403; a caller with no bearer is refused `AUTH_REQUIRED` upstream.
+  // @backend-unmodelled 404 MEALS_NOT_FOUND — the legacy uppercase wire code survives on the module's
+  //   opaque not-found; this fixture answers the current `meals.not-found` spelling only, which is
+  //   what the client reads.
+  // @backend-unmodelled 409 meals.invitation-expired — an invitation here carries an `expiresAtUtc`
+  //   the pages render, but nothing in the fixture advances a clock past it, so a modelled refusal
+  //   would be a branch no journey could ever reach.
+  // @backend-unmodelled 400 meals.validation — the session route validates its token shape server
+  //   side; this fixture treats an unknown token as absent, which is the same 404 the backend gives
+  //   for a well-formed token nobody issued.
+  // @backend-unmodelled 409 meals.invitation-not-claimable — answered by the claim route below; the
+  //   session route reaches it too because the backend previews a claimable invitation only, and
+  //   this fixture's session preview does not re-check the state its claim route checks.
+  //
+  // @backend POST /v1/meals/invitations/session
   if (path === '/v1/meals/invitations/session' && method === 'POST') {
     const token = (body && body.token) || '';
     const invitation = state.invitations[token];
@@ -204,6 +226,7 @@ function route (ctx) {
     return true;
   }
 
+  // @backend POST /v1/meals/invitations/claim
   if (path === '/v1/meals/invitations/claim' && method === 'POST') {
     const token = (body && body.token) || '';
     if (!token) { return refuse(ctx, 400, 'meals.validation', 'The request carried no token.'); }

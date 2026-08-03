@@ -34,6 +34,33 @@
 // and the transactional sender carries no SMTP dependency at all, so no newsletter leaves any process
 // on this branch. `providers` below therefore reports the account a venue has been given, never an
 // engine that would deliver — which is precisely what the page's own note says it is reporting.
+//
+// ---- WHAT KEEPS THIS FILE LEVEL WITH THE BACKEND ----------------------------------------------
+//
+// Each handler below is annotated with the backend route it stands in for, and
+// `npm run test:e2e:fixture-divergence` compares the (status, code) pairs this file can answer
+// against the ones that controller can. It exists because this very handler was found a release
+// behind: the test-send guard checked address equality but not the confirmation flag, and answered
+// `400 growth.test_address_not_own` where the API answers `403`. A journey against that would have
+// walked a world that never refused anything.
+//
+// The refusals `GrowthNewslettersController` can give that this file deliberately does not are
+// declared here, with the reason each one has no counterpart. Forgetting to declare one makes the
+// check RED, never green, and a declaration the backend has dropped is reported as stale.
+//
+// @backend-unmodelled 401 growth.unattributed — `RequireUserId()` refuses a token carrying no
+//   resolvable identity. Every bearer in this fixture's world maps to a user, and `api-server.js`
+//   answers `AUTH_REQUIRED` before a request reaches this file, so the state has no counterpart.
+// @backend-unmodelled 409 growth.preference_centre_unconfigured — a deployment-configuration probe
+//   over `PreferenceCentreBaseUrl`. This fixture has no deployment configuration to be absent.
+// @backend-unmodelled 409 growth.unsubscribe_unconfigured — the same probe over the one-click
+//   unsubscribe base URL, and absent here for the same reason.
+// @backend-unmodelled 409 growth.provider_paused — the dispatch preflight refuses when any provider
+//   account is paused. `PROVIDERS` below carries that flag and the delivery-health read reports it,
+//   but nothing in this fixture can pause an account, so the refusal would be unreachable.
+// @backend-unmodelled 409 growth.approval_stale — on DISPATCH (the approval route models it). The
+//   backend detects an approval whose content hash or snapshot drifted WITHIN one version; here a
+//   version id changes on every edit and an edit supersedes the approval, so that state cannot exist.
 
 const CONSENT_SUMMARY = {
   consentedContacts: 214,
@@ -185,14 +212,18 @@ function route (ctx) {
   // that has never switched Growth on can still open the screen, read its consent standing and draft
   // a newsletter. Gating the reads here would hide the state this journey exists to walk: a fully
   // rendered operator surface whose send gate is closed.
+  //
+  // @backend-preamble
   if (!(ctx.caller.adminIn || []).some(s => String(s.id) === String(storeId))) {
     return growthNotFound(ctx);
   }
 
+  // @backend GET /v1/growth/stores/{storeId}/consents/summary
   if (rest === '/consents/summary' && method === 'GET') {
     return growthOk(ctx, CONSENT_SUMMARY);
   }
 
+  // @backend GET /v1/growth/stores/{storeId}/delivery-health
   if (rest === '/delivery-health' && method === 'GET') {
     // READ BY THE GATE, AND MANDATORY FOR IT TO EVER OPEN. `readMailPath` treats an unanswered read
     // as UNKNOWN, and the gate blocks on unknown exactly as it blocks on absent — "we could not check
@@ -201,6 +232,7 @@ function route (ctx) {
     return growthOk(ctx, { providers: PROVIDERS });
   }
 
+  // @backend POST /v1/growth/stores/{storeId}/segments/{segmentKey}/snapshots
   if (rest === '/segments/newsletter-subscribers/snapshots' && method === 'POST') {
     state.seq += 1;
     const snapshot = Object.assign({}, AUDIENCE, {
@@ -211,6 +243,7 @@ function route (ctx) {
     return growthOk(ctx, snapshotDocument(snapshot));
   }
 
+  // @backend GET /v1/growth/stores/{storeId}/newsletters
   if (rest === '/newsletters' && method === 'GET') {
     return growthOk(ctx, {
       items: Object.keys(state.newsletters).map((id) => {
@@ -220,6 +253,7 @@ function route (ctx) {
     });
   }
 
+  // @backend POST /v1/growth/stores/{storeId}/newsletters
   if (rest === '/newsletters' && method === 'POST') {
     const subject = ((body && body.subject) || '').trim();
     if (!subject) { return growthError(ctx, 400, 'growth.subject_required', 'A subject is required.'); }
@@ -250,13 +284,24 @@ function route (ctx) {
   if (one) {
     const newsletter = state.newsletters[Number(one[1])] || null;
     const tail = one[2] || '';
+    // @backend-preamble /v1/growth/stores/{storeId}/newsletters/{newsletterId}
     if (!newsletter) { return growthNotFound(ctx); }
 
+    // @backend GET /v1/growth/stores/{storeId}/newsletters/{newsletterId}
     if (!tail && method === 'GET') {
       return growthOk(ctx, newsletterDocument(newsletter));
     }
 
+    // @backend PUT /v1/growth/stores/{storeId}/newsletters/{newsletterId}
     if (!tail && method === 'PUT') {
+      // EDITING STOPS WHEN DISPATCH BEGINS, and the divergence check is how this arrived: the fixture
+      // let a Dispatched newsletter be edited into a new version while `EditDraftAsync` refuses
+      // anything that is not Draft or Approved. A screen could have been walked doing something the
+      // API would have refused, which is the same lie as a refusal that never fires.
+      if (newsletter.state !== 'Draft' && newsletter.state !== 'Approved') {
+        return growthError(ctx, 409, 'growth.newsletter_not_editable',
+          'This newsletter can no longer be edited (it has entered dispatch).');
+      }
       // Optimistic concurrency by version NUMBER rather than an ETag, which is this surface's own
       // shape: a save built on a version somebody has already superseded is `growth.stale_version`.
       if ((body && body.baseVersionNo) !== newsletter.version.versionNo) {
@@ -284,6 +329,7 @@ function route (ctx) {
       return growthOk(ctx, newsletterDocument(newsletter));
     }
 
+    // @backend POST /v1/growth/stores/{storeId}/newsletters/{newsletterId}/test-sends
     if (tail === '/test-sends' && method === 'POST') {
       // ONE OF THE TWO ROUTES `ModuleIsLiveAsync` GUARDS. With `growth.module` down the test route
       // does not answer at all, which is what the page's own hint says will happen.
@@ -320,6 +366,7 @@ function route (ctx) {
       return growthOk(ctx, { status: 'Sent' });
     }
 
+    // @backend POST /v1/growth/stores/{storeId}/newsletters/{newsletterId}/approval
     if (tail === '/approval' && method === 'POST') {
       if (newsletter.run) {
         return growthError(ctx, 409, 'growth.newsletter_not_approvable',
@@ -353,6 +400,7 @@ function route (ctx) {
       return growthOk(ctx, newsletter.approval);
     }
 
+    // @backend POST /v1/growth/stores/{storeId}/newsletters/{newsletterId}/dispatch
     if (tail === '/dispatch' && method === 'POST') {
       // THE OTHER ROUTE `ModuleIsLiveAsync` GUARDS, and the kill switch on top of it. Both refuse
       // BEFORE anything is created — «ingenting ble opprettet og ingenting ble sendt» is the page's
