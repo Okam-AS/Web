@@ -2,9 +2,9 @@
   "journey": "workforce-invitation-onboarding",
   "title": "A manager invites a new hire, who claims the code and sees their published shift",
   "status": "passed",
-  "startedAtUtc": "2026-08-03T08:39:23.813Z",
-  "finishedAtUtc": "2026-08-03T08:39:32.059Z",
-  "durationMs": 8246,
+  "startedAtUtc": "2026-08-03T17:08:18.076Z",
+  "finishedAtUtc": "2026-08-03T17:08:27.228Z",
+  "durationMs": 9152,
   "capabilities": [
     "workforce.staff.invite",
     "workforce.me.invitation-claim",
@@ -12,22 +12,27 @@
   ],
   "surface": "admin",
   "backend": "fixture",
-  "baseUrl": "http://127.0.0.1:3081",
-  "apiBaseUrl": "http://127.0.0.1:4081",
-  "commit": "cff41c8583f9792b0368093fae632dd5fdacb716",
+  "baseUrl": "http://127.0.0.1:3094",
+  "apiBaseUrl": "http://127.0.0.1:4094",
+  "commit": "61a76efa915d1ea42459ad33896a2a365dfdacfa",
   "underTest": null,
   "backendProbe": null,
-  "backendBuild": null,
+  "backendBuild": {
+    "id": "fixture@61a76efa915d1ea42459ad33896a2a365dfdacfa+dirty",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "61a76ef-dirty",
+    "detail": "the in-repo fixture backend, not an API build (branch feature/restaurant-modules)"
+  },
   "backendServed": 74,
   "backendSample": [
-    "POST http://127.0.0.1:4081/user/sendverificationtoken -> 200",
-    "POST http://127.0.0.1:4081/user/login -> 200",
-    "GET http://127.0.0.1:4081/user -> 200",
-    "GET http://127.0.0.1:4081/stores/42/market -> 200",
-    "GET http://127.0.0.1:4081/user -> 200",
-    "GET http://127.0.0.1:4081/workforce/stores/42/context -> 200",
-    "GET http://127.0.0.1:4081/stores/42 -> 200",
-    "GET http://127.0.0.1:4081/stores/42/specialopeninghours -> 200"
+    "POST http://127.0.0.1:4094/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:4094/user/login -> 200",
+    "GET http://127.0.0.1:4094/user -> 200",
+    "GET http://127.0.0.1:4094/stores/42/market -> 200",
+    "GET http://127.0.0.1:4094/user -> 200",
+    "GET http://127.0.0.1:4094/workforce/stores/42/context -> 200",
+    "GET http://127.0.0.1:4094/stores/42 -> 200",
+    "GET http://127.0.0.1:4094/stores/42/specialopeninghours -> 200"
   ],
   "browser": "chromium",
   "steps": [
@@ -35,8 +40,8 @@
       "n": 1,
       "name": "sign in as the manager on the roster",
       "status": "passed",
-      "startedAtUtc": "2026-08-03T08:39:23.814Z",
-      "durationMs": 1335,
+      "startedAtUtc": "2026-08-03T17:08:18.078Z",
+      "durationMs": 1464,
       "detail": "landed on /admin/workforce-roster",
       "error": null
     },
@@ -44,8 +49,8 @@
       "n": 2,
       "name": "the new hire is on the roster and has no login",
       "status": "passed",
-      "startedAtUtc": "2026-08-03T08:39:25.149Z",
-      "durationMs": 56,
+      "startedAtUtc": "2026-08-03T17:08:19.542Z",
+      "durationMs": 44,
       "detail": "Ingen innlogging er koblet til engasjementet ennå. Personen kan settes opp på vakter, men kan ikke logge inn og se dem.",
       "error": null
     },
@@ -53,7 +58,7 @@
       "n": 3,
       "name": "the panel says what it cannot do before it offers the button",
       "status": "passed",
-      "startedAtUtc": "2026-08-03T08:39:25.205Z",
+      "startedAtUtc": "2026-08-03T17:08:19.586Z",
       "durationMs": 6,
       "detail": "Vi kan ikke vise om det finnes en aktiv kode akkurat nå, når den utløper, eller trekke den tilbake — API-et har ingen sl…",
       "error": null
@@ -62,8 +67,8 @@
       "n": 4,
       "name": "issue the invitation code",
       "status": "passed",
-      "startedAtUtc": "2026-08-03T08:39:25.305Z",
-      "durationMs": 55,
+      "startedAtUtc": "2026-08-03T17:08:19.676Z",
+      "durationMs": 56,
       "detail": "code issued, 20 characters, shown once",
       "error": null
     },
@@ -71,7 +76,7 @@
       "n": 5,
       "name": "the handover names the address and admits nothing was sent",
       "status": "passed",
-      "startedAtUtc": "2026-08-03T08:39:25.360Z",
+      "startedAtUtc": "2026-08-03T17:08:19.732Z",
       "durationMs": 7,
       "detail": "no delivery channel, /workforce/join named, once-only stated",
       "error": null
@@ -80,8 +85,8 @@
       "n": 6,
       "name": "turn the schedule publication switch on for this store",
       "status": "passed",
-      "startedAtUtc": "2026-08-03T08:39:25.471Z",
-      "durationMs": 757,
+      "startedAtUtc": "2026-08-03T17:08:19.845Z",
+      "durationMs": 741,
       "detail": "workforce.publication on for this store",
       "error": null
     },
@@ -89,8 +94,8 @@
       "n": 7,
       "name": "build and publish a week containing the new hire's shift",
       "status": "passed",
-      "startedAtUtc": "2026-08-03T08:39:26.228Z",
-      "durationMs": 888,
+      "startedAtUtc": "2026-08-03T17:08:20.586Z",
+      "durationMs": 948,
       "detail": "Publisert til 1 mottakere.",
       "error": null
     },
@@ -98,8 +103,8 @@
       "n": 8,
       "name": "a fragment-carried code never reaches the address bar",
       "status": "passed",
-      "startedAtUtc": "2026-08-03T08:39:27.116Z",
-      "durationMs": 1295,
+      "startedAtUtc": "2026-08-03T17:08:21.534Z",
+      "durationMs": 1679,
       "detail": "hash scrubbed, path /workforce/join, history length 6",
       "error": null
     },
@@ -107,8 +112,8 @@
       "n": 9,
       "name": "paste the real code BEFORE signing in",
       "status": "passed",
-      "startedAtUtc": "2026-08-03T08:39:28.411Z",
-      "durationMs": 639,
+      "startedAtUtc": "2026-08-03T17:08:23.213Z",
+      "durationMs": 716,
       "detail": "code accepted, page asks for a sign-in",
       "error": null
     },
@@ -116,8 +121,8 @@
       "n": 10,
       "name": "sign in as the new hire, in place",
       "status": "passed",
-      "startedAtUtc": "2026-08-03T08:39:29.067Z",
-      "durationMs": 101,
+      "startedAtUtc": "2026-08-03T17:08:23.950Z",
+      "durationMs": 111,
       "detail": "signed in without navigating; the pasted code survived",
       "error": null
     },
@@ -125,8 +130,8 @@
       "n": 11,
       "name": "the page admits what it cannot tell them before the button",
       "status": "passed",
-      "startedAtUtc": "2026-08-03T08:39:29.168Z",
-      "durationMs": 9,
+      "startedAtUtc": "2026-08-03T17:08:24.061Z",
+      "durationMs": 11,
       "detail": "Dette vet vi ikke ennå Vi kan ikke vise hvilken arbeidsplass koden gjelder, hvilken rolle du får ell…",
       "error": null
     },
@@ -134,8 +139,8 @@
       "n": 12,
       "name": "claim the code",
       "status": "passed",
-      "startedAtUtc": "2026-08-03T08:39:29.177Z",
-      "durationMs": 57,
+      "startedAtUtc": "2026-08-03T17:08:24.072Z",
+      "durationMs": 45,
       "detail": "claimed; grants on the receipt: WorkforceSelf",
       "error": null
     },
@@ -143,8 +148,8 @@
       "n": 13,
       "name": "the worker sees the shift the manager published",
       "status": "passed",
-      "startedAtUtc": "2026-08-03T08:39:29.245Z",
-      "durationMs": 599,
+      "startedAtUtc": "2026-08-03T17:08:24.134Z",
+      "durationMs": 627,
       "detail": "first shift card: 09:00–15:00 Uten rolle Betalt tid 6t Fra publisering 1",
       "error": null
     },
@@ -152,8 +157,8 @@
       "n": 14,
       "name": "claiming the same code again is answered honestly, not as a bare error",
       "status": "passed",
-      "startedAtUtc": "2026-08-03T08:39:29.857Z",
-      "durationMs": 667,
+      "startedAtUtc": "2026-08-03T17:08:24.775Z",
+      "durationMs": 735,
       "detail": "opaque refusal + the account's own engagements shown beside it",
       "error": null
     },
@@ -161,8 +166,8 @@
       "n": 15,
       "name": "the manager's roster now reads the person as signed in",
       "status": "passed",
-      "startedAtUtc": "2026-08-03T08:39:30.565Z",
-      "durationMs": 1407,
+      "startedAtUtc": "2026-08-03T17:08:25.553Z",
+      "durationMs": 1586,
       "detail": "Denne personen har koblet en innlogging til engasjementet og kan bruke Min vaktplan.",
       "error": null
     },
@@ -170,7 +175,7 @@
       "n": 16,
       "name": "what the browser said while this ran",
       "status": "passed",
-      "startedAtUtc": "2026-08-03T08:39:32.053Z",
+      "startedAtUtc": "2026-08-03T17:08:27.221Z",
       "durationMs": 0,
       "detail": "5 console errors recorded as findings",
       "error": null
@@ -218,7 +223,7 @@
   "failedRequests": [
     {
       "method": "POST",
-      "url": "http://127.0.0.1:4081/workforce/me/invitations/claim",
+      "url": "http://127.0.0.1:4094/workforce/me/invitations/claim",
       "status": 404
     }
   ],
@@ -237,6 +242,7 @@
     "file": "artifacts/journeys/runs/workforce-invitation-onboarding.fixture.playwright.json",
     "canonical": true,
     "canonicalHeldBy": "fixture",
-    "provisional": false
+    "provisional": false,
+    "supersedes": null
   }
 }
