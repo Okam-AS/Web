@@ -127,6 +127,16 @@ function report (result, apiRepo) {
     for (const bypass of result.fixture.bypasses) { lines.push('    ' + bypass); }
     lines.push('');
   }
+  // A backend refusal whose code or status is built rather than written cannot be resolved statically.
+  // It is a HOLE IN WHAT WAS COMPARED, not an absence of divergence, and saying so is the difference
+  // between a walk that examined nothing and one that found nothing. Empty across the anchored routes
+  // today; printed rather than counted so the next one arrives named.
+  const unresolved = result.backend.unresolved();
+  if (unresolved.length) {
+    lines.push('  note: a backend refusal this walk could not resolve to a (status, code) pair —');
+    for (const hole of unresolved) { lines.push('    ' + hole); }
+    lines.push('');
+  }
 
   const byKind = {};
   for (const finding of result.findings) { (byKind[finding.kind] = byKind[finding.kind] || []).push(finding); }
