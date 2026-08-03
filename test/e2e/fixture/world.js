@@ -284,15 +284,28 @@ const EVENTS_SETTLEMENT_FLAG = 'Events.Settlement';
 
 // ---- Events: the guest surface -----------------------------------------------------------------
 //
-// NOT GATED PER STORE, and that is the backend's shape rather than an omission here. The three public
-// proposal routes (`EventsController.GetProposal/AcceptProposal/DeclineProposal`) are `[AllowAnonymous]`
-// and carry only the controller-wide action filter on `IEventsModuleGate.IsEnabled` — the
-// deployment-wide `Events:Enabled` CONFIG switch, which is not a per-store flag, has no row, and no
-// lever on `/admin/feature-flags` can move it. `EventsProposalService` takes no gate at all: it has no
-// `IEventsModuleGate` dependency, and `GetPublicAsync` performs no store refinement. So a guest
-// journey has no switch of its own to turn on, and modelling one here would assert a gate the product
-// does not have.
+// THE READ IS NOT GATED PER STORE AND THE TWO WRITES NOW ARE, and the asymmetry is the backend's
+// rather than a choice made here. All three public proposal routes
+// (`EventsController.GetProposal/AcceptProposal/DeclineProposal`) are `[AllowAnonymous]` and carry the
+// controller-wide action filter on the deployment-wide `Events:Enabled` CONFIG switch, which is not a
+// per-store flag and which no lever on `/admin/feature-flags` can move. On top of that:
 //
+//   GetPublicAsync      performs NO store refinement. Still open, recorded as a read-side leak.
+//   AcceptAsync         `GuardStoreEnabledAsync` — store-scoped `Events.Core`, deny-closed.
+//   DeclineAsync        the same guard, the same code.
+//
+// The two writes were ungated until `F-EV-ACCEPT-UNGATED` closed it, and the refusal they give is
+// `EVENTS_PROPOSAL_NOT_FOUND` — the same 404 an unknown token gets, so no anonymous caller can turn
+// this surface into a roster of which venues bought the module.
+//
+// WHICH MEANS THESE TOKENS NEED A VENUE THAT HAS THE MODULE. A sent proposal only exists because a
+// venue with `Events.Core` on drafted and sent it, so a world in which one exists at a store that
+// never switched the module on is a world the backend cannot produce. `GUEST_VENUE_STORE_ID` is that
+// venue, and its override row is seeded below — deliberately NOT `STORE_ID`, whose empty deny-closed
+// flag state is the control every admin journey opens with ("before any switch is flipped, the venue
+// is dark"). No journey reads store 43's flag board; it exists to own these two tokens.
+const GUEST_VENUE_STORE_ID = 43;
+
 // Two tokens, and the second one is the point of having two. `EventsProposalService.GetPublicAsync`
 // answers a SUPERSEDED version with its own content and `isActionable:false` rather than a 404, so
 // the guest sees exactly what they were sent and is told it no longer stands. The refusal journey
@@ -301,6 +314,28 @@ const EVENTS_SETTLEMENT_FLAG = 'Events.Settlement';
 
 const OPEN_PROPOSAL_TOKEN = 'fixture-proposal-open';
 const SUPERSEDED_PROPOSAL_TOKEN = 'fixture-proposal-superseded';
+
+/**
+ * The per-store flag overrides a freshly reset fixture starts with.
+ *
+ * ONE ROW, and every module flag on `STORE_ID` is deliberately absent from it: they are deny-closed,
+ * and a fixture that started them on would hide the fact the whole switchboard exists for — that a
+ * store nobody has flipped cannot write through the module it gates.
+ *
+ * The row that IS here is `Events.Core` on `GUEST_VENUE_STORE_ID`, and it is not a bypass of that
+ * rule but a consequence of it: the two proposal tokens above are SENT versions, which the backend
+ * can only have produced for a venue that had the module. See the comment on that constant.
+ */
+function seededFlagOverrides () {
+  return {
+    [GUEST_VENUE_STORE_ID + '|' + EVENTS_CORE_FLAG]: {
+      enabled: true,
+      updatedByReference: 'user-manager',
+      updatedAtUtc: '2026-09-01T08:00:00Z',
+      note: 'the venue whose sent proposals the guest journeys open'
+    }
+  };
+}
 
 function proposalBase () {
   return {
@@ -370,6 +405,12 @@ const DIETARY_STATEMENT =
 // the journey asserts its absence by looking for it, not by echoing it.
 const ADMIN_DEPOSIT_TOKEN = 'fixture-deposit-bearer-9f3c1d';
 
+// The proposal bearer on the SAME sheet, and its own token rather than a reuse of
+// `OPEN_PROPOSAL_TOKEN`. The two belong to different venues — this event is `STORE_ID`'s and the open
+// proposal is `GUEST_VENUE_STORE_ID`'s — and one token resolving to two stores would make the public
+// gate unmodellable: there would be no answer to "which venue is this link's".
+const ADMIN_PROPOSAL_TOKEN = 'fixture-proposal-bearer-4c81ba';
+
 const ADMIN_EVENT_ROW = {
   id: ADMIN_EVENT_ID,
   publicId: 'e1000000-0000-0000-0000-000000000001',
@@ -408,7 +449,7 @@ const ADMIN_EVENT_DETAIL = {
       totalMinor: 4480000,
       sentAtUtc: '2026-10-05T10:00:00',
       // The proposal address the admin copies out. On screen, deliberately; not on the sheet.
-      publicToken: OPEN_PROPOSAL_TOKEN,
+      publicToken: ADMIN_PROPOSAL_TOKEN,
       lines: [
         { lineNo: 1, kind: 'Package', description: 'Julebordmeny', quantity: 40, unitPriceMinor: 89500, amountMinor: 3580000 },
         { lineNo: 2, kind: 'AddOn', description: 'Velkomstdrink', quantity: 40, unitPriceMinor: 12500, amountMinor: 500000 }
@@ -778,11 +819,14 @@ module.exports = {
   SCHEDULE_WRITE_FLAG,
   EVENTS_CORE_FLAG,
   EVENTS_SETTLEMENT_FLAG,
+  GUEST_VENUE_STORE_ID,
   OPEN_PROPOSAL_TOKEN,
   SUPERSEDED_PROPOSAL_TOKEN,
   PROPOSALS,
+  seededFlagOverrides,
   ADMIN_EVENT_ID,
   ADMIN_DEPOSIT_TOKEN,
+  ADMIN_PROPOSAL_TOKEN,
   DIETARY_STATEMENT,
   ADMIN_EVENT_ROW,
   ADMIN_EVENT_DETAIL,

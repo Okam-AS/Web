@@ -34,6 +34,10 @@ const marginFixture = require('./margin');
 const trainingFixture = require('./training');
 const mealsFixture = require('./meals');
 const growthNewsletterFixture = require('./growth-newsletter');
+// Events, BOTH halves. Its public routes sit above the auth wall and its admin routes below it, and
+// they are in one file because the store gate on the public writes needs the admin half's knowledge
+// of which venue a guest token belongs to — see the header of `events.js`.
+const eventsFixture = require('./events');
 // The Growth GUEST half, kept apart from the operator half above because the two sit on opposite
 // sides of the auth wall: `growth-newsletter.js` is a StoreAdmin surface, and every route in
 // `growth.js` is anonymous by contract. See where each is dispatched below.
@@ -93,11 +97,12 @@ function freshState () {
     // seen by another.
     proposals: JSON.parse(JSON.stringify(world.PROPOSALS)),
     acceptances: {},
-    // The shared per-store feature-flag OVERRIDE store: `${storeId}|${flagKey}` -> one row. Empty on
-    // purpose. Every module flag is deny-closed by default, and a fixture that started with them on
-    // would hide the one fact this whole surface exists for — that a store which has not had a
-    // switch flipped cannot write through the module it gates.
-    flags: {},
+    // The shared per-store feature-flag OVERRIDE store: `${storeId}|${flagKey}` -> one row. Empty of
+    // every flag on `STORE_ID` on purpose: they are deny-closed, and a fixture that started with them
+    // on would hide the one fact this whole surface exists for — that a store which has not had a
+    // switch flipped cannot write through the module it gates. The single row it does start with
+    // belongs to a DIFFERENT venue and is explained where it is defined.
+    flags: world.seededFlagOverrides(),
     // The venue's privacy queue, cloned from the world so a resolution in one journey cannot be seen
     // by another. Mutable: `POST .../resolution` rewrites the row's state, resolvedAt and notice
     // receipt in place, which is what makes the queue a queue rather than a table.
@@ -148,7 +153,8 @@ function freshState () {
     training: trainingFixture.fresh(),
     meals: mealsFixture.fresh(),
     growthNewsletter: growthNewsletterFixture.fresh(),
-    growth: growthGuestFixture.fresh()
+    growth: growthGuestFixture.fresh(),
+    events: eventsFixture.fresh()
   };
 }
 
@@ -200,21 +206,6 @@ function problem (res, status, code, detail, extra) {
     code,
     detail
   }, extra || {}));
-}
-
-/**
- * The single refusal every Events gate collapses to.
- *
- * 404 and not 403, and the same 404 for all three `Events.*` flags: `EventsProblemException.Disabled()`
- * carries `EVENTS_DISABLED` and NOTHING that says which switch is down, so a client cannot tell "the
- * module is off for this store" from "the settlement flag is off" from "no such store". That is the
- * opposite of the workforce refusal, which names its flag on a `flag` extension — and it is why an
- * Events journey cannot render "pull this lever" the way the schedule page can. Reproduced faithfully
- * rather than improved, because a fixture that added the key would make a page that reads it pass here
- * and fail against the real API.
- */
-function eventsDisabled (res) {
-  return problem(res, 404, 'EVENTS_DISABLED', 'Events is not enabled for this store.');
 }
 
 /**
@@ -690,58 +681,16 @@ async function route (req, res, url) {
     return send(res, 200, world.CULTURES);
   }
 
-  // ---- Events: anonymous. NO token is required and none is looked at. --------------------------
-  const proposalRead = /^\/events\/proposals\/([^/]+)$/.exec(path);
-  if (proposalRead && req.method === 'GET') {
-    const token = decodeURIComponent(proposalRead[1]);
-    const proposal = state.proposals[token];
-    if (!proposal) {
-      return problem(res, 404, 'EVENTS_PROPOSAL_NOT_FOUND', 'No sent version matches this link.');
-    }
-    return send(res, 200, proposal);
-  }
-
-  const proposalAccept = /^\/events\/proposals\/([^/]+)\/accept$/.exec(path);
-  if (proposalAccept && req.method === 'POST') {
-    const token = decodeURIComponent(proposalAccept[1]);
-    const proposal = state.proposals[token];
-    if (!proposal) {
-      return problem(res, 404, 'EVENTS_PROPOSAL_NOT_FOUND', 'No sent version matches this link.');
-    }
-    if (!proposal.isActionable) {
-      const code = proposal.status === 'Superseded' ? 'EVENTS_PROPOSAL_SUPERSEDED' : 'EVENTS_PROPOSAL_EXPIRED';
-      return problem(res, 409, code, 'This version can no longer be accepted.');
-    }
-    if (state.acceptances[token]) {
-      // The server replays rather than writing a second receipt (EventsWriteGuards.BuildReplay).
-      return send(res, 200, state.acceptances[token]);
-    }
-
-    const receipt = {
-      acceptedVersionNo: proposal.versionNo,
-      acceptedAtUtc: nowUtc(),
-      // Re-verified against the content the guest was shown. Echoed so the page can print it.
-      proposalContentHash: proposal.contentHash,
-      acceptorName: (body && body.acceptorName) || null,
-      acceptorEmail: (body && body.acceptorEmail) || null
-    };
-    state.acceptances[token] = receipt;
-    proposal.status = 'Accepted';
-    proposal.isActionable = false;
-    return send(res, 200, receipt);
-  }
-
-  const proposalDecline = /^\/events\/proposals\/([^/]+)\/decline$/.exec(path);
-  if (proposalDecline && req.method === 'POST') {
-    const token = decodeURIComponent(proposalDecline[1]);
-    const proposal = state.proposals[token];
-    if (!proposal) {
-      return problem(res, 404, 'EVENTS_PROPOSAL_NOT_FOUND', 'No sent version matches this link.');
-    }
-    proposal.status = 'Declined';
-    proposal.isActionable = false;
-    return send(res, 200, { declinedVersionNo: proposal.versionNo, declinedAtUtc: nowUtc() });
-  }
+  // ---- Events' guest surface: anonymous, and matched ABOVE the wall on purpose ------------------
+  //
+  // NO TOKEN IS REQUIRED AND NONE IS LOOKED AT — the enquiry form and the three tokenised proposal
+  // routes are `[AllowAnonymous]`. Matching them below the wall would 401 the guest and hide the one
+  // property the guest journeys exist to check: that these pages carry no bearer.
+  //
+  // The handlers moved into `fixture/events.js` when `F-EV-ACCEPT-UNGATED` put a store gate on the
+  // accept and decline writes, because the gate needs the admin half's knowledge of which venue a
+  // token belongs to and a gate with two enforcement points has one of them missing eventually.
+  if (eventsFixture.routePublic(context(req, res, url, path, body, null))) { return; }
 
   // ---- Growth's guest surface: anonymous, and matched ABOVE the wall on purpose ----------------
   //
@@ -804,67 +753,13 @@ async function route (req, res, url) {
   if (mealsFixture.route(moduleCtx)) { return; }
   if (growthNewsletterFixture.route(moduleCtx)) { return; }
 
-  // ---- Events: the ADMIN reads the pipeline page issues -----------------------------------------
+  // ---- Events: the admin half ------------------------------------------------------------------
   //
-  // GET only. The run-sheet print journey opens an event and prints what is already there; it writes
-  // nothing, so this fixture answers the five reads `selectEvent` fans out and no mutation. A POST or
-  // PUT to any of these falls through to the 404 below rather than being quietly accepted, which is
-  // the honest answer for a contract this fixture does not hold.
-  const eventsAdmin = /^\/events\/admin\/([^/]+)(\/.*)?$/.exec(path);
-  if (eventsAdmin && req.method === 'GET') {
-    const eventsStoreId = eventsAdmin[1];
-    const rest = eventsAdmin[2] || '';
-
-    // THE Events.Core STORE GATE, and it covers the READS — which is the whole difference between
-    // this module and Workforce. Every store-scoped Events route resolves through
-    // `IEventsModuleGate.IsStoreEnabledAsync` (`EventsController.GuardStoreAsync`,
-    // `EventsRunSheetController.GuardStoreAsync`, both `AuthorizeStoreAsync` helpers), and
-    // `Events.Core` is deny-closed. §9's rule for Events is INVISIBLE, not read-only: a store that
-    // has not been switched on sees no pipeline, no event, no run sheet and no notification health.
-    //
-    // Enforced here once, before the routing below, because a fixture that gated only some of the
-    // five reads would let the pipeline page ship half-lit — and because until this landed both
-    // run-sheet journeys were green against a world in which every one of these reads would have
-    // answered 404 on a real venue.
-    if (!flagEffective(eventsStoreId, world.EVENTS_CORE_FLAG)) {
-      return eventsDisabled(res);
-    }
-
-    if (rest === '/events') {
-      // The page sends `status`/`from`/`to` as filters. The journey uses none of them, and a fixture
-      // that silently ignored a filter it was sent would let a broken query string pass — so an
-      // unsupported filter answers an empty list rather than the row.
-      const status = url.searchParams.get('status');
-      const rows = (status && status !== world.ADMIN_EVENT_ROW.status) ? [] : [world.ADMIN_EVENT_ROW];
-      return send(res, 200, rows);
-    }
-
-    if (rest === '/notifications/health') {
-      return send(res, 200, world.ADMIN_NOTIFICATION_HEALTH);
-    }
-
-    const one = /^\/events\/([^/]+)(\/.*)?$/.exec(rest);
-    if (one) {
-      if (String(one[1]) !== String(world.ADMIN_EVENT_ID)) {
-        return problem(res, 404, 'EVENTS_NOT_FOUND', 'No event with that id in this fixture.');
-      }
-      const facet = one[2] || '';
-      if (facet === '') { return send(res, 200, world.ADMIN_EVENT_DETAIL); }
-      // Core is enough for the deposit READ: only the deposit ISSUE passes `requireDepositsFlag`, so
-      // `Events.Deposits` gates minting a new obligation and never reading an existing one. Copied
-      // deliberately — a fixture that also gated the read would hide a guest's paid deposit behind a
-      // switch, which is the case `EventsDepositsController` says out loud it must not do.
-      if (facet === '/deposits') { return send(res, 200, world.ADMIN_DEPOSITS); }
-      if (facet === '/run-sheet') { return send(res, 200, world.ADMIN_RUN_SHEET); }
-      if (facet === '/settlement') {
-        // The one facet with a second gate. `Events.Settlement` is deny-closed and gates the GET, so
-        // "Core on, settlement closed" — the ordinary state of a venue running events without the
-        // money machine — answers `EVENTS_DISABLED` here rather than a document.
-        if (!flagEffective(eventsStoreId, world.EVENTS_SETTLEMENT_FLAG)) { return eventsDisabled(res); }
-        return send(res, 200, world.ADMIN_SETTLEMENT);
-      }
-    }
-  }
+  // The other half of `fixture/events.js`. It owns the pipeline list, the four facet reads and the
+  // lifecycle writes the enquiry-to-settlement walk performs, and it applies the same `Events.Core`
+  // store gate the public half does — once, before its own routing, because a fixture that gated only
+  // some of the reads would let the pipeline page ship half-lit.
+  if (eventsFixture.route(moduleCtx)) { return; }
 
   // ---- the store the admin landing page reads --------------------------------------------------
   //
