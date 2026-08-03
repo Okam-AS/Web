@@ -1,0 +1,88 @@
+[WebServer] [fixture] listening on http://127.0.0.1:4477
+[WebServer] 
+[WebServer]  WARN  You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  Module @nuxt/image is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version >=3.1.0 is required but currently using 2.17.1
+[WebServer] 
+[WebServer] ℹ Parsed 0 files in 0.0 seconds
+[WebServer] ℹ [HPM] Proxy created: /  -> http://127.0.0.1:5080
+[WebServer] ℹ [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+[WebServer] ℹ Listening on: http://172.20.10.4:3477/
+[WebServer] ℹ Preparing project for development
+[WebServer] ℹ Initial build may take a while
+[WebServer] ℹ Discovered Components: .nuxt/components/readme.md
+[WebServer] ✔ Builder initialized
+[WebServer] ✔ Nuxt files generated
+[WebServer] 
+[WebServer]  WARN  Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[WebServer] 
+[WebServer] ℹ Compiling Server
+[WebServer] ℹ Compiling Client
+[WebServer] ✔ Server: Compiled successfully in 13.02s
+[WebServer] ✔ Client: Compiled successfully in 15.52s
+
+Running 1 test using 1 worker
+
+[WebServer] ℹ Waiting for file changes
+[WebServer] ℹ Memory usage: 1.19 GB (RSS: 1.95 GB)
+[WebServer] ℹ Listening on: http://172.20.10.4:3477/
+  ✘  1 [chromium] › test/e2e/journeys/margin-week-freeze.spec.js:69:1 › A frozen week is asked to take an edit, refuses it, and takes the same edit on its correction @fixture (20.6s)
+
+
+  1) [chromium] › test/e2e/journeys/margin-week-freeze.spec.js:69:1 › A frozen week is asked to take an edit, refuses it, and takes the same edit on its correction @fixture 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator: locator('[data-test="failure"]')
+    Expected: "Serveren avviste dette, og ingenting ble lagret. Begrunnelsen fra serveren: This statement is finalized and immutable."
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveText" with timeout 15000ms
+      - waiting for locator('[data-test="failure"]')
+
+
+      196 |       // in reach of (see the header).
+      197 |       const failure = page.locator('[data-test="failure"]');
+    > 198 |       await expect(failure).toHaveText(REFUSAL, { timeout: 15000 });
+          |                             ^
+      199 |
+      200 |       // AND THE REQUEST LEFT THE BROWSER. Without this the arm would also pass against a page that
+      201 |       // had grown a client-side guard and rendered the same sentence locally — which would be a
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/margin-week-freeze.spec.js:198:29
+        at JourneyRecorder.step (/Users/svendaneel/okam/Web-modules/test/e2e/support/journey.js:284:22)
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/margin-week-freeze.spec.js:180:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/margin-week-freeze-A-froze-59813-same-edit-on-its-correction-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/margin-week-freeze.fixture.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/margin-week-freeze.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/margin-week-freeze-A-froze-59813-same-edit-on-its-correction-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/margin-week-freeze-A-froze-59813-same-edit-on-its-correction-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/margin-week-freeze-A-froze-59813-same-edit-on-its-correction-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › test/e2e/journeys/margin-week-freeze.spec.js:69:1 › A frozen week is asked to take an edit, refuses it, and takes the same edit on its correction @fixture 
+EXIT=1

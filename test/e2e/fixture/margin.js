@@ -24,9 +24,32 @@
 //     That asymmetry with the recipe surface is real and is why the statement page pre-empts what it
 //     can and quotes the server for the rest, so the fixture reproduces it rather than tidying it up.
 //
-// WHAT IT IS NOT: a model of the backend. There is no supplier-price effective-date window, no
-// sub-recipe explosion, no VAT engine — an ingredient carries one price and a product carries its
-// net directly. Anything a journey wants to be true is seeded here explicitly.
+// WHAT IT IS NOT: a model of the backend. There is no sub-recipe explosion and no VAT engine — a
+// product carries its net directly. Anything a journey wants to be true is seeded here explicitly.
+//
+// ---- WHERE AN INGREDIENT'S PRICE COMES FROM ---------------------------------------------------
+//
+// TWO PATHS, and the split is deliberate rather than an oversight. A starter ingredient copied out of
+// the bootstrap library carries `pricePerBaseUnitMinor` DIRECTLY — a stand-in for supplier data no
+// journey walking the recipe surface ever enters, and the only reason `margin-recipe-to-margin` can
+// cost a waffle batter in six clicks. An ingredient that has ANY supplier article, on the other hand,
+// is priced by `resolvePricePerBaseUnit` and the seeded figure is ignored entirely: the moment a venue
+// starts describing where it buys something, the description is what governs.
+//
+// The resolver reproduces the three rules of `MarginPriceResolver` that decide whether a plate cost
+// exists at all, because they are the rules a supplier-to-plate walk is FOR:
+//
+//   • An article is a candidate only if it is Active AND has `packSize > 0` AND
+//     `purchaseUnitToBaseFactor > 0`. Both fields are optional on the wire, so an article missing one
+//     is accepted, listed, priceable — and contributes nothing.
+//   • An Active PREFERRED article that is not costable un-prices the WHOLE ingredient. The resolver
+//     does not fall through to a complete rival; it returns no price at all.
+//   • Only the OPEN price row counts (`effectiveTo: null`). Prices are append-only and
+//     effective-dated, and recording one closes its predecessor at the instant the new one starts.
+//
+// Cost per base unit is `priceMinor / (packSize * purchaseUnitToBaseFactor)`, which is the whole of
+// the arithmetic. There is no effective-date WINDOW: this fixture reads the open row and never asks
+// what the price was on some past instant, because no surface in the product does either.
 
 const world = require('./world');
 
@@ -75,8 +98,22 @@ function fresh () {
     // retired-link history, because no surface reads one.
     links: {},
     statements: {},
+    // Who the venue buys from, what they sell it, and what it costs. Flat arrays rather than a tree
+    // because every read the product makes is a filter over one of them, and a tree would have to be
+    // flattened at each one.
+    suppliers: [],
+    items: [],
+    prices: [],
     projectionLag: 4
   };
+
+  // The two suppliers a statement's purchase-spend line can be attributed to. They are STATE rather
+  // than a constant list so the supplier surface can add a third beside them, and they are seeded
+  // rather than left to a journey because `margin-statement-week` picks one by name out of the spend
+  // panel's dropdown and does not go near the supplier screen.
+  for (const seed of world.MARGIN_SUPPLIERS) {
+    newSupplier(state, { name: seed.name, organizationNumber: seed.organizationNumber || null }, seed.supplierId);
+  }
 
   // ONE SEEDED RECIPE, and it exists to make a refusal reachable. `Kaffe` is claimed by it, so the
   // journey's attempt to link the same product to a second recipe meets the real single-active-link
@@ -152,6 +189,231 @@ function newVersion (state, recipe, input) {
   return version;
 }
 
+function ingredientDetail (ingredient) {
+  return {
+    ingredientId: ingredient.ingredientId,
+    name: ingredient.name,
+    baseUnit: ingredient.baseUnit,
+    notes: ingredient.notes,
+    status: ingredient.status,
+    conversions: [],
+    revision: ingredient.revision
+  };
+}
+
+// ---- suppliers, their articles, and the prices those articles carry -----------------------------
+
+function newSupplier (state, input, forcedId) {
+  const supplierId = forcedId || nextId(state, 'sup');
+  const supplier = {
+    id: supplierId,
+    supplierId,
+    name: (input.name || '').trim(),
+    organizationNumber: input.organizationNumber || null,
+    contactName: input.contactName || null,
+    contactEmail: input.contactEmail || null,
+    contactPhone: input.contactPhone || null,
+    status: 'Active',
+    version: 0,
+    revision: ''
+  };
+  bumpRevision(supplier);
+  state.suppliers.push(supplier);
+  return supplier;
+}
+
+/**
+ * The LIST shape, and it deliberately carries NO revision. `MarginSupplierSummary` has none, there is
+ * no `GET /margin/suppliers/{id}` to get one from, and the page withholds its edit and archive
+ * controls after a reload for exactly that reason — a fixture that helpfully added one here would
+ * make `data-test="supplier-no-revision"` unreachable and the page would look over-cautious.
+ */
+function supplierSummary (supplier) {
+  return {
+    supplierId: supplier.supplierId,
+    name: supplier.name,
+    organizationNumber: supplier.organizationNumber,
+    status: supplier.status,
+    isArchived: supplier.status === 'Archived'
+  };
+}
+
+/** The WRITE response: the only place a supplier's revision ever appears. */
+function supplierDetail (supplier) {
+  return Object.assign(supplierSummary(supplier), {
+    contactName: supplier.contactName,
+    contactEmail: supplier.contactEmail,
+    contactPhone: supplier.contactPhone,
+    revision: supplier.revision
+  });
+}
+
+function newItem (state, supplier, input) {
+  const supplierItemId = nextId(state, 'item');
+  const item = {
+    id: supplierItemId,
+    supplierItemId,
+    supplierId: supplier.supplierId,
+    status: 'Active',
+    version: 0,
+    revision: ''
+  };
+  assignItem(item, input);
+  bumpRevision(item);
+  state.items.push(item);
+  return item;
+}
+
+/**
+ * A full replace of the article's fields — `PUT` is a replace, not a patch.
+ *
+ * `packSize` and `purchaseUnitToBaseFactor` are stored EXACTLY as sent, nulls included. Defaulting a
+ * missing one to 1 would be a fabricated conversion and would make an article that cannot cost look
+ * as though it can, which is the single most consequential thing this surface gets wrong in the wild.
+ */
+function assignItem (item, input) {
+  item.ingredientId = input.ingredientId || null;
+  item.name = (input.name || '').trim() || null;
+  item.supplierArticleNumber = input.supplierArticleNumber || null;
+  item.packSize = typeof input.packSize === 'number' ? input.packSize : null;
+  item.purchaseUnitCode = input.purchaseUnitCode || null;
+  item.purchaseUnitToBaseFactor = typeof input.purchaseUnitToBaseFactor === 'number'
+    ? input.purchaseUnitToBaseFactor
+    : null;
+  item.isPreferred = input.isPreferred === true;
+}
+
+function itemDocument (item) {
+  return {
+    supplierItemId: item.supplierItemId,
+    supplierId: item.supplierId,
+    ingredientId: item.ingredientId,
+    supplierArticleNumber: item.supplierArticleNumber,
+    name: item.name,
+    packSize: item.packSize,
+    purchaseUnitCode: item.purchaseUnitCode,
+    purchaseUnitToBaseFactor: item.purchaseUnitToBaseFactor,
+    isPreferred: item.isPreferred,
+    status: item.status,
+    // UNLIKE a supplier, every item row carries its revision — which is what keeps the item editor
+    // usable after a reload, and the asymmetry is the real controller's.
+    revision: item.revision
+  };
+}
+
+/**
+ * Records a price and returns the item's WHOLE refreshed timeline.
+ *
+ * APPEND-ONLY AND EFFECTIVE-DATED. The open row is CLOSED at exactly the instant the new one opens —
+ * the same instant is simultaneously one row's `effectiveTo` and the next row's `effectiveFrom` — so
+ * there is never a moment with two prices in force and never an ambiguous boundary. Nothing is
+ * edited and nothing is deleted; a superseded amount stays readable forever, which is the whole
+ * subject of the timeline panel.
+ */
+function addPrice (state, item, input) {
+  const from = String(input.effectiveFromUtc || '').replace('Z', '');
+  for (const row of state.prices) {
+    if (row.supplierItemId === item.supplierItemId && row.effectiveTo === null) {
+      row.effectiveTo = from;
+    }
+  }
+  state.prices.push({
+    id: nextId(state, 'price'),
+    supplierItemId: item.supplierItemId,
+    priceMinor: input.priceMinor,
+    currency: input.currency || CURRENCY,
+    effectiveFrom: from,
+    effectiveTo: null,
+    source: 'Manual',
+    importBatchId: null,
+    createdAtUtc: stamp().replace('Z', '')
+  });
+  return priceTimeline(state, item.supplierItemId);
+}
+
+/** Newest effective instant first — the server's own `OrderByDescending`, kept. */
+function priceTimeline (state, supplierItemId) {
+  return state.prices
+    .filter(row => row.supplierItemId === supplierItemId)
+    .sort((a, b) => b.effectiveFrom.localeCompare(a.effectiveFrom))
+    .map(row => ({
+      id: row.id,
+      priceMinor: row.priceMinor,
+      currency: row.currency,
+      // BARE, no `Z`, like every other column-loaded stamp this fixture sends: EF hands them back as
+      // `Unspecified` and `utils/margin/price-timeline` exists to parse exactly that. Sending them
+      // the tidy way would hide the bug that file was written against.
+      effectiveFrom: row.effectiveFrom,
+      effectiveTo: row.effectiveTo,
+      source: row.source,
+      importBatchId: row.importBatchId,
+      createdAtUtc: row.createdAtUtc
+    }));
+}
+
+function openPriceOf (state, supplierItemId) {
+  return state.prices.find(row => row.supplierItemId === supplierItemId && row.effectiveTo === null) || null;
+}
+
+function supplierOf (state, supplierId) {
+  return state.suppliers.find(s => s.supplierId === supplierId) || null;
+}
+
+/** Active, with a pack size and a conversion: this article can produce a cost. See the file header. */
+function isCostable (state, item) {
+  if (item.status !== 'Active') { return false; }
+  if (!(item.packSize > 0) || !(item.purchaseUnitToBaseFactor > 0)) { return false; }
+  const supplier = supplierOf(state, item.supplierId);
+  return !!supplier && supplier.status === 'Active';
+}
+
+/**
+ * What one base unit of this ingredient costs, in integer minor units — or null.
+ *
+ * See the file header for the three rules. The one worth restating where it is implemented: an
+ * incomplete PREFERRED article does not merely fail to win, it makes the whole ingredient unpriced.
+ * Falling through to a rival here would produce plate costs the real backend does not produce, and
+ * the venue-facing warning the supplier page draws for that case would be describing nothing.
+ */
+function resolvePricePerBaseUnit (state, ingredient) {
+  const own = state.items.filter(item => item.ingredientId === ingredient.ingredientId);
+  // No articles at all: the ingredient falls back to the bootstrap price it was seeded with, which is
+  // null for anything a venue authored itself.
+  if (!own.length) {
+    return typeof ingredient.pricePerBaseUnitMinor === 'number' ? ingredient.pricePerBaseUnitMinor : null;
+  }
+
+  const preferred = own.find(item => item.isPreferred && item.status === 'Active') || null;
+  if (preferred && !isCostable(state, preferred)) { return null; }
+
+  const candidates = own
+    .filter(item => isCostable(state, item))
+    .map(item => ({ item, price: openPriceOf(state, item.supplierItemId) }))
+    .filter(row => row.price && typeof row.price.priceMinor === 'number');
+  if (!candidates.length) { return null; }
+
+  const chosen = candidates.find(row => row.item === preferred) ||
+    candidates.reduce((best, row) => (best === null || perBaseUnit(row) < perBaseUnit(best) ? row : best), null);
+  return perBaseUnit(chosen);
+}
+
+function perBaseUnit (row) {
+  return row.price.priceMinor / (row.item.packSize * row.item.purchaseUnitToBaseFactor);
+}
+
+/**
+ * At most ONE preferred article per ingredient, store-wide — across suppliers, which is why this is
+ * keyed on the ingredient and not on the article's own supplier.
+ */
+function clearOtherPreferred (state, item) {
+  for (const other of state.items) {
+    if (other !== item && other.ingredientId === item.ingredientId && other.isPreferred) {
+      other.isPreferred = false;
+      bumpRevision(other);
+    }
+  }
+}
+
 // ---- the cost preview ---------------------------------------------------------------------------
 
 function ingredientById (state, id) {
@@ -175,7 +437,10 @@ function priceVersion (state, version) {
     const baseQuantity = ingredient
       ? toBaseQuantity(component.quantity, component.unitCode, ingredient.baseUnit)
       : null;
-    const priced = !!(ingredient && typeof ingredient.pricePerBaseUnitMinor === 'number' && baseQuantity !== null);
+    // THE ONE PLACE A PRICE IS LOOKED UP, so a line's cost changes the moment the supplier data
+    // behind its ingredient does — which is what makes a supplier-to-plate walk observable at all.
+    const pricePerBaseUnit = ingredient ? resolvePricePerBaseUnit(state, ingredient) : null;
+    const priced = !!(ingredient && typeof pricePerBaseUnit === 'number' && baseQuantity !== null);
 
     if (!priced) {
       complete = false;
@@ -191,7 +456,7 @@ function priceVersion (state, version) {
       };
     }
 
-    const exact = baseQuantity * ingredient.pricePerBaseUnitMinor;
+    const exact = baseQuantity * pricePerBaseUnit;
     unroundedTotal += exact;
     return {
       componentId: component.componentId,
@@ -586,7 +851,8 @@ function route (ctx) {
         ingredientId: i.ingredientId,
         name: i.name,
         baseUnit: i.baseUnit,
-        isArchived: false
+        status: i.status,
+        isArchived: i.status === 'Archived'
       })),
       // Only the ones the store does not already have — the backend's own bootstrap affordance.
       starterCandidates: world.MARGIN_STARTERS
@@ -599,16 +865,35 @@ function route (ctx) {
   if (path === '/margin/ingredients' && method === 'POST') {
     const name = ((body && body.name) || '').trim();
     const seed = world.MARGIN_STARTERS.find(c => c.name === name) || null;
+    const id = nextId(state, 'ing');
     const ingredient = {
-      ingredientId: nextId(state, 'ing'),
+      id,
+      ingredientId: id,
       name,
-      // FIXED at creation and immutable afterwards, which is why the price is attached to the
-      // ingredient rather than to the line that uses it.
+      // FIXED at creation and immutable afterwards — there is no field for it on the update request,
+      // so it is immutable by construction rather than by a rule.
       baseUnit: (body && body.baseUnit) || (seed && seed.baseUnit) || 'Kilogram',
-      pricePerBaseUnitMinor: seed ? seed.pricePerBaseUnitMinor : null
+      notes: (body && body.notes) || (seed && seed.notes) || null,
+      status: 'Active',
+      // THE BOOTSTRAP PRICE, and only a starter has one. An ingredient a venue authors itself is
+      // unpriced until it has a costable supplier article with an open price — see the file header.
+      pricePerBaseUnitMinor: seed ? seed.pricePerBaseUnitMinor : null,
+      version: 0,
+      revision: ''
     };
+    bumpRevision(ingredient);
     state.ingredients.push(ingredient);
-    ctx.send(200, { ingredientId: ingredient.ingredientId, name: ingredient.name, baseUnit: ingredient.baseUnit });
+    ctx.send(200, ingredientDetail(ingredient));
+    return true;
+  }
+
+  const ingredientRoute = /^\/margin\/ingredients\/([^/]+)$/.exec(path);
+  if (ingredientRoute && method === 'GET') {
+    const ingredient = ingredientById(state, decodeURIComponent(ingredientRoute[1]));
+    if (!ingredient) { ctx.problem(404, 'margin.not-found', 'No such ingredient.'); return true; }
+    // The detail read is what carries the REVISION; the list does not, which is why the page opens
+    // its editor on this response rather than on the row somebody clicked.
+    ctx.send(200, ingredientDetail(ingredient));
     return true;
   }
 
@@ -724,9 +1009,140 @@ function route (ctx) {
     return true;
   }
 
+  // ---- suppliers, articles, prices --------------------------------------------------------------
+  //
+  // The half of the module that every plate cost is built from, and the half no journey could reach
+  // until it existed here: `GET /margin/suppliers` used to answer a constant list of two names with
+  // no articles and no prices behind them, so `/admin/margin-suppliers` could be opened and nothing
+  // on it could be driven. Every route below is the one `MarginSuppliersController` publishes, with
+  // the same `If-Match` discipline: on suppliers and articles, and NOT on prices, which are
+  // append-only and carry no rowversion.
   if (path === '/margin/suppliers' && method === 'GET') {
-    ctx.send(200, world.MARGIN_SUPPLIERS.map(s => ({ supplierId: s.supplierId, name: s.name, isArchived: false })));
+    const includeArchived = url.searchParams.get('includeArchived') === 'true';
+    ctx.send(200, state.suppliers
+      .filter(s => includeArchived || s.status === 'Active')
+      .map(supplierSummary));
     return true;
+  }
+
+  if (path === '/margin/suppliers' && method === 'POST') {
+    const name = ((body && body.name) || '').trim();
+    if (!name) { return uncoded(ctx, 'A supplier needs a name.'); }
+    // Case-insensitive uniqueness, refused UNCODED — this surface's business failures carry a
+    // `detail` and no code, and the page renders the server's own sentence for them.
+    if (state.suppliers.some(s => s.status === 'Active' && s.name.toLowerCase() === name.toLowerCase())) {
+      return uncoded(ctx, 'A supplier with this name already exists in the store.');
+    }
+    ctx.send(200, supplierDetail(newSupplier(state, body || {})));
+    return true;
+  }
+
+  const supplierRoute = /^\/margin\/suppliers\/([^/]+)(\/.*)?$/.exec(path);
+  if (supplierRoute) {
+    const supplier = supplierOf(state, decodeURIComponent(supplierRoute[1]));
+    const rest = supplierRoute[2] || '';
+    if (!supplier) { ctx.problem(404, 'margin.not-found', 'No such supplier.'); return true; }
+
+    if (!rest && method === 'PUT') {
+      if (!checkRevision(ctx, supplier)) { return true; }
+      const name = ((body && body.name) || '').trim();
+      if (!name) { return uncoded(ctx, 'A supplier needs a name.'); }
+      if (state.suppliers.some(s => s !== supplier && s.status === 'Active' && s.name.toLowerCase() === name.toLowerCase())) {
+        return uncoded(ctx, 'A supplier with this name already exists in the store.');
+      }
+      supplier.name = name;
+      supplier.organizationNumber = (body && body.organizationNumber) || null;
+      supplier.contactName = (body && body.contactName) || null;
+      supplier.contactEmail = (body && body.contactEmail) || null;
+      supplier.contactPhone = (body && body.contactPhone) || null;
+      bumpRevision(supplier);
+      ctx.send(200, supplierDetail(supplier));
+      return true;
+    }
+
+    if (rest === '/archive' && method === 'POST') {
+      if (!checkRevision(ctx, supplier)) { return true; }
+      // ONE WAY, and it CLEARS the contact person: the lawful basis for holding it ends with the
+      // relationship. There is no unarchive route, here or in the module.
+      supplier.status = 'Archived';
+      supplier.contactName = null;
+      supplier.contactEmail = null;
+      supplier.contactPhone = null;
+      bumpRevision(supplier);
+      ctx.send(200, supplierDetail(supplier));
+      return true;
+    }
+
+    if (rest === '/items' && method === 'GET') {
+      const includeArchived = url.searchParams.get('includeArchived') === 'true';
+      ctx.send(200, state.items
+        .filter(item => item.supplierId === supplier.supplierId)
+        .filter(item => includeArchived || item.status === 'Active')
+        .map(itemDocument));
+      return true;
+    }
+
+    if (rest === '/items' && method === 'POST') {
+      if (!body || !body.ingredientId || !ingredientById(state, body.ingredientId)) {
+        return uncoded(ctx, 'An article must name an ingredient of the same store.');
+      }
+      const item = newItem(state, supplier, body);
+      // Marking one article preferred CLEARS the marker on every other article of the same
+      // ingredient, in the same transaction and possibly under a supplier not on screen — which is
+      // why the page re-reads the whole list after any item write rather than patching one row.
+      if (item.isPreferred) { clearOtherPreferred(state, item); }
+      ctx.send(200, itemDocument(item));
+      return true;
+    }
+
+    const itemRoute = /^\/items\/([^/]+)$/.exec(rest);
+    if (itemRoute && method === 'PUT') {
+      const item = state.items.find(candidate =>
+        candidate.supplierItemId === decodeURIComponent(itemRoute[1]) &&
+        candidate.supplierId === supplier.supplierId) || null;
+      if (!item) { ctx.problem(404, 'margin.not-found', 'No such supplier item.'); return true; }
+      if (!checkRevision(ctx, item)) { return true; }
+      if (!body || !body.ingredientId || !ingredientById(state, body.ingredientId)) {
+        return uncoded(ctx, 'An article must name an ingredient of the same store.');
+      }
+      assignItem(item, body);
+      bumpRevision(item);
+      if (item.isPreferred) { clearOtherPreferred(state, item); }
+      ctx.send(200, itemDocument(item));
+      return true;
+    }
+  }
+
+  const priceRoute = /^\/margin\/supplier-items\/([^/]+)\/prices$/.exec(path);
+  if (priceRoute) {
+    const item = state.items.find(candidate => candidate.supplierItemId === decodeURIComponent(priceRoute[1])) || null;
+    if (!item) { ctx.problem(404, 'margin.not-found', 'No such supplier item.'); return true; }
+
+    if (method === 'GET') {
+      ctx.send(200, priceTimeline(state, item.supplierItemId));
+      return true;
+    }
+
+    if (method === 'POST') {
+      // NO `If-Match`. Price rows are append-only and carry no rowversion, and the controller asks
+      // for no header — demanding one here would make the client look wrong for not sending a header
+      // the server never reads.
+      if (typeof body.priceMinor !== 'number' || body.priceMinor < 0) {
+        return uncoded(ctx, 'A price must not be negative.');
+      }
+      if (!body.effectiveFromUtc) {
+        return uncoded(ctx, 'A price needs the instant it starts applying.');
+      }
+      // BACKDATING IS REFUSED. The open row would have to be closed BEFORE it opened, which is not a
+      // shape the interval invariant allows; the real service refuses it and says so in prose.
+      const open = openPriceOf(state, item.supplierItemId);
+      const from = String(body.effectiveFromUtc).replace('Z', '');
+      if (open && from <= open.effectiveFrom) {
+        return uncoded(ctx, 'A new price must start after the price currently in force.');
+      }
+      ctx.send(200, addPrice(state, item, body));
+      return true;
+    }
   }
 
   if (path === '/margin/projection/rebuild' && method === 'POST') {
