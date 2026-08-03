@@ -1,12 +1,18 @@
 # L-MRG-EHF-SPIKE — Lane 0, the EHF ship/no-ship spike
 
 Verdict: **blocked**. The ship question cannot honestly be answered today, because the thing the
-answer is a function of — a real venue's invoices — does not exist anywhere this lane can reach, and
-neither does a stored token to probe. What this lane can do, and did, is make the remaining work
-cheap and precise: the classification taxonomy is now pinned against the vendor's live specification
-rather than against memory, the instrument that produces the answer is written and self-tested, and
-the access needed is decomposed into two independent asks, the cheaper of which needs no token, no
-signed pilot and no database.
+answer is a function of — a real venue's invoices — is not on this machine, and no stored token
+exists to probe because no real venue is connected to Tripletex at all.
+
+**The single most useful sentence in this document:** the invoices are not missing from the world,
+they are missing from the repository. Sven's own 2026-07-28 prompt says *"Casper also sent me
+invoices as examples for cost of ingredients."* The blocker is a file hand-off, not a discovery, not
+a negotiation, and not a build.
+
+What this lane did instead was make the remaining work cheap and precise: the classification taxonomy
+is now pinned against the vendor's live specification rather than memory, the instrument that
+produces the answer is written and self-tested, and the access ask is split so the half that decides
+ship/stop needs no token, no signed pilot and no database.
 
 ---
 
@@ -14,8 +20,8 @@ signed pilot and no database.
 
 | Exit criterion | Status |
 |---|---|
-| every one of the pilot venue's recent supplier invoices is classified by how its line data arrives | **Not possible.** No pilot venue's invoices exist. |
-| the stored integration token's supplier-invoice entitlement is probed | **Not possible.** No stored token for any real venue is reachable. The entitlement *model* was pinned instead. |
+| every one of the pilot venue's recent supplier invoices is classified by how its line data arrives | **Not possible here — but the files exist.** Casper sent them to Sven on 2026-07-28; they are not on this machine. |
+| the stored integration token's supplier-invoice entitlement is probed | **Has no referent.** No real venue is connected to Tripletex through Okam, so no stored token exists to probe. The entitlement *model* was pinned instead. |
 | the ship-or-stop answer is merged from a RETURN | **Answered as: not yet decidable, and here is why that is not a stall.** See §5. |
 
 ---
@@ -49,9 +55,28 @@ specification. It has never read what a Norwegian wholesaler actually sends.**
 
 `docs/plan/intent.md`, constraint R2, records Sven's 2026-07-20 ruling verbatim: *"there is no
 customer yet whose evidence a serial gate could consume"*, with `reopen_when: a pilot venue signs`.
-The exit criterion is written against a venue that has not signed. The plan's own text is
+The exit criterion is written against a venue that has not signed. The modules plan's own text is
 prospective throughout — *"a pilot venue signs"*, *"when this plan is dead, at one pilot venue"* —
-and names no venue.
+and the module specs defer the name explicitly (`60-training-internkontroll-spec.md:418`, *"Named
+venue and sponsor recorded at signing"*, still AWAITING SVEN SIGNATURE).
+
+**One nuance, because it is the nearest thing to a real venue.** A different plan does name a venue:
+`OkamAPI-modules/docs/plans/tripletex-plan.md:241-242` calls Jungel Pizza Sagene AS the *pilotkunden*
+for the Tripletex **accounting-export** work. But read the sentence — the evidence is *"skjermbildet
+av bilagsoversikten til Jungel Pizza Sagene AS"*, a screenshot of **eMonkey's** vouchers inside the
+customer's own Tripletex. That is proof Okam has *seen* a real Tripletex account, not that Okam is
+connected to one. Jungel Pizza is a real Okam customer independently (white-label theme
+`jungelPizza`, store ids 52/53/54/57/140), and Casper is placed there by a Planday panel screenshot
+naming its departments. So the venue that could supply invoices is identifiable — it is simply not
+connected, and its invoices are not here.
+
+**And no real venue is connected to Tripletex through Okam.** The onboarding write path exists
+(`Services/Tripletex/TripletexConnectionService.cs:121`), but every *other* `TripletexConnections.Add`
+in the estate is under `WebApi.Tests/**`. There is no seed, no SQL insert and no fixture naming a real
+store, and `OkamAPI-modules/README.md:413` says it outright: *"Tripletex WP2-WP7 er ennå ikke bygget"*,
+*"Inntil Tripletex er live…"*. So the phrase **"the stored integration token" in this lane's exit
+criterion has no referent at all** — there is no stored token, anywhere, for any real venue. That is
+not an access problem this lane could route around; the row does not exist.
 
 ---
 
@@ -65,10 +90,20 @@ venue's entitlement requires a row in a database holding a real venue's connecti
 
 - `~/.microsoft/usersecrets/1df35132-26a8-4882-9979-6b1151e63e2c/secrets.json` holds nine keys.
   `ConnectionStrings:WebApiDatabase` targets **localhost** only. No key mentions Tripletex.
+  The catalog is `okam_test_local`.
 - Local SQL Server on 1433 is **closed** — nothing is listening.
-- The four running SQL containers (`okam-lws-sql`, `okam-lws-staff-sql`, `okam-lwr-sql`,
-  `okam-lvsp-sql`) belong to other lanes. They were **not touched**, per the standing rule, and in any
-  case hold model-built test worlds seeded from fixtures — no real venue row could be in them.
+- The **five** running SQL containers (`okam-lws-sql`, `okam-lws-staff-sql`, `okam-lwr-sql`,
+  `okam-lvsp-sql`, `zen_pasteur`) belong to other lanes. They were **not touched**, per the standing
+  rule, and in any case hold model-built test worlds seeded from fixtures — no real venue row could be
+  in them.
+- **Even the application-level consumer token is unconfigured.** `Program.cs:64` binds
+  `Configure<TripletexSettings>`, whose member is `ConsumerToken` — and the `TripletexSettings`
+  section appears **zero times** in `appsettings.json` and `appsettings.Development.json`. The
+  Tripletex handshake needs consumer token *and* employee token. Neither exists here, so the probe is
+  two credentials short, not one. The live-verify tests read `TRIPLETEX_CONSUMER_TOKEN` and
+  `TRIPLETEX_EMPLOYEE_TOKEN` from the environment; neither is set. The sandbox key file
+  `tripletext-test-keys.txt` referenced at `docs/plans/tripletex-plan.md:253` is gitignored and **does
+  not exist on disk** — and it was a *test*-account key for `api-test.tripletex.tech` regardless.
 - No non-localhost SQL host is configured anywhere this lane could read.
 - An **Azure CLI session is logged in** on this machine. So the production database is not
   *technically* unreachable — it is reachable to somebody authorised, after a firewall rule is added
@@ -197,7 +232,20 @@ The two exit criteria are **independent**, and conflating them is what makes thi
 **Five to fifteen real supplier invoices from one real Norwegian restaurant, as files.** The plan §7
 already names the source: *"Casper's invoices."*
 
-This is not a new discovery. The backend's own decision log,
+**These files already exist, and Sven already has them.** The originating prompt, captured in the
+session transcript at
+`~/.claude/projects/-Users-svendaneel-okam/8c1de9c5-8b8a-4f53-a077-08918712fd82.jsonl` (2026-07-28),
+is Sven's own words:
+
+> *"Casper also sent me invoices as examples for cost of ingredients. Getting Okam to automaticly
+> read the invoices…"*
+
+So the ask is not "find a restaurant willing to share invoices" and not "sign a pilot". **It is:
+forward the files Casper already sent, into `lanes/L-MRG-EHF-SPIKE/invoices/`.** That is the whole
+blocker. Everything in this lane — the taxonomy, the instrument, the STOP rule — is waiting on an
+email attachment that was received six days before the ruling that unparked the lane.
+
+This is also not a new discovery. The backend's own decision log,
 `OkamAPI-modules/docs/plans/DECISIONS.md:172`, already carries the line:
 
 > **Blocked on external input, not on a ruling:** Tripletex Lane 0 needs Casper's real invoices
@@ -222,11 +270,13 @@ one restaurant willing to share a dozen invoices.
 
 ### Ask 2 (only relevant once a venue is connected) — the entitlement
 
-A real venue's Tripletex `TripletexConnection.ApiToken`, plus the consumer token, in the environment,
-and someone authorised to run the handshake. Then `classify-invoices.py` prints
-`ENTITLEMENT: YES|NO` on its first line. Until a venue is connected there is no stored token whose
-entitlement could be probed, so this criterion is not merely unreachable — **it currently has no
-referent.**
+A real venue's Tripletex `TripletexConnection.ApiToken`, **plus** the application's `ConsumerToken`
+(§3: bound in `Program.cs` but present in no config file), in the environment, and someone authorised
+to run the handshake. Then `classify-invoices.py` prints `ENTITLEMENT: YES|NO` on its first line.
+
+But no venue is connected, so **this criterion currently has no referent** — there is no stored token
+whose entitlement could be probed, and no database anywhere holds such a row. It becomes answerable
+the day a venue completes Tripletex onboarding, and not before. Ask 1 does not wait on it.
 
 Note also §3's finding: no shipped surface probes this. If the answer is wanted from the running
 product rather than a script, that is a small build (a read-only admin route), not a query.
@@ -252,7 +302,7 @@ instrument, not the product**, and says nothing about production.
 
 ## 8. What was NOT done, deliberately
 
-- No container was started; the four running SQL containers belong to other lanes and were not touched.
+- No container was started; the five running SQL containers belong to other lanes and were not touched.
 - No migration was authored.
 - No probe that writes was run against Tripletex. The only calls made were unauthenticated GETs that
   returned 401, and a fetch of the public swagger document.
