@@ -112,8 +112,12 @@
 # gives in full: a live run has no `/__fixture/reset`, and the two workforce journeys each consume the
 # current week.
 #
-#   E2E_API_BASE_URL=http://127.0.0.1:5951 E2E_WEB_PORT=3951 \
+#   E2E_API_BUILD="OkamAPI@<head>" E2E_API_BASE_URL=http://127.0.0.1:5951 E2E_WEB_PORT=3951 \
 #       npm run test:e2e -- test/e2e/journeys/workforce-flag-lever.spec.js
+#
+# The closing banner prints that line with E2E_API_BUILD already filled in from the checkout this
+# script built the world from — which is what puts the API's build, rather than the frontend's commit,
+# in every live artifact.
 #
 set -euo pipefail
 
@@ -150,6 +154,32 @@ safe_conn() { printf '%s' "$CONN" | sed 's/Password=[^;]*/Password=***/'; }
     migration chain and WebApi this world should be built from, e.g.
         OKAM_API_REPO=/Users/you/okam/OkamAPI $0"
 [ -f "$OKAM_API_REPO/WebApi.csproj" ] || die "no WebApi.csproj under OKAM_API_REPO=$OKAM_API_REPO"
+
+# ---- WHICH BUILD THIS WORLD IS ----------------------------------------------------------------
+#
+# `/health` is unauthenticated and its entire body is the word "Healthy", so it tells a journey that
+# SOMETHING answered and nothing about WHAT. On 2026-08-02 two live worlds stood on this machine at
+# once, out of two different api worktrees at two different commits, and both satisfied it identically
+# — and every artifact either produced named the FRONTEND's commit and no API build at all.
+#
+# This script is the only party that knows the answer for certain: it is the one that built the world.
+# So it says so, in the variable `test/e2e/support/artifact-store.js` reads first, and carries it into
+# the command it prints — a journey run against this world then identifies its backend without asking
+# `lsof` who holds the port, and its artifact can no longer be mistaken for one from a stale world.
+#
+# `+dirty` is part of the answer, not noise: a dirty tree is NOT the commit it sits on, and two dirty
+# trees on one commit are not each other. The store keys artifacts by this token, so dropping it would
+# let a clean and a modified build overwrite each other's record under one name.
+API_HEAD="$(git -C "$OKAM_API_REPO" rev-parse HEAD 2>/dev/null || true)"
+if [ -n "$API_HEAD" ]; then
+    [ -z "$(git -C "$OKAM_API_REPO" status --porcelain 2>/dev/null)" ] || API_HEAD="$API_HEAD+dirty"
+    API_BUILD="$(basename "$OKAM_API_REPO")@$API_HEAD"
+else
+    # Not a checkout. Named as such rather than left empty: `unknown` in the artifact is an answer, and
+    # an unset variable would silently fall back to whatever the runner's shell happened to carry.
+    API_BUILD=""
+fi
+export E2E_API_BUILD="$API_BUILD"
 
 # Checked here rather than at first use: every seeding step below builds its request body with jq, and
 # a missing tool should stop the run before a database is dropped, not sixty seconds into it.
@@ -623,6 +653,7 @@ cat <<EOF
 A LIVE world is up.
 
     API        $API_BASE           (pid $API_PID, log $LOG)
+    build      ${API_BUILD:-UNKNOWN -- $OKAM_API_REPO is not a git checkout}
     database   $DB_NAME on localhost,$SQL_PORT   ($APPLIED migrations, $TABLES tables)
     store      $STORE_ID  "$STORE_NAME"   registered through POST /Stores/register, org.nr $STORE_ORGNR
     market     NO / $MKT_CURRENCY / $TZ_ID   (PUT /stores/$STORE_ID/market; currency derived)
@@ -635,8 +666,15 @@ A LIVE world is up.
 Run ONE live journey against it:
 
     cd $WEB_REPO
+    E2E_API_BUILD="$API_BUILD" \\
     E2E_API_BASE_URL=$API_BASE E2E_WEB_PORT=$WEB_PORT \\
         npm run test:e2e -- test/e2e/journeys/events-deposit-precondition.spec.js
+
+E2E_API_BUILD is the line that makes the artifact self-describing. Without it the journey falls back
+to asking whoever holds the port what directory it runs from, and if that cannot answer either, the
+run is filed \`-unidentified\` and does not outrank one that named its build. This script KNOWS the
+answer -- it built the world from $OKAM_API_REPO -- so it hands it over rather than making the runner
+guess. Copy the whole block, not just the two E2E_ lines below it.
 
 ONE, and the file path is not a convenience. In fixture mode every journey gets a fresh backend from
 \`POST /__fixture/reset\`; a live world has no such thing, so the journeys share one database in the
@@ -645,15 +683,19 @@ current week -- both create the draft, both publish it -- so whichever runs seco
 already has a plan and no "Opprett utkast" to press. They are not flaky together; they are
 incompatible, and each needs its own world:
 
-    test/e2e/scripts/live-world.sh   &&  npm run test:e2e -- test/e2e/journeys/workforce-flag-lever.spec.js
-    test/e2e/scripts/live-world.sh   &&  npm run test:e2e -- test/e2e/journeys/workforce-schedule-publish.spec.js
+    test/e2e/scripts/live-world.sh  &&  E2E_API_BUILD="$API_BUILD" E2E_API_BASE_URL=$API_BASE E2E_WEB_PORT=$WEB_PORT \\
+        npm run test:e2e -- test/e2e/journeys/workforce-flag-lever.spec.js
+    test/e2e/scripts/live-world.sh  &&  E2E_API_BUILD="$API_BUILD" E2E_API_BASE_URL=$API_BASE E2E_WEB_PORT=$WEB_PORT \\
+        npm run test:e2e -- test/e2e/journeys/workforce-schedule-publish.spec.js
 
 (\`events-deposit-precondition\` is the exception: it removes the override it sets, so it leaves the
 world as it found it and can share one with either of the others, or be re-run against a used one.)
 
-Artifacts land in artifacts/journeys/ with "backend": "live" and this API's origin on "apiBaseUrl" --
-and support/journey.js FAILS a live run in which the browser never reached that origin, so the label
-cannot be produced without the traffic.
+Artifacts land in artifacts/journeys/ with "backend": "live", this API's origin on "apiBaseUrl" and
+"backendBuild" naming the build above -- and support/journey.js FAILS a live run in which the browser
+never reached that origin, so the label cannot be produced without the traffic. The canonical file is
+the STRONGEST run on record rather than the last one written, keyed by origin AND build, so a run
+against this world cannot overwrite the record of a different one. See support/artifact-store.js.
 
 Stop it with:   kill $API_PID
 -------------------------------------------------------------------------------

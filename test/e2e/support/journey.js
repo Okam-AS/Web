@@ -45,11 +45,18 @@
 //   "backendProbe":  { "url": "…/health", "status": 200, "body": "Healthy" },  // live only; see below
 //   "backendBuild":  { "id": "OkamAPI@ddc27fa…", "source": "env:E2E_API_BUILD",
 //                      "short": "ddc27fa", "detail": "branch feature/…" } | null,   // WHICH BUILD ANSWERED
+//                    // fixture runs answer it too, as { "id": "fixture@fc25ff3…",
+//                    // "source": "fixture:test/e2e/fixture/api-server.js", … } — never `<repo>@<sha>`,
+//                    // which would read as a claim about an API. null only when nothing could say.
 //   "artifact":      { "key": "live-5961-ddc27fa",       // the backend this run is filed under
 //                      "file": "artifacts/journeys/runs/…",
 //                      "canonical": true,                // did it take <name>.playwright.json?
 //                      "canonicalHeldBy": "live-5961-ddc27fa",   // and if not, who holds it
-//                      "provisional": false },           // true = written at start, run not finished
+//                      "provisional": false,             // true = written at start, run not finished
+//                      "supersedes": null | { "key": …, "status": "passed", "finishedAtUtc": …,
+//                        "file": "artifacts/journeys/runs/….superseded.playwright.json" } },
+//                      // set when THIS run replaced a STRONGER record of its own backend: that record
+//                      // is kept whole at `file` instead of being overwritten. See artifact-store.js.
 //   "backendServed": 37,                             // responses the browser got FROM apiBaseUrl
 //   "backendSample": ["GET http://127.0.0.1:5951/feature-flags/catalog -> 200", …],
 //   "browser":       "chromium",
@@ -409,12 +416,18 @@ const test = base.test.extend({
       // the HARNESS came from and say nothing about the code under test, so a journey that crosses
       // a repo boundary declares what it actually drove and the artifact carries both.
       underTest: annotation('under-test') || null,
-      // Which BUILD is on the other end of `apiBaseUrl`. Resolved for a LIVE backend only: the fixture
-      // is a node process inside this repo, so asking it the same question would put the FRONTEND's
-      // commit in `backendBuild` — the exact confusion this field exists to end. `null` when nothing
-      // can say, and null is not a failure; it is the honest answer, and it ranks this run below one
-      // that could be identified. See artifact-store.js.
-      backendBuild: null,
+      // Which BUILD is on the other end of `apiBaseUrl`, answered for BOTH backends.
+      //
+      // The fixture's answer used to be a deliberate `null`, on the reasoning that resolving it would
+      // put the FRONTEND's commit in `backendBuild` and that is the confusion the field exists to end.
+      // The danger was real; silence was the wrong remedy. It left nineteen of the twenty-two
+      // artifacts standing on this branch unable to answer "which build answered this run?" at all, so
+      // the field could not be read as an answer anywhere. `fixtureBuild` names it `fixture@<sha>`
+      // with the fixture's own file as the source — unmistakable for an API build — and the ordering
+      // is untouched, because `backend` is compared before identity and two fixture runs share one
+      // key. The live half is filled in by the preflight below, from the strongest source that will
+      // answer, and stays `null` rather than guessed when none will.
+      backendBuild: process.env.E2E_API_BASE_URL ? null : store.fixtureBuild(REPO_ROOT),
       browser: browserName
     };
 

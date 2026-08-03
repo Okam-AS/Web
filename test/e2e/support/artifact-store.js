@@ -27,6 +27,10 @@
 //                                                              shape: probes and the plan log join here.
 //   artifacts/journeys/runs/<name>.<backendKey>.playwright.json ONE PER BACKEND. A run only ever
 //                                                              overwrites the file of its own backend.
+//   artifacts/journeys/runs/<name>.<backendKey>.superseded.playwright.json
+//                                                              THE STRONGEST RECORD THAT BACKEND EVER
+//                                                              PRODUCED, kept whole when its own later
+//                                                              run reports worse. See below.
 //   artifacts/journeys/runs/ledger.jsonl                       APPEND-ONLY. One line per run, including
 //                                                              the ones that lost the canonical slot and
 //                                                              the ones that never finished.
@@ -55,6 +59,32 @@
 // ledger, and its own record says which key holds the slot. To hand the canonical slot to a different
 // world deliberately, delete `artifacts/journeys/<name>.playwright.json` and run again.
 //
+// ---- THE ONE CASE WHERE A WEAKER RUN STILL TAKES THE SLOT, AND WHAT IT COSTS -------------------
+//
+// The same-lineage rule above is a deliberate hole in "a weaker run cannot displace the evidence",
+// and it has to be: a world that has started failing must be able to say so, and the provisional
+// `running` record that stops an interrupted run leaving a stale pass behind is itself the weakest
+// record there is. Both would be refused by a pure ranking, and refusing them brings back the defect
+// this store was built to end.
+//
+// It landed in practice on 2026-08-03 anyway. `growth-newsletter-send-gate` failed at the branch tip
+// before reaching a newsletter route at all — the app shell never settled — and because it was the
+// same fixture lineage it replaced the passing record at the canonical path AND at `runs/`, leaving
+// one summary line in the ledger as the only trace that the green run had ever existed. Recorded as
+// `F-GR-SEND-GATE-JOURNEY-RED`.
+//
+// So the hole is kept and the LOSS is closed instead. Before a run overwrites its OWN lineage's
+// record with a strictly weaker one, the record it displaces is copied whole to
+// `runs/<name>.<backendKey>.superseded.playwright.json` — steps, findings, screenshots and all — and
+// the incoming record names it in `artifact.supersedes`, as does its ledger line. That file only ever
+// moves UP: a later displaced record replaces it when it outranks what is held, never when it is
+// weaker, so it settles on the strongest run that backend ever produced.
+//
+// A reader joining on the canonical path therefore finds what is true NOW, and, in the same file, is
+// told that a stronger run of the same world exists and exactly where to read it. Neither fact is
+// destroyed by the other, which is the whole point: an evidence store that argues against itself is
+// worse than none.
+//
 // ---- HOW THE BACKEND IS IDENTIFIED ------------------------------------------------------------
 //
 // In order, first hit wins:
@@ -78,6 +108,18 @@
 // When none of them answer, the key ends `-unidentified`, the run ranks below any run that could be
 // identified, and the harness says so on stdout with the variable to set. That is deliberate: unknown
 // is not zero, and it must not read like zero either.
+//
+// THE FIXTURE ANSWERS THE SAME QUESTION ABOUT ITSELF — see `fixtureBuild`. It was left null at first,
+// on the reasoning that resolving it would put the FRONTEND's commit in `backendBuild` and that is the
+// confusion the field exists to end. The reasoning was right about the danger and wrong about the
+// remedy: it left nineteen of the twenty-two artifacts standing on this branch answering "which build
+// answered this run?" with `null`, so the field could not be read as an answer anywhere. It is named
+// `fixture@<sha>`, never `<repo>@<sha>`, and its `source` names the fixture's own file — a reader
+// cannot mistake it for an API build, and the question now has an answer on EVERY artifact.
+//
+// It changes no ordering. `backend` is compared before identity, so live still outranks fixture
+// whatever either can name; and two fixture runs share one key, so they are the same lineage and the
+// rank is never consulted between them. `test/journey-artifact-store.test.js` pins both.
 
 const fs = require('fs');
 const path = require('path');
@@ -87,6 +129,7 @@ const { execFileSync } = require('child_process');
 const RUNS_DIRNAME = 'runs';
 const LEDGER_NAME = 'ledger.jsonl';
 const UNIDENTIFIED = 'unidentified';
+const DIRTY = '+dirty';
 
 /** Filesystem-safe, lowercase, and stable — this ends up in a filename a human reads. */
 function sanitize (text) {
@@ -103,10 +146,18 @@ function sha (text, length) {
  * A build id that already contains a commit-ish hex run is shown by that run, so the filename ties
  * back to something a reader can `git show`. Anything else is hashed, because an arbitrary string is
  * not a path component.
+ *
+ * `+dirty` SURVIVES, as `-dirty`. `buildFromCheckout` below marks a dirty tree in its own `short`, so
+ * without this the same tree keyed through `E2E_API_BUILD` and keyed through `OKAM_API_REPO` produced
+ * two DIFFERENT keys for the same build — and, worse, a clean and a dirty tree at one commit produced
+ * the SAME key through the declared route, which is exactly the collision the build token is in the
+ * filename to prevent.
  */
 function shortOfBuild (id) {
-  const hex = /[0-9a-f]{7,40}/.exec(String(id || '').toLowerCase());
-  return hex ? hex[0].slice(0, 7) : sha(id);
+  const text = String(id || '').toLowerCase();
+  const hex = /[0-9a-f]{7,40}/.exec(text);
+  const suffix = text.includes(DIRTY) ? '-dirty' : '';
+  return (hex ? hex[0].slice(0, 7) : sha(id)) + suffix;
 }
 
 function gitIn (dir, args) {
@@ -134,6 +185,34 @@ function buildFromCheckout (repo, source) {
     // read in reviews — the same reason events-runsheet-print.spec.js keeps its PDF path relative:
     // an artifact should not carry the directory layout of the laptop that produced it.
     detail: branch ? 'branch ' + branch : null
+  };
+}
+
+/**
+ * What the FIXTURE backend is, said in the same field every other backend answers in.
+ *
+ * The fixture is `test/e2e/fixture/api-server.js` inside this repo, so its build is this checkout —
+ * and that is precisely why it was left `null` at first: a bare `<repo>@<sha>` in `backendBuild` reads
+ * as a claim about the API and is the confusion the field exists to end. The remedy is the NAME, not
+ * silence: `fixture@<sha>` cannot be read as an API build, `source` points at the file that served the
+ * run, and `detail` says in words that this is the in-repo stand-in.
+ *
+ * Silence cost more than it saved. It left the field unanswerable on every fixture artifact — nineteen
+ * of the twenty-two standing on this branch — so "does this artifact say which build answered it?"
+ * had no checkable answer for the majority of the evidence.
+ *
+ * Null when this is not a checkout (the guard-proof harness copies these files into a temp tree that
+ * is not one), which is the same honest null every other source returns.
+ */
+function fixtureBuild (repoRoot, fixtureFile) {
+  const built = buildFromCheckout(repoRoot, 'fixture:' + (fixtureFile || 'test/e2e/fixture/api-server.js'));
+  if (!built) { return null; }
+  const at = built.id.indexOf('@');
+  return {
+    id: 'fixture@' + built.id.slice(at + 1),
+    source: built.source,
+    short: built.short,
+    detail: 'the in-repo fixture backend, not an API build' + (built.detail ? ' (' + built.detail + ')' : '')
   };
 }
 
@@ -292,12 +371,38 @@ function pathsFor (artifactDir, journey, key) {
     runsDir,
     canonical: path.join(artifactDir, journey + '.playwright.json'),
     run: path.join(runsDir, journey + '.' + key + '.playwright.json'),
+    superseded: path.join(runsDir, journey + '.' + key + '.superseded.playwright.json'),
     ledger: path.join(runsDir, LEDGER_NAME)
   };
 }
 
 function relative (artifactDir, file) {
   return path.relative(path.resolve(artifactDir, '..', '..'), file);
+}
+
+/**
+ * Keeps whole the record a run is about to overwrite with a worse one of its OWN backend.
+ *
+ * Called only for that case — same lineage, strictly weaker — because that is the one path by which
+ * this store still destroys evidence. Everywhere else the loser survives untouched under its own key.
+ *
+ * The kept file only ever moves UP: a record that does not outrank what is already held is not
+ * written, so after a red re-run, a killed re-run and a second red re-run, this still holds the pass.
+ * Returns what the incoming record should say about it, or null when nothing was kept.
+ */
+function preserveStrongest (artifactDir, files, standing) {
+  const held = fs.existsSync(files.superseded) ? readJson(files.superseded) : null;
+  const file = relative(artifactDir, files.superseded);
+  const kept = held && compareRank(standing, held) <= 0 ? held : standing;
+  if (kept !== held) {
+    fs.writeFileSync(files.superseded, JSON.stringify(kept, null, 2) + '\n');
+  }
+  return {
+    key: keyOfRecord(kept),
+    status: kept.status || null,
+    finishedAtUtc: kept.finishedAtUtc || null,
+    file
+  };
 }
 
 /**
@@ -319,7 +424,17 @@ function writeRun (artifactDir, record, options) {
   fs.mkdirSync(files.runsDir, { recursive: true });
 
   const standing = fs.existsSync(files.canonical) ? readJson(files.canonical) : null;
-  const takes = canTakeCanonical(Object.assign({}, record, { artifact: { key } }), standing, !!opts.provisional);
+  const incoming = Object.assign({}, record, { artifact: { key } });
+  const takes = canTakeCanonical(incoming, standing, !!opts.provisional);
+
+  // THE ONE PATH BY WHICH THIS STORE STILL DESTROYS EVIDENCE, and the whole of what is done about it.
+  // A run of the same backend takes the slot unconditionally — a failing world must be able to say so
+  // — and it overwrites its own `runs/` file too, so without this the stronger record it replaces is
+  // gone from disk entirely and survives only as a summary line in the ledger. That happened to
+  // `growth-newsletter-send-gate` on 2026-08-03. The displacement still stands; the loss does not.
+  const supersedes = takes && standing && keyOfRecord(standing) === key && compareRank(incoming, standing) < 0
+    ? preserveStrongest(artifactDir, files, standing)
+    : null;
 
   const filed = Object.assign({}, record, {
     artifact: {
@@ -327,7 +442,10 @@ function writeRun (artifactDir, record, options) {
       file: relative(artifactDir, files.run),
       canonical: takes,
       canonicalHeldBy: takes ? key : keyOfRecord(standing),
-      provisional: !!opts.provisional
+      provisional: !!opts.provisional,
+      // Named IN the canonical record, not only in the ledger: the reader who most needs to know that
+      // a stronger run of this same world exists is the one reading this file as the journey's result.
+      supersedes
     }
   });
 
@@ -351,7 +469,8 @@ function writeRun (artifactDir, record, options) {
     backendServed: filed.backendServed === undefined ? null : filed.backendServed,
     provisional: !!opts.provisional,
     canonical: takes,
-    canonicalHeldBy: filed.artifact.canonicalHeldBy
+    canonicalHeldBy: filed.artifact.canonicalHeldBy,
+    supersedes: supersedes ? supersedes.file : null
   }) + '\n');
 
   return {
@@ -360,6 +479,7 @@ function writeRun (artifactDir, record, options) {
     canonicalFile: takes ? files.canonical : null,
     canonical: takes,
     heldBy: filed.artifact.canonicalHeldBy,
+    supersededFile: supersedes ? files.superseded : null,
     record: filed
   };
 }
@@ -380,6 +500,7 @@ module.exports = {
   beginRun,
   resolveBackendBuild,
   buildFromListeningProcess,
+  fixtureBuild,
   backendKeyFor,
   canTakeCanonical,
   compareRank,

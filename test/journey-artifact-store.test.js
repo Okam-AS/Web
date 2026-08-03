@@ -138,6 +138,77 @@ describe('the canonical slot', () => {
   });
 });
 
+// The same-lineage rule is the one hole left in "a weaker run cannot displace the evidence": a world
+// that has started failing must be able to say so, and the provisional `running` record is the weakest
+// there is. It landed in practice on 2026-08-03 — `growth-newsletter-send-gate` failed at the branch
+// tip before reaching a newsletter route and replaced its own passing record at BOTH the canonical
+// path and `runs/`, leaving a ledger summary as the only trace the green run had existed.
+//
+// The displacement stays. The LOSS is what these cover.
+describe('the record a run replaces with a worse one of its own backend', () => {
+  it('is kept whole, and the run that replaced it says where', () => {
+    store.writeRun(dir, record({ backendServed: 80 }));
+
+    const filed = store.writeRun(dir, record({ status: 'failed', backendServed: 0, error: 'the app shell never settled' }));
+
+    // What a reader joining on the canonical path finds: the failure, as it must.
+    expect(canonical().status).toBe('failed');
+    // And, in that same file, that a stronger run of this same world exists and exactly where it is.
+    expect(canonical().artifact.supersedes.status).toBe('passed');
+    expect(canonical().artifact.supersedes.key).toBe('live-5961-aaaaaaa');
+
+    const kept = JSON.parse(fs.readFileSync(filed.supersededFile, 'utf8'));
+    expect(kept.status).toBe('passed');
+    expect(kept.backendServed).toBe(80);
+    // Whole, not a summary — the ledger already had the summary and it was not enough to read.
+    expect(kept.title).toBe(record().title);
+    expect(canonical().artifact.supersedes.file).toContain(JOURNEY + '.live-5961-aaaaaaa.superseded.playwright.json');
+  });
+
+  it('is not itself lost when the SAME backend then fails again, or is killed mid-run', () => {
+    store.writeRun(dir, record({ backendServed: 80 }));
+    store.writeRun(dir, record({ status: 'failed', backendServed: 0 }));
+    const supersededFile = path.join(dir, store.RUNS_DIRNAME, JOURNEY + '.live-5961-aaaaaaa.superseded.playwright.json');
+
+    // A second red, then a run that begins and never reports. Neither outranks the pass, so neither
+    // may take its place in the kept file — otherwise three bad days erase the good one by attrition.
+    store.writeRun(dir, record({ status: 'failed', backendServed: 0 }));
+    store.beginRun(dir, record({ status: 'running', backendServed: 0 }));
+
+    expect(JSON.parse(fs.readFileSync(supersededFile, 'utf8')).status).toBe('passed');
+    expect(JSON.parse(fs.readFileSync(supersededFile, 'utf8')).backendServed).toBe(80);
+    expect(canonical().status).toBe('running');
+  });
+
+  it('is NOT written when the replacement is not weaker — that is an ordinary re-run', () => {
+    store.writeRun(dir, record());
+    const filed = store.writeRun(dir, record({ backendServed: 96 }));
+
+    expect(filed.supersededFile).toBeNull();
+    expect(filed.record.artifact.supersedes).toBeNull();
+    expect(fs.readdirSync(path.join(dir, store.RUNS_DIRNAME)).filter(f => f.includes('superseded'))).toHaveLength(0);
+    expect(canonical().backendServed).toBe(96);
+  });
+
+  it('is NOT written for a loser, which was never overwritten in the first place', () => {
+    store.writeRun(dir, record());
+    const filed = store.writeRun(dir, record(Object.assign({}, FIXTURE_RUN, { status: 'failed' })));
+
+    expect(filed.canonical).toBe(false);
+    expect(filed.supersededFile).toBeNull();
+    expect(fs.readdirSync(path.join(dir, store.RUNS_DIRNAME)).filter(f => f.includes('superseded'))).toHaveLength(0);
+  });
+
+  it('names the kept file in the ledger too, so the append-only history points at it', () => {
+    store.writeRun(dir, record());
+    store.writeRun(dir, record({ status: 'failed' }));
+
+    const lines = ledger();
+    expect(lines[0].supersedes).toBeNull();
+    expect(lines[1].supersedes).toContain(JOURNEY + '.live-5961-aaaaaaa.superseded.playwright.json');
+  });
+});
+
 describe('a run that never finishes', () => {
   it('leaves its own backend visibly unfinished rather than its predecessor passing', () => {
     store.writeRun(dir, record());
@@ -261,6 +332,48 @@ describe('backend identity', () => {
     // The fixture is one world whatever this repo's commit is; keying it per commit would file a
     // record per commit for no reader's benefit.
     expect(store.backendKeyFor({ backend: 'fixture', apiBaseUrl: 'http://127.0.0.1:4010', build: null })).toBe('fixture');
+  });
+
+  // The fixture used to answer this question with `null`, deliberately, so that a fixture run could not
+  // put the FRONTEND's commit in a field a reader takes for the API's. The danger was real and silence
+  // was the wrong remedy: it left nineteen of the twenty-two artifacts standing on this branch with no
+  // answer at all, so "does this artifact say which build answered it?" was unreadable for most of the
+  // evidence. The remedy is the NAME.
+  it('lets the fixture answer for itself, under a name no reader can mistake for an API build', () => {
+    const build = store.fixtureBuild(path.resolve(__dirname, '..'));
+
+    expect(build.id).toMatch(/^fixture@[0-9a-f]{40}(\+dirty)?$/);
+    expect(build.id).not.toContain('Web-modules@');
+    expect(build.source).toBe('fixture:test/e2e/fixture/api-server.js');
+    expect(build.detail).toContain('not an API build');
+    // The same null every other source returns when it cannot say, rather than an invented id.
+    expect(store.fixtureBuild('/no/such/checkout')).toBeNull();
+  });
+
+  it('does not let a fixture run outrank a live one just because it can now name its build', () => {
+    const named = { id: 'fixture@' + 'b'.repeat(40), source: 'fixture:test/e2e/fixture/api-server.js', short: 'bbbbbbb', detail: null };
+    store.writeRun(dir, record());
+
+    const filed = store.writeRun(dir, record(Object.assign({}, FIXTURE_RUN, { backendBuild: named })));
+
+    expect(canonical().backend).toBe('live');
+    expect(filed.canonical).toBe(false);
+    // And it is still ONE fixture file, not one per frontend commit.
+    expect(store.backendKeyFor({ backend: 'fixture', apiBaseUrl: 'http://127.0.0.1:4010', build: named })).toBe('fixture');
+  });
+
+  it('keeps `+dirty` in the key, so a modified tree cannot overwrite the clean commit it sits on', () => {
+    const clean = 'OkamAPI@' + 'c'.repeat(40);
+
+    expect(store.shortOfBuild(clean)).toBe('ccccccc');
+    expect(store.shortOfBuild(clean + '+dirty')).toBe('ccccccc-dirty');
+    // The two routes to the same answer must agree: `live-world.sh` declares `<repo>@<head>+dirty`
+    // through E2E_API_BUILD, and `buildFromCheckout` derives the same tree as `<head>-dirty`. Before
+    // this they keyed differently, and a clean and a dirty build keyed IDENTICALLY.
+    expect(store.backendKeyFor({ backend: 'live', apiBaseUrl: 'http://127.0.0.1:5951', build: store.resolveBackendBuild({ E2E_API_BUILD: clean + '+dirty' }) }))
+      .toBe('live-5951-ccccccc-dirty');
+    expect(store.backendKeyFor({ backend: 'live', apiBaseUrl: 'http://127.0.0.1:5951', build: store.resolveBackendBuild({ E2E_API_BUILD: clean }) }))
+      .toBe('live-5951-ccccccc');
   });
 
   it('reads a legacy artifact — one written before builds were recorded — as unidentified, not as a match', () => {

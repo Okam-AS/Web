@@ -1,0 +1,6 @@
+pristine   Tests: 26 passed, 26 total
+mutant E   Tests: 3 failed, 23 passed, 26 total   <- the displaced stronger record is destroyed again (preservation removed)
+mutant F   Tests: 1 failed, 25 passed, 26 total   <- the kept file is overwritten by whatever displaced last (high-water rule removed)
+mutant G   Tests: 1 failed, 25 passed, 26 total   <- the fixture goes back to answering null about its own build
+mutant H   Tests: 1 failed, 25 passed, 26 total   <- a dirty tree keys identically to the clean commit it sits on (dirty marker dropped)
+restored   Tests: 26 passed, 26 total
