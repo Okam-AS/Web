@@ -78,6 +78,40 @@ describe('the setting and the gate are two different answers', () => {
     expect(isOverruled(row)).toBe(true)
   })
 
+  // The OTHER direction, which this file once documented as impossible. It is routine. A module that
+  // registered an effective-resolver reports what its own gate resolves, and those gates do not fall
+  // back to the advertised default for a store with no row: `workforce.module` grandfathers a store
+  // that already has engagements, and Meals falls back to its `Features:Meals` config section. So a
+  // store with no row on a config-enabled deployment answers `state:false, effective:true`.
+  //
+  // Two things must hold, and this pin reds if either is codified away. The board carries both
+  // fields as the server stated them — normalising `effective` down to `state` here would hide a
+  // module that is demonstrably serving requests. And `isOverruled` stays SILENT, because the switch
+  // is live rather than dead: every one of those gates checks an explicit row first, so the operator
+  // writing `false` really does dark this one venue. A symmetric `state !== effective` test would
+  // warn about a working control.
+  test('a setting of OFF with an effective of ON is carried, and is NOT overruled', () => {
+    const shape = (key, module) => state({
+      flagKey: key, module, title: 'Module', defaultEnabled: false, isOverridden: false, overrideEnabled: false, effective: true
+    })
+    const board = buildBoard({
+      catalog: [
+        { flagKey: 'meals.module', module: 'Meals', title: 'Module', defaultEnabled: false },
+        { flagKey: 'workforce.module', module: 'Workforce', title: 'Module', defaultEnabled: false }
+      ],
+      states: [shape('meals.module', 'Meals'), shape('workforce.module', 'Workforce')]
+    });
+    ['meals.module', 'workforce.module'].forEach((key) => {
+      const row = rowFor(board, key)
+      expect(row.state).toBe(false)
+      expect(row.isOverridden).toBe(false)
+      expect(row.effective).toBe(true)
+      expect(isOverruled(row)).toBe(false)
+      // The control is still offered: writing the row is the thing that changes this answer.
+      expect(row.writable).toBe(true)
+    })
+  })
+
   test('agreement is not overruled, in either direction', () => {
     const on = buildBoard({ catalog: CATALOG, states: [state({ isOverridden: true, overrideEnabled: true, effective: true })] })
     const off = buildBoard({ catalog: CATALOG, states: [state({ effective: false })] })

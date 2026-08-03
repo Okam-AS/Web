@@ -120,13 +120,25 @@ function toRow (row, writable) {
 }
 
 /**
- * Whether the setting and the module's own gate DISAGREE for a row — the case the operator has to be
- * told about, because it is the one where flipping this switch does nothing.
+ * Whether the setting and the module's own gate disagree in the direction the operator has to be told
+ * about — the one where flipping this switch does nothing.
  *
- * Only asserted in the direction the API can prove. `state: true` with `effective: false` means
- * something else is holding the module down (a master flag, a deployment-wide config switch), and
- * the server said so. The reverse — `state:false, effective:true` — cannot happen through this API
- * and is not claimed.
+ * BOTH disagreements are producible through this API. Only one of them is a warning:
+ *
+ *   • `state: true` with `effective: false` — WARNED. Something else is holding the module down (a
+ *     master flag, a deployment-wide config switch) and this row cannot lift it, so the control is
+ *     dead in the direction the operator just pushed it. The server said so; the page repeats it.
+ *   • `state: false` with `effective: true` — ROUTINE, and deliberately NOT warned about. A module
+ *     that registered an effective-resolver reports what its own gate resolves, and several of those
+ *     gates fall back to something other than the advertised default when a store has no row:
+ *     `workforce.module` grandfathers a store that already has engagements, Meals and Margin fall
+ *     back to their config section. A store with no row on a config-enabled deployment therefore
+ *     reads `state:false, effective:true` — and always did; the resolvers only made the API report
+ *     it. It is not overruled, because the switch is LIVE here: each of those gates checks the
+ *     explicit row FIRST, so writing `false` really does dark this one venue while the fleet runs.
+ *
+ * So `state !== effective` is not the test, and must not become it. Both directions are pinned in
+ * `test/platform-flag-board.test.js` against the shapes the API produces.
  */
 export function isOverruled (row) {
   return row.state === true && row.effective === false;

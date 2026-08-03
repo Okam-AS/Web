@@ -1,0 +1,139 @@
+MUTATION 1 - isOverruled made symmetric (state !== effective): the impossibility claim codified as logic
+watchman warning:  Recrawled this watch 41 times, most recently because:
+MustScanSubDirs UserDroppedTo resolve, please review the information on
+https://facebook.github.io/watchman/docs/troubleshooting.html#recrawl
+To clear this warning, run:
+`watchman watch-del '/Users/svendaneel/okam/Web-modules' ; watchman watch-project '/Users/svendaneel/okam/Web-modules'`
+
+FAIL test/platform-flag-board.test.js
+  what the board may claim about a store it has not heard from
+    ✓ a store read that did not answer is UNKNOWN, never a store with every flag off (1 ms)
+    ✓ a 403 is its own status, not an unknown and not an empty store
+    ✓ a store that really answered with no flags is READ, and is not the unknown case (1 ms)
+  the setting and the gate are two different answers
+    ✓ with no override the setting is the module default (5 ms)
+    ✓ with an override the setting is the override, not the default
+    ✓ a setting of ON with an effective of OFF is reported as overruled
+    ✕ a setting of OFF with an effective of ON is carried, and is NOT overruled (1 ms)
+    ✓ agreement is not overruled, in either direction
+    ✓ a missing effective is unknown, not off, and never reads as overruled
+    ✓ the audit stamp is withheld when there is no override to attribute
+  when the two reads disagree
+    ✓ a key the catalog does not carry is not writable
+    ✓ a key the store read did not carry is writable, and its state is unknown — not the default (1 ms)
+    ✓ with no catalog the board still draws, and writability becomes unknown
+  grouping
+    ✓ rows are grouped by owning module and ordered inside it
+    ✓ rows the server returned without a module are still drawn, under no module
+
+  ● the setting and the gate are two different answers › a setting of OFF with an effective of ON is carried, and is NOT overruled
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      107 |       expect(row.isOverridden).toBe(false)
+      108 |       expect(row.effective).toBe(true)
+    > 109 |       expect(isOverruled(row)).toBe(false)
+          |                                ^
+      110 |       // The control is still offered: writing the row is the thing that changes this answer.
+      111 |       expect(row.writable).toBe(true)
+      112 |     })
+
+      at forEach (test/platform-flag-board.test.js:109:32)
+          at Array.forEach (<anonymous>)
+      at Object.<anonymous> (test/platform-flag-board.test.js:104:42)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 14 passed, 15 total
+Snapshots:   0 total
+Time:        0.368 s, estimated 1 s
+Ran all test suites matching /test\/platform-flag-board.test.js/i.
+
+MUTATION 2 - toRow normalises effective down to the setting when the store has no row
+watchman warning:  Recrawled this watch 41 times, most recently because:
+MustScanSubDirs UserDroppedTo resolve, please review the information on
+https://facebook.github.io/watchman/docs/troubleshooting.html#recrawl
+To clear this warning, run:
+`watchman watch-del '/Users/svendaneel/okam/Web-modules' ; watchman watch-project '/Users/svendaneel/okam/Web-modules'`
+
+FAIL test/platform-flag-board.test.js
+  what the board may claim about a store it has not heard from
+    ✓ a store read that did not answer is UNKNOWN, never a store with every flag off (1 ms)
+    ✓ a 403 is its own status, not an unknown and not an empty store
+    ✓ a store that really answered with no flags is READ, and is not the unknown case (1 ms)
+  the setting and the gate are two different answers
+    ✓ with no override the setting is the module default (5 ms)
+    ✓ with an override the setting is the override, not the default
+    ✓ a setting of ON with an effective of OFF is reported as overruled
+    ✕ a setting of OFF with an effective of ON is carried, and is NOT overruled (1 ms)
+    ✓ agreement is not overruled, in either direction
+    ✓ a missing effective is unknown, not off, and never reads as overruled
+    ✓ the audit stamp is withheld when there is no override to attribute (1 ms)
+  when the two reads disagree
+    ✓ a key the catalog does not carry is not writable
+    ✓ a key the store read did not carry is writable, and its state is unknown — not the default
+    ✓ with no catalog the board still draws, and writability becomes unknown
+  grouping
+    ✓ rows are grouped by owning module and ordered inside it
+    ✓ rows the server returned without a module are still drawn, under no module
+
+  ● the setting and the gate are two different answers › a setting of OFF with an effective of ON is carried, and is NOT overruled
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      106 |       expect(row.state).toBe(false)
+      107 |       expect(row.isOverridden).toBe(false)
+    > 108 |       expect(row.effective).toBe(true)
+          |                             ^
+      109 |       expect(isOverruled(row)).toBe(false)
+      110 |       // The control is still offered: writing the row is the thing that changes this answer.
+      111 |       expect(row.writable).toBe(true)
+
+      at forEach (test/platform-flag-board.test.js:108:29)
+          at Array.forEach (<anonymous>)
+      at Object.<anonymous> (test/platform-flag-board.test.js:104:42)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 14 passed, 15 total
+Snapshots:   0 total
+Time:        0.317 s, estimated 1 s
+Ran all test suites matching /test\/platform-flag-board.test.js/i.
+
+RESTORED
+watchman warning:  Recrawled this watch 41 times, most recently because:
+MustScanSubDirs UserDroppedTo resolve, please review the information on
+https://facebook.github.io/watchman/docs/troubleshooting.html#recrawl
+To clear this warning, run:
+`watchman watch-del '/Users/svendaneel/okam/Web-modules' ; watchman watch-project '/Users/svendaneel/okam/Web-modules'`
+
+PASS test/platform-flag-board.test.js
+  what the board may claim about a store it has not heard from
+    ✓ a store read that did not answer is UNKNOWN, never a store with every flag off (1 ms)
+    ✓ a 403 is its own status, not an unknown and not an empty store
+    ✓ a store that really answered with no flags is READ, and is not the unknown case
+  the setting and the gate are two different answers
+    ✓ with no override the setting is the module default (5 ms)
+    ✓ with an override the setting is the override, not the default
+    ✓ a setting of ON with an effective of OFF is reported as overruled
+    ✓ a setting of OFF with an effective of ON is carried, and is NOT overruled (1 ms)
+    ✓ agreement is not overruled, in either direction
+    ✓ a missing effective is unknown, not off, and never reads as overruled
+    ✓ the audit stamp is withheld when there is no override to attribute
+  when the two reads disagree
+    ✓ a key the catalog does not carry is not writable
+    ✓ a key the store read did not carry is writable, and its state is unknown — not the default
+    ✓ with no catalog the board still draws, and writability becomes unknown
+  grouping
+    ✓ rows are grouped by owning module and ordered inside it
+    ✓ rows the server returned without a module are still drawn, under no module
+
+Test Suites: 1 passed, 1 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        0.314 s, estimated 1 s
+Ran all test suites matching /test\/platform-flag-board.test.js/i.
