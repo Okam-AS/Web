@@ -1,0 +1,7 @@
+# A real venue's invoices identify who it buys from and on what terms. Drop them here for
+# Lane 0's classification run; they must never reach a commit. The classifier's OUTPUT is
+# safe to share -- it reports supplier organisation numbers and shapes, never names or amounts.
+invoices/
+*.xml
+*.pdf
+ehf-dump/
