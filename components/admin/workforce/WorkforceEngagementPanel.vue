@@ -39,8 +39,140 @@
       {{ $i('wfr_panel_multi_engagement', { count: row.engagementCount }) }}
     </p>
 
+    <!-- ACCESS ----------------------------------------------------------------------------------
+         The engagement above authorises nothing until a LOGIN is attached to it, and a claim
+         invitation is the only mechanism in the module that attaches one: `POST /staff` creates a
+         person with no `ApplicationUserId`, and no other route ever sets it. Until this section
+         existed the module could create staff who could never sign in, which made the whole
+         self-service half — own shifts, availability, time off, acknowledgements — unreachable by
+         any human. -->
+    <section class="wfr-panel__section wfr-panel__section--access" data-test="section-access">
+      <h3>{{ $i('wfr_panel_access') }}</h3>
+
+      <p class="wfr-panel__hint" data-test="access-state">
+        {{ accessStateLabel }}
+      </p>
+
+      <!-- THE HANDOVER. Rendered INSTEAD of the issue button while a token is on screen, so a second
+           press cannot scroll the first token out of view — it is unrecoverable the moment it goes.
+           The same rule `MealsPeoplePanel` keeps, for the same reason. -->
+      <div v-if="invitation" class="wfr-panel__handover" data-test="invitation-handover">
+        <!-- The token is null on an IDEMPOTENT REPLAY: the server stores a token-less outcome on
+             purpose, so a replayed issue can answer with the invitation's metadata and nothing else.
+             That is not a failure and must not read as one — the invitation exists and is pending;
+             this caller simply cannot be shown it again. -->
+        <template v-if="invitation.token">
+          <div class="wfr-panel__warn">
+            <strong>{{ $i('wfr_access_not_sent_title') }}</strong>
+            <span>{{ $i('wfr_access_not_sent_body') }}</span>
+          </div>
+
+          <label class="wfr-panel__sublabel" for="wfr-invitation-token">
+            {{ $i('wfr_access_token_label') }}
+          </label>
+          <input
+            id="wfr-invitation-token"
+            ref="token"
+            class="wfr-panel__token"
+            type="text"
+            readonly
+            data-test="invitation-token"
+            :value="invitation.token"
+            @focus="selectToken"
+          >
+
+          <!-- The address, named rather than assumed. What the manager relays is a bare string in a
+               message, so the recipient has to be told where to put it — and the code and the
+               destination travel as two things, never as one clickable link carrying the credential
+               through somebody's chat history. -->
+          <p class="wfr-panel__hint">
+            {{ $i('wfr_access_token_where', { link: claimLink }) }}
+          </p>
+          <p class="wfr-panel__hint" data-test="invitation-expiry">
+            {{ $i('wfr_access_token_expires', { expires: invitationExpiry }) }}
+          </p>
+
+          <div class="wfr-panel__handover-actions">
+            <button class="wfr-panel__btn wfr-panel__btn--ghost" type="button" data-test="copy-token" @click="copyToken">
+              {{ copied ? $i('wfr_access_token_copied') : $i('wfr_access_token_copy') }}
+            </button>
+            <button class="wfr-panel__btn" type="button" data-test="dismiss-token" @click="$emit('dismiss-invitation')">
+              {{ $i('wfr_access_token_done') }}
+            </button>
+          </div>
+
+          <p v-if="copyFailed" class="wfr-panel__danger">
+            {{ $i('wfr_access_token_copy_failed') }}
+          </p>
+          <p class="wfr-panel__danger">
+            {{ $i('wfr_access_token_once') }}
+          </p>
+        </template>
+
+        <template v-else>
+          <p class="wfr-panel__danger" data-test="invitation-replayed">
+            {{ $i('wfr_access_token_replayed') }}
+          </p>
+          <button class="wfr-panel__btn" type="button" @click="$emit('dismiss-invitation')">
+            {{ $i('wfr_access_token_done') }}
+          </button>
+        </template>
+      </div>
+
+      <template v-else>
+        <!-- WHAT THIS SURFACE CANNOT DO, said here rather than left as an absence a manager
+             discovers during an incident. `WorkforceStaffController` binds issue and nothing else:
+             there is no read that lists an engagement's outstanding invitations and no verb that
+             revokes one — `WorkforceInvitationState.Revoked` is declared in the enum and written by
+             no code path in the module. So this panel cannot show whether a code is currently live,
+             when it expires, or who issued it; the durable signal it CAN show is the person state
+             above. The mitigation for a code that went to the wrong person is a REISSUE, which the
+             server performs by superseding the single pending row in place — the previous token
+             stops working the instant the new one is minted. That is a real lever, so it is offered;
+             a revoke button would be a control that does nothing. -->
+        <p class="wfr-panel__note" data-test="access-limits">
+          {{ $i('wfr_access_no_list') }}
+        </p>
+
+        <label class="wfr-panel__sublabel" for="wfr-invitation-hours">
+          {{ $i('wfr_access_expires_label') }}
+        </label>
+        <input
+          id="wfr-invitation-hours"
+          v-model="expiresInDays"
+          class="wfr-panel__input"
+          type="number"
+          min="1"
+          max="60"
+          :disabled="!canInvite || busy"
+        >
+        <p class="wfr-panel__hint">
+          {{ $i('wfr_access_expires_hint') }}
+        </p>
+
+        <button
+          class="wfr-panel__btn"
+          type="button"
+          data-test="issue-invitation"
+          :disabled="!canInvite || busy || !row.isActive"
+          @click="$emit('issue-invitation', { expiresInHours: requestedHours })"
+        >
+          {{ isClaimed ? $i('wfr_access_reissue') : $i('wfr_access_issue') }}
+        </button>
+
+        <!-- An ended engagement resolves no capability, so a login attached to it can do nothing.
+             The button is withheld rather than left to fail, and the reason is on screen. -->
+        <p v-if="!row.isActive" class="wfr-panel__hint">
+          {{ $i('wfr_access_ended') }}
+        </p>
+        <p v-else-if="isClaimed" class="wfr-panel__hint">
+          {{ $i('wfr_access_reissue_hint') }}
+        </p>
+      </template>
+    </section>
+
     <!-- CAPABILITIES ------------------------------------------------------------------------- -->
-    <section class="wfr-panel__section">
+    <section class="wfr-panel__section" data-test="section-capabilities">
       <h3>{{ $i('wfr_panel_capabilities') }}</h3>
       <p class="wfr-panel__hint">
         {{ $i('wfr_panel_capabilities_hint') }}
@@ -73,7 +205,7 @@
     <!-- THE ENGAGEMENT'S OWN NUMBERS ------------------------------------------------------------
          Payroll identifiers of the ENGAGEMENT, not of the person: the same human engaged at two
          venues carries two of these, and changing one here never touches the other. -->
-    <section class="wfr-panel__section">
+    <section class="wfr-panel__section" data-test="section-numbers">
       <h3>{{ $i('wfr_panel_numbers') }}</h3>
       <div class="wfr-panel__termgrid wfr-panel__termgrid--pair">
         <input
@@ -102,7 +234,7 @@
     </section>
 
     <!-- ROLES -------------------------------------------------------------------------------- -->
-    <section class="wfr-panel__section">
+    <section class="wfr-panel__section" data-test="section-roles">
       <h3>{{ $i('wfr_panel_roles') }}</h3>
       <!-- The single most important sentence on this panel. A role is a station, not a permission;
            the block above is where power lives. Planday conflates the two and this must not. -->
@@ -144,7 +276,7 @@
     </section>
 
     <!-- EMPLOYMENT TERMS --------------------------------------------------------------------- -->
-    <section class="wfr-panel__section">
+    <section class="wfr-panel__section" data-test="section-terms">
       <h3>{{ $i('wfr_panel_terms') }}</h3>
       <p v-if="terms === null" class="wfr-panel__unknown">
         {{ $i('wfr_panel_terms_unknown') }}
@@ -332,9 +464,29 @@ export default {
     terms: { type: Array, default: null },
     effects: { type: Object, required: true },
     canManage: { type: Boolean, default: false },
+    /**
+     * Whether an invitation may be ISSUED — a strictly weaker condition than `canManage`.
+     *
+     * `canManage` folds in "the detail read answered with a revision", because every other write here
+     * is the one PATCH and that route is a 400 without an `If-Match`. Endpoint 6 takes no
+     * precondition header at all, so a caller who holds WorkforceManager can onboard somebody even
+     * where no rowversion exists. Two props rather than one because collapsing them would make the
+     * module's only way in unreachable on exactly those deployments.
+     */
+    canInvite: { type: Boolean, default: false },
     // Decides whether a term's null wage means "withheld" or "none", and whether the wage fields on
     // the term form may be offered at all.
     hasPayrollApprover: { type: Boolean, default: false },
+    /**
+     * The `WorkforceInvitationIssuedResponse` from the LAST issue on this engagement, or null.
+     *
+     * The only carrier of the raw token there will ever be: the server keeps a SHA-256 hash and
+     * nothing else, and no read returns it. It is a prop rather than component state because the
+     * page owns the call — and because keying the panel on `staffMemberId` (which the roster page
+     * does) destroys this component when the selection moves, which is exactly the behaviour wanted:
+     * one person's claim token must never be on screen under another person's name.
+     */
+    invitation: { type: Object, default: null },
     storeId: { type: [String, Number], default: '' },
     timeZoneId: { type: String, default: null },
     locale: { type: String, default: 'no' },
@@ -349,6 +501,11 @@ export default {
       draftPayrollNumber: this.detail ? (this.detail.payrollNumber || '') : '',
       recordEndDate: false,
       endDate: '',
+      // Days rather than the wire's hours: a manager thinks in days, and the endpoint's own default
+      // is 14 days. Converted at the emit, never stored in two units.
+      expiresInDays: '14',
+      copied: false,
+      copyFailed: false,
       newTerm: {
         effectiveFromDate: '',
         contractHoursPerWeek: '',
@@ -363,6 +520,52 @@ export default {
     allCapabilities () { return CAPABILITIES; },
     personStateLabel () {
       return this.row.personState ? this.$i('wfr_person_' + String(this.row.personState).toLowerCase()) : this.$i('wfr_person_unknown');
+    },
+    /** `Claimed` is the ONE state that means a login is attached; everything else means none is. */
+    isClaimed () {
+      return String(this.row.personState || '') === 'Claimed';
+    },
+    /**
+     * What the access section is allowed to claim about this engagement's sign-in.
+     *
+     * Derived from `personState` and from nothing else, because nothing else is readable: there is no
+     * invitation list, so "a code is outstanding" is not a fact this client can hold. `Invited` means
+     * no login is attached — whether a live token exists is unknown and is not implied.
+     */
+    accessStateLabel () {
+      switch (String(this.row.personState || '')) {
+      case 'Claimed': return this.$i('wfr_access_state_claimed');
+      case 'Invited': return this.$i('wfr_access_state_invited');
+      case 'Archived': return this.$i('wfr_access_state_archived');
+      default: return this.$i('wfr_access_state_unknown');
+      }
+    },
+    /** Days on screen, hours on the wire. Out-of-range or non-numeric input sends null — the server's default. */
+    requestedHours () {
+      const days = Number(this.expiresInDays);
+      if (!isFinite(days) || days < 1 || days > 60) { return null; }
+      return Math.round(days) * 24;
+    },
+    /**
+     * Where the worker goes. The ORIGIN this admin page is served from, because the claim page is a
+     * route in this same app — never a configured host, which would silently point at the wrong
+     * deployment. It deliberately carries NO token: the credential and the destination are relayed as
+     * two separate things, so neither a chat log nor a screenshot of the address is enough on its own.
+     */
+    claimLink () {
+      const origin = (typeof window !== 'undefined' && window.location) ? window.location.origin : '';
+      return origin + '/workforce/join';
+    },
+    invitationExpiry () {
+      const raw = this.invitation && this.invitation.expiresAtUtc;
+      if (!raw) { return this.$i('wfr_access_expiry_unknown'); }
+      // The Workforce surface serialises column-loaded stamps BARE (no `Z`); JS reads a bare ISO
+      // string as browser-local, which would move the expiry by the viewer's own offset.
+      const parsed = new Date(/[Zz]|[+-]\d{2}:?\d{2}$/.test(raw) ? raw : raw + 'Z');
+      if (isNaN(parsed.getTime())) { return this.$i('wfr_access_expiry_unknown'); }
+      return new Intl.DateTimeFormat(this.locale, {
+        day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit', timeZone: this.timeZoneId || 'UTC'
+      }).format(parsed);
     },
     capabilitiesChanged () {
       const before = (this.row.capabilities || []).slice().sort().join(',');
@@ -423,6 +626,12 @@ export default {
     // than sitting empty and inviting a save that would blank it.
     detail (value) {
       this.draftPayrollNumber = value ? (value.payrollNumber || '') : '';
+    },
+    // A fresh token is a fresh handover. Leaving "Kopiert" standing would tell the manager they had
+    // already relayed a code they have not yet seen — and the previous one is now dead.
+    invitation () {
+      this.copied = false;
+      this.copyFailed = false;
     }
   },
   methods: {
@@ -446,6 +655,38 @@ export default {
       if (term.wageState === WAGE_WITHHELD) { return this.$i('wfr_term_wage_withheld'); }
       if (term.wageState === WAGE_SET) { return term.wage.amount + ' ' + orDash(term.wage.currency); }
       return this.$i('wfr_term_wage_none');
+    },
+
+    selectToken () {
+      const input = this.$refs.token;
+      if (input && typeof input.select === 'function') { input.select(); }
+    },
+
+    /**
+     * Copy, with the manual path left open rather than assumed away.
+     *
+     * The Clipboard API needs a secure context and a permission, and this token is the one value on
+     * the whole panel that cannot be fetched again — so a failed copy SAYS so and re-selects the
+     * field, instead of leaving a manager to close a handover believing they hold a code they do not.
+     */
+    copyToken () {
+      this.copyFailed = false;
+      const token = this.invitation && this.invitation.token;
+      if (!token) { return; }
+
+      const clipboard = typeof navigator !== 'undefined' && navigator.clipboard;
+      if (!clipboard || typeof clipboard.writeText !== 'function') {
+        this.copyFailed = true;
+        this.selectToken();
+        return;
+      }
+
+      clipboard.writeText(token).then(() => {
+        this.copied = true;
+      }).catch(() => {
+        this.copyFailed = true;
+        this.selectToken();
+      });
     }
   }
 };
@@ -501,5 +742,19 @@ export default {
 
 .wfr-panel__btn { margin-top: 12px; border: none; background: #1bb776; color: #fff; font-weight: 600; padding: 9px 18px; border-radius: 8px; cursor: pointer; font-size: 0.86rem; }
 .wfr-panel__btn--danger { background: #fff; color: #ef4444; border: 1px solid #ef4444; }
+.wfr-panel__btn--ghost { background: #fff; color: #292c34; border: 1px solid #cbd5e0; }
 .wfr-panel__btn:disabled { background: #cbd5e0; color: #fff; cursor: not-allowed; border-color: #cbd5e0; }
+
+/* ACCESS / INVITATION HANDOVER.
+   Deliberately louder than the sections around it. The token is the only value on this panel that
+   cannot be read back, so the block that holds it has to look like a thing you deal with now rather
+   than a field you scroll past. */
+.wfr-panel__section--access { border-top-color: #bfdbfe; }
+/* `.wfr-panel__note` carries no bottom margin (elsewhere it is the last thing in its block), and
+   here the lifetime label follows it directly — the two ran together on screen. */
+.wfr-panel__section--access .wfr-panel__note { margin-bottom: 14px; }
+.wfr-panel__handover { margin-top: 6px; padding: 14px; border: 1px solid #bfdbfe; border-radius: 10px; background: #eff6ff; }
+.wfr-panel__warn { display: flex; flex-direction: column; gap: 3px; padding: 10px 14px; border-radius: 8px; background: #fff7ed; color: #92400e; font-size: 0.78rem; margin-bottom: 12px; }
+.wfr-panel__token { width: 100%; padding: 10px 12px; border: 1px solid #93c5fd; border-radius: 8px; background: #fff; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.8rem; word-break: break-all; box-sizing: border-box; }
+.wfr-panel__handover-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 </style>

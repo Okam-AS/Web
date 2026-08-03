@@ -14,6 +14,7 @@
 //   POST  /workforce/stores/{storeId}/staff                            #3   (:82)
 //   GET   /workforce/stores/{storeId}/staff/{id}                       #4   (:107)
 //   PATCH /workforce/stores/{storeId}/staff/{id}                       #5   (:122)
+//   POST  /workforce/stores/{storeId}/staff/{id}/invitations           #6   (:156)
 //   GET   /workforce/stores/{storeId}/roles                            #8   (:203)
 //   GET   /workforce/stores/{storeId}/staff/{id}/roles                 #10  (:243)
 //   PUT   /workforce/stores/{storeId}/staff/{id}/roles                 #11  (:258)
@@ -26,15 +27,23 @@
 //   • `PUT /roles` (#9) — creating and retiring the store's job-role catalogue is a screen of its
 //     own. This page assigns roles that exist; it does not define them, and a roster that silently
 //     created a role because a manager typed a name would make the role list unownable.
-//   • `POST /staff/{id}/invitations` (#6) — issuing a claim token returns the RAW token exactly
-//     once and never again, which needs a handover flow (show once, copy, confirm sent) rather than
-//     a button on a table row that can be double-clicked into an unrecoverable token.
 //   • `POST /staff/pos-operator-import` (#7) — the manager-reviewed bulk link of existing POS
 //     operators to engagements. A per-item outcome report, not a roster action.
 //
 // THERE IS NO DELETE. `WorkforceStaffController` binds none, for any resource. Ending employment is
 // `PATCH { isActive: false }` and nothing else, which is why this client has no destructive verb to
 // offer.
+//
+// THE INVITATION SURFACE IS ONE ROUTE WIDE, AND THAT IS THE BACKEND'S SHAPE RATHER THAN THIS FILE'S
+// CHOICE. `WorkforceStaffController` binds issue (#6) and nothing else: there is no
+// `GET .../invitations` to list what is outstanding and no revoke verb, even though
+// `WorkforceInvitationState` declares a `Revoked` member that no code path in the module ever
+// writes. So a caller cannot ask whether an engagement currently holds a pending token, when it
+// expires, or who issued it — the only durable, readable signal is the engagement's
+// `personState`: `Invited` means no login has claimed it, `Claimed` means one has. The panel above
+// this client says exactly that and no more. Both gaps are named in the lane report as backend
+// handoffs; until they land, the mitigation for a leaked token is a REISSUE, which the service
+// performs by superseding the single pending row in place and killing the previous token instantly.
 
 import { WorkforceClientBase, toUtcRangeParam } from '~/utils/workforce/api-client';
 
@@ -99,6 +108,34 @@ export class WorkforceRosterService extends WorkforceClientBase {
     // in fact nobody did.
     const headers = revision ? { 'If-Match': revision } : undefined;
     return this._mutate('PATCH', this._staffPath(storeId, staffMemberId), request, headers);
+  }
+
+  /**
+   * #6: issue — or REISSUE — the engagement's one-use claim invitation.
+   *
+   * The response carries the RAW token EXACTLY ONCE and the server keeps only its SHA-256 hash, so a
+   * caller that loses this response has lost the token for good: there is no read that returns it and
+   * no route that resends it. `token` is null on an idempotent REPLAY (the stored outcome is
+   * deliberately token-less), which is a different thing from a failed issue and callers must not
+   * treat a null token as an error — the invitation exists, this caller simply cannot see it again.
+   *
+   * A REISSUE SUPERSEDES IN PLACE. A filtered unique index permits one Pending invitation per
+   * engagement, so the service overwrites that row's hash and expiry rather than adding a second one:
+   * the previous raw token stops working the instant this call returns. That is the only mitigation
+   * the module offers for a code relayed to the wrong person, because no revoke route exists.
+   *
+   * `request` is optional and every field on it is: `{ expiresInHours }` overrides the server's
+   * 14-day default and is clamped server-side to 60 days. An absent body is a valid issue.
+   *
+   * No `If-Match`. The invitation is a child resource with its own single-pending guard, not an
+   * optimistic-concurrency aggregate, and the controller reads no precondition header — sending one
+   * would be inventing a contract. The `Idempotency-Key` `_mutate` adds IS required: without it the
+   * surface answers 400. A 409 `workforce.invitation-issue-conflict` means a concurrent request took
+   * the single pending slot and the retry must carry a FRESH key, because the original one is already
+   * reserved and would replay as in-progress for ever.
+   */
+  IssueInvitation (storeId, staffMemberId, request) {
+    return this._mutate('POST', this._staffPath(storeId, staffMemberId) + '/invitations', request || {});
   }
 
   /**

@@ -2977,6 +2977,108 @@ export default {
   wfr_reactivate_submit: 'Gjenåpne',
 
   // ---------------------------------------------------------------------------------------------
+  // BEMANNING — tilgang og invitasjon (panelet i /admin/workforce-roster)
+  // ---------------------------------------------------------------------------------------------
+  wfr_panel_access: 'Tilgang',
+  wfr_access_state_claimed: 'Denne personen har koblet en innlogging til engasjementet og kan bruke Min vaktplan.',
+  wfr_access_state_invited: 'Ingen innlogging er koblet til engasjementet ennå. Personen kan settes opp på vakter, men kan ikke logge inn og se dem.',
+  wfr_access_state_archived: 'Personposten er arkivert. Historikken er beholdt, men engasjementet gir ingen tilgang.',
+  wfr_access_state_unknown: 'Vi vet ikke om en innlogging er koblet til dette engasjementet.',
+  wfr_access_no_list: 'Vi kan ikke vise om det finnes en aktiv kode akkurat nå, når den utløper, eller trekke den tilbake — API-et har ingen slike ruter. Lager du en ny kode, slutter den forrige å virke i samme øyeblikk. Det er den eneste måten å stoppe en kode som er sendt til feil person.',
+  wfr_access_expires_label: 'Koden varer i (dager)',
+  wfr_access_expires_hint: 'Mellom 1 og 60 dager. Står feltet tomt eller utenfor, bruker serveren sin egen grense på 14 dager.',
+  wfr_access_issue: 'Lag invitasjonskode',
+  wfr_access_reissue: 'Lag ny invitasjonskode',
+  wfr_access_reissue_hint: 'Personen har allerede tilgang. En ny kode gjør ingen skade, men den erstatter en eventuell kode som ikke er brukt.',
+  wfr_access_ended: 'Engasjementet er avsluttet, og et avsluttet engasjement gir ingen tilgang. Gjenåpne det først.',
+  wfr_access_not_sent_title: 'Vi har ikke sendt koden noe sted',
+  wfr_access_not_sent_body: 'Det finnes ingen SMS- eller e-postutsending for denne koden. Du må selv gi den videre til personen.',
+  wfr_access_token_label: 'Invitasjonskode',
+  wfr_access_token_where: 'Personen skriver koden inn på {link}. Send adressen og koden hver for seg — da holder ikke en videresendt melding alene.',
+  wfr_access_token_expires: 'Koden utløper {expires}.',
+  wfr_access_expiry_unknown: 'på et tidspunkt vi ikke fikk lest',
+  wfr_access_token_copy: 'Kopier koden',
+  wfr_access_token_copied: 'Kopiert',
+  wfr_access_token_copy_failed: 'Nettleseren lot oss ikke kopiere. Marker teksten i feltet og kopier den selv — den vises ikke igjen.',
+  wfr_access_token_done: 'Ferdig',
+  wfr_access_token_once: 'Koden vises kun nå. Serveren lagrer bare et avtrykk av den, så den kan ikke hentes fram igjen. Lukker du dette uten å ha gitt den videre, må du lage en ny.',
+  wfr_access_token_replayed: 'Serveren gjentok et tidligere svar, og et gjentatt svar inneholder aldri selve koden. Invitasjonen finnes, men koden kan ikke vises. Lag en ny kode hvis du trenger en å gi videre.',
+  wfr_invitation_issued: 'Invitasjonskoden er laget',
+  wfr_conflict_invitation_title: 'En annen forespørsel holder plassen',
+  wfr_conflict_invitation: 'Noen laget en kode for denne personen i samme øyeblikk. Prøv igjen — hvert trykk sender en ny nøkkel, som er akkurat det serveren ber om.',
+
+  // ---------------------------------------------------------------------------------------------
+  // BEMANNING — den ansattes egen innløsningsside (/workforce/join)
+  //
+  // Leseren er ikke operatør. Det er en barista med telefonen i hånda og en kode i en melding, så
+  // språket her er hverdagslig og hver blindvei ender i noe man kan gjøre eller noen man kan spørre.
+  // ---------------------------------------------------------------------------------------------
+  wfjoin_eyebrow: 'Bli med på vaktplanen',
+  wfjoin_meta_title: 'Løs inn invitasjonskoden',
+  wfjoin_lang_label: 'Språk',
+  wfjoin_lang_no: 'Norsk',
+  wfjoin_lang_en: 'English',
+  wfjoin_lang_de: 'Deutsch',
+  wfjoin_login_subtitle: 'Logg inn for å løse inn invitasjonen.',
+
+  wfjoin_paste_title: 'Skriv inn koden du fikk',
+  wfjoin_paste_intro: 'Arbeidsgiveren din har laget en kode til deg. Lim den inn her.',
+  wfjoin_paste_label: 'Invitasjonskode',
+  wfjoin_paste_placeholder: 'Lim inn koden',
+  wfjoin_paste_empty: 'Feltet er tomt. Lim inn koden du fikk.',
+  wfjoin_paste_button: 'Fortsett',
+  wfjoin_paste_help: 'Har du ikke fått noen kode? Spør lederen din — det er bare de som kan lage en.',
+
+  wfjoin_signin_title: 'Logg inn først',
+  wfjoin_signin_body: 'Koden knyttes til innloggingen din, så vi må vite hvem du er før vi kan bruke den.',
+  wfjoin_signin_kept: 'Koden blir liggende her mens du logger inn. Du trenger ikke lime den inn på nytt.',
+  wfjoin_signin_button: 'Logg inn',
+
+  wfjoin_confirm_title: 'Klar til å løse inn koden',
+  wfjoin_confirm_body: 'Vi kobler innloggingen din til engasjementet koden gjelder. Koden kan bare brukes én gang.',
+  wfjoin_button: 'Løs inn koden',
+  wfjoin_button_busy: 'Løser inn …',
+  wfjoin_unknowns_title: 'Dette vet vi ikke ennå',
+  wfjoin_unknowns_body: 'Vi kan ikke vise hvilken arbeidsplass koden gjelder, hvilken rolle du får eller når koden går ut — det finnes ingen måte å slå opp en kode på uten å bruke den. Det får du vite i samme øyeblikk som du løser den inn.',
+  wfjoin_working: 'Vent litt …',
+
+  wfjoin_done_title: 'Du er inne',
+  wfjoin_done_body: 'Innloggingen din er koblet til engasjementet. Vaktene dine dukker opp så snart vaktplanen er publisert.',
+  wfjoin_done_go: 'Gå til Min vaktplan',
+  wfjoin_done_no_selfservice: 'Engasjementet gir deg ikke tilgang til selvbetjening ennå, så Min vaktplan vil være tom. Å løse inn en kode gir aldri nye rettigheter i seg selv — si fra til lederen din.',
+  wfjoin_field_store: 'Arbeidsplass',
+  wfjoin_field_grants: 'Dette gir engasjementet deg',
+  wfjoin_grants_none: 'Ingenting ennå',
+
+  wfjoin_existing_title: 'Du har allerede tilgang et sted',
+  wfjoin_existing_body: 'Kontoen din er knyttet til {count} engasjement fra før. Har du løst inn denne koden tidligere, er du allerede inne — og da er svaret over ingenting å bekymre seg for.',
+
+  wfjoin_platform_words: 'Serveren sa: {detail}',
+  wfjoin_retry: 'Prøv igjen',
+  wfjoin_other_code: 'Prøv en annen kode',
+
+  wfjoin_private_note: 'Koden vises aldri i nettadressen og lagres ikke i nettleseren.',
+  wfjoin_footer_help: 'Noe som ikke stemmer? Spør lederen din — det er de som lager kodene.',
+  wfjoin_footer_mark: 'Okam',
+
+  // Avvisninger. Den første er med vilje vag: serveren svarer likt på fem forskjellige årsaker, og
+  // den setningen sier alle fem i stedet for å gjette på én.
+  wfjoin_refuse_invalid_title: 'Koden virker ikke',
+  wfjoin_refuse_invalid_body: 'Serveren svarer likt på fem ting, og vi kan ikke se hvilken av dem det er: koden kan være feilskrevet, utløpt, trukket tilbake, allerede brukt — eller den kan tilhøre en annen innlogging enn den du bruker nå. Sjekk at du kopierte hele koden, og at du er logget inn som deg selv. Stemmer begge deler, be lederen din lage en ny.',
+  wfjoin_refuse_attach_title: 'Denne innloggingen er allerede knyttet til en annen person',
+  wfjoin_refuse_attach_body: 'Kontoen din hører til en annen personpost, og engasjementet kan ikke flyttes over automatisk. Det finnes ingen knapp for dette noe sted — lederen din må opprette engasjementet på riktig person. Vis dem gjerne denne meldingen.',
+  wfjoin_refuse_conflict_title: 'Noe endret seg mens vi holdt på',
+  wfjoin_refuse_conflict_body: 'To ting skjedde samtidig, og ingenting ble lagret. Prøv én gang til.',
+  wfjoin_refuse_inflight_title: 'Vi holder allerede på',
+  wfjoin_refuse_inflight_body: 'Et tidligere forsøk er fortsatt underveis. Trykk én gang til, så henter vi svaret på det i stedet for å starte et nytt.',
+  wfjoin_refuse_signedout_title: 'Du er ikke logget inn lenger',
+  wfjoin_refuse_signedout_body: 'Innloggingen din tok slutt før koden ble brukt. Logg inn igjen — koden ligger fortsatt her.',
+  wfjoin_refuse_offline_title: 'Vi fikk ikke svar',
+  wfjoin_refuse_offline_body: 'Forespørselen kom kanskje aldri fram, så koden er sannsynligvis ubrukt. Prøv igjen.',
+  wfjoin_refuse_nomodule_title: 'Vi nådde ikke fram',
+  wfjoin_refuse_nomodule_body: 'Svaret kom ikke fra bemanningstjenesten, så vi vet ingenting om koden — heller ikke at den er feil. Prøv igjen om litt.',
+
+  // ---------------------------------------------------------------------------------------------
   // MARGIN — oppskrift inn, kostpris ut (/admin/margin-recipes)
   // ---------------------------------------------------------------------------------------------
   nav_margin_recipes: 'Oppskrifter',

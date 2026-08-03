@@ -1,0 +1,86 @@
+[WebServer] [fixture] listening on http://127.0.0.1:4081
+[WebServer] [dev-server] borrowed core from /Users/svendaneel/okam/Web-modules/core
+[WebServer] 
+[WebServer]  WARN  You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  Module @nuxt/image is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version >=3.1.0 is required but currently using 2.17.1
+[WebServer] 
+[WebServer] ℹ Parsed 0 files in 0.0 seconds
+[WebServer] ℹ [HPM] Proxy created: /  -> http://127.0.0.1:5080
+[WebServer] ℹ [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+[WebServer] ℹ Listening on: http://192.168.1.114:3081/
+[WebServer] ℹ Preparing project for development
+[WebServer] ℹ Initial build may take a while
+[WebServer] ℹ Discovered Components: .nuxt/components/readme.md
+[WebServer] ✔ Builder initialized
+[WebServer] ✔ Nuxt files generated
+[WebServer] ℹ Compiling Server
+[WebServer] ℹ Compiling Client
+[WebServer] ✔ Server: Compiled successfully in 24.58s
+[WebServer] ✔ Client: Compiled successfully in 27.02s
+
+Running 1 test using 1 worker
+
+[WebServer] ℹ Waiting for file changes
+[WebServer] ℹ Memory usage: 1.23 GB (RSS: 2.43 GB)
+[WebServer] ℹ Listening on: http://192.168.1.114:3081/
+  ✘  1 [chromium] › test/e2e/journeys/workforce-invitation-onboarding.spec.js:56:1 › A manager invites a new hire, who claims the code and sees their published shift @fixture (18.2s)
+[teardown] returned core/ to an empty submodule mount
+
+
+  1) [chromium] › test/e2e/journeys/workforce-invitation-onboarding.spec.js:56:1 › A manager invites a new hire, who claims the code and sees their published shift @fixture 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  locator('.wf-page__badge')
+    Expected: "Utkast"
+    Received: "Ingen plan"
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveText" with timeout 15000ms
+      - waiting for locator('.wf-page__badge')
+        34 × locator resolved to <span data-v-b47d747a="" data-v-70f5b8c5="" class="wf-page__badge wf-page__badge--none">Ingen plan</span>
+           - unexpected value "Ingen plan"
+
+
+      149 |
+      150 |       await page.getByRole('button', { name: 'Opprett utkast' }).click();
+    > 151 |       await expect(page.locator('.wf-page__badge')).toHaveText('Utkast', { timeout: 15000 });
+          |                                                     ^
+      152 |
+      153 |       // The row for Nina specifically — the shift has to name the person who is about to claim, or
+      154 |       // the last assertion in this journey proves nothing about the link the claim made.
+        at /Users/svendaneel/okam/web-wf-onboardwalk/test/e2e/journeys/workforce-invitation-onboarding.spec.js:151:53
+        at JourneyRecorder.step (/Users/svendaneel/okam/web-wf-onboardwalk/test/e2e/support/journey.js:277:22)
+        at /Users/svendaneel/okam/web-wf-onboardwalk/test/e2e/journeys/workforce-invitation-onboarding.spec.js:146:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/workforce-invitation-onboa-7e9d9--sees-their-published-shift-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/workforce-invitation-onboarding.fixture.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/workforce-invitation-onboarding.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/workforce-invitation-onboa-7e9d9--sees-their-published-shift-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/workforce-invitation-onboa-7e9d9--sees-their-published-shift-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/workforce-invitation-onboa-7e9d9--sees-their-published-shift-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › test/e2e/journeys/workforce-invitation-onboarding.spec.js:56:1 › A manager invites a new hire, who claims the code and sees their published shift @fixture 

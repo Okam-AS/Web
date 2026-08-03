@@ -1,0 +1,242 @@
+{
+  "journey": "workforce-invitation-onboarding",
+  "title": "A manager invites a new hire, who claims the code and sees their published shift",
+  "status": "passed",
+  "startedAtUtc": "2026-08-03T08:39:23.813Z",
+  "finishedAtUtc": "2026-08-03T08:39:32.059Z",
+  "durationMs": 8246,
+  "capabilities": [
+    "workforce.staff.invite",
+    "workforce.me.invitation-claim",
+    "workforce.me.schedule"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3081",
+  "apiBaseUrl": "http://127.0.0.1:4081",
+  "commit": "cff41c8583f9792b0368093fae632dd5fdacb716",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": null,
+  "backendServed": 74,
+  "backendSample": [
+    "POST http://127.0.0.1:4081/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:4081/user/login -> 200",
+    "GET http://127.0.0.1:4081/user -> 200",
+    "GET http://127.0.0.1:4081/stores/42/market -> 200",
+    "GET http://127.0.0.1:4081/user -> 200",
+    "GET http://127.0.0.1:4081/workforce/stores/42/context -> 200",
+    "GET http://127.0.0.1:4081/stores/42 -> 200",
+    "GET http://127.0.0.1:4081/stores/42/specialopeninghours -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in as the manager on the roster",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T08:39:23.814Z",
+      "durationMs": 1335,
+      "detail": "landed on /admin/workforce-roster",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "the new hire is on the roster and has no login",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T08:39:25.149Z",
+      "durationMs": 56,
+      "detail": "Ingen innlogging er koblet til engasjementet ennå. Personen kan settes opp på vakter, men kan ikke logge inn og se dem.",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "the panel says what it cannot do before it offers the button",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T08:39:25.205Z",
+      "durationMs": 6,
+      "detail": "Vi kan ikke vise om det finnes en aktiv kode akkurat nå, når den utløper, eller trekke den tilbake — API-et har ingen sl…",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "issue the invitation code",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T08:39:25.305Z",
+      "durationMs": 55,
+      "detail": "code issued, 20 characters, shown once",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "the handover names the address and admits nothing was sent",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T08:39:25.360Z",
+      "durationMs": 7,
+      "detail": "no delivery channel, /workforce/join named, once-only stated",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "turn the schedule publication switch on for this store",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T08:39:25.471Z",
+      "durationMs": 757,
+      "detail": "workforce.publication on for this store",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "build and publish a week containing the new hire's shift",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T08:39:26.228Z",
+      "durationMs": 888,
+      "detail": "Publisert til 1 mottakere.",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "a fragment-carried code never reaches the address bar",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T08:39:27.116Z",
+      "durationMs": 1295,
+      "detail": "hash scrubbed, path /workforce/join, history length 6",
+      "error": null
+    },
+    {
+      "n": 9,
+      "name": "paste the real code BEFORE signing in",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T08:39:28.411Z",
+      "durationMs": 639,
+      "detail": "code accepted, page asks for a sign-in",
+      "error": null
+    },
+    {
+      "n": 10,
+      "name": "sign in as the new hire, in place",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T08:39:29.067Z",
+      "durationMs": 101,
+      "detail": "signed in without navigating; the pasted code survived",
+      "error": null
+    },
+    {
+      "n": 11,
+      "name": "the page admits what it cannot tell them before the button",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T08:39:29.168Z",
+      "durationMs": 9,
+      "detail": "Dette vet vi ikke ennå Vi kan ikke vise hvilken arbeidsplass koden gjelder, hvilken rolle du får ell…",
+      "error": null
+    },
+    {
+      "n": 12,
+      "name": "claim the code",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T08:39:29.177Z",
+      "durationMs": 57,
+      "detail": "claimed; grants on the receipt: WorkforceSelf",
+      "error": null
+    },
+    {
+      "n": 13,
+      "name": "the worker sees the shift the manager published",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T08:39:29.245Z",
+      "durationMs": 599,
+      "detail": "first shift card: 09:00–15:00 Uten rolle Betalt tid 6t Fra publisering 1",
+      "error": null
+    },
+    {
+      "n": 14,
+      "name": "claiming the same code again is answered honestly, not as a bare error",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T08:39:29.857Z",
+      "durationMs": 667,
+      "detail": "opaque refusal + the account's own engagements shown beside it",
+      "error": null
+    },
+    {
+      "n": 15,
+      "name": "the manager's roster now reads the person as signed in",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T08:39:30.565Z",
+      "durationMs": 1407,
+      "detail": "Denne personen har koblet en innlogging til engasjementet og kan bruke Min vaktplan.",
+      "error": null
+    },
+    {
+      "n": 16,
+      "name": "what the browser said while this ran",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T08:39:32.053Z",
+      "durationMs": 0,
+      "detail": "5 console errors recorded as findings",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "defect",
+      "summary": "browser error during the invitation journey",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-roster\" to \"/admin?redirect=%2Fadmin%2Fworkforce-roster&storeId=42\" with a new navigation."
+    },
+    {
+      "severity": "defect",
+      "summary": "browser error during the invitation journey",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-roster\" to \"/admin?redirect=%2Fadmin%2Fworkforce-roster&storeId=42\" with a new navigation."
+    },
+    {
+      "severity": "defect",
+      "summary": "browser error during the invitation journey",
+      "detail": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    },
+    {
+      "severity": "defect",
+      "summary": "browser error during the invitation journey",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-roster\" to \"/admin?redirect=%2Fadmin%2Fworkforce-roster&storeId=42\" with a new navigation."
+    },
+    {
+      "severity": "defect",
+      "summary": "browser error during the invitation journey",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-roster\" to \"/admin?redirect=%2Fadmin%2Fworkforce-roster&storeId=42\" with a new navigation."
+    },
+    {
+      "severity": "note",
+      "summary": "no invitation list or revoke route exists",
+      "detail": "The manager surface can ISSUE (endpoint 6) and nothing else. `WorkforceStaffController` binds no GET for an engagement's invitations and no revoke verb, though `WorkforceInvitationState.Revoked` is declared and written by no code path in the module. So this UI cannot show whether a code is currently live, when it expires, or withdraw one that went to the wrong person — it offers a reissue (which supersedes in place and kills the previous token) and says so. Wanted: GET /workforce/stores/{storeId}/staff/{id}/invitations and a revoke route that writes the Revoked state."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-roster\" to \"/admin?redirect=%2Fadmin%2Fworkforce-roster&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-roster\" to \"/admin?redirect=%2Fadmin%2Fworkforce-roster&storeId=42\" with a new navigation.",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-roster\" to \"/admin?redirect=%2Fadmin%2Fworkforce-roster&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-roster\" to \"/admin?redirect=%2Fadmin%2Fworkforce-roster&storeId=42\" with a new navigation."
+  ],
+  "failedRequests": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:4081/workforce/me/invitations/claim",
+      "status": 404
+    }
+  ],
+  "screenshots": [
+    "workforce-invitation-onboarding/fixture/01-the-roster-before-an-invitation.png",
+    "workforce-invitation-onboarding/fixture/02-the-invitation-code-shown-once.png",
+    "workforce-invitation-onboarding/fixture/03-the-claim-page-code-held-not-signed-in.png",
+    "workforce-invitation-onboarding/fixture/04-the-worker-is-in.png",
+    "workforce-invitation-onboarding/fixture/05-my-shifts-after-claiming.png",
+    "workforce-invitation-onboarding/fixture/06-a-repeat-claim-answered-honestly.png",
+    "workforce-invitation-onboarding/fixture/07-the-roster-after-the-claim.png"
+  ],
+  "error": null,
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/workforce-invitation-onboarding.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false
+  }
+}

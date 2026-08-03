@@ -54,6 +54,34 @@ describe('the client is route-for-route with /workforce/me', () => {
     expect(lastCall().url).toBe('/workforce/me/staff-memberships/sm-1/exchanges/ex-1/decisions')
   })
 
+  test('the invitation claim sends the CALLER\'s idempotency key, not a fresh one', async () => {
+    const svc = service()
+
+    await svc.ClaimInvitation('wfinv_abc', 'key-held-across-retries')
+
+    expect(lastCall().url).toBe('/workforce/me/invitations/claim')
+    expect(lastCall().options.method).toBe('POST')
+    expect(JSON.parse(lastCall().options.body)).toEqual({ token: 'wfinv_abc' })
+    // THE POINT OF THE ARGUMENT. `_mutate` mints a fresh key per call, which is right for an admin
+    // pressing a button twice — two presses are two commands. Here the caller has ONE command in
+    // their whole visit, and the failure this route meets is a phone losing signal mid-request. A
+    // stable key REPLAYS and returns the engagement the first attempt created; a fresh one re-runs
+    // the command against an invitation the first attempt already consumed, and the answer is the
+    // opaque `workforce.invitation-invalid` — the caller told their own success does not exist.
+    expect(lastCall().options.headers['Idempotency-Key']).toBe('key-held-across-retries')
+  })
+
+  test('two claims under the same key send the same key', async () => {
+    const svc = service()
+
+    await svc.ClaimInvitation('wfinv_abc', 'stable-key')
+    const first = lastCall().options.headers['Idempotency-Key']
+    await svc.ClaimInvitation('wfinv_abc', 'stable-key')
+    const second = lastCall().options.headers['Idempotency-Key']
+
+    expect(first).toBe(second)
+  })
+
   test('the client binds no route the controller does not declare', () => {
     // A client method for a route that does not exist is the failure mode this surface is audited
     // for. Every public method here is checked against Controllers/WorkforceMeController.cs.
@@ -62,6 +90,9 @@ describe('the client is route-for-route with /workforce/me', () => {
       .sort()
     expect(bound).toEqual([
       'AcknowledgePublication',
+      // `POST /workforce/me/invitations/claim` — WorkforceMeController.ClaimInvitation, endpoint 32.
+      // Authenticated, capability-free (claiming is how a person first acquires one).
+      'ClaimInvitation',
       'DecideExchange',
       'GetInbox',
       'GetMemberships',

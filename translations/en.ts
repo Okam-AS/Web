@@ -2924,6 +2924,108 @@ export default {
   wfr_reactivate_submit: 'Reopen',
 
   // ---------------------------------------------------------------------------------------------
+  // WORKFORCE — access and invitations (the panel on /admin/workforce-roster)
+  // ---------------------------------------------------------------------------------------------
+  wfr_panel_access: 'Access',
+  wfr_access_state_claimed: 'A login is attached to this engagement, so this person can use My shifts.',
+  wfr_access_state_invited: 'No login is attached to this engagement yet. This person can be put on shifts but cannot sign in and see them.',
+  wfr_access_state_archived: 'The person record is archived. History is kept, but the engagement grants no access.',
+  wfr_access_state_unknown: 'We do not know whether a login is attached to this engagement.',
+  wfr_access_no_list: 'We cannot show whether a code is live right now, when it expires, or withdraw one — the API has no such routes. Issuing a new code kills the previous one the moment it is minted, and that is the only way to stop a code that went to the wrong person.',
+  wfr_access_expires_label: 'The code lasts (days)',
+  wfr_access_expires_hint: 'Between 1 and 60 days. Left blank or out of range, the server uses its own 14-day default.',
+  wfr_access_issue: 'Issue an invitation code',
+  wfr_access_reissue: 'Issue a new invitation code',
+  wfr_access_reissue_hint: 'This person already has access. A new code does no harm, but it replaces any unused code that is still out there.',
+  wfr_access_ended: 'This engagement has ended, and an ended engagement grants no access. Reopen it first.',
+  wfr_access_not_sent_title: 'We have not sent this code anywhere',
+  wfr_access_not_sent_body: 'There is no SMS or email delivery for this code. You have to hand it over yourself.',
+  wfr_access_token_label: 'Invitation code',
+  wfr_access_token_where: 'The person enters the code at {link}. Send the address and the code separately, so a forwarded message is not enough on its own.',
+  wfr_access_token_expires: 'The code expires {expires}.',
+  wfr_access_expiry_unknown: 'at a time we could not read',
+  wfr_access_token_copy: 'Copy the code',
+  wfr_access_token_copied: 'Copied',
+  wfr_access_token_copy_failed: 'The browser would not let us copy. Select the text in the field and copy it yourself — it is not shown again.',
+  wfr_access_token_done: 'Done',
+  wfr_access_token_once: 'The code is shown only now. The server stores a fingerprint of it and nothing more, so it cannot be fetched again. Close this without handing it over and you will have to issue a new one.',
+  wfr_access_token_replayed: 'The server replayed an earlier answer, and a replayed answer never carries the code itself. The invitation exists, but the code cannot be shown. Issue a new code if you need one to hand over.',
+  wfr_invitation_issued: 'Invitation code issued',
+  wfr_conflict_invitation_title: 'Another request holds the slot',
+  wfr_conflict_invitation: 'Somebody issued a code for this person at the same moment. Try again — each press sends a new key, which is exactly what the server is asking for.',
+
+  // ---------------------------------------------------------------------------------------------
+  // WORKFORCE — the worker's own claim page (/workforce/join)
+  //
+  // The reader is not an operator. It is a barista holding a phone and a code in a message, so the
+  // language is plain and every dead end finishes in something to do or somebody to ask.
+  // ---------------------------------------------------------------------------------------------
+  wfjoin_eyebrow: 'Join the schedule',
+  wfjoin_meta_title: 'Redeem your invitation code',
+  wfjoin_lang_label: 'Language',
+  wfjoin_lang_no: 'Norsk',
+  wfjoin_lang_en: 'English',
+  wfjoin_lang_de: 'Deutsch',
+  wfjoin_login_subtitle: 'Sign in to redeem the invitation.',
+
+  wfjoin_paste_title: 'Enter the code you were given',
+  wfjoin_paste_intro: 'Your employer issued a code for you. Paste it here.',
+  wfjoin_paste_label: 'Invitation code',
+  wfjoin_paste_placeholder: 'Paste the code',
+  wfjoin_paste_empty: 'The field is empty. Paste the code you were given.',
+  wfjoin_paste_button: 'Continue',
+  wfjoin_paste_help: 'No code? Ask your manager — they are the only ones who can issue one.',
+
+  wfjoin_signin_title: 'Sign in first',
+  wfjoin_signin_body: 'The code is attached to your login, so we need to know who you are before we can use it.',
+  wfjoin_signin_kept: 'The code stays here while you sign in. You will not have to paste it again.',
+  wfjoin_signin_button: 'Sign in',
+
+  wfjoin_confirm_title: 'Ready to redeem the code',
+  wfjoin_confirm_body: 'We will attach your login to the engagement this code belongs to. The code can only be used once.',
+  wfjoin_button: 'Redeem the code',
+  wfjoin_button_busy: 'Redeeming …',
+  wfjoin_unknowns_title: 'What we cannot tell you yet',
+  wfjoin_unknowns_body: 'We cannot show which workplace this code is for, what role you will get, or when it expires — there is no way to look a code up without spending it. You will be told the moment you redeem it.',
+  wfjoin_working: 'One moment …',
+
+  wfjoin_done_title: 'You are in',
+  wfjoin_done_body: 'Your login is attached to the engagement. Your shifts appear as soon as a schedule is published.',
+  wfjoin_done_go: 'Go to My shifts',
+  wfjoin_done_no_selfservice: 'This engagement does not give you self-service access yet, so My shifts will be empty. Redeeming a code never grants anything on its own — tell your manager.',
+  wfjoin_field_store: 'Workplace',
+  wfjoin_field_grants: 'What the engagement gives you',
+  wfjoin_grants_none: 'Nothing yet',
+
+  wfjoin_existing_title: 'You already have access somewhere',
+  wfjoin_existing_body: 'Your account is attached to {count} engagement(s) already. If you redeemed this code before, you are already in — and the answer above is nothing to worry about.',
+
+  wfjoin_platform_words: 'The server said: {detail}',
+  wfjoin_retry: 'Try again',
+  wfjoin_other_code: 'Try a different code',
+
+  wfjoin_private_note: 'The code never appears in the address bar and is not stored in your browser.',
+  wfjoin_footer_help: 'Something not right? Ask your manager — they are the ones who issue the codes.',
+  wfjoin_footer_mark: 'Okam',
+
+  // Refusals. The first is deliberately vague: the server answers five different causes identically,
+  // and that sentence names all five rather than guessing at one.
+  wfjoin_refuse_invalid_title: 'That code did not work',
+  wfjoin_refuse_invalid_body: 'The server answers five things identically and we cannot tell which one it is: the code may be mistyped, expired, withdrawn, already used — or it may belong to a different login than the one you are using. Check that you copied the whole code and that you are signed in as yourself. If both are right, ask your manager for a new one.',
+  wfjoin_refuse_attach_title: 'This login already belongs to another person record',
+  wfjoin_refuse_attach_body: 'Your account belongs to a different person record, and the engagement cannot be moved onto it automatically. There is no button for this anywhere — your manager has to create the engagement on the right person. Feel free to show them this message.',
+  wfjoin_refuse_conflict_title: 'Something changed while we were working',
+  wfjoin_refuse_conflict_body: 'Two things happened at once and nothing was saved. Try once more.',
+  wfjoin_refuse_inflight_title: 'We are already working on it',
+  wfjoin_refuse_inflight_body: 'An earlier attempt is still in flight. Press again and we will pick up its answer rather than starting a second one.',
+  wfjoin_refuse_signedout_title: 'You are no longer signed in',
+  wfjoin_refuse_signedout_body: 'Your session ended before the code was used. Sign in again — the code is still here.',
+  wfjoin_refuse_offline_title: 'We got no answer',
+  wfjoin_refuse_offline_body: 'The request may never have arrived, so the code is probably unused. Try again.',
+  wfjoin_refuse_nomodule_title: 'We could not reach it',
+  wfjoin_refuse_nomodule_body: 'That answer did not come from the workforce service, so we know nothing about the code — not even that it is wrong. Try again shortly.',
+
+  // ---------------------------------------------------------------------------------------------
   // MARGIN — a recipe in, a plate cost out (/admin/margin-recipes)
   // ---------------------------------------------------------------------------------------------
   nav_margin_recipes: 'Recipes',

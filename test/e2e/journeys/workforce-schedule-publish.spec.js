@@ -157,53 +157,50 @@ test(
 
     await journey.shot('draft with one shift');
 
-    // ---- what the browser showed that no unit test could ----------------------------------------
+    // ---- what only an assembled page can be asked ------------------------------------------------
     //
-    // RECORDED, NOT ASSERTED AGAINST. The publish flow works, so failing here would say the
-    // capability does not, which is false. But two things are on screen that should not be, and both
-    // are invisible to a component test that mounts one branch at a time — they are properties of
-    // the TEMPLATE's `v-if` chains, which only exist in an assembled page.
-    await journey.step('the three pivots render each other\'s grids', async () => {
-      const notes = [];
+    // ASSERTED, no longer merely recorded. This step used to write down two defects it found and
+    // pass anyway: the `v-else` chain across the three pivots was broken, so the employees pivot drew
+    // the month grid underneath the week grid, and the roles pivot of an editable week drew the
+    // authoring notice INSTEAD OF a schedule. Both are now fixed (the notice sits outside the chain,
+    // and the three grids are one contiguous `v-if` / `v-else-if` / `v-else`), so this proves the
+    // property rather than documenting its absence.
+    //
+    // It is invisible to a component test by construction: which branch a `v-else` binds to is a
+    // property of the assembled TEMPLATE, and a unit test that mounts one grid at a time can never
+    // see two of them on screen at once.
+    await journey.step('each pivot renders its own grid and only its own', async () => {
+      const seen = [];
 
-      // Defect 1. The template is:
-      //     <WorkforceWeekGrid  v-if="isEmployees" />        <- chain A, on its own
-      //     <p                  v-if="isRoles && canAuthorHere" />
-      //     <WorkforceRoleGrid  v-else-if="isRoles" />       <- chain B
-      //     <WorkforceMonthGrid v-else />                    <- still chain B
-      // `v-else` binds to the nearest preceding chain, which is B — not to the week grid. So on the
-      // EMPLOYEES pivot chain B falls through to its else and the MONTH grid renders underneath the
-      // week grid, fetching nothing, and prints "5 uker ble ikke hentet" about weeks nobody asked
-      // for. The correct chain is one `v-if / v-else-if / v-else` across all three.
-      const monthOnEmployees = await page.locator('.wf-month').count();
-      if (monthOnEmployees > 0) {
-        notes.push('the month grid renders on the employees pivot (pages/admin/workforce-schedule.vue:135-153 — ' +
-          '`WorkforceMonthGrid v-else` binds to the roles chain, not to the week grid)');
-      }
+      // EMPLOYEES: the week grid, and neither of the other two.
+      await expect(page.locator('.wf-grid')).toBeVisible();
+      await expect(page.locator('.wf-month')).toHaveCount(0);
+      await expect(page.locator('.wf-roles')).toHaveCount(0);
+      seen.push('medarbeidere → .wf-grid alone');
 
-      // Defect 2, the same chain from the other side. On the ROLES pivot, when the manager may
-      // author, the `<p>` notice takes the `v-if` and the role grid is its `v-else-if` — so the
-      // notice REPLACES the grid instead of sitting above it. A scheduler switching to the role
-      // pivot on an editable week sees the sentence "author on the employee pivot" and no schedule
-      // at all. Checked here, while the revision is still a Draft, because `canAuthorHere` is false
-      // once it is published and the branch then hides itself.
+      // ROLES, checked while the revision is still a DRAFT — `canAuthorHere` is false once it is
+      // published, and the notice branch would then hide itself and prove nothing. The notice and
+      // the grid must BOTH be on screen: the notice is an addition to this pivot, not a replacement
+      // for it.
       await page.getByRole('button', { name: 'Funksjoner' }).click();
-      await expect(page.locator('.wf-page__notice'))
-        .toContainText('medarbeidervisningen', { timeout: 15000 });
-      const roleGridShown = await page.locator('.wf-roles').count();
-      if (roleGridShown === 0) {
-        notes.push('the roles pivot shows no grid at all while the week is editable ' +
-          '(same chain: the authoring notice is the `v-if`, the role grid its `v-else-if`)');
-      }
+      await expect(page.locator('.wf-roles')).toBeVisible({ timeout: 15000 });
+      await expect(page.locator('.wf-page__notice')).toContainText('medarbeidervisningen');
+      await expect(page.locator('.wf-grid')).toHaveCount(0);
+      await expect(page.locator('.wf-month')).toHaveCount(0);
+      seen.push('funksjoner → .wf-roles WITH the authoring notice above it');
+
+      // MONTH: the month grid, and neither of the other two.
+      await page.getByRole('button', { name: 'Måned' }).click();
+      await expect(page.locator('.wf-month')).toBeVisible({ timeout: 15000 });
+      await expect(page.locator('.wf-grid')).toHaveCount(0);
+      await expect(page.locator('.wf-roles')).toHaveCount(0);
+      seen.push('måned → .wf-month alone');
 
       // Back to the pivot the rest of the journey is about.
       await page.getByRole('button', { name: 'Medarbeidere' }).click();
       await expect(page.locator('.wf-grid__shift')).toHaveCount(1, { timeout: 15000 });
 
-      for (const note of notes) {
-        journey.finding('defect', 'workforce schedule pivot rendering', note);
-      }
-      return notes.length ? notes.length + ' rendering defects recorded' : 'nothing';
+      return seen.join('; ');
     });
 
     await journey.step('validate the draft', async () => {

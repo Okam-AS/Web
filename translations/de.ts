@@ -2926,6 +2926,109 @@ export default {
   wfr_reactivate_submit: 'Wieder eröffnen',
 
   // ---------------------------------------------------------------------------------------------
+  // WORKFORCE — Zugang und Einladung (das Panel auf /admin/workforce-roster)
+  // ---------------------------------------------------------------------------------------------
+  wfr_panel_access: 'Zugang',
+  wfr_access_state_claimed: 'Ein Login ist mit dieser Anstellung verknüpft, diese Person kann „Meine Schichten“ nutzen.',
+  wfr_access_state_invited: 'Mit dieser Anstellung ist noch kein Login verknüpft. Die Person kann eingeplant werden, sich aber nicht anmelden und ihre Schichten sehen.',
+  wfr_access_state_archived: 'Der Personendatensatz ist archiviert. Die Historie bleibt erhalten, die Anstellung gewährt aber keinen Zugang.',
+  wfr_access_state_unknown: 'Wir wissen nicht, ob mit dieser Anstellung ein Login verknüpft ist.',
+  wfr_access_no_list: 'Wir können nicht anzeigen, ob gerade ein Code gültig ist, wann er abläuft, oder ihn zurückziehen — die API hat dafür keine Routen. Ein neuer Code macht den vorherigen im selben Moment ungültig, und das ist die einzige Möglichkeit, einen an die falsche Person gegangenen Code zu stoppen.',
+  wfr_access_expires_label: 'Der Code gilt (Tage)',
+  wfr_access_expires_hint: 'Zwischen 1 und 60 Tagen. Leer oder außerhalb des Bereichs verwendet der Server seine eigene Vorgabe von 14 Tagen.',
+  wfr_access_issue: 'Einladungscode erstellen',
+  wfr_access_reissue: 'Neuen Einladungscode erstellen',
+  wfr_access_reissue_hint: 'Diese Person hat bereits Zugang. Ein neuer Code schadet nicht, ersetzt aber einen eventuell noch nicht eingelösten Code.',
+  wfr_access_ended: 'Diese Anstellung ist beendet, und eine beendete Anstellung gewährt keinen Zugang. Eröffnen Sie sie zuerst wieder.',
+  wfr_access_not_sent_title: 'Wir haben diesen Code nirgendwohin gesendet',
+  wfr_access_not_sent_body: 'Für diesen Code gibt es keinen SMS- oder E-Mail-Versand. Sie müssen ihn selbst weitergeben.',
+  wfr_access_token_label: 'Einladungscode',
+  wfr_access_token_where: 'Die Person gibt den Code auf {link} ein. Senden Sie Adresse und Code getrennt — dann genügt eine weitergeleitete Nachricht allein nicht.',
+  wfr_access_token_expires: 'Der Code läuft am {expires} ab.',
+  wfr_access_expiry_unknown: 'zu einem Zeitpunkt, den wir nicht lesen konnten',
+  wfr_access_token_copy: 'Code kopieren',
+  wfr_access_token_copied: 'Kopiert',
+  wfr_access_token_copy_failed: 'Der Browser hat das Kopieren nicht zugelassen. Markieren Sie den Text im Feld und kopieren Sie ihn selbst — er wird nicht erneut angezeigt.',
+  wfr_access_token_done: 'Fertig',
+  wfr_access_token_once: 'Der Code wird nur jetzt angezeigt. Der Server speichert nur einen Abdruck davon, er lässt sich nicht erneut abrufen. Schließen Sie dies, ohne ihn weitergegeben zu haben, müssen Sie einen neuen erstellen.',
+  wfr_access_token_replayed: 'Der Server hat eine frühere Antwort wiederholt, und eine wiederholte Antwort enthält nie den Code selbst. Die Einladung existiert, der Code kann aber nicht angezeigt werden. Erstellen Sie einen neuen Code, wenn Sie einen zum Weitergeben brauchen.',
+  wfr_invitation_issued: 'Einladungscode erstellt',
+  wfr_conflict_invitation_title: 'Eine andere Anfrage belegt den Platz',
+  wfr_conflict_invitation: 'Jemand hat im selben Moment einen Code für diese Person erstellt. Versuchen Sie es erneut — jeder Klick sendet einen neuen Schlüssel, und genau darum bittet der Server.',
+
+  // ---------------------------------------------------------------------------------------------
+  // WORKFORCE — die Einlöseseite der Mitarbeitenden (/workforce/join)
+  //
+  // Die lesende Person ist keine Betreiberin. Es ist ein Barista mit dem Handy in der Hand und einem
+  // Code in einer Nachricht — die Sprache ist entsprechend einfach, und jede Sackgasse endet in
+  // etwas, das man tun, oder jemandem, den man fragen kann.
+  // ---------------------------------------------------------------------------------------------
+  wfjoin_eyebrow: 'Zum Dienstplan',
+  wfjoin_meta_title: 'Einladungscode einlösen',
+  wfjoin_lang_label: 'Sprache',
+  wfjoin_lang_no: 'Norsk',
+  wfjoin_lang_en: 'English',
+  wfjoin_lang_de: 'Deutsch',
+  wfjoin_login_subtitle: 'Melden Sie sich an, um die Einladung einzulösen.',
+
+  wfjoin_paste_title: 'Geben Sie den erhaltenen Code ein',
+  wfjoin_paste_intro: 'Ihr Arbeitgeber hat einen Code für Sie erstellt. Fügen Sie ihn hier ein.',
+  wfjoin_paste_label: 'Einladungscode',
+  wfjoin_paste_placeholder: 'Code einfügen',
+  wfjoin_paste_empty: 'Das Feld ist leer. Fügen Sie den erhaltenen Code ein.',
+  wfjoin_paste_button: 'Weiter',
+  wfjoin_paste_help: 'Keinen Code erhalten? Fragen Sie Ihre Führungskraft — nur sie kann einen erstellen.',
+
+  wfjoin_signin_title: 'Zuerst anmelden',
+  wfjoin_signin_body: 'Der Code wird mit Ihrem Login verknüpft, wir müssen also wissen, wer Sie sind, bevor wir ihn verwenden können.',
+  wfjoin_signin_kept: 'Der Code bleibt hier, während Sie sich anmelden. Sie müssen ihn nicht erneut einfügen.',
+  wfjoin_signin_button: 'Anmelden',
+
+  wfjoin_confirm_title: 'Bereit zum Einlösen',
+  wfjoin_confirm_body: 'Wir verknüpfen Ihr Login mit der Anstellung, zu der dieser Code gehört. Der Code lässt sich nur einmal verwenden.',
+  wfjoin_button: 'Code einlösen',
+  wfjoin_button_busy: 'Wird eingelöst …',
+  wfjoin_unknowns_title: 'Was wir noch nicht sagen können',
+  wfjoin_unknowns_body: 'Wir können nicht anzeigen, für welchen Arbeitsplatz dieser Code gilt, welche Funktion Sie erhalten oder wann er abläuft — einen Code nachzuschlagen, ohne ihn zu verbrauchen, ist nicht möglich. Sie erfahren es in dem Moment, in dem Sie ihn einlösen.',
+  wfjoin_working: 'Einen Moment …',
+
+  wfjoin_done_title: 'Sie sind dabei',
+  wfjoin_done_body: 'Ihr Login ist mit der Anstellung verknüpft. Ihre Schichten erscheinen, sobald ein Dienstplan veröffentlicht ist.',
+  wfjoin_done_go: 'Zu „Meine Schichten“',
+  wfjoin_done_no_selfservice: 'Diese Anstellung gibt Ihnen noch keinen Selbstbedienungszugang, „Meine Schichten“ bleibt also leer. Das Einlösen eines Codes gewährt für sich genommen nie Rechte — sagen Sie Ihrer Führungskraft Bescheid.',
+  wfjoin_field_store: 'Arbeitsplatz',
+  wfjoin_field_grants: 'Was Ihnen die Anstellung gibt',
+  wfjoin_grants_none: 'Noch nichts',
+
+  wfjoin_existing_title: 'Sie haben bereits irgendwo Zugang',
+  wfjoin_existing_body: 'Ihr Konto ist bereits mit {count} Anstellung(en) verknüpft. Falls Sie diesen Code schon früher eingelöst haben, sind Sie bereits dabei — dann ist die Antwort oben kein Grund zur Sorge.',
+
+  wfjoin_platform_words: 'Der Server meldete: {detail}',
+  wfjoin_retry: 'Erneut versuchen',
+  wfjoin_other_code: 'Anderen Code versuchen',
+
+  wfjoin_private_note: 'Der Code erscheint nie in der Adresszeile und wird nicht im Browser gespeichert.',
+  wfjoin_footer_help: 'Etwas stimmt nicht? Fragen Sie Ihre Führungskraft — sie erstellt die Codes.',
+  wfjoin_footer_mark: 'Okam',
+
+  // Ablehnungen. Die erste ist bewusst unbestimmt: Der Server beantwortet fünf verschiedene Ursachen
+  // identisch, und dieser Satz nennt alle fünf, statt auf eine zu raten.
+  wfjoin_refuse_invalid_title: 'Dieser Code hat nicht funktioniert',
+  wfjoin_refuse_invalid_body: 'Der Server beantwortet fünf Fälle identisch, und wir können nicht erkennen, welcher es ist: Der Code kann vertippt, abgelaufen, zurückgezogen oder bereits verwendet sein — oder er gehört zu einem anderen Login als dem, das Sie gerade nutzen. Prüfen Sie, ob Sie den ganzen Code kopiert haben und ob Sie als Sie selbst angemeldet sind. Stimmt beides, bitten Sie Ihre Führungskraft um einen neuen.',
+  wfjoin_refuse_attach_title: 'Dieses Login gehört bereits zu einem anderen Personendatensatz',
+  wfjoin_refuse_attach_body: 'Ihr Konto gehört zu einem anderen Personendatensatz, und die Anstellung lässt sich nicht automatisch darauf übertragen. Dafür gibt es nirgends eine Schaltfläche — Ihre Führungskraft muss die Anstellung auf der richtigen Person anlegen. Zeigen Sie ihr gern diese Meldung.',
+  wfjoin_refuse_conflict_title: 'Währenddessen hat sich etwas geändert',
+  wfjoin_refuse_conflict_body: 'Zwei Dinge geschahen gleichzeitig, gespeichert wurde nichts. Versuchen Sie es noch einmal.',
+  wfjoin_refuse_inflight_title: 'Wir sind bereits dabei',
+  wfjoin_refuse_inflight_body: 'Ein früherer Versuch läuft noch. Klicken Sie erneut, dann holen wir dessen Antwort, statt einen zweiten zu starten.',
+  wfjoin_refuse_signedout_title: 'Sie sind nicht mehr angemeldet',
+  wfjoin_refuse_signedout_body: 'Ihre Sitzung endete, bevor der Code verwendet wurde. Melden Sie sich erneut an — der Code ist noch hier.',
+  wfjoin_refuse_offline_title: 'Wir haben keine Antwort erhalten',
+  wfjoin_refuse_offline_body: 'Die Anfrage ist möglicherweise nie angekommen, der Code ist also wahrscheinlich unverbraucht. Versuchen Sie es erneut.',
+  wfjoin_refuse_nomodule_title: 'Wir konnten den Dienst nicht erreichen',
+  wfjoin_refuse_nomodule_body: 'Diese Antwort kam nicht vom Workforce-Dienst, wir wissen also nichts über den Code — auch nicht, dass er falsch ist. Versuchen Sie es gleich noch einmal.',
+
+  // ---------------------------------------------------------------------------------------------
   // MARGIN — Rezept rein, Tellerkosten raus (/admin/margin-recipes)
   // ---------------------------------------------------------------------------------------------
   nav_margin_recipes: 'Rezepte',

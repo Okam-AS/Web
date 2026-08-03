@@ -116,6 +116,25 @@ function freshState () {
     confirmationMails: [],
     seq: 0,
     requests: [],
+    // ---- the invitation surface ---------------------------------------------------------------
+    //
+    // `token -> { invitationId, staffMemberId, storeId, expiresAtUtc, state }`, keyed by the RAW
+    // token because that is the only handle a claimant has. The real service stores a SHA-256 hash
+    // and compares in constant time; hashing here would prove nothing about the CLIENT, which never
+    // sees the hash — what must be enforced is the shape of the contract, not the cryptography.
+    invitations: {},
+    // One PENDING invitation per engagement, mirroring the filtered unique index: a reissue
+    // supersedes in place and the previous raw token dies immediately. Without this the fixture
+    // would accept an old token after a reissue and the page's "the previous code stops working"
+    // sentence would be untested prose.
+    pendingByStaff: {},
+    // `userId -> [staffMemberId]`. The claim's whole effect. Seeded so the OTHER journeys keep the
+    // world they were written against, and so the onboarding journey's account starts with nothing.
+    claims: { 'user-worker': ['staff-1'] },
+    // Idempotency outcomes, per (scope, key). The claim is scoped PER USER in the real service
+    // (`wf.invitation.claim.{userId}`), so one caller's key can never alias another's — modelled
+    // here because the join page's whole retry story rests on a replay returning the same answer.
+    idempotency: {},
     // How many requests this fixture has answered since the last reset. Read by the journey fixture
     // as a WRONG-WORLD GUARD: `reuseExistingServer` will happily adopt a dev server somebody else
     // started, and if that one was pointed at the real API every journey would run green against
@@ -1062,21 +1081,108 @@ async function route (req, res, url) {
   }
 
   // ---- the worker's own surface ----------------------------------------------------------------
+  //
+  // #32. The route that makes every other route on this surface reachable by a human: nothing else
+  // in the module ever sets a person's `ApplicationUserId`.
+  if (path === '/workforce/me/invitations/claim' && req.method === 'POST') {
+    const key = req.headers['idempotency-key'];
+    // PER-USER scope, exactly as the service does it. A shared namespace would let two callers'
+    // identical keys collide, and a claim links the CALLER's own login — that would be a correctness
+    // bug rather than a replay.
+    const scope = 'claim|' + caller.id + '|' + key;
+    if (state.idempotency[scope]) {
+      // The replay. This is the branch the join page's stable-key retry depends on: pressing again
+      // after a lost response must return the engagement rather than refuse it as already-claimed.
+      return send(res, 200, state.idempotency[scope]);
+    }
+
+    const raw = String((body && body.token) || '').trim();
+    const invitation = state.invitations[raw];
+    const now = Date.now();
+    // THE ANTI-ORACLE. Unknown, expired, superseded, already-claimed and bound-to-another-login all
+    // answer the same opaque 404 with no discriminating extension, because the real surface does —
+    // and the page's copy names all five precisely because it cannot be told which.
+    if (!invitation || invitation.state !== 'Pending' || Date.parse(invitation.expiresAtUtc) <= now) {
+      return problem(res, 404, 'workforce.invitation-invalid', 'The invitation could not be claimed.');
+    }
+
+    invitation.state = 'Claimed';
+    delete state.pendingByStaff[invitation.staffMemberId];
+    const staff = world.STAFF.find(s => s.staffMemberId === invitation.staffMemberId) || null;
+    if (!state.claims[caller.id]) { state.claims[caller.id] = []; }
+    if (!state.claims[caller.id].includes(invitation.staffMemberId)) {
+      state.claims[caller.id].push(invitation.staffMemberId);
+    }
+
+    const outcome = {
+      staffMemberId: invitation.staffMemberId,
+      storeId: invitation.storeId,
+      workforcePersonId: (staff && staff.workforcePersonId) || ('person-' + invitation.staffMemberId),
+      personState: 'Claimed',
+      // The engagement's PRE-EXISTING grants. A claim never widens them, so this is read off the
+      // roster rather than invented at claim time.
+      capabilities: (staff && staff.capabilities) || ['WorkforceSelf']
+    };
+    state.idempotency[scope] = outcome;
+    return send(res, 200, outcome);
+  }
+
+  // #31. The wire name is `capabilityGrants` — a [Flags] enum rendered by StringEnumConverter, so a
+  // single grant is `"WorkforceSelf"` and several are comma-separated. It is NOT `capabilities`:
+  // `utils/workforce-me/memberships.js` reads `capabilityGrants` and an engagement whose grants it
+  // cannot see reads as un-capable, which renders the worker page as "you have no engagement". The
+  // fixture answered the wrong field name until the onboarding journey opened the page and looked.
   if (path === '/workforce/me/staff-memberships' && req.method === 'GET') {
-    return send(res, 200, caller.id === 'user-worker'
-      ? [{
-        staffMemberId: 'staff-1',
+    const mine = state.claims[caller.id] || [];
+    return send(res, 200, mine.map((staffMemberId) => {
+      const staff = world.STAFF.find(s => s.staffMemberId === staffMemberId) || null;
+      return {
+        staffMemberId,
         storeId: world.STORE_ID,
-        storeName: world.STORE_NAME,
-        capabilities: ['WorkforceSelf'],
-        isActive: true
-      }]
-      : []);
+        workforcePersonId: (staff && staff.workforcePersonId) || ('person-' + staffMemberId),
+        displayName: staff ? staff.displayName : null,
+        isActive: true,
+        capabilityGrants: 'WorkforceSelf',
+        legalEmployerId: 'employer-1',
+        activeFromUtc: '2026-01-01T00:00:00',
+        activeToUtc: null,
+        roleNames: []
+      };
+    }));
   }
+
+  // #33. Derived from the PUBLISHED revisions rather than hard-coded, so "the worker sees what the
+  // manager published" is a wire-through this fixture actually proves. A draft is never disclosed
+  // here, which is the rule the real surface enforces and the reason the journey has to publish.
   if (path === '/workforce/me/schedule' && req.method === 'GET') {
-    return send(res, 200, { items: [], timeZoneId: world.TIME_ZONE });
+    const mine = state.claims[caller.id] || [];
+    const items = [];
+    for (const key of Object.keys(state.revisions)) {
+      const revision = state.revisions[key];
+      if (revision.state !== 'Published') { continue; }
+      for (const assignment of revision.assignments) {
+        if (!assignment.staffMemberId || !mine.includes(assignment.staffMemberId)) { continue; }
+        items.push(Object.assign({}, assignment, {
+          storeId: world.STORE_ID,
+          timeZoneId: world.TIME_ZONE,
+          publicationId: 'pub-' + revision.scheduleRevisionId,
+          publicationNumber: revision.publicationNumber,
+          publishedAtUtc: nowUtc()
+        }));
+      }
+    }
+    return send(res, 200, { asOfUtc: nowUtc(), items });
   }
+
   if (path === '/workforce/me/inbox' && req.method === 'GET') {
+    return send(res, 200, { items: [] });
+  }
+
+  // #39. Answered because the worker page fans out one of these PER membership as soon as it has
+  // any — an unrouted 404 would land in the artifact's `failedRequests` and read as a product
+  // defect rather than as a gap in this fixture.
+  const openAssignments = /^\/workforce\/me\/staff-memberships\/([^/]+)\/open-assignments$/.exec(path);
+  if (openAssignments && req.method === 'GET') {
     return send(res, 200, { items: [] });
   }
 
@@ -1091,7 +1197,14 @@ async function route (req, res, url) {
     const administers = (caller.adminIn || []).some(s => String(s.id) === String(storeId));
     // #1 admits any capability grant, so the worker may read the context of a store they work at —
     // that is how `/admin/workforce-me` resolves the zone for its date forms.
-    const worksHere = caller.id === 'user-worker' && String(storeId) === String(world.STORE_ID);
+    //
+    // Derived from the CLAIMS this fixture has recorded rather than from one hardcoded user id. It
+    // used to name `user-worker` literally, which meant a worker who had just claimed an invitation
+    // was refused the zone read with a 403 — the worker page then withheld its date pickers from a
+    // person who genuinely works there. Nothing asserted it; it showed up as a red line in the
+    // journey's own request log, which is what that log is for.
+    const worksHere = (state.claims[caller.id] || []).length > 0 &&
+      String(storeId) === String(world.STORE_ID);
 
     if (rest === '/context' && req.method === 'GET') {
       if (!administers && !worksHere) {
@@ -1131,7 +1244,93 @@ async function route (req, res, url) {
         });
     }
 
-    if (rest === '/staff' && req.method === 'GET') { return send(res, 200, world.STAFF); }
+    if (rest === '/staff' && req.method === 'GET') {
+      // `personState` follows the claims this fixture has actually recorded, so the roster's access
+      // panel flips from "no login attached" to "a login is attached" because a claim HAPPENED —
+      // not because a constant said so. Without this the journey's last manager-side assertion
+      // would be asserting the seed.
+      const claimed = new Set(Object.keys(state.claims).reduce((all, u) => all.concat(state.claims[u]), []));
+      return send(res, 200, world.STAFF.map(s => Object.assign({}, s, {
+        personState: claimed.has(s.staffMemberId) ? 'Claimed' : 'Invited'
+      })));
+    }
+
+    const staffDetail = /^\/staff\/([^/]+)$/.exec(rest);
+    if (staffDetail && req.method === 'GET') {
+      const staff = world.STAFF.find(s => s.staffMemberId === staffDetail[1]);
+      if (!staff) { return problem(res, 404, 'workforce.not-found', 'No such engagement.'); }
+      const claimed = Object.keys(state.claims).some(u => state.claims[u].includes(staff.staffMemberId));
+      return send(res, 200, Object.assign({}, staff, {
+        storeId: Number(storeId),
+        workforcePersonId: staff.workforcePersonId || ('person-' + staff.staffMemberId),
+        contactEmail: null,
+        contactPhone: null,
+        personState: claimed ? 'Claimed' : 'Invited',
+        legalEmployerId: 'employer-1',
+        capabilities: staff.capabilities || ['WorkforceSelf'],
+        activeFromUtc: '2026-01-01T00:00:00',
+        activeToUtc: null,
+        // The opaque If-Match token. Present, because SQLite's null-revision case is a different
+        // branch and this journey is not about it.
+        revision: 'rev-' + staff.staffMemberId,
+        createdAtUtc: '2026-01-01T00:00:00'
+      }));
+    }
+
+    const staffRoles = /^\/staff\/([^/]+)\/roles$/.exec(rest);
+    if (staffRoles && req.method === 'GET') { return send(res, 200, []); }
+
+    const staffTerms = /^\/staff\/([^/]+)\/employment-terms$/.exec(rest);
+    if (staffTerms && req.method === 'GET') { return send(res, 200, []); }
+
+    if (rest === '/attendance' && req.method === 'GET') {
+      return send(res, 200, { rows: [], days: [] });
+    }
+
+    // #6. Issue or REISSUE the engagement's one-use claim token.
+    //
+    // Two properties of the real service are modelled because the UI makes claims about both:
+    //   • The RAW token rides the response EXACTLY ONCE. The fixture keeps only the mapping it needs
+    //     to honour a later claim, and never answers the token again on any read — there is no read.
+    //   • A reissue SUPERSEDES IN PLACE: the previous raw token is deleted here, so a journey that
+    //     reissued and then claimed the OLD code would get the opaque 404, which is exactly what the
+    //     panel's "the previous code stops working" sentence promises.
+    const issueInvitation = /^\/staff\/([^/]+)\/invitations$/.exec(rest);
+    if (issueInvitation && req.method === 'POST') {
+      const staffMemberId = issueInvitation[1];
+      if (!world.STAFF.some(s => s.staffMemberId === staffMemberId)) {
+        return problem(res, 404, 'workforce.not-found', 'No such engagement.');
+      }
+
+      const superseded = state.pendingByStaff[staffMemberId];
+      if (superseded && state.invitations[superseded]) {
+        state.invitations[superseded].state = 'Superseded';
+        delete state.invitations[superseded];
+      }
+
+      const hours = (body && Number(body.expiresInHours)) || 14 * 24;
+      const token = 'wfinv_' + nextId('tok') + '_' + Math.random().toString(36).slice(2, 10);
+      const invitation = {
+        invitationId: nextId('inv'),
+        storeId: Number(storeId),
+        staffMemberId,
+        state: 'Pending',
+        expiresAtUtc: new Date(Date.now() + hours * 3600000).toISOString().slice(0, 19),
+        createdAtUtc: nowUtc()
+      };
+      state.invitations[token] = invitation;
+      state.pendingByStaff[staffMemberId] = token;
+
+      return send(res, 200, {
+        invitationId: invitation.invitationId,
+        storeId: invitation.storeId,
+        staffMemberId: invitation.staffMemberId,
+        token,
+        expiresAtUtc: invitation.expiresAtUtc,
+        createdAtUtc: invitation.createdAtUtc
+      });
+    }
+
     if (rest === '/roles' && req.method === 'GET') { return send(res, 200, world.ROLES); }
     if (rest === '/requests' && req.method === 'GET') { return send(res, 200, { items: state.requests }); }
 

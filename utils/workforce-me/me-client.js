@@ -6,6 +6,7 @@
 // that exists today. Endpoint numbers are the ones the backend's own XML docs use, and the file:line
 // references are `Controllers/WorkforceMeController.cs` in the OkamAPI repo.
 //
+//   POST /workforce/me/invitations/claim                                     #32  (:66)
 //   GET  /workforce/me/staff-memberships                                     #31  (:115)
 //   GET  /workforce/me/schedule?from&to                                      #33  (:133)
 //   GET  /workforce/me/inbox                                                 #34  (:153)
@@ -40,8 +41,13 @@
 //   • #41 (initiate a give-away / swap): no worker-side read reports the caller's own outstanding
 //     offers, so the result would vanish on reload.
 //
-// Out of this page's scope rather than blocked: #32 (invitation claim) belongs to the deep-link
-// onboarding flow and #43 (own worked time) wants a screen of its own.
+// Out of this page's scope rather than blocked: #43 (own worked time) wants a screen of its own.
+//
+// #32 (invitation claim) USED TO BE LISTED HERE as belonging to "the deep-link onboarding flow".
+// That flow now exists — `pages/workforce/join.vue` — and #32 is bound below. It is the one route in
+// this file whose caller is NOT the worker page: it is how a person acquires the engagement every
+// other route on this surface presupposes, so it is called by an anonymous-until-signed-in page that
+// mounts its own login modal rather than by `/admin/workforce-me`.
 //
 // A GAP THE BOUND ROUTES INHERIT, which the screens must state rather than paper over: there is NO
 // worker-side READ for either availability (#36 is a PUT and #14's GET requires WorkforceScheduler)
@@ -61,6 +67,42 @@ export class WorkforceMeService extends WorkforceClientBase {
     if (from) { params.push('from=' + encodeURIComponent(toUtcRangeParam(from))); }
     if (to) { params.push('to=' + encodeURIComponent(toUtcRangeParam(to))); }
     return params.length ? '?' + params.join('&') : '';
+  }
+
+  /**
+   * #32: turn a raw invitation token into an engagement for the AUTHENTICATED caller.
+   *
+   * The only route on this surface that requires no capability — claiming is how a person first gets
+   * one — but it is still `[Authorize]`d, so there is no anonymous preview and no anonymous claim.
+   * The response is `{ staffMemberId, storeId, workforcePersonId, personState, capabilities[] }`, and
+   * the capabilities are the engagement's PRE-EXISTING grants: a claim never widens them.
+   *
+   * THE KEY IS THE CALLER'S, NOT A FRESH ONE — the same argument `MealsClaimService.Claim` makes, and
+   * here it is load-bearing twice over. The claim is ONE command in a person's whole visit, and the
+   * failure it actually meets is a phone losing signal mid-request, where the client cannot tell
+   * whether the link was made. The server scopes claim idempotency per USER (`wf.invitation.claim.
+   * {userId}`), so a key held stable across retries of that one command REPLAYS and returns the
+   * stored engagement. A fresh key would instead re-run the command against an invitation the first
+   * attempt already consumed, and the answer would be the opaque `workforce.invitation-invalid` —
+   * a caller being told "no such invitation" about their own success.
+   *
+   * The `extraHeaders` override is the base class's existing seam (`Object.assign` puts the caller's
+   * value last), so this goes through `_mutate` rather than assembling a header bag of its own.
+   *
+   * EVERY FAILURE MODE THIS CAN ANSWER, because the page must not invent finer ones:
+   *   • 404 `workforce.invitation-invalid` — deliberately opaque and UNIFORM across invalid, expired,
+   *     revoked, already-claimed, and bound-to-another-login. It is an anti-oracle: the surface offers
+   *     no person search, so a distinguishable answer would let a token holder enumerate people. A
+   *     page that guessed which of the five it was would be inventing a fact.
+   *   • 409 `workforce.person-attach-refused` — the caller's login already belongs to a different
+   *     person record and the engagement cannot be moved onto it. NOT retryable, and there is no
+   *     merge, relink or person-recovery route anywhere in the module: the resolution is a manager
+   *     re-composing the engagement, so the page sends the reader to their manager and nowhere else.
+   *   • 409 `workforce.claim-link-conflict` — a concurrent write took a uniqueness slot. Retryable,
+   *     but ONLY with a fresh key: the reservation for the original stays Reserved for ever.
+   */
+  ClaimInvitation (token, idempotencyKey) {
+    return this._mutate('POST', '/workforce/me/invitations/claim', { token }, { 'Idempotency-Key': idempotencyKey });
   }
 
   /** #31: the caller's own store-scoped engagements. */

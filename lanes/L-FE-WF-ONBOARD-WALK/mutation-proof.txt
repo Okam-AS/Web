@@ -1,0 +1,79 @@
+L-FE-WF-ONBOARD-WALK — is the ported walk falsifiable, or does it pass on scenery?
+
+Base measured in a clean detached worktree: feature/restaurant-modules @ cff41c8583f9792b0368093fae632dd5fdacb716
+Walk ported from 9ec1100dbc1451b743b92ff4ee4582845ad6aae3 (tip of lane/fe-wf-onboard, NOT an ancestor of the
+integration branch; 1 ahead of merge-base ce77727, which is 33 behind the integration tip).
+
+Ported by hand off the integration tip and committed as one commit. NOT merged: `lane/fe-wf-onboard` is
+untouched and is still not an ancestor of anything.
+
+Each mutation was applied alone, the walk run, then the tree restored from a pre-mutation copy and the
+restore verified byte-for-byte before the next one.
+
+M1  pages/workforce/join.vue — delete the `history.replaceState` that scrubs the fragment.
+    RED. `expect(url.hash).toBe('')` got "#token=wfinv_not_a_real_code" (spec:203).
+    So "the credential never reaches the address bar or the back stack" is asserted, not narrated.
+
+M2  pages/workforce/join.vue — clear `this.token` in `closeLogin()`, i.e. the code does NOT survive
+    authentication, which is what a navigate-away implementation would do.
+    RED. `[data-test="confirm"]` never appeared (spec:235).
+    So "paste FIRST, sign in SECOND" is load-bearing and the in-place LoginModal is really the property
+    under test.
+
+M3  pages/workforce/join.vue — cache the service LAZILY on first access.
+    GREEN — the mutation did NOT red, and this is recorded rather than hidden. Nothing on this page
+    touches `_workforceMeService` before sign-in, so a lazy cache is first built with a token that is
+    already correct. The walk does not detect lazy caching, and nothing here should claim it does.
+
+M3b pages/workforce/join.vue — build the service EAGERLY in `created()` and return the snapshot, which is
+    exactly what `pages/meals/join.vue` used to do and what L-FE-JOURNEYS-MERGE found had made that page
+    dead (the global mixin rehydrates Vuex in `mounted()`, so `created()` captures an empty bearer).
+    RED. `[data-test="claimed"]` never appeared (spec:254) — the claim 401s.
+    So this walk DOES catch the defect class that killed the sibling page. That is the one worth having.
+
+SUITES, both measured against the same pristine base worktree so the delta is the port and nothing else.
+
+  Playwright journeys   base cff41c8  18/18 passed
+                        ported        19/19 passed  (the 19th is this walk)
+  Jest                  base cff41c8  103 suites / 2380 passed, 4 suites failed, 1 test failed
+                        ported        105 suites / 2427 passed, 4 suites failed, 1 test failed
+
+  IDENTICAL failures on both sides, so the port adds none:
+    test/core-price-label.test.js, test/core-request-path-shape.test.js, test/price-absence.test.js
+      — "suite failed to run": these import `~/core`, and `core/` is an EMPTY submodule mount in any
+        worktree. The dev-server borrows a core only for the length of a browser run and returns it.
+    test/journey-artifact-store.test.js › "asks whoever is holding the port what directory they are
+      running from" — probes a live port; fails at base too.
+
+FLAKE FOUND, NOT MINE, RECORDED SO IT IS NOT REDISCOVERED:
+  test/e2e/journeys/modal-estate-scroll-lock.spec.js failed once in the first full ported suite run —
+  `expectHeldAt` got 109px of drift against a <=2px tolerance, and it failed FAST, at 2.9s.
+  It then passed at 8.3s in the second ported run, at 8.4s in the full base run, and at 47.1s run alone
+  at base. Same code on both sides of the comparison, so this is a timing race in that journey — it
+  wheels the page before the layout has settled — and not a consequence of this port.
+
+WHAT MOVED UNDER THE WALK BETWEEN 9ec1100 AND THE INTEGRATION TIP, and what was done about it:
+
+  1. THE §9.2 KILL SWITCH. `workforce.publication` gates all four schedule writes and is deny-closed.
+     The fixture models it now; it did not when this walk was authored, so the walk passed on its lane
+     against a world the product does not have. First ported run FAILED here, honestly: badge stayed
+     "Ingen plan" (run-1.log). Fixed by flipping the flag through the OPERATOR'S PAGE via the shared
+     `support/flags.js` helper — the lever a venue would actually pull — not a fixture backdoor.
+  2. A PHONE NUMBER COLLISION. The walk's new hire was authored as +4790000002. That number now belongs
+     to PHONE_SIGNUP_ADMIN_PHONE, and `USERS` is keyed by phone, so taking the lane's version would have
+     silently replaced the account-email journey's subject with a new hire who has no mailbox. The new
+     hire moved to +4790000004 (spec and world.js together).
+  3. `workforcePersonId` BECAME A GUID. The lane wrote person-1/2/3; this branch had already replaced
+     those with real GUIDs because every `*Ref` binds to a Guid server-side and Training's completion
+     write refuses anything else. Kept the branch's GUIDs and gave staff-3 one of the same shape.
+  4. Two files auto-merged and were verified by hand rather than trusted:
+     `pages/admin/workforce-schedule.vue` keeps the lane's pivot fix (notice outside the chain, three
+     grids in one contiguous v-if/v-else-if/v-else) AND the branch's later work;
+     `workforce-schedule-publish.spec.js` keeps the branch's `@live` tag and its feature-flag step AND
+     takes the lane's upgrade of two recorded defects into real assertions.
+
+C5: this is a browser artifact, not acceptance. Nobody has walked this by hand.
+    artifacts/journeys/workforce-invitation-onboarding.playwright.json — 16/16 steps, 74 backend
+    responses, 7 screenshots. The run also records 5 browser errors as findings (4x vue-router
+    "Navigation cancelled" on the sign-in redirect, 1x a 404 resource) — recorded, not asserted,
+    deliberately: the flow completed, so failing on them would say the capability does not work.

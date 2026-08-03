@@ -30,6 +30,16 @@ const PHONE_SIGNUP_ADMIN_PHONE = '+4790000002';
 // The platform PowerUser. A fourth identity rather than a flag on the manager's, because three
 // journeys assert refusals that are only refusals for somebody who is NOT one — see USERS below.
 const CONCIERGE_PHONE = '+4790000003';
+// A FIFTH identity, and the reason for it is the whole point of the onboarding journey: an account
+// that holds NOTHING. `user-worker` is seeded as already claimed (staff-1), which is what the other
+// journeys need — but a claim journey run by an account that already has an engagement proves
+// nothing about the route in. This one starts with no engagement and acquires one by claiming.
+//
+// `+4790000004` rather than the `+4790000002` this identity was authored with on `lane/fe-wf-onboard`:
+// that number has since been taken by PHONE_SIGNUP_ADMIN_PHONE above. Two identities sharing a
+// number is not a merge cosmetic — `USERS` is keyed by it, so one would have silently replaced the
+// other and the account-email journey would have signed in as a new hire with no mailbox.
+const NEW_HIRE_PHONE = '+4790000004';
 const OTP = '123123';
 
 const STORE_ID = 42;
@@ -116,9 +126,32 @@ const USERS = {
     // A store admin AS WELL, because the switchboard and the venue-scoped reads authorize on
     // `IStoreAdminAccess` and a PowerUser who administered nothing could not open either.
     adminIn: [{ id: STORE_ID, name: STORE_NAME, address: 'Storgata 1, 0155 Oslo' }]
+  },
+  [NEW_HIRE_PHONE]: {
+    id: 'user-newhire',
+    token: 'fixture-token-newhire',
+    phoneNumber: NEW_HIRE_PHONE,
+    firstName: 'Nina',
+    lastName: 'Nyansatt',
+    email: 'nina@example.test',
+    emailConfirmed: true,
+    isPowerUser: false,
+    isKeyAccountManager: false,
+    favoriteProductIds: [],
+    // Administers nothing AND is linked to no engagement. Until this account claims an invitation,
+    // `GET /workforce/me/staff-memberships` answers `[]` for it — which is the state every worker
+    // starts in and which no journey could reach before an invitation surface existed.
+    adminIn: []
   }
 };
 
+// `personState` is what the roster surfaces as "has a login attached": `Invited` means no
+// ApplicationUser has claimed this engagement's person, `Claimed` means one has. It is the ONLY
+// durable signal the invitation flow has (there is no invitation list endpoint), so a fixture that
+// omitted it would let the access panel render its unknown state and prove nothing. The values here
+// are only the STARTING POINT — `api-server.js` derives what it answers from the claims it has
+// actually recorded, so the roster flips because a claim happened.
+//
 // `workforcePersonId` is NOT decoration and is not the same id as `staffMemberId`. Training's
 // `personRef` names the PERSON — a completion is filed against a human being, not against one of
 // their engagements, which is the whole reason the two ids are different — and the Training
@@ -132,14 +165,31 @@ const STAFF = [
     workforcePersonId: '0f7d2c1a-8b64-4f2e-9c31-1a5d6e7f8091',
     displayName: 'Ola Ansatt',
     isActive: true,
-    employmentNumber: '101'
+    employmentNumber: '101',
+    personState: 'Claimed',
+    capabilities: ['WorkforceSelf']
   },
   {
     staffMemberId: 'staff-2',
     workforcePersonId: '3b91e40c-27af-4d5b-8e12-6c4f90ab7d23',
     displayName: 'Kari Hansen',
     isActive: true,
-    employmentNumber: '102'
+    employmentNumber: '102',
+    personState: 'Invited',
+    capabilities: ['WorkforceSelf']
+  },
+  // The onboarding journey's subject: on the roster, schedulable, and unable to sign in. A real GUID
+  // like her two colleagues — `lane/fe-wf-onboard` authored all three as `person-N`, which this
+  // branch had already replaced with GUIDs because every `*Ref` binds to a `Guid` server-side and
+  // Training's completion write refuses anything else before it leaves the browser.
+  {
+    staffMemberId: 'staff-3',
+    workforcePersonId: 'c5e8f7a2-9d41-4b83-a716-2f0c9d8e4b57',
+    displayName: 'Nina Nyansatt',
+    isActive: true,
+    employmentNumber: '103',
+    personState: 'Invited',
+    capabilities: ['WorkforceSelf']
   }
 ];
 
@@ -709,6 +759,7 @@ module.exports = {
   WORKER_PHONE,
   PHONE_SIGNUP_ADMIN_PHONE,
   CONCIERGE_PHONE,
+  NEW_HIRE_PHONE,
   OTP,
   CULTURES,
   STORE_ID,

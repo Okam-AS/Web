@@ -135,7 +135,27 @@
           {{ stateNotice }}
         </div>
 
-        <!-- Only the employee pivot takes `currency`, because it is the only one that prints money.
+        <!-- The role pivot re-groups the same week but is not an authoring surface: a shift belongs to
+             a person and a day, and the role rows carry neither. Editing stays on the pivot that has
+             both axes rather than being half-answered on one that has one.
+
+             IT SITS ABOVE THE GRID CHAIN AND OUTSIDE IT. This notice used to be the `v-if` that HEADED
+             the chain below, with the role grid as its `v-else-if` and the month grid as its `v-else`
+             — which meant the week grid's own `v-if` stood alone and the month grid's `v-else` bound
+             to THIS condition rather than to it. Two pivots rendered the wrong thing at once: the
+             employees pivot drew the week grid AND the month grid (the latter fetching nothing and
+             announcing that five weeks failed to load), and a scheduler on the roles pivot of an
+             editable week got this sentence INSTEAD OF a schedule. Keeping the notice out of the
+             chain is what makes it an addition to a pivot rather than a replacement for one. -->
+        <p v-if="isRoles && canAuthorHere" class="wf-page__notice">
+          {{ $i('wf_author_employees_only') }}
+        </p>
+
+        <!-- ONE chain, three pivots, exactly one grid on screen. Nothing may be inserted between these
+             three elements: a `v-if` in the middle re-heads the chain and the `v-else` silently
+             re-binds to it, which is the defect above.
+
+             Only the employee pivot takes `currency`, because it is the only one that prints money.
              The role and month pivots are given none: the API totals cost per shift, per day and per
              range, never per role and never per month, and a pivot handed a formatter but no server
              figure is one refactor away from summing the chips itself. -->
@@ -150,12 +170,6 @@
           @edit="openEdit"
           @move="moveShift"
         />
-        <!-- The role pivot re-groups the same week but is not an authoring surface: a shift belongs to
-             a person and a day, and the role rows carry neither. Editing stays on the pivot that has
-             both axes rather than being half-answered on one that has one. -->
-        <p v-if="isRoles && canAuthorHere" class="wf-page__notice">
-          {{ $i('wf_author_employees_only') }}
-        </p>
         <WorkforceRoleGrid v-else-if="isRoles" :grid="roleGrid" :locale="locale" />
         <WorkforceMonthGrid v-else :grid="monthGrid" :locale="locale" />
 

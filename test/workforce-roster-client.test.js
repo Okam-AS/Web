@@ -173,6 +173,59 @@ describe('WorkforceRosterService', () => {
     expect(error.problem.storeId).toBeUndefined()
   })
 
+  test('IssueInvitation posts to the engagement\'s invitations, with a key and NO If-Match', async () => {
+    respondWith(200, { invitationId: 'inv-1', token: 'wfinv_raw', expiresAtUtc: '2026-08-14T00:00:00' })
+    await service().IssueInvitation(42, 'sm-1', { expiresInHours: 168 })
+
+    const [url, init] = global.fetch.mock.calls[0]
+    expect(url).toBe('/workforce/stores/42/staff/sm-1/invitations')
+    expect(init.method).toBe('POST')
+    expect(JSON.parse(init.body)).toEqual({ expiresInHours: 168 })
+    // A mutation, so the key is mandatory.
+    expect(init.headers['Idempotency-Key']).toBe('idem-key')
+    // And NO precondition. The invitation is a child resource with its own single-Pending guard, not
+    // an optimistic-concurrency aggregate: the controller reads no If-Match, so sending one would be
+    // inventing a contract — and gating the button on having a revision (as every other write here
+    // is gated) would hide the module's only way in from a deployment with no rowversion.
+    expect(init.headers['If-Match']).toBeUndefined()
+  })
+
+  test('IssueInvitation with no request body still sends an object, never undefined', async () => {
+    respondWith(200, { invitationId: 'inv-1', token: 'wfinv_raw' })
+    await service().IssueInvitation(42, 'sm-1')
+
+    const [, init] = global.fetch.mock.calls[0]
+    expect(JSON.parse(init.body)).toEqual({})
+  })
+
+  test('a replayed issue answers a null token, which is not a failure', async () => {
+    // The stored idempotency outcome is deliberately token-less — the raw token is persisted
+    // nowhere. A caller that treated a null token as an error would tell a manager the invitation
+    // failed when it exists and is pending.
+    respondWith(200, { invitationId: 'inv-1', token: null, expiresAtUtc: '2026-08-14T00:00:00' })
+    const issued = await service().IssueInvitation(42, 'sm-1')
+
+    expect(issued.invitationId).toBe('inv-1')
+    expect(issued.token).toBeNull()
+  })
+
+  test('the concurrent-issue conflict arrives typed and retryable', async () => {
+    respondWith(409, {
+      code: 'workforce.invitation-issue-conflict',
+      conflictKind: 'invitation-issue-conflict',
+      retryable: true,
+      retryWithFreshKey: true
+    })
+
+    const error = await service().IssueInvitation(42, 'sm-1').catch(e => e)
+    expect(isWorkforceApiError(error)).toBe(true)
+    expect(error.code).toBe('workforce.invitation-issue-conflict')
+    expect(error.retryable).toBe(true)
+    // The retry must carry a FRESH key, which is automatic: `_mutate` mints one per call, so simply
+    // pressing the button again is the correct retry rather than a resubmission of a reserved key.
+    expect(error.problem.retryWithFreshKey).toBe(true)
+  })
+
   test('a stale revision arrives typed, carrying the current token to re-read against', async () => {
     respondWith(409, {
       code: 'workforce.stale-revision',

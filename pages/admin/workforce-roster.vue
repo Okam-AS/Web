@@ -60,6 +60,14 @@
             />
           </div>
 
+          <!-- `can-invite` is NOT `canManage && canPatch`, and the difference is deliberate. Every
+               other write this panel offers is the one PATCH, which is a plain 400 without the opaque
+               revision the detail read carries — hence `can-manage`. Issuing an invitation is a
+               different route with a different precondition: it takes no If-Match at all (the
+               invitation is a child resource with its own single-pending guard, not an
+               optimistic-concurrency aggregate), so a deployment whose backend returns no rowversion
+               — SQLite, where `revision` is null — can still onboard a worker. Reusing `canPatch`
+               here would hide the module's only way IN from exactly the deployments that need it. -->
           <WorkforceEngagementPanel
             v-if="selectedRow"
             :key="selectedRow.staffMemberId"
@@ -71,7 +79,9 @@
             :staff-roles="staffRoles"
             :terms="terms"
             :effects="effects"
+            :invitation="invitation"
             :can-manage="canManage && canPatch"
+            :can-invite="canManage"
             :has-payroll-approver="hasPayrollApprover"
             :store-id="storeId"
             :time-zone-id="timeZoneId"
@@ -85,6 +95,8 @@
             @save-term="saveTerm"
             @end="endEngagement"
             @reactivate="reactivate"
+            @issue-invitation="issueInvitation"
+            @dismiss-invitation="invitation = null"
           />
         </div>
 
@@ -160,6 +172,12 @@ export default {
       staffRoles: null,
       terms: null,
       attendance: null,
+      // The last `POST /staff/{id}/invitations` response, held ONLY in memory and ONLY for the
+      // selected engagement. It carries the raw claim token, which the server keeps a hash of and
+      // will never answer with again — so it is deliberately not persisted, not put in the store and
+      // not restored on reload. Cleared on every selection change (see `clearSelection`), so one
+      // person's code can never be on screen under another person's name.
+      invitation: null,
       conflict: null,
       asOf: new Date(),
       toast: { show: false, message: '', type: 'success' },
@@ -208,6 +226,7 @@ export default {
       case 'workforce.hidden-engagement-conflict': return this.$i('wfr_conflict_hidden_title');
       case 'workforce.engagement-conflict': return this.$i('wfr_conflict_same_store_title');
       case 'workforce.stale-revision': return this.$i('wfr_conflict_stale_title');
+      case 'workforce.invitation-issue-conflict': return this.$i('wfr_conflict_invitation_title');
       default: return this.$i('wfr_conflict_generic_title');
       }
     },
@@ -219,6 +238,9 @@ export default {
       case 'workforce.hidden-engagement-conflict': return this.$i('wfr_conflict_hidden');
       case 'workforce.engagement-conflict': return this.$i('wfr_conflict_same_store');
       case 'workforce.stale-revision': return this.$i('wfr_conflict_stale');
+      // Retryable, and the retry is simply pressing the button again: `_mutate` mints a fresh
+      // `Idempotency-Key` per call, which is exactly what this refusal demands.
+      case 'workforce.invitation-issue-conflict': return this.$i('wfr_conflict_invitation');
       default: return this.conflict.message;
       }
     }
@@ -282,6 +304,10 @@ export default {
 
     select (row) {
       this.selectedId = row.staffMemberId;
+      // A held token belongs to the engagement it was minted for and to no other. Dropping it as the
+      // selection moves is not tidiness: it is what stops a manager copying Kari's code off a panel
+      // headed with Ola's name.
+      this.invitation = null;
       this.loadEngagement(row.staffMemberId);
     },
 
@@ -291,6 +317,7 @@ export default {
       this.staffRoles = null;
       this.terms = null;
       this.attendance = null;
+      this.invitation = null;
     },
 
     async loadEngagement (staffMemberId) {
@@ -337,6 +364,42 @@ export default {
         this.addFormKey += 1;
         await this.loadRoster();
         if (created && created.staffMemberId) { this.select({ staffMemberId: created.staffMemberId }); }
+      } catch (e) {
+        this.handleMutationError(e);
+      } finally {
+        this.busy = false;
+      }
+    },
+
+    /**
+     * Issue (or reissue) this engagement's claim invitation — the module's ONLY way for a worker to
+     * acquire a login, and therefore the only route by which anything on `/workforce/me` becomes
+     * reachable by a human at all.
+     *
+     * The response is put on `this.invitation` and NOWHERE else. It carries the raw token exactly
+     * once; the server stores a hash, so if this object is lost the code is gone and the only remedy
+     * is issuing a new one (which kills the old). That is why the panel renders the handover INSTEAD
+     * of the issue button, and why a re-read of the roster afterwards is deliberately NOT done here:
+     * `loadRoster` re-runs `loadEngagement`, and the token would survive that only by accident.
+     *
+     * A 409 goes through the same conflict band as every other mutation. The invitation-specific one
+     * (`workforce.invitation-issue-conflict`) is retryable but demands a FRESH Idempotency-Key —
+     * which is automatic here, because `_mutate` mints one per call, so simply pressing again is the
+     * correct retry rather than a resubmission of a reserved key.
+     */
+    async issueInvitation (request) {
+      if (this.busy || !this.selectedId) { return; }
+      this.busy = true;
+      this.conflict = null;
+      try {
+        this.invitation = await this._workforceRosterService.IssueInvitation(
+          this.storeId,
+          this.selectedId,
+          // An out-of-range or blank lifetime sends no field at all rather than a guess: the server's
+          // own default (14 days) is a better answer than a number this page invented.
+          request && request.expiresInHours ? { expiresInHours: request.expiresInHours } : {}
+        );
+        this.notify(this.$i('wfr_invitation_issued'));
       } catch (e) {
         this.handleMutationError(e);
       } finally {

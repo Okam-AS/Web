@@ -176,6 +176,10 @@ describe('WorkforceEngagementPanel — capability is not role, and ending is not
         detail: { staffMemberId: row.staffMemberId, revision: 'AAAA', contactEmail: 'ida@example.com', contactPhone: '+4790000000' },
         effects: endEngagementEffects(roster, row, (over || {}).attendance || null),
         canManage: true,
+        // A separate prop from `canManage` on purpose — endpoint 6 takes no If-Match, so issuing an
+        // invitation must stay available where the detail read carries no revision. The roster page
+        // passes `canManage` here and `canManage && canPatch` above.
+        canInvite: true,
         storeId: 42,
         timeZoneId: 'Europe/Oslo',
         locale: 'no',
@@ -288,7 +292,10 @@ describe('WorkforceEngagementPanel — capability is not role, and ending is not
       const wrapper = mountPanel([summary({ capabilities: ['WorkforceManager'] })])
       await wrapper.setData({ draftCapabilities: [] })
       expect(wrapper.vm.losingLastManager).toBe(true)
-      expect(wrapper.find('.wfr-panel__section .wfr-panel__btn').attributes('disabled')).toBe('disabled')
+      // Scoped to the capabilities section by hook rather than by "the first section on the panel" —
+      // the loose selector matched whichever section happened to come first, so it silently changed
+      // subject the day one was inserted above it.
+      expect(wrapper.find('[data-test="section-capabilities"] .wfr-panel__btn').attributes('disabled')).toBe('disabled')
     })
   })
 
@@ -318,7 +325,10 @@ describe('WorkforceEngagementPanel — capability is not role, and ending is not
       await wrapper.setData({ draftEmploymentNumber: '211' })
       expect(wrapper.vm.numbersChanged).toBe(true)
 
-      wrapper.findAll('.wfr-panel__section').at(1).find('.wfr-panel__btn').trigger('click')
+      // Addressed by a stable hook rather than by ordinal. This used to be `.at(1)`, which meant the
+      // assertion silently moved to the capabilities section the day a section was inserted above it
+      // — and it then failed for a reason that had nothing to do with what it was testing.
+      wrapper.find('[data-test="section-numbers"]').find('.wfr-panel__btn').trigger('click')
       expect(wrapper.emitted()['save-numbers'][0][0]).toEqual({ employmentNumber: '211', payrollNumber: '' })
     })
   })
@@ -366,5 +376,115 @@ describe('WorkforceEngagementPanel — capability is not role, and ending is not
   test('contact details that did not load say so rather than rendering as blank', () => {
     const wrapper = mountPanel([summary()], { detail: null })
     expect(wrapper.text()).toContain(translations.no.wfr_panel_detail_unknown)
+  })
+
+  // ---- ACCESS / INVITATION -------------------------------------------------------------------
+  //
+  // The engagement above authorises nothing until a LOGIN is attached to it, and issuing a claim
+  // invitation is the only mechanism in the module that attaches one. These lock down what the panel
+  // is allowed to CLAIM about that, which is strictly less than a reader would expect.
+  describe('access — the only way a worker ever gets in', () => {
+    test('an unclaimed engagement is said to be schedulable but unable to sign in', () => {
+      const wrapper = mountPanel([summary({ personState: 'Invited' })])
+      expect(wrapper.find('[data-test="access-state"]').text())
+        .toBe(translations.no.wfr_access_state_invited)
+      // The FIRST-issue wording, not the reissue one.
+      expect(wrapper.find('[data-test="issue-invitation"]').text())
+        .toBe(translations.no.wfr_access_issue)
+    })
+
+    test('a claimed engagement says a login is attached, and offers a REISSUE', () => {
+      const wrapper = mountPanel([summary({ personState: 'Claimed' })])
+      expect(wrapper.find('[data-test="access-state"]').text())
+        .toBe(translations.no.wfr_access_state_claimed)
+      expect(wrapper.find('[data-test="issue-invitation"]').text())
+        .toBe(translations.no.wfr_access_reissue)
+    })
+
+    test('an unknown person state is never rendered as "no login"', () => {
+      // Two different claims. "Nobody has claimed this" would send a manager to issue a code that may
+      // already be in somebody's hand; "we do not know" sends them to look.
+      const wrapper = mountPanel([summary({ personState: null })])
+      expect(wrapper.find('[data-test="access-state"]').text())
+        .toBe(translations.no.wfr_access_state_unknown)
+    })
+
+    test('the panel states there is no list and no revoke BEFORE offering the button', () => {
+      // `WorkforceStaffController` binds issue and nothing else — no read of an engagement's
+      // invitations, and no revoke verb, though `WorkforceInvitationState.Revoked` exists. A manager
+      // who believes otherwise goes hunting for a button during an incident.
+      const wrapper = mountPanel([summary({ personState: 'Invited' })])
+      expect(wrapper.find('[data-test="access-limits"]').text())
+        .toBe(translations.no.wfr_access_no_list)
+    })
+
+    test('issuing is offered without a revision, unlike every other write here', () => {
+      // Endpoint 6 takes NO If-Match. Gating it on `canManage` (which folds in "the detail read
+      // answered with a revision") would hide the module's only way in from a deployment with no
+      // rowversion — SQLite, where `revision` is null.
+      const wrapper = mountPanel([summary({ personState: 'Invited' })], {
+        canManage: false,
+        canInvite: true
+      })
+      expect(wrapper.find('[data-test="issue-invitation"]').attributes('disabled')).toBeUndefined()
+    })
+
+    test('an ended engagement is not offered an invitation, and says why', () => {
+      // An ended engagement resolves no capability, so a login attached to it can do nothing.
+      const wrapper = mountPanel([summary({ personState: 'Invited', isActive: false })])
+      expect(wrapper.find('[data-test="issue-invitation"]').attributes('disabled')).toBe('disabled')
+      expect(wrapper.text()).toContain(translations.no.wfr_access_ended)
+    })
+
+    test('the days field is converted to hours, and an out-of-range value sends nothing', async () => {
+      const wrapper = mountPanel([summary({ personState: 'Invited' })])
+
+      await wrapper.setData({ expiresInDays: '7' })
+      wrapper.find('[data-test="issue-invitation"]').trigger('click')
+      expect(wrapper.emitted()['issue-invitation'][0][0]).toEqual({ expiresInHours: 168 })
+
+      // Beyond the server's own 60-day ceiling: send NOTHING and let the server's default stand,
+      // rather than a number this page invented or one the server will clamp silently.
+      await wrapper.setData({ expiresInDays: '900' })
+      wrapper.find('[data-test="issue-invitation"]').trigger('click')
+      expect(wrapper.emitted()['issue-invitation'][1][0]).toEqual({ expiresInHours: null })
+    })
+
+    test('the handover replaces the issue button, and says nothing was sent', () => {
+      const wrapper = mountPanel([summary({ personState: 'Invited' })], {
+        invitation: { invitationId: 'inv-1', token: 'wfinv_raw_code', expiresAtUtc: '2026-08-14T20:34:00' }
+      })
+
+      // A second press must not be able to scroll the first token out of view: it is unrecoverable
+      // the moment it goes.
+      expect(wrapper.find('[data-test="issue-invitation"]').exists()).toBe(false)
+      expect(wrapper.find('[data-test="invitation-token"]').element.value).toBe('wfinv_raw_code')
+      expect(wrapper.text()).toContain(translations.no.wfr_access_not_sent_title)
+      expect(wrapper.text()).toContain(translations.no.wfr_access_token_once)
+      // The address is NAMED rather than minted as a link carrying the credential.
+      expect(wrapper.text()).toContain('/workforce/join')
+    })
+
+    test('a REPLAYED issue carries no token, and that is not reported as a failure', () => {
+      // The stored idempotency outcome is token-less by construction. The invitation exists and is
+      // pending; this caller simply cannot be shown it again.
+      const wrapper = mountPanel([summary({ personState: 'Invited' })], {
+        invitation: { invitationId: 'inv-1', token: null, expiresAtUtc: '2026-08-14T20:34:00' }
+      })
+
+      expect(wrapper.find('[data-test="invitation-token"]').exists()).toBe(false)
+      expect(wrapper.find('[data-test="invitation-replayed"]').text())
+        .toBe(translations.no.wfr_access_token_replayed)
+    })
+
+    test('the expiry is rendered in the STORE zone, from a bare wire stamp', () => {
+      // The Workforce surface serialises column-loaded stamps without a `Z`; JS reads a bare ISO
+      // string as browser-local, which would move the expiry by the viewer's own offset.
+      const wrapper = mountPanel([summary({ personState: 'Invited' })], {
+        invitation: { invitationId: 'inv-1', token: 't', expiresAtUtc: '2026-08-14T20:34:00' }
+      })
+      // 20:34 UTC is 22:34 in Europe/Oslo in August.
+      expect(wrapper.find('[data-test="invitation-expiry"]').text()).toContain('22:34')
+    })
   })
 })
