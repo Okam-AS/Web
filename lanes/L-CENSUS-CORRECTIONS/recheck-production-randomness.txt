@@ -1,0 +1,144 @@
+
+===== RandomNumberGenerator =====
+  Controllers/OAuthDynamicClientRegistrationController.cs:195  var clientId = "okam-mcp-" + Convert.ToHexString(RandomNumberGenerator.GetBytes(16)).ToLowerInvariant();
+  Helpers/NumericConfirmationCode.cs:15  /// by design. <see cref="RandomNumberGenerator.GetInt32(int, int)"/> is uniform over the range and is not.</para>
+  Helpers/NumericConfirmationCode.cs:33  RandomNumberGenerator.GetInt32(Min, MaxExclusive).ToString(CultureInfo.InvariantCulture);
+  Services/Growth/GrowthAddressProtector.cs:275  var nonce = RandomNumberGenerator.GetBytes(NonceSize);
+  Services/Growth/GrowthPreferenceTokenService.cs:51  var raw = ToUrlSafeBase64(RandomNumberGenerator.GetBytes(TokenEntropyBytes));
+  Services/Growth/GrowthPreferenceTokenService.cs:57  var raw = UnsubscribeTokenMarker + ToUrlSafeBase64(RandomNumberGenerator.GetBytes(TokenEntropyBytes));
+  Services/Growth/GrowthPreferenceTokenService.cs:103  var csrf = ToUrlSafeBase64(RandomNumberGenerator.GetBytes(CsrfEntropyBytes));
+  Services/Workforce/WorkforceInvitationService.cs:527  var bytes = RandomNumberGenerator.GetBytes(32);
+
+===== new Random( =====
+  (no production site)
+
+===== Random.Shared =====
+  Services/AIService.cs:499  var jittered = Random.Shared.NextDouble() * exponential;
+
+===== ToBase64String =====
+  Helpers/Meals/MealsRevision.cs:25  : Convert.ToBase64String(concurrencyVersion);
+  Helpers/SurfboardSignatureValidator.cs:48  return Convert.ToBase64String(ComputeHmac(secret, message));
+  Services/DinteroTokenClient.cs:51  var credentials = Convert.ToBase64String(
+  Services/Events/EventsSettlementConcurrency.cs:24  => rowVersion == null || rowVersion.Length == 0 ? null : Convert.ToBase64String(rowVersion);
+  Services/Growth/GrowthAddressProtector.cs:297  return _keyVersion + ":" + Convert.ToBase64String(payload);
+  Services/Growth/GrowthNewsletterService.cs:683  Convert.ToBase64String(Encoding.UTF8.GetBytes(lastId.ToString()));
+  Services/Growth/GrowthPreferenceTokenService.cs:203  Convert.ToBase64String(bytes).TrimEnd('=').Replace('+', '-').Replace('/', '_');
+  Services/Kassa/PosReceiptService.cs:828  var token = Convert.ToBase64String(hash)
+  Services/Kassa/SignatureService.cs:65  Signature = Convert.ToBase64String(signed.Signature),
+  Services/Margin/MarginContractSupport.cs:32  : Convert.ToBase64String(concurrencyVersion);
+  Services/Margin/MarginPriceImportService.cs:603  summary.Revision = batch.ConcurrencyVersion != null ? Convert.ToBase64String(batch.ConcurrencyVersion) : null;
+  Services/Meals/MealsAuthorizationTokenService.cs:51  return Convert.ToBase64String(bytes)
+  Services/Meals/MealsInvitationTokenService.cs:121  return Convert.ToBase64String(bytes)
+  Services/Surfboard/SurfboardReceiptPrintService.cs:77  EscposCommands = Convert.ToBase64String(escPosJob),
+  Services/Training/TrainingConcurrency.cs:19  => rowVersion == null || rowVersion.Length == 0 ? null : Convert.ToBase64String(rowVersion);
+  Services/Tripletex/TripletexClient.cs:613  var raw = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:{sessionToken}"));
+  Services/VippsService.cs:392  Convert.ToBase64String(Encoding.UTF8.GetBytes($"{Options.AccountingClientId}:{Options.AccountingClientSecret}")));
+  Services/WoltAuthService.cs:61  var authValue = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{clientId}:{clientSecret}"));
+  Services/WoltAuthService.cs:101  var authValue = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{clientId}:{clientSecret}"));
+  Services/WoltAuthService.cs:138  var authValue = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{clientId}:{clientSecret}"));
+  Services/WoltAuthService.cs:509  return Convert.ToBase64String(result).TrimEnd('=').Replace('+', '-').Replace('/', '_');
+  Services/Workforce/WorkforceContractSupport.cs:60  : Convert.ToBase64String(concurrencyVersion);
+  Services/Workforce/WorkforceInvitationService.cs:528  return Convert.ToBase64String(bytes).TrimEnd('=').Replace('+', '-').Replace('/', '_');
+
+===== Base64Url =====
+  Services/Meals/MealsAuthorizationTokenService.cs:36  return "mealstok_" + Base64Url(mac);
+  Services/Meals/MealsAuthorizationTokenService.cs:45  return Base64Url(bytes);
+  Services/Meals/MealsAuthorizationTokenService.cs:49  private static string Base64Url(byte[] bytes)
+  Services/Meals/MealsInvitationTokenService.cs:43  return TokenPrefix + Base64Url(mac);
+  Services/Meals/MealsInvitationTokenService.cs:52  return Base64Url(bytes);
+  Services/Meals/MealsInvitationTokenService.cs:60  return body + "." + Base64Url(SessionMac(body));
+  Services/Meals/MealsInvitationTokenService.cs:78  var expected = Base64Url(SessionMac(body));
+  Services/Meals/MealsInvitationTokenService.cs:119  private static string Base64Url(byte[] bytes)
+
+===== Guid.NewGuid =====
+  Controllers/AdminKraviaInvoicesController.cs: lines [518]
+  Controllers/DinteroController.cs: lines [63]
+  Controllers/EventLogsController.cs: lines [39]
+  Controllers/StoresController.cs: lines [1440]
+  Controllers/SurfboardController.cs: lines [110, 202]
+  Controllers/VippsController.cs: lines [252]
+  Mcp/Services/McpShoppingService.cs: lines [483, 537, 652, 982]
+  Services/AddressService.cs: lines [57]
+  Services/Analytics/ChatOrchestrator.cs: lines [44]
+  Services/CartService.cs: lines [722, 740, 772]
+  Services/CategoryService.cs: lines [332, 560]
+  Services/DinteroTerminalService.Initiate.cs: lines [71]
+  Services/DiscountService.cs: lines [44]
+  Services/Events/EventsDepositService.cs: lines [128]
+  Services/Events/EventsInquiryService.cs: lines [55, 122]
+  Services/Events/EventsNotificationDrainService.cs: lines [61]
+  Services/Events/EventsProposalDraftBuilder.cs: lines [200]
+  Services/Events/PersistedEventsNotificationOutbox.cs: lines [101]
+  Services/GiftcardService.cs: lines [180, 514, 535]
+  Services/Growth/GrowthAuditWriter.cs: lines [77]
+  Services/Growth/GrowthDispatchService.cs: lines [348]
+  Services/Growth/GrowthFakeMailProvider.cs: lines [47]
+  Services/HomeDeliveryMethodService.cs: lines [73, 148, 309]
+  Services/ImageCarouselService.cs: lines [49, 124]
+  Services/ImageService.cs: lines [91, 164]
+  Services/Jobs/MaintenanceJobBase.cs: lines [40]
+  Services/Kassa/CheckSplitService.cs: lines [146, 186]
+  Services/Kassa/KassaLock.cs: lines [50]
+  Services/Kassa/OpenCheckService.Lines.cs: lines [110, 162, 192, 643]
+  Services/Kassa/OperatorPinService.cs: lines [76]
+  Services/Kassa/PosSettlementService.cs: lines [41, 67, 213, 318, 381, 442]
+  Services/Kassa/TerminalPaymentOrchestrator.cs: lines [534, 712]
+  Services/Margin/MarginIngredientService.cs: lines [85, 99, 190]
+  Services/Margin/MarginPriceImportService.cs: lines [164, 486]
+  Services/Margin/MarginProductLinkService.cs: lines [162]
+  Services/Margin/MarginProjectionService.cs: lines [121]
+  Services/Margin/MarginRecipeService.cs: lines [161, 172, 221, 241, 549]
+  Services/Margin/MarginStatementService.cs: lines [204, 273]
+  Services/Margin/MarginSupplierItemPriceService.cs: lines [134]
+  Services/Margin/MarginSupplierItemService.cs: lines [60]
+  Services/Margin/MarginSupplierService.cs: lines [53]
+  Services/Meals/MealsAgreementService.cs: lines [115]
+  Services/Meals/MealsAuditWriter.cs: lines [58]
+  Services/Meals/MealsCommandReceiptService.cs: lines [110, 149]
+  Services/Meals/MealsCompanyService.cs: lines [144]
+  Services/Meals/MealsFundingAuthority.cs: lines [511]
+  Services/Meals/MealsFundingLedgerService.cs: lines [104]
+  Services/Meals/MealsMembershipService.cs: lines [219, 465]
+  Services/Meals/MealsProgramService.cs: lines [154, 252, 412]
+  Services/Meals/MealsProjectionWorker.cs: lines [222, 262]
+  Services/Meals/MealsQuoteService.cs: lines [263, 654]
+  Services/Meals/MealsReconciliationWorker.cs: lines [154]
+  Services/Meals/MealsStatementService.cs: lines [151, 471, 528]
+  Services/OfferService.cs: lines [131]
+  Services/OrderService.cs: lines [1268]
+  Services/ProductService.cs: lines [309, 368, 544, 790, 804, 810]
+  Services/ReservationService.cs: lines [153, 343]
+  Services/RewardService.cs: lines [75, 206, 277, 475, 501]
+  Services/StoreMarketService.cs: lines [202]
+  Services/StoreService.cs: lines [527, 543, 606, 655]
+  Services/Surfboard/SurfboardOnboardingService.cs: lines [581]
+  Services/Surfboard/SurfboardTerminalService.cs: lines [102, 279]
+  Services/Training/TrainingAssignmentService.cs: lines [122]
+  Services/Training/TrainingAuditWriter.cs: lines [75]
+  Services/Training/TrainingCertificateService.cs: lines [181]
+  Services/Training/TrainingCompletionService.cs: lines [133]
+  Services/Training/TrainingCourseService.cs: lines [147, 221]
+  Services/Training/TrainingIdempotency.cs: lines [87]
+  Services/WoltService.cs: lines [836, 911, 949, 971]
+  Services/Workforce/WorkforceAttendanceService.cs: lines [220]
+  Services/Workforce/WorkforceAuditWriter.cs: lines [76]
+  Services/Workforce/WorkforceAvailabilityService.cs: lines [120, 149]
+  Services/Workforce/WorkforceClockProjection.cs: lines [155, 179, 237]
+  Services/Workforce/WorkforceClockService.cs: lines [109]
+  Services/Workforce/WorkforceIdempotency.cs: lines [128, 174]
+  Services/Workforce/WorkforceIdentityCodeRegisterService.cs: lines [93]
+  Services/Workforce/WorkforceInvitationService.cs: lines [132]
+  Services/Workforce/WorkforceNotificationDispatcher.cs: lines [71]
+  Services/Workforce/WorkforceOperatorImportService.cs: lines [175, 183]
+  Services/Workforce/WorkforcePersonnelListProjection.cs: lines [93, 205, 251]
+  Services/Workforce/WorkforceRateAuthoringService.cs: lines [487, 558]
+  Services/Workforce/WorkforceSchedulePublishService.cs: lines [231, 306, 318, 355]
+  Services/Workforce/WorkforceScheduleService.cs: lines [74, 152, 511]
+  Services/Workforce/WorkforceScheduleValidationService.cs: lines [119]
+  Services/Workforce/WorkforceSelfService.cs: lines [359]
+  Services/Workforce/WorkforceShiftExchangeService.cs: lines [213, 224, 333, 343]
+  Services/Workforce/WorkforceStaffService.cs: lines [157, 173, 417, 527, 598]
+  Services/Workforce/WorkforceTimeOffService.cs: lines [78]
+
+===== GenerateNonce/IV =====
+  Services/WoltAuthService.cs:497  aes.GenerateIV();

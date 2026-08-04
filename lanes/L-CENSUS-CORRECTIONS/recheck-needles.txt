@@ -1,0 +1,417 @@
+########## Q1  literal needles by alphabet class ##########
+
+===== digits-only =====
+  len=  3  Events/EventsOutboxDeliveryTests.cs:411  [DoesNotContain]  needle='250'
+  len=  4  Events/EventsOutboxDeliveryTests.cs:412  [DoesNotContain]  needle='2000'
+  len=  1  Kassa/SaftCashRegisterExportServiceTests.cs:171  [DoesNotContain]  needle='0'
+  len=  8  Observability/OperationalNotificationPiiTests.cs:84  [DoesNotContain]  needle='91234567'
+  len=  8  Observability/OperationalNotificationPiiTests.cs:137  [DoesNotContain]  needle='98765432'
+  len=  8  Observability/OperationalNotificationPiiTests.cs:260  [DoesNotContain]  needle='91234567'
+  len=  8  Observability/SensitiveDataRedactorTests.cs:186  [DoesNotContain]  needle='91234567'
+  len=  4  Tripletex/TripletexOnboardingTests.cs:40  [DoesNotContain]  needle='7770'
+  len=  4  Tripletex/TripletexOnboardingTests.cs:44  [DoesNotContain]  needle='1920'
+  len=  4  Tripletex/TripletexWp3ServiceTests.cs:32  [DoesNotContain]  needle='3000'
+  len=  4  Tripletex/TripletexWp3ServiceTests.cs:42  [DoesNotContain]  needle='3000'
+  len=  5  Workforce/WorkforceRateAuthoringTests.cs:223  [DoesNotContain]  needle='21500'
+
+===== hex-safe =====
+  len=  1  Kassa/DeliveryReceiptComplianceTests.cs:43  [DoesNotContain]  needle='-'
+  len=  4  Observability/SensitiveDataRedactorTests.cs:273  [DoesNotContain]  needle='8f21'
+  len= 10  Workforce/ScheduleExternalCommitmentsTests.cs:155  [DoesNotContain]  needle='2026-11-17'
+
+===== alnum-non-hex =====
+  len= 21  Events/EventsMigrationLineageTests.cs:260  [DoesNotContain]  needle='CollectionPathEventId'
+  len=  4  Events/EventsOutboxDispatchTests.cs:102  [DoesNotContain]  needle='Smtp'
+  len=  7  Events/EventsRunSheetDietaryTests.cs:132  [DoesNotContain]  needle='haggled'
+  len=  9  Events/EventsRunSheetDietaryTests.cs:302  [DoesNotContain]  needle='shellfish'
+  len=  3  Events/EventsStateMachineTests.cs:233  [DoesNotContain]  needle='T13'
+  len=  5  Growth/GrowthAddressProtectorTests.cs:26  [DoesNotContain]  needle='guest'
+  len=  7  Growth/GrowthAddressProtectorTests.cs:27  [DoesNotContain]  needle='example'
+  len=  9  Growth/GrowthAddressProtectorTests.cs:54  [DoesNotContain]  needle='roundtrip'
+  len=  7  Growth/GrowthConsentTextAuthoringTests.cs:333  [DoesNotContain]  needle='Version'
+  len=  2  Growth/GrowthConsentTextAuthoringTests.cs:334  [DoesNotContain]  needle='Id'
+  len= 16  Growth/GrowthDeliveryHealthEndpointTests.cs:77  [DoesNotContain]  needle='EncryptedAddress'
+  len= 10  Growth/GrowthDeliveryHealthEndpointTests.cs:78  [DoesNotContain]  needle='LookupHmac'
+  len= 14  Growth/GrowthDeliveryHealthEndpointTests.cs:79  [DoesNotContain]  needle='ContactPointId'
+  len= 14  Growth/GrowthDeliveryHealthEndpointTests.cs:99  [DoesNotContain]  needle='AttemptedCount'
+  len=  7  Growth/GrowthMigrationLineageTests.cs:153  [DoesNotContain]  needle='Address'
+  len=  5  Growth/GrowthUnsubscribeHeaderGoldenTests.cs:493  [DoesNotContain]  needle='plain'
+  len=  6  Growth/GrowthUnsubscribeHeaderGoldenTests.cs:499  [DoesNotContain]  needle='header'
+  len= 15  Kassa/CreditSaleDocumentRoutingTests.cs:98  [DoesNotContain]  needle='Salgskvittering'
+  len=  5  Kassa/DeliveryReceiptComplianceTests.cs:286  [DoesNotContain]  needle='IKKJE'
+  len=  8  Kassa/EscPosXZReportBuilderTests.cs:34  [DoesNotContain]  needle='Signatur'
+  len= 13  Kassa/Pr26_EscPosRoundingTests.cs:45  [DoesNotContain]  needle='Øresavrunding'
+  len= 21  Kassa/ReceiptMarkingComplianceTests.cs:35  [DoesNotContain]  needle='Utleveringskvittering'
+  len=  3  Margin/MarginMarketGeneralityTests.cs:114  [DoesNotContain]  needle='NOK'
+  len=  5  Margin/MarginSalesSeamContractTests.cs:230  [AssertFalse]  needle='Minor'
+  len=  7  Modules/ModuleReachabilityGuardSelfTests.cs:251  [DoesNotContain]  needle='refused'
+  len= 22  Modules/ModuleReachabilityGuardSelfTests.cs:267  [DoesNotContain]  needle='IMealsFundingAuthority'
+  len= 20  Modules/ModuleReachabilityGuardSelfTests.cs:268  [DoesNotContain]  needle='MarginSalesProjector'
+  len= 28  Modules/ModuleReachabilityGuardSelfTests.cs:283  [DoesNotContain]  needle='IMealsInvitationTokenService'
+  len= 27  Modules/ModuleReachabilityGuardSelfTests.cs:284  [DoesNotContain]  needle='MealsInvitationTokenService'
+  len= 13  Observability/SensitiveDataRedactorTests.cs:238  [DoesNotContain]  needle='Hemmeligveien'
+  len= 13  Observability/SensitiveDataRedactorTests.cs:263  [DoesNotContain]  needle='HEMMELIGVEIEN'
+  len=  5  Training/TrainingInspectorEvidencePackTests.cs:329  [DoesNotContain]  needle='Actor'
+  len= 10  Tripletex/Pr26_TripletexRedactionAndResidualTests.cs:26  [DoesNotContain]  needle='eyJhbGciOi'
+  len=  6  Wire/EventsDietaryRunSheetWireTests.cs:87  [DoesNotContain]  needle='EpiPen'
+  len=  6  Wire/GrowthPlatformSurfacesWireTests.cs:154  [DoesNotContain]  needle='stores'
+  len=  9  Wire/GrowthPrivacyNoticeDeliveryWireTests.cs:165  [DoesNotContain]  needle='Delivered'
+  len=  4  Workforce/IdentityCodeRegisterTests.cs:277  [DoesNotContain]  needle='Kari'
+  len=  4  Workforce/PersonnelListProjectionTests.cs:51  [DoesNotContain]  needle='Kari'
+  len=  4  Workforce/PersonnelListProjectionTests.cs:277  [DoesNotContain]  needle='Kari'
+  len=  5  Workforce/PosClockSurfaceTests.cs:483  [DoesNotContain]  needle='capab'
+  len=  4  Workforce/ScheduleAuditLedgerTests.cs:52  [DoesNotContain]  needle='wage'
+  len=  7  Workforce/ScheduleAuditLedgerTests.cs:53  [DoesNotContain]  needle='contact'
+  len=  4  Workforce/ScheduleAuditLedgerTests.cs:79  [DoesNotContain]  needle='wage'
+  len= 13  Workforce/ScheduleExternalCommitmentsTests.cs:128  [DoesNotContain]  needle='offsetMinutes'
+  len= 17  Workforce/ScheduleExternalCommitmentsTests.cs:129  [DoesNotContain]  needle='localBusinessDate'
+  len= 17  Workforce/WorkforceContractVsScheduleTests.cs:190  [DoesNotContain]  needle='maxOveragePercent'
+  len= 17  Workforce/WorkforceContractVsScheduleTests.cs:261  [DoesNotContain]  needle='maxOveragePercent'
+  len= 24  Workforce/WorkforceContractVsScheduleTests.cs:297  [DoesNotContain]  needle='staffWithoutContractTerm'
+  len= 13  Workforce/WorkforceLabourBandTests.cs:675  [DoesNotContain]  needle='StaffMemberId'
+  len= 12  Workforce/WorkforceLabourBandTests.cs:676  [DoesNotContain]  needle='StaffMembers'
+  len=  6  Workforce/WorkforceNotificationTransportTests.cs:526  [DoesNotContain]  needle='Ingrid'
+  len=  3  Workforce/WorkforceRateAuthoringTests.cs:538  [DoesNotContain]  needle='NOK'
+  len=  5  Workforce/WorkforceW4MigrationLineageTests.cs:387  [DoesNotContain]  needle='Round'
+  len=  7  Workforce/WorkforceW4MigrationLineageTests.cs:388  [DoesNotContain]  needle='Rounded'
+  len= 18  Workforce/WorkforceW4MigrationLineageTests.cs:418  [DoesNotContain]  needle='ConcurrencyVersion'
+  len= 26  Workforce/WorkforceWeeklyRestEvidenceTests.cs:126  [DoesNotContain]  needle='largestContinuousRestHours'
+
+===== punctuation =====
+  len= 13  Events/EventsOutboxDeliveryTests.cs:407  [DoesNotContain]  needle='Kari Nordmann'
+  len= 11  Events/EventsOutboxDeliveryTests.cs:408  [DoesNotContain]  needle='+4790000000'
+  len= 17  Events/EventsOutboxDeliveryTests.cs:409  [DoesNotContain]  needle='kari@example.test'
+  len= 17  Events/EventsOutboxDeliveryTests.cs:432  [DoesNotContain]  needle='/events/proposal/'
+  len= 10  Events/EventsRunSheetDietaryTests.cs:52  [DoesNotContain]  needle='no dietary'
+  len= 13  Events/EventsRunSheetDietaryTests.cs:53  [DoesNotContain]  needle='none recorded'
+  len= 23  Events/EventsRunSheetDietaryTests.cs:211  [DoesNotContain]  needle='Nothing has been stated'
+  len= 44  Events/EventsRunSheetLifecycleTests.cs:71  [DoesNotContain]  needle='No dietary or allergen requirements recorded'
+  len= 26  Growth/GrowthAttributionTests.cs:58  [DoesNotContain]  needle='named-erasure@example.test'
+  len= 12  Growth/GrowthAuditLedgerTests.cs:89  [DoesNotContain]  needle='growth-test-'
+  len= 20  Growth/GrowthAuditLedgerTests.cs:235  [DoesNotContain]  needle='SYNTHETIC-AUDIT-COPY'
+  len= 16  Growth/GrowthCaptureServiceTests.cs:38  [DoesNotContain]  needle='New@Example.test'
+  len= 16  Growth/GrowthCaptureServiceTests.cs:47  [DoesNotContain]  needle='New@Example.test'
+  len=  7  Growth/GrowthConfirmationMailerTests.cs:57  [DoesNotContain]  needle='?token='
+  len=  7  Growth/GrowthConfirmationMailerTests.cs:58  [DoesNotContain]  needle='&token='
+  len= 14  Growth/GrowthConfirmationMailerTests.cs:115  [DoesNotContain]  needle='secret.example'
+  len= 14  Growth/GrowthConsentRequestRedactionTests.cs:30  [DoesNotContain]  needle='secret.example'
+  len= 18  Growth/GrowthConsentServiceTests.cs:70  [DoesNotContain]  needle='Guest@Example.test'
+  len= 18  Growth/GrowthDeliveryHealthEndpointTests.cs:74  [DoesNotContain]  needle='@world.growth.test'
+  len= 18  Growth/GrowthDeliveryHealthEndpointTests.cs:75  [DoesNotContain]  needle='verified.consented'
+  len= 11  Growth/GrowthDeliveryHealthEndpointTests.cs:76  [DoesNotContain]  needle='multi.store'
+  len=  1  Growth/GrowthDispatchServiceTests.cs:269  [DoesNotContain]  needle='@'
+  len=  1  Growth/GrowthDispatchServiceTests.cs:273  [DoesNotContain]  needle='@'
+  len=  1  Growth/GrowthDispatchServiceTests.cs:406  [DoesNotContain]  needle='@'
+  len=  1  Growth/GrowthDispatchUnsubscribeHeaderTests.cs:47  [DoesNotContain]  needle='#'
+  len=  7  Growth/GrowthDispatchUnsubscribeHeaderTests.cs:195  [DoesNotContain]  needle='mailto:'
+  len= 21  Growth/GrowthEndpointContractTests.cs:297  [DoesNotContain]  needle='piiadmin@example.test'
+  len= 19  Growth/GrowthErasureRefCountTests.cs:131  [DoesNotContain]  needle='shared@example.test'
+  len= 18  Growth/GrowthMailProviderContractTests.cs:294  [DoesNotContain]  needle='pm-token-for-tests'
+  len= 26  Growth/GrowthMailProviderContractTests.cs:295  [DoesNotContain]  needle='leaky.guest@secret.example'
+  len= 20  Growth/GrowthMailProviderContractTests.cs:350  [DoesNotContain]  needle='bounced@example.test'
+  len= 11  Growth/GrowthMailProviderContractTests.cs:375  [DoesNotContain]  needle='leaky.guest'
+  len= 14  Growth/GrowthMailProviderContractTests.cs:376  [DoesNotContain]  needle='secret.example'
+  len= 18  Growth/GrowthMailProviderContractTests.cs:377  [DoesNotContain]  needle='pm-token-for-tests'
+  len= 20  Growth/GrowthMailProviderContractTests.cs:378  [DoesNotContain]  needle="Invalid 'To' address"
+  len= 18  Growth/GrowthMailProviderContractTests.cs:425  [DoesNotContain]  needle='pm-token-for-tests'
+  len= 26  Growth/GrowthMailProviderContractTests.cs:439  [DoesNotContain]  needle='leaky.guest@secret.example'
+  len= 14  Growth/GrowthMailProviderContractTests.cs:440  [DoesNotContain]  needle='secret.example'
+  len= 16  Growth/GrowthNewsletterLifecycleTests.cs:227  [DoesNotContain]  needle='admin@venue.test'
+  len= 18  Growth/GrowthPrivacyAndAdminServiceTests.cs:93  [DoesNotContain]  needle='shred@example.test'
+  len= 18  Growth/GrowthPrivacyAndAdminServiceTests.cs:95  [DoesNotContain]  needle='shred@example.test'
+  len= 19  Growth/GrowthPrivacyAndAdminServiceTests.cs:118  [DoesNotContain]  needle='access@example.test'
+  len= 19  Growth/GrowthPrivacyAndAdminServiceTests.cs:122  [DoesNotContain]  needle='access@example.test'
+  len= 21  Growth/GrowthPrivacyAndAdminServiceTests.cs:234  [DoesNotContain]  needle='timeline@example.test'
+  len= 15  Growth/GrowthPrivacyAndAdminServiceTests.cs:298  [DoesNotContain]  needle='crypto-shredded'
+  len= 24  Growth/GrowthPrivacyDeliveryEvidenceTests.cs:76  [DoesNotContain]  needle='access-fail@example.test'
+  len= 22  Growth/GrowthPrivacyDeliveryEvidenceTests.cs:203  [DoesNotContain]  needle='completion-notice-sent'
+  len= 20  Growth/GrowthProviderTransactionalMailSenderTests.cs:89  [DoesNotContain]  needle='subject@example.test'
+  len= 20  Growth/GrowthProviderTransactionalMailSenderTests.cs:119  [DoesNotContain]  needle='subject@example.test'
+  len=  1  Growth/GrowthSegmentServiceTests.cs:148  [DoesNotContain]  needle='@'
+  len= 23  Growth/GrowthTestSendBindingTests.cs:70  [DoesNotContain]  needle='stranger@somewhere.test'
+  len= 16  Growth/GrowthTestSendRateLimitTests.cs:137  [DoesNotContain]  needle='admin@venue.test'
+  len=  1  Growth/GrowthTestSendRateLimitTests.cs:138  [DoesNotContain]  needle='@'
+  len=  1  Growth/GrowthUnsubscribeHeaderGoldenTests.cs:217  [DoesNotContain]  needle='#'
+  len= 16  Growth/GrowthUnsubscribeHeaderGoldenTests.cs:431  [DoesNotContain]  needle='List-Unsubscribe'
+  len=  1  Growth/GrowthUnsubscribeHeaderGoldenTests.cs:534  [DoesNotContain]  needle='{'
+  len= 14  Growth/GrowthWebhookIngestionTests.cs:249  [DoesNotContain]  needle='secret.example'
+  len=  9  Kassa/Cov_SurfboardOnlineCronTests.cs:143  [DoesNotContain]  needle='ord_stale'
+  len= 10  Kassa/Cov_SurfboardOnlineCronTests.cs:211  [DoesNotContain]  needle='pay_shared'
+  len=  8  Kassa/Cov_SurfboardOnlineCronTests.cs:212  [DoesNotContain]  needle='pay_done'
+  len= 12  Kassa/Cov_SurfboardOnlineCronTests.cs:213  [DoesNotContain]  needle='pay_captured'
+  len= 10  Kassa/Cov_SurfboardOnlineCronTests.cs:214  [DoesNotContain]  needle='pay_linked'
+  len=  6  Kassa/DeliveryReceiptComplianceTests.cs:288  [DoesNotContain]  needle='125,00'
+  len= 15  Kassa/EscPosReceiptBuilderTests.cs:124  [DoesNotContain]  needle='Org.nr. Org.nr.'
+  len=  7  Kassa/EscPosReceiptBuilderTests.cs:125  [DoesNotContain]  needle='MVA MVA'
+  len=  5  Kassa/ReservationServiceTests.cs:137  [DoesNotContain]  needle='18:00'
+  len= 10  Kassa/ReservationServiceTests.cs:305  [DoesNotContain]  needle='Avbestill:'
+  len=  5  Kassa/ReservationServiceTests.cs:778  [DoesNotContain]  needle='19:30'
+  len=  5  Kassa/ReservationServiceTests.cs:796  [DoesNotContain]  needle='19:30'
+  len=  5  Kassa/ReservationServiceTests.cs:816  [DoesNotContain]  needle='18:00'
+  len=  4  Meals/MealsExportDeterminismTests.cs:55  [DoesNotContain]  needle='\\r\\n'
+  len=  7  Meals/MealsExportDeterminismTests.cs:79  [DoesNotContain]  needle=',12500,'
+  len=  9  Meals/MealsInvitationTokenServiceTests.cs:59  [DoesNotContain]  needle='mealsinv_'
+  len= 19  Meals/MealsStatementMemberReferenceTests.cs:116  [DoesNotContain]  needle='meals-user-employee'
+  len= 20  Meals/MealsStatementPeriodEpochTests.cs:106  [DoesNotContain]  needle='2026-07-31T23:30:00Z'
+  len= 14  Observability/OperationalNotificationPiiTests.cs:154  [DoesNotContain]  needle='secret.example'
+  len= 14  Observability/OperationalNotificationPiiTests.cs:177  [DoesNotContain]  needle='secret.example'
+  len= 12  Observability/OperationalNotificationPiiTests.cs:178  [DoesNotContain]  needle='User unknown'
+  len= 13  Observability/OperationalNotificationPiiTests.cs:222  [DoesNotContain]  needle='Kari Nordmann'
+  len= 13  Observability/OperationalNotificationPiiTests.cs:261  [DoesNotContain]  needle='Kari Nordmann'
+  len= 14  Observability/SensitiveDataRedactorTests.cs:65  [DoesNotContain]  needle='secret.example'
+  len= 12  Observability/SensitiveDataRedactorTests.cs:66  [DoesNotContain]  needle='User unknown'
+  len= 17  Observability/SensitiveDataRedactorTests.cs:253  [DoesNotContain]  needle='Hemmeligveien 42B'
+  len=  9  Observability/SensitiveDataRedactorTests.cs:254  [DoesNotContain]  needle='0155 Oslo'
+  len=  1  Services/ConfirmEmailCodeRetirementTests.cs:154  [DoesNotContain]  needle='@'
+  len=  5  Services/DocumentRendererFailureTests.cs:80  [DoesNotContain]  needle='code='
+  len=  1  Services/EmailConfirmationSendOutcomeTests.cs:125  [DoesNotContain]  needle='@'
+  len= 14  Services/EmailServiceRecipientRedactionTests.cs:219  [DoesNotContain]  needle='secret.example'
+  len= 12  Training/TrainingInspectorEvidencePackTests.cs:283  [DoesNotContain]  needle='expiryDate= '
+  len= 10  Tripletex/Pr26_TripletexRedactionAndResidualTests.cs:27  [DoesNotContain]  needle='SECRET-EMP'
+  len= 14  VippsCaptureJobTests.cs:83  [DoesNotContain]  needle='capture failed'
+  len=  1  Wire/ArbitraryAddressMailRateLimitWireTests.cs:105  [DoesNotContain]  needle='@'
+  len= 27  Wire/ArbitraryAddressMailRateLimitWireTests.cs:141  [DoesNotContain]  needle='probe-final@example.invalid'
+  len=  1  Wire/CompositionRootLimiterWireTests.cs:191  [DoesNotContain]  needle='@'
+  len=  1  Wire/EmailConfirmationFailureWireTests.cs:93  [DoesNotContain]  needle='@'
+  len= 44  Wire/EventsDietaryRunSheetWireTests.cs:69  [DoesNotContain]  needle='No dietary or allergen requirements recorded'
+  len= 23  Wire/EventsDietaryRunSheetWireTests.cs:98  [DoesNotContain]  needle='Nothing has been stated'
+  len= 19  Wire/EventsWireTests.cs:538  [DoesNotContain]  needle='wire-deposit-secret'
+  len=  1  Wire/GrowthConsentAdminWireTests.cs:190  [DoesNotContain]  needle='@'
+  len= 19  Wire/GrowthDispatchActorWireTests.cs:192  [DoesNotContain]  needle='growth.unattributed'
+  len=  1  Wire/GrowthOneClickUnsubscribeWireTests.cs:63  [DoesNotContain]  needle='@'
+  len= 19  Wire/GrowthOneClickUnsubscribeWireTests.cs:222  [DoesNotContain]  needle='growth_pref_session'
+  len=  1  Wire/GrowthPublicIntakeWireTests.cs:315  [DoesNotContain]  needle='@'
+  len=  6  Wire/InvalidModelStateWireTests.cs:183  [DoesNotContain]  needle='[none]'
+  len= 10  Wire/InvalidModelStateWireTests.cs:184  [DoesNotContain]  needle='[redacted]'
+  len= 18  Wire/InvalidModelStateWireTests.cs:200  [DoesNotContain]  needle='System.Collections'
+  len= 15  Wire/MealsAgreementWireTests.cs:173  [DoesNotContain]  needle='Idempotency-Key'
+  len= 12  Wire/MealsAgreementWireTests.cs:174  [DoesNotContain]  needle='request body'
+  len= 15  Wire/MealsWireTests.cs:89  [DoesNotContain]  needle='Idempotency-Key'
+  len= 12  Wire/MealsWireTests.cs:90  [DoesNotContain]  needle='request body'
+  len= 15  Wire/ModuleWireTests.cs:248  [DoesNotContain]  needle='EVENTS_DISABLED'
+  len= 61  Wire/TrainingWireTests.cs:699  [DoesNotContain]  needle='The If-Match header does not carry a valid resource revision.'
+  len= 12  Wire/WireContainmentTests.cs:65  [DoesNotContain]  needle='secrets.json'
+  len= 29  Wire/WireContractPinsTests.cs:145  [AssertFalse]  needle='Access-Control-Expose-Headers'
+  len= 10  Wire/WorkforceWireTests.cs:396  [DoesNotContain]  needle='workforce.'
+  len= 18  Workforce/AttendanceAdjustmentTests.cs:276  [DoesNotContain]  needle='SECRET-REASON-TEXT'
+  len= 22  Workforce/AttendanceAdjustmentTests.cs:277  [DoesNotContain]  needle='SECRET-CORRECTED-VALUE'
+  len= 12  Workforce/HoursExportTenantIsolationTests.cs:125  [DoesNotContain]  needle='Costa, Carla'
+  len= 10  Workforce/IdentityCodeRegisterTests.cs:276  [DoesNotContain]  needle='wf-person:'
+  len=  9  Workforce/PersonnelListProjectionTests.cs:278  [DoesNotContain]  needle='wf-person'
+  len=  5  Workforce/WorkforceNotificationTransportTests.cs:148  [DoesNotContain]  needle='09:00'
+  len=  5  Workforce/WorkforceNotificationTransportTests.cs:525  [DoesNotContain]  needle='09:00'
+  len= 17  Workforce/WorkforceSupplementWiringTests.cs:135  [DoesNotContain]  needle='shift-supplements'
+  len= 17  Workforce/WorkforceSupplementWiringTests.cs:270  [DoesNotContain]  needle='shift-supplements'
+
+########## Q1b  SHORT alphanumeric non-hex needles (len <= 12) ##########
+  len=  3  Events/EventsStateMachineTests.cs:233  needle='T13'
+        call: ("T13", permitted)
+  len=  5  Growth/GrowthAddressProtectorTests.cs:26  needle='guest'
+        call: ("guest", a.ToLowerInvariant())
+  len=  7  Growth/GrowthAddressProtectorTests.cs:27  needle='example'
+        call: ("example", a.ToLowerInvariant())
+  len=  9  Growth/GrowthAddressProtectorTests.cs:54  needle='roundtrip'
+        call: ("roundtrip", protectedAddress.EncryptedAddress)
+  len=  7  Growth/GrowthConsentTextAuthoringTests.cs:333  needle='Version'
+        call: ("Version", publishFields)
+  len=  2  Growth/GrowthConsentTextAuthoringTests.cs:334  needle='Id'
+        call: ("Id", publishFields)
+  len= 10  Growth/GrowthDeliveryHealthEndpointTests.cs:78  needle='LookupHmac'
+        call: ("LookupHmac", json)
+  len=  5  Kassa/DeliveryReceiptComplianceTests.cs:286  needle='IKKJE'
+        call: ("IKKJE", normal)
+  len=  8  Kassa/EscPosXZReportBuilderTests.cs:34  needle='Signatur'
+        call: ("Signatur", job)
+  len=  3  Margin/MarginMarketGeneralityTests.cs:114  needle='NOK'
+        call: ("NOK", string.Join("\n", CodeLinesFrom("// historically this defaulted to NOK\nvar x = 1;")), StringComparison.Ordinal)
+  len=  7  Modules/ModuleReachabilityGuardSelfTests.cs:251  needle='refused'
+        call: ("refused", blanked, StringComparison.Ordinal)
+  len= 10  Tripletex/Pr26_TripletexRedactionAndResidualTests.cs:26  needle='eyJhbGciOi'
+        call: ("eyJhbGciOi", redacted)
+  len=  6  Wire/GrowthPlatformSurfacesWireTests.cs:154  needle='stores'
+        call: ("stores", Path, StringComparison.Ordinal)
+  len=  4  Workforce/IdentityCodeRegisterTests.cs:277  needle='Kari'
+        call: ("Kari", audit.SemanticDeltaJson ?? string.Empty)
+  len=  4  Workforce/PersonnelListProjectionTests.cs:51  needle='Kari'
+        call: ("Kari", participant.ProtectedIdentityCodeRef)
+  len=  4  Workforce/PersonnelListProjectionTests.cs:277  needle='Kari'
+        call: ("Kari", audit.SemanticDeltaJson)
+  len=  5  Workforce/PosClockSurfaceTests.cs:483  needle='capab'
+        call: ("capab", p.Name.ToLowerInvariant())
+  len=  4  Workforce/ScheduleAuditLedgerTests.cs:52  needle='wage'
+        call: ("wage", e.SemanticDeltaJson, StringComparison.OrdinalIgnoreCase)
+  len=  7  Workforce/ScheduleAuditLedgerTests.cs:53  needle='contact'
+        call: ("contact", e.SemanticDeltaJson, StringComparison.OrdinalIgnoreCase)
+  len=  4  Workforce/ScheduleAuditLedgerTests.cs:79  needle='wage'
+        call: ("wage", o.PayloadJson, StringComparison.OrdinalIgnoreCase)
+  len= 12  Workforce/WorkforceLabourBandTests.cs:676  needle='StaffMembers'
+        call: ("StaffMembers", propertyNames)
+  len=  6  Workforce/WorkforceNotificationTransportTests.cs:526  needle='Ingrid'
+        call: ("Ingrid", sent.Html)
+  len=  3  Workforce/WorkforceRateAuthoringTests.cs:538  needle='NOK'
+        call: ("NOK", audited.SemanticDeltaJson)
+
+########## Q2  predicate-form (lambda) assertions ##########
+-- predicate-form sites WITH an embedded literal substring search --
+  Events/EventsOutboxDispatchTests.cs:102  Contains('Smtp'), Contains('Email'), Contains('Mail')
+        call: (parameterTypes, t => t.Name.Contains("Smtp") || t.Name.Contains("Email") || t.Name.Contains("Mail"))
+  Events/EventsRunSheetDietaryTests.cs:52  Contains('no dietary')
+        call: (dietary, i => i.Body.Contains("no dietary", StringComparison.OrdinalIgnoreCase))
+  Events/EventsRunSheetDietaryTests.cs:53  Contains('none recorded')
+        call: (dietary, i => i.Body.Contains("none recorded", StringComparison.OrdinalIgnoreCase))
+  Events/EventsRunSheetDietaryTests.cs:132  Contains('haggled')
+        call: (view.Items, i => i.Body.Contains("haggled", StringComparison.Ordinal))
+  Events/EventsRunSheetDietaryTests.cs:211  Contains('Nothing has been stated')
+        call: (Dietary(view), i => i.Body.Contains("Nothing has been stated", StringComparison.OrdinalIgnoreCase))
+  Events/EventsRunSheetDietaryTests.cs:302  Contains('shellfish')
+        call: (after.Items, i => i.Body.Contains("shellfish", StringComparison.OrdinalIgnoreCase))
+  Events/EventsRunSheetLifecycleTests.cs:71  Contains('No dietary or allergen requirements recorded')
+        call: (view.Items, i => i.Body.Contains("No dietary or allergen requirements recorded", StringComparison.OrdinalIgnoreCase))
+  Growth/GrowthMigrationLineageTests.cs:153  Contains('Address'), Contains('Email')
+        call: (columns, c => c.Contains("Address", StringComparison.OrdinalIgnoreCase) || c.Contains("Email", StringComparison.OrdinalIgnoreCase))
+  Growth/GrowthUnsubscribeHeaderGoldenTests.cs:431  StartsWith('List-Unsubscribe')
+        call: (email.Captured!.Headers, h => h.Field.StartsWith("List-Unsubscribe", StringComparison.OrdinalIgnoreCase))
+  Growth/GrowthUnsubscribeHeaderGoldenTests.cs:493  Contains('plain'), Contains('text')
+        call: (names, n => n.Contains("plain", StringComparison.OrdinalIgnoreCase) || n.Contains("text", StringComparison.OrdinalIgnoreCase))
+  Growth/GrowthUnsubscribeHeaderGoldenTests.cs:499  Contains('header')
+        call: ( typeof(IEmailService).GetMethods().SelectMany(m => m.GetParameters()).Select(p => p.Name!), n => n.Contains("header", StringComparison.OrdinalIgnoreCase))
+  Training/TrainingInspectorEvidencePackTests.cs:329  Contains('Actor'), Contains('RecordedBy')
+        call: (completionProperties, name => name.Contains("Actor", StringComparison.Ordinal) || name.Contains("RecordedBy", StringComparison.Ordinal))
+  Wire/EventsDietaryRunSheetWireTests.cs:69  Contains('No dietary or allergen requirements recorded')
+        call: (beforeItems, i => i.Body.Contains("No dietary or allergen requirements recorded", StringComparison.OrdinalIgnoreCase))
+  Wire/EventsDietaryRunSheetWireTests.cs:87  Contains('EpiPen')
+        call: (Items(stale.Json), i => i.Body.Contains("EpiPen", StringComparison.Ordinal))
+  Wire/EventsDietaryRunSheetWireTests.cs:98  Contains('Nothing has been stated')
+        call: (Dietary(reissuedItems), i => i.Body.Contains("Nothing has been stated", StringComparison.OrdinalIgnoreCase))
+  Wire/GrowthPrivacyNoticeDeliveryWireTests.cs:165  IndexOf('Delivered'), IndexOf('Received'), IndexOf('Read')
+        call: ( Enum.GetNames(typeof(GrowthPrivacyNoticeDelivery)), name => name.IndexOf("Delivered", StringComparison.OrdinalIgnoreCase) >= 0 || name.IndexOf("Received", StringComparison.OrdinalIgnoreCase) >= 0 || name.IndexOf("Read", StringComparison.O
+  Wire/WireContainmentTests.cs:65  EndsWith('secrets.json')
+        call: (jsonFiles, f => f.Path != null && f.Path.EndsWith("secrets.json", StringComparison.OrdinalIgnoreCase))
+  Workforce/WorkforceW4MigrationLineageTests.cs:387  Contains('Round')
+        call: (columns, c => c.Contains("Round", StringComparison.OrdinalIgnoreCase))
+  Workforce/WorkforceW4MigrationLineageTests.cs:388  Contains('Rounded')
+        call: (columns, c => c.Contains("Rounded", StringComparison.OrdinalIgnoreCase))
+-- predicate-form sites with no embedded literal: 101 (listed below) --
+  Auth/ActorClaimGroundTruthTests.cs:46
+  Auth/ActorClaimGroundTruthTests.cs:47
+  Auth/ActorClaimGroundTruthTests.cs:48
+  Events/EventsAmendmentTests.cs:212
+  Events/EventsEndToEndJourneys.cs:283
+  Events/EventsOutboxDispatchTests.cs:101
+  Events/EventsRunSheetDietaryTests.cs:46
+  Events/EventsRunSheetDietaryTests.cs:212
+  Events/EventsRunSheetLifecycleTests.cs:51
+  Growth/GrowthDispatchResumeTests.cs:225
+  Growth/GrowthNewsletterLifecycleTests.cs:290
+  Growth/GrowthTenantIsolationTests.cs:94
+  Growth/GrowthTenantIsolationTests.cs:335
+  Growth/GrowthTenantIsolationTests.cs:439
+  Growth/GrowthTenantIsolationTests.cs:445
+  Kassa/Cov_SurfboardOnlineCronTests.cs:141
+  Kassa/Cov_TripletexPosExportTests.cs:67
+  Kassa/Cov_TripletexPosExportTests.cs:105
+  Kassa/Cov_TripletexPosExportTests.cs:140
+  Kassa/Fault_CrashMidSplit_LinesExactlyOnce.cs:99
+  Kassa/Fault_CrashMidSplit_LinesExactlyOnce.cs:130
+  Kassa/KitchenBoardServiceTests.cs:85
+  Kassa/LoopR1_scen3_OpenPriceLineProfiledG.cs:82
+  Kassa/OpenCheckServiceTests.cs:427
+  Kassa/OpenPriceVatContextTests.cs:43
+  Kassa/ReservationServiceTests.cs:105
+  Margin/MarginIngredientContractTests.cs:88
+  Margin/MarginIngredientContractTests.cs:195
+  Margin/MarginJourneyE2ETests.cs:133
+  Margin/MarginJourneyE2ETests.cs:427
+  Margin/MarginJourneyE2ETests.cs:603
+  Margin/MarginLiveJourneyTests.cs:142
+  Margin/MarginLiveJourneyTests.cs:170
+  Margin/MarginMenuMarginPricingTests.cs:263
+  Margin/MarginMenuMarginPricingTests.cs:264
+  Margin/MarginMenuMarginPricingTests.cs:328
+  Margin/MarginMenuMarginPricingTests.cs:329
+  Margin/MarginPriceImpactRankingTests.cs:180
+  Margin/MarginPriceImportServiceTests.cs:543
+  Margin/MarginSalesProjectorTests.cs:101
+  Margin/MarginStatementLifecycleTests.cs:241
+  Margin/MarginSupplierContractTests.cs:81
+  Margin/MarginTenantIsolationSweepTests.cs:694
+  Margin/MarginTenantIsolationSweepTests.cs:696
+  Margin/MarginTenantIsolationSweepTests.cs:702
+  Margin/MarginTenantIsolationSweepTests.cs:703
+  Margin/MarginW3HousekeepingTests.cs:50
+  Meals/MealsFundingPathHardeningTests.cs:68
+  Meals/MealsKredittsalgJournalTests.cs:52
+  Meals/MealsKredittsalgJournalTests.cs:75
+  Meals/MealsSaftPaymentMediumTests.cs:45
+  Modules/ModuleActorGuardBehaviourTests.cs:132
+  Training/TrainingAssignmentServiceTests.cs:96
+  Training/TrainingCertificateExpiryProjectionTests.cs:167
+  Training/TrainingEvidenceReadTests.cs:216
+  Training/TrainingInspectorEvidencePackTests.cs:246
+  Training/TrainingTenantIsolationTests.cs:296
+  Training/TrainingTenantIsolationTests.cs:359
+  Training/TrainingTenantIsolationTests.cs:363
+  Training/TrainingTenantIsolationTests.cs:373
+  Training/TrainingTenantIsolationTests.cs:377
+  Training/TrainingTenantIsolationTests.cs:387
+  Training/TrainingTenantIsolationTests.cs:391
+  Training/TrainingTenantIsolationTests.cs:401
+  Training/TrainingTenantIsolationTests.cs:405
+  Training/TrainingTenantIsolationTests.cs:417
+  Training/TrainingTenantIsolationTests.cs:421
+  Training/TrainingTenantIsolationTests.cs:814
+  Tripletex/Triage_tripletexexport_OnlineIntermediaryE2eTests.cs:52
+  Tripletex/TripletexOnboardingTests.cs:45
+  Tripletex/TripletexOnboardingTests.cs:46
+  Tripletex/TripletexOnboardingTests.cs:206
+  Tripletex/TripletexOnboardingTests.cs:207
+  Tripletex/TripletexPayoutVoucherTests.cs:61
+  Tripletex/TripletexPosE2eTests.cs:99
+  Wire/CompositionRootLimiterWireTests.cs:258
+  Wire/CompositionRootLimiterWireTests.cs:259
+  Wire/CompositionRootLimiterWireTests.cs:285
+  Wire/EmailConfirmationFailureWireTests.cs:138
+  Wire/EventsWireTests.cs:121
+  Wire/ModuleCallerIdentityWireTests.cs:63
+  Wire/TrainingWireTests.cs:212
+  Wire/TrainingWireTests.cs:996
+  Wire/WireContainmentTests.cs:182
+  Workforce/HoursExportTests.cs:308
+  Workforce/HoursExportTests.cs:348
+  Workforce/HoursExportTests.cs:638
+  Workforce/HoursExportTests.cs:802
+  Workforce/HoursExportTests.cs:814
+  Workforce/HoursExportTests.cs:815
+  Workforce/PosClockSurfaceTests.cs:488
+  Workforce/SchedulePublishPreconditionSignalTests.cs:222
+  Workforce/ShiftExchangeTenantIsolationTests.cs:74
+  Workforce/WorkforceModuleGateTests.cs:193
+  Workforce/WorkforceModuleGateTests.cs:241
+  Workforce/WorkforceRequestInboxUnionTests.cs:117
+  Workforce/WorkforceScheduleConvergenceTests.cs:64
+  Workforce/WorkforceScheduleCostTests.cs:683
+  Workforce/WorkforceShiftExchangeTests.cs:76
+  Workforce/WorkforceShiftExchangeTests.cs:364
+  Workforce/WorkforceShiftExchangeTests.cs:516
+
+########## Q3  Assert.Empty / Assert.Null spans carrying a literal substring search ##########
+  [AssertEmpty] Wire/GrowthConsentAdminWireTests.cs:159  EndsWith('contactPointId=')
+        call: (_wire.Logs.Matching(AdminControllerCategory, PiiAuditFragment) .Where(e => e.Message.EndsWith("contactPointId=" + refusedContact.ContactPointId, StringComparison.Ordinal)))
+  [AssertEmpty] Workforce/WorkforceInvitationTests.cs:439  Contains('invitation.claim')
+        call: (await read.WorkforceIdempotencyRecords .Where(r => r.Scope.Contains("invitation.claim")).ToListAsync())
+-- Assert.False / bare !x.Contains spans carrying a literal substring search --
+  [AssertFalse] Margin/MarginSalesSeamContractTests.cs:230  EndsWith('Minor')
+  [AssertFalse] Wire/WireContractPinsTests.cs:145  Contains('Access-Control-Expose-Headers')
+
+########## Q4  is 'Guid.NewGuid() = 900 in 277 files' reproducible? ##########
+  occurrences, exact text 'Guid.NewGuid()': occurrences=966  files=287  matching-lines=940
+  occurrences, whitespace-tolerant: occurrences=966  files=287  matching-lines=940
+  occurrences, whitespace-tolerant, comments masked: occurrences=966  files=287  matching-lines=940
+  occurrences, bare 'NewGuid()' whatever the receiver: occurrences=966  files=287  matching-lines=940
+  per-form raw span counts (this extractor):
+    AssertEmpty: 361
+    AssertFalse: 967
+    AssertNull: 608
+    BareNotContains: 66
+    DoesNotContain: 439
+    DoesNotMatch: 1

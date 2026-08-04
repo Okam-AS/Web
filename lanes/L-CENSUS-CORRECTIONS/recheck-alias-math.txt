@@ -1,0 +1,58 @@
+=== (C) can the needle overlap itself? ===
+  '250': proper prefixes that are also suffixes -> NONE  => two occurrences must be disjoint
+  '2000': proper prefixes that are also suffixes -> NONE  => two occurrences must be disjoint
+
+=== (A) every length-3 window, per window ===
+  group1 offset0: P=2.441e-04
+  group1 offset1: P=2.441e-04
+  group1 offset2: P=2.441e-04
+  group1 offset3: P=2.441e-04
+  group1 offset4: P=2.441e-04
+  group1 offset5: P=2.441e-04
+  group2 offset0: P=2.441e-04
+  group2 offset1: P=2.441e-04
+  group3 offset0: IMPOSSIBLE  <- pos0 cannot be '2' (alphabet 4)
+  group3 offset1: P=2.441e-04
+  group4 offset0: IMPOSSIBLE  <- pos0 cannot be '2' (alphabet 89ab)
+  group4 offset1: P=2.441e-04
+  group5 offset0: P=2.441e-04
+  group5 offset1: P=2.441e-04
+  group5 offset2: P=2.441e-04
+  group5 offset3: P=2.441e-04
+  group5 offset4: P=2.441e-04
+  group5 offset5: P=2.441e-04
+  group5 offset6: P=2.441e-04
+  group5 offset7: P=2.441e-04
+  group5 offset8: P=2.441e-04
+  group5 offset9: P=2.441e-04
+  windows total = 22, impossible = 2, live = 20
+
+=== (B) decomposition of the 22/16^3 overstatement ===
+  naive  22/16^3            = 5.371094e-03
+  exact expected count      = 4.882812e-03   (= 20/16^3 = 4.882812e-03)
+  exact P(at least one)     = 4.873107e-03
+  naive vs exact P          : overstates by 10.22%
+  impossible-window share   : 10.00%  (22 -> 20 windows)
+  multiplicity share        : 0.20%  (E[count] -> P, disjoint repeats only)
+
+=== (D) exact probabilities against one v4 GUID ===
+  "250"              P = 4.873107e-03  = 1 in 205.2
+  "2000"             P = 2.288644e-04  = 1 in 4,369.4
+  "250" OR "2000"    P = 5.101131e-03  = 1 in 196.0
+
+=== (D2) direction check against the briefed figures ===
+  brief 1 in 130         rate 7.692308e-03 vs exact 5.101131e-03 -> OVERSTATES the failure rate (x1.508)
+  brief 1 in 180         rate 5.555556e-03 vs exact 5.101131e-03 -> OVERSTATES the failure rate (x1.089)
+  measured 1 in 197.6    rate 5.060729e-03 vs exact 5.101131e-03 -> UNDERSTATES (x0.992)
+
+=== (E) row 6: needle is a 6-digit decimal code, haystack holds a GUID ===
+  six-char in-group windows: group of 8 -> 3, group of 4 -> 0, group of 4 -> 0, group of 4 -> 0, group of 12 -> 7  => 10 total
+  windows touching a pinned/constrained nibble: NONE
+  census figure   0.596/900000        = 6.622222e-07 = 1 in 1,510,067
+  correct figure  10 * 16^-6          = 5.960464e-07 = 1 in 1,677,722
+  census overstates by 11.10%
+  identity check: (10/16)^6 * 10^-6 * 10 = 5.960464e-07  (per-window: all-decimal 0.0596 x 10^-6)
+  exact DP for code 123456: P = 5.960464e-07 = 1 in 1,677,722
+  exact DP for code 111111: P = 5.662441e-07 = 1 in 1,766,023
+  exact DP for code 100000: P = 5.960464e-07 = 1 in 1,677,722
+  exact DP for code 999999: P = 5.662441e-07 = 1 in 1,766,023
