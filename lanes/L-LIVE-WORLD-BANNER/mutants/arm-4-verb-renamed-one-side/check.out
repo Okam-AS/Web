@@ -1,0 +1,14 @@
+live-world banner check
+  script : /Users/svendaneel/okam/Web-modules/lanes/L-LIVE-WORLD-BANNER/mutants/arm-4-verb-renamed-one-side/live-world.sh
+  reset  : /Users/svendaneel/okam/Web-modules/lanes/L-LIVE-WORLD-BANNER/mutants/arm-4-verb-renamed-one-side/live-world-reset.sh
+
+  PASS  R0  header 135 comment lines; banner heredoc lines 688-758
+  PASS  R7  live-world-reset.sh exists, so the text is required to know it (R1-R6 below)
+  PASS  R1  the header names live-world-reset.sh
+  PASS  R2  the closing banner names live-world-reset.sh
+  PASS  R3  the banner never tells the reader to run live-world.sh again
+  FAIL  R4  live-world.sh calls live-world-reset.sh with verb(s) it does not implement: [revert]; implemented: [snapshot, restore, verify, forget]
+  PASS  R5  every variable handed to live-world-reset.sh [SQL_CONTAINER, SQL_PORT, DB_NAME, API_PORT] is one it reads
+  FAIL  R6  the banner offers [snapshot, revert]; live-world-reset.sh advertises `restore` as the between-journeys step and the banner must print it
+
+FAILED 2/8 — live-world.sh and live-world-reset.sh contradict each other.

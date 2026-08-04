@@ -1,0 +1,5 @@
+TEXT-ONLY PROOF  test/e2e/scripts/live-world.sh   HEAD 4b5c5c2 -> working tree
+executable lines at HEAD: 352   in the working tree: 352
+IDENTICAL: not one executable line differs. Every changed line is a comment or
+heredoc body, i.e. text the script prints or a reader reads. No behaviour changed.
+raw line changes across the whole file: 60

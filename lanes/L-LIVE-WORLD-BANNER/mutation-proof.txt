@@ -1,0 +1,71 @@
+MUTATION PROOF  test/e2e/scripts/live-world-banner-check.js
+repo /Users/svendaneel/okam/Web-modules  HEAD 4b5c5c2
+failure sets are matched EXACTLY: an arm that reds on more rules than named is unexpected too.
+
+ARM 0-head-as-landed  live-world.sh exactly as it stood at HEAD (4b5c5c2); the reset already existed
+    exit 1 (expected 1)   verdict: as expected
+    red    : R1, R2, R3, R6
+    expected: R1, R2, R3, R6
+    green  : R0, R4, R5, R7
+
+ARM 1-corrected  the corrected live-world.sh from the working tree
+    exit 0 (expected 0)   verdict: as expected
+    red    : (none)
+    expected: (none -- must be all green)
+    green  : R0, R1, R2, R3, R4, R5, R6, R7
+
+ARM 2-banner-reverted  header corrected, CLOSING BANNER reverted to the denial
+    exit 1 (expected 1)   verdict: as expected
+    red    : R2, R3, R6
+    expected: R2, R3, R6
+    green  : R0, R1, R4, R5, R7
+
+ARM 3-header-reverted  banner corrected, HEADER reverted to the denial
+    exit 1 (expected 1)   verdict: as expected
+    red    : R1
+    expected: R1
+    green  : R0, R2, R3, R4, R5, R6, R7
+
+ARM 4-verb-renamed-one-side  the text calls `revert`; the reset still implements `restore`
+    exit 1 (expected 1)   verdict: as expected
+    red    : R4, R6
+    expected: R4, R6
+    green  : R0, R1, R2, R3, R5, R7
+
+ARM 5-envvar-renamed  the banner recipe passes SQL_HOST, a name the reset never reads
+    exit 1 (expected 1)   verdict: as expected
+    red    : R5
+    expected: R5
+    green  : R0, R1, R2, R3, R4, R6, R7
+
+ARM 6-reset-deleted  the banner still prints the recipe; live-world-reset.sh is GONE
+    exit 1 (expected 1)   verdict: as expected
+    red    : R7
+    expected: R7
+    green  : R0
+
+ARM 7-banner-removed  the closing heredoc is gone: the check must fail CLOSED
+    exit 1 (expected 1)   verdict: as expected
+    red    : R0
+    expected: R0
+    green  : (none)
+
+ARM 8-consistently-absent  HEAD's text (never names the reset) and NO reset script -- consistent
+    exit 0 (expected 0)   verdict: as expected
+    red    : (none)
+    expected: (none -- must be all green)
+    green  : R0, R7
+
+ARM 9-verb-renamed-both  `restore` renamed to `revert` in BOTH files -- a clean rename
+    exit 0 (expected 0)   verdict: as expected
+    red    : (none)
+    expected: (none -- must be all green)
+    green  : R0, R1, R2, R3, R4, R5, R6, R7
+
+ARM 10-denial-paraphrased  the denial rewritten in ENTIRELY different words, naming neither script
+    exit 1 (expected 1)   verdict: as expected
+    red    : R2, R6
+    expected: R2, R6
+    green  : R0, R1, R3, R4, R5, R7
+
+11 arms, 11 as expected, 0 unexpected

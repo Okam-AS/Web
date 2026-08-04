@@ -108,12 +108,23 @@
 #
 #   OKAM_API_REPO=/path/to/OkamAPI SQL_CONTAINER=my-sql SQL_PORT=15433 test/e2e/scripts/live-world.sh
 #
-# then, in another terminal, what it prints — ONE journey per world, for the reason the closing banner
-# gives in full: a live run has no `/__fixture/reset`, and the two workforce journeys each consume the
-# current week.
+# then, in another terminal, what it prints — ONE journey per RUN, with a RESET between them. NOT one
+# world per journey: `test/e2e/scripts/live-world-reset.sh` images this world once and puts it back in
+# about nine seconds WITHOUT replaying the migration chain, so the second journey costs a restore
+# rather than the whole rebuild. The closing banner prints these lines with this world's values in them.
+#
+#   test/e2e/scripts/live-world-reset.sh snapshot     # once, on the world this script just seeded
 #
 #   E2E_API_BASE_URL=http://127.0.0.1:5951 E2E_WEB_PORT=3951 \
 #       npm run test:e2e -- test/e2e/journeys/workforce-flag-lever.spec.js
+#
+#   test/e2e/scripts/live-world-reset.sh restore      # ~9s, no migration replay, then the next journey
+#
+# This script's banner USED TO SAY a live world has no reset and that each journey needs its own — it
+# printed two rebuilds for a pair a nine-second restore separates. That was true when it was written
+# and was repealed by `live-world-reset.sh` (337f9bf) three days later. It is corrected here rather
+# than only in the new script's own header because THIS is the file an operator reads at the moment of
+# decision, and a stale rule in it is read as the rule.
 #
 # Those two variables are enough, and that is the point: once the world is healthy this script writes
 # `artifacts/world/live/<host>-<port>.json` naming the checkout it built from and the process it
@@ -707,20 +718,35 @@ stamp wins and the artifact says which declaration it overrode. Inspect it with:
 
     node test/e2e/support/world-stamp.js show $API_BASE
 
-ONE, and the file path is not a convenience. In fixture mode every journey gets a fresh backend from
-\`POST /__fixture/reset\`; a live world has no such thing, so the journeys share one database in the
-order Playwright runs them. \`workforce-flag-lever\` and \`workforce-schedule-publish\` each CONSUME the
-current week -- both create the draft, both publish it -- so whichever runs second finds a week that
-already has a plan and no "Opprett utkast" to press. They are not flaky together; they are
-incompatible, and each needs its own world:
+ONE PER RUN, AND A RESET BETWEEN THEM -- NOT ONE WORLD PER JOURNEY. In fixture mode every journey gets
+a fresh backend from \`POST /__fixture/reset\`; live mode has nothing of the kind INSIDE THE HARNESS, so
+\`@live\` journeys selected together run in file order against this one database and inherit each
+other's writes. What actually reds is the FLAG, not the week: \`workforce-schedule-publish\` leaves a
+\`workforce.publication\` override behind, and \`workforce-flag-lever\` opens by asserting that badge
+reads "Av". The week alone does NOT red -- once a revision is published the draft view resolves none,
+so the second journey still finds "Ingen plan" and quietly authors Revisjon 2. That is worse than a
+failure, not better: it passes while proving less than its own header claims.
 
-    test/e2e/scripts/live-world.sh  &&  E2E_API_BUILD="$API_BUILD" E2E_API_BASE_URL=$API_BASE E2E_WEB_PORT=$WEB_PORT \\
-        npm run test:e2e -- test/e2e/journeys/workforce-flag-lever.spec.js
-    test/e2e/scripts/live-world.sh  &&  E2E_API_BUILD="$API_BUILD" E2E_API_BASE_URL=$API_BASE E2E_WEB_PORT=$WEB_PORT \\
-        npm run test:e2e -- test/e2e/journeys/workforce-schedule-publish.spec.js
+THE ANSWER IS A RESTORE, NOT A SECOND WORLD. Take the image now, while nothing has run against it:
 
-(\`events-deposit-precondition\` is the exception: it removes the override it sets, so it leaves the
-world as it found it and can share one with either of the others, or be re-run against a used one.)
+    SQL_CONTAINER=$SQL_CONTAINER SQL_PORT=$SQL_PORT DB_NAME=$DB_NAME API_PORT=$API_PORT \\
+        test/e2e/scripts/live-world-reset.sh snapshot
+
+and put the world back between journeys -- about nine seconds, and NOT the $APPLIED-migration replay
+this script just spent:
+
+    SQL_CONTAINER=$SQL_CONTAINER SQL_PORT=$SQL_PORT DB_NAME=$DB_NAME API_PORT=$API_PORT \\
+        test/e2e/scripts/live-world-reset.sh restore
+
+It reads the same variable names with the same defaults this script does, so anything you overrode
+here you must pass there too. It refuses to image a world a journey has already used; every restore
+re-checks that all $TRIGGERS append-only triggers came back ENABLED with the bodies the image carried
+(C1), and that the API is serving the restored catalog, before it returns. Take the snapshot BEFORE
+the first journey: afterwards there is nothing clean left to image and the chain does have to be
+replayed.
+
+(\`events-deposit-precondition\` removes the override it sets, so it leaves the world as it found it and
+can run either side of a restore, or be re-run against a used one.)
 
 Artifacts land in artifacts/journeys/ with "backend": "live", this API's origin on "apiBaseUrl" and
 "backendBuild" naming the build above -- and support/journey.js FAILS a live run in which the browser

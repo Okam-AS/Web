@@ -1,0 +1,225 @@
+{
+  "head": "4b5c5c2",
+  "arms": [
+    {
+      "arm": "0-head-as-landed",
+      "what": "live-world.sh exactly as it stood at HEAD (4b5c5c2); the reset already existed",
+      "exit": 1,
+      "expected_exit": 1,
+      "failed": [
+        "R1",
+        "R2",
+        "R3",
+        "R6"
+      ],
+      "expected_fail": [
+        "R1",
+        "R2",
+        "R3",
+        "R6"
+      ],
+      "passed": [
+        "R0",
+        "R4",
+        "R5",
+        "R7"
+      ],
+      "verdict": "as expected"
+    },
+    {
+      "arm": "1-corrected",
+      "what": "the corrected live-world.sh from the working tree",
+      "exit": 0,
+      "expected_exit": 0,
+      "failed": [],
+      "expected_fail": [],
+      "passed": [
+        "R0",
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5",
+        "R6",
+        "R7"
+      ],
+      "verdict": "as expected"
+    },
+    {
+      "arm": "2-banner-reverted",
+      "what": "header corrected, CLOSING BANNER reverted to the denial",
+      "exit": 1,
+      "expected_exit": 1,
+      "failed": [
+        "R2",
+        "R3",
+        "R6"
+      ],
+      "expected_fail": [
+        "R2",
+        "R3",
+        "R6"
+      ],
+      "passed": [
+        "R0",
+        "R1",
+        "R4",
+        "R5",
+        "R7"
+      ],
+      "verdict": "as expected"
+    },
+    {
+      "arm": "3-header-reverted",
+      "what": "banner corrected, HEADER reverted to the denial",
+      "exit": 1,
+      "expected_exit": 1,
+      "failed": [
+        "R1"
+      ],
+      "expected_fail": [
+        "R1"
+      ],
+      "passed": [
+        "R0",
+        "R2",
+        "R3",
+        "R4",
+        "R5",
+        "R6",
+        "R7"
+      ],
+      "verdict": "as expected"
+    },
+    {
+      "arm": "4-verb-renamed-one-side",
+      "what": "the text calls `revert`; the reset still implements `restore`",
+      "exit": 1,
+      "expected_exit": 1,
+      "failed": [
+        "R4",
+        "R6"
+      ],
+      "expected_fail": [
+        "R4",
+        "R6"
+      ],
+      "passed": [
+        "R0",
+        "R1",
+        "R2",
+        "R3",
+        "R5",
+        "R7"
+      ],
+      "verdict": "as expected"
+    },
+    {
+      "arm": "5-envvar-renamed",
+      "what": "the banner recipe passes SQL_HOST, a name the reset never reads",
+      "exit": 1,
+      "expected_exit": 1,
+      "failed": [
+        "R5"
+      ],
+      "expected_fail": [
+        "R5"
+      ],
+      "passed": [
+        "R0",
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R6",
+        "R7"
+      ],
+      "verdict": "as expected"
+    },
+    {
+      "arm": "6-reset-deleted",
+      "what": "the banner still prints the recipe; live-world-reset.sh is GONE",
+      "exit": 1,
+      "expected_exit": 1,
+      "failed": [
+        "R7"
+      ],
+      "expected_fail": [
+        "R7"
+      ],
+      "passed": [
+        "R0"
+      ],
+      "verdict": "as expected"
+    },
+    {
+      "arm": "7-banner-removed",
+      "what": "the closing heredoc is gone: the check must fail CLOSED",
+      "exit": 1,
+      "expected_exit": 1,
+      "failed": [
+        "R0"
+      ],
+      "expected_fail": [
+        "R0"
+      ],
+      "passed": [],
+      "verdict": "as expected"
+    },
+    {
+      "arm": "8-consistently-absent",
+      "what": "HEAD's text (never names the reset) and NO reset script -- consistent",
+      "exit": 0,
+      "expected_exit": 0,
+      "failed": [],
+      "expected_fail": [],
+      "passed": [
+        "R0",
+        "R7"
+      ],
+      "verdict": "as expected"
+    },
+    {
+      "arm": "9-verb-renamed-both",
+      "what": "`restore` renamed to `revert` in BOTH files -- a clean rename",
+      "exit": 0,
+      "expected_exit": 0,
+      "failed": [],
+      "expected_fail": [],
+      "passed": [
+        "R0",
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5",
+        "R6",
+        "R7"
+      ],
+      "verdict": "as expected"
+    },
+    {
+      "arm": "10-denial-paraphrased",
+      "what": "the denial rewritten in ENTIRELY different words, naming neither script",
+      "exit": 1,
+      "expected_exit": 1,
+      "failed": [
+        "R2",
+        "R6"
+      ],
+      "expected_fail": [
+        "R2",
+        "R6"
+      ],
+      "passed": [
+        "R0",
+        "R1",
+        "R3",
+        "R4",
+        "R5",
+        "R7"
+      ],
+      "verdict": "as expected"
+    }
+  ]
+}

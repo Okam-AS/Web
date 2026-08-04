@@ -1,0 +1,14 @@
+live-world banner check
+  script : /Users/svendaneel/okam/Web-modules/lanes/L-LIVE-WORLD-BANNER/mutants/arm-0-head-as-landed/live-world.sh
+  reset  : /Users/svendaneel/okam/Web-modules/lanes/L-LIVE-WORLD-BANNER/mutants/arm-0-head-as-landed/live-world-reset.sh
+
+  PASS  R0  header 124 comment lines; banner heredoc lines 677-732
+  PASS  R7  live-world-reset.sh exists, so the text is required to know it (R1-R6 below)
+  FAIL  R1  the header of live-world.sh never names live-world-reset.sh, which exists — this is the shape that told a reader a live world cannot be reset
+  FAIL  R2  the CLOSING BANNER — the last text on the terminal — never names live-world-reset.sh, which exists
+  FAIL  R3  the banner recommends rebuilding the world 2 time(s): line(s) 717, 719
+  PASS  R4  live-world.sh names verb(s) []; live-world-reset.sh implements [snapshot, restore, verify, forget]
+  PASS  R5  every variable handed to live-world-reset.sh [none] is one it reads
+  FAIL  R6  the banner offers [no invocation at all]; live-world-reset.sh advertises `restore` as the between-journeys step and the banner must print it
+
+FAILED 4/8 — live-world.sh and live-world-reset.sh contradict each other.
