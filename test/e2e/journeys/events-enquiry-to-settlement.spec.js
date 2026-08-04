@@ -54,6 +54,44 @@
 // HERE is that the whole journey reaches a browser, that every screen in it exists and connects, and
 // that the refusal lands where a guest can read it. Those are different claims and neither replaces
 // the other.
+//
+// ---- THE TWO WAYS THIS FILE COULD ONLY EVER BE RUN ONCE ---------------------------------------
+//
+// Both were found by `L-LIVE-WORLD-DISCOVER` from outside its own subject, and neither was visible
+// as a failure, which is exactly why they stood.
+//
+// A WRITTEN-DOWN EXPIRY IS NOT A PASSING ASSERTION, IT IS A COUNTDOWN. This file used to draft its
+// offer with `expiryDay: '2026-11-30'`. The send preflight refuses a version whose expiry is not in
+// the future — `test/e2e/fixture/events.js`, «The proposal expiry must be in the future», and
+// `EventsProposalService` refuses it the same way — so on 30 November 2026 this journey turns red
+// EVERYWHERE, in one step, on a day nobody changed anything. The first instinct will be to hunt a
+// regression in the Events module, and there will not be one to find: the only thing that moved is
+// the calendar. A date literal in a test is not evidence that something works, it is a promise that
+// it will stop. The expiry and the event date are therefore both computed from the run's own clock,
+// which is the same thing an operator does — nobody types a date that has already gone.
+//
+// A CONSTANT CONTACT NAME MAKES THE WALK A FIXTURE TEST WEARING A JOURNEY'S NAME. Four steps below
+// find this booking's pipeline row by the contact name the guest typed, and that name used to be the
+// constant «Nina Nordmann». Against a freshly reset fixture that locates exactly one row and the
+// journey passes. Against any world that KEEPS what the previous run wrote — which is every real
+// world — the second run creates a second row with the same name, `toHaveCount(1)` fails, and if it
+// did not, the walk would go on against whichever of the two rows Playwright happened to pick. So
+// the name, the address, the occasion and the invoice number all carry a per-run tag now.
+//
+// THE SHAPE IS THE SIBLING'S, DELIBERATELY. `events-guest-proposal.spec.js` solved this first and
+// this file copies its `RUN` token and its `daysFromNow` helper spelling for spelling, because two
+// journeys that tag their subjects differently is the same predicate collision this estate keeps
+// paying for, wearing test clothes. `test/journey-rerunnability.test.js` holds both files to it.
+//
+// ---- WHAT STILL STOPS THIS JOURNEY FROM RUNNING LIVE ------------------------------------------
+//
+// Not the two above, and this file does not claim otherwise. `STORE` below is still
+// `world.STORE_ID` — the FIXTURE's store 42 — and the tag is still `@fixture`, so live mode filters
+// this walk out before either fault could matter. The sibling could discover its venue because it
+// signs in FIRST; this one cannot without reordering itself, because its opening move is a public
+// enquiry sent BEFORE anybody signs in, and that ordering is the finding it exists to show. Closing
+// that is a change to the walk rather than to its constants and is left to a lane that can re-run it
+// against a browser.
 
 const { test, journeyDetails, expect } = require('../support/journey');
 const { signIn } = require('../support/admin');
@@ -67,17 +105,30 @@ const JOURNEY = 'events-enquiry-to-settlement';
 // that quietly changed venues halfway would fail rather than read as a success.
 const STORE = world.STORE_ID;
 
-// What the guest types. Deliberately not the standing world's «Kari Nordmann» — every later step
-// looks this name up, so a screen showing the SEEDED event instead of the one this walk created
-// fails here rather than passing on somebody else's booking.
+// What makes this run's booking findable, and findable ONLY as itself. Spelled exactly as
+// `events-guest-proposal.spec.js` spells it, on purpose: one convention for per-run subjects across
+// the Events family, not two that drift.
+const RUN = Date.now().toString(36) + Math.random().toString(16).slice(2, 6);
+
+/** A day in the future, as the date inputs want it. Computed, because a written-in expiry expires. */
+function daysFromNow (days) {
+  return new Date(Date.now() + days * 86400000).toISOString().slice(0, 10);
+}
+
+// What the guest types. Every field a later step LOOKS THIS BOOKING UP BY carries the run tag: the
+// contact name is what four steps below locate the pipeline row with, and a constant there finds one
+// row on a reset fixture and two on the second run against a world that kept the first. The company
+// and the dietary message are deliberately NOT tagged — nothing searches by them, they are asserted
+// inside a row this walk has already opened, and tagging them would only make the artifact harder to
+// read.
 const GUEST = {
-  occasion: 'Julebord for Nordane AS',
-  date: '2026-12-12',
+  occasion: 'Julebord ' + RUN,
+  date: daysFromNow(120),
   guests: '40',
   from: '18:00',
   to: '23:30',
-  name: 'Nina Nordmann',
-  email: 'nina@nordane.test',
+  name: 'Nina Nordmann ' + RUN,
+  email: 'nina+' + RUN + '@nordane.test',
   phone: '91000002',
   company: 'Nordane AS',
   message: 'To gjester har cøliaki. Vi trenger et glutenfritt alternativ.'
@@ -88,12 +139,16 @@ const GUEST = {
 // closed statement. The deposit is deliberately 0: a private booking billed on invoice is exactly the
 // shape that ends in a settled statement, and a zero-deposit acceptance confirms the booking outright
 // rather than waiting for a money path this world does not hold.
+//
+// `expiryDay` is sixty days out from the run's own clock rather than a written date — see the header.
+// The figure it becomes on the wire is the START of that day at the VENUE (`proposalExpiryParam`
+// through `zonedMidnightToUtc`), never midnight where the laptop is.
 const OFFER = {
   currency: 'NOK',
   minimumSpend: '30000',
   roomFee: '4000',
   deposit: '0',
-  expiryDay: '2026-11-30',
+  expiryDay: daysFromNow(60),
   terms: 'Avbestilling senere enn 14 dager før arrangementet faktureres i sin helhet.',
   lineKind: 'Package',
   lineDescription: 'Julebordmeny',
@@ -102,7 +157,12 @@ const OFFER = {
   lineVat: '0.25'
 };
 
-const INVOICE = { reference: 'F-2026-4471', amount: '35800', note: 'Faktura sendt etter arrangementet' };
+// The venue's own invoice, put on the statement. The reference carries the run tag for a reason that
+// is the venue's rather than the harness's: an invoice number is unique in a set of books, and two
+// runs against one world filing the same number against two different bookings is a thing an
+// accountant would have to explain. Nothing searches by it — it is asserted inside the statement this
+// walk opened — so this is hygiene rather than a lookup key.
+const INVOICE = { reference: 'F-' + RUN, amount: '35800', note: 'Faktura sendt etter arrangementet' };
 
 // Copy a person reads, matched as copy rather than as translation keys — the same rule the sibling
 // Events journeys follow. These must red when the SENTENCE changes, because the sentence is what the
@@ -220,8 +280,10 @@ test(
     });
 
     await journey.step('the guest\'s enquiry is now in the pipeline, under the name they typed', async () => {
-      // THE JOIN. The row is found by the guest's OWN contact name, which appears nowhere in the
-      // seeded world — so a page rendering the standing event instead of this booking fails here.
+      // THE JOIN. The row is found by the guest's OWN contact name, and that name carries THIS run's
+      // tag — so a page rendering the standing event fails here, and so does a page rendering the
+      // booking a PREVIOUS run of this same journey left behind. `toHaveCount(1)` is the assertion
+      // doing that work: with a constant name it would have been the first of two on a second run.
       const row = page.locator('.ev-pipeline__row', { hasText: GUEST.name });
       await expect(row).toHaveCount(1, { timeout: 60000 });
       await expect(row).toContainText('Forespørsel');
