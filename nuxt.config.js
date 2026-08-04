@@ -30,6 +30,12 @@ export default {
     IS_PRODUCTION: process.env.NODE_ENV === 'production',
     API_BASE_URL: process.env.NODE_ENV === 'production' ? 'https://okamapi.azurewebsites.net' : 'https://okamapi.azurewebsites.net', // 'http://localhost:5000',
     IS_NATIVESCRIPT: 'false',
+    // Optional prefill for the power-user Wolt Drive setup page. These are shared across all Okam
+    // stores, so they are supplied from the local shell (or a gitignored .env) rather than committed.
+    // The site is statically generated and publicly hosted, so anything exposed here ends up in the
+    // public bundle: never set these in CI, and the production build refuses to pass them through.
+    WOLT_DRIVE_MERCHANT_ID: process.env.NODE_ENV === 'production' ? '' : (process.env.WOLT_DRIVE_MERCHANT_ID || ''),
+    WOLT_DRIVE_MERCHANT_KEY: process.env.NODE_ENV === 'production' ? '' : (process.env.WOLT_DRIVE_MERCHANT_KEY || ''),
     VERSION: '1.0.0',
     PLATFORM_FILE_SUFFIX: '.nuxt'
   },

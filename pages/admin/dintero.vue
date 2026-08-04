@@ -210,37 +210,14 @@
               />
             </div>
 
+            <!-- The three Wolt fees moved to /admin/wolt-drive-setup, where they are set together with
+                 the Drive credentials. They are still round-tripped in this page's payload so saving
+                 the Dintero configuration leaves them untouched. -->
             <div class="form-group">
-              <label for="woltDeliveryFeePercent">Wolt Delivery Fee Percent</label>
-              <input
-                id="woltDeliveryFeePercent"
-                v-model="dinteroConfig.woltDeliveryFeePercent"
-                type="number"
-                class="form-control"
-                placeholder="5.00"
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="woltCustomerDeliveryFeeAmount">Wolt Customer Delivery Fee Amount</label>
-              <input
-                id="woltCustomerDeliveryFeeAmount"
-                v-model="dinteroConfig.woltCustomerDeliveryFeeAmount"
-                type="number"
-                class="form-control"
-                placeholder="49.00"
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="woltServiceFeeAmount">Wolt Service Fee Amount</label>
-              <input
-                id="woltServiceFeeAmount"
-                v-model="dinteroConfig.woltServiceFeeAmount"
-                type="number"
-                class="form-control"
-                placeholder="29.00"
-              />
+              <p class="wolt-fees-moved">
+                {{ $i('dintero_woltFeesMoved') }}
+                <nuxt-link to="/admin/wolt-drive-setup">{{ $i('nav_wolt_drive_setup') }}</nuxt-link>
+              </p>
             </div>
 
             <div class="form-group">
@@ -849,6 +826,12 @@ export default {
 <style scoped>
 .dintero-config {
   padding: 2rem;
+}
+
+.wolt-fees-moved {
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin: 0;
 }
 
 .dintero-config__header {

@@ -334,6 +334,7 @@ export default {
             { label: this.$i("nav_okam_growth"), path: "/admin/poweruser-growth", icon: icons.growth },
             { label: this.$i("nav_dintero"), path: "/admin/dintero", icon: icons.dintero },
             { label: this.$i("nav_wolt_drive_invoice"), path: "/admin/wolt-drive-invoice", icon: icons.invoice },
+            { label: this.$i("nav_wolt_drive_setup"), path: "/admin/wolt-drive-setup", icon: icons.wolt },
             { label: this.$i("nav_goods"), path: "/admin/goods", icon: icons.goods },
             { label: this.$i("nav_kam_administration"), path: "/admin/kam", icon: icons.kam },
           ],
