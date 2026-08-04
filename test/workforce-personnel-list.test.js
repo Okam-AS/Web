@@ -438,12 +438,16 @@ describe('WorkforcePersonnelListService — route-for-route with endpoint 30', (
       detail: 'The submitted base revision is stale; the resource has since changed.'
     })
 
+    // `rejects` FIRST, as the 403 test above does. A bare `.catch(fn)` on a promise that resolves
+    // runs zero assertions and reports green, so the whole refusal could stop happening — the client
+    // handing a 409 body back as a successful result — without this test noticing. The rejection is
+    // the claim; the fields are the detail.
+    await expect(service().CorrectPersonnelListEntry(42, 'entry-1', { onSiteStartLocal: '2026-07-13T09:00:00' }))
+      .rejects.toMatchObject({ status: 409, code: 'workforce.stale-revision', conflictKind: 'stale-revision' })
+
     await service().CorrectPersonnelListEntry(42, 'entry-1', { onSiteStartLocal: '2026-07-13T09:00:00' })
       .catch((e) => {
         expect(isWorkforceApiError(e)).toBe(true)
-        expect(e.status).toBe(409)
-        expect(e.code).toBe('workforce.stale-revision')
-        expect(e.conflictKind).toBe('stale-revision')
       })
   })
 })
