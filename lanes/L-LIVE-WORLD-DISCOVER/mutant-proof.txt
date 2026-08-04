@@ -1,0 +1,24 @@
+=== A : playwright exit 1 ===
+    Error: expect(locator).toHaveCount(expected) failed
+    
+      1 failed
+        [chromium] › test/e2e/journeys/zz-mutant.spec.js:147:1 › A guest reads the offer their venue just sent and accepts it, and the receipt names what was on screen @fixture 
+
+=== B : playwright exit 1 ===
+    Error: DISCOVERY CAME UP EMPTY: the guest address on the venue's handover line, after the send. This journey holds no fallback for it on purpose — a default here would let the walk pass against a world that never produced the thing it claims to have read. Nothing was asserted and nothing was invented.
+    
+      1 failed
+        [chromium] › test/e2e/journeys/zz-mutant.spec.js:147:1 › A guest reads the offer their venue just sent and accepts it, and the receipt names what was on screen @fixture 
+
+=== C : playwright exit 1 ===
+    Error: expect(received).toEqual(expected) // deep equality
+    
+      1 failed
+        [chromium] › test/e2e/journeys/zz-mutant.spec.js:147:1 › A guest reads the offer their venue just sent and accepts it, and the receipt names what was on screen @fixture 
+
+=== D : playwright exit 1 ===
+    Error: expect(received).toContain(expected) // indexOf
+    
+      1 failed
+        [chromium] › test/e2e/journeys/zz-mutant.spec.js:147:1 › A guest reads the offer their venue just sent and accepts it, and the receipt names what was on screen @fixture 
+

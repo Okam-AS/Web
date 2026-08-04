@@ -1,0 +1,80 @@
+[WebServer] [fixture] listening on http://127.0.0.1:4971
+[WebServer] 
+[WebServer]  WARN  You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  Module @nuxt/image is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version >=3.1.0 is required but currently using 2.17.1
+[WebServer] 
+[WebServer] ℹ Parsed 0 files in 0.0 seconds
+[WebServer] ℹ [HPM] Proxy created: /  -> http://127.0.0.1:5080
+[WebServer] ℹ [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+[WebServer] ℹ Listening on: http://172.20.10.4:3971/
+[WebServer] ℹ Preparing project for development
+[WebServer] ℹ Initial build may take a while
+[WebServer] ℹ Discovered Components: .nuxt/components/readme.md
+[WebServer] ✔ Builder initialized
+
+Running 1 test using 1 worker
+
+[WebServer] ✔ Nuxt files generated
+[WebServer] 
+[WebServer]  WARN  Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[WebServer] 
+[WebServer] ℹ Compiling Server
+[WebServer] ℹ Compiling Client
+[WebServer] ✔ Server: Compiled successfully in 12.15s
+[WebServer] ✔ Client: Compiled successfully in 14.26s
+[WebServer] ℹ Waiting for file changes
+[WebServer] ℹ Memory usage: 1.2 GB (RSS: 2.04 GB)
+[WebServer] ℹ Listening on: http://172.20.10.4:3971/
+  ✘  1 [chromium] › test/e2e/journeys/zz-mutant.spec.js:147:1 › A guest reads the offer their venue just sent and accepts it, and the receipt names what was on screen @fixture (20.0s)
+
+
+  1) [chromium] › test/e2e/journeys/zz-mutant.spec.js:147:1 › A guest reads the offer their venue just sent and accepts it, and the receipt names what was on screen @fixture 
+
+    Error: expect(received).toContain(expected) // indexOf
+
+    Expected substring: "deadbeefdeadbeef"
+    Received string:    "Referanse: 1eeae0d24d65f2e3"
+
+      416 |       // other identifier on the line.
+      417 |       const printed = (await receipt.locator('.eg-ref').textContent()).trim();
+    > 418 |       expect(printed).toContain(displayedHash);
+          |                       ^
+      419 |       return 'version ' + facts[0] + ' at ' + facts[1] + ', bound to the reference shown before the click';
+      420 |     });
+      421 |
+        at /Users/svendaneel/okam/wt-lwd/test/e2e/journeys/zz-mutant.spec.js:418:23
+        at JourneyRecorder.step (/Users/svendaneel/okam/wt-lwd/test/e2e/support/journey.js:347:22)
+        at /Users/svendaneel/okam/wt-lwd/test/e2e/journeys/zz-mutant.spec.js:401:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/zz-mutant-A-guest-reads-th-7d21f-pt-names-what-was-on-screen-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/events-guest-proposal-accept.fixture.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/events-guest-proposal-accept.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/zz-mutant-A-guest-reads-th-7d21f-pt-names-what-was-on-screen-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/zz-mutant-A-guest-reads-th-7d21f-pt-names-what-was-on-screen-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/zz-mutant-A-guest-reads-th-7d21f-pt-names-what-was-on-screen-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › test/e2e/journeys/zz-mutant.spec.js:147:1 › A guest reads the offer their venue just sent and accepts it, and the receipt names what was on screen @fixture 

@@ -1,0 +1,238 @@
+{
+  "journey": "events-guest-proposal-accept",
+  "title": "A guest reads the offer their venue just sent and accepts it, and the receipt names what was on screen",
+  "status": "passed",
+  "startedAtUtc": "2026-08-04T01:20:21.719Z",
+  "finishedAtUtc": "2026-08-04T01:20:42.465Z",
+  "durationMs": 20746,
+  "capabilities": [
+    "events.guest.proposal.read",
+    "events.guest.proposal.accept",
+    "events.inquiry.public-create",
+    "events.proposal.author",
+    "events.proposal.send"
+  ],
+  "surface": "public+admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3971",
+  "apiBaseUrl": "http://127.0.0.1:4971",
+  "commit": "94fa256090201d3e478f4efdea4c5685008ac26a",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": {
+    "id": "fixture@94fa256090201d3e478f4efdea4c5685008ac26a+dirty",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "94fa256-dirty",
+    "detail": "the in-repo fixture backend, not an API build (branch HEAD)"
+  },
+  "backendServed": 35,
+  "backendSubjectServed": 26,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:4971/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:4971/user/login -> 200",
+    "GET http://127.0.0.1:4971/user -> 200",
+    "GET http://127.0.0.1:4971/stores/42/market -> 200",
+    "GET http://127.0.0.1:4971/user -> 200",
+    "GET http://127.0.0.1:4971/feature-flags/catalog -> 200",
+    "GET http://127.0.0.1:4971/stores/42/feature-flags -> 200",
+    "GET http://127.0.0.1:4971/stores/42 -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in as the venue's host (99999999 / 123123)",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T01:20:21.720Z",
+      "durationMs": 16566,
+      "detail": "landed on /admin/feature-flags",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "discover WHICH venue this host administers, rather than assuming one",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T01:20:38.286Z",
+      "durationMs": 8,
+      "detail": "the shell resolved store 42",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "the host switches Events on for this venue",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T01:20:38.294Z",
+      "durationMs": 964,
+      "detail": "Events.Core on for store 42",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "a guest sends the venue an enquiry through its public form",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T01:20:39.258Z",
+      "durationMs": 750,
+      "detail": "the guest holds a 20-digit-bearing reference, not echoed into this detail",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "the venue opens the booking under the name the guest typed",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T01:20:40.008Z",
+      "durationMs": 747,
+      "detail": "opened the pipeline row for Nina Nordmann msdz19nladd0",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "the venue drafts the offer and the server prices it",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T01:20:40.755Z",
+      "durationMs": 140,
+      "detail": "the venue is looking at Versjon 1",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "the venue sends it, and hands over the address the guest will open",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T01:20:40.895Z",
+      "durationMs": 73,
+      "detail": "version 1 sent; a 36-character address handed over; 1 priced line(s); figures 35800,00 / 30000,00 / 4000,00 / 5000,00",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "the guest opens the address and is shown WHAT THE VENUE SENT",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T01:20:41.048Z",
+      "durationMs": 665,
+      "detail": "1 line(s) and 4 money columns, every one of them equal to the venue's screen",
+      "error": null
+    },
+    {
+      "n": 9,
+      "name": "discover the reference the guest is shown, before answering anything",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T01:20:41.713Z",
+      "durationMs": 3,
+      "detail": "the guest is shown a 16-character reference",
+      "error": null
+    },
+    {
+      "n": 10,
+      "name": "the accept form refuses an incomplete identity",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T01:20:41.757Z",
+      "durationMs": 23,
+      "detail": "Skriv navnet ditt, så vet stedet hvem som har svart.",
+      "error": null
+    },
+    {
+      "n": 11,
+      "name": "the guest accepts the offer",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T01:20:41.780Z",
+      "durationMs": 58,
+      "detail": "accepted as Nina Nordmann msdz19nladd0",
+      "error": null
+    },
+    {
+      "n": 12,
+      "name": "the receipt names the version the VENUE sent and the reference the GUEST saw",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T01:20:41.838Z",
+      "durationMs": 4,
+      "detail": "version 1 at 4. august 2026 kl. 03:20 CEST, bound to the reference shown before the click",
+      "error": null
+    },
+    {
+      "n": 13,
+      "name": "the accept and decline controls are gone afterwards",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T01:20:41.842Z",
+      "durationMs": 3,
+      "detail": "no accept control; the offer is still rendered in full",
+      "error": null
+    },
+    {
+      "n": 14,
+      "name": "the page never sent a bearer token",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T01:20:41.889Z",
+      "durationMs": 570,
+      "detail": "no Authorization header on any /events/ request, from a browser that holds one",
+      "error": null
+    },
+    {
+      "n": 15,
+      "name": "what the browser said while this ran",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T01:20:42.459Z",
+      "durationMs": 0,
+      "detail": "2 shell-redirect, 2 answered-absence 404 (both notes), 0 unexplained",
+      "error": null
+    },
+    {
+      "n": 16,
+      "name": "the two-version claim this rewrite gave up, and why",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T01:20:42.459Z",
+      "durationMs": 0,
+      "detail": "recorded as a note",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "note",
+      "summary": "the admin shell logs a router «Navigation cancelled» pair on every signed-in journey",
+      "detail": "Seen 2 times here and identically in the privacy-queue and workforce journeys. It is AdminPage's login redirect being superseded by the storeId append, not anything on the guest proposal page."
+    },
+    {
+      "severity": "note",
+      "summary": "the pipeline detail answers 404 on two facets, and both are the product answering",
+      "detail": "GET http://127.0.0.1:4971/events/admin/42/events/8001/run-sheet -> 404; GET http://127.0.0.1:4971/events/admin/42/events/8001/settlement -> 404. The page renders «no run sheet yet» and the gated-settlement sentence rather than an error, so these are answered absences and not faults. Recorded because a reader counting console 404s would otherwise have to re-derive that."
+    },
+    {
+      "severity": "note",
+      "summary": "no browser evidence exists that a proposal token answers with the version it was MINTED for",
+      "detail": "The file this replaced asserted version «2» against a seeded token, which is the only way to hold two sent versions today: the e2e fixture refuses a second proposal version once an event is in ProposalSent (T4 from ProposalSent is not modelled), so no walk can make one. The claim that needs it — that a token answers with its own version rather than the current one — is therefore unproven by any browser run, on either backend. Named here rather than restored as a literal, because a literal would have asserted it against the fixture that invented it."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=42\" with a new navigation.",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "failedRequests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4971/events/admin/42/events/8001/run-sheet",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4971/events/admin/42/events/8001/settlement",
+      "status": 404
+    }
+  ],
+  "screenshots": [
+    "events-guest-proposal-accept/fixture/01-the-sent-offer-on-the-venue-s-screen.png",
+    "events-guest-proposal-accept/fixture/02-the-offer-as-the-guest-reads-it.png",
+    "events-guest-proposal-accept/fixture/03-the-acceptance-receipt.png"
+  ],
+  "error": null,
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/events-guest-proposal-accept.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false,
+    "supersedes": null
+  }
+}
