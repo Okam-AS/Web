@@ -100,15 +100,20 @@
 // WHICH backend, though, is a separate question from whether one answered, and `/health` cannot
 // settle it: it is unauthenticated and its whole body is the word "Healthy", so a world built from a
 // stale checkout — or a different lane's world that has since taken the same port — satisfies it
-// identically. `backendBuild` is the answer, resolved at run time by `artifact-store.js` from
-// `E2E_API_BUILD`, else from `OKAM_API_REPO`'s own HEAD, else from the API's published route surface,
-// and left null rather than guessed. It is also part of the filename a run is stored under, so two
-// builds cannot overwrite each other's record.
+// identically. `backendBuild` is the answer, resolved at run time by `artifact-store.js` from the
+// WORLD STAMP the world script left for this origin, else from `E2E_API_BUILD`, else from
+// `OKAM_API_REPO`'s own HEAD, else from whoever holds the port, else from the API's published route
+// surface, and left null rather than guessed. It is also part of the filename a run is stored under,
+// so two builds cannot overwrite each other's record.
 //
-//   E2E_API_BUILD="OkamAPI@$(git -C "$OKAM_API_REPO" rev-parse HEAD)" \
+//   test/e2e/scripts/live-world.sh                       # stamps the world it builds, then prints:
 //   E2E_API_BASE_URL=http://127.0.0.1:5951 E2E_WEB_PORT=3951 npm run test:e2e
 //
-// is the strongest form, and is what a world script should export about the checkout it built.
+// is the strongest form. The stamp (`artifacts/world/live/<host>-<port>.json`, see
+// `support/world-stamp.js`) is what makes the second line enough on its own: the identity comes from
+// the script that did the build and is refused when the process it started is gone, so a run in a
+// fresh shell names the right checkout without asking the port anything — and cannot be handed the
+// wrong one by a command copied from a world that is no longer up.
 //
 // STATUS IS THE RUN'S, NOT THE PRODUCT'S. A journey that documents where a broken flow stops still
 // reports `passed` when it successfully documented that — the defect goes in `findings`, which is
@@ -560,10 +565,16 @@ const test = base.test.extend({
         // NOT a failure, and deliberately not treated as one: refusing the run would stop live evidence
         // being produced at all on a machine where nothing can answer the question. But it is the
         // difference between evidence and an anecdote, so it is said once, plainly, with the fix.
+        //
+        // The STAMP's verdict is quoted, because "no world stamp for this origin" and "the world it
+        // describes is gone (no process 41234)" send an operator to two completely different places,
+        // and neither is guessable from a bare `unidentified`.
         process.stdout.write(
           '[journey] ' + meta.journey + ': NOTHING could say which BUILD is answering on ' + meta.apiBaseUrl + '.\n' +
+          '          world stamp: ' + (store.readWorldStamp(meta.apiBaseUrl).reason || 'usable') + '.\n' +
           '          This run will be filed as `unidentified` and will not outrank one that named its build.\n' +
-          '          Fix it in one line:  E2E_API_BUILD="OkamAPI@$(git -C "$OKAM_API_REPO" rev-parse HEAD)" ...\n');
+          '          Stand the world up with test/e2e/scripts/live-world.sh, which stamps it, or declare it:\n' +
+          '            E2E_API_BUILD="OkamAPI@$(git -C "$OKAM_API_REPO" rev-parse HEAD)" ...\n');
       }
     }
 

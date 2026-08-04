@@ -112,12 +112,15 @@
 # gives in full: a live run has no `/__fixture/reset`, and the two workforce journeys each consume the
 # current week.
 #
-#   E2E_API_BUILD="OkamAPI@<head>" E2E_API_BASE_URL=http://127.0.0.1:5951 E2E_WEB_PORT=3951 \
+#   E2E_API_BASE_URL=http://127.0.0.1:5951 E2E_WEB_PORT=3951 \
 #       npm run test:e2e -- test/e2e/journeys/workforce-flag-lever.spec.js
 #
-# The closing banner prints that line with E2E_API_BUILD already filled in from the checkout this
-# script built the world from — which is what puts the API's build, rather than the frontend's commit,
-# in every live artifact.
+# Those two variables are enough, and that is the point: once the world is healthy this script writes
+# `artifacts/world/live/<host>-<port>.json` naming the checkout it built from and the process it
+# started, so the run identifies the backend from what the BUILD left behind rather than by asking
+# whoever holds the port. The banner still prints E2E_API_BUILD as well — it costs nothing, it works
+# when the runner is on a different machine's shell, and when the two disagree the stamp wins and the
+# artifact records that it did. See test/e2e/support/world-stamp.js.
 #
 set -euo pipefail
 
@@ -231,6 +234,10 @@ done
 lsof -nP -iTCP:"$API_PORT" -sTCP:LISTEN -t >/dev/null 2>&1 \
     && die "port $API_PORT is still held and its holder is not ours to kill. Set API_PORT to a free port."
 note ":$API_PORT is free"
+# The world that stamp described is now dead, whatever happens to the rest of this run. A reader would
+# refuse it anyway -- the pid check is what makes a stamp worth anything -- but leaving a stamp for a
+# world that no longer exists is exactly the shape of file this whole mechanism exists to not have.
+node "$WEB_REPO/test/e2e/support/world-stamp.js" clear "$API_BASE" >/dev/null 2>&1 || true
 
 say "2/5  Recreating an EMPTY database [$DB_NAME]"
 sqlm -Q "IF DB_ID('$DB_NAME') IS NOT NULL
@@ -298,6 +305,25 @@ done
 curl -fsS -o /dev/null "$API_BASE/health" || die "API did not come up; see $LOG"
 grep -q "Failed to bind to address" "$LOG" && die "the API could not bind :$API_PORT; see $LOG"
 note "healthy (pid $API_PID, log: $LOG)"
+
+# ---- AND NOW THE WORLD SAYS SO, ON DISK -------------------------------------------------------
+#
+# Written HERE and not a line earlier: the stamp asserts that pid $API_PID is serving $API_BASE, and
+# that is only true once the health check above has passed. It names the checkout this script built
+# from and the process it started, so a journey run in ANY shell -- with no E2E_API_BUILD, no
+# OKAM_API_REPO and without asking lsof who holds the port -- files an artifact naming this build.
+# See test/e2e/support/world-stamp.js for why a stamp may be believed and exactly when it may not.
+#
+# A failure here does NOT tear the world down. The world is good; only its provenance would be
+# missing, and the run command below still carries E2E_API_BUILD. Said out loud rather than swallowed,
+# because the difference shows up much later as an artifact filed `-unidentified`.
+if node "$WEB_REPO/test/e2e/support/world-stamp.js" \
+        write "$API_BASE" "$OKAM_API_REPO" "$API_PID" "test/e2e/scripts/live-world.sh" >/dev/null 2>&1; then
+    note "stamped: artifacts/world/live/127-0-0-1-$API_PORT.json names $API_BUILD (pid $API_PID)"
+else
+    printf '   \033[33m%s\033[0m\n' "could NOT stamp this world -- a run that forgets E2E_API_BUILD will be filed unidentified.
+    Reason:  node $WEB_REPO/test/e2e/support/world-stamp.js write $API_BASE $OKAM_API_REPO $API_PID"
+fi
 
 say "5/5  Seeding the smallest world a journey can run against"
 
@@ -670,11 +696,16 @@ Run ONE live journey against it:
     E2E_API_BASE_URL=$API_BASE E2E_WEB_PORT=$WEB_PORT \\
         npm run test:e2e -- test/e2e/journeys/events-deposit-precondition.spec.js
 
-E2E_API_BUILD is the line that makes the artifact self-describing. Without it the journey falls back
-to asking whoever holds the port what directory it runs from, and if that cannot answer either, the
-run is filed \`-unidentified\` and does not outrank one that named its build. This script KNOWS the
-answer -- it built the world from $OKAM_API_REPO -- so it hands it over rather than making the runner
-guess. Copy the whole block, not just the two E2E_ lines below it.
+THE ARTIFACT NAMES THIS BUILD WITHOUT THE E2E_API_BUILD LINE, because the world was stamped:
+
+    artifacts/world/live/127-0-0-1-$API_PORT.json   ->  ${API_BUILD:-UNKNOWN}   (pid $API_PID)
+
+That file is what a journey reads first, and it is refused the moment pid $API_PID is gone -- so it
+can lose its answer and cannot invent a wrong one. E2E_API_BUILD is kept in the line above because it
+still carries the case where the runner is somewhere this file is not; when the two disagree the
+stamp wins and the artifact says which declaration it overrode. Inspect it with:
+
+    node test/e2e/support/world-stamp.js show $API_BASE
 
 ONE, and the file path is not a convenience. In fixture mode every journey gets a fresh backend from
 \`POST /__fixture/reset\`; a live world has no such thing, so the journeys share one database in the

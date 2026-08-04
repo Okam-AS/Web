@@ -89,10 +89,20 @@
 //
 // In order, first hit wins:
 //
+//   THE WORLD STAMP               `artifacts/world/live/<host>-<port>.json`, written by
+//                                 `test/e2e/scripts/live-world.sh` at the moment the world it built
+//                                 answered `/health`, naming the checkout AND the process it started.
+//                                 See `world-stamp.js`. It is FIRST because it is the only source
+//                                 bound to both the origin and a living process: it needs nothing from
+//                                 the runner's shell, and it is refused outright — never repaired,
+//                                 never trusted anyway — when the process it names is gone.
 //   E2E_API_BUILD                 what a world script exports about the checkout it built and ran.
-//                                 `test/e2e/scripts/live-world.sh` does not export it yet; when it
-//                                 does, `E2E_API_BUILD="OkamAPI@$(git -C "$OKAM_API_REPO" rev-parse HEAD)"`
-//                                 is the whole change and everything below becomes a fallback.
+//                                 `live-world.sh` prints it into the run command it hands over, so on
+//                                 the ordinary path this AGREES with the stamp and the artifact says
+//                                 so. When it disagrees, the stamp wins and the declaration is written
+//                                 into `detail` rather than discarded — a command copied from the
+//                                 world that was up an hour ago is the shape this ordering exists for,
+//                                 and it is a wrong answer, not a missing one.
 //   OKAM_API_REPO / E2E_API_REPO  the checkout is asked for its own HEAD, and whether it is dirty.
 //   THE LISTENING PROCESS         for a loopback origin: whoever holds the port is asked what
 //                                 directory it is running from, and THAT directory is asked for its
@@ -125,6 +135,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { execFileSync } = require('child_process');
+const worldStamp = require('./world-stamp');
 
 const RUNS_DIRNAME = 'runs';
 const LEDGER_NAME = 'ledger.jsonl';
@@ -256,16 +267,36 @@ function buildFromListeningProcess (apiBaseUrl) {
 /**
  * Who built the backend this run is about to talk to.
  *
- * `apiBaseUrl` is optional and only enables the listening-process source; pass it for a LIVE backend
- * and never for the fixture, whose process is this repo — resolving it would put the frontend's own
- * commit in `backendBuild`, which is precisely the confusion this field exists to end.
+ * `apiBaseUrl` is optional and enables the two origin-bound sources — the world stamp and the
+ * listening process; pass it for a LIVE backend and never for the fixture, whose process is this repo
+ * — resolving it would put the frontend's own commit in `backendBuild`, which is precisely the
+ * confusion this field exists to end.
+ *
+ * `stampDir` is for tests, which must not write a stamp into the real checkout's `artifacts/`.
  *
  * Returns `null` when nothing can say. Null, never a guess.
  */
-function resolveBackendBuild (env, apiBaseUrl) {
+function resolveBackendBuild (env, apiBaseUrl, stampDir) {
   const environment = env || process.env;
-
   const declared = (environment.E2E_API_BUILD || '').trim();
+
+  // THE STAMP OUTRANKS THE DECLARATION, and only this pair needed a ruling. Both come from the same
+  // place on the ordinary path — `live-world.sh` writes the stamp and prints `E2E_API_BUILD` into the
+  // command it hands over — so they normally agree and the artifact records that they did. They come
+  // apart when the runner's shell is carrying a value from an EARLIER world, which is the one case
+  // worth deciding: the stamp is checked against this origin and against a process that is still
+  // running, and the declaration is checked against nothing at all.
+  const stamped = apiBaseUrl ? worldStamp.buildFromWorldStamp(apiBaseUrl, stampDir) : null;
+  if (stamped) {
+    if (declared && declared !== stamped.id) {
+      return Object.assign({}, stamped, {
+        detail: stamped.detail + '; this overrode E2E_API_BUILD="' + declared +
+          '", which names a different build and is checked against nothing'
+      });
+    }
+    return declared ? Object.assign({}, stamped, { detail: stamped.detail + '; agrees with E2E_API_BUILD' }) : stamped;
+  }
+
   if (declared) {
     return { id: declared, source: 'env:E2E_API_BUILD', short: shortOfBuild(declared), detail: null };
   }
@@ -500,6 +531,9 @@ module.exports = {
   beginRun,
   resolveBackendBuild,
   buildFromListeningProcess,
+  buildFromWorldStamp: worldStamp.buildFromWorldStamp,
+  writeWorldStamp: worldStamp.writeStamp,
+  readWorldStamp: worldStamp.readStamp,
   fixtureBuild,
   backendKeyFor,
   canTakeCanonical,

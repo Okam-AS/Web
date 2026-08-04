@@ -1,0 +1,61 @@
+{
+  "journey": "provenance-probe",
+  "title": "the page loads and says who served it",
+  "status": "passed",
+  "startedAtUtc": "2026-08-04T00:52:09.340Z",
+  "finishedAtUtc": "2026-08-04T00:52:09.363Z",
+  "durationMs": 23,
+  "capabilities": [
+    "harness.provenance.probe"
+  ],
+  "surface": "public",
+  "backend": "live",
+  "baseUrl": "http://127.0.0.1:62618",
+  "apiBaseUrl": "http://127.0.0.1:62617",
+  "commit": null,
+  "underTest": null,
+  "backendProbe": {
+    "url": "http://127.0.0.1:62617/health",
+    "status": 200,
+    "body": "Healthy"
+  },
+  "backendBuild": {
+    "id": "okamapi-alpha@2448954c0d0a9965d4a6e98b514dc7e601797f43",
+    "source": "env:E2E_API_BUILD",
+    "short": "2448954",
+    "detail": null
+  },
+  "backendServed": 2,
+  "backendSubjectServed": 1,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "backendSample": [
+    "GET http://127.0.0.1:62617/user -> 200",
+    "GET http://127.0.0.1:62617/workforce/stores/1/context -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "open the page",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T00:52:09.342Z",
+      "durationMs": 20,
+      "detail": "served by live",
+      "error": null
+    }
+  ],
+  "findings": [],
+  "consoleErrors": [],
+  "failedRequests": [],
+  "screenshots": [],
+  "error": null,
+  "artifact": {
+    "key": "live-62617-2448954",
+    "file": "artifacts/journeys/runs/provenance-probe.live-62617-2448954.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "live-62617-2448954",
+    "provisional": false,
+    "supersedes": null
+  }
+}

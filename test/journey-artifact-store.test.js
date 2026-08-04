@@ -16,6 +16,7 @@ const os = require('os');
 const net = require('net');
 const http = require('http');
 const path = require('path');
+const { execFileSync } = require('child_process');
 
 const store = require('./e2e/support/artifact-store');
 
@@ -374,6 +375,231 @@ describe('backend identity', () => {
       .toBe('live-5951-ccccccc-dirty');
     expect(store.backendKeyFor({ backend: 'live', apiBaseUrl: 'http://127.0.0.1:5951', build: store.resolveBackendBuild({ E2E_API_BUILD: clean }) }))
       .toBe('live-5951-ccccccc');
+  });
+
+  // ---- THE WORLD STAMP -------------------------------------------------------------------------
+  //
+  // Every test below is written so that the WRONG answer is available and nameable. That is the whole
+  // discipline of this block: a stamp is only worth having if the run would otherwise have said
+  // something else, so each arm stands a real listening process (whose checkout is THIS repo) against
+  // a stamp naming a different real checkout, and reads which one came back. An assertion that the
+  // field is merely populated would pass against a store that resolved everything to `Web-modules`.
+  describe('the world stamp', () => {
+    // Real checkouts, not fixtures of one: `writeStamp` asks git for the HEAD and whether the tree is
+    // dirty, and a stubbed git would only prove that the stub was read.
+    function checkout (name) {
+      const repo = fs.mkdtempSync(path.join(os.tmpdir(), 'world-' + name + '-'));
+      const run = (...args) => execFileSync('git', args, {
+        cwd: repo,
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'ignore'],
+        env: Object.assign({}, process.env, {
+          GIT_AUTHOR_NAME: 'lane',
+          GIT_AUTHOR_EMAIL: 'lane@example.invalid',
+          GIT_COMMITTER_NAME: 'lane',
+          GIT_COMMITTER_EMAIL: 'lane@example.invalid'
+        })
+      });
+      run('init', '-q', '-b', 'main');
+      fs.writeFileSync(path.join(repo, 'Program.cs'), '// ' + name + '\n');
+      run('add', 'Program.cs');
+      run('commit', '-q', '-m', 'the build ' + name + ' was made from', '--no-gpg-sign');
+      return { repo, name: path.basename(repo), head: run('rev-parse', 'HEAD').trim() };
+    }
+
+    let stamps;
+    let listener;
+    let origin;
+    const made = [];
+
+    beforeEach(async () => {
+      stamps = fs.mkdtempSync(path.join(os.tmpdir(), 'world-stamps-'));
+      // A REAL process on a REAL port, so that "the port would have said something else" is a fact
+      // about this machine and not a mock's opinion. It is this jest process, whose cwd is this
+      // checkout — so the port's answer is `Web-modules@…` and a stamp's answer must not be.
+      listener = http.createServer((_req, res) => res.end('ok'));
+      await new Promise(resolve => listener.listen(0, '127.0.0.1', resolve));
+      origin = 'http://127.0.0.1:' + listener.address().port;
+    });
+
+    afterEach(async () => {
+      await new Promise(resolve => listener.close(resolve));
+      fs.rmSync(stamps, { recursive: true, force: true });
+      while (made.length) { fs.rmSync(made.pop(), { recursive: true, force: true }); }
+    });
+
+    function stamp (from, overrides) {
+      made.push(from.repo);
+      const written = store.writeWorldStamp({ apiBaseUrl: origin, repo: from.repo, pid: process.pid }, stamps);
+      if (overrides) {
+        fs.writeFileSync(written.file, JSON.stringify(Object.assign(written.stamp, overrides), null, 2) + '\n');
+      }
+      return written;
+    }
+
+    it('names the checkout the world script recorded, not the one holding the port', () => {
+      const api = checkout('alpha');
+      stamp(api);
+
+      const build = store.resolveBackendBuild({}, origin, stamps);
+
+      expect(build.id).toBe(api.name + '@' + api.head);
+      expect(build.source).toBe('stamp:127-0-0-1-' + listener.address().port + '.json');
+      expect(build.short).toBe(api.head.slice(0, 7));
+      // Where a REAL run reads it from — the path live-world.sh's banner names and this test's
+      // temporary directory stands in for. Pinned here because it is a contract with that script.
+      expect(require('./e2e/support/world-stamp').fileFor('http://127.0.0.1:5951'))
+        .toMatch(/\/artifacts\/world\/live\/127-0-0-1-5951\.json$/);
+      // The stamp's directory is this laptop's business and stays out of a file read in reviews.
+      expect(JSON.stringify(build)).not.toContain(stamps);
+      // The answer the port would have given, and the one this run must NOT have taken: this process
+      // is running out of the Web-modules checkout and holds that socket.
+      expect(store.buildFromListeningProcess(origin).id).toMatch(/^Web-modules@/);
+      expect(build.id).not.toMatch(/^Web-modules@/);
+    });
+
+    it('records a DIFFERENT build when a different checkout built the world', () => {
+      const alpha = checkout('alpha');
+      stamp(alpha);
+      const first = store.resolveBackendBuild({}, origin, stamps);
+
+      const beta = checkout('beta');
+      stamp(beta);
+      const second = store.resolveBackendBuild({}, origin, stamps);
+
+      expect(first.id).toBe(alpha.name + '@' + alpha.head);
+      expect(second.id).toBe(beta.name + '@' + beta.head);
+      expect(second.id).not.toBe(first.id);
+      // …and the two runs are filed apart, which is the point of putting the build in the key.
+      expect(store.backendKeyFor({ backend: 'live', apiBaseUrl: origin, build: first }))
+        .not.toBe(store.backendKeyFor({ backend: 'live', apiBaseUrl: origin, build: second }));
+    });
+
+    it('is refused when the world it describes is gone, and the run falls through to the port', () => {
+      const api = checkout('alpha');
+      // A pid that is not running. `writeStamp` refuses to record one, so this is the state a stamp
+      // reaches by OUTLIVING its world — which is every stamp, eventually.
+      const dead = stamp(api, { pid: 2147483646, processStartedAt: 'Mon Aug  4 02:31:07 2026' });
+
+      const read = store.readWorldStamp(origin, stamps);
+      expect(read.ok).toBe(false);
+      expect(read.reason).toContain('the world it describes is gone');
+      expect(store.buildFromWorldStamp(origin, stamps)).toBeNull();
+
+      // Refused, not repaired and not believed anyway: the next source gets its turn.
+      const build = store.resolveBackendBuild({}, origin, stamps);
+      expect(build.source).toBe('process:127.0.0.1:' + listener.address().port);
+      expect(fs.existsSync(dead.file)).toBe(true);
+    });
+
+    it('is refused when its pid has been reused by a process it did not stamp', () => {
+      const api = checkout('alpha');
+      // This pid IS alive — it is this test — but it started at a different time, which is exactly
+      // what a recycled pid looks like. A stamp verified by pid alone would answer here.
+      stamp(api, { processStartedAt: 'Mon Jan  1 00:00:00 2001' });
+
+      const read = store.readWorldStamp(origin, stamps);
+      expect(read.ok).toBe(false);
+      expect(read.reason).toContain('is not the one that was stamped');
+      expect(store.resolveBackendBuild({}, origin, stamps).source).toMatch(/^process:/);
+    });
+
+    it('is refused when it is about a different origin, however it got that filename', () => {
+      const api = checkout('alpha');
+      stamp(api, { origin: 'http://127.0.0.1:5951' });
+
+      const read = store.readWorldStamp(origin, stamps);
+      expect(read.ok).toBe(false);
+      expect(read.reason).toContain('is about http://127.0.0.1:5951');
+    });
+
+    it('outranks a declared build that disagrees, and says in the artifact what it overrode', () => {
+      const api = checkout('alpha');
+      stamp(api);
+      // The shape this ordering exists for: a run command copied from the world that was up an hour
+      // ago. The declaration is checked against nothing; the stamp is checked against this origin and
+      // against a process that is still running.
+      const stale = 'OkamAPI@' + 'f'.repeat(40);
+
+      const build = store.resolveBackendBuild({ E2E_API_BUILD: stale }, origin, stamps);
+
+      expect(build.id).toBe(api.name + '@' + api.head);
+      expect(build.source).toMatch(/^stamp:/);
+      expect(build.detail).toContain('this overrode E2E_API_BUILD="' + stale + '"');
+    });
+
+    it('records that the declaration agreed, when it did', () => {
+      const api = checkout('alpha');
+      stamp(api);
+
+      const build = store.resolveBackendBuild({ E2E_API_BUILD: api.name + '@' + api.head }, origin, stamps);
+
+      expect(build.detail).toContain('agrees with E2E_API_BUILD');
+      expect(build.detail).not.toContain('overrode');
+    });
+
+    it('leaves the declared build in charge when there is no stamp to prefer', () => {
+      const declared = 'OkamAPI@' + 'd'.repeat(40);
+
+      const build = store.resolveBackendBuild({ E2E_API_BUILD: declared }, origin, stamps);
+
+      expect(build.source).toBe('env:E2E_API_BUILD');
+      expect(build.id).toBe(declared);
+    });
+
+    it('is neither written nor read for an origin on another machine', () => {
+      const api = checkout('alpha');
+      made.push(api.repo);
+
+      expect(() => store.writeWorldStamp({ apiBaseUrl: 'https://api.okam.no', repo: api.repo, pid: process.pid }, stamps))
+        .toThrow(/loopback/);
+      expect(store.buildFromWorldStamp('https://api.okam.no', stamps)).toBeNull();
+      // A pid is a statement about THIS machine; a stamp asserting one about a remote world would be
+      // the confident wrong answer this whole mechanism exists to refuse.
+      expect(store.readWorldStamp('https://api.okam.no', stamps).reason).toBe('not a loopback origin');
+    });
+
+    it('refuses to stamp a world whose process is not running, rather than writing an unverifiable one', () => {
+      const api = checkout('alpha');
+      made.push(api.repo);
+
+      expect(() => store.writeWorldStamp({ apiBaseUrl: origin, repo: api.repo, pid: 2147483646 }, stamps))
+        .toThrow(/no process 2147483646 is running/);
+      expect(() => store.writeWorldStamp({ apiBaseUrl: origin, repo: '/no/such/checkout', pid: process.pid }, stamps))
+        .toThrow(/not a git checkout/);
+      expect(fs.readdirSync(stamps)).toEqual([]);
+    });
+
+    it('records who wrote it, rather than claiming an authorship it does not have', () => {
+      const api = checkout('alpha');
+      made.push(api.repo);
+
+      const byScript = store.writeWorldStamp(
+        { apiBaseUrl: origin, repo: api.repo, pid: process.pid, writtenBy: 'test/e2e/scripts/live-world.sh' }, stamps);
+      expect(byScript.stamp.writtenBy).toBe('test/e2e/scripts/live-world.sh');
+      // It travels into the artifact, so a reader of a live artifact learns where the claim came from.
+      expect(store.buildFromWorldStamp(origin, stamps).detail).toContain('stamped by test/e2e/scripts/live-world.sh');
+
+      // …and a caller that does not say gets the program that actually ran. A constant here would put
+      // that script's name on every stamp this repo's own harnesses write.
+      const byNobody = store.writeWorldStamp({ apiBaseUrl: origin, repo: api.repo, pid: process.pid }, stamps);
+      expect(byNobody.stamp.writtenBy).not.toBe('test/e2e/scripts/live-world.sh');
+    });
+
+    it('keys a stamped dirty tree the same way every other route keys it', () => {
+      const api = checkout('alpha');
+      made.push(api.repo);
+      fs.writeFileSync(path.join(api.repo, 'Program.cs'), '// edited after the build\n');
+      const written = store.writeWorldStamp({ apiBaseUrl: origin, repo: api.repo, pid: process.pid }, stamps);
+
+      const build = store.buildFromWorldStamp(origin, stamps);
+
+      expect(written.stamp.build.id).toBe(api.name + '@' + api.head + '+dirty');
+      expect(build.short).toBe(api.head.slice(0, 7) + '-dirty');
+      // The same tree declared through E2E_API_BUILD must produce the SAME key, or one build gets two
+      // artifact files and neither reader can tell they are the same world.
+      expect(store.shortOfBuild(build.id)).toBe(build.short);
+    });
   });
 
   it('reads a legacy artifact — one written before builds were recorded — as unidentified, not as a match', () => {
