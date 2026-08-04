@@ -86,6 +86,56 @@ export function statedSum (...amounts) {
 }
 
 /**
+ * The typographic MINUS (U+2212), not the ASCII hyphen. It is what these rows have always printed,
+ * and it is exported so a test can name the character instead of pasting a glyph that looks like
+ * three other ones.
+ */
+export const MINUS_SIGN = '−'
+
+/**
+ * The label for a row that prints the NEGATION of an amount — the deduction rows on an X/Z report
+ * (negativ salg, retur, feilslag) and the discount lines on a check.
+ *
+ * WHY IT EXISTS, AND WHY NO EXISTING GATE COULD REACH IT. Those rows wrote the sign as a template
+ * literal OUTSIDE the interpolation: `−{{ priceLabel(x) }}`. The formatter therefore never saw the
+ * character, and every absence rule in this module — all of which run INSIDE the interpolation —
+ * was structurally incapable of refusing it. An absent amount rendered as `−—`: a minus sign
+ * attached to the unknown mark, which reads as the negative of a figure nobody stated and is
+ * indistinguishable from a formatting slip on a kassasystemforskrifta document an inspector reads.
+ * A gate cannot refuse a character that is never passed to it, so the sign has to be owned by the
+ * label. That is the whole point of this function, and it is why the answer is not a fifth guard.
+ *
+ * FOUR WORLDS, NOT THREE. A deduction row has to survive a field that already carries a minus, on
+ * top of the usual stated / zero / absent trio:
+ *
+ *   - STATED MAGNITUDE (5000, the normal case) renders `−kr 50,00`. The sign MUST still print.
+ *     Deleting the literal is the obvious way to be rid of `−—`, and it silently turns every
+ *     deduction on the report into a positive — trading a confusing row for a wrong one.
+ *   - GENUINE ZERO renders `kr 0,00`, with no sign. Zero is a figure somebody stated; `−kr 0,00`
+ *     is not a smaller number, only a stranger one.
+ *   - ALREADY NEGATIVE (-5000): the negation is +50 and it prints `kr 50,00`. The sign is resolved
+ *     ONCE, from the negated value. Prepending a literal to a formatted negative would compose
+ *     `−kr -50,00`, which states the opposite of itself twice.
+ *   - ABSENT renders the bare unknown mark and NO sign, because "we do not know" is the whole of
+ *     the claim and a sign in front of it asserts a direction the row does not have.
+ *
+ * `formatAmount` is the caller's own formatter (`this.priceLabel` off the global mixin), and it is
+ * only ever handed a MAGNITUDE. That is not a stylistic preference: core's `priceLabel` splits the
+ * minor units with `slice(0, -2)` and `slice(-2)`, so it formats -4 as "kr 0,-4" and -50 as
+ * "kr -,50". Negating the value and letting the formatter print the sign would be correct
+ * arithmetic handed to a formatter that cannot render it.
+ */
+export function negatedAmountLabel (amountMinor, formatAmount) {
+  if (!isAmountStated(amountMinor)) { return UNKNOWN_AMOUNT }
+  const negated = -Number(amountMinor)
+  // A genuine zero needs no case of its own: negating it gives `-0`, and `-0 < 0` is false, so it
+  // takes the unsigned branch and prints its digits. An explicit `if (negated === 0)` guard stood
+  // here first and the mutation proof in `lanes/L-XZ-NEGATED-ABSENCE/` could not make deleting it
+  // fail a single test — which is what dead means.
+  return (negated < 0 ? MINUS_SIGN : '') + formatAmount(Math.abs(negated))
+}
+
+/**
  * The gate in front of the local money formatters the legacy admin pages wrote for themselves.
  *
  * Five pages each invented their own — an invoice, a settlements summary, a Wolt menu, a rewards

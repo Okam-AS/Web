@@ -48,10 +48,10 @@
         <span class="xreport__num">{{ report.discountAmount ? priceLabel(report.discountAmount) : '—' }}</span>
       </div>
       <div class="xreport__row">
-        <span>{{ $i('pos_report_negative_sales') }} ({{ report.negativeSalesCount }})</span><span>−{{ priceLabel(report.negativeSalesAmount) }}</span>
+        <span>{{ $i('pos_report_negative_sales') }} ({{ report.negativeSalesCount }})</span><span>{{ negatedPriceLabel(report.negativeSalesAmount) }}</span>
       </div>
       <div class="xreport__row">
-        <span>{{ $i('pos_report_return') }} ({{ report.referencedReturnsCount }})</span><span>−{{ priceLabel(report.referencedReturnsAmount) }}</span>
+        <span>{{ $i('pos_report_return') }} ({{ report.referencedReturnsCount }})</span><span>{{ negatedPriceLabel(report.referencedReturnsAmount) }}</span>
       </div>
       <div class="xreport__row">
         <span>{{ $i('pos_report_drawer_opens') }}</span><span>{{ report.drawerOpenCount }}</span>
@@ -85,16 +85,16 @@
         <span>{{ $i('pos_report_sales') }}</span><span>{{ priceLabel(report.grandTotalSales) }}</span>
       </div>
       <div class="xreport__row">
-        <span>{{ $i('pos_report_return') }}</span><span>−{{ priceLabel(report.grandTotalReturns) }}</span>
+        <span>{{ $i('pos_report_return') }}</span><span>{{ negatedPriceLabel(report.grandTotalReturns) }}</span>
       </div>
       <div class="xreport__row xreport__row--sub">
         <span>{{ $i('pos_report_net') }}</span><span>{{ priceLabel(report.grandTotalNet) }}</span>
       </div>
       <div class="xreport__row">
-        <span>{{ $i('pos_report_negative_sales') }}</span><span>−{{ priceLabel(report.grandTotalNegativeSales) }}</span>
+        <span>{{ $i('pos_report_negative_sales') }}</span><span>{{ negatedPriceLabel(report.grandTotalNegativeSales) }}</span>
       </div>
       <div class="xreport__row">
-        <span>{{ $i('pos_report_errors') }}</span><span>−{{ priceLabel(report.grandTotalErrors) }}</span>
+        <span>{{ $i('pos_report_errors') }}</span><span>{{ negatedPriceLabel(report.grandTotalErrors) }}</span>
       </div>
       <div v-if="report.grandTotalTips" class="xreport__row">
         <span>{{ $i('pos_report_tips') }}</span><span>{{ priceLabel(report.grandTotalTips) }}</span>
@@ -175,7 +175,7 @@
           <span>{{ o.operatorName }}</span><span>{{ priceLabel(o.salesAmount) }}</span>
         </div>
         <div v-if="o.returnsCount" class="xreport__row xreport__row--muted">
-          <span>· {{ $i('pos_report_return') }} ({{ o.returnsCount }})</span><span>−{{ priceLabel(o.returnsAmount) }}</span>
+          <span>· {{ $i('pos_report_return') }} ({{ o.returnsCount }})</span><span>{{ negatedPriceLabel(o.returnsAmount) }}</span>
         </div>
       </div>
     </section>
@@ -200,7 +200,13 @@
 // failed to arrive used to reach the formatter already disguised as a stated zero and print as a real
 // figure on a fiscal document. `statedSum` returns null the moment any addend is unstated, so the hole
 // survives the arithmetic and `priceLabel` can still withhold it.
-import { statedSum } from '~/utils/price';
+//
+// EVERY deduction row (negativ salg, retur, feilslag) prints its sign through `negatedAmountLabel`,
+// never as a template literal in front of the interpolation. `−{{ priceLabel(x) }}` put the minus
+// where no formatter could see it, so an absent amount composed to `−—` — the negative of a figure
+// nobody stated, on a document an inspector reads. Six rows did it. The sign now belongs to the
+// label, which is the only place that knows whether there is a figure to attach it to.
+import { statedSum, negatedAmountLabel } from '~/utils/price';
 
 export default {
   name: 'XReportView',
@@ -231,6 +237,11 @@ export default {
   },
   methods: {
     statedSum,
+    // The sign is resolved from the negated value and the magnitude alone goes to the formatter —
+    // core's `priceLabel` renders -4 as "kr 0,-4". See `negatedAmountLabel` for the four worlds.
+    negatedPriceLabel (amountMinor) {
+      return negatedAmountLabel(amountMinor, this.priceLabel);
+    },
     paymentLabel (type) {
       if (type === 'Cash') { return this.$i('pos_pay_cash'); }
       if (type === 'SurfboardTerminal' || type === 'DinteroTerminal') { return this.$i('pos_pay_card'); }
