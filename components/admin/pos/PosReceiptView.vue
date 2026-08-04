@@ -54,7 +54,7 @@
             {{ $i('pos_deposit') }} {{ priceLabel(line.depositAmount) }}
           </div>
           <div v-if="line.discountAmount > 0" class="receipt__line-sub receipt__line-discount">
-            {{ line.discountReason || $i('pos_discount') }} −{{ priceLabel(line.discountAmount) }}
+            {{ line.discountReason || $i('pos_discount') }} {{ negatedPriceLabel(line.discountAmount) }}
           </div>
         </div>
       </div>
@@ -116,6 +116,19 @@
 // Renders a complete PosReceiptModel (SALREC / COPY / PROREC / TRAINREC / RETREC). The on-screen
 // look mirrors a paper receipt; print() clones it into an 80 mm iframe so it prints on a bong roll
 // without the surrounding POS chrome.
+//
+// The per-line discount prints its sign through `negatedAmountLabel`, never as a template literal in
+// front of the interpolation. `−{{ priceLabel(x) }}` puts the minus where no formatter can see it, so
+// an amount the absence rule withholds composes to `−—`: the negative of a figure nobody stated, on
+// the one artifact in this component tree that an inspector holds in their hand. The `> 0` guard
+// above hides the ordinary absences (`null`, `undefined`, `''`, `NaN`, a genuine zero) before the row
+// renders at all, but it is a RELATIONAL test, not the absence rule, and the two do not agree
+// everywhere: `Infinity > 0` is true while `isAmountStated(Infinity)` is false, so an amount the rule
+// refuses still reaches the label. A guard nobody wrote as an absence gate is not one, and the sign
+// belongs to the label either way — the only place that knows whether there is a figure to attach it
+// to. See `lanes/L-XZ-RESIDUAL-SITES/mutation-log.md`.
+import { negatedAmountLabel } from '~/utils/price';
+
 const PRINT_CSS = `
   * { box-sizing: border-box; }
   body { margin: 0; font-family: 'Courier New', monospace; color: #000; }
@@ -149,6 +162,11 @@ export default {
     }
   },
   methods: {
+    // The sign is resolved from the negated value and the magnitude alone goes to the formatter —
+    // core's `priceLabel` renders -4 as "kr 0,-4" and -50 as "kr -,50". See `negatedAmountLabel`.
+    negatedPriceLabel (amountMinor) {
+      return negatedAmountLabel(amountMinor, this.priceLabel);
+    },
     paymentLabel (type) {
       if (type === 'Cash') { return this.$i('pos_pay_cash'); }
       if (type === 'SurfboardTerminal' || type === 'DinteroTerminal') { return this.$i('pos_pay_card'); }

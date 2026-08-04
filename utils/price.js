@@ -93,8 +93,11 @@ export function statedSum (...amounts) {
 export const MINUS_SIGN = '−'
 
 /**
- * The label for a row that prints the NEGATION of an amount — the deduction rows on an X/Z report
- * (negativ salg, retur, feilslag) and the discount lines on a check.
+ * The label for a row that prints the NEGATION of an amount. Nine rows, and the list is exhaustive
+ * because a source scan in `test/xz-negated-absence.test.js` fails if a tenth appears anywhere under
+ * `components/admin/pos/`: six deduction rows on the X/Z report (negativ salg, retur, feilslag),
+ * the per-line discount on a printed receipt, the per-line discount on an open check, and the
+ * discount total in the check footer.
  *
  * WHY IT EXISTS, AND WHY NO EXISTING GATE COULD REACH IT. Those rows wrote the sign as a template
  * literal OUTSIDE the interpolation: `−{{ priceLabel(x) }}`. The formatter therefore never saw the

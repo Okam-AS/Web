@@ -115,7 +115,7 @@
             {{ $i('pos_discount') }}
             <button type="button" class="check-panel__discount-remove" :title="$i('pos_remove_discount')" @click="$emit('remove-discount')">×</button>
           </span>
-          <span class="check-panel__discount">−{{ priceLabel(totalDiscount) }}</span>
+          <span class="check-panel__discount">{{ negatedPriceLabel(totalDiscount) }}</span>
         </div>
         <div class="check-panel__total-row check-panel__total-row--grand">
           <span>{{ $i('pos_total') }}</span>
@@ -168,6 +168,10 @@
 
 <script>
 import CheckLine from '~/components/admin/pos/CheckLine.vue';
+// The discount total prints its sign through `negatedAmountLabel` rather than as a template literal
+// in front of the interpolation. `−{{ priceLabel(x) }}` puts the minus outside the interpolation,
+// where no absence rule in this repo can see it, and an amount the rule withholds composes to `−—`.
+import { negatedAmountLabel } from '~/utils/price';
 
 // The open-check panel (right column of the sales screen). Groups identical server lines into
 // quantity rows and shows the server-authoritative totals. All mutations are delegated upward.
@@ -289,6 +293,23 @@ export default {
       return order.map(k => map[k]);
     },
     finalAmount () { return this.check ? this.check.finalAmount : 0; },
+    // RULED, not inherited. `sum + (g.discountAmount || 0)` is the manufactured-sum shape `statedSum`
+    // exists to prevent — a hole filled in by the arithmetic, before any gate is in a position to
+    // refuse it — and it is NOT that here, for a reason that has nothing to do with whether "no
+    // discount" is a semantic zero. `g` is not a wire object. `groups` above BUILDS it: it seeds
+    // `discountAmount: 0` and then only ever `+=` a number onto it. By construction `g.discountAmount`
+    // is always a finite number, so the `|| 0` cannot be reached by an absence and there is no hole
+    // for `statedSum` to preserve. It stays because it is harmless and because removing it would read
+    // as a claim that the field is guaranteed by something other than the six lines above it.
+    //
+    // The coercion that IS the manufactured-sum shape is one screen up, at `g.discountAmount +=
+    // line.discountAmount || 0` in `groups` — `line` is the wire object. A member line whose discount
+    // never arrived is added as 0, so a discounted group silently UNDERSTATES its discount and this
+    // total inherits that. Turning that one into `statedSum` is not a free correction: `null` would
+    // fail the `> 0` guards at CheckLine and on the row below, deleting the discount row entirely
+    // while the backend's `finalAmount` still reflects the discount — a bill whose total is lower than
+    // its lines with nothing on screen saying why. That is a display-semantics decision, it is
+    // recorded in `lanes/L-XZ-RESIDUAL-SITES/mutation-log.md`, and it is deliberately not taken here.
     totalDiscount () {
       return this.groups.reduce((sum, g) => sum + (g.discountAmount || 0), 0);
     },
@@ -303,6 +324,11 @@ export default {
     }
   },
   methods: {
+    // The sign is resolved from the negated value and the magnitude alone goes to the formatter —
+    // core's `priceLabel` renders -4 as "kr 0,-4" and -50 as "kr -,50". See `negatedAmountLabel`.
+    negatedPriceLabel (amountMinor) {
+      return negatedAmountLabel(amountMinor, this.priceLabel);
+    },
     startEditCouverts () {
       this.couvertsDraft = (this.check && this.check.couverts) || 2;
       this.editingCouverts = true;

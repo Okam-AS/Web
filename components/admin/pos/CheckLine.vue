@@ -52,7 +52,7 @@
         {{ group.notes }}
       </p>
       <p v-if="group.discountAmount > 0" class="check-line__discount">
-        {{ group.discountReason || $i('pos_discount') }}: −{{ priceLabel(group.discountAmount) }}
+        {{ group.discountReason || $i('pos_discount') }}: {{ negatedPriceLabel(group.discountAmount) }}
         <button type="button" class="check-line__discount-remove" :title="$i('pos_remove_discount')" @click.stop="$emit('line-remove-discount', group)">×</button>
       </p>
 
@@ -100,6 +100,15 @@
 <script>
 // One grouped row in the open check. Because the backend never merges lines, the panel groups
 // identical lines and shows the combined quantity; +/- add or remove one member line.
+//
+// The discount line prints its sign through `negatedAmountLabel` rather than as a template literal in
+// front of the interpolation. `−{{ priceLabel(x) }}` puts the minus outside the interpolation, where
+// no absence rule in this repo can see it, and an amount the rule withholds composes to `−—`. The
+// `> 0` guard on the row hides the ordinary absences before they get that far, but it is a relational
+// test rather than the absence rule and the two disagree on `Infinity`; the sign belongs to the label
+// regardless, which is the only place that knows whether there is a figure to attach it to.
+import { negatedAmountLabel } from '~/utils/price';
+
 export default {
   name: 'CheckLine',
   props: {
@@ -143,6 +152,11 @@ export default {
     }
   },
   methods: {
+    // The sign is resolved from the negated value and the magnitude alone goes to the formatter —
+    // core's `priceLabel` renders -4 as "kr 0,-4" and -50 as "kr -,50". See `negatedAmountLabel`.
+    negatedPriceLabel (amountMinor) {
+      return negatedAmountLabel(amountMinor, this.priceLabel);
+    },
     optionLabel (o) {
       return o.parentName ? o.parentName + ': ' + o.name : o.name;
     }
