@@ -1,0 +1,385 @@
+ASSEMBLY WebApi /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/dicensus/bin/Debug/net8.0/WebApi.dll
+TYPES 7500
+
+CTORPARAM	WebApi.Controllers.MarginStatusController	public	contributors	IEnumerable<IMarginStatusContributor>	WebApi.Services.Margin.Interfaces.IMarginStatusContributor	nodefault	controller
+CTORPARAM	WebApi.Controllers.StoreFeatureFlagsController	public	effectiveResolvers	IEnumerable<IStoreFeatureFlagEffectiveResolver>	WebApi.Services.Platform.FeatureFlags.IStoreFeatureFlagEffectiveResolver	nodefault	controller
+CTORPARAM	WebApi.Controllers.TripletexAdminController	public	exportProviders	IEnumerable<IAccountingExportProvider>	WebApi.Services.Interfaces.IAccountingExportProvider	nodefault	controller
+CTORPARAM	WebApi.Helpers.AppException	public	args	Object[]	System.Object	nodefault	plain
+CTORPARAM	WebApi.Models.Workforce.WorkforceRateSegment	public	supplements	IReadOnlyList<WorkforceSupplementComponent>	WebApi.Models.Workforce.WorkforceSupplementComponent	nodefault	plain
+CTORPARAM	WebApi.Models.Workforce.WorkforceShiftCost	private	segments	IReadOnlyList<WorkforceRateSegment>	WebApi.Models.Workforce.WorkforceRateSegment	nodefault	plain
+CTORPARAM	WebApi.Models.Workforce.WorkforceSupplementPolicy	private	windows	IReadOnlyList<WorkforceSupplementWindow>	WebApi.Models.Workforce.WorkforceSupplementWindow	nodefault	plain
+CTORPARAM	WebApi.Services.AccountingExportOrchestrator	public	providers	IEnumerable<IAccountingExportProvider>	WebApi.Services.Interfaces.IAccountingExportProvider	nodefault	plain
+CTORPARAM	WebApi.Services.Events.EventsNotificationDrainService	public	deliveries	IEnumerable<IEventsNotificationDelivery>	WebApi.Services.Events.Interfaces.IEventsNotificationDelivery	nodefault	plain
+CTORPARAM	WebApi.Services.Growth.GrowthDeferredShredSweepResult	public	Failed	IReadOnlyList<GrowthDeferredShredFailure>	WebApi.Services.Growth.GrowthDeferredShredFailure	nodefault	plain
+CTORPARAM	WebApi.Services.Kassa.TerminalPaymentProviderResolver	public	providers	IEnumerable<ITerminalPaymentProvider>	WebApi.Services.Interfaces.ITerminalPaymentProvider	nodefault	plain
+CTORPARAM	WebApi.Services.MaintenanceService	public	captureSweepers	IEnumerable<IUncapturedOrderSweeper>	WebApi.Services.Interfaces.IUncapturedOrderSweeper	nodefault	plain
+CTORPARAM	WebApi.Services.Margin.Interfaces.MarginCsvParseResult	public	rows	IReadOnlyList<MarginCsvParsedRow>	WebApi.Services.Margin.Interfaces.MarginCsvParsedRow	nodefault	plain
+CTORPARAM	WebApi.Services.Margin.MarginRecipeCostCalculator+IngredientRate	public	conversions	IReadOnlyList<ValueTuple<String,Decimal>>	System.ValueTuple`2[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Decimal, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]	nodefault	plain
+CTORPARAM	WebApi.Services.Meals.MealsJournalReceiptProjection	public	taxLines	IReadOnlyList<MealsJournalTaxLineProjection>	WebApi.Services.Meals.MealsJournalTaxLineProjection	nodefault	plain
+CTORPARAM	WebApi.Services.Platform.FeatureFlags.FeatureFlagCatalog	public	descriptors	IEnumerable<FeatureFlagDescriptor>	WebApi.Services.Platform.FeatureFlags.FeatureFlagDescriptor	nodefault	plain
+CTORPARAM	WebApi.Services.Workforce.WorkforceNotificationDispatcher	public	deliveries	IEnumerable<IWorkforceNotificationDelivery>	WebApi.Services.Workforce.Interfaces.IWorkforceNotificationDelivery	nodefault	plain
+CTORPARAM	WebApi.Services.Workforce.WorkforceRateResolver+RateTimeline	public	engagement	IReadOnlyList<RateRow>	WebApi.Services.Workforce.WorkforceRateResolver+RateRow	nodefault	plain
+CTORPARAM	WebApi.Services.Workforce.WorkforceRateResolver+RateTimeline	public	role	IReadOnlyList<RateRow>	WebApi.Services.Workforce.WorkforceRateResolver+RateRow	nodefault	plain
+
+=== METHOD-INJECTION SITES: Invoke/InvokeAsync on middleware + [FromServices]/[FromKeyedServices] params ===
+(end method-injection sweep)
+
+=== COMPOSITION ROOT: descriptors produced by Program.AddServices + Program.AddBuilders ===
+INVOKED AddServices -> descriptors now 284
+INVOKED AddBuilders -> descriptors now 289
+EXT AddCustomAuthorization +17
+EXT AddIdentityConfiguration +70
+EXT AddControllersWithSerializerSettings +116
+EXT AddJWTAuthentication +8
+
+--- EXT descriptors whose service type is a known multi-registration seam ---
+EXTSEAM	Microsoft.AspNetCore.Authorization.IAuthorizationHandlerProvider	Microsoft.AspNetCore.Authorization.DefaultAuthorizationHandlerProvider	Transient
+EXTSEAM	Microsoft.AspNetCore.Authorization.IAuthorizationHandlerContextFactory	Microsoft.AspNetCore.Authorization.DefaultAuthorizationHandlerContextFactory	Transient
+EXTSEAM	Microsoft.AspNetCore.Authorization.IAuthorizationHandler	Microsoft.AspNetCore.Authorization.Infrastructure.PassThroughAuthorizationHandler	Transient
+EXTSEAM	Microsoft.AspNetCore.Authorization.IAuthorizationHandler	WebApi.Authorization.StoreAdminAuthorizationHandler	Singleton
+EXTSEAM	Microsoft.AspNetCore.Authentication.IClaimsTransformation	Microsoft.AspNetCore.Authentication.NoopClaimsTransformation	Singleton
+EXTSEAM	Microsoft.Extensions.Options.IPostConfigureOptions`1[[Microsoft.AspNetCore.DataProtection.KeyManagement.KeyManagementOptions, Microsoft.AspNetCore.DataProtection, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]	Microsoft.AspNetCore.DataProtection.Internal.KeyManagementOptionsPostSetup	Singleton
+EXTSEAM	Microsoft.Extensions.Hosting.IHostedService	Microsoft.AspNetCore.DataProtection.Internal.DataProtectionHostedService	Singleton
+EXTSEAM	Microsoft.Extensions.Options.IPostConfigureOptions`1[[Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationOptions, Microsoft.AspNetCore.Authentication.Cookies, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]	Microsoft.AspNetCore.Authentication.Cookies.PostConfigureCookieAuthenticationOptions	Singleton
+EXTSEAM	Microsoft.Extensions.Options.IValidateOptions`1[[Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationOptions, Microsoft.AspNetCore.Authentication.Cookies, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]	(instance)	Singleton
+EXTSEAM	Microsoft.Extensions.Options.IValidateOptions`1[[Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationOptions, Microsoft.AspNetCore.Authentication.Cookies, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]	(instance)	Singleton
+EXTSEAM	Microsoft.Extensions.Options.IPostConfigureOptions`1[[Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationOptions, Microsoft.AspNetCore.Authentication.Cookies, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]	Microsoft.AspNetCore.Authentication.AuthenticationBuilder+PostConfigureAuthenticationSchemeOptions`1[[Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationOptions, Microsoft.AspNetCore.Authentication.Cookies, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]	Singleton
+EXTSEAM	Microsoft.Extensions.Options.IValidateOptions`1[[Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationOptions, Microsoft.AspNetCore.Authentication.Cookies, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]	(instance)	Singleton
+EXTSEAM	Microsoft.Extensions.Options.IValidateOptions`1[[Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationOptions, Microsoft.AspNetCore.Authentication.Cookies, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]	(instance)	Singleton
+EXTSEAM	Microsoft.Extensions.Options.IValidateOptions`1[[Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationOptions, Microsoft.AspNetCore.Authentication.Cookies, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]	(instance)	Singleton
+EXTSEAM	Microsoft.Extensions.Options.IValidateOptions`1[[Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationOptions, Microsoft.AspNetCore.Authentication.Cookies, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]	(instance)	Singleton
+EXTSEAM	Microsoft.Extensions.Options.IValidateOptions`1[[Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationOptions, Microsoft.AspNetCore.Authentication.Cookies, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]	(instance)	Singleton
+EXTSEAM	Microsoft.Extensions.Options.IValidateOptions`1[[Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationOptions, Microsoft.AspNetCore.Authentication.Cookies, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]	(instance)	Singleton
+EXTSEAM	Microsoft.Extensions.Options.IPostConfigureOptions`1[[Microsoft.AspNetCore.Identity.SecurityStampValidatorOptions, Microsoft.AspNetCore.Identity, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]	Microsoft.Extensions.DependencyInjection.IdentityServiceCollectionExtensions+PostConfigureSecurityStampValidatorOptions	Singleton
+EXTSEAM	Microsoft.Extensions.Options.IPostConfigureOptions`1[[Microsoft.AspNetCore.Mvc.MvcOptions, Microsoft.AspNetCore.Mvc.Core, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]	Microsoft.AspNetCore.Mvc.MvcCoreMvcOptionsSetup	Transient
+EXTSEAM	Microsoft.AspNetCore.Hosting.IStartupFilter	Microsoft.AspNetCore.Mvc.Filters.MiddlewareFilterBuilderStartupFilter	Singleton
+EXTSEAM	Microsoft.Extensions.Options.IPostConfigureOptions`1[[Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerOptions, Microsoft.AspNetCore.Authentication.JwtBearer, Version=8.0.11.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]	Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerPostConfigureOptions	Singleton
+EXTSEAM	Microsoft.Extensions.Options.IValidateOptions`1[[Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerOptions, Microsoft.AspNetCore.Authentication.JwtBearer, Version=8.0.11.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]	(instance)	Singleton
+EXTSEAM	Microsoft.Extensions.Options.IPostConfigureOptions`1[[Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerOptions, Microsoft.AspNetCore.Authentication.JwtBearer, Version=8.0.11.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]	Microsoft.AspNetCore.Authentication.AuthenticationBuilder+PostConfigureAuthenticationSchemeOptions`1[[Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerOptions, Microsoft.AspNetCore.Authentication.JwtBearer, Version=8.0.11.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]	Singleton
+
+--- AddServices+AddBuilders: every service type registered MORE THAN ONCE (the multi-registration surface) ---
+MULTI	Microsoft.Extensions.Hosting.IHostedService	count=10	WebApi.Services.Jobs.PaymentCaptureBackgroundService , WebApi.Services.Jobs.DailyMaintenanceBackgroundService , WebApi.Services.Workforce.WorkforceNotificationDispatchHostedService , WebApi.Services.Meals.MealsProjectionHostedService , WebApi.Services.Meals.MealsReconciliationHostedService , WebApi.Services.Jobs.GrowthDeferredShredSweepBackgroundService , WebApi.Services.Jobs.GrowthDispatchBackgroundService , WebApi.Services.Events.EventsExpirySweepHostedService , WebApi.Services.Events.EventsNotificationDispatchHostedService , WebApi.Services.Margin.MarginSalesProjector
+MULTI	WebApi.Services.Interfaces.IAccountingExportProvider	count=2	WebApi.Services.EmonkeyAccountingExportProvider , WebApi.Services.TripletexAccountingExportProvider
+MULTI	WebApi.Services.Interfaces.ITerminalPaymentProvider	count=2	(factory) , (factory)
+MULTI	WebApi.Services.Interfaces.IUncapturedOrderSweeper	count=3	WebApi.Services.Jobs.DinteroUncapturedOrderSweeper , WebApi.Services.Jobs.SurfboardUncapturedOrderSweeper , WebApi.Services.Jobs.VippsUncapturedOrderSweeper
+MULTI	WebApi.Services.Margin.Interfaces.IMarginStatusContributor	count=3	WebApi.Services.Margin.MarginPriceImportStatusContributor , WebApi.Services.Margin.MarginRecipeStatusContributor , WebApi.Services.Margin.MarginProjectionStatusContributor
+MULTI	WebApi.Services.Platform.FeatureFlags.IStoreFeatureFlagEffectiveResolver	count=2	WebApi.Services.Workforce.WorkforceModuleFlagEffectiveResolver , WebApi.Services.Margin.MarginModuleFlagEffectiveResolver
+MULTI	WebApi.Services.Workforce.Interfaces.IWorkforceNotificationDelivery	count=4	WebApi.Services.Workforce.WorkforceInAppNotificationDelivery , WebApi.Services.Workforce.WorkforcePushNotificationDelivery , WebApi.Services.Workforce.WorkforceSmsNotificationDelivery , WebApi.Services.Workforce.WorkforceEmailNotificationDelivery
+
+--- registrations for each collection ELEMENT type found above ---
+ELEM	WebApi.Services.Margin.Interfaces.IMarginStatusContributor	count=3
+  IMPL	WebApi.Services.Margin.MarginPriceImportStatusContributor	Scoped
+  IMPL	WebApi.Services.Margin.MarginRecipeStatusContributor	Scoped
+  IMPL	WebApi.Services.Margin.MarginProjectionStatusContributor	Scoped
+ELEM	WebApi.Services.Platform.FeatureFlags.IStoreFeatureFlagEffectiveResolver	count=2
+  IMPL	WebApi.Services.Workforce.WorkforceModuleFlagEffectiveResolver	Scoped
+  IMPL	WebApi.Services.Margin.MarginModuleFlagEffectiveResolver	Scoped
+ELEM	WebApi.Services.Interfaces.IAccountingExportProvider	count=2
+  IMPL	WebApi.Services.EmonkeyAccountingExportProvider	Scoped
+  IMPL	WebApi.Services.TripletexAccountingExportProvider	Scoped
+ELEM	WebApi.Services.Events.Interfaces.IEventsNotificationDelivery	count=1
+  IMPL	WebApi.Services.Events.EventsEmailNotificationDelivery	Scoped
+ELEM	WebApi.Services.Interfaces.ITerminalPaymentProvider	count=2
+  IMPL	(factory)	Scoped
+  IMPL	(factory)	Scoped
+ELEM	WebApi.Services.Interfaces.IUncapturedOrderSweeper	count=3
+  IMPL	WebApi.Services.Jobs.DinteroUncapturedOrderSweeper	Scoped
+  IMPL	WebApi.Services.Jobs.SurfboardUncapturedOrderSweeper	Scoped
+  IMPL	WebApi.Services.Jobs.VippsUncapturedOrderSweeper	Scoped
+ELEM	WebApi.Services.Platform.FeatureFlags.FeatureFlagDescriptor	count=0
+ELEM	WebApi.Services.Workforce.Interfaces.IWorkforceNotificationDelivery	count=4
+  IMPL	WebApi.Services.Workforce.WorkforceInAppNotificationDelivery	Scoped
+  IMPL	WebApi.Services.Workforce.WorkforcePushNotificationDelivery	Scoped
+  IMPL	WebApi.Services.Workforce.WorkforceSmsNotificationDelivery	Scoped
+  IMPL	WebApi.Services.Workforce.WorkforceEmailNotificationDelivery	Scoped
+
+--- FULL DESCRIPTOR DUMP (serviceType -> impl, lifetime) ---
+DESC	WebApi.Services.Interfaces.ISmsService	WebApi.Services.SmsService	Transient
+DESC	WebApi.Services.Interfaces.IUserService	WebApi.Services.UserService	Scoped
+DESC	WebApi.Services.Interfaces.ICartService	WebApi.Services.CartService	Scoped
+DESC	WebApi.Services.Interfaces.IOrderService	WebApi.Services.OrderService	Scoped
+DESC	WebApi.Services.Interfaces.IOrderIdGeneratorService	WebApi.Services.OrderIdGeneratorService	Scoped
+DESC	WebApi.Services.Interfaces.IStatisticsService	WebApi.Services.StatisticsService	Scoped
+DESC	WebApi.Services.Interfaces.IWrappedService	WebApi.Services.WrappedService	Scoped
+DESC	WebApi.Services.Interfaces.IStoreService	WebApi.Services.StoreService	Scoped
+DESC	WebApi.Services.Interfaces.IRewardService	WebApi.Services.RewardService	Scoped
+DESC	WebApi.Services.Interfaces.IGiftcardService	WebApi.Services.GiftcardService	Scoped
+DESC	WebApi.Services.Interfaces.IAddressService	WebApi.Services.AddressService	Scoped
+DESC	WebApi.Services.Interfaces.IImageService	WebApi.Services.ImageService	Scoped
+DESC	WebApi.Services.Interfaces.INotificationService	WebApi.Services.NotificationService	Scoped
+DESC	WebApi.Services.Interfaces.IProductService	WebApi.Services.ProductService	Scoped
+DESC	WebApi.Services.Interfaces.IDiscountService	WebApi.Services.DiscountService	Scoped
+DESC	WebApi.Services.Interfaces.IImageCarouselService	WebApi.Services.ImageCarouselService	Scoped
+DESC	WebApi.Services.Interfaces.IHomeDeliveryMethodService	WebApi.Services.HomeDeliveryMethodService	Scoped
+DESC	WebApi.Services.Interfaces.ICategoryService	WebApi.Services.CategoryService	Scoped
+DESC	WebApi.Services.Interfaces.IProductVariantService	WebApi.Services.ProductVariantService	Scoped
+DESC	WebApi.Services.Interfaces.IAuthService	WebApi.Services.AuthService	Scoped
+DESC	WebApi.Services.Interfaces.IEmailService	WebApi.Services.EmailService	Scoped
+DESC	WebApi.Services.Interfaces.IDocumentRenderer	WebApi.Services.OkamFunctionsDocumentRenderer	Scoped
+DESC	WebApi.Services.Interfaces.IInvoiceService	WebApi.Services.InvoiceService	Scoped
+DESC	WebApi.Services.Interfaces.IFeedbackService	WebApi.Services.FeedbackService	Scoped
+DESC	WebApi.Services.Interfaces.IReceiptService	WebApi.Services.ReceiptService	Scoped
+DESC	WebApi.Services.Interfaces.IDiscordService	WebApi.Services.DiscordService	Singleton
+DESC	WebApi.Services.Interfaces.ICultureService	WebApi.Services.CultureService	Scoped
+DESC	WebApi.Services.Interfaces.IStoreTranslationService	WebApi.Services.StoreTranslationService	Scoped
+DESC	WebApi.Services.Interfaces.IPaymentService	WebApi.Services.PaymentService	Scoped
+DESC	WebApi.Services.Interfaces.IStripeService	WebApi.Services.StripeService	Scoped
+DESC	WebApi.Services.Interfaces.IOkamPayoutService	WebApi.Services.OkamPayoutService	Scoped
+DESC	WebApi.Services.Interfaces.IVippsService	WebApi.Services.VippsService	Scoped
+DESC	WebApi.Services.Interfaces.IDineHomeService	WebApi.Services.DineHomeService	Scoped
+DESC	WebApi.Services.Interfaces.IWoltService	WebApi.Services.WoltService	Scoped
+DESC	WebApi.Services.Interfaces.IWoltAuthService	WebApi.Services.WoltAuthService	Scoped
+DESC	WebApi.Services.Interfaces.IWoltOrderService	WebApi.Services.WoltOrderService	Scoped
+DESC	WebApi.Services.Interfaces.IWoltMenuService	WebApi.Services.WoltMenuService	Scoped
+DESC	WebApi.Services.Interfaces.IWoltMenuSyncService	WebApi.Services.WoltMenuSyncService	Scoped
+DESC	WebApi.Services.Interfaces.IWoltVenueService	WebApi.Services.WoltVenueService	Scoped
+DESC	WebApi.Services.Interfaces.IClientConfigurationService	WebApi.Services.ClientConfigurationService	Scoped
+DESC	WebApi.Services.Interfaces.IMenuAIService	WebApi.Services.AIService	Scoped
+DESC	IDinteroService	WebApi.Services.DinteroService	Scoped
+DESC	WebApi.Services.IDinteroFeeCalculationService	WebApi.Services.DinteroFeeCalculationService	Scoped
+DESC	WebApi.Services.DinteroTerminalService	WebApi.Services.DinteroTerminalService	Scoped
+DESC	WebApi.Services.Interfaces.IDinteroTerminalService	(factory)	Scoped
+DESC	WebApi.Services.Interfaces.ITerminalPaymentProvider	(factory)	Scoped
+DESC	WebApi.Services.Interfaces.IDinteroTokenClient	WebApi.Services.DinteroTokenClient	Scoped
+DESC	WebApi.Services.Interfaces.ISurfboardClient	WebApi.Services.SurfboardClient	Scoped
+DESC	WebApi.Services.Interfaces.ISurfboardService	WebApi.Services.SurfboardService	Scoped
+DESC	WebApi.Services.Interfaces.ISurfboardOnboardingService	WebApi.Services.SurfboardOnboardingService	Scoped
+DESC	WebApi.Services.Interfaces.ISurfboardReceiptPrintService	WebApi.Services.SurfboardReceiptPrintService	Scoped
+DESC	WebApi.Services.SurfboardTerminalService	WebApi.Services.SurfboardTerminalService	Scoped
+DESC	WebApi.Services.Interfaces.ITerminalPaymentProvider	(factory)	Scoped
+DESC	System.TimeProvider	(instance System.TimeProvider+SystemTimeProvider)	Singleton
+DESC	WebApi.Services.Interfaces.ITripletexClient	WebApi.Services.TripletexClient	Scoped
+DESC	WebApi.Services.Interfaces.ITripletexVoucherBuilder	WebApi.Services.TripletexVoucherBuilder	Scoped
+DESC	WebApi.Services.Interfaces.ITripletexConnectionService	WebApi.Services.TripletexConnectionService	Scoped
+DESC	WebApi.Services.Interfaces.ITripletexAccountResolver	WebApi.Services.TripletexAccountResolver	Scoped
+DESC	WebApi.Services.Interfaces.ITripletexVoucherPoster	WebApi.Services.TripletexVoucherPoster	Scoped
+DESC	WebApi.Services.Interfaces.IAccountingExportProvider	WebApi.Services.EmonkeyAccountingExportProvider	Scoped
+DESC	WebApi.Services.Interfaces.IAccountingExportProvider	WebApi.Services.TripletexAccountingExportProvider	Scoped
+DESC	WebApi.Services.Interfaces.IAccountingExportOrchestrator	WebApi.Services.AccountingExportOrchestrator	Scoped
+DESC	WebApi.Services.Interfaces.ITripletexPosService	WebApi.Services.TripletexPosService	Scoped
+DESC	WebApi.Services.Interfaces.ITripletexPayoutService	WebApi.Services.TripletexPayoutService	Scoped
+DESC	WebApi.Services.Interfaces.IStoreAdminAccess	WebApi.Services.StoreAdminAccess	Scoped
+DESC	WebApi.Services.Interfaces.IStoreMarketService	WebApi.Services.StoreMarketService	Scoped
+DESC	WebApi.Services.Interfaces.IOfferService	WebApi.Services.OfferService	Scoped
+DESC	WebApi.Services.Interfaces.IOfferProposalService	WebApi.Services.OfferProposalService	Scoped
+DESC	WebApi.Services.Interfaces.IKamService	WebApi.Services.KamService	Scoped
+DESC	WebApi.Services.Interfaces.IUserLookupService	WebApi.Services.UserLookupService	Scoped
+DESC	WebApi.Services.Interfaces.IBrregService	WebApi.Services.BrregService	Scoped
+DESC	WebApi.Services.Interfaces.IAccountingService	WebApi.Services.AccountingService	Scoped
+DESC	WebApi.Services.Interfaces.IUncapturedOrderSweeper	WebApi.Services.Jobs.DinteroUncapturedOrderSweeper	Scoped
+DESC	WebApi.Services.Interfaces.IUncapturedOrderSweeper	WebApi.Services.Jobs.SurfboardUncapturedOrderSweeper	Scoped
+DESC	WebApi.Services.Interfaces.IUncapturedOrderSweeper	WebApi.Services.Jobs.VippsUncapturedOrderSweeper	Scoped
+DESC	WebApi.Services.Interfaces.IMaintenanceService	WebApi.Services.MaintenanceService	Scoped
+DESC	Microsoft.Extensions.Hosting.IHostedService	WebApi.Services.Jobs.PaymentCaptureBackgroundService	Singleton
+DESC	Microsoft.Extensions.Hosting.IHostedService	WebApi.Services.Jobs.DailyMaintenanceBackgroundService	Singleton
+DESC	WebApi.Services.Interfaces.IPlacesService	WebApi.Services.PlacesService	Scoped
+DESC	WebApi.Services.Interfaces.IChatService	WebApi.Services.ChatService	Scoped
+DESC	WebApi.Services.Interfaces.IGeminiClient	WebApi.Services.Analytics.GeminiClient	Scoped
+DESC	WebApi.Services.Interfaces.ISemanticLayerService	WebApi.Services.Analytics.SemanticLayerService	Scoped
+DESC	WebApi.Services.Interfaces.IAnalyticsToolRunner	WebApi.Services.Analytics.Tools.AnalyticsToolRunner	Scoped
+DESC	WebApi.Services.Interfaces.IChatOrchestrator	WebApi.Services.Analytics.ChatOrchestrator	Scoped
+DESC	WebApi.Services.Interfaces.IExternalMenuService	WebApi.Services.ExternalMenuService	Scoped
+DESC	WebApi.Mcp.Services.IMcpShoppingService	WebApi.Mcp.Services.McpShoppingService	Scoped
+DESC	WebApi.Mcp.Services.IMcpAdminAnalyticsService	WebApi.Mcp.Services.McpAdminAnalyticsService	Scoped
+DESC	WebApi.Services.ICircuitBreakerService	WebApi.Services.CircuitBreakerService	Singleton
+DESC	WebApi.Services.IGeminiRateLimiterService	WebApi.Services.GeminiRateLimiterService	Singleton
+DESC	WebApi.Services.Interfaces.IKassaSigningKeyProvider	(factory)	Singleton
+DESC	WebApi.Services.Interfaces.ISignatureService	WebApi.Services.Kassa.SignatureService	Scoped
+DESC	WebApi.Services.Interfaces.IJournalService	WebApi.Services.Kassa.JournalService	Scoped
+DESC	WebApi.Services.Interfaces.IJournalVerificationService	WebApi.Services.Kassa.JournalVerificationService	Scoped
+DESC	WebApi.Services.Interfaces.IFinalizeService	WebApi.Services.Kassa.FinalizeService	Scoped
+DESC	WebApi.Services.Interfaces.IPosReceiptService	WebApi.Services.Kassa.PosReceiptService	Scoped
+DESC	WebApi.Services.Interfaces.ITerminalPaymentProviderResolver	WebApi.Services.Kassa.TerminalPaymentProviderResolver	Scoped
+DESC	WebApi.Services.Interfaces.ITerminalPaymentOrchestrator	WebApi.Services.Kassa.TerminalPaymentOrchestrator	Scoped
+DESC	WebApi.Services.Interfaces.IPosSettlementService	WebApi.Services.Kassa.PosSettlementService	Scoped
+DESC	WebApi.Services.Interfaces.IOpenCheckService	WebApi.Services.Kassa.OpenCheckService	Scoped
+DESC	WebApi.Services.Interfaces.ICheckSplitService	WebApi.Services.Kassa.CheckSplitService	Scoped
+DESC	WebApi.Services.Interfaces.IAllergenService	WebApi.Services.Kassa.AllergenService	Scoped
+DESC	WebApi.Services.Interfaces.IBoardStatusService	WebApi.Services.Kassa.BoardStatusService	Scoped
+DESC	WebApi.Services.Interfaces.IKitchenBoardService	WebApi.Services.Kassa.KitchenBoardService	Scoped
+DESC	WebApi.Services.Interfaces.ICashPointService	WebApi.Services.Kassa.CashPointService	Scoped
+DESC	WebApi.Services.Interfaces.IOperatorService	WebApi.Services.Kassa.OperatorService	Scoped
+DESC	WebApi.Services.Interfaces.IOperatorPinService	WebApi.Services.Kassa.OperatorPinService	Scoped
+DESC	WebApi.Services.Interfaces.IOperatorSessionResolver	WebApi.Services.Kassa.OperatorSessionResolver	Scoped
+DESC	WebApi.Services.Interfaces.IGoodsGroupService	WebApi.Services.Kassa.GoodsGroupService	Scoped
+DESC	WebApi.Services.Interfaces.IOpenPricePresetService	WebApi.Services.Kassa.OpenPricePresetService	Scoped
+DESC	WebApi.Services.Interfaces.ICashDrawerService	WebApi.Services.Kassa.CashDrawerService	Scoped
+DESC	WebApi.Services.Interfaces.IXZReportService	WebApi.Services.Kassa.XZReportService	Scoped
+DESC	WebApi.Services.Interfaces.IEodService	WebApi.Services.Kassa.EodService	Scoped
+DESC	WebApi.Services.Interfaces.ISaftCashRegisterExportService	WebApi.Services.Kassa.SaftCashRegisterExportService	Scoped
+DESC	WebApi.Services.Interfaces.ITableService	WebApi.Services.TableService	Scoped
+DESC	WebApi.Services.Interfaces.IReservationService	WebApi.Services.ReservationService	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceAuthorizationService	WebApi.Services.Workforce.WorkforceAuthorizationService	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceIdempotency	WebApi.Services.Workforce.WorkforceIdempotency	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceAuditWriter	WebApi.Services.Workforce.WorkforceAuditWriter	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IStoreTimeZoneResolver	WebApi.Services.Workforce.StoreTimeZoneResolver	Scoped
+DESC	WebApi.Services.Interfaces.IKassaBusinessDateResolver	WebApi.Services.Kassa.KassaBusinessDateResolver	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceStaffService	WebApi.Services.Workforce.WorkforceStaffService	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceInvitationService	WebApi.Services.Workforce.WorkforceInvitationService	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceOperatorImportService	WebApi.Services.Workforce.WorkforceOperatorImportService	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceScheduleService	WebApi.Services.Workforce.WorkforceScheduleService	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceScheduleValidationService	WebApi.Services.Workforce.WorkforceScheduleValidationService	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceSchedulePublishService	WebApi.Services.Workforce.WorkforceSchedulePublishService	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceScheduleCostProjection	WebApi.Services.Workforce.WorkforceScheduleCostProjection	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforcePersonnelListProjection	WebApi.Services.Workforce.WorkforcePersonnelListProjection	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforcePersonnelListService	WebApi.Services.Workforce.WorkforcePersonnelListService	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceIdentityCodeRegisterService	WebApi.Services.Workforce.WorkforceIdentityCodeRegisterService	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceClockService	WebApi.Services.Workforce.WorkforceClockService	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceAttendanceService	WebApi.Services.Workforce.WorkforceAttendanceService	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceRateResolver	WebApi.Services.Workforce.WorkforceRateResolver	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceSupplementPolicyResolver	WebApi.Services.Workforce.WorkforceSupplementPolicyResolver	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceRateAuthoringService	WebApi.Services.Workforce.WorkforceRateAuthoringService	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceHoursExportService	WebApi.Services.Workforce.WorkforceHoursExportService	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceContractExposureService	WebApi.Services.Workforce.WorkforceContractExposureService	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceLabourBandService	WebApi.Services.Workforce.WorkforceLabourBandService	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforcePosVerification	WebApi.Services.Workforce.WorkforcePosDevVerification	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforcePosOperatorResolver	WebApi.Services.Workforce.WorkforcePosOperatorResolver	Scoped
+DESC	WebApi.Services.Platform.FeatureFlags.IFeatureFlagCatalog	(instance WebApi.Services.Platform.FeatureFlags.FeatureFlagCatalog)	Singleton
+DESC	WebApi.Services.Platform.FeatureFlags.IFeatureFlagStore	WebApi.Services.Platform.FeatureFlags.FeatureFlagStore	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceFeatureFlags	WebApi.Services.Workforce.StoreBackedWorkforceFeatureFlags	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceModuleGate	WebApi.Services.Workforce.WorkforceModuleGate	Scoped
+DESC	WebApi.Services.Platform.FeatureFlags.IStoreFeatureFlagEffectiveResolver	WebApi.Services.Workforce.WorkforceModuleFlagEffectiveResolver	Scoped
+DESC	WebApi.Services.Growth.IGrowthFeatureFlags	WebApi.Services.Growth.StoreBackedGrowthFeatureFlags	Scoped
+DESC	WebApi.Services.Meals.Interfaces.IMealsStoreFeatureFlags	WebApi.Services.Meals.StoreBackedMealsFeatureFlags	Scoped
+DESC	WebApi.Services.Meals.Interfaces.IMealsInvitationTokenService	(factory)	Scoped
+DESC	WebApi.Services.Meals.Interfaces.IMealsCompanyService	WebApi.Services.Meals.MealsCompanyService	Scoped
+DESC	WebApi.Services.Meals.Interfaces.IMealsMembershipService	WebApi.Services.Meals.MealsMembershipService	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceSelfService	WebApi.Services.Workforce.WorkforceSelfService	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceAvailabilityService	WebApi.Services.Workforce.WorkforceAvailabilityService	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceTimeOffService	WebApi.Services.Workforce.WorkforceTimeOffService	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceRequestsService	WebApi.Services.Workforce.WorkforceRequestsService	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceShiftExchangeService	WebApi.Services.Workforce.WorkforceShiftExchangeService	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceNotificationDelivery	WebApi.Services.Workforce.WorkforceInAppNotificationDelivery	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceNotificationDelivery	WebApi.Services.Workforce.WorkforcePushNotificationDelivery	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceNotificationDelivery	WebApi.Services.Workforce.WorkforceSmsNotificationDelivery	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceNotificationDelivery	WebApi.Services.Workforce.WorkforceEmailNotificationDelivery	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceNotificationDispatcher	WebApi.Services.Workforce.WorkforceNotificationDispatcher	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceCallerIdentity	WebApi.Services.Workforce.WorkforceCallerIdentityResolver	Scoped
+DESC	WebApi.Services.Workforce.Interfaces.IWorkforceCompetencyProjection	WebApi.Services.Workforce.WorkforceCompetencyProjection	Scoped
+DESC	Microsoft.Extensions.Hosting.IHostedService	WebApi.Services.Workforce.WorkforceNotificationDispatchHostedService	Singleton
+DESC	WebApi.Services.Meals.Interfaces.IMealsAuthorizationService	WebApi.Services.Meals.MealsAuthorizationService	Scoped
+DESC	WebApi.Services.Meals.Interfaces.IMealsCommandReceiptService	WebApi.Services.Meals.MealsCommandReceiptService	Scoped
+DESC	WebApi.Services.Meals.Interfaces.IMealsAuditWriter	WebApi.Services.Meals.MealsAuditWriter	Scoped
+DESC	WebApi.Services.Meals.Interfaces.IMealsProgramService	WebApi.Services.Meals.MealsProgramService	Scoped
+DESC	Microsoft.Extensions.Options.IOptions`1	Microsoft.Extensions.Options.UnnamedOptionsManager`1	Singleton
+DESC	Microsoft.Extensions.Options.IOptionsSnapshot`1	Microsoft.Extensions.Options.OptionsManager`1	Scoped
+DESC	Microsoft.Extensions.Options.IOptionsMonitor`1	Microsoft.Extensions.Options.OptionsMonitor`1	Singleton
+DESC	Microsoft.Extensions.Options.IOptionsFactory`1	Microsoft.Extensions.Options.OptionsFactory`1	Transient
+DESC	Microsoft.Extensions.Options.IOptionsMonitorCache`1	Microsoft.Extensions.Options.OptionsCache`1	Singleton
+DESC	Microsoft.Extensions.Options.IConfigureOptions`1[[WebApi.Models.Meals.MealsFeatureSettings, WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]	(factory)	Transient
+DESC	Microsoft.Extensions.Options.IOptionsChangeTokenSource`1[[WebApi.Models.Meals.MealsFeatureSettings, WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]	Microsoft.Extensions.Options.ConfigurationChangeTokenSource`1[[WebApi.Models.Meals.MealsFeatureSettings, WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]	Singleton
+DESC	WebApi.Services.Meals.Interfaces.IMealsFeatureGate	WebApi.Services.Meals.MealsFeatureGate	Scoped
+DESC	WebApi.Services.Meals.Interfaces.IMealsAuthorizationTokenService	(factory)	Scoped
+DESC	WebApi.Services.Meals.Interfaces.IMealsQuoteService	WebApi.Services.Meals.MealsQuoteService	Scoped
+DESC	WebApi.Services.Meals.Interfaces.IMealsFundingLedgerService	WebApi.Services.Meals.MealsFundingLedgerService	Scoped
+DESC	WebApi.Services.Meals.Interfaces.IMealsFundingAuthority	WebApi.Services.Meals.MealsFundingAuthority	Scoped
+DESC	WebApi.Services.Meals.Interfaces.IMealsJournalProjectionSource	WebApi.Services.Meals.MealsJournalProjectionSource	Scoped
+DESC	WebApi.Services.Meals.Interfaces.IMealsProjectionWorker	WebApi.Services.Meals.MealsProjectionWorker	Scoped
+DESC	WebApi.Services.Meals.Interfaces.IMealsReconciliationWorker	WebApi.Services.Meals.MealsReconciliationWorker	Scoped
+DESC	Microsoft.Extensions.Hosting.IHostedService	WebApi.Services.Meals.MealsProjectionHostedService	Singleton
+DESC	Microsoft.Extensions.Hosting.IHostedService	WebApi.Services.Meals.MealsReconciliationHostedService	Singleton
+DESC	WebApi.Services.Meals.Interfaces.IMealsStoreAccess	WebApi.Services.Meals.MealsStoreAccess	Scoped
+DESC	WebApi.Services.Meals.Interfaces.IMealsStatementService	WebApi.Services.Meals.MealsStatementService	Scoped
+DESC	WebApi.Services.Meals.Interfaces.IMealsStatementExportService	WebApi.Services.Meals.MealsStatementExportService	Scoped
+DESC	WebApi.Services.Meals.Interfaces.IMealsReconciliationService	WebApi.Services.Meals.MealsReconciliationService	Scoped
+DESC	WebApi.Services.Meals.Interfaces.IMealsAgreementService	WebApi.Services.Meals.MealsAgreementService	Scoped
+DESC	WebApi.Services.Growth.IGrowthAddressProtector	(factory)	Singleton
+DESC	WebApi.Services.Growth.IGrowthContactPointResolver	WebApi.Services.Growth.GrowthContactPointResolver	Scoped
+DESC	WebApi.Services.Growth.IGrowthConsentService	WebApi.Services.Growth.GrowthConsentService	Scoped
+DESC	WebApi.Services.Growth.IGrowthConsentGate	WebApi.Services.Growth.GrowthConsentGate	Scoped
+DESC	WebApi.Services.Growth.IGrowthAddressRekeyService	WebApi.Services.Growth.GrowthAddressRekeyService	Scoped
+DESC	WebApi.Services.Growth.GrowthFakeMailProvider	WebApi.Services.Growth.GrowthFakeMailProvider	Scoped
+DESC	WebApi.Services.Growth.GrowthSmtpMailProvider	WebApi.Services.Growth.GrowthSmtpMailProvider	Scoped
+DESC	WebApi.Services.Growth.GrowthPostmarkMailProvider	WebApi.Services.Growth.GrowthPostmarkMailProvider	Scoped
+DESC	WebApi.Services.Growth.IGrowthMailProvider	(factory)	Scoped
+DESC	WebApi.Services.Growth.IGrowthConfirmationMailer	WebApi.Services.Growth.GrowthConfirmationMailer	Scoped
+DESC	WebApi.Services.Growth.IGrowthPreferenceTokenService	WebApi.Services.Growth.GrowthPreferenceTokenService	Singleton
+DESC	WebApi.Services.Growth.IGrowthTransactionalMailSender	WebApi.Services.Growth.GrowthProviderTransactionalMailSender	Scoped
+DESC	WebApi.Services.Growth.IGrowthSubscriptionService	WebApi.Services.Growth.GrowthSubscriptionService	Scoped
+DESC	WebApi.Services.Growth.IGrowthPreferenceService	WebApi.Services.Growth.GrowthPreferenceService	Scoped
+DESC	WebApi.Services.Growth.IGrowthPrivacyRequestService	WebApi.Services.Growth.GrowthPrivacyRequestService	Scoped
+DESC	WebApi.Services.Growth.IGrowthConsentAdminService	WebApi.Services.Growth.GrowthConsentAdminService	Scoped
+DESC	WebApi.Services.Growth.IGrowthSegmentService	WebApi.Services.Growth.GrowthSegmentService	Scoped
+DESC	WebApi.Services.Growth.IGrowthNewsletterService	WebApi.Services.Growth.GrowthNewsletterService	Scoped
+DESC	WebApi.Services.Growth.IGrowthDispatchService	WebApi.Services.Growth.GrowthDispatchService	Scoped
+DESC	WebApi.Services.Growth.IGrowthWebhookSecretResolver	WebApi.Services.Growth.GrowthWebhookSecretResolver	Singleton
+DESC	WebApi.Services.Growth.IGrowthWebhookIngestionService	WebApi.Services.Growth.GrowthWebhookIngestionService	Scoped
+DESC	WebApi.Services.Growth.IGrowthDeliveryHealthService	WebApi.Services.Growth.GrowthDeliveryHealthService	Scoped
+DESC	WebApi.Services.Growth.IGrowthProviderAccountService	WebApi.Services.Growth.GrowthProviderAccountService	Scoped
+DESC	WebApi.Services.Growth.IGrowthAuditWriter	WebApi.Services.Growth.GrowthAuditWriter	Scoped
+DESC	WebApi.Services.Growth.IGrowthAuditReadService	WebApi.Services.Growth.GrowthAuditReadService	Scoped
+DESC	Microsoft.Extensions.Caching.Memory.IMemoryCache	Microsoft.Extensions.Caching.Memory.MemoryCache	Singleton
+DESC	WebApi.Services.Growth.IGrowthPublicRateLimiter	WebApi.Services.Growth.GrowthPublicRateLimiter	Singleton
+DESC	Microsoft.Extensions.Options.IConfigureOptions`1[[Microsoft.AspNetCore.Mvc.MvcOptions, Microsoft.AspNetCore.Mvc.Core, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]	(instance Microsoft.Extensions.Options.ConfigureNamedOptions`1[[Microsoft.AspNetCore.Mvc.MvcOptions, Microsoft.AspNetCore.Mvc.Core, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]])	Singleton
+DESC	WebApi.Services.IEmailConfirmationRateLimiter	WebApi.Services.EmailConfirmationRateLimiter	Singleton
+DESC	WebApi.Services.IReservationRateLimiter	WebApi.Services.ReservationRateLimiter	Singleton
+DESC	WebApi.Services.Growth.IGrowthDeferredShredSweep	WebApi.Services.Growth.GrowthDeferredShredSweep	Scoped
+DESC	Microsoft.Extensions.Hosting.IHostedService	WebApi.Services.Jobs.GrowthDeferredShredSweepBackgroundService	Singleton
+DESC	WebApi.Services.Growth.IGrowthDispatchSweep	WebApi.Services.Growth.GrowthDispatchSweep	Scoped
+DESC	Microsoft.Extensions.Hosting.IHostedService	WebApi.Services.Jobs.GrowthDispatchBackgroundService	Singleton
+DESC	WebApi.Services.Growth.IGrowthConsentTextService	WebApi.Services.Growth.GrowthConsentTextService	Scoped
+DESC	WebApi.Services.Events.IEventsFeatureFlagStore	WebApi.Services.Events.StoreBackedEventsFeatureFlagStore	Singleton
+DESC	WebApi.Services.Events.IEventsModuleGate	WebApi.Services.Events.EventsModuleGate	Singleton
+DESC	WebApi.Services.Events.IEventsInquiryRateLimiter	WebApi.Services.Events.EventsInquiryRateLimiter	Singleton
+DESC	WebApi.Services.Events.Interfaces.IEventsAmendmentService	WebApi.Services.Events.EventsAmendmentService	Scoped
+DESC	WebApi.Services.Events.Interfaces.IEventsProposalService	WebApi.Services.Events.EventsProposalService	Scoped
+DESC	Microsoft.Extensions.Hosting.IHostedService	WebApi.Services.Events.EventsExpirySweepHostedService	Singleton
+DESC	WebApi.Services.Events.Interfaces.IEventsInquiryService	WebApi.Services.Events.EventsInquiryService	Scoped
+DESC	WebApi.Services.Events.Interfaces.IEventsSettingsService	WebApi.Services.Events.EventsSettingsService	Scoped
+DESC	WebApi.Services.Events.Interfaces.IEventsDepositPaymentPort	WebApi.Services.Events.EventsDepositPaymentPortAdapter	Scoped
+DESC	WebApi.Services.Events.Interfaces.IEventsDepositCompletionSink	WebApi.Services.Events.EventsDepositCompletionSink	Scoped
+DESC	WebApi.Services.Events.Interfaces.IEventsDepositService	WebApi.Services.Events.EventsDepositService	Scoped
+DESC	WebApi.Services.Events.Interfaces.IEventsNotificationOutbox	WebApi.Services.Events.PersistedEventsNotificationOutbox	Scoped
+DESC	WebApi.Services.Events.Interfaces.IEventsNotificationDispatcher	WebApi.Services.Events.EventsNotificationDispatcher	Scoped
+DESC	WebApi.Services.Events.Interfaces.IEventsNotificationDelivery	WebApi.Services.Events.EventsEmailNotificationDelivery	Scoped
+DESC	WebApi.Services.Events.Interfaces.IEventsNotificationDrain	WebApi.Services.Events.EventsNotificationDrainService	Scoped
+DESC	Microsoft.Extensions.Hosting.IHostedService	WebApi.Services.Events.EventsNotificationDispatchHostedService	Singleton
+DESC	WebApi.Services.Events.Interfaces.IEventsNotificationHealthService	WebApi.Services.Events.EventsNotificationHealthService	Scoped
+DESC	WebApi.Services.Events.Interfaces.IEventsRunSheetService	WebApi.Services.Events.EventsRunSheetService	Scoped
+DESC	WebApi.Services.Events.Interfaces.IEventsBookingReadPort	WebApi.Services.Events.EventsBookingReadAdapter	Scoped
+DESC	WebApi.Services.Events.Interfaces.IEventsPosTruthReadPort	WebApi.Services.Events.EventsPosTruthReadAdapter	Scoped
+DESC	WebApi.Services.Events.Interfaces.IEventsScheduleReadPort	WebApi.Services.Events.EventsScheduleReadAdapter	Scoped
+DESC	WebApi.Services.Events.Interfaces.IEventsSettlementService	WebApi.Services.Events.EventsSettlementService	Scoped
+DESC	Microsoft.Extensions.Options.IConfigureOptions`1[[WebApi.Models.AppSettings.MarginModuleSettings, WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]	(factory)	Transient
+DESC	Microsoft.Extensions.Options.IOptionsChangeTokenSource`1[[WebApi.Models.AppSettings.MarginModuleSettings, WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]	Microsoft.Extensions.Options.ConfigurationChangeTokenSource`1[[WebApi.Models.AppSettings.MarginModuleSettings, WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]	Singleton
+DESC	WebApi.Services.Margin.Interfaces.IMarginModuleGate	WebApi.Services.Margin.MarginModuleGate	Scoped
+DESC	WebApi.Services.Platform.FeatureFlags.IStoreFeatureFlagEffectiveResolver	WebApi.Services.Margin.MarginModuleFlagEffectiveResolver	Scoped
+DESC	WebApi.Services.Margin.Interfaces.IMarginIngredientService	WebApi.Services.Margin.MarginIngredientService	Scoped
+DESC	WebApi.Services.Margin.Interfaces.IMarginSupplierService	WebApi.Services.Margin.MarginSupplierService	Scoped
+DESC	WebApi.Services.Margin.Interfaces.IMarginSupplierItemService	WebApi.Services.Margin.MarginSupplierItemService	Scoped
+DESC	WebApi.Services.Margin.Interfaces.IMarginSupplierItemPriceService	WebApi.Services.Margin.MarginSupplierItemPriceService	Scoped
+DESC	WebApi.Services.Margin.Interfaces.IMarginSupplierItemPriceWriter	WebApi.Services.Margin.MarginSupplierItemPriceService	Scoped
+DESC	WebApi.Services.Margin.Interfaces.IMarginPriceResolver	WebApi.Services.Margin.MarginPriceResolver	Scoped
+DESC	WebApi.Services.Margin.Interfaces.IMarginCsvParser	WebApi.Services.Margin.MarginCsvParser	Scoped
+DESC	WebApi.Services.Margin.Interfaces.IMarginPriceImportService	WebApi.Services.Margin.MarginPriceImportService	Scoped
+DESC	WebApi.Services.Margin.Interfaces.IMarginStatusContributor	WebApi.Services.Margin.MarginPriceImportStatusContributor	Scoped
+DESC	WebApi.Services.Margin.Interfaces.IMarginRecipeCostCalculator	WebApi.Services.Margin.MarginRecipeCostCalculator	Scoped
+DESC	WebApi.Services.Margin.Interfaces.IMarginRecipeService	WebApi.Services.Margin.MarginRecipeService	Scoped
+DESC	WebApi.Services.Margin.Interfaces.IMarginProductCatalogReadModel	WebApi.Services.Margin.MarginProductCatalogReadModel	Scoped
+DESC	WebApi.Services.Margin.Interfaces.IMarginProductLinkService	WebApi.Services.Margin.MarginProductLinkService	Scoped
+DESC	WebApi.Services.Margin.Interfaces.IMarginStatusContributor	WebApi.Services.Margin.MarginRecipeStatusContributor	Scoped
+DESC	WebApi.Services.Margin.Interfaces.IMarginStatementService	WebApi.Services.Margin.MarginStatementService	Scoped
+DESC	WebApi.Services.Margin.Interfaces.IMarginCoverageService	WebApi.Services.Margin.MarginCoverageService	Scoped
+DESC	WebApi.Services.Margin.Interfaces.IMarginMenuMarginService	WebApi.Services.Margin.MarginMenuMarginService	Scoped
+DESC	WebApi.Services.Margin.Interfaces.IMarginSalesProjectionSource	WebApi.Services.Margin.MarginSalesProjectionSource	Scoped
+DESC	WebApi.Services.Margin.Interfaces.IMarginProjectionService	WebApi.Services.Margin.MarginProjectionService	Scoped
+DESC	WebApi.Services.Margin.Interfaces.IMarginStatusContributor	WebApi.Services.Margin.MarginProjectionStatusContributor	Scoped
+DESC	Microsoft.Extensions.Hosting.IHostedService	WebApi.Services.Margin.MarginSalesProjector	Singleton
+DESC	WebApi.Services.Margin.Interfaces.IMarginDayRevenueRead	WebApi.Services.Margin.MarginDayRevenueRead	Scoped
+DESC	WebApi.Services.Training.Interfaces.ITrainingFeatureFlags	WebApi.Services.Training.StoreBackedTrainingFeatureFlags	Scoped
+DESC	WebApi.Services.Training.Interfaces.ITrainingModuleGate	WebApi.Services.Training.TrainingModuleGate	Scoped
+DESC	WebApi.Services.Training.Interfaces.ITrainingAuthorizationService	WebApi.Services.Training.TrainingAuthorizationService	Scoped
+DESC	WebApi.Services.Training.Interfaces.ITrainingIdempotency	WebApi.Services.Training.TrainingIdempotency	Scoped
+DESC	WebApi.Services.Training.Interfaces.ITrainingAuditWriter	WebApi.Services.Training.TrainingAuditWriter	Scoped
+DESC	WebApi.Services.Training.Interfaces.ITrainingContextService	WebApi.Services.Training.TrainingContextService	Scoped
+DESC	WebApi.Services.Training.Interfaces.ITrainingCourseService	WebApi.Services.Training.TrainingCourseService	Scoped
+DESC	WebApi.Services.Training.Interfaces.ITrainingAssignmentService	WebApi.Services.Training.TrainingAssignmentService	Scoped
+DESC	WebApi.Services.Training.Interfaces.ITrainingCompletionService	WebApi.Services.Training.TrainingCompletionService	Scoped
+DESC	WebApi.Services.Training.Interfaces.ITrainingCertificateService	WebApi.Services.Training.TrainingCertificateService	Scoped
+DESC	WebApi.Services.Training.Interfaces.ITrainingCompetencyService	WebApi.Services.Training.TrainingCompetencyService	Scoped
+DESC	WebApi.Services.Training.Interfaces.ITrainingEvidenceService	WebApi.Services.Training.TrainingEvidenceService	Scoped
+DESC	WebApi.ModelBuilders.Interfaces.IOrderModelBuilder	WebApi.ModelBuilders.OrderModelBuilder	Scoped
+DESC	WebApi.ModelBuilders.Interfaces.ICultureModelBuilder	WebApi.ModelBuilders.CultureModelBuilder	Scoped
+DESC	WebApi.ModelBuilders.Interfaces.ICartModelBuilder	WebApi.Services.CartModelBuilder	Scoped
+DESC	WebApi.ModelBuilders.Interfaces.ICategoryModelBuilder	WebApi.ModelBuilders.CategoryModelBuilder	Scoped
+DESC	WebApi.ModelBuilders.Interfaces.IStoreModelBuilder	WebApi.ModelBuilders.StoreModelBuilder	Scoped

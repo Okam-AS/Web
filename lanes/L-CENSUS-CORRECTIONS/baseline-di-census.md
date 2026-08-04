@@ -3,16 +3,6 @@
 brief 28c3b781 - backend `feature/restaurant-modules` - 2026-08-04 - read-only, nothing edited,
 no container started, no suite run, no ref moved.
 
-> **CORRECTED 2026-08-04 by `L-CENSUS-CORRECTIONS`.** A Fable reviewer verified this census
-> independently and **every load-bearing finding held** - the nine sites, their empty-case behaviour
-> and the money-path exposure at S5/S6 all stand. What did not: **S9's summary row said "Guarded
-> today: NO" while the guard substantially exists** (`Modules/ModuleFeatureFlagContractTests.cs:302`
-> reds when a family stops being concatenated). The prose in S9 hedged; the table did not - and **the
-> table is what dispatches lanes.** S9 is now `harden`, not `build`, with its five residual gaps
-> named. Also corrected here: two further `Main` registrations outside the reflectable seam (sec. 2),
-> three unstated limits of the instrument itself (sec. 2, items 9-11), and two summary sentences that
-> claimed no guard exists where this census's own body names one (sec. 6, sec. 7).
-
 ## 0. Tip state, measured
 
 The brief said backend integration was `8e2b57de`. That is what I found, and nothing more recent:
@@ -32,8 +22,7 @@ moved on since; `35696d6b` is an ancestor of `8e2b57de`. The brief is right, tha
 Two questions, two mechanisms, both container-free and host-free:
 
 **(a) "Where is a collection injected?"** - reflection over the compiled `WebApi.dll`, not a grep.
-Every one of the 7,500 types the assembly declares **that loaded** (limit 9 - the tool cannot report
-how many did not), every constructor (public and non-public), every
+Every one of the 7,500 types the assembly declares, every constructor (public and non-public), every
 parameter whose type is `T[]`, `IEnumerable<T>`, `IReadOnlyList<T>`, `IReadOnlyCollection<T>`,
 `IList<T>`, `ICollection<T>` or `List<T>` for a non-primitive `T`. A grep for `IEnumerable<I` would
 have missed `TripletexAdminController`'s fully-qualified spellings and every `IReadOnlyList<>` site;
@@ -53,26 +42,12 @@ Tool: `<scratchpad>/dicensus/` (a console project referencing `WebApi.csproj`; r
 
 Stated plainly, because a census that hides its edges is the shape this estate keeps removing.
 
-1. **Registrations made inside `Program.Main` itself** are outside (b). The collection-shaped one is
-   `Program.cs:164` `AddSingleton<ITelemetryInitializer, CapabilityRouteTelemetryInitializer>()` (F2).
-   I found it by reading `Main` line by line, not by descriptor. Running `Main` would have built a
-   host, which the brief forbids. **A composition-root floor must not have this gap** - it needs a
-   seam that exposes the whole registration phase without `Build()`.
-
-   **CORRECTED (2026-08-04):** this item said `Main` "registers directly **before** it calls
-   `AddServices`", which understates both the position and the extent. Re-read at `8e2b57de`, `Main`
-   holds **two further application-service registrations outside the reflectable seam**, and neither
-   is before `AddServices`:
-   - `Program.cs:193` `AddScoped<ICartRepository, CartRepository>()` - **between** the
-     `AddServices(builder.Services)` call at `:192` and `AddBuilders(builder.Services)` at `:194`;
-   - `Program.cs:197` `AddSingleton<IRedisService, RedisService>()` - **after** both, alongside
-     `AddHttpContextAccessor()` at `:196`.
-
-   Both are single (non-collection) registrations, so neither changes a verdict in section 4 - but
-   they mean **the 289 descriptors this census dumps are not the whole composition root even for
-   plain services**, and a floor built on the dump alone would silently exempt them. (`Main` also
-   holds `AddSingleton(mcpStartupState)` at `:158`, an instance registration of a local built at
-   `:140`, which no reflectable seam can produce at all.)
+1. **Registrations made inside `Program.Main` itself** are outside (b). `Main` registers directly
+   before it calls `AddServices`, and one of those lines matters: `Program.cs:164`
+   `AddSingleton<ITelemetryInitializer, CapabilityRouteTelemetryInitializer>()`. I found it by
+   reading `Main` line by line, not by descriptor. Running `Main` would have built a host, which the
+   brief forbids. **A composition-root floor must not have this gap** - it needs a seam that exposes
+   the whole registration phase without `Build()`.
 2. **`AddMcpAuthentication` / `AddMcpAuthorization` / `AddMcpServer().WithToolsFromAssembly()`** were
    not invoked: the first throws without certificate configuration (that is exactly what
    `CompositionRootRegistrationOrderTests` pins) and the third reflects over the assembly for MCP
@@ -95,44 +70,9 @@ Stated plainly, because a census that hides its edges is the shape this estate k
    suite go red; the brief is read-only and I kept it. Every "would red" claim below is therefore an
    analysis of the guard's own code, and I say which guard and why.
 
-**Three limits of the INSTRUMENT, added 2026-08-04 (`L-CENSUS-CORRECTIONS`) after the Fable review
-read the tool rather than only its output.** Items 1-8 above bound what the census looked at; these
-bound what the tool could report even where it did look. All three are in
-`lanes/L-DI-COLLECTION-SILENT/dicensus-tool.cs.txt`, cited by its own line numbers.
-
-9. **The type-load fallback cannot say how much it lost.** `:26-28` is
-   `try { types = asm.GetTypes(); } catch (ReflectionTypeLoadException ex) { types = ex.Types.Where(t => t != null).ToArray(); }`,
-   and `:28` then prints only `TYPES 7500`. It never prints `ex.LoaderExceptions.Length` nor how many
-   entries were null, so **`TYPES 7500` cannot be told apart from "7,500 survived and N were dropped
-   silently"** - the header of `composition-root-dump.txt` reads the same either way. The same shape
-   repeats at `:36`, `:40`, `:64` and `:68`, where `catch { continue; }` skips a type's constructors
-   or a method's parameters without a word. Nothing observed suggests a load failure occurred; the
-   point is that the instrument is not built to say. **The inventory of 19 is therefore a floor, not
-   a proven ceiling** - which is the same shape as S5's empty loop reporting success.
-10. **The extension-method dump is keyword-filtered.** The four methods `Main` calls directly produce
-    **211 descriptors** (`AddCustomAuthorization` +17, `AddIdentityConfiguration` +70,
-    `AddControllersWithSerializerSettings` +116, `AddJWTAuthentication` +8, per the dump's own `EXT`
-    lines). Only descriptors whose service-type name contains one of **eight** hard-coded substrings
-    are printed (`:134-137`: `IAuthorizationHandler`, `ITelemetryInitializer`, `IStartupFilter`,
-    `IClaimsTransformation`, `IHostedService`, `IModelBinderProvider`, `IPostConfigureOptions`,
-    `IValidateOptions`) - **23 `EXTSEAM` rows of the 211**. The FULL descriptor dump at `:196-203`
-    iterates `services` (AddServices + AddBuilders) only and never `extra`. **F3 was found because
-    `IAuthorizationHandler` happened to be on that list**; a multi-registration seam whose interface
-    is not on it would not have appeared anywhere in the output.
-11. **Collections of primitive elements are excluded by construction.** `IsUninteresting`
-    (`:222-229`) drops `string`, every primitive, `Guid`, `decimal`, `DateTime`, `DateTimeOffset` and
-    every enum, so an `IEnumerable<string>`-shaped injection point - an allow-list of origins, of
-    account numbers, of flag keys - **never enters the inventory of 19 at all**. The paired predicate
-    `CollectionElement` (`:231-238`) also fixes what "collection-shaped" means: 1-D arrays plus
-    exactly six open generic types, so `IAsyncEnumerable<T>`, `ISet<T>`/`HashSet<T>`,
-    `ImmutableArray<T>` and `IDictionary<,>` parameters are invisible too. Both exclusions are
-    defensible for this brief and neither is reported at run time.
-
 ## 3. Inventory - 19 collection-shaped constructor parameters, 9 of them DI-resolved
 
-Reflection found 19 **under the tool's own definition of "collection-shaped"** - which excludes
-primitive, `string`, `Guid`, `decimal`, date and enum element types, and recognises only 1-D arrays
-plus six open generic types (limit 11). Ten are value objects and DTOs the code `new`s itself; **none of their owning
+Reflection found 19. Ten are value objects and DTOs the code `new`s itself; **none of their owning
 types appears anywhere in the 289 descriptors**, so the container never constructs them and an empty
 sequence there is a caller's argument, not a wiring fact. Excluded, named so the exclusion is
 checkable:
@@ -360,7 +300,7 @@ copies of the same contributor; the response shape is the real invariant.
 
 ---
 
-### S9. `FeatureFlagCatalog.descriptors` - SILENT on read, REFUSE on write - NOT a DI collection - **GUARDED (corrected)**
+### S9. `FeatureFlagCatalog.descriptors` - SILENT on read, REFUSE on write - NOT a DI collection
 
 `Services/Platform/FeatureFlags/FeatureFlagCatalog.cs:18` - `IEnumerable<FeatureFlagDescriptor>`.
 **Zero descriptors of this type are registered in the container** (my descriptor dump: `count=0`), and
@@ -377,56 +317,11 @@ is not one. The hazard is identical. Drop a `featureFlagDescriptors.AddRange(...
 - `PUT /stores/{id}/feature-flags` (`:141-143`) **refuses** with `400 "Unknown feature flag: ..."`;
 - the ctor throws on a DUPLICATE key (`:27`) and on nothing else - absence is free.
 
-**CORRECTED (2026-08-04, `L-CENSUS-CORRECTIONS`). The floor this entry asked for substantially
-EXISTS, and this census shipped a summary row saying it did not.** The original text read: "*Floor
-needed: the catalog contains every key every `*FeatureFlags.Describe()` in the assembly declares,
-derived by reflection over the `Describe()` methods rather than from the same list `Program.cs`
-builds. `Modules/ModuleFlagCensus.cs` and `Modules/ModuleFeatureFlagContractTests.cs` already work in
-this area and are the natural home; I did not read far enough into them to say whether they close it,
-and I am not going to claim they do.*" The Fable review read them. They largely do.
-
-**Checked:** `Modules/ModuleFeatureFlagContractTests.cs:302`,
-`Every_discovered_family_is_concatenated_into_the_shared_catalog`. It derives the family set exactly
-as this entry asked - `ModuleFlagCensus.DiscoverFamilies()` (`ModuleFlagCensus.cs:124-142`) reflects
-over `typeof(FeatureFlagDescriptor).Assembly.GetTypes()` for a public static parameterless
-`Describe()` whose return type is assignable to `IReadOnlyList<FeatureFlagDescriptor>`
-(`CatalogContribution`, `:149-162`) - then requires each family to appear in the composition root
-(`:304-307`, `composition.Contains(f.DeclaringType.Name + ".Describe()")`).
-
-**It reds on exactly the mutation this entry names.** Each of the six families' `X.Describe()` text
-occurs **once** in `Program.cs`, at its own `AddRange` line (`:761-766`, verified per occurrence:
-`WorkforceFeatureFlags` 761, `EventsFeatureFlags` 762, `MarginFeatureFlags` 763,
-`TrainingFeatureFlags` 764, `GrowthFeatureFlags` 765, `MealsFeatureFlags` 766, and nowhere else in the
-file). Delete one `featureFlagDescriptors.AddRange(...)` line and its family's only occurrence goes
-with it, so the assertion fails and names the module. `ModuleFlagCensus.cs:135` adds a
-`families.Count >= 6` non-vacuity floor, so a renamed contract cannot empty the sweep out silently.
-
-**Residual gaps - what to HARDEN, stated so each is checkable:**
-
-1. **It matches source TEXT in `Program.cs`, never the catalog object.** It never resolves
-   `IFeatureFlagCatalog` and asks for its keys. `featureFlagDescriptors.AddRange(WorkforceFeatureFlags.Describe().Where(d => d.Key != "workforce.dispatch"))`
-   keeps the matched text and drops a key: green. So does concatenating into a list that is never
-   passed to the constructor.
-2. **The singleton registration itself is unguarded by this test.** `Program.cs:767-768`
-   (`AddSingleton<IFeatureFlagCatalog>(new FeatureFlagCatalog(featureFlagDescriptors))`) can be
-   deleted and this assertion stays green - the six `Describe()` calls are still spelled above it.
-   Whether some other test reds on that deletion was not established here, and should not be assumed.
-3. **Family granularity, not key granularity.** A `Describe()` that stops returning one of its own
-   descriptors is invisible to this rule; rules 2 and 5 in the same file
-   (`Every_declared_flag_is_advertised_or_withheld_with_a_reason` `:140`,
-   `Every_declared_key_is_spelled_by_exactly_one_production_constant` `:268`) cover part of that
-   ground, and none of the three resolves the registered catalog instance.
-4. **The discovery predicate is narrow.** Only a **public static parameterless** `Describe()` with
-   that exact return type counts as a family. A module contributing descriptors by an instance method,
-   an `IEnumerable<FeatureFlagDescriptor>` return, or a const array is never discovered, so its
-   absence from the catalog is undetectable; `Count >= 6` catches only a total collapse.
-5. **The write path is unmeasured.** `PUT /stores/{id}/feature-flags` refusing `400 "Unknown feature
-   flag"` for a dropped key is the loud half of this site and no test named here drives it.
-
-So S9 is **harden**, not **build**, and the cheapest hardening is (1)+(2) together: resolve
-`IFeatureFlagCatalog` from the composition root and compare its key set against the union of every
-discovered family's `Describe()`. That closes the text-versus-object gap and the registration gap in
-one assertion, and it is the shape `EventsWireTests.cs:61` already uses for S2.
+**Floor needed:** the catalog contains every key every `*FeatureFlags.Describe()` in the assembly
+declares, derived by reflection over the `Describe()` methods rather than from the same list
+`Program.cs` builds. `Modules/ModuleFlagCensus.cs` and `Modules/ModuleFeatureFlagContractTests.cs`
+already work in this area and are the natural home; I did not read far enough into them to say
+whether they close it, and I am not going to claim they do.
 
 ---
 
@@ -491,15 +386,9 @@ floor needed.
 ## 6. Standing guards, and precisely what each does and does not cover
 
 - **`Wire/CompositionRootLimiterWireTests.cs` + `CompositionRootRegistrationOrderTests`** - the only
-  existing **descriptor-level** composition-root check. It asserts `ServiceDescriptor`
-  presence/absence on a `ServiceCollection` built by one extension method, and boots a wire host to
-  prove ORDER. It knows nothing about collections. It is the right SHAPE for every floor named above.
-  **CORRECTED (2026-08-04):** it is not "the only existing composition-root check" full stop - three
-  others already assert composition-root facts by resolving or reading it
-  (`Wire/EventsWireTests.cs:61` for S2, `Wire/WorkforceWireTests.cs:213` and
-  `Margin/MarginFeatureFlagEffectiveTests.cs:102` for S7), and a fourth reads `Program.cs` itself
-  (`Modules/ModuleFeatureFlagContractTests.cs:302` for S9). What is singular about this one is the
-  MECHANISM - descriptors rather than behaviour - not the coverage.
+  existing composition-root check. It asserts `ServiceDescriptor` presence/absence on a
+  `ServiceCollection` built by one extension method, and boots a wire host to prove ORDER. It knows
+  nothing about collections. It is the right SHAPE for every floor named above.
 - **`Modules/ModuleReachabilitySweepTests` + `ProductionCallGraph`** - the strongest existing backstop
   and the one most likely to be over-trusted here. Three limits that matter for this census:
   1. It reads **source text** (`ReadRegistrations` at `ProductionCallGraph.cs:320`), which is the form
@@ -524,27 +413,7 @@ production code at `8e2b57de`.** The only occurrences are test-side: a provision
 `WebApi.Tests/Workforce/WorkforceEndToEndJourneyTests.cs:703` whose skip reason says W5 is unbuilt.
 That lane built on `lane/wf-w5-timesheet` and said so in its return. The finding travels anyway -
 this census found eight production sites of the same shape at the tip, four of them silent, two of
-those on the money path.
-
-**CORRECTED (2026-08-04):** this sentence ended "*and none of the eight guarded by a composition-root
-check today*", which contradicts this census's own section 4 - the same error of shape as the S9 row,
-and in the same direction. **Two of the eight are guarded by a test that resolves from a container**,
-each named in its own entry: **S2** by `Wire/EventsWireTests.cs:61`
-(`GetServices<IEventsNotificationDelivery>()` from the real wire container, `Assert.Single`), and
-**S7** by two tests, one per half - `Wire/WorkforceWireTests.cs:213`, which drives the real container
-over the real route and reads the answer out of the response body, and
-`Margin/MarginFeatureFlagEffectiveTests.cs:102`, at the module seam rather than at the root.
-
-The accurate statement is: **six of the eight carry no composition-root check**, and they do not all
-fail the same way:
-
-- **S1 and S4 refuse by construction** - the refusal per payment type / per target is their floor.
-- **S3 refuses too, but the refusal is DEFERRED into a dead-letter row** (`"NoAdapterForChannel:"`,
-  `WorkforceNotificationDispatcher.cs:182`) **that no suite reads** - honest at runtime, invisible to
-  the estate. Its heading says exactly this; an earlier draft of this correction wrote that S3 had
-  "neither a check nor a refusal", which contradicted both its own entry and the summary row.
-- **S5, S6 and S8 are silent** - no check, no refusal, no record. **Both money-path sites, S5 and S6,
-  are here**, and S5 additionally reports a success number sourced from somewhere else entirely.
+those on the money path, and none of the eight guarded by a composition-root check today.
 
 ## 8. Summary
 
@@ -558,24 +427,11 @@ fail the same way:
 | S6 | `MaintenanceService` | 3 | **SILENT** - captures never run, reported clean | NO |
 | S7 | `StoreFeatureFlagsController` | 2 | **SILENT** - wrong effective value | Workforce YES, Margin at module seam |
 | S8 | `MarginStatusController` | 3 | **SILENT** - null status fields | NO |
-| S9 | `FeatureFlagCatalog` | n/a (local list) | SILENT read / REFUSE write | **YES, mostly** - `ModuleFeatureFlagContractTests.cs:302` reds on a dropped `AddRange`; gaps in S9 |
+| S9 | `FeatureFlagCatalog` | n/a (local list) | SILENT read / REFUSE write | NO |
 | F1 | `IHostedService` x10 | 10 | **SILENT** - loop never ticks | 6 of 10 by module sweep; 4 money-path unswept |
 | F2 | `ITelemetryInitializer` | 1 | **SILENT** - C7, tokens to App Insights | NO |
 | F3 | `IAuthorizationHandler` | 1 | fail-closed 403 | safe |
 
-**Seven floors to BUILD** (**corrected 2026-08-04**: this line read "Six floors" while heading a list
-of **eight** items - the count was wrong in the original and the split into build-vs-harden below is
-new), in the order I would build them: **F2** (C7, one line, cheapest), **S5** and **S6** (money and
-books), **F1** (the four unswept loops), **S7** (complete the Margin half at the composition root),
-**S8**, **S3**.
-
-**One floor to HARDEN, not build: S9** - corrected 2026-08-04. A contract test already reds when a
-family stops being concatenated; what is missing is that it asserts source text rather than the
-resolved catalog, and never covers the singleton registration line. Full reasoning and the five
-residual gaps are in S9. It is last in this order because a guard with a known seam beats a seam with
-no guard, not because the seam is closed.
-
-**The lesson this row cost, and the one to carry:** the prose in S9 hedged honestly ("I did not read
-far enough ... I am not going to claim they do") and the table still printed **NO**. **The table is
-what dispatches lanes** - nobody reads the hedge before filing the work. A cell that a paragraph
-elsewhere qualifies is not qualified; where a verdict is uncertain the cell must say so in the cell.
+Six floors for a later lane to build, in the order I would build them:
+**F2** (C7, one line, cheapest), **S5** and **S6** (money and books), **F1** (the four unswept loops),
+**S7** (complete the Margin half at the composition root), **S8**, **S3**, **S9**.

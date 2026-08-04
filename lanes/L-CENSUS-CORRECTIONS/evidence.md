@@ -21,6 +21,11 @@ Scripts in this directory, each re-runnable and each printing **per item**, neve
 | `recheck-needles.py` | needle extraction Q1/Q1b/Q2/Q3/Q4 | `recheck-needles.txt` |
 | `recheck-production-randomness.py` | production minters of non-hex randoms | `recheck-production-randomness.txt` |
 
+`recheck-needles-rows.json` is the raw extraction those answers are computed from - all **2,442**
+matched assertion spans with file, line, form and call text, which is what makes the per-form counts
+(`DoesNotContain` 439, `DoesNotMatch` 1, `Assert.False` 967, bare `!x.Contains` 66, `Assert.Empty`
+361, `Assert.Null` 608) checkable without re-running anything.
+
 `recheck-needles.py` reproduces the subject census's own raw span counts exactly -
 `Assert.DoesNotContain` 439, `Assert.DoesNotMatch` 1, `Assert.False` 967, bare `!x.Contains` 66,
 over 811 files - which is the control that says the two extractors are looking at the same tree.
@@ -226,6 +231,44 @@ own body names one - and leaving them would have contradicted the corrected S9 r
   check". Corrected: it is the only **descriptor-level** one; three others assert composition-root
   facts by resolving it and a fourth reads `Program.cs`.
 
+## The baseline, and why it is in this directory
+
+**"Nothing was removed" was unfalsifiable from the repository as first shipped, and that is the same
+defect this lane exists to correct - one layer up.** Neither census existed in git before my commit:
+both were untracked working-tree files, so that commit is their **first**, every line lands as an
+addition, and `git diff` against the parent cannot show what a correction replaced. A reader had no
+way to check the load-bearing claim except by trusting it. **Assert, don't show** - exactly the shape
+this lane was correcting in the documents themselves.
+
+    $ git cat-file -e <corrections-commit>^:lanes/L-ALIASING-NEEDLE-SWEEP/census.md
+    fatal: path '...' exists on disk, but not in '<corrections-commit>^'
+
+Fixed by committing the pre-correction baselines alongside the corrected documents:
+
+| baseline | bytes | sha256 (first 16) |
+|---|---|---|
+| `baseline-aliasing-census.md` | 17395 | `0a003ae9bdcfd0a5` |
+| `baseline-di-census.md` | 28159 | `bb720a44f4b23347` |
+
+**Provenance, stated plainly:** these were recovered from session transcripts by the reviewer, not
+from git - git never held them. Two independent corroborations that they are the documents I edited:
+their byte sizes are **exactly** those recorded when this lane first listed the two lane directories
+(17395 and 28159), and diffing each against its corrected version yields hunks that are **only** the
+sentences the six corrections target - no other line differs.
+
+`diff -u baseline-* <corrected>` is now the check anybody can run, and it settles the claim mechanically:
+
+- **Aliasing:** the baseline cites **26** distinct `file:line` sites; the corrected document cites
+  **48**. **Lost: none.**
+- **DI:** baseline **51**, corrected **58**. **Lost: none.**
+- Every removed line is a restated reason or a replaced figure - the immunity rule, the
+  `Guid.NewGuid()` row, the 4-column alphabet table, the cross-check sentence, row 6's derivation,
+  two sec. 3.6 bullets, the `Assert.Empty` exclusion, S9's "Floor needed" paragraph, S9's `NO` row,
+  the `Main` limit, the "only existing check" clause, the "none of the eight" clause, the floor order.
+
+The reviewer independently reached the same result from the recovered baselines (19/19 aliasing rows,
+12/12 S/F entries, zero cited sites dropped).
+
 ## Observed, deliberately NOT changed (outside the six)
 
 `lanes/L-ALIASING-NEEDLE-SWEEP/census.md` sec. 3.5, the row 19 cell, contains a literal `|` inside
@@ -242,6 +285,33 @@ was checked column-by-column against its header and separator, and all of them a
 - **Nothing that would need a code change was made.** The floors S5/S6/S8/S3/F1/F2 still need
   building, S9 still needs hardening, and rows 1-2 of the aliasing census still need one of the two
   unmerged branches landed. This lane is documents only.
-- The unreproducible partitions (`174 / 71 / 88`, `Assert.Empty` 359, `Assert.Null` 599) were **not
-  overwritten** with this lane's numbers; both are shown, because replacing an unattributed number
-  with another unattributed number is the failure being corrected.
+- The unreproducible partitions (`174 / 71 / 88`, `Assert.Empty` 359, `Assert.Null` 599, and the
+  reviewer's `14` short needles) were **not overwritten** with this lane's numbers; both sides are
+  shown, because replacing an unattributed number with another unattributed number is the failure
+  being corrected.
+
+---
+
+## Second pass - conditions from the independent review
+
+An independent Fable reviewer with fresh context re-derived all six corrections and confirmed each
+(including a 4-million-draw Monte Carlo at 1 in 195.2 against the exact 1 in 196.0). Five named
+conditions followed; all five are applied, and none was refused:
+
+1. **The four cited-but-untracked artifacts are now committed** - `alias-probability.py` and
+   `extract-absence-assertions.py` under `L-ALIASING-NEEDLE-SWEEP`, `composition-root-dump.txt` and
+   `dicensus-tool.cs.txt` under `L-DI-COLLECTION-SILENT`. The corrections cite the tool by its own
+   line numbers and the dump by its `EXT` lines; **citing evidence the history does not contain fails
+   this lane's own attribution standard at the commit boundary**, which is the reviewer's point and
+   it is correct.
+2. **Baselines committed and their provenance stated** - see the section above.
+3. **A contradiction this lane's own sec. 7 correction introduced is fixed.** It wrote that S3 has
+   "neither a check nor a refusal", contradicting S3's heading and the summary row. S3 **does**
+   refuse - `"NoAdapterForChannel:"` at `WorkforceNotificationDispatcher.cs:182` - but the refusal is
+   deferred into a dead-letter row no suite reads. Corrected in place, with the error named rather
+   than quietly overwritten.
+4. **The reviewer's `14` is reconciled by printing both populations**, not by guessing which
+   threshold produces 14 (none does; the nearest is 15 distinct needles at length <= 8). The residue
+   is marked as resting on a per-site pass this document cannot enumerate.
+5. **The `Six floors` -> `Seven floors` change now carries a correction marker**, per this lane's
+   own each-change-is-marked rule. The original said "Six" while heading a list of eight.

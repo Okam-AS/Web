@@ -1,0 +1,250 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+
+namespace DiCensus
+{
+    public static class CensusMain
+    {
+        private static readonly Type[] CollectionOpenTypes =
+        {
+            typeof(IEnumerable<>),
+            typeof(IReadOnlyList<>),
+            typeof(IReadOnlyCollection<>),
+            typeof(IList<>),
+            typeof(ICollection<>),
+            typeof(List<>),
+        };
+
+        public static void Main(string[] args)
+        {
+            var asm = typeof(WebApi.Program).Assembly;
+            Console.WriteLine("ASSEMBLY " + asm.GetName().Name + " " + asm.Location);
+
+            Type[] types;
+            try { types = asm.GetTypes(); }
+            catch (ReflectionTypeLoadException ex) { types = ex.Types.Where(t => t != null).ToArray(); }
+            Console.WriteLine("TYPES " + types.Length);
+            Console.WriteLine();
+
+            foreach (var t in types.OrderBy(x => x.FullName, StringComparer.Ordinal))
+            {
+                if (t.IsInterface) continue;
+                ConstructorInfo[] ctors;
+                try { ctors = t.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance); }
+                catch { continue; }
+                foreach (var c in ctors)
+                {
+                    ParameterInfo[] ps;
+                    try { ps = c.GetParameters(); } catch { continue; }
+                    foreach (var p in ps)
+                    {
+                        var elem = CollectionElement(p.ParameterType);
+                        if (elem == null) continue;
+                        if (IsUninteresting(elem)) continue;
+                        Console.WriteLine("CTORPARAM\t" + t.FullName
+                            + "\t" + (c.IsPublic ? "public" : (c.IsPrivate ? "private" : "other"))
+                            + "\t" + p.Name
+                            + "\t" + Pretty(p.ParameterType)
+                            + "\t" + elem.FullName
+                            + "\t" + (p.HasDefaultValue ? "hasdefault" : "nodefault")
+                            + "\t" + Kind(t));
+                    }
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("=== METHOD-INJECTION SITES: Invoke/InvokeAsync on middleware + [FromServices]/[FromKeyedServices] params ===");
+            foreach (var t in types.OrderBy(x => x.FullName, StringComparer.Ordinal))
+            {
+                if (t.IsInterface) continue;
+                MethodInfo[] ms;
+                try { ms = t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly); }
+                catch { continue; }
+                foreach (var m in ms)
+                {
+                    ParameterInfo[] ps;
+                    try { ps = m.GetParameters(); } catch { continue; }
+                    var isMiddlewareInvoke = (m.Name == "Invoke" || m.Name == "InvokeAsync")
+                        && ps.Any(p => p.ParameterType.FullName == "Microsoft.AspNetCore.Http.HttpContext");
+                    foreach (var p in ps)
+                    {
+                        var attrs = p.GetCustomAttributes(true).Select(a => a.GetType().Name).ToArray();
+                        var fromServices = attrs.Any(a => a.StartsWith("FromServices", StringComparison.Ordinal)
+                                                       || a.StartsWith("FromKeyedServices", StringComparison.Ordinal));
+                        if (!isMiddlewareInvoke && !fromServices) continue;
+                        var elem = CollectionElement(p.ParameterType);
+                        if (elem == null || IsUninteresting(elem)) continue;
+                        Console.WriteLine("METHODPARAM\t" + t.FullName + "." + m.Name + "\t" + p.Name
+                            + "\t" + Pretty(p.ParameterType) + "\t" + elem.FullName
+                            + "\t" + (isMiddlewareInvoke ? "middleware-invoke" : "") + (fromServices ? "|fromservices" : ""));
+                    }
+                }
+            }
+            Console.WriteLine("(end method-injection sweep)");
+
+            Console.WriteLine();
+            Console.WriteLine("=== COMPOSITION ROOT: descriptors produced by Program.AddServices + Program.AddBuilders ===");
+            DumpCompositionRoot(asm);
+        }
+
+        private static void DumpCompositionRoot(Assembly asm)
+        {
+            var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
+            var progType = typeof(WebApi.Program);
+            foreach (var name in new[] { "AddServices", "AddBuilders" })
+            {
+                var mi = progType.GetMethod(name, BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
+                if (mi == null) { Console.WriteLine("MISSING METHOD " + name); continue; }
+                try
+                {
+                    mi.Invoke(null, new object[] { services });
+                    Console.WriteLine("INVOKED " + name + " -> descriptors now " + services.Count);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("THREW " + name + " : " + (ex.InnerException ?? ex).GetType().Name + " " + (ex.InnerException ?? ex).Message);
+                }
+            }
+
+            // The other composition-root entry points Main calls directly, invoked the same way.
+            var ext = asm.GetType("WebApi.Helpers.ServiceCollectionExtensions");
+            var extra = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
+            var cfg = new Microsoft.Extensions.Configuration.ConfigurationBuilder().Build();
+            foreach (var call in new (string, object[])[]
+            {
+                ("AddCustomAuthorization", new object[] { extra }),
+                ("AddIdentityConfiguration", new object[] { extra }),
+                ("AddControllersWithSerializerSettings", new object[] { extra }),
+                ("AddJWTAuthentication", new object[] { extra, "0123456789abcdef0123456789abcdef0123456789abcdef" }),
+            })
+            {
+                var mi = ext?.GetMethod(call.Item1, BindingFlags.Static | BindingFlags.Public);
+                if (mi == null) { Console.WriteLine("EXT MISSING " + call.Item1); continue; }
+                var before = extra.Count;
+                try { mi.Invoke(null, call.Item2); Console.WriteLine("EXT " + call.Item1 + " +" + (extra.Count - before)); }
+                catch (Exception ex) { Console.WriteLine("EXT THREW " + call.Item1 + " : " + (ex.InnerException ?? ex).Message); }
+            }
+            Console.WriteLine();
+            Console.WriteLine("--- EXT descriptors whose service type is a known multi-registration seam ---");
+            foreach (var d in extra)
+            {
+                var st = d.ServiceType.FullName ?? "";
+                if (st.Contains("IAuthorizationHandler") || st.Contains("ITelemetryInitializer")
+                    || st.Contains("IStartupFilter") || st.Contains("IClaimsTransformation")
+                    || st.Contains("IHostedService") || st.Contains("IModelBinderProvider")
+                    || st.Contains("IPostConfigureOptions") || st.Contains("IValidateOptions"))
+                {
+                    var impl2 = d.ImplementationType != null ? d.ImplementationType.FullName
+                        : (d.ImplementationFactory != null ? "(factory)" : "(instance)");
+                    Console.WriteLine("EXTSEAM\t" + st + "\t" + impl2 + "\t" + d.Lifetime);
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("--- AddServices+AddBuilders: every service type registered MORE THAN ONCE (the multi-registration surface) ---");
+            var dupCount = new Dictionary<string, List<string>>(StringComparer.Ordinal);
+            foreach (var d in services)
+            {
+                var st = d.ServiceType.FullName ?? d.ServiceType.Name;
+                var impl3 = d.ImplementationType != null ? d.ImplementationType.FullName
+                    : (d.ImplementationFactory != null ? "(factory)" : "(instance)");
+                if (!dupCount.ContainsKey(st)) dupCount[st] = new List<string>();
+                dupCount[st].Add(impl3);
+            }
+            foreach (var kv in dupCount.Where(k => k.Value.Count > 1).OrderBy(k => k.Key, StringComparer.Ordinal))
+            {
+                Console.WriteLine("MULTI\t" + kv.Key + "\tcount=" + kv.Value.Count + "\t" + string.Join(" , ", kv.Value));
+            }
+
+            var byService = new Dictionary<string, int>(StringComparer.Ordinal);
+            foreach (var d in services)
+            {
+                var key = d.ServiceType.FullName ?? d.ServiceType.Name;
+                byService.TryGetValue(key, out var n);
+                byService[key] = n + 1;
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("--- registrations for each collection ELEMENT type found above ---");
+            var elems = new[]
+            {
+                "WebApi.Services.Margin.Interfaces.IMarginStatusContributor",
+                "WebApi.Services.Platform.FeatureFlags.IStoreFeatureFlagEffectiveResolver",
+                "WebApi.Services.Interfaces.IAccountingExportProvider",
+                "WebApi.Services.Events.Interfaces.IEventsNotificationDelivery",
+                "WebApi.Services.Interfaces.ITerminalPaymentProvider",
+                "WebApi.Services.Interfaces.IUncapturedOrderSweeper",
+                "WebApi.Services.Platform.FeatureFlags.FeatureFlagDescriptor",
+                "WebApi.Services.Workforce.Interfaces.IWorkforceNotificationDelivery",
+            };
+            foreach (var e in elems)
+            {
+                var matches = services.Where(d => (d.ServiceType.FullName ?? "") == e).ToList();
+                Console.WriteLine("ELEM\t" + e + "\tcount=" + matches.Count);
+                foreach (var m in matches)
+                {
+                    var impl = m.ImplementationType != null ? m.ImplementationType.FullName
+                        : (m.ImplementationFactory != null ? "(factory)"
+                        : (m.ImplementationInstance != null ? "(instance " + m.ImplementationInstance.GetType().FullName + ")" : "(?)"));
+                    Console.WriteLine("  IMPL\t" + impl + "\t" + m.Lifetime);
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("--- FULL DESCRIPTOR DUMP (serviceType -> impl, lifetime) ---");
+            foreach (var d in services)
+            {
+                var impl = d.ImplementationType != null ? d.ImplementationType.FullName
+                    : (d.ImplementationFactory != null ? "(factory)"
+                    : (d.ImplementationInstance != null ? "(instance " + d.ImplementationInstance.GetType().FullName + ")" : "(?)"));
+                Console.WriteLine("DESC\t" + (d.ServiceType.FullName ?? d.ServiceType.Name) + "\t" + impl + "\t" + d.Lifetime);
+            }
+        }
+
+        private static string Kind(Type t)
+        {
+            var names = new List<string>();
+            var b = t;
+            while (b != null && b != typeof(object)) { names.Add(b.Name); b = b.BaseType; }
+            var ifaces = t.GetInterfaces().Select(i => i.Name).ToArray();
+            var kind = new List<string>();
+            if (names.Any(n => n.Contains("Controller"))) kind.Add("controller");
+            if (ifaces.Contains("IHostedService")) kind.Add("hostedservice");
+            if (ifaces.Any(i => i.Contains("Filter"))) kind.Add("mvcfilter");
+            if (ifaces.Contains("IAuthorizationHandler")) kind.Add("authhandler");
+            if (ifaces.Contains("IMiddleware") || t.Name.EndsWith("Middleware", StringComparison.Ordinal)) kind.Add("middleware");
+            if (kind.Count == 0) kind.Add("plain");
+            return string.Join("|", kind);
+        }
+
+        private static bool IsUninteresting(Type elem)
+        {
+            if (elem == typeof(string)) return true;
+            if (elem.IsPrimitive) return true;
+            if (elem == typeof(Guid) || elem == typeof(decimal) || elem == typeof(DateTime) || elem == typeof(DateTimeOffset)) return true;
+            if (elem.IsEnum) return true;
+            return false;
+        }
+
+        private static Type CollectionElement(Type t)
+        {
+            if (t.IsArray && t.GetArrayRank() == 1) return t.GetElementType();
+            if (!t.IsGenericType) return null;
+            var def = t.GetGenericTypeDefinition();
+            if (CollectionOpenTypes.Contains(def)) return t.GetGenericArguments()[0];
+            return null;
+        }
+
+        internal static string Pretty(Type t)
+        {
+            if (t.IsArray) return Pretty(t.GetElementType()) + "[]";
+            if (!t.IsGenericType) return t.Name;
+            var n = t.Name;
+            var i = n.IndexOf('`');
+            if (i > 0) n = n.Substring(0, i);
+            return n + "<" + string.Join(",", t.GetGenericArguments().Select(Pretty)) + ">";
+        }
+    }
+}

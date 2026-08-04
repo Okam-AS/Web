@@ -178,12 +178,26 @@ alphabet. The neighbouring line `:53` searches for `"roundtrip@example.test"`, w
 spell at all - safe **by punctuation**. Two different immunities, one line apart, and neither is the
 one the rule named.
 
-**Is the class clear at this tip? Yes - and here is exactly who checked what.** The **Fable reviewer**
-extracted all 14 short alphanumeric non-hex needles and read **each** against its actual haystack;
-that is the basis for "nothing was missed", and it is the reviewer's work, not this census's.
-`L-CENSUS-CORRECTIONS` independently re-extracted the class (`recheck-needles.py`, Q1b: **23** sites
-at length <= 12, of which **19** at length <= 8, every one printed with its call text) and read
-**7 of them at the producer**:
+**Is the class clear at this tip? Yes - and here is exactly who checked what, including where the two
+counts do not line up.** The **Fable reviewer** extracted the short alphanumeric non-hex needles -
+reported as **14** - and read **each** against its actual haystack; that is the basis for "nothing was
+missed", and it is the reviewer's work, not this census's.
+
+**The 14 is not reproduced by this lane's extraction, and the reviewer's list is not in this document,
+so it cannot be enumerated here.** `recheck-needles.py` Q1b yields, at the two obvious thresholds:
+
+| threshold | sites | distinct needles |
+|---|---|---|
+| length <= 12 | 23 | 19 |
+| length <= 8 | 19 | 15 |
+
+**No threshold in that extraction gives 14** - the nearest is 15 distinct needles at length <= 8.
+Printed side by side rather than reconciled by guesswork, exactly as sec. 2.3 does for `174 / 71 / 88`
+and sec. 1 does for the `Assert.Empty` span counts: **the population a claim was checked over is part
+of the claim.** Of this lane's 23 sites, **7 were re-read at the producer** and are tabled below; the
+remaining **16 rest on the reviewer's per-site pass, which this document cannot enumerate.** Anyone
+re-deriving the immunity of that residue should re-run Q1b and read the sites, not cite this
+paragraph.
 
 | site | needle | haystack, at the producer | immune by |
 |---|---|---|---|
@@ -195,9 +209,8 @@ at length <= 12, of which **19** at length <= 8, every one printed with its call
 | `Kassa/EscPosXZReportBuilderTests.cs:34` | `Signatur` | UTF-8 text of an ESC/POS job, no base64 | alphabet, deterministic body |
 | `Workforce/PosClockSurfaceTests.cs:483` | `capab` | reflected property name | deterministic |
 
-The remaining 16 were **not** re-read at the producer by this lane; they rest on the reviewer's
-per-site pass. **Nothing was missed. What was wrong is the reason given - and the reason is what the
-next needle inherits.**
+**Nothing was missed. What was wrong is the reason given - and the reason is what the next needle
+inherits.**
 
 ### 2.3 Applying the corrected filter to the 174 literal needles
 
