@@ -74,7 +74,7 @@
         <span>{{ priceLabel(v.basis) }}</span>
         <span class="xreport__num">{{ v.vatPercent }}%</span>
         <span class="xreport__num">{{ priceLabel(v.amount) }}</span>
-        <span class="xreport__num">{{ priceLabel(v.basis + v.amount) }}</span>
+        <span class="xreport__num">{{ priceLabel(statedSum(v.basis, v.amount)) }}</span>
       </div>
     </section>
 
@@ -193,6 +193,15 @@
 // Layout mirrors a Norwegian X/Z receipt: turnover per goods group, the correction buckets (negativ
 // salg / retur / korreksjoner), the VAT summary, the from-day-1 grand totals, payment means and the
 // per-operator specification.
+//
+// EVERY total on this receipt is summed with `statedSum`, never with `+` or `(x || 0)`. The gate that
+// keeps an absent amount from printing as "kr 0" lives inside `priceLabel`, and a gate can only refuse
+// what still looks absent when it runs — `null + null` is `0`, so a VAT row whose basis and amount both
+// failed to arrive used to reach the formatter already disguised as a stated zero and print as a real
+// figure on a fiscal document. `statedSum` returns null the moment any addend is unstated, so the hole
+// survives the arithmetic and `priceLabel` can still withhold it.
+import { statedSum } from '~/utils/price';
+
 export default {
   name: 'XReportView',
   props: {
@@ -200,19 +209,28 @@ export default {
   },
   computed: {
     isZ () { return this.report.zNumber != null; },
+    // TOTALT MOTTATT. A payment mean whose amount did not arrive makes the total received unknowable,
+    // and `(p.amount || 0)` used to answer it anyway — dropping that mean silently and reporting the
+    // rest as if it were the whole. An absent `paymentMeans` is likewise not an empty one: the list
+    // never arrived, so there is no total to state.
     receivedTotal () {
-      return (this.report.paymentMeans || []).reduce((sum, p) => sum + (p.amount || 0), 0);
+      if (!Array.isArray(this.report.paymentMeans)) { return null; }
+      return statedSum(...this.report.paymentMeans.map(p => p.amount));
     },
     // TOTAL KORREKSJONER for the period: negative sales + referenced returns + correction receipts
-    // + aborted/voided sales.
+    // + aborted/voided sales. All four are `long` minor-unit fields on the wire; any one of them
+    // missing means this line cannot be stated, so it is withheld rather than summed as zero.
     correctionsTotal () {
-      return (this.report.negativeSalesAmount || 0) +
-        (this.report.referencedReturnsAmount || 0) +
-        (this.report.correctionAmount || 0) +
-        (this.report.abortedSalesAmount || 0);
+      return statedSum(
+        this.report.negativeSalesAmount,
+        this.report.referencedReturnsAmount,
+        this.report.correctionAmount,
+        this.report.abortedSalesAmount
+      );
     }
   },
   methods: {
+    statedSum,
     paymentLabel (type) {
       if (type === 'Cash') { return this.$i('pos_pay_cash'); }
       if (type === 'SurfboardTerminal' || type === 'DinteroTerminal') { return this.$i('pos_pay_card'); }

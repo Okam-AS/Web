@@ -302,17 +302,6 @@ export default {
       });
     },
 
-    calculateTotalRewards() {
-      if (!this.customerRewards || this.customerRewards.length === 0) {
-        return 0;
-      }
-      return (
-        this.customerRewards.reduce((total, reward) => {
-          return total + (reward.balance || 0);
-        }, 0) / 100
-      ); // Convert from øre to kroner
-    },
-
     getTransactionLabel(type) {
       switch (type) {
         case "Earned":

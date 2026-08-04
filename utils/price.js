@@ -60,6 +60,74 @@ export function isAmountStated (amountMinor) {
   return false
 }
 
+/**
+ * Add amounts WITHOUT inventing one.
+ *
+ * A gate in front of a formatter cannot see a hole that the arithmetic already filled in. `null + null`
+ * is `0` and `(a || 0) + (b || 0)` is `0`, so a row whose two fields never arrived reaches
+ * `priceLabel` as a genuine zero and prints as a real amount — the figure is manufactured before
+ * anything is in a position to refuse it. That is why this is a SUM helper and not a second gate:
+ * the only place absence can still be seen is before the `+`.
+ *
+ * Returns `null` — the absent marker every entry point here already understands — if ANY addend is
+ * unstated, so `priceLabel(statedSum(a, b))` prints the unknown mark. A partial sum presented as a
+ * total is a worse lie than no total: the reader cannot tell which term is missing.
+ *
+ * An EMPTY list sums to `0`, and that is deliberate: nothing recorded really is nothing. An ABSENT
+ * list is not a list, and callers must gate the container themselves rather than pass `[]` for it.
+ */
+export function statedSum (...amounts) {
+  let total = 0
+  for (const amount of amounts) {
+    if (!isAmountStated(amount)) { return null }
+    total += Number(amount)
+  }
+  return total
+}
+
+/**
+ * The gate in front of the local money formatters the legacy admin pages wrote for themselves.
+ *
+ * Five pages each invented their own — an invoice, a settlements summary, a Wolt menu, a rewards
+ * roster and two product lists — and five of them printed an amount nobody stated as a real figure,
+ * because each one re-decided the absence question and got it wrong in a different way (`|| 0`, an
+ * `if (!x)` that a genuine zero also takes, an explicit absence test answered with "0 kr", a raw
+ * `/ 100`). The FORMAT legitimately differs per page and stays with the page; the RULE does not, and
+ * lives here so there is one place left to get it wrong.
+ *
+ * `suffix` is a trailing unit ("kr", a currency code) and is omitted when blank — an absent amount
+ * never gets one, since "— kr" still asserts that somebody priced this in kroner.
+ */
+export function amountLabel (amountMinor, { suffix = '', decimalSeparator = '.' } = {}) {
+  if (!isAmountStated(amountMinor)) { return UNKNOWN_AMOUNT }
+  const kroner = (Number(amountMinor) / 100).toFixed(2)
+  const body = decimalSeparator === '.' ? kroner : kroner.split('.').join(decimalSeparator)
+  return suffix ? body + ' ' + suffix : body
+}
+
+/**
+ * The nb-NO currency rendering ("kr 206,80") that the invoice and the settlements summary each built
+ * with their own identical `Intl.NumberFormat` call.
+ */
+export function nokAmountLabel (amountMinor) {
+  if (!isAmountStated(amountMinor)) { return UNKNOWN_AMOUNT }
+  return new Intl.NumberFormat('nb-NO', { style: 'currency', currency: 'NOK' })
+    .format(Number(amountMinor) / 100)
+}
+
+/**
+ * What an `<input type="number">` is seeded with for an amount nobody stated.
+ *
+ * NOT the unknown mark: a number input cannot hold "—", and a dash is not something an operator can
+ * edit. Blank is the honest seed — there is no number to show — and it is the difference between an
+ * operator seeing an empty price field and an operator tabbing past a pre-filled "0.00" that then
+ * gets published as a real price.
+ */
+export function amountInputValue (amountMinor) {
+  if (!isAmountStated(amountMinor)) { return '' }
+  return (Number(amountMinor) / 100).toFixed(2)
+}
+
 export function formatChf (amountMinor) {
   // Before any arithmetic. `Number(null)` is 0 and `NaN || 0` is 0, so every absent amount used to
   // arrive at the formatter already disguised as a genuine zero.
