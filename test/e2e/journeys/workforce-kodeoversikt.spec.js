@@ -159,7 +159,7 @@ test(
       const stream = await download.createReadStream();
       const csv = await new Promise((resolve, reject) => {
         let text = '';
-        stream.on('data', chunk => { text += chunk; });
+        stream.on('data', (chunk) => { text += chunk; });
         stream.on('end', () => resolve(text));
         stream.on('error', reject);
       });
@@ -211,7 +211,7 @@ test(
       return 'two issue rows, distinct ids, both stamped with an actor';
     });
 
-    await journey.step('the page reported no console errors of its own', async () => {
+    await journey.step('the page reported no console errors of its own', () => {
       // SORTED RATHER THAN FILTERED. The router's «Navigation cancelled» pair is the ADMIN SHELL's
       // login redirect racing itself — `AdminPage` replaces to `/admin?redirect=…` and the store
       // selection appends `&storeId=` on top of it — and it appears identically in
