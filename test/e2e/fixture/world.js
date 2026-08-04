@@ -304,6 +304,72 @@ const EVENTS_SETTLEMENT_FLAG = 'Events.Settlement';
 // venue, and its override row is seeded below — deliberately NOT `STORE_ID`, whose empty deny-closed
 // flag state is the control every admin journey opens with ("before any switch is flipped, the venue
 // is dark"). No journey reads store 43's flag board; it exists to own these two tokens.
+// ---- the personalliste day, and the kodeoversikt it is decoded by ------------------------------
+//
+// A FIXED business day rather than "today", so the register and the overview issued beside it can be
+// asserted by value. The page never asks for a date on first load — it lets the SERVER resolve the
+// venue's own day and then follows the answer — so this constant is also what proves that echo
+// happened: the date picker ends up holding a day the browser did not choose.
+const PERSONNEL_BUSINESS_DATE = '2026-07-13';
+const PERSONNEL_AS_OF_UTC = '2026-07-13T12:00:00Z';
+// Accounting-year end (2026-12-31) + three years six months, the § 8-5-7 horizon the real
+// `WorkforcePersonnelListRetention` computes. Held as a constant so the document and the issue row
+// cannot disagree about it.
+const PERSONNEL_RETAIN_UNTIL = '2030-06-30';
+const PERSONNEL_BUSINESS_NAME = 'Okam Testrestaurant AS';
+const PERSONNEL_ORGNR = '912345678';
+
+// Two people carrying a protected identity code and ONE carrying none.
+//
+// The codeless row is the point of the third entry, not padding: § 8-5-6 requires everyone present
+// on the list, and the real service prints such a person with an empty code column and counts them
+// on `rowsWithoutIdentityCode` rather than dropping them. A fixture with only coded people would let
+// a regression that silently drops them pass.
+const PERSONNEL_ROWS = [
+  {
+    personnelListEntryId: 'entry-1',
+    participantName: 'Ola Ansatt',
+    protectedIdentityCodeRef: 'wf-person:0f7d2c1a-8b64-4f2e-9c31-1a5d6e7f8091',
+    category: 'Employee',
+    hiredInOrganizationNumber: null,
+    onSiteStartUtc: '2026-07-13T06:00:00Z',
+    onSiteEndUtc: '2026-07-13T12:00:00Z',
+    businessName: PERSONNEL_BUSINESS_NAME,
+    organizationNumber: PERSONNEL_ORGNR,
+    retainUntilUtc: PERSONNEL_RETAIN_UNTIL + 'T00:00:00Z',
+    correctionActorReference: null,
+    correctedAtUtc: null
+  },
+  {
+    personnelListEntryId: 'entry-2',
+    participantName: 'Kari Hansen',
+    protectedIdentityCodeRef: 'wf-person:3b91e40c-27af-4d5b-8e12-6c4f90ab7d23',
+    category: 'Employee',
+    hiredInOrganizationNumber: null,
+    onSiteStartUtc: '2026-07-13T07:30:00Z',
+    onSiteEndUtc: '2026-07-13T13:30:00Z',
+    businessName: PERSONNEL_BUSINESS_NAME,
+    organizationNumber: PERSONNEL_ORGNR,
+    retainUntilUtc: PERSONNEL_RETAIN_UNTIL + 'T00:00:00Z',
+    correctionActorReference: null,
+    correctedAtUtc: null
+  },
+  {
+    personnelListEntryId: 'entry-3',
+    participantName: 'Uregistrert Hjelper',
+    protectedIdentityCodeRef: null,
+    category: 'Unpaid',
+    hiredInOrganizationNumber: null,
+    onSiteStartUtc: '2026-07-13T09:00:00Z',
+    onSiteEndUtc: '2026-07-13T11:00:00Z',
+    businessName: PERSONNEL_BUSINESS_NAME,
+    organizationNumber: PERSONNEL_ORGNR,
+    retainUntilUtc: PERSONNEL_RETAIN_UNTIL + 'T00:00:00Z',
+    correctionActorReference: null,
+    correctedAtUtc: null
+  }
+];
+
 const GUEST_VENUE_STORE_ID = 43;
 
 // Two tokens, and the second one is the point of having two. `EventsProposalService.GetPublicAsync`
@@ -847,5 +913,11 @@ module.exports = {
   MEALS_INVITE_USED,
   MEALS_INVITE_UNKNOWN,
   MEALS_INVITATIONS,
-  growthPrivacyRequests
+  growthPrivacyRequests,
+  PERSONNEL_BUSINESS_DATE,
+  PERSONNEL_AS_OF_UTC,
+  PERSONNEL_RETAIN_UNTIL,
+  PERSONNEL_BUSINESS_NAME,
+  PERSONNEL_ORGNR,
+  PERSONNEL_ROWS
 };
