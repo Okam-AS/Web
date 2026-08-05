@@ -2130,6 +2130,7 @@ export default {
   pos_return_menu_search_ph: 'Søk i menyen',
   pos_negative_sale: 'Negativ salg',
   pos_negative_sale_done: 'Negativt salg registrert',
+  pos_negative_sale_unpriceable: 'Kan ikke returnere hele regningen: beløpet mangler på {names}. Bygg returen manuelt under Dag.',
   pos_board_no_floorplan: 'Ingen bordkart satt opp.',
   pos_board_edit_floorplan: 'Rediger bordkart →',
   pos_board_free: 'Ledig',

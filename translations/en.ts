@@ -1894,6 +1894,7 @@ export default {
   pos_return_menu_search_ph: 'Search the menu',
   pos_negative_sale: 'Negative sale',
   pos_negative_sale_done: 'Negative sale recorded',
+  pos_negative_sale_unpriceable: 'Cannot return the whole bill: the amount is missing on {names}. Build the return by hand under Day.',
   pos_board_no_floorplan: 'No floor plan set up.',
   pos_board_edit_floorplan: 'Edit floor plan →',
   pos_board_free: 'Free',

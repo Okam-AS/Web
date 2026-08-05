@@ -266,7 +266,16 @@ export default {
         }
         const g = map[key];
         g.quantity += line.quantity;
-        g.lineAmount += line.netLineAmount;
+        // `statedSum`, and this one is the REFUND. `g.lineAmount` is not just the figure on the row:
+        // `SellScreen.onNegativeSale` reads it as `unitAmount` when a discount is in play, so it is
+        // what the till hands back. A bare `+=` off the WIRE object gave the absent world and the
+        // genuinely-zero world the same answer — `0 + null` is `0` — and a bill the till took 50,00
+        // for returned nothing, on a row indistinguishable from one that had been comped. That is a
+        // refund somebody has to explain, built from a field that never arrived.
+        //
+        // Unstated is STICKY, as it is for the discount below: a row total missing one member's net
+        // is not a total, however many stated members follow it.
+        g.lineAmount = statedSum(g.lineAmount, line.netLineAmount);
         // `statedSum`, not `+= (x || 0)`. `line` is the WIRE object, and the coercion folded a member
         // line whose discount never arrived into the row as a zero — a hole filled in by the
         // arithmetic, one screen before any gate was in a position to refuse it. A fixed discount is
@@ -278,7 +287,12 @@ export default {
         // Unstated is STICKY. Once a member says nothing the group's discount is `null` and stays
         // null however many stated members follow, because a sum missing one term is not a total.
         g.discountAmount = statedSum(g.discountAmount, line.discountAmount);
-        g.depositAmount += line.depositAmount || 0;
+        // The same `|| 0` family, on pant. A group folds lines of the SAME product, so its members
+        // carry the same deposit; one member arriving without the field is the ordinary shape of a
+        // dropped field, not a contrived one. The coercion summed [500, absent] to 500 — a figure
+        // that looks like a full row's pant and is short by one bottle — and summed [absent] to a
+        // zero that says "no pant on this row", which is a claim nobody made.
+        g.depositAmount = statedSum(g.depositAmount, line.depositAmount);
         g.lineIds.push(line.orderLineItemId);
       });
       return order.map(k => map[k]);

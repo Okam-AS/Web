@@ -1895,6 +1895,7 @@ export default {
   pos_return_menu_search_ph: 'Im Menü suchen',
   pos_negative_sale: 'Negativer Verkauf',
   pos_negative_sale_done: 'Negativer Verkauf erfasst',
+  pos_negative_sale_unpriceable: 'Die gesamte Rechnung kann nicht zurückgegeben werden: Der Betrag fehlt bei {names}. Erstellen Sie die Rückgabe manuell unter Tag.',
   pos_board_no_floorplan: 'Kein Tischplan eingerichtet.',
   pos_board_edit_floorplan: 'Tischplan bearbeiten →',
   pos_board_free: 'Frei',

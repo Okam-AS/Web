@@ -21,7 +21,7 @@
       </div>
 
       <div v-if="showTags" class="check-line__tags">
-        <span v-if="group.depositAmount > 0" class="check-line__tag check-line__tag--deposit">{{ $i('pos_deposit') }}</span>
+        <span v-if="depositInPlay" class="check-line__tag check-line__tag--deposit">{{ depositLabel }}</span>
         <template v-if="coursing">
           <span v-if="group.courseSequence" class="check-line__tag">{{ $i('pos_course') }} {{ group.courseSequence }}</span>
           <span v-if="statusLabel" class="check-line__tag" :class="statusClass">{{ statusLabel }}</span>
@@ -113,7 +113,7 @@
 // occasion the operator most needed something on screen, and the check then showed no discount at
 // all while the server's `finalAmount` still carried one. `isDeductionInPlay` keeps a stated zero
 // silent and gives an unstated amount its row.
-import { negatedAmountLabel, isDeductionInPlay } from '~/utils/price';
+import { negatedAmountLabel, isDeductionInPlay, isAmountInPlay, isAmountStated } from '~/utils/price';
 
 export default {
   name: 'CheckLine',
@@ -141,10 +141,31 @@ export default {
     statusClass () {
       return this.group.status ? 'check-line__tag--' + String(this.group.status).toLowerCase() : '';
     },
+    // Is there pant on this row, or do we not know? Three worlds, and the middle one is the reason
+    // this is not `> 0`: a stated zero means no deposit and shows no tag, a stated amount shows it,
+    // and an amount nobody stated still shows it — carrying the unknown mark, because "there is pant
+    // here and we cannot say how much" is a reading an operator settling a return has to be given.
+    //
+    // WHY IT CHANGED WITH THE SUM ABOVE IT. `groups` summed pant with `+= line.depositAmount || 0`,
+    // so a row whose members were [500, absent] came out as 500 and the tag showed on the strength
+    // of a manufactured figure. Gating that sum makes the row `null`, and `null > 0` is false — so
+    // the tag would have switched itself OFF on exactly the rows that used to show it, which is the
+    // sum's defect moved one screen down rather than removed. `isAmountInPlay` is the same predicate
+    // the deduction rows already render on; pant is an addition, so it is used under its general
+    // name rather than the deduction one.
+    depositInPlay () {
+      return isAmountInPlay(this.group.depositAmount);
+    },
+    // The tag names the deposit and, when nobody stated it, says so rather than implying a figure.
+    depositLabel () {
+      return isAmountStated(this.group.depositAmount)
+        ? this.$i('pos_deposit')
+        : this.$i('pos_deposit') + ' ' + this.priceLabel(this.group.depositAmount);
+    },
     // The deposit tag always shows; the course / status tags only on a coursing (table) check; the
     // guest tag (assigned or the ghost affordance) whenever seating is in play.
     showTags () {
-      return this.group.depositAmount > 0 || this.coursing || this.seating;
+      return this.depositInPlay || this.coursing || this.seating;
     },
     // The kitchen has finished this line (bumped Ready) — highlight it so a server notices at a
     // glance that it is ready to run.
