@@ -54,6 +54,58 @@ import { formatChf, isAmountStated, UNKNOWN_AMOUNT } from '~/utils/price'
 // Admin web keeps the legacy "kr 100" prefix format.
 setCurrencyFormat({ prefix: 'kr ', suffix: '' })
 
+// Every member of the backend's `PaymentType` (OkamAPI `Enums/PaymentType.cs`, read by object at
+// `8e2b57de`) mapped to the dictionary key an operator reads back off an order.
+//
+// ENUMERATED FROM THE BACKEND, NOT FROM THIS FILE. The `switch` this replaces carried ten cases and
+// a `default: 'Ukjent'`, so SEVEN of the backend's seventeen members answered "Ukjent" — and two of
+// those seven are written by this repository's own POS. `PosSettlementService.DominantPaymentType`
+// stamps the settled order with its largest tender, so a POS cash sale
+// (`components/admin/pos/PaymentScreen.vue` allocates `paymentType: 'Cash'`) came back as "Ukjent"
+// in the admin order list, as did a terminal card sale (`'SurfboardTerminal'`). Taking the switch's
+// own cases as the population is what let that stand: it passes by construction.
+//
+// KEYS, NOT LITERALS. Nine of these keys already existed and are already used by the payment-type
+// filter on the same page that renders these cards (`pages/admin/orders.vue:572`), in all three
+// dictionaries. The switch had re-typed the Norwegian half of them as literals, which is why the
+// German build — the only language the CH deployment serves — rendered a Norwegian sentence here
+// while the filter three components away rendered German.
+//
+// Where two members share a key they share an operator-facing fact, not an implementation: both
+// terminals are a card presented at the counter (the backend groups them the same way in
+// `EodService`, `XZReportService` and the SAF-T export), and the Vipps/card families follow
+// `ReceiptService.PaymentTypeLabel`'s own wording rather than a new one invented here.
+const PAYMENT_TYPE_LABEL_KEYS = {
+  // 0 — no tender recorded. NOT the same fact as an unrecognised value, and it is a real persisted
+  // state: `CheckSplitService.BuildPartOrder` creates every split part as an OpenCheck order with
+  // `PaymentType.NotSet`. "Ukjent" said the client could not read the value; the truth is that
+  // nobody has paid yet.
+  NotSet: 'orders_paymentNotSet',
+  Giftcard: 'orders_paymentGiftcard',
+  PayInStore: 'orders_paymentPayInStore',
+  // 110 — this repo's POS writes it.
+  Cash: 'orders_paymentCash',
+  // 120 — Company Meals credit sale. Never a payment rail; the backend's own receipt line calls it
+  // "Betalt med bedriftskonto" (`ReceiptService.cs:171`) and the SAF-T export books it as a
+  // customer account (12006), so it is named here rather than invented.
+  CompanyAccount: 'orders_paymentCompanyAccount',
+  Stripe: 'orders_paymentCard',
+  Vipps: 'orders_paymentVipps',
+  Dintero: 'orders_paymentDintero',
+  DinteroVipps: 'orders_paymentVipps',
+  DinteroBillie: 'orders_paymentBillie',
+  DinteroKlarna: 'orders_paymentKlarna',
+  DinteroKravia: 'orders_paymentKravia',
+  // 450 / 650 — a card taken on the counter terminal. Kept distinct from the online card rails
+  // above because the two reconcile through different books: terminal sales are excluded from
+  // `OnlineSettledPaymentTypes` and reach the ledger through the Z-report instead.
+  DinteroTerminal: 'orders_paymentTerminal',
+  WoltMarketplace: 'orders_paymentWolt',
+  Surfboard: 'orders_paymentCard',
+  SurfboardVipps: 'orders_paymentVipps',
+  SurfboardTerminal: 'orders_paymentTerminal'
+}
+
 const mixin = {
   data () {
     return {
@@ -79,20 +131,14 @@ const mixin = {
     }
   },
   methods: {
+    // Resolves a dictionary key, never a literal. See PAYMENT_TYPE_LABEL_KEYS above for why both
+    // halves of that sentence matter. A value the map does not carry keeps answering "Ukjent" —
+    // narrow on purpose, so the next member the backend adds is visible instead of absorbed.
     paymentTypeLabel (paymentTypeEnum) {
-      switch (paymentTypeEnum) {
-      case 'PayInStore': return 'Betal i butikk'
-      case 'Stripe': return 'Betalt med kort'
-      case 'Vipps': return 'Betalt med Vipps'
-      case 'Giftcard': return 'Betalt med gavekort'
-      case 'Dintero': return 'Betalt med Dintero'
-      case 'DinteroVipps': return 'Betalt med Vipps'
-      case 'DinteroBillie': return 'Betalt med Billie'
-      case 'DinteroKlarna': return 'Betalt med Klarna'
-      case 'DinteroKravia': return 'Betalt med Kravia'
-      case 'WoltMarketplace': return 'Betalt via Wolt'
-      default: return 'Ukjent'
-      }
+      const key = Object.prototype.hasOwnProperty.call(PAYMENT_TYPE_LABEL_KEYS, paymentTypeEnum)
+        ? PAYMENT_TYPE_LABEL_KEYS[paymentTypeEnum]
+        : 'orders_paymentUnknown'
+      return this.$i(key)
     },
     deliveryTypeLabel (deliveryTypeEnum) {
       switch (deliveryTypeEnum) {
@@ -263,3 +309,8 @@ Vue.mixin(mixin)
 // exercises the real one. Nuxt registers a plugin by calling its DEFAULT export when that export is a
 // function; there is none here and this adds none, so the plugin still runs exactly as before.
 export { mixin as globalMixin }
+
+// Exported for the same reason: `test/payment-type-label.test.js` enumerates the backend's members
+// and asserts this map declares exactly them — no member missing, and no key left behind for a
+// member the backend no longer has.
+export { PAYMENT_TYPE_LABEL_KEYS }
