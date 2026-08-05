@@ -37,50 +37,46 @@ import CheckPanel from '~/components/admin/pos/CheckPanel.vue'
 //      all — so it is on the record that the guard, not the label, is what hides them, and relaxing
 //      it becomes a deliberate act that has to come back through this file.
 //
-// AND IT DID COME BACK THROUGH THIS FILE. `L-CHECK-DISCOUNT-SUM-COUPLED` relaxed it on the two CHECK
-// surfaces, because the guard was hiding the wrong thing: the reducer one screen above CheckLine
-// manufactured a zero out of a member line that never stated its discount, and the guard then
-// deleted the row that absence should have produced. Those two sites split the list in three — a
-// stated deduction, a stated NO deduction, and an amount nobody stated — and only the middle one is
-// still silent. `PosReceiptView` is untouched and keeps the original list, so the assertions below
-// are now a record of a real difference between a check and a receipt rather than a uniform rule.
+// AND IT DID COME BACK THROUGH THIS FILE. TWICE. `L-CHECK-DISCOUNT-SUM-COUPLED` relaxed it on the
+// two CHECK surfaces, because the guard was hiding the wrong thing: the reducer one screen above
+// CheckLine manufactured a zero out of a member line that never stated its discount, and the guard
+// then deleted the row that absence should have produced. `L-RECEIPT-DISCOUNT-ROW-DROPPED` then
+// relaxed it on the RECEIPT, for a reason the check does not have — a receipt line renders
+// `lineAmount`, which is GROSS of the discount, while the printed grand total is the net figure the
+// backend charged, so the deduction rows are the only thing on the page that bridges the two. A
+// dropped row leaves ore unaccounted for on a document that is supposed to reconcile. That is
+// argued and proved against the backend's own numbers in `test/receipt-discount-row.test.js`; this
+// file pins that all three sites now answer the same question the same way.
+//
+// So every site now splits in three: a stated deduction prints its figure, a stated NO deduction
+// prints no row, and an amount nobody stated prints the row carrying the bare mark. The single
+// undifferentiated "what the guard withholds" list that part 3 below was written around is gone —
+// which is itself the record that the guard stopped being the thing that hides an absence.
 
 const posMocks = () => ({
   $i: (key, args) => (args ? key + ':' + JSON.stringify(args) : key),
   $store: { dispatch: () => {}, subscribe: () => {} }
 })
 
-// The six shapes the `> 0` guard withholds. `-5000` is included because a negative discount is a
-// figure somebody stated and the guard hides it just the same.
-//
-// STILL THE GUARD ON PosReceiptView, AND NO LONGER THE GUARD ON THE CHECK. `L-CHECK-DISCOUNT-SUM-
-// COUPLED` did the deliberate act this file's closing section said would have to come back through
-// it: CheckLine and CheckPanel now render their row on `isDeductionInPlay`, so the four ABSENCES
-// below get a row carrying the unknown mark instead of vanishing, while the two STATED shapes are
-// withheld exactly as before. The receipt is a wire object with no reducer in front of it and was
-// out of that lane's scope, so it keeps all six. The split is below, and the two lists together are
-// still these six shapes.
-const GUARD_WITHHELD = [
-  ['null', null],
-  ['undefined', undefined],
-  ['the empty string', ''],
-  ['NaN', NaN],
-  ['a genuine zero', 0],
-  ['an already-negative amount', -5000]
-]
+// The `> 0` guard used to withhold six shapes as one undifferentiated list — four absences and two
+// stated figures, given the same answer. All three sites now split that list in two, and the list
+// itself is gone rather than kept as a constant nothing asserts.
 
-// On the check surfaces: the amounts that STATE there was no deduction. These, and only these, are
-// withheld now.
+// The amounts that STATE there was no deduction. These, and only these, are withheld now — at every
+// one of the three sites. A "Rabatt kr 0,00" row on every ordinary bill and every ordinary receipt
+// is noise, and `-5000` is here because a negative discount is still a figure somebody stated.
 const STATED_NO_DEDUCTION = [
   ['a genuine zero', 0],
   ['an already-negative amount', -5000]
 ]
 
-// On the check surfaces: the amounts nobody stated. Every one of them used to be dropped silently by
-// the relational guard; every one of them now renders the row with the bare mark. `test/check-
-// discount-sum.test.js` is where that change is argued and proved against the server's own
-// `finalAmount`; this file pins that the four sites still agree about what a sign may attach to.
-const UNSTATED_ON_A_CHECK = [
+// The amounts nobody stated. Every one of them used to be dropped silently by the relational guard;
+// every one of them now renders the row with the bare mark. `test/check-discount-sum.test.js` argues
+// that change on the CHECK against the server's own `finalAmount`, and
+// `test/receipt-discount-row.test.js` argues it on the RECEIPT against the printed page's own
+// arithmetic — a different reason at each surface. This file pins that the four sites nevertheless
+// agree about what a sign may attach to.
+const UNSTATED = [
   ['null', null],
   ['undefined', undefined],
   ['the empty string', ''],
@@ -101,9 +97,16 @@ const GUARD_ADMITS_UNSTATED = [
 // ---------------------------------------------------------------------------------------------
 // PosReceiptView — ported FIRST, because it is the only one of the three that is itself a
 // kassasystemforskrifta artifact: it is what `print()` puts on the bong roll, and it is mounted from
-// five surfaces (PaymentScreen, ReceiptsView, ReturnBuilder, RefundModal, SellScreen's proforma).
-// It also reads `line.discountAmount` straight off the wire model, with no client-side reducer in
-// between, so all three unstated-but-guard-passing shapes reach it.
+// six surfaces (PaymentScreen, ReceiptsView, ReturnBuilder, RefundModal, SellScreen's proforma, and
+// the public electronic-receipt page at `pages/kvittering/_id/_token.vue`). It also reads
+// `line.discountAmount` straight off the wire model, with no client-side reducer in between, so all
+// three unstated-but-guard-passing shapes reach it.
+//
+// It was also the LAST of the three to have its guard relaxed, and for the strongest reason. The
+// full argument and the reconciliation assertions are in `test/receipt-discount-row.test.js`; the
+// one-line version is that a receipt row renders `lineAmount`, which is gross of the discount,
+// while the grand total below it is net — so the deduction rows are the only thing on the printed
+// page that makes it add up, and a dropped one leaves ore missing off a legal document.
 // ---------------------------------------------------------------------------------------------
 
 const receiptWith = discountAmount => ({
@@ -156,11 +159,22 @@ describe('PosReceiptView — the per-line discount on a printed receipt', () => 
       wrapper.destroy()
     })
 
-  test.each(GUARD_WITHHELD)(
-    'the `> 0` guard, not the label, is what withholds %s — no row renders',
+  test.each(STATED_NO_DEDUCTION)(
+    'an amount that states there was no deduction (%s) renders no row',
     (_name, value) => {
       const wrapper = mountReceipt(value)
       expect(receiptDiscountRow(wrapper).exists()).toBe(false)
+      wrapper.destroy()
+    })
+
+  test.each(UNSTATED)(
+    'an amount nobody stated (%s) now gets its row, carrying the bare mark',
+    (_name, value) => {
+      const wrapper = mountReceipt(value)
+      const row = receiptDiscountRow(wrapper)
+      expect(row.exists()).toBe(true)
+      expect(row.text()).toContain(UNKNOWN_AMOUNT)
+      expect(row.text()).not.toContain(MINUS_SIGN)
       wrapper.destroy()
     })
 
@@ -241,7 +255,7 @@ describe('CheckLine — the discount line on an open check row', () => {
       wrapper.destroy()
     })
 
-  test.each(UNSTATED_ON_A_CHECK)(
+  test.each(UNSTATED)(
     'an amount nobody stated (%s) now gets its row, carrying the bare mark',
     (_name, value) => {
       const wrapper = mountCheckLine(value)
@@ -321,7 +335,7 @@ describe('CheckPanel — the discount total in the check footer', () => {
       wrapper.destroy()
     })
 
-  test.each(UNSTATED_ON_A_CHECK)(
+  test.each(UNSTATED)(
     'an amount nobody stated (%s) now gets its footer row, carrying the bare mark',
     (_name, value) => {
       const wrapper = mountPanel(value)

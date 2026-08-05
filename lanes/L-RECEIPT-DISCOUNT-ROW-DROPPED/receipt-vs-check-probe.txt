@@ -1,0 +1,134 @@
+1. THE ROW GUARD AGAINST THE ABSENCE RULE
+
+shape                   guard `> 0`   isAmountStated   the label prints
+null                   false         false            (row hidden)
+undefined              false         false            (row hidden)
+''                     false         false            (row hidden)
+'   '                  false         false            (row hidden)
+NaN                    false         false            (row hidden)
+0                      false         true             (row hidden)
+-0                     false         true             (row hidden)
+-1                     false         true             (row hidden)
+-5000                  false         true             (row hidden)
+5000                   true          true             a figure
+'50'                   true          true             a figure
+Infinity               true          false            THE UNKNOWN MARK   <-- REACHES THE LABEL UNSTATED
+-Infinity              false         false            (row hidden)
+'Infinity'             true          false            THE UNKNOWN MARK   <-- REACHES THE LABEL UNSTATED
+true                   true          false            THE UNKNOWN MARK   <-- REACHES THE LABEL UNSTATED
+false                  false         false            (row hidden)
+{}                     false         false            (row hidden)
+{valueOf:()=>5000}     true          false            THE UNKNOWN MARK   <-- REACHES THE LABEL UNSTATED
+[]                     false         false            (row hidden)
+
+shapes the guard admits and the absence rule refuses: Infinity, 'Infinity', true, {valueOf:()=>5000}
+
+
+2. WHAT ONE MEMBER LINE BECOMES IN THE GROUP TOTAL
+
+line.discountAmount     `0 + (x || 0)`       statedSum(0, x)
+null                   0                    null   <-- AN ABSENCE BECAME A FIGURE
+undefined              0                    null   <-- AN ABSENCE BECAME A FIGURE
+''                     0                    null   <-- AN ABSENCE BECAME A FIGURE
+'   '                  0                    null   <-- AN ABSENCE BECAME A FIGURE
+NaN                    0                    null   <-- AN ABSENCE BECAME A FIGURE
+0                      0                    0
+-0                     0                    0
+-1                     -1                   -1
+-5000                  -5000                -5000
+5000                   5000                 5000
+'50'                   050                  50
+Infinity               Infinity             null
+-Infinity              -Infinity            null
+'Infinity'             0Infinity            null
+true                   1                    null   <-- AN ABSENCE BECAME A FIGURE
+false                  0                    null   <-- AN ABSENCE BECAME A FIGURE
+{}                     0[object Object]     null
+{valueOf:()=>5000}     5000                 null   <-- AN ABSENCE BECAME A FIGURE
+[]                     0                    null   <-- AN ABSENCE BECAME A FIGURE
+
+
+3. THE ROW GUARD BEFORE AND AFTER
+
+shape                   `> 0` shows   showsDeductionRow   what changes
+null                   false         true                ROW NOW RENDERS -> "—"
+undefined              false         true                ROW NOW RENDERS -> "—"
+''                     false         true                ROW NOW RENDERS -> "—"
+'   '                  false         true                ROW NOW RENDERS -> "—"
+NaN                    false         true                ROW NOW RENDERS -> "—"
+0                      false         false               (same)
+-0                     false         false               (same)
+-1                     false         false               (same)
+-5000                  false         false               (same)
+5000                   true          true                (same)
+'50'                   true          true                (same)
+Infinity               true          true                (same)
+-Infinity              false         true                ROW NOW RENDERS -> "—"
+'Infinity'             true          true                (same)
+true                   true          true                (same)
+false                  false         true                ROW NOW RENDERS -> "—"
+{}                     false         true                ROW NOW RENDERS -> "—"
+{valueOf:()=>5000}     true          true                (same)
+[]                     false         true                ROW NOW RENDERS -> "—"
+
+shapes whose row changes: null, undefined, '', '   ', NaN, -Infinity, false, {}, []
+every one is unstated; no stated shape (0, -5000, 5000, '50') changes answer.
+stated shapes that changed answer: none
+
+
+4. A GROUPED ROW WHOSE SECOND MEMBER SAID NOTHING
+
+backend finalAmount            = 5000 (kr 50,00)
+backend discount it implies    = 5000 (SUM lineAmount - finalAmount)
+
+world             `+= (x||0)`   renders        statedSum   renders   agrees with backend?
+present           5000           −kr 50,00      5000        −kr 50,00 yes  |  yes
+genuinely zero    0              kr 0,00        0           kr 0,00   yes  |  yes
+absent            3000           −kr 30,00      null        —         NO -- 3000 != 5000  |  makes no claim
+
+the row itself, in the absent world:
+  today          sum = 3000, `3000 > 0` is true  -> the row prints −kr 30,00, a real figure that is WRONG
+  sum fixed only sum = null, `null > 0` is false -> NO ROW AT ALL, which reads as "no discount"
+  both fixed     sum = null, showsDeductionRow    -> the row prints —, which is the only true reading
+
+INHERITED PREMISE, CHECKED: "the check shows a total that does not match its own lines".
+  the rows render netLineAmount, and SUM(netLineAmount) = 5000 == finalAmount
+  so the lines DO add up to the total whether the discount row is shown or not.
+  the harm is not a visible mismatch; it is a discount figure that is quietly too small,
+  and then a row that disappears. That is what the tests assert.
+
+
+6. THE RECEIPT: WHAT THE PRINTED PAGE ADDS UP TO
+
+printed line amounts sum to      30000 (kr 300,00)
+printed grand total (grossAmount) 24000 (kr 240,00)
+the gap the deduction rows must carry 6000 (kr 60,00)
+
+world           guard `>0` rows   printed deductions   page adds up?        rule rows  page adds up?
+present         2                 6000                 yes                  2          yes
+genuinely zero  0                 0                    yes                  0          yes
+absent          1                 4000                 NO -- 2000 UNACCOUNTED 2          residual 2000 MARKED "—"
+
+the absent world is the whole finding, and it is arithmetic rather than layout:
+  today   the page prints 200,00 + 100,00, one deduction of 40,00, total 240,00.
+          20,00 is missing from a document that is supposed to reconcile, and there is
+          no row on it that says so.
+  fixed   the second deduction row renders "—", so the page states that a deduction was taken
+          on that line whose amount it does not have. The total is unchanged and still
+          agrees with the backend; what changes is that the page stops implying zero.
+
+AND THE CHECK, FOR CONTRAST — the property the sibling lane measured and this one inherited:
+  CheckLine renders netLineAmount: 16000 + 8000 = 24000 == finalAmount
+  so the CHECK adds up in all three worlds and only the deduction figure is wrong.
+  the RECEIPT does not add up at all. Same predicate, different harm, and the stronger
+  claim is true HERE and only here.
+
+
+5. WHY THE LABEL TAKES A MAGNITUDE, AND WHERE Infinity COMES FROM
+
+JSON.parse('{"a":1e400}').a = Infinity -- Infinity has a wire provenance; a well-formed .NET long does not reach it.
+
+core priceLabel on negatives:
+      -4 -> kr 0,-4
+     -50 -> kr -,50
+   -5000 -> kr -50,00
