@@ -1,0 +1,41 @@
+Which arrangement of traps actually exposes the dead teardown, measured before the test was written.
+
+WHY THIS WAS MEASURED
+  The obvious focus-correctness test — "open a modal, close it, open a second, assert focus lands
+  inside the second" — was proposed as the sharper form of this defect. It is not: it PASSES against
+  the defect. `mounted` does `instances.push(this.data)` and `reducePropsToState` takes
+  `.slice(-1)[0]`, so a trap mounted AFTER a stale entry is appended after it and wins selection
+  regardless. The stale entry only decides when nothing live was pushed after it.
+
+METHOD
+  A throwaway jest probe under lanes/ (jest.config ignores <rootDir>/lanes/) mounted the SAME three
+  scenarios against two modules: the live component ("BROKEN") and a byte-identical copy whose only
+  difference was `unmounted` -> `destroyed` ("FIXED"). Separate modules, so the module-level
+  `instances`/`lastActiveTrap` of one run could not decide the other — the failure mode the sibling
+  lane L-DECLARATIONS-THE-FRAMEWORK-IGNORES recorded and corrected in its own harness.
+
+  To recreate (the component is now FIXED, so the copy to make is the broken one):
+    sed 's/^  destroyed () {/  unmounted () {/' components/molecules/FocusTrap.vue \
+      > lanes/L-FOCUSTRAP-TEARDOWN/BrokenFocusTrap.vue
+  then mount both and run the three scenarios below, each ending with an element outside every trap
+  taking focus and a `focusin` dispatched on document.
+
+RAW RESULT
+    BROKEN SEQUENTIAL   focus: second-in
+    BROKEN SEQ+DISABLED focus: outside
+    BROKEN STACKED      focus: outside
+    FIXED  SEQUENTIAL   focus: second-in
+    FIXED  SEQ+DISABLED focus: outside
+    FIXED  STACKED      focus: behind-in
+
+READING
+  SEQUENTIAL   — identical both ways. A test written this way would have passed against the defect.
+  SEQ+DISABLED — identical both ways (focus stays outside); the difference in which trap is selected
+                 is real but is not observable through activeElement, so it is not assertable here.
+  STACKED      — the ONLY discriminating arrangement: destroy the trap that was pushed LAST while an
+                 earlier one is still on screen. Broken leaves focus on `outside` — the modal still
+                 on screen governs nothing, and the closed one still holds `lastActiveTrap` with a
+                 detached `observed`. Fixed pulls focus back to `behind-inside`.
+
+  This is why test/focus-trap-teardown.test.js asserts the stacked arrangement and not the
+  sequential one, and why the sequential framing is documented there as deliberately not asserted.

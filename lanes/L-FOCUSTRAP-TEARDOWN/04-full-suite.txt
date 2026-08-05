@@ -1,0 +1,25 @@
+PASS test/workforce-me-memberships.test.js
+PASS test/growth-client.test.js
+PASS test/workforce-rates-timeline.test.js
+PASS test/workforce-roster-client.test.js
+PASS test/meals-statement-view.test.js
+PASS test/workforce-week-range.test.js
+PASS test/platform-flag-board.test.js
+PASS test/meals-store-view.test.js
+PASS test/chf-format.test.js
+PASS test/workforce-api-client.test.js
+PASS test/growth-guest-client.test.js
+PASS test/workforce-schedule-client.test.js
+PASS test/workforce-requests-client.test.js
+PASS test/meals-client.test.js
+PASS test/margin-price-timeline.test.js
+PASS test/workforce-rates-hours-export.test.js
+PASS test/world-stamp-windows.test.js
+PASS test/pos-clock-reserved-key.test.js
+PASS test/journey-artifact-store.test.js
+
+Test Suites: 129 passed, 129 total
+Tests:       2992 passed, 2992 total
+Snapshots:   0 total
+Time:        5.131 s, estimated 6 s
+Ran all test suites.

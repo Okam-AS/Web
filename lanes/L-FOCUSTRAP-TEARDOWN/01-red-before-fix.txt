@@ -1,0 +1,7 @@
+    ✓ Vue 2.7 calls `destroyed` and does not call `unmounted`, silently (5 ms)
+    ✕ no component in the estate declares a lifecycle hook this Vue never calls (15 ms)
+    ✕ the document is left carrying no focus handlers once the last trap is gone (82 ms)
+    ✕ a focus event on the page no longer reaches a trap Vue has destroyed (42 ms)
+    ✕ closing the top trap hands governance back to the one still on screen (36 ms)
+    ✕ returnFocus puts focus back on the element that opened the trap (20 ms)
+Tests:       5 failed, 1 passed, 6 total
