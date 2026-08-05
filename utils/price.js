@@ -139,6 +139,34 @@ export function negatedAmountLabel (amountMinor, formatAmount) {
 }
 
 /**
+ * Is a deduction in play on this amount?
+ *
+ * The predicate a deduction ROW is rendered on, and the one that decides whether a returned bill row
+ * refunds what was charged or what it was listed at. `true` when the amount states a deduction, and
+ * ALSO when it states nothing at all. `false` only for an amount that positively says there was none
+ * — a stated zero, or a stated value at or below it.
+ *
+ * WHY IT IS NOT `x > 0`. A relational test gives the same answer, "no", to a genuine zero and to a
+ * field that never arrived, so a discount nobody could read vanished off the check with nothing left
+ * on screen to say it had been there. Three worlds, not two: a stated discount prints its figure; a
+ * stated zero prints NO ROW, because nothing was taken off and a "Rabatt kr 0,00" line on every
+ * ordinary bill is noise; and an amount nobody stated prints the row carrying the unknown mark,
+ * because "we do not know what came off this bill" is a reading an operator has to be given rather
+ * than one the layout is allowed to swallow.
+ *
+ * WHY THE ZERO AND NEGATIVE ANSWERS ARE DELIBERATELY UNCHANGED. Dropping the `> 0` altogether —
+ * rendering a row for every stated amount — puts a zero discount on every check in the estate and
+ * turns a stated negative into an unsigned `kr 50,00` under a heading that says Rabatt. The change
+ * is exactly one column wide, and that is measured rather than asserted:
+ * `lanes/L-CHECK-DISCOUNT-SUM-COUPLED/sum-vs-guard-probe.js` runs both predicates over nineteen
+ * shapes and prints every shape whose answer moves. All of them are unstated; no stated shape moves.
+ */
+export function isDeductionInPlay (amountMinor) {
+  if (!isAmountStated(amountMinor)) { return true }
+  return Number(amountMinor) > 0
+}
+
+/**
  * The gate in front of the local money formatters the legacy admin pages wrote for themselves.
  *
  * Five pages each invented their own — an invoice, a settlements summary, a Wolt menu, a rewards

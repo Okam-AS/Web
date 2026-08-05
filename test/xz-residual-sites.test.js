@@ -33,17 +33,33 @@ import CheckPanel from '~/components/admin/pos/CheckPanel.vue'
 //      into a surcharge.
 //   2. THE WORLD THE GUARD DOES NOT SAVE. `Infinity` passes `> 0`, renders the row, and reaches the
 //      label. This is real rendered DOM with the guard untouched and no fixture bent to make it fail.
-//   3. THE GUARD ITSELF, PINNED. The five absences the guard does withhold are asserted to render NO
-//      ROW at all — so it is on the record that the guard, not the label, is what hides them today,
-//      and relaxing it becomes a deliberate act that has to come back through this file.
+//   3. THE GUARD ITSELF, PINNED. The absences the guard withholds are asserted to render NO ROW at
+//      all — so it is on the record that the guard, not the label, is what hides them, and relaxing
+//      it becomes a deliberate act that has to come back through this file.
+//
+// AND IT DID COME BACK THROUGH THIS FILE. `L-CHECK-DISCOUNT-SUM-COUPLED` relaxed it on the two CHECK
+// surfaces, because the guard was hiding the wrong thing: the reducer one screen above CheckLine
+// manufactured a zero out of a member line that never stated its discount, and the guard then
+// deleted the row that absence should have produced. Those two sites split the list in three — a
+// stated deduction, a stated NO deduction, and an amount nobody stated — and only the middle one is
+// still silent. `PosReceiptView` is untouched and keeps the original list, so the assertions below
+// are now a record of a real difference between a check and a receipt rather than a uniform rule.
 
 const posMocks = () => ({
   $i: (key, args) => (args ? key + ':' + JSON.stringify(args) : key),
   $store: { dispatch: () => {}, subscribe: () => {} }
 })
 
-// The five shapes the `> 0` guard withholds. `-5000` is included because a negative discount is a
+// The six shapes the `> 0` guard withholds. `-5000` is included because a negative discount is a
 // figure somebody stated and the guard hides it just the same.
+//
+// STILL THE GUARD ON PosReceiptView, AND NO LONGER THE GUARD ON THE CHECK. `L-CHECK-DISCOUNT-SUM-
+// COUPLED` did the deliberate act this file's closing section said would have to come back through
+// it: CheckLine and CheckPanel now render their row on `isDeductionInPlay`, so the four ABSENCES
+// below get a row carrying the unknown mark instead of vanishing, while the two STATED shapes are
+// withheld exactly as before. The receipt is a wire object with no reducer in front of it and was
+// out of that lane's scope, so it keeps all six. The split is below, and the two lists together are
+// still these six shapes.
 const GUARD_WITHHELD = [
   ['null', null],
   ['undefined', undefined],
@@ -51,6 +67,24 @@ const GUARD_WITHHELD = [
   ['NaN', NaN],
   ['a genuine zero', 0],
   ['an already-negative amount', -5000]
+]
+
+// On the check surfaces: the amounts that STATE there was no deduction. These, and only these, are
+// withheld now.
+const STATED_NO_DEDUCTION = [
+  ['a genuine zero', 0],
+  ['an already-negative amount', -5000]
+]
+
+// On the check surfaces: the amounts nobody stated. Every one of them used to be dropped silently by
+// the relational guard; every one of them now renders the row with the bare mark. `test/check-
+// discount-sum.test.js` is where that change is argued and proved against the server's own
+// `finalAmount`; this file pins that the four sites still agree about what a sign may attach to.
+const UNSTATED_ON_A_CHECK = [
+  ['null', null],
+  ['undefined', undefined],
+  ['the empty string', ''],
+  ['NaN', NaN]
 ]
 
 // Every shape that passes `> 0` while `isAmountStated` refuses it. Enumerated by running both
@@ -199,11 +233,22 @@ describe('CheckLine — the discount line on an open check row', () => {
       wrapper.destroy()
     })
 
-  test.each(GUARD_WITHHELD)(
-    'the `> 0` guard, not the label, is what withholds %s — no row renders',
+  test.each(STATED_NO_DEDUCTION)(
+    'an amount that states there was no deduction (%s) renders no row',
     (_name, value) => {
       const wrapper = mountCheckLine(value)
       expect(wrapper.find('.check-line__discount').exists()).toBe(false)
+      wrapper.destroy()
+    })
+
+  test.each(UNSTATED_ON_A_CHECK)(
+    'an amount nobody stated (%s) now gets its row, carrying the bare mark',
+    (_name, value) => {
+      const wrapper = mountCheckLine(value)
+      const row = wrapper.find('.check-line__discount')
+      expect(row.exists()).toBe(true)
+      expect(row.text()).toContain(UNKNOWN_AMOUNT)
+      expect(row.text()).not.toContain(MINUS_SIGN)
       wrapper.destroy()
     })
 })
@@ -251,25 +296,38 @@ describe('CheckPanel — the discount total in the check footer', () => {
     wrapper.destroy()
   })
 
-  // `groups` reduces `line.discountAmount || 0` into a number it seeds itself, so three of the four
-  // shapes are ARITHMETICALLY absorbed on the way here and never reach the label: `0 + true` is 1,
-  // `0 + {valueOf:()=>5000}` is 5000, and `0 + 'Infinity'` is the STRING '0Infinity', which then
-  // fails the `> 0` guard. Numeric Infinity survives the addition, and is the one shape that still
-  // gets through — which is why the panel gets one case here and the other two sites get four.
-  test('Infinity survives the groups reducer and renders the bare mark, unsigned', () => {
-    const wrapper = mountPanel(Infinity)
-    const cell = wrapper.find('.check-panel__discount')
-    expect(cell.exists()).toBe(true)
-    expect(cell.text()).toBe(UNKNOWN_AMOUNT)
-    expect(cell.text()).not.toContain(MINUS_SIGN)
-    wrapper.destroy()
-  })
+  // `groups` used to reduce `line.discountAmount || 0` into a number it seeded itself, and three of
+  // the four shapes were ARITHMETICALLY ABSORBED on the way here rather than refused: `0 + true` was
+  // 1, `0 + {valueOf:()=>5000}` was 5000, and `0 + 'Infinity'` was the STRING '0Infinity'. Two of
+  // those reached the footer as real figures. `statedSum` refuses all four at the reducer, so every
+  // one of them arrives as `null` and the footer prints the mark — which is why the panel now takes
+  // the same four cases the other two sites do instead of the one that used to survive.
+  test.each(GUARD_ADMITS_UNSTATED)(
+    'the reducer refuses %s rather than absorbing it, and the footer prints the bare mark',
+    (_name, value) => {
+      const wrapper = mountPanel(value)
+      const cell = wrapper.find('.check-panel__discount')
+      expect(cell.exists()).toBe(true)
+      expect(cell.text()).toBe(UNKNOWN_AMOUNT)
+      expect(cell.text()).not.toContain(MINUS_SIGN)
+      wrapper.destroy()
+    })
 
-  test.each(GUARD_WITHHELD)(
-    'the `> 0` guard, not the label, is what withholds %s — no discount row renders',
+  test.each(STATED_NO_DEDUCTION)(
+    'an amount that states there was no deduction (%s) renders no discount row',
     (_name, value) => {
       const wrapper = mountPanel(value)
       expect(wrapper.find('.check-panel__discount').exists()).toBe(false)
+      wrapper.destroy()
+    })
+
+  test.each(UNSTATED_ON_A_CHECK)(
+    'an amount nobody stated (%s) now gets its footer row, carrying the bare mark',
+    (_name, value) => {
+      const wrapper = mountPanel(value)
+      const cell = wrapper.find('.check-panel__discount')
+      expect(cell.exists()).toBe(true)
+      expect(cell.text()).toBe(UNKNOWN_AMOUNT)
       wrapper.destroy()
     })
 
@@ -296,11 +354,13 @@ describe('CheckPanel — the discount total in the check footer', () => {
 // ---------------------------------------------------------------------------------------------
 // The label reached DIRECTLY, with the guard out of the picture entirely.
 //
-// The guard is incidental safety: nobody wrote `> 0` as an absence gate, no comment marks it
-// load-bearing, and CheckLine's guard in particular protects a field its own parent constructs. If it
-// is ever relaxed — to distinguish "no discount" from "discount unknown", say — every one of the four
-// worlds below becomes renderable in the same edit. This is the caller that reaches the label without
-// waiting for that, and it is why the port is worth making before the guard changes rather than after.
+// The guard was incidental safety: nobody wrote `> 0` as an absence gate, no comment marked it
+// load-bearing, and CheckLine's guard in particular protected a field its own parent constructs. The
+// prediction written here was that if it were ever relaxed — to distinguish "no discount" from
+// "discount unknown", say — every one of the four worlds below would become renderable in the same
+// edit. That is exactly what happened one lane later, and on the two check surfaces the ABSENT world
+// is renderable today. The port landing first is why that lane changed a guard instead of shipping
+// `−—`, and this describe block is why the label was already right when it did.
 // ---------------------------------------------------------------------------------------------
 
 describe('negatedPriceLabel, reached directly at each of the three sites', () => {

@@ -243,6 +243,7 @@ import SeatPickerModal from '~/components/admin/pos/SeatPickerModal.vue';
 import ReturnBuilder from '~/components/admin/pos/ReturnBuilder.vue';
 import PosReceiptView from '~/components/admin/pos/PosReceiptView.vue';
 import PosConfirm, { confirmIsOpen } from '~/components/admin/pos/PosConfirm.vue';
+import { isDeductionInPlay } from '~/utils/price';
 
 // How long an add may be in flight before the check panel admits it is waiting. Below this the
 // line simply appears, which is what a fast register should look like.
@@ -563,7 +564,14 @@ export default {
         const name = optionNames.length ? g.name + ' (' + optionNames.join(', ') + ')' : g.name;
         // A discounted row refunds exactly what was charged: one unit at the discounted total
         // (the per-unit net may not divide evenly in ore).
-        if (g.discountAmount > 0) {
+        //
+        // `isDeductionInPlay`, not `> 0`, and this branch is money rather than layout. A group whose
+        // member line said nothing about its discount is `null` (CheckPanel's `groups`), `null > 0`
+        // is false, and the other branch refunds `unitAmount * quantity` — the LISTED price, not the
+        // discounted one that was actually taken. `g.lineAmount` is summed from `netLineAmount`, so
+        // this branch refunds what the till took whether the discount is stated or unknown; the
+        // other branch is only ever right when the row states that nothing came off.
+        if (isDeductionInPlay(g.discountAmount)) {
           // g.lineAmount is summed from netLineAmount and is already net of the discount —
           // subtracting discountAmount again would under-refund the customer.
           return {

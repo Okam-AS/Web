@@ -51,7 +51,7 @@
       <p v-if="group.notes" class="check-line__notes">
         {{ group.notes }}
       </p>
-      <p v-if="group.discountAmount > 0" class="check-line__discount">
+      <p v-if="showsDiscount" class="check-line__discount">
         {{ group.discountReason || $i('pos_discount') }}: {{ negatedPriceLabel(group.discountAmount) }}
         <button type="button" class="check-line__discount-remove" :title="$i('pos_remove_discount')" @click.stop="$emit('line-remove-discount', group)">×</button>
       </p>
@@ -75,7 +75,7 @@
       <button
         type="button"
         class="check-line__disc-btn"
-        :class="{ 'check-line__disc-btn--set': group.discountAmount > 0 }"
+        :class="{ 'check-line__disc-btn--set': showsDiscount }"
         :title="$i('pos_discount')"
         @click.stop="$emit('line-discount', group)"
       >
@@ -103,11 +103,17 @@
 //
 // The discount line prints its sign through `negatedAmountLabel` rather than as a template literal in
 // front of the interpolation. `−{{ priceLabel(x) }}` puts the minus outside the interpolation, where
-// no absence rule in this repo can see it, and an amount the rule withholds composes to `−—`. The
-// `> 0` guard on the row hides the ordinary absences before they get that far, but it is a relational
-// test rather than the absence rule and the two disagree on `Infinity`; the sign belongs to the label
-// regardless, which is the only place that knows whether there is a figure to attach it to.
-import { negatedAmountLabel } from '~/utils/price';
+// no absence rule in this repo can see it, and an amount the rule withholds composes to `−—`; the
+// sign belongs to the label, which is the only place that knows whether there is a figure to attach
+// it to.
+//
+// The row used to be guarded on `group.discountAmount > 0`, which HID the ordinary absences instead
+// of stating them. `group` is built by CheckPanel's `groups`, and a group whose member line said
+// nothing about its discount is `null` there — so the relational test deleted the row on the one
+// occasion the operator most needed something on screen, and the check then showed no discount at
+// all while the server's `finalAmount` still carried one. `isDeductionInPlay` keeps a stated zero
+// silent and gives an unstated amount its row.
+import { negatedAmountLabel, isDeductionInPlay } from '~/utils/price';
 
 export default {
   name: 'CheckLine',
@@ -149,6 +155,13 @@ export default {
     // Ready); you cannot serve food that has not been cooked.
     canServe () {
       return this.coursing && (this.group.status === 'Fired' || this.group.status === 'Ready');
+    },
+    // One answer, used twice. The discount BUTTON's "set" highlight is the same question as whether
+    // the row renders, and answering it two ways would put a row reading "Rabatt: —" next to a
+    // button that says no discount is set — two claims about one line, on one screen, from one
+    // component.
+    showsDiscount () {
+      return isDeductionInPlay(this.group.discountAmount);
     }
   },
   methods: {
