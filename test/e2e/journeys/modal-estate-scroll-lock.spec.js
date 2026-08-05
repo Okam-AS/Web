@@ -92,8 +92,31 @@
 //     fight a correction. What is asserted there is the org NUMBER, which the correction does not
 //     move.
 //   • `paymentTypeLabel`, `deliveryTypeLabel` and `orderStatusLabel` in `plugins/global-mixin.js`
-//     return hardcoded Norwegian with no `$i` at all, so three of the receipt's six values read
-//     'Ukjent' / 'Hent selv' / 'Forespurt' to a Swiss operator. Same reasoning: recorded, not pinned.
+//     returned hardcoded Norwegian with no `$i` at all, so three of the receipt's six values read
+//     'Ukjent' / 'Hent selv' / 'Forespurt' to a Swiss operator. THAT ONE IS NOW FIXED AND ASSERTED —
+//     see the block below. It was recorded rather than pinned only for as long as pinning it would
+//     have pinned the defect.
+//
+// ---- AND THE VALUES BESIDE THOSE LABELS ARE NOW ASSERTED TOO ----------------------------------
+//
+// The three functions above now resolve dictionary keys (`DELIVERY_TYPE_LABEL_KEYS`,
+// `ORDER_STATUS_LABEL_KEYS`, `PAYMENT_TYPE_LABEL_KEYS` in `plugins/global-mixin.js`), so the receipt
+// carries six German VALUES under six German labels rather than three of each.
+//
+// WHY THE ASSERTION ALONE IS NOT THE PROOF, and what is. A journey that only watched the German word
+// render would go green the moment somebody wrote German literals into the `switch` beside the
+// Norwegian ones — the exact defect class this lane exists to close, passing its own test. The
+// evidence that the value came from the DICTIONARY is a mutation: `translations/de.ts`'s
+// `orders_deliverySelfPickup` is corrupted and this walk goes RED at `ch`, while the same corruption
+// applied to `translations/no.ts` leaves the `ch` walk GREEN and takes the `no` walk red. Those arms
+// are in `lanes/L-MIXIN-LABELS-TRANSLATE/mutation-log.md`, run at both editions over byte-identical
+// trees. Read that, not this file, for whether the claim holds.
+//
+// The values are asserted as ONE ORDERED COMPLETE LIST, for the reason the label list is: a row that
+// vanishes is a failure too. Two of the six are not copy at all — the order identifier and the
+// customer's name come from `test/e2e/fixture/world.js` and are the same bytes in both editions —
+// and the timestamp is matched by shape because `formatDate` renders in the runner's zone. They are
+// in the list to guard the row, and counted as language-distinguishing nowhere.
 //
 // A rendered-literal floor of this kind catches copy that DRIFTS. It would not have caught either
 // org-number finding, because both are well-formed German that whoever wrote the assertion would
@@ -119,6 +142,16 @@ const RECEIPT_COPY = {
     // payment type that is not Stripe, so exactly these six rows render. Asserting the whole list
     // rather than a keyword means a row that disappears is a failure too.
     detailLabels: ['Bestillingsnummer:', 'Kunde:', 'Betaling:', 'Leveringsmåte:', 'Bestilt:', 'Status:'],
+    // The six VALUES, in the same DOM order as the six labels above. Rows 3, 4 and 6 are the three
+    // this lane routed through the dictionary; rows 1 and 2 are fixture identity and row 5 is a
+    // clock. `headers[3].click()` below expands the FOURTH card deterministically, which is why an
+    // order identifier can be written down at all.
+    detailValues: ['1004 (order-4)', 'Gjest 4', 'Betal i butikk', 'Hent selv',
+      /^\d{2}\.\d{2}\.\d{2} \d{2}:\d{2}$/, 'Forespurt'],
+    // The three under test, named so a reader can see which words this lane is responsible for
+    // without counting rows. Keys: orders_paymentPayInStore, orders_deliverySelfPickup,
+    // orders_statusAccepted.
+    routedValues: { payment: 'Betal i butikk', delivery: 'Hent selv', status: 'Forespurt' },
     itemColumns: ['Vare', 'Ant.', 'Mva', 'Pris'],
     total: 'Totalt'
   },
@@ -126,6 +159,15 @@ const RECEIPT_COPY = {
     locale: 'de',
     title: 'Quittung',
     detailLabels: ['Bestellnummer:', 'Kunde:', 'Zahlung:', 'Liefermethode:', 'Bestellt:', 'Status:'],
+    // Byte-identical rows 1, 2 and 5 to the Norwegian arm above — deliberately, because they are the
+    // control: they are the same fixture bytes at both editions, so if the German arm ever went
+    // green on a page that had silently fallen back to Norwegian, these three would look identical
+    // while rows 3, 4 and 6 would be the only ones that had moved. Every German word in this file is
+    // written out rather than read from `translations/de.ts`; a spec that resolved the key would
+    // follow that dictionary wherever it went and could never red on a wrong word.
+    detailValues: ['1004 (order-4)', 'Gjest 4', 'Im Geschäft bezahlen', 'Selbstabholung',
+      /^\d{2}\.\d{2}\.\d{2} \d{2}:\d{2}$/, 'Angefragt'],
+    routedValues: { payment: 'Im Geschäft bezahlen', delivery: 'Selbstabholung', status: 'Angefragt' },
     itemColumns: ['Artikel', 'Anz.', 'MwSt', 'Preis'],
     total: 'Gesamt'
   }
@@ -312,6 +354,12 @@ test(
       // between two lock assertions rather than at the end.
       await expect(receipt.locator('.modal-header h2')).toHaveText(t.title);
       await expect(receipt.locator('.order-details .detail-row .label')).toHaveText(t.detailLabels);
+      // THE VALUES, not only the labels. Three of these six are the words `paymentTypeLabel`,
+      // `deliveryTypeLabel` and `orderStatusLabel` answer, and until this lane those three were
+      // Norwegian literals with no `$i` in them — the German column below could not have been
+      // written at all. Asserted as the whole ordered row set for the same reason the labels are:
+      // a row that disappears has to be a failure too.
+      await expect(receipt.locator('.order-details .detail-row .value')).toHaveText(t.detailValues);
       await expect(receipt.locator('.items-header > span')).toHaveText(t.itemColumns);
       await expect(receipt.locator('.total-section .total-label')).toHaveText(t.total);
 
@@ -330,7 +378,10 @@ test(
       }));
 
       const guarded = t.detailLabels.concat(t.itemColumns, [t.title, t.total]);
-      const distinguishing = guarded.filter(word => LOCALE_INVARIANT_LABELS.indexOf(word) === -1);
+      // `.includes` rather than `.indexOf(...) === -1`: the inherited floor's form is an eslint
+      // error under this repo's `unicorn/prefer-includes`, and a file that cannot pass lint is a
+      // file the next person edits around. Same predicate, same result.
+      const distinguishing = guarded.filter(word => !LOCALE_INVARIANT_LABELS.includes(word));
 
       if (EDITION === 'ch') {
         journey.finding(
@@ -345,19 +396,34 @@ test(
           'a floor that pinned them would red on the fix.'
         );
         journey.finding(
-          'defect',
-          'three receipt VALUES are hardcoded Norwegian at the Swiss edition',
-          'plugins/global-mixin.js — `paymentTypeLabel` (:82), `deliveryTypeLabel` (:97) and ' +
-          '`orderStatusLabel` (:134) are `switch` statements returning Norwegian string literals ' +
-          'with no `$i` and no dictionary key, so no translation can reach them. The receipt\'s ' +
-          'German labels therefore carry Norwegian values. Rendered in this run: ' +
-          JSON.stringify(rendered.values) + '. Recorded rather than asserted, for the same reason ' +
-          'as the finding above.'
+          'note',
+          'the receipt\'s three routed VALUES are asserted in German, and the assertion is not the proof',
+          'plugins/global-mixin.js — `paymentTypeLabel`, `deliveryTypeLabel` and `orderStatusLabel` ' +
+          'no longer switch on literals; each resolves a dictionary key through `$i` ' +
+          '(PAYMENT_TYPE_LABEL_KEYS / DELIVERY_TYPE_LABEL_KEYS / ORDER_STATUS_LABEL_KEYS). The six ' +
+          'rows rendered in this run: ' + JSON.stringify(rendered.values) + '. This step asserts ' +
+          'all six, but a rendered-German assertion would also pass against German literals ' +
+          'hardcoded beside the Norwegian ones. What shows the words came from translations/de.ts ' +
+          'is the mutation arm in lanes/L-MIXIN-LABELS-TRANSLATE/mutation-log.md, where corrupting ' +
+          '`orders_deliverySelfPickup` in de.ts turns this walk red at ch and the same corruption ' +
+          'in no.ts leaves it green.'
+        );
+        journey.finding(
+          'note',
+          'two members of the order vocabulary still have no word, and neither is reachable from this fixture',
+          '`core/enums/order-status.ts` declares `OpenCheck`, which OkamAPI Enums/OrderStatus.cs ' +
+          'does not — an order carrying it would read the `orders_statusNotSet` fallback. And ' +
+          '`GroupedHomeDelivery` is a case in the delivery map that appears in no backend enum, no ' +
+          'core enum and no other call site in this repository. Both are recorded rather than ' +
+          'resolved: naming a state the API cannot send would put a guessed word on a receipt, and ' +
+          'deleting a case is a behaviour change, not the routing change this walk measures.'
         );
       }
 
       return EDITION + ': ' + guarded.length + ' receipt labels asserted (' + distinguishing.length +
-        ' of them language-distinguishing), heading "' + t.title + '"; statutory header rendered as ' +
+        ' of them language-distinguishing), heading "' + t.title + '"; ' + t.detailValues.length +
+        ' values asserted, of which the 3 routed through the dictionary read ' +
+        JSON.stringify(t.routedValues) + '; statutory header rendered as ' +
         JSON.stringify(rendered.orgLines);
     });
 

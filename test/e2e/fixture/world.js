@@ -790,6 +790,17 @@ const ONGOING_ORDERS = Array.from({ length: ONGOING_ORDER_COUNT }, (_, i) => ({
   storeVAT: '912345678',
   status: 'Accepted',
   deliveryType: 'SelfPickup',
+  // WITHOUT THIS FIELD THE RECEIPT'S PAYMENT ROW CAN ONLY EVER EXERCISE THE UNKNOWN FALLBACK.
+  // `plugins/global-mixin.js` resolves `paymentTypeLabel` through `PAYMENT_TYPE_LABEL_KEYS`, and an
+  // order with no `paymentType` at all misses every member of that map — so the row read
+  // "Unbekannt" / "Ukjent" and a walk asserting it would have said nothing about whether the
+  // seventeen mapped members reach the dictionary. Same reasoning as `storeVAT` above: a fixture
+  // that omits the field renders a surface the journey cannot measure.
+  //
+  // `PayInStore` rather than a card rail because these are live orders on `/admin/ongoing` awaiting
+  // pickup, and it is one of the ten the pre-existing switch already carried — so the Norwegian arm
+  // of the journey pins a word that did not move in this change either.
+  paymentType: 'PayInStore',
   platform: 'Web',
   created: new Date(Date.UTC(2026, 7, 1, 9, i)).toISOString(),
   requestedCompletion: null,

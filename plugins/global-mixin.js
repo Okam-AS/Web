@@ -106,6 +106,75 @@ const PAYMENT_TYPE_LABEL_KEYS = {
   SurfboardTerminal: 'orders_paymentTerminal'
 }
 
+// Every member of the backend's `DeliveryType` (OkamAPI `Enums/DeliveryType.cs`) mapped to the
+// dictionary key an operator reads back off an order.
+//
+// SAME DEFECT AS THE PAYMENT MAP ABOVE, SAME FIX, AND THE ORDER OF THE TWO MATTERS. The `switch`
+// this replaces returned seven Norwegian string LITERALS and a Norwegian default, with no `$i` and
+// no key anywhere in it — so there was no lookup to repair, there was no lookup, and no translation
+// could reach these words in any language. On the CH build, which serves German and only German
+// (`nuxt.config.js` sets `locales: isCh ? ['de'] : ['en','no']`), the receipt therefore printed
+// 'Hent selv' under 'Liefermethode:'. That is a fiscal document a Swiss reader is handed.
+//
+// THE KEYS ARE NOT NEW. Four of the seven already existed in all three dictionaries and are already
+// used by the delivery-type filter on the same page that renders these cards
+// (`pages/admin/orders.vue:562-567`), with Norwegian values BYTE-IDENTICAL to the literals the
+// switch returned. The switch was a duplicate of a dictionary two components away — exactly what
+// PAYMENT_TYPE_LABEL_KEYS found. Three keys are new (`orders_deliveryNotSet`,
+// `orders_deliveryWoltDrive`, `orders_deliveryWoltMarketplace`) and carry the switch's own words.
+//
+// POPULATION READ FROM THE BACKEND, NOT FROM THE SWITCH — because taking the switch's own cases as
+// the population is what let the payment map ship seven unlabelled members. `DeliveryType.cs`
+// declares exactly seven: NotSet, SelfPickup, InstantHomeDelivery, DineHomeDelivery, WoltDelivery,
+// WoltMarketplaceDelivery, TableDelivery. All seven are named below and `core/enums/delivery-type.ts`
+// declares the same seven, so unlike payment there is no coverage hole here to inherit.
+//
+// `GroupedHomeDelivery` IS NOT A MEMBER OF ANYTHING. It appears in no backend enum, in no core enum
+// and at no other call site in this repository — the switch's own case was its only occurrence in
+// the estate. It is carried below rather than deleted because this change is a routing change and
+// deleting a case is a behaviour change; it is recorded so whoever removes it does so deliberately.
+const DELIVERY_TYPE_LABEL_KEYS = {
+  // 0 — a real persisted member AND the shape an order with no deliveryType at all arrives in, and
+  // the switch answered both with the same words ('Ikke satt'). Named explicitly here so the map
+  // covers the enum, and pointed at the same key the default below resolves, so the rendered string
+  // is unchanged for both. Whether an unrecognised value should instead read "Ukjent" — the way
+  // PAYMENT_TYPE_LABEL_KEYS keeps the next backend member visible — is a behaviour decision about
+  // what a receipt prints, not a routing one, and is deliberately not taken here.
+  NotSet: 'orders_deliveryNotSet',
+  SelfPickup: 'orders_deliverySelfPickup',
+  InstantHomeDelivery: 'orders_deliveryInstantHome',
+  // Not a backend member and not a core member — see above.
+  GroupedHomeDelivery: 'orders_deliveryInstantHome',
+  DineHomeDelivery: 'orders_deliveryDineHome',
+  TableDelivery: 'orders_deliveryTable',
+  WoltDelivery: 'orders_deliveryWoltDrive',
+  WoltMarketplaceDelivery: 'orders_deliveryWoltMarketplace'
+}
+
+// Every member of the backend's `OrderStatus` (OkamAPI `Enums/OrderStatus.cs`) mapped to the
+// dictionary key an operator reads back off an order. Same defect, same fix, same provenance.
+//
+// ALL EIGHT KEYS ALREADY EXISTED in all three dictionaries, with Norwegian values byte-identical to
+// the literals the switch returned, and `pages/admin/orders.vue:550-557` already builds the status
+// FILTER on this same page out of exactly these eight keys. So the board's filter offered a German
+// word and the card beside it answered in Norwegian, from two copies of one vocabulary.
+//
+// COVERAGE, READ FROM THE BACKEND: `OrderStatus.cs` declares exactly the eight below and the switch
+// carried all eight, so no member fell through — the payment map's seventeen-against-ten gap does
+// not repeat here. `core/enums/order-status.ts` additionally declares `OpenCheck`, which no backend
+// enum declares; that mirror drift is recorded rather than mapped, because inventing a word for a
+// state the API cannot send would be a guess printed on a receipt.
+const ORDER_STATUS_LABEL_KEYS = {
+  Accepted: 'orders_statusAccepted',
+  Processing: 'orders_statusProcessing',
+  ReadyForPickup: 'orders_statusReadyForPickup',
+  ReadyForDriver: 'orders_statusReadyForDriver',
+  DriverPickedUp: 'orders_statusDriverPickedUp',
+  Served: 'orders_statusServed',
+  Completed: 'orders_statusCompleted',
+  Canceled: 'orders_statusCanceled'
+}
+
 const mixin = {
   data () {
     return {
@@ -140,17 +209,14 @@ const mixin = {
         : 'orders_paymentUnknown'
       return this.$i(key)
     },
+    // Resolves a dictionary key, never a literal. See DELIVERY_TYPE_LABEL_KEYS above. A value the
+    // map does not carry resolves the same key `NotSet` does, which is what the switch's default
+    // did, so no rendered string moves in any language.
     deliveryTypeLabel (deliveryTypeEnum) {
-      switch (deliveryTypeEnum) {
-      case 'SelfPickup': return 'Hent selv'
-      case 'InstantHomeDelivery': return 'Hjemlevering'
-      case 'GroupedHomeDelivery': return 'Hjemlevering'
-      case 'DineHomeDelivery': return 'DineHome Hjemlevering'
-      case 'TableDelivery': return 'Spis inne'
-      case 'WoltDelivery': return 'Wolt Drive'
-      case 'WoltMarketplaceDelivery': return 'Wolt Marketplace'
-      default: return 'Ikke satt'
-      }
+      const key = Object.prototype.hasOwnProperty.call(DELIVERY_TYPE_LABEL_KEYS, deliveryTypeEnum)
+        ? DELIVERY_TYPE_LABEL_KEYS[deliveryTypeEnum]
+        : 'orders_deliveryNotSet'
+      return this.$i(key)
     },
     dineHomeDeliveryStatusLabel (dineHomeDeliveryTypeEnum) {
       switch (dineHomeDeliveryTypeEnum) {
@@ -177,18 +243,14 @@ const mixin = {
       default: return 'Venter på sjåfør'
       }
     },
+    // Resolves a dictionary key, never a literal. See ORDER_STATUS_LABEL_KEYS above. A value the map
+    // does not carry — `OpenCheck` is the one core declares and the backend does not — resolves
+    // `orders_statusNotSet`, which is the switch's own default wording unchanged.
     orderStatusLabel (orderStatusEnum) {
-      switch (orderStatusEnum) {
-      case 'Accepted': return 'Forespurt'
-      case 'Processing': return 'Tilberedes'
-      case 'ReadyForPickup': return 'Klar for henting'
-      case 'ReadyForDriver': return 'På vei'
-      case 'DriverPickedUp': return 'Sjåføren er på vei'
-      case 'Served': return 'Servert'
-      case 'Completed': return 'Fullført'
-      case 'Canceled': return 'Kansellert'
-      default: return 'Ikke satt'
-      }
+      const key = Object.prototype.hasOwnProperty.call(ORDER_STATUS_LABEL_KEYS, orderStatusEnum)
+        ? ORDER_STATUS_LABEL_KEYS[orderStatusEnum]
+        : 'orders_statusNotSet'
+      return this.$i(key)
     },
     formatString (str, format) {
       return formatString(str, format)
@@ -314,3 +376,8 @@ export { mixin as globalMixin }
 // and asserts this map declares exactly them — no member missing, and no key left behind for a
 // member the backend no longer has.
 export { PAYMENT_TYPE_LABEL_KEYS }
+
+// Same reason again: `test/order-label-dictionaries.test.js` reads the backend's `DeliveryType` and
+// `OrderStatus` members and asserts these two maps declare exactly them, and that every key they
+// name is present in each dictionary in its own right.
+export { DELIVERY_TYPE_LABEL_KEYS, ORDER_STATUS_LABEL_KEYS }
