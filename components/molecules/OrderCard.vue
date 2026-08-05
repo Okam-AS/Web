@@ -201,8 +201,16 @@
           <span class="material-icons">sms</span>
           {{ $i('orderCard_smsDriver') }}
         </button>
+        <!-- `data-test` because the LABEL is the thing under test on this button. The only journey
+             that opens the receipt used to find it by matching `/Kvittering|Receipt/i` against the
+             button's own text, which meant the walk could only be driven in the two languages that
+             regex happened to list — at the Swiss edition `orderCard_receipt` is 'Quittung', `find`
+             returned undefined, and `receipt.click()` threw a TypeError inside `page.evaluate`
+             before any assertion ran. A third alternative in the regex is the same defect deferred:
+             the next language moves the selector again. A hook that is not copy cannot. -->
         <button
           class="action-btn"
+          data-test="order-action-receipt"
           @click="$emit('receipt', order)"
         >
           <span class="material-icons">receipt</span>

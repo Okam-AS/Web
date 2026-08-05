@@ -778,6 +778,16 @@ const ONGOING_ORDERS = Array.from({ length: ONGOING_ORDER_COUNT }, (_, i) => ({
   friendlyOrderId: String(1000 + i + 1),
   storeId: STORE_ID,
   storeLegalName: STORE_NAME,
+  // The receipt's statutory header is behind `v-if="order.storeVAT"` in
+  // `components/molecules/ReceiptModal.vue`, so WITHOUT this field the two lines that carry the
+  // issuing authority — the org-number line and the register name — do not render at all, and a
+  // journey that opens the receipt would report a clean surface while saying nothing about the
+  // part of it a bokføring inspector reads. `core/models/order/order.ts:50` declares `storeVAT` on
+  // the order, so this is the field the API supplies and not a prop invented for a test.
+  //
+  // A NORWEGIAN organisasjonsnummer, because this fixture's venue is Norwegian and the number is
+  // what the wrong German label is printed OVER. Nine digits, the shape Brønnøysund issues.
+  storeVAT: '912345678',
   status: 'Accepted',
   deliveryType: 'SelfPickup',
   platform: 'Web',
