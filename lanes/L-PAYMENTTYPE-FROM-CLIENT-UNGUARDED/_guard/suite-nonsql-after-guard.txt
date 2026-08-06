@@ -1,0 +1,4 @@
+Passed!  - Failed:     0, Passed:  4645, Skipped:    12, Total:  4657, Duration: 12 m 29 s - WebApi.Tests.dll (net8.0)
+
+command: dotnet test WebApi.Tests/WebApi.Tests.csproj --filter "Database!=SqlServer" --no-build
+note: 88 [Trait("Database","SqlServer")] tests excluded — this lane had no SQL container slot.

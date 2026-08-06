@@ -1,0 +1,143 @@
+{
+  "journey": "growth-preference-withdrawal",
+  "title": "A guest opens their private link and withdraws consent — once the two origins let the session cookie through",
+  "status": "passed",
+  "startedAtUtc": "2026-08-03T09:27:30.749Z",
+  "finishedAtUtc": "2026-08-03T09:27:32.552Z",
+  "durationMs": 1803,
+  "capabilities": [
+    "growth.guest.preference-session.open",
+    "growth.guest.preferences.read",
+    "growth.guest.preferences.withdraw",
+    "growth.guest.session-cookie.cross-origin-grant"
+  ],
+  "surface": "public",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3098",
+  "apiBaseUrl": "http://127.0.0.1:4098",
+  "commit": "59f5fabfc456eaba2fb47c0c9c32c8757242e93f",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": null,
+  "backendServed": 5,
+  "backendSample": [
+    "POST http://127.0.0.1:4098/v1/growth/preference-sessions -> 200",
+    "GET http://127.0.0.1:4098/v1/growth/preference-session/preferences -> 200",
+    "PUT http://127.0.0.1:4098/v1/growth/preference-session/preferences/Email/Newsletter -> 200",
+    "GET http://127.0.0.1:4098/v1/growth/preference-session/preferences -> 200",
+    "GET http://127.0.0.1:4098/v1/growth/preference-session/preferences -> 401"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "the API answers the wildcard it answers in production today",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T09:27:30.751Z",
+      "durationMs": 8,
+      "detail": "Access-Control-Allow-Origin: *, no allow-credentials",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "the private link opens, and the session never does",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T09:27:30.759Z",
+      "durationMs": 1017,
+      "detail": "page rendered the unknown state; no preference state was ever read",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "the browser, not the server, is what refused it",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T09:27:31.795Z",
+      "durationMs": 0,
+      "detail": "Access to fetch at 'http://127.0.0.1:4098/v1/growth/preference-sessions' from origin 'http://127.0.0.1:3098' has been blocked by CORS policy: Response to prefli",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "the API names the origin and grants credentials",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T09:27:31.795Z",
+      "durationMs": 3,
+      "detail": "Access-Control-Allow-Origin: <the page origin>, Access-Control-Allow-Credentials: true",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "the same link, unspent, now opens the session",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T09:27:31.798Z",
+      "durationMs": 592,
+      "detail": "the session opened from the token the blocked attempt never spent",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "the guest withdraws",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T09:27:32.439Z",
+      "durationMs": 50,
+      "detail": "PUT /v1/growth/preference-session/preferences/Email/Newsletter -> 200 consented=false suppressed=true",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "the page says so, and offers the honest way back",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T09:27:32.489Z",
+      "durationMs": 8,
+      "detail": null,
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "the same read, with the cookie withheld, is refused",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T09:27:32.542Z",
+      "durationMs": 6,
+      "detail": "credentials:include -> 200, credentials:omit -> 401",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "note",
+      "summary": "Chrome refused the credentialed preflight",
+      "detail": "Access to fetch at 'http://127.0.0.1:4098/v1/growth/preference-sessions' from origin 'http://127.0.0.1:3098' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'."
+    }
+  ],
+  "consoleErrors": [
+    "Access to fetch at 'http://127.0.0.1:4098/v1/growth/preference-sessions' from origin 'http://127.0.0.1:3098' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'.",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+  ],
+  "failedRequests": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:4098/v1/growth/preference-sessions",
+      "status": null,
+      "failure": "net::ERR_FAILED"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4098/v1/growth/preference-session/preferences",
+      "status": 401
+    }
+  ],
+  "screenshots": [
+    "growth-preference-withdrawal/fixture/01-the-withdrawal-a-guest-cannot-reach-today.png",
+    "growth-preference-withdrawal/fixture/02-the-preference-centre-session-open.png",
+    "growth-preference-withdrawal/fixture/03-withdrawn-and-the-standing-says-so.png"
+  ],
+  "error": null,
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/growth-preference-withdrawal.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false
+  }
+}

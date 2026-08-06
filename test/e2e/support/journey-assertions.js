@@ -319,6 +319,80 @@ function judgeSubjectOrigin ({ apiBaseUrl, subjectFromBackend, subjectFromElsewh
     (elsewhereSample || []).join(' | ') + '.';
 }
 
+// ---- the SAME-ORIGIN PROXY, which the split above cannot see -----------------------------------
+
+// `nuxt.config.js:138` mounts `server-middleware/okam-api-proxy.js` at this path, and a client built
+// with `API_BASE_URL=/okam-api` — the deckhand preview build — therefore fetches its whole subject
+// SAME-ORIGIN. The app forwards it, the backend answers it, and the browser never sees the backend's
+// origin at all.
+const PROXY_MOUNT = '/okam-api';
+
+/**
+ * The path the BACKEND saw, for a request the app proxied on its behalf — or null when the request
+ * was not proxied at all.
+ *
+ * The rewrite is mirrored from the middleware itself (`pathRewrite: { '^/okam-api': '' }`), and
+ * mirroring it is the load-bearing part rather than a nicety: the proxy strips its own mount, so
+ * `/okam-api/user/login` reaches the API as `/user/login` and IS the sign-in shell. A counter that
+ * tested the un-stripped path would classify every proxied sign-in as a subject call and red on a
+ * run that only opened the door — which is a guard somebody deletes.
+ *
+ * Matched as a DELIMITED prefix, never as a bare `startsWith`. `/okam-api-docs` and `/okam-apifoo`
+ * are the app's own routes and are not proxied to anything; counting them would make a Nuxt route
+ * that merely begins with the same letters read as backend traffic.
+ */
+function proxiedApiPath (pathname) {
+  const p = String(pathname === null || pathname === undefined ? '' : pathname);
+  if (p !== PROXY_MOUNT && p.indexOf(PROXY_MOUNT + '/') !== 0) { return null; }
+  return p.slice(PROXY_MOUNT.length) || '/';
+}
+
+/**
+ * THE SAME LIE AS `judgeSubjectOrigin`, ONE LAYER DOWN — and invisible to it.
+ *
+ * `judgeSubjectOrigin` refuses a run whose subject was served by SOME OTHER ORIGIN. It cannot see a
+ * run whose subject was served by the app's OWN origin, because the recorder excludes same-origin
+ * traffic by construction (`origin !== this._appOrigin`) so that documents, bundles and webfonts are
+ * never mistaken for a second API. A client built with `API_BASE_URL=/okam-api` falls in exactly
+ * that hole: it signs in at the named backend, fetches everything it is about through the proxy, and
+ * files `backendSubjectServed: 0, foreignSubjectServed: 0`. Nothing is positive, so nothing speaks,
+ * every floor is green, and the artifact names a backend that answered only the door.
+ *
+ * The distinction this rests on, and the reason the counter is a THIRD number rather than a wider
+ * definition of an existing one: `subjectViaProxy` is positive only when a same-origin `xhr`/`fetch`
+ * to a path under the proxy mount, whose STRIPPED path is not the shell, was actually observed. So
+ *
+ *   • a journey that fetched no subject anywhere (the modal scroll-lock walks) leaves it at 0 and is
+ *     not accused — "the proxy served it" and "nothing was fetched" are different numbers here,
+ *     which is the whole point of counting rather than widening;
+ *   • a same-origin fetch that is NOT under `/okam-api/` — the Nuxt dev server's own routes — leaves
+ *     it at 0 too;
+ *   • a proxied SIGN-IN leaves it at 0, because the stripped path is the shell;
+ *   • a run whose subject did reach the named origin directly is green whatever else it proxied.
+ *
+ * This is NOT the same finding as a split origin and does not have the same remedy. The backend the
+ * artifact names may well have answered every one of these calls — through the proxy. What is false
+ * is the artifact's ability to SAY SO: the evidence that a live backend served this journey is a
+ * count the recorder could not take. So the run is refused for being unattributable, not for being
+ * wrong, and the sentence says which.
+ *
+ * @returns the error sentence, or null when there is nothing to say
+ */
+function judgeProxiedSubject ({ apiBaseUrl, appBaseUrl, subjectFromBackend, subjectViaProxy, proxySample }) {
+  if (subjectFromBackend > 0) { return null; }
+  if (!subjectViaProxy) { return null; }
+  return 'This journey fetched its subject through the SAME-ORIGIN PROXY: ' + subjectViaProxy +
+    ' subject request(s) went to ' + (appBaseUrl || 'the app origin') + PROXY_MOUNT + '/… and NOT ONE ' +
+    'came from ' + apiBaseUrl + ' directly. The app was built with `API_BASE_URL=' + PROXY_MOUNT +
+    '`, so `server-middleware/okam-api-proxy.js` forwarded them and the browser never saw the ' +
+    'backend\'s origin. That backend may have answered every one of them — this instrument cannot ' +
+    'tell, which is why the run is refused: `backendSubjectServed` would read 0 and ' +
+    '`foreignSubjectServed` 0 as well, so every floor would be green and the artifact would name a ' +
+    'backend it can only show answering the sign-in. Build the app under test with an ABSOLUTE ' +
+    'API_BASE_URL pointing at ' + apiBaseUrl + ' so the traffic is attributable. Sample: ' +
+    (proxySample || []).join(' | ') + '.';
+}
+
 module.exports = {
   parseWageChip,
   assertPricedWage,
@@ -329,5 +403,8 @@ module.exports = {
   assertFirstRevision,
   SHELL_PATHS,
   isShellPath,
-  judgeSubjectOrigin
+  judgeSubjectOrigin,
+  PROXY_MOUNT,
+  proxiedApiPath,
+  judgeProxiedSubject
 };

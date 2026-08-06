@@ -1,0 +1,117 @@
+# Re-measured trial merges against candidate/fe-compose-2026-08-05 = 9f7d8dfc78dceaaa9c52c72ba470a34eb904a130
+# measured 2026-08-05T04:20Z by L-MANIFEST-CONDITIONS, git git version 2.50.1 (Apple Git-155)
+# method: git merge-tree --write-tree --name-only <candidate> <head>; exit 0 = clean; conflicted paths counted from the name block
+
+== 20693381  [lane/fe-training-meals-surfaces ]  CONFLICT (28 files)
+     components/admin/margin/MarginCoveragePanel.vue
+     components/admin/meals/MealsReconciliationQueue.vue
+     components/admin/training/TrainingEvidenceDocument.vue
+     components/organisms/AdminPageHeader.vue
+     pages/admin/meals-statements.vue
+     pages/admin/training-courses.vue
+     pages/admin/training-evidence.vue
+     playwright.config.js
+     test/admin-nav-access.test.js
+     test/e2e/fixture/api-server.js
+     test/e2e/fixture/growth.js
+     test/e2e/fixture/margin.js
+     test/e2e/fixture/meals.js
+     test/e2e/fixture/training.js
+     test/e2e/fixture/world.js
+     test/e2e/journeys/events-guest-proposal.spec.js
+     test/e2e/journeys/growth-guest-consent.spec.js
+     test/e2e/journeys/margin-recipe-to-margin.spec.js
+     test/e2e/journeys/margin-statement-week.spec.js
+     test/e2e/journeys/meals-admin-setup.spec.js
+     test/e2e/journeys/meals-guest-claim.spec.js
+     test/e2e/journeys/training-course-to-evidence.spec.js
+     test/e2e/support/journey.js
+     translations/de.ts
+     translations/en.ts
+     translations/no.ts
+     utils/training/evidence.js
+     utils/training/training-client.js
+
+== e8b58ec1  [lane/fe-events-margin-surfaces ]  CONFLICT (8 files)
+     components/admin/events/EventsJourney.vue
+     components/admin/margin/MarginCoveragePanel.vue
+     components/admin/margin/MarginStatementFiguresPanel.vue
+     pages/admin/events-pipeline.vue
+     pages/admin/margin-statements.vue
+     test/e2e/fixture/api-server.js
+     test/e2e/journeys/margin-statement-week.spec.js
+     test/margin-statement-components.test.js
+
+== 319ec253  [lane/workforce-roster ]  CONFLICT (10 files)
+     components/admin/workforce/WorkforceEngagementPanel.vue
+     components/organisms/AdminPageHeader.vue
+     pages/admin/workforce-roster.vue
+     test/workforce-roster-client.test.js
+     test/workforce-roster-components.test.js
+     translations/de.ts
+     translations/en.ts
+     translations/no.ts
+     utils/workforce/api-client.js
+     utils/workforce/roster-client.js
+
+== 7890f691  [lane/meals-admin ]  CONFLICT (10 files)
+     components/admin/meals/MealsFundedOrders.vue
+     pages/admin/meals-agreements.vue
+     test/meals-client.test.js
+     test/meals-page.test.js
+     test/meals-store-view.test.js
+     translations/de.ts
+     translations/en.ts
+     translations/no.ts
+     utils/meals/meals-client.js
+     utils/meals/refusal-copy.js
+
+== c3974fdb  [lane/margin-recipes ]  CONFLICT (11 files)
+     components/admin/margin/MarginCostPanel.vue
+     pages/admin/margin-recipes.vue
+     test/margin-cost-panel.component.test.js
+     test/margin-recipe-client.test.js
+     test/margin-recipes-page.test.js
+     translations/de.ts
+     translations/en.ts
+     translations/no.ts
+     utils/margin/api-client.js
+     utils/margin/cost-preview.js
+     utils/margin/recipe-client.js
+
+== f866024a  [lane/growth-admin ]  CONFLICT (13 files)
+     components/admin/growth/GrowthRunOutcome.vue
+     components/admin/growth/GrowthSendGate.vue
+     pages/admin/growth-newsletter.vue
+     test/growth-client.test.js
+     test/growth-components.test.js
+     test/growth-newsletter-page.test.js
+     test/growth-send-gate.test.js
+     translations/de.ts
+     translations/en.ts
+     translations/no.ts
+     utils/growth/growth-client.js
+     utils/growth/platform-capability.js
+     utils/growth/send-gate.js
+
+== 6790589e  [lane/events-admin ]  CONFLICT (11 files)
+     components/admin/events/EventsJourney.vue
+     pages/admin/events-pipeline.vue
+     test/events-client.test.js
+     test/events-journey.test.js
+     test/events-page.test.js
+     test/events-surface.test.js
+     translations/de.ts
+     translations/en.ts
+     translations/no.ts
+     utils/events/events-client.js
+     utils/events/journey.js
+
+== 775d45e2  [lane/fe-growth-suppressed-key ]  CLEAN (0 conflicted files)
+
+== 0dbec34b  [lane/fixture-divergence-receipt ]  CLEAN (0 conflicted files)
+
+== 618efc88  [lane/wf-timesheet-ui ]  CLEAN (0 conflicted files)
+
+== 808d5095  [lane/collect-review-conditions ]  CLEAN (0 conflicted files)
+

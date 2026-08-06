@@ -1,0 +1,71 @@
+L-WF-ONBOARD — a worker joins without a SQL UPDATE
+brief 38d70257
+
+THE CHANGE (committed)
+  repo      /Users/svendaneel/okam/OkamAPI-modules  (worktree /Users/svendaneel/okam/wt-L-WF-ONBOARD)
+  branch    lane/wf-onboard-claim
+  commit    de0811f6   parent 8e2b57de (integration tip; verified ancestor, clean fast-forward)
+  file      Scripts/demo/seed-workforce-demo.sh   (+60 / -10)
+
+  Deleted   UPDATE WorkforcePersons SET ApplicationUserId = ..., State = N'Claimed'   (was line 244)
+  Added     step 5b   POST {WF}/staff/{NORA}/invitations            endpoint 6,  manager token
+                      POST /workforce/me/invitations/claim          endpoint 32, WORKER token
+            step 14b  GET  /workforce/me/staff-memberships          endpoint 31, WORKER token
+                      GET  /workforce/me/schedule                   endpoint 33, WORKER token
+
+  Nothing in the script writes WorkforcePersons now. The only remaining statement naming that table
+  is the bootstrap INSERT for the FIRST manager engagement, which has no endpoint by construction.
+
+EVIDENCE ON DISK (untracked, matching the sibling lane's convention; *.log is gitignored so these are .txt)
+  evidence/invitation-contract-suite.txt   WorkforceInvitationTests 25/25 passed, SQLite fast suite,
+                                           real controllers + production service composition.
+  evidence/join-block-happy-path.txt       the script's own 5b + 14b text, run green against the stub.
+  evidence/join-block-mutations.txt        6 mutations, all RED with the correct message.
+  harness/stub-api.js                      stub answering the REAL DTO shapes (WorkforceInvitationIssued
+                                           Response / WorkforceClaimResponse / WorkforceStaffMembership
+                                           Model / WorkforceMeScheduleResponse, StringEnumConverter casing).
+  harness/run-join-block.sh                extracts the bash from the REAL file by ANCHORED line range —
+                                           nothing retyped, so a change that breaks the join breaks this.
+  harness/extracted-*.sh                   exactly what was executed, per mutation.
+
+MUTATIONS (an assertion nothing can falsify is not an assertion)
+  no-token           -> RED  "the invitation carried no token -- an idempotent REPLAY answers token=null"
+  wrong-person       -> RED  "the claim bound person '9999...', expected Nora's '2222...'"
+  wrong-state        -> RED  "the claim left the person in state 'Invited', expected Claimed"
+  empty-memberships  -> RED  "Nora's engagement (1111...) is not on her own membership list"
+  empty-schedule     -> RED  "the worker's schedule for week C (...) is empty"
+  issue-problem      -> RED  "POST staff/1111.../invitations -> {"status":404,...}"
+  happy path         -> EXIT=0, memberships listed, 1 published shift visible.
+
+C7 — the invitation token is a credential
+  grep RAWTOKEN over all 7 captured runs: 0 occurrences, including all six FAILURE paths.
+  The claim body reaches curl over stdin (--data-binary @-), never argv, so it is not in the process table.
+  Pre-existing leak closed in the same change: the worker-login `die` printed the whole login response,
+  bearer token included; it now prints a copy with .token removed.
+
+IDENTITY — measured at the stub, not assumed
+  issueAuth = manager-bearer-token   claimAuth = worker-bearer-token
+  memAuth   = worker-bearer-token    schedAuth = worker-bearer-token
+  distinct Idempotency-Key on both mutations.
+
+CLAUSE 1 OF THE EXIT — cited, not re-walked (as the brief directed)
+  L-FE-WF-ONBOARD-WALK landed 35440cf, an ancestor of baseline e34977ac. 16/16 steps.
+  lanes/L-WF-INVITE-SURFACE/evidence/rewalk-at-e34977ac.playwright.json — passed at my exact baseline.
+  screenshots 02 code-shown-once, 03 claim page, 04 the worker is in, 05 my shifts, 07 roster after claim.
+
+WHAT IS NOT PROVEN
+  The demo has NOT been run against a live SQL world. Cap is sql=2 and both slots are held by foreign
+  containers okam-lvsp-sql and okam-lwr-sql (up 2 days, idle, not mine). My class is node. demo-up.sh
+  refuses to start its own container by design — it BORROWS one, so running it means using a container
+  I did not create. I did neither. This needs a sql-class lane: Scripts/demo/demo-up.sh, then confirm
+  step 5b prints "Nora claimed her own engagement -> person <id> is Claimed" and 14b lists her membership.
+
+LEFT ALONE ON PURPOSE
+  The identical-404 anti-oracle (invalid / expired / revoked / already-claimed / wrong-recipient /
+  archived all answer workforce.invitation-invalid), pinned at WorkforceInvitationTests.cs:493.
+  Still true and not mine: no invitation LIST route and no revoke verb exist, though
+  WorkforceInvitationState.Revoked is declared. A manager cannot see whether a code is live.
+
+HYGIENE
+  No container started or touched. Ports 4311/4312 mine alone, both released. Nothing pushed.
+  Frontend working tree (dirty from other lanes at arrival) left exactly as found.

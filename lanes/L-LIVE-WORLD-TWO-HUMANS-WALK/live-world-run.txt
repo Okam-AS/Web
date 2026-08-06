@@ -1,0 +1,113 @@
+   target: Server=localhost,15436;Database=OkamLiveTwoHumans;User Id=sa;Password=***;TrustServerCertificate=True;Encrypt=False;Connect Timeout=60
+
+[1m== 1/5  Stopping any API this script previously started on :5971[0m
+   :5971 is free
+
+[1m== 2/5  Recreating an EMPTY database [OkamLiveTwoHumans][0m
+   empty: 0 tables
+
+[1m== 3/5  Applying the migration chain from empty[0m
+   built from wt-lwtwo-api@8e2b57de8442a389a9b5f8025312c9750614c85e
+   127 migrations, 211 tables, 25 append-only triggers
+   C1 checked on sys.triggers: the 3 directly-seeded tables carry none
+
+[1m== 4/5  Starting the API on http://127.0.0.1:5971[0m
+   healthy (launcher pid 96289, log: /tmp/okam-live-world-OkamLiveTwoHumans.log)
+   stamped: wt-lwtwo-api@8e2b57de8442a389a9b5f8025312c9750614c85e  ->  artifacts/world/live/127-0-0-1-5971.json  (pid 96293, launched by 96289)
+
+[1m== 5/5  Seeding the smallest world a journey can run against[0m
+   manager signed in: applicationUserId = 6ba6dd27-42b0-4ba9-807b-96930c735f2f
+   store 'Two Humans Kafé' = StoreId 1, registered through POST /Stores/register (unapproved), with the manager as its StoreAdmin
+   market NO / NOK / Europe/Oslo, set through PUT /stores/1/market under the manager's bearer
+
+[1m== 5b/5  The roster, employment terms and rates the two workforce journeys need[0m
+   legal employer + the manager's own engagement (bootstrap capabilities 6) — the 3 rows with no endpoint
+   capabilities 6 -> Self+Scheduler+Manager+PayrollApprover, granted by PATCH /staff under the manager's bearer
+   roles: Barista, Kjøkken  (workforce-schedule-publish picks 'Barista' by its label)
+   staff: Astrid Vik (ANS-002), Jonas Lie (ANS-003) — created through POST /staff, not INSERTed
+   employment terms for all three engagements (37.5h manager, 30h each colleague)
+   Barista role rate 220.00 NOK/h from 2024-01-01, written by the manager through PUT .../rates
+   the manager's adminIn carries store 1 -- the shell will let them in
+   GET /feature-flags/catalog -> 18 flags
+   GET /stores/1/feature-flags -> 18 states (the manager IS a StoreAdmin)
+   no flag overrides: every flag reads its module default, deny-closed
+   GET /context -> [WorkforceSelf,WorkforceScheduler,WorkforceManager,WorkforcePayrollApprover], timeZone Europe/Oslo
+   GET /staff -> 3 engagements; GET /roles -> [Barista,Kjøkken]
+   the current week 2026-08-03..2026-08-10 has no plan -- 'Opprett utkast' will be offered
+
+-------------------------------------------------------------------------------
+A LIVE world is up.
+
+    API        http://127.0.0.1:5971           (serving pid 96293, launcher 96289, log /tmp/okam-live-world-OkamLiveTwoHumans.log)
+    build      wt-lwtwo-api@8e2b57de8442a389a9b5f8025312c9750614c85e
+    database   OkamLiveTwoHumans on localhost,15436   (127 migrations, 211 tables)
+    store      1  "Two Humans Kafé"   registered through POST /Stores/register, org.nr 912345678
+    market     NO / NOK / Europe/Oslo   (PUT /stores/1/market; currency derived)
+    published  no -- Approved is left false, which is what registration produces; see the header
+    manager    PHONE-WITHHELD / CODE-WITHHELD   (the app prefixes +47 itself)
+    roster     Astrid Vik, Ingrid Moen (the manager), Jonas Lie
+    roles      Barista (220.00 NOK/h from 2024-01-01), Kjøkken
+    week       2026-08-03..2026-08-10, no plan
+
+Run ONE live journey against it:
+
+    cd /Users/svendaneel/okam/Web-modules
+    E2E_API_BUILD="wt-lwtwo-api@8e2b57de8442a389a9b5f8025312c9750614c85e" \
+    E2E_API_BASE_URL=http://127.0.0.1:5971 E2E_WEB_PORT=3971 \
+        npm run test:e2e -- test/e2e/journeys/events-deposit-precondition.spec.js
+
+THE ARTIFACT NAMES THIS BUILD WITHOUT THE E2E_API_BUILD LINE, because the world was stamped:
+
+    artifacts/world/live/127-0-0-1-5971.json   ->  wt-lwtwo-api@8e2b57de8442a389a9b5f8025312c9750614c85e   (serving pid 96293)
+
+That file is what a journey reads first, and it is refused the moment the process it names is gone --
+so it can lose its answer and cannot invent a wrong one. TWO THINGS MAKE THAT SENTENCE TRUE rather
+than merely printed: it names the build read when the binary was BUILT and refuses if this checkout
+has moved since, and it names the process HOLDING THE SOCKET rather than the `dotnet run` launcher
+that started it -- so a launcher outliving a dead server cannot keep the answer alive. E2E_API_BUILD
+is kept in the line above because it still carries the case where the runner is somewhere this file is
+not; when the two disagree the stamp wins and the artifact says which declaration it overrode.
+Inspect it with:
+
+    node test/e2e/support/world-stamp.js show http://127.0.0.1:5971
+
+ONE PER RUN, AND A RESET BETWEEN THEM -- NOT ONE WORLD PER JOURNEY. In fixture mode every journey gets
+a fresh backend from `POST /__fixture/reset`; live mode has nothing of the kind INSIDE THE HARNESS, so
+`@live` journeys selected together run in file order against this one database and inherit each
+other's writes. What actually reds is the FLAG, not the week: `workforce-schedule-publish` leaves a
+`workforce.publication` override behind, and `workforce-flag-lever` opens by asserting that badge
+reads "Av". The week alone does NOT red -- once a revision is published the draft view resolves none,
+so the second journey still finds "Ingen plan" and quietly authors Revisjon 2. That is worse than a
+failure, not better: it passes while proving less than its own header claims.
+
+THE ANSWER IS A RESTORE, NOT A SECOND WORLD. Take the image now, while nothing has run against it:
+
+    SQL_CONTAINER=okam-lwtwo-sql SQL_PORT=15436 DB_NAME=OkamLiveTwoHumans API_PORT=5971 \
+        test/e2e/scripts/live-world-reset.sh snapshot
+
+and put the world back between journeys -- about nine seconds, and NOT the 127-migration replay
+this script just spent:
+
+    SQL_CONTAINER=okam-lwtwo-sql SQL_PORT=15436 DB_NAME=OkamLiveTwoHumans API_PORT=5971 \
+        test/e2e/scripts/live-world-reset.sh restore
+
+It reads the same variable names with the same defaults this script does, so anything you overrode
+here you must pass there too. It refuses to image a world a journey has already used; every restore
+re-checks that all 25 append-only triggers came back ENABLED with the bodies the image carried
+(C1), and that the API is serving the restored catalog, before it returns. Take the snapshot BEFORE
+the first journey: afterwards there is nothing clean left to image and the chain does have to be
+replayed.
+
+(`events-deposit-precondition` removes the override it sets, so it leaves the world as it found it and
+can run either side of a restore, or be re-run against a used one.)
+
+Artifacts land in artifacts/journeys/ with "backend": "live", this API's origin on "apiBaseUrl" and
+"backendBuild" naming the build above -- and support/journey.js FAILS a live run in which the browser
+never reached that origin, so the label cannot be produced without the traffic. The canonical file is
+the STRONGEST run on record rather than the last one written, keyed by origin AND build, so a run
+against this world cannot overwrite the record of a different one. See support/artifact-store.js.
+
+Stop it with:   kill 96293 96289
+                (the server and the launcher that started it -- killing only the launcher can leave
+                 the server holding :5971, which is why step 1 of a rebuild kills by port)
+-------------------------------------------------------------------------------

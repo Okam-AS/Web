@@ -1,0 +1,8 @@
+      at Object.<anonymous> (test/journey-artifact-store.test.js:457:58)
+
+
+Test Suites: 1 failed, 116 passed, 117 total
+Tests:       2 failed, 2775 passed, 2777 total
+Snapshots:   0 total
+Time:        5.175 s, estimated 8 s
+Ran all test suites.

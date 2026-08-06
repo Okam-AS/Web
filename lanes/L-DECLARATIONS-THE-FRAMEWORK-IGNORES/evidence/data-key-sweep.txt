@@ -1,0 +1,8 @@
+files with <script>: 315 / 317 .vue files
+files with no recognised data block: 92
+
+--- data() top-level keys starting with _ or $ (NOT proxied by Vue 2.7 initData) ---
+(none)
+
+--- watch keys starting with _ or $ ---
+(none)

@@ -1,0 +1,60 @@
+[WebServer] ℹ Listening on: http://172.20.10.4:3974/
+[WebServer] [fixture] GET /workforce/me/inbox -> ReferenceError: publicationsFor is not defined
+[WebServer]     at route (/Users/svendaneel/okam/wt-jwf/test/e2e/fixture/api-server.js:1092:36)
+[WebServer]     at Server.<anonymous> (/Users/svendaneel/okam/wt-jwf/test/e2e/fixture/api-server.js:1403:3)
+[WebServer]     at Server.emit (node:events:509:28)
+[WebServer]     at parserOnIncoming (node:_http_server:1213:12)
+[WebServer]     at HTTPParser.parserOnHeadersComplete (node:_http_common:125:17)
+  ✘  1 [chromium] › test/e2e/journeys/workforce-week-run.spec.js:68:1 › A manager plans and publishes a week; the worker sees it and confirms it @fixture (26.8s)
+[teardown] returned core/ to an empty submodule mount
+
+
+  1) [chromium] › test/e2e/journeys/workforce-week-run.spec.js:68:1 › A manager plans and publishes a week; the worker sees it and confirms it @fixture 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.wfme-pub')
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 15000ms
+      - waiting for locator('.wfme-pub')
+
+
+      220 |       // has been `v-if`'d out of existence in every fixture run ever recorded.
+      221 |       const notice = page.locator('.wfme-pub');
+    > 222 |       await expect(notice).toBeVisible({ timeout: 15000 });
+          |                            ^
+      223 |       const items = notice.locator('.wfme-pub__item');
+      224 |       await expect(items).toHaveCount(1);
+      225 |
+        at fn (/Users/svendaneel/okam/wt-jwf/test/e2e/journeys/workforce-week-run.spec.js:222:28)
+        at JourneyRecorder.step (/Users/svendaneel/okam/wt-jwf/test/e2e/support/journey.js:347:28)
+        at /Users/svendaneel/okam/wt-jwf/test/e2e/journeys/workforce-week-run.spec.js:217:19
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/workforce-week-run-A-manag-fe486-ker-sees-it-and-confirms-it-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/workforce-week-run.fixture.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/workforce-week-run.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/workforce-week-run-A-manag-fe486-ker-sees-it-and-confirms-it-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/workforce-week-run-A-manag-fe486-ker-sees-it-and-confirms-it-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/workforce-week-run-A-manag-fe486-ker-sees-it-and-confirms-it-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › test/e2e/journeys/workforce-week-run.spec.js:68:1 › A manager plans and publishes a week; the worker sees it and confirms it @fixture 

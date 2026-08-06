@@ -1,0 +1,54 @@
+=== label        : G-final-no
+=== edition      : OKAM_EDITION=no
+=== worktree     : /Users/svendaneel/okam/web-rcptde
+=== commit       : e34977acebd59b223584158c33451b6f1ffd82c1
+=== spec sha     : 2a1a23cf89195f08ac77bfc60e49f3e8ad34cb71
+=== de.ts sha    : cc6e56d4b4f89df4d03bef00d84bce081872d89e
+=== no.ts sha    : 03fbae5be5671ee23cdb88f1829dfab1b94c4eb5
+=== OrderCard sha: 548e4267840c043296c7aa4d50e1f47e00cb9d85
+=== world.js sha : 5e5ccd06442d6339cbb1564cdd5982d269e48a7c
+=== dirty (non-artifact, non-core): 3 path(s)
+=== ports        : web=3847 fixture=4847 (4010 never bound, pid 73160 never signalled)
+=== core         : 10 entries
+[WebServer] [fixture] listening on http://127.0.0.1:4847
+
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://172.20.10.4:3847/
+
+[WebServer] [info] Preparing project for development
+
+[WebServer] [info] Initial build may take a while
+
+
+Running 1 test using 1 worker
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+[WebServer] [success] Builder initialized
+
+[1/1] [chromium] › test/e2e/journeys/modal-estate-scroll-lock.spec.js:191:1 › Two different modals hold the page, and closing one does not let go @fixture
+[WebServer] [success] Nuxt files generated
+
+[WebServer] [warn] Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[WebServer] [info] Waiting for file changes
+
+[WebServer] [info] Memory usage: 1.25 GB (RSS: 2.05 GB)
+
+[WebServer] [info] Listening on: http://172.20.10.4:3847/
+
+  1 passed (26.2s)
+RESULT G-final-no edition=no PASS rc=0

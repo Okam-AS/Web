@@ -1,0 +1,82 @@
+
+Running 1 test using 1 worker
+
+probe base http://127.0.0.1:3082 api http://127.0.0.1:4082
+serving check: 2 .trn-table-scroll wrapper(s) in the DOM
+
+=== STATE A — one Draft row, hash and published-at both "—" (the narrowest this table ever is)
+  @1024px
+    FIX OFF   overflow=138px   overflowX=visible  pageScrollsX=false  visibleAtRest=false  hit=<p class="trn-form__hint">         pointer-click FAILS (locator.click: Timeout 4000ms exceeded.)
+    FIX ON    overflow=131px   overflowX=auto     pageScrollsX=false  visibleAtRest=false  hit=<div class="admin-nav__topbar">    pointer-click LANDS
+  @1280px
+    FIX OFF   overflow=126px   overflowX=visible  pageScrollsX=false  visibleAtRest=false  hit=<p class="trn-form__hint">         pointer-click FAILS (locator.click: Timeout 4000ms exceeded.)
+    FIX ON    overflow=132px   overflowX=auto     pageScrollsX=false  visibleAtRest=false  hit=<p class="trn-form__hint">         pointer-click LANDS
+  @1366px
+    FIX OFF   overflow=92px    overflowX=visible  pageScrollsX=false  visibleAtRest=false  hit=<form class="trn-form">            pointer-click FAILS (locator.click: Timeout 4000ms exceeded.)
+    FIX ON    overflow=0px     overflowX=auto     pageScrollsX=false  visibleAtRest=true   hit=the control itself                 pointer-click LANDS
+  @1440px
+    FIX OFF   overflow=55px    overflowX=visible  pageScrollsX=false  visibleAtRest=false  hit=the control itself                 pointer-click LANDS
+    FIX ON    overflow=0px     overflowX=auto     pageScrollsX=false  visibleAtRest=true   hit=the control itself                 pointer-click LANDS
+  @1920px
+    FIX OFF   overflow=0px     overflowX=visible  pageScrollsX=false  visibleAtRest=true   hit=the control itself                 pointer-click LANDS
+    FIX ON    overflow=0px     overflowX=auto     pageScrollsX=false  visibleAtRest=true   hit=the control itself                 pointer-click LANDS
+
+REAL POINTER CLICK (no force, no dispatch) on publish @1280, state A:
+  LANDED. Row now reads "Publisert", content hash 00ad7cd4bb4f…, and the publish control is GONE (a published version is immutable).
+
+=== STATE B — v1 Publisert (real hash + timestamp) beside v2 Utkast — what a second version looks like
+  @1024px
+    FIX OFF   overflow=168px   overflowX=visible  pageScrollsX=false  visibleAtRest=false  hit=<section class="trn-completions">  pointer-click FAILS (locator.click: Timeout 4000ms exceeded.)
+    FIX ON    overflow=159px   overflowX=auto     pageScrollsX=false  visibleAtRest=false  hit=<div class="admin-nav__topbar">    pointer-click LANDS
+  @1280px
+    FIX OFF   overflow=153px   overflowX=visible  pageScrollsX=false  visibleAtRest=false  hit=<section class="trn-completions">  pointer-click FAILS (locator.click: Timeout 4000ms exceeded.)
+    FIX ON    overflow=132px   overflowX=auto     pageScrollsX=false  visibleAtRest=false  hit=<section class="trn-completions">  pointer-click LANDS
+  @1366px
+    FIX OFF   overflow=120px   overflowX=visible  pageScrollsX=false  visibleAtRest=false  hit=<section class="trn-completions">  pointer-click FAILS (locator.click: Timeout 4000ms exceeded.)
+    FIX ON    overflow=0px     overflowX=auto     pageScrollsX=false  visibleAtRest=true   hit=the control itself                 pointer-click LANDS
+  @1440px
+    FIX OFF   overflow=83px    overflowX=visible  pageScrollsX=false  visibleAtRest=false  hit=<section class="trn-completions">  pointer-click FAILS (locator.click: Timeout 4000ms exceeded.)
+    FIX ON    overflow=0px     overflowX=auto     pageScrollsX=false  visibleAtRest=true   hit=the control itself                 pointer-click LANDS
+  @1920px
+    FIX OFF   overflow=0px     overflowX=visible  pageScrollsX=false  visibleAtRest=true   hit=the control itself                 pointer-click LANDS
+    FIX ON    overflow=0px     overflowX=auto     pageScrollsX=false  visibleAtRest=true   hit=the control itself                 pointer-click LANDS
+
+REAL POINTER CLICK on publish @1280, state B:
+  LANDED. v2 now reads "Publisert" too.
+
+=== SIBLING — assignment-revoke, the one other action control in a trailing cell
+  @1024px
+    FIX OFF   overflow=116px   overflowX=visible  pageScrollsX=true   visibleAtRest=false  hit=NULL (nothing at that point)       pointer-click LANDS
+    FIX ON    overflow=107px   overflowX=auto     pageScrollsX=false  visibleAtRest=false  hit=NULL (nothing at that point)       pointer-click LANDS
+  @1280px
+    FIX OFF   overflow=103px   overflowX=visible  pageScrollsX=true   visibleAtRest=false  hit=NULL (nothing at that point)       pointer-click LANDS
+    FIX ON    overflow=111px   overflowX=auto     pageScrollsX=false  visibleAtRest=false  hit=NULL (nothing at that point)       pointer-click LANDS
+  @1366px
+    FIX OFF   overflow=68px    overflowX=visible  pageScrollsX=true   visibleAtRest=false  hit=NULL (nothing at that point)       pointer-click LANDS
+    FIX ON    overflow=0px     overflowX=auto     pageScrollsX=false  visibleAtRest=true   hit=the control itself                 pointer-click LANDS
+  @1440px
+    FIX OFF   overflow=31px    overflowX=visible  pageScrollsX=true   visibleAtRest=false  hit=the control itself                 pointer-click LANDS
+    FIX ON    overflow=0px     overflowX=auto     pageScrollsX=false  visibleAtRest=true   hit=the control itself                 pointer-click LANDS
+  @1920px
+    FIX OFF   overflow=0px     overflowX=visible  pageScrollsX=false  visibleAtRest=true   hit=the control itself                 pointer-click LANDS
+    FIX ON    overflow=0px     overflowX=auto     pageScrollsX=false  visibleAtRest=true   hit=the control itself                 pointer-click LANDS
+
+=== EVERY .trn-table on the surface @1280, fix ON
+  trn-courses        5 cols  overflowX=auto     table is 163px   past the column (content — fine if contained) | PAINTS 0px past  (contained)
+  trn-versions       6 cols  overflowX=auto     table is 89px    past the column (content — fine if contained) | PAINTS 0px past  (contained)
+  trn-assign         6 cols  overflowX=auto     table is 111px   past the column (content — fine if contained) | PAINTS 0px past  (contained)
+
+==== SUMMARY — pointer-click verdict on the publish control ====
+  state A @1024  fix OFF: FAILS  -> fix ON: LANDS
+  state A @1280  fix OFF: FAILS  -> fix ON: LANDS
+  state A @1366  fix OFF: FAILS  -> fix ON: LANDS
+  state A @1440  fix OFF: LANDS  -> fix ON: LANDS
+  state A @1920  fix OFF: LANDS  -> fix ON: LANDS
+  state B @1024  fix OFF: FAILS  -> fix ON: LANDS
+  state B @1280  fix OFF: FAILS  -> fix ON: LANDS
+  state B @1366  fix OFF: FAILS  -> fix ON: LANDS
+  state B @1440  fix OFF: FAILS  -> fix ON: LANDS
+  state B @1920  fix OFF: LANDS  -> fix ON: LANDS
+  ✓  1 [chromium] › lanes/L-TRAIN-PUBLISH-UNCLICKABLE/probe.spec.js:117:1 › the Training publish control, five widths x two table states x fix on/off (37.1s)
+
+  1 passed (1.0m)

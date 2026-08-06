@@ -1,0 +1,83 @@
+[WebServer] [fixture] listening on http://127.0.0.1:4915
+[WebServer] 
+[WebServer]  WARN  You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  Module @nuxt/image is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version >=3.1.0 is required but currently using 2.17.1
+[WebServer] 
+[WebServer] ℹ Parsed 0 files in 0.0 seconds
+[WebServer] ℹ [HPM] Proxy created: /  -> http://127.0.0.1:5080
+[WebServer] ℹ [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+[WebServer] ℹ Listening on: http://172.20.10.4:3915/
+[WebServer] ℹ Preparing project for development
+[WebServer] ℹ Initial build may take a while
+[WebServer] ℹ Discovered Components: .nuxt/components/readme.md
+[WebServer] ✔ Builder initialized
+[WebServer] ✔ Nuxt files generated
+[WebServer] 
+[WebServer]  WARN  Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[WebServer] 
+[WebServer] ℹ Compiling Server
+[WebServer] ℹ Compiling Client
+[WebServer] ✔ Server: Compiled successfully in 15.64s
+[WebServer] ✔ Client: Compiled successfully in 18.06s
+
+Running 2 tests using 1 worker
+
+[WebServer] ℹ Waiting for file changes
+[WebServer] ℹ Memory usage: 1.18 GB (RSS: 2.04 GB)
+[WebServer] ℹ Listening on: http://172.20.10.4:3915/
+  ✓  1 [chromium] › test/e2e/journeys/growth-guest-lifecycle.spec.js:96:1 › A guest joins a venue's newsletter, confirms it from the link, and takes themselves back off it @fixture (10.2s)
+  ✘  2 [chromium] › test/e2e/journeys/growth-testsend-refusal.spec.js:92:1 › An administrator is refused a test-send to the address on her own account, because it is unconfirmed @fixture (19.7s)
+
+
+  1) [chromium] › test/e2e/journeys/growth-testsend-refusal.spec.js:92:1 › An administrator is refused a test-send to the address on her own account, because it is unconfirmed @fixture 
+
+    TimeoutError: locator.click: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for getByRole('link', { name: 'Send deg selv en test av nyhetsbrevet' })
+
+
+      178 |     // ---- THE REFUSAL ----------------------------------------------------------------------------
+      179 |     await journey.step('THE WALL: the test-send is refused to the account\'s OWN address', async () => {
+    > 180 |       await page.getByRole('link', { name: 'Send deg selv en test av nyhetsbrevet' }).click();
+          |                                                                                       ^
+      181 |       await page.waitForURL(url => url.pathname === '/admin/growth-newsletter', { timeout: 30000 });
+      182 |       await reopenNewsletter(page);
+      183 |
+        at fn (/Users/svendaneel/okam/Web-modules/test/e2e/journeys/growth-testsend-refusal.spec.js:180:87)
+        at JourneyRecorder.step (/Users/svendaneel/okam/Web-modules/test/e2e/support/journey.js:347:28)
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/growth-testsend-refusal.spec.js:179:19
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/growth-testsend-refusal-An-fcbf7-t-because-it-is-unconfirmed-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/growth-testsend-refusal.fixture.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/growth-testsend-refusal.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/growth-testsend-refusal-An-fcbf7-t-because-it-is-unconfirmed-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/growth-testsend-refusal-An-fcbf7-t-because-it-is-unconfirmed-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/growth-testsend-refusal-An-fcbf7-t-because-it-is-unconfirmed-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › test/e2e/journeys/growth-testsend-refusal.spec.js:92:1 › An administrator is refused a test-send to the address on her own account, because it is unconfirmed @fixture 
+  1 passed (50.8s)
+EXIT=1

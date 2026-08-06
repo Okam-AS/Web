@@ -1,0 +1,984 @@
+[
+ {
+  "id": "L-ALIASING-NEEDLE-SWEEP",
+  "type": "Lane",
+  "state": "verified",
+  "title": "no absence assertion can be satisfied by its own random fixture",
+  "evidence": "lanes/L-ALIASING-NEEDLE-SWEEP/census.md",
+  "exit": "every DoesNotContain-style absence assertion whose needle can occur by chance in a random fixture value is named with its probability, and each is either excised-haystack, pinned-fixture or ruled safe with the reason, recorded in lanes/L-ALIASING-NEEDLE-SWEEP/census.md",
+  "exit_paths": [
+   "lanes/L-ALIASING-NEEDLE-SWEEP/census.md"
+  ],
+  "matched": [
+   "lanes/L-ALIASING-NEEDLE-SWEEP/census.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/lanes/L-ALIASING-NEEDLE-SWEEP/census.md",
+  "verdict": "text",
+  "detail": "32451 bytes, first line: # L-ALIASING-NEEDLE-SWEEP - census of absence assertions that can fire on their own fixture"
+ },
+ {
+  "id": "L-CENSUS-CORRECTIONS",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the two censuses stop teaching rules their own evidence does not support",
+  "evidence": "lanes/L-CENSUS-CORRECTIONS/evidence.md",
+  "exit": "the six named corrections are applied to the two census documents, each citing what falsified it, and no immunity rule remains that a later needle or registration could inherit falsely, recorded in lanes/L-CENSUS-CORRECTIONS/evidence.md",
+  "exit_paths": [
+   "lanes/L-CENSUS-CORRECTIONS/evidence.md"
+  ],
+  "matched": [
+   "lanes/L-CENSUS-CORRECTIONS/evidence.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/lanes/L-CENSUS-CORRECTIONS/evidence.md",
+  "verdict": "text",
+  "detail": "21283 bytes, first line: # L-CENSUS-CORRECTIONS - evidence"
+ },
+ {
+  "id": "L-COMPROOT-FAMILY-LAND",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the composition-root, confirm and middleware pins land together",
+  "evidence": "lanes/L-COMPROOT-FAMILY-LAND/merge-receipt.md",
+  "exit": "the composition-root family is merged into feature/restaurant-modules with CompositionRootLimiterWireTests.cs and RequestBodyTelemetryPinTests.cs present on that branch, recorded in lanes/L-COMPROOT-FAMILY-LAND/merge-receipt.md",
+  "exit_paths": [
+   "feature/restaurant-modules",
+   "lanes/L-COMPROOT-FAMILY-LAND/merge-receipt.md"
+  ],
+  "matched": [
+   "lanes/L-COMPROOT-FAMILY-LAND/merge-receipt.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/lanes/L-COMPROOT-FAMILY-LAND/merge-receipt.md",
+  "verdict": "text",
+  "detail": "15802 bytes, first line: # L-COMPROOT-FAMILY-LAND - merge receipt"
+ },
+ {
+  "id": "L-CONFIRM-ADMIN-SURFACE",
+  "type": "Lane",
+  "state": "verified",
+  "title": "an admin can confirm their address from an admin screen",
+  "evidence": "artifacts/journeys/account-email-confirm.playwright.json",
+  "exit": "an admin confirms their email from an admin surface and can then test-send, captured under artifacts/journeys/",
+  "exit_paths": [
+   "artifacts/journeys/"
+  ],
+  "matched": [
+   "artifacts/journeys/"
+  ],
+  "exact": false,
+  "absp": "/Users/svendaneel/okam/Web-modules/artifacts/journeys/account-email-confirm.playwright.json",
+  "verdict": "pass",
+  "detail": "status='passed'; steps=14 failed=0"
+ },
+ {
+  "id": "L-CONFIRM-CHAIN-REVIEW",
+  "type": "Lane",
+  "state": "verified",
+  "title": "eleven branches in one family, read as one thing",
+  "evidence": "docs/plan/reviews/L-CONFIRM-CHAIN-REVIEW.md",
+  "exit": "a returned verdict on the composed state of the confirm and Growth chain, naming any defect that exists only in the merge and any pin the merge would leave unfalsifiable, recorded at `docs/plan/reviews/L-CONFIRM-CHAIN-REVIEW.md`",
+  "exit_paths": [
+   "docs/plan/reviews/L-CONFIRM-CHAIN-REVIEW.md"
+  ],
+  "matched": [
+   "docs/plan/reviews/L-CONFIRM-CHAIN-REVIEW.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/docs/plan/reviews/L-CONFIRM-CHAIN-REVIEW.md",
+  "verdict": "text",
+  "detail": "3947 bytes, first line: # Fable review \u2014 the confirm chain read as one composed thing (2026-08-02)"
+ },
+ {
+  "id": "L-CORS-CREDENTIALED-ORIGIN",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the credentialed preference centre is served by a policy that exists",
+  "evidence": "lanes/L-CORS-CREDENTIALED-ORIGIN/evidence.md",
+  "exit": "the credentialed cross-origin surface is served by the named CORS policy rather than AllowAnyOrigin, pinned by a wire test that reds if the policy is swapped back, recorded in lanes/L-CORS-CREDENTIALED-ORIGIN/evidence.md",
+  "exit_paths": [
+   "lanes/L-CORS-CREDENTIALED-ORIGIN/evidence.md"
+  ],
+  "matched": [
+   "lanes/L-CORS-CREDENTIALED-ORIGIN/evidence.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/lanes/L-CORS-CREDENTIALED-ORIGIN/evidence.md",
+  "verdict": "text",
+  "detail": "11766 bytes, first line: # L-CORS-CREDENTIALED-ORIGIN -- evidence"
+ },
+ {
+  "id": "L-DI-COLLECTION-SILENT",
+  "type": "Lane",
+  "state": "verified",
+  "title": "a missing registration behind an IEnumerable stops passing for present",
+  "evidence": "lanes/L-DI-COLLECTION-SILENT/census.md",
+  "exit": "every IEnumerable-shaped injection point is named with what an empty sequence does at runtime, and each is either guarded by a floor the composition-root check enforces or recorded as deliberately optional, in lanes/L-DI-COLLECTION-SILENT/census.md",
+  "exit_paths": [
+   "lanes/L-DI-COLLECTION-SILENT/census.md"
+  ],
+  "matched": [
+   "lanes/L-DI-COLLECTION-SILENT/census.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/lanes/L-DI-COLLECTION-SILENT/census.md",
+  "verdict": "text",
+  "detail": "40164 bytes, first line: # L-DI-COLLECTION-SILENT - census of IEnumerable-shaped injection points"
+ },
+ {
+  "id": "L-EV-DEPOSITS-PRECONDITION",
+  "type": "Lane",
+  "state": "verified",
+  "title": "arming the deposit flag names its precondition",
+  "evidence": "artifacts/journeys/events-deposit-precondition.playwright.json",
+  "exit": "the deposits row carries its merchant-configuration precondition where an operator arming it will read it, captured at `artifacts/journeys/events-deposit-precondition.playwright.json`",
+  "exit_paths": [
+   "artifacts/journeys/events-deposit-precondition.playwright.json"
+  ],
+  "matched": [
+   "artifacts/journeys/events-deposit-precondition.playwright.json"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/artifacts/journeys/events-deposit-precondition.playwright.json",
+  "verdict": "pass",
+  "detail": "status='passed'; steps=6 failed=0"
+ },
+ {
+  "id": "L-EV-FAMILY-LAND",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the two events gates land on the integration branch",
+  "evidence": "lanes/L-EV-FAMILY-LAND/merge-receipt.md",
+  "exit": "the events gate lanes are merged into feature/restaurant-modules with EventsPublicProposalWriteGateTests.cs and EventsGuestOriginConfigurationWireTests.cs present on that branch, recorded in lanes/L-EV-FAMILY-LAND/merge-receipt.md",
+  "exit_paths": [
+   "feature/restaurant-modules",
+   "lanes/L-EV-FAMILY-LAND/merge-receipt.md"
+  ],
+  "matched": [
+   "lanes/L-EV-FAMILY-LAND/merge-receipt.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/lanes/L-EV-FAMILY-LAND/merge-receipt.md",
+  "verdict": "text",
+  "detail": "17087 bytes, first line: # L-EV-FAMILY-LAND - merge receipt"
+ },
+ {
+  "id": "L-EV-INQUIRY-REVIEW",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the public enquiry gate is read as a security surface",
+  "evidence": "docs/plan/reviews/L-EV-INQUIRY-REVIEW.md",
+  "exit": "a returned verdict on the enquiry gate, naming any request that still distinguishes a venue from a non-venue, and any path the gate does not cover, recorded at `docs/plan/reviews/L-EV-INQUIRY-REVIEW.md`",
+  "exit_paths": [
+   "docs/plan/reviews/L-EV-INQUIRY-REVIEW.md"
+  ],
+  "matched": [
+   "docs/plan/reviews/L-EV-INQUIRY-REVIEW.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/docs/plan/reviews/L-EV-INQUIRY-REVIEW.md",
+  "verdict": "text",
+  "detail": "6667 bytes, first line: # Fable review \u2014 L-EV-INQUIRY-GATE, read as a security surface (2026-08-02)"
+ },
+ {
+  "id": "L-EV-REVIEW",
+  "type": "Lane",
+  "state": "verified",
+  "title": "what stands between Events and a person walking it",
+  "evidence": "docs/plan/reviews/L-EV-REVIEW.md",
+  "exit": "a returned inventory naming, for every step of the Events journey, the code that serves it and the first step a person cannot complete, each with the file and line that decides it, recorded at `docs/plan/reviews/L-EV-REVIEW.md`",
+  "exit_paths": [
+   "docs/plan/reviews/L-EV-REVIEW.md"
+  ],
+  "matched": [
+   "docs/plan/reviews/L-EV-REVIEW.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/docs/plan/reviews/L-EV-REVIEW.md",
+  "verdict": "text",
+  "detail": "5682 bytes, first line: # Fable review \u2014 Events (L-EV-REVIEW, 2026-08-01)"
+ },
+ {
+  "id": "L-EV-RUNSHEET-PRINT",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the kitchen's sheet can actually be printed",
+  "evidence": "artifacts/journeys/events-runsheet-print.playwright.json",
+  "exit": "a browser print produces an artifact carrying the recorded dietary statement and no guest token URL, captured under artifacts/journeys/",
+  "exit_paths": [
+   "artifacts/journeys/"
+  ],
+  "matched": [
+   "artifacts/journeys/"
+  ],
+  "exact": false,
+  "absp": "/Users/svendaneel/okam/Web-modules/artifacts/journeys/events-runsheet-print.playwright.json",
+  "verdict": "pass",
+  "detail": "status='passed'; steps=12 failed=0"
+ },
+ {
+  "id": "L-EXIT-INSTRUMENT-SWEEP",
+  "type": "Lane",
+  "state": "verified",
+  "title": "every unverifiable exit is either given an instrument or recorded as unverifiable",
+  "evidence": "lanes/L-EXIT-INSTRUMENT-SWEEP/map.md",
+  "exit": "each built-unverified lane whose exit names no instrument is listed with the instrument it should name, or with the reason no instrument can exist, recorded at `lanes/L-EXIT-INSTRUMENT-SWEEP/map.md`",
+  "exit_paths": [
+   "lanes/L-EXIT-INSTRUMENT-SWEEP/map.md"
+  ],
+  "matched": [
+   "lanes/L-EXIT-INSTRUMENT-SWEEP/map.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/lanes/L-EXIT-INSTRUMENT-SWEEP/map.md",
+  "verdict": "text",
+  "detail": "28675 bytes, first line: # L-EXIT-INSTRUMENT-SWEEP \u2014 the instrument map"
+ },
+ {
+  "id": "L-FLAGS-RESOLVERS-REVIEW",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the four new resolvers are read against what they claim",
+  "evidence": "docs/plan/reviews/L-FLAGS-RESOLVERS-REVIEW.md",
+  "exit": "a returned verdict on the three effective-flag resolvers, naming any case where a reported value still disagrees with what the gate would answer, recorded at `docs/plan/reviews/L-FLAGS-RESOLVERS-REVIEW.md`",
+  "exit_paths": [
+   "docs/plan/reviews/L-FLAGS-RESOLVERS-REVIEW.md"
+  ],
+  "matched": [
+   "docs/plan/reviews/L-FLAGS-RESOLVERS-REVIEW.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/docs/plan/reviews/L-FLAGS-RESOLVERS-REVIEW.md",
+  "verdict": "text",
+  "detail": "5491 bytes, first line: # Fable review \u2014 L-FLAGS-EFFECTIVE-RESOLVERS (2026-08-02)"
+ },
+ {
+  "id": "L-FLAGS-UI-REVIEW",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the switchboard is read against what it actually reaches",
+  "evidence": "docs/plan/reviews/L-FLAGS-UI-REVIEW.md",
+  "exit": "a returned verdict on the flag switchboard naming, for every flag it offers, whether throwing that switch changes anything a person can observe, recorded at `docs/plan/reviews/L-FLAGS-UI-REVIEW.md`",
+  "exit_paths": [
+   "docs/plan/reviews/L-FLAGS-UI-REVIEW.md"
+  ],
+  "matched": [
+   "docs/plan/reviews/L-FLAGS-UI-REVIEW.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/docs/plan/reviews/L-FLAGS-UI-REVIEW.md",
+  "verdict": "text",
+  "detail": "6861 bytes, first line: # Fable review \u2014 L-WF-FLAGS-UI, the flag switchboard (2026-08-01)"
+ },
+ {
+  "id": "L-GR-CONFIRMED-REVIEW",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the fix for the not-sound verdict is read by a third party",
+  "evidence": "docs/plan/reviews/L-GR-CONFIRMED-REVIEW.md",
+  "exit": "a returned verdict on whether the \u00a7 15 path is now closed, naming any remaining route to an address the platform cannot prove belongs to the sender, recorded at `docs/plan/reviews/L-GR-CONFIRMED-REVIEW.md`",
+  "exit_paths": [
+   "docs/plan/reviews/L-GR-CONFIRMED-REVIEW.md"
+  ],
+  "matched": [
+   "docs/plan/reviews/L-GR-CONFIRMED-REVIEW.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/docs/plan/reviews/L-GR-CONFIRMED-REVIEW.md",
+  "verdict": "text",
+  "detail": "7192 bytes, first line: # Fable review \u2014 L-GR-CONFIRMED-EMAIL (2026-08-02)"
+ },
+ {
+  "id": "L-GR-DEADLINE-ONWIRE",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the article 12 deadline is the server's answer, not the page's arithmetic",
+  "evidence": "artifacts/journeys/growth-privacy-queue.playwright.json",
+  "exit": "the privacy request read carries the deadline the venue is held to, and the page renders it rather than deriving it, pinned by a wire test, captured at `artifacts/journeys/growth-privacy-queue.playwright.json`",
+  "exit_paths": [
+   "artifacts/journeys/growth-privacy-queue.playwright.json"
+  ],
+  "matched": [
+   "artifacts/journeys/growth-privacy-queue.playwright.json"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/artifacts/journeys/growth-privacy-queue.playwright.json",
+  "verdict": "pass",
+  "detail": "status='passed'; steps=16 failed=0"
+ },
+ {
+  "id": "L-GR-PRIVACY-REVIEW",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the article 12 surface is read by someone who did not build it",
+  "evidence": "docs/plan/reviews/L-GR-PRIVACY-REVIEW.md",
+  "exit": "a returned verdict on the privacy queue and the deadline, naming every place the statutory claim could be wrong and every claim the artifacts do not support, recorded at `docs/plan/reviews/L-GR-PRIVACY-REVIEW.md`",
+  "exit_paths": [
+   "docs/plan/reviews/L-GR-PRIVACY-REVIEW.md"
+  ],
+  "matched": [
+   "docs/plan/reviews/L-GR-PRIVACY-REVIEW.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/docs/plan/reviews/L-GR-PRIVACY-REVIEW.md",
+  "verdict": "text",
+  "detail": "8123 bytes, first line: # Fable review \u2014 L-GR-PRIVACY-VENUE + L-GR-DEADLINE-ONWIRE (2026-08-02)"
+ },
+ {
+  "id": "L-GR-PRIVACY-VENUE",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the venue can see the requests it is told it must answer",
+  "evidence": "artifacts/journeys/growth-privacy-queue.playwright.json",
+  "exit": "an erasure request filed by a guest appears on an admin list and is resolved from it, verified by opening the UI, captured at `artifacts/journeys/growth-privacy-queue.playwright.json`",
+  "exit_paths": [
+   "artifacts/journeys/growth-privacy-queue.playwright.json"
+  ],
+  "matched": [
+   "artifacts/journeys/growth-privacy-queue.playwright.json"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/artifacts/journeys/growth-privacy-queue.playwright.json",
+  "verdict": "pass",
+  "detail": "status='passed'; steps=16 failed=0"
+ },
+ {
+  "id": "L-GR-RATELIMIT-REVIEW",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the thresholds and the cache finding are read by a third party",
+  "evidence": "docs/plan/reviews/L-GR-RATELIMIT-REVIEW.md",
+  "exit": "a returned verdict on the rate limits, naming any path to a code or a send that no limiter covers, and whether the cache fix holds, recorded at `docs/plan/reviews/L-GR-RATELIMIT-REVIEW.md`",
+  "exit_paths": [
+   "docs/plan/reviews/L-GR-RATELIMIT-REVIEW.md"
+  ],
+  "matched": [
+   "docs/plan/reviews/L-GR-RATELIMIT-REVIEW.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/docs/plan/reviews/L-GR-RATELIMIT-REVIEW.md",
+  "verdict": "text",
+  "detail": "7115 bytes, first line: # Fable review \u2014 L-GR-TESTSEND-RATELIMIT (2026-08-02)"
+ },
+ {
+  "id": "L-GR-REVIEW",
+  "type": "Lane",
+  "state": "verified",
+  "title": "what stands between Growth and a person walking it",
+  "evidence": "docs/plan/reviews/L-GR-REVIEW.md",
+  "exit": "a returned inventory naming, for every step of the Growth journey, the code that serves it and the first step a person cannot complete, each with the file and line that decides it, recorded at `docs/plan/reviews/L-GR-REVIEW.md`",
+  "exit_paths": [
+   "docs/plan/reviews/L-GR-REVIEW.md"
+  ],
+  "matched": [
+   "docs/plan/reviews/L-GR-REVIEW.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/docs/plan/reviews/L-GR-REVIEW.md",
+  "verdict": "text",
+  "detail": "7658 bytes, first line: # Fable review \u2014 Growth (L-GR-REVIEW, 2026-08-01)"
+ },
+ {
+  "id": "L-GR-TESTSEND-REVIEW",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the marketing-law binding is read against what it actually stops",
+  "evidence": "docs/plan/reviews/L-GR-TESTSEND-REVIEW.md",
+  "exit": "a returned verdict on the test-send binding naming every path by which marketing content can still reach an address, and whether the pins can fail, recorded at `docs/plan/reviews/L-GR-TESTSEND-REVIEW.md`",
+  "exit_paths": [
+   "docs/plan/reviews/L-GR-TESTSEND-REVIEW.md"
+  ],
+  "matched": [
+   "docs/plan/reviews/L-GR-TESTSEND-REVIEW.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/docs/plan/reviews/L-GR-TESTSEND-REVIEW.md",
+  "verdict": "text",
+  "detail": "7996 bytes, first line: # Fable review \u2014 L-GR-TESTSEND-GUARD (2026-08-02)"
+ },
+ {
+  "id": "L-GROWTH-MAIL",
+  "type": "Lane",
+  "state": "verified",
+  "title": "a confirmation mail leaves the process",
+  "evidence": "artifacts/journeys/growth-doi-postmark-sandbox.json",
+  "exit": "fact:growth.mail.provider is present AND one double-opt-in confirmation is accepted by the ruled provider's sandbox, recorded under artifacts/journeys/",
+  "exit_paths": [
+   "artifacts/journeys/"
+  ],
+  "matched": [
+   "artifacts/journeys/"
+  ],
+  "exact": false,
+  "absp": "/Users/svendaneel/okam/Web-modules/artifacts/journeys/growth-doi-postmark-sandbox.json",
+  "verdict": "unknown",
+  "detail": "no status-ish key"
+ },
+ {
+  "id": "L-JOURNEY-COVERAGE-THREE",
+  "type": "Lane",
+  "state": "verified",
+  "title": "three modules have no browser journey at all",
+  "evidence": "artifacts/journeys/",
+  "exit": "Margin, Training and Growth each hold one journey walking their stated exit, captured under artifacts/journeys/",
+  "exit_paths": [
+   "artifacts/journeys/"
+  ],
+  "matched": [
+   "artifacts/journeys/"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/artifacts/journeys/",
+  "verdict": "dir",
+  "detail": "evidence is a DIRECTORY, no status of its own"
+ },
+ {
+  "id": "L-JOURNEY-EVENTS",
+  "type": "Lane",
+  "state": "verified",
+  "title": "a private booking runs from enquiry to settled statement",
+  "evidence": "artifacts/journeys/events-enquiry-to-settlement.playwright.json",
+  "exit": "artifacts/journeys/events-enquiry-to-settlement.playwright.json captures a completed walk from public enquiry through proposal acceptance to a settled statement, and reds when the module core flag is off",
+  "exit_paths": [
+   "artifacts/journeys/events-enquiry-to-settlement.playwright.json"
+  ],
+  "matched": [
+   "artifacts/journeys/events-enquiry-to-settlement.playwright.json"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/artifacts/journeys/events-enquiry-to-settlement.playwright.json",
+  "verdict": "pass",
+  "detail": "status='passed'; steps=23 failed=0"
+ },
+ {
+  "id": "L-JOURNEY-MARGIN",
+  "type": "Lane",
+  "state": "verified",
+  "title": "a venue costs a plate and freezes a week from the browser",
+  "evidence": "artifacts/journeys/margin-supplier-to-plate.playwright.json",
+  "exit": "artifacts/journeys/margin-supplier-to-plate.playwright.json and margin-week-freeze.playwright.json each capture a completed walk, and the freeze walk reds when the frozen week accepts an edit",
+  "exit_paths": [
+   "artifacts/journeys/margin-supplier-to-plate.playwright.json"
+  ],
+  "matched": [
+   "artifacts/journeys/margin-supplier-to-plate.playwright.json"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/artifacts/journeys/margin-supplier-to-plate.playwright.json",
+  "verdict": "pass",
+  "detail": "status='passed'; steps=13 failed=0"
+ },
+ {
+  "id": "L-JOURNEY-PROXY-BLINDSPOT",
+  "type": "Lane",
+  "state": "verified",
+  "title": "a subject fetched through the same-origin proxy stops reading as zero",
+  "evidence": "lanes/L-JOURNEY-PROXY-BLINDSPOT/guard-proof.txt",
+  "exit": "a journey whose client fetches its subject through the same-origin /okam-api proxy is judged rather than counted as zero, pinned by a new guard-proof arm that reds when the branch is disabled, recorded in lanes/L-JOURNEY-PROXY-BLINDSPOT/guard-proof.txt",
+  "exit_paths": [
+   "/okam-api",
+   "lanes/L-JOURNEY-PROXY-BLINDSPOT/guard-proof.txt"
+  ],
+  "matched": [
+   "lanes/L-JOURNEY-PROXY-BLINDSPOT/guard-proof.txt"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/lanes/L-JOURNEY-PROXY-BLINDSPOT/guard-proof.txt",
+  "verdict": "text",
+  "detail": "9249 bytes, first line: journey.js under test  58aa9db69b86575500011bc4c55c03aa66a4b507794d276535c56b5c177deaff"
+ },
+ {
+  "id": "L-JOURNEY-TEARDOWN",
+  "type": "Lane",
+  "state": "verified",
+  "title": "a journey that dies halfway stops poisoning the next run",
+  "evidence": "lanes/L-JOURNEY-TEARDOWN/mutation-log.md",
+  "exit": "every journey that pulls a module flag restores it from a teardown rather than a final step, and a run killed mid-walk leaves no flag lit, pinned by a test that reds if a restore moves back into the body, recorded in lanes/L-JOURNEY-TEARDOWN/mutation-log.md",
+  "exit_paths": [
+   "lanes/L-JOURNEY-TEARDOWN/mutation-log.md"
+  ],
+  "matched": [
+   "lanes/L-JOURNEY-TEARDOWN/mutation-log.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/lanes/L-JOURNEY-TEARDOWN/mutation-log.md",
+  "verdict": "text",
+  "detail": "14515 bytes, first line: # L-JOURNEY-TEARDOWN \u2014 mutation log"
+ },
+ {
+  "id": "L-LIVE-HARNESS-REVIEW",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the live-journey harness is read before more is built on it",
+  "evidence": "docs/plan/reviews/L-LIVE-HARNESS-REVIEW.md",
+  "exit": "a returned verdict on the live harness and both live journeys, naming every way a live-labelled artifact could still be produced without reaching a live backend, recorded at `docs/plan/reviews/L-LIVE-HARNESS-REVIEW.md`",
+  "exit_paths": [
+   "docs/plan/reviews/L-LIVE-HARNESS-REVIEW.md"
+  ],
+  "matched": [
+   "docs/plan/reviews/L-LIVE-HARNESS-REVIEW.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/docs/plan/reviews/L-LIVE-HARNESS-REVIEW.md",
+  "verdict": "text",
+  "detail": "7296 bytes, first line: # Fable review \u2014 the live-journey harness and its three journeys (2026-08-02)"
+ },
+ {
+  "id": "L-MEALS-FUNDED",
+  "type": "Lane",
+  "state": "verified",
+  "title": "a funded order can be placed at all",
+  "evidence": "artifacts/journeys/meals-funded-checkout.playwright.json",
+  "exit": "a company-funded order completes from the ConsumerWeb checkout, captured under a journey artifact this plan can read, captured at `artifacts/journeys/meals-funded-checkout.playwright.json`",
+  "exit_paths": [
+   "artifacts/journeys/meals-funded-checkout.playwright.json"
+  ],
+  "matched": [
+   "artifacts/journeys/meals-funded-checkout.playwright.json"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/artifacts/journeys/meals-funded-checkout.playwright.json",
+  "verdict": "pass",
+  "detail": "status='passed'; steps=5 failed=0"
+ },
+ {
+  "id": "L-MEALS-POSREL-LAND",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the pos-tender and quote-release wires land",
+  "evidence": "lanes/L-MEALS-POSREL-LAND/merge-receipt.md",
+  "exit": "the meals pos-tender and release lanes are merged into feature/restaurant-modules with MealsPosCreditTenderReachabilityTests.cs and MealsQuoteReleaseWireTests.cs present on that branch, recorded in lanes/L-MEALS-POSREL-LAND/merge-receipt.md",
+  "exit_paths": [
+   "feature/restaurant-modules",
+   "lanes/L-MEALS-POSREL-LAND/merge-receipt.md"
+  ],
+  "matched": [
+   "lanes/L-MEALS-POSREL-LAND/merge-receipt.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/lanes/L-MEALS-POSREL-LAND/merge-receipt.md",
+  "verdict": "text",
+  "detail": "11413 bytes, first line: # Merge receipt - L-MEALS-POSREL-LAND"
+ },
+ {
+  "id": "L-MEALS-RELEASE-CLUSTER-REVIEW",
+  "type": "Lane",
+  "state": "verified",
+  "title": "four lanes in one file, read together",
+  "evidence": "docs/plan/reviews/L-MEALS-RELEASE-CLUSTER-REVIEW.md",
+  "exit": "a returned verdict on the combined state of the Meals release path, naming any pin that a merge of all four lanes would leave unfalsifiable, recorded at `docs/plan/reviews/L-MEALS-RELEASE-CLUSTER-REVIEW.md`",
+  "exit_paths": [
+   "docs/plan/reviews/L-MEALS-RELEASE-CLUSTER-REVIEW.md"
+  ],
+  "matched": [
+   "docs/plan/reviews/L-MEALS-RELEASE-CLUSTER-REVIEW.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/docs/plan/reviews/L-MEALS-RELEASE-CLUSTER-REVIEW.md",
+  "verdict": "text",
+  "detail": "6493 bytes, first line: # Fable review \u2014 the four Meals release-path lanes, read together (2026-08-02)"
+ },
+ {
+  "id": "L-MEALS-REVIEW",
+  "type": "Lane",
+  "state": "verified",
+  "title": "what stands between Meals and a person walking it",
+  "evidence": "docs/plan/reviews/L-MEALS-REVIEW.md",
+  "exit": "a returned inventory naming, for every step of the Meals journey, the code that serves it and the first step a person cannot complete, each with the file and line that decides it, recorded at `docs/plan/reviews/L-MEALS-REVIEW.md`",
+  "exit_paths": [
+   "docs/plan/reviews/L-MEALS-REVIEW.md"
+  ],
+  "matched": [
+   "docs/plan/reviews/L-MEALS-REVIEW.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/docs/plan/reviews/L-MEALS-REVIEW.md",
+  "verdict": "text",
+  "detail": "8006 bytes, first line: # Fable review \u2014 Meals (L-MEALS-REVIEW, 2026-08-01)"
+ },
+ {
+  "id": "L-MEALS-STALE-TOKEN",
+  "type": "Lane",
+  "state": "verified",
+  "title": "a guest who edits their cart cannot pay against a stale reservation",
+  "evidence": "artifacts/journeys/meals-stale-token-requote.playwright.json",
+  "exit": "pressing pay inside the re-quote window re-quotes before completing, and an order refused at bind is not attributed to the store, captured under artifacts/journeys/",
+  "exit_paths": [
+   "artifacts/journeys/"
+  ],
+  "matched": [
+   "artifacts/journeys/"
+  ],
+  "exact": false,
+  "absp": "/Users/svendaneel/okam/Web-modules/artifacts/journeys/meals-stale-token-requote.playwright.json",
+  "verdict": "pass",
+  "detail": "status='passed'; steps=6 failed=0"
+ },
+ {
+  "id": "L-MEALS-SWEEP-REVIEW",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the concurrency guard is read against what it can actually prove",
+  "evidence": "docs/plan/reviews/L-MEALS-SWEEP-REVIEW.md",
+  "exit": "a returned verdict on the sweep guard naming every assertion that cannot fail at the tier it runs on, and what the SQL tier would have to show, recorded at `docs/plan/reviews/L-MEALS-SWEEP-REVIEW.md`",
+  "exit_paths": [
+   "docs/plan/reviews/L-MEALS-SWEEP-REVIEW.md"
+  ],
+  "matched": [
+   "docs/plan/reviews/L-MEALS-SWEEP-REVIEW.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/docs/plan/reviews/L-MEALS-SWEEP-REVIEW.md",
+  "verdict": "text",
+  "detail": "5872 bytes, first line: # Fable review \u2014 L-MEALS-SWEEP-GUARD (2026-08-02)"
+ },
+ {
+  "id": "L-MODAL-LAND",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the two modal branches land so their evidence exists here",
+  "evidence": "artifacts/journeys/modal-scroll-lock.playwright.json",
+  "exit": "artifacts/journeys/modal-scroll-lock.playwright.json and modal-estate-scroll-lock.playwright.json both exist on feature/restaurant-modules and the frontend suite is green at that tip",
+  "exit_paths": [
+   "artifacts/journeys/modal-scroll-lock.playwright.json",
+   "feature/restaurant-modules"
+  ],
+  "matched": [
+   "artifacts/journeys/modal-scroll-lock.playwright.json"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/artifacts/journeys/modal-scroll-lock.playwright.json",
+  "verdict": "pass",
+  "detail": "status='passed'; steps=8 failed=0"
+ },
+ {
+  "id": "L-MODAL-SCROLLLOCK",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the scroll lock behind every modal actually locks",
+  "evidence": "artifacts/journeys/modal-scroll-lock.playwright.json",
+  "exit": "opening a modal prevents the page behind it from scrolling, measured in a browser on the real login redirect flow and captured under artifacts/journeys/",
+  "exit_paths": [
+   "artifacts/journeys/"
+  ],
+  "matched": [
+   "artifacts/journeys/"
+  ],
+  "exact": false,
+  "absp": "/Users/svendaneel/okam/Web-modules/artifacts/journeys/modal-scroll-lock.playwright.json",
+  "verdict": "pass",
+  "detail": "status='passed'; steps=8 failed=0"
+ },
+ {
+  "id": "L-MONEYPATH-PAIR-REVIEW",
+  "type": "Lane",
+  "state": "verified",
+  "title": "two money-path lanes read by someone who did not write them",
+  "evidence": "docs/plan/reviews/L-MONEYPATH-PAIR-REVIEW.md",
+  "exit": "a returned verdict on the export-duplicate index and the renderer outage handling, naming any route still unguarded and any claim the artifacts do not support, recorded at `docs/plan/reviews/L-MONEYPATH-PAIR-REVIEW.md`",
+  "exit_paths": [
+   "docs/plan/reviews/L-MONEYPATH-PAIR-REVIEW.md"
+  ],
+  "matched": [
+   "docs/plan/reviews/L-MONEYPATH-PAIR-REVIEW.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/docs/plan/reviews/L-MONEYPATH-PAIR-REVIEW.md",
+  "verdict": "text",
+  "detail": "3643 bytes, first line: # Fable review \u2014 export-duplicate x renderer-outage, read as a pair (2026-08-02)"
+ },
+ {
+  "id": "L-MRG-REVIEW",
+  "type": "Lane",
+  "state": "verified",
+  "title": "what stands between Margin and a person walking it",
+  "evidence": "docs/plan/reviews/L-MRG-REVIEW.md",
+  "exit": "a returned inventory naming, for every step of the Margin journey, the code that serves it and the first step a person cannot complete, each with the file and line that decides it, recorded at `docs/plan/reviews/L-MRG-REVIEW.md`",
+  "exit_paths": [
+   "docs/plan/reviews/L-MRG-REVIEW.md"
+  ],
+  "matched": [
+   "docs/plan/reviews/L-MRG-REVIEW.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/docs/plan/reviews/L-MRG-REVIEW.md",
+  "verdict": "text",
+  "detail": "6194 bytes, first line: # Fable review \u2014 Margin (L-MRG-REVIEW, 2026-08-01)"
+ },
+ {
+  "id": "L-MRG-REVISE-LAND",
+  "type": "Lane",
+  "state": "verified",
+  "title": "a finished lane's work stops living only in a shared checkout",
+  "evidence": "lanes/L-MRG-REVISE-LAND/evidence.md",
+  "exit": "L-MRG-RECIPE-REVISE-UI's page, client and test work is committed on lane/mrg-recipe-revise-ui with that suite green at the tip, recorded in lanes/L-MRG-REVISE-LAND/evidence.md",
+  "exit_paths": [
+   "lane/mrg-recipe-revise-ui",
+   "lanes/L-MRG-REVISE-LAND/evidence.md"
+  ],
+  "matched": [
+   "lanes/L-MRG-REVISE-LAND/evidence.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/lanes/L-MRG-REVISE-LAND/evidence.md",
+  "verdict": "text",
+  "detail": "10066 bytes, first line: # L-MRG-REVISE-LAND \u2014 evidence"
+ },
+ {
+  "id": "L-MRG-WASTE-REVIEW",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the waste migration is read by someone who did not write it",
+  "evidence": "docs/plan/reviews/L-MRG-WASTE-REVIEW.md",
+  "exit": "a returned verdict on MIG-23, its trigger and its guard, naming every place the change could be wrong and every claim in its return that the artifacts do not support, recorded at `docs/plan/reviews/L-MRG-WASTE-REVIEW.md`",
+  "exit_paths": [
+   "docs/plan/reviews/L-MRG-WASTE-REVIEW.md"
+  ],
+  "matched": [
+   "docs/plan/reviews/L-MRG-WASTE-REVIEW.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/docs/plan/reviews/L-MRG-WASTE-REVIEW.md",
+  "verdict": "text",
+  "detail": "7669 bytes, first line: # Fable review \u2014 L-MRG-WASTE (2026-08-01)"
+ },
+ {
+  "id": "L-PDF-FAMILY-LAND",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the four stacked download lanes land as one tip",
+  "evidence": "lanes/L-PDF-FAMILY-LAND/merge-receipt.md",
+  "exit": "the pdf/download family is merged into feature/restaurant-modules with BrowserReadableHeaders.cs and the three download/pdf wire test files present on that branch, recorded in lanes/L-PDF-FAMILY-LAND/merge-receipt.md",
+  "exit_paths": [
+   "pdf/download",
+   "feature/restaurant-modules",
+   "download/pdf",
+   "lanes/L-PDF-FAMILY-LAND/merge-receipt.md"
+  ],
+  "matched": [
+   "lanes/L-PDF-FAMILY-LAND/merge-receipt.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/lanes/L-PDF-FAMILY-LAND/merge-receipt.md",
+  "verdict": "text",
+  "detail": "20616 bytes, first line: # L-PDF-FAMILY-LAND - merge receipt"
+ },
+ {
+  "id": "L-PRICE-REVIEW",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the money-display gate is read against everything that inherits it",
+  "evidence": "docs/plan/reviews/L-PRICE-REVIEW.md",
+  "exit": "a returned verdict on the absent-amount gate naming every render path that now behaves differently and every place absence can still print as a real amount, recorded at `docs/plan/reviews/L-PRICE-REVIEW.md`",
+  "exit_paths": [
+   "docs/plan/reviews/L-PRICE-REVIEW.md"
+  ],
+  "matched": [
+   "docs/plan/reviews/L-PRICE-REVIEW.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/docs/plan/reviews/L-PRICE-REVIEW.md",
+  "verdict": "text",
+  "detail": "5627 bytes, first line: # Fable review \u2014 L-PRICE-NULL-ZERO (2026-08-01)"
+ },
+ {
+  "id": "L-REPLAY-PINS-RECHECK",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the other two replay pins are checked for the hole Training found",
+  "evidence": "lanes/L-REPLAY-PINS-RECHECK/census.md",
+  "exit": "the Workforce and Meals same-key retry tests are shown to distinguish a replayed refusal from a re-decided one, or the gap is named per test with the world change that would close it, recorded in lanes/L-REPLAY-PINS-RECHECK/census.md",
+  "exit_paths": [
+   "lanes/L-REPLAY-PINS-RECHECK/census.md"
+  ],
+  "matched": [
+   "lanes/L-REPLAY-PINS-RECHECK/census.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/lanes/L-REPLAY-PINS-RECHECK/census.md",
+  "verdict": "text",
+  "detail": "17286 bytes, first line: # L-REPLAY-PINS-RECHECK \u2014 does each same-key retry pin distinguish a REPLAY from a RE-DECIDE?"
+ },
+ {
+  "id": "L-ROW-FIT-GOODS-GROUPS",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the fit rule's remaining count-bearing rows are pinned at width",
+  "evidence": "lanes/L-ROW-FIT-GOODS-GROUPS/mutation-log.md",
+  "exit": "every count-bearing printed row keeps its digits at the widths where the label must shorten, pinned by a width-swept test that reds if a trailing digit group becomes shortenable again, recorded in lanes/L-ROW-FIT-GOODS-GROUPS/mutation-log.md",
+  "exit_paths": [
+   "lanes/L-ROW-FIT-GOODS-GROUPS/mutation-log.md"
+  ],
+  "matched": [
+   "lanes/L-ROW-FIT-GOODS-GROUPS/mutation-log.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/lanes/L-ROW-FIT-GOODS-GROUPS/mutation-log.md",
+  "verdict": "text",
+  "detail": "14283 bytes, first line: # L-ROW-FIT-GOODS-GROUPS - mutation log"
+ },
+ {
+  "id": "L-TRAIN-REVIEW",
+  "type": "Lane",
+  "state": "verified",
+  "title": "what stands between Training and a person walking it",
+  "evidence": "docs/plan/reviews/L-TRAIN-REVIEW.md",
+  "exit": "a returned inventory naming, for every step of the Training journey, the code that serves it and the first step a person cannot complete, each with the file and line that decides it, recorded at `docs/plan/reviews/L-TRAIN-REVIEW.md`",
+  "exit_paths": [
+   "docs/plan/reviews/L-TRAIN-REVIEW.md"
+  ],
+  "matched": [
+   "docs/plan/reviews/L-TRAIN-REVIEW.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/docs/plan/reviews/L-TRAIN-REVIEW.md",
+  "verdict": "text",
+  "detail": "7588 bytes, first line: # Fable review \u2014 Training (L-TRAIN-REVIEW, 2026-08-01)"
+ },
+ {
+  "id": "L-UTLKVIT-REVIEW",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the statutory delivery receipt is read by someone who did not write it",
+  "evidence": "docs/plan/reviews/L-UTLKVIT-REVIEW.md",
+  "exit": "a returned verdict on the delivery receipt, its number series, its marking path and the no-migration claim, naming every place the change could be wrong and every claim the artifacts do not support, recorded at `docs/plan/reviews/L-UTLKVIT-REVIEW.md`",
+  "exit_paths": [
+   "docs/plan/reviews/L-UTLKVIT-REVIEW.md"
+  ],
+  "matched": [
+   "docs/plan/reviews/L-UTLKVIT-REVIEW.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/docs/plan/reviews/L-UTLKVIT-REVIEW.md",
+  "verdict": "text",
+  "detail": "6501 bytes, first line: # Fable review \u2014 L-MEALS-UTLKVIT, the \u00a7 2-8-7 delivery receipt (2026-08-01)"
+ },
+ {
+  "id": "L-WF-CONTACT-PINS",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the contact write's tenancy line and refill watcher are pinned",
+  "evidence": "lanes/L-WF-CONTACT-PINS/mutation-log.md",
+  "exit": "deleting the store predicate from the staff lookup, and deleting the draft-refill watcher, each red a test, and the audit value is pinned by shape rather than by two characters, recorded in lanes/L-WF-CONTACT-PINS/mutation-log.md",
+  "exit_paths": [
+   "lanes/L-WF-CONTACT-PINS/mutation-log.md"
+  ],
+  "matched": [
+   "lanes/L-WF-CONTACT-PINS/mutation-log.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/lanes/L-WF-CONTACT-PINS/mutation-log.md",
+  "verdict": "text",
+  "detail": "12656 bytes, first line: # L-WF-CONTACT-PINS \u2014 mutation log"
+ },
+ {
+  "id": "L-WF-CORRECTION-PINS",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the correction's own refusal cannot be defeated, and its audit stops lying",
+  "evidence": "lanes/L-WF-CORRECTION-PINS/mutation-log.md",
+  "exit": "the rowversion allowlist entries name whole methods rather than fragments, the stale-revision frontend test reds if the client resolves, the flag census probes the correction route, and a correction that moved neither time stops auditing a field it did not change, recorded in lanes/L-WF-CORRECTION-PINS/mutation-log.md",
+  "exit_paths": [
+   "lanes/L-WF-CORRECTION-PINS/mutation-log.md"
+  ],
+  "matched": [
+   "lanes/L-WF-CORRECTION-PINS/mutation-log.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/lanes/L-WF-CORRECTION-PINS/mutation-log.md",
+  "verdict": "text",
+  "detail": "9854 bytes, first line: # L-WF-CORRECTION-PINS - mutation log"
+ },
+ {
+  "id": "L-WF-FLAGS-UI",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the stage flags have a lever a person can pull",
+  "evidence": "artifacts/journeys/workforce-flag-lever.playwright.json",
+  "exit": "flipping the publication flag off in the browser turns the schedule page's publish into its typed refusal, and back on restores it, captured at `artifacts/journeys/workforce-flag-lever.playwright.json`",
+  "exit_paths": [
+   "artifacts/journeys/workforce-flag-lever.playwright.json"
+  ],
+  "matched": [
+   "artifacts/journeys/workforce-flag-lever.playwright.json"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/artifacts/journeys/workforce-flag-lever.playwright.json",
+  "verdict": "pass",
+  "detail": "status='passed'; steps=10 failed=0"
+ },
+ {
+  "id": "L-WF-PUSH-LAND",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the push delivery lane and its honesty fix land together",
+  "evidence": "lanes/L-WF-PUSH-LAND/merge-receipt.md",
+  "exit": "WorkforcePushNotificationDelivery is on feature/restaurant-modules with the registration probe and the withheld state, recorded in lanes/L-WF-PUSH-LAND/merge-receipt.md",
+  "exit_paths": [
+   "feature/restaurant-modules",
+   "lanes/L-WF-PUSH-LAND/merge-receipt.md"
+  ],
+  "matched": [
+   "lanes/L-WF-PUSH-LAND/merge-receipt.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/lanes/L-WF-PUSH-LAND/merge-receipt.md",
+  "verdict": "text",
+  "detail": "20741 bytes, first line: # L-WF-PUSH-LAND - merge receipt"
+ },
+ {
+  "id": "L-WF-REVIEW",
+  "type": "Lane",
+  "state": "verified",
+  "title": "what stands between Workforce and a person walking it",
+  "evidence": "docs/plan/reviews/L-WF-REVIEW.md",
+  "exit": "a returned inventory naming, for every step of the Workforce journey, the code that serves it and the first step a person cannot complete, each with the file and line that decides it, recorded at `docs/plan/reviews/L-WF-REVIEW.md`",
+  "exit_paths": [
+   "docs/plan/reviews/L-WF-REVIEW.md"
+  ],
+  "matched": [
+   "docs/plan/reviews/L-WF-REVIEW.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/docs/plan/reviews/L-WF-REVIEW.md",
+  "verdict": "text",
+  "detail": "7182 bytes, first line: # Fable review \u2014 Workforce (L-WF-REVIEW, 2026-08-01)"
+ },
+ {
+  "id": "L-WF-W5-REVIEW",
+  "type": "Lane",
+  "state": "verified",
+  "title": "the timesheet batch and its migration are read by someone who did not write them",
+  "evidence": "docs/plan/reviews/L-WF-W5-REVIEW.md",
+  "exit": "a returned verdict on the W5 tables, the export seam and MIG-24, naming every place the change could be wrong and every claim the artifacts do not support, recorded at `docs/plan/reviews/L-WF-W5-REVIEW.md`",
+  "exit_paths": [
+   "docs/plan/reviews/L-WF-W5-REVIEW.md"
+  ],
+  "matched": [
+   "docs/plan/reviews/L-WF-W5-REVIEW.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/docs/plan/reviews/L-WF-W5-REVIEW.md",
+  "verdict": "text",
+  "detail": "7289 bytes, first line: # Fable review \u2014 L-WF-W5-TIMESHEET (2026-08-02)"
+ },
+ {
+  "id": "L-XZ-SIGNED-COUNT",
+  "type": "Lane",
+  "state": "verified",
+  "title": "a negative goods-group count stops being restated as a smaller one",
+  "evidence": "lanes/L-XZ-SIGNED-COUNT/mutation-log.md",
+  "exit": "a goods-group row whose quantity is negative keeps its digits and its sign at the widths where the label must shorten, pinned by a world the existing sweep never sampled, recorded in lanes/L-XZ-SIGNED-COUNT/mutation-log.md",
+  "exit_paths": [
+   "lanes/L-XZ-SIGNED-COUNT/mutation-log.md"
+  ],
+  "matched": [
+   "lanes/L-XZ-SIGNED-COUNT/mutation-log.md"
+  ],
+  "exact": true,
+  "absp": "/Users/svendaneel/okam/Web-modules/lanes/L-XZ-SIGNED-COUNT/mutation-log.md",
+  "verdict": "text",
+  "detail": "11469 bytes, first line: # L-XZ-SIGNED-COUNT \u2014 mutation log"
+ }
+]

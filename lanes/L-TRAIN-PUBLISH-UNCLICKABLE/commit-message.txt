@@ -1,0 +1,49 @@
+Training: make the publish control reachable by a pointer at laptop widths
+
+The versions table's min-content width is 607px, and 635px once a published
+row carries a real content hash and a timestamp. `.trn-page__columns` is
+`repeat(auto-fit, minmax(420px, 1fr))`, so at 1280 each track is ~488px. A
+table box never shrinks below min-content, so the table escaped its track and
+its last cell -- the cell holding `version-publish` -- came to rest under the
+RIGHT-HAND column, which is painted later and therefore won the hit test.
+
+Measured in Chromium rather than reasoned about: an ordinary `.click()` on
+`[data-test="version-publish"]` timed out at 1024, 1280 and 1366, and at 1440
+too once a second version existed. `document.elementFromPoint` at the button's
+own centre returned the right-hand column's `<p class="trn-form__hint">`. The
+control was reachable by keyboard throughout, which is why this was not a total
+block -- and every suite that "published" did so by calling the handler, which
+is why nothing caught it.
+
+Fix: `.trn-table-scroll { overflow-x: auto }` and the wrapper on all seven
+Training tables, so the overflow is contained instead of escaping. Scrolling
+rather than wrapping the headers on purpose: wrapping fits today's labels and
+breaks on the next longer one, while this holds for any content width.
+
+Proven by A/B in a single browser run (the fix neutralised at runtime so both
+arms share a fixture and a page state): across five widths and two table
+states, eight of ten cells flip FAILS -> LANDS and the two that already landed
+still land, so the failure has not moved to 1024 or 1440. Real pointer clicks
+-- no `force`, no `dispatchEvent` -- published v1 and v2 at 1280.
+
+The same defect had `assignment-revoke` in it too: in the last column nothing
+painted over it, but it pushed a horizontal scrollbar onto the whole page at
+1024-1440. That is gone as well.
+
+The journey is updated to match. Step 9 filed a defect and is now a falsifiable
+guard: a trial click plus the invariant that the table paints inside its column.
+Its old check read `blocked = !!covering && ...`, so `elementFromPoint`
+returning NULL -- what an off-viewport control returns -- scored as CLEAR, and
+that is the reading it gave while the button was unreachable. Step 10 published
+via `dispatchEvent` and now uses an ordinary `.click()`: a dispatched click
+proves the handler, and passes with the button unbound or never rendered.
+
+Mutation-proved: with `overflow-x` back to `visible` the journey reds at step 9
+with "<p class=trn-form__hint> from <div class=trn-page__column> subtree
+intercepts pointer events" -- the diagnosed cause, verbatim.
+
+Residue, measured and not assumed: at 1024 and 1280 the button is reachable but
+needs a horizontal scroll of the table; from 1366 up the table fits and it sits
+in plain view. Narrowing the table so it fits 1280 unscrolled is a design call.
+
+Training jest 6 suites / 196 tests unchanged; journey passes with the real click.

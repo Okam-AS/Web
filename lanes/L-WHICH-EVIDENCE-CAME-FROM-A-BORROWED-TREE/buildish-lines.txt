@@ -1,0 +1,457 @@
+### L-ARM-RECEIPTS-RECAPTURE-1.md
+9:Both print journey.js 6dd043e1..., equal to git show 7030c00:test/e2e/support/journey.js | shasum -a 256.
+### L-ARTIFACT-FIELDS-VS-HARNESS-1.md
+6:spec_gap: Brief assumed one producer per field and a filename-defined artifact set; family A has two producers (9d4399a + dangling twin 097c3c9e) and 3 of 19 findings are in .json receipts not named *.playwright.json.
+12:test/e2e/support/artifact-store.js. `git cat-file -t fadc84a:test/e2e/support/artifact-store.js`
+20:but not named *.playwright.json. Census is shape-based, 2112 placements, two universes (sits-on and
+### L-ARTIFACT-NAMES-ITS-LOCALE-1.md
+9:New test/e2e/support/edition.js; journey.js records+guards; artifact-store.js keys on it; 3 tests in journey-artifact-store.test.js.
+11:runs/modal-scroll-lock.fixture.playwright.json = declared no/market no/locale no; runs/...fixture-ch... = declared ch/market ch/locale de/html de-CH.
+12:Distinguishable by NAME (key, screenshot folder, ledger columns) and by CONTENT; the ch run declines canonical and names the holder.
+13:Both halves: the NAME carries the declared edition (beginRun files a provisional under it before the browser opens), the CONTENT what the app resolved.
+### L-ARTIFACT-PROVENANCE-1.md
+8:Store: canonical artifacts/journeys/<name>.playwright.json keeps its path and shape (probes join there), plus runs/<name>.<backendKey>.playwright.json per backend and an append-only runs/ledger.jsonl.
+10:Backend identity, first hit wins: E2E_API_BUILD, else OKAM_API_REPO HEAD, else whoever holds the port (lsof -> cwd -> git rev-parse), else the API's swagger route surface. Null when nothing can say, never guessed, and the runner prints the one-line fix.
+11:A provisional "status":"running" record is written before the browser opens, and the /__fixture/stats fetch is guarded, so a killed run or a dead fixture can no longer leave its predecessor's pass reading as this run's result. Both wrong-world guards still write before they re-throw.
+12:Screenshots and the two printed PDFs moved to <name>/<backendKey>/ - the same defect one level down, since a fixture re-run used to overwrite the pixels a live artifact referenced.
+17:artifacts/ stays gitignored and I committed no artifact; the durable record is runs/ plus the ledger. Zero tracked-artifact churn after four browser runs; the two force-added modal files were left untouched and will now churn less.
+19:NEEDS the live-world.sh owners (script not edited, two SQL lanes are in it): export E2E_API_BUILD="OkamAPI@$(git -C "$OKAM_API_REPO" rev-parse HEAD)" and carry it into the run command the script prints. That makes every live artifact self-identifying without lsof.
+### L-ARTIFACT-RANK-KEY-1.md
+7:Measured the base first. Clause (a) ALREADY LANDED (533aea4; 18/18 green in this checkout). Clause (c) ALREADY TRUE: all three live journeys hold live passes with real steps and every referenced screenshot on disk, restored by other lanes' own re-runs on 08-02, not by me. Nothing fabricated, nothing re-run to manufacture a restoration. So I scoped to (b) plus the one hole in (a) the brief said landed today.
+13:Closed by preservation rather than refusal: the displaced record is kept whole at runs/<name>.<key>.superseded.playwright.json, named from the record that replaced it and from the ledger, and that file only ever moves up. The canonical still shows what is true now, and says in the same file where the stronger run is.
+14:NON-VACUITY, attempted for real in a browser: a fixture run of workforce-flag-lever against its standing live pass left the canonical BYTE-IDENTICAL (dbc424de) and filed itself as the loser naming live-5961-3579bbb.
+18:DISCLOSURE: the accepted half updated another lane's force-added artifact, so I committed it separately (5407589). It is identical to the record it replaced in every field that is evidence of anything - passed, 16/16 steps, 74 fixture responses, 7 screenshots, 6 findings, 3 capabilities - plus backendBuild.
+### L-BLOCKER-RESTATE-RECHECK-1.md
+10:and package.json declares exactly six e2e scripts, none a divergence run - verbatim as written.
+### L-BLOCKER-STALE-RERULE-1.md
+14:UNPROVEN -- F-FIXTURE-BEHIND-BACKEND: verdict was TRUE at 31fc45d (file untracked, exactly six e2e scripts), confirming the recheck's false->stale re-ruling. At the tip the check exists in the strong form (both sides derived live from source, refuses a committed snapshot by design, six-arm --prove). But it is in NO automatic gate and NO receipt records a run. Met on the mechanism, unrecorded in fact -- C5. Needs a person to run it.
+### L-BUILT-BUT-ON-NO-REF-1.md
+19:EXCLUDED AS EVIDENCE, STATED: lanes/** (950 of 1182 FE dirty pairs), docs/plan/** (untracked entirely bar refs/lanes/plan-snapshot), artifacts/** and .runout/** (gitignored by the repo's own rule) - ~40 journey JSONs and screenshots read as orphaned and are not.
+### L-COMPOSE-FE-CANDIDATE-1.md
+13:STOP REASON: browser journeys 21 passed / 8 failed vs 20/2 at the tip. 1 genuine regression (meals-admin-setup, passed at the tip), 6 new journeys failing on arrival incl. the SS 8-5-6 kodeoversikt (C6), 1 pre-existing.
+### L-COMPOSE-FE-CANDIDATE-2.md
+13:STOP REASON: browser journeys 21 passed / 8 failed vs 20/2 at the tip. 1 genuine regression (meals-admin-setup, passed at the tip), 6 new journeys failing on arrival incl. the SS 8-5-6 kodeoversikt (C6), 1 pre-existing.
+### L-COMPOSE-FE-CANDIDATE-3.md
+13:STOP REASON: browser journeys 26 passed / 3 failed against the candidate's OWN fixture — 1 genuine regression (meals-admin-setup), 1 arriving broken (meals-statement-month), 1 pre-existing @live.
+16:PROGRAM HAZARD: with ~80 worktrees on this box, any journey receipt taken without a private E2E_FIXTURE_PORT may have been served by a foreign fixture. Receipts should record the serving fixture's pid and cwd.
+### L-CONFIRM-ADMIN-SURFACE-1.md
+5:evidence: artifacts/journeys/account-email-confirm.playwright.json (passed, 14 steps, 4 shots) · commit 968869e
+14:THE BROWSER FOUND WHAT NO MOCKED TEST COULD: the shipped client posts to /user/confirm-email/
+17:Silent-failure notes split: browser half of both taken, server halves refused as outside a node
+58:through the browser, so it is not counted in `backendServed`, cannot reach `backendSample`, and never
+65:trusted. During the lane another lane modified `playwright.config.js`, `live-world.sh` and two
+78:walked this. The artifact and four screenshots record that a browser did; Sven's acceptance is the
+### L-CORE-ORE-LABEL-1.md
+4:evidence: lanes/L-CORE-ORE-LABEL/shots/before-confirmation-206-80-suffix.png · lanes/L-CORE-ORE-LABEL/shots/after-confirmation-206-80-no-suffix.png · lanes/L-CORE-ORE-LABEL/core-pins.txt · lanes/L-CORE-ORE-LABEL/red-run.txt · lanes/L-CORE-ORE-LABEL/browser-red-run.txt
+13:RED THEN GREEN, TWICE. Unit: test/core-price-label.test.js, 9 failed/5 passed on `Expected "206,80" / Received "206,80,–"` (red-run.txt), then 14/14. Browser: the Core fix was stashed for one run and Playwright resolved `<p data-testid="order-total">206,80,–</p>` 34 times against a real DOM (browser-red-run.txt), then 5/5 green.
+14:THE SCREENSHOT IS THE EVIDENCE. after-confirmation-206-80-no-suffix.png shows both halves of the rule in one image: Totalt **206,80** with no suffix, above line items **149,–** and **39,–** that keep it. artifacts/ is gitignored on purpose, so the shots are committed in the lane directory instead.
+19:The ConsumerWeb/core stash window was ~90s with no other Playwright run active; the stash was popped and verified before anything was committed.
+### L-CORS-FOLLOWUPS-1.md
+10:Applied to the MCP policy as well as the credentialed one so a future credentialed policy inherits it. Named consequence: the MCP inspector cannot drive a non-Development host from localhost; no non-Development settings file names such an origin today.
+19:Frontend left UNCOMMITTED by design: Web-modules is on feature/restaurant-modules, which this lane may not move, and it already carries another lane's dirty test/e2e/journeys/admin-refusal-worker.spec.js. Diff preserved at lanes/L-CORS-FOLLOWUPS/frontend-comments.diff.
+21:Residue, not fixed: test/e2e/journeys/growth-privacy-queue.spec.js:283-294 repeats the AllowAnyOrigin premise in a journey NOTE string; outside this lane's exit criteria, changes no result, left alone.
+### L-CORS-LAND-FOLLOWUPS-1.md
+14:the tip's BrowserReadableHeaders.All — a reviewer inspecting only conflicts would never have seen it.
+15:Ported to BrowserReadableHeaders.All (ServiceCollectionExtensions.cs:77) + doc para on why the set is
+### L-DECLARATIONS-THE-FRAMEWORK-IGNORES-1.md
+7:Denominator 317 .vue (components/pages/layouts, excl node_modules/.nuxt/coverage/artifacts), working tree of feature/restaurant-modules @ e34977a, 2026-08-05, 1450 dirty -uall. 317/317 covered.
+14:Method: enumerated the POPULATION of top-level option keys (313 parsed default exports, 22 distinct keys) and diffed against what the installed runtime consumes - exactly 3 unrecognised, the third being beforeRouteLeave which IS called (vue-router 3.6.5 extractGuards + .nuxt/router.js).
+20:Could not check: SSR paths, `instances` growth by direct inspection (module-private, proven by proxy), the 4 lane branches beyond ClockScreen, .nuxt/ generated components. No suite run; per C5 nothing here is "verified". Read only - no file edited, nothing committed, no container, no push.
+### L-DOWNLOAD-HEADERS-1.md
+5:evidence: OkamAPI-dlhdr 9207f480 (lane/download-headers, local, not pushed) · WebApi.Tests/Wire/DownloadHeaderWireTests.cs · WebApi.Tests/Wire/MealsDownloadHeaderWireTests.cs · Helpers/BrowserReadableHeaders.cs · lanes/L-DOWNLOAD-HEADERS/red.txt
+11:- FIX: one string set. `Helpers/BrowserReadableHeaders.cs` names ETag + Content-Disposition + X-Meals-Content-Hash; Program.cs and MealsStatementController now both read it, so the policy and the stamping site cannot drift again — which is exactly how they were out of step for the estate's whole history.
+### L-DUPLICATE-KEY-IN-THE-BUILD-1.md
+7:SILENT. Planted a second categories_create, ran the command that SHIPS - npm run generate, not nuxt build: exit 0, 212 routes, warning set byte-identical to the pristine baseline.
+13:INSTRUMENT: symlinked node_modules made webpack compile the SHARED checkout's components - caught only because one differed. Fixed with cp -Rc; it clobbered shared node_modules/.cache/nuxt.
+### L-EV-ACCEPT-RECEIPT-1.md
+46:  artifacts/journeys/ev-accept-receipt/acceptance-receipt.html in a browser — that is the document,
+### L-EV-DEPOSITS-PRECONDITION-1.md
+4:evidence: artifacts/journeys/events-deposit-precondition.playwright.json
+### L-EV-DIETARY-1.md
+26:- WHAT A PERSON STILL HAS TO WALK: the admin page lever is unit-tested only. test/e2e's
+27:  fixture api-server has no admin Events routes, so no browser capture exists for this walk
+### L-EV-FAMILY-LAND-1.md
+21:C5: no suite proves a capability. Two things need a person - a Core-OFF store must show a DEAD guest proposal link in a browser rather than a 500, and https://okam.no is now the committed guest origin while the pages it names are still not deployed there.
+### L-EV-JOURNEY-TIMEBOMB-1.md
+14:PROVEN IN A BROWSER on this lane's own fixture+dev server, reset suppressed so run 2
+33:literal. All of it kept. The killed run's dirty `test/e2e/support/journey.js`
+34:(`E2E_NO_RESET`) was read before being touched and is now committed with prose.
+49:| consecutive-run proof (both arms, 4 browser runs) | `lanes/L-EV-JOURNEY-TIMEBOMB/consecutive-run-proof.txt` |
+### L-EV-ONBOARD-PRINT-BLEED-1.md
+19:Green: playwright 6/6 incl. sibling; jest 98/2257; core/ intact; no shared fixture touched.
+### L-EV-RUNSHEET-PRINT-1.md
+5:evidence: artifacts/journeys/events-runsheet-print.playwright.json (10/10 steps passed) + artifacts/journeys/events-runsheet-print/run-sheet.pdf
+9:DIVERGED FROM THE BRIEF'S REFERENCE, deliberately: the personalliste's control and stylesheet shapes were copied, its GUARD was not. That guard is a class set imperatively on document.body, and L-MENU-ALLERGEN-MATRIX measured it wiped by vue-meta in a browser - the wfpl print path is inert today. Scoped CSS needs no class applied, cannot leak to another admin screen, and dies on unmount. It also touches no shared file, so it neither strips okam-ch nor collides with the layouts/default.vue string-vs-array merge decision.
+11:INSTRUMENT: browser journey measures the real cascade under emulated print media (not "the rule exists in the file"), then reads the produced PDF back with pdftotext - text AND geometry. It first asserts on SCREEN that the dietary sentence and a guest address are both present, so "no token on the sheet" cannot pass vacuously.
+12:CORRECTED MY OWN CLAIM: I added an unscoped :has()-guarded rule to flatten the shell's 264px sidebar gutter, then measured the produced A4 PDF and found it was never inset by it (leftmost text 63.0pt, inside the 14mm box). The gutter is an artifact of the viewport screenshot only. Removed the rule rather than ship an unscoped rule whose effect I could not observe. Zero unscoped rules ship.
+15:FLAG (shared files): test/e2e/fixture/world.js and api-server.js were edited concurrently by the feature-flags lane while I worked. My additions are additive and coexist (verified by require + a green journey), but my commit c1b4619 sweeps that lane's in-flight hunks in those two files along with mine.
+16:C5: acceptance is Sven's, not this suite's. To walk it: npm run test:e2e:headed, or open /admin/events-pipeline (99999999/AppSettings__DemoVerificationCode__REDACTED), select the event, press "Skriv ut kjøreplanen".
+### L-EV-STALE-CAUSE-1.md
+5:evidence: ../web-evstale/artifacts/journeys/events-stale-cause.playwright.json (6/6 steps, 3 PNGs, commit 2bc18da) + ../OkamAPI-modules worktree ../wt-evstale artifacts/lanes/L-EV-STALE-CAUSE/EVIDENCE.md
+25:  client reverted to the old shape → 15 fail; browser journey on the pre-lane wire → fails at the
+29:  on every file I touched; playwright 6/6 including both sibling journeys.
+### L-EXIT-INSTRUMENT-SWEEP-1.md
+11:fact:journeys.browser CAN NEVER VERIFY ANYTHING - exists-extractor, refused by _evidence_kind_ok. Same for acct.uidx, wf.idreg, train.checklists; be.tests and fe.tests are suite-kind. 7 of 34 probes are structurally inadmissible as verification.
+### L-FE-CI-1.md
+18:Untouched: translations/*.ts, playwright.config.js, every port. The e2e journeys are deliberately NOT in this job — this gate is Jest only, and wiring a browser job I could not run here is the failure mode this lane exists to stop.
+### L-FE-JOURNEYS-MERGE-1.md
+8:PORTED, NOT MERGED, deliberately. lane/fe-journeys is 3 ahead of a base 27 behind; its support/journey.js (-149), playwright.config.js, margin.js, training.js and two specs (-158/-200) are all OLDER. A merge would have offered to take the harness guards, the resolved-flag fixtures and COVERAGE-THREE's rewrites back out. Carried the 4 specs + fixture/meals.js + fixture/growth.js + world constants by hand instead.
+14:playwright.config.js: navigation 30s->90s, test 60s->120s. nuxt dev compiles a route on first request and holds it; a cold first navigation timed out with ZERO fixture traffic on /admin/margin-statements AND /subscribe/:store - it reads exactly like a dead page. Shared-file change, 2 knobs widened, no journey meaning altered.
+15:SUITE 18/18 green from an empty .nuxt (incl. all 14 pre-existing), jest 104/104 2370/2370. Ports 3077/4077, mine alone, both released. No container started or touched. support/ untouched.
+16:Method copied from L-MODAL-LAND: isolated detached worktree off the tip, then ff-only into the shared checkout. Diff vs 033d180 is exactly my 13 paths. A sibling's dirty test/e2e/scripts/live-world.sh was there before and after, untouched.
+18:C5: this is not acceptance. Nobody has walked these four in a browser by hand, and three of the four run only against the fixture.
+### L-FE-WF-INVITE-LIST-REVOKE-1.md
+18:The already-claimed 409 is driven as the real race (worker claims in a 2nd browser context, manager
+21:screen said two incompatible things; found by opening the screenshot, not by a selector.
+### L-FE-WF-ONBOARD-WALK-1.md
+5:evidence: commit 35440cf on feature/restaurant-modules (ff, no merge commit) - artifacts/journeys/workforce-invitation-onboarding.playwright.json + lanes/L-FE-WF-ONBOARD-WALK/{mutation-proof,run-1,run-2,run-final,suite-journeys,suite-journeys-2,suite-jest}.txt
+18:ARTIFACT COMMITTED, force-added past the artifacts/ ignore as the modal lanes did: 16/16 steps, 74 backend responses, 7 screenshots. It also records 5 browser errors as findings - 4x vue-router "Navigation cancelled" on the sign-in redirect, 1x a 404 resource - recorded, not asserted, because the flow completed. NOTE the prior lane's cited lanes/*.log evidence is NOT in the tree; *.log is gitignored, so mine are .txt.
+19:C5: this is a browser record, NOT acceptance. Nobody has walked this by hand, and it runs against the fixture, not a live world. Two foreign artifacts under artifacts/journeys/modal-* were dirtied by my suite runs and reverted, not committed. No container was started or touched. Ports 3081/3082/4081/4082, mine alone, all released.
+### L-FIXTURE-RENDERED-VALUES-FIX-1.md
+10:Predicted 0 reds from the edits - no jest test and no Playwright journey reads any of the five words - and got 0.
+### L-FLAGS-JOURNEY-SWEEP-1.md
+4:evidence: lanes/L-FLAGS-JOURNEY-SWEEP/census.md (all 12 journeys) · mutation-{a,b,c-a,c-b}.log · commit bb1bf0c · artifacts/journeys/*.playwright.json 12/12 passed
+11:HANDED ON: Events.Core does NOT gate the public accept/decline writes (state-changing, reachable with the flag off); the Meals catalog lever is inert on the consumer path; the fixture's effective for workforce.module diverges from the real resolver - left alone deliberately, it is the flag-lever lane's screenshot.
+### L-FLAGS-NOTE-FALSIFIABLE-1.md
+5:evidence: 7c9f172 · artifacts/journeys/workforce-flag-lever.playwright.json
+### L-GR-DEADLINE-LAND-1.md
+11:BLOCKED, exit half 2: the journey cannot run live, and three separate walls each stop it. (a) It carries the default @fixture tag, and `E2E_API_BASE_URL=... playwright test --list` selects 0 tests — live mode is DESIGNED to exclude it, per playwright.config.js's own header.
+17:FINDING 2. DateFormatHandling.MicrosoftDateFormat does NOT move a DateTimeOffset on this pipeline (measured, wire value unchanged); DateFormatString does. The /Date(...)/ shape a browser cannot parse is unreachable for this DTO.
+### L-GR-DEADLINE-ONWIRE-1.md
+5:evidence: artifacts/journeys/growth-privacy-queue.playwright.json (16 steps, 0 failed requests, 0 defects) · Web-modules 6b1412b · OkamAPI-modules lane/gr-deadline-onwire 86c0f9ae
+10:GrowthPrivacyRequestResponse (endpoints 7/21) deliberately NOT given the field — nothing reads a deadline off a resolution, and the e2e fixture projects endpoint 21 separately so it cannot drift into fidelity it does not have.
+16:Frontend mutations (each restored): deriving due from receivedAt reds 9 incl. the page's rendered date; re-sorting the open queue here reds 2; dropping dueAt from the fixture reds the JOURNEY at the on-screen deadline — which is what proves the browser step reads the wire and not the seed.
+19:HAZARD for the merger: a sibling lane modified test/e2e/fixture/consumer-api-server.js and test/feature-flags-page.test.js in the shared Web-modules checkout while this lane ran. Neither was staged or committed here; my suite runs saw them in the tree.
+### L-GR-EXIT-WIRE-THE-MAIL-1.md
+12:J-EXIT-UNSUB (journey growth-guest-unsubscribe) PASSED in Chromium; opens the captured link, done card "Du er meldt av", plus replay, token-dead and no-token legs. Artifact + 2 screenshots in the lane dir; token grepped for in artifacts/ and absent.
+15:Your second condition needed a real change, because @fixture/grepInvert does NOT cover it and I will not claim it does. It forbids SPENDING (this journey is skipped whenever E2E_API_BASE_URL is set) but regeneration happens in the BACKEND xUnit test, which Playwright config has no reach over.
+20:HAZARD, since you are recording it: Playwright reuseExistingServer silently borrowed two FOREIGN e2e fixtures (port 4010, and 4021 owned by a run in ~/okam/web-kodeui), both serving old code; the symptom was a 401 indistinguishable from a missing route. Killed nothing. Passing runs used CI=1 on ports verified free first.
+### L-GR-PRIVACY-VENUE-1.md
+4:evidence: artifacts/journeys/growth-privacy-queue.playwright.json
+18:OPEN: the guest's own filing is not browser-drivable (Program.cs AllowAnyOrigin vs the credentialed session cookie) — guest-surface
+20:SVEN: E2E_WEB_PORT=3081 E2E_FIXTURE_PORT=4081 npx playwright test test/e2e/journeys/growth-privacy-queue.spec.js --headed
+### L-GR-TESTSEND-ERRORCODE-1.md
+18:- CONCURRENCY: `test/e2e/fixture/world.js` **never modified** — absent from `git status` before and after, md5 `3aec7d2da10bedf583d9b8f606c44643` unchanged. No e2e run, no ports taken, no container started, nothing of another lane's touched. `git status` before and after carried the same 13 untracked lane dirs and `docs/plan/`.
+### L-GR-WITHDRAW-ORIGIN-1.md
+6:spec_gap: "a browser at the deployed preference-centre URL shows the session cookie attached on the preferences read, answering 200" — https://okam.no/preferences/communications answers 404. The Growth guest surface is unshipped: it exists only on feature/restaurant-modules and .github/workflows/nuxtjs.yml deploys main only. Closing it also needs a redeploy of the API's CORS policy, which is the reserved topology decision.
+11:  allow-credentials. Break 1 confirmed in a real browser, not inferred.
+16:  Browser harness on two genuinely different sites (localhost:3907 vs 127.0.0.1:4907), same-site
+### L-GR-WITHDRAW-ORIGIN-2.md
+10:NON-VACUITY: two reads built by ONE factory from one session - same route, same Origin, same CSRF header - differing in exactly one header. With the cookie 200, without it 401 growth.session_invalid. Both carry the CORS grant, which is why the refusal is READABLE by the page instead of discarded by the browser.
+### L-GROWTH-LAND-1.md
+11:unsub-oneclick is a TWIN of 4e2e3147, which is already an ancestor: 8 conflicts, all resolved to the branch, and the merged tree is byte-identical to its first parent — which is itself the proof nothing was dropped, since a three-way result equal to HEAD means every lane-side change was already present.
+### L-GROWTH-PREFCENTRE-1.md
+5:evidence: lanes/L-GROWTH-PREFCENTRE/growth-preference-withdrawal.playwright.json + shots/01-03.png; OkamAPI lane/growth-prefcentre 2a052800 (base feature/restaurant-modules 3579bbbc); Web-modules lane/fe-growth-prefcentre 59f5fab (base feature/restaurant-modules 35440cfb); backend container-free tier 4390 passed / 0 failed / 12 skipped / 4402 total
+7:reason: the exit names deployed origins and there are none. https://okam.no/preferences/communications answers 404 and /subscribe/confirm answers 404: .github/workflows/nuxtjs.yml deploys main ONLY, as a static Nuxt export to GitHub Pages, and the whole Growth guest surface exists only on feature/restaurant-modules. The API carrying the new CORS policy is equally undeployed. Both halves are owner deploy actions, not code, and no change inside this lane can put a browser in front of a working deployed preference centre.
+12:WHAT THE OTHER WOULD HAVE COST: D-PREF-ORIGIN's samesite-none half relaxes the cookie to None; Secure, giving up the browser's own cross-site protection permanently and leaving the double-submit CSRF token as the sole defence - to buy a property api-subdomain already provides for free. It would ALSO still need the same named CORS policy, so it is strictly more change and strictly less protection.
+17:NON-VACUITY, browser: ONE run flips the world mid-walk rather than asserting a good outcome in a world incapable of a bad one. Same page, same token, same fixture process. Against the wildcard grant the deployed API answers today the session never opens and Chrome's own words are captured verbatim in the artifact: "The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'." Then the grant is switched to named and the SAME unspent link completes the withdrawal: PUT .../Email/Newsletter -> 200 consented=false suppressed=true, screenshot 03 shows "Sperret - vi sender ikke til deg".
+18:THE COOKIE-ACCEPTED CLAIM HAS ITS REJECTION ONE LINE AWAY, as required: byte-identical reads from the same page differing only in whether the browser may attach the cookie answer credentials:include -> 200 and credentials:omit -> 401. Without it the 200 is compatible with an endpoint that authorises nobody.
+19:WHAT THE BROWSER EVIDENCE DOES NOT COVER, said plainly. The fixture REPLICATES the API's CORS and cookie contract; it is not the API. The wire tier binds the real API but is not a browser. Together they cover the claim; neither does alone. And fixture mode runs page and API both on 127.0.0.1, which is SAME-SITE, so this capture cannot discriminate the SameSite half - that half rests on the api.okam.no move plus the Public Suffix List, both checked by hand (dig: api.okam.no is a CNAME to okamapi.azurewebsites.net, same IP 40.118.102.46, /health 200, certificate valid).
+22:GOTCHA FOR WHOEVER ADDS A STAGING ORIGIN: .NET config arrays merge BY INDEX, not by append. Growth:GuestOrigins in appsettings.Development.json shadows appsettings.json entry-for-entry rather than adding to it. Harmless today (production never loads the Development file, and localhost must never reach production anyway) but it will silently drop an origin the first time someone layers a second file.
+### L-GUARD-REPAIR-LANDS-1.md
+19:No third copying harness: copyFileSync/cpSync across test/e2e/scripts + scripts = 2 sites, both harness-copy callers.
+### L-IDENTITY-STUB-TESTS-1.md
+8:Population derived, not inherited: 128 non-e2e jest files, 60 exercise $i.
+13:no e2e journey drives de or en, and de IS the CH build (nuxt.config.js:147) — no DOM guard.
+15:settlements + reward-members: 179 keys, 0 sentence assertions in jest AND 0 in e2e. Live
+### L-INVOICE-AUTHORIZE-LAND-1.md
+21:- HYGIENE: ref moved ONLY by compare-and-swap (update-ref with old value 5df07afa, accepted, so nothing moved under me); never branch -f, never reset. ev-dietary run-sheet.{json,md} dirtied by each tier run and restored with git checkout --, never committed. Staged by pathspec only. Local, NOTHING PUSHED - the branch has no remote ref. No container started or touched, no SQL tier, no migration. C5 unmet: these routes have no admin-surface caller to walk and the branch has no browser-level framework.
+### L-JEST-COLLECTS-LANES-1.md
+6:spec_gap: brief says the lanes/ files are committed Playwright specs; 2 of 5 are in no commit on any ref, and one is a runnable jest COPY of a live test that passes rather than fails, so a spec-only pattern would have missed it
+10:Premise confirmed: 5 failed suites / 0 failed tests, every one require('@playwright/test') evaluated outside a runner.
+14:Fix is one entry, '<rootDir>/lanes/', beside the test/e2e/ entry that exists for the identical reason. Nothing deleted; probes still run by npm run test:e2e.
+### L-JOURNEY-ARTIFACTS-UNWITNESSED-1.md
+17:resolved health+lsof to this worktree's own pid/cwd, no foreign fixture (runs/rerun-*.playwright.json).
+### L-JOURNEY-COVERAGE-THREE-1.md
+5:evidence: artifacts/journeys/{margin-recipe-to-margin,training-course-to-evidence,growth-newsletter-send-gate}.playwright.json + 14 shots; commit 174a550
+### L-JOURNEY-EVENTS-1.md
+5:evidence: artifacts/journeys/events-enquiry-to-settlement.playwright.json (passed, fixture, commit a1a1ec84e, 23/23 steps, 6 screenshots, 95 backend responses)
+12:FIXTURE: new test/e2e/fixture/events.js owns every /events route, public and admin. They moved out of api-server.js because the gate on the public writes needs the admin half's knowledge of which venue a token belongs to; two enforcement points is one missing eventually.
+### L-JOURNEY-GROWTH-1.md
+5:evidence: artifacts/journeys/growth-guest-lifecycle.playwright.json, artifacts/journeys/growth-testsend-refusal.playwright.json
+### L-JOURNEY-GUARD-FAIL-1.md
+5:evidence: test/e2e/scripts/guard-proof.js @ 31fc45d
+12:Built test/e2e/scripts/guard-proof.js - a proof, not an assertion, since an assertion cannot observe its own
+13:runner's exit code and the exit code is what lied. It drives real playwright children and reads their exit
+### L-JOURNEY-MARGIN-1.md
+5:evidence: artifacts/journeys/margin-week-freeze.playwright.json, artifacts/journeys/margin-supplier-to-plate.playwright.json, lanes/L-JOURNEY-MARGIN/NOTES.md
+8:ARM 1: open week takes the spend save and the server's own actual moves kr 0,00 -> kr 14 000,00. A second page in the same context then finalises it, which leaves tab one stale with its editor still drawn - the only honest way a browser reaches a control the product means to remove.
+9:ARM 2: same page, same button, PUT /inputs -> 400 uncoded, the server quoted whole, and the request is checked to have LEFT the browser so no client-side guard could pass the arm. Reload: 1 line, kr 14 000,00, the refused kr 9 000,00 nowhere. ARM 3: the correction takes the same amount. One variable.
+15:Observed, not fixed: test/e2e/fixture/margin.js carries no anchors, so fixture-divergence says nothing about Margin; its 22 findings are all pre-existing growth/meals. Default OKAM_API_REPO is on feature/swiss and has no Margin module.
+### L-JOURNEY-MEALS-1.md
+22:E2E_FIXTURE_PORT where four siblings get it right; mine reddened it, superseded copy kept, restored on 4010.
+### L-JOURNEY-PORT-HARDCODED-1.md
+7:spec:72 hardcoded 127.0.0.1:4010 and ignored E2E_FIXTURE_PORT; now the sibling expression.
+### L-JOURNEY-PROXY-BLINDSPOT-1.md
+3:brief: e2e104fd
+### L-JOURNEY-REGRESSION-BISECT-1.md
+21:3777/4777, core pre-populated, .nuxt cleared per step, shared node_modules/.cache untouched.
+### L-JOURNEY-TEARDOWN-1.md
+7:KILLED ONE FOR REAL -- SIGKILL to the process group mid-walk, real browser:
+17:all 25 static tests. Trusting the green suite would have broken the whole e2e tree. PIN 29
+47:- **`test/e2e/support/levers.js`** (new) — the ledger. Fed from the recorder's existing
+52:- **`test/e2e/support/journey.js`** — lease opened before the walk; release in a `finally`
+55:- **`test/e2e/fixture/api-server.js`** — the lease. Outside `state`, cleared on reset, fed
+57:- **`test/e2e/scripts/global-teardown.js`** — names what was left up.
+73:### Why the browser proof was not a formality
+81:Had this shipped on its green static suite, every `npm run test:e2e` in the repo would have
+87:`:4973` fixture and `:3973` dev server, both started by this lane out of
+93:from the primary checkout) rather than a borrowed one. Playwright's `globalTeardown` calls
+95:externally-started dev server and left it compiling against an empty directory — the first
+### L-JOURNEY-TRAINING-1.md
+11:HALF B, log: frontend complete (GetDisclosures, disclosure.js, TrainingDisclosurePanel mounted on training-courses.vue:96 and workforce-me.vue:364, no.ts keys, 2 jest suites) - and 06b8b582 is on lane/train-disclosure ONLY. branch --contains says so; is-ancestor of feature/restaurant-modules says NO; git grep finds no route on that branch. The shipped panel 404s against the integration backend. L-TRAIN-DISCLOSURE said it itself: "NOT ACCEPTED under C5: nobody has walked this in a browser."
+13:I DID NOT ADD FIXTURE #17 AND WALK IT. That would have been green. A fixture is a claim about a backend; claiming the integration branch serves a route it does not have makes the browser pass where the real click 404s - the exact defect refusal-shapes.js exists to end. Being ahead on three refusal shapes on anchored routes is not a licence to invent a route. Fixture #16 alone would be honest and useless: nothing in the browser clicks it, and the exit still needs #17.
+15:Did not mass re-run other journeys. Read training-course-to-evidence.playwright.json without re-running it: 19 steps, passed, backend fixture. Its step 8 "THE STATED EXIT CANNOT BE WALKED" is about the QUIZ, a different absent surface; the sibling sweep was accurate and is not this lane's blocker.
+16:Grounded the brief's guard claim rather than repeating it: npm run test:e2e:guard-proof, all 7 arms held.
+### L-JOURNEY-WORKFORCE-1.md
+9:BOTH WALKS WERE IMPOSSIBLE BEFORE, and not for want of trying: `/workforce/me/inbox` hard-returned `{items:[]}` in every fixture run ever made, and `/attendance` was a 3-line stub returning `rows:[]`. So #35, #44, the punch list and the correction had NO browser-reachable caller. The fixture now derives both from the acts that produce them (publish → inbox item; seeded punches → sessions), mirroring how #33 already derived the worker's shifts.
+14:C1 asserted over the re-read: after the correction the punch window is character-for-character what it was, and the correction stands beside it as its own row. C4: the fixture resolves the actor server-side and the request body carries none. C5: this is a browser record against the throwaway fixture, NOT acceptance — nobody has walked it by hand.
+15:week-run DOES NOT need the port: measured green with the port reverted (week-run-without-port.playwright.json), so it is portable to the integration branch as it stands.
+17:COMMITTED: specs, fixture, lane evidence and BOTH artifacts on lane/journey-workforce @ eb8f412. UNCOMMITTED: the copies at artifacts/journeys/workforce-{week-run,punch-correction}.playwright.json in the shared checkout — `artifacts/` is gitignored, so those exist on disk only and a later clean loses them.
+### L-LINT-RUNNABLE-1.md
+21:A FOURTH DEAD LEVER THE BRIEF DID NOT NAME: @nuxtjs/eslint-module is a declared devDependency and is NOT in buildModules, while its sibling @nuxtjs/stylelint-module IS (nuxt.config.js:221). stylelint runs on every `npm run dev` and `npm run build`; eslint does not. lint-staged configures both and only one is reachable - evidence the eslint wiring was dropped rather than never intended, and a fifth option for the gate decision (not free: it lints on every rebuild, which is why it is named and not done).
+### L-LIVE-ASSERTION-FLOORS-1.md
+16:which is also the demonstration that both floors accepted it before today. eslint clean on all 7 files; playwright --list collects 22/22.
+### L-LIVE-BUILD-EXPORT-1.md
+5:evidence: lanes/L-LIVE-BUILD-EXPORT/evidence.md (commit 94fa256, 6 files by pathspec) + lanes/L-LIVE-BUILD-EXPORT/journey-artifacts/arm-1.provenance-probe.playwright.json
+7:NOT already done. The mechanism half existed (E2E_API_BUILD, exported by live-world.sh); the exit did not. Of the three live artifacts on the branch, two carry backendBuild null and the third named its build via process:127.0.0.1:5961 -- lsof on the port, the source the exit rules out.
+8:BUILT test/e2e/support/world-stamp.js: live-world.sh, once the world it built answers /health, writes artifacts/world/live/<host>-<port>.json naming the checkout AND the process it started. resolveBackendBuild reads it first; the declared/checkout/port/swagger sources follow unchanged.
+10:When E2E_API_BUILD disagrees, the stamp wins and backendBuild.detail records the declaration it overrode -- the stale-copied-command case, which is the F-PROBE-ROOT-WRONG-WORLD shape.
+11:THE ARTIFACT: test/e2e/scripts/build-provenance-proof.js drives a real Chromium against the real journey.js/artifact-store.js/world-stamp.js (sha256 printed) in a throwaway tree. 5/5 arms, exit 0, every artifact backend=live status=passed.
+16:PROBE, if this ends in one: PROBE live.build.source file artifacts/journeys/workforce-flag-lever.playwright.json json:$.backendBuild.source -- extractor json:, never exists. Today it reads process:127.0.0.1:5961 and must read stamp:... for a world stood up after this.
+### L-LIVE-SEED-VIA-PRODUCT-1.md
+5:evidence: test/e2e/scripts/live-world.sh (Web-modules feature/restaurant-modules, local commit) - three live artifacts under lanes/L-LIVE-SEED-VIA-PRODUCT/ all "backend":"live" "apiBaseUrl":"http://127.0.0.1:5956" (workforce-schedule-publish backendServed=48, workforce-flag-lever=80, events-deposit-precondition=12) - seed receipt lanes/L-LIVE-SEED-VIA-PRODUCT/live-world-run.txt (127 migrations, 211 tables, 25 append-only triggers, from EMPTY)
+16:ONE RED WAS INFRASTRUCTURE AND I PROVED IT RATHER THAN RETRYING PAST IT: flag-lever failed once with `ENOENT .nuxt/views/app.template.html` in the page snapshot - a second lane running `npx playwright test` from this same checkout, so two `nuxt dev` processes were writing one shared `.nuxt/`. Their dev server was live on :3961 throughout. dev-server.js also borrows and RELEASES the `core/` gitlink on exit, which is the same shared-state hazard one step worse. Neither is mine to fix, but concurrent journey runs in one checkout are not safe today.
+17:THE CANONICAL-ARTIFACT BLOCKER IS REAL AND I HIT IT: artifacts/journeys/workforce-flag-lever.playwright.json held a FAILED run at apiBaseUrl :5961 that was never mine. Every artifact I cite was copied into my lane directory in the same command as its run and re-read for its apiBaseUrl; nothing in artifacts/ is offered as evidence. (artifacts/ is gitignored, so there was no journey-artifact churn to revert.)
+18:CONSTRAINTS: C1 - the sys.triggers guard now protects the 3 tables still INSERTed into and no longer names two it does not write; C2 - no migration authored, the existing 127 re-applied from empty on every rebuild; C4 - no money-path row is INSERTed and the rate is still a PUT under the manager's bearer; the localhost check still runs on the resolved connection string before anything is created; C7 - no credential added, the SA password is still redacted in every printed path.
+21:Committed by pathspec (live-world.sh + my lane directory only). Another lane's WIP in test/e2e/support/journey.js and its three new untracked files were left exactly as found. Nothing pushed.
+### L-LIVE-WORLD-ADMINCRED-1.md
+5:evidence: test/e2e/journeys/admin-refusal-worker.spec.js section THE CREDENTIAL, committed at lane/fe-admin-refusal-credential @ 478ced7 (worktree ~/okam/web-admincred, off 22f2108, NOT pushed) and left identical in the shared Web-modules tree; detail lanes/L-LIVE-WORLD-ADMINCRED/CREDENTIAL.md; fixture run artifacts/journeys/admin-refusal-worker.playwright.json is gitignored and does not survive a clone, so the tracked spec is the record
+14:Journey made live-runnable: E2E_WORKER_PHONE/E2E_WORKER_CODE; @fixture comes off ONLY when supplied, so live selection is byte-for-byte unchanged until a world exists; the number stays out of the artifact.
+16:Non-vacuity proven both ways: mutated toBe(1) -> red Expected 1 Received 0; and E2E_WORKER_PHONE=99999999 reds in step 1 at /admin?storeId=42, which is what a store admin's shell does.
+20:NEXT LANE: stand a world with a slot, restart its API with AppSettings__AdminUserPhoneNumber (live-world.sh does not pass it through - that is the one line), then run with E2E_WORKER_PHONE set.
+### L-LIVE-WORLD-BANNER-1.md
+12:THE PIN: test/e2e/scripts/live-world-banner-check.js, npm run test:e2e:live-world-banner, 8/8. Not a keyword grep. Regions are found STRUCTURALLY (leading comment block; last heredoc), and the verbs and variables it enforces are PARSED out of live-world-reset.sh at run time rather than frozen in the check.
+### L-LIVE-WORLD-DISCOVER-1.md
+5:evidence: lanes/L-LIVE-WORLD-DISCOVER/ (green-fixture.playwright.json, mutant-proof.txt, mutant-A..D.txt, run-1..4-fixture*.txt) at commit 5a08fc7 - TRACKED, not artifacts/, so it survives a clone
+12:DISCOVERY CANNOT FALL BACK, AND THAT IS PROVED BY MUTATION - 4 of 4 red, playwright exit 1: (A) the lever unpulled, so the world makes no booking at all; (B) the handover line removed at the moment the token is read, which is the guard itself - "DISCOVERY CAME UP EMPTY: the guest address on the venue's handover line", named in the artifact's error; (C) one venue figure corrupted before the comparison; (D) the displayed hash swapped for another hash-shaped string. The clean file ran green four times, twice after the mutants. No flake seen.
+13:ONE CLAIM LOST, FILED RATHER THAN FAKED: version 2. The e2e fixture refuses a second proposal version once an event is ProposalSent, so no walk can build the two-version world that "the token answers with the version it was MINTED for" needs. It is a journey finding now, not a literal.
+16:privacy queue: rewritable today (its ids can be discovered by rendered role), but it can NEVER run live on a rewrite alone - the guest-side filing is CORS-blocked (F-PREF-UNREACHABLE), so no browser walk can create a privacy request, and live needs SQL seeding permanently.
+17:both run-sheet journeys: /admin/events-pipeline HAS a GenerateRunSheet control, but the e2e fixture holds no run-sheet generation route (a living event's /run-sheet answers 404 and only the standing seeded event has one). So a discovering rewrite of these two cannot be proven in fixture mode at all: it needs fixture work, which is another lane's file, or a live world first.
+19:HOW IT WAS RUN: my own detached worktree with its own .nuxt, cloned node_modules and copied core, because three dev servers already share the primary checkout (F-DEV-SERVERS-SHARE-BUILD) and two are serving worlds held for a walk. Worktree removed afterwards. One spec only - no suite re-run, and the known-red newsletter journey was not touched.
+20:NOTHING SENSITIVE COMMITTED: the artifact records the guest's reference and the proposal token by SHAPE, never bytes; I re-scanned every evidence file for GUIDs and /events/proposal links before committing and found none. Screenshots were deliberately NOT committed - the venue's screen carries the handover token by design.
+### L-LIVE-WORLD-RESET-1.md
+6:spec_gap: The brief rests on "live mode has no reset", contradicted by test/e2e/scripts/live-world-reset.sh (385 lines, landed 337f9bf, an ancestor of HEAD 4b5c5c2, unchanged since, clean in the tree); and the exit is word-for-word the exit of L-LIVE-WORLD-RESTORE (plan 4831, built-unverified, class sql pts 2), which met it on 2026-08-02.
+12:THE RESIDUAL DEFECT, AND IT IS WHY I EXIST. The reset has 9 references outside itself (playwright.config.js, both workforce spec headers, journey-assertions.js) but NONE from test/e2e/scripts/live-world.sh - the script an operator runs. Its header (111-113) and closing banner (710-720, the last text on the terminal) still print "a live world has no such thing", "incompatible, and each needs its own world", and a recipe calling live-world.sh TWICE: two full rebuilds for a pair a 9s restore now separates. It also still blames the week.
+### L-LIVE-WORLD-RESTORE-1.md
+10:THE RESET CAN FAIL, shown two ways. Journey B green on a restored world (Revisjon 1); journey A straight after with NO reset REDS on the override B left behind ("Expected: Av / Received: Pa"), playwright exit 1; restore; A green. And `verify` run against the used world reds ("carries 1 schedule revision") while greening on the restored one.
+14:WHY IT BROKE, and it is not mine: THREE `nuxt dev` watchers run out of this one checkout (pids 6601, 39821, 85915) sharing .nuxt/. A sibling recompile deleted .nuxt/views/app.template.html under my server and webpack cached the failure until I restarted it. Cost two whole chain runs.
+17:C2: no migration authored. Localhost asserted on the resolved target before any restore, plus a deployed-name refusal.
+### L-LIVE-WORLD-SEED-1.md
+5:evidence: Web-modules feature/restaurant-modules @ 9a5900a (local, not pushed) · artifact lanes/L-LIVE-WORLD-SEED/events-deposit-precondition.live.playwright.json = {"backend":"live","apiBaseUrl":"http://127.0.0.1:5951","backendProbe":{"status":200,"body":"Healthy"},"backendServed":12} · seed receipt lanes/L-LIVE-WORLD-SEED/live-world-run.txt (127 migrations, 211 tables, 25 append-only triggers, from EMPTY)
+9:THE PATH IS PROVEN END TO END: own SQL container (okam-lws-sql, :15433), empty catalog, whole chain from empty, real WebApi on :5951, real browser on :3951, 1 passed. The browser's own PUT/DELETE hit the real database — API log shows `INSERT INTO [StoreFeatureFlags] (… UpdatedByReference)` then `DELETE`, and the table is back to 0 rows, so the journey is re-runnable.
+10:C4 HELD BY ROUTING, NOT BY CLAIM. The seed writes NO money-path row and NO flag override. The only flag writes are made by the BROWSER under the manager's own bearer, so the row carries a resolved actor; a seeded flag state would also have been seeding the journey's own subject.
+11:C1 CHECKED AGAINST sys.triggers, NOT THE DIFF. The script refuses to run if Stores or StoreAdmins ever carries a guard. C2: no migration authored; the chain is applied, and re-applied from empty on every run. Localhost asserted on the resolved connection string before anything is created.
+13:AND THE GUARD NOW THROWS — THE BRIEF'S OWN TRAP, FOUND BY RUNNING IT. I reproduced the dangerous case for real (dev server compiled against the fixture, live label pointed at :5951): the journey PASSED, the artifact wrote `"status":"failed"`, and Playwright printed `1 passed` and exited 0. The pre-existing fixture-side guard had the same hole. Both now re-throw AFTER writing the artifact. Both mutations re-run red.
+16:THE SEAM, for the next journey: extend step 5 of test/e2e/scripts/live-world.sh, flip `tag: ['@live']` in journeyDetails, done — the plumbing, the guard and the artifact contract are already paid for.
+20:NOT ACCEPTANCE (C5). A browser walked it and the artifact names the backend it reached, but no person has. The world is LEFT UP for exactly that: API pid on :5951, container okam-lws-sql — both mine, nobody else's to keep or kill. Sven's walk is the gate.
+### L-LIVE-WORLD-STAFF-1.md
+8:GUARD CONFIRMED FIXED FIRST (journey.js:410 re-throws after writing), THEN REPRODUCED: browser driven at :5952 while the run DECLARED :5951 (healthy, not the fixture) -> all six steps passed, artifact "failed", playwright exited 1. Artifact kept as guard-proof-*.failed.json.
+13:FINDING NOT IN THE BRIEF: the two journeys cannot share one live world. Each creates AND publishes the current week, each begins by needing it unplanned, and live mode has no /__fixture/reset. So it is one journey per world, rebuilt between - now written into the script banner, playwright.config.js and both spec headers. A rebuild is ~70s; five were done.
+19:Committed by pathspec onto feature/restaurant-modules (538abe6); a concurrent lane's test/e2e/fixture changes were left alone and landed in their own commit. Nothing pushed.
+### L-MANIFEST-CONDITIONS-1.md
+16:CORS is now a resolution rule: merge BOTH, and resolve ServiceCollectionExtensions.cs to 3c71b323's BrowserReadableHeaders.All, never the "ETag" literal. lane/gr-withdraw-origin carries 2a052800 and is the pair's backend half, so "drop the other four" cannot be followed.
+17:Verified by object: at 2a052800's base 3579bbbc, Program.cs exposed "ETag" and BrowserReadableHeaders.cs did not exist; at 8e2b57de it exposes .All. The old commit was correct at its base and is wrong only as a resolution against today's tip - F-CORS-EXPOSURE-REVERT.
+### L-MEALS-CLAIM-RECEIPT-1.md
+18:F2: test/e2e/fixture/meals.js models neither invitationModel().employeeReference nor the claim response's, and no seeded invitation carries one, so the journey can only ever render the fallback. Left alone - I cannot run Playwright, and a pin I did not watch fail is not a pin.
+### L-MEALS-ENROL-JOURNEY-LOCATOR-1.md
+22:FINDING not fixed: e2e fixture serves no GET /programs/{id}/members, so the walk always takes the
+### L-MEALS-FOURWAY-TIER-1.md
+9:The 12 skips are the tier's standing ones (declared journey gaps, Postmark sandbox, flag-gated Workforce E2E); none is Meals.
+### L-MEALS-FUNDED-2.md
+4:evidence: artifacts/journeys/meals-funded-checkout.playwright.json · fact:meals.token.client
+8:Journey capture (`npm run test:e2e:consumer`, 3 passed): meals-funded-checkout drives the real ConsumerWeb checkout — payer strip → quote carrying Idempotency-Key and a `sha256:` hash → token on cart completion → confirmation reading "188,–", with the company allowance going 25000 → 6200 minor and the reservation Bound to the order. Screenshots in artifacts/journeys/meals-funded-checkout/.
+12:HANDOFF — the journeys run against test/e2e/fixture/consumer-api-server.js, never the live .NET API, so `backend: "fixture"` in the artifact is the honest reading. The CLIENT side is proven; the server's answers are modelled from its own code (idempotency precondition, the bind's order of checks including cancelling the order it refuses, the cap, bearer auth). Driving this against a live backend needs SQL, which my brief forbids.
+16:Environment repairs needed before anything could run, all in gitignored trees: ConsumerWeb/node_modules had its `bin/` directories deleted for esbuild, @nuxt/cli and nuxt (the known `-name bin` sweep) — restored from npm tarballs; and @playwright/test was declared in this repo's devDependencies but not installed, so no browser journey here was runnable — installed with --no-save.
+17:Suite partitioning: playwright.config.js now ignores `journeys/consumer/**` by path (a tag can be forgotten on the next spec), so `npm run test:e2e` still lists exactly its three admin journeys and does not start needing a sibling checkout. i18n parity green for en/no/de (fr/it stay deferred, per the guard's own policy). No SQL tier run, no container started or touched.
+### L-MEALS-PRETICK-NEVER-WALKED-1.md
+18:the GET moves between arms. The arm is DECLARED via E2E_MEALS_PROGRAM_MEMBERS_READ, not discovered
+### L-MEALS-PROJECTION-LAG-VISIBLE-1.md
+17:8/8 mutants killed with a green positive control, one tree mutated and measured. Browser: 1 passed,
+### L-MEALS-REACHABLE-1.md
+8:UNDERSTATEMENT: Content-Disposition is unexposed too. 9 actions return File(...), and 2 LIVE browser callers parse it (utils/margin/api-client.js, utils/workforce-rates/rates-client.js) via a fileNameFrom that returns null when unexposed, so margin-statements and workforce-rates took their fallback filename 100% of the time. Both now exposed. Retry-After left off deliberately: 5 writers, 0 readers.
+### L-MEALS-RECONCILE-UI-1.md
+16:Suites: new file 25/25; meals* + admin-nav-access 265/265 over 12 suites; full jest 2609/2611, 112/113. The 2 failures are test/journey-artifact-store.test.js expecting /^Web-modules@/ and getting web-mealsrecon@ - the pre-existing worktree-name failure the brief named. Proved pre-existing: with every tracked change of mine reverted it still fails 2/38 here. No container started or touched; e2e journeys not run.
+18:C5: NOT acceptance. Nobody has walked it in a browser. The module is dark by default on both gates and the walk needs both flags on, a corridor agreement and a seeded exception - none producible by a shipped client, since none can place a company-funded order. The surface says so on screen rather than leaving it to be discovered.
+### L-MEALS-STALE-TOKEN-1.md
+4:evidence: artifacts/journeys/meals-stale-token-requote.playwright.json · artifacts/journeys/meals-stale-token-refused.playwright.json · artifacts/journeys/meals-funded-guard.playwright.json
+### L-MEALS-STATEMENT-SURFACE-1.md
+8:Exit names 3 stages; a browser CONTROL walked 1: get #22 and export #23, plus the decisive
+15:Non-vacuity, both real browser runs: mutant B (view reads allocationId) RED at step 5, got
+### L-MEALS-UTLKVIT-1.md
+18:NOT TOUCHED, ON PURPOSE: XZReportService and EscPosXZReportBuilder, because lane/meals-xz-credit holds exactly those files unmerged. A delivery-receipt COUNT on the Z report is the obvious follow-up and belongs after that merge. The receipt browser (receiptsOnly) also excludes Delivery, consistent with how it already excludes copies and provisional bills.
+### L-MENU-ALLERGEN-MATRIX-1.md
+5:evidence: /Users/svendaneel/okam/web-menu-allergen/artifacts/journeys/menu-allergen-matrix.playwright.json (16/16 steps passed; 3 screenshots + print-preview.pdf, one A4 landscape page) · commit f1b0d1a on lane/menu-allergen-matrix (local, unpushed)
+7:The brief's premise held: Allergen, ProductAllergen, AllergenController and /admin/allergens all exist and the product editor writes the links. Built the read: /admin/menu-allergens + nav entry (Menu group), MenuAllergenMatrixSheet, utils/menu/allergen-matrix.js, NO/EN/DE keys, 22 unit tests, one Playwright journey. 92 jest suites / 2162 tests and 4/4 journeys green.
+11:DEFECT (live, other lane's file): pages/admin/workforce-personnel-list.vue adds `wfpl-print-host` with classList.add in mounted. vue-meta owns body.class (layouts/default.vue bodyAttrs), so the class is wiped on the next head update — measured empty in a browser. The § 8-5-6 print path's whole stylesheet is then inert and the personalliste prints with the admin shell's padding, the sidebar gutter and the onboarding banner on the paper. Mine declares it through head() instead.
+### L-MODAL-BROKEN-TWO-1.md
+8:  DROVE IT: "Nåværende leveringstype: Hent selv" (helper resolved, asserted != the raw enum), three options with the current type filtered out, changed to dine-in, order card agrees. Zero browser errors attributable to the modal.
+16:  SUITES: Jest 94 suites / 2306 tests all pass. All 5 browser journeys pass, including the 3 predating this lane. ESLint error set byte-identical to HEAD on every touched file (one no-useless-return I introduced was removed).
+18:  GOTCHA FOR THE NEXT LANE: playwright globalTeardown calls releaseBorrowedCore() and strips core/ even from a hand-started dev server. HMR then rebuilds an app with no client bundle and every probe reads zero — which looks exactly like a product defect. Cost one wrong measurement here.
+### L-MODAL-LAND-1.md
+5:evidence: artifacts/journeys/modal-scroll-lock.playwright.json and artifacts/journeys/modal-estate-scroll-lock.playwright.json, both tracked on feature/restaurant-modules @ 3ee9c15
+9:Merge 1 (lane/modal-scrolllock 178c895) conflicted in exactly two files: test/e2e/fixture/world.js and test/e2e/fixture/api-server.js. Both hunks purely additive; kept both sides; nothing restored from a snapshot; no assertion deleted.
+13:Also re-ran both browser journeys at the merged tip on ports 3991/4991 (mine, outside the 3021-3961 band). Both passed, backend fixture. This was to check my hand-merge of the fixture server, which jest never exercises.
+16:Harness: the 9a5900a live/wrong-world guards are on the tip and neither lane touches test/e2e/support/, so the merge cannot have regressed them.
+### L-MODAL-SCROLLLOCK-1.md
+4:evidence: lane/modal-scrolllock @ 178c895 · artifacts/journeys/modal-scroll-lock.playwright.json (8/8 steps, 3 PNGs) · test/modal-scroll-lock.test.js
+6:Diagnosis confirmed causally in a browser first: login modal open on the real redirect flow, body `class=""` / `overflow: visible`; adding `noscroll` by hand gave `hidden`, and one `$meta().refresh()` with the modal still open took it straight back off. Worse than briefed — on a 4662px admin page, ONE `$router.replace` with a modal open let the page behind wheel 1200 -> 3691.
+11:Suites: Jest 93/93 (2160), browser journeys 4/4, run twice. Not run: SQL tier. Not pushed. No translations touched.
+### L-MODAL-SEVEN-1.md
+4:evidence: lane/modal-seven @ 839d377 (off lane/modal-scrolllock, UNMERGED — must land with or after it) · artifacts/journeys/modal-estate-scroll-lock.playwright.json (7 steps, 3 PNGs) · test/modal-scroll-lock-estate.test.js · lanes/L-MODAL-SEVEN/red-probe-before-fix.playwright.json
+7:THE DEFECT IS REACHABLE BY CLICKING, not only by contrivance: `OrderModal` nests `CustomerInfoModal`, whose `closeModal()` released the body while the outer modal was still on screen; `pages/admin/ongoing.vue` hosts six of them over one shared `currentOrder`. Measured before the fix, in a browser: two overlays open, close one, computed overflow `visible` — artifact kept at lanes/L-MODAL-SEVEN/red-probe-before-fix.playwright.json.
+12:WHAT I SAW: screenshot 02 is the whole board with the Kvittering modal over it and the customer card gone, board unmoved. Nothing about the page tells you the difference from the broken version — which is the point.
+13:Suites: Jest 94/94 (2172), all 12 new assertions verified RED against the imperative form (7 of 11 went red on a straight revert; the self-hiding guard proven red separately). Browser journeys 5/5, run twice — including the sibling lane's, so this did not break it. Not run: SQL tier (Docker down). Not pushed. No translations touched. `core/` borrowed and released by the harness; `node_modules` symlinked to the primary checkout, nothing installed.
+16:NOT DRIVEN IN A BROWSER: the 10 POS modals, the 5 product-admin modals and `ReservationModal` reach the mechanism and are guarded at the source, but no fixture world exists to open them; the marketing drawer and the product editor are asserted with the real vue-meta in jsdom, not with a wheel. Stated plainly rather than implied by a green suite.
+### L-MODULES-PREFLIGHT-FAILS-LOUD-1.md
+20:MERGE SURFACE FOR WHOEVER LANDS THIS. jest.config.js and package.json are BOTH already modified-uncommitted in the shared checkout by sibling lanes (a lanes/ testPathIgnorePattern; a test:e2e:live-world-stamp script). My hunks are elsewhere in both files, but the files collide. scripts/ is untracked in the shared checkout (drift-demo, worldstamp) and is not tracked at e34977a - my commit is the first to track it.
+### L-MRG-PRICE-CORRECTION-1.md
+20:OPS: no migration authored - Migrations/ and the model snapshot byte-identical to the base. Trait filter Database!=SqlServer throughout; no container started, and the 5 foreign ones untouched. Own worktree, nothing pushed, committed by pathspec. artifacts/journeys/ev-dietary restored and verified clean. Attempt 1's return preserved in the lane dir before this path was overwritten. No browser driven, so nothing here is acceptance (C5).
+### L-PAYMENTTYPE-COMPANYACCOUNT-1.md
+11:NOTHING HERE READS IT. reach.py swept 630 app-layer files: imports of PaymentType from core/enums = ZERO; core/pinia hits = 2, both prose in e2e comments; calls to payedLabel = 0. The only mirror enums this repo imports at all are KeyAccountManagerStatus and MutationName/ActionName. PaymentType is read as a value only INSIDE the submodule (checkout.ts 12, order.ts 9), and this repo mounts none of it. reach.json.
+### L-PDF-FAMILY-LAND-1.md
+16:- SEVEN HAZARDS, each by name. CORS not double-landed (AddCors/UseCors/AddPolicy/WithOrigins identical 1/1/9/1 on both sides and at the merge; the target still had WithExposedHeaders("ETag"), so this stack is the only side that changed it). No guest link touched. PREDICATE COLLISION was the live one and it resolved: the target's DERIVED middleware sweep (RequestBodyTelemetryPinTests) now sees the stack's new DocumentRenderExceptionMiddleware; it constructs, runs, writes nothing, green. Receipt trap - above. Census floors - the stack's own set-equality download census matches the target's ten file-serving controllers exactly, and the target's floors are lower bounds this stack only raises. No registrable-domain or content-disposition helper lands twice; the target carries no BrowserReadableHeaders-like file at all, and each added type is declared once. And the merge compiles.
+20:- EXIT MET on the BRANCH: BrowserReadableHeaders.cs, DownloadHeaderWireTests.cs, PdfDownloadWireTests.cs, PdfRendererOutageWireTests.cs all PRESENT via git ls-tree. NO MIGRATION (Migrations/ diff empty). NO CONTAINER started or touched - same five foreign ones before and after; SQL tier NOT run. Own worktree wt-pdffamily; OkamAPI-modules never entered; ev-dietary journey churn reverted, never committed; pathspec commits only. Nothing pushed. C5 NOT met - no UI walked.
+### L-PRESERVE-UNREFERENCED-WORK-1.md
+6:spec_gap: the brief says refs/salvage/dangling-8550f5e0 has no artifact behind it — measured, the two journeys and the fixture route it names sit on lane/L-JOURNEY-GROWTH and salvage/dangling-1890c9a3 at blobs identical to the working copy, so there is nothing to preserve because the work already landed elsewhere and not because it never existed; and the census's 0-ref list is three paths short of what the preserved work needs to run (test/e2e/fixture/api-server.js, pages/admin/workforce-schedule.vue, test/admin-nav-access.test.js), each measured on 0 of 141 refs and left unstaged to hold the pathspec discipline.
+16:NOT PRESERVED, and the preserved work does not run without them: test/e2e/fixture/api-server.js (requires both new fixtures), pages/admin/workforce-schedule.vue (holds the wf-delivery-link the journey clicks), test/admin-nav-access.test.js (holds the /admin/workforce-delivery pin). All tracked, modified, content on 0 of 141, none in the census list.
+### L-PRESERVE-UNREFERENCED-WORK-2.md
+6:spec_gap: the four named paths do not make the preserved work runnable — api-server.js also needs test/e2e/fixture/world.js, which is on 0 of 143 refs and was not on the list (HEAD's world.js exports none of staffFor, seededRoleCatalogue, ROLE_WRITE_FLAG, TIMESHEET_WRITE_FLAG, so api-server.js throws on require without it), so it was added as a fifth; and even with all five the fixture still cannot load, because api-server.js unconditionally requires test/e2e/fixture/workforce-publications.js and test/e2e/fixture/workforce-timesheets.js, which live only on lane/wf-pubhist and lane/wf-timesheet-ui — neither an ancestor of the candidate or the tip — and were left out under the rule that the snapshot holds only what would otherwise be lost, though they are in exactly the class of utils/workforce/schedule-client.js which this pass was told to include.
+### L-PRESERVE-UNREFERENCED-WORK-3.md
+6:spec_gap: none remaining in this lane's scope — the seam pass 2 named is closed and the load question is answered by measurement rather than by assertion: the transitive require closure from api-server.js and both preserved journey specs is 20 modules, all 20 present in the snapshot tree, 0 unresolvable specifiers, so MODULE_NOT_FOUND is gone; the browser-side import closure is 76 modules of which one, utils/cross-currency.js (reached via workforce-schedule.vue -> WorkforceWeekGrid.vue), is absent from the snapshot only because the snapshot is parented on the tip — it resolves on 6 refs including candidate/fe-compose-2026-08-05, so any composition carries it, and per instruction it is named and not chased.
+8:CLOSED. refs/lanes/preservation-snapshot-unreferenced-work now 054e140 -> dcb79b9 -> e79348e3 -> e34977ac. Two paths added verbatim: test/e2e/fixture/workforce-publications.js (L-WF-PUBHIST, #21/#22) and test/e2e/fixture/workforce-timesheets.js (L-WF-TIMESHEET-UI, #27/#28/#29). Snapshot now 30 paths beyond the tip, verified 30 of 30 identical to the working copy, 0 mismatched.
+10:THE HARNESS CONTRACT HOLDS TOO. The snapshot carries HEAD's test/e2e/support/journey.js, whose journeyDetails({journey, capabilities, surface, tag, underTest}) and module.exports = { test, expect, journeyDetails, ARTIFACT_DIR } are exactly what the two specs call. Checked rather than assumed, because a present-but-older support module would load and then fail at the first step.
+12:ONE MODULE NAMED AND NOT CHASED, as instructed. utils/cross-currency.js is absent from the browser-side closure. It is NOT missing from the estate — it is missing from the TIP: 6 refs carry it, including candidate/fe-compose-2026-08-05. By the amended rule it does not belong here, because it neither would be lost nor sits on a lane ref no composition names — it sits on the composition. Stopping there.
+### L-PRICE-CROSSCURRENCY-1.md
+20:OPS: no container started or touched, nothing pushed, `feature/restaurant-modules` still at `e34977ac`. Committed by pathspec through a temporary index via commit-tree + update-ref, so the shared ref never moved; reachability verified with for-each-ref AND fsck rather than assumed. No sibling's file was reverted, stashed or cleaned. No browser driven, so nothing here is acceptance (C5).
+### L-PRICE-NULL-ZERO-1.md
+13:SUITES: jest 94/94 suites, 2197/2197. Admin browser journeys 3/3, and the client bundle compiled — which is the proof the added export did not break the Nuxt plugin. No container started or touched, no push. `artifacts/.core-borrowed` checked absent before Playwright: core/ carries L-CORE-ORE-LABEL's unpushed 4f31003.
+14:NO BROWSER SHOT OF THE DASH, AND WHY NOT. No fixture-reachable admin surface can honestly produce an absent amount — Workforce, Events, Meals and Margin all resolve absence into a state before the formatter. Manufacturing one would have been a world the backend cannot produce.
+### L-PRICE-SHADOW-GUARD-1.md
+19:Full jest 2754 passed / 0 test failures; only failing SUITE is another lane's playwright spec under lanes/.
+### L-PRINT-HOST-1.md
+4:evidence: lane/print-host @ 6e6acd0 · artifacts/journeys/admin-print-host/ (5 PDFs, read) · artifacts/journeys/admin-print-host.playwright.json
+6:All three defects reproduced in a browser before anything changed, then re-measured after.
+12:DEFECT (harness): playwright globalTeardown deletes a borrowed `core/` out from under a dev server adopted via `reuseExistingServer`; the next run then fails four journeys that look like product breakage. Cost me one false red.
+15:Suites: Jest 92/92, 2155 tests. Browser journeys 4/4 green over five consecutive cold runs. One flake seen and hardened (cold nuxt route compile vs the 10s expect default), then five clean runs.
+### L-PROVENANCE-EXCLUDES-LANE-EVIDENCE-1.md
+15:Three independent implementations of "is this tree dirty" existed at 7030c00 (artifact-store.js:187, world-stamp.js:168, live-world.sh:189) and agreed only by being copies. Unified on worldStamp.dirtyOf; the shell now calls "node world-stamp.js built <repo>". Two of three excluding and one not would have printed the drift as resolveBackendBuild's "this overrode E2E_API_BUILD" - drift dressed as the guard working.
+### L-RECEIPT-JOURNEY-AT-DE-1.md
+20:F3 test/e2e/support/admin.js:33 signs in via /Send kode|Send|senden/i -- the same allowlist pattern, on the door every journey walks.
+### L-SHARED-DIRT-CENSUS-2.md
+18:43 rival variants EACH; test/e2e/fixture/api-server.js 26; world.js 19; utils/workforce/roster-client.js 12; AdminPageHeader.vue 9. Table in dirt.md.
+### L-STATUTE-EVIDENCE-WORLD-1.md
+8:- FIXED: fixture world holds only producible rows; PDF regenerated through Chromium's print path at A4 portrait and I opened and read it — four rows, all «Ansatt», no note lines. The daglig leder is deliberately still on it AS «Ansatt», so the sheet now demonstrates the limit it declares instead of disproving it.
+9:- PINNED BOTH WAYS: new test/workforce-personnel-list-evidence-world.test.js (16 tests) reds if the world or the sheet ever carries an excluded category, a correction or a hired-in orgnr; the browser journey pins every relationship cell row by row. CATEGORY_LABEL_KEYS is now one exported list, so a fifth relationship added to the column reds until the caveat names it — in all three locales.
+11:- MUTATED, 9 mutations, all red: HiredIn back / correction back / hiredIn-orgnr back (4 failed each), fifth category unnamed by the caveat (4), caveat deleted (5), category cell blanked (5), column dropped (5), plus both browser pins (E1 category, E2 the note column pushed to 2521px of a 1280px page). My FIRST M4 passed and was a bad mutation — I had pointed the new category at a label the caveat already names; redone.
+14:- Numbers: jest TZ=Europe/Oslo 94 suites / 2218 tests / 0 failed (baseline 93/2202 + this lane's 1 suite / 16 tests); eslint 0 errors on all six files touched; playwright 5/5 journeys green on the FULL suite, ports 3417/4417. No SQL tier, no container started, nothing pushed.
+15:- OPS: admin-print-host failed once on a cold `nuxt dev` compile (page.goto 30s navigationTimeout), passed on every warm run — not an assertion failure and not this change. Web-modules/core verified intact after every borrow/teardown cycle; the shared-core strip hazard did not fire.
+### L-STATUTE-HONESTY-1.md
+9:- VERIFIED ON PAPER, not on screen. Merged lane/print-host into this lane first: without it the page's whole print stylesheet is inert, so a caveat proved in a browser is proved nowhere. artifacts/journeys/statute-honesty/01-personalliste-with-coverage-caveat.pdf is Chromium's print path at A4 portrait through the page's own `@page` box; the caveat is whole, unclipped, above the column it qualifies. I opened it and read it.
+15:- RESIDUAL, and I am naming it rather than hiding it: the shared version sentence is untouched and still shown, because `isStale` is the server's boolean. On the dietary enquiry both lines appear and only mine is true of it — visible in screenshot 03 and recorded as a `defect` finding in the journey JSON. Closing it needs one nullable field on EventsRunSheetView where Map already computes all four causes. Deriving the version cause client-side instead would risk showing a stale sheet as current.
+16:- REACHABILITY (C3): both surfaces are reached in a browser by a person signing in through the modal. test/e2e's fixture gained the four Events admin reads `selectEvent` issues — this is the first browser capture of the Events admin surface at all, which L-EV-DIETARY-1 named as its open gap.
+17:- Numbers: frontend jest 93 suites / 2202 tests / 0 failed (TZ=Europe/Oslo); eslint 0 errors on every file I touched; 5/5 browser journeys green including the merged print-host one; backend fast tier 4352 passed / 0 failed / 12 skipped. No SQL tier — I hold no slot and started no container.
+20:- C5: NOT accepted. Nobody has walked either of these. The personalliste needs lane/print-host merged before Sven can print it, and the run-sheet line has no live backend behind it — the browser capture is against the fixture.
+### L-TRAIN-DISCLOSURE-1.md
+19:NOT ACCEPTED under C5: nobody has walked this in a browser - this branch has no browser-level framework, and the suite counts above are evidence of behaviour, not of a finished capability.
+### L-TRAIN-EVIDENCE-NAMES-COURSE-1.md
+5:evidence: OkamAPI wt-trn-names lane/trn-evidence-names fcb5181a + b560bc3a (artifacts/tests/L-TRAIN-EVIDENCE-NAMES-COURSE/RUN.md, base.trx, after.trx) . Web-modules cff41c8 . artifacts/journeys/training-course-to-evidence.playwright.json (19 steps, passed)
+15:The browser journey PASSED (19 steps) - and went RED on this exact step while the column was missing, which happened for real: I clobbered the panel with a git checkout during mutation work and the journey caught it before I did.
+### L-TRAIN-EVIDENCE-PACK-UI-1.md
+4:evidence: commit af0a4a13 on refs/heads/lane/train-evidence-pack-ui; journey test/e2e/journeys/training-evidence-document.spec.js 18/18 green; full detail incl. what is NOT committed (artifacts/ is gitignored: journey JSON + 2 screenshots) in lanes/L-TRAIN-EVIDENCE-PACK-UI/NOTES.md
+### L-TRAIN-PUBLISH-UNCLICKABLE-1.md
+8:REPRODUCED FIRST at 1280 in a browser: an ordinary .click() on version-publish TIMED OUT, and it is COVERED -
+### L-TRAIN-READONLY-VISIBLE-1.md
+17:Browser proof, not jsdom: jest stubs $i, so every page assertion is a KEY. shots/ holds the same
+18:3 surfaces before and after, nuxt dev at locale no, ports 3151/4151. No container, no journey rerun.
+### L-TRAIN-W3-SCHEMA-1.md
+19:- C5: not accepted. Nobody has walked anything in a browser; there is no UI for these tables at all (L-TRAIN-W3-UI).
+20:- Applied to no database anyone keeps — only localhost throwaway catalogs (Testcontainers, a RoundTrip_* scratch DB dropped in a finally, and one container I created and removed). Never touched a container I did not create; the foreign exited clever_davinci was left alone.
+### L-UTLKVIT-SALE-ROW-1.md
+10:FOUR SURFACES, NOT THREE, AND I COVERED THE FOURTH. Print (POST print), view (GET receipt), public page (GET receipt/public) all render by id. The SMS/email send endpoints are a fourth entry point: they mint a link to the public page from the addressed entry, so they now deliver the handover document too - pinned by driving the real SendReceiptSmsAsync and following its link rather than computing a token in the test. A fifth, the receipts browser, lists journal metadata and not documents; its Sale row for a credit sale is truthful and the document behind it now resolves.
+### L-VUE3-SHAPE-GUARD-1.md
+8:NOT a lint rule: eslint-module absent from nuxt buildModules, no lint script, CI runs only `npm run generate` - npm test is the sole runner. Its collection was verified in the full-suite output.
+### L-WF-CONTACT-IMPORTED-1.md
+21:NOT ACCEPTANCE (C5): nobody has walked this in a browser. COLLISION DECLARED: unmerged lane/fe-wf-oplink touches the same four frontend files (different capability, no duplication), and WireHostFixture.cs is shared across wire suites.
+### L-WF-DEMO-PRESENCE-1.md
+21:OPS + C5: my own container okam-wfdemopres-sql on :21433 (removed) and my API on :5191 (stopped); zen_pasteur and every testcontainers container belong to other lanes and were never touched. Chain applies from empty (127 migrations, 211 tables, 25 append-only triggers). shellcheck -x clean at warning level. Nothing pushed. NOT ACCEPTANCE — I read the register over HTTP and the seed now refuses to finish without it, but nobody has walked the screen in a browser; Sven's acceptance is the gate.
+### L-WF-DIGEST-TAUTOLOGY-1.md
+7:WRONG REPO IN THE BRIEF, AND I SWEPT IT BEFORE SAYING SO. The notes said Web-modules / feature/restaurant-modules / class node; the defect is in the BACKEND. Every digest|sha256|checksum|contentHash|hash hit under Web-modules test/e2e/journeys, test/e2e/support, test/, components/, pages/ was read and none has this shape. The finding's source is docs/plan/reviews/L-WF-W5-REVIEW.md D3, reviewing lane/wf-w5-timesheet @ 9e82b286 in OkamAPI-modules. Exit criterion itself was exact, so I built rather than returning fail-spec on a resource pointer.
+### L-WF-FAILURES-SURFACE-1.md
+11:Journey PASSES on E2E_FIXTURE_PORT=4021 E2E_WEB_PORT=3021: sign in, flip workforce.publication, draft, staff every roster row, validate, publish, then CLICK the link (never navigate by URL) to the report.
+18:Suites: jest 2 suites / 40 tests green (incl. the nav enforcement test that reds on a page with no sidebar entry); playwright 1 passed.
+20:Nothing committed, nothing pushed. Other lanes' uncommitted files in the shared checkout were not touched. artifacts/ is gitignored, so the journey JSON and 3 screenshots are on disk only.
+### L-WF-FLAGS-UI-1.md
+4:evidence: artifacts/journeys/workforce-flag-lever.playwright.json
+6:Exit criterion met IN A BROWSER, 10/10 steps: switch on -> build+validate a week -> switch off -> Publiser answers "Vaktplanen er skrivebeskyttet / Bryteren workforce.publication star av..." with a link to the switchboard -> the week still fully rendered (read-only, not dark) -> switch on -> "Publisert til 1 mottakere."
+8:BRIEF VERIFIED against wt-flagguard: all five module claims are TRUE. Two corrections. (1) "render withheld keys as withheld" is impossible and unnecessary - withheld flags are absent from Describe(), so neither read carries them and there is no wire field. (2) C5's "this branch has no browser-level test framework at all" is stale: Playwright, three journeys and an artifact contract are on the branch.
+11:HAZARD: commit c1b4619 (another lane) swept up my uncommitted translations/*.ts and test/e2e/fixture/*. Content intact and asserted green, but attribution is wrong and a revert of c1b4619 would take this lane's keys with it.
+12:OPS: the shared e2e ports 3010/4010 were being killed mid-run by a neighbour; ran on 3021/4021 instead of spin-waiting.
+### L-WF-IDREG-1.md
+20:- C5: not accepted. Nobody has walked this in a browser. The backend is on feature/restaurant-modules; the frontend needs lane/wf-idreg merged before Sven can click the button.
+### L-WF-INVITE-LIST-REVOKE-1.md
+8:reason: nothing stopped the backend; the frontend half is deliberately deferred because translations/{en,no,de}.ts and test/e2e/fixture/api-server.js are held dirty by another lane in the shared Web-modules checkout (204 uncommitted files) and cannot be edited without corrupting it or guaranteeing a 4-file conflict
+### L-WF-INVITE-SURFACE-1.md
+5:evidence: lanes/L-WF-INVITE-SURFACE/evidence/rewalk-at-e34977ac.playwright.json — 16/16 steps passed, stamped commit e34977ac (no +dirty), re-walked in clean worktree ../wt-wfinvite on lane/wf-invite-surface, ports 3077/4077, `1 passed (1.9m)`; 7 screenshots beside it; already-committed twin at artifacts/journeys/workforce-invitation-onboarding.playwright.json
+6:spec_gap: The invite surface, its routes, its nav entries and a committed green browser journey capturing manager-issues → worker-claims → worker-sees-own-schedule ALL already exist at baseline e34977ac (landed by 35440cf), so this lane's exit criterion is satisfied before it starts and there is nothing left to build.
+17:  C7 NOT breached: record stores the code's LENGTH not its value; screenshot token is fixture-
+### L-WF-KODEOVERSIKT-UI-1.md
+4:evidence: lanes/L-WF-KODEOVERSIKT-UI/{evidence.md,journey-green.json} on lane/wf-kodeoversikt-ui @ f4c355b (worktree /Users/svendaneel/okam/web-kodeui, 4 commits, nothing pushed) + test/e2e/journeys/workforce-kodeoversikt.spec.js
+7:- THE BRIEF'S PREMISE WAS RIGHT ABOUT e34977ac AND WRONG ABOUT THE WORLD. No client method, no button, no kodeoversikt UI at my baseline — but the work existed, built and never merged, on lane/wf-idreg @ a649e08. Its parent is an ancestor of e34977ac so it cherry-picked clean. That lane's own return says it: "C5: not accepted. Nobody has walked this in a browser." Walking it was the real gap.
+9:- ALL THREE EXIT CLAUSES DRIVEN BY CLICKING, real Chromium, no container: caveat names the issued template; button pressed with no `force` at 176x37 inside 1280px; download okam-kodeoversikt-42-2026-07-13.csv under the SERVER's name off an exposed Content-Disposition; two clicks, two distinct issue rows, each stamped with an actor.
+10:- THE ISSUE ROW IS READ BACK OFF THE SERVER, never inferred from the request log — "the browser sent a request" and "the handover was recorded" are different facts and only the second is what § 8-5-6 leans on. Second click APPENDS (a GET with no Idempotency-Key: suppressing the second production of a handover is exactly wrong), now pinned so nobody converts it into an idempotent read.
+14:- HAZARD FOR EVERY LANE RUNNING E2E RIGHT NOW: an orphaned fixture server (PID 73160, PPID 1) has held port 4010 since 16:03 running from wt-jwf — another lane's worktree. Playwright's reuseExistingServer adopted it and my first run 404'd on routes that exist, because it serves hours-old code. I did NOT kill it; I moved to ports 4021/3021. Anyone on the default ports is testing a stale build.
+17:- C5 IS NOT MET AND I AM NOT CLAIMING IT. Sven has not walked this. What is proved is that a browser can. To accept it he needs lane/wf-kodeoversikt-ui merged; the backend half is already on the integration branch.
+### L-WF-LINK-DEADEND-1.md
+21:NOT DONE: nobody has walked it in a browser. C5 is Sven's, not the suite's.
+### L-WF-ONBOARD-1.md
+12:I DID NOT RE-WALK THE SURFACE. Clause 1 is already proven at 35440cf, an ancestor of baseline e34977ac, by L-FE-WF-ONBOARD-WALK: 16/16 steps, and lanes/L-WF-INVITE-SURFACE/evidence/rewalk-at-e34977ac.playwright.json passed at my exact baseline. Screenshots 02 code-shown-once, 04 the worker is in, 05 my shifts, 07 roster after the claim.
+### L-WF-OPLINK-1.md
+4:evidence: artifacts/journeys/wf-operator-import-clock.playwright.json (11/11 steps passed, commit 3e811b2, 0 failed requests, 6 screenshots) in worktree ~/okam/web-wf-oplink, copied to lanes/L-WF-OPLINK/artifacts/journeys/ · branch lane/fe-wf-oplink, commit 3e811b2, not pushed · Jest 98 suites / 2282 tests, 5/5 browser journeys
+12:- THREE DEFECTS FOUND BY LOOKING at the screenshots: two adjacent buttons both read "Avbryt" (now "Skjul kobling"); the employer field showed a raw id with no explanation (now carries the add-form's hint); "1 operatør(er)"/"1 kobling(er)" (now real singulars in no/en/de).
+### L-WF-PIVOT-DEFECTS-1.md
+5:evidence: lanes/L-WF-PIVOT-DEFECTS/{workforce-schedule-publish.live.playwright.json,live-run-after.txt,probe-fixed.txt,probe-mutant-defect1.txt,probe-mutant-defect2.txt,probe-restored.txt,shots-after/,shots-mutant/}
+6:spec_gap: the exit reads as if the two defects were unfixed, but both were already fixed in code at 35440cf on 2026-08-03 (a day after the staff lane's live run recorded them) and the only thing outstanding was the live browser proof, which is what this lane produced.
+12:Ran the real `@live` workforce-schedule-publish journey in chromium against a REAL backend: artifact says backend=live, apiBaseUrl http://127.0.0.1:5961, probe 200 Healthy, 53 backend calls, commit e34977ac, 12/12 steps passed.
+15:Orphan hazard avoided: a dev server from 2026-08-02 still holds 3961 in this checkout and pairs with :5961 — adopting it would have served pre-fix code and passed for the wrong reason.
+18:Fix restored, both arms green again. Screenshots show the roles pivot with notice AND role grid together, and the mutant showing a second grid starting under the week grid.
+19:Probes kept in the lane directory and deliberately NOT added to test/e2e/journeys/: untagged specs run in every live run and would mutate the world.
+### L-WF-PUBHIST-1.md
+10:Verified, not assumed: GetPublicationHistory is the ONLY one of 11 client methods with zero callers — no with(this)/mixin resolution (global-mixin declares no workforce service), no dynamic dispatch, no Proxy, no .nuxt hit, no fixture, no unit test. Recipients (#22) had no client method AND no backend test.
+17:Journey PASSES on E2E_FIXTURE_PORT=4023 E2E_WEB_PORT=3023: sign in, flip workforce.publication via the operator page, draft, staff every row, validate, publish, then CLICK THE SIDEBAR ENTRY (never a URL) and click each publication. The week published seconds ago shows the toast's own number as the count with NO receipt.
+19:Falsifiable, proven: making a manager's hand-delivery read as a worker confirmation reds 2 unit tests AND the browser walk (by-hand group not found). Reverted and re-verified green; transcript in lanes/L-WF-PUBHIST/mutation-proof.txt.
+22:Suites: jest 4 suites / 76 tests green, including the nav converse walk that reds on any module page with no sidebar entry; playwright 1 passed.
+### L-WF-PUNCH-UI-1.md
+11:FOURTH ABSENCE, unnamed by the brief: the e2e fixture served ZERO POS endpoints, so /admin/pos was
+12:  unreachable to any browser journey at all. Standing the register up was a precondition of this lane.
+### L-WF-ROLES-UI-1.md
+5:evidence: commit ff21e48 on refs/heads/lane/wf-roles-ui; journey artifacts/journeys/workforce-role-catalogue.playwright.json (passed, 10 steps, 4 shots); full detail in lanes/L-WF-ROLES-UI/NOTES.md
+15:Suites: new workforce-roles-page 15/15; admin-nav-access 28/28; full jest 2910/2910 tests, 124 suites (the 5 failing suites are OTHER lanes' stray Playwright probes under lanes/); journey 1/1.
+### L-WF-TIMESHEET-UI-1.md
+5:evidence: commit 618efc88 on refs/heads/lane/wf-timesheet-ui; journey artifacts/journeys/workforce-timesheet-export.playwright.json 15/15 steps + 6 screenshots (COMMITTED, force-added); full detail in lanes/L-WF-TIMESHEET-UI/NOTES.md
+12:Download is a real browser download, bytes read off disk: basis=hours-only, wageMath=none, and the MISSING_PUNCH row's minutes cell is EMPTY, never 0.
+15:Suites: full jest 2910/2910 passed (the 5 failed SUITES are other lanes' untracked Playwright probes under lanes/, none mine); fixture-divergence --prove 7/7, real run 1 pre-existing Growth divergence and it could not check my routes at all since that checkout has no W5; eslint clean on 19 files. Ports 3931/4931, fresh bind confirmed by the [fixture] listening line; 4010/5951/5952/5961 untouched; no container.
+20:FINDING (recorded in the artifact): the batch digest on screen is server-ATTESTED, not browser-verified — X-Okam-Content-Sha256 is not in Access-Control-Expose-Headers on either the real API or the fixture and the app is cross-origin, so the page reads payloadSha256 off the batch model. BrowserReadableHeaders would close it.
+21:C5 is NOT satisfied by this return: a journey is a walk, not Sven. The page is /admin/workforce-timesheets, reachable from the sidebar as "Timelister"; open it with E2E_WEB_PORT=3931 E2E_FIXTURE_PORT=4931 npm run test:e2e:headed, or against the dev server.
+### L-WF-W5-TIMESHEET-1.md
+19:NO DOOR — SAY THIS OUT LOUD: pages/admin/ carries six Workforce screens and none is a timesheet screen; nothing in the frontend calls 27-29. The capability is reachable over HTTP and NOT from a browser, so C5 cannot be satisfied for it until a node lane builds the surface.
+### L-WORKTREE-BASENAME-PIN-1.md
+6:spec_gap: the brief counted only the reds; the same literal had also silently disarmed a PASSING assertion at :347 and still ranks checkout discovery at test/e2e/support/core-checkout.js:74-75, so the pin cost three checks and not two
+### L-WORKTREE-BASENAME-TAX-1.md
+6:spec_gap: brief names test/e2e/journey-artifact-store.test.js (file is test/journey-artifact-store.test.js) and calls the fix "on no tip" though 0cea96a is on candidate/fe-compose-2026-08-05 and lane/collect-review-conditions
+### L-WORKTREE-BASENAME-TAX-2.md
+6:spec_gap: brief names test/e2e/journey-artifact-store.test.js (file is test/journey-artifact-store.test.js) and calls the fix "on no tip" though 0cea96a is on candidate/fe-compose-2026-08-05 and lane/collect-review-conditions
+### L-WORLD-STAMP-WINDOWS-1.md
+15:New guard `npm run test:e2e:live-world-stamp` 12/12: 6 structural (the script still hands over both arguments, token read AFTER dotnet build) + 6 behavioural against the real CLI with a bash launcher/child pair.
+16:Regression: jest 2920 passed / 0 failed; build-provenance-proof 5/5 arms in real Chromium; banner check 8/8.
+21:PRE-EXISTING, not caused here: `npx jest` shows 5 failed SUITES / 0 failed tests - other lanes' Playwright specs under lanes/** that jest collects (jest.config ignores test/e2e/ but not lanes/).

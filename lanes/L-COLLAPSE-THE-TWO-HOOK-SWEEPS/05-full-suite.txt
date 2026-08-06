@@ -1,0 +1,16 @@
+FULL SUITE — lane/collapse-the-two-hook-sweeps, worktree /Users/svendaneel/okam/Web-modules-wt/L-COLLAPSE-THE-TWO-HOOK-SWEEPS
+commit under test: cffede3 (cffede3) + this lane's uncommitted diff at capture time
+core submodule: 1bcab0b (pinned 1bcab0b)
+node_modules: symlink -> /Users/svendaneel/okam/Web-modules/node_modules  [never npm ci; shared with ~121 worktrees]
+tracked .vue under components/pages/layouts: 301
+on-disk .vue under those dirs: 301
+untracked files in this worktree: 0
+
+      at Object.<anonymous> (test/journey-artifact-store.test.js:457:58)
+
+
+Test Suites: 1 failed, 113 passed, 114 total
+Tests:       2 failed, 2605 passed, 2607 total
+Snapshots:   0 total
+Time:        7.943 s, estimated 9 s
+Ran all test suites.

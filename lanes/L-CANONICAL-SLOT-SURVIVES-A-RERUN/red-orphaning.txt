@@ -1,0 +1,15 @@
+== modal-scroll-lock ==  status=passed  screenshots=3
+   on-disk record points at: artifacts/journeys/modal-scroll-lock/fixture/01-login-modal-body-locked.png
+                             artifacts/journeys/modal-scroll-lock/fixture/02-modal-open-page-behind-held-at-1200.png
+                             artifacts/journeys/modal-scroll-lock/fixture/03-all-modals-closed-page-free-again.png
+   tracked picture artifacts/journeys/modal-scroll-lock/01-login-modal-body-locked.png -> ORPHANED (tracked, unreferenced by the record on disk)
+   tracked picture artifacts/journeys/modal-scroll-lock/02-modal-open-page-behind-held-at-1200.png -> ORPHANED (tracked, unreferenced by the record on disk)
+   tracked picture artifacts/journeys/modal-scroll-lock/03-all-modals-closed-page-free-again.png -> ORPHANED (tracked, unreferenced by the record on disk)
+   referenced path artifacts/journeys/modal-scroll-lock/fixture/01-login-modal-body-locked.png -> exists on disk, IGNORED — git does not keep it
+   referenced path artifacts/journeys/modal-scroll-lock/fixture/02-modal-open-page-behind-held-at-1200.png -> exists on disk, IGNORED — git does not keep it
+   referenced path artifacts/journeys/modal-scroll-lock/fixture/03-all-modals-closed-page-free-again.png -> exists on disk, IGNORED — git does not keep it
+== modal-estate-scroll-lock ==  status=failed  screenshots=0
+   on-disk record points at: 
+   tracked picture artifacts/journeys/modal-estate-scroll-lock/01-receipt-modal-open-board-behind-held.png -> ORPHANED (tracked, unreferenced by the record on disk)
+   tracked picture artifacts/journeys/modal-estate-scroll-lock/02-one-of-two-closed-board-still-held.png -> ORPHANED (tracked, unreferenced by the record on disk)
+   tracked picture artifacts/journeys/modal-estate-scroll-lock/03-all-modals-closed-board-free-again.png -> ORPHANED (tracked, unreferenced by the record on disk)

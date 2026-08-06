@@ -129,7 +129,18 @@
       <h3 class="mcv__subtitle">
         {{ $i('mrgs_waste_coverage_title') }}
       </h3>
-      <p v-if="!coverage.waste.entryCount" class="mcv__note" data-test="waste-none">
+      <!-- THREE states, not two. "The response carried no waste block" and "the week's waste was
+           recorded as none" are different facts and only the second one is a measurement, so they
+           cannot share a sentence. The first is not a transitional state either: web and API deploy
+           separately, so this build will keep meeting coverage responses that predate the block. -->
+      <!-- `coverage-waste-unknown`, NOT `waste-unknown`: `MarginWastePanel` already owns that hook for
+           its own failed read, and BOTH panels are on this page at once. Sharing one made a probe
+           resolve whichever the DOM ordered first — see the note on `coverage-window-percent` above,
+           which is the same mistake this module has already paid for once. -->
+      <p v-if="wasteUnknown" class="mcv__note" data-test="coverage-waste-unknown">
+        {{ $i('mrgs_waste_coverage_unknown') }}
+      </p>
+      <p v-else-if="coverage.waste.entryCount === 0" class="mcv__note" data-test="waste-none">
         {{ $i('mrgs_waste_coverage_none') }}
       </p>
       <template v-else>
@@ -158,7 +169,9 @@
             <tr v-for="line in coverage.waste.byReason" :key="line.reason" data-test="waste-row">
               <td>{{ reasonLabel(line.reason) }}</td>
               <td class="mcv__num">
-                {{ number(line.entryCount) }}
+                <!-- Guarded like every other count on this panel: `Intl.NumberFormat().format(null)`
+                     is the string "0", so an unstated count would print as a counted zero. -->
+                {{ line.entryCount === null ? unknownMark : number(line.entryCount) }}
               </td>
               <td class="mcv__num">
                 {{ money(line.valuedMinor) }}
@@ -205,6 +218,19 @@ export default {
     windowLabel () {
       if (!this.coverage.fromDate || !this.coverage.toDate) { return this.unknownMark; }
       return this.$i('mrgs_period_range', { from: this.coverage.fromDate, to: this.coverage.toDate });
+    },
+    /**
+     * Whether the coverage read answered WITHOUT saying anything about waste.
+     *
+     * Two ways in, one meaning: `readWasteSummary` returns null when the response carried no waste
+     * block (or an unreadable one), and it returns a null `entryCount` when a block arrived without
+     * the one field that says how many entries the server actually looked at. Neither is a zero.
+     *
+     * `=== null` rather than falsiness on purpose: `!0` is true, and a genuine count of zero — the
+     * server looked at the week and found nothing — is the one case this must NOT swallow.
+     */
+    wasteUnknown () {
+      return this.coverage.waste === null || this.coverage.waste.entryCount === null;
     }
   },
   methods: {

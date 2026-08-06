@@ -1,0 +1,303 @@
+
+> okam-consumer@1.0.0 generate
+> NODE_ENV=production nuxt-ts generate
+
+
+ WARN  You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+
+ WARN  You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+
+ WARN  Module @nuxt/image is disabled due to incompatibility issues:
+ - [nuxt] Nuxt version >=3.1.0 is required but currently using 2.17.1
+
+
+ WARN  No package found which can optimize images.
+For help during the setup and installation, please read `https://marquez.co/docs/nuxt-optimized-images#optimization-packages`
+If this is on purpose and you don't want this plugin to optimize the images, set the option `optimizeImages: false` to hide this warning.
+
+ℹ Parsed 0 files in 0.0 seconds
+ℹ Production build
+ℹ Bundling for server and client side
+ℹ Target: static
+ℹ Using components loader to optimize imports
+ℹ Discovered Components: node_modules/.cache/nuxt/components/readme.md
+✔ Builder initialized
+✔ Nuxt files generated
+
+ WARN  Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+ℹ Compiling Client
+✔ Client: Compiled with some errors in 17.17s
+
+Hash: [1mff67eb67d42126178fa6[39m[22m
+Version: webpack [1m4.46.0[39m[22m
+Time: [1m17173[39m[22mms
+Built at: 08/05/2026 [1m9:32:25 AM[39m[22m
+          [1mAsset[39m[22m       [1mSize[39m[22m                                                          [1mChunks[39m[22m  [1m[39m[22m             [1m[39m[22m[1mChunk Names[39m[22m
+     [1m[32m002cd81.js[39m[22m   2.07 KiB                                                             [1m160[39m[22m  [1m[32m[immutable][39m[22m  pages/kvittering/_id/_token.eb603595
+     [1m[32m0167533.js[39m[22m  758 bytes                                                              [1m67[39m[22m  [1m[32m[immutable][39m[22m  components/atoms-continue-button.6a71e647
+     [1m[32m019ee77.js[39m[22m      7 KiB                          [1m59, 49, 54, 55, 56, 57, 58, 61, 62, 63[39m[22m  [1m[32m[immutable][39m[22m  components/admin-meals-reconciliation-queue.45d69b64
+     [1m[32m01c2cdf.js[39m[22m   36.2 KiB                                                             [1m157[39m[22m  [1m[32m[immutable][39m[22m  pages/index.51a4cd32
+     [1m[32m0329cb7.js[39m[22m   62.4 KiB                                                              [1m34[39m[22m  [1m[32m[immutable][39m[22m  common.f6cac036
+     [1m[32m03848cd.js[39m[22m      1 KiB                                                              [1m44[39m[22m  [1m[32m[immutable][39m[22m  app.6c86539e
+     [1m[32m03bbc56.js[39m[22m   32.9 KiB                                                    [1m122, 39, 210[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/poweruser-growth.2d76453e
+     [1m[32m0437d6d.js[39m[22m   45.8 KiB                                                             [1m115[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/orders.153dbc13
+     [1m[32m08bd3b0.js[39m[22m   7.77 KiB                                                             [1m169[39m[22m  [1m[32m[immutable][39m[22m  pages/om-oss.51a4cd32
+     [1m[32m0a09a32.js[39m[22m  991 bytes                                                             [1m170[39m[22m  [1m[32m[immutable][39m[22m  pages/personvern-og-vilkar.d00e4d2c
+     [1m[32m0a656f7.js[39m[22m   10.2 KiB                                                             [1m134[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/training-evidence.a527a44e
+     [1m[32m0c1a3ea.js[39m[22m   79.6 KiB                                                              [1m35[39m[22m  [1m[32m[immutable][39m[22m  common.fb61cc31
+     [1m[32m0ebc640.js[39m[22m    2.4 KiB                                                             [1m131[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/tables.db18b2f7
+     [1m[32m0ee91cb.js[39m[22m  768 bytes                                                              [1m71[39m[22m  [1m[32m[immutable][39m[22m  components/atoms-price-item.35ac96e1
+     [1m[32m0f3069f.js[39m[22m   54.5 KiB                                                              [1m28[39m[22m  [1m[32m[immutable][39m[22m  common.cd15c063
+     [1m[32m0f58caf.js[39m[22m   14.3 KiB                                                               [1m2[39m[22m  [1m[32m[immutable][39m[22m  common.09ad1708
+     [1m[32m0fd7f19.js[39m[22m     35 KiB                                                              [1m87[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/delivery.65450cc2
+     [1m[32m1207e63.js[39m[22m  350 bytes                                                             [1m187[39m[22m  [1m[32m[immutable][39m[22m  pages/webshop/index.9a59bc6a
+     [1m[32m128a2d6.js[39m[22m   16.4 KiB                                                             [1m144[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/workforce-roles.96f9cabe
+     [1m[32m14570cc.js[39m[22m   39.8 KiB                                                             [1m139[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/wolt.0e683445
+     [1m[32m15e8f17.js[39m[22m   13.8 KiB                                                              [1m37[39m[22m  [1m[32m[immutable][39m[22m  commons.components/onboarding-product-images.components/organisms-order-modal.components/organisms-r.488b5419
+     [1m[32m1669da3.js[39m[22m   94.6 KiB                                                               [1m4[39m[22m  [1m[32m[immutable][39m[22m  common.290a8095
+     [1m[32m176f5c5.js[39m[22m   12.5 KiB                  [1m38, 49, 50, 54, 55, 56, 57, 58, 59, 61, 62, 63[39m[22m  [1m[32m[immutable][39m[22m  
+     [1m[32m17c800c.js[39m[22m    116 KiB                                                              [1m10[39m[22m  [1m[32m[immutable][39m[22m  common.716f1b83
+     [1m[32m18dbeaa.js[39m[22m   3.89 KiB                                                             [1m147[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/wrapped.94475107
+     [1m[32m194ce3a.js[39m[22m  297 bytes                                                         [1m39, 210[39m[22m  [1m[32m[immutable][39m[22m  
+     [1m[32m1988696.js[39m[22m   8.15 KiB                                                              [1m77[39m[22m  [1m[32m[immutable][39m[22m  components/organisms-product-config.4f16d3f5
+     [1m[32m19b6a4a.js[39m[22m   28.4 KiB                                                             [1m202[39m[22m  [1m[32m[immutable][39m[22m  vendor.a4e663ef
+     [1m[32m19cdab6.js[39m[22m   31.7 KiB                                                              [1m42[39m[22m  [1m[32m[immutable][39m[22m  app.51a4cd32
+     [1m[32m1d4a572.js[39m[22m   4.51 KiB                                                             [1m173[39m[22m  [1m[32m[immutable][39m[22m  pages/preferences/unsubscribe.4f9cc669
+     [1m[32m1ded7e7.js[39m[22m   35.2 KiB                                                             [1m116[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/overview.4f8c19e7
+     [1m[32m1ef419f.js[39m[22m   21.3 KiB                                                             [1m155[39m[22m  [1m[32m[immutable][39m[22m  pages/events/proposal/_token.57f3afd6
+     [1m[32m1f14850.js[39m[22m    106 KiB                                                              [1m16[39m[22m  [1m[32m[immutable][39m[22m  common.7dc2ccc7
+     [1m[32m1fedb57.js[39m[22m   20.9 KiB                                                               [1m5[39m[22m  [1m[32m[immutable][39m[22m  common.382ae33b
+     [1m[32m2060c50.js[39m[22m   56.1 KiB                                                              [1m29[39m[22m  [1m[32m[immutable][39m[22m  common.dbfe2c62
+     [1m[32m209addf.js[39m[22m   20.1 KiB                                                             [1m192[39m[22m  [1m[32m[immutable][39m[22m  pages/wolt.51a4cd32
+     [1m[32m2155698.js[39m[22m   72.4 KiB                                                              [1m48[39m[22m  [1m[32m[immutable][39m[22m  app.ee6618d9
+     [1m[32m22ce7e9.js[39m[22m   3.06 KiB                                                              [1m79[39m[22m  [1m[32m[immutable][39m[22m  components/wrapped-banner.155bc708
+     [1m[32m2346771.js[39m[22m   39.2 KiB                                                             [1m146[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/workforce-schedule.b3d4f929
+     [1m[32m2367fd4.js[39m[22m   4.05 KiB                                                             [1m211[39m[22m  [1m[32m[immutable][39m[22m  
+     [1m[32m23cac93.js[39m[22m  232 bytes                                                             [1m168[39m[22m  [1m[32m[immutable][39m[22m  pages/om-okam.8516a889
+     [1m[32m24eaf78.js[39m[22m   3.15 KiB                                                             [1m177[39m[22m  [1m[32m[immutable][39m[22m  pages/registrert-ferdig.6df9f7e3
+     [1m[32m2564090.js[39m[22m      7 KiB                          [1m63, 49, 54, 55, 56, 57, 58, 59, 61, 62[39m[22m  [1m[32m[immutable][39m[22m  components/admin-pos-shell.45d69b64
+     [1m[32m259c049.js[39m[22m     19 KiB                                                              [1m17[39m[22m  [1m[32m[immutable][39m[22m  common.80d515db
+     [1m[32m28c70a3.js[39m[22m   23.1 KiB                                                             [1m119[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/pos-reports.cf5d5a68
+     [1m[32m293dbb2.js[39m[22m   70.5 KiB                                                              [1m21[39m[22m  [1m[32m[immutable][39m[22m  common.8995f4a3
+     [1m[32m2964a9b.js[39m[22m    120 KiB                                                             [1m205[39m[22m  [1m[32m[immutable][39m[22m  vendor.c97b3500
+     [1m[32m298dfc7.js[39m[22m   9.01 KiB                                                             [1m180[39m[22m  [1m[32m[immutable][39m[22m  pages/subscribe/_store.b1f591a5
+     [1m[32m2a78115.js[39m[22m   94.5 KiB                                                              [1m27[39m[22m  [1m[32m[immutable][39m[22m  common.be76afd0
+     [1m[32m2aeaaa8.js[39m[22m   3.43 KiB                                                             [1m171[39m[22m  [1m[32m[immutable][39m[22m  pages/personvern.9120e2cd
+     [1m[32m2c1219d.js[39m[22m   13.8 KiB                                                             [1m114[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/ongoing.f09002d3
+     [1m[32m2c6d068.js[39m[22m  607 bytes                                                             [1m179[39m[22m  [1m[32m[immutable][39m[22m  pages/store/notfound.783a1041
+     [1m[32m2d2b7cb.js[39m[22m   4.81 KiB                                                             [1m104[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/lang.b6b5f686
+     [1m[32m2eb1fa6.js[39m[22m   13.9 KiB                                                             [1m101[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/kam.9961095d
+     [1m[32m30383de.js[39m[22m   22.9 KiB                                                             [1m132[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/terminals.7d3275c9
+     [1m[32m304d2a2.js[39m[22m  351 bytes                                                             [1m190[39m[22m  [1m[32m[immutable][39m[22m  pages/webshop/vipps.28a2b3a0
+     [1m[32m30c78c5.js[39m[22m   18.1 KiB                                                             [1m162[39m[22m  [1m[32m[immutable][39m[22m  pages/meals/join.b3d4f929
+     [1m[32m3180c62.js[39m[22m  948 bytes                                                              [1m68[39m[22m  [1m[32m[immutable][39m[22m  components/atoms-feature-info.e65acc2a
+     [1m[32m31e6164.js[39m[22m   8.45 KiB                                                              [1m25[39m[22m  [1m[32m[immutable][39m[22m  common.acd1ae15
+     [1m[32m3469d45.js[39m[22m  327 bytes                                                             [1m188[39m[22m  [1m[32m[immutable][39m[22m  pages/webshop/mycards.f1364961
+     [1m[32m35ee005.js[39m[22m   3.59 KiB                                                              [1m80[39m[22m  [1m[32m[immutable][39m[22m  pages/2000-brukere-i-sogn.51a4cd32
+     [1m[32m3601de2.js[39m[22m   1.92 KiB                                                              [1m83[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/brev.247c79f2
+     [1m[32m3665266.js[39m[22m   47.9 KiB                                                              [1m13[39m[22m  [1m[32m[immutable][39m[22m  common.7587c744
+     [1m[32m38be71a.js[39m[22m   24.5 KiB                                                              [1m30[39m[22m  [1m[32m[immutable][39m[22m  common.dc7d9585
+     [1m[32m3a25bd7.js[39m[22m   10.4 KiB                                                             [1m184[39m[22m  [1m[32m[immutable][39m[22m  pages/vilkar.3ce90d15
+     [1m[32m3c4f0eb.js[39m[22m   36.7 KiB                                                             [1m106[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/margin-recipes.747180f8
+     [1m[32m408cc7e.js[39m[22m  198 bytes                                                              [1m50[39m[22m  [1m[32m[immutable][39m[22m  components/admin-kitchen-ticket.264a9eed
+     [1m[32m40b1bc4.js[39m[22m   4.26 KiB                                                              [1m78[39m[22m  [1m[32m[immutable][39m[22m  components/organisms-product.6aa49d8a
+     [1m[32m4775727.js[39m[22m  238 bytes                                                             [1m167[39m[22m  [1m[32m[immutable][39m[22m  pages/om-okam-admin.4f035029
+     [1m[32m47c2182.js[39m[22m      7 KiB                          [1m55, 49, 54, 56, 57, 58, 59, 61, 62, 63[39m[22m  [1m[32m[immutable][39m[22m  components/admin-meals-company-panel.45d69b64
+     [1m[32m48f52f3.js[39m[22m   47.4 KiB                                                              [1m19[39m[22m  [1m[32m[immutable][39m[22m  common.83fd6663
+     [1m[32m4b0b03d.js[39m[22m      7 KiB                          [1m61, 49, 54, 55, 56, 57, 58, 59, 62, 63[39m[22m  [1m[32m[immutable][39m[22m  components/admin-pos-payment-screen.45d69b64
+     [1m[32m4be51a3.js[39m[22m   2.82 KiB                                                              [1m82[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/allergens.0a525e1e
+     [1m[32m4e59246.js[39m[22m   17.2 KiB                                                             [1m105[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/margin-price-imports.ae44e849
+     [1m[32m4e9301d.js[39m[22m    196 KiB                                                              [1m32[39m[22m  [1m[32m[immutable][39m[22m  common.e9864950
+     [1m[32m5208cbe.js[39m[22m      7 KiB                          [1m62, 49, 54, 55, 56, 57, 58, 59, 61, 63[39m[22m  [1m[32m[immutable][39m[22m  components/admin-pos-sell-screen.45d69b64
+     [1m[32m5766c2d.js[39m[22m   35.2 KiB                                                             [1m176[39m[22m  [1m[32m[immutable][39m[22m  pages/registrer.0c132152
+     [1m[32m58a782e.js[39m[22m   29.9 KiB                                                              [1m91[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/discount.273d4afd
+     [1m[32m5bda8c3.js[39m[22m   73.1 KiB                                                              [1m15[39m[22m  [1m[32m[immutable][39m[22m  common.7b1faeed
+     [1m[32m5c56853.js[39m[22m   45.8 KiB  [1m99, 49, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 65[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/import.2d76453e
+     [1m[32m63a8a85.js[39m[22m   19.7 KiB                                                               [1m9[39m[22m  [1m[32m[immutable][39m[22m  common.52eaaa40
+     [1m[32m64e8479.js[39m[22m   17.9 KiB                                                             [1m200[39m[22m  [1m[32m[immutable][39m[22m  vendor.46b622fc
+     [1m[32m657d037.js[39m[22m   12.3 KiB                                                              [1m81[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/account-email.a8e31fc7
+     [1m[32m671adad.js[39m[22m  841 bytes                                                             [1m182[39m[22m  [1m[32m[immutable][39m[22m  pages/terms.a742605b
+     [1m[32m6740f3a.js[39m[22m   1.44 KiB                                                              [1m74[39m[22m  [1m[32m[immutable][39m[22m  components/atoms-team-member.40a1a876
+     [1m[32m67d3f90.js[39m[22m   5.92 KiB                                                             [1m150[39m[22m  [1m[32m[immutable][39m[22m  pages/datenschutz.f955bbd6
+     [1m[32m6a22cd9.js[39m[22m   17.4 KiB                                                             [1m193[39m[22m  [1m[32m[immutable][39m[22m  pages/workforce/join.b3d4f929
+     [1m[32m6af8157.js[39m[22m    135 KiB                                                               [1m0[39m[22m  [1m[32m[immutable][39m[22m  common.009a51fb
+     [1m[32m6ba8b2d.js[39m[22m   76.5 KiB                                                             [1m201[39m[22m  [1m[32m[immutable][39m[22m  vendor.615a04d7
+     [1m[32m6d194ee.js[39m[22m   9.08 KiB                                                             [1m183[39m[22m  [1m[32m[immutable][39m[22m  pages/vilkar-store.5493ce30
+     [1m[32m6e7707e.js[39m[22m   17.9 KiB                                                             [1m111[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/meals-statements.b3d4f929
+     [1m[32m6f6d572.js[39m[22m   24.5 KiB                                                             [1m127[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/rewards.2d94e5f4
+     [1m[32m6ffb014.js[39m[22m   2.94 KiB                                                             [1m178[39m[22m  [1m[32m[immutable][39m[22m  pages/store/_slug.a45f97c8
+     [1m[32m723bbff.js[39m[22m    301 KiB                                                              [1m40[39m[22m  [1m[32m[immutable][39m[22m  app.29d4c866
+     [1m[32m728acae.js[39m[22m      7 KiB                          [1m57, 49, 54, 55, 56, 58, 59, 61, 62, 63[39m[22m  [1m[32m[immutable][39m[22m  components/admin-meals-people-panel.45d69b64
+     [1m[32m736c1f5.js[39m[22m   12.8 KiB                                                             [1m141[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/workforce-personnel-list.b3d4f929
+     [1m[32m737deea.js[39m[22m     56 KiB                                                             [1m196[39m[22m  [1m[32m[immutable][39m[22m  vendor.10713f6e
+     [1m[32m74dc65b.js[39m[22m   4.64 KiB                                                              [1m76[39m[22m  [1m[32m[immutable][39m[22m  components/molecules-price-table.04891490
+     [1m[32m7611f14.js[39m[22m  208 bytes                                              [1m65, 51, 52, 53, 60[39m[22m  [1m[32m[immutable][39m[22m  components/admin-workforce-rate-timeline.191b28fb
+     [1m[32m774c28a.js[39m[22m   18.9 KiB                                                              [1m33[39m[22m  [1m[32m[immutable][39m[22m  common.f63250c1
+     [1m[32m7cd9c72.js[39m[22m   7.84 KiB                     [1m121, 49, 54, 55, 56, 57, 58, 59, 61, 62, 63[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/pos.2d76453e
+     [1m[32m7f7bb0a.js[39m[22m  208 bytes                                              [1m52, 51, 53, 60, 65[39m[22m  [1m[32m[immutable][39m[22m  components/admin-margin-spend-panel.191b28fb
+     [1m[32m7fe45ce.js[39m[22m   3.84 KiB                                                             [1m156[39m[22m  [1m[32m[immutable][39m[22m  pages/impressum.3a9426c3
+     [1m[32m8178285.js[39m[22m   27.9 KiB                     [1m110, 49, 54, 55, 56, 57, 58, 59, 61, 62, 63[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/meals-companies.2d76453e
+     [1m[32m820824c.js[39m[22m    336 KiB                                                              [1m45[39m[22m  [1m[32m[immutable][39m[22m  app.9be3d18f
+     [1m[32m82ef065.js[39m[22m   19.2 KiB                                 [1m36, 39, 51, 52, 53, 60, 65, 210[39m[22m  [1m[32m[immutable][39m[22m  commons.components/admin-events-journey.components/admin-events-pipeline.components/admin-meals-agre.b0ba50c0
+     [1m[32m8383a6f.js[39m[22m      7 KiB                          [1m54, 49, 55, 56, 57, 58, 59, 61, 62, 63[39m[22m  [1m[32m[immutable][39m[22m  components/admin-meals-agreement-list.45d69b64
+     [1m[32m8538839.js[39m[22m   62.2 KiB                                                             [1m204[39m[22m  [1m[32m[immutable][39m[22m  vendor.bceed597
+     [1m[32m8668c23.js[39m[22m   21.1 KiB                                                              [1m96[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/goods.6b88de49
+     [1m[32m88fb64e.js[39m[22m  208 bytes                                              [1m51, 52, 53, 60, 65[39m[22m  [1m[32m[immutable][39m[22m  components/admin-margin-price-timeline-panel.191b28fb
+     [1m[32m8abd10d.js[39m[22m   44.9 KiB                                                              [1m46[39m[22m  [1m[32m[immutable][39m[22m  app.c40a2416
+     [1m[32m8b99b40.js[39m[22m   16.5 KiB                                                              [1m86[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/customers.1478d127
+     [1m[32m8c99013.js[39m[22m  262 bytes                                                             [1m175[39m[22m  [1m[32m[immutable][39m[22m  pages/rask-vei-til-egen-nettbutikk.77352861
+     [1m[32m8e21237.js[39m[22m   14.3 KiB                                                             [1m143[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/workforce-requests.7658bbdb
+     [1m[32m8e866ea.js[39m[22m   80.2 KiB                                                              [1m14[39m[22m  [1m[32m[immutable][39m[22m  common.79f5c299
+     [1m[32m90eff8d.js[39m[22m  321 bytes                                                             [1m166[39m[22m  [1m[32m[immutable][39m[22m  pages/offer/index.6516a3db
+     [1m[32m93d6434.js[39m[22m     51 KiB                                                              [1m22[39m[22m  [1m[32m[immutable][39m[22m  common.914287b4
+     [1m[32m94676ba.js[39m[22m  282 bytes                                                             [1m163[39m[22m  [1m[32m[immutable][39m[22m  pages/menneskene.b0c402e1
+     [1m[32m94687ba.js[39m[22m   4.77 KiB                                                             [1m194[39m[22m  [1m[32m[immutable][39m[22m  runtime
+     [1m[32m962ebff.js[39m[22m   16.2 KiB                                                              [1m95[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/feature-flags.b3d4f929
+     [1m[32m9708334.js[39m[22m   18.3 KiB                                                             [1m142[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/workforce-rates.b3d4f929
+     [1m[32m9b915d3.js[39m[22m   97.5 KiB                     [1m123, 49, 54, 55, 56, 57, 58, 59, 61, 62, 63[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/products.2d76453e
+     [1m[32m9bc38a1.js[39m[22m   71.2 KiB                                                             [1m198[39m[22m  [1m[32m[immutable][39m[22m  vendor.37efc5d9
+     [1m[32m9cb8993.js[39m[22m   65.9 KiB                                                               [1m6[39m[22m  [1m[32m[immutable][39m[22m  common.3c88dfb8
+     [1m[32m9cf10df.js[39m[22m   17.5 KiB                                                              [1m98[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/growth-privacy.b3d4f929
+     [1m[32m9cf18e0.js[39m[22m   2.46 KiB                                                              [1m73[39m[22m  [1m[32m[immutable][39m[22m  components/atoms-select-button.0fa3fa19
+       [1m[32mLICENSES[39m[22m    1.3 KiB                                                                [1m[39m[22m  [1m[32m[39m[22m             
+     [1m[32ma012c69.js[39m[22m   10.2 KiB                                                             [1m174[39m[22m  [1m[32m[immutable][39m[22m  pages/priser.157ee2cd
+     [1m[32ma034e28.js[39m[22m   23.4 KiB                                                              [1m97[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/growth-newsletter.b3d4f929
+     [1m[32ma0b8ef0.js[39m[22m   30.9 KiB                                         [1m107, 51, 52, 53, 60, 65[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/margin-statements.2d76453e
+     [1m[32ma15ad7d.js[39m[22m   26.7 KiB                                                             [1m140[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/workforce-me.b3d4f929
+     [1m[32ma25d60e.js[39m[22m  327 bytes                                                             [1m189[39m[22m  [1m[32m[immutable][39m[22m  pages/webshop/orders.b027cf4d
+     [1m[32ma36fec2.js[39m[22m  208 bytes                                              [1m53, 51, 52, 60, 65[39m[22m  [1m[32m[immutable][39m[22m  components/admin-margin-waste-panel.191b28fb
+     [1m[32ma41c3a0.js[39m[22m   37.5 KiB                                                             [1m195[39m[22m  [1m[32m[immutable][39m[22m  vendor.09d843da
+     [1m[32ma48a180.js[39m[22m   23.9 KiB                                                             [1m125[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/reservations.55376635
+     [1m[32ma4b23c9.js[39m[22m   7.84 KiB                                                             [1m126[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/reward-members.5ef0dfc4
+     [1m[32ma5fb6d8.js[39m[22m   16.3 KiB                                                             [1m145[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/workforce-roster.52249b4b
+     [1m[32maa42d90.js[39m[22m   37.7 KiB                                                             [1m112[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/offers.56e2a969
+     [1m[32maab8a6b.js[39m[22m   40.9 KiB                                                             [1m100[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/index.c1d1e067
+     [1m[32mab246fd.js[39m[22m     23 KiB                                                             [1m165[39m[22m  [1m[32m[immutable][39m[22m  pages/offer/_code.0a563296
+     [1m[32mab3d39a.js[39m[22m  763 bytes                                                             [1m191[39m[22m  [1m[32m[immutable][39m[22m  pages/wolt-callback.7e6908d9
+     [1m[32mab9a0a5.js[39m[22m     16 KiB                                                             [1m137[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/wolt-drive-invoice.30a4784e
+     [1m[32mac2d28f.js[39m[22m   8.29 KiB                                                              [1m92[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/discounts.b4238a65
+     [1m[32mac8e2a8.js[39m[22m   3.37 KiB                                                             [1m164[39m[22m  [1m[32m[immutable][39m[22m  pages/menu.7a92129d
+     [1m[32mad3ae62.js[39m[22m   32.6 KiB                                                              [1m90[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/dintero.a45f7215
+     [1m[32madf0c69.js[39m[22m   5.75 KiB                                                             [1m159[39m[22m  [1m[32m[immutable][39m[22m  pages/kontakt.7a17dbdd
+     [1m[32mae3cdbb.js[39m[22m  348 bytes                                                             [1m185[39m[22m  [1m[32m[immutable][39m[22m  pages/webshop/3d.38830f4d
+     [1m[32mae4340c.js[39m[22m   15.8 KiB                                                             [1m128[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/settlements.65b52fea
+     [1m[32mb085827.js[39m[22m  327 bytes                                                             [1m186[39m[22m  [1m[32m[immutable][39m[22m  pages/webshop/checkout.c30573bb
+     [1m[32mb4e6a70.js[39m[22m  297 bytes                                                         [1m210, 39[39m[22m  [1m[32m[immutable][39m[22m  
+     [1m[32mb58712d.js[39m[22m   13.4 KiB                                                         [1m102, 50[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/kitchen.2d76453e
+     [1m[32mb5c35d9.js[39m[22m   24.2 KiB                                                             [1m151[39m[22m  [1m[32m[immutable][39m[22m  pages/egen-app-kampanje.37616c19
+     [1m[32mb61a2f2.js[39m[22m   48.5 KiB                                                              [1m94[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/events-pipeline.bf92b4c0
+     [1m[32mb69ce46.js[39m[22m   94.4 KiB                                                              [1m41[39m[22m  [1m[32m[immutable][39m[22m  app.39b4bef4
+     [1m[32mb6e53cb.js[39m[22m   38.8 KiB                                                             [1m135[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/tripletex.ec324fe9
+     [1m[32mb91570c.js[39m[22m   20.3 KiB                                                             [1m117[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/payment.9bba608d
+     [1m[32mba91698.js[39m[22m   8.46 KiB                                                             [1m153[39m[22m  [1m[32m[immutable][39m[22m  pages/events/deposit/_token.61bba950
+     [1m[32mbddada8.js[39m[22m   71.5 KiB                                                             [1m138[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/wolt-menu.b98e5d61
+     [1m[32mbe08d03.js[39m[22m   16.4 KiB                                                             [1m133[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/training-courses.3dc28570
+     [1m[32mc1b3684.js[39m[22m   23.1 KiB                                                             [1m152[39m[22m  [1m[32m[immutable][39m[22m  pages/egen-app.64d93c77
+     [1m[32mc2b0391.js[39m[22m   14.9 KiB                                                             [1m113[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/onboarding.5a9647b5
+     [1m[32mc2f08a7.js[39m[22m   12.8 KiB                                                              [1m18[39m[22m  [1m[32m[immutable][39m[22m  common.814320d4
+     [1m[32mc32a438.js[39m[22m  355 bytes                                                             [1m124[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/reservation.38531926
+     [1m[32mc64f4bc.js[39m[22m    108 KiB                                                              [1m12[39m[22m  [1m[32m[immutable][39m[22m  common.75868ec6
+     [1m[32mc7bc664.js[39m[22m  249 bytes                                                             [1m158[39m[22m  [1m[32m[immutable][39m[22m  pages/kom-i-gang.a6dbb85c
+     [1m[32mc82dd08.js[39m[22m   39.3 KiB                                                              [1m24[39m[22m  [1m[32m[immutable][39m[22m  common.ac789be8
+     [1m[32mca2c857.js[39m[22m    307 KiB                                                              [1m43[39m[22m  [1m[32m[immutable][39m[22m  app.550eb588
+     [1m[32mca7b233.js[39m[22m   3.15 KiB                                                              [1m69[39m[22m  [1m[32m[immutable][39m[22m  components/atoms-my-user-dropdown.57a4532b
+     [1m[32mcd8db91.js[39m[22m   23.4 KiB                                                              [1m23[39m[22m  [1m[32m[immutable][39m[22m  common.aaee1b4c
+     [1m[32mcd9bcd2.js[39m[22m   60.9 KiB                                                              [1m26[39m[22m  [1m[32m[immutable][39m[22m  common.b0d089da
+     [1m[32md007065.js[39m[22m      7 KiB                          [1m49, 54, 55, 56, 57, 58, 59, 61, 62, 63[39m[22m  [1m[32m[immutable][39m[22m  components/admin-copy-variant-to-targets-modal.45d69b64
+     [1m[32md08cb7d.js[39m[22m   40.9 KiB                                                             [1m199[39m[22m  [1m[32m[immutable][39m[22m  vendor.3ec44f66
+     [1m[32md168ca1.js[39m[22m     71 KiB                                                               [1m3[39m[22m  [1m[32m[immutable][39m[22m  common.1bc75e7d
+     [1m[32md27b7ff.js[39m[22m   47.7 KiB                      [1m85, 49, 54, 55, 56, 57, 58, 59, 61, 62, 63[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/category-editor.2d76453e
+     [1m[32md32686c.js[39m[22m   75.3 KiB                                                             [1m203[39m[22m  [1m[32m[immutable][39m[22m  vendor.a58d7949
+     [1m[32md335971.js[39m[22m   35.1 KiB                                                              [1m31[39m[22m  [1m[32m[immutable][39m[22m  common.e4122484
+     [1m[32md42eeb7.js[39m[22m   4.28 KiB                                                             [1m120[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/pos-settings.2a8c5354
+     [1m[32md682f93.js[39m[22m   69.5 KiB                                                             [1m130[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/surfboard.6c8beca6
+     [1m[32md772c86.js[39m[22m     14 KiB                                                              [1m84[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/categories.1c9c9a02
+     [1m[32md7d96a2.js[39m[22m   68.9 KiB                                                               [1m8[39m[22m  [1m[32m[immutable][39m[22m  common.5278b41d
+     [1m[32md7e7b66.js[39m[22m   12.6 KiB                                                             [1m154[39m[22m  [1m[32m[immutable][39m[22m  pages/events/inquiry/_store.f828b7dd
+     [1m[32md835b7e.js[39m[22m   46.5 KiB                                                             [1m129[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/statistics.d2263b52
+     [1m[32mdaffded.js[39m[22m   6.08 KiB                                                              [1m75[39m[22m  [1m[32m[immutable][39m[22m  components/molecules-order-modal.8625507a
+     [1m[32mdc52286.js[39m[22m   2.25 KiB                                                              [1m93[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/employees.7691e7e0
+     [1m[32mdf1be88.js[39m[22m  249 bytes                                                             [1m149[39m[22m  [1m[32m[immutable][39m[22m  pages/brosjyre-tilbud.6812b157
+     [1m[32mdf1f83e.js[39m[22m   62.1 KiB                                                    [1m209, 39, 210[39m[22m  [1m[32m[immutable][39m[22m  vendors.content/plugin.js.7587c744
+     [1m[32mdf8a8e1.js[39m[22m   22.4 KiB                                                              [1m47[39m[22m  [1m[32m[immutable][39m[22m  app.e00ee41a
+     [1m[32mdfbf8ee.js[39m[22m   2.92 KiB                                                              [1m72[39m[22m  [1m[32m[immutable][39m[22m  components/atoms-price-slide.9d430520
+     [1m[32me01a1aa.js[39m[22m  208 bytes                                              [1m60, 51, 52, 53, 65[39m[22m  [1m[32m[immutable][39m[22m  components/admin-meals-statement-lines.191b28fb
+     [1m[32me31d6d7.js[39m[22m      7 KiB                          [1m58, 49, 54, 55, 56, 57, 59, 61, 62, 63[39m[22m  [1m[32m[immutable][39m[22m  components/admin-meals-program-panel.45d69b64
+     [1m[32me32d508.js[39m[22m   52.2 KiB                                                              [1m20[39m[22m  [1m[32m[immutable][39m[22m  common.85fda076
+     [1m[32me49fdb0.js[39m[22m      7 KiB                          [1m56, 49, 54, 55, 57, 58, 59, 61, 62, 63[39m[22m  [1m[32m[immutable][39m[22m  components/admin-meals-funded-orders.45d69b64
+     [1m[32me4ff034.js[39m[22m   5.36 KiB                                                             [1m118[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/payouts.673830ce
+     [1m[32mea22920.js[39m[22m   27.8 KiB                                         [1m108, 51, 52, 53, 60, 65[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/margin-suppliers.2d76453e
+     [1m[32meb31b57.js[39m[22m   42.1 KiB                                                             [1m103[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/kravia-invoice.f7aecb84
+     [1m[32mece395e.js[39m[22m   17.7 KiB                                                              [1m64[39m[22m  [1m[32m[immutable][39m[22m  components/admin-variant-selector-modal.7d38e85e
+     [1m[32meeb2082.js[39m[22m    130 KiB                                                               [1m1[39m[22m  [1m[32m[immutable][39m[22m  common.03779d57
+     [1m[32mf042843.js[39m[22m   47.4 KiB                                                             [1m206[39m[22m  [1m[32m[immutable][39m[22m  vendor.d44ec1f0
+     [1m[32mf06ce2e.js[39m[22m   36.3 KiB                                                             [1m208[39m[22m  [1m[32m[immutable][39m[22m  vendors.content/plugin.js.615a04d7
+     [1m[32mf21fbc0.js[39m[22m  741 bytes                                                              [1m66[39m[22m  [1m[32m[immutable][39m[22m  components/atoms-check-info.51a4cd32
+     [1m[32mf25d5d8.js[39m[22m   44.4 KiB                                                               [1m7[39m[22m  [1m[32m[immutable][39m[22m  common.51a4cd32
+     [1m[32mf2a9b81.js[39m[22m   19.7 KiB                                                              [1m89[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/dintero-terminal.a1e8ca64
+     [1m[32mf401917.js[39m[22m     43 KiB                                                             [1m197[39m[22m  [1m[32m[immutable][39m[22m  vendor.310cd18e
+     [1m[32mf420751.js[39m[22m   1.84 KiB                                                              [1m70[39m[22m  [1m[32m[immutable][39m[22m  components/atoms-other-price-item.899e1e8f
+     [1m[32mf488f1c.js[39m[22m   4.84 KiB                                                             [1m181[39m[22m  [1m[32m[immutable][39m[22m  pages/subscribe/confirm.b9b86600
+     [1m[32mf5b87e4.js[39m[22m   13.8 KiB                                                             [1m172[39m[22m  [1m[32m[immutable][39m[22m  pages/preferences/communications.f379737b
+     [1m[32mf6b065b.js[39m[22m   16.9 KiB                     [1m109, 49, 54, 55, 56, 57, 58, 59, 61, 62, 63[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/meals-agreements.2d76453e
+     [1m[32mf7b2ab7.js[39m[22m   13.8 KiB                                                              [1m88[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/dinehome.f511f599
+     [1m[32mf95b3e0.js[39m[22m     13 KiB                                                             [1m207[39m[22m  [1m[32m[immutable][39m[22m  vendor.d89be493
+     [1m[32mfbac684.js[39m[22m   9.07 KiB                                                             [1m161[39m[22m  [1m[32m[immutable][39m[22m  pages/last-ned.28f2b231
+     [1m[32mfcb5b9a.js[39m[22m   33.4 KiB                                                              [1m11[39m[22m  [1m[32m[immutable][39m[22m  common.75071abe
+     [1m[32mfd5a497.js[39m[22m   12.3 KiB                                                             [1m136[39m[22m  [1m[32m[immutable][39m[22m  pages/admin/wolt-calc.f888f714
+     [1m[32mfefd4ef.js[39m[22m   5.58 KiB                                                             [1m148[39m[22m  [1m[32m[immutable][39m[22m  pages/agb.496960f8
+[1m[32mimg/2a0e00b.svg[39m[22m    1.5 KiB                                                                [1m[39m[22m  [1m[32m[immutable][39m[22m  
+[1m[32mimg/2e93fee.png[39m[22m     13 KiB                                                                [1m[39m[22m  [1m[32m[immutable][39m[22m  
+[1m[32mimg/32dce02.png[39m[22m    237 KiB                                                                [1m[39m[22m  [1m[32m[immutable][39m[22m  
+[1m[32mimg/44115f1.svg[39m[22m   5.11 KiB                                                                [1m[39m[22m  [1m[32m[immutable][39m[22m  
+[1m[32mimg/5b7515f.png[39m[22m    282 KiB                                                                [1m[39m[22m  [1m[32m[immutable][39m[22m  
+[1m[32mimg/672f42a.png[39m[22m    120 KiB                                                                [1m[39m[22m  [1m[32m[immutable][39m[22m  
+[1m[32mimg/724b5cf.svg[39m[22m    1.4 KiB                                                                [1m[39m[22m  [1m[32m[immutable][39m[22m  
+[1m[32mimg/77bf09a.png[39m[22m   5.38 KiB                                                                [1m[39m[22m  [1m[32m[immutable][39m[22m  
+[1m[32mimg/79be010.png[39m[22m    282 KiB                                                                [1m[39m[22m  [1m[32m[immutable][39m[22m  
+[1m[32mimg/82bb197.png[39m[22m   39.2 KiB                                                                [1m[39m[22m  [1m[32m[immutable][39m[22m  
+[1m[32mimg/85d222a.png[39m[22m    141 KiB                                                                [1m[39m[22m  [1m[32m[immutable][39m[22m  
+[1m[32mimg/a101b07.png[39m[22m    271 KiB                                                                [1m[39m[22m  [1m[32m[immutable][39m[22m  
+[1m[32mimg/bf6ec9b.png[39m[22m   16.9 KiB                                                                [1m[39m[22m  [1m[32m[immutable][39m[22m  
+[1m[32mimg/cc5d48d.png[39m[22m   8.68 KiB                                                                [1m[39m[22m  [1m[32m[immutable][39m[22m  
+[1m[32mimg/ce98a9f.png[39m[22m    1.1 MiB                                                                [1m[39m[22m  [1m[32m[immutable][39m[22m  
+[1m[32mimg/e15f385.svg[39m[22m    2.7 KiB                                                                [1m[39m[22m  [1m[32m[immutable][39m[22m  
+[1m[32mimg/fc49235.png[39m[22m    295 KiB                                                                [1m[39m[22m  [1m[32m[immutable][39m[22m  
+[1m[32mimg/ffb6888.svg[39m[22m   5.12 KiB                                                                [1m[39m[22m  [1m[32m[immutable][39m[22m  
+Entrypoint [1mapp[39m[22m = [1m[32m94687ba.js[39m[22m [1m[32m6ba8b2d.js[39m[22m [1m[32m2964a9b.js[39m[22m [1m[32md08cb7d.js[39m[22m [1m[32m64e8479.js[39m[22m [1m[32ma41c3a0.js[39m[22m [1m[32mf042843.js[39m[22m [1m[32mf401917.js[39m[22m [1m[32m737deea.js[39m[22m [1m[32m8538839.js[39m[22m [1m[32mf95b3e0.js[39m[22m [1m[32m19b6a4a.js[39m[22m [1m[32md32686c.js[39m[22m [1m[32m9bc38a1.js[39m[22m [1m[32m19cdab6.js[39m[22m [1m[32m2155698.js[39m[22m [1m[32m03848cd.js[39m[22m [1m[32m8abd10d.js[39m[22m [1m[32mb69ce46.js[39m[22m [1m[32mdf8a8e1.js[39m[22m [1m[32m820824c.js[39m[22m [1m[32m723bbff.js[39m[22m [1m[32mca2c857.js[39m[22m
+
+[1m[31mERROR in translations/no.ts:5513:3
+TS1117: An object literal cannot have multiple properties with the same name.
+    5511 |   wfrl_toast_reinstated: 'Funksjonen er tatt i bruk igjen.'
+    5512 | ,
+  > 5513 |   categories_create: 'ZZRERUN_LATER_NO'
+         |   ^^^^^^^^^^^^^^^^^
+    5514 | }
+    5515 |[39m[22m
+
+ FATAL  Nuxt build error
+
+  at WebpackBundler.webpackCompile (node_modules/@nuxt/webpack/dist/webpack.js:1868:21)
+  at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+  at async WebpackBundler.build (node_modules/@nuxt/webpack/dist/webpack.js:1833:5)
+  at async Builder.build (node_modules/@nuxt/builder/dist/builder.js:249:5)
+  at async ensureBuild (node_modules/@nuxt/cli/dist/cli-generate.js:117:3)
+  at async Object.run (node_modules/@nuxt/cli/dist/cli-generate.js:234:7)
+  at async NuxtCommand.run (node_modules/@nuxt/cli/dist/cli-index.js:356:7)
+
+
+   ╭─────────────────────────────╮
+   │                             │
+   │   ✖ Nuxt Fatal Error        │
+   │                             │
+   │   Error: Nuxt build error   │
+   │                             │
+   ╰─────────────────────────────╯
+
+npm run generate  45.29s user 2.90s system 227% cpu 21.153 total
+EXIT=1

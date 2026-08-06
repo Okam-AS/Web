@@ -312,14 +312,21 @@ import {
 // that the newest message in their inbox carries a fresh one rather than concluding they have been
 // locked out of their own rights.
 //
-// ⚠ THE SESSION COOKIE CANNOT REACH THE API AS THIS APP IS DEPLOYED TODAY. It is HttpOnly + Secure +
-// SameSite=Strict on the API origin, and this app's `API_BASE_URL` is a different SITE
-// (`okamapi.azurewebsites.net` vs `okam.no`), while `Program.cs` builds CORS with `AllowAnyOrigin()`,
-// which a browser refuses to combine with credentials. Endpoints 4/5/7 will therefore answer 401
-// `growth.session_invalid` until the API is served same-site or the policy names this origin with
-// `AllowCredentials`. The page is written to the contract and renders that 401 as what it is (see the
-// `session-dead` branch) rather than as a page that silently does nothing — the seam is in
-// `~/utils/growth/growth-guest-client`.
+// ⚠ THE SESSION COOKIE CANNOT REACH THE API AS THIS APP IS DEPLOYED TODAY, and it takes TWO separate
+// fixes rather than either one. The cookie is HttpOnly + Secure + SameSite=Strict on the API origin,
+// so it rides a request only when BOTH of the following hold:
+//
+//   • The API is served SAME-SITE as these pages. `API_BASE_URL` is `okamapi.azurewebsites.net` while
+//     the pages are `okam.no` — different sites, so the browser attaches no cookie at all.
+//   • CORS NAMES THIS ORIGIN with `AllowCredentials`. The API serves endpoints 3/4/5/7 with a
+//     dedicated policy whose allowlist is derived from `GrowthSettings.PreferenceCentreBaseUrl` and
+//     `ConfirmBaseUrl`, so this origin has to be among them.
+//
+// NEITHER SUBSTITUTES FOR THE OTHER. Same-site is not same-origin, so CORS still applies to a
+// sibling host; and no CORS header persuades a Strict cookie onto a cross-site request. Until both
+// hold, endpoints 4/5/7 answer 401 `growth.session_invalid`. The page is written to the contract and
+// renders that 401 as what it is (see the `session-dead` branch) rather than as a page that silently
+// does nothing — the seam is in `~/utils/growth/growth-guest-client`.
 export default {
   name: 'GrowthGuestPreferencesPage',
   components: { GuestShell },

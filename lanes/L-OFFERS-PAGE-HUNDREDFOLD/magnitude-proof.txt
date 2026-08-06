@@ -1,0 +1,53 @@
+watchman warning:  Recrawled this watch 45 times, most recently because:
+MustScanSubDirs UserDroppedTo resolve, please review the information on
+https://facebook.github.io/watchman/docs/troubleshooting.html#recrawl
+To clear this warning, run:
+`watchman watch-del '/Users/svendaneel/okam/Web-modules' ; watchman watch-project '/Users/svendaneel/okam/Web-modules'`
+
+PASS lanes/L-OFFERS-PAGE-HUNDREDFOLD/magnitude-proof.test.js
+  the slice is really the shipped code
+    ✓ all four helpers came out of the file, and nothing else did (2 ms)
+  the magnitude, with a real figure
+    ✓ the page helper renders a hundredth of the offer document beside it (8 ms)
+    ✓ the one-time helper does the same to a four-figure amount
+    ✓ the two Value helpers hand kroner to callers that every sibling reads as øre (1 ms)
+  the absence, independently of the magnitude
+    ✓ an unstated fee is silently dropped and the total prints as a real zero
+    ✓ the same `if` also drops a genuine zero, so the three worlds are two
+    ✓ an absent lineItems container answers with a manufactured zero too (1 ms)
+
+  console.log
+    MONTHLY  49900 øre -> helper: kr 4,99  | document: kr 499,00
+
+      at Object.<anonymous> (lanes/L-OFFERS-PAGE-HUNDREDFOLD/magnitude-proof.test.js:67:13)
+
+  console.log
+    ONETIME 125000 øre -> helper: kr 12,50  | document: kr 1 250,00
+
+      at Object.<anonymous> (lanes/L-OFFERS-PAGE-HUNDREDFOLD/magnitude-proof.test.js:77:13)
+
+  console.log
+    VALUES  monthly: 499 (document: 49900)  onetime: 1250 (document: 125000)
+
+      at Object.<anonymous> (lanes/L-OFFERS-PAGE-HUNDREDFOLD/magnitude-proof.test.js:86:13)
+
+  console.log
+    ABSENT  monthly: kr 0,00  onetime: kr 0,00  (should be the dash)
+
+      at Object.<anonymous> (lanes/L-OFFERS-PAGE-HUNDREDFOLD/magnitude-proof.test.js:101:13)
+
+  console.log
+    COLLAPSE stated-zero: kr 0,00  absent: kr 0,00  identical: true
+
+      at Object.<anonymous> (lanes/L-OFFERS-PAGE-HUNDREDFOLD/magnitude-proof.test.js:114:13)
+
+  console.log
+    NO-LIST monthly: kr 0,00  value: 0
+
+      at Object.<anonymous> (lanes/L-OFFERS-PAGE-HUNDREDFOLD/magnitude-proof.test.js:124:13)
+
+Test Suites: 1 passed, 1 total
+Tests:       7 passed, 7 total
+Snapshots:   0 total
+Time:        0.536 s, estimated 1 s
+Ran all test suites matching /lanes\/L-OFFERS-PAGE-HUNDREDFOLD\/magnitude-proof.test.js/i.

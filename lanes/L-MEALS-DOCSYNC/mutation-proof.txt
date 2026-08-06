@@ -1,0 +1,37 @@
+=== BASELINE ===
+    guard exit 0 -> GREEN
+
+--- M1-OPTIONS-BOUND : demo/RUNBOOK.md
+    reworded: the deleted text said `Configure<MealsFeatureSettings>` is never called
+    mutant   -> RED (exit 1)
+      caught: OPTIONS-BOUND      Scripts/demo/RUNBOOK.md:484: The `Features:Meals` section is never bound in this build.
+    restored -> GREEN (exit 0)
+
+--- M2-AGREEMENT-CREATE : Meals/MEALS-MEMBERSHIP-JOURNEY-MANIFEST.md
+    reworded: the deleted text said 'no agreement-create endpoint in v1'
+    mutant   -> RED (exit 1)
+      caught: AGREEMENT-CREATE   WebApi.Tests/Meals/MEALS-MEMBERSHIP-JOURNEY-MANIFEST.md:17: Note: agreements have no create endpoint, so step 2 must stay a fixture.
+    restored -> GREEN (exit 0)
+
+--- M3-RESERVATION-TOKEN : meals/meals-client.js
+    planted in a DIFFERENT file from the two the lane corrected
+    mutant   -> RED (exit 1)
+      caught: RESERVATION-TOKEN  utils/meals/meals-client.js:28: // The funding path is unusable: it needs a reservation token no cart in this estate sends.
+    restored -> GREEN (exit 0)
+
+--- M4-INVITATION-CLAIM : meals/MealsPeoplePanel.vue
+    planted in a DIFFERENT file from the one the lane corrected
+    mutant   -> RED (exit 1)
+      caught: INVITATION-CLAIM   components/admin/meals/MealsPeoplePanel.vue:268: // Enrolment has no candidates: no client in the estate claims one.
+    restored -> GREEN (exit 0)
+
+--- M5-CLOSURE-STRIPPED : replan/b-meals-completeness.md
+    strips the dated closure from the freeze-frame ledger; the preserved F3 row must fire
+    mutant   -> RED (exit 1)
+      caught: AGREEMENT-CREATE   docs/plans/replan/b-meals-completeness.md:34: > - **F3 "the corridor agreement has no production write path"** — superseded around `588061e7`, which added
+      caught: AGREEMENT-CREATE   docs/plans/replan/b-meals-completeness.md:53: **F3 — the corridor agreement has no production write path. VERIFIED.**
+      caught: AGREEMENT-CREATE   docs/plans/replan/b-meals-completeness.md:54: `MealsAgreement` is a shipped entity (`Entities/Meals/MealsAgreement.cs:19-56`) with a table and migration (`Migrations/20260720134041_MealsW1_CompanyIdentityMembership.cs`). Grep for every construction site in the repo returns exactly two, both test fixtures: `WebApi.Tests/Meals/MealsWorld.cs:120` and `WebApi.Tests/Meals/MealsPilotFullLoopJourneyTests.cs:258`. The module's own journey manifest says so in writing — `WebApi.Tests/Meals/MEALS-MEMBERSHIP-JOURNEY-MANIFEST.md` step 2: *"Concierge fixture: seed the corridor agreement (spec §5 — agreements have no create endpoint in v1)."* Four services refuse to operate without an `Active` agreement, including the store directory `MealsCompanyService.cs:370-380`, which reads `MealsAgreements` first and returns an empty list when none exist.
+      caught: RESERVATION-TOKEN  docs/plans/replan/b-meals-completeness.md:198: - `core/services/cart-service.ts:57-58` — `Complete(storeId)` must accept and send `?reservationToken=`. Without it no client can complete a company-funded checkout. **S.**
+    restored -> GREEN (exit 0)
+
+=== ALL 5 MUTATIONS RED, ALL RESTORES GREEN ===

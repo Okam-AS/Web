@@ -1,0 +1,174 @@
+{
+ "integration/mig-stack-land": {
+  "new": [
+   "20260801084923_Margin_PeriodStatementFinalizedImmutable",
+   "20260801102621_Workforce_PublicationReceiptUniqueness",
+   "20260801113131_Training_W3_ChecklistsAndDeviations",
+   "20260801132512_Margin_WasteEntries",
+   "20260801174639_Workforce_W5_Timesheets",
+   "20260802103646_Workforce_TimesheetExportSingleSucceeded",
+   "20260802151208_Workforce_TimesheetAdjustmentOrdinal",
+   "20260803090036_Meals_CompanyReceivableAccount",
+   "20260803093235_Kassa_AccountingSummaryDayUniqueIndex"
+  ],
+  "snapshot_touched": true
+ },
+ "lane/acct-uidx": {
+  "new": [
+   "20260801084923_Margin_PeriodStatementFinalizedImmutable",
+   "20260801102621_Workforce_PublicationReceiptUniqueness",
+   "20260801113131_Training_W3_ChecklistsAndDeviations",
+   "20260801132512_Margin_WasteEntries",
+   "20260801174639_Workforce_W5_Timesheets",
+   "20260802103646_Workforce_TimesheetExportSingleSucceeded",
+   "20260802151208_Workforce_TimesheetAdjustmentOrdinal",
+   "20260803090036_Meals_CompanyReceivableAccount",
+   "20260803093235_Kassa_AccountingSummaryDayUniqueIndex"
+  ],
+  "snapshot_touched": true
+ },
+ "lane/ef-index-shadow-sweep": {
+  "new": [
+   "20260801084923_Margin_PeriodStatementFinalizedImmutable",
+   "20260801102621_Workforce_PublicationReceiptUniqueness",
+   "20260801113131_Training_W3_ChecklistsAndDeviations",
+   "20260801132512_Margin_WasteEntries",
+   "20260801174639_Workforce_W5_Timesheets",
+   "20260802103646_Workforce_TimesheetExportSingleSucceeded",
+   "20260802151208_Workforce_TimesheetAdjustmentOrdinal",
+   "20260803090036_Meals_CompanyReceivableAccount",
+   "20260803093235_Kassa_AccountingSummaryDayUniqueIndex"
+  ],
+  "snapshot_touched": true
+ },
+ "lane/margin-finalize-lag": {
+  "new": [
+   "20260731203011_Margin_PeriodStatementFinalizedImmutable"
+  ],
+  "snapshot_touched": true
+ },
+ "lane/margin-waste": {
+  "new": [
+   "20260801084923_Margin_PeriodStatementFinalizedImmutable",
+   "20260801102621_Workforce_PublicationReceiptUniqueness",
+   "20260801113131_Training_W3_ChecklistsAndDeviations",
+   "20260801132512_Margin_WasteEntries"
+  ],
+  "snapshot_touched": true
+ },
+ "lane/margin-waste-500": {
+  "new": [
+   "20260801084923_Margin_PeriodStatementFinalizedImmutable",
+   "20260801102621_Workforce_PublicationReceiptUniqueness",
+   "20260801113131_Training_W3_ChecklistsAndDeviations",
+   "20260801132512_Margin_WasteEntries"
+  ],
+  "snapshot_touched": true
+ },
+ "lane/mig-company-receivable": {
+  "new": [
+   "20260801084923_Margin_PeriodStatementFinalizedImmutable",
+   "20260801102621_Workforce_PublicationReceiptUniqueness",
+   "20260801113131_Training_W3_ChecklistsAndDeviations",
+   "20260801132512_Margin_WasteEntries",
+   "20260801174639_Workforce_W5_Timesheets",
+   "20260802103646_Workforce_TimesheetExportSingleSucceeded",
+   "20260802151208_Workforce_TimesheetAdjustmentOrdinal",
+   "20260803090036_Meals_CompanyReceivableAccount"
+  ],
+  "snapshot_touched": true
+ },
+ "lane/review-residuals-rezone": {
+  "new": [
+   "20260801084923_Margin_PeriodStatementFinalizedImmutable",
+   "20260801102621_Workforce_PublicationReceiptUniqueness",
+   "20260801113131_Training_W3_ChecklistsAndDeviations",
+   "20260801132512_Margin_WasteEntries",
+   "20260801174639_Workforce_W5_Timesheets",
+   "20260802103646_Workforce_TimesheetExportSingleSucceeded"
+  ],
+  "snapshot_touched": true
+ },
+ "lane/wf-adjustment-ordinal": {
+  "new": [
+   "20260801084923_Margin_PeriodStatementFinalizedImmutable",
+   "20260801102621_Workforce_PublicationReceiptUniqueness",
+   "20260801113131_Training_W3_ChecklistsAndDeviations",
+   "20260801132512_Margin_WasteEntries",
+   "20260801174639_Workforce_W5_Timesheets",
+   "20260802103646_Workforce_TimesheetExportSingleSucceeded",
+   "20260802151208_Workforce_TimesheetAdjustmentOrdinal"
+  ],
+  "snapshot_touched": true
+ },
+ "lane/wf-bootstrap-one-engagement": {
+  "new": [
+   "20260801084923_Margin_PeriodStatementFinalizedImmutable",
+   "20260801102621_Workforce_PublicationReceiptUniqueness",
+   "20260801113131_Training_W3_ChecklistsAndDeviations",
+   "20260801132512_Margin_WasteEntries",
+   "20260801174639_Workforce_W5_Timesheets",
+   "20260802103646_Workforce_TimesheetExportSingleSucceeded",
+   "20260802151208_Workforce_TimesheetAdjustmentOrdinal",
+   "20260803090036_Meals_CompanyReceivableAccount",
+   "20260803093235_Kassa_AccountingSummaryDayUniqueIndex",
+   "20260803124302_Workforce_BootstrapFirstEngagement"
+  ],
+  "snapshot_touched": true
+ },
+ "lane/wf-digest-tautology": {
+  "new": [
+   "20260801084923_Margin_PeriodStatementFinalizedImmutable",
+   "20260801102621_Workforce_PublicationReceiptUniqueness",
+   "20260801113131_Training_W3_ChecklistsAndDeviations",
+   "20260801132512_Margin_WasteEntries",
+   "20260801174639_Workforce_W5_Timesheets"
+  ],
+  "snapshot_touched": true
+ },
+ "lane/wf-export-duplicate": {
+  "new": [
+   "20260801084923_Margin_PeriodStatementFinalizedImmutable",
+   "20260801102621_Workforce_PublicationReceiptUniqueness",
+   "20260801113131_Training_W3_ChecklistsAndDeviations",
+   "20260801132512_Margin_WasteEntries",
+   "20260801174639_Workforce_W5_Timesheets",
+   "20260802103646_Workforce_TimesheetExportSingleSucceeded"
+  ],
+  "snapshot_touched": true
+ },
+ "lane/wf-timesheet-race": {
+  "new": [
+   "20260801084923_Margin_PeriodStatementFinalizedImmutable",
+   "20260801102621_Workforce_PublicationReceiptUniqueness",
+   "20260801113131_Training_W3_ChecklistsAndDeviations",
+   "20260801132512_Margin_WasteEntries",
+   "20260801174639_Workforce_W5_Timesheets",
+   "20260802103646_Workforce_TimesheetExportSingleSucceeded",
+   "20260802151208_Workforce_TimesheetAdjustmentOrdinal",
+   "20260803090036_Meals_CompanyReceivableAccount",
+   "20260803093235_Kassa_AccountingSummaryDayUniqueIndex"
+  ],
+  "snapshot_touched": true
+ },
+ "lane/wf-timesheet-wire": {
+  "new": [
+   "20260801084923_Margin_PeriodStatementFinalizedImmutable",
+   "20260801102621_Workforce_PublicationReceiptUniqueness",
+   "20260801113131_Training_W3_ChecklistsAndDeviations",
+   "20260801132512_Margin_WasteEntries",
+   "20260801174639_Workforce_W5_Timesheets"
+  ],
+  "snapshot_touched": true
+ },
+ "lane/wf-w5-timesheet": {
+  "new": [
+   "20260801084923_Margin_PeriodStatementFinalizedImmutable",
+   "20260801102621_Workforce_PublicationReceiptUniqueness",
+   "20260801113131_Training_W3_ChecklistsAndDeviations",
+   "20260801132512_Margin_WasteEntries",
+   "20260801174639_Workforce_W5_Timesheets"
+  ],
+  "snapshot_touched": true
+ }
+}

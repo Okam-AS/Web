@@ -1,0 +1,24 @@
+Test run for /Users/svendaneel/okam/OkamAPI-corscred/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+Microsoft (R) Test Execution Command Line Tool Version 17.8.0 (arm64)
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+warn: Microsoft.EntityFrameworkCore.Model.Validation[10622]
+warn: Microsoft.EntityFrameworkCore.Model.Validation[10622]
+warn: Microsoft.EntityFrameworkCore.Model.Validation[10622]
+warn: Microsoft.EntityFrameworkCore.Model.Validation[10622]
+warn: Microsoft.EntityFrameworkCore.Model.Validation[10622]
+warn: Microsoft.EntityFrameworkCore.Model.Validation[20601]
+crit: WebApi.Program[0]
+warn: WebApi[0]
+warn: Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware[3]
+warn: WebApi.Services.Growth.GrowthAddressProtector[0]
+warn: Microsoft.EntityFrameworkCore.Query[20504]
+warn: Microsoft.EntityFrameworkCore.Query[20504]
+warn: Microsoft.EntityFrameworkCore.Query[20504]
+crit: WebApi.Program[0]
+warn: WebApi[0]
+warn: Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware[3]
+
+Passed!  - Failed:     0, Passed:    42, Skipped:     0, Total:    42, Duration: 4 s - WebApi.Tests.dll (net8.0)

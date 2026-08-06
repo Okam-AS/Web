@@ -1,0 +1,2 @@
+/Users/svendaneel/okam/wt-mealsposrel/WebApi.Tests/Meals/MealsPoisonedModuleGraph.cs(138,53): error CS0535: 'MealsPoisonedModuleGraph.ThrowingFundingAuthority' does not implement interface member 'IMealsFundingAuthority.AuthorizePointOfSaleTenderAsync(int, int, long, string, string, CancellationToken)' [/Users/svendaneel/okam/wt-mealsposrel/WebApi.Tests/WebApi.Tests.csproj]
+EXITCODE=1

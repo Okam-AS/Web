@@ -1,0 +1,2651 @@
+# Log — web-modules
+
+- 2026-07-31T18:15Z · tool · initialised plan `web-modules` in phase draft
+- 2026-07-31T18:29Z · @sven · signed intent 7c84435b072ff7fe; phase draft -> cockpit
+- 2026-07-31T18:29Z · tool · refreshed 21 fact spans, 15 unconfirmed
+- 2026-07-31T18:30Z · tool · fact ev.journeys: hand edit overwritten
+- 2026-07-31T18:30Z · tool · fact fe.tests: hand edit overwritten
+- 2026-07-31T18:30Z · tool · fact fe.tests.failed: hand edit overwritten
+- 2026-07-31T18:30Z · tool · fact wf.journeys: hand edit overwritten
+- 2026-07-31T18:30Z · tool · refreshed 21 fact spans, 15 unconfirmed
+- 2026-07-31T18:30Z · tool · L-ADMIN-NAV built-unverified -> verified, evidence fact:nav.modules
+- 2026-07-31T18:31Z · tool · waived the six dispatch orders from the first tick: this pass authored the plan and ran no lanes; the queue stands for @sven to release
+- 2026-07-31T18:31Z · tool · authoring note: two fact spans on one line corrupt each other on refresh (stale offsets after the first rewrite) — one span per line in this file
+- 2026-07-31T19:28Z · tool · refreshed 21 fact spans, 15 unconfirmed
+- 2026-07-31T20:10Z · @claude · authored recommend: lines and context bullets on all twelve decisions; D-EV-VAT deliberately carries none
+- 2026-07-31T20:37Z · tool · raised F-EV-CALLBACK (blocker)
+- 2026-07-31T20:37Z · tool · raised F-EV-FAKE-DRIFT (warn)
+- 2026-07-31T20:37Z · tool · raised F-GR-FALSE-EVIDENCE (blocker)
+- 2026-07-31T20:37Z · tool · raised F-WF-NO-INVITE (blocker)
+- 2026-07-31T20:37Z · tool · raised F-TRAIN-NO-EVIDENCE (warn)
+- 2026-07-31T20:37Z · tool · raised F-MRG-FINALIZE-LAG (warn)
+- 2026-07-31T20:42Z · tool · lane/ev-capture reproduced the lost-callback release (deposit=Expired captures=0 cancels=1 released=1) and closed it at 99f56e63. Nine of fourteen existing Events sweep pins asserted the defect as correct behaviour, one landed the previous day; they were re-pointed at the case that still reaches release, not deleted. A suite can defend a defect it was written after.
+- 2026-07-31T20:43Z · tool · lane/fe-journeys: the Playwright harness landed unrun (@playwright/test declared, never installed, no artifacts). Installed and ran: 9/9 journeys, 23 capabilities now browser-demonstrable. Blocking defect found by driving the app: pages/meals/join.vue snapshots _coreInitializer in created(), before the global mixin rehydrates Vuex, so bearerToken is empty for the component's life and both invitee routes are [Authorize] — no invited employee can see or accept an invitation. Proven with the request log (authorization ABSENT to 401).
+- 2026-07-31T20:44Z · tool · lane/margin-finalize-lag: finalize now REFUSES while the projector is behind (margin.projection-behind, 409, retryable) rather than freezing a floor; caveat option rejected because the only lag surface is power-user-gated. Statement freeze trigger added (THROW 50061). Estate-wide finding: every triggered table has no rowversion and the only two rowversion tables have no trigger, because SQL Server refuses OUTPUT INSERTED on a triggered table (error 334); resolved with EF7 ToTable(t => t.HasTrigger(...)), which generates zero migration operations. This corrects MIG-14 and unblocks MealsStatementRun.
+- 2026-07-31T20:48Z · tool · lane/fe-wf-onboard (9ec1100): schedule pivot chain fixed (the roles-notice v-if headed the chain, so the month grid bound to the notice's condition); manager invitation surface + public /workforce/join claim page built and driven in a real browser end to end (issue -> code shown once -> claim -> worker sees the published shift). Jest 93 suites/2174. Backend handoffs: no invitation LIST route and no REVOKE route -- WorkforceInvitationState.Revoked is declared and written by no code path. Independently confirmed pages/meals/join.vue carries the same created()-caches-the-service defect.
+- 2026-07-31T20:54Z · agent:fe-journeys · started L-JOURNEY-HARNESS
+- 2026-07-31T20:56Z · tool · raised F-MEALS-LEVER-OPAQUE (warn)
+- 2026-07-31T20:58Z · agent:L-BE-RECEIPT · started L-BE-RECEIPT
+- 2026-07-31T20:58Z · agent:L-EV-DIETARY · started L-EV-DIETARY
+- 2026-07-31T20:58Z · agent:L-MEALS-GATE · started L-MEALS-GATE
+- 2026-07-31T20:58Z · agent:L-MEALS-FUNDED · started L-MEALS-FUNDED
+- 2026-07-31T20:58Z · agent:L-FE-CI · started L-FE-CI
+- 2026-07-31T21:04Z · agent:L-MEALS-FUNDED · returned L-MEALS-FUNDED verdict=fail-spec -> open; D-SPEC-L-MEALS-FUNDED appended
+- 2026-07-31T21:04Z · agent:L-MEALS-FUNDED · report L-MEALS-FUNDED: ; All three reported client gaps hold: core/enums/payment-type.ts has no CompanyAccount member; cart-service.ts:57 Complete() posts /carts/complete/{storeId} with no query string; nothing in pages/, components/ or utils/meals/ binds POST /v1/stores/{id}/meals/quotes.; The backend half is complete — 
+- 2026-07-31T21:10Z · agent:L-FE-CI · L-FE-CI returned built -> built-unverified, evidence fact:fe.ci
+- 2026-07-31T21:10Z · agent:L-FE-CI · report L-FE-CI: ; lane/fe-ci @ 36ce9ae off ce77727, committed not pushed, worktree /Users/svendaneel/okam/web-fe-ci.; .github/workflows/nuxtjs.yml gains a `test` job: push on main|feature/**|lane/** and every pull_request. `build` now `needs: test` and is pinned to main, so a red suite stops the deploy and a featur
+- 2026-07-31T21:10Z · agent:L-BE-RECEIPT · L-BE-RECEIPT returned built -> built-unverified, evidence fact:be.tests
+- 2026-07-31T21:10Z · agent:L-BE-RECEIPT · report L-BE-RECEIPT: ; Fast tier at 8c8a243d: 4095 passed / 0 failed / 8 skipped / 4103 total, exit 0, 5m06s.; Run in a throwaway detached worktree at that SHA with a clean tree. The shared checkout held 13 modified files and an uncommitted Events migration while this ran, so a run there would have measured no commit at
+- 2026-07-31T21:11Z · tool · refreshed 21 fact spans, 13 unconfirmed
+- 2026-07-31T21:12Z · @sven · ruled D-MAIL = postmark
+- 2026-07-31T21:14Z · @sven · ruled D-SPEC-L-MEALS-FUNDED = consumerweb
+- 2026-07-31T21:15Z · tool · cleared F-EV-DIETARY (fact:ev.dietary is present)
+- 2026-07-31T21:15Z · tool · cleared F-BE-NO-ARTIFACT (fact:be.tests is ok)
+- 2026-07-31T21:18Z · @sven · L-ADMIN-NAV verified -> accepted
+- 2026-07-31T21:20Z · @sven · ruled D-PAYROLL = neutral-okam-csv
+- 2026-07-31T21:22Z · agent:L-EV-DIETARY · L-EV-DIETARY returned built -> built-unverified, evidence fact:ev.dietary (EventsRunSheetComposer.cs now reads ev.DietaryRequirements) + ../OkamAPI-modules/artifacts/journeys/ev-dietary/run-sheet.md
+- 2026-07-31T21:22Z · agent:L-EV-DIETARY · report L-EV-DIETARY: ; - NOT already built. The prior lane (4e30cab1) stopped the sheet ASSERTING an absence but deliberately authored no schema; MIG-20 was still an unbuilt ledger entry. So I built it.; - MIG-20 authored off the chain tip (20260730150953): EventsEvents + DietaryRequirements (nvarchar(max)), ...UpdatedA
+- 2026-07-31T21:23Z · agent:L-GROWTH-MAIL · started L-GROWTH-MAIL
+- 2026-07-31T21:23Z · agent:L-VIPPS-LOG · started L-VIPPS-LOG
+- 2026-07-31T21:43Z · agent:L-MEALS-GATE · returned L-MEALS-GATE verdict=fail-spec -> open; D-SPEC-L-MEALS-GATE appended
+- 2026-07-31T21:43Z · agent:L-MEALS-GATE · report L-MEALS-GATE: ; - Already built, by lane/meals-gate (bf650efd, merged 2262d155) before this brief was cut. Its own commit message names the same grep trap the probe fell into. F-MEALS-GATE is clearable once the probe is fixed.; - What was NOT built: any join between config and a request. MealsFeatureSettingsBindi
+- 2026-07-31T21:43Z · tool · refreshed 21 fact spans, 10 unconfirmed
+- 2026-07-31T21:43Z · tool · cleared F-MEALS-GATE (fact:meals.gate is present)
+- 2026-07-31T21:44Z · tool · cleared F-NO-BROWSER-EVIDENCE (fact:journeys.browser is present)
+- 2026-07-31T21:44Z · @sven · ruled D-IDCODE = venue-procedure-template
+- 2026-07-31T21:45Z · @sven · ruled D-MEALS-EMPREF = nullable-copied-at-claim
+- 2026-07-31T21:47Z · agent:L-MEALS-EMPREF · started L-MEALS-EMPREF
+- 2026-07-31T21:47Z · agent:L-WF-IDREG · started L-WF-IDREG
+- 2026-07-31T21:47Z · agent:L-MEALS-GATE · started L-MEALS-GATE
+- 2026-07-31T21:47Z · agent:L-MEALS-GATE · L-MEALS-GATE returned built -> built-unverified, evidence fact:meals.gate
+- 2026-07-31T21:47Z · agent:L-MEALS-GATE · report L-MEALS-GATE: ; - Verified the coordinator's four claims rather than taking them; all four hold.; - plan.md:1292 probe now reads `meals.gate wire ../OkamAPI-modules/Program.cs contains:services.AddMealsFeatureOptions();`. plan.md:1320 `fact:meals.gate` = ok/present, stamped 2026-07-31T21:43Z (stamps.log:98, hash 
+- 2026-07-31T21:53Z · @sven · ruled D-GROWTH-RETENTION = amend-13
+- 2026-07-31T21:53Z · tool · refreshed 21 fact spans, 9 unconfirmed
+- 2026-07-31T21:54Z · @sven · ruled D-EV-DINTERO = own-credentials-only
+- 2026-07-31T21:54Z · agent:L-GROWTH-MAIL · L-GROWTH-MAIL returned built -> built-unverified, evidence artifacts/journeys/growth-doi-postmark-sandbox.json
+- 2026-07-31T21:54Z · agent:L-GROWTH-MAIL · report L-GROWTH-MAIL: ; lane/growth-mail-postmark @ af6ec9dc off 349d8806, worktree /Users/svendaneel/okam/wt-growthmail, committed not pushed.; Verified the brief: IGrowthMailProvider was hard-bound to GrowthFakeMailProvider (Program.cs:910), which does no I/O.; Binding is now Growth:MailProvider (Fake|Smtp|Postmark), r
+- 2026-07-31T21:54Z · @sven · ruled D-EV-STRIPE = out-of-v1
+- 2026-07-31T22:05Z · tool · raised F-AI-REQUEST-BODY (blocker)
+- 2026-08-01T07:18Z · agent:L-VIPPS-LOG · L-VIPPS-LOG returned built -> built-unverified, evidence fact:vipps.token.guard · OkamAPI-modules 81d93e82 · artifacts/security/L-VIPPS-LOG-mutation.md
+- 2026-08-01T07:18Z · agent:L-VIPPS-LOG · report L-VIPPS-LOG: BRIEF STALE, not wrong: fecd9780 (21:43, before the brief was cut) had already made the merchant; reference one-way. Both directions re-verified clean — VippsService.cs:280's Error line (outbound URI; plus the provider's error body) and the orderId Vipps quotes back, in the callback route and body.;
+- 2026-08-01T07:18Z · tool · cleared F-VIPPS-LOG (fact:vipps.token.guard is present)
+- 2026-08-01T07:21Z · agent:L-MEALS-EMPREF · L-MEALS-EMPREF returned built -> built-unverified, evidence fact:meals.empref
+- 2026-08-01T07:21Z · agent:L-MEALS-EMPREF · report L-MEALS-EMPREF: Built D-MEALS-EMPREF as ruled (nullable-copied-at-claim). Backend OkamAPI-modules 241e042e; frontend Web-modules 27e33a7. Not pushed.; Migration 20260731215452_Meals_MembershipEmployeeReference: nullable nvarchar(64) on MealsInvitations + MealsMemberships. No index, no FK, no backfill.; Chain is lin
+- 2026-08-01T07:21Z · tool · cleared F-MEALS-INVITE (fact:meals.empref is present)
+- 2026-08-01T07:32Z · agent:L-WF-IDREG · L-WF-IDREG returned built -> built-unverified, evidence fact:wf.idreg (../OkamAPI-modules/Entities/Workforce/WorkforceIdentityCodeRegisterIssue.cs) + backend a04f51ca, d22c84c9 on feature/restaurant-modules + frontend a649e08 on lane/wf-idreg (worktree /Users/svendaneel/okam/web-wf-idreg), neither pushed
+- 2026-08-01T07:32Z · agent:L-WF-IDREG · report L-WF-IDREG: - Built D-IDCODE = venue-procedure-template. GET .../personnel-list/code-register?businessDate= produces the kodeoversikt as text/csv off the SAME read the screen uses, so the supersession rule and the WorkforceManager gate stay in one place. One row per CODE; fødselsnummer column blank on every row
+- 2026-08-01T07:32Z · tool · raised F-WF-CATEGORY (warn)
+- 2026-08-01T07:32Z · tool · raised F-WF-NODEPARTURE (warn)
+- 2026-08-01T09:00Z · tool · raised F-MRG-EPOCH-CAVEAT (warn)
+- 2026-08-01T10:01Z · tool · raised F-WF-ACK-DUP (warn)
+- 2026-08-01T10:29Z · tool · refreshed 21 fact spans, 8 unconfirmed
+- 2026-08-01T10:31Z · tool · raised F-WF-CLOCK-UNLINKED (blocker)
+- 2026-08-01T10:31Z · tool · raised F-WF-EXCHANGE-STALE-GRID (warn)
+- 2026-08-01T10:31Z · tool · raised F-WF-PAYROLL-REKEY (warn)
+- 2026-08-01T10:31Z · tool · raised F-MRG-ONBOARD-16 (warn)
+- 2026-08-01T10:31Z · agent:L-EV-EXTDEP · started L-EV-EXTDEP
+- 2026-08-01T10:31Z · agent:L-MEALS-FUNDED · started L-MEALS-FUNDED
+- 2026-08-01T10:31Z · agent:L-TRAIN-EVID-LAND · started L-TRAIN-EVID-LAND
+- 2026-08-01T10:58Z · tool · raised F-EV-HEALTHDATA (warn)
+- 2026-08-01T10:58Z · tool · raised F-GR-HEALTH-DEAF (blocker)
+- 2026-08-01T10:58Z · tool · raised F-VIPPS-REDACT-OPEN (blocker)
+- 2026-08-01T11:00Z · tool · raised F-WF-CLOCK-LIES (warn)
+- 2026-08-01T11:01Z · agent:L-MEALS-FUNDED · L-MEALS-FUNDED returned built -> built-unverified, evidence artifacts/journeys/meals-funded-checkout.playwright.json · fact:meals.token.client
+- 2026-08-01T11:01Z · agent:L-MEALS-FUNDED · report L-MEALS-FUNDED: Landed as three local commits, nothing pushed: ConsumerWeb/core ef833ca and ConsumerWeb ac264e5 (both feature/swiss), Web-modules 8a08b36 (feature/restaurant-modules). I worked only in ConsumerWeb's core; this repo's core lineage is untouched, so the retargeted probe measures the client that actuall
+- 2026-08-01T11:01Z · tool · refreshed 21 fact spans, 7 unconfirmed
+- 2026-08-01T11:01Z · tool · cleared F-MEALS-UNFUNDED (fact:meals.token.client is present)
+- 2026-08-01T11:08Z · agent:L-TRAIN-EVID-LAND · L-TRAIN-EVID-LAND returned built -> built-unverified, evidence OkamAPI-modules/artifacts/tests/f8b3a30f2ecfaf00beab1e903dd68193fbc8eca2/RUN.md
+- 2026-08-01T11:08Z · agent:L-TRAIN-EVID-LAND · report L-TRAIN-EVID-LAND: lane/train-evidence-endpoint is an ancestor of feature/restaurant-modules; tip 968fd273.; Merge b84b947b took ZERO conflicts. The brief expected several; the target had not touched 16 of the lane's 17 files since the merge-base, and Program.cs auto-merged. No test file was hand-resolved, so nothing 
+- 2026-08-01T11:08Z · tool · raised F-TRAIN-PERSONREF-LEAK (warn)
+- 2026-08-01T11:14Z · agent:L-EV-EXTDEP · L-EV-EXTDEP returned built -> built-unverified, evidence fact:ev.deposit.external (Services/Events/EventsDepositService.cs contains ExternalRecorded) + ../OkamAPI-ev-extdep/artifacts/lanes/L-EV-EXTDEP/EVIDENCE.md · lane/ev-extdep b10fc8a7, 7e9c38bf off feature/restaurant-modules d458e1cf, not pushed
+- 2026-08-01T11:14Z · agent:L-EV-EXTDEP · report L-EV-EXTDEP: - POST .../deposits/external records a rail-less deposit: created Paid, T7+T9 in one transaction, paid-truth = ONE ExternalRecorded receipt naming the recorder and the bank/terminal reference. Two PaymentTypes (BankTransfer/ExternalTerminal), gated on Events.Deposits like issue.; - NOT a carve-out, 
+- 2026-08-01T11:14Z · agent:L-MENU-ALLERGEN-MATRIX · started L-MENU-ALLERGEN-MATRIX
+- 2026-08-01T11:15Z · agent:L-WF-EXCHANGE-MOVE · started L-WF-EXCHANGE-MOVE
+- 2026-08-01T11:21Z · agent:L-GROWTH-LAND · started L-GROWTH-LAND
+- 2026-08-01T11:21Z · agent:L-TRAIN-W3-SCHEMA · started L-TRAIN-W3-SCHEMA
+- 2026-08-01T11:28Z · tool · raised F-WF-PUSH-SILENT (blocker)
+- 2026-08-01T11:43Z · agent:L-MENU-ALLERGEN-MATRIX · L-MENU-ALLERGEN-MATRIX returned built -> built-unverified, evidence /Users/svendaneel/okam/web-menu-allergen/artifacts/journeys/menu-allergen-matrix.playwright.json (16/16 steps passed; 3 screenshots + print-preview.pdf, one A4 landscape page) · commit f1b0d1a on lane/menu-allergen-matrix (local, unpushed)
+- 2026-08-01T11:43Z · agent:L-MENU-ALLERGEN-MATRIX · report L-MENU-ALLERGEN-MATRIX: The brief's premise held: Allergen, ProductAllergen, AllergenController and /admin/allergens all exist and the product editor writes the links. Built the read: /admin/menu-allergens + nav entry (Menu group), MenuAllergenMatrixSheet, utils/menu/allergen-matrix.js, NO/EN/DE keys, 22 unit tests, one Pl
+- 2026-08-01T11:43Z · tool · raised F-PERSONALLISTE-PRINT (warn)
+- 2026-08-01T11:47Z · agent:L-WF-EXCHANGE-MOVE · L-WF-EXCHANGE-MOVE returned built -> built-unverified, evidence OkamAPI-modules a5ff40f2 on lane/wf-exchange-move (worktree ~/okam/wt-wfexmove) · fact:wf.journeys now 13 (WebApi.Tests/Workforce/WORKFORCE-JOURNEY-MANIFEST.md, WFJ-11 VERIFIED-GREEN) · Workforce fast suite 625/2 skipped/0 failed
+- 2026-08-01T11:47Z · agent:L-WF-EXCHANGE-MOVE · report L-WF-EXCHANGE-MOVE: Brief verified before building: award computed AffectedScheduleRevisionId + RequiresSuccessorRevision and wrote no schedule row; CreateDraftAsync already did successor numbering + copy-from-range. Shape as described.; AwardAsync now plans and stages the successor in its own commit: revision N+1 over
+- 2026-08-01T11:47Z · tool · refreshed 21 fact spans, 6 unconfirmed
+- 2026-08-01T11:47Z · agent:L-MEALS-STALE-TOKEN · started L-MEALS-STALE-TOKEN
+- 2026-08-01T11:51Z · tool · cleared F-GROWTH-FAKE-MAIL (fact:growth.mail.provider is present)
+- 2026-08-01T11:51Z · agent:L-GROWTH-LAND · L-GROWTH-LAND returned built -> built-unverified, evidence ../OkamAPI-modules/artifacts/tests/99855b1d1d35ab35c1c09e072da0fc6d42421e56/RUN.md
+- 2026-08-01T11:51Z · agent:L-GROWTH-LAND · report L-GROWTH-LAND: Four lanes landed one at a time on feature/restaurant-modules, tip a2897738, committed not pushed. mail-postmark, privacy-evidence, webhook-auth, unsub-oneclick and growth-reach are all ancestors; reach carried privacy-evidence and its already-resolved union.; Growth's tests after EVERY merge, 0 fai
+- 2026-08-01T11:52Z · tool · raised F-BE-TESTS-AMBIGUOUS (warn)
+- 2026-08-01T11:52Z · tool · refreshed 21 fact spans, 6 unconfirmed
+- 2026-08-01T12:18Z · agent:L-MEALS-STALE-TOKEN · L-MEALS-STALE-TOKEN returned built -> built-unverified, evidence artifacts/journeys/meals-stale-token-requote.playwright.json · artifacts/journeys/meals-stale-token-refused.playwright.json · artifacts/journeys/meals-funded-guard.playwright.json
+- 2026-08-01T12:18Z · agent:L-MEALS-STALE-TOKEN · report L-MEALS-STALE-TOKEN: Four local commits, nothing pushed: ConsumerWeb/core c339a1b + ConsumerWeb 9f61571 (feature/swiss), OkamAPI-modules 24dec838 + this repo b1a1d5f (feature/restaurant-modules).; DEFECT CONFIRMED BY RUNNING IT. lanes/L-MEALS-STALE-TOKEN/red-run.txt: both new journeys fail on the pre-fix client at "the 
+- 2026-08-01T12:21Z · agent:L-EV-ACCEPT-RECEIPT · started L-EV-ACCEPT-RECEIPT
+- 2026-08-01T12:21Z · agent:L-EV-EXTDEP-GUARDS · started L-EV-EXTDEP-GUARDS
+- 2026-08-01T12:21Z · agent:L-CORE-ORE-LABEL · started L-CORE-ORE-LABEL
+- 2026-08-01T12:37Z · agent:L-CORE-ORE-LABEL · returned L-CORE-ORE-LABEL verdict=blocked -> open, needs D-CORE-PIN
+- 2026-08-01T12:37Z · agent:L-CORE-ORE-LABEL · report L-CORE-ORE-LABEL: FIXED AND DRIVEN, BUT NOT IN EVERY CLIENT — hence blocked, per the brief. Four local commits, nothing pushed: Web-modules/core 4f31003 (new branch lane/core-ore-label) + Web-modules a234509, ConsumerWeb/core c0d70a4 (feature/swiss) + ConsumerWeb 0abcb38.; THE PIN MAP (lanes/L-CORE-ORE-LABEL/core-pin
+- 2026-08-01T12:40Z · agent:L-EV-ACCEPT-RECEIPT · L-EV-ACCEPT-RECEIPT returned built -> built-unverified, evidence fact:ev.accept.receipt (Enums/Events/EventsNotificationKind.cs contains AcceptanceReceipt) + ../wt-ev-accept/artifacts/journeys/ev-accept-receipt/acceptance-receipt.html · lane/ev-accept-receipt 9f161e9e, 8ef3ce74 off feature/restaurant-modules a2897738, not pushed
+- 2026-08-01T12:40Z · agent:L-EV-ACCEPT-RECEIPT · report L-EV-ACCEPT-RECEIPT: - NOT already built: the outbox had two link kinds and acceptance staged nothing. Landed a third kind, a document renderer, a DB-backed composer, a venue-address resolver, staging in BOTH accept paths (T5 and the T17 amendment), and the DI registration. No migration (C2): the new value rides the exi
+- 2026-08-01T12:40Z · tool · raised F-EV-ACCEPT-UNNAMED (warn)
+- 2026-08-01T12:44Z · agent:L-EV-EXTDEP-GUARDS · L-EV-EXTDEP-GUARDS returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-evextguards/artifacts/lanes/L-EV-EXTDEP-GUARDS/EVIDENCE.md (commit 07247536, lane/ev-extdep-guards, local, unpushed)
+- 2026-08-01T12:44Z · agent:L-EV-EXTDEP-GUARDS · report L-EV-EXTDEP-GUARDS: BASE: the code is NOT on feature/restaurant-modules — lane/ev-extdep (7e9c38bf) is unmerged and tip 24dec838 has no RecordExternalAsync. Branched off lane/ev-extdep, itself off feature/restaurant-modules at d458e1cf. Objective reachable, so not fail-spec.; 1 DATE. ReceivedAtUtc was non-nullable, so 
+- 2026-08-01T12:45Z · agent:L-PRINT-HOST · started L-PRINT-HOST
+- 2026-08-01T12:45Z · agent:L-MEALS-REACHABLE · started L-MEALS-REACHABLE
+- 2026-08-01T12:51Z · agent:L-GROWTH-HEALTH-HONEST · started L-GROWTH-HEALTH-HONEST
+- 2026-08-01T13:06Z · agent:L-TRAIN-W3-SCHEMA · L-TRAIN-W3-SCHEMA returned built -> built-unverified, evidence artifacts/tests/1da15fb113ae72a8f71ed68ef758bb1a8a30d69b/RUN.md (SQL tier 557/557, fast 4313/0/9) + OkamAPI-modules 3993f797 in detached worktree /Users/svendaneel/okam/wt-trainw3, NOT pushed. fact:train.checklists probes ../OkamAPI-modules and will read present only AFTER this lane is merged; the entities exist only in my worktree.
+- 2026-08-01T13:06Z · agent:L-TRAIN-W3-SCHEMA · report L-TRAIN-W3-SCHEMA: - LEDGER NUMBER CHECKED, NOT TAKEN ON TRUST. MIG-13 is the reserved entry for this wave and was still unclaimed; MIG-21 and MIG-22 were both taken this morning. THROW 50051 re-verified as the only claimant across the whole chain (50050/50052/50053 are Training's live three). Ledger entry rewritten t
+- 2026-08-01T13:06Z · tool · raised F-DETACHED-MIGRATIONS (blocker)
+- 2026-08-01T13:07Z · agent:L-MEALS-REACHABLE · returned L-MEALS-REACHABLE verdict=blocked -> open, needs D-MEALS-STATEMENT-LEVER
+- 2026-08-01T13:07Z · agent:L-MEALS-REACHABLE · report L-MEALS-REACHABLE: HALF LANDED, HALF FORKED. Gap 2 is fixed and proven. Gap 1 is a product ruling: the brief's exit criterion ("the lever reaches all five statement routes") and F-MEALS-LEVER-OPAQUE's clears_when ("the operator surface distinguishes the lever from host configuration") point opposite ways, and I am not
+- 2026-08-01T13:10Z · agent:L-MRG-WASTE · started L-MRG-WASTE
+- 2026-08-01T13:10Z · agent:L-MEALS-RELEASE · started L-MEALS-RELEASE
+- 2026-08-01T13:14Z · agent:L-PRINT-HOST · L-PRINT-HOST returned built -> built-unverified, evidence lane/print-host @ 6e6acd0 · artifacts/journeys/admin-print-host/ (5 PDFs, read) · artifacts/journeys/admin-print-host.playwright.json
+- 2026-08-01T13:14Z · agent:L-PRINT-HOST · report L-PRINT-HOST: All three defects reproduced in a browser before anything changed, then re-measured after.; 1. Personalliste body carried `class=""` — the whole print stylesheet was inert, as briefed. Worse on paper than described: the A4 print lost the ORGANISASJONSNUMMER, the TIDSSONE, the correction lineage and 
+- 2026-08-01T13:21Z · agent:L-MODAL-SCROLLLOCK · started L-MODAL-SCROLLLOCK
+- 2026-08-01T13:27Z · agent:L-GROWTH-HEALTH-HONEST · L-GROWTH-HEALTH-HONEST returned built -> built-unverified, evidence OkamAPI-modules lane/growth-health-honest @ c11e78a6 (worktree ../wt-growth-health, off feature/restaurant-modules 24dec838); fast tier 4360 passed / 0 failed / 12 skipped, `dotnet test --filter "Database!=SqlServer"`; per-mutation detail at ../wt-growth-health/.lane/L-GROWTH-HEALTH-HONEST-detail.md
+- 2026-08-01T13:27Z · agent:L-GROWTH-HEALTH-HONEST · report L-GROWTH-HEALTH-HONEST: Bounce and complaint are nullable now, withheld with their cause when the bound transport cannot; produce an ingestible event. The condition is the provider's OWN declaration — new; `IGrowthMailProvider.DeliveryEventIngestion` — never a count, so a venue that genuinely had no; bounces on a transport
+- 2026-08-01T13:27Z · agent:L-MEALS-XZ-CREDIT · started L-MEALS-XZ-CREDIT
+- 2026-08-01T13:46Z · agent:L-MODAL-SCROLLLOCK · L-MODAL-SCROLLLOCK returned built -> built-unverified, evidence lane/modal-scrolllock @ 178c895 · artifacts/journeys/modal-scroll-lock.playwright.json (8/8 steps, 3 PNGs) · test/modal-scroll-lock.test.js
+- 2026-08-01T13:46Z · agent:L-MODAL-SCROLLLOCK · report L-MODAL-SCROLLLOCK: Diagnosis confirmed causally in a browser first: login modal open on the real redirect flow, body `class=""` / `overflow: visible`; adding `noscroll` by hand gave `hidden`, and one `$meta().refresh()` with the modal still open took it straight back off. Worse than briefed — on a 4662px admin page, O
+- 2026-08-01T13:47Z · agent:L-STATUTE-HONESTY · started L-STATUTE-HONESTY
+- 2026-08-01T13:58Z · tool · raised F-TRAIN-TRUNCATE (info)
+- 2026-08-01T14:00Z · agent:L-MEALS-RELEASE · L-MEALS-RELEASE returned built -> built-unverified, evidence OkamAPI-meals-release 0659666f (lane/meals-release, local, not pushed) · WebApi.Tests/Wire/MealsQuoteReleaseWireTests.cs · lanes/L-MEALS-RELEASE/red-no-route.txt · lanes/L-MEALS-RELEASE/evidence.md · receipt artifacts/tests/0659666f33e500ce3fad3c456f5d01d2ac68ac9b/RUN.md
+- 2026-08-01T14:00Z · agent:L-MEALS-RELEASE · report L-MEALS-RELEASE: - SPEC VERIFIED BY RUNNING IT, not read. red-no-route.txt: all 7 new wire facts fail and the host logs "Request reached the end of the middleware pipeline without being handled by application code … POST /v1/stores/4501/meals/quotes/release". The headline reached line 80 first, i.e. it had ALREADY o
+- 2026-08-01T14:02Z · agent:L-MEALS-XZ-CREDIT · L-MEALS-XZ-CREDIT returned built -> built-unverified, evidence OkamAPI worktree /Users/svendaneel/okam/wt-xzcredit, branch lane/meals-xz-credit @ 25586d86 (local, not pushed) · ARTIFACT WebApi.Tests/Meals/Fixtures/zreport-kredittsalg.txt · WebApi.Tests/Meals/MealsXZCreditSaleTests.cs (7 pins) · WebApi.Tests/Kassa/EodServiceTests.cs::GetSummary_CompanyAccount_IsCreditNotOtherTakings
+- 2026-08-01T14:02Z · agent:L-MEALS-XZ-CREDIT · report L-MEALS-XZ-CREDIT: BRIEF CONFIRMED, ALL THREE DEFECTS PRESENT AS DESCRIBED. The planner's correction was right: the itemisation was never broken (CompanyAccount already had its own PaymentMeansTotal row). XZReportService's roll-up absorbed it into OtherTotal's default arm (two copies, live + persisted-Z, that had alre
+- 2026-08-01T14:19Z · agent:L-STATUTE-HONESTY · L-STATUTE-HONESTY returned built -> built-unverified, evidence Web-modules lane/statute-honesty @ f01886a (worktree ../web-statute) + OkamAPI-modules lane/statute-honesty @ 485959ab (worktree ../OkamAPI-statute); artifacts/journeys/statute-honesty/ incl. the A4 portrait PDF; neither pushed
+- 2026-08-01T14:19Z · agent:L-STATUTE-HONESTY · report L-STATUTE-HONESTY: - Both findings HOLD, checked in code rather than taken on report. Exactly one production site writes a personalliste participant (WorkforcePersonnelListProjection.ResolveOrCreateEmployeeParticipantAsync:207, off a clock punch, literal `Employee`); WorkingOwnerManager/Unpaid/HiredIn appear only in t
+- 2026-08-01T14:21Z · agent:L-EV-STALE-CAUSE · started L-EV-STALE-CAUSE
+- 2026-08-01T14:21Z · agent:L-WF-OPLINK · started L-WF-OPLINK
+- 2026-08-01T14:52Z · agent:L-MRG-STARTER-150 · started L-MRG-STARTER-150
+- 2026-08-01T14:58Z · agent:L-EV-STALE-CAUSE · L-EV-STALE-CAUSE returned built -> built-unverified, evidence ../web-evstale/artifacts/journeys/events-stale-cause.playwright.json (6/6 steps, 3 PNGs, commit 2bc18da) + ../OkamAPI-modules worktree ../wt-evstale artifacts/lanes/L-EV-STALE-CAUSE/EVIDENCE.md
+- 2026-08-01T14:58Z · agent:L-EV-STALE-CAUSE · report L-EV-STALE-CAUSE: - BRIEF VERIFIED IN CODE FIRST, and it held exactly. Four conditions OR'd in Map, the wire carried only IsStale. The sibling line is on lane/statute-honesty, UNMERGED, so the frontend branch is cut from it (as L-EV-EXTDEP-GUARDS did off lane/ev-extdep), not from feature/restaurant-modules.; - ONE DE
+- 2026-08-01T14:58Z · tool · raised F-DISK-PRESSURE (warn)
+- 2026-08-01T15:00Z · agent:L-WF-OPLINK · L-WF-OPLINK returned built -> built-unverified, evidence artifacts/journeys/wf-operator-import-clock.playwright.json (11/11 steps passed, commit 3e811b2, 0 failed requests, 6 screenshots) in worktree ~/okam/web-wf-oplink, copied to lanes/L-WF-OPLINK/artifacts/journeys/ · branch lane/fe-wf-oplink, commit 3e811b2, not pushed · Jest 98 suites / 2282 tests, 5/5 browser journeys
+- 2026-08-01T15:00Z · agent:L-WF-OPLINK · report L-WF-OPLINK: - Brief verified before building: endpoint 7 exists (WorkforceStaffController:178) and the client named it only in a comment. True.; - Branched lane/fe-wf-oplink off feature/restaurant-modules, then merged lane/fe-pos-clock locally (438e719) — the clock surface it needs is unmerged, so my lane must 
+- 2026-08-01T15:07Z · agent:L-MRG-WASTE · returned L-MRG-WASTE verdict=blocked -> open, needs D-DOCKER-VM
+- 2026-08-01T15:07Z · agent:L-MRG-WASTE · report L-MRG-WASTE: - BRANCHED FROM 3993f797 (wt-trainw3, DETACHED — `lane/train-w3-schema` does not exist), not from feature/restaurant-modules, which is NOT an ancestor of it and ends three migrations earlier. My Designer's parent is 20260801113131_Training_W3_ChecklistsAndDeviations; diffed against that migration's 
+- 2026-08-01T15:16Z · agent:L-MRG-STARTER-150 · returned L-MRG-STARTER-150 verdict=blocked -> open, needs D-MRG-CURATION
+- 2026-08-01T15:16Z · agent:L-MRG-STARTER-150 · report L-MRG-STARTER-150: YOU WERE RIGHT TO HOLD IT, AND THE MECHANISM IS NOT THE GAP. Library → MarginIngredientService.ListAsync:54 → GET margin/ingredients → `starterCandidates` → chips on BOTH admin pages (margin-suppliers.vue:38, margin-recipes.vue:61), each firing an ordinary create pre-filled from the candidate incl. 
+- 2026-08-01T15:21Z · agent:L-MEALS-RELEASE-RACE · started L-MEALS-RELEASE-RACE
+- 2026-08-01T15:21Z · agent:L-MEALS-FLOOR-PINS · started L-MEALS-FLOOR-PINS
+- 2026-08-01T15:36Z · agent:L-DOWNLOAD-HEADERS · started L-DOWNLOAD-HEADERS
+- 2026-08-01T15:42Z · agent:L-MEALS-FLOOR-PINS · L-MEALS-FLOOR-PINS returned built -> built-unverified, evidence /Users/svendaneel/okam/OkamAPI-mealsfloor/lanes/L-MEALS-FLOOR-PINS/evidence.md (commit 5a254d72 on lane/meals-floor-pins, off feature/restaurant-modules de1e5c5e; not pushed)
+- 2026-08-01T15:42Z · agent:L-MEALS-FLOOR-PINS · report L-MEALS-FLOOR-PINS: | Brief confirmed by injection, not by reading: a decrement added to the authority's already-released early return left both classes green at 31/31. Two causes — neither pin read the guard after the replay, and had it, the guard sits at 0 where the release path's own `ReservedMinor - cap >= 0` predi
+- 2026-08-01T15:57Z · agent:L-MEALS-RELEASE-RACE · L-MEALS-RELEASE-RACE returned built -> built-unverified, evidence lanes/L-MEALS-RELEASE-RACE/evidence.md — worktree /Users/svendaneel/okam/OkamAPI-meals-race, branch lane/meals-release-race, commit f70a0254 (off feature/restaurant-modules de1e5c5e, local only)
+- 2026-08-01T15:57Z · agent:L-MEALS-RELEASE-RACE · report L-MEALS-RELEASE-RACE: Both brief claims verified true before building; the 500 lands on the cart completion endpoint, the release; seam having no HTTP route. Fix: catch the lost check inside the strategy, roll back, detach, retry. The; rollback is the money line - it undoes the guard decrement the attempt already issued.
+- 2026-08-01T15:58Z · agent:L-GROWTH-NEWSLETTER-WIRE · started L-GROWTH-NEWSLETTER-WIRE
+- 2026-08-01T15:58Z · tool · raised F-WF-BLIND-BIND (blocker)
+- 2026-08-01T16:08Z · agent:L-DOWNLOAD-HEADERS · L-DOWNLOAD-HEADERS returned built -> built-unverified, evidence OkamAPI-dlhdr 9207f480 (lane/download-headers, local, not pushed) · WebApi.Tests/Wire/DownloadHeaderWireTests.cs · WebApi.Tests/Wire/MealsDownloadHeaderWireTests.cs · Helpers/BrowserReadableHeaders.cs · lanes/L-DOWNLOAD-HEADERS/red.txt
+- 2026-08-01T16:08Z · agent:L-DOWNLOAD-HEADERS · report L-DOWNLOAD-HEADERS: - THE BRIEF FILE DOES NOT EXIST. docs/plan/briefs/L-DOWNLOAD-HEADERS.md was never generated (the lane is `state: running` but the last tick that wrote briefs predates it). I worked from plan.md's lane entry plus the dispatch message, and took the constraint block + return protocol from a sibling bri
+- 2026-08-01T16:43Z · agent:L-GROWTH-NEWSLETTER-WIRE · L-GROWTH-NEWSLETTER-WIRE returned built -> built-unverified, evidence OkamAPI-modules lane/growth-newsletter-wire @ 87600a1c (worktree ../wt-gr-nlwire, off feature/restaurant-modules de1e5c5e); fast tier 4363 passed / 0 failed / 12 skipped, `dotnet test --filter "Database!=SqlServer"`; per-mutation detail at ../wt-gr-nlwire/.lane/L-GROWTH-NEWSLETTER-WIRE-detail.md
+- 2026-08-01T16:43Z · agent:L-GROWTH-NEWSLETTER-WIRE · report L-GROWTH-NEWSLETTER-WIRE: Added WebApi.Tests/Wire/GrowthNewsletterAuthoringWireTests.cs, 6 facts, no production code changed.; Brief correction: the class-level [Authorize] WAS already covered (GrowthPlatformSurfacesWireTests drives the list read anonymously), and deleting the AuthorizeStoreAsync guard reds one pre-existing 
+- 2026-08-01T16:43Z · tool · raised F-GR-NEWSLETTER-CROSS (blocker)
+- 2026-08-01T16:44Z · agent:L-GR-APPROVAL-STATE · started L-GR-APPROVAL-STATE
+- 2026-08-01T16:44Z · agent:L-MODAL-BROKEN-TWO · started L-MODAL-BROKEN-TWO
+- 2026-08-01T16:46Z · agent:L-DOWNLOAD-PDF-WIRE · started L-DOWNLOAD-PDF-WIRE
+- 2026-08-01T16:50Z · @sven · ruled D-DOCKER-VM = reset-docker-vm
+- 2026-08-01T16:52Z · tool · raised F-SCHED-DEAD-CLASS (warn)
+- 2026-08-01T16:56Z · agent:L-MRG-WASTE · started L-MRG-WASTE
+- 2026-08-01T17:08Z · agent:L-MODAL-BROKEN-TWO · L-MODAL-BROKEN-TWO returned built -> built-unverified, evidence lanes/L-MODAL-BROKEN-TWO/detail.md · artifacts/journeys/admin-single-login-prompt · artifacts/journeys/admin-change-delivery-type · lane/modal-broken-two @ 6348944 (worktree ~/okam/web-modal-two, not pushed)
+- 2026-08-01T17:08Z · agent:L-MODAL-BROKEN-TWO · report L-MODAL-BROKEN-TWO: | BRIEF HALF-WRONG. Defect 1 does not exist. `deliveryTypeLabel` IS defined — global mixin, plugins/global-mixin.js:97, registered nuxt.config.js:189; five other components call it identically and `git log -S` puts it in the tree before the modal was written. NEITHER REPAIRED NOR DELETED — it needed
+- 2026-08-01T17:12Z · agent:L-GR-APPROVAL-STATE · L-GR-APPROVAL-STATE returned built -> built-unverified, evidence OkamAPI-modules lane/gr-approval-state @ 3ea531f5 (worktree ../wt-gr-approval, off feature/restaurant-modules de1e5c5e, local only); fast tier 4361 passed / 0 failed / 12 skipped; lanes/L-GR-APPROVAL-STATE/{red-1-projection.txt,mutations.txt,fast-tier.txt}
+- 2026-08-01T17:12Z · agent:L-GR-APPROVAL-STATE · report L-GR-APPROVAL-STATE: BRIEF VERIFIED BEFORE BUILDING, and it held — then went further than briefed. Both approval lookups in BuildDetailAsync were bound to the CURRENT version's id (EF command log captured in red-1). An edit appends the version the second lookup searches and revokes the approval binding the version it le
+- 2026-08-01T17:22Z · agent:wf-w5-timesheet · started L-WF-W5-TIMESHEET
+- 2026-08-01T17:22Z · agent:meals-grace-pins · started L-MEALS-GRACE-PINS
+- 2026-08-01T17:22Z · agent:price-null-zero · started L-PRICE-NULL-ZERO
+- 2026-08-01T17:22Z · @clerk · caps raised global 8->12 node 4->6 suite 3->4 on owner instruction 'launch more agents'; sql held at 2 under the container-contention law
+- 2026-08-01T17:25Z · @clerk · waived: six analysis reviews dispatched over the load gate (28.0/21.0) - read-only Fable readers, no compile, no suite, no container
+- 2026-08-01T17:25Z · agent:fable-WF-REVIEW · started L-WF-REVIEW
+- 2026-08-01T17:25Z · agent:fable-MRG-REVIEW · started L-MRG-REVIEW
+- 2026-08-01T17:25Z · agent:fable-EV-REVIEW · started L-EV-REVIEW
+- 2026-08-01T17:25Z · agent:fable-MEALS-REVIEW · started L-MEALS-REVIEW
+- 2026-08-01T17:25Z · agent:fable-TRAIN-REVIEW · started L-TRAIN-REVIEW
+- 2026-08-01T17:25Z · agent:fable-GR-REVIEW · started L-GR-REVIEW
+- 2026-08-01T17:26Z · agent:L-MRG-WASTE · returned L-MRG-WASTE verdict=blocked -> open, needs D-DOCKER-VM
+- 2026-08-01T17:26Z · agent:L-MRG-WASTE · report L-MRG-WASTE: - BRANCHED FROM 3993f797 (wt-trainw3, DETACHED — `lane/train-w3-schema` does not exist), not from feature/restaurant-modules, which is NOT an ancestor of it and ends three migrations earlier. My Designer's parent is 20260801113131_Training_W3_ChecklistsAndDeviations; diffed against that migration's 
+- 2026-08-01T17:27Z · @clerk · L-MODAL-SEVEN parked open on its dependency; L-MODAL-SCROLLLOCK is now built-unverified so the return can land — re-marking running to merge work already complete at lane/modal-seven 839d377
+- 2026-08-01T17:27Z · @clerk · brief hashes for all in-flight lanes changed when caps were edited in frontmatter; --accept-stale used on that basis alone, no lane text changed
+- 2026-08-01T17:34Z · tool · L-WF-REVIEW running -> built-unverified, evidence docs/plan/reviews/L-WF-REVIEW.md
+- 2026-08-01T17:35Z · agent:statute-evidence-world · started L-STATUTE-EVIDENCE-WORLD
+- 2026-08-01T17:35Z · tool · L-MRG-REVIEW running -> built-unverified, evidence docs/plan/reviews/L-MRG-REVIEW.md
+- 2026-08-01T17:36Z · tool · L-TRAIN-REVIEW running -> built-unverified, evidence docs/plan/reviews/L-TRAIN-REVIEW.md
+- 2026-08-01T17:36Z · agent:L-MEALS-GRACE-PINS · L-MEALS-GRACE-PINS returned built -> built-unverified, evidence /Users/svendaneel/okam/OkamAPI-modules/lanes/L-MEALS-GRACE-PINS/evidence.md (commit 34c6c103 on lane/meals-grace-pins, off feature/restaurant-modules de1e5c5e; not pushed)
+- 2026-08-01T17:36Z · agent:L-MEALS-GRACE-PINS · report L-MEALS-GRACE-PINS: | Brief confirmed by injection, not by reading: with the worker's decrement replaced by an unconditional SET ReservedMinor = 0, MealsExpiryGraceReconciliationTests stayed green 5/5. The old pins were one-sided — they caught a MISSING decrement (guard would sit at 5000) but not a clamped or over-size
+- 2026-08-01T17:37Z · agent:mrg-waste-sqltier · started L-MRG-WASTE
+- 2026-08-01T17:37Z · tool · L-EV-REVIEW running -> built-unverified, evidence docs/plan/reviews/L-EV-REVIEW.md
+- 2026-08-01T17:38Z · tool · L-GR-REVIEW running -> built-unverified, evidence docs/plan/reviews/L-GR-REVIEW.md
+- 2026-08-01T17:39Z · agent:flags-lever · started L-WF-FLAGS-UI
+- 2026-08-01T17:39Z · agent:L-PRICE-NULL-ZERO · L-PRICE-NULL-ZERO returned built -> built-unverified, evidence lanes/L-PRICE-NULL-ZERO/before-after.txt · lanes/L-PRICE-NULL-ZERO/mutation-proof.txt · lanes/L-PRICE-NULL-ZERO/lane-notes.md · test/price-absence.test.js · commit a48fb78 on feature/restaurant-modules, not pushed
+- 2026-08-01T17:39Z · agent:L-PRICE-NULL-ZERO · report L-PRICE-NULL-ZERO: BRIEF VERIFIED FIRST. `utils/price.js` shipped `Number(amountMinor) || 0` — the same `Number(null) === 0` L-WF-OPLINK found in normalizeOperatorId — and `test/chf-format.test.js` PINNED it, calling "CHF 0.00" for null handling it "gracefully". Core does it from the other side (`if (!amount) return "
+- 2026-08-01T17:42Z · agent:runsheet-print · started L-EV-RUNSHEET-PRINT
+- 2026-08-01T17:42Z · tool · L-MEALS-REVIEW running -> built-unverified, evidence docs/plan/reviews/L-MEALS-REVIEW.md
+- 2026-08-01T17:42Z · agent:L-MRG-WASTE · L-MRG-WASTE returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-mrgwaste/artifacts/tests/50b85657/RUN.md
+- 2026-08-01T17:42Z · agent:L-MRG-WASTE · report L-MRG-WASTE: - EXIT CRITERIA MET ON A CHAIN-BUILT DATABASE. SQL tier 568/568/0 skipped at 50b85657, fast tier 4342/0/9 at the SAME SHA, both from a clean detached worktree with the tree asserted EMPTY before each run. Diffed set-against-set on test names: SQL +11/-0, fast +29/-0. Every one of the 568 outcomes wa
+- 2026-08-01T17:43Z · @clerk · SQL tier 568/568 at 50b85657 from a clean detached worktree; first committed backend suite artifact on this plan
+- 2026-08-01T17:49Z · agent:meals-utlkvit · started L-MEALS-UTLKVIT
+- 2026-08-01T17:52Z · agent:fable-waste-review · started L-MRG-WASTE-REVIEW
+- 2026-08-01T17:52Z · agent:fable-price-review · started L-PRICE-REVIEW
+- 2026-08-01T17:52Z · agent:L-STATUTE-EVIDENCE-WORLD · L-STATUTE-EVIDENCE-WORLD returned built -> built-unverified, evidence worktree /Users/svendaneel/okam/web-statute-world @ 2ee3fd7 (branch lane/statute-evidence-world, off lane/statute-honesty f01886a, not pushed); artifacts/journeys/statute-honesty/01-personalliste-with-coverage-caveat.pdf; lanes/L-STATUTE-EVIDENCE-WORLD/{EVIDENCE.md,mutation-log.txt}
+- 2026-08-01T17:52Z · agent:L-STATUTE-EVIDENCE-WORLD · report L-STATUTE-EVIDENCE-WORLD: - BRIEF HOLDS, and worse than stated. Checked in code, not on report: the committed PDF printed «Arbeidende eier eller leder» and «Innleid» two rows under a caveat saying such a person "står vedkommende ikke her". THREE unproducible shapes, not one — category (only ResolveOrCreateEmployeeParticipant
+- 2026-08-01T17:53Z · agent:ev-seed-deposits · started L-EV-SEED-DEPOSITS
+- 2026-08-01T18:00Z · tool · L-PRICE-REVIEW running -> built-unverified, evidence docs/plan/reviews/L-PRICE-REVIEW.md
+- 2026-08-01T18:01Z · agent:L-DOWNLOAD-PDF-WIRE · L-DOWNLOAD-PDF-WIRE returned built -> built-unverified, evidence OkamAPI-dlpdf a7b90cbd (lane/download-pdf-wire, local, not pushed) · WebApi.Tests/Wire/PdfDownloadWireTests.cs · Services/Interfaces/IDocumentRenderer.cs · Services/OkamFunctionsDocumentRenderer.cs · WireContainmentTests.The_substituted_pdf_renderer_cannot_become_the_production_path · lanes/L-DOWNLOAD-PDF-WIRE/{red.txt,decision.md}
+- 2026-08-01T18:01Z · agent:L-DOWNLOAD-PDF-WIRE · report L-DOWNLOAD-PDF-WIRE: - BASE, named because it is a deviation: branched off `lane/download-headers` (9207f480, unmerged, local), not the branch tip. That commit's parent IS the tip, so ancestry is unchanged — but "carrying a READABLE filename" is that lane's CORS fix, and off the tip every exposure assertion would have f
+- 2026-08-01T18:02Z · agent:ev-inquiry-gate · started L-EV-INQUIRY-GATE
+- 2026-08-01T18:07Z · agent:L-EV-RUNSHEET-PRINT · L-EV-RUNSHEET-PRINT returned built -> built-unverified, evidence artifacts/journeys/events-runsheet-print.playwright.json (10/10 steps passed) + artifacts/journeys/events-runsheet-print/run-sheet.pdf
+- 2026-08-01T18:07Z · agent:L-EV-RUNSHEET-PRINT · report L-EV-RUNSHEET-PRINT: BRIEF VERIFIED, not taken on trust: zero window.print and zero @media print in any Events file before this. Dietary IS recorded and reachable; run sheet IS inside EventsJourney.vue on the pipeline page; both handover links print on screen at :107 and :147. All four claims held.; BUILT: print control
+- 2026-08-01T18:08Z · agent:ev-onboard-bleed · started L-EV-ONBOARD-PRINT-BLEED
+- 2026-08-01T18:08Z · agent:L-EV-SEED-DEPOSITS · returned L-EV-SEED-DEPOSITS verdict=fail-spec -> open; D-SPEC-L-EV-SEED-DEPOSITS appended
+- 2026-08-01T18:08Z · agent:L-EV-SEED-DEPOSITS · report L-EV-SEED-DEPOSITS: BRIEF VERIFIED, every citation true. seed:34-37 flips Core+Settlement and asserts Deposits is withheld and "gates NOTHING"; df808624 put it in Describe() (EventsFeatureFlags.cs:62) and gated Issue deny-closed (EventsDepositsController.cs:116,186-190); seed:134's else-arm accepted ANY non-200 as "exp
+- 2026-08-01T18:09Z · tool · L-MRG-WASTE-REVIEW running -> built-unverified, evidence docs/plan/reviews/L-MRG-WASTE-REVIEW.md
+- 2026-08-01T18:10Z · agent:L-WF-FLAGS-UI · L-WF-FLAGS-UI returned built -> built-unverified, evidence artifacts/journeys/workforce-flag-lever.playwright.json
+- 2026-08-01T18:10Z · agent:L-WF-FLAGS-UI · report L-WF-FLAGS-UI: Exit criterion met IN A BROWSER, 10/10 steps: switch on -> build+validate a week -> switch off -> Publiser answers "Vaktplanen er skrivebeskyttet / Bryteren workforce.publication star av..." with a link to the switchboard -> the week still fully rendered (read-only, not dark) -> switch on -> "Publis
+- 2026-08-01T18:21Z · agent:L-EV-ONBOARD-PRINT-BLEED · L-EV-ONBOARD-PRINT-BLEED returned built -> built-unverified, evidence lanes/L-EV-ONBOARD-PRINT-BLEED/evidence.md
+- 2026-08-01T18:21Z · agent:L-EV-ONBOARD-PRINT-BLEED · report L-EV-ONBOARD-PRINT-BLEED: Brief verified on the PDF first: the unfixed sheet's FIRST printed line was the nag; ("…oppsett-prosess … Fortsett oppsett  Lukk"), then "Kjøreplan" — real on paper,; not a viewport artifact like the 264px gutter.; The premise dissolved. The page cannot reach the banner, but the banner can hide; ITS
+- 2026-08-01T18:21Z · agent:ev-vipps-fallback · started L-EV-VIPPS-FALLBACK
+- 2026-08-01T18:22Z · agent:flags-journey-sweep · started L-FLAGS-JOURNEY-SWEEP
+- 2026-08-01T18:29Z · agent:L-EV-INQUIRY-GATE · L-EV-INQUIRY-GATE returned built -> built-unverified, evidence backend lane/ev-inquiry-gate 8ecb47df (174/174 SQLite-tier Events+Modules) · frontend lane/fe-ev-inquiry-gate f7695bc (94 suites / 2199 tests)
+- 2026-08-01T18:29Z · agent:L-EV-INQUIRY-GATE · report L-EV-INQUIRY-GATE: BRIEF VERIFIED. EventsInquiryService.cs:47 checked only EnsureStoreExistsAsync; EventsFeatureFlagGateTests covered ADMIN routes only.; FIX: gate is a REQUIRED ctor arg (not the deposit service's optional-null, which is default-open); public entry asks IsStoreEnabledAsync before writing.; Admin Creat
+- 2026-08-01T18:30Z · agent:gr-postmark-webhook · started L-GR-POSTMARK-WEBHOOK
+- 2026-08-01T18:31Z · agent:L-MEALS-UTLKVIT · L-MEALS-UTLKVIT returned built -> built-unverified, evidence OkamAPI worktree /Users/svendaneel/okam/wt-utlkvit, branch lane/meals-utlkvit @ 1a03bc6c (local, not pushed) · SQL TIER WebApi.Tests/Meals/MealsDeliveryReceiptSqlServerTests.cs (3/3 green, Meals SQL collection 101/101) · WebApi.Tests/Kassa/DeliveryReceiptComplianceTests.cs (9 pins) · fact:meals.utlkvit present on the branch (PosReceiptService.cs, 2 hits)
+- 2026-08-01T18:31Z · agent:L-MEALS-UTLKVIT · report L-MEALS-UTLKVIT: BRIEF CONFIRMED, BOTH CLAIMS EXACTLY AS STATED. KassaReceiptType held six members and no delivery type; GetMarkingText — the documented single choke point, enumerated by the compliance guard — could return only the three § 2-8-6 texts. § 2-8-7 needs three things and the register had none: a document
+- 2026-08-01T18:32Z · agent:wf-demo-presence · started L-WF-DEMO-PRESENCE
+- 2026-08-01T18:49Z · agent:L-FLAGS-JOURNEY-SWEEP · L-FLAGS-JOURNEY-SWEEP returned built -> built-unverified, evidence lanes/L-FLAGS-JOURNEY-SWEEP/census.md (all 12 journeys) · mutation-{a,b,c-a,c-b}.log · commit bb1bf0c · artifacts/journeys/*.playwright.json 12/12 passed
+- 2026-08-01T18:49Z · agent:L-FLAGS-JOURNEY-SWEEP · report L-FLAGS-JOURNEY-SWEEP: Censused all 12 journeys, clean ones included. 6 walked a gated surface unmodelled.; EVENTS x2 (runsheet print + onboarding): Events.Core is deny-closed and gates the READS, so on a real venue there was no pipeline, no event, no sheet to print. Both now open dark, ASSERT the refusal, then flip Event
+- 2026-08-01T18:51Z · agent:gr-privacy-venue · started L-GR-PRIVACY-VENUE
+- 2026-08-01T18:52Z · agent:fable-utlkvit-review · started L-UTLKVIT-REVIEW
+- 2026-08-01T18:52Z · agent:fable-flags-review · started L-FLAGS-UI-REVIEW
+- 2026-08-01T18:59Z · agent:L-WF-W5-TIMESHEET · L-WF-W5-TIMESHEET returned built -> built-unverified, evidence OkamAPI-modules lane/wf-w5-timesheet @ 9e82b286 (worktree ~/okam/wt-wfw5, cut from lane/margin-waste afcfddbc — the real chain tip, three migrations ahead of feature/restaurant-modules; local, not pushed) · fast tier 4362 passed / 0 failed / 7 skipped · SQL tier 26/26 (WorkforceTimesheetImmutabilitySqlServerTests + WorkforceW4MigrationLineageTests + RestaurantModulesMigrationRoundTripTests) · WORKFORCE-JOURNEY-MANIFEST.md on this branch reads 14 journeys VERIFIED-GREEN / 1 BLOCKED-ON-GAP · lanes/L-WF-W5-TIMESHEET/{evidence.md,mutations.md,fast-tier.txt,sql-tier.txt}
+- 2026-08-01T18:59Z · agent:L-WF-W5-TIMESHEET · report L-WF-W5-TIMESHEET: BRIEF VERIFIED FIRST AND IT HELD. W5 was genuinely unbuilt; the only trace was a test-side provisional ITimesheetExportProvider whose own header asked to be replaced when the real one landed. It has been, and the fail-on-N payroll fake now implements the production interface.; LANDED: four tables (M
+- 2026-08-01T18:59Z · agent:gr-testsend-guard · started L-GR-TESTSEND-GUARD
+- 2026-08-01T19:01Z · agent:L-WF-DEMO-PRESENCE · L-WF-DEMO-PRESENCE returned built -> built-unverified, evidence OkamAPI worktree /Users/svendaneel/okam/wt-wfdemopres, branch lane/wf-demo-presence @ 8a9080c8 (local, not pushed; off feature/restaurant-modules de1e5c5e) · six full `Scripts/demo/demo-up.sh` runs from an EMPTY database against my own container, final green run captured at /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/final-run.txt · step 13b prints `2026-07-20: Jonas Lie 08:02-16:04, Nora Berg 13:58-20:04` / `2026-07-21: Jonas Lie 07:58-16:12, Nora Berg 16:01-00:19`
+- 2026-08-01T19:01Z · agent:L-WF-DEMO-PRESENCE · report L-WF-DEMO-PRESENCE: BRIEF CONFIRMED ON A LIVE WORLD, not on report. Baseline demo-up from empty: WorkforceClockEvents=8, WorkforceClockSessions=4, WorkforcePersonnelListEntries=0, and GET /personnel-list answered rows=0 for every day of week A. The register really did print blank.; ROUTED THROUGH THE INGEST, with no di
+- 2026-08-01T19:01Z · agent:meals-degenerate-two · started L-MEALS-DEGENERATE-TWO
+- 2026-08-01T19:04Z · tool · L-FLAGS-UI-REVIEW running -> built-unverified, evidence docs/plan/reviews/L-FLAGS-UI-REVIEW.md
+- 2026-08-01T19:08Z · tool · L-UTLKVIT-REVIEW running -> built-unverified, evidence docs/plan/reviews/L-UTLKVIT-REVIEW.md
+- 2026-08-01T19:15Z · agent:L-GR-POSTMARK-WEBHOOK · L-GR-POSTMARK-WEBHOOK returned built -> built-unverified, evidence lane/gr-postmark-webhook 5b895dc4 (worktree ../wt-gr-postmark) — Wire/GrowthPostmarkWebhookWireTests 8/8, Growth/GrowthPostmarkEventReaderTests 38/38, Growth non-SQL 544/0, Wire+Modules 377/0
+- 2026-08-01T19:15Z · agent:L-GR-POSTMARK-WEBHOOK · report L-GR-POSTMARK-WEBHOOK: Brief verified and it understated the gap: auth is one of TWO blockers. The parser read only {providerEventId,type,providerMessageId} — no field Postmark sends — so a genuine Postmark delivery was Malformed even if it authenticated. That half is now built.; GrowthProviderEventReader picks the body s
+- 2026-08-01T19:16Z · agent:flags-resolvers · started L-FLAGS-EFFECTIVE-RESOLVERS
+- 2026-08-01T19:16Z · agent:L-GR-TESTSEND-GUARD · L-GR-TESTSEND-GUARD returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-gr-testsend @ 5719fc96 · WebApi.Tests/Growth/GrowthTestSendBindingTests.cs · Growth 460/0/1 (SqlServer excluded, no slot held)
+- 2026-08-01T19:16Z · agent:L-GR-TESTSEND-GUARD · report L-GR-TESTSEND-GUARD: Brief VERIFIED, one correction. TestSendAsync did no consent and no address check; the controller; alone among newsletter writes passed no user id. But "unattributed" is the weaker half:; GrowthEndpointContractTests already proves the 401 branch is UNREACHABLE at the wire (StoreAdminPolicy; refuses 
+- 2026-08-01T19:17Z · agent:gr-testsend-record · started L-GR-TESTSEND-RECORD
+- 2026-08-01T19:20Z · agent:L-GR-PRIVACY-VENUE · L-GR-PRIVACY-VENUE returned built -> built-unverified, evidence artifacts/journeys/growth-privacy-queue.playwright.json
+- 2026-08-01T19:20Z · agent:L-GR-PRIVACY-VENUE · report L-GR-PRIVACY-VENUE: BRIEF VERIFIED ENTIRELY: both routes served, zero callers, growth-client.js:25 says so; no.ts:4837 names art. 12.; BUILT /admin/growth-privacy + sidebar entry (C3, same change) + utils/growth/privacy-queue.js + client #20/#21 + 3 locales by hand.; BRIEF CORRECTION: this surface is NOT dark. GrowthCo
+- 2026-08-01T19:21Z · agent:ev-deposits-precond · started L-EV-DEPOSITS-PRECONDITION
+- 2026-08-01T19:21Z · agent:L-EV-VIPPS-FALLBACK · returned L-EV-VIPPS-FALLBACK verdict=fail-spec -> open; D-SPEC-L-EV-VIPPS-FALLBACK appended
+- 2026-08-01T19:21Z · agent:L-EV-VIPPS-FALLBACK · report L-EV-VIPPS-FALLBACK: BRIEF VERIFIED: the adapter sent no FallBack, and VippsService.cs:109 copies model.FallBack onto merchantInfo.fallBack, so a deposit's went out null. One correction — TWO callers set it, not one: VippsController.cs:407 and Mcp/Services/McpShoppingService.cs:442, both composing the checkout path.; VI
+- 2026-08-01T19:21Z · agent:L-MEALS-DEGENERATE-TWO · L-MEALS-DEGENERATE-TWO returned built -> built-unverified, evidence /Users/svendaneel/okam/OkamAPI-mealsdegen2/lanes/L-MEALS-DEGENERATE-TWO/evidence.md
+- 2026-08-01T19:21Z · agent:L-MEALS-DEGENERATE-TWO · report L-MEALS-DEGENERATE-TWO: Brief confirmed by INJECTION not reading: MealsFundingAuthority's floored guard-decrement replaced by an unconditional SET ReservedMinor = 0 - the clamp its own comment says it is not doing - left both classes GREEN at 31/31. Both named reads were degenerate at zero.; Fixed both. State-machine unbou
+- 2026-08-01T19:23Z · agent:gr-deadline-onwire · started L-GR-DEADLINE-ONWIRE
+- 2026-08-01T19:23Z · agent:meals-release-actor · started L-MEALS-RELEASE-ACTOR
+- 2026-08-01T19:25Z · agent:L-GR-TESTSEND-RECORD · returned L-GR-TESTSEND-RECORD verdict=blocked -> open, needs D-GROWTH-AUDIT-LEDGER
+- 2026-08-01T19:25Z · agent:L-GR-TESTSEND-RECORD · report L-GR-TESTSEND-RECORD: - THE BRIEF'S PREMISE IS FALSE. There is no `GrowthAuditEvent`, on any branch, ever: `git log --all -S "GrowthAuditEvent"` returns nothing, a per-branch grep over ~400 refs returns nothing, and the DbContext declares `WorkforceAuditEvents`/`MealsAuditEvents`/`TrainingAuditEvents` and no Growth one. 
+- 2026-08-01T19:26Z · agent:meals-requote-release · started L-MEALS-REQUOTE-RELEASE
+- 2026-08-01T19:31Z · agent:L-EV-DEPOSITS-PRECONDITION · L-EV-DEPOSITS-PRECONDITION returned built -> built-unverified, evidence artifacts/journeys/events-deposit-precondition.playwright.json
+- 2026-08-01T19:31Z · agent:L-EV-DEPOSITS-PRECONDITION · report L-EV-DEPOSITS-PRECONDITION: Finding verified: EventsFeatureFlags.cs:32-37 carries the sentence verbatim and the; precondition it belongs to. The Events.Deposits row printed nothing about it.; ONE BRIEF CORRECTION: the catalog carries NO per-flag description and the page renders; none — FeatureFlagDescriptor is (Key, Module, Ti
+- 2026-08-01T19:39Z · agent:L-MEALS-RELEASE-ACTOR · returned L-MEALS-RELEASE-ACTOR verdict=blocked -> open, needs D-MEALS-AUDIT-ACTOR-KIND
+- 2026-08-01T19:39Z · agent:L-MEALS-RELEASE-ACTOR · report L-MEALS-RELEASE-ACTOR: - FINDING CONFIRMED BY OBSERVATION, not reading: a throwaway probe drove all three release paths for real and read MealsAuditEvents — ReleaseByOrderIdAsync(Cancelled), ReleaseAsync(token, OrderCreationFailed) and the worker sweep (ReleasedBound==1). 3/3 RED on Assert.NotEmpty, each with the release 
+- 2026-08-01T19:40Z · agent:flags-note-falsifiable · started L-FLAGS-NOTE-FALSIFIABLE
+- 2026-08-01T19:43Z · agent:ev-refund-fake-arg · started L-EV-REFUND-FAKE-ARG
+- 2026-08-01T19:45Z · agent:L-GR-DEADLINE-ONWIRE · L-GR-DEADLINE-ONWIRE returned built -> built-unverified, evidence artifacts/journeys/growth-privacy-queue.playwright.json (16 steps, 0 failed requests, 0 defects) · Web-modules 6b1412b · OkamAPI-modules lane/gr-deadline-onwire 86c0f9ae
+- 2026-08-01T19:45Z · agent:L-GR-DEADLINE-ONWIRE · report L-GR-DEADLINE-ONWIRE: Brief verified before building: GrowthPrivacyRequestListItem carried ReceivedAt/ResolvedAt and no deadline; ListAsync ordered OrderByDescending(ReceivedAt). Both claims true as written.; Backend 86c0f9ae (worktree ~/okam/wt-gr-deadline off feature/restaurant-modules): new GrowthPrivacyObligation.Due
+- 2026-08-01T19:46Z · agent:ev-uri-relative · started L-EV-URI-RELATIVE
+- 2026-08-01T19:47Z · agent:L-FLAGS-EFFECTIVE-RESOLVERS · L-FLAGS-EFFECTIVE-RESOLVERS returned built -> built-unverified, evidence lane/flags-effective-resolvers @ e45ec4c1 (worktree /Users/svendaneel/okam/OkamAPI-flagseff); trx at lanes/L-FLAGS-EFFECTIVE-RESOLVERS/fast-tier.trx
+- 2026-08-01T19:47Z · agent:L-FLAGS-EFFECTIVE-RESOLVERS · report L-FLAGS-EFFECTIVE-RESOLVERS: Brief verified in source, not assumed. Events ANDs Events:Enabled (absent from shipped appsettings); Growth ANDs Growth:Enabled (ships false); Meals falls back to the Features:Meals config gate, not the advertised false. The 4th resolver-less module is Training, which correctly needs none.; Added 3 
+- 2026-08-01T19:48Z · agent:meals-sweep-guard · started L-MEALS-SWEEP-GUARD
+- 2026-08-01T19:52Z · agent:fable-privacy-review · started L-GR-PRIVACY-REVIEW
+- 2026-08-01T19:52Z · agent:fable-testsend-review · started L-GR-TESTSEND-REVIEW
+- 2026-08-01T19:53Z · agent:L-FLAGS-NOTE-FALSIFIABLE · L-FLAGS-NOTE-FALSIFIABLE returned built -> built-unverified, evidence 7c9f172 · artifacts/journeys/workforce-flag-lever.playwright.json
+- 2026-08-01T19:53Z · agent:L-FLAGS-NOTE-FALSIFIABLE · report L-FLAGS-NOTE-FALSIFIABLE: Both brief claims verified true before building; neither was already falsifiable.; feature-flags-page.test.js:304 asserted toBeTruthy() on 3 strings, never mounted the page.; workforce-flag-lever.spec.js:62 read rows.count() into returned prose, never asserted it.; Note test replaced: 3 locale CONTE
+- 2026-08-01T19:54Z · agent:gr-testsend-errorcode · started L-GR-TESTSEND-ERRORCODE
+- 2026-08-02T08:02Z · agent:L-MEALS-REQUOTE-RELEASE · L-MEALS-REQUOTE-RELEASE returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-mealsrequote/lanes/L-MEALS-REQUOTE-RELEASE/evidence.md
+- 2026-08-02T08:02Z · agent:L-MEALS-REQUOTE-RELEASE · report L-MEALS-REQUOTE-RELEASE: Finding verified (client path is ConsumerWeb/core/pinia/checkout.ts, not Web-modules'). HOME: the; server, but the caller NAMES the token. Inference is refuted by measurement — it breaks; Quote_over_the_period_allowance_is_denied (15000+10000 vs 20000 must refuse) and the AllowanceMinor/cap; winner 
+- 2026-08-02T08:05Z · @clerk · session limit killed 8 agents at ~21:55; all six recoverable lanes relaunched with their partial findings folded into the briefs
+- 2026-08-02T08:13Z · tool · L-GR-TESTSEND-REVIEW running -> built-unverified, evidence docs/plan/reviews/L-GR-TESTSEND-REVIEW.md
+- 2026-08-02T08:16Z · tool · L-GR-PRIVACY-REVIEW running -> built-unverified, evidence docs/plan/reviews/L-GR-PRIVACY-REVIEW.md
+- 2026-08-02T08:16Z · agent:L-GR-TESTSEND-ERRORCODE · L-GR-TESTSEND-ERRORCODE returned built -> built-unverified, evidence lanes/L-GR-TESTSEND-ERRORCODE/DETAIL.md (commit 2a3a881 on feature/restaurant-modules, local)
+- 2026-08-02T08:16Z · agent:L-GR-TESTSEND-ERRORCODE · report L-GR-TESTSEND-ERRORCODE: - THE CODE, READ FROM THE BRANCH: `growth.test_address_not_own`, **403**, thrown by `RequireOwnAccountAddressAsync` in `Services/Growth/GrowthNewsletterService.cs` on OkamAPI `lane/gr-testsend-guard`@5719fc96 (worktree `/Users/svendaneel/okam/wt-gr-testsend`, local, unmerged). Not taken from the bri
+- 2026-08-02T08:19Z · agent:L-EV-URI-RELATIVE · L-EV-URI-RELATIVE returned built -> built-unverified, evidence lane/ev-uri-relative @ 6a7bf75b (wt-evuri) · artifacts/lanes/L-EV-URI-RELATIVE/RUN.md
+- 2026-08-02T08:19Z · agent:L-EV-URI-RELATIVE · report L-EV-URI-RELATIVE: Brief verified, not assumed: on this host `new Uri("/events"+"/events/deposit/{tok}", Absolute)` throws nothing — it returns file:///events/events/deposit/{tok}, scheme=file. Fix NOT on feature/restaurant-modules.; Ported EventsGuestLink.cs BYTE-IDENTICAL from lane/ev-vipps-fallback @9e3a607b (unmer
+- 2026-08-02T08:21Z · agent:gr-confirmed-email · started L-GR-CONFIRMED-EMAIL
+- 2026-08-02T08:21Z · agent:gr-deadline-copy · started L-GR-DEADLINE-COPY
+- 2026-08-02T08:21Z · agent:gr-deadline-land · started L-GR-DEADLINE-LAND
+- 2026-08-02T08:22Z · @clerk · waived: 2 analysis reviews queued not dispatched — load 24.9/21 with three builder lanes ramping; the host peaked at 56 this morning and reviews lose nothing by waiting a cycle
+- 2026-08-02T08:25Z · agent:L-EV-REFUND-FAKE-ARG · L-EV-REFUND-FAKE-ARG returned built -> built-unverified, evidence lanes/L-EV-REFUND-FAKE-ARG/commit-events-sqlserver.trx (25/25, chain-built) + commit-events-fast.trx (458/458) at OkamAPI lane/ev-refund-fake-arg db9b39a1
+- 2026-08-02T08:25Z · agent:L-EV-REFUND-FAKE-ARG · report L-EV-REFUND-FAKE-ARG: Brief confirmed on the counts: 25 call sites (29 grep hits less 4 inside EventsActs.cs), exactly 2 passed the port.; CORRECTION — "three failures" is not supported. The defect's footprint is ONE deterministic failure:; EventsSettlementLifecycleTests.Cancel_a_confirmed_event_..._refunds_through_the_r
+- 2026-08-02T08:26Z · agent:fable-w5-review · started L-WF-W5-REVIEW
+- 2026-08-02T08:26Z · agent:fable-meals-cluster · started L-MEALS-RELEASE-CLUSTER-REVIEW
+- 2026-08-02T08:27Z · agent:gr-deadline-statute · started L-GR-DEADLINE-STATUTE
+- 2026-08-02T08:35Z · agent:L-GR-DEADLINE-COPY · L-GR-DEADLINE-COPY returned built -> built-unverified, evidence lanes/L-GR-DEADLINE-COPY/DETAIL.md · frontend 7a2c789 · backend 3b42da1d (lane/gr-deadline-onwire)
+- 2026-08-02T08:35Z · agent:L-GR-DEADLINE-COPY · report L-GR-DEADLINE-COPY: All four findings verified before anything was touched; all four real, #3 worse than stated.; gp_due_unknown rewritten by hand in en/no/de: names the response as the cause, not the receipt time.; Three MORE instances of the same stale claim, not in the brief — the header comment above the gp_*; bloc
+- 2026-08-02T08:35Z · @clerk · held L-GR-ISOPEN-DOC: its file already has three lanes in one worktree; gated on the landing lane
+- 2026-08-02T08:36Z · agent:gr-withdraw-origin · started L-GR-WITHDRAW-ORIGIN
+- 2026-08-02T08:38Z · tool · L-WF-W5-REVIEW running -> built-unverified, evidence docs/plan/reviews/L-WF-W5-REVIEW.md
+- 2026-08-02T08:40Z · tool · L-MEALS-RELEASE-CLUSTER-REVIEW running -> built-unverified, evidence docs/plan/reviews/L-MEALS-RELEASE-CLUSTER-REVIEW.md
+- 2026-08-02T08:43Z · agent:L-GR-DEADLINE-STATUTE · L-GR-DEADLINE-STATUTE returned built -> built-unverified, evidence lane/gr-deadline-statute f7abfd8e (wt /Users/svendaneel/okam/wt-gr-statute, off 3b42da1d) · lanes/L-GR-DEADLINE-STATUTE/growth-scoped.trx
+- 2026-08-02T08:43Z · agent:L-GR-DEADLINE-STATUTE · report L-GR-DEADLINE-STATUTE: Brief verified in full; every part held. Named all three in GrowthPrivacyObligation's own doc.; (1) art 3(4) NOT implementable honestly: art 2(1) makes public holidays per-Member-State data the product holds for no market. Named with direction + worst case + what it would need.; (2) art 3(2)(c) end-
+- 2026-08-02T08:44Z · agent:meals-fourway-tier · started L-MEALS-FOURWAY-TIER
+- 2026-08-02T08:44Z · agent:L-GR-WITHDRAW-ORIGIN · returned L-GR-WITHDRAW-ORIGIN verdict=fail-spec -> open; D-SPEC-L-GR-WITHDRAW-ORIGIN appended
+- 2026-08-02T08:44Z · agent:L-GR-WITHDRAW-ORIGIN · report L-GR-WITHDRAW-ORIGIN: | Brief VERIFIED, neither break fixed. Cookie SameSite=Strict GrowthPreferenceController.cs:58-65; AllowAnyOrigin Program.cs:96-103 applied globally :285; API_BASE_URL nuxt.config.js:45. Break 2 confirmed LIVE: preflight to api.okam.no returns "access-control-allow-origin: *" and no allow-credential
+- 2026-08-02T08:45Z · agent:journey-coverage-three · started L-JOURNEY-COVERAGE-THREE
+- 2026-08-02T08:47Z · @clerk · repaired L-GR-DEADLINE-LAND needs line: the two names fail the ID grammar; authored L-LIVE-WORLD-SEED and pointed it there. Syntax repair, request unchanged
+- 2026-08-02T08:47Z · agent:L-GR-DEADLINE-LAND · returned L-GR-DEADLINE-LAND verdict=blocked -> open, needs L-LIVE-WORLD-SEED
+- 2026-08-02T08:47Z · agent:L-GR-DEADLINE-LAND · report L-GR-DEADLINE-LAND: BRIEF TRUE. 86c0f9ae was not on feature/restaurant-modules (merge-base = de1e5c5e = the tip). All three symptoms confirmed. No migration, no OnModelCreating change: derive-on-read holds and the MIGRATION note does not gate this.; LANDED, exit half 1. 1416e810 merges lane/gr-deadline-onwire; the bran
+- 2026-08-02T08:47Z · agent:L-MEALS-SWEEP-GUARD · L-MEALS-SWEEP-GUARD returned built -> built-unverified, evidence /Users/svendaneel/okam/OkamAPI-sweepguard/lanes/L-MEALS-SWEEP-GUARD/evidence.md — lane/meals-sweep-guard @ 4bddfc7d (fix e828bcdf) off de1e5c5e, local only
+- 2026-08-02T08:47Z · agent:L-MEALS-SWEEP-GUARD · report L-MEALS-SWEEP-GUARD: BRIEF VERIFIED BY OBSERVATION. Base 168 = SaveChangesAsync inside a try whose only catch is the unique filter; EF raises the concurrency exception from a row-count mismatch, so it has no provider inner and IsUniqueViolation is false. Captured frame by frame at the base: 176(=base 168) -> ReleaseStra
+- 2026-08-02T08:47Z · agent:L-GR-CONFIRMED-EMAIL · L-GR-CONFIRMED-EMAIL returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-gr-confirmed @ 801d36a3 (lane/gr-confirmed-email, off 5719fc96, local, unpushed) · WebApi.Tests/Growth/GrowthTestSendBindingTests.cs · artifacts/tests/a7697121-fast-tier.trx = fast tier 4376 run / 4364 passed / 0 failed / 12 skipped, from a clean detached checkout of a7697121
+- 2026-08-02T08:47Z · agent:L-GR-CONFIRMED-EMAIL · report L-GR-CONFIRMED-EMAIL: Brief VERIFIED end to end: the clause selected u.Email alone; UserService.cs:113-121 persists Email; and clears EmailConfirmed BEFORE any code (route UserController.cs:53); RequireUniqueEmail unset; (ServiceCollectionExtensions.cs:176-192); Meals precedent MealsMembershipService.cs:613 requires it.;
+- 2026-08-02T08:48Z · agent:live-world-seed · started L-LIVE-WORLD-SEED
+- 2026-08-02T08:48Z · agent:meals-eighth-pin · started L-MEALS-EIGHTH-PIN
+- 2026-08-02T08:51Z · agent:gr-testsend-ratelimit · started L-GR-TESTSEND-RATELIMIT
+- 2026-08-02T08:53Z · agent:fable-confirmed-review · started L-GR-CONFIRMED-REVIEW
+- 2026-08-02T08:53Z · agent:fable-sweep-review · started L-MEALS-SWEEP-REVIEW
+- 2026-08-02T08:57Z · agent:L-MEALS-FOURWAY-TIER · L-MEALS-FOURWAY-TIER returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-meals-fourway-tier/lanes/L-MEALS-FOURWAY-TIER/ (commit 702d9481, trx f72c7a81-fourway-fast-tier.trx)
+- 2026-08-02T08:57Z · agent:L-MEALS-FOURWAY-TIER · report L-MEALS-FOURWAY-TIER: Four-way merge off de1e5c5e in the prescribed order (floor-pins, degenerate-two, grace, re-quote last): 0 conflicts, tree f72c7a81, status empty before the build.; Full fast tier `--filter "Database!=SqlServer"` on that tree: total=4378 executed=4366 passed=4366 FAILED=0, 578 classes, 4m59s, exit 0.
+- 2026-08-02T08:58Z · agent:meals-supersede-sql · started L-MEALS-SUPERSEDE-SQL
+- 2026-08-02T09:06Z · tool · L-MEALS-SWEEP-REVIEW running -> built-unverified, evidence docs/plan/reviews/L-MEALS-SWEEP-REVIEW.md
+- 2026-08-02T09:07Z · tool · L-GR-CONFIRMED-REVIEW running -> built-unverified, evidence docs/plan/reviews/L-GR-CONFIRMED-REVIEW.md
+- 2026-08-02T09:08Z · @clerk · sent mid-flight correction to L-GR-TESTSEND-RATELIMIT: brief named the address-write route, the load-bearing one is the confirm/guess route
+- 2026-08-02T09:22Z · agent:fable-resolvers-review · started L-FLAGS-RESOLVERS-REVIEW
+- 2026-08-02T09:22Z · agent:fable-inquiry-review · started L-EV-INQUIRY-REVIEW
+- 2026-08-02T09:22Z · agent:L-MEALS-SUPERSEDE-SQL · L-MEALS-SUPERSEDE-SQL returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-mealssupsql/lanes/L-MEALS-SUPERSEDE-SQL/evidence.md (commit 7dafec47; trx supersede-sql-clean, mutant-clamp, mutant-repeat-decrement, mutant-no-detach, trait-guard)
+- 2026-08-02T09:22Z · agent:L-MEALS-SUPERSEDE-SQL · report L-MEALS-SUPERSEDE-SQL: Base 702d9481 (four-way merged), not d5483cb3: it is a descendant of the re-quote commit AND the only tree carrying the strengthened grace pin the brief also asks for, so one container covers both.; MealsRequoteSupersedeSqlServerTests: 3 pins on a migrated catalog. supersede-sql-clean.trx = 18/18 pa
+- 2026-08-02T09:22Z · agent:L-MEALS-EIGHTH-PIN · L-MEALS-EIGHTH-PIN returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-mealseighth/lanes/L-MEALS-EIGHTH-PIN/evidence.md — lane/meals-eighth-pin @ 9fe599c6 off d5483cb3, local only
+- 2026-08-02T09:22Z · agent:L-MEALS-EIGHTH-PIN · report L-MEALS-EIGHTH-PIN: FINDING VERIFIED BY INJECTION FIRST: clamp (SET ReservedMinor = 0, floor dropped) passed 9/9 at the base. Wider than the brief: this file is the ONLY caller in the suite that supplies a SupersedesToken, so the clamp was invisible to all 4378 fast-tier tests.; Three of the nine tests reach the decrem
+- 2026-08-02T09:23Z · agent:meals-quote-retry · started L-MEALS-QUOTE-RETRY
+- 2026-08-02T09:23Z · agent:gr-confirmed-pin-fix · started L-GR-CONFIRMED-PIN-FIX
+- 2026-08-02T09:25Z · agent:L-LIVE-WORLD-SEED · L-LIVE-WORLD-SEED returned built -> built-unverified, evidence Web-modules feature/restaurant-modules @ 9a5900a (local, not pushed) · artifact lanes/L-LIVE-WORLD-SEED/events-deposit-precondition.live.playwright.json = {"backend":"live","apiBaseUrl":"http://127.0.0.1:5951","backendProbe":{"status":200,"body":"Healthy"},"backendServed":12} · seed receipt lanes/L-LIVE-WORLD-SEED/live-world-run.txt (127 migrations, 211 tables, 25 append-only triggers, from EMPTY)
+- 2026-08-02T09:25Z · agent:L-LIVE-WORLD-SEED · report L-LIVE-WORLD-SEED: BRIEF VERIFIED, AND ONE THIRD OF IT WAS ALREADY FALSE. The tag exclusion and the dead API are real. But `99999999 / AppSettings__DemoVerificationCode__REDACTED` is NOT a fixture invention — it is AppSettings.DemoPhoneNumber/DemoVerificationCode, one of two no-SMS sign-ins the app has, and it works against a live backend unchanged. The 
+- 2026-08-02T09:26Z · agent:live-world-staff · started L-LIVE-WORLD-STAFF
+- 2026-08-02T09:28Z · agent:L-JOURNEY-COVERAGE-THREE · L-JOURNEY-COVERAGE-THREE returned built -> built-unverified, evidence artifacts/journeys/{margin-recipe-to-margin,training-course-to-evidence,growth-newsletter-send-gate}.playwright.json + 14 shots; commit 174a550
+- 2026-08-02T09:28Z · agent:L-JOURNEY-COVERAGE-THREE · report L-JOURNEY-COVERAGE-THREE: BRIEF, 3 corrections. (1) Growth ALREADY had a journey: growth-privacy-queue. Margin and Training had none here, but all four walks the plan cites `driven · lane only` exist unmerged on lane/fe-journeys — I brought Margin+Training forward and wrote Growth's operator half new. (2) Those ported fixtur
+- 2026-08-02T09:29Z · agent:confirm-admin-surface · started L-CONFIRM-ADMIN-SURFACE
+- 2026-08-02T09:30Z · @clerk · L-GR-TESTSEND-RATELIMIT return refused (log over 15 lines); asked the agent to re-emit rather than trimming it myself
+- 2026-08-02T09:32Z · tool · L-EV-INQUIRY-REVIEW running -> built-unverified, evidence docs/plan/reviews/L-EV-INQUIRY-REVIEW.md
+- 2026-08-02T09:32Z · agent:L-GR-TESTSEND-RATELIMIT · L-GR-TESTSEND-RATELIMIT returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-gr-ratelimit @ c96cd21e (lane/gr-testsend-ratelimit, off 801d36a3, local, unpushed) · artifacts/tests/lane-fast-tier.trx 4403/4391/0/12 · artifacts/tests/base-801d36a3.trx 4376/4364/0/12, measured myself from a clean checkout of the base
+- 2026-08-02T09:32Z · agent:L-GR-TESTSEND-RATELIMIT · report L-GR-TESTSEND-RATELIMIT: WORKDIR: the brief's ../OkamAPI-modules is another lane's live worktree (lane/meals-grace-pins) — left untouched; I made my own off the sibling tip 801d36a3.; All citations VERIFIED, with two brief corrections. confirm-email is NOT on the sign-up path: sign-in requires a confirmed PHONE, and its onl
+- 2026-08-02T09:32Z · tool · L-FLAGS-RESOLVERS-REVIEW running -> built-unverified, evidence docs/plan/reviews/L-FLAGS-RESOLVERS-REVIEW.md
+- 2026-08-02T09:34Z · agent:flags-excuse-byflag · started L-FLAGS-EXCUSE-BYFLAG
+- 2026-08-02T09:50Z · agent:L-GR-CONFIRMED-PIN-FIX · L-GR-CONFIRMED-PIN-FIX returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-gr-confirmed @ 48950702 (lane/gr-confirmed-email, local, unpushed) · code 3cf288fb · artifacts/tests/3cf288fb-fast-tier.trx + .../3cf288fb.../RUN.md = 4376 run / 4364 passed / 0 failed / 12 skipped
+- 2026-08-02T09:50Z · agent:L-GR-CONFIRMED-PIN-FIX · report L-GR-CONFIRMED-PIN-FIX: All THREE verified real before anything changed; none was already right.; 1 PIN: the subject was seeded with no Email AND the flag false, so the confirmation clause; short-circuited and deleting the null-address clause left the whole tier green. It is now seeded; CONFIRMED-with-no-address, plus a se
+- 2026-08-02T09:51Z · agent:gr-confirm-stale · started L-GR-CONFIRM-STALE
+- 2026-08-02T09:52Z · agent:L-LIVE-WORLD-STAFF · L-LIVE-WORLD-STAFF returned built -> built-unverified, evidence lanes/L-LIVE-WORLD-STAFF/live-world-run.txt (commit 538abe6)
+- 2026-08-02T09:52Z · agent:L-LIVE-WORLD-STAFF · report L-LIVE-WORLD-STAFF: Both journeys carry @live and ran green against a real API on a real DB: workforce-flag-lever backendServed=80, workforce-schedule-publish backendServed=48, apiBaseUrl http://127.0.0.1:5952. Both live artifacts committed under lanes/L-LIVE-WORLD-STAFF/.; GUARD CONFIRMED FIXED FIRST (journey.js:410 r
+- 2026-08-02T09:53Z · agent:L-CONFIRM-ADMIN-SURFACE · L-CONFIRM-ADMIN-SURFACE returned built -> built-unverified, evidence artifacts/journeys/account-email-confirm.playwright.json (passed, 14 steps, 4 shots) · commit 968869e
+- 2026-08-02T09:53Z · agent:L-CONFIRM-ADMIN-SURFACE · report L-CONFIRM-ADMIN-SURFACE: Brief verified in full against source; all six claims hold, nothing contradicted.; Built pages/admin/account-email.vue + its sidebar entry in the same change (C3), in the one nav; group not gated on store-admin membership, so the phone-signup admin the guard blocks reaches it.; Refusal copy names th
+- 2026-08-02T10:01Z · agent:L-FLAGS-EXCUSE-BYFLAG · L-FLAGS-EXCUSE-BYFLAG returned built -> built-unverified, evidence /Users/svendaneel/okam/OkamAPI-flagsexcuse/lanes/L-FLAGS-EXCUSE-BYFLAG/mutation-receipt.md
+- 2026-08-02T10:01Z · agent:L-FLAGS-EXCUSE-BYFLAG · report L-FLAGS-EXCUSE-BYFLAG: verified: the guard filtered on d.Module (line 96) — a module-keyed denylist, as briefed.; proved pre-fix: deleting Program.cs:779 (Workforce resolver) left the guard 4/4 GREEN, and only; WorkforceWireTests' grandfathered-store pin reddened. Finding 1 confirmed empirically.; proved pre-fix: a new ad
+- 2026-08-02T10:02Z · @clerk · waived: load 76/21 with a dotnet run and a node build in flight; 4 containers (2 live worlds held for Sven, 1 foreign, 1 lane-owned). Nothing dispatched
+- 2026-08-02T10:04Z · agent:L-MEALS-QUOTE-RETRY · L-MEALS-QUOTE-RETRY returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-mealsqretry/lanes/L-MEALS-QUOTE-RETRY/evidence.md — lane/meals-quote-retry @ 92d45967, local only (base 46519562 = supersede-sql 7dafec47 + eighth-pin 9fe599c6 merged; disjoint files)
+- 2026-08-02T10:04Z · agent:L-MEALS-QUOTE-RETRY · report L-MEALS-QUOTE-RETRY: FINDING VERIFIED BY INJECTION FIRST, against the unchanged service: 3 new pins 3/3 red, two of them with the caller's answer verbatim — InvalidOperationException "A quote idempotency-key race reported a conflict but no receipt was found", MealsQuoteService.cs:357. Exactly as briefed.; CAUSE: the str
+- 2026-08-02T10:21Z · agent:L-GR-CONFIRM-STALE · L-GR-CONFIRM-STALE returned built -> built-unverified, evidence OkamAPI-modules lane/gr-confirm-stale @ 771c0fc0 (own worktree /Users/svendaneel/okam/wt-gr-confirm-stale, off 48950702) · artifacts/tests/771c0fc0a6504971fb1cfdab5eed4ab878582ab5/RUN.md + artifacts/tests/771c0fc0-fast-tier.trx (fast tier Database!=SqlServer, 4380 total / 4368 passed / 0 failed / 12 skipped) · WebApi.Tests/Growth/GrowthTestSendReachabilityTests.cs
+- 2026-08-02T10:21Z · agent:L-GR-CONFIRM-STALE · report L-GR-CONFIRM-STALE: - Brief verified before building: EmailConfirmed is set true only at UserService.cs:134 and cleared only at :106/:119 (address change). No expiry, no re-read, and no column records WHEN. The finding holds exactly as written.; - No staleness NUMBER invented, and none was needed for the exit criterion
+- 2026-08-02T10:23Z · agent:WF-EXPORT-DUPLICATE · started L-WF-EXPORT-DUPLICATE
+- 2026-08-02T10:23Z · agent:MODAL-LAND · started L-MODAL-LAND
+- 2026-08-02T10:23Z · agent:CONFIRM-SERVER-HALVES · started L-CONFIRM-SERVER-HALVES
+- 2026-08-02T10:23Z · agent:CLIENT-TRAILING-SLASH · started L-CLIENT-TRAILING-SLASH
+- 2026-08-02T10:23Z · agent:mrg-price-correction · started L-MRG-PRICE-CORRECTION
+- 2026-08-02T10:31Z · agent:L-MODAL-LAND · L-MODAL-LAND returned built -> built-unverified, evidence artifacts/journeys/modal-scroll-lock.playwright.json and artifacts/journeys/modal-estate-scroll-lock.playwright.json, both tracked on feature/restaurant-modules @ 3ee9c15
+- 2026-08-02T10:31Z · agent:L-MODAL-LAND · report L-MODAL-LAND: BEFORE: feature/restaurant-modules @ 538abe6, no tracked changes, 20 untracked lanes/ dirs. Neither artifact present -- artifacts/ is gitignored and both lanes force-added their own.; Merged in an isolated worktree cut from 538abe6, never in the shared checkout, then fast-forwarded it. No merge comm
+- 2026-08-02T10:31Z · tool · L-MODAL-SCROLLLOCK built-unverified -> verified, evidence artifacts/journeys/modal-scroll-lock.playwright.json
+- 2026-08-02T11:01Z · agent:L-CONFIRM-SERVER-HALVES · L-CONFIRM-SERVER-HALVES returned built -> built-unverified, evidence OkamAPI worktree /Users/svendaneel/okam/wt-confirm-halves, branch lane/confirm-server-halves @ 8704ff63 (off c96cd21e, local, unpushed) - lanes/L-CONFIRM-SERVER-HALVES/evidence.md - artifacts/tests/base-c96cd21e-fast-tier.trx 4403/4391/0/12 from a clean checkout of the base - artifacts/tests/lane-confirm-halves-fast-tier.trx 4410/4398/0/12
+- 2026-08-02T11:01Z · agent:L-CONFIRM-SERVER-HALVES · report L-CONFIRM-SERVER-HALVES: BRIEF VERIFIED before building. All three findings real; the third is real on BOTH branches, not one.; Proved the 500 rather than read it: at the base the wire pin gets 500 + MimeKit.ParseException, not 400.; BASE c96cd21e (lane/gr-testsend-ratelimit), not feature/restaurant-modules - it rewrites th
+- 2026-08-02T11:02Z · agent:fable-ratelimit-review · started L-GR-RATELIMIT-REVIEW
+- 2026-08-02T11:02Z · agent:fable-live-harness · started L-LIVE-HARNESS-REVIEW
+- 2026-08-02T11:02Z · agent:L-CLIENT-TRAILING-SLASH · L-CLIENT-TRAILING-SLASH returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/lanes/L-CLIENT-TRAILING-SLASH/mutation-receipt.md
+- 2026-08-02T11:02Z · agent:L-CLIENT-TRAILING-SLASH · report L-CLIENT-TRAILING-SLASH: verified first: UserController declares confirm-email BARE, the client posted it slashed. Real.; brief wrong on scale: 418 call sites parsed, THIRTEEN end in a slash, FIVE in user-service.ts, so; "unlike every other route in that file" was false. All 13 fixed, all 13 declared bare in OkamAPI.; built
+- 2026-08-02T11:04Z · agent:mrg-waste-500 · started L-MRG-WASTE-500
+- 2026-08-02T11:04Z · agent:pdf-nullderef · started L-PDF-NULLDEREF
+- 2026-08-02T11:05Z · agent:L-MRG-PRICE-CORRECTION · returned L-MRG-PRICE-CORRECTION verdict=blocked -> open, needs D-MRG-PRICE-CORRECTION
+- 2026-08-02T11:05Z · agent:L-MRG-PRICE-CORRECTION · report L-MRG-PRICE-CORRECTION: VERIFIED BY EXECUTION, NOT READING. All five of the brief's line references are correct, and every part of the finding is now a test in WebApi.Tests/Margin/MarginFrozenWeekRepricingTests.cs (5 tests, all green, committed at a371bffd).; CONTROL (works today): with the wrong price still the newest row
+- 2026-08-02T11:05Z · agent:fe-journeys-merge · started L-FE-JOURNEYS-MERGE
+- 2026-08-02T11:13Z · tool · L-LIVE-HARNESS-REVIEW running -> built-unverified, evidence docs/plan/reviews/L-LIVE-HARNESS-REVIEW.md
+- 2026-08-02T11:17Z · tool · L-GR-RATELIMIT-REVIEW running -> built-unverified, evidence docs/plan/reviews/L-GR-RATELIMIT-REVIEW.md
+- 2026-08-02T11:17Z · agent:L-WF-EXPORT-DUPLICATE · L-WF-EXPORT-DUPLICATE returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-wfexpdup/lanes/L-WF-EXPORT-DUPLICATE/{evidence.md,injection-probe-red.txt,sql-tier.txt,export-duplicate-race.trx,fast-tier.trx,sql-tier-workforce.trx} - lane/wf-export-duplicate @ 3a4442a7, local only
+- 2026-08-02T11:17Z · agent:L-WF-EXPORT-DUPLICATE · report L-WF-EXPORT-DUPLICATE: VERIFIED BY INJECTION BEFORE WRITING ANYTHING. Two ExportAsync calls, different idempotency keys, one held at its second SaveChanges on a migrated catalog: Expected 1 / Actual 2. Both callers committed a succeeded FULL batch in rows a trigger makes permanent. Every part of the brief holds. Two claim
+- 2026-08-02T11:22Z · agent:live-seed-via-product · started L-LIVE-SEED-VIA-PRODUCT
+- 2026-08-02T11:22Z · agent:live-world-restore · started L-LIVE-WORLD-RESTORE
+- 2026-08-02T11:33Z · agent:L-FE-JOURNEYS-MERGE · L-FE-JOURNEYS-MERGE returned built -> built-unverified, evidence commit ddc27fa on feature/restaurant-modules (ff, no merge commit) - lanes/L-FE-JOURNEYS-MERGE/{bookkeeping.md,suite-18-of-18.log,mutation-proof.log,first-port-attempt-3-red.log}
+- 2026-08-02T11:33Z · agent:L-FE-JOURNEYS-MERGE · report L-FE-JOURNEYS-MERGE: COUNT IS SIX, NOT FOUR. plan.md marks 194/217/355/380/465/542 driven-lane-only on lane/fe-journeys. COVERAGE-THREE landed 194+465 at 174a550 and their "lane only" marks were never cleared, so the plan was stale in BOTH directions. All six are on the branch now. A SEVENTH, plan.md:121, is still lane-
+- 2026-08-02T11:34Z · agent:artifact-provenance · started L-ARTIFACT-PROVENANCE
+- 2026-08-02T11:36Z · agent:L-MRG-WASTE-500 · L-MRG-WASTE-500 returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-mrgwaste500/artifacts/tests/L-MRG-WASTE-500/RUN.md
+- 2026-08-02T11:36Z · agent:L-MRG-WASTE-500 · report L-MRG-WASTE-500: - FINDING VERIFIED BY INJECTION, NOT BY READING. A throwaway probe ran against the unmodified base binary, at the service and again through MarginWasteController.Create itself, then was deleted. The exception was caught coming OUT of the action: DbUpdateException, inner SqliteException "SQLite Error
+- 2026-08-02T11:47Z · agent:L-LIVE-SEED-VIA-PRODUCT · L-LIVE-SEED-VIA-PRODUCT returned built -> built-unverified, evidence test/e2e/scripts/live-world.sh (Web-modules feature/restaurant-modules, local commit) - three live artifacts under lanes/L-LIVE-SEED-VIA-PRODUCT/ all "backend":"live" "apiBaseUrl":"http://127.0.0.1:5956" (workforce-schedule-publish backendServed=48, workforce-flag-lever=80, events-deposit-precondition=12) - seed receipt lanes/L-LIVE-SEED-VIA-PRODUCT/live-world-run.txt (127 migrations, 211 tables, 25 append-only triggers, from EMPTY)
+- 2026-08-02T11:47Z · agent:L-LIVE-SEED-VIA-PRODUCT · report L-LIVE-SEED-VIA-PRODUCT: BRIEF VERIFIED IN EVERY PART, and the script's justification was false. POST /Stores/register (StoresController.cs:346) is [AllowAnonymous]; StoreService.RegisterAsync (StoreService.cs:428) writes the Stores row AND the caller's StoreAdmins row whenever User.Identity.Name resolves - the login JWT se
+- 2026-08-02T11:48Z · agent:composition-root-check · started L-COMPOSITION-ROOT-CHECK
+- 2026-08-02T11:48Z · agent:L-PDF-NULLDEREF · L-PDF-NULLDEREF returned built -> built-unverified, evidence OkamAPI-pdfnull 2497ce9d + receipt 17198f14 (lane/pdf-nullderef, local, not pushed) - WebApi.Tests/Wire/PdfRendererOutageWireTests.cs - WebApi.Tests/Services/DocumentRendererFailureTests.cs - artifacts/tests/2497ce9d-fast-tier.trx + 2497ce9d.../RUN.md - lanes/L-PDF-NULLDEREF/{red.txt,decision.md}
+- 2026-08-02T11:48Z · agent:L-PDF-NULLDEREF · report L-PDF-NULLDEREF: - BASE, measured not inherited: 4373 passed / 0 failed / 12 skipped of 4385, on this lane's own worktree at a7b90cbd before any edit. HEAD 4399 / 0 / 12 of 4411, from a clean detached checkout of the commit. The +26 is exactly the number of tests added.; - BASE DEVIATION, named: branched off lane/do
+- 2026-08-02T11:48Z · @clerk · waived: L-WF-ADJUSTMENT-ORDINAL granted but held - 5 mssql containers at ~6.5 of 7.65 GiB, three of them worlds held for the same unwalked acceptance
+- 2026-08-02T11:51Z · agent:confirm-conat-retire · started L-CONFIRM-CONAT-RETIRE
+- 2026-08-02T11:51Z · @clerk · waived again: L-WF-ADJUSTMENT-ORDINAL held - still 5 mssql containers, 3 of them worlds standing for one unwalked acceptance
+- 2026-08-02T11:52Z · agent:L-LIVE-WORLD-RESTORE · L-LIVE-WORLD-RESTORE returned built -> built-unverified, evidence lanes/L-LIVE-WORLD-RESTORE/live-world-reset-run.txt (commit 337f9bf)
+- 2026-08-02T11:52Z · agent:L-LIVE-WORLD-RESTORE · report L-LIVE-WORLD-RESTORE: EXIT MET, with three journeys not two: events-deposit-precondition -> workforce-schedule-publish -> workforce-flag-lever, ONE world, a restore before each, all green and all "backend":"live" at :5961, and __EFMigrationsHistory still reading 127 at the end. See 09-chain-three-journeys.txt and the thr
+- 2026-08-02T11:58Z · agent:L-ARTIFACT-PROVENANCE · L-ARTIFACT-PROVENANCE returned built -> built-unverified, evidence lanes/L-ARTIFACT-PROVENANCE/evidence.md (commit 533aea4, 5 files, pathspec) + artifacts/journeys/runs/ledger.jsonl
+- 2026-08-02T11:58Z · agent:L-ARTIFACT-PROVENANCE · report L-ARTIFACT-PROVENANCE: All three code defects verified before building. The brief's LIVE-STATE claim was stale: by 11:44Z other lanes had re-run all three live journeys, so their canonical paths held live passes, not the guard proof and fixture re-runs. The mechanisms were unaffected.; Store: canonical artifacts/journeys/
+- 2026-08-02T13:59Z · agent:L-COMPOSITION-ROOT-CHECK · L-COMPOSITION-ROOT-CHECK returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-comproot @ bfe57c3c (lane/composition-root-check, off 8704ff63, local, unpushed) - WebApi.Tests/Wire/CompositionRootLimiterWireTests.cs - artifacts/tests/lane-composition-root-fast-tier.trx 4419/4406/1/12 - artifacts/tests/base-8704ff63-fast-tier.trx 4410/4398/0/12 measured myself from this clean worktree - lanes/L-COMPOSITION-ROOT-CHECK/{evidence.md,mutations.txt}
+- 2026-08-02T13:59Z · agent:L-COMPOSITION-ROOT-CHECK · report L-COMPOSITION-ROOT-CHECK: BASE 8704ff63 (lane/confirm-server-halves), the newest tip carrying the cache fix c96cd21e. feature/restaurant-modules contains neither, so a check written on it would have pinned the defect.; BRIEF VERIFIED. The corrected story is right and sharper than either telling: outside Development the host 
+- 2026-08-02T13:59Z · agent:L-CONFIRM-CONAT-RETIRE · L-CONFIRM-CONAT-RETIRE returned built -> built-unverified, evidence OkamAPI 6771ba9a on lane/confirm-conat-retire (worktree /Users/svendaneel/okam/wt-conatretire, local, not pushed) + lanes/L-CONFIRM-CONAT-RETIRE/evidence.md
+- 2026-08-02T13:59Z · agent:L-CONFIRM-CONAT-RETIRE · report L-CONFIRM-CONAT-RETIRE: - Based on 8704ff63 (lane/confirm-server-halves), NOT c96cd21e. It is c96cd21e's direct child, it rewrites the send path that mints the successor code, and the new wire pin cannot be written without it. Nothing here touches UserService's send path, so the two are additive and this lands with or afte
+- 2026-08-02T14:00Z · agent:reservation-limiter-move · started L-RESERVATION-LIMITER-MOVE
+- 2026-08-02T14:00Z · agent:crypto-pin-byform · started L-CRYPTO-PIN-BYFORM
+- 2026-08-02T14:00Z · @clerk · waived: L-WF-ADJUSTMENT-ORDINAL held a third time - docker at 6.4 of 7.65 GiB across 5 containers, a sixth would exceed the host
+- 2026-08-02T14:01Z · agent:review-residuals · started L-REVIEW-RESIDUALS
+- 2026-08-02T14:01Z · agent:train-disclosure · started L-TRAIN-DISCLOSURE
+- 2026-08-02T14:17Z · tool · refreshed 21 fact spans, 6 unconfirmed
+- 2026-08-02T14:27Z · agent:L-RESERVATION-LIMITER-MOVE · L-RESERVATION-LIMITER-MOVE returned built -> built-unverified, evidence /Users/svendaneel/okam/OkamAPI-reslimiter/lanes/L-RESERVATION-LIMITER-MOVE/evidence.md (commit d9189fbd, branch lane/reservation-limiter-move, local)
+- 2026-08-02T14:27Z · agent:L-RESERVATION-LIMITER-MOVE · report L-RESERVATION-LIMITER-MOVE: One line moved: IReservationRateLimiter AddSingleton out of AddMcpAuthentication (ServiceCollectionExtensions.cs:60) into Program.AddServices, beside AddMemoryCache and the three limiters already unconditional.; Checked sufficiency before building. IsMcpDisabledPath covers /mcp, /oauth, /authorize, 
+- 2026-08-02T14:36Z · agent:L-TRAIN-DISCLOSURE · L-TRAIN-DISCLOSURE returned built -> built-unverified, evidence OkamAPI-modules 06b8b582 (lane/train-disclosure) + Web-modules 2d3488c; artifacts/tests/L-TRAIN-DISCLOSURE/after.trx
+- 2026-08-02T14:36Z · agent:L-TRAIN-DISCLOSURE · report L-TRAIN-DISCLOSURE: Finding CONFIRMED, not overstated: TrainingEvidenceService appends evidence.read keyed to personRef, and the only ledger read (ReadLedgerAsync) selects on completion/certificate ids, so no route could return it.; Built GET /training/stores/{storeId}/evidence/disclosures[?personRef=] - service, inter
+- 2026-08-02T14:37Z · agent:fable-confirm-chain · started L-CONFIRM-CHAIN-REVIEW
+- 2026-08-02T14:37Z · agent:fable-moneypath-pair · started L-MONEYPATH-PAIR-REVIEW
+- 2026-08-02T14:38Z · agent:train-display-snapshot · started L-TRAIN-DISPLAY-SNAPSHOT
+- 2026-08-02T14:38Z · agent:train-evidence-names · started L-TRAIN-EVIDENCE-NAMES-COURSE
+- 2026-08-02T14:44Z · agent:clerk-inloop · started L-GUARD-W0
+- 2026-08-02T14:46Z · agent:L-REVIEW-RESIDUALS · L-REVIEW-RESIDUALS returned built -> built-unverified, evidence OkamAPI-modules lane/review-residuals-provider @ bd765c7d (worktree ../wt-resid-provider, off lane/growth-health-honest c11e78a6) and lane/review-residuals-rezone @ 15a1d0b7 (worktree ../wt-resid-rezone, off lane/wf-export-duplicate 3a4442a7); trx committed at artifacts/tests/3bdef5c6-fast-tier.trx and artifacts/tests/4a9cbb9c-fast-tier.trx; per-guard detail at ../wt-resid-provider/.lane/L-REVIEW-RESIDUALS-provider.md and ../wt-resid-rezone/.lane/L-REVIEW-RESIDUALS-rezone.md
+- 2026-08-02T14:46Z · agent:L-REVIEW-RESIDUALS · report L-REVIEW-RESIDUALS: Both findings verified against shipped code before building. Both real, and both understated in one way: the two guards do NOT live on one branch. Neither is on feature/restaurant-modules, and no branch carries both, so the work is one commit per guard on the branch that owns it rather than a merge 
+- 2026-08-02T14:47Z · agent:L-CRYPTO-PIN-BYFORM · L-CRYPTO-PIN-BYFORM returned built -> built-unverified, evidence OkamAPI worktree /Users/svendaneel/okam/wt-cryptopin, branch lane/crypto-pin-byform @ cfb3b14a (code 35630600, off 6771ba9a, local, unpushed) - lanes/L-CRYPTO-PIN-BYFORM/evidence.md - artifacts/tests/lane-crypto-pin-byform-fast-tier.trx 4418/4406/0/12 - artifacts/tests/base-6771ba9a-fast-tier.trx 4415/4402/1/12
+- 2026-08-02T14:47Z · agent:L-CRYPTO-PIN-BYFORM · report L-CRYPTO-PIN-BYFORM: BASE 6771ba9a (lane/confirm-conat-retire), the family tip - not c96cd21e, not 8704ff63. It descends from both and touches neither the generator nor its tests, so the subject is byte-identical at all three; UserService, which this lane also pins, HAD moved on between them.; FINDING VERIFIED FIRST and
+- 2026-08-02T14:47Z · tool · refreshed 27 fact spans, 6 unconfirmed
+- 2026-08-02T14:48Z · tool · refreshed 27 fact spans, 6 unconfirmed
+- 2026-08-02T14:51Z · agent:L-TRAIN-DISPLAY-SNAPSHOT · returned L-TRAIN-DISPLAY-SNAPSHOT verdict=blocked -> open, needs L-MIG-TRAIN-DISPLAY-SNAPSHOT, D-TRAIN-ERASURE
+- 2026-08-02T14:51Z · agent:L-TRAIN-DISPLAY-SNAPSHOT · report L-TRAIN-DISPLAY-SNAPSHOT: FINDING CONFIRMED, executed not argued. TrainingEvidenceService.cs:105-113 resolves the name live on every read; no Training entity stores one. Spec requires it twice: 60-training-internkontroll-spec.md:80 and :307, both "opaque identity reference + display snapshot".; PROOF: probe-output.txt writes
+- 2026-08-02T14:53Z · agent:L-CONFIRM-CHAIN-REVIEW · L-CONFIRM-CHAIN-REVIEW returned built -> built-unverified, evidence docs/plan/reviews/L-CONFIRM-CHAIN-REVIEW.md
+- 2026-08-02T14:53Z · agent:L-CONFIRM-CHAIN-REVIEW · report L-CONFIRM-CHAIN-REVIEW: SOUND-WITH-CONDITIONS. Eleven commits, five true heads, trial-merged in the object database only.; Topology verified from parents: base de1e5c5e; heads 75e5168c d9189fbd 6771ba9a f7abfd8e 5b895dc4.; No pair is code-incompatible. All ten head-pairs and the five-way composition merge clean in source.;
+- 2026-08-02T14:53Z · agent:L-MONEYPATH-PAIR-REVIEW · L-MONEYPATH-PAIR-REVIEW returned built -> built-unverified, evidence docs/plan/reviews/L-MONEYPATH-PAIR-REVIEW.md
+- 2026-08-02T14:53Z · agent:L-MONEYPATH-PAIR-REVIEW · report L-MONEYPATH-PAIR-REVIEW: Lane one wf-export-duplicate SOUND. Lane two pdf-nullderef SOUND-WITH-CONDITIONS.; MIG-25 parentage measured, not asserted: the Designer delta against MIG-24 is exactly five index; lines; the chain is five migrations past the feature tip; merge-base 968fd273; THROW ceiling 50073; so no collision; Do
+- 2026-08-02T14:55Z · agent:confirm-postmerge-pin · started L-CONFIRM-POSTMERGE-PIN
+- 2026-08-02T14:55Z · agent:invoice-retry-retirement · started L-INVOICE-RETRY-RETIREMENT
+- 2026-08-02T14:55Z · @clerk · waiver, fifth cycle: L-WF-ADJUSTMENT-ORDINAL granted a sql slot and held. Five containers hold 6.4 of 7.65 GiB; a sixth needs 1.3-1.4 and 1.2 is free. See F-CAP-COUNTS-LANES.
+- 2026-08-02T14:55Z · tool · refreshed 27 fact spans, 6 unconfirmed
+- 2026-08-02T14:58Z · agent:L-GUARD-W0 · L-GUARD-W0 returned built -> built-unverified, evidence lanes/L-GUARD-DEMO/demo-run.txt
+- 2026-08-02T14:58Z · agent:L-GUARD-W0 · report L-GUARD-W0: Built: scripts/worldstamp in all three probe roots, world.config per repo, .claude/hooks/; plan-wake.sh (SessionStart) and plan-pulse.sh (UserPromptSubmit), .claude/settings.json.; No tool amendment. The wake script compares WORLD.json to world.config itself.; Roots are DERIVED from the probes table
+- 2026-08-02T15:03Z · agent:L-TRAIN-EVIDENCE-NAMES-COURSE · L-TRAIN-EVIDENCE-NAMES-COURSE returned built -> built-unverified, evidence OkamAPI wt-trn-names lane/trn-evidence-names fcb5181a + b560bc3a (artifacts/tests/L-TRAIN-EVIDENCE-NAMES-COURSE/RUN.md, base.trx, after.trx) . Web-modules cff41c8 . artifacts/journeys/training-course-to-evidence.playwright.json (19 steps, passed)
+- 2026-08-02T15:03Z · agent:L-TRAIN-EVIDENCE-NAMES-COURSE · report L-TRAIN-EVIDENCE-NAMES-COURSE: Brief verified first: completionRow parsed courseId/courseVersionId and rendered neither, and TrainingAssignmentModel already carried CourseTitle+VersionNo. Both true as written; the finding was not understated.; NO MIGRATION, and none is needed. The wire carries both as a read-side projection in Li
+- 2026-08-02T15:05Z · agent:tripletex-credit · started L-TRIPLETEX-CREDIT
+- 2026-08-02T15:05Z · agent:utlkvit-replay-source · started L-UTLKVIT-REPLAY-SOURCE
+- 2026-08-02T15:05Z · agent:wf-adjustment-ordinal · started L-WF-ADJUSTMENT-ORDINAL
+- 2026-08-02T15:11Z · agent:L-CONFIRM-POSTMERGE-PIN · L-CONFIRM-POSTMERGE-PIN returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-postmergepin @ 02c077cb on lane/confirm-postmerge-pin off d9189fbd (1 file, pathspec commit, unpushed)
+- 2026-08-02T15:11Z · agent:L-CONFIRM-POSTMERGE-PIN · report L-CONFIRM-POSTMERGE-PIN: Base verified: the file exists only on lane/composition-root-check (bfe57c3c) and its child lane/reservation-limiter-move (d9189fbd). BRIEF CORRECTION: lane/confirm-conat-retire (6771ba9a) is a SIBLING off 8704ff63 that does not contain the file at all. Worked off d9189fbd. Finding held: AddMcpAuthe
+- 2026-08-02T15:13Z · agent:L-INVOICE-RETRY-RETIREMENT · L-INVOICE-RETRY-RETIREMENT returned built -> built-unverified, evidence wt-invretire f18ffeda (fix+test) + receipt 1a0c0cbb, branch lane/invoice-retry-retirement off lane/pdf-nullderef (17198f14), local, not pushed - Services/InvoiceService.cs:89-102 - WebApi.Tests/Services/DocumentRendererFailureTests.cs - artifacts/tests/f18ffeda-fast-tier.trx + f18ffeda.../RUN.md
+- 2026-08-02T15:13Z · agent:L-INVOICE-RETRY-RETIREMENT · report L-INVOICE-RETRY-RETIREMENT: - EVERY LINE NUMBER IN THE BRIEF IS EXACT, checked in the file not inferred: :76 unsent filter, :91 pre-render stamp, :93 TryAttachPdf skip, :104 SaveChangesAsync, :1242 TryAttachPdf. The mechanism is real and the invoice is tracked, so the stamp does reach the row. One path is wrong: the test lives
+- 2026-08-02T15:16Z · @clerk · syntax repair: L-TRIPLETEX-CREDIT-1 needs line, three bare IDs prefixed to D-/L- per the entity grammar. No verdict, evidence or log altered.
+- 2026-08-02T15:17Z · @clerk · syntax repair: L-TRIPLETEX-CREDIT-1 needs line, parenthetical explanations stripped from three IDs. The tool splits on commas so they parsed into the IDs. Same text stands verbatim in reason:.
+- 2026-08-02T15:17Z · agent:L-TRIPLETEX-CREDIT · returned L-TRIPLETEX-CREDIT verdict=blocked -> open, needs D-MEALS-CREDIT-ACCOUNT, L-MIG-COMPANY-RECEIVABLE, L-MEALS-POS-TENDER-WIRE
+- 2026-08-02T15:17Z · agent:L-TRIPLETEX-CREDIT · report L-TRIPLETEX-CREDIT: Base 34c6c103, clean checkout, container-free tier: 4357 passed / 0 failed / 12 skipped / 4369 total. No after number: nothing built, tree left clean, no commit, no container, no migration.; VERIFIED both default arms. PaymentAccountNumber:295-296 falls to config.AccountNumberReceivables; PaymentDes
+- 2026-08-02T15:17Z · agent:utlkvit-sale-row · started L-UTLKVIT-SALE-ROW
+- 2026-08-02T15:17Z · agent:comproot-pin · started L-COMPROOT-PIN-OVERDETERMINED
+- 2026-08-03T08:11Z · agent:L-COMPROOT-PIN-OVERDETERMINED · L-COMPROOT-PIN-OVERDETERMINED returned built -> built-unverified, evidence 02c077cb on lane/confirm-postmerge-pin (/Users/svendaneel/okam/wt-postmergepin), WebApi.Tests/Wire/CompositionRootLimiterWireTests.cs
+- 2026-08-03T08:11Z · agent:L-COMPROOT-PIN-OVERDETERMINED · report L-COMPROOT-PIN-OVERDETERMINED: ALREADY LANDED BY THE SIBLING L-CONFIRM-POSTMERGE-PIN. No second fix written, no file edited on this lane, nothing committed. 02c077cb deleted the vacuous DoesNotContain(IReservationRateLimiter) from the throwing test and added a placement test, A_successful_mcp_registration_registers_no_reservation
+- 2026-08-03T08:11Z · agent:L-UTLKVIT-SALE-ROW · L-UTLKVIT-SALE-ROW returned built -> built-unverified, evidence worktree /Users/svendaneel/okam/wt-utlkvit-salerow, branch lane/utlkvit-sale-row @ 1854f594 (local, not pushed, off lane/meals-utlkvit 1a03bc6c) - WebApi.Tests/Kassa/CreditSaleDocumentRoutingTests.cs (7 pins) - base 4366/0/12 at 1a03bc6c clean, after 4373/0/12, filter "Database!=SqlServer", no container started
+- 2026-08-03T08:11Z · agent:L-UTLKVIT-SALE-ROW · report L-UTLKVIT-SALE-ROW: BRIEF CONFIRMED AND UNDERSTATED, in one place that mattered. The two forward resolutions do exist in BuildReceiptAsync (COPYREC, UTLEVREC) and I mirrored their shape. But BuildPublicReceiptAsync never shared that dispatch, so the public page had NEITHER of them: a copy id or a delivery id on the ele
+- 2026-08-03T08:11Z · tool · refreshed 27 fact spans, 6 unconfirmed
+- 2026-08-03T08:12Z · @clerk · syntax repair: L-WF-ADJUSTMENT-ORDINAL-1 needs, SQL-HEADROOM -> F-SQL-HEADROOM per the entity grammar. Nothing else altered.
+- 2026-08-03T08:12Z · agent:L-UTLKVIT-REPLAY-SOURCE · L-UTLKVIT-REPLAY-SOURCE returned built -> built-unverified, evidence commit 3a509b68 on lane/utlkvit-replay-source (worktree /Users/svendaneel/okam/wt-utlkvitreplay); base 1a03bc6c fast tier 4366 passed / 0 failed / 12 skipped / 4378; after 3a509b68 fast tier 4368 / 0 / 12 / 4380
+- 2026-08-03T08:12Z · agent:L-UTLKVIT-REPLAY-SOURCE · report L-UTLKVIT-REPLAY-SOURCE: 1 Brief CONFIRMED at Services/Kassa/FinalizeService.cs:237 (was `payments.Any(IsCompanyAccount)`).; 2 JournalService.RunAppendTransactionAsync commits and RETURNS at the findExisting hit, so afterAppend never runs on a replay - both directions land.; 3 Target code is NOT in OkamAPI-modules (that wor
+- 2026-08-03T08:12Z · agent:L-WF-ADJUSTMENT-ORDINAL · returned L-WF-ADJUSTMENT-ORDINAL verdict=blocked -> open, needs F-SQL-HEADROOM
+- 2026-08-03T08:12Z · agent:L-WF-ADJUSTMENT-ORDINAL · report L-WF-ADJUSTMENT-ORDINAL: Ledger verified contiguous MIG-1..25 and MIG-26 unclaimed on every branch and worktree - claimed before authoring.; Topology measured with git, not trusted: merge-base 968fd273, tip and stack DIVERGED (22 commits vs 23), stack carries six migrations the tip lacks. Authored on the stack.; Designer pa
+- 2026-08-03T08:15Z · agent:meals-pos-tender-wire · started L-MEALS-POS-TENDER-WIRE
+- 2026-08-03T08:17Z · agent:L-UTLKVIT-REPRINT-KIND · started L-UTLKVIT-REPRINT-KIND
+- 2026-08-03T08:17Z · agent:L-VIPPS-REDACT-404 · started L-VIPPS-REDACT-404
+- 2026-08-03T08:17Z · agent:L-WF-ADJUST-ADDRESS · started L-WF-ADJUST-ADDRESS
+- 2026-08-03T08:17Z · agent:L-FE-WF-ONBOARD-WALK · started L-FE-WF-ONBOARD-WALK
+- 2026-08-03T08:36Z · agent:L-UTLKVIT-REPRINT-KIND · returned L-UTLKVIT-REPRINT-KIND verdict=fail-spec -> open; D-SPEC-L-UTLKVIT-REPRINT-KIND appended
+- 2026-08-03T08:36Z · agent:L-UTLKVIT-REPRINT-KIND · report L-UTLKVIT-REPRINT-KIND: NEITHER NAMED TIP HAS BOTH. lane/utlkvit-replay-source 3a509b68 and lane/utlkvit-sale-row 1854f594 are SIBLINGS off lane/meals-utlkvit 1a03bc6c (git merge-base confirms), not ancestor and descendant. I branched lane/utlkvit-reprint-kind off sale-row into my own worktree and merged replay-source. The
+- 2026-08-03T08:37Z · agent:wf-bootstrap · started L-WF-BOOTSTRAP
+- 2026-08-03T08:44Z · agent:L-FE-WF-ONBOARD-WALK · L-FE-WF-ONBOARD-WALK returned built -> built-unverified, evidence commit 35440cf on feature/restaurant-modules (ff, no merge commit) - artifacts/journeys/workforce-invitation-onboarding.playwright.json + lanes/L-FE-WF-ONBOARD-WALK/{mutation-proof,run-1,run-2,run-final,suite-journeys,suite-journeys-2,suite-jest}.txt
+- 2026-08-03T08:44Z · agent:L-FE-WF-ONBOARD-WALK · report L-FE-WF-ONBOARD-WALK: FOUND IT. workforce-invitation-onboarding.spec.js existed only in 9ec1100, tip of lane/fe-wf-onboard, also carried by lane/fe-wf-self via a merge. NOT an ancestor of feature/restaurant-modules. Merge base ce77727 is 33 commits behind the tip. pages/workforce/join.vue was on that branch too, so the w
+- 2026-08-03T08:46Z · agent:L-VIPPS-REDACT-404 · L-VIPPS-REDACT-404 returned built -> built-unverified, evidence OkamAPI worktree /Users/svendaneel/okam/wt-vippsredact, branch lane/vipps-redact-404, commit cb18cab4, base feature/restaurant-modules 3579bbbc
+- 2026-08-03T08:46Z · agent:L-VIPPS-REDACT-404 · report L-VIPPS-REDACT-404: Base 3579bbbc, own worktree wt-vippsredact; shared OkamAPI-modules checkout untouched. Fast tier; 4384/0/12 vs 4369/0/12 recorded at base = +15, exactly the cases added. No SQL tier, no container.; H1 CONFIRMED live. Measured through real routing: /events/deposits/<guid>. and <guid>%5D bind no; endp
+- 2026-08-03T08:51Z · agent:L-MEALS-POS-TENDER-WIRE · L-MEALS-POS-TENDER-WIRE returned built -> built-unverified, evidence worktree ~/okam/OkamAPI-postender, branch lane/meals-pos-tender-wire, commit 32fd5a86 off lane/meals-utlkvit 1a03bc6c, NOT pushed. Container-free tier (dotnet test --filter "Database!=SqlServer"): base 1a03bc6c clean checkout 4366 passed / 0 failed / 12 skipped / 4378 total; mine 32fd5a86 4370 / 0 / 12 / 4382 - delta is exactly the 4 new tests. New file WebApi.Tests/Meals/MealsPosCreditTenderReachabilityTests.cs.
+- 2026-08-03T08:51Z · agent:L-MEALS-POS-TENDER-WIRE · report L-MEALS-POS-TENDER-WIRE: - BASE CHOICE: lane/meals-utlkvit 1a03bc6c, the common ancestor of the two utlkvit siblings. Both descendants (3a509b68 replay-source, 1854f594 sale-row) DIVERGE from it and both rewrite receipt-document selection incl. FinalizeService - C6 territory. Basing on either would put this lane on one side
+- 2026-08-03T08:51Z · @sven · ruled D-GR-DEADLINE-CALENDAR = venue-local
+- 2026-08-03T08:51Z · @sven · ruled D-MEALS-SPLIT = cap-only
+- 2026-08-03T08:51Z · @sven · ruled D-EV-VAT = on-account-liability
+- 2026-08-03T08:51Z · @sven · ruled D-PUNCH = request-surface-mints-adjustment
+- 2026-08-03T08:51Z · @sven · ruled D-MEALS-STATEMENT-LEVER = tell-the-truth
+- 2026-08-03T08:51Z · @sven · ruled D-MRG-CURATION = author-the-list
+- 2026-08-03T08:51Z · @sven · ruled D-EHF-UNPARK = unpark-now
+- 2026-08-03T08:51Z · @sven · ruled D-PAYROLL-VENDOR = tripletex-first
+- 2026-08-03T08:52Z · @sven · ruled D-ACCT-TIMING = hand-author-now
+- 2026-08-03T08:52Z · @sven · ruled D-CORE-PIN = consumer-only
+- 2026-08-03T08:52Z · @sven · ruled D-GROWTH-EVENTS = basic-auth-url
+- 2026-08-03T08:52Z · @sven · ruled D-MEALS-AUDIT-ACTOR-KIND = actorkind-column
+- 2026-08-03T08:52Z · @sven · ruled D-GROWTH-AUDIT-LEDGER = growth-ledger
+- 2026-08-03T08:52Z · @sven · ruled D-MRG-PRICE-CORRECTION = backdated-correction
+- 2026-08-03T08:52Z · @sven · ruled D-BUILDER-PRUNE = scheduled-prune
+- 2026-08-03T08:52Z · @sven · ruled D-SPEC-L-GR-WITHDRAW-ORIGIN = api-subdomain
+- 2026-08-03T08:52Z · @sven · ruled D-PREF-ORIGIN = named-cors-policy-plus-samesite-none
+- 2026-08-03T08:52Z · @sven · ruled D-SPEC-L-EV-VIPPS-FALLBACK = compose-and-refuse
+- 2026-08-03T08:52Z · @sven · ruled D-SPEC-L-MEALS-GATE = row-not-status
+- 2026-08-03T08:52Z · @sven · ruled D-TRAIN-ERASURE = snapshot-with-horizon
+- 2026-08-03T08:52Z · @sven · ruled D-MEALS-CREDIT-ACCOUNT = own-interim-account
+- 2026-08-03T08:52Z · @sven · ruled D-CONSUMERWEB-WORLD = drop-the-probe
+- 2026-08-03T08:52Z · @sven · ruled D-SPEC-L-EV-SEED-DEPOSITS = respec
+- 2026-08-03T08:52Z · @sven · ruled D-SPEC-L-UTLKVIT-REPRINT-KIND = take-the-corrected-exit
+- 2026-08-03T08:53Z · @sven · ruled D-WOLT = leave-as-is
+- 2026-08-03T08:55Z · agent:mig-company-receivable · started L-MIG-COMPANY-RECEIVABLE
+- 2026-08-03T08:55Z · agent:mrg-ehf-spike · started L-MRG-EHF-SPIKE
+- 2026-08-03T08:56Z · @clerk · waiver: L-MIG-TRAIN-DISPLAY-SNAPSHOT granted a sql slot and held. L-MIG-COMPANY-RECEIVABLE holds the single migration author slot (C2). Not a memory hold.
+- 2026-08-03T08:56Z · agent:growth-prefcentre · started L-GROWTH-PREFCENTRE
+- 2026-08-03T08:57Z · agent:L-WF-ADJUST-ADDRESS · L-WF-ADJUST-ADDRESS returned built -> built-unverified, evidence OkamAPI-wfadjust f3887f9a + web-wf-adjust e9ba89e
+- 2026-08-03T08:57Z · agent:L-WF-ADJUST-ADDRESS · report L-WF-ADJUST-ADDRESS: Brief VERIFIED EXACT, neither overstated nor understated. #26 takes ClockSessionId; swept every manager-reachable read.; Only #43 GET /me/.../time exposes one, and it is WorkforceSelf/own-engagement. #25 rows, personalliste, hours-export CSV, contract-exposure and labour-band carry none; the POS/clo
+- 2026-08-03T08:58Z · agent:flags-impossible-comment · started L-FLAGS-IMPOSSIBLE-COMMENT
+- 2026-08-03T08:58Z · agent:wf-clock-wire · started L-WF-CLOCK-WIRE
+- 2026-08-03T08:58Z · agent:L-FLAGS-IMPOSSIBLE-COMMENT · L-FLAGS-IMPOSSIBLE-COMMENT returned built -> built-unverified, evidence commit 89c2c1f on feature/restaurant-modules (base 35440cfb, local, not pushed) - lanes/L-FLAGS-IMPOSSIBLE-COMMENT/{notes.md,mutation-proof.txt,suite-base.txt,suite-after.txt}
+- 2026-08-03T08:58Z · agent:L-FLAGS-IMPOSSIBLE-COMMENT · report L-FLAGS-IMPOSSIBLE-COMMENT: Claim verified FALSE in backend source before editing, not assumed. StoreFeatureFlagsController.EffectiveAsync asks a registered resolver FIRST; the board's `state` is the row-or-advertised-default. So state:false/effective:true is produced by any resolver-owning flag with default false, no row, and
+- 2026-08-03T08:58Z · @clerk · clerk error: two lanes were dispatched to agents without plan start, so both sat open while their agents ran. Corrected; the returns were unaffected.
+- 2026-08-03T08:59Z · @clerk · waiver: L-MIG-TRAIN-DISPLAY-SNAPSHOT held again; L-MIG-COMPANY-RECEIVABLE holds the single migration author slot. Not memory.
+- 2026-08-03T09:09Z · tool · L-GROWTH-MAIL built-unverified -> verified, evidence artifacts/journeys/growth-doi-postmark-sandbox.json
+- 2026-08-03T09:09Z · tool · L-EV-DIETARY built-unverified -> verified, evidence fact:ev.dietary
+- 2026-08-03T09:09Z · tool · L-MEALS-STALE-TOKEN built-unverified -> verified, evidence artifacts/journeys/meals-stale-token-requote.playwright.json
+- 2026-08-03T09:09Z · tool · L-MODAL-LAND built-unverified -> verified, evidence artifacts/journeys/modal-scroll-lock.playwright.json
+- 2026-08-03T09:09Z · tool · L-EV-RUNSHEET-PRINT built-unverified -> verified, evidence artifacts/journeys/events-runsheet-print.playwright.json
+- 2026-08-03T09:09Z · tool · L-CONFIRM-ADMIN-SURFACE built-unverified -> verified, evidence artifacts/journeys/account-email-confirm.playwright.json
+- 2026-08-03T09:09Z · tool · L-WF-FLAGS-UI built-unverified -> verified, evidence artifacts/journeys/workforce-flag-lever.playwright.json
+- 2026-08-03T09:09Z · tool · L-GR-PRIVACY-VENUE built-unverified -> verified, evidence artifacts/journeys/growth-privacy-queue.playwright.json
+- 2026-08-03T09:09Z · tool · L-EV-DEPOSITS-PRECONDITION built-unverified -> verified, evidence artifacts/journeys/events-deposit-precondition.playwright.json
+- 2026-08-03T09:09Z · tool · L-GR-DEADLINE-ONWIRE built-unverified -> verified, evidence artifacts/journeys/growth-privacy-queue.playwright.json
+- 2026-08-03T09:09Z · tool · L-MEALS-FUNDED built-unverified -> verified, evidence artifacts/journeys/meals-funded-checkout.playwright.json
+- 2026-08-03T09:11Z · agent:L-MRG-EHF-SPIKE · returned L-MRG-EHF-SPIKE verdict=blocked -> open, needs D-EHF-INVOICE-ACCESS
+- 2026-08-03T09:11Z · agent:L-MRG-EHF-SPIKE · report L-MRG-EHF-SPIKE: The invoices are not missing from the world, only from the repo. Sven's own 2026-07-28 prompt says; "Casper also sent me invoices as examples for cost of ingredients", so the blocker is a file; hand-off, not a discovery or a negotiation. Swept ~/okam, Downloads, Desktop, Documents and; .claude by na
+- 2026-08-03T09:12Z · agent:L-MIG-COMPANY-RECEIVABLE · L-MIG-COMPANY-RECEIVABLE returned built -> built-unverified, evidence OkamAPI lane/mig-company-receivable @ 32c56fa4, off chain tip cff1c005; Migrations/20260803090036_Meals_CompanyReceivableAccount.cs; fast tier 4368/0/7
+- 2026-08-03T09:12Z · agent:L-MIG-COMPANY-RECEIVABLE · report L-MIG-COMPANY-RECEIVABLE: Base MEASURED not inherited. Chain tip = lane/wf-adjustment-ordinal cff1c005 (most migration files of any branch). Own worktree wt-migcompanyrecv, not OkamAPI-modules.; The chain is SEVEN migrations past feature/restaurant-modules, not six: 20260801084923, 102621, 113131, 132512, 174639, 20260802103
+- 2026-08-03T09:13Z · agent:mig-train-display-snapshot · started L-MIG-TRAIN-DISPLAY-SNAPSHOT
+- 2026-08-03T09:21Z · tool · refreshed 27 fact spans, 6 unconfirmed
+- 2026-08-03T09:21Z · agent:ai-middleware-delete · started L-AI-MIDDLEWARE-DELETE
+- 2026-08-03T09:22Z · agent:L-MIG-TRAIN-DISPLAY-SNAPSHOT · returned L-MIG-TRAIN-DISPLAY-SNAPSHOT verdict=blocked -> open, needs D-TRAIN-ERASURE, F-SQL-HEADROOM
+- 2026-08-03T09:22Z · agent:L-MIG-TRAIN-DISPLAY-SNAPSHOT · report L-MIG-TRAIN-DISPLAY-SNAPSHOT: FINDING RE-PROVEN INDEPENDENTLY, executed not inherited. probe.cs writes a completion as "Kari Nordmann", edits the roster to "Kari Hansen", re-reads the SAME pack: documents identical apart from the subject line = True; "Kari Nordmann" survives anywhere in the reprint = False. Source confirmed at T
+- 2026-08-03T09:23Z · tool · refreshed 28 fact spans, 6 unconfirmed
+- 2026-08-03T09:25Z · agent:L-WF-BOOTSTRAP · L-WF-BOOTSTRAP returned built -> built-unverified, evidence OkamAPI lane/wf-bootstrap @ 9d1719df (worktree ../wt-wfboot, off feature/restaurant-modules 3579bbbc); fast tier 4374 passed / 0 failed / 12 skipped vs BASE 4369 / 0 / 12 from a clean checkout of 3579bbbc, `dotnet test --filter "Database!=SqlServer"`, assembly mtime 11:17:43 > newest source 11:13:16. Web-modules lane/fe-wf-bootstrap @ 9264904 (worktree ../web-wfboot, off 89c2c1f); jest 109 suites / 2469 passed / 1 failed (journey-artifact-store asserts the checkout is named Web-modules; this is a worktree).
+- 2026-08-03T09:25Z · agent:L-WF-BOOTSTRAP · report L-WF-BOOTSTRAP: | CIRCLE CONFIRMED, not assumed: exactly three production writers of CapabilityGrants exist - WorkforceStaffService Create/Update and WorkforceOperatorImportService.Import - all requiring WorkforceManager + workforce.setup. WorkforceInvitationService writes NO engagement; no seeder, hosted service o
+- 2026-08-03T09:26Z · agent:acct-uidx · started L-ACCT-UIDX
+- 2026-08-03T09:29Z · agent:L-GROWTH-PREFCENTRE · returned L-GROWTH-PREFCENTRE verdict=blocked -> open, needs D-PREFCENTRE-DEPLOY
+- 2026-08-03T09:29Z · agent:L-GROWTH-PREFCENTRE · report L-GROWTH-PREFCENTRE: BRIEF VERIFIED IN MY OWN CLEAN CHECKOUTS, not inherited. AllowCredentials appears NOWHERE in the backend (grep exit 1), so nothing throws at startup; the default policy is AllowAnyOrigin at Program.cs:96-103 applied globally at :285; the cookie is HttpOnly/Secure/SameSite=Strict at GrowthPreferenceC
+- 2026-08-03T09:29Z · @clerk · waiver: L-MIG-STACK-LAND granted a sql slot and held; L-ACCT-UIDX holds the migration author slot.
+- 2026-08-03T09:31Z · agent:L-WF-CLOCK-WIRE · L-WF-CLOCK-WIRE returned built -> built-unverified, evidence OkamAPI lane/wf-clock-wire f14c91ec (base feature/restaurant-modules 3579bbbc); container-free tier 4377/0/12 vs base 4369/0/12
+- 2026-08-03T09:31Z · agent:L-WF-CLOCK-WIRE · report L-WF-CLOCK-WIRE: All four gaps CONFIRMED as stated; none overstated. Gap 4 was UNDERSTATED - see below.; Base: feature/restaurant-modules 3579bbbc, the tip newest lanes branch from. Own worktree /Users/svendaneel/okam/wt-wfclockwire.; Wire proof: WebApi.Tests/Wire/WorkforcePosClockWireTests.cs, 6 tests, each refusal
+- 2026-08-03T09:32Z · agent:meals-reachable · started L-MEALS-REACHABLE
+- 2026-08-03T09:32Z · @clerk · waiver: L-MIG-STACK-LAND held again; L-ACCT-UIDX holds the migration author slot.
+- 2026-08-03T09:36Z · agent:mrg-starter-150 · started L-MRG-STARTER-150
+- 2026-08-03T09:36Z · @clerk · waiver: L-MIG-STACK-LAND held; L-ACCT-UIDX holds the migration author slot. Fable is designing the blocker resolution path per Sven's standing rule.
+- 2026-08-03T09:44Z · tool · L-MEALS-EMPREF built-unverified -> verified, evidence fact:meals.empref
+- 2026-08-03T09:44Z · tool · L-MEALS-GATE built-unverified -> verified, evidence fact:meals.gate
+- 2026-08-03T09:44Z · tool · L-VIPPS-LOG built-unverified -> verified, evidence fact:vipps.token.guard
+- 2026-08-03T09:44Z · tool · refreshed 31 fact spans, 8 unconfirmed
+- 2026-08-03T09:48Z · agent:L-AI-MIDDLEWARE-DELETE · L-AI-MIDDLEWARE-DELETE returned built -> built-unverified, evidence OkamAPI lane/ai-middleware-delete @ 5b2e99c8 (worktree ~/okam/wt-aimw, cut from feature/restaurant-modules 3579bbbc; local, not pushed) - container-free tier 4370 passed / 0 failed / 12 skipped (5m49s) vs clean-checkout base 4369/0/12 at 3579bbbc, delta is the one new test - WebApi.Tests/Wire/RequestBodyTelemetryPinTests.cs - lanes/L-AI-MIDDLEWARE-DELETE/mutations.txt
+- 2026-08-03T09:48Z · agent:L-AI-MIDDLEWARE-DELETE · report L-AI-MIDDLEWARE-DELETE: BRIEF VERIFIED FIRST AND EVERY CLAIM HELD, measured in a clean checkout of 3579bbbc: the type existed; the capture was real and the cap was exactly 8190 ("limit: 8192 characters"); it WAS DI-registered (Program.cs:196 AddTransient); and it was NOT in the pipeline - the only UseMiddleware in Program.
+- 2026-08-03T09:51Z · agent:ev-accept-gate · started L-EV-ACCEPT-GATE
+- 2026-08-03T09:51Z · @clerk · waiver: L-MIG-STACK-LAND held again; L-ACCT-UIDX holds the migration author slot under C2.
+- 2026-08-03T10:05Z · @clerk · network outage: ENOTFOUND killed five agents at once. All five resumed from their own last states; none restarted, no work lost.
+- 2026-08-03T10:13Z · agent:L-MEALS-REACHABLE · L-MEALS-REACHABLE returned built -> built-unverified, evidence lane/meals-reachable-api@02f27b95 (backend 28/28 container-free); lane/meals-reachable-web@f65595d (frontend 55/55 flag suites)
+- 2026-08-03T10:13Z · agent:L-MEALS-REACHABLE · report L-MEALS-REACHABLE: HALF 2 CONFIRMED, and understated. The default policy exposed "ETag" alone, so X-Meals-Content-Hash (MealsStatementController.cs:131) rode the wire invisible to script. It is the estate's ONLY content-hash header, so "one string" is exact for the hash.; UNDERSTATEMENT: Content-Disposition is unexpos
+- 2026-08-03T10:15Z · agent:L-ACCT-UIDX · returned L-ACCT-UIDX verdict=blocked -> open, needs F-SQL-HEADROOM
+- 2026-08-03T10:15Z · agent:L-ACCT-UIDX · report L-ACCT-UIDX: BASE MEASURED, NOT INHERITED. Own worktree wt-acctuidx off the chain tip lane/mig-company-receivable @ 32c56fa4. NOT OkamAPI-modules, which is on lane/meals-grace-pins.; NO FORK, and proven by CONTENT not prose: Designer parent is 20260803090036_Meals_CompanyReceivableAccount, and my generated Desig
+- 2026-08-03T10:17Z · agent:mig-stack-land · started L-MIG-STACK-LAND
+- 2026-08-03T10:18Z · agent:L-MRG-STARTER-150 · returned L-MRG-STARTER-150 verdict=blocked -> open, needs D-MRG-CURATION-CONTENT
+- 2026-08-03T10:18Z · agent:L-MRG-STARTER-150 · report L-MRG-STARTER-150: VERIFIED THE SIXTEEN FIRST. Count 16. Units 16/16 complete - they were C# enum members, so a missing one was not even representable. Conversions 16/16 present, and the pack arithmetic checks by hand. All three pass the pins I wrote. YIELDS 0/16, and that is the finding: not one carries a yield, and 
+- 2026-08-03T10:19Z · agent:ev-guest-origin · started L-EV-GUEST-ORIGIN
+- 2026-08-03T10:21Z · agent:L-EV-ACCEPT-GATE · L-EV-ACCEPT-GATE returned built -> built-unverified, evidence worktree ~/okam/OkamAPI-ev-acceptgate, branch lane/ev-accept-gate, commit 8eee00f7, NOT pushed, based on feature/restaurant-modules @ 3579bbbc (the stated integration tip; OkamAPI-modules is on lane/meals-grace-pins and was not used) - container-free tier 4374/0/12 vs baseline 4369/0/12 measured in a clean checkout of 3579bbbc, delta +5 = the 5 new tests, 0 regressions - WebApi.Tests/Events/EventsPublicProposalWriteGateTests.cs (3), WebApi.Tests/Wire/EventsProposalGateWiringTests.cs (2)
+- 2026-08-03T10:21Z · agent:L-EV-ACCEPT-GATE · report L-EV-ACCEPT-GATE: - Brief verified before building, and it UNDERSTATED. The Events module has 5 anonymous routes, not 2 writes: POST /events/inquiries, GET+POST accept+decline on /events/proposals/{token}, GET /events/deposits/{token}. THREE are ungated public writes (accept, decline, AND inquiry-create); the deposit
+- 2026-08-03T10:22Z · agent:ev-vipps-fallback · started L-EV-VIPPS-FALLBACK
+- 2026-08-03T10:22Z · agent:gr-testsend-record · started L-GR-TESTSEND-RECORD
+- 2026-08-03T10:22Z · @clerk · waiver: L-WF-BOOTSTRAP-ONE-ENGAGEMENT granted a sql slot and held; L-MIG-STACK-LAND holds the migration author slot under C2.
+- 2026-08-03T10:48Z · agent:L-EV-VIPPS-FALLBACK · L-EV-VIPPS-FALLBACK returned built -> built-unverified, evidence lane/ev-vipps-fallback-2 @ fc09be1d off feature/restaurant-modules 3579bbbc, worktree ../wt-evvippsfb2, local, unpushed - container-free tier (Database!=SqlServer) 4380 passed / 0 failed / 12 skipped, zero containers started - WebApi.Tests/Events/EventsDepositVippsFallbackTests.cs 11/11
+- 2026-08-03T10:48Z · agent:L-EV-VIPPS-FALLBACK · report L-EV-VIPPS-FALLBACK: BRIEF VERIFIED at 3579bbbc: the adapter sent no FallBack, and VippsService.cs:109 copies model.FallBack onto merchantInfo.fallBack. CORRECTION: three production call sites reach that method, and TWO set a fallback (VippsController.cs:407, McpShoppingService.cs:442), both composing the checkout path.
+- 2026-08-03T10:48Z · tool · refreshed 31 fact spans, 8 unconfirmed
+- 2026-08-03T10:52Z · agent:gr-delivery-record · started L-GR-DELIVERY-RECORD
+- 2026-08-03T10:52Z · agent:meals-release-actor · started L-MEALS-RELEASE-ACTOR
+- 2026-08-03T10:52Z · @clerk · waiver: L-WF-BOOTSTRAP-ONE-ENGAGEMENT held again; L-MIG-STACK-LAND holds the migration author slot under C2.
+- 2026-08-03T11:00Z · agent:L-EV-GUEST-ORIGIN · L-EV-GUEST-ORIGIN returned built -> built-unverified, evidence OkamAPI lane/ev-guest-origin @ b0b501a5, NOT pushed, based on feature/restaurant-modules @ 3579bbbc - worktree ~/okam/OkamAPI-ev-guestorigin - container-free tier 4371/0/12 vs baseline 4369/0/12 measured in the same worktree at 3579bbbc, delta +2 = the 2 new tests, 0 regressions - WebApi.Tests/Wire/EventsGuestOriginConfigurationWireTests.cs
+- 2026-08-03T11:00Z · agent:L-EV-GUEST-ORIGIN · report L-EV-GUEST-ORIGIN: WHICH HALF I KEPT, for merge order: the CONFIGURATION only. The coordinator's collision report is correct and I verified it myself. lane/ev-vipps-fallback-2 @ fc09be1d (base 3579bbbc, same as mine) already builds the adapter fallback + refusal over EventsGuestLink (SINGULAR) from lane/ev-uri-relativ
+- 2026-08-03T11:01Z · @clerk · waiver: L-WF-BOOTSTRAP-ONE-ENGAGEMENT held; L-MIG-STACK-LAND holds the author slot. Suite at 4/4.
+- 2026-08-03T11:01Z · agent:L-GR-DELIVERY-RECORD · returned L-GR-DELIVERY-RECORD verdict=fail-spec -> open; D-SPEC-L-GR-DELIVERY-RECORD appended
+- 2026-08-03T11:01Z · agent:L-GR-DELIVERY-RECORD · report L-GR-DELIVERY-RECORD: | Base feature/restaurant-modules @ 3579bbbc, own worktree OkamAPI-grdelrec, clean, 0 commits. Did NOT work in OkamAPI-modules (lane/meals-grace-pins @ 34c6c103, live WebApi). No container started, no migration, no confirm/limiter file touched, workdir clean, artifacts untouched. PREMISE HALF TRUE. 
+- 2026-08-03T11:03Z · agent:journey-guard-fail · started L-JOURNEY-GUARD-FAIL
+- 2026-08-03T12:15Z · tool · refreshed 31 fact spans, 8 unconfirmed
+- 2026-08-03T12:15Z · @clerk · second outage: ENOTFOUND plus two stream stalls killed four agents. All four resumed from their own last states; none restarted.
+- 2026-08-03T12:16Z · agent:L-MIG-STACK-LAND · returned L-MIG-STACK-LAND verdict=blocked -> open, needs F-SQL-HEADROOM
+- 2026-08-03T12:16Z · agent:L-MIG-STACK-LAND · report L-MIG-STACK-LAND: MEASURED, NOT INHERITED, AND THE BRIEF WAS WRONG AGAIN IN BOTH DIRECTIONS. The stack is SEVEN links, not the three the previous brief said nor the six this one listed. Depth is NINE migrations past feature/restaurant-modules, not eight; the eight predates lane/acct-uidx committing its own. 152 of 24
+- 2026-08-03T12:18Z · agent:wf-bootstrap-one-engagement · started L-WF-BOOTSTRAP-ONE-ENGAGEMENT
+- 2026-08-03T12:19Z · agent:L-GR-TESTSEND-RECORD · L-GR-TESTSEND-RECORD returned built -> built-unverified, evidence lane/growth-audit-ledger@bd3a840f (worktree /Users/svendaneel/okam/wt-gr-ledger)
+- 2026-08-03T12:19Z · agent:L-GR-TESTSEND-RECORD · report L-GR-TESTSEND-RECORD: - BASE, stated because it is not the bare integration tip: feature/restaurant-modules@3579bbbc PLUS a merge of lane/gr-testsend-guard@5719fc96 (one commit; its parent de1e5c5e IS an ancestor of the tip). The exit criterion needs the test-send to NAME an actor, and at the bare tip TestSendAsync takes
+- 2026-08-03T12:21Z · agent:mrg-price-correction · started L-MRG-PRICE-CORRECTION
+- 2026-08-03T12:23Z · agent:L-JOURNEY-GUARD-FAIL · L-JOURNEY-GUARD-FAIL returned built -> built-unverified, evidence test/e2e/scripts/guard-proof.js @ 31fc45d
+- 2026-08-03T12:23Z · agent:L-JOURNEY-GUARD-FAIL · report L-JOURNEY-GUARD-FAIL: Base measured clean at 0138168 first. CORRECTION: the defect is NOT live. There, a live-labelled run against; a fixture-compiled app already exits 1, reporter "1 failed", artifact "failed"; the fixture side likewise.; The re-throw landed in 9a5900a and the flag's own text already said both mutations
+- 2026-08-03T12:33Z · agent:L-MEALS-RELEASE-ACTOR · returned L-MEALS-RELEASE-ACTOR verdict=blocked -> open, needs F-MIG-CHAIN-STACKED
+- 2026-08-03T12:33Z · agent:L-MEALS-RELEASE-ACTOR · report L-MEALS-RELEASE-ACTOR: - EXIT MET AT THE WIRE TIER, blocked only on the column's migration. Both release paths now write an append-only audit event naming an actor and a MealsActorKind; fast tier 4373 passed / 0 failed / 12 skipped, MealsFundedCheckoutWireTests 10/10. The SQL tier WILL be red until the migration lands: fa
+- 2026-08-03T12:53Z · @clerk · held L-GR-DELIVERY-RECORD: it returned fail-spec because its defect was already fixed; D-SPEC-L-GR-DELIVERY-RECORD is unruled, so re-dispatching sends an agent at the same wall.
+- 2026-08-03T13:03Z · agent:confirm-family-merge · started L-CONFIRM-FAMILY-MERGE
+- 2026-08-03T13:03Z · agent:utlkvit-reprint-kind · started L-UTLKVIT-REPRINT-KIND
+- 2026-08-03T13:03Z · agent:core-ore-label · started L-CORE-ORE-LABEL
+- 2026-08-03T14:55Z · agent:L-CONFIRM-FAMILY-MERGE · L-CONFIRM-FAMILY-MERGE returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-confirmfam/artifacts/tests/72cf3e0a34b278514bb6872c8803a52384a80000/RUN.md
+- 2026-08-03T14:55Z · agent:L-CONFIRM-FAMILY-MERGE · report L-CONFIRM-FAMILY-MERGE: Merged in OkamAPI (not Web-modules), new branch integration/confirm-family, worktree; wt-confirmfam, base de1e5c5e. Never pushed; feature/restaurant-modules still 3579bbbc.; Topology re-measured, not inherited. Reviewed order held: de1e5c5e ff 75e5168c, +d9189fbd,; +6771ba9a, +f7abfd8e, +5b895dc4 = 
+- 2026-08-03T14:55Z · agent:L-CORE-ORE-LABEL · L-CORE-ORE-LABEL returned built -> built-unverified, evidence lanes/L-CORE-ORE-LABEL/consumerapp-red-run.txt, lanes/L-CORE-ORE-LABEL/consumerapp-revert-red.txt, lanes/L-CORE-ORE-LABEL/consumerapp-green-run.txt, lanes/L-CORE-ORE-LABEL/residual-unfixed-cores.txt, ConsumerApp/checks/price-label-ore.mjs
+- 2026-08-03T14:55Z · agent:L-CORE-ORE-LABEL · report L-CORE-ORE-LABEL: VERIFIED BEFORE BUILDING, AND HALF OF IT WAS ALREADY DONE. ConsumerWeb was fixed by pass 1 and is still fixed: core c0d70a4 present, pin 0abcb38 present, and its helper passes the same 30 assertions I wrote today. ConsumerApp was NOT: core c879935 still appended the no-ore notation unconditionally, 
+- 2026-08-03T14:56Z · tool · refreshed 31 fact spans, 8 unconfirmed
+- 2026-08-03T14:58Z · agent:L-UTLKVIT-REPRINT-KIND · L-UTLKVIT-REPRINT-KIND returned built -> built-unverified, evidence worktree /Users/svendaneel/okam/wt-utlkvit-reprint, branch lane/utlkvit-reprint-kind @ 88b7307f (local, never pushed, merge base fb522bdd = sale-row 1854f594 + replay-source 3a509b68) - fast tier base fb522bdd 4375 passed / 0 failed / 12 skipped / 4387, after 88b7307f 4379 / 0 / 12 / 4391, filter "Database!=SqlServer", separate clean detached checkouts, zero containers started - mutation 11 green -> 8 red -> 11 green - summaries and the red set in lanes/L-UTLKVIT-REPRINT-KIND/
+- 2026-08-03T14:58Z · agent:L-UTLKVIT-REPRINT-KIND · report L-UTLKVIT-REPRINT-KIND: TIPS RE-MEASURED, NOT INHERITED. lane/utlkvit-sale-row 1854f594, lane/utlkvit-replay-source 3a509b68 and lane/meals-utlkvit 1a03bc6c are identical to my prior return, and fb522bdd's two parents ARE those exact tips (git rev-parse). Nothing moved under me; the merge does not need redoing.; ONE PREDIC
+- 2026-08-03T15:01Z · agent:ev-callback-sweep · started L-EV-CALLBACK-SWEEP
+- 2026-08-03T15:01Z · agent:ev-outbox-guid · started L-EV-OUTBOX-GUID-SUBSTRING
+- 2026-08-03T15:01Z · agent:gr-withdraw-origin · started L-GR-WITHDRAW-ORIGIN
+- 2026-08-03T15:01Z · @clerk · held L-EV-SEED-DEPOSITS: D-SPEC-L-EV-SEED-DEPOSITS ruled respec, but its exit still names the 200 no seed can produce. Re-scope before dispatch.
+- 2026-08-03T15:06Z · agent:L-WF-BOOTSTRAP-ONE-ENGAGEMENT · returned L-WF-BOOTSTRAP-ONE-ENGAGEMENT verdict=blocked -> open, needs F-SQL-HEADROOM
+- 2026-08-03T15:06Z · agent:L-WF-BOOTSTRAP-ONE-ENGAGEMENT · report L-WF-BOOTSTRAP-ONE-ENGAGEMENT: Defect VERIFIED and UNDERSTATED. Brief and IWorkforceBootstrapService both name one; surviving case: a caller already carrying a person row. A second, larger case survives that; neither names -- two DIFFERENT admins of one store, neither carrying a person. Two logins mint; two persons, so the one-pe
+- 2026-08-03T15:13Z · agent:L-EV-CALLBACK-SWEEP · returned L-EV-CALLBACK-SWEEP verdict=fail-spec -> open; D-SPEC-L-EV-CALLBACK-SWEEP appended
+- 2026-08-03T15:13Z · agent:L-EV-CALLBACK-SWEEP · report L-EV-CALLBACK-SWEEP: Base feature/restaurant-modules 3579bbbc, own worktree, zero commits, no container, no migration, clean.; VERIFIED BEFORE BUILDING AND THE RED TEST WOULD NOT GO RED. The remedy the ruling names was already in; the tip: 99f56e63 "Collect the deposit a guest approved instead of releasing it when the c
+- 2026-08-03T15:31Z · agent:L-GR-WITHDRAW-ORIGIN · L-GR-WITHDRAW-ORIGIN returned built -> built-unverified, evidence lanes/L-GR-WITHDRAW-ORIGIN/RUNS-2.md; OkamAPI lane/gr-withdraw-origin @ e0c2b02f (base lane/growth-prefcentre 2a052800, worktree ~/okam/OkamAPI-grwithdraw); Web-modules lane/fe-gr-withdraw-origin @ 8049332 (base lane/fe-growth-prefcentre 7a8b0d3, worktree ~/okam/web-grwithdraw); neither pushed
+- 2026-08-03T15:31Z · agent:L-GR-WITHDRAW-ORIGIN · report L-GR-WITHDRAW-ORIGIN: BOTH HALVES ALREADY EXISTED SOMEWHERE and I read across worktrees before writing: CORS policy at 2a052800, Events origin at b0b501a5, API_BASE_URL -> api.okam.no at Web 7a8b0d3. I extended, I did not fork.; WHAT WAS MISSING EVERYWHERE: the session COOKIE at any tier, and any test relating the commit
+- 2026-08-03T15:32Z · agent:blocker-restate · started L-BLOCKER-RESTATE
+- 2026-08-03T15:32Z · agent:ev-seed-deposits · started L-EV-SEED-DEPOSITS
+- 2026-08-03T15:34Z · agent:L-MRG-PRICE-CORRECTION · returned L-MRG-PRICE-CORRECTION verdict=blocked -> open, needs F-MIG-CHAIN-STACKED
+- 2026-08-03T15:34Z · agent:L-MRG-PRICE-CORRECTION · report L-MRG-PRICE-CORRECTION: PREMISE RE-VERIFIED, NOT TRUSTED. feature/restaurant-modules is unmoved at 3579bbbc with ZERO Margin commits since attempt 1; the supersede-forward guard is unchanged and attempt 1's five hole tests still pass on this base. The defect is real. Based on lane/margin-price-correction deliberately: its 
+- 2026-08-03T15:35Z · agent:fixture-divergence · started L-FIXTURE-DIVERGENCE
+- 2026-08-03T15:37Z · agent:L-EV-OUTBOX-GUID-SUBSTRING · L-EV-OUTBOX-GUID-SUBSTRING returned built -> built-unverified, evidence OkamAPI-modules lane/ev-outbox-guid-substring 79f9dd7d (worktree /Users/svendaneel/okam/wt-evoutboxguid, off feature/restaurant-modules 3579bbbc, local, unpushed); after 4383/0/12 vs base 4369/0/12 measured myself, filter "Database!=SqlServer", no container started; .lane/base-3579bbbc.trx, .lane/after-lane.trx, .lane/repeat-runs.txt, .lane/L-EV-OUTBOX-GUID-SUBSTRING-detail.md
+- 2026-08-03T15:37Z · agent:L-EV-OUTBOX-GUID-SUBSTRING · report L-EV-OUTBOX-GUID-SUBSTRING: VERIFIED FIRST. Blob 62c0a61e is identical on feature/restaurant-modules, integration/mig-stack-land, integration/confirm-family and lane/meals-grace-pins, so the defect is live on all of them. Shape exactly as briefed: DoesNotContain("250"/"2000") over a body whose only digits are the 32 hex of the
+- 2026-08-03T15:51Z · tool · refreshed 31 fact spans, 8 unconfirmed
+- 2026-08-03T15:56Z · agent:L-BLOCKER-RESTATE · L-BLOCKER-RESTATE returned built -> built-unverified, evidence lanes/L-BLOCKER-RESTATE/verdicts.md
+- 2026-08-03T15:56Z · agent:L-BLOCKER-RESTATE · report L-BLOCKER-RESTATE: All 47 open blockers re-measured, each verdict citing a sha+date or file:line; table in; lanes/L-BLOCKER-RESTATE/verdicts.md. 6 already-fixed, 14 still-true, 27 PARTLY-TRUE; 21 of 47 have a; remedy dated BEFORE the ruling written for them. BOTH SHORTLIST NUMBERS WRONG: 19 carry no re-measure not 38;
+- 2026-08-03T16:08Z · agent:L-EV-SEED-DEPOSITS · returned L-EV-SEED-DEPOSITS verdict=blocked -> open, needs F-SQL-HEADROOM
+- 2026-08-03T16:08Z · agent:L-EV-SEED-DEPOSITS · report L-EV-SEED-DEPOSITS: MEASURED FIRST, and the defect is still live. Four commits landed on the base since pass 1; none touches Scripts/demo, Services/Events or EventsDepositsController. Describe() still advertises Events.Deposits and Issue still passes requireDepositsFlag: true, so a store the pre-lane seed provisions st
+- 2026-08-03T16:24Z · agent:L-FIXTURE-DIVERGENCE · L-FIXTURE-DIVERGENCE returned built -> built-unverified, evidence lanes/L-FIXTURE-DIVERGENCE/receipts.txt - commits a62160e, 61a76ef off base 31fc45d
+- 2026-08-03T16:24Z · agent:L-FIXTURE-DIVERGENCE · report L-FIXTURE-DIVERGENCE: Divergence STILL REAL, re-measured: the confirmed-address clause the flag names exists on; lane/gr-confirmed-email @ 48950702 and NOT on stage0 @ 903b70d1, so there is no single backend; to be behind; the check takes OKAM_API_REPO and prints the sha it read.; DERIVED, not enumerated. Backend: status
+- 2026-08-03T16:52Z · agent:gr-dispatch-actor · started L-GR-DISPATCH-ACTOR
+- 2026-08-03T16:52Z · agent:gr-newsletter-cross · started L-GR-NEWSLETTER-CROSS
+- 2026-08-03T16:52Z · agent:artifact-rank-key · started L-ARTIFACT-RANK-KEY
+- 2026-08-03T16:52Z · @clerk · held L-GR-DELIVERY-RECORD and L-EV-CALLBACK-SWEEP: both returned fail-spec on already-fixed defects; their D-SPEC decisions are unruled, so re-dispatching sends agents at the same wall.
+- 2026-08-03T16:52Z · tool · refreshed 31 fact spans, 8 unconfirmed
+- 2026-08-03T17:00Z · agent:L-GR-NEWSLETTER-CROSS · returned L-GR-NEWSLETTER-CROSS verdict=fail-spec -> open; D-SPEC-L-GR-NEWSLETTER-CROSS appended
+- 2026-08-03T17:00Z · agent:L-GR-NEWSLETTER-CROSS · report L-GR-NEWSLETTER-CROSS: Did not rebuild it -- read the remedy first, as instructed. 87600a1c is test-only (GrowthNewsletterAuthoringWireTests.cs +439) and is the entire unlanded delta to the tip: one commit, one file. No live defect: at the tip all four actions honour the guard; PROOF gap. Clauses checked: at the wire (Web
+- 2026-08-03T17:16Z · agent:L-ARTIFACT-RANK-KEY · L-ARTIFACT-RANK-KEY returned built -> built-unverified, evidence lanes/L-ARTIFACT-RANK-KEY/evidence.md (commits 397f4ab + 5407589, pathspec) + lanes/L-ARTIFACT-RANK-KEY/mutants/mutation-report.txt
+- 2026-08-03T17:16Z · agent:L-ARTIFACT-RANK-KEY · report L-ARTIFACT-RANK-KEY: Measured the base first. Clause (a) ALREADY LANDED (533aea4; 18/18 green in this checkout). Clause (c) ALREADY TRUE: all three live journeys hold live passes with real steps and every referenced screenshot on disk, restored by other lanes' own re-runs on 08-02, not by me. Nothing fabricated, nothing
+- 2026-08-03T17:22Z · agent:journey-evidence-sweep · started L-JOURNEY-EVIDENCE-SWEEP
+- 2026-08-03T17:22Z · @clerk · held L-FIXTURE-FLAG-STORE: the blocker audit ruled F-FIXTURE-NO-GATES already-fixed, remedy dated 08-01, two days before the ruling. Dispatching would be a ninth burned lane.
+- 2026-08-03T17:30Z · agent:L-GR-DISPATCH-ACTOR · L-GR-DISPATCH-ACTOR returned built -> built-unverified, evidence lane/gr-dispatch-actor@a1e2655f (worktree /Users/svendaneel/okam/wt-gr-dispatch-actor); detail in lanes/L-GR-DISPATCH-ACTOR/detail.md
+- 2026-08-03T17:30Z · agent:L-GR-DISPATCH-ACTOR · report L-GR-DISPATCH-ACTOR: - BASE, stated because it is not the bare integration tip: lane/growth-audit-ledger@bd3a840f (= feature/restaurant-modules@3579bbbc + a merge of lane/gr-testsend-guard). My write belongs in the ledger that lane built, so I based on it rather than racing it. SHAPE RE-VERIFIED FIRST: Dispatch called D
+- 2026-08-03T17:37Z · agent:L-JOURNEY-EVIDENCE-SWEEP · L-JOURNEY-EVIDENCE-SWEEP returned built -> built-unverified, evidence lanes/L-JOURNEY-EVIDENCE-SWEEP/verification-map.md
+- 2026-08-03T17:37Z · agent:L-JOURNEY-EVIDENCE-SWEEP · report L-JOURNEY-EVIDENCE-SWEEP: 149 built-unverified, not 118: 143 Lane + 6 Feature. 15 verified, 0 accepted.; Read-only: the tool's own evidence_admissible() called in-process. No state written, no suite run.; NONE of the 149 verifies against its recorded evidence today. Refusal classes, counted:; 33 exit-rewrite-only (evidence e
+- 2026-08-03T17:54Z · @clerk · clerk error: a batch exit edit spliced with stale offsets, deleting 22 lane blocks. All restored from render/LANES.md; prose bodies unrecoverable, not invented.
+- 2026-08-03T18:22Z · tool · L-WF-REVIEW built-unverified -> verified, evidence docs/plan/reviews/L-WF-REVIEW.md
+- 2026-08-03T18:23Z · tool · L-MRG-REVIEW built-unverified -> verified, evidence docs/plan/reviews/L-MRG-REVIEW.md
+- 2026-08-03T18:23Z · tool · L-EV-REVIEW built-unverified -> verified, evidence docs/plan/reviews/L-EV-REVIEW.md
+- 2026-08-03T18:23Z · tool · L-MEALS-REVIEW built-unverified -> verified, evidence docs/plan/reviews/L-MEALS-REVIEW.md
+- 2026-08-03T18:23Z · tool · L-TRAIN-REVIEW built-unverified -> verified, evidence docs/plan/reviews/L-TRAIN-REVIEW.md
+- 2026-08-03T18:23Z · tool · L-GR-REVIEW built-unverified -> verified, evidence docs/plan/reviews/L-GR-REVIEW.md
+- 2026-08-03T18:23Z · tool · L-MRG-WASTE-REVIEW built-unverified -> verified, evidence docs/plan/reviews/L-MRG-WASTE-REVIEW.md
+- 2026-08-03T18:23Z · tool · L-PRICE-REVIEW built-unverified -> verified, evidence docs/plan/reviews/L-PRICE-REVIEW.md
+- 2026-08-03T18:23Z · tool · L-UTLKVIT-REVIEW built-unverified -> verified, evidence docs/plan/reviews/L-UTLKVIT-REVIEW.md
+- 2026-08-03T18:23Z · tool · L-FLAGS-UI-REVIEW built-unverified -> verified, evidence docs/plan/reviews/L-FLAGS-UI-REVIEW.md
+- 2026-08-03T18:23Z · tool · L-GR-PRIVACY-REVIEW built-unverified -> verified, evidence docs/plan/reviews/L-GR-PRIVACY-REVIEW.md
+- 2026-08-03T18:23Z · tool · L-GR-TESTSEND-REVIEW built-unverified -> verified, evidence docs/plan/reviews/L-GR-TESTSEND-REVIEW.md
+- 2026-08-03T18:23Z · tool · L-WF-W5-REVIEW built-unverified -> verified, evidence docs/plan/reviews/L-WF-W5-REVIEW.md
+- 2026-08-03T18:23Z · tool · L-MEALS-RELEASE-CLUSTER-REVIEW built-unverified -> verified, evidence docs/plan/reviews/L-MEALS-RELEASE-CLUSTER-REVIEW.md
+- 2026-08-03T18:23Z · tool · L-GR-CONFIRMED-REVIEW built-unverified -> verified, evidence docs/plan/reviews/L-GR-CONFIRMED-REVIEW.md
+- 2026-08-03T18:23Z · tool · L-MEALS-SWEEP-REVIEW built-unverified -> verified, evidence docs/plan/reviews/L-MEALS-SWEEP-REVIEW.md
+- 2026-08-03T18:23Z · tool · L-FLAGS-RESOLVERS-REVIEW built-unverified -> verified, evidence docs/plan/reviews/L-FLAGS-RESOLVERS-REVIEW.md
+- 2026-08-03T18:23Z · tool · L-EV-INQUIRY-REVIEW built-unverified -> verified, evidence docs/plan/reviews/L-EV-INQUIRY-REVIEW.md
+- 2026-08-03T18:23Z · tool · L-LIVE-HARNESS-REVIEW built-unverified -> verified, evidence docs/plan/reviews/L-LIVE-HARNESS-REVIEW.md
+- 2026-08-03T18:23Z · tool · L-GR-RATELIMIT-REVIEW built-unverified -> verified, evidence docs/plan/reviews/L-GR-RATELIMIT-REVIEW.md
+- 2026-08-03T18:23Z · tool · L-CONFIRM-CHAIN-REVIEW built-unverified -> verified, evidence docs/plan/reviews/L-CONFIRM-CHAIN-REVIEW.md
+- 2026-08-03T18:23Z · tool · L-MONEYPATH-PAIR-REVIEW built-unverified -> verified, evidence docs/plan/reviews/L-MONEYPATH-PAIR-REVIEW.md
+- 2026-08-03T18:51Z · tool · refreshed 31 fact spans, 8 unconfirmed
+- 2026-08-03T19:39Z · agent:exit-instrument-sweep · started L-EXIT-INSTRUMENT-SWEEP
+- 2026-08-03T19:51Z · tool · refreshed 31 fact spans, 8 unconfirmed
+- 2026-08-03T19:56Z · agent:L-EXIT-INSTRUMENT-SWEEP · L-EXIT-INSTRUMENT-SWEEP returned built -> built-unverified, evidence lanes/L-EXIT-INSTRUMENT-SWEEP/map.md
+- 2026-08-03T19:56Z · agent:L-EXIT-INSTRUMENT-SWEEP · report L-EXIT-INSTRUMENT-SWEEP: 88 CONFIRMED EXACTLY, by importing the plan tool and calling its own exit_tokens() on all 122 built-unverified exits: 14 name a fact, 20 a path, 88 neither. My hand pass said 89; the extra was L-WF-BOOTSTRAP, which names Scripts/demo/... - a real instrument in the WRONG REPO, unreachable from this r
+- 2026-08-03T20:22Z · agent:invoice-authorize · started L-INVOICE-AUTHORIZE
+- 2026-08-03T20:22Z · agent:journey-margin · started L-JOURNEY-MARGIN
+- 2026-08-03T20:22Z · @clerk · backup taken: docs/plan and lanes copied to /Users/svendaneel/okam/plan-backup-2026-08-03 after F-PLAN-NOT-IN-GIT. A copy, not a mechanism.
+- 2026-08-03T20:42Z · agent:L-INVOICE-AUTHORIZE · L-INVOICE-AUTHORIZE returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-invauth @ d7ffdae9 (lane/invoice-authorize, off feature/restaurant-modules 3579bbbc, local, unpushed) - Controllers/InvoicesController.cs - WebApi.Tests/Wire/InvoicesAuthorizationWireTests.cs (26 tests) - lanes/L-INVOICE-AUTHORIZE/evidence.md
+- 2026-08-03T20:42Z · agent:L-INVOICE-AUTHORIZE · report L-INVOICE-AUTHORIZE: FLAG RE-VERIFIED BEFORE EDITING, still true: git log -1 on the controller is 030b1aaf 2025-12-03 10:13:03, the brief's date exactly. No fallback policy and no global authorize filter; Program.cs:98 AddDefaultPolicy is CORS, not authorization. The only global MVC filter is GrowthPublicRateLimitFilter
+- 2026-08-03T20:42Z · tool · refreshed 33 fact spans, 10 unconfirmed
+- 2026-08-03T20:45Z · agent:meals-eighth-read · started L-MEALS-EIGHTH-READ
+- 2026-08-03T20:48Z · agent:l-rollback-tracked-sweep · started L-ROLLBACK-TRACKED-SWEEP
+- 2026-08-03T20:48Z · agent:l-ef-index-shadow-sweep · started L-EF-INDEX-SHADOW-SWEEP
+- 2026-08-03T20:48Z · agent:l-census-floors-derived · started L-CENSUS-FLOORS-DERIVED
+- 2026-08-03T20:48Z · agent:l-journey-events · started L-JOURNEY-EVENTS
+- 2026-08-03T20:52Z · tool · refreshed 33 fact spans, 10 unconfirmed
+- 2026-08-03T20:52Z · agent:L-MEALS-EIGHTH-READ · returned L-MEALS-EIGHTH-READ verdict=fail-spec -> open; D-SPEC-L-MEALS-EIGHTH-READ appended
+- 2026-08-03T20:52Z · agent:L-MEALS-EIGHTH-READ · report L-MEALS-EIGHTH-READ: THE DEFECT IS ABSENT AT THE WORLD, measured not assumed. git grep SupersedesToken at 3579bbbc = 0 files; at 9fe599c6 = 3. Decrement sites at the tip: MealsFundingAuthority.cs:265 and MealsReconciliationWorker.cs:132 only. 81d9f5fe (the re-quote release, 08-01 21:49) is NOT an ancestor of the tip; ne
+- 2026-08-03T20:57Z · agent:L-JOURNEY-MARGIN · L-JOURNEY-MARGIN returned built -> built-unverified, evidence artifacts/journeys/margin-week-freeze.playwright.json, artifacts/journeys/margin-supplier-to-plate.playwright.json, lanes/L-JOURNEY-MARGIN/NOTES.md
+- 2026-08-03T20:57Z · agent:L-JOURNEY-MARGIN · report L-JOURNEY-MARGIN: Base measured first in a clean checkout: recipe-to-margin + statement-week, 2 passed, 33.3s. Jest after: 110 suites / 2481 tests pass. All four margin walks green at the tip.; margin-week-freeze, 9 steps, passed, 58 fixture responses. It PRESSES the control instead of asserting it gone, because a pa
+- 2026-08-03T20:57Z · @clerk · accept-stale on L-JOURNEY-MARGIN-1: brief hash moved because the plan changed around the lane; its exit is byte-identical to the criterion the work was measured against.
+- 2026-08-03T21:20Z · agent:L-EF-INDEX-SHADOW-SWEEP · L-EF-INDEX-SHADOW-SWEEP returned built -> built-unverified, evidence OkamAPI lane/ef-index-shadow-sweep @ 08309e39, off integration/mig-stack-land 4b37f81b; WebApi.Tests/Modules/IndexConfigurationSweep.cs + ModelIndexShadowSweepTests.cs + ModelIndexShadowGuardSelfTests.cs; lanes/L-EF-INDEX-SHADOW-SWEEP/evidence.md; fast tier 4450/0/10
+- 2026-08-03T21:20Z · agent:L-EF-INDEX-SHADOW-SWEEP · report L-EF-INDEX-SHADOW-SWEEP: BASE MEASURED. integration/mig-stack-land, because merge-base(feature/restaurant-modules, stack) IS 3579bbbc and the count is 0 ahead / 34 behind - the stack STRICTLY CONTAINS the integration tip, and carries 18 more index configurations (196 vs 178). Sweeping the older tip would have been blind to 
+- 2026-08-03T21:21Z · agent:L-CENSUS-FLOORS-DERIVED · L-CENSUS-FLOORS-DERIVED returned built -> built-unverified, evidence OkamAPI worktree /Users/svendaneel/okam/OkamAPI-censusfloors, branch lane/census-floors-derived @ 75dcc2ff, base feature/restaurant-modules @ 3579bbbc
+- 2026-08-03T21:21Z · agent:L-CENSUS-FLOORS-DERIVED · report L-CENSUS-FLOORS-DERIVED: KnownFiles/KnownSiteFloor/KnownResolverFloor/KnownGuardFloor DELETED from ModuleActorStampPin.; New ProductionAssemblyActorSites walks WebApi IL for newobj of each stamped type and; places every one via the portable PDB line table. Comparison is EQUALITY both ways, not >=.; Independent directions: r
+- 2026-08-03T21:22Z · agent:L-ROLLBACK-TRACKED-SWEEP · L-ROLLBACK-TRACKED-SWEEP returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-rbtracked/lanes/L-ROLLBACK-TRACKED-SWEEP/evidence.md
+- 2026-08-03T21:22Z · agent:L-ROLLBACK-TRACKED-SWEEP · report L-ROLLBACK-TRACKED-SWEEP: base feature/restaurant-modules @ 3579bbbc; wt-rbtracked; lane/rollback-tracked-sweep; commit 11829752; no push; shape still present: reference fix 249612ac is NOT an ancestor of this base (it sits on lane/meals-release-actor); derived census not grep: 1996 throws / 280 files, cut by tracked-local c
+- 2026-08-03T21:24Z · agent:utlkvit-family-land · started L-UTLKVIT-FAMILY-LAND
+- 2026-08-03T21:24Z · agent:journey-training · started L-JOURNEY-TRAINING
+- 2026-08-03T21:24Z · @clerk · held L-MEALS-EIGHTH-READ: returned fail-spec, its D-SPEC is unruled; re-dispatch sends an agent at the same wall.
+- 2026-08-03T21:30Z · agent:L-JOURNEY-EVENTS · L-JOURNEY-EVENTS returned built -> built-unverified, evidence artifacts/journeys/events-enquiry-to-settlement.playwright.json (passed, fixture, commit a1a1ec84e, 23/23 steps, 6 screenshots, 95 backend responses)
+- 2026-08-03T21:30Z · agent:L-JOURNEY-EVENTS · report L-JOURNEY-EVENTS: WALK: public enquiry -> dark pipeline -> Events.Core lever -> proposal drafted+sent -> guest accepts -> start service -> close -> invoice line -> reconcile -> statement Closed, booking Oppgjort. Nothing seeded; each step names what the previous produced (reference, contact name, token, content hash)
+- 2026-08-03T21:31Z · agent:wf-blind-bind-name · started L-WF-BLIND-BIND-NAME
+- 2026-08-03T21:33Z · agent:L-JOURNEY-TRAINING · returned L-JOURNEY-TRAINING verdict=fail-spec -> open; D-SPEC-L-JOURNEY-TRAINING appended
+- 2026-08-03T21:33Z · agent:L-JOURNEY-TRAINING · report L-JOURNEY-TRAINING: Verified before building, as instructed; measured rather than read. Base 4cfd306, training jest 6 suites/196 tests/0 failed. No container, no migration, no push, no artifact touched.; HALF A, pack: backend HAS it. TrainingController.cs:383 [HttpGet("evidence")]; d52a8313 and c5c15f17 are ancestors o
+- 2026-08-03T21:34Z · agent:wf-contact-imported · started L-WF-CONTACT-IMPORTED
+- 2026-08-03T21:34Z · agent:L-UTLKVIT-FAMILY-LAND · returned L-UTLKVIT-FAMILY-LAND verdict=fail-spec -> open; D-SPEC-L-UTLKVIT-FAMILY-LAND appended
+- 2026-08-03T21:34Z · agent:L-UTLKVIT-FAMILY-LAND · report L-UTLKVIT-FAMILY-LAND: COMPOSITION ALREADY EXISTS AND HOLDS. This is the good outcome the brief named, not a failure. I authored no code, no commit and no merge; my only writes are this return, lanes/L-UTLKVIT-FAMILY-LAND/, and a detached worktree at fb522bdd.; FAST TIER RE-RUN AT THE MERGE COMMIT, NOT INHERITED. 4375/0/1
+- 2026-08-03T21:59Z · @clerk · landed a273e013 on feature/restaurant-modules: the utlkvit family merged, not ported. Tier at the merge commit 4387/0/12. Local only, nothing pushed.
+- 2026-08-03T22:04Z · agent:opus · started L-WF-CORRECTION-PATH
+- 2026-08-03T22:04Z · agent:opus · started L-LIVE-ASSERTION-FLOORS
+- 2026-08-03T22:05Z · agent:opus · started L-WF-EXCHANGE-AWARD-UNGATED
+- 2026-08-03T22:06Z · tool · L-JOURNEY-EVENTS built-unverified -> verified, evidence artifacts/journeys/events-enquiry-to-settlement.playwright.json
+- 2026-08-03T22:07Z · tool · L-JOURNEY-COVERAGE-THREE built-unverified -> verified, evidence artifacts/journeys/
+- 2026-08-03T22:07Z · tool · L-JOURNEY-MARGIN built-unverified -> verified, evidence artifacts/journeys/margin-supplier-to-plate.playwright.json
+- 2026-08-03T22:07Z · tool · L-EXIT-INSTRUMENT-SWEEP built-unverified -> verified, evidence lanes/L-EXIT-INSTRUMENT-SWEEP/map.md
+- 2026-08-03T22:31Z · agent:L-WF-EXCHANGE-AWARD-UNGATED · L-WF-EXCHANGE-AWARD-UNGATED returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/lanes/L-WF-EXCHANGE-AWARD-UNGATED/EVIDENCE.md
+- 2026-08-03T22:31Z · agent:L-WF-EXCHANGE-AWARD-UNGATED · report L-WF-EXCHANGE-AWARD-UNGATED: Verified at the tip a273e013, not at a brief quote: AwardAsync had no stage gate there.; workforce.exchange was read at 3 worker-side writes (156/254/383), never in AwardAsync (485).; Shape 1, not shape 2: the seam is bound (Program.cs 769/774), lever real, catalog default false.; No branch carried 
+- 2026-08-03T22:31Z · agent:L-WF-CONTACT-IMPORTED · L-WF-CONTACT-IMPORTED returned built -> built-unverified, evidence backend OkamAPI-wfcontact lane/wf-contact-imported @ 833fd2f1 (off feature/restaurant-modules 3579bbbc, local, not pushed), container-free tier 4376 passed / 0 failed / 12 skipped, post-commit wire+workforce 859/0/5 | frontend web-wf-contact lane/fe-wf-contact-imported @ 61b053b (off feature/restaurant-modules a1a1ec8, local, not pushed), jest 2493 passed / 1 pre-existing environmental failure / 111 suites | lanes/L-WF-CONTACT-IMPORTED/DETAIL.md
+- 2026-08-03T22:31Z · agent:L-WF-CONTACT-IMPORTED · report L-WF-CONTACT-IMPORTED: GAP STILL REAL, swept not assumed. At HEAD the only writes of WorkforcePerson.ContactEmail/Phone are the create pair (WorkforceStaffService:195-196); :829-830 is a read. Across all 109 backend branches no branch has a third write, no UpdateWorkforceStaffRequest carries a Contact field, and no Workfo
+- 2026-08-03T22:34Z · agent:L-WF-BLIND-BIND-NAME · L-WF-BLIND-BIND-NAME returned built -> built-unverified, evidence backend OkamAPI lane/wf-blind-bind-name @ 3b593fef, worktree ~/okam/wt-wfblindbind, based on feature/restaurant-modules @ 3579bbbc, NOT pushed - container-free tier 4392/0/12 vs a 4369/0/12 baseline measured in the same worktree at a clean 3579bbbc, delta +23 = the new tests, 0 regressions - WebApi.Tests/Workforce/WorkforceOperatorLinkReviewTests.cs (16), WebApi.Tests/Wire/WorkforceOperatorLinkWireTests.cs (5), 2 contract fixtures | frontend Web lane/fe-wf-blind-bind-name @ c67df92, worktree ~/okam/web-blindbind, based on lane/fe-wf-oplink @ 3e811b2 (the only branch carrying the operator surface), NOT pushed - Jest 2278/0 across 99 suites vs 2268/0 on the parent, +10 | detail: lanes/L-WF-BLIND-BIND-NAME/detail.md
+- 2026-08-03T22:34Z · agent:L-WF-BLIND-BIND-NAME · report L-WF-BLIND-BIND-NAME: Verified first: the import service was the only writer of OperatorId anywhere, PATCH; /staff has no such field, no read mapped a login to a person. Still real, not stale.; 7a GET /staff/pos-operator-candidates names the person for every resolution a bind; can be made under, from the predicate the im
+- 2026-08-03T22:36Z · agent:L-LIVE-ASSERTION-FLOORS · L-LIVE-ASSERTION-FLOORS returned built -> built-unverified, evidence lanes/L-LIVE-ASSERTION-FLOORS/ (guard-proof.txt, jest-new-suite.txt, jest-full.txt); commit 22f2108
+- 2026-08-03T22:36Z · agent:L-LIVE-ASSERTION-FLOORS · report L-LIVE-ASSERTION-FLOORS: Base at a1a1ec8: 110 suites/2481 green, no modified tracked files. After: 111 suites/2538 green.; Cost: /kr|NOK|\d/ accepted kr 0,00 = priceLabel(0) for a Totalled zero, i.e. the rate bug itself.; Rules: toBeGreaterThan(0) COULD NOT FAIL - the empty-state li carries .wf-page__result too.; Stamp: "Si
+- 2026-08-03T22:39Z · @clerk · empty-state-inside-counted-collection sweep: 3 .vue sites match the form, only workforce-schedule.vue:291 reuses the item class; other two use distinct classes. No lane needed.
+- 2026-08-03T22:40Z · agent:opus · started L-COMPROOT-FAMILY-LAND
+- 2026-08-03T22:40Z · agent:opus · started L-EV-FAMILY-LAND
+- 2026-08-03T22:40Z · agent:opus · started L-MEALS-POSREL-LAND
+- 2026-08-03T22:48Z · tool · raised F-EXCHANGE-GATE-MERGE (warn)
+- 2026-08-03T22:52Z · @clerk · walks/ created: docs/plan/walks/L-WF-CONTACT-IMPORTED.md, the first acceptance walk script. C5 walks had no home; F-ACCEPTANCE-IS-THE-CHOKE was ruled walk-and-accept-a-batch.
+- 2026-08-03T22:52Z · tool · refreshed 33 fact spans, 10 unconfirmed
+- 2026-08-03T22:56Z · agent:L-WF-CORRECTION-PATH · L-WF-CORRECTION-PATH returned built -> built-unverified, evidence OkamAPI lane/wf-correction-path @ 305dbe79 off feature/restaurant-modules a273e013; Web lane/fe-wf-correction-path @ 6a641bc7 off a1a1ec8; Controllers/WorkforcePersonnelListController.cs; WebApi.Tests/Wire/WorkforceWireTests.cs; WebApi.Tests/Workforce/PersonnelListCorrectionTests.cs; backend container-free 4399/0/12; frontend jest 2491/1; lanes/L-WF-CORRECTION-PATH/DETAIL.md
+- 2026-08-03T22:56Z · agent:L-WF-CORRECTION-PATH · report L-WF-CORRECTION-PATH: BLOCKER RE-MEASURED BEFORE BUILDING, and it was real. Both null-actor sites are Projection.cs:116 and :132; the controller held two GETs and no write; the ONLY non-null correction row in the estate was the committed read fixture, a row no code path can produce. Columns already exist (RestaurantModul
+- 2026-08-03T22:58Z · agent:opus · started L-WF-CONTACT-PINS
+- 2026-08-03T23:13Z · agent:L-EV-FAMILY-LAND · L-EV-FAMILY-LAND returned built -> built-unverified, evidence lanes/L-EV-FAMILY-LAND/merge-receipt.md
+- 2026-08-03T23:13Z · agent:L-EV-FAMILY-LAND · report L-EV-FAMILY-LAND: BRIEF TRUE at a273e013: neither EventsPublicProposalWriteGateTests.cs nor EventsGuestOriginConfigurationWireTests.cs was on the branch, so both rulings were unexecuted there. Both are on it now, plus EventsProposalGateWiringTests.cs riding along.; TOPOLOGY measured, not inherited: merge-base 8eee00f
+- 2026-08-03T23:14Z · agent:opus · started L-WF-IDEMPOTENCY-REFUSAL
+- 2026-08-03T23:27Z · agent:L-MEALS-POSREL-LAND · L-MEALS-POSREL-LAND returned built -> built-unverified, evidence lanes/L-MEALS-POSREL-LAND/merge-receipt.md
+- 2026-08-03T23:27Z · agent:L-MEALS-POSREL-LAND · report L-MEALS-POSREL-LAND: - MERGED, LOCAL ONLY, NOTHING PUSHED. Two real two-parent merges: 21f79514 (lane/meals-pos-tender-wire 32fd5a86) then b9c95082 (lane/meals-release af53dc84). Neither lane contained the other (merge-base --is-ancestor both ways = NO; bases 1a03bc6c and 24dec838), so both were merged. Both exit files 
+- 2026-08-03T23:28Z · tool · raised F-SHARED-REF-CLOBBER (warn)
+- 2026-08-03T23:28Z · tool · raised F-MERGE-BREAKS-BUILD (warn)
+- 2026-08-03T23:28Z · agent:opus · started L-CORS-CREDENTIALED-ORIGIN
+- 2026-08-03T23:28Z · agent:L-WF-CONTACT-PINS · L-WF-CONTACT-PINS returned built -> built-unverified, evidence lanes/L-WF-CONTACT-PINS/mutation-log.md
+- 2026-08-03T23:28Z · agent:L-WF-CONTACT-PINS · report L-WF-CONTACT-PINS: All four items pinned; each mutation watched red, restored, watched green.; 1 TENANCY. Counterfactual measured first: with s.StoreId==storeId deleted from WorkforceStaffService.cs:405 the WHOLE container-free tier is 4376/4376 GREEN, not just the wire tests. WireHostFixture gains ManagerB (new login
+- 2026-08-03T23:30Z · agent:opus · started L-WF-LINK-DEADEND
+- 2026-08-03T23:32Z · agent:L-COMPROOT-FAMILY-LAND · L-COMPROOT-FAMILY-LAND returned built -> built-unverified, evidence lanes/L-COMPROOT-FAMILY-LAND/merge-receipt.md
+- 2026-08-03T23:32Z · agent:L-COMPROOT-FAMILY-LAND · report L-COMPROOT-FAMILY-LAND: LANDED. feature/restaurant-modules = 35696d6b, local, unpushed, carrying BOTH Wire/CompositionRootLimiterWireTests.cs and Wire/RequestBodyTelemetryPinTests.cs - checked with git ls-tree against the BRANCH, not a worktree. Neither was reachable there before this lane.; ANCESTRY VERIFIED, NOT TAKEN ON
+- 2026-08-03T23:41Z · agent:opus · started L-GROWTH-FAMILY-LAND
+- 2026-08-03T23:51Z · tool · refreshed 33 fact spans, 10 unconfirmed
+- 2026-08-03T23:55Z · agent:L-CORS-CREDENTIALED-ORIGIN · L-CORS-CREDENTIALED-ORIGIN returned built -> built-unverified, evidence lanes/L-CORS-CREDENTIALED-ORIGIN/evidence.md
+- 2026-08-03T23:55Z · agent:L-CORS-CREDENTIALED-ORIGIN · report L-CORS-CREDENTIALED-ORIGIN: Measured at tip 35696d6b, unchanged at lane end. Policy had NOT landed: 2a052800 not an ancestor,; no GrowthGuestCorsPolicy in the tree, Program.cs:100 still AllowAnyOrigin under a bare app.UseCors().; So built, not fail-spec. Credentialed-ness confirmed client-side, not assumed: growth-guest-client
+- 2026-08-03T23:56Z · agent:opus · started L-PHONE-IN-PATH
+- 2026-08-03T23:56Z · tool · raised F-CORS-ORIGINS-BY-INDEX (warn)
+- 2026-08-03T23:56Z · agent:L-WF-IDEMPOTENCY-REFUSAL · L-WF-IDEMPOTENCY-REFUSAL returned built -> built-unverified, evidence backend OkamAPI lane/wf-idempotency-refusal @ a1d57208, worktree ~/okam/OkamAPI-wfidemref, based on feature/restaurant-modules @ 9888178f, NOT pushed - container-free tier (dotnet test --filter "Database!=SqlServer") 4402/0/12 vs a 4394/0/12 baseline measured in the same worktree at a clean 9888178f, delta +8 = WebApi.Tests/Workforce/WorkforceIdempotencyTests.cs (6) and WebApi.Tests/Workforce/WorkforceShiftExchangeTests.cs (2)
+- 2026-08-03T23:56Z · agent:L-WF-IDEMPOTENCY-REFUSAL · report L-WF-IDEMPOTENCY-REFUSAL: Base 9888178f; worktree ~/okam/OkamAPI-wfidemref; lane/wf-idempotency-refusal a1d57208; NOT pushed.; Container-free 4402/0/12 vs a 4394/0/12 baseline at clean 9888178f in the same worktree; +8 = the; new tests. Baseline's first run had 1 non-reproducing failure - pre-existing flake, name not kept.; 
+- 2026-08-03T23:57Z · agent:opus · started L-WF-CORRECTION-PINS
+- 2026-08-04T00:03Z · agent:L-GROWTH-FAMILY-LAND · L-GROWTH-FAMILY-LAND returned built -> built-unverified, evidence lanes/L-GROWTH-FAMILY-LAND/merge-receipt.md on feature/restaurant-modules @ 4685fb01 (local, unpushed); merges f58109e6 + 029e2869 over measured tip 35696d6b
+- 2026-08-04T00:03Z · agent:L-GROWTH-FAMILY-LAND · report L-GROWTH-FAMILY-LAND: - ANCESTRY RE-MEASURED, and the brief's every ancestor claim HOLDS: gr-testsend-guard is an ancestor of all five others, gr-confirmed-email of gr-confirm-stale, growth-audit-ledger of gr-dispatch-actor. What changed is the TARGET: at 35696d6b it had already absorbed the shared guard base AND the gr-
+- 2026-08-04T00:04Z · agent:opus · started L-PDF-FAMILY-LAND
+- 2026-08-04T00:11Z · agent:L-WF-LINK-DEADEND · L-WF-LINK-DEADEND returned built -> built-unverified, evidence backend OkamAPI lane/wf-link-deadend @ a3a526ae, worktree ~/okam/wt-wflinkdead, based on lane/wf-blind-bind-name @ 3b593fef, NOT pushed - container-free tier (--filter "Database!=SqlServer") 4397/0/12 vs the parent's recorded 4392/0/12, delta +5 = the new tests, 0 regressions - WebApi.Tests/Workforce/WorkforceOperatorLinkDeadEndTests.cs (3), WebApi.Tests/Wire/WorkforceOperatorLinkWireTests.cs (+2) | frontend Web lane/fe-wf-link-deadend @ bed932e, worktree ~/okam/web-linkdeadend, based on lane/fe-wf-blind-bind-name @ c67df92, NOT pushed - jest 99 suites/2296 vs a 2292 baseline I measured myself at c67df92 in a throwaway worktree, delta +4 | runs: lanes/L-WF-LINK-DEADEND/{backend-containerfree.txt,frontend-jest.txt,frontend-jest-baseline.txt} | detail: lanes/L-WF-LINK-DEADEND/detail.md
+- 2026-08-04T00:11Z · agent:L-WF-LINK-DEADEND · report L-WF-LINK-DEADEND: BASE, recorded: tip 35696d6b does NOT carry CorrectLinkAsync at all - it exists; only on the unmerged lane/wf-blind-bind-name (merge-base 3579bbbc). Built there;; all four legs of the dead end re-verified at 3b593fef first. Not stale.; Holder query mirrors the candidates read (materialise, OrderByDe
+- 2026-08-04T00:12Z · agent:opus · started L-WF-PUSH-SILENT
+- 2026-08-04T00:27Z · agent:L-PDF-FAMILY-LAND · L-PDF-FAMILY-LAND returned built -> built-unverified, evidence lanes/L-PDF-FAMILY-LAND/merge-receipt.md - feature/restaurant-modules 5df07afa (local, unpushed) - work/{baseline-4685fb01,merged-5df07afa}.trx - work/{added,removed}-tests.txt
+- 2026-08-04T00:27Z · agent:L-PDF-FAMILY-LAND · report L-PDF-FAMILY-LAND: - ANCESTRY RE-MEASURED, not taken from the brief, and TWO TIPS HAD MOVED: lane/pdf-nullderef is 17198f14 (not 2497ce9d) and lane/invoice-retry-retirement is 1a0c0cbb (not f18ffeda), each a receipt commit on top. The chain still holds tip-to-root (three --is-ancestor checks YES, +1/+2/+4/+6) and NONE
+- 2026-08-04T00:29Z · agent:opus · started L-INVOICE-AUTHORIZE-LAND
+- 2026-08-04T00:29Z · agent:opus · started L-LIVE-BUILD-EXPORT
+- 2026-08-04T00:34Z · agent:L-WF-CORRECTION-PINS · L-WF-CORRECTION-PINS returned built -> built-unverified, evidence lanes/L-WF-CORRECTION-PINS/mutation-log.md
+- 2026-08-04T00:34Z · agent:L-WF-CORRECTION-PINS · report L-WF-CORRECTION-PINS: Five items landed on the branches they pin, each watched red then green, plus the counterfactual for the three "guard is a formality" findings.; Backend lane/wf-correction-path 182fa43e (7 files), frontend lane/fe-wf-correction-path b4dd528 (1 file). Neither pushed. feature/restaurant-modules not mo
+- 2026-08-04T00:34Z · tool · raised F-CORS-EXPOSURE-REVERT (warn)
+- 2026-08-04T00:37Z · agent:opus · started L-EV-OUTBOX-FLAKE
+- 2026-08-04T00:37Z · agent:opus · started L-LIVE-WORLD-ADMINCRED
+- 2026-08-04T00:37Z · tool · raised F-C5-NOT-WALKABLE (info)
+- 2026-08-04T00:37Z · agent:L-PHONE-IN-PATH · L-PHONE-IN-PATH returned built -> built-unverified, evidence backend OkamAPI lane/phone-in-path @ a60da359 (fix c7422096 + finding-closure a60da359), worktree ~/okam/wt-phoneinpath, based on feature/restaurant-modules @ 35696d6b, NOT pushed - container-free tier (--filter "Database!=SqlServer") 4505/0/12 vs a base 4466/0/12 I measured myself at 35696d6b in a clean detached worktree, delta +39 = exactly the new tests, 0 regressions - WebApi.Tests/Observability/PersonalIdentifierRouteShapeTests.cs (39) | mutations: lanes/L-PHONE-IN-PATH/mutations.txt | tiers: lanes/L-PHONE-IN-PATH/{base,containerfree}-tier.summary.txt | detail: lanes/L-PHONE-IN-PATH/evidence.md and artifacts/security/L-PHONE-IN-PATH-mutation.md | stale finding closed in artifacts/security/L-VIPPS-LOG-mutation.md
+- 2026-08-04T00:37Z · agent:L-PHONE-IN-PATH · report L-PHONE-IN-PATH: BASE recorded: tip 35696d6b; both routes verified LIVE there first, not inferred. Tip has since; moved 4685fb01 -> 5df07afa; neither touches a file this lane edits and the route-parameter set; is identical, so the merge is clean.; Both are writes: PUT /stores/{storeId}/phonenumber and POST /giftcard
+- 2026-08-04T00:38Z · tool · raised F-CAPABILITY-URL-BLINDSPOT (info)
+- 2026-08-04T00:39Z · agent:opus · started L-WF-IDEMPOTENCY-REFUSAL-REST
+- 2026-08-04T00:42Z · agent:L-WF-PUSH-SILENT · L-WF-PUSH-SILENT returned built -> built-unverified, evidence OkamAPI lane/wf-push-silent 991c21f6 (base lane/wf-push-notify f5305ced); WebApi.Tests/Workforce/WorkforceNotificationTransportTests.cs
+- 2026-08-04T00:42Z · agent:L-WF-PUSH-SILENT · report L-WF-PUSH-SILENT: Base: lane/wf-push-notify f5305ced, the ONLY branch carrying WorkforcePushNotificationDelivery.cs - it is NOT merged into feature/restaurant-modules (tip moved 4685fb01 -> 5df07afa during this lane; I did not touch it). Own worktree OkamAPI-wfpushsilent.; Baseline at f5305ced from a clean checkout: 
+- 2026-08-04T00:46Z · agent:opus · started L-WF-PUSH-LAND
+- 2026-08-04T00:50Z · agent:L-EV-OUTBOX-FLAKE · L-EV-OUTBOX-FLAKE returned built -> built-unverified, evidence OkamAPI lane/ev-outbox-flake 59a1d607 (base 5df07afa, worktree /Users/svendaneel/okam/OkamAPI-evoutboxflake)
+- 2026-08-04T00:50Z · agent:L-EV-OUTBOX-FLAKE · report L-EV-OUTBOX-FLAKE: Base measured: feature/restaurant-modules = 5df07afa, unmoved. Defect still live.; Only aliasing pair in Events tests; grep found no second instance.; Fix 1 - token pinned to 2502000a-2500-2000-2500-250020002500, which CONTAINS "250" and "2000". Worst case, not a safe one: the historical failure now
+- 2026-08-04T00:51Z · tool · refreshed 33 fact spans, 10 unconfirmed
+- 2026-08-04T00:52Z · agent:opus · started L-LIVE-WORLD-DISCOVER
+- 2026-08-04T00:55Z · agent:L-LIVE-WORLD-ADMINCRED · returned L-LIVE-WORLD-ADMINCRED verdict=blocked -> open, needs F-CAP-COUNTS-LANES
+- 2026-08-04T00:55Z · agent:L-LIVE-WORLD-ADMINCRED · report L-LIVE-WORLD-ADMINCRED: CREDENTIAL FOUND, RECORDED IN TRACKED SOURCE. Read at OkamAPI 5df07afa by file:line, not remembered.; Login accepts 3 ways (UserController.cs:174-180); the 3rd is a real SMS token and GetOrCreateAsync:540 Twilio-validates anything else, so a journey can type only 2, both product settings (UserServic
+- 2026-08-04T00:55Z · agent:L-INVOICE-AUTHORIZE-LAND · L-INVOICE-AUTHORIZE-LAND returned built -> built-unverified, evidence lanes/L-INVOICE-AUTHORIZE-LAND/merge-receipt.md on feature/restaurant-modules @ 26599c6e (local, unpushed); merge 21510917 brings d7ffdae9 over measured tip 5df07afa
+- 2026-08-04T00:55Z · agent:L-INVOICE-AUTHORIZE-LAND · report L-INVOICE-AUTHORIZE-LAND: - BRIEF RE-VERIFIED AT THE TIP, all three claims hold, so fail-spec does not apply: at 5df07afa InvoicesController had [ApiController]+[Route] and NO [Authorize]; lane/invoice-authorize was +1 over merge-base 3579bbbc (rev-list 48/1); and an anonymous POST to RetrySendingExistingInvoices answered 20
+- 2026-08-04T00:56Z · agent:L-LIVE-BUILD-EXPORT · L-LIVE-BUILD-EXPORT returned built -> built-unverified, evidence lanes/L-LIVE-BUILD-EXPORT/evidence.md (commit 94fa256, 6 files by pathspec) + lanes/L-LIVE-BUILD-EXPORT/journey-artifacts/arm-1.provenance-probe.playwright.json
+- 2026-08-04T00:56Z · agent:L-LIVE-BUILD-EXPORT · report L-LIVE-BUILD-EXPORT: NOT already done. The mechanism half existed (E2E_API_BUILD, exported by live-world.sh); the exit did not. Of the three live artifacts on the branch, two carry backendBuild null and the third named its build via process:127.0.0.1:5961 -- lsof on the port, the source the exit rules out.; BUILT test/e
+- 2026-08-04T00:58Z · agent:opus · started L-CORS-FOLLOWUPS
+- 2026-08-04T00:58Z · agent:opus · started L-CREDIT-NOTE-NUMBER
+- 2026-08-04T00:59Z · tool · L-WF-CORRECTION-PINS built-unverified -> verified, evidence lanes/L-WF-CORRECTION-PINS/mutation-log.md
+- 2026-08-04T01:04Z · agent:L-WF-IDEMPOTENCY-REFUSAL-REST · L-WF-IDEMPOTENCY-REFUSAL-REST returned built -> built-unverified, evidence /Users/svendaneel/okam/OkamAPI-wfrefusalrest @ 02684ecc (branch lane/wf-idempotency-refusal-rest, base a1d57208 = the sibling lane; 0 Workforce files drifted between 9888178f and the tip, so it merges clean)
+- 2026-08-04T01:04Z · agent:L-WF-IDEMPOTENCY-REFUSAL-REST · report L-WF-IDEMPOTENCY-REFUSAL-REST: All three sites now RefuseAsync before the throw: import ~line 236, invitation issue ~176, invitation claim ~397. No migration; Refused is a value in the existing nvarchar(32).; Container-free tier only, no container started: 4405 passed / 0 failed / 12 skipped. Lower total than the tip's 4571 becau
+- 2026-08-04T01:04Z · @clerk · accepted stale brief for L-WF-IDEMPOTENCY-REFUSAL-REST: hash moved because the clerk removed a banned word from the lane block; no scope or constraint changed.
+- 2026-08-04T01:12Z · agent:L-WF-PUSH-LAND · L-WF-PUSH-LAND returned built -> built-unverified, evidence lanes/L-WF-PUSH-LAND/merge-receipt.md
+- 2026-08-04T01:12Z · agent:L-WF-PUSH-LAND · report L-WF-PUSH-LAND: Ancestry re-measured before anything: f5305ced IS an ancestor of 991c21f6, neither is on the integration branch, merge-base d458e1cf. The brief had not aged. Merging the silent tip brought both commits, so the delivery lane did not land bare.; The tip MOVED before I merged: 5df07afa -> 26599c6e (L-I
+- 2026-08-04T01:13Z · tool · raised F-ZSH-WORD-SPLIT (warn)
+- 2026-08-04T01:13Z · agent:opus · started L-WF-TIMEOFF-DECIDE-GATE
+- 2026-08-04T01:15Z · agent:opus · started L-WF-TIMESHEET-RACE
+- 2026-08-04T01:15Z · agent:L-CORS-FOLLOWUPS · L-CORS-FOLLOWUPS returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/lanes/L-CORS-FOLLOWUPS/evidence.md
+- 2026-08-04T01:15Z · agent:L-CORS-FOLLOWUPS · report L-CORS-FOLLOWUPS: Backend built in worktree /Users/svendaneel/okam/OkamAPI-corscred on a NEW branch lane/cors-followups @ 524289b9, parented on lane/cors-credentialed-origin @ edbb7dea.; That shared ref was NOT moved and L-SECURITY-LAND's merge is untouched; 524289b9 is a descendant of edbb7dea, so landing edbb7dea a
+- 2026-08-04T01:17Z · agent:opus · started L-WF-TIMESHEET-WIRE
+- 2026-08-04T01:19Z · agent:L-CREDIT-NOTE-NUMBER · L-CREDIT-NOTE-NUMBER returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/lanes/L-CREDIT-NOTE-NUMBER/receipt.md
+- 2026-08-04T01:19Z · agent:L-CREDIT-NOTE-NUMBER · report L-CREDIT-NOTE-NUMBER: Defect confirmed live at tip 26599c6e; tip moved to 569887a5 mid-lane, neither of my two files touched by that range, so I rebased and re-measured there.; Worktree /Users/svendaneel/okam/OkamAPI-cnnum, branch lane/credit-note-number, one commit 24c95aa9 on 569887a5. Nothing pushed, feature/restauran
+- 2026-08-04T01:20Z · tool · raised F-IDENTICAL-EXPRESSION-DIVERGENT-MEANING (info)
+- 2026-08-04T01:21Z · agent:opus · started L-WF-VIOLATION-EXACT
+- 2026-08-04T01:22Z · tool · refreshed 33 fact spans, 10 unconfirmed
+- 2026-08-04T01:24Z · agent:L-LIVE-WORLD-DISCOVER · returned L-LIVE-WORLD-DISCOVER verdict=blocked -> open, needs F-CAP-COUNTS-LANES
+- 2026-08-04T01:24Z · agent:L-LIVE-WORLD-DISCOVER · report L-LIVE-WORLD-DISCOVER: EXIT HALF-MET AND THE UNMET HALF IS A RESOURCE I MAY NOT TAKE. The rewrite is done and proven; no live run exists. No container started: five foreign mssql are up, four live APIs (5951/5952/5956/5961), and three of those worlds are standing for an acceptance walk. This journey pulls the Events.Core 
+- 2026-08-04T01:25Z · agent:opus · started L-EV-JOURNEY-TIMEBOMB
+- 2026-08-04T01:37Z · agent:L-WF-TIMEOFF-DECIDE-GATE · L-WF-TIMEOFF-DECIDE-GATE returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/lanes/L-WF-TIMEOFF-DECIDE-GATE/EVIDENCE.md
+- 2026-08-04T01:37Z · agent:L-WF-TIMEOFF-DECIDE-GATE · report L-WF-TIMEOFF-DECIDE-GATE: Measured at tip 569887a5 (re-read after the build, unmoved): DecideAsync had no flag read at all, ctor no gate. Python scan of all 246 local branches: 0 carry the fix.; Spec read at base: 9.1:420 "requests in flight stay READABLE"; 9.2:426 says writes owe the typed 409. Neither line contains "decida
+- 2026-08-04T01:37Z · tool · raised F-BRIEF-QUOTES-UNMERGED-STATE (warn)
+- 2026-08-04T01:38Z · agent:opus · started L-WF-PUSH-STILL-LIES
+- 2026-08-04T01:44Z · agent:L-WF-TIMESHEET-WIRE · L-WF-TIMESHEET-WIRE returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-wftswire/lanes/L-WF-TIMESHEET-WIRE/evidence.md
+- 2026-08-04T01:44Z · agent:L-WF-TIMESHEET-WIRE · report L-WF-TIMESHEET-WIRE: Tip 569887a5 carries NO timesheet code (ls-tree: zero files). W5 lives only on lane/wf-w5-timesheet 9e82b286, 22 ahead / 76 behind. Chose to BUILD THERE, in my own worktree wt-wftswire on branch lane/wf-timesheet-wire; moved no shared ref.; Added ONE new file, WebApi.Tests/Wire/WorkforceTimesheetWir
+- 2026-08-04T01:51Z · tool · L-PDF-FAMILY-LAND built-unverified -> verified, evidence lanes/L-PDF-FAMILY-LAND/merge-receipt.md
+- 2026-08-04T01:51Z · tool · L-COMPROOT-FAMILY-LAND built-unverified -> verified, evidence lanes/L-COMPROOT-FAMILY-LAND/merge-receipt.md
+- 2026-08-04T01:51Z · tool · L-EV-FAMILY-LAND built-unverified -> verified, evidence lanes/L-EV-FAMILY-LAND/merge-receipt.md
+- 2026-08-04T01:51Z · tool · L-MEALS-POSREL-LAND built-unverified -> verified, evidence lanes/L-MEALS-POSREL-LAND/merge-receipt.md
+- 2026-08-04T01:51Z · tool · L-WF-CONTACT-PINS built-unverified -> verified, evidence lanes/L-WF-CONTACT-PINS/mutation-log.md
+- 2026-08-04T01:51Z · tool · L-CORS-CREDENTIALED-ORIGIN built-unverified -> verified, evidence lanes/L-CORS-CREDENTIALED-ORIGIN/evidence.md
+- 2026-08-04T01:51Z · tool · L-WF-PUSH-LAND built-unverified -> verified, evidence lanes/L-WF-PUSH-LAND/merge-receipt.md
+- 2026-08-04T01:52Z · agent:opus · started L-WF-WITHHELD-BOUND
+- 2026-08-04T08:31Z · tool · raised F-JOURNEY-LEAVES-LEVERS-ON (warn)
+- 2026-08-04T08:31Z · tool · raised F-OVERBROAD-TEST-FILTER (warn)
+- 2026-08-04T08:31Z · tool · refreshed 33 fact spans, 10 unconfirmed
+- 2026-08-04T08:47Z · agent:L-WF-PUSH-STILL-LIES · L-WF-PUSH-STILL-LIES returned built -> built-unverified, evidence OkamAPI lane/wf-push-still-lies 100ae000 (base feature/restaurant-modules 569887a5, unmoved); WebApi.Tests/Workforce/WorkforceNotificationTransportTests.cs, WebApi.Tests/Workforce/ScheduleAuditLedgerTests.cs, WebApi.Tests/Wire/WorkforceWireTests.cs
+- 2026-08-04T08:47Z · agent:L-WF-PUSH-STILL-LIES · report L-WF-PUSH-STILL-LIES: RESUMED: the killed run's 15-file uncommitted tree in worktree wt-wfpushlies was intact and correct. I kept all of it, added the mutation proof and the suite runs it never reached, and committed it by pathspec as 100ae000. Nothing was redone.; All three quoted sites matched the tip 569887a5 by value
+- 2026-08-04T08:52Z · tool · raised F-CLERK-EXITS-NAME-NO-INSTRUMENT (warn)
+- 2026-08-04T08:53Z · agent:opus · started L-ROUTE-GUARD-GAPS
+- 2026-08-04T08:53Z · agent:L-WF-VIOLATION-EXACT · L-WF-VIOLATION-EXACT returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-wfviolexact @ cdb4c66c (lane/wf-violation-exact, parent 569887a5, unpushed)
+- 2026-08-04T08:53Z · agent:L-WF-VIOLATION-EXACT · report L-WF-VIOLATION-EXACT: RESUMED: prior worktree /Users/svendaneel/okam/wt-wfviolexact was at 569887a5 with NO commits; only dirt was artifacts/journeys/ev-dietary/run-sheet.{json,md}, a date stamp regenerated by a test run - reverted. Nothing kept.; FIX: WorkforceDbViolations.IsUniqueViolation SQLite arm no longer accepts 
+- 2026-08-04T08:54Z · agent:opus · started L-MEALS-VIOLATION-EXACT
+- 2026-08-04T08:59Z · agent:L-EV-JOURNEY-TIMEBOMB · L-EV-JOURNEY-TIMEBOMB returned built -> built-unverified, evidence lanes/L-EV-JOURNEY-TIMEBOMB/ at lane/ev-journey-timebomb b7a9f389 (parent 4b5c5c2; feature/restaurant-modules NOT moved, still 4b5c5c2)
+- 2026-08-04T08:59Z · agent:L-EV-JOURNEY-TIMEBOMB · report L-EV-JOURNEY-TIMEBOMB: RESUMED at 4b5c5c2, this lane's own commit: the two brief faults were already closed by; reading the file. Kept it whole, redid nothing, added what RUNNING it twice found.; THIRD FAULT CONFIRMED AND CLOSED: the walk ended with Events.Core + Events.Settlement ON,; so run 2 met a lit venue at the step
+- 2026-08-04T09:00Z · agent:opus · started L-LIVE-WORLD-RESET
+- 2026-08-04T09:01Z · agent:L-WF-WITHHELD-BOUND · L-WF-WITHHELD-BOUND returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-wfwithheld @ 74405b34 (lane/wf-withheld-bound off feature/restaurant-modules 569887a5); pin WebApi.Tests/Workforce/WorkforceNotificationBacklogBoundTests.cs; four-state record lanes/L-WF-WITHHELD-BOUND/mutation_check.py + trx/
+- 2026-08-04T09:01Z · agent:L-WF-WITHHELD-BOUND · report L-WF-WITHHELD-BOUND: Both halves built. At most one live push row per worker per store, and none for weeks already over.; 1) PublishAsync tx: a superseded publication's Pending/Failed/Withheld outbox rows -> new terminal Superseded, staged on the same SaveChanges. Leased excluded: a dispatcher is mid-attempt and writes 
+- 2026-08-04T09:03Z · agent:opus · started L-DATED-TEST-OUTPUT
+- 2026-08-04T09:03Z · agent:opus · started L-MEALS-CLAIM-RECEIPT
+- 2026-08-04T09:06Z · agent:L-LIVE-WORLD-RESET · returned L-LIVE-WORLD-RESET verdict=fail-spec -> open; D-SPEC-L-LIVE-WORLD-RESET appended
+- 2026-08-04T09:06Z · agent:L-LIVE-WORLD-RESET · report L-LIVE-WORLD-RESET: DUPLICATE LANE. Plan 4689 (mine, node/1) and plan 4831 (RESTORE, sql/2) carry the same exit sentence. RESTORE walked it with three journeys not two, one world, a restore before each, all green, all "backend":"live" at :5961, __EFMigrationsHistory still 127 at the end (09-chain-three-journeys.txt).; 
+- 2026-08-04T09:08Z · agent:L-WF-TIMESHEET-RACE · L-WF-TIMESHEET-RACE returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-wftsrace/lanes/L-WF-TIMESHEET-RACE/{evidence.md,mutations.txt,mutate.py} - branch lane/wf-timesheet-race @ bc9c7e96, worktree wt-wftsrace, not pushed
+- 2026-08-04T09:08Z · agent:L-WF-TIMESHEET-RACE · report L-WF-TIMESHEET-RACE: BASE MOVED SINCE THE BRIEF. integration/mig-stack-land @ 4b37f81b now carries the whole W5 family plus MIG-25/MIG-26; the killed run cut from there, better than 9e82b286, and I kept it.; RESUMED, NOT REDONE. No commit existed, but a dirty tree did: 5 modified files + 2 untracked test files, all read
+- 2026-08-04T09:21Z · agent:L-MEALS-VIOLATION-EXACT · L-MEALS-VIOLATION-EXACT returned built -> built-unverified, evidence lanes/L-MEALS-VIOLATION-EXACT/mutation-log.md
+- 2026-08-04T09:21Z · agent:L-MEALS-VIOLATION-EXACT · report L-MEALS-VIOLATION-EXACT: FIX: MealsDbViolations.IsUniqueViolation SQLite arm no longer accepts bare SQLITE_CONSTRAINT 19 (which also covers NOT NULL 1299, CHECK 275, FK 787); only extended 2067/1555 + "UNIQUE constraint failed".; SQLSERVER ARM: verified for Meals independently, NOT assumed - 2627/2601 only, accepts neither 
+- 2026-08-04T09:22Z · agent:opus · started L-MEALS-IDEMPOTENCY-REFUSAL
+- 2026-08-04T09:22Z · tool · refreshed 33 fact spans, 10 unconfirmed
+- 2026-08-04T09:22Z · agent:L-MEALS-CLAIM-RECEIPT · L-MEALS-CLAIM-RECEIPT returned built -> built-unverified, evidence lanes/L-MEALS-CLAIM-RECEIPT/evidence.md
+- 2026-08-04T09:22Z · agent:L-MEALS-CLAIM-RECEIPT · report L-MEALS-CLAIM-RECEIPT: Frontend lane, not backend: the page, the wire it discards and the 3-language copy are all Web-modules. Nothing backend edited.; Base Web-modules feature/restaurant-modules 4b5c5c2, own worktree web-meals-claim-receipt, branch lane/fe-meals-claim-receipt, commit d833d19. Not pushed. No container sta
+- 2026-08-04T09:23Z · agent:opus · started L-MARGIN-VIOLATION-ANCHOR
+- 2026-08-04T09:29Z · agent:L-DATED-TEST-OUTPUT · L-DATED-TEST-OUTPUT returned built -> built-unverified, evidence lanes/L-DATED-TEST-OUTPUT/evidence.md
+- 2026-08-04T09:29Z · agent:L-DATED-TEST-OUTPUT · report L-DATED-TEST-OUTPUT: Writer: WebApi.Tests/Wire/EventsDietaryRunSheetWireTests.cs WriteCapture() rewrote tracked; artifacts/journeys/ev-dietary/run-sheet.{md,json} every run - the repo's only unconditional write into a; tracked path. Dated 5 ways: capturedAtUtc, 6 TimeProvider stamps, 2 Guid.NewGuid(), "(stated yyyy-MM-d
+- 2026-08-04T09:29Z · @clerk · brief template: the ev-dietary restore line is retired. L-DATED-TEST-OUTPUT made it false on this branch and pinned it false; briefs stop teaching that a dirty tree after a test run is normal.
+- 2026-08-04T09:30Z · agent:opus · started L-VIOLATION-EXACT-LAND
+- 2026-08-04T09:34Z · agent:L-ROUTE-GUARD-GAPS · L-ROUTE-GUARD-GAPS returned built -> built-unverified, evidence lanes/L-ROUTE-GUARD-GAPS/mutation-log.md
+- 2026-08-04T09:34Z · agent:L-ROUTE-GUARD-GAPS · report L-ROUTE-GUARD-GAPS: Commit a5b9e28b on NEW branch lane/route-guard-gaps, a DESCENDANT of a60da359. lane/phone-in-path NOT advanced, no shared ref moved, feature/restaurant-modules untouched; a merge taking only the parent silently drops this. Worktree /Users/svendaneel/okam/wt-routeguard. No container started or touche
+- 2026-08-04T09:36Z · agent:opus · started L-WOLT-SYNC
+- 2026-08-04T09:59Z · agent:L-MARGIN-VIOLATION-ANCHOR · L-MARGIN-VIOLATION-ANCHOR returned built -> built-unverified, evidence lanes/L-MARGIN-VIOLATION-ANCHOR/mutation-log.md
+- 2026-08-04T09:59Z · agent:L-MARGIN-VIOLATION-ANCHOR · report L-MARGIN-VIOLATION-ANCHOR: BASE 569887a5 (siblings' base); defect LIVE there AND at integration/mig-stack-land 4b37f81b, sites drifted to :68/:700. Those two branches DIVERGED (merge-base 3579bbbc, +54/+34). Commit a2bfd116, refs unmoved.; FIX MarginRecipeSupport.IsUniqueViolation: unanchored Contains("UNIQUE") -> SQLite exte
+- 2026-08-04T10:01Z · agent:opus · started L-XZ-CREDIT-FIELDS
+- 2026-08-04T10:02Z · agent:L-VIOLATION-EXACT-LAND · L-VIOLATION-EXACT-LAND returned built -> built-unverified, evidence lanes/L-VIOLATION-EXACT-LAND/merge-receipt.md (OkamAPI, at feature/restaurant-modules 8e2b57de)
+- 2026-08-04T10:02Z · agent:L-VIOLATION-EXACT-LAND · report L-VIOLATION-EXACT-LAND: TIP: feature/restaurant-modules was 569887a5, re-read 3x, unmoved. mig-stack-land 4b37f81b is a DIVERGED branch (569887a5 is NOT its ancestor), not 34 fast-forward ahead; nothing from it merged.; MERGED: a8190fee = lane/wf-violation-exact cdb4c66c; ef2bd5c8 = lane/meals-violation-exact 13cd9f18, bot
+- 2026-08-04T10:03Z · agent:L-WOLT-SYNC · L-WOLT-SYNC returned built -> built-unverified, evidence lanes/L-WOLT-SYNC/evidence.md
+- 2026-08-04T10:03Z · agent:L-WOLT-SYNC · report L-WOLT-SYNC: Neither registered nor deleted, per D-WOLT. lane/wolt-sync-unregistered @ 3c7b28ee off 569887a5.; Re-measured myself over all 2977 commits from every ref: `git log --all -G "AddHostedService.*Wolt"` hits one commit, the one that ADDED; the sweep (its own prose); `-G "HostedService.*WoltMenuSync"` no
+- 2026-08-04T10:05Z · agent:opus · started L-PUSH-TOKEN-IN-PATH
+- 2026-08-04T10:05Z · agent:opus · started L-LIVE-WORLD-BANNER
+- 2026-08-04T10:19Z · agent:L-LIVE-WORLD-BANNER · L-LIVE-WORLD-BANNER returned built -> built-unverified, evidence lanes/L-LIVE-WORLD-BANNER/evidence.md
+- 2026-08-04T10:19Z · agent:L-LIVE-WORLD-BANNER · report L-LIVE-WORLD-BANNER: BRIEF VERIFIED IN EVERY PART at 4b5c5c2: 337f9bf is an ancestor, live-world-reset.sh is 385 lines, unchanged, clean in the tree; nine references and none from live-world.sh; the two false passages exactly where the brief said, header 111-113 and closing banner 710-723.; CORRECTED BOTH. The header US
+- 2026-08-04T10:19Z · tool · raised F-PROOF-HARNESS-NOT-THE-GUARD (info)
+- 2026-08-04T10:21Z · agent:opus · started L-MEALS-DOCSYNC
+- 2026-08-04T10:21Z · tool · refreshed 33 fact spans, 10 unconfirmed
+- 2026-08-04T10:31Z · agent:L-MEALS-IDEMPOTENCY-REFUSAL · L-MEALS-IDEMPOTENCY-REFUSAL returned built -> built-unverified, evidence lanes/L-MEALS-IDEMPOTENCY-REFUSAL/mutation-log.md
+- 2026-08-04T10:31Z · agent:L-MEALS-IDEMPOTENCY-REFUSAL · report L-MEALS-IDEMPOTENCY-REFUSAL: Base feature/restaurant-modules @ 569887a5 = the tip the brief names. mig-stack-land 4b37f81b is DIVERGED, not 34 ahead (34 its way, 54 the tip's); its 34 touch only Migrations/**, zero Services/Meals differ.; No discriminator at any integration ref, so not fail-spec. Worktree OkamAPI-mealsidemref, 
+- 2026-08-04T10:33Z · agent:opus · started L-MEALS-AGREEMENT-PIN-INVERTS
+- 2026-08-04T10:33Z · agent:opus · started L-MEALS-ENROL-UI
+- 2026-08-04T10:40Z · agent:L-PUSH-TOKEN-IN-PATH · L-PUSH-TOKEN-IN-PATH returned built -> built-unverified, evidence lanes/L-PUSH-TOKEN-IN-PATH/mutation-log.md
+- 2026-08-04T10:40Z · agent:L-PUSH-TOKEN-IN-PATH · report L-PUSH-TOKEN-IN-PATH: Tip measured 8e2b57de, matches the brief exactly. Backend lane/push-token-in-path @ 363d3f7f in ~/okam/OkamAPI-pushtoken off that tip, NOT pushed. No container started at any point; tier was --filter "Database!=SqlServer" throughout.; Both routes are now POST /notification/{consumer,store}/registrat
+- 2026-08-04T10:41Z · agent:opus · started L-TRAIN-IDEMPOTENCY-REFUSAL
+- 2026-08-04T10:50Z · agent:L-XZ-CREDIT-FIELDS · L-XZ-CREDIT-FIELDS returned built -> built-unverified, evidence lanes/L-XZ-CREDIT-FIELDS/evidence.md
+- 2026-08-04T10:50Z · agent:L-XZ-CREDIT-FIELDS · report L-XZ-CREDIT-FIELDS: BASE 569887a5 (worktree /Users/svendaneel/okam/wt-xzcreditfields, branch lane/xz-credit-fields @ 9bdfc267, local, never pushed). Chose it over integration/mig-stack-land, which is DIVERGED not behind (merge-base 3579bbbc, 54 ahead / 34 behind). 569887a5 carries the utlkvit family land, so KassaCredi
+- 2026-08-04T10:51Z · tool · raised F-XZ-CREDIT-DOUBLE-LAND (warn)
+- 2026-08-04T10:52Z · agent:opus · started L-XZ-PRINTED-DEFECTS
+- 2026-08-04T10:53Z · agent:L-MEALS-DOCSYNC · L-MEALS-DOCSYNC returned built -> built-unverified, evidence lanes/L-MEALS-DOCSYNC/evidence.md
+- 2026-08-04T10:53Z · agent:L-MEALS-DOCSYNC · report L-MEALS-DOCSYNC: Tips measured: backend 8e2b57de (still tip), frontend 3cd2570. Commits f7b30b2d (lane/meals-docsync) + 7ac2f92 (lane/fe-meals-docsync). No shared ref moved, shared checkout restored as-found, no container, no migration.; knowledge:check PASS - "DOC-MAP: 38 referenced files checked, 0 missing / repos
+- 2026-08-04T10:54Z · agent:opus · started L-MEALS-LEVER-WITHHOLD
+- 2026-08-04T10:56Z · agent:L-MEALS-ENROL-UI · L-MEALS-ENROL-UI returned built -> built-unverified, evidence lanes/L-MEALS-ENROL-UI/evidence.md
+- 2026-08-04T10:56Z · agent:L-MEALS-ENROL-UI · report L-MEALS-ENROL-UI: FE 3cd2570 / BE 8e2b57de verified correct. Enrol is bound on no branch of 57; neither; unmerged Meals branch (d833d19, f65595d) touches it - not fail-spec.; C3: client method + panel control NEW; nav entry ALREADY EXISTED (AdminPageHeader:379).; test/meals-enrolment-journey.test.js 6/6: one world, r
+- 2026-08-04T10:57Z · tool · raised F-DOCSYNC-WROTE-A-STALE-TRUTH (warn)
+- 2026-08-04T10:58Z · agent:opus · started L-MEALS-PROJECTION-LAG-VISIBLE
+- 2026-08-04T10:58Z · agent:L-MEALS-AGREEMENT-PIN-INVERTS · returned L-MEALS-AGREEMENT-PIN-INVERTS verdict=fail-spec -> open; D-SPEC-L-MEALS-AGREEMENT-PIN-INVERTS appended
+- 2026-08-04T10:58Z · agent:L-MEALS-AGREEMENT-PIN-INVERTS · report L-MEALS-AGREEMENT-PIN-INVERTS: DOCSYNC IS RIGHT ABOUT ONE COMMENT AND WRONG ABOUT THE OTHER - there are two. The test-side one is; replaced by 54714dd6. The SERVICE-side one, at the stranding site, is not: 54714dd6 never opens; Services/Meals/MealsAgreementService.cs, which still reads "Throwing here strands the reservation; (the
+- 2026-08-04T11:00Z · agent:opus · started L-MEALS-MEMBERS-READ
+- 2026-08-04T11:08Z · agent:L-MEALS-LEVER-WITHHOLD · returned L-MEALS-LEVER-WITHHOLD verdict=fail-spec -> open; D-SPEC-L-MEALS-LEVER-WITHHOLD appended
+- 2026-08-04T11:08Z · agent:L-MEALS-LEVER-WITHHOLD · report L-MEALS-LEVER-WITHHOLD: base: worktree OkamAPI-mealslever @ 8e2b57de, branch lane/meals-lever-withhold. Verified: integration tip IS feature/restaurant-modules @ 8e2b57de (0 ahead/0 behind); mig-stack-land 34 ahead/59 behind, not chosen. Entry NOT already withheld. Shape found, and Training and Workforce AGREE: Declared ->
+- 2026-08-04T11:10Z · agent:opus · started L-MEALS-RECONCILE-UI
+- 2026-08-04T11:21Z · agent:L-TRAIN-IDEMPOTENCY-REFUSAL · L-TRAIN-IDEMPOTENCY-REFUSAL returned built -> built-unverified, evidence lanes/L-TRAIN-IDEMPOTENCY-REFUSAL/mutation-log.md
+- 2026-08-04T11:21Z · agent:L-TRAIN-IDEMPOTENCY-REFUSAL · report L-TRAIN-IDEMPOTENCY-REFUSAL: Base 8e2b57de = the tip the brief named, verified; mig-stack-land DIVERGED 59/34, zero Training drift.; No discriminator there, so not fail-spec. Worktree OkamAPI-trainidemref, commit 01cd5eee, 7 files by; pathspec, NOT pushed, no shared ref moved, no container started. C5 owed - nobody has walked t
+- 2026-08-04T11:21Z · agent:L-XZ-PRINTED-DEFECTS · L-XZ-PRINTED-DEFECTS returned built -> built-unverified, evidence lanes/L-XZ-PRINTED-DEFECTS/mutation-log.md
+- 2026-08-04T11:21Z · agent:L-XZ-PRINTED-DEFECTS · report L-XZ-PRINTED-DEFECTS: BASE 9bdfc267 (lane/xz-credit-fields tip); worktree wt-xzprinted, branch lane/xz-printed-defects, commit ca2570ac. MY COMMIT IS A DESCENDANT of BOTH 9bdfc267 and 569887a5 (merge-base verified) - taking only the parent drops the nine fields, the credit predicate AND this fix. mig-stack-land not chose
+- 2026-08-04T11:23Z · agent:opus · started L-MEALS-STATEMENT-SURFACE
+- 2026-08-04T11:23Z · agent:opus · started L-ALIASING-NEEDLE-SWEEP
+- 2026-08-04T11:23Z · agent:opus · started L-DI-COLLECTION-SILENT
+- 2026-08-04T11:26Z · agent:L-MEALS-PROJECTION-LAG-VISIBLE · L-MEALS-PROJECTION-LAG-VISIBLE returned built -> built-unverified, evidence lanes/L-MEALS-PROJECTION-LAG-VISIBLE/evidence.md
+- 2026-08-04T11:26Z · agent:L-MEALS-PROJECTION-LAG-VISIBLE · report L-MEALS-PROJECTION-LAG-VISIBLE: Landed lane/mrg-lag-visible @ b2aa72e, parent 3cd25709. 7 files, all read/surface, no money write.; Subject is MARGIN not Meals: brief lines 13-83 are spliced from two other briefs; the legible parts; match the margin statements page. Not fail-spec - the lag sat inside the same v-if="isPowerUser" as
+- 2026-08-04T11:27Z · tool · raised F-SPLICE-RESIDUE-IN-BRIEFS (warn)
+- 2026-08-04T11:27Z · tool · refreshed 33 fact spans, 10 unconfirmed
+- 2026-08-04T11:28Z · agent:opus · started L-ROW-FIT-GOODS-GROUPS
+- 2026-08-04T11:36Z · agent:L-MEALS-MEMBERS-READ · L-MEALS-MEMBERS-READ returned built -> built-unverified, evidence lanes/L-MEALS-MEMBERS-READ/mutation-log.md
+- 2026-08-04T11:36Z · agent:L-MEALS-MEMBERS-READ · report L-MEALS-MEMBERS-READ: BRIEF TRUE IN BOTH HALVES at 8e2b57de; one drift: the reason block sits at 475-483, not 426. Neither half; exists on ANY ref (-S: the route, ProgramMembersAsync, NotEnrolled), so not fail-spec.; Base feature/restaurant-modules 8e2b57de, worktree wt-mealsmembers, lane/meals-members-read 086ac34f. Nev
+- 2026-08-04T11:37Z · agent:L-DI-COLLECTION-SILENT · L-DI-COLLECTION-SILENT returned built -> built-unverified, evidence lanes/L-DI-COLLECTION-SILENT/census.md
+- 2026-08-04T11:37Z · agent:L-DI-COLLECTION-SILENT · report L-DI-COLLECTION-SILENT: Tip measured 8e2b57de as briefed. Own worktree wt-dicollect, created and removed clean.; Asked the composition root, not source text: AddServices+AddBuilders invoked BY REFLECTION on a; fresh ServiceCollection, 289 ServiceDescriptors read. No host built, no Build(), no container.; Injection points b
+- 2026-08-04T11:38Z · agent:opus · started L-REPLAY-PINS-RECHECK
+- 2026-08-04T11:39Z · agent:L-ALIASING-NEEDLE-SWEEP · L-ALIASING-NEEDLE-SWEEP returned built -> built-unverified, evidence lanes/L-ALIASING-NEEDLE-SWEEP/census.md
+- 2026-08-04T11:39Z · agent:L-ALIASING-NEEDLE-SWEEP · report L-ALIASING-NEEDLE-SWEEP: Tip claim CORRECT: feature/restaurant-modules = 8e2b57de. Read from the object DB (git archive) because the OkamAPI worktree is dirty with another lane's WIP. Read-only: no edit, no suite, no container, no ref moved.; SCOPE: all 811 files of WebApi.Tests, the only test csproj. Balanced-paren extract
+- 2026-08-04T11:40Z · agent:opus · started L-ACCOUNTING-EXPORT-SILENT
+- 2026-08-04T11:40Z · tool · raised F-OUTBOX-FLAKE-FIXED-TWICE (warn)
+- 2026-08-04T11:42Z · agent:opus · started L-FRAGILE-NEEDLES
+- 2026-08-04T11:42Z · agent:opus · started L-MEALS-ENROL-PRETICK
+- 2026-08-04T11:42Z · agent:L-MEALS-RECONCILE-UI · L-MEALS-RECONCILE-UI returned built -> built-unverified, evidence lanes/L-MEALS-RECONCILE-UI/evidence.md
+- 2026-08-04T11:42Z · agent:L-MEALS-RECONCILE-UI · report L-MEALS-RECONCILE-UI: Instrument test/meals-reconciliation-page.test.js, 25 tests, all driven through rendered controls; no assertion reads a status code. mutation-proof.py: 9 mutants, 9 killed, 19 runs, every restore GREEN. Wrong tree excluded (script refuses unless git toplevel is my worktree, asserts each mutation rea
+- 2026-08-04T11:42Z · tool · raised F-TWO-FINALIZE-CONTROLS (warn)
+- 2026-08-04T11:43Z · agent:opus · started L-MRG-COVERAGE-UNKNOWN
+- 2026-08-04T11:52Z · agent:L-REPLAY-PINS-RECHECK · L-REPLAY-PINS-RECHECK returned built -> built-unverified, evidence lanes/L-REPLAY-PINS-RECHECK/census.md
+- 2026-08-04T11:52Z · agent:L-REPLAY-PINS-RECHECK · report L-REPLAY-PINS-RECHECK: Base VERIFIED: feature/restaurant-modules IS exactly 8e2b57de, 0 ahead; tips a1d57208 / 02684ecc /; 54714dd6 all clean. Read-only: nothing edited, no suite run, no container, no ref moved.; 36 same-key-retry candidates enumerated across 9 touched files, then ruled per test by reading.; 4 DO NOT DISC
+- 2026-08-04T11:53Z · agent:L-MRG-COVERAGE-UNKNOWN · L-MRG-COVERAGE-UNKNOWN returned built -> built-unverified, evidence lanes/L-MRG-COVERAGE-UNKNOWN/evidence.md
+- 2026-08-04T11:53Z · agent:L-MRG-COVERAGE-UNKNOWN · report L-MRG-COVERAGE-UNKNOWN: Brief verified first: HEAD is 3cd2570 as claimed; defect real at statement-view.js:318 (block -> {} then longOrNull(x) || 0) and MarginCoveragePanel.vue:132 (!entryCount -> "nothing recorded"). An existing test ASSERTED the defect; rewritten, not deleted.; Fix: readWasteSummary returns null for an a
+- 2026-08-04T11:54Z · agent:opus · started L-TELEMETRY-INITIALIZER-FLOOR
+- 2026-08-04T11:54Z · tool · raised F-COERCION-MAKES-A-ZERO (warn)
+- 2026-08-04T12:01Z · agent:L-ROW-FIT-GOODS-GROUPS · L-ROW-FIT-GOODS-GROUPS returned built -> built-unverified, evidence lanes/L-ROW-FIT-GOODS-GROUPS/mutation-log.md
+- 2026-08-04T12:01Z · agent:L-ROW-FIT-GOODS-GROUPS · report L-ROW-FIT-GOODS-GROUPS: Commit 9cbe2b93, lane/xz-printed-defects @ wt-xzprinted, base ca2570ac; descendant; of 9bdfc267 AND 569887a5 AND ca2570ac (merge-base verified). No production change.; Added XZPrintedRowFitSweepTests: 5 amount x 5 count widths, 29 count-bearing rows; read off the rendered X and Z in all 25 worlds; l
+- 2026-08-04T12:02Z · agent:opus · started L-MRG-RECIPE-REVISE-UI
+- 2026-08-04T12:03Z · agent:L-MEALS-STATEMENT-SURFACE · returned L-MEALS-STATEMENT-SURFACE verdict=blocked -> open, needs L-MEALS-RECONCILE-UI, D-MEALS-FINALIZE-OWNER
+- 2026-08-04T12:03Z · agent:L-MEALS-STATEMENT-SURFACE · report L-MEALS-STATEMENT-SURFACE: Exit names 3 stages; a browser CONTROL walked 1: get #22 and export #23, plus the decisive; clause in full - the FINALIZED line shows the persisted ref BY VALUE. #19/#20 ran via the API; context, labelled API per step: I built no second freeze control. MealsMonthClose.vue owns it; and names its bloc
+- 2026-08-04T12:08Z · agent:L-MEALS-ENROL-PRETICK · L-MEALS-ENROL-PRETICK returned built -> built-unverified, evidence lanes/L-MEALS-ENROL-PRETICK/evidence.md
+- 2026-08-04T12:08Z · agent:L-MEALS-ENROL-PRETICK · report L-MEALS-ENROL-PRETICK: Built on lane/meals-enrol-ui @ 802041a. Commit 2e3f39d is a DESCENDANT of it, not of 3cd2570.; Backend tested against: lane/meals-members-read @ 086ac34f (off 8e2b57de).; Tip verified: Web-modules HEAD = 3cd2570 as briefed, and no ref has ListProgramMembers. Not built.; Panel preticks from GET /prog
+- 2026-08-04T12:09Z · agent:opus · started L-EOD-CREDIT-SPLIT
+- 2026-08-04T12:10Z · agent:opus · started L-MRG-WASTE-FRONTEND
+- 2026-08-04T12:12Z · agent:L-FRAGILE-NEEDLES · L-FRAGILE-NEEDLES returned built -> built-unverified, evidence lanes/L-FRAGILE-NEEDLES/mutation-log.md
+- 2026-08-04T12:12Z · agent:L-FRAGILE-NEEDLES · report L-FRAGILE-NEEDLES: Tip claim CORRECT: feature/restaurant-modules = 8e2b57de, verified unmoved at end. Files read from the object DB (git archive 8e2b57de) because OkamAPI-modules is dirty on lane/meals-grace-pins. Own worktree wt-fragileneedles, branch lane/fragile-needles, commit f2517d5d by pathspec. TESTS ONLY, no 
+- 2026-08-04T12:12Z · @clerk · accepted stale brief for L-FRAGILE-NEEDLES: hash moved because the clerk appended a fourth site to the lane block after dispatch; scope and constraints unchanged.
+- 2026-08-04T12:12Z · tool · raised F-LAND-OUTBOX-FLAKE-NOT-GUID (warn)
+- 2026-08-04T12:14Z · agent:opus · started L-XZ-SIGNED-COUNT
+- 2026-08-04T12:21Z · tool · refreshed 33 fact spans, 10 unconfirmed
+- 2026-08-04T12:21Z · tool · L-ROW-FIT-GOODS-GROUPS built-unverified -> verified, evidence lanes/L-ROW-FIT-GOODS-GROUPS/mutation-log.md
+- 2026-08-04T12:21Z · tool · L-REPLAY-PINS-RECHECK built-unverified -> verified, evidence lanes/L-REPLAY-PINS-RECHECK/census.md
+- 2026-08-04T12:21Z · tool · L-DI-COLLECTION-SILENT built-unverified -> verified, evidence lanes/L-DI-COLLECTION-SILENT/census.md
+- 2026-08-04T12:21Z · tool · L-ALIASING-NEEDLE-SWEEP built-unverified -> verified, evidence lanes/L-ALIASING-NEEDLE-SWEEP/census.md
+- 2026-08-04T12:24Z · agent:L-MRG-RECIPE-REVISE-UI · L-MRG-RECIPE-REVISE-UI returned built -> built-unverified, evidence lanes/L-MRG-RECIPE-REVISE-UI/evidence.md
+- 2026-08-04T12:24Z · agent:L-MRG-RECIPE-REVISE-UI · report L-MRG-RECIPE-REVISE-UI: Brief was coherent; no fragments of another lane. Every claim in it verified true at 3cd2570.; Client had none of CreateVersion/UpdateVersion/Retire; the 3 routes are live in MarginRecipesController.; Added all three to utils/margin/recipe-client.js and a revise card + draft editor to margin-recipes
+- 2026-08-04T12:25Z · tool · raised F-TRANSLATIONS-ARE-A-CHOKE (warn)
+- 2026-08-04T12:32Z · agent:L-TELEMETRY-INITIALIZER-FLOOR · L-TELEMETRY-INITIALIZER-FLOOR returned built -> built-unverified, evidence lanes/L-TELEMETRY-INITIALIZER-FLOOR/mutation-log.md
+- 2026-08-04T12:32Z · agent:L-TELEMETRY-INITIALIZER-FLOOR · report L-TELEMETRY-INITIALIZER-FLOOR: BASE 8e2b57de = feature/restaurant-modules tip, VERIFIED. Worktree wt-teleminit; commit; 78a59ed6 on lane/telemetry-initializer-floor, parent exactly 8e2b57de. mig-stack-land untouched.; NO FLOOR EXISTED: PiiLogSweep calls the STATIC Redact; RequestBodyTelemetryPin derives by; assembly type-scan. Bo
+- 2026-08-04T12:33Z · agent:opus · started L-CENSUS-CORRECTIONS
+- 2026-08-04T12:34Z · agent:opus · started L-HOSTED-SERVICE-FLOOR
+- 2026-08-04T12:35Z · agent:L-EOD-CREDIT-SPLIT · L-EOD-CREDIT-SPLIT returned built -> built-unverified, evidence lanes/L-EOD-CREDIT-SPLIT/mutation-log.md
+- 2026-08-04T12:35Z · agent:L-EOD-CREDIT-SPLIT · report L-EOD-CREDIT-SPLIT: Defect confirmed at base, then fixed. Base verified: lane/xz-printed-defects; @ 9cbe2b93, descendant of 9bdfc267 + 569887a5 + ca2570ac (all three checked).; Commit f028c0a8 on a NEW branch+worktree; no shared ref moved, nothing pushed.; Company-account ore leave EodService's default arm. KassaCredit
+- 2026-08-04T12:35Z · agent:L-ACCOUNTING-EXPORT-SILENT · L-ACCOUNTING-EXPORT-SILENT returned built -> built-unverified, evidence lanes/L-ACCOUNTING-EXPORT-SILENT/mutation-log.md
+- 2026-08-04T12:35Z · agent:L-ACCOUNTING-EXPORT-SILENT · report L-ACCOUNTING-EXPORT-SILENT: Both sites defective at 8e2b57de as briefed; tip confirmed, so not fail-spec.; Own worktree wt-acctexport off 8e2b57de, branch lane/accounting-export-silent, commit a154ca19.; FIX: StoresExported counted from what the export produced, not the eligibility query.; Daily and POS halves held apart - Exp
+- 2026-08-04T12:35Z · agent:L-MRG-WASTE-FRONTEND · L-MRG-WASTE-FRONTEND returned built -> built-unverified, evidence lanes/L-MRG-WASTE-FRONTEND/evidence.md
+- 2026-08-04T12:35Z · agent:L-MRG-WASTE-FRONTEND · report L-MRG-WASTE-FRONTEND: Brief verified first: HEAD is 3cd2570 as claimed. Three defects re-verified against backend source.; BRIEF WRONG: no branch lane/mrg-coverage-unknown and no commit anywhere carries that work.; Clause 4 IS built, but only as UNCOMMITTED edits in the shared checkout Web-modules.; So it is one git chec
+- 2026-08-04T12:38Z · tool · raised F-THE-FIX-REPRODUCED-THE-DEFECT (info)
+- 2026-08-04T12:39Z · agent:opus · started L-REPLAY-PINS-CLOSE
+- 2026-08-04T12:39Z · agent:opus · started L-MRG-PAGE-TEST-VACUOUS
+- 2026-08-04T12:41Z · agent:opus · started L-JOURNEY-GROWTH
+- 2026-08-04T12:49Z · tool · refreshed 33 fact spans, 10 unconfirmed
+- 2026-08-04T13:24Z · @claude · API session limit at 14:53 killed all six running lanes; host was idle at load 5.7/21. Nothing lost, none retracted; all six resumed from transcript at 15:22.
+- 2026-08-04T13:24Z · @claude · Verified before resuming: no dotnet test process survived, so any output stamped before 14:53 is a stale run; wt-xzprinted holds the lane fix, not a leftover mutant.
+- 2026-08-04T13:25Z · agent:L-XZ-SIGNED-COUNT · L-XZ-SIGNED-COUNT returned built -> built-unverified, evidence lanes/L-XZ-SIGNED-COUNT/mutation-log.md
+- 2026-08-04T13:25Z · agent:L-XZ-SIGNED-COUNT · report L-XZ-SIGNED-COUNT: Base 9cbe2b93 verified; commit 6c394057 descends from 9bdfc267, 569887a5, ca2570ac, 9cbe2b93.; integration/mig-stack-land = 4b37f81b, confirmed NOT an ancestor (diverged). Not used.; Fix: TrailingCount allows one optional '-' after the last '(' before digits; one-digit rule kept.; Reproduced pre-fix
+- 2026-08-04T13:27Z · agent:L-MRG-PAGE-TEST-VACUOUS · returned L-MRG-PAGE-TEST-VACUOUS verdict=fail-spec -> open; D-SPEC-L-MRG-PAGE-TEST-VACUOUS appended
+- 2026-08-04T13:27Z · agent:L-MRG-PAGE-TEST-VACUOUS · report L-MRG-PAGE-TEST-VACUOUS: Verified at 3cd2570, not assumed. Brief's core claim CONFIRMED and understated: with; @click="activate" unbound the OLD file stayed 29/29 green - and so did it with the list; row, create button and link save unbound. It pinned NONE of its four controls, because; every action entered via wrapper.vm.<
+- 2026-08-04T13:28Z · agent:opus · started L-COERCION-WRITE-PATHS
+- 2026-08-04T13:28Z · @claude · Safety copy of the shared checkout taken to scratchpad safety-2026-08-04-1530: 2513-line patch plus the untracked 36KB margin-recipe-revise.test.js. No repo change.
+- 2026-08-04T13:31Z · tool · raised F-FAILSPEC-DOES-NOT-HOLD-ITS-LANE (warn)
+- 2026-08-04T13:33Z · tool · L-XZ-SIGNED-COUNT built-unverified -> verified, evidence lanes/L-XZ-SIGNED-COUNT/mutation-log.md
+- 2026-08-04T13:33Z · @claude · Fable APPROVE on L-XZ-SIGNED-COUNT 6c394057: all five self-claims independently rechecked; verified against lanes/L-XZ-SIGNED-COUNT/mutation-log.md.
+- 2026-08-04T13:33Z · @claude · Lane-block needs: takes bare ids; the + form is RETURN-only. Writing + yields E-NEEDS-DANGLING naming a target that is in fact defined.
+- 2026-08-04T13:34Z · agent:L-CENSUS-CORRECTIONS · L-CENSUS-CORRECTIONS returned built -> built-unverified, evidence lanes/L-CENSUS-CORRECTIONS/evidence.md (commit 5ad0ca0, pathspec only)
+- 2026-08-04T13:34Z · agent:L-CENSUS-CORRECTIONS · report L-CENSUS-CORRECTIONS: Six corrections applied to both censuses; no verdict, site or finding removed.; Aliasing sec.2: hex-immunity was derived from TEST-tree randomness alone, but production; mints base64 into the same haystacks (4 sites + HMAC-over-GUID). Restated: the hex filter; holds only against a GUID; against base
+- 2026-08-04T13:39Z · agent:L-HOSTED-SERVICE-FLOOR · L-HOSTED-SERVICE-FLOOR returned built -> built-unverified, evidence lanes/L-HOSTED-SERVICE-FLOOR/mutation-log.md
+- 2026-08-04T13:39Z · agent:L-HOSTED-SERVICE-FLOOR · report L-HOSTED-SERVICE-FLOOR: Base 8e2b57de is real and is the tip, but of feature/restaurant-modules, not any integration/* ref.; No floor existed. Ten registrations confirmed: nine in Program.cs, tenth in the Margin helper.; Defect measured, not assumed: the containment guard asserts declared>0 over TYPES, so it stayed; GREEN 
+- 2026-08-04T13:42Z · agent:opus · started L-JOURNEY-MEALS
+- 2026-08-04T13:42Z · agent:L-JOURNEY-GROWTH · L-JOURNEY-GROWTH returned built -> built-unverified, evidence artifacts/journeys/growth-guest-lifecycle.playwright.json, artifacts/journeys/growth-testsend-refusal.playwright.json
+- 2026-08-04T13:42Z · agent:L-JOURNEY-GROWTH · report L-JOURNEY-GROWTH: Both walks green at tip 5ad0ca0 (brief said 3cd2570: true at my 14:45 baseline, a sibling; landed 5ad0ca0 mid-run, so I re-ran the lifecycle to put both artifacts on one tree).; lifecycle 17/17 served 32 subject 23; refusal 11/11 served 97 subject 75; foreign 0 both, so; neither is the proxy blind s
+- 2026-08-04T13:43Z · agent:L-REPLAY-PINS-CLOSE · L-REPLAY-PINS-CLOSE returned built -> built-unverified, evidence lanes/L-REPLAY-PINS-CLOSE/mutation-log.md
+- 2026-08-04T13:43Z · agent:L-REPLAY-PINS-CLOSE · report L-REPLAY-PINS-CLOSE: Base: the 4 tests do NOT exist at 8e2b57de; feature/restaurant-modules IS 8e2b57de but the 3 lanes; are unmerged (a1d57208 1/50; 4bbf34a5 2/5, ancestor 54714dd6). Base = 8e2b57de + 4bbf34a5 +; a1d57208, merged clean, in own worktree wt-replaypins. Nothing pushed, no shared ref moved.; Mutant is the 
+- 2026-08-04T13:46Z · agent:opus · started L-JOURNEY-PROXY-BLINDSPOT
+- 2026-08-04T13:46Z · agent:opus · started L-JOURNEY-TEARDOWN
+- 2026-08-04T13:46Z · agent:L-COERCION-WRITE-PATHS · L-COERCION-WRITE-PATHS returned built -> built-unverified, evidence lanes/L-COERCION-WRITE-PATHS/mutation-log.md
+- 2026-08-04T13:46Z · agent:L-COERCION-WRITE-PATHS · report L-COERCION-WRITE-PATHS: Committed 4351f8f on lane/coercion-write-paths, worktree /Users/svendaneel/okam/web-coercwrite, parent 3cd2570. Nine paths by pathspec, no git add -A, nothing pushed, worktree clean.; The brief's distinction holds but the margin write paths already had the null-vs-zero axis RIGHT: every blank guard 
+- 2026-08-04T13:49Z · agent:opus · started L-MRG-REVISE-LAND
+- 2026-08-04T13:49Z · agent:opus · started L-JOURNEY-WORKFORCE
+- 2026-08-04T13:51Z · tool · raised F-COMMIT-CITES-WHAT-IT-LACKS (warn)
+- 2026-08-04T13:51Z · @claude · Fable APPROVE-WITH-CONDITIONS on L-CENSUS-CORRECTIONS 5ad0ca0: six corrections all re-derived true; five named changes sent back to the lane.
+- 2026-08-04T13:55Z · tool · raised F-MRG-INGREDIENT-FACTOR-ZERO (warn)
+- 2026-08-04T13:55Z · tool · raised F-CONDITIONS-HAVE-NO-RETURN-PATH (warn)
+- 2026-08-04T13:55Z · @claude · Six second-RETURNs refused: the clerk models one dispatch one return, so an applied review condition has no legal landing. Interim: report by message.
+- 2026-08-04T13:55Z · @claude · Fable APPROVE-WITH-CONDITIONS on L-COERCION-WRITE-PATHS 4351f8f; MarginIngredientPanel:146 coerced zero confirmed and registered.
+- 2026-08-04T13:57Z · tool · L-CENSUS-CORRECTIONS built-unverified -> verified, evidence lanes/L-CENSUS-CORRECTIONS/evidence.md
+- 2026-08-04T13:58Z · tool · raised F-GR-NO-EXIT-FROM-A-LIST (blocker)
+- 2026-08-04T13:59Z · @claude · Census conditions applied at e34977a incl. baselines committed with provenance; lane verified. MRG revise-land landed on lane/mrg-recipe-revise-ui.
+- 2026-08-04T13:59Z · @claude · Correction: three of four replay tests were absent at 8e2b57de, not four; the census line was from the right tree.
+- 2026-08-04T14:00Z · agent:L-MRG-REVISE-LAND · L-MRG-REVISE-LAND returned built -> built-unverified, evidence lanes/L-MRG-REVISE-LAND/evidence.md
+- 2026-08-04T14:00Z · agent:L-MRG-REVISE-LAND · report L-MRG-REVISE-LAND: lane/mrg-recipe-revise-ui = 2 commits on 5ad0ca0. 0c483de: the brief's 7 paths (page, client,; both tests, lane dir), 1694 insertions. c429d51: translations/{no,en,de}.ts, 16 lines each,; nothing else. At the tip: 51/51 named suites, 463/463 test/margin, 491/491 with admin-nav.; I EXTENDED THE BRIEF
+- 2026-08-04T14:01Z · @claude · L-MRG-REVISE-LAND merged after rewriting its log to 15 lines; translations landed as a separate revertible commit c429d51, recorded on the choke flag.
+- 2026-08-04T14:03Z · tool · raised F-MEALS-REFUSAL-NAMES-THE-INVITEE (warn)
+- 2026-08-04T14:05Z · @claude · L-REPLAY-PINS-CLOSE conditions applied at a6583a02 incl. order-independence re-derived; 47/47 green, doc-only.
+- 2026-08-04T14:05Z · @claude · Meals exit names three artifacts that never existed; real ids are meals-admin-setup, meals-guest-claim, meals-statement-month.
+- 2026-08-04T14:05Z · agent:L-JOURNEY-MEALS · returned L-JOURNEY-MEALS verdict=blocked -> open, needs L-MEALS-RECONCILE-UI, D-MEALS-FINALIZE-OWNER
+- 2026-08-04T14:05Z · agent:L-JOURNEY-MEALS · report L-JOURNEY-MEALS: Two walks green at e34977a (meals-admin-setup, meals-guest-claim); proof in lanes/L-JOURNEY-MEALS/evidence.md.; MUTATION WAS THE ONLY LEVER: Meals has no operator switch anywhere — fixture/meals.js calls ctx.flagEffective; ZERO times against events 7, margin 5, growth 3, training 3. Four arms, fixtu
+- 2026-08-04T14:05Z · @claude · Merged L-JOURNEY-MEALS with --accept-stale: brief hash moved 4b6f411a->d06fd599 because I appended the exit-name correction to the lane block after dispatch.
+- 2026-08-04T14:09Z · agent:opus · started L-LANES-OUT-OF-THE-ASSEMBLY
+- 2026-08-04T14:09Z · agent:opus · started L-JOURNEY-PORT-HARDCODED
+- 2026-08-04T14:09Z · agent:opus · started L-MRG-WASTE-RECEIPTS
+- 2026-08-04T14:11Z · tool · raised F-GUARD-PROOF-COULD-NOT-EXECUTE (warn)
+- 2026-08-04T14:11Z · tool · raised F-BACKEND-CHECKOUT-IS-A-LANE-BRANCH (warn)
+- 2026-08-04T14:11Z · @claude · Growth conditions applied at ef2d6be; artifacts force-added with their screenshots and the gitignore contract corrected.
+- 2026-08-04T14:11Z · @claude · OkamAPI-modules checkout HEAD is lane/meals-grace-pins 34c6c103, not feature/restaurant-modules 8e2b57de.
+- 2026-08-04T14:13Z · agent:L-JOURNEY-PROXY-BLINDSPOT · L-JOURNEY-PROXY-BLINDSPOT returned built -> built-unverified, evidence lanes/L-JOURNEY-PROXY-BLINDSPOT/guard-proof.txt
+- 2026-08-04T14:13Z · agent:L-JOURNEY-PROXY-BLINDSPOT · report L-JOURNEY-PROXY-BLINDSPOT: Baseline 5ad0ca0; tip moved to e34977ac mid-run touching none of my 8 files, so I parented there.; HEADLINE, PRE-EXISTING, NOT CAUSED HERE: guard-proof.js was DEAD at the tip. It hand-copied two; support files while artifact-store.js requires ./world-stamp, so all 15 arms died in module load.; It st
+- 2026-08-04T14:14Z · @claude · Proxy blindspot merged at 9d4399a (supersedes 097c3c9); reviews fired for proxy-blindspot and mrg-revise-land.
+- 2026-08-04T14:16Z · tool · raised F-EMPTY-GREP-READS-AS-ABSENCE (warn)
+- 2026-08-04T14:16Z · tool · raised F-CROSS-REPO-EVIDENCE-UNVERIFIABLE (warn)
+- 2026-08-04T14:16Z · @claude · L-HOSTED-SERVICE-FLOOR conditions applied at 6dcc1503; matrix reproduces 13 FAILED, M11 still the only red under the deleted call; tier 4651/0/12.
+- 2026-08-04T14:17Z · agent:L-LANES-OUT-OF-THE-ASSEMBLY · L-LANES-OUT-OF-THE-ASSEMBLY returned built -> built-unverified, evidence lanes/L-LANES-OUT-OF-THE-ASSEMBLY/mutation-log.md
+- 2026-08-04T14:17Z · agent:L-LANES-OUT-OF-THE-ASSEMBLY · report L-LANES-OUT-OF-THE-ASSEMBLY: Base 8e2b57de (feature/restaurant-modules), own worktree wt-lanesexcl, commit 2c1eebaf.; Premise re-read from git at the tip, not a working copy: removes covered only; WebApi.Tests/**, "lanes" absent. Holds - not fail-spec.; Two routes, not one. Compile: a .cs under lanes/ enters WebApi.dll. Content
+- 2026-08-04T14:17Z · @claude · L-LANES-OUT-OF-THE-ASSEMBLY built at 2c1eebaf; planting found a second route: a lane .json shipped into bin/ via the Web SDK Content glob on a green build.
+- 2026-08-04T14:23Z · @claude · Created lane/L-JOURNEY-PROXY-BLINDSPOT at 9d4399a: the commit was dangling, reachable from no ref and gc-prunable. Purely additive, nothing moved.
+- 2026-08-04T14:25Z · agent:L-JOURNEY-PORT-HARDCODED · L-JOURNEY-PORT-HARDCODED returned built -> built-unverified, evidence lanes/L-JOURNEY-PORT-HARDCODED/evidence.md
+- 2026-08-04T14:25Z · agent:L-JOURNEY-PORT-HARDCODED · report L-JOURNEY-PORT-HARDCODED: spec:72 hardcoded 127.0.0.1:4010 and ignored E2E_FIXTURE_PORT; now the sibling expression.; Baseline e34977ac. Precise sibling count: 3 specs + support/journey.js:524, not 4 specs.; RED, real run on 4318: OLD base answered HTTP 200 by a FOREIGN fixture reporting port 4010;; NEW base answered by this
+- 2026-08-04T14:25Z · @claude · Salvage refs created for 8 commits reachable from no ref (refs/salvage/dangling-*); the other 27 dangling objects are stashes.
+- 2026-08-04T14:25Z · tool · raised F-COMMIT-TREE-LEAVES-NO-REF (warn)
+- 2026-08-04T14:27Z · tool · L-MRG-REVISE-LAND built-unverified -> verified, evidence lanes/L-MRG-REVISE-LAND/evidence.md
+- 2026-08-04T14:27Z · @claude · L-MRG-REVISE-LAND conditions applied at 4a4aa4a on lane/mrg-revise-land and proven under python3 -O; lane verified.
+- 2026-08-04T14:33Z · agent:opus · started L-PRICE-BYPASS-FIVE
+- 2026-08-04T14:33Z · agent:opus · started L-PDF-CREDITNOTE-NAME
+- 2026-08-04T14:33Z · agent:L-MRG-WASTE-RECEIPTS · L-MRG-WASTE-RECEIPTS returned built -> built-unverified, evidence /Users/svendaneel/okam/web-wastereceipts/lanes/L-MRG-WASTE-RECEIPTS/RUN.md @ 87702ef
+- 2026-08-04T14:33Z · agent:L-MRG-WASTE-RECEIPTS · report L-MRG-WASTE-RECEIPTS: - RECEIPT COMMITTED: 87702ef on lane/mrg-waste-receipts -> lanes/L-MRG-WASTE-RECEIPTS/RUN.md.; - THE OLD ARTIFACT CANNOT COVER 7b99f2a: artifacts/tests/frontend/jest.json is gitignored (never committed), ran 19h29m earlier, and holds NO margin-waste suite -- a tree without the panel.; - AT THE WASTE
+- 2026-08-04T14:33Z · tool · L-JOURNEY-PROXY-BLINDSPOT built-unverified -> verified, evidence lanes/L-JOURNEY-PROXY-BLINDSPOT/guard-proof.txt
+- 2026-08-04T14:34Z · tool · raised F-SUITE-PINS-THE-CHECKOUT-NAME (warn)
+- 2026-08-04T14:34Z · tool · raised F-I18N-FALLBACK-MASKS-A-MISSING-KEY (info)
+- 2026-08-04T14:34Z · agent:L-JOURNEY-WORKFORCE · L-JOURNEY-WORKFORCE returned built -> built-unverified, evidence branch lane/journey-workforce @ eb8f412 (both artifacts force-added) + lanes/L-JOURNEY-WORKFORCE/mutation-proof.txt
+- 2026-08-04T14:34Z · agent:L-JOURNEY-WORKFORCE · report L-JOURNEY-WORKFORCE: Baseline 5ad0ca0, read at 15:49; ran in my own worktree wt-jwf on ports 3974/4974. The brief's L-WF-ADJUST-ADDRESS claim is VERIFIED EXACT (3 of 4 wire cases red; the 4th addresses a random Guid).; THE CORRECTION SURFACE IS NOT ON THIS BRANCH. e9ba89e (lane/wf-adjust-address) is not an ancestor of 5
+- 2026-08-04T14:35Z · tool · raised F-WF-ACKNOWLEDGE-SHOWS-NOTHING (warn)
+- 2026-08-04T14:36Z · agent:opus · started L-PRICE-CLEANUP-TWO
+- 2026-08-04T14:36Z · @claude · Workforce walks merged; found a live defect where acknowledging a published week shows nothing, and the correction surface is unmerged (e9ba89e ported to a worktree only).
+- 2026-08-04T14:36Z · agent:opus · started L-PRICE-CROSSCURRENCY
+- 2026-08-04T14:37Z · agent:L-JOURNEY-TEARDOWN · L-JOURNEY-TEARDOWN returned built -> built-unverified, evidence lanes/L-JOURNEY-TEARDOWN/mutation-log.md at lane/journey-teardown b3e60a0 (baseline read at feature/restaurant-modules 5ad0ca0; branch NOT moved)
+- 2026-08-04T14:37Z · agent:L-JOURNEY-TEARDOWN · report L-JOURNEY-TEARDOWN: KILLED ONE FOR REAL -- SIGKILL to the process group mid-walk, real browser: ARM A as shipped       42|Events.Core LOWERED, seed intact ARM B lease suppressed 42|Events.Core STILL UP  <- the defect, reproduced; Teardown isolated: ARM C nothing left up; ARM D left Events.Core AND Events.Settlement up 
+- 2026-08-04T14:38Z · @claude · L-JOURNEY-TEARDOWN merged at b3e60a0 after a 32->15 line rewrite; three of its brief's statements were wrong and are corrected on the lane block.
+- 2026-08-04T14:39Z · agent:opus · started L-PRICE-SHADOW-GUARD
+- 2026-08-04T14:48Z · agent:L-PRICE-CLEANUP-TWO · L-PRICE-CLEANUP-TWO returned built -> built-unverified, evidence lanes/L-PRICE-CLEANUP-TWO/notes.md
+- 2026-08-04T14:48Z · agent:L-PRICE-CLEANUP-TWO · report L-PRICE-CLEANUP-TWO: Base e34977ac (self-measured). Commit e41cdff2 = refs/heads/lane/price-cleanup-two; branch tip unmoved.; Built via a scratch GIT_INDEX_FILE: shared index never staged, nothing reverted. Reachability verified.; NEITHER CHANGE IS USER-VISIBLE. Both sites were traps for the next reader, not live defect
+- 2026-08-04T14:49Z · @claude · L-PRICE-CLEANUP-TWO built at e41cdff2; found a user-visible subtotal defect out of scope and reported it — new lane L-OFFER-PARTIAL-SUBTOTAL.
+- 2026-08-04T14:49Z · tool · refreshed 33 fact spans, 10 unconfirmed
+- 2026-08-04T14:49Z · agent:opus · started L-OFFER-PARTIAL-SUBTOTAL
+- 2026-08-04T14:51Z · agent:L-PRICE-CROSSCURRENCY · L-PRICE-CROSSCURRENCY returned built -> built-unverified, evidence commit 17fe84ae on refs/heads/lane/price-crosscurrency (baseline e34977ac, feature/restaurant-modules UNMOVED, never pushed) · utils/cross-currency.js · test/price-crosscurrency.test.js 30/30 · lanes/L-PRICE-CROSSCURRENCY/{mutation-proof.txt,census.txt,attribution.txt,mutate.py,census.py,attribute-sibling-red.py}
+- 2026-08-04T14:51Z · agent:L-PRICE-CROSSCURRENCY · report L-PRICE-CROSSCURRENCY: BRIEF VERIFIED FIRST, AND CORRECTED: there are SIX raw compositions, not five. `EventsJourney.amount` composes too; its own `readMinor` answers absence before the composition sees it, which is why the null-zero lane counted five.; THE DEFECT MEASURED, NOT ASSUMED: core's `wholeAmountTool(null)` is "
+- 2026-08-04T14:53Z · agent:opus · started L-PROBE-DROP-CONSUMERWEB
+- 2026-08-04T14:54Z · @claude · Teardown review APPROVE-WITH-CONDITIONS: a stale lease close handler can lower a fresh run's levers mid-walk — the defect class the lane closes, via its own mechanism.
+- 2026-08-04T14:55Z · agent:L-PDF-CREDITNOTE-NAME · L-PDF-CREDITNOTE-NAME returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/lanes/L-PDF-CREDITNOTE-NAME/receipt.md
+- 2026-08-04T14:55Z · agent:L-PDF-CREDITNOTE-NAME · report L-PDF-CREDITNOTE-NAME: Baseline 8e2b57de in OkamAPI, not Web-modules - the brief's repo line names the plan hub. Worktree OkamAPI-cnname, branch lane/pdf-creditnote-name, two commits, nothing pushed.; OVERLAP, and it changes the merge: L-CREDIT-NOTE-NUMBER (built-unverified, unmerged) had ALREADY fixed the single-download
+- 2026-08-04T16:26Z · agent:L-PRICE-BYPASS-FIVE · L-PRICE-BYPASS-FIVE returned built -> built-unverified, evidence refs/lanes/L-PRICE-BYPASS-FIVE = 8c6e91fa (parent e34977ac); 39/39 pins
+- 2026-08-04T16:26Z · agent:L-PRICE-BYPASS-FIVE · report L-PRICE-BYPASS-FIVE: Baseline e34977ac. Six sites fixed, each pinned over null, zero and a stated amount.; kravia-invoice priceLabel was a local method SHADOWING the mixin gate, so no invoice; figure was ever gated — including the confirm dialog shown before one is issued.; settlements formatAmount rendered absence and 
+- 2026-08-04T16:28Z · agent:opus · started L-TIER-ARTIFACTS
+- 2026-08-04T16:28Z · @claude · Session limit 16:57-20:20 killed six agents; all resumed from transcript. No test process survived, so pre-16:57 outputs are stale runs.
+- 2026-08-04T16:29Z · agent:opus · started L-TRAIN-DEMO-SEED
+- 2026-08-04T16:30Z · agent:L-PROBE-DROP-CONSUMERWEB · returned L-PROBE-DROP-CONSUMERWEB verdict=fail-spec -> open; D-SPEC-L-PROBE-DROP-CONSUMERWEB appended
+- 2026-08-04T16:30Z · agent:L-PROBE-DROP-CONSUMERWEB · report L-PROBE-DROP-CONSUMERWEB: No sanctioned removal path exists. Verbs extracted from the binary: init sign-off check; refresh tick render serve headline start built verify unverify accept retract decide flag; note return log compact. Nothing mutates the probes fence. SPEC 1.2 gives plan.md structure; to humans; SPEC 8 names the
+- 2026-08-04T16:31Z · @claude · L-PROBE-DROP-CONSUMERWEB fail-spec: no plan verb removes a probe; two probes read the root not one; dropping the cart probe rewrites a verified lane's exit.
+- 2026-08-04T16:33Z · agent:opus · started L-TRAIN-EVIDENCE-PACK-UI
+- 2026-08-04T16:33Z · agent:L-PRICE-SHADOW-GUARD · L-PRICE-SHADOW-GUARD returned built -> built-unverified, evidence lanes/L-PRICE-SHADOW-GUARD/ (state-A..E.txt, plant-proof.sh) + test/price-gate-shadow.test.js
+- 2026-08-04T16:33Z · agent:L-PRICE-SHADOW-GUARD · report L-PRICE-SHADOW-GUARD: Guard = test/price-gate-shadow.test.js (19 tests). Planting proof, 5 states, all re-run 18:27 after the kill:; A clean GREEN; B plant a component declaring priceLabel RED (names its file:line); C remove it GREEN;; D a ledger entry whose shadow is gone RED as stale; E restored GREEN. Both failure dir
+- 2026-08-04T16:33Z · tool · raised F-INVOICE-PRICELABEL-STILL-SHADOWS (warn)
+- 2026-08-04T16:33Z · @claude · Correction: 8c6e91fa fixed the invoice-page coercion, not the shadow — priceLabel is still declared at line 591 and is pinned rather than fixed.
+- 2026-08-04T16:36Z · tool · L-JOURNEY-TEARDOWN built-unverified -> verified, evidence lanes/L-JOURNEY-TEARDOWN/mutation-log.md
+- 2026-08-04T16:37Z · tool · raised F-SURVIVING-FIXTURE-SERVES-STALE-CODE (warn)
+- 2026-08-04T16:38Z · agent:opus · started L-TRAIN-PUBLISH-UNCLICKABLE
+- 2026-08-04T16:38Z · @claude · Correction: the -null/-0 mechanism is false. signedAmount negates only inside minor<0, so absence delegates un-negated; the defect was real, the story was not.
+- 2026-08-04T16:39Z · agent:L-OFFER-PARTIAL-SUBTOTAL · L-OFFER-PARTIAL-SUBTOTAL returned built -> built-unverified, evidence lanes/L-OFFER-PARTIAL-SUBTOTAL/mutation-log.md (on lane/offer-partial-subtotal @ 35e5cdd)
+- 2026-08-04T16:39Z · agent:L-OFFER-PARTIAL-SUBTOTAL · report L-OFFER-PARTIAL-SUBTOTAL: Baseline e34977ac; cut at e41cdff2, merged sibling 8c6e91fa -> b76cbbb. statedSum USED, not rebuilt.; Chose REFUSE-TO-TOTAL plus a note saying why, over marking a partial sum. Why: the bold; "Totalt inkl. mva" is what a customer quotes, so no number is honest there while a line is; unpriced; and mar
+- 2026-08-04T16:40Z · tool · raised F-OFFER-MIXED-CANNOT-SAY-NOT-APPLICABLE (warn)
+- 2026-08-04T16:40Z · @claude · Offer document refuses to total what it cannot total; mutation showed fixing only the subtotal makes VAT print a confident kr 0,00 since null*0.25 is 0.
+- 2026-08-04T16:41Z · agent:opus · started L-OFFERS-PAGE-HUNDREDFOLD
+- 2026-08-04T17:47Z · tool · raised F-HOST-VM-EATS-THE-CEILING (warn)
+- 2026-08-04T17:49Z · @claude · Six agents died to watchdog stalls at load 59.8; cause is a three-day Virtualization VM taking four cores, not the lanes. Two cheapest resumed, four held.
+- 2026-08-04T17:50Z · tool · refreshed 33 fact spans, 10 unconfirmed
+- 2026-08-04T17:51Z · @claude · Review backlog measured: ten built-unverified lanes lack a reviewer; firing them one at a time while the host sits near its ceiling.
+- 2026-08-04T17:53Z · agent:L-OFFERS-PAGE-HUNDREDFOLD · L-OFFERS-PAGE-HUNDREDFOLD returned built -> built-unverified, evidence lanes/L-OFFERS-PAGE-HUNDREDFOLD/evidence.md
+- 2026-08-04T17:53Z · agent:L-OFFERS-PAGE-HUNDREDFOLD · report L-OFFERS-PAGE-HUNDREDFOLD: Baseline e34977ac; built on 35e5cdd (has 8c6e91fa): the recorded reason --; OfferDocument totals correctly and absence-honestly -- holds only there;; offers.vue is byte-identical at both bases.; Premise re-proven, not inherited: every hit across every ref is a definition; line; no branch anywhere ca
+- 2026-08-04T17:54Z · @claude · L-OFFERS-PAGE-HUNDREDFOLD deleted all four helpers at 021d19c3: repair would have made a second answer to what an offer totals.
+- 2026-08-04T17:55Z · agent:opus · started L-TRAIN-READONLY-VISIBLE
+- 2026-08-04T17:57Z · @claude · Nine ruled decisions owed reopen_when; all written from their recorded basis, so a ruling that stops holding can now be noticed.
+- 2026-08-04T18:01Z · @claude · Shadow contradiction settled: it stands, but deletion would restyle every invoice figure, so the fix is a rename and it is assigned.
+- 2026-08-04T18:04Z · agent:L-TIER-ARTIFACTS · returned L-TIER-ARTIFACTS verdict=fail-spec -> open; D-SPEC-L-TIER-ARTIFACTS appended
+- 2026-08-04T18:04Z · agent:L-TIER-ARTIFACTS · report L-TIER-ARTIFACTS: The convention exists once, at OkamAPI-modules/artifacts/tests/README.md (2026-07-31). Cited, not invented.; It was unfollowable from this repo. artifacts/ was ignored as a DIRECTORY, so git never descends and no; later negation could re-include it; nothing in either repo emits a trx or junit; jest-
+- 2026-08-04T18:06Z · tool · raised F-CORE-PIN-ON-NO-REMOTE (blocker)
+- 2026-08-04T18:06Z · @claude · core submodule is pinned at 1bcab0b6, reachable only from a local unpushed branch: a fresh clone cannot build this branch. Verified, not inherited.
+- 2026-08-04T18:08Z · @sven · note F-AZURE-FUNCKEY: Sven, 2026-08-04: 'this is fine disregard'. Acknowledged and not treated as gating. The key remains committed and in hi…
+- 2026-08-04T18:08Z · @sven · note F-HOST-VM-EATS-THE-CEILING: Sven, 2026-08-04: 'raise this or fix it so its not fucking us anymore'. Acted on: three runaway containers (zen_pasteur…
+- 2026-08-04T18:09Z · @claude · Host fixed on Sven's instruction: three runaway containers stopped gracefully; the Docker VM went from 4.2 cores to 0.1. Nothing removed.
+- 2026-08-04T18:11Z · @claude · L-PRICE-BYPASS-FIVE conditions at c4a4fa44; its new rename pin caught its own earlier assertions inspecting a template fragment.
+- 2026-08-04T18:12Z · agent:opus · started L-WF-DIGEST-TAUTOLOGY
+- 2026-08-04T18:14Z · agent:L-TRAIN-READONLY-VISIBLE · L-TRAIN-READONLY-VISIBLE returned built -> built-unverified, evidence lane/train-readonly-visible @ abef9aac · lanes/L-TRAIN-READONLY-VISIBLE/shots/{before,after}-setup-row.png · mutation-proof.txt
+- 2026-08-04T18:14Z · agent:L-TRAIN-READONLY-VISIBLE · report L-TRAIN-READONLY-VISIBLE: Verified the gate at my own baseline e34977ac rather than inheriting it. The brief understates it.; TrainingModuleGate: 8 read paths call EnsureVisibleAsync and consult NO flag; writes call; EnsureWritableAsync(flag) -> 409 training.flag-disabled-read-only when off on a VISIBLE store.; Visible = tra
+- 2026-08-04T18:14Z · tool · raised F-FLAG-PAGE-PROMISED-ONE-BEHAVIOUR-FOR-SIX (warn)
+- 2026-08-04T18:14Z · agent:L-TRAIN-PUBLISH-UNCLICKABLE · L-TRAIN-PUBLISH-UNCLICKABLE returned built -> built-unverified, evidence commit 28548f96 on refs/heads/lane/train-publish-unclickable (base e34977ac, NOT pushed) - lanes/L-TRAIN-PUBLISH-UNCLICKABLE/{probe-before.txt,probe-after.txt,mutation-proof.txt,probe.spec.js,shot-1280-after-publish.png}
+- 2026-08-04T18:14Z · agent:L-TRAIN-PUBLISH-UNCLICKABLE · report L-TRAIN-PUBLISH-UNCLICKABLE: Baseline e34977ac; ports 3098/4098, no container, nothing pushed; jest 6/196 + journey green; HEAD untouched.; REPRODUCED FIRST at 1280 in a browser: an ordinary .click() on version-publish TIMED OUT, and it is COVERED -; not off-viewport, zero-size or pointer-events. The versions table's min-conten
+- 2026-08-04T18:17Z · agent:L-TRAIN-EVIDENCE-PACK-UI · L-TRAIN-EVIDENCE-PACK-UI returned built -> built-unverified, evidence commit af0a4a13 on refs/heads/lane/train-evidence-pack-ui; journey test/e2e/journeys/training-evidence-document.spec.js 18/18 green; full detail incl. what is NOT committed (artifacts/ is gitignored: journey JSON + 2 screenshots) in lanes/L-TRAIN-EVIDENCE-PACK-UI/NOTES.md
+- 2026-08-04T18:17Z · agent:L-TRAIN-EVIDENCE-PACK-UI · report L-TRAIN-EVIDENCE-PACK-UI: Baseline e34977ac; backend checkout was on lane/meals-grace-pins so every fact was re-checked on feature/restaurant-modules.; Endpoint #16 = GET /training/stores/{storeId}/evidence?personRef=, StoreAdmin, camelCase wire, PascalCase enum strings.; Whole C3 wire in one commit: GetEvidence in training-
+- 2026-08-04T18:18Z · agent:opus · started L-GR-EXIT-WIRE-THE-MAIL
+- 2026-08-04T18:19Z · agent:opus · started L-CORS-LAND-FOLLOWUPS
+- 2026-08-04T18:22Z · tool · raised F-TRAIN-DISCLOSURE-UNREADABLE (warn)
+- 2026-08-04T18:22Z · @claude · Verified: two pages call GET evidence/disclosures incl. the worker's own, and no handler exists at 8e2b57de. Flag and lane authored.
+- 2026-08-04T18:25Z · agent:opus · started L-WF-KODEOVERSIKT-UI
+- 2026-08-04T18:25Z · agent:opus · started L-WF-FAILURES-SURFACE
+- 2026-08-04T18:34Z · agent:L-CORS-LAND-FOLLOWUPS · L-CORS-LAND-FOLLOWUPS returned built -> built-unverified, evidence lanes/L-CORS-LAND-FOLLOWUPS/evidence.md
+- 2026-08-04T18:34Z · agent:L-CORS-LAND-FOLLOWUPS · report L-CORS-LAND-FOLLOWUPS: Verified 524289b9 against the brief first: every claim holds, nothing drifted — derivation from; PreferenceCentreBaseUrl/ConfirmBaseUrl + Growth:GuestOrigins, loopback-stripping outside Development,; [EnableCors] on endpoints 3/4/5/7, endpoint 6 deliberately excluded (RFC 8058, no Origin sent).; Reb
+- 2026-08-04T18:35Z · tool · raised F-THE-CONFLICT-IS-A-DECOY (warn)
+- 2026-08-04T18:35Z · @claude · CORS lane landed at 17c12c20: the Program.cs conflict was a decoy; the damage was in a file that auto-merged, and would have broken every download filename.
+- 2026-08-04T18:36Z · agent:L-WF-DIGEST-TAUTOLOGY · L-WF-DIGEST-TAUTOLOGY returned built -> built-unverified, evidence OkamAPI-modules lane/wf-digest-tautology @ 4b911917 (worktree ~/okam/wt-wfdigest, cut from lane/wf-w5-timesheet 9e82b286; local, not pushed) · WorkforceEndToEndJourneyTests + WorkforceTimesheetTests 33 passed / 0 failed / 1 skipped · lanes/L-WF-DIGEST-TAUTOLOGY/{evidence.md,fix.diff,commit.txt}
+- 2026-08-04T18:36Z · agent:L-WF-DIGEST-TAUTOLOGY · report L-WF-DIGEST-TAUTOLOGY: WRONG REPO IN THE BRIEF, AND I SWEPT IT BEFORE SAYING SO. The notes said Web-modules / feature/restaurant-modules / class node; the defect is in the BACKEND. Every digest|sha256|checksum|contentHash|hash hit under Web-modules test/e2e/journeys, test/e2e/support, test/, components/, pages/ was read a
+- 2026-08-04T18:37Z · @claude · Digest tautology dead at 4b911917. My brief named the wrong repo; the lane proved it, traced the real source and built anyway because the exit was exact.
+- 2026-08-04T18:37Z · @claude · Landing dependency: whoever lands lane/wf-w5-timesheet must also take 4b911917 or the tautology merges as-is.
+- 2026-08-04T18:52Z · agent:opus · started L-WF-INVITE-SURFACE
+- 2026-08-04T18:52Z · tool · refreshed 33 fact spans, 10 unconfirmed
+- 2026-08-04T19:03Z · agent:L-WF-KODEOVERSIKT-UI · L-WF-KODEOVERSIKT-UI returned built -> built-unverified, evidence lanes/L-WF-KODEOVERSIKT-UI/{evidence.md,journey-green.json} on lane/wf-kodeoversikt-ui @ f4c355b (worktree /Users/svendaneel/okam/web-kodeui, 4 commits, nothing pushed) + test/e2e/journeys/workforce-kodeoversikt.spec.js
+- 2026-08-04T19:03Z · agent:L-WF-KODEOVERSIKT-UI · report L-WF-KODEOVERSIKT-UI: - BASELINE MINE: frontend e34977ac as briefed; backend checkout was on lane/meals-grace-pins @ 34c6c103, so every backend fact below was read via `git show 8e2b57de:` and that checkout was never touched.; - THE BRIEF'S PREMISE WAS RIGHT ABOUT e34977ac AND WRONG ABOUT THE WORLD. No client method, no 
+- 2026-08-04T19:04Z · agent:L-WF-INVITE-SURFACE · returned L-WF-INVITE-SURFACE verdict=fail-spec -> open; D-SPEC-L-WF-INVITE-SURFACE appended
+- 2026-08-04T19:04Z · agent:L-WF-INVITE-SURFACE · report L-WF-INVITE-SURFACE: | PREMISE STALE, verified by walking not reading. The invite/claim surface already exists at baseline e34977ac (landed by 35440cf): pages/workforce/join.vue (public, mounts its own LoginModal), WorkforceEngagementPanel issue-invitation, me-client #32 + roster-client #6 bound. C3 already closed - nav
+- 2026-08-04T19:06Z · @claude · Invite surface was already landed at 35440cf; the real gap is backend list/revoke, and two refusals the brief asked for are a pinned anti-oracle.
+- 2026-08-04T19:06Z · @claude · Stale-fixture detection: reuseExistingServer prints nothing when adopting, so a fixture listening line in log line 1 proves the world is yours.
+- 2026-08-04T19:07Z · @claude · Load 150 with four lanes: 73 jest/playwright workers. The ceiling counts lanes; a suite lane fans out to a worker per core.
+- 2026-08-04T19:08Z · agent:L-WF-FAILURES-SURFACE · L-WF-FAILURES-SURFACE returned built -> built-unverified, evidence lanes/L-WF-FAILURES-SURFACE/evidence.md
+- 2026-08-04T19:08Z · agent:L-WF-FAILURES-SURFACE · report L-WF-FAILURES-SURFACE: Baselines: frontend e34977ac (feature/restaurant-modules); backend checkout was on lane/meals-grace-pins, so I read the contract from 8e2b57de via git show and never checked it out.; Route verified before building: WorkforceSchedulesController.cs:243 on Route("workforce/stores/{storeId:int}"), bare 
+- 2026-08-04T19:08Z · @claude · Failures surface built on private ports after a stale foreign fixture invalidated run one; its own journey had covered 2 of 3 tiers and was fixed.
+- 2026-08-04T19:20Z · @claude · Repaired a stray paste that made L-WF-PIVOT-DEFECTS generate a brief carrying another entity's class, pts, exit, agent and evidence.
+- 2026-08-04T19:23Z · @claude · L-WF-ONBOARD corrected: issuing and claiming are both bound and landed at 35440cf; only the demo's raw UPDATE at seed-workforce-demo.sh:244 remains.
+- 2026-08-04T19:23Z · agent:opus · started L-WF-INVITE-LIST-REVOKE
+- 2026-08-04T19:24Z · agent:opus · started L-WF-ONBOARD
+- 2026-08-04T19:24Z · agent:L-GR-EXIT-WIRE-THE-MAIL · L-GR-EXIT-WIRE-THE-MAIL returned built -> built-unverified, evidence lanes/L-GR-EXIT-WIRE-THE-MAIL/evidence.md
+- 2026-08-04T19:24Z · agent:L-GR-EXIT-WIRE-THE-MAIL · report L-GR-EXIT-WIRE-THE-MAIL: All five named changes built; backend lane/gr-exit-wire-the-mail 54a8bb51 off 8e2b57de, frontend lane/fe-gr-exit-wire-the-mail 814f04d off e34977ac. Nothing pushed, no container, no migration, appsettings untouched.; Footer now carries both links. Captured from the body the provider actually receive
+- 2026-08-04T19:25Z · @claude · Art 7(3) remedy built: footer carries the session-free exit, withdrawal suppresses the next campaign, and a self-inflicted token-in-logs leak was caught by the lane's own test.
+- 2026-08-04T19:40Z · agent:L-WF-ONBOARD · L-WF-ONBOARD returned built -> built-unverified, evidence commit de0811f6 on lane/wf-onboard-claim in OkamAPI-modules (parent 8e2b57de, ff) + lanes/L-WF-ONBOARD/evidence.txt with evidence/{invitation-contract-suite,join-block-happy-path,join-block-mutations}.txt and harness/
+- 2026-08-04T19:40Z · agent:L-WF-ONBOARD · report L-WF-ONBOARD: ONE CLAUSE OF THREE HELD, as the brief said. seed-workforce-demo.sh:244 still ran `UPDATE WorkforcePersons SET ApplicationUserId=..., State=N'Claimed'`. Deleted. Nothing in the script writes that table now; the only statement still naming it is the bootstrap INSERT for the FIRST manager engagement, 
+- 2026-08-04T19:40Z · agent:opus · started L-WF-PUBHIST
+- 2026-08-04T19:47Z · agent:L-WF-INVITE-LIST-REVOKE · L-WF-INVITE-LIST-REVOKE returned built -> built-unverified, evidence lanes/L-WF-INVITE-LIST-REVOKE/evidence.md · backend branch lane/wf-invite-list-revoke @ 68f2472c (forked from 8e2b57de, not pushed)
+- 2026-08-04T19:47Z · agent:L-WF-INVITE-LIST-REVOKE · report L-WF-INVITE-LIST-REVOKE: All three absence claims TRUE. Controller bound issue only (:156); no list route, no revoke route;; every WorkforceInvitationState reference in the repo (14 sites) named only Pending or Claimed.; FOURTH absence the brief did not name: Expired is written by no code path either — expiry is a; read-tim
+- 2026-08-04T19:47Z · @claude · Invite list/revoke built at 68f2472c; a fourth absence found — Expired is written by no code path, so a stored Pending does not mean live.
+- 2026-08-04T19:52Z · agent:opus · started L-WF-PUNCH-UI
+- 2026-08-04T19:52Z · agent:opus · started L-FE-WF-INVITE-LIST-REVOKE
+- 2026-08-04T19:53Z · agent:opus · started L-WF-ONBOARD-DEMO-RUN
+- 2026-08-04T19:54Z · agent:opus · started L-WF-PIVOT-DEFECTS
+- 2026-08-04T19:54Z · tool · refreshed 33 fact spans, 10 unconfirmed
+- 2026-08-04T20:08Z · tool · raised F-C2-EXAMPLE-NO-LONGER-REPRODUCES (info)
+- 2026-08-04T20:08Z · @claude · Migration chain replayed from empty twice at de0811f6: 127 migrations, no 2705. Only one migration names Orders.TableId, in its own Up and Down.
+- 2026-08-04T20:08Z · @claude · Live demo world left standing for acceptance: API 127.0.0.1:5093, store 1, manager 99999999, worker 90000001, /admin/workforce-me.
+- 2026-08-04T20:08Z · agent:L-WF-ONBOARD-DEMO-RUN · L-WF-ONBOARD-DEMO-RUN returned built -> built-unverified, evidence lanes/L-WF-ONBOARD-DEMO-RUN/evidence.md with evidence/{demo-run-1,demo-run-2,caller-binds}.txt + api.log, run from wt-L-WF-ONBOARD-DEMO-RUN @ de0811f6 against my own container okam-lwfodr-sql
+- 2026-08-04T20:08Z · agent:L-WF-ONBOARD-DEMO-RUN · report L-WF-ONBOARD-DEMO-RUN: THE DEMO RAN, TWICE, EACH FROM AN EMPTY CATALOG. seed-workforce-demo.sh at de0811f6 end to end, exit 0 both times, via demo-up.sh with my own SQL container and my own port. One green run is luck; the second dropped and recreated the catalog and reproduced it with entirely different GUIDs.; NORA REAC
+- 2026-08-04T20:09Z · @claude · Demo-run merged. Scope tightened per the lane: the 2705 collision is absent at de0811f6, not repealed estate-wide.
+- 2026-08-04T20:13Z · tool · raised F-DEAD-WORLD-ANSWERS-HEALTHY (warn)
+- 2026-08-04T20:13Z · @claude · Two lanes refused for a needs: placeholder; the fault is my dispatch note, which now says omit the line entirely unless blocked.
+- 2026-08-04T20:13Z · @claude · :5951 and :5952 answer /health 200 with their SQL containers gone — a probe cannot tell a dead world from a live one.
+- 2026-08-04T20:14Z · agent:L-WF-PIVOT-DEFECTS · L-WF-PIVOT-DEFECTS returned built -> built-unverified, evidence lanes/L-WF-PIVOT-DEFECTS/{workforce-schedule-publish.live.playwright.json,live-run-after.txt,probe-fixed.txt,probe-mutant-defect1.txt,probe-mutant-defect2.txt,probe-restored.txt,shots-after/,shots-mutant/}
+- 2026-08-04T20:14Z · agent:L-WF-PIVOT-DEFECTS · report L-WF-PIVOT-DEFECTS: Both defects are ONE root cause: the authoring notice `<p v-if="isRoles && canAuthorHere">` sat INSIDE the three-pivot chain and re-headed it.; So the employees pivot drew WeekGrid AND MonthGrid (MonthGrid's `v-else` bound to the notice), and the roles pivot of an EDITABLE week drew the notice INSTE
+- 2026-08-04T20:14Z · tool · raised F-LIVE-WORLD-5961-DIRTY (warn)
+- 2026-08-04T20:15Z · tool · raised F-NEEDS-PLACEHOLDER-REFUSES-A-GOOD-RETURN (warn)
+- 2026-08-04T20:18Z · agent:L-WF-PUBHIST · L-WF-PUBHIST returned built -> built-unverified, evidence lanes/L-WF-PUBHIST/evidence.md
+- 2026-08-04T20:18Z · agent:L-WF-PUBHIST · report L-WF-PUBHIST: Baselines: frontend e34977ac (feature/restaurant-modules); backend checkout was on lane/meals-grace-pins, so I read the contract from 8e2b57de via git show and never checked it out.; Verified, not assumed: GetPublicationHistory is the ONLY one of 11 client methods with zero callers — no with(this)/m
+- 2026-08-04T20:18Z · tool · raised F-LANE-COMMITS-CARRY-SIBLING-HUNKS (warn)
+- 2026-08-04T20:18Z · @claude · L-WF-PUBHIST committed at 2d86446 via a private index; it discloses seven files carrying sibling hunks — take paths, not files, when landing tonight's branches.
+- 2026-08-04T20:19Z · agent:opus · started L-WF-ROLES-UI
+- 2026-08-04T20:22Z · agent:opus · started L-WF-TIMESHEET-UI
+- 2026-08-04T20:23Z · @claude · Authored ahead: D-EV-INQUIRY-UNGATED (a guest can book a venue that cannot see it) and L-EXIT-INSTRUMENT-CENSUS for the verification-path flag.
+- 2026-08-04T20:26Z · @claude · L-FE-WF-INVITE-LIST-REVOKE built at e8d69fc but unrecordable: refused for a needs placeholder, and its agent's transcript is gone. Return not hand-edited.
+- 2026-08-04T20:34Z · agent:L-WF-PUNCH-UI · L-WF-PUNCH-UI returned built -> built-unverified, evidence lanes/L-WF-PUNCH-UI/evidence.md
+- 2026-08-04T20:34Z · agent:L-WF-PUNCH-UI · report L-WF-PUNCH-UI: Built the register's clock: ClockScreen inside PosShell, reached by a new Stempling entry in the POS top bar.; Only the POS shell holds an operator session, so endpoint 45 could never have lived on an admin page.; Premise verified: pos.vue has zero workforce refs and nothing in the repo called clock
+- 2026-08-04T20:36Z · tool · raised F-CLOCKOUT-ANSWERS-OPEN (blocker)
+- 2026-08-04T20:36Z · agent:opus · started L-EXIT-INSTRUMENT-CENSUS
+- 2026-08-04T20:36Z · @claude · Clock-out with no open session answers 200 accepted:true sessionState:Open — the register shows clocked-in at the moment a worker clocks out.
+- 2026-08-04T20:52Z · agent:opus · started L-WORKTREE-BASENAME-PIN
+- 2026-08-04T20:52Z · tool · refreshed 33 fact spans, 10 unconfirmed
+- 2026-08-04T20:52Z · agent:L-EXIT-INSTRUMENT-CENSUS · L-EXIT-INSTRUMENT-CENSUS returned built -> built-unverified, evidence lanes/L-EXIT-INSTRUMENT-CENSUS/census.md
+- 2026-08-04T20:52Z · agent:L-EXIT-INSTRUMENT-CENSUS · report L-EXIT-INSTRUMENT-CENSUS: 337 EXITS, NOT 149. All 331 Lanes + 6 Features carry an exit:; Flags, Decisions, Stages and Horizons carry none and cannot be verified at all. Every figure is emitted by lanes/L-EXIT-INSTRUMENT-CENSUS/census.py, which loads the clerk as a module and calls its own exit_tokens/evidence_admissible - no
+- 2026-08-04T20:53Z · @claude · Census by script: 337 exits not 149, 173 name no instrument, a failing artifact is accepted 48 of 48, and all six Features are directory-stamped.
+- 2026-08-04T20:53Z · @claude · Of 183 unverifiable exits, 86 already have a work artifact in their lane dir, 88 only a return, 9 nothing — half wording, half produce-something.
+- 2026-08-04T20:56Z · @claude · Census committed at 778482ba, reachability checked two ways; shared checkout byte-identical before and after.
+- 2026-08-04T20:56Z · @claude · F-POS-CLOCK-NO-CLIENT: L-WF-PUNCH-UI built the till screen its clears_when asks for, but unmerged, so the flag stays open.
+- 2026-08-04T20:58Z · @claude · Authored L-EV-GUESTLINK-ONE-COMPOSER for the fork git cannot see: two files, no conflict, both compile, two answers to where a guest returns.
+- 2026-08-04T21:03Z · agent:L-WORKTREE-BASENAME-PIN · L-WORKTREE-BASENAME-PIN returned built -> built-unverified, evidence lanes/L-WORKTREE-BASENAME-PIN/evidence.md
+- 2026-08-04T21:03Z · agent:L-WORKTREE-BASENAME-PIN · report L-WORKTREE-BASENAME-PIN: baseline e34977ac; own worktree /Users/svendaneel/okam/web-wtbasename created at it, branch lane/worktree-basename-pin; both facts the brief asked to be CHECKED are CONFIRMED, no drift: :457 is still the line, and the sibling's second failure at :295 is real - unmodified baseline gave 2 failed / 36 
+- 2026-08-04T21:04Z · tool · raised F-CORE-DISCOVERY-PREFERS-THE-SHARED-CHECKOUT (warn)
+- 2026-08-04T21:04Z · @claude · Basename pin fixed: 38/38 in a lane worktree and 38/38 in the shared checkout. A third assertion had been silently vacuous in every lane worktree.
+- 2026-08-04T21:07Z · agent:L-WF-ROLES-UI · L-WF-ROLES-UI returned built -> built-unverified, evidence commit ff21e48 on refs/heads/lane/wf-roles-ui; journey artifacts/journeys/workforce-role-catalogue.playwright.json (passed, 10 steps, 4 shots); full detail in lanes/L-WF-ROLES-UI/NOTES.md
+- 2026-08-04T21:07Z · agent:L-WF-ROLES-UI · report L-WF-ROLES-UI: Baseline e34977ac; backend checkout was on lane/meals-grace-pins, so every backend fact was read from feature/restaurant-modules.; Premise CONFIRMED, one correction: the client write was ABSENT, not present-and-unimported (roster-client.js:26-29 recorded it as "a screen of its own"). THREE consumers
+- 2026-08-04T21:08Z · agent:opus · started L-EV-GUESTLINK-ONE-COMPOSER
+- 2026-08-04T21:09Z · agent:opus · started L-WORLD-STAMP-WINDOWS
+- 2026-08-04T21:18Z · agent:L-WF-TIMESHEET-UI · L-WF-TIMESHEET-UI returned built -> built-unverified, evidence commit 618efc88 on refs/heads/lane/wf-timesheet-ui; journey artifacts/journeys/workforce-timesheet-export.playwright.json 15/15 steps + 6 screenshots (COMMITTED, force-added); full detail in lanes/L-WF-TIMESHEET-UI/NOTES.md
+- 2026-08-04T21:18Z · agent:L-WF-TIMESHEET-UI · report L-WF-TIMESHEET-UI: Baseline FE feature/restaurant-modules e34977ac (224 dirty); BE checkout was lane/meals-grace-pins, so all backend facts were read from lane/wf-digest-tautology 4b911917 — the branch carrying BOTH W5 and the digest fix — via git show.; C3 whole wire in one change: client (5 routes) + gate/refusal mo
+- 2026-08-04T21:18Z · tool · raised F-PRIVATE-INDEX-COMMIT-CAN-BUILD-AN-UNRUN-TREE (warn)
+- 2026-08-04T21:18Z · @claude · The prescribed private-index commit recipe can build a tree nobody ran; a lane measured it at -U3 and -U0 and refused it. Take paths and re-run at landing.
+- 2026-08-04T21:18Z · @claude · Timesheet UI built at 618efc88: Approve shipped disabled with no reason because :disabled renders on an empty string; every gate function and unit test was correct.
+- 2026-08-04T21:22Z · @claude · Sven directed composition onto our branch in both repos, prove there, merge nowhere else. feature/POS measured fully contained in both — nothing to bring across.
+- 2026-08-04T21:23Z · agent:opus · started L-COMPOSE-CENSUS
+- 2026-08-04T21:24Z · agent:L-EV-GUESTLINK-ONE-COMPOSER · L-EV-GUESTLINK-ONE-COMPOSER returned built -> built-unverified, evidence lanes/L-EV-GUESTLINK-ONE-COMPOSER/evidence.md
+- 2026-08-04T21:24Z · agent:L-EV-GUESTLINK-ONE-COMPOSER · report L-EV-GUESTLINK-ONE-COMPOSER: Premise stale: NO EventsGuestLinks.cs plural on any ref, in 33 worktrees incl untracked, in either; stash, or any dangling commit -- never written. Content sweep of every ref: only TWO production; files compose a guest URL; other 11 hits are tests. A blind 2nd sweep reproduced every finding.; Fork I
+- 2026-08-04T21:25Z · @claude · Guestlink fork swept: the plural file never existed; the fork is helper-vs-inline inside lane/ev-vipps-fallback-2. Land 9e3a607b, not fc09be1d.
+- 2026-08-04T21:25Z · @claude · Three refs carry the byte-identical helper blob, so any two merge add/add with no conflict — and the sweep test stays green on the forked branch.
+- 2026-08-04T21:33Z · agent:L-WORLD-STAMP-WINDOWS · L-WORLD-STAMP-WINDOWS returned built -> built-unverified, evidence lanes/L-WORLD-STAMP-WINDOWS/evidence.md
+- 2026-08-04T21:33Z · agent:L-WORLD-STAMP-WINDOWS · report L-WORLD-STAMP-WINDOWS: Commit 997936ad on refs/lanes/L-WORLD-STAMP-WINDOWS (18 files, my pathspecs only, reachability verified).; Both windows closed in world-stamp.js, NOT in live-world.sh: a guard in a script nobody runs is how both survived review.; W1 `builtFrom` is now REQUIRED - the token `world-stamp.js built <repo
+- 2026-08-04T21:33Z · @claude · World-stamp windows closed at 997936ad: the liveness check had been proving the launcher alive, not the process holding the socket.
+- 2026-08-04T21:33Z · @claude · Authored L-JEST-COLLECTS-LANES: four lanes reported N failed suites 0 failed tests, and one watched the count grow 1 to 3 while it worked.
+- 2026-08-04T21:42Z · agent:L-COMPOSE-CENSUS · L-COMPOSE-CENSUS returned built -> built-unverified, evidence lanes/L-COMPOSE-CENSUS/compose.md
+- 2026-08-04T21:42Z · agent:L-COMPOSE-CENSUS · report L-COMPOSE-CENSUS: 139 mergeable heads, not 260: FE 95 refs -> 22 contained, 73 live, 12 superseded -> 61 heads; BE 315 -> 128 contained, 111 live, 76 stale-epoch, 30 superseded, 2 excluded -> 78 heads.; Brief corrections: FE ahead is 73 not 74; lanes at built-unverified|verified are 250 not 249; the a1-b3 set is EIGH
+- 2026-08-04T21:43Z · @claude · Census: 139 mergeable heads not 260; five of my claims corrected including that POS containment rests on ahead=0, not on 0 files differing.
+- 2026-08-04T21:43Z · @claude · C2: fourteen migration branches are prefixes of one ten-deep chain; the only fork is lane/margin-finalize-lag, a mid-chain insert needing rebuild.
+- 2026-08-04T21:52Z · agent:opus · started L-XZ-NEGATED-ABSENCE
+- 2026-08-04T21:52Z · tool · refreshed 33 fact spans, 10 unconfirmed
+- 2026-08-04T21:52Z · agent:opus · started L-JEST-COLLECTS-LANES
+- 2026-08-04T21:54Z · @claude · ready hit 0 with capacity free — authored L-POS-TENDER-WIRE-REBASE and L-COMPOSE-FE-CANDIDATE; composition lands on a candidate, not on our branch.
+- 2026-08-04T22:07Z · agent:L-JEST-COLLECTS-LANES · L-JEST-COLLECTS-LANES returned built -> built-unverified, evidence lanes/L-JEST-COLLECTS-LANES/evidence.md
+- 2026-08-04T22:07Z · agent:L-JEST-COLLECTS-LANES · report L-JEST-COLLECTS-LANES: Baseline e34977ac, shared checkout, 261 dirty, 2026-08-04 23:52 CEST; lane worktree web-jestlanes detached there.; Premise confirmed: 5 failed suites / 0 failed tests, every one require('@playwright/test') evaluated outside a runner.; Corrections: 4 lane dirs but 5 suites; only 3 of 5 committed anyw
+- 2026-08-04T22:07Z · tool · raised F-ARCHIVED-TEST-INFLATES-THE-GREEN (warn)
+- 2026-08-04T22:07Z · agent:L-XZ-NEGATED-ABSENCE · L-XZ-NEGATED-ABSENCE returned built -> built-unverified, evidence lanes/L-XZ-NEGATED-ABSENCE/mutation-log.md · commit b150668b on refs/lanes/L-XZ-NEGATED-ABSENCE
+- 2026-08-04T22:07Z · agent:L-XZ-NEGATED-ABSENCE · report L-XZ-NEGATED-ABSENCE: BASE c4a4fa44 (refs/lanes/L-PRICE-BYPASS-FIVE), NOT tip e34977ac: my change builds on its; absence rule and the working tree already matched it byte for byte. Commit b150668b via a; private GIT_INDEX_FILE; no checkout -b, branch left at e34977ac, nothing pushed, no container.; TWO commits share that
+- 2026-08-04T22:08Z · agent:opus · started L-POS-TENDER-WIRE-REBASE
+- 2026-08-04T22:08Z · @claude · Negated-absence closed at b150668b; its mutation proof exposed a dead branch in its own fix that all 58 tests passed without.
+- 2026-08-04T22:27Z · @clerk · Render surfaces measured: plan.html carries 534/534 authored prose bodies; LANES.md and COCKPIT.md carry 0 of 315 lane bodies. Point a reader at the HTML, never the markdown lane views.
+- 2026-08-04T22:27Z · @clerk · That measurement first read 219/534 for plan.html - a fault in the measuring script, which counted inline <strong> tags as body text. Instrument audited by direction before the number was reported.
+- 2026-08-04T22:28Z · agent:opus · started L-COMPOSE-FE-CANDIDATE
+- 2026-08-04T22:31Z · agent:opus · started L-COLLECTED-PATHS
+- 2026-08-04T22:31Z · agent:opus · started L-ABSENCE-CLAIMS-AUDIT
+- 2026-08-04T22:48Z · agent:L-COLLECTED-PATHS · L-COLLECTED-PATHS returned built -> built-unverified, evidence lanes/L-COLLECTED-PATHS/collected.txt — committed 6f03b18 on lane/collected-paths; regenerate with lanes/L-COLLECTED-PATHS/rerun.sh (15/15 assertions pass)
+- 2026-08-04T22:48Z · agent:L-COLLECTED-PATHS · report L-COLLECTED-PATHS: collected.txt is the runner's own output (jest --listTests, executes no test): 126 paths, all under test/, 0 under lanes/, 0 archived-marked names.; Both directions from ONE tree at ONE instant: without the entry 131, with it 126 — removed 5, added 0, every removal under lanes/. Live suite count unc
+- 2026-08-04T22:51Z · agent:L-POS-TENDER-WIRE-REBASE · returned L-POS-TENDER-WIRE-REBASE verdict=fail-spec -> open; D-SPEC-L-POS-TENDER-WIRE-REBASE appended
+- 2026-08-04T22:51Z · agent:L-POS-TENDER-WIRE-REBASE · report L-POS-TENDER-WIRE-REBASE: Branch is CONTAINED: merge-base --is-ancestor lane/meals-pos-tender-wire 8e2b57de = true, left-right 61/0.; compose.md:447 already files it under "Contained (ancestor) - merge is a no-op, do not merge". Census right, brief wrong.; Seventh twin was REAL at 32fd5a86 (FinalizeService:237 classified off
+- 2026-08-04T23:01Z · tool · raised F-RETREC-GUARD-IS-DEAD (warn)
+- 2026-08-04T23:01Z · tool · raised F-FLAG-CONDITIONS-ARE-NOT-TESTABLE (warn)
+- 2026-08-04T23:01Z · @clerk · Independently verified: lane/meals-pos-tender-wire is 0 ahead of backend tip 8e2b57de; one IsCreditSale(JournalEntry) definition, six call sites. Both arms of the flag condition hold.
+- 2026-08-04T23:01Z · @clerk · plan flag clear refused it: clears_when names no fact key. 165 of 170 open flags are in that state, so only an owner override moves the count.
+- 2026-08-04T23:02Z · agent:opus · started L-EVIDENCE-CITATIONS-RESOLVE
+- 2026-08-04T23:05Z · tool · raised F-REVIEWS-CANNOT-BE-JOINED-TO-LANES (warn)
+- 2026-08-04T23:05Z · @clerk · Fable review fired for L-XZ-NEGATED-ABSENCE at b150668b: three-world null handling, helper vocabulary, and the three fiscal surfaces its spec_gap names.
+- 2026-08-04T23:05Z · @clerk · Fable review fired for L-JEST-COLLECTS-LANES at 82127eb and L-COLLECTED-PATHS at 6f03b18: whether the ignore pattern is right in both directions.
+- 2026-08-04T23:18Z · tool · L-JOURNEY-HARNESS running -> retracted: Started 2026-07-31T20:54Z by agent:fe-journeys; five days later the lane directory does not exist and no return was filed. The agent's session ended long ago, so the running state was holding budget for nobody. Re-author if the work is still wanted.
+- 2026-08-04T23:18Z · tool · L-FE-WF-INVITE-LIST-REVOKE running -> retracted: Built at e8d69fc on lane/fe-wf-invite-list-revoke; its return was refused for a needs placeholder and its agent's transcript is gone and unresumable, so the return can never be merged as written. Retracted to stop it holding budget. The work is safe at that commit and is recorded on F-NEEDS-PLACEHOLDER-REFUSES-A-GOOD-RETURN.
+- 2026-08-04T23:18Z · agent:opus · started L-FLAG-CONDITIONS-TESTABLE
+- 2026-08-04T23:19Z · tool · raised F-EXISTENCE-CHECKS-REPORT-PRESENT-FILES-ABSENT (blocker)
+- 2026-08-04T23:19Z · tool · raised F-BARE-PATHSPEC-PROVES-A-FALSE-ZERO (warn)
+- 2026-08-04T23:19Z · @clerk · 126 lane-evidence markdown files on disk, 12 tracked on our branch, 47 across all 100 refs. lanes/ is not gitignored; the files were never committed.
+- 2026-08-04T23:20Z · @clerk · Blocker withdrawn to warn: two of the three sweeps I accused were right, one at a tip it named and one by 10 and 74 minutes of time-decay.
+- 2026-08-04T23:20Z · @clerk · All 89 denial rows measured, not sampled: 56 correct, 27 false and untracked, 6 false and tracked before the sweep ran. The git-based-check hypothesis is refuted by those 6.
+- 2026-08-04T23:21Z · agent:L-ABSENCE-CLAIMS-AUDIT · L-ABSENCE-CLAIMS-AUDIT returned built -> built-unverified, evidence lanes/L-ABSENCE-CLAIMS-AUDIT/absences.md
+- 2026-08-04T23:21Z · agent:L-ABSENCE-CLAIMS-AUDIT · report L-ABSENCE-CLAIMS-AUDIT: COVERAGE COMPLETE: plan.md 122 strict claims (hand-read) + lanes/ 118/118 files + returns/ 282/282. ~1,440 absence claims total: ~680 validated, ~720 unvalidated, 51 contradicted. Half the program's absence claims name no surface they were checked against; returns/ healthiest (~80% validated), lanes
+- 2026-08-04T23:23Z · @clerk · docs/plan is 627 files and zero tracked; git clean -nd listed the whole plan for removal. Snapshot taken at refs/lanes/plan-snapshot 51970563, 954 files, nothing outside docs/plan and lanes staged.
+- 2026-08-04T23:23Z · agent:opus · started L-COLLECT-REVIEW-CONDITIONS
+- 2026-08-04T23:24Z · agent:opus · started L-XZ-RESIDUAL-SITES
+- 2026-08-04T23:27Z · @clerk · F-HOST-VM-EATS-THE-CEILING condition met: six lanes running, load 2.81/3.96/5.98 against a ceiling of 21. Refused for want of a fact key; third flag in that state.
+- 2026-08-04T23:28Z · @clerk · Fable review fired for L-ABSENCE-CLAIMS-AUDIT: what validated actually measures, the lanes-vs-returns rate, and a re-derivation sample of the contradicted column.
+- 2026-08-04T23:28Z · agent:L-EVIDENCE-CITATIONS-RESOLVE · L-EVIDENCE-CITATIONS-RESOLVE returned built -> built-unverified, evidence lanes/L-EVIDENCE-CITATIONS-RESOLVE/citations.md
+- 2026-08-04T23:28Z · agent:L-EVIDENCE-CITATIONS-RESOLVE · report L-EVIDENCE-CITATIONS-RESOLVE: 1987 citations from 559 evidence lines: plan.md (276) + returns (283 files). Read-only.; 1300 resolvable, 533 untracked-never-committed, 74 ignored-by-git, 34 resolvable-but-not-where-cited, 10 tracked-dirty, 35 unresolvable.; F-COMMIT-TREE-LEAVES-NO-REF: 527 commit ids, 524 on a ref. ONE dangling: 
+- 2026-08-04T23:30Z · agent:opus · started L-BARE-PATHSPEC-SWEEP
+- 2026-08-04T23:30Z · agent:opus · started L-GROWTHAUDIT-TABLE-ABSENT
+- 2026-08-04T23:30Z · @clerk · Citation census: 1987 citations, 524 of 527 commit ids on a ref, one dangling with its work preserved elsewhere. Naive cross-repo checking would have reported 238 absent paths against a true 3.
+- 2026-08-04T23:36Z · @clerk · L-COMPOSE-FE-CANDIDATE blocked: 28 of 61 frontend heads do not merge and 16 conflict with the tip itself, so no ordering composes them. D-REBASE-CONFLICTING-HEADS authored with four options.
+- 2026-08-04T23:36Z · @clerk · Candidate 9f7d8df carries 35 heads with jest green at 2959 tests while the journey tier reds 8 of 29, one a real regression in meals-admin-setup. Nothing forced; every conflict aborted.
+- 2026-08-04T23:36Z · agent:L-COLLECT-REVIEW-CONDITIONS · L-COLLECT-REVIEW-CONDITIONS returned built -> built-unverified, evidence lanes/L-COLLECT-REVIEW-CONDITIONS/applied.md
+- 2026-08-04T23:36Z · agent:L-COLLECT-REVIEW-CONDITIONS · report L-COLLECT-REVIEW-CONDITIONS: All five conditions re-derived before applying; none refused. Fix behaviour unchanged — comment-stripped diff vs 82127eb is empty.; C1 the "(14 paths)" claim is false everywhere: 6 untracked .md on disk, 0 tracked on 119 of 120 refs, 6 on refs/lanes/plan-snapshot 51970563. Reframed on-disk with no n
+- 2026-08-04T23:37Z · @clerk · rerun.sh run from a foreign directory overwrote the artifact it cites with 112 paths from another tree, or wrote 0 bytes with 13 of 15 assertions still passing. Fixed: 20/20 from both.
+- 2026-08-04T23:37Z · @clerk · Third flag whose condition is demonstrably met and which the tool will not clear: the collected-path listing exists and excludes every archived file. Overrides owed on three.
+- 2026-08-04T23:37Z · agent:L-COMPOSE-FE-CANDIDATE · returned L-COMPOSE-FE-CANDIDATE verdict=blocked -> open, needs D-REBASE-CONFLICTING-HEADS
+- 2026-08-04T23:37Z · agent:L-COMPOSE-FE-CANDIDATE · report L-COMPOSE-FE-CANDIDATE: Candidate candidate/fe-compose-2026-08-05 tip 9f7d8df, 103 commits, in worktree /Users/svendaneel/okam/web-fe-candidate. No push, no shared-branch commit, feature/restaurant-modules and OkamAPI-modules untouched.; 64 heads attempted (61 census, minus 1 held by ruling, plus 4 the census could not see
+- 2026-08-04T23:38Z · agent:L-GROWTHAUDIT-TABLE-ABSENT · L-GROWTHAUDIT-TABLE-ABSENT returned built -> built-unverified, evidence lanes/L-GROWTHAUDIT-TABLE-ABSENT/finding.md
+- 2026-08-04T23:38Z · agent:L-GROWTHAUDIT-TABLE-ABSENT · report L-GROWTHAUDIT-TABLE-ABSENT: PREMISE HOLDS. Case (1) of four: in the model, in NO migration, under no other name, created by no raw SQL. Read by object from refs/heads/feature/restaurant-modules 8e2b57de, never the stale meals-grace-pins checkout.; Controls that could fail: AccountingSummaries 47 migration files; Workforce/Meal
+- 2026-08-04T23:38Z · agent:opus · started L-JOURNEY-REGRESSION-BISECT
+- 2026-08-04T23:39Z · tool · raised F-GROWTH-PUBLISH-LIES-ABOUT-WHY-IT-FAILED (blocker)
+- 2026-08-04T23:39Z · tool · raised F-MIG-LEDGER-THROW-NUMBER-WRONG (warn)
+- 2026-08-04T23:40Z · agent:opus · started L-GROWTH-SQL-CATCH-TYPED
+- 2026-08-04T23:40Z · agent:L-BARE-PATHSPEC-SWEEP · L-BARE-PATHSPEC-SWEEP returned built -> built-unverified, evidence lanes/L-BARE-PATHSPEC-SWEEP/pathspecs.md
+- 2026-08-04T23:40Z · agent:L-BARE-PATHSPEC-SWEEP · report L-BARE-PATHSPEC-SWEEP: Instrument validated first: bare `Program.cs` 266 commits vs bare `MealsQuoteService.cs` 0 (full path 16);; `-- '*.cs'` matches 2724 files, 2723 nested, so those 5 citations are globs not bare. A bare pathspec is; the only class resolving to zero in BOTH repos - a fourth separator that fell out of t
+- 2026-08-04T23:41Z · @clerk · Pathspec sweep: 7 of 8 executable searches sound. The one defect let a two-file check be published as a whole-repository claim; no consumer reach on any branch is false at its own declared ref.
+- 2026-08-04T23:41Z · @clerk · Side effect of the preservation snapshot: lanes/ is now searchable, so root-wide -S searches match their own evidence. Exclude lanes/ or an absence search finds itself.
+- 2026-08-04T23:43Z · @clerk · Diagnosed at bin/plan:8719-8721: the whole decorated evidence string goes to os.path.exists, so an annotation reads as a missing file. Reproduced; 0 of 89 denial rows carries a bare path.
+- 2026-08-04T23:43Z · @clerk · The refusals are protocol-correct. The admissible-evidence counts were never inflated; the message wording made three readers take them for file-existence counts, the clerk among them.
+- 2026-08-04T23:44Z · agent:L-FLAG-CONDITIONS-TESTABLE · L-FLAG-CONDITIONS-TESTABLE returned built -> built-unverified, evidence lanes/L-FLAG-CONDITIONS-TESTABLE/conditions.md
+- 2026-08-04T23:44Z · agent:L-FLAG-CONDITIONS-TESTABLE · report L-FLAG-CONDITIONS-TESTABLE: 60 open blocker flags (61 an hour earlier; one downgraded mid-measure). Snapshotted plan.md at sha256; 7aa1ba846f3f9b24 - concurrent lanes moved my line numbers 134 lines between two parses. T1=0, T2=44,; T3=16 (act 7, rule 2, inexpressible 7); 61 probe lines written. I read the TOOL, not the spec p
+- 2026-08-04T23:44Z · agent:L-XZ-RESIDUAL-SITES · L-XZ-RESIDUAL-SITES returned built -> built-unverified, evidence lanes/L-XZ-RESIDUAL-SITES/mutation-log.md · commit 799f05d5 on refs/lanes/L-XZ-RESIDUAL-SITES
+- 2026-08-04T23:44Z · agent:L-XZ-RESIDUAL-SITES · report L-XZ-RESIDUAL-SITES: BASE b150668b (refs/lanes/L-XZ-NEGATED-ABSENCE). Own worktree web-xz-residual, committed by; pathspec (10 files, no core/node_modules), nothing pushed, no container, 8c6e91fa never read.; THE REVIEWER'S "UNREACHABLE" IS OFF BY FOUR SHAPES. `x > 0` is relational, isAmountStated is the; absence rule; 
+- 2026-08-04T23:45Z · agent:opus · started L-ABSENCE-AUDIT-CONDITIONS
+- 2026-08-04T23:46Z · tool · raised F-FLAG-PROBES-CANNOT-COMPARE-A-VALUE (blocker)
+- 2026-08-04T23:46Z · @clerk · Correction: 44 of 60 open blockers are probe-testable, not beyond measurement. The clerk reported the opposite; most of Sven's flag queue is authorable work.
+- 2026-08-04T23:46Z · @clerk · flag_condition_met never compares a fact value, so F-ACCT-DUP would clear on a filename glob rather than on a unique index existing.
+- 2026-08-04T23:47Z · agent:opus · started L-BLOCKER-RESTATE-RECHECK
+- 2026-08-04T23:47Z · agent:opus · started L-WFR-ACCESS-STRING-TRUTH
+- 2026-08-04T23:47Z · @clerk · XZ residual sites: x>0 and isAmountStated do not agree. Four shapes pass the guard and reach the label unstated; PosReceiptView rendered a negated em-dash in mounted DOM with the guard untouched.
+- 2026-08-04T23:51Z · agent:L-JOURNEY-REGRESSION-BISECT · L-JOURNEY-REGRESSION-BISECT returned built -> built-unverified, evidence lanes/L-JOURNEY-REGRESSION-BISECT/bisect.md
+- 2026-08-04T23:51Z · agent:L-JOURNEY-REGRESSION-BISECT · report L-JOURNEY-REGRESSION-BISECT: Culprit: 55b2dcd "Merge branch 'lane/meals-enrol-pretick'" (compose step F1.16, index 7 of 35).; Last passing commit 9bc40c6 (lane/wf-roles-ui, index 6) PASS; first failing 55b2dcd FAIL.; Both endpoints re-measured here, not inherited: e34977ac PASS (34.4s), 9f7d8df FAIL. Both agree.; Six journey ru
+- 2026-08-04T23:52Z · @clerk · Journey regression named: 55b2dcd (lane/meals-enrol-pretick), a strict-mode locator collision. Not a merge interaction - the head fails the journey unmerged at its own tip 2e3f39d.
+- 2026-08-04T23:52Z · agent:opus · started L-MEALS-ENROL-JOURNEY-LOCATOR
+- 2026-08-04T23:53Z · agent:L-WFR-ACCESS-STRING-TRUTH · L-WFR-ACCESS-STRING-TRUTH returned built -> built-unverified, evidence lanes/L-WFR-ACCESS-STRING-TRUTH/verdict.md
+- 2026-08-04T23:53Z · agent:L-WFR-ACCESS-STRING-TRUTH · report L-WFR-ACCESS-STRING-TRUTH: RULING: wfr_access_no_list is TRUE of what ships. Copy stays, both pins stay, nothing edited.; Surface named: refs/heads/feature/restaurant-modules @ 8e2b57de, read BY OBJECT (working tree has; lane/meals-grace-pins out, 63 behind). All ten workforce controllers enumerated, route attributes; read no
+- 2026-08-04T23:53Z · @clerk · wfr_access_no_list ruled TRUE at 8e2b57de: no list route and no revoke verb on any of ten workforce controllers, positive control passed. The string stays.
+- 2026-08-04T23:53Z · @clerk · Both halves of the invite list/revoke capability are built and unlanded; each is a clean fast-forward, verified with --is-ancestor in both repos. D-WF-INVITE-LANDING-PAIR authored.
+- 2026-08-04T23:54Z · agent:opus · started L-CHECK-DISCOUNT-SUM-COUPLED
+- 2026-08-04T23:57Z · agent:L-ABSENCE-AUDIT-CONDITIONS · L-ABSENCE-AUDIT-CONDITIONS returned built -> built-unverified, evidence lanes/L-ABSENCE-AUDIT-CONDITIONS/applied.md
+- 2026-08-04T23:57Z · agent:L-ABSENCE-AUDIT-CONDITIONS · report L-ABSENCE-AUDIT-CONDITIONS: - absences.md 761 -> 875 lines. diff DELETES 17 lines, every one named by a condition. No compression; both demoted claims kept struck-through in place. Self-criticism verified intact after the edit: the four false zeros, S1.5 "a defect in THIS audit", the C-6 retraction, "93 is a floor", S8.8.; - A
+- 2026-08-04T23:57Z · tool · raised F-WRONG-CLOCK-DEMOTES-A-TRUE-FINDING (warn)
+- 2026-08-04T23:57Z · @clerk · Demotion reversed: the L-DOWNLOAD-HEADERS brief was written 15:51:07Z and the return 16:07:45Z. A UTC stamp was compared against a CEST mtime, inverting the order by two hours.
+- 2026-08-04T23:59Z · agent:opus · started L-MIG-STACK-RECORD
+- 2026-08-05T00:03Z · agent:L-BLOCKER-RESTATE-RECHECK · L-BLOCKER-RESTATE-RECHECK returned built -> built-unverified, evidence lanes/L-BLOCKER-RESTATE-RECHECK/recheck.md
+- 2026-08-05T00:03Z · agent:L-BLOCKER-RESTATE-RECHECK · report L-BLOCKER-RESTATE-RECHECK: 41 of 47 verdicts sustained; all 41 re-derived. Tally: 26 holds, 13 stale, 2 false.; F-FIXTURE-BEHIND-BACKEND is NOT false. At its own ref 31fc45d the divergence check is untracked; and package.json declares exactly six e2e scripts, none a divergence run - verbatim as written.; a62160e landed the ch
+- 2026-08-05T00:04Z · tool · raised F-RF1313-CREDIT-SALE-CLAIM-UNBACKED (blocker)
+- 2026-08-05T00:04Z · @clerk · Recheck of 41 sustained verdicts: 26 hold, 13 stale, 2 false. My own falsification of the fixture verdict was a wrong-ref reading; it is stale, overtaken 21 minutes after writing.
+- 2026-08-05T00:04Z · @clerk · RF-1313 systembeskrivelse says the X/Z report describes credit sales per 2-8-2; CreditSalesCount has one hit at the tip and it is in a planning document. Second unbacked claim in that file.
+- 2026-08-05T00:05Z · agent:opus · started L-CANDIDATE-JOURNEYS-ON-ARRIVAL
+- 2026-08-05T00:05Z · agent:L-GROWTH-SQL-CATCH-TYPED · L-GROWTH-SQL-CATCH-TYPED returned built -> built-unverified, evidence lanes/L-GROWTH-SQL-CATCH-TYPED/mutation-log.md
+- 2026-08-05T00:05Z · agent:L-GROWTH-SQL-CATCH-TYPED · report L-GROWTH-SQL-CATCH-TYPED: PREMISE HOLDS at 8e2b57de, re-measured in my own worktree: both catches untyped, neither already fixed.; Services/Growth held ZERO violation classifiers; the other four modules all have one.; FIX 2 lines: catch (DbUpdateException) -> catch (DbUpdateException ex) when (DbExceptionHelper.IsUniqueViola
+- 2026-08-05T00:05Z · tool · raised F-GROWTH-SQL-TIER-RED-BY-CONSTRUCTION (warn)
+- 2026-08-05T00:05Z · @clerk · Growth catches typed at two sites; M1 and M2 red disjoint arms, so neither rides the other's coverage. 4643/0/12 container-free. They catch DbUpdateException, not SqlException.
+- 2026-08-05T00:06Z · agent:opus · started L-BLOCKER-STALE-RERULE
+- 2026-08-05T00:09Z · agent:L-MEALS-ENROL-JOURNEY-LOCATOR · L-MEALS-ENROL-JOURNEY-LOCATOR returned built -> built-unverified, evidence lanes/L-MEALS-ENROL-JOURNEY-LOCATOR/mutation-log.md
+- 2026-08-05T00:09Z · agent:L-MEALS-ENROL-JOURNEY-LOCATOR · report L-MEALS-ENROL-JOURNEY-LOCATOR: Ruled the SPEC wrong, not the panel, and MEASURED it (runs/R1-probe.txt dumps all four from DOM):; exactly one of the four says 'leser' and exactly one sits outside .mls-enrol - the same element.; Counterfactual in the same probe: only 2 of the 4 are gated on enrolledUnknown, so had that read; answe
+- 2026-08-05T00:09Z · @clerk · meals-admin-setup completes on candidate tip 9f7d8df with d320105 cherry-picked; line 131 was that journey's only blocker across all 35 heads.
+- 2026-08-05T00:10Z · agent:opus · started L-MEALS-PRETICK-NEVER-WALKED
+- 2026-08-05T00:13Z · agent:L-MIG-STACK-RECORD · L-MIG-STACK-RECORD returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/lanes/L-MIG-STACK-RECORD/stack.md
+- 2026-08-05T00:13Z · agent:L-MIG-STACK-RECORD · report L-MIG-STACK-RECORD: Measured, not read. 79 of 271 backend refs carry migrations INT lacks; 63 are pre-fork lineages (merge-base <= 2026-07-17, a; different chain). Live set: 16 refs. Instrument validated on the brief's positive pair first: --is-ancestor afcfddbc 9e82b286 = YES.; The flag understated it three ways. 14 b
+- 2026-08-05T00:13Z · tool · raised F-MIG22-CLAIMED-TWICE (blocker)
+- 2026-08-05T00:13Z · tool · raised F-SHELL-FALLBACK-MASQUERADES-AS-THE-FIRST-BRANCH (info)
+- 2026-08-05T00:13Z · @clerk · Stacked migrations measured: 14 branches, not one. Seven author no migration and inherited the stack, so their diffs cannot show that merging them lands ten schema changes.
+- 2026-08-05T00:13Z · @clerk · The migrations ledger is in OkamAPI-modules, tracked on 184 refs; my brief said Web-modules. A shell fallback branch produced output indistinguishable from the branch it replaced.
+- 2026-08-05T00:15Z · agent:opus · started L-MIG-NUMBER-CLAIMS
+- 2026-08-05T00:16Z · agent:L-CHECK-DISCOUNT-SUM-COUPLED · L-CHECK-DISCOUNT-SUM-COUPLED returned built -> built-unverified, evidence lanes/L-CHECK-DISCOUNT-SUM-COUPLED/mutation-log.md
+- 2026-08-05T00:16Z · agent:L-CHECK-DISCOUNT-SUM-COUPLED · report L-CHECK-DISCOUNT-SUM-COUPLED: commit c8f26d5, ref refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED, off 799f05d4. 8c6e91fa untouched.; PREMISE CHECKED, one claim did NOT hold. Backend: NetLineAmount = LineAmount - DiscountAmount and; FinalAmount = SUM(LineGross), so rows render NET and always add to the total. "A total that does not; mat
+- 2026-08-05T00:17Z · tool · raised F-NEGATIVE-SALE-REFUNDS-THE-LISTED-PRICE (blocker)
+- 2026-08-05T00:17Z · @clerk · A POS return built its amount from the listed price when the discount was unstated, refunding money the shop never took. Fixed and pinned at c8f26d5, on no shared branch.
+- 2026-08-05T00:17Z · @clerk · A worktree without the core submodule loses five suites at load, all four money suites among them, and reports 2547 tests instead of 2729 while reading as green.
+- 2026-08-05T00:18Z · agent:opus · started L-RECEIPT-DISCOUNT-ROW-DROPPED
+- 2026-08-05T00:21Z · @clerk · L-TRAIN-DEMO-SEED has written nothing since 18:44 and holds 2 cpu points. Not retracted: stale files are not evidence an agent is gone, and load is near the ceiling anyway.
+- 2026-08-05T00:23Z · agent:L-BLOCKER-STALE-RERULE · L-BLOCKER-STALE-RERULE returned built -> built-unverified, evidence lanes/L-BLOCKER-STALE-RERULE/rerule.md
+- 2026-08-05T00:23Z · agent:L-BLOCKER-STALE-RERULE · report L-BLOCKER-STALE-RERULE: Re-derived all 14 stale verdicts at 8e2b57de (tip unmoved) / e34977ac. Split: 11 overtaken, 2 part-true, 1 unproven, 0 still-true in full.; Count reconciled: the recheck's stale table has 14 rows, not 13 -- F-UTLKVIT-SALE-ROW comes from the 6 already-fixed, not the 41 sustained. Tally of 13 is right
+- 2026-08-05T00:24Z · tool · raised F-JOURNEY-RECEIPT-DOES-NOT-NAME-ITS-FIXTURE (blocker)
+- 2026-08-05T00:24Z · @clerk · Journey evidence corrected: the composition ran against a sibling's fixture on port 4010. True figure 26 passed / 3 failed, not 21/8; the kodeoversikt statutory journey passes.
+- 2026-08-05T00:24Z · @clerk · I repeated that statutory failure in two briefs and three reports. It does not exist. The RF-1313 credit-sale blocker is separate and still holds; I verified it myself at the tip.
+- 2026-08-05T00:25Z · @clerk · Re-rule of the stale set: 11 overtaken, 2 part-true, 1 met-but-unproven, 0 still-true. Every overtaking names its build commit and its landing commit.
+- 2026-08-05T00:25Z · @clerk · F-AZURE-FUNCKEY re-derived: the two-site arithmetic expired but the live key is still committed at OkamFunctionsDocumentRenderer.cs:28. Rotation is the owner's act; no merge closes it.
+- 2026-08-05T00:26Z · agent:opus · started L-FIXTURE-DIVERGENCE-RECEIPT
+- 2026-08-05T00:30Z · agent:L-MIG-NUMBER-CLAIMS · L-MIG-NUMBER-CLAIMS returned built -> built-unverified, evidence lanes/L-MIG-NUMBER-CLAIMS/claims.md
+- 2026-08-05T00:30Z · agent:L-MIG-NUMBER-CLAIMS · report L-MIG-NUMBER-CLAIMS: 28 MIG numbers checked (denominator), from 317 backend refs/heads + 0 refs/lanes, 33,108 ref x; file rows, 19 pending-epoch migrations of 181. Frontend empty: 102 heads + 7 refs/lanes, no ledger.; 5 of 28 numbers collide, not 1: MIG-12, 19, 20, 21, 22 - derived twice (parsed name, then whole; normal
+- 2026-08-05T00:31Z · @clerk · Migration-number census: 5 collisions of 28, not 1. MIG-21 is the only two-file case and has no IF OBJECT_ID guard, so the second Up() fails hard.
+- 2026-08-05T00:31Z · @clerk · integration/mig-stack-land forks the integration branch: 34 against 59 commits, is-ancestor false both ways. The fast-forward option's premise is false and I had reported it as true.
+- 2026-08-05T00:33Z · agent:opus · started L-LEDGER-BUILD-STATE-RECONCILE
+- 2026-08-05T00:36Z · agent:L-CANDIDATE-JOURNEYS-ON-ARRIVAL · L-CANDIDATE-JOURNEYS-ON-ARRIVAL returned built -> built-unverified, evidence lanes/L-CANDIDATE-JOURNEYS-ON-ARRIVAL/triage.md
+- 2026-08-05T00:36Z · agent:L-CANDIDATE-JOURNEYS-ON-ARRIVAL · report L-CANDIDATE-JOURNEYS-ON-ARRIVAL: All six PASS on candidate/fe-compose-2026-08-05: 6/6 harness-shape, 0 regression, 0 never-passed.; Tier re-measured at BOTH endpoints, each run's fixture named by pid+cwd+self-reported port: tip e34977ac      22 journeys  21 passed  1 failed  (workforce-schedule-publish @live) candidate 9f7d8df 29 j
+- 2026-08-05T00:37Z · @clerk · Candidate journey tier measured on isolated ports: 27 of 29 pass, tip 21 of 22, and the only difference is the regression already attributed and fixed. All six triage journeys pass.
+- 2026-08-05T00:37Z · @clerk · Ninth instance: a spec hardcoded port 4010, so its red survived isolation, and journey.js logs the port the run was given rather than the one that answered.
+- 2026-08-05T00:38Z · agent:opus · started L-JOURNEY-RECEIPT-RECORDS-WHAT-ANSWERED
+- 2026-08-05T00:39Z · agent:L-FIXTURE-DIVERGENCE-RECEIPT · L-FIXTURE-DIVERGENCE-RECEIPT returned built -> built-unverified, evidence /Users/svendaneel/okam/web-fixdiv/lanes/L-FIXTURE-DIVERGENCE-RECEIPT/receipt.md
+- 2026-08-05T00:39Z · agent:L-FIXTURE-DIVERGENCE-RECEIPT · report L-FIXTURE-DIVERGENCE-RECEIPT: Ran at frontend e34977a in a private worktree; receipt committed 0dbec34 on lane/fixture-divergence-receipt.; The check reads SOURCE both sides — no server, no port bound. pid 73160 / port 4010 never contacted.; Backend side is a WORKING TREE, not a ref. OkamAPI-modules is DIVERGENT from the tip: 1 
+- 2026-08-05T00:39Z · @clerk · Divergence check run at the tip and it reds on a real defect: the backend throws 409 growth.test_address_suppressed and the fixture answers no such refusal.
+- 2026-08-05T00:39Z · @clerk · Run against the shared backend checkout the same check returns fixture-ahead, the opposite verdict. Three worlds, three answers; only a detached clone at the tip is meaningful.
+- 2026-08-05T00:40Z · agent:opus · started L-FIXTURE-SUPPRESSED-REFUSAL
+- 2026-08-05T00:41Z · agent:L-RECEIPT-DISCOUNT-ROW-DROPPED · L-RECEIPT-DISCOUNT-ROW-DROPPED returned built -> built-unverified, evidence lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED/mutation-log.md
+- 2026-08-05T00:41Z · agent:L-RECEIPT-DISCOUNT-ROW-DROPPED · report L-RECEIPT-DISCOUNT-ROW-DROPPED: commit 7a72c02, refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED, off c8f26d5; 8c6e91fa never read.; THE INHERITED CLAIM INVERTS. Check rows render netLineAmount so a check adds up either way; RECEIPT rows render lineAmount, GROSS of the discount, while the total is net (JournalLineFactory:95-105 keeps the
+- 2026-08-05T00:41Z · agent:L-MEALS-PRETICK-NEVER-WALKED · L-MEALS-PRETICK-NEVER-WALKED returned built -> built-unverified, evidence lanes/L-MEALS-PRETICK-NEVER-WALKED/mutation-log.md
+- 2026-08-05T00:41Z · agent:L-MEALS-PRETICK-NEVER-WALKED · report L-MEALS-PRETICK-NEVER-WALKED: Fix 9fbed80 on lane/fe-meals-pretick-walked off d320105. Fixture now serves 12 AND 12R: 12 replaces; the WHOLE set, so serving it without 12R is what left the branch dark. Shapes read BY OBJECT from; refs/heads/lane/meals-members-read, never from a working tree.; BRANCH-CHANGE PROVED, not the walk's
+- 2026-08-05T00:42Z · agent:L-LEDGER-BUILD-STATE-RECONCILE · L-LEDGER-BUILD-STATE-RECONCILE returned built -> built-unverified, evidence lanes/L-LEDGER-BUILD-STATE-RECONCILE/state.md
+- 2026-08-05T00:42Z · agent:L-LEDGER-BUILD-STATE-RECONCILE · report L-LEDGER-BUILD-STATE-RECONCILE: 50 entry-instances checked (22 INT copy + 28 STACK copy, 28 numbers) against the 8 pending-epoch migrations on INT=8e2b57de; 317 heads, 0 refs/lanes.; 12 disagreements, 4 directions. A: MIG-17 built and marked not-built in BOTH copies - 20260731215452_Meals_MembershipEmployeeReference on feature/res
+- 2026-08-05T00:42Z · tool · raised F-MIG17-WIDTH-HALF-THE-SPEC (blocker)
+- 2026-08-05T00:42Z · tool · raised F-THROW-50018-ALREADY-SPENT (blocker)
+- 2026-08-05T00:42Z · tool · raised F-INT-LEDGER-CEILING-SIX-LOW (blocker)
+- 2026-08-05T00:42Z · @clerk · Ledger reconciliation: 12 disagreements over 50 entry-instances in four directions. Neither copy is right about both branches; ten stack entries marked landed are absent from the integration branch.
+- 2026-08-05T00:42Z · @clerk · Eleventh instrument failure: a pending-epoch sweep returned zero migrations because its regex demanded 15 digits and ids are 14. Clean, plausible, no error; caught by a known positive.
+- 2026-08-05T00:44Z · agent:opus · started L-CHECK-LINEAMOUNT-UNGATED-SUM
+- 2026-08-05T00:44Z · agent:opus · started L-MEALS-MEMBERS-READ-LAND-CHECK
+- 2026-08-05T00:44Z · @clerk · Receipt rows render gross under a net total, so dropping a deduction row makes the paper fail to reconcile by the discount. The check does not share that property; rows there are already net.
+- 2026-08-05T00:44Z · @clerk · GET /v1/meals/programs/{id}/members exists on one ref only. The withheld arm is what an operator on the candidate sees, and the note explaining it was deleted on the frontend lane.
+- 2026-08-05T02:22Z · @clerk · Session limit killed four lanes around 02:50 CEST; it reset at 04:10. All four resumed from transcript with their last recorded state and a warning that no process survived.
+- 2026-08-05T02:22Z · @clerk · Outage rule restated for the resumed lanes: files survived, processes did not, so any pre-02:50 run output is a stale run and must be re-established before comparison.
+- 2026-08-05T02:27Z · agent:L-FIXTURE-SUPPRESSED-REFUSAL · L-FIXTURE-SUPPRESSED-REFUSAL returned built -> built-unverified, evidence lanes/L-FIXTURE-SUPPRESSED-REFUSAL/run.md
+- 2026-08-05T02:27Z · agent:L-FIXTURE-SUPPRESSED-REFUSAL · report L-FIXTURE-SUPPRESSED-REFUSAL: TAUGHT, not exempted; nothing was exempted. The exemption was the fast close and fails its own test:; nothing else covers the path — no ERROR_KEYS entry and no translation key for the code exist anywhere.; GREEN at 8e2b57de: "12 anchored routes refuse exactly what that checkout refuses", exit 0, npm
+- 2026-08-05T02:28Z · tool · raised F-CONSENT-SUMMARY-REASONS-NOT-IN-THE-ENUM (warn)
+- 2026-08-05T02:28Z · @clerk · The suppression refusal was taught rather than exempted; the exemption would have hidden a live operator-facing gap permanently. One divergence, not six; zero anchors added.
+- 2026-08-05T02:28Z · @clerk · web-fixdiv has no node_modules, so the receipt's 8-tests-passed figure was measured in the shared checkout. Result likely right, attribution wrong, and I repeated it without naming the tree.
+- 2026-08-05T02:28Z · agent:L-MEALS-MEMBERS-READ-LAND-CHECK · L-MEALS-MEMBERS-READ-LAND-CHECK returned built -> built-unverified, evidence lanes/L-MEALS-MEMBERS-READ-LAND-CHECK/combinations.md
+- 2026-08-05T02:28Z · agent:L-MEALS-MEMBERS-READ-LAND-CHECK · report L-MEALS-MEMBERS-READ-LAND-CHECK: A real pair, unlike tonight's two false ones: backend 086ac34f is 1 ahead / 0 behind FRM (clean FF), frontend 9fbed80 is 4 ahead / 2 behind, neither an ancestor; 12R lives on exactly one api ref.; FOUR COMBINATIONS COLLAPSE TO THREE — but not on the expected axis. "Neither" == "backend alone", becau
+- 2026-08-05T02:30Z · agent:opus · started L-GROWTH-SUPPRESSED-ERROR-KEY
+- 2026-08-05T02:31Z · @clerk · Meals pair measured: neither and backend-alone are the same world; frontend-alone is the dangerous one and it is the state already composed into the candidate.
+- 2026-08-05T02:38Z · agent:L-JOURNEY-RECEIPT-RECORDS-WHAT-ANSWERED · L-JOURNEY-RECEIPT-RECORDS-WHAT-ANSWERED returned built -> built-unverified, evidence lanes/L-JOURNEY-RECEIPT-RECORDS-WHAT-ANSWERED/mutation-log.md
+- 2026-08-05T02:38Z · agent:L-JOURNEY-RECEIPT-RECORDS-WHAT-ANSWERED · report L-JOURNEY-RECEIPT-RECORDS-WHAT-ANSWERED: Receipt gained two halves that CAN disagree with env-derived `apiBaseUrl`: `servingFixture` = who holds; the GRANTED port (health: port/pid/cwd, plus lsof: pid/cwd/command, with identitySource naming which; spoke), and `nodeCalls` = every origin the SPEC reached from Node, by role, servedBy resolved
+- 2026-08-05T02:39Z · tool · raised F-JOURNEY-GUARD-WAS-DEAD (blocker)
+- 2026-08-05T02:39Z · @clerk · guard-proof.js was dead at e34977a: 9 of 10 arms die in module load, and the tenth passes on a condition a module-load death satisfies. Directory split confirmed independently.
+- 2026-08-05T02:40Z · agent:opus · started L-JOURNEY-ARTIFACTS-UNWITNESSED
+- 2026-08-05T02:41Z · agent:L-CHECK-LINEAMOUNT-UNGATED-SUM · L-CHECK-LINEAMOUNT-UNGATED-SUM returned built -> built-unverified, evidence lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM/mutation-log.md
+- 2026-08-05T02:41Z · agent:L-CHECK-LINEAMOUNT-UNGATED-SUM · report L-CHECK-LINEAMOUNT-UNGATED-SUM: commit c32cda3, refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM, off baseline 7a72c02; 8c6e91fa never read.; THE FALSIFICATION HOLDS, AND IT IS THE MONEY. Under the old sums the ABSENT world and the ZERO world handed back the SAME kr 0,00 — `0 + null` is `0` — one because nothing was ever charged, the oth
+- 2026-08-05T02:42Z · tool · raised F-WORKTREE-WITHOUT-MODULES-FAILS-SILENTLY (blocker)
+- 2026-08-05T02:42Z · tool · raised F-SHARED-CHECKOUT-DIRT-IS-UNRECORDED-WORK (warn)
+- 2026-08-05T02:42Z · @clerk · A mutation that should have failed was green: every fixture world had one row, so a refusal inspecting only the first was indistinguishable from one inspecting all.
+- 2026-08-05T02:42Z · @clerk · Under the old sums an absent amount and a genuine zero both refunded kr 0,00 - one on a bill nothing was charged for, the other on a bill the till took 50,00 for.
+- 2026-08-05T02:42Z · agent:opus · started L-SHARED-DIRT-CENSUS
+- 2026-08-05T02:43Z · agent:L-GROWTH-SUPPRESSED-ERROR-KEY · L-GROWTH-SUPPRESSED-ERROR-KEY returned built -> built-unverified, evidence lanes/L-GROWTH-SUPPRESSED-ERROR-KEY/mutation-log.md
+- 2026-08-05T02:43Z · agent:L-GROWTH-SUPPRESSED-ERROR-KEY · report L-GROWTH-SUPPRESSED-ERROR-KEY: Premise verified first, with a positive control: growth_error_test_address_required present 1/1/1 in no|en|de, growth_error_test_address_suppressed 0/0/0, and no ERROR_KEYS entry — only the fixture mentions the code.; Thrower is live: GrowthNewsletterService.cs:649, reached unconditionally at :278; 
+- 2026-08-05T02:44Z · @clerk · A suite total is a property of a tree: three lane baselines carry 146, 145 and 140 test files. My briefs quoted one tree's number as if it were the estate's.
+- 2026-08-05T02:44Z · agent:opus · started L-WORKTREE-BASENAME-TAX
+- 2026-08-05T02:52Z · @clerk · The basename fix at 0cea96a closes the condition and is already on the composition candidate; my brief said it was on no tip and named the wrong path. Both corrected by the lane.
+- 2026-08-05T02:52Z · agent:L-WORKTREE-BASENAME-TAX · L-WORKTREE-BASENAME-TAX returned built -> built-unverified, evidence lanes/L-WORKTREE-BASENAME-TAX/run.md
+- 2026-08-05T02:52Z · agent:L-WORKTREE-BASENAME-TAX · report L-WORKTREE-BASENAME-TAX: lane/worktree-basename-pin @ 0cea96a closes the condition. It is a real fix, not a relaxation.; Baseline e34977a in worktree web-wtbasename-tax: 2 failed / 36 passed / 38, exit 1; both reds are; the checkout directory name only. At 0cea96a same worktree: 38/38, exit 0 - total still 38, so no; test w
+- 2026-08-05T02:53Z · @clerk · Two more silent-instrument instances: a perl mutation with \Q..\E around an @ silently no-oped and the suite reported 38 passed, and zsh does not populate PIPESTATUS.
+- 2026-08-05T02:54Z · agent:opus · started L-FIX-BRANCH-MANIFEST
+- 2026-08-05T02:55Z · agent:L-JOURNEY-ARTIFACTS-UNWITNESSED · L-JOURNEY-ARTIFACTS-UNWITNESSED returned built -> built-unverified, evidence lanes/L-JOURNEY-ARTIFACTS-UNWITNESSED/witnessed.md
+- 2026-08-05T02:55Z · agent:L-JOURNEY-ARTIFACTS-UNWITNESSED · report L-JOURNEY-ARTIFACTS-UNWITNESSED: 41 committed receipts censused across all 115 refs; 15 PRE-PROOF, 26 DEAD, 0 WITNESSED.; Guard died at 94fa256 (2026-08-04T02:54:30+02:00) when artifact-store.js gained require('./world-stamp'); and guard-proof.js's hand-written copy list of two did not follow. It worked only 31fc45d->94fa256, 12h35
+- 2026-08-05T02:56Z · @clerk · Of 41 committed journey receipts, zero were ever witnessed: the guard lived 12h35m and that window contains no artifact-adding commit. Five have now been re-run and are witnessed.
+- 2026-08-05T02:56Z · @clerk · The guard repair is on 0 of 115 refs, and landing it breaks build-provenance-proof.js, whose own hand-written file list omits what the repair requires.
+- 2026-08-05T02:56Z · agent:opus · started L-GUARD-REPAIR-LANDS
+- 2026-08-05T02:59Z · @clerk · L-SHARED-DIRT-CENSUS died to a server error while compressing its log; evidence and scripts survived on disk, so it resumed at the write step rather than re-measuring.
+- 2026-08-05T03:04Z · agent:L-SHARED-DIRT-CENSUS · L-SHARED-DIRT-CENSUS returned built -> built-unverified, evidence lanes/L-SHARED-DIRT-CENSUS/dirt.md
+- 2026-08-05T03:04Z · agent:L-SHARED-DIRT-CENSUS · report L-SHARED-DIRT-CENSUS: DENOMINATOR 133 paths, as of 2026-08-05T02:43:01Z, baseline e34977ac (still e34977ac). `git status -uall` file-level saw 1,216 entries.; IN SCOPE = all of it EXCEPT lanes/** (735 entries) and docs/plan/** (348), both excluded and stated: together 89% of the dirt, and they; are the programme's own bo
+- 2026-08-05T03:05Z · @clerk · Dirt census: 133 paths in scope, 66 contested by more than one lane. translations/no,en,de each claimed by 46 lanes with 43 rival variants.
+- 2026-08-05T03:05Z · @clerk · My 270-dirty-files figure was the untracked-normal count, which counts directories. In scope the number is 133; lanes and docs/plan hold most of the rest.
+- 2026-08-05T03:06Z · agent:opus · started L-TRANSLATIONS-COLLISION
+- 2026-08-05T03:06Z · agent:L-GUARD-REPAIR-LANDS · L-GUARD-REPAIR-LANDS returned built -> built-unverified, evidence lanes/L-GUARD-REPAIR-LANDS/run.md
+- 2026-08-05T03:06Z · agent:L-GUARD-REPAIR-LANDS · report L-GUARD-REPAIR-LANDS: Committed 7030c00 on lane/guard-repair-lands, parent e34977a, worktree /Users/svendaneel/okam/web-guardland.; 8 overlay files copied from web-whoanswered, sha256 byte-identical, that worktree read-only and unchanged.; 9th file is this lane's: build-provenance-proof.js:185 four-name list -> copySuppo
+- 2026-08-05T03:06Z · @clerk · Both journey provers green together for the first time at 7030c00: guard-proof 10/10, build-provenance 5/5, each printing the ref's own journey.js sha rather than its configuration.
+- 2026-08-05T03:06Z · @clerk · Carrying the repair to the candidate is a merge, not a copy: journey.js is +73/-1 there, world-stamp.js +317/-52, api-server.js +630/-16 past e34977a.
+- 2026-08-05T03:08Z · agent:opus · started L-ARM-RECEIPTS-RECAPTURE
+- 2026-08-05T03:08Z · agent:L-FIX-BRANCH-MANIFEST · L-FIX-BRANCH-MANIFEST returned built -> built-unverified, evidence lanes/L-FIX-BRANCH-MANIFEST/manifest.md
+- 2026-08-05T03:08Z · agent:L-FIX-BRANCH-MANIFEST · report L-FIX-BRANCH-MANIFEST: Denominator 433 refs, all classified: frontend 116 (107 heads + 9 lanes), backend 317 heads.; Frontend: 22 in both anchors, 41 candidate-only, 0 modules-only, 53 in neither.; Of those 53: 3 alias duplicates, feature/swiss, plan-snapshot (documents), 3 content-already-applied, 45 real unlanded fixes.
+- 2026-08-05T03:09Z · @clerk · Branch manifest: 433 refs classified. The money work is one head six deep, not six peers; merging it conflicts on XReportView.vue and utils/price.js, both money-path.
+- 2026-08-05T03:09Z · @clerk · Third must-land-together pair found, and its quiet half is the backend: consent withdrawal refuses with no status code, no log line and no rendered refusal, and no test reds.
+- 2026-08-05T03:16Z · agent:L-ARM-RECEIPTS-RECAPTURE · returned L-ARM-RECEIPTS-RECAPTURE verdict=fail-spec -> open; D-SPEC-L-ARM-RECEIPTS-RECAPTURE appended
+- 2026-08-05T03:16Z · agent:L-ARM-RECEIPTS-RECAPTURE · report L-ARM-RECEIPTS-RECAPTURE: All ten re-captured at 7030c00 from clean worktree web-armrecapture; porcelain 0 before and after every run.; Both provers re-measured by me, not inherited: guard-proof 10/10 EXIT=0, build-provenance 5/5 EXIT=0 twice.; Both print journey.js 6dd043e1..., equal to git show 7030c00:test/e2e/support/jou
+- 2026-08-05T03:18Z · @clerk · Ten arm receipts re-captured: probe substance identical across all ten pairs, only provenance moved. Two originals name a build nobody can check out; five carry fields no relevant ref can emit.
+- 2026-08-05T03:18Z · @clerk · The servingFixture clause was mine and was generalised from five fixture-backed re-runs; these ten are live-backed, where identity is backendBuild's job by design.
+- 2026-08-05T03:18Z · tool · raised F-EVIDENCE-IN-THE-TREE-DIRTIES-ITS-OWN-BUILD-ID (warn)
+- 2026-08-05T03:20Z · agent:opus · started L-ARTIFACT-FIELDS-VS-HARNESS
+- 2026-08-05T03:20Z · agent:opus · started L-CONSENT-REASON-VOCABULARY
+- 2026-08-05T03:20Z · agent:L-TRANSLATIONS-COLLISION · L-TRANSLATIONS-COLLISION returned built -> built-unverified, evidence lanes/L-TRANSLATIONS-COLLISION/keys.md
+- 2026-08-05T03:20Z · agent:L-TRANSLATIONS-COLLISION · report L-TRANSLATIONS-COLLISION: ALMOST NOTHING COLLIDES. 1,911 keys added across 117 refs (108 heads + 9 lanes, as-of; 2026-08-05T03:06Z) plus the working tree as a 47th claimant; all three files ` M`. 1,321; added by one claimant; of the 590 added by 2+, 543 are BYTE-IDENTICAL -- one lane's commits; seen from descendant branches.
+- 2026-08-05T03:21Z · tool · raised F-TRANSLATION-MERGE-DUPLICATES-A-KEY-SILENTLY (blocker)
+- 2026-08-05T03:21Z · tool · raised F-NORWEGIAN-ONLY-KEYS-RENDER-NORWEGIAN-TO-EVERYONE (warn)
+- 2026-08-05T03:21Z · @clerk · Translations: of 1911 keys added, 1321 have one claimant and 543 of the rest are byte-identical. Real disagreements are 19, 20 and 21 by locale.
+- 2026-08-05T03:21Z · @clerk · Nine of 87 simulated merges leave a key twice with no conflict; two are money keys saying opposite things, and which side wins depends on line position.
+- 2026-08-05T03:24Z · agent:opus · started L-DUPLICATE-KEY-GUARD
+- 2026-08-05T03:24Z · agent:opus · started L-VAT-KEYS-MONOLINGUAL
+- 2026-08-05T03:30Z · agent:L-CONSENT-REASON-VOCABULARY · L-CONSENT-REASON-VOCABULARY returned built -> built-unverified, evidence /Users/svendaneel/okam/web-consentvocab/lanes/L-CONSENT-REASON-VOCABULARY/vocabulary.md
+- 2026-08-05T03:30Z · agent:L-CONSENT-REASON-VOCABULARY · report L-CONSENT-REASON-VOCABULARY: Enum by object at 8e2b57de: Unsubscribe Objection HardBounce Complaint InvalidAddress AdminBlock Erasure.; GrowthConsentAdminService serialises byReason[group.Key.ToString()] - member names ARE the wire keys.; Fixture moved, enum did not, and NOT on naming grounds: Reason persists via EnumToStringCo
+- 2026-08-05T03:31Z · @clerk · The consent fixture was wrong, not the enum: the member name is the stored string and the table is append-only, so renaming it would need an UPDATE against a guarded ledger.
+- 2026-08-05T03:31Z · @clerk · GrowthConsentStanding.vue:54 renders the reason raw, so every journey against that fixture printed two words to an operator that the product can never print.
+- 2026-08-05T03:32Z · agent:opus · started L-FIXTURE-VOCABULARY-SWEEP
+- 2026-08-05T03:38Z · agent:L-ARTIFACT-FIELDS-VS-HARNESS · L-ARTIFACT-FIELDS-VS-HARNESS returned built -> built-unverified, evidence lanes/L-ARTIFACT-FIELDS-VS-HARNESS/mismatches.md
+- 2026-08-05T03:38Z · agent:L-ARTIFACT-FIELDS-VS-HARNESS · report L-ARTIFACT-FIELDS-VS-HARNESS: 19 of 65 committed journey receipts carry a field the tree holding them cannot name. Not six.; Two families, two producers. A: proxiedSubjectServed/Sample, 15 artifacts, sole producer 9d4399a; (+ byte-identical dangling twin 097c3c9e), on 5 of 137 refs only. B is NEW: backendBuild +; canonicalHeldBy
+- 2026-08-05T03:38Z · tool · raised F-ARTIFACTS-FROM-A-HARNESS-THE-BRANCH-LACKS (blocker)
+- 2026-08-05T03:38Z · @clerk · 19 of 65 committed receipts carry a field their branch cannot name, in two families two days apart. Four lanes filed inside one twenty-minute band from a shared dirty checkout.
+- 2026-08-05T03:38Z · @clerk · This repo has four ref namespaces: heads 111, lanes 9, salvage 8, remotes 8. My standing enumerate-both instruction was itself incomplete; a producer's twin lives only in salvage.
+- 2026-08-05T03:41Z · agent:L-DUPLICATE-KEY-GUARD · L-DUPLICATE-KEY-GUARD returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/lanes/L-DUPLICATE-KEY-GUARD/mutation-log.md
+- 2026-08-05T03:41Z · agent:L-DUPLICATE-KEY-GUARD · report L-DUPLICATE-KEY-GUARD: BASELINE MEASURED IN MY OWN TREE, NOT INHERITED: worktree web-dupkeyguard off candidate/fe-compose-2026-08-05 (9f7d8df), core submodule initialised (it needed -c protocol.file.allow=always), node_modules symlinked. Before the first edit: 126 suites / 2959 tests / exit 0. After: 127 / 2965 / exit 0. 
+- 2026-08-05T03:42Z · tool · raised F-LINT-IS-ENABLED-AND-WIRED-INTO-NOTHING (warn)
+- 2026-08-05T03:42Z · @clerk · The duplicate-key guard runs inside the suite: waste merge reds exactly one test in 2965, and it is this one. Seven dictionaries covered, not three.
+- 2026-08-05T03:42Z · @clerk · no-dupe-keys is already error and catches it in under a second; no lint script, no workflow, and husky v4 hooks read a key package.json lacks. Verified all three.
+- 2026-08-05T03:43Z · agent:opus · started L-LINT-RUNNABLE
+- 2026-08-05T03:45Z · agent:L-VAT-KEYS-MONOLINGUAL · L-VAT-KEYS-MONOLINGUAL returned built -> built-unverified, evidence lanes/L-VAT-KEYS-MONOLINGUAL/keys.md
+- 2026-08-05T03:45Z · agent:L-VAT-KEYS-MONOLINGUAL · report L-VAT-KEYS-MONOLINGUAL: Census re-derived from the e34977ac blobs by object, not the dirty checkout: 4817/4782/4782, gap 35,; zero unparsed, zero dupes — matches the collision lane; the brief's 4816/4781 is one low per locale.; VAT-facing subset is 19, not 20; the other 16 are the index_specialDays_ opening-hours block.; A
+- 2026-08-05T03:45Z · tool · raised F-TRANSLATION-STALE-BUT-PRESENT (warn)
+- 2026-08-05T03:45Z · @clerk · 19 VAT keys landed in both locales with three flagged for a tax-literate person; reverting them turns 16 of 20 tests red and prints a German screen reading Norwegian.
+- 2026-08-05T03:45Z · @clerk · My key counts were one low per locale: the tip is 4817/4782/4782. My pattern required two spaces of indentation and one key is indented differently.
+- 2026-08-05T03:47Z · agent:opus · started L-TRANSLATION-STALE-SWEEP
+- 2026-08-05T03:53Z · agent:opus · started L-MODULES-PREFLIGHT-FAILS-LOUD
+- 2026-08-05T03:53Z · agent:opus · started L-PROVENANCE-EXCLUDES-LANE-EVIDENCE
+- 2026-08-05T03:53Z · @clerk · Fable review fired for L-FIX-BRANCH-MANIFEST: whether the containment classification and the six-deep chain claim survive re-derivation before the composition is ruled on them.
+- 2026-08-05T03:59Z · agent:L-FIXTURE-VOCABULARY-SWEEP · L-FIXTURE-VOCABULARY-SWEEP returned built -> built-unverified, evidence /Users/svendaneel/okam/web-vocabsweep/lanes/L-FIXTURE-VOCABULARY-SWEEP/vocabulary.md
+- 2026-08-05T03:59Z · agent:L-FIXTURE-VOCABULARY-SWEEP · report L-FIXTURE-VOCABULARY-SWEEP: All 10 fixture files swept, not the 4 named as the floor: 1556 literals + 17 enum-shaped KEYS, comments stripped first.; 360 rows checked; 272 bound to a backend enum by the READING code (89 fields, 47 of 177 enums at 8e2b57de); 260 correct.; 12 wrong, 11 distinct strings, 5 files. events/margin/mea
+- 2026-08-05T04:00Z · tool · raised F-FIXTURE-PRINTS-WORDS-THE-PRODUCT-CANNOT-SAY (blocker)
+- 2026-08-05T04:00Z · @clerk · Fixture vocabulary swept with a denominator: 260 of 272 enum-bound values are right, twelve wrong, six of them printed to an operator.
+- 2026-08-05T04:00Z · @clerk · The drift is seeded versus hand-typed: events.js derives its values by running the machine and is 74 of 74; world.js hand-types them and owns five of the twelve.
+- 2026-08-05T04:01Z · agent:opus · started L-FIXTURE-RENDERED-VALUES-FIX
+- 2026-08-05T04:03Z · agent:L-LINT-RUNNABLE · L-LINT-RUNNABLE returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/lanes/L-LINT-RUNNABLE/run.md
+- 2026-08-05T04:03Z · agent:L-LINT-RUNNABLE · report L-LINT-RUNNABLE: NOT FAIL-SPEC, CHECKED NOT ASSUMED: eslint v7.32.0 runs, all 8 plugins and vue-eslint-parser resolve, --print-config exits 0 for .ts/.js/.vue, and there are 0 fatal/parse errors across all 878 files. 207 rules resolve to `error`. .eslintrc.js itself sets 14 rules - 10 warn, 4 off, NONE error - so ev
+- 2026-08-05T04:04Z · @clerk · eslint is healthy and now runnable: 207 rules at error, 0 fatal across 878 files, and a deliberate violation moves the repo from 678 to 679 with exactly one new line-item.
+- 2026-08-05T04:04Z · @clerk · My husky account was wrong: the hook greps for its own name, not a husky key. The 17 hooks sit in one shared dir behind ninety worktrees, written by a lane's npm install.
+- 2026-08-05T04:04Z · agent:L-TRANSLATION-STALE-SWEEP · L-TRANSLATION-STALE-SWEEP returned built -> built-unverified, evidence lanes/L-TRANSLATION-STALE-SWEEP/stale.md
+- 2026-08-05T04:04Z · agent:L-TRANSLATION-STALE-SWEEP · report L-TRANSLATION-STALE-SWEEP: Read no/en/de by OBJECT from e34977ac (03fbae5b/e2298392/cc6e56d4, byte-identical to the VAT lane's; table); working tree NOT read, so the 19 new VAT sisters are absent. Re-parsed 4817/4782/4782, 0; unparsed, 0 dupes -- confirms your correction of 4816/4781. Population = the 4782 tri-present.; FINDI
+- 2026-08-05T04:05Z · agent:opus · started L-LINT-TWO-REAL-DEFECTS
+- 2026-08-05T04:06Z · @clerk · Stale sweep: exactly one key of 4782, and the obvious structural method scored 0 of 25 while missing the known positive entirely. 454 keys read by hand.
+- 2026-08-05T04:06Z · @clerk · receiptModal_orgNumber prints a Norwegian org number on a receipt as a German VAT identification number; two more German strings substitute a German institution for a Norwegian one.
+- 2026-08-05T04:07Z · agent:opus · started L-GERMAN-IDENTIFIER-LABELS
+- 2026-08-05T04:08Z · @clerk · Manifest review: the conflict census is 26 of 30, not 19 of 25. Five older heads were never trial-merged and all five conflict; a landing plan sized on 19 is undersized by seven merges.
+- 2026-08-05T04:08Z · @clerk · The two CORS commits are not the same patch: one hardcodes ETag, the other exposes all browser-readable headers and records that the literal dropped two. The dedup advice becomes a resolution rule.
+- 2026-08-05T04:09Z · agent:opus · started L-MANIFEST-CONDITIONS
+- 2026-08-05T04:13Z · agent:L-PROVENANCE-EXCLUDES-LANE-EVIDENCE · L-PROVENANCE-EXCLUDES-LANE-EVIDENCE returned built -> built-unverified, evidence lanes/L-PROVENANCE-EXCLUDES-LANE-EVIDENCE/run.md
+- 2026-08-05T04:13Z · agent:L-PROVENANCE-EXCLUDES-LANE-EVIDENCE · report L-PROVENANCE-EXCLUDES-LANE-EVIDENCE: Exclusion built, argued against the convention rather than picked. Rule: an UNTRACKED path under lanes/ or docs/plan/ is not a change to the build; everything else is. Commit 607f138 on lane/provenance-excludes-lane-evidence off 7030c00, worktree /Users/svendaneel/okam/web-provexcl, unpushed.; Both 
+- 2026-08-05T04:14Z · @clerk · Provenance exclusion decided by measurement: the write-evidence-elsewhere convention put 1221 of 1356 dirty entries into the shared checkout, and the strict check fired on every correct run.
+- 2026-08-05T04:14Z · @clerk · git status --porcelain collapses an untracked directory to its ancestor: one line for docs/plan against 366 with -uall. Three copies of the dirty check existed; unifying them was load-bearing.
+- 2026-08-05T04:14Z · agent:L-MODULES-PREFLIGHT-FAILS-LOUD · L-MODULES-PREFLIGHT-FAILS-LOUD returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/lanes/L-MODULES-PREFLIGHT-FAILS-LOUD/run.md
+- 2026-08-05T04:14Z · agent:L-MODULES-PREFLIGHT-FAILS-LOUD · report L-MODULES-PREFLIGHT-FAILS-LOUD: NOTHING INHERITED. Two worktrees I made at one commit (e34977a), differing only in module trees: web-preflight (node_modules symlinked, core populated) and web-preflight-missing (neither, created deliberately, never repaired). Driver lanes/L-MODULES-PREFLIGHT-FAILS-LOUD/falsify.sh asserts each tree'
+- 2026-08-05T04:15Z · @clerk · Corrected: 2547 is the empty-core case, not the missing-modules one; populated the same tree reports 2583; and 2729 is not a total this commit produces in any state.
+- 2026-08-05T04:15Z · @clerk · Corrected: jest exits 1 on the ts-jest validation error. The zero was the caller's pipeline returning tail's status, so that instrument entry was the pipeline one twice.
+- 2026-08-05T04:15Z · @clerk · Corrected: the shared module tree is okam/Web on feature/POS with a different package-lock. 80 worktrees symlink it and 16 are at a differing lock.
+- 2026-08-05T04:23Z · @clerk · The receipt modal cannot be mounted in jest at all; the German-labels lane rewrote two template lines to make seven assertions possible and raised it rather than absorbing it.
+- 2026-08-05T04:23Z · agent:L-GERMAN-IDENTIFIER-LABELS · L-GERMAN-IDENTIFIER-LABELS returned built -> built-unverified, evidence lanes/L-GERMAN-IDENTIFIER-LABELS/mutation-log.md
+- 2026-08-05T04:23Z · agent:L-GERMAN-IDENTIFIER-LABELS · report L-GERMAN-IDENTIFIER-LABELS: Refuted the alternative first: {vat} is order.storeVAT -> Order.StoreVAT, a `long`; copied from Store.VAT. A German USt-IdNr is DE+9 digits and cannot fit a numeric; column, so the value is a Norwegian organisasjonsnummer and NO/EN were the correct; ones. OrderModal.vue:95 already labels the same fi
+- 2026-08-05T04:24Z · tool · raised F-SV-NUMBER-PASSES-THE-FODSELSNUMMER-GUARD (blocker)
+- 2026-08-05T04:24Z · agent:L-LINT-TWO-REAL-DEFECTS · L-LINT-TWO-REAL-DEFECTS returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/lanes/L-LINT-TWO-REAL-DEFECTS/mutation-log.md
+- 2026-08-05T04:24Z · agent:L-LINT-TWO-REAL-DEFECTS · report L-LINT-TWO-REAL-DEFECTS: WHICH TREE EACH DEFECT LIVES IN, ESTABLISHED BEFORE FIXING EITHER. overview.vue is tracked and byte-identical (md5 99d6334b) at e34977a, at lane/lint-runnable and in the shared-checkout working tree. ClockScreen.vue is UNTRACKED, shared checkout only, one of a cluster (pos-clock-client.js, pos-clock
+- 2026-08-05T04:26Z · tool · raised F-CLOCKSCREEN-FOUR-BRANCHES-NO-KEYS (blocker)
+- 2026-08-05T04:26Z · @clerk · The till screen and its 25 keys are both untracked; four branches carry a version whose keys exist nowhere, and merging one would overwrite the untracked pair without conflicting.
+- 2026-08-05T04:26Z · @clerk · De-duplicating the watcher had a wrong answer: the two bodies differ and one is the only KAM normalisation. The wrong fix is lint-clean and behaviourally broken.
+- 2026-08-05T04:27Z · agent:opus · started L-IDENTITY-STUB-TESTS
+- 2026-08-05T04:28Z · agent:L-MANIFEST-CONDITIONS · L-MANIFEST-CONDITIONS returned built -> built-unverified, evidence lanes/L-MANIFEST-CONDITIONS/applied.md
+- 2026-08-05T04:28Z · agent:L-MANIFEST-CONDITIONS · report L-MANIFEST-CONDITIONS: Seven of seven APPLIED, none refused. Every one re-measured by object before it was written in, and all seven held.; Conflict census now 26 of 30 conflict / 4 clean: the 24 reported are 20C/4clean not 19; e8b58ec1 was listed "not run" while inside the denominator (CONFLICT 8); five older heads were 
+- 2026-08-05T04:29Z · @clerk · Manifest corrected: 26 of 30 conflict, and the old 19-of-25 failed its own arithmetic. One clean head is a fast-forward; the five older heads conflict on 10 to 13 files each.
+- 2026-08-05T04:29Z · @clerk · The older CORS commit was correct at its own base and is wrong only as a resolution against today's tip, so the remedy is a resolution rule rather than a dedup.
+- 2026-08-05T04:29Z · @clerk · lane/vat-keys-monolingual resolves to the modules tip and carries nothing; the nineteen keys and their test exist only in that lane's worktree. Asked the lane to commit them.
+- 2026-08-05T04:30Z · agent:opus · started L-BUILT-BUT-ON-NO-REF
+- 2026-08-05T04:31Z · @clerk · The VAT keys are on a ref: 358 insertions, zero deletions, staged by pathspec. That worktree was cut from the tip, so it never held a sibling's uncommitted work.
+- 2026-08-05T04:33Z · agent:L-FIXTURE-RENDERED-VALUES-FIX · L-FIXTURE-RENDERED-VALUES-FIX returned built -> built-unverified, evidence /Users/svendaneel/okam/web-fixrendered/lanes/L-FIXTURE-RENDERED-VALUES-FIX/mutation-log.md
+- 2026-08-05T04:33Z · agent:L-FIXTURE-RENDERED-VALUES-FIX · report L-FIXTURE-RENDERED-VALUES-FIX: Five values corrected, two left with the reason IN CODE; 20 mounted assertions over 7 render sites, all green.; Suite 112 files/2583 tests -> 113/2603; the SAME 2 reds before and after (journey-artifact-store checkout-basename, not mine).; Predicted 0 reds from the edits - no jest test and no Playwr
+- 2026-08-05T04:34Z · tool · raised F-FRONTEND-ENUM-MIRROR-SHORT-A-MEMBER (warn)
+- 2026-08-05T04:34Z · @clerk · Fixture values fixed at the seed: world.js now throws at require time on a non-member, and the two exemptions are exported and asserted whole so a third joining reds.
+- 2026-08-05T04:34Z · @clerk · Correction: the wrong order status rendered a blank heading to a guest from a different repo's app, not Ikke satt; Ikke satt is what the venue read. Both readers were worse off.
+- 2026-08-05T04:35Z · agent:opus · started L-ENUM-MIRROR-CENSUS
+- 2026-08-05T04:39Z · agent:L-IDENTITY-STUB-TESTS · L-IDENTITY-STUB-TESTS returned built -> built-unverified, evidence lanes/L-IDENTITY-STUB-TESTS/stubs.md
+- 2026-08-05T04:39Z · agent:L-IDENTITY-STUB-TESTS · report L-IDENTITY-STUB-TESTS: Read feature/restaurant-modules @ e34977ac, working tree DIRTY (all 3 dictionaries modified).; Population derived, not inherited: 128 non-e2e jest files, 60 exercise $i.; 26 resolve the REAL dictionary; 4 guest suites use the real resolver with no stub.; 23 mount copy-blind with no copy assertion an
+- 2026-08-05T04:40Z · tool · raised F-CH-BUILD-COPY-HAS-NO-DOM-GUARD (blocker)
+- 2026-08-05T04:40Z · @clerk · The CH build serves only de and no journey asserts a German literal anywhere, so the Swiss market's copy has no DOM-level guard in this repository.
+- 2026-08-05T04:40Z · @clerk · My stub count was wrong both ways: 23 not 15, because a multi-line shape reads as a stub and mostly is not, and nine suites use an echo shape no identity pattern matches.
+- 2026-08-05T04:41Z · agent:opus · started L-JOURNEY-AT-DE
+- 2026-08-05T04:49Z · agent:L-BUILT-BUT-ON-NO-REF · L-BUILT-BUT-ON-NO-REF returned built -> built-unverified, evidence lanes/L-BUILT-BUT-ON-NO-REF/onref.md
+- 2026-08-05T04:49Z · agent:L-BUILT-BUT-ON-NO-REF · report L-BUILT-BUT-ON-NO-REF: DENOMINATORS, as-of 04:30Z-04:46Z: 335 returns classified (334 -> 336 inside 16 min); FE 141 refs = heads 116 + lanes 9 + salvage 8 + remotes 8; BE 332 = heads 317 + remotes 15; 450 worktrees scanned (FE 113, BE 337); tips e34977ac / 8e2b57de unmoved.; POPULATION SPLIT, mechanical: 195 returns name 
+- 2026-08-05T04:50Z · agent:L-ENUM-MIRROR-CENSUS · L-ENUM-MIRROR-CENSUS returned built -> built-unverified, evidence lanes/L-ENUM-MIRROR-CENSUS/mirrors.md
+- 2026-08-05T04:50Z · agent:L-ENUM-MIRROR-CENSUS · report L-ENUM-MIRROR-CENSUS: Denominator: 918 files swept, 40 enum declarations, ALL in core/enums/; extractor validated on the; known positive (PaymentType=16). 32 are backend mirrors: 24 EXACT, 8 divergent. 8 not mirrors.; Matched by MEMBER SET against all 177 backend enums at 8e2b57de read by object; name kept as a; separate
+- 2026-08-05T04:52Z · tool · raised F-FINISHED-WORK-ON-NO-REF (blocker)
+- 2026-08-05T04:52Z · @clerk · Work on no ref: a whole delivery-failures feature on 0 of 141 refs, a till clock-state guard, and a backend fix with a five-arm proof living only in a worktree.
+- 2026-08-05T04:52Z · @clerk · Enum census: 24 of 32 mirrors agree member-for-member. The one live defect is PaymentType omitting CompanyAccount, which falls through the checkout label ladder.
+- 2026-08-05T04:53Z · agent:opus · started L-PAYMENTTYPE-COMPANYACCOUNT
+- 2026-08-05T04:54Z · @clerk · The backend Growth fix is on a ref at c7912d49, three files by pathspec. Its suite run rewrote two journey artifacts it did not author; the lane reverted them before staging.
+- 2026-08-05T04:54Z · @clerk · A lane warned about the decorated-evidence trap hit it while re-validating format: it checked what had failed before, not the field it had just edited.
+- 2026-08-05T04:57Z · agent:opus · started L-PRESERVE-UNREFERENCED-WORK
+- 2026-08-05T04:57Z · @clerk · Evidence line restored and verified. The rule from it: check the changed field first by the consumer's own rule, then every field, then the historical set.
+- 2026-08-05T05:03Z · agent:L-JOURNEY-AT-DE · L-JOURNEY-AT-DE returned built -> built-unverified, evidence lanes/L-JOURNEY-AT-DE/mutation-log.md
+- 2026-08-05T05:03Z · agent:L-JOURNEY-AT-DE · report L-JOURNEY-AT-DE: Parameterised margin-statement-week.spec.js; no new journey. Chosen by measuring all 22 journeys' locators: it addresses 0 elements by text and 76 by data-test, so language moves assertions and never selectors, and it is Margin's fiscal headline.; margin-supplier-to-plate rejected: ~41 Norwegian tex
+- 2026-08-05T05:03Z · agent:L-PAYMENTTYPE-COMPANYACCOUNT · returned L-PAYMENTTYPE-COMPANYACCOUNT verdict=fail-spec -> open; D-SPEC-L-PAYMENTTYPE-COMPANYACCOUNT appended
+- 2026-08-05T05:03Z · agent:L-PAYMENTTYPE-COMPANYACCOUNT · report L-PAYMENTTYPE-COMPANYACCOUNT: THE OMISSION IS REAL. Backend read by object at 8e2b57de: 17 members incl. CompanyAccount = 120. This repo's mirror at pin 1bcab0b6: 16, missing exactly that one, no extra. Extractor validated on the stated positive (PaymentType = 16). measured.json.; THE PREMISE IS NOT. The ladder is unreachable fr
+- 2026-08-05T05:05Z · agent:opus · started L-PAYMENT-LABEL-UKJENT
+- 2026-08-05T05:17Z · agent:L-PRESERVE-UNREFERENCED-WORK · L-PRESERVE-UNREFERENCED-WORK returned built -> built-unverified, evidence lanes/L-PRESERVE-UNREFERENCED-WORK/preserved.md
+- 2026-08-05T05:17Z · agent:L-PRESERVE-UNREFERENCED-WORK · report L-PRESERVE-UNREFERENCED-WORK: PRESERVED. refs/lanes/preservation-snapshot-unreferenced-work = e79348e3, parent e34977ac. 23 paths staged by explicit pathspec, verbatim, 17 untracked + 6 tracked-and-modified. All 23 measured blob-on-0-of-141 immediately before staging and blob-on-1-of-143 after.; NOT A BRANCH. refs/lanes, not ref
+- 2026-08-05T05:18Z · @clerk · Unreferenced work preserved at refs/lanes/preservation-snapshot-unreferenced-work e79348e3: 23 paths, verbatim, nothing adopted, reachability checked across all four namespaces.
+- 2026-08-05T05:18Z · @clerk · Correction: the empty salvage commit does have artifacts behind it. The two specs it claims are on a lane branch and a salvage ref, byte-identical, and reported in a return.
+- 2026-08-05T05:23Z · agent:opus · started L-RECEIPT-JOURNEY-AT-DE
+- 2026-08-05T05:23Z · agent:opus · started L-ARTIFACT-NAMES-ITS-LOCALE
+- 2026-08-05T05:23Z · @clerk · Fable review fired for L-JOURNEY-AT-DE: whether the fallback-confound arms prove what they claim, before other lanes build on that floor.
+- 2026-08-05T05:27Z · agent:L-PAYMENT-LABEL-UKJENT · L-PAYMENT-LABEL-UKJENT returned built -> built-unverified, evidence lanes/L-PAYMENT-LABEL-UKJENT/mutation-log.md
+- 2026-08-05T05:27Z · agent:L-PAYMENT-LABEL-UKJENT · report L-PAYMENT-LABEL-UKJENT: BUILT at 4465d02 on lane/payment-label-ukjent (worktree /Users/svendaneel/okam/web-paylabel, off e34977a). plugins/global-mixin.js +64/-13, translations/{no,en,de}.ts +5 each, test/payment-type-label.test.js new. Nothing pushed, no shared branch, no pin moved, no container, no SQL.; POPULATION FROM 
+- 2026-08-05T05:28Z · tool · raised F-FOCUSTRAP-TEARDOWN-NEVER-RUNS (warn)
+- 2026-08-05T05:28Z · tool · raised F-RECEIPT-BLANK-PAYER-LINE (warn)
+- 2026-08-05T05:28Z · @clerk · Payment labels fixed at the dictionary rather than the switch: nine of ten keys already existed and were used by the filter on the same page, so ten labels were wrong on the CH build too.
+- 2026-08-05T05:28Z · @clerk · Correction: a company-account payment is built and stamped by the settlement service, so an admin can read one back today. Only the checkout cannot send that allocation.
+- 2026-08-05T05:29Z · agent:opus · started L-DECLARATIONS-THE-FRAMEWORK-IGNORES
+- 2026-08-05T05:32Z · @clerk · Snapshot extended to 28 paths. Three loss classes: untracked lost to a clean, tracked-modified lost to a checkout, and one-ref files lost only to a composition that never names that lane.
+- 2026-08-05T05:32Z · @clerk · My preservation rule and my instruction disagreed; the lane named it rather than resolving it. Amended: preserve what would be lost plus what the preserved work needs to load.
+- 2026-08-05T05:39Z · agent:atde-conditions · started L-ATDE-REVIEW-CONDITIONS
+- 2026-08-05T05:39Z · agent:focustrap · started L-FOCUSTRAP-TEARDOWN
+- 2026-08-05T05:39Z · agent:no-only-keys · started L-NORWEGIAN-ONLY-KEYS-TRANSLATE
+- 2026-08-05T05:39Z · agent:payer-line · started L-RECEIPT-PAYER-LINE-LOCATE
+- 2026-08-05T05:39Z · @clerk · Fable ruled the German journey floor APPROVE-WITH-CONDITIONS: the render is build-sourced and the fallback confound is dead, but the shipped spec blob never ran green at edition=no.
+- 2026-08-05T05:39Z · @clerk · Two counts in that floor were grep artifacts and both favour its own conclusion: 21 assertion sites is 19, and 21 Norwegian locators on the walk it rejected is 41.
+- 2026-08-05T05:39Z · @clerk · Ten second-pass returns refused, all correctly: the clerk models one dispatch one return. Conditions now become a successor lane with its own dispatch, which is a path the tool accepts.
+- 2026-08-05T05:40Z · @clerk · Preservation snapshot closed at 054e140, 30 paths. Require closure resolved against the snapshot tree: 20 modules, 0 missing, so both preserved journeys load rather than throwing.
+- 2026-08-05T05:40Z · @clerk · A third loss class wears the first one's clothes: files showing as untracked whose bytes are on a lane ref, where a clean costs the working copy and loses nothing.
+- 2026-08-05T05:42Z · @clerk · Evidence for L-MRG-COVERAGE-UNKNOWN resolves to a copy ending Nothing was committed; the section proving otherwise is at 4557027 on lane/mrg-coverage-unknown.
+- 2026-08-05T05:42Z · @clerk · The evidence field is a bare path with no room for a ref, so a plan can point at a file that resolves and still read the wrong copy of it.
+- 2026-08-05T05:45Z · agent:L-DECLARATIONS-THE-FRAMEWORK-IGNORES · L-DECLARATIONS-THE-FRAMEWORK-IGNORES returned built -> built-unverified, evidence lanes/L-DECLARATIONS-THE-FRAMEWORK-IGNORES/ignored.md
+- 2026-08-05T05:45Z · agent:L-DECLARATIONS-THE-FRAMEWORK-IGNORES · report L-DECLARATIONS-THE-FRAMEWORK-IGNORES: Denominator 317 .vue (components/pages/layouts, excl node_modules/.nuxt/coverage/artifacts), working tree of feature/restaurant-modules @ e34977a, 2026-08-05, 1450 dirty -uall. 317/317 covered.; Installed vue 2.7.14 vs package.json ^2.6.14. LIFECYCLE_HOOKS is exactly 14 names; unmounted/beforeUnmoun
+- 2026-08-05T05:46Z · agent:L-RECEIPT-JOURNEY-AT-DE · L-RECEIPT-JOURNEY-AT-DE returned built -> built-unverified, evidence lanes/L-RECEIPT-JOURNEY-AT-DE/mutation-log.md
+- 2026-08-05T05:46Z · agent:L-RECEIPT-JOURNEY-AT-DE · report L-RECEIPT-JOURNEY-AT-DE: modal-estate-scroll-lock.spec.js parameterised by OKAM_EDITION; no new journey. Locator now [data-test="order-action-receipt"], not text.; 9 runs, private ports 3847/4847, CI=1, free-port precheck; 4010 never bound, pid 73160 never signalled; 9 distinct pids, all my worktree.; A/B PASS at no (baseli
+- 2026-08-05T05:47Z · tool · raised F-MIXIN-LABELS-CANNOT-TRANSLATE (blocker)
+- 2026-08-05T05:47Z · @clerk · Three receipt labels are switch statements with no dictionary lookup at all, so a Swiss reader sees Ukjent, Hent selv and Forespurt on a fiscal artifact.
+- 2026-08-05T05:47Z · @clerk · The German receipt premise was false and running it refuted a code-read confirmation: Material Icons are ligatures, so the regex matched the icon rather than the label.
+- 2026-08-05T05:49Z · agent:mixin-labels · started L-MIXIN-LABELS-TRANSLATE
+- 2026-08-05T05:49Z · agent:L-ARTIFACT-NAMES-ITS-LOCALE · L-ARTIFACT-NAMES-ITS-LOCALE returned built -> built-unverified, evidence lanes/L-ARTIFACT-NAMES-ITS-LOCALE/run.md
+- 2026-08-05T05:49Z · agent:L-ARTIFACT-NAMES-ITS-LOCALE · report L-ARTIFACT-NAMES-ITS-LOCALE: Committed adde936 on lane/artifact-names-its-locale, parent 7030c00, worktree /Users/svendaneel/okam/web-artloc.; New test/e2e/support/edition.js; journey.js records+guards; artifact-store.js keys on it; 3 tests in journey-artifact-store.test.js.; EXIT CRITERION: modal-scroll-lock walked at no and c
+- 2026-08-05T05:50Z · agent:L-ATDE-REVIEW-CONDITIONS · L-ATDE-REVIEW-CONDITIONS returned built -> built-unverified, evidence lanes/L-JOURNEY-AT-DE/mutation-log.md
+- 2026-08-05T05:50Z · agent:L-ATDE-REVIEW-CONDITIONS · report L-ATDE-REVIEW-CONDITIONS: C1 ran run-journey.sh B2-final-no no (3823/4823; 4010 never bound, pid 73160 never signalled): spec 8ebe68bc at edition=no PASS, 1 passed 22.1s, pid 70893, own worktree. Gap closed.; C1 §3 now 8 arms with a spec-blob column: A=820c8473, B/C=7fa75c11, D1-E+B2=8ebe68bc. Draft 7fa75c11 was hashed witho
+- 2026-08-05T05:50Z · agent:L-RECEIPT-PAYER-LINE-LOCATE · L-RECEIPT-PAYER-LINE-LOCATE returned built -> built-unverified, evidence lanes/L-RECEIPT-PAYER-LINE-LOCATE/finding.md
+- 2026-08-05T05:50Z · agent:L-RECEIPT-PAYER-LINE-LOCATE · report L-RECEIPT-PAYER-LINE-LOCATE: LOCATED at Services/ReceiptService.cs:152 (PaymentTypeLabel); blank = :176-177 default: return string.Empty. Ref feature/restaurant-modules@8e2b57de, read via git show. No fix made: class analysis.; CONFIRMED, but SIX not five. 17 enum values, 11 labelled; blank = NotSet(0) Giftcard(75) PayInStore(1
+- 2026-08-05T05:51Z · tool · raised F-FISCAL-RECEIPT-PRINTS-AN-ENGLISH-ENUM (warn)
+- 2026-08-05T05:51Z · @clerk · The mis-cited receipt path was the clerk's, not the lane's: the source document had it right and this record restated it wrong, costing a lane.
+- 2026-08-05T05:51Z · @clerk · Blank payer line is six payment types not five, and it is on the emailed PDF rather than the fiscal receipt, so no statutory exposure.
+- 2026-08-05T05:51Z · @clerk · The fiscal receipt has the same hole failing the safer way: no CompanyAccount arm, so it prints the English enum name to a Norwegian reader.
+- 2026-08-05T05:52Z · agent:escpos-label · started L-ESCPOS-COMPANYACCOUNT-LABEL
+- 2026-08-05T05:52Z · @clerk · My dispatch said both count corrections favour the German floor; only one does. The other is downward: it guards two fewer sites than advertised, and the lane said so.
+- 2026-08-05T05:52Z · @clerk · Two receipt denominators disagreed and both were right: 18 tracked captures tree-wide, 3 under artifacts/journeys, the rest inside lane directories.
+- 2026-08-05T05:55Z · tool · raised F-EVERY-LANE-DEPENDENCY-ENDS-AT-SVEN (blocker)
+- 2026-08-05T05:55Z · @clerk · Zero lanes are accepted and needs targets require acceptance, so 64 open lanes are all unready and only no-needs lanes can dispatch while he is away.
+- 2026-08-05T05:55Z · @clerk · The Vue-3-shape defect has no guard: no-reserved-keys catches the data-key class, but eslint-plugin-vue 6.2.2 predates Vue 3 and knows neither unmounted nor emits.
+- 2026-08-05T05:55Z · agent:vue3-guard · started L-VUE3-SHAPE-GUARD
+- 2026-08-05T05:58Z · agent:L-FOCUSTRAP-TEARDOWN · L-FOCUSTRAP-TEARDOWN returned built -> built-unverified, evidence lanes/L-FOCUSTRAP-TEARDOWN/01-red-before-fix.txt
+- 2026-08-05T05:58Z · agent:L-FOCUSTRAP-TEARDOWN · report L-FOCUSTRAP-TEARDOWN: FocusTrap.vue:147 `unmounted ()` -> `destroyed ()`; Vue 2.7.14 never called it, so the body ran 0 times ever. Test written FIRST: 5 red, 6 green. Suite 129/2992, lint clean.; Red proven by renaming the hook back on the FINAL file, not a draft. Commit 8ac6f63 on lane/focustrap-teardown; nothing pushe
+- 2026-08-05T05:58Z · agent:L-NORWEGIAN-ONLY-KEYS-TRANSLATE · L-NORWEGIAN-ONLY-KEYS-TRANSLATE returned built -> built-unverified, evidence /Users/svendaneel/okam/web-noonly/lanes/L-NORWEGIAN-ONLY-KEYS-TRANSLATE/keys.md
+- 2026-08-05T05:58Z · agent:L-NORWEGIAN-ONLY-KEYS-TRANSLATE · report L-NORWEGIAN-ONLY-KEYS-TRANSLATE: PIN REPRODUCES at e34977ac: 4817/4782/4782, 0 dupes, 0 keys absent from all three; gap 35, of which 34 are rendered on exactly the 3 surfaces the pin names (index 15, GoodsGroupsTab 14, products 5).; All 34 now carry en+de -> 4817/4816/4816, gap 1, 0 duplicates. No key deleted, no Norwegian string t
+- 2026-08-05T05:58Z · @clerk · My steer for the focus-trap test would have shipped a test that passes against the defect; only the stacked case discriminates, and the lane measured that rather than complying.
+- 2026-08-05T05:58Z · @clerk · A duplicate translation key does not pass quietly here: the dictionaries are TypeScript, ts-jest raises TS1117, and the suite fails to run.
+- 2026-08-05T06:00Z · agent:dupkey-build · started L-DUPLICATE-KEY-IN-THE-BUILD
+- 2026-08-05T06:00Z · agent:L-ESCPOS-COMPANYACCOUNT-LABEL · L-ESCPOS-COMPANYACCOUNT-LABEL returned built -> built-unverified, evidence lanes/L-ESCPOS-COMPANYACCOUNT-LABEL/finding.md
+- 2026-08-05T06:00Z · agent:L-ESCPOS-COMPANYACCOUNT-LABEL · report L-ESCPOS-COMPANYACCOUNT-LABEL: REF: git show feature/restaurant-modules@8e2b57de only (rev-parse + is-ancestor); the working dir is on lane/meals-grace-pins and was not read. Nothing written: no edit, commit, push, container, SQL.; ALL 17 ENUMERATED, 4 LABELLED / 13 RAW. Kontant=Cash, Kort=DinteroTerminal+SurfboardTerminal, Gavek
+- 2026-08-05T06:01Z · @clerk · The fiscal roll prints a raw C# identifier for 13 of 17 payment types, and a character-identical twin ladder in the X/Z report prints the same.
+- 2026-08-05T06:01Z · @clerk · Larger than the defect it was sent for: FinalizeService copies PaymentType off the client DTO with no membership guard, so an undefined int can reach a printed fiscal line.
+- 2026-08-05T06:01Z · @clerk · Two receipt emitters have complementary holes, which is why reviewing either made the other look handled.
+- 2026-08-05T06:02Z · agent:escpos-ladder · started L-ESCPOS-LADDER-NAMES-THE-TENDER
+- 2026-08-05T06:02Z · agent:paymenttype-dto · started L-PAYMENTTYPE-FROM-CLIENT-UNGUARDED
+- 2026-08-05T06:07Z · @clerk · A rule I cited as reading package.json reads only its own option and is inert unset; I had already copied that into a live brief, and relayed the correction mid-flight.
+- 2026-08-05T06:07Z · @clerk · A detached node cannot receive focus, so the stale-trap symptom is enforcement lost rather than focus landing in the dead subtree. My relay said otherwise.
+- 2026-08-05T06:11Z · @clerk · Verified independently: a lane's receipts quote 129 suites and 317 SFCs where its own commit holds 113 and 301, the extra being other lanes untracked files.
+- 2026-08-05T06:11Z · @clerk · The steer I gave was worse than the lane reported: without an outside-focus poke it fails both ways, so in no form does that framing discriminate.
+- 2026-08-05T06:17Z · agent:L-VUE3-SHAPE-GUARD · L-VUE3-SHAPE-GUARD returned built -> built-unverified, evidence lanes/L-VUE3-SHAPE-GUARD/vue3-shape-guard.md
+- 2026-08-05T06:17Z · agent:L-VUE3-SHAPE-GUARD · report L-VUE3-SHAPE-GUARD: lane/vue3-shape-guard @ cffede3, worktree web-vue3shape, base 8ac6f63 (carries the sibling FocusTrap repair). FocusTrap.vue untouched. Not pushed. Guard = test/vue3-shape-guard.test.js, 12 tests.; NOT a lint rule: eslint-module absent from nuxt buildModules, no lint script, CI runs only `npm run gen
+- 2026-08-05T06:18Z · @clerk · npm test is the only check runner this repo executes, so the Vue 3 guard was built as a test rather than a lint rule, and reachability was shown from the suite output.
+- 2026-08-05T06:18Z · @clerk · node_modules here is a symlink shared with the main checkout and about a hundred worktrees, so the lane replicated npm's sync check across 48 deps instead of running npm ci.
+- 2026-08-05T07:31Z · agent:collapse-sweeps · started L-COLLAPSE-THE-TWO-HOOK-SWEEPS
+- 2026-08-05T07:31Z · @clerk · Five lanes died inside one minute at 08:20 on an infrastructure fault, four of them at the point of writing their deliverable; all resumed from transcript, nothing recreated.
+- 2026-08-05T07:33Z · agent:wf-ack-receipt · started L-WF-ACKNOWLEDGE-RECEIPT-VISIBLE
+- 2026-08-05T07:33Z · agent:lint-wired · started L-LINT-RUNS-ON-SOMETHING
+- 2026-08-05T07:37Z · agent:L-DUPLICATE-KEY-IN-THE-BUILD · L-DUPLICATE-KEY-IN-THE-BUILD returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/lanes/L-DUPLICATE-KEY-IN-THE-BUILD/finding.md
+- 2026-08-05T07:37Z · agent:L-DUPLICATE-KEY-IN-THE-BUILD · report L-DUPLICATE-KEY-IN-THE-BUILD: SILENT. Planted a second categories_create, ran the command that SHIPS - npm run generate, not nuxt build: exit 0, 212 routes, warning set byte-identical to the pristine baseline.; Asked twice, since vercel.json ships OKAM_EDITION=ch: default edition (locales en,no) planted into no.ts, and ch (local
+- 2026-08-05T07:37Z · agent:L-PAYMENTTYPE-FROM-CLIENT-UNGUARDED · returned L-PAYMENTTYPE-FROM-CLIENT-UNGUARDED verdict=fail-spec -> open; D-SPEC-L-PAYMENTTYPE-FROM-CLIENT-UNGUARDED appended
+- 2026-08-05T07:37Z · agent:L-PAYMENTTYPE-FROM-CLIENT-UNGUARDED · report L-PAYMENTTYPE-FROM-CLIENT-UNGUARDED: X/Z copies the ladder byte-identically (EscPosXZReportBuilder:341-354), so a builder fix needs doing twice. DESIGN CALL FRAMED NOT SETTLED: DTO vs service vs builder. No fix/suite/container/SQL.
+- 2026-08-05T07:39Z · tool · raised F-SYMLINKED-MODULES-COMPILE-THE-OTHER-TREE (blocker)
+- 2026-08-05T07:39Z · @clerk · A duplicate translation key is completely silent in the shipping build: typeCheck is false, so ts-loader is transpile-only and Babel rewrites the literal so the later entry wins.
+- 2026-08-05T07:39Z · @clerk · Symlinking node_modules into a worktree makes webpack compile the shared checkout's components; it failed loudly only because one file differed.
+- 2026-08-05T07:39Z · @clerk · My own counts named a commit while describing a tree: 4817 is HEAD, the working tree holds 5164. Sixth instance of the error I have briefed five lanes to avoid.
+- 2026-08-05T07:39Z · @clerk · I misrouted the eslint-plugin-vue correction to the wrong lane; the guard lane never received it and reached the right shape on its own judgement.
+- 2026-08-05T07:43Z · agent:L-ESCPOS-LADDER-NAMES-THE-TENDER · L-ESCPOS-LADDER-NAMES-THE-TENDER returned built -> built-unverified, evidence lanes/L-ESCPOS-LADDER-NAMES-THE-TENDER/finding.md
+- 2026-08-05T07:43Z · agent:L-ESCPOS-LADDER-NAMES-THE-TENDER · report L-ESCPOS-LADDER-NAMES-THE-TENDER: BUILT at 9990b4bb on lane/escpos-ladder-tender (worktree ~/okam/wt-escposladder off tip 8e2b57de, read via git show; the lane/meals-grace-pins checkout was never read). Nothing pushed.; ONE TABLE, NOT TWO LADDERS: new Services/Kassa/KassaPaymentLabels.cs; the character-identical private copies at Es
+- 2026-08-05T07:44Z · tool · raised F-A-SUITE-RUN-REWRITES-COMMITTED-ARTIFACTS (warn)
+- 2026-08-05T07:44Z · @clerk · Two character-identical ladders became one table; the copy is how a payment type added code-only was swallowed by one document and not the other.
+- 2026-08-05T07:44Z · @clerk · Vipps cannot be told apart from a fall-through by any output assertion, its Norwegian name being byte-identical to the identifier, so it is proven structurally and declared.
+- 2026-08-05T07:44Z · @clerk · A wire test rewrites two committed artifacts on every run, so the act of measuring alters the record the measurement is about.
+- 2026-08-05T07:45Z · agent:borrowed-tree · started L-WHICH-EVIDENCE-CAME-FROM-A-BORROWED-TREE
+- 2026-08-05T07:45Z · agent:artifact-writers · started L-TESTS-THAT-WRITE-ARTIFACTS
+- 2026-08-05T07:46Z · agent:L-MIXIN-LABELS-TRANSLATE · L-MIXIN-LABELS-TRANSLATE returned built -> built-unverified, evidence lanes/L-MIXIN-LABELS-TRANSLATE/mutation-log.md
+- 2026-08-05T07:46Z · agent:L-MIXIN-LABELS-TRANSLATE · report L-MIXIN-LABELS-TRANSLATE: BUILT at 627e34a on lane/mixin-labels-translate (worktree /Users/svendaneel/okam/web-mixinlabels), off 4465d02 so all three functions are true of one tree and the merge is a descendant.; deliveryTypeLabel + orderStatusLabel now resolve DELIVERY_TYPE_LABEL_KEYS / ORDER_STATUS_LABEL_KEYS through $i. N
+- 2026-08-05T07:47Z · tool · raised F-FRONTEND-DECLARES-STATES-THE-SERVER-CANNOT-SEND (warn)
+- 2026-08-05T07:47Z · @clerk · Twelve of sixteen label keys already existed in all three dictionaries, so the orders filter answered in German while the card beside it answered in Norwegian.
+- 2026-08-05T07:47Z · @clerk · Told to re-derive after the outage, a lane found four of its own claims outrunning their evidence, including a commit message describing a run it never performed.
+- 2026-08-05T07:47Z · @clerk · The enum mirror also runs the other way: two members the server cannot send, which render nothing at all and so survive every test and every walk.
+- 2026-08-05T07:48Z · agent:enum-mirror · started L-MIRROR-HOLDS-ONLY-REAL-MEMBERS
+- 2026-08-05T07:57Z · agent:L-TESTS-THAT-WRITE-ARTIFACTS · L-TESTS-THAT-WRITE-ARTIFACTS returned built -> built-unverified, evidence lanes/L-TESTS-THAT-WRITE-ARTIFACTS/census.md
+- 2026-08-05T07:57Z · agent:L-TESTS-THAT-WRITE-ARTIFACTS · report L-TESTS-THAT-WRITE-ARTIFACTS: LIVE NOW: the FE tree is dirty from a test run, not a lane - M workforce-invitation-onboarding.playwright.json + 3 of its 7 tracked PNGs (51+/46-, fields the committed copy predates).; BE EventsDietaryRunSheetWireTests:110 WriteCapture is UNGATED, rewrites tracked artifacts/journeys/ev-dietary/run-s
+- 2026-08-05T07:58Z · tool · raised F-A-RERUN-TAKES-THE-CANONICAL-SLOT (blocker)
+- 2026-08-05T07:58Z · @clerk · A re-run takes the canonical artifact slot and writes a running stub over the committed record before the browser opens; four tracked files are dirty right now.
+- 2026-08-05T07:58Z · @clerk · Re-running and committing is not a safe remedy: six pictures get orphaned while the committed JSON is repointed at ignored files, and no picture diff shows it.
+- 2026-08-05T07:58Z · @clerk · Two growth captures exist on disk and are committed nowhere, so their lane evidence passes an existence check while naming files a clean would take.
+- 2026-08-05T08:01Z · agent:canonical-slot · started L-CANONICAL-SLOT-SURVIVES-A-RERUN
+- 2026-08-05T08:01Z · agent:L-LINT-RUNS-ON-SOMETHING · L-LINT-RUNS-ON-SOMETHING returned built -> built-unverified, evidence lanes/L-LINT-RUNS-ON-SOMETHING/evidence.md
+- 2026-08-05T08:01Z · agent:L-LINT-RUNS-ON-SOMETHING · report L-LINT-RUNS-ON-SOMETHING: Base 9f7d8df; commit f9a777f parent 9f7d8df on lane/lint-runs-on-something, worktree web-lintruns. Not pushed. All 4 halves re-confirmed at 9f7d8df; eslint healthy v7.32.0, 251 rules, 207 error.; Built `lint:translations`, invoked from INSIDE the jest suite. Chain: npm test -> jest -> test/translati
+- 2026-08-05T08:01Z · agent:L-WF-ACKNOWLEDGE-RECEIPT-VISIBLE · L-WF-ACKNOWLEDGE-RECEIPT-VISIBLE returned built -> built-unverified, evidence lanes/L-WF-ACKNOWLEDGE-RECEIPT-VISIBLE/receipt-visible.md
+- 2026-08-05T08:01Z · agent:L-WF-ACKNOWLEDGE-RECEIPT-VISIBLE · report L-WF-ACKNOWLEDGE-RECEIPT-VISIBLE: Base candidate/fe-compose @9f7d8df; the shared checkout (focustrap-teardown @8ac6f63) has no such journey. Fix 8539b3f, evidence 02c7356 on lane/wf-acknowledge-receipt-visible; not pushed.; The feed was the defect, not the template: publicationsForNotice() keeps a row this session acknowledged, so t
+- 2026-08-05T08:04Z · tool · raised F-NOTHING-RUNS-A-SUITE-IN-CI (blocker)
+- 2026-08-05T08:04Z · @clerk · Nothing runs a suite in CI, so every guard built this week protects a run somebody chooses to make; that is why the estate keeps shipping controls that gate nothing.
+- 2026-08-05T08:04Z · @clerk · A duplicate key was never invisible: ts-jest reds nine suites as failed to run, naming neither rule nor reason. The gap is the other 206 error rules the type checker cannot see.
+- 2026-08-05T08:04Z · @clerk · The uninitialised submodule reds six suites, not three; four lack core in the name, which is how the wrong count arose and I repeated it into two briefs.
+- 2026-08-05T08:04Z · @clerk · A clean eslint JSON run over the dictionaries emits about 1.06MB and blows node's buffer, so the child is killed and a passing lint reads as a mysterious red.
+- 2026-08-05T08:05Z · agent:L-COLLAPSE-THE-TWO-HOOK-SWEEPS · L-COLLAPSE-THE-TWO-HOOK-SWEEPS returned built -> built-unverified, evidence lanes/L-COLLAPSE-THE-TWO-HOOK-SWEEPS/collapse.md
+- 2026-08-05T08:05Z · agent:L-COLLAPSE-THE-TWO-HOOK-SWEEPS · report L-COLLAPSE-THE-TWO-HOOK-SWEEPS: Sits on 8ac6f63 + cffede3 (they stack). lane/collapse-the-two-hook-sweeps @ 542ee15, own worktree, NOT pushed. Numbers from a CLEAN tree: 0 untracked, 301 SFCs, 114 suites, core 1bcab0b, no npm ci.; Removed the regex sweep from test/focus-trap-teardown.test.js. test/vue3-shape-guard.test.js is now t
+- 2026-08-05T08:05Z · agent:L-WHICH-EVIDENCE-CAME-FROM-A-BORROWED-TREE · L-WHICH-EVIDENCE-CAME-FROM-A-BORROWED-TREE returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/lanes/L-WHICH-EVIDENCE-CAME-FROM-A-BORROWED-TREE/census.md
+- 2026-08-05T08:05Z · agent:L-WHICH-EVIDENCE-CAME-FROM-A-BORROWED-TREE · report L-WHICH-EVIDENCE-CAME-FROM-A-BORROWED-TREE: NARROWED BY MEASUREMENT: the symlink redirects `npm run generate` ALONE. cli-generate.js:128 moves buildDir into node_modules/.cache/nuxt; dev/build keep .nuxt inside the worktree (config.js:139).; SO JOURNEYS ARE NOT IMPEACHED: playwright.config.js:95 -> dev-server.js:41 spawns nuxt-ts with no subc
+- 2026-08-05T08:06Z · agent:ack-reload · started L-ACK-RECEIPT-SURVIVES-A-RELOAD
+- 2026-08-05T08:06Z · @clerk · Fable found three merge decisions resting on premises the repositories no longer support: two are already landed and moot, and the third describes a fast-forward that cannot happen.
+- 2026-08-05T08:06Z · @clerk · The stack side carries 126 files outside Migrations, so the claim that it touches only migrations is false and that merge is real code, not a chain replay.
+- 2026-08-05T08:07Z · @clerk · The hosted-service floor reads registrations filtered on AddHostedService, not types, so the claim carried here that it stays green with every registration deleted is wrong at the tip.
+- 2026-08-05T08:07Z · @clerk · A fact is stamped green today on a root whose world is declared unknown, which is an advertised control gating nothing, live on the board rather than in the past.
+- 2026-08-05T08:07Z · @clerk · Fable named an option for the tier-artifacts decision that the block did not carry, so it is written in with pro and con rather than recommended from outside the choices.
+- 2026-08-05T08:09Z · agent:vuejest-measure · started L-VUE-JEST-UPGRADE-MEASURED
+- 2026-08-05T08:09Z · agent:artifact-modtree · started L-ARTIFACT-NAMES-ITS-MODULE-TREE
+- 2026-08-05T08:11Z · agent:L-MIRROR-HOLDS-ONLY-REAL-MEMBERS · L-MIRROR-HOLDS-ONLY-REAL-MEMBERS returned built -> built-unverified, evidence lanes/L-MIRROR-HOLDS-ONLY-REAL-MEMBERS/census.md
+- 2026-08-05T08:11Z · agent:L-MIRROR-HOLDS-ONLY-REAL-MEMBERS · report L-MIRROR-HOLDS-ONLY-REAL-MEMBERS: Refs, all by object: BE feature/restaurant-modules 8e2b57de (177 enums / 2723 .cs); core pin 1bcab0b6 IDENTICAL at FE tip e34977ac, HEAD 8ac6f636 and candidate 9f7d8dfc, so no core ambiguity;; FE app e34977ac + candidate 9f7d8dfc, 0 own enum decls. OkamAPI checkout on lane/meals-grace-pins 34c6c103 
+- 2026-08-05T08:12Z · @clerk · Half my enum-mirror flag is refuted: OrderStatus carries OpenCheck and has nine members, so the mirror is exact and the ladder is what is short.
+- 2026-08-05T08:12Z · @clerk · A POS that takes cash prints Ukjent at the tip; the fix exists on an unlanded branch, and I nearly reported it missing because that lane replaced the switch with a map.
+- 2026-08-05T08:12Z · @clerk · One mirror is short and long at once: it can name a case that cannot occur and cannot name the case that does, so auditing one direction finds half the defect.
+- 2026-08-05T08:16Z · @clerk · The credit-note method takes only an invoice id and copies every line, and the flag is set in one file once, so partial crediting is not a workflow this product has.
+- 2026-08-05T08:16Z · @clerk · All four Fable batches are in: 38 decisions carry a recommendation, a reason and a ruling order, and five rested on premises the repositories no longer support.
+- 2026-08-05T08:17Z · agent:L-ACK-RECEIPT-SURVIVES-A-RELOAD · L-ACK-RECEIPT-SURVIVES-A-RELOAD returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/lanes/L-ACK-RECEIPT-SURVIVES-A-RELOAD/finding.md
+- 2026-08-05T08:17Z · agent:L-ACK-RECEIPT-SURVIVES-A-RELOAD · report L-ACK-RECEIPT-SURVIVES-A-RELOAD: Ref: 8e2b57de = tip of branch feature/restaurant-modules; all backend claims via `git show 8e2b57de:<path>`; working tree (lane/meals-grace-pins) never read. FE via candidate/fe-compose-2026-08-05.; ANSWER: the ack is ALREADY persisted twice per confirm - SelfService.cs:360 inserts an append-only Re
+- 2026-08-05T08:17Z · tool · raised F-APPEND-ONLY-RECEIPTS-HAVE-NO-READER (warn)
+- 2026-08-05T08:17Z · @clerk · The acknowledgement write already exists twice and the read stops one column short of it, so the reload gap is a column rather than a contract.
+- 2026-08-05T08:17Z · @clerk · Calling the acknowledge endpoint on reload would create the acknowledgement for a worker who never confirmed: a write wearing a read's answer, on a table nothing may delete from.
+- 2026-08-05T08:17Z · @clerk · The costs invert: the cheap read is of the mutable store that is uniquely indexed, and the evidence-grade read is of the append-only store that is not.
+- 2026-08-05T08:24Z · agent:L-CANONICAL-SLOT-SURVIVES-A-RERUN · L-CANONICAL-SLOT-SURVIVES-A-RERUN returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/lanes/L-CANONICAL-SLOT-SURVIVES-A-RERUN/proof-hashes.txt
+- 2026-08-05T08:24Z · agent:L-CANONICAL-SLOT-SURVIVES-A-RERUN · report L-CANONICAL-SLOT-SURVIVES-A-RERUN: Red at 8ac6f636: one re-run of the 3 committed journeys changed 5 of 16 tracked artifacts; green after, 0 of 16, all 3 passing. Hash = git ls-files artifacts/ piped to shasum, before and after.; The trap decided the fix: modal-* records predate backendBuild, so an incoming run OUTRANKS them — consul
+- 2026-08-05T08:24Z · @sven · ruled D-SPEC-L-UTLKVIT-FAMILY-LAND = restate-as-a-merge-order-constraint
+- 2026-08-05T08:24Z · @sven · ruled D-SPEC-L-GR-DELIVERY-RECORD = close-as-already-done
+- 2026-08-05T08:24Z · @sven · ruled D-SPEC-L-EV-CALLBACK-SWEEP = correct-the-flag-in-three-parts
+- 2026-08-05T08:24Z · @sven · ruled D-SPEC-L-POS-TENDER-WIRE-REBASE = drop
+- 2026-08-05T08:24Z · @sven · ruled D-SPEC-L-ARM-RECEIPTS-RECAPTURE = respec-per-backend
+- 2026-08-05T08:24Z · @sven · ruled D-SPEC-L-LIVE-WORLD-RESET = retract-onto-restore
+- 2026-08-05T08:24Z · @sven · ruled D-SPEC-L-PROBE-DROP-CONSUMERWEB = clerk-does-it-both-probes
+- 2026-08-05T08:24Z · @sven · ruled D-SPEC-L-MEALS-LEVER-WITHHOLD = retitle-and-pin
+- 2026-08-05T08:24Z · @sven · ruled D-SPEC-L-GR-NEWSLETTER-CROSS = both
+- 2026-08-05T08:24Z · @sven · ruled D-SPEC-L-WF-INVITE-SURFACE = split
+- 2026-08-05T08:24Z · @sven · ruled D-SPEC-L-MEALS-EIGHTH-READ = re-scope-to-the-merge
+- 2026-08-05T08:24Z · @sven · ruled D-SPEC-L-MRG-PAGE-TEST-VACUOUS = split
+- 2026-08-05T08:24Z · @sven · ruled D-SPEC-L-MEALS-AGREEMENT-PIN-INVERTS = adopt-the-offered-pin
+- 2026-08-05T08:24Z · @sven · ruled D-SPEC-L-PAYMENTTYPE-COMPANYACCOUNT = drop-and-take-the-reachable-one
+- 2026-08-05T08:24Z · @sven · ruled D-SPEC-L-JOURNEY-TRAINING = land-then-build-then-walk
+- 2026-08-05T08:24Z · @sven · ruled D-CREDITNOTE-SECOND-ISSUE = refuse-second
+- 2026-08-05T08:24Z · @sven · ruled D-MIG21-WHICH-TRIGGER-WINS = keep-23f6bbeb
+- 2026-08-05T08:24Z · @sven · ruled D-EV-INQUIRY-UNGATED = refuse-the-write
+- 2026-08-05T08:24Z · @sven · ruled D-MEALS-MEMBERS-READ-LANDING = land-both
+- 2026-08-05T08:24Z · @sven · ruled D-GR-WITHDRAW-PAIR = land-the-backend-halves
+- 2026-08-05T08:24Z · @sven · ruled D-HUSKY-HOOKS-ESTATE-WIDE = remove
+- 2026-08-05T08:24Z · @sven · ruled D-WOLT-HOSTED-EXEMPTION = keep-exempt
+- 2026-08-05T08:24Z · @sven · ruled D-RECEIPT-MODAL-UNTESTABLE = accept-the-rewrite
+- 2026-08-05T08:24Z · @sven · ruled D-MEALS-FINALIZE-OWNER = both-with-one-link
+- 2026-08-05T08:24Z · @sven · ruled D-OFFER-MONTHLY-ABSENCE = document-gets-the-flag
+- 2026-08-05T08:24Z · @sven · ruled D-TRAIN-RETENTION-BASIS = product-policy-no-statute
+- 2026-08-05T08:24Z · @sven · ruled D-EHF-INVOICE-ACCESS = forward-the-files
+- 2026-08-05T08:24Z · @sven · ruled D-WF-CORRECTION-FLAG = ungated
+- 2026-08-05T08:24Z · @sven · ruled D-WF-LINEAGE-PRODUCIBLE = screen-only
+- 2026-08-05T08:24Z · @sven · ruled D-REBASE-CONFLICTING-HEADS = land-the-clean-thirty-five-first
+- 2026-08-05T08:24Z · @sven · ruled D-WF-INVITE-LANDING-PAIR = review-then-land
+- 2026-08-05T08:24Z · @sven · ruled D-TYPECHECK-IN-THE-BUILD = turn-it-on
+- 2026-08-05T08:24Z · @sven · ruled D-SPEC-L-PAYMENTTYPE-FROM-CLIENT-UNGUARDED = guard-where-the-value-enters
+- 2026-08-05T08:24Z · @sven · ruled D-PREFCENTRE-DEPLOY = deploy-the-branch
+- 2026-08-05T08:24Z · @sven · ruled D-MRG-CURATION-CONTENT = fill-the-csv
+- 2026-08-05T08:27Z · @clerk · Owner instruction: take Fable's recommended path on all of them. 35 ruled; the reopen_when on each is the reviewer's own stated mind-changer, not inference.
+- 2026-08-05T08:27Z · @clerk · A ruling line tripped the banned-vocabulary check on an option slug the tool itself wrote, so the exemption already granted to notes was extended to rulings.
+- 2026-08-05T08:27Z · agent:gr-delivery · started L-GR-DELIVERY-RECORD
+- 2026-08-05T08:27Z · agent:ev-callback · started L-EV-CALLBACK-SWEEP
+- 2026-08-05T08:27Z · agent:ehf-spike · started L-MRG-EHF-SPIKE
+- 2026-08-05T08:27Z · agent:prefcentre · started L-GROWTH-PREFCENTRE
+- 2026-08-05T08:27Z · agent:starter150 · started L-MRG-STARTER-150
+- 2026-08-05T08:30Z · agent:L-VUE-JEST-UPGRADE-MEASURED · L-VUE-JEST-UPGRADE-MEASURED returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/lanes/L-VUE-JEST-UPGRADE-MEASURED/finding.md
+- 2026-08-05T08:30Z · agent:L-VUE-JEST-UPGRADE-MEASURED · report L-VUE-JEST-UPGRADE-MEASURED: No. At 8ac6f63 (core 1bcab0b6) vue-jest 3.0.7 -> 4.0.1 changes nothing: 113 suites / 2589 tests in BOTH arms, key-by-key 0 suites and 0 tests changed side. Do NOT revert the rewrite.; All four templates still fail to transform AND to mount under 4.0.1 - ReceiptModal, admin/products, admin/wolt-menu,
+- 2026-08-05T08:30Z · tool · raised F-NPM-INSTALL-CANNOT-SUCCEED (blocker)
+- 2026-08-05T08:30Z · @clerk · The template transpiler upgrade changes nothing: both arms identical to the test, all four templates still red, and no version on the Vue 2 line can parse them.
+- 2026-08-05T08:30Z · @clerk · npm install fails repo-wide on an unresolvable edge dependency, so a fresh clone cannot be built and the estate has been living on one surviving node_modules.
+- 2026-08-05T08:30Z · @clerk · A failed transform leaves an empty module that Vue mounts with only a warning, so a mount probe reported four passes for four templates producing no DOM.
+- 2026-08-05T08:31Z · agent:fixture-flags · started L-FIXTURE-FLAG-STORE
+- 2026-08-05T08:34Z · agent:L-GR-DELIVERY-RECORD · returned L-GR-DELIVERY-RECORD verdict=fail-spec -> open; D-SPEC-L-GR-DELIVERY-RECORD appended
+- 2026-08-05T08:34Z · agent:L-GR-DELIVERY-RECORD · report L-GR-DELIVERY-RECORD: | Ref: feature/restaurant-modules @ 8e2b57de (2026-08-04). Every read via `git show 8e2b57de:<path>`; the primary checkout (lane/meals-grace-pins @ 34c6c103) was never read. `git merge-base --is-ancestor 6b4913b8 8e2b57de` = yes. Enum carries three states and NO Delivered member; `git grep exportDel
+- 2026-08-05T08:34Z · tool · L-GR-DELIVERY-RECORD open -> retracted: Ruled close-as-already-done on 2026-08-05. Run 2 confirmed it independently at 8e2b57de rather than taking the ruling's word: the commit is an ancestor, the record cannot outrun the sender, and the contract case exists parameterized on both articles. The surviving mail-provider gap is a deployment setting and belongs to another decision.
+- 2026-08-05T08:35Z · tool · L-POS-TENDER-WIRE-REBASE open -> retracted: Ruled drop 2026-08-05: the lane it was to rebase is already an ancestor of the tip, 0 ahead and 61 behind, so there is nothing to rebase. Two survivors are re-homed rather than lost: the unwalked till credit-sale journey, and the RETREC guard barred from deletion on suite-green alone while no SQL tier has run.
+- 2026-08-05T08:35Z · tool · L-LIVE-WORLD-RESET open -> retracted: Ruled retract-onto-restore 2026-08-05: the 385-line reset script landed and is an ancestor of HEAD, and a twin lane holds a word-for-word identical exit. Two lanes existed for one exit because the brief was generated twice; that duplication is the durable finding.
+- 2026-08-05T08:35Z · tool · L-UTLKVIT-FAMILY-LAND open -> retracted: Ruled restate-as-a-merge-order-constraint 2026-08-05: the two-parent merge it waited for is already an ancestor of the tip, landed in the 2026-08-04 wave, so family-before-till ordering is enforced by reality. What survives is a note for whoever merges the till lane: merge it, do not port it, or the predicate fix unwinds.
+- 2026-08-05T08:35Z · tool · L-PAYMENTTYPE-COMPANYACCOUNT open -> retracted: Ruled drop-and-take-the-reachable-one 2026-08-05: fixing the core mirror changes no rendered pixel here and would move a pin ruled consumer-only, while the reachable defect is the admin ladder that prints Ukjent for a cash sale. A successor lane takes that surface.
+- 2026-08-05T08:38Z · agent:L-EV-CALLBACK-SWEEP · L-EV-CALLBACK-SWEEP returned built -> built-unverified, evidence lanes/L-EV-CALLBACK-SWEEP/flag-correction.md
+- 2026-08-05T08:38Z · agent:L-EV-CALLBACK-SWEEP · report L-EV-CALLBACK-SWEEP: RE-MEASURED AT THE REF. 8e2b57de = feature/restaurant-modules tip, read only by `git show`; the checkout (lane/meals-grace-pins) untouched. The deliverable is the record: zero code, migration or SQL.; 99f56e63 "Collect the deposit a guest approved..." IS an ancestor of 8e2b57de (as are b77d15b0/a43b
+- 2026-08-05T08:38Z · agent:L-MRG-EHF-SPIKE · returned L-MRG-EHF-SPIKE verdict=fail-spec -> open; D-SPEC-L-MRG-EHF-SPIKE appended
+- 2026-08-05T08:38Z · agent:L-MRG-EHF-SPIKE · report L-MRG-EHF-SPIKE: Not blocked-again: re-raising the ruled decision walks the next agent into the same wall. Read at 8e2b57de.; FIXTURES CAN say the parser reads EN16931 and keeps BT-106/109/112/115 apart. They CANNOT say the mix, which is the whole STOP rule.; Four hand-written edge-case documents are 100% Class A be
+- 2026-08-05T08:39Z · @clerk · Two lanes wrote to -2 because my brief named -1 explicitly where the protocol says -n, and -1 already held returns cited as evidence; both preserved rather than overwrote.
+- 2026-08-05T08:39Z · @clerk · Ruling forward-the-files did not move a file, so the spike hit the same wall; it swept wider than the drop path and found no real invoice anywhere on the machine.
+- 2026-08-05T08:39Z · @clerk · The banned-word check now masks option slugs the plan itself declares, verified both ways: a bare word still errors, and a slug-shaped string that is not declared still errors.
+- 2026-08-05T08:40Z · agent:L-GROWTH-PREFCENTRE · returned L-GROWTH-PREFCENTRE verdict=blocked -> open, needs L-PREFCENTRE-DEPLOY-EXEC
+- 2026-08-05T08:40Z · agent:L-GROWTH-PREFCENTRE · report L-GROWTH-PREFCENTRE: MEASURED not inherited: main e7896bc = 0 preference pages; backend integ 8e2b57de = 0 EnableCors; lane 2a052800 NOT an ancestor of it; .github/workflows identical main vs HEAD. All checks read-only.; LIVE: /preferences/communications 404 (SPA fallback shell); /subscribe/confirm 404; /admin/ 200; api
+- 2026-08-05T08:40Z · tool · raised F-BOTH-PROBES-GATING-THE-PREF-FLAG-ARE-MISAIMED (warn)
+- 2026-08-05T08:40Z · @clerk · The preference ruling is ruled and not executed: main carries no preference pages, the CORS policy is on no integration branch, and the live path answers 404.
+- 2026-08-05T08:40Z · @clerk · Merging to main alone fixes the consumer origin, because the page is a static route whose token rides in the URL fragment and never reaches a server.
+- 2026-08-05T08:40Z · @clerk · Only a sandbox setting stands between a guest and an Article 12 link that 404s, since the address is hardcoded as the default and printed in every dispatched message.
+- 2026-08-05T08:46Z · agent:L-ARTIFACT-NAMES-ITS-MODULE-TREE · L-ARTIFACT-NAMES-ITS-MODULE-TREE returned built -> built-unverified, evidence lanes/L-ARTIFACT-NAMES-ITS-MODULE-TREE/run.md
+- 2026-08-05T08:46Z · agent:L-ARTIFACT-NAMES-ITS-MODULE-TREE · report L-ARTIFACT-NAMES-ITS-MODULE-TREE: 8fa3f6d..c3024b8 on lane/artifact-names-its-module-tree, worktree /Users/svendaneel/okam/web-modtree off 8ac6f636. No push, no npm install, no container, 4010 never bound; 8 files, no rename.; New moduleTree beside commit: state(symlink|own|absent), REALPATH, owner, shared, root, buildDir{command,re
+- 2026-08-05T08:46Z · tool · raised F-STASH-IS-SHARED-ACROSS-WORKTREES (warn)
+- 2026-08-05T08:46Z · @clerk · The guard harness copies the artifact store but not the module it requires, so every arm died before reaching a browser: the second time this prover has been found not running.
+- 2026-08-05T08:46Z · @clerk · git stash is one shared stack across about 124 worktrees; a pop reached a stash left on another branch in July, and the failure arrives as a conflict in files the lane never touched.
+- 2026-08-05T08:46Z · @clerk · An artifact now records which module tree built it, proven by walking one journey twice in one tree, symlinked and copied, and by collapsing the resolution to show the arms become identical.
+- 2026-08-05T08:55Z · agent:L-MRG-STARTER-150 · L-MRG-STARTER-150 returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-mrg150fill/lanes/L-MRG-STARTER-150/evidence.md
+- 2026-08-05T08:55Z · agent:L-MRG-STARTER-150 · report L-MRG-STARTER-150: LANDED THE MECHANISM WITH THE FILL. lane/mrg-starter-150 off tip 8e2b57de; cherry-pick of 9a00da6e clean (its parent is an ancestor of the tip). Local, never pushed, no shared ref moved.; 150 ROWS, was 16. 123 g / 16 ml / 11 stk, grouped by section; the original sixteen carried over with values unto
+- 2026-08-05T08:55Z · tool · raised F-MARGIN-MODEL-DRIFTS-FROM-ITS-CHAIN (warn)
+- 2026-08-05T08:55Z · tool · raised F-SQL-CONTAINERS-FROM-EARLIER-SESSIONS-STILL-HOLD-THE-HOST (warn)
+- 2026-08-05T08:55Z · @clerk · Three SQL containers from earlier sessions are still up, two of them for days, on a host whose measured ceiling is two to three; none was touched.
+- 2026-08-05T08:55Z · @clerk · The starter counters hold the file to a number the file declares, so deleting rows and lowering the counter stays green; a new pin holds the served count instead.
+- 2026-08-05T08:55Z · @clerk · A test filter can claim a container slot silently: one run swept the SQL fixture classes and started two containers the lane had no slot for.
+- 2026-08-05T09:09Z · agent:L-FIXTURE-FLAG-STORE · L-FIXTURE-FLAG-STORE returned built -> built-unverified, evidence lanes/L-FIXTURE-FLAG-STORE/mutation-report.txt
+- 2026-08-05T09:09Z · agent:L-FIXTURE-FLAG-STORE · report L-FIXTURE-FLAG-STORE: bb1bf0c swept this shape across the 12 journeys of 2026-08-01. The tip has 28. The audit's already-fixed was true AND incomplete: the denominator moved, and 2 later journeys re-acquired it.; Censused all 28 at e34977a incl. the clean ones (census.md): 26 clean with the gate named, 2 holed - both Mea
+- 2026-08-05T09:10Z · @clerk · Cleared the estate on the owner's instruction: three SQL containers and six stale API hosts, the oldest running since 30 July from the main backend checkout.
+- 2026-08-05T09:11Z · agent:compose-fe · started L-COMPOSE-FE-CANDIDATE
+- 2026-08-05T09:11Z · agent:paymenttype-guard · started L-PAYMENTTYPE-FROM-CLIENT-UNGUARDED
+- 2026-08-05T09:11Z · agent:meals-pin · started L-MEALS-AGREEMENT-PIN-INVERTS
+- 2026-08-05T09:11Z · agent:meals-eighth · started L-MEALS-EIGHTH-READ
+- 2026-08-05T09:11Z · agent:gr-newsletter · started L-GR-NEWSLETTER-CROSS
+- 2026-08-05T09:23Z · agent:L-GR-NEWSLETTER-CROSS · F-GR-NEWSLETTER-CROSS restated: no live defect at 8e2b57de, all four actions honour the guard; the discard shape was the injected mutation. Proof gap only. lanes/L-GR-NEWSLETTER-CROSS/restatement.md
+- 2026-08-05T09:24Z · agent:L-GR-NEWSLETTER-CROSS · Landing prepared not merged: 2fc29f34 on lane/gr-newsletter-cross-land = 8e2b57de + 87600a1c, zero conflicts, one test file, 6/6 green, mutation 4/6 red at this tip. No push.
+- 2026-08-05T09:26Z · agent:L-GR-NEWSLETTER-CROSS · L-GR-NEWSLETTER-CROSS returned built -> built-unverified, evidence lanes/L-GR-NEWSLETTER-CROSS/landing.md
+- 2026-08-05T09:26Z · agent:L-GR-NEWSLETTER-CROSS · report L-GR-NEWSLETTER-CROSS: Both halves of `both` delivered. RESTATEMENT (undeferrable) done and on the board; LANDING prepared,; re-validated at the current tip, not merged -- the merge to feature/restaurant-modules is not mine.; RESTATEMENT. Read with `git show 8e2b57de:Controllers/GrowthNewslettersController.cs`, never the;
+- 2026-08-05T09:27Z · @clerk · Restated the newsletter flag: there was never a live defect, the discard shape was the injected mutation, and the guard is honoured at five sites at the tip.
+- 2026-08-05T09:27Z · @clerk · What survives is worse than a typo: the guard is protected by nothing, since every cross-tenant test passes the intruder's own store and the isolation suite stays green under the mutation.
+- 2026-08-05T09:27Z · @clerk · My first check of that controller ran in the wrong repository and returned nothing; re-derived in the backend before restating anything.
+- 2026-08-05T09:33Z · agent:L-COMPOSE-FE-CANDIDATE · L-COMPOSE-FE-CANDIDATE returned built -> built-unverified, evidence lanes/L-COMPOSE-FE-CANDIDATE/compose-run.md
+- 2026-08-05T09:33Z · agent:L-COMPOSE-FE-CANDIDATE · report L-COMPOSE-FE-CANDIDATE: Candidate candidate/fe-compose-2026-08-05 at f40fdf3 = the ruled clean set + the gate fix, 36 heads. No push (no upstream), no container; feature/restaurant-modules re-read at e34977a, unmoved.; GATE DONE: merged lane/fe-meals-journey-locator (= meals-enrol-pretick + d320105 only). Decoy surface 1 f
+- 2026-08-05T09:33Z · @clerk · Re-tested all 28 unlanded heads against the composed candidate: none became clean, eleven got worse, and the twelve order-induced heads merge clean onto the pristine tip alone.
+- 2026-08-05T09:33Z · @clerk · Landing the clean thirty-five is what costs the order-induced heads their clean merge, so the re-cut is marginally harder from the candidate than from the tip.
+- 2026-08-05T09:33Z · @clerk · A zsh parameter modifier inside a quoted ref string made every scan loop return empty; it fails as a plausible answer rather than an error, which is the family that keeps catching us.
+- 2026-08-05T09:38Z · agent:L-MEALS-AGREEMENT-PIN-INVERTS · L-MEALS-AGREEMENT-PIN-INVERTS returned built -> built-unverified, evidence lanes/L-MEALS-AGREEMENT-PIN-INVERTS/adoption-review.md
+- 2026-08-05T09:38Z · agent:L-MEALS-AGREEMENT-PIN-INVERTS · report L-MEALS-AGREEMENT-PIN-INVERTS: ADOPT 4bbf34a5 - but not for the reason the lane gave. Read at 8e2b57de via git show; measured in my own detached worktree OkamAPI-agrpinrev; no shared ref moved, nothing committed, nothing pushed.; THE WITHHELD ASSERTION, supplied by injection. M-REDECIDE reopens a refused receipt and hands back Pr
+- 2026-08-05T09:39Z · tool · raised F-THE-DEFAULT-TEST-FILTER-CLAIMS-A-CONTAINER-SLOT (warn)
+- 2026-08-05T09:39Z · @clerk · The reviewer built the mutant the offering lane never ran and the pin discriminates, but that lane credited a replay mutant with closing a clause only a moved world can separate.
+- 2026-08-05T09:39Z · @clerk · Verified the routing myself: none of the three commits is an ancestor of the tip, and one lane branch already carries all of them, so adopting the single commit would duplicate merged work.
+- 2026-08-05T09:39Z · @clerk · Second lane today to start a database container it had no grant for, both on a first baseline, both because the obvious filter sweeps the SQL fixture classes.
+- 2026-08-05T09:41Z · agent:L-PAYMENTTYPE-FROM-CLIENT-UNGUARDED · L-PAYMENTTYPE-FROM-CLIENT-UNGUARDED returned built -> built-unverified, evidence lanes/L-PAYMENTTYPE-FROM-CLIENT-UNGUARDED/finding.md
+- 2026-08-05T09:41Z · agent:L-PAYMENTTYPE-FROM-CLIENT-UNGUARDED · report L-PAYMENTTYPE-FROM-CLIENT-UNGUARDED: SQL tier (88 Trait Database=SqlServer, no slot) and any browser walk (C5); residual = guard sits on the writer, not the table (C2). Commit bd77cd6b, lane/paymenttype-defined-tender, NOT pushed.
+- 2026-08-05T09:42Z · @clerk · An out-of-range payment type was actually journalled on five paths before the guard, so the class was reachable in test rather than merely latent.
+- 2026-08-05T09:42Z · @clerk · The company-account member sits outside any contiguous range between cash and card, so a bounds check would refuse a member a defined-member test must admit.
+- 2026-08-05T09:42Z · @clerk · My brief named three journal-line write sites; there are four, and the lane found the one I missed.
+- 2026-08-05T09:45Z · agent:L-MEALS-EIGHTH-READ · L-MEALS-EIGHTH-READ returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-meals-eighth-read/lanes/L-MEALS-EIGHTH-READ/evidence-2.md
+- 2026-08-05T09:45Z · agent:L-MEALS-EIGHTH-READ · report L-MEALS-EIGHTH-READ: RE-SCOPED AS RULED; return 1 intact. Read via git show at 8e2b57de = feature/restaurant-modules: two decrement sites (FundingAuthority.cs:453, Worker.cs:132), pin 9fe599c6 not an ancestor.; NOT SELF-CARRYING: six branches contain release d5483cb3, only three contain the pin. The three without it are
+- 2026-08-05T09:45Z · @clerk · My own reopening condition on the eighth-read decision is measured false: seven branches carry the release and four the pin, so the hazard is not self-carrying.
+- 2026-08-05T09:45Z · @clerk · The merge gate is a predicate, not a paragraph: require the pin to be an ancestor of the Meals merge commit, which one conflict-free merge satisfies.
+- 2026-08-05T09:45Z · @clerk · The third run is the hazard: with the pre-pin fixture and the identical clamp the suite is green on nine and the defect is invisible.
+- 2026-08-05T09:51Z · @clerk · Load 223 with one lane running: seven of 76 node processes are this estate's, the rest a sibling project's build fleet and package runners.
+- 2026-08-05T10:52Z · agent:arm-receipts · started L-ARM-RECEIPTS-RECAPTURE
+- 2026-08-05T10:52Z · agent:meals-lever · started L-MEALS-LEVER-WITHHOLD
+- 2026-08-05T10:52Z · agent:mrg-page · started L-MRG-PAGE-TEST-VACUOUS
+- 2026-08-05T10:52Z · agent:journey-training · started L-JOURNEY-TRAINING
+- 2026-08-05T10:52Z · tool · L-WF-INVITE-SURFACE open -> retracted: Ruled split 2026-08-05. The surface half landed at 35440cf, an ancestor of the frontend tip, so this frontend lane has nothing left to build. The survivor is the list-and-revoke gap, which is backend work and gets its own brief; the indistinguishable-404 refusal travels with it as a pinned security property that must never be improved, and the cold-start path where no endpoint mints the first engagement belongs to the bootstrap lane.
+- 2026-08-05T10:55Z · tool · L-PROBE-DROP-CONSUMERWEB open -> retracted: Ruled clerk-does-it-both-probes 2026-08-05 and executed by the clerk in the measured order: both fact spans first, both probe lines second, and the two references rewritten in the same edit. The doctor now lists two worlds and no undeclared root, so the exit is met without a lane session. The exit of the verified lane that named the dropped fact was re-worded, which the ruling authorised explicitly as an evidence re-word.
+- 2026-08-05T10:55Z · @clerk · Dropped both ConsumerWeb probes and their spans in the ruled order; the doctor now lists two worlds and no undeclared root.
+- 2026-08-05T10:55Z · @clerk · Waived the three-item refill debt deliberately: one lane is owner-owned production work, one would hit the same wall as an hour ago, and the third was ruled to the clerk and is executed.
+- 2026-08-05T10:55Z · @clerk · The doctor reports the backend world as a mismatch: the checkout sits on a lane branch, missing four landed commits and carrying one unlanded.
+- 2026-08-05T11:02Z · agent:L-JOURNEY-TRAINING · returned L-JOURNEY-TRAINING verdict=blocked -> open, needs L-TRAIN-DISCLOSURE-LAND, L-COMPOSE-FE-CANDIDATE
+- 2026-08-05T11:02Z · agent:L-JOURNEY-TRAINING · report L-JOURNEY-TRAINING: Neither gating merge has landed; no capture produced. Measured at refs only - this checkout is lane/focustrap-teardown, 341 dirty foreign files incl. training components, so the tree is not the truth.; STEP 1 NOT LANDED, unowned: HttpGet("evidence/disclosures") is at lane/train-disclosure 06b8b582 (
+- 2026-08-05T11:03Z · @clerk · A journey artifact records passed at a commit whose tree does not contain its spec, so the stamp proves the walk was unverified rather than that the surface is reachable.
+- 2026-08-05T11:03Z · @clerk · The disclosure route exists on one branch and nowhere else, so the shipped panel calls a 404 and has since it landed; one merge alone cannot make the walk possible.
+- 2026-08-05T11:03Z · @clerk · The training checkout carries 341 dirty foreign files including modified training components, so reading the tree would have answered a different question.
+- 2026-08-05T11:04Z · agent:L-ARM-RECEIPTS-RECAPTURE · L-ARM-RECEIPTS-RECAPTURE returned built -> built-unverified, evidence lanes/L-ARM-RECEIPTS-RECAPTURE/recaptured.md
+- 2026-08-05T11:04Z · agent:L-ARM-RECEIPTS-RECAPTURE · report L-ARM-RECEIPTS-RECAPTURE: Ruled respec-per-backend: the clause is rewritten, not satisfied. Contract recorded as recaptured.md §7. The ten of §2 untouched - all 10 sha256 re-verified identical to the §2 table.; CONTRACT: the identity channel is chosen by `backend`, not the capture. fixture -> servingFixture (health+lsof: pid
+- 2026-08-05T11:04Z · @clerk · No live receipt in the estate has ever resolved a serving fixture and no fixture receipt has failed to, across 182 captures, so the old clause was unmeetable by construction.
+- 2026-08-05T11:04Z · @clerk · The replaced clause refuses 17 of 44 live receipts, two of them the exact originals this lane replaced, so it gates the defect rather than describing it.
+- 2026-08-05T11:05Z · agent:L-MEALS-LEVER-WITHHOLD · L-MEALS-LEVER-WITHHOLD returned built -> built-unverified, evidence lanes/L-MEALS-LEVER-WITHHOLD/retitle-and-pin.md
+- 2026-08-05T11:05Z · agent:L-MEALS-LEVER-WITHHOLD · report L-MEALS-LEVER-WITHHOLD: Ruled retitle-and-pin; the brief's withholding exit was NOT satisfied. Pass 1 (return -1) measured it reds 8/28 and hand-weakens a landed guard. Base worktree OkamAPI-mealslever @ lane/meals-lever-withhold; production identical to 8e2b57de at start. Every file read via `git show 8e2b57de:<path>`, ne
+- 2026-08-05T11:05Z · @clerk · The retitle pin derives its surfaces from the route-gate map and refuses both degenerate reaches, so no wording can satisfy it without the reach agreeing.
+- 2026-08-05T11:05Z · @clerk · The workforce flag carries the identical title at its own descriptor; the Meals lane left it alone rather than guess at a reach it had not measured.
+- 2026-08-05T11:06Z · agent:wf-lever-title · started L-WF-LEVER-TITLE-NAMES-ITS-REACH
+- 2026-08-05T11:09Z · agent:L-MRG-PAGE-TEST-VACUOUS · L-MRG-PAGE-TEST-VACUOUS returned built -> built-unverified, evidence lanes/L-MRG-PAGE-TEST-VACUOUS/mutation-log.md
+- 2026-08-05T11:09Z · agent:L-MRG-PAGE-TEST-VACUOUS · report L-MRG-PAGE-TEST-VACUOUS: Split taken: the committed suite is kept under an exit naming what it pins, and the transitions go to a successor whose precondition is a commit rather than a hope.; Reproduced at 8ac314c rather than trusted: the four unbind mutations red 11/3/10/2 on their own arms, OLD blind at 0 in all four, 31/3
+- 2026-08-05T11:09Z · @clerk · The old exit said unbinding any control reds a test; three of the page's controls unbind cleanly green, so the suite pins five of eight and the exit now names them.
+- 2026-08-05T11:09Z · @clerk · Verified the successor precondition myself: the landing lane does not carry the page commit and the candidate does, so the obvious base would have pinned nothing.
+- 2026-08-05T11:09Z · @clerk · Fourth shared-resource trap today: a fixed scratch path would let two concurrent lanes restore each other's backup over the wrong tree.
+- 2026-08-05T11:22Z · agent:mrg-transitions · started L-MRG-RECIPE-TRANSITIONS-PINNED
+- 2026-08-05T11:22Z · @clerk · Waived the standing refill debt again: two granted lanes are owner-owned merges to shared branches and the third would hit the same wall it hit this morning.
+- 2026-08-05T11:31Z · agent:L-WF-LEVER-TITLE-NAMES-ITS-REACH · L-WF-LEVER-TITLE-NAMES-ITS-REACH returned built -> built-unverified, evidence lanes/L-WF-LEVER-TITLE-NAMES-ITS-REACH/retitle-and-pin.md
+- 2026-08-05T11:31Z · agent:L-WF-LEVER-TITLE-NAMES-ITS-REACH · report L-WF-LEVER-TITLE-NAMES-ITS-REACH: Base worktree OkamAPI-wflever, branch lane/wf-lever-title, cut from the integration tip feature/restaurant-modules @ 8e2b57de; every file read at that ref with `git show`. REACH MEASURED FIRST: workforce.module refuses 48 of 53 routes across THREE shells - stores 37/37, me 10/14, pos 1/2. Not none, 
+- 2026-08-05T11:32Z · @clerk · The workforce lever's title was true about one shell and silent about two: taking a venue off Workforce also stops till clock-in and the staff app.
+- 2026-08-05T11:32Z · @clerk · A lie in the off direction is worse than an overclaim, because nobody discovers it until they flip the switch.
+- 2026-08-05T11:32Z · @clerk · That gate is never one hop away, so a hand-written reach list would have missed it; the map walks controller to implementation to guard to seam.
+- 2026-08-05T11:35Z · agent:fixture-titles · started L-FIXTURE-TITLES-FOLLOW-THE-FLAGS
+- 2026-08-05T11:36Z · agent:L-MRG-RECIPE-TRANSITIONS-PINNED · L-MRG-RECIPE-TRANSITIONS-PINNED returned built -> built-unverified, evidence /Users/svendaneel/okam/web-mrgtrans/lanes/L-MRG-RECIPE-TRANSITIONS-PINNED/mutation-log.md
+- 2026-08-05T11:36Z · agent:L-MRG-RECIPE-TRANSITIONS-PINNED · report L-MRG-RECIPE-TRANSITIONS-PINNED: Based on candidate/fe-compose-2026-08-05 (f40fdf3), verified: its page IS 0c483de and equals c429d51 byte for byte, its suite equals 8ac314c, and 0c483de is still no ancestor of lane/mrg-revise-land.; Measured before building: PRIOR, the pinned suite as landed, runs 31/31 GREEN on this page unmodifi
+- 2026-08-05T11:37Z · @clerk · The suite as landed runs 31 of 31 green and reds zero under all five unbinds, so the five transitions are additions and the old suite could not see the gap.
+- 2026-08-05T11:37Z · @clerk · Two lanes independently found the disabled-control trap is diagnostic rather than the detection: deleting it reds the same tests.
+- 2026-08-05T11:37Z · @clerk · A fresh worktree needs an explicit protocol override to initialise the submodule; the plain command is refused outright and nothing in the repo says so.
+- 2026-08-05T11:39Z · @clerk · A lane's count of forty construction sites does not reproduce: 53 at the parent and 59 at its own commit, though the property the count supported still holds.
+- 2026-08-05T11:41Z · @clerk · The guard's enumeration is complete: exactly three production sites build a journal payment line, all guarded, and no production path hand-builds one.
+- 2026-08-05T11:41Z · @clerk · Three counts in one lane's evidence fail to reproduce while every property they supported holds, which is the pattern this board keeps recording rather than an incident.
+- 2026-08-05T11:41Z · @clerk · A whole-span bounds check would admit the company-account member and the undefined gaps too, which is the real reason a range test fails here.
+- 2026-08-05T11:53Z · agent:clockout-state · started L-CLOCKOUT-STATE-IS-NOT-OPEN
+- 2026-08-05T11:53Z · agent:waste-panel · started L-MRG-WASTE-PANEL-SAYS-ABSENT
+- 2026-08-05T12:04Z · agent:L-FIXTURE-TITLES-FOLLOW-THE-FLAGS · L-FIXTURE-TITLES-FOLLOW-THE-FLAGS returned built -> built-unverified, evidence /Users/svendaneel/okam/web-fixtitles/lanes/L-FIXTURE-TITLES-FOLLOW-THE-FLAGS/receipt.md
+- 2026-08-05T12:04Z · agent:L-FIXTURE-TITLES-FOLLOW-THE-FLAGS · report L-FIXTURE-TITLES-FOLLOW-THE-FLAGS: DERIVED, not copied — and the two strings are deliberately NOT written in. Commit ccb847d, lane/fixture-titles-follow-the-flags, worktree web-fixtitles off frontend tip e34977ac, unpushed. PROCEEDED rather than waited: at feature/restaurant-modules @ 8e2b57de the fixture is LEVEL, 18/18. Copying 2d0
+- 2026-08-05T12:05Z · @clerk · The fixture is level with the tip at 18 of 18, so following the two unlanded retitles would have made it wrong about the only line that ships.
+- 2026-08-05T12:05Z · @clerk · The fixture now asserts against the composition root instead of copying, and reads any ref through git show without moving the shared backend checkout.
+- 2026-08-05T12:05Z · @clerk · My brief quoted fixture line numbers read from the working tree, which carries another lane's uncommitted work; at the tip those rows sit elsewhere.
+- 2026-08-05T12:14Z · @clerk · Landing the hunks that inventory marks as the lane's own would ship the canonical-slot guard inert: the wire passing tracked into it is mislabelled inherited.
+- 2026-08-05T12:14Z · @clerk · The ignore check calls none of the sixteen tracked artifacts ignored, because it consults the index already; the instrument chosen is right and its stated reason is backwards.
+- 2026-08-05T12:14Z · @clerk · Two named steps of the estate journey are byte-identical pictures: two states, one image.
+- 2026-08-05T12:18Z · agent:L-MRG-WASTE-PANEL-SAYS-ABSENT · L-MRG-WASTE-PANEL-SAYS-ABSENT returned built -> built-unverified, evidence /Users/svendaneel/okam/web-wasteabsent/lanes/L-MRG-WASTE-PANEL-SAYS-ABSENT/evidence.md
+- 2026-08-05T12:18Z · agent:L-MRG-WASTE-PANEL-SAYS-ABSENT · report L-MRG-WASTE-PANEL-SAYS-ABSENT: - EXIT: the routes DO NOT EXIST -> the panel says absent, not a softer error. Ref named 8e2b57de (=feature/restaurant-modules): git show of controller, service and entity all "path does not exist".; - UNLANDED, NOT LOST: the controller is on 5 refs (margin-waste, -500, acct-uidx, ef-index-shadow-swe
+- 2026-08-05T12:19Z · @clerk · A mutant that did not red was equivalent rather than survived: the flag is cleared before it is read, so the arm was green for a reason unrelated to the test.
+- 2026-08-05T12:19Z · @clerk · The existing page suite replaces the client with a class that always resolves, so it was structurally blind to a route that does not exist.
+- 2026-08-05T12:19Z · @clerk · The status endpoint still reports statements available, which is what puts the panel on screen, so the 404 arrives on every week a venue opens.
+- 2026-08-05T12:19Z · agent:coverage-panel · started L-MRG-COVERAGE-PANEL-SAYS-ABSENT
+- 2026-08-05T12:36Z · agent:L-CLOCKOUT-STATE-IS-NOT-OPEN · L-CLOCKOUT-STATE-IS-NOT-OPEN returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-clockoutstate/lanes/L-CLOCKOUT-STATE-IS-NOT-OPEN/evidence.md
+- 2026-08-05T12:36Z · agent:L-CLOCKOUT-STATE-IS-NOT-OPEN · report L-CLOCKOUT-STATE-IS-NOT-OPEN: Read at 8e2b57de; every file I touched was byte-identical at HEAD and the tip. Built in my own worktree wt-clockoutstate, branch lane/clockout-state-is-not-open cut at 8e2b57de.; Defect confirmed verbatim: `SessionState = result.ClosedUtc.HasValue ? Closed : Open`, commented "An exception outcome ca
+- 2026-08-05T12:36Z · @clerk · The clock wire had no word for the third case, so an exception outcome reported the worker open by default; the enum now carries it and reads the fold's outcome.
+- 2026-08-05T12:36Z · @clerk · A rule keyed on a null session id looks equivalent and is not: a cross-engagement punch carries the other employer's id, and a lost race carries none on a genuine close.
+- 2026-08-05T12:37Z · agent:clock-client · started L-CLOCK-CLIENT-READS-THE-WIRE
+- 2026-08-05T12:41Z · agent:L-MRG-COVERAGE-PANEL-SAYS-ABSENT · L-MRG-COVERAGE-PANEL-SAYS-ABSENT returned built -> built-unverified, evidence /Users/svendaneel/okam/web-mrgcovabsent/lanes/L-MRG-COVERAGE-PANEL-SAYS-ABSENT/evidence.md
+- 2026-08-05T12:41Z · agent:L-MRG-COVERAGE-PANEL-SAYS-ABSENT · report L-MRG-COVERAGE-PANEL-SAYS-ABSENT: - REACHABLE, checked not assumed: the page renders both panels as siblings and wasteAbsent is page data; one non-test caller. Cut from the sibling's 633e637 — f40fdf3 does not hold the fact.; - ABSENCE RE-CONFIRMED at 8e2b57de (=feature/restaurant-modules): ls-tree grep -ci waste = 0; the one .cs hi
+- 2026-08-05T12:41Z · @clerk · A lane's first pass keyed absence on a flag that is also true when the data arrives withheld, so it would have printed no-figures over a value that did arrive.
+- 2026-08-05T12:41Z · @clerk · All eight of its mutants went red on the first try, which the lane names as exactly the moment it is easiest to stop looking.
+- 2026-08-05T12:41Z · @clerk · The method that opens the week loaded one read of two, so both panels reported on a request never sent and the absent state was unreachable on that path.
+- 2026-08-05T12:53Z · @clerk · Zero of 812 files under docs/plan are tracked on any branch: a clean would take the plan, every return, every review and today's thirty-five rulings.
+- 2026-08-05T12:53Z · @clerk · Refreshed the snapshot ref through a temporary index; it preserves bytes but is not fetched by a clone, so a fresh checkout still finds no plan at all.
+- 2026-08-05T12:55Z · @clerk · A guard refuses eleven digits passing mod-11, which is a fodselsnummer and nothing else, so a twelve-character foreign number passes and reaches a frozen line.
+- 2026-08-05T12:55Z · @clerk · The Swiss DOM-guard condition now appears met by two falsified CH journeys, but a literal floor reds on drift and not on a string wrong when written.
+- 2026-08-05T12:56Z · agent:employee-ref · started L-EMPLOYEE-REF-REFUSES-ANY-NATIONAL-ID
+- 2026-08-05T12:56Z · tool · raised F-REVIEWERS-LOSE-THE-RUNS-THEY-WAIT-ON (warn)
+- 2026-08-05T12:56Z · @clerk · Three reviewers today held a complete verdict hostage to a suite run that died with their session; each had already produced the load-bearing evidence itself.
+- 2026-08-05T12:59Z · tool · raised F-MY-LIVENESS-CHECK-NEVER-MEASURED-ANYTHING (warn)
+- 2026-08-05T12:59Z · @clerk · My liveness check never measured anything: the count flag does not exist here, the error was discarded, and the fallback printed zero every time.
+- 2026-08-05T12:59Z · @clerk · Three agents were told their runs were dead on that constant; the third checked, found eight processes alive, and said so rather than accepting it.
+- 2026-08-05T12:59Z · @clerk · The clock-out wire fix is approved with no conditions: both rejected alternatives verified real, no path lets an exception outcome say open, and no strict parser exists in either repo.
+- 2026-08-05T13:01Z · @clerk · The run I called dead was alive and finished at the builder's exact number, so the clock-out tier is now re-derived on both sides rather than taken on the builder's word.
+- 2026-08-05T13:01Z · @clerk · The false premise cost one measurement's worth of doubt and no more, because the reviewer declined to accept it.
+- 2026-08-05T15:40Z · agent:L-CLOCK-CLIENT-READS-THE-WIRE · L-CLOCK-CLIENT-READS-THE-WIRE returned built -> built-unverified, evidence /Users/svendaneel/okam/web-clockclient/lanes/L-CLOCK-CLIENT-READS-THE-WIRE/evidence.md
+- 2026-08-05T15:40Z · agent:L-CLOCK-CLIENT-READS-THE-WIRE · report L-CLOCK-CLIENT-READS-THE-WIRE: BASE: my file is on NO branch; it IS on refs/lanes/preservation-snapshot-unreferenced-work @054e140, 9/9 identical to the shared checkout's untracked copies. Built in web-clockclient, 29eb669.; ZSH TRAP: git cat-file -e "$r:path" applies zsh's :c modifier to $r, so my ref scan first said NO ref carr
+- 2026-08-05T15:40Z · @clerk · The client module and till screen are on no branch: they exist only on the preservation snapshot, which is what that morning's work was for.
+- 2026-08-05T15:40Z · @clerk · Third instance of the unbraced-reference trap: a ref scan applied a history modifier to the path and answered that no ref carried the file.
+- 2026-08-05T15:40Z · @clerk · The identifier lane died after deciding to refuse, on a ground its brief did not supply: the export is readable by a third party to the buying company.
+- 2026-08-05T15:43Z · agent:path-evidence · started L-PATH-EVIDENCE-IS-READ
+- 2026-08-05T15:43Z · agent:fixture-enums · started L-FIXTURE-VALUES-ARE-ENUM-MEMBERS
+- 2026-08-05T15:45Z · agent:rebuild-census · started L-CANNOT-BE-REBUILT-CENSUS
+- 2026-08-05T15:52Z · agent:finalize-index · started L-FINALIZE-INDEX-OR-A-REASON
+- 2026-08-05T15:53Z · agent:L-PATH-EVIDENCE-IS-READ · L-PATH-EVIDENCE-IS-READ returned built -> built-unverified, evidence lanes/L-PATH-EVIDENCE-IS-READ/finding.md
+- 2026-08-05T15:53Z · agent:L-PATH-EVIDENCE-IS-READ · report L-PATH-EVIDENCE-IS-READ: MEASURED: evidence_admissible() admits all 6 Feature exits against `artifacts`, a scroll-lock capture, and BOTH failed artifacts - 36/36. Path evidence is never opened; only fact: gets a status check.; STATE 3 first: L-JOURNEY-COVERAGE-THREE is VERIFIED against `artifacts/journeys/` - the directory 
+- 2026-08-05T15:54Z · tool · raised F-A-VERIFIED-LANE-RESTS-ON-A-FAILED-RUN (blocker)
+- 2026-08-05T15:54Z · @clerk · 338 of 348 evidence pointers are path-shaped and never read, and 284 entities were promoted without the checker running at all: the board is unfalsifiable rather than false.
+- 2026-08-05T15:54Z · @clerk · One verified row is demonstrably false: its pointer was widened to the bare directory before verify, and two of its three artifacts read failed.
+- 2026-08-05T15:54Z · @clerk · A status-word sweep would red a lane that declares failure deliberately, twice, as the red halves of a guard proof and a mutation proof, so the repair cannot be a grep.
+- 2026-08-05T15:55Z · agent:evidence-checked · started L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED
+- 2026-08-05T15:58Z · @clerk · The workforce reach was reproduced twice by different methods, 48 of 53 across three shells, and the map traverses to the seam rather than matching names.
+- 2026-08-05T15:58Z · @clerk · Restoring files by archive extraction gives them timestamps older than the built assembly, so the build skips recompiling and the suite measures the mutant.
+- 2026-08-05T15:58Z · @clerk · The pin holds shells rather than per-shell counts, so a regression from ten routes to one on the worker's app would stay green.
+- 2026-08-05T16:05Z · agent:L-EMPLOYEE-REF-REFUSES-ANY-NATIONAL-ID · L-EMPLOYEE-REF-REFUSES-ANY-NATIONAL-ID returned built -> built-unverified, evidence lanes/L-EMPLOYEE-REF-REFUSES-ANY-NATIONAL-ID/mutation-log.md
+- 2026-08-05T16:05Z · agent:L-EMPLOYEE-REF-REFUSES-ANY-NATIONAL-ID · report L-EMPLOYEE-REF-REFUSES-ANY-NATIONAL-ID: Exit met: REFUSE. Exit B was ruled out, not merely unpreferred - MealsStatementController states "company admin OR its store billing may read/export it",; so the number is DISCLOSED to the restaurant, a third party to the employment relationship, and C1 forbids the repair. A disclosure with no undo 
+- 2026-08-05T16:06Z · @clerk · The refuse exit was chosen on a ground that rules the alternative out: the export is readable by the restaurant, a third party to the employment relationship, and the line is frozen.
+- 2026-08-05T16:06Z · @clerk · The regional prefix is deliberately unconstrained, because a stale allowlist would make the guard accept a real number, which is the direction C1 punishes.
+- 2026-08-05T16:06Z · @clerk · I reported no lane branch existed; it had, under a name my pattern did not match. Third check today whose shape encoded an assumption and reported it as a measurement.
+- 2026-08-05T16:07Z · agent:L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED · L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED returned built -> built-unverified, evidence lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/finding.md
+- 2026-08-05T16:07Z · agent:L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED · report L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED: REPAIRED both halves. names_the_instrument: the two-directional prefix is gone; evidence must BE an artifact the exit named (paths compared, not strings), and a DIRECTORY token admits nothing.; _evidence_kind_ok: a directory is refused outright, and it now ends in _artifact_outcome_ok, which reads t
+- 2026-08-05T16:09Z · tool · L-JOURNEY-COVERAGE-THREE verified -> built-unverified, evidence artifacts/journeys/ withdrawn: Its evidence is the bare journeys directory, and two of its three modules record status failed. The repaired checker refuses that pointer three ways: a directory records no run, the exit names the directory rather than an artifact, and the artifact reads failed. Verified 2026-08-04 roughly six hours after one of those runs had already gone red on disk. Re-record against a named artifact with a narrowed exit; the work is not necessarily undone.
+- 2026-08-05T16:10Z · @clerk · The evidence checker now refuses a directory and reads an artifact's declared field, and the six admissions went from 36 of 36 to none.
+- 2026-08-05T16:10Z · @clerk · It also repaired a false refusal nobody had noticed: nine rows record evidence as an absolute path while the exit names it relatively, and sixty entities record absolute paths.
+- 2026-08-05T16:10Z · @clerk · Withdrew the verification on the one materially false row; five others now refuse and are sound, needing re-recording against a named artifact rather than rework.
+- 2026-08-06T08:11Z · agent:L-FIXTURE-VALUES-ARE-ENUM-MEMBERS · L-FIXTURE-VALUES-ARE-ENUM-MEMBERS returned built -> built-unverified, evidence /Users/svendaneel/okam/web-fixenums/lanes/L-FIXTURE-VALUES-ARE-ENUM-MEMBERS/repair.md
+- 2026-08-06T08:11Z · agent:L-FIXTURE-VALUES-ARE-ENUM-MEMBERS · report L-FIXTURE-VALUES-ARE-ENUM-MEMBERS: Commit 1a88c24, lane/fixture-values-are-enum-members, worktree web-fixenums off frontend tip e34977ac; backend read BY OBJECT at 8e2b57de, braced refs. Unpushed. The sweep's twelve taken as given.; FOURTEEN not twelve: cut from the tip, not the sweep base 038612f (4 commits, 2 unlanded lanes), so Sp
+- 2026-08-06T08:11Z · agent:L-CANNOT-BE-REBUILT-CENSUS · L-CANNOT-BE-REBUILT-CENSUS returned built -> built-unverified, evidence lanes/L-CANNOT-BE-REBUILT-CENSUS/finding.md
+- 2026-08-06T08:11Z · agent:L-CANNOT-BE-REBUILT-CENSUS · report L-CANNOT-BE-REBUILT-CENSUS: A clone gets main. The program is on NO remote: FE e34977ac +135, candidate f40fdf36 +240, BE 8e2b57de +507. Gate 1 = `git checkout feature/restaurant-modules` -> pathspec did not match, both repos.; Past gate 1: a file:// clone of the branch, which gives more than a real clone, so failures hold. Su
+- 2026-08-06T08:11Z · agent:L-FINALIZE-INDEX-OR-A-REASON · L-FINALIZE-INDEX-OR-A-REASON returned built -> built-unverified, evidence lanes/L-FINALIZE-INDEX-OR-A-REASON/evidence.md
+- 2026-08-06T08:11Z · agent:L-FINALIZE-INDEX-OR-A-REASON · report L-FINALIZE-INDEX-OR-A-REASON: Read at 8e2b57de (checkout is on lane/meals-grace-pins). Work on lane/finalize-index-or-a-reason @ 5e53de83, worktree ~/okam/wt-finalizeidx. One container, mine, disposed. No push, no prod.; Answered before adding. Chain-built catalog (MigrateAsync from empty, never EnsureCreated), 64k journal rows 
+- 2026-08-06T08:12Z · tool · raised F-THE-BRANCH-EXISTS-ON-NO-REMOTE (blocker)
+- 2026-08-06T08:12Z · tool · raised F-THE-SUITE-IS-RED-ON-A-FAITHFUL-CLONE (warn)
+- 2026-08-06T08:12Z · @clerk · The branch this whole program is on exists on neither remote, so a clone stops at checkout, before the submodule pin and before any install.
+- 2026-08-06T08:12Z · @clerk · Two inherited hazards did not survive the walk: the install succeeds on a fresh clone, and this branch's migration chain has no duplicate column.
+- 2026-08-06T08:12Z · @clerk · One index cannot serve both journal reads: the engine refuses the hint outright where the predicate does not imply the filter, which is statistics-independent.
+- 2026-08-06T08:12Z · @clerk · The fixture repair was fourteen not twelve, because the lane checked its base and found the sweep's carried four commits from two unlanded lanes.
+- 2026-08-06T08:13Z · agent:built-checked · started L-BUILT-IS-CHECKED-TOO
+- 2026-08-06T08:15Z · agent:gr-exit-link · started L-GR-EXIT-IS-LINKED
+- 2026-08-06T08:15Z · agent:pos-clock-caller · started L-POS-CLOCK-CLIENT-OR-RECORDED
+- 2026-08-06T08:22Z · agent:ev-concurrency · started L-EV-CONCURRENCY-REFUSES-A-STALE-REVISION
+- 2026-08-06T08:22Z · agent:supersede-attrib · started L-SUPERSEDE-RELEASE-IS-ATTRIBUTED
+- 2026-08-06T08:23Z · @clerk · Applied the review's one condition: the extension test was case-sensitive, so an uppercase-suffixed record declaring failure was admitted on naming alone.
+- 2026-08-06T08:23Z · @clerk · Proven both builds against one file: refused with the fix, admitted without it. On this filesystem the two spellings are the same file, so one of them simply skipped the check.
+- 2026-08-06T08:23Z · @clerk · The reviewer's separating pair holds: failure as the subject of a run admits, failure as its outcome refuses, and an absent declared field refuses fail-closed.
+- 2026-08-06T08:24Z · agent:L-GR-EXIT-IS-LINKED · returned L-GR-EXIT-IS-LINKED verdict=fail-spec -> open; D-SPEC-L-GR-EXIT-IS-LINKED appended
+- 2026-08-06T08:24Z · agent:L-GR-EXIT-IS-LINKED · report L-GR-EXIT-IS-LINKED: REMEDY ALREADY EXISTS, read at the refs not the returns: 54a8bb51 composes the exit at GrowthDispatchService.cs:480 into both body parts; 814f04d deletes the page's two false sentences.; Brief 2026-08-06T08:14Z; remedy committed 2026-08-04T19:22Z. 54a8bb51 is NOT an ancestor of feature/restaurant-mo
+- 2026-08-06T08:25Z · @clerk · A lane found its remedy already built and committed 37 hours before its own brief; the discriminator this plan wrote for stale claims fired on the plan itself.
+- 2026-08-06T08:25Z · @clerk · It supplied the proof the sibling lacked: deleting the composed link reds all five tests including the outcome one, so the red is the withdrawal rather than a string match.
+- 2026-08-06T08:25Z · @clerk · Both preference addresses answer 404 while the site root answers 200, and the printed default is the address that 404s.
+- 2026-08-06T08:27Z · agent:L-POS-CLOCK-CLIENT-OR-RECORDED · L-POS-CLOCK-CLIENT-OR-RECORDED returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/lanes/L-POS-CLOCK-CLIENT-OR-RECORDED/finding.md
+- 2026-08-06T08:27Z · agent:L-POS-CLOCK-CLIENT-OR-RECORDED · report L-POS-CLOCK-CLIENT-OR-RECORDED: SURFACE = 2 endpoints at 8e2b57de: 45 POST /workforce/pos/clock-events, 46 GET /workforce/pos/personnel-list. Both need device JWT + X-Operator-Session. No third route.; The clock-state read is NOT an endpoint - it is sessionState on 45's response. A census hunting a third route finds nothing and co
+- 2026-08-06T08:27Z · agent:L-BUILT-IS-CHECKED-TOO · L-BUILT-IS-CHECKED-TOO returned built -> built-unverified, evidence lanes/L-BUILT-IS-CHECKED-TOO/finding.md
+- 2026-08-06T08:27Z · agent:L-BUILT-IS-CHECKED-TOO · report L-BUILT-IS-CHECKED-TOO: cmd_built calls set_evidence and no checker. Sandbox proof: built rc=0, verify rc=6 on one sentence; real plan.md byte-identical. Nothing changed, check NOT on. Predicate = CLI 9/9.; The 284 are intact and now number 290 - six more promoted unchecked since, two of them the prior lanes. The 149 that 
+- 2026-08-06T08:27Z · @clerk · Promoting a lane accepts a sentence as evidence and returns success; the same sentence at verify is refused. Proven on a throwaway copy, with the real plan byte-identical.
+- 2026-08-06T08:27Z · @clerk · 165 of 290 unchecked rows belong to an entity whose exit names neither a fact nor a path, so no evidence string can satisfy them; the exit rule must land before the check is turned on.
+- 2026-08-06T08:27Z · @clerk · The missing-keys flag is false: the keys exist on the same ref as the component, and the flag measured the two places the component does not exist.
+- 2026-08-06T08:27Z · @clerk · My own check of that returned zeros on every ref because I left the reference unbraced; fourth instance of that trap, this time while verifying somebody else's instrument.
+- 2026-08-06T08:52Z · agent:L-EV-CONCURRENCY-REFUSES-A-STALE-REVISION · L-EV-CONCURRENCY-REFUSES-A-STALE-REVISION returned built -> built-unverified, evidence lanes/L-EV-CONCURRENCY-REFUSES-A-STALE-REVISION/evidence.md
+- 2026-08-06T08:52Z · agent:L-EV-CONCURRENCY-REFUSES-A-STALE-REVISION · report L-EV-CONCURRENCY-REFUSES-A-STALE-REVISION: WebApi.Tests/Events/EventsSettlementStaleRevisionSqlServerTests.cs - 6 arms on the Events SQL Server fixture, 6/6 green. Commit 93d2b422 on lane/ev-concurrency-stale-revision, off the tip 8e2b57de.; Every arm drives a REAL second operator that reads the current revision and commits through the produ
+- 2026-08-06T08:53Z · @clerk · The settlement guard is now proven where it can fire; every prior proof was synthetic or on the lenient provider, and the fast tier pinned the null explicitly.
+- 2026-08-06T08:53Z · @clerk · A zero-amount adjustment emits no update at all, so the revision never reaches a where clause and the pre-check is the entire defence on that path.
+- 2026-08-06T08:53Z · @clerk · One mutant survives because it is equivalent: the method is a no-op on every reachable path while its comment claims it is what makes a late bump conflict.
+- 2026-08-06T08:57Z · agent:L-SUPERSEDE-RELEASE-IS-ATTRIBUTED · L-SUPERSEDE-RELEASE-IS-ATTRIBUTED returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-supattr/lanes/L-SUPERSEDE-RELEASE-IS-ATTRIBUTED/evidence.md
+- 2026-08-06T08:57Z · agent:L-SUPERSEDE-RELEASE-IS-ATTRIBUTED · report L-SUPERSEDE-RELEASE-IS-ATTRIBUTED: Fourth site = MealsQuoteService.ReleaseSupersededReservationAsync (lane/meals-requote-release): mutates the tracked reservation, issues its own guard decrement, never calls the authority.; ROUTE B: own attribution, named in the census. Route A refused - ReleaseSupersededAsync opens its own strategy+
+- 2026-08-06T08:58Z · @clerk · Routing the fourth release through the authority is unavailable rather than unattractive: it opens its own transaction inside code already in one, and a nested begin throws.
+- 2026-08-06T08:58Z · @clerk · The merge was performed and measured, and it found an offender neither branch shows alone: the till tender stamp has no correct actor kind to name.
+- 2026-08-06T08:58Z · @clerk · Fourth distinct form of the stale-measurement trap: clean-source backups parked inside the compile glob, with quiet verbosity and a narrow grep hiding the failed build.
+- 2026-08-06T09:10Z · @sven · ruled D-CONFIRM-SIXTH-HEAD = merge-as-is
+- 2026-08-06T09:10Z · @sven · ruled D-INTEGRATION-FASTFORWARD = author-a-merge-lane
+- 2026-08-06T09:10Z · @sven · ruled D-SPEC-L-TIER-ARTIFACTS = forward-only-plus-C8
+- 2026-08-06T09:10Z · @sven · ruled D-ACK-RECEIPT-IS-STATE-OR-EVIDENCE = ui-state-one-column
+- 2026-08-06T09:10Z · @sven · ruled D-SPEC-L-MRG-EHF-SPIKE = abandon-the-chase-at-Q4
+- 2026-08-06T09:10Z · @sven · ruled D-SPEC-L-GR-EXIT-IS-LINKED = retire-into-the-sibling
+- 2026-08-06T09:11Z · tool · L-GR-EXIT-IS-LINKED open -> retracted: Ruled retire-into-the-sibling 2026-08-06. The remedy was already committed 37 hours before this lane was briefed, on lane/gr-exit-wire-the-mail 54a8bb51 and lane/fe-gr-exit-wire-the-mail 814f04d. This lane's mutation proof — deleting the composed link reds all five tests including the outcome one — is carried to that sibling as the proof it lacked. What remains is a landing, not a build.
+- 2026-08-06T09:11Z · tool · L-MRG-EHF-SPIKE open -> retracted: Ruled abandon-the-chase-at-Q4 2026-08-06 on the owner's word that the files do not exist to send. Neither SHIP nor STOP is answerable from four fixtures hand-written to exercise parser edge cases, and the STOP rule turns on a mix those fixtures cannot show. The sending mandate arrives 2027-01-01, after which the input is structured by law; reopens if a venue forwards real invoices before Q4 or a pilot connects an integration that supplies them.
+- 2026-08-06T09:11Z · @clerk · Sven ruled all six: two were moot or impossible as written, one was my duplicated option, and three were real. Both moot lanes retracted, two new lanes authored.
+- 2026-08-06T09:11Z · @clerk · The EHF chase is abandoned with a dated exit because the files do not exist to send; it reopens only if a venue forwards real invoices or a pilot supplies them.
+- 2026-08-06T09:21Z · @clerk · New standing goal from Sven: drive to production-ready and do not stop. Recorded so every later wake reads it.
+- 2026-08-06T09:21Z · @clerk · Thirty-five of thirty-eight journey captures drive a fixture and three drive the real backend, which is the gap between a module that tests green and one somebody can use.
+- 2026-08-06T09:21Z · @clerk · Authored a live-walk lane per module plus repairs for the two captures that record their own failure; dispatch waits on a host a sibling project is saturating.
+- 2026-08-06T09:28Z · @clerk · Moved five artifacts from the plan directory to the repository's lane directory and deleted one byte-identical duplicate; all six pointers now resolve.
+- 2026-08-06T09:28Z · @clerk · The 165 unsatisfiable exits stay unwritten: an exit is a contract, and rewriting one to fit the evidence already recorded against it is the failure this work exists to stop.
+- 2026-08-06T10:22Z · agent:mig-stack-merge · started L-MIG-STACK-MERGE
+- 2026-08-06T10:22Z · agent:ack-reload-fix · started L-ACK-RECEIPT-SURVIVES-A-RELOAD-FIX
+- 2026-08-06T10:22Z · agent:gr-sendgate-walk · started L-GROWTH-SEND-GATE-WALK-IS-GREEN
+- 2026-08-06T10:22Z · agent:tier-artifacts · started L-TIER-ARTIFACTS
+- 2026-08-06T10:23Z · agent:wf-operator-unique · started L-WF-OPERATOR-UNIQUE
+- 2026-08-06T10:35Z · @clerk · Two lanes died mid-stream on infrastructure within minutes; both resumed from transcript with their last state, nothing recreated.
+- 2026-08-06T10:35Z · @clerk · One resumed lane had cut its branch from the migration stack tip rather than the integration tip, with no commits of its own; told to verify the base before authoring.
+- 2026-08-06T10:41Z · agent:L-TIER-ARTIFACTS · L-TIER-ARTIFACTS returned built -> built-unverified, evidence lanes/L-TIER-ARTIFACTS/DETAIL.md
+- 2026-08-06T10:41Z · agent:L-TIER-ARTIFACTS · report L-TIER-ARTIFACTS: Ruling executed as forward-only-plus-C8. NO receipt retrofitted onto any branch, and no suite run: a run today is the retrofit the ruling forbids.; Landed on lane/tier-artifacts, 12 commits e34977ac..b1a2872, never pushed, no container, explicit pathspec only: f6c0579 census.js, b1a2872 the dated ba
+- 2026-08-06T10:41Z · @clerk · A lane corrected two of its own published figures: 361 branch-claims is 92 commits, and 8 receipts is 28 files naming 25 commits.
+- 2026-08-06T10:41Z · @clerk · The per-branch tally inflates elevenfold because lane branches share ancestors, and the contradiction between 61 backed and 26 receipt files is how the bug surfaced.
+- 2026-08-06T10:41Z · @clerk · The C8 text is drafted and intent.md is untouched, verified: file unchanged since 31 July and no occurrence of the constraint.
+- 2026-08-06T10:42Z · @clerk · Four lanes died on infrastructure within twenty minutes, two mid-stream and two on watchdog stalls; all four resumed from transcript with their last state.
+- 2026-08-06T10:42Z · @clerk · The send-gate walk passes at the very commit whose committed artifact records failed, so the red was not the product; the lane must name whether it was stale, environmental or the fixture.
+- 2026-08-06T10:48Z · agent:L-GROWTH-SEND-GATE-WALK-IS-GREEN · L-GROWTH-SEND-GATE-WALK-IS-GREEN returned built -> built-unverified, evidence artifacts/journeys/growth-newsletter-send-gate.playwright.json
+- 2026-08-06T10:48Z · agent:L-GROWTH-SEND-GATE-WALK-IS-GREEN · report L-GROWTH-SEND-GATE-WALK-IS-GREEN: NOT THE WALK, NOT THE FIXTURE, NOT THE PRODUCT. At the red's OWN commit 31fc45da, clean worktree, ports 3877/4877, the same spec+fixture+page+gate walks 17/17 GREEN (runs/B1-at-31fc45da.txt).; It was the RUN, not staleness - nothing since 31fc45da repaired this. Its own file says backendServed 0: th
+- 2026-08-06T10:49Z · @clerk · The send-gate red was false: the walk was already green at the commit the artifact names, and the artifact records that the browser never reached the API.
+- 2026-08-06T10:49Z · @clerk · A thirty-second hard-coded wait is copied into roughly twenty admin journeys and reports a dead application as an undiagnosable URL timeout.
+- 2026-08-06T10:49Z · @clerk · The lane refused to capture in the primary checkout because it carries 354 uncommitted paths including six under the e2e harness, which would name a commit while driving another.
+- 2026-08-06T10:52Z · agent:journey-wait · started L-ADMIN-JOURNEY-WAIT-DIAGNOSES
+- 2026-08-06T10:52Z · agent:live-events · started L-LIVE-WALK-EVENTS
+- 2026-08-06T10:55Z · agent:L-ACK-RECEIPT-SURVIVES-A-RELOAD-FIX · L-ACK-RECEIPT-SURVIVES-A-RELOAD-FIX returned built -> built-unverified, evidence /Users/svendaneel/okam/web-ackreload/lanes/L-ACK-RECEIPT-SURVIVES-A-RELOAD-FIX/evidence.md
+- 2026-08-06T10:55Z · agent:L-ACK-RECEIPT-SURVIVES-A-RELOAD-FIX · report L-ACK-RECEIPT-SURVIVES-A-RELOAD-FIX: Contract A. BE lane/ack-receipt-inbox-column 6dfbb74b off tip 8e2b57de; FE lane/ack-receipt-survives-reload ac6ed72 off predecessor 02c7356. Nothing pushed; 4010 never bound.; ONE COLUMN: GetInboxAsync already loaded the recipient row and selected SeenAtUtc; it now selects AcknowledgedAtUtc too. No 
+- 2026-08-06T10:56Z · @clerk · The clock receipt survives a reload on one column, as ruled; the mark-as-read path fills it too, so it is not null on one of the two arrival paths.
+- 2026-08-06T10:56Z · @clerk · What survives is a mutable column outside the append-only guard, and the append-only receipt is still read back by no endpoint on any surface.
+- 2026-08-06T10:56Z · @clerk · The journey replaced its closed gap finding with the surviving one rather than deleting it, which is how a finding should be retired.
+- 2026-08-06T10:56Z · agent:live-growth · started L-LIVE-WALK-GROWTH
+- 2026-08-06T11:08Z · tool · raised F-GROWTH-NO-LIVE-CONFIRM-LINK (blocker)
+- 2026-08-06T11:08Z · tool · raised F-GROWTH-MODULE-LEVER-CANNOT-TURN-ON (blocker)
+- 2026-08-06T11:08Z · agent:L-LIVE-WALK-GROWTH · returned L-LIVE-WALK-GROWTH verdict=blocked -> open, needs F-GROWTH-NO-LIVE-CONFIRM-LINK
+- 2026-08-06T11:08Z · agent:L-LIVE-WALK-GROWTH · report L-LIVE-WALK-GROWTH: NO RUN CLAIMED. No container, no process, NO PORT BOUND - 4010/4971/4973 untouched, all foreign. Read-only at web 8ac6f63 / api 8e2b57de (clean). Nothing outside my lane dir, and no mail sent.; THE WIRE: the confirm link lives only inside a sent message. GrowthSubscriptionService.cs:89-92 mints it, 
+- 2026-08-06T11:09Z · @clerk · Growth cannot be walked live at all: the confirm token is stored only as a hash by design, so the fixture mailbox has no live analogue and none can be built.
+- 2026-08-06T11:09Z · @clerk · A live-only defect no fixture can see: every Growth flag is ANDed under a master that ships false, and Growth registers no effective resolver, so the board says on while the surface stays dark.
+- 2026-08-06T11:09Z · @clerk · Verified at the tip: resolver implementations exist for Workforce and Margin only, and one is registered; Meals is in the same position as Growth.
+- 2026-08-06T11:09Z · agent:growth-resolver · started L-GROWTH-EFFECTIVE-RESOLVER
+- 2026-08-06T11:11Z · agent:L-LIVE-WALK-EVENTS · returned L-LIVE-WALK-EVENTS verdict=blocked -> open, needs F-SQL-HEADROOM
+- 2026-08-06T11:11Z · agent:L-LIVE-WALK-EVENTS · report L-LIVE-WALK-EVENTS: THE WIRE. EventsController is its OWN IActionFilter (Controllers/EventsController.cs:67-75): every /events route, public AND admin, 404s EVENTS_DISABLED while EventsModuleGate.IsEnabled is false.; IsEnabled reads config Events:Enabled, default FALSE (EventsModuleGate.cs:57,66). Declared in NEITHER a
+- 2026-08-06T11:12Z · tool · raised F-MODULE-MASTERS-ARE-UNDECLARED-AND-INVISIBLE (blocker)
+- 2026-08-06T11:12Z · @clerk · The Events master key is declared in neither settings file, so a controller-wide filter 404s every route and the walk's first anonymous act fails before sign-in.
+- 2026-08-06T11:12Z · @clerk · The flag board renders all eighteen rows with the module fully dark behind them, and a live capture passes while arming a flag on a store whose every route is 404.
+- 2026-08-06T11:12Z · @clerk · Two live walks hit the same shape within an hour from opposite directions: one master undeclared, one unresolved, both invisible to every fixture.
+- 2026-08-06T11:13Z · agent:live-margin · started L-LIVE-WALK-MARGIN
+- 2026-08-06T11:15Z · agent:L-ADMIN-JOURNEY-WAIT-DIAGNOSES · L-ADMIN-JOURNEY-WAIT-DIAGNOSES returned built -> built-unverified, evidence lanes/L-ADMIN-JOURNEY-WAIT-DIAGNOSES/kill-proof.txt
+- 2026-08-06T11:15Z · agent:L-ADMIN-JOURNEY-WAIT-DIAGNOSES · report L-ADMIN-JOURNEY-WAIT-DIAGNOSES: signIn (test/e2e/support/admin.js, 31 journeys) now wraps its 4 waits: on timeout it probes both origins from node, reads #__nuxt and the modal, leads with the first "no". Assertions untouched.; Commit ac77d25 on lane/admin-journey-wait-diagnoses, worktree /Users/svendaneel/okam/web-waitdiag (detach
+- 2026-08-06T11:16Z · @clerk · The sign-in wait now names what did not answer, proven by killing the server, and the diagnosis lands in the artifact rather than only the console.
+- 2026-08-06T11:16Z · @clerk · Its control arm reproduces the original red's signature exactly, which answers the sibling's open question: a fixture that stopped answering is sufficient to produce it.
+- 2026-08-06T11:16Z · @clerk · With nothing listening the login modal still offers six boxes for a code it never sent, because the request layer resolves failures and the flag is set in a then that never reads the value.
+- 2026-08-06T11:21Z · agent:live-meals · started L-LIVE-WALK-MEALS
+- 2026-08-06T11:23Z · agent:L-LIVE-WALK-MARGIN · returned L-LIVE-WALK-MARGIN verdict=blocked -> open, needs F-SQL-HEADROOM
+- 2026-08-06T11:23Z · agent:L-LIVE-WALK-MARGIN · report L-LIVE-WALK-MARGIN: NO RUN CLAIMED. No container, no process, NO PORT BOUND — 4010/4971/4973 untouched, all foreign. Read-only at web 8ac6f63 / api 8e2b57de (clean). Nothing written outside my lane dir.; MARGIN HAS NEITHER SIBLING DEFECT — worth more than the capture. Resolver REGISTERED, master DECLARED, and the overr
+- 2026-08-06T11:24Z · @clerk · My claim that one resolver is registered was a grep of one file reported as a fact about the application: Margin registers its own inside a module extension, so the count is two.
+- 2026-08-06T11:24Z · @clerk · Margin has neither sibling defect: its master is a per-store allow-list that coalesces rather than ANDs, so an operator flip is honoured and no harness switch is needed.
+- 2026-08-06T11:24Z · @clerk · A divergence found without running: the read model emits all three price bases per product while the fixture emits only declared ones, so a live run renders three rows where captures show two.
+- 2026-08-06T11:29Z · agent:L-WF-OPERATOR-UNIQUE · L-WF-OPERATOR-UNIQUE returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-wfopuniq/lanes/L-WF-OPERATOR-UNIQUE/evidence.md
+- 2026-08-06T11:29Z · agent:L-WF-OPERATOR-UNIQUE · report L-WF-OPERATOR-UNIQUE: BASE IS THE STACK, DELIBERATELY: lane/wf-operator-unique @ c67d0923 off integration/mig-stack-land @ 4b37f81b, wt-wfopuniq, NOT pushed. Read at integration tip feature/restaurant-modules @ 8e2b57de.; WHY NOT THE INTEGRATION TIP: its 127 migrations are a STRICT PREFIX of the stack's 136 (0 removed, 9
+- 2026-08-06T11:30Z · @clerk · The base I flagged as wrong was deliberate and correct: the tip's migrations are a strict prefix of the stack's, so the stack tip is the post-merge chain tip.
+- 2026-08-06T11:30Z · @clerk · Two SQL lanes ran at once without snapshot contention because one hand-authored its migration, leaving the model snapshot untouched.
+- 2026-08-06T11:30Z · @clerk · A mutant was equivalent by accident: the renamed index contained the original name, so every substring check still matched and only the catalogue reddened.
+- 2026-08-06T11:31Z · agent:live-training · started L-LIVE-WALK-TRAINING
+- 2026-08-06T11:31Z · agent:training-walk-green · started L-TRAINING-WALK-IS-GREEN
+- 2026-08-06T11:33Z · tool · raised F-MEALS-MONEY-FLAGS-HAVE-NO-LEVER (blocker)
+- 2026-08-06T11:33Z · tool · raised F-MEALS-BOARD-SAYS-OFF-OVER-A-LIVE-MODULE (warn)
+- 2026-08-06T11:33Z · agent:L-LIVE-WALK-MEALS · returned L-LIVE-WALK-MEALS verdict=blocked -> open, needs F-MEALS-MONEY-FLAGS-HAVE-NO-LEVER
+- 2026-08-06T11:33Z · agent:L-LIVE-WALK-MEALS · report L-LIVE-WALK-MEALS: NO RUN CLAIMED. No container, no process, NO PORT BOUND — 4010/4971/4973 untouched, all foreign. Read-only at web 8ac6f63 / api 8e2b57de (clean, 0 paths). Nothing written outside my lane dir.; THE RESOLVER, CHECKED FIRST: Meals has NONE. Swept the whole tree, not just Program.cs — 2 impls exist (Wor
+- 2026-08-06T11:34Z · @clerk · Meals is a fourth flag shape: master declared, lever coalesces, no resolver, so the board says off over a module that is serving.
+- 2026-08-06T11:34Z · @clerk · Three of four Meals flags are withheld from the operator catalogue by design and every act of the walk sits on one, so the module is switched on for the process rather than a store.
+- 2026-08-06T11:34Z · @clerk · The Meals walk cannot survive live unchanged: one of its two identities is fixture-only, and the only claimable phone is on its own withheld list and on screen.
+- 2026-08-06T11:35Z · agent:live-workforce · started L-LIVE-WALK-WORKFORCE
+- 2026-08-06T11:40Z · agent:ledger-numbers · started L-LEDGER-NUMBERS-ARE-FREE
+- 2026-08-06T11:40Z · agent:empref-width · started L-EMPREF-WIDTH-OR-A-RULING
+- 2026-08-06T11:40Z · agent:cors-measured · started L-CORS-WILDCARD-MEASURED
+- 2026-08-06T11:40Z · agent:login-modal · started L-LOGIN-MODAL-REPORTS-A-FAILED-SEND
+- 2026-08-06T11:42Z · agent:L-GROWTH-EFFECTIVE-RESOLVER · L-GROWTH-EFFECTIVE-RESOLVER returned built -> built-unverified, evidence /Users/svendaneel/okam/OkamAPI-growthres/lanes/L-GROWTH-EFFECTIVE-RESOLVER/mutation-receipt.md
+- 2026-08-06T11:42Z · agent:L-GROWTH-EFFECTIVE-RESOLVER · report L-GROWTH-EFFECTIVE-RESOLVER: Verified at the tip 8e2b57de, not assumed: Growth ANDs Growth:Enabled (ships false) over the row and registers no resolver. Events is its exact twin and has none either.; MEALS IS NOT IN THE SAME POSITION: its row wins in BOTH directions and the config gate is only its fallback, so it diverges the O
+- 2026-08-06T11:42Z · tool · raised F-TRAIN-INVISIBLE-ON-A-FRESH-STORE (blocker)
+- 2026-08-06T11:42Z · agent:L-LIVE-WALK-TRAINING · returned L-LIVE-WALK-TRAINING verdict=blocked -> open, needs L-TRAIN-DISCLOSURE-LAND, L-COMPOSE-FE-CANDIDATE, F-TRAIN-INVISIBLE-ON-A-FRESH-STORE
+- 2026-08-06T11:42Z · agent:L-LIVE-WALK-TRAINING · report L-LIVE-WALK-TRAINING: NO RUN CLAIMED. No container, no process, NO PORT BOUND — 4010/4971/4973 untouched, all foreign. Read-only at web 8ac6f63 / api 8e2b57de (clean); wrote only my lane dir.; NEITHER SIBLING DEFECT, for a FOURTH reason: NO MASTER AT ALL. `grep -ni training appsettings*.json` = nothing; TrainingModuleGat
+- 2026-08-06T11:45Z · @clerk · L-LIVE-WALK-TRAINING
+- 2026-08-06T11:45Z · @clerk · L-LIVE-WALK-TRAINING
+- 2026-08-06T11:45Z · @clerk · L-LIVE-WALK-TRAINING
+- 2026-08-06T11:45Z · @clerk · L-LIVE-WALK-TRAINING
+- 2026-08-06T11:47Z · @clerk · F-MODULE-MASTERS-ARE-UNDECLARED-AND-INVISIBLE
+- 2026-08-06T11:47Z · @clerk · F-MODULE-MASTERS-ARE-UNDECLARED-AND-INVISIBLE
+- 2026-08-06T11:47Z · @clerk · F-MODULE-MASTERS-ARE-UNDECLARED-AND-INVISIBLE
+- 2026-08-06T11:47Z · @clerk · F-MODULE-MASTERS-ARE-UNDECLARED-AND-INVISIBLE
+- 2026-08-06T11:51Z · agent:L-EMPREF-WIDTH-OR-A-RULING · L-EMPREF-WIDTH-OR-A-RULING returned built -> built-unverified, evidence lanes/L-EMPREF-WIDTH-OR-A-RULING/finding.md
+- 2026-08-06T11:51Z · agent:L-EMPREF-WIDTH-OR-A-RULING · report L-EMPREF-WIDTH-OR-A-RULING: NOTHING TRUNCATES — zero values, every path. Normalize refuses >64 with a 400 before EF sees it, pinned by A_reference_longer_than_the_column_is_refused_rather_than_silently_truncated.; F-MIG17's premise is false at tip AND stack: 64 gives a REFUSAL BAND of 65-128, loud and recoverable, not a perman
+- 2026-08-06T11:51Z · agent:L-TRAINING-WALK-IS-GREEN · L-TRAINING-WALK-IS-GREEN returned built -> built-unverified, evidence artifacts/journeys/training-course-to-evidence.playwright.json
+- 2026-08-06T11:51Z · agent:L-TRAINING-WALK-IS-GREEN · report L-TRAINING-WALK-IS-GREEN: THE PRODUCT — and it was already fixed. Probe re-run in my clean worktree: publish @1280 state A fix OFF pointer-click FAILS -> fix ON LANDS; 8 of 10 width x state cells flip. probe-rerun.txt; THE WALK was broken too: at e34977ac step 9 FILED a defect and passed anyway and step 10 dispatched. Arm A 
+- 2026-08-06T11:51Z · tool · raised F-LIVE-WORLD-ONE-HUMAN (blocker)
+- 2026-08-06T11:51Z · agent:L-LIVE-WALK-WORKFORCE · returned L-LIVE-WALK-WORKFORCE verdict=blocked -> open, needs F-LIVE-WORLD-ONE-HUMAN
+- 2026-08-06T11:51Z · agent:L-LIVE-WALK-WORKFORCE · report L-LIVE-WALK-WORKFORCE: NO RUN CLAIMED. No container started or touched, NO PORT BOUND — 4010/4971/4973 untouched, all foreign. Clean detached worktree at web 8ac6f63, api read-only. Nothing written outside my lane dir.; WRONG-TREE CORRECTION FIRST: /okam/OkamAPI is feature/swiss @597192ef with NO restaurant modules at all
+- 2026-08-06T11:51Z · agent:L-LEDGER-NUMBERS-ARE-FREE · L-LEDGER-NUMBERS-ARE-FREE returned built -> built-unverified, evidence lanes/L-LEDGER-NUMBERS-ARE-FREE/finding.md
+- 2026-08-06T11:51Z · agent:L-LEDGER-NUMBERS-ARE-FREE · report L-LEDGER-NUMBERS-ARE-FREE: 3 copies, not 2: INT feature/restaurant-modules 8e2b57de blob 91de8393 MIG-1..22; STACK mig-stack-land 4b37f81b 50a98d75 1..27; MERGE mig-stack-merge 24cd4ead a96faee3 1..29, in flight.; Checked against migrations, never the ledger: THROW 5\d{4} from every non-Designer migration per ref + 332 heads 
+- 2026-08-06T11:51Z · @clerk · F-MODULE-MASTERS-ARE-UNDECLARED-AND-INVISIBLE
+- 2026-08-06T11:51Z · @clerk · F-MODULE-MASTERS-ARE-UNDECLARED-AND-INVISIBLE
+- 2026-08-06T11:51Z · @clerk · F-MODULE-MASTERS-ARE-UNDECLARED-AND-INVISIBLE
+- 2026-08-06T11:51Z · @clerk · F-MODULE-MASTERS-ARE-UNDECLARED-AND-INVISIBLE
+- 2026-08-06T11:51Z · @clerk · F-MODULE-MASTERS-ARE-UNDECLARED-AND-INVISIBLE
+- 2026-08-06T11:53Z · agent:opus · started L-COMPOSE-AND-RUN-THE-STACK
+- 2026-08-06T11:53Z · agent:opus · started L-CENSUS-DERIVES-ITS-FLOOR
+- 2026-08-06T11:53Z · agent:opus · started L-FLAGS-RESOLVERS-COVER-THREE
+- 2026-08-06T11:53Z · agent:opus · started L-PLAN-LIVES-IN-GIT
+- 2026-08-06T11:53Z · agent:opus · started L-TRAIN-DISCLOSURE-LAND
+- 2026-08-06T11:53Z · agent:opus · started L-PREFCENTRE-DEPLOY-EXEC
+- 2026-08-06T11:54Z · agent:L-CORS-WILDCARD-MEASURED · L-CORS-WILDCARD-MEASURED returned built -> built-unverified, evidence lanes/L-CORS-WILDCARD-MEASURED/finding.md
+- 2026-08-06T11:54Z · agent:L-CORS-WILDCARD-MEASURED · report L-CORS-WILDCARD-MEASURED: Production = origin/master 6c0b3a19 (workflow master->okamapi), NOT integration 8e2b57de nor lane/cors-followups 17c12c20. AllowAnyOrigin is Program.cs:71-77 on master and on no other branch.; Re-measured 2026-08-06T11:48Z: allow-origin:* everywhere, allow-credentials absent everywhere. F-PROD-CORS-
+- 2026-08-06T11:54Z · tool · raised F-PROD-STORES-APIKEY-HARDCODED (blocker)
+- 2026-08-06T11:54Z · tool · raised F-PROD-BEARER-IS-SCRIPT-READABLE (blocker)
+- 2026-08-06T11:54Z · tool · raised F-LOGIN-CENTURY-TOKEN (blocker)
+- 2026-08-06T11:54Z · @clerk · F-PROD-CORS-WILDCARD
+- 2026-08-06T11:57Z · @clerk · F-MY-LIVENESS-CHECK-NEVER-MEASURED-ANYTHING
+- 2026-08-06T11:57Z · @clerk · F-MY-LIVENESS-CHECK-NEVER-MEASURED-ANYTHING
+- 2026-08-06T11:58Z · agent:L-PLAN-LIVES-IN-GIT · L-PLAN-LIVES-IN-GIT returned built -> built-unverified, evidence lanes/L-PLAN-LIVES-IN-GIT/evidence.md
+- 2026-08-06T11:58Z · agent:L-PLAN-LIVES-IN-GIT · report L-PLAN-LIVES-IN-GIT: - Branch plan/docs-20260806 exists locally at 54d4dfc: orphan, 444 files, 3.59 MB, no code. Primary index fingerprint identical before and after (1785918138 89350); no `git add -A`, no stash.; - PUSH IS UNPERFORMED AND OWED: `git -C /Users/svendaneel/okam/Web-modules push origin plan/docs-20260806:r
+- 2026-08-06T11:59Z · @clerk · L-PLAN-LIVES-IN-GIT
+- 2026-08-06T11:59Z · @clerk · L-PLAN-LIVES-IN-GIT
+- 2026-08-06T11:59Z · @clerk · L-PLAN-LIVES-IN-GIT
+- 2026-08-06T11:59Z · @clerk · L-PLAN-LIVES-IN-GIT
+- 2026-08-06T11:59Z · @clerk · L-PLAN-LIVES-IN-GIT
+- 2026-08-06T11:59Z · @clerk · F-MY-LIVENESS-CHECK-NEVER-MEASURED-ANYTHING
+- 2026-08-06T12:00Z · agent:L-PREFCENTRE-DEPLOY-EXEC · L-PREFCENTRE-DEPLOY-EXEC returned built -> built-unverified, evidence lanes/L-PREFCENTRE-DEPLOY-EXEC/deploy-state-2026-08-06.md
+- 2026-08-06T12:00Z · agent:L-PREFCENTRE-DEPLOY-EXEC · report L-PREFCENTRE-DEPLOY-EXEC: DEPLOY UNPERFORMED AND OWED. No push, no merge, no deploy, no mail. The owner's steps exist as runnable blocks (Sequences A-D in the evidence); not one of them was executed here.; SANDBOX CHECK ANSWERED, NOT A LIVE EXPOSURE: deployed master 6c0b3a19 carries ZERO Growth dispatch code, so no productio
+- 2026-08-06T12:01Z · @clerk · L-PREFCENTRE-DEPLOY-EXEC
+- 2026-08-06T12:01Z · @clerk · L-PREFCENTRE-DEPLOY-EXEC
+- 2026-08-06T12:01Z · @clerk · L-PREFCENTRE-DEPLOY-EXEC
+- 2026-08-06T12:01Z · @clerk · L-PREFCENTRE-DEPLOY-EXEC
+- 2026-08-06T12:01Z · @clerk · L-PREFCENTRE-DEPLOY-EXEC
+- 2026-08-06T12:01Z · @clerk · F-BACKEND-FACTS-OFF-BRANCH
+- 2026-08-06T12:01Z · @clerk · F-BACKEND-FACTS-OFF-BRANCH
+- 2026-08-06T12:01Z · @clerk · F-PREF-UNREACHABLE
+- 2026-08-06T12:02Z · tool · raised F-PROBE-DIR-IS-A-FOREIGN-LANE-BRANCH (blocker)
+- 2026-08-06T12:07Z · agent:L-LOGIN-MODAL-REPORTS-A-FAILED-SEND · L-LOGIN-MODAL-REPORTS-A-FAILED-SEND returned built -> built-unverified, evidence lanes/L-LOGIN-MODAL-REPORTS-A-FAILED-SEND/kill-proof.txt
+- 2026-08-06T12:07Z · agent:L-LOGIN-MODAL-REPORTS-A-FAILED-SEND · report L-LOGIN-MODAL-REPORTS-A-FAILED-SEND: DECIDED the MODAL, not the request layer: PostRequest's resolve is a documented contract 205 call sites read via TryParseResponse, and the Safe*Request variants exist to mirror it.; SendVerificationToken already returns Promise<boolean>; 3 of 4 callers read it, LoginModal alone discarded it — a call
+- 2026-08-06T12:08Z · tool · raised F-LOGINMODAL-MOUNTED-TWICE (warn)
+- 2026-08-06T12:08Z · tool · raised F-LOGINMODAL-SUCCESS-SHOWS-A-BLOB (warn)
+- 2026-08-06T12:08Z · @clerk · L-LOGIN-MODAL-REPORTS-A-FAILED-SEND
+- 2026-08-06T12:08Z · @clerk · L-LOGIN-MODAL-REPORTS-A-FAILED-SEND
+- 2026-08-06T12:08Z · @clerk · L-LOGIN-MODAL-REPORTS-A-FAILED-SEND
+- 2026-08-06T12:08Z · @clerk · L-LOGIN-MODAL-REPORTS-A-FAILED-SEND
+- 2026-08-06T12:19Z · agent:L-TRAIN-DISCLOSURE-LAND · L-TRAIN-DISCLOSURE-LAND returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRAIN-DISCLOSURE-LAND/merge.md
+- 2026-08-06T12:19Z · agent:L-TRAIN-DISCLOSURE-LAND · report L-TRAIN-DISCLOSURE-LAND: Premise re-measured with `git show <ref>:<path>` only, never a working tree. Both halves confirmed exactly as the brief states.; Route `GET training/stores/{storeId:int}/evidence/disclosures` lives at 06b8b582 and nowhere else: 332 local + 15 remote refs, two probes (route literal, ITrainingDisclosu
+- 2026-08-06T12:19Z · @clerk · L-TRAIN-DISCLOSURE-LAND
+- 2026-08-06T12:19Z · @clerk · L-TRAIN-DISCLOSURE-LAND
+- 2026-08-06T12:19Z · @clerk · L-TRAIN-DISCLOSURE-LAND
+- 2026-08-06T12:19Z · @clerk · L-TRAIN-DISCLOSURE-LAND
+- 2026-08-06T12:19Z · tool · raised F-TRAINWIRE-TIER-ABORTS (blocker)
+- 2026-08-06T12:21Z · agent:L-FLAGS-RESOLVERS-COVER-THREE · L-FLAGS-RESOLVERS-COVER-THREE returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-FLAGS-RESOLVERS-COVER-THREE/evidence.md
+- 2026-08-06T12:21Z · agent:L-FLAGS-RESOLVERS-COVER-THREE · report L-FLAGS-RESOLVERS-COVER-THREE: SAME SHAPE, machine-checked (equivalence-107ca70e.txt): 107ca70e = e45ec4c1 + 6ae0b8db onto the tip. All 6 new files byte-identical; Program.cs + 2 Meals test patches patch-identical.; Its wire-test blob equals 6ae0b8db's, not e45ec4c1's, so it carries the flag-keyed guard too. merge-base(tip,107ca7
+- 2026-08-06T12:21Z · agent:L-CENSUS-DERIVES-ITS-FLOOR · L-CENSUS-DERIVES-ITS-FLOOR returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-CENSUS-DERIVES-ITS-FLOOR/detail.md
+- 2026-08-06T12:21Z · agent:L-CENSUS-DERIVES-ITS-FLOOR · report L-CENSUS-DERIVES-ITS-FLOOR: Base verified: OkamAPI feature/restaurant-modules tip IS 8e2b57de; that ref resolves in no Web-modules object. Worktree OkamAPI-censusderive, branch lane/census-derives-its-floor @ 7585fa3b, unpushed.; TWO uncensused audit-stamping services at that tip, not one: Services/Training/TrainingEvidenceSer
+- 2026-08-06T12:21Z · @clerk · F-FLAGS-FALSE-GUARANTEE
+- 2026-08-06T12:21Z · @clerk · F-FLAGS-FALSE-GUARANTEE
+- 2026-08-06T12:21Z · @clerk · F-FLAGS-FALSE-GUARANTEE
+- 2026-08-06T12:21Z · @clerk · F-FLAGS-FALSE-GUARANTEE
+- 2026-08-06T12:21Z · @clerk · F-FLAGS-FALSE-GUARANTEE
+- 2026-08-06T12:21Z · @clerk · L-CENSUS-DERIVES-ITS-FLOOR
+- 2026-08-06T12:21Z · @clerk · L-CENSUS-DERIVES-ITS-FLOOR
+- 2026-08-06T12:21Z · @clerk · L-CENSUS-DERIVES-ITS-FLOOR
+- 2026-08-06T12:21Z · @clerk · L-CENSUS-DERIVES-ITS-FLOOR
+- 2026-08-06T12:21Z · @clerk · L-CENSUS-FLOORS-DERIVED
+- 2026-08-06T12:21Z · @clerk · L-CENSUS-FLOORS-DERIVED
+- 2026-08-06T12:21Z · @clerk · F-MY-LIVENESS-CHECK-NEVER-MEASURED-ANYTHING
+- 2026-08-06T12:22Z · agent:opus · started L-CORS-NARROW-THE-DEFAULT
+- 2026-08-06T12:22Z · agent:opus · started L-LIVE-WORLD-SECOND-HUMAN
+- 2026-08-06T12:23Z · agent:opus · started L-GUESTLINK-ONE-COMPOSER
+- 2026-08-06T12:23Z · agent:opus · started L-PREF-COOKIE-HALF
+- 2026-08-06T12:25Z · @clerk · L-CORS-WILDCARD-MEASURED
+- 2026-08-06T12:25Z · @clerk · L-CENSUS-DERIVES-ITS-FLOOR
+- 2026-08-06T12:25Z · @clerk · L-FLAGS-RESOLVERS-COVER-THREE
+- 2026-08-06T12:31Z · agent:L-LIVE-WORLD-SECOND-HUMAN · L-LIVE-WORLD-SECOND-HUMAN returned built -> built-unverified, evidence OkamAPI-modules feature/restaurant-modules 8e2b57de -- Controllers/UserController.cs:178-180 + Helpers/ServiceCollectionExtensions.cs:182 + Services/UserService.cs:540,551,565
+- 2026-08-06T12:31Z · agent:L-LIVE-WORLD-SECOND-HUMAN · report L-LIVE-WORLD-SECOND-HUMAN: The app has exactly TWO no-SMS doors. UserController.cs:178 demo, :179 power-user. live-world.sh spends the demo one.; Path 3 is NOT a bypass: UserService.cs:560-568 generates the one-time token, skips only the SEND, returns true. Lock-out.; It is also not on IUserService (Interfaces/IUserService.cs
+- 2026-08-06T12:32Z · tool · raised F-POWERUSER-CODE-IS-COMMITTED (blocker)
+- 2026-08-06T12:32Z · @clerk · F-LIVE-WORLD-ONE-HUMAN
+- 2026-08-06T12:32Z · @clerk · F-LIVE-WORLD-ONE-HUMAN
+- 2026-08-06T12:32Z · @clerk · F-LIVE-WORLD-ONE-HUMAN
+- 2026-08-06T12:32Z · @clerk · F-LIVE-WORLD-ONE-HUMAN
+- 2026-08-06T12:32Z · @clerk · F-LIVE-WORLD-ONE-HUMAN
+- 2026-08-06T12:32Z · agent:opus · started L-LOGINMODAL-MOUNTED-ONCE
+- 2026-08-06T12:38Z · @clerk · L-CORS-WILDCARD-MEASURED
+- 2026-08-06T12:38Z · @clerk · L-CORS-WILDCARD-MEASURED
+- 2026-08-06T12:38Z · @clerk · L-CORS-WILDCARD-MEASURED
+- 2026-08-06T12:38Z · @clerk · L-CORS-WILDCARD-MEASURED
+- 2026-08-06T12:38Z · @clerk · L-CORS-WILDCARD-MEASURED
+- 2026-08-06T12:38Z · @clerk · L-CORS-WILDCARD-MEASURED
+- 2026-08-06T12:38Z · @clerk · L-CENSUS-DERIVES-ITS-FLOOR
+- 2026-08-06T12:38Z · @clerk · L-CENSUS-DERIVES-ITS-FLOOR
+- 2026-08-06T12:38Z · @clerk · L-CENSUS-DERIVES-ITS-FLOOR
+- 2026-08-06T12:38Z · @clerk · L-CENSUS-FLOORS-DERIVED
+- 2026-08-06T12:38Z · @clerk · F-FLAGS-FALSE-GUARANTEE
+- 2026-08-06T12:38Z · @clerk · F-FLAGS-FALSE-GUARANTEE
+- 2026-08-06T12:50Z · agent:L-MIG-STACK-MERGE · L-MIG-STACK-MERGE returned built -> built-unverified, evidence lanes/L-MIG-STACK-MERGE/evidence.md
+- 2026-08-06T12:50Z · agent:L-MIG-STACK-MERGE · report L-MIG-STACK-MERGE: Tip integration/mig-stack-merge 7f8945dc, 0 behind / 38 ahead of feature/restaurant-modules (UNMOVED at 8e2b57de): a clean fast-forward. Nothing pushed. Read at refs, braced.; Real code merge: 145 files, 19 in Migrations/, 126 outside, no Meals services. Only 2 files conflicted. Build 0 errors at th
+- 2026-08-06T12:51Z · tool · raised F-NEWSLETTER-DISPATCH-DEAD-ON-CHAIN (blocker)
+- 2026-08-06T12:51Z · tool · raised F-PUBLISH-DOUBLE-OUTBOX (blocker)
+- 2026-08-06T12:51Z · @clerk · L-GROWTHAUDIT-TABLE-ABSENT
+- 2026-08-06T12:51Z · @clerk · L-GROWTH-AUDIT-INDEX
+- 2026-08-06T12:51Z · @clerk · L-MIG-STACK-MERGE
+- 2026-08-06T12:51Z · @clerk · L-MIG-STACK-MERGE
+- 2026-08-06T12:51Z · @clerk · L-MIG-STACK-MERGE
+- 2026-08-06T12:51Z · agent:L-GUESTLINK-ONE-COMPOSER · L-GUESTLINK-ONE-COMPOSER returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-GUESTLINK-ONE-COMPOSER/RUN.md
+- 2026-08-06T12:51Z · agent:L-GUESTLINK-ONE-COMPOSER · report L-GUESTLINK-ONE-COMPOSER: Premise verified in OkamAPI, not Web-modules: fc09be1d resolves there, 8e2b57de is feature/restaurant-modules tip. Plural EventsGuestLinks.cs absent everywhere; one confirming pass, no re-litigation.; Fork is helper-vs-inline as flagged. Inline new Uri(origin+path, UriKind.Absolute) does NOT reject 
+- 2026-08-06T12:51Z · agent:L-PREF-COOKIE-HALF · L-PREF-COOKIE-HALF returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-PREF-COOKIE-HALF/evidence.md
+- 2026-08-06T12:51Z · agent:L-PREF-COOKIE-HALF · report L-PREF-COOKIE-HALF: Brief re-measured not inherited: 2a052800 carries the CORS half and is NOT an ancestor of the probed tree; the tip is Strict; the probe regex encodes the ruled option. Neither fact is mis-probed.; Built on lane/pref-cookie-half @ b5a3b1a6, worktree OkamAPI-prefcookie, base 8e2b57de. One line: Growth
+- 2026-08-06T12:52Z · agent:opus · started L-GROWTHAUDIT-MIGRATION
+- 2026-08-06T12:52Z · @clerk · D-PREF-ORIGIN
+- 2026-08-06T12:52Z · @clerk · D-PREF-ORIGIN
+- 2026-08-06T12:52Z · @clerk · L-PREF-COOKIE-HALF
+- 2026-08-06T12:52Z · @clerk · L-PREF-COOKIE-HALF
+- 2026-08-06T12:52Z · @clerk · L-PREF-COOKIE-HALF
+- 2026-08-06T12:52Z · @clerk · L-GUESTLINK-ONE-COMPOSER
+- 2026-08-06T12:53Z · agent:opus · started L-NEWSLETTER-DISPATCH-REPORTS-ITS-CAUSE
+- 2026-08-06T12:53Z · agent:opus · started L-PUBLISH-WRITES-ONE-OUTBOX-ROW
+- 2026-08-06T12:56Z · @clerk · L-MIG-STACK-MERGE
+- 2026-08-06T12:56Z · @clerk · L-LIVE-WORLD-SECOND-HUMAN
+- 2026-08-06T12:56Z · @clerk · L-PREF-COOKIE-HALF
+- 2026-08-06T13:02Z · agent:L-LOGINMODAL-MOUNTED-ONCE · L-LOGINMODAL-MOUNTED-ONCE returned built -> built-unverified, evidence /Users/svendaneel/okam/web-loginmodalonce/lanes/L-LOGINMODAL-MOUNTED-ONCE/kill-proof-browser.txt
+- 2026-08-06T13:02Z · agent:L-LOGINMODAL-MOUNTED-ONCE · report L-LOGINMODAL-MOUNTED-ONCE: Census verified independently: ELEVEN admin pages, not twelve. brev dinehome kitchen lang onboarding ongoing orders payouts statistics wolt-calc wolt-menu, each at 2 mount sites, now 1.; Three counts existed in-repo (ten / twelve / eleven). The estate-scroll-lock note says ten, the sibling lane's sp
+- 2026-08-06T13:02Z · tool · raised F-ADMINPAGE-IGNORES-ITS-RELOAD (warn)
+- 2026-08-06T13:02Z · tool · raised F-DEV-SERVER-REUSE-PASSES-A-MUTANT (warn)
+- 2026-08-06T13:02Z · @clerk · L-LOGINMODAL-MOUNTED-ONCE
+- 2026-08-06T13:02Z · @clerk · L-LOGINMODAL-MOUNTED-ONCE
+- 2026-08-06T13:02Z · @clerk · L-LOGINMODAL-MOUNTED-ONCE
+- 2026-08-06T13:02Z · @clerk · L-LOGINMODAL-MOUNTED-ONCE
+- 2026-08-06T13:05Z · tool · raised F-JWT-SIGNING-KEY-COMMITTED (blocker)
+- 2026-08-06T13:05Z · tool · raised F-PLAN-SNAPSHOT-CARRIES-A-CREDENTIAL (blocker)
+- 2026-08-06T13:05Z · tool · raised F-INVITATION-CLAIM-IGNORES-THE-MODULE (warn)
+- 2026-08-06T13:06Z · @clerk · L-PLAN-LIVES-IN-GIT
+- 2026-08-06T13:06Z · @clerk · L-PLAN-LIVES-IN-GIT
+- 2026-08-06T13:06Z · @clerk · L-LIVE-WORLD-SECOND-HUMAN
+- 2026-08-06T13:06Z · @clerk · L-LIVE-WORLD-SECOND-HUMAN
+- 2026-08-06T13:06Z · @clerk · L-LIVE-WORLD-SECOND-HUMAN
+- 2026-08-06T13:06Z · @clerk · L-LIVE-WORLD-SECOND-HUMAN
+- 2026-08-06T13:10Z · @clerk · note L-LIVE-WALK-TRAINING: master-shape claim REPRODUCED -- git grep -ni training 8e2b57de -- appsettings*.json returns 0 matches; Training is a fifth shape, no module master at all.
+- 2026-08-06T13:10Z · @clerk · note L-LIVE-WALK-TRAINING: its divergence claim does NOT reproduce -- rev-list --left-right --count tip...candidate prints 0 105, so the tip is a strict ancestor and the compose stays a fast-forward.
+- 2026-08-06T13:10Z · @clerk · note L-LIVE-WALK-TRAINING: fixture training.js:202 answers GET /context 200 unconditionally; TrainingContextService.cs:42 gates on EnsureVisibleAsync. live-world.sh supplies neither.
+- 2026-08-06T13:10Z · @clerk · note F-MODULE-MASTERS-ARE-UNDECLARED-AND-INVISIBLE: Workforce is a SIXTH shape, read at 8e2b57de in a clean tree -- WorkforceModuleGate.cs:33-57 is a three-tier ladder, not a combinator.
+- 2026-08-06T13:10Z · @clerk · note F-MODULE-MASTERS-ARE-UNDECLARED-AND-INVISIBLE: StoreFeatureFlagsController.cs:65 is the fallback every module without a resolver takes -- overridden ? row.Enabled : descriptor.DefaultEnabled.
+- 2026-08-06T13:10Z · @clerk · note L-LIVE-WALK-TRAINING: two defects it found sit unmerged -- publish unclickable at lane/train-publish-unclickable 28548f96, disclosures at lane/train-disclosure 06b8b582.
+- 2026-08-06T13:10Z · @clerk · note F-MODULE-MASTERS: Workforce ladder is override row (:39-40, wins both ways), then compile default (:45), then a data probe (:55-56). Any WorkforceStaffMember row turns the module on.
+- 2026-08-06T13:10Z · @clerk · note F-MODULE-MASTERS: the Workforce gate reads no configuration -- no IConfiguration, no IOptions, no Workforce section in either appsettings. The grandfather probe IS the master.
+- 2026-08-06T13:10Z · @clerk · note F-MODULE-MASTERS: Workforce alone has an honest board -- Program.cs:783 makes the flags endpoint quote the gate, pinned WorkforceModuleGateTests.cs:338.
+- 2026-08-06T13:10Z · @clerk · note F-MODULE-MASTERS: Growth is one click from the lie on SHIPPED config -- appsettings.json:176 ships Growth:Enabled false, so a store row set true reads effective true over a dark gate.
+- 2026-08-06T13:10Z · @clerk · note F-MODULE-MASTERS: Meals is latent -- appsettings.json:164 ships Features:Meals:Module false, so board and gate agree today and diverge when a deployment enables it with no rows.
+- 2026-08-06T13:10Z · @clerk · note F-MODULE-MASTERS: StoreFeatureFlagsController.cs:65 is the fallback every resolverless module takes -- overridden ? row.Enabled : descriptor.DefaultEnabled.
+- 2026-08-06T13:10Z · @clerk · note F-MODULE-MASTERS: the Workforce probe ignores employment state -- AnyAsync has no predicate past StoreId, so one terminated staff row from two years ago opens the module.
+- 2026-08-06T13:10Z · @clerk · note F-MODULE-MASTERS: withheld Workforce keys strand rows -- a pre-withholding workforce.personnel-list row can no longer be listed, written or cleared through the API.
+- 2026-08-06T13:11Z · @clerk · note L-PLAN-LIVES-IN-GIT: the stopgap ref was unreachable as well as stale -- origin carries 0 refs/lanes and the clone refspec is +refs/heads/*, so no clone would fetch it even if pushed.
+- 2026-08-06T13:11Z · @clerk · note L-PLAN-LIVES-IN-GIT: I refreshed the local snapshot ref to 5780798 at 14:00Z -- 883 files, plan.md byte-identical to the working copy, 418 returns, 22 reviews. Local only, never pushed.
+- 2026-08-06T13:11Z · @clerk · note L-PLAN-LIVES-IN-GIT: written through a temporary GIT_INDEX_FILE, so the primary index fingerprint reads 1785918138 89350 before and after and no plan path is staged.
+- 2026-08-06T13:11Z · @clerk · note L-PLAN-LIVES-IN-GIT: its owner step is GATED -- plan/docs-20260806 at 54d4dfc carries two returns holding a live credential, so the prepared push would publish it.
+- 2026-08-06T13:11Z · @clerk · note L-PLAN-LIVES-IN-GIT: the snapshot ref I refreshed carries them too, since I wrote it with git add -f. Neither ref is pushed and neither file is on any real branch.
+- 2026-08-06T13:11Z · @clerk · note F-MY-INSTRUMENTS: my unmerged-return detector read one log format of two and reported 341 of 416 returns unmerged; the true figure was 3, all of which the tool refuses.
+- 2026-08-06T13:11Z · @clerk · note F-MY-INSTRUMENTS: log.md carries both 'ID returned built' and 'returned ID verdict=' shapes; matching either alone lies in one direction only, so the error reads as a backlog rather than a bug.
+- 2026-08-06T13:11Z · @clerk · note F-MY-INSTRUMENTS: new zsh trap for every brief -- while read -r sha path destroys PATH, because path is zsh's array alias; commands in the loop body vanish without naming the cause.
+- 2026-08-06T13:11Z · @clerk · note F-MY-INSTRUMENTS: my briefs cite a SHA without naming its repo -- 8e2b57de is the OkamAPI tip and resolves to no object in Web-modules, where the plan hub lives.
+- 2026-08-06T13:11Z · @clerk · note L-PREFCENTRE-DEPLOY-EXEC: its 'both gating facts are mis-probed' does not hold either way -- both are correctly specified against the ruled option; the tree they read is what is wrong.
+- 2026-08-06T13:11Z · @clerk · note L-PREFCENTRE-DEPLOY-EXEC: growth.prefcentre.cors is built and would go green -- 2a052800 carries AllowCredentials twice in ServiceCollectionExtensions.cs and EnableCors on the controller.
+- 2026-08-06T13:11Z · @clerk · note L-PREFCENTRE-DEPLOY-EXEC: growth.cookie.crosssite is unbuilt, not mis-asked -- SameSite is Strict at 2a052800:76 and at the tip, while D-PREF-ORIGIN ruled the cross-site cookie on 2026-08-03.
+- 2026-08-06T13:11Z · @clerk · note L-PREFCENTRE-DEPLOY-EXEC: the ruled option is half executed -- the named policy landed on a branch that is NOT an ancestor of the probe tree, and the cookie half was never written anywhere.
+- 2026-08-06T13:11Z · @clerk · note L-PREFCENTRE-DEPLOY-EXEC: the sandbox answer beats the config gate on record -- deployed master 6c0b3a19 carries ZERO Growth dispatch code, so no production artifact can print the link.
+- 2026-08-06T13:11Z · @clerk · note F-BACKEND-FACTS-OFF-BRANCH: worse than four commits behind -- ../OkamAPI-modules, the dir every backend probe reads, is checked out on lane/meals-grace-pins at 34c6c103, a sibling lane's branch.
+- 2026-08-06T13:11Z · @clerk · note F-BACKEND-FACTS-OFF-BRANCH: so every backend fact measures whichever branch a foreign lane last checked out there, and it moves without anything in this plan changing.
+- 2026-08-06T13:11Z · @clerk · note F-PREF-UNREACHABLE: neither integration branch exists on its remote -- Web carries 7 heads, OkamAPI 14, and none is named feature/restaurant-modules. Both are local only.
+- 2026-08-06T13:11Z · @clerk · note L-PLAN-LIVES-IN-GIT: corrects my figure -- 4 return files ARE tracked, swept into commits on candidate/fe-compose and 5 lane branches. plan.md and 22 reviews sit on zero branches.
+- 2026-08-06T13:11Z · @clerk · note L-PLAN-LIVES-IN-GIT: its where-answer is conditional and that is the point -- a dedicated branch only if refresh has an owner, since a stale one carries superseded rulings with plan.md authority.
+- 2026-08-06T13:11Z · @clerk · note L-CORS-WILDCARD-MEASURED: a Fable reviewer checked its claims and my three flags, because I reported them to the owner as fact before anyone re-derived them.
+- 2026-08-06T13:11Z · @clerk · review L-CORS-WILDCARD-MEASURED: APPROVE-WITH-CONDITIONS. Every exposure claim behind the three flags CONFIRMED, two better supported than the lane argued. One structural claim refuted and corrected.
+- 2026-08-06T13:11Z · @clerk · note L-CORS-WILDCARD-MEASURED: the echo is proved rather than inferred -- a request header named x-zzz-probe-only, which exists nowhere in the codebase, came back echoed beside allow-origin star.
+- 2026-08-06T13:11Z · @clerk · note L-CORS-WILDCARD-MEASURED: the lane never measured a JWT route; the reviewer did. GET /User with no credential answers 401, www-authenticate Bearer, access-control-allow-origin star.
+- 2026-08-06T13:11Z · @clerk · note L-CORS-WILDCARD-MEASURED: emphasis calibrated -- the carve-out only ever protected credential 1. X-Okam-ApiKey and X-API-Key are ordinary headers a literal star would have covered.
+- 2026-08-06T13:11Z · @clerk · note L-CORS-WILDCARD-MEASURED: production being master is corroborated by behaviour -- both other branches append WithExposedHeaders, and production emits no expose-headers on any response.
+- 2026-08-06T13:11Z · @clerk · note L-CORS-WILDCARD-MEASURED: that pins the BRANCH and not the SHA. 6c0b3a19 is origin/master as this clone last fetched; any master commit not touching CORS is indistinguishable.
+- 2026-08-06T13:11Z · @clerk · note L-CENSUS-DERIVES-ITS-FLOOR: what changed is friction, not coverage -- loosening the old floor meant editing C#; loosening the census is one env-var regeneration of a generated file.
+- 2026-08-06T13:11Z · @clerk · note L-CENSUS-DERIVES-ITS-FLOOR: under Fable review, weighted at what the four deleted floors covered and whether a blind regeneration still blesses drift.
+- 2026-08-06T13:11Z · @clerk · note L-CENSUS-FLOORS-DERIVED: they collide in ModuleActorStampPin.cs and one test method; keep both tests and take the field deletion once. Its base 3579bbbc needs rebasing.
+- 2026-08-06T13:11Z · @clerk · review L-FLAGS-RESOLVERS-COVER-THREE: APPROVE-WITH-CONDITIONS, equivalence RULED SAFE. e45ec4c1 is the parent of 6ae0b8db, so the two are one linear chain and retiring both loses no work.
+- 2026-08-06T13:11Z · @clerk · note F-FLAGS-FALSE-GUARANTEE: the two candidate branches are the SAME shape, machine-checked -- 107ca70e equals e45ec4c1 plus 6ae0b8db onto the tip, six new files byte-identical.
+- 2026-08-06T13:11Z · @clerk · note F-FLAGS-FALSE-GUARANTEE: red proved separately per module at the tip -- removing the Growth, Meals or Events registration reds the catalog-claim wire test naming that module's keys.
+- 2026-08-06T13:11Z · @clerk · note F-FLAGS-FALSE-GUARANTEE: Training needing none is checkable -- TrainingFeatureFlags.cs:118-119 projects Defaults from the same Declared list the descriptors come from.
+- 2026-08-06T13:11Z · @clerk · note F-FLAGS-FALSE-GUARANTEE: the guard proved registration, not deployment, so the lane added a Meals HTTP-level arm; it is the only one of five that reds without the registration.
+- 2026-08-06T13:11Z · @clerk · note L-FLAGS-RESOLVERS-COVER-THREE: under Fable review weighted at the equivalence -- a file-by-file check of NEW files cannot see a change to a file only one branch touches.
+- 2026-08-06T13:12Z · @clerk · note F-PROD-CORS-WILDCARD: its citation misdirects -- production runs origin/master 6c0b3a19 where the shape is Program.cs:71-77; the Program.cs:97-102 here is the integration range.
+- 2026-08-06T13:12Z · @clerk · review L-CENSUS-DERIVES-ITS-FLOOR: APPROVE-WITH-CONDITIONS. The replacement subsumes all four deleted floors -- every old entry is a row, every old floor at or below the derived count.
+- 2026-08-06T13:12Z · @clerk · note L-CENSUS-FLOORS-DERIVED: ruled ADDITIVE -- the artifact arm's census and rule share one enumeration, so a target-typed new() is invisible to both at once; the IL arm catches exactly that.
+- 2026-08-06T13:12Z · @clerk · note F-FLAGS-FALSE-GUARANTEE: its own stale pointer was the hazard -- it named the retired branch as the landing vehicle, the shape that produces a double-land. Repointed to 0f29a898.
+- 2026-08-06T13:12Z · @clerk · note L-MIG-STACK-MERGE: it left both reds unfixed on purpose, and that was right -- repairing them inside a merge would have hidden that five days of integration work went unmeasured.
+- 2026-08-06T13:12Z · @clerk · note L-MIG-STACK-MERGE: it replayed from empty on a real catalog rather than from the model, so MIG-7's SQL tests, recorded as never executed anywhere, have now executed.
+- 2026-08-06T13:12Z · @clerk · note L-MIG-STACK-MERGE: under Fable review weighted at the attribution -- three lanes are dispatched on its 20/5/1 split, so a wrong grouping has three agents building the wrong thing.
+- 2026-08-06T13:12Z · @clerk · note L-GROWTHAUDIT-TABLE-ABSENT: no longer an inference -- the first SQL tier at any SHA carrying five days of integration work measured 565/22/587, and 20 of the 22 trace to this table.
+- 2026-08-06T13:12Z · @clerk · note L-GROWTH-AUDIT-INDEX: folded into L-GROWTHAUDIT-MIGRATION -- the table and its two indexes are one migration, and this lane needs a lane that will never be accepted.
+- 2026-08-06T13:12Z · @clerk · note D-PREF-ORIGIN: its reopen_when is half wrong -- a same registrable DOMAIN retires the cookie, since SameSite is a site rule, but NOT the named policy.
+- 2026-08-06T13:12Z · @clerk · note D-PREF-ORIGIN: CORS is ORIGIN-scoped, so the wildcard is still refused under a shared domain; only a true same-origin serving retires both halves.
+- 2026-08-06T13:12Z · @clerk · note L-PREF-COOKIE-HALF: its proof method is load-bearing -- it replayed the cookie through an explicit header, never a jar, since CookieContainer would return a Strict cookie to the same host.
+- 2026-08-06T13:12Z · @clerk · note L-PREF-COOKIE-HALF: Secure is now load-bearing rather than advisable -- mutating it false reds, because a browser discards a SameSite=None cookie that is not Secure.
+- 2026-08-06T13:12Z · @clerk · note L-PREF-COOKIE-HALF: it and lane/cors-followups at 17c12c20 are the two halves, same base, different hunks of one controller; landing either alone leaves the ruled option half built.
+- 2026-08-06T13:12Z · @clerk · note L-PREF-COOKIE-HALF: under Fable review weighted as a security change -- under SameSite None the double-submit is the only control between a cross-site request and the session.
+- 2026-08-06T13:12Z · @clerk · note L-GUESTLINK-ONE-COMPOSER: its M2 mutant is why a behavioural pin was not enough -- re-inlining a CORRECT composer left all 22 carried assertions green while the estate again held two composers.
+- 2026-08-06T13:12Z · @clerk · note L-LOGINMODAL-MOUNTED-ONCE: MyUserDropdown.vue mounts a LoginModal nothing renders -- dead code carrying a duplicate, left in place and pinned in the census rather than removed silently.
+- 2026-08-06T13:12Z · @clerk · note L-LOGINMODAL-MOUNTED-ONCE: 20 mutations fooled none, including a kebab-case mount, a nested component, a v-else branch, and two inverses that had to STAY green.
+- 2026-08-06T13:12Z · @clerk · note L-LOGINMODAL-MOUNTED-ONCE: it named four excluded suites and showed each fails without its change too -- a worktree-name hazard, an empty core submodule, and core-request-path-shape red at HEAD.
+- 2026-08-06T13:12Z · @clerk · review L-LIVE-WORLD-SECOND-HUMAN: APPROVE-WITH-CONDITIONS. Its conclusion is correct and understated; four statements in MY flag were false, one of which hid a larger exposure.
+- 2026-08-06T13:12Z · @clerk · note L-LIVE-WORLD-SECOND-HUMAN: its 'exactly two no-SMS doors' is refuted -- the pair short-circuits at three sites, adding OAuthLoginController.cs:119 and OfferProposalService.cs:436.
+- 2026-08-06T13:12Z · @clerk · note L-LIVE-WORLD-SECOND-HUMAN: its refusal to manufacture an identity via a phone-change token is RULED CORRECT -- it would install a become-any-user primitive into the walk tooling.
+- 2026-08-06T13:12Z · @clerk · note L-LIVE-WORLD-SECOND-HUMAN: the claim making the manager allocation SAFE holds -- StoreService.cs:177 builds AdminIn from membership only and the workforce service reads CapabilityGrants alone.
+- 2026-08-06T13:12Z · @clerk · note L-LIVE-WORLD-SECOND-HUMAN: under Fable review because I reported its finding to the owner as fact, and the last claim I relayed that way carried a false premise.
+- 2026-08-06T13:12Z · @clerk · note F-LIVE-WORLD-ONE-HUMAN: the prior reading was right about the symptom and wrong about the cause -- the power-user door is real, its key held in Azure config rather than missing from the product.
+- 2026-08-06T13:12Z · @clerk · note F-LIVE-WORLD-ONE-HUMAN: wall 1 closes with one env override at live-world.sh:346-349; IsNoSmsPhoneNumber is confirmed a lock-out, not on IUserService and given no Twilio exemption.
+- 2026-08-06T13:12Z · @clerk · note F-LIVE-WORLD-ONE-HUMAN: wall 2 closes with no owner act -- endpoint 6 returns the raw claim token once under workforce.setup, endpoint 32 claims it with no capability and no module gate.
+- 2026-08-06T13:12Z · @clerk · note F-LIVE-WORLD-ONE-HUMAN: one wall behind all three -- CreateAsync has a single non-test call site at UserService.cs:551, and every other phone clears Twilio Lookup, whose creds are placeholders.
+- 2026-08-06T13:12Z · @clerk · note L-MIG-STACK-MERGE: two collisions, not one -- MIG-22's landed migration keeps the number, Growth's fileless reservation moved to 29, the duplicate FILE is an ancestor of neither side.
+- 2026-08-06T13:12Z · @clerk · note L-LOGINMODAL-MOUNTED-ONCE: two defects fixed on the way -- brev.vue called loadOrders() on sign-in and has no such method; wolt-menu.vue bound login-success to a missing handler.
+- 2026-08-06T13:12Z · @clerk · note F-LIVE-WORLD-ONE-HUMAN: wall 3 is new -- selfservice and publication are deny-closed, so the manager flips both as a walk step and the published week must assign the engagement.
+- 2026-08-06T13:12Z · @clerk · note F-MY-INSTRUMENTS: cmd_log takes the message as the FIRST positional. Every call I made passing an entity ID first made the ID the whole log text and discarded my message.
+- 2026-08-06T13:12Z · @clerk · note F-MY-INSTRUMENTS: 94 of 472 clerk log lines carry only an entity name. The tool printed 'logged' each time, so nothing signalled the loss until a reviewer found a correction missing.
+- 2026-08-06T13:12Z · @clerk · note F-MY-INSTRUMENTS: the shape is plan log TEXT --by @handle, with no entity argument; association is by naming the entity inside the text. All 94 messages are re-logged correctly.
+- 2026-08-06T13:12Z · @clerk · note F-MY-INSTRUMENTS: the blank lines stay in log.md rather than being edited out, since the log is append-only; they are the record of the failure, not of the finding.
+- 2026-08-06T13:12Z · @clerk · note L-CENSUS-DERIVES-ITS-FLOOR: the reviewer exercised the write lever itself -- the env var rewrote the artifact byte-identically and failed its own run 1/1; no receipt in the lane covered it.
+- 2026-08-06T13:14Z · @clerk · review L-MIG-STACK-MERGE: APPROVE-WITH-CONDITIONS. The merge is sound and landable; the control is exact, so the three dispatched lanes are building the right things and must not be recalled.
+- 2026-08-06T13:14Z · @clerk · note L-MIG-STACK-MERGE: its internal arithmetic is off by one twice and the errors cancel -- GrowthAuditEvents causes 21 of 22, not 20; TrainingW3 was counted twice and the dispatch reds undercounted.
+- 2026-08-06T13:14Z · @clerk · note L-MIG-STACK-MERGE: the README union is exact, verified from all four blobs -- 19 plus 17 giving 29, both sides' row order preserved as a subsequence, no row content altered.
+- 2026-08-06T13:14Z · @clerk · note L-MIG-STACK-MERGE: leaving the third pointer stale is RULED RIGHT -- a receipt is evidence about its own SHA, the ledger records the supersession, and editing it would falsify evidence.
+- 2026-08-06T13:14Z · @clerk · note L-MIG-STACK-MERGE: naming the CORS fix without making it is RULED RIGHT -- a CORS-surface change does not belong in a merge commit.
+- 2026-08-06T13:14Z · @clerk · note L-MIG-STACK-MERGE: C2 confirmed clean -- no migration authored, 136 migrations with 136 paired Designers, no duplicate id or name, and the snapshot carries no GrowthAuditEvents.
+- 2026-08-06T13:14Z · @clerk · note F-NEWSLETTER-DISPATCH-DEAD-ON-CHAIN: it cannot clear from its own lane alone -- dispatch succeeding on a chain-built database needs L-GROWTHAUDIT-MIGRATION to land as well.
+- 2026-08-06T13:14Z · @clerk · note F-MY-INSTRUMENTS: I handed a running migration author two wrong THROW numbers -- 50019 is reserved for MIG-14 and 50074 for MIG-29's own trigger. Corrected by message mid-run.
+- 2026-08-06T13:21Z · agent:L-PUBLISH-WRITES-ONE-OUTBOX-ROW · returned L-PUBLISH-WRITES-ONE-OUTBOX-ROW verdict=fail-spec -> open; D-SPEC-L-PUBLISH-WRITES-ONE-OUTBOX-ROW appended
+- 2026-08-06T13:21Z · agent:L-PUBLISH-WRITES-ONE-OUTBOX-ROW · report L-PUBLISH-WRITES-ONE-OUTBOX-ROW: SIBLING, NOT DUPLICATE. Different Channel, different TargetReference, different LogicalDedupeKey; same safe-summary payload by design.; The person receives ONE inbox entry + ONE e-mail. WorkforceInAppNotificationDelivery is a no-op adapter; the InApp row only flips the recipient to Delivered.; Not e
+- 2026-08-06T13:22Z · @clerk · note L-PUBLISH-WRITES-ONE-OUTBOX-ROW: fail-spec, and correctly so -- my exit would have deleted a channel. The two rows are siblings by Channel, TargetReference and LogicalDedupeKey, not duplicates.
+- 2026-08-06T13:22Z · @clerk · note L-PUBLISH-WRITES-ONE-OUTBOX-ROW: that count line is Database=SqlServer, so it was unreachable from every routine run and read 1 for five days until the first SQL tier in five days ran.
+- 2026-08-06T13:22Z · @clerk · note L-PUBLISH-WRITES-ONE-OUTBOX-ROW: not a provider behaviour -- transliterating the body to the SQLite fixture reproduces Expected 1 Actual 2, so no migration and no constraint are wanted.
+- 2026-08-06T13:22Z · @clerk · note F-PUBLISH-DOUBLE-OUTBOX: downgraded from blocker to warn on measurement -- the product is correct, and driving it to one row deletes the only channel reaching a not-yet-claimed worker.
+- 2026-08-06T13:22Z · @clerk · note L-PUBLISH-WRITES-ONE-OUTBOX-ROW: the cause is a stale assertion -- f5305ced swapped one command for a channel plan on 2026-08-01 and its own message records that the SQL tier was not run.
+- 2026-08-06T13:22Z · @clerk · note L-PUBLISH-WRITES-ONE-OUTBOX-ROW: its fix at lane/publish-outbox-shape 3bb9c039 has never run on SQL Server; fold it into the run that verifies MIG-29, the only other defect on that tier.
+- 2026-08-06T13:23Z · agent:opus · started L-LOGINMODAL-SUCCESS-IS-SILENT
+- 2026-08-06T13:24Z · @clerk · note L-PUBLISH-WRITES-ONE-OUTBOX-ROW: gated on its D-SPEC rather than redispatched -- the work is finished, the fix sits at 3bb9c039, and what it lacks is a ruling and one SQL slot.
+- 2026-08-06T13:25Z · agent:opus · started L-TRAINWIRE-ABORT
+- 2026-08-06T13:25Z · @clerk · note F-NEWSLETTER-DISPATCH-DEAD-ON-CHAIN: half-clears on the reporting conjunct only; the five SQL reds stay red until the migration lands, but they now name the absent table instead of a lost race.
+- 2026-08-06T13:25Z · @clerk · note L-NEWSLETTER-DISPATCH: I authored a lane at a defect that already had one -- L-GROWTH-SQL-CATCH-TYPED holds the identical change at c7912d49. Fifth double-land, and the first I caused.
+- 2026-08-06T13:25Z · @clerk · note L-NEWSLETTER-DISPATCH: independent convergence is corroboration rather than waste, but only one may land. Prefer c7912d49; it also narrows the consent path this exit excludes.
+- 2026-08-06T13:25Z · @clerk · note L-NEWSLETTER-DISPATCH: take one thing from the newer lane -- its dispatch arm is fabrication-free, where c7912d49 raises a constructed SqlException 208 and its docstring names the gap.
+- 2026-08-06T13:25Z · @clerk · note L-NEWSLETTER-DISPATCH: symptom measured, not argued -- under the broad catch the operator gets Sequence contains no elements from the winner re-read; the absent table is named nowhere.
+- 2026-08-06T13:25Z · @clerk · note L-NEWSLETTER-DISPATCH: C1 honoured by construction -- the absence is arranged by RENAMING the table and back, never DROP, with the ledger count asserted unchanged both ways.
+- 2026-08-06T13:25Z · @clerk · note L-NEWSLETTER-DISPATCH: C7 -- 6.3MB of raw stdout carried 200-plus single-use fixture tokens; distilled to summary lines and deleted rather than committed under the lane dir.
+- 2026-08-06T13:25Z · @clerk · note F-NEWSLETTER-DISPATCH-DEAD-ON-CHAIN: a second untyped catch is unfixed -- GrowthConsentTextService:247 answers an absent table with a 409 race code, a retry that can never succeed.
+- 2026-08-06T13:25Z · agent:L-NEWSLETTER-DISPATCH-REPORTS-ITS-CAUSE · L-NEWSLETTER-DISPATCH-REPORTS-ITS-CAUSE returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-NEWSLETTER-DISPATCH-REPORTS-ITS-CAUSE/mutation-log.md
+- 2026-08-06T13:25Z · agent:L-NEWSLETTER-DISPATCH-REPORTS-ITS-CAUSE · report L-NEWSLETTER-DISPATCH-REPORTS-ITS-CAUSE: FIX one hunk, GrowthDispatchService.cs:311: catch (DbUpdateException) -> catch (DbUpdateException ex) when (DbExceptionHelper.IsUniqueViolation(ex)), the shared 2627/2601 detector. No 4th local copy.; COLLISION outranking the fix: this exact change exists at lane/growth-sql-catch-typed c7912d49 (L-G
+- 2026-08-06T13:25Z · @clerk · note L-NEWSLETTER-DISPATCH: merged with --accept-stale; the brief hash moved because I edited the flag body after dispatch, so the mismatch was mine and not the agent's.
+- 2026-08-06T13:27Z · agent:opus · started L-PLAN-ARTIFACTS-ARE-SCRUBBED
+- 2026-08-06T13:27Z · agent:opus · started L-PROBE-DIR-IS-PINNED
+- 2026-08-06T13:27Z · agent:opus · started L-TRX-CONTAINS-WHAT-IT-CLAIMS
+- 2026-08-06T13:27Z · @clerk · note L-CORS-NARROW-THE-DEFAULT: the live-caller question had a real answer nobody had found -- www.okam-swiss.ch is a Nuxt build of this repo with API_BASE_URL at default, calling okamapi for real.
+- 2026-08-06T13:27Z · @clerk · note L-CORS-NARROW-THE-DEFAULT: and a shallow check would have missed it -- that site's landing page calls no API at all, so only the admin surface reveals the dependency.
+- 2026-08-06T13:27Z · @clerk · note L-CORS-NARROW-THE-DEFAULT: it excluded shop.lora-as.no deliberately -- no NS record, no whois, no CT issuance ever, so allowlisting it would grant CORS to whoever registers the domain next.
+- 2026-08-06T13:27Z · @clerk · note L-CORS-NARROW-THE-DEFAULT: the enumeration is closed rather than sampled -- no entity on either branch carries a store domain column, so the caller set can be bounded.
+- 2026-08-06T13:27Z · @clerk · note L-CORS-NARROW-THE-DEFAULT: its first integration run was 14 red and all 14 were its own -- 13 cross-origin download-header tests plus a guard catching an IOptions injection.
+- 2026-08-06T13:27Z · @clerk · note L-CORS-NARROW-THE-DEFAULT: that is the class of failure a master-only, test-free change would have shipped. Both resolved on evidence rather than by loosening assertions.
+- 2026-08-06T13:27Z · @clerk · note L-CORS-NARROW-THE-DEFAULT: a wire pin had asserted 'any other origin' via an invented host this change falsifies; repointed to a permitted origin and given its missing refusal direction.
+- 2026-08-06T13:27Z · @clerk · note L-CORS-NARROW-THE-DEFAULT: owner-only residue -- okamtest inherits this appsettings via branch test and its origins went unmeasured, and the two API keys need rotation no CORS change delivers.
+- 2026-08-06T13:28Z · @clerk · note L-CORS-NARROW-THE-DEFAULT: the mid-run correction changed its deliverable and was right -- TWO diffs, master bed7cab3 and integration aa29464d, since a master-only fix reverts on merge.
+- 2026-08-06T13:28Z · @clerk · note L-CORS-NARROW-THE-DEFAULT: neither diff contains the trap -- SetIsOriginAllowed(_=>true).AllowCredentials() does not throw where AllowAnyOrigin plus AllowCredentials does.
+- 2026-08-06T13:28Z · agent:L-CORS-NARROW-THE-DEFAULT · L-CORS-NARROW-THE-DEFAULT returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/lanes/L-CORS-NARROW-THE-DEFAULT/evidence.md
+- 2026-08-06T13:28Z · agent:L-CORS-NARROW-THE-DEFAULT · report L-CORS-NARROW-THE-DEFAULT: Two diffs, not one: master 6c0b3a19 -> lane/cors-narrow-the-default bed7cab3, integration 8e2b57de -> lane/...-integration aa29464d. Nothing pushed, no shared ref moved, no container touched.; Correction holds: integration has the SAME wildcard inline at Program.cs:96-103, UseCors :284 vs UseAuthent
+- 2026-08-06T13:28Z · @clerk · note L-CORS-NARROW-THE-DEFAULT: merged with --accept-stale; the brief hash moved because I rewrote the false branch premise mid-run, so the mismatch was mine.
+- 2026-08-06T13:28Z · agent:opus · started L-TENDER-WIRE-MERGE-IS-SAFE
+- 2026-08-06T13:31Z · tool · raised F-MEALS-ENROLMENT-HAS-NO-CALLER (blocker)
+- 2026-08-06T13:31Z · tool · raised F-MEALS-STATEMENT-CLIENT-CLAIMS-A-PAGE-THAT-IS-NOT-HERE (warn)
+- 2026-08-06T13:31Z · tool · raised F-RUNBOOK-CANNOT-START-A-COLD-MACHINE (warn)
+- 2026-08-06T13:31Z · @clerk · note F-MODULE-MASTERS: the flag board's effective column is real for Workforce and Margin ALONE; every other module falls through StoreFeatureFlagsController.cs:65 to echoing the override row.
+- 2026-08-06T13:31Z · @clerk · note F-RUNBOOK-CANNOT-START-A-COLD-MACHINE: the path itself works -- Scripts/demo/demo-up.sh brings the API up on :5091, seeds all six modules and arms Events and Growth.
+- 2026-08-06T13:31Z · @clerk · note F-MEALS-MONEY-FLAGS-HAVE-NO-LEVER: confirmed by the UI derivation -- MealsFeatureFlags.cs:56-72 withholds all three, so a venue can neither be given Meals nor taken off it.
+- 2026-08-06T13:31Z · @clerk · note F-MEALS-ENROLMENT-HAS-NO-CALLER: this is why 30 Meals lanes sit built-unverified -- everything downstream is unreachable, so the count grew from 22 without the module becoming walkable.
+- 2026-08-06T13:35Z · @clerk · note F-TRAIN-PUBLISH-UNCLICKABLE: still live on the SHIPPED branch at 1024-1440 -- the fix 28548f96 sits on candidate/fe-compose and lanes, and shipped _training-panel.scss is verified wrapper-free.
+- 2026-08-06T13:35Z · @clerk · note F-TRAIN-DISCLOSURE: the 404 fails QUIETLY -- it maps to the unknown state and renders one grey line, so it reads as a flaky network rather than as a missing feature.
+- 2026-08-06T13:35Z · @clerk · note F-MODULE-MASTERS: Events master is declared in NEITHER settings file, defaults false, and a controller filter 404s every route while the board still shows Events.Core effective on.
+- 2026-08-06T13:35Z · @clerk · note F-MODULE-MASTERS: Margin confirmed cleanest -- its resolver reports THROUGH the enforcing gate, so board and gate cannot disagree, and the projector honours board-enabled stores.
+- 2026-08-06T13:35Z · @clerk · note F-EV-GUEST-ORIGIN: correction -- Events:PublicBaseUrl IS committed at this tip, appsettings.json:183. The link is still dead in prod and wrong-port in the demo world.
+- 2026-08-06T13:35Z · tool · raised F-MARGIN-WASTE-PANEL-CALLS-NOTHING (blocker)
+- 2026-08-06T13:35Z · tool · raised F-SHIPPED-BRANCH-IS-NOT-WHAT-THE-CHECKOUT-SHOWS (blocker)
+- 2026-08-06T13:38Z · tool · raised F-ONGOING-HIDES-A-LIVE-STATUS (blocker)
+- 2026-08-06T13:38Z · tool · raised F-KITCHEN-CLOCK-FREEZES-AFTER-LOGIN (blocker)
+- 2026-08-06T13:38Z · tool · raised F-DELIVERY-TOGGLES-FAIL-SILENTLY (blocker)
+- 2026-08-06T13:38Z · tool · raised F-RESERVATION-CONFLICT-IGNORES-EXTRA-TABLES (blocker)
+- 2026-08-06T13:38Z · tool · raised F-CORE-ADMIN-DEAD-SURFACES (warn)
+- 2026-08-06T13:39Z · @clerk · note F-LOGINMODAL-MOUNTED-TWICE: refined -- AdminPage.vue:99-101 redirects a logged-out visitor away from any admin path but /admin, so the page's own modal is usually unreachable.
+- 2026-08-06T13:39Z · @clerk · note F-LOGINMODAL-MOUNTED-TWICE: except with ?redirect= already set, which AdminPage.vue:99 skips -- and that is exactly the post-login return path, so the broken handlers are latent, not dead.
+- 2026-08-06T13:39Z · @clerk · note F-CORE-ADMIN-DEAD-SURFACES: the three pages using login-success instead of their own modal -- delivery, reservations, tables -- are the correct pattern and carry no duplicate.
+- 2026-08-06T13:39Z · @clerk · note F-KITCHEN-CLOCK-FREEZES-AFTER-LOGIN: kitchen.vue also shows a permanent spinner for a user with no admin store -- isLoading starts true and refresh returns early without clearing it.
+- 2026-08-06T13:42Z · agent:L-TRX-CONTAINS-WHAT-IT-CLAIMS · L-TRX-CONTAINS-WHAT-IT-CLAIMS returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRX-CONTAINS-WHAT-IT-CLAIMS/trx-contains-what-it-claims.md
+- 2026-08-06T13:42Z · agent:L-TRX-CONTAINS-WHAT-IT-CLAIMS · report L-TRX-CONTAINS-WHAT-IT-CLAIMS: Derived, not sampled: all 20 plan items whose evidence: field names a trx, 25 cited trx, every commit in repo OkamAPI. Six further items mention a trx in prose only and cite none as evidence.; 147 tests are added by those 20 commits: 125 present in the cited trx (117 exact, 8 matched as [Theory] row
+- 2026-08-06T13:43Z · tool · raised F-TRAIN-DISCLOSURE-EVIDENCE-IS-AN-ABORT (blocker)
+- 2026-08-06T13:43Z · @clerk · note L-TRX-CONTAINS-WHAT-IT-CLAIMS: the answer is bounded and better than feared -- 19 of 20 receipts hold what their commit added, so this is one lane rather than a shape across many.
+- 2026-08-06T13:43Z · @clerk · note L-TRX-CONTAINS-WHAT-IT-CLAIMS: 147 tests across 20 commits -- 125 present, 11 absent-unexplained, 14 absent-because-filtered, and the filtered split was load-bearing.
+- 2026-08-06T13:43Z · @clerk · note L-TRX-CONTAINS-WHAT-IT-CLAIMS: ignoring run mode scored 14 FALSE shortfalls across three lanes, each of which cites a second tier that does hold its tests, in both directions.
+- 2026-08-06T13:43Z · @clerk · note L-TRX-CONTAINS-WHAT-IT-CLAIMS: presence is not sufficiency -- L-COMPOSITION-ROOT-CHECK reads outcome Failed with failed=1 on its own pin and declares it, so a presence check would pass both.
+- 2026-08-06T13:43Z · @clerk · note L-TRX-CONTAINS-WHAT-IT-CLAIMS: its list is durable but not git-committed; it read 'committed' as the artifact and left the commit to the clerk, since a shared-branch commit is barred.
+- 2026-08-06T13:44Z · tool · raised F-DEV-BUILD-POINTS-AT-PRODUCTION (blocker)
+- 2026-08-06T13:44Z · tool · raised F-DINTERO-SAVE-WIPES-PAYMENT-CONFIG (blocker)
+- 2026-08-06T13:44Z · tool · raised F-SURFBOARD-SAVE-CLEARS-TIPS (blocker)
+- 2026-08-06T13:44Z · tool · raised F-TRIPLETEX-PROMISES-IDEMPOTENCE-IT-LACKS (blocker)
+- 2026-08-06T13:44Z · @clerk · note F-LOGINMODAL-SUCCESS-SHOWS-A-BLOB: C7 question ANSWERED -- the serialized user object rendered into the error slot on success includes the token key. It is a credential in the DOM.
+- 2026-08-06T13:44Z · @clerk · note F-CORE-ADMIN-DEAD-SURFACES: the wolt rails are incoherent too -- wolt.vue pause and open-hours controls never render on the ordinary nav path, and wolt-menu.vue is orphaned and blank.
+- 2026-08-06T13:44Z · @clerk · note L-OFFERS-PAGE-HUNDREDFOLD: my brief was stale -- offers.vue DOES still render totals, via the OfferDocument proposal preview. The deletion did not leave the page total-less.
+- 2026-08-06T13:44Z · @clerk · note F-CORE-ADMIN: the POS register is the deepest surface in the repo -- cash point, PIN, trading day, sell, cash, receipt, Z, SAF-T all walk from a browser with zero hardware.
+- 2026-08-06T13:46Z · agent:L-PROBE-DIR-IS-PINNED · L-PROBE-DIR-IS-PINNED returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-PROBE-DIR-IS-PINNED/detail.md
+- 2026-08-06T13:46Z · agent:L-PROBE-DIR-IS-PINNED · report L-PROBE-DIR-IS-PINNED: Instrument: 4 probe lines per dir reading git's own bookkeeping. <dir>/.git gives repo+worktree; <repo>/.git/worktrees/<name>/HEAD gives the ref. No stamp, no collector, nothing to re-run.; Clerk applies proposed-probes.txt (8 lines, into the probes fence before intent.hash) and proposed-facts.txt (
+- 2026-08-06T13:47Z · tool · refreshed 39 fact spans, 12 unconfirmed
+- 2026-08-06T13:47Z · tool · raised F-WORLD-FACTS-ARE-GREEN-IN-THE-WRONG-DIRECTION (blocker)
+- 2026-08-06T13:47Z · @clerk · note L-PROBE-DIR-IS-PINNED: applied its 8 probe lines and 2 fact bullets verbatim; refresh confirms be.dir.ref reads lane/meals-grace-pins and fe.dir.ref reads lane/focustrap-teardown.
+- 2026-08-06T13:47Z · @clerk · note L-PROBE-DIR-IS-PINNED: the instrument reads git's own bookkeeping rather than a stamp, so no collector can forget to run and no artifact can decay between runs.
+- 2026-08-06T13:47Z · @clerk · note L-PROBE-DIR-IS-PINNED: its falsification arm is the proof -- weakening the pin to a mere exists check makes the identical mutation read green, so the declared-ref clause is load-bearing.
+- 2026-08-06T13:47Z · @clerk · note L-PROBE-DIR-IS-PINNED: the repo half is not padding either -- a dir repointed at a DIFFERENT repo that is also on the declared branch reads as conforming to a branch-only check.
+- 2026-08-06T13:47Z · @clerk · note L-PROBE-DIR-IS-PINNED: three flag-body corrections it measured -- no ConsumerWeb probes remain, the 8 non-backend probes read the hub unnamed as a dir, and there are 66 dir fields not 65.
+- 2026-08-06T13:48Z · agent:L-TENDER-WIRE-MERGE-IS-SAFE · L-TENDER-WIRE-MERGE-IS-SAFE returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TENDER-WIRE-MERGE-IS-SAFE/evidence.md
+- 2026-08-06T13:48Z · agent:L-TENDER-WIRE-MERGE-IS-SAFE · report L-TENDER-WIRE-MERGE-IS-SAFE: MERGE (OkamAPI, throwaway worktree+ref): fb522bdd utlkvit-family base <- lane/meals-pos-tender-wire 32fd5a86 => d5033c40, ort strategy, ZERO conflicts, 8 files, 662+/2-.; COUNT at d5033c40: exactly ONE definition, Services/Kassa/KassaCreditSale.cs:25 IsCreditSale(JournalEntry). Six call sites, each 
+- 2026-08-06T13:49Z · @clerk · note L-TENDER-WIRE-MERGE-IS-SAFE: it corrected the correction -- a plain merge is safe only when the branch's merge-base already holds the predicate, which eleven pre-fork heads do not.
+- 2026-08-06T13:49Z · @clerk · note L-TENDER-WIRE-MERGE-IS-SAFE: measured by simulating ALL 215 outstanding landings onto the tip -- 111 clean yield one definition, 104 conflict, 11 results hold two.
+- 2026-08-06T13:49Z · @clerk · note L-TENDER-WIRE-MERGE-IS-SAFE: the lane it warned about already landed by true merge 21f79514 on 2026-08-04 with zero conflicts, so holding it was never the right call.
+- 2026-08-06T13:49Z · @clerk · note L-TENDER-WIRE-MERGE-IS-SAFE: the estate's habit is confirmed on a money path one day ago -- Web-modules f1d177f took a whole blob from c4a4fa44, which is not an ancestor of the tip.
+- 2026-08-06T13:51Z · @clerk · note F-DISK-PRESSURE: load 195 on a 14-core host at 15:51, swap 11.9G of 13.3G used. The top two consumers are foreign raiis vitest processes, not this plan's lanes.
+- 2026-08-06T13:51Z · @clerk · note F-DISK-PRESSURE: my own share is 2 dotnet test hosts, wt-trainwire-abort and wt-composebase, plus 2 SQL containers. Within the caps; the ceiling breach is not mine to clear.
+- 2026-08-06T13:52Z · @clerk · note F-DISK-PRESSURE: correction to the line above -- my dotnet hosts are wt-growthaudit and wt-trainwire-abort, not wt-composebase. 25 foreign raiis node processes are the bulk of the load.
+- 2026-08-06T13:53Z · agent:L-PLAN-ARTIFACTS-ARE-SCRUBBED · L-PLAN-ARTIFACTS-ARE-SCRUBBED returned built -> built-unverified, evidence lanes/L-PLAN-ARTIFACTS-ARE-SCRUBBED/evidence.md
+- 2026-08-06T13:53Z · agent:L-PLAN-ARTIFACTS-ARE-SCRUBBED · report L-PLAN-ARTIFACTS-ARE-SCRUBBED: FIVE VALUES READ FROM SOURCE, never typed: AppSettings Secret, PowerUserVerificationCode, DemoVerificationCode, the StoresController X-Okam-ApiKey GUID, the Functions host key. Same on 3 branches.; COUNTS: power-user code CONFIRMED at exactly 7 untracked files, 2 under docs/plan/returns/. Demo code 
+- 2026-08-06T13:54Z · @clerk · note L-PLAN-ARTIFACTS-ARE-SCRUBBED: its residue claim also verified -- refs/lanes/plan-snapshot still holds 133 demo-code occurrences across 5760 objects, with power-user code and Secret at zero.
+- 2026-08-06T13:54Z · @clerk · note F-MY-INSTRUMENTS: my own check was wrong AGAIN -- git grep across ref~0..ref~311 reported 0 demo-code hits where a byte scan of reachable objects finds 133.
+- 2026-08-06T13:54Z · @clerk · note F-MY-INSTRUMENTS: git grep searches trees at named revisions, not the object set a clone receives; for a credential question only the reachable-object scan answers the right question.
+- 2026-08-06T13:55Z · @clerk · note L-PLAN-ARTIFACTS-ARE-SCRUBBED: VERIFIED by byte scan of every reachable object. plan/docs-20260806 at 6c4305e, 451 objects, zero carriers. The push gate is closed.
+- 2026-08-06T13:55Z · @clerk · note L-PLAN-ARTIFACTS-ARE-SCRUBBED: it crossed a stated boundary knowingly and said so -- the brief forbade editing docs/plan while its exit required scrubbing it. Specific over generic was right.
+- 2026-08-06T13:55Z · @clerk · note L-PLAN-ARTIFACTS-ARE-SCRUBBED: two carriers nobody named -- plan-snapshot's parent commits already held both codes, and fresh-clone/.git held ten pre-scrub blobs behind clean files.
+- 2026-08-06T13:55Z · @clerk · note L-PLAN-ARTIFACTS-ARE-SCRUBBED: owner-step.md hardcoded 54d4dfc in both verify and confirm blocks, so after the rebuild both would have failed the owner. Fixed by the lane.
+- 2026-08-06T14:03Z · agent:opus · started L-ABORTED-TRX-CANNOT-BE-EVIDENCE
+- 2026-08-06T14:03Z · agent:L-ABORTED-TRX-CANNOT-BE-EVIDENCE · L-ABORTED-TRX-CANNOT-BE-EVIDENCE returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-ABORTED-TRX-CANNOT-BE-EVIDENCE/aborted-trx-cannot-be-evidence.md
+- 2026-08-06T14:03Z · agent:L-ABORTED-TRX-CANNOT-BE-EVIDENCE · report L-ABORTED-TRX-CANNOT-BE-EVIDENCE: Check is trx_self_consistent.py: one bounded tail read per trx (ResultSummary sits within ~16KB of EOF here), comparing ResultSummary/@outcome against Counters in BOTH directions.; Three verdicts, not two. PASS green and clean; RED not-green with a tally that says why, reported and never refused; RE
+- 2026-08-06T14:04Z · @clerk · note L-ABORTED-TRX-CANNOT-BE-EVIDENCE: its second finding is about MY instrument -- the plan tool's trx extractor read Counters alone and rendered the aborted receipt as 960 passed / 0 failed.
+- 2026-08-06T14:04Z · @clerk · note L-ABORTED-TRX-CANNOT-BE-EVIDENCE: I patched the extractor to carry ResultSummary outcome into the value; that file now reads 960 passed / 0 failed (outcome=Failed) and cannot pass as clean.
+- 2026-08-06T14:04Z · @clerk · note L-ABORTED-TRX-CANNOT-BE-EVIDENCE: estate sweep of 3112 trx in 22s -- 2767 pass, 339 red, 6 refuse across 3 distinct artifacts, two of which are a sibling's deliberate abort reproductions.
+- 2026-08-06T14:04Z · agent:L-LOGINMODAL-SUCCESS-IS-SILENT · L-LOGINMODAL-SUCCESS-IS-SILENT returned built -> built-unverified, evidence /Users/svendaneel/okam/web-loginsuccess/lanes/L-LOGINMODAL-SUCCESS-IS-SILENT/kill-proof.txt
+- 2026-08-06T14:04Z · agent:L-LOGINMODAL-SUCCESS-IS-SILENT · report L-LOGINMODAL-SUCCESS-IS-SILENT: C7 ANSWERED, NOT A CREDENTIAL: AdminUserService.Login (plugins/admin-core-services.js:50-54) collapses the User to a boolean first, so the assigned string was "true".; The token is real one layer down: core UserService.Login resolves keys id, phoneNumber, email, emailConfirmed, firstName, lastName, 
+- 2026-08-06T14:04Z · tool · raised F-JEST-COLLECTS-LANE-FILES (warn)
+- 2026-08-06T14:04Z · @clerk · note L-LOGINMODAL-SUCCESS-IS-SILENT: C7 ANSWERED and it inverts my report -- the adapter collapses the User to a boolean, so the assigned string was "true", not a token.
+- 2026-08-06T14:04Z · @clerk · note L-LOGINMODAL-SUCCESS-IS-SILENT: and nobody was ever shown it -- the form hides once SetCurrentUser lands, and all 15 mount sites unmount on the close the success path emits.
+- 2026-08-06T14:04Z · @clerk · note L-LOGINMODAL-SUCCESS-IS-SILENT: the real risk is latent -- LoginAdmin in that same adapter returns the user object, so the line sat ONE call-site edit from serializing the token.
+- 2026-08-06T14:04Z · @clerk · note L-LOGINMODAL-SUCCESS-IS-SILENT: the naive fix was a trap -- login() had no errorMessage reset, so the defective line was the only thing clearing a stale refusal before a success.
+- 2026-08-06T14:04Z · @clerk · note L-LOGINMODAL-SUCCESS-IS-SILENT: its own barrier caught two harness faults that each gave a confident wrong answer -- a Playwright route-order shadow and a bundle check reading its own comment.
+- 2026-08-06T14:04Z · @clerk · note L-LOGINMODAL-SUCCESS-IS-SILENT: it added no permanent e2e journey on purpose, since such a test passes against the defect and this estate has shipped nineteen non-failing assertion shapes.
+- 2026-08-06T14:06Z · agent:L-TRAINWIRE-ABORT · L-TRAINWIRE-ABORT returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRAINWIRE-ABORT/finding.md
+- 2026-08-06T14:06Z · agent:L-TRAINWIRE-ABORT · report L-TRAINWIRE-ABORT: Abort REPRODUCED before anything changed, at a clean checkout of 06b8b582 (OkamAPI), no merge in front; own worktree, --filter Database!=SqlServer throughout, no container touched.; Tier before: 3155 passed / 0 failed / 10 skipped = 3165 counted, then Test Run Aborted (artifacts/tier-before.trx) - z
+- 2026-08-06T14:06Z · @clerk · note L-TRAINWIRE-ABORT: the abort was hiding a second red -- with the host alive, TrainingWireTests:1031 runs and fails on the identical all-rows-over-shared-fixture shape.
+- 2026-08-06T14:06Z · @clerk · note L-TRAINWIRE-ABORT: only Assert.All is fatal -- AllException formats its message lazily where ContainsException formats in its constructor, so the disposed document is reached at report time.
+- 2026-08-06T14:06Z · @clerk · note L-TRAINWIRE-ABORT: the landing is unblocked, measured on the merge itself -- the file is byte-identical at 06b8b582 and f4407595, and the tier there completes at 4650/0/12.
+- 2026-08-06T14:06Z · @clerk · note L-TRAINWIRE-ABORT: my exit asked for 4650 tests at 06b8b582; that tree holds 4393. The 4650 belongs to 8e2b57de, 59 commits ahead. My error, not a fail-spec.
+- 2026-08-06T14:06Z · @clerk · note F-TRAIN-DISCLOSURE-EVIDENCE-IS-AN-ABORT: the cause is now fixed on a private branch, so the receipt can be retaken -- the tier at the merge completes rather than aborting.
+- 2026-08-06T14:08Z · agent:L-COMPOSE-AND-RUN-THE-STACK · L-COMPOSE-AND-RUN-THE-STACK returned built -> built-unverified, evidence /Users/svendaneel/okam/wt-composestack/lanes/L-COMPOSE-AND-RUN-THE-STACK/compose-7ac6f2b2-sql-tier.trx
+- 2026-08-06T14:08Z · agent:L-COMPOSE-AND-RUN-THE-STACK · report L-COMPOSE-AND-RUN-THE-STACK: COMPOSED, MEASURED NOT ASSUMED. 24cd4ead (stack tip; mig-stack-land verified its ancestor) x eeb1b8c4 = 7ac6f2b2, first parent the stack. 86 left / 10 right: no fast-forward either way.; FOUR merge bases -- 02c077cb, 6771ba9a, 75e5168c, 86c0f9ae -- a criss-cross, which caused both conflicts. In Okam
+- 2026-08-06T14:09Z · agent:opus · started L-DESTRUCTIVE-SAVES-LOAD-FIRST
+- 2026-08-06T14:09Z · agent:opus · started L-ONGOING-SHOWS-EVERY-LIVE-ORDER
+- 2026-08-06T14:09Z · agent:opus · started L-RESERVATION-CONFLICT-SEES-EVERY-TABLE
+- 2026-08-06T14:09Z · agent:opus · started L-SETTINGS-SAVES-REPORT-FAILURE
+- 2026-08-06T14:09Z · @clerk · note L-COMPOSE-AND-RUN-THE-STACK: THE SQL TIER RAN -- 587 executed, 565 passed, 22 failed, 0 skipped, 55m15s, all 95 trait-carrying classes. Not 584 discovered and zero executed.
+- 2026-08-06T14:09Z · @clerk · note L-COMPOSE-AND-RUN-THE-STACK: all 22 reds pre-date the composition test for test, against a baseline it measured itself at 24cd4ead. Zero added, zero removed, zero outcome changed.
+- 2026-08-06T14:09Z · @clerk · note L-COMPOSE-AND-RUN-THE-STACK: it honoured the SQL floor -- measured blocked twice at under 2 GiB free with a foreign mssql up, and took the slot only when docker ps was empty at 6.97 GiB.
+- 2026-08-06T14:09Z · @clerk · note L-COMPOSE-AND-RUN-THE-STACK: four merge bases, a criss-cross, which caused both conflicts; the receipts trap appeared TWICE more, and one stage-1 base held literal conflict markers in no commit.
+- 2026-08-06T14:09Z · @clerk · note L-COMPOSE-AND-RUN-THE-STACK: resolving that by side would have deleted a real run both times; the stack side had already deleted one, and this composition restores it.
+- 2026-08-06T14:09Z · @clerk · note F-NEWSLETTER-DISPATCH-DEAD-ON-CHAIN: independently confirmed on the composed stack -- Growth was left out of the sweep cdb4c66c and 13cd9f18 gave Workforce and Meals.
+- 2026-08-06T14:10Z · @clerk · note L-COMPOSE-AND-RUN-THE-STACK: the three properties recorded as exercised NOWHERE are green -- accounting-day index 2/2, settlement lifecycle 17/17, migration round-trip 1/1.
+- 2026-08-06T14:10Z · agent:opus · started L-LIVE-WORLD-TWO-HUMANS-WALK
+- 2026-08-06T14:12Z · tool · raised F-SQL-SLOT-GATE-IS-ONLY-A-START-CONDITION (warn)
+- 2026-08-06T14:12Z · @clerk · note L-GROWTHAUDIT-MIGRATION: SQL tier 565/22/587 to 593/1/594 in 40m54s. 21 cured, 0 newly failing, diffed test-by-test against the baseline trx rather than by counters.
+- 2026-08-06T14:12Z · @clerk · note L-GROWTHAUDIT-MIGRATION: it derived the exit number 1 independently before my correction arrived, parsing every Failed result out of the baseline trx. We agree, slip included.
+- 2026-08-06T14:12Z · @clerk · note L-GROWTHAUDIT-MIGRATION: the trigger is proved by MUTATION rather than by reading -- drop it and the same DELETE succeeds, re-create and it refuses with 50074. No FK could be the refuser.
+- 2026-08-06T14:12Z · @clerk · note L-GROWTHAUDIT-MIGRATION: C2 held -- parent is the chain tip 20260803093235, Designer equals the model snapshot byte-for-byte and equals the tip's plus exactly one entity.
+- 2026-08-06T14:12Z · @clerk · note L-GROWTHAUDIT-MIGRATION: ef migrations add folded in NOTHING else, so this table was the whole model-versus-chain drift at the tip. The trigger shipped in the same file, so MIG-29 keeps one.
+- 2026-08-06T14:12Z · @clerk · note L-GROWTHAUDIT-MIGRATION: a green test was green BECAUSE of the defect -- the lineage test asserted the Growth surface is exactly 19 tables, and the ledger is the twentieth. Fixed, not loosened.
+- 2026-08-06T14:12Z · @clerk · note F-NEWSLETTER-DISPATCH-DEAD-ON-CHAIN: its lane just lost its evidence -- all six dispatch reds were the absent table and are green now, so the untyped catch must be argued from code.
+- 2026-08-06T14:12Z · @clerk · note F-NEWSLETTER-DISPATCH-DEAD-ON-CHAIN: the untyped catch is untouched and will misreport the next non-race DbUpdateException the same way, so the reporting half of this flag still stands.
+- 2026-08-06T14:12Z · agent:L-GROWTHAUDIT-MIGRATION · L-GROWTHAUDIT-MIGRATION returned built -> built-unverified, evidence docs/plan/lanes/L-GROWTHAUDIT-MIGRATION/sys-catalog.txt
+- 2026-08-06T14:12Z · agent:L-GROWTHAUDIT-MIGRATION · report L-GROWTHAUDIT-MIGRATION: SQL tier 565/22/587 -> 593/1/594, 40m54s. 21 cured, 0 newly failing. trx at lanes/L-GROWTHAUDIT-MIGRATION/trx/lane-mig29-sql-tier.trx, diffed test-by-test vs 24cd4ead's, not by counters.; Your correction holds; I measured 1, derived from the baseline trx before it arrived: 15 lineage + 6 dispatch + 
+- 2026-08-06T14:12Z · @clerk · note L-GROWTHAUDIT-MIGRATION: merged with --accept-stale; the brief hash moved because I corrected the exit from 2 to 1 and rewrote the THROW guidance mid-run, so the mismatch was mine.
+- 2026-08-06T14:19Z · agent:opus · started L-DEV-DEFAULT-FAILS-CLOSED
+- 2026-08-06T14:19Z · agent:opus · started L-TRIPLETEX-LABEL-MATCHES-THE-GUARANTEE
+- 2026-08-06T14:19Z · @clerk · note L-GROWTHAUDIT-MIGRATION: under Fable review, weighted at C2 -- parent, snapshot additivity and replay from empty, since this estate has been bitten twice by a migration that did not replay.
+- 2026-08-06T14:19Z · @clerk · note L-TRIPLETEX-LABEL-MATCHES-THE-GUARANTEE: authored with the migration in mind -- the accounting-day index tests read 2/2 green at the composed stack, so this may be a label fix alone.
+- 2026-08-06T14:21Z · agent:L-RESERVATION-CONFLICT-SEES-EVERY-TABLE · L-RESERVATION-CONFLICT-SEES-EVERY-TABLE returned built -> built-unverified, evidence lanes/L-RESERVATION-CONFLICT-SEES-EVERY-TABLE/evidence.md
+- 2026-08-06T14:21Z · agent:L-RESERVATION-CONFLICT-SEES-EVERY-TABLE · report L-RESERVATION-CONFLICT-SEES-EVERY-TABLE: THE SERVER DOES CATCH IT. Not a live double-booking path; severity is a missing warning plus a lost draft.; OkamAPI-modules read by object at 8e2b57de (clone left on lane/meals-grace-pins, nothing checked out).; ReservationService.cs:701-735 Includes r.Tables and blocks EVERY rt.TableId; :633-637 re
+- 2026-08-06T14:21Z · @clerk · note L-RESERVATION-CONFLICT-SEES-EVERY-TABLE: it answered the severity question first, as briefed -- the server DOES block every table, so this was never a live double-booking path.
+- 2026-08-06T14:21Z · @clerk · note L-RESERVATION-CONFLICT-SEES-EVERY-TABLE: the real cost is a lost draft -- the refusal closes the modal and the typed booking is gone, over a message saying the table is no longer available.
+- 2026-08-06T14:21Z · @clerk · note L-RESERVATION-CONFLICT-SEES-EVERY-TABLE: the renderer already knew -- blocksFor drew the block on every tableIds row while the conflict rule swore that table was free.
+- 2026-08-06T14:21Z · @clerk · note L-RESERVATION-CONFLICT-SEES-EVERY-TABLE: red first against shipped code, 7 failed 7 passed, and each of its three edits mutation-checked alone rather than together.
+- 2026-08-06T14:22Z · agent:opus · started L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN
+- 2026-08-06T14:25Z · agent:L-SETTINGS-SAVES-REPORT-FAILURE · L-SETTINGS-SAVES-REPORT-FAILURE returned built -> built-unverified, evidence lanes/L-SETTINGS-SAVES-REPORT-FAILURE/measurements.txt
+- 2026-08-06T14:25Z · agent:L-SETTINGS-SAVES-REPORT-FAILURE · report L-SETTINGS-SAVES-REPORT-FAILURE: Measured on lane/focustrap-teardown @ 8ac6f63, working tree (~394 foreign uncommitted paths). Touched 2 files: pages/admin/delivery.vue, test/delivery-save-failure.test.js (new).; RED FIRST, shipped page: 12 of 21 arms failed. Switch checked=false while the server held selfPickUp=true, .notification
+- 2026-08-06T14:25Z · @clerk · note L-SETTINGS-SAVES-REPORT-FAILURE: worse than I raised it -- FOUR call sites, three of which fire two or three writes under Promise.all and drop every boolean.
+- 2026-08-06T14:25Z · @clerk · note L-SETTINGS-SAVES-REPORT-FAILURE: 12 of 21 arms red against the shipped page, and the false return is demonstrated through the real StoreService rather than assumed.
+- 2026-08-06T14:25Z · @clerk · note L-SETTINGS-SAVES-REPORT-FAILURE: its sharpest arm -- a refused Wolt switch leaves own-driving off and Wolt on-refused, so the venue has NO home delivery while the page said changed to Wolt.
+- 2026-08-06T14:25Z · @clerk · note L-SETTINGS-SAVES-REPORT-FAILURE: the rounding defect reproduces, and no writer in this repo can create such a store, which is why a second reader could not see it.
+- 2026-08-06T14:25Z · @clerk · note L-SETTINGS-SAVES-REPORT-FAILURE: it left one residual open rather than defaulting it -- an ore component is now invisible on screen, and showing it needs the money control already in that file.
+- 2026-08-06T14:25Z · @clerk · note L-SETTINGS-SAVES-REPORT-FAILURE: a third instance needed no outside writer -- a null city stayed dirty because raw store fields were compared against locals normalised with empty string.
+- 2026-08-06T14:26Z · agent:opus · started L-MONEY-FIELDS-SHOW-THEIR-ORE
+- 2026-08-06T14:30Z · agent:L-TRIPLETEX-LABEL-MATCHES-THE-GUARANTEE · returned L-TRIPLETEX-LABEL-MATCHES-THE-GUARANTEE verdict=fail-spec -> open; D-SPEC-L-TRIPLETEX-LABEL-MATCHES-THE-GUARANTEE appended
+- 2026-08-06T14:30Z · agent:L-TRIPLETEX-LABEL-MATCHES-THE-GUARANTEE · report L-TRIPLETEX-LABEL-MATCHES-THE-GUARANTEE: Label backed: all four Kjor-bilag buttons and rerunFailed funnel into TripletexVoucherPoster.PostAsync keyed on a deterministic ExternalKey.; That key's gate IS in the chain: 20260714014129_AddTripletexIntegration.cs:84-89 creates IX_TripletexVoucherLogs_ExternalKey UNIQUE, filter [ExternalKey] IS N
+- 2026-08-06T14:30Z · tool · raised F-TRIPLETEX-CLAIM-EXPIRES-MID-CALL (blocker)
+- 2026-08-06T14:30Z · tool · raised F-TRIPLETEX-REFUSAL-READS-AS-FAILURE (warn)
+- 2026-08-06T14:32Z · @clerk · note L-TRIPLETEX-LABEL-MATCHES-THE-GUARANTEE: the poster claims the key BEFORE posting rather than checking after, and detects the violation by SQL error number rather than message text.
+- 2026-08-06T14:32Z · @clerk · note F-TRIPLETEX-CLAIM-EXPIRES-MID-CALL: the arithmetic is the finding -- 5 retries at 120s is 600s, exactly the 10-minute stale threshold, per call, and PostAsync makes two calls inside one claim.
+- 2026-08-06T14:32Z · @clerk · note F-TRIPLETEX-CLAIM-EXPIRES-MID-CALL: so a rate limit alone opens it. Tripletex ends holding two vouchers on one external number, the log holds one, and reconciliation reads the log.
+- 2026-08-06T14:32Z · @clerk · note F-TRIPLETEX-REFUSAL-READS-AS-FAILURE: the two compose -- a correctly-refused duplicate paints red, and a red row instructs the operator to retry, which is the door the other flag leaves open.
+- 2026-08-06T14:32Z · @clerk · note L-PENDING-MODEL-CHANGES-ON-THE-FAST-TIER: the check exists and is scoped out of reach -- asserted in 15 lineage suites, every one SqlServer-traited, so none runs on the tier every lane uses.
+- 2026-08-06T14:32Z · @clerk · note L-TRIPLETEX-LABEL-MATCHES-THE-GUARANTEE: fail-spec, my premise wrong three ways -- the index is in the chain since 14 July, the page cannot reach the double-post, and the double-post is closed.
+- 2026-08-06T14:33Z · agent:L-DESTRUCTIVE-SAVES-LOAD-FIRST · L-DESTRUCTIVE-SAVES-LOAD-FIRST returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/lanes/L-DESTRUCTIVE-SAVES-LOAD-FIRST/receipts/live-record-before-after.md
+- 2026-08-06T14:33Z · agent:L-DESTRUCTIVE-SAVES-LOAD-FIRST · report L-DESTRUCTIVE-SAVES-LOAD-FIRST: Shape fixed at the seam: core/services/full-replace-guard.ts, enforced inside StoreService, the one door both pages must pass through. Load-before-edit chosen; reasons on line 9.; Measured against Web-modules 8ac6f636 on lane/focustrap-teardown and core submodule 1bcab0b6 on lane/core-ore-label. cor
+- 2026-08-06T14:33Z · tool · raised F-KRAVIA-MESSAGE-NULLED-BY-EVERY-DINTERO-SAVE (warn)
+- 2026-08-06T14:33Z · @clerk · note L-DESTRUCTIVE-SAVES-LOAD-FIRST: reproduced on a live loopback record -- open dintero.vue and press Save, and 14 of 17 stored fields are destroyed including the client secret.
+- 2026-08-06T14:33Z · @clerk · note L-DESTRUCTIVE-SAVES-LOAD-FIRST: fixed at the seam rather than on two pages -- a full-replace guard inside StoreService, the one door both pages pass through.
+- 2026-08-06T14:33Z · @clerk · note L-DESTRUCTIVE-SAVES-LOAD-FIRST: C7 -- it found and removed a console.log in dintero.vue that printed the client secret.
+- 2026-08-06T14:33Z · @clerk · note L-DESTRUCTIVE-SAVES-LOAD-FIRST: the guard lands in the Core SUBMODULE, not this repo, so the change crosses a repo boundary. No consumer of the gated methods exists outside these two pages.
+- 2026-08-06T14:33Z · @clerk · note L-DESTRUCTIVE-SAVES-LOAD-FIRST: a neighbouring cause closed too -- GetSurfboardConfig caught a failed read into blank defaults, which were then saved over the record.
+- 2026-08-06T14:34Z · agent:opus · started L-PENDING-MODEL-CHANGES-ON-THE-FAST-TIER
+- 2026-08-06T14:34Z · @clerk · review L-GROWTHAUDIT-MIGRATION: APPROVE-WITH-CONDITIONS, and the migration is SAFE TO LAND. Every C2 claim re-derived from objects rather than accepted from prose.
+- 2026-08-06T14:34Z · @clerk · note L-GROWTHAUDIT-MIGRATION: parent is the chain tip, Designer equals the snapshot byte-for-byte, the diff is 48 lines added and 0 removed for one entity, and 137 unique migrations replay from empty.
+- 2026-08-06T14:34Z · @clerk · note L-GROWTHAUDIT-MIGRATION: the corrected 19-to-20 constant is RULED RIGHT -- loosening to a floor would have destroyed the instrument that catches the next unmigrated table.
+- 2026-08-06T14:34Z · @clerk · note L-GROWTHAUDIT-MIGRATION: the reviewer swept all 344 local branches -- THROW 50074 exists only on this lane, and 50019 is intact as MIG-14's reservation.
+- 2026-08-06T14:34Z · @clerk · note L-GROWTHAUDIT-MIGRATION: a FOURTH post-tip migration exists -- lane/wf-operator-unique carries 20260806111500, which sorts BEFORE this lane's. That interleaved replay order has run nowhere.
+- 2026-08-06T14:34Z · @clerk · note L-GROWTHAUDIT-MIGRATION: so the integrator owes one lineage plus replay-from-empty run at the first tip carrying both, before or at the merge that combines them.
+- 2026-08-06T14:34Z · @clerk · note L-GROWTHAUDIT-MIGRATION: two record corrections -- the baseline trx lives in OkamAPI artifacts/tests, not the hub, and 'eight migrations stale' is nine newer files with eight strictly between.
+- 2026-08-06T14:37Z · agent:L-DEV-DEFAULT-FAILS-CLOSED · L-DEV-DEFAULT-FAILS-CLOSED returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/lanes/L-DEV-DEFAULT-FAILS-CLOSED/run.md
+- 2026-08-06T14:37Z · agent:L-DEV-DEFAULT-FAILS-CLOSED · report L-DEV-DEFAULT-FAILS-CLOSED: Measured on lane/focustrap-teardown 8ac6f63, not the shipped tip; nuxt.config.js:45 is identical on both. Nothing committed, nothing pushed, no container, no foreign port.; CHOSE REFUSE, not localhost. A localhost default starts, fetches nothing and hides which backend it picked - the same silence b
+- 2026-08-06T14:37Z · @clerk · note L-DEV-DEFAULT-FAILS-CLOSED: the old line was a NO-OP TERNARY -- both arms returned the deployed API, so it read as if dev were handled and was not.
+- 2026-08-06T14:37Z · @clerk · note L-DEV-DEFAULT-FAILS-CLOSED: it chose refuse over a localhost default, because a localhost default starts, fetches nothing and hides which backend it picked -- the same silence being fixed.
+- 2026-08-06T14:37Z · @clerk · note L-DEV-DEFAULT-FAILS-CLOSED: the discriminator is NOT unset, since unset is exactly what both deploys are; it is the nuxt command or NODE_ENV, set to production before the config is read.
+- 2026-08-06T14:37Z · @clerk · note L-DEV-DEFAULT-FAILS-CLOSED: the Swiss build is unchanged, proven by two real builds -- 11 of 221 client assets carry the deployed host and zero carry localhost.
+- 2026-08-06T14:37Z · @clerk · note L-DEV-DEFAULT-FAILS-CLOSED: it built to a lane-local buildDir so the .nuxt shared by ~124 worktrees was never overwritten, and deleted 141MB afterwards.
+- 2026-08-06T14:37Z · @clerk · note F-JEST-COLLECTS-LANE-FILES: STALE -- jest.config.js on this branch DOES ignore lanes/, with a comment explaining the two ways it bit lanes. My brief hazard was out of date.
+- 2026-08-06T14:37Z · @clerk · note L-DEV-DEFAULT-FAILS-CLOSED: residual it named -- a LOCAL npm run build/start still defaults to the deployed API, since telling a laptop build from a deploy needs CI markers.
+- 2026-08-06T14:37Z · agent:L-ONGOING-SHOWS-EVERY-LIVE-ORDER · L-ONGOING-SHOWS-EVERY-LIVE-ORDER returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-ONGOING-SHOWS-EVERY-LIVE-ORDER/evidence.md
+- 2026-08-06T14:37Z · agent:L-ONGOING-SHOWS-EVERY-LIVE-ORDER · report L-ONGOING-SHOWS-EVERY-LIVE-ORDER: Measured against lane/focustrap-teardown @ 8ac6f63 in the shared checkout, ~394 foreign uncommitted paths present. Nothing committed, stashed or pushed.; CONFIRMED: ongoing.vue bucketed 5 of the 9 OrderStatus members. DriverPickedUp and OpenCheck were loaded by GetAllOngoing() and rendered in no col
+- 2026-08-06T14:37Z · @clerk · note L-ONGOING-SHOWS-EVERY-LIVE-ORDER: confirmed 5 of 9 OrderStatus members bucketed -- DriverPickedUp AND OpenCheck were loaded and rendered in no column, unseen and un-completable.
+- 2026-08-06T14:37Z · @clerk · note L-ONGOING-SHOWS-EVERY-LIVE-ORDER: it stated the board as ONE total table over the enum, with a function returning members placed nowhere and excluded nowhere, asserted empty.
+- 2026-08-06T14:37Z · @clerk · note L-ONGOING-SHOWS-EVERY-LIVE-ORDER: DriverPickedUp got a Fullfor action, not just a card -- visible-but-stuck would have been half a fix, and the estate already collapses that rung.
+- 2026-08-06T14:37Z · @clerk · note L-ONGOING-SHOWS-EVERY-LIVE-ORDER: a BROWSER capture, not just a suite -- 16 orders sent, 16 cards drawn, same ids, with the red arm on its own fresh compiler failing on exactly the two.
+- 2026-08-06T14:37Z · @clerk · note L-ONGOING-SHOWS-EVERY-LIVE-ORDER: seeding the two orders into the shared world.js broke a sibling journey; it reverted byte-exact and injects at the wire instead.
+- 2026-08-06T14:37Z · @clerk · note L-ONGOING-SHOWS-EVERY-LIVE-ORDER: modal-estate-scroll-lock is FLAKY not regressed -- two identical configs gave opposite results, and it races the board's 7s auto-refresh.
+- 2026-08-06T14:37Z · @clerk · note L-ONGOING-SHOWS-EVERY-LIVE-ORDER: five .vue files use optional chaining that buble cannot parse, so no jest test may import them -- which is why /admin/ongoing had no unit test at all.
+- 2026-08-06T14:41Z · agent:L-LIVE-WORLD-TWO-HUMANS-WALK · L-LIVE-WORLD-TWO-HUMANS-WALK returned built -> built-unverified, evidence artifacts/journeys/workforce-week-run-two-humans.playwright.json
+- 2026-08-06T14:41Z · agent:L-LIVE-WORLD-TWO-HUMANS-WALK · report L-LIVE-WORLD-TWO-HUMANS-WALK: TWO HUMANS IN ONE LIVE WORLD, from the app's own ids: published by 6ba6dd27, acknowledged by 9750cac8, asserted not-equal. live, 128 served / 94 subject / 0 foreign / 0 proxied.; Wall 1 shut with NO code change and NO edit to live-world.sh: exported AppSettings__AdminUserPhoneNumber + __PowerUserVer
+- 2026-08-06T14:43Z · agent:L-MONEY-FIELDS-SHOW-THEIR-ORE · L-MONEY-FIELDS-SHOW-THEIR-ORE returned built -> built-unverified, evidence lanes/L-MONEY-FIELDS-SHOW-THEIR-ORE/reachability-census.md, lanes/L-MONEY-FIELDS-SHOW-THEIR-ORE/red-01-shipped-page.txt, lanes/L-MONEY-FIELDS-SHOW-THEIR-ORE/green-02-full-suite.txt
+- 2026-08-06T14:43Z · agent:L-MONEY-FIELDS-SHOW-THEIR-ORE · report L-MONEY-FIELDS-SHOW-THEIR-ORE: Measured on lane/focustrap-teardown 8ac6f63 WORKING TREE, not the shipped tip; ~394 foreign uncommitted paths present. Four files touched. No commit, no push, no container, no migration.; REACHABILITY ANSWERED FIRST: no automated writer in this estate can create an ore-carrying minimum. All THREE ad
+- 2026-08-06T14:43Z · tool · raised F-NATIVE-ADMIN-CARRIES-THE-SAME-ORE-FLOOR (warn)
+- 2026-08-06T14:43Z · @clerk · note L-MONEY-FIELDS-SHOW-THEIR-ORE: my brief named one client; there are THREE, including the native admin, which carries the identical floor and stays unfixed.
+- 2026-08-06T14:43Z · @clerk · note L-MONEY-FIELDS-SHOW-THEIR-ORE: a consequence nobody had named -- under the floor an ore component could not be REMOVED, since typing 150 over a stored 150,50 read the same on both sides.
+- 2026-08-06T14:43Z · @clerk · note L-MONEY-FIELDS-SHOW-THEIR-ORE: a negative store rounded AWAY from zero, expected -150,50 and received -151, which the 16-of-18 red arms caught.
+- 2026-08-06T14:43Z · @clerk · note L-MONEY-FIELDS-SHOW-THEIR-ORE: it did NOT use the mixin's wholeAmount/fractionAmount, and measured why -- they slice the decimal string, so -50 ore reads back as +50.
+- 2026-08-06T14:43Z · @clerk · note L-MONEY-FIELDS-SHOW-THEIR-ORE: it composed with the sibling rather than beside it -- moved the fake backend to a shared harness verbatim and left all 22 of that lane's assertions untouched.
+- 2026-08-06T14:44Z · @clerk · note L-MONEY-FIELDS-SHOW-THEIR-ORE: it answered reachability first -- no automated writer can create an ore-carrying minimum, but the backend writer applies no rounding or validation at all.
+- 2026-08-06T14:47Z · tool · raised F-ADMIN-LOGOUT-LANDS-ON-A-BLANK-PAGE (blocker)
+- 2026-08-06T14:47Z · @clerk · note F-ADMIN-LOGOUT-LANDS-ON-A-BLANK-PAGE: found by the owner in the first minute of walking a live world, which is the whole argument for opening one.
+- 2026-08-06T14:47Z · @clerk · note F-ADMIN-LOGOUT-LANDS-ON-A-BLANK-PAGE: no suite could have caught it -- the destination is a different page in the other half of the product, and nobody asserts where sign-out puts you.
+- 2026-08-06T14:50Z · agent:L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN · L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN returned built -> built-unverified, evidence lanes/L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN/notes.md
+- 2026-08-06T14:50Z · agent:L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN · report L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN: Base: lane/focustrap-teardown @ 8ac6f63, this checkout's HEAD, NOT the shipped tip. ongoing.vue also held L-ONGOING-SHOWS-EVERY-LIVE-ORDER's uncommitted work.; Sibling 0f88242 does NOT delete this problem: it copies the incomplete starter list forward verbatim and binds ongoing to loadOrders alone. 
+- 2026-08-06T14:50Z · tool · raised F-IN-PAGE-SIGN-IN-IS-DEAD-END-TO-END (blocker)
+- 2026-08-06T14:50Z · @clerk · note L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN: it checked the sibling BEFORE building -- 0f88242 removes the modals but carries the incomplete starter list forward, so the two compose.
+- 2026-08-06T14:50Z · @clerk · note L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN: its browser arm changed the picture and it did not bury it -- with the fix applied the board still makes zero requests after a real sign-in.
+- 2026-08-06T14:50Z · @clerk · note L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN: red first, 6 of 7 -- a ticket nine minutes old renders 0:00, and the board draws no order placed after the sign-in.
+- 2026-08-06T15:10Z · agent:L-PENDING-MODEL-CHANGES-ON-THE-FAST-TIER · L-PENDING-MODEL-CHANGES-ON-THE-FAST-TIER returned built -> built-unverified, evidence docs/plan/lanes/L-PENDING-MODEL-CHANGES-ON-THE-FAST-TIER/NOTES.md
+- 2026-08-06T15:10Z · agent:L-PENDING-MODEL-CHANGES-ON-THE-FAST-TIER · report L-PENDING-MODEL-CHANGES-ON-THE-FAST-TIER: Base integration/mig-stack-merge 7f8945dc6; 8e2b57de is its ancestor, 38 behind (measured). Own worktree wt-pendmodel; OkamAPI-modules untouched.; Scoping claim re-measured and exact: 17 lineage suites, ALL 17 [Trait("Database","SqlServer")], 15 assert HasPendingModelChanges, none under Kassa/Triple
+- 2026-08-06T15:10Z · tool · raised F-PENDING-MODEL-CHECK-HAS-A-BLIND-SPOT (warn)
+- 2026-08-06T15:10Z · @clerk · note L-PENDING-MODEL-CHANGES-ON-THE-FAST-TIER: its OWN first draft was this estate's failure shape -- a catch turned a thrown diff into a string and the probe passed on it.
+- 2026-08-06T15:10Z · @clerk · note L-PENDING-MODEL-CHANGES-ON-THE-FAST-TIER: only the full-assembly run exposed it; the single-class run was green. A single-class run is not evidence for anything touching EF's model cache.
+- 2026-08-06T15:10Z · @clerk · note L-PENDING-MODEL-CHANGES-ON-THE-FAST-TIER: the cause is that EF finalizes the snapshot model IN PLACE inside HasPendingModelChanges, so the diff worked only on a warmed context.
+- 2026-08-06T15:10Z · @clerk · note L-PENDING-MODEL-CHANGES-ON-THE-FAST-TIER: it parked the live GrowthAuditEvents drift by exact operation text so the tier can gate, with a second test that reds the day MIG-29 lands.
+- 2026-08-06T15:10Z · @clerk · note L-PENDING-MODEL-CHANGES-ON-THE-FAST-TIER: 17 lineage suites, ALL 17 SqlServer-traited, 15 asserting the check, none under Kassa or Tripletex. My scoping claim was exact.
+- 2026-08-06T15:21Z · agent:opus · started L-ADMIN-LOGOUT-RETURNS-TO-SIGN-IN
+- 2026-08-06T15:21Z · agent:opus · started L-TRIPLETEX-CLAIM-OUTLIVES-ITS-CALL
+- 2026-08-06T15:23Z · agent:L-ADMIN-LOGOUT-RETURNS-TO-SIGN-IN · L-ADMIN-LOGOUT-RETURNS-TO-SIGN-IN returned built -> built-unverified, evidence /Users/svendaneel/okam/Web/.claude/worktrees/agent-a2127f65723afed15/lanes/L-ADMIN-LOGOUT-RETURNS-TO-SIGN-IN/evidence.md
+- 2026-08-06T15:23Z · agent:L-ADMIN-LOGOUT-RETURNS-TO-SIGN-IN · report L-ADMIN-LOGOUT-RETURNS-TO-SIGN-IN: DISCLOSURE FIRST: my `pkill -f nuxt-ts` between arms killed the owner's :3971 too. Restarted it from Web-modules with the same env inside ~4 min, recompiled clean, /admin=200. API/SQL/redis untouched.; LOGOUT ANSWERED: the reload carried NO teardown. ClearState empties currentUser/carts/orders and g
+- 2026-08-06T15:23Z · tool · raised F-AGENT-KILLED-THE-OWNERS-DEV-SERVER (blocker)
+- 2026-08-06T15:23Z · @clerk · note L-ADMIN-LOGOUT-RETURNS-TO-SIGN-IN: the reload carried NO teardown, measured -- ClearState empties the session, the mixin persists it on the same tick, and six pages clear timers in beforeDestroy.
+- 2026-08-06T15:23Z · @clerk · note L-ADMIN-LOGOUT-RETURNS-TO-SIGN-IN: it targets bare /admin deliberately, because ?redirect= is the form whose closeLoginModal never emits login-success.
+- 2026-08-06T15:23Z · @clerk · note L-ADMIN-LOGOUT-RETURNS-TO-SIGN-IN: it proved two console errors PRE-EXISTING by patching the router in the live page and by a control leg on the unfixed build.
+- 2026-08-06T15:27Z · @clerk · note L-ADMIN-LOGOUT-RETURNS-TO-SIGN-IN: it disclosed killing the owner's dev server BEFORE its result and restarted it in four minutes. That disclosure is the behaviour to keep.
+- 2026-08-06T15:27Z · @clerk · note L-ADMIN-LOGOUT-RETURNS-TO-SIGN-IN: it fixed the SHELL not the button -- AdminPage watches for a session that existed and ended, covering the 401 path and a second copy in the footer.
+- 2026-08-06T15:27Z · @clerk · note L-ADMIN-LOGOUT-RETURNS-TO-SIGN-IN: the BLANK PAGE did not reproduce -- the storefront renders fully on this world. The wrong-destination defect reproduced exactly; hydration is separate.
+- 2026-08-06T15:27Z · @clerk · note F-MEALS-ENROLMENT-HAS-NO-CALLER: the demo plan confirms the shape -- MealsQuoteService refuses a non-enrolled member with an OPAQUE 404, so the company tab is never offered and nothing says why.
+- 2026-08-06T15:27Z · @clerk · note F-MEALS-ENROLMENT-HAS-NO-CALLER: three UI additions make the module demonstrable -- an enrolment editor, month close, and a reconciliation tab. The rest of the backlog follows those.
+- 2026-08-06T15:29Z · agent:opus · started L-MEALS-ENROLMENT-HAS-A-BUTTON
+- 2026-08-06T15:29Z · agent:opus · started L-MARGIN-WASTE-SURFACE-IS-HONEST
+- 2026-08-06T15:29Z · agent:opus · started L-ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING
+- 2026-08-06T15:29Z · @clerk · note F-MODULE-MASTERS: and a bound-but-crippled one -- the exchange decisions route is called, but the UI only ever sends withdraw, so accept and decline are unreachable.
+- 2026-08-06T15:29Z · @clerk · note F-WF-CLOCK-CHAIN-UNREACHABLE: the demo plan confirms the whole punch to attendance to personalliste chain cannot be lit, because the operator-link route is deliberately unbound.
+- 2026-08-06T15:29Z · @clerk · note F-DISPATCH-DEAD-LETTER: a worker-tier dead letter cannot be produced locally -- with no push credential every outbox row records store-tier Withheld, so the board fills but never shows a failure.
+- 2026-08-06T15:47Z · tool · raised F-EF-NEVER-DECLARES-A-TRIGGER (blocker)
+- 2026-08-06T15:51Z · tool · raised F-DEV-EXCEPTION-PAGE-ECHOES-THE-BEARER (blocker)
+- 2026-08-06T15:51Z · tool · raised F-EVENTS-SPACE-CANNOT-BE-ATTACHED (warn)
+- 2026-08-06T15:51Z · tool · raised F-EVENTS-VIPPS-REFUSAL-IS-UNTYPED (warn)
+- 2026-08-06T15:52Z · agent:opus · started L-EF-DECLARES-EVERY-TRIGGER
+- 2026-08-06T15:52Z · tool · refreshed 39 fact spans, 12 unconfirmed
+- 2026-08-06T15:54Z · agent:L-MEALS-ENROLMENT-HAS-A-BUTTON · L-MEALS-ENROLMENT-HAS-A-BUTTON returned built -> built-unverified, evidence /Users/svendaneel/okam/Web/.claude/worktrees/agent-a0b63b4f563fc2786/artifacts/journeys/meals-admin-setup/fixture/03-a-programme-somebody-is-enrolled-in.png
+- 2026-08-06T15:54Z · agent:L-MEALS-ENROLMENT-HAS-A-BUTTON · report L-MEALS-ENROLMENT-HAS-A-BUTTON: Enrolment editor lands on the programme panel of /admin/meals-companies, where the demo plan put it; that page already carries a nav entry, so C3 closes inside this diff.; Browser proof: journey meals-admin-setup, extended, drives company -> corridor -> programme -> policy -> ENROL through the real 
+- 2026-08-06T15:54Z · @clerk · note L-MEALS-ENROLMENT-HAS-A-BUTTON: its blocker claim is WRONG -- it read appsettings.json, not the running env. The live API carries all four Features__Meals__* as true and answers 200.
+- 2026-08-06T15:54Z · @clerk · note L-MEALS-ENROLMENT-HAS-A-BUTTON: so the loop can be closed on the owner's own world, not only in a fixture. That is the one correction its report needs.
+- 2026-08-06T15:54Z · @clerk · note L-MEALS-ENROLMENT-HAS-A-BUTTON: the design problem it surfaced is real and the plan missed it -- the write takes the DESIRED set and NO route reads that set back.
+- 2026-08-06T15:54Z · @clerk · note L-MEALS-ENROLMENT-HAS-A-BUTTON: so a naive tick list would silently unenrol everyone the operator could not see. It admits two knowable states and says so otherwise.
+- 2026-08-06T15:54Z · @clerk · note L-MEALS-ENROLMENT-HAS-A-BUTTON: it returns removes null rather than empty when the set is unknown, because nobody-is-at-risk is the one claim the wire cannot support.
+- 2026-08-06T15:54Z · @clerk · note L-MEALS-ENROLMENT-HAS-A-BUTTON: correction to the demo plan -- ConsumerWeb already binds the company tab, /me/companies, /me/context and quotes, so the checkout is built, not missing.
+- 2026-08-06T15:55Z · tool · raised F-WF-OPEN-SHIFTS-IGNORE-SUPERSESSION (blocker)
+- 2026-08-06T15:55Z · tool · raised F-WF-WORKER-CANNOT-SEE-HER-OWN-REQUESTS (warn)
+- 2026-08-06T15:55Z · @clerk · note SEED-WORKFORCE: all 15 steps executed, zero failures, and it corrected the plan four ways rather than forcing the data to fit.
+- 2026-08-06T15:55Z · @clerk · note SEED-WORKFORCE: the claimed engagement was the MANAGER's, not a worker's -- so it issued and claimed an invitation for Astrid, piping the token through in one command, never written down.
+- 2026-08-06T15:55Z · @clerk · note SEED-WORKFORCE: a successor draft over a published range is created EMPTY, so the plan's step 13 would have published an empty week over the seeded one. It re-batched all 16 shifts instead.
+- 2026-08-06T15:55Z · @clerk · note SEED-WORKFORCE: the delivery board is BETTER than predicted -- 4 worker-tier e-mail rows genuinely fail with an SSL handshake and 2 have DeadLettered at attempt 5. Nothing was faked.
+- 2026-08-06T15:55Z · @clerk · note SEED-WORKFORCE: Jonas has neither login nor e-mail so he produces NO outbox row at all -- a recipient the delivery board is entirely silent about.
+- 2026-08-06T15:55Z · @clerk · note SEED-WORKFORCE: only 7 of 9 flags are on -- personnel-list and export are withheld -- yet GET /personnel-list answers 200 despite its flag being off.
+- 2026-08-06T15:58Z · tool · raised F-MARGIN-SETUP-DAY-RECONCILES-TO-ZERO (blocker)
+- 2026-08-06T15:58Z · tool · raised F-MARGIN-CSV-TIMESTAMP-IS-TWO-HOURS-EARLY (warn)
+- 2026-08-06T15:58Z · @clerk · note SEED-MARGIN: 18 of 19 steps landed as written, and every cost prediction in the plan was accurate to the ore, including Cappuccino 8,60 to 8,78 after the import.
+- 2026-08-06T15:58Z · @clerk · note SEED-MARGIN: it refused the tempting workaround -- backdating recipe versions would have meant creating near-duplicate recipes on the owner's page, so it left the defect visible.
+- 2026-08-06T15:58Z · @clerk · note SEED-MARGIN: it did use effectiveFrom to backdate the six links, and said plainly that the owner cannot reproduce that by clicking, because the UI never sends that field.
+- 2026-08-06T15:58Z · @clerk · note SEED-MARGIN: a sibling seeded a full cafe menu into the same store mid-run, so menu-margin now lists 22 dishes with name collisions. The ones carrying plate costs are Margin's.
+- 2026-08-06T15:58Z · @clerk · note SEED-MARGIN: the owner had already created Hvetemel, Lok and a recipe called test; it reused the ingredients and left the recipe alone rather than duplicating.
+- 2026-08-06T16:00Z · agent:L-ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING · L-ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING returned built -> built-unverified, evidence /Users/svendaneel/okam/Web/.claude/worktrees/agent-a65db45f6ddd4ab5b/lanes/L-ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING/evidence.md
+- 2026-08-06T16:00Z · agent:L-ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING · report L-ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING: Base 8ac6f63 in a private worktree, NOT the owner's tree and its ~394 uncommitted paths. Two files borrowed unchanged: his ongoing.vue and utils/admin/ongoing-columns.js, the repaired starter list.; RED FIRST, in a browser. /admin/ongoing?redirect=/admin/ongoing: 2 modals stacked, the URL sheds its 
+- 2026-08-06T16:00Z · @clerk · note L-ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING: it narrowed its own defect rather than inflating it -- the deep link was never broken, only a redirect query pointing at its own page.
+- 2026-08-06T16:00Z · @clerk · note L-ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING: it said plainly that landing alone changes nothing a person sees, because ongoing.vue binds no login-success today. Not dressed up.
+- 2026-08-06T16:00Z · @clerk · note L-ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING: one landing order is WORSE than doing nothing -- the modal removal without this change leaves an exposed frozen board with nothing explaining it.
+- 2026-08-06T16:00Z · @clerk · note L-ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING: all four lanes proven to coexist in a browser on shipped bytes -- one modal, it closes, two board calls seven seconds apart.
+- 2026-08-06T16:00Z · @clerk · note L-ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING: its comparison also strips the target's own query, since a legitimate target carries one; a mutant leaving it unstripped gives zero calls.
+- 2026-08-06T16:02Z · agent:L-MARGIN-WASTE-SURFACE-IS-HONEST · L-MARGIN-WASTE-SURFACE-IS-HONEST returned built -> built-unverified, evidence /Users/svendaneel/okam/Web/.claude/worktrees/agent-a14e83ac504f04840/lanes/L-MARGIN-WASTE-SURFACE-IS-HONEST/evidence.md
+- 2026-08-06T16:02Z · agent:L-MARGIN-WASTE-SURFACE-IS-HONEST · report L-MARGIN-WASTE-SURFACE-IS-HONEST: - ENDING: WITHDRAW via a runtime 404 check, not deletion - the blocker's own or-clause. It un-withdraws itself the day the controller ships, so nothing has to be taken back out.; - BUILD WAS NOT OPEN TO ME: L-MRG-WASTE already built MIG-23, proven at layer 2, unmerged. Merging lands 10 schema change
+- 2026-08-06T16:02Z · agent:L-TRIPLETEX-CLAIM-OUTLIVES-ITS-CALL · returned L-TRIPLETEX-CLAIM-OUTLIVES-ITS-CALL verdict=blocked -> open, needs F-PROBE-DIR-IS-A-FOREIGN-LANE-BRANCH
+- 2026-08-06T16:02Z · agent:L-TRIPLETEX-CLAIM-OUTLIVES-ITS-CALL · report L-TRIPLETEX-CLAIM-OUTLIVES-ITS-CALL: FE half LANDED at 94f06c7 off feature/restaurant-modules e34977ac: four AccountingExportResult shapes now read as four states - OK, Hoppet over, Kjores allerede (neutral, new), Feil.; FE red first: test/tripletex-run-outcome.test.js against the SHIPPED page = 5 pass / 2 fail, the 2 being exactly the
+- 2026-08-06T16:02Z · tool · raised F-OWNERS-CHECKOUT-HOLDS-UNOWNED-WORK (blocker)
+- 2026-08-06T16:02Z · tool · raised F-JOURNEY-FILTER-DISCARDS-A-404 (warn)
+- 2026-08-06T16:02Z · tool · raised F-WASTE-PANEL-REPORTED-A-FAILURE-IT-NEVER-ATTEMPTED (warn)
+- 2026-08-06T16:08Z · tool · raised F-COMPANY-REFUND-BOOKS-A-CASH-PAYOUT (blocker)
+- 2026-08-06T16:08Z · tool · raised F-COMPANYACCOUNT-BLOCKED-BY-THE-APPROVAL-GATE (warn)
+- 2026-08-06T16:08Z · @clerk · note SEED-MEALS: both live checks answered -- all four Features:Meals flags are on in the running process, each proven by its own observable rather than by reading config.
+- 2026-08-06T16:08Z · @clerk · note SEED-MEALS: three things the plan missed, all worked around and recorded -- no signable employee accounts, the lunch window was closed at seeding time, and store 1 was unapproved.
+- 2026-08-06T16:08Z · @clerk · note SEED-MEALS: the ledger holds 9 captures and 1 reversal, net kr 1320, with the over-allowance 409 firing at exactly kr 2400 against kr 1986 remaining.
+- 2026-08-06T16:11Z · tool · raised F-ISPOWERUSER-IS-A-COLUMN-NOTHING-WRITES (blocker)
+- 2026-08-06T16:11Z · tool · raised F-GROWTHAUDIT-TABLE-MISSING-FROM-THE-GROWTH-MIGRATION (blocker)
+- 2026-08-06T16:11Z · tool · raised F-CONSUMER-MENU-EMPTY-WITHOUT-CATEGORY-IMAGES (blocker)
+- 2026-08-06T16:11Z · tool · raised F-REWARDS-STATS-DIVIDES-BY-ZERO (warn)
+- 2026-08-06T16:12Z · @clerk · note SEED-MEALS: it corrected the plan's capture count with arithmetic rather than accepting it -- the day table produces 9 captures, not 8, and the ninth is what makes the refusal land exactly.
+- 2026-08-06T16:12Z · @clerk · note SEED-MEALS: all three refusal beats fired verbatim through the real session-to-claim flow -- not-found, invitation-not-claimable naming the current state, and contact-mismatch.
+- 2026-08-06T16:12Z · @clerk · note SEED-MEALS: the meals-statements page is still EMPTY and fills only after the reconciliation sweep produces the expired-bound exception, which is the point of that row.
+- 2026-08-06T16:17Z · agent:opus · started L-SECRETS-READ-FROM-CONFIG
+- 2026-08-06T16:17Z · agent:opus · started L-CI-RUNS-THE-FAST-TIER
+- 2026-08-06T16:23Z · agent:opus · started L-COMPANY-REFUND-IS-NOT-A-CASH-PAYOUT
+- 2026-08-06T16:23Z · agent:opus · started L-A-PUBLISHED-CATEGORY-REACHES-THE-SHOP
+- 2026-08-06T16:23Z · agent:opus · started L-OPEN-SHIFTS-EXCLUDE-SUPERSEDED

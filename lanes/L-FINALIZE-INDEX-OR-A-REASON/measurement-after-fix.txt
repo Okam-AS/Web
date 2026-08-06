@@ -1,0 +1,141 @@
+Test run for /Users/svendaneel/okam/wt-finalizeidx/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+Microsoft (R) Test Execution Command Line Tool Version 17.8.0 (arm64)
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+/Users/svendaneel/okam/wt-finalizeidx/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 8.0.28)
+[xUnit.net 00:00:00.97]   Discovering: WebApi.Tests
+[xUnit.net 00:00:01.21]   Discovered:  WebApi.Tests
+[xUnit.net 00:00:01.21]   Starting:    WebApi.Tests
+[testcontainers.org 00:00:00.07] Connected to Docker:
+  Host: unix:///var/run/docker.sock
+  Server Version: 28.4.0
+  Kernel Version: 6.10.14-linuxkit
+  API Version: 1.51
+  Operating System: Docker Desktop
+  Total Memory: 7.65 GB
+  Labels: 
+    com.docker.desktop.address=unix:///Users/svendaneel/Library/Containers/com.docker.docker/Data/docker-cli.sock
+[testcontainers.org 00:00:00.17] Docker container f4101f3d2a54 created
+[testcontainers.org 00:00:00.19] Start Docker container f4101f3d2a54
+[testcontainers.org 00:00:00.26] Wait for Docker container f4101f3d2a54 to complete readiness checks
+[testcontainers.org 00:00:01.28] Docker container f4101f3d2a54 ready
+[testcontainers.org 00:00:01.32] Docker container 50202b206785 created
+[testcontainers.org 00:00:01.33] Start Docker container 50202b206785
+[testcontainers.org 00:00:01.40] Wait for Docker container 50202b206785 to complete readiness checks
+[testcontainers.org 00:00:01.40] Execute "/bin/sh -c find /opt/mssql-tools*/bin/sqlcmd -type f -print -quit" at Docker container 50202b206785
+[testcontainers.org 00:00:01.47] Execute "/opt/mssql-tools18/bin/sqlcmd -C -Q SELECT 1;" at Docker container 50202b206785
+[testcontainers.org 00:00:07.20] Docker container 50202b206785 ready
+  Passed WebApi.Tests.Kassa.JournalOrderIndexMeasurementTests.Order_scoped_journal_reads_seek_rather_than_scan_the_append_only_journal [449 ms]
+  Standard Output Messages:
+ ===== OKAM_PROBE_FINALIZE_IDEMPOTENCY (CashPointId + OrderId + ReceiptType=Sale) =====
+ DECLARE @__cashPointId_0 int = 7;
+ DECLARE @__orderId_1 int = 4711;
+ 
+ -- OKAM_PROBE_FINALIZE_IDEMPOTENCY
+ 
+ SELECT [j].[JournalEntryId], [j].[CanonicalData], [j].[CashPointId], [j].[EventType], [j].[GrossAmount], [j].[IsTraining], [j].[IsVoid], [j].[KeyVersion], [j].[NetAmount], [j].[OperatorId], [j].[OperatorName], [j].[OrderId], [j].[PreviousSignature], [j].[ReceiptNumber], [j].[ReceiptType], [j].[ReferencedJournalEntryId], [j].[ReferencedReceiptNumber], [j].[ReturnCustomerPhone], [j].[ReturnCustomerSignature], [j].[ReturnIdempotencyKey], [j].[ReturnReason], [j].[ReturnReasonType], [j].[RoundingAmount], [j].[SequenceNumber], [j].[Signature], [j].[StoreId], [j].[Timestamp], [j].[TipAmount], [j].[VatAmount], [j0].[JournalLineId], [j0].[ArticleId], [j0].[DepositAmount], [j0].[DiscountAmount], [j0].[DiscountReason], [j0].[GoodsGroupCode], [j0].[GoodsGroupName], [j0].[IsOpenPrice], [j0].[JournalEntryId], [j0].[LineAmount], [j0].[LineNumber], [j0].[OperatorId], [j0].[OptionsFlattened], [j0].[ProductId], [j0].[ProductName], [j0].[Quantity], [j0].[UnitAmount], [j0].[VatAmount], [j0].[VatCode], [j0].[VatPercent], [j1].[JournalTaxLineId], [j1].[Amount], [j1].[Basis], [j1].[JournalEntryId], [j1].[VatCode], [j1].[VatPercent], [j2].[JournalPaymentLineId], [j2].[Amount], [j2].[CashDrawerTransactionId], [j2].[JournalEntryId], [j2].[PaymentTransactionId], [j2].[PaymentType]
+ FROM [JournalEntries] AS [j]
+ LEFT JOIN [JournalLines] AS [j0] ON [j].[JournalEntryId] = [j0].[JournalEntryId]
+ LEFT JOIN [JournalTaxLines] AS [j1] ON [j].[JournalEntryId] = [j1].[JournalEntryId]
+ LEFT JOIN [JournalPaymentLines] AS [j2] ON [j].[JournalEntryId] = [j2].[JournalEntryId]
+ WHERE [j].[CashPointId] = @__cashPointId_0 AND [j].[OrderId] = @__orderId_1 AND [j].[ReceiptType] = N'Sale'
+ ORDER BY [j].[JournalEntryId], [j0].[JournalLineId], [j1].[JournalTaxLineId]
+ PLAN OKAM_PROBE_FINALIZE_IDEMPOTENCY: Nested Loops on [UX_JournalEntries_OneSalePerOrder] (estimated rows 1)
+ PLAN OKAM_PROBE_FINALIZE_IDEMPOTENCY: Nested Loops on [UX_JournalEntries_OneSalePerOrder] (estimated rows 1)
+ PLAN OKAM_PROBE_FINALIZE_IDEMPOTENCY: Nested Loops on [UX_JournalEntries_OneSalePerOrder] (estimated rows 1)
+ PLAN OKAM_PROBE_FINALIZE_IDEMPOTENCY: Top on [UX_JournalEntries_OneSalePerOrder] (estimated rows 1)
+ PLAN OKAM_PROBE_FINALIZE_IDEMPOTENCY: Nested Loops on [UX_JournalEntries_OneSalePerOrder] (estimated rows 1)
+ PLAN OKAM_PROBE_FINALIZE_IDEMPOTENCY: Index Seek on [UX_JournalEntries_OneSalePerOrder] (estimated rows 1.27243)
+ PLAN OKAM_PROBE_FINALIZE_IDEMPOTENCY: Clustered Index Seek on [PK_JournalEntries] (estimated rows 1)
+ 
+ ===== OKAM_PROBE_FINALIZE_HANDOVER (CashPointId + OrderId + EventType=UTLEVREC) =====
+ DECLARE @__cashPointId_0 int = 7;
+ DECLARE @__orderId_1 int = 4711;
+ 
+ -- OKAM_PROBE_FINALIZE_HANDOVER
+ 
+ SELECT [j].[JournalEntryId], [j].[CanonicalData], [j].[CashPointId], [j].[EventType], [j].[GrossAmount], [j].[IsTraining], [j].[IsVoid], [j].[KeyVersion], [j].[NetAmount], [j].[OperatorId], [j].[OperatorName], [j].[OrderId], [j].[PreviousSignature], [j].[ReceiptNumber], [j].[ReceiptType], [j].[ReferencedJournalEntryId], [j].[ReferencedReceiptNumber], [j].[ReturnCustomerPhone], [j].[ReturnCustomerSignature], [j].[ReturnIdempotencyKey], [j].[ReturnReason], [j].[ReturnReasonType], [j].[RoundingAmount], [j].[SequenceNumber], [j].[Signature], [j].[StoreId], [j].[Timestamp], [j].[TipAmount], [j].[VatAmount]
+ FROM [JournalEntries] AS [j]
+ WHERE [j].[CashPointId] = @__cashPointId_0 AND [j].[OrderId] = @__orderId_1 AND [j].[EventType] = N'UTLEVREC'
+ PLAN OKAM_PROBE_FINALIZE_HANDOVER: Top on [IX_JournalEntries_CashPointId_OrderId] (estimated rows 1)
+ PLAN OKAM_PROBE_FINALIZE_HANDOVER: Filter on [IX_JournalEntries_CashPointId_OrderId] (estimated rows 1)
+ PLAN OKAM_PROBE_FINALIZE_HANDOVER: Nested Loops on [IX_JournalEntries_CashPointId_OrderId] (estimated rows 1.27243)
+ PLAN OKAM_PROBE_FINALIZE_HANDOVER: Index Seek on [IX_JournalEntries_CashPointId_OrderId] (estimated rows 1.27243)
+ PLAN OKAM_PROBE_FINALIZE_HANDOVER: Clustered Index Seek on [PK_JournalEntries] (estimated rows 1)
+ 
+ ===== OKAM_PROBE_RECEIPT_DELIVERY_FOR_SALE (CashPointId + OrderId + EventType=UTLEVREC) =====
+ DECLARE @__cashPointId_0 int = 7;
+ DECLARE @__orderId_1 int = 4711;
+ 
+ -- OKAM_PROBE_RECEIPT_DELIVERY_FOR_SALE
+ 
+ SELECT [j].[JournalEntryId], [j].[CanonicalData], [j].[CashPointId], [j].[EventType], [j].[GrossAmount], [j].[IsTraining], [j].[IsVoid], [j].[KeyVersion], [j].[NetAmount], [j].[OperatorId], [j].[OperatorName], [j].[OrderId], [j].[PreviousSignature], [j].[ReceiptNumber], [j].[ReceiptType], [j].[ReferencedJournalEntryId], [j].[ReferencedReceiptNumber], [j].[ReturnCustomerPhone], [j].[ReturnCustomerSignature], [j].[ReturnIdempotencyKey], [j].[ReturnReason], [j].[ReturnReasonType], [j].[RoundingAmount], [j].[SequenceNumber], [j].[Signature], [j].[StoreId], [j].[Timestamp], [j].[TipAmount], [j].[VatAmount]
+ FROM [JournalEntries] AS [j]
+ WHERE [j].[CashPointId] = @__cashPointId_0 AND [j].[OrderId] = @__orderId_1 AND [j].[EventType] = N'UTLEVREC'
+ PLAN OKAM_PROBE_RECEIPT_DELIVERY_FOR_SALE: Top on [IX_JournalEntries_CashPointId_OrderId] (estimated rows 1)
+ PLAN OKAM_PROBE_RECEIPT_DELIVERY_FOR_SALE: Filter on [IX_JournalEntries_CashPointId_OrderId] (estimated rows 1)
+ PLAN OKAM_PROBE_RECEIPT_DELIVERY_FOR_SALE: Nested Loops on [IX_JournalEntries_CashPointId_OrderId] (estimated rows 1.27243)
+ PLAN OKAM_PROBE_RECEIPT_DELIVERY_FOR_SALE: Index Seek on [IX_JournalEntries_CashPointId_OrderId] (estimated rows 1.27243)
+ PLAN OKAM_PROBE_RECEIPT_DELIVERY_FOR_SALE: Clustered Index Seek on [PK_JournalEntries] (estimated rows 1)
+ 
+ ===== OKAM_PROBE_RECEIPT_SALE_FOR_DELIVERY (CashPointId + OrderId + ReceiptType=Sale) =====
+ DECLARE @__cashPointId_0 int = 7;
+ DECLARE @__orderId_1 int = 4711;
+ 
+ -- OKAM_PROBE_RECEIPT_SALE_FOR_DELIVERY
+ 
+ SELECT [j].[JournalEntryId], [j].[CanonicalData], [j].[CashPointId], [j].[EventType], [j].[GrossAmount], [j].[IsTraining], [j].[IsVoid], [j].[KeyVersion], [j].[NetAmount], [j].[OperatorId], [j].[OperatorName], [j].[OrderId], [j].[PreviousSignature], [j].[ReceiptNumber], [j].[ReceiptType], [j].[ReferencedJournalEntryId], [j].[ReferencedReceiptNumber], [j].[ReturnCustomerPhone], [j].[ReturnCustomerSignature], [j].[ReturnIdempotencyKey], [j].[ReturnReason], [j].[ReturnReasonType], [j].[RoundingAmount], [j].[SequenceNumber], [j].[Signature], [j].[StoreId], [j].[Timestamp], [j].[TipAmount], [j].[VatAmount], [j0].[JournalLineId], [j0].[ArticleId], [j0].[DepositAmount], [j0].[DiscountAmount], [j0].[DiscountReason], [j0].[GoodsGroupCode], [j0].[GoodsGroupName], [j0].[IsOpenPrice], [j0].[JournalEntryId], [j0].[LineAmount], [j0].[LineNumber], [j0].[OperatorId], [j0].[OptionsFlattened], [j0].[ProductId], [j0].[ProductName], [j0].[Quantity], [j0].[UnitAmount], [j0].[VatAmount], [j0].[VatCode], [j0].[VatPercent], [j1].[JournalTaxLineId], [j1].[Amount], [j1].[Basis], [j1].[JournalEntryId], [j1].[VatCode], [j1].[VatPercent], [j2].[JournalPaymentLineId], [j2].[Amount], [j2].[CashDrawerTransactionId], [j2].[JournalEntryId], [j2].[PaymentTransactionId], [j2].[PaymentType]
+ FROM [JournalEntries] AS [j]
+ LEFT JOIN [JournalLines] AS [j0] ON [j].[JournalEntryId] = [j0].[JournalEntryId]
+ LEFT JOIN [JournalTaxLines] AS [j1] ON [j].[JournalEntryId] = [j1].[JournalEntryId]
+ LEFT JOIN [JournalPaymentLines] AS [j2] ON [j].[JournalEntryId] = [j2].[JournalEntryId]
+ WHERE [j].[CashPointId] = @__cashPointId_0 AND [j].[OrderId] = @__orderId_1 AND [j].[ReceiptType] = N'Sale'
+ ORDER BY [j].[JournalEntryId], [j0].[JournalLineId], [j1].[JournalTaxLineId]
+ PLAN OKAM_PROBE_RECEIPT_SALE_FOR_DELIVERY: Nested Loops on [UX_JournalEntries_OneSalePerOrder] (estimated rows 1)
+ PLAN OKAM_PROBE_RECEIPT_SALE_FOR_DELIVERY: Nested Loops on [UX_JournalEntries_OneSalePerOrder] (estimated rows 1)
+ PLAN OKAM_PROBE_RECEIPT_SALE_FOR_DELIVERY: Nested Loops on [UX_JournalEntries_OneSalePerOrder] (estimated rows 1)
+ PLAN OKAM_PROBE_RECEIPT_SALE_FOR_DELIVERY: Top on [UX_JournalEntries_OneSalePerOrder] (estimated rows 1)
+ PLAN OKAM_PROBE_RECEIPT_SALE_FOR_DELIVERY: Nested Loops on [UX_JournalEntries_OneSalePerOrder] (estimated rows 1)
+ PLAN OKAM_PROBE_RECEIPT_SALE_FOR_DELIVERY: Index Seek on [UX_JournalEntries_OneSalePerOrder] (estimated rows 1.27243)
+ PLAN OKAM_PROBE_RECEIPT_SALE_FOR_DELIVERY: Clustered Index Seek on [PK_JournalEntries] (estimated rows 1)
+ 
+
+
+  Passed WebApi.Tests.Kassa.JournalOrderIndexMeasurementTests.Chain_built_catalog_carries_the_lookup_and_the_backstop_as_two_indexes [66 ms]
+  Standard Output Messages:
+ CATALOG IX_JournalEntries_CashPointId_OrderId | unique=False | keys=(CashPointId,OrderId) | filter=([OrderId] IS NOT NULL)
+ CATALOG IX_JournalEntries_CashPointId_ReceiptType_ReceiptNumber | unique=True | keys=(CashPointId,ReceiptType,ReceiptNumber) | filter=([ReceiptNumber] IS NOT NULL)
+ CATALOG IX_JournalEntries_CashPointId_SequenceNumber | unique=True | keys=(CashPointId,SequenceNumber) | filter=<none>
+ CATALOG IX_JournalEntries_ReferencedJournalEntryId | unique=True | keys=(ReferencedJournalEntryId) | filter=([ReferencedJournalEntryId] IS NOT NULL AND [EventType]='COPYREC')
+ CATALOG IX_JournalEntries_ReturnIdempotencyKey | unique=True | keys=(ReturnIdempotencyKey) | filter=([ReturnIdempotencyKey] IS NOT NULL)
+ CATALOG IX_JournalEntries_StoreId_Timestamp | unique=False | keys=(StoreId,Timestamp) | filter=<none>
+ CATALOG PK_JournalEntries | unique=True | keys=(JournalEntryId) | filter=<none>
+ CATALOG UX_JournalEntries_OneSalePerOrder | unique=True | keys=(CashPointId,OrderId) | filter=([OrderId] IS NOT NULL AND [ReceiptType]='Sale')
+
+
+  Passed WebApi.Tests.Kassa.JournalOrderIndexMeasurementTests.The_migration_reverses_and_reapplies_with_rows_in_the_journal [5 s]
+  Standard Output Messages:
+ DOWN: IX_JournalEntries_CashPointId_OrderId unique=True
+ UP: IX_JournalEntries_CashPointId_OrderId unique=False | UX_JournalEntries_OneSalePerOrder unique=True
+
+
+[testcontainers.org 00:00:24.27] Delete Docker container 50202b206785
+[xUnit.net 00:00:25.74]   Finished:    WebApi.Tests
+  Passed WebApi.Tests.Kassa.JournalOrderIndexMeasurementTests.SqlServer_rules_on_which_predicates_each_index_can_serve [19 ms]
+  Standard Output Messages:
+ HINT IX_JournalEntries_CashPointId_OrderId <- finalize idempotency (ReceiptType = 'Sale'): plan produced — the predicate implies the index filter
+ HINT IX_JournalEntries_CashPointId_OrderId <- § 2-8-7 handover (EventType = 'UTLEVREC'): plan produced — the predicate implies the index filter
+ HINT IX_JournalEntries_CashPointId_OrderId <- any order-linked entry (no receipt-type predicate): plan produced — the predicate implies the index filter
+ HINT UX_JournalEntries_OneSalePerOrder <- finalize idempotency (ReceiptType = 'Sale'): plan produced — the predicate implies the index filter
+ HINT UX_JournalEntries_OneSalePerOrder <- § 2-8-7 handover (EventType = 'UTLEVREC'): Msg 8622: Query processor could not produce a query plan because of the hints defined in this query. Resubmit the query without specifying any hints and without using SET FORCEPLAN.
+ HINT UX_JournalEntries_OneSalePerOrder <- any order-linked entry (no receipt-type predicate): Msg 8622: Query processor could not produce a query plan because of the hints defined in this query. Resubmit the query without specifying any hints and without using SET FORCEPLAN.
+
+
+
+Test Run Successful.
+Total tests: 4
+     Passed: 4
+ Total time: 26.0076 Seconds

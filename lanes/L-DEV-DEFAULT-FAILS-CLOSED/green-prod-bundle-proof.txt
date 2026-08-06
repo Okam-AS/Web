@@ -1,0 +1,21 @@
+# Which API origin the PRODUCTION client bundles carry, with API_BASE_URL UNSET.
+# Both arms: node node_modules/.bin/nuxt-ts build --config-file lanes/<lane>/prod-build.nuxt.config.js
+# (that config is the repo's real nuxt.config.js with ONLY buildDir/generate.dir moved into the lane)
+# captured: 2026-08-06T14:32:43Z
+
+## OKAM_EDITION=no   (no = okam.no, .github/workflows/nuxtjs.yml)
+   client asset files:                      221
+   files carrying okamapi.azurewebsites.net: 11
+   total occurrences:                        14
+   files carrying localhost:5080:            0
+   sample inlined occurrence, ad18edd.js:
+     tactPreference),source:"/egen-app"},t.next=6,fetch("https://okamapi.azurewebsites.net/stores/feedback",{m
+
+## OKAM_EDITION=ch   (ch = www.okam-swiss.ch, vercel.json)
+   client asset files:                      221
+   files carrying okamapi.azurewebsites.net: 11
+   total occurrences:                        14
+   files carrying localhost:5080:            0
+   sample inlined occurrence, ba1a7a5.js:
+     ference," | Statsiden"),source:"/"},t.next=6,fetch("https://okamapi.azurewebsites.net/stores/feedback",{m
+

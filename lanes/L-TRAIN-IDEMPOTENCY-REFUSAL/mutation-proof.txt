@@ -1,0 +1,25 @@
+M01 MUTANT [the stage-refusal recording] -> RED; failed=15 ['A_recorded_refusal_still_replays_after_the_world_changed_into_one_that_would_succeed', 'A_refused_assignment_create_replays_its_not_found', 'A_refused_assignment_of_a_draft_version_replays_its_validation_refusal', 'A_refused_assignment_revoke_replays_its_not_found', 'A_refused_certificate_update_on_a_stale_revision_replays_its_stale_version_refusal', 'A_refused_certificate_update_replays_its_not_found', 'A_refused_certificate_update_with_an_impossible_expiry_replays_its_validation_refusal', 'A_refused_completion_against_a_draft_version_replays_its_validation_refusal', 'A_refused_completion_record_replays_its_not_found', 'A_refused_course_version_create_replays_its_not_found', 'A_refused_edit_of_a_published_version_replays_its_immutability_refusal', 'A_refused_publish_of_an_already_published_version_replays_its_immutability_refusal', 'A_refused_retire_of_a_draft_version_replays_its_immutability_refusal', 'A_refused_revoke_of_an_attempted_assignment_replays_its_validation_refusal', 'A_refused_version_lookup_replays_its_not_found']
+      verbatim: [('training.course-version-immutable', 'training.idempotency-in-progress'), ('training.not-found', 'training.idempotency-in-progress'), ('training.stale-version', 'training.idempotency-in-progress')]
+M01 RESTORED -> GREEN
+M02 MUTANT [the commit-time (onConcurrency) recording] -> RED; failed=2 ['A_certificate_update_refused_by_the_commit_time_backstop_replays_that_refusal', 'A_revoke_refused_by_the_commit_time_backstop_replays_that_refusal']
+      verbatim: [('training.stale-version', 'training.idempotency-in-progress')]
+M02 RESTORED -> GREEN
+M03 MUTANT [the Refused branch in Resolve (the replay read)] -> RED; failed=19 ['A_certificate_update_refused_by_the_commit_time_backstop_replays_that_refusal', 'A_recorded_refusal_still_replays_after_the_world_changed_into_one_that_would_succeed', 'A_refused_assignment_create_replays_its_not_found', 'A_refused_assignment_of_a_draft_version_replays_its_validation_refusal', 'A_refused_assignment_revoke_replays_its_not_found', 'A_refused_certificate_update_on_a_stale_revision_replays_its_stale_version_refusal', 'A_refused_certificate_update_replays_its_not_found', 'A_refused_certificate_update_with_an_impossible_expiry_replays_its_validation_refusal', 'A_refused_completion_against_a_draft_version_replays_its_validation_refusal', 'A_refused_completion_record_replays_its_not_found', 'A_refused_course_version_create_replays_its_not_found', 'A_refused_edit_of_a_published_version_replays_its_immutability_refusal', 'A_refused_publish_of_an_already_published_version_replays_its_immutability_refusal', 'A_refused_retire_of_a_draft_version_replays_its_immutability_refusal', 'A_refused_revoke_of_an_attempted_assignment_replays_its_validation_refusal', 'A_refused_version_lookup_replays_its_not_found', 'A_replayed_refusal_renders_the_same_problem_document_as_the_original', 'A_revoke_refused_by_the_commit_time_backstop_replays_that_refusal', 'An_in_flight_duplicate_is_still_in_progress_and_only_a_recorded_refusal_moves_that_answer']
+      verbatim: [('training.course-version-immutable', 'training.idempotency-in-progress'), ('training.not-found', 'training.idempotency-in-progress'), ('training.stale-version', 'training.idempotency-in-progress')]
+M03 RESTORED -> GREEN
+M04 MUTANT [the Refused disposition arm in RunAsync (the rethrow)] -> RED; failed=1 ['A_recorded_refusal_still_replays_after_the_world_changed_into_one_that_would_succeed']
+M04 RESTORED -> GREEN
+M05 MUTANT [the change-tracker clear before the refusal's own save] -> RED; failed=3 ['A_certificate_update_refused_by_the_commit_time_backstop_replays_that_refusal', 'A_revoke_refused_by_the_commit_time_backstop_replays_that_refusal', 'Recording_a_refusal_never_commits_what_the_refused_command_had_already_staged']
+M05 RESTORED -> GREEN
+M06 MUTANT [the already-recorded-outcome guard] -> RED; failed=1 ['A_refusal_never_overwrites_an_already_recorded_success']
+M06 RESTORED -> GREEN
+
+=== SUMMARY ===
+M01 RED    reds=15 restored=GREEN  | the stage-refusal recording
+M02 RED    reds= 2 restored=GREEN  | the commit-time (onConcurrency) recording
+M03 RED    reds=19 restored=GREEN  | the Refused branch in Resolve (the replay read)
+M04 RED    reds= 1 restored=GREEN  | the Refused disposition arm in RunAsync (the rethrow)
+M05 RED    reds= 3 restored=GREEN  | the change-tracker clear before the refusal's own save
+M06 RED    reds= 1 restored=GREEN  | the already-recorded-outcome guard
+
+survivors: 0

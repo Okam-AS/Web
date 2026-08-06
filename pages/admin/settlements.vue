@@ -180,6 +180,7 @@
 <script>
 import AdminPage from "~/components/organisms/AdminPage.vue";
 import Loading from "~/components/atoms/Loading.vue";
+import { nokAmountLabel } from "~/utils/price";
 
 export default {
   name: "PendingSettlements",
@@ -377,15 +378,15 @@ export default {
       });
     },
 
+    // The early return used to be `if (!amountInOre) return "0,00 kr"`, and `!0` is `true` — so a
+    // settlement that genuinely came to nothing and one whose figure never arrived took the SAME
+    // branch and printed the SAME string. There was no branch left that could tell them apart.
+    //
+    // These three figures come off `GetPendingSettlements`, which is typed `Promise<any>` and has no
+    // model class, so an omitted field arrives as `undefined` and a JSON null as `null`. Both are
+    // absence; zero is not, and now keeps the branch that formats it.
     formatAmount(amountInOre) {
-      if (!amountInOre) {
-        return "0,00 kr";
-      }
-      const amount = amountInOre / 100;
-      return new Intl.NumberFormat("nb-NO", {
-        style: "currency",
-        currency: "NOK",
-      }).format(amount);
+      return nokAmountLabel(amountInOre);
     },
 
     showNotification(message, type) {

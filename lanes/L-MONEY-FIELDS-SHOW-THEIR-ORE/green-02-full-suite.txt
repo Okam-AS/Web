@@ -1,0 +1,60 @@
+PASS test/workforce-roster-client.test.js
+PASS test/workforce-schedule-client.test.js
+PASS test/events-client.test.js
+PASS test/growth-send-gate.test.js
+PASS test/meals-components.test.js
+PASS test/workforce-month-grid.test.js
+PASS test/delivery-save-failure.test.js
+PASS test/growth-privacy-queue.test.js
+PASS test/workforce-me-inbox-filter.test.js
+PASS test/price-absence.test.js
+PASS test/margin-price-timeline.test.js
+PASS test/workforce-week-grid.test.js
+PASS test/workforce-rates-timeline.test.js
+PASS test/workforce-me-claim-outcome.test.js
+PASS test/margin-statement-view.test.js
+PASS test/workforce-rates-amount.test.js
+PASS test/workforce-rates-attendance.test.js
+PASS test/core-price-label.test.js
+PASS test/training-client.test.js
+PASS test/training-journey.test.js
+PASS test/growth-client.test.js
+PASS test/workforce-me-invitation-claim.test.js
+PASS test/margin-statement-client.test.js
+PASS test/margin-money-input.test.js
+PASS test/margin-price-import-model.test.js
+PASS test/store-market-dashboard.test.js
+PASS test/workforce-requests-client.test.js
+PASS test/meals-store-view.test.js
+PASS test/workforce-timesheet.test.js
+PASS test/margin-price-import-client.test.js
+PASS test/meals-statement-view.test.js
+PASS test/workforce-api-client.test.js
+PASS test/meals-admin-view.test.js
+PASS test/workforce-week-range.test.js
+PASS test/margin-menu-margin.test.js
+PASS test/workforce-timesheet-client.test.js
+PASS test/store-market-client.test.js
+PASS test/workforce-me-shift-view.test.js
+PASS test/chf-format.test.js
+PASS test/workforce-requests-inbox.test.js
+PASS test/workforce-me-memberships.test.js
+PASS test/meals-admin-client.test.js
+PASS test/workforce-delivery-failures.test.js
+PASS test/margin-supplier-client.test.js
+PASS test/meals-client.test.js
+PASS test/platform-flag-board.test.js
+PASS test/workforce-me-client.test.js
+PASS test/workforce-personnel-list.test.js
+PASS test/growth-guest.test.js
+PASS test/margin-spend-amount.test.js
+PASS test/workforce-role-grid.test.js
+PASS test/workforce-rates-hours-export.test.js
+PASS test/workforce-me-self-requests.test.js
+PASS test/journey-artifact-store.test.js (5.912 s)
+
+Test Suites: 136 passed, 136 total
+Tests:       3106 passed, 3106 total
+Snapshots:   0 total
+Time:        6.716 s, estimated 9 s
+Ran all test suites.

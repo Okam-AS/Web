@@ -1,0 +1,594 @@
+diff --git a/Helpers/BrowserReadableHeaders.cs b/Helpers/BrowserReadableHeaders.cs
+index 8c282ed4..c46ab537 100644
+--- a/Helpers/BrowserReadableHeaders.cs
++++ b/Helpers/BrowserReadableHeaders.cs
+@@ -14,11 +14,12 @@ namespace WebApi.Helpers
+     /// stamping site and re-spelled in the policy is exactly how that happens, so custom names are declared
+     /// here and read from here at both ends.</para>
+     ///
+-    /// <para>Exposure is not an access grant. The default policy is
+-    /// <c>AllowAnyOrigin</c>/<c>AllowAnyMethod</c>/<c>AllowAnyHeader</c>, so a caller that can read a header
+-    /// listed here could already read the response BODY that header describes; adding a name here discloses
+-    /// strictly less than what is already disclosed. What it changes is whether a legitimate first-party
+-    /// client can use it.</para>
++    /// <para>Exposure is not an access grant. Any browser that reaches a header listed here has already
++    /// passed the default policy's origin check and read the response BODY that header describes, so adding
++    /// a name here discloses strictly less than what is already disclosed to that same caller. What it
++    /// changes is whether a legitimate first-party client can use it. (The default policy used to be
++    /// <c>AllowAnyOrigin</c>, which made "that same caller" mean every page on the internet; it now names
++    /// its origins, so this list is read only by the enumerated clients.)</para>
+     /// </summary>
+     public static class BrowserReadableHeaders
+     {
+diff --git a/Helpers/Constants.cs b/Helpers/Constants.cs
+index f3002f39..68749023 100644
+--- a/Helpers/Constants.cs
++++ b/Helpers/Constants.cs
+@@ -24,6 +24,8 @@ namespace WebApi.Helpers
+         public const string DineHomeSettings = "DineHomeSettings";
+         public const string WoltSettings = "WoltSettings";
+         public const string McpSettings = "Mcp";
++        public const string McpAllowedOrigins = "Mcp:AllowedOrigins";
++        public const string CorsAllowedOrigins = "Cors:AllowedOrigins";
+         public const string KassaSettings = "KassaSettings";
+         public const string MaintenanceSettings = "MaintenanceSettings";
+         public const string DiscordSettings = "DiscordSettings";
+diff --git a/Helpers/OkamCorsOrigins.cs b/Helpers/OkamCorsOrigins.cs
+new file mode 100644
+index 00000000..550e025d
+--- /dev/null
++++ b/Helpers/OkamCorsOrigins.cs
+@@ -0,0 +1,106 @@
++using System;
++using System.Collections.Generic;
++using System.Linq;
++using Microsoft.Extensions.Configuration;
++using Microsoft.Extensions.Hosting;
++
++namespace WebApi.Helpers
++{
++    /// <summary>
++    /// Resolves the origin list for the global (default) CORS policy.
++    ///
++    /// <para>Which origins are permitted can only be answered on the RESOLVED policy, never by reading a
++    /// settings file. The configuration array is overridden BY INDEX, so an environment file or an
++    /// <c>Cors__AllowedOrigins__0</c> app setting replaces one entry rather than the list. Both the startup
++    /// log and the tests therefore read <c>CorsOptions</c>, not <c>appsettings.json</c>.</para>
++    ///
++    /// <para>Loopback origins are added HERE, in Development only, rather than configured, and are removed
++    /// from a configured list everywhere else. <c>appsettings.Development.json</c> ships in the publish
++    /// output, so a loopback entry in a settings file would otherwise be one mis-set
++    /// <c>ASPNETCORE_ENVIRONMENT</c> away from trusting whatever else is listening on the operator's
++    /// machine.</para>
++    /// </summary>
++    public static class OkamCorsOrigins
++    {
++        /// <summary>
++        /// The client dev servers, from the API's own registry of them:
++        /// <see cref="WebApi.Services.ClientConfigurationService"/> lists <c>http://localhost:3000</c> and
++        /// <c>http://localhost:5000</c> among the Okam theme's domains, and already validates a browser's
++        /// <c>Origin</c> header against that list on the Dintero return path. Never permitted outside
++        /// Development, whatever configuration says.
++        /// </summary>
++        public static readonly string[] DevelopmentOnlyOrigins =
++        {
++            "http://localhost:3000",
++            "http://127.0.0.1:3000",
++            "http://localhost:5000",
++            "http://127.0.0.1:5000"
++        };
++
++        public static string[] ResolveDefaultPolicyOrigins(IConfiguration configuration, IHostEnvironment environment)
++        {
++            var configured = configuration?.GetSection(Constants.CorsAllowedOrigins).Get<string[]>()
++                ?? Array.Empty<string>();
++            var isDevelopment = environment != null && environment.IsDevelopment();
++            var candidates = isDevelopment
++                ? configured.Concat(DevelopmentOnlyOrigins)
++                : configured;
++
++            var resolved = new List<string>();
++            foreach (var candidate in candidates)
++            {
++                var normalized = Normalize(candidate);
++                if (normalized == null)
++                {
++                    continue;
++                }
++
++                if (!isDevelopment && IsLoopback(normalized))
++                {
++                    continue;
++                }
++
++                if (resolved.Contains(normalized, StringComparer.Ordinal))
++                {
++                    continue;
++                }
++
++                resolved.Add(normalized);
++            }
++
++            return resolved.ToArray();
++        }
++
++        /// <summary>
++        /// An <c>Origin</c> header is scheme + host + port and nothing else, and ASP.NET Core compares it
++        /// ordinally. Entries are reduced to that form so that a trailing slash or a mixed-case host — both
++        /// of which fail to match silently — cannot cost somebody an afternoon. Anything that is not an
++        /// absolute http(s) URL is skipped rather than thrown on: one stale entry must not stop the API from
++        /// starting, and the startup log names what survived.
++        /// </summary>
++        private static string Normalize(string value)
++        {
++            if (string.IsNullOrWhiteSpace(value))
++            {
++                return null;
++            }
++
++            if (!Uri.TryCreate(value.Trim(), UriKind.Absolute, out var uri))
++            {
++                return null;
++            }
++
++            if (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps)
++            {
++                return null;
++            }
++
++            return uri.GetLeftPart(UriPartial.Authority);
++        }
++
++        private static bool IsLoopback(string normalizedOrigin)
++        {
++            return Uri.TryCreate(normalizedOrigin, UriKind.Absolute, out var uri) && uri.IsLoopback;
++        }
++    }
++}
+diff --git a/Helpers/ServiceCollectionExtensions.cs b/Helpers/ServiceCollectionExtensions.cs
+index 9f4bd2c9..ebb638f1 100644
+--- a/Helpers/ServiceCollectionExtensions.cs
++++ b/Helpers/ServiceCollectionExtensions.cs
+@@ -28,6 +28,70 @@ namespace WebApi.Helpers
+ {
+     public static class ServiceCollectionExtensions
+     {
++        /// <summary>
++        /// Registers the CORS policies this API serves.
++        ///
++        /// <para>The DEFAULT policy is the global one: <c>app.UseCors()</c> in <c>Program</c> applies it to
++        /// every route, and it sits BEFORE <c>UseAuthentication()</c> in the pipeline, so it stamps its
++        /// headers on a 401 exactly as it does on a 200. It therefore names its origins rather than echoing
++        /// whatever asks.</para>
++        ///
++        /// <para>Why a wildcard was not safe here even though nothing on this API rides on a browser-attached
++        /// session: three credentials are carried in explicit request headers — <c>Authorization: Bearer</c>
++        /// on every <c>[Authorize]</c> route, <c>X-Okam-ApiKey</c> in <c>StoresController</c> and
++        /// <c>X-API-Key</c> in <c>ExternalMenuController</c>. A header the script sets itself is not
++        /// "credentials" in the CORS sense, so <c>Access-Control-Allow-Origin: *</c> satisfies such a request
++        /// completely and any page on the internet can read the response body. The two API-key headers were
++        /// open on a wildcard whatever the header policy said, because a literal <c>*</c> in
++        /// <c>Access-Control-Allow-Headers</c> covers ordinary non-safelisted headers. Only
++        /// <c>Authorization</c> has a carve-out — <c>*</c> never covers it, and the Fetch specification would
++        /// therefore have blocked cross-origin bearer calls by accident — but <c>AllowAnyHeader()</c> ECHOES
++        /// the requested headers instead of emitting <c>*</c>, which defeats that one carve-out by name.</para>
++        ///
++        /// <para>Do NOT add <c>AllowCredentials()</c> to the default policy. <c>AllowAnyOrigin()</c> together
++        /// with <c>AllowCredentials()</c> throws at startup, which is a safety net;
++        /// <c>SetIsOriginAllowed(_ => true).AllowCredentials()</c> does NOT throw, and it is the one line
++        /// somebody reaches for when a page starts answering 401. On the global default it would hand every
++        /// cookie on this host to every origin. Credentialed browser access belongs on a NAMED policy applied
++        /// per action with <c>[EnableCors]</c>, the way <see cref="ClaimConstants.McpCorsPolicy"/> is scoped
++        /// to the MCP endpoints with <c>RequireCors</c>.</para>
++        ///
++        /// <para>The exposed-header set stays as it was and is read from <see cref="BrowserReadableHeaders"/>
++        /// rather than spelled as a literal: narrowing the ORIGIN does not change which response headers a
++        /// permitted origin may read, and a naive merge that respells the set is how Content-Disposition was
++        /// dropped from every export download once already.</para>
++        ///
++        /// <para>Methods and headers stay open on the default policy deliberately: once the origin is named,
++        /// the method and header sets carry no further authority, and narrowing them would break callers for
++        /// reasons unrelated to the exposure this closes.</para>
++        /// </summary>
++        public static IServiceCollection AddOkamCors(
++            this IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
++        {
++            var defaultOrigins = OkamCorsOrigins.ResolveDefaultPolicyOrigins(configuration, environment);
++            var mcpAllowedOrigins = configuration.GetSection(Constants.McpAllowedOrigins).Get<string[]>()
++                ?? Array.Empty<string>();
++
++            return services.AddCors(options =>
++            {
++                options.AddDefaultPolicy(policy =>
++                {
++                    policy.WithOrigins(defaultOrigins)
++                          .AllowAnyMethod()
++                          .AllowAnyHeader()
++                          .WithExposedHeaders(BrowserReadableHeaders.All);
++                });
++
++                options.AddPolicy(ClaimConstants.McpCorsPolicy, policy =>
++                {
++                    policy.WithOrigins(mcpAllowedOrigins)
++                        .WithMethods("POST", "GET", "DELETE")
++                        .WithHeaders("Content-Type", "Authorization", "MCP-Protocol-Version", "Mcp-Session-Id")
++                        .WithExposedHeaders("Mcp-Session-Id");
++                });
++            });
++        }
++
+         public static IServiceCollection AddCustomAuthorization(this IServiceCollection services)
+         {
+             // Not very happy about the way authentication works here but this is the recommended way from Microsoft -André
+diff --git a/Program.cs b/Program.cs
+index 862a31cb..2d24e26d 100755
+--- a/Program.cs
++++ b/Program.cs
+@@ -1,5 +1,6 @@
+ using Microsoft.ApplicationInsights.Extensibility;
+ using Microsoft.AspNetCore.Builder;
++using Microsoft.AspNetCore.Cors.Infrastructure;
+ using WebApi.Helpers;
+ using WebApi.Middleware;
+ using Microsoft.Extensions.Configuration;
+@@ -93,23 +94,7 @@ namespace WebApi
+             }, ServiceLifetime.Scoped);
+ 
+             builder.Services.AddIdentityConfiguration();
+-            builder.Services.AddCors(options =>
+-            {
+-                options.AddDefaultPolicy(policy =>
+-                {
+-                    policy.AllowAnyOrigin()
+-                          .AllowAnyMethod()
+-                          .AllowAnyHeader().WithExposedHeaders(BrowserReadableHeaders.All);
+-                });
+-                var mcpAllowedOrigins = builder.Configuration.GetSection("Mcp:AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
+-                options.AddPolicy(ClaimConstants.McpCorsPolicy, policy =>
+-                {
+-                    policy.WithOrigins(mcpAllowedOrigins)
+-                        .WithMethods("POST", "GET", "DELETE")
+-                        .WithHeaders("Content-Type", "Authorization", "MCP-Protocol-Version", "Mcp-Session-Id")
+-                        .WithExposedHeaders("Mcp-Session-Id");
+-                });
+-            });
++            builder.Services.AddOkamCors(builder.Configuration, builder.Environment);
+             builder.Services.AddControllersWithSerializerSettings();
+             builder.Services.AddHealthChecks();
+             builder.Services.AddHttpClient();
+@@ -265,6 +250,31 @@ namespace WebApi
+ 
+             var app = builder.Build();
+ 
++            // Which origins the global CORS policy actually permits is a property of the RESOLVED policy and
++            // of no settings file: the configuration array is overridden by index, so an app setting named
++            // Cors__AllowedOrigins__0 replaces one entry rather than the list. Log what the policy holds, so
++            // a mis-set index shows up on the first lines of a boot instead of as a browser error somebody
++            // else has to reproduce. Origins are public hostnames; nothing here is a credential.
++            // Read through ICorsPolicyProvider, which is the same abstraction CorsMiddleware resolves the
++            // policy with on every request - and not through IOptions<CorsOptions>, which would make a
++            // framework options type look like an unbound settings type of this repository's own.
++            var defaultCorsPolicy = app.Services.GetRequiredService<ICorsPolicyProvider>()
++                .GetPolicyAsync(new DefaultHttpContext(), policyName: null)
++                .GetAwaiter().GetResult();
++            if (defaultCorsPolicy == null || defaultCorsPolicy.Origins.Count == 0)
++            {
++                app.Logger.LogWarning(
++                    "The default CORS policy permits no origins, so every cross-origin browser call will be refused. Set {ConfigurationKey}.",
++                    Constants.CorsAllowedOrigins);
++            }
++            else
++            {
++                app.Logger.LogInformation(
++                    "The default CORS policy permits {OriginCount} origins: {AllowedOrigins}",
++                    defaultCorsPolicy.Origins.Count,
++                    string.Join(", ", defaultCorsPolicy.Origins));
++            }
++
+             app.Use(async (context, next) =>
+             {
+                 try
+diff --git a/WebApi.Tests/OkamCorsDefaultPolicyTests.cs b/WebApi.Tests/OkamCorsDefaultPolicyTests.cs
+new file mode 100644
+index 00000000..e4e8ca85
+--- /dev/null
++++ b/WebApi.Tests/OkamCorsDefaultPolicyTests.cs
+@@ -0,0 +1,187 @@
++using System.Collections.Generic;
++using Microsoft.AspNetCore.Cors.Infrastructure;
++using Microsoft.Extensions.Configuration;
++using Microsoft.Extensions.DependencyInjection;
++using Microsoft.Extensions.FileProviders;
++using Microsoft.Extensions.Hosting;
++using Microsoft.Extensions.Options;
++using WebApi.Helpers;
++
++namespace WebApi.Tests;
++
++/// <summary>
++/// Every assertion here reads the RESOLVED <see cref="CorsPolicy"/> off the built <see cref="CorsOptions"/>,
++/// never a settings file. A settings file cannot answer which origins are permitted: the configuration array
++/// is overridden by index, so an environment file or a <c>Cors__AllowedOrigins__0</c> app setting shadows one
++/// entry rather than replacing the list.
++/// </summary>
++public class OkamCorsDefaultPolicyTests
++{
++    private const string ProductionOrigin = "https://okam.no";
++    private const string SecondProductionOrigin = "https://shop.jungelpizza.no";
++    private const string ForeignOrigin = "https://evil.example";
++
++    [Fact]
++    public void Default_policy_permits_only_the_origins_it_names()
++    {
++        var policy = ResolveDefaultPolicy(
++            new Dictionary<string, string?>
++            {
++                ["Cors:AllowedOrigins:0"] = ProductionOrigin,
++                ["Cors:AllowedOrigins:1"] = SecondProductionOrigin
++            },
++            Environments.Production);
++
++        Assert.Equal(new[] { ProductionOrigin, SecondProductionOrigin }, policy.Origins);
++        Assert.True(policy.IsOriginAllowed(ProductionOrigin));
++        Assert.True(policy.IsOriginAllowed(SecondProductionOrigin));
++        Assert.False(policy.IsOriginAllowed(ForeignOrigin));
++    }
++
++    /// <summary>
++    /// The wildcard is what made an author-set <c>Authorization</c>, <c>X-Okam-ApiKey</c> or <c>X-API-Key</c>
++    /// response readable from any page, because such a request is not "credentialed" in the CORS sense and a
++    /// bare <c>*</c> satisfies it. This is the assertion that reds if it comes back.
++    /// </summary>
++    [Fact]
++    public void Default_policy_does_not_allow_any_origin()
++    {
++        var policy = ResolveDefaultPolicy(
++            new Dictionary<string, string?> { ["Cors:AllowedOrigins:0"] = ProductionOrigin },
++            Environments.Production);
++
++        Assert.False(policy.AllowAnyOrigin);
++    }
++
++    /// <summary>
++    /// <c>AllowAnyOrigin()</c> with <c>AllowCredentials()</c> throws at startup, so it cannot reach
++    /// production. <c>SetIsOriginAllowed(_ =&gt; true).AllowCredentials()</c> does not throw, and on the global
++    /// default policy it would open every cookie on this host to every origin. Credentials belong on a named
++    /// policy applied per action, so the default carries none and this test says so out loud.
++    /// </summary>
++    [Fact]
++    public void Default_policy_never_carries_credentials()
++    {
++        var policy = ResolveDefaultPolicy(
++            new Dictionary<string, string?> { ["Cors:AllowedOrigins:0"] = ProductionOrigin },
++            Environments.Production);
++
++        Assert.False(policy.SupportsCredentials);
++        Assert.False(policy.IsOriginAllowed(ForeignOrigin));
++    }
++
++    [Fact]
++    public void Loopback_origins_are_dropped_outside_development()
++    {
++        var policy = ResolveDefaultPolicy(
++            new Dictionary<string, string?>
++            {
++                ["Cors:AllowedOrigins:0"] = ProductionOrigin,
++                ["Cors:AllowedOrigins:1"] = "http://localhost:3000",
++                ["Cors:AllowedOrigins:2"] = "http://127.0.0.1:5000"
++            },
++            Environments.Production);
++
++        Assert.Equal(new[] { ProductionOrigin }, policy.Origins);
++        Assert.False(policy.IsOriginAllowed("http://localhost:3000"));
++    }
++
++    [Fact]
++    public void Client_dev_servers_are_permitted_in_development()
++    {
++        var policy = ResolveDefaultPolicy(
++            new Dictionary<string, string?> { ["Cors:AllowedOrigins:0"] = ProductionOrigin },
++            Environments.Development);
++
++        Assert.Contains(ProductionOrigin, policy.Origins);
++        foreach (var origin in OkamCorsOrigins.DevelopmentOnlyOrigins)
++        {
++            Assert.True(policy.IsOriginAllowed(origin), origin);
++        }
++
++        Assert.False(policy.IsOriginAllowed(ForeignOrigin));
++    }
++
++    /// <summary>
++    /// An <c>Origin</c> header is scheme + host + port, compared ordinally. A trailing slash or a
++    /// capitalised host never matches and fails silently, which is the shape of mistake that gets an
++    /// allowlist reverted rather than corrected.
++    /// </summary>
++    [Fact]
++    public void Configured_origins_are_reduced_to_the_form_a_browser_sends()
++    {
++        var policy = ResolveDefaultPolicy(
++            new Dictionary<string, string?>
++            {
++                ["Cors:AllowedOrigins:0"] = "https://okam.no/",
++                ["Cors:AllowedOrigins:1"] = "https://SHOP.Okam.no",
++                ["Cors:AllowedOrigins:2"] = "https://okam.no",
++                ["Cors:AllowedOrigins:3"] = "not-a-url",
++                ["Cors:AllowedOrigins:4"] = ""
++            },
++            Environments.Production);
++
++        Assert.Equal(new[] { "https://okam.no", "https://shop.okam.no" }, policy.Origins);
++    }
++
++    [Fact]
++    public void An_empty_configured_list_permits_nothing_rather_than_everything()
++    {
++        var policy = ResolveDefaultPolicy(new Dictionary<string, string?>(), Environments.Production);
++
++        Assert.Empty(policy.Origins);
++        Assert.False(policy.AllowAnyOrigin);
++        Assert.False(policy.IsOriginAllowed(ForeignOrigin));
++    }
++
++    /// <summary>
++    /// The MCP policy is the one policy on this API that was already scoped correctly. It moved into
++    /// <c>AddOkamCors</c> unchanged, and this asserts the move did not quietly widen it.
++    /// </summary>
++    [Fact]
++    public void Mcp_policy_still_names_its_own_origins_and_carries_no_credentials()
++    {
++        var options = BuildCorsOptions(
++            new Dictionary<string, string?>
++            {
++                ["Cors:AllowedOrigins:0"] = ProductionOrigin,
++                ["Mcp:AllowedOrigins:0"] = "http://localhost:6274"
++            },
++            Environments.Development);
++
++        var mcpPolicy = options.GetPolicy(ClaimConstants.McpCorsPolicy);
++
++        Assert.NotNull(mcpPolicy);
++        Assert.Equal(new[] { "http://localhost:6274" }, mcpPolicy!.Origins);
++        Assert.False(mcpPolicy.AllowAnyOrigin);
++        Assert.False(mcpPolicy.SupportsCredentials);
++        Assert.False(mcpPolicy.IsOriginAllowed(ForeignOrigin));
++        Assert.False(mcpPolicy.IsOriginAllowed(ProductionOrigin));
++    }
++
++    private static CorsPolicy ResolveDefaultPolicy(Dictionary<string, string?> settings, string environmentName)
++    {
++        var options = BuildCorsOptions(settings, environmentName);
++        var policy = options.GetPolicy(options.DefaultPolicyName);
++        Assert.NotNull(policy);
++        return policy!;
++    }
++
++    private static CorsOptions BuildCorsOptions(Dictionary<string, string?> settings, string environmentName)
++    {
++        var configuration = new ConfigurationBuilder().AddInMemoryCollection(settings).Build();
++        var services = new ServiceCollection();
++        services.AddOkamCors(configuration, new StubHostEnvironment(environmentName));
++        return services.BuildServiceProvider().GetRequiredService<IOptions<CorsOptions>>().Value;
++    }
++
++    private sealed class StubHostEnvironment : IHostEnvironment
++    {
++        public StubHostEnvironment(string environmentName) => EnvironmentName = environmentName;
++
++        public string EnvironmentName { get; set; }
++        public string ApplicationName { get; set; } = "WebApi";
++        public string ContentRootPath { get; set; } = string.Empty;
++        public IFileProvider ContentRootFileProvider { get; set; } = new NullFileProvider();
++    }
++}
+diff --git a/WebApi.Tests/Wire/DownloadHeaderWireTests.cs b/WebApi.Tests/Wire/DownloadHeaderWireTests.cs
+index 69073c87..a3e9b57a 100644
+--- a/WebApi.Tests/Wire/DownloadHeaderWireTests.cs
++++ b/WebApi.Tests/Wire/DownloadHeaderWireTests.cs
+@@ -34,9 +34,8 @@ namespace WebApi.Tests.Wire;
+ /// halves off the same response: the filename the server chose, and the exposure that lets the client see
+ /// it.</para>
+ ///
+-/// <para><b>Why this is not a security relaxation.</b> The default policy is
+-/// <c>AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()</c>, so any origin holding a bearer token can
+-/// already read the BODY of every one of these files. Exposing the name discloses strictly less than the
++/// <para><b>Why this is not a security relaxation.</b> Any origin the default policy permits, holding a
++/// bearer token, can already read the BODY of every one of these files. Exposing the name discloses strictly less than the
+ /// bytes it names, and none of these filenames carries a person's name — the kodeoversikt, whose body maps
+ /// people to identity codes, is named <c>okam-kodeoversikt-{storeId}-{date}.csv</c>. The one filename built
+ /// from a party's name is the Wolt-drive invoice (a venue's own trade name, already sanitized by
+diff --git a/WebApi.Tests/Wire/WireContractPinsTests.cs b/WebApi.Tests/Wire/WireContractPinsTests.cs
+index 3198a0dc..7f29ae3d 100644
+--- a/WebApi.Tests/Wire/WireContractPinsTests.cs
++++ b/WebApi.Tests/Wire/WireContractPinsTests.cs
+@@ -96,6 +96,9 @@ public class WireContractPinsTests
+     /// The formatter is scoped to the unsubscribe model, so it must NOT have made every JSON endpoint in the
+     /// application form-bindable. A form body posted at an unrelated JSON endpoint still gets its 415.
+     /// </summary>
++    /// <summary>An origin the default CORS policy names; see <c>Cors:AllowedOrigins</c>.</summary>
++    private const string PermittedBrowserOrigin = "https://admin.okam.no";
++
+     [Fact]
+     public async Task The_form_formatter_did_not_leak_to_other_endpoints()
+     {
+@@ -110,19 +113,26 @@ public class WireContractPinsTests
+     /// FIXED, and pinned here as the tripwire. Three controllers write an <c>ETag</c> response header
+     /// (<c>WorkforceSchedulesController</c>, <c>EventsSettlementController</c>, <c>TrainingControllerBase</c>)
+     /// and one of them then demands the value back as <c>If-Match</c>. <c>ETag</c> is NOT a CORS-safelisted
+-    /// response header, and the default policy exposed nothing, so a browser on any other origin could not
+-    /// READ the header it was required to echo — the concurrency token was reachable only through the
+-    /// duplicate <c>eTag</c> field in the body, and the header was decoration.
++    /// response header, and the default policy exposed nothing, so a cross-origin browser could not READ the
++    /// header it was required to echo — the concurrency token was reachable only through the duplicate
++    /// <c>eTag</c> field in the body, and the header was decoration.
+     ///
+     /// <para>Asserted over the real pipeline rather than off the options object: the preflight-less simple
+     /// GET below is exactly what a browser issues, and <c>Access-Control-Expose-Headers</c> is what its CORS
+     /// layer consults before letting script touch the header.</para>
++    ///
++    /// <para>The origin must now be one the default policy PERMITS. This pin was written when the default
++    /// was <c>AllowAnyOrigin()</c> and used the invented origin <c>https://admin.example.test</c> to say
++    /// "any other origin"; since the default names its origins, an unlisted origin receives no CORS headers
++    /// at all and this pin would red for the reason the policy exists rather than for the defect it guards.
++    /// The second assertion below keeps that distinction honest by checking the refusal direction too, so
++    /// neither half can pass by accident.</para>
+     /// </summary>
+     [Fact]
+     public async Task The_cors_policy_exposes_the_etag_header_so_a_browser_can_read_it()
+     {
+         var request = new HttpRequestMessage(HttpMethod.Get, "/config");
+-        request.Headers.Add("Origin", "https://admin.example.test");
++        request.Headers.Add("Origin", PermittedBrowserOrigin);
+ 
+         var response = await _wire.CreateClient().SendAsync(request);
+ 
+@@ -132,6 +142,24 @@ public class WireContractPinsTests
+         Assert.Contains(exposed, v => v.Contains("ETag", System.StringComparison.OrdinalIgnoreCase));
+     }
+ 
++    /// <summary>
++    /// The refusal direction of the pin above. An origin the default policy does not name receives no CORS
++    /// response headers whatsoever — not an error status, which is what makes a narrowed policy easy to
++    /// misread as working. Without this, the pin above could be satisfied by a policy that had gone back to
++    /// permitting everything.
++    /// </summary>
++    [Fact]
++    public async Task An_unlisted_origin_gets_no_cors_headers_at_all()
++    {
++        var request = new HttpRequestMessage(HttpMethod.Get, "/config");
++        request.Headers.Add("Origin", "https://admin.example.test");
++
++        var response = await _wire.CreateClient().SendAsync(request);
++
++        Assert.False(response.Headers.Contains("Access-Control-Allow-Origin"));
++        Assert.False(response.Headers.Contains("Access-Control-Expose-Headers"));
++    }
++
+     /// <summary>
+     /// The positive control for the pin above. It asserts the probe is reading a header the CORS middleware
+     /// really produced for this request — without an <c>Origin</c> there is no CORS response at all, so a
+diff --git a/appsettings.json b/appsettings.json
+index 7a39302c..d908de06 100755
+--- a/appsettings.json
++++ b/appsettings.json
+@@ -132,6 +132,20 @@
+     "RefreshTokenLifetimeDays": 30,
+     "Clients": []
+   },
++  "Cors": {
++    "AllowedOrigins": [
++      "https://okam.no",
++      "https://www.okam.no",
++      "https://admin.okam.no",
++      "https://www.okam-swiss.ch",
++      "https://okam-swiss.ch",
++      "https://shop.okam.no",
++      "https://jungelpizza.okam.no",
++      "https://shop.jungelpizza.no",
++      "https://mathavna.okam.no",
++      "https://shop.mathavna.no"
++    ]
++  },
+   "ConnectionStrings": {
+     "WebApiDatabase": "Set in Azure. For development, set in User Secrets",
+     "WebApiStorage": "Set in Azure. For development, set in User Secrets"

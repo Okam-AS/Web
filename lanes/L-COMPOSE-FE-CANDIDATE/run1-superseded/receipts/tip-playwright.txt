@@ -1,0 +1,35 @@
+
+[WebServer] ℹ Discovered Components: .nuxt/components/readme.md
+
+[WebServer] ✔ Builder initialized
+
+[WebServer] ✔ Nuxt files generated
+
+[WebServer] 
+[WebServer]  WARN  Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[WebServer] 
+
+[WebServer] ℹ Compiling Server
+
+[WebServer] ℹ Compiling Client
+
+[WebServer] ✔ Server: Compiled successfully in 14.22s
+
+[WebServer] ✔ Client: Compiled successfully in 16.83s
+
+
+Running 29 tests using 1 worker
+
+[WebServer] ℹ Waiting for file changes
+[WebServer] ℹ Memory usage: 1.33 GB (RSS: 2.36 GB)
+[WebServer] ℹ Listening on: http://172.20.10.4:3010/
+
+[1/29] [chromium] › test/e2e/journeys/account-email-confirm.spec.js:77:1 › A phone-signup administrator is refused a test-send, confirms her address from admin, and is then allowed it @fixture
+[2/29] [chromium] › test/e2e/journeys/admin-refusal-worker.spec.js:87:1 › A worker is refused the store-admin schedule and is given their own page instead @fixture
+[3/29] [chromium] › test/e2e/journeys/events-deposit-precondition.spec.js:65:1 › the operator reads the deposit precondition on the row before arming the money path @live
+[4/29] [chromium] › test/e2e/journeys/events-enquiry-to-settlement.spec.js:184:1 › A private booking runs from a public enquiry to a settled statement, and the accept refuses while the module is off @fixture
+[5/29] [chromium] › test/e2e/journeys/events-guest-proposal.spec.js:147:1 › A guest reads the offer their venue just sent and accepts it, and the receipt names what was on screen @fixture
+[6/29] [chromium] › test/e2e/journeys/events-runsheet-onboarding.spec.js:96:1 › A store still in onboarding prints the run sheet, and the setup banner is not on it @fixture
+[7/29] [chromium] › test/e2e/journeys/events-runsheet-print.spec.js:78:1 › A host prints the run sheet: the dietary requirement is on it and the guest links are not @fixture

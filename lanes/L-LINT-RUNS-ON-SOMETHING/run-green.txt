@@ -1,0 +1,12 @@
+PASS test/translations-lint.test.js
+  the configured lint rules run on a change to a translations dictionary
+    ✓ package.json declares the script this suite invokes, pointed at the dictionaries (1 ms)
+    ✓ runs that script, and the dictionaries carry no error-severity violation (1455 ms)
+    ✓ the rule that catches a duplicate key is error, and reports one, in a dictionary (1018 ms)
+    ✓ every shipped dictionary is actually read by that run, none ignored away (888 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        4.118 s
+Ran all test suites matching /test\/translations-lint.test.js/i.

@@ -1,0 +1,21 @@
+```
+RETURN: L-JOURNEY-WORKFORCE
+brief: 88ec65f2
+verdict: built
+evidence: branch lane/journey-workforce @ eb8f412 (both artifacts force-added) + lanes/L-JOURNEY-WORKFORCE/mutation-proof.txt
+log:
+Baseline 5ad0ca0, read at 15:49; ran in my own worktree wt-jwf on ports 3974/4974. The brief's L-WF-ADJUST-ADDRESS claim is VERIFIED EXACT (3 of 4 wire cases red; the 4th addresses a random Guid).
+THE CORRECTION SURFACE IS NOT ON THIS BRANCH. e9ba89e (lane/wf-adjust-address) is not an ancestor of 5ad0ca0 — the rates page here still ships the prose refusing to fake a correction, and attendance-view's toRow has no `sessions`. I cherry-picked it INTO MY WORKTREE ONLY. Nothing landed on feature/restaurant-modules, nothing pushed. The punch-correction artifact therefore describes a PORTED tree; the plan must decide whether that counts.
+BOTH WALKS WERE IMPOSSIBLE BEFORE, and not for want of trying: `/workforce/me/inbox` hard-returned `{items:[]}` in every fixture run ever made, and `/attendance` was a 3-line stub returning `rows:[]`. So #35, #44, the punch list and the correction had NO browser-reachable caller. The fixture now derives both from the acts that produce them (publish → inbox item; seeded punches → sessions), mirroring how #33 already derived the worker's shifts.
+MUTATION — 5 arms, each red AT THE STEP WHOSE CLAIM IT BREAKS, tree restored and re-verified green between every one: M1 inbox stops deriving → red at 10; M2 #44 always claims replay → red at 11; M3 ack stops implying seen → red at 12; M4 SERVER withholds clockSessionId → red at 3; M5 CLIENT projector drops it → red at 3.
+M4/M5 ARE THE BRIEF'S MUTATION AND THEY RED THE STRONGER WAY: `.wfrt-att__correct` goes 2 → 0 — the affordance STOPS EXISTING (it is `v-if="session.clockSessionId"`) — and only 3 of 8 steps are recorded, so the correction refusal and the append assertion never happen at all rather than failing. See m4-where-it-dies.txt.
+REFUSALS WALKED BEFORE THEIR SUCCESSES: the draft refused by the deny-closed §9.2 switch (never observed on screen by anything — both existing workforce journeys flip that switch as their first act); the worker refused the manager's page; the pay rates refused while the hours stay readable (WorkforcePayrollApprover stacked on WorkforceManager); a locked payroll day OFFERED a correction and then refused 409 by the server, recording nothing.
+PRODUCT DEFECT FOUND BY WALKING, asserted so that fixing it reds this journey: the worker presses "Bekreft" and is shown NOTHING. `acknowledge()` (workforce-me.vue:751) stores the receipt then reloads the inbox; acknowledging implies seen, `unreadPublications()` drops the item, and the whole notice is v-if'd away taking the receipt line with it. The receipt renderer needs an item that is BOTH unread and acknowledged — no such item can exist. `wfme_pub_receipt_already` is unreachable for the same reason. Invisible to component tests, which control both props.
+C1 asserted over the re-read: after the correction the punch window is character-for-character what it was, and the correction stands beside it as its own row. C4: the fixture resolves the actor server-side and the request body carries none. C5: this is a browser record against the throwaway fixture, NOT acceptance — nobody has walked it by hand.
+week-run DOES NOT need the port: measured green with the port reverted (week-run-without-port.playwright.json), so it is portable to the integration branch as it stands.
+NOT MINE, PROVEN: workforce-schedule-publish fails in fixture mode at the 11-rule pack (the fixture's validate answers 2). Identical failure against the pristine 5ad0ca0 fixture. The other five workforce/refusal journeys are green alongside my two.
+COMMITTED: specs, fixture, lane evidence and BOTH artifacts on lane/journey-workforce @ eb8f412. UNCOMMITTED: the copies at artifacts/journeys/workforce-{week-run,punch-correction}.playwright.json in the shared checkout — `artifacts/` is gitignored, so those exist on disk only and a later clean loses them.
+Shared checkout: my only status entry is lanes/L-JOURNEY-WORKFORCE/; I modified zero tracked files there. No container started or touched. Ports 3974/4974 released.
+Residual unchanged and still true: nothing runs guard-proof.js in CI, so both artifacts protect a run somebody chooses to check.
+END RETURN
+```

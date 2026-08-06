@@ -1,0 +1,43 @@
+
+Running 1 test using 1 worker
+
+[arm] .login-modal elements on /admin/ongoing?redirect=%2Fadmin%2Fongoing: 2
+[arm] url before sign-in: http://127.0.0.1:3903/admin/ongoing?redirect=%2Fadmin%2Fongoing
+[arm] after the FIRST sign-in: url http://127.0.0.1:3903/admin/ongoing, modals still up: 1
+  ✘  1 [chromium] › lanes/L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN/resume-after-login.arm.playwright.js:46:1 › an order placed after an in-page sign-in reaches the board (51.2s)
+
+
+  1) [chromium] › lanes/L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN/resume-after-login.arm.playwright.js:46:1 › an order placed after an in-page sign-in reaches the board 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('.login-modal').first().locator('.otp-input input')
+    Expected: 6
+    Received: 0
+    Timeout:  30000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 30000ms
+      - waiting for locator('.login-modal').first().locator('.otp-input input')
+        64 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      69 |
+      70 |     const boxes = modal.locator('.otp-input input');
+    > 71 |     await expect(boxes).toHaveCount(OTP_LENGTH);
+         |                         ^
+      72 |     // Box by box, never pasted: `OtpInput.onValueChange` is what advances focus and emits
+      73 |     // `complete`, and it only runs on a per-input `input` event.
+      74 |     const digits = '123123'.split('');
+        at signInThrough (/Users/svendaneel/okam/web-kitchresume/lanes/L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN/resume-after-login.arm.playwright.js:71:25)
+        at /Users/svendaneel/okam/web-kitchresume/lanes/L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN/resume-after-login.arm.playwright.js:98:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    lanes/L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN/runs/playwright-output/resume-after-login.arm.pla-31c75-e-sign-in-reaches-the-board-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: lanes/L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN/runs/playwright-output/resume-after-login.arm.pla-31c75-e-sign-in-reaches-the-board-chromium/error-context.md
+
+  1 failed
+    [chromium] › lanes/L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN/resume-after-login.arm.playwright.js:46:1 › an order placed after an in-page sign-in reaches the board 

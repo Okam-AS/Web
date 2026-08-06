@@ -1,0 +1,54 @@
+--- M01-composition : Services/Meals/MealsIdempotentMutation.cs
+    mutant   -> RED    Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: < 1 ms - WebApi.Tests.dll (net8.0)
+    because  : Assert.Equal() Failure | Expected: meals.invitation-not-claimable | Actual:   meals.idempotency-in-progress | 
+    restored -> GREEN  Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: < 1 ms - WebApi.Tests.dll (net8.0)
+--- M02-company-update : Services/Meals/MealsCompanyService.cs
+    mutant   -> RED    Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: < 1 ms - WebApi.Tests.dll (net8.0)
+    because  : Assert.Equal() Failure | Expected: meals.stale-revision | Actual:   meals.idempotency-in-progress | 
+    restored -> GREEN  Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: < 1 ms - WebApi.Tests.dll (net8.0)
+--- M03-company-archive : Services/Meals/MealsCompanyService.cs
+    mutant   -> RED    Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: < 1 ms - WebApi.Tests.dll (net8.0)
+    because  : Assert.Equal() Failure | Expected: meals.stale-revision | Actual:   meals.idempotency-in-progress | 
+    restored -> GREEN  Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: < 1 ms - WebApi.Tests.dll (net8.0)
+--- M04-membership-revoke : Services/Meals/MealsMembershipService.cs
+    mutant   -> RED    Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: < 1 ms - WebApi.Tests.dll (net8.0)
+    because  : Assert.Equal() Failure | Expected: meals.stale-revision | Actual:   meals.idempotency-in-progress | 
+    restored -> GREEN  Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: < 1 ms - WebApi.Tests.dll (net8.0)
+--- M05-invitation-revoke : Services/Meals/MealsMembershipService.cs
+    mutant   -> RED    Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: < 1 ms - WebApi.Tests.dll (net8.0)
+    because  : Assert.Equal() Failure | Expected: meals.stale-revision | Actual:   meals.idempotency-in-progress | 
+    restored -> GREEN  Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: < 1 ms - WebApi.Tests.dll (net8.0)
+--- M06-invitation-claim : Services/Meals/MealsMembershipService.cs
+    mutant   -> RED    Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: < 1 ms - WebApi.Tests.dll (net8.0)
+    because  : Assert.Equal() Failure | Expected: meals.invitation-not-claimable | Actual:   meals.idempotency-in-progress | 
+    restored -> GREEN  Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: < 1 ms - WebApi.Tests.dll (net8.0)
+--- M07-program-members : Services/Meals/MealsProgramService.cs
+    mutant   -> RED    Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: < 1 ms - WebApi.Tests.dll (net8.0)
+    because  : Assert.Equal() Failure | Expected: meals.stale-revision | Actual:   meals.idempotency-in-progress | 
+    restored -> GREEN  Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: < 1 ms - WebApi.Tests.dll (net8.0)
+--- M08-reconciliation-resolve : Services/Meals/MealsReconciliationService.cs
+    mutant   -> RED    Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: < 1 ms - WebApi.Tests.dll (net8.0)
+    because  : Assert.Equal() Failure | Expected: meals.stale-revision | Actual:   meals.idempotency-in-progress | 
+    restored -> GREEN  Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: < 1 ms - WebApi.Tests.dll (net8.0)
+--- M09-statement-finalize : Services/Meals/MealsStatementService.cs
+    mutant   -> RED    Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: < 1 ms - WebApi.Tests.dll (net8.0)
+    because  : Assert.Equal() Failure | Expected: meals.stale-revision | Actual:   meals.idempotency-in-progress | 
+    restored -> GREEN  Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: < 1 ms - WebApi.Tests.dll (net8.0)
+--- M10-discriminator-read : Services/Meals/MealsCommandReceiptService.cs
+    mutant   -> RED    Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: < 1 ms - WebApi.Tests.dll (net8.0)
+    because  : Assert.Throws() Failure | Expected: typeof(WebApi.Helpers.Meals.MealsProblemException) | Actual:   (No exception was thrown) | 
+    restored -> GREEN  Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1, Duration: < 1 ms - WebApi.Tests.dll (net8.0)
+
+=== MATRIX ===
+M01-composition              mutant=RED        restored=GREEN
+M02-company-update           mutant=RED        restored=GREEN
+M03-company-archive          mutant=RED        restored=GREEN
+M04-membership-revoke        mutant=RED        restored=GREEN
+M05-invitation-revoke        mutant=RED        restored=GREEN
+M06-invitation-claim         mutant=RED        restored=GREEN
+M07-program-members          mutant=RED        restored=GREEN
+M08-reconciliation-resolve   mutant=RED        restored=GREEN
+M09-statement-finalize       mutant=RED        restored=GREEN
+M10-discriminator-read       mutant=RED        restored=GREEN
+
+SURVIVORS (mutant stayed green or did not apply): 0

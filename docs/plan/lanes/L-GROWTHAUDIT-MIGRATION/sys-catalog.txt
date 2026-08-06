@@ -1,0 +1,38 @@
+# system-catalog read of a CHAIN-BUILT database (dotnet ef database update from EMPTY, 137/137 applied)
+# container lgam-mssql (lane-owned) :14380, catalog LgamChain, 2026-08-06 15:06:33 CEST
+
+--- sys.tables ---
+table|create_date
+-----|-----------
+GrowthAuditEvents|2026-08-06 13:06:06.037
+--- sys.columns ---
+column_id|column|type|max_length|is_nullable|is_identity
+---------|------|----|----------|-----------|-----------
+1|Id|uniqueidentifier|16|0|0
+2|StoreId|int|4|1|0
+3|ActorKind|nvarchar|32|0|0
+4|ActorReference|nvarchar|512|1|0
+5|EventType|nvarchar|256|1|0
+6|AggregateType|nvarchar|256|1|0
+7|AggregateId|nvarchar|256|1|0
+8|CorrelationId|nvarchar|256|1|0
+9|SemanticDeltaJson|nvarchar|-1|1|0
+10|OccurredAt|datetimeoffset|10|0|0
+--- sys.indexes / sys.index_columns ---
+index|type_desc|is_unique|is_primary_key|filter_definition|key_columns
+-----|---------|---------|--------------|-----------------|-----------
+IX_GrowthAuditEvents_AggregateType_AggregateId|NONCLUSTERED|0|0|NULL|AggregateType,AggregateId
+IX_GrowthAuditEvents_StoreId_OccurredAt|NONCLUSTERED|0|0|NULL|StoreId,OccurredAt
+PK_GrowthAuditEvents|CLUSTERED|1|1|NULL|Id
+--- sys.triggers / sys.trigger_events ---
+trigger|is_instead_of_trigger|is_disabled|fires_on
+-------|---------------------|-----------|--------
+TR_GrowthAuditEvents_AppendOnly|0|0|UPDATE
+TR_GrowthAuditEvents_AppendOnly|0|0|DELETE
+--- sys.foreign_keys touching the ledger (expect none) ---
+name|parent|referenced
+----|------|----------
+--- Growth surface total (expect 20) ---
+growth_tables
+-------------
+20

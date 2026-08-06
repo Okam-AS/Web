@@ -1,0 +1,49 @@
+worktree      /Users/svendaneel/okam/wt-xzprinted
+production    Services/Kassa/EscPosXZReportBuilder.cs
+filter        Database!=SqlServer&FullyQualifiedName~WebApi.Tests.Kassa
+
+BASELINE  WebApi.dll 14:20:16  Passed!  - Failed:     0, Passed:   913, Skipped:     0, Total:   913, Duration: 2 m 52 s - WebApi.Tests.dll (net8.0)
+
+====================================================================================================
+M1-revert-the-sign-allowance
+  removes: the named change itself: a trailing count must be all digits again
+  reached the file: yes (36 chars changed)
+  MUTANT    WebApi.dll 14:24:47  Failed!  - Failed:    34, Passed:   879, Skipped:     0, Total:   913, Duration: 2 m 24 s - WebApi.Tests.dll (net8.0)
+      red: (none)
+  RESTORED  WebApi.dll 14:27:35  Passed!  - Failed:     0, Passed:   913, Skipped:     0, Total:   913, Duration: 2 m 18 s - WebApi.Tests.dll (net8.0)
+  verdict: KILLED
+
+====================================================================================================
+M2-drop-the-at-least-one-digit-rule
+  removes: the guard that keeps '( )' and '(-)' from counting as a figure
+  reached the file: yes (20 chars changed)
+  MUTANT    WebApi.dll 14:30:13  Passed!  - Failed:     0, Passed:   913, Skipped:     0, Total:   913, Duration: 2 m 11 s - WebApi.Tests.dll (net8.0)
+      red: (none)
+  RESTORED  WebApi.dll 14:32:46  Passed!  - Failed:     0, Passed:   913, Skipped:     0, Total:   913, Duration: 2 m 10 s - WebApi.Tests.dll (net8.0)
+  verdict: SURVIVED
+
+====================================================================================================
+M3-protect-any-trailing-parenthesis
+  removes: the digit test, so 'Kort (Stripe)' would be protected as if it were a figure
+  reached the file: yes (18 chars changed)
+  MUTANT    WebApi.dll 14:35:15  Passed!  - Failed:     0, Passed:   913, Skipped:     0, Total:   913, Duration: 2 m 10 s - WebApi.Tests.dll (net8.0)
+      red: (none)
+  RESTORED  WebApi.dll 14:37:43  Passed!  - Failed:     0, Passed:   913, Skipped:     0, Total:   913, Duration: 2 m 19 s - WebApi.Tests.dll (net8.0)
+  verdict: SURVIVED
+
+====================================================================================================
+M4-stop-excluding-the-count-from-the-cut
+  removes: the choke point: FitKeepingCount degraded to plain Fit
+  reached the file: yes (33 chars changed)
+  MUTANT    WebApi.dll 14:40:15  Failed!  - Failed:    59, Passed:   854, Skipped:     0, Total:   913, Duration: 2 m 25 s - WebApi.Tests.dll (net8.0)
+      red: (none)
+  RESTORED  WebApi.dll 14:43:04  Passed!  - Failed:     0, Passed:   913, Skipped:     0, Total:   913, Duration: 2 m 27 s - WebApi.Tests.dll (net8.0)
+  verdict: KILLED
+
+====================================================================================================
+KILLED          M1-revert-the-sign-allowance                  34 failing, 0 distinct tests
+SURVIVED        M2-drop-the-at-least-one-digit-rule           0 failing, 0 distinct tests
+SURVIVED        M3-protect-any-trailing-parenthesis           0 failing, 0 distinct tests
+KILLED          M4-stop-excluding-the-count-from-the-cut      59 failing, 0 distinct tests
+
+production file restored byte-for-byte

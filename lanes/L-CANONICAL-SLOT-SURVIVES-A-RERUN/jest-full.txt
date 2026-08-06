@@ -1,0 +1,25 @@
+PASS test/margin-statement-view.test.js
+PASS test/meals-admin-client.test.js
+PASS test/margin-supplier-client.test.js
+PASS test/workforce-schedule-client.test.js
+PASS test/workforce-month-grid.test.js
+PASS test/growth-guest-client.test.js
+PASS test/workforce-me-self-requests.test.js
+PASS test/margin-price-import-model.test.js
+PASS test/meals-statement-view.test.js
+PASS test/workforce-rates-amount.test.js
+PASS test/workforce-requests-client.test.js
+PASS test/workforce-me-inbox-filter.test.js
+PASS test/margin-price-timeline.test.js
+PASS test/workforce-week-range.test.js
+PASS test/meals-client.test.js
+PASS test/workforce-rates-hours-export.test.js
+PASS test/world-stamp-windows.test.js
+PASS test/growth-client.test.js
+PASS test/journey-artifact-store.test.js (6.25 s)
+
+Test Suites: 129 passed, 129 total
+Tests:       2998 passed, 2998 total
+Snapshots:   0 total
+Time:        7.045 s
+Ran all test suites.

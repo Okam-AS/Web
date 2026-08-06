@@ -1,0 +1,51 @@
+=== label    : A1-asis
+=== worktree : /Users/svendaneel/okam/web-sendgate
+=== commit   : 8ac6f63648015d8c7a230181a7f07bf303d43268
+=== dirty    : 0 path(s) before the run
+=== spec sha : ff03d2a26d5c8c0c143a54adb9331f0643a4baae
+=== fixture  : 42deb6e0480d07acb3302f97d2ddfff7d5ec9d99 growth-newsletter.js
+=== page sha : 9c59f98bfd51368d629c7e317185e92938817d5f
+=== gate sha : 2fc00b09163ff9ffb69ad0d1b9885acf69a49ab6
+=== ports    : web=3876 fixture=4876 (4010/4971/4973 never bound, never signalled)
+=== core     : 10 entries
+=== started  : 2026-08-06T10:26:53Z
+[WebServer] [fixture] listening on http://127.0.0.1:4876
+
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://192.168.1.114:3876/
+
+[WebServer] [info] Preparing project for development
+
+[WebServer] [info] Initial build may take a while
+
+
+Running 1 test using 1 worker
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+[WebServer] [success] Builder initialized
+
+[1/1] [chromium] › test/e2e/journeys/growth-newsletter-send-gate.spec.js:95:1 › An operator drafts and approves a newsletter, and the send gate opens only when both switches are up @fixture
+[WebServer] [success] Nuxt files generated
+
+[WebServer] [info] Waiting for file changes
+
+[WebServer] [info] Memory usage: 958 MB (RSS: 2.48 GB)
+
+[WebServer] [info] Listening on: http://192.168.1.114:3876/
+
+  1 passed (49.2s)
+=== finished : 2026-08-06T10:27:43Z
+=== declared : passed
+RESULT A1-asis PASS rc=0

@@ -1,0 +1,27 @@
+BASELINE (every edit in place)
+  GREEN  Tests:       69 passed, 69 total
+
+M1 the receipt row guard: isDeductionInPlay -> the `> 0` that dropped the row
+  RED (branch is load-bearing)
+  Tests:       12 failed, 57 passed, 69 total
+
+M2 the predicate loses its absence branch (an unstated deduction reads as none)
+  RED (branch is load-bearing)
+  Tests:       24 failed, 45 passed, 69 total
+
+M3 the predicate loses its relational branch (a kr 0,00 deduction on every receipt line)
+  RED (branch is load-bearing)
+  Tests:       9 failed, 60 passed, 69 total
+
+M4 the method answers off the raw field instead of the rule (a stated zero would render)
+  RED (branch is load-bearing)
+  Tests:       2 failed, 67 passed, 69 total
+
+M5 the label loses its sign ownership -> the pre-XZ `−{{ priceLabel(x) }}`, now reachable
+  RED (branch is load-bearing)
+  Tests:       18 failed, 51 passed, 69 total
+
+==============================================================================
+all 5 mutations red. no branch in this change is carried by a green.
+
+restored: GREEN  Tests:       69 passed, 69 total

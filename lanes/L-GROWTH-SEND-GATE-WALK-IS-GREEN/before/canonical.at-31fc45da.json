@@ -1,0 +1,51 @@
+{
+  "journey": "growth-newsletter-send-gate",
+  "title": "An operator drafts and approves a newsletter, and the send gate opens only when both switches are up",
+  "status": "failed",
+  "startedAtUtc": "2026-08-03T16:13:57.547Z",
+  "finishedAtUtc": "2026-08-03T16:14:28.743Z",
+  "durationMs": 31196,
+  "capabilities": [
+    "platform.feature-flags.write",
+    "growth.consent.standing.read",
+    "growth.audience.snapshot",
+    "growth.newsletter.author",
+    "growth.newsletter.test-send",
+    "growth.newsletter.approve",
+    "growth.send-gate.fail-closed"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3971",
+  "apiBaseUrl": "http://127.0.0.1:4971",
+  "commit": "31fc45da44faa590a6a095f30780b3f627d32049",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": null,
+  "backendServed": 0,
+  "backendSample": [],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in and open the newsletter screen",
+      "status": "failed",
+      "startedAtUtc": "2026-08-03T16:13:57.549Z",
+      "durationMs": 31135,
+      "detail": null,
+      "error": "page.waitForURL: Timeout 30000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation until \"load\"\n============================================================"
+    }
+  ],
+  "findings": [],
+  "consoleErrors": [],
+  "failedRequests": [],
+  "screenshots": [],
+  "error": "TimeoutError: page.waitForURL: Timeout 30000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation until \"load\"\n============================================================",
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/growth-newsletter-send-gate.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false
+  }
+}

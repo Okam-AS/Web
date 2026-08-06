@@ -1,0 +1,22 @@
+=== sandbox : /Users/svendaneel/okam/Web-modules/lanes/L-TRAINING-WALK-IS-GREEN/gate-sandbox   (the live docs/plan is never written)
+=== lane    : L-TRAINING-WALK-IS-GREEN, exit reads: artifacts/journeys/training-course-to-evidence.playwright.json
+=== failed  : /Users/svendaneel/okam/Web-modules/lanes/L-TRAINING-WALK-IS-GREEN/before/training-course-to-evidence.playwright.json
+===           declared failed, 9 steps, commit e34977ac
+=== green   : /Users/svendaneel/okam/Web-modules/lanes/L-TRAINING-WALK-IS-GREEN/runs/M0R-restored.artifacts/training-course-to-evidence.playwright.json
+===           declared passed, 19 steps, commit 28548f96
+
+--- ARM A — the capture as found on disk (status failed)
+    artifact declares: failed
+    plan built  -> state built-unverified
+    plan verify -> rc=6
+      plan: evidence inadmissible — artifacts/journeys/training-course-to-evidence.playwright.json reads `status: failed` — the artifact records its own failure, and a run that failed does not demonstrate the exit it was run for
+    state after : built-unverified
+
+--- ARM B — this lane's capture (status passed)
+    artifact declares: passed
+    plan built  -> state built-unverified
+    plan verify -> rc=0
+      L-TRAINING-WALK-IS-GREEN built-unverified -> verified
+    state after : verified
+
+=== live plan untouched: 1 path(s) changed under docs/plan

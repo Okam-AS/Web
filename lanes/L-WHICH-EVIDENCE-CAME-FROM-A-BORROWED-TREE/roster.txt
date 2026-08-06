@@ -1,0 +1,80 @@
+lane                                      tree                      nm-now    how-resolved
+L-ARTIFACT-FIELDS-VS-HARNESS              UNKNOWN                   ?         no tree named; no live worktree
+L-ARTIFACT-NAMES-ITS-LOCALE               web-artloc                symlink   named-in-return
+L-ARTIFACT-PROVENANCE                     UNKNOWN                   ?         no tree named; no live worktree
+L-ARTIFACT-RANK-KEY                       UNKNOWN                   ?         no tree named; no live worktree
+L-BUILT-BUT-ON-NO-REF                     AMBIGUOUS(2)              ?         multiple-candidates
+L-COMPOSE-FE-CANDIDATE                    web-fe-candidate          symlink   named-in-return
+L-COMPOSE-FE-CANDIDATE                    web-fe-candidate          symlink   named-in-return
+L-COMPOSE-FE-CANDIDATE                    web-fe-candidate          symlink   named-in-return
+L-CONFIRM-ADMIN-SURFACE                   UNKNOWN                   ?         no tree named; no live worktree
+L-CORE-ORE-LABEL                          UNKNOWN                   ?         no tree named; no live worktree
+L-DUPLICATE-KEY-IN-THE-BUILD              web-dupbuild              own-dir   lane-id->branch
+L-EV-ACCEPT-RECEIPT                       UNKNOWN                   ?         no tree named; no live worktree
+L-EV-DEPOSITS-PRECONDITION                UNKNOWN                   ?         no tree named; no live worktree
+L-EV-FAMILY-LAND                          UNKNOWN                   ?         no tree named; no live worktree
+L-EV-JOURNEY-TIMEBOMB                     wt-evtb                   own-dir   named-in-return
+L-EV-RUNSHEET-PRINT                       UNKNOWN                   ?         no tree named; no live worktree
+L-EV-STALE-CAUSE                          web-evstale               symlink   named-in-return
+L-FE-JOURNEYS-MERGE                       AMBIGUOUS(2)              ?         multiple-candidates
+L-FE-WF-INVITE-LIST-REVOKE                web-fe-invlist            symlink   named-in-return
+L-FE-WF-ONBOARD-WALK                      AMBIGUOUS(2)              ?         multiple-candidates
+L-FLAGS-JOURNEY-SWEEP                     UNKNOWN                   ?         no tree named; no live worktree
+L-FLAGS-NOTE-FALSIFIABLE                  UNKNOWN                   ?         no tree named; no live worktree
+L-GR-CONFIRMED-PIN-FIX                    UNKNOWN                   ?         no tree named; no live worktree
+L-GR-DEADLINE-ONWIRE                      UNKNOWN                   ?         no tree named; no live worktree
+L-GR-EXIT-WIRE-THE-MAIL                   web-kodeui                symlink   named-in-return
+L-GR-PRIVACY-VENUE                        UNKNOWN                   ?         no tree named; no live worktree
+L-GROWTH-PREFCENTRE                       wt-prefcentre-fe          none      branch-mentioned
+L-JOURNEY-ARTIFACTS-UNWITNESSED           web-whoanswered           symlink   named-in-return
+L-JOURNEY-COVERAGE-THREE                  web-journeys              own-dir   branch-mentioned
+L-JOURNEY-EVENTS                          UNKNOWN                   ?         no tree named; no live worktree
+L-JOURNEY-GROWTH                          UNKNOWN                   ?         no tree named; no live worktree
+L-JOURNEY-MARGIN                          UNKNOWN                   ?         no tree named; no live worktree
+L-JOURNEY-PORT-HARDCODED                  wt-jwf                    symlink   named-in-return
+L-JOURNEY-TRAINING                        UNKNOWN                   ?         no tree named; no live worktree
+L-JOURNEY-WORKFORCE                       wt-jwf                    symlink   named-in-return
+L-LINT-RUNNABLE                           web-menu-allergen         own-dir   named-in-return
+L-LIVE-BUILD-EXPORT                       UNKNOWN                   ?         no tree named; no live worktree
+L-LIVE-SEED-VIA-PRODUCT                   UNKNOWN                   ?         no tree named; no live worktree
+L-LIVE-WORLD-ADMINCRED                    web-admincred             none      named-in-return
+L-LIVE-WORLD-DISCOVER                     UNKNOWN                   ?         no tree named; no live worktree
+L-LIVE-WORLD-SEED                         UNKNOWN                   ?         no tree named; no live worktree
+L-MEALS-FUNDED                            UNKNOWN                   ?         no tree named; no live worktree
+L-MEALS-RECONCILE-UI                      web-mealsrecon            symlink   named-in-return
+L-MEALS-STALE-TOKEN                       UNKNOWN                   ?         no tree named; no live worktree
+L-MEALS-STATEMENT-SURFACE                 UNKNOWN                   ?         no tree named; no live worktree
+L-MENU-ALLERGEN-MATRIX                    web-menu-allergen         own-dir   named-in-return
+L-MODAL-BROKEN-TWO                        web-modal-two             symlink   named-in-return
+L-MODAL-LAND                              AMBIGUOUS(2)              ?         multiple-candidates
+L-MODAL-SCROLLLOCK                        web-modal-scrolllock      symlink   lane-id->branch
+L-MODAL-SEVEN                             web-modal-seven           symlink   lane-id->branch
+L-PRICE-NULL-ZERO                         UNKNOWN                   ?         no tree named; no live worktree
+L-PRINT-HOST                              web-print-host            own-dir   lane-id->branch
+L-STATUTE-EVIDENCE-WORLD                  AMBIGUOUS(2)              ?         multiple-candidates
+L-STATUTE-HONESTY                         web-statute               symlink   named-in-return
+L-TRAIN-DISCLOSURE                        UNKNOWN                   ?         no tree named; no live worktree
+L-TRAIN-EVIDENCE-NAMES-COURSE             UNKNOWN                   ?         no tree named; no live worktree
+L-TRAIN-EVIDENCE-PACK-UI                  UNKNOWN                   ?         no tree named; no live worktree
+L-TRAIN-PUBLISH-UNCLICKABLE               UNKNOWN                   ?         no tree named; no live worktree
+L-TRAIN-W3-SCHEMA                         UNKNOWN                   ?         no tree named; no live worktree
+L-VUE3-SHAPE-GUARD                        web-vue3shape             symlink   named-in-return
+L-WF-CONTACT-IMPORTED                     web-wf-contact            none      named-in-return
+L-WF-DEMO-PRESENCE                        UNKNOWN                   ?         no tree named; no live worktree
+L-WF-FAILURES-SURFACE                     UNKNOWN                   ?         no tree named; no live worktree
+L-WF-FLAGS-UI                             UNKNOWN                   ?         no tree named; no live worktree
+L-WF-IDREG                                web-wf-idreg              symlink   named-in-return
+L-WF-INVITE-SURFACE                       wt-wfinvite               symlink   named-in-return
+L-WF-KODEOVERSIKT-UI                      AMBIGUOUS(2)              ?         multiple-candidates
+L-WF-LINK-DEADEND                         web-linkdeadend           symlink   named-in-return
+L-WF-ONBOARD                              UNKNOWN                   ?         no tree named; no live worktree
+L-WF-OPLINK                               web-wf-oplink             none      named-in-return
+L-WF-PIVOT-DEFECTS                        UNKNOWN                   ?         no tree named; no live worktree
+L-WF-PUBHIST                              UNKNOWN                   ?         no tree named; no live worktree
+L-WF-PUNCH-UI                             UNKNOWN                   ?         no tree named; no live worktree
+L-WF-ROLES-UI                             UNKNOWN                   ?         no tree named; no live worktree
+L-WF-TIMESHEET-UI                         UNKNOWN                   ?         no tree named; no live worktree
+L-WORLD-STAMP-WINDOWS                     UNKNOWN                   ?         no tree named; no live worktree
+
+POPULATION: 76
+BY STATE: {'UNKNOWN': 41, 'symlink': 19, '?': 6, 'own-dir': 6, 'none': 4}

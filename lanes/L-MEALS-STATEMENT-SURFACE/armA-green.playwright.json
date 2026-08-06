@@ -1,0 +1,200 @@
+{
+  "journey": "meals-statement-month",
+  "title": "A venue reads the month statement, sees the reference each line was written with, and exports it",
+  "status": "passed",
+  "startedAtUtc": "2026-08-04T11:56:17.005Z",
+  "finishedAtUtc": "2026-08-04T11:56:45.978Z",
+  "durationMs": 28973,
+  "capabilities": [
+    "meals.statement.get",
+    "meals.statement.list.refused",
+    "meals.statement.export",
+    "meals.statement.member-reference.persisted"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3010",
+  "apiBaseUrl": "http://127.0.0.1:4010",
+  "commit": "3cd25709ec6af4806e4683e666f44814ff8e441a",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": {
+    "id": "fixture@3cd25709ec6af4806e4683e666f44814ff8e441a+dirty",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "3cd2570-dirty",
+    "detail": "the in-repo fixture backend, not an API build (branch feature/restaurant-modules)"
+  },
+  "backendServed": 12,
+  "backendSubjectServed": 5,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:4010/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:4010/user/login -> 200",
+    "GET http://127.0.0.1:4010/user -> 200",
+    "GET http://127.0.0.1:4010/stores/42/market -> 200",
+    "GET http://127.0.0.1:4010/stores/42 -> 200",
+    "GET http://127.0.0.1:4010/user -> 200",
+    "GET http://127.0.0.1:4010/v1/stores/42/meals/companies -> 200",
+    "GET http://127.0.0.1:4010/stores/42/specialopeninghours -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in as the venue manager",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T11:56:17.009Z",
+      "durationMs": 28555,
+      "detail": "on /admin/meals-statements as +4799999999 (store admin)",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "the page says out loud that it does not close the month",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T11:56:45.564Z",
+      "durationMs": 10,
+      "detail": "Denne siden lager ikke oppgjør og ferdigstiller dem ikke. Månedsavslutningen ligger på Bedriftsavtaler, ved si…",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "the company statement LIST is refused, and the page says whose it is",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T11:56:45.574Z",
+      "durationMs": 12,
+      "detail": "Denne lista er kjøperens. Serveren gir den bare til bedriftsadministrator, ikke til utsalgsstedet — så vi vet …",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "#19 DRAFT — performed through the API, because this page has no such control",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T11:56:45.633Z",
+      "durationMs": 13,
+      "detail": "drafted stmt-2026-06-comp-fixture-1 for 2026-06, 2 lines, status Draft",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "the DRAFT is opened in the browser and its lines carry those references",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T11:56:45.646Z",
+      "durationMs": 71,
+      "detail": "draft renders ANS-2287 + 4b050000-0000-0000-0000-000000000002",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "#20 FINALIZE — through the API, for the same reason",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T11:56:45.717Z",
+      "durationMs": 5,
+      "detail": "finalized at 2026-08-04T11:56:45Z, content hash 20e4b12ba051…",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "THE EXIT: the FINALIZED line shows the persisted reference",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T11:56:45.722Z",
+      "durationMs": 42,
+      "detail": "finalized lines still read ANS-2287 + 4b050000-0000-0000-0000-000000000002",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "#23 EXPORT — the venue fetches the file the buyer receives",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T11:56:45.824Z",
+      "durationMs": 39,
+      "detail": "CSV column 5 = 4b050000-0000-0000-0000-000000000002 + ANS-2287, 15 lines",
+      "error": null
+    },
+    {
+      "n": 9,
+      "name": "the file the server signed is named and signed by the server",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T11:56:45.863Z",
+      "durationMs": 10,
+      "detail": "Serverens innholdssignatur på fila: 20e4b12ba051775dbb70f3273d618e8dd0600920c2638ef30f1fe8…",
+      "error": null
+    },
+    {
+      "n": 10,
+      "name": "and it is saved",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T11:56:45.873Z",
+      "durationMs": 25,
+      "detail": "downloaded meals-statement-2026-06-stmt202606compfixture1.csv",
+      "error": null
+    },
+    {
+      "n": 11,
+      "name": "what this walk did NOT prove, recorded rather than implied",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T11:56:45.974Z",
+      "durationMs": 0,
+      "detail": "recorded",
+      "error": null
+    },
+    {
+      "n": 12,
+      "name": "what the browser said while this ran",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T11:56:45.974Z",
+      "durationMs": 0,
+      "detail": "2 shell-redirect (note), 0 this page's",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "note",
+      "summary": "draft and finalize were driven through the API, not through a browser control",
+      "detail": "This page binds #21/#22/#23 only. #19 and #20 belong to MealsMonthClose.vue on /admin/meals-agreements, which is on an unmerged lane branch and is not in this checkout, so no browser control for them exists here to drive. The two stages above are labelled API in their step names. A walk of the full draft-finalize-export sequence through browser controls needs the two surfaces merged and one link added from the close to this page."
+    },
+    {
+      "severity": "note",
+      "summary": "this run is a FIXTURE proxy for the persistence claim, not a live one",
+      "detail": "The backend really does snapshot memberDisplayRef at draft and freeze it with TR_MealsStatementLines_FinalizedImmutable — L-MEALS-EMPREF proved that on a SQL tier. What THIS run shows is the client half: that the page prints the value the wire carried and reconstructs nothing. A live run would additionally show that the value came out of a real MealsStatementLines row, that the trigger refuses an UPDATE to it, and that both survive a restart; it needs Features:Meals:Module and Features:Meals:Statements on, a corridor, and funded-order allocations no shipped client can create."
+    },
+    {
+      "severity": "note",
+      "summary": "the gate on this surface has NO operator lever",
+      "detail": "meals.statements is in MealsFeatureFlags' Withheld dictionary and is host configuration read through IOptionsMonitor, so unlike margin-recipe-to-margin or the workforce walks this journey cannot flip its own gate in either direction. The fixture therefore models no gate here, which is stated in fixture/meals.js rather than left to be discovered."
+    },
+    {
+      "severity": "note",
+      "summary": "the admin shell logs a router «Navigation cancelled» pair on every signed-in journey",
+      "detail": "Seen 2 times here and identically in every other signed-in journey in this suite. It is AdminPage's login redirect being superseded by the storeId append, not anything on this page."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fmeals-statements\" to \"/admin?redirect=%2Fadmin%2Fmeals-statements&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fmeals-statements\" to \"/admin?redirect=%2Fadmin%2Fmeals-statements&storeId=42\" with a new navigation.",
+    "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+  ],
+  "failedRequests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4010/v1/meals/companies/comp-fixture-1/statements",
+      "status": 403
+    }
+  ],
+  "screenshots": [
+    "meals-statement-month/fixture/01-the-statement-page-before-a-run-is-opened.png",
+    "meals-statement-month/fixture/02-the-finalized-statement-and-its-member-reference.png",
+    "meals-statement-month/fixture/03-the-exported-file.png"
+  ],
+  "error": null,
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/meals-statement-month.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false,
+    "supersedes": null
+  }
+}

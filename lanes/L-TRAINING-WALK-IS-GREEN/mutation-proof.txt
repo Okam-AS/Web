@@ -1,0 +1,24 @@
+=== worktree : /Users/svendaneel/okam/web-trainwalk-after
+=== commit   : 28548f96036f6118e5523bd963632ddf5ea3af63
+=== target   : components/admin/training/_training-panel.scss
+=== sha@HEAD : 6c53cee49a26ea5dadeea1f298b8b5dc36870632
+
+--- ARM M1 : mutated, the table overflow escapes its column again
+-  overflow-x: auto;
++  overflow-x: visible;
+    sha       : 32e0508c9045d6b37b3a0f71a963817eb70ffcd4
+    overflow  : overflow-x:visible;
+    RESULT M1-mutated FAIL-ASSERT rc=1
+    declared  : failed (9 steps)
+    stopped at: 9 the publish control is reachable BY POINTER at this viewport
+    signature : expect(received).not.toBe(expected) // Object.is equality
+
+--- ARM M2 : restored
+    identical to HEAD: yes
+    sha       : 6c53cee49a26ea5dadeea1f298b8b5dc36870632
+    overflow  : overflow-x:auto;
+    RESULT M2-restored PASS rc=0
+    declared  : passed (19 steps)
+    step 9    : passed — clickable by pointer at 1280×720; the table scrolls inside its column (overflow-x: auto) and paints 0px inside its right edge
+
+=== dirty after : 0 tracked path(s)

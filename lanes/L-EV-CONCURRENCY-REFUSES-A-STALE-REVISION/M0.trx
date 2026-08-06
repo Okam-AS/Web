@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="7f8b6204-3ca3-4a27-a0ac-e54b8a0f072e" name="@svens-macbook-pro 2026-08-06 10:32:51" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-06T10:32:51.5565040+02:00" queuing="2026-08-06T10:32:51.5565040+02:00" start="2026-08-06T10:32:24.6021160+02:00" finish="2026-08-06T10:33:23.3962080+02:00" />
+  <TestSettings name="default" id="9f4907b4-40e7-42da-85fa-c31cf73b8d47">
+    <Deployment runDeploymentRoot="_svens-macbook-pro_2026-08-06_10_32_51" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="ac57df09-4dc5-42bc-b0b8-c77cbb119e90" testId="eb7873c2-1258-1607-ba6d-8e31014738c8" testName="WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_bump_after_the_precheck_still_loses_at_the_update" computerName="svens-macbook-pro" duration="00:00:05.4302295" startTime="2026-08-06T10:33:02.6460170+02:00" endTime="2026-08-06T10:33:02.6460170+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ac57df09-4dc5-42bc-b0b8-c77cbb119e90" />
+    <UnitTestResult executionId="d45488e3-d8d7-4e50-a56d-466a365977a6" testId="b5a3a3b8-68c4-12fa-9467-bedd5f93e4de" testName="WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_zero_delta_line_with_a_stale_revision_is_refused_before_it_is_staged" computerName="svens-macbook-pro" duration="00:00:06.2589923" startTime="2026-08-06T10:33:08.9063970+02:00" endTime="2026-08-06T10:33:08.9063970+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d45488e3-d8d7-4e50-a56d-466a365977a6">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Throws() Failure
+Expected: typeof(WebApi.Helpers.Events.EventsProblemException)
+Actual:   (No exception was thrown)</Message>
+          <StackTrace>   at WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_zero_delta_line_with_a_stale_revision_is_refused_before_it_is_staged() in /Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/Events/EventsSettlementStaleRevisionSqlServerTests.cs:line 143
+   at WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_zero_delta_line_with_a_stale_revision_is_refused_before_it_is_staged() in /Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/Events/EventsSettlementStaleRevisionSqlServerTests.cs:line 150
+   at WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_zero_delta_line_with_a_stale_revision_is_refused_before_it_is_staged() in /Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/Events/EventsSettlementStaleRevisionSqlServerTests.cs:line 154
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="f46036d1-d6de-49ef-8da5-96f545f4918e" testId="bcf60e74-7360-cfa3-e3a2-d9ba4bf009bd" testName="WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_stale_revision_is_refused_after_a_second_operator_has_written" computerName="svens-macbook-pro" duration="00:00:07.1505134" startTime="2026-08-06T10:33:22.8174300+02:00" endTime="2026-08-06T10:33:22.8174300+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f46036d1-d6de-49ef-8da5-96f545f4918e">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Throws() Failure
+Expected: typeof(WebApi.Helpers.Events.EventsProblemException)
+Actual:   (No exception was thrown)</Message>
+          <StackTrace>   at WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_stale_revision_is_refused_after_a_second_operator_has_written() in /Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/Events/EventsSettlementStaleRevisionSqlServerTests.cs:line 75
+   at WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_stale_revision_is_refused_after_a_second_operator_has_written() in /Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/Events/EventsSettlementStaleRevisionSqlServerTests.cs:line 83
+   at WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_stale_revision_is_refused_after_a_second_operator_has_written() in /Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/Events/EventsSettlementStaleRevisionSqlServerTests.cs:line 88
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="3011d318-938d-4eb8-aebf-b93eab0d0669" testId="abb9900c-1790-9f0c-7966-d12fd426eeab" testName="WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.The_current_revision_is_accepted_and_returns_a_new_one" computerName="svens-macbook-pro" duration="00:00:05.6773456" startTime="2026-08-06T10:32:57.2157260+02:00" endTime="2026-08-06T10:32:57.2157260+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3011d318-938d-4eb8-aebf-b93eab0d0669" />
+    <UnitTestResult executionId="f6e349b8-87d9-47f6-b904-eaa40d1e041d" testId="113e3721-5d3e-b714-6c2f-68d8fd760454" testName="WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.An_absent_precondition_is_refused_where_the_row_has_a_revision" computerName="svens-macbook-pro" duration="00:00:06.4979004" startTime="2026-08-06T10:32:51.5392000+02:00" endTime="2026-08-06T10:32:51.5392080+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f6e349b8-87d9-47f6-b904-eaa40d1e041d">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Throws() Failure
+Expected: typeof(WebApi.Helpers.Events.EventsProblemException)
+Actual:   (No exception was thrown)</Message>
+          <StackTrace>   at WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.An_absent_precondition_is_refused_where_the_row_has_a_revision() in /Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/Events/EventsSettlementStaleRevisionSqlServerTests.cs:line 230
+   at WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.An_absent_precondition_is_refused_where_the_row_has_a_revision() in /Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/Events/EventsSettlementStaleRevisionSqlServerTests.cs:line 236
+   at WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.An_absent_precondition_is_refused_where_the_row_has_a_revision() in /Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/Events/EventsSettlementStaleRevisionSqlServerTests.cs:line 236
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="aa4039ac-a6a6-4e69-ab62-f40d0b795f7b" testId="fde44edc-f680-b033-477b-d35f93f0214a" testName="WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_stale_revision_is_refused_by_reconcile" computerName="svens-macbook-pro" duration="00:00:06.7584780" startTime="2026-08-06T10:33:15.6654350+02:00" endTime="2026-08-06T10:33:15.6654350+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="aa4039ac-a6a6-4e69-ab62-f40d0b795f7b">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Throws() Failure
+Expected: typeof(WebApi.Helpers.Events.EventsProblemException)
+Actual:   (No exception was thrown)</Message>
+          <StackTrace>   at WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_stale_revision_is_refused_by_reconcile() in /Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/Events/EventsSettlementStaleRevisionSqlServerTests.cs:line 109
+   at WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_stale_revision_is_refused_by_reconcile() in /Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/Events/EventsSettlementStaleRevisionSqlServerTests.cs:line 115
+   at WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_stale_revision_is_refused_by_reconcile() in /Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/Events/EventsSettlementStaleRevisionSqlServerTests.cs:line 120
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.An_absent_precondition_is_refused_where_the_row_has_a_revision" storage="/users/svendaneel/okam/wt-evstalerev/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="113e3721-5d3e-b714-6c2f-68d8fd760454">
+      <Execution id="f6e349b8-87d9-47f6-b904-eaa40d1e041d" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests" name="An_absent_precondition_is_refused_where_the_row_has_a_revision" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_stale_revision_is_refused_by_reconcile" storage="/users/svendaneel/okam/wt-evstalerev/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="fde44edc-f680-b033-477b-d35f93f0214a">
+      <Execution id="aa4039ac-a6a6-4e69-ab62-f40d0b795f7b" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests" name="A_stale_revision_is_refused_by_reconcile" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.The_current_revision_is_accepted_and_returns_a_new_one" storage="/users/svendaneel/okam/wt-evstalerev/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="abb9900c-1790-9f0c-7966-d12fd426eeab">
+      <Execution id="3011d318-938d-4eb8-aebf-b93eab0d0669" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests" name="The_current_revision_is_accepted_and_returns_a_new_one" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_bump_after_the_precheck_still_loses_at_the_update" storage="/users/svendaneel/okam/wt-evstalerev/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="eb7873c2-1258-1607-ba6d-8e31014738c8">
+      <Execution id="ac57df09-4dc5-42bc-b0b8-c77cbb119e90" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests" name="A_bump_after_the_precheck_still_loses_at_the_update" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_zero_delta_line_with_a_stale_revision_is_refused_before_it_is_staged" storage="/users/svendaneel/okam/wt-evstalerev/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="b5a3a3b8-68c4-12fa-9467-bedd5f93e4de">
+      <Execution id="d45488e3-d8d7-4e50-a56d-466a365977a6" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests" name="A_zero_delta_line_with_a_stale_revision_is_refused_before_it_is_staged" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_stale_revision_is_refused_after_a_second_operator_has_written" storage="/users/svendaneel/okam/wt-evstalerev/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="bcf60e74-7360-cfa3-e3a2-d9ba4bf009bd">
+      <Execution id="f46036d1-d6de-49ef-8da5-96f545f4918e" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests" name="A_stale_revision_is_refused_after_a_second_operator_has_written" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="eb7873c2-1258-1607-ba6d-8e31014738c8" executionId="ac57df09-4dc5-42bc-b0b8-c77cbb119e90" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b5a3a3b8-68c4-12fa-9467-bedd5f93e4de" executionId="d45488e3-d8d7-4e50-a56d-466a365977a6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bcf60e74-7360-cfa3-e3a2-d9ba4bf009bd" executionId="f46036d1-d6de-49ef-8da5-96f545f4918e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="abb9900c-1790-9f0c-7966-d12fd426eeab" executionId="3011d318-938d-4eb8-aebf-b93eab0d0669" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="113e3721-5d3e-b714-6c2f-68d8fd760454" executionId="f6e349b8-87d9-47f6-b904-eaa40d1e041d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fde44edc-f680-b033-477b-d35f93f0214a" executionId="aa4039ac-a6a6-4e69-ab62-f40d0b795f7b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="6" executed="6" passed="2" failed="4" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 8.0.28)
+[xUnit.net 00:00:01.03]   Discovering: WebApi.Tests
+[xUnit.net 00:00:01.32]   Discovered:  WebApi.Tests
+[xUnit.net 00:00:01.32]   Starting:    WebApi.Tests
+[xUnit.net 00:00:26.71]       Assert.Throws() Failure
+[xUnit.net 00:00:26.71]       Expected: typeof(WebApi.Helpers.Events.EventsProblemException)
+[xUnit.net 00:00:26.71]       Actual:   (No exception was thrown)
+[xUnit.net 00:00:26.71]       Stack Trace:
+[xUnit.net 00:00:26.72]         /Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/Events/EventsSettlementStaleRevisionSqlServerTests.cs(230,0): at WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.An_absent_precondition_is_refused_where_the_row_has_a_revision()
+[xUnit.net 00:00:26.72]         /Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/Events/EventsSettlementStaleRevisionSqlServerTests.cs(236,0): at WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.An_absent_precondition_is_refused_where_the_row_has_a_revision()
+[xUnit.net 00:00:26.72]         /Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/Events/EventsSettlementStaleRevisionSqlServerTests.cs(236,0): at WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.An_absent_precondition_is_refused_where_the_row_has_a_revision()
+[xUnit.net 00:00:26.72]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:44.08]       Assert.Throws() Failure
+[xUnit.net 00:00:44.08]       Expected: typeof(WebApi.Helpers.Events.EventsProblemException)
+[xUnit.net 00:00:44.08]       Actual:   (No exception was thrown)
+[xUnit.net 00:00:44.08]       Stack Trace:
+[xUnit.net 00:00:44.08]         /Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/Events/EventsSettlementStaleRevisionSqlServerTests.cs(143,0): at WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_zero_delta_line_with_a_stale_revision_is_refused_before_it_is_staged()
+[xUnit.net 00:00:44.08]         /Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/Events/EventsSettlementStaleRevisionSqlServerTests.cs(150,0): at WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_zero_delta_line_with_a_stale_revision_is_refused_before_it_is_staged()
+[xUnit.net 00:00:44.08]         /Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/Events/EventsSettlementStaleRevisionSqlServerTests.cs(154,0): at WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_zero_delta_line_with_a_stale_revision_is_refused_before_it_is_staged()
+[xUnit.net 00:00:44.08]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:50.84]       Assert.Throws() Failure
+[xUnit.net 00:00:50.84]       Expected: typeof(WebApi.Helpers.Events.EventsProblemException)
+[xUnit.net 00:00:50.84]       Actual:   (No exception was thrown)
+[xUnit.net 00:00:50.84]       Stack Trace:
+[xUnit.net 00:00:50.84]         /Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/Events/EventsSettlementStaleRevisionSqlServerTests.cs(109,0): at WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_stale_revision_is_refused_by_reconcile()
+[xUnit.net 00:00:50.84]         /Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/Events/EventsSettlementStaleRevisionSqlServerTests.cs(115,0): at WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_stale_revision_is_refused_by_reconcile()
+[xUnit.net 00:00:50.84]         /Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/Events/EventsSettlementStaleRevisionSqlServerTests.cs(120,0): at WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_stale_revision_is_refused_by_reconcile()
+[xUnit.net 00:00:50.84]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:57.99]       Assert.Throws() Failure
+[xUnit.net 00:00:57.99]       Expected: typeof(WebApi.Helpers.Events.EventsProblemException)
+[xUnit.net 00:00:57.99]       Actual:   (No exception was thrown)
+[xUnit.net 00:00:57.99]       Stack Trace:
+[xUnit.net 00:00:57.99]         /Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/Events/EventsSettlementStaleRevisionSqlServerTests.cs(75,0): at WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_stale_revision_is_refused_after_a_second_operator_has_written()
+[xUnit.net 00:00:57.99]         /Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/Events/EventsSettlementStaleRevisionSqlServerTests.cs(83,0): at WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_stale_revision_is_refused_after_a_second_operator_has_written()
+[xUnit.net 00:00:57.99]         /Users/svendaneel/okam/wt-evstalerev/WebApi.Tests/Events/EventsSettlementStaleRevisionSqlServerTests.cs(88,0): at WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_stale_revision_is_refused_after_a_second_operator_has_written()
+[xUnit.net 00:00:57.99]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:58.49]   Finished:    WebApi.Tests
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="svens-macbook-pro" outcome="Error" timestamp="2026-08-06T10:32:51.5385140+02:00">
+        <Text>[xUnit.net 00:00:26.71]     WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.An_absent_precondition_is_refused_where_the_row_has_a_revision [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="svens-macbook-pro" outcome="Error" timestamp="2026-08-06T10:33:08.9063790+02:00">
+        <Text>[xUnit.net 00:00:44.08]     WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_zero_delta_line_with_a_stale_revision_is_refused_before_it_is_staged [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="svens-macbook-pro" outcome="Error" timestamp="2026-08-06T10:33:15.6653850+02:00">
+        <Text>[xUnit.net 00:00:50.84]     WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_stale_revision_is_refused_by_reconcile [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="svens-macbook-pro" outcome="Error" timestamp="2026-08-06T10:33:22.8183480+02:00">
+        <Text>[xUnit.net 00:00:57.99]     WebApi.Tests.Events.EventsSettlementStaleRevisionSqlServerTests.A_stale_revision_is_refused_after_a_second_operator_has_written [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

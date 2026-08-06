@@ -1,0 +1,8 @@
+BEFORE (pages/admin + AdminPage at HEAD 7b99f2a)
+  plain deep link             peak 2   settled 1   final url /admin?redirect=%2Fadmin%2Fongoing
+  deep link with ?redirect=   peak 2   settled 2   final url /admin/ongoing?redirect=%2Fadmin%2Fongoing
+  statistics with ?redirect=  peak 2   settled 2   final url /admin/statistics?redirect=%2Fadmin%2Fstatistics
+AFTER (this lane's change)
+  plain deep link             peak 1   settled 1   final url /admin?redirect=%2Fadmin%2Fongoing
+  deep link with ?redirect=   peak 1   settled 1   final url /admin/ongoing?redirect=%2Fadmin%2Fongoing
+  statistics with ?redirect=  peak 1   settled 1   final url /admin/statistics?redirect=%2Fadmin%2Fstatistics

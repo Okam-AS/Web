@@ -277,7 +277,12 @@ describe('reachability — C3', () => {
     // AND IT IS DRAWN FOR SOMEBODY WITH NO STORE ADMIN MEMBERSHIP — `showsStoreAdminNav` is false
     // above. Every other group is withheld from that person; this one is the reason a worker's
     // sidebar is not a menu of dead ends, and the page sets `allow-non-admin` to match.
-    expect(groups.filter(g => g.title === 'nav_group_modules')).toEqual([])
+    //
+    // Asserted as "this is the ONLY group" rather than by naming the store-admin group to look for.
+    // It used to name `nav_group_modules`, which was the single heading the six restaurant modules
+    // shared; that group has since been split into six (`nav_group_module_*`), and a check written
+    // against the retired name would have gone on passing while checking nothing at all.
+    expect(groups.map(g => g.title)).toEqual(['nav_group_me'])
   })
 })
 

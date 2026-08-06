@@ -1,0 +1,220 @@
+====================================================================================================
+ARM: 1 BASELINE (both branches intact)
+====================================================================================================
+  every test that FAILED under this arm:
+    (none)
+  every test that PASSED under this arm:
+    green arriving with a code a code in the fragment is taken up and looked up straight away
+    green arriving with a code `token=` in the fragment is accepted too, because a person building the link will write it
+    green arriving with a code the address bar no longer holds the code once the page has read it
+    green arriving with a code with no code at all the page asks for one and issues no request
+    green arriving with a code a pasted code is taken into memory and cleared out of the field
+    green arriving with a code an empty paste is refused by the page and never sent
+    green arriving before signing in a held code with nobody signed in issues NO request and says why
+    green arriving before signing in the code survives signing in, and is never written into a URL to get there
+    green arriving before signing in the code is not left anywhere a later visitor to this browser could read it
+    green what the invitation is allowed to say the company, the role and the expiry — the whole of what the session carries
+    green what the invitation is allowed to say it states that the allowance, the venues and the inviter are NOT things it can show
+    green what the invitation is allowed to say a company the server named nothing for gets a title that does not invent one
+    green what the invitation is allowed to say a role outside the enum is printed verbatim rather than mapped onto one we know
+    green claiming the claim sends the RAW token, so a slow reader is not refused by an expired session
+    green claiming a retry after a lost response replays the SAME command rather than issuing a second
+    green claiming signing in as somebody else mints a new key, so the old command is not resubmitted
+    green claiming the membership is shown, with the reference the company statements will name them by
+    green claiming nothing warns about the missing employee reference BEFORE the claim, where it could not be acted on
+    green claiming the invitation is not re-read after a claim, so a consumed one cannot paint over the receipt
+    green claiming the button cannot be pressed twice into two commands
+    green the reference the statement will actually name camelCase, reference present: the receipt prints the COMPANY reference, not the membership id
+    green the reference the statement will actually name camelCase, reference null: the receipt falls back to the membership id
+    green the reference the statement will actually name PascalCase, reference present: the receipt prints the COMPANY reference
+    green the reference the statement will actually name PascalCase, reference absent from the document entirely: the membership id
+    green the reference the statement will actually name a whitespace-only reference is absence, exactly as the statement treats it
+    green the reference the statement will actually name a response carrying neither prints a dash rather than an invented string
+    green the reference the statement will actually name only a company-supplied reference is described as the employer's own
+    green the reference the statement will actually name the reference copy exists in all three languages this page offers
+    green the refusals, which is most of what this page does a code the server does not recognise names BOTH possibilities and asserts neither
+    green the refusals, which is most of what this page does an already-used code, a withdrawn one and an expired one are three different sentences
+    green the refusals, which is most of what this page does a state this client has not heard of gets a neutral sentence, not one of the three
+    green the refusals, which is most of what this page does the wrong-person refusal blames nobody, names no address, and offers the way out
+    green the refusals, which is most of what this page does a person who is already a member is told they are in, not that something failed
+    green the refusals, which is most of what this page does an expired invitation sends them to the one person who can fix it
+    green the refusals, which is most of what this page does a 401 offers sign-in and promises the code is still here
+    green the refusals, which is most of what this page does an unrouted 404 claims nothing about the invitation at all
+    green the refusals, which is most of what this page does the server's own words are shown BESIDE the sentence and never instead of it
+    green the refusals, which is most of what this page does a final refusal takes the claim button away and offers a different code instead
+    green the refusals, which is most of what this page does a refusal that MIGHT not have landed keeps the button and says so
+    green the refusals, which is most of what this page does an idempotency collision drops the key, so the offered retry can actually succeed
+    green the refusals, which is most of what this page does a refusal earned by one account is not left on screen next to another
+    green the refusals, which is most of what this page does every refusal this page can produce has its own heading and body, in all three languages
+    green the refusals, which is most of what this page does nothing on this page ever renders a bare "something went wrong"
+    green the page is not an admin screen it mounts with no store-admin membership and never asks for one
+    green the page is not an admin screen it declares itself unindexable, because the address can carry a credential
+    green the page is not an admin screen the language is the reader's, not whichever operator last used this browser
+  EXPECTED ALL GREEN: satisfied
+====================================================================================================
+ARM: 2 IGNORE-REFERENCE (receipt never reads the employee reference)
+====================================================================================================
+  every test that FAILED under this arm:
+    RED   the reference the statement will actually name camelCase, reference present: the receipt prints the COMPANY reference, not the membership id
+    RED   the reference the statement will actually name PascalCase, reference present: the receipt prints the COMPANY reference
+    RED   the reference the statement will actually name only a company-supplied reference is described as the employer's own
+  every test that PASSED under this arm:
+    green arriving with a code a code in the fragment is taken up and looked up straight away
+    green arriving with a code `token=` in the fragment is accepted too, because a person building the link will write it
+    green arriving with a code the address bar no longer holds the code once the page has read it
+    green arriving with a code with no code at all the page asks for one and issues no request
+    green arriving with a code a pasted code is taken into memory and cleared out of the field
+    green arriving with a code an empty paste is refused by the page and never sent
+    green arriving before signing in a held code with nobody signed in issues NO request and says why
+    green arriving before signing in the code survives signing in, and is never written into a URL to get there
+    green arriving before signing in the code is not left anywhere a later visitor to this browser could read it
+    green what the invitation is allowed to say the company, the role and the expiry — the whole of what the session carries
+    green what the invitation is allowed to say it states that the allowance, the venues and the inviter are NOT things it can show
+    green what the invitation is allowed to say a company the server named nothing for gets a title that does not invent one
+    green what the invitation is allowed to say a role outside the enum is printed verbatim rather than mapped onto one we know
+    green claiming the claim sends the RAW token, so a slow reader is not refused by an expired session
+    green claiming a retry after a lost response replays the SAME command rather than issuing a second
+    green claiming signing in as somebody else mints a new key, so the old command is not resubmitted
+    green claiming the membership is shown, with the reference the company statements will name them by
+    green claiming nothing warns about the missing employee reference BEFORE the claim, where it could not be acted on
+    green claiming the invitation is not re-read after a claim, so a consumed one cannot paint over the receipt
+    green claiming the button cannot be pressed twice into two commands
+    green the reference the statement will actually name camelCase, reference null: the receipt falls back to the membership id
+    green the reference the statement will actually name PascalCase, reference absent from the document entirely: the membership id
+    green the reference the statement will actually name a whitespace-only reference is absence, exactly as the statement treats it
+    green the reference the statement will actually name a response carrying neither prints a dash rather than an invented string
+    green the reference the statement will actually name the reference copy exists in all three languages this page offers
+    green the refusals, which is most of what this page does a code the server does not recognise names BOTH possibilities and asserts neither
+    green the refusals, which is most of what this page does an already-used code, a withdrawn one and an expired one are three different sentences
+    green the refusals, which is most of what this page does a state this client has not heard of gets a neutral sentence, not one of the three
+    green the refusals, which is most of what this page does the wrong-person refusal blames nobody, names no address, and offers the way out
+    green the refusals, which is most of what this page does a person who is already a member is told they are in, not that something failed
+    green the refusals, which is most of what this page does an expired invitation sends them to the one person who can fix it
+    green the refusals, which is most of what this page does a 401 offers sign-in and promises the code is still here
+    green the refusals, which is most of what this page does an unrouted 404 claims nothing about the invitation at all
+    green the refusals, which is most of what this page does the server's own words are shown BESIDE the sentence and never instead of it
+    green the refusals, which is most of what this page does a final refusal takes the claim button away and offers a different code instead
+    green the refusals, which is most of what this page does a refusal that MIGHT not have landed keeps the button and says so
+    green the refusals, which is most of what this page does an idempotency collision drops the key, so the offered retry can actually succeed
+    green the refusals, which is most of what this page does a refusal earned by one account is not left on screen next to another
+    green the refusals, which is most of what this page does every refusal this page can produce has its own heading and body, in all three languages
+    green the refusals, which is most of what this page does nothing on this page ever renders a bare "something went wrong"
+    green the page is not an admin screen it mounts with no store-admin membership and never asks for one
+    green the page is not an admin screen it declares itself unindexable, because the address can carry a credential
+    green the page is not an admin screen the language is the reader's, not whichever operator last used this browser
+  EXPECTED-RED satisfied by: the reference the statement will actually name camelCase, reference present: the receipt prints the COMPANY reference, not the membership id <- 'camelCase, reference present'
+  EXPECTED-RED satisfied by: the reference the statement will actually name PascalCase, reference present: the receipt prints the COMPANY reference <- 'PascalCase, reference present'
+  EXPECTED-RED satisfied by: the reference the statement will actually name only a company-supplied reference is described as the employer's own <- "only a company-supplied reference is described as the employer's own"
+====================================================================================================
+ARM: 3 IGNORE-FALLBACK (receipt never falls back to the membership id)
+====================================================================================================
+  every test that FAILED under this arm:
+    RED   claiming the membership is shown, with the reference the company statements will name them by
+    RED   the reference the statement will actually name camelCase, reference null: the receipt falls back to the membership id
+    RED   the reference the statement will actually name PascalCase, reference absent from the document entirely: the membership id
+    RED   the reference the statement will actually name a whitespace-only reference is absence, exactly as the statement treats it
+  every test that PASSED under this arm:
+    green arriving with a code a code in the fragment is taken up and looked up straight away
+    green arriving with a code `token=` in the fragment is accepted too, because a person building the link will write it
+    green arriving with a code the address bar no longer holds the code once the page has read it
+    green arriving with a code with no code at all the page asks for one and issues no request
+    green arriving with a code a pasted code is taken into memory and cleared out of the field
+    green arriving with a code an empty paste is refused by the page and never sent
+    green arriving before signing in a held code with nobody signed in issues NO request and says why
+    green arriving before signing in the code survives signing in, and is never written into a URL to get there
+    green arriving before signing in the code is not left anywhere a later visitor to this browser could read it
+    green what the invitation is allowed to say the company, the role and the expiry — the whole of what the session carries
+    green what the invitation is allowed to say it states that the allowance, the venues and the inviter are NOT things it can show
+    green what the invitation is allowed to say a company the server named nothing for gets a title that does not invent one
+    green what the invitation is allowed to say a role outside the enum is printed verbatim rather than mapped onto one we know
+    green claiming the claim sends the RAW token, so a slow reader is not refused by an expired session
+    green claiming a retry after a lost response replays the SAME command rather than issuing a second
+    green claiming signing in as somebody else mints a new key, so the old command is not resubmitted
+    green claiming nothing warns about the missing employee reference BEFORE the claim, where it could not be acted on
+    green claiming the invitation is not re-read after a claim, so a consumed one cannot paint over the receipt
+    green claiming the button cannot be pressed twice into two commands
+    green the reference the statement will actually name camelCase, reference present: the receipt prints the COMPANY reference, not the membership id
+    green the reference the statement will actually name PascalCase, reference present: the receipt prints the COMPANY reference
+    green the reference the statement will actually name a response carrying neither prints a dash rather than an invented string
+    green the reference the statement will actually name only a company-supplied reference is described as the employer's own
+    green the reference the statement will actually name the reference copy exists in all three languages this page offers
+    green the refusals, which is most of what this page does a code the server does not recognise names BOTH possibilities and asserts neither
+    green the refusals, which is most of what this page does an already-used code, a withdrawn one and an expired one are three different sentences
+    green the refusals, which is most of what this page does a state this client has not heard of gets a neutral sentence, not one of the three
+    green the refusals, which is most of what this page does the wrong-person refusal blames nobody, names no address, and offers the way out
+    green the refusals, which is most of what this page does a person who is already a member is told they are in, not that something failed
+    green the refusals, which is most of what this page does an expired invitation sends them to the one person who can fix it
+    green the refusals, which is most of what this page does a 401 offers sign-in and promises the code is still here
+    green the refusals, which is most of what this page does an unrouted 404 claims nothing about the invitation at all
+    green the refusals, which is most of what this page does the server's own words are shown BESIDE the sentence and never instead of it
+    green the refusals, which is most of what this page does a final refusal takes the claim button away and offers a different code instead
+    green the refusals, which is most of what this page does a refusal that MIGHT not have landed keeps the button and says so
+    green the refusals, which is most of what this page does an idempotency collision drops the key, so the offered retry can actually succeed
+    green the refusals, which is most of what this page does a refusal earned by one account is not left on screen next to another
+    green the refusals, which is most of what this page does every refusal this page can produce has its own heading and body, in all three languages
+    green the refusals, which is most of what this page does nothing on this page ever renders a bare "something went wrong"
+    green the page is not an admin screen it mounts with no store-admin membership and never asks for one
+    green the page is not an admin screen it declares itself unindexable, because the address can carry a credential
+    green the page is not an admin screen the language is the reader's, not whichever operator last used this browser
+  EXPECTED-RED satisfied by: the reference the statement will actually name camelCase, reference null: the receipt falls back to the membership id <- 'camelCase, reference null'
+  EXPECTED-RED satisfied by: the reference the statement will actually name PascalCase, reference absent from the document entirely: the membership id <- 'PascalCase, reference absent from the document entirely'
+  EXPECTED-RED satisfied by: the reference the statement will actually name a whitespace-only reference is absence, exactly as the statement treats it <- 'a whitespace-only reference is absence'
+====================================================================================================
+ARM: 4 RESTORED (byte-identical to the baseline)
+====================================================================================================
+  every test that FAILED under this arm:
+    (none)
+  every test that PASSED under this arm:
+    green arriving with a code a code in the fragment is taken up and looked up straight away
+    green arriving with a code `token=` in the fragment is accepted too, because a person building the link will write it
+    green arriving with a code the address bar no longer holds the code once the page has read it
+    green arriving with a code with no code at all the page asks for one and issues no request
+    green arriving with a code a pasted code is taken into memory and cleared out of the field
+    green arriving with a code an empty paste is refused by the page and never sent
+    green arriving before signing in a held code with nobody signed in issues NO request and says why
+    green arriving before signing in the code survives signing in, and is never written into a URL to get there
+    green arriving before signing in the code is not left anywhere a later visitor to this browser could read it
+    green what the invitation is allowed to say the company, the role and the expiry — the whole of what the session carries
+    green what the invitation is allowed to say it states that the allowance, the venues and the inviter are NOT things it can show
+    green what the invitation is allowed to say a company the server named nothing for gets a title that does not invent one
+    green what the invitation is allowed to say a role outside the enum is printed verbatim rather than mapped onto one we know
+    green claiming the claim sends the RAW token, so a slow reader is not refused by an expired session
+    green claiming a retry after a lost response replays the SAME command rather than issuing a second
+    green claiming signing in as somebody else mints a new key, so the old command is not resubmitted
+    green claiming the membership is shown, with the reference the company statements will name them by
+    green claiming nothing warns about the missing employee reference BEFORE the claim, where it could not be acted on
+    green claiming the invitation is not re-read after a claim, so a consumed one cannot paint over the receipt
+    green claiming the button cannot be pressed twice into two commands
+    green the reference the statement will actually name camelCase, reference present: the receipt prints the COMPANY reference, not the membership id
+    green the reference the statement will actually name camelCase, reference null: the receipt falls back to the membership id
+    green the reference the statement will actually name PascalCase, reference present: the receipt prints the COMPANY reference
+    green the reference the statement will actually name PascalCase, reference absent from the document entirely: the membership id
+    green the reference the statement will actually name a whitespace-only reference is absence, exactly as the statement treats it
+    green the reference the statement will actually name a response carrying neither prints a dash rather than an invented string
+    green the reference the statement will actually name only a company-supplied reference is described as the employer's own
+    green the reference the statement will actually name the reference copy exists in all three languages this page offers
+    green the refusals, which is most of what this page does a code the server does not recognise names BOTH possibilities and asserts neither
+    green the refusals, which is most of what this page does an already-used code, a withdrawn one and an expired one are three different sentences
+    green the refusals, which is most of what this page does a state this client has not heard of gets a neutral sentence, not one of the three
+    green the refusals, which is most of what this page does the wrong-person refusal blames nobody, names no address, and offers the way out
+    green the refusals, which is most of what this page does a person who is already a member is told they are in, not that something failed
+    green the refusals, which is most of what this page does an expired invitation sends them to the one person who can fix it
+    green the refusals, which is most of what this page does a 401 offers sign-in and promises the code is still here
+    green the refusals, which is most of what this page does an unrouted 404 claims nothing about the invitation at all
+    green the refusals, which is most of what this page does the server's own words are shown BESIDE the sentence and never instead of it
+    green the refusals, which is most of what this page does a final refusal takes the claim button away and offers a different code instead
+    green the refusals, which is most of what this page does a refusal that MIGHT not have landed keeps the button and says so
+    green the refusals, which is most of what this page does an idempotency collision drops the key, so the offered retry can actually succeed
+    green the refusals, which is most of what this page does a refusal earned by one account is not left on screen next to another
+    green the refusals, which is most of what this page does every refusal this page can produce has its own heading and body, in all three languages
+    green the refusals, which is most of what this page does nothing on this page ever renders a bare "something went wrong"
+    green the page is not an admin screen it mounts with no store-admin membership and never asks for one
+    green the page is not an admin screen it declares itself unindexable, because the address can carry a credential
+    green the page is not an admin screen the language is the reader's, not whichever operator last used this browser
+  EXPECTED ALL GREEN: satisfied
+====================================================================================================
+IDENTICAL AFTER RESTORE: True
+  1 BASELINE             OK
+  2 IGNORE-REFERENCE     OK
+  3 IGNORE-FALLBACK      OK
+  4 RESTORED             OK

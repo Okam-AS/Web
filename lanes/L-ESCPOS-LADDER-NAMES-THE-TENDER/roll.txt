@@ -1,0 +1,73 @@
+=== § 2-8-7 utleveringskvittering, CompanyAccount credit sale ===
+Okam AS
+Org.nr. 925 024 414 MVA
+Thorvald Meyers gate 83A, 0552
+Oslo
+
+Utleveringskvittering
+Utleveringskvitt
+ering – IKKJE
+KVITTERING FOR
+KJØP
+Kvittering nr               1824
+Utlevering nr                  7
+Gjelder kvittering          1824
+Dato         2026-08-05 11:42:03
+Kasse                         K1
+Operatør                 Åse Ørn
+--------------------------------
+Kaffe
+  1 x 125,00              125,00
+--------------------------------
+TOTALT NOK                125,00
+Bedriftskonto             125,00
+
+MVA%     Grunnlag         MVA
+25%        100,00       25,00
+
+=== Z report for the day that sale belongs to ===
+Z-RAPPORT #12
+Okam AS
+
+Kasse                         K1
+Dato            2026-08-05 23:59
+Sekvens                      0-0
+Forrige Z                      0
+Kvitteringer                   3
+--------------------------------
+OMSETNING
+Salg (3)                  375,00
+Rabatt (0)                 -0,00
+Negativt salg (0)          -0,00
+Retur (0)                  -0,00
+--------------------------------
+MOTTATT BETALING
+Kontant (1)               125,00
+Bedriftskonto (1)         125,00
+Wolt (1)                  125,00
+Sum mottatt               375,00
+--------------------------------
+KORREKSJONER
+Negativt salg (0)           0,00
+Retur (0)                   0,00
+Avbrutt salg (0)            0,00
+Linjekorreksjon (0)         0,00
+Sum korreksjoner            0,00
+Kopikvitteringer (0)        0,00
+Foreløpige (0)              0,00
+Trening (0)                 0,00
+Skuffåpninger                  0
+--------------------------------
+KONTANTOPPGJØR
+Vekslepenger                0,00
+Forventet                   0,00
+Opptalt                     0,00
+Differanse                  0,00
+--------------------------------
+GRAND TOTAL
+Salg                        0,00
+Retur                      -0,00
+Negativt salg              -0,00
+Feil/korreksjon            -0,00
+Netto                       0,00
+

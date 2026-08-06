@@ -1,0 +1,33 @@
+BASELINE: Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 72 ms - WebApi.Tests.dll (net8.0)
+
+=== ARM A. the ignore rule is removed (the defect as it shipped) ===
+  mutated -> Failed!  - Failed:     2, Passed:     0, Skipped:     0, Total:     2, Duration: 14 ms - WebApi.Tests.dll (net8.0)
+    A run must leave the checkout clean. 3 write site(s) do not:
+    WebApi.Tests/TestOutputContainmentTests.cs: writes to `artifacts/journeys`, which git tracks. A file written by a run is a record of that run, so it belongs on an ignored path — every run rewrites it,
+    WebApi.Tests/Wire/EventsDietaryRunSheetWireTests.cs: writes to `artifacts/journeys/ev-dietary/run-sheet.md`, which git tracks. A file written by a run is a record of that run, so it belongs on an igno
+    WebApi.Tests/Wire/EventsDietaryRunSheetWireTests.cs: writes to `artifacts/journeys/ev-dietary/run-sheet.json`, which git tracks. A file written by a run is a record of that run, so it belongs on an ig
+    Assert.Equal() Failure
+  restored -> Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 96 ms - WebApi.Tests.dll (net8.0)
+
+=== ARM B. a second dated artifact, other directory, other name ===
+  mutated -> Failed!  - Failed:     1, Passed:     1, Skipped:     0, Total:     2, Duration: 58 ms - WebApi.Tests.dll (net8.0)
+    A run must leave the checkout clean. 1 write site(s) do not:
+    WebApi.Tests/Wire/EventsDietaryRunSheetWireTests.cs: writes to `docs/plans`, which git tracks. A file written by a run is a record of that run, so it belongs on an ignored path — every run rewrites it
+  restored -> Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 81 ms - WebApi.Tests.dll (net8.0)
+
+=== ARM C. a destination the source does not state ===
+  mutated -> Failed!  - Failed:     1, Passed:     1, Skipped:     0, Total:     2, Duration: 56 ms - WebApi.Tests.dll (net8.0)
+    A run must leave the checkout clean. 1 write site(s) do not:
+    WebApi.Tests/Wire/EventsDietaryRunSheetWireTests.cs: writes to `Environment.GetEnvironmentVariable("SOMEWHERE") ?? "x.md"`, which cannot be resolved from the source. Build the path from a literal so t
+  restored -> Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 88 ms - WebApi.Tests.dll (net8.0)
+
+=== ARM D. git always answers 'clean' (the counter-probe's purpose) ===
+  mutated -> Failed!  - Failed:     1, Passed:     1, Skipped:     0, Total:     2, Duration: 78 ms - WebApi.Tests.dll (net8.0)
+    Assert.NotEqual() Failure
+  restored -> Passed!  - Failed:     0, Passed:     2, Skipped:     0, Total:     2, Duration: 76 ms - WebApi.Tests.dll (net8.0)
+
+=== RESULT ===
+RED-ON-DEFECT, GREEN-ON-RESTORE: A. the ignore rule is removed (the defect as it shipped)
+RED-ON-DEFECT, GREEN-ON-RESTORE: B. a second dated artifact, other directory, other name
+RED-ON-DEFECT, GREEN-ON-RESTORE: C. a destination the source does not state
+RED-ON-DEFECT, GREEN-ON-RESTORE: D. git always answers 'clean' (the counter-probe's purpose)

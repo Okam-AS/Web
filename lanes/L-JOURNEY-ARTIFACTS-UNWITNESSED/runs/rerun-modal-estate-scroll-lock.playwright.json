@@ -1,0 +1,143 @@
+{
+  "journey": "modal-estate-scroll-lock",
+  "title": "Two different modals hold the page, and closing one does not let go",
+  "status": "passed",
+  "startedAtUtc": "2026-08-05T02:47:07.440Z",
+  "finishedAtUtc": "2026-08-05T02:47:16.083Z",
+  "durationMs": 8643,
+  "capabilities": [
+    "ui.modal.scroll-lock"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3861",
+  "apiBaseUrl": "http://127.0.0.1:4861",
+  "commit": "e34977acebd59b223584158c33451b6f1ffd82c1",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": {
+    "id": "fixture@e34977acebd59b223584158c33451b6f1ffd82c1+dirty",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "e34977a-dirty",
+    "detail": "the in-repo fixture backend, not an API build (branch HEAD)"
+  },
+  "backendServed": 11,
+  "backendSubjectServed": 4,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:4861/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:4861/user/login -> 200",
+    "GET http://127.0.0.1:4861/user -> 200",
+    "GET http://127.0.0.1:4861/stores/42/market -> 200",
+    "GET http://127.0.0.1:4861/stores/42 -> 200",
+    "GET http://127.0.0.1:4861/user -> 200",
+    "GET http://127.0.0.1:4861/orders/ongoing -> 200",
+    "GET http://127.0.0.1:4861/stores/42/specialopeninghours -> 200"
+  ],
+  "servingFixture": {
+    "origin": "http://127.0.0.1:4861",
+    "askedPort": 4861,
+    "reportedPort": 4861,
+    "reportedPid": 29977,
+    "reportedCwd": "/Users/svendaneel/okam/web-unwitnessed",
+    "holderPid": 29977,
+    "holderCwd": "/Users/svendaneel/okam/web-unwitnessed",
+    "holderCommand": "node test/e2e/fixture/api-server.js",
+    "identitySource": "health+lsof",
+    "unresolved": null
+  },
+  "nodeCalls": [],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in and land on the live orders board",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:47:07.442Z",
+      "durationMs": 1630,
+      "detail": "on /admin/ongoing, 2254px of board in a 720px viewport; nothing locked",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "with no modal open, a wheel moves the page — the control",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:47:09.072Z",
+      "durationMs": 632,
+      "detail": "wheel 600 moved the page 900 -> 1236",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "OPEN THE RECEIPT MODAL BY CLICKING IT, and the wheel stops working",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:47:09.704Z",
+      "durationMs": 1762,
+      "detail": "body class \"noscroll\", computed overflow hidden, inline overflow \"\"; wheel 600 then 3000 left the page at 900",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "A SECOND, DIFFERENT MODAL OPENS — the customer card",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:47:11.560Z",
+      "durationMs": 1000,
+      "detail": "two overlays on screen, body \"noscroll noscroll\", page still at 900",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "CLOSE ONE OF THEM AND THE PAGE IS STILL LOCKED — the defect",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:47:12.560Z",
+      "durationMs": 1095,
+      "detail": "closed one of two; body still \"noscroll\" / hidden, wheel 3000 left the page at 900",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "a navigation with a modal still open does not release it",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:47:13.746Z",
+      "durationMs": 1081,
+      "detail": "after $router.replace the body is still \"noscroll\" and the board has not moved",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "closing the LAST one releases it, and the wheel works again",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:47:14.827Z",
+      "durationMs": 1176,
+      "detail": "lock released, board resumed at 900 and wheeled to 1500",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "note",
+      "summary": "a signed-out visitor sees two login modals stacked until the redirect lands",
+      "detail": "Asking for /admin/ongoing while signed out renders `.login-modal` TWICE for as long as the requested page is still mounted: components/organisms/AdminPage.vue opens one in `initAuth`, and pages/admin/ongoing.vue mounts its own `<LoginModal v-if=\"showLogin\">` on the same condition in its own `mounted`. Ten admin pages carry that duplicate handling. Measured here as a strict-mode violation on `.login-modal` (2 elements) before `$router.replace` completes. Transient and pre-existing, unrelated to the scroll lock, not fixed by this lane."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fongoing\" to \"/admin?redirect=%2Fadmin%2Fongoing&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fongoing\" to \"/admin?redirect=%2Fadmin%2Fongoing&storeId=42\" with a new navigation."
+  ],
+  "failedRequests": [],
+  "screenshots": [
+    "modal-estate-scroll-lock/fixture/01-receipt-modal-open-board-behind-held.png",
+    "modal-estate-scroll-lock/fixture/02-one-of-two-closed-board-still-held.png",
+    "modal-estate-scroll-lock/fixture/03-all-modals-closed-board-free-again.png"
+  ],
+  "error": null,
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/modal-estate-scroll-lock.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false,
+    "supersedes": null
+  }
+}

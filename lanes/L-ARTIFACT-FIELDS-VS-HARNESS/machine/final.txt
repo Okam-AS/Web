@@ -1,0 +1,148 @@
+
+=== A sits-on: 15 mismatching artifacts, 30 (artifact,key) rows ===
+10d5f376 proxiedSubjectSample   artifacts/journeys/growth-guest-lifecycle.playwright.json
+         @ ['lane/L-JOURNEY-GROWTH']
+10d5f376 proxiedSubjectServed   artifacts/journeys/growth-guest-lifecycle.playwright.json
+         @ ['lane/L-JOURNEY-GROWTH']
+f2d5f373 proxiedSubjectSample   artifacts/journeys/growth-guest-lifecycle.playwright.json
+         @ ['salvage/dangling-1890c9a3']
+f2d5f373 proxiedSubjectServed   artifacts/journeys/growth-guest-lifecycle.playwright.json
+         @ ['salvage/dangling-1890c9a3']
+4b8751af proxiedSubjectSample   artifacts/journeys/growth-testsend-refusal.playwright.json
+         @ ['lane/L-JOURNEY-GROWTH']
+4b8751af proxiedSubjectServed   artifacts/journeys/growth-testsend-refusal.playwright.json
+         @ ['lane/L-JOURNEY-GROWTH']
+9ffabf89 proxiedSubjectSample   artifacts/journeys/growth-testsend-refusal.playwright.json
+         @ ['salvage/dangling-1890c9a3']
+9ffabf89 proxiedSubjectServed   artifacts/journeys/growth-testsend-refusal.playwright.json
+         @ ['salvage/dangling-1890c9a3']
+16f6fe0c proxiedSubjectSample   artifacts/journeys/workforce-timesheet-export.playwright.json
+         @ ['lane/wf-timesheet-ui']
+16f6fe0c proxiedSubjectServed   artifacts/journeys/workforce-timesheet-export.playwright.json
+         @ ['lane/wf-timesheet-ui']
+1f378555 proxiedSubjectSample   lanes/L-JOURNEY-MEALS/capture-meals-admin-setup.playwright.json
+         @ ['lane/fe-journey-meals', 'lanes/plan-snapshot']
+1f378555 proxiedSubjectServed   lanes/L-JOURNEY-MEALS/capture-meals-admin-setup.playwright.json
+         @ ['lane/fe-journey-meals', 'lanes/plan-snapshot']
+54739741 proxiedSubjectSample   lanes/L-JOURNEY-MEALS/capture-meals-guest-claim.playwright.json
+         @ ['lane/fe-journey-meals', 'lanes/plan-snapshot']
+54739741 proxiedSubjectServed   lanes/L-JOURNEY-MEALS/capture-meals-guest-claim.playwright.json
+         @ ['lane/fe-journey-meals', 'lanes/plan-snapshot']
+9696ab28 proxiedSubjectSample   lanes/L-JOURNEY-PORT-HARDCODED/artifact-backup/meals-statement-month.playwright.json
+         @ ['lane/L-JOURNEY-PORT-HARDCODED', 'lanes/plan-snapshot']
+9696ab28 proxiedSubjectServed   lanes/L-JOURNEY-PORT-HARDCODED/artifact-backup/meals-statement-month.playwright.json
+         @ ['lane/L-JOURNEY-PORT-HARDCODED', 'lanes/plan-snapshot']
+9696ab28 proxiedSubjectSample   lanes/L-JOURNEY-PORT-HARDCODED/artifact-backup/runs/meals-statement-month.fixture.playwright.json
+         @ ['lane/L-JOURNEY-PORT-HARDCODED', 'lanes/plan-snapshot']
+9696ab28 proxiedSubjectServed   lanes/L-JOURNEY-PORT-HARDCODED/artifact-backup/runs/meals-statement-month.fixture.playwright.json
+         @ ['lane/L-JOURNEY-PORT-HARDCODED', 'lanes/plan-snapshot']
+f4d5d876 proxiedSubjectSample   lanes/L-WF-PUNCH-UI/evidence/workforce-pos-punch.playwright.json
+         @ ['lanes/plan-snapshot']
+f4d5d876 proxiedSubjectServed   lanes/L-WF-PUNCH-UI/evidence/workforce-pos-punch.playwright.json
+         @ ['lanes/plan-snapshot']
+7fbeb7ba proxiedSubjectSample   lanes/L-WORLD-STAMP-WINDOWS/provenance-arms/arm-1.provenance-probe.playwright.json
+         @ ['lanes/L-WORLD-STAMP-WINDOWS', 'lanes/plan-snapshot']
+7fbeb7ba proxiedSubjectServed   lanes/L-WORLD-STAMP-WINDOWS/provenance-arms/arm-1.provenance-probe.playwright.json
+         @ ['lanes/L-WORLD-STAMP-WINDOWS', 'lanes/plan-snapshot']
+a1ef2e22 proxiedSubjectSample   lanes/L-WORLD-STAMP-WINDOWS/provenance-arms/arm-2.provenance-probe.playwright.json
+         @ ['lanes/L-WORLD-STAMP-WINDOWS', 'lanes/plan-snapshot']
+a1ef2e22 proxiedSubjectServed   lanes/L-WORLD-STAMP-WINDOWS/provenance-arms/arm-2.provenance-probe.playwright.json
+         @ ['lanes/L-WORLD-STAMP-WINDOWS', 'lanes/plan-snapshot']
+bfd77d89 proxiedSubjectSample   lanes/L-WORLD-STAMP-WINDOWS/provenance-arms/arm-3.provenance-probe.playwright.json
+         @ ['lanes/L-WORLD-STAMP-WINDOWS', 'lanes/plan-snapshot']
+bfd77d89 proxiedSubjectServed   lanes/L-WORLD-STAMP-WINDOWS/provenance-arms/arm-3.provenance-probe.playwright.json
+         @ ['lanes/L-WORLD-STAMP-WINDOWS', 'lanes/plan-snapshot']
+be42d763 proxiedSubjectSample   lanes/L-WORLD-STAMP-WINDOWS/provenance-arms/arm-4.provenance-probe.playwright.json
+         @ ['lanes/L-WORLD-STAMP-WINDOWS', 'lanes/plan-snapshot']
+be42d763 proxiedSubjectServed   lanes/L-WORLD-STAMP-WINDOWS/provenance-arms/arm-4.provenance-probe.playwright.json
+         @ ['lanes/L-WORLD-STAMP-WINDOWS', 'lanes/plan-snapshot']
+c1ed83cd proxiedSubjectSample   lanes/L-WORLD-STAMP-WINDOWS/provenance-arms/arm-5.provenance-probe.playwright.json
+         @ ['lanes/L-WORLD-STAMP-WINDOWS', 'lanes/plan-snapshot']
+c1ed83cd proxiedSubjectServed   lanes/L-WORLD-STAMP-WINDOWS/provenance-arms/arm-5.provenance-probe.playwright.json
+         @ ['lanes/L-WORLD-STAMP-WINDOWS', 'lanes/plan-snapshot']
+
+=== B committed-into: 19 mismatching artifacts, 42 (artifact,key) rows ===
+10d5f376 proxiedSubjectSample   artifacts/journeys/growth-guest-lifecycle.playwright.json
+         @ ['ef2d6be46ee11b76154c639275a360285ad61e8e']
+10d5f376 proxiedSubjectServed   artifacts/journeys/growth-guest-lifecycle.playwright.json
+         @ ['ef2d6be46ee11b76154c639275a360285ad61e8e']
+f2d5f373 proxiedSubjectSample   artifacts/journeys/growth-guest-lifecycle.playwright.json
+         @ ['1890c9a38a3a9f5eae692d65bdb06b5d996dedf1']
+f2d5f373 proxiedSubjectServed   artifacts/journeys/growth-guest-lifecycle.playwright.json
+         @ ['1890c9a38a3a9f5eae692d65bdb06b5d996dedf1']
+4b8751af proxiedSubjectSample   artifacts/journeys/growth-testsend-refusal.playwright.json
+         @ ['ef2d6be46ee11b76154c639275a360285ad61e8e']
+4b8751af proxiedSubjectServed   artifacts/journeys/growth-testsend-refusal.playwright.json
+         @ ['ef2d6be46ee11b76154c639275a360285ad61e8e']
+9ffabf89 proxiedSubjectSample   artifacts/journeys/growth-testsend-refusal.playwright.json
+         @ ['1890c9a38a3a9f5eae692d65bdb06b5d996dedf1']
+9ffabf89 proxiedSubjectServed   artifacts/journeys/growth-testsend-refusal.playwright.json
+         @ ['1890c9a38a3a9f5eae692d65bdb06b5d996dedf1']
+16f6fe0c proxiedSubjectSample   artifacts/journeys/workforce-timesheet-export.playwright.json
+         @ ['618efc88750fa4adb59769b859d3975bfcdc1f3b']
+16f6fe0c proxiedSubjectServed   artifacts/journeys/workforce-timesheet-export.playwright.json
+         @ ['618efc88750fa4adb59769b859d3975bfcdc1f3b']
+1f378555 proxiedSubjectSample   lanes/L-JOURNEY-MEALS/capture-meals-admin-setup.playwright.json
+         @ ['51970563d3801f3ce4ccffadc342e4dc197d2a06', '8a773267a6ed24afcc68d3d2f627bb8887fa6688']
+1f378555 proxiedSubjectServed   lanes/L-JOURNEY-MEALS/capture-meals-admin-setup.playwright.json
+         @ ['51970563d3801f3ce4ccffadc342e4dc197d2a06', '8a773267a6ed24afcc68d3d2f627bb8887fa6688']
+54739741 proxiedSubjectSample   lanes/L-JOURNEY-MEALS/capture-meals-guest-claim.playwright.json
+         @ ['51970563d3801f3ce4ccffadc342e4dc197d2a06', '8a773267a6ed24afcc68d3d2f627bb8887fa6688']
+54739741 proxiedSubjectServed   lanes/L-JOURNEY-MEALS/capture-meals-guest-claim.playwright.json
+         @ ['51970563d3801f3ce4ccffadc342e4dc197d2a06', '8a773267a6ed24afcc68d3d2f627bb8887fa6688']
+9696ab28 proxiedSubjectSample   lanes/L-JOURNEY-PORT-HARDCODED/artifact-backup/meals-statement-month.playwright.json
+         @ ['4772c1316ac933bdab6d5d5434111d0479da6b37', '51970563d3801f3ce4ccffadc342e4dc197d2a06']
+9696ab28 proxiedSubjectServed   lanes/L-JOURNEY-PORT-HARDCODED/artifact-backup/meals-statement-month.playwright.json
+         @ ['4772c1316ac933bdab6d5d5434111d0479da6b37', '51970563d3801f3ce4ccffadc342e4dc197d2a06']
+9696ab28 proxiedSubjectSample   lanes/L-JOURNEY-PORT-HARDCODED/artifact-backup/runs/meals-statement-month.fixture.playwright.json
+         @ ['4772c1316ac933bdab6d5d5434111d0479da6b37', '51970563d3801f3ce4ccffadc342e4dc197d2a06']
+9696ab28 proxiedSubjectServed   lanes/L-JOURNEY-PORT-HARDCODED/artifact-backup/runs/meals-statement-month.fixture.playwright.json
+         @ ['4772c1316ac933bdab6d5d5434111d0479da6b37', '51970563d3801f3ce4ccffadc342e4dc197d2a06']
+de773948 backendBuild           lanes/L-LIVE-SEED-VIA-PRODUCT/workforce-flag-lever.live.playwright.json
+         @ ['fadc84a3f34cd185a14ca642bb9f4d21b6117bcc']
+de773948 canonicalHeldBy        lanes/L-LIVE-SEED-VIA-PRODUCT/workforce-flag-lever.live.playwright.json
+         @ ['fadc84a3f34cd185a14ca642bb9f4d21b6117bcc']
+de773948 provisional            lanes/L-LIVE-SEED-VIA-PRODUCT/workforce-flag-lever.live.playwright.json
+         @ ['fadc84a3f34cd185a14ca642bb9f4d21b6117bcc']
+7e176a48 backendBuild           lanes/L-LIVE-WORLD-RESTORE/chain-events-deposit-precondition.live.json
+         @ ['337f9bf2b14987c4ffd302a5659db2b8b411aacd']
+7e176a48 canonicalHeldBy        lanes/L-LIVE-WORLD-RESTORE/chain-events-deposit-precondition.live.json
+         @ ['337f9bf2b14987c4ffd302a5659db2b8b411aacd']
+7e176a48 provisional            lanes/L-LIVE-WORLD-RESTORE/chain-events-deposit-precondition.live.json
+         @ ['337f9bf2b14987c4ffd302a5659db2b8b411aacd']
+5f10b01b backendBuild           lanes/L-LIVE-WORLD-RESTORE/chain-workforce-flag-lever.live.json
+         @ ['337f9bf2b14987c4ffd302a5659db2b8b411aacd']
+5f10b01b canonicalHeldBy        lanes/L-LIVE-WORLD-RESTORE/chain-workforce-flag-lever.live.json
+         @ ['337f9bf2b14987c4ffd302a5659db2b8b411aacd']
+5f10b01b provisional            lanes/L-LIVE-WORLD-RESTORE/chain-workforce-flag-lever.live.json
+         @ ['337f9bf2b14987c4ffd302a5659db2b8b411aacd']
+fedbc64c backendBuild           lanes/L-LIVE-WORLD-RESTORE/chain-workforce-schedule-publish.live.json
+         @ ['337f9bf2b14987c4ffd302a5659db2b8b411aacd']
+fedbc64c canonicalHeldBy        lanes/L-LIVE-WORLD-RESTORE/chain-workforce-schedule-publish.live.json
+         @ ['337f9bf2b14987c4ffd302a5659db2b8b411aacd']
+fedbc64c provisional            lanes/L-LIVE-WORLD-RESTORE/chain-workforce-schedule-publish.live.json
+         @ ['337f9bf2b14987c4ffd302a5659db2b8b411aacd']
+f4d5d876 proxiedSubjectSample   lanes/L-WF-PUNCH-UI/evidence/workforce-pos-punch.playwright.json
+         @ ['51970563d3801f3ce4ccffadc342e4dc197d2a06']
+f4d5d876 proxiedSubjectServed   lanes/L-WF-PUNCH-UI/evidence/workforce-pos-punch.playwright.json
+         @ ['51970563d3801f3ce4ccffadc342e4dc197d2a06']
+7fbeb7ba proxiedSubjectSample   lanes/L-WORLD-STAMP-WINDOWS/provenance-arms/arm-1.provenance-probe.playwright.json
+         @ ['51970563d3801f3ce4ccffadc342e4dc197d2a06', '997936ad692145ea68eee9865d06c6430c505c8e']
+7fbeb7ba proxiedSubjectServed   lanes/L-WORLD-STAMP-WINDOWS/provenance-arms/arm-1.provenance-probe.playwright.json
+         @ ['51970563d3801f3ce4ccffadc342e4dc197d2a06', '997936ad692145ea68eee9865d06c6430c505c8e']
+a1ef2e22 proxiedSubjectSample   lanes/L-WORLD-STAMP-WINDOWS/provenance-arms/arm-2.provenance-probe.playwright.json
+         @ ['51970563d3801f3ce4ccffadc342e4dc197d2a06', '997936ad692145ea68eee9865d06c6430c505c8e']
+a1ef2e22 proxiedSubjectServed   lanes/L-WORLD-STAMP-WINDOWS/provenance-arms/arm-2.provenance-probe.playwright.json
+         @ ['51970563d3801f3ce4ccffadc342e4dc197d2a06', '997936ad692145ea68eee9865d06c6430c505c8e']
+bfd77d89 proxiedSubjectSample   lanes/L-WORLD-STAMP-WINDOWS/provenance-arms/arm-3.provenance-probe.playwright.json
+         @ ['51970563d3801f3ce4ccffadc342e4dc197d2a06', '997936ad692145ea68eee9865d06c6430c505c8e']
+bfd77d89 proxiedSubjectServed   lanes/L-WORLD-STAMP-WINDOWS/provenance-arms/arm-3.provenance-probe.playwright.json
+         @ ['51970563d3801f3ce4ccffadc342e4dc197d2a06', '997936ad692145ea68eee9865d06c6430c505c8e']
+be42d763 proxiedSubjectSample   lanes/L-WORLD-STAMP-WINDOWS/provenance-arms/arm-4.provenance-probe.playwright.json
+         @ ['51970563d3801f3ce4ccffadc342e4dc197d2a06', '997936ad692145ea68eee9865d06c6430c505c8e']
+be42d763 proxiedSubjectServed   lanes/L-WORLD-STAMP-WINDOWS/provenance-arms/arm-4.provenance-probe.playwright.json
+         @ ['51970563d3801f3ce4ccffadc342e4dc197d2a06', '997936ad692145ea68eee9865d06c6430c505c8e']
+c1ed83cd proxiedSubjectSample   lanes/L-WORLD-STAMP-WINDOWS/provenance-arms/arm-5.provenance-probe.playwright.json
+         @ ['51970563d3801f3ce4ccffadc342e4dc197d2a06', '997936ad692145ea68eee9865d06c6430c505c8e']
+c1ed83cd proxiedSubjectServed   lanes/L-WORLD-STAMP-WINDOWS/provenance-arms/arm-5.provenance-probe.playwright.json
+         @ ['51970563d3801f3ce4ccffadc342e4dc197d2a06', '997936ad692145ea68eee9865d06c6430c505c8e']

@@ -1,0 +1,32 @@
+BASELINE: 53 tests, 0 failing
+
+ARM 1 new-draft: unbound @click="newDraft" -> 4 newly red
+  RED margin-recipe-revise.test.js :: an active recipe can be fixed and then ended, without leaving the page new draft -> edit -> activate -> retire, every step driven from the screen
+  RED margin-recipe-revise.test.js :: an active recipe can be fixed and then ended, without leaving the page the list row follows the same journey
+  RED margin-recipe-revise.test.js :: the new draft is a clone of the ACTIVE version it is requested for this recipe, with no revision and no invented notes
+  RED margin-recipe-revise.test.js :: the new draft is a clone of the ACTIVE version it re-reads the recipe and the list, and not the menu margin
+  step-scoped describes still green: 12
+
+ARM 2 edit: unbound @click="saveDraft" -> 6 newly red
+  RED margin-recipe-revise.test.js :: an active recipe can be fixed and then ended, without leaving the page new draft -> edit -> activate -> retire, every step driven from the screen
+  RED margin-recipe-revise.test.js :: the edit carries the DRAFT revision and the whole version a null yield factor stays null, and a real one is not rounded away
+  RED margin-recipe-revise.test.js :: the edit carries the DRAFT revision and the whole version a refusal is rendered from its CODE and the draft is not reported as saved
+  RED margin-recipe-revise.test.js :: the edit carries the DRAFT revision and the whole version a save that changed one number sends the version whole
+  RED margin-recipe-revise.test.js :: the edit carries the DRAFT revision and the whole version it re-reads the recipe and not the menu margin
+  RED margin-recipe-revise.test.js :: the edit carries the DRAFT revision and the whole version the token sent is the draft own, not the recipe header one and not the active version one
+  step-scoped describes still green: 9
+
+ARM 3 activate: unbound @click="activate" -> 3 newly red
+  RED margin-recipe-revise.test.js :: activation supersedes what it replaces the predecessor leaves the Active state in the same transition
+  RED margin-recipe-revise.test.js :: an active recipe can be fixed and then ended, without leaving the page new draft -> edit -> activate -> retire, every step driven from the screen
+  RED margin-recipe-revise.test.js :: an active recipe can be fixed and then ended, without leaving the page the list row follows the same journey
+  step-scoped describes still green: 13
+
+ARM 4 retire: unbound @click="retire" -> 5 newly red
+  RED margin-recipe-revise.test.js :: an active recipe can be fixed and then ended, without leaving the page new draft -> edit -> activate -> retire, every step driven from the screen
+  RED margin-recipe-revise.test.js :: an active recipe can be fixed and then ended, without leaving the page the list row follows the same journey
+  RED margin-recipe-revise.test.js :: retire is reachable from ACTIVE, and only from there a server refusal is rendered from its CODE and the recipe stays active
+  RED margin-recipe-revise.test.js :: retire is reachable from ACTIVE, and only from there it re-reads the menu margin, unlike a draft edit
+  RED margin-recipe-revise.test.js :: retire is reachable from ACTIVE, and only from there the token sent is the ACTIVE VERSION revision, not the recipe header one
+  step-scoped describes still green: 11
+

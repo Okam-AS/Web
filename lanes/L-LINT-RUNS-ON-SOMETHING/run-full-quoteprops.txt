@@ -1,0 +1,747 @@
+
+> okam-consumer@1.0.0 test
+> jest
+
+PASS test/workforce-rates-components.test.js
+PASS test/workforce-week-grid.component.test.js
+PASS test/workforce-roster-components.test.js
+PASS test/growth-privacy-page.test.js
+PASS test/growth-guest-pages.test.js
+PASS test/training-disclosure.test.js
+PASS test/feature-flags-page.test.js
+PASS test/workforce-schedule-authoring.test.js
+PASS test/margin-recipe-revise.test.js
+PASS test/growth-newsletter-page.test.js
+PASS test/margin-menu-margin-panel.component.test.js
+PASS test/workforce-external-commitments.test.js
+PASS test/store-market-card.component.test.js
+PASS test/meals-claim-page.test.js
+PASS test/workforce-pivot-components.test.js
+PASS test/margin-statements-page.test.js
+PASS test/growth-components.test.js
+PASS test/workforce-me-training-disclosure.test.js
+PASS test/store-market-view.test.js
+PASS test/margin-cost-panel.component.test.js
+PASS test/margin-product-links.component.test.js
+PASS test/meals-components.test.js
+PASS test/workforce-schedule-authoring-page.test.js
+PASS test/account-email-page.test.js
+PASS test/workforce-personnel-list-components.test.js
+PASS test/translation-key-presence.test.js
+PASS test/events-surface.test.js
+PASS test/events-guest-pages.test.js
+PASS test/admin-nav-access.test.js
+PASS test/training-page.test.js
+PASS test/workforce-rates-page.test.js
+PASS test/training-components.test.js
+PASS test/workforce-join-page.test.js
+PASS test/meals-page.test.js
+PASS test/meals-reconciliation-page.test.js
+PASS test/margin-recipes-page.test.js
+PASS test/workforce-roster-page.test.js
+PASS test/events-page.test.js
+PASS test/margin-waste.test.js
+PASS test/workforce-requests-page.test.js
+PASS test/meals-admin-components.test.js
+PASS test/workforce-personnel-list-page.test.js
+PASS test/workforce-schedule-page.test.js
+PASS test/margin-suppliers-page.test.js
+PASS test/meals-companies-page.test.js
+PASS test/modal-scroll-lock-estate.test.js
+PASS test/events-guest.test.js
+PASS test/workforce-personnel-list-code-register.test.js
+PASS test/margin-price-imports-page.test.js
+PASS test/margin-supplier-panels.component.test.js
+PASS test/margin-statement-components.test.js
+PASS test/workforce-schedule-flag-refusal.test.js
+PASS test/meals-enrolment-journey.test.js
+PASS test/modal-scroll-lock.test.js
+PASS test/workforce-role-grid.test.js
+PASS test/workforce-contact-imported.test.js
+PASS test/journey-rerunnability.test.js
+PASS test/workforce-me-self-service.test.js
+PASS test/workforce-month-grid.test.js
+PASS test/workforce-week-grid.test.js
+PASS test/fixture-refusal-divergence.test.js
+PASS test/workforce-me-claim-outcome.test.js
+PASS test/workforce-roster.test.js
+PASS test/margin-cost-preview.test.js
+PASS test/workforce-me-components.test.js
+PASS test/workforce-personnel-list.test.js
+PASS test/workforce-roles-page.test.js
+PASS test/meals-admin-view.test.js
+PASS test/store-market-dashboard.test.js
+PASS test/events-journey.test.js
+PASS test/workforce-me-self-requests.test.js
+PASS test/growth-client.test.js
+PASS test/training-journey.test.js
+PASS test/margin-price-import-model.test.js
+PASS test/margin-statement-client.test.js
+PASS test/training-client.test.js
+PASS test/meals-admin-picker.test.js
+PASS test/margin-supplier-client.test.js
+PASS test/workforce-requests-inbox.test.js
+PASS test/margin-recipe-client.test.js
+PASS test/growth-guest.test.js
+PASS test/workforce-api-client.test.js
+PASS test/workforce-rates-amount.test.js
+PASS test/meals-admin-client.test.js
+PASS test/meals-statement-view.test.js
+PASS test/workforce-rates-attendance.test.js
+PASS test/admin-page-auth.test.js
+PASS test/growth-send-gate.test.js
+PASS test/margin-price-timeline.test.js
+PASS test/margin-price-import-client.test.js
+PASS test/margin-menu-margin.test.js
+PASS test/workforce-me-memberships.test.js
+PASS test/platform-feature-flags-client.test.js
+PASS test/store-market-client.test.js
+PASS test/journey-assertions.test.js
+PASS test/workforce-rates-client.test.js
+PASS test/workforce-me-client.test.js
+PASS test/workforce-personnel-list-code-register-client.test.js
+PASS test/workforce-requests-client.test.js
+PASS test/workforce-week-range.test.js
+PASS test/platform-flag-board.test.js
+PASS test/events-client.test.js
+PASS test/workforce-roster-client.test.js
+PASS test/growth-guest-client.test.js
+PASS test/margin-statement-view.test.js
+PASS test/margin-spend-amount.test.js
+PASS test/workforce-me-inbox-filter.test.js
+PASS test/workforce-rates-timeline.test.js
+PASS test/workforce-schedule-client.test.js
+PASS test/meals-store-view.test.js
+PASS test/workforce-me-shift-view.test.js
+PASS test/growth-privacy-queue.test.js
+PASS test/meals-client.test.js
+PASS test/workforce-rates-hours-export.test.js
+FAIL test/core-request-path-shape.test.js
+  ● Test suite failed to run
+
+    ENOENT: no such file or directory, open '/Users/svendaneel/okam/web-lintruns/core/services/request-service.ts'
+
+      170 | // ---- what RequestService says takes a path ----------------------------------------------------
+      171 |
+    > 172 | const requestServiceSource = blankComments(fs.readFileSync(REQUEST_SERVICE, 'utf8'))
+          |                                               ^
+      173 | const declarations = []
+      174 | const declarationRe = /\bpublic\s+([A-Za-z0-9_]*Request)\s*\(\s*([A-Za-z0-9_]+)\s*:/g
+      175 | let declaration
+
+      at Object.<anonymous> (test/core-request-path-shape.test.js:172:47)
+
+PASS test/workforce-me-invitation-claim.test.js
+PASS test/growth-withdrawal-origin.test.js
+PASS test/chf-format.test.js
+FAIL test/core-price-label.test.js
+  ● Test suite failed to run
+
+    Configuration error:
+
+    Could not locate module ~/core/helpers/tools mapped as:
+    /Users/svendaneel/okam/web-lintruns/$1.
+
+    Please check your configuration for these entries:
+    {
+      "moduleNameMapper": {
+        "/^~\/(.*)$/": "/Users/svendaneel/okam/web-lintruns/$1"
+      },
+      "resolver": undefined
+    }
+
+    > 1 | import { priceLabel, fractionAmount, setCurrencyFormat } from '~/core/helpers/tools'
+        | ^
+      2 |
+      3 | // Core's price helper, exercised directly out of the submodule (`~/core` maps to <rootDir>/core, and
+      4 | // ts-jest compiles it). Every other money assertion in this repo goes through a hand-written stand-in
+
+      at createNoMappedModuleFoundError (../Web-modules/node_modules/jest-resolve/build/index.js:551:17)
+      at Object.<anonymous> (test/core-price-label.test.js:1:1)
+
+FAIL test/price-crosscurrency.test.js
+  ● Test suite failed to run
+
+    Configuration error:
+
+    Could not locate module ~/core/helpers/tools mapped as:
+    /Users/svendaneel/okam/web-lintruns/$1.
+
+    Please check your configuration for these entries:
+    {
+      "moduleNameMapper": {
+        "/^~\/(.*)$/": "/Users/svendaneel/okam/web-lintruns/$1"
+      },
+      "resolver": undefined
+    }
+
+      3 | import { crossCurrencyLabel } from '~/utils/cross-currency'
+      4 | import { UNKNOWN_AMOUNT } from '~/utils/price'
+    > 5 | import { wholeAmount, fractionAmount } from '~/core/helpers/tools'
+        | ^
+      6 | import WorkforceWeekGrid from '~/components/admin/workforce/WorkforceWeekGrid.vue'
+      7 | import WorkforceRateTimeline from '~/components/admin/workforce-rates/WorkforceRateTimeline.vue'
+      8 | import MealsFundedOrders from '~/components/admin/meals/MealsFundedOrders.vue'
+
+      at createNoMappedModuleFoundError (../Web-modules/node_modules/jest-resolve/build/index.js:551:17)
+      at Object.<anonymous> (test/price-crosscurrency.test.js:5:1)
+
+PASS test/margin-money-input.test.js
+FAIL test/price-absence.test.js
+  ● Test suite failed to run
+
+    Configuration error:
+
+    Could not locate module ~/core/services mapped as:
+    /Users/svendaneel/okam/web-lintruns/$1.
+
+    Please check your configuration for these entries:
+    {
+      "moduleNameMapper": {
+        "/^~\/(.*)$/": "/Users/svendaneel/okam/web-lintruns/$1"
+      },
+      "resolver": undefined
+    }
+
+      1 | import Vue from 'vue'
+      2 | import dayjs from 'dayjs'
+    > 3 | import {
+        | ^
+      4 |   ProductService,
+      5 |   DiscountService,
+      6 |   StoreService,
+
+      at createNoMappedModuleFoundError (../Web-modules/node_modules/jest-resolve/build/index.js:551:17)
+      at Object.<anonymous> (plugins/global-mixin.js:3:1)
+      at Object.<anonymous> (test/price-absence.test.js:4:1)
+
+FAIL test/price-bypass-legacy.test.js
+  ● Test suite failed to run
+
+    Configuration error:
+
+    Could not locate module ~/core/services mapped as:
+    /Users/svendaneel/okam/web-lintruns/$1.
+
+    Please check your configuration for these entries:
+    {
+      "moduleNameMapper": {
+        "/^~\/(.*)$/": "/Users/svendaneel/okam/web-lintruns/$1"
+      },
+      "resolver": undefined
+    }
+
+      1 | import Vue from 'vue'
+      2 | import dayjs from 'dayjs'
+    > 3 | import {
+        | ^
+      4 |   ProductService,
+      5 |   DiscountService,
+      6 |   StoreService,
+
+      at createNoMappedModuleFoundError (../Web-modules/node_modules/jest-resolve/build/index.js:551:17)
+      at Object.<anonymous> (plugins/global-mixin.js:3:1)
+      at Object.<anonymous> (test/price-bypass-legacy.test.js:4:1)
+
+FAIL test/price-gate-shadow.test.js
+  ● Test suite failed to run
+
+    Configuration error:
+
+    Could not locate module ~/core/services mapped as:
+    /Users/svendaneel/okam/web-lintruns/$1.
+
+    Please check your configuration for these entries:
+    {
+      "moduleNameMapper": {
+        "/^~\/(.*)$/": "/Users/svendaneel/okam/web-lintruns/$1"
+      },
+      "resolver": undefined
+    }
+
+      1 | import Vue from 'vue'
+      2 | import dayjs from 'dayjs'
+    > 3 | import {
+        | ^
+      4 |   ProductService,
+      5 |   DiscountService,
+      6 |   StoreService,
+
+      at createNoMappedModuleFoundError (../Web-modules/node_modules/jest-resolve/build/index.js:551:17)
+      at Object.<anonymous> (plugins/global-mixin.js:3:1)
+      at Object.<anonymous> (test/price-gate-shadow.test.js:4:1)
+
+FAIL test/translations-lint.test.js (5.307 s)
+  ● the configured lint rules run on a change to a translations dictionary › runs that script, and the dictionaries carry no error-severity violation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "translations/no.ts:2  quote-props  Unnecessarily quoted property 'aIQueryBox_example1' found.",
+    + ]
+
+      109 |     // The message is the point: a translator reading this red should not have to go and re-run
+      110 |     // anything to learn which key in which dictionary broke.
+    > 111 |     expect(failures).toEqual([])
+          |                      ^
+      112 |     expect(status).toBe(0)
+      113 |   }, 60000)
+      114 |
+
+      at Object.<anonymous> (test/translations-lint.test.js:111:22)
+
+PASS test/world-stamp-windows.test.js
+PASS test/journey-artifact-store.test.js
+Failed to collect coverage from /Users/svendaneel/okam/web-lintruns/components/molecules/ReceiptModal.vue
+ERROR: Unexpected token (1:1470)
+STACK: SyntaxError: Unexpected token (1:1470)
+    at pp$4.raise (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2757:13)
+    at pp.unexpected (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:647:8)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2196:10)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1954:28)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseParenAndDistinguishExpression (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2238:30)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2163:41)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+Failed to collect coverage from /Users/svendaneel/okam/web-lintruns/components/onboarding/OnboardingProductImages.vue
+ERROR: Unexpected token (2:133)
+STACK: SyntaxError: Unexpected token (2:133)
+    at pp$4.raise (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2757:13)
+    at pp.unexpected (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:647:8)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2196:10)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1954:28)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseParenAndDistinguishExpression (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2238:30)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2163:41)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+Failed to collect coverage from /Users/svendaneel/okam/web-lintruns/pages/admin/offers.vue
+ERROR: Unexpected token (1:15427)
+STACK: SyntaxError: Unexpected token (1:15427)
+    at pp$4.raise (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2757:13)
+    at pp.unexpected (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:647:8)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2196:10)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1954:28)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+Failed to collect coverage from /Users/svendaneel/okam/web-lintruns/pages/admin/wolt-menu.vue
+ERROR: Unexpected token (1:903)
+STACK: SyntaxError: Unexpected token (1:903)
+    at pp$4.raise (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2757:13)
+    at pp.unexpected (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:647:8)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2196:10)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1954:28)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parsePropertyValue (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2443:87)
+    at pp$3.parseProperty (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2434:8)
+    at pp$3.parseObj (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2380:23)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2179:17)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+Failed to collect coverage from /Users/svendaneel/okam/web-lintruns/pages/admin/products.vue
+ERROR: Unexpected token (2:922)
+STACK: SyntaxError: Unexpected token (2:922)
+    at pp$4.raise (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2757:13)
+    at pp.unexpected (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:647:8)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2196:10)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1954:28)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseParenAndDistinguishExpression (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2238:30)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2163:41)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+File                              | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+All files                         |   47.92 |    28.26 |   31.25 |   48.35 |                   
+
+Summary of all failing tests
+FAIL test/core-request-path-shape.test.js
+  ● Test suite failed to run
+
+    ENOENT: no such file or directory, open '/Users/svendaneel/okam/web-lintruns/core/services/request-service.ts'
+
+      170 | // ---- what RequestService says takes a path ----------------------------------------------------
+      171 |
+    > 172 | const requestServiceSource = blankComments(fs.readFileSync(REQUEST_SERVICE, 'utf8'))
+          |                                               ^
+      173 | const declarations = []
+      174 | const declarationRe = /\bpublic\s+([A-Za-z0-9_]*Request)\s*\(\s*([A-Za-z0-9_]+)\s*:/g
+      175 | let declaration
+
+      at Object.<anonymous> (test/core-request-path-shape.test.js:172:47)
+
+FAIL test/core-price-label.test.js
+  ● Test suite failed to run
+
+    Configuration error:
+
+    Could not locate module ~/core/helpers/tools mapped as:
+    /Users/svendaneel/okam/web-lintruns/$1.
+
+    Please check your configuration for these entries:
+    {
+      "moduleNameMapper": {
+        "/^~\/(.*)$/": "/Users/svendaneel/okam/web-lintruns/$1"
+      },
+      "resolver": undefined
+    }
+
+    > 1 | import { priceLabel, fractionAmount, setCurrencyFormat } from '~/core/helpers/tools'
+        | ^
+      2 |
+      3 | // Core's price helper, exercised directly out of the submodule (`~/core` maps to <rootDir>/core, and
+      4 | // ts-jest compiles it). Every other money assertion in this repo goes through a hand-written stand-in
+
+      at createNoMappedModuleFoundError (../Web-modules/node_modules/jest-resolve/build/index.js:551:17)
+      at Object.<anonymous> (test/core-price-label.test.js:1:1)
+
+FAIL test/price-crosscurrency.test.js
+  ● Test suite failed to run
+
+    Configuration error:
+
+    Could not locate module ~/core/helpers/tools mapped as:
+    /Users/svendaneel/okam/web-lintruns/$1.
+
+    Please check your configuration for these entries:
+    {
+      "moduleNameMapper": {
+        "/^~\/(.*)$/": "/Users/svendaneel/okam/web-lintruns/$1"
+      },
+      "resolver": undefined
+    }
+
+      3 | import { crossCurrencyLabel } from '~/utils/cross-currency'
+      4 | import { UNKNOWN_AMOUNT } from '~/utils/price'
+    > 5 | import { wholeAmount, fractionAmount } from '~/core/helpers/tools'
+        | ^
+      6 | import WorkforceWeekGrid from '~/components/admin/workforce/WorkforceWeekGrid.vue'
+      7 | import WorkforceRateTimeline from '~/components/admin/workforce-rates/WorkforceRateTimeline.vue'
+      8 | import MealsFundedOrders from '~/components/admin/meals/MealsFundedOrders.vue'
+
+      at createNoMappedModuleFoundError (../Web-modules/node_modules/jest-resolve/build/index.js:551:17)
+      at Object.<anonymous> (test/price-crosscurrency.test.js:5:1)
+
+FAIL test/price-absence.test.js
+  ● Test suite failed to run
+
+    Configuration error:
+
+    Could not locate module ~/core/services mapped as:
+    /Users/svendaneel/okam/web-lintruns/$1.
+
+    Please check your configuration for these entries:
+    {
+      "moduleNameMapper": {
+        "/^~\/(.*)$/": "/Users/svendaneel/okam/web-lintruns/$1"
+      },
+      "resolver": undefined
+    }
+
+      1 | import Vue from 'vue'
+      2 | import dayjs from 'dayjs'
+    > 3 | import {
+        | ^
+      4 |   ProductService,
+      5 |   DiscountService,
+      6 |   StoreService,
+
+      at createNoMappedModuleFoundError (../Web-modules/node_modules/jest-resolve/build/index.js:551:17)
+      at Object.<anonymous> (plugins/global-mixin.js:3:1)
+      at Object.<anonymous> (test/price-absence.test.js:4:1)
+
+FAIL test/price-bypass-legacy.test.js
+  ● Test suite failed to run
+
+    Configuration error:
+
+    Could not locate module ~/core/services mapped as:
+    /Users/svendaneel/okam/web-lintruns/$1.
+
+    Please check your configuration for these entries:
+    {
+      "moduleNameMapper": {
+        "/^~\/(.*)$/": "/Users/svendaneel/okam/web-lintruns/$1"
+      },
+      "resolver": undefined
+    }
+
+      1 | import Vue from 'vue'
+      2 | import dayjs from 'dayjs'
+    > 3 | import {
+        | ^
+      4 |   ProductService,
+      5 |   DiscountService,
+      6 |   StoreService,
+
+      at createNoMappedModuleFoundError (../Web-modules/node_modules/jest-resolve/build/index.js:551:17)
+      at Object.<anonymous> (plugins/global-mixin.js:3:1)
+      at Object.<anonymous> (test/price-bypass-legacy.test.js:4:1)
+
+FAIL test/price-gate-shadow.test.js
+  ● Test suite failed to run
+
+    Configuration error:
+
+    Could not locate module ~/core/services mapped as:
+    /Users/svendaneel/okam/web-lintruns/$1.
+
+    Please check your configuration for these entries:
+    {
+      "moduleNameMapper": {
+        "/^~\/(.*)$/": "/Users/svendaneel/okam/web-lintruns/$1"
+      },
+      "resolver": undefined
+    }
+
+      1 | import Vue from 'vue'
+      2 | import dayjs from 'dayjs'
+    > 3 | import {
+        | ^
+      4 |   ProductService,
+      5 |   DiscountService,
+      6 |   StoreService,
+
+      at createNoMappedModuleFoundError (../Web-modules/node_modules/jest-resolve/build/index.js:551:17)
+      at Object.<anonymous> (plugins/global-mixin.js:3:1)
+      at Object.<anonymous> (test/price-gate-shadow.test.js:4:1)
+
+FAIL test/translations-lint.test.js (5.307 s)
+  ● the configured lint rules run on a change to a translations dictionary › runs that script, and the dictionaries carry no error-severity violation
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "translations/no.ts:2  quote-props  Unnecessarily quoted property 'aIQueryBox_example1' found.",
+    + ]
+
+      109 |     // The message is the point: a translator reading this red should not have to go and re-run
+      110 |     // anything to learn which key in which dictionary broke.
+    > 111 |     expect(failures).toEqual([])
+          |                      ^
+      112 |     expect(status).toBe(0)
+      113 |   }, 60000)
+      114 |
+
+      at Object.<anonymous> (test/translations-lint.test.js:111:22)
+
+
+Test Suites: 7 failed, 120 passed, 127 total
+Tests:       1 failed, 2817 passed, 2818 total
+Snapshots:   0 total
+Time:        8.391 s
+Ran all test suites.

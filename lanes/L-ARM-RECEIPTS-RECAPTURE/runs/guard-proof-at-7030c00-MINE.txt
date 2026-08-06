@@ -1,0 +1,24 @@
+journey.js under test  6dd043e1f34648c3fc5f322c0a777247b35c1d591766991b8ff0621c51e631c2
+  pristine copy        6dd043e1f34648c3fc5f322c0a777247b35c1d591766991b8ff0621c51e631c2
+  mutant copy          190f29efcd81957cb74033bbcc077cddca755f4b00e9095c2511eeef45ffd57f   (re-throw removed)
+  split-mutant copy    3e57975b5f5f4e90f44e9ecae918c8c7eb4e7a7203cb6c1870082183aad959c8   (split-origin guard disabled)
+stand-in live api      http://127.0.0.1:50339
+stand-in fixture       http://127.0.0.1:50340
+stand-in app           http://127.0.0.1:50341
+
+  ok    1    exit 1     artifact failed   1 failed                live-labelled, app compiled against the FIXTURE
+  ok    2    exit 1     artifact failed   1 failed                fixture-labelled, app compiled against a LIVE api
+  ok    3    exit 1     artifact NONE     1 failed                live-labelled, pointed AT the throwaway fixture
+  ok    4    exit 0     artifact passed   1 passed (479ms)        live-labelled, app compiled against that LIVE api (honest)
+  ok    5    exit 0     artifact passed   1 passed (443ms)        fixture-labelled, app compiled against that FIXTURE (honest)
+  ok    S1   exit 1     artifact failed   1 failed                live-labelled; signs in at the named api, fetches its SUBJECT elsewhere
+  ok    S2   exit 1     artifact failed   1 failed                fixture-labelled; signs in at the fixture, fetches its SUBJECT elsewhere
+  ok    M1   exit 0     artifact failed   1 passed (500ms)        arm 1 with the re-throw REMOVED — must go green again
+  ok    M2   exit 0     artifact failed   1 passed (430ms)        arm 2 with the re-throw REMOVED — must go green again
+  ok    M3   exit 0     artifact passed   1 passed (506ms)        arm S1 with the split-origin guard DISABLED — must go green again
+
+All 10 arms held. A mislabelled run fails the process, and so does one whose
+subject calls left for another origin behind an honest sign-in; removing the re-throw, or the
+split-origin branch, makes the matching run green again — which is what makes the rest mean
+something.
+EXIT=0

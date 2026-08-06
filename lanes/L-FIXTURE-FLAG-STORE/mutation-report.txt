@@ -1,0 +1,40 @@
+Mutation proofs — L-FIXTURE-FLAG-STORE
+base commit e34977acebd59b223584158c33451b6f1ffd82c1
+run at      2026-08-05T08:57:13Z
+
+MUTATION no-flip
+  claim     the per-store meals.module gate really refuses this venue's writes
+  mutated   test/e2e/journeys/meals-admin-setup.spec.js
+  ran       test/e2e/journeys/meals-admin-setup.spec.js
+  exit      1 (expected non-zero)
+  verdict   RED AS REQUIRED
+  first red ✘  1 [chromium] › test/e2e/journeys/meals-admin-setup.spec.js:40:1 › A concierge creates a company, signs its corridor, runs a programme and issues an
+  restored  byte-for-byte (43d67e62b898a032881a26e1c533c4ce0baa69b50a0f5d408c4d65580f1bdc24)
+
+MUTATION no-store-gate
+  claim     the dark-venue assertion is not vacuous
+  mutated   test/e2e/fixture/meals.js
+  ran       test/e2e/journeys/meals-admin-setup.spec.js
+  exit      1 (expected non-zero)
+  verdict   RED AS REQUIRED
+  first red ✘  1 [chromium] › test/e2e/journeys/meals-admin-setup.spec.js:40:1 › A concierge creates a company, signs its corridor, runs a programme and issues an
+  restored  byte-for-byte (53ff7431a8fda47f95eb11dd9baaea49a4e95d928a3d327a3eb051f31376a9bf)
+
+MUTATION no-config-gate
+  claim     Features:Meals is really enforced on the invitee routes, ahead of the token lookup
+  mutated   test/e2e/fixture/meals.js
+  ran       test/e2e/journeys/meals-guest-claim.spec.js
+  exit      1 (expected non-zero)
+  verdict   RED AS REQUIRED
+  first red ✘  1 [chromium] › test/e2e/journeys/meals-guest-claim.spec.js:51:1 › An employee is refused a stranger's invitation without being told whose it is, th
+  restored  byte-for-byte (53ff7431a8fda47f95eb11dd9baaea49a4e95d928a3d327a3eb051f31376a9bf)
+
+MUTATION reset-ignores-param
+  claim     the journey verifies it got the world it asked for
+  mutated   test/e2e/fixture/api-server.js
+  ran       test/e2e/journeys/meals-guest-claim.spec.js
+  exit      1 (expected non-zero)
+  verdict   RED AS REQUIRED
+  first red ✘  1 [chromium] › test/e2e/journeys/meals-guest-claim.spec.js:51:1 › An employee is refused a stranger's invitation without being told whose it is, th
+  restored  byte-for-byte (a2a4a4c41fec81710858e72748500a46b8a8ed107c3fa0f5018c99aac4596ca9)
+

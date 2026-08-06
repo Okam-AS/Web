@@ -1,0 +1,23 @@
+=== worktree : /Users/svendaneel/okam/web-sendgate
+=== commit   : 8ac6f63648015d8c7a230181a7f07bf303d43268
+=== target   : utils/growth/send-gate.js
+=== sha@HEAD : 2fc00b09163ff9ffb69ad0d1b9885acf69a49ab6
+
+--- ARM M1 : mutated, dispatch refusal deleted
+    sha       : e835918627a7b7d39e7d3d12ce940b822a5467a3
+    diff      :
+@@ -417,3 +417,2 @@ export function resolveSendGate (options) {
+     if (flags.module === false) { blocked.push(BLOCK_MODULE_OFF); }
+-    if (flags.dispatch === false) { blocked.push(BLOCK_DISPATCH_OFF); }
+   }
+    RESULT M1-mutated FAIL-ASSERT rc=1
+    declared  : failed
+    stopped at:     Error: expect(received).toEqual(expected) // deep equality
+
+--- ARM M2 : restored
+    sha       : 2fc00b09163ff9ffb69ad0d1b9885acf69a49ab6  (identical to HEAD: yes)
+    RESULT M2-restored PASS rc=0
+    declared  : passed
+
+VERDICT: MUTATION PROVEN — the green tracks the refusal
+=== dirty after : 0 path(s)

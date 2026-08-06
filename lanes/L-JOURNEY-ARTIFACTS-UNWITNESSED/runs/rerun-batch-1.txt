@@ -1,0 +1,42 @@
+[WebServer] [fixture] listening on http://127.0.0.1:4861
+
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://172.20.10.4:3861/
+
+[WebServer] [info] Preparing project for development
+
+[WebServer] [info] Initial build may take a while
+
+
+Running 5 tests using 1 worker
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+[WebServer] [success] Builder initialized
+
+[WebServer] [success] Nuxt files generated
+
+[1/5] [chromium] › test/e2e/journeys/meals-admin-setup.spec.js:31:1 › A concierge creates a company, signs its corridor, runs a programme and issues an invitation @fixture
+[WebServer] [info] Waiting for file changes
+
+[WebServer] [info] Memory usage: 1.25 GB (RSS: 2.7 GB)
+
+[WebServer] [info] Listening on: http://172.20.10.4:3861/
+
+[2/5] [chromium] › test/e2e/journeys/meals-guest-claim.spec.js:46:1 › An employee is refused a stranger's invitation without being told whose it is, then claims their own @fixture
+[3/5] [chromium] › test/e2e/journeys/modal-estate-scroll-lock.spec.js:87:1 › Two different modals hold the page, and closing one does not let go @fixture
+[4/5] [chromium] › test/e2e/journeys/modal-scroll-lock.spec.js:105:1 › A modal holds the page behind it still, and lets go when it closes @fixture
+[5/5] [chromium] › test/e2e/journeys/workforce-invitation-onboarding.spec.js:57:1 › A manager invites a new hire, who claims the code and sees their published shift @fixture
+  5 passed (57.9s)
+EXIT=0

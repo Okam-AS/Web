@@ -120,6 +120,35 @@ describe('buildTimeline — the instants', () => {
     expect(buildTimeline(history([version({ hourlyRateMinor: 23550 })])).rows[0].hourlyRateMinor).toBe(23550)
     expect(buildTimeline(history([version({ hourlyRateMinor: 1 })])).rows[0].hourlyRateMinor).toBe(1)
   })
+
+  // Three worlds, not two. The middle one is the one a guard usually loses.
+  test('a non-finite amount is absence, and a genuine zero is not', () => {
+    const rateOf = value => buildTimeline(history([version({ hourlyRateMinor: value })])).rows[0].hourlyRateMinor
+
+    // PRESENT.
+    expect(rateOf(23550)).toBe(23550)
+
+    // GENUINELY ZERO. The server refuses a non-positive rate (`workforce.rate-not-positive`), so this
+    // does not arrive today — which is the reason to assert it rather than the reason not to. The
+    // guard has to be the kind that would carry a zero if one ever came, not the kind that is right
+    // by accident: `row.hourlyRateMinor || null` passes both neighbours here and destroys this one.
+    expect(rateOf(0)).toBe(0)
+    expect(rateOf(0)).not.toBeNull()
+
+    // ABSENT OR NON-FINITE. `typeof NaN` is `'number'`, so `typeof === 'number'` called a NaN a
+    // stated rate. The one consumer, `amountLabel` in `WorkforceRateTimeline.vue`, tests `=== null`
+    // and would have let it through to the cross-currency branch, where the deliberately ungated
+    // `wholeAmount`/`fractionAmount` answer "0"/"00" to anything falsy: `0,00 SEK` for an hour of
+    // work nobody priced.
+    for (const value of [null, undefined, NaN, Infinity, -Infinity]) {
+      expect(rateOf(value)).toBeNull()
+    }
+
+    // A numeric string is not this wire's shape and was already refused. Asserted so that relaxing
+    // the guard to the GLOBAL `isFinite`, which coerces (`isFinite('23550')` is true) where
+    // `Number.isFinite` does not, fails here rather than by putting a string into a formatter.
+    expect(rateOf('23550')).toBeNull()
+  })
 })
 
 describe('buildTimeline — the currency in force', () => {

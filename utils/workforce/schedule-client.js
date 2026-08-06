@@ -15,6 +15,8 @@
 //   POST /workforce/stores/{storeId}/schedules/{revisionId}/validate        #19  WorkforceSchedulesController
 //   POST /workforce/stores/{storeId}/schedules/{revisionId}/publish         #20  WorkforceSchedulesController
 //   GET  /workforce/stores/{storeId}/schedules/publication-history          #21  WorkforceSchedulesController
+//   GET  /workforce/stores/{storeId}/schedules/publications/{id}/recipients #22  WorkforceSchedulesController
+//   GET  /workforce/stores/{storeId}/schedules/notification-failures             WorkforceSchedulesController
 //
 // The error type, the `Idempotency-Key` mutation rule and the range wire format live one level up in
 // `~/utils/workforce/api-client`, shared with the worker surface.
@@ -119,8 +121,66 @@ export class WorkforceScheduleService extends WorkforceClientBase {
     return this._mutate('POST', '/workforce/stores/' + storeId + '/schedules/' + revisionId + '/publish');
   }
 
+  /**
+   * #21: every publication this store has ever made, newest first.
+   *
+   * STORE-SCOPED AND UNPAGED — the whole history in one array. `~/utils/workforce/publication-receipts`
+   * relies on that to derive which publications have been superseded, because a publication only names
+   * its PREDECESSOR (`supersedesPublicationId`) and the successor relationship has to be inverted
+   * across the full list. A page cursor added here would silently break that derivation.
+   *
+   * The server's order is a guarantee, not a convenience: published-desc, then revision-desc, then
+   * publication-number-desc, so that a same-tick republish still puts the successor ahead of the rows
+   * it supersedes. Callers must not re-sort.
+   *
+   * TWO FIELDS OF THE MODEL ARE NOT PROJECTED BY THIS ENDPOINT and arrive as defaults: `cost` is null
+   * by design, and `noticeLeadDays` is 0 — a default that is indistinguishable from a same-day
+   * publication. Neither is rendered; see the receipts module header.
+   */
   GetPublicationHistory (storeId) {
     return this._request('GET', '/workforce/stores/' + storeId + '/schedules/publication-history');
+  }
+
+  /**
+   * #22: every worker one publication was addressed to, and what each of them did about it.
+   *
+   * A HIGHER GRANT THAN THE HISTORY BESIDE IT. The history is `WorkforceScheduler`; this is
+   * `WorkforceManager` (`WorkforceSchedulePublishService.cs:465`), because it names individual
+   * workers and carries their acknowledgement timestamps. A scheduler who can list the publications
+   * gets a 403 here, so the caller must treat the two reads as separately authorised rather than
+   * assuming one grant covers both.
+   *
+   * An unknown `publicationId`, or one belonging to another store, is a 404 — the existence check
+   * runs before the read, so this never leaks another store's roster through a guessed id.
+   *
+   * Rows are `WorkforcePublicationRecipientModel`. `deliveryState` describes the SEND (and includes
+   * the manager's manual fallback); the seen/acknowledged timestamps describe what a PERSON did.
+   * `~/utils/workforce/publication-receipts` owns that distinction — nothing here interprets it.
+   */
+  GetRecipients (storeId, publicationId) {
+    return this._request(
+      'GET',
+      '/workforce/stores/' + storeId + '/schedules/publications/' + publicationId + '/recipients'
+    );
+  }
+
+  /**
+   * The store's OUTSTANDING delivery problems — every outbox command that failed, gave up, or is
+   * being withheld. It is the only truthful account of what a publication actually reached: the
+   * publish response's `recipientCount` is how many rows were ENQUEUED, not how many arrived.
+   *
+   * STORE-SCOPED, NOT WEEK-SCOPED. The backend filters on `storeId` alone and orders by
+   * dead-lettered-then-created, so this answers "what is undelivered here", across publications.
+   * The caller must not present it as "this week's failures" — each row names its own publication.
+   *
+   * Rows are `WorkforceNotificationFailureModel`: `status` is `Withheld` | `Failed` | `DeadLettered`
+   * as a STRING (the API serialises enums through `StringEnumConverter`), and `lastError` is a
+   * redacted code (`PushNotConfigured`, `NoPushRegistration`, `NoPushTarget`, or an exception type)
+   * — never provider prose, and never an address. See `~/utils/workforce/delivery-failures`, which
+   * owns the reading of both.
+   */
+  GetNotificationFailures (storeId) {
+    return this._request('GET', '/workforce/stores/' + storeId + '/schedules/notification-failures');
   }
 }
 

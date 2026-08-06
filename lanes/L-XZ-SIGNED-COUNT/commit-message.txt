@@ -1,0 +1,37 @@
+fix(kassa): a negative goods-group count keeps its sign on the printed X and Z
+
+The fit rule that stopped the printed X and Z cutting a count off a statutory figure
+required an all-digit trailing group. A minus is not a digit, so the one count on this
+document that can go below nought was the one count the rule excluded.
+
+A goods group's quantity accumulates sign * line.Quantity, with sign -1 for a return,
+while every statutory count on the paper accumulates += 1. A group whose returns
+outweigh its sales nets negative, its label fails the all-digit test, and the whole
+label including the count is shortened as prose:
+
+    Sesongens smaksmeny (…       -1 234,00
+
+Two columns wider the same row printed "Sesongens smaksmeny (-12…" for a quantity of
+-123 - a return of twelve where there were a hundred and twenty-three. A count stated
+nowhere invites a question; that one does not. And it is not an edge: a
+returns-dominated day is an ordinary day.
+
+TrailingCount now allows one optional minus after the opening parenthesis before
+requiring digits, keeping the at-least-one-digit rule, so a signed count is excluded
+from shortening exactly as an unsigned one is.
+
+This is the third repair to this row at a scale that missed the next one. The first
+shrank a label measured against a single world; the second protected unsigned counts
+across five width regimes; and the sweep that proved the second - counts of 1, 9, 12,
+127 and 1234 - never sampled a signed count. So the sign goes into the sweep and not
+only into the rule: a signed goods group now rides all 25 cells, 30 count-bearing rows
+per world instead of 29, and the reader that takes a count off the paper reads the
+minus, so a truncated "(-12…" is reported as -12 against the count it replaced rather
+than as no match at all. Five worlds printed by the reviewer are pinned by name, each
+located by amount within its section and never by label, each asserting the count reads
+back with its sign and its digits and that no ellipsis follows the last parenthesis.
+
+Reverting the sign allowance reds 34 of the 913 Kassa tests and restoring it returns
+all 913. Two neighbouring predicates in the same method - the digit test and the
+empty-group guard - survive mutation because no label this builder composes can reach
+them: the count is appended last and is always numeric.

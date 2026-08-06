@@ -1,0 +1,54 @@
+Build started 8/6/2026 3:13:22 PM.
+Test run for /Users/svendaneel/okam/wt-newsletter-cause/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+/Users/svendaneel/okam/wt-newsletter-cause/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 8.0.28)
+[xUnit.net 00:00:01.52]   Discovering: WebApi.Tests
+[xUnit.net 00:00:01.97]   Discovered:  WebApi.Tests
+[xUnit.net 00:00:02.00]   Starting:    WebApi.Tests
+[xUnit.net 00:00:04.76]     WebApi.Tests.Growth.GrowthDispatchAbsentTableReportTests.A_dispatch_whose_audit_ledger_is_absent_reports_the_absent_ledger_not_a_race [FAIL]
+[xUnit.net 00:00:04.76]       Assert.Throws() Failure
+[xUnit.net 00:00:04.76]       Expected: typeof(Microsoft.EntityFrameworkCore.DbUpdateException)
+[xUnit.net 00:00:04.76]       Actual:   typeof(System.InvalidOperationException): Sequence contains no elements.
+[xUnit.net 00:00:04.76]       ---- System.InvalidOperationException : Sequence contains no elements.
+[xUnit.net 00:00:04.76]       Stack Trace:
+[xUnit.net 00:00:04.76]            at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+[xUnit.net 00:00:04.76]            at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+[xUnit.net 00:00:04.76]         /Users/svendaneel/okam/wt-newsletter-cause/Services/Growth/GrowthDispatchService.cs(331,0): at WebApi.Services.Growth.GrowthDispatchService.CreateOrGetRunAsync(Int32 storeId, Int64 newsletterId, String userId, CancellationToken cancellationToken)
+[xUnit.net 00:00:04.76]         ----- Inner Stack Trace -----
+[xUnit.net 00:00:04.76]            at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+[xUnit.net 00:00:04.76]            at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+[xUnit.net 00:00:04.76]         /Users/svendaneel/okam/wt-newsletter-cause/Services/Growth/GrowthDispatchService.cs(331,0): at WebApi.Services.Growth.GrowthDispatchService.CreateOrGetRunAsync(Int32 storeId, Int64 newsletterId, String userId, CancellationToken cancellationToken)
+  Failed WebApi.Tests.Growth.GrowthDispatchAbsentTableReportTests.A_dispatch_whose_audit_ledger_is_absent_reports_the_absent_ledger_not_a_race [2 s]
+  Error Message:
+   Assert.Throws() Failure
+Expected: typeof(Microsoft.EntityFrameworkCore.DbUpdateException)
+Actual:   typeof(System.InvalidOperationException): Sequence contains no elements.
+---- System.InvalidOperationException : Sequence contains no elements.
+  Stack Trace:
+     at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at WebApi.Services.Growth.GrowthDispatchService.CreateOrGetRunAsync(Int32 storeId, Int64 newsletterId, String userId, CancellationToken cancellationToken) in /Users/svendaneel/okam/wt-newsletter-cause/Services/Growth/GrowthDispatchService.cs:line 331
+----- Inner Stack Trace -----
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at WebApi.Services.Growth.GrowthDispatchService.CreateOrGetRunAsync(Int32 storeId, Int64 newsletterId, String userId, CancellationToken cancellationToken) in /Users/svendaneel/okam/wt-newsletter-cause/Services/Growth/GrowthDispatchService.cs:line 331
+[xUnit.net 00:00:05.00]   Finished:    WebApi.Tests
+  Passed WebApi.Tests.Growth.GrowthDispatchAbsentTableReportTests.A_dispatch_that_genuinely_loses_the_run_race_still_adopts_the_winner [239 ms]
+
+Test Run Failed.
+Total tests: 2
+     Passed: 1
+     Failed: 1
+ Total time: 5.4507 Seconds
+     1>Project "/Users/svendaneel/okam/wt-newsletter-cause/WebApi.Tests/WebApi.Tests.csproj" on node 1 (VSTest target(s)).
+     1>VSTest:
+         MSB4181: The "Microsoft.TestPlatform.Build.Tasks.VSTestTask" task returned false but did not log an error.
+     1>Done Building Project "/Users/svendaneel/okam/wt-newsletter-cause/WebApi.Tests/WebApi.Tests.csproj" (VSTest target(s)) -- FAILED.
+
+Build FAILED.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:05.86

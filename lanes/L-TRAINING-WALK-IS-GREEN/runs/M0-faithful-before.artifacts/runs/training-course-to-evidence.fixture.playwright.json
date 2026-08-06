@@ -1,0 +1,160 @@
+{
+  "journey": "training-course-to-evidence",
+  "title": "A manager opens Training, publishes a course version, files a failing score, and the SERVER calls it not passed",
+  "status": "failed",
+  "startedAtUtc": "2026-08-06T11:41:23.631Z",
+  "finishedAtUtc": "2026-08-06T11:41:28.538Z",
+  "durationMs": 4907,
+  "capabilities": [
+    "platform.feature-flags.write",
+    "training.flags.read-only-refusal",
+    "training.course.author",
+    "training.version.publish",
+    "training.assignment.create",
+    "training.completion.record",
+    "training.completion.server-graded",
+    "training.competency.holdings"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3082",
+  "apiBaseUrl": "http://127.0.0.1:4082",
+  "commit": "28548f96036f6118e5523bd963632ddf5ea3af63",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": {
+    "id": "fixture@28548f96036f6118e5523bd963632ddf5ea3af63+dirty",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "28548f9-dirty",
+    "detail": "the in-repo fixture backend, not an API build (branch HEAD)"
+  },
+  "backendServed": 58,
+  "backendSubjectServed": 48,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:4082/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:4082/user/login -> 200",
+    "GET http://127.0.0.1:4082/user -> 200",
+    "GET http://127.0.0.1:4082/stores/42/market -> 200",
+    "GET http://127.0.0.1:4082/stores/42 -> 200",
+    "GET http://127.0.0.1:4082/user -> 200",
+    "GET http://127.0.0.1:4082/training/stores/42/context -> 200",
+    "GET http://127.0.0.1:4082/stores/42/specialopeninghours -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in and pass the module gate",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T11:41:23.636Z",
+      "durationMs": 1929,
+      "detail": "gate open, zone Europe/Oslo",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "READ-ONLY, NOT DARK: the store is visible and every write is refused",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T11:41:25.565Z",
+      "durationMs": 39,
+      "detail": "both flags read \"Av\"; the form is drawn and its submit goes live anyway",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "and pressing it really is refused, by the server",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T11:41:25.604Z",
+      "durationMs": 55,
+      "detail": "refused 409 training.flag-disabled-read-only; nothing filed",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "turn both Training switches on from the operator switchboard",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T11:41:25.766Z",
+      "durationMs": 1700,
+      "detail": "both training.setup and training.assignments on for store 42",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "the same page now reports both switches up",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T11:41:27.466Z",
+      "durationMs": 749,
+      "detail": "both flags read \"På\", both warnings gone",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "author a course that carries a competency key",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T11:41:28.215Z",
+      "durationMs": 95,
+      "detail": "Allergenhåndtering · food.allergens",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "cut a draft version with a pass threshold of 80",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T11:41:28.310Z",
+      "durationMs": 142,
+      "detail": "v1 Draft, threshold 80 %",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "THE STATED EXIT CANNOT BE WALKED — there is no quiz and nobody to take it",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T11:41:28.452Z",
+      "durationMs": 6,
+      "detail": "recorded: the worker half does not exist; walking the manager half",
+      "error": null
+    },
+    {
+      "n": 9,
+      "name": "the publish control is reachable BY POINTER at this viewport",
+      "status": "failed",
+      "startedAtUtc": "2026-08-06T11:41:28.458Z",
+      "durationMs": 46,
+      "detail": null,
+      "error": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"visible\"\u001b[39m"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "note",
+      "summary": "Training's stated exit — \"a worker passes the quiz\" — names a step no shipped screen offers",
+      "detail": "pages/admin/training-courses.vue is the only Training page in the app: there is no worker-facing surface at all, and none is planned for this wave. `utils/training/training-client.js` records that a worker's own quiz submission has no route anywhere, so every completion is `ManagerRecorded` by construction; `TrainingVersionPanel` authors no quiz for the same reason and prints the sentence asserted above. What this journey walks is therefore the MANAGER half — a score filed against a frozen threshold — which is the whole of what exists. The Feature's exit and L-TRAIN-FIXES's exit both name the worker half and neither can be met by any screen on this branch."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ftraining-courses\" to \"/admin?redirect=%2Fadmin%2Ftraining-courses&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ftraining-courses\" to \"/admin?redirect=%2Fadmin%2Ftraining-courses&storeId=42\" with a new navigation.",
+    "Failed to load resource: the server responded with a status of 409 (Conflict)"
+  ],
+  "failedRequests": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:4082/training/stores/42/courses",
+      "status": 409
+    }
+  ],
+  "screenshots": [
+    "training-course-to-evidence/fixture/01-visible-and-read-only.png"
+  ],
+  "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"visible\"\u001b[39m",
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/training-course-to-evidence.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false,
+    "supersedes": null
+  }
+}

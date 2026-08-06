@@ -1,0 +1,2355 @@
+{
+ "rows": [
+  {
+   "mirror": "HttpProperty",
+   "path": "core/enums/http-property.ts",
+   "mirror_size": 11,
+   "mirror_members": [
+    "Url",
+    "Method",
+    "Data",
+    "ContentType",
+    "Content",
+    "Authorization",
+    "ClientAppVersion",
+    "ClientPlatform",
+    "ClientFeatures",
+    "SelectedTheme",
+    "Language"
+   ],
+   "candidates": []
+  },
+  {
+   "mirror": "StatisticDateFilter",
+   "path": "core/enums/statistic-date-filter.ts",
+   "mirror_size": 7,
+   "mirror_members": [
+    "Today",
+    "Yesterday",
+    "LastSevenDays",
+    "ThisMonth",
+    "LastMonth",
+    "ThisYear",
+    "Custom"
+   ],
+   "candidates": [
+    {
+     "backend": "EventsProposalLineKind",
+     "backend_path": "Enums/Events/EventsProposalLineKind.cs",
+     "jaccard": 0.0909,
+     "shared": 1,
+     "backend_size": 5,
+     "missing_from_mirror": [
+      "AddOn",
+      "MenuItem",
+      "Package",
+      "RoomFee"
+     ],
+     "extra_in_mirror": [
+      "LastMonth",
+      "LastSevenDays",
+      "ThisMonth",
+      "ThisYear",
+      "Today",
+      "Yesterday"
+     ],
+     "name_equal": false
+    }
+   ]
+  },
+  {
+   "mirror": "HttpMethod",
+   "path": "core/enums/http-method.ts",
+   "mirror_size": 5,
+   "mirror_members": [
+    "POST",
+    "GET",
+    "PUT",
+    "PATCH",
+    "DELETE"
+   ],
+   "candidates": []
+  },
+  {
+   "mirror": "PosReasonType",
+   "path": "core/enums/pos-reason-type.ts",
+   "mirror_size": 10,
+   "mirror_members": [
+    "None",
+    "AngretKjop",
+    "FeilVare",
+    "Reklamasjon",
+    "Feilslag",
+    "KundeAvbrot",
+    "Tellefeil",
+    "FeilVekselGitt",
+    "Ukjent",
+    "Annet"
+   ],
+   "candidates": [
+    {
+     "backend": "PosReasonType",
+     "backend_path": "Enums/Kassa/PosReasonType.cs",
+     "jaccard": 1.0,
+     "shared": 10,
+     "backend_size": 10,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": true
+    },
+    {
+     "backend": "ConfirmRefusal",
+     "backend_path": "Services/EmailConfirmationRateLimiter.cs",
+     "jaccard": 0.0833,
+     "shared": 1,
+     "backend_size": 3,
+     "missing_from_mirror": [
+      "AccountBudgetSpent",
+      "SourceBudgetSpent"
+     ],
+     "extra_in_mirror": [
+      "AngretKjop",
+      "Annet",
+      "FeilVare",
+      "FeilVekselGitt",
+      "Feilslag",
+      "KundeAvbrot",
+      "Reklamasjon",
+      "Tellefeil",
+      "Ukjent"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "IfMatchDefect",
+     "backend_path": "Services/Margin/MarginContractSupport.cs",
+     "jaccard": 0.0833,
+     "shared": 1,
+     "backend_size": 3,
+     "missing_from_mirror": [
+      "Missing",
+      "Undecodable"
+     ],
+     "extra_in_mirror": [
+      "AngretKjop",
+      "Annet",
+      "FeilVare",
+      "FeilVekselGitt",
+      "Feilslag",
+      "KundeAvbrot",
+      "Reklamasjon",
+      "Tellefeil",
+      "Ukjent"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "WorkforceCapability",
+     "backend_path": "Enums/Workforce/WorkforceCapability.cs",
+     "jaccard": 0.0714,
+     "shared": 1,
+     "backend_size": 5,
+     "missing_from_mirror": [
+      "WorkforceManager",
+      "WorkforcePayrollApprover",
+      "WorkforceScheduler",
+      "WorkforceSelf"
+     ],
+     "extra_in_mirror": [
+      "AngretKjop",
+      "Annet",
+      "FeilVare",
+      "FeilVekselGitt",
+      "Feilslag",
+      "KundeAvbrot",
+      "Reklamasjon",
+      "Tellefeil",
+      "Ukjent"
+     ],
+     "name_equal": false
+    }
+   ]
+  },
+  {
+   "mirror": "ReservationStatus",
+   "path": "core/enums/reservation-status.ts",
+   "mirror_size": 6,
+   "mirror_members": [
+    "Requested",
+    "Confirmed",
+    "Seated",
+    "Completed",
+    "NoShow",
+    "Cancelled"
+   ],
+   "candidates": [
+    {
+     "backend": "ReservationStatus",
+     "backend_path": "Enums/FloorPlan/ReservationStatus.cs",
+     "jaccard": 1.0,
+     "shared": 6,
+     "backend_size": 6,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": true
+    },
+    {
+     "backend": "EventsDepositProviderOutcome",
+     "backend_path": "Services/Events/EventsDepositPaymentContracts.cs",
+     "jaccard": 0.25,
+     "shared": 2,
+     "backend_size": 4,
+     "missing_from_mirror": [
+      "Expired",
+      "Failed"
+     ],
+     "extra_in_mirror": [
+      "Confirmed",
+      "NoShow",
+      "Requested",
+      "Seated"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "TrainingIdempotencyRecordStatus",
+     "backend_path": "Enums/Training/TrainingIdempotencyRecordStatus.cs",
+     "jaccard": 0.1429,
+     "shared": 1,
+     "backend_size": 2,
+     "missing_from_mirror": [
+      "InProgress"
+     ],
+     "extra_in_mirror": [
+      "Cancelled",
+      "Confirmed",
+      "NoShow",
+      "Requested",
+      "Seated"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "EventStatus",
+     "backend_path": "Enums/Events/EventStatus.cs",
+     "jaccard": 0.1333,
+     "shared": 2,
+     "backend_size": 11,
+     "missing_from_mirror": [
+      "Accepted",
+      "DepositPending",
+      "InService",
+      "Inquiry",
+      "Lost",
+      "ProposalSent",
+      "Proposing",
+      "Settled",
+      "Settling"
+     ],
+     "extra_in_mirror": [
+      "Completed",
+      "NoShow",
+      "Requested",
+      "Seated"
+     ],
+     "name_equal": false
+    }
+   ]
+  },
+  {
+   "mirror": "DiscountApplicability",
+   "path": "core/enums/discount-applicability.ts",
+   "mirror_size": 6,
+   "mirror_members": [
+    "Order",
+    "HomeDeliveryOrder",
+    "SelfPickupOrder",
+    "TableDeliveryOrder",
+    "ProductsInclusive",
+    "ProductsExclusive"
+   ],
+   "candidates": [
+    {
+     "backend": "DiscountApplicability",
+     "backend_path": "Enums/DiscountApplicability.cs",
+     "jaccard": 1.0,
+     "shared": 6,
+     "backend_size": 6,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": true
+    },
+    {
+     "backend": "OkamDiscordChannel",
+     "backend_path": "Enums/DiscordOkamChannel.cs",
+     "jaccard": 0.0833,
+     "shared": 1,
+     "backend_size": 7,
+     "missing_from_mirror": [
+      "Contact",
+      "Invoice",
+      "Offer",
+      "Store",
+      "System",
+      "Unknown"
+     ],
+     "extra_in_mirror": [
+      "HomeDeliveryOrder",
+      "ProductsExclusive",
+      "ProductsInclusive",
+      "SelfPickupOrder",
+      "TableDeliveryOrder"
+     ],
+     "name_equal": false
+    }
+   ]
+  },
+  {
+   "mirror": "PosSettlementStatus",
+   "path": "core/enums/pos-settlement-status.ts",
+   "mirror_size": 3,
+   "mirror_members": [
+    "Open",
+    "Finalized",
+    "Aborted"
+   ],
+   "candidates": [
+    {
+     "backend": "PosSettlementStatus",
+     "backend_path": "Enums/Kassa/PosSettlementStatus.cs",
+     "jaccard": 1.0,
+     "shared": 3,
+     "backend_size": 3,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": true
+    },
+    {
+     "backend": "MarginStatementState",
+     "backend_path": "Enums/Margin/MarginStatementState.cs",
+     "jaccard": 0.6667,
+     "shared": 2,
+     "backend_size": 2,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [
+      "Aborted"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "MealsStatementStatus",
+     "backend_path": "Enums/Meals/MealsStatementStatus.cs",
+     "jaccard": 0.25,
+     "shared": 1,
+     "backend_size": 2,
+     "missing_from_mirror": [
+      "Draft"
+     ],
+     "extra_in_mirror": [
+      "Aborted",
+      "Open"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "WorkforcePosSessionState",
+     "backend_path": "Models/Workforce/WorkforcePosModels.cs",
+     "jaccard": 0.25,
+     "shared": 1,
+     "backend_size": 2,
+     "missing_from_mirror": [
+      "Closed"
+     ],
+     "extra_in_mirror": [
+      "Aborted",
+      "Finalized"
+     ],
+     "name_equal": false
+    }
+   ]
+  },
+  {
+   "mirror": "PaymentType",
+   "path": "core/enums/payment-type.ts",
+   "mirror_size": 16,
+   "mirror_members": [
+    "NotSet",
+    "Giftcard",
+    "PayInStore",
+    "Stripe",
+    "Vipps",
+    "Dintero",
+    "DinteroVipps",
+    "DinteroBillie",
+    "DinteroKlarna",
+    "DinteroKravia",
+    "WoltMarketplace",
+    "Cash",
+    "DinteroTerminal",
+    "Surfboard",
+    "SurfboardVipps",
+    "SurfboardTerminal"
+   ],
+   "candidates": [
+    {
+     "backend": "PaymentType",
+     "backend_path": "Enums/PaymentType.cs",
+     "jaccard": 0.9412,
+     "shared": 16,
+     "backend_size": 17,
+     "missing_from_mirror": [
+      "CompanyAccount"
+     ],
+     "extra_in_mirror": [],
+     "name_equal": true
+    },
+    {
+     "backend": "PaymentTypeFilter",
+     "backend_path": "Enums/PaymentTypeFilter.cs",
+     "jaccard": 0.75,
+     "shared": 12,
+     "backend_size": 12,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [
+      "Cash",
+      "DinteroTerminal",
+      "NotSet",
+      "SurfboardVipps"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "TripletexSettlementProvider",
+     "backend_path": "Models/Tripletex/TripletexPayoutModels.cs",
+     "jaccard": 0.125,
+     "shared": 2,
+     "backend_size": 2,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [
+      "Cash",
+      "DinteroBillie",
+      "DinteroKlarna",
+      "DinteroKravia",
+      "DinteroTerminal",
+      "DinteroVipps",
+      "Giftcard",
+      "NotSet",
+      "PayInStore",
+      "Stripe",
+      "SurfboardTerminal",
+      "SurfboardVipps",
+      "Vipps",
+      "WoltMarketplace"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "TerminalProvider",
+     "backend_path": "Enums/Kassa/TerminalProvider.cs",
+     "jaccard": 0.1176,
+     "shared": 2,
+     "backend_size": 3,
+     "missing_from_mirror": [
+      "Auto"
+     ],
+     "extra_in_mirror": [
+      "Cash",
+      "DinteroBillie",
+      "DinteroKlarna",
+      "DinteroKravia",
+      "DinteroTerminal",
+      "DinteroVipps",
+      "Giftcard",
+      "NotSet",
+      "PayInStore",
+      "Stripe",
+      "SurfboardTerminal",
+      "SurfboardVipps",
+      "Vipps",
+      "WoltMarketplace"
+     ],
+     "name_equal": false
+    }
+   ]
+  },
+  {
+   "mirror": "TerminalPaymentState",
+   "path": "core/enums/terminal-payment-state.ts",
+   "mirror_size": 10,
+   "mirror_members": [
+    "Unknown",
+    "NoTransaction",
+    "Authorized",
+    "PartiallyCaptured",
+    "Captured",
+    "Declined",
+    "Failed",
+    "AuthorizationVoided",
+    "PartiallyRefunded",
+    "Refunded"
+   ],
+   "candidates": [
+    {
+     "backend": "TerminalPaymentState",
+     "backend_path": "Models/Kassa/TerminalPaymentModels.cs",
+     "jaccard": 1.0,
+     "shared": 10,
+     "backend_size": 10,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": true
+    },
+    {
+     "backend": "EventsDepositProviderState",
+     "backend_path": "Services/Events/EventsDepositPaymentContracts.cs",
+     "jaccard": 0.3077,
+     "shared": 4,
+     "backend_size": 7,
+     "missing_from_mirror": [
+      "Cancelled",
+      "Initiated",
+      "None"
+     ],
+     "extra_in_mirror": [
+      "AuthorizationVoided",
+      "Declined",
+      "NoTransaction",
+      "PartiallyCaptured",
+      "PartiallyRefunded",
+      "Unknown"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "VippsRailState",
+     "backend_path": "WebApi.Tests/Events/EventsProviderFixtures.cs",
+     "jaccard": 0.3077,
+     "shared": 4,
+     "backend_size": 7,
+     "missing_from_mirror": [
+      "Cancelled",
+      "Initiated",
+      "Reserved"
+     ],
+     "extra_in_mirror": [
+      "AuthorizationVoided",
+      "Authorized",
+      "Declined",
+      "Failed",
+      "NoTransaction",
+      "Unknown"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "EventsDepositStatus",
+     "backend_path": "Enums/Events/EventsDepositStatus.cs",
+     "jaccard": 0.1765,
+     "shared": 3,
+     "backend_size": 10,
+     "missing_from_mirror": [
+      "Expired",
+      "Forfeited",
+      "LatePaid",
+      "Paid",
+      "Pending",
+      "Quarantined",
+      "Requested"
+     ],
+     "extra_in_mirror": [
+      "AuthorizationVoided",
+      "Authorized",
+      "Captured",
+      "Declined",
+      "NoTransaction",
+      "PartiallyCaptured",
+      "Unknown"
+     ],
+     "name_equal": false
+    }
+   ]
+  },
+  {
+   "mirror": "KitchenTicketSource",
+   "path": "core/enums/kitchen-ticket-source.ts",
+   "mirror_size": 2,
+   "mirror_members": [
+    "PosTable",
+    "Online"
+   ],
+   "candidates": [
+    {
+     "backend": "KitchenTicketSource",
+     "backend_path": "Models/Kassa/KitchenBoardModels.cs",
+     "jaccard": 1.0,
+     "shared": 2,
+     "backend_size": 2,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": true
+    }
+   ]
+  },
+  {
+   "mirror": "OrderStatus",
+   "path": "core/enums/order-status.ts",
+   "mirror_size": 9,
+   "mirror_members": [
+    "OpenCheck",
+    "Accepted",
+    "Processing",
+    "ReadyForPickup",
+    "ReadyForDriver",
+    "DriverPickedUp",
+    "Served",
+    "Completed",
+    "Canceled"
+   ],
+   "candidates": [
+    {
+     "backend": "OrderStatus",
+     "backend_path": "Enums/OrderStatus.cs",
+     "jaccard": 1.0,
+     "shared": 9,
+     "backend_size": 9,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": true
+    },
+    {
+     "backend": "DineHomeStatus",
+     "backend_path": "Enums/DineHomeStatus.cs",
+     "jaccard": 0.25,
+     "shared": 3,
+     "backend_size": 6,
+     "missing_from_mirror": [
+      "NotSet",
+      "PickedUp",
+      "ReachedDestination"
+     ],
+     "extra_in_mirror": [
+      "DriverPickedUp",
+      "OpenCheck",
+      "Processing",
+      "ReadyForDriver",
+      "ReadyForPickup",
+      "Served"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "OrderStatusFilter",
+     "backend_path": "Enums/OrderStatusFilter.cs",
+     "jaccard": 0.2,
+     "shared": 2,
+     "backend_size": 3,
+     "missing_from_mirror": [
+      "Remaining"
+     ],
+     "extra_in_mirror": [
+      "Accepted",
+      "DriverPickedUp",
+      "OpenCheck",
+      "Processing",
+      "ReadyForDriver",
+      "ReadyForPickup",
+      "Served"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "GiftcardStatus",
+     "backend_path": "Enums/GiftcardStatus.cs",
+     "jaccard": 0.1667,
+     "shared": 2,
+     "backend_size": 5,
+     "missing_from_mirror": [
+      "AwaitingReceiver",
+      "Initiated",
+      "Transferred"
+     ],
+     "extra_in_mirror": [
+      "Accepted",
+      "DriverPickedUp",
+      "OpenCheck",
+      "Processing",
+      "ReadyForDriver",
+      "ReadyForPickup",
+      "Served"
+     ],
+     "name_equal": false
+    }
+   ]
+  },
+  {
+   "mirror": "TerminalProvider",
+   "path": "core/enums/terminal-provider.ts",
+   "mirror_size": 3,
+   "mirror_members": [
+    "Auto",
+    "Surfboard",
+    "Dintero"
+   ],
+   "candidates": [
+    {
+     "backend": "TerminalProvider",
+     "backend_path": "Enums/Kassa/TerminalProvider.cs",
+     "jaccard": 1.0,
+     "shared": 3,
+     "backend_size": 3,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": true
+    },
+    {
+     "backend": "TripletexSettlementProvider",
+     "backend_path": "Models/Tripletex/TripletexPayoutModels.cs",
+     "jaccard": 0.6667,
+     "shared": 2,
+     "backend_size": 2,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [
+      "Auto"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "PaymentTypeFilter",
+     "backend_path": "Enums/PaymentTypeFilter.cs",
+     "jaccard": 0.1538,
+     "shared": 2,
+     "backend_size": 12,
+     "missing_from_mirror": [
+      "DinteroBillie",
+      "DinteroKlarna",
+      "DinteroKravia",
+      "DinteroVipps",
+      "Giftcard",
+      "PayInStore",
+      "Stripe",
+      "SurfboardTerminal",
+      "Vipps",
+      "WoltMarketplace"
+     ],
+     "extra_in_mirror": [
+      "Auto"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "PaymentType",
+     "backend_path": "Enums/PaymentType.cs",
+     "jaccard": 0.1111,
+     "shared": 2,
+     "backend_size": 17,
+     "missing_from_mirror": [
+      "Cash",
+      "CompanyAccount",
+      "DinteroBillie",
+      "DinteroKlarna",
+      "DinteroKravia",
+      "DinteroTerminal",
+      "DinteroVipps",
+      "Giftcard",
+      "NotSet",
+      "PayInStore",
+      "Stripe",
+      "SurfboardTerminal",
+      "SurfboardVipps",
+      "Vipps",
+      "WoltMarketplace"
+     ],
+     "extra_in_mirror": [
+      "Auto"
+     ],
+     "name_equal": false
+    }
+   ]
+  },
+  {
+   "mirror": "DeliveryType",
+   "path": "core/enums/delivery-type.ts",
+   "mirror_size": 7,
+   "mirror_members": [
+    "NotSet",
+    "SelfPickup",
+    "InstantHomeDelivery",
+    "DineHomeDelivery",
+    "TableDelivery",
+    "WoltDelivery",
+    "WoltMarketplaceDelivery"
+   ],
+   "candidates": [
+    {
+     "backend": "DeliveryType",
+     "backend_path": "Enums/DeliveryType.cs",
+     "jaccard": 1.0,
+     "shared": 7,
+     "backend_size": 7,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": true
+    },
+    {
+     "backend": "DeliveryFilter",
+     "backend_path": "Enums/DeliveryFilter.cs",
+     "jaccard": 0.125,
+     "shared": 1,
+     "backend_size": 2,
+     "missing_from_mirror": [
+      "HomeDelivery"
+     ],
+     "extra_in_mirror": [
+      "DineHomeDelivery",
+      "InstantHomeDelivery",
+      "NotSet",
+      "TableDelivery",
+      "WoltDelivery",
+      "WoltMarketplaceDelivery"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "DinteroTerminalStatus",
+     "backend_path": "Enums/DinteroTerminalStatus.cs",
+     "jaccard": 0.1,
+     "shared": 1,
+     "backend_size": 4,
+     "missing_from_mirror": [
+      "Fail",
+      "Success",
+      "Waiting"
+     ],
+     "extra_in_mirror": [
+      "DineHomeDelivery",
+      "InstantHomeDelivery",
+      "SelfPickup",
+      "TableDelivery",
+      "WoltDelivery",
+      "WoltMarketplaceDelivery"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "DinteroVerifyStatus",
+     "backend_path": "Enums/DinteroVerifyStatus.cs",
+     "jaccard": 0.1,
+     "shared": 1,
+     "backend_size": 4,
+     "missing_from_mirror": [
+      "Fail",
+      "Success",
+      "Waiting"
+     ],
+     "extra_in_mirror": [
+      "DineHomeDelivery",
+      "InstantHomeDelivery",
+      "SelfPickup",
+      "TableDelivery",
+      "WoltDelivery",
+      "WoltMarketplaceDelivery"
+     ],
+     "name_equal": false
+    }
+   ]
+  },
+  {
+   "mirror": "DiscountType",
+   "path": "core/enums/discount-type.ts",
+   "mirror_size": 2,
+   "mirror_members": [
+    "Amount",
+    "Percent"
+   ],
+   "candidates": [
+    {
+     "backend": "DiscountType",
+     "backend_path": "Enums/DiscountType.cs",
+     "jaccard": 1.0,
+     "shared": 2,
+     "backend_size": 2,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": true
+    }
+   ]
+  },
+  {
+   "mirror": "OrderPaymentStatus",
+   "path": "core/enums/order-payment-status.ts",
+   "mirror_size": 3,
+   "mirror_members": [
+    "Pending",
+    "Confirmed",
+    "Failed"
+   ],
+   "candidates": [
+    {
+     "backend": "OrderPaymentStatus",
+     "backend_path": "Enums/Kassa/OrderPaymentStatus.cs",
+     "jaccard": 1.0,
+     "shared": 3,
+     "backend_size": 3,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": true
+    },
+    {
+     "backend": "WorkforcePublicationDeliveryState",
+     "backend_path": "Enums/Workforce/WorkforcePublicationDeliveryState.cs",
+     "jaccard": 0.4,
+     "shared": 2,
+     "backend_size": 4,
+     "missing_from_mirror": [
+      "Delivered",
+      "ManuallyDelivered"
+     ],
+     "extra_in_mirror": [
+      "Confirmed"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "EventsNotificationOutboxStatus",
+     "backend_path": "Enums/Events/EventsNotificationOutboxStatus.cs",
+     "jaccard": 0.3333,
+     "shared": 2,
+     "backend_size": 5,
+     "missing_from_mirror": [
+      "DeadLettered",
+      "Leased",
+      "Sent"
+     ],
+     "extra_in_mirror": [
+      "Confirmed"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "TripletexVoucherStatus",
+     "backend_path": "Enums/TripletexVoucherEnums.cs",
+     "jaccard": 0.3333,
+     "shared": 2,
+     "backend_size": 5,
+     "missing_from_mirror": [
+      "Posted",
+      "Reversed",
+      "Skipped"
+     ],
+     "extra_in_mirror": [
+      "Confirmed"
+     ],
+     "name_equal": false
+    }
+   ]
+  },
+  {
+   "mirror": "OrderPaymentTypeFilter",
+   "path": "core/enums/order-payment-type-filter.ts",
+   "mirror_size": 11,
+   "mirror_members": [
+    "PayInStore",
+    "Stripe",
+    "Vipps",
+    "Giftcard",
+    "Dintero",
+    "DinteroVipps",
+    "DinteroBillie",
+    "DinteroKlarna",
+    "WoltMarketplace",
+    "Surfboard",
+    "SurfboardTerminal"
+   ],
+   "candidates": [
+    {
+     "backend": "PaymentTypeFilter",
+     "backend_path": "Enums/PaymentTypeFilter.cs",
+     "jaccard": 0.9167,
+     "shared": 11,
+     "backend_size": 12,
+     "missing_from_mirror": [
+      "DinteroKravia"
+     ],
+     "extra_in_mirror": [],
+     "name_equal": false
+    },
+    {
+     "backend": "PaymentType",
+     "backend_path": "Enums/PaymentType.cs",
+     "jaccard": 0.6471,
+     "shared": 11,
+     "backend_size": 17,
+     "missing_from_mirror": [
+      "Cash",
+      "CompanyAccount",
+      "DinteroKravia",
+      "DinteroTerminal",
+      "NotSet",
+      "SurfboardVipps"
+     ],
+     "extra_in_mirror": [],
+     "name_equal": false
+    },
+    {
+     "backend": "TripletexSettlementProvider",
+     "backend_path": "Models/Tripletex/TripletexPayoutModels.cs",
+     "jaccard": 0.1818,
+     "shared": 2,
+     "backend_size": 2,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [
+      "DinteroBillie",
+      "DinteroKlarna",
+      "DinteroVipps",
+      "Giftcard",
+      "PayInStore",
+      "Stripe",
+      "SurfboardTerminal",
+      "Vipps",
+      "WoltMarketplace"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "TerminalProvider",
+     "backend_path": "Enums/Kassa/TerminalProvider.cs",
+     "jaccard": 0.1667,
+     "shared": 2,
+     "backend_size": 3,
+     "missing_from_mirror": [
+      "Auto"
+     ],
+     "extra_in_mirror": [
+      "DinteroBillie",
+      "DinteroKlarna",
+      "DinteroVipps",
+      "Giftcard",
+      "PayInStore",
+      "Stripe",
+      "SurfboardTerminal",
+      "Vipps",
+      "WoltMarketplace"
+     ],
+     "name_equal": false
+    }
+   ]
+  },
+  {
+   "mirror": "DineHomeStatus",
+   "path": "core/enums/dinehome-status.ts",
+   "mirror_size": 6,
+   "mirror_members": [
+    "NotSet",
+    "Accepted",
+    "PickedUp",
+    "ReachedDestination",
+    "Completed",
+    "Canceled"
+   ],
+   "candidates": [
+    {
+     "backend": "DineHomeStatus",
+     "backend_path": "Enums/DineHomeStatus.cs",
+     "jaccard": 1.0,
+     "shared": 6,
+     "backend_size": 6,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": true
+    },
+    {
+     "backend": "OrderStatusFilter",
+     "backend_path": "Enums/OrderStatusFilter.cs",
+     "jaccard": 0.2857,
+     "shared": 2,
+     "backend_size": 3,
+     "missing_from_mirror": [
+      "Remaining"
+     ],
+     "extra_in_mirror": [
+      "Accepted",
+      "NotSet",
+      "PickedUp",
+      "ReachedDestination"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "OrderStatus",
+     "backend_path": "Enums/OrderStatus.cs",
+     "jaccard": 0.25,
+     "shared": 3,
+     "backend_size": 9,
+     "missing_from_mirror": [
+      "DriverPickedUp",
+      "OpenCheck",
+      "Processing",
+      "ReadyForDriver",
+      "ReadyForPickup",
+      "Served"
+     ],
+     "extra_in_mirror": [
+      "NotSet",
+      "PickedUp",
+      "ReachedDestination"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "RewardTransactionType",
+     "backend_path": "Enums/RewardTransactionType.cs",
+     "jaccard": 0.25,
+     "shared": 2,
+     "backend_size": 4,
+     "missing_from_mirror": [
+      "Received",
+      "Spent"
+     ],
+     "extra_in_mirror": [
+      "Accepted",
+      "Completed",
+      "PickedUp",
+      "ReachedDestination"
+     ],
+     "name_equal": false
+    }
+   ]
+  },
+  {
+   "mirror": "TableShape",
+   "path": "core/enums/table-shape.ts",
+   "mirror_size": 3,
+   "mirror_members": [
+    "Round",
+    "Square",
+    "Rectangle"
+   ],
+   "candidates": [
+    {
+     "backend": "TableShape",
+     "backend_path": "Enums/FloorPlan/TableShape.cs",
+     "jaccard": 1.0,
+     "shared": 3,
+     "backend_size": 3,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": true
+    }
+   ]
+  },
+  {
+   "mirror": "DinteroTerminalStatus",
+   "path": "core/enums/dintero-terminal-status.ts",
+   "mirror_size": 4,
+   "mirror_members": [
+    "NotSet",
+    "Waiting",
+    "Success",
+    "Fail"
+   ],
+   "candidates": [
+    {
+     "backend": "DinteroTerminalStatus",
+     "backend_path": "Enums/DinteroTerminalStatus.cs",
+     "jaccard": 1.0,
+     "shared": 4,
+     "backend_size": 4,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": true
+    },
+    {
+     "backend": "DinteroVerifyStatus",
+     "backend_path": "Enums/DinteroVerifyStatus.cs",
+     "jaccard": 1.0,
+     "shared": 4,
+     "backend_size": 4,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": false
+    },
+    {
+     "backend": "VippsVerifyStatus",
+     "backend_path": "Enums/VippsVerifyStatus.cs",
+     "jaccard": 1.0,
+     "shared": 4,
+     "backend_size": 4,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": false
+    },
+    {
+     "backend": "RewardTransactionType",
+     "backend_path": "Enums/RewardTransactionType.cs",
+     "jaccard": 0.1429,
+     "shared": 1,
+     "backend_size": 4,
+     "missing_from_mirror": [
+      "Canceled",
+      "Received",
+      "Spent"
+     ],
+     "extra_in_mirror": [
+      "Fail",
+      "Success",
+      "Waiting"
+     ],
+     "name_equal": false
+    }
+   ]
+  },
+  {
+   "mirror": "ActionName",
+   "path": "core/enums/action-name.ts",
+   "mirror_size": 10,
+   "mirror_members": [
+    "Load",
+    "SetCurrentUser",
+    "SetDeliveryAddress",
+    "SetNotificationId",
+    "SetCurrentStore",
+    "FileUploadEvent",
+    "ClearFileUploadEvent",
+    "SetProductsQuery",
+    "SetLastViewedProductId",
+    "ClearState"
+   ],
+   "candidates": []
+  },
+  {
+   "mirror": "AppSettingKey",
+   "path": "core/enums/app-setting-key.ts",
+   "mirror_size": 1,
+   "mirror_members": [
+    "State"
+   ],
+   "candidates": []
+  },
+  {
+   "mirror": "OfferProposalStatus",
+   "path": "core/enums/offer-proposal-status.ts",
+   "mirror_size": 7,
+   "mirror_members": [
+    "Created",
+    "Sent",
+    "Read",
+    "Accepted",
+    "StoreRegistered",
+    "Rejected",
+    "Cancelled"
+   ],
+   "candidates": [
+    {
+     "backend": "OfferProposalStatus",
+     "backend_path": "Enums/OfferProposalStatus.cs",
+     "jaccard": 1.0,
+     "shared": 7,
+     "backend_size": 7,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": true
+    },
+    {
+     "backend": "GrowthMailSubmissionStatusDto",
+     "backend_path": "Models/Growth/GrowthNewsletterModels.cs",
+     "jaccard": 0.25,
+     "shared": 2,
+     "backend_size": 3,
+     "missing_from_mirror": [
+      "Duplicate"
+     ],
+     "extra_in_mirror": [
+      "Cancelled",
+      "Created",
+      "Read",
+      "Sent",
+      "StoreRegistered"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "GrowthMailSubmissionStatus",
+     "backend_path": "Services/Growth/GrowthMailProviderContracts.cs",
+     "jaccard": 0.25,
+     "shared": 2,
+     "backend_size": 3,
+     "missing_from_mirror": [
+      "Duplicate"
+     ],
+     "extra_in_mirror": [
+      "Cancelled",
+      "Created",
+      "Read",
+      "Sent",
+      "StoreRegistered"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "EventsProposalVersionStatus",
+     "backend_path": "Enums/Events/EventsProposalVersionStatus.cs",
+     "jaccard": 0.1818,
+     "shared": 2,
+     "backend_size": 6,
+     "missing_from_mirror": [
+      "Declined",
+      "Draft",
+      "Expired",
+      "Superseded"
+     ],
+     "extra_in_mirror": [
+      "Cancelled",
+      "Created",
+      "Read",
+      "Rejected",
+      "StoreRegistered"
+     ],
+     "name_equal": false
+    }
+   ]
+  },
+  {
+   "mirror": "MutationName",
+   "path": "core/enums/mutation-name.ts",
+   "mirror_size": 27,
+   "mirror_members": [
+    "Load",
+    "SetIntroIsSeen",
+    "SetCurrentUser",
+    "SetDeliveryAddress",
+    "SetUserPosition",
+    "ClearCurrentUser",
+    "SetCarts",
+    "SetOrders",
+    "SetStores",
+    "SetStore",
+    "SetNotificationId",
+    "RemoveCart",
+    "RemoveCartItems",
+    "SetCartIsLoading",
+    "SetLineItem",
+    "SetCartRootProperties",
+    "RemoveLineItem",
+    "SetCurrentStore",
+    "SetStoreProducts",
+    "ClearCurrentUserAndStore",
+    "FileUploadEvent",
+    "ClearFileUploadEvent",
+    "SetProductsQuery",
+    "SetNotificationStatus",
+    "SetLastViewedProductId",
+    "StartNewOrderNotificationsInterval",
+    "StopNewOrderNotificationsInterval"
+   ],
+   "candidates": []
+  },
+  {
+   "mirror": "KeyAccountManagerStatus",
+   "path": "core/enums/key-account-manager-status.ts",
+   "mirror_size": 6,
+   "mirror_members": [
+    "MissingSetup",
+    "ReadyForDemo",
+    "WaitingForCustomerResponse",
+    "RequiresFollowUp",
+    "InOperation",
+    "Deleted"
+   ],
+   "candidates": [
+    {
+     "backend": "KeyAccountManagerStatus",
+     "backend_path": "Enums/KeyAccountManagerStatus.cs",
+     "jaccard": 1.0,
+     "shared": 6,
+     "backend_size": 6,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": true
+    }
+   ]
+  },
+  {
+   "mirror": "VippsVerifyStatus",
+   "path": "core/enums/vipps-verify-status.ts",
+   "mirror_size": 4,
+   "mirror_members": [
+    "NotSet",
+    "Waiting",
+    "Success",
+    "Fail"
+   ],
+   "candidates": [
+    {
+     "backend": "DinteroTerminalStatus",
+     "backend_path": "Enums/DinteroTerminalStatus.cs",
+     "jaccard": 1.0,
+     "shared": 4,
+     "backend_size": 4,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": false
+    },
+    {
+     "backend": "DinteroVerifyStatus",
+     "backend_path": "Enums/DinteroVerifyStatus.cs",
+     "jaccard": 1.0,
+     "shared": 4,
+     "backend_size": 4,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": false
+    },
+    {
+     "backend": "VippsVerifyStatus",
+     "backend_path": "Enums/VippsVerifyStatus.cs",
+     "jaccard": 1.0,
+     "shared": 4,
+     "backend_size": 4,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": true
+    },
+    {
+     "backend": "RewardTransactionType",
+     "backend_path": "Enums/RewardTransactionType.cs",
+     "jaccard": 0.1429,
+     "shared": 1,
+     "backend_size": 4,
+     "missing_from_mirror": [
+      "Canceled",
+      "Received",
+      "Spent"
+     ],
+     "extra_in_mirror": [
+      "Fail",
+      "Success",
+      "Waiting"
+     ],
+     "name_equal": false
+    }
+   ]
+  },
+  {
+   "mirror": "CheckSplitMode",
+   "path": "core/enums/check-split-mode.ts",
+   "mirror_size": 2,
+   "mirror_members": [
+    "ByItem",
+    "EqualParts"
+   ],
+   "candidates": [
+    {
+     "backend": "CheckSplitMode",
+     "backend_path": "Enums/Kassa/CheckSplitMode.cs",
+     "jaccard": 1.0,
+     "shared": 2,
+     "backend_size": 2,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": true
+    }
+   ]
+  },
+  {
+   "mirror": "RewardTransactionType",
+   "path": "core/enums/reward-transaction-type.ts",
+   "mirror_size": 4,
+   "mirror_members": [
+    "NotSet",
+    "Received",
+    "Spent",
+    "Transferred"
+   ],
+   "candidates": [
+    {
+     "backend": "RewardTransactionType",
+     "backend_path": "Enums/RewardTransactionType.cs",
+     "jaccard": 0.6,
+     "shared": 3,
+     "backend_size": 4,
+     "missing_from_mirror": [
+      "Canceled"
+     ],
+     "extra_in_mirror": [
+      "Transferred"
+     ],
+     "name_equal": true
+    },
+    {
+     "backend": "GiftcardTransactionType",
+     "backend_path": "Enums/GiftcardTransactionType.cs",
+     "jaccard": 0.25,
+     "shared": 2,
+     "backend_size": 6,
+     "missing_from_mirror": [
+      "AwaitingReceiver",
+      "Canceled",
+      "Purchased",
+      "Redeemed"
+     ],
+     "extra_in_mirror": [
+      "Received",
+      "Spent"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "DinteroTerminalStatus",
+     "backend_path": "Enums/DinteroTerminalStatus.cs",
+     "jaccard": 0.1429,
+     "shared": 1,
+     "backend_size": 4,
+     "missing_from_mirror": [
+      "Fail",
+      "Success",
+      "Waiting"
+     ],
+     "extra_in_mirror": [
+      "Received",
+      "Spent",
+      "Transferred"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "DinteroVerifyStatus",
+     "backend_path": "Enums/DinteroVerifyStatus.cs",
+     "jaccard": 0.1429,
+     "shared": 1,
+     "backend_size": 4,
+     "missing_from_mirror": [
+      "Fail",
+      "Success",
+      "Waiting"
+     ],
+     "extra_in_mirror": [
+      "Received",
+      "Spent",
+      "Transferred"
+     ],
+     "name_equal": false
+    }
+   ]
+  },
+  {
+   "mirror": "KassaReceiptType",
+   "path": "core/enums/kassa-receipt-type.ts",
+   "mirror_size": 6,
+   "mirror_members": [
+    "Sale",
+    "Return",
+    "Correction",
+    "Copy",
+    "Provisional",
+    "Training"
+   ],
+   "candidates": [
+    {
+     "backend": "KassaReceiptType",
+     "backend_path": "Enums/Kassa/KassaReceiptType.cs",
+     "jaccard": 0.8571,
+     "shared": 6,
+     "backend_size": 7,
+     "missing_from_mirror": [
+      "Delivery"
+     ],
+     "extra_in_mirror": [],
+     "name_equal": true
+    },
+    {
+     "backend": "KassaReceiptSeries",
+     "backend_path": "Enums/Kassa/KassaReceiptSeries.cs",
+     "jaccard": 0.5556,
+     "shared": 5,
+     "backend_size": 8,
+     "missing_from_mirror": [
+      "Delivery",
+      "JournalSequence",
+      "ZReport"
+     ],
+     "extra_in_mirror": [
+      "Correction"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "MealsJournalReceiptKind",
+     "backend_path": "Enums/Meals/MealsJournalReceiptKind.cs",
+     "jaccard": 0.3333,
+     "shared": 2,
+     "backend_size": 2,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [
+      "Copy",
+      "Correction",
+      "Provisional",
+      "Training"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "OpKind",
+     "backend_path": "WebApi.Tests/Kassa/Prop_DrawerExpectedCashLedgerInvariant.cs",
+     "jaccard": 0.125,
+     "shared": 1,
+     "backend_size": 3,
+     "missing_from_mirror": [
+      "PayIn",
+      "PayOut"
+     ],
+     "extra_in_mirror": [
+      "Copy",
+      "Correction",
+      "Provisional",
+      "Return",
+      "Training"
+     ],
+     "name_equal": false
+    }
+   ]
+  },
+  {
+   "mirror": "NotificationPlatform",
+   "path": "core/enums/notification-platform.ts",
+   "mirror_size": 2,
+   "mirror_members": [
+    "Apns",
+    "Fcm"
+   ],
+   "candidates": []
+  },
+  {
+   "mirror": "SafTVatCode",
+   "path": "core/enums/saf-t-vat-code.ts",
+   "mirror_size": 3,
+   "mirror_members": [
+    "TwentyFivePercent",
+    "FifteenPercent",
+    "ZeroPercent"
+   ],
+   "candidates": [
+    {
+     "backend": "SafTVatCode",
+     "backend_path": "Enums/SafTVatCode.cs",
+     "jaccard": 0.75,
+     "shared": 3,
+     "backend_size": 4,
+     "missing_from_mirror": [
+      "TwelvePercent"
+     ],
+     "extra_in_mirror": [],
+     "name_equal": true
+    }
+   ]
+  },
+  {
+   "mirror": "KassaReceiptSeries",
+   "path": "core/enums/kassa-receipt-series.ts",
+   "mirror_size": 7,
+   "mirror_members": [
+    "JournalSequence",
+    "Sale",
+    "Return",
+    "Copy",
+    "Provisional",
+    "Training",
+    "ZReport"
+   ],
+   "candidates": [
+    {
+     "backend": "KassaReceiptSeries",
+     "backend_path": "Enums/Kassa/KassaReceiptSeries.cs",
+     "jaccard": 0.875,
+     "shared": 7,
+     "backend_size": 8,
+     "missing_from_mirror": [
+      "Delivery"
+     ],
+     "extra_in_mirror": [],
+     "name_equal": true
+    },
+    {
+     "backend": "KassaReceiptType",
+     "backend_path": "Enums/Kassa/KassaReceiptType.cs",
+     "jaccard": 0.5556,
+     "shared": 5,
+     "backend_size": 7,
+     "missing_from_mirror": [
+      "Correction",
+      "Delivery"
+     ],
+     "extra_in_mirror": [
+      "JournalSequence",
+      "ZReport"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "MealsJournalReceiptKind",
+     "backend_path": "Enums/Meals/MealsJournalReceiptKind.cs",
+     "jaccard": 0.2857,
+     "shared": 2,
+     "backend_size": 2,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [
+      "Copy",
+      "JournalSequence",
+      "Provisional",
+      "Training",
+      "ZReport"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "OpKind",
+     "backend_path": "WebApi.Tests/Kassa/Prop_DrawerExpectedCashLedgerInvariant.cs",
+     "jaccard": 0.1111,
+     "shared": 1,
+     "backend_size": 3,
+     "missing_from_mirror": [
+      "PayIn",
+      "PayOut"
+     ],
+     "extra_in_mirror": [
+      "Copy",
+      "JournalSequence",
+      "Provisional",
+      "Return",
+      "Training",
+      "ZReport"
+     ],
+     "name_equal": false
+    }
+   ]
+  },
+  {
+   "mirror": "OrderLineItemStatus",
+   "path": "core/enums/order-line-item-status.ts",
+   "mirror_size": 5,
+   "mirror_members": [
+    "Pending",
+    "Sent",
+    "Fired",
+    "Ready",
+    "Served"
+   ],
+   "candidates": [
+    {
+     "backend": "OrderLineItemStatus",
+     "backend_path": "Enums/Kassa/OrderLineItemStatus.cs",
+     "jaccard": 1.0,
+     "shared": 5,
+     "backend_size": 5,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": true
+    },
+    {
+     "backend": "EventsNotificationOutboxStatus",
+     "backend_path": "Enums/Events/EventsNotificationOutboxStatus.cs",
+     "jaccard": 0.25,
+     "shared": 2,
+     "backend_size": 5,
+     "missing_from_mirror": [
+      "DeadLettered",
+      "Failed",
+      "Leased"
+     ],
+     "extra_in_mirror": [
+      "Fired",
+      "Ready",
+      "Served"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "WorkforceNotificationOutboxStatus",
+     "backend_path": "Enums/Workforce/WorkforceNotificationOutboxStatus.cs",
+     "jaccard": 0.2222,
+     "shared": 2,
+     "backend_size": 6,
+     "missing_from_mirror": [
+      "DeadLettered",
+      "Failed",
+      "Leased",
+      "Withheld"
+     ],
+     "extra_in_mirror": [
+      "Fired",
+      "Ready",
+      "Served"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "OrderPaymentStatus",
+     "backend_path": "Enums/Kassa/OrderPaymentStatus.cs",
+     "jaccard": 0.1429,
+     "shared": 1,
+     "backend_size": 3,
+     "missing_from_mirror": [
+      "Confirmed",
+      "Failed"
+     ],
+     "extra_in_mirror": [
+      "Fired",
+      "Ready",
+      "Sent",
+      "Served"
+     ],
+     "name_equal": false
+    }
+   ]
+  },
+  {
+   "mirror": "OrderKind",
+   "path": "core/enums/order-kind.ts",
+   "mirror_size": 2,
+   "mirror_members": [
+    "Consumer",
+    "PosCheck"
+   ],
+   "candidates": [
+    {
+     "backend": "OrderKind",
+     "backend_path": "Enums/OrderKind.cs",
+     "jaccard": 1.0,
+     "shared": 2,
+     "backend_size": 2,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": true
+    },
+    {
+     "backend": "EventsSettlementLineKind",
+     "backend_path": "Enums/Events/EventsSettlementLineKind.cs",
+     "jaccard": 0.1667,
+     "shared": 1,
+     "backend_size": 5,
+     "missing_from_mirror": [
+      "Adjustment",
+      "DepositApplied",
+      "Invoice",
+      "Refund"
+     ],
+     "extra_in_mirror": [
+      "Consumer"
+     ],
+     "name_equal": false
+    }
+   ]
+  },
+  {
+   "mirror": "OrderStatusFilter",
+   "path": "core/enums/order-status-filter.ts",
+   "mirror_size": 3,
+   "mirror_members": [
+    "Remaining",
+    "Completed",
+    "Canceled"
+   ],
+   "candidates": [
+    {
+     "backend": "OrderStatusFilter",
+     "backend_path": "Enums/OrderStatusFilter.cs",
+     "jaccard": 1.0,
+     "shared": 3,
+     "backend_size": 3,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": true
+    },
+    {
+     "backend": "GiftcardStatus",
+     "backend_path": "Enums/GiftcardStatus.cs",
+     "jaccard": 0.3333,
+     "shared": 2,
+     "backend_size": 5,
+     "missing_from_mirror": [
+      "AwaitingReceiver",
+      "Initiated",
+      "Transferred"
+     ],
+     "extra_in_mirror": [
+      "Remaining"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "DineHomeStatus",
+     "backend_path": "Enums/DineHomeStatus.cs",
+     "jaccard": 0.2857,
+     "shared": 2,
+     "backend_size": 6,
+     "missing_from_mirror": [
+      "Accepted",
+      "NotSet",
+      "PickedUp",
+      "ReachedDestination"
+     ],
+     "extra_in_mirror": [
+      "Remaining"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "TrainingIdempotencyRecordStatus",
+     "backend_path": "Enums/Training/TrainingIdempotencyRecordStatus.cs",
+     "jaccard": 0.25,
+     "shared": 1,
+     "backend_size": 2,
+     "missing_from_mirror": [
+      "InProgress"
+     ],
+     "extra_in_mirror": [
+      "Canceled",
+      "Remaining"
+     ],
+     "name_equal": false
+    }
+   ]
+  },
+  {
+   "mirror": "KassaEventType",
+   "path": "core/enums/kassa-event-type.ts",
+   "mirror_size": 19,
+   "mirror_members": [
+    "POSSTART",
+    "POSEND",
+    "EMPIN",
+    "EMPOUT",
+    "SALREC",
+    "RETREC",
+    "COPYREC",
+    "PROREC",
+    "TRAINREC",
+    "LINEDELETE",
+    "PRICELOOKUP",
+    "DRAWOPEN",
+    "DRAWOPENMAN",
+    "ZREP",
+    "XREP",
+    "DISCOUNT",
+    "VOIDTRANS",
+    "PAYIN",
+    "PAYOUT"
+   ],
+   "candidates": [
+    {
+     "backend": "KassaEventType",
+     "backend_path": "Enums/Kassa/KassaEventType.cs",
+     "jaccard": 0.95,
+     "shared": 19,
+     "backend_size": 20,
+     "missing_from_mirror": [
+      "UTLEVREC"
+     ],
+     "extra_in_mirror": [],
+     "name_equal": true
+    }
+   ]
+  },
+  {
+   "mirror": "GiftcardStatus",
+   "path": "core/enums/giftcard-status.ts",
+   "mirror_size": 4,
+   "mirror_members": [
+    "Initiated",
+    "AwaitingReceiver",
+    "Completed",
+    "Canceled"
+   ],
+   "candidates": [
+    {
+     "backend": "GiftcardStatus",
+     "backend_path": "Enums/GiftcardStatus.cs",
+     "jaccard": 0.8,
+     "shared": 4,
+     "backend_size": 5,
+     "missing_from_mirror": [
+      "Transferred"
+     ],
+     "extra_in_mirror": [],
+     "name_equal": true
+    },
+    {
+     "backend": "OrderStatusFilter",
+     "backend_path": "Enums/OrderStatusFilter.cs",
+     "jaccard": 0.4,
+     "shared": 2,
+     "backend_size": 3,
+     "missing_from_mirror": [
+      "Remaining"
+     ],
+     "extra_in_mirror": [
+      "AwaitingReceiver",
+      "Initiated"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "DineHomeStatus",
+     "backend_path": "Enums/DineHomeStatus.cs",
+     "jaccard": 0.25,
+     "shared": 2,
+     "backend_size": 6,
+     "missing_from_mirror": [
+      "Accepted",
+      "NotSet",
+      "PickedUp",
+      "ReachedDestination"
+     ],
+     "extra_in_mirror": [
+      "AwaitingReceiver",
+      "Initiated"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "GiftcardTransactionType",
+     "backend_path": "Enums/GiftcardTransactionType.cs",
+     "jaccard": 0.25,
+     "shared": 2,
+     "backend_size": 6,
+     "missing_from_mirror": [
+      "NotSet",
+      "Purchased",
+      "Redeemed",
+      "Transferred"
+     ],
+     "extra_in_mirror": [
+      "Completed",
+      "Initiated"
+     ],
+     "name_equal": false
+    }
+   ]
+  },
+  {
+   "mirror": "GiftcardTransactionType",
+   "path": "core/enums/giftcard-transaction-type.ts",
+   "mirror_size": 6,
+   "mirror_members": [
+    "NotSet",
+    "AwaitingReceiver",
+    "Transferred",
+    "Purchased",
+    "Redeemed",
+    "Canceled"
+   ],
+   "candidates": [
+    {
+     "backend": "GiftcardTransactionType",
+     "backend_path": "Enums/GiftcardTransactionType.cs",
+     "jaccard": 1.0,
+     "shared": 6,
+     "backend_size": 6,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": true
+    },
+    {
+     "backend": "GiftcardStatus",
+     "backend_path": "Enums/GiftcardStatus.cs",
+     "jaccard": 0.375,
+     "shared": 3,
+     "backend_size": 5,
+     "missing_from_mirror": [
+      "Completed",
+      "Initiated"
+     ],
+     "extra_in_mirror": [
+      "NotSet",
+      "Purchased",
+      "Redeemed"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "RewardTransactionType",
+     "backend_path": "Enums/RewardTransactionType.cs",
+     "jaccard": 0.25,
+     "shared": 2,
+     "backend_size": 4,
+     "missing_from_mirror": [
+      "Received",
+      "Spent"
+     ],
+     "extra_in_mirror": [
+      "AwaitingReceiver",
+      "Purchased",
+      "Redeemed",
+      "Transferred"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "DineHomeStatus",
+     "backend_path": "Enums/DineHomeStatus.cs",
+     "jaccard": 0.2,
+     "shared": 2,
+     "backend_size": 6,
+     "missing_from_mirror": [
+      "Accepted",
+      "Completed",
+      "PickedUp",
+      "ReachedDestination"
+     ],
+     "extra_in_mirror": [
+      "AwaitingReceiver",
+      "Purchased",
+      "Redeemed",
+      "Transferred"
+     ],
+     "name_equal": false
+    }
+   ]
+  },
+  {
+   "mirror": "SurfboardApplicationStatus",
+   "path": "core/enums/surfboard-application-status.ts",
+   "mirror_size": 8,
+   "mirror_members": [
+    "Initiated",
+    "Submitted",
+    "PendingInformation",
+    "Signed",
+    "Rejected",
+    "Expired",
+    "Completed",
+    "MerchantCreated"
+   ],
+   "candidates": [
+    {
+     "backend": "WorkforceTimeOffRequestStatus",
+     "backend_path": "Enums/Workforce/WorkforceTimeOffRequestStatus.cs",
+     "jaccard": 0.2727,
+     "shared": 3,
+     "backend_size": 6,
+     "missing_from_mirror": [
+      "Approved",
+      "UnderReview",
+      "Withdrawn"
+     ],
+     "extra_in_mirror": [
+      "Completed",
+      "Initiated",
+      "MerchantCreated",
+      "PendingInformation",
+      "Signed"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "EventsDepositProviderOutcome",
+     "backend_path": "Services/Events/EventsDepositPaymentContracts.cs",
+     "jaccard": 0.2,
+     "shared": 2,
+     "backend_size": 4,
+     "missing_from_mirror": [
+      "Cancelled",
+      "Failed"
+     ],
+     "extra_in_mirror": [
+      "Initiated",
+      "MerchantCreated",
+      "PendingInformation",
+      "Rejected",
+      "Signed",
+      "Submitted"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "GiftcardStatus",
+     "backend_path": "Enums/GiftcardStatus.cs",
+     "jaccard": 0.1818,
+     "shared": 2,
+     "backend_size": 5,
+     "missing_from_mirror": [
+      "AwaitingReceiver",
+      "Canceled",
+      "Transferred"
+     ],
+     "extra_in_mirror": [
+      "Expired",
+      "MerchantCreated",
+      "PendingInformation",
+      "Rejected",
+      "Signed",
+      "Submitted"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "EventsPaymentReceiptKind",
+     "backend_path": "Enums/Events/EventsPaymentReceiptKind.cs",
+     "jaccard": 0.1429,
+     "shared": 2,
+     "backend_size": 8,
+     "missing_from_mirror": [
+      "Failed",
+      "Forfeited",
+      "LinkIssued",
+      "ProviderConfirmed",
+      "ProviderRefundConfirmed",
+      "RefundIssued"
+     ],
+     "extra_in_mirror": [
+      "Completed",
+      "MerchantCreated",
+      "PendingInformation",
+      "Rejected",
+      "Signed",
+      "Submitted"
+     ],
+     "name_equal": false
+    }
+   ]
+  },
+  {
+   "mirror": "CashDrawerTransactionType",
+   "path": "core/enums/cash-drawer-transaction-type.ts",
+   "mirror_size": 8,
+   "mirror_members": [
+    "OpenFloat",
+    "Sale",
+    "Change",
+    "PayIn",
+    "PayOut",
+    "Refund",
+    "BankDeposit",
+    "CloseCount"
+   ],
+   "candidates": [
+    {
+     "backend": "CashDrawerTransactionType",
+     "backend_path": "Enums/Kassa/CashDrawerTransactionType.cs",
+     "jaccard": 1.0,
+     "shared": 8,
+     "backend_size": 8,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": true
+    },
+    {
+     "backend": "OpKind",
+     "backend_path": "WebApi.Tests/Kassa/Prop_DrawerExpectedCashLedgerInvariant.cs",
+     "jaccard": 0.375,
+     "shared": 3,
+     "backend_size": 3,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [
+      "BankDeposit",
+      "Change",
+      "CloseCount",
+      "OpenFloat",
+      "Refund"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "EventsDepositResolution",
+     "backend_path": "Enums/Events/EventsDepositResolution.cs",
+     "jaccard": 0.1111,
+     "shared": 1,
+     "backend_size": 2,
+     "missing_from_mirror": [
+      "Forfeit"
+     ],
+     "extra_in_mirror": [
+      "BankDeposit",
+      "Change",
+      "CloseCount",
+      "OpenFloat",
+      "PayIn",
+      "PayOut",
+      "Sale"
+     ],
+     "name_equal": false
+    },
+    {
+     "backend": "MealsJournalReceiptKind",
+     "backend_path": "Enums/Meals/MealsJournalReceiptKind.cs",
+     "jaccard": 0.1111,
+     "shared": 1,
+     "backend_size": 2,
+     "missing_from_mirror": [
+      "Return"
+     ],
+     "extra_in_mirror": [
+      "BankDeposit",
+      "Change",
+      "CloseCount",
+      "OpenFloat",
+      "PayIn",
+      "PayOut",
+      "Refund"
+     ],
+     "name_equal": false
+    }
+   ]
+  },
+  {
+   "mirror": "DinteroVerifyStatus",
+   "path": "core/enums/dintero-verify-status.ts",
+   "mirror_size": 4,
+   "mirror_members": [
+    "NotSet",
+    "Waiting",
+    "Success",
+    "Fail"
+   ],
+   "candidates": [
+    {
+     "backend": "DinteroTerminalStatus",
+     "backend_path": "Enums/DinteroTerminalStatus.cs",
+     "jaccard": 1.0,
+     "shared": 4,
+     "backend_size": 4,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": false
+    },
+    {
+     "backend": "DinteroVerifyStatus",
+     "backend_path": "Enums/DinteroVerifyStatus.cs",
+     "jaccard": 1.0,
+     "shared": 4,
+     "backend_size": 4,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": true
+    },
+    {
+     "backend": "VippsVerifyStatus",
+     "backend_path": "Enums/VippsVerifyStatus.cs",
+     "jaccard": 1.0,
+     "shared": 4,
+     "backend_size": 4,
+     "missing_from_mirror": [],
+     "extra_in_mirror": [],
+     "name_equal": false
+    },
+    {
+     "backend": "RewardTransactionType",
+     "backend_path": "Enums/RewardTransactionType.cs",
+     "jaccard": 0.1429,
+     "shared": 1,
+     "backend_size": 4,
+     "missing_from_mirror": [
+      "Canceled",
+      "Received",
+      "Spent"
+     ],
+     "extra_in_mirror": [
+      "Fail",
+      "Success",
+      "Waiting"
+     ],
+     "name_equal": false
+    }
+   ]
+  }
+ ]
+}

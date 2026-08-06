@@ -1,0 +1,18 @@
+L-GROWTH-SQL-CATCH-TYPED — regression evidence
+worktree: /Users/svendaneel/okam/wt-grsqlcatch  (lane/growth-sql-catch-typed off feature/restaurant-modules 8e2b57de)
+no SQL container used; Database=SqlServer excluded (no slot granted)
+
+--- whole container-free tier ---
+$ dotnet test WebApi.Tests/WebApi.Tests.csproj --filter "Database!=SqlServer"
+Passed!  - Failed:     0, Passed:  4643, Skipped:    12, Total:  4655, Duration: 5 m 29 s - WebApi.Tests.dll (net8.0)
+
+--- Growth only ---
+$ dotnet test ... --filter "FullyQualifiedName~WebApi.Tests.Growth&Database!=SqlServer"
+Passed!  - Failed:     0, Passed:   494, Skipped:     1, Total:   495, Duration: 30 s
+
+--- the five new arms (M3, fix in place) ---
+  Passed WebApi.Tests.Growth.GrowthDispatchDbFailureClassificationTests.A_genuine_competing_run_still_returns_the_single_winning_run [2 s]
+  Passed WebApi.Tests.Growth.GrowthDispatchDbFailureClassificationTests.A_missing_object_failure_is_refused_as_itself_and_never_masked_by_a_winner_re_read [199 ms]
+  Passed WebApi.Tests.Growth.GrowthConsentTextDbFailureClassificationTests.A_missing_object_failure_is_refused_as_itself_and_never_as_a_publish_race [6 ms]
+  Passed WebApi.Tests.Growth.GrowthConsentTextDbFailureClassificationTests.A_genuinely_absent_audit_table_is_refused_as_itself_and_never_as_a_publish_race [2 ms]
+  Passed WebApi.Tests.Growth.GrowthConsentTextDbFailureClassificationTests.A_genuine_locale_version_clash_still_answers_the_publish_race_409 [5 ms]

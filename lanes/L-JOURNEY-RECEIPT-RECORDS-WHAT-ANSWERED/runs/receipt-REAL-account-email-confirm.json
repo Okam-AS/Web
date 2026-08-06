@@ -1,0 +1,240 @@
+{
+  "journey": "account-email-confirm",
+  "title": "A phone-signup administrator is refused a test-send, confirms her address from admin, and is then allowed it",
+  "status": "passed",
+  "startedAtUtc": "2026-08-05T02:34:08.773Z",
+  "finishedAtUtc": "2026-08-05T02:34:15.408Z",
+  "durationMs": 6635,
+  "capabilities": [
+    "account.email.confirm",
+    "account.email.reachable-from-admin",
+    "growth.newsletter.test-send"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3934",
+  "apiBaseUrl": "http://127.0.0.1:4934",
+  "commit": "e34977acebd59b223584158c33451b6f1ffd82c1",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": {
+    "id": "fixture@e34977acebd59b223584158c33451b6f1ffd82c1+dirty",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "e34977a-dirty",
+    "detail": "the in-repo fixture backend, not an API build (branch HEAD)"
+  },
+  "backendServed": 45,
+  "backendSubjectServed": 31,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:4934/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:4934/user/login -> 200",
+    "GET http://127.0.0.1:4934/user -> 200",
+    "GET http://127.0.0.1:4934/stores/42/market -> 200",
+    "GET http://127.0.0.1:4934/stores/42 -> 200",
+    "GET http://127.0.0.1:4934/stores/42/specialopeninghours -> 200",
+    "GET http://127.0.0.1:4934/user -> 200",
+    "GET http://127.0.0.1:4934/v1/growth/stores/42/consents/summary -> 200"
+  ],
+  "servingFixture": {
+    "origin": "http://127.0.0.1:4934",
+    "askedPort": 4934,
+    "reportedPort": 4934,
+    "reportedPid": 95253,
+    "reportedCwd": "/Users/svendaneel/okam/web-whoanswered",
+    "holderPid": 95253,
+    "holderCwd": "/Users/svendaneel/okam/web-whoanswered",
+    "holderCommand": "node test/e2e/fixture/api-server.js",
+    "identitySource": "health+lsof",
+    "unresolved": null
+  },
+  "nodeCalls": [
+    {
+      "origin": "http://127.0.0.1:4934",
+      "calls": 4,
+      "via": [
+        "fetch"
+      ],
+      "role": "granted",
+      "sample": [
+        "http://127.0.0.1:4934/__fixture/confirmation-code",
+        "http://127.0.0.1:4934/__fixture/confirmation-code",
+        "http://127.0.0.1:4934/__fixture/confirmation-code"
+      ]
+    }
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in as the administrator who signed up by phone",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:34:08.775Z",
+      "durationMs": 2826,
+      "detail": "signed in as the phone-signup admin, on /admin/growth-newsletter",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "turn the newsletter module on, so the test route answers at all",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:34:11.601Z",
+      "durationMs": 771,
+      "detail": "growth.module on for store 42",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "get far enough to have something to test-send",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:34:12.372Z",
+      "durationMs": 785,
+      "detail": "draft saved; the test-send panel is on screen",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "THE WALL: she is refused a test-send to the very address she is about to claim",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:34:13.157Z",
+      "durationMs": 50,
+      "detail": "refused: growth.test_address_not_own, and the sentence names the remedy",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "reach the remedy THROUGH THE SIDEBAR, not by typing a URL",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:34:13.285Z",
+      "durationMs": 672,
+      "detail": "navigated from the sidebar to /admin/account-email",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "the screen states the account has no address, rather than an empty box",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:34:13.957Z",
+      "durationMs": 12,
+      "detail": "status \"Ingen adresse registrert\"; no code step yet",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "a malformed address is refused HERE rather than 500ing at the server",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:34:13.969Z",
+      "durationMs": 51,
+      "detail": "refused client-side; no code was ordered",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "ask for a code, and read what the screen is willing to claim",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:34:14.020Z",
+      "durationMs": 54,
+      "detail": "code ordered; account address set and NOT confirmed",
+      "error": null
+    },
+    {
+      "n": 9,
+      "name": "a WRONG code is refused — and the artifact records what that costs a guesser",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:34:14.163Z",
+      "durationMs": 40,
+      "detail": "wrong code refused; the code is still outstanding afterwards",
+      "error": null
+    },
+    {
+      "n": 10,
+      "name": "confirm the address with the code from the mailbox",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:34:14.203Z",
+      "durationMs": 927,
+      "detail": "confirmed; the badge is the account's answer, and no credential is rendered",
+      "error": null
+    },
+    {
+      "n": 11,
+      "name": "the screen offers the way on, and it goes where it says",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:34:15.167Z",
+      "durationMs": 35,
+      "detail": "followed the on-screen link back to the newsletter",
+      "error": null
+    },
+    {
+      "n": 12,
+      "name": "THE SAME test-send, by the SAME person, to the SAME address — now accepted",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:34:15.202Z",
+      "durationMs": 126,
+      "detail": "test-send accepted for the address she just confirmed",
+      "error": null
+    },
+    {
+      "n": 13,
+      "name": "what the browser said while this ran",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:34:15.406Z",
+      "durationMs": 0,
+      "detail": "2 shell-redirect (note), 0 this page's",
+      "error": null
+    },
+    {
+      "n": 14,
+      "name": "the half this lane did NOT close, recorded rather than glossed",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:34:15.406Z",
+      "durationMs": 0,
+      "detail": "2 notes: both silent-failure halves that live in OkamAPI",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "defect",
+      "summary": "a wrong confirmation code costs the guesser nothing",
+      "detail": "Six digits, no attempt counter, no lockout on this path, no rate limit — and `UserService.ConfirmEmailAsync` clears `EmailConfirmationCode` only on SUCCESS, so the code is still live after a wrong guess and can be guessed at again until it expires (15 minutes). Driven and confirmed here against the fixture, which models that clause deliberately. This screen makes the confirmation reachable; it does not make it strong, and nothing in this lane may be read as saying markedsforingsloven section 15 is closed. The limits are a separate lane's subject."
+    },
+    {
+      "severity": "note",
+      "summary": "the confirmation send is fire-and-forget, so a mail failure is invisible to everybody",
+      "detail": "`UserService.SendEmailConfirmationCodeAsync` hands the send to `FireAndForgetTask.Run` and returns true without waiting, so a provider rejection is swallowed and the caller cannot tell an ordered code from a delivered one. Fixed only on the SCREEN here — the copy says the code was ordered and that we do not learn whether it arrived, and offers a resend — because the swallow itself is in OkamAPI, which this lane may not write to."
+    },
+    {
+      "severity": "note",
+      "summary": "a malformed address still throws unhandled at the server for any caller but this screen",
+      "detail": "`MailboxAddress.Parse` raises a MimeKit `ParseException` inside `SendEmailConfirmationCodeAsync`, and `UserController.SendEmailConfirmationCode` catches only `AppException` — so it escapes as an unhandled 500 rather than a refusal. This screen validates the shape before calling, which closes it for its own user and for nobody else. The server-side refusal is still owed and belongs to a backend lane."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fgrowth-newsletter\" to \"/admin?redirect=%2Fadmin%2Fgrowth-newsletter&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fgrowth-newsletter\" to \"/admin?redirect=%2Fadmin%2Fgrowth-newsletter&storeId=42\" with a new navigation.",
+    "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+  ],
+  "failedRequests": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:4934/v1/growth/stores/42/newsletters/2/test-sends",
+      "status": 403
+    }
+  ],
+  "screenshots": [
+    "account-email-confirm/fixture/01-the-test-send-refused.png",
+    "account-email-confirm/fixture/02-the-code-step-with-what-the-screen-will-and-will.png",
+    "account-email-confirm/fixture/03-the-address-confirmed.png",
+    "account-email-confirm/fixture/04-the-test-send-now-allowed.png"
+  ],
+  "error": null,
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/account-email-confirm.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false,
+    "supersedes": null
+  }
+}

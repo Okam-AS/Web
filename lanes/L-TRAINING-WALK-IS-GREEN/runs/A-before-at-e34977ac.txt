@@ -1,0 +1,51 @@
+=== label    : A-before-at-e34977ac
+=== worktree : /Users/svendaneel/okam/web-trainwalk-before
+=== commit   : e34977acebd59b223584158c33451b6f1ffd82c1
+=== dirty    : 0 path(s) before the run
+=== spec sha : e1a0681c10dc1c8b72990e6a0b183843762954f2
+=== panel sha: 0f5a9241b9e48582aba997efdb3f0c061729c070
+=== scss sha : db8352b52a00c74812bc3c2eb477185c0f4aaf69
+=== overflow : 
+=== ports    : web=3082 fixture=4082 (4010/4971/4973 never bound, never signalled)
+=== core     : 10 entries
+=== started  : 2026-08-06T11:35:04Z
+[WebServer] [fixture] listening on http://127.0.0.1:4082
+
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://192.168.68.111:3082/
+
+[WebServer] [info] Preparing project for development
+
+[WebServer] [info] Initial build may take a while
+
+
+Running 1 test using 1 worker
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+[WebServer] [success] Builder initialized
+
+[1/1] [chromium] › test/e2e/journeys/training-course-to-evidence.spec.js:63:1 › A manager opens Training, publishes a course version, files a failing score, and the SERVER calls it not passed @fixture
+[WebServer] [success] Nuxt files generated
+
+[WebServer] [info] Waiting for file changes
+
+[WebServer] [info] Memory usage: 1.28 GB (RSS: 2.24 GB)
+[WebServer] [info] Listening on: http://192.168.68.111:3082/
+
+  1 passed (52.3s)
+=== finished : 2026-08-06T11:35:57Z
+=== declared : passed
+=== failedStep: none — 19 steps all passed
+RESULT A-before-at-e34977ac PASS rc=0

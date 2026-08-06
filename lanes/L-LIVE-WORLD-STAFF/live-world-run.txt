@@ -37,7 +37,7 @@ A LIVE world is up.
     API        http://127.0.0.1:5952           (pid 37262, log /tmp/okam-live-world-OkamLiveJourneyStaff.log)
     database   OkamLiveJourneyStaff on localhost,15434   (127 migrations, 211 tables)
     store      1  "Live Journey Kafé"
-    manager    99999999 / 123123   (the app prefixes +47 itself)
+    manager    99999999 / AppSettings__DemoVerificationCode__REDACTED   (the app prefixes +47 itself)
     roster     Astrid Vik, Ingrid Moen (the manager), Jonas Lie
     roles      Barista (220.00 NOK/h from 2024-01-01), Kjøkken
     week       2026-07-27..2026-08-03, no plan
@@ -109,7 +109,7 @@ half that used to be broken: the artifact said "failed" and the runner printed
 2. workforce-flag-lever, LIVE  (green)
 
   status=passed  backend=live  apiBaseUrl=http://127.0.0.1:5952  backendProbe=200  backendServed=80  commit=174a550cad59
-   1. sign in as the manager (99999999 / 123123)
+   1. sign in as the manager (99999999 / AppSettings__DemoVerificationCode__REDACTED)
         landed on /admin/feature-flags
    2. the switchboard lists every module's flags, deny-closed
         18 flags across 6 modules; workforce.publication reads "Av"
@@ -155,7 +155,7 @@ The switch is simply left off. On a real store the very next write is refused:
   status=passed  backend=live  apiBaseUrl=http://127.0.0.1:5952  backendProbe=200  backendServed=48  commit=174a550cad59
    1. open the schedule page as an anonymous visitor
         redirected to ?redirect=%2Fadmin%2Fworkforce-schedule
-   2. sign in as the manager (99999999 / 123123)
+   2. sign in as the manager (99999999 / AppSettings__DemoVerificationCode__REDACTED)
         landed back on /admin/workforce-schedule
    3. turn the schedule publication switch on for this store
         workforce.publication on for this store

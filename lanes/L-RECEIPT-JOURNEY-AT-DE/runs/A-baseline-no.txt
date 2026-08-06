@@ -1,0 +1,50 @@
+=== label        : A-baseline-no
+=== edition      : OKAM_EDITION=no
+=== worktree     : /Users/svendaneel/okam/web-rcptde
+=== commit       : e34977acebd59b223584158c33451b6f1ffd82c1
+=== spec sha     : 0e9ccdc1c70a0542db64e6e7cd7914f108bc5ac7
+=== de.ts sha    : cc6e56d4b4f89df4d03bef00d84bce081872d89e
+=== no.ts sha    : 03fbae5be5671ee23cdb88f1829dfab1b94c4eb5
+=== OrderCard sha: 5257316bee3a50af72729a4352f8f670a6d183c0
+=== world.js sha : 1bbd1faa5478e26f849e7f7e8dc3298f6cc1af51
+=== dirty (non-artifact, non-core): 0 path(s)
+=== ports        : web=3847 fixture=4847 (4010 never bound, pid 73160 never signalled)
+=== core         : 10 entries
+[WebServer] [fixture] listening on http://127.0.0.1:4847
+
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://172.20.10.4:3847/
+
+[WebServer] [info] Preparing project for development
+
+[WebServer] [info] Initial build may take a while
+
+
+Running 1 test using 1 worker
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+[WebServer] [success] Builder initialized
+
+[WebServer] [success] Nuxt files generated
+
+[1/1] [chromium] › test/e2e/journeys/modal-estate-scroll-lock.spec.js:87:1 › Two different modals hold the page, and closing one does not let go @fixture
+[WebServer] [info] Waiting for file changes
+
+[WebServer] [info] Memory usage: 1.42 GB (RSS: 2.48 GB)
+
+[WebServer] [info] Listening on: http://172.20.10.4:3847/
+
+  1 passed (36.2s)
+RESULT A-baseline-no edition=no PASS rc=0

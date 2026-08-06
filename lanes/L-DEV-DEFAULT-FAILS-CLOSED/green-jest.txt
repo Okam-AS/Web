@@ -1,0 +1,11 @@
+PASS test/nuxt-config-api-base-url.test.js
+    ✓ refuses to resolve at all when a dev server names no API target (125 ms)
+    ✓ refuses for `nuxt dev` even when NODE_ENV says production, because the command is the truth (115 ms)
+    ✓ takes the dev target it is given (114 ms)
+    ✓ lets a dev build reach the deployed API when someone types it, which is the point of typing it (117 ms)
+    ✓ resolves the deployed API for okam.no, whose workflow sets no API_BASE_URL (109 ms)
+    ✓ resolves the deployed API for www.okam-swiss.ch, whose vercel.json sets only OKAM_EDITION (115 ms)
+    ✓ resolves the deployed API for `nuxt build` and `nuxt start` too (238 ms)
+    ✓ still lets a deploy override the target explicitly (115 ms)
+Test Suites: 1 passed, 1 total
+Tests:       8 passed, 8 total

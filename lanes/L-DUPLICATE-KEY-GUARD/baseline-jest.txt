@@ -1,0 +1,732 @@
+PASS test/journey-rerunnability.test.js
+PASS test/feature-flags-page.test.js
+PASS test/meals-admin-components.test.js
+PASS test/training-page.test.js
+PASS test/workforce-week-grid.component.test.js
+PASS test/growth-newsletter-page.test.js
+PASS test/margin-recipe-revise.test.js
+PASS test/training-components.test.js
+PASS test/margin-recipes-page.test.js
+PASS test/workforce-week-grid.test.js
+PASS test/meals-claim-page.test.js
+PASS test/growth-send-gate.test.js
+PASS test/margin-statements-page.test.js
+PASS test/events-surface.test.js
+PASS test/events-page.test.js
+PASS test/workforce-roster.test.js
+PASS test/journey-assertions.test.js
+PASS test/admin-nav-access.test.js
+PASS test/workforce-rates-components.test.js
+PASS test/training-journey.test.js
+PASS test/growth-privacy-page.test.js
+PASS test/workforce-roster-components.test.js
+PASS test/workforce-rates-page.test.js
+PASS test/margin-cost-preview.test.js
+PASS test/meals-admin-view.test.js
+PASS test/margin-menu-margin-panel.component.test.js
+PASS test/events-journey.test.js
+PASS test/margin-waste.test.js
+PASS test/workforce-schedule-authoring.test.js
+PASS test/events-guest-pages.test.js
+PASS test/meals-enrolment-journey.test.js
+PASS test/meals-reconciliation-page.test.js
+PASS test/workforce-external-commitments.test.js
+PASS test/margin-recipe-client.test.js
+PASS test/workforce-contact-imported.test.js
+PASS test/growth-guest-pages.test.js
+PASS test/workforce-schedule-authoring-page.test.js
+PASS test/growth-components.test.js
+PASS test/margin-statement-components.test.js
+PASS test/workforce-personnel-list.test.js
+PASS test/modal-scroll-lock-estate.test.js
+PASS test/margin-menu-margin.test.js
+PASS test/account-email-page.test.js
+PASS test/meals-components.test.js
+PASS test/margin-supplier-panels.component.test.js
+PASS test/margin-statement-client.test.js
+PASS test/core-request-path-shape.test.js
+PASS test/meals-companies-page.test.js
+PASS test/price-crosscurrency.test.js
+PASS test/events-client.test.js
+PASS test/store-market-card.component.test.js
+PASS test/store-market-view.test.js
+PASS test/growth-privacy-queue.test.js
+PASS test/margin-suppliers-page.test.js
+PASS test/workforce-roster-client.test.js
+PASS test/workforce-requests-page.test.js
+PASS test/price-absence.test.js
+PASS test/events-guest.test.js
+PASS test/meals-store-view.test.js
+PASS test/workforce-role-grid.test.js
+PASS test/margin-statement-view.test.js
+PASS test/margin-cost-panel.component.test.js
+PASS test/workforce-month-grid.test.js
+PASS test/workforce-me-shift-view.test.js
+PASS test/workforce-rates-client.test.js
+PASS test/translation-key-presence.test.js
+PASS test/workforce-join-page.test.js
+PASS test/price-bypass-legacy.test.js
+PASS test/workforce-requests-inbox.test.js
+PASS test/training-client.test.js
+PASS test/workforce-roster-page.test.js
+PASS test/workforce-rates-timeline.test.js
+PASS test/workforce-me-client.test.js
+PASS test/meals-admin-client.test.js
+PASS test/margin-price-imports-page.test.js
+PASS test/training-disclosure.test.js
+PASS test/meals-statement-view.test.js
+PASS test/workforce-personnel-list-components.test.js
+PASS test/workforce-rates-attendance.test.js
+PASS test/modal-scroll-lock.test.js
+PASS test/platform-flag-board.test.js
+PASS test/margin-supplier-client.test.js
+PASS test/workforce-me-self-requests.test.js
+PASS test/workforce-personnel-list-page.test.js
+PASS test/growth-client.test.js
+PASS test/meals-client.test.js
+PASS test/workforce-rates-hours-export.test.js
+PASS test/meals-page.test.js
+PASS test/margin-price-import-client.test.js
+PASS test/platform-feature-flags-client.test.js
+PASS test/workforce-pivot-components.test.js
+PASS test/growth-guest.test.js
+PASS test/margin-product-links.component.test.js
+PASS test/workforce-roles-page.test.js
+PASS test/store-market-client.test.js
+PASS test/workforce-schedule-client.test.js
+PASS test/growth-guest-client.test.js
+PASS test/workforce-personnel-list-code-register.test.js
+PASS test/workforce-api-client.test.js
+PASS test/core-price-label.test.js
+PASS test/workforce-me-self-service.test.js
+PASS test/workforce-schedule-flag-refusal.test.js
+PASS test/workforce-me-components.test.js
+PASS test/workforce-me-inbox-filter.test.js
+PASS test/margin-price-import-model.test.js
+PASS test/workforce-me-claim-outcome.test.js
+PASS test/workforce-me-invitation-claim.test.js
+PASS test/margin-price-timeline.test.js
+PASS test/workforce-rates-amount.test.js
+PASS test/growth-withdrawal-origin.test.js
+PASS test/fixture-refusal-divergence.test.js
+PASS test/admin-page-auth.test.js
+PASS test/workforce-requests-client.test.js
+PASS test/workforce-me-memberships.test.js
+PASS test/workforce-week-range.test.js
+PASS test/margin-money-input.test.js
+PASS test/workforce-personnel-list-code-register-client.test.js
+PASS test/margin-spend-amount.test.js
+PASS test/workforce-me-training-disclosure.test.js
+PASS test/workforce-schedule-page.test.js
+PASS test/meals-admin-picker.test.js
+PASS test/chf-format.test.js
+PASS test/store-market-dashboard.test.js
+PASS test/price-gate-shadow.test.js
+PASS test/journey-artifact-store.test.js (6.325 s)
+PASS test/world-stamp-windows.test.js
+Failed to collect coverage from /Users/svendaneel/okam/web-dupkeyguard/components/molecules/ReceiptModal.vue
+ERROR: Unexpected token (1:1470)
+STACK: SyntaxError: Unexpected token (1:1470)
+    at pp$4.raise (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2757:13)
+    at pp.unexpected (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:647:8)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2196:10)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1954:28)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseParenAndDistinguishExpression (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2238:30)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2163:41)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+Failed to collect coverage from /Users/svendaneel/okam/web-dupkeyguard/components/onboarding/OnboardingProductImages.vue
+ERROR: Unexpected token (2:133)
+STACK: SyntaxError: Unexpected token (2:133)
+    at pp$4.raise (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2757:13)
+    at pp.unexpected (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:647:8)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2196:10)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1954:28)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseParenAndDistinguishExpression (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2238:30)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2163:41)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+Failed to collect coverage from /Users/svendaneel/okam/web-dupkeyguard/pages/admin/wolt-menu.vue
+ERROR: Unexpected token (1:903)
+STACK: SyntaxError: Unexpected token (1:903)
+    at pp$4.raise (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2757:13)
+    at pp.unexpected (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:647:8)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2196:10)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1954:28)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parsePropertyValue (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2443:87)
+    at pp$3.parseProperty (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2434:8)
+    at pp$3.parseObj (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2380:23)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2179:17)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+Failed to collect coverage from /Users/svendaneel/okam/web-dupkeyguard/pages/admin/offers.vue
+ERROR: Unexpected token (1:15427)
+STACK: SyntaxError: Unexpected token (1:15427)
+    at pp$4.raise (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2757:13)
+    at pp.unexpected (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:647:8)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2196:10)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1954:28)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+Failed to collect coverage from /Users/svendaneel/okam/web-dupkeyguard/pages/admin/products.vue
+ERROR: Unexpected token (2:922)
+STACK: SyntaxError: Unexpected token (2:922)
+    at pp$4.raise (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2757:13)
+    at pp.unexpected (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:647:8)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2196:10)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1954:28)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseParenAndDistinguishExpression (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2238:30)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2163:41)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/Users/svendaneel/okam/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+----------------------------------|---------|----------|---------|---------|-------------------
+File                              | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+----------------------------------|---------|----------|---------|---------|-------------------
+All files                         |   49.77 |    30.43 |   33.17 |   50.13 |                   
+ components/admin                 |   28.12 |        0 |       0 |    25.8 |                   
+  AllergensManager.vue            |       0 |      100 |     100 |       0 | 70                
+  CategoryProductList.vue         |       0 |        0 |       0 |       0 | 85-87             
+  CopyProductToStoresModal.vue    |       0 |        0 |       0 |       0 | 59-61             
+  CopyVariantToTargetsModal.vue   |       0 |        0 |       0 |       0 | 71-73             
+  LanguageSwitcher.vue            |     100 |      100 |     100 |     100 |                   
+  MultiDateCalendar.vue           |     100 |      100 |     100 |     100 |                   
+  ProductSelectorModal.vue        |       0 |        0 |       0 |       0 | 128-132           
+  PublishingRuleEditor.vue        |       0 |      100 |     100 |       0 | 92                
+  StoreMarketCard.vue             |     100 |      100 |     100 |     100 |                   
+  StoreSelector.vue               |       0 |      100 |     100 |       0 | 62                
+  SuggestInput.vue                |       0 |      100 |     100 |       0 | 35                
+  VariantEditorModal.vue          |       0 |        0 |       0 |       0 | 150-165           
+  VariantSelectorModal.vue        |       0 |        0 |       0 |       0 | 163-166           
+ components/admin/events          |     100 |      100 |     100 |     100 |                   
+  EventsJourney.vue               |     100 |      100 |     100 |     100 |                   
+  EventsPipeline.vue              |     100 |      100 |     100 |     100 |                   
+ components/admin/floorplan       |       0 |        0 |       0 |       0 |                   
+  FloorPlanEditor.vue             |       0 |        0 |       0 |       0 | 267-311           
+  FloorPlanTable.vue              |       0 |      100 |     100 |       0 | 82-84             
+ components/admin/growth          |     100 |      100 |     100 |     100 |                   
+  GrowthAudiencePanel.vue         |     100 |      100 |     100 |     100 |                   
+  GrowthConsentStanding.vue       |     100 |      100 |     100 |     100 |                   
+  GrowthRunOutcome.vue            |     100 |      100 |     100 |     100 |                   
+  GrowthSendGate.vue              |     100 |      100 |     100 |     100 |                   
+ components/admin/kitchen         |       0 |        0 |       0 |       0 |                   
+  CourseSection.vue               |       0 |        0 |       0 |       0 | 29-31             
+  KitchenLine.vue                 |       0 |      100 |     100 |       0 | 74                
+  KitchenTicket.vue               |       0 |        0 |       0 |       0 | 83-85             
+ components/admin/margin          |     100 |      100 |     100 |     100 |                   
+  MarginConversionEditor.vue      |     100 |      100 |     100 |     100 |                   
+  MarginCostPanel.vue             |     100 |      100 |     100 |     100 |                   
+  MarginCoveragePanel.vue         |     100 |      100 |     100 |     100 |                   
+  MarginImportRowsPanel.vue       |     100 |      100 |     100 |     100 |                   
+  MarginIngredientPanel.vue       |     100 |      100 |     100 |     100 |                   
+  MarginMenuMarginPanel.vue       |     100 |      100 |     100 |     100 |                   
+  MarginPriceTimelinePanel.vue    |     100 |      100 |     100 |     100 |                   
+  MarginProductLinkPanel.vue      |     100 |      100 |     100 |     100 |                   
+  MarginSpendPanel.vue            |     100 |      100 |     100 |     100 |                   
+  MarginStatementFiguresPanel.vue |     100 |      100 |     100 |     100 |                   
+  MarginSupplierItemPanel.vue     |     100 |      100 |     100 |     100 |                   
+  MarginWastePanel.vue            |     100 |      100 |     100 |     100 |                   
+ components/admin/meals           |   94.73 |      100 |     100 |   94.73 |                   
+  MealsAgreementList.vue          |     100 |      100 |     100 |     100 |                   
+  MealsCompanyPanel.vue           |     100 |      100 |     100 |     100 |                   
+  MealsCompanyPicker.vue          |     100 |      100 |     100 |     100 |                   
+  MealsCorridorPanel.vue          |     100 |      100 |     100 |     100 |                   
+  MealsFundedOrders.vue           |     100 |      100 |     100 |     100 |                   
+  MealsMonthClose.vue             |     100 |      100 |     100 |     100 |                   
+  MealsPeoplePanel.vue            |     100 |      100 |     100 |     100 |                   
+  MealsProgramPanel.vue           |     100 |      100 |     100 |     100 |                   
+  MealsReconciliationQueue.vue    |     100 |      100 |     100 |     100 |                   
+  MealsStatementLines.vue         |       0 |      100 |     100 |       0 | 138-140           
+  MealsWriteFailure.vue           |     100 |      100 |     100 |     100 |                   
+ components/admin/pos             |    2.14 |        0 |       0 |    2.22 |                   
+  AmountPad.vue                   |       0 |        0 |       0 |       0 | 24-29             
+  BeginDayModal.vue               |       0 |        0 |       0 |       0 | 34-38             
+  BoardView.vue                   |       0 |        0 |       0 |       0 | 158-164           
+  CardTerminalStatus.vue          |     100 |      100 |     100 |     100 |                   
+  CashPad.vue                     |       0 |        0 |       0 |       0 | 28-31             
+  CashPointPicker.vue             |       0 |      100 |     100 |       0 | 35                
+  CheckLine.vue                   |       0 |      100 |     100 |       0 | 102               
+  CheckPanel.vue                  |       0 |        0 |       0 |       0 | 170-173           
+  DayFlow.vue                     |       0 |        0 |       0 |       0 | 119-126           
+  DiscountModal.vue               |       0 |        0 |       0 |       0 | 42-44             
+  DrawerTransactionModal.vue      |       0 |        0 |       0 |       0 | 35-38             
+  EodWizard.vue                   |       0 |        0 |       0 |       0 | 106-112           
+  LineNoteModal.vue               |       0 |        0 |       0 |       0 | 49-52             
+  OpenPriceModal.vue              |       0 |        0 |       0 |       0 | 109-113           
+  OperatorLoginScreen.vue         |       0 |        0 |       0 |       0 | 70-77             
+  OptionPicker.vue                |       0 |      100 |     100 |       0 | 64                
+  PaymentScreen.vue               |       0 |        0 |       0 |       0 | 244-264           
+  PhonePad.vue                    |       0 |        0 |       0 |       0 | 11-14             
+  PinPadModal.vue                 |       0 |        0 |       0 |       0 | 59-67             
+  PosConfirm.vue                  |       0 |      100 |       0 |       0 | 38-39             
+  PosNumpad.vue                   |       0 |      100 |     100 |       0 | 22                
+  PosReceiptView.vue              |       0 |      100 |     100 |       0 | 119-137           
+  PosShell.vue                    |       0 |        0 |       0 |       0 | 152-166           
+  PosStatusChip.vue               |       0 |      100 |     100 |       0 | 88                
+  PosToast.vue                    |       0 |      100 |     100 |       0 | 57                
+  PosTopBar.vue                   |       0 |        0 |       0 |       0 | 65-70             
+  ProductGrid.vue                 |       0 |        0 |       0 |       0 | 170-174           
+  ProductTile.vue                 |       0 |      100 |     100 |       0 | 30                
+  ReasonPicker.vue                |       0 |      100 |     100 |       0 | 32-51             
+  ReceiptSend.vue                 |       0 |      100 |     100 |       0 | 50-56             
+  ReceiptsView.vue                |       0 |        0 |       0 |       0 | 129-137           
+  RefundModal.vue                 |       0 |        0 |       0 |       0 | 91-106            
+  ReturnBuilder.vue               |       0 |        0 |       0 |       0 | 239-256           
+  SeatPickerModal.vue             |       0 |        0 |       0 |       0 | 52-55             
+  SellScreen.vue                  |       0 |        0 |       0 |       0 | 234-254           
+  SignaturePad.vue                |       0 |      100 |     100 |       0 | 26                
+  SplitBillModal.vue              |       0 |        0 |       0 |       0 | 185-190           
+  VoidModal.vue                   |       0 |        0 |       0 |       0 | 38-42             
+  XReportView.vue                 |     100 |      100 |     100 |     100 |                   
+ components/admin/pos-settings    |       0 |      100 |     100 |       0 |                   
+  CashPointsTab.vue               |       0 |      100 |     100 |       0 | 118               
+  GoodsGroupsTab.vue              |       0 |      100 |     100 |       0 | 85                
+  OperatorsTab.vue                |       0 |      100 |     100 |       0 | 85                
+ components/admin/reservations    |       0 |        0 |       0 |       0 |                   
+  ReservationFloorView.vue        |       0 |        0 |       0 |       0 | 57-59             
+  ReservationList.vue             |       0 |      100 |     100 |       0 | 63-70             
+  ReservationModal.vue            |       0 |        0 |       0 |       0 | 122-130           
+  ReservationSettingsPanel.vue    |       0 |      100 |       0 |       0 | 158-175           
+  ReservationTimeline.vue         |       0 |      100 |     100 |       0 | 60-65             
+ components/admin/statistics      |       0 |      100 |     100 |       0 |                   
+  AIQueryBox.vue                  |       0 |      100 |     100 |       0 | 63                
+ components/admin/training        |   83.87 |      100 |     100 |   83.87 |                   
+  TrainingAssignmentPanel.vue     |     100 |      100 |     100 |     100 |                   
+  TrainingCertificatePanel.vue    |     100 |      100 |     100 |     100 |                   
+  TrainingCompletionPanel.vue     |     100 |      100 |     100 |     100 |                   
+  TrainingContextPanel.vue        |     100 |      100 |     100 |     100 |                   
+  TrainingCourseList.vue          |     100 |      100 |     100 |     100 |                   
+  TrainingDisclosurePanel.vue     |     100 |      100 |     100 |     100 |                   
+  TrainingEvidenceDocument.vue    |       0 |      100 |     100 |       0 | 215-239           
+  TrainingHoldingsPanel.vue       |     100 |      100 |     100 |     100 |                   
+  TrainingReferenceField.vue      |     100 |      100 |     100 |     100 |                   
+  TrainingVersionPanel.vue        |     100 |      100 |     100 |     100 |                   
+ components/admin/workforce       |     100 |      100 |     100 |     100 |                   
+  WorkforceAddPersonForm.vue      |     100 |      100 |     100 |     100 |                   
+  WorkforceEngagementPanel.vue    |     100 |      100 |     100 |     100 |                   
+  WorkforceMonthGrid.vue          |     100 |      100 |     100 |     100 |                   
+  WorkforcePersonnelListSheet.vue |     100 |      100 |     100 |     100 |                   
+  WorkforceRequestCard.vue        |     100 |      100 |     100 |     100 |                   
+  WorkforceRoleGrid.vue           |     100 |      100 |     100 |     100 |                   
+  WorkforceRosterTable.vue        |     100 |      100 |     100 |     100 |                   
+  WorkforceWeekGrid.vue           |     100 |      100 |     100 |     100 |                   
+ components/admin/workforce-me    |     100 |      100 |     100 |     100 |                   
+  WorkforceAvailabilityForm.vue   |     100 |      100 |     100 |     100 |                   
+  WorkforceOpenShiftCard.vue      |     100 |      100 |     100 |     100 |                   
+  WorkforcePublicationNotice.vue  |     100 |      100 |     100 |     100 |                   
+  WorkforceShiftCard.vue          |     100 |      100 |     100 |     100 |                   
+  WorkforceTimeOffForm.vue        |     100 |      100 |     100 |     100 |                   
+ components/admin/workforce-rates |     100 |      100 |     100 |     100 |                   
+  WorkforceAttendanceTable.vue    |     100 |      100 |     100 |     100 |                   
+  WorkforceHoursExportPanel.vue   |     100 |      100 |     100 |     100 |                   
+  WorkforceRateTimeline.vue       |     100 |      100 |     100 |     100 |                   
+ components/atoms                 |   36.36 |    66.66 |   66.66 |   36.36 |                   
+  AutocompleteInput.vue           |       0 |      100 |     100 |       0 | 29                
+  CheckInfo.vue                   |       0 |      100 |     100 |       0 | 18                
+  ContinueButton.vue              |       0 |      100 |     100 |       0 | 8                 
+  FaqItem.vue                     |       0 |      100 |     100 |       0 | 25                
+  FeatureInfo.vue                 |       0 |      100 |     100 |       0 | 16                
+  Loading.vue                     |     100 |      100 |     100 |     100 |                   
+  Modal.vue                       |     100 |      100 |     100 |     100 |                   
+  MyUserDropdown.vue              |       0 |        0 |       0 |       0 | 27-29             
+  OtherPriceItem.vue              |       0 |      100 |     100 |       0 | 16                
+  OtpInput.vue                    |     100 |      100 |     100 |     100 |                   
+  PriceInput.vue                  |       0 |      100 |     100 |       0 | 18                
+  PriceItem.vue                   |       0 |      100 |     100 |       0 | 11                
+  PriceSlide.vue                  |       0 |      100 |     100 |       0 | 62                
+  SelectButton.vue                |       0 |      100 |     100 |       0 | 27                
+  TeamMember.vue                  |       0 |      100 |     100 |       0 | 12                
+  VatAutocompleteInput.vue        |       0 |      100 |     100 |       0 | 37                
+ components/events                |     100 |      100 |     100 |     100 |                   
+  GuestShell.vue                  |     100 |      100 |     100 |     100 |                   
+ components/modals                |     100 |      100 |     100 |     100 |                   
+  TermsModal.vue                  |     100 |      100 |     100 |     100 |                   
+ components/molecules             |      60 |    46.15 |    23.8 |   61.36 |                   
+  BookDemoButton.vue              |       0 |      100 |     100 |       0 | 24-26             
+  ChangeDeliveryTypeModal.vue     |       0 |        0 |       0 |       0 | 80-82             
+  CustomerInfoModal.vue           |     100 |      100 |     100 |     100 |                   
+  EmployeeManager.vue             |       0 |        0 |       0 |       0 | 99-101            
+  FocusTrap.vue                   |     100 |       40 |    7.69 |     100 | 15-31             
+  LoadingSkeleton.vue             |       0 |      100 |     100 |       0 | 31                
+  LoginModal.vue                  |     100 |      100 |     100 |     100 |                   
+  MultiSelectDropdown.vue         |       0 |      100 |     100 |       0 | 68                
+  OrderCard.vue                   |       0 |      100 |     100 |       0 | 222               
+  OrderModal.vue                  |       0 |        0 |       0 |       0 | 164-166           
+  OrderProcessingModal.vue        |       0 |        0 |       0 |       0 | 105-107           
+  PeakPerformanceHeatmap.vue      |       0 |      100 |     100 |       0 | 112               
+  SmsDriverModal.vue              |     100 |      100 |     100 |     100 |                   
+  StatisticsChart.vue             |       0 |      100 |     100 |       0 | 6                 
+  Stepper.vue                     |       0 |      100 |     100 |       0 | 18                
+  TransferOrderModal.vue          |     100 |      100 |     100 |     100 |                   
+ components/onboarding            |       0 |        0 |       0 |       0 |                   
+  OnboardingAIImport.vue          |       0 |      100 |     100 |       0 | 201               
+  OnboardingLogoUpload.vue        |       0 |        0 |       0 |       0 | 38-41             
+ components/organisms             |   46.42 |     37.5 |    37.5 |   46.42 |                   
+  AdminPage.vue                   |     100 |      100 |     100 |     100 |                   
+  AdminPageFooter.vue             |     100 |      100 |     100 |     100 |                   
+  AdminPageHeader.vue             |     100 |      100 |     100 |     100 |                   
+  EditLangRowModal.vue            |       0 |        0 |       0 |       0 | 21-23             
+  EmployeeManagerModal.vue        |       0 |        0 |       0 |       0 | 16-19             
+  OnboardingNotification.vue      |     100 |      100 |     100 |     100 |                   
+  OrderModal.vue                  |       0 |        0 |       0 |       0 | 213-217           
+  PageFooter.vue                  |       0 |      100 |     100 |       0 | 90                
+  PageHeader.vue                  |     100 |      100 |     100 |     100 |                   
+  Product.vue                     |       0 |      100 |     100 |       0 | 46                
+  ProductConfig.vue               |       0 |        0 |       0 |       0 | 70-72             
+  RedirectToNewStore.vue          |       0 |        0 |       0 |       0 | 8                 
+  SalesLetter.vue                 |       0 |      100 |     100 |       0 | 82                
+ components/shared                |     100 |      100 |     100 |     100 |                   
+  OfferDocument.vue               |     100 |      100 |     100 |     100 |                   
+  TermsContent.vue                |     100 |      100 |     100 |     100 |                   
+ components/wrapped               |       0 |        0 |       0 |       0 |                   
+  WrappedBanner.vue               |       0 |      100 |     100 |       0 | 19                
+  WrappedSlideshow.vue            |       0 |        0 |       0 |       0 | 64-77             
+  WrappedStoreSelector.vue        |       0 |      100 |     100 |       0 | 29                
+ components/wrapped/slides        |       0 |      100 |     100 |       0 |                   
+  Slide2026.vue                   |       0 |      100 |     100 |       0 | 55                
+  SlideBusiestDay.vue             |       0 |      100 |     100 |       0 | 35                
+  SlideDelivery.vue               |       0 |      100 |     100 |       0 | 58                
+  SlideFunFacts.vue               |       0 |      100 |     100 |       0 | 42                
+  SlideIntro.vue                  |       0 |      100 |     100 |       0 | 31                
+  SlideNotEnoughData.vue          |       0 |      100 |     100 |       0 | 33                
+  SlideOkamHighlights.vue         |       0 |      100 |     100 |       0 | 76                
+  SlideOverview.vue               |       0 |      100 |     100 |       0 | 37                
+  SlidePayments.vue               |       0 |      100 |     100 |       0 | 29                
+  SlidePlatforms.vue              |       0 |      100 |     100 |       0 | 54                
+  SlideTips.vue                   |       0 |      100 |     100 |       0 | 21                
+  SlideTopProducts.vue            |       0 |      100 |     100 |       0 | 59                
+ pages                            |       0 |        0 |       0 |       0 |                   
+  2000-brukere-i-sogn.vue         |       0 |        0 |       0 |       0 | 52-55             
+  agb.vue                         |       0 |        0 |       0 |       0 | 49-52             
+  datenschutz.vue                 |       0 |        0 |       0 |       0 | 80-83             
+  egen-app-kampanje.vue           |       0 |        0 |       0 |       0 | 243-247           
+  egen-app.vue                    |       0 |        0 |       0 |       0 | 222-228           
+  impressum.vue                   |       0 |        0 |       0 |       0 | 63-66             
+  index.vue                       |       0 |        0 |       0 |       0 | 307-311           
+  kontakt.vue                     |       0 |        0 |       0 |       0 | 94-98             
+  last-ned.vue                    |       0 |        0 |       0 |       0 | 130-133           
+  menneskene.vue                  |       0 |      100 |     100 |       0 | 4                 
+  menu.vue                        |       0 |      100 |     100 |       0 | 31                
+  om-oss.vue                      |       0 |        0 |       0 |       0 | 90-93             
+  personvern-og-vilkar.vue        |       0 |        0 |       0 |       0 | 33-36             
+  personvern.vue                  |       0 |        0 |       0 |       0 | 42-45             
+  priser.vue                      |       0 |        0 |       0 |       0 | 140-144           
+  registrer.vue                   |       0 |        0 |       0 |       0 | 312-316           
+  registrert-ferdig.vue           |       0 |        0 |       0 |       0 | 35-38             
+  terms.vue                       |       0 |        0 |       0 |       0 | 6-8               
+  vilkar-store.vue                |       0 |      100 |     100 |       0 | 92                
+  vilkar.vue                      |       0 |        0 |       0 |       0 | 86-89             
+  wolt-callback.vue               |       0 |        0 |       0 |       0 | 8                 
+  wolt.vue                        |       0 |        0 |       0 |       0 | 167-170           
+ pages/admin                      |   56.09 |    33.33 |   42.66 |   56.09 |                   
+  account-email.vue               |     100 |      100 |     100 |     100 |                   
+  allergens.vue                   |       0 |        0 |       0 |       0 | 28-32             
+  brev.vue                        |       0 |        0 |       0 |       0 | 11-15             
+  categories.vue                  |       0 |        0 |       0 |       0 | 159-163           
+  category-editor.vue             |       0 |        0 |       0 |       0 | 345-357           
+  customers.vue                   |       0 |        0 |       0 |       0 | 153-158           
+  delivery.vue                    |       0 |        0 |       0 |       0 | 336-339           
+  dinehome.vue                    |       0 |        0 |       0 |       0 | 195-199           
+  dintero-terminal.vue            |       0 |        0 |       0 |       0 | 167-169           
+  dintero.vue                     |       0 |        0 |       0 |       0 | 491-496           
+  discount.vue                    |       0 |        0 |       0 |       0 | 299-303           
+  discounts.vue                   |       0 |        0 |       0 |       0 | 77-80             
+  employees.vue                   |       0 |        0 |       0 |       0 | 22-25             
+  events-pipeline.vue             |     100 |      100 |     100 |     100 |                   
+  feature-flags.vue               |     100 |      100 |     100 |     100 |                   
+  goods.vue                       |       0 |        0 |       0 |       0 | 321-326           
+  growth-newsletter.vue           |     100 |      100 |     100 |     100 |                   
+  growth-privacy.vue              |     100 |      100 |     100 |     100 |                   
+  import.vue                      |       0 |        0 |       0 |       0 | 321-328           
+  index.vue                       |     100 |      100 |     100 |     100 |                   
+  kam.vue                         |       0 |        0 |       0 |       0 | 184-187           
+  kitchen.vue                     |       0 |        0 |       0 |       0 | 86-91             
+  kravia-invoice.vue              |     100 |      100 |     100 |     100 |                   
+  lang.vue                        |       0 |        0 |       0 |       0 | 67-72             
+  margin-price-imports.vue        |     100 |      100 |     100 |     100 |                   
+  margin-recipes.vue              |     100 |      100 |     100 |     100 |                   
+  margin-statements.vue           |     100 |      100 |     100 |     100 |                   
+  margin-suppliers.vue            |     100 |      100 |     100 |     100 |                   
+  meals-agreements.vue            |     100 |      100 |     100 |     100 |                   
+  meals-companies.vue             |     100 |      100 |     100 |     100 |                   
+  meals-statements.vue            |       0 |        0 |       0 |       0 | 132-138           
+  onboarding.vue                  |       0 |        0 |       0 |       0 | 240-246           
+  ongoing.vue                     |       0 |        0 |       0 |       0 | 226-237           
+  orders.vue                      |       0 |        0 |       0 |       0 | 392-398           
+  overview.vue                    |       0 |        0 |       0 |       0 | 421-428           
+  payment.vue                     |       0 |        0 |       0 |       0 | 161-164           
+  payouts.vue                     |       0 |        0 |       0 |       0 | 70-74             
+  pos-reports.vue                 |       0 |        0 |       0 |       0 | 200-205           
+  pos-settings.vue                |       0 |        0 |       0 |       0 | 46-54             
+  pos.vue                         |       0 |        0 |       0 |       0 | 8-13              
+  poweruser-growth.vue            |       0 |        0 |       0 |       0 | 115-151           
+  reservation.vue                 |       0 |      100 |     100 |       0 | 3                 
+  reservations.vue                |       0 |        0 |       0 |       0 | 135-165           
+  reward-members.vue              |     100 |      100 |     100 |     100 |                   
+  rewards.vue                     |       0 |        0 |       0 |       0 | 226-230           
+  settlements.vue                 |     100 |      100 |     100 |     100 |                   
+  statistics.vue                  |       0 |        0 |       0 |       0 | 449-458           
+  surfboard.vue                   |       0 |        0 |       0 |       0 | 875-879           
+  tables.vue                      |       0 |        0 |       0 |       0 | 17-20             
+  terminals.vue                   |       0 |        0 |       0 |       0 | 259-272           
+  training-courses.vue            |     100 |      100 |     100 |     100 |                   
+  training-evidence.vue           |       0 |        0 |       0 |       0 | 71-108            
+  tripletex.vue                   |       0 |        0 |       0 |       0 | 338-341           
+  wolt-calc.vue                   |       0 |        0 |       0 |       0 | 162-165           
+  wolt-drive-invoice.vue          |       0 |        0 |       0 |       0 | 180-183           
+  wolt.vue                        |       0 |        0 |       0 |       0 | 418-421           
+  workforce-me.vue                |     100 |      100 |     100 |     100 |                   
+  workforce-personnel-list.vue    |     100 |      100 |     100 |     100 |                   
+  workforce-rates.vue             |     100 |      100 |     100 |     100 |                   
+  workforce-requests.vue          |     100 |      100 |     100 |     100 |                   
+  workforce-roles.vue             |     100 |      100 |     100 |     100 |                   
+  workforce-roster.vue            |     100 |      100 |     100 |     100 |                   
+  workforce-schedule.vue          |     100 |      100 |     100 |     100 |                   
+  wrapped.vue                     |       0 |        0 |       0 |       0 | 34-37             
+ pages/events/deposit             |     100 |      100 |     100 |     100 |                   
+  _token.vue                      |     100 |      100 |     100 |     100 |                   
+ pages/events/inquiry             |     100 |      100 |     100 |     100 |                   
+  _store.vue                      |     100 |      100 |     100 |     100 |                   
+ pages/events/proposal            |     100 |      100 |     100 |     100 |                   
+  _token.vue                      |     100 |      100 |     100 |     100 |                   
+ pages/kvittering/_id             |       0 |        0 |       0 |       0 |                   
+  _token.vue                      |       0 |        0 |       0 |       0 | 17-20             
+ pages/meals                      |     100 |      100 |     100 |     100 |                   
+  join.vue                        |     100 |      100 |     100 |     100 |                   
+ pages/offer                      |       0 |        0 |       0 |       0 |                   
+  _code.vue                       |       0 |        0 |       0 |       0 | 217-221           
+ pages/preferences                |     100 |      100 |     100 |     100 |                   
+  communications.vue              |     100 |      100 |     100 |     100 |                   
+  unsubscribe.vue                 |     100 |      100 |     100 |     100 |                   
+ pages/store                      |       0 |        0 |       0 |       0 |                   
+  _slug.vue                       |       0 |        0 |       0 |       0 | 57-60             
+  notfound.vue                    |       0 |        0 |       0 |       0 | 14-17             
+ pages/subscribe                  |     100 |      100 |     100 |     100 |                   
+  _store.vue                      |     100 |      100 |     100 |     100 |                   
+  confirm.vue                     |     100 |      100 |     100 |     100 |                   
+ pages/webshop                    |       0 |        0 |       0 |       0 |                   
+  3d.vue                          |       0 |        0 |       0 |       0 | 8                 
+  checkout.vue                    |       0 |        0 |       0 |       0 | 8                 
+  index.vue                       |       0 |        0 |       0 |       0 | 8                 
+  mycards.vue                     |       0 |        0 |       0 |       0 | 8                 
+  orders.vue                      |       0 |        0 |       0 |       0 | 8                 
+  vipps.vue                       |       0 |        0 |       0 |       0 | 8                 
+ pages/workforce                  |     100 |      100 |     100 |     100 |                   
+  join.vue                        |     100 |      100 |     100 |     100 |                   
+----------------------------------|---------|----------|---------|---------|-------------------
+
+Test Suites: 126 passed, 126 total
+Tests:       2959 passed, 2959 total
+Snapshots:   0 total
+Time:        9.494 s
+Ran all test suites.
+JEST_EXIT=0

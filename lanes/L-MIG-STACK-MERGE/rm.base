@@ -1,0 +1,43 @@
+# artifacts/tests — backend suite receipts
+
+A number without a commit is not a measurement. Every file here belongs to one SHA, and the SHA is
+named in the filename and again inside the receipt beside it.
+
+## What is here
+
+| file | SHA it ran against | tier | result |
+| --- | --- | --- | --- |
+| `8c8a243d-fast-tier.trx` | `8c8a243dad403d184d53a373ba2d3283eacfe210` | fast (`Database!=SqlServer`) | 4095 passed / 0 failed / 8 skipped |
+| `6f26ad2b-fast-tier.trx` | `6f26ad2b2becc2394071edba2452ec91bcb5bd5d` | fast (`Database!=SqlServer`) | 4117 passed / 0 failed / 8 skipped |
+| `ffb29e4e-fast-tier.trx` | `ffb29e4e603972a7bf6d9742f38177103400a051` | fast (`Database!=SqlServer`) | 4110 passed / 0 failed / 9 skipped |
+| `baa5e38a-fast-tier.trx` | `baa5e38a17ab188869049a581570eea64c464bae` | fast (`Database!=SqlServer`) | 4292 passed / 0 failed / 10 skipped |
+| `f8b3a30f-fast-tier.trx` | `f8b3a30f2ecfaf00beab1e903dd68193fbc8eca2` | fast (`Database!=SqlServer`) | 4304 passed / 0 failed / 9 skipped |
+| `99855b1d-fast-tier.trx` | `99855b1d1d35ab35c1c09e072da0fc6d42421e56` | fast (`Database!=SqlServer`) | 4351 passed / 0 failed / 12 skipped |
+| `bb82b3a0-fast-tier.trx` | `bb82b3a0575a6f75c235c6e83d3c84bc917a4a3d` | fast (`Database!=SqlServer`) | 4369 passed / 0 failed / 12 skipped |
+
+The full receipt for each run — command, environment, what was excluded and what is still unmeasured —
+is the `RUN.md` in the directory named for its SHA.
+
+`ffb29e4e` is a LANE commit, not an ancestor of any receipt above it: it ran on
+`lane/growth-mail-postmark` off `349d8806`, which is why its count sits below the row before it.
+
+## The rule this directory keeps
+
+A run recorded here was produced from a **clean checkout of one commit**, not from a working tree. The
+run above was executed in a throwaway `git worktree` detached at the SHA, which is why the paths inside
+the `.trx` read `wt-be-receipt` rather than the main checkout: a suite run in a shared worktree while
+sibling lanes are editing it measures no commit at all, and that is the exact defect this directory
+exists to stop.
+
+Adding a run means: run it at a SHA, drop the `.trx` in with that SHA leading its name, add a row above,
+and write the `RUN.md` beside it. Do not overwrite an existing row — a superseded run is still the
+honest record of what was true that day.
+
+The other way a number here can measure the wrong thing is `--no-build` over a stale assembly: see the
+`--no-build` note in the repo's `CLAUDE.md` under **Commands → Tests** before recording any run produced
+with it.
+
+## What a green suite here is not
+
+It is evidence that code behaves. It is not evidence that a capability exists or is reachable, and it
+is never acceptance — acceptance is a person completing the journey.

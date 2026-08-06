@@ -1,0 +1,45 @@
+    Locator: locator('.wfme-pub__receipt')
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 15000ms
+      - waiting for locator('.wfme-pub__receipt')
+
+
+      243 |       // because the inbox row has no acknowledgement field to re-read it from.
+      244 |       const receipt = page.locator('.wfme-pub__receipt');
+    > 245 |       await expect(receipt).toBeVisible({ timeout: 15000 });
+          |                             ^
+      246 |       const text = (await receipt.textContent()).replace(/\s+/g, ' ').trim();
+      247 |       // A TIME, not merely a word: `receiptLabel` formats `occurredAtUtc`, so a receipt with no
+      248 |       // instant would mean the server answered without one.
+        at /Users/svendaneel/okam/wt-jwf/test/e2e/journeys/workforce-week-run.spec.js:245:29
+        at JourneyRecorder.step (/Users/svendaneel/okam/wt-jwf/test/e2e/support/journey.js:347:22)
+        at /Users/svendaneel/okam/wt-jwf/test/e2e/journeys/workforce-week-run.spec.js:239:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/workforce-week-run-A-manag-fe486-ker-sees-it-and-confirms-it-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/workforce-week-run.fixture.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/workforce-week-run.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/workforce-week-run-A-manag-fe486-ker-sees-it-and-confirms-it-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/workforce-week-run-A-manag-fe486-ker-sees-it-and-confirms-it-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/workforce-week-run-A-manag-fe486-ker-sees-it-and-confirms-it-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › test/e2e/journeys/workforce-week-run.spec.js:68:1 › A manager plans and publishes a week; the worker sees it and confirms it @fixture 

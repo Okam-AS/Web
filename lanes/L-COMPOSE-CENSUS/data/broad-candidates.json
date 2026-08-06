@@ -1,0 +1,616 @@
+{
+ "**/*.json": [
+  "L-LANES-OUT-OF-THE-ASSEMBLY"
+ ],
+ "/Users/svendaneel/okam/OkamAPI-modules": [
+  "L-MEALS-POSREL-LAND"
+ ],
+ "/^Web-modules@\u2026/": [
+  "L-WORKTREE-BASENAME-PIN"
+ ],
+ "/admin": [
+  "FT-WORKFORCE"
+ ],
+ "/admin/events-pipeline": [
+  "FT-EVENTS"
+ ],
+ "/admin/growth-newsletter": [
+  "FT-GROWTH"
+ ],
+ "/admin/margin-price-imports": [
+  "FT-MARGIN"
+ ],
+ "/admin/margin-recipes": [
+  "FT-MARGIN"
+ ],
+ "/admin/margin-statements": [
+  "FT-MARGIN"
+ ],
+ "/admin/margin-suppliers": [
+  "FT-MARGIN"
+ ],
+ "/admin/meals-agreements": [
+  "FT-MEALS"
+ ],
+ "/admin/meals-companies": [
+  "FT-MEALS"
+ ],
+ "/admin/offers": [
+  "L-OFFER-PARTIAL-SUBTOTAL"
+ ],
+ "/admin/training-courses": [
+  "FT-TRAINING"
+ ],
+ "/admin/workforce-me": [
+  "FT-WORKFORCE"
+ ],
+ "/admin/workforce-personnel-list": [
+  "FT-WORKFORCE"
+ ],
+ "/admin/workforce-rates": [
+  "FT-WORKFORCE"
+ ],
+ "/admin/workforce-requests": [
+  "FT-WORKFORCE"
+ ],
+ "/admin/workforce-roster": [
+  "FT-WORKFORCE"
+ ],
+ "/admin/workforce-schedule": [
+  "FT-WORKFORCE"
+ ],
+ "/admin?redirect=\u2026": [
+  "FT-WORKFORCE"
+ ],
+ "/events/deposit/:token": [
+  "FT-EVENTS"
+ ],
+ "/events/inquiry/:store": [
+  "FT-EVENTS"
+ ],
+ "/events/proposal/:token": [
+  "FT-EVENTS"
+ ],
+ "/events/proposal/<token>": [
+  "FT-EVENTS"
+ ],
+ "/meals/join": [
+  "FT-MEALS"
+ ],
+ "/offer/:code": [
+  "L-OFFER-PARTIAL-SUBTOTAL"
+ ],
+ "/okam-api/": [
+  "L-JOURNEY-PROXY-BLINDSPOT"
+ ],
+ "/preferences/communications": [
+  "FT-GROWTH"
+ ],
+ "/preferences/unsubscribe": [
+  "FT-GROWTH"
+ ],
+ "/registrer": [
+  "FT-WORKFORCE"
+ ],
+ "/subscribe/:store": [
+  "FT-GROWTH"
+ ],
+ "/subscribe/confirm": [
+  "FT-GROWTH"
+ ],
+ "/workforce/join": [
+  "FT-WORKFORCE"
+ ],
+ "/workforce/me/schedule": [
+  "L-WF-ONBOARD-DEMO-RUN"
+ ],
+ "/workforce/me/staff-memberships": [
+  "L-WF-ONBOARD-DEMO-RUN"
+ ],
+ "4021/3021": [
+  "L-WF-FAILURES-SURFACE"
+ ],
+ "API_BASE_URL=/okam-api": [
+  "L-JOURNEY-PROXY-BLINDSPOT"
+ ],
+ "Controllers/GrowthPreferenceController.cs:143": [
+  "L-GR-EXIT-WIRE-THE-MAIL"
+ ],
+ "Controllers/InvoicesController.cs": [
+  "L-INVOICE-AUTHORIZE-LAND"
+ ],
+ "Helpers/ApplicationInsightsLoggingMiddleware": [
+  "L-PHONE-IN-PATH"
+ ],
+ "Helpers/BrowserReadableHeaders.cs": [
+  "L-PDF-FAMILY-LAND"
+ ],
+ "Helpers/DbExceptionHelper": [
+  "L-MARGIN-VIOLATION-ANCHOR",
+  "L-MEALS-VIOLATION-EXACT"
+ ],
+ "Helpers/Events/EventsGuestLink.cs": [
+  "L-EV-GUESTLINK-ONE-COMPOSER"
+ ],
+ "Scripts/demo/demo-up.sh": [
+  "L-WF-DEMO-PRESENCE"
+ ],
+ "Scripts/demo/seed-workforce-demo.sh:244": [
+  "L-WF-ONBOARD"
+ ],
+ "Services/Margin/MarginPriceImportService.cs:694": [
+  "L-MARGIN-VIOLATION-ANCHOR"
+ ],
+ "Services/Margin/MarginRecipeSupport.cs:64": [
+  "L-MARGIN-VIOLATION-ANCHOR"
+ ],
+ "Services/Meals/MealsCommandReceiptService.cs": [
+  "L-MEALS-IDEMPOTENCY-REFUSAL"
+ ],
+ "Services/Meals/MealsDbViolations.cs:94": [
+  "L-MEALS-VIOLATION-EXACT"
+ ],
+ "Services/OkamFunctionsDocumentRenderer.cs": [
+  "L-INVOICE-AUTHORIZE-LAND"
+ ],
+ "Services/Training/TrainingIdempotency.cs": [
+  "L-TRAIN-IDEMPOTENCY-REFUSAL"
+ ],
+ "Services/Workforce/WorkforcePushNotificationDelivery.cs": [
+  "L-WF-PUSH-LAND"
+ ],
+ "Services/Workforce/WorkforceRequestsService.cs": [
+  "L-WF-TIMEOFF-DECIDE-GATE"
+ ],
+ "Services/Workforce/WorkforceStaffService.cs:405": [
+  "L-WF-CONTACT-PINS"
+ ],
+ "WebApi.Tests/": [
+  "L-LANES-OUT-OF-THE-ASSEMBLY"
+ ],
+ "WebApi.Tests/**": [
+  "L-LANES-OUT-OF-THE-ASSEMBLY"
+ ],
+ "WebApi.Tests/Events/": [
+  "L-ALIASING-NEEDLE-SWEEP"
+ ],
+ "WebApi.Tests/Wire/DownloadHeaderWireTests.cs": [
+  "L-PDF-FAMILY-LAND"
+ ],
+ "WebApi.Tests/Wire/PdfDownloadWireTests.cs": [
+  "L-PDF-FAMILY-LAND"
+ ],
+ "WebApi.Tests/Wire/PdfRendererOutageWireTests.cs": [
+  "L-PDF-FAMILY-LAND"
+ ],
+ "WebApi.Tests/Workforce/WorkforceFlagCensus.cs:40": [
+  "L-WF-TIMEOFF-DECIDE-GATE"
+ ],
+ "WebApi.Tests/lanes/": [
+  "L-LANES-OUT-OF-THE-ASSEMBLY"
+ ],
+ "artifacts/journeys/": [
+  "L-MODAL-LAND"
+ ],
+ "artifacts/journeys/ev-dietary/": [
+  "L-DATED-TEST-OUTPUT"
+ ],
+ "artifacts/journeys/events-deposit-precondition.playwright.json": [
+  "L-EV-DEPOSITS-PRECONDITION"
+ ],
+ "artifacts/journeys/growth-privacy-queue.playwright.json": [
+  "L-GR-DEADLINE-ONWIRE",
+  "L-GR-PRIVACY-VENUE"
+ ],
+ "artifacts/journeys/meals-funded-checkout.playwright.json": [
+  "L-MEALS-FUNDED"
+ ],
+ "artifacts/journeys/workforce-flag-lever.playwright.json": [
+  "L-WF-FLAGS-UI"
+ ],
+ "artifacts/tests/README.md": [
+  "L-VIOLATION-EXACT-LAND",
+  "L-WF-PUSH-LAND"
+ ],
+ "artifacts/world/WORLD.json": [
+  "L-GUARD-W0"
+ ],
+ "atoms/Modal": [
+  "L-MODAL-LAND"
+ ],
+ "bin/": [
+  "L-LANES-OUT-OF-THE-ASSEMBLY"
+ ],
+ "bin/Debug/net8.0/lanes/.../plant-content.json": [
+  "L-LANES-OUT-OF-THE-ASSEMBLY"
+ ],
+ "capture/captured-exit-link.txt": [
+  "L-GR-EXIT-WIRE-THE-MAIL"
+ ],
+ "components/admin/margin/MarginCoveragePanel.vue": [
+  "L-MRG-REVISE-LAND"
+ ],
+ "components/atoms/Modal.vue": [
+  "L-MODAL-SCROLLLOCK"
+ ],
+ "components/molecules/CustomerInfoModal.vue": [
+  "L-PRICE-BYPASS-FIVE"
+ ],
+ "components/shared/OfferDocument.vue": [
+  "L-OFFER-PARTIAL-SUBTOTAL"
+ ],
+ "docs/plan/": [
+  "L-EXIT-INSTRUMENT-CENSUS"
+ ],
+ "docs/plan/render/LANES.md": [
+  "L-CONFIRM-CHAIN-REVIEW",
+  "L-EV-INQUIRY-REVIEW",
+  "L-EV-REVIEW",
+  "L-FLAGS-RESOLVERS-REVIEW",
+  "L-FLAGS-UI-REVIEW",
+  "L-GR-CONFIRMED-REVIEW",
+  "L-GR-PRIVACY-REVIEW",
+  "L-GR-RATELIMIT-REVIEW",
+  "L-GR-REVIEW",
+  "L-GR-TESTSEND-REVIEW",
+  "L-LIVE-BUILD-EXPORT",
+  "L-LIVE-HARNESS-REVIEW",
+  "L-MEALS-RELEASE-CLUSTER-REVIEW",
+  "L-MEALS-REVIEW",
+  "L-MEALS-SWEEP-REVIEW",
+  "L-MONEYPATH-PAIR-REVIEW",
+  "L-MRG-WASTE-REVIEW",
+  "L-PRICE-REVIEW",
+  "L-TRAIN-REVIEW",
+  "L-UTLKVIT-REVIEW",
+  "L-WF-EXCHANGE-AWARD-UNGATED",
+  "L-WF-W5-REVIEW"
+ ],
+ "docs/plan/reviews/L-CONFIRM-CHAIN-REVIEW.md": [
+  "L-CONFIRM-CHAIN-REVIEW",
+  "L-MEALS-PROJECTION-LAG-VISIBLE"
+ ],
+ "docs/plan/reviews/L-EV-INQUIRY-REVIEW.md": [
+  "L-CONFIRM-ADMIN-SURFACE",
+  "L-EV-INQUIRY-REVIEW"
+ ],
+ "docs/plan/reviews/L-EV-REVIEW.md": [
+  "L-EV-REVIEW",
+  "L-MRG-REVIEW"
+ ],
+ "docs/plan/reviews/L-FLAGS-RESOLVERS-REVIEW.md": [
+  "L-CONFIRM-ADMIN-SURFACE",
+  "L-FLAGS-RESOLVERS-REVIEW"
+ ],
+ "docs/plan/reviews/L-FLAGS-UI-REVIEW.md": [
+  "L-FLAGS-UI-REVIEW",
+  "L-JOURNEY-COVERAGE-THREE"
+ ],
+ "docs/plan/reviews/L-GR-CONFIRMED-REVIEW.md": [
+  "L-GR-CONFIRMED-REVIEW",
+  "L-LIVE-WORLD-SEED"
+ ],
+ "docs/plan/reviews/L-GR-PRIVACY-REVIEW.md": [
+  "L-GR-PRIVACY-REVIEW"
+ ],
+ "docs/plan/reviews/L-GR-RATELIMIT-REVIEW.md": [
+  "L-GR-RATELIMIT-REVIEW",
+  "L-WF-PIVOT-DEFECTS"
+ ],
+ "docs/plan/reviews/L-GR-REVIEW.md": [
+  "L-GR-REVIEW",
+  "L-MRG-REVIEW"
+ ],
+ "docs/plan/reviews/L-GR-TESTSEND-REVIEW.md": [
+  "L-GR-TESTSEND-REVIEW"
+ ],
+ "docs/plan/reviews/L-LIVE-HARNESS-REVIEW.md": [
+  "L-LIVE-HARNESS-REVIEW",
+  "L-WF-PIVOT-DEFECTS"
+ ],
+ "docs/plan/reviews/L-MEALS-RELEASE-CLUSTER-REVIEW.md": [
+  "L-MEALS-RELEASE-CLUSTER-REVIEW"
+ ],
+ "docs/plan/reviews/L-MEALS-REVIEW.md": [
+  "L-MEALS-REVIEW",
+  "L-MRG-REVIEW"
+ ],
+ "docs/plan/reviews/L-MEALS-SWEEP-REVIEW.md": [
+  "L-LIVE-WORLD-SEED",
+  "L-MEALS-SWEEP-REVIEW"
+ ],
+ "docs/plan/reviews/L-MONEYPATH-PAIR-REVIEW.md": [
+  "L-MEALS-PROJECTION-LAG-VISIBLE",
+  "L-MONEYPATH-PAIR-REVIEW"
+ ],
+ "docs/plan/reviews/L-MRG-REVIEW.md": [
+  "L-MRG-REVIEW"
+ ],
+ "docs/plan/reviews/L-MRG-WASTE-REVIEW.md": [
+  "L-MEALS-DOCSYNC",
+  "L-MRG-WASTE-REVIEW"
+ ],
+ "docs/plan/reviews/L-PRICE-REVIEW.md": [
+  "L-MEALS-DOCSYNC",
+  "L-PRICE-REVIEW"
+ ],
+ "docs/plan/reviews/L-TRAIN-REVIEW.md": [
+  "L-MRG-REVIEW",
+  "L-TRAIN-REVIEW"
+ ],
+ "docs/plan/reviews/L-UTLKVIT-REVIEW.md": [
+  "L-JOURNEY-COVERAGE-THREE",
+  "L-UTLKVIT-REVIEW"
+ ],
+ "docs/plan/reviews/L-WF-REVIEW.md": [
+  "L-WF-REVIEW"
+ ],
+ "docs/plan/reviews/L-WF-W5-REVIEW.md": [
+  "L-WF-W5-REVIEW"
+ ],
+ "feature/restaurant-modules": [
+  "FT-WORKFORCE",
+  "L-MRG-REVISE-LAND"
+ ],
+ "file://": [
+  "L-EV-URI-RELATIVE"
+ ],
+ "http://": [
+  "L-CORS-FOLLOWUPS"
+ ],
+ "http://localhost:3000": [
+  "L-CORS-FOLLOWUPS"
+ ],
+ "lane/ai-middleware-delete": [
+  "L-COMPROOT-FAMILY-LAND"
+ ],
+ "lane/composition-root-check": [
+  "L-COMPROOT-FAMILY-LAND"
+ ],
+ "lane/confirm-conat-retire": [
+  "L-COMPROOT-FAMILY-LAND"
+ ],
+ "lane/confirm-postmerge-pin": [
+  "L-COMPROOT-FAMILY-LAND"
+ ],
+ "lane/confirm-server-halves": [
+  "L-COMPROOT-FAMILY-LAND"
+ ],
+ "lane/cors-followups": [
+  "L-CORS-LAND-FOLLOWUPS"
+ ],
+ "lane/credit-note-number": [
+  "L-PDF-CREDITNOTE-NAME"
+ ],
+ "lane/crypto-pin-byform": [
+  "L-COMPROOT-FAMILY-LAND"
+ ],
+ "lane/download-headers": [
+  "L-PDF-FAMILY-LAND"
+ ],
+ "lane/download-pdf-wire": [
+  "L-PDF-FAMILY-LAND"
+ ],
+ "lane/ev-accept-gate": [
+  "L-EV-FAMILY-LAND"
+ ],
+ "lane/ev-guest-origin": [
+  "L-EV-FAMILY-LAND"
+ ],
+ "lane/ev-rails": [
+  "L-BE-RECEIPT"
+ ],
+ "lane/ev-vat": [
+  "L-BE-RECEIPT"
+ ],
+ "lane/ev-vipps-fallback": [
+  "L-EV-VIPPS-FALLBACK"
+ ],
+ "lane/exit-instrument-census": [
+  "L-EXIT-INSTRUMENT-CENSUS"
+ ],
+ "lane/fe-journeys": [
+  "FT-MARGIN",
+  "FT-MEALS"
+ ],
+ "lane/fe-wf-onboard": [
+  "FT-WORKFORCE"
+ ],
+ "lane/gr-confirm-stale": [
+  "L-GROWTH-FAMILY-LAND"
+ ],
+ "lane/gr-confirmed-email": [
+  "L-GROWTH-FAMILY-LAND"
+ ],
+ "lane/gr-dispatch-actor": [
+  "L-GROWTH-FAMILY-LAND"
+ ],
+ "lane/gr-testsend-guard": [
+  "L-GROWTH-FAMILY-LAND"
+ ],
+ "lane/gr-testsend-ratelimit": [
+  "L-GROWTH-FAMILY-LAND"
+ ],
+ "lane/growth-audit-ledger": [
+  "L-GROWTH-FAMILY-LAND"
+ ],
+ "lane/invoice-authorize": [
+  "L-INVOICE-AUTHORIZE-LAND"
+ ],
+ "lane/invoice-retry-retirement": [
+  "L-PDF-FAMILY-LAND"
+ ],
+ "lane/meals-grace-pins": [
+  "L-MEALS-POSREL-LAND"
+ ],
+ "lane/meals-pos-tender-wire": [
+  "L-MEALS-POSREL-LAND"
+ ],
+ "lane/meals-release": [
+  "L-MEALS-POSREL-LAND"
+ ],
+ "lane/meals-xz-credit": [
+  "L-EOD-CREDIT-SPLIT"
+ ],
+ "lane/pdf-creditnote-name": [
+  "L-PDF-CREDITNOTE-NAME"
+ ],
+ "lane/pdf-nullderef": [
+  "L-PDF-FAMILY-LAND"
+ ],
+ "lane/reservation-limiter-move": [
+  "L-COMPROOT-FAMILY-LAND"
+ ],
+ "lane/wf-blind-bind-name": [
+  "L-WF-IDEMPOTENCY-REFUSAL-REST"
+ ],
+ "lane/wf-digest-tautology": [
+  "L-WF-DIGEST-TAUTOLOGY"
+ ],
+ "lane/wf-push-notify": [
+  "L-WF-PUSH-LAND"
+ ],
+ "lane/wf-push-silent": [
+  "L-WF-PUSH-LAND"
+ ],
+ "lane/wf-w5-timesheet": [
+  "L-WF-DIGEST-TAUTOLOGY"
+ ],
+ "lanes/": [
+  "L-LANES-OUT-OF-THE-ASSEMBLY"
+ ],
+ "lanes/L-EXIT-INSTRUMENT-SWEEP/map.md": [
+  "L-EXIT-INSTRUMENT-SWEEP"
+ ],
+ "lanes/L-MRG-RECIPE-REVISE-UI/evidence.md": [
+  "L-MRG-REVISE-LAND"
+ ],
+ "lanes/L-WF-CONTACT-IMPORTED/DETAIL.md": [
+  "L-WF-CONTACT-PINS"
+ ],
+ "pages/admin/margin-recipes.vue": [
+  "L-MRG-REVISE-LAND"
+ ],
+ "pages/admin/offers.vue:816": [
+  "L-OFFERS-PAGE-HUNDREDFOLD"
+ ],
+ "pages/admin/products.vue": [
+  "L-PRICE-BYPASS-FIVE"
+ ],
+ "pages/admin/workforce-personnel-list.vue": [
+  "L-PRINT-HOST"
+ ],
+ "pages/admin/workforce-roster.vue": [
+  "L-WF-ONBOARD"
+ ],
+ "pages/preferences/communications.vue": [
+  "L-CORS-FOLLOWUPS"
+ ],
+ "pages/preferences/unsubscribe.vue": [
+  "L-GR-EXIT-WIRE-THE-MAIL"
+ ],
+ "pages/workforce/join.vue": [
+  "FT-WORKFORCE",
+  "L-WF-ONBOARD"
+ ],
+ "scratchpad/safety-2026-08-04-1530": [
+  "L-MRG-REVISE-LAND"
+ ],
+ "server-middleware/okam-api-proxy.js": [
+  "L-JOURNEY-PROXY-BLINDSPOT"
+ ],
+ "source.indexOf('</template>')": [
+  "L-PRICE-BYPASS-FIVE"
+ ],
+ "test/e2e/": [
+  "L-DATED-TEST-OUTPUT"
+ ],
+ "test/e2e/fixture/": [
+  "FT-EVENTS",
+  "FT-GROWTH",
+  "FT-MARGIN",
+  "FT-MEALS",
+  "FT-TRAINING"
+ ],
+ "test/e2e/fixture/api-server.js": [
+  "FT-WORKFORCE"
+ ],
+ "test/e2e/fixture/meals.js": [
+  "L-WORKTREE-BASENAME-PIN"
+ ],
+ "test/e2e/journeys/": [
+  "FT-WORKFORCE"
+ ],
+ "test/e2e/journeys/admin-refusal-worker.spec.js": [
+  "FT-WORKFORCE"
+ ],
+ "test/e2e/journeys/events-guest-proposal.spec.js": [
+  "FT-EVENTS"
+ ],
+ "test/e2e/journeys/growth-guest-consent.spec.js": [
+  "FT-GROWTH"
+ ],
+ "test/e2e/journeys/margin-recipe-to-margin.spec.js": [
+  "FT-MARGIN"
+ ],
+ "test/e2e/journeys/margin-statement-week.spec.js": [
+  "FT-MARGIN"
+ ],
+ "test/e2e/journeys/meals-admin-setup.spec.js": [
+  "FT-MEALS"
+ ],
+ "test/e2e/journeys/meals-guest-claim.spec.js": [
+  "FT-MEALS"
+ ],
+ "test/e2e/journeys/meals-statement-month.spec.js:72": [
+  "L-JOURNEY-PORT-HARDCODED"
+ ],
+ "test/e2e/journeys/training-course-to-evidence.spec.js": [
+  "FT-TRAINING"
+ ],
+ "test/e2e/journeys/workforce-invitation-onboarding.spec.js": [
+  "FT-WORKFORCE"
+ ],
+ "test/e2e/journeys/workforce-schedule-publish.spec.js": [
+  "FT-WORKFORCE"
+ ],
+ "test/e2e/scripts/live-world-reset.sh": [
+  "L-LIVE-WORLD-BANNER"
+ ],
+ "test/journey-artifact-store.test.js:457": [
+  "L-WORKTREE-BASENAME-PIN"
+ ],
+ "test/margin-recipe-client.test.js": [
+  "L-MRG-REVISE-LAND"
+ ],
+ "test/margin-recipe-revise.test.js": [
+  "L-MRG-REVISE-LAND"
+ ],
+ "test/margin-statements-page.test.js": [
+  "L-MRG-REVISE-LAND"
+ ],
+ "test/margin-waste.test.js": [
+  "L-MRG-REVISE-LAND"
+ ],
+ "test/price-bypass-legacy.test.js": [
+  "L-OFFER-PARTIAL-SUBTOTAL"
+ ],
+ "translations/{no,en,de}.ts": [
+  "L-MRG-REVISE-LAND"
+ ],
+ "utils/margin/recipe-client.js": [
+  "L-MRG-REVISE-LAND"
+ ],
+ "utils/margin/statement-view.js": [
+  "L-MRG-REVISE-LAND"
+ ],
+ "utils/workforce/": [
+  "FT-WORKFORCE"
+ ],
+ "utils/workforce/roster-client.js:137": [
+  "L-WF-ONBOARD"
+ ],
+ "vue-template-es2015-compiler/buble.js": [
+  "L-PRICE-BYPASS-FIVE"
+ ]
+}

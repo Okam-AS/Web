@@ -1,0 +1,6 @@
+[xUnit.net 00:08:16.15]     WebApi.Tests.Workforce.WorkforceEndToEndJourneyTests.WFJ14_correction_approval_export_batch_is_idempotent_and_immutable [SKIP]
+  Skipped WebApi.Tests.Workforce.WorkforceEndToEndJourneyTests.WFJ11_give_away_exchange_approved_assignment_moves_atomically [1 ms]
+  Skipped WebApi.Tests.Workforce.WorkforceEndToEndJourneyTests.WFJ15_disabled_export_flag_keeps_exports_readable [1 ms]
+  Skipped WebApi.Tests.Workforce.WorkforceEndToEndJourneyTests.WFJ14_correction_approval_export_batch_is_idempotent_and_immutable [1 ms]
+
+Passed!  - Failed:     0, Passed:  4369, Skipped:    12, Total:  4381, Duration: 8 m 19 s - WebApi.Tests.dll (net8.0)

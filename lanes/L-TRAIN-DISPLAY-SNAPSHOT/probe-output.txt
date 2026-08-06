@@ -1,0 +1,76 @@
+L-TRAIN-DISPLAY-SNAPSHOT — the defect, executed
+base: OkamAPI-modules lane/train-disclosure 06b8b582 (worktree ~/okam/OkamAPI-traindisp, branch lane/train-display-snapshot, NO commits)
+filter: dotnet test --filter "FullyQualifiedName~ZzDisplaySnapshotProbe&Database!=SqlServer"   (SQLite fast tier, no container)
+probe source: probe.cs in this directory — drop it into WebApi.Tests/Training/ to reproduce
+result: 2 passed / 0 failed / 4.2 s
+
+================================================================================
+PROBE 1 — The_pack_reprints_a_completion_under_whatever_name_the_roster_holds_today
+================================================================================
+--- AT WRITE TIME ---
+evidence-pack store=96001 person=b1000000-0000-0000-0000-000000000001 asOf=2026-07-15T10:00:00Z
+subject: personOnFile=true displayName="Kari Nordmann"
+timezone: Europe/Oslo fallback=true
+training-state: RecordedAsPassed
+integrity-notice: passed= is derived server-side as score >= passThreshold (TR-B1); the SCORE is the recorder's assertion
+completions:
+  courseId=c1000000-0000-0000-0000-000000000001 title="Ansvarlig alkoholservering" versionNo=1 contentHash=sha256:1a19bd0636797c252cd4bb022f731da9dd86d3a5ce4a714bc2ceb4aedea2273c passThreshold=80 score=90 passed=true source=Quiz recordedBy=<unknown> recordedAt=2026-07-15 12:00:00 audit=NoAuditEventForThisRow hashLinkage=Intact
+  courseId=c1000000-0000-0000-0000-000000000001 title="Ansvarlig alkoholservering" versionNo=1 contentHash=sha256:1a19bd0636797c252cd4bb022f731da9dd86d3a5ce4a714bc2ceb4aedea2273c passThreshold=80 score=90 passed=true source=ManagerRecorded recordedBy=test-manager recordedAt=2026-07-15 12:00:00 audit=Covered hashLinkage=Intact
+certificates:
+  type=alcohol-service issuer="Vinmonopolet Kurs" issueDate=2026-01-10 expiryDate=2027-01-10 documentReference=blob://certs/worker-alcohol.pdf status=Valid audit=NoAuditEventForThisRow
+audit-chain:
+  2026-07-15 12:00:00 completion.record TrainingCompletion actor=test-manager payload={"completionSource":"ManagerRecorded","passed":"true","scorePercent":"90"} linkedTo=completion
+chain-verification:
+  chainLinkFields=absent rowDigest=absent contentHashLinkage=Intact rowsWithoutAuditEvent=2
+  verdict=NOT-VERIFIABLE (no chain link and no row digest: edits are refused by the database's append-only layers, and the pack itself carries no evidence that none happened)
+
+--- AFTER THE ROSTER CHANGED (WorkforcePerson.DisplayName: "Kari Nordmann" -> "Kari Hansen") ---
+evidence-pack store=96001 person=b1000000-0000-0000-0000-000000000001 asOf=2026-07-15T10:00:00Z
+subject: personOnFile=true displayName="Kari Hansen"
+timezone: Europe/Oslo fallback=true
+training-state: RecordedAsPassed
+integrity-notice: passed= is derived server-side as score >= passThreshold (TR-B1); the SCORE is the recorder's assertion
+completions:
+  courseId=c1000000-0000-0000-0000-000000000001 title="Ansvarlig alkoholservering" versionNo=1 contentHash=sha256:1a19bd0636797c252cd4bb022f731da9dd86d3a5ce4a714bc2ceb4aedea2273c passThreshold=80 score=90 passed=true source=Quiz recordedBy=<unknown> recordedAt=2026-07-15 12:00:00 audit=NoAuditEventForThisRow hashLinkage=Intact
+  courseId=c1000000-0000-0000-0000-000000000001 title="Ansvarlig alkoholservering" versionNo=1 contentHash=sha256:1a19bd0636797c252cd4bb022f731da9dd86d3a5ce4a714bc2ceb4aedea2273c passThreshold=80 score=90 passed=true source=ManagerRecorded recordedBy=test-manager recordedAt=2026-07-15 12:00:00 audit=Covered hashLinkage=Intact
+certificates:
+  type=alcohol-service issuer="Vinmonopolet Kurs" issueDate=2026-01-10 expiryDate=2027-01-10 documentReference=blob://certs/worker-alcohol.pdf status=Valid audit=NoAuditEventForThisRow
+audit-chain:
+  2026-07-15 12:00:00 completion.record TrainingCompletion actor=test-manager payload={"completionSource":"ManagerRecorded","passed":"true","scorePercent":"90"} linkedTo=completion
+chain-verification:
+  chainLinkFields=absent rowDigest=absent contentHashLinkage=Intact rowsWithoutAuditEvent=2
+  verdict=NOT-VERIFIABLE (no chain link and no row digest: edits are refused by the database's append-only layers, and the pack itself carries no evidence that none happened)
+
+completions unchanged: True
+displayName before=Kari Nordmann after=Kari Hansen
+
+READ THIS: the two documents are byte-identical except the subject line. The append-only
+completion rows did not move — the trigger and GuardAppendOnly saw to that — and the pack
+still reprinted them under a name that did not exist when they were written. The content
+hash froze what was learned; nothing froze who learned it.
+
+================================================================================
+PROBE 2 — An_archived_person_still_resolves_so_leaving_does_not_break_the_name_today
+================================================================================
+archived displayName=Kari Nordmann personOnFile=True
+removed  displayName=<null>        personOnFile=False
+removed  completions still present: 2
+
+evidence-pack store=96001 person=b1000000-0000-0000-0000-000000000001 asOf=2026-07-15T10:00:00Z
+subject: personOnFile=false displayName=<unavailable>
+timezone: Europe/Oslo fallback=true
+training-state: RecordedAsPassed
+integrity-notice: passed= is derived server-side as score >= passThreshold (TR-B1); the SCORE is the recorder's assertion
+completions:
+  courseId=c1000000-0000-0000-0000-000000000001 ... score=90 passed=true source=Quiz ...
+  courseId=c1000000-0000-0000-0000-000000000001 ... score=90 passed=true source=ManagerRecorded ...
+certificates:
+  type=alcohol-service issuer="Vinmonopolet Kurs" issueDate=2026-01-10 expiryDate=2027-01-10 ... status=Valid ...
+(remainder identical to probe 1)
+
+READ THIS: the pack lists two passed completions and a valid certificate for a subject it
+cannot name. That is the inspection document keyed by an identifier the brief describes —
+but it is LATENT, not live: no production path removes a WorkforcePerson row. The leaver
+path is WorkforceInvitationService.cs:311, which sets State = Archived and leaves
+DisplayName standing, and TrainingEvidenceService's lookup carries no State predicate, so
+an archived leaver still resolves. See handover.md, "where the finding is overstated".

@@ -188,6 +188,16 @@
             </div>
             <p class="dintero-config__section-description">{{ $i('dintero_apiConfigDescription') }}</p>
 
+            <!-- A failed read used to leave the blank form on screen looking like the store's
+                 configuration, and the next Save posted those blanks over the live record. The form
+                 now says so, and Save is refused until the record has actually been read. -->
+            <div
+              v-if="configLoadFailed"
+              class="notification notification--error"
+            >
+              {{ $i('dintero_configNotLoaded') }}
+            </div>
+
             <div class="form-group">
               <label for="splitSellerId">Split Seller ID</label>
               <input
@@ -401,6 +411,7 @@
             <div class="form-actions">
               <button
                 class="btn btn-primary"
+                :disabled="!configLoaded"
                 @click="updateDinteroConfig"
               >
                 {{ $i('dintero_saveChanges') }}
@@ -513,6 +524,11 @@ export default {
         type: "success",
       },
       dinteroEnabled: false,
+      // True once this store's stored configuration has actually been read. Save is gated on it:
+      // the record is replaced whole, so posting a form that was never filled from the record
+      // overwrites the live credentials and fees with these defaults.
+      configLoaded: false,
+      configLoadFailed: false,
       dinteroConfig: {
         dinteroAccountId: "",
         clientId: "",
@@ -524,6 +540,10 @@ export default {
         klarnaEnabled: false,
         billieEnabled: false,
         kraviaEnabled: false,
+        // No input on this page yet, but the endpoint replaces the whole record — so it is carried
+        // through the load and posted back unchanged. Omitting it blanked the stored message on
+        // every save. It needs an operator lever of its own; until then it must at least survive.
+        kraviaMessage: "",
         commissionPercentage: 0,
         woltDeliveryFeePercent: 0,
         woltCustomerDeliveryFeeAmount: 0,
@@ -588,6 +608,15 @@ export default {
     init() {
       this.initialLoading = false;
       this.loadSellers();
+      // THE DEFECT THIS CLOSES: the sidebar already carries the selected store when this page is
+      // opened, so `selectedStore` does not CHANGE on arrival and the watcher below never fired.
+      // The form stayed at its blank defaults, and the first Save posted those over the store's
+      // live Dintero account id, client id, client secret, split seller, commission and Wolt fees.
+      // Loading here (rather than making the watcher `immediate`) keeps the read behind the
+      // logged-in and PowerUser checks in `mounted`.
+      if (this.selectedStore > 0) {
+        this.fetchStoreData(this.selectedStore);
+      }
     },
     handleLoginSuccess() {
       this.initialLoading = false;
@@ -606,6 +635,8 @@ export default {
     },
     resetForm() {
       this.dinteroEnabled = false;
+      // The form no longer stands for any stored record, so Save must not be able to post it.
+      this.configLoaded = false;
       this.dinteroConfig = {
         dinteroAccountId: "",
         clientId: "",
@@ -617,6 +648,7 @@ export default {
         klarnaEnabled: false,
         billieEnabled: false,
         kraviaEnabled: false,
+        kraviaMessage: "",
         commissionPercentage: 0,
         woltDeliveryFeePercent: 0,
         woltCustomerDeliveryFeeAmount: 0,
@@ -633,6 +665,8 @@ export default {
     },
     fetchStoreData(storeId) {
       this.isLoading = true;
+      this.configLoaded = false;
+      this.configLoadFailed = false;
 
       this._storeService.Get(storeId).then((res) => {
         this.dinteroEnabled = res.dinteroEnabled;
@@ -642,7 +676,9 @@ export default {
       this._storeService
         .GetDinteroConfig(storeId)
         .then((config) => {
-          console.log(config);
+          // C7: this response carries `clientSecret`. It used to be `console.log(config)` — the
+          // whole record, credential included, printed to the devtools of whatever machine the
+          // admin panel was open on. Nothing here may log the record or any field of it.
           this.dinteroConfig = {
             dinteroAccountId: config.dinteroAccountId || "",
             clientId: config.clientId || "",
@@ -654,18 +690,21 @@ export default {
             klarnaEnabled: config.klarnaEnabled || false,
             billieEnabled: config.billieEnabled || false,
             kraviaEnabled: config.kraviaEnabled || false,
+            kraviaMessage: config.kraviaMessage || "",
             commissionPercentage: config.commissionPercentage || 0,
             woltDeliveryFeePercent: config.woltDeliveryFeePercent || 0,
             woltCustomerDeliveryFeeAmount: config.woltCustomerDeliveryFeeAmount || 0,
             woltServiceFeeAmount: config.woltServiceFeeAmount || 0,
             splitSellerId: config.splitSellerId || "",
           };
+          this.configLoaded = true;
           this.isLoading = false;
           this.initialLoading = false;
         })
         .catch((error) => {
           console.error("Error fetching Dintero configuration:", error);
           this.resetForm();
+          this.configLoadFailed = true;
           this.isLoading = false;
           this.initialLoading = false;
           this.showNotification(this.$i("dintero_fetchConfigError"), "error");
@@ -706,10 +745,18 @@ export default {
       if (!this.selectedStore) {
         return;
       }
+      // This endpoint replaces the record whole. A form that was never filled from the stored
+      // configuration holds blanks, and posting it destroys the credentials and fees it never read.
+      if (!this.configLoaded) {
+        this.showNotification(this.$i("dintero_configNotLoaded"), "error");
+        return;
+      }
 
       this.isLoading = true;
 
-      // Create the request payload
+      // Every field of the backend write model, because the record is replaced whole — a key left
+      // out here is not "unchanged", it is set to the backend default. See
+      // core/services/full-replace-guard.ts, which refuses the request if this list goes short.
       const payload = {
         dinteroEnabled: this.dinteroEnabled,
         dinteroAccountId: this.dinteroConfig.dinteroAccountId,
@@ -722,6 +769,7 @@ export default {
         klarnaEnabled: this.dinteroConfig.klarnaEnabled,
         billieEnabled: this.dinteroConfig.billieEnabled,
         kraviaEnabled: this.dinteroConfig.kraviaEnabled,
+        kraviaMessage: this.dinteroConfig.kraviaMessage,
         commissionPercentage: this.dinteroConfig.commissionPercentage,
         woltDeliveryFeePercent: this.dinteroConfig.woltDeliveryFeePercent,
         woltCustomerDeliveryFeeAmount: this.dinteroConfig.woltCustomerDeliveryFeeAmount,
@@ -742,6 +790,13 @@ export default {
         .catch((error) => {
           console.error("Error updating Dintero configuration:", error);
           this.isLoading = false;
+          // The guard names the rule it refused on and the fields involved (names only, never
+          // values — this record carries a client secret). Showing it beats a generic failure,
+          // because the operator's next move differs: reload vs. report a missing field.
+          if (error && error.isFullReplaceGuardError) {
+            this.showNotification(error.message, "error");
+            return;
+          }
           this.showNotification(this.$i("dintero_updateConfigError"), "error");
         });
     },

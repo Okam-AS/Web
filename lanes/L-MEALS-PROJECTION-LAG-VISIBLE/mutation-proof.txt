@@ -1,0 +1,67 @@
+BASELINE (unmutated): rc=0
+['Tests:       40 passed, 40 total']
+
+=== re-gate the whole panel behind isPowerUser (the defect this lane removes)
+    diff in measured tree: 124	17	pages/admin/margin-statements.vue
+    Tests:       5 failed, 35 passed, 40 total
+    DIED (assertion bites)
+
+=== unbind the gate note from its computed (a constant in its place)
+    diff in measured tree: 125	18	pages/admin/margin-statements.vue
+    Tests:       4 failed, 36 passed, 40 total
+    DIED (assertion bites)
+
+=== make the gate always read 'caught up' (kill the behind branch)
+    diff in measured tree: 123	18	pages/admin/margin-statements.vue
+    Tests:       2 failed, 38 passed, 40 total
+    DIED (assertion bites)
+
+=== coerce instead of withholding: Number(null) === 0 turns 'not established' into a zero
+    diff in measured tree: 125	18	pages/admin/margin-statements.vue
+    Tests:       2 failed, 38 passed, 40 total
+    DIED (assertion bites)
+
+=== drop the status re-read after a lag refusal (panel keeps contradicting the refusal)
+    diff in measured tree: 124	18	pages/admin/margin-statements.vue
+    Tests:       1 failed, 39 passed, 40 total
+    DIED (assertion bites)
+
+=== stop intercepting margin.projection-behind (fall through to the generic sentence)
+    diff in measured tree: 125	18	pages/admin/margin-statements.vue
+    Tests:       2 failed, 38 passed, 40 total
+    DIED (assertion bites)
+
+=== size the refusal from the panel's re-read instead of the refusal's own extension
+    diff in measured tree: 125	18	pages/admin/margin-statements.vue
+    Tests:       2 failed, 38 passed, 40 total
+    DIED (assertion bites)
+
+=== delete one new key from the Norwegian dictionary only
+    diff in measured tree: 5	0	translations/no.ts
+    Tests:       1 failed, 39 passed, 40 total
+    DIED (assertion bites)
+
+=== POSITIVE CONTROL: a no-op edit inside the suite must stay GREEN
+    diff in measured tree: 160	0	test/margin-statements-page.test.js
+    Tests:       40 passed, 40 total
+    GREEN (as required)
+
+==============================================================================
+re-gate the whole panel behind isPowerUser (the defect this lane remov DIED (assertion bites)
+unbind the gate note from its computed (a constant in its place)       DIED (assertion bites)
+make the gate always read 'caught up' (kill the behind branch)         DIED (assertion bites)
+coerce instead of withholding: Number(null) === 0 turns 'not establish DIED (assertion bites)
+drop the status re-read after a lag refusal (panel keeps contradicting DIED (assertion bites)
+stop intercepting margin.projection-behind (fall through to the generi DIED (assertion bites)
+size the refusal from the panel's re-read instead of the refusal's own DIED (assertion bites)
+delete one new key from the Norwegian dictionary only                  DIED (assertion bites)
+POSITIVE CONTROL: a no-op edit inside the suite must stay GREEN        GREEN (as required)
+
+TREE AFTER (should be the lane's own six files only):
+125	18	pages/admin/margin-statements.vue
+160	0	test/margin-statements-page.test.js
+5	0	translations/de.ts
+5	0	translations/en.ts
+5	0	translations/no.ts
+17	0	utils/margin/api-client.js
+

@@ -1,0 +1,136 @@
+{
+  "journey": "growth-newsletter-send-gate",
+  "title": "An operator drafts and approves a newsletter, and the send gate opens only when both switches are up",
+  "status": "failed",
+  "startedAtUtc": "2026-08-06T11:06:38.278Z",
+  "finishedAtUtc": "2026-08-06T11:07:03.162Z",
+  "durationMs": 24884,
+  "capabilities": [
+    "platform.feature-flags.write",
+    "growth.consent.standing.read",
+    "growth.audience.snapshot",
+    "growth.newsletter.author",
+    "growth.newsletter.test-send",
+    "growth.newsletter.approve",
+    "growth.send-gate.fail-closed"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3877",
+  "apiBaseUrl": "http://127.0.0.1:4877",
+  "commit": "8ac6f63648015d8c7a230181a7f07bf303d43268",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": {
+    "id": "fixture@8ac6f63648015d8c7a230181a7f07bf303d43268+dirty",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "8ac6f63-dirty",
+    "detail": "the in-repo fixture backend, not an API build (branch HEAD)"
+  },
+  "backendServed": 5,
+  "backendSubjectServed": 0,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:4877/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:4877/user/login -> 200",
+    "GET http://127.0.0.1:4877/user -> 200",
+    "GET http://127.0.0.1:4877/stores/42/market -> 200",
+    "GET http://127.0.0.1:4877/stores/42 -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in and open the newsletter screen",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T11:06:38.281Z",
+      "durationMs": 24832,
+      "detail": "on /admin/growth-newsletter, no blocker",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "the consent standing is the SERVER's four figures, not a total",
+      "status": "failed",
+      "startedAtUtc": "2026-08-06T11:07:03.113Z",
+      "durationMs": 21,
+      "detail": null,
+      "error": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 4\u001b[39m\n\u001b[31m+ Received  + 4\u001b[39m\n\n\u001b[2m  Array [\u001b[22m\n\u001b[32m-   \"214\",\u001b[39m\n\u001b[32m-   \"18\",\u001b[39m\n\u001b[32m-   \"7\",\u001b[39m\n\u001b[32m-   \"5\",\u001b[39m\n\u001b[31m+   \"—\",\u001b[39m\n\u001b[31m+   \"—\",\u001b[39m\n\u001b[31m+   \"—\",\u001b[39m\n\u001b[31m+   \"—\",\u001b[39m\n\u001b[2m  ]\u001b[22m"
+    }
+  ],
+  "findings": [],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fgrowth-newsletter\" to \"/admin?redirect=%2Fadmin%2Fgrowth-newsletter&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fgrowth-newsletter\" to \"/admin?redirect=%2Fadmin%2Fgrowth-newsletter&storeId=42\" with a new navigation.",
+    "Failed to load resource: net::ERR_CONNECTION_RESET",
+    "Failed to load resource: net::ERR_CONNECTION_RESET",
+    "Failed to load resource: net::ERR_CONNECTION_RESET",
+    "Failed to load resource: net::ERR_CONNECTION_RESET",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Error loading special opening days: Error: Network Error\n    at createError (webpack-internal:///../Web-modules/node_modules/axios/lib/core/createError.js:16:15)\n    at XMLHttpRequest.handleError (webpack-internal:///../Web-modules/node_modules/axios/lib/adapters/xhr.js:99:14)",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+    "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING"
+  ],
+  "failedRequests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4877/v1/growth/stores/42/consents/summary",
+      "status": null,
+      "failure": "net::ERR_CONNECTION_RESET"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4877/v1/growth/stores/42/newsletters",
+      "status": null,
+      "failure": "net::ERR_CONNECTION_RESET"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4877/stores/42/feature-flags",
+      "status": null,
+      "failure": "net::ERR_CONNECTION_RESET"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4877/v1/growth/stores/42/delivery-health",
+      "status": null,
+      "failure": "net::ERR_CONNECTION_RESET"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4877/user",
+      "status": null,
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4877/stores/42/specialopeninghours",
+      "status": null,
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:3877/_loading/sse",
+      "status": null,
+      "failure": "net::ERR_INCOMPLETE_CHUNKED_ENCODING"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:3877/__webpack_hmr/client",
+      "status": null,
+      "failure": "net::ERR_INCOMPLETE_CHUNKED_ENCODING"
+    }
+  ],
+  "screenshots": [],
+  "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 4\u001b[39m\n\u001b[31m+ Received  + 4\u001b[39m\n\n\u001b[2m  Array [\u001b[22m\n\u001b[32m-   \"214\",\u001b[39m\n\u001b[32m-   \"18\",\u001b[39m\n\u001b[32m-   \"7\",\u001b[39m\n\u001b[32m-   \"5\",\u001b[39m\n\u001b[31m+   \"—\",\u001b[39m\n\u001b[31m+   \"—\",\u001b[39m\n\u001b[31m+   \"—\",\u001b[39m\n\u001b[31m+   \"—\",\u001b[39m\n\u001b[2m  ]\u001b[22m",
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/growth-newsletter-send-gate.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false,
+    "supersedes": null
+  }
+}

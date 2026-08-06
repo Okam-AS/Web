@@ -1,0 +1,7 @@
+  Error Message:
+  POST /v1/stores/4603/meals/statements/drafts  →  404 application/problem+json meals.not-found
+  POST /v1/meals/statements/6b43362f-04c1-4806-8d5b-37a0f5239256/finalize  →  404 application/problem+json meals.not-found
+  GET /v1/meals/companies/2bf2dbc7-ce1b-4db0-ad67-9b1fb0992d80/statements  →  403 application/problem+json meals.forbidden
+  GET /v1/meals/statements/6b43362f-04c1-4806-8d5b-37a0f5239256  →  404 application/problem+json meals.not-found
+  GET /v1/meals/statements/6b43362f-04c1-4806-8d5b-37a0f5239256/export?format=csv  →  404 application/problem+json meals.not-found
+Failed!  - Failed:     1, Passed:     1, Skipped:     0, Total:     2, Duration: 17 ms - WebApi.Tests.dll (net8.0)

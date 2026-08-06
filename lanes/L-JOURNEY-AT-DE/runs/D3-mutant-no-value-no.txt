@@ -1,0 +1,103 @@
+=== label      : D3-mutant-no-value-no
+=== edition    : OKAM_EDITION=no
+=== worktree   : /Users/svendaneel/okam/web-atde
+=== commit     : e34977acebd59b223584158c33451b6f1ffd82c1
+=== dirty      : 3 tracked path(s) modified
+=== spec sha   : 8ebe68bc58475753ec7adaa92d13b4dfb89b9c8b
+=== de.ts sha  : cc6e56d4b4f89df4d03bef00d84bce081872d89e
+=== ports      : web=3823 fixture=4823 (4010 never bound, pid 73160 never signalled)
+=== core       : 10 entries
+[WebServer] [fixture] listening on http://127.0.0.1:4823
+
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://172.20.10.4:3823/
+
+[WebServer] [info] Preparing project for development
+
+[WebServer] [info] Initial build may take a while
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+
+[WebServer] [success] Builder initialized
+
+[WebServer] [success] Nuxt files generated
+
+
+Running 1 test using 1 worker
+
+[WebServer] [warn] Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1/1] [chromium] › test/e2e/journeys/margin-statement-week.spec.js:136:1 › A venue opens a week, enters its purchase spend, finalises it, and finds it frozen @fixture
+[WebServer] [info] Waiting for file changes
+
+[WebServer] [info] Memory usage: 1.01 GB (RSS: 2 GB)
+
+[WebServer] [info] Listening on: http://172.20.10.4:3823/
+
+  1) [chromium] › test/e2e/journeys/margin-statement-week.spec.js:136:1 › A venue opens a week, enters its purchase spend, finalises it, and finds it frozen @fixture 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  locator('[data-test="state-badge"]')
+    Expected: "Låst"
+    Received: "MUTANT-NO-VALUE"
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveText" with timeout 15000ms
+      - waiting for locator('[data-test="state-badge"]')
+        34 × locator resolved to <span data-v-9a3982a0="" data-test="state-badge" class="mst__badge mst__badge--finalized">MUTANT-NO-VALUE</span>
+           - unexpected value "MUTANT-NO-VALUE"
+
+
+      327 |     await journey.step('finalise it', async () => {
+      328 |       await page.locator('[data-test="finalize"]').click();
+    > 329 |       await expect(page.locator('[data-test="state-badge"]')).toHaveText(t.stateFinalized, { timeout: 15000 });
+          |                                                               ^
+      330 |       await expect(page.locator('[data-test="finalized-at"]')).not.toHaveText('—');
+      331 |       return 'Open → Finalized';
+      332 |     });
+        at /Users/svendaneel/okam/web-atde/test/e2e/journeys/margin-statement-week.spec.js:329:63
+        at JourneyRecorder.step (/Users/svendaneel/okam/web-atde/test/e2e/support/journey.js:347:22)
+        at /Users/svendaneel/okam/web-atde/test/e2e/journeys/margin-statement-week.spec.js:327:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/margin-statement-week-A-ve-3c171-ises-it-and-finds-it-frozen-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/margin-statement-week.fixture.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/margin-statement-week.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/margin-statement-week-A-ve-3c171-ises-it-and-finds-it-frozen-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/margin-statement-week-A-ve-3c171-ises-it-and-finds-it-frozen-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/margin-statement-week-A-ve-3c171-ises-it-and-finds-it-frozen-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+  1 failed
+    [chromium] › test/e2e/journeys/margin-statement-week.spec.js:136:1 › A venue opens a week, enters its purchase spend, finalises it, and finds it frozen @fixture 
+RESULT D3-mutant-no-value-no edition=no FAIL-ASSERT rc=1

@@ -1,0 +1,28 @@
+==============================================================================
+ARM A -- the lease is OPEN (as shipped)
+==============================================================================
+  world reset. seeded overrides (must SURVIVE the kill): ['43|Events.Core']
+  the walk has RAISED (beyond the seed): ['42|Events.Core']
+  ...SIGKILL to process group 7972, mid-walk
+  after the kill, the world holds: ['43|Events.Core']
+    of what the walk raised, still up: nothing
+    the seeded override survived:      True
+  verdict: AS PREDICTED -- levers LOWERED, expected LOWERED
+==============================================================================
+ARM B -- the lease is SUPPRESSED (control)
+==============================================================================
+  world reset. seeded overrides (must SURVIVE the kill): ['43|Events.Core']
+  the walk has RAISED (beyond the seed): ['42|Events.Core']
+  ...SIGKILL to process group 11159, mid-walk
+  after the kill, the world holds: ['42|Events.Core', '43|Events.Core']
+    of what the walk raised, still up: ['42|Events.Core']
+    the seeded override survived:      True
+  verdict: AS PREDICTED -- levers STILL UP, expected STILL UP
+
+journey.js restored byte-for-byte: True
+
+==============================================================================
+  ARM A  AS PREDICTED     raised=['42|Events.Core']  still-up-after-kill=nothing  seed-intact=True
+  ARM B  AS PREDICTED     raised=['42|Events.Core']  still-up-after-kill=['42|Events.Core']  seed-intact=True
+  OVERALL: PROVEN
+==============================================================================

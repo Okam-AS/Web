@@ -1,0 +1,31 @@
+[WebServer] [fixture] listening on http://127.0.0.1:4318
+
+Running 2 tests using 1 worker
+
+  ✘  1 lanes/L-JOURNEY-PORT-HARDCODED/portproof/port-resolution.spec.js:64:1 › OLD expression (hardcoded 4010) reaches the fixture serving THIS run (51ms)
+  ✓  2 lanes/L-JOURNEY-PORT-HARDCODED/portproof/port-resolution.spec.js:71:1 › NEW expression (reads E2E_FIXTURE_PORT) reaches the fixture serving THIS run (35ms)
+
+
+  1) lanes/L-JOURNEY-PORT-HARDCODED/portproof/port-resolution.spec.js:64:1 › OLD expression (hardcoded 4010) reaches the fixture serving THIS run 
+
+    Error: the old expression ignores E2E_FIXTURE_PORT
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "http://127.0.0.1:4318"
+    Received: "http://127.0.0.1:4010"
+
+      65 |   const probe = await whoAnswers(OLD_BASE);
+      66 |   record('old', probe, OLD_BASE);
+    > 67 |   expect(OLD_BASE, 'the old expression ignores E2E_FIXTURE_PORT').toBe('http://127.0.0.1:' + RUN_PORT);
+         |                                                                   ^
+      68 |   expect(probe.port, 'the old base is answered by this run\'s own fixture').toBe(RUN_PORT);
+      69 | });
+      70 |
+        at /Users/svendaneel/okam/Web-modules/lanes/L-JOURNEY-PORT-HARDCODED/portproof/port-resolution.spec.js:67:67
+
+    Error Context: lanes/L-JOURNEY-PORT-HARDCODED/portproof/output/port-resolution-OLD-expres-13c11-he-fixture-serving-THIS-run/error-context.md
+
+  1 failed
+    lanes/L-JOURNEY-PORT-HARDCODED/portproof/port-resolution.spec.js:64:1 › OLD expression (hardcoded 4010) reaches the fixture serving THIS run 
+  1 passed (877ms)

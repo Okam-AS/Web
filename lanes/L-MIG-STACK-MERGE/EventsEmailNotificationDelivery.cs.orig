@@ -1,0 +1,181 @@
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using WebApi.Entities.Events;
+using WebApi.Enums.Events;
+using WebApi.Helpers;
+using WebApi.Models.AppSettings;
+using WebApi.Services.Events.Interfaces;
+using WebApi.Services.Interfaces;
+
+namespace WebApi.Services.Events
+{
+    /// <summary>
+    /// Delivers an Events outbox row as transactional email over the platform <see cref="IEmailService"/>
+    /// (MailKit/SMTP) — the same seam every other message in this system ships from, which is why the wire
+    /// test host contains this path for free: it substitutes <c>IEmailService</c> with a recorder, so no
+    /// Events test can open an SMTP socket.
+    ///
+    /// <para>
+    /// <b>What the message may say.</b> The link token is a bearer credential for an unauthenticated page, so
+    /// the body is written on the assumption that the mail WILL be forwarded. It therefore carries the link
+    /// and nothing else of consequence: no amount, no guest name, no event date, no dietary or contact
+    /// detail, and no second token. A forwarded copy grants exactly what the link already grants and not one
+    /// thing more. The token never appears in the SUBJECT, which is the part mail clients preview, sync to
+    /// notification shades and write to more logs than the body.
+    /// </para>
+    ///
+    /// <para>
+    /// <b>The copy is a placeholder and is meant to be replaced.</b> <see cref="ComposeSubject"/> and
+    /// <see cref="ComposeHtml"/> are the whole seam — Norwegian, deliberately terse, brand from
+    /// <c>EventsSettings.AppName</c>. Nothing outside these two methods needs to change to reword the guest
+    /// mail.
+    /// </para>
+    /// </summary>
+    public class EventsEmailNotificationDelivery : IEventsNotificationDelivery
+    {
+        private readonly IEmailService _email;
+        private readonly EventsSettings _settings;
+        private readonly ILogger<EventsEmailNotificationDelivery> _logger;
+
+        public EventsEmailNotificationDelivery(
+            IEmailService email,
+            IOptions<EventsSettings> settings,
+            ILogger<EventsEmailNotificationDelivery> logger)
+        {
+            _email = email ?? throw new ArgumentNullException(nameof(email));
+            _settings = (settings ?? throw new ArgumentNullException(nameof(settings))).Value ?? new EventsSettings();
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+
+        public EventsNotificationChannel Channel
+        {
+            get { return EventsNotificationChannel.Email; }
+        }
+
+        public Task<EventsNotificationDeliveryResult> DeliverAsync(
+            EventsNotificationOutbox row, CancellationToken ct = default(CancellationToken))
+        {
+            if (row == null)
+            {
+                throw new ArgumentNullException(nameof(row));
+            }
+
+            return DeliverCoreAsync(row, ct);
+        }
+
+        private async Task<EventsNotificationDeliveryResult> DeliverCoreAsync(
+            EventsNotificationOutbox row, CancellationToken ct)
+        {
+            if (string.IsNullOrWhiteSpace(_settings.PublicBaseUrl))
+            {
+                // Retryable, NOT fatal: mailing a dead link is worse than mailing late, and configuring the
+                // origin later must drain the backlog rather than find it dead-lettered. The row keeps its
+                // attempt budget for real transport failures.
+                return EventsNotificationDeliveryResult.Fail("PublicBaseUrlNotConfigured");
+            }
+
+            if (string.IsNullOrWhiteSpace(row.TargetReference))
+            {
+                // No address to deliver to, and no retry can invent one. Burn the budget deliberately so the
+                // row reaches DeadLettered and surfaces as "this guest was never told".
+                return EventsNotificationDeliveryResult.Fail("NoTargetAddress");
+            }
+
+            string link;
+            try
+            {
+                link = ComposeLink(row);
+            }
+            catch (UriFormatException)
+            {
+                return EventsNotificationDeliveryResult.Fail("PublicBaseUrlMalformed");
+            }
+
+            try
+            {
+                var message = _email.BuildHtmlMessage(
+                    new List<string> { row.TargetReference },
+                    ComposeSubject(row.Kind, _settings.AppName),
+                    ComposeHtml(row.Kind, _settings.AppName, link));
+
+                await _email.Send(message);
+            }
+            catch (OperationCanceledException)
+            {
+                // Shutdown, not a delivery failure: let the drain leave the row leased so it is retried
+                // rather than spending an attempt on a cancellation.
+                throw;
+            }
+            catch (Exception ex)
+            {
+                // Only the exception TYPE is recorded and logged. An SMTP failure message can quote the
+                // recipient address back at us, and that must not reach a log or the LastError column.
+                _logger.LogWarning(
+                    "Events notification delivery failed for outbox row {OutboxId} (kind {Kind}); failure type {FailureType}",
+                    row.NotificationOutboxId, row.Kind, SensitiveDataRedactor.ExceptionLabel(ex));
+
+                return EventsNotificationDeliveryResult.Fail(SensitiveDataRedactor.ExceptionLabel(ex));
+            }
+
+            return EventsNotificationDeliveryResult.Ok();
+        }
+
+        /// <summary>
+        /// The guest-facing page URL.
+        /// <para>
+        /// The token rides the PATH, matching the module's own public API routes
+        /// (<c>proposals/{token:guid}</c>, <c>deposits/{token:guid}</c>) and the guest page the delivery plan
+        /// names (<c>pages/events/deposit/_token.vue</c>, a Nuxt path parameter). Growth puts its token in a
+        /// URL fragment instead, so it never reaches a server log or a <c>Referer</c> header; that is the
+        /// stronger posture and Events cannot adopt it unilaterally, because the page that must read the
+        /// token does not exist yet and a fragment link would not work against a path-based page. Flagged as
+        /// an open decision rather than silently chosen — this method is the one place that changes.
+        /// </para>
+        /// </summary>
+        private string ComposeLink(EventsNotificationOutbox row)
+        {
+            var segment = row.Kind == EventsNotificationKind.DepositLink ? "deposit" : "proposal";
+            var origin = _settings.PublicBaseUrl.TrimEnd('/');
+
+            // Rejects a relative or malformed origin here rather than mailing an unusable link.
+            var uri = new Uri(origin + "/events/" + segment + "/" + row.PublicToken.ToString("D"), UriKind.Absolute);
+            return uri.ToString();
+        }
+
+        private static string ComposeSubject(EventsNotificationKind kind, string appName)
+        {
+            var brand = string.IsNullOrWhiteSpace(appName) ? "Okam" : appName;
+            return kind == EventsNotificationKind.DepositLink
+                ? "Depositum for arrangementet ditt - " + brand
+                : "Tilbud på arrangementet ditt - " + brand;
+        }
+
+        private static string ComposeHtml(EventsNotificationKind kind, string appName, string link)
+        {
+            var brand = HtmlEncode(string.IsNullOrWhiteSpace(appName) ? "Okam" : appName);
+            var href = HtmlEncode(link);
+
+            var lead = kind == EventsNotificationKind.DepositLink
+                ? "Du kan betale depositumet for arrangementet ditt her:"
+                : "Du har fått et tilbud på arrangementet ditt. Du kan se det her:";
+            var label = kind == EventsNotificationKind.DepositLink ? "Betal depositum" : "Se tilbudet";
+
+            return "<!DOCTYPE html><html lang=\"no\"><head><meta charset=\"UTF-8\"></head><body>"
+                + "<p>Hei,</p>"
+                + "<p>" + lead + "</p>"
+                + "<p><a href=\"" + href + "\">" + label + "</a></p>"
+                + "<p>Lenken er personlig - ikke del den videre.</p>"
+                + "<p>Hilsen " + brand + "</p>"
+                + "</body></html>";
+        }
+
+        private static string HtmlEncode(string value)
+        {
+            return System.Net.WebUtility.HtmlEncode(value ?? string.Empty);
+        }
+    }
+}

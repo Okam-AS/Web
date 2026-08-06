@@ -1,0 +1,90 @@
+{
+  "journey": "admin-single-login-prompt",
+  "title": "A signed-out visitor to an admin page is asked to sign in once, not twice",
+  "status": "passed",
+  "startedAtUtc": "2026-08-01T17:02:17.032Z",
+  "finishedAtUtc": "2026-08-01T17:02:25.302Z",
+  "durationMs": 8270,
+  "capabilities": [
+    "admin.shell.login-prompt-single-owner",
+    "admin.shell.redirect-to-login",
+    "admin.shell.sign-in"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3120",
+  "apiBaseUrl": "http://127.0.0.1:4120",
+  "commit": "7b99f2a0b94b115d990a8503e5aeaea0128998c5",
+  "underTest": null,
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "CASE A — the URL that used to strand two prompts side by side",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T17:02:17.033Z",
+      "durationMs": 2346,
+      "detail": "one prompt, one heading, one phone field, and the page did not navigate",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "CASE B — a plain deep link, counted from the first paint",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T17:02:19.404Z",
+      "durationMs": 4639,
+      "detail": "peak simultaneous prompts: 1",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "the shell still redirects, and still shows one",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T17:02:24.043Z",
+      "durationMs": 39,
+      "detail": "redirected to /admin?redirect=/admin/statistics, still one prompt",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "and the one prompt still signs you in and lands you where you asked",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T17:02:24.107Z",
+      "durationMs": 1159,
+      "detail": "signed in through the single prompt and landed on /admin/ongoing",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "what the browser said while this ran",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T17:02:25.295Z",
+      "durationMs": 0,
+      "detail": "2 browser errors: 0 defects, 2 pre-existing notes",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "note",
+      "summary": "pre-existing router navigation race on /admin",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fongoing\" to \"/admin?redirect=%2Fadmin%2Fongoing&storeId=42\" with a new navigation."
+    },
+    {
+      "severity": "note",
+      "summary": "pre-existing router navigation race on /admin",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fongoing\" to \"/admin?redirect=%2Fadmin%2Fongoing&storeId=42\" with a new navigation."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fongoing\" to \"/admin?redirect=%2Fadmin%2Fongoing&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fongoing\" to \"/admin?redirect=%2Fadmin%2Fongoing&storeId=42\" with a new navigation."
+  ],
+  "failedRequests": [],
+  "screenshots": [
+    "admin-single-login-prompt/01-one-login-prompt-on-a-redirect-carrying-url.png",
+    "admin-single-login-prompt/02-one-login-prompt-after-the-redirect.png",
+    "admin-single-login-prompt/03-signed-in-on-the-requested-page.png"
+  ],
+  "error": null
+}

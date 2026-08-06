@@ -1,0 +1,25 @@
+watchman warning:  Recrawled this watch 57 times, most recently because:
+MustScanSubDirs UserDroppedTo resolve, please review the information on
+https://facebook.github.io/watchman/docs/troubleshooting.html#recrawl
+To clear this warning, run:
+`watchman watch-del '/Users/svendaneel/okam/Web-modules' ; watchman watch-project '/Users/svendaneel/okam/Web-modules'`
+
+PASS test/ongoing-board-covers-every-live-status.test.js
+  the bucketing is total over OrderStatus
+    ✓ no member of OrderStatus is left unplaced and unexcluded (1 ms)
+    ✓ the enum it walks is the shipped one
+    ✓ the column and the action agree with the placement the board renders
+    ✓ an unrecognised status gets a column and no action
+  the ongoing board shows every live order
+    ✓ no live status renders in no column (16 ms)
+    ✓ each live order is rendered once, in exactly one column (5 ms)
+    ✓ each live status lands in its named column with its named action (4 ms)
+    ✓ an order whose driver has collected it can still be completed from this screen (5 ms)
+    ✓ completed and cancelled orders are excluded, and that exclusion is deliberate (2 ms)
+    ✓ a status this build has never heard of is surfaced, not dropped (2 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       10 passed, 10 total
+Snapshots:   0 total
+Time:        0.647 s, estimated 1 s
+Ran all test suites matching /test\/ongoing-board-covers-every-live-status.test.js/i.

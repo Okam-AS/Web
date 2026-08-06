@@ -1,0 +1,57 @@
+commit 4b911917b930272a8beaef32c464a4d0a652c5f0
+Author: Claude (margin-landing) <sven4696@gmail.com>
+Date:   Tue Aug 4 20:34:03 2026 +0200
+
+    WFJ-15: compare the served bytes against the recorded digest
+    
+    The export-readable clause of WFJ-15 asserted
+    `Assert.Equal(sent.PayloadSha256, file.FileDownloadName == null ? null : sent.PayloadSha256)`
+    — a comparison of the recorded digest WITH ITSELF whenever the download carried a
+    file name. It reads as "the served bytes match the recorded digest" and could not
+    fail for any payload, which is the seventeenth unfalsifiable assertion of the hunt
+    and the one shape this suite exists to refuse.
+    
+    Measured rather than argued: appending one byte to the payload served by
+    WorkforceTimesheetService.DownloadBatchAsync leaves the old line GREEN, while
+    WorkforceTimesheetTests.Exporting_renders_the_frozen_snapshot_and_the_stored_bytes_are_what_the_download_serves
+    reds on the same mutation — so the bytes really did diverge and this step slept
+    through it.
+    
+    The digest is now recomputed here from what was served. Under that same mutation the
+    line reds naming both digests; a second mutation nulling FileName reds the adjacent
+    name assertion, so neither new line is a second tautology.
+    
+    Not deleted in favour of the sibling check: that one covers the ordinary download,
+    whereas WFJ-15's sentence is that the kill switch leaves the artifact
+    BYTE-IDENTICAL, which no other test states.
+    
+    Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+
+diff --git a/WebApi.Tests/Workforce/WorkforceEndToEndJourneyTests.cs b/WebApi.Tests/Workforce/WorkforceEndToEndJourneyTests.cs
+index 78c5acf1..1d017f34 100644
+--- a/WebApi.Tests/Workforce/WorkforceEndToEndJourneyTests.cs
++++ b/WebApi.Tests/Workforce/WorkforceEndToEndJourneyTests.cs
+@@ -886,7 +886,12 @@ public sealed class WorkforceEndToEndJourneyTests
+ 
+         var file = Assert.IsType<FileContentResult>(await WorkforceTimesheetTestHost
+             .Controller(h, Manager).DownloadTimesheetExport(WorkforceWorld.StoreId, periodId, sent.BatchId));
+-        Assert.Equal(sent.PayloadSha256, file.FileDownloadName == null ? null : sent.PayloadSha256);
++        // The digest is recomputed HERE from the bytes that were served, never read back off the same
++        // response: a comparison between two copies of the value the export reported would pass however
++        // the payload had changed since. What this pins is the sentence WFJ-15 makes — the kill switch
++        // leaves the artifact BYTE-IDENTICAL, not merely still downloadable.
++        Assert.Equal(sent.PayloadSha256, Sha256Hex(file.FileContents));
++        Assert.False(string.IsNullOrWhiteSpace(file.FileDownloadName));
+         Assert.NotEmpty(file.FileContents);
+ 
+         // …and the W6 hours CSV, which §9.2 says this flag may never take away, still answers.
+@@ -895,6 +900,9 @@ public sealed class WorkforceEndToEndJourneyTests
+         Assert.IsType<FileContentResult>(hours);
+     }
+ 
++    private static string Sha256Hex(byte[] content)
++        => Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(content)).ToLowerInvariant();
++
+     // =============================================================================================
+     // Shared builders
+     // =============================================================================================

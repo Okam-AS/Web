@@ -1,0 +1,71 @@
+# gap census — parse.py against the three dictionaries
+# BEFORE: the three blobs of e34977ac, read by object id
+#   no 03fbae5be5671ee23cdb88f1829dfab1b94c4eb5
+#   en e2298392df775e8f68ec09171624abc8ecfe508e
+#   de cc6e56d4b4f89df4d03bef00d84bce081872d89e
+
+## BEFORE (e34977ac)
+   no keys=4817 unparsed=0 dupes=0
+   en keys=4782 unparsed=0 dupes=0
+   de keys=4782 unparsed=0 dupes=0
+   en key set == de key set: True
+   keys in no.ts and in neither en.ts nor de.ts: 35
+       index_specialDays
+       index_specialDays_add
+       index_specialDays_addTitle
+       index_specialDays_added
+       index_specialDays_date
+       index_specialDays_empty
+       index_specialDays_failed
+       index_specialDays_from
+       index_specialDays_note
+       index_specialDays_note_ph
+       index_specialDays_openLabel
+       index_specialDays_pickDates
+       index_specialDays_removed
+       index_specialDays_selectedCount
+       index_specialDays_status
+       index_specialDays_to
+       posset_col_profile
+       posset_goods_delivery
+       posset_goods_eatin
+       posset_goods_preset_food
+       posset_goods_preset_free
+       posset_goods_preset_standard
+       posset_goods_profile
+       posset_goods_profile_hint
+       posset_goods_profile_incomplete
+       posset_goods_profile_reprice
+       posset_goods_rate_none
+       posset_goods_seed
+       posset_goods_seeded
+       posset_goods_takeaway
+       products_goodsGroup
+       products_goodsGroupVatNote
+       products_goodsGroup_none
+       products_vatAdvancedHide
+       products_vatAdvancedShow
+
+## AFTER (worktree)
+   no keys=4817 unparsed=0 dupes=0
+   en keys=4801 unparsed=0 dupes=0
+   de keys=4801 unparsed=0 dupes=0
+   en key set == de key set: True
+   keys in no.ts and in neither en.ts nor de.ts: 16
+       index_specialDays
+       index_specialDays_add
+       index_specialDays_addTitle
+       index_specialDays_added
+       index_specialDays_date
+       index_specialDays_empty
+       index_specialDays_failed
+       index_specialDays_from
+       index_specialDays_note
+       index_specialDays_note_ph
+       index_specialDays_openLabel
+       index_specialDays_pickDates
+       index_specialDays_removed
+       index_specialDays_selectedCount
+       index_specialDays_status
+       index_specialDays_to
+

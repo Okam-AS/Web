@@ -1,0 +1,49 @@
+=== label R4-candidate-tip | base commit 67e912e68d6b9c6ece40c4c57f47c357789d2ae1 ===
+67e912e The policy assertion names the sentence it means, not a class it shared
+=== core: 10 entries ===
+=== working tree vs base ===
+=== spec blob: d91fefce684dec047b5ef09389c33b130010a398 ===
+=== panel blob: b41d79a7156836245bb394a3337826a67c9bfb5b ===
+[WebServer] [fixture] listening on http://127.0.0.1:4778
+
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://172.20.10.4:3778/
+
+[WebServer] [info] Preparing project for development
+
+[WebServer] [info] Initial build may take a while
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+
+[WebServer] [success] Builder initialized
+
+
+Running 1 test using 1 worker
+
+[WebServer] [success] Nuxt files generated
+
+[1/1] [chromium] › test/e2e/journeys/meals-admin-setup.spec.js:35:1 › A concierge creates a company, signs its corridor, runs a programme and issues an invitation @fixture
+[WebServer] [warn] Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[WebServer] [info] Waiting for file changes
+
+[WebServer] [info] Memory usage: 1.31 GB (RSS: 2.32 GB)
+
+[WebServer] [info] Listening on: http://172.20.10.4:3778/
+
+  1 passed (23.8s)
+RESULT R4-candidate-tip 67e912e PASS rc=0

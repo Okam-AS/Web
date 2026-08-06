@@ -1,0 +1,22 @@
+support files under test
+  artifact-store.js     f8bd6ddb57294f133b17bb2e90a5941b825d270b5486682b572f952d450c3ab8
+  fixture-provenance.js d022ff24ed16f876ad3b4c5af216015ed8b0d094c720a742661f8596078712fb
+  journey-assertions.js 4ddbed1671a04c71405c64657976b6b9a4debe479bf0a85bfde90565f4f07532
+  journey.js            6dd043e1f34648c3fc5f322c0a777247b35c1d591766991b8ff0621c51e631c2
+  world-stamp.js        ec4089ffaff867f8d7888055ca68c7723109bfb0945a91902e19d09d01cb2c97
+stand-in live api      http://127.0.0.1:50863   (served by pid 90108, cwd web-armrecapture)
+stand-in app           http://127.0.0.1:50864
+the port would say     web-armrecapture@7030c00122e026f077bdb1bfecee1c916ca72d67+dirty   <- the wrong answer, available in every arm
+checkout alpha         okamapi-alpha@eda32b56cf46254429817ee349404ab0c2159324
+checkout beta          okamapi-beta@f4f4fd9d25fe53623cf77ea74e74783e09bbf1c8
+
+  ok    1  okamapi-alpha@eda32b56cf46254429817ee349404ab0c2159324  stamp:artifacts/world/live/127-0-0-1-50863.json  stamped from checkout ALPHA, nothing declared
+  ok    2  okamapi-beta@f4f4fd9d25fe53623cf77ea74e74783e09bbf1c8  stamp:artifacts/world/live/127-0-0-1-50863.json  the same world stamped from a DIFFERENT checkout (BETA)
+  ok    3  web-armrecapture@7030c00122e026f077bdb1bfecee1c916ca72d67+dirty  process:127.0.0.1:50863             stamp INVALIDATED (its world is gone) — must fall back to the port and be WRONG
+  ok    4  okamapi-alpha@eda32b56cf46254429817ee349404ab0c2159324  stamp:artifacts/world/live/127-0-0-1-50863.json  stamped ALPHA while the shell declares BETA — a command copied from an older world
+  ok    5  okamapi-alpha@eda32b56cf46254429817ee349404ab0c2159324  env:E2E_API_BUILD                   NO stamp, the shell declares ALPHA — the declaration still carries a remote runner
+
+All 5 arms held. A live journey artifact names the checkout the world script
+recorded, changes when that checkout changes, and — arm 3 — names the port's wrong answer the
+moment the stamp is no longer verifiable. Nothing asked the API what it was.
+EXIT=0

@@ -1,0 +1,23 @@
+# MUTATION PROOF — do the new pins red without the fix?  HEAD 8ac6f636 + this lane's diff
+
+== M1: remove the tracked guard from canTakeCanonical ==
+1
+    ✕ is not overwritten by a re-run of its own lineage, which is how the workforce record was rewritten (101 ms)
+    ✕ is not overwritten by a run that OUTRANKS it — the case reordering rank would have missed (68 ms)
+    ✕ is not replaced by the provisional `running` record a run files before the browser opens (59 ms)
+    ✓ is regenerated the documented way — deleted, re-run, re-added — because a deleted file has no bytes to keep (54 ms)
+    ✓ is answered `false` outside a checkout, so the harnesses that copy these files into temp trees still write (52 ms)
+    ✓ is told apart from the ignored run output beside it, which `git check-ignore` cannot do (70 ms)
+Tests:       3 failed, 38 skipped, 3 passed, 44 total
+
+== M2: make isTracked always answer false ==
+1
+    ✕ is not overwritten by a re-run of its own lineage, which is how the workforce record was rewritten (40 ms)
+    ✕ is not overwritten by a run that OUTRANKS it — the case reordering rank would have missed (35 ms)
+    ✕ is not replaced by the provisional `running` record a run files before the browser opens (36 ms)
+    ✕ is told apart from the ignored run output beside it, which `git check-ignore` cannot do (37 ms)
+Tests:       4 failed, 38 skipped, 2 passed, 44 total
+
+== M3 (control): unmutated ==
+Test Suites: 1 passed, 1 total
+Tests:       44 passed, 44 total

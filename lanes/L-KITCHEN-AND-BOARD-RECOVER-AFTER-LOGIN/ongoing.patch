@@ -1,0 +1,70 @@
+--- lanes/L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN/baseline/ongoing.vue.base	2026-08-06 16:25:40
++++ pages/admin/ongoing.vue	2026-08-06 16:37:50
+@@ -287,21 +287,39 @@
+       this.showLogin = true;
+       return;
+     }
+-    this.adminStores = this.$store.state.currentUser.adminIn;
+-    this.loadOrders();
+-    this.checkMobile();
+-    window.addEventListener('resize', this.checkMobile);
+-    this.startAutoRefresh();
++    this.startLiveBoard();
+   },
+   beforeDestroy () {
+-    window.removeEventListener('resize', this.checkMobile);
+-    this.stopAutoRefresh();
++    this.stopLiveBoard();
+   },
+   methods: {
++    // THE ONE STARTER LIST for this screen, run by `mounted` for a visitor who arrives signed in and
++    // by `closeLoginModal` for one who signs in on the page. A signed-out visitor does reach this
++    // page: `AdminPage.initAuth` skips its bounce to /admin when a `redirect` query is already
++    // present (AdminPage.vue:99), which is exactly the post-login return path.
++    //
++    // It is one list rather than two because the second copy went stale. The sign-in handler called
++    // `loadOrders()` and stopped there, so the board a venue signed into showed the snapshot taken
++    // at that instant and never changed again — no order placed afterwards appeared, on the one
++    // screen the kitchen and the counter work from during service, and nothing looked broken.
++    // `adminStores` was left empty by the same omission, which does not break transfer visibly: it
++    // just offers nowhere to send the order.
++    startLiveBoard () {
++      this.adminStores = (this.$store.state.currentUser && this.$store.state.currentUser.adminIn) || [];
++      this.loadOrders();
++      this.checkMobile();
++      window.addEventListener('resize', this.checkMobile);
++      this.startAutoRefresh();
++    },
++    stopLiveBoard () {
++      window.removeEventListener('resize', this.checkMobile);
++      this.stopAutoRefresh();
++    },
++    // Recovery is the starter list above, not a hand-picked subset of it.
+     closeLoginModal (isLoggedIn) {
+       this.showLogin = !isLoggedIn;
+       if (isLoggedIn) {
+-        this.loadOrders();
++        this.startLiveBoard();
+       }
+     },
+     loadOrders () {
+@@ -318,7 +336,11 @@
+     checkMobile () {
+       this.isMobile = window.innerWidth <= 768;
+     },
++    // Clears before it sets. `beforeDestroy` holds one handle, so a second poll started over the
++    // top of the first is one this page can never stop — it would keep fetching after the screen is
++    // gone, and signing in twice is enough to start one.
+     startAutoRefresh () {
++      this.stopAutoRefresh();
+       this.refreshInterval = setInterval(() => {
+         this._orderService.GetAllOngoing().then((orders) => {
+           this.orders = orders;
+@@ -329,6 +351,7 @@
+       if (this.refreshInterval) {
+         clearInterval(this.refreshInterval);
+       }
++      this.refreshInterval = null;
+     },
+     toggleOrderExpand (orderId) {
+       this.showOrderId = this.showOrderId === orderId ? '' : orderId;

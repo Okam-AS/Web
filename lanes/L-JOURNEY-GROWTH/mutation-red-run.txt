@@ -1,0 +1,87 @@
+[WebServer] [fixture] listening on http://127.0.0.1:4915
+[WebServer] ℹ Parsed 0 files in 0.0 seconds
+[WebServer] ℹ [HPM] Proxy created: /  -> http://127.0.0.1:5080
+[WebServer] ℹ [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+[WebServer] ℹ Listening on: http://172.20.10.4:3915/
+[WebServer] ℹ Preparing project for development
+[WebServer] ℹ Initial build may take a while
+[WebServer] ℹ Discovered Components: .nuxt/components/readme.md
+[WebServer] ✔ Builder initialized
+
+Running 1 test using 1 worker
+
+[WebServer] ✔ Nuxt files generated
+[WebServer] ℹ Compiling Server
+[WebServer] ℹ Compiling Client
+[WebServer] ✔ Server: Compiled successfully in 23.92s
+[WebServer] ✔ Client: Compiled successfully in 29.54s
+[WebServer] ℹ Waiting for file changes
+[WebServer] ℹ Memory usage: 1.22 GB (RSS: 2.03 GB)
+[WebServer] ℹ Listening on: http://172.20.10.4:3915/
+  ✘  1 [chromium] › test/e2e/journeys/growth-testsend-refusal.spec.js:92:1 › An administrator is refused a test-send to the address on her own account, because it is unconfirmed @fixture (53.8s)
+
+
+  1) [chromium] › test/e2e/journeys/growth-testsend-refusal.spec.js:92:1 › An administrator is refused a test-send to the address on her own account, because it is unconfirmed @fixture 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.growth-page__toast--error')
+    Expected substring: "En testsending kan bare gå til e-postadressen på din egen konto"
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" with timeout 15000ms
+      - waiting for locator('.growth-page__toast--error')
+
+
+      204 |       // indistinguishable by status, and the sentence is what the operator meets.
+      205 |       const toast = page.locator('.growth-page__toast--error');
+    > 206 |       await expect(toast).toContainText(
+          |                           ^
+      207 |         'En testsending kan bare gå til e-postadressen på din egen konto', { timeout: 15000 });
+      208 |       // AND IT NAMES THE WAY OUT. A deny-closed refusal that does not is a wall; this clause is what
+      209 |       // makes it a door, and it names the screen this walk just came from.
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/growth-testsend-refusal.spec.js:206:27
+        at JourneyRecorder.step (/Users/svendaneel/okam/Web-modules/test/e2e/support/journey.js:383:22)
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/growth-testsend-refusal.spec.js:186:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/growth-testsend-refusal-An-fcbf7-t-because-it-is-unconfirmed-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/growth-testsend-refusal.fixture.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/growth-testsend-refusal.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/growth-testsend-refusal-An-fcbf7-t-because-it-is-unconfirmed-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/growth-testsend-refusal-An-fcbf7-t-because-it-is-unconfirmed-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/growth-testsend-refusal-An-fcbf7-t-because-it-is-unconfirmed-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › test/e2e/journeys/growth-testsend-refusal.spec.js:92:1 › An administrator is refused a test-send to the address on her own account, because it is unconfirmed @fixture 
+[WebServer] 
+[WebServer]  WARN  You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  Module @nuxt/image is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version >=3.1.0 is required but currently using 2.17.1
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[WebServer] 

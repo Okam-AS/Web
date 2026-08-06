@@ -1,0 +1,104 @@
+L-UTLKVIT-FAMILY-LAND - independent verification of the existing composition
+brief bf9b544e - 2026-08-03
+
+WORKTREE
+  /Users/svendaneel/okam/wt-utlkvitfam, detached at fb522bdd, created by me.
+  git status --porcelain empty BEFORE the build; after the run it was dirty on
+  artifacts/journeys/ev-dietary/run-sheet.json and .md (the known churn); restored
+  with git checkout, not committed. No commit was made on this worktree.
+  No other worktree, branch or ref was touched. Nothing pushed. No migration authored.
+
+TOPOLOGY (git, not inherited)
+  git merge-base 1854f594 3a509b68 = 1a03bc6c8f65aa2322c81806680ea3076a67fbb6
+    -> lane/utlkvit-sale-row and lane/utlkvit-replay-source are SIBLINGS off
+       lane/meals-utlkvit, exactly as briefed.
+  git log --format=%P -1 fb522bdd = 1854f594... 3a509b68...
+    -> fb522bdd is a TRUE two-parent merge of those exact tips, not a port,
+       not a squash, not a cherry-pick.
+  88b7307f (lane/utlkvit-reprint-kind) has fb522bdd as its first parent.
+
+PREDICATE COUNT (measured at both fb522bdd and 88b7307f)
+  definitions:  git grep -n "bool IsCreditSale" -- '*.cs'
+      Services/Kassa/KassaCreditSale.cs:25   <- exactly one
+  references (non-test): exactly six
+      Services/Kassa/FinalizeService.cs:237
+      Services/Kassa/FinalizeService.cs:304
+      Services/Kassa/PosReceiptService.cs:131
+      Services/Kassa/PosReceiptService.cs:386
+      Services/Kassa/SaftCashRegisterExportService.MasterData.cs:112
+      Services/Kassa/SaftCashRegisterExportService.Transactions.cs:251
+  sale-row's rival internal static on PosReceiptService is gone; replay-source's
+  KassaCreditSale.cs is taken verbatim.
+  unnamed-twin sweep: IsCompanyAccount() under Services/ Controllers/ Models/ at
+  fb522bdd = 5 hits. Only KassaCreditSale.cs:30 classifies a JournalEntry. The
+  other four (CartService 573/582/699, PaymentService 400) read cart.PaymentType /
+  order.PaymentType - cart-level tender, a different question.
+
+UNION ARITHMETIC (my own count of [Fact]/[Theory] under WebApi.Tests)
+  1a03bc6c  4211      (common ancestor)
+  3a509b68  4213      (+2  replay-source)
+  1854f594  4218      (+7  sale-row)
+  fb522bdd  4220      (+9) == 4211 + 2 + 7 exactly -> no pin lost, none duplicated
+  88b7307f  4224      (+4  reprint-kind)
+  Consistent with the runner's own numbers (4366 / 4375) - attribute count differs
+  from case count because Theories expand, but every DELTA matches.
+
+FAST TIER AT THE MERGE COMMIT - MY OWN RUN, NOT THE PRIOR LANE'S
+  cmd: dotnet test WebApi.Tests/WebApi.Tests.csproj --filter "Database!=SqlServer"
+  Passed! - Failed: 0, Passed: 4375, Skipped: 12, Total: 4387, Duration: 5 m 25 s
+  exit 0.
+  Reproduces lanes/L-UTLKVIT-REPRINT-KIND/base-test.summary.txt (4375/0/12/4387)
+  to the case.
+  Never used FullyQualifiedName!~SqlServer. Zero containers started: the same five
+  foreign containers (okam-lvsp-sql, okam-lwr-sql, okam-lws-sql, okam-lws-staff-sql,
+  zen_pasteur) were up before and after; none was touched, inspected or killed.
+  NO SQL TIER HAS EVER RUN AGAINST ANY COMMIT OF THIS FAMILY, including this one.
+
+ASSEMBLY FRESHNESS (watching the assembly the change lives in)
+  newest tracked *.cs  mtime 1785792369
+  WebApi.dll           mtime 1785792408   <- the production predicate compiles here
+  WebApi.Tests.dll     mtime 1785792416
+  Both dlls newer than every tracked source. No --no-build run at any point.
+
+FLAG CLEARS_WHEN, CHECKED AGAINST CODE
+  F-UTLKVIT-PREDICATE-COLLISION: "one credit-sale predicate exists in the tree and
+    all six call sites read it" -> MET (count above).
+  F-UTLKVIT-SALE-ROW: "the print, view and public paths addressed at a credit sale's
+    own id produce the delivery receipt, and the copy guard refuses the credit-sale
+    sale row" -> MET. PosReceiptService.BuildDocumentForAsync:131 resolves a credit
+    sale forward via BuildDeliveryDocumentForSaleAsync; its only two callers are
+    BuildReceiptAsync (line 100 - PosController 161 view, 230 print) and
+    BuildPublicReceiptAsync (line 805 - PosController 196 public page), so all three
+    surfaces route through the one resolution. The copy guard is
+    PosReceiptService.cs:386, throwing ReceiptCopyNotAllowed on a credit sale's
+    Sale row after the receipt-type allowlist admits it.
+
+C6 / C1 / C4 / C7
+  I emitted no code at all, so nothing was widened or narrowed. Confirmed the ruled-
+  against option was NOT taken: model.JournalEntryId at fb522bdd still names the SALE,
+  and FinalizeService.FinalizeReturnAsync still refuses an original that is not
+  ReceiptType.Sale - so a credit sale remains refundable at the till.
+
+SEVENTH TWIN, MEASURED
+  lane/meals-pos-tender-wire 32fd5a86. git merge-base with lane/meals-utlkvit =
+  1a03bc6c, the same common ancestor. Its diff vs that base touches 8 files:
+    Enums/Meals/MealsTenderAuthorizationOutcome.cs
+    Services/Kassa/PosSettlementService.cs
+    Services/Meals/DenyClosedMealsFundingAuthority.cs
+    Services/Meals/Interfaces/IMealsFundingAuthority.cs
+    Services/Meals/MealsFundingAuthority.cs
+    Services/Meals/MealsTenderAuthorizationResult.cs
+    WebApi.Tests/Meals/MealsFundingTestKit.cs
+    WebApi.Tests/Meals/MealsPosCreditTenderReachabilityTests.cs
+  It does NOT touch FinalizeService.cs or PosReceiptService.cs. The stale request-list
+  predicate is in its TREE only, inherited from 1a03bc6c. Confirms the brief: a true
+  git merge keeps the fix with no conflict; a port or a whole-file resolution
+  reintroduces both defects.
+
+RECEIPT TRAP - DID NOT ARISE HERE
+  git diff --name-only 1a03bc6c 88b7307f contains no artifacts/, no receipts/, no
+  README path. Neither sibling committed a run at a receipt path, so fb522bdd had no
+  receipt-side conflict to resolve. Nothing was resolved by side and no measurement
+  was deleted. (Separately: lanes/L-UTLKVIT-REPRINT-KIND/ is untracked - its .txt
+  summaries exist on disk, its *.log files are gitignored per .gitignore:5. That is
+  the F-EVIDENCE-GITIGNORED shape, already an open warn.)

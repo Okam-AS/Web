@@ -1,0 +1,50 @@
+=== label    : B1-at-31fc45da
+=== worktree : /Users/svendaneel/okam/web-sendgate-before
+=== commit   : 31fc45da44faa590a6a095f30780b3f627d32049
+=== dirty    : 0 path(s) before the run
+=== spec sha : ff03d2a26d5c8c0c143a54adb9331f0643a4baae
+=== fixture  : ec68b8ac9c10231a2ba3251cca8299a78ec08414 growth-newsletter.js
+=== page sha : 9c59f98bfd51368d629c7e317185e92938817d5f
+=== gate sha : 2fc00b09163ff9ffb69ad0d1b9885acf69a49ab6
+=== ports    : web=3877 fixture=4877 (4010/4971/4973 never bound, never signalled)
+=== core     : 10 entries
+=== started  : 2026-08-06T10:28:27Z
+[WebServer] [fixture] listening on http://127.0.0.1:4877
+
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://192.168.1.114:3877/
+
+[WebServer] [info] Preparing project for development
+[WebServer] [info] Initial build may take a while
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+
+[WebServer] [success] Builder initialized
+
+
+Running 1 test using 1 worker
+
+[WebServer] [success] Nuxt files generated
+
+[1/1] [chromium] › test/e2e/journeys/growth-newsletter-send-gate.spec.js:95:1 › An operator drafts and approves a newsletter, and the send gate opens only when both switches are up @fixture
+[WebServer] [info] Waiting for file changes
+
+[WebServer] [info] Memory usage: 1.02 GB (RSS: 1.57 GB)
+[WebServer] [info] Listening on: http://192.168.1.114:3877/
+
+  1 passed (58.7s)
+=== finished : 2026-08-06T10:29:27Z
+=== declared : passed
+RESULT B1-at-31fc45da PASS rc=0

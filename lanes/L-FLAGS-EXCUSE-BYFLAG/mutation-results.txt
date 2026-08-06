@@ -1,0 +1,7 @@
+workforce-resolver-deleted :: Failed!  - Failed:     1, Passed:     3, Skipped:     0, Total:     4, Duration: 13 ms - WebApi.Tests.dll (net8.0)
+growth-resolver-deleted :: Failed!  - Failed:     1, Passed:     3, Skipped:     0, Total:     4, Duration: 10 ms - WebApi.Tests.dll (net8.0)
+meals-resolver-deleted :: Failed!  - Failed:     1, Passed:     3, Skipped:     0, Total:     4, Duration: 9 ms - WebApi.Tests.dll (net8.0)
+events-resolver-deleted :: Failed!  - Failed:     1, Passed:     3, Skipped:     0, Total:     4, Duration: 8 ms - WebApi.Tests.dll (net8.0)
+margin-resolver-deleted :: Failed!  - Failed:     1, Passed:     3, Skipped:     0, Total:     4, Duration: 8 ms - WebApi.Tests.dll (net8.0)
+--- tree after restore ---
+ M WebApi.Tests/Wire/FlagEffectiveResolverWireTests.cs

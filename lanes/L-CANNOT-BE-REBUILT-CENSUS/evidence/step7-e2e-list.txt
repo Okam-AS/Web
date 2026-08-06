@@ -1,0 +1,24 @@
+Listing tests:
+  [chromium] › account-email-confirm.spec.js:77:1 › A phone-signup administrator is refused a test-send, confirms her address from admin, and is then allowed it
+  [chromium] › admin-refusal-worker.spec.js:24:1 › A worker is refused the store-admin schedule and is given their own page instead
+  [chromium] › events-deposit-precondition.spec.js:65:1 › the operator reads the deposit precondition on the row before arming the money path
+  [chromium] › events-enquiry-to-settlement.spec.js:184:1 › A private booking runs from a public enquiry to a settled statement, and the accept refuses while the module is off
+  [chromium] › events-guest-proposal.spec.js:147:1 › A guest reads the offer their venue just sent and accepts it, and the receipt names what was on screen
+  [chromium] › events-runsheet-onboarding.spec.js:96:1 › A store still in onboarding prints the run sheet, and the setup banner is not on it
+  [chromium] › events-runsheet-print.spec.js:78:1 › A host prints the run sheet: the dietary requirement is on it and the guest links are not
+  [chromium] › growth-guest-consent.spec.js:51:1 › A guest reads the consent wording verbatim, is refused without ticking it, and then subscribes
+  [chromium] › growth-newsletter-send-gate.spec.js:95:1 › An operator drafts and approves a newsletter, and the send gate opens only when both switches are up
+  [chromium] › growth-privacy-queue.spec.js:52:1 › a venue sees a guest's erasure request on its privacy queue and resolves it
+  [chromium] › margin-recipe-to-margin.spec.js:51:1 › A chef switches Margin on, costs a recipe, sells it as a dish, and meets the statements gate
+  [chromium] › margin-statement-week.spec.js:41:1 › A venue opens a week, enters its purchase spend, finalises it, and finds it frozen
+  [chromium] › margin-supplier-to-plate.spec.js:70:1 › A venue records a supplier, an article and a price, and a plate cost stops being unknown
+  [chromium] › margin-week-freeze.spec.js:69:1 › A frozen week is asked to take an edit, refuses it, and takes the same edit on its correction
+  [chromium] › meals-admin-setup.spec.js:31:1 › A concierge creates a company, signs its corridor, runs a programme and issues an invitation
+  [chromium] › meals-guest-claim.spec.js:46:1 › An employee is refused a stranger's invitation without being told whose it is, then claims their own
+  [chromium] › modal-estate-scroll-lock.spec.js:87:1 › Two different modals hold the page, and closing one does not let go
+  [chromium] › modal-scroll-lock.spec.js:105:1 › A modal holds the page behind it still, and lets go when it closes
+  [chromium] › training-course-to-evidence.spec.js:63:1 › A manager opens Training, publishes a course version, files a failing score, and the SERVER calls it not passed
+  [chromium] › workforce-flag-lever.spec.js:40:1 › an operator turns the schedule publication switch off and the publish becomes its typed refusal
+  [chromium] › workforce-invitation-onboarding.spec.js:57:1 › A manager invites a new hire, who claims the code and sees their published shift
+  [chromium] › workforce-schedule-publish.spec.js:37:1 › A manager creates a draft week, staffs a shift, validates it and publishes it
+Total: 22 tests in 22 files

@@ -1,0 +1,284 @@
+diff --git a/test/e2e/support/admin.js b/test/e2e/support/admin.js
+index 6b3fe7f..447a8b8 100644
+--- a/test/e2e/support/admin.js
++++ b/test/e2e/support/admin.js
+@@ -10,10 +10,221 @@
+ // the modal's close handler replaces back to the redirect target. So a journey asks for the page it
+ // wants, signs in, and finds itself on that page; it never navigates twice.
+ 
++// ---- WHY A WAIT HERE HAS TO SAY WHAT IT WAS WAITING ON ----------------------------------------
++//
++// This helper is called by THIRTY-ONE journeys, and until now every one of them reported the same
++// sentence for four unrelated faults:
++//
++//     page.waitForURL: Timeout 30000ms exceeded.
++//     waiting for navigation until "load"
++//
++// That sentence names the instrument and nothing else. On 2026-08-03 it stood for three days as the
++// evidence that `growth-newsletter-send-gate` was red — the artifact recorded `backendServed: 0`,
++// the run had reached the API zero times, and the message said none of it. The lane that later drove
++// the same journey found it green and could not reproduce the red at all, because the only record of
++// it was a timeout that could equally have meant a dead API, a dead dev server, a shell that never
++// hydrated or a redirect that fired somewhere else. A `verified` claim was made false by a red
++// nobody could read.
++//
++// So when one of these waits gives out, it is not enough to report that it gave out. The helper
++// itself asks the four questions a person would ask next, and leads its message with the answer:
++//
++//   1. Is the application listening at all?      an origin-level fetch from NODE, not from the page
++//   2. Is the API listening at all?              the same, against the origin the harness declared
++//   3. Did the shell ever render?                `#__nuxt` present and carrying text
++//   4. Where did the browser actually end up?    and what is the modal SAYING about it
++//
++// Those are different faults. A dead application, a dead backend, an unrendered shell and a redirect
++// that landed elsewhere each get their own opening line, and the original Playwright error is kept
++// verbatim underneath so nothing the runner knew is thrown away.
++//
++// NOTHING ABOUT WHAT THE JOURNEYS ASSERT CHANGES HERE, and that is deliberate: thirty-one specs share
++// this file, the success path below is untouched, and a diff that widened into their assertions
++// would be unreviewable. The probes run ONLY on the failure path, in parallel, with a two-second
++// budget each, so a journey that passes pays nothing and a journey that fails cannot be pushed past
++// the 120s test timeout by its own diagnosis — being killed by the runner is exactly how a message
++// ends up never printed.
++
+ const { expect } = require('@playwright/test');
+ 
+ const OTP_LENGTH = 6;
+ 
++/** How long any single probe may take. Short on purpose — see the note above. */
++const PROBE_MS = 2000;
++
++/**
++ * The origins this helper probes, resolved the SAME way the harness resolves them
++ * (`test/e2e/support/journey.js`, `playwright.config.js`). Read from the environment rather than
++ * from the page, because the question being asked is "is anything listening there" — which is
++ * exactly the question a browser can no longer answer once the answer is no.
++ */
++function declaredOrigins () {
++  const web = process.env.E2E_BASE_URL || ('http://127.0.0.1:' + (process.env.E2E_WEB_PORT || 3010));
++  const api = process.env.E2E_API_BASE_URL ||
++    ('http://127.0.0.1:' + (process.env.E2E_FIXTURE_PORT || 4010));
++  return { web: web.replace(/\/+$/, ''), api: api.replace(/\/+$/, '') };
++}
++
++/**
++ * Whether ANYTHING is on the other end of an origin.
++ *
++ * A 404 or a 500 counts as listening: the question is whether a process accepted the connection, not
++ * whether it liked the request. Only a transport failure — ECONNREFUSED, a socket that never opened —
++ * means nothing is there, and that distinction is the whole difference between "the application is
++ * down" and "the application is up and something else is wrong", which is the pair this file exists
++ * to stop conflating.
++ */
++async function listening (origin) {
++  const controller = new AbortController();
++  const timer = setTimeout(() => controller.abort(), PROBE_MS);
++  try {
++    const response = await fetch(origin, { signal: controller.signal });
++    return { up: true, note: 'answered HTTP ' + response.status };
++  } catch (error) {
++    const code = (error && error.cause && error.cause.code) || (error && error.name) || null;
++    return { up: false, note: 'no answer (' + (code || (error && error.message) || error) + ')' };
++  } finally {
++    clearTimeout(timer);
++  }
++}
++
++/**
++ * What the browser has, as the browser has it.
++ *
++ * Every field is read defensively and the whole thing degrades to `unreadable` rather than throwing:
++ * this runs while something is already wrong, and a diagnosis that dies mid-diagnosis replaces a bad
++ * message with no message.
++ */
++async function pageFacts (page) {
++  let url = null;
++  try { url = page.url(); } catch (e) { url = null; }
++  try {
++    const dom = await page.evaluate(() => {
++      const root = document.querySelector('#__nuxt');
++      const alert = document.querySelector('.login-modal .alert--error');
++      return {
++        // Nuxt's mount point. Absent means the document on screen is not this application at all —
++        // a proxy error page, a dev-server 500, an `about:blank` left over from a navigation that
++        // never happened. Present but empty means the app was served and never hydrated.
++        rooted: !!root,
++        chars: ((root && root.textContent) || '').trim().length,
++        modal: !!document.querySelector('.login-modal'),
++        boxes: document.querySelectorAll('.login-modal .otp-input input').length,
++        // What the modal is SAYING. `LoginModal.getCode` writes «Feil telefonnummer» and
++        // `LoginModal.login` writes «Feil kode» from their `.catch` arms, so a request that never
++        // got an answer surfaces here as a refusal the user can see — and a wait that then runs out
++        // is a CONSEQUENCE of that refusal, not an independent fact.
++        says: alert ? (alert.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 160) : null
++      };
++    });
++    return Object.assign({ url: url }, dom);
++  } catch (error) {
++    return { url: url, unreadable: (error && error.message) || String(error) };
++  }
++}
++
++/**
++ * The one line that opens the failure — the first question above whose answer is "no".
++ *
++ * Ordered outside in, because an inner fault observed while an outer one holds is not evidence of
++ * anything: a shell cannot render out of a server that is not listening, so reporting the shell in
++ * that case would name a symptom as the cause.
++ *
++ * WHICH OF THESE HAS ACTUALLY BEEN SHOWN, because a branch that has never fired under a real fault
++ * is a claim and not a control:
++ *
++ *   THE API IS NOT LISTENING   — SHOWN. The fixture was killed mid-journey and this is the sentence
++ *                                the journey then printed, against the same wait and the same kill
++ *                                under which stock code printed only "Timeout 30000ms exceeded".
++ *   the remaining branches     — NOT shown by a kill, and one of them is unlikely ever to fire on
++ *                                this app: killing the dev server stops the run earlier, at
++ *                                `page.goto`, with `net::ERR_EMPTY_RESPONSE` — which already names
++ *                                its own cause and is not the failure this file exists to fix. They
++ *                                are kept because a wrong opening line is worse than a general one
++ *                                and the ordering makes each of them strictly more specific than
++ *                                the fallback, but nobody should read them as verified.
++ */
++function cause (facts, web, api, expected) {
++  if (!web.up) {
++    return 'THE APPLICATION IS NOT LISTENING — nothing answered ' + facts.webOrigin + '. ' +
++      'The dev server is not running, died during the run, or never bound this port.';
++  }
++  if (facts.unreadable) {
++    return 'THE BROWSER COULD NOT BE READ — ' + facts.unreadable + '. The page or its context is gone.';
++  }
++  if (!facts.rooted) {
++    return 'THE SHELL NEVER RENDERED — ' + facts.webOrigin + ' is listening, but the document in the ' +
++      'browser has no #__nuxt at all, so what was served is not this application.';
++  }
++  if (!facts.chars) {
++    return 'THE SHELL NEVER HYDRATED — #__nuxt is present and empty, so the bundle was served and ' +
++      'the app never mounted. Check the console errors recorded on this run.';
++  }
++  if (!api.up) {
++    return 'THE API IS NOT LISTENING — the application is up, the shell rendered, and nothing ' +
++      'answered ' + facts.apiOrigin + '. Sign-in cannot complete because no request can.';
++  }
++  if (facts.says) {
++    return 'THE SIGN-IN WAS REFUSED — the modal is showing «' + facts.says + '». Both origins are ' +
++      'listening, so this is an answer the app got and did not like, not a wait that ran out.';
++  }
++  if (expected && facts.url && !facts.url.includes(expected)) {
++    return 'THE REDIRECT WENT SOMEWHERE ELSE — both origins are listening and the shell rendered, ' +
++      'but the browser settled on ' + facts.url + ' instead of ' + expected + '.';
++  }
++  return 'BOTH ORIGINS ARE LISTENING AND THE SHELL RENDERED — nothing is down, so this wait is ' +
++    'reporting the application being slow or the step below not happening at all, not a dead stack.';
++}
++
++/**
++ * Turns whatever Playwright threw into a message that names a fault.
++ *
++ * The original error is re-thrown as the tail of the new one rather than replaced: the runner's own
++ * text carries the selector and the budget, and a diagnosis that discarded it would trade one kind of
++ * missing information for another.
++ */
++async function diagnose (page, original, { waitingFor, expected }) {
++  const origins = declaredOrigins();
++  const [facts, web, api] = await Promise.all([
++    pageFacts(page),
++    listening(origins.web),
++    listening(origins.api)
++  ]);
++  facts.webOrigin = origins.web;
++  facts.apiOrigin = origins.api;
++
++  const lines = [
++    'ADMIN SIGN-IN GAVE UP WAITING FOR ' + waitingFor + '.',
++    cause(facts, web, api, expected),
++    '',
++    '  application : ' + origins.web + ' — ' + web.note,
++    '  api         : ' + origins.api + ' — ' + api.note,
++    '  browser at  : ' + (facts.url || '(no url)'),
++    expected ? '  expected    : ' + expected : null,
++    facts.unreadable
++      ? '  page        : unreadable (' + facts.unreadable + ')'
++      : '  shell       : ' + (facts.rooted ? '#__nuxt present, ' + facts.chars + ' chars' : 'no #__nuxt'),
++    facts.unreadable ? null : '  modal       : ' + (facts.modal ? 'open, ' + facts.boxes + ' otp box(es)' : 'not open'),
++    facts.unreadable ? null : '  modal says  : ' + (facts.says ? '«' + facts.says + '»' : '(nothing)'),
++    '',
++    'The runner reported:',
++    String((original && original.message) || original)
++  ].filter(line => line !== null);
++
++  const error = new Error(lines.join('\n'));
++  error.stack = error.message + '\n' + ((original && original.stack) || '');
++  return error;
++}
++
++/** Runs one wait, and replaces its timeout with a diagnosis of why it timed out. */
++async function waitOrDiagnose (page, describe, run) {
++  try {
++    await run();
++  } catch (original) {
++    throw await diagnose(page, original, describe);
++  }
++}
++
+ /**
+  * @param page          Playwright page, already navigated to the admin URL the journey wants
+  * @param phone         national part only — the modal prefixes +47 itself
+@@ -22,18 +233,35 @@ const OTP_LENGTH = 6;
+  */
+ async function signIn (page, { phone, code, expectPath }) {
+   const modal = page.locator('.login-modal');
+-  await expect(modal).toBeVisible({ timeout: 30000 });
++  // The door itself. Reaching this at all requires the dev server to have served the route and the
++  // app to have hydrated, so a failure here is almost always one of the two outer faults.
++  await waitOrDiagnose(page, { waitingFor: 'the login modal to appear' }, async () => {
++    await expect(modal).toBeVisible({ timeout: 30000 });
++  });
+ 
+   // At the phone step there is exactly one tel input; the six OTP boxes are also `type=tel` and only
+   // exist after the code has been requested, which is why this is scoped to the form step.
+   const phoneField = modal.locator('.input-wrapper input[type="tel"]');
+-  await expect(phoneField).toBeVisible();
++  await waitOrDiagnose(page, { waitingFor: 'the phone field' }, async () => {
++    await expect(phoneField).toBeVisible();
++  });
+   await phoneField.fill(phone);
+ 
+   await modal.getByRole('button', { name: /Send kode|Send|senden/i }).click();
+ 
+   const boxes = modal.locator('.otp-input input');
+-  await expect(boxes).toHaveCount(OTP_LENGTH);
++  // NOT a point at which the backend is known to have answered, and the arm that killed the API
++  // proved it: with nothing listening at all, this step still passes and six boxes still render.
++  // `RequestService.PostRequest` RESOLVES a failed request to the axios error object rather than
++  // rejecting, `UserService.SendVerificationToken` turns that into `false`, and
++  // `LoginModal.getCode` sets `smsSent = true` in a `.then` that never looks at the value. So the
++  // modal offers to accept a code it never sent, its «Feil telefonnummer» arm is unreachable for
++  // any server-side failure, and the journey sails on to the redirect wait below. That is a defect
++  // in the modal, not in this helper — recorded rather than fixed here, because thirty-one journeys
++  // share this file and none of them is about the login modal's honesty.
++  await waitOrDiagnose(page, { waitingFor: 'the six OTP boxes after the code was requested' }, async () => {
++    await expect(boxes).toHaveCount(OTP_LENGTH);
++  });
+ 
+   // Filled box by box rather than pasted: `OtpInput.onValueChange` is what advances the focus and
+   // emits `complete`, and it only runs on a per-input `input` event. A journey that set the value
+@@ -44,9 +272,16 @@ async function signIn (page, { phone, code, expectPath }) {
+   }
+ 
+   if (expectPath) {
+-    await page.waitForURL(url => url.pathname === expectPath, { timeout: 30000 });
++    // THE WAIT THAT PRODUCED THE 2026-08-03 RED. `page.waitForURL` reports the budget it exceeded
++    // and nothing about the redirect it was waiting on, so every fault upstream of the redirect —
++    // including a backend that answered nothing at all — arrived here wearing the same sentence.
++    await waitOrDiagnose(page, { waitingFor: 'the redirect after sign-in', expected: expectPath }, async () => {
++      await page.waitForURL(url => url.pathname === expectPath, { timeout: 30000 });
++    });
+   }
+-  await expect(modal).toHaveCount(0, { timeout: 15000 });
++  await waitOrDiagnose(page, { waitingFor: 'the login modal to close', expected: expectPath }, async () => {
++    await expect(modal).toHaveCount(0, { timeout: 15000 });
++  });
+ }
+ 
+ /**

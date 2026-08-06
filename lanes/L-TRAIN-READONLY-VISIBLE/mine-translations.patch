@@ -1,0 +1,75 @@
+diff --git a/translations/no.ts b/translations/no.ts
+index 03fbae5..b3c0c96 100644
+--- a/translations/no.ts
++++ b/translations/no.ts
+@@ -5079,7 +5217,7 @@ export default {
+   // samme som en modul som er i drift, og en tom liste er ikke det samme som ingen brytere.
+   nav_feature_flags: 'Modulbrytere',
+   ff_page_title: 'Modulbrytere',
+-  ff_page_intro: 'Bryterne som avgjør hva de seks modulene får lov til å skrive for denne butikken. Alt er avslått som utgangspunkt: en bryter som ikke står på, avviser skrivinger — lesing og eksport av det som allerede er registrert, fortsetter.',
++  ff_page_intro: 'Bryterne som avgjør hva de seks modulene får lov til å skrive for denne butikken. Alt er avslått som utgangspunkt. Hva «av» gjør med lesingen, er ikke likt fra modul til modul — noen fortsetter å vise det som allerede er registrert, andre blir helt borte — så les raden før du slår av.',
+   ff_reload: 'Hent på nytt',
+   ff_effective_note: '«Faktisk» er svaret modulens egen port gir. Noen moduler ligger i tillegg under en driftsbryter i serveroppsettet som denne siden ikke ser. Derfor er «faktisk: av» til å stole på, mens «faktisk: på» ikke er et løfte om at skrivingen går gjennom.',
+   ff_withheld_note: 'Listen er katalogen tjenesten oppgir. En modul kan ha trinn som med vilje ikke tilbys her — de gir ingen effekt uansett hva de settes til, og en bryter som ikke gjør noe er verre enn ingen bryter.',
+@@ -5104,6 +5242,11 @@ export default {
+   // Forutsetningen som gjelder FØR bryteren slås på, og som ingen kode håndhever. Den står på raden
+   // fordi det er der noen slår den på — ikke i et notat øverst som gjelder alle de atten bryterne.
+   ff_precondition_events_deposits: 'Før denne slås på: butikken må allerede ha tatt imot ekte bestillinger gjennom sitt eget betalingsoppsett. Depositum trekkes gjennom nøyaktig det samme oppsettet og setter ikke opp noe eget. Ingenting her sjekker det — å slå den på for en butikk som aldri har tatt imot en ekte betaling går gjennom, og er en svikt i rutinen, ikke i programvaren.',
++  // Hva «av» faktisk gjør — lest ut av Trainings egen port, ikke ut av ordet «av». Står på raden
++  // fordi det er der noen slår bryteren av, og de to radene sier ulike ting fordi portene deres er
++  // ulike: bare training.setup er med på å avgjøre om modulen er synlig i det hele tatt.
++  ff_off_training_setup: 'Når denne står av, avvises skriving — lesing fortsetter. Kurs, versjoner og sertifikater kan ikke lagres, men listene lastes som før, skjemaet tegnes og lagreknappen er aktiv: avvisningen kommer først når du trykker. Modulen blir altså ikke borte. Det ene unntaket er en butikk som aldri har registrert noe treningsdata — den blir usynlig når denne står av, og sidene svarer «finnes ikke» i stedet.',
++  ff_off_training_assignments: 'Når denne står av, avvises skriving — lesing fortsetter. Tildeling av kurs og registrering av gjennomføring kan ikke lagres, men listene lastes som før, skjemaet tegnes og lagreknappen er aktiv: avvisningen kommer først når du trykker. Ingen lesing i Training ser på denne bryteren, og den avgjør ikke om modulen er synlig — det gjør training.setup og dataene butikken allerede har.',
+   ff_note_label: 'Begrunnelse',
+   ff_note_placeholder: 'Hvorfor endres denne nå?',
+   ff_updated_by: 'Sist endret av {actor}',
+diff --git a/translations/en.ts b/translations/en.ts
+index e229839..9c96af1 100644
+--- a/translations/en.ts
++++ b/translations/en.ts
+@@ -5024,7 +5155,7 @@ export default {
+   // module that is running, and an empty list is not the same as no switches.
+   nav_feature_flags: 'Module switches',
+   ff_page_title: 'Module switches',
+-  ff_page_intro: 'The switches that decide what the six modules may write for this store. Everything is off to begin with: a switch that is not on refuses writes — reads and exports of what is already recorded keep working.',
++  ff_page_intro: 'The switches that decide what the six modules may write for this store. Everything is off to begin with. What "off" does to reading is not the same from one module to the next — some keep showing what is already recorded, others disappear entirely — so read the row before you switch it off.',
+   ff_reload: 'Read again',
+   ff_effective_note: '"Effective" is the answer the module\'s own gate gives. Some modules also sit under a deployment switch in the server configuration that this page cannot see. So "effective: off" can be relied on, while "effective: on" is not a promise that the write will go through.',
+   ff_withheld_note: 'The list is the catalogue the service reports. A module may have stages deliberately not offered here — they would have no effect whatever they were set to, and a switch that does nothing is worse than no switch.',
+@@ -5049,6 +5180,11 @@ export default {
+   // The precondition that holds BEFORE the switch goes on, and that no code enforces. It sits on the
+   // row because that is where somebody arms it — not in a note at the top that covers all eighteen.
+   ff_precondition_events_deposits: 'Before this is switched on: the store must already have taken live orders through its own payment setup. Deposits are charged through exactly that merchant configuration and set nothing up of their own. Nothing here checks it — switching this on for a store that has never taken a live payment will succeed, and it is a failure of procedure, not of the software.',
++  // What "off" actually does, read out of Training's own gate rather than out of the word "off". On
++  // the row because that is where somebody switches it off, and the two rows say different things
++  // because their gates differ: only training.setup has any part in deciding module visibility.
++  ff_off_training_setup: 'With this off, writes are refused — reads keep serving. Courses, versions and certificates cannot be saved, but the lists load as before, the form is drawn and the save button is live: the refusal comes only when you press it. The module does not go away. The one exception is a store that has never recorded any training data — with this off it becomes invisible, and the pages answer "not found" instead.',
++  ff_off_training_assignments: 'With this off, writes are refused — reads keep serving. Assigning a course and recording a completion cannot be saved, but the lists load as before, the form is drawn and the save button is live: the refusal comes only when you press it. No read in Training consults this switch, and it does not decide whether the module is visible — training.setup and the data the store already has decide that.',
+   ff_note_label: 'Reason',
+   ff_note_placeholder: 'Why is this being changed now?',
+   ff_updated_by: 'Last changed by {actor}',
+diff --git a/translations/de.ts b/translations/de.ts
+index cc6e56d..fbe1410 100644
+--- a/translations/de.ts
++++ b/translations/de.ts
+@@ -5030,7 +5161,7 @@ export default {
+   // nicht dasselbe wie ein laufendes Modul, und eine leere Liste nicht dasselbe wie keine Schalter.
+   nav_feature_flags: 'Modulschalter',
+   ff_page_title: 'Modulschalter',
+-  ff_page_intro: 'Die Schalter, die bestimmen, was die sechs Module für dieses Lokal schreiben dürfen. Alles ist zunächst aus: ein Schalter, der nicht an ist, lehnt Schreibvorgänge ab — Lesen und Exportieren von bereits Erfasstem läuft weiter.',
++  ff_page_intro: 'Die Schalter, die bestimmen, was die sechs Module für dieses Lokal schreiben dürfen. Alles ist zunächst aus. Was «aus» für das Lesen bedeutet, ist von Modul zu Modul verschieden — manche zeigen bereits Erfasstes weiter an, andere verschwinden ganz — lesen Sie deshalb die Zeile, bevor Sie abschalten.',
+   ff_reload: 'Neu laden',
+   ff_effective_note: '«Effektiv» ist die Antwort der modul-eigenen Prüfung. Manche Module liegen zusätzlich unter einem Betriebsschalter in der Serverkonfiguration, den diese Seite nicht sieht. «Effektiv: aus» ist deshalb verlässlich, «effektiv: an» dagegen kein Versprechen, dass der Schreibvorgang durchgeht.',
+   ff_withheld_note: 'Die Liste ist der Katalog, den der Dienst meldet. Ein Modul kann Stufen haben, die hier bewusst nicht angeboten werden — sie hätten keinerlei Wirkung, und ein Schalter ohne Wirkung ist schlimmer als kein Schalter.',
+@@ -5055,6 +5186,11 @@ export default {
+   // Die Voraussetzung, die VOR dem Einschalten gilt und die kein Code erzwingt. Sie steht auf der
+   // Zeile, weil dort jemand den Schalter umlegt — nicht in einem Hinweis über allen achtzehn.
+   ff_precondition_events_deposits: 'Bevor dieser Schalter umgelegt wird: das Lokal muss bereits echte Bestellungen über seine eigene Zahlungskonfiguration abgewickelt haben. Anzahlungen laufen über genau diese Konfiguration und richten nichts Eigenes ein. Hier wird das nicht geprüft — für ein Lokal, das noch nie eine echte Zahlung angenommen hat, geht das Einschalten trotzdem durch, und das ist ein Fehler im Verfahren, nicht in der Software.',
++  // Was «aus» tatsächlich bewirkt — aus Trainings eigener Prüfung gelesen, nicht aus dem Wort «aus».
++  // Auf der Zeile, weil dort abgeschaltet wird; die beiden Zeilen sagen Verschiedenes, weil ihre
++  // Prüfungen verschieden sind: nur training.setup entscheidet über die Sichtbarkeit mit.
++  ff_off_training_setup: 'Steht dieser Schalter auf aus, werden Schreibvorgänge abgewiesen — gelesen wird weiter. Kurse, Versionen und Zertifikate lassen sich nicht speichern, aber die Listen laden wie zuvor, das Formular wird gezeichnet und die Schaltfläche bleibt aktiv: die Abweisung kommt erst beim Klick. Das Modul verschwindet also nicht. Die eine Ausnahme ist ein Lokal, das noch nie Trainingsdaten erfasst hat — dort wird es bei ausgeschaltetem Schalter unsichtbar, und die Seiten antworten stattdessen «nicht gefunden».',
++  ff_off_training_assignments: 'Steht dieser Schalter auf aus, werden Schreibvorgänge abgewiesen — gelesen wird weiter. Kurszuweisung und das Erfassen einer Durchführung lassen sich nicht speichern, aber die Listen laden wie zuvor, das Formular wird gezeichnet und die Schaltfläche bleibt aktiv: die Abweisung kommt erst beim Klick. Kein Lesevorgang in Training fragt diesen Schalter ab, und er entscheidet nicht über die Sichtbarkeit des Moduls — das tun training.setup und die bereits vorhandenen Daten.',
+   ff_note_label: 'Begründung',
+   ff_note_placeholder: 'Warum wird das jetzt geändert?',
+   ff_updated_by: 'Zuletzt geändert von {actor}',

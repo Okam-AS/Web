@@ -1,0 +1,4 @@
+
+[1m== 5b. Nora joins (POST staff/{id}/invitations -> POST /workforce/me/invitations/claim)[0m
+[31mFAILED: the invitation carried no token -- an idempotent REPLAY answers token=null,
+    and the raw token is unrecoverable once that happens. Seed a fresh database rather than re-running.[0m

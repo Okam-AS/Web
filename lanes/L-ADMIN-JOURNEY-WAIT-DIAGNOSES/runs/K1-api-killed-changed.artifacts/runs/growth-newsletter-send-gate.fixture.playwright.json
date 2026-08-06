@@ -1,0 +1,76 @@
+{
+  "journey": "growth-newsletter-send-gate",
+  "title": "An operator drafts and approves a newsletter, and the send gate opens only when both switches are up",
+  "status": "failed",
+  "startedAtUtc": "2026-08-06T11:03:08.572Z",
+  "finishedAtUtc": "2026-08-06T11:04:08.389Z",
+  "durationMs": 59817,
+  "capabilities": [
+    "platform.feature-flags.write",
+    "growth.consent.standing.read",
+    "growth.audience.snapshot",
+    "growth.newsletter.author",
+    "growth.newsletter.test-send",
+    "growth.newsletter.approve",
+    "growth.send-gate.fail-closed"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3877",
+  "apiBaseUrl": "http://127.0.0.1:4877",
+  "commit": "8ac6f63648015d8c7a230181a7f07bf303d43268",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": {
+    "id": "fixture@8ac6f63648015d8c7a230181a7f07bf303d43268+dirty",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "8ac6f63-dirty",
+    "detail": "the in-repo fixture backend, not an API build (branch HEAD)"
+  },
+  "backendServed": 0,
+  "backendSubjectServed": 0,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "backendSample": [],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in and open the newsletter screen",
+      "status": "failed",
+      "startedAtUtc": "2026-08-06T11:03:08.575Z",
+      "durationMs": 59790,
+      "detail": null,
+      "error": "ADMIN SIGN-IN GAVE UP WAITING FOR the redirect after sign-in.\nTHE API IS NOT LISTENING — the application is up, the shell rendered, and nothing answered http://127.0.0.1:4877. Sign-in cannot complete because no request can.\n\n  application : http://127.0.0.1:3877 — answered HTTP 200\n  api         : http://127.0.0.1:4877 — no answer (ECONNREFUSED)\n  browser at  : http://127.0.0.1:3877/admin?redirect=%2Fadmin%2Fgrowth-newsletter\n  expected    : /admin/growth-newsletter\n  shell       : #__nuxt present, 239 chars\n  modal       : open, 6 otp box(es)\n  modal says  : «Feil kode»\n\nThe runner reported:\npage.waitForURL: Timeout 30000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation until \"load\"\n============================================================"
+    }
+  ],
+  "findings": [],
+  "consoleErrors": [
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED"
+  ],
+  "failedRequests": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:4877/user/sendverificationtoken",
+      "status": null,
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:4877/user/login",
+      "status": null,
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    }
+  ],
+  "screenshots": [],
+  "error": "Error: ADMIN SIGN-IN GAVE UP WAITING FOR the redirect after sign-in.\nTHE API IS NOT LISTENING — the application is up, the shell rendered, and nothing answered http://127.0.0.1:4877. Sign-in cannot complete because no request can.\n\n  application : http://127.0.0.1:3877 — answered HTTP 200\n  api         : http://127.0.0.1:4877 — no answer (ECONNREFUSED)\n  browser at  : http://127.0.0.1:3877/admin?redirect=%2Fadmin%2Fgrowth-newsletter\n  expected    : /admin/growth-newsletter\n  shell       : #__nuxt present, 239 chars\n  modal       : open, 6 otp box(es)\n  modal says  : «Feil kode»\n\nThe runner reported:\npage.waitForURL: Timeout 30000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation until \"load\"\n============================================================",
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/growth-newsletter-send-gate.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false,
+    "supersedes": null
+  }
+}

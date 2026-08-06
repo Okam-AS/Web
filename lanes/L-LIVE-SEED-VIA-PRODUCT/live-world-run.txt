@@ -41,7 +41,7 @@ A LIVE world is up.
     store      1  "Live Journey Kafé"   registered through POST /Stores/register, org.nr 912345678
     market     NO / NOK / Europe/Oslo   (PUT /stores/1/market; currency derived)
     published  no -- Approved is left false, which is what registration produces; see the header
-    manager    99999999 / 123123   (the app prefixes +47 itself)
+    manager    99999999 / AppSettings__DemoVerificationCode__REDACTED   (the app prefixes +47 itself)
     roster     Astrid Vik, Ingrid Moen (the manager), Jonas Lie
     roles      Barista (220.00 NOK/h from 2024-01-01), Kjøkken
     week       2026-07-27..2026-08-03, no plan

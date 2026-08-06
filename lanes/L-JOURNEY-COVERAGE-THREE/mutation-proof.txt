@@ -1,0 +1,45 @@
+=== MUTATION: margin: do not turn Margin.Module on ===
+  ✘  1 [chromium] › test/e2e/journeys/margin-recipe-to-margin.spec.js:51:1 › A chef switches Margin on, costs a recipe, sells it as a dish, and meets the statements gate @fixture (27.0s)
+    Error: expect(locator).toHaveText(expected) failed
+    Expected: "Av"
+    Error: element(s) not found
+      101 |       // press would have failed here.
+    > 102 |       await expect(flagRow(page, STATEMENTS_FLAG).locator('.ff-row__badge')).toHaveText('Av');
+    artifacts/playwright-output/margin-recipe-to-margin-A--ce140-d-meets-the-statements-gate-chromium/test-failed-1.png
+  1 failed
+=== MUTATION: training: do not turn training.setup on ===
+  ✘  1 [chromium] › test/e2e/journeys/training-course-to-evidence.spec.js:63:1 › A manager opens Training, publishes a course version, files a failing score, and the SERVER calls it not passed @fixture (13.0s)
+  1) [chromium] › test/e2e/journeys/training-course-to-evidence.spec.js:63:1 › A manager opens Training, publishes a course version, files a failing score, and the SERVER calls it not passed @fixture 
+    Error: expect(locator).toHaveText(expected) failed
+    > 151 |       await expect(page.locator('[data-test="flag-' + SETUP_FLAG + '"]')).toHaveText('På');
+    artifacts/playwright-output/training-course-to-evidenc-f764e--SERVER-calls-it-not-passed-chromium/test-failed-1.png
+    Error Context: artifacts/playwright-output/training-course-to-evidenc-f764e--SERVER-calls-it-not-passed-chromium/error-context.md
+    artifacts/playwright-output/training-course-to-evidenc-f764e--SERVER-calls-it-not-passed-chromium/trace.zip
+        npx playwright show-trace artifacts/playwright-output/training-course-to-evidenc-f764e--SERVER-calls-it-not-passed-chromium/trace.zip
+  1 failed
+    [chromium] › test/e2e/journeys/training-course-to-evidence.spec.js:63:1 › A manager opens Training, publishes a course version, files a failing score, and the SERVER calls it not passed @fixture 
+=== MUTATION: growth: do not turn growth.dispatch on ===
+  ✘  1 [chromium] › test/e2e/journeys/growth-newsletter-send-gate.spec.js:95:1 › An operator drafts and approves a newsletter, and the send gate opens only when both switches are up @fixture (13.5s)
+    Error: expect(locator).toHaveText(expected) failed
+    > 298 |       await expect(page.locator('.growth-gate__badge')).toHaveText('Vilkårene er oppfylt');
+    artifacts/playwright-output/growth-newsletter-send-gat-b49d0-y-when-both-switches-are-up-chromium/test-failed-1.png
+  1 failed
+=== MUTATION (sharper): margin: navigate to the switchboard but never press the switch ===
+  ✘  1 [chromium] › test/e2e/journeys/margin-recipe-to-margin.spec.js:51:1 › A chef switches Margin on, costs a recipe, sells it as a dish, and meets the statements gate @fixture (13.9s)
+    Error: expect(locator).toHaveCount(expected) failed
+    Expected: 0
+    Received: 1
+    > 110 |       await expect(page.locator('[data-test="blocker"]')).toHaveCount(0);
+    artifacts/playwright-output/margin-recipe-to-margin-A--ce140-d-meets-the-statements-gate-chromium/test-failed-1.png
+  1 failed
+=== MUTATION (sharper): training: flip assignments only, never training.setup ===
+  ✘  1 [chromium] › test/e2e/journeys/training-course-to-evidence.spec.js:63:1 › A manager opens Training, publishes a course version, files a failing score, and the SERVER calls it not passed @fixture (12.9s)
+  1) [chromium] › test/e2e/journeys/training-course-to-evidence.spec.js:63:1 › A manager opens Training, publishes a course version, files a failing score, and the SERVER calls it not passed @fixture 
+    Error: expect(locator).toHaveText(expected) failed
+    > 150 |       await expect(page.locator('[data-test="flag-' + SETUP_FLAG + '"]')).toHaveText('På');
+    artifacts/playwright-output/training-course-to-evidenc-f764e--SERVER-calls-it-not-passed-chromium/test-failed-1.png
+    Error Context: artifacts/playwright-output/training-course-to-evidenc-f764e--SERVER-calls-it-not-passed-chromium/error-context.md
+    artifacts/playwright-output/training-course-to-evidenc-f764e--SERVER-calls-it-not-passed-chromium/trace.zip
+        npx playwright show-trace artifacts/playwright-output/training-course-to-evidenc-f764e--SERVER-calls-it-not-passed-chromium/trace.zip
+  1 failed
+    [chromium] › test/e2e/journeys/training-course-to-evidence.spec.js:63:1 › A manager opens Training, publishes a course version, files a failing score, and the SERVER calls it not passed @fixture 

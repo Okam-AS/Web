@@ -1,0 +1,33 @@
+=== TRUTHS RESOLVED AT RUN TIME ===
+  OPTIONS-BOUND      EXISTS      Program.cs calls AddMealsFeatureOptions() and the extension calls BindConfiguration (d81f037b); appsettings.json ships the section (bf650efd).
+  AGREEMENT-CREATE   EXISTS      MealsAgreementController exposes POST .../agreements (588061e7).
+  RESERVATION-TOKEN  EXISTS      Core cart-service.ts puts ?reservationToken= on the wire (Core ef833ca); ConsumerWeb CheckoutMeals.vue offers the payer (ac264e5); CartsController.Complete receives it.
+  INVITATION-CLAIM   EXISTS      pages/meals/join.vue claims invitations (a3f6100).
+
+=== SURFACE SCANNED ===
+  255 files under the Meals surface of both repos
+
+=== REASSERTED FALSE CLAIMS ===
+  OPTIONS-BOUND      Scripts/demo/RUNBOOK.md:36: variable — because `Configure<MealsFeatureSettings>` is never called in the backend, so the
+  OPTIONS-BOUND      Scripts/demo/RUNBOOK.md:37: `Features:Meals` section is never bound and all four of its flags read `false`. Binding it is item 2 on
+  OPTIONS-BOUND      Scripts/demo/RUNBOOK.md:483: `Configure<MealsFeatureSettings>` is never called anywhere in the backend, so the `Features:Meals` section
+  OPTIONS-BOUND      Scripts/demo/RUNBOOK.md:486: `Features__Meals__Module=true` in the environment does nothing, because **nothing reads the section**.
+  OPTIONS-BOUND      Scripts/demo/RUNBOOK.md:625: | Meals **Bestillinger** | no order can be funded — `Features:Meals` is unbound (§ 9) |
+  OPTIONS-BOUND      Scripts/demo/seed-meals-demo.sh:10: #   Configure<MealsFeatureSettings> is never called anywhere in the backend. The `Features:Meals`
+  OPTIONS-BOUND      Scripts/demo/seed-meals-demo.sh:11: #   section is therefore never bound, so IOptionsMonitor<MealsFeatureSettings>.CurrentValue is a
+  OPTIONS-BOUND      Scripts/demo/seed-meals-demo.sh:15: #   nothing, because nothing reads the section.
+  OPTIONS-BOUND      Scripts/demo/seed-meals-demo.sh:17: # Binding it is item 2 on Sven's open-decision list and is sequenced AFTER the journal-epoch ruling, so
+  OPTIONS-BOUND      Scripts/demo/seed-meals-demo.sh:182: # RequireOrderingVisible() = Module && Ordering, both from the unbound config section. This is the wall.
+  OPTIONS-BOUND      Scripts/demo/seed-meals-demo.sh:208: storeId=$STORE_ID   flags: meals.module=on (per store), Features:Meals UNBOUND (all four false)
+  AGREEMENT-CREATE   WebApi.Tests/Meals/MEALS-MEMBERSHIP-JOURNEY-MANIFEST.md:23: 2. Concierge fixture: seed the corridor **agreement** (spec §5 — agreements have no create endpoint in v1).
+  AGREEMENT-CREATE   WebApi.Tests/Meals/MealsPilotFullLoopJourneyTests.cs:83: // there is deliberately no agreement-create endpoint in v1).
+  AGREEMENT-CREATE   WebApi.Tests/Meals/MealsPilotFullLoopJourneyTests.cs:254: /// concierge writes; there is no agreement-create endpoint in v1). Returns the agreement id.
+  AGREEMENT-CREATE   docs/plans/replan/b-meals-completeness.md:38: **F3 — the corridor agreement has no production write path. VERIFIED.**
+  AGREEMENT-CREATE   docs/plans/replan/b-meals-completeness.md:39: `MealsAgreement` is a shipped entity (`Entities/Meals/MealsAgreement.cs:19-56`) with a table and migration (`Migrations/20260720134041_MealsW1_CompanyIdentityMembership.cs`). Grep for every construction site in the repo returns exactly two, both test fixtures: `WebApi.Tests/Meals/MealsWorld.cs:120` and `WebApi.Tests/Meals/MealsPilotFullLoopJourneyTests.cs:258`. The module's own journey manifest says so in writing — `WebApi.Tests/Meals/MEALS-MEMBERSHIP-JOURNEY-MANIFEST.md` step 2: *"Concierge fixture: seed the corridor agreement (spec §5 — agreements have no create endpoint in v1)."* Four services refuse to operate without an `Active` agreement, including the store directory `MealsCompanyService.cs:370-380`, which reads `MealsAgreements` first and returns an empty list when none exist.
+  RESERVATION-TOKEN  test/e2e/journeys/meals-admin-setup.spec.js:64: // reservation token no cart in this estate sends, and sits behind its own `meals.ordering`
+  RESERVATION-TOKEN  docs/plans/replan/b-meals-completeness.md:183: - `core/services/cart-service.ts:57-58` — `Complete(storeId)` must accept and send `?reservationToken=`. Without it no client can complete a company-funded checkout. **S.**
+  RESERVATION-TOKEN  pages/admin/meals-companies.vue:132: *   • NOBODY ORDERS. The employee funding path (quotes, checkout) needs a reservation token no cart
+  RESERVATION-TOKEN  pages/admin/meals-companies.vue:133: *     in this estate sends and a company-account payer no client offers, and it sits behind its own
+  INVITATION-CLAIM   utils/meals/admin-client.js:50: //     exists once somebody claims an invitation and no client in the estate claims one. It is
+
+=== FAIL ===

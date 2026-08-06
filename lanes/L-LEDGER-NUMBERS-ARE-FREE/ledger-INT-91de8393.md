@@ -1,0 +1,582 @@
+# Pending migrations ledger
+
+**Written 2026-07-30.** Every schema change deferred behind the single-migration-author rule, plus the
+schema debts that converge on the pre-deploy POS squash. This file exists because a durability review found
+four fully-specified migrations living **only in a lane report, committed nowhere** — one session end from
+being lost. Nothing here is authored; everything here is specified.
+
+> **Read `docs/plans/pos-review-triage.md` (§ squash) and `CLAUDE.md` (EF Core migrations) first.** The
+> squash is a one-shot, hand-run production event and it is a *regeneration* — see the ⚠️ section at the end,
+> which is the reason this ledger is not just a to-do list.
+
+---
+
+## ✅ STATUS UPDATE — section A is AUTHORED (2026-07-30, `lane/attribution-migrations` @ `d6e35955`)
+
+MIG-1, MIG-2, MIG-4, MIG-5 and MIG-9 are written and verified; **MIG-3 was declined with reasoning**
+(see below). Section A is kept for the record because its *constraints* are still the load-bearing part.
+
+The no-backfill warning was **proven, not assumed**: a receipt seeded before the migration reads
+`System`/`NULL` after it, and the exact backfill statement returns
+`Msg 50022 … EventsPaymentReceipts is append-only: UPDATE and DELETE are not permitted.` Replay-from-empty
+and an up→down→up round trip both pass on a localhost scratch DB; `has-pending-model-changes` is clean.
+
+**MIG-3 declined, better argument than the original:** `ReconciledByUserId` must pair with
+`ReconciledAtUtc`, which reconcile **nulls** when it ends in Discrepancy — so the column would name an actor
+only in the case where the next act (T13 close) already records `ClosedByUserId`, and be blank exactly where
+it would have been new information. Symmetry is not enough for a schema change heading into the squash.
+
+**These still belong in the pre-deploy squash when it happens** — but not folded in now, because the entities
+are still moving and the squash is explicitly the last step before deploy. They are additive and replay clean
+until then.
+
+---
+
+## A. Actor columns — money-path attribution
+
+From `lane/money-path-attribution` (`fff3af88`). Seven money-or-destruction paths recorded no actor. The
+refusals now land **before** the irreversible effect, but three operations still write no actor to the
+database because no column can hold one: the Events **deposit refund**, the Events **settlement adjustment
+line**, and the Margin **price approval**.
+
+### MIG-1 `Events_PaymentReceiptActor`
+`EventsPaymentReceipts` + `ActorKind nvarchar(16) NOT NULL`, `ActorUserId nvarchar(128) NULL`
+(matching `EventsStateTransitions`; opaque reference, no FK).
+
+⚠️ **The table is append-only in two layers** — EF `GuardAppendOnly` and `TR_EventsPaymentReceipts_AppendOnly`
+(AFTER UPDATE/DELETE → THROW 50022). **A backfill `UPDATE` will be rolled back by the trigger.** Add the
+column with `DEFAULT 'System'` and **never backfill**. `System` is also the truthful default: existing rows
+are webhook/sink-written or unattributed.
+
+Coherence rule to honour (established by `lane/module-audit-pins`): `Admin` requires a non-blank actor;
+`Guest`/`System` require the actor to be **exactly null** — not merely blank, because an empty string with
+`ActorKind = System` says "no human" while a reader testing `!= null` counts the row as naming one.
+
+### MIG-2 `Events_SettlementLineActor`
+`EventsSettlementLines.EnteredByUserId nvarchar(128) NULL`.
+
+### MIG-3 `Events_SettlementReconciledBy` — **OPTIONAL, and the lane ruled it not a defect**
+`EventsSettlements.ReconciledByUserId nvarchar(128) NULL`. Reconcile re-derives truth from the read seams and
+writes nothing of its own; the act it unlocks (T13 close) already records `ClosedByUserId` *and* an Admin
+transition. Symmetry only. Land it or don't — but decide deliberately.
+
+### MIG-4 `Margin_PriceImportApprovedBy`
+`MarginPriceImportBatches.ApprovedByReference nvarchar(256) NULL`, mirroring `UploadedByReference`, stamped
+from the **truncated** value (300 spaces + a name passes a caller's own `IsNullOrWhiteSpace` and reaches a
+256-wide column blank). Existing rows NULL — unknown is the truthful answer.
+
+### MIG-5 `Growth_NewsletterVersionAuthor`
+`GrowthNewsletterVersions.CreatedByUserId nvarchar(450) NULL` and
+`GrowthNewsletterApprovals.InvalidatedByUserId nvarchar(450) NULL` (Growth's copied-value width, no FK).
+
+---
+
+## B. Fiscal / legal
+
+### MIG-6 Kassa journal append-only triggers — **legally required, exist only as prose**
+`docs/okam-kassa/sql/journal-append-only-triggers.sql` is applied by **nothing**, including production.
+6 tables: `JournalEntries`, `JournalLines`, `JournalTaxLines`, `JournalPaymentLines`, `ZReports`,
+`JournalAccessLogs`.
+
+- `AFTER UPDATE, DELETE` — **never `INSTEAD OF`**: SQL Server forbids those on a table targeted by a
+  cascading FK, and three child tables are `ON DELETE CASCADE` from `JournalEntries`.
+- Body: `SET NOCOUNT ON; ROLLBACK TRANSACTION; THROW 5000n, '<Table> is append-only…', 1;`
+- Error numbers **50001-50006** (free, reserved for Kassa by estate convention; modules occupy 50010-50060).
+- Strip the `.sql` file's `GO` separators — `GO` is a sqlcmd batch separator, not T-SQL. One
+  `migrationBuilder.Sql(@"…")` per trigger (each `CREATE TRIGGER` must be first in its batch). `DROP TRIGGER`
+  ×6 in `Down`. No `OnModelCreating` counterpart, so `HasPendingModelChanges()` stays clean.
+- Consequences to plan for, not discover: the `ROLLBACK` unwinds the **whole ambient transaction**, so an
+  illegal update poisons any legitimate append sharing it; and any SQL Server variant of the eight raw-SQL
+  tamper tests will start failing (they pass today only on SQLite).
+- **Compliance note:** in-process `GuardAppendOnly` alone is arguably insufficient — `kassasystemforskrifta
+  § 2-6 andre ledd` regulates what the software can be *connected to*, not what it does, and the journal sits
+  in a database reachable by SSMS/portal/reporting tools. See [[okam-rf1313-false-control]] reasoning in
+  `lane/kassa-journal-triggers` (`041b077e`).
+
+### MIG-7 `AccountingSummaries` unique index — **OD-1, and there is a live ruling CONTRADICTION**
+The chain contains **no `CreateIndex` on `AccountingSummaries` at all**, so the `DbUpdateException` backstop at
+`AccountingSummaryService.cs:133-141` is dead code on every chain-built database including prod → two
+concurrent runs both insert and **the accounting day posts twice**.
+
+⚠️ **Two documents rule oppositely and both are live:**
+- `IMPLEMENTATION-PLAN.md:313` — the squash regenerates against master's snapshot and therefore
+  **re-emits the drift ops automatically**; hand-authoring here would collide at integration.
+- `OVERNIGHT-RUN-LOG.md:471` — regeneration will **never** re-emit them; they must be hand-authored.
+
+**This is empirically resolvable in one rehearsal run** (see ⚠️ below). Resolve it before the squash, not
+during it.
+
+### MIG-8 `ZReport` credit-sale columns — § 2-8-2 t/v
+6 columns (`CreditSales*`, `CreditReturns*`, `DeliveryReceipt*`). The Z is *persisted* and both the reprint
+(`XZReportService.MapEntityToModel`) and SAF-T (`SaftCashRegisterExportService.Transactions.cs:159`, which
+hardcodes `reportReceiptDeliveryNum = 0`) read the stored row — so building only the X half yields a Z that
+prints zero for documents that exist. XSD is already ready (`reportCreditSales`/`reportCreditMemos` are
+`minOccurs="0"`). Gated on the § 5-3-1 a ruling (`docs/plans/pos-open-decisions.md` item 1).
+
+---
+
+## C. Module debts
+
+### MIG-9 `GrowthConsentTextVersion` layer-2 trigger
+Every other append-only Growth family has a SQL trigger; this one has only the EF guard
+(`lane/growth-consent-text` added the layer-1 branch and could not author the trigger).
+
+### MIG-10 Meals `TradingDay` column — SB-2
+`MealsFundingAllocation` has no trading-day column, so Meals lands one epoch short of D-01's ruling
+(`KassaZoneToStoreZone`, identical to `StoreWallClock` for every market the estate has today). Pinned as a
+*measured* residual by `MealsStatementPeriodEpochTests`, not a note.
+
+### MIG-12 `Training_W2_Onboarding` — **4 tables, not built**
+`training.onboarding` is advertised in the shared operator catalog and gates **nothing**: an operator can
+flip it and `GET /context` reports the stage live while no table, service or route exists behind it
+(measured by `TrainingFlagConsumptionTests`). The wave, per `60-training-internkontroll-spec.md` §4.1:
+
+| Table | Content / physical notes |
+| --- | --- |
+| `TrainingOnboardingTracks` | template envelope for a `RoleRef` (value); composite `StoreId`; `rowversion` |
+| `TrainingOnboardingSteps` | kind (`Course`/`DocumentToRead`/`ManualSignoff`) + order; optional course-version ref; **unique (`TrackId`, `Order`)** |
+| `TrainingOnboardingRuns` | `PersonRef` (value); status; `Source` (`Manual`/`EngagementEnvelope`); **filtered unique (`TrackId`, `PersonRef`) where active** — one live run per person per track |
+| `TrainingOnboardingStepResults` | per-run step state; **unique (`RunId`, `StepId`)** |
+
+No new trigger. `PersonRef`/`RoleRef` are stored **by value with no FK** into `Workforce*` — the module's
+isolation law, and the reason the whole family stays droppable. The filtered unique index is the one piece
+`ef migrations add` regeneration handles badly (see the ⚠️ section): it must survive the squash.
+
+### MIG-13 `Training_W3_ChecklistsAndDeviations` — **6 tables, not built, and this is the internkontroll**
+`training.checklists` and `training.deviations` are advertised and gate nothing, exactly as above. This is
+the wave that carries the module's *internal control* claim: without it Training documents **training**, not
+internkontroll — no temperature routine, no cleaning routine, no deviation log with corrective action
+(`docs/plans/PROOF-BENCHMARKS.md` §2.4 lists the obligations against their legal sources). Per spec §4.1:
+
+| Table | Content / physical notes |
+| --- | --- |
+| `TrainingChecklistTemplates` | store/station; type (`Open`/`Close`/`Clean`); schedule; active |
+| `TrainingChecklistTemplateItems` | kind (`Check`/`NumericReading`/`FreeText`); expected min/max for `NumericReading`; **unique (`TemplateId`, `Order`)** |
+| `TrainingChecklistRuns` | **unique (`StoreId`, `TemplateId`, `BusinessDate`)**; `PosDayRef` (value, null); status |
+| `TrainingChecklistItemResults` | raw value per kind — a **raw `decimal`** for `NumericReading`, never rounded and never reduced to a boolean; derived pass/fail is a separate column; `RaisedDeviationId` (value, null); **unique (`RunId`, `ItemId`)** |
+| `TrainingDeviations` | mutable envelope; severity; status; `AssigneeRef` (value, null); `rowversion` |
+| `TrainingDeviationEvents` | **append-only** history; trigger `TR_TrainingDeviationEvents_AppendOnly` → **`THROW 50051`** + the EF `GuardAppendOnly` |
+
+**Trigger band.** Training claims `50050–50059`; `50050` (`TR_TrainingCompletions_AppendOnly`), `50052`
+(`TR_TrainingAuditEvents_AppendOnly`) and `50053` (`TR_TrainingCourseVersions_ImmutableAfterPublish`) are
+already live in `20260727221455_RestaurantModules_Initial.cs`. **`50051` is reserved for this table and is
+free** — verified against every `THROW 500` in the migration chain at the time of writing. Re-verify before
+authoring: the band was allocated by grep, and this is the third module to do that.
+
+`BusinessDate` is a store-local calendar date, resolved through `IStoreTimeZoneResolver` and
+`KassaBusinessDate` — the same date-against-date epoch D-01 settled for certificate expiry. It must not be
+an instant.
+
+### MIG-15 (BLOCKED on a ruling) Growth retention vs the append-only deny-triggers — **the spec contradicts itself**
+Spec §13 *Retention* gives three Growth tables a finite life: **consent-check receipts 24 months**, **delivery
++ provider event rows 24 months then reduced to aggregate counts**, and consent/suppression receipts
+"life + 3 years". Spec §4 makes three of those same tables **append-only with DB deny-triggers**, and they are
+installed and live: `TR_GrowthSuppressions_AppendOnly` (50031), `TR_GrowthConsentCheckReceipts_AppendOnly`
+(50032), `TR_GrowthProviderEventReceipts_AppendOnly` (50033), all
+`Migrations/20260727221455_RestaurantModules_Initial.cs:4109-4133`.
+
+**A retention purge is therefore physically impossible, not merely unbuilt** — any `DELETE` rolls back and
+throws. There is no retention job today for any of the five §13 rules, so nothing has hit this yet; the first
+attempt to write one does.
+
+⚠️ **Do not resolve this by weakening a trigger.** The append-only property is the evidential basis of the
+whole consent ledger (GRW-LEDGER-001) and the §10 gate. The ruling comes first — Sven and the spec — and only
+then the schema change it implies. Three shapes exist, in ascending order of what they give up:
+1. **Amend §13** so the append-only tables are retained for the life of the controller relationship and are
+   never purged (no migration at all; the honest option if the evidence is the point).
+2. **Purge by a dated carve-out**: `ALTER` each trigger to permit `DELETE` only where `EvaluatedAt`/`ReceivedAt`
+   is older than the retention horizon. A trigger that permits some deletes is a materially weaker control and
+   needs its own tamper tests.
+3. **Reduce to aggregates** (what §13 already says for delivery/provider rows): a new summary table plus a
+   trigger carve-out for the reduced source rows.
+
+**Newly urgent as of `lane/growth-next`:** the dispatcher now appends one `GrowthConsentCheckReceipts` row per
+recipient per send (the §10 gate needs it — the table previously had zero production writers). That table's
+growth rate is now proportional to mail volume rather than to gate calls that never happened, so "no retention
+job" stopped being theoretical.
+
+### MIG-16 `Events_VenueSettings` — the fourteenth Events table the settings endpoint needs
+From `lane/events-next`. Spec §5 specifies `GET/PUT /events/admin/{storeId}/settings` as "Spaces, default
+deposit policy, default terms text, proposal expiry default", and spec §4 freezes the module at **13 tables**,
+none of which holds venue defaults. The endpoint therefore cannot be built as specified without a fourteenth
+table. **The spaces half shipped** (`EventsSettingsController`, which finally gives `EventsSpaces` a
+production writer); the three defaults are ABSENT from the contract rather than accepted-and-dropped.
+
+```
+EventsVenueSettings
+  Id int PK
+  StoreId int NOT NULL   -- FK -> Store (identity seam, the one permitted out-of-prefix FK), UNIQUE
+  DefaultDepositPercent decimal(5,2) NULL      -- exactly one of percent/amount, or neither
+  DefaultDepositAmountMinor bigint NULL
+  DefaultTermsText nvarchar(max) NULL
+  DefaultProposalExpiryDays int NULL
+  UpdatedByUserId nvarchar(450) NULL           -- copied value, no FK (EventsProposalVersion convention)
+  UpdatedAtUtc datetime2 NOT NULL
+```
+
+Constraints to honour:
+- **Unique on `StoreId`** — one settings row per venue; the write is an upsert and a second row would make
+  "the venue's default terms" ambiguous on the document a guest signs.
+- Mutable, so **not** append-only: no trigger, no `GuardAppendOnly` entry. This is the first mutable
+  `Events*` table besides `EventsEvents`/`EventsDeposits`/`EventsSettlements`, all of which carry a
+  `RowVersion`; add one here too if the settings screen ever gets a concurrent editor, but v1 is one
+  operator per venue and a rowversion with no `If-Match` plumbing is a column nobody reads.
+- Defaults are **suggestions the draft builder copies at creation time**, never a live reference: a proposal
+  version is immutable from `Sent` and hash-pinned, so a version must never re-read a default that changed
+  after it was sent.
+
+⚠️ **Spec inconsistency needing a Sven ruling, not just a migration:** §4's "13 tables total" and §5's
+settings endpoint contradict each other. Either §4's count moves to 14, or §5's three defaults leave v1.
+Until that is decided this migration should not be authored — the shape above is the answer to the first
+option only.
+### MIG-17 Meals member reference — **has a DEADLINE, not just a priority**
+Spec §13.3 says the statement CSV carries a **member display name** per line. It carries
+`MembershipId.ToString()` — a bare GUID (`MealsStatementService.cs:467,506`), so the accountant cannot
+reconcile a line to a person. Pinned as a *measured* residual by `MealsStatementMemberReferenceTests`.
+
+Two columns, both `nvarchar(128) NULL`, no FK, no index (they are display values, never a key):
+`MealsInvitation.EmployeeReference` and `MealsMembership.EmployeeReference` — the second copied from the
+first at claim, so a revoked or re-invited person keeps the reference their statement lines already used.
+Then `MemberDisplayRef` reads the membership's value and falls back to the id when it is null.
+
+The value is **supplied by the buying company**, never lifted from identity, and **never a fødselsnummer**
+(decision D-d). That is why it has to be captured at *invitation*: the company is in the loop at exactly
+that moment and nowhere else in the flow.
+
+⚠️ **This must land before the pilot's first invitation is sent.** A membership claimed without the
+reference cannot acquire one retroactively (the invitation that would have carried it is `Claimed`), and
+finalized statement lines are immutable by trigger — so the first month's statement would be permanently
+un-fixable. Of everything in this ledger, this is the only entry whose cost rises the day the pilot starts
+rather than the day the squash runs.
+
+### MIG-11 (conditional) `MarginPeriodStatement.TheoreticalIngredientCostMinor` `long` → `long?`
+Only if a future ruling wants a partial theoretical cost **absent** rather than a lower bound. Single additive
+`AlterColumn`, no trigger, no index; `TheoreticalFoodCostPercent`/`GapPercentagePoints` are already nullable.
+The current convention (lower bound + `TheoreticalCostComplete`) is pinned by a test — changing it is a
+contract change for *every* cause of partiality.
+
+**Pin audit (`lane/margin-next`, 2026-07-30): the convention is real, but only one of its three causes was
+measured, and it was the least discriminating one.** `MarginStatementLifecycleTests`
+`A_recipe_cost_in_another_currency_is_left_out_of_the_theoretical_total_and_named` covers the currency
+exclusion, where the total collapses to **0** — a value a nullable column, a suppressed figure and a genuine
+lower bound are all consistent with, so it could not tell the convention apart from the alternatives it is
+chosen over. `MarginTheoreticalCostLowerBoundTests` now adds the discriminating case (an **unpriced
+ingredient** leaves a real partial sum: `> 0`, `<` the complete total, with the percentage reported as that
+same bound rather than suppressed) plus the third cause (**no active recipe version** at the sale instant)
+and a complete-world positive control. Verified able to fail against both plausible re-implementations:
+skipping an incomplete version's contribution, and hard-coding `TheoreticalCostComplete = true`. **No
+behaviour was changed — MIG-11 stays conditional and unauthored.**
+
+### MIG-14 Workforce schedule evidence-receipt triggers — layer 2 for the two tables that had NEITHER layer
+`lane/wf-schedimm2` found that **every** other evidence-receipt family in the estate is append-only in two
+layers (`GrowthConsentReceipts` 50030, `GrowthConsentCheckReceipts` 50032, `GrowthProviderEventReceipts`
+50033, `EventsAcceptanceReceipts` 50020, `EventsPaymentReceipts` 50022) while the two Workforce ones had
+**no rule at either layer**. The layer-1 `GuardAppendOnly` branch is now in
+`Helpers/ApplicationDbContext.cs` and pinned by
+`WorkforceSelfServiceTests.Schedule_evidence_receipts_cannot_be_updated_or_deleted` (proven red: with the
+branch disabled a forged `DraftChecksum` is written and no exception is raised). The triggers are owed.
+
+Two triggers, same body shape as the eight Workforce triggers already in
+`Migrations/20260727221455_RestaurantModules_Initial.cs`:
+
+- `TR_WorkforceScheduleValidationReceipts_AppendOnly` on `[dbo].[WorkforceScheduleValidationReceipts]`,
+  `THROW 50018, 'WorkforceScheduleValidationReceipts is append-only: UPDATE and DELETE are not permitted (re-validating writes a NEW receipt).', 1;`
+- `TR_WorkforceSchedulePublicationReceipts_AppendOnly` on `[dbo].[WorkforceSchedulePublicationReceipts]`,
+  `THROW 50019, 'WorkforceSchedulePublicationReceipts is append-only: UPDATE and DELETE are not permitted.', 1;`
+
+Conventions to honour, all of them already established by the eight in place:
+- `AFTER UPDATE, DELETE` — **never `INSTEAD OF`** (both tables are FK children, and `INSTEAD OF DELETE` is
+  forbidden on a table targeted by a cascading FK).
+- Body: `SET NOCOUNT ON; ROLLBACK TRANSACTION; THROW 500nn, '…', 1;`
+- 50018/50019 are the next free numbers in the Workforce block (50010-50017 are taken); modules occupy
+  50010-50060.
+- One `migrationBuilder.Sql(@"…")` per trigger (each `CREATE TRIGGER` must be first in its batch); no `GO`
+  separators. `DROP TRIGGER` ×2 in `Down`. No `OnModelCreating` counterpart, so `HasPendingModelChanges()`
+  stays clean.
+- ⚠ Neither table may take a rowversion or a store-generated column afterwards: an `OUTPUT` clause on
+  `INSERT` collides with an `AFTER` trigger (SQL error 334). Both use app-assigned `Guid` keys today, which
+  is why `WorkforceSchedulePublications` could carry its trigger.
+- **Precedence gotcha the lane proved:** SQL Server evaluates FOREIGN KEY constraints *before* an `AFTER`
+  trigger fires, so a `DELETE` of a row that still has FK children is refused with `REFERENCE constraint`
+  and the trigger never runs. Any test asserting the immutability message must clear the children first, or
+  it certifies the FK and not the trigger — see
+  `SchedulePublishSqlServerTests.A_published_snapshot_cannot_be_mutated`.
+
+### MIG-18 (CONDITIONAL on a Sven ruling) `MealsGuardDriftObservation` — drift history
+
+Only if the guard-drift repair decision lands on an option that needs a HISTORY of when drift appeared and
+when it was corrected. See `docs/plans/meals-guard-drift-repair-decision.md` § D-3; the lane's own
+recommendation is that the audit event on the repair is enough for pilot and this table is **not** taken.
+
+Detection itself needs nothing: it is a fold computed on demand and logged, and it writes nothing today.
+
+If ruled in — one table, additive, no trigger:
+
+`MealsGuardDriftObservations`
+`ObservationId uniqueidentifier NOT NULL` (PK, app-assigned — no rowversion, see the MIG-14 `OUTPUT`/trigger
+gotcha), `CompanyId uniqueidentifier NOT NULL`, `ProgramId uniqueidentifier NOT NULL`,
+`MembershipId uniqueidentifier NOT NULL`, `PeriodKey nvarchar(16) NOT NULL`,
+`GuardRowMissing bit NOT NULL`, `StoredReservedMinor bigint NOT NULL`, `StoredCapturedMinor bigint NOT NULL`,
+`LedgerReservedMinor bigint NOT NULL`, `LedgerCapturedMinor bigint NOT NULL`,
+`ObservedAtUtc datetime2 NOT NULL`, `ClearedAtUtc datetime2 NULL`.
+
+Index `(CompanyId, ProgramId, MembershipId, PeriodKey)` and a filtered
+`WHERE [ClearedAtUtc] IS NULL` for the open set. **No FK** — it mirrors `MealsFundingAllocation`, whose
+references are all stored by value so the row survives any cascade and stays self-contained.
+
+⚠️ It would be written by a hosted loop that **has no Redis lease**, so a scaled-out App Service would
+insert one row per instance per pass. Either lease the loop first (the `DailyMaintenanceBackgroundService`
+precedent) or make `(ProgramId, MembershipId, PeriodKey)` unique-while-open, before this table exists.
+
+### MIG-19 `Events_LineVatRate` — the VAT a settlement line has nowhere to put
+
+From `lane/ev-vat`. The settlement statement now carries a per-rate MVA roll-up
+(`EventsSettlementView.Vat`), derived at projection time from the signed POS journal. It covers exactly one
+kind of line — a `PosCheck` referencing `JournalRef` that reconciled `Matched` — because that is the only
+line whose VAT any record in this database establishes. `Invoice`, `Refund` and `Adjustment` lines are
+withheld with reason `NoVatRateOnLine`, and that reason is **a schema gap, not an unknowable fact**: the
+operator recording an invoice remainder is reading the rate off the invoice in front of them and has nowhere
+to type it. Two additive columns close it.
+
+```
+EventsSettlementLines
+  VatPercent int NULL          -- whole percent, the fiscal side's unit: {0, 12, 15, 25} only
+  VatRateSource nvarchar(16) NULL   -- 'Operator' | 'FiscalTruth', stored via EnumToStringConverter
+
+EventsProposalLines
+  VatRate decimal(6,4) NULL    -- WIDEN TO NULL from NOT NULL; existing rows keep their value
+```
+
+Constraints to honour:
+
+- **`EventsSettlementLines.VatPercent` is `int`, not `decimal`, and deliberately disagrees with
+  `EventsProposalLines.VatRate`.** The fiscal estate speaks whole percent everywhere
+  (`JournalLine.VatPercent`, `JournalTaxLine.VatPercent`, `GoodsGroup.*VatPercent`, `Product.Tax`) and
+  `AccountingHelper.GetVatRateFromPercentage` is the single chokepoint mapping it to a `SafTVatCode`. A
+  settlement line is reconciled against journal rows, so it must key on the same unit they do. The
+  proposal's fraction is the outlier and is NOT being changed here — see the hash note below.
+- **NULL is the default and means "not stated", never 0 %.** Zero is a real Norwegian rate. **Never
+  backfill**: an existing settlement line's rate was never captured and inventing one retrospectively would
+  put a fabricated tax figure on a document that may already have gone to an accountant. The roll-up reads
+  NULL as withheld, which is what it does today with no column at all.
+- **Application-level validation, not a CHECK constraint.** `AccountingHelper.EnsureSupportedVatRate` is the
+  estate's guard at every other entry point (product save, goods-group upsert, journal build); a CHECK would
+  be a second, silently divergent copy of the rate set — and the set changes by annual Stortingsvedtak.
+- **`VatRateSource` exists so a hand-typed rate can never be mistaken for the journal's.** The roll-up must
+  keep treating a `Matched` `JournalRef` line's fiscal breakdown as authoritative and must not let an
+  operator's typed rate override it; without the discriminator, `VatPercent` on a `PosCheck` line would be
+  ambiguous the moment anyone sets it.
+- **No index.** Both columns are read only as part of the owning settlement's line set, which is already
+  reached through `IX`/`UX_EventsSettlementLines (SettlementId, LineNo)`. A VAT-rate index would serve no
+  query that exists.
+- **No trigger, and no append-only family is affected.** `EventsSettlements`/`EventsSettlementLines` are
+  deliberately OUTSIDE the append-only guard (the settlement mutates across Draft → Reconciled → Closed and
+  carries a `RowVersion` instead) — see `Entities/Events/EventsSettlement.cs` class remarks and the absence
+  of an entry in `GuardAppendOnly`. So this entry claims **no THROW number**; Events' band 50020–50029 is
+  untouched. `EventsProposalLines` is likewise not append-only (immutability is enforced at the *version*
+  level, invariant 2).
+
+⚠️ **The `EventsProposalLines.VatRate` widening touches the proposal content hash — read this before
+authoring.** `EventsProposalContentHash` renders the rate at fixed scale 4 (`Scale(line.VatRate, 4)`) into
+the SHA-256 that every sent version is pinned with and re-verified against at acceptance. Making the column
+nullable is safe *only* because no existing row is null, so every stored version rehashes identically. The
+migration must land **with** the hash change that renders a null as the empty string — the convention
+`CurrencyCode ?? string.Empty` already uses — in the same commit, or a null-rate draft will hash as
+`"0.0000"` and be indistinguishable from a zero-rated one in the very artefact that exists to distinguish
+content.
+
+⚠️ **A ruling is needed before the settlement columns are worth authoring**, and it is not about the schema:
+`docs/plans/events-settlement-vat-decision.md` asks whether a `DepositApplied` line is a taxable advance or
+an on-account liability with no VAT until delivery (spec §13 assigns this to Sven, with the venue's
+accountant, before the first live pilot deposit). Until it is ruled, **every settlement carrying a deposit
+publishes no VAT total regardless of these columns** — because the deposit, not the invoice line, is what
+withholds it on the realistic pilot statement. Authoring MIG-19 first would add columns that change nothing
+anybody sees. The proposal widening has no such dependency and can land alone.
+
+### MIG-20 `Events_DietaryRequirements` — the field the run sheet had to lie about
+
+✅ **AUTHORED AND LANDED 2026-07-31** as `Migrations/20260731210732_Events_DietaryRequirements.cs`, off the
+chain tip `20260730150953_Growth_ConsentTextVersionAppendOnly` (the generated snapshot diff is these columns
+and nothing else, so the model matched the chain both before and after). It is **applied to no database by
+this lane** — like every entry here, deployment is the owner's.
+
+Three columns, not the two specified below: `DietaryRequirementsUpdatedByUserId` (`nvarchar(128) NULL`, no FK
+and no index) was added because nothing else records who stated a requirement, and a health-adjacent claim
+printed onto a kitchen document with no author is the shape this module refuses everywhere else. It is
+current-state provenance on a mutable row — the same shape as `EventsRunSheet.IssuedByUserId` — so it stays
+outside `ModuleActorStamps.Events`, whose remarks already name that class of column and why.
+
+The dependencies below are answered rather than waived: the write path is
+`PUT /events/admin/{storeId}/events/{eventId}/dietary` → `EventsInquiryService.RecordDietaryStatementAsync`
+(store-admin gated, refuses an unattributable caller, refuses an EMPTY statement so a blank can never be
+stored as an absence), the read-back is `EventsEventDetailView.Dietary`, and the printed result is captured
+at `artifacts/journeys/ev-dietary/run-sheet.md`. What remains unanswered is the retention promise below.
+
+`EventsEvents` + two additive nullable columns:
+
+| Column | Type | Notes |
+|---|---|---|
+| `DietaryRequirements` | `nvarchar(max) NULL` | Guest/staff free text, authoritative. `max` deliberately: an allergen statement truncated by a column width is the same false-negative this entry exists to close, in the storage layer. |
+| `DietaryRequirementsUpdatedAtUtc` | `datetime2 NULL` | When it was last stated. A stale requirement and a never-stated one are different facts and the sheet must be able to tell them apart. |
+
+**No backfill.** `EventsEvents` is NOT append-only (it carries a `RowVersion` and mutates across the
+lifecycle — see `Entities/Events/EventsEvent.cs`), so no trigger blocks an `UPDATE`, and that is exactly why
+the rule has to be written down: **there is nothing to migrate from.** Any backfill would invent a dietary
+statement, which is the defect wearing a new hat. Existing rows are `NULL` = never stated, and `NULL` is the
+only truthful value for them.
+
+**No index.** The column is read only as part of the owning event, already reached by PK.
+
+**No trigger, no append-only band.** Events' THROW band 50020–50029 is untouched.
+
+⚠️ **A `NULL` column must never restore the "none recorded" sentence.** Three distinct states exist and the
+composer must keep them distinct: *never asked* (`NULL`), *asked, guest stated none* (a non-empty string
+saying so), *asked, guest stated a requirement*. Only the second may be printed as an absence, and only
+because a human wrote it. The composer's honest-limitation line stays for `NULL` — it is not scaffolding to
+delete when the column lands. `WebApi.Tests/Events/EventsRunSheetDietaryTests.cs` is the standing guard.
+
+⚠️ **Optional structured tags are a SEPARATE, LATER entry — do not fold them in.** A
+`EventsEventDietaryTags` child table (or a reuse of `Allergen`) would let a proposal line containing nuts
+raise an alert. It is not part of this migration, it must never become the authoritative store (the free
+text is), and the reasoning against reusing `ProductAllergen` as the requirement model is in
+`docs/plans/events-dietary-capture-decision.md` §5.
+
+⚠️ **This column inherits an unimplemented promise.** Spec §13 (`docs/plans/modules/40-events-spec.md:345`)
+commits to anonymising dietary text and contact fields 90 days after the event ends; **nothing implements
+it** (BE-EVT-13 / M6). The lane that landed the run-sheet fix already copies guest free text onto persisted
+`EventsRunSheetItems` rows, so an erasure job must reach **two** tables, not one. Authoring MIG-20 without
+that job in sight adds a third place health-adjacent text accumulates with no exit.
+
+**Depends on a guest-side field to fill it** — `EventsProposalAcceptRequest` has `AcceptorName` and
+`AcceptorEmail` and nothing else, and there is no Events frontend at all. Authoring MIG-20 before either
+exists adds a column only staff could ever populate, and only through an endpoint that does not exist yet.
+
+↳ **Answered by half, 2026-07-31.** The staff endpoint now exists and is driven end to end over HTTP, so the
+column is populated by a real caller rather than by nobody. The GUEST half is still open and is still the
+better capture point: the only prompt a guest ever sees is the enquiry message, months before the menu and
+the guest list are settled. `EventsProposalAcceptRequest` still carries no dietary field, and there is still
+no Events UI of any kind — which is also why the journey capture is the API's own printed sheet.
+
+### MIG-21 `WorkforceSchedulePublicationReceipts` uniqueness — the ack's backstop **does not exist**
+
+From `lane/wf-cost-stability`. A review flagged that the acknowledgement's unique-index backstop had no
+concurrent-race test. It has no **index**. `Helpers/ApplicationDbContext.cs` configures exactly one index on
+the table — the non-unique `HasIndex(x => new { x.StoreId, x.SchedulePublicationId })` — and no migration
+adds another. The sibling `WorkforceSchedulePublicationRecipients` *does* carry
+`HasIndex(SchedulePublicationId, StaffMemberId).IsUnique()`, which is probably why the receipt table read as
+guarded.
+
+**What is reachable today.** `WorkforceSelfService.AcknowledgePublicationAsync` is idempotent on the natural
+key only through an in-memory read (`existing != null`) inside the reserve→stage→complete composition. Two
+acks with **different** idempotency keys are two different reservations — the unique `(Scope, Key)` index
+never sees them as one act — so both read "no receipt" and both insert one. `WorkforceSchedulePublicationReceipt`
+is in the `GuardAppendOnly` branch, so the duplicate can never be deleted through the application. A reader
+counting acknowledgements then counts two people where there is one.
+
+**The index.** Filtered unique on `(StoreId, SchedulePublicationId, StaffMemberId, ReceiptType)`, or unfiltered
+on those four columns — `ReceiptType` is `nvarchar(32)` and only `Acknowledged` is written today, so a
+filtered variant would have to be revisited the moment a second receipt type appears. Recommend **unfiltered
+unique on all four**, which needs no predicate maintenance and still admits a future second type.
+
+⚠ Conventions that bind here:
+- The service must MAP the resulting unique violation, or the loser gets a 500 for an operation the database
+  decided correctly. `WorkforceDbViolations.IsUniqueViolation` + a `NamesReceiptTable` discriminator, in the
+  shape of `WorkforceExchangeProblems.IsOneAwardViolation`. Note the violation surfaces inside
+  `WorkforceIdempotency.CompleteAsync`'s single SaveChanges, whose existing catch is deliberately narrow
+  (`IsCompletionRowDuplicate`) and must stay so.
+- The table is also owed MIG-14's `AFTER UPDATE, DELETE` trigger. **A rowversion may not be added to it**
+  (`OUTPUT` collides with an `AFTER` trigger, SQL error 334) — an index does not, so the two are compatible.
+
+`WebApi.Tests/Workforce/PublicationAcknowledgementRaceSqlServerTests.cs` is written and traited
+`[Trait("PendingMigration", "MIG-21")]`. It is **expected red on the SQL tier until this lands**; it holds one
+racer at its second `SaveChanges` (the commit that writes the receipt) so the overlap is a fixture fact, and
+it refuses to run on SQLite, where no such guard exists and the test could not fail.
+
+### MIG-22 `Growth_AuditLedger` — the table Growth's whole audit ledger is written into
+
+From `lane/growth-audit-ledger` (D-GROWTH-AUDIT-LEDGER, ruled **growth-ledger** by @sven 2026-08-03). The
+lane holds no migration-author slot and the chain is eight past `feature/restaurant-modules`, so the entity,
+the model configuration, the writer, five write sites, the read surface and the whole proof are built and
+green — and the **table is owed**. Everything below is already expressed in
+`ApplicationDbContext.GrowthBuilder`, so `ef migrations add` against the true chain tip generates the table
+itself; what a generator CANNOT produce is the trigger, which is the reason this entry exists.
+
+**Table `GrowthAuditEvents`** — in the shape of `WorkforceAuditEvents` / `MealsAuditEvents` / `TrainingAuditEvents`:
+
+| column | type | note |
+| --- | --- | --- |
+| `Id` | `uniqueidentifier` | PK, **app-assigned** (`ValueGeneratedNever`). Do NOT let EF add a default or an `OUTPUT` clause — that is what keeps the insert path compatible with an `AFTER` trigger (the MIG-14 lesson, SQL error 334). |
+| `StoreId` | `int` **NULL** | BY VALUE, **no foreign key**, so the ledger never participates in a cascade. **Nullable is load-bearing, not laziness:** consent-text publication is platform-global and `GrowthConsentTextVersion` has no `StoreId` at all, so a NOT NULL column would force a tenant onto a fact that has none. |
+| `ActorKind` | `nvarchar(16)` | Enum stored as a string (`Admin`/`Guest`/`System`), the sanctioned named-system-actor pattern (D-MEALS-AUDIT-ACTOR-KIND). |
+| `ActorReference` | `nvarchar(256)` NULL | The acting user id when `ActorKind = Admin`; **exactly NULL** otherwise. Nullable in the schema on purpose — the coherence rule is enforced in `GrowthAuditWriter`, in both directions, because a NOT NULL column would make the honest Guest/System row unexpressible. |
+| `EventType` | `nvarchar(128)` | |
+| `AggregateType` / `AggregateId` | `nvarchar(128)` | |
+| `CorrelationId` | `nvarchar(128)` NULL | |
+| `SemanticDeltaJson` | `nvarchar(max)` | Key-sorted JSON, fail-closed against `GrowthAuditAllowlist`. |
+| `OccurredAt` | `datetimeoffset` | `DateTimeOffset`, matching every other Growth timestamp — NOT the `DateTime OccurredAtUtc` the Workforce/Meals ledgers use. |
+
+Indexes: `(StoreId, OccurredAt)` and `(AggregateType, AggregateId)`. **Neither is unique, and no unique index
+belongs on this table** — two test-sends of the same version by the same admin are two events, and a
+uniqueness constraint reached for by instinct would silently drop the second.
+
+**What an absent value means here, and why this table has no backfill question at all.** `GrowthAuditEvents`
+is a NEW table: it has zero pre-existing rows, so no row can predate the actor-kind concept and `ActorKind`
+is NOT NULL from the first insert. That is worth stating explicitly because it is the exact opposite of the
+sibling case — D-GROWTH-AUDIT-LEDGER's own recorded `con` against `actorkind-column` was that *backfilling
+existing rows assigns a kind to rows that predate the concept, in an append-only ledger*. That objection is
+real for `MealsAuditEvents`, which already holds rows; it does not apply to this table, and an author who
+carries the Meals reasoning across would add a nullable column or a backfill `UPDATE` that neither the
+model nor C1 wants (and which the trigger above would roll back). A NULL `ActorReference` on this table
+therefore has exactly one meaning and never means "unknown": it means `ActorKind <> 'Admin'` — no store user
+acted — and `GrowthAuditWriter` refuses, in both directions, any row where the two columns disagree.
+
+**The trigger, which is the part only a migration can add.** `AFTER UPDATE, DELETE` →
+`SET NOCOUNT ON; ROLLBACK TRANSACTION; THROW 50074, 'GrowthAuditEvents is append-only: UPDATE and DELETE are not permitted (a correction is a new event).', 1;`
+
+- **50074** is free: the highest `THROW 500nn` claimed on any branch at the time of writing is **50073**
+  (`51000`/`51001` are a different family). **Re-verify before authoring** — the number is only free until
+  somebody else takes it, and the naive next-after-what-is-visible-locally pick is already Margin's.
+- `AFTER`, not `INSTEAD OF`, matching the Workforce/Meals/Training audit ledgers. The sibling Growth
+  consent tables use `INSTEAD OF`; either enforces, but the audit family's convention is `AFTER` and an
+  `INSTEAD OF UPDATE` trigger would also silently swallow rather than refuse if the body were ever weakened.
+- ⚠ **A backfill `UPDATE` will be rolled back by the trigger** — same warning as MIG-1. There is nothing to
+  backfill here (the table is new), and C1 forbids it in any case.
+
+**What is green WITHOUT this migration, and what is not.** The wire tier builds its schema with
+`EnsureCreated()` from the model, so the table exists there and the full container-free tier is green
+(4422/0/12) including the append-only guard. That guard is **layer 1 only** (the EF `GuardAppendOnly`
+branch, all providers). Until MIG-22 lands there is **no layer 2 on SQL Server**, so a DBA session can still
+rewrite these rows — stated in the `GuardAppendOnly` comment and in the entity's own summary rather than
+assumed away. No SQL-tier test is owed by this lane: nothing here is provider-specific except the trigger,
+and a trigger test would be red-by-construction until the migration exists.
+
+**A SECOND lane now writes into this table and asks nothing new of it.** `lane/gr-dispatch-actor` records
+`growth.newsletter.dispatch_requested` — the actor who triggered a mass send, which the approval on the
+version does not name — so the write sites are six rather than five and `GrowthDispatchService.cs` joins the
+list above. It adds two allowlist KEYS (`dispatchRunId`, `runCreated`) and no column, no index and no
+constraint, so the table shape specified here is unchanged and this entry still needs authoring exactly once.
+Until it is authored, that attribution exists on SQLite (fast + wire) and nowhere on SQL Server.
+
+---
+
+## ⚠️ The squash is a REGENERATION, and that is the largest risk on this branch
+
+`Migrations/20260727221455_RestaurantModules_Initial.cs` carries **23 module triggers plus
+`UX_WorkforceStaffMembers_ActiveEngagement` as raw SQL** that any `ef migrations add` regeneration silently
+destroys. **This has already happened once** and was restored by hand (`549907f4`). The squash *is* a
+regeneration.
+
+Five debts converge on one unrehearsed, hand-run, one-shot-ordered production event:
+1. the catch-up script "only works one way", is unrecoverable if inverted, and **does not exist**;
+2. the OD-1 contradiction above;
+3. the 23 raw-SQL triggers + the filtered unique index that regeneration drops;
+4. the 6 Kassa triggers that nothing asserts (`demo-up.sh` only *echoes* a count);
+5. everything in this ledger.
+
+**Cheapest defusal, available today:** rehearse the squash once on a scratch Docker SQL database. One run
+empirically settles the OD-1 contradiction (regeneration either re-emits the drift ops or it does not — it is
+observable), proves the trigger-restoration step, and converts a production event into a script plus a
+checklist. Hours of work against the least reversible layer in the estate.
+
+**Also worth doing cheaply:** a `sys.triggers` catalog assertion in the SQL tier — 0 of the 6 Kassa triggers
+are covered today, while ~15 of the 23 module triggers already are.

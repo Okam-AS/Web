@@ -1,0 +1,20 @@
+journey.js under test   6dd043e1f34648c3fc5f322c0a777247b35c1d591766991b8ff0621c51e631c2
+  pristine copy         6dd043e1f34648c3fc5f322c0a777247b35c1d591766991b8ff0621c51e631c2
+  mutant-bypass         bcf187bda572c78c6afefbe38609a60a728c60ba3c9f5d907c518f28eae4d7cf   (bypassed-origin guard disabled)
+  mutant-serving        f0c301fef76e066006eee7d7fe48afdf6602c3a93dc7983756ba2cf4e599c603   (foreign-fixture guard disabled)
+  mutant-recorder       e4661577a95039afc46d3ee59e22fff1a51196b92d285bc030f6c23df60223a3   (request-fixture recorder removed)
+
+honest fixture          http://127.0.0.1:55357 pid 91245   cwd /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/serving-fixture-proof-W8hrL7/pristine
+honest fixture          http://127.0.0.1:55358 pid 91246   cwd /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/serving-fixture-proof-W8hrL7/mutant-bypass
+honest fixture          http://127.0.0.1:55363 pid 91247   cwd /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/serving-fixture-proof-W8hrL7/mutant-recorder
+foreign fixture         http://127.0.0.1:55364 pid 91248   cwd /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/serving-fixture-proof-W8hrL7/foreign-checkout
+foreign (legacy health) http://127.0.0.1:55369 pid 91249   cwd /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/serving-fixture-proof-W8hrL7/foreign-checkout-legacy
+stand-in app            http://127.0.0.1:55370
+
+  ok    B1   exit 1     artifact failed   1 failed                spec BYPASSES the granted port via `fetch` — bypassed fixture answers 200
+
+harnesses kept at /var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/serving-fixture-proof-W8hrL7
+
+ONLY B1 was run. This is a capture, not a verdict: the arms that make
+the others mean something — the honest arms, the benign arm and the three mutants — did not
+run, so nothing here says the guard is load-bearing. Run the whole file for that.

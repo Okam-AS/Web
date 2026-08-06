@@ -91,7 +91,7 @@
             </div>
             <div class="product-info">
               <h3>{{ product.name }}</h3>
-              <p class="product-price">{{ (product.amount / 100).toFixed(2) }} {{ product.currency }}</p>
+              <p class="product-price">{{ productPrice(product.amount, product.currency) }}</p>
               <p class="product-description">
                 {{ product.description || "Ingen beskrivelse" }}
               </p>
@@ -107,6 +107,7 @@
 import axios from "axios";
 import $config from "~/core/helpers/configuration";
 import dayjs from "dayjs";
+import { amountLabel } from "~/utils/price";
 
 export default {
   name: "OnboardingProductImages",
@@ -143,6 +144,13 @@ export default {
     this.loadProducts();
   },
   methods: {
+    // Same defect and the same fix as the product cards on `pages/admin/products.vue`: dividing the
+    // raw field printed "0.00" for a `null` price and the letters "NaN" for an omitted one, both in
+    // the slot where a price belongs. The currency is folded in so an unpriced product cannot render
+    // as "— kr", which would still claim somebody priced it.
+    productPrice(amountInOre, currency) {
+      return amountLabel(amountInOre, { suffix: currency });
+    },
     loadProducts() {
       this.loading = true;
       this._productService

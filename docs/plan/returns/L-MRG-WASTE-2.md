@@ -1,0 +1,23 @@
+```
+RETURN: L-MRG-WASTE
+brief: 308c75c7
+verdict: built
+evidence: /Users/svendaneel/okam/wt-mrgwaste/artifacts/tests/50b85657/RUN.md
+log:
+- THE DEBT IS DISCHARGED, BUT A CONCURRENT SECOND RESUME OF THIS SAME LANE DID IT, NOT THIS RUN. Same identity (`Claude (margin-landing)`), dispatched against the OLDER brief 7c7906dc, running while I re-established ground. It ran both tiers 18:57-19:38, committed 78d0fb64 + afcfddbc, and then deleted the shared `wt-wasterun` out from under the run I had just started in that same path. I killed MY OWN process and removed MY OWN two containers; the foreign ryuk 6ded63a4 and amazing_banzai were attributed by name and left alone. Two agents sharing one worktree path is the hazard to fix, not the receipt.
+- SO I VERIFIED THE RECEIPT INSTEAD OF RE-RUNNING IT, and verified it adversarially rather than taking it on trust. Parsed all 568 `<UnitTestResult>` elements out of 50b85657-sql-tier.trx individually: 568 Passed, zero anything-else, matching the `<Counters>` summary rather than being read off it.
+- ALL ELEVEN trigger tests Passed, by name: the falsification `Dropping_the_trigger_lets_the_frozen_week_be_rewritten`, the boundary `A_raw_insert_on_the_frozen_weeks_LAST_DAY_throws_50062` that the `date` column exists for, `..._throws_50062_not_a_foreign_key` (the FK-before-trigger trap), and `The_ordinary_waste_write_path_still_works_with_the_trigger_installed` (the error-334 regression). My own earlier correction from ten to eleven is confirmed against the .trx.
+- THE ROUND TRIP Passed, and BOTH lineage exact-set assertions Passed — including `All_four_recipe_w2_tables_are_created`, the one my killed first attempt found red.
+- THE RECEIPT IS GENUINE, NOT A RELABELLED COPY — I checked, because the fast trx at 50b85657 and at 13217cfd are byte-identical in SIZE. They differ by MD5, their internal `<Times>` are distinct (SQL 18:57:33 -> 19:32:22, 34m49s; fast 19:32:56 -> 19:38:43), and per-test durations are 5.9-6.6 s each, which is a real container round trip and not an in-memory stand-in.
+- SO MIG-23 IS NOW PROVEN AT LAYER 2. My "PROVEN AT LAYER 1 ONLY" is retired, and the exit criterion is met on a chain-built database.
+- THE FABLE REVIEW'S FINDING IS LIVE, AND WORSE THAN THE REVIEW STATED. Verified independently, as instructed.
+- LIVE: `feature/restaurant-modules` carries my frontend 7b99f2a but ZERO backend waste — `git show feature/restaurant-modules:Services/Margin/MarginCoverageService.cs | grep -c Waste` is 0 and no waste service file exists there. MarginCoveragePanel.vue renders the waste heading UNCONDITIONALLY (no flag, no v-if) and prints `mrgs_waste_coverage_none` = "Nothing has been recorded as waste in this window." The integration branch asserts that sentence today against a server that has never heard of waste.
+- WORSE: thirty lines below the flagged block IN THE SAME FILE, `readWasteEntries` returns NULL for an absent response, and margin-statements.vue documents exactly why — "never `[]`, which is the claim that this venue threw nothing away" — and `readSupplierNames` states the rule a third time. This is not a timing hazard awaiting my backend; it is ONE COMMIT OF MINE deciding absent-vs-empty in both directions, and the summary path is the one that got it wrong.
+- AND IT DOES NOT GO AWAY WHEN MY BACKEND LANDS: the server sends `Waste` unconditionally, so a same-version deploy is fine, but the web app and the API deploy independently and the rolling window reproduces it exactly.
+- I DID NOT FIX IT. The review scoped it to a separate lane and said not to touch my files, and my brief scoped me to the test debt. It still needs that lane.
+- CHAIN RE-CHECKED RATHER THAN ASSUMED: the base gained only de1e5c5e, which touches no Entities/Enums/DbContext/Migrations file, so my Designer's parent 20260801113131 still holds. MIG-23 and THROW 50062 are still sole claimants.
+- MERGE-ORDER NOTE NOBODY HAS FLAGGED: `lane/wf-w5-timesheet` branched off my tip and now carries my UNMERGED migration as its own chain tail. It inherits MIG-23; if this lane is reworked rather than merged, that lane's chain breaks with it.
+- A RETURN ALREADY SAT AT THIS PATH, written by that concurrent resume under the old brief hash. It is preserved verbatim at lanes/L-MRG-WASTE/CONCURRENT-RESUME-RETURN.md and nothing in it is contradicted here; it is superseded only because it predates the review question and says nothing about it.
+- STILL SVEN'S, UNTOUCHED BY ME: the §2 spec departure, and the fact that NOBODY HAS WALKED THE UI — a green suite is not acceptance (C5). Nothing pushed. 9 commits on lane/margin-waste, of which the concurrent resume's 2 touch no code, only artifacts and the ledger.
+END RETURN
+```

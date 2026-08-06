@@ -1,0 +1,162 @@
+{
+  "journey": "training-course-to-evidence",
+  "title": "A manager opens Training, publishes a course version, files a failing score, and the SERVER calls it not passed",
+  "status": "failed",
+  "startedAtUtc": "2026-08-04T18:05:24.065Z",
+  "finishedAtUtc": "2026-08-04T18:05:55.586Z",
+  "durationMs": 31521,
+  "capabilities": [
+    "platform.feature-flags.write",
+    "training.flags.read-only-refusal",
+    "training.course.author",
+    "training.version.publish",
+    "training.assignment.create",
+    "training.completion.record",
+    "training.completion.server-graded",
+    "training.competency.holdings"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3098",
+  "apiBaseUrl": "http://127.0.0.1:4098",
+  "commit": "e34977acebd59b223584158c33451b6f1ffd82c1",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": {
+    "id": "fixture@e34977acebd59b223584158c33451b6f1ffd82c1+dirty",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "e34977a-dirty",
+    "detail": "the in-repo fixture backend, not an API build (branch feature/restaurant-modules)"
+  },
+  "backendServed": 58,
+  "backendSubjectServed": 48,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "proxiedSubjectServed": 0,
+  "proxiedSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:4098/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:4098/user/login -> 200",
+    "GET http://127.0.0.1:4098/user -> 200",
+    "GET http://127.0.0.1:4098/stores/42/market -> 200",
+    "GET http://127.0.0.1:4098/stores/42 -> 200",
+    "GET http://127.0.0.1:4098/user -> 200",
+    "GET http://127.0.0.1:4098/training/stores/42/context -> 200",
+    "GET http://127.0.0.1:4098/stores/42/specialopeninghours -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in and pass the module gate",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T18:05:24.067Z",
+      "durationMs": 20690,
+      "detail": "gate open, zone Europe/Oslo",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "READ-ONLY, NOT DARK: the store is visible and every write is refused",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T18:05:44.757Z",
+      "durationMs": 28,
+      "detail": "both flags read \"Av\"; the form is drawn and its submit goes live anyway",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "and pressing it really is refused, by the server",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T18:05:44.785Z",
+      "durationMs": 41,
+      "detail": "refused 409 training.flag-disabled-read-only; nothing filed",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "turn both Training switches on from the operator switchboard",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T18:05:44.925Z",
+      "durationMs": 1597,
+      "detail": "both training.setup and training.assignments on for store 42",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "the same page now reports both switches up",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T18:05:46.522Z",
+      "durationMs": 816,
+      "detail": "both flags read \"På\", both warnings gone",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "author a course that carries a competency key",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T18:05:47.338Z",
+      "durationMs": 83,
+      "detail": "Allergenhåndtering · food.allergens",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "cut a draft version with a pass threshold of 80",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T18:05:47.421Z",
+      "durationMs": 122,
+      "detail": "v1 Draft, threshold 80 %",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "THE STATED EXIT CANNOT BE WALKED — there is no quiz and nobody to take it",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T18:05:47.543Z",
+      "durationMs": 6,
+      "detail": "recorded: the worker half does not exist; walking the manager half",
+      "error": null
+    },
+    {
+      "n": 9,
+      "name": "the publish control is reachable BY POINTER at this viewport",
+      "status": "failed",
+      "startedAtUtc": "2026-08-04T18:05:47.549Z",
+      "durationMs": 8005,
+      "detail": null,
+      "error": "locator.click: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-test=\"version-publish\"]')\u001b[22m\n\u001b[2m    - locator resolved to <button type=\"button\" data-v-476c99e0=\"\" data-test=\"version-publish\" class=\"trn-btn trn-btn--small\">↵                  Publiser↵                </button>\u001b[22m\n\u001b[2m  - attempting click action (trial run)\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <p data-v-86835500=\"\" class=\"trn-form__hint\">↵    Dette er beviset på at de fem stegene over g…</p> from <div data-v-3007fc84=\"\" data-v-70f5b8c5=\"\" class=\"trn-page__column\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action (trial run)\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <p data-v-86835500=\"\" class=\"trn-form__hint\">↵    Dette er beviset på at de fem stegene over g…</p> from <div data-v-3007fc84=\"\" data-v-70f5b8c5=\"\" class=\"trn-page__column\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action (trial run)\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    15 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <p data-v-86835500=\"\" class=\"trn-form__hint\">↵    Dette er beviset på at de fem stegene over g…</p> from <div data-v-3007fc84=\"\" data-v-70f5b8c5=\"\" class=\"trn-page__column\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action (trial run)\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "note",
+      "summary": "Training's stated exit — \"a worker passes the quiz\" — names a step no shipped screen offers",
+      "detail": "pages/admin/training-courses.vue is the only Training page in the app: there is no worker-facing surface at all, and none is planned for this wave. `utils/training/training-client.js` records that a worker's own quiz submission has no route anywhere, so every completion is `ManagerRecorded` by construction; `TrainingVersionPanel` authors no quiz for the same reason and prints the sentence asserted above. What this journey walks is therefore the MANAGER half — a score filed against a frozen threshold — which is the whole of what exists. The Feature's exit and L-TRAIN-FIXES's exit both name the worker half and neither can be met by any screen on this branch."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ftraining-courses\" to \"/admin?redirect=%2Fadmin%2Ftraining-courses&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ftraining-courses\" to \"/admin?redirect=%2Fadmin%2Ftraining-courses&storeId=42\" with a new navigation.",
+    "Failed to load resource: the server responded with a status of 409 (Conflict)"
+  ],
+  "failedRequests": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:4098/training/stores/42/courses",
+      "status": 409
+    }
+  ],
+  "screenshots": [
+    "training-course-to-evidence/fixture/01-visible-and-read-only.png"
+  ],
+  "error": "TimeoutError: locator.click: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-test=\"version-publish\"]')\u001b[22m\n\u001b[2m    - locator resolved to <button type=\"button\" data-v-476c99e0=\"\" data-test=\"version-publish\" class=\"trn-btn trn-btn--small\">↵                  Publiser↵                </button>\u001b[22m\n\u001b[2m  - attempting click action (trial run)\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <p data-v-86835500=\"\" class=\"trn-form__hint\">↵    Dette er beviset på at de fem stegene over g…</p> from <div data-v-3007fc84=\"\" data-v-70f5b8c5=\"\" class=\"trn-page__column\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action (trial run)\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <p data-v-86835500=\"\" class=\"trn-form__hint\">↵    Dette er beviset på at de fem stegene over g…</p> from <div data-v-3007fc84=\"\" data-v-70f5b8c5=\"\" class=\"trn-page__column\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action (trial run)\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    15 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <p data-v-86835500=\"\" class=\"trn-form__hint\">↵    Dette er beviset på at de fem stegene over g…</p> from <div data-v-3007fc84=\"\" data-v-70f5b8c5=\"\" class=\"trn-page__column\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action (trial run)\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/training-course-to-evidence.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false,
+    "supersedes": null
+  }
+}

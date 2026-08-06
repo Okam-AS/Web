@@ -1,0 +1,22 @@
+
+> okam-consumer@1.0.0 test:e2e:live-world-stamp
+> node test/e2e/scripts/live-world-stamp-wiring-check.js
+
+live-world stamp wiring check
+  script : /Users/svendaneel/okam/Web-modules/test/e2e/scripts/live-world.sh
+  module : /Users/svendaneel/okam/Web-modules/test/e2e/support/world-stamp.js
+
+  PASS  S0  found the write invocation
+  PASS  S1  write is handed 5 argument(s): $API_BASE | $OKAM_API_REPO | $API_PID | ${API_BUILT:-} | test/e2e/scripts/live-world.sh
+  PASS  S2  launchedPid is $API_PID and `$!` was captured into $API_PID
+  PASS  S3  builtFrom is ${API_BUILT:-} and $API_BUILT comes from `world-stamp.js built`
+  PASS  S4  the token is read on line 301, after `dotnet build` on line 279
+  PASS  S5  the script refuses a build whose commit moved while it was running
+  PASS  B0  `built` printed 8853606dcaba52f2e07d6bdfc99abe563e9a5282
+  PASS  B1  the launcher (pid 13280) is not the process on :53495 (pid 13281) — the shape `$!` gets wrong
+  PASS  B2  the stamp records pid 13281 (the socket holder), launched by 13280
+  PASS  B3  refused, and wrote nothing: world-stamp: the checkout has moved since the build: /var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/lws-wiring-3yQDHh/okamapi was built from 8853606dcaba52f2e07d6bdfc99abe563e9a5282 and now says 776eebe9205b29dd6a6ddfbdd106a480307532b3. Refusing to stamp — a stamp naming 776eebe9205b29dd6a6ddfbdd106a480307532b3 would name a commit this binary was not built from.
+  PASS  B4  the refusal never names 776eebe, the commit the binary was not built from
+  PASS  B5  a world rebuilt at 776eebe stamps normally
+
+OK 12/12 — the script hands over both guards, and both refuse when opened.

@@ -1,0 +1,26 @@
+==============================================================================
+ARM C -- lease SUPPRESSED, teardown release ON
+==============================================================================
+  world reset. seeded overrides: ['43|Events.Core']
+  the walk ended in 12s: 1 passed (11.8s)
+  after the walk, the world holds: ['43|Events.Core']
+    left up beyond the seed: nothing
+    the seeded override survived: True
+  verdict: AS PREDICTED -- levers LOWERED, expected LOWERED
+==============================================================================
+ARM D -- lease SUPPRESSED, teardown release SUPPRESSED
+==============================================================================
+  world reset. seeded overrides: ['43|Events.Core']
+  the walk ended in 12s: 1 passed (12.4s)
+  after the walk, the world holds: ['42|Events.Core', '42|Events.Settlement', '43|Events.Core']
+    left up beyond the seed: ['42|Events.Core', '42|Events.Settlement']
+    the seeded override survived: True
+  verdict: AS PREDICTED -- levers STILL UP, expected STILL UP
+
+journey.js restored byte-for-byte: True
+
+==============================================================================
+  ARM C  AS PREDICTED   walk=1 passed (11.8s)             left-up=nothing
+  ARM D  AS PREDICTED   walk=1 passed (12.4s)             left-up=['42|Events.Core', '42|Events.Settlement']
+  OVERALL: PROVEN
+==============================================================================

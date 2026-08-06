@@ -13,6 +13,10 @@
 //   artifacts/journeys/runs/ledger.jsonl                         append-only, one line per run
 //   artifacts/journeys/<name>/<backendKey>/NN-<slug>.png         the screenshots that journey chose to take,
 //                                                                and the PDFs two of them print
+//   artifacts/journeys/runs/<name>.<backendKey>/NN-<slug>.png    ...and where those go instead when
+//                                                                git KEEPS the canonical record: a run
+//                                                                may neither overwrite committed
+//                                                                evidence nor the pictures it cites.
 //
 // `<name>` is the journey's own id (the `journey` annotation on the test, see `journeyTest` below),
 // NOT the test title and NOT the file name — those are prose and will be reworded. The id is the
@@ -52,6 +56,7 @@
 //                      "file": "artifacts/journeys/runs/…",
 //                      "canonical": true,                // did it take <name>.playwright.json?
 //                      "canonicalHeldBy": "live-5961-ddc27fa",   // and if not, who holds it
+//                      "canonicalTracked": false,        // true = git keeps that file, so NO run takes it
 //                      "provisional": false,             // true = written at start, run not finished
 //                      "supersedes": null | { "key": …, "status": "passed", "finishedAtUtc": …,
 //                        "file": "artifacts/journeys/runs/….superseded.playwright.json" } },
@@ -62,6 +67,10 @@
 //                                                    // to a path that is not the sign-in/store shell
 //   "foreignSubjectServed": 0,                       // the same, answered by some OTHER origin
 //   "foreignSubjectSample": [],                      // …and who
+//   "proxiedSubjectServed": 0,                       // …and the same again, answered by the APP's own
+//                                                    // origin under the `/okam-api` proxy mount, which
+//                                                    // neither number above can represent
+//   "proxiedSubjectSample": [],                      // …and which calls
 //   "backendSample": ["GET http://127.0.0.1:5951/feature-flags/catalog -> 200", …],
 //   "browser":       "chromium",
 //   "steps": [
@@ -93,6 +102,13 @@
 //             whose subject calls were all answered by a different origin fails too — see
 //             `judgeSubjectOrigin`. That is the case where the served count is honestly non-zero and
 //             the artifact's backend claim is still a lie.
+//   proxy     and, because that split is attributed BY ORIGIN and same-origin traffic is excluded
+//             from it on purpose (so bundles and webfonts are never mistaken for a second API), a
+//             client built with `API_BASE_URL=/okam-api` — which `nuxt.config.js:138` proxies to the
+//             backend — fetches its whole subject SAME-ORIGIN and lands in no counter at all. Both
+//             subject numbers then read 0, the split judge needs a positive one before it will
+//             speak, and the run is green. `judgeProxiedSubject` is the third counter's judge, and
+//             `proxiedSubjectServed` is the number that was previously unwritable rather than zero.
 //
 // `backendServed` and `backendSample` are in the artifact so the claim is auditable by a reader who
 // was not there, rather than only by the process that wrote it.
@@ -138,7 +154,7 @@ const path = require('path');
 const { execFileSync } = require('child_process');
 const base = require('@playwright/test');
 const store = require('./artifact-store');
-const { isShellPath, judgeSubjectOrigin } = require('./journey-assertions');
+const { isShellPath, judgeSubjectOrigin, proxiedApiPath, judgeProxiedSubject } = require('./journey-assertions');
 
 const REPO_ROOT = path.resolve(__dirname, '..', '..', '..');
 const ARTIFACT_DIR = path.join(REPO_ROOT, 'artifacts', 'journeys');
@@ -272,9 +288,25 @@ class JourneyRecorder {
     this.backendSubjectResponses = 0;
     this.foreignSubjectResponses = 0;
     this.foreignSubjectSample = [];
+    // ...AND THE ONES THE APP ANSWERED ON THE BACKEND'S BEHALF. The two counters above split subject
+    // traffic into "the named origin" and "somebody else", and BOTH miss the app's own origin — which
+    // the recorder excludes on purpose, so that documents, bundles and webfonts are never mistaken
+    // for a second API. `nuxt.config.js:138` mounts a proxy at `/okam-api`, so a client built with
+    // `API_BASE_URL=/okam-api` fetches its whole subject through that hole and lands in neither
+    // number. This is that traffic, scoped to the proxy mount and shell-tested on the path the
+    // BACKEND saw, so a Nuxt route and a proxied sign-in are both left out. See `judgeProxiedSubject`.
+    this.proxiedSubjectResponses = 0;
+    this.proxiedSubjectSample = [];
     // Computed once, and by the same function the store files the JSON with, so a run's pictures and
     // its record can never end up under different names for the same backend.
     this.backendKey = store.backendKeyFor(meta);
+    // ...AND WHETHER THIS JOURNEY'S RECORD IS ONE GIT KEEPS. Asked once here rather than per
+    // screenshot, so every picture of a run lands together and the run's `screenshots` array stays
+    // coherent. The store refuses to overwrite a tracked canonical record (see artifact-store.js);
+    // that guard on its own would have protected the JSON and left the SEVEN TRACKED PNGs of
+    // `workforce-invitation-onboarding` being overwritten by the next fixture run, because they sit
+    // at exactly the path `dir` resolves to. Two of them changed bytes in the re-run of 2026-08-05.
+    this.canonicalTracked = store.isTracked(path.join(ARTIFACT_DIR, meta.journey + '.playwright.json'));
     this._apiOrigin = originOf(meta.apiBaseUrl);
     // The app's own origin, so its documents, bundles and any same-origin call it makes are never
     // mistaken for a second API.
@@ -302,6 +334,14 @@ class JourneyRecorder {
       const kind = safeResourceType(response);
       const isApiCall = kind === 'xhr' || kind === 'fetch';
       const subject = isApiCall && !isShellPath(pathOf(response.url()));
+      // The path the BACKEND would have seen for a call the app proxied on its behalf, or null when
+      // this is not one. Resolved separately from `subject` above rather than reusing it, because
+      // `subject` tests the UN-STRIPPED path: the proxy rewrites `^/okam-api` away, so
+      // `/okam-api/user/login` is the sign-in shell while `isShellPath('/okam-api/user/login')` is
+      // false. Reusing it would count every proxied sign-in as a subject call.
+      const proxied = isApiCall && this._appOrigin && origin === this._appOrigin
+        ? proxiedApiPath(pathOf(response.url()))
+        : null;
 
       if (this._apiOrigin && origin === this._apiOrigin) {
         this.backendResponses += 1;
@@ -310,6 +350,18 @@ class JourneyRecorder {
         // that reaches this file, because a funding token travels in a query string.
         if (this.backendSample.length < 8) {
           this.backendSample.push(response.request().method() + ' ' + redactUrl(response.url()) + ' -> ' + response.status());
+        }
+      } else if (proxied !== null && proxied !== '/' && !isShellPath(proxied)) {
+        // `proxied !== '/'` covers the bare mount: `/okam-api` and `/okam-api/` both strip to `/`,
+        // which is in no SHELL_PATHS shape and would therefore count as a subject call. No real
+        // client fetches the API root as its subject, so counting it could only ever produce a false
+        // red — and a guard that reds on something harmless is a guard somebody deletes.
+        // Same-origin, under the proxy mount, and not the shell once the mount is stripped. Neither
+        // counter above can hold this: the origin is not the named API, and the foreign branch below
+        // excludes the app's own origin by design.
+        this.proxiedSubjectResponses += 1;
+        if (this.proxiedSubjectSample.length < 8) {
+          this.proxiedSubjectSample.push(response.request().method() + ' ' + redactUrl(response.url()) + ' -> ' + response.status());
         }
       } else if (subject && origin && origin !== this._appOrigin) {
         this.foreignSubjectResponses += 1;
@@ -362,28 +414,47 @@ class JourneyRecorder {
   }
 
   /**
-   * WHERE THIS RUN'S FILES GO — screenshots, and the PDFs two journeys print.
+   * WHERE THIS RUN'S FILES GO — screenshots, and the PDFs two journeys print. Relative to
+   * `artifacts/journeys`, which is how the `screenshots` array quotes them.
    *
    * Under the BACKEND KEY, for the same reason the JSON is: a fixture re-run used to overwrite the
    * pixels a live artifact referenced, so the strongest record on disk could end up illustrated by the
    * weakest run's screenshots while still saying `"backend": "live"`. Same lie, one level down.
+   *
+   * ...UNLESS THE RECORD IS ONE GIT KEEPS, and then the run goes to `runs/` entirely — pictures as
+   * well as JSON. The store will not let this run take the canonical name, so writing its pictures
+   * over the committed ones would be strictly destructive: it would change the bytes of files a
+   * reviewer is joined to while the record that cites them stays exactly as it was, leaving a
+   * committed record whose pictures are somebody else's run. That is the overwrite half of what one
+   * re-run did on 2026-08-05.
    */
-  get dir () {
-    return path.join(ARTIFACT_DIR, this.meta.journey, this.backendKey);
-  }
-
-  /** The same, written the way an artifact or a review should quote it — never an absolute path. */
   get relativeDir () {
-    return 'artifacts/journeys/' + this.meta.journey + '/' + this.backendKey;
+    return 'artifacts/journeys/' + this.pictureBase;
   }
 
-  /** A screenshot, filed under this journey and this backend, and referenced from its JSON. */
+  /** The segment under `artifacts/journeys` that this run owns. One decision, two readers. */
+  get pictureBase () {
+    return this.canonicalTracked
+      ? store.RUNS_DIRNAME + '/' + this.meta.journey + '.' + this.backendKey
+      : this.meta.journey + '/' + this.backendKey;
+  }
+
+  get dir () {
+    return path.join(ARTIFACT_DIR, ...this.pictureBase.split('/'));
+  }
+
+  /**
+   * A screenshot, filed under this journey and this backend, and referenced from its JSON.
+   *
+   * The relative path is derived from the SAME `pictureBase` the file was written under, never
+   * rebuilt from the parts, so a record can never cite a path its pictures are not at.
+   */
   async shot (name) {
     if (!this._page) { return null; }
     fs.mkdirSync(this.dir, { recursive: true });
     const file = String(this.screenshots.length + 1).padStart(2, '0') + '-' + slug(name) + '.png';
     await this._page.screenshot({ path: path.join(this.dir, file), fullPage: true });
-    const relative = this.meta.journey + '/' + this.backendKey + '/' + file;
+    const relative = this.pictureBase + '/' + file;
     this.screenshots.push(relative);
     return relative;
   }
@@ -421,6 +492,12 @@ class JourneyRecorder {
       backendSubjectServed: this.backendSubjectResponses,
       foreignSubjectServed: this.foreignSubjectResponses,
       foreignSubjectSample: this.foreignSubjectSample,
+      // AND THE THIRD PLACE A SUBJECT CALL CAN GO, which neither of the two above can represent: the
+      // app's own origin, under the `/okam-api` proxy mount. Filed every run for the same reason as
+      // the pair above — a zero that is written down is a zero a reader can question, and this one
+      // used to be unwritable rather than merely zero.
+      proxiedSubjectServed: this.proxiedSubjectResponses,
+      proxiedSubjectSample: this.proxiedSubjectSample,
       backendSample: this.backendSample,
       browser: this.meta.browser,
       steps: this.steps,
@@ -677,6 +754,32 @@ const test = base.test.extend({
       }
     }
 
+    // THE SAME LIE THROUGH THE APP'S OWN FRONT DOOR, which even the split above cannot see. It reds
+    // on a subject the browser fetched from ANOTHER origin; a client built with
+    // `API_BASE_URL=/okam-api` fetches its subject SAME-ORIGIN, and the recorder excludes same-origin
+    // traffic so that bundles and webfonts are not mistaken for a second API. So both subject
+    // counters stay at zero, `judgeSubjectOrigin` needs `subjectFromElsewhere` to be POSITIVE before
+    // it will speak, and the run is green with an artifact naming a backend it can only show
+    // answering the sign-in. `proxiedSubjectServed` is the number that was missing.
+    //
+    // Ordered AFTER the split rather than before it so that a run which somehow did both keeps the
+    // sentence it has always had, and so no existing arm of `guard-proof.js` changes meaning.
+    if (!failed) {
+      const proxied = judgeProxiedSubject({
+        apiBaseUrl: meta.apiBaseUrl,
+        appBaseUrl: meta.baseUrl,
+        subjectFromBackend: recorder.backendSubjectResponses,
+        subjectViaProxy: recorder.proxiedSubjectResponses,
+        proxySample: recorder.proxiedSubjectSample
+      });
+      if (proxied) {
+        failed = true;
+        error = proxied;
+        recorder.finding('defect', 'journey subject calls went through the same-origin proxy', error);
+        wrongWorld = true;
+      }
+    }
+
     const filed = recorder.write(failed ? 'failed' : 'passed', error);
     try {
       testInfo.attachments.push({ name: 'journey', path: filed.runFile, contentType: 'application/json' });
@@ -690,11 +793,19 @@ const test = base.test.extend({
     // as this run's evidence. It is not an error: the loser is on disk under its own backend key and in
     // the ledger, and the slot is held by a run this one did not outrank.
     if (!filed.canonical) {
+      // TWO DIFFERENT REASONS, and they send the reader to two different places. "A stronger run holds
+      // it" is a ranking; "git keeps that file" means the record is an exit's reviewed evidence and
+      // this run was never going to be allowed to touch it, which is not a problem to be solved.
       process.stdout.write(
         '[journey] ' + meta.journey + ': filed as ' + path.relative(REPO_ROOT, filed.runFile) + '.\n' +
-        '          artifacts/journeys/' + meta.journey + '.playwright.json still belongs to `' + filed.heldBy +
-        '`, which this run did not outrank.\n' +
-        '          To hand it over deliberately, delete that file and run again.\n');
+        (filed.canonicalTracked
+          ? '          artifacts/journeys/' + meta.journey + '.playwright.json is COMMITTED EVIDENCE — git keeps it,\n' +
+            '          so no run overwrites it, and this run\'s screenshots went to ' + recorder.relativeDir + '/\n' +
+            '          rather than over the pictures that record cites.\n' +
+            '          To regenerate it deliberately, delete it, run again, and `git add -f` the record and its pictures.\n'
+          : '          artifacts/journeys/' + meta.journey + '.playwright.json still belongs to `' + filed.heldBy +
+            '`, which this run did not outrank.\n' +
+            '          To hand it over deliberately, delete that file and run again.\n'));
     }
 
     // AFTER the artifact is written, never before: the record of a wrong-world run is the most useful

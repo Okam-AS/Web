@@ -1,0 +1,154 @@
+=============== F1. TIPS (nothing moved check) ===============
+  refs/heads/feature/restaurant-modules              e34977a
+  refs/heads/lane/fe-meals-pretick-walked            9fbed80
+  refs/heads/candidate/fe-compose-2026-08-05         9f7d8df
+  refs/heads/lane/fe-meals-journey-locator           d320105
+  refs/heads/lane/meals-enrol-pretick                2e3f39d
+  refs/heads/lane/meals-enrol-ui                     802041a
+  refs/heads/feature/restaurant-modules              8e2b57de
+  refs/heads/lane/meals-members-read                 086ac34f
+=============== F2. AHEAD / BEHIND ===============
+BE  ahead=1 behind=0
+FE  ahead=4 behind=2
+-- FE chain (oldest last) --
+9fbed80 The enrolment journey walks the pretick, and still walks the withheld read
+d320105 The policy assertion names the sentence it means, not a class it shared
+2e3f39d The enrolment panel arrives showing who is already enrolled
+802041a An employee who claimed an invitation can be enrolled, and is then eligible
+=============== F3. IS 12R ON THE MERGE CANDIDATE'S BACKEND? ===============
+-- verbs on FRM MealsProgramController --
+45:        [HttpGet("companies/{companyId:guid}/programs")]
+60:        [HttpPost("companies/{companyId:guid}/programs")]
+87:        [HttpPost("programs/{programId:guid}/policies")]
+114:        [HttpPost("programs/{programId:guid}/members")]
+-- verbs on lane/meals-members-read --
+45:        [HttpGet("companies/{companyId:guid}/programs")]
+60:        [HttpPost("companies/{companyId:guid}/programs")]
+87:        [HttpPost("programs/{programId:guid}/policies")]
+114:        [HttpPost("programs/{programId:guid}/members")]
+141:        [HttpGet("programs/{programId:guid}/members")]
+-- refs in the api repo carrying the symbol --
+  refs/heads/lane/meals-members-read
+=============== F4. HOW MUCH OF THE PAGE WORKS ON FRM ===============
+-- routes admin-client calls (lane tip) vs routes FRM binds --
+  CALLS //   POST /v1/meals/companies                                              MealsCompanyController:35
+  CALLS //   GET  /v1/meals/companies/{companyId}                              #1  MealsCompanyController:62
+  CALLS //   POST /v1/meals/companies/{companyId}                                  MealsCompanyController:77
+  CALLS //   POST /v1/stores/{storeId}/meals/companies/{companyId}/agreements      MealsAgreementController:42
+  CALLS //   GET  /v1/meals/companies/{companyId}/members                      #2  MealsMembershipController:39
+  CALLS //   GET  /v1/meals/companies/{companyId}/invitations                  #3  MealsMembershipController:76
+  CALLS //   POST /v1/meals/companies/{companyId}/invitations                  #4  MealsMembershipController:91
+  CALLS //   POST /v1/meals/companies/{companyId}/invitations/{id}/revoke      #5  MealsMembershipController:118
+  CALLS //   GET  /v1/meals/companies/{companyId}/programs                     #9  MealsProgramController:45
+  CALLS //   POST /v1/meals/companies/{companyId}/programs                     #10 MealsProgramController:60
+  CALLS //   POST /v1/meals/programs/{programId}/policies                      #11 MealsProgramController:87
+  CALLS //   POST /v1/meals/programs/{programId}/members                       #12 MealsProgramController:114
+  CALLS //   GET  /v1/meals/programs/{programId}/members                       #12R MealsProgramController:143
+  CALLS //
+  FRM MealsProgramController 45:        [HttpGet("companies/{companyId:guid}/programs")]
+  FRM MealsProgramController 60:        [HttpPost("companies/{companyId:guid}/programs")]
+  FRM MealsProgramController 87:        [HttpPost("programs/{programId:guid}/policies")]
+  FRM MealsProgramController 114:        [HttpPost("programs/{programId:guid}/members")]
+  FRM MealsCompanyController 35:        [HttpPost("companies")]
+  FRM MealsCompanyController 62:        [HttpGet("companies/{companyId:guid}")]
+  FRM MealsCompanyController 77:        [HttpPost("companies/{companyId:guid}")]
+  FRM MealsCompanyController 104:        [HttpPost("companies/{companyId:guid}/archive")]
+  FRM MealsCompanyController 126:        [HttpGet("/v1/stores/{storeId:int}/meals/companies")]
+  FRM MealsMembershipController 39:        [HttpGet("companies/{companyId:guid}/members")]
+  FRM MealsMembershipController 54:        [HttpPost("companies/{companyId:guid}/members/{membershipId:guid}/revoke")]
+  FRM MealsMembershipController 76:        [HttpGet("companies/{companyId:guid}/invitations")]
+  FRM MealsMembershipController 91:        [HttpPost("companies/{companyId:guid}/invitations")]
+  FRM MealsMembershipController 118:        [HttpPost("companies/{companyId:guid}/invitations/{invitationId:guid}/revoke")]
+  FRM MealsMembershipController 140:        [HttpPost("invitations/session")]
+  FRM MealsMembershipController 162:        [HttpPost("invitations/claim")]
+=============== F5. DOES THE ENROL CONTROL EXIST ON FRM AT ALL? ===============
+  refs/heads/feature/restaurant-modules: enrol data-test hits = 0
+  refs/heads/lane/fe-meals-pretick-walked: enrol data-test hits = 8
+  refs/heads/candidate/fe-compose-2026-08-05: enrol data-test hits = 8
+=============== F6. THE NOTE: REPLACED, NOT DELETED ===============
+  meals_enrol_no_read_note   refs/heads/feature/restaurant-modules         absent
+  meals_enrol_no_read_note   refs/heads/lane/fe-meals-pretick-walked       absent
+  meals_enrol_no_read_note   refs/heads/candidate/fe-compose-2026-08-05    absent
+  meals_enrol_unread_note    refs/heads/feature/restaurant-modules         absent
+  meals_enrol_unread_note    refs/heads/lane/fe-meals-pretick-walked       PRESENT
+  meals_enrol_unread_note    refs/heads/candidate/fe-compose-2026-08-05    PRESENT
+=============== F7. THE THREE SENTENCES FE-ALONE PUTS ON SCREEN ===============
+3642:  meals_refusal_absent: 'This server did not answer as Company Meals. We do not know whether the module is here.',
+3749:  meals_enrol_replaces_note: 'The list you submit is the WHOLE enrolment, not an addition: anyone left unticked is un-enrolled. Tick everybody who should be enrolled afterwards.',
+3750:  meals_enrol_unread_note: 'We could not read who is enrolled right now, so the control is withheld. Saving a list we cannot compare against would un-enrol people without ever showing them. Reload and try again.',
+-- the middle one is unconditional (no v-if) --
+             `ListProgramMembers`, and why they are shown at all only when that read answered. -->
+        <p class="mls-note mls-note--warn" data-test="enrol-replaces">
+          {{ $i('meals_enrol_replaces_note') }}
+        </p>
+
+        <p v-if="membersUnknown" class="mls-note mls-note--warn" data-test="enrol-members-unknown">
+          {{ $i(membersRefusalKey) }}
+        </p>
+
+        <!-- The read did not answer, so nobody can say who is enrolled. The control is WITHHELD
+             rather than offered unticked: this route replaces the set, and a submission assembled
+             against an answer that never arrived un-enrols whoever it was wrong about — silently,
+             and they find out at a checkout. -->
+        <template v-else-if="enrolledUnknown">
+          <p class="mls-note mls-note--warn" data-test="enrol-unread">
+            {{ $i('meals_enrol_unread_note') }}
+          </p>
+          <p class="mls-note mls-note--warn" data-test="enrol-unread-refusal">
+            {{ $i(enrolledRefusalKey) }}
+          </p>
+=============== F8. WHY 'absent' AND NOT 'dark' FIRES ===============
+ * the backend (`MealsWireTests.PINNED_a_dark_route_is_already_distinguishable_from_a_path_that_is_
+ * not_routed`) established that a dark Meals route answers `application/problem+json` while an
+ * unrouted path answers 404 with an EMPTY body. So what Meals hides is which company/program exists,
+ * not that the module is deployed — and the copy keyed on this constant says exactly that much.
+ */
+export const REFUSAL_DARK = 'dark';
+
+/**
+ * 404 with no `meals.*` code — an empty-bodied routing 404, or some other 404 that is not this
+ * module's. The module did not answer, so nothing may be claimed about this store's agreements.
+ */
+export const REFUSAL_ABSENT = 'absent';
+
+  if (error.status === 404) {
+    const code = error.code;
+    return (typeof code === 'string' && code.indexOf(MEALS_CODE_PREFIX) === 0)
+      ? REFUSAL_DARK
+      : REFUSAL_ABSENT;
+  }
+=============== F9. IS THE HALF-LANDING ALREADY STAGED? ===============
+  YES: lane/meals-enrol-pretick (note deleted + read called) IS IN refs/heads/candidate/fe-compose-2026-08-05
+  (walk lane NOT in candidate)
+-- web refs that call the read --
+  refs/heads/candidate/fe-compose-2026-08-05
+  refs/heads/lane/collect-review-conditions
+  refs/heads/lane/fe-meals-journey-locator
+  refs/heads/lane/fe-meals-pretick-walked
+  refs/heads/lane/meals-enrol-pretick
+=============== F10. WOULD ANY GUARD CATCH IT? ===============
+  fixture-divergence.js lines at lane tip: 0
+  12R anchored there? 0
+=============== F11. THE OTHER PAIR (symmetry) ===============
+wf FE ahead=1 behind=0
+wf BE ahead=1 behind=0
+-- the workforce frontend's failure mode when its routes are absent --
+441-     *
+442-     * A FAILURE LEAVES THE LIST UNKNOWN (null), NEVER EMPTY. "No code is outstanding" is the one
+443-     * answer a manager acts on — it is what tells them the leaked code they are worried about is
+444-     * already dead — so a read that did not answer must not be able to produce it. The panel prints
+445-     * "we could not read this" instead, which is a different sentence and a different decision.
+446-     *
+447:     * Silent rather than a toast: this read rides along with every roster load and every invitation
+448-     * write, so a persistent failure would otherwise fire a notification the manager cannot act on.
+449-     * The unknown state is already on screen in the place it matters.
+450-     */
+    async loadInvitations () {
+      if (!this.storeId) { return; }
+      try {
+        const items = await this._workforceRosterService.ListInvitations(this.storeId);
+        this.invitations = Array.isArray(items) ? items : null;
+      } catch (e) {
+        this.invitations = null;
+      }
+    },

@@ -1,0 +1,90 @@
+================ M1 the original defect restored: PostRequest(/user/confirm-email/) ================
+    ✕ A: no request path ends in a trailing slash (3 ms)
+    ✓ A2: no request path contains a doubled slash
+    ✓ A3: every statically-written request path starts with exactly one leading slash (1 ms)
+    ✓ 1: RequestService partitions into path-taking and not, with both sides populated
+    ✓ 2: every call site found had its path argument parsed
+    ✓ 3: every parsed path is classified exactly once, and static paths are the majority
+    ✓ 4: every file naming a path-taking method contributed a parsed call site (1 ms)
+    ✕ the email-confirm route is one of the paths this guard reads (1 ms)
+Tests:       2 failed, 6 passed, 8 total
+================ M2 a new route added with a trailing slash ================
+    ✕ A: no request path ends in a trailing slash (3 ms)
+    ✓ A2: no request path contains a doubled slash (1 ms)
+    ✓ A3: every statically-written request path starts with exactly one leading slash
+    ✓ 1: RequestService partitions into path-taking and not, with both sides populated
+    ✓ 2: every call site found had its path argument parsed (1 ms)
+    ✓ 3: every parsed path is classified exactly once, and static paths are the majority
+    ✓ 4: every file naming a path-taking method contributed a parsed call site
+    ✓ the email-confirm route is one of the paths this guard reads
+Tests:       1 failed, 7 passed, 8 total
+================ M3 a new route with a doubled slash ================
+    ✓ A: no request path ends in a trailing slash (1 ms)
+    ✕ A2: no request path contains a doubled slash (2 ms)
+    ✓ A3: every statically-written request path starts with exactly one leading slash
+    ✓ 1: RequestService partitions into path-taking and not, with both sides populated (1 ms)
+    ✓ 2: every call site found had its path argument parsed
+    ✓ 3: every parsed path is classified exactly once, and static paths are the majority
+    ✓ 4: every file naming a path-taking method contributed a parsed call site
+    ✓ the email-confirm route is one of the paths this guard reads
+Tests:       1 failed, 7 passed, 8 total
+================ M4 a new route with no leading slash ================
+    ✓ A: no request path ends in a trailing slash (1 ms)
+    ✓ A2: no request path contains a doubled slash (1 ms)
+    ✕ A3: every statically-written request path starts with exactly one leading slash (1 ms)
+    ✓ 1: RequestService partitions into path-taking and not, with both sides populated (1 ms)
+    ✓ 2: every call site found had its path argument parsed
+    ✓ 3: every parsed path is classified exactly once, and static paths are the majority
+    ✓ 4: every file naming a path-taking method contributed a parsed call site
+    ✓ the email-confirm route is one of the paths this guard reads
+Tests:       1 failed, 7 passed, 8 total
+================ M5 RequestService.GetRequest renames its path parameter ================
+    ✓ A: no request path ends in a trailing slash (1 ms)
+    ✓ A2: no request path contains a doubled slash
+    ✓ A3: every statically-written request path starts with exactly one leading slash (1 ms)
+    ✕ 1: RequestService partitions into path-taking and not, with both sides populated (1 ms)
+    ✓ 2: every call site found had its path argument parsed
+    ✓ 3: every parsed path is classified exactly once, and static paths are the majority
+    ✓ 4: every file naming a path-taking method contributed a parsed call site
+    ✓ the email-confirm route is one of the paths this guard reads
+Tests:       1 failed, 7 passed, 8 total
+================ M6 the first-argument scanner returns nothing ================
+    ✓ A: no request path ends in a trailing slash (1 ms)
+    ✓ A2: no request path contains a doubled slash
+    ✓ A3: every statically-written request path starts with exactly one leading slash
+    ✓ 1: RequestService partitions into path-taking and not, with both sides populated (1 ms)
+    ✕ 2: every call site found had its path argument parsed (2 ms)
+    ✕ 3: every parsed path is classified exactly once, and static paths are the majority
+    ✕ 4: every file naming a path-taking method contributed a parsed call site (1 ms)
+    ✕ the email-confirm route is one of the paths this guard reads
+Tests:       4 failed, 4 passed, 8 total
+================ M7 the file walk no longer reaches core/ ================
+    ✓ A: no request path ends in a trailing slash (1 ms)
+    ✓ A2: no request path contains a doubled slash
+    ✓ A3: every statically-written request path starts with exactly one leading slash
+    ✓ 1: RequestService partitions into path-taking and not, with both sides populated
+    ✕ 2: every call site found had its path argument parsed (1 ms)
+    ✕ 3: every parsed path is classified exactly once, and static paths are the majority
+    ✕ 4: every file naming a path-taking method contributed a parsed call site
+    ✕ the email-confirm route is one of the paths this guard reads (1 ms)
+Tests:       4 failed, 4 passed, 8 total
+================ M8 the confirm-email call is renamed away ================
+    ✓ A: no request path ends in a trailing slash (1 ms)
+    ✓ A2: no request path contains a doubled slash
+    ✓ A3: every statically-written request path starts with exactly one leading slash
+    ✓ 1: RequestService partitions into path-taking and not, with both sides populated (1 ms)
+    ✓ 2: every call site found had its path argument parsed
+    ✓ 3: every parsed path is classified exactly once, and static paths are the majority
+    ✓ 4: every file naming a path-taking method contributed a parsed call site
+    ✕ the email-confirm route is one of the paths this guard reads (1 ms)
+Tests:       1 failed, 7 passed, 8 total
+================ RESTORED ================
+    ✓ A: no request path ends in a trailing slash (1 ms)
+    ✓ A2: no request path contains a doubled slash (1 ms)
+    ✓ A3: every statically-written request path starts with exactly one leading slash
+    ✓ 1: RequestService partitions into path-taking and not, with both sides populated (1 ms)
+    ✓ 2: every call site found had its path argument parsed
+    ✓ 3: every parsed path is classified exactly once, and static paths are the majority
+    ✓ 4: every file naming a path-taking method contributed a parsed call site
+    ✓ the email-confirm route is one of the paths this guard reads
+Tests:       8 passed, 8 total

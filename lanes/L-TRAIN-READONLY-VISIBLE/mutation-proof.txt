@@ -1,0 +1,21 @@
+BASE            : rc=0 Tests:       46 passed, 46 total
+M1 the assignments row loses its sentence
+    RED (good)  Tests:       4 failed, 42 passed, 46 total
+M2 both rows share the setup sentence
+    RED (good)  Tests:       2 failed, 44 passed, 46 total
+M3 the sentence is hidden unless the row is already off
+    RED (good)  Tests:       5 failed, 41 passed, 46 total
+M4 the sentence is printed below the switch instead of above it
+    RED (good)  Tests:       6 failed, 40 passed, 46 total
+M5 the sentence is put on every row instead of the two whose gate was read
+    RED (good)  Tests:       1 failed, 45 passed, 46 total
+M6 the setup copy drops the store that does go dark
+    RED (good)  Tests:       1 failed, 45 passed, 46 total
+M7 the setup copy stops saying the submit stays live
+    RED (good)  Tests:       1 failed, 45 passed, 46 total
+M8 the assignments copy claims it decides visibility after all
+    RED (good)  Tests:       1 failed, 45 passed, 46 total
+M9 the old fleet-wide reads-keep-working promise is put back in the intro
+    RED (good)  Tests:       1 failed, 45 passed, 46 total
+
+all files restored byte-for-byte

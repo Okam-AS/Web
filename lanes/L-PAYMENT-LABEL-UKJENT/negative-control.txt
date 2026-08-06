@@ -1,0 +1,1395 @@
+FAIL test/payment-type-label.test.js
+  the map is the backend enum, and nothing else
+    ✕ declares exactly the seventeen members `8e2b57de:Enums/PaymentType.cs` declares (1 ms)
+    ✕ resolves every member to a key all three dictionaries carry in their own right
+    ✓ carries the unknown fallback key in all three dictionaries too
+  OrderCard — the admin order list on /admin/ongoing
+    ✕ renders a Norwegian operator can read for NotSet (= 0) (9 ms)
+    ✓ renders a Norwegian operator can read for Giftcard (= 75) (2 ms)
+    ✓ renders a Norwegian operator can read for PayInStore (= 100) (2 ms)
+    ✕ renders a Norwegian operator can read for Cash (= 110) (6 ms)
+    ✕ renders a Norwegian operator can read for CompanyAccount (= 120) (1 ms)
+    ✓ renders a Norwegian operator can read for Stripe (= 200) (1 ms)
+    ✓ renders a Norwegian operator can read for Vipps (= 300) (2 ms)
+    ✓ renders a Norwegian operator can read for Dintero (= 400) (1 ms)
+    ✓ renders a Norwegian operator can read for DinteroVipps (= 410) (1 ms)
+    ✓ renders a Norwegian operator can read for DinteroBillie (= 420) (1 ms)
+    ✓ renders a Norwegian operator can read for DinteroKlarna (= 430) (1 ms)
+    ✓ renders a Norwegian operator can read for DinteroKravia (= 440) (1 ms)
+    ✕ renders a Norwegian operator can read for DinteroTerminal (= 450) (1 ms)
+    ✓ renders a Norwegian operator can read for WoltMarketplace (= 500) (1 ms)
+    ✕ renders a Norwegian operator can read for Surfboard (= 600) (2 ms)
+    ✕ renders a Norwegian operator can read for SurfboardVipps (= 610) (1 ms)
+    ✕ renders a Norwegian operator can read for SurfboardTerminal (= 650)
+    ✕ NotSet no longer reads "Ukjent" (1 ms)
+    ✕ Cash no longer reads "Ukjent" (1 ms)
+    ✕ CompanyAccount no longer reads "Ukjent" (1 ms)
+    ✕ DinteroTerminal no longer reads "Ukjent" (1 ms)
+    ✕ Surfboard no longer reads "Ukjent" (1 ms)
+    ✕ SurfboardVipps no longer reads "Ukjent" (1 ms)
+    ✕ SurfboardTerminal no longer reads "Ukjent" (1 ms)
+    ✓ still answers the unknown fallback for an unrecognised member the backend might add tomorrow (1 ms)
+    ✓ still answers the unknown fallback for a member spelled in the wrong case (1 ms)
+    ✓ still answers the unknown fallback for an inherited Object property
+    ✓ still answers the unknown fallback for another inherited Object property
+    ✓ still answers the unknown fallback for an empty string (1 ms)
+    ✓ still answers the unknown fallback for null (1 ms)
+    ✓ still answers the unknown fallback for undefined (1 ms)
+    ✓ still answers the unknown fallback for a number (1 ms)
+  OrderModal (organisms) — the order detail on /admin/orders
+    ✕ renders a Norwegian operator can read for NotSet (= 0) (2 ms)
+    ✓ renders a Norwegian operator can read for Giftcard (= 75) (2 ms)
+    ✓ renders a Norwegian operator can read for PayInStore (= 100) (1 ms)
+    ✕ renders a Norwegian operator can read for Cash (= 110) (1 ms)
+    ✕ renders a Norwegian operator can read for CompanyAccount (= 120) (7 ms)
+    ✓ renders a Norwegian operator can read for Stripe (= 200) (1 ms)
+    ✓ renders a Norwegian operator can read for Vipps (= 300) (1 ms)
+    ✓ renders a Norwegian operator can read for Dintero (= 400) (1 ms)
+    ✓ renders a Norwegian operator can read for DinteroVipps (= 410) (2 ms)
+    ✓ renders a Norwegian operator can read for DinteroBillie (= 420) (1 ms)
+    ✓ renders a Norwegian operator can read for DinteroKlarna (= 430) (1 ms)
+    ✓ renders a Norwegian operator can read for DinteroKravia (= 440) (1 ms)
+    ✕ renders a Norwegian operator can read for DinteroTerminal (= 450) (1 ms)
+    ✓ renders a Norwegian operator can read for WoltMarketplace (= 500)
+    ✕ renders a Norwegian operator can read for Surfboard (= 600) (1 ms)
+    ✕ renders a Norwegian operator can read for SurfboardVipps (= 610) (1 ms)
+    ✕ renders a Norwegian operator can read for SurfboardTerminal (= 650) (1 ms)
+    ✕ NotSet no longer reads "Ukjent" (1 ms)
+    ✕ Cash no longer reads "Ukjent" (1 ms)
+    ✕ CompanyAccount no longer reads "Ukjent" (1 ms)
+    ✕ DinteroTerminal no longer reads "Ukjent" (1 ms)
+    ✕ Surfboard no longer reads "Ukjent" (1 ms)
+    ✕ SurfboardVipps no longer reads "Ukjent"
+    ✕ SurfboardTerminal no longer reads "Ukjent" (1 ms)
+    ✓ still answers the unknown fallback for an unrecognised member the backend might add tomorrow (1 ms)
+    ✓ still answers the unknown fallback for a member spelled in the wrong case (1 ms)
+    ✓ still answers the unknown fallback for an inherited Object property (1 ms)
+    ✓ still answers the unknown fallback for another inherited Object property (1 ms)
+    ✓ still answers the unknown fallback for an empty string (1 ms)
+    ✓ still answers the unknown fallback for null (1 ms)
+    ✓ still answers the unknown fallback for undefined (1 ms)
+    ✓ still answers the unknown fallback for a number (1 ms)
+  OrderModal (molecules) — the printable receipt view
+    ✕ renders a Norwegian operator can read for NotSet (= 0) (4 ms)
+    ✓ renders a Norwegian operator can read for Giftcard (= 75) (2 ms)
+    ✓ renders a Norwegian operator can read for PayInStore (= 100) (1 ms)
+    ✕ renders a Norwegian operator can read for Cash (= 110) (1 ms)
+    ✕ renders a Norwegian operator can read for CompanyAccount (= 120) (1 ms)
+    ✓ renders a Norwegian operator can read for Stripe (= 200) (1 ms)
+    ✓ renders a Norwegian operator can read for Vipps (= 300) (4 ms)
+    ✓ renders a Norwegian operator can read for Dintero (= 400) (2 ms)
+    ✓ renders a Norwegian operator can read for DinteroVipps (= 410) (1 ms)
+    ✓ renders a Norwegian operator can read for DinteroBillie (= 420) (1 ms)
+    ✓ renders a Norwegian operator can read for DinteroKlarna (= 430) (1 ms)
+    ✓ renders a Norwegian operator can read for DinteroKravia (= 440) (2 ms)
+    ✕ renders a Norwegian operator can read for DinteroTerminal (= 450) (1 ms)
+    ✓ renders a Norwegian operator can read for WoltMarketplace (= 500) (1 ms)
+    ✕ renders a Norwegian operator can read for Surfboard (= 600) (1 ms)
+    ✕ renders a Norwegian operator can read for SurfboardVipps (= 610) (1 ms)
+    ✕ renders a Norwegian operator can read for SurfboardTerminal (= 650) (1 ms)
+    ✕ NotSet no longer reads "Ukjent" (1 ms)
+    ✕ Cash no longer reads "Ukjent" (2 ms)
+    ✕ CompanyAccount no longer reads "Ukjent" (1 ms)
+    ✕ DinteroTerminal no longer reads "Ukjent" (1 ms)
+    ✕ Surfboard no longer reads "Ukjent" (1 ms)
+    ✕ SurfboardVipps no longer reads "Ukjent" (1 ms)
+    ✕ SurfboardTerminal no longer reads "Ukjent" (1 ms)
+    ✓ still answers the unknown fallback for an unrecognised member the backend might add tomorrow (3 ms)
+    ✓ still answers the unknown fallback for a member spelled in the wrong case (1 ms)
+    ✓ still answers the unknown fallback for an inherited Object property (1 ms)
+    ✓ still answers the unknown fallback for another inherited Object property (1 ms)
+    ✓ still answers the unknown fallback for an empty string (1 ms)
+    ✓ still answers the unknown fallback for null (1 ms)
+    ✓ still answers the unknown fallback for undefined (1 ms)
+    ✓ still answers the unknown fallback for a number (1 ms)
+  the journey this lane exists for — a POS cash sale, read back by an operator
+    ✕ reads "Betalt kontant" on OrderCard — the admin order list on /admin/ongoing (1 ms)
+    ✕ reads "Betalt kontant" on OrderModal (organisms) — the order detail on /admin/orders (1 ms)
+    ✕ reads "Betalt kontant" on OrderModal (molecules) — the printable receipt view (1 ms)
+    ✕ reads "Betalt med terminal" for the card leg on OrderCard — the admin order list on /admin/ongoing (1 ms)
+    ✕ reads "Betalt med terminal" for the card leg on OrderModal (organisms) — the order detail on /admin/orders (1 ms)
+    ✕ reads "Betalt med terminal" for the card leg on OrderModal (molecules) — the printable receipt view (1 ms)
+  the Swiss build serves only German, and this switch could not
+    ✕ renders German for NotSet (= 0) (1 ms)
+    ✕ renders German for Giftcard (= 75) (5 ms)
+    ✕ renders German for PayInStore (= 100) (1 ms)
+    ✕ renders German for Cash (= 110) (1 ms)
+    ✕ renders German for CompanyAccount (= 120) (1 ms)
+    ✕ renders German for Stripe (= 200) (1 ms)
+    ✕ renders German for Vipps (= 300)
+    ✕ renders German for Dintero (= 400) (1 ms)
+    ✕ renders German for DinteroVipps (= 410) (1 ms)
+    ✕ renders German for DinteroBillie (= 420) (1 ms)
+    ✕ renders German for DinteroKlarna (= 430) (1 ms)
+    ✕ renders German for DinteroKravia (= 440) (1 ms)
+    ✕ renders German for DinteroTerminal (= 450)
+    ✕ renders German for WoltMarketplace (= 500) (1 ms)
+    ✕ renders German for Surfboard (= 600) (1 ms)
+    ✕ renders German for SurfboardVipps (= 610) (1 ms)
+    ✕ renders German for SurfboardTerminal (= 650) (1 ms)
+    ✕ answers the German unknown fallback for an unrecognised member the backend might add tomorrow (1 ms)
+    ✕ answers the German unknown fallback for a member spelled in the wrong case (1 ms)
+    ✕ answers the German unknown fallback for an inherited Object property
+    ✕ answers the German unknown fallback for another inherited Object property (1 ms)
+    ✕ answers the German unknown fallback for an empty string (1 ms)
+    ✕ answers the German unknown fallback for null (1 ms)
+    ✕ answers the German unknown fallback for undefined (1 ms)
+    ✕ answers the German unknown fallback for a number (1 ms)
+  ReceiptModal — the one mounting surface this toolchain cannot mount
+    ✓ renders the same `paymentTypeLabel(order.paymentType)` expression the mounted surfaces do
+    ✓ and still cannot be mounted, for the stated reason rather than a guessed one
+
+  ● the map is the backend enum, and nothing else › declares exactly the seventeen members `8e2b57de:Enums/PaymentType.cs` declares
+
+    TypeError: Cannot convert undefined or null to object
+        at Object.keys (<anonymous>)
+
+      217 | describe('the map is the backend enum, and nothing else', () => {
+      218 |   it('declares exactly the seventeen members `8e2b57de:Enums/PaymentType.cs` declares', () => {
+    > 219 |     expect(Object.keys(PAYMENT_TYPE_LABEL_KEYS).sort()).toEqual([...MEMBERS].sort())
+          |                   ^
+      220 |   })
+      221 |
+      222 |   it('resolves every member to a key all three dictionaries carry in their own right', () => {
+
+      at Object.<anonymous> (test/payment-type-label.test.js:219:19)
+
+  ● the map is the backend enum, and nothing else › resolves every member to a key all three dictionaries carry in their own right
+
+    TypeError: Cannot read properties of undefined (reading 'NotSet')
+
+      224 |     // the German build and looks translated. Each dictionary is read directly for that reason.
+      225 |     for (const member of MEMBERS) {
+    > 226 |       const key = PAYMENT_TYPE_LABEL_KEYS[member]
+          |                                          ^
+      227 |       for (const lang of ['no', 'en', 'de']) {
+      228 |         expect([member, lang, translations[lang][key]]).toEqual([member, lang, expect.any(String)])
+      229 |         expect(translations[lang][key]).not.toBe('')
+
+      at Object.<anonymous> (test/payment-type-label.test.js:226:42)
+
+  ● OrderCard — the admin order list on /admin/ongoing › renders a Norwegian operator can read for NotSet (= 0)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Ingen betaling registrert"
+    Received: "Ukjent"
+
+      242 |   it.each(BACKEND_PAYMENT_TYPES)('renders a Norwegian operator can read for %s (= %i)', async (member) => {
+      243 |     const rendered = await surface.render(member, 'no')
+    > 244 |     expect(rendered).toBe(EXPECTED_NO[member])
+          |                      ^
+      245 |     // Stated separately from the equality above so a future edit that makes the expectation table
+      246 |     // wrong still cannot make "Ukjent" acceptable.
+      247 |     expect(rendered).not.toBe(UNKNOWN.no)
+
+      at test/payment-type-label.test.js:244:22
+
+  ● OrderCard — the admin order list on /admin/ongoing › renders a Norwegian operator can read for Cash (= 110)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Betalt kontant"
+    Received: "Ukjent"
+
+      242 |   it.each(BACKEND_PAYMENT_TYPES)('renders a Norwegian operator can read for %s (= %i)', async (member) => {
+      243 |     const rendered = await surface.render(member, 'no')
+    > 244 |     expect(rendered).toBe(EXPECTED_NO[member])
+          |                      ^
+      245 |     // Stated separately from the equality above so a future edit that makes the expectation table
+      246 |     // wrong still cannot make "Ukjent" acceptable.
+      247 |     expect(rendered).not.toBe(UNKNOWN.no)
+
+      at test/payment-type-label.test.js:244:22
+
+  ● OrderCard — the admin order list on /admin/ongoing › renders a Norwegian operator can read for CompanyAccount (= 120)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Betalt med bedriftskonto"
+    Received: "Ukjent"
+
+      242 |   it.each(BACKEND_PAYMENT_TYPES)('renders a Norwegian operator can read for %s (= %i)', async (member) => {
+      243 |     const rendered = await surface.render(member, 'no')
+    > 244 |     expect(rendered).toBe(EXPECTED_NO[member])
+          |                      ^
+      245 |     // Stated separately from the equality above so a future edit that makes the expectation table
+      246 |     // wrong still cannot make "Ukjent" acceptable.
+      247 |     expect(rendered).not.toBe(UNKNOWN.no)
+
+      at test/payment-type-label.test.js:244:22
+
+  ● OrderCard — the admin order list on /admin/ongoing › renders a Norwegian operator can read for DinteroTerminal (= 450)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Betalt med terminal"
+    Received: "Ukjent"
+
+      242 |   it.each(BACKEND_PAYMENT_TYPES)('renders a Norwegian operator can read for %s (= %i)', async (member) => {
+      243 |     const rendered = await surface.render(member, 'no')
+    > 244 |     expect(rendered).toBe(EXPECTED_NO[member])
+          |                      ^
+      245 |     // Stated separately from the equality above so a future edit that makes the expectation table
+      246 |     // wrong still cannot make "Ukjent" acceptable.
+      247 |     expect(rendered).not.toBe(UNKNOWN.no)
+
+      at test/payment-type-label.test.js:244:22
+
+  ● OrderCard — the admin order list on /admin/ongoing › renders a Norwegian operator can read for Surfboard (= 600)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Betalt med kort"
+    Received: "Ukjent"
+
+      242 |   it.each(BACKEND_PAYMENT_TYPES)('renders a Norwegian operator can read for %s (= %i)', async (member) => {
+      243 |     const rendered = await surface.render(member, 'no')
+    > 244 |     expect(rendered).toBe(EXPECTED_NO[member])
+          |                      ^
+      245 |     // Stated separately from the equality above so a future edit that makes the expectation table
+      246 |     // wrong still cannot make "Ukjent" acceptable.
+      247 |     expect(rendered).not.toBe(UNKNOWN.no)
+
+      at test/payment-type-label.test.js:244:22
+
+  ● OrderCard — the admin order list on /admin/ongoing › renders a Norwegian operator can read for SurfboardVipps (= 610)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Betalt med Vipps"
+    Received: "Ukjent"
+
+      242 |   it.each(BACKEND_PAYMENT_TYPES)('renders a Norwegian operator can read for %s (= %i)', async (member) => {
+      243 |     const rendered = await surface.render(member, 'no')
+    > 244 |     expect(rendered).toBe(EXPECTED_NO[member])
+          |                      ^
+      245 |     // Stated separately from the equality above so a future edit that makes the expectation table
+      246 |     // wrong still cannot make "Ukjent" acceptable.
+      247 |     expect(rendered).not.toBe(UNKNOWN.no)
+
+      at test/payment-type-label.test.js:244:22
+
+  ● OrderCard — the admin order list on /admin/ongoing › renders a Norwegian operator can read for SurfboardTerminal (= 650)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Betalt med terminal"
+    Received: "Ukjent"
+
+      242 |   it.each(BACKEND_PAYMENT_TYPES)('renders a Norwegian operator can read for %s (= %i)', async (member) => {
+      243 |     const rendered = await surface.render(member, 'no')
+    > 244 |     expect(rendered).toBe(EXPECTED_NO[member])
+          |                      ^
+      245 |     // Stated separately from the equality above so a future edit that makes the expectation table
+      246 |     // wrong still cannot make "Ukjent" acceptable.
+      247 |     expect(rendered).not.toBe(UNKNOWN.no)
+
+      at test/payment-type-label.test.js:244:22
+
+  ● OrderCard — the admin order list on /admin/ongoing › NotSet no longer reads "Ukjent"
+
+    expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "Ukjent"
+
+      249 |
+      250 |   it.each(WERE_UNKNOWN)('%s no longer reads "Ukjent"', async (member) => {
+    > 251 |     expect(await surface.render(member, 'no')).not.toBe(UNKNOWN.no)
+          |                                                    ^
+      252 |   })
+      253 |
+      254 |   it.each(NOT_PAYMENT_TYPES)('still answers the unknown fallback for %s', async (_what, value) => {
+
+      at test/payment-type-label.test.js:251:52
+
+  ● OrderCard — the admin order list on /admin/ongoing › Cash no longer reads "Ukjent"
+
+    expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "Ukjent"
+
+      249 |
+      250 |   it.each(WERE_UNKNOWN)('%s no longer reads "Ukjent"', async (member) => {
+    > 251 |     expect(await surface.render(member, 'no')).not.toBe(UNKNOWN.no)
+          |                                                    ^
+      252 |   })
+      253 |
+      254 |   it.each(NOT_PAYMENT_TYPES)('still answers the unknown fallback for %s', async (_what, value) => {
+
+      at test/payment-type-label.test.js:251:52
+
+  ● OrderCard — the admin order list on /admin/ongoing › CompanyAccount no longer reads "Ukjent"
+
+    expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "Ukjent"
+
+      249 |
+      250 |   it.each(WERE_UNKNOWN)('%s no longer reads "Ukjent"', async (member) => {
+    > 251 |     expect(await surface.render(member, 'no')).not.toBe(UNKNOWN.no)
+          |                                                    ^
+      252 |   })
+      253 |
+      254 |   it.each(NOT_PAYMENT_TYPES)('still answers the unknown fallback for %s', async (_what, value) => {
+
+      at test/payment-type-label.test.js:251:52
+
+  ● OrderCard — the admin order list on /admin/ongoing › DinteroTerminal no longer reads "Ukjent"
+
+    expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "Ukjent"
+
+      249 |
+      250 |   it.each(WERE_UNKNOWN)('%s no longer reads "Ukjent"', async (member) => {
+    > 251 |     expect(await surface.render(member, 'no')).not.toBe(UNKNOWN.no)
+          |                                                    ^
+      252 |   })
+      253 |
+      254 |   it.each(NOT_PAYMENT_TYPES)('still answers the unknown fallback for %s', async (_what, value) => {
+
+      at test/payment-type-label.test.js:251:52
+
+  ● OrderCard — the admin order list on /admin/ongoing › Surfboard no longer reads "Ukjent"
+
+    expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "Ukjent"
+
+      249 |
+      250 |   it.each(WERE_UNKNOWN)('%s no longer reads "Ukjent"', async (member) => {
+    > 251 |     expect(await surface.render(member, 'no')).not.toBe(UNKNOWN.no)
+          |                                                    ^
+      252 |   })
+      253 |
+      254 |   it.each(NOT_PAYMENT_TYPES)('still answers the unknown fallback for %s', async (_what, value) => {
+
+      at test/payment-type-label.test.js:251:52
+
+  ● OrderCard — the admin order list on /admin/ongoing › SurfboardVipps no longer reads "Ukjent"
+
+    expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "Ukjent"
+
+      249 |
+      250 |   it.each(WERE_UNKNOWN)('%s no longer reads "Ukjent"', async (member) => {
+    > 251 |     expect(await surface.render(member, 'no')).not.toBe(UNKNOWN.no)
+          |                                                    ^
+      252 |   })
+      253 |
+      254 |   it.each(NOT_PAYMENT_TYPES)('still answers the unknown fallback for %s', async (_what, value) => {
+
+      at test/payment-type-label.test.js:251:52
+
+  ● OrderCard — the admin order list on /admin/ongoing › SurfboardTerminal no longer reads "Ukjent"
+
+    expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "Ukjent"
+
+      249 |
+      250 |   it.each(WERE_UNKNOWN)('%s no longer reads "Ukjent"', async (member) => {
+    > 251 |     expect(await surface.render(member, 'no')).not.toBe(UNKNOWN.no)
+          |                                                    ^
+      252 |   })
+      253 |
+      254 |   it.each(NOT_PAYMENT_TYPES)('still answers the unknown fallback for %s', async (_what, value) => {
+
+      at test/payment-type-label.test.js:251:52
+
+  ● OrderModal (organisms) — the order detail on /admin/orders › renders a Norwegian operator can read for NotSet (= 0)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Ingen betaling registrert"
+    Received: "Ukjent"
+
+      242 |   it.each(BACKEND_PAYMENT_TYPES)('renders a Norwegian operator can read for %s (= %i)', async (member) => {
+      243 |     const rendered = await surface.render(member, 'no')
+    > 244 |     expect(rendered).toBe(EXPECTED_NO[member])
+          |                      ^
+      245 |     // Stated separately from the equality above so a future edit that makes the expectation table
+      246 |     // wrong still cannot make "Ukjent" acceptable.
+      247 |     expect(rendered).not.toBe(UNKNOWN.no)
+
+      at test/payment-type-label.test.js:244:22
+
+  ● OrderModal (organisms) — the order detail on /admin/orders › renders a Norwegian operator can read for Cash (= 110)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Betalt kontant"
+    Received: "Ukjent"
+
+      242 |   it.each(BACKEND_PAYMENT_TYPES)('renders a Norwegian operator can read for %s (= %i)', async (member) => {
+      243 |     const rendered = await surface.render(member, 'no')
+    > 244 |     expect(rendered).toBe(EXPECTED_NO[member])
+          |                      ^
+      245 |     // Stated separately from the equality above so a future edit that makes the expectation table
+      246 |     // wrong still cannot make "Ukjent" acceptable.
+      247 |     expect(rendered).not.toBe(UNKNOWN.no)
+
+      at test/payment-type-label.test.js:244:22
+
+  ● OrderModal (organisms) — the order detail on /admin/orders › renders a Norwegian operator can read for CompanyAccount (= 120)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Betalt med bedriftskonto"
+    Received: "Ukjent"
+
+      242 |   it.each(BACKEND_PAYMENT_TYPES)('renders a Norwegian operator can read for %s (= %i)', async (member) => {
+      243 |     const rendered = await surface.render(member, 'no')
+    > 244 |     expect(rendered).toBe(EXPECTED_NO[member])
+          |                      ^
+      245 |     // Stated separately from the equality above so a future edit that makes the expectation table
+      246 |     // wrong still cannot make "Ukjent" acceptable.
+      247 |     expect(rendered).not.toBe(UNKNOWN.no)
+
+      at test/payment-type-label.test.js:244:22
+
+  ● OrderModal (organisms) — the order detail on /admin/orders › renders a Norwegian operator can read for DinteroTerminal (= 450)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Betalt med terminal"
+    Received: "Ukjent"
+
+      242 |   it.each(BACKEND_PAYMENT_TYPES)('renders a Norwegian operator can read for %s (= %i)', async (member) => {
+      243 |     const rendered = await surface.render(member, 'no')
+    > 244 |     expect(rendered).toBe(EXPECTED_NO[member])
+          |                      ^
+      245 |     // Stated separately from the equality above so a future edit that makes the expectation table
+      246 |     // wrong still cannot make "Ukjent" acceptable.
+      247 |     expect(rendered).not.toBe(UNKNOWN.no)
+
+      at test/payment-type-label.test.js:244:22
+
+  ● OrderModal (organisms) — the order detail on /admin/orders › renders a Norwegian operator can read for Surfboard (= 600)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Betalt med kort"
+    Received: "Ukjent"
+
+      242 |   it.each(BACKEND_PAYMENT_TYPES)('renders a Norwegian operator can read for %s (= %i)', async (member) => {
+      243 |     const rendered = await surface.render(member, 'no')
+    > 244 |     expect(rendered).toBe(EXPECTED_NO[member])
+          |                      ^
+      245 |     // Stated separately from the equality above so a future edit that makes the expectation table
+      246 |     // wrong still cannot make "Ukjent" acceptable.
+      247 |     expect(rendered).not.toBe(UNKNOWN.no)
+
+      at test/payment-type-label.test.js:244:22
+
+  ● OrderModal (organisms) — the order detail on /admin/orders › renders a Norwegian operator can read for SurfboardVipps (= 610)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Betalt med Vipps"
+    Received: "Ukjent"
+
+      242 |   it.each(BACKEND_PAYMENT_TYPES)('renders a Norwegian operator can read for %s (= %i)', async (member) => {
+      243 |     const rendered = await surface.render(member, 'no')
+    > 244 |     expect(rendered).toBe(EXPECTED_NO[member])
+          |                      ^
+      245 |     // Stated separately from the equality above so a future edit that makes the expectation table
+      246 |     // wrong still cannot make "Ukjent" acceptable.
+      247 |     expect(rendered).not.toBe(UNKNOWN.no)
+
+      at test/payment-type-label.test.js:244:22
+
+  ● OrderModal (organisms) — the order detail on /admin/orders › renders a Norwegian operator can read for SurfboardTerminal (= 650)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Betalt med terminal"
+    Received: "Ukjent"
+
+      242 |   it.each(BACKEND_PAYMENT_TYPES)('renders a Norwegian operator can read for %s (= %i)', async (member) => {
+      243 |     const rendered = await surface.render(member, 'no')
+    > 244 |     expect(rendered).toBe(EXPECTED_NO[member])
+          |                      ^
+      245 |     // Stated separately from the equality above so a future edit that makes the expectation table
+      246 |     // wrong still cannot make "Ukjent" acceptable.
+      247 |     expect(rendered).not.toBe(UNKNOWN.no)
+
+      at test/payment-type-label.test.js:244:22
+
+  ● OrderModal (organisms) — the order detail on /admin/orders › NotSet no longer reads "Ukjent"
+
+    expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "Ukjent"
+
+      249 |
+      250 |   it.each(WERE_UNKNOWN)('%s no longer reads "Ukjent"', async (member) => {
+    > 251 |     expect(await surface.render(member, 'no')).not.toBe(UNKNOWN.no)
+          |                                                    ^
+      252 |   })
+      253 |
+      254 |   it.each(NOT_PAYMENT_TYPES)('still answers the unknown fallback for %s', async (_what, value) => {
+
+      at test/payment-type-label.test.js:251:52
+
+  ● OrderModal (organisms) — the order detail on /admin/orders › Cash no longer reads "Ukjent"
+
+    expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "Ukjent"
+
+      249 |
+      250 |   it.each(WERE_UNKNOWN)('%s no longer reads "Ukjent"', async (member) => {
+    > 251 |     expect(await surface.render(member, 'no')).not.toBe(UNKNOWN.no)
+          |                                                    ^
+      252 |   })
+      253 |
+      254 |   it.each(NOT_PAYMENT_TYPES)('still answers the unknown fallback for %s', async (_what, value) => {
+
+      at test/payment-type-label.test.js:251:52
+
+  ● OrderModal (organisms) — the order detail on /admin/orders › CompanyAccount no longer reads "Ukjent"
+
+    expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "Ukjent"
+
+      249 |
+      250 |   it.each(WERE_UNKNOWN)('%s no longer reads "Ukjent"', async (member) => {
+    > 251 |     expect(await surface.render(member, 'no')).not.toBe(UNKNOWN.no)
+          |                                                    ^
+      252 |   })
+      253 |
+      254 |   it.each(NOT_PAYMENT_TYPES)('still answers the unknown fallback for %s', async (_what, value) => {
+
+      at test/payment-type-label.test.js:251:52
+
+  ● OrderModal (organisms) — the order detail on /admin/orders › DinteroTerminal no longer reads "Ukjent"
+
+    expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "Ukjent"
+
+      249 |
+      250 |   it.each(WERE_UNKNOWN)('%s no longer reads "Ukjent"', async (member) => {
+    > 251 |     expect(await surface.render(member, 'no')).not.toBe(UNKNOWN.no)
+          |                                                    ^
+      252 |   })
+      253 |
+      254 |   it.each(NOT_PAYMENT_TYPES)('still answers the unknown fallback for %s', async (_what, value) => {
+
+      at test/payment-type-label.test.js:251:52
+
+  ● OrderModal (organisms) — the order detail on /admin/orders › Surfboard no longer reads "Ukjent"
+
+    expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "Ukjent"
+
+      249 |
+      250 |   it.each(WERE_UNKNOWN)('%s no longer reads "Ukjent"', async (member) => {
+    > 251 |     expect(await surface.render(member, 'no')).not.toBe(UNKNOWN.no)
+          |                                                    ^
+      252 |   })
+      253 |
+      254 |   it.each(NOT_PAYMENT_TYPES)('still answers the unknown fallback for %s', async (_what, value) => {
+
+      at test/payment-type-label.test.js:251:52
+
+  ● OrderModal (organisms) — the order detail on /admin/orders › SurfboardVipps no longer reads "Ukjent"
+
+    expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "Ukjent"
+
+      249 |
+      250 |   it.each(WERE_UNKNOWN)('%s no longer reads "Ukjent"', async (member) => {
+    > 251 |     expect(await surface.render(member, 'no')).not.toBe(UNKNOWN.no)
+          |                                                    ^
+      252 |   })
+      253 |
+      254 |   it.each(NOT_PAYMENT_TYPES)('still answers the unknown fallback for %s', async (_what, value) => {
+
+      at test/payment-type-label.test.js:251:52
+
+  ● OrderModal (organisms) — the order detail on /admin/orders › SurfboardTerminal no longer reads "Ukjent"
+
+    expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "Ukjent"
+
+      249 |
+      250 |   it.each(WERE_UNKNOWN)('%s no longer reads "Ukjent"', async (member) => {
+    > 251 |     expect(await surface.render(member, 'no')).not.toBe(UNKNOWN.no)
+          |                                                    ^
+      252 |   })
+      253 |
+      254 |   it.each(NOT_PAYMENT_TYPES)('still answers the unknown fallback for %s', async (_what, value) => {
+
+      at test/payment-type-label.test.js:251:52
+
+  ● OrderModal (molecules) — the printable receipt view › renders a Norwegian operator can read for NotSet (= 0)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Ingen betaling registrert"
+    Received: "Ukjent"
+
+      242 |   it.each(BACKEND_PAYMENT_TYPES)('renders a Norwegian operator can read for %s (= %i)', async (member) => {
+      243 |     const rendered = await surface.render(member, 'no')
+    > 244 |     expect(rendered).toBe(EXPECTED_NO[member])
+          |                      ^
+      245 |     // Stated separately from the equality above so a future edit that makes the expectation table
+      246 |     // wrong still cannot make "Ukjent" acceptable.
+      247 |     expect(rendered).not.toBe(UNKNOWN.no)
+
+      at test/payment-type-label.test.js:244:22
+
+  ● OrderModal (molecules) — the printable receipt view › renders a Norwegian operator can read for Cash (= 110)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Betalt kontant"
+    Received: "Ukjent"
+
+      242 |   it.each(BACKEND_PAYMENT_TYPES)('renders a Norwegian operator can read for %s (= %i)', async (member) => {
+      243 |     const rendered = await surface.render(member, 'no')
+    > 244 |     expect(rendered).toBe(EXPECTED_NO[member])
+          |                      ^
+      245 |     // Stated separately from the equality above so a future edit that makes the expectation table
+      246 |     // wrong still cannot make "Ukjent" acceptable.
+      247 |     expect(rendered).not.toBe(UNKNOWN.no)
+
+      at test/payment-type-label.test.js:244:22
+
+  ● OrderModal (molecules) — the printable receipt view › renders a Norwegian operator can read for CompanyAccount (= 120)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Betalt med bedriftskonto"
+    Received: "Ukjent"
+
+      242 |   it.each(BACKEND_PAYMENT_TYPES)('renders a Norwegian operator can read for %s (= %i)', async (member) => {
+      243 |     const rendered = await surface.render(member, 'no')
+    > 244 |     expect(rendered).toBe(EXPECTED_NO[member])
+          |                      ^
+      245 |     // Stated separately from the equality above so a future edit that makes the expectation table
+      246 |     // wrong still cannot make "Ukjent" acceptable.
+      247 |     expect(rendered).not.toBe(UNKNOWN.no)
+
+      at test/payment-type-label.test.js:244:22
+
+  ● OrderModal (molecules) — the printable receipt view › renders a Norwegian operator can read for DinteroTerminal (= 450)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Betalt med terminal"
+    Received: "Ukjent"
+
+      242 |   it.each(BACKEND_PAYMENT_TYPES)('renders a Norwegian operator can read for %s (= %i)', async (member) => {
+      243 |     const rendered = await surface.render(member, 'no')
+    > 244 |     expect(rendered).toBe(EXPECTED_NO[member])
+          |                      ^
+      245 |     // Stated separately from the equality above so a future edit that makes the expectation table
+      246 |     // wrong still cannot make "Ukjent" acceptable.
+      247 |     expect(rendered).not.toBe(UNKNOWN.no)
+
+      at test/payment-type-label.test.js:244:22
+
+  ● OrderModal (molecules) — the printable receipt view › renders a Norwegian operator can read for Surfboard (= 600)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Betalt med kort"
+    Received: "Ukjent"
+
+      242 |   it.each(BACKEND_PAYMENT_TYPES)('renders a Norwegian operator can read for %s (= %i)', async (member) => {
+      243 |     const rendered = await surface.render(member, 'no')
+    > 244 |     expect(rendered).toBe(EXPECTED_NO[member])
+          |                      ^
+      245 |     // Stated separately from the equality above so a future edit that makes the expectation table
+      246 |     // wrong still cannot make "Ukjent" acceptable.
+      247 |     expect(rendered).not.toBe(UNKNOWN.no)
+
+      at test/payment-type-label.test.js:244:22
+
+  ● OrderModal (molecules) — the printable receipt view › renders a Norwegian operator can read for SurfboardVipps (= 610)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Betalt med Vipps"
+    Received: "Ukjent"
+
+      242 |   it.each(BACKEND_PAYMENT_TYPES)('renders a Norwegian operator can read for %s (= %i)', async (member) => {
+      243 |     const rendered = await surface.render(member, 'no')
+    > 244 |     expect(rendered).toBe(EXPECTED_NO[member])
+          |                      ^
+      245 |     // Stated separately from the equality above so a future edit that makes the expectation table
+      246 |     // wrong still cannot make "Ukjent" acceptable.
+      247 |     expect(rendered).not.toBe(UNKNOWN.no)
+
+      at test/payment-type-label.test.js:244:22
+
+  ● OrderModal (molecules) — the printable receipt view › renders a Norwegian operator can read for SurfboardTerminal (= 650)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Betalt med terminal"
+    Received: "Ukjent"
+
+      242 |   it.each(BACKEND_PAYMENT_TYPES)('renders a Norwegian operator can read for %s (= %i)', async (member) => {
+      243 |     const rendered = await surface.render(member, 'no')
+    > 244 |     expect(rendered).toBe(EXPECTED_NO[member])
+          |                      ^
+      245 |     // Stated separately from the equality above so a future edit that makes the expectation table
+      246 |     // wrong still cannot make "Ukjent" acceptable.
+      247 |     expect(rendered).not.toBe(UNKNOWN.no)
+
+      at test/payment-type-label.test.js:244:22
+
+  ● OrderModal (molecules) — the printable receipt view › NotSet no longer reads "Ukjent"
+
+    expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "Ukjent"
+
+      249 |
+      250 |   it.each(WERE_UNKNOWN)('%s no longer reads "Ukjent"', async (member) => {
+    > 251 |     expect(await surface.render(member, 'no')).not.toBe(UNKNOWN.no)
+          |                                                    ^
+      252 |   })
+      253 |
+      254 |   it.each(NOT_PAYMENT_TYPES)('still answers the unknown fallback for %s', async (_what, value) => {
+
+      at test/payment-type-label.test.js:251:52
+
+  ● OrderModal (molecules) — the printable receipt view › Cash no longer reads "Ukjent"
+
+    expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "Ukjent"
+
+      249 |
+      250 |   it.each(WERE_UNKNOWN)('%s no longer reads "Ukjent"', async (member) => {
+    > 251 |     expect(await surface.render(member, 'no')).not.toBe(UNKNOWN.no)
+          |                                                    ^
+      252 |   })
+      253 |
+      254 |   it.each(NOT_PAYMENT_TYPES)('still answers the unknown fallback for %s', async (_what, value) => {
+
+      at test/payment-type-label.test.js:251:52
+
+  ● OrderModal (molecules) — the printable receipt view › CompanyAccount no longer reads "Ukjent"
+
+    expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "Ukjent"
+
+      249 |
+      250 |   it.each(WERE_UNKNOWN)('%s no longer reads "Ukjent"', async (member) => {
+    > 251 |     expect(await surface.render(member, 'no')).not.toBe(UNKNOWN.no)
+          |                                                    ^
+      252 |   })
+      253 |
+      254 |   it.each(NOT_PAYMENT_TYPES)('still answers the unknown fallback for %s', async (_what, value) => {
+
+      at test/payment-type-label.test.js:251:52
+
+  ● OrderModal (molecules) — the printable receipt view › DinteroTerminal no longer reads "Ukjent"
+
+    expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "Ukjent"
+
+      249 |
+      250 |   it.each(WERE_UNKNOWN)('%s no longer reads "Ukjent"', async (member) => {
+    > 251 |     expect(await surface.render(member, 'no')).not.toBe(UNKNOWN.no)
+          |                                                    ^
+      252 |   })
+      253 |
+      254 |   it.each(NOT_PAYMENT_TYPES)('still answers the unknown fallback for %s', async (_what, value) => {
+
+      at test/payment-type-label.test.js:251:52
+
+  ● OrderModal (molecules) — the printable receipt view › Surfboard no longer reads "Ukjent"
+
+    expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "Ukjent"
+
+      249 |
+      250 |   it.each(WERE_UNKNOWN)('%s no longer reads "Ukjent"', async (member) => {
+    > 251 |     expect(await surface.render(member, 'no')).not.toBe(UNKNOWN.no)
+          |                                                    ^
+      252 |   })
+      253 |
+      254 |   it.each(NOT_PAYMENT_TYPES)('still answers the unknown fallback for %s', async (_what, value) => {
+
+      at test/payment-type-label.test.js:251:52
+
+  ● OrderModal (molecules) — the printable receipt view › SurfboardVipps no longer reads "Ukjent"
+
+    expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "Ukjent"
+
+      249 |
+      250 |   it.each(WERE_UNKNOWN)('%s no longer reads "Ukjent"', async (member) => {
+    > 251 |     expect(await surface.render(member, 'no')).not.toBe(UNKNOWN.no)
+          |                                                    ^
+      252 |   })
+      253 |
+      254 |   it.each(NOT_PAYMENT_TYPES)('still answers the unknown fallback for %s', async (_what, value) => {
+
+      at test/payment-type-label.test.js:251:52
+
+  ● OrderModal (molecules) — the printable receipt view › SurfboardTerminal no longer reads "Ukjent"
+
+    expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "Ukjent"
+
+      249 |
+      250 |   it.each(WERE_UNKNOWN)('%s no longer reads "Ukjent"', async (member) => {
+    > 251 |     expect(await surface.render(member, 'no')).not.toBe(UNKNOWN.no)
+          |                                                    ^
+      252 |   })
+      253 |
+      254 |   it.each(NOT_PAYMENT_TYPES)('still answers the unknown fallback for %s', async (_what, value) => {
+
+      at test/payment-type-label.test.js:251:52
+
+  ● the journey this lane exists for — a POS cash sale, read back by an operator › reads "Betalt kontant" on OrderCard — the admin order list on /admin/ongoing
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Betalt kontant"
+    Received: "Ukjent"
+
+      263 |   // no unusual tender — and it said "Ukjent".
+      264 |   it.each(SURFACES.map(s => [s.name, s]))('reads "Betalt kontant" on %s', async (_name, surface) => {
+    > 265 |     expect(await surface.render('Cash', 'no')).toBe('Betalt kontant')
+          |                                                ^
+      266 |   })
+      267 |
+      268 |   it.each(SURFACES.map(s => [s.name, s]))('reads "Betalt med terminal" for the card leg on %s', async (_name, surface) => {
+
+      at test/payment-type-label.test.js:265:48
+
+  ● the journey this lane exists for — a POS cash sale, read back by an operator › reads "Betalt kontant" on OrderModal (organisms) — the order detail on /admin/orders
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Betalt kontant"
+    Received: "Ukjent"
+
+      263 |   // no unusual tender — and it said "Ukjent".
+      264 |   it.each(SURFACES.map(s => [s.name, s]))('reads "Betalt kontant" on %s', async (_name, surface) => {
+    > 265 |     expect(await surface.render('Cash', 'no')).toBe('Betalt kontant')
+          |                                                ^
+      266 |   })
+      267 |
+      268 |   it.each(SURFACES.map(s => [s.name, s]))('reads "Betalt med terminal" for the card leg on %s', async (_name, surface) => {
+
+      at test/payment-type-label.test.js:265:48
+
+  ● the journey this lane exists for — a POS cash sale, read back by an operator › reads "Betalt kontant" on OrderModal (molecules) — the printable receipt view
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Betalt kontant"
+    Received: "Ukjent"
+
+      263 |   // no unusual tender — and it said "Ukjent".
+      264 |   it.each(SURFACES.map(s => [s.name, s]))('reads "Betalt kontant" on %s', async (_name, surface) => {
+    > 265 |     expect(await surface.render('Cash', 'no')).toBe('Betalt kontant')
+          |                                                ^
+      266 |   })
+      267 |
+      268 |   it.each(SURFACES.map(s => [s.name, s]))('reads "Betalt med terminal" for the card leg on %s', async (_name, surface) => {
+
+      at test/payment-type-label.test.js:265:48
+
+  ● the journey this lane exists for — a POS cash sale, read back by an operator › reads "Betalt med terminal" for the card leg on OrderCard — the admin order list on /admin/ongoing
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Betalt med terminal"
+    Received: "Ukjent"
+
+      267 |
+      268 |   it.each(SURFACES.map(s => [s.name, s]))('reads "Betalt med terminal" for the card leg on %s', async (_name, surface) => {
+    > 269 |     expect(await surface.render('SurfboardTerminal', 'no')).toBe('Betalt med terminal')
+          |                                                             ^
+      270 |   })
+      271 | })
+      272 |
+
+      at test/payment-type-label.test.js:269:61
+
+  ● the journey this lane exists for — a POS cash sale, read back by an operator › reads "Betalt med terminal" for the card leg on OrderModal (organisms) — the order detail on /admin/orders
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Betalt med terminal"
+    Received: "Ukjent"
+
+      267 |
+      268 |   it.each(SURFACES.map(s => [s.name, s]))('reads "Betalt med terminal" for the card leg on %s', async (_name, surface) => {
+    > 269 |     expect(await surface.render('SurfboardTerminal', 'no')).toBe('Betalt med terminal')
+          |                                                             ^
+      270 |   })
+      271 | })
+      272 |
+
+      at test/payment-type-label.test.js:269:61
+
+  ● the journey this lane exists for — a POS cash sale, read back by an operator › reads "Betalt med terminal" for the card leg on OrderModal (molecules) — the printable receipt view
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Betalt med terminal"
+    Received: "Ukjent"
+
+      267 |
+      268 |   it.each(SURFACES.map(s => [s.name, s]))('reads "Betalt med terminal" for the card leg on %s', async (_name, surface) => {
+    > 269 |     expect(await surface.render('SurfboardTerminal', 'no')).toBe('Betalt med terminal')
+          |                                                             ^
+      270 |   })
+      271 | })
+      272 |
+
+      at test/payment-type-label.test.js:269:61
+
+  ● the Swiss build serves only German, and this switch could not › renders German for NotSet (= 0)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Keine Zahlung erfasst"
+    Received: "Ukjent"
+
+      276 |   it.each(BACKEND_PAYMENT_TYPES)('renders German for %s (= %i)', async (member) => {
+      277 |     const rendered = await SURFACES[0].render(member, 'de')
+    > 278 |     expect(rendered).toBe(EXPECTED_DE[member])
+          |                      ^
+      279 |     // No German label coincides with its Norwegian one, so this is a real discriminator: it reds
+      280 |     // the moment a label goes back to being a Norwegian literal in the mixin.
+      281 |     expect(rendered).not.toBe(EXPECTED_NO[member])
+
+      at test/payment-type-label.test.js:278:22
+
+  ● the Swiss build serves only German, and this switch could not › renders German for Giftcard (= 75)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Mit Geschenkkarte bezahlt"
+    Received: "Betalt med gavekort"
+
+      276 |   it.each(BACKEND_PAYMENT_TYPES)('renders German for %s (= %i)', async (member) => {
+      277 |     const rendered = await SURFACES[0].render(member, 'de')
+    > 278 |     expect(rendered).toBe(EXPECTED_DE[member])
+          |                      ^
+      279 |     // No German label coincides with its Norwegian one, so this is a real discriminator: it reds
+      280 |     // the moment a label goes back to being a Norwegian literal in the mixin.
+      281 |     expect(rendered).not.toBe(EXPECTED_NO[member])
+
+      at test/payment-type-label.test.js:278:22
+
+  ● the Swiss build serves only German, and this switch could not › renders German for PayInStore (= 100)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Im Geschäft bezahlen"
+    Received: "Betal i butikk"
+
+      276 |   it.each(BACKEND_PAYMENT_TYPES)('renders German for %s (= %i)', async (member) => {
+      277 |     const rendered = await SURFACES[0].render(member, 'de')
+    > 278 |     expect(rendered).toBe(EXPECTED_DE[member])
+          |                      ^
+      279 |     // No German label coincides with its Norwegian one, so this is a real discriminator: it reds
+      280 |     // the moment a label goes back to being a Norwegian literal in the mixin.
+      281 |     expect(rendered).not.toBe(EXPECTED_NO[member])
+
+      at test/payment-type-label.test.js:278:22
+
+  ● the Swiss build serves only German, and this switch could not › renders German for Cash (= 110)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Bar bezahlt"
+    Received: "Ukjent"
+
+      276 |   it.each(BACKEND_PAYMENT_TYPES)('renders German for %s (= %i)', async (member) => {
+      277 |     const rendered = await SURFACES[0].render(member, 'de')
+    > 278 |     expect(rendered).toBe(EXPECTED_DE[member])
+          |                      ^
+      279 |     // No German label coincides with its Norwegian one, so this is a real discriminator: it reds
+      280 |     // the moment a label goes back to being a Norwegian literal in the mixin.
+      281 |     expect(rendered).not.toBe(EXPECTED_NO[member])
+
+      at test/payment-type-label.test.js:278:22
+
+  ● the Swiss build serves only German, and this switch could not › renders German for CompanyAccount (= 120)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Mit Firmenkonto bezahlt"
+    Received: "Ukjent"
+
+      276 |   it.each(BACKEND_PAYMENT_TYPES)('renders German for %s (= %i)', async (member) => {
+      277 |     const rendered = await SURFACES[0].render(member, 'de')
+    > 278 |     expect(rendered).toBe(EXPECTED_DE[member])
+          |                      ^
+      279 |     // No German label coincides with its Norwegian one, so this is a real discriminator: it reds
+      280 |     // the moment a label goes back to being a Norwegian literal in the mixin.
+      281 |     expect(rendered).not.toBe(EXPECTED_NO[member])
+
+      at test/payment-type-label.test.js:278:22
+
+  ● the Swiss build serves only German, and this switch could not › renders German for Stripe (= 200)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Mit Karte bezahlt"
+    Received: "Betalt med kort"
+
+      276 |   it.each(BACKEND_PAYMENT_TYPES)('renders German for %s (= %i)', async (member) => {
+      277 |     const rendered = await SURFACES[0].render(member, 'de')
+    > 278 |     expect(rendered).toBe(EXPECTED_DE[member])
+          |                      ^
+      279 |     // No German label coincides with its Norwegian one, so this is a real discriminator: it reds
+      280 |     // the moment a label goes back to being a Norwegian literal in the mixin.
+      281 |     expect(rendered).not.toBe(EXPECTED_NO[member])
+
+      at test/payment-type-label.test.js:278:22
+
+  ● the Swiss build serves only German, and this switch could not › renders German for Vipps (= 300)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Mit Vipps bezahlt"
+    Received: "Betalt med Vipps"
+
+      276 |   it.each(BACKEND_PAYMENT_TYPES)('renders German for %s (= %i)', async (member) => {
+      277 |     const rendered = await SURFACES[0].render(member, 'de')
+    > 278 |     expect(rendered).toBe(EXPECTED_DE[member])
+          |                      ^
+      279 |     // No German label coincides with its Norwegian one, so this is a real discriminator: it reds
+      280 |     // the moment a label goes back to being a Norwegian literal in the mixin.
+      281 |     expect(rendered).not.toBe(EXPECTED_NO[member])
+
+      at test/payment-type-label.test.js:278:22
+
+  ● the Swiss build serves only German, and this switch could not › renders German for Dintero (= 400)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Mit Dintero bezahlt"
+    Received: "Betalt med Dintero"
+
+      276 |   it.each(BACKEND_PAYMENT_TYPES)('renders German for %s (= %i)', async (member) => {
+      277 |     const rendered = await SURFACES[0].render(member, 'de')
+    > 278 |     expect(rendered).toBe(EXPECTED_DE[member])
+          |                      ^
+      279 |     // No German label coincides with its Norwegian one, so this is a real discriminator: it reds
+      280 |     // the moment a label goes back to being a Norwegian literal in the mixin.
+      281 |     expect(rendered).not.toBe(EXPECTED_NO[member])
+
+      at test/payment-type-label.test.js:278:22
+
+  ● the Swiss build serves only German, and this switch could not › renders German for DinteroVipps (= 410)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Mit Vipps bezahlt"
+    Received: "Betalt med Vipps"
+
+      276 |   it.each(BACKEND_PAYMENT_TYPES)('renders German for %s (= %i)', async (member) => {
+      277 |     const rendered = await SURFACES[0].render(member, 'de')
+    > 278 |     expect(rendered).toBe(EXPECTED_DE[member])
+          |                      ^
+      279 |     // No German label coincides with its Norwegian one, so this is a real discriminator: it reds
+      280 |     // the moment a label goes back to being a Norwegian literal in the mixin.
+      281 |     expect(rendered).not.toBe(EXPECTED_NO[member])
+
+      at test/payment-type-label.test.js:278:22
+
+  ● the Swiss build serves only German, and this switch could not › renders German for DinteroBillie (= 420)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Mit Billie bezahlt"
+    Received: "Betalt med Billie"
+
+      276 |   it.each(BACKEND_PAYMENT_TYPES)('renders German for %s (= %i)', async (member) => {
+      277 |     const rendered = await SURFACES[0].render(member, 'de')
+    > 278 |     expect(rendered).toBe(EXPECTED_DE[member])
+          |                      ^
+      279 |     // No German label coincides with its Norwegian one, so this is a real discriminator: it reds
+      280 |     // the moment a label goes back to being a Norwegian literal in the mixin.
+      281 |     expect(rendered).not.toBe(EXPECTED_NO[member])
+
+      at test/payment-type-label.test.js:278:22
+
+  ● the Swiss build serves only German, and this switch could not › renders German for DinteroKlarna (= 430)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Mit Klarna bezahlt"
+    Received: "Betalt med Klarna"
+
+      276 |   it.each(BACKEND_PAYMENT_TYPES)('renders German for %s (= %i)', async (member) => {
+      277 |     const rendered = await SURFACES[0].render(member, 'de')
+    > 278 |     expect(rendered).toBe(EXPECTED_DE[member])
+          |                      ^
+      279 |     // No German label coincides with its Norwegian one, so this is a real discriminator: it reds
+      280 |     // the moment a label goes back to being a Norwegian literal in the mixin.
+      281 |     expect(rendered).not.toBe(EXPECTED_NO[member])
+
+      at test/payment-type-label.test.js:278:22
+
+  ● the Swiss build serves only German, and this switch could not › renders German for DinteroKravia (= 440)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Mit Kravia bezahlt"
+    Received: "Betalt med Kravia"
+
+      276 |   it.each(BACKEND_PAYMENT_TYPES)('renders German for %s (= %i)', async (member) => {
+      277 |     const rendered = await SURFACES[0].render(member, 'de')
+    > 278 |     expect(rendered).toBe(EXPECTED_DE[member])
+          |                      ^
+      279 |     // No German label coincides with its Norwegian one, so this is a real discriminator: it reds
+      280 |     // the moment a label goes back to being a Norwegian literal in the mixin.
+      281 |     expect(rendered).not.toBe(EXPECTED_NO[member])
+
+      at test/payment-type-label.test.js:278:22
+
+  ● the Swiss build serves only German, and this switch could not › renders German for DinteroTerminal (= 450)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Mit Terminal bezahlt"
+    Received: "Ukjent"
+
+      276 |   it.each(BACKEND_PAYMENT_TYPES)('renders German for %s (= %i)', async (member) => {
+      277 |     const rendered = await SURFACES[0].render(member, 'de')
+    > 278 |     expect(rendered).toBe(EXPECTED_DE[member])
+          |                      ^
+      279 |     // No German label coincides with its Norwegian one, so this is a real discriminator: it reds
+      280 |     // the moment a label goes back to being a Norwegian literal in the mixin.
+      281 |     expect(rendered).not.toBe(EXPECTED_NO[member])
+
+      at test/payment-type-label.test.js:278:22
+
+  ● the Swiss build serves only German, and this switch could not › renders German for WoltMarketplace (= 500)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Über Wolt bezahlt"
+    Received: "Betalt via Wolt"
+
+      276 |   it.each(BACKEND_PAYMENT_TYPES)('renders German for %s (= %i)', async (member) => {
+      277 |     const rendered = await SURFACES[0].render(member, 'de')
+    > 278 |     expect(rendered).toBe(EXPECTED_DE[member])
+          |                      ^
+      279 |     // No German label coincides with its Norwegian one, so this is a real discriminator: it reds
+      280 |     // the moment a label goes back to being a Norwegian literal in the mixin.
+      281 |     expect(rendered).not.toBe(EXPECTED_NO[member])
+
+      at test/payment-type-label.test.js:278:22
+
+  ● the Swiss build serves only German, and this switch could not › renders German for Surfboard (= 600)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Mit Karte bezahlt"
+    Received: "Ukjent"
+
+      276 |   it.each(BACKEND_PAYMENT_TYPES)('renders German for %s (= %i)', async (member) => {
+      277 |     const rendered = await SURFACES[0].render(member, 'de')
+    > 278 |     expect(rendered).toBe(EXPECTED_DE[member])
+          |                      ^
+      279 |     // No German label coincides with its Norwegian one, so this is a real discriminator: it reds
+      280 |     // the moment a label goes back to being a Norwegian literal in the mixin.
+      281 |     expect(rendered).not.toBe(EXPECTED_NO[member])
+
+      at test/payment-type-label.test.js:278:22
+
+  ● the Swiss build serves only German, and this switch could not › renders German for SurfboardVipps (= 610)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Mit Vipps bezahlt"
+    Received: "Ukjent"
+
+      276 |   it.each(BACKEND_PAYMENT_TYPES)('renders German for %s (= %i)', async (member) => {
+      277 |     const rendered = await SURFACES[0].render(member, 'de')
+    > 278 |     expect(rendered).toBe(EXPECTED_DE[member])
+          |                      ^
+      279 |     // No German label coincides with its Norwegian one, so this is a real discriminator: it reds
+      280 |     // the moment a label goes back to being a Norwegian literal in the mixin.
+      281 |     expect(rendered).not.toBe(EXPECTED_NO[member])
+
+      at test/payment-type-label.test.js:278:22
+
+  ● the Swiss build serves only German, and this switch could not › renders German for SurfboardTerminal (= 650)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Mit Terminal bezahlt"
+    Received: "Ukjent"
+
+      276 |   it.each(BACKEND_PAYMENT_TYPES)('renders German for %s (= %i)', async (member) => {
+      277 |     const rendered = await SURFACES[0].render(member, 'de')
+    > 278 |     expect(rendered).toBe(EXPECTED_DE[member])
+          |                      ^
+      279 |     // No German label coincides with its Norwegian one, so this is a real discriminator: it reds
+      280 |     // the moment a label goes back to being a Norwegian literal in the mixin.
+      281 |     expect(rendered).not.toBe(EXPECTED_NO[member])
+
+      at test/payment-type-label.test.js:278:22
+
+  ● the Swiss build serves only German, and this switch could not › answers the German unknown fallback for an unrecognised member the backend might add tomorrow
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Unbekannt"
+    Received: "Ukjent"
+
+      283 |
+      284 |   it.each(NOT_PAYMENT_TYPES)('answers the German unknown fallback for %s', async (_what, value) => {
+    > 285 |     expect(await SURFACES[0].render(value, 'de')).toBe(UNKNOWN.de)
+          |                                                   ^
+      286 |   })
+      287 | })
+      288 |
+
+      at test/payment-type-label.test.js:285:51
+
+  ● the Swiss build serves only German, and this switch could not › answers the German unknown fallback for a member spelled in the wrong case
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Unbekannt"
+    Received: "Ukjent"
+
+      283 |
+      284 |   it.each(NOT_PAYMENT_TYPES)('answers the German unknown fallback for %s', async (_what, value) => {
+    > 285 |     expect(await SURFACES[0].render(value, 'de')).toBe(UNKNOWN.de)
+          |                                                   ^
+      286 |   })
+      287 | })
+      288 |
+
+      at test/payment-type-label.test.js:285:51
+
+  ● the Swiss build serves only German, and this switch could not › answers the German unknown fallback for an inherited Object property
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Unbekannt"
+    Received: "Ukjent"
+
+      283 |
+      284 |   it.each(NOT_PAYMENT_TYPES)('answers the German unknown fallback for %s', async (_what, value) => {
+    > 285 |     expect(await SURFACES[0].render(value, 'de')).toBe(UNKNOWN.de)
+          |                                                   ^
+      286 |   })
+      287 | })
+      288 |
+
+      at test/payment-type-label.test.js:285:51
+
+  ● the Swiss build serves only German, and this switch could not › answers the German unknown fallback for another inherited Object property
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Unbekannt"
+    Received: "Ukjent"
+
+      283 |
+      284 |   it.each(NOT_PAYMENT_TYPES)('answers the German unknown fallback for %s', async (_what, value) => {
+    > 285 |     expect(await SURFACES[0].render(value, 'de')).toBe(UNKNOWN.de)
+          |                                                   ^
+      286 |   })
+      287 | })
+      288 |
+
+      at test/payment-type-label.test.js:285:51
+
+  ● the Swiss build serves only German, and this switch could not › answers the German unknown fallback for an empty string
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Unbekannt"
+    Received: "Ukjent"
+
+      283 |
+      284 |   it.each(NOT_PAYMENT_TYPES)('answers the German unknown fallback for %s', async (_what, value) => {
+    > 285 |     expect(await SURFACES[0].render(value, 'de')).toBe(UNKNOWN.de)
+          |                                                   ^
+      286 |   })
+      287 | })
+      288 |
+
+      at test/payment-type-label.test.js:285:51
+
+  ● the Swiss build serves only German, and this switch could not › answers the German unknown fallback for null
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Unbekannt"
+    Received: "Ukjent"
+
+      283 |
+      284 |   it.each(NOT_PAYMENT_TYPES)('answers the German unknown fallback for %s', async (_what, value) => {
+    > 285 |     expect(await SURFACES[0].render(value, 'de')).toBe(UNKNOWN.de)
+          |                                                   ^
+      286 |   })
+      287 | })
+      288 |
+
+      at test/payment-type-label.test.js:285:51
+
+  ● the Swiss build serves only German, and this switch could not › answers the German unknown fallback for undefined
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Unbekannt"
+    Received: "Ukjent"
+
+      283 |
+      284 |   it.each(NOT_PAYMENT_TYPES)('answers the German unknown fallback for %s', async (_what, value) => {
+    > 285 |     expect(await SURFACES[0].render(value, 'de')).toBe(UNKNOWN.de)
+          |                                                   ^
+      286 |   })
+      287 | })
+      288 |
+
+      at test/payment-type-label.test.js:285:51
+
+  ● the Swiss build serves only German, and this switch could not › answers the German unknown fallback for a number
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Unbekannt"
+    Received: "Ukjent"
+
+      283 |
+      284 |   it.each(NOT_PAYMENT_TYPES)('answers the German unknown fallback for %s', async (_what, value) => {
+    > 285 |     expect(await SURFACES[0].render(value, 'de')).toBe(UNKNOWN.de)
+          |                                                   ^
+      286 |   })
+      287 | })
+      288 |
+
+      at test/payment-type-label.test.js:285:51
+
+Test Suites: 1 failed, 1 total
+Tests:       75 failed, 57 passed, 132 total
+Snapshots:   0 total
+Time:        0.704 s, estimated 1 s
+Ran all test suites matching /test\/payment-type-label.test.js/i.

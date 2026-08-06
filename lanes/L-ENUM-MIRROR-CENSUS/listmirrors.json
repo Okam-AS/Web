@@ -1,0 +1,1021 @@
+{
+ "count": 60,
+ "hits": [
+  {
+   "file": "core/models/tripletex/tripletex-admin-models.ts",
+   "line": 7,
+   "backend": "TripletexVoucherKind",
+   "backend_size": 3,
+   "listed": [
+    "OnlineDaily",
+    "Payout",
+    "Pos"
+   ],
+   "missing": [],
+   "snippet": "'OnlineDaily' | 'Pos' | 'Payout'"
+  },
+  {
+   "file": "core/models/tripletex/tripletex-admin-models.ts",
+   "line": 8,
+   "backend": "TripletexVoucherStatus",
+   "backend_size": 5,
+   "listed": [
+    "Failed",
+    "Posted",
+    "Reversed",
+    "Skipped"
+   ],
+   "missing": [
+    "Pending"
+   ],
+   "snippet": "'Posted' | 'Failed' | 'Reversed' | 'Skipped'"
+  },
+  {
+   "file": "test/workforce-delivery-failures.test.js",
+   "line": 60,
+   "backend": "WorkforceNotificationOutboxStatus",
+   "backend_size": 6,
+   "listed": [
+    "DeadLettered",
+    "Failed",
+    "Withheld"
+   ],
+   "missing": [
+    "Leased",
+    "Pending",
+    "Sent"
+   ],
+   "snippet": "{ expect(tierOf('Withheld')).toBe(TIER_STORE); expect(tierOf('Failed')).toBe(TIER_WORKER); expect(tierOf('DeadLettered')).toBe(TIER_WORKER); }"
+  },
+  {
+   "file": "test/margin-menu-margin-panel.component.test.js",
+   "line": 79,
+   "backend": "MarginMenuPriceBasis",
+   "backend_size": 3,
+   "listed": [
+    "Base",
+    "Delivery",
+    "Table"
+   ],
+   "missing": [],
+   "snippet": "[ row({ priceBasis: 'Base', vatPercent: 15, grossPriceMinor: 14900, netPriceMinor: 12957, contributionMinor: 12052, foodCostPercent: 905 / 12957 * 100"
+  },
+  {
+   "file": "test/growth-send-gate.test.js",
+   "line": 205,
+   "backend": "GrowthSuppressionReason",
+   "backend_size": 7,
+   "listed": [
+    "Complaint",
+    "HardBounce",
+    "Unsubscribe"
+   ],
+   "missing": [
+    "AdminBlock",
+    "Erasure",
+    "InvalidAddress",
+    "Objection"
+   ],
+   "snippet": "['Unsubscribe', 'HardBounce', 'Complaint']"
+  },
+  {
+   "file": "test/growth-send-gate.test.js",
+   "line": 249,
+   "backend": "GrowthConsentDenyReason",
+   "backend_size": 8,
+   "listed": [
+    "FrequencyCapped",
+    "Suppressed",
+    "Unverified"
+   ],
+   "missing": [
+    "ChannelUnsupported",
+    "DispatchPaused",
+    "NoConsent",
+    "None",
+    "Withdrawn"
+   ],
+   "snippet": "[ { reason: 'Suppressed', count: 3 }, { reason: 'Unverified', count: 2 }, { reason: 'FrequencyCapped', count: 1 } ]"
+  },
+  {
+   "file": "test/margin-menu-margin.test.js",
+   "line": 203,
+   "backend": "MarginMenuPriceBasis",
+   "backend_size": 3,
+   "listed": [
+    "Base",
+    "Delivery",
+    "Table"
+   ],
+   "missing": [],
+   "snippet": "[ row({ priceBasis: 'Base', vatPercent: 15, netPriceMinor: 12957, contributionMinor: 12052 }), row({ priceBasis: 'Table', vatPercent: 25, netPriceMino"
+  },
+  {
+   "file": "test/training-page.test.js",
+   "line": 501,
+   "backend": "TrainingCourseVersionState",
+   "backend_size": 3,
+   "listed": [
+    "Draft",
+    "Published",
+    "Retired"
+   ],
+   "missing": [],
+   "snippet": "[ { courseVersionId: 'v-draft', versionNo: 3, state: 'Draft' }, { courseVersionId: PUBLISHED_V, versionNo: 2, state: 'Published' }, { courseVersionId:"
+  },
+  {
+   "file": "test/margin-cost-preview.test.js",
+   "line": 375,
+   "backend": "MarginBaseUnit",
+   "backend_size": 5,
+   "listed": [
+    "Gram",
+    "Kilogram",
+    "Liter",
+    "Milliliter"
+   ],
+   "missing": [
+    "Piece"
+   ],
+   "snippet": "{ expect(unitCodesFor('Gram')).toEqual(unitCodesFor('Kilogram')) expect(unitCodesFor('Milliliter')).toEqual(unitCodesFor('Liter')) expect(unitCodesFor"
+  },
+  {
+   "file": "test/margin-cost-preview.test.js",
+   "line": 386,
+   "backend": "MarginBaseUnit",
+   "backend_size": 5,
+   "listed": [
+    "Gram",
+    "Kilogram",
+    "Liter",
+    "Milliliter",
+    "Piece"
+   ],
+   "missing": [],
+   "snippet": "{ expect(defaultUnitCodeFor('Gram')).toBe('g') expect(defaultUnitCodeFor('Kilogram')).toBe('kg') expect(defaultUnitCodeFor('Milliliter')).toBe('ml') e"
+  },
+  {
+   "file": "test/training-journey.test.js",
+   "line": 141,
+   "backend": "TrainingCourseVersionState",
+   "backend_size": 3,
+   "listed": [
+    "Draft",
+    "Published",
+    "Retired"
+   ],
+   "missing": [],
+   "snippet": "[ { courseVersionId: 'v-draft', versionNo: 3, state: 'Draft' }, { courseVersionId: 'v-pub', versionNo: 2, state: 'Published' }, { courseVersionId: 'v-"
+  },
+  {
+   "file": "test/training-components.test.js",
+   "line": 169,
+   "backend": "TrainingCourseVersionState",
+   "backend_size": 3,
+   "listed": [
+    "Draft",
+    "Published",
+    "Retired"
+   ],
+   "missing": [],
+   "snippet": "[ { courseVersionId: 'v1', versionNo: 1, state: 'Published', passThresholdPercent: 80, contentHash: 'abcdef0123456789ff', publishedAtUtc: '2026-07-02T"
+  },
+  {
+   "file": "test/training-components.test.js",
+   "line": 560,
+   "backend": "TrainingCertificateStatus",
+   "backend_size": 3,
+   "listed": [
+    "Expired",
+    "Expiring",
+    "Valid"
+   ],
+   "missing": [],
+   "snippet": "[ cert({ certificateId: 'a', status: 'Valid' }), cert({ certificateId: 'b', status: 'Expiring' }), cert({ certificateId: 'c', status: 'Expired' }) ]"
+  },
+  {
+   "file": "test/growth-privacy-queue.test.js",
+   "line": 101,
+   "backend": "GrowthPrivacyRequestState",
+   "backend_size": 4,
+   "listed": [
+    "Fulfilled",
+    "InProgress",
+    "Received",
+    "RejectedWithReason"
+   ],
+   "missing": [],
+   "snippet": "[ item({ requestId: 1, state: 'Received' }), item({ requestId: 2, state: 'InProgress' }), item({ requestId: 3, state: 'Fulfilled', resolvedAt: '2026-0"
+  },
+  {
+   "file": "test/meals-admin-view.test.js",
+   "line": 171,
+   "backend": "MealsInvitationState",
+   "backend_size": 4,
+   "listed": [
+    "Claimed",
+    "Expired",
+    "Pending",
+    "Revoked"
+   ],
+   "missing": [],
+   "snippet": "[ { invitationId: 'i-1', state: 'Pending' }, { invitationId: 'i-2', state: 'Claimed' }, { invitationId: 'i-3', state: 'Revoked' }, { invitationId: 'i-"
+  },
+  {
+   "file": "test/growth-components.test.js",
+   "line": 141,
+   "backend": "GrowthConsentDenyReason",
+   "backend_size": 8,
+   "listed": [
+    "FrequencyCapped",
+    "Suppressed",
+    "Unverified"
+   ],
+   "missing": [
+    "ChannelUnsupported",
+    "DispatchPaused",
+    "NoConsent",
+    "None",
+    "Withdrawn"
+   ],
+   "snippet": "{ const wrapper = render(readAudience(SNAPSHOT)) const figures = wrapper.findAll('.growth-audience__figure dd').wrappers.map(w => w.text()) expect(fig"
+  },
+  {
+   "file": "test/events-journey.test.js",
+   "line": 172,
+   "backend": "EventsDepositStatus",
+   "backend_size": 10,
+   "listed": [
+    "Paid",
+    "PartiallyRefunded",
+    "Quarantined"
+   ],
+   "missing": [
+    "Expired",
+    "Failed",
+    "Forfeited",
+    "LatePaid",
+    "Pending",
+    "Refunded",
+    "Requested"
+   ],
+   "snippet": "['Paid', 'PartiallyRefunded', 'Quarantined']"
+  },
+  {
+   "file": "test/events-journey.test.js",
+   "line": 175,
+   "backend": "EventsDepositStatus",
+   "backend_size": 10,
+   "listed": [
+    "Expired",
+    "Failed",
+    "Forfeited",
+    "Pending",
+    "Refunded"
+   ],
+   "missing": [
+    "LatePaid",
+    "Paid",
+    "PartiallyRefunded",
+    "Quarantined",
+    "Requested"
+   ],
+   "snippet": "['Pending', 'Refunded', 'Forfeited', 'Expired', 'Failed']"
+  },
+  {
+   "file": "test/events-journey.test.js",
+   "line": 263,
+   "backend": "EventStatus",
+   "backend_size": 11,
+   "listed": [
+    "Accepted",
+    "DepositPending",
+    "Inquiry",
+    "ProposalSent",
+    "Proposing"
+   ],
+   "missing": [
+    "Cancelled",
+    "Confirmed",
+    "InService",
+    "Lost",
+    "Settled",
+    "Settling"
+   ],
+   "snippet": "{ const rail = buildPhaseRail('DepositPending') expect(rail.filter(n => n.state === 'current').map(n => n.phase)).toEqual(['DepositPending']) expect(r"
+  },
+  {
+   "file": "test/e2e/fixture/events.js",
+   "line": 61,
+   "backend": "EventsProposalLineKind",
+   "backend_size": 5,
+   "listed": [
+    "AddOn",
+    "Custom",
+    "MenuItem",
+    "Package",
+    "RoomFee"
+   ],
+   "missing": [],
+   "snippet": "['Package', 'MenuItem', 'AddOn', 'RoomFee', 'Custom']"
+  },
+  {
+   "file": "test/e2e/fixture/training.js",
+   "line": 523,
+   "backend": "TrainingEvidenceContentHashLinkage",
+   "backend_size": 3,
+   "listed": [
+    "Broken",
+    "Intact",
+    "Unresolvable"
+   ],
+   "missing": [],
+   "snippet": "{ completionId: c.completionId, courseId: c.courseId, courseTitle: found ? found.course.title : null, courseVersionId: c.courseVersionId, versionNo: v"
+  },
+  {
+   "file": "test/e2e/fixture/api-server.js",
+   "line": 1167,
+   "backend": "WorkforceCapability",
+   "backend_size": 5,
+   "listed": [
+    "WorkforceManager",
+    "WorkforcePayrollApprover",
+    "WorkforceScheduler"
+   ],
+   "missing": [
+    "None",
+    "WorkforceSelf"
+   ],
+   "snippet": "['WorkforceScheduler', 'WorkforceManager', 'WorkforcePayrollApprover']"
+  },
+  {
+   "file": "test/workforce-me-memberships.test.js",
+   "line": 29,
+   "backend": "WorkforceCapability",
+   "backend_size": 5,
+   "listed": [
+    "WorkforceManager",
+    "WorkforceScheduler",
+    "WorkforceSelf"
+   ],
+   "missing": [
+    "None",
+    "WorkforcePayrollApprover"
+   ],
+   "snippet": "{ const grants = 'WorkforceSelf, WorkforceScheduler' expect(hasCapability(grants, 'WorkforceSelf')).toBe(true) expect(hasCapability(grants, 'Workforce"
+  },
+  {
+   "file": "plugins/global-mixin.js",
+   "line": 109,
+   "backend": "DineHomeStatus",
+   "backend_size": 6,
+   "listed": [
+    "Accepted",
+    "Canceled",
+    "Completed",
+    "PickedUp",
+    "ReachedDestination"
+   ],
+   "missing": [
+    "NotSet"
+   ],
+   "snippet": "{ case 'Accepted': return 'Sj\u00e5f\u00f8r har akseptert' case 'PickedUp': return 'Sj\u00e5f\u00f8r leverer bestilling' case 'ReachedDestination': return 'Sj\u00e5f\u00f8r fremme "
+  },
+  {
+   "file": "utils/workforce/personnel-list.js",
+   "line": 50,
+   "backend": "WorkforcePersonnelParticipantCategory",
+   "backend_size": 4,
+   "listed": [
+    "Employee",
+    "HiredIn",
+    "Unpaid",
+    "WorkingOwnerManager"
+   ],
+   "missing": [],
+   "snippet": "['Employee', 'WorkingOwnerManager', 'Unpaid', 'HiredIn']"
+  },
+  {
+   "file": "utils/workforce-me/self-requests.js",
+   "line": 20,
+   "backend": "WorkforceAvailabilityKind",
+   "backend_size": 3,
+   "listed": [
+    "Available",
+    "Preferred",
+    "Unavailable"
+   ],
+   "missing": [],
+   "snippet": "['Available', 'Preferred', 'Unavailable']"
+  },
+  {
+   "file": "utils/workforce-me/self-requests.js",
+   "line": 268,
+   "backend": "WorkforceTimeOffRequestStatus",
+   "backend_size": 6,
+   "listed": [
+    "Approved",
+    "Expired",
+    "Rejected",
+    "Submitted",
+    "UnderReview",
+    "Withdrawn"
+   ],
+   "missing": [],
+   "snippet": "{ case 'Submitted': return 'wfme_timeoff_status_submitted'; case 'UnderReview': return 'wfme_timeoff_status_review'; case 'Approved': return 'wfme_tim"
+  },
+  {
+   "file": "utils/margin/units.js",
+   "line": 18,
+   "backend": "MarginBaseUnit",
+   "backend_size": 5,
+   "listed": [
+    "Gram",
+    "Kilogram",
+    "Liter",
+    "Milliliter",
+    "Piece"
+   ],
+   "missing": [],
+   "snippet": "['Gram', 'Kilogram', 'Milliliter', 'Liter', 'Piece']"
+  },
+  {
+   "file": "utils/events/guest.js",
+   "line": 92,
+   "backend": "EventsProposalVersionStatus",
+   "backend_size": 6,
+   "listed": [
+    "Accepted",
+    "Declined",
+    "Expired",
+    "Sent",
+    "Superseded"
+   ],
+   "missing": [
+    "Draft"
+   ],
+   "snippet": "{ case 'Accepted': return STANCE_ACCEPTED; case 'Declined': return STANCE_DECLINED; case 'Superseded': return STANCE_SUPERSEDED; case 'Expired': retur"
+  },
+  {
+   "file": "utils/events/guest.js",
+   "line": 131,
+   "backend": "EventsDepositStatus",
+   "backend_size": 10,
+   "listed": [
+    "Expired",
+    "Failed",
+    "Forfeited",
+    "LatePaid",
+    "Paid",
+    "PartiallyRefunded",
+    "Quarantined",
+    "Refunded"
+   ],
+   "missing": [
+    "Pending",
+    "Requested"
+   ],
+   "snippet": "{ case 'Paid': case 'LatePaid': case 'Quarantined': return DEPOSIT_PAID; case 'Refunded': case 'PartiallyRefunded': return DEPOSIT_REFUNDED; case 'For"
+  },
+  {
+   "file": "utils/events/journey.js",
+   "line": 164,
+   "backend": "EventsDepositStatus",
+   "backend_size": 10,
+   "listed": [
+    "Paid",
+    "PartiallyRefunded",
+    "Quarantined"
+   ],
+   "missing": [
+    "Expired",
+    "Failed",
+    "Forfeited",
+    "LatePaid",
+    "Pending",
+    "Refunded",
+    "Requested"
+   ],
+   "snippet": "['Paid', 'PartiallyRefunded', 'Quarantined']"
+  },
+  {
+   "file": "utils/events/journey.js",
+   "line": 175,
+   "backend": "EventStatus",
+   "backend_size": 11,
+   "listed": [
+    "Accepted",
+    "Confirmed",
+    "DepositPending",
+    "InService",
+    "Inquiry",
+    "ProposalSent",
+    "Proposing",
+    "Settled",
+    "Settling"
+   ],
+   "missing": [
+    "Cancelled",
+    "Lost"
+   ],
+   "snippet": "[ 'Inquiry', 'Proposing', 'ProposalSent', 'Accepted', 'DepositPending', 'Confirmed', 'InService', 'Settling', 'Settled' ]"
+  },
+  {
+   "file": "components/molecules/ChangeDeliveryTypeModal.vue",
+   "line": 101,
+   "backend": "DeliveryType",
+   "backend_size": 7,
+   "listed": [
+    "InstantHomeDelivery",
+    "SelfPickup",
+    "TableDelivery",
+    "WoltDelivery"
+   ],
+   "missing": [
+    "DineHomeDelivery",
+    "NotSet",
+    "WoltMarketplaceDelivery"
+   ],
+   "snippet": "[ { value: 'SelfPickup', label: this.$i('changeDeliveryTypeModal_selfPickupLabel'), icon: 'shopping_bag', description: this.$i('changeDeliveryTypeModa"
+  },
+  {
+   "file": "components/molecules/OrderCard.vue",
+   "line": 303,
+   "backend": "DineHomeStatus",
+   "backend_size": 6,
+   "listed": [
+    "Accepted",
+    "Canceled",
+    "Completed",
+    "PickedUp",
+    "ReachedDestination"
+   ],
+   "missing": [
+    "NotSet"
+   ],
+   "snippet": "{ case 'Accepted': return this.$i('orderCard_dineHomeAccepted'); case 'PickedUp': return this.$i('orderCard_dineHomePickedUp'); case 'ReachedDestinati"
+  },
+  {
+   "file": "components/admin/workforce/WorkforceEngagementPanel.vue",
+   "line": 513,
+   "backend": "WorkforcePersonState",
+   "backend_size": 3,
+   "listed": [
+    "Archived",
+    "Claimed",
+    "Invited"
+   ],
+   "missing": [],
+   "snippet": "{ case 'Claimed': return this.$i('wfr_access_state_claimed'); case 'Invited': return this.$i('wfr_access_state_invited'); case 'Archived': return this"
+  },
+  {
+   "file": "components/admin/workforce/WorkforceRequestCard.vue",
+   "line": 152,
+   "backend": "WorkforceShiftExchangeKind",
+   "backend_size": 4,
+   "listed": [
+    "DirectSwap",
+    "GiveAway",
+    "OpenPool",
+    "OpenShiftRequest"
+   ],
+   "missing": [],
+   "snippet": "{ case 'GiveAway': return this.$i('wfq_exchange_giveaway'); case 'DirectSwap': return this.$i('wfq_exchange_directswap'); case 'OpenPool': return this"
+  },
+  {
+   "file": "components/admin/workforce/WorkforceRequestCard.vue",
+   "line": 162,
+   "backend": "WorkforceAvailabilityKind",
+   "backend_size": 3,
+   "listed": [
+    "Available",
+    "Preferred",
+    "Unavailable"
+   ],
+   "missing": [],
+   "snippet": "{ case 'Unavailable': return this.$i('wfq_availability_unavailable'); case 'Preferred': return this.$i('wfq_availability_preferred'); case 'Available'"
+  },
+  {
+   "file": "components/admin/pos/ReasonPicker.vue",
+   "line": 33,
+   "backend": "PosReasonType",
+   "backend_size": 10,
+   "listed": [
+    "AngretKjop",
+    "Annet",
+    "FeilVare",
+    "Feilslag",
+    "Reklamasjon"
+   ],
+   "missing": [
+    "FeilVekselGitt",
+    "KundeAvbrot",
+    "None",
+    "Tellefeil",
+    "Ukjent"
+   ],
+   "snippet": "[ { type: 'AngretKjop', label: 'Angret kj\u00f8p' }, { type: 'FeilVare', label: 'Feil vare' }, { type: 'Reklamasjon', label: 'Reklamasjon' }, { type: 'Feil"
+  },
+  {
+   "file": "components/admin/pos/ReasonPicker.vue",
+   "line": 40,
+   "backend": "PosReasonType",
+   "backend_size": 10,
+   "listed": [
+    "Annet",
+    "Feilslag",
+    "KundeAvbrot"
+   ],
+   "missing": [
+    "AngretKjop",
+    "FeilVare",
+    "FeilVekselGitt",
+    "None",
+    "Reklamasjon",
+    "Tellefeil",
+    "Ukjent"
+   ],
+   "snippet": "[ { type: 'Feilslag', label: 'Feilslag' }, { type: 'KundeAvbrot', label: 'Kunde avbr\u00f8t' }, { type: 'Annet', label: 'Annet' } ]"
+  },
+  {
+   "file": "components/admin/pos/ReasonPicker.vue",
+   "line": 45,
+   "backend": "PosReasonType",
+   "backend_size": 10,
+   "listed": [
+    "Annet",
+    "FeilVekselGitt",
+    "Tellefeil",
+    "Ukjent"
+   ],
+   "missing": [
+    "AngretKjop",
+    "FeilVare",
+    "Feilslag",
+    "KundeAvbrot",
+    "None",
+    "Reklamasjon"
+   ],
+   "snippet": "[ { type: 'Tellefeil', label: 'Tellefeil' }, { type: 'FeilVekselGitt', label: 'Feil veksel gitt' }, { type: 'Ukjent', label: 'Ukjent avvik' }, { type:"
+  },
+  {
+   "file": "components/admin/floorplan/FloorPlanEditor.vue",
+   "line": 309,
+   "backend": "TableShape",
+   "backend_size": 3,
+   "listed": [
+    "Rectangle",
+    "Round",
+    "Square"
+   ],
+   "missing": [],
+   "snippet": "{ round: 'Round', square: 'Square', rect: 'Rectangle' }"
+  },
+  {
+   "file": "components/admin/meals/MealsFundedOrders.vue",
+   "line": 138,
+   "backend": "MealsReservationState",
+   "backend_size": 4,
+   "listed": [
+    "Bound",
+    "Captured",
+    "Released",
+    "Reserved"
+   ],
+   "missing": [],
+   "snippet": "{ case 'Captured': return 'captured'; case 'Bound': return 'bound'; case 'Reserved': return 'reserved'; case 'Released': return 'released'; default: r"
+  },
+  {
+   "file": "components/admin/meals/MealsPeoplePanel.vue",
+   "line": 364,
+   "backend": "MealsInvitationState",
+   "backend_size": 4,
+   "listed": [
+    "Claimed",
+    "Expired",
+    "Pending",
+    "Revoked"
+   ],
+   "missing": [],
+   "snippet": "{ case 'Pending': return this.$i('meals_invite_pending'); case 'Claimed': return this.$i('meals_invite_claimed'); case 'Revoked': return this.$i('meal"
+  },
+  {
+   "file": "components/organisms/OrderModal.vue",
+   "line": 285,
+   "backend": "OrderStatus",
+   "backend_size": 9,
+   "listed": [
+    "Canceled",
+    "Completed",
+    "Processing",
+    "ReadyForPickup"
+   ],
+   "missing": [
+    "Accepted",
+    "DriverPickedUp",
+    "OpenCheck",
+    "ReadyForDriver",
+    "Served"
+   ],
+   "snippet": "{ case \"Processing\": return \"status-processing\"; case \"ReadyForPickup\": return \"status-ready\"; case \"Completed\": return \"status-completed\"; case \"Canc"
+  },
+  {
+   "file": "pages/admin/category-editor.vue",
+   "line": 419,
+   "backend": "DeliveryType",
+   "backend_size": 7,
+   "listed": [
+    "DineHomeDelivery",
+    "InstantHomeDelivery",
+    "WoltDelivery"
+   ],
+   "missing": [
+    "NotSet",
+    "SelfPickup",
+    "TableDelivery",
+    "WoltMarketplaceDelivery"
+   ],
+   "snippet": "{ if (!this.category.hideFromDeliveryTypes) return false const homeDeliveryTypes = ['InstantHomeDelivery', 'DineHomeDelivery', 'WoltDelivery'] return "
+  },
+  {
+   "file": "pages/admin/ongoing.vue",
+   "line": 134,
+   "backend": "OrderStatus",
+   "backend_size": 9,
+   "listed": [
+    "ReadyForDriver",
+    "ReadyForPickup",
+    "Served"
+   ],
+   "missing": [
+    "Accepted",
+    "Canceled",
+    "Completed",
+    "DriverPickedUp",
+    "OpenCheck",
+    "Processing"
+   ],
+   "snippet": "['ReadyForPickup', 'ReadyForDriver', 'Served']"
+  },
+  {
+   "file": "pages/admin/statistics.vue",
+   "line": 499,
+   "backend": "DeliveryType",
+   "backend_size": 7,
+   "listed": [
+    "DineHomeDelivery",
+    "InstantHomeDelivery",
+    "SelfPickup",
+    "TableDelivery",
+    "WoltDelivery",
+    "WoltMarketplaceDelivery"
+   ],
+   "missing": [
+    "NotSet"
+   ],
+   "snippet": "[ 'SelfPickup', 'InstantHomeDelivery', 'DineHomeDelivery', 'WoltDelivery', 'WoltMarketplaceDelivery', 'TableDelivery', ]"
+  },
+  {
+   "file": "pages/admin/statistics.vue",
+   "line": 507,
+   "backend": "PaymentType",
+   "backend_size": 17,
+   "listed": [
+    "Dintero",
+    "DinteroBillie",
+    "DinteroKlarna",
+    "DinteroKravia",
+    "DinteroVipps",
+    "Giftcard",
+    "PayInStore",
+    "Stripe",
+    "Vipps",
+    "WoltMarketplace"
+   ],
+   "missing": [
+    "Cash",
+    "CompanyAccount",
+    "DinteroTerminal",
+    "NotSet",
+    "Surfboard",
+    "SurfboardTerminal",
+    "SurfboardVipps"
+   ],
+   "snippet": "[ 'PayInStore', 'Stripe', 'Vipps', 'Giftcard', 'Dintero', 'DinteroVipps', 'DinteroBillie', 'DinteroKlarna', 'DinteroKravia', 'WoltMarketplace', ]"
+  },
+  {
+   "file": "pages/admin/statistics.vue",
+   "line": 543,
+   "backend": "OrderStatusFilter",
+   "backend_size": 3,
+   "listed": [
+    "Canceled",
+    "Completed",
+    "Remaining"
+   ],
+   "missing": [],
+   "snippet": "[ { id: 'Remaining', label: this.$i('statistics_statusRemaining') }, { id: 'Completed', label: this.$i('statistics_statusCompleted') }, { id: 'Cancele"
+  },
+  {
+   "file": "pages/admin/statistics.vue",
+   "line": 690,
+   "backend": "DeliveryType",
+   "backend_size": 7,
+   "listed": [
+    "InstantHomeDelivery",
+    "WoltDelivery",
+    "WoltMarketplaceDelivery"
+   ],
+   "missing": [
+    "DineHomeDelivery",
+    "NotSet",
+    "SelfPickup",
+    "TableDelivery"
+   ],
+   "snippet": "{ ...baseModel, deliveryTypes: ['InstantHomeDelivery', 'WoltDelivery', 'WoltMarketplaceDelivery'], }"
+  },
+  {
+   "file": "pages/admin/statistics.vue",
+   "line": 791,
+   "backend": "DeliveryType",
+   "backend_size": 7,
+   "listed": [
+    "InstantHomeDelivery",
+    "SelfPickup",
+    "TableDelivery",
+    "WoltDelivery"
+   ],
+   "missing": [
+    "DineHomeDelivery",
+    "NotSet",
+    "WoltMarketplaceDelivery"
+   ],
+   "snippet": "{ case 'SelfPickup': return ( this.deliveryStats.pickup?.charts?.find( (c) => c.headingKey === 'Antall bestillinger totalt' )?.headingValue || 0 ); ca"
+  },
+  {
+   "file": "pages/admin/statistics.vue",
+   "line": 924,
+   "backend": "DeliveryType",
+   "backend_size": 7,
+   "listed": [
+    "SelfPickup",
+    "TableDelivery",
+    "WoltDelivery"
+   ],
+   "missing": [
+    "DineHomeDelivery",
+    "InstantHomeDelivery",
+    "NotSet",
+    "WoltMarketplaceDelivery"
+   ],
+   "snippet": "[ { id: 'pickup', type: 'SelfPickup', stats: this.deliveryStats.pickup, compStats: this.comparisonDeliveryStats.pickup }, { id: 'delivery', type: 'Wol"
+  },
+  {
+   "file": "pages/admin/events-pipeline.vue",
+   "line": 465,
+   "backend": "EventsProposalLineKind",
+   "backend_size": 5,
+   "listed": [
+    "AddOn",
+    "Custom",
+    "MenuItem",
+    "Package",
+    "RoomFee"
+   ],
+   "missing": [],
+   "snippet": "['Package', 'MenuItem', 'AddOn', 'RoomFee', 'Custom']"
+  },
+  {
+   "file": "pages/admin/orders.vue",
+   "line": 415,
+   "backend": "OrderStatus",
+   "backend_size": 9,
+   "listed": [
+    "Accepted",
+    "Canceled",
+    "Completed",
+    "DriverPickedUp",
+    "Processing",
+    "ReadyForDriver",
+    "ReadyForPickup",
+    "Served"
+   ],
+   "missing": [
+    "OpenCheck"
+   ],
+   "snippet": "[ \"Accepted\", \"Processing\", \"ReadyForPickup\", \"ReadyForDriver\", \"DriverPickedUp\", \"Served\", \"Completed\", \"Canceled\", ]"
+  },
+  {
+   "file": "pages/admin/orders.vue",
+   "line": 425,
+   "backend": "DeliveryType",
+   "backend_size": 7,
+   "listed": [
+    "DineHomeDelivery",
+    "InstantHomeDelivery",
+    "SelfPickup",
+    "TableDelivery",
+    "WoltDelivery",
+    "WoltMarketplaceDelivery"
+   ],
+   "missing": [
+    "NotSet"
+   ],
+   "snippet": "[ \"SelfPickup\", \"InstantHomeDelivery\", \"DineHomeDelivery\", \"WoltDelivery\", \"WoltMarketplaceDelivery\", \"TableDelivery\", ]"
+  },
+  {
+   "file": "pages/admin/orders.vue",
+   "line": 433,
+   "backend": "PaymentType",
+   "backend_size": 17,
+   "listed": [
+    "Dintero",
+    "DinteroBillie",
+    "DinteroKlarna",
+    "DinteroKravia",
+    "DinteroVipps",
+    "Giftcard",
+    "PayInStore",
+    "Stripe",
+    "Vipps",
+    "WoltMarketplace"
+   ],
+   "missing": [
+    "Cash",
+    "CompanyAccount",
+    "DinteroTerminal",
+    "NotSet",
+    "Surfboard",
+    "SurfboardTerminal",
+    "SurfboardVipps"
+   ],
+   "snippet": "[ \"PayInStore\", \"Stripe\", \"Vipps\", \"Giftcard\", \"Dintero\", \"DinteroVipps\", \"DinteroBillie\", \"DinteroKlarna\", \"DinteroKravia\", \"WoltMarketplace\", ]"
+  },
+  {
+   "file": "pages/admin/offers.vue",
+   "line": 753,
+   "backend": "OfferProposalStatus",
+   "backend_size": 7,
+   "listed": [
+    "Accepted",
+    "Cancelled",
+    "Created",
+    "Read",
+    "Rejected",
+    "Sent",
+    "StoreRegistered"
+   ],
+   "missing": [],
+   "snippet": "{ case \"Created\": return this.$i(\"offers_statusCreated\"); case \"Sent\": return this.$i(\"offers_statusSent\"); case \"Read\": return this.$i(\"offers_status"
+  },
+  {
+   "file": "pages/admin/products.vue",
+   "line": 1375,
+   "backend": "DeliveryType",
+   "backend_size": 7,
+   "listed": [
+    "DineHomeDelivery",
+    "InstantHomeDelivery",
+    "WoltDelivery"
+   ],
+   "missing": [
+    "NotSet",
+    "SelfPickup",
+    "TableDelivery",
+    "WoltMarketplaceDelivery"
+   ],
+   "snippet": "[\"InstantHomeDelivery\", \"DineHomeDelivery\", \"WoltDelivery\"]"
+  },
+  {
+   "file": "pages/admin/reservations.vue",
+   "line": 146,
+   "backend": "ReservationStatus",
+   "backend_size": 6,
+   "listed": [
+    "Cancelled",
+    "Completed",
+    "Confirmed",
+    "NoShow",
+    "Requested",
+    "Seated"
+   ],
+   "missing": [],
+   "snippet": "{ requested: 'Requested', confirmed: 'Confirmed', seated: 'Seated', completed: 'Completed', noshow: 'NoShow', cancelled: 'Cancelled' }"
+  },
+  {
+   "file": "pages/events/proposal/_token.vue",
+   "line": 353,
+   "backend": "EventsProposalLineKind",
+   "backend_size": 5,
+   "listed": [
+    "AddOn",
+    "Custom",
+    "MenuItem",
+    "Package",
+    "RoomFee"
+   ],
+   "missing": [],
+   "snippet": "['Package', 'MenuItem', 'AddOn', 'RoomFee', 'Custom']"
+  }
+ ]
+}

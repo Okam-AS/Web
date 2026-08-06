@@ -1,0 +1,21 @@
+support files under test
+  journey.js            27429d181a35655f4c458e507eb33c79bdbfe6ace3f02ee4dadb6a3f303bef4b
+  artifact-store.js     f8bd6ddb57294f133b17bb2e90a5941b825d270b5486682b572f952d450c3ab8
+  journey-assertions.js 4ddbed1671a04c71405c64657976b6b9a4debe479bf0a85bfde90565f4f07532
+  world-stamp.js        ec4089ffaff867f8d7888055ca68c7723109bfb0945a91902e19d09d01cb2c97
+stand-in live api      http://127.0.0.1:58969   (served by pid 52063, cwd web-unwitnessed)
+stand-in app           http://127.0.0.1:58970
+the port would say     web-unwitnessed@e34977acebd59b223584158c33451b6f1ffd82c1+dirty   <- the wrong answer, available in every arm
+checkout alpha         okamapi-alpha@9cd681381b5d7eb3ba803c4a0f19d068c6bc7dc8
+checkout beta          okamapi-beta@de79413e6acacc632bc3925fdd1aa93b5b5326ab
+
+  ok    1  okamapi-alpha@9cd681381b5d7eb3ba803c4a0f19d068c6bc7dc8  stamp:artifacts/world/live/127-0-0-1-58969.json  stamped from checkout ALPHA, nothing declared
+  ok    2  okamapi-beta@de79413e6acacc632bc3925fdd1aa93b5b5326ab  stamp:artifacts/world/live/127-0-0-1-58969.json  the same world stamped from a DIFFERENT checkout (BETA)
+  ok    3  web-unwitnessed@e34977acebd59b223584158c33451b6f1ffd82c1+dirty  process:127.0.0.1:58969             stamp INVALIDATED (its world is gone) — must fall back to the port and be WRONG
+  ok    4  okamapi-alpha@9cd681381b5d7eb3ba803c4a0f19d068c6bc7dc8  stamp:artifacts/world/live/127-0-0-1-58969.json  stamped ALPHA while the shell declares BETA — a command copied from an older world
+  ok    5  okamapi-alpha@9cd681381b5d7eb3ba803c4a0f19d068c6bc7dc8  env:E2E_API_BUILD                   NO stamp, the shell declares ALPHA — the declaration still carries a remote runner
+
+All 5 arms held. A live journey artifact names the checkout the world script
+recorded, changes when that checkout changes, and — arm 3 — names the port's wrong answer the
+moment the stamp is no longer verifiable. Nothing asked the API what it was.
+EXIT=0

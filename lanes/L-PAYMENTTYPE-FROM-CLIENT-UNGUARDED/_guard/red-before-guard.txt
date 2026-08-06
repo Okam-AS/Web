@@ -1,0 +1,122 @@
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 8.0.28)
+[xUnit.net 00:00:01.08]   Discovering: WebApi.Tests
+[xUnit.net 00:00:01.44]   Discovered:  WebApi.Tests
+[xUnit.net 00:00:01.44]   Starting:    WebApi.Tests
+[xUnit.net 00:00:04.89]     WebApi.Tests.Kassa.FinalizeDefinedTenderTests.Settlement_WithOneGoodAndOneUndefinedTender_IsRefusedAndNothingIsJournalled [FAIL]
+[xUnit.net 00:00:04.89]       Assert.Throws() Failure
+[xUnit.net 00:00:04.89]       Expected: typeof(WebApi.Helpers.AppException)
+[xUnit.net 00:00:04.89]       Actual:   (No exception was thrown)
+[xUnit.net 00:00:04.89]       Stack Trace:
+[xUnit.net 00:00:04.89]         /Users/svendaneel/okam/wt-paytypeguard/WebApi.Tests/Kassa/FinalizeDefinedTenderTests.cs(127,0): at WebApi.Tests.Kassa.FinalizeDefinedTenderTests.Settlement_WithOneGoodAndOneUndefinedTender_IsRefusedAndNothingIsJournalled()
+[xUnit.net 00:00:04.89]         /Users/svendaneel/okam/wt-paytypeguard/WebApi.Tests/Kassa/FinalizeDefinedTenderTests.cs(142,0): at WebApi.Tests.Kassa.FinalizeDefinedTenderTests.Settlement_WithOneGoodAndOneUndefinedTender_IsRefusedAndNothingIsJournalled()
+[xUnit.net 00:00:04.89]         --- End of stack trace from previous location ---
+  Failed WebApi.Tests.Kassa.FinalizeDefinedTenderTests.Settlement_WithOneGoodAndOneUndefinedTender_IsRefusedAndNothingIsJournalled [3 s]
+  Error Message:
+   Assert.Throws() Failure
+Expected: typeof(WebApi.Helpers.AppException)
+Actual:   (No exception was thrown)
+  Stack Trace:
+     at WebApi.Tests.Kassa.FinalizeDefinedTenderTests.Settlement_WithOneGoodAndOneUndefinedTender_IsRefusedAndNothingIsJournalled() in /Users/svendaneel/okam/wt-paytypeguard/WebApi.Tests/Kassa/FinalizeDefinedTenderTests.cs:line 127
+   at WebApi.Tests.Kassa.FinalizeDefinedTenderTests.Settlement_WithOneGoodAndOneUndefinedTender_IsRefusedAndNothingIsJournalled() in /Users/svendaneel/okam/wt-paytypeguard/WebApi.Tests/Kassa/FinalizeDefinedTenderTests.cs:line 142
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:05.47]     WebApi.Tests.Kassa.FinalizeDefinedTenderTests.UnreferencedReturn_WithAnUndefinedPaymentType_IsRefusedAndNoRetrecIsWritten [FAIL]
+[xUnit.net 00:00:05.47]       Assert.Throws() Failure
+[xUnit.net 00:00:05.47]       Expected: typeof(WebApi.Helpers.AppException)
+[xUnit.net 00:00:05.47]       Actual:   (No exception was thrown)
+[xUnit.net 00:00:05.47]       Stack Trace:
+[xUnit.net 00:00:05.47]         /Users/svendaneel/okam/wt-paytypeguard/WebApi.Tests/Kassa/FinalizeDefinedTenderTests.cs(183,0): at WebApi.Tests.Kassa.FinalizeDefinedTenderTests.UnreferencedReturn_WithAnUndefinedPaymentType_IsRefusedAndNoRetrecIsWritten()
+[xUnit.net 00:00:05.47]         /Users/svendaneel/okam/wt-paytypeguard/WebApi.Tests/Kassa/FinalizeDefinedTenderTests.cs(198,0): at WebApi.Tests.Kassa.FinalizeDefinedTenderTests.UnreferencedReturn_WithAnUndefinedPaymentType_IsRefusedAndNoRetrecIsWritten()
+[xUnit.net 00:00:05.47]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:05.92]     WebApi.Tests.Kassa.FinalizeDefinedTenderTests.Settlement_WithAnUndefinedAllocationTender_IsRefusedAndNothingIsJournalled [FAIL]
+[xUnit.net 00:00:05.92]       Assert.Throws() Failure
+[xUnit.net 00:00:05.92]       Expected: typeof(WebApi.Helpers.AppException)
+[xUnit.net 00:00:05.92]       Actual:   (No exception was thrown)
+[xUnit.net 00:00:05.92]       Stack Trace:
+[xUnit.net 00:00:05.92]         /Users/svendaneel/okam/wt-paytypeguard/WebApi.Tests/Kassa/FinalizeDefinedTenderTests.cs(100,0): at WebApi.Tests.Kassa.FinalizeDefinedTenderTests.Settlement_WithAnUndefinedAllocationTender_IsRefusedAndNothingIsJournalled()
+[xUnit.net 00:00:05.92]         /Users/svendaneel/okam/wt-paytypeguard/WebApi.Tests/Kassa/FinalizeDefinedTenderTests.cs(115,0): at WebApi.Tests.Kassa.FinalizeDefinedTenderTests.Settlement_WithAnUndefinedAllocationTender_IsRefusedAndNothingIsJournalled()
+[xUnit.net 00:00:05.92]         --- End of stack trace from previous location ---
+  Passed WebApi.Tests.Kassa.FinalizeDefinedTenderTests.Settlement_WithCompanyAccount_StillJournalsTheTender [320 ms]
+  Failed WebApi.Tests.Kassa.FinalizeDefinedTenderTests.UnreferencedReturn_WithAnUndefinedPaymentType_IsRefusedAndNoRetrecIsWritten [258 ms]
+  Error Message:
+   Assert.Throws() Failure
+Expected: typeof(WebApi.Helpers.AppException)
+Actual:   (No exception was thrown)
+  Stack Trace:
+     at WebApi.Tests.Kassa.FinalizeDefinedTenderTests.UnreferencedReturn_WithAnUndefinedPaymentType_IsRefusedAndNoRetrecIsWritten() in /Users/svendaneel/okam/wt-paytypeguard/WebApi.Tests/Kassa/FinalizeDefinedTenderTests.cs:line 183
+   at WebApi.Tests.Kassa.FinalizeDefinedTenderTests.UnreferencedReturn_WithAnUndefinedPaymentType_IsRefusedAndNoRetrecIsWritten() in /Users/svendaneel/okam/wt-paytypeguard/WebApi.Tests/Kassa/FinalizeDefinedTenderTests.cs:line 198
+--- End of stack trace from previous location ---
+  Failed WebApi.Tests.Kassa.FinalizeDefinedTenderTests.Settlement_WithAnUndefinedAllocationTender_IsRefusedAndNothingIsJournalled [447 ms]
+  Error Message:
+   Assert.Throws() Failure
+Expected: typeof(WebApi.Helpers.AppException)
+Actual:   (No exception was thrown)
+  Stack Trace:
+     at WebApi.Tests.Kassa.FinalizeDefinedTenderTests.Settlement_WithAnUndefinedAllocationTender_IsRefusedAndNothingIsJournalled() in /Users/svendaneel/okam/wt-paytypeguard/WebApi.Tests/Kassa/FinalizeDefinedTenderTests.cs:line 100
+   at WebApi.Tests.Kassa.FinalizeDefinedTenderTests.Settlement_WithAnUndefinedAllocationTender_IsRefusedAndNothingIsJournalled() in /Users/svendaneel/okam/wt-paytypeguard/WebApi.Tests/Kassa/FinalizeDefinedTenderTests.cs:line 115
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:06.42]     WebApi.Tests.Kassa.FinalizeDefinedTenderTests.CardSale_WithNotSet_IsStillRefused [FAIL]
+[xUnit.net 00:00:06.42]       Assert.Contains() Failure
+[xUnit.net 00:00:06.42]       Not found: requires the payment type
+[xUnit.net 00:00:06.42]       In value:  A card finalize requires the provider payment type.
+[xUnit.net 00:00:06.42]       Stack Trace:
+[xUnit.net 00:00:06.42]         /Users/svendaneel/okam/wt-paytypeguard/WebApi.Tests/Kassa/FinalizeDefinedTenderTests.cs(86,0): at WebApi.Tests.Kassa.FinalizeDefinedTenderTests.CardSale_WithNotSet_IsStillRefused()
+[xUnit.net 00:00:06.42]         /Users/svendaneel/okam/wt-paytypeguard/WebApi.Tests/Kassa/FinalizeDefinedTenderTests.cs(87,0): at WebApi.Tests.Kassa.FinalizeDefinedTenderTests.CardSale_WithNotSet_IsStillRefused()
+[xUnit.net 00:00:06.42]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:06.87]     WebApi.Tests.Kassa.FinalizeDefinedTenderTests.ReferencedReturn_WithAnUndefinedPaymentType_IsRefusedAndNoRetrecIsWritten [FAIL]
+[xUnit.net 00:00:06.87]       Assert.Throws() Failure
+[xUnit.net 00:00:06.87]       Expected: typeof(WebApi.Helpers.AppException)
+[xUnit.net 00:00:06.87]       Actual:   (No exception was thrown)
+[xUnit.net 00:00:06.87]       Stack Trace:
+[xUnit.net 00:00:06.87]         /Users/svendaneel/okam/wt-paytypeguard/WebApi.Tests/Kassa/FinalizeDefinedTenderTests.cs(158,0): at WebApi.Tests.Kassa.FinalizeDefinedTenderTests.ReferencedReturn_WithAnUndefinedPaymentType_IsRefusedAndNoRetrecIsWritten()
+[xUnit.net 00:00:06.87]         /Users/svendaneel/okam/wt-paytypeguard/WebApi.Tests/Kassa/FinalizeDefinedTenderTests.cs(170,0): at WebApi.Tests.Kassa.FinalizeDefinedTenderTests.ReferencedReturn_WithAnUndefinedPaymentType_IsRefusedAndNoRetrecIsWritten()
+[xUnit.net 00:00:06.87]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:07.24]     WebApi.Tests.Kassa.FinalizeDefinedTenderTests.CardSale_WithAnUndefinedPaymentType_IsRefusedAndNothingIsJournalled [FAIL]
+[xUnit.net 00:00:07.24]       Assert.Throws() Failure
+[xUnit.net 00:00:07.24]       Expected: typeof(WebApi.Helpers.AppException)
+[xUnit.net 00:00:07.24]       Actual:   (No exception was thrown)
+[xUnit.net 00:00:07.24]       Stack Trace:
+[xUnit.net 00:00:07.24]         /Users/svendaneel/okam/wt-paytypeguard/WebApi.Tests/Kassa/FinalizeDefinedTenderTests.cs(48,0): at WebApi.Tests.Kassa.FinalizeDefinedTenderTests.CardSale_WithAnUndefinedPaymentType_IsRefusedAndNothingIsJournalled()
+[xUnit.net 00:00:07.24]         /Users/svendaneel/okam/wt-paytypeguard/WebApi.Tests/Kassa/FinalizeDefinedTenderTests.cs(63,0): at WebApi.Tests.Kassa.FinalizeDefinedTenderTests.CardSale_WithAnUndefinedPaymentType_IsRefusedAndNothingIsJournalled()
+[xUnit.net 00:00:07.24]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:07.24]   Finished:    WebApi.Tests
+  Failed WebApi.Tests.Kassa.FinalizeDefinedTenderTests.CardSale_WithNotSet_IsStillRefused [495 ms]
+  Error Message:
+   Assert.Contains() Failure
+Not found: requires the payment type
+In value:  A card finalize requires the provider payment type.
+  Stack Trace:
+     at WebApi.Tests.Kassa.FinalizeDefinedTenderTests.CardSale_WithNotSet_IsStillRefused() in /Users/svendaneel/okam/wt-paytypeguard/WebApi.Tests/Kassa/FinalizeDefinedTenderTests.cs:line 86
+   at WebApi.Tests.Kassa.FinalizeDefinedTenderTests.CardSale_WithNotSet_IsStillRefused() in /Users/svendaneel/okam/wt-paytypeguard/WebApi.Tests/Kassa/FinalizeDefinedTenderTests.cs:line 87
+--- End of stack trace from previous location ---
+  Failed WebApi.Tests.Kassa.FinalizeDefinedTenderTests.ReferencedReturn_WithAnUndefinedPaymentType_IsRefusedAndNoRetrecIsWritten [447 ms]
+  Error Message:
+   Assert.Throws() Failure
+Expected: typeof(WebApi.Helpers.AppException)
+Actual:   (No exception was thrown)
+  Stack Trace:
+     at WebApi.Tests.Kassa.FinalizeDefinedTenderTests.ReferencedReturn_WithAnUndefinedPaymentType_IsRefusedAndNoRetrecIsWritten() in /Users/svendaneel/okam/wt-paytypeguard/WebApi.Tests/Kassa/FinalizeDefinedTenderTests.cs:line 158
+   at WebApi.Tests.Kassa.FinalizeDefinedTenderTests.ReferencedReturn_WithAnUndefinedPaymentType_IsRefusedAndNoRetrecIsWritten() in /Users/svendaneel/okam/wt-paytypeguard/WebApi.Tests/Kassa/FinalizeDefinedTenderTests.cs:line 170
+--- End of stack trace from previous location ---
+  Failed WebApi.Tests.Kassa.FinalizeDefinedTenderTests.CardSale_WithAnUndefinedPaymentType_IsRefusedAndNothingIsJournalled [376 ms]
+  Error Message:
+   Assert.Throws() Failure
+Expected: typeof(WebApi.Helpers.AppException)
+Actual:   (No exception was thrown)
+  Stack Trace:
+     at WebApi.Tests.Kassa.FinalizeDefinedTenderTests.CardSale_WithAnUndefinedPaymentType_IsRefusedAndNothingIsJournalled() in /Users/svendaneel/okam/wt-paytypeguard/WebApi.Tests/Kassa/FinalizeDefinedTenderTests.cs:line 48
+   at WebApi.Tests.Kassa.FinalizeDefinedTenderTests.CardSale_WithAnUndefinedPaymentType_IsRefusedAndNothingIsJournalled() in /Users/svendaneel/okam/wt-paytypeguard/WebApi.Tests/Kassa/FinalizeDefinedTenderTests.cs:line 63
+--- End of stack trace from previous location ---
+Test Run Failed.
+Total tests: 7
+     Passed: 1
+     Failed: 6
+ Total time: 7.5680 Seconds
+       VSTest:
+         MSB4181: The "Microsoft.TestPlatform.Build.Tasks.VSTestTask" task returned false but did not log an error.
+     1>Done Building Project "/Users/svendaneel/okam/wt-paytypeguard/WebApi.Tests/WebApi.Tests.csproj" (VSTest target(s)) -- FAILED.
+Build FAILED.
+    0 Warning(s)
+    0 Error(s)
+Time Elapsed 00:00:09.38

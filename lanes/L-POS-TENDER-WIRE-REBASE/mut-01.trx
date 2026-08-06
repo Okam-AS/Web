@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="b8fc3547-7c20-441b-893f-dfdd484e2600" name="@Svens-MacBook-Pro 2026-08-05 00:18:09" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-05T00:18:09.0813780+02:00" queuing="2026-08-05T00:18:09.0813780+02:00" start="2026-08-05T00:18:04.8449490+02:00" finish="2026-08-05T00:18:13.0139230+02:00" />
+  <TestSettings name="default" id="6181ef83-9b29-4d49-8c56-9f5df597c3a5">
+    <Deployment runDeploymentRoot="_Svens-MacBook-Pro_2026-08-05_00_18_09" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="bd6384a6-2241-4f56-ba0c-1b9fb47b5642" testId="322f0ec8-9b4f-15ee-d324-0acaa0ddd935" testName="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.DeliveryReceipt_DoesNotCountTurnoverASecondTimeInTheXReport" computerName="Svens-MacBook-Pro" duration="00:00:00.2720097" startTime="2026-08-05T00:18:10.3963620+02:00" endTime="2026-08-05T00:18:10.3963620+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bd6384a6-2241-4f56-ba0c-1b9fb47b5642" />
+    <UnitTestResult executionId="50747260-e63d-4e1b-844b-33cc1d0e1133" testId="a6331401-6286-aad3-aa24-01d36977f3dd" testName="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.CashSale_ProducesNoDeliveryReceipt" computerName="Svens-MacBook-Pro" duration="00:00:00.2036389" startTime="2026-08-05T00:18:09.7833770+02:00" endTime="2026-08-05T00:18:09.7833770+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="50747260-e63d-4e1b-844b-33cc1d0e1133" />
+    <UnitTestResult executionId="f5eaf8a1-e4b0-4c57-8ecb-f57ff0325f77" testId="bc1b96e8-c8cb-efde-ec36-4bcd33b8337b" testName="WebApi.Tests.Kassa.CreditSaleDocumentRoutingTests.A_credit_sale_with_no_handover_document_is_refused_rather_than_shown_as_a_sales_receipt" computerName="Svens-MacBook-Pro" duration="00:00:00.2408551" startTime="2026-08-05T00:18:12.3922910+02:00" endTime="2026-08-05T00:18:12.3922910+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f5eaf8a1-e4b0-4c57-8ecb-f57ff0325f77" />
+    <UnitTestResult executionId="a50f51b1-7e70-45f8-b97c-9790ef835fd8" testId="59ee66ef-5b7e-dfe5-d71b-e5fb444e7ecb" testName="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.DeliveryEvent_IsJournalledAsAPureEventChainedToItsSale" computerName="Svens-MacBook-Pro" duration="00:00:00.3417217" startTime="2026-08-05T00:18:10.1246730+02:00" endTime="2026-08-05T00:18:10.1246730+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a50f51b1-7e70-45f8-b97c-9790ef835fd8" />
+    <UnitTestResult executionId="a67c6174-bc36-4b90-a0e9-e35a3effd619" testId="4b7121da-3611-9f1d-e57c-bcf104f9a8ff" testName="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.CopyOfADeliveryReceipt_IsRefused" computerName="Svens-MacBook-Pro" duration="00:00:00.3324109" startTime="2026-08-05T00:18:11.6749600+02:00" endTime="2026-08-05T00:18:11.6749600+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a67c6174-bc36-4b90-a0e9-e35a3effd619" />
+    <UnitTestResult executionId="70954a62-5f8b-4323-b2ed-e903258c608e" testId="e1833ad1-40cc-08e6-6bbd-fce417cad5d8" testName="WebApi.Tests.Kassa.CreditSaleDocumentRoutingTests.Printing_the_credit_sale_row_puts_the_marked_handover_document_on_paper" computerName="Svens-MacBook-Pro" duration="00:00:00.1092120" startTime="2026-08-05T00:18:12.8222840+02:00" endTime="2026-08-05T00:18:12.8222840+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="70954a62-5f8b-4323-b2ed-e903258c608e" />
+    <UnitTestResult executionId="65bca6bf-6b8d-47bb-ba18-29773c0697a4" testId="5c961f82-eaa2-f3bc-c9bf-13a59676928b" testName="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.ReplayingACashSaleWithADriftedPaymentList_StillHandsOverTheSalesReceipt_AndJournalsNoDeliveryDocument" computerName="Svens-MacBook-Pro" duration="00:00:00.3547200" startTime="2026-08-05T00:18:11.0628480+02:00" endTime="2026-08-05T00:18:11.0628480+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="65bca6bf-6b8d-47bb-ba18-29773c0697a4">
+      <Output>
+        <ErrorInfo>
+          <Message>WebApi.Helpers.AppException : A credit sale must produce an utleveringskvittering (kassasystemforskrifta § 2-8-7).</Message>
+          <StackTrace>   at WebApi.Services.Kassa.FinalizeService.FinalizeSaleCoreAsync(Order order, Int32 cashPointId, Int32 operatorId, String operatorName, DeliveryType vatContext, Int32 roundingAmount, Int32 tipAmount, List`1 payments) in /Users/svendaneel/okam/wt-postender-rebase/Services/Kassa/FinalizeService.cs:line 309
+   at WebApi.Services.Kassa.FinalizeService.FinalizeSettlementAsync(FinalizeSettlementRequest request) in /Users/svendaneel/okam/wt-postender-rebase/Services/Kassa/FinalizeService.cs:line 91
+   at WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.ReplayingACashSaleWithADriftedPaymentList_StillHandsOverTheSalesReceipt_AndJournalsNoDeliveryDocument() in /Users/svendaneel/okam/wt-postender-rebase/WebApi.Tests/Kassa/DeliveryReceiptComplianceTests.cs:line 230
+   at WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.ReplayingACashSaleWithADriftedPaymentList_StillHandsOverTheSalesReceipt_AndJournalsNoDeliveryDocument() in /Users/svendaneel/okam/wt-postender-rebase/WebApi.Tests/Kassa/DeliveryReceiptComplianceTests.cs:line 241
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="3a1ad9b7-12bc-4588-a4a7-2760656862fb" testId="63df4090-c659-7c6e-9e11-65d3e136f6b8" testName="WebApi.Tests.Kassa.CreditSaleDocumentRoutingTests.The_copy_endpoint_refuses_the_credit_sale_row_too" computerName="Svens-MacBook-Pro" duration="00:00:00.1374310" startTime="2026-08-05T00:18:12.7131250+02:00" endTime="2026-08-05T00:18:12.7131250+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3a1ad9b7-12bc-4588-a4a7-2760656862fb" />
+    <UnitTestResult executionId="719558fc-3805-4cf8-a974-d27ead7c03c3" testId="f1e9e1f0-23c0-a72f-2149-428352119cca" testName="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.ReprintingTheDeliveryEntry_RendersTheMarkedHandoverDocument_NotABlankOne" computerName="Svens-MacBook-Pro" duration="00:00:00.2754032" startTime="2026-08-05T00:18:09.3445120+02:00" endTime="2026-08-05T00:18:09.3445120+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="719558fc-3805-4cf8-a974-d27ead7c03c3" />
+    <UnitTestResult executionId="10667e81-9010-4598-88d8-71c1b4c3ce73" testId="1c8c0481-7345-0e7a-f19b-b7e283055194" testName="WebApi.Tests.Kassa.CreditSaleDocumentRoutingTests.The_public_page_behind_the_sms_link_shows_the_handover_document" computerName="Svens-MacBook-Pro" duration="00:00:00.2429807" startTime="2026-08-05T00:18:11.9187730+02:00" endTime="2026-08-05T00:18:11.9187730+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="10667e81-9010-4598-88d8-71c1b4c3ce73" />
+    <UnitTestResult executionId="d8bac752-a964-4027-8f1f-20ab6e258646" testId="d0b84fc6-8353-568c-4c79-c4ec81a97ee1" testName="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.CompanyAccountSale_HandsOverAnUtleveringskvittering_NotASalesReceipt" computerName="Svens-MacBook-Pro" duration="00:00:00.3034874" startTime="2026-08-05T00:18:10.6994950+02:00" endTime="2026-08-05T00:18:10.6994950+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d8bac752-a964-4027-8f1f-20ab6e258646" />
+    <UnitTestResult executionId="85597ae9-6bc2-492b-9046-0c5b8ba7b91c" testId="0c8194ad-28e2-f5b7-e1b5-6048ab8adb82" testName="WebApi.Tests.Kassa.CreditSaleDocumentRoutingTests.Viewing_the_credit_sale_row_returns_the_handover_document" computerName="Svens-MacBook-Pro" duration="00:00:00.1520639" startTime="2026-08-05T00:18:12.9742300+02:00" endTime="2026-08-05T00:18:12.9742300+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="85597ae9-6bc2-492b-9046-0c5b8ba7b91c" />
+    <UnitTestResult executionId="ac8dae80-01e8-4091-93db-54fa936e2f83" testId="12c0748a-165c-2d81-f7e9-cb29ec497021" testName="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.RefinalizingTheSameCreditSale_HandsOverTheSameDocument_NotASecondOne" computerName="Svens-MacBook-Pro" duration="00:00:00.2823251" startTime="2026-08-05T00:18:11.3428960+02:00" endTime="2026-08-05T00:18:11.3428960+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ac8dae80-01e8-4091-93db-54fa936e2f83" />
+    <UnitTestResult executionId="8e2b1359-5446-41b2-a136-e66b9ce6284a" testId="c18d0263-e113-57f5-508d-ff98c6e5c902" testName="WebApi.Tests.Kassa.CreditSaleDocumentRoutingTests.A_cash_sale_still_produces_the_sales_receipt_on_all_three_surfaces" computerName="Svens-MacBook-Pro" duration="00:00:00.2331255" startTime="2026-08-05T00:18:12.1516580+02:00" endTime="2026-08-05T00:18:12.1516580+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8e2b1359-5446-41b2-a136-e66b9ce6284a" />
+    <UnitTestResult executionId="6d8a068a-db97-4886-b5c1-2f2e3b193327" testId="e5538593-d531-592b-af9c-9f072772e9ce" testName="WebApi.Tests.Kassa.CreditSaleDocumentRoutingTests.Copying_the_credit_sale_row_is_refused_in_a_world_that_copies_a_cash_sale" computerName="Svens-MacBook-Pro" duration="00:00:00.1836441" startTime="2026-08-05T00:18:12.5757830+02:00" endTime="2026-08-05T00:18:12.5757830+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6d8a068a-db97-4886-b5c1-2f2e3b193327" />
+    <UnitTestResult executionId="0663eb35-6681-4841-a90d-4af9b1fb86e7" testId="1c0c3dbb-d2d1-e863-e931-a7d7b120cc03" testName="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.DeliveryMarking_IsTheVerbatimSection287Wording_WithTheMandatedEnDash" computerName="Svens-MacBook-Pro" duration="00:00:00.0051586" startTime="2026-08-05T00:18:09.0694830+02:00" endTime="2026-08-05T00:18:09.0694830+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0663eb35-6681-4841-a90d-4af9b1fb86e7" />
+    <UnitTestResult executionId="cac1ad60-d20b-4ce6-a0f8-c9cd2e992862" testId="9a34da9d-7f3e-e648-aa4c-fde79a8b26da" testName="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.ReplayingACreditSaleWithADriftedPaymentList_StillHandsOverTheUtleveringskvittering" computerName="Svens-MacBook-Pro" duration="00:00:02.7005922" startTime="2026-08-05T00:18:09.0644830+02:00" endTime="2026-08-05T00:18:09.0644910+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cac1ad60-d20b-4ce6-a0f8-c9cd2e992862" />
+    <UnitTestResult executionId="9f3227ee-0f69-474c-bf0d-8c8b2e44787d" testId="e30fd4c0-9084-5635-7f22-f4aefa0d82d1" testName="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.DeliveryMarking_IsPrintedUnderTheDoubleSizeCommand" computerName="Svens-MacBook-Pro" duration="00:00:00.2357620" startTime="2026-08-05T00:18:09.5799790+02:00" endTime="2026-08-05T00:18:09.5799790+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9f3227ee-0f69-474c-bf0d-8c8b2e44787d" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.ReplayingACashSaleWithADriftedPaymentList_StillHandsOverTheSalesReceipt_AndJournalsNoDeliveryDocument" storage="/users/svendaneel/okam/wt-postender-rebase/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="5c961f82-eaa2-f3bc-c9bf-13a59676928b">
+      <Execution id="65bca6bf-6b8d-47bb-ba18-29773c0697a4" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-postender-rebase/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests" name="ReplayingACashSaleWithADriftedPaymentList_StillHandsOverTheSalesReceipt_AndJournalsNoDeliveryDocument" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.CreditSaleDocumentRoutingTests.A_cash_sale_still_produces_the_sales_receipt_on_all_three_surfaces" storage="/users/svendaneel/okam/wt-postender-rebase/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="c18d0263-e113-57f5-508d-ff98c6e5c902">
+      <Execution id="8e2b1359-5446-41b2-a136-e66b9ce6284a" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-postender-rebase/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.CreditSaleDocumentRoutingTests" name="A_cash_sale_still_produces_the_sales_receipt_on_all_three_surfaces" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.CompanyAccountSale_HandsOverAnUtleveringskvittering_NotASalesReceipt" storage="/users/svendaneel/okam/wt-postender-rebase/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="d0b84fc6-8353-568c-4c79-c4ec81a97ee1">
+      <Execution id="d8bac752-a964-4027-8f1f-20ab6e258646" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-postender-rebase/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests" name="CompanyAccountSale_HandsOverAnUtleveringskvittering_NotASalesReceipt" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.ReplayingACreditSaleWithADriftedPaymentList_StillHandsOverTheUtleveringskvittering" storage="/users/svendaneel/okam/wt-postender-rebase/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="9a34da9d-7f3e-e648-aa4c-fde79a8b26da">
+      <Execution id="cac1ad60-d20b-4ce6-a0f8-c9cd2e992862" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-postender-rebase/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests" name="ReplayingACreditSaleWithADriftedPaymentList_StillHandsOverTheUtleveringskvittering" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.DeliveryMarking_IsTheVerbatimSection287Wording_WithTheMandatedEnDash" storage="/users/svendaneel/okam/wt-postender-rebase/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="1c0c3dbb-d2d1-e863-e931-a7d7b120cc03">
+      <Execution id="0663eb35-6681-4841-a90d-4af9b1fb86e7" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-postender-rebase/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests" name="DeliveryMarking_IsTheVerbatimSection287Wording_WithTheMandatedEnDash" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.CopyOfADeliveryReceipt_IsRefused" storage="/users/svendaneel/okam/wt-postender-rebase/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="4b7121da-3611-9f1d-e57c-bcf104f9a8ff">
+      <Execution id="a67c6174-bc36-4b90-a0e9-e35a3effd619" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-postender-rebase/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests" name="CopyOfADeliveryReceipt_IsRefused" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.CreditSaleDocumentRoutingTests.The_copy_endpoint_refuses_the_credit_sale_row_too" storage="/users/svendaneel/okam/wt-postender-rebase/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="63df4090-c659-7c6e-9e11-65d3e136f6b8">
+      <Execution id="3a1ad9b7-12bc-4588-a4a7-2760656862fb" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-postender-rebase/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.CreditSaleDocumentRoutingTests" name="The_copy_endpoint_refuses_the_credit_sale_row_too" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.RefinalizingTheSameCreditSale_HandsOverTheSameDocument_NotASecondOne" storage="/users/svendaneel/okam/wt-postender-rebase/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="12c0748a-165c-2d81-f7e9-cb29ec497021">
+      <Execution id="ac8dae80-01e8-4091-93db-54fa936e2f83" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-postender-rebase/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests" name="RefinalizingTheSameCreditSale_HandsOverTheSameDocument_NotASecondOne" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.ReprintingTheDeliveryEntry_RendersTheMarkedHandoverDocument_NotABlankOne" storage="/users/svendaneel/okam/wt-postender-rebase/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="f1e9e1f0-23c0-a72f-2149-428352119cca">
+      <Execution id="719558fc-3805-4cf8-a974-d27ead7c03c3" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-postender-rebase/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests" name="ReprintingTheDeliveryEntry_RendersTheMarkedHandoverDocument_NotABlankOne" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.CreditSaleDocumentRoutingTests.Viewing_the_credit_sale_row_returns_the_handover_document" storage="/users/svendaneel/okam/wt-postender-rebase/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="0c8194ad-28e2-f5b7-e1b5-6048ab8adb82">
+      <Execution id="85597ae9-6bc2-492b-9046-0c5b8ba7b91c" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-postender-rebase/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.CreditSaleDocumentRoutingTests" name="Viewing_the_credit_sale_row_returns_the_handover_document" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.DeliveryReceipt_DoesNotCountTurnoverASecondTimeInTheXReport" storage="/users/svendaneel/okam/wt-postender-rebase/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="322f0ec8-9b4f-15ee-d324-0acaa0ddd935">
+      <Execution id="bd6384a6-2241-4f56-ba0c-1b9fb47b5642" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-postender-rebase/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests" name="DeliveryReceipt_DoesNotCountTurnoverASecondTimeInTheXReport" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.CreditSaleDocumentRoutingTests.Printing_the_credit_sale_row_puts_the_marked_handover_document_on_paper" storage="/users/svendaneel/okam/wt-postender-rebase/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="e1833ad1-40cc-08e6-6bbd-fce417cad5d8">
+      <Execution id="70954a62-5f8b-4323-b2ed-e903258c608e" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-postender-rebase/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.CreditSaleDocumentRoutingTests" name="Printing_the_credit_sale_row_puts_the_marked_handover_document_on_paper" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.DeliveryMarking_IsPrintedUnderTheDoubleSizeCommand" storage="/users/svendaneel/okam/wt-postender-rebase/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="e30fd4c0-9084-5635-7f22-f4aefa0d82d1">
+      <Execution id="9f3227ee-0f69-474c-bf0d-8c8b2e44787d" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-postender-rebase/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests" name="DeliveryMarking_IsPrintedUnderTheDoubleSizeCommand" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.CreditSaleDocumentRoutingTests.Copying_the_credit_sale_row_is_refused_in_a_world_that_copies_a_cash_sale" storage="/users/svendaneel/okam/wt-postender-rebase/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="e5538593-d531-592b-af9c-9f072772e9ce">
+      <Execution id="6d8a068a-db97-4886-b5c1-2f2e3b193327" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-postender-rebase/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.CreditSaleDocumentRoutingTests" name="Copying_the_credit_sale_row_is_refused_in_a_world_that_copies_a_cash_sale" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.CashSale_ProducesNoDeliveryReceipt" storage="/users/svendaneel/okam/wt-postender-rebase/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="a6331401-6286-aad3-aa24-01d36977f3dd">
+      <Execution id="50747260-e63d-4e1b-844b-33cc1d0e1133" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-postender-rebase/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests" name="CashSale_ProducesNoDeliveryReceipt" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.CreditSaleDocumentRoutingTests.A_credit_sale_with_no_handover_document_is_refused_rather_than_shown_as_a_sales_receipt" storage="/users/svendaneel/okam/wt-postender-rebase/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="bc1b96e8-c8cb-efde-ec36-4bcd33b8337b">
+      <Execution id="f5eaf8a1-e4b0-4c57-8ecb-f57ff0325f77" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-postender-rebase/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.CreditSaleDocumentRoutingTests" name="A_credit_sale_with_no_handover_document_is_refused_rather_than_shown_as_a_sales_receipt" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.DeliveryEvent_IsJournalledAsAPureEventChainedToItsSale" storage="/users/svendaneel/okam/wt-postender-rebase/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="59ee66ef-5b7e-dfe5-d71b-e5fb444e7ecb">
+      <Execution id="a50f51b1-7e70-45f8-b97c-9790ef835fd8" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-postender-rebase/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.DeliveryReceiptComplianceTests" name="DeliveryEvent_IsJournalledAsAPureEventChainedToItsSale" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.CreditSaleDocumentRoutingTests.The_public_page_behind_the_sms_link_shows_the_handover_document" storage="/users/svendaneel/okam/wt-postender-rebase/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="1c8c0481-7345-0e7a-f19b-b7e283055194">
+      <Execution id="10667e81-9010-4598-88d8-71c1b4c3ce73" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-postender-rebase/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.CreditSaleDocumentRoutingTests" name="The_public_page_behind_the_sms_link_shows_the_handover_document" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="322f0ec8-9b4f-15ee-d324-0acaa0ddd935" executionId="bd6384a6-2241-4f56-ba0c-1b9fb47b5642" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a6331401-6286-aad3-aa24-01d36977f3dd" executionId="50747260-e63d-4e1b-844b-33cc1d0e1133" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bc1b96e8-c8cb-efde-ec36-4bcd33b8337b" executionId="f5eaf8a1-e4b0-4c57-8ecb-f57ff0325f77" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="59ee66ef-5b7e-dfe5-d71b-e5fb444e7ecb" executionId="a50f51b1-7e70-45f8-b97c-9790ef835fd8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4b7121da-3611-9f1d-e57c-bcf104f9a8ff" executionId="a67c6174-bc36-4b90-a0e9-e35a3effd619" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e1833ad1-40cc-08e6-6bbd-fce417cad5d8" executionId="70954a62-5f8b-4323-b2ed-e903258c608e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5c961f82-eaa2-f3bc-c9bf-13a59676928b" executionId="65bca6bf-6b8d-47bb-ba18-29773c0697a4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="63df4090-c659-7c6e-9e11-65d3e136f6b8" executionId="3a1ad9b7-12bc-4588-a4a7-2760656862fb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f1e9e1f0-23c0-a72f-2149-428352119cca" executionId="719558fc-3805-4cf8-a974-d27ead7c03c3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1c8c0481-7345-0e7a-f19b-b7e283055194" executionId="10667e81-9010-4598-88d8-71c1b4c3ce73" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d0b84fc6-8353-568c-4c79-c4ec81a97ee1" executionId="d8bac752-a964-4027-8f1f-20ab6e258646" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0c8194ad-28e2-f5b7-e1b5-6048ab8adb82" executionId="85597ae9-6bc2-492b-9046-0c5b8ba7b91c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="12c0748a-165c-2d81-f7e9-cb29ec497021" executionId="ac8dae80-01e8-4091-93db-54fa936e2f83" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c18d0263-e113-57f5-508d-ff98c6e5c902" executionId="8e2b1359-5446-41b2-a136-e66b9ce6284a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e5538593-d531-592b-af9c-9f072772e9ce" executionId="6d8a068a-db97-4886-b5c1-2f2e3b193327" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1c0c3dbb-d2d1-e863-e931-a7d7b120cc03" executionId="0663eb35-6681-4841-a90d-4af9b1fb86e7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9a34da9d-7f3e-e648-aa4c-fde79a8b26da" executionId="cac1ad60-d20b-4ce6-a0f8-c9cd2e992862" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e30fd4c0-9084-5635-7f22-f4aefa0d82d1" executionId="9f3227ee-0f69-474c-bf0d-8c8b2e44787d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="18" executed="18" passed="17" failed="1" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 8.0.28)
+[xUnit.net 00:00:01.01]   Discovering: WebApi.Tests
+[xUnit.net 00:00:01.27]   Discovered:  WebApi.Tests
+[xUnit.net 00:00:01.27]   Starting:    WebApi.Tests
+[xUnit.net 00:00:05.99]       WebApi.Helpers.AppException : A credit sale must produce an utleveringskvittering (kassasystemforskrifta § 2-8-7).
+[xUnit.net 00:00:05.99]       Stack Trace:
+[xUnit.net 00:00:05.99]         /Users/svendaneel/okam/wt-postender-rebase/Services/Kassa/FinalizeService.cs(309,0): at WebApi.Services.Kassa.FinalizeService.FinalizeSaleCoreAsync(Order order, Int32 cashPointId, Int32 operatorId, String operatorName, DeliveryType vatContext, Int32 roundingAmount, Int32 tipAmount, List`1 payments)
+[xUnit.net 00:00:05.99]         /Users/svendaneel/okam/wt-postender-rebase/Services/Kassa/FinalizeService.cs(91,0): at WebApi.Services.Kassa.FinalizeService.FinalizeSettlementAsync(FinalizeSettlementRequest request)
+[xUnit.net 00:00:05.99]         /Users/svendaneel/okam/wt-postender-rebase/WebApi.Tests/Kassa/DeliveryReceiptComplianceTests.cs(230,0): at WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.ReplayingACashSaleWithADriftedPaymentList_StillHandsOverTheSalesReceipt_AndJournalsNoDeliveryDocument()
+[xUnit.net 00:00:05.99]         /Users/svendaneel/okam/wt-postender-rebase/WebApi.Tests/Kassa/DeliveryReceiptComplianceTests.cs(241,0): at WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.ReplayingACashSaleWithADriftedPaymentList_StillHandsOverTheSalesReceipt_AndJournalsNoDeliveryDocument()
+[xUnit.net 00:00:05.99]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:07.90]   Finished:    WebApi.Tests
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-05T00:18:11.0622380+02:00">
+        <Text>[xUnit.net 00:00:05.99]     WebApi.Tests.Kassa.DeliveryReceiptComplianceTests.ReplayingACashSaleWithADriftedPaymentList_StillHandsOverTheSalesReceipt_AndJournalsNoDeliveryDocument [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

@@ -1,0 +1,34 @@
+journey.js under test   6dd043e1f34648c3fc5f322c0a777247b35c1d591766991b8ff0621c51e631c2
+  pristine copy         6dd043e1f34648c3fc5f322c0a777247b35c1d591766991b8ff0621c51e631c2
+  mutant-bypass         bcf187bda572c78c6afefbe38609a60a728c60ba3c9f5d907c518f28eae4d7cf   (bypassed-origin guard disabled)
+  mutant-serving        f0c301fef76e066006eee7d7fe48afdf6602c3a93dc7983756ba2cf4e599c603   (foreign-fixture guard disabled)
+  mutant-recorder       e4661577a95039afc46d3ee59e22fff1a51196b92d285bc030f6c23df60223a3   (request-fixture recorder removed)
+
+honest fixture          http://127.0.0.1:53670 pid 88633   cwd /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/serving-fixture-proof-k80RiK/pristine
+honest fixture          http://127.0.0.1:53671 pid 88634   cwd /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/serving-fixture-proof-k80RiK/mutant-bypass
+honest fixture          http://127.0.0.1:53672 pid 88635   cwd /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/serving-fixture-proof-k80RiK/mutant-recorder
+foreign fixture         http://127.0.0.1:53673 pid 88636   cwd /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/serving-fixture-proof-k80RiK/foreign-checkout
+foreign (legacy health) http://127.0.0.1:53678 pid 88637   cwd /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/serving-fixture-proof-k80RiK/foreign-checkout-legacy
+stand-in app            http://127.0.0.1:53679
+
+  ok    H1   exit 0     artifact passed   1 passed (480ms)        granted port, own fixture, Node-side `fetch` to the granted origin
+  ok    H2   exit 0     artifact passed   1 passed (466ms)        granted port, own fixture, Node-side `request.post` to the granted origin
+  ok    B1   exit 1     artifact failed   1 failed                spec BYPASSES the granted port via `fetch` — bypassed fixture answers 200
+  ok    B2   exit 1     artifact failed   1 failed                spec BYPASSES via `request.post`/`finalize` — the meals-statement-month channel
+  ok    F1   exit 1     artifact failed   1 failed                granted port is held by ANOTHER CHECKOUT's fixture (the reuse case)
+  ok    F2   exit 1     artifact failed   1 failed                the same, but the foreign fixture is TOO OLD to report its pid and cwd — lsof alone
+  ok    N1   exit 0     artifact passed   1 passed (465ms)        Node-side `fetch` to the APP's own origin — must NOT red
+  ok    M1   exit 0     artifact passed   1 passed (579ms)        B1 with the bypassed-origin guard DISABLED — must go green again
+  ok    M2   exit 0     artifact passed   1 passed (505ms)        F1 with the foreign-fixture guard DISABLED — must go green again
+  ok    M3   exit 0     artifact passed   1 passed (502ms)        B2 with the `request` recorder REMOVED — must go green again
+
+harnesses kept at /var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/serving-fixture-proof-k80RiK
+
+All 10 arms held.
+A journey whose spec called an origin it was never granted fails the process, and its receipt
+names the pid, the cwd and the self-reported port of the fixture that answered instead — while
+that fixture answered 200 to everything and every step of the walk passed. So does a journey
+handed a port another checkout's fixture already held, including one too old to say anything
+about itself. A Node-side call to the app's own origin stays green. Removing either branch, or
+the `request` recorder, makes the matching run green again — which is what makes the rest mean
+something.

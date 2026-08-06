@@ -1,0 +1,129 @@
+journey.js under test  58aa9db69b86575500011bc4c55c03aa66a4b507794d276535c56b5c177deaff
+  pristine copy        58aa9db69b86575500011bc4c55c03aa66a4b507794d276535c56b5c177deaff
+  mutant copy          54fd9f43a6f7e6f4245e92e2daa7a964537ccfce099317883c62590cc2d17a31   (re-throw removed)
+  split-mutant copy    67b56bccca975000e1bcb521fa5dbccb3222b2ed85abc6f0ab7ccd85379bcb79   (split-origin guard disabled)
+  proxy-mutant copy    73e7ac1404f9f754b4c5030286f4b43b9eeef98e2b3bdd1337eb09ff0efc8f56   (same-origin-proxy guard disabled)
+stand-in live api      http://127.0.0.1:49312
+stand-in fixture       http://127.0.0.1:49313
+stand-in app           http://127.0.0.1:49314
+
+  ok    1    exit 1     artifact failed   1 failed                live-labelled, app compiled against the FIXTURE
+  ok    2    exit 1     artifact failed   1 failed                fixture-labelled, app compiled against a LIVE api
+  ok    3    exit 1     artifact NONE     1 failed                live-labelled, pointed AT the throwaway fixture
+  ok    4    exit 0     artifact passed   1 passed (624ms)        live-labelled, app compiled against that LIVE api (honest)
+  ok    5    exit 0     artifact passed   1 passed (487ms)        fixture-labelled, app compiled against that FIXTURE (honest)
+  ok    S1   exit 1     artifact failed   1 failed                live-labelled; signs in at the named api, fetches its SUBJECT elsewhere
+  ok    S2   exit 1     artifact failed   1 failed                fixture-labelled; signs in at the fixture, fetches its SUBJECT elsewhere
+  ok    P1   exit 1     artifact failed   1 failed                live-labelled; signs in at the named api, proxies its SUBJECT same-origin
+  ok    P2   exit 0     artifact passed   1 passed (635ms)        live-labelled; signs in and fetches NOTHING else — no subject anywhere
+  ok    P3   exit 0     artifact passed   1 passed (663ms)        live-labelled; a same-origin fetch OUTSIDE the mount (a Nuxt route) — must not red
+  ok    P4   exit 0     artifact passed   1 passed (639ms)        live-labelled; the SIGN-IN goes through the proxy — shell once stripped, not subject
+  ok    M1   exit 0     artifact failed   1 passed (713ms)        arm 1 with the re-throw REMOVED — must go green again
+  ok    M2   exit 0     artifact failed   1 passed (447ms)        arm 2 with the re-throw REMOVED — must go green again
+  ok    M3   exit 0     artifact passed   1 passed (706ms)        arm S1 with the split-origin guard DISABLED — must go green again
+  ok    M4   exit 0     artifact passed   1 passed (706ms)        arm P1 with the same-origin-proxy guard DISABLED — must go green again
+
+All 15 arms held. A mislabelled run fails the process; so does one whose subject
+calls left for another origin behind an honest sign-in; and so does one that fetched its subject
+through the same-origin `/okam-api` proxy, where BOTH subject counters read zero and every floor
+was green. That last guard stays silent for a journey that fetched no subject at all, for a
+same-origin fetch outside the mount, and for a sign-in that went through it — so it distinguishes
+a proxied subject from an absent one rather than reding on both. Removing the re-throw, the
+split-origin branch, or the proxy branch makes the matching run green again — which is what
+makes the rest mean something.
+
+================================================================================
+RECORDED STATES — L-JOURNEY-PROXY-BLINDSPOT
+================================================================================
+The table above is the RESTORED state: guards present, 15/15 hold, exit 0, and EVERY
+row now carries execution evidence (`1 passed` / `1 failed`).
+
+  state                                     file                              result
+  ----------------------------------------  --------------------------------  ----------------
+  guards present (restored)                 guard-proof.txt (this file)       15/15, exit 0
+  `if (proxied) {` deleted from journey.js  guard-proof-branch-disabled.txt   proof REFUSES to
+                                                                              run at all, exit 1
+  judgeProxiedSubject neutered to `null`    guard-proof-judge-neutered.txt    P1 ALONE reds,
+                                                                              14 others unmoved
+  world-stamp.js copy suppressed            guard-proof-loaddeath.txt         15/15 FAIL incl.
+  (the historical rot, reproduced)                                            ARM 3, exit 1
+
+All three mutation runs were made against the real files and RESTORED byte-for-byte; the
+restore sha is echoed in each transcript.
+
+DOES THE COUNTER DISTINGUISH A PROXY-SERVED SUBJECT FROM NO SUBJECT AT ALL?  Yes, and it
+is observed rather than asserted:
+
+  P1  subject fetched through /okam-api/   -> REFUSED   (exit 1, artifact failed)
+  P2  no subject fetched anywhere          -> green     (a different fact, not a red)
+  P3  same-origin fetch OUTSIDE the mount  -> green     (a Nuxt dev-server fetch)
+  P4  the SIGN-IN went through the proxy   -> green     (shell once the mount is stripped)
+
+Under the neutered judge only P1 moved, so P2/P3/P4 are not accidentally carrying the guard.
+The bare mount (`/okam-api`, `/okam-api/`) strips to `/`, is in no SHELL_PATHS shape, and is
+excluded explicitly: no client fetches the API root as its subject, so counting it could only
+ever produce a false red.
+
+================================================================================
+ARM 3 COULD BE SATISFIED BY A DEAD HARNESS — CLOSED, AND PROVED CLOSED
+================================================================================
+Arm 3 expects `nonzero` + artifact `NONE`. That is EXACTLY the signature of a harness that
+died in module load: nothing ran, nothing was written, the process exited 1. So arm 3 was
+satisfiable by the very breakage this script failed to notice. The `ok` computation now also
+requires the runner's own summary to show `1 passed` or `1 failed`.
+
+Proved by reproducing the historical rot (guard-proof-loaddeath.txt): world-stamp.js is
+discovered but not placed, so every harness dies in module load.
+
+  before this change   arm 3 reported `ok` under a load-death   -> 14 of 15 arms failed
+  after this change    arm 3 reports FAIL under a load-death    -> 15 of 15 arms failed
+
+    expected exit nonzero and artifact NONE, AND NO TEST EXECUTED - the harness died
+    before running a spec (a module-load death, not a guard verdict)
+
+================================================================================
+GATES
+================================================================================
+  guard-proof   node test/e2e/scripts/guard-proof.js      15/15 arms held, exit 0
+  jest          npx jest test/journey-assertions.test.js  75/75 passed, 1 suite
+  eslint        the four touched files                    0 errors, 0 warnings
+
+Restore shas, re-verified after every subsequent edit:
+  test/e2e/support/journey-assertions.js
+    ecc60afd60f62f721c0de56640adb2490a84f183cfa441598b359fced14e81e2
+
+================================================================================
+WHY guard-proof.js WAS DEAD AT THE TIP, AND THE CORRECTED SCOPE OF THAT CLAIM
+================================================================================
+buildHarness copied a HAND-WRITTEN list -- artifact-store.js and journey-assertions.js --
+into its throwaway harness. artifact-store.js requires ./world-stamp, which was never on
+that list, so every arm's child process died in module load:
+
+    Error: Cannot find module './world-stamp'
+    Error: No tests found
+
+The script still printed its table and still exited nonzero, so the failure read as a guard
+regression rather than as a proof that could not execute -- which is why it survived.
+
+CORRECTED SCOPE. An earlier draft of this lane said the approved split-origin arms "had
+NEVER RUN". That is overstated and does not survive scrutiny. The provable claim is
+UNRUNNABLE AT EVERY TIP SINCE 94fa256:
+
+  22f2108  the split-origin arms land  -- artifact-store.js has NO world-stamp require
+                                          (git show 22f2108:...artifact-store.js -> 0 hits),
+                                          so the arms WERE runnable at their own approval
+  94fa256  world-stamp require lands   -- 2 hits; every arm dies in module load from here
+  e34977ac the tip this lane worked at -- 5 commits shipped carrying the break
+                                          (git rev-list --count 94fa256..e34977ac -> 5)
+
+  git merge-base --is-ancestor 22f2108 94fa256  -> true
+
+So the arms were approved against a proof that ran, and were silently disarmed later. That
+is a different finding from "never ran", and it is the one the repository can show.
+
+THE FIX GENERALISES. build-provenance-proof.js ALREADY listed world-stamp.js in its own copy
+list; the lane that added world-stamp updated that script and missed this one. The list here
+now closes over whatever the support files actually import, and REFUSES loudly on any local
+require it cannot place (a nested `./sub/x` or a `../fixture/x`) rather than skipping it --
+the first version of the closure had no `/` in its character class and would have silently
+reintroduced exactly this defect.

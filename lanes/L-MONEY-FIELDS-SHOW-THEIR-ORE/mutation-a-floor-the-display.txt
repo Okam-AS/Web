@@ -1,0 +1,167 @@
+watchman warning:  Recrawled this watch 59 times, most recently because:
+MustScanSubDirs UserDroppedTo resolve, please review the information on
+https://facebook.github.io/watchman/docs/troubleshooting.html#recrawl
+To clear this warning, run:
+`watchman watch-del '/Users/svendaneel/okam/Web-modules' ; watchman watch-project '/Users/svendaneel/okam/Web-modules'`
+
+FAIL test/delivery-minimum-ore.test.js
+  ● a stored minimum-order amount is shown to the last øre › 150,50 kr is shown as 150,50 and not as 150
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "150,50"
+    Received: "150,00"
+
+      70 |   test('150,50 kr is shown as 150,50 and not as 150', async () => {
+      71 |     const wrapper = await mountDelivery(withStoredMinimum(15050))
+    > 72 |     expect(shownMinimum(wrapper)).toBe('150,50')
+         |                                   ^
+      73 |   })
+      74 |
+      75 |   test('a whole-kroner minimum still reads as whole kroner', async () => {
+
+      at Object.<anonymous> (test/delivery-minimum-ore.test.js:72:35)
+
+  ● a stored minimum-order amount is shown to the last øre › a minimum below one krone is shown as the amount it is, not as nothing
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "0,05"
+    Received: "0,00"
+
+      82 |     // — the display did not merely lose precision, it changed what the setting SAYS.
+      83 |     const wrapper = await mountDelivery(withStoredMinimum(5))
+    > 84 |     expect(shownMinimum(wrapper)).toBe('0,05')
+         |                                   ^
+      85 |   })
+      86 |
+      87 |   test('a genuinely absent minimum still reads as zero', async () => {
+
+      at Object.<anonymous> (test/delivery-minimum-ore.test.js:84:35)
+
+  ● a stored minimum-order amount is shown to the last øre › EVERY amount the column can hold survives the round trip to the screen and back
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "0,01"
+    Received: "0,00"
+
+      107 |       const backend = withStoredMinimum(stored)
+      108 |       const wrapper = await mountDelivery(backend)
+    > 109 |       expect(shownMinimum(wrapper)).toBe(asKronerAndOre(stored))
+          |                                     ^
+      110 |       expect(saveButton(wrapper).exists()).toBe(false)
+      111 |       wrapper.destroy()
+      112 |     }
+
+      at Object.<anonymous> (test/delivery-minimum-ore.test.js:109:37)
+
+  ● a stored minimum-order amount is shown to the last øre › a negative stored minimum is shown as it is, and is not quietly rewritten
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "-150,50"
+    Received: "-150,00"
+
+      119 |     const backend = withStoredMinimum(-15050)
+      120 |     const wrapper = await mountDelivery(backend)
+    > 121 |     expect(shownMinimum(wrapper)).toBe('-150,50')
+          |                                   ^
+      122 |     expect(saveButton(wrapper).exists()).toBe(false)
+      123 |     expect(backend.store.minimumOrderPriceForHomeDelivery).toBe(-15050)
+      124 |   })
+
+      at Object.<anonymous> (test/delivery-minimum-ore.test.js:121:35)
+
+  ● what the field shows is what the field writes › editing the kroner does not throw away the øre that were already stored
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 20050
+    Received: 20000
+
+      152 |     await settle(wrapper)
+      153 |
+    > 154 |     expect(backend.store.minimumOrderPriceForHomeDelivery).toBe(20050)
+          |                                                            ^
+      155 |   })
+      156 |
+      157 |   test('the øre can be cleared, which is the correction the floored field made impossible', async () => {
+
+      at Object.<anonymous> (test/delivery-minimum-ore.test.js:154:60)
+
+  ● what the field shows is what the field writes › the øre can be cleared, which is the correction the floored field made impossible
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      163 |     await oreBox(wrapper).setValue('00')
+      164 |     await wrapper.vm.$nextTick()
+    > 165 |     expect(saveButton(wrapper).exists()).toBe(true)
+          |                                          ^
+      166 |
+      167 |     await saveButton(wrapper).trigger('click')
+      168 |     await settle(wrapper)
+
+      at Object.<anonymous> (test/delivery-minimum-ore.test.js:165:42)
+
+  ● what the field shows is what the field writes › a saved amount comes back onto the screen as the amount that was saved
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "249,90"
+    Received: "249,00"
+
+      182 |
+      183 |     expect(backend.store.minimumOrderPriceForHomeDelivery).toBe(24990)
+    > 184 |     expect(shownMinimum(wrapper)).toBe('249,90')
+          |                                   ^
+      185 |     expect(saveButton(wrapper).exists()).toBe(false)
+      186 |   })
+      187 |
+
+      at Object.<anonymous> (test/delivery-minimum-ore.test.js:184:35)
+
+  ● the boxes normalise on blur, so what is on screen is what would be written › one digit in the øre box is øre, not tenths of a krone
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "05"
+    Received: "00"
+
+      236 |     await oreBox(wrapper).trigger('blur')
+      237 |     await wrapper.vm.$nextTick()
+    > 238 |     expect(oreBox(wrapper).element.value).toBe('05')
+          |                                           ^
+      239 |
+      240 |     await saveButton(wrapper).trigger('click')
+      241 |     await settle(wrapper)
+
+      at Object.<anonymous> (test/delivery-minimum-ore.test.js:238:43)
+
+  ● the boxes normalise on blur, so what is on screen is what would be written › an øre entry past 99 is shown clamped rather than silently folded into the kroner
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "99"
+    Received: "00"
+
+      265 |     await wrapper.vm.$nextTick()
+      266 |
+    > 267 |     expect(oreBox(wrapper).element.value).toBe('99')
+          |                                           ^
+      268 |     await saveButton(wrapper).trigger('click')
+      269 |     await settle(wrapper)
+      270 |     expect(backend.store.minimumOrderPriceForHomeDelivery).toBe(15099)
+
+      at Object.<anonymous> (test/delivery-minimum-ore.test.js:267:43)
+
+PASS test/delivery-save-failure.test.js
+
+Test Suites: 1 failed, 1 passed, 2 total
+Tests:       9 failed, 31 passed, 40 total
+Snapshots:   0 total
+Time:        0.89 s, estimated 3 s
+Ran all test suites matching /test\/delivery-minimum-ore.test.js|test\/delivery-save-failure.test.js/i.

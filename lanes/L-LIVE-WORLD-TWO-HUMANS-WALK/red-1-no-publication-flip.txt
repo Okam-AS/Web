@@ -1,0 +1,92 @@
+[WebServer] 
+[WebServer]  WARN  You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  Module @nuxt/image is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version >=3.1.0 is required but currently using 2.17.1
+[WebServer] 
+[WebServer] ℹ Parsed 0 files in 0.0 seconds
+[WebServer] ℹ [HPM] Proxy created: /  -> http://127.0.0.1:5080
+[WebServer] ℹ [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+[WebServer] ℹ Listening on: http://192.168.68.111:3971/
+[WebServer] ℹ Preparing project for development
+[WebServer] ℹ Initial build may take a while
+[WebServer] ℹ Discovered Components: .nuxt/components/readme.md
+[WebServer] ✔ Builder initialized
+[WebServer] ✔ Nuxt files generated
+[WebServer] 
+[WebServer]  WARN  Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[WebServer] 
+[WebServer] ℹ Compiling Server
+[WebServer] ℹ Compiling Client
+[WebServer] ✔ Server: Compiled successfully in 22.67s
+[WebServer] ✔ Client: Compiled successfully in 26.37s
+
+Running 1 test using 1 worker
+
+[WebServer] ℹ Waiting for file changes
+[WebServer] ℹ Memory usage: 1.25 GB (RSS: 2.17 GB)
+[WebServer] ℹ Listening on: http://192.168.68.111:3971/
+[WebServer] ↻ Updated .nuxt/google-analytics.js
+[WebServer] ℹ Compiling Client
+[WebServer] ℹ Compiling Server
+[WebServer] ✔ Server: Compiled successfully in 1.27s
+[WebServer] ✔ Client: Compiled successfully in 1.34s
+  ✘  1 [chromium] › test/e2e/journeys/zz-mutant-lwtwo.spec.js:143:3 › workforce week-run › A manager publishes a week and a second human acknowledges it, in one live world @live (25.9s)
+
+
+  1) [chromium] › test/e2e/journeys/zz-mutant-lwtwo.spec.js:143:3 › workforce week-run › A manager publishes a week and a second human acknowledges it, in one live world @live 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.wf-page__toast')
+    Expected substring: "Utkast opprettet"
+    Timeout: 20000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" with timeout 20000ms
+      - waiting for locator('.wf-page__toast')
+
+
+      291 |         // The SAME control that was refused in the probe. Nothing else changed in between.
+      292 |         await page.getByRole('button', { name: 'Opprett utkast' }).click();
+    > 293 |         await expect(page.locator('.wf-page__toast')).toContainText('Utkast opprettet', { timeout: 20000 });
+          |                                                       ^
+      294 |         await expect(page.locator('.wf-page__badge')).toHaveText('Utkast');
+      295 |
+      296 |         // The shift must name the person about to claim, or the acknowledgement at the end proves
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/zz-mutant-lwtwo.spec.js:293:55
+        at JourneyRecorder.step (/Users/svendaneel/okam/Web-modules/test/e2e/support/journey.js:399:22)
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/zz-mutant-lwtwo.spec.js:287:7
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/zz-mutant-lwtwo-workforce--7e184-ledges-it-in-one-live-world-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/MUTANT-noflag-publication.live-5971-8e2b57d.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/MUTANT-noflag-publication.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/zz-mutant-lwtwo-workforce--7e184-ledges-it-in-one-live-world-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/zz-mutant-lwtwo-workforce--7e184-ledges-it-in-one-live-world-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/zz-mutant-lwtwo-workforce--7e184-ledges-it-in-one-live-world-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › test/e2e/journeys/zz-mutant-lwtwo.spec.js:143:3 › workforce week-run › A manager publishes a week and a second human acknowledges it, in one live world @live 
+exit=1

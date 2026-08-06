@@ -1,0 +1,98 @@
+=== label     : B2-dead-stock
+=== worktree  : /Users/svendaneel/okam/web-loginsend-before
+=== commit    : 8ac6f63648015d8c7a230181a7f07bf303d43268
+=== dirty     : 2 path(s) before the run
+=== modal sha : 7213119e136338ede0dbaff91dfb2a2604eec6fe components/molecules/LoginModal.vue
+=== spec sha  : 0e5c69a443ac02166f53d5ed95b015964d10aefc  test/e2e/journeys/nothing-listening.evidence.spec.js
+=== mode      : dead   api=127.0.0.1:4883   web=127.0.0.1:3882
+=== api before: 0 listener(s) on the API port — 0 means nothing is listening
+=== api probe : 000no answer (curl rc=7)
+=== ports     : 4010/4971/4973 never bound, never probed, never signalled
+=== started   : 2026-08-06T11:48:52Z
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://192.168.68.111:3882/
+
+[WebServer] [info] Preparing project for development
+
+[WebServer] [info] Initial build may take a while
+
+
+Running 1 test using 1 worker
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+[WebServer] [success] Builder initialized
+
+[1/1] [chromium] › test/e2e/journeys/nothing-listening.evidence.spec.js:16:1 › with nothing listening, what does the login modal do after asking for a code?
+[WebServer] [success] Nuxt files generated
+
+[WebServer] [warn] Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[WebServer] [info] Waiting for file changes
+
+[WebServer] [info] Memory usage: 982 MB (RSS: 1.9 GB)
+
+[WebServer] [info] Listening on: http://192.168.68.111:3882/
+
+[chromium] › test/e2e/journeys/nothing-listening.evidence.spec.js:16:1 › with nothing listening, what does the login modal do after asking for a code?
+---- NOTHING-LISTENING OBSERVATION ----
+
+api traffic     : FAILED http://127.0.0.1:4883/user/sendverificationtoken :: net::ERR_CONNECTION_REFUSED
+
+otp boxes shown : 6
+
+phone step still: true
+
+modal says      : (no error shown)
+
+---------------------------------------
+
+  1) [chromium] › test/e2e/journeys/nothing-listening.evidence.spec.js:16:1 › with nothing listening, what does the login modal do after asking for a code? 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 0
+    Received: 6
+
+      61 |
+      62 |   // THE CLAIM: a code that was never sent is never asked for.
+    > 63 |   expect(otpCount).toBe(0);
+         |                    ^
+      64 |   expect(phoneStillThere).toBe(true);
+      65 |   expect(alertText).toContain('kunne ikke sende koden');
+      66 | });
+        at /Users/svendaneel/okam/web-loginsend-before/test/e2e/journeys/nothing-listening.evidence.spec.js:63:20
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/nothing-listening.evidence-5a69f-do-after-asking-for-a-code--chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/nothing-listening.evidence-5a69f-do-after-asking-for-a-code--chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/nothing-listening.evidence-5a69f-do-after-asking-for-a-code--chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/nothing-listening.evidence-5a69f-do-after-asking-for-a-code--chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+  1 failed
+    [chromium] › test/e2e/journeys/nothing-listening.evidence.spec.js:16:1 › with nothing listening, what does the login modal do after asking for a code? 
+=== api after : 0 listener(s) — still nothing listening if 0
+=== finished  : 2026-08-06T11:49:23Z
+RESULT B2-dead-stock FAIL-ASSERT rc=1

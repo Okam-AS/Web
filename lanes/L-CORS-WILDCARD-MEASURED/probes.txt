@@ -1,0 +1,50 @@
+# L-CORS-WILDCARD-MEASURED raw probes — read-only (OPTIONS preflights + unauthenticated GETs only)
+# no cookie, no Authorization, no API key, no body was ever sent to production
+# re-run at 2026-08-06T11:51:03Z
+
+== B  OPTIONS https://api.okam.no/api/Store  (ACRM:PUT ACRH:authorization,content-type) ==
+HTTP/2 204 
+access-control-allow-headers: authorization,content-type
+access-control-allow-methods: PUT
+access-control-allow-origin: *
+
+== Q  OPTIONS https://api.okam.no/Stores/52/orders  (ACRM:GET ACRH:x-okam-apikey) ==
+HTTP/2 204 
+access-control-allow-headers: x-okam-apikey
+access-control-allow-methods: GET
+access-control-allow-origin: *
+
+== R  OPTIONS https://api.okam.no/api/external/menu/52  (ACRM:GET ACRH:x-api-key) ==
+HTTP/2 204 
+access-control-allow-headers: x-api-key
+access-control-allow-methods: GET
+access-control-allow-origin: *
+
+== F  OPTIONS https://api.okam.no/mcp  (ACRM:POST ACRH:authorization,content-type,mcp-protocol-version) ==
+HTTP/2 204 
+
+== K  OPTIONS https://api.okam.no/User/login  (ACRM:POST ACRH:content-type) ==
+HTTP/2 204 
+access-control-allow-headers: content-type
+access-control-allow-methods: POST
+access-control-allow-origin: *
+
+== S1  GET https://api.okam.no/api/external/menu/52 (unauthenticated) ==
+HTTP/2 401 
+access-control-allow-origin: *
+
+== S2  GET https://api.okam.no/Stores/52/orders?date=2026-08-01 (unauthenticated) ==
+HTTP/2 401 
+access-control-allow-origin: *
+
+== M  GET https://api.okam.no/Stores (unauthenticated) ==
+HTTP/2 200 
+access-control-allow-origin: *
+
+== E  GET https://api.okam.no/health (unauthenticated) ==
+HTTP/2 200 
+access-control-allow-origin: *
+
+== O1  GET https://api.okam.no/v1/growth/stores/1/consent-text (unauthenticated) ==
+HTTP/2 404 
+access-control-allow-origin: *

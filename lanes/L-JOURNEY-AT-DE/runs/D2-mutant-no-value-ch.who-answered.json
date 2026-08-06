@@ -1,0 +1,12 @@
+{
+  "label": "D2-mutant-no-value-ch",
+  "edition": "ch",
+  "grantedFixturePort": 4823,
+  "grantedWebPort": 3823,
+  "health": "{\"ok\":true,\"port\":4823}",
+  "holderPid": "76282",
+  "holderCwd": "/Users/svendaneel/okam/web-atde",
+  "holderCommand": "node test/e2e/fixture/api-server.js",
+  "lsof": "p76282 f12 n127.0.0.1:4823 ",
+  "capturedAt": "2026-08-05T04:56:35Z"
+}

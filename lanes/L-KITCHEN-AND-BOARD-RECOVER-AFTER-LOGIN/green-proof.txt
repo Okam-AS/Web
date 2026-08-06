@@ -1,0 +1,22 @@
+watchman warning:  Recrawled this watch 57 times, most recently because:
+MustScanSubDirs UserDroppedTo resolve, please review the information on
+https://facebook.github.io/watchman/docs/troubleshooting.html#recrawl
+To clear this warning, run:
+`watchman watch-del '/Users/svendaneel/okam/Web-modules' ; watchman watch-project '/Users/svendaneel/okam/Web-modules'`
+
+PASS test/kitchen-and-board-resume-after-login.test.js
+  /admin/kitchen — signing in through the page brings the ticket clock with it
+    ✓ a ticket sent at sign-in ages on screen instead of sitting at 0:00 (19 ms)
+    ✓ the board keeps polling after the sign-in, not just once (3 ms)
+    ✓ the fullscreen state tracks the document after the sign-in (2 ms)
+    ✓ a repeated sign-in leaves exactly one clock and one poll behind (2 ms)
+  /admin/ongoing — signing in through the page brings the live board with it
+    ✓ an order placed after the sign-in appears on the board without a reload (5 ms)
+    ✓ the stores an order can be transferred to are known after the sign-in (3 ms)
+    ✓ a repeated sign-in leaves exactly one poll behind (2 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       7 passed, 7 total
+Snapshots:   0 total
+Time:        0.617 s, estimated 1 s
+Ran all test suites matching /test\/kitchen-and-board-resume-after-login.test.js/i.

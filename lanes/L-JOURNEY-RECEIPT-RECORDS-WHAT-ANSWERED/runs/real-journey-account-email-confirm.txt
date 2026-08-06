@@ -1,0 +1,36 @@
+[WebServer] [fixture] listening on http://127.0.0.1:4934
+
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://172.20.10.4:3934/
+
+[WebServer] [info] Preparing project for development
+
+[WebServer] [info] Initial build may take a while
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+
+[WebServer] [success] Builder initialized
+
+[WebServer] [success] Nuxt files generated
+
+
+Running 1 test using 1 worker
+
+[WebServer] [info] Waiting for file changes
+[WebServer] [info] Memory usage: 988 MB (RSS: 2.59 GB)
+[WebServer] [info] Listening on: http://172.20.10.4:3934/
+
+[1/1] [chromium] › test/e2e/journeys/account-email-confirm.spec.js:77:1 › A phone-signup administrator is refused a test-send, confirms her address from admin, and is then allowed it @fixture
+  1 passed (32.7s)

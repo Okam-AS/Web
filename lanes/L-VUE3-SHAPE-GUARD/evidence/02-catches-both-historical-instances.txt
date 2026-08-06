@@ -1,0 +1,2 @@
+components/molecules/FocusTrap.vue:147: `unmounted` — this Vue (2.7.14) never reads it
+components/atoms/Modal.vue:97: `emits` — this Vue (2.7.14) never reads it

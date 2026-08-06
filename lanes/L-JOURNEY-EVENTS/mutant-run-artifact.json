@@ -1,0 +1,188 @@
+{
+  "journey": "events-enquiry-to-settlement",
+  "title": "A private booking runs from a public enquiry to a settled statement, and the accept refuses while the module is off",
+  "status": "failed",
+  "startedAtUtc": "2026-08-03T21:16:03.575Z",
+  "finishedAtUtc": "2026-08-03T21:16:45.515Z",
+  "durationMs": 41940,
+  "capabilities": [
+    "events.inquiry.public-create",
+    "events.proposal.author",
+    "events.proposal.send",
+    "events.guest.proposal.accept",
+    "events.proposal.accept.store-gate",
+    "events.settlement.close",
+    "events.settlement.line",
+    "events.settlement.reconcile",
+    "events.module.store-gate",
+    "platform.feature-flags.write"
+  ],
+  "surface": "public+admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3061",
+  "apiBaseUrl": "http://127.0.0.1:4061",
+  "commit": "4cfd3063488efc831f2a79bf4a2d8fd9506207dd",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": {
+    "id": "fixture@4cfd3063488efc831f2a79bf4a2d8fd9506207dd+dirty",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "4cfd306-dirty",
+    "detail": "the in-repo fixture backend, not an API build (branch feature/restaurant-modules)"
+  },
+  "backendServed": 40,
+  "backendSample": [
+    "POST http://127.0.0.1:4061/events/inquiries -> 200",
+    "POST http://127.0.0.1:4061/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:4061/user/login -> 200",
+    "GET http://127.0.0.1:4061/user -> 200",
+    "GET http://127.0.0.1:4061/stores/42/market -> 200",
+    "GET http://127.0.0.1:4061/stores/42 -> 200",
+    "GET http://127.0.0.1:4061/user -> 200",
+    "GET http://127.0.0.1:4061/events/admin/42/events -> 404"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "a guest fills in the venue's public enquiry form",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T21:16:03.579Z",
+      "durationMs": 26598,
+      "detail": "Nina Nordmann <nina@nordane.test>, 40 gjester on 2026-12-12",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "the enquiry is accepted even though the venue has Events switched off",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T21:16:30.177Z",
+      "durationMs": 90,
+      "detail": "the guest holds reference eef25e72-366a-5dfe-60aa-f801f5275323",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "sign in as the host (99999999 / AppSettings__DemoVerificationCode__REDACTED)",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T21:16:30.304Z",
+      "durationMs": 1324,
+      "detail": "landed on /admin/events-pipeline as the host of store 42",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "the venue cannot see the enquiry it has already been sent",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T21:16:31.628Z",
+      "durationMs": 42,
+      "detail": "the pipeline reads: Events er ikke slått på for dette utsalgsstedet. Det er en innstilling, og sier ingenting om hvor mange forespørsler stedet har.",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "the host switches Events on for this venue",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T21:16:31.706Z",
+      "durationMs": 1551,
+      "detail": "Events.Core on for store 42",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "the guest's enquiry is now in the pipeline, under the name they typed",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T21:16:33.257Z",
+      "durationMs": 86,
+      "detail": "opened: lør. 12. des. 2026 Julebord for Nordane AS Forespørsel 40 Nina Nordmann —",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "the venue drafts the offer",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T21:16:33.343Z",
+      "durationMs": 237,
+      "detail": "version 1 drafted at kr 35 800,00",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "the venue sends it, and gets a link to hand the guest",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T21:16:33.580Z",
+      "durationMs": 43,
+      "detail": "a proposal link was minted (36 characters, not echoed here)",
+      "error": null
+    },
+    {
+      "n": 9,
+      "name": "the host switches Events back OFF for this venue",
+      "status": "passed",
+      "startedAtUtc": "2026-08-03T21:16:33.736Z",
+      "durationMs": 749,
+      "detail": "Events.Core off for store 42",
+      "error": null
+    },
+    {
+      "n": 10,
+      "name": "the guest opens the offer and answers it — and the answer is refused",
+      "status": "failed",
+      "startedAtUtc": "2026-08-03T21:16:34.485Z",
+      "durationMs": 10994,
+      "detail": null,
+      "error": "\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-test=\"refusal\"]')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-test=\"refusal\"]')\u001b[22m\n"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "note",
+      "summary": "the public enquiry write is not gated, and the guest holds a reference the venue cannot see",
+      "detail": "F-EV-INQUIRY-UNGATED, open for a product ruling. POST /events/inquiries carries no store-scoped Events.Core gate, so this walk created event eef25e72-366a-5dfe-60aa-f801f5275323 for store 42 while every admin read for that store answered 404 EVENTS_DISABLED. The guest was told to keep a reference for a booking nobody at the venue can open. This journey asserts what is true rather than the gate a ruling might add."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fevents-pipeline\" to \"/admin?redirect=%2Fadmin%2Fevents-pipeline&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fevents-pipeline\" to \"/admin?redirect=%2Fadmin%2Fevents-pipeline&storeId=42\" with a new navigation.",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "failedRequests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4061/events/admin/42/events",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4061/events/admin/42/notifications/health",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4061/events/admin/42/events/8001/run-sheet",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4061/events/admin/42/events/8001/settlement",
+      "status": 404
+    }
+  ],
+  "screenshots": [
+    "events-enquiry-to-settlement/fixture/01-the-enquiry-the-guest-sent.png",
+    "events-enquiry-to-settlement/fixture/02-the-venue-dark-with-the-enquiry-already-filed.png",
+    "events-enquiry-to-settlement/fixture/03-the-sent-offer-in-the-venue-s-pipeline.png"
+  ],
+  "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-test=\"refusal\"]')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-test=\"refusal\"]')\u001b[22m\n",
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/events-enquiry-to-settlement.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false,
+    "supersedes": null
+  }
+}

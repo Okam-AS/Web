@@ -1,0 +1,14 @@
+
+Error: This proof mutates `journey.js` by disabling:
+
+    if (proxied) {
+
+and that branch is no longer in test/e2e/support/journey.js. Refusing to report success:
+arm P1 would then be measuring nothing, and a proxied-subject run that goes green in both
+the pristine and the mutant harness proves the guard is absent, not present. Point the
+mutation at whatever now acts on `judgeProxiedSubject`, or say plainly that nothing does.
+    at buildHarness (/Users/svendaneel/okam/Web-modules/test/e2e/scripts/guard-proof.js:334:13)
+    at main (/Users/svendaneel/okam/Web-modules/test/e2e/scripts/guard-proof.js:411:23)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+guard-proof EXIT=1

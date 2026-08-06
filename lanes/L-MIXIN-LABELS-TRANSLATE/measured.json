@@ -1,0 +1,77 @@
+{
+  "api_commit": "597192efa5be8a3c373b7a3c992cb089cb5ebbda",
+  "backend_members": {
+    "delivery": {
+      "DineHomeDelivery": 350,
+      "InstantHomeDelivery": 200,
+      "NotSet": 0,
+      "SelfPickup": 100,
+      "TableDelivery": 400,
+      "WoltDelivery": 375,
+      "WoltMarketplaceDelivery": 380
+    },
+    "status": {
+      "Accepted": 20,
+      "Canceled": 110,
+      "Completed": 100,
+      "DriverPickedUp": 60,
+      "Processing": 30,
+      "ReadyForDriver": 50,
+      "ReadyForPickup": 40,
+      "Served": 70
+    }
+  },
+  "base_commit": "e34977a",
+  "delivery_backend_members_unmapped": [],
+  "delivery_mapped_non_members": [
+    "GroupedHomeDelivery"
+  ],
+  "dictionary_key_counts": {
+    "de": 4790,
+    "en": 4790,
+    "no": 4825
+  },
+  "dictionary_key_counts_along_the_chain": {
+    "4465d02": {
+      "de": 4786,
+      "en": 4786,
+      "no": 4821
+    },
+    "HEAD": {
+      "de": 4790,
+      "en": 4790,
+      "no": 4825
+    },
+    "e34977a": {
+      "de": 4781,
+      "en": 4781,
+      "no": 4816
+    }
+  },
+  "duplicate_keys": {
+    "de": [],
+    "en": [],
+    "no": []
+  },
+  "german_equals_norwegian": [
+    "orders_deliveryWoltDrive",
+    "orders_deliveryWoltMarketplace"
+  ],
+  "keys_missing_from_a_dictionary": [],
+  "norwegian_drift": [],
+  "norwegian_drift_count": 0,
+  "old_switch_case_count": {
+    "delivery": 7,
+    "status": 8
+  },
+  "old_switch_default": {
+    "delivery": "Ikke satt",
+    "status": "Ikke satt"
+  },
+  "old_switch_delivery_members_missing_vs_backend": [
+    "NotSet"
+  ],
+  "old_switch_status_members_missing_vs_backend": [],
+  "status_backend_members_unmapped": [],
+  "status_mapped_non_members": []
+}

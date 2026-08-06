@@ -1,0 +1,356 @@
+{
+ "fe": {
+  "superseded_by_ancestry": {
+   "lane/ev-journey-timebomb": [
+    "lane/journey-teardown"
+   ],
+   "lane/fe-growth-prefcentre": [
+    "lane/fe-gr-withdraw-origin"
+   ],
+   "lane/fe-journeys": [
+    "lane/fe-training-meals-surfaces"
+   ],
+   "lane/fe-pos-clock": [
+    "lane/fe-wf-blind-bind-name",
+    "lane/fe-wf-link-deadend",
+    "lane/fe-wf-oplink"
+   ],
+   "lane/fe-wf-blind-bind-name": [
+    "lane/fe-wf-link-deadend"
+   ],
+   "lane/fe-wf-onboard": [
+    "lane/fe-wf-self"
+   ],
+   "lane/fe-wf-oplink": [
+    "lane/fe-wf-blind-bind-name",
+    "lane/fe-wf-link-deadend"
+   ],
+   "lane/meals-enrol-ui": [
+    "lane/meals-enrol-pretick"
+   ],
+   "lane/offer-partial-subtotal": [
+    "lane/offers-page-hundredfold"
+   ],
+   "lane/price-cleanup-two": [
+    "lane/offer-partial-subtotal",
+    "lane/offers-page-hundredfold"
+   ],
+   "lane/print-host": [
+    "lane/ev-stale-cause",
+    "lane/statute-evidence-world",
+    "lane/statute-honesty"
+   ],
+   "lane/statute-honesty": [
+    "lane/ev-stale-cause",
+    "lane/statute-evidence-world"
+   ]
+  },
+  "alias_groups": {},
+  "mergeable_heads": [
+   "feature/swiss",
+   "lane/L-JOURNEY-GROWTH",
+   "lane/L-JOURNEY-PORT-HARDCODED",
+   "lane/L-JOURNEY-PROXY-BLINDSPOT",
+   "lane/L-PRICE-SHADOW-GUARD",
+   "lane/coercion-write-paths",
+   "lane/ev-guestlink-one-composer",
+   "lane/ev-stale-cause",
+   "lane/events-admin",
+   "lane/exit-instrument-census",
+   "lane/fe-admin-refusal-credential",
+   "lane/fe-ci",
+   "lane/fe-ev-inquiry-gate",
+   "lane/fe-events-margin-surfaces",
+   "lane/fe-gr-exit-wire-the-mail",
+   "lane/fe-gr-withdraw-origin",
+   "lane/fe-journey-meals",
+   "lane/fe-meals-claim-receipt",
+   "lane/fe-meals-docsync",
+   "lane/fe-meals-reconcile-ui",
+   "lane/fe-meals-statement-surface",
+   "lane/fe-training-meals-surfaces",
+   "lane/fe-wf-bootstrap",
+   "lane/fe-wf-contact-imported",
+   "lane/fe-wf-correction-path",
+   "lane/fe-wf-invite-list-revoke",
+   "lane/fe-wf-link-deadend",
+   "lane/fe-wf-self",
+   "lane/growth-admin",
+   "lane/journey-teardown",
+   "lane/journey-workforce",
+   "lane/margin-menu-margin-ui",
+   "lane/margin-recipes",
+   "lane/meals-admin",
+   "lane/meals-enrol-pretick",
+   "lane/meals-reachable-web",
+   "lane/menu-allergen-matrix",
+   "lane/modal-broken-two",
+   "lane/mrg-coverage-unknown",
+   "lane/mrg-lag-visible",
+   "lane/mrg-page-test-vacuous",
+   "lane/mrg-recipe-revise-ui",
+   "lane/mrg-revise-land",
+   "lane/mrg-waste-frontend",
+   "lane/mrg-waste-receipts",
+   "lane/offers-page-hundredfold",
+   "lane/price-crosscurrency",
+   "lane/statute-evidence-world",
+   "lane/tier-artifacts",
+   "lane/train-evidence-pack-ui",
+   "lane/train-publish-unclickable",
+   "lane/train-readonly-visible",
+   "lane/training-admin",
+   "lane/wf-adjust-address",
+   "lane/wf-idreg",
+   "lane/wf-kodeoversikt-ui",
+   "lane/wf-pubhist",
+   "lane/wf-roles-ui",
+   "lane/wf-timesheet-ui",
+   "lane/workforce-roster",
+   "lane/worktree-basename-pin"
+  ]
+ },
+ "be": {
+  "superseded_by_ancestry": {
+   "integration/mig-stack-land": [
+    "lane/ef-index-shadow-sweep",
+    "lane/wf-bootstrap-one-engagement",
+    "lane/wf-timesheet-race"
+   ],
+   "lane/acct-uidx": [
+    "integration/mig-stack-land",
+    "lane/ef-index-shadow-sweep",
+    "lane/wf-bootstrap-one-engagement",
+    "lane/wf-timesheet-race"
+   ],
+   "lane/ev-extdep": [
+    "lane/ev-extdep-guards"
+   ],
+   "lane/flags-effective-resolvers": [
+    "lane/flags-excuse-byflag"
+   ],
+   "lane/gr-deadline-onwire": [
+    "integration/confirm-family",
+    "lane/gr-deadline-statute"
+   ],
+   "lane/gr-deadline-statute": [
+    "integration/confirm-family"
+   ],
+   "lane/gr-postmark-webhook": [
+    "integration/confirm-family"
+   ],
+   "lane/growth-health-honest": [
+    "lane/review-residuals-provider"
+   ],
+   "lane/growth-newsletter-wire": [
+    "lane/gr-newsletter-cross-verify"
+   ],
+   "lane/growth-prefcentre": [
+    "lane/cors-credentialed-origin",
+    "lane/gr-withdraw-origin",
+    "lane/meals-reachable-api"
+   ],
+   "lane/margin-price-correction": [
+    "lane/mrg-price-correction-2"
+   ],
+   "lane/margin-waste": [
+    "integration/mig-stack-land",
+    "lane/acct-uidx",
+    "lane/ef-index-shadow-sweep",
+    "lane/margin-waste-500",
+    "lane/mig-company-receivable",
+    "lane/review-residuals-rezone",
+    "lane/wf-adjustment-ordinal",
+    "lane/wf-bootstrap-one-engagement",
+    "lane/wf-digest-tautology",
+    "lane/wf-export-duplicate",
+    "lane/wf-timesheet-race",
+    "lane/wf-timesheet-wire",
+    "lane/wf-w5-timesheet"
+   ],
+   "lane/meals-agreement-pin-inverts": [
+    "lane/replay-pins-close"
+   ],
+   "lane/meals-degenerate-two": [
+    "lane/meals-fourway-tier",
+    "lane/meals-quote-retry",
+    "lane/meals-supersede-sql"
+   ],
+   "lane/meals-eighth-pin": [
+    "lane/meals-eighth-read",
+    "lane/meals-quote-retry"
+   ],
+   "lane/meals-floor-pins": [
+    "lane/meals-fourway-tier",
+    "lane/meals-quote-retry",
+    "lane/meals-supersede-sql"
+   ],
+   "lane/meals-fourway-tier": [
+    "lane/meals-quote-retry",
+    "lane/meals-supersede-sql"
+   ],
+   "lane/meals-grace-pins": [
+    "lane/meals-fourway-tier",
+    "lane/meals-quote-retry",
+    "lane/meals-supersede-sql"
+   ],
+   "lane/meals-idempotency-refusal": [
+    "lane/meals-agreement-pin-inverts",
+    "lane/replay-pins-close"
+   ],
+   "lane/meals-requote-release": [
+    "lane/meals-eighth-pin",
+    "lane/meals-eighth-read",
+    "lane/meals-fourway-tier",
+    "lane/meals-quote-retry",
+    "lane/meals-supersede-sql"
+   ],
+   "lane/meals-supersede-sql": [
+    "lane/meals-quote-retry"
+   ],
+   "lane/mig-company-receivable": [
+    "integration/mig-stack-land",
+    "lane/acct-uidx",
+    "lane/ef-index-shadow-sweep",
+    "lane/wf-bootstrap-one-engagement",
+    "lane/wf-timesheet-race"
+   ],
+   "lane/phone-in-path": [
+    "lane/route-guard-gaps"
+   ],
+   "lane/wf-adjustment-ordinal": [
+    "integration/mig-stack-land",
+    "lane/acct-uidx",
+    "lane/ef-index-shadow-sweep",
+    "lane/mig-company-receivable",
+    "lane/wf-bootstrap-one-engagement",
+    "lane/wf-timesheet-race"
+   ],
+   "lane/wf-blind-bind-name": [
+    "lane/wf-link-deadend"
+   ],
+   "lane/wf-bootstrap": [
+    "lane/wf-bootstrap-one-engagement"
+   ],
+   "lane/wf-export-duplicate": [
+    "integration/mig-stack-land",
+    "lane/acct-uidx",
+    "lane/ef-index-shadow-sweep",
+    "lane/mig-company-receivable",
+    "lane/review-residuals-rezone",
+    "lane/wf-adjustment-ordinal",
+    "lane/wf-bootstrap-one-engagement",
+    "lane/wf-timesheet-race"
+   ],
+   "lane/wf-idempotency-refusal": [
+    "lane/replay-pins-close",
+    "lane/wf-idempotency-refusal-rest"
+   ],
+   "lane/wf-w5-timesheet": [
+    "integration/mig-stack-land",
+    "lane/acct-uidx",
+    "lane/ef-index-shadow-sweep",
+    "lane/mig-company-receivable",
+    "lane/review-residuals-rezone",
+    "lane/wf-adjustment-ordinal",
+    "lane/wf-bootstrap-one-engagement",
+    "lane/wf-digest-tautology",
+    "lane/wf-export-duplicate",
+    "lane/wf-timesheet-race",
+    "lane/wf-timesheet-wire"
+   ],
+   "lane/xz-credit-fields": [
+    "lane/eod-credit-split",
+    "lane/xz-printed-defects"
+   ]
+  },
+  "alias_groups": {
+   "de0811f6330b0e2f28805b62206bd51d8021f88e": [
+    "lane/wf-onboard-claim",
+    "lane/wf-onboard-demo-run"
+   ]
+  },
+  "mergeable_heads": [
+   "integration/confirm-family",
+   "land/meals-posrel-v1",
+   "lane/accounting-export-silent",
+   "lane/census-floors-derived",
+   "lane/cors-credentialed-origin",
+   "lane/cors-followups",
+   "lane/credit-note-number",
+   "lane/dated-test-output",
+   "lane/ef-index-shadow-sweep",
+   "lane/eod-credit-split",
+   "lane/ev-accept-receipt",
+   "lane/ev-extdep-guards",
+   "lane/ev-inquiry-gate",
+   "lane/ev-outbox-flake",
+   "lane/ev-outbox-guid-substring",
+   "lane/ev-refund-fake-arg",
+   "lane/ev-seed-deposits",
+   "lane/ev-stale-cause",
+   "lane/ev-uri-relative",
+   "lane/ev-vipps-fallback",
+   "lane/ev-vipps-fallback-2",
+   "lane/flags-excuse-byflag",
+   "lane/fragile-needles",
+   "lane/gr-approval-state",
+   "lane/gr-exit-wire-the-mail",
+   "lane/gr-newsletter-cross-verify",
+   "lane/gr-withdraw-origin",
+   "lane/hosted-service-floor",
+   "lane/lanes-out-of-assembly",
+   "lane/margin-finalize-lag",
+   "lane/margin-violation-anchor",
+   "lane/margin-waste-500",
+   "lane/meals-docsync",
+   "lane/meals-eighth-read",
+   "lane/meals-lever-withhold",
+   "lane/meals-members-read",
+   "lane/meals-quote-retry",
+   "lane/meals-reachable",
+   "lane/meals-reachable-api",
+   "lane/meals-release-actor",
+   "lane/meals-release-race",
+   "lane/meals-sweep-guard",
+   "lane/meals-xz-credit",
+   "lane/mrg-price-correction-2",
+   "lane/mrg-starter-150b",
+   "lane/pdf-creditnote-name",
+   "lane/push-token-in-path",
+   "lane/replay-pins-close",
+   "lane/review-residuals-provider",
+   "lane/review-residuals-rezone",
+   "lane/rollback-tracked-sweep",
+   "lane/route-guard-gaps",
+   "lane/statute-honesty",
+   "lane/telemetry-initializer-floor",
+   "lane/train-disclosure",
+   "lane/train-idempotency-refusal",
+   "lane/trb2",
+   "lane/trn-evidence-names",
+   "lane/utlkvit-reprint-kind",
+   "lane/vipps-redact-404",
+   "lane/wf-adjust-address",
+   "lane/wf-bootstrap-one-engagement",
+   "lane/wf-clock-wire",
+   "lane/wf-contact-imported",
+   "lane/wf-correction-path",
+   "lane/wf-demo-presence",
+   "lane/wf-digest-tautology",
+   "lane/wf-exchange-award-ungated",
+   "lane/wf-exchange-move",
+   "lane/wf-idempotency-refusal-rest",
+   "lane/wf-invite-list-revoke",
+   "lane/wf-link-deadend",
+   "lane/wf-onboard-claim",
+   "lane/wf-push-still-lies",
+   "lane/wf-timeoff-decide-gate",
+   "lane/wf-timesheet-race",
+   "lane/wf-timesheet-wire",
+   "lane/wf-withheld-bound",
+   "lane/wolt-sync-unregistered",
+   "lane/xz-printed-defects"
+  ]
+ }
+}

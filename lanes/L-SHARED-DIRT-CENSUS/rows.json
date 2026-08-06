@@ -1,0 +1,5175 @@
+[
+ {
+  "path": ".gitignore",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/salvage/dangling-1890c9a3"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "44cd6d4e": [
+    "refs/heads/lane/L-JOURNEY-GROWTH"
+   ],
+   "de4655fe": [
+    "refs/heads/lane/tier-artifacts"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "1890c9a38a3a9f5eae692d65bdb06b5d996dedf1",
+  "n_revisions_seen": 6,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/L-JOURNEY-GROWTH",
+   "refs/heads/lane/tier-artifacts"
+  ],
+  "n_lane_interest": 2,
+  "tip_identical_on": [
+   "refs/salvage/dangling-1890c9a3"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/tier-artifacts"
+  ]
+ },
+ {
+  "path": "artifacts/journeys/workforce-invitation-onboarding.playwright.json",
+  "status": " M",
+  "class": "live-lane-work",
+  "who": [
+   "refs/heads/lane/wf-roles-ui (re-ran the journey; did NOT commit the rewrite)"
+  ],
+  "rival_variants": 0,
+  "rival_refs": {},
+  "hazard": false,
+  "blob_commit": null,
+  "n_revisions_seen": 2,
+  "orphan_lines": 51,
+  "added_lines": 51,
+  "lane_interest": [],
+  "n_lane_interest": 0,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "artifacts/journeys/workforce-invitation-onboarding/fixture/01-the-roster-before-an-invitation.png",
+  "status": " M",
+  "class": "live-lane-work",
+  "who": [
+   "refs/heads/lane/wf-roles-ui (re-ran the journey; did NOT commit the rewrite)"
+  ],
+  "rival_variants": 0,
+  "rival_refs": {},
+  "hazard": false,
+  "blob_commit": null,
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": 0,
+  "lane_interest": [],
+  "n_lane_interest": 0,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "artifacts/journeys/workforce-invitation-onboarding/fixture/02-the-invitation-code-shown-once.png",
+  "status": " M",
+  "class": "live-lane-work",
+  "who": [
+   "refs/heads/lane/wf-roles-ui (re-ran the journey; did NOT commit the rewrite)"
+  ],
+  "rival_variants": 0,
+  "rival_refs": {},
+  "hazard": false,
+  "blob_commit": null,
+  "n_revisions_seen": 2,
+  "orphan_lines": null,
+  "added_lines": 0,
+  "lane_interest": [],
+  "n_lane_interest": 0,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "artifacts/journeys/workforce-invitation-onboarding/fixture/07-the-roster-after-the-claim.png",
+  "status": " M",
+  "class": "live-lane-work",
+  "who": [
+   "refs/heads/lane/wf-roles-ui (re-ran the journey; did NOT commit the rewrite)"
+  ],
+  "rival_variants": 0,
+  "rival_refs": {},
+  "hazard": false,
+  "blob_commit": null,
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": 0,
+  "lane_interest": [],
+  "n_lane_interest": 0,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "components/admin/events/EventsJourney.vue",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "rival_variants": 6,
+  "rival_refs": {
+   "1d57dfbf": [
+    "refs/heads/lane/ev-stale-cause"
+   ],
+   "64e21dbd": [
+    "refs/heads/lane/events-admin"
+   ],
+   "05177d6c": [
+    "refs/heads/lane/fe-events-margin-surfaces"
+   ],
+   "061e9287": [
+    "refs/heads/lane/fe-training-meals-surfaces",
+    "refs/heads/lane/fe-wf-self"
+   ],
+   "de3b4773": [
+    "refs/heads/lane/price-crosscurrency"
+   ],
+   "ec448ce8": [
+    "refs/heads/lane/statute-evidence-world",
+    "refs/heads/lane/statute-honesty"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 9,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/events-admin",
+   "refs/heads/lane/fe-events-margin-surfaces",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/fe-wf-self",
+   "refs/heads/lane/price-crosscurrency",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty"
+  ],
+  "n_lane_interest": 8,
+  "tip_identical_on": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/events-admin",
+   "refs/heads/lane/fe-events-margin-surfaces",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/fe-wf-self",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty"
+  ]
+ },
+ {
+  "path": "components/admin/margin/MarginCoveragePanel.vue",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/mrg-coverage-unknown"
+  ],
+  "rival_variants": 4,
+  "rival_refs": {
+   "b89640d6": [
+    "refs/heads/lane/ev-stale-cause",
+    "refs/heads/lane/fe-wf-blind-bind-name",
+    "refs/heads/lane/fe-wf-link-deadend",
+    "refs/heads/lane/fe-wf-oplink",
+    "refs/heads/lane/statute-evidence-world",
+    "refs/heads/lane/statute-honesty"
+   ],
+   "7c83d47e": [
+    "refs/heads/lane/fe-events-margin-surfaces"
+   ],
+   "8933a5a6": [
+    "refs/heads/lane/fe-journeys",
+    "refs/heads/lane/fe-training-meals-surfaces"
+   ],
+   "e157fc2b": [
+    "refs/heads/lane/mrg-coverage-unknown"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 6,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/fe-events-margin-surfaces",
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/mrg-coverage-unknown",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty"
+  ],
+  "n_lane_interest": 10,
+  "tip_identical_on": [
+   "refs/heads/lane/mrg-coverage-unknown"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/fe-events-margin-surfaces",
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty"
+  ]
+ },
+ {
+  "path": "components/admin/meals/MealsFundedOrders.vue",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "2b0b0e8b": [
+    "refs/heads/lane/fe-meals-docsync"
+   ],
+   "e53738b0": [
+    "refs/heads/lane/price-crosscurrency"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 3,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/fe-meals-docsync",
+   "refs/heads/lane/meals-admin",
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "n_lane_interest": 3,
+  "tip_identical_on": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/fe-meals-docsync",
+   "refs/heads/lane/meals-admin"
+  ]
+ },
+ {
+  "path": "components/admin/meals/MealsProgramPanel.vue",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "rival_variants": 4,
+  "rival_refs": {
+   "9e13f43b": [
+    "refs/heads/lane/fe-meals-journey-locator",
+    "refs/heads/lane/fe-meals-pretick-walked"
+   ],
+   "fcf396c7": [
+    "refs/heads/lane/meals-enrol-pretick"
+   ],
+   "5d42507d": [
+    "refs/heads/lane/meals-enrol-ui"
+   ],
+   "4f5c7574": [
+    "refs/heads/lane/price-crosscurrency"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "17fe84ae05cde18576317ef357cb25efa5b51fa3",
+  "n_revisions_seen": 6,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/fe-meals-journey-locator",
+   "refs/heads/lane/fe-meals-pretick-walked",
+   "refs/heads/lane/meals-enrol-pretick",
+   "refs/heads/lane/meals-enrol-ui",
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "n_lane_interest": 5,
+  "tip_identical_on": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/fe-meals-journey-locator",
+   "refs/heads/lane/fe-meals-pretick-walked",
+   "refs/heads/lane/meals-enrol-pretick",
+   "refs/heads/lane/meals-enrol-ui"
+  ]
+ },
+ {
+  "path": "components/admin/meals/MealsStatementLines.vue",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "474962a8": [
+    "refs/heads/lane/fe-meals-statement-surface"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "components/admin/pos/ClockScreen.vue",
+  "status": "??",
+  "class": "live-lane-work",
+  "who": [
+   "lanes/L-WF-PUNCH-UI (lane dir; NO branch)"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "d9aff24c": [
+    "refs/heads/lane/fe-pos-clock",
+    "refs/heads/lane/fe-wf-blind-bind-name",
+    "refs/heads/lane/fe-wf-link-deadend",
+    "refs/heads/lane/fe-wf-oplink"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": null,
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/fe-pos-clock",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink"
+  ],
+  "n_lane_interest": 4,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "components/admin/pos/PosShell.vue",
+  "status": " M",
+  "class": "live-lane-work",
+  "who": [
+   "refs/heads/lane/fe-pos-clock",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink",
+   "+7 orphan lines"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "39536d08": [
+    "refs/heads/lane/fe-pos-clock",
+    "refs/heads/lane/fe-wf-blind-bind-name",
+    "refs/heads/lane/fe-wf-link-deadend",
+    "refs/heads/lane/fe-wf-oplink"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": null,
+  "n_revisions_seen": 9,
+  "orphan_lines": 7,
+  "added_lines": 10,
+  "lane_interest": [
+   "refs/heads/lane/fe-pos-clock",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink"
+  ],
+  "n_lane_interest": 4,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "components/admin/pos/PosTopBar.vue",
+  "status": " M",
+  "class": "live-lane-work",
+  "who": [
+   "refs/heads/lane/fe-pos-clock",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink",
+   "+30 orphan lines"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "61a904d8": [
+    "refs/heads/lane/fe-pos-clock",
+    "refs/heads/lane/fe-wf-blind-bind-name",
+    "refs/heads/lane/fe-wf-link-deadend",
+    "refs/heads/lane/fe-wf-oplink"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": null,
+  "n_revisions_seen": 5,
+  "orphan_lines": 30,
+  "added_lines": 36,
+  "lane_interest": [
+   "refs/heads/lane/fe-pos-clock",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink"
+  ],
+  "n_lane_interest": 4,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "components/admin/pos/XReportView.vue",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/lanes/L-XZ-NEGATED-ABSENCE"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "55ae3990": [
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+    "refs/lanes/L-PRICE-BYPASS-FIVE"
+   ],
+   "b392c4bf": [
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "b150668b7de1992dd858dc2b2d5be4c2b7017def",
+  "n_revisions_seen": 5,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "n_lane_interest": 8,
+  "tip_identical_on": [
+   "refs/lanes/L-XZ-NEGATED-ABSENCE"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+   "refs/lanes/L-PRICE-BYPASS-FIVE"
+  ]
+ },
+ {
+  "path": "components/admin/training/TrainingAssignmentPanel.vue",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "f69cdbd9": [
+    "refs/heads/lane/train-publish-unclickable"
+   ],
+   "29e5e586": [
+    "refs/heads/lane/training-admin"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 3,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/train-publish-unclickable",
+   "refs/heads/lane/training-admin"
+  ],
+  "n_lane_interest": 2,
+  "tip_identical_on": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/training-admin"
+  ]
+ },
+ {
+  "path": "components/admin/training/TrainingCertificatePanel.vue",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "892bb5d2": [
+    "refs/heads/lane/train-publish-unclickable"
+   ],
+   "e90d310a": [
+    "refs/heads/lane/training-admin"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 3,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/train-publish-unclickable",
+   "refs/heads/lane/training-admin"
+  ],
+  "n_lane_interest": 2,
+  "tip_identical_on": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/training-admin"
+  ]
+ },
+ {
+  "path": "components/admin/training/TrainingCompletionPanel.vue",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "38ed01c5": [
+    "refs/heads/lane/train-publish-unclickable"
+   ],
+   "ef8cddfe": [
+    "refs/heads/lane/training-admin"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 4,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/train-publish-unclickable",
+   "refs/heads/lane/training-admin"
+  ],
+  "n_lane_interest": 2,
+  "tip_identical_on": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/training-admin"
+  ]
+ },
+ {
+  "path": "components/admin/training/TrainingCourseList.vue",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "4b870052": [
+    "refs/heads/lane/train-publish-unclickable"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 2,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/train-publish-unclickable",
+   "refs/heads/lane/training-admin"
+  ],
+  "n_lane_interest": 2,
+  "tip_identical_on": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/training-admin"
+  ]
+ },
+ {
+  "path": "components/admin/training/TrainingDisclosurePanel.vue",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "89c15f6e": [
+    "refs/heads/lane/train-publish-unclickable"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 2,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "components/admin/training/TrainingEvidenceDocument.vue",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "31230da7": [
+    "refs/heads/lane/fe-training-meals-surfaces"
+   ],
+   "8f231f77": [
+    "refs/heads/lane/train-evidence-pack-ui"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "n_revisions_seen": 2,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "n_lane_interest": 2,
+  "tip_identical_on": [
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/fe-training-meals-surfaces"
+  ]
+ },
+ {
+  "path": "components/admin/training/TrainingHoldingsPanel.vue",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "b1e2fb82": [
+    "refs/heads/lane/train-publish-unclickable"
+   ],
+   "02711a27": [
+    "refs/heads/lane/training-admin"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 3,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/train-publish-unclickable",
+   "refs/heads/lane/training-admin"
+  ],
+  "n_lane_interest": 2,
+  "tip_identical_on": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/training-admin"
+  ]
+ },
+ {
+  "path": "components/admin/training/TrainingVersionPanel.vue",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "829d48a7": [
+    "refs/heads/lane/train-publish-unclickable"
+   ],
+   "6f523b96": [
+    "refs/heads/lane/training-admin"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 3,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/train-publish-unclickable",
+   "refs/heads/lane/training-admin"
+  ],
+  "n_lane_interest": 2,
+  "tip_identical_on": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/training-admin"
+  ]
+ },
+ {
+  "path": "components/admin/training/_training-panel.scss",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "6c53cee4": [
+    "refs/heads/lane/train-publish-unclickable"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 2,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/train-publish-unclickable",
+   "refs/heads/lane/training-admin"
+  ],
+  "n_lane_interest": 2,
+  "tip_identical_on": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/training-admin"
+  ]
+ },
+ {
+  "path": "components/admin/workforce-rates/WorkforceRateTimeline.vue",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "bb885eb1": [
+    "refs/heads/lane/price-crosscurrency"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 2,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "components/admin/workforce/WorkforceDeliveryGroup.vue",
+  "status": "??",
+  "class": "live-lane-work",
+  "who": [
+   "lanes/L-WF-FAILURES-SURFACE (lane dir; NO branch)"
+  ],
+  "rival_variants": 0,
+  "rival_refs": {},
+  "hazard": false,
+  "blob_commit": null,
+  "n_revisions_seen": 0,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [],
+  "n_lane_interest": 0,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "components/admin/workforce/WorkforceDeliveryPanel.vue",
+  "status": "??",
+  "class": "live-lane-work",
+  "who": [
+   "lanes/L-WF-FAILURES-SURFACE (lane dir; NO branch)"
+  ],
+  "rival_variants": 0,
+  "rival_refs": {},
+  "hazard": false,
+  "blob_commit": null,
+  "n_revisions_seen": 0,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [],
+  "n_lane_interest": 0,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "components/admin/workforce/WorkforcePublicationList.vue",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "ccecfdec": [
+    "refs/heads/lane/wf-pubhist"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "2d86446b746cff8477c4d6dbde316aceecda811b",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "components/admin/workforce/WorkforcePublicationReceiptGroup.vue",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "b0485001": [
+    "refs/heads/lane/wf-pubhist"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "2d86446b746cff8477c4d6dbde316aceecda811b",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "components/admin/workforce/WorkforcePublicationRecipients.vue",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "abd2b186": [
+    "refs/heads/lane/wf-pubhist"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "2d86446b746cff8477c4d6dbde316aceecda811b",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "components/admin/workforce/WorkforceTimesheetBatchList.vue",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "2a90d4cf": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "618efc88750fa4adb59769b859d3975bfcdc1f3b",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "components/admin/workforce/WorkforceTimesheetPanel.vue",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "a69233e7": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "618efc88750fa4adb59769b859d3975bfcdc1f3b",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "components/admin/workforce/WorkforceWeekGrid.vue",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "e5ac5567": [
+    "refs/heads/lane/price-crosscurrency"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 6,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "components/molecules/CustomerInfoModal.vue",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/L-PRICE-SHADOW-GUARD"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "53212d7f": [
+    "refs/heads/lane/L-PRICE-SHADOW-GUARD"
+   ],
+   "8a68da67": [
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-PRICE-BYPASS-FIVE",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "83952084c2ba007683d58ed7fbdc4cf6333337ad",
+  "n_revisions_seen": 7,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/L-PRICE-SHADOW-GUARD",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "n_lane_interest": 7,
+  "tip_identical_on": [
+   "refs/heads/lane/L-PRICE-SHADOW-GUARD"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ]
+ },
+ {
+  "path": "components/onboarding/OnboardingProductImages.vue",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "73c96535": [
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+    "refs/lanes/L-PRICE-BYPASS-FIVE",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 4,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "n_lane_interest": 8,
+  "tip_identical_on": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "components/organisms/AdminPageHeader.vue",
+  "status": " M",
+  "class": "live-lane-work",
+  "who": [
+   "refs/heads/lane/fe-meals-statement-surface",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/train-evidence-pack-ui",
+   "refs/heads/lane/wf-pubhist",
+   "refs/heads/lane/wf-roles-ui",
+   "+16 orphan lines"
+  ],
+  "rival_variants": 8,
+  "rival_refs": {
+   "e992e1fb": [
+    "refs/heads/lane/fe-meals-statement-surface"
+   ],
+   "c626c4f3": [
+    "refs/heads/lane/fe-training-meals-surfaces"
+   ],
+   "145d4acb": [
+    "refs/heads/lane/fe-wf-self"
+   ],
+   "62cb46b0": [
+    "refs/heads/lane/menu-allergen-matrix"
+   ],
+   "cb43efba": [
+    "refs/heads/lane/train-evidence-pack-ui"
+   ],
+   "14050ac5": [
+    "refs/heads/lane/wf-pubhist"
+   ],
+   "aac4726b": [
+    "refs/heads/lane/wf-roles-ui"
+   ],
+   "cd08a11d": [
+    "refs/heads/lane/workforce-roster"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": null,
+  "n_revisions_seen": 59,
+  "orphan_lines": 16,
+  "added_lines": 73,
+  "lane_interest": [
+   "refs/heads/lane/fe-meals-statement-surface",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/fe-wf-self",
+   "refs/heads/lane/menu-allergen-matrix",
+   "refs/heads/lane/train-evidence-pack-ui",
+   "refs/heads/lane/wf-pubhist",
+   "refs/heads/lane/wf-roles-ui",
+   "refs/heads/lane/workforce-roster"
+  ],
+  "n_lane_interest": 8,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "components/shared/OfferDocument.vue",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/price-cleanup-two"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "aa00144e": [
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+   ],
+   "7ad3e67a": [
+    "refs/heads/lane/price-cleanup-two"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "b76cbbb2d2d11c9584dd74128488a5b35d6354f5",
+  "n_revisions_seen": 4,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/heads/lane/price-cleanup-two",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "n_lane_interest": 3,
+  "tip_identical_on": [
+   "refs/heads/lane/price-cleanup-two"
+  ],
+  "revision": "current tip",
+  "superseded_by": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "rival_lanes": []
+ },
+ {
+  "path": "jest.config.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/jest-collects-lanes"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "cc1fbe38": [
+    "refs/heads/lane/jest-collects-lanes"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "n_revisions_seen": 4,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/jest-collects-lanes"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/jest-collects-lanes"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "package.json",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "cb8f5e01": [
+    "refs/heads/lane/fe-wf-blind-bind-name",
+    "refs/heads/lane/fe-wf-link-deadend",
+    "refs/heads/lane/fe-wf-oplink"
+   ],
+   "94bf7747": [
+    "refs/lanes/L-WORLD-STAMP-WINDOWS"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+  "n_revisions_seen": 12,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/journey-teardown",
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "n_lane_interest": 5,
+  "tip_identical_on": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/journey-teardown"
+  ]
+ },
+ {
+  "path": "pages/admin/feature-flags.vue",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/train-readonly-visible"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "37442cbe": [
+    "refs/heads/lane/meals-reachable-web"
+   ],
+   "17434cb7": [
+    "refs/heads/lane/train-readonly-visible"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "abef9aacd2fbffa2c98cadfe9521d82981f60bd7",
+  "n_revisions_seen": 4,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/meals-reachable-web",
+   "refs/heads/lane/train-readonly-visible"
+  ],
+  "n_lane_interest": 2,
+  "tip_identical_on": [
+   "refs/heads/lane/train-readonly-visible"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/meals-reachable-web"
+  ]
+ },
+ {
+  "path": "pages/admin/kravia-invoice.vue",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/lanes/L-PRICE-BYPASS-FIVE"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "9e48fd25": [
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+   ],
+   "77c363d4": [
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-PRICE-BYPASS-FIVE",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "990c2db6db3618fdd77556f4b14770e756c92285",
+  "n_revisions_seen": 13,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "n_lane_interest": 8,
+  "tip_identical_on": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/lanes/L-PRICE-BYPASS-FIVE"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ]
+ },
+ {
+  "path": "pages/admin/margin-recipes.vue",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/mrg-recipe-revise-ui"
+  ],
+  "rival_variants": 3,
+  "rival_refs": {
+   "586a3d3d": [
+    "refs/heads/lane/margin-menu-margin-ui"
+   ],
+   "1f87d8dc": [
+    "refs/heads/lane/margin-recipes"
+   ],
+   "ced33bdb": [
+    "refs/heads/lane/mrg-recipe-revise-ui"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "0c483de9dbb22220f74f6b3fca9a6c8967d67d85",
+  "n_revisions_seen": 5,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/margin-menu-margin-ui",
+   "refs/heads/lane/margin-recipes",
+   "refs/heads/lane/mrg-recipe-revise-ui"
+  ],
+  "n_lane_interest": 3,
+  "tip_identical_on": [
+   "refs/heads/lane/mrg-recipe-revise-ui"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/margin-menu-margin-ui",
+   "refs/heads/lane/margin-recipes"
+  ]
+ },
+ {
+  "path": "pages/admin/meals-statements.vue",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "f524610b": [
+    "refs/heads/lane/fe-meals-statement-surface"
+   ],
+   "5d8638b6": [
+    "refs/heads/lane/fe-training-meals-surfaces"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "n_revisions_seen": 2,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/fe-meals-statement-surface",
+   "refs/heads/lane/fe-training-meals-surfaces"
+  ],
+  "n_lane_interest": 2,
+  "tip_identical_on": [
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/fe-training-meals-surfaces"
+  ]
+ },
+ {
+  "path": "pages/admin/offers.vue",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/offers-page-hundredfold"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "d2f4cfaa": [
+    "refs/heads/lane/offers-page-hundredfold"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "021d19c37444dd4ea14dff6c8bb89200e9135b09",
+  "n_revisions_seen": 5,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/offers-page-hundredfold"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/offers-page-hundredfold"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "pages/admin/products.vue",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "f45f7c37": [
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+    "refs/lanes/L-PRICE-BYPASS-FIVE",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 24,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "n_lane_interest": 8,
+  "tip_identical_on": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "pages/admin/reward-members.vue",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "47a6d7e2": [
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+    "refs/lanes/L-PRICE-BYPASS-FIVE",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 4,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "n_lane_interest": 8,
+  "tip_identical_on": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "pages/admin/settlements.vue",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "248f639a": [
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+    "refs/lanes/L-PRICE-BYPASS-FIVE",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 11,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "n_lane_interest": 8,
+  "tip_identical_on": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "pages/admin/training-evidence.vue",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "9e11c4ae": [
+    "refs/heads/lane/fe-training-meals-surfaces"
+   ],
+   "e0a913f8": [
+    "refs/heads/lane/train-evidence-pack-ui"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "n_revisions_seen": 2,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "n_lane_interest": 2,
+  "tip_identical_on": [
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/fe-training-meals-surfaces"
+  ]
+ },
+ {
+  "path": "pages/admin/wolt-menu.vue",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "05a201d1": [
+    "refs/heads/lane/modal-broken-two"
+   ],
+   "4401a89a": [
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+    "refs/lanes/L-PRICE-BYPASS-FIVE",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 10,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/modal-broken-two",
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "n_lane_interest": 9,
+  "tip_identical_on": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/modal-broken-two"
+  ]
+ },
+ {
+  "path": "pages/admin/workforce-delivery.vue",
+  "status": "??",
+  "class": "live-lane-work",
+  "who": [
+   "lanes/L-WF-FAILURES-SURFACE (lane dir; NO branch)"
+  ],
+  "rival_variants": 0,
+  "rival_refs": {},
+  "hazard": false,
+  "blob_commit": null,
+  "n_revisions_seen": 0,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [],
+  "n_lane_interest": 0,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "pages/admin/workforce-publications.vue",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "669e3746": [
+    "refs/heads/lane/wf-pubhist"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "2d86446b746cff8477c4d6dbde316aceecda811b",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "pages/admin/workforce-roles.vue",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/wf-roles-ui"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "e4719247": [
+    "refs/heads/lane/wf-roles-ui"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/wf-roles-ui"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/wf-roles-ui"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "pages/admin/workforce-schedule.vue",
+  "status": " M",
+  "class": "live-lane-work",
+  "who": [
+   "refs/heads/lane/fe-wf-onboard",
+   "refs/heads/lane/fe-wf-self"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "27ef3cb5": [
+    "refs/heads/lane/fe-wf-onboard",
+    "refs/heads/lane/fe-wf-self"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": null,
+  "n_revisions_seen": 9,
+  "orphan_lines": 14,
+  "added_lines": 15,
+  "lane_interest": [
+   "refs/heads/lane/fe-wf-onboard",
+   "refs/heads/lane/fe-wf-self"
+  ],
+  "n_lane_interest": 2,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "pages/admin/workforce-timesheets.vue",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "4e65ce18": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "618efc88750fa4adb59769b859d3975bfcdc1f3b",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "pages/preferences/communications.vue",
+  "status": " M",
+  "class": "live-lane-work",
+  "who": [
+   "refs/heads/lane/fe-gr-withdraw-origin"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "8ad0efa8": [
+    "refs/heads/lane/fe-gr-withdraw-origin"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": null,
+  "n_revisions_seen": 2,
+  "orphan_lines": 13,
+  "added_lines": 13,
+  "lane_interest": [
+   "refs/heads/lane/fe-gr-withdraw-origin"
+  ],
+  "n_lane_interest": 1,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "plugins/global-mixin.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "0c51ca74": [
+    "refs/heads/lane/price-crosscurrency"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 28,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "scripts/drift-demo/demo.sh",
+  "status": "??",
+  "class": "live-lane-work",
+  "who": [
+   "lanes/L-GUARD-DEMO (lane dir; NO branch)"
+  ],
+  "rival_variants": 0,
+  "rival_refs": {},
+  "hazard": false,
+  "blob_commit": null,
+  "n_revisions_seen": 0,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [],
+  "n_lane_interest": 0,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "scripts/worldstamp",
+  "status": "??",
+  "class": "live-lane-work",
+  "who": [
+   "lanes/L-GUARD-W0 (lane dir; NO branch)"
+  ],
+  "rival_variants": 0,
+  "rival_refs": {},
+  "hazard": false,
+  "blob_commit": null,
+  "n_revisions_seen": 0,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [],
+  "n_lane_interest": 0,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/admin-nav-access.test.js",
+  "status": " M",
+  "class": "live-lane-work",
+  "who": [
+   "refs/heads/lane/fe-meals-statement-surface",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/train-evidence-pack-ui",
+   "refs/heads/lane/wf-pubhist",
+   "refs/heads/lane/wf-roles-ui",
+   "+6 orphan lines"
+  ],
+  "rival_variants": 7,
+  "rival_refs": {
+   "1b34d98c": [
+    "refs/heads/lane/fe-meals-statement-surface"
+   ],
+   "5f3b31f0": [
+    "refs/heads/lane/fe-training-meals-surfaces"
+   ],
+   "e6c4a87a": [
+    "refs/heads/lane/fe-wf-self"
+   ],
+   "8187c276": [
+    "refs/heads/lane/menu-allergen-matrix"
+   ],
+   "72f5eb12": [
+    "refs/heads/lane/train-evidence-pack-ui"
+   ],
+   "235594b4": [
+    "refs/heads/lane/wf-pubhist"
+   ],
+   "10c23d92": [
+    "refs/heads/lane/wf-roles-ui"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": null,
+  "n_revisions_seen": 26,
+  "orphan_lines": 6,
+  "added_lines": 44,
+  "lane_interest": [
+   "refs/heads/lane/fe-meals-statement-surface",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/fe-wf-self",
+   "refs/heads/lane/menu-allergen-matrix",
+   "refs/heads/lane/train-evidence-pack-ui",
+   "refs/heads/lane/wf-pubhist",
+   "refs/heads/lane/wf-roles-ui"
+  ],
+  "n_lane_interest": 7,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/e2e/fixture/api-server.js",
+  "status": " M",
+  "class": "live-lane-work",
+  "who": [
+   "refs/heads/lane/L-JOURNEY-GROWTH",
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/fe-events-margin-surfaces",
+   "refs/heads/lane/fe-gr-exit-wire-the-mail",
+   "refs/heads/lane/fe-gr-withdraw-origin",
+   "refs/heads/lane/fe-growth-prefcentre",
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-pos-clock",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-invite-list-revoke",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-onboard",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/fe-wf-self",
+   "refs/heads/lane/journey-teardown",
+   "refs/heads/lane/journey-workforce",
+   "refs/heads/lane/menu-allergen-matrix",
+   "refs/heads/lane/modal-broken-two",
+   "refs/heads/lane/print-host",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty",
+   "refs/heads/lane/train-evidence-pack-ui",
+   "refs/heads/lane/wf-kodeoversikt-ui",
+   "refs/heads/lane/wf-pubhist",
+   "refs/heads/lane/wf-roles-ui",
+   "+61 orphan lines"
+  ],
+  "rival_variants": 22,
+  "rival_refs": {
+   "83fc1f6c": [
+    "refs/heads/lane/L-JOURNEY-GROWTH"
+   ],
+   "125dc83a": [
+    "refs/heads/lane/ev-stale-cause",
+    "refs/heads/lane/statute-evidence-world",
+    "refs/heads/lane/statute-honesty"
+   ],
+   "041b1350": [
+    "refs/heads/lane/fe-events-margin-surfaces"
+   ],
+   "039c5134": [
+    "refs/heads/lane/fe-gr-exit-wire-the-mail"
+   ],
+   "7771253b": [
+    "refs/heads/lane/fe-gr-withdraw-origin",
+    "refs/heads/lane/fe-growth-prefcentre"
+   ],
+   "3d3b6f16": [
+    "refs/heads/lane/fe-journeys"
+   ],
+   "e346a5d5": [
+    "refs/heads/lane/fe-pos-clock"
+   ],
+   "fe9c9701": [
+    "refs/heads/lane/fe-training-meals-surfaces"
+   ],
+   "99949e56": [
+    "refs/heads/lane/fe-wf-blind-bind-name",
+    "refs/heads/lane/fe-wf-link-deadend"
+   ],
+   "c771d590": [
+    "refs/heads/lane/fe-wf-invite-list-revoke"
+   ],
+   "378aada6": [
+    "refs/heads/lane/fe-wf-onboard"
+   ],
+   "a4c22097": [
+    "refs/heads/lane/fe-wf-oplink"
+   ],
+   "b526d736": [
+    "refs/heads/lane/fe-wf-self"
+   ],
+   "949d350d": [
+    "refs/heads/lane/journey-teardown"
+   ],
+   "f0d4dc91": [
+    "refs/heads/lane/journey-workforce"
+   ],
+   "80f466a6": [
+    "refs/heads/lane/menu-allergen-matrix"
+   ],
+   "8fb8fdfb": [
+    "refs/heads/lane/modal-broken-two"
+   ],
+   "1815bb78": [
+    "refs/heads/lane/print-host"
+   ],
+   "3e566e1b": [
+    "refs/heads/lane/train-evidence-pack-ui"
+   ],
+   "bc792bca": [
+    "refs/heads/lane/wf-kodeoversikt-ui"
+   ],
+   "b0b22db8": [
+    "refs/heads/lane/wf-pubhist"
+   ],
+   "eac17acc": [
+    "refs/heads/lane/wf-roles-ui"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": null,
+  "n_revisions_seen": 44,
+  "orphan_lines": 61,
+  "added_lines": 307,
+  "lane_interest": [
+   "refs/heads/lane/L-JOURNEY-GROWTH",
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/fe-events-margin-surfaces",
+   "refs/heads/lane/fe-gr-exit-wire-the-mail",
+   "refs/heads/lane/fe-gr-withdraw-origin",
+   "refs/heads/lane/fe-growth-prefcentre",
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-pos-clock",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-invite-list-revoke",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-onboard",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/fe-wf-self",
+   "refs/heads/lane/journey-teardown",
+   "refs/heads/lane/journey-workforce",
+   "refs/heads/lane/menu-allergen-matrix",
+   "refs/heads/lane/modal-broken-two",
+   "refs/heads/lane/print-host",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty",
+   "refs/heads/lane/train-evidence-pack-ui",
+   "refs/heads/lane/wf-kodeoversikt-ui",
+   "refs/heads/lane/wf-pubhist",
+   "refs/heads/lane/wf-roles-ui"
+  ],
+  "n_lane_interest": 26,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/e2e/fixture/growth.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/L-JOURNEY-GROWTH"
+  ],
+  "rival_variants": 4,
+  "rival_refs": {
+   "40dd32c7": [
+    "refs/heads/lane/L-JOURNEY-GROWTH"
+   ],
+   "6771be60": [
+    "refs/heads/lane/fe-gr-exit-wire-the-mail"
+   ],
+   "a26f760f": [
+    "refs/heads/lane/fe-gr-withdraw-origin",
+    "refs/heads/lane/fe-growth-prefcentre"
+   ],
+   "2930113c": [
+    "refs/heads/lane/fe-journeys",
+    "refs/heads/lane/fe-training-meals-surfaces"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "ef2d6be46ee11b76154c639275a360285ad61e8e",
+  "n_revisions_seen": 8,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/L-JOURNEY-GROWTH",
+   "refs/heads/lane/fe-gr-exit-wire-the-mail",
+   "refs/heads/lane/fe-gr-withdraw-origin",
+   "refs/heads/lane/fe-growth-prefcentre",
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-training-meals-surfaces"
+  ],
+  "n_lane_interest": 6,
+  "tip_identical_on": [
+   "refs/heads/lane/L-JOURNEY-GROWTH"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/fe-gr-exit-wire-the-mail",
+   "refs/heads/lane/fe-gr-withdraw-origin",
+   "refs/heads/lane/fe-growth-prefcentre",
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-training-meals-surfaces"
+  ]
+ },
+ {
+  "path": "test/e2e/fixture/meals.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "rival_variants": 4,
+  "rival_refs": {
+   "d6dccfc8": [
+    "refs/heads/lane/fe-journeys"
+   ],
+   "84f00ee7": [
+    "refs/heads/lane/fe-meals-pretick-walked"
+   ],
+   "059e96a4": [
+    "refs/heads/lane/fe-meals-statement-surface"
+   ],
+   "02d46d8b": [
+    "refs/heads/lane/fe-training-meals-surfaces"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "n_revisions_seen": 5,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-meals-pretick-walked",
+   "refs/heads/lane/fe-meals-statement-surface",
+   "refs/heads/lane/fe-training-meals-surfaces"
+  ],
+  "n_lane_interest": 4,
+  "tip_identical_on": [
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-meals-pretick-walked",
+   "refs/heads/lane/fe-training-meals-surfaces"
+  ]
+ },
+ {
+  "path": "test/e2e/fixture/training.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "rival_variants": 3,
+  "rival_refs": {
+   "55af8087": [
+    "refs/heads/lane/fe-journeys"
+   ],
+   "22e6ac3d": [
+    "refs/heads/lane/fe-training-meals-surfaces"
+   ],
+   "757a42d9": [
+    "refs/heads/lane/train-evidence-pack-ui"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "n_revisions_seen": 5,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "n_lane_interest": 3,
+  "tip_identical_on": [
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-training-meals-surfaces"
+  ]
+ },
+ {
+  "path": "test/e2e/fixture/workforce-delivery.js",
+  "status": "??",
+  "class": "live-lane-work",
+  "who": [
+   "lanes/L-WF-FAILURES-SURFACE (lane dir; NO branch)"
+  ],
+  "rival_variants": 0,
+  "rival_refs": {},
+  "hazard": false,
+  "blob_commit": null,
+  "n_revisions_seen": 0,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [],
+  "n_lane_interest": 0,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/e2e/fixture/workforce-publications.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "2a10ae27": [
+    "refs/heads/lane/wf-pubhist"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "2d86446b746cff8477c4d6dbde316aceecda811b",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/e2e/fixture/workforce-punch.js",
+  "status": "??",
+  "class": "live-lane-work",
+  "who": [
+   "lanes/L-WF-PUNCH-UI (lane dir; NO branch)"
+  ],
+  "rival_variants": 0,
+  "rival_refs": {},
+  "hazard": false,
+  "blob_commit": null,
+  "n_revisions_seen": 0,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [],
+  "n_lane_interest": 0,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/e2e/fixture/workforce-timesheets.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "ff9016f6": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "618efc88750fa4adb59769b859d3975bfcdc1f3b",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/e2e/fixture/world.js",
+  "status": " M",
+  "class": "live-lane-work",
+  "who": [
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/fe-gr-withdraw-origin",
+   "refs/heads/lane/fe-growth-prefcentre",
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-pos-clock",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-invite-list-revoke",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-onboard",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/fe-wf-self",
+   "refs/heads/lane/menu-allergen-matrix",
+   "refs/heads/lane/modal-broken-two",
+   "refs/heads/lane/print-host",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty",
+   "refs/heads/lane/wf-kodeoversikt-ui",
+   "refs/heads/lane/wf-roles-ui",
+   "+26 orphan lines"
+  ],
+  "rival_variants": 14,
+  "rival_refs": {
+   "c25bd021": [
+    "refs/heads/lane/ev-stale-cause"
+   ],
+   "9f81c4ed": [
+    "refs/heads/lane/fe-gr-withdraw-origin",
+    "refs/heads/lane/fe-growth-prefcentre"
+   ],
+   "84df9a2c": [
+    "refs/heads/lane/fe-journeys",
+    "refs/heads/lane/fe-training-meals-surfaces"
+   ],
+   "cfdefdd8": [
+    "refs/heads/lane/fe-pos-clock"
+   ],
+   "9875fb04": [
+    "refs/heads/lane/fe-wf-blind-bind-name",
+    "refs/heads/lane/fe-wf-link-deadend",
+    "refs/heads/lane/fe-wf-oplink"
+   ],
+   "2cfcd25e": [
+    "refs/heads/lane/fe-wf-invite-list-revoke"
+   ],
+   "6f9c2451": [
+    "refs/heads/lane/fe-wf-onboard",
+    "refs/heads/lane/fe-wf-self"
+   ],
+   "35e925e8": [
+    "refs/heads/lane/menu-allergen-matrix"
+   ],
+   "1bdc974b": [
+    "refs/heads/lane/modal-broken-two"
+   ],
+   "f07e8ddc": [
+    "refs/heads/lane/print-host"
+   ],
+   "937db1ad": [
+    "refs/heads/lane/statute-evidence-world"
+   ],
+   "4c8e29ec": [
+    "refs/heads/lane/statute-honesty"
+   ],
+   "406c8b85": [
+    "refs/heads/lane/wf-kodeoversikt-ui"
+   ],
+   "5ba7cf2b": [
+    "refs/heads/lane/wf-roles-ui"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": null,
+  "n_revisions_seen": 30,
+  "orphan_lines": 26,
+  "added_lines": 101,
+  "lane_interest": [
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/fe-gr-withdraw-origin",
+   "refs/heads/lane/fe-growth-prefcentre",
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-pos-clock",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-invite-list-revoke",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-onboard",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/fe-wf-self",
+   "refs/heads/lane/menu-allergen-matrix",
+   "refs/heads/lane/modal-broken-two",
+   "refs/heads/lane/print-host",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty",
+   "refs/heads/lane/wf-kodeoversikt-ui",
+   "refs/heads/lane/wf-roles-ui"
+  ],
+  "n_lane_interest": 19,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/e2e/journeys/admin-refusal-worker.spec.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/fe-admin-refusal-credential"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "9df6c8f0": [
+    "refs/heads/lane/fe-admin-refusal-credential"
+   ],
+   "38b19f45": [
+    "refs/heads/lane/fe-journeys",
+    "refs/heads/lane/fe-training-meals-surfaces"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 3,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/fe-admin-refusal-credential",
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-training-meals-surfaces"
+  ],
+  "n_lane_interest": 3,
+  "tip_identical_on": [
+   "refs/heads/lane/fe-admin-refusal-credential"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-training-meals-surfaces"
+  ]
+ },
+ {
+  "path": "test/e2e/journeys/growth-guest-lifecycle.spec.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/salvage/dangling-1890c9a3"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "f1281746": [
+    "refs/heads/lane/L-JOURNEY-GROWTH"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "1890c9a38a3a9f5eae692d65bdb06b5d996dedf1",
+  "n_revisions_seen": 2,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/L-JOURNEY-GROWTH"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/salvage/dangling-1890c9a3"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/e2e/journeys/growth-testsend-refusal.spec.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/L-JOURNEY-GROWTH",
+   "refs/salvage/dangling-1890c9a3"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "668b7589": [
+    "refs/heads/lane/L-JOURNEY-GROWTH"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "40012fc9d6adba08dd9902f221b1858e18399fb9",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/L-JOURNEY-GROWTH"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/L-JOURNEY-GROWTH",
+   "refs/salvage/dangling-1890c9a3"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/e2e/journeys/meals-statement-month.spec.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/L-JOURNEY-PORT-HARDCODED"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "9c5beb79": [
+    "refs/heads/lane/L-JOURNEY-PORT-HARDCODED"
+   ],
+   "f5912d48": [
+    "refs/heads/lane/fe-meals-statement-surface"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "4772c1316ac933bdab6d5d5434111d0479da6b37",
+  "n_revisions_seen": 2,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/L-JOURNEY-PORT-HARDCODED",
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "n_lane_interest": 2,
+  "tip_identical_on": [
+   "refs/heads/lane/L-JOURNEY-PORT-HARDCODED"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/fe-meals-statement-surface"
+  ]
+ },
+ {
+  "path": "test/e2e/journeys/training-course-to-evidence.spec.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "3d323f78": [
+    "refs/heads/lane/fe-journeys",
+    "refs/heads/lane/fe-training-meals-surfaces"
+   ],
+   "20aa50da": [
+    "refs/heads/lane/train-publish-unclickable"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 4,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "n_lane_interest": 3,
+  "tip_identical_on": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-training-meals-surfaces"
+  ]
+ },
+ {
+  "path": "test/e2e/journeys/training-evidence-document.spec.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "6563a765": [
+    "refs/heads/lane/train-evidence-pack-ui"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/e2e/journeys/workforce-delivery-failures.spec.js",
+  "status": "??",
+  "class": "live-lane-work",
+  "who": [
+   "lanes/L-WF-FAILURES-SURFACE (lane dir; NO branch)"
+  ],
+  "rival_variants": 0,
+  "rival_refs": {},
+  "hazard": false,
+  "blob_commit": null,
+  "n_revisions_seen": 0,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [],
+  "n_lane_interest": 0,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/e2e/journeys/workforce-pos-punch.spec.js",
+  "status": "??",
+  "class": "live-lane-work",
+  "who": [
+   "lanes/L-WF-PUNCH-UI (lane dir; NO branch)"
+  ],
+  "rival_variants": 0,
+  "rival_refs": {},
+  "hazard": false,
+  "blob_commit": null,
+  "n_revisions_seen": 0,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [],
+  "n_lane_interest": 0,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/e2e/journeys/workforce-publication-receipts.spec.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "4dc8d429": [
+    "refs/heads/lane/wf-pubhist"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "2d86446b746cff8477c4d6dbde316aceecda811b",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/e2e/journeys/workforce-role-catalogue.spec.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/wf-roles-ui"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "0ba5559b": [
+    "refs/heads/lane/wf-roles-ui"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/wf-roles-ui"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/wf-roles-ui"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/e2e/journeys/workforce-timesheet-export.spec.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "d377196d": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "618efc88750fa4adb59769b859d3975bfcdc1f3b",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/e2e/scripts/build-provenance-proof.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "e04ac414": [
+    "refs/lanes/L-WORLD-STAMP-WINDOWS"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+  "n_revisions_seen": 2,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/e2e/scripts/guard-proof.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "be00d106": [
+    "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 4,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/e2e/scripts/live-world-stamp-wiring-check.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "117d9dba": [
+    "refs/lanes/L-WORLD-STAMP-WINDOWS"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/e2e/scripts/live-world.sh",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "3489d4e9": [
+    "refs/lanes/L-WORLD-STAMP-WINDOWS"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+  "n_revisions_seen": 7,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/journey-teardown",
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "n_lane_interest": 2,
+  "tip_identical_on": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/journey-teardown"
+  ]
+ },
+ {
+  "path": "test/e2e/support/artifact-store.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "6014b123": [
+    "refs/lanes/L-WORLD-STAMP-WINDOWS"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+  "n_revisions_seen": 4,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/e2e/support/journey-assertions.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/salvage/dangling-097c3c9e"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "bb38b5b9": [
+    "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "097c3c9ec82356c292f5f90f5caebfb4ac284f09",
+  "n_revisions_seen": 2,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/salvage/dangling-097c3c9e"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/e2e/support/journey.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT"
+  ],
+  "rival_variants": 5,
+  "rival_refs": {
+   "4123dab4": [
+    "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT"
+   ],
+   "18fae6b4": [
+    "refs/heads/lane/ev-journey-timebomb"
+   ],
+   "ae4c9a4e": [
+    "refs/heads/lane/fe-journeys",
+    "refs/heads/lane/fe-training-meals-surfaces"
+   ],
+   "d94c94fd": [
+    "refs/heads/lane/fe-wf-blind-bind-name",
+    "refs/heads/lane/fe-wf-link-deadend",
+    "refs/heads/lane/fe-wf-oplink"
+   ],
+   "f1be14b8": [
+    "refs/heads/lane/journey-teardown"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 13,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT",
+   "refs/heads/lane/ev-journey-timebomb",
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/journey-teardown"
+  ],
+  "n_lane_interest": 8,
+  "tip_identical_on": [
+   "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/ev-journey-timebomb",
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/journey-teardown"
+  ]
+ },
+ {
+  "path": "test/e2e/support/world-stamp.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "3d3a9a01": [
+    "refs/lanes/L-WORLD-STAMP-WINDOWS"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+  "n_revisions_seen": 2,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/feature-flags-page.test.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/train-readonly-visible"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "8824fa7d": [
+    "refs/heads/lane/meals-reachable-web"
+   ],
+   "82e1236e": [
+    "refs/heads/lane/train-readonly-visible"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "abef9aacd2fbffa2c98cadfe9521d82981f60bd7",
+  "n_revisions_seen": 5,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/meals-reachable-web",
+   "refs/heads/lane/train-readonly-visible"
+  ],
+  "n_lane_interest": 2,
+  "tip_identical_on": [
+   "refs/heads/lane/train-readonly-visible"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/meals-reachable-web"
+  ]
+ },
+ {
+  "path": "test/journey-artifact-store.test.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "70cceea5": [
+    "refs/heads/lane/worktree-basename-pin"
+   ],
+   "49cc7583": [
+    "refs/lanes/L-WORLD-STAMP-WINDOWS"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+  "n_revisions_seen": 5,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/worktree-basename-pin",
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "n_lane_interest": 2,
+  "tip_identical_on": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/worktree-basename-pin"
+  ]
+ },
+ {
+  "path": "test/journey-assertions.test.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "84f77ada": [
+    "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 3,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/margin-recipe-client.test.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/mrg-recipe-revise-ui"
+  ],
+  "rival_variants": 3,
+  "rival_refs": {
+   "31012d79": [
+    "refs/heads/lane/margin-menu-margin-ui"
+   ],
+   "9a3a7e66": [
+    "refs/heads/lane/margin-recipes"
+   ],
+   "cfcb495a": [
+    "refs/heads/lane/mrg-recipe-revise-ui"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "0c483de9dbb22220f74f6b3fca9a6c8967d67d85",
+  "n_revisions_seen": 4,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/margin-menu-margin-ui",
+   "refs/heads/lane/margin-recipes",
+   "refs/heads/lane/mrg-recipe-revise-ui"
+  ],
+  "n_lane_interest": 3,
+  "tip_identical_on": [
+   "refs/heads/lane/mrg-recipe-revise-ui"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/margin-menu-margin-ui",
+   "refs/heads/lane/margin-recipes"
+  ]
+ },
+ {
+  "path": "test/margin-recipe-revise.test.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/mrg-recipe-revise-ui"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "351ed75c": [
+    "refs/heads/lane/mrg-recipe-revise-ui"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "0c483de9dbb22220f74f6b3fca9a6c8967d67d85",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/mrg-recipe-revise-ui"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/mrg-recipe-revise-ui"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/margin-statements-page.test.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/mrg-coverage-unknown"
+  ],
+  "rival_variants": 3,
+  "rival_refs": {
+   "36a980d3": [
+    "refs/heads/lane/fe-events-margin-surfaces"
+   ],
+   "16aa87e5": [
+    "refs/heads/lane/mrg-coverage-unknown"
+   ],
+   "7e7f62ea": [
+    "refs/heads/lane/mrg-lag-visible"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "2f4e389f94da4f0ab702429471369b331859e3df",
+  "n_revisions_seen": 6,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/fe-events-margin-surfaces",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/mrg-coverage-unknown",
+   "refs/heads/lane/mrg-lag-visible",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty"
+  ],
+  "n_lane_interest": 9,
+  "tip_identical_on": [
+   "refs/heads/lane/mrg-coverage-unknown"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/fe-events-margin-surfaces",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/mrg-lag-visible",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty"
+  ]
+ },
+ {
+  "path": "test/margin-waste.test.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/mrg-coverage-unknown"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "b7d56832": [
+    "refs/heads/lane/coercion-write-paths"
+   ],
+   "264d50c4": [
+    "refs/heads/lane/mrg-coverage-unknown"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "2f4e389f94da4f0ab702429471369b331859e3df",
+  "n_revisions_seen": 4,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/coercion-write-paths",
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/mrg-coverage-unknown",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty"
+  ],
+  "n_lane_interest": 8,
+  "tip_identical_on": [
+   "refs/heads/lane/mrg-coverage-unknown"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/coercion-write-paths",
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty"
+  ]
+ },
+ {
+  "path": "test/meals-statement-view.test.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "2917575a": [
+    "refs/heads/lane/fe-meals-statement-surface"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/price-absence.test.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/price-cleanup-two"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "d6bf30bb": [
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+   ],
+   "30d22b3f": [
+    "refs/heads/lane/price-cleanup-two"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "b76cbbb2d2d11c9584dd74128488a5b35d6354f5",
+  "n_revisions_seen": 3,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/heads/lane/price-cleanup-two",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "n_lane_interest": 3,
+  "tip_identical_on": [
+   "refs/heads/lane/price-cleanup-two"
+  ],
+  "revision": "current tip",
+  "superseded_by": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/price-bypass-legacy.test.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/lanes/L-PRICE-BYPASS-FIVE"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "0c6a81e7": [
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+   ],
+   "e0389bcb": [
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-PRICE-BYPASS-FIVE",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "990c2db6db3618fdd77556f4b14770e756c92285",
+  "n_revisions_seen": 2,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "n_lane_interest": 8,
+  "tip_identical_on": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/lanes/L-PRICE-BYPASS-FIVE"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ]
+ },
+ {
+  "path": "test/price-crosscurrency.test.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "a72e0272": [
+    "refs/heads/lane/price-crosscurrency"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 2,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/price-gate-shadow.test.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/L-PRICE-SHADOW-GUARD"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "e10891c2": [
+    "refs/heads/lane/L-PRICE-SHADOW-GUARD"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "990c2db6db3618fdd77556f4b14770e756c92285",
+  "n_revisions_seen": 2,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/L-PRICE-SHADOW-GUARD"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/L-PRICE-SHADOW-GUARD"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/workforce-delivery-failures.test.js",
+  "status": "??",
+  "class": "live-lane-work",
+  "who": [
+   "lanes/L-WF-FAILURES-SURFACE (lane dir; NO branch)"
+  ],
+  "rival_variants": 0,
+  "rival_refs": {},
+  "hazard": false,
+  "blob_commit": null,
+  "n_revisions_seen": 0,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [],
+  "n_lane_interest": 0,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/workforce-pos-clock.test.js",
+  "status": "??",
+  "class": "live-lane-work",
+  "who": [
+   "lanes/L-WF-PUNCH-UI (lane dir; NO branch)"
+  ],
+  "rival_variants": 0,
+  "rival_refs": {},
+  "hazard": false,
+  "blob_commit": null,
+  "n_revisions_seen": 0,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [],
+  "n_lane_interest": 0,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/workforce-publication-receipts.test.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "d09b64d8": [
+    "refs/heads/lane/wf-pubhist"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "2d86446b746cff8477c4d6dbde316aceecda811b",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/workforce-rates-timeline.test.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/heads/lane/price-cleanup-two",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "bc4aba6b": [
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/heads/lane/price-cleanup-two",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 2,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/heads/lane/price-cleanup-two",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "n_lane_interest": 3,
+  "tip_identical_on": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/heads/lane/price-cleanup-two",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/workforce-roles-page.test.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/wf-roles-ui"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "b18fddb0": [
+    "refs/heads/lane/wf-roles-ui"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/wf-roles-ui"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/wf-roles-ui"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/workforce-timesheet-client.test.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "c7c3ccd5": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "618efc88750fa4adb59769b859d3975bfcdc1f3b",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/workforce-timesheet-components.test.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "98dee017": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "618efc88750fa4adb59769b859d3975bfcdc1f3b",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/workforce-timesheet.test.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "918bce3e": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "618efc88750fa4adb59769b859d3975bfcdc1f3b",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/world-stamp-windows.test.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "cfc11d30": [
+    "refs/lanes/L-WORLD-STAMP-WINDOWS"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "test/xz-negated-absence.test.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/lanes/L-XZ-NEGATED-ABSENCE"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "b66ab6af": [
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ],
+   "a9962cc6": [
+    "refs/lanes/L-XZ-NEGATED-ABSENCE"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "b150668b7de1992dd858dc2b2d5be4c2b7017def",
+  "n_revisions_seen": 2,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "n_lane_interest": 5,
+  "tip_identical_on": [
+   "refs/lanes/L-XZ-NEGATED-ABSENCE"
+  ],
+  "revision": "current tip",
+  "superseded_by": [
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "rival_lanes": []
+ },
+ {
+  "path": "translations/de.ts",
+  "status": " M",
+  "class": "live-lane-work",
+  "who": [
+   "refs/heads/lane/fe-meals-statement-surface",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/mrg-coverage-unknown",
+   "refs/heads/lane/mrg-recipe-revise-ui",
+   "refs/heads/lane/train-evidence-pack-ui",
+   "refs/heads/lane/train-readonly-visible",
+   "refs/heads/lane/wf-pubhist",
+   "refs/heads/lane/wf-roles-ui",
+   "+69 orphan lines"
+  ],
+  "rival_variants": 43,
+  "rival_refs": {
+   "0bece3bc": [
+    "refs/heads/lane/coercion-write-paths"
+   ],
+   "c2f2f29c": [
+    "refs/heads/lane/ev-stale-cause"
+   ],
+   "0c97098f": [
+    "refs/heads/lane/events-admin"
+   ],
+   "35132992": [
+    "refs/heads/lane/fe-events-margin-surfaces"
+   ],
+   "b4c52ee3": [
+    "refs/heads/lane/fe-growth-suppressed-key"
+   ],
+   "416c2493": [
+    "refs/heads/lane/fe-meals-claim-receipt"
+   ],
+   "c1d4f3f2": [
+    "refs/heads/lane/fe-meals-journey-locator",
+    "refs/heads/lane/fe-meals-pretick-walked",
+    "refs/heads/lane/meals-enrol-pretick"
+   ],
+   "28c77d44": [
+    "refs/heads/lane/fe-meals-reconcile-ui"
+   ],
+   "cc2f32e6": [
+    "refs/heads/lane/fe-meals-statement-surface"
+   ],
+   "ff62ab87": [
+    "refs/heads/lane/fe-pos-clock"
+   ],
+   "efd77fb3": [
+    "refs/heads/lane/fe-training-meals-surfaces"
+   ],
+   "c06c04ad": [
+    "refs/heads/lane/fe-wf-blind-bind-name"
+   ],
+   "372a8234": [
+    "refs/heads/lane/fe-wf-bootstrap"
+   ],
+   "2551f083": [
+    "refs/heads/lane/fe-wf-contact-imported"
+   ],
+   "afd2ecd0": [
+    "refs/heads/lane/fe-wf-correction-path"
+   ],
+   "938a28e8": [
+    "refs/heads/lane/fe-wf-invite-list-revoke"
+   ],
+   "f2e0ae9b": [
+    "refs/heads/lane/fe-wf-link-deadend"
+   ],
+   "cc316ff8": [
+    "refs/heads/lane/fe-wf-onboard"
+   ],
+   "9be2c376": [
+    "refs/heads/lane/fe-wf-oplink"
+   ],
+   "9e6c8f51": [
+    "refs/heads/lane/fe-wf-self"
+   ],
+   "1a46e3fe": [
+    "refs/heads/lane/growth-admin"
+   ],
+   "1dfe5680": [
+    "refs/heads/lane/journey-workforce"
+   ],
+   "0156458e": [
+    "refs/heads/lane/margin-menu-margin-ui"
+   ],
+   "901088d2": [
+    "refs/heads/lane/margin-recipes"
+   ],
+   "3a58e7f7": [
+    "refs/heads/lane/meals-admin"
+   ],
+   "9f903b28": [
+    "refs/heads/lane/meals-enrol-ui"
+   ],
+   "5b32e8b0": [
+    "refs/heads/lane/meals-reachable-web"
+   ],
+   "6f7fb672": [
+    "refs/heads/lane/menu-allergen-matrix"
+   ],
+   "c7ce9416": [
+    "refs/heads/lane/mrg-coverage-unknown"
+   ],
+   "4403c4b0": [
+    "refs/heads/lane/mrg-lag-visible"
+   ],
+   "a6900257": [
+    "refs/heads/lane/mrg-recipe-revise-ui"
+   ],
+   "70779afb": [
+    "refs/heads/lane/mrg-waste-frontend"
+   ],
+   "0283a101": [
+    "refs/heads/lane/statute-evidence-world",
+    "refs/heads/lane/statute-honesty"
+   ],
+   "ebc59e86": [
+    "refs/heads/lane/train-evidence-pack-ui"
+   ],
+   "d91f275a": [
+    "refs/heads/lane/train-readonly-visible"
+   ],
+   "00a66179": [
+    "refs/heads/lane/training-admin"
+   ],
+   "5dee40d8": [
+    "refs/heads/lane/wf-adjust-address"
+   ],
+   "13a41f5f": [
+    "refs/heads/lane/wf-idreg"
+   ],
+   "f057ba65": [
+    "refs/heads/lane/wf-kodeoversikt-ui"
+   ],
+   "efbe238b": [
+    "refs/heads/lane/wf-pubhist"
+   ],
+   "423ddc1e": [
+    "refs/heads/lane/wf-roles-ui"
+   ],
+   "2716ee9b": [
+    "refs/heads/lane/workforce-roster"
+   ],
+   "4f0a724b": [
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": null,
+  "n_revisions_seen": 134,
+  "orphan_lines": 69,
+  "added_lines": 368,
+  "lane_interest": [
+   "refs/heads/lane/coercion-write-paths",
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/events-admin",
+   "refs/heads/lane/fe-events-margin-surfaces",
+   "refs/heads/lane/fe-growth-suppressed-key",
+   "refs/heads/lane/fe-meals-claim-receipt",
+   "refs/heads/lane/fe-meals-journey-locator",
+   "refs/heads/lane/fe-meals-pretick-walked",
+   "refs/heads/lane/fe-meals-reconcile-ui",
+   "refs/heads/lane/fe-meals-statement-surface",
+   "refs/heads/lane/fe-pos-clock",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-bootstrap",
+   "refs/heads/lane/fe-wf-contact-imported",
+   "refs/heads/lane/fe-wf-correction-path",
+   "refs/heads/lane/fe-wf-invite-list-revoke",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-onboard",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/fe-wf-self",
+   "refs/heads/lane/growth-admin",
+   "refs/heads/lane/journey-workforce",
+   "refs/heads/lane/margin-menu-margin-ui",
+   "refs/heads/lane/margin-recipes",
+   "refs/heads/lane/meals-admin",
+   "refs/heads/lane/meals-enrol-pretick",
+   "refs/heads/lane/meals-enrol-ui",
+   "refs/heads/lane/meals-reachable-web",
+   "refs/heads/lane/menu-allergen-matrix",
+   "refs/heads/lane/mrg-coverage-unknown",
+   "refs/heads/lane/mrg-lag-visible",
+   "refs/heads/lane/mrg-recipe-revise-ui",
+   "refs/heads/lane/mrg-waste-frontend",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty",
+   "refs/heads/lane/train-evidence-pack-ui",
+   "refs/heads/lane/train-readonly-visible",
+   "refs/heads/lane/training-admin",
+   "refs/heads/lane/wf-adjust-address",
+   "refs/heads/lane/wf-idreg",
+   "refs/heads/lane/wf-kodeoversikt-ui",
+   "refs/heads/lane/wf-pubhist",
+   "refs/heads/lane/wf-roles-ui",
+   "refs/heads/lane/workforce-roster",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM"
+  ],
+  "n_lane_interest": 46,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "translations/en.ts",
+  "status": " M",
+  "class": "live-lane-work",
+  "who": [
+   "refs/heads/lane/fe-meals-statement-surface",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/mrg-coverage-unknown",
+   "refs/heads/lane/mrg-recipe-revise-ui",
+   "refs/heads/lane/train-evidence-pack-ui",
+   "refs/heads/lane/train-readonly-visible",
+   "refs/heads/lane/wf-pubhist",
+   "refs/heads/lane/wf-roles-ui",
+   "+69 orphan lines"
+  ],
+  "rival_variants": 43,
+  "rival_refs": {
+   "209c078c": [
+    "refs/heads/lane/coercion-write-paths"
+   ],
+   "17098e6e": [
+    "refs/heads/lane/ev-stale-cause"
+   ],
+   "eb78e038": [
+    "refs/heads/lane/events-admin"
+   ],
+   "43fb2177": [
+    "refs/heads/lane/fe-events-margin-surfaces"
+   ],
+   "fbc4e46a": [
+    "refs/heads/lane/fe-growth-suppressed-key"
+   ],
+   "d2899310": [
+    "refs/heads/lane/fe-meals-claim-receipt"
+   ],
+   "914cb3f2": [
+    "refs/heads/lane/fe-meals-journey-locator",
+    "refs/heads/lane/fe-meals-pretick-walked",
+    "refs/heads/lane/meals-enrol-pretick"
+   ],
+   "9e9db25e": [
+    "refs/heads/lane/fe-meals-reconcile-ui"
+   ],
+   "3df8abd1": [
+    "refs/heads/lane/fe-meals-statement-surface"
+   ],
+   "4e0d70fb": [
+    "refs/heads/lane/fe-pos-clock"
+   ],
+   "6642c167": [
+    "refs/heads/lane/fe-training-meals-surfaces"
+   ],
+   "3ca803e2": [
+    "refs/heads/lane/fe-wf-blind-bind-name"
+   ],
+   "d182e656": [
+    "refs/heads/lane/fe-wf-bootstrap"
+   ],
+   "b6e2aca2": [
+    "refs/heads/lane/fe-wf-contact-imported"
+   ],
+   "d0180861": [
+    "refs/heads/lane/fe-wf-correction-path"
+   ],
+   "4e2e8f1c": [
+    "refs/heads/lane/fe-wf-invite-list-revoke"
+   ],
+   "c72d859e": [
+    "refs/heads/lane/fe-wf-link-deadend"
+   ],
+   "013a3c2d": [
+    "refs/heads/lane/fe-wf-onboard"
+   ],
+   "3c5cd3a1": [
+    "refs/heads/lane/fe-wf-oplink"
+   ],
+   "e4579127": [
+    "refs/heads/lane/fe-wf-self"
+   ],
+   "bffa1bd4": [
+    "refs/heads/lane/growth-admin"
+   ],
+   "21155262": [
+    "refs/heads/lane/journey-workforce"
+   ],
+   "7ec8327c": [
+    "refs/heads/lane/margin-menu-margin-ui"
+   ],
+   "515d1b8d": [
+    "refs/heads/lane/margin-recipes"
+   ],
+   "9b1a0ee5": [
+    "refs/heads/lane/meals-admin"
+   ],
+   "b9723e3a": [
+    "refs/heads/lane/meals-enrol-ui"
+   ],
+   "872de312": [
+    "refs/heads/lane/meals-reachable-web"
+   ],
+   "f46657aa": [
+    "refs/heads/lane/menu-allergen-matrix"
+   ],
+   "f5b8696b": [
+    "refs/heads/lane/mrg-coverage-unknown"
+   ],
+   "a0ab57ee": [
+    "refs/heads/lane/mrg-lag-visible"
+   ],
+   "22b6ce9b": [
+    "refs/heads/lane/mrg-recipe-revise-ui"
+   ],
+   "29ca33fd": [
+    "refs/heads/lane/mrg-waste-frontend"
+   ],
+   "336c6f46": [
+    "refs/heads/lane/statute-evidence-world",
+    "refs/heads/lane/statute-honesty"
+   ],
+   "eb89b3ef": [
+    "refs/heads/lane/train-evidence-pack-ui"
+   ],
+   "9926c832": [
+    "refs/heads/lane/train-readonly-visible"
+   ],
+   "733a7f8e": [
+    "refs/heads/lane/training-admin"
+   ],
+   "d67bac95": [
+    "refs/heads/lane/wf-adjust-address"
+   ],
+   "0b1afe66": [
+    "refs/heads/lane/wf-idreg"
+   ],
+   "20c738f3": [
+    "refs/heads/lane/wf-kodeoversikt-ui"
+   ],
+   "2a14d73c": [
+    "refs/heads/lane/wf-pubhist"
+   ],
+   "c751a76a": [
+    "refs/heads/lane/wf-roles-ui"
+   ],
+   "0166579f": [
+    "refs/heads/lane/workforce-roster"
+   ],
+   "b0a20951": [
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": null,
+  "n_revisions_seen": 133,
+  "orphan_lines": 69,
+  "added_lines": 367,
+  "lane_interest": [
+   "refs/heads/lane/coercion-write-paths",
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/events-admin",
+   "refs/heads/lane/fe-events-margin-surfaces",
+   "refs/heads/lane/fe-growth-suppressed-key",
+   "refs/heads/lane/fe-meals-claim-receipt",
+   "refs/heads/lane/fe-meals-journey-locator",
+   "refs/heads/lane/fe-meals-pretick-walked",
+   "refs/heads/lane/fe-meals-reconcile-ui",
+   "refs/heads/lane/fe-meals-statement-surface",
+   "refs/heads/lane/fe-pos-clock",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-bootstrap",
+   "refs/heads/lane/fe-wf-contact-imported",
+   "refs/heads/lane/fe-wf-correction-path",
+   "refs/heads/lane/fe-wf-invite-list-revoke",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-onboard",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/fe-wf-self",
+   "refs/heads/lane/growth-admin",
+   "refs/heads/lane/journey-workforce",
+   "refs/heads/lane/margin-menu-margin-ui",
+   "refs/heads/lane/margin-recipes",
+   "refs/heads/lane/meals-admin",
+   "refs/heads/lane/meals-enrol-pretick",
+   "refs/heads/lane/meals-enrol-ui",
+   "refs/heads/lane/meals-reachable-web",
+   "refs/heads/lane/menu-allergen-matrix",
+   "refs/heads/lane/mrg-coverage-unknown",
+   "refs/heads/lane/mrg-lag-visible",
+   "refs/heads/lane/mrg-recipe-revise-ui",
+   "refs/heads/lane/mrg-waste-frontend",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty",
+   "refs/heads/lane/train-evidence-pack-ui",
+   "refs/heads/lane/train-readonly-visible",
+   "refs/heads/lane/training-admin",
+   "refs/heads/lane/wf-adjust-address",
+   "refs/heads/lane/wf-idreg",
+   "refs/heads/lane/wf-kodeoversikt-ui",
+   "refs/heads/lane/wf-pubhist",
+   "refs/heads/lane/wf-roles-ui",
+   "refs/heads/lane/workforce-roster",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM"
+  ],
+  "n_lane_interest": 46,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "translations/no.ts",
+  "status": " M",
+  "class": "live-lane-work",
+  "who": [
+   "refs/heads/lane/fe-meals-statement-surface",
+   "refs/heads/lane/fe-pos-clock",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/mrg-coverage-unknown",
+   "refs/heads/lane/mrg-recipe-revise-ui",
+   "refs/heads/lane/train-evidence-pack-ui",
+   "refs/heads/lane/train-readonly-visible",
+   "refs/heads/lane/wf-pubhist",
+   "refs/heads/lane/wf-roles-ui",
+   "+72 orphan lines"
+  ],
+  "rival_variants": 43,
+  "rival_refs": {
+   "b1c25b2f": [
+    "refs/heads/lane/coercion-write-paths"
+   ],
+   "cdfb140a": [
+    "refs/heads/lane/ev-stale-cause"
+   ],
+   "0c7e9e06": [
+    "refs/heads/lane/events-admin"
+   ],
+   "e2a9987f": [
+    "refs/heads/lane/fe-events-margin-surfaces"
+   ],
+   "00f5d53f": [
+    "refs/heads/lane/fe-growth-suppressed-key"
+   ],
+   "282547dc": [
+    "refs/heads/lane/fe-meals-claim-receipt"
+   ],
+   "5c25dc75": [
+    "refs/heads/lane/fe-meals-journey-locator",
+    "refs/heads/lane/fe-meals-pretick-walked",
+    "refs/heads/lane/meals-enrol-pretick"
+   ],
+   "1a815a9e": [
+    "refs/heads/lane/fe-meals-reconcile-ui"
+   ],
+   "97c86f86": [
+    "refs/heads/lane/fe-meals-statement-surface"
+   ],
+   "52e06be7": [
+    "refs/heads/lane/fe-pos-clock"
+   ],
+   "d3551c68": [
+    "refs/heads/lane/fe-training-meals-surfaces"
+   ],
+   "b62a24c5": [
+    "refs/heads/lane/fe-wf-blind-bind-name"
+   ],
+   "ddcfe498": [
+    "refs/heads/lane/fe-wf-bootstrap"
+   ],
+   "d22db8ff": [
+    "refs/heads/lane/fe-wf-contact-imported"
+   ],
+   "989843d9": [
+    "refs/heads/lane/fe-wf-correction-path"
+   ],
+   "420ba65a": [
+    "refs/heads/lane/fe-wf-invite-list-revoke"
+   ],
+   "bc2fc5e5": [
+    "refs/heads/lane/fe-wf-link-deadend"
+   ],
+   "dac04723": [
+    "refs/heads/lane/fe-wf-onboard"
+   ],
+   "a407877c": [
+    "refs/heads/lane/fe-wf-oplink"
+   ],
+   "e6cd9286": [
+    "refs/heads/lane/fe-wf-self"
+   ],
+   "0a439c7f": [
+    "refs/heads/lane/growth-admin"
+   ],
+   "bbec9bc8": [
+    "refs/heads/lane/journey-workforce"
+   ],
+   "086a0dba": [
+    "refs/heads/lane/margin-menu-margin-ui"
+   ],
+   "3718d408": [
+    "refs/heads/lane/margin-recipes"
+   ],
+   "402d90c0": [
+    "refs/heads/lane/meals-admin"
+   ],
+   "4ba32ee6": [
+    "refs/heads/lane/meals-enrol-ui"
+   ],
+   "4ff76fa6": [
+    "refs/heads/lane/meals-reachable-web"
+   ],
+   "7bd1008f": [
+    "refs/heads/lane/menu-allergen-matrix"
+   ],
+   "ec2bebc8": [
+    "refs/heads/lane/mrg-coverage-unknown"
+   ],
+   "fa97fb44": [
+    "refs/heads/lane/mrg-lag-visible"
+   ],
+   "1d86b405": [
+    "refs/heads/lane/mrg-recipe-revise-ui"
+   ],
+   "4c247f03": [
+    "refs/heads/lane/mrg-waste-frontend"
+   ],
+   "73e680ac": [
+    "refs/heads/lane/statute-evidence-world",
+    "refs/heads/lane/statute-honesty"
+   ],
+   "f312ef08": [
+    "refs/heads/lane/train-evidence-pack-ui"
+   ],
+   "8a63446a": [
+    "refs/heads/lane/train-readonly-visible"
+   ],
+   "13e921ba": [
+    "refs/heads/lane/training-admin"
+   ],
+   "63e73ef5": [
+    "refs/heads/lane/wf-adjust-address"
+   ],
+   "79476bef": [
+    "refs/heads/lane/wf-idreg"
+   ],
+   "f5d14cbc": [
+    "refs/heads/lane/wf-kodeoversikt-ui"
+   ],
+   "08b3622c": [
+    "refs/heads/lane/wf-pubhist"
+   ],
+   "ae0ff181": [
+    "refs/heads/lane/wf-roles-ui"
+   ],
+   "7826f176": [
+    "refs/heads/lane/workforce-roster"
+   ],
+   "d5247444": [
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": null,
+  "n_revisions_seen": 138,
+  "orphan_lines": 72,
+  "added_lines": 376,
+  "lane_interest": [
+   "refs/heads/lane/coercion-write-paths",
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/events-admin",
+   "refs/heads/lane/fe-events-margin-surfaces",
+   "refs/heads/lane/fe-growth-suppressed-key",
+   "refs/heads/lane/fe-meals-claim-receipt",
+   "refs/heads/lane/fe-meals-journey-locator",
+   "refs/heads/lane/fe-meals-pretick-walked",
+   "refs/heads/lane/fe-meals-reconcile-ui",
+   "refs/heads/lane/fe-meals-statement-surface",
+   "refs/heads/lane/fe-pos-clock",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-bootstrap",
+   "refs/heads/lane/fe-wf-contact-imported",
+   "refs/heads/lane/fe-wf-correction-path",
+   "refs/heads/lane/fe-wf-invite-list-revoke",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-onboard",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/fe-wf-self",
+   "refs/heads/lane/growth-admin",
+   "refs/heads/lane/journey-workforce",
+   "refs/heads/lane/margin-menu-margin-ui",
+   "refs/heads/lane/margin-recipes",
+   "refs/heads/lane/meals-admin",
+   "refs/heads/lane/meals-enrol-pretick",
+   "refs/heads/lane/meals-enrol-ui",
+   "refs/heads/lane/meals-reachable-web",
+   "refs/heads/lane/menu-allergen-matrix",
+   "refs/heads/lane/mrg-coverage-unknown",
+   "refs/heads/lane/mrg-lag-visible",
+   "refs/heads/lane/mrg-recipe-revise-ui",
+   "refs/heads/lane/mrg-waste-frontend",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty",
+   "refs/heads/lane/train-evidence-pack-ui",
+   "refs/heads/lane/train-readonly-visible",
+   "refs/heads/lane/training-admin",
+   "refs/heads/lane/wf-adjust-address",
+   "refs/heads/lane/wf-idreg",
+   "refs/heads/lane/wf-kodeoversikt-ui",
+   "refs/heads/lane/wf-pubhist",
+   "refs/heads/lane/wf-roles-ui",
+   "refs/heads/lane/workforce-roster",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM"
+  ],
+  "n_lane_interest": 46,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "utils/cross-currency.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "161752ac": [
+    "refs/heads/lane/price-crosscurrency"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "utils/growth/growth-guest-client.js",
+  "status": " M",
+  "class": "live-lane-work",
+  "who": [
+   "refs/heads/lane/fe-gr-withdraw-origin"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "0fd1c9e3": [
+    "refs/heads/lane/fe-gr-withdraw-origin"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": null,
+  "n_revisions_seen": 2,
+  "orphan_lines": 20,
+  "added_lines": 20,
+  "lane_interest": [
+   "refs/heads/lane/fe-gr-withdraw-origin"
+  ],
+  "n_lane_interest": 1,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "utils/margin/money.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "ce20f296": [
+    "refs/heads/lane/price-crosscurrency"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 2,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/margin-menu-margin-ui",
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "n_lane_interest": 2,
+  "tip_identical_on": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/margin-menu-margin-ui"
+  ]
+ },
+ {
+  "path": "utils/margin/recipe-client.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/mrg-recipe-revise-ui"
+  ],
+  "rival_variants": 3,
+  "rival_refs": {
+   "1ee152b9": [
+    "refs/heads/lane/margin-menu-margin-ui"
+   ],
+   "4153fbce": [
+    "refs/heads/lane/margin-recipes"
+   ],
+   "efa8f91c": [
+    "refs/heads/lane/mrg-recipe-revise-ui"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "0c483de9dbb22220f74f6b3fca9a6c8967d67d85",
+  "n_revisions_seen": 6,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/margin-menu-margin-ui",
+   "refs/heads/lane/margin-recipes",
+   "refs/heads/lane/mrg-recipe-revise-ui"
+  ],
+  "n_lane_interest": 3,
+  "tip_identical_on": [
+   "refs/heads/lane/mrg-recipe-revise-ui"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/margin-menu-margin-ui",
+   "refs/heads/lane/margin-recipes"
+  ]
+ },
+ {
+  "path": "utils/margin/statement-view.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/mrg-coverage-unknown"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "1b3b85d2": [
+    "refs/heads/lane/fe-events-margin-surfaces"
+   ],
+   "5b7a6d5b": [
+    "refs/heads/lane/mrg-coverage-unknown"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 4,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/fe-events-margin-surfaces",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/mrg-coverage-unknown",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty"
+  ],
+  "n_lane_interest": 8,
+  "tip_identical_on": [
+   "refs/heads/lane/mrg-coverage-unknown"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/fe-events-margin-surfaces",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty"
+  ]
+ },
+ {
+  "path": "utils/meals/statement-client.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "3359a1d3": [
+    "refs/heads/lane/fe-meals-statement-surface"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "utils/meals/statement-view.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "bf9b4729": [
+    "refs/heads/lane/fe-meals-statement-surface"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "utils/price.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/lanes/L-XZ-NEGATED-ABSENCE"
+  ],
+  "rival_variants": 5,
+  "rival_refs": {
+   "0acc5120": [
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+    "refs/lanes/L-PRICE-BYPASS-FIVE"
+   ],
+   "a6327b76": [
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED"
+   ],
+   "967db001": [
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM"
+   ],
+   "4673f24c": [
+    "refs/lanes/L-XZ-NEGATED-ABSENCE"
+   ],
+   "6aa3aef9": [
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "b150668b7de1992dd858dc2b2d5be4c2b7017def",
+  "n_revisions_seen": 7,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "n_lane_interest": 8,
+  "tip_identical_on": [
+   "refs/lanes/L-XZ-NEGATED-ABSENCE"
+  ],
+  "revision": "current tip",
+  "superseded_by": [
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "rival_lanes": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+   "refs/lanes/L-PRICE-BYPASS-FIVE"
+  ]
+ },
+ {
+  "path": "utils/training/evidence.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "dd0b414c": [
+    "refs/heads/lane/fe-training-meals-surfaces"
+   ],
+   "d30e2652": [
+    "refs/heads/lane/train-evidence-pack-ui"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "n_revisions_seen": 2,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "n_lane_interest": 2,
+  "tip_identical_on": [
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/fe-training-meals-surfaces"
+  ]
+ },
+ {
+  "path": "utils/training/training-client.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "rival_variants": 3,
+  "rival_refs": {
+   "ca18204e": [
+    "refs/heads/lane/fe-training-meals-surfaces"
+   ],
+   "4d167877": [
+    "refs/heads/lane/train-evidence-pack-ui"
+   ],
+   "641f5851": [
+    "refs/heads/lane/training-admin"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "n_revisions_seen": 5,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/train-evidence-pack-ui",
+   "refs/heads/lane/training-admin"
+  ],
+  "n_lane_interest": 3,
+  "tip_identical_on": [
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/training-admin"
+  ]
+ },
+ {
+  "path": "utils/workforce-rates/rate-timeline.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/heads/lane/price-cleanup-two",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "2c627a05": [
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/heads/lane/price-cleanup-two",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "n_revisions_seen": 2,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/heads/lane/price-cleanup-two",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "n_lane_interest": 3,
+  "tip_identical_on": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/heads/lane/price-cleanup-two",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "utils/workforce-rates/rates-client.js",
+  "status": " M",
+  "class": "live-lane-work",
+  "who": [
+   "refs/heads/lane/wf-idreg",
+   "refs/heads/lane/wf-kodeoversikt-ui"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "8773d4b1": [
+    "refs/heads/lane/wf-idreg",
+    "refs/heads/lane/wf-kodeoversikt-ui"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": null,
+  "n_revisions_seen": 3,
+  "orphan_lines": 6,
+  "added_lines": 6,
+  "lane_interest": [
+   "refs/heads/lane/wf-idreg",
+   "refs/heads/lane/wf-kodeoversikt-ui"
+  ],
+  "n_lane_interest": 2,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "utils/workforce/api-client.js",
+  "status": " M",
+  "class": "live-lane-work",
+  "who": [
+   "refs/heads/lane/wf-idreg",
+   "refs/heads/lane/wf-kodeoversikt-ui",
+   "refs/heads/lane/workforce-roster",
+   "+16 orphan lines"
+  ],
+  "rival_variants": 2,
+  "rival_refs": {
+   "f76342c0": [
+    "refs/heads/lane/wf-idreg",
+    "refs/heads/lane/wf-kodeoversikt-ui"
+   ],
+   "5372cd9d": [
+    "refs/heads/lane/workforce-roster"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": null,
+  "n_revisions_seen": 7,
+  "orphan_lines": 16,
+  "added_lines": 38,
+  "lane_interest": [
+   "refs/heads/lane/wf-idreg",
+   "refs/heads/lane/wf-kodeoversikt-ui",
+   "refs/heads/lane/workforce-roster"
+  ],
+  "n_lane_interest": 3,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "utils/workforce/delivery-failures.js",
+  "status": "??",
+  "class": "live-lane-work",
+  "who": [
+   "lanes/L-WF-FAILURES-SURFACE (lane dir; NO branch)"
+  ],
+  "rival_variants": 0,
+  "rival_refs": {},
+  "hazard": false,
+  "blob_commit": null,
+  "n_revisions_seen": 0,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [],
+  "n_lane_interest": 0,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "utils/workforce/pos-clock-client.js",
+  "status": "??",
+  "class": "live-lane-work",
+  "who": [
+   "lanes/L-WF-PUNCH-UI (lane dir; NO branch)"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "91ebea07": [
+    "refs/heads/lane/fe-pos-clock",
+    "refs/heads/lane/fe-wf-blind-bind-name",
+    "refs/heads/lane/fe-wf-link-deadend",
+    "refs/heads/lane/fe-wf-oplink"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": null,
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/fe-pos-clock",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink"
+  ],
+  "n_lane_interest": 4,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "utils/workforce/pos-clock-state.js",
+  "status": "??",
+  "class": "live-lane-work",
+  "who": [
+   "lanes/L-WF-PUNCH-UI (lane dir; NO branch)"
+  ],
+  "rival_variants": 0,
+  "rival_refs": {},
+  "hazard": false,
+  "blob_commit": null,
+  "n_revisions_seen": 0,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [],
+  "n_lane_interest": 0,
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "utils/workforce/publication-receipts.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "24400311": [
+    "refs/heads/lane/wf-pubhist"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "2d86446b746cff8477c4d6dbde316aceecda811b",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "utils/workforce/roster-client.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/wf-roles-ui"
+  ],
+  "rival_variants": 9,
+  "rival_refs": {
+   "69c7fe0b": [
+    "refs/heads/lane/fe-wf-blind-bind-name",
+    "refs/heads/lane/fe-wf-link-deadend"
+   ],
+   "0baddbab": [
+    "refs/heads/lane/fe-wf-bootstrap"
+   ],
+   "24024267": [
+    "refs/heads/lane/fe-wf-contact-imported"
+   ],
+   "8695d870": [
+    "refs/heads/lane/fe-wf-invite-list-revoke"
+   ],
+   "691ddbf6": [
+    "refs/heads/lane/fe-wf-oplink"
+   ],
+   "d526549e": [
+    "refs/heads/lane/journey-workforce"
+   ],
+   "1532da34": [
+    "refs/heads/lane/wf-adjust-address"
+   ],
+   "313985ff": [
+    "refs/heads/lane/wf-roles-ui"
+   ],
+   "0792e43d": [
+    "refs/heads/lane/workforce-roster"
+   ]
+  },
+  "hazard": true,
+  "blob_commit": "ff21e488eae8181cc8dbe302147d335f9d3ff7ec",
+  "n_revisions_seen": 12,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-bootstrap",
+   "refs/heads/lane/fe-wf-contact-imported",
+   "refs/heads/lane/fe-wf-invite-list-revoke",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-onboard",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/fe-wf-self",
+   "refs/heads/lane/journey-workforce",
+   "refs/heads/lane/wf-adjust-address",
+   "refs/heads/lane/wf-roles-ui",
+   "refs/heads/lane/workforce-roster"
+  ],
+  "n_lane_interest": 12,
+  "tip_identical_on": [
+   "refs/heads/lane/wf-roles-ui"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": [
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-bootstrap",
+   "refs/heads/lane/fe-wf-contact-imported",
+   "refs/heads/lane/fe-wf-invite-list-revoke",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-onboard",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/fe-wf-self",
+   "refs/heads/lane/journey-workforce",
+   "refs/heads/lane/wf-adjust-address",
+   "refs/heads/lane/workforce-roster"
+  ]
+ },
+ {
+  "path": "utils/workforce/schedule-client.js",
+  "status": " M",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "cd9f41b8": [
+    "refs/heads/lane/wf-pubhist"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "2d86446b746cff8477c4d6dbde316aceecda811b",
+  "n_revisions_seen": 6,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "utils/workforce/timesheet-client.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "6e785823": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "618efc88750fa4adb59769b859d3975bfcdc1f3b",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "utils/workforce/timesheet.js",
+  "status": "??",
+  "class": "already-committed-elsewhere",
+  "who": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "rival_variants": 1,
+  "rival_refs": {
+   "db65eeb6": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ]
+  },
+  "hazard": false,
+  "blob_commit": "618efc88750fa4adb59769b859d3975bfcdc1f3b",
+  "n_revisions_seen": 1,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "n_lane_interest": 1,
+  "tip_identical_on": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "revision": "current tip",
+  "superseded_by": [],
+  "rival_lanes": []
+ },
+ {
+  "path": "world.config",
+  "status": "??",
+  "class": "live-lane-work",
+  "who": [
+   "lanes/L-GUARD-W0 (lane dir; NO branch)"
+  ],
+  "rival_variants": 0,
+  "rival_refs": {},
+  "hazard": false,
+  "blob_commit": null,
+  "n_revisions_seen": 0,
+  "orphan_lines": null,
+  "added_lines": null,
+  "lane_interest": [],
+  "n_lane_interest": 0,
+  "superseded_by": [],
+  "rival_lanes": []
+ }
+]

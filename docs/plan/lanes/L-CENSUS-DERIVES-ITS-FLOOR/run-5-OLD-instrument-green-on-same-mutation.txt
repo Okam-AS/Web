@@ -1,0 +1,5 @@
+Test run for /Users/svendaneel/okam/OkamAPI-censusderive/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    38, Skipped:     0, Total:    38, Duration: 4 s - WebApi.Tests.dll (net8.0)

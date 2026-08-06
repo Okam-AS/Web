@@ -530,14 +530,11 @@ export default {
       immediate: true,
       deep: true,
     },
-    storeOverview: {
-      handler() {
-        this.totalOrderCount = this.sortedStores.reduce((sum, s) => sum + (s.orderCount || 0), 0);
-        this.totalAmountSum = this.sortedStores.reduce((sum, s) => sum + (s.totalAmount || 0), 0);
-      },
-      immediate: true,
-      deep: true,
-    },
+    // Only ever declared once. A second `storeOverview` key used to sit above this one, recomputing
+    // the two header totals from `sortedStores`; being the earlier of two identical keys in one
+    // object literal, it was discarded before Vue ever saw it and had never run. Those totals are
+    // produced by the `sortedStores` watcher above, which does the same two reductions over the same
+    // array and also fires when a filter — not just the source list — changes.
     storeOverview: {
       handler(stores) {
         // Set empty KAM IDs to empty string to ensure "Ingen" is selected

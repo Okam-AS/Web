@@ -1,0 +1,39 @@
+Test run for /Users/svendaneel/okam/wt-mrg150/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+Microsoft (R) Test Execution Command Line Tool Version 17.8.0 (arm64)
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:03.09]     WebApi.Tests.Margin.MarginStarterLibraryTests.Copying_the_same_candidate_twice_is_refused_and_leaves_one_ingredient [FAIL]
+  Failed WebApi.Tests.Margin.MarginStarterLibraryTests.Copying_the_same_candidate_twice_is_refused_and_leaves_one_ingredient [2 s]
+  Error Message:
+   Assert.Equal() Failure
+Expected: 15
+Actual:   14
+  Stack Trace:
+     at WebApi.Tests.Margin.MarginStarterLibraryTests.Copying_the_same_candidate_twice_is_refused_and_leaves_one_ingredient() in /Users/svendaneel/okam/wt-mrg150/WebApi.Tests/Margin/MarginStarterLibraryTests.cs:line 189
+   at WebApi.Tests.Margin.MarginStarterLibraryTests.Copying_the_same_candidate_twice_is_refused_and_leaves_one_ingredient() in /Users/svendaneel/okam/wt-mrg150/WebApi.Tests/Margin/MarginStarterLibraryTests.cs:line 189
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:03.27]     WebApi.Tests.Margin.MarginStarterLibraryTests.Every_candidate_copies_into_a_store_with_its_unit_and_conversions_intact [FAIL]
+[xUnit.net 00:00:03.27]     WebApi.Tests.Margin.MarginStarterLibraryTests.The_library_never_offers_one_name_twice [FAIL]
+  Failed WebApi.Tests.Margin.MarginStarterLibraryTests.Every_candidate_copies_into_a_store_with_its_unit_and_conversions_intact [183 ms]
+  Error Message:
+   Assert.IsType() Failure
+Expected: Microsoft.AspNetCore.Mvc.OkObjectResult
+Actual:   Microsoft.AspNetCore.Mvc.ObjectResult
+  Stack Trace:
+     at WebApi.Tests.Margin.MarginBResults.Ok[T](IActionResult result) in /Users/svendaneel/okam/wt-mrg150/WebApi.Tests/Margin/MarginBTestHost.cs:line 118
+   at WebApi.Tests.Margin.MarginStarterLibraryTests.Every_candidate_copies_into_a_store_with_its_unit_and_conversions_intact() in /Users/svendaneel/okam/wt-mrg150/WebApi.Tests/Margin/MarginStarterLibraryTests.cs:line 132
+   at WebApi.Tests.Margin.MarginStarterLibraryTests.Every_candidate_copies_into_a_store_with_its_unit_and_conversions_intact() in /Users/svendaneel/okam/wt-mrg150/WebApi.Tests/Margin/MarginStarterLibraryTests.cs:line 161
+--- End of stack trace from previous location ---
+  Failed WebApi.Tests.Margin.MarginStarterLibraryTests.The_library_never_offers_one_name_twice [< 1 ms]
+  Error Message:
+   Starter library holds repeated names: Hvetemel.
+Expected: True
+Actual:   False
+  Stack Trace:
+     at WebApi.Tests.Margin.MarginStarterLibraryTests.The_library_never_offers_one_name_twice() in /Users/svendaneel/okam/wt-mrg150/WebApi.Tests/Margin/MarginStarterLibraryTests.cs:line 95
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     3, Passed:     3, Skipped:     0, Total:     6, Duration: 187 ms - WebApi.Tests.dll (net8.0)

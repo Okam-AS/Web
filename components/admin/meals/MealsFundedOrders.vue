@@ -92,6 +92,7 @@
 <script>
 import { DATA_UNKNOWN, CAPTURE_KNOWN, CAPTURE_NONE } from '~/utils/meals/store-view';
 import { refusalKey } from '~/utils/meals/refusal-copy';
+import { crossCurrencyLabel } from '~/utils/cross-currency';
 
 // The funded orders of ONE company account at this store. Purely presentational — it renders the
 // rows `buildStoreView` produced and adds no arithmetic of any kind.
@@ -166,7 +167,7 @@ export default {
      */
     amount (minor, currency) {
       if (currency && this.currency && currency !== this.currency) {
-        return this.wholeAmount(minor) + ',' + this.fractionAmount(minor) + ' ' + currency;
+        return crossCurrencyLabel(minor, currency, this);
       }
       return this.priceLabel(minor);
     },

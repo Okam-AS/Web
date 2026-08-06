@@ -1,0 +1,33 @@
+# as-of 2026-08-05T03:40Z · worktree /Users/svendaneel/okam/web-vatkeys @ e34977acebd59b223584158c33451b6f1ffd82c1
+# npx jest test/vat-goods-group-locales.test.js --coverage=false
+PASS test/vat-goods-group-locales.test.js
+  the nineteen VAT keys are authored in en and de rather than inherited from no
+    ✓ every key is an own entry of en.ts and de.ts
+    ✓ every key resolves to something other than the Norwegian sentence, bar the two identical by design (1 ms)
+    ✓ the two identical-by-design keys are present, not inherited
+    ✓ the repricing warning still says FUTURE sales in every locale
+    ✓ the VAT note keeps all three interpolation tokens in every locale
+  the posset_ and products_ blocks carry the same key set in all three dictionaries
+    ✓ posset_is the size these surfaces need
+    ✓ posset_no, en and de carry exactly the same keys (1 ms)
+    ✓ posset_every value is a non-empty string in every locale (8 ms)
+    ✓ products_is the size these surfaces need
+    ✓ products_no, en and de carry exactly the same keys (1 ms)
+    ✓ products_every value is a non-empty string in every locale (12 ms)
+  GoodsGroupsTab renders the VAT profile block in the operator’s language
+    ✓ Norwegian is unchanged (9 ms)
+    ✓ English reads English, and no Norwegian sentence survives on the surface (5 ms)
+    ✓ German reads German, and no Norwegian sentence survives on the surface (2 ms)
+    ✓ the incomplete-profile refusal reads in the operator’s language (12 ms)
+    ✓ the seeded confirmation is emitted in the operator’s language (15 ms)
+  the product editor’s goods-group block renders in the operator’s language
+    ✓ no (8 ms)
+    ✓ en (1 ms)
+    ✓ de (1 ms)
+    ✓ neither foreign locale renders the Norwegian note (1 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       20 passed, 20 total
+Snapshots:   0 total
+Time:        0.549 s, estimated 1 s
+Ran all test suites matching /test\/vat-goods-group-locales.test.js/i.

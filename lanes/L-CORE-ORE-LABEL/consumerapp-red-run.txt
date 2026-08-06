@@ -1,0 +1,43 @@
+
+[price-label] 21 of 30 FAILED against core/helpers/tools.ts:
+
+  - priceLabel(20680, true) — a total carrying øre must not claim it has none
+      expected "206,80"
+      received "206,80,–"
+  - priceLabel(20680, false) — same total, fraction explicitly asked for
+      expected "206,80"
+      received "206,80,–"
+  - priceLabel(18800, false) — spelling the two zero øre out loud is still not "and no øre"
+      expected "188,00"
+      received "188,00,–"
+  - fractionAmount(4) — 1-9 øre pads on the LEFT
+      expected "04"
+      received "00"
+  - priceLabel(4, false) — the erased-øre half of the same defect
+      expected "0,04"
+      received "0,00,–"
+  - priceLabel(4, true) — and it is not "no øre" either
+      expected "0,04"
+      received "0,–"
+  - priceLabel(1234567, false) — thousands separator survives
+      expected "12 345,67"
+      received "12 345,67,–"
+  - priceLabel(1, true) — carries øre and still claims none: "0,–"
+  - priceLabel(1, false) — carries øre and still claims none: "0,00,–"
+  - priceLabel(9, true) — carries øre and still claims none: "0,–"
+  - priceLabel(9, false) — carries øre and still claims none: "0,00,–"
+  - priceLabel(50, true) — carries øre and still claims none: "0,50,–"
+  - priceLabel(50, false) — carries øre and still claims none: "0,50,–"
+  - priceLabel(99, true) — carries øre and still claims none: "0,99,–"
+  - priceLabel(99, false) — carries øre and still claims none: "0,99,–"
+  - priceLabel(20680, true) — carries øre and still claims none: "206,80,–"
+  - priceLabel(20680, false) — carries øre and still claims none: "206,80,–"
+  - priceLabel(1234567, true) — carries øre and still claims none: "12 345,67,–"
+  - priceLabel(1234567, false) — carries øre and still claims none: "12 345,67,–"
+  - priceLabel(100001, true) — carries øre and still claims none: "1 000,01,–"
+  - priceLabel(100001, false) — carries øre and still claims none: "1 000,01,–"
+
+[price-label] ",–" is the Norwegian notation for "and no øre" and stands IN PLACE OF the
+            fraction. If these fail, either the helper is printing it beside øre again or the
+            `core` pin has moved to a commit that never had the fix. Check `git submodule status`.
+

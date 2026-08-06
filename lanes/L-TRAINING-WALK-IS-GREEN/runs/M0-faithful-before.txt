@@ -1,0 +1,97 @@
+=== label    : M0-faithful-before
+=== worktree : /Users/svendaneel/okam/web-trainwalk-after
+=== commit   : 28548f96036f6118e5523bd963632ddf5ea3af63
+=== dirty    : 8 path(s) before the run
+=== spec sha : 20aa50da33574f430f45163a3e1a37997b45a9bf
+=== panel sha: 0f5a9241b9e48582aba997efdb3f0c061729c070
+=== scss sha : db8352b52a00c74812bc3c2eb477185c0f4aaf69
+=== overflow : 
+=== ports    : web=3082 fixture=4082 (4010/4971/4973 never bound, never signalled)
+=== core     : 10 entries
+=== started  : 2026-08-06T11:40:47Z
+[WebServer] [fixture] listening on http://127.0.0.1:4082
+
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://192.168.68.111:3082/
+
+[WebServer] [info] Preparing project for development
+
+[WebServer] [info] Initial build may take a while
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+
+[WebServer] [success] Builder initialized
+
+[WebServer] [success] Nuxt files generated
+
+[WebServer] [warn] Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+
+Running 1 test using 1 worker
+
+[WebServer] [info] Waiting for file changes
+
+[WebServer] [info] Memory usage: 1.23 GB (RSS: 1.59 GB)
+[WebServer] [info] Listening on: http://192.168.68.111:3082/
+
+[1/1] [chromium] › test/e2e/journeys/training-course-to-evidence.spec.js:63:1 › A manager opens Training, publishes a course version, files a failing score, and the SERVER calls it not passed @fixture
+  1) [chromium] › test/e2e/journeys/training-course-to-evidence.spec.js:63:1 › A manager opens Training, publishes a course version, files a failing score, and the SERVER calls it not passed @fixture 
+
+    Error: expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "visible"
+
+      249 |       });
+      250 |       expect(escape.past).toBeLessThanOrEqual(0);
+    > 251 |       expect(escape.scrolls).not.toBe('visible');
+          |                                  ^
+      252 |
+      253 |       return 'clickable by pointer at ' + viewport.width + '×' + viewport.height
+      254 |         + '; the table scrolls inside its column (overflow-x: ' + escape.scrolls
+        at /Users/svendaneel/okam/web-trainwalk-after/test/e2e/journeys/training-course-to-evidence.spec.js:251:34
+        at JourneyRecorder.step (/Users/svendaneel/okam/web-trainwalk-after/test/e2e/support/journey.js:347:22)
+        at /Users/svendaneel/okam/web-trainwalk-after/test/e2e/journeys/training-course-to-evidence.spec.js:214:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/training-course-to-evidenc-f764e--SERVER-calls-it-not-passed-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/training-course-to-evidence.fixture.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/training-course-to-evidence.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/training-course-to-evidenc-f764e--SERVER-calls-it-not-passed-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/training-course-to-evidenc-f764e--SERVER-calls-it-not-passed-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/training-course-to-evidenc-f764e--SERVER-calls-it-not-passed-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+  1 failed
+    [chromium] › test/e2e/journeys/training-course-to-evidence.spec.js:63:1 › A manager opens Training, publishes a course version, files a failing score, and the SERVER calls it not passed @fixture 
+=== finished : 2026-08-06T11:41:29Z
+=== declared : failed
+=== failedStep: 9:the publish control is reachable BY POINTER at this viewport
+RESULT M0-faithful-before FAIL-ASSERT rc=1

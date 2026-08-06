@@ -1,0 +1,69 @@
+== margin-recipe-to-margin | passed | 18 steps | 6 shots | commit 174a550
+    1. sign in, and be stopped before the first screen  ->  stopped by Margin.Module: "Margin-modulen er ikke slått på for denne butikken."
+    2. turn Margin on from the operator switchboard  ->  Margin.Module on, Margin.Statements still off
+    3. the same page now opens  ->  gate open, on /admin/margin-recipes
+    4. copy two ingredients out of the starter library  ->  2 råvarer i butikken.
+    5. author a recipe with two component lines  ->  500 g Hvetemel + 1 l Melk, 4 liter / 10 porsjoner
+    6. the plate cost is the backend's, to the øre  ->  batch kr 30,00 · per porsjon kr 3,00 · lines 
+          kr 12,00
+         + 
+          kr 18,00
+        
+    7. nobody sells it yet, and the page says exactly that  ->  Ingen rett selger denne oppskriften, så den har en kostpris …
+    8. a link row with no product is refused before anything is sent  ->  refused locally: "En rad mangler produkt."
+    9. a product another recipe already claims is refused by the server  ->  Koblingene ble avvist. Et produkt kan bare være aktivt koblet til én oppskrift, og mengden må være større enn null.
+   10. link it to the dish it is actually sold as  ->  linked to Vaffel med rømme, 1 per solgt enhet
+   11. linked but not activated: the margin is WITHHELD, and it says why  ->  Take-away: Oppskriften har ingen aktiv versjon på dette tidspunktet, så kostprisen mangler helt.
+   12. activate the draft  ->  version 1 is now Active
+   13. the margin table fills in, per price basis  ->  Take-away kr 27,00 (10,00 %) · Servering kr 37,00 (7,50 %)
+   14. a second recipe with the same name is refused  ->  refused: recipe-name-conflict, screen unchanged
+   15. the weekly settlement is behind its OWN switch, and stops the walk  ->  stopped by Margin.Statements, with the master still on
+   16. turn the statements stage on, and the same page opens  ->  settlement surface open, no statements yet
+   17. and putting the stage switch back down closes it again  ->  switch down, surface gone — the gate is real
+   18. what the browser said while this ran  ->  2 shell-redirect (note), 0 this page's
+   FINDING [note] the admin shell logs a router «Navigation cancelled» pair on every signed-in journey
+
+== training-course-to-evidence | passed | 19 steps | 4 shots | commit 174a550
+    1. sign in and pass the module gate  ->  gate open, zone Europe/Oslo
+    2. READ-ONLY, NOT DARK: the store is visible and every write is refused  ->  both flags read "Av"; the form is drawn and its submit goes live anyway
+    3. and pressing it really is refused, by the server  ->  refused 409 training.flag-disabled-read-only; nothing filed
+    4. turn both Training switches on from the operator switchboard  ->  both training.setup and training.assignments on for store 42
+    5. the same page now reports both switches up  ->  both flags read "På", both warnings gone
+    6. author a course that carries a competency key  ->  Allergenhåndtering · food.allergens
+    7. cut a draft version with a pass threshold of 80  ->  v1 Draft, threshold 80 %
+    8. THE STATED EXIT CANNOT BE WALKED — there is no quiz and nobody to take it  ->  recorded: the worker half does not exist; walking the manager half
+    9. DEFECT — the publish button is not clickable at a 1280px viewport  ->  blocked by <p class="trn-form__hint">
+   10. publish it — this is the hinge  ->  v1 Published, content hash 00ad7cd4bb4f…
+   11. assign it to a named person  ->  v1 assigned to Ola Ansatt, due 2026-08-15
+   12. a reference that is not a GUID is refused before anything is sent  ->  refused locally, submit disabled
+   13. a well-formed reference naming nobody is refused by the SERVER  ->  ID-en peker ikke på en kjent person, så ingenting ble ført. Kontroller den mot a…
+   14. file 55 against a threshold of 80  ->  filed 55 % for Ola Ansatt
+   15. THE ROW COMES BACK NOT PASSED, and the UI did not decide that  ->  55 % → Ikke bestått, stamped 00ad7cd4bb4f…
+   16. a retake above the threshold passes — and the first row survives  ->  two rows: 55 % Ikke bestått, 90 % Bestått
+   17. the possession projection is what proves the six steps did anything  ->  Ola Ansatt holds food.allergens
+   18. and putting the assignments switch back down closes writing again  ->  switch down: the two rows survive, the third is refused — the gate is real
+   19. what the browser said while this ran  ->  2 shell-redirect (note), 0 this page's
+   FINDING [note] Training's stated exit — "a worker passes the quiz" — names a step no shipped screen offers
+   FINDING [defect] the Training publish button cannot be clicked at a 1280px viewport
+   FINDING [note] the admin shell logs a router «Navigation cancelled» pair on every signed-in journey
+
+== growth-newsletter-send-gate | passed | 17 steps | 4 shots | commit 174a550
+    1. sign in and open the newsletter screen  ->  on /admin/growth-newsletter, no blocker
+    2. the consent standing is the SERVER's four figures, not a total  ->  samtykket 214 · trukket 18 · sperret 7 · venter 5
+    3. there is no gate yet, and there is no draft form either  ->  no gate, no draft form; the audience is the stated precondition
+    4. compute the audience — and it is NOT the consent total  ->  209 will receive, 5 excluded, watermark a91c4f7e20b8
+    5. write the newsletter  ->  version 1 saved
+    6. THE FIRST STOP: the gate arrives closed, and both switches are named  ->  3 reasons, both flags among them; the send button is drawn and disabled
+    7. the module switch also closes the TEST route, and the panel says so  ->  test route closed by growth.module, input disabled
+    8. right after a save the approval is informed, and the panel does not warn  ->  no unseen-body warning: the boxes are the version being approved
+    9. approve it — and now ONLY the two switches are left  ->  approval Live; the only reasons left are growth.module and growth.dispatch
+   10. turn both Growth switches on from the operator switchboard  ->  both growth.module and growth.dispatch on for store 42
+   11. come back to the newsletter  ->  newsletter 1 reopened, still approved — and the screen states it cannot show the body
+   12. a test send may only go to your own address  ->  refused: growth.test_address_not_own
+   13. send yourself the test, and read what the answer actually is  ->  Testen er sendt inn. Leverandøren svarte: Sent. Det er en innsendingsstatus, ikke en leveringsbekreftelse.
+   14. the gate opens — with everything checked, and one thing it cannot check  ->  gate READY, 209 recipients, send enabled — and the caveat on screen
+   15. THE WALK STOPS HERE, deliberately, and this is why  ->  stopped at the gate, by choice; the mail path is a fake below this line
+   16. put the kill switch back down, and the same gate closes  ->  one reason, the kill switch; send disabled again — the gate is real
+   17. what the browser said while this ran  ->  2 shell-redirect (note), 0 this page's
+   FINDING [note] the operator walk ends at the gate: nothing downstream of it can be shown to work
+   FINDING [note] the admin shell logs a router «Navigation cancelled» pair on every signed-in journey

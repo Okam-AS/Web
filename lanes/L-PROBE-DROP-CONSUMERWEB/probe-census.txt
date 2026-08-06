@@ -1,0 +1,45 @@
+probes parsed: 33
+
+ROOT .                      DECLARED-ok        branch=feature/restaurant-modules expected=feature/restaurant-modules
+     8 probe(s): intent.hash, fe.tests, fe.tests.failed, nav.modules, journeys.browser, fe.ci, fe.world, fe.world.branch
+
+ROOT ../ConsumerWeb         UNDECLARED         branch=feature/swiss expected=unknown
+     2 probe(s): meals.token.client, cw.world
+
+ROOT ../OkamAPI-modules     DECLARED-mismatch  branch=lane/meals-grace-pins expected=feature/restaurant-modules
+     23 probe(s): be.tests, ev.journeys, wf.journeys, acct.uidx, meals.empref, wf.idreg, train.checklists, growth.mail.provider, growth.prefcentre.cors, growth.cookie.crosssite, meals.gate, wolt.sync.host, vipps.token.guard, ev.dietary, meals.utlkvit, meals.xz.credit, ev.deposit.external, ev.accept.receipt, growth.dispatch.hosted, be.world, be.world.branch, be.world.behind, be.mig.head
+
+--- per-probe ---
+intent.hash              meta      .                    docs/plan/intent.md
+fe.tests                 suite     .                    artifacts/tests/frontend/jest.json
+fe.tests.failed          suite     .                    artifacts/tests/frontend/jest.json
+be.tests                 suite     ../OkamAPI-modules   ../OkamAPI-modules/artifacts/tests/*.trx
+nav.modules              wire      .                    components/organisms/AdminPageHeader.vue
+journeys.browser         journey   .                    artifacts/journeys/*.json
+ev.journeys              journey   ../OkamAPI-modules   ../OkamAPI-modules/WebApi.Tests/Events/EVENTS-JOURNEY-MANIFEST.md
+wf.journeys              journey   ../OkamAPI-modules   ../OkamAPI-modules/WebApi.Tests/Workforce/WORKFORCE-JOURNEY-MANIFEST.md
+acct.uidx                schema    ../OkamAPI-modules   ../OkamAPI-modules/Migrations/*AccountingSummar*.cs
+meals.empref             schema    ../OkamAPI-modules   ../OkamAPI-modules/Entities/Meals/MealsMembership.cs
+wf.idreg                 schema    ../OkamAPI-modules   ../OkamAPI-modules/Entities/Workforce/*IdentityCode*.cs
+train.checklists         schema    ../OkamAPI-modules   ../OkamAPI-modules/Entities/Training/*Checklist*.cs
+growth.mail.provider     wire      ../OkamAPI-modules   ../OkamAPI-modules/Models/AppSettings/GrowthSettings.cs
+growth.prefcentre.cors   wire      ../OkamAPI-modules   ../OkamAPI-modules/Program.cs
+growth.cookie.crosssite  wire      ../OkamAPI-modules   ../OkamAPI-modules/Controllers/GrowthPreferenceController.cs
+meals.token.client       wire      ../ConsumerWeb       ../ConsumerWeb/core/services/cart-service.ts
+meals.gate               wire      ../OkamAPI-modules   ../OkamAPI-modules/Program.cs
+wolt.sync.host           wire      ../OkamAPI-modules   ../OkamAPI-modules/Program.cs
+vipps.token.guard        wire      ../OkamAPI-modules   ../OkamAPI-modules/WebApi.Tests/Observability/PiiLogSweepTests.cs
+ev.dietary               wire      ../OkamAPI-modules   ../OkamAPI-modules/Services/Events/EventsRunSheetComposer.cs
+fe.ci                    wire      .                    .github/workflows/nuxtjs.yml
+meals.utlkvit            wire      ../OkamAPI-modules   ../OkamAPI-modules/Services/Kassa/PosReceiptService.cs
+meals.xz.credit          wire      ../OkamAPI-modules   ../OkamAPI-modules/Services/Kassa/XZReportService.cs
+ev.deposit.external      wire      ../OkamAPI-modules   ../OkamAPI-modules/Services/Events/EventsDepositService.cs
+ev.accept.receipt        wire      ../OkamAPI-modules   ../OkamAPI-modules/Enums/Events/EventsNotificationKind.cs
+growth.dispatch.hosted   wire      ../OkamAPI-modules   ../OkamAPI-modules/Program.cs
+be.world                 meta      ../OkamAPI-modules   ../OkamAPI-modules/artifacts/world/WORLD.json
+be.world.branch          meta      ../OkamAPI-modules   ../OkamAPI-modules/artifacts/world/WORLD.json
+be.world.behind          meta      ../OkamAPI-modules   ../OkamAPI-modules/artifacts/world/WORLD.json
+be.mig.head              meta      ../OkamAPI-modules   ../OkamAPI-modules/artifacts/world/WORLD.json
+fe.world                 meta      .                    artifacts/world/WORLD.json
+fe.world.branch          meta      .                    artifacts/world/WORLD.json
+cw.world                 meta      ../ConsumerWeb       ../ConsumerWeb/artifacts/world/WORLD.json

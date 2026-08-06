@@ -1,0 +1,141 @@
+{
+ "n_blocks": 566,
+ "n_lanes": 316,
+ "n_target_any_kind": 256,
+ "n_target_lanes": 250,
+ "state_counts": {
+  "built-unverified": 198,
+  "running": 5,
+  "open": 255,
+  "verified": 58,
+  "ruled": 34,
+  "cleared": 8
+ },
+ "candidates": {
+  "feature/restaurant-modules": [
+   "FT-WORKFORCE",
+   "L-MRG-REVISE-LAND"
+  ],
+  "lane/ai-middleware-delete": [
+   "L-COMPROOT-FAMILY-LAND"
+  ],
+  "lane/composition-root-check": [
+   "L-COMPROOT-FAMILY-LAND"
+  ],
+  "lane/confirm-conat-retire": [
+   "L-COMPROOT-FAMILY-LAND"
+  ],
+  "lane/confirm-postmerge-pin": [
+   "L-COMPROOT-FAMILY-LAND"
+  ],
+  "lane/confirm-server-halves": [
+   "L-COMPROOT-FAMILY-LAND"
+  ],
+  "lane/cors-followups": [
+   "L-CORS-LAND-FOLLOWUPS"
+  ],
+  "lane/credit-note-number": [
+   "L-PDF-CREDITNOTE-NAME"
+  ],
+  "lane/crypto-pin-byform": [
+   "L-COMPROOT-FAMILY-LAND"
+  ],
+  "lane/download-headers": [
+   "L-PDF-FAMILY-LAND"
+  ],
+  "lane/download-pdf-wire": [
+   "L-PDF-FAMILY-LAND"
+  ],
+  "lane/ev-accept-gate": [
+   "L-EV-FAMILY-LAND"
+  ],
+  "lane/ev-guest-origin": [
+   "L-EV-FAMILY-LAND"
+  ],
+  "lane/ev-rails": [
+   "L-BE-RECEIPT"
+  ],
+  "lane/ev-vat": [
+   "L-BE-RECEIPT"
+  ],
+  "lane/ev-vipps-fallback": [
+   "L-EV-VIPPS-FALLBACK"
+  ],
+  "lane/exit-instrument-census": [
+   "L-EXIT-INSTRUMENT-CENSUS"
+  ],
+  "lane/fe-journeys": [
+   "FT-MARGIN",
+   "FT-MEALS"
+  ],
+  "lane/fe-wf-onboard": [
+   "FT-WORKFORCE"
+  ],
+  "lane/gr-confirm-stale": [
+   "L-GROWTH-FAMILY-LAND"
+  ],
+  "lane/gr-confirmed-email": [
+   "L-GROWTH-FAMILY-LAND"
+  ],
+  "lane/gr-dispatch-actor": [
+   "L-GROWTH-FAMILY-LAND"
+  ],
+  "lane/gr-testsend-guard": [
+   "L-GROWTH-FAMILY-LAND"
+  ],
+  "lane/gr-testsend-ratelimit": [
+   "L-GROWTH-FAMILY-LAND"
+  ],
+  "lane/growth-audit-ledger": [
+   "L-GROWTH-FAMILY-LAND"
+  ],
+  "lane/invoice-authorize": [
+   "L-INVOICE-AUTHORIZE-LAND"
+  ],
+  "lane/invoice-retry-retirement": [
+   "L-PDF-FAMILY-LAND"
+  ],
+  "lane/meals-grace-pins": [
+   "L-MEALS-POSREL-LAND"
+  ],
+  "lane/meals-pos-tender-wire": [
+   "L-MEALS-POSREL-LAND"
+  ],
+  "lane/meals-release": [
+   "L-MEALS-POSREL-LAND"
+  ],
+  "lane/meals-xz-credit": [
+   "L-EOD-CREDIT-SPLIT"
+  ],
+  "lane/pdf-creditnote-name": [
+   "L-PDF-CREDITNOTE-NAME"
+  ],
+  "lane/pdf-nullderef": [
+   "L-PDF-FAMILY-LAND"
+  ],
+  "lane/reservation-limiter-move": [
+   "L-COMPROOT-FAMILY-LAND"
+  ],
+  "lane/wf-blind-bind-name": [
+   "L-WF-IDEMPOTENCY-REFUSAL-REST"
+  ],
+  "lane/wf-digest-tautology": [
+   "L-WF-DIGEST-TAUTOLOGY"
+  ],
+  "lane/wf-push-notify": [
+   "L-WF-PUSH-LAND"
+  ],
+  "lane/wf-push-silent": [
+   "L-WF-PUSH-LAND"
+  ],
+  "lane/wf-w5-timesheet": [
+   "L-WF-DIGEST-TAUTOLOGY"
+  ]
+ },
+ "lane_state_counts": {
+  "running": 5,
+  "open": 61,
+  "built-unverified": 192,
+  "verified": 58
+ }
+}

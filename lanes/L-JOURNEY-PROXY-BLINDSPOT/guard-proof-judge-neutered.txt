@@ -1,0 +1,37 @@
+journey.js under test  31385f8bcd764597a3e03ce5b632dc1275292cca826c9504d28a30ba373674e3
+  pristine copy        31385f8bcd764597a3e03ce5b632dc1275292cca826c9504d28a30ba373674e3
+  mutant copy          7fba5eaab70a5d4739786ad42caa9091192b569a74588a7f0f469eff2f3ca0bf   (re-throw removed)
+  split-mutant copy    041893c0b943a7f5fef7e158ffe9e1a4d3221141ef0ef4c33ae39366e10c0313   (split-origin guard disabled)
+  proxy-mutant copy    2e543134f85e2db25da6440ce134addaa50cc42043f8939a0dba85292e5b77e2   (same-origin-proxy guard disabled)
+stand-in live api      http://127.0.0.1:63732
+stand-in fixture       http://127.0.0.1:63733
+stand-in app           http://127.0.0.1:63734
+
+  ok    1    exit 1     artifact failed   1 failed                live-labelled, app compiled against the FIXTURE
+  ok    2    exit 1     artifact failed   1 failed                fixture-labelled, app compiled against a LIVE api
+  ok    3    exit 1     artifact NONE     1 failed                live-labelled, pointed AT the throwaway fixture
+  ok    4    exit 0     artifact passed   1 passed (808ms)        live-labelled, app compiled against that LIVE api (honest)
+  ok    5    exit 0     artifact passed   1 passed (396ms)        fixture-labelled, app compiled against that FIXTURE (honest)
+  ok    S1   exit 1     artifact failed   1 failed                live-labelled; signs in at the named api, fetches its SUBJECT elsewhere
+  ok    S2   exit 1     artifact failed   1 failed                fixture-labelled; signs in at the fixture, fetches its SUBJECT elsewhere
+  FAIL  P1   exit 0     artifact passed   1 passed (522ms)        live-labelled; signs in at the named api, proxies its SUBJECT same-origin
+        expected exit nonzero and artifact failed
+  ok    P2   exit 0     artifact passed   1 passed (559ms)        live-labelled; signs in and fetches NOTHING else — no subject anywhere
+  ok    P3   exit 0     artifact passed   1 passed (525ms)        live-labelled; a same-origin fetch OUTSIDE the mount (a Nuxt route) — must not red
+  ok    P4   exit 0     artifact passed   1 passed (510ms)        live-labelled; the SIGN-IN goes through the proxy — shell once stripped, not subject
+  ok    M1   exit 0     artifact failed   1 passed (604ms)        arm 1 with the re-throw REMOVED — must go green again
+  ok    M2   exit 0     artifact failed   1 passed (396ms)        arm 2 with the re-throw REMOVED — must go green again
+  ok    M3   exit 0     artifact passed   1 passed (583ms)        arm S1 with the split-origin guard DISABLED — must go green again
+  ok    M4   exit 0     artifact passed   1 passed (584ms)        arm P1 with the same-origin-proxy guard DISABLED — must go green again
+
+1 of 15 arms did not do what they must.
+
+---- arm P1 (live-labelled; signs in at the named api, proxies its SUBJECT same-origin) ----
+Running 1 test using 1 worker
+
+fatal: not a git repository (or any of the parent directories): .git
+  ✓  1 [chromium] › test/e2e/journeys/guard-probe.spec.js:5:1 › the page loads and says who served it @live (223ms)
+
+  1 passed (522ms)
+
+guard-proof EXIT=1

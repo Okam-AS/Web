@@ -1,0 +1,41 @@
+==============================================================================
+BASELINE   (tree as built) -> GREEN (expected GREEN)
+==============================================================================
+  Test Suites: 2 passed, 2 total
+  Tests:       64 passed, 64 total
+
+==============================================================================
+MUTANT-A   (read model: absent block becomes zeros) -> RED (expected RED)
+==============================================================================
+  Test Suites: 2 failed, 2 total
+  Tests:       5 failed, 59 passed, 64 total
+  failing:
+    ● an absent waste block reads as unknown, a zeroed one reads as zero › WORLD 3 — NO waste block at all: the page says it could not tell, and claims no zero
+    ● an absent waste block reads as unknown, a zeroed one reads as zero › the three worlds are three different sentences, not two
+    ● readWasteEntries / readWasteSummary › an absent summary block is UNKNOWN, never an empty summary
+    ● readWasteEntries / readWasteSummary › a withheld FIELD inside a present block stays null and is not coerced to zero
+    ● MarginCoveragePanel — the waste bucket › a response with NO waste block says unknown, not that the week had no waste
+
+==============================================================================
+RESTORE-A  (tree as built) -> GREEN (expected GREEN)
+==============================================================================
+  Test Suites: 2 passed, 2 total
+  Tests:       64 passed, 64 total
+
+==============================================================================
+MUTANT-B   (panel: absent block falls into the zero branch) -> RED (expected RED)
+==============================================================================
+  Test Suites: 2 failed, 2 total
+  Tests:       3 failed, 61 passed, 64 total
+  failing:
+    ● an absent waste block reads as unknown, a zeroed one reads as zero › WORLD 3 — NO waste block at all: the page says it could not tell, and claims no zero
+    ● an absent waste block reads as unknown, a zeroed one reads as zero › the three worlds are three different sentences, not two
+    ● MarginCoveragePanel — the waste bucket › a response with NO waste block says unknown, not that the week had no waste
+
+==============================================================================
+RESTORE-B  (tree as built) -> GREEN (expected GREEN)
+==============================================================================
+  Test Suites: 2 passed, 2 total
+  Tests:       64 passed, 64 total
+
+MUTATION PROOF: PASS

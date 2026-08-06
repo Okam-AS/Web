@@ -44,6 +44,29 @@ const OTP = '123123';
 
 const STORE_ID = 42;
 const STORE_NAME = 'Fixture Kafé';
+
+// ---- THE SECOND VENUE: a store nobody has ever curled -------------------------------------------
+//
+// `STORE_ID` is a venue in mid-life. It has a roster, a role catalogue, publications and a month of
+// history, because the journeys that walk those surfaces need something to walk. That makes it
+// exactly the wrong place to prove a SETUP capability: a screen that authors the role catalogue
+// looks like it works on a store whose catalogue was seeded in this file, and proves only that the
+// list renders.
+//
+// This is the other case, and it is the one a real venue actually starts in: opened last week, two
+// people hired, and NOT ONE ROLE DEFINED — because until `/admin/workforce-roles` existed there was
+// no way in any browser to define one. `seededRoleCatalogue()` gives it an EMPTY ARRAY rather than
+// omitting it, so the difference between "this store has no roles" and "the read failed" stays
+// visible here too.
+//
+// It is deliberately NOT `GUEST_VENUE_STORE_ID`: that venue exists to be a store the manager does
+// NOT administer, and reusing it would make every refusal on this store ambiguous between "no roles"
+// and "no access".
+//
+// Declared beside `STORE_ID` rather than beside the roster below it because `USERS` names it, and
+// `USERS` is the next block in this file.
+const VIRGIN_STORE_ID = 44;
+const VIRGIN_STORE_NAME = 'Nyåpnet Filial';
 const TIME_ZONE = 'Europe/Oslo';
 const CURRENCY = 'NOK';
 
@@ -62,7 +85,16 @@ const USERS = {
     isKeyAccountManager: false,
     favoriteProductIds: [],
     // Non-empty: this is exactly what AdminPage.initAuth tests before it bounces to /registrer.
-    adminIn: [{ id: STORE_ID, name: STORE_NAME, address: 'Storgata 1, 0155 Oslo' }]
+    //
+    // TWO venues, and the order matters: `STORE_ID` stays FIRST because every page resolves its
+    // store as `selectedAdminStore ?? adminIn[0].id`, so a journey that does not touch the picker
+    // still lands where it always did. The second is the newly opened one — see `VIRGIN_STORE_ID`.
+    // One manager running two venues is also the ordinary case rather than a contrivance, and it is
+    // what makes the store picker in `AdminPageHeader` reachable at all in fixture mode.
+    adminIn: [
+      { id: STORE_ID, name: STORE_NAME, address: 'Storgata 1, 0155 Oslo' },
+      { id: VIRGIN_STORE_ID, name: VIRGIN_STORE_NAME, address: 'Havnegata 4, 0150 Oslo' }
+    ]
   },
   [WORKER_PHONE]: {
     id: 'user-worker',
@@ -201,6 +233,54 @@ const ROLES = [
   { roleId: 'role-kitchen', name: 'Kjøkken', sortOrder: 2, station: 'Kjøkken', color: '#f59e0b' }
 ];
 
+// Two engagements and nothing else. They are here rather than created by the journey because
+// `POST /staff` (#3) has no fixture handler and writing one would be a second lane's worth of
+// surface — but the ORDER a real venue does this in is preserved: people first, then the stations
+// they work. Without a row apiece the week grid has no rows, and the shift editor — where the role
+// select this whole page exists to fill actually lives — cannot be opened at all.
+const VIRGIN_STAFF = [
+  {
+    staffMemberId: 'staff-44-1',
+    workforcePersonId: 'a1c3e5f7-2b48-4d6a-9e10-3c5f7a9b1d24',
+    displayName: 'Sara Ny',
+    isActive: true,
+    employmentNumber: '201',
+    personState: 'Invited',
+    capabilities: ['WorkforceSelf']
+  },
+  {
+    staffMemberId: 'staff-44-2',
+    workforcePersonId: 'b2d4f6a8-3c59-4e7b-8f21-4d6a8b0c2e35',
+    displayName: 'Jonas Vik',
+    isActive: true,
+    employmentNumber: '202',
+    personState: 'Invited',
+    capabilities: ['WorkforceSelf']
+  }
+];
+
+/**
+ * The role catalogue, PER STORE — which is how the backend holds it
+ * (`ListRolesAsync` filters `Where(r => r.StoreId == storeId)`).
+ *
+ * Cloned rather than shared, because the catalogue is now WRITTEN by `PUT /roles` and a role created
+ * in one journey must not be visible to the next. A store with no entry here has no roles, which is
+ * the state every store in the world starts in.
+ */
+function seededRoleCatalogue () {
+  return {
+    [STORE_ID]: JSON.parse(JSON.stringify(ROLES)),
+    [VIRGIN_STORE_ID]: []
+  };
+}
+
+/** The roster, per store. A store nobody staffed has nobody — never `STORE_ID`'s people by default. */
+function staffFor (storeId) {
+  if (String(storeId) === String(STORE_ID)) { return STAFF; }
+  if (String(storeId) === String(VIRGIN_STORE_ID)) { return VIRGIN_STAFF; }
+  return [];
+}
+
 // ---- the shared per-store feature-flag catalog --------------------------------------------------
 //
 // `GET /feature-flags/catalog` — the ADVERTISED set, transcribed key-for-key and default-for-default
@@ -221,12 +301,21 @@ const ROLES = [
 // deny-closed. Copying the exception matters: a fixture with everything off would make the page's
 // "default: on" branch unreachable and therefore unproven.
 //
-// WHAT IS DELIBERATELY ABSENT. Seven declared flags are WITHHELD from the catalog by their own
-// modules — `workforce.personnel-list`, `workforce.export`, and five `training.*` — each because its
-// enforcement point would be unlawful (gating the personalliste an inspector may demand) or does not
-// exist (a W5 batch that is not built). The controller refuses to write any key the catalog does not
-// carry, so a withheld flag is not merely un-togglable, it is invisible: there is no wire field for
-// "withheld" and nothing for a client to render. Their absence here is the accurate model.
+// WHAT IS DELIBERATELY ABSENT. Six declared flags are WITHHELD from the catalog by their own
+// modules — `workforce.personnel-list` and five `training.*` — each because its enforcement point
+// would be unlawful (gating the personalliste an inspector may demand) or does not exist. The
+// controller refuses to write any key the catalog does not carry, so a withheld flag is not merely
+// un-togglable, it is invisible: there is no wire field for "withheld" and nothing for a client to
+// render. Their absence here is the accurate model.
+//
+// `workforce.export` WAS on that withheld list, for the stated reason that its enforcement point did
+// not exist — "a W5 batch that is not built". It is built: `WorkforceTimesheetService` now passes
+// `WorkforceFeatureFlags.Export` to `RequireWriteCapabilityAsync` on BOTH its writes (approve at
+// :164, export at :297), and the backend advertises it as
+// `new FeatureFlagDescriptor(Export, "Workforce", "Export", false)`. So the flag has a real gate and
+// a real lever, and withholding it here would now be the inaccurate model — it would make the
+// timesheet surface's read-only refusal unreachable and leave the journey unable to pull the lever
+// an operator actually pulls.
 const FEATURE_FLAG_CATALOG = [
   { flagKey: 'Events.Core', module: 'Events', title: 'Core (inquiries/proposals)', defaultEnabled: false },
   { flagKey: 'Events.Deposits', module: 'Events', title: 'Deposit money path', defaultEnabled: false },
@@ -242,6 +331,10 @@ const FEATURE_FLAG_CATALOG = [
   { flagKey: 'workforce.clock', module: 'Workforce', title: 'POS clock write', defaultEnabled: false },
   { flagKey: 'workforce.dispatch', module: 'Workforce', title: 'Dispatch', defaultEnabled: false },
   { flagKey: 'workforce.exchange', module: 'Workforce', title: 'Shift exchange', defaultEnabled: false },
+  // The §9.1 stage-6 gate on the timesheet's two WRITES — approve and export. Default OFF, matching
+  // `FeatureFlagDescriptor(Export, "Workforce", "Export", false)`. The three timesheet READS are
+  // never gated on it (§9.2): a disabled stage goes read-only, not dark.
+  { flagKey: 'workforce.export', module: 'Workforce', title: 'Export', defaultEnabled: false },
   { flagKey: 'workforce.module', module: 'Workforce', title: 'Module (store surfaces)', defaultEnabled: false },
   { flagKey: 'workforce.publication', module: 'Workforce', title: 'Schedule publication', defaultEnabled: false },
   { flagKey: 'workforce.selfservice', module: 'Workforce', title: 'Self-service', defaultEnabled: false },
@@ -257,6 +350,31 @@ const FEATURE_FLAG_CATALOG = [
  * each of the four fixture routes, which is how the four would drift apart.
  */
 const SCHEDULE_WRITE_FLAG = 'workforce.publication';
+
+/**
+ * The stage flag the role catalogue's WRITE is gated on.
+ *
+ * `UpsertRolesAsync` passes `WorkforceFeatureFlags.Setup` to `RequireWriteCapabilityAsync`, and it is
+ * the one flag in the family whose compile-time default is TRUE — so unlike `workforce.publication`
+ * above, a store that has never had a switch flipped CAN author roles. That asymmetry is the point of
+ * naming it: a fixture that gated setup like publication would make the first screen of a new venue
+ * refuse for a reason the real server does not have, and a fixture that gated it not at all would let
+ * a page ship that ignores an operator turning it off.
+ *
+ * The READ (#8) is not gated — §9.2 forbids gating a read.
+ */
+const ROLE_WRITE_FLAG = 'workforce.setup';
+
+/**
+ * The stage flag the timesheet's two WRITES are gated on — and only the writes.
+ *
+ * `ApproveAsync` (:164) and `ExportAsync` (:297) both pass `WorkforceFeatureFlags.Export` to
+ * `RequireWriteCapabilityAsync`. The list, the period detail and the batch download pass nothing:
+ * §9.2 requires that turning this off stops NEW batches while what has already been sent stays
+ * readable, and journey WFJ-15 is the pin. Named once here for the same reason the schedule's is —
+ * so the write gate and the ungated reads cannot drift apart one route at a time.
+ */
+const TIMESHEET_WRITE_FLAG = 'workforce.export';
 
 /**
  * The stage flag every Events ADMIN route is gated on — reads included.
@@ -805,6 +923,11 @@ module.exports = {
   CULTURES,
   STORE_ID,
   STORE_NAME,
+  VIRGIN_STORE_ID,
+  VIRGIN_STORE_NAME,
+  VIRGIN_STAFF,
+  seededRoleCatalogue,
+  staffFor,
   TIME_ZONE,
   CURRENCY,
   USERS,
@@ -817,6 +940,8 @@ module.exports = {
   MARGIN_WEEK,
   FEATURE_FLAG_CATALOG,
   SCHEDULE_WRITE_FLAG,
+  ROLE_WRITE_FLAG,
+  TIMESHEET_WRITE_FLAG,
   EVENTS_CORE_FLAG,
   EVENTS_SETTLEMENT_FLAG,
   GUEST_VENUE_STORE_ID,

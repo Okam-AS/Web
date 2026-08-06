@@ -1,0 +1,403 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="99b49f7a-6c6d-45e0-93c5-25ebef2c4056" name="@Svens-MacBook-Pro 2026-08-06 14:18:34" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-06T14:18:34.2450410+02:00" queuing="2026-08-06T14:18:34.2450410+02:00" start="2026-08-06T14:18:00.1035730+02:00" finish="2026-08-06T14:20:27.7922530+02:00" />
+  <TestSettings name="default" id="28a0a8a5-1613-475c-8195-b6d34fd7f289">
+    <Deployment runDeploymentRoot="_Svens-MacBook-Pro_2026-08-06_14_18_34" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="877772da-30c3-47d1-9809-a1aba7bb89e1" testId="528284ab-987a-24fa-1d38-06c7af43cf4d" testName="WebApi.Tests.Events.EventsMigrationLineageTests.Deposit_single_active_collection_path_is_db_enforced" computerName="Svens-MacBook-Pro" duration="00:00:00.1105692" startTime="2026-08-06T14:19:53.6842630+02:00" endTime="2026-08-06T14:19:53.6842630+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="877772da-30c3-47d1-9809-a1aba7bb89e1" />
+    <UnitTestResult executionId="338c7434-744b-4c08-b1d9-89ca16696673" testId="8372acdd-95e6-5671-abb2-b22f319d254f" testName="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Provider_event_receipts_still_accept_inserts_despite_the_append_only_trigger" computerName="Svens-MacBook-Pro" duration="00:00:00.0176095" startTime="2026-08-06T14:20:26.6897420+02:00" endTime="2026-08-06T14:20:26.6897420+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="338c7434-744b-4c08-b1d9-89ca16696673" />
+    <UnitTestResult executionId="128344b0-3bc3-4b50-aa46-d322d13241ca" testId="a8af0b6e-c27f-a42e-5c95-ad37256c33fb" testName="WebApi.Tests.Events.EventsMigrationLineageTests.Append_only_audit_triggers_exist" computerName="Svens-MacBook-Pro" duration="00:00:00.0262622" startTime="2026-08-06T14:19:53.4545350+02:00" endTime="2026-08-06T14:19:53.4545350+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="128344b0-3bc3-4b50-aa46-d322d13241ca" />
+    <UnitTestResult executionId="8233f363-0eac-498e-b7b3-6ace01c45872" testId="82e88356-d3fc-f0fd-9df7-a632024186ec" testName="WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Two_concurrent_publishes_of_overlapping_shifts_for_one_worker_serialize" computerName="Svens-MacBook-Pro" duration="00:00:08.7901786" startTime="2026-08-06T14:18:52.2177530+02:00" endTime="2026-08-06T14:18:52.2177530+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8233f363-0eac-498e-b7b3-6ace01c45872" />
+    <UnitTestResult executionId="41695dbb-5f3f-4d50-b0d9-1fc2fc8d63b0" testId="19bde937-b2db-7abe-ef8e-97b35238ad5b" testName="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Provider_message_id_is_unique_only_when_set_a_filtered_index" computerName="Svens-MacBook-Pro" duration="00:00:00.0047701" startTime="2026-08-06T14:20:27.4745440+02:00" endTime="2026-08-06T14:20:27.4745440+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="41695dbb-5f3f-4d50-b0d9-1fc2fc8d63b0" />
+    <UnitTestResult executionId="0149f32b-d863-4316-b7bc-e59743e88ef9" testId="414b3f6a-d1f2-31ec-ab6d-ec5c71c087c9" testName="WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Publish_commits_publication_recipients_inbox_outbox_and_audit_atomically" computerName="Svens-MacBook-Pro" duration="00:00:09.1946818" startTime="2026-08-06T14:18:43.4299960+02:00" endTime="2026-08-06T14:18:43.4299960+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0149f32b-d863-4316-b7bc-e59743e88ef9">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+Expected: 1
+Actual:   2</Message>
+          <StackTrace>   at WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Publish_commits_publication_recipients_inbox_outbox_and_audit_atomically() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Workforce/SchedulePublishSqlServerTests.cs:line 60
+   at WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Publish_commits_publication_recipients_inbox_outbox_and_audit_atomically() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Workforce/SchedulePublishSqlServerTests.cs:line 65
+   at WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Publish_commits_publication_recipients_inbox_outbox_and_audit_atomically() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Workforce/SchedulePublishSqlServerTests.cs:line 65
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="7250da30-d5b4-475d-857a-24e629cfba09" testId="3ae83368-671d-8cc4-7924-6a51d25d7517" testName="WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Two_managers_editing_the_same_revision_conflict_on_if_match" computerName="Svens-MacBook-Pro" duration="00:00:09.3392714" startTime="2026-08-06T14:18:34.2247440+02:00" endTime="2026-08-06T14:18:34.2247570+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7250da30-d5b4-475d-857a-24e629cfba09" />
+    <UnitTestResult executionId="ec40f4bc-0931-4f9d-a913-fccc4312adee" testId="fc293a93-1ead-0b4a-d973-5a9d28b6e629" testName="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Physical_unique_index_enforces_the_state_machine_invariant(table: &quot;GrowthDeliveries&quot;, columns: &quot;SendIntentId&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0034042" startTime="2026-08-06T14:20:26.9354150+02:00" endTime="2026-08-06T14:20:26.9354150+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ec40f4bc-0931-4f9d-a913-fccc4312adee" />
+    <UnitTestResult executionId="5903a275-d03f-4aba-9a1d-a7935f042bd3" testId="09b56457-75ed-4b71-bcfe-ae77639239d5" testName="WebApi.Tests.Events.EventsMigrationLineageTests.At_most_one_sent_and_one_accepted_proposal_version_per_event" computerName="Svens-MacBook-Pro" duration="00:00:00.0268607" startTime="2026-08-06T14:19:53.7996900+02:00" endTime="2026-08-06T14:19:53.7996900+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5903a275-d03f-4aba-9a1d-a7935f042bd3" />
+    <UnitTestResult executionId="f5033288-3359-4476-ba37-38c2227352f2" testId="032a0d44-1119-0118-4b9c-59d0cf6b1761" testName="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Physical_unique_index_enforces_the_state_machine_invariant(table: &quot;GrowthSegmentSnapshotMembers&quot;, columns: &quot;SnapshotId,ContactPointId&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0585450" startTime="2026-08-06T14:20:27.2177770+02:00" endTime="2026-08-06T14:20:27.2177770+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f5033288-3359-4476-ba37-38c2227352f2" />
+    <UnitTestResult executionId="6ed39ff5-92cc-41f1-a2cc-b245bceddfe8" testId="1ba7518b-d8aa-162d-c746-09f4f2f1f613" testName="WebApi.Tests.Workforce.SchedulePublishSqlServerTests.A_published_snapshot_cannot_be_mutated" computerName="Svens-MacBook-Pro" duration="00:00:08.6399142" startTime="2026-08-06T14:19:00.8576490+02:00" endTime="2026-08-06T14:19:00.8576490+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6ed39ff5-92cc-41f1-a2cc-b245bceddfe8" />
+    <UnitTestResult executionId="4fa98140-a181-41d2-b916-80b351d83942" testId="303ac595-6feb-2622-f4c7-55a7a1e9ebb1" testName="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Physical_unique_index_enforces_the_state_machine_invariant(table: &quot;GrowthProviderEventReceipts&quot;, columns: &quot;ProviderAccountId,ProviderEventId&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0551618" startTime="2026-08-06T14:20:27.1590370+02:00" endTime="2026-08-06T14:20:27.1590370+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4fa98140-a181-41d2-b916-80b351d83942" />
+    <UnitTestResult executionId="dd518c98-4bf7-4047-be53-5c6ff9d06932" testId="fcd5c64f-e580-1772-2cb2-c52ca76ecf94" testName="WebApi.Tests.Events.EventsMigrationLineageTests.Events_migration_is_applied_over_the_committed_baseline" computerName="Svens-MacBook-Pro" duration="00:00:00.0178459" startTime="2026-08-06T14:19:53.4280390+02:00" endTime="2026-08-06T14:19:53.4280390+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dd518c98-4bf7-4047-be53-5c6ff9d06932" />
+    <UnitTestResult executionId="3226ba16-eb92-4b66-b662-ae004d9f0719" testId="b9d71cf2-e6ea-5608-e8af-df95710edfb1" testName="WebApi.Tests.Workforce.SchedulePublishSqlServerTests.A_stale_publish_produces_zero_side_effects" computerName="Svens-MacBook-Pro" duration="00:00:08.5574439" startTime="2026-08-06T14:19:18.0081620+02:00" endTime="2026-08-06T14:19:18.0081620+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3226ba16-eb92-4b66-b662-ae004d9f0719" />
+    <UnitTestResult executionId="6664c305-f5af-4f21-b6df-2129babf0612" testId="ac533ed1-8462-546e-97dc-a2be1f898d20" testName="WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.GRW_DISPATCH_001_two_concurrent_dispatchers_send_each_recipient_exactly_once" computerName="Svens-MacBook-Pro" duration="00:00:08.4990975" startTime="2026-08-06T14:20:26.5480140+02:00" endTime="2026-08-06T14:20:26.5480140+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6664c305-f5af-4f21-b6df-2129babf0612">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Sequence contains no elements.</Message>
+          <StackTrace>   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at WebApi.Services.Growth.GrowthDispatchService.CreateOrGetRunAsync(Int32 storeId, Int64 newsletterId, String userId, CancellationToken cancellationToken) in /Users/svendaneel/okam/wt-msm-base/Services/Growth/GrowthDispatchService.cs:line 316
+   at WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.GRW_DISPATCH_001_two_concurrent_dispatchers_send_each_recipient_exactly_once() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs:line 82
+   at WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.GRW_DISPATCH_001_two_concurrent_dispatchers_send_each_recipient_exactly_once() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs:line 83
+   at WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.GRW_DISPATCH_001_two_concurrent_dispatchers_send_each_recipient_exactly_once() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs:line 117
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="686c80ca-2278-428a-aeba-f93c1accbd49" testId="d7610f42-71f3-4a2a-07aa-2af37831d1eb" testName="WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Publish_replays_the_same_key_without_double_publishing" computerName="Svens-MacBook-Pro" duration="00:00:08.6385644" startTime="2026-08-06T14:19:35.1371920+02:00" endTime="2026-08-06T14:19:35.1371920+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="686c80ca-2278-428a-aeba-f93c1accbd49" />
+    <UnitTestResult executionId="a3055e0a-09c4-4df8-a09e-75b6ebe3133a" testId="ff274338-3600-ce0f-47c0-e297a57db262" testName="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Physical_unique_index_enforces_the_state_machine_invariant(table: &quot;GrowthDeliveries&quot;, columns: &quot;ProviderMessageId&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.1902133" startTime="2026-08-06T14:20:26.8801890+02:00" endTime="2026-08-06T14:20:26.8801890+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a3055e0a-09c4-4df8-a09e-75b6ebe3133a" />
+    <UnitTestResult executionId="dc9fc92f-ea91-42ed-be78-ac566c4e4bfa" testId="27a54501-76b1-3844-c18d-fc1f6fa9aad4" testName="WebApi.Tests.Events.EventsMigrationLineageTests.Append_only_tables_reject_direct_delete" computerName="Svens-MacBook-Pro" duration="00:00:00.0199105" startTime="2026-08-06T14:19:53.4099110+02:00" endTime="2026-08-06T14:19:53.4099110+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dc9fc92f-ea91-42ed-be78-ac566c4e4bfa" />
+    <UnitTestResult executionId="ac76d023-26a8-4be3-a8ed-c75f047155e9" testId="99f9a199-ce45-5a23-dcc7-05befc9ea921" testName="WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Republishing_a_terminal_revision_is_rejected" computerName="Svens-MacBook-Pro" duration="00:00:08.5928384" startTime="2026-08-06T14:19:09.4506000+02:00" endTime="2026-08-06T14:19:09.4506000+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ac76d023-26a8-4be3-a8ed-c75f047155e9" />
+    <UnitTestResult executionId="47ff5c42-a324-4393-a8f6-d529645b3178" testId="ffdd3ae2-dde9-b0e4-6299-dc93d0ee2e3d" testName="WebApi.Tests.Events.EventsMigrationLineageTests.Nothing_outside_the_events_prefix_references_the_events_tables" computerName="Svens-MacBook-Pro" duration="00:00:00.0576085" startTime="2026-08-06T14:19:53.3897580+02:00" endTime="2026-08-06T14:19:53.3897580+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="47ff5c42-a324-4393-a8f6-d529645b3178" />
+    <UnitTestResult executionId="8ef8a7e2-6cc2-448d-9a10-b245bdfb5dcc" testId="0bf9a155-06f0-3c97-c8c7-0f566c0bdbb6" testName="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Growth_dispatch_migration_is_on_the_certified_chain_and_has_no_pending_changes" computerName="Svens-MacBook-Pro" duration="00:00:00.1234843" startTime="2026-08-06T14:20:26.6722650+02:00" endTime="2026-08-06T14:20:26.6722650+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8ef8a7e2-6cc2-448d-9a10-b245bdfb5dcc">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.False() Failure
+Expected: False
+Actual:   True</Message>
+          <StackTrace>   at WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Growth_dispatch_migration_is_on_the_certified_chain_and_has_no_pending_changes() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchMigrationLineageTests.cs:line 73
+   at WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Growth_dispatch_migration_is_on_the_certified_chain_and_has_no_pending_changes() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchMigrationLineageTests.cs:line 73
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="2af81724-ef14-4bd3-8c2e-284456a2bf4d" testId="8bac2a82-70da-65af-80cb-9390bd8cf160" testName="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Provider_event_receipts_reject_direct_update" computerName="Svens-MacBook-Pro" duration="00:00:00.0171897" startTime="2026-08-06T14:20:27.3770710+02:00" endTime="2026-08-06T14:20:27.3770710+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2af81724-ef14-4bd3-8c2e-284456a2bf4d" />
+    <UnitTestResult executionId="d9475979-0f05-42ae-93eb-67e63dad5317" testId="e3c0c776-caaa-02f3-29e8-2712420da06b" testName="WebApi.Tests.Events.EventsMigrationLineageTests.Proposal_versions_are_unique_per_event" computerName="Svens-MacBook-Pro" duration="00:00:00.1829062" startTime="2026-08-06T14:19:53.3318320+02:00" endTime="2026-08-06T14:19:53.3318320+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d9475979-0f05-42ae-93eb-67e63dad5317" />
+    <UnitTestResult executionId="7d691b02-c3f3-4407-a2ba-9eab9f607edd" testId="0c98dca8-94e8-e65e-dc90-50dcc393c018" testName="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Physical_unique_index_enforces_the_state_machine_invariant(table: &quot;GrowthDeliveries&quot;, columns: &quot;ProviderClientKey&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0016170" startTime="2026-08-06T14:20:26.9372650+02:00" endTime="2026-08-06T14:20:26.9372650+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7d691b02-c3f3-4407-a2ba-9eab9f607edd" />
+    <UnitTestResult executionId="fe4a1ef7-410b-4f99-9a65-df3cb52424f0" testId="58450250-78ce-161e-2c08-ba1639ee6b17" testName="WebApi.Tests.Events.EventsMigrationLineageTests.Append_only_tables_reject_direct_update" computerName="Svens-MacBook-Pro" duration="00:00:00.0597582" startTime="2026-08-06T14:19:53.7443180+02:00" endTime="2026-08-06T14:19:53.7443180+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fe4a1ef7-410b-4f99-9a65-df3cb52424f0" />
+    <UnitTestResult executionId="dc8964a7-8a2a-41d5-a66b-82f5603a94c6" testId="61659f64-e479-ef5e-e72c-59322645953a" testName="WebApi.Tests.Events.EventsMigrationLineageTests.Public_identifiers_are_unique" computerName="Svens-MacBook-Pro" duration="00:00:00.1065883" startTime="2026-08-06T14:19:53.5614760+02:00" endTime="2026-08-06T14:19:53.5614760+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dc8964a7-8a2a-41d5-a66b-82f5603a94c6" />
+    <UnitTestResult executionId="0684ae75-6b1a-477f-9c25-2c7f52255095" testId="fdf1e2db-2dab-650d-5a07-d0c2d787371a" testName="WebApi.Tests.Workforce.SchedulePublishSqlServerTests.A_transient_failure_mid_publish_retries_cleanly_with_no_double_stage" computerName="Svens-MacBook-Pro" duration="00:00:08.4901563" startTime="2026-08-06T14:19:26.4984450+02:00" endTime="2026-08-06T14:19:26.4984450+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0684ae75-6b1a-477f-9c25-2c7f52255095" />
+    <UnitTestResult executionId="2b10bdbe-b89d-4a67-b8b8-14522168de1e" testId="554ec6a7-98a1-5ceb-020a-f841be298035" testName="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Physical_unique_index_enforces_the_state_machine_invariant(table: &quot;GrowthDispatchRuns&quot;, columns: &quot;NewsletterVersionId&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0534647" startTime="2026-08-06T14:20:27.2715060+02:00" endTime="2026-08-06T14:20:27.2715070+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2b10bdbe-b89d-4a67-b8b8-14522168de1e" />
+    <UnitTestResult executionId="13bd45a7-e01c-45be-91a3-8cde8f40471c" testId="ee224bb8-cac4-7c22-579f-133e18035275" testName="WebApi.Tests.Events.EventsMigrationLineageTests.Has_no_pending_model_changes_after_the_events_wave" computerName="Svens-MacBook-Pro" duration="00:00:00.6659906" startTime="2026-08-06T14:19:53.1491460+02:00" endTime="2026-08-06T14:19:53.1491460+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="13bd45a7-e01c-45be-91a3-8cde8f40471c">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.False() Failure
+Expected: False
+Actual:   True</Message>
+          <StackTrace>   at WebApi.Tests.Events.EventsMigrationLineageTests.Has_no_pending_model_changes_after_the_events_wave() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Events/EventsMigrationLineageTests.cs:line 297
+   at WebApi.Tests.Events.EventsMigrationLineageTests.Has_no_pending_model_changes_after_the_events_wave() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Events/EventsMigrationLineageTests.cs:line 297
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="391396df-80e6-4168-87ac-db28fa28f0e9" testId="f0589602-5190-2ec0-8d01-8a6920ace445" testName="WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.GRW_DISPATCH_001_two_concurrent_dispatch_requests_create_exactly_one_run" computerName="Svens-MacBook-Pro" duration="00:00:08.5689679" startTime="2026-08-06T14:20:18.0482700+02:00" endTime="2026-08-06T14:20:18.0482700+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="391396df-80e6-4168-87ac-db28fa28f0e9">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : Sequence contains no elements.</Message>
+          <StackTrace>   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at WebApi.Services.Growth.GrowthDispatchService.CreateOrGetRunAsync(Int32 storeId, Int64 newsletterId, String userId, CancellationToken cancellationToken) in /Users/svendaneel/okam/wt-msm-base/Services/Growth/GrowthDispatchService.cs:line 316
+   at WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.&lt;&gt;c__DisplayClass3_0.&lt;&lt;GRW_DISPATCH_001_two_concurrent_dispatch_requests_create_exactly_one_run&gt;g__Create|0&gt;d.MoveNext() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs:line 54
+--- End of stack trace from previous location ---
+   at WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.&lt;&gt;c__DisplayClass3_0.&lt;&lt;GRW_DISPATCH_001_two_concurrent_dispatch_requests_create_exactly_one_run&gt;g__Create|0&gt;d.MoveNext() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs:line 54
+--- End of stack trace from previous location ---
+   at WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.GRW_DISPATCH_001_two_concurrent_dispatch_requests_create_exactly_one_run() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs:line 57
+   at WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.GRW_DISPATCH_001_two_concurrent_dispatch_requests_create_exactly_one_run() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs:line 64
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="6b37ffd4-dfaa-46d2-a8da-4d7d46344323" testId="ff443b03-d6b6-630d-93e3-cc7a38d42d20" testName="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Physical_unique_index_enforces_the_state_machine_invariant(table: &quot;GrowthSegments&quot;, columns: &quot;StoreId,SegmentKey,DefinitionVersion&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0622257" startTime="2026-08-06T14:20:26.9997340+02:00" endTime="2026-08-06T14:20:26.9997340+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6b37ffd4-dfaa-46d2-a8da-4d7d46344323" />
+    <UnitTestResult executionId="d7dc83d8-8982-4795-bfd9-7b0c8a796f03" testId="a341178b-ff5e-4b95-4c3b-e15c866fecb7" testName="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Physical_unique_index_enforces_the_state_machine_invariant(table: &quot;GrowthNewsletterVersions&quot;, columns: &quot;NewsletterId,VersionNo&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0513657" startTime="2026-08-06T14:20:26.9318100+02:00" endTime="2026-08-06T14:20:26.9318100+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d7dc83d8-8982-4795-bfd9-7b0c8a796f03" />
+    <UnitTestResult executionId="bf85815b-aa06-456f-a390-b276ead49072" testId="974eacc7-6049-1eea-d61f-fcf6b005b0d3" testName="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.No_raw_pii_column_is_used_in_any_growth_w2_key_or_index" computerName="Svens-MacBook-Pro" duration="00:00:00.0878386" startTime="2026-08-06T14:20:27.3597070+02:00" endTime="2026-08-06T14:20:27.3597070+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bf85815b-aa06-456f-a390-b276ead49072" />
+    <UnitTestResult executionId="7541532d-c8f1-4714-a6cf-a671357ca7e8" testId="cfc987b6-cb6c-9bb0-8edb-f4c5872f9810" testName="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Physical_unique_index_enforces_the_state_machine_invariant(table: &quot;GrowthSegmentSnapshots&quot;, columns: &quot;SegmentId,WatermarkHash&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0540083" startTime="2026-08-06T14:20:27.1036070+02:00" endTime="2026-08-06T14:20:27.1036070+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7541532d-c8f1-4714-a6cf-a671357ca7e8" />
+    <UnitTestResult executionId="70a87245-0229-4fad-9b3b-7fe68d7fc0f4" testId="fef58911-f61f-f84b-855b-6e7647bd5e36" testName="WebApi.Tests.Events.EventsMigrationLineageTests.Events_deposits_carries_the_full_seven_member_ipayable_shape" computerName="Svens-MacBook-Pro" duration="00:00:00.0116040" startTime="2026-08-06T14:19:53.5734200+02:00" endTime="2026-08-06T14:19:53.5734210+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="70a87245-0229-4fad-9b3b-7fe68d7fc0f4" />
+    <UnitTestResult executionId="0cf44f69-c281-46f6-8347-5af1e112ea95" testId="f85c1c9d-8e08-bc40-f8fe-e83b8e78d2c3" testName="WebApi.Tests.Events.EventsMigrationLineageTests.All_eight_events_w1_tables_are_created" computerName="Svens-MacBook-Pro" duration="00:00:00.0279571" startTime="2026-08-06T14:19:53.7725280+02:00" endTime="2026-08-06T14:19:53.7725290+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0cf44f69-c281-46f6-8347-5af1e112ea95" />
+    <UnitTestResult executionId="20322b7d-6ed5-4781-a112-82d8b2089aa7" testId="2a0aaabe-c30e-de67-0e4b-1269b09335e6" testName="WebApi.Tests.Events.EventsMigrationLineageTests.Store_owning_tables_have_a_store_foreign_key" computerName="Svens-MacBook-Pro" duration="00:00:00.0496923" startTime="2026-08-06T14:19:53.8496050+02:00" endTime="2026-08-06T14:19:53.8496050+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="20322b7d-6ed5-4781-a112-82d8b2089aa7" />
+    <UnitTestResult executionId="9e7e2384-58fe-4898-9c40-02c6a1479168" testId="f9fab7d2-86bd-9d0b-2fb0-a8403f42efab" testName="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Physical_unique_index_enforces_the_state_machine_invariant(table: &quot;GrowthSendIntents&quot;, columns: &quot;LogicalSendKey&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0493681" startTime="2026-08-06T14:20:27.0493780+02:00" endTime="2026-08-06T14:20:27.0493780+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9e7e2384-58fe-4898-9c40-02c6a1479168" />
+    <UnitTestResult executionId="1e7214d5-c4b4-4166-841e-1b946d258632" testId="4e789a62-433e-ea70-ebbe-d84c9eeee876" testName="WebApi.Tests.Events.EventsMigrationLineageTests.Only_store_and_aspnetusers_foreign_keys_leave_the_events_prefix" computerName="Svens-MacBook-Pro" duration="00:00:00.0533206" startTime="2026-08-06T14:19:53.9033430+02:00" endTime="2026-08-06T14:19:53.9033440+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1e7214d5-c4b4-4166-841e-1b946d258632" />
+    <UnitTestResult executionId="eb418db9-45ba-4500-b696-4c7446c1660b" testId="09a69c4b-0792-9031-2d49-045dbc14671a" testName="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Provider_event_receipts_reject_direct_delete" computerName="Svens-MacBook-Pro" duration="00:00:00.0082135" startTime="2026-08-06T14:20:27.4171200+02:00" endTime="2026-08-06T14:20:27.4171200+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="eb418db9-45ba-4500-b696-4c7446c1660b" />
+    <UnitTestResult executionId="48a761ac-e0a5-46f0-9bc6-414fe1d15ecc" testId="ea1a47a0-2cde-2f83-00b7-4a80a39f1926" testName="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.No_foreign_key_leaves_the_growth_set" computerName="Svens-MacBook-Pro" duration="00:00:00.0520445" startTime="2026-08-06T14:20:27.4694430+02:00" endTime="2026-08-06T14:20:27.4694430+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="48a761ac-e0a5-46f0-9bc6-414fe1d15ecc" />
+    <UnitTestResult executionId="be82fb53-4036-4aa9-8e0b-9169717f7829" testId="7cc74f15-e41d-7e3d-6448-70d9d678bc6f" testName="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.All_eleven_growth_w2_tables_are_created_and_the_full_growth_surface_is_nineteen_tables" computerName="Svens-MacBook-Pro" duration="00:00:00.0313587" startTime="2026-08-06T14:20:27.4086470+02:00" endTime="2026-08-06T14:20:27.4086470+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="be82fb53-4036-4aa9-8e0b-9169717f7829" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="WebApi.Tests.Events.EventsMigrationLineageTests.Append_only_tables_reject_direct_update" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="58450250-78ce-161e-2c08-ba1639ee6b17">
+      <Execution id="fe4a1ef7-410b-4f99-9a65-df3cb52424f0" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsMigrationLineageTests" name="Append_only_tables_reject_direct_update" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Physical_unique_index_enforces_the_state_machine_invariant(table: &quot;GrowthSegmentSnapshots&quot;, columns: &quot;SegmentId,WatermarkHash&quot;)" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="cfc987b6-cb6c-9bb0-8edb-f4c5872f9810">
+      <Execution id="7541532d-c8f1-4714-a6cf-a671357ca7e8" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests" name="Physical_unique_index_enforces_the_state_machine_invariant" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsMigrationLineageTests.Nothing_outside_the_events_prefix_references_the_events_tables" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="ffdd3ae2-dde9-b0e4-6299-dc93d0ee2e3d">
+      <Execution id="47ff5c42-a324-4393-a8f6-d529645b3178" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsMigrationLineageTests" name="Nothing_outside_the_events_prefix_references_the_events_tables" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsMigrationLineageTests.Append_only_audit_triggers_exist" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="a8af0b6e-c27f-a42e-5c95-ad37256c33fb">
+      <Execution id="128344b0-3bc3-4b50-aa46-d322d13241ca" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsMigrationLineageTests" name="Append_only_audit_triggers_exist" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsMigrationLineageTests.Proposal_versions_are_unique_per_event" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="e3c0c776-caaa-02f3-29e8-2712420da06b">
+      <Execution id="d9475979-0f05-42ae-93eb-67e63dad5317" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsMigrationLineageTests" name="Proposal_versions_are_unique_per_event" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Provider_event_receipts_still_accept_inserts_despite_the_append_only_trigger" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="8372acdd-95e6-5671-abb2-b22f319d254f">
+      <Execution id="338c7434-744b-4c08-b1d9-89ca16696673" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests" name="Provider_event_receipts_still_accept_inserts_despite_the_append_only_trigger" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Physical_unique_index_enforces_the_state_machine_invariant(table: &quot;GrowthDispatchRuns&quot;, columns: &quot;NewsletterVersionId&quot;)" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="554ec6a7-98a1-5ceb-020a-f841be298035">
+      <Execution id="2b10bdbe-b89d-4a67-b8b8-14522168de1e" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests" name="Physical_unique_index_enforces_the_state_machine_invariant" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Physical_unique_index_enforces_the_state_machine_invariant(table: &quot;GrowthDeliveries&quot;, columns: &quot;ProviderClientKey&quot;)" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="0c98dca8-94e8-e65e-dc90-50dcc393c018">
+      <Execution id="7d691b02-c3f3-4407-a2ba-9eab9f607edd" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests" name="Physical_unique_index_enforces_the_state_machine_invariant" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Workforce.SchedulePublishSqlServerTests.A_transient_failure_mid_publish_retries_cleanly_with_no_double_stage" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="fdf1e2db-2dab-650d-5a07-d0c2d787371a">
+      <Execution id="0684ae75-6b1a-477f-9c25-2c7f52255095" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Workforce.SchedulePublishSqlServerTests" name="A_transient_failure_mid_publish_retries_cleanly_with_no_double_stage" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Publish_commits_publication_recipients_inbox_outbox_and_audit_atomically" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="414b3f6a-d1f2-31ec-ab6d-ec5c71c087c9">
+      <Execution id="0149f32b-d863-4316-b7bc-e59743e88ef9" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Workforce.SchedulePublishSqlServerTests" name="Publish_commits_publication_recipients_inbox_outbox_and_audit_atomically" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsMigrationLineageTests.Has_no_pending_model_changes_after_the_events_wave" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="ee224bb8-cac4-7c22-579f-133e18035275">
+      <Execution id="13bd45a7-e01c-45be-91a3-8cde8f40471c" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsMigrationLineageTests" name="Has_no_pending_model_changes_after_the_events_wave" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Provider_event_receipts_reject_direct_update" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="8bac2a82-70da-65af-80cb-9390bd8cf160">
+      <Execution id="2af81724-ef14-4bd3-8c2e-284456a2bf4d" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests" name="Provider_event_receipts_reject_direct_update" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Physical_unique_index_enforces_the_state_machine_invariant(table: &quot;GrowthSendIntents&quot;, columns: &quot;LogicalSendKey&quot;)" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="f9fab7d2-86bd-9d0b-2fb0-a8403f42efab">
+      <Execution id="9e7e2384-58fe-4898-9c40-02c6a1479168" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests" name="Physical_unique_index_enforces_the_state_machine_invariant" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsMigrationLineageTests.Store_owning_tables_have_a_store_foreign_key" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="2a0aaabe-c30e-de67-0e4b-1269b09335e6">
+      <Execution id="20322b7d-6ed5-4781-a112-82d8b2089aa7" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsMigrationLineageTests" name="Store_owning_tables_have_a_store_foreign_key" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsMigrationLineageTests.Deposit_single_active_collection_path_is_db_enforced" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="528284ab-987a-24fa-1d38-06c7af43cf4d">
+      <Execution id="877772da-30c3-47d1-9809-a1aba7bb89e1" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsMigrationLineageTests" name="Deposit_single_active_collection_path_is_db_enforced" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Growth_dispatch_migration_is_on_the_certified_chain_and_has_no_pending_changes" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="0bf9a155-06f0-3c97-c8c7-0f566c0bdbb6">
+      <Execution id="8ef8a7e2-6cc2-448d-9a10-b245bdfb5dcc" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests" name="Growth_dispatch_migration_is_on_the_certified_chain_and_has_no_pending_changes" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.No_foreign_key_leaves_the_growth_set" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="ea1a47a0-2cde-2f83-00b7-4a80a39f1926">
+      <Execution id="48a761ac-e0a5-46f0-9bc6-414fe1d15ecc" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests" name="No_foreign_key_leaves_the_growth_set" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.GRW_DISPATCH_001_two_concurrent_dispatchers_send_each_recipient_exactly_once" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="ac533ed1-8462-546e-97dc-a2be1f898d20">
+      <Execution id="6664c305-f5af-4f21-b6df-2129babf0612" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests" name="GRW_DISPATCH_001_two_concurrent_dispatchers_send_each_recipient_exactly_once" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsMigrationLineageTests.Events_deposits_carries_the_full_seven_member_ipayable_shape" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="fef58911-f61f-f84b-855b-6e7647bd5e36">
+      <Execution id="70a87245-0229-4fad-9b3b-7fe68d7fc0f4" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsMigrationLineageTests" name="Events_deposits_carries_the_full_seven_member_ipayable_shape" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Two_concurrent_publishes_of_overlapping_shifts_for_one_worker_serialize" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="82e88356-d3fc-f0fd-9df7-a632024186ec">
+      <Execution id="8233f363-0eac-498e-b7b3-6ace01c45872" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Workforce.SchedulePublishSqlServerTests" name="Two_concurrent_publishes_of_overlapping_shifts_for_one_worker_serialize" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.No_raw_pii_column_is_used_in_any_growth_w2_key_or_index" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="974eacc7-6049-1eea-d61f-fcf6b005b0d3">
+      <Execution id="bf85815b-aa06-456f-a390-b276ead49072" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests" name="No_raw_pii_column_is_used_in_any_growth_w2_key_or_index" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsMigrationLineageTests.Public_identifiers_are_unique" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="61659f64-e479-ef5e-e72c-59322645953a">
+      <Execution id="dc8964a7-8a2a-41d5-a66b-82f5603a94c6" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsMigrationLineageTests" name="Public_identifiers_are_unique" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Publish_replays_the_same_key_without_double_publishing" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="d7610f42-71f3-4a2a-07aa-2af37831d1eb">
+      <Execution id="686c80ca-2278-428a-aeba-f93c1accbd49" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Workforce.SchedulePublishSqlServerTests" name="Publish_replays_the_same_key_without_double_publishing" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Physical_unique_index_enforces_the_state_machine_invariant(table: &quot;GrowthNewsletterVersions&quot;, columns: &quot;NewsletterId,VersionNo&quot;)" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="a341178b-ff5e-4b95-4c3b-e15c866fecb7">
+      <Execution id="d7dc83d8-8982-4795-bfd9-7b0c8a796f03" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests" name="Physical_unique_index_enforces_the_state_machine_invariant" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Provider_event_receipts_reject_direct_delete" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="09a69c4b-0792-9031-2d49-045dbc14671a">
+      <Execution id="eb418db9-45ba-4500-b696-4c7446c1660b" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests" name="Provider_event_receipts_reject_direct_delete" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.All_eleven_growth_w2_tables_are_created_and_the_full_growth_surface_is_nineteen_tables" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="7cc74f15-e41d-7e3d-6448-70d9d678bc6f">
+      <Execution id="be82fb53-4036-4aa9-8e0b-9169717f7829" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests" name="All_eleven_growth_w2_tables_are_created_and_the_full_growth_surface_is_nineteen_tables" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Workforce.SchedulePublishSqlServerTests.A_stale_publish_produces_zero_side_effects" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="b9d71cf2-e6ea-5608-e8af-df95710edfb1">
+      <Execution id="3226ba16-eb92-4b66-b662-ae004d9f0719" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Workforce.SchedulePublishSqlServerTests" name="A_stale_publish_produces_zero_side_effects" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Physical_unique_index_enforces_the_state_machine_invariant(table: &quot;GrowthSegments&quot;, columns: &quot;StoreId,SegmentKey,DefinitionVersion&quot;)" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="ff443b03-d6b6-630d-93e3-cc7a38d42d20">
+      <Execution id="6b37ffd4-dfaa-46d2-a8da-4d7d46344323" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests" name="Physical_unique_index_enforces_the_state_machine_invariant" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Republishing_a_terminal_revision_is_rejected" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="99f9a199-ce45-5a23-dcc7-05befc9ea921">
+      <Execution id="ac76d023-26a8-4be3-a8ed-c75f047155e9" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Workforce.SchedulePublishSqlServerTests" name="Republishing_a_terminal_revision_is_rejected" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Physical_unique_index_enforces_the_state_machine_invariant(table: &quot;GrowthDeliveries&quot;, columns: &quot;SendIntentId&quot;)" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="fc293a93-1ead-0b4a-d973-5a9d28b6e629">
+      <Execution id="ec40f4bc-0931-4f9d-a913-fccc4312adee" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests" name="Physical_unique_index_enforces_the_state_machine_invariant" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsMigrationLineageTests.Append_only_tables_reject_direct_delete" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="27a54501-76b1-3844-c18d-fc1f6fa9aad4">
+      <Execution id="dc9fc92f-ea91-42ed-be78-ac566c4e4bfa" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsMigrationLineageTests" name="Append_only_tables_reject_direct_delete" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Provider_message_id_is_unique_only_when_set_a_filtered_index" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="19bde937-b2db-7abe-ef8e-97b35238ad5b">
+      <Execution id="41695dbb-5f3f-4d50-b0d9-1fc2fc8d63b0" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests" name="Provider_message_id_is_unique_only_when_set_a_filtered_index" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Two_managers_editing_the_same_revision_conflict_on_if_match" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="3ae83368-671d-8cc4-7924-6a51d25d7517">
+      <Execution id="7250da30-d5b4-475d-857a-24e629cfba09" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Workforce.SchedulePublishSqlServerTests" name="Two_managers_editing_the_same_revision_conflict_on_if_match" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Workforce.SchedulePublishSqlServerTests.A_published_snapshot_cannot_be_mutated" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="1ba7518b-d8aa-162d-c746-09f4f2f1f613">
+      <Execution id="6ed39ff5-92cc-41f1-a2cc-b245bceddfe8" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Workforce.SchedulePublishSqlServerTests" name="A_published_snapshot_cannot_be_mutated" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsMigrationLineageTests.All_eight_events_w1_tables_are_created" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="f85c1c9d-8e08-bc40-f8fe-e83b8e78d2c3">
+      <Execution id="0cf44f69-c281-46f6-8347-5af1e112ea95" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsMigrationLineageTests" name="All_eight_events_w1_tables_are_created" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsMigrationLineageTests.Events_migration_is_applied_over_the_committed_baseline" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="fcd5c64f-e580-1772-2cb2-c52ca76ecf94">
+      <Execution id="dd518c98-4bf7-4047-be53-5c6ff9d06932" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsMigrationLineageTests" name="Events_migration_is_applied_over_the_committed_baseline" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Physical_unique_index_enforces_the_state_machine_invariant(table: &quot;GrowthDeliveries&quot;, columns: &quot;ProviderMessageId&quot;)" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="ff274338-3600-ce0f-47c0-e297a57db262">
+      <Execution id="a3055e0a-09c4-4df8-a09e-75b6ebe3133a" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests" name="Physical_unique_index_enforces_the_state_machine_invariant" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.GRW_DISPATCH_001_two_concurrent_dispatch_requests_create_exactly_one_run" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="f0589602-5190-2ec0-8d01-8a6920ace445">
+      <Execution id="391396df-80e6-4168-87ac-db28fa28f0e9" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests" name="GRW_DISPATCH_001_two_concurrent_dispatch_requests_create_exactly_one_run" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsMigrationLineageTests.At_most_one_sent_and_one_accepted_proposal_version_per_event" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="09b56457-75ed-4b71-bcfe-ae77639239d5">
+      <Execution id="5903a275-d03f-4aba-9a1d-a7935f042bd3" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsMigrationLineageTests" name="At_most_one_sent_and_one_accepted_proposal_version_per_event" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Physical_unique_index_enforces_the_state_machine_invariant(table: &quot;GrowthSegmentSnapshotMembers&quot;, columns: &quot;SnapshotId,ContactPointId&quot;)" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="032a0d44-1119-0118-4b9c-59d0cf6b1761">
+      <Execution id="f5033288-3359-4476-ba37-38c2227352f2" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests" name="Physical_unique_index_enforces_the_state_machine_invariant" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsMigrationLineageTests.Only_store_and_aspnetusers_foreign_keys_leave_the_events_prefix" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="4e789a62-433e-ea70-ebbe-d84c9eeee876">
+      <Execution id="1e7214d5-c4b4-4166-841e-1b946d258632" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsMigrationLineageTests" name="Only_store_and_aspnetusers_foreign_keys_leave_the_events_prefix" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Physical_unique_index_enforces_the_state_machine_invariant(table: &quot;GrowthProviderEventReceipts&quot;, columns: &quot;ProviderAccountId,ProviderEventId&quot;)" storage="/users/svendaneel/okam/wt-msm-base/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="303ac595-6feb-2622-f4c7-55a7a1e9ebb1">
+      <Execution id="4fa98140-a181-41d2-b916-80b351d83942" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests" name="Physical_unique_index_enforces_the_state_machine_invariant" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="528284ab-987a-24fa-1d38-06c7af43cf4d" executionId="877772da-30c3-47d1-9809-a1aba7bb89e1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8372acdd-95e6-5671-abb2-b22f319d254f" executionId="338c7434-744b-4c08-b1d9-89ca16696673" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a8af0b6e-c27f-a42e-5c95-ad37256c33fb" executionId="128344b0-3bc3-4b50-aa46-d322d13241ca" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="82e88356-d3fc-f0fd-9df7-a632024186ec" executionId="8233f363-0eac-498e-b7b3-6ace01c45872" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="19bde937-b2db-7abe-ef8e-97b35238ad5b" executionId="41695dbb-5f3f-4d50-b0d9-1fc2fc8d63b0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="414b3f6a-d1f2-31ec-ab6d-ec5c71c087c9" executionId="0149f32b-d863-4316-b7bc-e59743e88ef9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3ae83368-671d-8cc4-7924-6a51d25d7517" executionId="7250da30-d5b4-475d-857a-24e629cfba09" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fc293a93-1ead-0b4a-d973-5a9d28b6e629" executionId="ec40f4bc-0931-4f9d-a913-fccc4312adee" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="09b56457-75ed-4b71-bcfe-ae77639239d5" executionId="5903a275-d03f-4aba-9a1d-a7935f042bd3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="032a0d44-1119-0118-4b9c-59d0cf6b1761" executionId="f5033288-3359-4476-ba37-38c2227352f2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1ba7518b-d8aa-162d-c746-09f4f2f1f613" executionId="6ed39ff5-92cc-41f1-a2cc-b245bceddfe8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="303ac595-6feb-2622-f4c7-55a7a1e9ebb1" executionId="4fa98140-a181-41d2-b916-80b351d83942" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fcd5c64f-e580-1772-2cb2-c52ca76ecf94" executionId="dd518c98-4bf7-4047-be53-5c6ff9d06932" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b9d71cf2-e6ea-5608-e8af-df95710edfb1" executionId="3226ba16-eb92-4b66-b662-ae004d9f0719" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ac533ed1-8462-546e-97dc-a2be1f898d20" executionId="6664c305-f5af-4f21-b6df-2129babf0612" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d7610f42-71f3-4a2a-07aa-2af37831d1eb" executionId="686c80ca-2278-428a-aeba-f93c1accbd49" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ff274338-3600-ce0f-47c0-e297a57db262" executionId="a3055e0a-09c4-4df8-a09e-75b6ebe3133a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="27a54501-76b1-3844-c18d-fc1f6fa9aad4" executionId="dc9fc92f-ea91-42ed-be78-ac566c4e4bfa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="99f9a199-ce45-5a23-dcc7-05befc9ea921" executionId="ac76d023-26a8-4be3-a8ed-c75f047155e9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ffdd3ae2-dde9-b0e4-6299-dc93d0ee2e3d" executionId="47ff5c42-a324-4393-a8f6-d529645b3178" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0bf9a155-06f0-3c97-c8c7-0f566c0bdbb6" executionId="8ef8a7e2-6cc2-448d-9a10-b245bdfb5dcc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8bac2a82-70da-65af-80cb-9390bd8cf160" executionId="2af81724-ef14-4bd3-8c2e-284456a2bf4d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e3c0c776-caaa-02f3-29e8-2712420da06b" executionId="d9475979-0f05-42ae-93eb-67e63dad5317" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0c98dca8-94e8-e65e-dc90-50dcc393c018" executionId="7d691b02-c3f3-4407-a2ba-9eab9f607edd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="58450250-78ce-161e-2c08-ba1639ee6b17" executionId="fe4a1ef7-410b-4f99-9a65-df3cb52424f0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="61659f64-e479-ef5e-e72c-59322645953a" executionId="dc8964a7-8a2a-41d5-a66b-82f5603a94c6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fdf1e2db-2dab-650d-5a07-d0c2d787371a" executionId="0684ae75-6b1a-477f-9c25-2c7f52255095" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="554ec6a7-98a1-5ceb-020a-f841be298035" executionId="2b10bdbe-b89d-4a67-b8b8-14522168de1e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ee224bb8-cac4-7c22-579f-133e18035275" executionId="13bd45a7-e01c-45be-91a3-8cde8f40471c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f0589602-5190-2ec0-8d01-8a6920ace445" executionId="391396df-80e6-4168-87ac-db28fa28f0e9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ff443b03-d6b6-630d-93e3-cc7a38d42d20" executionId="6b37ffd4-dfaa-46d2-a8da-4d7d46344323" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a341178b-ff5e-4b95-4c3b-e15c866fecb7" executionId="d7dc83d8-8982-4795-bfd9-7b0c8a796f03" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="974eacc7-6049-1eea-d61f-fcf6b005b0d3" executionId="bf85815b-aa06-456f-a390-b276ead49072" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cfc987b6-cb6c-9bb0-8edb-f4c5872f9810" executionId="7541532d-c8f1-4714-a6cf-a671357ca7e8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fef58911-f61f-f84b-855b-6e7647bd5e36" executionId="70a87245-0229-4fad-9b3b-7fe68d7fc0f4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f85c1c9d-8e08-bc40-f8fe-e83b8e78d2c3" executionId="0cf44f69-c281-46f6-8347-5af1e112ea95" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2a0aaabe-c30e-de67-0e4b-1269b09335e6" executionId="20322b7d-6ed5-4781-a112-82d8b2089aa7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f9fab7d2-86bd-9d0b-2fb0-a8403f42efab" executionId="9e7e2384-58fe-4898-9c40-02c6a1479168" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4e789a62-433e-ea70-ebbe-d84c9eeee876" executionId="1e7214d5-c4b4-4166-841e-1b946d258632" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="09a69c4b-0792-9031-2d49-045dbc14671a" executionId="eb418db9-45ba-4500-b696-4c7446c1660b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ea1a47a0-2cde-2f83-00b7-4a80a39f1926" executionId="48a761ac-e0a5-46f0-9bc6-414fe1d15ecc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7cc74f15-e41d-7e3d-6448-70d9d678bc6f" executionId="be82fb53-4036-4aa9-8e0b-9169717f7829" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="42" executed="42" passed="37" failed="5" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 8.0.28)
+[xUnit.net 00:00:01.07]   Discovering: WebApi.Tests
+[xUnit.net 00:00:01.39]   Discovered:  WebApi.Tests
+[xUnit.net 00:00:01.40]   Starting:    WebApi.Tests
+[xUnit.net 00:00:43.06]       Assert.Equal() Failure
+[xUnit.net 00:00:43.06]       Expected: 1
+[xUnit.net 00:00:43.06]       Actual:   2
+[xUnit.net 00:00:43.06]       Stack Trace:
+[xUnit.net 00:00:43.06]         /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Workforce/SchedulePublishSqlServerTests.cs(60,0): at WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Publish_commits_publication_recipients_inbox_outbox_and_audit_atomically()
+[xUnit.net 00:00:43.06]         /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Workforce/SchedulePublishSqlServerTests.cs(65,0): at WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Publish_commits_publication_recipients_inbox_outbox_and_audit_atomically()
+[xUnit.net 00:00:43.06]         /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Workforce/SchedulePublishSqlServerTests.cs(65,0): at WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Publish_commits_publication_recipients_inbox_outbox_and_audit_atomically()
+[xUnit.net 00:00:43.06]         --- End of stack trace from previous location ---
+[xUnit.net 00:01:52.79]       Assert.False() Failure
+[xUnit.net 00:01:52.79]       Expected: False
+[xUnit.net 00:01:52.79]       Actual:   True
+[xUnit.net 00:01:52.79]       Stack Trace:
+[xUnit.net 00:01:52.79]         /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Events/EventsMigrationLineageTests.cs(297,0): at WebApi.Tests.Events.EventsMigrationLineageTests.Has_no_pending_model_changes_after_the_events_wave()
+[xUnit.net 00:01:52.79]         /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Events/EventsMigrationLineageTests.cs(297,0): at WebApi.Tests.Events.EventsMigrationLineageTests.Has_no_pending_model_changes_after_the_events_wave()
+[xUnit.net 00:01:52.79]         --- End of stack trace from previous location ---
+[xUnit.net 00:02:17.61]       System.InvalidOperationException : Sequence contains no elements.
+[xUnit.net 00:02:17.61]       Stack Trace:
+[xUnit.net 00:02:17.61]            at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+[xUnit.net 00:02:17.61]            at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+[xUnit.net 00:02:17.61]         /Users/svendaneel/okam/wt-msm-base/Services/Growth/GrowthDispatchService.cs(316,0): at WebApi.Services.Growth.GrowthDispatchService.CreateOrGetRunAsync(Int32 storeId, Int64 newsletterId, String userId, CancellationToken cancellationToken)
+[xUnit.net 00:02:17.61]         /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs(54,0): at WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.&lt;&gt;c__DisplayClass3_0.&lt;&lt;GRW_DISPATCH_001_two_concurrent_dispatch_requests_create_exactly_one_run&gt;g__Create|0&gt;d.MoveNext()
+[xUnit.net 00:02:17.61]         --- End of stack trace from previous location ---
+[xUnit.net 00:02:17.61]         /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs(54,0): at WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.&lt;&gt;c__DisplayClass3_0.&lt;&lt;GRW_DISPATCH_001_two_concurrent_dispatch_requests_create_exactly_one_run&gt;g__Create|0&gt;d.MoveNext()
+[xUnit.net 00:02:17.61]         --- End of stack trace from previous location ---
+[xUnit.net 00:02:17.61]         /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs(57,0): at WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.GRW_DISPATCH_001_two_concurrent_dispatch_requests_create_exactly_one_run()
+[xUnit.net 00:02:17.61]         /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs(64,0): at WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.GRW_DISPATCH_001_two_concurrent_dispatch_requests_create_exactly_one_run()
+[xUnit.net 00:02:17.61]         --- End of stack trace from previous location ---
+[xUnit.net 00:02:26.11]       System.InvalidOperationException : Sequence contains no elements.
+[xUnit.net 00:02:26.11]       Stack Trace:
+[xUnit.net 00:02:26.11]            at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+[xUnit.net 00:02:26.11]            at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+[xUnit.net 00:02:26.11]         /Users/svendaneel/okam/wt-msm-base/Services/Growth/GrowthDispatchService.cs(316,0): at WebApi.Services.Growth.GrowthDispatchService.CreateOrGetRunAsync(Int32 storeId, Int64 newsletterId, String userId, CancellationToken cancellationToken)
+[xUnit.net 00:02:26.11]         /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs(82,0): at WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.GRW_DISPATCH_001_two_concurrent_dispatchers_send_each_recipient_exactly_once()
+[xUnit.net 00:02:26.11]         /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs(83,0): at WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.GRW_DISPATCH_001_two_concurrent_dispatchers_send_each_recipient_exactly_once()
+[xUnit.net 00:02:26.11]         /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs(117,0): at WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.GRW_DISPATCH_001_two_concurrent_dispatchers_send_each_recipient_exactly_once()
+[xUnit.net 00:02:26.11]         --- End of stack trace from previous location ---
+[xUnit.net 00:02:26.23]       Assert.False() Failure
+[xUnit.net 00:02:26.23]       Expected: False
+[xUnit.net 00:02:26.23]       Actual:   True
+[xUnit.net 00:02:26.23]       Stack Trace:
+[xUnit.net 00:02:26.23]         /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchMigrationLineageTests.cs(73,0): at WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Growth_dispatch_migration_is_on_the_certified_chain_and_has_no_pending_changes()
+[xUnit.net 00:02:26.23]         /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchMigrationLineageTests.cs(73,0): at WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Growth_dispatch_migration_is_on_the_certified_chain_and_has_no_pending_changes()
+[xUnit.net 00:02:26.23]         --- End of stack trace from previous location ---
+[xUnit.net 00:02:27.27]   Finished:    WebApi.Tests
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-06T14:18:43.4292910+02:00">
+        <Text>[xUnit.net 00:00:43.06]     WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Publish_commits_publication_recipients_inbox_outbox_and_audit_atomically [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-06T14:19:53.1491800+02:00">
+        <Text>[xUnit.net 00:01:52.79]     WebApi.Tests.Events.EventsMigrationLineageTests.Has_no_pending_model_changes_after_the_events_wave [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-06T14:20:18.0482650+02:00">
+        <Text>[xUnit.net 00:02:17.61]     WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.GRW_DISPATCH_001_two_concurrent_dispatch_requests_create_exactly_one_run [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-06T14:20:26.5478770+02:00">
+        <Text>[xUnit.net 00:02:26.11]     WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.GRW_DISPATCH_001_two_concurrent_dispatchers_send_each_recipient_exactly_once [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-06T14:20:26.6721550+02:00">
+        <Text>[xUnit.net 00:02:26.23]     WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Growth_dispatch_migration_is_on_the_certified_chain_and_has_no_pending_changes [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

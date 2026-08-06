@@ -1,0 +1,9 @@
+# commit 627e34ae5eced9af7d8931529a1108db97241c9e  worktree basename: web-mixinlabels
+# The two reds in the full suite. Neither touches this lane's files; both pin the CHECKOUT NAME.
+  ● backend identity › asks whoever is holding the port what directory they are running from
+    Expected pattern: /^Web-modules@[0-9a-f]{40}(\+dirty)?$/
+    Received string:  "web-mixinlabels@627e34ae5eced9af7d8931529a1108db97241c9e"
+  ● backend identity › the world stamp › names the checkout the world script recorded, not the one holding the port
+    Expected pattern: /^Web-modules@/
+    Received string:  "web-mixinlabels@627e34ae5eced9af7d8931529a1108db97241c9e"
+Tests:       2 failed, 36 passed, 38 total

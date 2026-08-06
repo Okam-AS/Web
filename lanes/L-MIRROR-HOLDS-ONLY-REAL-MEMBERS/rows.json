@@ -1,0 +1,539 @@
+[
+ {
+  "fe": "ActionName",
+  "fe_path": "enums/action-name.ts",
+  "fe_count": 10,
+  "be": null,
+  "be_path": null,
+  "be_count": 0,
+  "how": "NO MATCH (best - 0.00)",
+  "short": [],
+  "extra": [
+   "ClearFileUploadEvent",
+   "ClearState",
+   "FileUploadEvent",
+   "Load",
+   "SetCurrentStore",
+   "SetCurrentUser",
+   "SetDeliveryAddress",
+   "SetLastViewedProductId",
+   "SetNotificationId",
+   "SetProductsQuery"
+  ]
+ },
+ {
+  "fe": "AppSettingKey",
+  "fe_path": "enums/app-setting-key.ts",
+  "fe_count": 1,
+  "be": null,
+  "be_path": null,
+  "be_count": 0,
+  "how": "NO MATCH (best - 0.00)",
+  "short": [],
+  "extra": [
+   "State"
+  ]
+ },
+ {
+  "fe": "CashDrawerTransactionType",
+  "fe_path": "enums/cash-drawer-transaction-type.ts",
+  "fe_count": 8,
+  "be": "CashDrawerTransactionType",
+  "be_path": "Enums/Kassa/CashDrawerTransactionType.cs",
+  "be_count": 8,
+  "how": "name",
+  "short": [],
+  "extra": []
+ },
+ {
+  "fe": "CheckSplitMode",
+  "fe_path": "enums/check-split-mode.ts",
+  "fe_count": 2,
+  "be": "CheckSplitMode",
+  "be_path": "Enums/Kassa/CheckSplitMode.cs",
+  "be_count": 2,
+  "how": "name",
+  "short": [],
+  "extra": []
+ },
+ {
+  "fe": "DeliveryType",
+  "fe_path": "enums/delivery-type.ts",
+  "fe_count": 7,
+  "be": "DeliveryType",
+  "be_path": "Enums/DeliveryType.cs",
+  "be_count": 7,
+  "how": "name",
+  "short": [],
+  "extra": []
+ },
+ {
+  "fe": "DineHomeStatus",
+  "fe_path": "enums/dinehome-status.ts",
+  "fe_count": 6,
+  "be": "DineHomeStatus",
+  "be_path": "Enums/DineHomeStatus.cs",
+  "be_count": 6,
+  "how": "name",
+  "short": [],
+  "extra": []
+ },
+ {
+  "fe": "DinteroTerminalStatus",
+  "fe_path": "enums/dintero-terminal-status.ts",
+  "fe_count": 4,
+  "be": "DinteroTerminalStatus",
+  "be_path": "Enums/DinteroTerminalStatus.cs",
+  "be_count": 4,
+  "how": "name",
+  "short": [],
+  "extra": []
+ },
+ {
+  "fe": "DinteroVerifyStatus",
+  "fe_path": "enums/dintero-verify-status.ts",
+  "fe_count": 4,
+  "be": "DinteroVerifyStatus",
+  "be_path": "Enums/DinteroVerifyStatus.cs",
+  "be_count": 4,
+  "how": "name",
+  "short": [],
+  "extra": []
+ },
+ {
+  "fe": "DiscountApplicability",
+  "fe_path": "enums/discount-applicability.ts",
+  "fe_count": 6,
+  "be": "DiscountApplicability",
+  "be_path": "Enums/DiscountApplicability.cs",
+  "be_count": 6,
+  "how": "name",
+  "short": [],
+  "extra": []
+ },
+ {
+  "fe": "DiscountType",
+  "fe_path": "enums/discount-type.ts",
+  "fe_count": 2,
+  "be": "DiscountType",
+  "be_path": "Enums/DiscountType.cs",
+  "be_count": 2,
+  "how": "name",
+  "short": [],
+  "extra": []
+ },
+ {
+  "fe": "GiftcardStatus",
+  "fe_path": "enums/giftcard-status.ts",
+  "fe_count": 4,
+  "be": "GiftcardStatus",
+  "be_path": "Enums/GiftcardStatus.cs",
+  "be_count": 5,
+  "how": "name",
+  "short": [
+   "Transferred"
+  ],
+  "extra": []
+ },
+ {
+  "fe": "GiftcardTransactionType",
+  "fe_path": "enums/giftcard-transaction-type.ts",
+  "fe_count": 6,
+  "be": "GiftcardTransactionType",
+  "be_path": "Enums/GiftcardTransactionType.cs",
+  "be_count": 6,
+  "how": "name",
+  "short": [],
+  "extra": []
+ },
+ {
+  "fe": "HttpMethod",
+  "fe_path": "enums/http-method.ts",
+  "fe_count": 5,
+  "be": null,
+  "be_path": null,
+  "be_count": 0,
+  "how": "NO MATCH (best - 0.00)",
+  "short": [],
+  "extra": [
+   "DELETE",
+   "GET",
+   "PATCH",
+   "POST",
+   "PUT"
+  ]
+ },
+ {
+  "fe": "HttpProperty",
+  "fe_path": "enums/http-property.ts",
+  "fe_count": 11,
+  "be": null,
+  "be_path": null,
+  "be_count": 0,
+  "how": "NO MATCH (best - 0.00)",
+  "short": [],
+  "extra": [
+   "Authorization",
+   "ClientAppVersion",
+   "ClientFeatures",
+   "ClientPlatform",
+   "Content",
+   "ContentType",
+   "Data",
+   "Language",
+   "Method",
+   "SelectedTheme",
+   "Url"
+  ]
+ },
+ {
+  "fe": "KassaEventType",
+  "fe_path": "enums/kassa-event-type.ts",
+  "fe_count": 19,
+  "be": "KassaEventType",
+  "be_path": "Enums/Kassa/KassaEventType.cs",
+  "be_count": 20,
+  "how": "name",
+  "short": [
+   "UTLEVREC"
+  ],
+  "extra": []
+ },
+ {
+  "fe": "KassaReceiptSeries",
+  "fe_path": "enums/kassa-receipt-series.ts",
+  "fe_count": 7,
+  "be": "KassaReceiptSeries",
+  "be_path": "Enums/Kassa/KassaReceiptSeries.cs",
+  "be_count": 8,
+  "how": "name",
+  "short": [
+   "Delivery"
+  ],
+  "extra": []
+ },
+ {
+  "fe": "KassaReceiptType",
+  "fe_path": "enums/kassa-receipt-type.ts",
+  "fe_count": 6,
+  "be": "KassaReceiptType",
+  "be_path": "Enums/Kassa/KassaReceiptType.cs",
+  "be_count": 7,
+  "how": "name",
+  "short": [
+   "Delivery"
+  ],
+  "extra": []
+ },
+ {
+  "fe": "KeyAccountManagerStatus",
+  "fe_path": "enums/key-account-manager-status.ts",
+  "fe_count": 6,
+  "be": "KeyAccountManagerStatus",
+  "be_path": "Enums/KeyAccountManagerStatus.cs",
+  "be_count": 6,
+  "how": "name",
+  "short": [],
+  "extra": []
+ },
+ {
+  "fe": "KitchenTicketSource",
+  "fe_path": "enums/kitchen-ticket-source.ts",
+  "fe_count": 2,
+  "be": "KitchenTicketSource",
+  "be_path": "Models/Kassa/KitchenBoardModels.cs",
+  "be_count": 2,
+  "how": "name",
+  "short": [],
+  "extra": []
+ },
+ {
+  "fe": "MutationName",
+  "fe_path": "enums/mutation-name.ts",
+  "fe_count": 27,
+  "be": null,
+  "be_path": null,
+  "be_count": 0,
+  "how": "NO MATCH (best - 0.00)",
+  "short": [],
+  "extra": [
+   "ClearCurrentUser",
+   "ClearCurrentUserAndStore",
+   "ClearFileUploadEvent",
+   "FileUploadEvent",
+   "Load",
+   "RemoveCart",
+   "RemoveCartItems",
+   "RemoveLineItem",
+   "SetCartIsLoading",
+   "SetCartRootProperties",
+   "SetCarts",
+   "SetCurrentStore",
+   "SetCurrentUser",
+   "SetDeliveryAddress",
+   "SetIntroIsSeen",
+   "SetLastViewedProductId",
+   "SetLineItem",
+   "SetNotificationId",
+   "SetNotificationStatus",
+   "SetOrders",
+   "SetProductsQuery",
+   "SetStore",
+   "SetStoreProducts",
+   "SetStores",
+   "SetUserPosition",
+   "StartNewOrderNotificationsInterval",
+   "StopNewOrderNotificationsInterval"
+  ]
+ },
+ {
+  "fe": "NotificationPlatform",
+  "fe_path": "enums/notification-platform.ts",
+  "fe_count": 2,
+  "be": null,
+  "be_path": null,
+  "be_count": 0,
+  "how": "NO MATCH (best - 0.00)",
+  "short": [],
+  "extra": [
+   "Apns",
+   "Fcm"
+  ]
+ },
+ {
+  "fe": "OfferProposalStatus",
+  "fe_path": "enums/offer-proposal-status.ts",
+  "fe_count": 7,
+  "be": "OfferProposalStatus",
+  "be_path": "Enums/OfferProposalStatus.cs",
+  "be_count": 7,
+  "how": "name",
+  "short": [],
+  "extra": []
+ },
+ {
+  "fe": "OrderKind",
+  "fe_path": "enums/order-kind.ts",
+  "fe_count": 2,
+  "be": "OrderKind",
+  "be_path": "Enums/OrderKind.cs",
+  "be_count": 2,
+  "how": "name",
+  "short": [],
+  "extra": []
+ },
+ {
+  "fe": "OrderLineItemStatus",
+  "fe_path": "enums/order-line-item-status.ts",
+  "fe_count": 5,
+  "be": "OrderLineItemStatus",
+  "be_path": "Enums/Kassa/OrderLineItemStatus.cs",
+  "be_count": 5,
+  "how": "name",
+  "short": [],
+  "extra": []
+ },
+ {
+  "fe": "OrderPaymentStatus",
+  "fe_path": "enums/order-payment-status.ts",
+  "fe_count": 3,
+  "be": "OrderPaymentStatus",
+  "be_path": "Enums/Kassa/OrderPaymentStatus.cs",
+  "be_count": 3,
+  "how": "name",
+  "short": [],
+  "extra": []
+ },
+ {
+  "fe": "OrderPaymentTypeFilter",
+  "fe_path": "enums/order-payment-type-filter.ts",
+  "fe_count": 11,
+  "be": "PaymentTypeFilter",
+  "be_path": "Enums/PaymentTypeFilter.cs",
+  "be_count": 12,
+  "how": "overlap 0.92",
+  "short": [
+   "DinteroKravia"
+  ],
+  "extra": []
+ },
+ {
+  "fe": "OrderStatus",
+  "fe_path": "enums/order-status.ts",
+  "fe_count": 9,
+  "be": "OrderStatus",
+  "be_path": "Enums/OrderStatus.cs",
+  "be_count": 9,
+  "how": "name",
+  "short": [],
+  "extra": []
+ },
+ {
+  "fe": "OrderStatusFilter",
+  "fe_path": "enums/order-status-filter.ts",
+  "fe_count": 3,
+  "be": "OrderStatusFilter",
+  "be_path": "Enums/OrderStatusFilter.cs",
+  "be_count": 3,
+  "how": "name",
+  "short": [],
+  "extra": []
+ },
+ {
+  "fe": "PaymentType",
+  "fe_path": "enums/payment-type.ts",
+  "fe_count": 16,
+  "be": "PaymentType",
+  "be_path": "Enums/PaymentType.cs",
+  "be_count": 17,
+  "how": "name",
+  "short": [
+   "CompanyAccount"
+  ],
+  "extra": []
+ },
+ {
+  "fe": "PosReasonType",
+  "fe_path": "enums/pos-reason-type.ts",
+  "fe_count": 10,
+  "be": "PosReasonType",
+  "be_path": "Enums/Kassa/PosReasonType.cs",
+  "be_count": 10,
+  "how": "name",
+  "short": [],
+  "extra": []
+ },
+ {
+  "fe": "PosSettlementStatus",
+  "fe_path": "enums/pos-settlement-status.ts",
+  "fe_count": 3,
+  "be": "PosSettlementStatus",
+  "be_path": "Enums/Kassa/PosSettlementStatus.cs",
+  "be_count": 3,
+  "how": "name",
+  "short": [],
+  "extra": []
+ },
+ {
+  "fe": "ReservationStatus",
+  "fe_path": "enums/reservation-status.ts",
+  "fe_count": 6,
+  "be": "ReservationStatus",
+  "be_path": "Enums/FloorPlan/ReservationStatus.cs",
+  "be_count": 6,
+  "how": "name",
+  "short": [],
+  "extra": []
+ },
+ {
+  "fe": "RewardTransactionType",
+  "fe_path": "enums/reward-transaction-type.ts",
+  "fe_count": 4,
+  "be": "RewardTransactionType",
+  "be_path": "Enums/RewardTransactionType.cs",
+  "be_count": 4,
+  "how": "name",
+  "short": [
+   "Canceled"
+  ],
+  "extra": [
+   "Transferred"
+  ]
+ },
+ {
+  "fe": "SafTVatCode",
+  "fe_path": "enums/saf-t-vat-code.ts",
+  "fe_count": 3,
+  "be": "SafTVatCode",
+  "be_path": "Enums/SafTVatCode.cs",
+  "be_count": 4,
+  "how": "name",
+  "short": [
+   "TwelvePercent"
+  ],
+  "extra": []
+ },
+ {
+  "fe": "StatisticDateFilter",
+  "fe_path": "enums/statistic-date-filter.ts",
+  "fe_count": 7,
+  "be": null,
+  "be_path": null,
+  "be_count": 0,
+  "how": "NO MATCH (best EventsProposalLineKind 0.09)",
+  "short": [],
+  "extra": [
+   "Custom",
+   "LastMonth",
+   "LastSevenDays",
+   "ThisMonth",
+   "ThisYear",
+   "Today",
+   "Yesterday"
+  ]
+ },
+ {
+  "fe": "SurfboardApplicationStatus",
+  "fe_path": "enums/surfboard-application-status.ts",
+  "fe_count": 8,
+  "be": null,
+  "be_path": null,
+  "be_count": 0,
+  "how": "NO MATCH (best WorkforceTimeOffRequestStatus 0.27)",
+  "short": [],
+  "extra": [
+   "Completed",
+   "Expired",
+   "Initiated",
+   "MerchantCreated",
+   "PendingInformation",
+   "Rejected",
+   "Signed",
+   "Submitted"
+  ]
+ },
+ {
+  "fe": "TableShape",
+  "fe_path": "enums/table-shape.ts",
+  "fe_count": 3,
+  "be": "TableShape",
+  "be_path": "Enums/FloorPlan/TableShape.cs",
+  "be_count": 3,
+  "how": "name",
+  "short": [],
+  "extra": []
+ },
+ {
+  "fe": "TerminalPaymentState",
+  "fe_path": "enums/terminal-payment-state.ts",
+  "fe_count": 10,
+  "be": "TerminalPaymentState",
+  "be_path": "Models/Kassa/TerminalPaymentModels.cs",
+  "be_count": 10,
+  "how": "name",
+  "short": [],
+  "extra": []
+ },
+ {
+  "fe": "TerminalProvider",
+  "fe_path": "enums/terminal-provider.ts",
+  "fe_count": 3,
+  "be": "TerminalProvider",
+  "be_path": "Enums/Kassa/TerminalProvider.cs",
+  "be_count": 3,
+  "how": "name",
+  "short": [],
+  "extra": []
+ },
+ {
+  "fe": "VippsVerifyStatus",
+  "fe_path": "enums/vipps-verify-status.ts",
+  "fe_count": 4,
+  "be": "VippsVerifyStatus",
+  "be_path": "Enums/VippsVerifyStatus.cs",
+  "be_count": 4,
+  "how": "name",
+  "short": [],
+  "extra": []
+ }
+]

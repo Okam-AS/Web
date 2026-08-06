@@ -1,0 +1,62 @@
+=== label        : D2-mutant-no-ch
+=== edition      : OKAM_EDITION=ch
+=== worktree     : /Users/svendaneel/okam/web-mixinlabels
+=== commit       : fff21f6c3402d95c2859383f401d9ebcd790e00e
+=== spec sha     : 28b9c0177ef7dda0285effb37ea4b136e6adc57c
+=== mixin sha    : 23eafd4bb413b9bd337572d48f4a38a1ff9295b8
+=== de.ts sha    : 1a5e2f8f2bbb130d26a6b08f86901c3249bc8632
+=== no.ts sha    : 23807e9abf5007a6135c32fceac3cdfaca9fb22f
+=== en.ts sha    : cf769abbe7e0edee0eded7a83ab2eeec86cf0116
+=== world.js sha : 307a7cc9e12294b21b2840bc35ec4707609e97c8
+=== ports        : web=3853 fixture=4853 (4010 never bound, pid 73160 never signalled; 3847/4847 not this lane's)
+=== core         : 10 entries
+=== dirty        : verbatim `git status --porcelain -- ':!core' ':!artifacts'` <<<
+ M plugins/global-mixin.js
+ M test/e2e/fixture/world.js
+ M test/e2e/journeys/modal-estate-scroll-lock.spec.js
+ M translations/de.ts
+ M translations/en.ts
+ M translations/no.ts
+=== dirty end    : >>>
+[WebServer] [fixture] listening on http://127.0.0.1:4853
+
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://172.20.10.4:3853/
+
+[WebServer] [info] Preparing project for development
+
+[WebServer] [info] Initial build may take a while
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+
+[WebServer] [success] Builder initialized
+
+
+Running 1 test using 1 worker
+
+[WebServer] [success] Nuxt files generated
+
+[WebServer] [warn] Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1/1] [chromium] › test/e2e/journeys/modal-estate-scroll-lock.spec.js:233:1 › Two different modals hold the page, and closing one does not let go — at the Swiss edition, with the receipt read in German @fixture
+[WebServer] [info] Waiting for file changes
+
+[WebServer] [info] Memory usage: 1.24 GB (RSS: 2.13 GB)
+
+[WebServer] [info] Listening on: http://172.20.10.4:3853/
+
+  1 passed (26.6s)
+RESULT D2-mutant-no-ch edition=ch PASS rc=0

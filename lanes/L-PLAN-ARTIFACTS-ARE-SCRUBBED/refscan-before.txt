@@ -1,0 +1,25 @@
+== refs/lanes/plan-snapshot
+   C3 x1  docs/plan/log.md
+   C3 x1  docs/plan/render/plan.html
+   C3 x1  docs/plan/returns/L-EV-RUNSHEET-PRINT-1.md
+   C3 x1  docs/plan/returns/L-LIVE-SEED-VIA-PRODUCT-1.md
+   C3 x1  docs/plan/returns/L-LIVE-WORLD-RESTORE-1.md
+   C2 x1  docs/plan/returns/L-LIVE-WORLD-SEED-1.md
+   C3 x2  docs/plan/returns/L-LIVE-WORLD-SEED-1.md
+   C3 x1  docs/plan/returns/L-LIVE-WORLD-STAFF-1.md
+   C3 x2  docs/plan/returns/L-PRESERVE-UNREFERENCED-WORK-1.md
+   C2 x1  docs/plan/returns/L-WF-ONBOARD-DEMO-RUN-1.md
+   C3 x1  docs/plan/returns/L-WF-ONBOARD-DEMO-RUN-1.md
+   TOTAL 13
+== plan/docs-20260806
+   C3 x1  docs/plan/log.md
+   C3 x1  docs/plan/returns/L-EV-RUNSHEET-PRINT-1.md
+   C3 x1  docs/plan/returns/L-LIVE-SEED-VIA-PRODUCT-1.md
+   C3 x1  docs/plan/returns/L-LIVE-WORLD-RESTORE-1.md
+   C2 x1  docs/plan/returns/L-LIVE-WORLD-SEED-1.md
+   C3 x2  docs/plan/returns/L-LIVE-WORLD-SEED-1.md
+   C3 x1  docs/plan/returns/L-LIVE-WORLD-STAFF-1.md
+   C3 x2  docs/plan/returns/L-PRESERVE-UNREFERENCED-WORK-1.md
+   C2 x1  docs/plan/returns/L-WF-ONBOARD-DEMO-RUN-1.md
+   C3 x1  docs/plan/returns/L-WF-ONBOARD-DEMO-RUN-1.md
+   TOTAL 12

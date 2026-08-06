@@ -1,0 +1,976 @@
+watchman warning:  Recrawled this watch 57 times, most recently because:
+MustScanSubDirs UserDroppedTo resolve, please review the information on
+https://facebook.github.io/watchman/docs/troubleshooting.html#recrawl
+To clear this warning, run:
+`watchman watch-del '/Users/svendaneel/okam/Web-modules' ; watchman watch-project '/Users/svendaneel/okam/Web-modules'`
+
+FAIL test/reservations-combined-table-conflict.test.js
+  what the page reads off a combined booking
+    ✓ a combined booking carries every table it holds, not only the primary (19 ms)
+  conflict detection sees every table a reservation holds
+    ✕ a booking on the secondary table of a combined 1+2 is a conflict (7 ms)
+    ✓ a table the combined booking does NOT hold stays free (3 ms)
+    ✕ a draft that combines onto an already-booked table is a conflict (4 ms)
+    ✓ a reservation never conflicts with itself on any of its own tables (3 ms)
+    ✓ the rules that already held still hold across the whole combination (2 ms)
+    ✓ an empty table selection is not a conflict (3 ms)
+  the modal refuses a draft whose extra table is taken
+    ✕ the conflict line shows and Save is blocked when only the EXTRA table overlaps (8 ms)
+    ✓ a draft whose combination is entirely free still saves (5 ms)
+    ✕ the table list marks the secondary table of a combined booking as busy (6 ms)
+    ✕ a combinable table that is already booked says so before it is picked (8 ms)
+  the timeline refuses a drag whose extra table is taken
+    ✕ the drop is refused and the move is never emitted (8 ms)
+    ✓ the same drag onto a free slot still lands (4 ms)
+    ✕ a resize that stretches a combination over a booking on its extra table is refused (5 ms)
+
+  ● conflict detection sees every table a reservation holds › a booking on the secondary table of a combined 1+2 is a conflict
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      129 |     expect(wrapper.vm.checkConflict(null, 1, 19 * 60, 90, DAY)).toBe(true)
+      130 |     // The secondary is the defect: table 2 is held by the same party for the same two hours.
+    > 131 |     expect(wrapper.vm.checkConflict(null, 2, 19 * 60, 90, DAY)).toBe(true)
+          |                                                                 ^
+      132 |     wrapper.destroy()
+      133 |   })
+      134 |
+
+      at Object.<anonymous> (test/reservations-combined-table-conflict.test.js:131:65)
+
+  ● conflict detection sees every table a reservation holds › a draft that combines onto an already-booked table is a conflict
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      145 |
+      146 |     // Primary 4 is free; the extra table 3 is not, so the draft as a whole conflicts.
+    > 147 |     expect(wrapper.vm.checkConflict(null, [4, 3], 19 * 60, 90, DAY)).toBe(true)
+          |                                                                      ^
+      148 |     // …and a combination that touches nothing booked still does not.
+      149 |     expect(wrapper.vm.checkConflict(null, [4, 5], 19 * 60, 90, DAY)).toBe(false)
+      150 |     wrapper.destroy()
+
+      at Object.<anonymous> (test/reservations-combined-table-conflict.test.js:147:70)
+
+  ● the modal refuses a draft whose extra table is taken › the conflict line shows and Save is blocked when only the EXTRA table overlaps
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      222 |     const modal = mountModal(page, draftOn(4, [3], 19 * 60, 90))
+      223 |
+    > 224 |     expect(modal.vm.conflictNow).toBe(true)
+          |                                  ^
+      225 |     expect(modal.vm.canSave).toBe(false)
+      226 |     expect(modal.find('.rm-error').exists()).toBe(true)
+      227 |     modal.destroy()
+
+      at Object.<anonymous> (test/reservations-combined-table-conflict.test.js:224:34)
+
+  ● the modal refuses a draft whose extra table is taken › the table list marks the secondary table of a combined booking as busy
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      244 |
+      245 |     expect(modal.vm.isBusy(1)).toBe(true)
+    > 246 |     expect(modal.vm.isBusy(2)).toBe(true)
+          |                                ^
+      247 |     expect(modal.vm.isBusy(5)).toBe(false)
+      248 |     modal.destroy()
+      249 |     page.destroy()
+
+      at Object.<anonymous> (test/reservations-combined-table-conflict.test.js:246:32)
+
+  ● the modal refuses a draft whose extra table is taken › a combinable table that is already booked says so before it is picked
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1
+    Received: 0
+
+      255 |
+      256 |     const busy = modal.findAll('.rm-combine-chip').filter(c => c.attributes('data-table-id') === '2')
+    > 257 |     expect(busy.length).toBe(1)
+          |                         ^
+      258 |     expect(busy.at(0).classes()).toContain('is-busy')
+      259 |
+      260 |     const free = modal.findAll('.rm-combine-chip').filter(c => c.attributes('data-table-id') === '5')
+
+      at Object.<anonymous> (test/reservations-combined-table-conflict.test.js:257:25)
+
+  ● the timeline refuses a drag whose extra table is taken › the drop is refused and the move is never emitted
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      310 |     expect(timeline.vm.drag.curStart).toBe(18 * 60)
+      311 |     expect(timeline.vm.drag.curTable).toBe(4)
+    > 312 |     expect(timeline.vm.drag.conflict).toBe(true)
+          |                                       ^
+      313 |
+      314 |     timeline.vm.onPointerUp()
+      315 |     expect(timeline.emitted('conflict')).toBeTruthy()
+
+      at Object.<anonymous> (test/reservations-combined-table-conflict.test.js:312:39)
+
+  ● the timeline refuses a drag whose extra table is taken › a resize that stretches a combination over a booking on its extra table is refused
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      351 |
+      352 |     expect(timeline.vm.drag.curDur).toBe(120)
+    > 353 |     expect(timeline.vm.drag.conflict).toBe(true)
+          |                                       ^
+      354 |
+      355 |     timeline.vm.onPointerUp()
+      356 |     expect(timeline.emitted('conflict')).toBeTruthy()
+
+      at Object.<anonymous> (test/reservations-combined-table-conflict.test.js:353:39)
+
+  console.error
+    [Vue warn]: Unknown custom element: <NuxtLink> - did you register the component correctly? For recursive components, make sure to provide the "name" option.
+    
+    found in
+    
+    ---> <AdminReservations>
+           <Root>
+
+      81 | // the conflict rule — `fromApi` and `checkConflict` are the code under test.
+      82 | function mountPage (dayReservations) {
+    > 83 |   const wrapper = shallowMount(ReservationsPage, {
+         |                               ^
+      84 |     mocks: {
+      85 |       $i,
+      86 |       $store: {
+
+      at warn$2 (node_modules/vue/dist/vue.common.dev.js:5037:21)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6466:21)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at mount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14067:21)
+      at shallowMount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14093:10)
+      at mountPage (test/reservations-combined-table-conflict.test.js:83:31)
+      at Object.<anonymous> (test/reservations-combined-table-conflict.test.js:113:21)
+
+  console.error
+    [Vue warn]: Unknown custom element: <NuxtLink> - did you register the component correctly? For recursive components, make sure to provide the "name" option.
+    
+    found in
+    
+    ---> <AdminReservations>
+           <Root>
+
+      81 | // the conflict rule — `fromApi` and `checkConflict` are the code under test.
+      82 | function mountPage (dayReservations) {
+    > 83 |   const wrapper = shallowMount(ReservationsPage, {
+         |                               ^
+      84 |     mocks: {
+      85 |       $i,
+      86 |       $store: {
+
+      at warn$2 (node_modules/vue/dist/vue.common.dev.js:5037:21)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6466:21)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at mount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14067:21)
+      at shallowMount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14093:10)
+      at mountPage (test/reservations-combined-table-conflict.test.js:83:31)
+      at Object.<anonymous> (test/reservations-combined-table-conflict.test.js:126:21)
+
+  console.error
+    [Vue warn]: Unknown custom element: <NuxtLink> - did you register the component correctly? For recursive components, make sure to provide the "name" option.
+    
+    found in
+    
+    ---> <AdminReservations>
+           <Root>
+
+      81 | // the conflict rule — `fromApi` and `checkConflict` are the code under test.
+      82 | function mountPage (dayReservations) {
+    > 83 |   const wrapper = shallowMount(ReservationsPage, {
+         |                               ^
+      84 |     mocks: {
+      85 |       $i,
+      86 |       $store: {
+
+      at warn$2 (node_modules/vue/dist/vue.common.dev.js:5037:21)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6466:21)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at mount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14067:21)
+      at shallowMount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14093:10)
+      at mountPage (test/reservations-combined-table-conflict.test.js:83:31)
+      at Object.<anonymous> (test/reservations-combined-table-conflict.test.js:136:21)
+
+  console.error
+    [Vue warn]: Unknown custom element: <NuxtLink> - did you register the component correctly? For recursive components, make sure to provide the "name" option.
+    
+    found in
+    
+    ---> <AdminReservations>
+           <Root>
+
+      81 | // the conflict rule — `fromApi` and `checkConflict` are the code under test.
+      82 | function mountPage (dayReservations) {
+    > 83 |   const wrapper = shallowMount(ReservationsPage, {
+         |                               ^
+      84 |     mocks: {
+      85 |       $i,
+      86 |       $store: {
+
+      at warn$2 (node_modules/vue/dist/vue.common.dev.js:5037:21)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6466:21)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at mount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14067:21)
+      at shallowMount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14093:10)
+      at mountPage (test/reservations-combined-table-conflict.test.js:83:31)
+      at Object.<anonymous> (test/reservations-combined-table-conflict.test.js:144:21)
+
+  console.error
+    [Vue warn]: Unknown custom element: <NuxtLink> - did you register the component correctly? For recursive components, make sure to provide the "name" option.
+    
+    found in
+    
+    ---> <AdminReservations>
+           <Root>
+
+      81 | // the conflict rule — `fromApi` and `checkConflict` are the code under test.
+      82 | function mountPage (dayReservations) {
+    > 83 |   const wrapper = shallowMount(ReservationsPage, {
+         |                               ^
+      84 |     mocks: {
+      85 |       $i,
+      86 |       $store: {
+
+      at warn$2 (node_modules/vue/dist/vue.common.dev.js:5037:21)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6466:21)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at mount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14067:21)
+      at shallowMount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14093:10)
+      at mountPage (test/reservations-combined-table-conflict.test.js:83:31)
+      at Object.<anonymous> (test/reservations-combined-table-conflict.test.js:154:21)
+
+  console.error
+    [Vue warn]: Unknown custom element: <NuxtLink> - did you register the component correctly? For recursive components, make sure to provide the "name" option.
+    
+    found in
+    
+    ---> <AdminReservations>
+           <Root>
+
+      81 | // the conflict rule — `fromApi` and `checkConflict` are the code under test.
+      82 | function mountPage (dayReservations) {
+    > 83 |   const wrapper = shallowMount(ReservationsPage, {
+         |                               ^
+      84 |     mocks: {
+      85 |       $i,
+      86 |       $store: {
+
+      at warn$2 (node_modules/vue/dist/vue.common.dev.js:5037:21)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6466:21)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at mount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14067:21)
+      at shallowMount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14093:10)
+      at mountPage (test/reservations-combined-table-conflict.test.js:83:31)
+      at Object.<anonymous> (test/reservations-combined-table-conflict.test.js:166:21)
+
+  console.error
+    [Vue warn]: Unknown custom element: <NuxtLink> - did you register the component correctly? For recursive components, make sure to provide the "name" option.
+    
+    found in
+    
+    ---> <AdminReservations>
+           <Root>
+
+      81 | // the conflict rule — `fromApi` and `checkConflict` are the code under test.
+      82 | function mountPage (dayReservations) {
+    > 83 |   const wrapper = shallowMount(ReservationsPage, {
+         |                               ^
+      84 |     mocks: {
+      85 |       $i,
+      86 |       $store: {
+
+      at warn$2 (node_modules/vue/dist/vue.common.dev.js:5037:21)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6466:21)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at mount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14067:21)
+      at shallowMount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14093:10)
+      at mountPage (test/reservations-combined-table-conflict.test.js:83:31)
+      at Object.<anonymous> (test/reservations-combined-table-conflict.test.js:176:21)
+
+  console.error
+    [Vue warn]: Unknown custom element: <NuxtLink> - did you register the component correctly? For recursive components, make sure to provide the "name" option.
+    
+    found in
+    
+    ---> <AdminReservations>
+           <Root>
+
+      81 | // the conflict rule — `fromApi` and `checkConflict` are the code under test.
+      82 | function mountPage (dayReservations) {
+    > 83 |   const wrapper = shallowMount(ReservationsPage, {
+         |                               ^
+      84 |     mocks: {
+      85 |       $i,
+      86 |       $store: {
+
+      at warn$2 (node_modules/vue/dist/vue.common.dev.js:5037:21)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6466:21)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at mount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14067:21)
+      at shallowMount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14093:10)
+      at mountPage (test/reservations-combined-table-conflict.test.js:83:31)
+      at Object.<anonymous> (test/reservations-combined-table-conflict.test.js:221:18)
+
+  console.error
+    [Vue warn]: Unknown custom element: <NuxtLink> - did you register the component correctly? For recursive components, make sure to provide the "name" option.
+    
+    found in
+    
+    ---> <AdminReservations>
+           <Root>
+
+      81 | // the conflict rule — `fromApi` and `checkConflict` are the code under test.
+      82 | function mountPage (dayReservations) {
+    > 83 |   const wrapper = shallowMount(ReservationsPage, {
+         |                               ^
+      84 |     mocks: {
+      85 |       $i,
+      86 |       $store: {
+
+      at warn$2 (node_modules/vue/dist/vue.common.dev.js:5037:21)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6466:21)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at mount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14067:21)
+      at shallowMount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14093:10)
+      at mountPage (test/reservations-combined-table-conflict.test.js:83:31)
+      at Object.<anonymous> (test/reservations-combined-table-conflict.test.js:232:18)
+
+  console.error
+    [Vue warn]: Unknown custom element: <NuxtLink> - did you register the component correctly? For recursive components, make sure to provide the "name" option.
+    
+    found in
+    
+    ---> <AdminReservations>
+           <Root>
+
+      81 | // the conflict rule — `fromApi` and `checkConflict` are the code under test.
+      82 | function mountPage (dayReservations) {
+    > 83 |   const wrapper = shallowMount(ReservationsPage, {
+         |                               ^
+      84 |     mocks: {
+      85 |       $i,
+      86 |       $store: {
+
+      at warn$2 (node_modules/vue/dist/vue.common.dev.js:5037:21)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6466:21)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at mount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14067:21)
+      at shallowMount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14093:10)
+      at mountPage (test/reservations-combined-table-conflict.test.js:83:31)
+      at Object.<anonymous> (test/reservations-combined-table-conflict.test.js:242:18)
+
+  console.error
+    [Vue warn]: Unknown custom element: <NuxtLink> - did you register the component correctly? For recursive components, make sure to provide the "name" option.
+    
+    found in
+    
+    ---> <AdminReservations>
+           <Root>
+
+      81 | // the conflict rule — `fromApi` and `checkConflict` are the code under test.
+      82 | function mountPage (dayReservations) {
+    > 83 |   const wrapper = shallowMount(ReservationsPage, {
+         |                               ^
+      84 |     mocks: {
+      85 |       $i,
+      86 |       $store: {
+
+      at warn$2 (node_modules/vue/dist/vue.common.dev.js:5037:21)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6466:21)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at mount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14067:21)
+      at shallowMount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14093:10)
+      at mountPage (test/reservations-combined-table-conflict.test.js:83:31)
+      at Object.<anonymous> (test/reservations-combined-table-conflict.test.js:253:18)
+
+  console.error
+    [Vue warn]: Unknown custom element: <NuxtLink> - did you register the component correctly? For recursive components, make sure to provide the "name" option.
+    
+    found in
+    
+    ---> <AdminReservations>
+           <Root>
+
+      81 | // the conflict rule — `fromApi` and `checkConflict` are the code under test.
+      82 | function mountPage (dayReservations) {
+    > 83 |   const wrapper = shallowMount(ReservationsPage, {
+         |                               ^
+      84 |     mocks: {
+      85 |       $i,
+      86 |       $store: {
+
+      at warn$2 (node_modules/vue/dist/vue.common.dev.js:5037:21)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6466:21)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at mount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14067:21)
+      at shallowMount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14093:10)
+      at mountPage (test/reservations-combined-table-conflict.test.js:83:31)
+      at Object.<anonymous> (test/reservations-combined-table-conflict.test.js:301:18)
+
+  console.error
+    [Vue warn]: Unknown custom element: <NuxtLink> - did you register the component correctly? For recursive components, make sure to provide the "name" option.
+    
+    found in
+    
+    ---> <AdminReservations>
+           <Root>
+
+      81 | // the conflict rule — `fromApi` and `checkConflict` are the code under test.
+      82 | function mountPage (dayReservations) {
+    > 83 |   const wrapper = shallowMount(ReservationsPage, {
+         |                               ^
+      84 |     mocks: {
+      85 |       $i,
+      86 |       $store: {
+
+      at warn$2 (node_modules/vue/dist/vue.common.dev.js:5037:21)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6466:21)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at mount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14067:21)
+      at shallowMount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14093:10)
+      at mountPage (test/reservations-combined-table-conflict.test.js:83:31)
+      at Object.<anonymous> (test/reservations-combined-table-conflict.test.js:322:18)
+
+  console.error
+    [Vue warn]: Unknown custom element: <NuxtLink> - did you register the component correctly? For recursive components, make sure to provide the "name" option.
+    
+    found in
+    
+    ---> <AdminReservations>
+           <Root>
+
+      81 | // the conflict rule — `fromApi` and `checkConflict` are the code under test.
+      82 | function mountPage (dayReservations) {
+    > 83 |   const wrapper = shallowMount(ReservationsPage, {
+         |                               ^
+      84 |     mocks: {
+      85 |       $i,
+      86 |       $store: {
+
+      at warn$2 (node_modules/vue/dist/vue.common.dev.js:5037:21)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6466:21)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at createChildren (node_modules/vue/dist/vue.common.dev.js:6573:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6477:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at init (node_modules/vue/dist/vue.common.dev.js:4842:19)
+      at createComponent (node_modules/vue/dist/vue.common.dev.js:6500:17)
+      at createElm (node_modules/vue/dist/vue.common.dev.js:6454:13)
+      at VueComponent.patch [as __patch__] (node_modules/vue/dist/vue.common.dev.js:7002:13)
+      at VueComponent.Vue._update (node_modules/vue/dist/vue.common.dev.js:2787:25)
+      at VueComponent.updateComponent (node_modules/vue/dist/vue.common.dev.js:2897:16)
+      at Watcher.get (node_modules/vue/dist/vue.common.dev.js:4117:33)
+      at new Watcher (node_modules/vue/dist/vue.common.dev.js:4107:51)
+      at mountComponent (node_modules/vue/dist/vue.common.dev.js:2914:5)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:9225:12)
+      at VueComponent.Object.<anonymous>.Vue.$mount (node_modules/vue/dist/vue.common.dev.js:11762:18)
+      at mount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14067:21)
+      at shallowMount (node_modules/@vue/test-utils/dist/vue-test-utils.js:14093:10)
+      at mountPage (test/reservations-combined-table-conflict.test.js:83:31)
+      at Object.<anonymous> (test/reservations-combined-table-conflict.test.js:341:18)
+
+Test Suites: 1 failed, 1 total
+Tests:       7 failed, 7 passed, 14 total
+Snapshots:   0 total
+Time:        0.455 s, estimated 1 s
+Ran all test suites matching /test\/reservations-combined-table-conflict.test.js/i.

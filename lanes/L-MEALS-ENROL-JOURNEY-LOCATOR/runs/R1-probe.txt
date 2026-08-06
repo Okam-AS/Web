@@ -1,0 +1,62 @@
+=== label R1-probe | base commit 2e3f39d1441428b548403822e6dd6e4539416678 ===
+2e3f39d The enrolment panel arrives showing who is already enrolled
+=== core: 10 entries ===
+=== working tree vs base ===
+ M test/e2e/journeys/meals-admin-setup.spec.js
+=== spec blob: eb594f4a2cbe652b6b48def4e4a0715ee1b4fdf0 ===
+=== panel blob: fcf396c72e897de625e977e8e9bc214dad9d1f5e ===
+[WebServer] [fixture] listening on http://127.0.0.1:4778
+
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://172.20.10.4:3778/
+
+[WebServer] [info] Preparing project for development
+
+[WebServer] [info] Initial build may take a while
+
+
+Running 1 test using 1 worker
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+[WebServer] [success] Builder initialized
+
+[1/1] [chromium] › test/e2e/journeys/meals-admin-setup.spec.js:31:1 › A concierge creates a company, signs its corridor, runs a programme and issues an invitation @fixture
+[WebServer] [success] Nuxt files generated
+
+[WebServer] [warn] Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[WebServer] [info] Waiting for file changes
+
+[WebServer] [info] Memory usage: 1.3 GB (RSS: 2.11 GB)
+
+[WebServer] [info] Listening on: http://172.20.10.4:3778/
+
+[chromium] › test/e2e/journeys/meals-admin-setup.spec.js:31:1 › A concierge creates a company, signs its corridor, runs a programme and issues an invitation @fixture
+PROBE-COUNT 4
+
+PROBE-0 data-test=null inEnrol=false saysLeser=true :: Vi kan si hvilken versjon som er gjeldende, men ikke hva den sier: modulen har ingen rute 
+
+PROBE-1 data-test=enrol-replaces inEnrol=true saysLeser=false :: Listen du sender inn er hele påmeldingen, ikke et tillegg: alle som ikke er huket av, blir
+
+PROBE-2 data-test=enrol-unread inEnrol=true saysLeser=false :: Vi fikk ikke lest hvem som står påmeldt nå, så kontrollen holdes tilbake. Å lagre en liste
+
+PROBE-3 data-test=enrol-unread-refusal inEnrol=true saysLeser=false :: Denne serveren svarte ikke som Company Meals. Vi vet ikke om modulen finnes her.
+
+PROBE-IF-READ-ANSWERED count=2 [null,"enrol-replaces"]
+
+  1 passed (20.8s)
+RESULT R1-probe 2e3f39d PASS rc=0

@@ -1,0 +1,14 @@
+{
+  "label": "E-reverted-ch",
+  "edition": "ch",
+  "grantedFixturePort": 4847,
+  "grantedWebPort": 3847,
+  "health": "{\"ok\":true,\"port\":4847}",
+  "holderPid": "63599",
+  "holderCwd": "/Users/svendaneel/okam/web-rcptde",
+  "holderCommand": "node test/e2e/fixture/api-server.js",
+  "webPid": "63601",
+  "webCwd": "/Users/svendaneel/okam/web-rcptde",
+  "lsof": "p63599 f12 n127.0.0.1:4847 ",
+  "capturedAt": "2026-08-05T05:40:51Z"
+}

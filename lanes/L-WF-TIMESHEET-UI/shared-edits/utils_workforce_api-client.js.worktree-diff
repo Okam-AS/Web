@@ -1,0 +1,69 @@
+diff --git a/utils/workforce/api-client.js b/utils/workforce/api-client.js
+index 9fd07b1..7a8f70c 100644
+--- a/utils/workforce/api-client.js
++++ b/utils/workforce/api-client.js
+@@ -167,7 +167,64 @@ export class WorkforceClientBase {
+    * duplicated discriminator drifted apart before this file existed.
+    */
+   _mutate (method, path, body, extraHeaders) {
+     const headers = Object.assign({ 'Idempotency-Key': newGuid() }, extraHeaders || {});
+     return this._request(method, path, { body, headers });
+   }
++
++  /**
++   * A read whose body is a FILE rather than JSON.
++   *
++   * Deliberately NOT `_request`, which parses every body as JSON and would hand a caller the file
++   * wrapped in `{ detail }` — a shape that happens to work only because a CSV never parses as JSON,
++   * which is not a contract.
++   *
++   * It lived on `WorkforceRatesService` while the payroll hours export was the only such route. The
++   * timesheet batch download is the second, so it moved here rather than being copied — the same
++   * move `assertBusinessDate` made when the personalliste became the third date-taking surface. Two
++   * copies of an error path is the dangerous kind of duplication: the failure is silent and the
++   * copies drift one field at a time.
++   *
++   * The failure path is byte-for-byte `_request`'s so there is exactly one workforce error family:
++   * a problem+json body becomes `WorkforceApiError` with its `code`, a non-JSON body becomes one
++   * carrying the text as `detail`.
++   */
++  async _requestFile (path, accept) {
++    const response = await fetch(this._baseUrl + path, {
++      method: 'GET',
++      headers: this._headers({ Accept: accept || 'text/csv' })
++    });
++
++    const text = await response.text();
++
++    if (!response.ok) {
++      let payload = null;
++      if (text) {
++        try { payload = JSON.parse(text); } catch (e) { payload = { detail: text }; }
++      }
++      throw new WorkforceApiError(response.status, payload);
++    }
++
++    return { text, fileName: fileNameFrom(response.headers) };
++  }
++}
++
++/**
++ * The download name the server chose, off `Content-Disposition`.
++ *
++ * Returns null rather than a guess when the header is absent or unreadable — a cross-origin fetch
++ * only exposes it when the server lists it in `Access-Control-Expose-Headers`, and inventing the
++ * server's own naming scheme here would be a second copy of it that silently stops matching. The
++ * caller supplies its own fallback and knows it is a fallback.
++ */
++export function fileNameFrom (headers) {
++  if (!headers || typeof headers.get !== 'function') { return null; }
++  const disposition = headers.get('Content-Disposition') || headers.get('content-disposition');
++  if (!disposition) { return null; }
++  // RFC 6266: `filename*=UTF-8''…` wins over the plain `filename=…` when both are present.
++  const extended = /filename\*\s*=\s*UTF-8''([^;]+)/i.exec(disposition);
++  if (extended) {
++    try { return decodeURIComponent(extended[1].trim()); } catch (e) { return extended[1].trim(); }
++  }
++  const plain = /filename\s*=\s*"?([^";]+)"?/i.exec(disposition);
++  return plain ? plain[1].trim() : null;
+ }

@@ -1,0 +1,474 @@
+{
+ "candidate/fe-compose-2026-08-05": {
+  "ahead": 103,
+  "behind": 0
+ },
+ "feature/POS": {
+  "ahead": 0,
+  "behind": 105
+ },
+ "feature/restaurant-modules": {
+  "ahead": 0,
+  "behind": 0
+ },
+ "feature/swiss": {
+  "ahead": 24,
+  "behind": 146
+ },
+ "lane/L-JOURNEY-GROWTH": {
+  "ahead": 2,
+  "behind": 1
+ },
+ "lane/L-JOURNEY-PORT-HARDCODED": {
+  "ahead": 1,
+  "behind": 0
+ },
+ "lane/L-JOURNEY-PROXY-BLINDSPOT": {
+  "ahead": 2,
+  "behind": 0
+ },
+ "lane/L-PRICE-SHADOW-GUARD": {
+  "ahead": 2,
+  "behind": 0
+ },
+ "lane/admin-nav-links": {
+  "ahead": 0,
+  "behind": 84
+ },
+ "lane/check-discount-sum-coupled": {
+  "ahead": 4,
+  "behind": 0
+ },
+ "lane/check-lineamount-ungated-sum": {
+  "ahead": 6,
+  "behind": 0
+ },
+ "lane/coercion-write-paths": {
+  "ahead": 1,
+  "behind": 2
+ },
+ "lane/collect-review-conditions": {
+  "ahead": 104,
+  "behind": 0
+ },
+ "lane/collected-paths": {
+  "ahead": 1,
+  "behind": 0
+ },
+ "lane/ev-guestlink-one-composer": {
+  "ahead": 1,
+  "behind": 0
+ },
+ "lane/ev-journey-timebomb": {
+  "ahead": 1,
+  "behind": 3
+ },
+ "lane/ev-stale-cause": {
+  "ahead": 5,
+  "behind": 45
+ },
+ "lane/events-admin": {
+  "ahead": 1,
+  "behind": 99
+ },
+ "lane/events-margin-client": {
+  "ahead": 0,
+  "behind": 78
+ },
+ "lane/exit-instrument-census": {
+  "ahead": 1,
+  "behind": 0
+ },
+ "lane/fe-admin-refusal-credential": {
+  "ahead": 1,
+  "behind": 6
+ },
+ "lane/fe-ci": {
+  "ahead": 1,
+  "behind": 51
+ },
+ "lane/fe-ev-inquiry-gate": {
+  "ahead": 1,
+  "behind": 44
+ },
+ "lane/fe-events-guest": {
+  "ahead": 0,
+  "behind": 75
+ },
+ "lane/fe-events-margin-surfaces": {
+  "ahead": 2,
+  "behind": 49
+ },
+ "lane/fe-gr-exit-wire-the-mail": {
+  "ahead": 2,
+  "behind": 0
+ },
+ "lane/fe-gr-withdraw-origin": {
+  "ahead": 2,
+  "behind": 17
+ },
+ "lane/fe-growth-guest": {
+  "ahead": 0,
+  "behind": 56
+ },
+ "lane/fe-growth-honesty": {
+  "ahead": 0,
+  "behind": 76
+ },
+ "lane/fe-growth-prefcentre": {
+  "ahead": 1,
+  "behind": 17
+ },
+ "lane/fe-growth-suppressed-key": {
+  "ahead": 4,
+  "behind": 0
+ },
+ "lane/fe-journey-meals": {
+  "ahead": 2,
+  "behind": 0
+ },
+ "lane/fe-journeys": {
+  "ahead": 3,
+  "behind": 51
+ },
+ "lane/fe-margin-statement": {
+  "ahead": 0,
+  "behind": 75
+ },
+ "lane/fe-margin-supplier": {
+  "ahead": 0,
+  "behind": 76
+ },
+ "lane/fe-meals-claim": {
+  "ahead": 0,
+  "behind": 56
+ },
+ "lane/fe-meals-claim-receipt": {
+  "ahead": 1,
+  "behind": 3
+ },
+ "lane/fe-meals-docsync": {
+  "ahead": 1,
+  "behind": 2
+ },
+ "lane/fe-meals-journey-locator": {
+  "ahead": 3,
+  "behind": 2
+ },
+ "lane/fe-meals-pretick-walked": {
+  "ahead": 4,
+  "behind": 2
+ },
+ "lane/fe-meals-reconcile-ui": {
+  "ahead": 2,
+  "behind": 2
+ },
+ "lane/fe-meals-statement-surface": {
+  "ahead": 1,
+  "behind": 2
+ },
+ "lane/fe-meals-write": {
+  "ahead": 0,
+  "behind": 76
+ },
+ "lane/fe-playwright": {
+  "ahead": 0,
+  "behind": 52
+ },
+ "lane/fe-pos-clock": {
+  "ahead": 1,
+  "behind": 49
+ },
+ "lane/fe-training-fixes": {
+  "ahead": 0,
+  "behind": 76
+ },
+ "lane/fe-training-meals-surfaces": {
+  "ahead": 5,
+  "behind": 49
+ },
+ "lane/fe-wf-blind-bind-name": {
+  "ahead": 4,
+  "behind": 45
+ },
+ "lane/fe-wf-bootstrap": {
+  "ahead": 1,
+  "behind": 16
+ },
+ "lane/fe-wf-contact-imported": {
+  "ahead": 2,
+  "behind": 7
+ },
+ "lane/fe-wf-correction-path": {
+  "ahead": 2,
+  "behind": 7
+ },
+ "lane/fe-wf-inbox": {
+  "ahead": 0,
+  "behind": 76
+ },
+ "lane/fe-wf-invite-list-revoke": {
+  "ahead": 1,
+  "behind": 0
+ },
+ "lane/fe-wf-link-deadend": {
+  "ahead": 5,
+  "behind": 45
+ },
+ "lane/fe-wf-onboard": {
+  "ahead": 1,
+  "behind": 51
+ },
+ "lane/fe-wf-oplink": {
+  "ahead": 3,
+  "behind": 45
+ },
+ "lane/fe-wf-personnel": {
+  "ahead": 0,
+  "behind": 76
+ },
+ "lane/fe-wf-self": {
+  "ahead": 3,
+  "behind": 49
+ },
+ "lane/fe-wf-supplement-basis": {
+  "ahead": 0,
+  "behind": 58
+ },
+ "lane/fixture-divergence-receipt": {
+  "ahead": 1,
+  "behind": 0
+ },
+ "lane/fixture-suppressed-refusal": {
+  "ahead": 3,
+  "behind": 0
+ },
+ "lane/growth-admin": {
+  "ahead": 1,
+  "behind": 99
+ },
+ "lane/guard-repair-lands": {
+  "ahead": 1,
+  "behind": 0
+ },
+ "lane/jest-collects-lanes": {
+  "ahead": 1,
+  "behind": 0
+ },
+ "lane/journey-teardown": {
+  "ahead": 4,
+  "behind": 1
+ },
+ "lane/journey-workforce": {
+  "ahead": 4,
+  "behind": 1
+ },
+ "lane/margin-menu-margin-ui": {
+  "ahead": 1,
+  "behind": 90
+ },
+ "lane/margin-recipes": {
+  "ahead": 1,
+  "behind": 99
+ },
+ "lane/meals-admin": {
+  "ahead": 1,
+  "behind": 99
+ },
+ "lane/meals-enrol-pretick": {
+  "ahead": 2,
+  "behind": 2
+ },
+ "lane/meals-enrol-ui": {
+  "ahead": 1,
+  "behind": 2
+ },
+ "lane/meals-reachable-web": {
+  "ahead": 1,
+  "behind": 14
+ },
+ "lane/menu-allergen-matrix": {
+  "ahead": 1,
+  "behind": 48
+ },
+ "lane/modal-broken-two": {
+  "ahead": 1,
+  "behind": 45
+ },
+ "lane/modal-scrolllock": {
+  "ahead": 0,
+  "behind": 45
+ },
+ "lane/modal-seven": {
+  "ahead": 0,
+  "behind": 44
+ },
+ "lane/mrg-coverage-unknown": {
+  "ahead": 2,
+  "behind": 2
+ },
+ "lane/mrg-lag-visible": {
+  "ahead": 1,
+  "behind": 2
+ },
+ "lane/mrg-page-test-vacuous": {
+  "ahead": 1,
+  "behind": 2
+ },
+ "lane/mrg-recipe-revise-ui": {
+  "ahead": 2,
+  "behind": 1
+ },
+ "lane/mrg-revise-land": {
+  "ahead": 1,
+  "behind": 0
+ },
+ "lane/mrg-waste-frontend": {
+  "ahead": 1,
+  "behind": 2
+ },
+ "lane/mrg-waste-receipts": {
+  "ahead": 1,
+  "behind": 0
+ },
+ "lane/offer-partial-subtotal": {
+  "ahead": 4,
+  "behind": 0
+ },
+ "lane/offers-page-hundredfold": {
+  "ahead": 5,
+  "behind": 0
+ },
+ "lane/price-cleanup-two": {
+  "ahead": 1,
+  "behind": 0
+ },
+ "lane/price-crosscurrency": {
+  "ahead": 2,
+  "behind": 0
+ },
+ "lane/print-host": {
+  "ahead": 1,
+  "behind": 46
+ },
+ "lane/receipt-discount-row-dropped": {
+  "ahead": 5,
+  "behind": 0
+ },
+ "lane/statute-evidence-world": {
+  "ahead": 4,
+  "behind": 45
+ },
+ "lane/statute-honesty": {
+  "ahead": 3,
+  "behind": 45
+ },
+ "lane/store-market-ui": {
+  "ahead": 0,
+  "behind": 80
+ },
+ "lane/tier-artifacts": {
+  "ahead": 10,
+  "behind": 0
+ },
+ "lane/train-evidence-pack-ui": {
+  "ahead": 1,
+  "behind": 0
+ },
+ "lane/train-publish-unclickable": {
+  "ahead": 1,
+  "behind": 0
+ },
+ "lane/train-readonly-visible": {
+  "ahead": 1,
+  "behind": 0
+ },
+ "lane/training-admin": {
+  "ahead": 1,
+  "behind": 88
+ },
+ "lane/wf-adjust-address": {
+  "ahead": 1,
+  "behind": 18
+ },
+ "lane/wf-idreg": {
+  "ahead": 1,
+  "behind": 50
+ },
+ "lane/wf-invite-surface": {
+  "ahead": 0,
+  "behind": 0
+ },
+ "lane/wf-kodeoversikt-ui": {
+  "ahead": 5,
+  "behind": 0
+ },
+ "lane/wf-pubhist": {
+  "ahead": 1,
+  "behind": 0
+ },
+ "lane/wf-roles-ui": {
+  "ahead": 1,
+  "behind": 0
+ },
+ "lane/wf-timesheet-ui": {
+  "ahead": 1,
+  "behind": 0
+ },
+ "lane/workforce-roster": {
+  "ahead": 1,
+  "behind": 99
+ },
+ "lane/worktree-basename-pin": {
+  "ahead": 2,
+  "behind": 0
+ },
+ "main": {
+  "ahead": 0,
+  "behind": 146
+ },
+ "swiss": {
+  "ahead": 0,
+  "behind": 172
+ },
+ "lanes/L-CHECK-DISCOUNT-SUM-COUPLED": {
+  "ahead": 4,
+  "behind": 0
+ },
+ "lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM": {
+  "ahead": 6,
+  "behind": 0
+ },
+ "lanes/L-OFFER-PARTIAL-SUBTOTAL": {
+  "ahead": 4,
+  "behind": 0
+ },
+ "lanes/L-PRICE-BYPASS-FIVE": {
+  "ahead": 1,
+  "behind": 0
+ },
+ "lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED": {
+  "ahead": 5,
+  "behind": 0
+ },
+ "lanes/L-WORLD-STAMP-WINDOWS": {
+  "ahead": 1,
+  "behind": 0
+ },
+ "lanes/L-XZ-NEGATED-ABSENCE": {
+  "ahead": 2,
+  "behind": 0
+ },
+ "lanes/L-XZ-RESIDUAL-SITES": {
+  "ahead": 3,
+  "behind": 0
+ },
+ "lanes/plan-snapshot": {
+  "ahead": 1,
+  "behind": 0
+ },
+ "WORKING-TREE": {
+  "ahead": 0,
+  "behind": 0
+ }
+}

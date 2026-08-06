@@ -1,0 +1,103 @@
+[WebServer] [consumer-fixture] listening on http://127.0.0.1:4020
+[WebServer] [ nuxi ] Nuxt 3.16.2 with Nitro 2.11.8
+[WebServer] 
+[WebServer]   ➜ Local:    http://localhost:3020/
+[WebServer]   ➜ Network:  use --host to expose
+[WebServer] 
+[WebServer]   ➜ DevTools: press Shift + Option + D in the browser (v2.3.2)
+[WebServer] 
+[WebServer] ✔ Vite client built in 19ms
+[WebServer] 
+[WebServer]  WARN  Browserslist: browsers data (caniuse-lite) is 9 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[WebServer] 
+[WebServer] ✔ Vite server built in 228ms
+[WebServer] [nitro] ✔ Nuxt Nitro server built in 219ms
+[WebServer] ℹ Vite client warmed up in 0ms
+
+Running 2 tests using 1 worker
+
+  ✘  1 [chromium] › test/e2e/journeys/consumer/meals-stale-token-refused.spec.js:23:1 › a stale reservation is never sent, and the refusal happens before an order exists to cancel @fixture (2.9s)
+  ✘  2 [chromium] › test/e2e/journeys/consumer/meals-stale-token-requote.spec.js:36:1 › a tip added a moment before pay is funded by a reservation minted for the tipped cart @fixture (2.6s)
+
+
+  1) [chromium] › test/e2e/journeys/consumer/meals-stale-token-refused.spec.js:23:1 › a stale reservation is never sent, and the refusal happens before an order exists to cancel @fixture 
+
+    Error: the stale token never reached the wire
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 0
+    Received: 1
+
+      54 |       await page.locator('[data-testid="checkout-submit"] button').click();
+      55 |       await page.waitForTimeout(1500);
+    > 56 |       expect(completions().length, 'the stale token never reached the wire').toBe(0);
+         |                                                                              ^
+      57 |       return 'cart ' + TIPPED_TOTAL_MINOR + ' minor over a ' + world.CART_TOTAL_MINOR + ' minor cap; 0 completions';
+      58 |     });
+      59 |
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/consumer/meals-stale-token-refused.spec.js:56:78
+        at JourneyRecorder.step (/Users/svendaneel/okam/Web-modules/test/e2e/support/journey.js:151:22)
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/consumer/meals-stale-token-refused.spec.js:50:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output-consumer/meals-stale-token-refused--da52d-e-an-order-exists-to-cancel-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/meals-stale-token-refused.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output-consumer/meals-stale-token-refused--da52d-e-an-order-exists-to-cancel-chromium/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output-consumer/meals-stale-token-refused--da52d-e-an-order-exists-to-cancel-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output-consumer/meals-stale-token-refused--da52d-e-an-order-exists-to-cancel-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › test/e2e/journeys/consumer/meals-stale-token-requote.spec.js:36:1 › a tip added a moment before pay is funded by a reservation minted for the tipped cart @fixture 
+
+    Error: no completion left the client while it held only a stale reservation
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 0
+    Received: 1
+
+      85 |       // already saved and cancelled. Long enough that a client which was going to send it, has.
+      86 |       await page.waitForTimeout(1500);
+    > 87 |       expect(completions().length, 'no completion left the client while it held only a stale reservation').toBe(0);
+         |                                                                                                            ^
+      88 |       expect(page.url()).toContain('/checkout');
+      89 |       return 'held ' + gate.held + ' quote request(s); 0 completions in 1500ms';
+      90 |     });
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/consumer/meals-stale-token-requote.spec.js:87:108
+        at JourneyRecorder.step (/Users/svendaneel/okam/Web-modules/test/e2e/support/journey.js:151:22)
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/consumer/meals-stale-token-requote.spec.js:79:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output-consumer/meals-stale-token-requote--9e8cd--minted-for-the-tipped-cart-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/meals-stale-token-requote.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output-consumer/meals-stale-token-requote--9e8cd--minted-for-the-tipped-cart-chromium/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output-consumer/meals-stale-token-requote--9e8cd--minted-for-the-tipped-cart-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output-consumer/meals-stale-token-requote--9e8cd--minted-for-the-tipped-cart-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › test/e2e/journeys/consumer/meals-stale-token-refused.spec.js:23:1 › a stale reservation is never sent, and the refusal happens before an order exists to cancel @fixture 
+    [chromium] › test/e2e/journeys/consumer/meals-stale-token-requote.spec.js:36:1 › a tip added a moment before pay is funded by a reservation minted for the tipped cart @fixture 

@@ -1,0 +1,13 @@
+PASS test/translations-duplicate-keys.test.js
+  ✓ the scan reaches every translation dictionary in the tree, and says so (2 ms)
+  ✓ no translation dictionary carries the same key twice
+  ✓ a key repeated in one object literal is reported, with the occurrence that ships
+  ✓ the check reads object literals, not lines, so it neither misses nor invents duplicates (1 ms)
+  ✓ the check refuses to report a clean file it could not actually read (3 ms)
+  ✓ discovery is by directory, so a language or a locale directory added later is covered
+
+Test Suites: 1 passed, 1 total
+Tests:       6 passed, 6 total
+Snapshots:   0 total
+Time:        0.396 s, estimated 1 s
+Ran all test suites matching /test\/translations-duplicate-keys.test.js/i.

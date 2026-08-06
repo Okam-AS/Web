@@ -1,0 +1,14 @@
+{
+  "label": "B-parameterised-no",
+  "edition": "no",
+  "grantedFixturePort": 4847,
+  "grantedWebPort": 3847,
+  "health": "{\"ok\":true,\"port\":4847}",
+  "holderPid": "37922",
+  "holderCwd": "/Users/svendaneel/okam/web-rcptde",
+  "holderCommand": "node test/e2e/fixture/api-server.js",
+  "webPid": "37924",
+  "webCwd": "/Users/svendaneel/okam/web-rcptde",
+  "lsof": "p37922 f12 n127.0.0.1:4847 ",
+  "capturedAt": "2026-08-05T05:32:52Z"
+}

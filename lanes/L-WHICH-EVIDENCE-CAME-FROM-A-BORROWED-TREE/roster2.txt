@@ -1,0 +1,79 @@
+lane                             tree                    nm-now    built?  how
+L-ARTIFACT-FIELDS-VS-HARNESS     UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-ARTIFACT-NAMES-ITS-LOCALE      web-artloc              symlink   yes     lane-id==branch
+L-ARTIFACT-PROVENANCE            UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-ARTIFACT-RANK-KEY              UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-BUILT-BUT-ON-NO-REF            UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-COMPOSE-FE-CANDIDATE           web-fe-candidate        symlink   yes     "worktree <name>" in return
+L-CONFIRM-ADMIN-SURFACE          UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-CORE-ORE-LABEL                 UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-DUPLICATE-KEY-IN-THE-BUILD     web-dupbuild            own-dir   -       lane-id==branch
+L-EV-ACCEPT-RECEIPT              UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-EV-DEPOSITS-PRECONDITION       UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-EV-FAMILY-LAND                 UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-EV-JOURNEY-TIMEBOMB            wt-evtb                 own-dir   yes     lane-id==branch
+L-EV-RUNSHEET-PRINT              UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-EV-STALE-CAUSE                 web-evstale             symlink   yes     lane-id==branch
+L-FE-JOURNEYS-MERGE              UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-FE-WF-INVITE-LIST-REVOKE       web-fe-invlist          symlink   yes     lane-id==branch
+L-FE-WF-ONBOARD-WALK             UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-FLAGS-JOURNEY-SWEEP            UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-FLAGS-NOTE-FALSIFIABLE         UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-GR-CONFIRMED-PIN-FIX           UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-GR-DEADLINE-ONWIRE             UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-GR-EXIT-WIRE-THE-MAIL          UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-GR-PRIVACY-VENUE               UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-GROWTH-PREFCENTRE              UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-JOURNEY-ARTIFACTS-UNWITNESSED  UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-JOURNEY-COVERAGE-THREE         UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-JOURNEY-EVENTS                 UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-JOURNEY-GROWTH                 UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-JOURNEY-MARGIN                 UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-JOURNEY-PORT-HARDCODED         UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-JOURNEY-TRAINING               UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-JOURNEY-WORKFORCE              wt-jwf                  symlink   yes     "worktree <name>" in return
+L-LINT-RUNNABLE                  web-lintrunnable        symlink   -       lane-id==branch
+L-LIVE-BUILD-EXPORT              UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-LIVE-SEED-VIA-PRODUCT          UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-LIVE-WORLD-ADMINCRED           web-admincred           none      -       "worktree <name>" in return
+L-LIVE-WORLD-DISCOVER            UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-LIVE-WORLD-SEED                UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-MEALS-FUNDED                   UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-MEALS-RECONCILE-UI             web-mealsrecon          symlink   -       "worktree <name>" in return
+L-MEALS-STALE-TOKEN              UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-MEALS-STATEMENT-SURFACE        UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-MENU-ALLERGEN-MATRIX           web-menu-allergen       own-dir   yes     lane-id==branch
+L-MODAL-BROKEN-TWO               web-modal-two           symlink   yes     lane-id==branch
+L-MODAL-LAND                     UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-MODAL-SCROLLLOCK               web-modal-scrolllock    symlink   yes     lane-id==branch
+L-MODAL-SEVEN                    web-modal-seven         symlink   yes     lane-id==branch
+L-PRICE-NULL-ZERO                UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-PRINT-HOST                     web-print-host          own-dir   yes     lane-id==branch
+L-STATUTE-EVIDENCE-WORLD         web-statute-world       symlink   yes     lane-id==branch
+L-STATUTE-HONESTY                web-statute             symlink   yes     lane-id==branch
+L-TRAIN-DISCLOSURE               UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-TRAIN-EVIDENCE-NAMES-COURSE    UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-TRAIN-EVIDENCE-PACK-UI         UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-TRAIN-PUBLISH-UNCLICKABLE      UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-TRAIN-W3-SCHEMA                UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-VUE3-SHAPE-GUARD               web-vue3shape           symlink   -       lane-id==branch
+L-WF-CONTACT-IMPORTED            UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-WF-DEMO-PRESENCE               UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-WF-FAILURES-SURFACE            UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-WF-FLAGS-UI                    UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-WF-IDREG                       web-wf-idreg            symlink   -       lane-id==branch
+L-WF-INVITE-SURFACE              wt-wfinvite             symlink   yes     lane-id==branch
+L-WF-KODEOVERSIKT-UI             web-kodeui              symlink   yes     lane-id==branch
+L-WF-LINK-DEADEND                web-linkdeadend         symlink   -       "worktree <name>" in return
+L-WF-ONBOARD                     UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-WF-OPLINK                      web-wf-oplink           none      yes     "worktree <name>" in return
+L-WF-PIVOT-DEFECTS               UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-WF-PUBHIST                     UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-WF-PUNCH-UI                    UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-WF-ROLES-UI                    UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-WF-TIMESHEET-UI                UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+L-WORLD-STAMP-WINDOWS            UNKNOWN                 ?         ?       no tree named in return; lane-id matches no live branch
+
+LANES: 74
+tree resolved: Counter({'no tree named in return; lane-id matches no live branch': 51, 'lane-id==branch': 17, '"worktree <name>" in return': 6})
+nm state: Counter({'?': 51, 'symlink': 17, 'own-dir': 4, 'none': 2})

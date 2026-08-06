@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="78ae4f73-71ba-4674-9233-3d0db549c968" name="@svens-macbook-pro 2026-08-01 21:46:42" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-01T21:46:42.5033990+02:00" queuing="2026-08-01T21:46:42.5033990+02:00" start="2026-08-01T21:46:17.4830660+02:00" finish="2026-08-01T21:48:47.7098440+02:00" />
+  <TestSettings name="default" id="f64ad06c-594d-4a9c-921e-85b4bde67ad9">
+    <Deployment runDeploymentRoot="_svens-macbook-pro_2026-08-01_21_46_42" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="e642793c-9146-427e-b43e-26d88f826405" testId="f0d46faa-7f18-bb5f-259b-2fbc6c362d8a" testName="WebApi.Tests.Events.EventsReconcileTruthTests.A_pos_line_that_mismatches_truth_holds_the_settlement_in_discrepancy_naming_the_line" computerName="svens-macbook-pro" duration="00:00:05.0157318" startTime="2026-08-01T21:47:13.7202030+02:00" endTime="2026-08-01T21:47:13.7202030+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e642793c-9146-427e-b43e-26d88f826405" />
+    <UnitTestResult executionId="37172e65-9776-450d-8062-d9e553604afc" testId="56a2c08b-e369-d9c6-f2c2-c7bdc248028e" testName="WebApi.Tests.Events.EventsSettlementLifecycleTests.Cancel_with_forfeit_marks_the_deposit_forfeited" computerName="svens-macbook-pro" duration="00:00:05.2656541" startTime="2026-08-01T21:47:34.2650760+02:00" endTime="2026-08-01T21:47:34.2650760+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="37172e65-9776-450d-8062-d9e553604afc" />
+    <UnitTestResult executionId="68278b2e-59c8-4a95-8a71-34188a5dccdc" testId="b1336066-79e1-0870-4e89-f0126735016e" testName="WebApi.Tests.Events.EventsReconcileTruthTests.Matching_truth_promotes_the_settlement_to_reconciled_then_close_settles_the_event" computerName="svens-macbook-pro" duration="00:00:05.6314054" startTime="2026-08-01T21:46:42.4856240+02:00" endTime="2026-08-01T21:46:42.4856320+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="68278b2e-59c8-4a95-8a71-34188a5dccdc" />
+    <UnitTestResult executionId="86737c51-abba-4a02-89b8-71ff3cfbe8f9" testId="45a30eef-319b-43fb-4a6f-6c12aded1569" testName="WebApi.Tests.Events.EventsSettlementLifecycleTests.A_second_deposit_applied_line_violates_the_filtered_unique_index" computerName="svens-macbook-pro" duration="00:00:05.1069563" startTime="2026-08-01T21:48:31.0518520+02:00" endTime="2026-08-01T21:48:31.0518520+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="86737c51-abba-4a02-89b8-71ff3cfbe8f9" />
+    <UnitTestResult executionId="a4df8b6d-f5d7-4231-9919-cbaecd7e297e" testId="84e5812a-8a7e-d5b3-85a1-47b93a065257" testName="WebApi.Tests.Events.EventsSettlementLifecycleTests.Close_with_no_paid_deposit_generates_an_empty_settlement_draft" computerName="svens-macbook-pro" duration="00:00:05.5976916" startTime="2026-08-01T21:47:49.6743780+02:00" endTime="2026-08-01T21:47:49.6743780+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a4df8b6d-f5d7-4231-9919-cbaecd7e297e" />
+    <UnitTestResult executionId="81231997-a0ca-4add-be69-d5fde6445aeb" testId="2cbc2ee5-36d6-9562-1a36-723f36167e21" testName="WebApi.Tests.Events.EventsReconcileTruthTests.An_invoice_line_self_attests_as_matched" computerName="svens-macbook-pro" duration="00:00:05.8077821" startTime="2026-08-01T21:46:48.2937780+02:00" endTime="2026-08-01T21:46:48.2937780+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="81231997-a0ca-4add-be69-d5fde6445aeb" />
+    <UnitTestResult executionId="ebfe0dc9-51ca-46b2-af6d-02367ea30cd1" testId="590c1547-40fc-468c-500d-dbc903b0ce90" testName="WebApi.Tests.Events.EventsReconcileTruthTests.A_pos_reference_that_resolves_to_no_truth_is_a_mismatch" computerName="svens-macbook-pro" duration="00:00:05.3621537" startTime="2026-08-01T21:47:08.7043790+02:00" endTime="2026-08-01T21:47:08.7043790+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ebfe0dc9-51ca-46b2-af6d-02367ea30cd1" />
+    <UnitTestResult executionId="213093b7-a61f-47f0-aa0b-36e2a14ced35" testId="fba0be24-d74e-bfb3-6d94-95fc4f7e09a4" testName="WebApi.Tests.Events.EventsReconcileTruthTests.T12_close_demotes_a_reconciled_settlement_to_draft_forcing_re_reconciliation_before_t13" computerName="svens-macbook-pro" duration="00:00:04.9723126" startTime="2026-08-01T21:47:03.3421270+02:00" endTime="2026-08-01T21:47:03.3421270+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="213093b7-a61f-47f0-aa0b-36e2a14ced35" />
+    <UnitTestResult executionId="cbe4a21d-372b-4866-95b1-564b940c1e04" testId="eba5e5e9-e177-e168-737f-6716b99a4968" testName="WebApi.Tests.Events.EventsSettlementLifecycleTests.Deposit_applied_amount_is_paid_minus_refunded" computerName="svens-macbook-pro" duration="00:00:04.5204882" startTime="2026-08-01T21:47:44.0765450+02:00" endTime="2026-08-01T21:47:44.0765450+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cbe4a21d-372b-4866-95b1-564b940c1e04" />
+    <UnitTestResult executionId="3a84000d-0376-4457-9e4f-411977f7ba01" testId="45ea8017-a934-c11c-7e74-f75fb2ceba94" testName="WebApi.Tests.Events.EventsReconcileTruthTests.Closing_the_settlement_with_a_stale_if_match_is_rejected" computerName="svens-macbook-pro" duration="00:00:04.9094068" startTime="2026-08-01T21:46:58.3697400+02:00" endTime="2026-08-01T21:46:58.3697400+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3a84000d-0376-4457-9e4f-411977f7ba01" />
+    <UnitTestResult executionId="03d11a0c-085c-4bc8-9975-4951875f0b81" testId="08887e53-7015-81e0-5874-b796c5aeef0a" testName="WebApi.Tests.Events.EventsSettlementLifecycleTests.Start_service_moves_confirmed_event_to_in_service_and_is_idempotent" computerName="svens-macbook-pro" duration="00:00:05.2907798" startTime="2026-08-01T21:47:39.5559520+02:00" endTime="2026-08-01T21:47:39.5559520+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="03d11a0c-085c-4bc8-9975-4951875f0b81" />
+    <UnitTestResult executionId="ea51b2f7-f255-444d-9177-db2f8d39d28c" testId="0f978562-6c2f-133d-56b4-f3def8cb52a4" testName="WebApi.Tests.Events.EventsSettlementLifecycleTests.Add_invoice_line_updates_the_total_and_requires_the_current_if_match_revision" computerName="svens-macbook-pro" duration="00:00:05.4810123" startTime="2026-08-01T21:47:55.1554910+02:00" endTime="2026-08-01T21:47:55.1554910+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ea51b2f7-f255-444d-9177-db2f8d39d28c" />
+    <UnitTestResult executionId="95823322-3be1-4428-941d-f58e26dbe509" testId="5da1f7c0-025e-1fef-2dd3-f4a06cf09f59" testName="WebApi.Tests.Events.EventsSettlementLifecycleTests.Concurrent_close_produces_exactly_one_settlement_and_maps_the_loser_to_a_conflict" computerName="svens-macbook-pro" duration="00:00:04.4283860" startTime="2026-08-01T21:48:25.9448060+02:00" endTime="2026-08-01T21:48:25.9448060+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="95823322-3be1-4428-941d-f58e26dbe509" />
+    <UnitTestResult executionId="93809820-5065-46eb-a4e5-a8ae505e4a58" testId="92a210a6-0e44-f137-2732-dff06be9da23" testName="WebApi.Tests.Events.EventsSettlementLifecycleTests.Adjustment_line_requires_a_reason" computerName="svens-macbook-pro" duration="00:00:04.9358745" startTime="2026-08-01T21:48:35.9878510+02:00" endTime="2026-08-01T21:48:35.9878510+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="93809820-5065-46eb-a4e5-a8ae505e4a58" />
+    <UnitTestResult executionId="20b6dd56-7fff-47f8-8671-b050c6918357" testId="331fad5c-862e-aa56-900e-a895e3c52c79" testName="WebApi.Tests.Events.EventsSettlementLifecycleTests.Line_sum_equals_statement_total_after_deposit_pos_and_invoice_lines" computerName="svens-macbook-pro" duration="00:00:05.7841121" startTime="2026-08-01T21:48:47.3748760+02:00" endTime="2026-08-01T21:48:47.3748760+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="20b6dd56-7fff-47f8-8671-b050c6918357" />
+    <UnitTestResult executionId="155be33e-f581-4c73-81e4-3e1d8682208f" testId="6882a1d6-885a-a2e2-b0e1-627052f384f5" testName="WebApi.Tests.Events.EventsSettlementLifecycleTests.Pos_link_with_a_blank_reference_is_rejected" computerName="svens-macbook-pro" duration="00:00:05.0270984" startTime="2026-08-01T21:47:28.9993270+02:00" endTime="2026-08-01T21:47:28.9993270+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="155be33e-f581-4c73-81e4-3e1d8682208f" />
+    <UnitTestResult executionId="3b2f6b20-0d55-4f01-8dd7-2142a5c8588d" testId="691c59f3-4d73-8182-7224-fbce4c4e3675" testName="WebApi.Tests.Events.EventsSettlementLifecycleTests.Close_generates_a_settlement_draft_with_deposit_applied_read_from_provider_truth" computerName="svens-macbook-pro" duration="00:00:05.4292101" startTime="2026-08-01T21:48:11.3918080+02:00" endTime="2026-08-01T21:48:11.3918080+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3b2f6b20-0d55-4f01-8dd7-2142a5c8588d" />
+    <UnitTestResult executionId="686960a3-8742-40a3-86e9-70d0ebac01ee" testId="4389a1ed-8a9e-6be9-ec66-4df8325edee0" testName="WebApi.Tests.Events.EventsSettlementLifecycleTests.Start_service_is_illegal_from_accepted" computerName="svens-macbook-pro" duration="00:00:05.3655812" startTime="2026-08-01T21:48:05.9625310+02:00" endTime="2026-08-01T21:48:05.9625310+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="686960a3-8742-40a3-86e9-70d0ebac01ee" />
+    <UnitTestResult executionId="819c8ca1-3412-4570-8ec1-2f24e48e1b94" testId="950306b6-1472-7636-5890-8f1258226132" testName="WebApi.Tests.Events.EventsSettlementLifecycleTests.Cancel_with_a_paid_deposit_and_no_resolution_is_rejected" computerName="svens-macbook-pro" duration="00:00:05.0681390" startTime="2026-08-01T21:47:23.9721190+02:00" endTime="2026-08-01T21:47:23.9721190+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="819c8ca1-3412-4570-8ec1-2f24e48e1b94" />
+    <UnitTestResult executionId="bb62cf74-dc68-44a8-99ad-b013d3531a00" testId="6ef7c409-96bc-a847-d868-d81f7c2f7c4b" testName="WebApi.Tests.Events.EventsSettlementLifecycleTests.First_pos_link_on_a_confirmed_event_fires_t11_and_creates_a_draft_settlement_line" computerName="svens-macbook-pro" duration="00:00:05.1665665" startTime="2026-08-01T21:48:16.5584660+02:00" endTime="2026-08-01T21:48:16.5584660+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bb62cf74-dc68-44a8-99ad-b013d3531a00" />
+    <UnitTestResult executionId="9776b47e-d0fb-44a3-8699-8b91678408ee" testId="e7339847-c434-a3a1-8f8c-685e80d70f04" testName="WebApi.Tests.Events.EventsSettlementLifecycleTests.Each_settlement_response_publishes_the_revision_the_next_mutation_accepts" computerName="svens-macbook-pro" duration="00:00:04.9577378" startTime="2026-08-01T21:48:21.5163170+02:00" endTime="2026-08-01T21:48:21.5163170+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9776b47e-d0fb-44a3-8699-8b91678408ee" />
+    <UnitTestResult executionId="33b600c6-cbc1-43e0-899e-a5184e571ff5" testId="5e96ef41-5328-a513-d092-3690842a7da8" testName="WebApi.Tests.Events.EventsReconcileTruthTests.Reconcile_is_refused_before_the_event_is_settling" computerName="svens-macbook-pro" duration="00:00:05.1663813" startTime="2026-08-01T21:46:53.4602310+02:00" endTime="2026-08-01T21:46:53.4602310+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="33b600c6-cbc1-43e0-899e-a5184e571ff5" />
+    <UnitTestResult executionId="d34e50b6-48aa-4da4-a68a-99387b9e99d7" testId="a8b3929a-9e23-772f-412e-a9d0b2edbc98" testName="WebApi.Tests.Events.EventsSettlementLifecycleTests.Cancel_a_confirmed_event_with_a_paid_deposit_refunds_through_the_rail_and_cancels" computerName="svens-macbook-pro" duration="00:00:05.5962839" startTime="2026-08-01T21:48:41.5925770+02:00" endTime="2026-08-01T21:48:41.5925770+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d34e50b6-48aa-4da4-a68a-99387b9e99d7">
+      <Output>
+        <ErrorInfo>
+          <Message>WebApi.Helpers.Events.EventsProblemException : The provider refund failed: nothing left to refund: the captured amount is fully returned (test)</Message>
+          <StackTrace>   at WebApi.Services.Events.EventsDepositService.RefundAsync(Int32 storeId, Int32 eventId, Int32 depositId, EventsDepositRefundRequest request, String userId, CancellationToken ct) in /Users/svendaneel/okam/wt-evrefund/Services/Events/EventsDepositService.cs:line 325
+   at WebApi.Services.Events.EventsSettlementService.CancelAsync(Int32 storeId, Int32 eventId, EventsCancelRequest request, String userId, CancellationToken ct) in /Users/svendaneel/okam/wt-evrefund/Services/Events/EventsSettlementService.cs:line 421
+   at WebApi.Tests.Events.EventsSettlementLifecycleTests.Cancel_a_confirmed_event_with_a_paid_deposit_refunds_through_the_rail_and_cancels() in /Users/svendaneel/okam/wt-evrefund/WebApi.Tests/Events/EventsSettlementLifecycleTests.cs:line 435
+   at WebApi.Tests.Events.EventsSettlementLifecycleTests.Cancel_a_confirmed_event_with_a_paid_deposit_refunds_through_the_rail_and_cancels() in /Users/svendaneel/okam/wt-evrefund/WebApi.Tests/Events/EventsSettlementLifecycleTests.cs:line 438
+   at WebApi.Tests.Events.EventsSettlementLifecycleTests.Cancel_a_confirmed_event_with_a_paid_deposit_refunds_through_the_rail_and_cancels() in /Users/svendaneel/okam/wt-evrefund/WebApi.Tests/Events/EventsSettlementLifecycleTests.cs:line 446
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="f35e1f4f-579e-45e7-9546-ccffa13328ef" testId="57eb8638-e0ed-01a5-1b45-ceb7b2896450" testName="WebApi.Tests.Events.EventsReconcileTruthTests.The_deposit_line_reconciles_against_live_provider_truth_catching_a_post_close_refund" computerName="svens-macbook-pro" duration="00:00:05.1826407" startTime="2026-08-01T21:47:18.9029350+02:00" endTime="2026-08-01T21:47:18.9029350+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f35e1f4f-579e-45e7-9546-ccffa13328ef" />
+    <UnitTestResult executionId="7e48c44c-6a51-4440-bd37-8e23265ec2d9" testId="ab144493-6c0b-d57d-d7b4-fa180630d4b7" testName="WebApi.Tests.Events.EventsSettlementLifecycleTests.Closing_an_unreconciled_settlement_is_rejected" computerName="svens-macbook-pro" duration="00:00:05.4411448" startTime="2026-08-01T21:48:00.5967450+02:00" endTime="2026-08-01T21:48:00.5967450+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7e48c44c-6a51-4440-bd37-8e23265ec2d9" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="WebApi.Tests.Events.EventsReconcileTruthTests.Reconcile_is_refused_before_the_event_is_settling" storage="/users/svendaneel/okam/wt-evrefund/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="5e96ef41-5328-a513-d092-3690842a7da8">
+      <Execution id="33b600c6-cbc1-43e0-899e-a5184e571ff5" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evrefund/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsReconcileTruthTests" name="Reconcile_is_refused_before_the_event_is_settling" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsSettlementLifecycleTests.Close_with_no_paid_deposit_generates_an_empty_settlement_draft" storage="/users/svendaneel/okam/wt-evrefund/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="84e5812a-8a7e-d5b3-85a1-47b93a065257">
+      <Execution id="a4df8b6d-f5d7-4231-9919-cbaecd7e297e" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evrefund/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsSettlementLifecycleTests" name="Close_with_no_paid_deposit_generates_an_empty_settlement_draft" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsSettlementLifecycleTests.Start_service_is_illegal_from_accepted" storage="/users/svendaneel/okam/wt-evrefund/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="4389a1ed-8a9e-6be9-ec66-4df8325edee0">
+      <Execution id="686960a3-8742-40a3-86e9-70d0ebac01ee" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evrefund/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsSettlementLifecycleTests" name="Start_service_is_illegal_from_accepted" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsSettlementLifecycleTests.Close_generates_a_settlement_draft_with_deposit_applied_read_from_provider_truth" storage="/users/svendaneel/okam/wt-evrefund/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="691c59f3-4d73-8182-7224-fbce4c4e3675">
+      <Execution id="3b2f6b20-0d55-4f01-8dd7-2142a5c8588d" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evrefund/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsSettlementLifecycleTests" name="Close_generates_a_settlement_draft_with_deposit_applied_read_from_provider_truth" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsSettlementLifecycleTests.Line_sum_equals_statement_total_after_deposit_pos_and_invoice_lines" storage="/users/svendaneel/okam/wt-evrefund/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="331fad5c-862e-aa56-900e-a895e3c52c79">
+      <Execution id="20b6dd56-7fff-47f8-8671-b050c6918357" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evrefund/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsSettlementLifecycleTests" name="Line_sum_equals_statement_total_after_deposit_pos_and_invoice_lines" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsSettlementLifecycleTests.Cancel_a_confirmed_event_with_a_paid_deposit_refunds_through_the_rail_and_cancels" storage="/users/svendaneel/okam/wt-evrefund/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="a8b3929a-9e23-772f-412e-a9d0b2edbc98">
+      <Execution id="d34e50b6-48aa-4da4-a68a-99387b9e99d7" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evrefund/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsSettlementLifecycleTests" name="Cancel_a_confirmed_event_with_a_paid_deposit_refunds_through_the_rail_and_cancels" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsSettlementLifecycleTests.Adjustment_line_requires_a_reason" storage="/users/svendaneel/okam/wt-evrefund/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="92a210a6-0e44-f137-2732-dff06be9da23">
+      <Execution id="93809820-5065-46eb-a4e5-a8ae505e4a58" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evrefund/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsSettlementLifecycleTests" name="Adjustment_line_requires_a_reason" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsReconcileTruthTests.T12_close_demotes_a_reconciled_settlement_to_draft_forcing_re_reconciliation_before_t13" storage="/users/svendaneel/okam/wt-evrefund/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="fba0be24-d74e-bfb3-6d94-95fc4f7e09a4">
+      <Execution id="213093b7-a61f-47f0-aa0b-36e2a14ced35" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evrefund/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsReconcileTruthTests" name="T12_close_demotes_a_reconciled_settlement_to_draft_forcing_re_reconciliation_before_t13" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsReconcileTruthTests.Closing_the_settlement_with_a_stale_if_match_is_rejected" storage="/users/svendaneel/okam/wt-evrefund/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="45ea8017-a934-c11c-7e74-f75fb2ceba94">
+      <Execution id="3a84000d-0376-4457-9e4f-411977f7ba01" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evrefund/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsReconcileTruthTests" name="Closing_the_settlement_with_a_stale_if_match_is_rejected" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsReconcileTruthTests.The_deposit_line_reconciles_against_live_provider_truth_catching_a_post_close_refund" storage="/users/svendaneel/okam/wt-evrefund/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="57eb8638-e0ed-01a5-1b45-ceb7b2896450">
+      <Execution id="f35e1f4f-579e-45e7-9546-ccffa13328ef" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evrefund/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsReconcileTruthTests" name="The_deposit_line_reconciles_against_live_provider_truth_catching_a_post_close_refund" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsReconcileTruthTests.A_pos_line_that_mismatches_truth_holds_the_settlement_in_discrepancy_naming_the_line" storage="/users/svendaneel/okam/wt-evrefund/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="f0d46faa-7f18-bb5f-259b-2fbc6c362d8a">
+      <Execution id="e642793c-9146-427e-b43e-26d88f826405" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evrefund/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsReconcileTruthTests" name="A_pos_line_that_mismatches_truth_holds_the_settlement_in_discrepancy_naming_the_line" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsSettlementLifecycleTests.First_pos_link_on_a_confirmed_event_fires_t11_and_creates_a_draft_settlement_line" storage="/users/svendaneel/okam/wt-evrefund/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="6ef7c409-96bc-a847-d868-d81f7c2f7c4b">
+      <Execution id="bb62cf74-dc68-44a8-99ad-b013d3531a00" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evrefund/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsSettlementLifecycleTests" name="First_pos_link_on_a_confirmed_event_fires_t11_and_creates_a_draft_settlement_line" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsReconcileTruthTests.Matching_truth_promotes_the_settlement_to_reconciled_then_close_settles_the_event" storage="/users/svendaneel/okam/wt-evrefund/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="b1336066-79e1-0870-4e89-f0126735016e">
+      <Execution id="68278b2e-59c8-4a95-8a71-34188a5dccdc" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evrefund/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsReconcileTruthTests" name="Matching_truth_promotes_the_settlement_to_reconciled_then_close_settles_the_event" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsReconcileTruthTests.An_invoice_line_self_attests_as_matched" storage="/users/svendaneel/okam/wt-evrefund/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="2cbc2ee5-36d6-9562-1a36-723f36167e21">
+      <Execution id="81231997-a0ca-4add-be69-d5fde6445aeb" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evrefund/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsReconcileTruthTests" name="An_invoice_line_self_attests_as_matched" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsSettlementLifecycleTests.Start_service_moves_confirmed_event_to_in_service_and_is_idempotent" storage="/users/svendaneel/okam/wt-evrefund/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="08887e53-7015-81e0-5874-b796c5aeef0a">
+      <Execution id="03d11a0c-085c-4bc8-9975-4951875f0b81" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evrefund/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsSettlementLifecycleTests" name="Start_service_moves_confirmed_event_to_in_service_and_is_idempotent" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsSettlementLifecycleTests.Closing_an_unreconciled_settlement_is_rejected" storage="/users/svendaneel/okam/wt-evrefund/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="ab144493-6c0b-d57d-d7b4-fa180630d4b7">
+      <Execution id="7e48c44c-6a51-4440-bd37-8e23265ec2d9" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evrefund/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsSettlementLifecycleTests" name="Closing_an_unreconciled_settlement_is_rejected" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsSettlementLifecycleTests.Add_invoice_line_updates_the_total_and_requires_the_current_if_match_revision" storage="/users/svendaneel/okam/wt-evrefund/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="0f978562-6c2f-133d-56b4-f3def8cb52a4">
+      <Execution id="ea51b2f7-f255-444d-9177-db2f8d39d28c" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evrefund/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsSettlementLifecycleTests" name="Add_invoice_line_updates_the_total_and_requires_the_current_if_match_revision" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsReconcileTruthTests.A_pos_reference_that_resolves_to_no_truth_is_a_mismatch" storage="/users/svendaneel/okam/wt-evrefund/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="590c1547-40fc-468c-500d-dbc903b0ce90">
+      <Execution id="ebfe0dc9-51ca-46b2-af6d-02367ea30cd1" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evrefund/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsReconcileTruthTests" name="A_pos_reference_that_resolves_to_no_truth_is_a_mismatch" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsSettlementLifecycleTests.Pos_link_with_a_blank_reference_is_rejected" storage="/users/svendaneel/okam/wt-evrefund/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="6882a1d6-885a-a2e2-b0e1-627052f384f5">
+      <Execution id="155be33e-f581-4c73-81e4-3e1d8682208f" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evrefund/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsSettlementLifecycleTests" name="Pos_link_with_a_blank_reference_is_rejected" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsSettlementLifecycleTests.Concurrent_close_produces_exactly_one_settlement_and_maps_the_loser_to_a_conflict" storage="/users/svendaneel/okam/wt-evrefund/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="5da1f7c0-025e-1fef-2dd3-f4a06cf09f59">
+      <Execution id="95823322-3be1-4428-941d-f58e26dbe509" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evrefund/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsSettlementLifecycleTests" name="Concurrent_close_produces_exactly_one_settlement_and_maps_the_loser_to_a_conflict" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsSettlementLifecycleTests.A_second_deposit_applied_line_violates_the_filtered_unique_index" storage="/users/svendaneel/okam/wt-evrefund/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="45a30eef-319b-43fb-4a6f-6c12aded1569">
+      <Execution id="86737c51-abba-4a02-89b8-71ff3cfbe8f9" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evrefund/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsSettlementLifecycleTests" name="A_second_deposit_applied_line_violates_the_filtered_unique_index" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsSettlementLifecycleTests.Cancel_with_forfeit_marks_the_deposit_forfeited" storage="/users/svendaneel/okam/wt-evrefund/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="56a2c08b-e369-d9c6-f2c2-c7bdc248028e">
+      <Execution id="37172e65-9776-450d-8062-d9e553604afc" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evrefund/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsSettlementLifecycleTests" name="Cancel_with_forfeit_marks_the_deposit_forfeited" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsSettlementLifecycleTests.Cancel_with_a_paid_deposit_and_no_resolution_is_rejected" storage="/users/svendaneel/okam/wt-evrefund/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="950306b6-1472-7636-5890-8f1258226132">
+      <Execution id="819c8ca1-3412-4570-8ec1-2f24e48e1b94" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evrefund/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsSettlementLifecycleTests" name="Cancel_with_a_paid_deposit_and_no_resolution_is_rejected" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsSettlementLifecycleTests.Each_settlement_response_publishes_the_revision_the_next_mutation_accepts" storage="/users/svendaneel/okam/wt-evrefund/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="e7339847-c434-a3a1-8f8c-685e80d70f04">
+      <Execution id="9776b47e-d0fb-44a3-8699-8b91678408ee" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evrefund/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsSettlementLifecycleTests" name="Each_settlement_response_publishes_the_revision_the_next_mutation_accepts" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsSettlementLifecycleTests.Deposit_applied_amount_is_paid_minus_refunded" storage="/users/svendaneel/okam/wt-evrefund/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="eba5e5e9-e177-e168-737f-6716b99a4968">
+      <Execution id="cbe4a21d-372b-4866-95b1-564b940c1e04" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evrefund/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsSettlementLifecycleTests" name="Deposit_applied_amount_is_paid_minus_refunded" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="f0d46faa-7f18-bb5f-259b-2fbc6c362d8a" executionId="e642793c-9146-427e-b43e-26d88f826405" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="56a2c08b-e369-d9c6-f2c2-c7bdc248028e" executionId="37172e65-9776-450d-8062-d9e553604afc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b1336066-79e1-0870-4e89-f0126735016e" executionId="68278b2e-59c8-4a95-8a71-34188a5dccdc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="45a30eef-319b-43fb-4a6f-6c12aded1569" executionId="86737c51-abba-4a02-89b8-71ff3cfbe8f9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="84e5812a-8a7e-d5b3-85a1-47b93a065257" executionId="a4df8b6d-f5d7-4231-9919-cbaecd7e297e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2cbc2ee5-36d6-9562-1a36-723f36167e21" executionId="81231997-a0ca-4add-be69-d5fde6445aeb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="590c1547-40fc-468c-500d-dbc903b0ce90" executionId="ebfe0dc9-51ca-46b2-af6d-02367ea30cd1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fba0be24-d74e-bfb3-6d94-95fc4f7e09a4" executionId="213093b7-a61f-47f0-aa0b-36e2a14ced35" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="eba5e5e9-e177-e168-737f-6716b99a4968" executionId="cbe4a21d-372b-4866-95b1-564b940c1e04" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="45ea8017-a934-c11c-7e74-f75fb2ceba94" executionId="3a84000d-0376-4457-9e4f-411977f7ba01" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="08887e53-7015-81e0-5874-b796c5aeef0a" executionId="03d11a0c-085c-4bc8-9975-4951875f0b81" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0f978562-6c2f-133d-56b4-f3def8cb52a4" executionId="ea51b2f7-f255-444d-9177-db2f8d39d28c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5da1f7c0-025e-1fef-2dd3-f4a06cf09f59" executionId="95823322-3be1-4428-941d-f58e26dbe509" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="92a210a6-0e44-f137-2732-dff06be9da23" executionId="93809820-5065-46eb-a4e5-a8ae505e4a58" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="331fad5c-862e-aa56-900e-a895e3c52c79" executionId="20b6dd56-7fff-47f8-8671-b050c6918357" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6882a1d6-885a-a2e2-b0e1-627052f384f5" executionId="155be33e-f581-4c73-81e4-3e1d8682208f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="691c59f3-4d73-8182-7224-fbce4c4e3675" executionId="3b2f6b20-0d55-4f01-8dd7-2142a5c8588d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4389a1ed-8a9e-6be9-ec66-4df8325edee0" executionId="686960a3-8742-40a3-86e9-70d0ebac01ee" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="950306b6-1472-7636-5890-8f1258226132" executionId="819c8ca1-3412-4570-8ec1-2f24e48e1b94" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6ef7c409-96bc-a847-d868-d81f7c2f7c4b" executionId="bb62cf74-dc68-44a8-99ad-b013d3531a00" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e7339847-c434-a3a1-8f8c-685e80d70f04" executionId="9776b47e-d0fb-44a3-8699-8b91678408ee" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5e96ef41-5328-a513-d092-3690842a7da8" executionId="33b600c6-cbc1-43e0-899e-a5184e571ff5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a8b3929a-9e23-772f-412e-a9d0b2edbc98" executionId="d34e50b6-48aa-4da4-a68a-99387b9e99d7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="57eb8638-e0ed-01a5-1b45-ceb7b2896450" executionId="f35e1f4f-579e-45e7-9546-ccffa13328ef" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ab144493-6c0b-d57d-d7b4-fa180630d4b7" executionId="7e48c44c-6a51-4440-bd37-8e23265ec2d9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="25" executed="25" passed="24" failed="1" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 8.0.28)
+[xUnit.net 00:00:00.84]   Discovering: WebApi.Tests
+[xUnit.net 00:00:01.05]   Discovered:  WebApi.Tests
+[xUnit.net 00:00:01.05]   Starting:    WebApi.Tests
+[xUnit.net 00:02:23.92]       WebApi.Helpers.Events.EventsProblemException : The provider refund failed: nothing left to refund: the captured amount is fully returned (test)
+[xUnit.net 00:02:23.92]       Stack Trace:
+[xUnit.net 00:02:23.92]         /Users/svendaneel/okam/wt-evrefund/Services/Events/EventsDepositService.cs(325,0): at WebApi.Services.Events.EventsDepositService.RefundAsync(Int32 storeId, Int32 eventId, Int32 depositId, EventsDepositRefundRequest request, String userId, CancellationToken ct)
+[xUnit.net 00:02:23.92]         /Users/svendaneel/okam/wt-evrefund/Services/Events/EventsSettlementService.cs(421,0): at WebApi.Services.Events.EventsSettlementService.CancelAsync(Int32 storeId, Int32 eventId, EventsCancelRequest request, String userId, CancellationToken ct)
+[xUnit.net 00:02:23.92]         /Users/svendaneel/okam/wt-evrefund/WebApi.Tests/Events/EventsSettlementLifecycleTests.cs(435,0): at WebApi.Tests.Events.EventsSettlementLifecycleTests.Cancel_a_confirmed_event_with_a_paid_deposit_refunds_through_the_rail_and_cancels()
+[xUnit.net 00:02:23.92]         /Users/svendaneel/okam/wt-evrefund/WebApi.Tests/Events/EventsSettlementLifecycleTests.cs(438,0): at WebApi.Tests.Events.EventsSettlementLifecycleTests.Cancel_a_confirmed_event_with_a_paid_deposit_refunds_through_the_rail_and_cancels()
+[xUnit.net 00:02:23.92]         /Users/svendaneel/okam/wt-evrefund/WebApi.Tests/Events/EventsSettlementLifecycleTests.cs(446,0): at WebApi.Tests.Events.EventsSettlementLifecycleTests.Cancel_a_confirmed_event_with_a_paid_deposit_refunds_through_the_rail_and_cancels()
+[xUnit.net 00:02:23.92]         --- End of stack trace from previous location ---
+[xUnit.net 00:02:29.99]   Finished:    WebApi.Tests
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="svens-macbook-pro" outcome="Error" timestamp="2026-08-01T21:48:41.5918500+02:00">
+        <Text>[xUnit.net 00:02:23.92]     WebApi.Tests.Events.EventsSettlementLifecycleTests.Cancel_a_confirmed_event_with_a_paid_deposit_refunds_through_the_rail_and_cancels [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

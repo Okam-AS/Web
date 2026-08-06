@@ -1,0 +1,1 @@
+[price-label] OK — 30 assertions against the shipped core/helpers/tools.ts (NOK + CHF formats).

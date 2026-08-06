@@ -25,6 +25,7 @@
 // wants to be true it must seed here explicitly.
 
 const http = require('http');
+const crypto = require('crypto');
 const { URL } = require('url');
 const world = require('./world');
 // One file per module family, for the same reason the clients are one file per controller: the two
@@ -42,6 +43,17 @@ const eventsFixture = require('./events');
 // sides of the auth wall: `growth-newsletter.js` is a StoreAdmin surface, and every route in
 // `growth.js` is anonymous by contract. See where each is dispatched below.
 const growthGuestFixture = require('./growth');
+// The notification outbox behind a publication: what the enqueued commands became. Its own module
+// because the delivery report's contract is a family of its own, not a field on the publish response.
+const workforceDeliveryFixture = require('./workforce-delivery');
+// The register itself — the POS startup path plus the clock. Before it, this fixture served no POS
+// endpoint at all, so `/admin/pos` was unreachable to a browser journey regardless of the clock.
+const workforcePunchFixture = require('./workforce-punch');
+// The publications themselves and who each one reached. Separate from the outbox above: that one
+// answers what could not be got OUT, this one answers what came BACK from the people it did reach,
+// and a store can be clean on one and silent on the other.
+const workforcePublicationsFixture = require('./workforce-publications');
+const workforceTimesheetsFixture = require('./workforce-timesheets');
 
 const PORT = Number(process.env.E2E_FIXTURE_PORT || 4010);
 
@@ -103,6 +115,11 @@ function freshState () {
     // switch flipped cannot write through the module it gates. The single row it does start with
     // belongs to a DIFFERENT venue and is explained where it is defined.
     flags: world.seededFlagOverrides(),
+    // The job-role catalogue, `${storeId}` -> array, and MUTABLE because `PUT /roles` writes it.
+    // Cloned from the world so a role created in one journey is not visible to the next — the same
+    // reason `proposals` is cloned. `VIRGIN_STORE_ID` starts as an EMPTY ARRAY rather than being
+    // absent, which is the state this whole surface exists to get a store out of.
+    roleCatalogue: world.seededRoleCatalogue(),
     // The venue's privacy queue, cloned from the world so a resolution in one journey cannot be seen
     // by another. Mutable: `POST .../resolution` rewrites the row's state, resolvedAt and notice
     // receipt in place, which is what makes the queue a queue rather than a table.
@@ -154,7 +171,11 @@ function freshState () {
     meals: mealsFixture.fresh(),
     growthNewsletter: growthNewsletterFixture.fresh(),
     growth: growthGuestFixture.fresh(),
-    events: eventsFixture.fresh()
+    events: eventsFixture.fresh(),
+    workforceDelivery: workforceDeliveryFixture.fresh(),
+    workforcePunch: workforcePunchFixture.fresh(),
+    workforcePublications: workforcePublicationsFixture.fresh(),
+    workforceTimesheets: workforceTimesheetsFixture.fresh()
   };
 }
 
@@ -163,6 +184,62 @@ let state = freshState();
 function nextId (prefix) {
   state.seq += 1;
   return prefix + '-' + state.seq;
+}
+
+/**
+ * One store's job-role catalogue, created empty the first time it is asked for.
+ *
+ * Absent means EMPTY here, and that is the backend's shape rather than a shortcut: `ListRolesAsync`
+ * filters an ordinary table by store and a store nobody has written a role for simply has no rows.
+ * There is no such thing as a store that has not been "set up" for roles.
+ */
+function roleCatalogue (storeId) {
+  const key = String(storeId);
+  if (!state.roleCatalogue[key]) { state.roleCatalogue[key] = []; }
+  return state.roleCatalogue[key];
+}
+
+/**
+ * One role in the shape `WorkforceRoleModel` actually goes out in.
+ *
+ * The seeded roles in `world.js` carry only what the week grid needed to draw them, and the read is
+ * now consumed by a page that decides RETIREMENT from `effectiveToUtc`. Filling both stamps here
+ * rather than in the seed keeps the world readable while making every role on the wire complete —
+ * and `effectiveToUtc: null` is a positive answer ("not retired"), not an absent field.
+ */
+function roleWire (role) {
+  return {
+    roleId: role.roleId,
+    name: role.name,
+    station: role.station || null,
+    color: role.color || null,
+    sortOrder: typeof role.sortOrder === 'number' ? role.sortOrder : 0,
+    effectiveFromUtc: role.effectiveFromUtc || '2026-01-01T00:00:00Z',
+    effectiveToUtc: role.effectiveToUtc || null
+  };
+}
+
+/** `OrderBy(r => r.SortOrder).ThenBy(r => r.Name)`, which is the order both #8 and #9 answer in. */
+function compareRoles (a, b) {
+  const order = (a.sortOrder || 0) - (b.sortOrder || 0);
+  if (order !== 0) { return order; }
+  return String(a.name || '').localeCompare(String(b.name || ''));
+}
+
+/**
+ * A role id shaped like the one the server mints.
+ *
+ * `UpsertRolesAsync` assigns `Guid.NewGuid()`, and the frontend puts that value straight into a
+ * `<select>`'s option value and later into an assignment payload — so a fixture that minted
+ * `role-7` would be exercising a shape the real API never produces. Version 4, from
+ * `crypto.randomUUID` where the runtime has it.
+ */
+function newRoleId () {
+  if (crypto && typeof crypto.randomUUID === 'function') { return crypto.randomUUID(); }
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = Math.random() * 16 | 0;
+    return (c === 'x' ? r : ((r & 0x3) | 0x8)).toString(16);
+  });
 }
 
 // ---- responses ---------------------------------------------------------------------------------
@@ -175,7 +252,12 @@ function send (res, status, body, extraHeaders) {
     // Deliberately NOT exposing ETag: the real API's CORS policy does not, which is precisely why
     // `WorkforceScheduleService` reads the checksum off the response BODY. Withholding it here keeps
     // that constraint real instead of letting a future client start reading the header and pass.
-    'Access-Control-Allow-Headers': 'Authorization, Content-Type, Accept, Idempotency-Key, If-Match, ClientPlatform, Language, ClientAppVersion, ClientFeatures, SelectedTheme',
+    // `X-Operator-Session` is here because the register's own surfaces send it and it is not a
+    // CORS-simple header, so without it the browser fails the PREFLIGHT and the call never reaches a
+    // handler — a "Failed to fetch" with no status, which reads like a dead endpoint rather than a
+    // policy. The real API allows it via `AllowAnyHeader()` (Program.cs:102); this list has simply
+    // been narrower than the server it stands in for, and no POS endpoint existed here to notice.
+    'Access-Control-Allow-Headers': 'Authorization, Content-Type, Accept, Idempotency-Key, If-Match, X-Operator-Session, ClientPlatform, Language, ClientAppVersion, ClientFeatures, SelectedTheme',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
     'Cache-Control': 'no-store'
   }, extraHeaders || {}));
@@ -195,6 +277,31 @@ function sendText (res, status, text, contentType) {
     'Cache-Control': 'no-store'
   });
   res.end(text);
+}
+
+/**
+ * A DOWNLOAD — a body with a filename attached, which `sendText` above has no way to express.
+ *
+ * `Content-Disposition` is the only place the server's chosen filename travels, and it is NOT a
+ * CORS-safelisted response header: a cross-origin page cannot read it unless the server also lists
+ * it in `Access-Control-Expose-Headers`. It is listed here because the real API does expose it for
+ * this route family, and the workforce clients' `fileNameFrom` reads it — a fixture that withheld it
+ * would make every client fall back to its own guessed name and the guess would never be caught.
+ *
+ * `extraHeaders` is deliberately NOT added to the expose list. The timesheet download answers
+ * `X-Okam-Content-Sha256`, and the real API does NOT expose that one (its controller says so), so
+ * the browser must not be able to read it here either. That withholding is the whole reason the page
+ * takes `payloadSha256` off the batch model instead — see `workforce-timesheets.js`.
+ */
+function sendFile (res, status, body, contentType, fileName, extraHeaders) {
+  res.writeHead(status, Object.assign({
+    'Content-Type': contentType || 'application/octet-stream',
+    'Content-Disposition': 'attachment; filename="' + String(fileName || 'download').replace(/"/g, '') + '"',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Expose-Headers': 'Content-Disposition',
+    'Cache-Control': 'no-store'
+  }, extraHeaders || {}));
+  res.end(body);
 }
 
 /** RFC 9457 problem+json in the shape `WorkforceApiError` / `EventsApiError` parse. */
@@ -440,7 +547,7 @@ function bumpETag (revision) {
   revision.eTag = 'etag-' + revision.scheduleRevisionId + '-' + (++revision.version);
 }
 
-function applyBatch (revision, items) {
+function applyBatch (revision, items, storeId) {
   for (const item of items || []) {
     if (item.delete) {
       revision.assignments = revision.assignments.filter(a => a.shiftAssignmentId !== item.shiftAssignmentId);
@@ -449,8 +556,12 @@ function applyBatch (revision, items) {
 
     const start = localToUtc(world.TIME_ZONE, item.localStart);
     const end = localToUtc(world.TIME_ZONE, item.localEnd);
-    const role = world.ROLES.find(r => r.roleId === item.roleId) || null;
-    const staff = world.STAFF.find(s => s.staffMemberId === item.staffMemberId) || null;
+    // Resolved out of THIS STORE's catalogue, not a global list. A role belongs to one store
+    // (`WorkforceRoles` is filtered `Where(r => r.StoreId == storeId)` on every read, and #11
+    // refuses a cross-store role with the opaque 404), so a fixture that resolved names globally
+    // would let a shift on one venue print a role defined at another.
+    const role = roleCatalogue(storeId).find(r => r.roleId === item.roleId) || null;
+    const staff = world.staffFor(storeId).find(s => s.staffMemberId === item.staffMemberId) || null;
 
     const assignment = {
       shiftAssignmentId: item.shiftAssignmentId || nextId('shift'),
@@ -590,6 +701,59 @@ async function route (req, res, url) {
     const mails = state.confirmationMails.filter(m => m.to === forAddress);
     const latest = mails.length ? mails[mails.length - 1] : null;
     return send(res, 200, { code: latest ? latest.code : null, ordered: mails.length });
+  }
+  // THE GUEST'S MAILBOX, for exactly the same reason and under exactly the same rules.
+  //
+  // The double-opt-in link and the RFC 8058 unsubscribe link both travel by mail, and nothing on this
+  // branch sends any (`F-GROWTH-FAKE-MAIL`). So a lifecycle journey has to read them from somewhere,
+  // and it reads them as a RECIPIENT does: the handle it would have clicked, and the contact's own
+  // state — never a verdict on whether the product behaved, which is the part the pages must show.
+  //
+  // On the `/__fixture` control surface, so it is not counted in `served`, is fetched from NODE and
+  // never through the browser, and therefore cannot reach `backendSample` or the artifact (C7).
+  if (path === '/__fixture/growth-links') {
+    const forAddress = (url.searchParams.get('address') || '').trim().toLowerCase();
+    const contact = state.growth.contacts[forAddress] || null;
+    return send(res, 200, {
+      confirmToken: contact ? contact.confirmToken : null,
+      unsubscribeToken: contact ? contact.unsubscribeToken : null,
+      // The three states a guest can put this row in, and how many times the address was captured.
+      state: contact ? contact.state : null,
+      captures: state.growth.captures.filter(c => String(c.email).toLowerCase() === forAddress).length
+    });
+  }
+
+  // WHAT THE APPEND-ONLY LEDGER RECORDED ABOUT A READ, for the one journey that has to prove a GET
+  // wrote something.
+  //
+  // `GET /training/stores/{id}/evidence` appends an `evidence.read` disclosure and commits it in the
+  // same request, and the Training evidence page prints a notice saying so. That notice is a claim
+  // about a control, and this estate has repeatedly shipped screens naming controls nothing
+  // implements — so the journey has to be able to FALSIFY it, and no product surface can: the
+  // disclosures are deliberately excluded from the document's own audit chain (it is the provenance
+  // of the evidence, not an access log), and the route that would serve them to a subject does not
+  // exist on this backend branch at all.
+  //
+  // So the journey reads the ledger the way the two mailboxes above are read: from the control
+  // surface, from NODE, never through the browser. It is not counted in `served`, is routed for no
+  // caller, and never enters page state — so it cannot reach `backendSample` or the artifact (C7).
+  // It returns COUNTS and event types only, never a payload, so a fixture-side leak of what was
+  // disclosed is impossible by construction.
+  if (path === '/__fixture/training-disclosures') {
+    const forPerson = (url.searchParams.get('personRef') || '').trim().toLowerCase();
+    const rows = state.training.auditEvents.filter(e =>
+      e.eventType === 'evidence.read' && (!forPerson || e.aggregateId === forPerson));
+    return send(res, 200, {
+      disclosures: rows.length,
+      actors: Array.from(new Set(rows.map(e => e.actorReference))),
+      // Every ledger row this world holds, by type — so a journey can show that the read added a
+      // disclosure WITHOUT adding a mutation row, which is the difference between a GET that records
+      // and a GET that quietly writes.
+      byEventType: state.training.auditEvents.reduce((acc, e) => {
+        acc[e.eventType] = (acc[e.eventType] || 0) + 1;
+        return acc;
+      }, {})
+    });
   }
 
   state.served += 1;
@@ -752,6 +916,15 @@ async function route (req, res, url) {
   if (trainingFixture.route(moduleCtx)) { return; }
   if (mealsFixture.route(moduleCtx)) { return; }
   if (growthNewsletterFixture.route(moduleCtx)) { return; }
+
+  // ---- the register: POS startup + the clock ---------------------------------------------------
+  //
+  // Placed with the module families and BELOW the `/workforce/` header guard on purpose: the punch is
+  // a workforce mutation and must be refused without an `Idempotency-Key` by the same rule as every
+  // other one, rather than by a check of its own that could drift from it.
+  if (workforcePunchFixture.handle({
+    path, method: req.method, req, res, state, send, problem, body, flagEffective
+  })) { return; }
 
   // ---- Events: the admin half ------------------------------------------------------------------
   //
@@ -1108,14 +1281,70 @@ async function route (req, res, url) {
       return send(res, 200, {
         storeId: Number(storeId),
         timeZone: { id: world.TIME_ZONE },
+        // `WorkforcePayrollApprover` joined this list when the timesheet surface arrived, and it is
+        // a CONVERGENCE rather than a widening: `test/e2e/scripts/live-world.sh` already grants the
+        // live manager exactly `WorkforceSelf,WorkforceScheduler,WorkforceManager,
+        // WorkforcePayrollApprover` (:534) and then DIES if `GET /context` does not answer with the
+        // payroll grant (:657). The fixture was the only world in the estate whose manager could not
+        // approve a timesheet or read a rate — which is why neither the rates page nor the timesheet
+        // page had a journey until now, and why the payroll-gated half of Workforce was reachable
+        // over HTTP and from no browser.
         capabilities: administers
-          ? ['WorkforceScheduler', 'WorkforceManager']
+          ? ['WorkforceScheduler', 'WorkforceManager', 'WorkforcePayrollApprover']
           : ['WorkforceSelf']
       });
     }
 
     if (!administers) {
       return problem(res, 403, 'workforce.forbidden', 'No workforce capability at this store.');
+    }
+
+    // ---- THE TIMESHEET BATCH (#27, #28, #29 + the two reads beside them) ------------------------
+    //
+    // Dispatched to its own module BEFORE the schedule kill switch below, because the two families
+    // are gated on DIFFERENT flags: the schedule's writes on `workforce.publication`, the
+    // timesheet's on `workforce.export`. A shared guard would gate each family on the other's
+    // switch — the timesheet page would go read-only when a manager turned schedule publication
+    // off, which is not a product anybody built.
+    //
+    // The §9.2 gate for this family is applied INSIDE this block rather than in the module, so the
+    // rule that only the two WRITES are gated is stated in the same place as the schedule's and can
+    // be compared with it.
+    if (/^\/timesheets(\/|$)/.test(rest)) {
+      const exportEnabled = flagEffective(storeId, world.TIMESHEET_WRITE_FLAG);
+      if (req.method !== 'GET' && !exportEnabled) {
+        return problem(res, 409, 'workforce.flag-disabled-read-only',
+          'The workforce feature is disabled for this store; the surface is read-only.', {
+            conflictKind: 'flag-disabled-read-only',
+            flag: world.TIMESHEET_WRITE_FLAG,
+            retryable: false
+          });
+      }
+
+      const handled = workforceTimesheetsFixture.route({
+        req,
+        res,
+        method: req.method,
+        rest,
+        body,
+        query: {
+          from: url.searchParams.get('from'),
+          to: url.searchParams.get('to')
+        },
+        storeId,
+        caller,
+        state: state.workforceTimesheets,
+        exportEnabled,
+        // The caller's OWN key, threaded through rather than regenerated: it is the batch's
+        // `batchKey` and it is what decides replay-versus-refuse. A fixture that minted its own
+        // here would make every retry look like a first attempt and the whole finalize-then-refuse
+        // chain would be unobservable.
+        idempotencyKey: req.headers['idempotency-key'] || null,
+        send,
+        problem,
+        sendFile
+      });
+      if (handled !== false) { return handled; }
     }
 
     // THE §9.2 KILL SWITCH. All four schedule writes — create draft, batch edit, validate, publish —
@@ -1145,14 +1374,18 @@ async function route (req, res, url) {
       // not because a constant said so. Without this the journey's last manager-side assertion
       // would be asserting the seed.
       const claimed = new Set(Object.keys(state.claims).reduce((all, u) => all.concat(state.claims[u]), []));
-      return send(res, 200, world.STAFF.map(s => Object.assign({}, s, {
+      // SCOPED TO THE ROUTE STORE. `ListStaffAsync` filters by store like every other read in the
+      // module, and a fixture that answered one global roster would put another venue's people on a
+      // newly opened store's week grid — which would also have made this lane's virgin store look
+      // staffed by a seed it does not own.
+      return send(res, 200, world.staffFor(storeId).map(s => Object.assign({}, s, {
         personState: claimed.has(s.staffMemberId) ? 'Claimed' : 'Invited'
       })));
     }
 
     const staffDetail = /^\/staff\/([^/]+)$/.exec(rest);
     if (staffDetail && req.method === 'GET') {
-      const staff = world.STAFF.find(s => s.staffMemberId === staffDetail[1]);
+      const staff = world.staffFor(storeId).find(s => s.staffMemberId === staffDetail[1]);
       if (!staff) { return problem(res, 404, 'workforce.not-found', 'No such engagement.'); }
       const claimed = Object.keys(state.claims).some(u => state.claims[u].includes(staff.staffMemberId));
       return send(res, 200, Object.assign({}, staff, {
@@ -1193,7 +1426,7 @@ async function route (req, res, url) {
     const issueInvitation = /^\/staff\/([^/]+)\/invitations$/.exec(rest);
     if (issueInvitation && req.method === 'POST') {
       const staffMemberId = issueInvitation[1];
-      if (!world.STAFF.some(s => s.staffMemberId === staffMemberId)) {
+      if (!world.staffFor(storeId).some(s => s.staffMemberId === staffMemberId)) {
         return problem(res, 404, 'workforce.not-found', 'No such engagement.');
       }
 
@@ -1226,7 +1459,71 @@ async function route (req, res, url) {
       });
     }
 
-    if (rest === '/roles' && req.method === 'GET') { return send(res, 200, world.ROLES); }
+    // ---- Endpoints 8 and 9: the store's job-role catalogue -----------------------------------
+    //
+    // #8 is a READ and is NOT flag-gated (§9.2 forbids gating a read); it needs WorkforceScheduler,
+    // which every administering caller here holds. #9 is the write, and it is the reason this pair
+    // is modelled at all: it was live on the wire for the whole of W1 with no caller in any browser,
+    // so the only stores that had roles were the ones somebody had curled.
+    if (rest === '/roles' && req.method === 'GET') {
+      return send(res, 200, roleCatalogue(storeId).map(roleWire));
+    }
+
+    if (rest === '/roles' && req.method === 'PUT') {
+      // The stage gate. `workforce.setup` defaults ON, so this refuses nothing until an operator
+      // turns it OFF — which is exactly the behaviour to model, because a page that ignored it would
+      // keep offering a form the real server answers with a 409 nobody can act on.
+      if (!flagEffective(storeId, world.ROLE_WRITE_FLAG)) {
+        return problem(res, 409, 'workforce.flag-disabled-read-only',
+          'The workforce feature is disabled for this store; the surface is read-only.', {
+            conflictKind: 'flag-disabled-read-only',
+            flag: world.ROLE_WRITE_FLAG,
+            retryable: false
+          });
+      }
+
+      // A MERGE, NOT A REPLACE — the single most important property of this route, and the one a
+      // fixture could most easily get wrong in a way that hides a client bug. `UpsertRolesAsync`
+      // walks ONLY the items it was sent: roles absent from the request are left untouched. A
+      // fixture that rebuilt the catalogue from the request would make a client that (wrongly) sends
+      // one item at a time look like it was deleting everything else, and a client that wrongly sent
+      // the whole list every time would look correct.
+      const catalogue = roleCatalogue(storeId);
+      const items = (body && body.roles) || [];
+      const now = nowUtc();
+
+      for (const item of items) {
+        const existing = item.roleId ? catalogue.find(r => r.roleId === item.roleId) : null;
+        if (existing) {
+          // Assigned UNCONDITIONALLY, field for field, exactly as the service does — including
+          // `effectiveToUtc`, which is why an edit that omits it CLEARS the retirement rather than
+          // preserving it. The page is written knowing that; the fixture must not be kinder than the
+          // server or the page's care would be untested.
+          existing.name = item.name;
+          existing.station = item.station;
+          existing.color = item.color;
+          existing.sortOrder = item.sortOrder;
+          if (item.effectiveFromUtc) { existing.effectiveFromUtc = item.effectiveFromUtc; }
+          existing.effectiveToUtc = item.effectiveToUtc || null;
+        } else {
+          // An item with no `roleId` — or one naming a role this store does not have — is a CREATE.
+          // The server mints the id; the client never supplies it.
+          catalogue.push({
+            roleId: newRoleId(),
+            name: item.name,
+            station: item.station,
+            color: item.color,
+            sortOrder: item.sortOrder,
+            effectiveFromUtc: item.effectiveFromUtc || now,
+            effectiveToUtc: item.effectiveToUtc || null
+          });
+        }
+      }
+
+      // The FULL list, server-ordered — `OrderBy(SortOrder).ThenBy(Name)` — not just what was sent.
+      return send(res, 200, catalogue.slice().sort(compareRoles).map(roleWire));
+    }
+
     if (rest === '/requests' && req.method === 'GET') { return send(res, 200, { items: state.requests }); }
 
     if (rest === '/schedules' && req.method === 'GET') {
@@ -1239,6 +1536,41 @@ async function route (req, res, url) {
       // `timeZoneId` is mandatory: without it `placeExternalCommitments` reads the whole overlay as
       // unknown, and the grid would print "the cross-store check did not answer" on a clean week.
       return send(res, 200, { items: [], timeZoneId: world.TIME_ZONE });
+    }
+
+    // What the enqueued commands became. A BARE ARRAY, matching the controller, which returns the
+    // service's `List<WorkforceNotificationFailureModel>` with no envelope — a page written against
+    // an `{ items: [] }` wrapper here would find nothing at all against the real API.
+    //
+    // Reached only past the `!administers` 403 above, which is this fixture's stand-in for the
+    // endpoint's `RequireCapabilityAsync(WorkforceManager)`.
+    if (rest === '/schedules/notification-failures' && req.method === 'GET') {
+      return send(res, 200, workforceDeliveryFixture.failures(state.workforceDelivery, storeId));
+    }
+
+    // Endpoint 21. A BARE ARRAY, matching the controller, and UNPAGED — the page derives which
+    // publications have been superseded by inverting `supersedesPublicationId` across the whole
+    // list, so a fixture that paged here would break a derivation the real endpoint supports.
+    if (rest === '/schedules/publication-history' && req.method === 'GET') {
+      return send(res, 200, workforcePublicationsFixture.history(state.workforcePublications, storeId));
+    }
+
+    // Endpoint 22. The real service gates this on `WorkforceManager` — a HIGHER grant than the
+    // history above it, which is `WorkforceScheduler` — and this fixture cannot tell the two apart:
+    // the `!administers` 403 above is its only capability stand-in. So a journey here proves the
+    // wire and the 404, NOT the split grant. The page's manager-only refusal is unit-covered
+    // instead, and that limit is stated rather than papered over.
+    const recipientsRoute = /^\/schedules\/publications\/([^/]+)\/recipients$/.exec(rest || '');
+    if (recipientsRoute && req.method === 'GET') {
+      const roster = workforcePublicationsFixture.recipientsFor(
+        state.workforcePublications, storeId, recipientsRoute[1]);
+      // The service checks the publication exists FOR THIS STORE before reading, so a guessed id
+      // never reaches another store's roster. Same refusal here.
+      if (roster === null) {
+        return problem(res, 404, 'workforce.publication-not-found',
+          'This store has no such publication.');
+      }
+      return send(res, 200, roster);
     }
 
     if (rest === '/schedules/drafts' && req.method === 'POST') {
@@ -1255,7 +1587,12 @@ async function route (req, res, url) {
         publicationNumber: null,
         assignments: [],
         version: 0,
-        eTag: ''
+        eTag: '',
+        // Carried on the revision so the publish below can state WHICH WEEK it published. The
+        // publication history is a list of weeks, and a row that cannot name its own range is not a
+        // history entry a manager can act on. Internal to the fixture; no response echoes it.
+        rangeStartUtc: (body && body.rangeStartUtc) || null,
+        rangeEndUtc: (body && body.rangeEndUtc) || null
       };
       bumpETag(revision);
       state.revisions[key] = revision;
@@ -1298,7 +1635,7 @@ async function route (req, res, url) {
               eTag: revision.eTag
             });
         }
-        applyBatch(revision, body && body.assignments);
+        applyBatch(revision, body && body.assignments, storeId);
         return send(res, 200, rangeDocument(revision, 'draft'));
       }
 
@@ -1325,9 +1662,38 @@ async function route (req, res, url) {
         revision.publicationNumber = 1;
         bumpETag(revision);
         const recipients = new Set(revision.assignments.map(a => a.staffMemberId).filter(Boolean));
+
+        // PUBLISHING ENQUEUES; IT DOES NOT DELIVER. One command per channel per recipient, each
+        // resolved by the adapter rules — so a recipient the transports cannot reach becomes a row
+        // on the failures read rather than disappearing into the count below. Without this the
+        // fixture would answer an empty failures list for every world, and a journey against it
+        // would prove only that the page renders.
+        const publicationId = 'publication-' + revision.scheduleRevisionId;
+        workforceDeliveryFixture.enqueueForPublication(state.workforceDelivery, {
+          storeId,
+          publicationId,
+          recipients: Array.from(recipients)
+        });
+
+        // THE SAME PUBLICATION, FROM THE OTHER SIDE. The outbox above records what has to be got
+        // out; this records the publication itself and its recipient rows, which is what the history
+        // and the roster read. Written with NO receipt on any row — nobody can have confirmed a week
+        // published this instant, and that is precisely the state the receipts page must show
+        // honestly rather than dressing up as delivery.
+        workforcePublicationsFixture.recordPublication(state.workforcePublications, {
+          storeId,
+          publicationId,
+          revisionId: revision.scheduleRevisionId,
+          recipients: Array.from(recipients),
+          rangeStartUtc: revision.rangeStartUtc,
+          rangeEndUtc: revision.rangeEndUtc
+        });
+
         return send(res, 200, {
           publicationNumber: 1,
           publishedAtUtc: nowUtc(),
+          // How many rows were ENQUEUED. Deliberately not how many arrived — that is the whole
+          // difference the delivery report exists to show, and the fixture must not blur it either.
           recipientCount: recipients.size
         });
       }

@@ -1,0 +1,46 @@
+
+● SUITE-PREFLIGHT: this tree cannot run the suite.
+
+  tree:    /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/ancestor/tree
+  checked: 48 modules (the runner, everything jest.config.js names, every declared
+           dependency) and 1 submodule .gitmodules declares.
+
+  ✗ 48 module(s) resolved from OUTSIDE this tree. A run here measures another
+    checkout while reporting this one:
+      - jest   <- /Users/svendaneel/okam/Web-modules/node_modules/jest/package.json
+      - ts-jest   <- /Users/svendaneel/okam/Web-modules/node_modules/ts-jest/package.json
+      - babel-jest   <- /Users/svendaneel/okam/Web-modules/node_modules/babel-jest/package.json
+      - vue-jest   <- /Users/svendaneel/okam/Web-modules/node_modules/vue-jest/package.json
+      - vue   <- /Users/svendaneel/okam/Web-modules/node_modules/vue/package.json
+      - @chenfengyuan/vue-qrcode   <- /Users/svendaneel/okam/Web-modules/node_modules/@chenfengyuan/vue-qrcode/package.json
+      - @nuxt/cli-edge   <- /Users/svendaneel/okam/Web-modules/node_modules/@nuxt/cli-edge/package.json
+      - @nuxt/content   <- /Users/svendaneel/okam/Web-modules/node_modules/@nuxt/content/package.json
+      ... and 40 more.
+
+  ✗ 1 submodule directory is present but EMPTY: core
+    This is the quiet one. The suite still runs; the suites that import from it fail at
+    LOAD, contribute zero tests each, and the reported total silently shrinks.
+
+  Nothing was installed, cloned or repaired — this check never does that, because a
+  preflight that repairs the world hides the same problem one layer along. Do it yourself:
+
+    npm ci        # a private module tree for this worktree, from package-lock.json
+
+    # or share an existing tree — the convention most worktrees in this estate
+    # already use. It works, it is instant, and nobody had written it down. Only
+    # checkouts whose package-lock.json is byte-identical to this one's are
+    # offered here; a checkout whose lock differs is the stale-tree failure, and
+    # this check would not catch it a second time.
+    ln -s /Users/svendaneel/okam/Web-modules/node_modules /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/ancestor/tree/node_modules
+    ln -s /Users/svendaneel/okam/web-fe-ci/node_modules /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/ancestor/tree/node_modules
+
+    git -c protocol.file.allow=always submodule update --init core
+                  # the -c is not optional in a worktree: git resolves the submodule
+                  # through a sibling checkout, and plain `submodule update --init`
+                  # dies with "transport 'file' not allowed".
+
+  This resolves NAMES, not VERSIONS, and sees an EMPTY submodule, not one at the wrong
+  commit. A stale or foreign-but-complete tree passes this and is a different failure.
+  scripts/suite-preflight.js documents, in its header, everything this cannot see.
+
+EXIT=1

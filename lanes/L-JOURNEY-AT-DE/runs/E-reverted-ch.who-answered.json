@@ -1,0 +1,12 @@
+{
+  "label": "E-reverted-ch",
+  "edition": "ch",
+  "grantedFixturePort": 4823,
+  "grantedWebPort": 3823,
+  "health": "{\"ok\":true,\"port\":4823}",
+  "holderPid": "77985",
+  "holderCwd": "/Users/svendaneel/okam/web-atde",
+  "holderCommand": "node test/e2e/fixture/api-server.js",
+  "lsof": "p77985 f12 n127.0.0.1:4823 ",
+  "capturedAt": "2026-08-05T04:57:52Z"
+}

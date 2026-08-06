@@ -1,0 +1,40 @@
+Test run for /Users/svendaneel/okam/wt-mrg150/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+Microsoft (R) Test Execution Command Line Tool Version 17.8.0 (arm64)
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:03.90]     WebApi.Tests.Margin.MarginIngredientContractTests.List_of_an_empty_store_returns_all_starter_candidates [FAIL]
+[xUnit.net 00:00:04.43]     WebApi.Tests.Margin.MarginIngredientContractTests.Creating_a_starter_named_ingredient_removes_it_from_the_candidates [FAIL]
+  Failed WebApi.Tests.Margin.MarginIngredientContractTests.List_of_an_empty_store_returns_all_starter_candidates [168 ms]
+  Error Message:
+   Assert.Equal() Failure
+                                 ↓ (pos 5)
+Expected: ···øttdeig", "Kyllingfilet", "Poteter", ...]
+Actual:   ···r", "Helmelk", "Egg"]
+                                 ↑ (pos 5)
+  Stack Trace:
+     at WebApi.Tests.Margin.MarginIngredientContractTests.List_of_an_empty_store_returns_all_starter_candidates() in /Users/svendaneel/okam/wt-mrg150/WebApi.Tests/Margin/MarginIngredientContractTests.cs:line 73
+   at WebApi.Tests.Margin.MarginIngredientContractTests.List_of_an_empty_store_returns_all_starter_candidates() in /Users/svendaneel/okam/wt-mrg150/WebApi.Tests/Margin/MarginIngredientContractTests.cs:line 73
+--- End of stack trace from previous location ---
+  Failed WebApi.Tests.Margin.MarginIngredientContractTests.Creating_a_starter_named_ingredient_removes_it_from_the_candidates [177 ms]
+  Error Message:
+   Assert.Equal() Failure
+Expected: 15
+Actual:   5
+  Stack Trace:
+     at WebApi.Tests.Margin.MarginIngredientContractTests.Creating_a_starter_named_ingredient_removes_it_from_the_candidates() in /Users/svendaneel/okam/wt-mrg150/WebApi.Tests/Margin/MarginIngredientContractTests.cs:line 89
+   at WebApi.Tests.Margin.MarginIngredientContractTests.Creating_a_starter_named_ingredient_removes_it_from_the_candidates() in /Users/svendaneel/okam/wt-mrg150/WebApi.Tests/Margin/MarginIngredientContractTests.cs:line 89
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:06.00]     WebApi.Tests.Margin.MarginStarterLibraryTests.Copying_the_same_candidate_twice_is_refused_and_leaves_one_ingredient [FAIL]
+  Failed WebApi.Tests.Margin.MarginStarterLibraryTests.Copying_the_same_candidate_twice_is_refused_and_leaves_one_ingredient [222 ms]
+  Error Message:
+   Assert.Equal() Failure
+Expected: 15
+Actual:   5
+  Stack Trace:
+     at WebApi.Tests.Margin.MarginStarterLibraryTests.Copying_the_same_candidate_twice_is_refused_and_leaves_one_ingredient() in /Users/svendaneel/okam/wt-mrg150/WebApi.Tests/Margin/MarginStarterLibraryTests.cs:line 198
+   at WebApi.Tests.Margin.MarginStarterLibraryTests.Copying_the_same_candidate_twice_is_refused_and_leaves_one_ingredient() in /Users/svendaneel/okam/wt-mrg150/WebApi.Tests/Margin/MarginStarterLibraryTests.cs:line 198
+--- End of stack trace from previous location ---
+
+Failed!  - Failed:     3, Passed:    18, Skipped:     0, Total:    21, Duration: 3 s - WebApi.Tests.dll (net8.0)

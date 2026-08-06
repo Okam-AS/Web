@@ -1,0 +1,819 @@
+[
+ {
+  "repo": "Web-modules",
+  "path": "components/admin/floorplan/FloorPlanEditor.vue",
+  "line": 310,
+  "be": "TableShape",
+  "score": 1.0,
+  "keys": [
+   "Rectangle",
+   "Round",
+   "Square"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "components/admin/growth/GrowthRunOutcome.vue",
+  "line": 108,
+  "be": "GrowthDispatchRunState",
+  "score": 1.0,
+  "keys": [
+   "Completed",
+   "InProgress",
+   "Pending",
+   "ReconciliationRequired"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "components/admin/meals/MealsAgreementList.vue",
+  "line": 118,
+  "be": "MealsAgreementStatus",
+  "score": 1.0,
+  "keys": [
+   "Active",
+   "Ended"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "components/admin/meals/MealsAgreementList.vue",
+  "line": 125,
+  "be": "MealsAgreementStatus",
+  "score": 1.0,
+  "keys": [
+   "Active",
+   "Ended"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "components/admin/meals/MealsCompanyPanel.vue",
+  "line": 230,
+  "be": "MarginLifecycleStatus",
+  "score": 1.0,
+  "keys": [
+   "Active",
+   "Archived"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "components/admin/meals/MealsCompanyPicker.vue",
+  "line": 131,
+  "be": "MealsAgreementStatus",
+  "score": 1.0,
+  "keys": [
+   "Active",
+   "Ended"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "components/admin/meals/MealsCorridorPanel.vue",
+  "line": 156,
+  "be": "MealsAgreementStatus",
+  "score": 1.0,
+  "keys": [
+   "Active",
+   "Ended"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "components/admin/meals/MealsFundedOrders.vue",
+  "line": 138,
+  "be": "MealsReservationState",
+  "score": 1.0,
+  "keys": [
+   "Bound",
+   "Captured",
+   "Released",
+   "Reserved"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "components/admin/meals/MealsFundedOrders.vue",
+  "line": 149,
+  "be": "MealsReservationState",
+  "score": 1.0,
+  "keys": [
+   "Bound",
+   "Captured",
+   "Released",
+   "Reserved"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "components/admin/meals/MealsPeoplePanel.vue",
+  "line": 356,
+  "be": "MealsCompanyRole",
+  "score": 1.0,
+  "keys": [
+   "CompanyAdmin",
+   "Employee"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "components/admin/meals/MealsPeoplePanel.vue",
+  "line": 364,
+  "be": "MealsInvitationState",
+  "score": 1.0,
+  "keys": [
+   "Claimed",
+   "Expired",
+   "Pending",
+   "Revoked"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "components/admin/meals/MealsPeoplePanel.vue",
+  "line": 373,
+  "be": "MealsInvitationState",
+  "score": 0.5,
+  "keys": [
+   "Claimed",
+   "Pending"
+  ],
+  "short": [
+   "Expired",
+   "Revoked"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "components/admin/meals/MealsPeoplePanel.vue",
+  "line": 380,
+  "be": "MealsMembershipState",
+  "score": 1.0,
+  "keys": [
+   "Active",
+   "Revoked"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "components/admin/pos/BoardView.vue",
+  "line": 160,
+  "be": "TableShape",
+  "score": 1.0,
+  "keys": [
+   "Rectangle",
+   "Round",
+   "Square"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "components/admin/pos/CheckLine.vue",
+  "line": 117,
+  "be": "OrderLineItemStatus",
+  "score": 1.0,
+  "keys": [
+   "Fired",
+   "Pending",
+   "Ready",
+   "Sent",
+   "Served"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "components/admin/training/TrainingCertificatePanel.vue",
+  "line": 174,
+  "be": "TrainingCertificateStatus",
+  "score": 1.0,
+  "keys": [
+   "Expired",
+   "Expiring",
+   "Valid"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "components/admin/training/TrainingHoldingsPanel.vue",
+  "line": 131,
+  "be": "TrainingCertificateStatus",
+  "score": 1.0,
+  "keys": [
+   "Expired",
+   "Expiring",
+   "Valid"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "components/admin/training/TrainingVersionPanel.vue",
+  "line": 142,
+  "be": "TrainingCourseVersionState",
+  "score": 1.0,
+  "keys": [
+   "Draft",
+   "Published",
+   "Retired"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "components/admin/workforce/WorkforceEngagementPanel.vue",
+  "line": 514,
+  "be": "WorkforcePersonState",
+  "score": 1.0,
+  "keys": [
+   "Archived",
+   "Claimed",
+   "Invited"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "components/admin/workforce/WorkforcePersonnelListSheet.vue",
+  "line": 160,
+  "be": "WorkforcePersonnelParticipantCategory",
+  "score": 1.0,
+  "keys": [
+   "Employee",
+   "HiredIn",
+   "Unpaid",
+   "WorkingOwnerManager"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "components/admin/workforce/WorkforceRequestCard.vue",
+  "line": 154,
+  "be": "WorkforceShiftExchangeKind",
+  "score": 1.0,
+  "keys": [
+   "DirectSwap",
+   "GiveAway",
+   "OpenPool",
+   "OpenShiftRequest"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "components/admin/workforce/WorkforceRequestCard.vue",
+  "line": 164,
+  "be": "WorkforceAvailabilityKind",
+  "score": 1.0,
+  "keys": [
+   "Available",
+   "Preferred",
+   "Unavailable"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "components/molecules/OrderCard.vue",
+  "line": 303,
+  "be": "DineHomeStatus",
+  "score": 0.83,
+  "keys": [
+   "Accepted",
+   "Canceled",
+   "Completed",
+   "PickedUp",
+   "ReachedDestination"
+  ],
+  "short": [
+   "NotSet"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "pages/admin/growth-privacy.vue",
+  "line": 234,
+  "be": "GrowthPrivacyNoticeDelivery",
+  "score": 1.0,
+  "keys": [
+   "AttemptedAndFailed",
+   "NotAttempted",
+   "SubmittedToTransport"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "pages/admin/growth-privacy.vue",
+  "line": 240,
+  "be": "GrowthPrivacyRequestState",
+  "score": 1.0,
+  "keys": [
+   "Fulfilled",
+   "InProgress",
+   "Received",
+   "RejectedWithReason"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "pages/admin/offers.vue",
+  "line": 775,
+  "be": "OfferProposalStatus",
+  "score": 1.0,
+  "keys": [
+   "Accepted",
+   "Cancelled",
+   "Created",
+   "Read",
+   "Rejected",
+   "Sent",
+   "StoreRegistered"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "pages/admin/offers.vue",
+  "line": 796,
+  "be": "OfferProposalStatus",
+  "score": 1.0,
+  "keys": [
+   "Accepted",
+   "Cancelled",
+   "Created",
+   "Read",
+   "Rejected",
+   "Sent",
+   "StoreRegistered"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "pages/admin/orders.vue",
+  "line": 845,
+  "be": "OrderStatus",
+  "score": 0.89,
+  "keys": [
+   "Accepted",
+   "Canceled",
+   "Completed",
+   "DriverPickedUp",
+   "Processing",
+   "ReadyForDriver",
+   "ReadyForPickup",
+   "Served"
+  ],
+  "short": [
+   "OpenCheck"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "pages/admin/reservations.vue",
+  "line": 145,
+  "be": "ReservationStatus",
+  "score": 1.0,
+  "keys": [
+   "Cancelled",
+   "Completed",
+   "Confirmed",
+   "NoShow",
+   "Requested",
+   "Seated"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "pages/admin/reservations.vue",
+  "line": 147,
+  "be": "TableShape",
+  "score": 1.0,
+  "keys": [
+   "Rectangle",
+   "Round",
+   "Square"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "pages/admin/statistics.vue",
+  "line": 795,
+  "be": "DeliveryType",
+  "score": 0.57,
+  "keys": [
+   "InstantHomeDelivery",
+   "SelfPickup",
+   "TableDelivery",
+   "WoltDelivery"
+  ],
+  "short": [
+   "DineHomeDelivery",
+   "NotSet",
+   "WoltMarketplaceDelivery"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "pages/admin/statistics.vue",
+  "line": 822,
+  "be": "DeliveryType",
+  "score": 0.57,
+  "keys": [
+   "InstantHomeDelivery",
+   "SelfPickup",
+   "TableDelivery",
+   "WoltDelivery"
+  ],
+  "short": [
+   "DineHomeDelivery",
+   "NotSet",
+   "WoltMarketplaceDelivery"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "pages/admin/statistics.vue",
+  "line": 858,
+  "be": "DeliveryType",
+  "score": 0.57,
+  "keys": [
+   "InstantHomeDelivery",
+   "SelfPickup",
+   "TableDelivery",
+   "WoltDelivery"
+  ],
+  "short": [
+   "DineHomeDelivery",
+   "NotSet",
+   "WoltMarketplaceDelivery"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "pages/admin/statistics.vue",
+  "line": 885,
+  "be": "DeliveryType",
+  "score": 0.57,
+  "keys": [
+   "InstantHomeDelivery",
+   "SelfPickup",
+   "TableDelivery",
+   "WoltDelivery"
+  ],
+  "short": [
+   "DineHomeDelivery",
+   "NotSet",
+   "WoltMarketplaceDelivery"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "pages/meals/join.vue",
+  "line": 383,
+  "be": "MealsCompanyRole",
+  "score": 1.0,
+  "keys": [
+   "CompanyAdmin",
+   "Employee"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "plugins/global-mixin.js",
+  "line": 83,
+  "be": "PaymentTypeFilter",
+  "score": 0.83,
+  "keys": [
+   "Dintero",
+   "DinteroBillie",
+   "DinteroKlarna",
+   "DinteroKravia",
+   "DinteroVipps",
+   "Giftcard",
+   "PayInStore",
+   "Stripe",
+   "Vipps",
+   "WoltMarketplace"
+  ],
+  "short": [
+   "Surfboard",
+   "SurfboardTerminal"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "plugins/global-mixin.js",
+  "line": 98,
+  "be": "DeliveryType",
+  "score": 0.75,
+  "keys": [
+   "DineHomeDelivery",
+   "GroupedHomeDelivery",
+   "InstantHomeDelivery",
+   "SelfPickup",
+   "TableDelivery",
+   "WoltDelivery",
+   "WoltMarketplaceDelivery"
+  ],
+  "short": [
+   "NotSet"
+  ],
+  "extra": [
+   "GroupedHomeDelivery"
+  ]
+ },
+ {
+  "repo": "Web-modules",
+  "path": "plugins/global-mixin.js",
+  "line": 110,
+  "be": "DineHomeStatus",
+  "score": 0.83,
+  "keys": [
+   "Accepted",
+   "Canceled",
+   "Completed",
+   "PickedUp",
+   "ReachedDestination"
+  ],
+  "short": [
+   "NotSet"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "plugins/global-mixin.js",
+  "line": 120,
+  "be": "WoltStatus",
+  "score": 0.67,
+  "keys": [
+   "CustomerNoShow",
+   "Delivered",
+   "DropoffArrival",
+   "DropoffCompleted",
+   "DropoffStarted",
+   "OrderReceived",
+   "OrderRejected",
+   "PickedUp",
+   "PickupArrival",
+   "PickupStarted"
+  ],
+  "short": [
+   "DropoffEtaUpdated",
+   "HandshakeDelivery",
+   "LocationUpdated",
+   "NotSet",
+   "PickupEtaUpdated"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "plugins/global-mixin.js",
+  "line": 135,
+  "be": "OrderStatus",
+  "score": 0.89,
+  "keys": [
+   "Accepted",
+   "Canceled",
+   "Completed",
+   "DriverPickedUp",
+   "Processing",
+   "ReadyForDriver",
+   "ReadyForPickup",
+   "Served"
+  ],
+  "short": [
+   "OpenCheck"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "test/e2e/fixture/margin.js",
+  "line": 68,
+  "be": "MarginBaseUnit",
+  "score": 1.0,
+  "keys": [
+   "Gram",
+   "Kilogram",
+   "Liter",
+   "Milliliter",
+   "Piece"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "test/e2e/fixture/margin.js",
+  "line": 70,
+  "be": "MarginBaseUnit",
+  "score": 1.0,
+  "keys": [
+   "Gram",
+   "Kilogram",
+   "Liter",
+   "Milliliter",
+   "Piece"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "test/margin-cost-preview.test.js",
+  "line": 373,
+  "be": "MarginBaseUnit",
+  "score": 1.0,
+  "keys": [
+   "Gram",
+   "Kilogram",
+   "Liter",
+   "Milliliter",
+   "Piece"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "utils/events/guest.js",
+  "line": 94,
+  "be": "EventsProposalVersionStatus",
+  "score": 0.83,
+  "keys": [
+   "Accepted",
+   "Declined",
+   "Expired",
+   "Sent",
+   "Superseded"
+  ],
+  "short": [
+   "Draft"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "utils/events/guest.js",
+  "line": 134,
+  "be": "EventsDepositStatus",
+  "score": 0.8,
+  "keys": [
+   "Expired",
+   "Failed",
+   "Forfeited",
+   "LatePaid",
+   "Paid",
+   "PartiallyRefunded",
+   "Quarantined",
+   "Refunded"
+  ],
+  "short": [
+   "Pending",
+   "Requested"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "utils/margin/units.js",
+  "line": 24,
+  "be": "MarginBaseUnit",
+  "score": 1.0,
+  "keys": [
+   "Gram",
+   "Kilogram",
+   "Liter",
+   "Milliliter",
+   "Piece"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "utils/margin/units.js",
+  "line": 40,
+  "be": "MarginBaseUnit",
+  "score": 1.0,
+  "keys": [
+   "Gram",
+   "Kilogram",
+   "Liter",
+   "Milliliter",
+   "Piece"
+  ],
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "utils/meals/refusal-copy.js",
+  "line": 215,
+  "be": "MealsInvitationState",
+  "score": 0.75,
+  "keys": [
+   "Claimed",
+   "Expired",
+   "Revoked"
+  ],
+  "short": [
+   "Pending"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "utils/workforce-me/memberships.js",
+  "line": 15,
+  "be": "WorkforceCapability",
+  "score": 0.8,
+  "keys": [
+   "WorkforceManager",
+   "WorkforcePayrollApprover",
+   "WorkforceScheduler",
+   "WorkforceSelf"
+  ],
+  "short": [
+   "None"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "path": "utils/workforce-me/self-requests.js",
+  "line": 270,
+  "be": "WorkforceTimeOffRequestStatus",
+  "score": 1.0,
+  "keys": [
+   "Approved",
+   "Expired",
+   "Rejected",
+   "Submitted",
+   "UnderReview",
+   "Withdrawn"
+  ],
+  "short": [],
+  "extra": []
+ }
+]

@@ -1,0 +1,7 @@
+PLANTED translations/de.ts
+  key=categories_create occurrences=2 marker=ZZPLANT_LATER_DE
+  ts.transpileModule (what a transpile-only loader sees) diagnostics: []
+  program.getSemanticDiagnostics (what a type-check sees):          [1117]
+  TS1117 present at semantic tier: true
+  sha256 planted=5264d6a67d3b9a9cd035b1d8bf3575b05e61fc98cf318e9d9b65e0c65f787c9c
+  sha256 pristine=1c1fd14aa013492f3cf452ca7198fd8f8de314e78a45439e7d48ae58941d04e0

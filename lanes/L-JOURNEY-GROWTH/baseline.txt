@@ -1,0 +1,39 @@
+BASELINE — L-JOURNEY-GROWTH, taken before this lane wrote a line
+date: 2026-08-04T12:45:03Z
+checkout: /Users/svendaneel/okam/Web-modules  (SHARED, not a worktree)
+branch: feature/restaurant-modules   tip: 3cd2570
+brief claimed frontend integration 3cd2570 -> observed tip 3cd2570: MATCHES
+
+-- growth artifacts already on disk, as found --
+growth-newsletter-send-gate.playwright.json    status=failed   backend=fixture  served=0    commit=31fc45d mtime=2026-08-03T16:14:28Z
+    error: TimeoutError: page.waitForURL: Timeout 30000ms exceeded.
+growth-privacy-queue.playwright.json           status=passed   backend=fixture  served=24   commit=174a550 mtime=2026-08-02T09:26:32Z
+
+-- is the send-gate red PRE-EXISTING? --
+artifact commit 31fc45da... is an ancestor of HEAD: YES
+commits between that artifact's commit and HEAD: 11
+artifact mtime 2026-08-03T16:14Z predates this lane's start 2026-08-04T12:45Z by ~20h
+
+-- growth-guest-consent has NO canonical artifact at all --
+-rw-r--r--@  1 svendaneel  staff   1222 Jul 31 23:40 growth-doi-postmark-sandbox.json
+drwxr-xr-x@  6 svendaneel  staff    192 Aug  2 11:13 growth-newsletter-send-gate
+-rw-r--r--@  1 svendaneel  staff   1868 Aug  3 18:14 growth-newsletter-send-gate.playwright.json
+drwxr-xr-x@  5 svendaneel  staff    160 Aug  1 21:12 growth-privacy-queue
+-rw-r--r--@  1 svendaneel  staff   7532 Aug  2 11:26 growth-privacy-queue.playwright.json
+
+-- ledger tail for growth --
+  18 "journey":"workforce-flag-lever"
+  14 "journey":"margin-week-freeze"
+  10 "journey":"meals-statement-month"
+  10 "journey":"margin-supplier-to-plate"
+  10 "journey":"events-enquiry-to-settlement"
+   8 "journey":"growth-newsletter-send-gate"
+   8 "journey":"admin-refusal-worker"
+   6 "journey":"margin-statement-week"
+   6 "journey":"margin-recipe-to-margin"
+   4 "journey":"workforce-schedule-publish"
+   4 "journey":"training-course-to-evidence"
+   4 "journey":"events-runsheet-print"
+   4 "journey":"events-deposit-precondition"
+   2 "journey":"workforce-invitation-onboarding"
+   2 "journey":"events-guest-proposal-accept"

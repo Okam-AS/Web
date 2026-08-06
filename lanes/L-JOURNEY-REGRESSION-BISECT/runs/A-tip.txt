@@ -1,0 +1,40 @@
+=== commit e34977acebd59b223584158c33451b6f1ffd82c1 ===
+e34977a The corrections stop asserting what the repository cannot show
+=== core: 10 entries | spec sha: 240787602ca928c1ab06daffeb4130a715171961 ===
+[WebServer] [fixture] listening on http://127.0.0.1:4777
+
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://172.20.10.4:3777/
+
+[WebServer] [info] Preparing project for development
+
+[WebServer] [info] Initial build may take a while
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+
+[WebServer] [success] Builder initialized
+
+[WebServer] [success] Nuxt files generated
+
+
+Running 1 test using 1 worker
+
+[WebServer] [info] Waiting for file changes
+[WebServer] [info] Memory usage: 1.24 GB (RSS: 2.56 GB)
+[WebServer] [info] Listening on: http://172.20.10.4:3777/
+
+[1/1] [chromium] › test/e2e/journeys/meals-admin-setup.spec.js:31:1 › A concierge creates a company, signs its corridor, runs a programme and issues an invitation @fixture
+  1 passed (34.4s)
+RESULT A-tip e34977a PASS rc=0

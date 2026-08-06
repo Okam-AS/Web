@@ -1,0 +1,50 @@
+WHICH CORES STILL DISAGREE ABOUT HOW MONEY IS PRINTED
+Measured 2026-08-03 by L-CORE-ORE-LABEL, after Sven ruled D-CORE-PIN = consumer-only.
+
+Sven's ruling closed the reachable harm: the two clients a guest reads a price from are fixed. It did
+NOT close the class. The recorded `con:` on the ruling stands and this file is it, in numbers:
+
+    THE ESTATE KEEPS SIX CORE CHECKOUTS AND THREE OF THEM STILL PRINT MONEY THE OLD WAY.
+
+The prior pin map (core-pins.txt, 2026-08-01) found five. There are six — /Users/svendaneel/okam/Core
+is a standalone clone on its own feature/swiss at d883ab1 that no client submodules, and nobody had
+counted it. Anyone who opens that one to learn the rule learns the wrong one.
+
+checkout / helper                        pin        branch                  suffix-fix  ore-pad  fixed by
+--------------------------------------------------------------------------------------------------------
+Web-modules  core/helpers/tools.ts       1bcab0b    lane/core-ore-label     YES         YES      L-CORE-ORE-LABEL-1
+ConsumerWeb  core/helpers/tools.ts       c0d70a4    feature/swiss           YES         YES      L-CORE-ORE-LABEL-1
+ConsumerApp  core/helpers/tools.ts       a1ce983    feature/swiss           YES         YES      L-CORE-ORE-LABEL-2 (this lane)
+Web          core/helpers/tools.ts       cd1cc86    (detached, feature/POS) NO          NO       -- left pinned
+AdminApp     app/core/helpers/tools.ts   cdae43d    (detached, master-8-*)  NO          NO       -- left pinned
+Core         helpers/tools.ts            d883ab1    feature/swiss           NO          NO       -- not a client; not previously counted
+
+"suffix-fix" = priceLabelTool suppresses the ",–" notation when a fraction is printed.
+"ore-pad"    = fractionAmountTool pads 1-9 øre on the LEFT ("04") instead of widening them to "00".
+
+WHAT IS STILL WRONG IN THE THREE THAT WERE LEFT, AND WHAT IT COSTS
+The suffix half is harmless in Web and AdminApp: both call setCurrencyFormat with suffix "" at
+startup (Web plugins/global-mixin.js:55, AdminApp app/main.ts:246), so neither could render
+"206,80,–". That is the whole reason the ruling could be consumer-only.
+
+The øre half is NOT harmless and is still live on both admin surfaces. fractionAmountTool widens a
+single-digit minor amount to "00", so an amount of 1-9 øre renders as though it had none: 4 øre
+prints "kr 0,00" on a screen an operator reads. It is a smaller defect than the consumer one and it
+was never this lane's exit criterion, but it is a money-display defect that is now knowingly left in
+two shipping clients plus the standalone Core, and it should be somebody's lane rather than a thing
+three Cores quietly disagree about.
+
+AdminApp additionally carries hand-written duplicates of wholeAmount/fractionAmount in
+app/main.ts (found by L-CORE-ORE-LABEL-1, not touched by either pass), so fixing its pin alone would
+not fix its own copy.
+
+WHY NOT JUST BUMP THEM
+Three Core branches, and two of the feature/swiss histories are divergent local trees: ConsumerApp's
+pin is not an object in ConsumerWeb's copy, and both carry commits with identical subjects under
+different hashes. The fix therefore had to be authored three times (4f31003, c0d70a4, a1ce983) --
+byte-identical in the changed region, three unrelated commits. That is the cost the ruling accepted
+and the reason converge-core was recorded as its own scoped work rather than folded into a rendering
+fix.
+
+REOPEN WHEN (from the ruling): a defect appears in a client that was left pinned, or the four -- now
+six -- Core histories are converged for another reason.

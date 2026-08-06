@@ -1,0 +1,5 @@
+  Failed WebApi.Tests.Wire.PdfDownloadWireTests.Two_credit_notes_against_one_invoice_download_under_distinct_names [388 ms]
+   Assert.Equal() Failure
+Expected: KREDITNOTA-990602.pdf
+Actual:   KREDITNOTA-990601.pdf
+Failed!  - Failed:     1, Passed:     6, Skipped:     0, Total:     7, Duration: 235 ms - WebApi.Tests.dll (net8.0)

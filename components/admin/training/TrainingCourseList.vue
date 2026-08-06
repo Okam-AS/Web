@@ -15,45 +15,47 @@
     <p v-else-if="!rows.length" class="trn-note" data-test="courses-empty">
       {{ $i('trn_courses_empty') }}
     </p>
-    <table v-else class="trn-table" data-test="courses-table">
-      <thead>
-        <tr>
-          <th>{{ $i('trn_col_title') }}</th>
-          <th>{{ $i('trn_col_category') }}</th>
-          <th>{{ $i('trn_col_competency') }}</th>
-          <th>{{ $i('trn_col_versions') }}</th>
-          <th>{{ $i('trn_col_created') }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="row in rows"
-          :key="row.courseId"
-          class="trn-table__row"
-          :class="{ 'is-selected': row.courseId === selectedCourseId }"
-          data-test="course-row"
-          @click="$emit('select', row.courseId)"
-        >
-          <td>
-            <span class="trn-courses__name">{{ row.title || dash }}</span>
-            <span v-if="!row.isActive" class="trn-flag">{{ $i('trn_course_inactive') }}</span>
-          </td>
-          <td>{{ row.category || dash }}</td>
-          <td>
-            <!-- No competency key is a real, authored choice: the course teaches something without
-                 conferring a competence. It is a dash with a title, never an empty cell. -->
-            <span :title="row.competencyKey ? null : $i('trn_course_no_competency')">
-              {{ row.competencyKey || dash }}
-            </span>
-          </td>
-          <td>
-            {{ row.versionCount === null ? dash : row.versionCount }}
-            <span v-if="row.hasPublishedVersion" class="trn-badge trn-badge--on">{{ $i('trn_course_has_published') }}</span>
-          </td>
-          <td>{{ stamp(row.created) }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div v-else class="trn-table-scroll">
+      <table class="trn-table" data-test="courses-table">
+        <thead>
+          <tr>
+            <th>{{ $i('trn_col_title') }}</th>
+            <th>{{ $i('trn_col_category') }}</th>
+            <th>{{ $i('trn_col_competency') }}</th>
+            <th>{{ $i('trn_col_versions') }}</th>
+            <th>{{ $i('trn_col_created') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="row in rows"
+            :key="row.courseId"
+            class="trn-table__row"
+            :class="{ 'is-selected': row.courseId === selectedCourseId }"
+            data-test="course-row"
+            @click="$emit('select', row.courseId)"
+          >
+            <td>
+              <span class="trn-courses__name">{{ row.title || dash }}</span>
+              <span v-if="!row.isActive" class="trn-flag">{{ $i('trn_course_inactive') }}</span>
+            </td>
+            <td>{{ row.category || dash }}</td>
+            <td>
+              <!-- No competency key is a real, authored choice: the course teaches something without
+                   conferring a competence. It is a dash with a title, never an empty cell. -->
+              <span :title="row.competencyKey ? null : $i('trn_course_no_competency')">
+                {{ row.competencyKey || dash }}
+              </span>
+            </td>
+            <td>
+              {{ row.versionCount === null ? dash : row.versionCount }}
+              <span v-if="row.hasPublishedVersion" class="trn-badge trn-badge--on">{{ $i('trn_course_has_published') }}</span>
+            </td>
+            <td>{{ stamp(row.created) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <form class="trn-form" data-test="course-form" @submit.prevent="submit">
       <h3 class="trn-form__title">

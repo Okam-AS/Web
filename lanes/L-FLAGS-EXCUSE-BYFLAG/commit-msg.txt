@@ -1,0 +1,38 @@
+The catalog guard excuses a flag, never a module
+
+The guard that made every catalog flag either claimed by an effective-value resolver or
+excused with a reason keyed its excuses by MODULE, so it excused every unclaimed flag of a
+listed module rather than the flags whose gates the reasons were written about. Deleting
+WorkforceModuleFlagEffectiveResolver's AddScoped line left it 4/4 green: the "Workforce"
+entry absorbed workforce.module, the one key in that family whose gate does diverge, and
+only WorkforceWireTests' grandfathered-store pin caught it — real coverage, but not this
+guard's. A new diverging flag inside a listed module passed unexamined for the same reason;
+appending one to TrainingFeatureFlags.Declared reproduced that, also 4/4 green. The commit
+message's claim that every catalog flag must be claimed or excused by name was true in
+prose and not in code.
+
+The excuses are now keyed by flag key — eight entries, the two advertised training.* flags
+and the six workforce.* stage flags — each stating why THAT key's gate resolves
+`override row ?? advertised default`. The self-correction test moves with them: an excused
+key must still be in the catalog AND still be claimed by no resolver, which is what makes a
+deleted registration visible rather than absorbed. Because no claimed key can be excused,
+dropping any resolver's registration leaves its keys unclaimed and unexcused. Proved by
+deleting each of the five in turn — Workforce, Growth, Meals, Events, Margin — each reds;
+the Training probe now reds and names training.probe. Receipt in
+lanes/L-FLAGS-EXCUSE-BYFLAG/mutation-receipt.md.
+
+The Training excuse also opened by naming "all seven advertised training.* flags", inside
+the mechanism whose entire justification is named reasons. Training declares seven and
+advertises two: TrainingFeatureFlags.Withheld holds the other five and Describe() returns
+only what is not withheld. Each of the eight reasons now names its own gate's enforcement
+points, and one nuance is stated rather than flattened — training.setup effective-off means
+WRITES are refused, not that the module is dark, because IsVisibleAsync keeps a store that
+already holds Training rows read-visible with the flag off.
+
+No resolver, gate or Program.cs line changed; every mutation above was restored and the
+tree verified clean before the commit.
+
+Fast tier (Database!=SqlServer): 4388 total, 4376 passed, 0 failed, 12 skipped; trx
+committed. No migration, no schema, no money-path write, no container started.
+
+Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>

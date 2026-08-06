@@ -1,0 +1,45 @@
+# PRE-EXISTING DIRT (recorded before lane touched anything)
+HEAD: 8ac6f63648015d8c7a230181a7f07bf303d43268  branch: lane/focustrap-teardown
+recorded_at: 2026-08-05T08:02:42Z
+
+## git status of tracked artifacts/ (whole tree)
+ M artifacts/journeys/workforce-invitation-onboarding.playwright.json
+ M artifacts/journeys/workforce-invitation-onboarding/fixture/01-the-roster-before-an-invitation.png
+ M artifacts/journeys/workforce-invitation-onboarding/fixture/02-the-invitation-code-shown-once.png
+ M artifacts/journeys/workforce-invitation-onboarding/fixture/07-the-roster-after-the-claim.png
+
+## working-tree hashes of ALL tracked files under artifacts/ (git ls-files -> sha256 of on-disk bytes)
+750536e0be53a8e5ec7acbb4ee0b3205c2846e89d487da76d9053973a65664c7  artifacts/journeys/modal-estate-scroll-lock.playwright.json
+d35da5aaeaab8438c447d81d7989de10fcaa5d62aaf56d3395ad81da668acbcd  artifacts/journeys/modal-estate-scroll-lock/01-receipt-modal-open-board-behind-held.png
+d35da5aaeaab8438c447d81d7989de10fcaa5d62aaf56d3395ad81da668acbcd  artifacts/journeys/modal-estate-scroll-lock/02-one-of-two-closed-board-still-held.png
+07911c05149f184d18ff92fe8f777554ecc50cb5d0b555df022f413274f21322  artifacts/journeys/modal-estate-scroll-lock/03-all-modals-closed-board-free-again.png
+dc666e487fd3d2219c6563711f6d895b7439130caee8856cd1742d145079b3d9  artifacts/journeys/modal-scroll-lock.playwright.json
+46a3a4b1c564600c340fcf07936b30c05ee3b8beb15ed7eb7744700a76a0fd97  artifacts/journeys/modal-scroll-lock/01-login-modal-body-locked.png
+b0936bc8ed9b3c772f03cae4deba331be2b55f57a3547ae436901b3c0102391d  artifacts/journeys/modal-scroll-lock/02-modal-open-page-behind-held-at-1200.png
+46fcfeebacd4801c6bb418dddc97cf82f561bf0070a7edc529b264200ee18a07  artifacts/journeys/modal-scroll-lock/03-all-modals-closed-page-free-again.png
+b9768d450333ef026efb0cd95cc149941d6a763ee280df626813766934f3239f  artifacts/journeys/workforce-invitation-onboarding.playwright.json
+35095a9083034ae3f2a8f0e52006a70e1072c9366866a4c3b652bb33240edec9  artifacts/journeys/workforce-invitation-onboarding/fixture/01-the-roster-before-an-invitation.png
+0239ed93c4a2ba38d4d5515f5c735f488f53d5aa5e012cefec1c3a6cc7e83521  artifacts/journeys/workforce-invitation-onboarding/fixture/02-the-invitation-code-shown-once.png
+4584b1a53b6908001c111799960ed23ead583371785b6a152ce55e22e80ef5e2  artifacts/journeys/workforce-invitation-onboarding/fixture/03-the-claim-page-code-held-not-signed-in.png
+5f184a120b3209fb6c542a5037786558ba9b979908e30b7ddc0e45baf00e6595  artifacts/journeys/workforce-invitation-onboarding/fixture/04-the-worker-is-in.png
+638992a5533155b13823f1fa04e6b003ff2c65b3c34b2205f0459b5a9de82417  artifacts/journeys/workforce-invitation-onboarding/fixture/05-my-shifts-after-claiming.png
+6408be2f29937e4dfbb7de48cb95c617b525414a4e8bfb4bddc2608810e6ddf1  artifacts/journeys/workforce-invitation-onboarding/fixture/06-a-repeat-claim-answered-honestly.png
+f1f49b37c00901ca1ab2893506f5571e0c8a2382ad2a593894c36340261e4a94  artifacts/journeys/workforce-invitation-onboarding/fixture/07-the-roster-after-the-claim.png
+
+## INDEX/HEAD blob hashes of the same files (git's committed content)
+100644 9de46aa38c8b12ffcf1d64048e90a2afa4496e08 0	artifacts/journeys/modal-estate-scroll-lock.playwright.json
+100644 3b7245e5a0a8a77546666ba9026d5e0edd1e5d58 0	artifacts/journeys/modal-estate-scroll-lock/01-receipt-modal-open-board-behind-held.png
+100644 3b7245e5a0a8a77546666ba9026d5e0edd1e5d58 0	artifacts/journeys/modal-estate-scroll-lock/02-one-of-two-closed-board-still-held.png
+100644 22f45e344f2c114bcac5b49bd760b6d837156a87 0	artifacts/journeys/modal-estate-scroll-lock/03-all-modals-closed-board-free-again.png
+100644 b4eecbcdaf5713b0a9a4246fb87cbbbca010298c 0	artifacts/journeys/modal-scroll-lock.playwright.json
+100644 3785f358daee8c9649e0f6cedae6385e5a7318de 0	artifacts/journeys/modal-scroll-lock/01-login-modal-body-locked.png
+100644 452da103678ca6e30a015388b9b73c7d79837f8c 0	artifacts/journeys/modal-scroll-lock/02-modal-open-page-behind-held-at-1200.png
+100644 9a3e6ed5415679dfbf2a76c88c3dd6aca0aa2084 0	artifacts/journeys/modal-scroll-lock/03-all-modals-closed-page-free-again.png
+100644 60ffe72424d98fcff99d1c22e777b7073b9963d5 0	artifacts/journeys/workforce-invitation-onboarding.playwright.json
+100644 4887efd3ea0f33381f000c20921cf083bd51320f 0	artifacts/journeys/workforce-invitation-onboarding/fixture/01-the-roster-before-an-invitation.png
+100644 070c4a2127c9d0fa92222780e078a2f4883fe811 0	artifacts/journeys/workforce-invitation-onboarding/fixture/02-the-invitation-code-shown-once.png
+100644 f2b7fffdd38b368bdd41fec8a69953837d389e58 0	artifacts/journeys/workforce-invitation-onboarding/fixture/03-the-claim-page-code-held-not-signed-in.png
+100644 8fc60d032d46a14850f87978de476770d85906e5 0	artifacts/journeys/workforce-invitation-onboarding/fixture/04-the-worker-is-in.png
+100644 9a6afab21fe8d838b367d6393b425123c86512f3 0	artifacts/journeys/workforce-invitation-onboarding/fixture/05-my-shifts-after-claiming.png
+100644 274ea57d8a5bafc6ac1c42e4395865214fbb2c0e 0	artifacts/journeys/workforce-invitation-onboarding/fixture/06-a-repeat-claim-answered-honestly.png
+100644 a8c1dfb3cd5ba799534f9f7d407f6c06b4383f53 0	artifacts/journeys/workforce-invitation-onboarding/fixture/07-the-roster-after-the-claim.png

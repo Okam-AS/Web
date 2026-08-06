@@ -1,0 +1,38 @@
+L-AI-MIDDLEWARE-DELETE - red/green proof for WebApi.Tests/Wire/RequestBodyTelemetryPinTests
+Worktree /Users/svendaneel/okam/wt-aimw, branch lane/ai-middleware-delete, base feature/restaurant-modules 3579bbbc.
+Marker used everywhere below is synthetic and inert: okam-wire-body-pin-3f9a2c17-synthetic-not-a-real-secret
+
+STEP 1 - the pin run against the tree that still contained the real middleware (before deletion).
+RED, naming the real type from the assembly derivation:
+  these attach the request body to telemetry:
+  WebApi.Helpers.ApplicationInsightsLoggingMiddleware -> RequestTelemetry[{"email":"okam-wire-body-pin-...
+
+STEP 2 - is a live-pipeline (HTTP) version of this pin capable of failing? MEASURED, not assumed.
+app.UseMiddleware<ApplicationInsightsLoggingMiddleware>() was added to Program.cs after
+UseMiddleware<OperatorSessionExceptionMiddleware>(), i.e. the middleware genuinely wired into the real
+pipeline, and a real POST carrying the marker was driven through the wire host.
+NO LEAK. The non-vacuity guard reported why:
+  the live telemetry channel received no request telemetry for a request that was served,
+  so this pin observes nothing (items in window: 2)
+Cause: the wire host blanks InstrumentationKey and ConnectionString (WireContainmentTests requires it),
+and with no key the SDK never produces RequestTelemetry, so HttpContext.Features.Get<RequestTelemetry>()
+is null and every capture path returns early. A live-pipeline body-leak test at this tier is green in
+both worlds. The UseMiddleware line was reverted; Program.cs carries no such line.
+
+STEP 3 - deletion. Helpers/ApplicationInsightsLoggingMiddleware.cs removed, the AddTransient<> in
+Program.cs removed, the CLAUDE.md telemetry bullet that named it rewritten. Pin GREEN.
+
+STEP 4 - differently-named stand-ins, in BOTH shapes the pin claims to cover, added to the PRODUCTION
+assembly as Helpers/StandInProbe.cs:
+  - PayloadEnrichmentMiddleware          convention shape (RequestDelegate ctor + InvokeAsync), property "Payload"
+  - RequestPayloadTelemetryEnricher      ITelemetryInitializer, property "Body"
+Neither shares a name, a property name or an interface with the deleted type.
+RED on both in one run:
+  these attach the request body to telemetry:
+  WebApi.Helpers.PayloadEnrichmentMiddleware -> RequestTelemetry[{"email":"okam-wire-body-pin-...;
+  WebApi.Helpers.RequestPayloadTelemetryEnricher -> RequestTelemetry[{"email":"okam-wire-body-pin-...
+
+STEP 5 - probe removed, forced rebuild, GREEN.
+
+mtime trap: --no-build was never used, and WebApi.dll's mtime was checked to have MOVED at each of the
+four builds above (11:31:44 -> 11:34:43 -> 11:35:31 -> 11:36:00), so no step measured a stale binary.

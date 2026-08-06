@@ -1,0 +1,9 @@
+  Failed WebApi.Tests.Events.EventsGuestLinkSoleComposerTests.The_outbox_mail_path_composes_through_the_composer [< 1 ms]
+  Error Message:
+   Services/Events/EventsEmailNotificationDelivery.cs no longer reads EventsGuestLink. The address it mails the guest and the address the Vipps deposit order returns the guest to are then composed in two places, which is the fork this composer exists to prevent — see the type's own summary.
+Expected: True
+Actual:   False
+  Stack Trace:
+     at WebApi.Tests.Events.EventsGuestLinkSoleComposerTests.The_outbox_mail_path_composes_through_the_composer() in /Users/svendaneel/okam/wt-guestlink/WebApi.Tests/Events/EventsGuestLinkSoleComposerTests.cs:line 156
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)

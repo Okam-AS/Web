@@ -1,0 +1,2 @@
+fatal: remote error: upload-pack: not our ref 1bcab0b6b3882bc232795437d7ad48455a5af0a6
+fatal: Fetched in submodule path 'core', but it did not contain 1bcab0b6b3882bc232795437d7ad48455a5af0a6. Direct fetching of that commit failed.

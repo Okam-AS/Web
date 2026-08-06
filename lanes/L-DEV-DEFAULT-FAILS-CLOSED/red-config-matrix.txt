@@ -1,0 +1,8 @@
+HEAD 8ac6f63648015d8c7a230181a7f07bf303d43268 on HEAD -> lane/focustrap-teardown
+== BEFORE (nuxt.config.js as found, line 45) ==
+npm run dev            (API_BASE_URL unset)                      | API_BASE_URL -> "https://okamapi.azurewebsites.net"  [EDITION=no]
+npm run dev            (API_BASE_URL=http://localhost:5080)      | API_BASE_URL -> "http://localhost:5080"  [EDITION=no]
+npm run generate       (API_BASE_URL unset)  <- github pages okam.no | API_BASE_URL -> "https://okamapi.azurewebsites.net"  [EDITION=no]
+npm run generate ch    (API_BASE_URL unset)  <- vercel www.okam-swiss.ch | API_BASE_URL -> "https://okamapi.azurewebsites.net"  [EDITION=ch]
+npm run start          (API_BASE_URL unset)                      | API_BASE_URL -> "https://okamapi.azurewebsites.net"  [EDITION=no]
+npm run generate       (API_BASE_URL=https://example.invalid)    | API_BASE_URL -> "https://example.invalid"  [EDITION=no]

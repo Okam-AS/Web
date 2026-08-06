@@ -1,0 +1,45 @@
+  Skipped WebApi.Tests.Growth.GrowthPostmarkSandboxSmokeTests.A_double_opt_in_confirmation_is_accepted_by_the_postmark_sandbox [1 ms]
+[xUnit.net 00:04:29.63]     WebApi.Tests.Surfboard.SurfboardCashSplitSmokeTests.Cash_Portion_Completes_A_Partially_Paid_Order [SKIP]
+  Skipped WebApi.Tests.Surfboard.SurfboardCashSplitSmokeTests.Cash_Portion_Completes_A_Partially_Paid_Order [1 ms]
+crit: WebApi.Program[0]
+crit: WebApi.Program[0]
+[xUnit.net 00:07:06.56]     WebApi.Tests.Wire.GrowthWebhookAuthWireTests.An_authenticated_event_from_outside_the_providers_address_ranges_is_refused [SKIP]
+[xUnit.net 00:07:06.56]     WebApi.Tests.Wire.GrowthWebhookAuthWireTests.A_bounce_from_the_bound_provider_suppresses_the_guest_channel_globally [SKIP]
+  Skipped WebApi.Tests.Wire.GrowthWebhookAuthWireTests.An_authenticated_event_from_outside_the_providers_address_ranges_is_refused [1 ms]
+  Skipped WebApi.Tests.Wire.GrowthWebhookAuthWireTests.A_bounce_from_the_bound_provider_suppresses_the_guest_channel_globally [1 ms]
+fail: WebApi.Program[0]
+fail: WebApi.Program[0]
+fail: Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware[1]
+fail: Microsoft.EntityFrameworkCore.Database.Command[20102]
+fail: Microsoft.EntityFrameworkCore.Update[10000]
+The active test run was aborted. Reason: Test host process crashed : Unhandled exception. System.ObjectDisposedException: Cannot access a disposed object.
+Object name: 'JsonDocument'.
+   at System.Text.Json.ThrowHelper.ThrowObjectDisposedException_JsonDocument()
+   at System.Text.Json.JsonElement.ToString()
+   at Xunit.Sdk.AllException.<>c.<get_Message>b__6_0(Tuple`3 error) in /_/src/xunit.assert/Asserts/Sdk/Exceptions/AllException.cs:line 60
+   at System.Linq.Enumerable.SelectArrayIterator`2.MoveNext()
+   at System.String.Join(String separator, IEnumerable`1 values)
+   at Xunit.Sdk.AllException.get_Message() in /_/src/xunit.assert/Asserts/Sdk/Exceptions/AllException.cs:line 70
+   at Xunit.Sdk.ExceptionUtility.ConvertExceptionToFailureInformation(Exception ex, Int32 parentIndex, List`1 exceptionTypes, List`1 messages, List`1 stackTraces, List`1 indices) in /_/src/common/ExceptionUtility.cs:line 194
+   at Xunit.Sdk.ExceptionUtility.ConvertExceptionToFailureInformation(Exception ex) in /_/src/common/ExceptionUtility.cs:line 178
+   at Xunit.Sdk.TestFailed..ctor(ITest test, Decimal executionTime, String output, Exception ex) in /_/src/messages/TestFailed.cs:line 42
+   at Xunit.Sdk.TestRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestRunner.cs:line 164
+   at Xunit.Sdk.TestCaseRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestCaseRunner.cs:line 82
+   at Xunit.Sdk.TestMethodRunner`1.RunTestCasesAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestMethodRunner.cs:line 136
+   at Xunit.Sdk.TestMethodRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestMethodRunner.cs:line 106
+   at Xunit.Sdk.TestClassRunner`1.RunTestMethodsAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestClassRunner.cs:line 213
+   at Xunit.Sdk.TestClassRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestClassRunner.cs:line 171
+   at Xunit.Sdk.TestCollectionRunner`1.RunTestClassesAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestCollectionRunner.cs:line 130
+   at Xunit.Sdk.TestCollectionRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestCollectionRunner.cs:line 101
+   at Xunit.Sdk.TestAssemblyRunner`1.RunTestCollectionsAsync(IMessageBus messageBus, CancellationTokenSource cancellationTokenSource) in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestAssemblyRunner.cs:line 231
+   at Xunit.Sdk.XunitTestAssemblyRunner.RunTestCollectionsAsync(IMessageBus messageBus, CancellationTokenSource cancellationTokenSource) in /_/src/xunit.execution/Sdk/Frameworks/Runners/XunitTestAssemblyRunner.cs:line 165
+   at Xunit.Sdk.TestAssemblyRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestAssemblyRunner.cs:line 196
+   at Xunit.Sdk.XunitTestFrameworkExecutor.RunTestCases(IEnumerable`1 testCases, IMessageSink executionMessageSink, ITestFrameworkExecutionOptions executionOptions) in /_/src/xunit.execution/Sdk/Frameworks/XunitTestFrameworkExecutor.cs:line 95
+   at System.Threading.Tasks.Task.<>c.<ThrowAsync>b__128_1(Object state)
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
+   at System.Threading.Thread.StartCallback()
+
+
+Passed!  - Failed:     0, Passed:  4100, Skipped:    12, Total:  4112, Duration: 7 m 6 s - WebApi.Tests.dll (net8.0)
+Test Run Aborted.

@@ -1,0 +1,408 @@
+# TRUNCATED to suite verdicts and failure titles. Full output was 405 KB of assertion
+# diffs for 112 tests that all say the same thing: swapping the Norwegian dictionary for the
+# English one changes visible strings, which the estate already notices. Kept as the record that
+# it notices WRONG STRINGS, never a wrong SHAPE. Reproduce: set translations/index.js to
+#   const translations = { no, en, de, no: en }
+# then run npm test.
+
+PASS test/events-surface.test.js
+FAIL test/workforce-roster-components.test.js
+  ● WorkforceRosterTable — the three answers look different on screen › one person with two engagements is marked as such
+  ● WorkforceEngagementPanel — capability is not role, and ending is not deletion › 37.5 hours a week renders as 37.5 hours a week
+  ● WorkforceEngagementPanel — capability is not role, and ending is not deletion › the end section tells the truth about what ending does › a KNOWN open clock session blocks the end button and says why
+  ● WorkforceEngagementPanel — capability is not role, and ending is not deletion › reactivation › an ended engagement carrying an unclearable past end date warns it stays unschedulable
+FAIL test/workforce-rates-components.test.js
+  ● WorkforceRateTimeline — the append-only model, made unmistakable › the form is phrased as "this rate applies from…", never as an edit
+  ● WorkforceRateTimeline — the mistyped future rate, surfaced before the 409 › choosing a date that already carries a rate blocks the submit and says why
+  ● WorkforceRateTimeline — the mistyped future rate, surfaced before the 409 › it names the statement that will be closed forward, and what does NOT change
+  ● WorkforceRateTimeline — the mistyped future rate, surfaced before the 409 › a BACKDATED statement is shown as bounded by the later one, not as cancelling it
+  ● WorkforceAttendanceTable › the published-only rule is stated on every state of the table
+PASS test/admin-nav-access.test.js
+FAIL test/growth-privacy-page.test.js
+  ● the copy exists in all three locales › the unknown-deadline sentence names the RESPONSE as the cause, in all three
+  ● the copy exists in all three locales › the deadline note names the article the guest was shown
+PASS test/events-guest-pages.test.js
+FAIL test/store-market-card.component.test.js
+  ● the two 409s — "this store is operating", not "you typed something wrong" › the zone conflict reads as an operating store, in its own non-red panel
+  ● the two 409s — "this store is operating", not "you typed something wrong" › the currency conflict reads the same way and names the label the money carries
+  ● the five 400s — the values are the place to look › store.market.timezone-missing renders as a validation failure the operator can act on
+  ● the five 400s — the values are the place to look › currency-not-authoritative blames the configuration and keeps the platform's sentence
+PASS test/training-page.test.js
+FAIL test/growth-guest-pages.test.js
+  ● the signup page, which is the only way a contact point is ever created › the consent text is read first, and the form renders the served wording VERBATIM
+PASS test/events-page.test.js
+FAIL test/workforce-schedule-authoring-page.test.js
+  ● a stale write › is refused by the server and surfaced as a refusal, not a failure
+  ● a stale write › a frozen revision and a stale one are different sentences
+  ● a stale write › a cross-store conflict stays opaque on the authoring path too
+  ● the editor is really on the page › the refusal and its one action are rendered where the manager is looking
+  ● the editor is really on the page › says which day an overnight shift will be filed under
+PASS test/meals-admin-components.test.js
+PASS test/margin-suppliers-page.test.js
+PASS test/workforce-rates-page.test.js
+PASS test/meals-reconciliation-page.test.js
+PASS test/meals-companies-page.test.js
+PASS test/workforce-requests-page.test.js
+PASS test/workforce-contact-imported.test.js
+PASS test/workforce-roles-page.test.js
+FAIL test/meals-claim-page.test.js
+  ● the refusals, which is most of what this page does › a code the server does not recognise names BOTH possibilities and asserts neither
+  ● the refusals, which is most of what this page does › the wrong-person refusal blames nobody, names no address, and offers the way out
+  ● the refusals, which is most of what this page does › a person who is already a member is told they are in, not that something failed
+  ● the page is not an admin screen › the language is the reader's, not whichever operator last used this browser
+PASS test/margin-price-imports-page.test.js
+FAIL test/margin-statements-page.test.js
+  ● an absent waste block reads as unknown, a zeroed one reads as zero › WORLD 1 — waste recorded with a value: the page prints the total the server sent
+  ● an absent waste block reads as unknown, a zeroed one reads as zero › WORLD 2 — waste recorded AS NONE: the page still says nothing was recorded
+  ● an absent waste block reads as unknown, a zeroed one reads as zero › WORLD 3 — NO waste block at all: the page says it could not tell, and claims no zero
+FAIL test/growth-newsletter-page.test.js
+  ● the copy itself — what the screen is allowed to assert › the not-your-address refusal is its own sentence, and names both ways it happens
+  ● the copy itself — what the screen is allowed to assert › the test-send intro no longer promises an address the operator names
+PASS test/margin-recipes-page.test.js
+FAIL test/margin-recipe-revise.test.js
+  ● the capability is reachable and speaks three languages › the retire copy warns that it cannot be taken back
+PASS test/modal-scroll-lock-estate.test.js
+PASS test/workforce-me-self-service.test.js
+PASS test/meals-enrolment-journey.test.js
+PASS test/workforce-join-page.test.js
+PASS test/training-components.test.js
+FAIL test/account-email-page.test.js
+  ● the copy itself — what the screen is allowed to assert › the code notice never claims the mail was delivered
+  ● the copy itself — what the screen is allowed to assert › the test-send refusal names the confirmation clause and points at this screen
+PASS test/workforce-schedule-flag-refusal.test.js
+PASS test/workforce-roster-page.test.js
+FAIL test/feature-flags-page.test.js
+  ● the standing honesty statement is on the screen, and says what it says › no says an effective:off is dependable and an effective:on is not
+  ● the deposit switch names what must be true before it is thrown › no states the precondition, that it is unchecked, and that arming still succeeds
+  ● the withheld note stops calling an enforced flag inert › no names both kinds instead of calling every withheld stage inert
+  ● the withheld note stops calling an enforced flag inert › no states the Meals flags are deployment configuration and off unless it sets them
+PASS test/margin-statement-components.test.js
+FAIL test/workforce-week-grid.component.test.js
+  ● WorkforceWeekGrid › the day header carries the shift count for that day
+  ● WorkforceWeekGrid › the open-shift row is the first row and holds unassigned shifts
+  ● WorkforceWeekGrid › an unavailable day renders Utilgjengelig
+  ● WorkforceWeekGrid › an approved absence renders Fri, a requested one renders as requested
+  ● WorkforceWeekGrid › when absences were not loaded the grid says so instead of implying everyone is free
+  ● WorkforceWeekGrid › a shift the API called a double booking is rendered distinctly
+  ● WorkforceWeekGrid › the footer still refuses to name a wage percentage, a revenue or a variance
+  ● WorkforceWeekGrid › an off-roster person keeps their shifts and is flagged
+  ● WorkforceWeekGrid › an empty roster states it rather than rendering as a staffed store with nothing on
+  ● WorkforceWeekGrid — money › an incomplete cost shows the refusal and the count, never a partial total and never a zero
+  ● WorkforceWeekGrid — money › a currency mismatch is its own sentence, and the unaffected days still total
+  ● WorkforceWeekGrid — money › an unfilled vacancy reads as a floor — not as a defect, and not as free labour
+  ● WorkforceWeekGrid — money › a week of nothing but vacancies never reads as free labour
+  ● WorkforceWeekGrid — money › no per-employee wage figure is manufactured from a row of chips
+  ● WorkforceWeekGrid — what the money is measured on › a store whose pack declares tillegg is told they are IN the figure
+  ● WorkforceWeekGrid — what the money is measured on › a store whose pack is silent keeps the sentence that is still correct
+  ● WorkforceWeekGrid — what the money is measured on › an unstated basis says it is unknown and asserts NEITHER answer
+  ● WorkforceWeekGrid — what the money is measured on › a flag that is not a boolean is unknown, not false
+  ● WorkforceWeekGrid — what the money is measured on › the basis TOKEN is not read — the boolean is
+  ● WorkforceWeekGrid — what the money is measured on › arbeidsgiveravgift is still excluded whichever basis applies
+  ● WorkforceWeekGrid — what the money is measured on › a published week says its total is re-priced on every read
+FAIL test/workforce-personnel-list-components.test.js
+  ● the sheet states the § 8-5-6 header facts › the workplace, the organisation number, the day and the zone are all on it
+  ● the sheet states the § 8-5-6 header facts › a day whose entries name two businesses shows neither in the header, and says why
+  ● the sheet states the § 8-5-6 header facts › a fallback zone is disclosed as a platform default, not presented as the venue's choice
+  ● the sheet never claims an identification it does not have › the notice names the condition the substitution depends on, and who has to meet it
+  ● the sheet never claims an identification it does not have › the sheet still refuses to call itself full identification on its own
+  ● the sheet never claims an identification it does not have › a row with no code says so rather than leaving the cell blank
+  ● arrival and departure, and the two readings of a missing departure › an open window on the venue's current day reads as a person on site
+  ● arrival and departure, and the two readings of a missing departure › the same window on a past day reads as a missing end time — never as a person standing there
+  ● arrival and departure, and the two readings of a missing departure › a departure on the following calendar day names that day beside the time
+  ● the rest of the register › a hired-in row shows the employer it is hired in from
+  ● the rest of the register › a correction shows who made it and when, as the paragraph requires
+  ● the rest of the register › the retention horizon is stated
+  ● the rest of the register › an empty day says nobody was registered; a failed read says we do not know
+PASS test/journey-rerunnability.test.js
+PASS test/modal-scroll-lock.test.js
+PASS test/workforce-schedule-page.test.js
+FAIL test/workforce-schedule-authoring.test.js
+  ● the week grid as an authoring surface › draws no affordance at all when the week may not be written to
+PASS test/margin-waste.test.js
+PASS test/workforce-personnel-list-page.test.js
+FAIL test/growth-components.test.js
+  ● GrowthRunOutcome — accepted is not delivered › the counters carry a refresh control and say when they were read
+PASS test/workforce-personnel-list-code-register.test.js
+FAIL test/meals-components.test.js
+  ● the agreement list — what the directory read is allowed to say › dark and absent are two different sentences, and neither claims the module is invisible
+PASS test/margin-cost-preview.test.js
+FAIL test/translation-key-presence.test.js
+  ● the dictionaries, across every surface that renders one › renders no raw key: nothing referenced is missing from EVERY language
+  ● the dictionaries, across every surface that renders one › has no locale gap beyond the pinned debt, and the pinned debt is still real
+FAIL test/workforce-pivot-components.test.js
+  ● WorkforceRoleGrid › an unresolved role is labelled and flagged, never shown as a bare id
+  ● WorkforceRoleGrid › an unresolved role with no name says "Ukjent funksjon" rather than inventing one
+  ● WorkforceRoleGrid › "Uten funksjon" is its own row and is not the same thing as an unresolved role
+  ● WorkforceRoleGrid › an unread role list produces its own caveat, not an empty store
+  ● WorkforceRoleGrid › hidden retired roles are named in a caveat rather than silently omitted
+  ● WorkforceRoleGrid › there is no wage column, and a sentence says why instead of a column of dashes
+  ● WorkforceMonthGrid › THE WEEKDAY BAND: a whole column shows its total and its average
+  ● WorkforceMonthGrid › A PARTIAL COLUMN NEVER SHOWS A BARE NUMBER — the denominator is rendered beside it
+  ● WorkforceMonthGrid › a column with nothing counted shows the unknown mark rather than 0t
+  ● WorkforceMonthGrid › an unplanned month says "ingen plan", which is a different sentence from unread
+PASS test/margin-supplier-panels.component.test.js
+PASS test/events-guest.test.js
+FAIL test/workforce-external-commitments.test.js
+  ● rendering — kind and times, never a store › the chip states that a commitment exists elsewhere, with its times
+  ● rendering — kind and times, never a store › the tooltip says a store is not disclosed rather than implying one
+  ● rendering — kind and times, never a store › NOTHING resembling a store identity reaches the DOM, even if the payload grew one
+  ● rendering — kind and times, never a store › an unrecognised kind is described vaguely rather than called a published shift
+  ● rendering — kind and times, never a store › a clash reads as a collision and marks the planned shift too
+  ● rendering — kind and times, never a store › an unanswered overlay says so; an answered empty one says nothing
+  ● rendering — kind and times, never a store › items that could not be placed are admitted to, in the right number
+  ● the page-level warning copy › the clash notice names a count and a consequence, never a store
+FAIL test/margin-menu-margin-panel.component.test.js
+  ● the golden dish, in all three VAT contexts › each figure carries the basis it belongs to, and its VAT rate
+  ● the three plate-cost states render as three different things › exact, "at least", and a dash — one screen, three renderings
+  ● the three plate-cost states render as three different things › the same wire 0 is "kr 0,00" when complete and "minst kr 0,00" when it is a bound
+PASS test/fixture-refusal-divergence.test.js
+FAIL test/workforce-me-training-disclosure.test.js
+  ● the worker page reaches the training disclosure log › the read names the store and NO person, and renders what came back
+FAIL test/store-market-view.test.js
+  ● what the two 409s say to a venue owner › the zone conflict says the store is operating and names both clocks
+  ● what the two 409s say to a venue owner › the currency conflict names the label the money already carries
+  ● what the five 400s say to a venue owner › a non-authoritative currency blames the market configuration, not the operator
+  ● what the five 400s say to a venue owner › a missing zone explains that no country implies one
+  ● the refusals that carry no code › a code this page does not know falls back to the platform's own words
+  ● the refusals that carry no code › a network failure is not a refusal at all: no decision was made
+PASS test/margin-supplier-client.test.js
+PASS test/events-client.test.js
+FAIL test/margin-product-links.component.test.js
+  ● the current set is what the editor starts from › a product already claimed by another recipe is offered, and named as claimed
+FAIL test/training-disclosure.test.js
+  ● TrainingDisclosurePanel — what a person is shown, and what they are not › the log renders one row per entry, naming WHEN, the kind, and the size
+PASS test/meals-page.test.js
+PASS test/store-market-dashboard.test.js
+PASS test/workforce-week-grid.test.js
+PASS test/journey-assertions.test.js
+FAIL test/margin-cost-panel.component.test.js
+  ● the three ways an incomplete cost can end › SOME priced: the amounts are shown as the lower bounds they are
+  ● the three ways an incomplete cost can end › NONE priced: the panel shows the unknown mark, not a floor of zero
+  ● which version the figures belong to › an active version is badged as active
+  ● which version the figures belong to › the draft fallback is badged as a draft, not as the menu
+  ● the recipe facts that make the money readable › the yield and the portion count are shown beside the two figures
+PASS test/growth-guest-client.test.js
+PASS test/workforce-me-components.test.js
+PASS test/workforce-requests-inbox.test.js
+PASS test/growth-guest.test.js
+PASS test/workforce-personnel-list.test.js
+PASS test/growth-client.test.js
+PASS test/workforce-rates-hours-export.test.js
+PASS test/meals-admin-view.test.js
+PASS test/workforce-rates-amount.test.js
+PASS test/workforce-me-shift-view.test.js
+PASS test/admin-page-auth.test.js
+PASS test/growth-withdrawal-origin.test.js
+PASS test/workforce-rates-timeline.test.js
+PASS test/events-journey.test.js
+PASS test/margin-statement-client.test.js
+PASS test/workforce-role-grid.test.js
+PASS test/platform-feature-flags-client.test.js
+PASS test/workforce-rates-client.test.js
+PASS test/chf-format.test.js
+PASS test/workforce-me-self-requests.test.js
+PASS test/meals-admin-picker.test.js
+PASS test/margin-menu-margin.test.js
+PASS test/store-market-client.test.js
+PASS test/growth-send-gate.test.js
+PASS test/workforce-me-client.test.js
+PASS test/margin-price-import-client.test.js
+PASS test/workforce-week-range.test.js
+PASS test/margin-money-input.test.js
+PASS test/meals-statement-view.test.js
+PASS test/workforce-month-grid.test.js
+PASS test/workforce-roster.test.js
+PASS test/margin-recipe-client.test.js
+PASS test/workforce-me-inbox-filter.test.js
+PASS test/training-journey.test.js
+PASS test/training-client.test.js
+PASS test/meals-admin-client.test.js
+PASS test/workforce-me-memberships.test.js
+PASS test/workforce-personnel-list-code-register-client.test.js
+PASS test/meals-store-view.test.js
+PASS test/margin-price-import-model.test.js
+PASS test/meals-client.test.js
+PASS test/margin-statement-view.test.js
+PASS test/workforce-me-claim-outcome.test.js
+PASS test/workforce-schedule-client.test.js
+PASS test/margin-price-timeline.test.js
+PASS test/workforce-roster-client.test.js
+PASS test/workforce-me-invitation-claim.test.js
+PASS test/workforce-rates-attendance.test.js
+PASS test/platform-flag-board.test.js
+PASS test/margin-spend-amount.test.js
+PASS test/workforce-requests-client.test.js
+PASS test/growth-privacy-queue.test.js
+FAIL test/core-price-label.test.js
+  ● Test suite failed to run
+FAIL test/core-request-path-shape.test.js
+  ● Test suite failed to run
+PASS test/workforce-api-client.test.js
+FAIL test/price-crosscurrency.test.js
+  ● Test suite failed to run
+FAIL test/price-absence.test.js
+  ● Test suite failed to run
+FAIL test/price-gate-shadow.test.js
+  ● Test suite failed to run
+FAIL test/price-bypass-legacy.test.js
+  ● Test suite failed to run
+PASS test/world-stamp-windows.test.js
+FAIL test/translations-lint.test.js
+  ● the configured lint rules run on a change to a translations dictionary › runs that script, and the dictionaries carry no error-severity violation
+PASS test/journey-artifact-store.test.js
+FAIL test/workforce-roster-components.test.js
+  ● WorkforceRosterTable — the three answers look different on screen › one person with two engagements is marked as such
+  ● WorkforceEngagementPanel — capability is not role, and ending is not deletion › 37.5 hours a week renders as 37.5 hours a week
+  ● WorkforceEngagementPanel — capability is not role, and ending is not deletion › the end section tells the truth about what ending does › a KNOWN open clock session blocks the end button and says why
+  ● WorkforceEngagementPanel — capability is not role, and ending is not deletion › reactivation › an ended engagement carrying an unclearable past end date warns it stays unschedulable
+FAIL test/workforce-rates-components.test.js
+  ● WorkforceRateTimeline — the append-only model, made unmistakable › the form is phrased as "this rate applies from…", never as an edit
+  ● WorkforceRateTimeline — the mistyped future rate, surfaced before the 409 › choosing a date that already carries a rate blocks the submit and says why
+  ● WorkforceRateTimeline — the mistyped future rate, surfaced before the 409 › it names the statement that will be closed forward, and what does NOT change
+  ● WorkforceRateTimeline — the mistyped future rate, surfaced before the 409 › a BACKDATED statement is shown as bounded by the later one, not as cancelling it
+  ● WorkforceAttendanceTable › the published-only rule is stated on every state of the table
+FAIL test/growth-privacy-page.test.js
+  ● the copy exists in all three locales › the unknown-deadline sentence names the RESPONSE as the cause, in all three
+  ● the copy exists in all three locales › the deadline note names the article the guest was shown
+FAIL test/store-market-card.component.test.js
+  ● the two 409s — "this store is operating", not "you typed something wrong" › the zone conflict reads as an operating store, in its own non-red panel
+  ● the two 409s — "this store is operating", not "you typed something wrong" › the currency conflict reads the same way and names the label the money carries
+  ● the five 400s — the values are the place to look › store.market.timezone-missing renders as a validation failure the operator can act on
+  ● the five 400s — the values are the place to look › currency-not-authoritative blames the configuration and keeps the platform's sentence
+FAIL test/growth-guest-pages.test.js
+  ● the signup page, which is the only way a contact point is ever created › the consent text is read first, and the form renders the served wording VERBATIM
+FAIL test/workforce-schedule-authoring-page.test.js
+  ● a stale write › is refused by the server and surfaced as a refusal, not a failure
+  ● a stale write › a frozen revision and a stale one are different sentences
+  ● a stale write › a cross-store conflict stays opaque on the authoring path too
+  ● the editor is really on the page › the refusal and its one action are rendered where the manager is looking
+  ● the editor is really on the page › says which day an overnight shift will be filed under
+FAIL test/meals-claim-page.test.js
+  ● the refusals, which is most of what this page does › a code the server does not recognise names BOTH possibilities and asserts neither
+  ● the refusals, which is most of what this page does › the wrong-person refusal blames nobody, names no address, and offers the way out
+  ● the refusals, which is most of what this page does › a person who is already a member is told they are in, not that something failed
+  ● the page is not an admin screen › the language is the reader's, not whichever operator last used this browser
+FAIL test/margin-statements-page.test.js
+  ● an absent waste block reads as unknown, a zeroed one reads as zero › WORLD 1 — waste recorded with a value: the page prints the total the server sent
+  ● an absent waste block reads as unknown, a zeroed one reads as zero › WORLD 2 — waste recorded AS NONE: the page still says nothing was recorded
+  ● an absent waste block reads as unknown, a zeroed one reads as zero › WORLD 3 — NO waste block at all: the page says it could not tell, and claims no zero
+FAIL test/growth-newsletter-page.test.js
+  ● the copy itself — what the screen is allowed to assert › the not-your-address refusal is its own sentence, and names both ways it happens
+  ● the copy itself — what the screen is allowed to assert › the test-send intro no longer promises an address the operator names
+FAIL test/margin-recipe-revise.test.js
+  ● the capability is reachable and speaks three languages › the retire copy warns that it cannot be taken back
+FAIL test/account-email-page.test.js
+  ● the copy itself — what the screen is allowed to assert › the code notice never claims the mail was delivered
+  ● the copy itself — what the screen is allowed to assert › the test-send refusal names the confirmation clause and points at this screen
+FAIL test/feature-flags-page.test.js
+  ● the standing honesty statement is on the screen, and says what it says › no says an effective:off is dependable and an effective:on is not
+  ● the deposit switch names what must be true before it is thrown › no states the precondition, that it is unchecked, and that arming still succeeds
+  ● the withheld note stops calling an enforced flag inert › no names both kinds instead of calling every withheld stage inert
+  ● the withheld note stops calling an enforced flag inert › no states the Meals flags are deployment configuration and off unless it sets them
+FAIL test/workforce-week-grid.component.test.js
+  ● WorkforceWeekGrid › the day header carries the shift count for that day
+  ● WorkforceWeekGrid › the open-shift row is the first row and holds unassigned shifts
+  ● WorkforceWeekGrid › an unavailable day renders Utilgjengelig
+  ● WorkforceWeekGrid › an approved absence renders Fri, a requested one renders as requested
+  ● WorkforceWeekGrid › when absences were not loaded the grid says so instead of implying everyone is free
+  ● WorkforceWeekGrid › a shift the API called a double booking is rendered distinctly
+  ● WorkforceWeekGrid › the footer still refuses to name a wage percentage, a revenue or a variance
+  ● WorkforceWeekGrid › an off-roster person keeps their shifts and is flagged
+  ● WorkforceWeekGrid › an empty roster states it rather than rendering as a staffed store with nothing on
+  ● WorkforceWeekGrid — money › an incomplete cost shows the refusal and the count, never a partial total and never a zero
+  ● WorkforceWeekGrid — money › a currency mismatch is its own sentence, and the unaffected days still total
+  ● WorkforceWeekGrid — money › an unfilled vacancy reads as a floor — not as a defect, and not as free labour
+  ● WorkforceWeekGrid — money › a week of nothing but vacancies never reads as free labour
+  ● WorkforceWeekGrid — money › no per-employee wage figure is manufactured from a row of chips
+  ● WorkforceWeekGrid — what the money is measured on › a store whose pack declares tillegg is told they are IN the figure
+  ● WorkforceWeekGrid — what the money is measured on › a store whose pack is silent keeps the sentence that is still correct
+  ● WorkforceWeekGrid — what the money is measured on › an unstated basis says it is unknown and asserts NEITHER answer
+  ● WorkforceWeekGrid — what the money is measured on › a flag that is not a boolean is unknown, not false
+  ● WorkforceWeekGrid — what the money is measured on › the basis TOKEN is not read — the boolean is
+  ● WorkforceWeekGrid — what the money is measured on › arbeidsgiveravgift is still excluded whichever basis applies
+  ● WorkforceWeekGrid — what the money is measured on › a published week says its total is re-priced on every read
+FAIL test/workforce-personnel-list-components.test.js
+  ● the sheet states the § 8-5-6 header facts › the workplace, the organisation number, the day and the zone are all on it
+  ● the sheet states the § 8-5-6 header facts › a day whose entries name two businesses shows neither in the header, and says why
+  ● the sheet states the § 8-5-6 header facts › a fallback zone is disclosed as a platform default, not presented as the venue's choice
+  ● the sheet never claims an identification it does not have › the notice names the condition the substitution depends on, and who has to meet it
+  ● the sheet never claims an identification it does not have › the sheet still refuses to call itself full identification on its own
+  ● the sheet never claims an identification it does not have › a row with no code says so rather than leaving the cell blank
+  ● arrival and departure, and the two readings of a missing departure › an open window on the venue's current day reads as a person on site
+  ● arrival and departure, and the two readings of a missing departure › the same window on a past day reads as a missing end time — never as a person standing there
+  ● arrival and departure, and the two readings of a missing departure › a departure on the following calendar day names that day beside the time
+  ● the rest of the register › a hired-in row shows the employer it is hired in from
+  ● the rest of the register › a correction shows who made it and when, as the paragraph requires
+  ● the rest of the register › the retention horizon is stated
+  ● the rest of the register › an empty day says nobody was registered; a failed read says we do not know
+FAIL test/workforce-schedule-authoring.test.js
+  ● the week grid as an authoring surface › draws no affordance at all when the week may not be written to
+FAIL test/growth-components.test.js
+  ● GrowthRunOutcome — accepted is not delivered › the counters carry a refresh control and say when they were read
+FAIL test/meals-components.test.js
+  ● the agreement list — what the directory read is allowed to say › dark and absent are two different sentences, and neither claims the module is invisible
+FAIL test/translation-key-presence.test.js
+  ● the dictionaries, across every surface that renders one › renders no raw key: nothing referenced is missing from EVERY language
+  ● the dictionaries, across every surface that renders one › has no locale gap beyond the pinned debt, and the pinned debt is still real
+FAIL test/workforce-pivot-components.test.js
+  ● WorkforceRoleGrid › an unresolved role is labelled and flagged, never shown as a bare id
+  ● WorkforceRoleGrid › an unresolved role with no name says "Ukjent funksjon" rather than inventing one
+  ● WorkforceRoleGrid › "Uten funksjon" is its own row and is not the same thing as an unresolved role
+  ● WorkforceRoleGrid › an unread role list produces its own caveat, not an empty store
+  ● WorkforceRoleGrid › hidden retired roles are named in a caveat rather than silently omitted
+  ● WorkforceRoleGrid › there is no wage column, and a sentence says why instead of a column of dashes
+  ● WorkforceMonthGrid › THE WEEKDAY BAND: a whole column shows its total and its average
+  ● WorkforceMonthGrid › A PARTIAL COLUMN NEVER SHOWS A BARE NUMBER — the denominator is rendered beside it
+  ● WorkforceMonthGrid › a column with nothing counted shows the unknown mark rather than 0t
+  ● WorkforceMonthGrid › an unplanned month says "ingen plan", which is a different sentence from unread
+FAIL test/workforce-external-commitments.test.js
+  ● rendering — kind and times, never a store › the chip states that a commitment exists elsewhere, with its times
+  ● rendering — kind and times, never a store › the tooltip says a store is not disclosed rather than implying one
+  ● rendering — kind and times, never a store › NOTHING resembling a store identity reaches the DOM, even if the payload grew one
+  ● rendering — kind and times, never a store › an unrecognised kind is described vaguely rather than called a published shift
+  ● rendering — kind and times, never a store › a clash reads as a collision and marks the planned shift too
+  ● rendering — kind and times, never a store › an unanswered overlay says so; an answered empty one says nothing
+  ● rendering — kind and times, never a store › items that could not be placed are admitted to, in the right number
+  ● the page-level warning copy › the clash notice names a count and a consequence, never a store
+FAIL test/margin-menu-margin-panel.component.test.js
+  ● the golden dish, in all three VAT contexts › each figure carries the basis it belongs to, and its VAT rate
+  ● the three plate-cost states render as three different things › exact, "at least", and a dash — one screen, three renderings
+  ● the three plate-cost states render as three different things › the same wire 0 is "kr 0,00" when complete and "minst kr 0,00" when it is a bound
+FAIL test/workforce-me-training-disclosure.test.js
+  ● the worker page reaches the training disclosure log › the read names the store and NO person, and renders what came back
+FAIL test/store-market-view.test.js
+  ● what the two 409s say to a venue owner › the zone conflict says the store is operating and names both clocks
+  ● what the two 409s say to a venue owner › the currency conflict names the label the money already carries
+  ● what the five 400s say to a venue owner › a non-authoritative currency blames the market configuration, not the operator
+  ● what the five 400s say to a venue owner › a missing zone explains that no country implies one
+  ● the refusals that carry no code › a code this page does not know falls back to the platform's own words
+  ● the refusals that carry no code › a network failure is not a refusal at all: no decision was made
+FAIL test/margin-product-links.component.test.js
+  ● the current set is what the editor starts from › a product already claimed by another recipe is offered, and named as claimed
+FAIL test/training-disclosure.test.js
+  ● TrainingDisclosurePanel — what a person is shown, and what they are not › the log renders one row per entry, naming WHEN, the kind, and the size
+FAIL test/margin-cost-panel.component.test.js
+  ● the three ways an incomplete cost can end › SOME priced: the amounts are shown as the lower bounds they are
+  ● the three ways an incomplete cost can end › NONE priced: the panel shows the unknown mark, not a floor of zero
+  ● which version the figures belong to › an active version is badged as active
+  ● which version the figures belong to › the draft fallback is badged as a draft, not as the menu
+  ● the recipe facts that make the money readable › the yield and the portion count are shown beside the two figures
+FAIL test/core-price-label.test.js
+  ● Test suite failed to run
+FAIL test/core-request-path-shape.test.js
+  ● Test suite failed to run
+FAIL test/price-crosscurrency.test.js
+  ● Test suite failed to run
+FAIL test/price-absence.test.js
+  ● Test suite failed to run
+FAIL test/price-gate-shadow.test.js
+  ● Test suite failed to run
+FAIL test/price-bypass-legacy.test.js
+  ● Test suite failed to run
+FAIL test/translations-lint.test.js
+  ● the configured lint rules run on a change to a translations dictionary › runs that script, and the dictionaries carry no error-severity violation
+Test Suites: 33 failed, 94 passed, 127 total
+Tests:       112 failed, 2706 passed, 2818 total
+Snapshots:   0 total
+Time:        7.477 s
+Ran all test suites.

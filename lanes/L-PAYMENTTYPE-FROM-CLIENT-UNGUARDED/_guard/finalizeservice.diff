@@ -1,0 +1,74 @@
+diff --git a/Services/Kassa/FinalizeService.cs b/Services/Kassa/FinalizeService.cs
+index 6bdd877b..f89fed87 100644
+--- a/Services/Kassa/FinalizeService.cs
++++ b/Services/Kassa/FinalizeService.cs
+@@ -65,9 +65,7 @@ namespace WebApi.Services.Kassa
+                     {
+                         // A NotSet here is a caller bug: silently defaulting to DinteroTerminal
+                         // would journal (and later refund) the sale against the wrong provider.
+-                        PaymentType = request.PaymentType != PaymentType.NotSet
+-                            ? request.PaymentType
+-                            : throw new AppException("A card finalize requires the provider payment type."),
++                        PaymentType = RequireDefinedTender(request.PaymentType, "A card finalize"),
+                         Amount = request.Order.FinalAmount + request.TipAmount,
+                         PaymentTransactionId = request.PaymentTransactionId
+                     }
+@@ -221,7 +219,7 @@ namespace WebApi.Services.Kassa
+             {
+                 entry.PaymentLines.Add(new JournalPaymentLine
+                 {
+-                    PaymentType = payment.PaymentType,
++                    PaymentType = RequireDefinedTender(payment.PaymentType, "A sale payment line"),
+                     Amount = payment.Amount,
+                     PaymentTransactionId = payment.PaymentTransactionId,
+                     CashDrawerTransactionId = payment.CashDrawerTransactionId
+@@ -317,6 +315,31 @@ namespace WebApi.Services.Kassa
+             return receipt;
+         }
+ 
++        // Every payment line the journal writes must name a tender, and the name has to exist. A C#
++        // enum is not validated on cast and the app's Newtonsoft binder accepts any integer while
++        // rejecting only unknown names, so an out-of-range PaymentType arrives here intact — the same
++        // hazard PosReasonLabels.IsValid already guards on the reason field of this document. The
++        // column is mapped through EnumToStringConverter, so the value would persist as its bare
++        // decimal form ("999") on JournalPaymentLine, which is append-only and therefore beyond any
++        // later repair, and print as a naked number on the payer line of the SALREC and the § 2-8-7
++        // RETREC, where every other value is a Norwegian tender name. The check belongs on the writer
++        // rather than on the request types: those are internal DTOs no model binder ever fills, so a
++        // guard placed there would gate nothing.
++        private static PaymentType RequireDefinedTender(PaymentType paymentType, string what)
++        {
++            if (paymentType == PaymentType.NotSet)
++            {
++                throw new AppException(what + " requires the payment type.");
++            }
++
++            if (!Enum.IsDefined(typeof(PaymentType), paymentType))
++            {
++                throw new AppException(what + " carries an unknown payment type (" + (int)paymentType + ").");
++            }
++
++            return paymentType;
++        }
++
+         private static void ValidateSaleBackstop(Order order)
+         {
+             if (order.Couverts.HasValue && order.Couverts.Value < 0)
+@@ -500,7 +523,7 @@ namespace WebApi.Services.Kassa
+ 
+             entry.PaymentLines.Add(new JournalPaymentLine
+             {
+-                PaymentType = request.PaymentType,
++                PaymentType = RequireDefinedTender(request.PaymentType, "A return payment line"),
+                 Amount = request.RefundAmount,
+                 PaymentTransactionId = request.PaymentTransactionId
+             });
+@@ -636,7 +659,7 @@ namespace WebApi.Services.Kassa
+ 
+             entry.PaymentLines.Add(new JournalPaymentLine
+             {
+-                PaymentType = request.PaymentType,
++                PaymentType = RequireDefinedTender(request.PaymentType, "A return payment line"),
+                 Amount = grossAmount,
+                 PaymentTransactionId = request.PaymentTransactionId
+             });

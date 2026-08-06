@@ -1,0 +1,50 @@
+KILL-PROOF  test/kitchen-and-board-resume-after-login.test.js
+root        /Users/svendaneel/okam/Web-modules
+
+ARM 0 control — nothing mutated
+  expected green, got green  OK
+
+ARM 1 kitchen: the per-second clock is not started
+  expected red, got red  OK
+    red: ✕ a ticket sent at sign-in ages on screen instead of sitting at 0:00
+    red: ✕ a repeated sign-in leaves exactly one clock and one poll behind
+
+ARM 2 kitchen: the fullscreen listener is not attached
+  expected red, got red  OK
+    red: ✕ the fullscreen state tracks the document after the sign-in
+
+ARM 3 kitchen: the board poll is not started
+  expected red, got red  OK
+    red: ✕ the board keeps polling after the sign-in, not just once
+    red: ✕ a repeated sign-in leaves exactly one clock and one poll behind
+
+ARM 4 kitchen: the sign-in handler goes back to its own partial copy of the list (the defect verbatim)
+  expected red, got red  OK
+    red: ✕ a ticket sent at sign-in ages on screen instead of sitting at 0:00
+    red: ✕ the fullscreen state tracks the document after the sign-in
+    red: ✕ a repeated sign-in leaves exactly one clock and one poll behind
+
+ARM 5 kitchen: the clock is started without clearing the previous one
+  expected red, got red  OK
+    red: ✕ a repeated sign-in leaves exactly one clock and one poll behind
+
+ARM 6 ongoing: the 7s poll is not started
+  expected red, got red  OK
+    red: ✕ an order placed after the sign-in appears on the board without a reload
+    red: ✕ a repeated sign-in leaves exactly one poll behind
+
+ARM 7 ongoing: adminStores is left empty, so transfer has nowhere to send an order
+  expected red, got red  OK
+    red: ✕ the stores an order can be transferred to are known after the sign-in
+
+ARM 8 ongoing: the sign-in handler goes back to loadOrders() alone (the defect verbatim)
+  expected red, got red  OK
+    red: ✕ an order placed after the sign-in appears on the board without a reload
+    red: ✕ the stores an order can be transferred to are known after the sign-in
+    red: ✕ a repeated sign-in leaves exactly one poll behind
+
+ARM 9 ongoing: the poll is started without clearing the previous one
+  expected red, got red  OK
+    red: ✕ a repeated sign-in leaves exactly one poll behind
+
+VERDICT: every starter in the recovery path is load-bearing — deleting any one of them reds the suite

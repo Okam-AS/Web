@@ -1,7 +1,10 @@
+import fs from 'fs'
+import path from 'path'
 import { mount } from '@vue/test-utils'
 import { globalMixin } from '~/plugins/global-mixin'
 import { formatChf, isAmountStated, UNKNOWN_AMOUNT } from '~/utils/price'
 import CardTerminalStatus from '~/components/admin/pos/CardTerminalStatus.vue'
+import OfferDocument from '~/components/shared/OfferDocument.vue'
 
 // A zero price is a claim — this costs nothing. An absent price is not a claim at all. This file is
 // the pin that keeps the two apart, and it asserts them TOGETHER: an "it is not zero" test on its own
@@ -158,5 +161,60 @@ describe('the card terminal screen, in a real DOM', () => {
     const wrapper = mountStatus({ amount: 0 })
     expect(wrapper.find('.card-status__amount').text()).toBe('kr 0,00')
     wrapper.destroy()
+  })
+})
+
+// The offer document is the other real DOM this rule has to hold in, and it is the one where the
+// STRUCTURE said the opposite. `components/shared/OfferDocument.vue` imported core's raw `priceLabel`
+// from `~/core/helpers/tools` and never registered it in `methods`. A Vue 2 template compiles with
+// `with(this)`, so that import was invisible to the template and bound nothing: every `priceLabel`
+// in it has always resolved to the GATED mixin method. It read as a deliberate bypass and was not
+// one — the worst kind of comment, one that lies by structure. The import is gone; this is the pin
+// that says which function is actually on the other end.
+describe('the offer document, in a real DOM', () => {
+  // Importing the plugin at the top of this file ran `Vue.mixin(mixin)`, so this mounts with the REAL
+  // global mixin. `isCh` lives on the separate `market-mixin`, which is not installed here, so it is
+  // undefined and the Norwegian branch renders — the market this document is written for (it prints
+  // "25% mva" and an Okam AS org.nr).
+  const mountOffer = lineItems => mount(OfferDocument, {
+    propsData: {
+      offerProposal: {
+        code: 'OFF-1',
+        expiration: '2026-09-01T00:00:00',
+        lineItems
+      }
+    },
+    mocks: { $store: { dispatch: () => {}, subscribe: () => {} } }
+  })
+
+  // Minor units, and one column only: with every `onetimeFee` unstated, `hasOnetimeFees` is false and
+  // each row is [product, quantity, monthly]. Three rows, three worlds.
+  const monthlyCells = wrapper => wrapper.findAll('tbody tr').wrappers.map(row => row.findAll('td').at(2).text())
+
+  test('a fee nobody stated is withheld, a zero fee is zero, and a real fee is the price it is', () => {
+    const cells = monthlyCells(mountOffer([
+      { name: 'Kasseterminal', quantity: 1, monthlyFee: 49900 },
+      { name: 'Support, inkludert', quantity: 1, monthlyFee: 0 },
+      { name: 'Tilleggsskjerm', quantity: 1, monthlyFee: null }
+    ]))
+
+    // PRESENT.
+    expect(cells[0]).toBe('kr 499,00')
+    // GENUINELY ZERO — an included line is priced at nothing, and that is a claim somebody made.
+    expect(cells[1]).toBe('kr 0,00')
+    // ABSENT. Core's raw helper answers "0" to any falsy amount, so had that import ever bound, this
+    // cell would have quoted a customer a line item costing nothing.
+    expect(cells[2]).toBe(UNKNOWN_AMOUNT)
+
+    // The whole point: these are three different renderings, not two.
+    expect(new Set(cells).size).toBe(3)
+  })
+
+  test('the document does not reach past the gate to core for its money formatter', () => {
+    // Read off __dirname, not the checkout's name, so this holds in a lane worktree too.
+    const source = fs.readFileSync(path.join(__dirname, '..', 'components', 'shared', 'OfferDocument.vue'), 'utf8')
+    // An IMPORT statement, anchored — the comment in that file names the path in prose deliberately,
+    // and a pin that a reader breaks by rewording a comment teaches them to delete the pin.
+    expect(source).not.toMatch(/^\s*import\s[^\n]*\sfrom\s+["']~\/core\/helpers\/tools["']/m)
   })
 })

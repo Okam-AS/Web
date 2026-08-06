@@ -1,0 +1,9 @@
+  Failed WebApi.Tests.Wire.PdfDownloadWireTests.Two_credit_notes_against_one_invoice_download_under_distinct_names [380 ms]
+   both credit notes downloaded as KREDITNOTA-990601.pdf, so filing the second one overwrites the first and the operator keeps one document where two were issued
+Expected: True
+Actual:   False
+  Failed WebApi.Tests.Wire.PdfDownloadWireTests.A_credit_note_downloads_under_its_own_number_not_the_one_it_credits [8 ms]
+   Assert.Equal() Failure
+Expected: KREDITNOTA-990604.pdf
+Actual:   KREDITNOTA-990501.pdf
+Failed!  - Failed:     2, Passed:     5, Skipped:     0, Total:     7, Duration: 268 ms - WebApi.Tests.dll (net8.0)

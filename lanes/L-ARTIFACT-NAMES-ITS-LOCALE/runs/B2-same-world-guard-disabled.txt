@@ -1,0 +1,56 @@
+=== label      : B2-same-world-guard-disabled
+=== edition    : OKAM_EDITION=ch
+=== worktree   : /Users/svendaneel/okam/web-artloc
+=== commit     : adde9364eee47a71a9feb97c1b807896e9af40cb
+=== dirty      : 2 path(s) before the run
+=== spec sha   : d584bf9cb91700cd4244edeee99a5eb58fbae8e4
+=== support    : 4e74a14cc6b5198ef6256921df693e2219f5fb5b journey.js
+===            : 3bcc4e43e3766ba7e653018c7862b95459c83390 edition.js
+===            : e966f3cc8caf42703d26a522ce17bc58067fc0f5 artifact-store.js
+=== edition.js : 7d2b07b2f99c6e3c9cdbd72be5ce11a77772ac05 config/edition.js
+=== ports      : web=3841 fixture=4841 (4010 never bound, pid 73160 never signalled)
+=== core       : 10 entries
+[WebServer] [fixture] listening on http://127.0.0.1:4841
+
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://172.20.10.4:3841/
+
+[WebServer] [info] Preparing project for development
+
+[WebServer] [info] Initial build may take a while
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+
+[WebServer] [success] Builder initialized
+
+
+Running 1 test using 1 worker
+
+[WebServer] [success] Nuxt files generated
+
+[WebServer] [warn] Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1/1] [chromium] › test/e2e/journeys/modal-scroll-lock.spec.js:105:1 › A modal holds the page behind it still, and lets go when it closes @fixture
+[WebServer] [info] Waiting for file changes
+
+[WebServer] [info] Memory usage: 1.02 GB (RSS: 1.95 GB)
+
+[WebServer] [info] Listening on: http://172.20.10.4:3841/
+
+  1 passed (26.0s)
+=== after      : 3 path(s) left dirty
+RESULT B2-same-world-guard-disabled edition=ch PASS rc=0

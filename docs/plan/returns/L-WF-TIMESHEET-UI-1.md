@@ -1,0 +1,23 @@
+```
+RETURN: L-WF-TIMESHEET-UI
+brief: dab1a964
+verdict: built
+evidence: commit 618efc88 on refs/heads/lane/wf-timesheet-ui; journey artifacts/journeys/workforce-timesheet-export.playwright.json 15/15 steps + 6 screenshots (COMMITTED, force-added); full detail in lanes/L-WF-TIMESHEET-UI/NOTES.md
+spec_gap: none — premise held: "timesheet" appeared once in the whole frontend at e34977ac, as a capability string in translations/en.ts:2963, and nothing had been built
+log:
+Baseline FE feature/restaurant-modules e34977ac (224 dirty); BE checkout was lane/meals-grace-pins, so all backend facts were read from lane/wf-digest-tautology 4b911917 — the branch carrying BOTH W5 and the digest fix — via git show.
+C3 whole wire in one change: client (5 routes) + gate/refusal module + 2 components + page + Nuxt route + AdminPageHeader entry + icon + 67 keys x3 langs + STORE_ADMIN_PATHS pin. admin-nav-access 28/28 incl. the converse walk.
+C4 — the actor is NOT the user id: CurrentUserId() -> RequireWriteCapabilityAsync returns a WorkforceStaffMember -> caller.StaffMemberId.ToString() -> ApprovedByActorReference/RequestedByActorReference; AppendExportAudit throws on a blank one. Nothing in the frontend names an actor, it only carries the token; the fixture reproduces the refusal rather than defaulting, and the journey asserts the on-screen value is the signed-in manager and is none of the three workers in the file.
+Both refusals provoked BY CLICKING: second Approve from a live button in a tab opened BEFORE the freeze (two managers, one fortnight) -> 409 already-approved on screen; second Export from a control deliberately left enabled because it is the adjustment path -> 409 nothing-to-reconcile. A fresh Idempotency-Key per click is what makes a second click a real second attempt and not a replay — pinned in the client suite.
+Download is a real browser download, bytes read off disk: basis=hours-only, wageMath=none, and the MISSING_PUNCH row's minutes cell is EMPTY, never 0.
+DEFECT found by looking at the rendered page, not by a test: Approve shipped disabled with no reason beside it — `:disabled="!enabled || busy"` renders disabled="" when busy is ''. Fixed, pinned on the DOM attribute, mutation-check reds 5/17.
+Two stale fixture facts corrected: workforce.export was withheld from the flag catalog for a reason W5 has made false, and the fixture manager held no WorkforcePayrollApprover while live-world.sh has granted the live one all along — which is why the payroll half of Workforce had never had a journey.
+Suites: full jest 2910/2910 passed (the 5 failed SUITES are other lanes' untracked Playwright probes under lanes/, none mine); fixture-divergence --prove 7/7, real run 1 pre-existing Growth divergence and it could not check my routes at all since that checkout has no W5; eslint clean on 19 files. Ports 3931/4931, fresh bind confirmed by the [fixture] listening line; 4010/5951/5952/5961 untouched; no container.
+Commit carries ONLY wholly-mine files (28, all additions). The nine SHARED files are recorded in lanes/L-WF-TIMESHEET-UI/shared-edits/ instead — the translations as the actual re-runnable guarded scripts, the other six as whole worktree diffs with the marker list identifying my hunks.
+A HEAD+my-hunks tree was built and REJECTED on evidence: at -U3 a sibling nav entry merged into my hunk and rode along (the standalone run caught it, offering a link to a page that tree lacked); at -U0 the anchors themselves proved to be sibling work, because the workforce-delivery, workforce-publications, training-evidence and workforce-roles pages are ALL absent from e34977ac. Everything above was verified against the WORKING TREE, so a synthetic HEAD+mine tree is one nobody has run.
+HEAD never moved, index left empty, working tree as found, never pushed.
+FINDING (not mine): lanes/L-WF-ROLES-UI/reconstructed/test/admin-nav-access.test.js fails 7/28 — unchanged when my nav entry is removed, so it is that lane's own state; the merged path list will need both entries.
+FINDING (recorded in the artifact): the batch digest on screen is server-ATTESTED, not browser-verified — X-Okam-Content-Sha256 is not in Access-Control-Expose-Headers on either the real API or the fixture and the app is cross-origin, so the page reads payloadSha256 off the batch model. BrowserReadableHeaders would close it.
+C5 is NOT satisfied by this return: a journey is a walk, not Sven. The page is /admin/workforce-timesheets, reachable from the sidebar as "Timelister"; open it with E2E_WEB_PORT=3931 E2E_FIXTURE_PORT=4931 npm run test:e2e:headed, or against the dev server.
+END RETURN
+```

@@ -304,6 +304,7 @@ import {
   VIEW_PUBLISHED,
   formatMinutes
 } from '~/utils/workforce/week-grid';
+import { crossCurrencyLabel } from '~/utils/cross-currency';
 
 // The week grid: seven store-local day columns, one row per employee, the open-shift row pinned on
 // top, and a totals band. Purely presentational — it renders the model `buildWeekGrid` produced and
@@ -600,7 +601,7 @@ export default {
      */
     amount (minor, currency) {
       if (currency && this.currency && currency !== this.currency) {
-        return this.wholeAmount(minor) + ',' + this.fractionAmount(minor) + ' ' + currency;
+        return crossCurrencyLabel(minor, currency, this);
       }
       return this.priceLabel(minor);
     },

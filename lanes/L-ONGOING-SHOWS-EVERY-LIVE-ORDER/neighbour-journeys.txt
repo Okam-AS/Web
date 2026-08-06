@@ -1,0 +1,77 @@
+[WebServer] [fixture] listening on http://127.0.0.1:4906
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+[WebServer] [info] Listening on: http://192.168.68.111:3906/
+[WebServer] [info] Preparing project for development
+[WebServer] [info] Initial build may take a while
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+[WebServer] [success] Builder initialized
+
+Running 2 tests using 1 worker
+
+[WebServer] [success] Nuxt files generated
+[WebServer] [warn] Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[WebServer] [info] Waiting for file changes
+[WebServer] [info] Memory usage: 1.28 GB (RSS: 2.03 GB)
+[WebServer] [info] Listening on: http://192.168.68.111:3906/
+[journey] modal-estate-scroll-lock: filed as artifacts/journeys/runs/modal-estate-scroll-lock.fixture.playwright.json.
+          artifacts/journeys/modal-estate-scroll-lock.playwright.json is COMMITTED EVIDENCE — git keeps it,
+          so no run overwrites it, and this run's screenshots went to artifacts/journeys/runs/modal-estate-scroll-lock.fixture/
+          rather than over the pictures that record cites.
+          To regenerate it deliberately, delete it, run again, and `git add -f` the record and its pictures.
+  ✘  1 [chromium] › test/e2e/journeys/modal-estate-scroll-lock.spec.js:87:1 › Two different modals hold the page, and closing one does not let go @fixture (19.3s)
+[journey] modal-scroll-lock: filed as artifacts/journeys/runs/modal-scroll-lock.fixture.playwright.json.
+          artifacts/journeys/modal-scroll-lock.playwright.json is COMMITTED EVIDENCE — git keeps it,
+          so no run overwrites it, and this run's screenshots went to artifacts/journeys/runs/modal-scroll-lock.fixture/
+          rather than over the pictures that record cites.
+          To regenerate it deliberately, delete it, run again, and `git add -f` the record and its pictures.
+  ✓  2 [chromium] › test/e2e/journeys/modal-scroll-lock.spec.js:105:1 › A modal holds the page behind it still, and lets go when it closes @fixture (8.7s)
+
+
+  1) [chromium] › test/e2e/journeys/modal-estate-scroll-lock.spec.js:87:1 › Two different modals hold the page, and closing one does not let go @fixture 
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 2
+    Received:    86
+
+      44 |
+      45 | function expectHeldAt (actual, anchor) {
+    > 46 |   expect(Math.abs(actual - anchor)).toBeLessThanOrEqual(SUB_PIXEL);
+         |                                     ^
+      47 | }
+      48 |
+      49 | /** A real wheel gesture over the middle of the viewport, and where the page ended up. */
+        at expectHeldAt (/Users/svendaneel/okam/Web-modules/test/e2e/journeys/modal-estate-scroll-lock.spec.js:46:37)
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/modal-estate-scroll-lock.spec.js:162:7
+        at JourneyRecorder.step (/Users/svendaneel/okam/Web-modules/test/e2e/support/journey.js:399:22)
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/modal-estate-scroll-lock.spec.js:123:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/modal-estate-scroll-lock-T-a5a9f-closing-one-does-not-let-go-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/modal-estate-scroll-lock.fixture.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/modal-estate-scroll-lock-T-a5a9f-closing-one-does-not-let-go-chromium/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/modal-estate-scroll-lock-T-a5a9f-closing-one-does-not-let-go-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/modal-estate-scroll-lock-T-a5a9f-closing-one-does-not-let-go-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › test/e2e/journeys/modal-estate-scroll-lock.spec.js:87:1 › Two different modals hold the page, and closing one does not let go @fixture 
+  1 passed (29.8s)

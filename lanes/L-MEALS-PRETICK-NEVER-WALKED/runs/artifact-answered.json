@@ -1,0 +1,224 @@
+{
+  "journey": "meals-admin-setup",
+  "title": "A concierge creates a company, signs its corridor, runs a programme and issues an invitation",
+  "status": "passed",
+  "startedAtUtc": "2026-08-05T00:36:07.958Z",
+  "finishedAtUtc": "2026-08-05T00:36:25.190Z",
+  "durationMs": 17232,
+  "capabilities": [
+    "meals.company.create",
+    "meals.agreement.sign",
+    "meals.program.create",
+    "meals.policy.version.issue",
+    "meals.program.members.set",
+    "meals.invitation.create"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3779",
+  "apiBaseUrl": "http://127.0.0.1:4779",
+  "commit": "d320105f289c4e385a92879a0766bf4d1c3770bd",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": {
+    "id": "fixture@d320105f289c4e385a92879a0766bf4d1c3770bd+dirty",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "d320105-dirty",
+    "detail": "the in-repo fixture backend, not an API build (branch HEAD)"
+  },
+  "backendServed": 47,
+  "backendSubjectServed": 38,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:4779/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:4779/user/login -> 200",
+    "GET http://127.0.0.1:4779/user -> 200",
+    "GET http://127.0.0.1:4779/stores/42/market -> 200",
+    "GET http://127.0.0.1:4779/stores/42 -> 200",
+    "GET http://127.0.0.1:4779/user -> 200",
+    "GET http://127.0.0.1:4779/stores/42/market -> 200",
+    "GET http://127.0.0.1:4779/v1/stores/42/meals/companies -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in as the concierge",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T00:36:07.959Z",
+      "durationMs": 16115,
+      "detail": "on /admin/meals-companies as +4790000003 (PowerUser)",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "the step this surface CANNOT perform is stated at the top",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T00:36:24.074Z",
+      "durationMs": 6,
+      "detail": "Ingenting her gjør at en ansatt kan bestille. Bestilling på bedriftskonto ligger bak et eg…",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "create the buying company",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T00:36:24.080Z",
+      "durationMs": 91,
+      "detail": "Sogn Kafé Drift AS created and selected",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "sign the corridor agreement at this venue",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T00:36:24.309Z",
+      "durationMs": 57,
+      "detail": "corridor signed, currency NOK",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "create a programme under it",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T00:36:24.366Z",
+      "durationMs": 65,
+      "detail": "Lunsjordning 2026, no policy version yet",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "issue its first immutable policy version",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T00:36:24.431Z",
+      "durationMs": 90,
+      "detail": "policy version 1 issued in NOK",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "the enrolled-set read answers, so the control is offered",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T00:36:24.669Z",
+      "durationMs": 23,
+      "detail": "offered with one candidate, nothing enrolled yet",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "enrol the member, and the tick that comes back is FROM THE READ",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T00:36:24.692Z",
+      "durationMs": 149,
+      "detail": "enrolled mem-2, preticked after a fresh read",
+      "error": null
+    },
+    {
+      "n": 9,
+      "name": "an invitation with no contact channel is refused locally",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T00:36:24.841Z",
+      "durationMs": 53,
+      "detail": "refused before anything was sent",
+      "error": null
+    },
+    {
+      "n": 10,
+      "name": "an invitation naming BOTH channels is refused by the server",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T00:36:24.894Z",
+      "durationMs": 58,
+      "detail": "Serveren avviste opplysningene slik de står. Ingenting ble lagret. Exactly one contact channel is required.",
+      "error": null
+    },
+    {
+      "n": 11,
+      "name": "issue the invitation, and receive the token exactly once",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T00:36:24.952Z",
+      "durationMs": 57,
+      "detail": "token issued: mealsinv_inv-6",
+      "error": null
+    },
+    {
+      "n": 12,
+      "name": "the invitation list can never show that token again",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T00:36:25.009Z",
+      "durationMs": 42,
+      "detail": "the row names the contact and not the code",
+      "error": null
+    },
+    {
+      "n": 13,
+      "name": "this surface carries no test hooks, and that is a finding",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T00:36:25.187Z",
+      "durationMs": 0,
+      "detail": "recorded",
+      "error": null
+    },
+    {
+      "n": 14,
+      "name": "the gate on this surface has NO lever, and the walk says so",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T00:36:25.187Z",
+      "durationMs": 0,
+      "detail": "recorded: Features:Meals is host config, so this walk has no flip to make",
+      "error": null
+    },
+    {
+      "n": 15,
+      "name": "what the browser said while this ran",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T00:36:25.187Z",
+      "durationMs": 0,
+      "detail": "2 shell-redirect (note), 0 this page's",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "note",
+      "summary": "the Meals admin surface has no data-test attributes",
+      "detail": "pages/admin/meals-companies.vue, pages/admin/meals-agreements.vue and every component under components/admin/meals/ carry zero `data-test` attributes, so this journey addresses its controls by CSS class and by Norwegian label text. Margin, Training, Events and the Growth guest pages all carry them. The consequence is not cosmetic: a reworded label here fails a journey that is meant to fail only when the product does."
+    },
+    {
+      "severity": "note",
+      "summary": "the Meals concierge surface is gated by host config with no operator lever",
+      "detail": "The three company-scoped route families this walk drives resolve `Features:Meals` through `IOptionsMonitor`, so nothing in the product can open or close them and this journey cannot flip its own gate the way margin-recipe-to-margin, growth-guest-consent and the two workforce walks do. The permanent counterpart already exists on the consumer side as `journeys/consumer/meals-module-dark.spec.js`. `L-MEALS-REACHABLE` records the same gap from the backend and holds it open on a Sven ruling."
+    },
+    {
+      "severity": "note",
+      "summary": "the admin shell logs a router «Navigation cancelled» pair on every signed-in journey",
+      "detail": "Seen 2 times here and identically in every other signed-in journey in this suite. It is AdminPage's login redirect being superseded by the storeId append, not anything on this page."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fmeals-companies\" to \"/admin?redirect=%2Fadmin%2Fmeals-companies&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fmeals-companies\" to \"/admin?redirect=%2Fadmin%2Fmeals-companies&storeId=42\" with a new navigation.",
+    "Failed to load resource: the server responded with a status of 400 (Bad Request)"
+  ],
+  "failedRequests": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:4779/v1/meals/companies/comp-1/invitations",
+      "status": 400
+    }
+  ],
+  "screenshots": [
+    "meals-admin-setup/fixture/01-a-new-company-account.png",
+    "meals-admin-setup/fixture/02-a-programme-with-a-policy.png",
+    "meals-admin-setup/fixture/03-an-issued-invitation.png"
+  ],
+  "error": null,
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/meals-admin-setup.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false,
+    "supersedes": null
+  }
+}

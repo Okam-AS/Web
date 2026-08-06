@@ -1,0 +1,3387 @@
+{
+ ".gitignore": {
+  "status": " M",
+  "wt_blob": "44cd6d4e450dd175e6c5dd01aafe813035a15d66",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1890c9a38a3a9f5eae692d65bdb06b5d996dedf1",
+  "introducing_refs": [
+   "refs/salvage/dangling-1890c9a3"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/lane/L-JOURNEY-GROWTH",
+   "refs/salvage/dangling-1890c9a3"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/feature/swiss",
+   "refs/heads/lane/L-JOURNEY-GROWTH",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/tier-artifacts",
+   "refs/salvage/dangling-1890c9a3"
+  ],
+  "n_revisions_seen": 6
+ },
+ "artifacts/journeys/workforce-invitation-onboarding.playwright.json": {
+  "status": " M",
+  "wt_blob": "f0b41030b2739a7b40e47ebe0707780be0b9626f",
+  "class": "PENDING",
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions"
+  ],
+  "n_revisions_seen": 2,
+  "added_lines": 51,
+  "added_line_coverage": [
+   {
+    "ref": "refs/heads/candidate/fe-compose-2026-08-05",
+    "hit": 0,
+    "of": 51,
+    "pct": 0.0
+   },
+   {
+    "ref": "refs/heads/lane/collect-review-conditions",
+    "hit": 0,
+    "of": 51,
+    "pct": 0.0
+   }
+  ]
+ },
+ "artifacts/journeys/workforce-invitation-onboarding/fixture/01-the-roster-before-an-invitation.png": {
+  "status": " M",
+  "wt_blob": "f3dbc8bb900fdf660892657799465d8f72a398b1",
+  "class": "PENDING",
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions"
+  ],
+  "n_revisions_seen": 1,
+  "added_lines": 0,
+  "added_line_coverage": []
+ },
+ "artifacts/journeys/workforce-invitation-onboarding/fixture/02-the-invitation-code-shown-once.png": {
+  "status": " M",
+  "wt_blob": "b64265693b2f4497c981af937b865d358b5d6420",
+  "class": "PENDING",
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions"
+  ],
+  "n_revisions_seen": 2,
+  "added_lines": 0,
+  "added_line_coverage": []
+ },
+ "artifacts/journeys/workforce-invitation-onboarding/fixture/07-the-roster-after-the-claim.png": {
+  "status": " M",
+  "wt_blob": "55ec2ca55d8b9f1c65603e365afabed2b655ffb7",
+  "class": "PENDING",
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions"
+  ],
+  "n_revisions_seen": 1,
+  "added_lines": 0,
+  "added_line_coverage": []
+ },
+ "components/admin/events/EventsJourney.vue": {
+  "status": " M",
+  "wt_blob": "de3b47732cc417b5cc350472abb2b10bb2eb85b2",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/events-admin",
+   "refs/heads/lane/fe-events-margin-surfaces",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/fe-wf-self",
+   "refs/heads/lane/price-crosscurrency",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty"
+  ],
+  "n_revisions_seen": 9
+ },
+ "components/admin/margin/MarginCoveragePanel.vue": {
+  "status": " M",
+  "wt_blob": "e157fc2b2051ecc33c435b8d9a011cf5185cbd9d",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/mrg-coverage-unknown"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/mrg-coverage-unknown"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/fe-events-margin-surfaces",
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/mrg-coverage-unknown",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty"
+  ],
+  "n_revisions_seen": 6
+ },
+ "components/admin/meals/MealsFundedOrders.vue": {
+  "status": " M",
+  "wt_blob": "e53738b08be1b2c216fa66d1896903a57feeaa63",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-meals-docsync",
+   "refs/heads/lane/meals-admin",
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "n_revisions_seen": 3
+ },
+ "components/admin/meals/MealsProgramPanel.vue": {
+  "status": " M",
+  "wt_blob": "4f5c7574d0c2feebf7ac5141838b6cc35733ecce",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "17fe84ae05cde18576317ef357cb25efa5b51fa3",
+  "introducing_refs": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 1,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-meals-journey-locator",
+   "refs/heads/lane/fe-meals-pretick-walked",
+   "refs/heads/lane/meals-enrol-pretick",
+   "refs/heads/lane/meals-enrol-ui",
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "n_revisions_seen": 6
+ },
+ "components/admin/meals/MealsStatementLines.vue": {
+  "status": "??",
+  "wt_blob": "474962a85b80e55e0097a301e690443d8c6f1015",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "introducing_refs": [
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "n_revisions_seen": 1
+ },
+ "components/admin/pos/ClockScreen.vue": {
+  "status": "??",
+  "wt_blob": "1faee579386b2d8a8070e3383319d1a0b6504ccd",
+  "class": "PENDING",
+  "interested_refs": [
+   "refs/heads/lane/fe-pos-clock",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink"
+  ],
+  "n_revisions_seen": 1,
+  "added_line_coverage": []
+ },
+ "components/admin/pos/PosShell.vue": {
+  "status": " M",
+  "wt_blob": "36a7f1ade1c5dec3f709462051cc1df194aa1c12",
+  "class": "PENDING",
+  "interested_refs": [
+   "refs/heads/lane/fe-pos-clock",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink"
+  ],
+  "n_revisions_seen": 9,
+  "added_lines": 10,
+  "added_line_coverage": [
+   {
+    "ref": "refs/heads/lane/fe-pos-clock",
+    "hit": 3,
+    "of": 10,
+    "pct": 30.0
+   },
+   {
+    "ref": "refs/heads/lane/fe-wf-blind-bind-name",
+    "hit": 3,
+    "of": 10,
+    "pct": 30.0
+   },
+   {
+    "ref": "refs/heads/lane/fe-wf-link-deadend",
+    "hit": 3,
+    "of": 10,
+    "pct": 30.0
+   },
+   {
+    "ref": "refs/heads/lane/fe-wf-oplink",
+    "hit": 3,
+    "of": 10,
+    "pct": 30.0
+   }
+  ]
+ },
+ "components/admin/pos/PosTopBar.vue": {
+  "status": " M",
+  "wt_blob": "cf95e968925d3c657f5aff5129edace2666ef047",
+  "class": "PENDING",
+  "interested_refs": [
+   "refs/heads/lane/fe-pos-clock",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink"
+  ],
+  "n_revisions_seen": 5,
+  "added_lines": 36,
+  "added_line_coverage": [
+   {
+    "ref": "refs/heads/lane/fe-pos-clock",
+    "hit": 6,
+    "of": 36,
+    "pct": 16.7
+   },
+   {
+    "ref": "refs/heads/lane/fe-wf-blind-bind-name",
+    "hit": 6,
+    "of": 36,
+    "pct": 16.7
+   },
+   {
+    "ref": "refs/heads/lane/fe-wf-link-deadend",
+    "hit": 6,
+    "of": 36,
+    "pct": 16.7
+   },
+   {
+    "ref": "refs/heads/lane/fe-wf-oplink",
+    "hit": 6,
+    "of": 36,
+    "pct": 16.7
+   }
+  ]
+ },
+ "components/admin/pos/XReportView.vue": {
+  "status": " M",
+  "wt_blob": "b392c4bffc78feba738e45aad267540b7aa1e20a",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "b150668b7de1992dd858dc2b2d5be4c2b7017def",
+  "introducing_refs": [
+   "refs/lanes/L-XZ-NEGATED-ABSENCE"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "n_revisions_seen": 5
+ },
+ "components/admin/training/TrainingAssignmentPanel.vue": {
+  "status": " M",
+  "wt_blob": "f69cdbd9da6d92107d1655338fc4c3783db581e5",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/train-publish-unclickable",
+   "refs/heads/lane/training-admin"
+  ],
+  "n_revisions_seen": 3
+ },
+ "components/admin/training/TrainingCertificatePanel.vue": {
+  "status": " M",
+  "wt_blob": "892bb5d27b89d83861d0a19ff25d02875ddb2fca",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/train-publish-unclickable",
+   "refs/heads/lane/training-admin"
+  ],
+  "n_revisions_seen": 3
+ },
+ "components/admin/training/TrainingCompletionPanel.vue": {
+  "status": " M",
+  "wt_blob": "38ed01c5e0897e8796338b1e001f234bc1bac778",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/train-publish-unclickable",
+   "refs/heads/lane/training-admin"
+  ],
+  "n_revisions_seen": 4
+ },
+ "components/admin/training/TrainingCourseList.vue": {
+  "status": " M",
+  "wt_blob": "4b87005234a438920a2c70da66b1f3b90d8d5d07",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/train-publish-unclickable",
+   "refs/heads/lane/training-admin"
+  ],
+  "n_revisions_seen": 2
+ },
+ "components/admin/training/TrainingDisclosurePanel.vue": {
+  "status": " M",
+  "wt_blob": "89c15f6eced9fde3e0cde6379d6bf68bbf3b1391",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "n_revisions_seen": 2
+ },
+ "components/admin/training/TrainingEvidenceDocument.vue": {
+  "status": "??",
+  "wt_blob": "8f231f773492344145715cdfcf0a4e59fd3838e1",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "introducing_refs": [
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "n_revisions_seen": 2
+ },
+ "components/admin/training/TrainingHoldingsPanel.vue": {
+  "status": " M",
+  "wt_blob": "b1e2fb82754a2a5fac75bce83248f9eb1746a099",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/train-publish-unclickable",
+   "refs/heads/lane/training-admin"
+  ],
+  "n_revisions_seen": 3
+ },
+ "components/admin/training/TrainingVersionPanel.vue": {
+  "status": " M",
+  "wt_blob": "829d48a758ff96fa7e4493a7bb7a6f22d79ea8f6",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/train-publish-unclickable",
+   "refs/heads/lane/training-admin"
+  ],
+  "n_revisions_seen": 3
+ },
+ "components/admin/training/_training-panel.scss": {
+  "status": " M",
+  "wt_blob": "6c53cee49a26ea5dadeea1f298b8b5dc36870632",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/train-publish-unclickable",
+   "refs/heads/lane/training-admin"
+  ],
+  "n_revisions_seen": 2
+ },
+ "components/admin/workforce-rates/WorkforceRateTimeline.vue": {
+  "status": " M",
+  "wt_blob": "bb885eb193fc0b416642df4416373c9c4838b830",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "interested_refs": [
+   "detached:wt-rateui",
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "n_revisions_seen": 2
+ },
+ "components/admin/workforce/WorkforceDeliveryGroup.vue": {
+  "status": "??",
+  "wt_blob": "f9ba69a1a98dda8288007617bc123c8dd7295c2f",
+  "class": "PENDING",
+  "interested_refs": [],
+  "n_revisions_seen": 0,
+  "added_line_coverage": []
+ },
+ "components/admin/workforce/WorkforceDeliveryPanel.vue": {
+  "status": "??",
+  "wt_blob": "9862d783e2c338bce5e95ccc00bb46b1373e1191",
+  "class": "PENDING",
+  "interested_refs": [],
+  "n_revisions_seen": 0,
+  "added_line_coverage": []
+ },
+ "components/admin/workforce/WorkforcePublicationList.vue": {
+  "status": "??",
+  "wt_blob": "ccecfdecc9816cff14b3c7f44c8b06fcdf7cce6c",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "2d86446b746cff8477c4d6dbde316aceecda811b",
+  "introducing_refs": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "interested_refs": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "n_revisions_seen": 1
+ },
+ "components/admin/workforce/WorkforcePublicationReceiptGroup.vue": {
+  "status": "??",
+  "wt_blob": "b04850015c8c51f173bc6e83bede5eb8dcb9b355",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "2d86446b746cff8477c4d6dbde316aceecda811b",
+  "introducing_refs": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "interested_refs": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "n_revisions_seen": 1
+ },
+ "components/admin/workforce/WorkforcePublicationRecipients.vue": {
+  "status": "??",
+  "wt_blob": "abd2b186ed940f1a4368ec042242c60019a309c4",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "2d86446b746cff8477c4d6dbde316aceecda811b",
+  "introducing_refs": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "interested_refs": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "n_revisions_seen": 1
+ },
+ "components/admin/workforce/WorkforceTimesheetBatchList.vue": {
+  "status": "??",
+  "wt_blob": "2a90d4cf9573a655b557f203616a40d566f76f03",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "618efc88750fa4adb59769b859d3975bfcdc1f3b",
+  "introducing_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "interested_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "n_revisions_seen": 1
+ },
+ "components/admin/workforce/WorkforceTimesheetPanel.vue": {
+  "status": "??",
+  "wt_blob": "a69233e7fb32aff3e38e8c9f2d75979079cbc442",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "618efc88750fa4adb59769b859d3975bfcdc1f3b",
+  "introducing_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "interested_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "n_revisions_seen": 1
+ },
+ "components/admin/workforce/WorkforceWeekGrid.vue": {
+  "status": " M",
+  "wt_blob": "e5ac5567017ed24914cd0aaa94bd3e09389fb1ed",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "interested_refs": [
+   "detached:wt-author",
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "n_revisions_seen": 6
+ },
+ "components/molecules/CustomerInfoModal.vue": {
+  "status": " M",
+  "wt_blob": "53212d7fab670347045b35f3d588d6dbcb752af4",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "83952084c2ba007683d58ed7fbdc4cf6333337ad",
+  "introducing_refs": [
+   "refs/heads/lane/L-PRICE-SHADOW-GUARD"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 1,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/L-PRICE-SHADOW-GUARD",
+   "refs/heads/lane/collect-review-conditions"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/L-PRICE-SHADOW-GUARD",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "n_revisions_seen": 7
+ },
+ "components/onboarding/OnboardingProductImages.vue": {
+  "status": " M",
+  "wt_blob": "73c96535b0c3d3ed4058a52da94436b2932d6dbd",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/feature/swiss",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "n_revisions_seen": 4
+ },
+ "components/organisms/AdminPageHeader.vue": {
+  "status": " M",
+  "wt_blob": "2ed383c205d968a7038f5014589e8cd508ae3dd0",
+  "class": "PENDING",
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/feature/swiss",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-meals-statement-surface",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/fe-wf-self",
+   "refs/heads/lane/menu-allergen-matrix",
+   "refs/heads/lane/train-evidence-pack-ui",
+   "refs/heads/lane/wf-pubhist",
+   "refs/heads/lane/wf-roles-ui",
+   "refs/heads/lane/workforce-roster",
+   "refs/remotes/origin/feature/dintero-in-person-terminal",
+   "refs/remotes/origin/feature/email-campaign"
+  ],
+  "n_revisions_seen": 59,
+  "added_lines": 73,
+  "added_line_coverage": [
+   {
+    "ref": "refs/heads/lane/wf-pubhist",
+    "hit": 44,
+    "of": 73,
+    "pct": 60.3
+   },
+   {
+    "ref": "refs/heads/candidate/fe-compose-2026-08-05",
+    "hit": 34,
+    "of": 73,
+    "pct": 46.6
+   },
+   {
+    "ref": "refs/heads/lane/collect-review-conditions",
+    "hit": 34,
+    "of": 73,
+    "pct": 46.6
+   },
+   {
+    "ref": "refs/heads/lane/wf-roles-ui",
+    "hit": 13,
+    "of": 73,
+    "pct": 17.8
+   },
+   {
+    "ref": "refs/heads/lane/train-evidence-pack-ui",
+    "hit": 11,
+    "of": 73,
+    "pct": 15.1
+   },
+   {
+    "ref": "refs/heads/lane/fe-meals-statement-surface",
+    "hit": 10,
+    "of": 73,
+    "pct": 13.7
+   },
+   {
+    "ref": "refs/heads/lane/fe-training-meals-surfaces",
+    "hit": 2,
+    "of": 73,
+    "pct": 2.7
+   },
+   {
+    "ref": "refs/heads/feature/swiss",
+    "hit": 0,
+    "of": 73,
+    "pct": 0.0
+   }
+  ]
+ },
+ "components/shared/OfferDocument.vue": {
+  "status": " M",
+  "wt_blob": "7ad3e67a4bcd52b890b8947a969e5286e697a4aa",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "b76cbbb2d2d11c9584dd74128488a5b35d6354f5",
+  "introducing_refs": [
+   "refs/heads/lane/price-cleanup-two"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/heads/lane/price-cleanup-two",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/heads/lane/price-cleanup-two",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "n_revisions_seen": 4
+ },
+ "jest.config.js": {
+  "status": " M",
+  "wt_blob": "cc1fbe384883e530bdfd63f09b3c0feb19d63431",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "introducing_refs": [
+   "refs/heads/lane/jest-collects-lanes"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "detached:web-jestlanes",
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/jest-collects-lanes"
+  ],
+  "interested_refs": [
+   "detached:web-jestlanes",
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/jest-collects-lanes"
+  ],
+  "n_revisions_seen": 4
+ },
+ "package.json": {
+  "status": " M",
+  "wt_blob": "94bf774729a03c83f9412fccc4606b1bba10fd9b",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+  "introducing_refs": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/journey-teardown",
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "n_revisions_seen": 12
+ },
+ "pages/admin/feature-flags.vue": {
+  "status": " M",
+  "wt_blob": "17434cb7dffbd55468447d0282587e357e34fe8b",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "abef9aacd2fbffa2c98cadfe9521d82981f60bd7",
+  "introducing_refs": [
+   "refs/heads/lane/train-readonly-visible"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/lane/train-readonly-visible"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/meals-reachable-web",
+   "refs/heads/lane/train-readonly-visible"
+  ],
+  "n_revisions_seen": 4
+ },
+ "pages/admin/kravia-invoice.vue": {
+  "status": " M",
+  "wt_blob": "77c363d4d05f7015687b06ccd7f753b814bf1e8b",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "990c2db6db3618fdd77556f4b14770e756c92285",
+  "introducing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/lanes/L-PRICE-BYPASS-FIVE"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 1,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "n_revisions_seen": 13
+ },
+ "pages/admin/margin-recipes.vue": {
+  "status": " M",
+  "wt_blob": "ced33bdbb1dc7c3f50d5764c26539d9806812b50",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "0c483de9dbb22220f74f6b3fca9a6c8967d67d85",
+  "introducing_refs": [
+   "refs/heads/lane/mrg-recipe-revise-ui"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 1,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/mrg-recipe-revise-ui"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/margin-menu-margin-ui",
+   "refs/heads/lane/margin-recipes",
+   "refs/heads/lane/mrg-recipe-revise-ui"
+  ],
+  "n_revisions_seen": 5
+ },
+ "pages/admin/meals-statements.vue": {
+  "status": "??",
+  "wt_blob": "f524610b8552603498b4d4c4b45d2bba892a0626",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "introducing_refs": [
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-meals-statement-surface",
+   "refs/heads/lane/fe-training-meals-surfaces"
+  ],
+  "n_revisions_seen": 2
+ },
+ "pages/admin/offers.vue": {
+  "status": " M",
+  "wt_blob": "d2f4cfaae553dab1d42c8d486d80bfb3da91cbeb",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "021d19c37444dd4ea14dff6c8bb89200e9135b09",
+  "introducing_refs": [
+   "refs/heads/lane/offers-page-hundredfold"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/offers-page-hundredfold"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/offers-page-hundredfold"
+  ],
+  "n_revisions_seen": 5
+ },
+ "pages/admin/products.vue": {
+  "status": " M",
+  "wt_blob": "f45f7c376d8fa541fb4f3ef5e67acfab0eb3df28",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/feature/swiss",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "n_revisions_seen": 24
+ },
+ "pages/admin/reward-members.vue": {
+  "status": " M",
+  "wt_blob": "47a6d7e248d1b87bca5bf0ad4f205024686b7ca9",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "n_revisions_seen": 4
+ },
+ "pages/admin/settlements.vue": {
+  "status": " M",
+  "wt_blob": "248f639a1d1470708f37db18fd8c676c4f439862",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "n_revisions_seen": 11
+ },
+ "pages/admin/training-evidence.vue": {
+  "status": "??",
+  "wt_blob": "e0a913f8ea5ba10a9b89f5ad7c664f4532b249fb",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "introducing_refs": [
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "n_revisions_seen": 2
+ },
+ "pages/admin/wolt-menu.vue": {
+  "status": " M",
+  "wt_blob": "4401a89a7dab0b02f71e8d30eb62b5d8f7eca2f3",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/feature/swiss",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/modal-broken-two",
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "n_revisions_seen": 10
+ },
+ "pages/admin/workforce-delivery.vue": {
+  "status": "??",
+  "wt_blob": "857a800668b81d67c6a783c2cc271120bf0d2c56",
+  "class": "PENDING",
+  "interested_refs": [],
+  "n_revisions_seen": 0,
+  "added_line_coverage": []
+ },
+ "pages/admin/workforce-publications.vue": {
+  "status": "??",
+  "wt_blob": "669e37466878a10d0bfee3a3929697d444c946eb",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "2d86446b746cff8477c4d6dbde316aceecda811b",
+  "introducing_refs": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "interested_refs": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "n_revisions_seen": 1
+ },
+ "pages/admin/workforce-roles.vue": {
+  "status": "??",
+  "wt_blob": "e4719247b226c5767caec5dbbabf9053533ce497",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "introducing_refs": [
+   "refs/heads/lane/wf-roles-ui"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/wf-roles-ui"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/wf-roles-ui"
+  ],
+  "n_revisions_seen": 1
+ },
+ "pages/admin/workforce-schedule.vue": {
+  "status": " M",
+  "wt_blob": "01c7f20341c12cabe470ba293eca26ed8d1302ab",
+  "class": "PENDING",
+  "interested_refs": [
+   "detached:wt-author",
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-wf-onboard",
+   "refs/heads/lane/fe-wf-self"
+  ],
+  "n_revisions_seen": 9,
+  "added_lines": 15,
+  "added_line_coverage": [
+   {
+    "ref": "refs/heads/candidate/fe-compose-2026-08-05",
+    "hit": 1,
+    "of": 15,
+    "pct": 6.7
+   },
+   {
+    "ref": "refs/heads/lane/collect-review-conditions",
+    "hit": 1,
+    "of": 15,
+    "pct": 6.7
+   },
+   {
+    "ref": "refs/heads/lane/fe-wf-onboard",
+    "hit": 0,
+    "of": 15,
+    "pct": 0.0
+   },
+   {
+    "ref": "refs/heads/lane/fe-wf-self",
+    "hit": 0,
+    "of": 15,
+    "pct": 0.0
+   }
+  ]
+ },
+ "pages/admin/workforce-timesheets.vue": {
+  "status": "??",
+  "wt_blob": "4e65ce1859ae0e152c2a6031a6d6b59af5611922",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "618efc88750fa4adb59769b859d3975bfcdc1f3b",
+  "introducing_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "interested_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "n_revisions_seen": 1
+ },
+ "pages/preferences/communications.vue": {
+  "status": " M",
+  "wt_blob": "0a420cf6336370d3ec922681d4a527ca5ea8d172",
+  "class": "PENDING",
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-gr-withdraw-origin"
+  ],
+  "n_revisions_seen": 2,
+  "added_lines": 13,
+  "added_line_coverage": [
+   {
+    "ref": "refs/heads/candidate/fe-compose-2026-08-05",
+    "hit": 0,
+    "of": 13,
+    "pct": 0.0
+   },
+   {
+    "ref": "refs/heads/lane/collect-review-conditions",
+    "hit": 0,
+    "of": 13,
+    "pct": 0.0
+   },
+   {
+    "ref": "refs/heads/lane/fe-gr-withdraw-origin",
+    "hit": 0,
+    "of": 13,
+    "pct": 0.0
+   }
+  ]
+ },
+ "plugins/global-mixin.js": {
+  "status": " M",
+  "wt_blob": "0c51ca74a9b606a8dd8c5e8b409ad27de0d5f936",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/feature/swiss",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/price-crosscurrency",
+   "refs/remotes/origin/feature/dintero-in-person-terminal",
+   "refs/remotes/origin/feature/email-campaign"
+  ],
+  "n_revisions_seen": 28
+ },
+ "scripts/drift-demo/demo.sh": {
+  "status": "??",
+  "wt_blob": "477156f9b5cd4d6f0d9d8683cd5e6f859444fc6c",
+  "class": "PENDING",
+  "interested_refs": [],
+  "n_revisions_seen": 0,
+  "added_line_coverage": []
+ },
+ "scripts/worldstamp": {
+  "status": "??",
+  "wt_blob": "db97d1c200eb2a5f5b00c2ea1fb5f73f46227a51",
+  "class": "PENDING",
+  "interested_refs": [],
+  "n_revisions_seen": 0,
+  "added_line_coverage": []
+ },
+ "test/admin-nav-access.test.js": {
+  "status": " M",
+  "wt_blob": "f741e757a63c5f69cef775064ef5ba3871f37aff",
+  "class": "PENDING",
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-meals-statement-surface",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/fe-wf-self",
+   "refs/heads/lane/menu-allergen-matrix",
+   "refs/heads/lane/train-evidence-pack-ui",
+   "refs/heads/lane/wf-pubhist",
+   "refs/heads/lane/wf-roles-ui"
+  ],
+  "n_revisions_seen": 26,
+  "added_lines": 44,
+  "added_line_coverage": [
+   {
+    "ref": "refs/heads/lane/wf-pubhist",
+    "hit": 26,
+    "of": 44,
+    "pct": 59.1
+   },
+   {
+    "ref": "refs/heads/candidate/fe-compose-2026-08-05",
+    "hit": 22,
+    "of": 44,
+    "pct": 50.0
+   },
+   {
+    "ref": "refs/heads/lane/collect-review-conditions",
+    "hit": 22,
+    "of": 44,
+    "pct": 50.0
+   },
+   {
+    "ref": "refs/heads/lane/wf-roles-ui",
+    "hit": 12,
+    "of": 44,
+    "pct": 27.3
+   },
+   {
+    "ref": "refs/heads/lane/fe-meals-statement-surface",
+    "hit": 6,
+    "of": 44,
+    "pct": 13.6
+   },
+   {
+    "ref": "refs/heads/lane/train-evidence-pack-ui",
+    "hit": 4,
+    "of": 44,
+    "pct": 9.1
+   },
+   {
+    "ref": "refs/heads/lane/fe-training-meals-surfaces",
+    "hit": 3,
+    "of": 44,
+    "pct": 6.8
+   },
+   {
+    "ref": "refs/heads/lane/fe-wf-self",
+    "hit": 0,
+    "of": 44,
+    "pct": 0.0
+   }
+  ]
+ },
+ "test/e2e/fixture/api-server.js": {
+  "status": " M",
+  "wt_blob": "955ff982335b20e2ac005a82914c2ac9fe6be647",
+  "class": "PENDING",
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/L-JOURNEY-GROWTH",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/fe-events-margin-surfaces",
+   "refs/heads/lane/fe-gr-exit-wire-the-mail",
+   "refs/heads/lane/fe-gr-withdraw-origin",
+   "refs/heads/lane/fe-growth-prefcentre",
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-pos-clock",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-invite-list-revoke",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-onboard",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/fe-wf-self",
+   "refs/heads/lane/journey-teardown",
+   "refs/heads/lane/journey-workforce",
+   "refs/heads/lane/menu-allergen-matrix",
+   "refs/heads/lane/modal-broken-two",
+   "refs/heads/lane/print-host",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty",
+   "refs/heads/lane/train-evidence-pack-ui",
+   "refs/heads/lane/wf-kodeoversikt-ui",
+   "refs/heads/lane/wf-pubhist",
+   "refs/heads/lane/wf-roles-ui",
+   "refs/salvage/dangling-1890c9a3",
+   "refs/salvage/dangling-1b324667",
+   "refs/salvage/dangling-59f5fabf",
+   "refs/salvage/dangling-6f7f155c"
+  ],
+  "n_revisions_seen": 44,
+  "added_lines": 307,
+  "added_line_coverage": [
+   {
+    "ref": "refs/heads/candidate/fe-compose-2026-08-05",
+    "hit": 168,
+    "of": 307,
+    "pct": 54.7
+   },
+   {
+    "ref": "refs/heads/lane/collect-review-conditions",
+    "hit": 168,
+    "of": 307,
+    "pct": 54.7
+   },
+   {
+    "ref": "refs/heads/lane/wf-pubhist",
+    "hit": 140,
+    "of": 307,
+    "pct": 45.6
+   },
+   {
+    "ref": "refs/heads/lane/wf-roles-ui",
+    "hit": 127,
+    "of": 307,
+    "pct": 41.4
+   },
+   {
+    "ref": "refs/heads/lane/train-evidence-pack-ui",
+    "hit": 62,
+    "of": 307,
+    "pct": 20.2
+   },
+   {
+    "ref": "refs/heads/lane/L-JOURNEY-GROWTH",
+    "hit": 36,
+    "of": 307,
+    "pct": 11.7
+   },
+   {
+    "ref": "refs/salvage/dangling-1890c9a3",
+    "hit": 36,
+    "of": 307,
+    "pct": 11.7
+   },
+   {
+    "ref": "refs/heads/lane/journey-workforce",
+    "hit": 23,
+    "of": 307,
+    "pct": 7.5
+   }
+  ]
+ },
+ "test/e2e/fixture/growth.js": {
+  "status": " M",
+  "wt_blob": "40dd32c7c494ad8a976416bbae21f50b613fb6ea",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "ef2d6be46ee11b76154c639275a360285ad61e8e",
+  "introducing_refs": [
+   "refs/heads/lane/L-JOURNEY-GROWTH"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/lane/L-JOURNEY-GROWTH"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/L-JOURNEY-GROWTH",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-gr-exit-wire-the-mail",
+   "refs/heads/lane/fe-gr-withdraw-origin",
+   "refs/heads/lane/fe-growth-prefcentre",
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/salvage/dangling-1890c9a3",
+   "refs/salvage/dangling-59f5fabf"
+  ],
+  "n_revisions_seen": 8
+ },
+ "test/e2e/fixture/meals.js": {
+  "status": " M",
+  "wt_blob": "059e96a46b7a235dc984f7c2dfbb1c6fcaabd57f",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "introducing_refs": [
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-meals-pretick-walked",
+   "refs/heads/lane/fe-meals-statement-surface",
+   "refs/heads/lane/fe-training-meals-surfaces"
+  ],
+  "n_revisions_seen": 5
+ },
+ "test/e2e/fixture/training.js": {
+  "status": " M",
+  "wt_blob": "757a42d903a5070762e5ba144897a79aa3342fbf",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "introducing_refs": [
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/train-evidence-pack-ui",
+   "refs/salvage/dangling-1b324667"
+  ],
+  "n_revisions_seen": 5
+ },
+ "test/e2e/fixture/workforce-delivery.js": {
+  "status": "??",
+  "wt_blob": "6cb41ba1acf5d53bf853af39f7169ca1e4d41171",
+  "class": "PENDING",
+  "interested_refs": [],
+  "n_revisions_seen": 0,
+  "added_line_coverage": []
+ },
+ "test/e2e/fixture/workforce-publications.js": {
+  "status": "??",
+  "wt_blob": "2a10ae273fcbd8d1a2e56cc494357a27b72323db",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "2d86446b746cff8477c4d6dbde316aceecda811b",
+  "introducing_refs": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "interested_refs": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "n_revisions_seen": 1
+ },
+ "test/e2e/fixture/workforce-punch.js": {
+  "status": "??",
+  "wt_blob": "e2d2f44317789647131b247d4d1dfd02f4bcae56",
+  "class": "PENDING",
+  "interested_refs": [],
+  "n_revisions_seen": 0,
+  "added_line_coverage": []
+ },
+ "test/e2e/fixture/workforce-timesheets.js": {
+  "status": "??",
+  "wt_blob": "ff9016f6314edf1e25a8a699942fbcde4aa31fac",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "618efc88750fa4adb59769b859d3975bfcdc1f3b",
+  "introducing_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "interested_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "n_revisions_seen": 1
+ },
+ "test/e2e/fixture/world.js": {
+  "status": " M",
+  "wt_blob": "c77cf9d8fa0f66c4cfb1ef65a45c46acd5cf3d83",
+  "class": "PENDING",
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/fe-gr-withdraw-origin",
+   "refs/heads/lane/fe-growth-prefcentre",
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-pos-clock",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-invite-list-revoke",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-onboard",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/fe-wf-self",
+   "refs/heads/lane/menu-allergen-matrix",
+   "refs/heads/lane/modal-broken-two",
+   "refs/heads/lane/print-host",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty",
+   "refs/heads/lane/wf-kodeoversikt-ui",
+   "refs/heads/lane/wf-roles-ui",
+   "refs/salvage/dangling-1b324667",
+   "refs/salvage/dangling-59f5fabf",
+   "refs/salvage/dangling-6f7f155c"
+  ],
+  "n_revisions_seen": 30,
+  "added_lines": 101,
+  "added_line_coverage": [
+   {
+    "ref": "refs/heads/candidate/fe-compose-2026-08-05",
+    "hit": 75,
+    "of": 101,
+    "pct": 74.3
+   },
+   {
+    "ref": "refs/heads/lane/collect-review-conditions",
+    "hit": 75,
+    "of": 101,
+    "pct": 74.3
+   },
+   {
+    "ref": "refs/heads/lane/wf-roles-ui",
+    "hit": 75,
+    "of": 101,
+    "pct": 74.3
+   },
+   {
+    "ref": "refs/heads/lane/fe-gr-withdraw-origin",
+    "hit": 7,
+    "of": 101,
+    "pct": 6.9
+   },
+   {
+    "ref": "refs/heads/lane/fe-growth-prefcentre",
+    "hit": 7,
+    "of": 101,
+    "pct": 6.9
+   },
+   {
+    "ref": "refs/heads/lane/fe-wf-invite-list-revoke",
+    "hit": 7,
+    "of": 101,
+    "pct": 6.9
+   },
+   {
+    "ref": "refs/heads/lane/wf-kodeoversikt-ui",
+    "hit": 7,
+    "of": 101,
+    "pct": 6.9
+   },
+   {
+    "ref": "refs/salvage/dangling-59f5fabf",
+    "hit": 7,
+    "of": 101,
+    "pct": 6.9
+   }
+  ]
+ },
+ "test/e2e/journeys/admin-refusal-worker.spec.js": {
+  "status": " M",
+  "wt_blob": "9df6c8f0cd91ab380d7f9320883541d4638324c9",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/fe-admin-refusal-credential"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-admin-refusal-credential"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-admin-refusal-credential",
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-training-meals-surfaces"
+  ],
+  "n_revisions_seen": 3
+ },
+ "test/e2e/journeys/growth-guest-lifecycle.spec.js": {
+  "status": "??",
+  "wt_blob": "f12817461e71695c5bd018c76b5ba3f91f567105",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1890c9a38a3a9f5eae692d65bdb06b5d996dedf1",
+  "introducing_refs": [
+   "refs/salvage/dangling-1890c9a3"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/lane/L-JOURNEY-GROWTH",
+   "refs/salvage/dangling-1890c9a3"
+  ],
+  "interested_refs": [
+   "refs/heads/lane/L-JOURNEY-GROWTH",
+   "refs/salvage/dangling-1890c9a3"
+  ],
+  "n_revisions_seen": 2
+ },
+ "test/e2e/journeys/growth-testsend-refusal.spec.js": {
+  "status": "??",
+  "wt_blob": "668b75892bfb91f00345ee5ed4c97f34c94b549a",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "40012fc9d6adba08dd9902f221b1858e18399fb9",
+  "introducing_refs": [
+   "refs/heads/lane/L-JOURNEY-GROWTH",
+   "refs/salvage/dangling-1890c9a3"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 1,
+  "all_containing_refs": [
+   "refs/heads/lane/L-JOURNEY-GROWTH",
+   "refs/salvage/dangling-1890c9a3"
+  ],
+  "interested_refs": [
+   "refs/heads/lane/L-JOURNEY-GROWTH",
+   "refs/salvage/dangling-1890c9a3"
+  ],
+  "n_revisions_seen": 1
+ },
+ "test/e2e/journeys/meals-statement-month.spec.js": {
+  "status": "??",
+  "wt_blob": "9c5beb793764b9371d5e5d433cb295f4c3382762",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "4772c1316ac933bdab6d5d5434111d0479da6b37",
+  "introducing_refs": [
+   "refs/heads/lane/L-JOURNEY-PORT-HARDCODED"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/lane/L-JOURNEY-PORT-HARDCODED"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/L-JOURNEY-PORT-HARDCODED",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "n_revisions_seen": 2
+ },
+ "test/e2e/journeys/training-course-to-evidence.spec.js": {
+  "status": " M",
+  "wt_blob": "20aa50da33574f430f45163a3e1a37997b45a9bf",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/train-publish-unclickable"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/train-publish-unclickable",
+   "refs/salvage/dangling-1b324667"
+  ],
+  "n_revisions_seen": 4
+ },
+ "test/e2e/journeys/training-evidence-document.spec.js": {
+  "status": "??",
+  "wt_blob": "6563a765570183f0b39c5e1568aa3cd42048a5ef",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "introducing_refs": [
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "n_revisions_seen": 1
+ },
+ "test/e2e/journeys/workforce-delivery-failures.spec.js": {
+  "status": "??",
+  "wt_blob": "939f43bcd066a6a9a20f2bfbc38eb13122310059",
+  "class": "PENDING",
+  "interested_refs": [],
+  "n_revisions_seen": 0,
+  "added_line_coverage": []
+ },
+ "test/e2e/journeys/workforce-pos-punch.spec.js": {
+  "status": "??",
+  "wt_blob": "e19d05366a567d20015881d8de47055c2ce9b7bc",
+  "class": "PENDING",
+  "interested_refs": [],
+  "n_revisions_seen": 0,
+  "added_line_coverage": []
+ },
+ "test/e2e/journeys/workforce-publication-receipts.spec.js": {
+  "status": "??",
+  "wt_blob": "4dc8d429ce19189199e22a9bd1d31c8ca4807ef4",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "2d86446b746cff8477c4d6dbde316aceecda811b",
+  "introducing_refs": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "interested_refs": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "n_revisions_seen": 1
+ },
+ "test/e2e/journeys/workforce-role-catalogue.spec.js": {
+  "status": "??",
+  "wt_blob": "0ba5559b85b85e8af74c610f9c19a23c5a18685f",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "introducing_refs": [
+   "refs/heads/lane/wf-roles-ui"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/wf-roles-ui"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/wf-roles-ui"
+  ],
+  "n_revisions_seen": 1
+ },
+ "test/e2e/journeys/workforce-timesheet-export.spec.js": {
+  "status": "??",
+  "wt_blob": "d377196d8cd79630a4ccf024c393a01d96d34dee",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "618efc88750fa4adb59769b859d3975bfcdc1f3b",
+  "introducing_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "interested_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "n_revisions_seen": 1
+ },
+ "test/e2e/scripts/build-provenance-proof.js": {
+  "status": " M",
+  "wt_blob": "e04ac4145717e194cc998950c34471ad80cb8efc",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+  "introducing_refs": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "n_revisions_seen": 2
+ },
+ "test/e2e/scripts/guard-proof.js": {
+  "status": " M",
+  "wt_blob": "be00d10688d30d35442688b555c24cffcd1908b1",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT",
+   "refs/heads/lane/collect-review-conditions"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/salvage/dangling-097c3c9e"
+  ],
+  "n_revisions_seen": 4
+ },
+ "test/e2e/scripts/live-world-stamp-wiring-check.js": {
+  "status": "??",
+  "wt_blob": "117d9dba1a5e0c60219e40bbc3f4524024b60d77",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+  "introducing_refs": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "n_revisions_seen": 1
+ },
+ "test/e2e/scripts/live-world.sh": {
+  "status": " M",
+  "wt_blob": "3489d4e971e917210c8bff501f8c91dd4f36b9cb",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+  "introducing_refs": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/journey-teardown",
+   "refs/lanes/L-WORLD-STAMP-WINDOWS",
+   "refs/salvage/dangling-1b324667"
+  ],
+  "n_revisions_seen": 7
+ },
+ "test/e2e/support/artifact-store.js": {
+  "status": " M",
+  "wt_blob": "6014b1238f4e2c7027b21f4b04a2781a1cdb7d95",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+  "introducing_refs": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "n_revisions_seen": 4
+ },
+ "test/e2e/support/journey-assertions.js": {
+  "status": " M",
+  "wt_blob": "bb38b5b90be9876036d58333aec68df552f59ac3",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "097c3c9ec82356c292f5f90f5caebfb4ac284f09",
+  "introducing_refs": [
+   "refs/salvage/dangling-097c3c9e"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/salvage/dangling-097c3c9e"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/salvage/dangling-097c3c9e"
+  ],
+  "n_revisions_seen": 2
+ },
+ "test/e2e/support/journey.js": {
+  "status": " M",
+  "wt_blob": "4123dab47eff7870153025db02f6688e3cc99411",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT",
+   "refs/heads/lane/collect-review-conditions"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/ev-journey-timebomb",
+   "refs/heads/lane/fe-journeys",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/journey-teardown",
+   "refs/salvage/dangling-097c3c9e",
+   "refs/salvage/dangling-1b324667"
+  ],
+  "n_revisions_seen": 13
+ },
+ "test/e2e/support/world-stamp.js": {
+  "status": " M",
+  "wt_blob": "3d3a9a01d44a7321e5f61dc6d82e3e20a9d9f8de",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+  "introducing_refs": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "n_revisions_seen": 2
+ },
+ "test/feature-flags-page.test.js": {
+  "status": " M",
+  "wt_blob": "82e1236e5cdf62f72f258e538bd052949eeeae5a",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "abef9aacd2fbffa2c98cadfe9521d82981f60bd7",
+  "introducing_refs": [
+   "refs/heads/lane/train-readonly-visible"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/lane/train-readonly-visible"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/meals-reachable-web",
+   "refs/heads/lane/train-readonly-visible"
+  ],
+  "n_revisions_seen": 5
+ },
+ "test/journey-artifact-store.test.js": {
+  "status": " M",
+  "wt_blob": "49cc75830be663b79309bca2d26ae4ac1eba795e",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+  "introducing_refs": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/worktree-basename-pin",
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "n_revisions_seen": 5
+ },
+ "test/journey-assertions.test.js": {
+  "status": " M",
+  "wt_blob": "84f77ada88db943e1672f0f1749eef60b3eb0e70",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT",
+   "refs/heads/lane/collect-review-conditions"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/salvage/dangling-097c3c9e"
+  ],
+  "n_revisions_seen": 3
+ },
+ "test/margin-recipe-client.test.js": {
+  "status": " M",
+  "wt_blob": "cfcb495a2d503ba15b447d4190804af5b11f1af2",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "0c483de9dbb22220f74f6b3fca9a6c8967d67d85",
+  "introducing_refs": [
+   "refs/heads/lane/mrg-recipe-revise-ui"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 1,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/mrg-recipe-revise-ui"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/margin-menu-margin-ui",
+   "refs/heads/lane/margin-recipes",
+   "refs/heads/lane/mrg-recipe-revise-ui"
+  ],
+  "n_revisions_seen": 4
+ },
+ "test/margin-recipe-revise.test.js": {
+  "status": "??",
+  "wt_blob": "351ed75ce86937db342498fa81bdd074fbdf9a7b",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "0c483de9dbb22220f74f6b3fca9a6c8967d67d85",
+  "introducing_refs": [
+   "refs/heads/lane/mrg-recipe-revise-ui"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 1,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/mrg-recipe-revise-ui"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/mrg-recipe-revise-ui"
+  ],
+  "n_revisions_seen": 1
+ },
+ "test/margin-statements-page.test.js": {
+  "status": " M",
+  "wt_blob": "16aa87e5b49589b01f9b992d2c1c63dfd1bee974",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "2f4e389f94da4f0ab702429471369b331859e3df",
+  "introducing_refs": [
+   "refs/heads/lane/mrg-coverage-unknown"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 1,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/mrg-coverage-unknown"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/fe-events-margin-surfaces",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/mrg-coverage-unknown",
+   "refs/heads/lane/mrg-lag-visible",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty"
+  ],
+  "n_revisions_seen": 6
+ },
+ "test/margin-waste.test.js": {
+  "status": " M",
+  "wt_blob": "264d50c4ac5ab19d68882644e0a3631074f40feb",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "2f4e389f94da4f0ab702429471369b331859e3df",
+  "introducing_refs": [
+   "refs/heads/lane/mrg-coverage-unknown"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 1,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/mrg-coverage-unknown"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/coercion-write-paths",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/mrg-coverage-unknown",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty"
+  ],
+  "n_revisions_seen": 4
+ },
+ "test/meals-statement-view.test.js": {
+  "status": "??",
+  "wt_blob": "2917575a1551ae89920c8f7feff093689d38d56d",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "introducing_refs": [
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "n_revisions_seen": 1
+ },
+ "test/price-absence.test.js": {
+  "status": " M",
+  "wt_blob": "30d22b3f3238d50461f36353a316b0eb1d2e25bf",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "b76cbbb2d2d11c9584dd74128488a5b35d6354f5",
+  "introducing_refs": [
+   "refs/heads/lane/price-cleanup-two"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/heads/lane/price-cleanup-two",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/heads/lane/price-cleanup-two",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "n_revisions_seen": 3
+ },
+ "test/price-bypass-legacy.test.js": {
+  "status": "??",
+  "wt_blob": "e0389bcbbfd348808f39ed786bcbdbbc3852373f",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "990c2db6db3618fdd77556f4b14770e756c92285",
+  "introducing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/lanes/L-PRICE-BYPASS-FIVE"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 1,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "n_revisions_seen": 2
+ },
+ "test/price-crosscurrency.test.js": {
+  "status": "??",
+  "wt_blob": "a72e02726ef0c638367658d82d670dba8562d9db",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "n_revisions_seen": 2
+ },
+ "test/price-gate-shadow.test.js": {
+  "status": "??",
+  "wt_blob": "e10891c2f5e2a63c7c2a295dfb79d219640e79e6",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "990c2db6db3618fdd77556f4b14770e756c92285",
+  "introducing_refs": [
+   "refs/heads/lane/L-PRICE-SHADOW-GUARD"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/L-PRICE-SHADOW-GUARD",
+   "refs/heads/lane/collect-review-conditions"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/L-PRICE-SHADOW-GUARD",
+   "refs/heads/lane/collect-review-conditions"
+  ],
+  "n_revisions_seen": 2
+ },
+ "test/workforce-delivery-failures.test.js": {
+  "status": "??",
+  "wt_blob": "d6c8c22a92da297a6d07d0bad798d7e4acdbda0c",
+  "class": "PENDING",
+  "interested_refs": [],
+  "n_revisions_seen": 0,
+  "added_line_coverage": []
+ },
+ "test/workforce-pos-clock.test.js": {
+  "status": "??",
+  "wt_blob": "9f0131d93a82a8017f031289ce41a3efdb7d3149",
+  "class": "PENDING",
+  "interested_refs": [],
+  "n_revisions_seen": 0,
+  "added_line_coverage": []
+ },
+ "test/workforce-publication-receipts.test.js": {
+  "status": "??",
+  "wt_blob": "d09b64d816e37f478afb395a7a4725a5ceda7fe0",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "2d86446b746cff8477c4d6dbde316aceecda811b",
+  "introducing_refs": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "interested_refs": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "n_revisions_seen": 1
+ },
+ "test/workforce-rates-timeline.test.js": {
+  "status": " M",
+  "wt_blob": "bc4aba6b36b93110ffbc4d80c72e6395f93c3f72",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/heads/lane/price-cleanup-two",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/heads/lane/price-cleanup-two",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "interested_refs": [
+   "detached:wt-rateui",
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/heads/lane/price-cleanup-two",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "n_revisions_seen": 2
+ },
+ "test/workforce-roles-page.test.js": {
+  "status": "??",
+  "wt_blob": "b18fddb0673c3ac8ef311ff86319a8d08b40cad5",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "introducing_refs": [
+   "refs/heads/lane/wf-roles-ui"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/wf-roles-ui"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/wf-roles-ui"
+  ],
+  "n_revisions_seen": 1
+ },
+ "test/workforce-timesheet-client.test.js": {
+  "status": "??",
+  "wt_blob": "c7c3ccd5be49f1ac89853f4b778b119e97726186",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "618efc88750fa4adb59769b859d3975bfcdc1f3b",
+  "introducing_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "interested_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "n_revisions_seen": 1
+ },
+ "test/workforce-timesheet-components.test.js": {
+  "status": "??",
+  "wt_blob": "98dee0178a3ffc060aa19b5ba8b3349171a7406c",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "618efc88750fa4adb59769b859d3975bfcdc1f3b",
+  "introducing_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "interested_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "n_revisions_seen": 1
+ },
+ "test/workforce-timesheet.test.js": {
+  "status": "??",
+  "wt_blob": "918bce3e57d203f265c505b075d19f3ed74175c9",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "618efc88750fa4adb59769b859d3975bfcdc1f3b",
+  "introducing_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "interested_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "n_revisions_seen": 1
+ },
+ "test/world-stamp-windows.test.js": {
+  "status": "??",
+  "wt_blob": "cfc11d308239063fd211195132ffe054fca8251f",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+  "introducing_refs": [
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/lanes/L-WORLD-STAMP-WINDOWS"
+  ],
+  "n_revisions_seen": 1
+ },
+ "test/xz-negated-absence.test.js": {
+  "status": "??",
+  "wt_blob": "a9962cc687df4d2b71f06ff4ada19f9860a89593",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "b150668b7de1992dd858dc2b2d5be4c2b7017def",
+  "introducing_refs": [
+   "refs/lanes/L-XZ-NEGATED-ABSENCE"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "interested_refs": [
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "n_revisions_seen": 2
+ },
+ "translations/de.ts": {
+  "status": " M",
+  "wt_blob": "4c5f69a114ea8df7e2a7b7e984b085a13fd0ee0f",
+  "class": "PENDING",
+  "interested_refs": [
+   "detached:wt-author",
+   "detached:wt-rateui",
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/feature/swiss",
+   "refs/heads/lane/coercion-write-paths",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/events-admin",
+   "refs/heads/lane/fe-events-margin-surfaces",
+   "refs/heads/lane/fe-growth-suppressed-key",
+   "refs/heads/lane/fe-meals-claim-receipt",
+   "refs/heads/lane/fe-meals-journey-locator",
+   "refs/heads/lane/fe-meals-pretick-walked",
+   "refs/heads/lane/fe-meals-reconcile-ui",
+   "refs/heads/lane/fe-meals-statement-surface",
+   "refs/heads/lane/fe-pos-clock",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-bootstrap",
+   "refs/heads/lane/fe-wf-contact-imported",
+   "refs/heads/lane/fe-wf-correction-path",
+   "refs/heads/lane/fe-wf-invite-list-revoke",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-onboard",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/fe-wf-self",
+   "refs/heads/lane/growth-admin",
+   "refs/heads/lane/journey-workforce",
+   "refs/heads/lane/margin-menu-margin-ui",
+   "refs/heads/lane/margin-recipes",
+   "refs/heads/lane/meals-admin",
+   "refs/heads/lane/meals-enrol-pretick",
+   "refs/heads/lane/meals-enrol-ui",
+   "refs/heads/lane/meals-reachable-web",
+   "refs/heads/lane/menu-allergen-matrix",
+   "refs/heads/lane/mrg-coverage-unknown",
+   "refs/heads/lane/mrg-lag-visible",
+   "refs/heads/lane/mrg-recipe-revise-ui",
+   "refs/heads/lane/mrg-waste-frontend",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty",
+   "refs/heads/lane/train-evidence-pack-ui",
+   "refs/heads/lane/train-readonly-visible",
+   "refs/heads/lane/training-admin",
+   "refs/heads/lane/wf-adjust-address",
+   "refs/heads/lane/wf-idreg",
+   "refs/heads/lane/wf-kodeoversikt-ui",
+   "refs/heads/lane/wf-pubhist",
+   "refs/heads/lane/wf-roles-ui",
+   "refs/heads/lane/workforce-roster",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM"
+  ],
+  "n_revisions_seen": 134,
+  "added_lines": 368,
+  "added_line_coverage": [
+   {
+    "ref": "refs/heads/lane/wf-pubhist",
+    "hit": 259,
+    "of": 368,
+    "pct": 70.4
+   },
+   {
+    "ref": "refs/heads/candidate/fe-compose-2026-08-05",
+    "hit": 167,
+    "of": 368,
+    "pct": 45.4
+   },
+   {
+    "ref": "refs/heads/lane/collect-review-conditions",
+    "hit": 167,
+    "of": 368,
+    "pct": 45.4
+   },
+   {
+    "ref": "refs/heads/lane/fe-meals-statement-surface",
+    "hit": 57,
+    "of": 368,
+    "pct": 15.5
+   },
+   {
+    "ref": "refs/heads/lane/train-evidence-pack-ui",
+    "hit": 55,
+    "of": 368,
+    "pct": 14.9
+   },
+   {
+    "ref": "refs/heads/lane/wf-roles-ui",
+    "hit": 40,
+    "of": 368,
+    "pct": 10.9
+   },
+   {
+    "ref": "refs/heads/lane/mrg-recipe-revise-ui",
+    "hit": 15,
+    "of": 368,
+    "pct": 4.1
+   },
+   {
+    "ref": "refs/heads/lane/fe-training-meals-surfaces",
+    "hit": 6,
+    "of": 368,
+    "pct": 1.6
+   }
+  ]
+ },
+ "translations/en.ts": {
+  "status": " M",
+  "wt_blob": "3481fc1ed31e3d97c42a6617dc97616eef90a152",
+  "class": "PENDING",
+  "interested_refs": [
+   "detached:wt-author",
+   "detached:wt-rateui",
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/feature/swiss",
+   "refs/heads/lane/coercion-write-paths",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/events-admin",
+   "refs/heads/lane/fe-events-margin-surfaces",
+   "refs/heads/lane/fe-growth-suppressed-key",
+   "refs/heads/lane/fe-meals-claim-receipt",
+   "refs/heads/lane/fe-meals-journey-locator",
+   "refs/heads/lane/fe-meals-pretick-walked",
+   "refs/heads/lane/fe-meals-reconcile-ui",
+   "refs/heads/lane/fe-meals-statement-surface",
+   "refs/heads/lane/fe-pos-clock",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-bootstrap",
+   "refs/heads/lane/fe-wf-contact-imported",
+   "refs/heads/lane/fe-wf-correction-path",
+   "refs/heads/lane/fe-wf-invite-list-revoke",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-onboard",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/fe-wf-self",
+   "refs/heads/lane/growth-admin",
+   "refs/heads/lane/journey-workforce",
+   "refs/heads/lane/margin-menu-margin-ui",
+   "refs/heads/lane/margin-recipes",
+   "refs/heads/lane/meals-admin",
+   "refs/heads/lane/meals-enrol-pretick",
+   "refs/heads/lane/meals-enrol-ui",
+   "refs/heads/lane/meals-reachable-web",
+   "refs/heads/lane/menu-allergen-matrix",
+   "refs/heads/lane/mrg-coverage-unknown",
+   "refs/heads/lane/mrg-lag-visible",
+   "refs/heads/lane/mrg-recipe-revise-ui",
+   "refs/heads/lane/mrg-waste-frontend",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty",
+   "refs/heads/lane/train-evidence-pack-ui",
+   "refs/heads/lane/train-readonly-visible",
+   "refs/heads/lane/training-admin",
+   "refs/heads/lane/wf-adjust-address",
+   "refs/heads/lane/wf-idreg",
+   "refs/heads/lane/wf-kodeoversikt-ui",
+   "refs/heads/lane/wf-pubhist",
+   "refs/heads/lane/wf-roles-ui",
+   "refs/heads/lane/workforce-roster",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM"
+  ],
+  "n_revisions_seen": 133,
+  "added_lines": 367,
+  "added_line_coverage": [
+   {
+    "ref": "refs/heads/lane/wf-pubhist",
+    "hit": 258,
+    "of": 367,
+    "pct": 70.3
+   },
+   {
+    "ref": "refs/heads/candidate/fe-compose-2026-08-05",
+    "hit": 167,
+    "of": 367,
+    "pct": 45.5
+   },
+   {
+    "ref": "refs/heads/lane/collect-review-conditions",
+    "hit": 167,
+    "of": 367,
+    "pct": 45.5
+   },
+   {
+    "ref": "refs/heads/lane/fe-meals-statement-surface",
+    "hit": 57,
+    "of": 367,
+    "pct": 15.5
+   },
+   {
+    "ref": "refs/heads/lane/train-evidence-pack-ui",
+    "hit": 55,
+    "of": 367,
+    "pct": 15.0
+   },
+   {
+    "ref": "refs/heads/lane/wf-roles-ui",
+    "hit": 40,
+    "of": 367,
+    "pct": 10.9
+   },
+   {
+    "ref": "refs/heads/lane/mrg-recipe-revise-ui",
+    "hit": 15,
+    "of": 367,
+    "pct": 4.1
+   },
+   {
+    "ref": "refs/heads/lane/fe-training-meals-surfaces",
+    "hit": 6,
+    "of": 367,
+    "pct": 1.6
+   }
+  ]
+ },
+ "translations/no.ts": {
+  "status": " M",
+  "wt_blob": "2970bc7b1d9d9f337b6668b6023d6f2d1221a19f",
+  "class": "PENDING",
+  "interested_refs": [
+   "detached:wt-author",
+   "detached:wt-rateui",
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/feature/swiss",
+   "refs/heads/lane/coercion-write-paths",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/events-admin",
+   "refs/heads/lane/fe-events-margin-surfaces",
+   "refs/heads/lane/fe-growth-suppressed-key",
+   "refs/heads/lane/fe-meals-claim-receipt",
+   "refs/heads/lane/fe-meals-journey-locator",
+   "refs/heads/lane/fe-meals-pretick-walked",
+   "refs/heads/lane/fe-meals-reconcile-ui",
+   "refs/heads/lane/fe-meals-statement-surface",
+   "refs/heads/lane/fe-pos-clock",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-bootstrap",
+   "refs/heads/lane/fe-wf-contact-imported",
+   "refs/heads/lane/fe-wf-correction-path",
+   "refs/heads/lane/fe-wf-invite-list-revoke",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-onboard",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/fe-wf-self",
+   "refs/heads/lane/growth-admin",
+   "refs/heads/lane/journey-workforce",
+   "refs/heads/lane/margin-menu-margin-ui",
+   "refs/heads/lane/margin-recipes",
+   "refs/heads/lane/meals-admin",
+   "refs/heads/lane/meals-enrol-pretick",
+   "refs/heads/lane/meals-enrol-ui",
+   "refs/heads/lane/meals-reachable-web",
+   "refs/heads/lane/menu-allergen-matrix",
+   "refs/heads/lane/mrg-coverage-unknown",
+   "refs/heads/lane/mrg-lag-visible",
+   "refs/heads/lane/mrg-recipe-revise-ui",
+   "refs/heads/lane/mrg-waste-frontend",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty",
+   "refs/heads/lane/train-evidence-pack-ui",
+   "refs/heads/lane/train-readonly-visible",
+   "refs/heads/lane/training-admin",
+   "refs/heads/lane/wf-adjust-address",
+   "refs/heads/lane/wf-idreg",
+   "refs/heads/lane/wf-kodeoversikt-ui",
+   "refs/heads/lane/wf-pubhist",
+   "refs/heads/lane/wf-roles-ui",
+   "refs/heads/lane/workforce-roster",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM"
+  ],
+  "n_revisions_seen": 138,
+  "added_lines": 376,
+  "added_line_coverage": [
+   {
+    "ref": "refs/heads/lane/wf-pubhist",
+    "hit": 264,
+    "of": 376,
+    "pct": 70.2
+   },
+   {
+    "ref": "refs/heads/candidate/fe-compose-2026-08-05",
+    "hit": 173,
+    "of": 376,
+    "pct": 46.0
+   },
+   {
+    "ref": "refs/heads/lane/collect-review-conditions",
+    "hit": 173,
+    "of": 376,
+    "pct": 46.0
+   },
+   {
+    "ref": "refs/heads/lane/train-evidence-pack-ui",
+    "hit": 61,
+    "of": 376,
+    "pct": 16.2
+   },
+   {
+    "ref": "refs/heads/lane/fe-meals-statement-surface",
+    "hit": 57,
+    "of": 376,
+    "pct": 15.2
+   },
+   {
+    "ref": "refs/heads/lane/wf-roles-ui",
+    "hit": 40,
+    "of": 376,
+    "pct": 10.6
+   },
+   {
+    "ref": "refs/heads/lane/mrg-recipe-revise-ui",
+    "hit": 15,
+    "of": 376,
+    "pct": 4.0
+   },
+   {
+    "ref": "refs/heads/lane/fe-training-meals-surfaces",
+    "hit": 7,
+    "of": 376,
+    "pct": 1.9
+   }
+  ]
+ },
+ "utils/cross-currency.js": {
+  "status": "??",
+  "wt_blob": "161752ac7b719e552127b8ea525671376dda8dba",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "n_revisions_seen": 1
+ },
+ "utils/growth/growth-guest-client.js": {
+  "status": " M",
+  "wt_blob": "39acf88db3dcb483755f7dc9ba5d0cb0e69f0e14",
+  "class": "PENDING",
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-gr-withdraw-origin"
+  ],
+  "n_revisions_seen": 2,
+  "added_lines": 20,
+  "added_line_coverage": [
+   {
+    "ref": "refs/heads/candidate/fe-compose-2026-08-05",
+    "hit": 0,
+    "of": 20,
+    "pct": 0.0
+   },
+   {
+    "ref": "refs/heads/lane/collect-review-conditions",
+    "hit": 0,
+    "of": 20,
+    "pct": 0.0
+   },
+   {
+    "ref": "refs/heads/lane/fe-gr-withdraw-origin",
+    "hit": 0,
+    "of": 20,
+    "pct": 0.0
+   }
+  ]
+ },
+ "utils/margin/money.js": {
+  "status": " M",
+  "wt_blob": "ce20f296bdc0424e18d3621e10a3da58f82bbc96",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/margin-menu-margin-ui",
+   "refs/heads/lane/price-crosscurrency"
+  ],
+  "n_revisions_seen": 2
+ },
+ "utils/margin/recipe-client.js": {
+  "status": " M",
+  "wt_blob": "efa8f91c738d1961b79523baf8ce34fb4e8f11f1",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "0c483de9dbb22220f74f6b3fca9a6c8967d67d85",
+  "introducing_refs": [
+   "refs/heads/lane/mrg-recipe-revise-ui"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 1,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/mrg-recipe-revise-ui"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/margin-menu-margin-ui",
+   "refs/heads/lane/margin-recipes",
+   "refs/heads/lane/mrg-recipe-revise-ui"
+  ],
+  "n_revisions_seen": 6
+ },
+ "utils/margin/statement-view.js": {
+  "status": " M",
+  "wt_blob": "5b7a6d5b615e1a54dfe37485b553ab7908c92aed",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/mrg-coverage-unknown"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/mrg-coverage-unknown"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/ev-stale-cause",
+   "refs/heads/lane/fe-events-margin-surfaces",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/mrg-coverage-unknown",
+   "refs/heads/lane/statute-evidence-world",
+   "refs/heads/lane/statute-honesty"
+  ],
+  "n_revisions_seen": 4
+ },
+ "utils/meals/statement-client.js": {
+  "status": "??",
+  "wt_blob": "3359a1d3c821b40f5630706a3e31532b5d733b6f",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "introducing_refs": [
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "n_revisions_seen": 1
+ },
+ "utils/meals/statement-view.js": {
+  "status": "??",
+  "wt_blob": "bf9b47292eb12d1c8d550990a83e501f17b8ae5b",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "introducing_refs": [
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-meals-statement-surface"
+  ],
+  "n_revisions_seen": 1
+ },
+ "utils/price.js": {
+  "status": " M",
+  "wt_blob": "4673f24c2d78dff2c7c53acf3b8dad494de294b1",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "b150668b7de1992dd858dc2b2d5be4c2b7017def",
+  "introducing_refs": [
+   "refs/lanes/L-XZ-NEGATED-ABSENCE"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+   "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+   "refs/lanes/L-PRICE-BYPASS-FIVE",
+   "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "refs/lanes/L-XZ-NEGATED-ABSENCE",
+   "refs/lanes/L-XZ-RESIDUAL-SITES"
+  ],
+  "n_revisions_seen": 7
+ },
+ "utils/training/evidence.js": {
+  "status": "??",
+  "wt_blob": "d30e2652f0e7431a344a8a54c3f772bd080a43e9",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "introducing_refs": [
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "n_revisions_seen": 2
+ },
+ "utils/training/training-client.js": {
+  "status": " M",
+  "wt_blob": "4d167877df6d8b07ead6f204c94edcca83b6bdca",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "01b868674406021988a5263b0bc3a531d0fd8996",
+  "introducing_refs": [
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/train-evidence-pack-ui"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-training-meals-surfaces",
+   "refs/heads/lane/train-evidence-pack-ui",
+   "refs/heads/lane/training-admin"
+  ],
+  "n_revisions_seen": 5
+ },
+ "utils/workforce-rates/rate-timeline.js": {
+  "status": " M",
+  "wt_blob": "2c627a059a92e77420586d265a1d22c6ebb59482",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+  "introducing_refs": [
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/heads/lane/price-cleanup-two",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/heads/lane/price-cleanup-two",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "interested_refs": [
+   "detached:wt-rateui",
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/offers-page-hundredfold",
+   "refs/heads/lane/price-cleanup-two",
+   "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+  ],
+  "n_revisions_seen": 2
+ },
+ "utils/workforce-rates/rates-client.js": {
+  "status": " M",
+  "wt_blob": "a7711002b05eccfe29726ae8ee5e6209ff6623df",
+  "class": "PENDING",
+  "interested_refs": [
+   "detached:wt-rateui",
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/wf-idreg",
+   "refs/heads/lane/wf-kodeoversikt-ui"
+  ],
+  "n_revisions_seen": 3,
+  "added_lines": 6,
+  "added_line_coverage": [
+   {
+    "ref": "refs/heads/candidate/fe-compose-2026-08-05",
+    "hit": 0,
+    "of": 6,
+    "pct": 0.0
+   },
+   {
+    "ref": "refs/heads/lane/collect-review-conditions",
+    "hit": 0,
+    "of": 6,
+    "pct": 0.0
+   },
+   {
+    "ref": "refs/heads/lane/wf-idreg",
+    "hit": 0,
+    "of": 6,
+    "pct": 0.0
+   },
+   {
+    "ref": "refs/heads/lane/wf-kodeoversikt-ui",
+    "hit": 0,
+    "of": 6,
+    "pct": 0.0
+   }
+  ]
+ },
+ "utils/workforce/api-client.js": {
+  "status": " M",
+  "wt_blob": "7a8f70c96ac726a653c5548386cebe9ca87676d5",
+  "class": "PENDING",
+  "interested_refs": [
+   "detached:wt-author",
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/wf-idreg",
+   "refs/heads/lane/wf-kodeoversikt-ui",
+   "refs/heads/lane/workforce-roster"
+  ],
+  "n_revisions_seen": 7,
+  "added_lines": 38,
+  "added_line_coverage": [
+   {
+    "ref": "refs/heads/candidate/fe-compose-2026-08-05",
+    "hit": 22,
+    "of": 38,
+    "pct": 57.9
+   },
+   {
+    "ref": "refs/heads/lane/collect-review-conditions",
+    "hit": 22,
+    "of": 38,
+    "pct": 57.9
+   },
+   {
+    "ref": "refs/heads/lane/wf-idreg",
+    "hit": 22,
+    "of": 38,
+    "pct": 57.9
+   },
+   {
+    "ref": "refs/heads/lane/wf-kodeoversikt-ui",
+    "hit": 22,
+    "of": 38,
+    "pct": 57.9
+   },
+   {
+    "ref": "refs/heads/lane/workforce-roster",
+    "hit": 5,
+    "of": 38,
+    "pct": 13.2
+   }
+  ]
+ },
+ "utils/workforce/delivery-failures.js": {
+  "status": "??",
+  "wt_blob": "51d3fdf21eeb431e0b4f344e300fee55206093b9",
+  "class": "PENDING",
+  "interested_refs": [],
+  "n_revisions_seen": 0,
+  "added_line_coverage": []
+ },
+ "utils/workforce/pos-clock-client.js": {
+  "status": "??",
+  "wt_blob": "5e7030c9b5e94881bbd787c57386e1a8a35fedca",
+  "class": "PENDING",
+  "interested_refs": [
+   "refs/heads/lane/fe-pos-clock",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-oplink"
+  ],
+  "n_revisions_seen": 1,
+  "added_line_coverage": []
+ },
+ "utils/workforce/pos-clock-state.js": {
+  "status": "??",
+  "wt_blob": "016ece9461d56f13012a7f3667a45e922d9307a4",
+  "class": "PENDING",
+  "interested_refs": [],
+  "n_revisions_seen": 0,
+  "added_line_coverage": []
+ },
+ "utils/workforce/publication-receipts.js": {
+  "status": "??",
+  "wt_blob": "2440031177cac418fee6ff26d68fea15e99b5412",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "2d86446b746cff8477c4d6dbde316aceecda811b",
+  "introducing_refs": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "interested_refs": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "n_revisions_seen": 1
+ },
+ "utils/workforce/roster-client.js": {
+  "status": " M",
+  "wt_blob": "313985ff4cee716bdcd97a65fc83a02da152ac4f",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "ff21e488eae8181cc8dbe302147d335f9d3ff7ec",
+  "introducing_refs": [
+   "refs/heads/lane/wf-roles-ui"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/wf-roles-ui"
+  ],
+  "interested_refs": [
+   "refs/heads/candidate/fe-compose-2026-08-05",
+   "refs/heads/lane/collect-review-conditions",
+   "refs/heads/lane/fe-wf-blind-bind-name",
+   "refs/heads/lane/fe-wf-bootstrap",
+   "refs/heads/lane/fe-wf-contact-imported",
+   "refs/heads/lane/fe-wf-invite-list-revoke",
+   "refs/heads/lane/fe-wf-link-deadend",
+   "refs/heads/lane/fe-wf-onboard",
+   "refs/heads/lane/fe-wf-oplink",
+   "refs/heads/lane/fe-wf-self",
+   "refs/heads/lane/journey-workforce",
+   "refs/heads/lane/wf-adjust-address",
+   "refs/heads/lane/wf-roles-ui",
+   "refs/heads/lane/workforce-roster"
+  ],
+  "n_revisions_seen": 12
+ },
+ "utils/workforce/schedule-client.js": {
+  "status": " M",
+  "wt_blob": "cd9f41b8b69e4057224a6a3b661defcc7adf2b81",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "2d86446b746cff8477c4d6dbde316aceecda811b",
+  "introducing_refs": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "interested_refs": [
+   "detached:wt-author",
+   "refs/heads/lane/wf-pubhist"
+  ],
+  "n_revisions_seen": 6
+ },
+ "utils/workforce/timesheet-client.js": {
+  "status": "??",
+  "wt_blob": "6e78582317f697d06f5b291f56d1fc30f020b1d3",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "618efc88750fa4adb59769b859d3975bfcdc1f3b",
+  "introducing_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "interested_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "n_revisions_seen": 1
+ },
+ "utils/workforce/timesheet.js": {
+  "status": "??",
+  "wt_blob": "db65eeb6126525e0e17fd14d4208c6b1b1cc37d8",
+  "class": "already-committed-elsewhere",
+  "blob_commit": "618efc88750fa4adb59769b859d3975bfcdc1f3b",
+  "introducing_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "commits_ahead_of_that_commit_on_that_ref": 0,
+  "all_containing_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "interested_refs": [
+   "refs/heads/lane/wf-timesheet-ui"
+  ],
+  "n_revisions_seen": 1
+ },
+ "world.config": {
+  "status": "??",
+  "wt_blob": "78e25318af959462c0d7f3599990e6e25e32c413",
+  "class": "PENDING",
+  "interested_refs": [],
+  "n_revisions_seen": 0,
+  "added_line_coverage": []
+ }
+}

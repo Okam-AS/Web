@@ -1,0 +1,5 @@
+lane branch  lane/fixture-flag-store @  (worktree /Users/svendaneel/okam/web-fixtureflags)
+base         feature/restaurant-modules @ e34977a
+full suite   run-03-full-suite.log — 21/22 green; workforce-schedule-publish reds identically at the base (rule-pack, unrelated)
+divergence   divergence.log — 1 finding, byte-identical at the base (growth-newsletter.js:332)
+ports        E2E_FIXTURE_PORT=4111 E2E_WEB_PORT=3111 — never 4010

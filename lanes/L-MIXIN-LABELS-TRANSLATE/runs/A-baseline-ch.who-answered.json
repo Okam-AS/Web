@@ -1,0 +1,14 @@
+{
+  "label": "A-baseline-ch",
+  "edition": "ch",
+  "grantedFixturePort": 4853,
+  "grantedWebPort": 3853,
+  "health": "{\"ok\":true,\"port\":4853}",
+  "holderPid": "10603",
+  "holderCwd": "/Users/svendaneel/okam/web-mixinlabels",
+  "holderCommand": "node test/e2e/fixture/api-server.js",
+  "webPid": "10605",
+  "webCwd": "/Users/svendaneel/okam/web-mixinlabels",
+  "lsof": "p10603 f12 n127.0.0.1:4853 ",
+  "capturedAt": "2026-08-05T05:57:12Z"
+}

@@ -1,0 +1,19 @@
+FAILING SUITES IN THE FULL FRONTEND RUN: 1
+
+  lanes/L-JOURNEY-PORT-HARDCODED/portproof/port-resolution.spec.js lane L-JOURNEY-PORT-HARDCODED (its own untracked scratch)
+
+WITH THIS LANE'S WORK IN THE TREE:
+  lanes/L-JOURNEY-PORT-HARDCODED/portproof/port-resolution.spec.js FAIL (suite failed to LOAD)
+
+WITH EVERY FILE THIS LANE TOUCHED BACK AT HEAD:
+  lanes/L-JOURNEY-PORT-HARDCODED/portproof/port-resolution.spec.js FAIL (suite failed to LOAD)
+
+RESTORE  every tracked file re-read byte-identical: True
+         both new files back in place: True
+
+VERDICT
+  fails identically WITHOUT this lane's work, so NOT this lane's: 1 of 1
+    lanes/L-JOURNEY-PORT-HARDCODED/portproof/port-resolution.spec.js lane L-JOURNEY-PORT-HARDCODED (its own untracked scratch)
+  none changed.
+
+THIS LANE'S OWN SUITE, after restoring: PASS

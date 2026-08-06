@@ -1,0 +1,17 @@
+fixture sha256 cf1f7e789772250112f97df2f9fa391094568efc4a51a0c87bff7eaa5bc0f293
+
+---- CLEAN — the refusal as shipped ----
+  HTTP 403
+  body: {"type":"https://okam.test/problems/meals.invitation-contact-mismatch","title":"meals.invitation-contact-mismatch","status":403,"code":"meals.invitation-contact-mismatch","detail":"This invitation was issued to a different contact."}
+  withheld values PRESENT ON THE WIRE: none
+
+---- MUTATED — the refusal echoes the intended contact ----
+  HTTP 403
+  body: {"type":"https://okam.test/problems/meals.invitation-contact-mismatch","title":"meals.invitation-contact-mismatch","status":403,"code":"meals.invitation-contact-mismatch","detail":"This invitation was issued to a different contact.","intendedContact":"marit@example.test"}
+  withheld values PRESENT ON THE WIRE: ["marit@example.test","marit"]
+
+fixture restored: cf1f7e789772250112f97df2f9fa391094568efc4a51a0c87bff7eaa5bc0f293 (identical)
+
+CONCLUSION: the mutation is REAL — it put ["marit@example.test","marit"] in the 403 body,
+and `meals-guest-claim` still exited 0. The journey asserts on the RENDERED PAGE only,
+so a server that discloses the invitee to a token holder ships green.

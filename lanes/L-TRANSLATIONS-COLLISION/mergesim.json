@@ -1,0 +1,581 @@
+[
+ {
+  "lane": "feature/swiss",
+  "path": "translations/no.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "feature/swiss",
+  "path": "translations/en.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "feature/swiss",
+  "path": "translations/de.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/coercion-write-paths",
+  "path": "translations/no.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/coercion-write-paths",
+  "path": "translations/en.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/coercion-write-paths",
+  "path": "translations/de.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/collect-review-conditions",
+  "path": "translations/no.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/collect-review-conditions",
+  "path": "translations/en.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/collect-review-conditions",
+  "path": "translations/de.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/events-admin",
+  "path": "translations/no.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/events-admin",
+  "path": "translations/en.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/events-admin",
+  "path": "translations/de.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-events-margin-surfaces",
+  "path": "translations/no.ts",
+  "conflicts": 0,
+  "dups": {
+   "mrgs_err_projection_behind": [
+    "'Uken ble ikke fryst: salgsprojeksjonen ligger {lag} poster bak kassen, s\u00e5 tallene ville blitt frosset som et gulv. Oppgj\u00f8ret st\u00e5r fortsatt \u00e5pent. Projeksjonen tar igjen av seg selv \u2014 beregn p\u00e5 nytt og frys om et par minutter.'",
+    "'Salgsprojeksjonen ligger {lag} journalposter bak kassen, s\u00e5 ukens tall er et gulv \u2014 ekte, men for lave med et ukjent bel\u00f8p. Ferdigstilling er avvist for ikke \u00e5 fryse gulvet som ukens fasit. Projeksjonen henter seg inn av seg selv i l\u00f8pet av et par minutter: beregn p\u00e5 nytt og ferdigstill da. Oppgj\u00f8ret st\u00e5r \u00e5pent og redigerbart i mellomtiden.'"
+   ],
+   "mrgs_err_projection_behind_unsized": [
+    "'Uken ble ikke fryst: salgsprojeksjonen ligger bak kassen, og serveren sa ikke hvor langt. Oppgj\u00f8ret st\u00e5r fortsatt \u00e5pent. Projeksjonen tar igjen av seg selv \u2014 beregn p\u00e5 nytt og frys om et par minutter.'",
+    "'Salgsprojeksjonen ligger bak kassen, s\u00e5 ukens tall er et gulv \u2014 ekte, men for lave med et ukjent bel\u00f8p. Ferdigstilling er avvist. Projeksjonen henter seg inn av seg selv i l\u00f8pet av et par minutter.'"
+   ]
+  }
+ },
+ {
+  "lane": "lane/fe-events-margin-surfaces",
+  "path": "translations/en.ts",
+  "conflicts": 0,
+  "dups": {
+   "mrgs_err_projection_behind": [
+    "'The week was not frozen: the sales projection is {lag} entries behind the till, so the figures would have frozen as a floor. The statement is still open. The projection catches up on its own \u2014 recalculate and freeze in a couple of minutes.'",
+    "'The sales projection is {lag} journal entries behind the till, so this week figures are a floor \u2014 real, and short by an unknown amount. Finalizing was refused rather than freezing that floor as the week record. The projector catches up on its own within a couple of minutes: recalculate and finalize then. The statement stays open and editable meanwhile.'"
+   ],
+   "mrgs_err_projection_behind_unsized": [
+    "'The week was not frozen: the sales projection is behind the till, and the server did not say how far. The statement is still open. The projection catches up on its own \u2014 recalculate and freeze in a couple of minutes.'",
+    "'The sales projection is behind the till, so this week figures are a floor \u2014 real, and short by an unknown amount. Finalizing was refused. The projector catches up on its own within a couple of minutes.'"
+   ]
+  }
+ },
+ {
+  "lane": "lane/fe-events-margin-surfaces",
+  "path": "translations/de.ts",
+  "conflicts": 0,
+  "dups": {
+   "mrgs_err_projection_behind": [
+    "'Die Woche wurde nicht eingefroren: Die Verkaufsprojektion liegt {lag} Eintr\u00e4ge hinter der Kasse, die Zahlen w\u00e4ren also als Untergrenze eingefroren. Der Abschluss bleibt offen. Die Projektion holt von selbst auf \u2014 in ein paar Minuten neu berechnen und einfrieren.'",
+    "'Die Umsatzprojektion liegt {lag} Journaleintr\u00e4ge hinter der Kasse, die Zahlen dieser Woche sind also eine Untergrenze \u2014 echt, aber um einen unbekannten Betrag zu niedrig. Die Finalisierung wurde abgelehnt, statt diese Untergrenze als Wochenergebnis einzufrieren. Die Projektion holt innerhalb weniger Minuten von selbst auf: dann neu berechnen und finalisieren. Der Abschluss bleibt derweil offen und bearbeitbar.'"
+   ],
+   "mrgs_err_projection_behind_unsized": [
+    "'Die Woche wurde nicht eingefroren: Die Verkaufsprojektion liegt hinter der Kasse, und der Server hat nicht gesagt, wie weit. Der Abschluss bleibt offen. Die Projektion holt von selbst auf \u2014 in ein paar Minuten neu berechnen und einfrieren.'",
+    "'Die Umsatzprojektion liegt hinter der Kasse, die Zahlen dieser Woche sind also eine Untergrenze \u2014 echt, aber um einen unbekannten Betrag zu niedrig. Die Finalisierung wurde abgelehnt. Die Projektion holt innerhalb weniger Minuten von selbst auf.'"
+   ]
+  }
+ },
+ {
+  "lane": "lane/fe-meals-journey-locator",
+  "path": "translations/no.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-meals-journey-locator",
+  "path": "translations/en.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-meals-journey-locator",
+  "path": "translations/de.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-meals-pretick-walked",
+  "path": "translations/no.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-meals-pretick-walked",
+  "path": "translations/en.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-meals-pretick-walked",
+  "path": "translations/de.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-meals-reconcile-ui",
+  "path": "translations/no.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-meals-reconcile-ui",
+  "path": "translations/en.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-meals-reconcile-ui",
+  "path": "translations/de.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-meals-statement-surface",
+  "path": "translations/no.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-meals-statement-surface",
+  "path": "translations/en.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-meals-statement-surface",
+  "path": "translations/de.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-pos-clock",
+  "path": "translations/no.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-pos-clock",
+  "path": "translations/en.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-pos-clock",
+  "path": "translations/de.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-training-meals-surfaces",
+  "path": "translations/no.ts",
+  "conflicts": 3,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-training-meals-surfaces",
+  "path": "translations/en.ts",
+  "conflicts": 3,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-training-meals-surfaces",
+  "path": "translations/de.ts",
+  "conflicts": 3,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-wf-blind-bind-name",
+  "path": "translations/no.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-wf-blind-bind-name",
+  "path": "translations/en.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-wf-blind-bind-name",
+  "path": "translations/de.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-wf-link-deadend",
+  "path": "translations/no.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-wf-link-deadend",
+  "path": "translations/en.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-wf-link-deadend",
+  "path": "translations/de.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-wf-oplink",
+  "path": "translations/no.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-wf-oplink",
+  "path": "translations/en.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-wf-oplink",
+  "path": "translations/de.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/fe-wf-self",
+  "path": "translations/no.ts",
+  "conflicts": 0,
+  "dups": {
+   "nav_growth_privacy": [
+    "'Personvern'",
+    "'Personvern'"
+   ]
+  }
+ },
+ {
+  "lane": "lane/fe-wf-self",
+  "path": "translations/en.ts",
+  "conflicts": 0,
+  "dups": {
+   "nav_growth_privacy": [
+    "'Privacy'",
+    "'Privacy'"
+   ]
+  }
+ },
+ {
+  "lane": "lane/fe-wf-self",
+  "path": "translations/de.ts",
+  "conflicts": 0,
+  "dups": {
+   "nav_growth_privacy": [
+    "'Datenschutz'",
+    "'Datenschutz'"
+   ]
+  }
+ },
+ {
+  "lane": "lane/growth-admin",
+  "path": "translations/no.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/growth-admin",
+  "path": "translations/en.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/growth-admin",
+  "path": "translations/de.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/margin-recipes",
+  "path": "translations/no.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/margin-recipes",
+  "path": "translations/en.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/margin-recipes",
+  "path": "translations/de.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/meals-enrol-pretick",
+  "path": "translations/no.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/meals-enrol-pretick",
+  "path": "translations/en.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/meals-enrol-pretick",
+  "path": "translations/de.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/meals-enrol-ui",
+  "path": "translations/no.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/meals-enrol-ui",
+  "path": "translations/en.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/meals-enrol-ui",
+  "path": "translations/de.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/meals-reachable-web",
+  "path": "translations/no.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/meals-reachable-web",
+  "path": "translations/en.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/meals-reachable-web",
+  "path": "translations/de.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/mrg-lag-visible",
+  "path": "translations/no.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/mrg-lag-visible",
+  "path": "translations/en.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/mrg-lag-visible",
+  "path": "translations/de.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/mrg-waste-frontend",
+  "path": "translations/no.ts",
+  "conflicts": 0,
+  "dups": {
+   "mrgs_waste_err_quantity": [
+    "'Mengden m\u00e5 v\u00e6re et tall st\u00f8rre enn null, med opptil seks desimaler og uten enhet \u2014 for eksempel 2,5. Ingenting ble sendt.'",
+    "'Mengden m\u00e5 v\u00e6re et tall. La feltet st\u00e5 tomt om du ikke vil oppgi mengde.'"
+   ]
+  }
+ },
+ {
+  "lane": "lane/mrg-waste-frontend",
+  "path": "translations/en.ts",
+  "conflicts": 0,
+  "dups": {
+   "mrgs_waste_err_quantity": [
+    "'A quantity must be a number greater than zero, with at most six decimals and no unit \u2014 for example 2.5. Nothing was sent.'",
+    "'The quantity must be a number. Leave the field empty to state no quantity.'"
+   ]
+  }
+ },
+ {
+  "lane": "lane/mrg-waste-frontend",
+  "path": "translations/de.ts",
+  "conflicts": 0,
+  "dups": {
+   "mrgs_waste_err_quantity": [
+    "'Eine Menge muss eine Zahl gr\u00f6sser als null sein, mit h\u00f6chstens sechs Dezimalstellen und ohne Einheit \u2014 zum Beispiel 2,5. Es wurde nichts gesendet.'",
+    "'Die Menge muss eine Zahl sein. Feld leer lassen, wenn keine Menge angegeben wird.'"
+   ]
+  }
+ },
+ {
+  "lane": "lane/train-evidence-pack-ui",
+  "path": "translations/no.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/train-evidence-pack-ui",
+  "path": "translations/en.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/train-evidence-pack-ui",
+  "path": "translations/de.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/train-readonly-visible",
+  "path": "translations/no.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/train-readonly-visible",
+  "path": "translations/en.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/train-readonly-visible",
+  "path": "translations/de.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/training-admin",
+  "path": "translations/no.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/training-admin",
+  "path": "translations/en.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/training-admin",
+  "path": "translations/de.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/wf-idreg",
+  "path": "translations/no.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/wf-idreg",
+  "path": "translations/en.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/wf-idreg",
+  "path": "translations/de.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/wf-kodeoversikt-ui",
+  "path": "translations/no.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/wf-kodeoversikt-ui",
+  "path": "translations/en.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/wf-kodeoversikt-ui",
+  "path": "translations/de.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/wf-pubhist",
+  "path": "translations/no.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/wf-pubhist",
+  "path": "translations/en.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/wf-pubhist",
+  "path": "translations/de.ts",
+  "conflicts": 0,
+  "dups": {}
+ },
+ {
+  "lane": "lane/workforce-roster",
+  "path": "translations/no.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/workforce-roster",
+  "path": "translations/en.ts",
+  "conflicts": 1,
+  "dups": {}
+ },
+ {
+  "lane": "lane/workforce-roster",
+  "path": "translations/de.ts",
+  "conflicts": 1,
+  "dups": {}
+ }
+]

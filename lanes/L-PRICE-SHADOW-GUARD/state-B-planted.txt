@@ -1,0 +1,91 @@
+### STATE B — a new component declares its own priceLabel (must RED)
+
+FAIL test/price-gate-shadow.test.js
+  the extractor tells a definition apart from a call
+    ✓ a method a component declares IS found (1 ms)
+    ✓ the same name declared as a computed or a prop is found too
+    ✓ an `async` or quoted key is still a key
+    ✓ a quoted shadow is found: double-quoted, function value
+    ✓ a quoted shadow is found: single-quoted, function value
+    ✓ a quoted shadow is found: double-quoted, arrow value
+    ✓ a quoted shadow is found: quoted, after a string-valued property
+    ✓ a quoted shadow is found: quoted, after a shorthand method
+    ✓ a quoted shadow is found: quoted, in computed
+    ✓ a quoted shadow is found: quoted, in props
+    ✓ a quoted shadow is found: quoted, value on the next line
+    ✓ a quoted shadow is found: quoted, with a stray brace inside a neighbouring string
+    ✓ a CALL inside a method body is not a definition (1 ms)
+    ✓ a call in the TEMPLATE is not a definition
+    ✓ a key of a NESTED object inside a method is not a component member
+    ✓ the name inside a comment or a string cannot fake a definition
+    ✓ the KNOWN LIMIT is a data-declared shadow, and it is stated rather than implied
+  the guard is actually looking at something
+    ✓ the guarded names are real members of the shipped mixin
+    ✓ the walk opened the estate, not an empty directory
+    ✓ and it parsed real option blocks out of them
+  no component takes a silent exit from the money gate
+    ✕ every component that redeclares a gated money member is one the ledger already names (2 ms)
+    ✓ every ledger entry still describes a shadow that is really there
+    ✓ every ledger entry names an owner and says why, at length
+    ✕ there is no ledger left: every surface in the estate is on the gate (1 ms)
+  the customer modal, in a real DOM, after its shadow was removed
+    ✓ a balance that never arrived is withheld, with the estate mark (12 ms)
+    ✓ a genuine zero balance is still a figure (2 ms)
+    ✓ a real balance prints in the shape the rest of this admin uses (2 ms)
+    ✓ absent, zero and a real balance are three different renderings (5 ms)
+
+  ● no component takes a silent exit from the money gate › every component that redeclares a gated money member is one the ledger already names
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "components/molecules/ShadowPlantProbe.vue:13 declares `priceLabel` in `methods`, which in Vue 2 overrides the gated mixin member of that name — this surface would render money without the gate. Render through the mixin instead of redeclaring it.",
+    + ]
+
+      325 |       .map(hit => hit.rel + ':' + hit.line + ' declares `' + hit.member + '` in `' + hit.block +
+      326 |         '`, which in Vue 2 overrides the gated mixin member of that name — this surface would render money without the gate. Render through the mixin instead of redeclaring it.')
+    > 327 |     expect(unpinned).toEqual([])
+          |                      ^
+      328 |   })
+      329 |
+      330 |   test('every ledger entry still describes a shadow that is really there', () => {
+
+      at Object.<anonymous> (test/price-gate-shadow.test.js:327:22)
+
+  ● no component takes a silent exit from the money gate › there is no ledger left: every surface in the estate is on the gate
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 8
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "block": "methods",
+    +     "line": 13,
+    +     "member": "priceLabel",
+    +     "rel": "components/molecules/ShadowPlantProbe.vue",
+    +   },
+    + ]
+
+      349 |     // zero now — no component declares a gated money member, and nothing is excused from that.
+      350 |     // If this ever reds upward, read it as "the estate acquired a shadow", not "update the number".
+    > 351 |     expect(shadows).toEqual([])
+          |                     ^
+      352 |     expect(PINNED_SHADOWS).toEqual([])
+      353 |   })
+      354 | })
+
+      at Object.<anonymous> (test/price-gate-shadow.test.js:351:21)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 26 passed, 28 total
+Snapshots:   0 total
+Time:        1.33 s, estimated 2 s
+Ran all test suites matching /test\/price-gate-shadow.test.js/i.
+VERDICT: RED

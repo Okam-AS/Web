@@ -13,45 +13,47 @@
     <p v-else-if="!rows.length" class="trn-note" data-test="completions-empty">
       {{ $i('trn_completions_empty') }}
     </p>
-    <table v-else class="trn-table" data-test="completions-table">
-      <thead>
-        <tr>
-          <th>{{ $i('trn_col_course') }}</th>
-          <th>{{ $i('trn_col_person') }}</th>
-          <th>{{ $i('trn_col_score') }}</th>
-          <th>{{ $i('trn_col_result') }}</th>
-          <th>{{ $i('trn_col_source') }}</th>
-          <th>{{ $i('trn_col_hash') }}</th>
-          <th>{{ $i('trn_col_completed') }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="row in rows" :key="row.completionId" data-test="completion-row">
-          <td data-test="completion-course">
-            {{ row.courseTitle || dash }}
-            <span v-if="row.versionNo !== null" class="trn-flag">v{{ row.versionNo }}</span>
-          </td>
-          <td>
-            <span class="trn-ref" :title="row.personRef">{{ personName(row.personRef) }}</span>
-          </td>
-          <!-- A score of 0 is a score, not a missing value; only a null prints as a dash. -->
-          <td>{{ row.scorePercent === null ? dash : row.scorePercent + '%' }}</td>
-          <td>
-            <span v-if="row.passed === null" :title="$i('trn_result_unknown')">{{ dash }}</span>
-            <span v-else class="trn-badge" :class="row.passed ? 'trn-badge--on' : 'trn-badge--off'">
-              {{ row.passed ? $i('trn_result_passed') : $i('trn_result_failed') }}
-            </span>
-          </td>
-          <td>
-            <span :title="sourceTitle(row.source)">{{ sourceLabel(row.source) }}</span>
-          </td>
-          <td>
-            <span class="trn-ref" :title="row.versionContentHash">{{ shortHash(row.versionContentHash) }}</span>
-          </td>
-          <td>{{ stamp(row.completed) }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div v-else class="trn-table-scroll">
+      <table class="trn-table" data-test="completions-table">
+        <thead>
+          <tr>
+            <th>{{ $i('trn_col_course') }}</th>
+            <th>{{ $i('trn_col_person') }}</th>
+            <th>{{ $i('trn_col_score') }}</th>
+            <th>{{ $i('trn_col_result') }}</th>
+            <th>{{ $i('trn_col_source') }}</th>
+            <th>{{ $i('trn_col_hash') }}</th>
+            <th>{{ $i('trn_col_completed') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="row in rows" :key="row.completionId" data-test="completion-row">
+            <td data-test="completion-course">
+              {{ row.courseTitle || dash }}
+              <span v-if="row.versionNo !== null" class="trn-flag">v{{ row.versionNo }}</span>
+            </td>
+            <td>
+              <span class="trn-ref" :title="row.personRef">{{ personName(row.personRef) }}</span>
+            </td>
+            <!-- A score of 0 is a score, not a missing value; only a null prints as a dash. -->
+            <td>{{ row.scorePercent === null ? dash : row.scorePercent + '%' }}</td>
+            <td>
+              <span v-if="row.passed === null" :title="$i('trn_result_unknown')">{{ dash }}</span>
+              <span v-else class="trn-badge" :class="row.passed ? 'trn-badge--on' : 'trn-badge--off'">
+                {{ row.passed ? $i('trn_result_passed') : $i('trn_result_failed') }}
+              </span>
+            </td>
+            <td>
+              <span :title="sourceTitle(row.source)">{{ sourceLabel(row.source) }}</span>
+            </td>
+            <td>
+              <span class="trn-ref" :title="row.versionContentHash">{{ shortHash(row.versionContentHash) }}</span>
+            </td>
+            <td>{{ stamp(row.completed) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <form class="trn-form" data-test="completion-form" @submit.prevent="submit">
       <h3 class="trn-form__title">

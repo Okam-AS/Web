@@ -18,45 +18,47 @@
         <p v-if="!detail.versions.length" class="trn-note" data-test="versions-empty">
           {{ $i('trn_versions_empty') }}
         </p>
-        <table v-else class="trn-table" data-test="versions-table">
-          <thead>
-            <tr>
-              <th>{{ $i('trn_col_version') }}</th>
-              <th>{{ $i('trn_col_state') }}</th>
-              <th>{{ $i('trn_col_threshold') }}</th>
-              <th>{{ $i('trn_col_hash') }}</th>
-              <th>{{ $i('trn_col_published') }}</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="version in detail.versions" :key="version.courseVersionId" data-test="version-row">
-              <td>v{{ version.versionNo }}</td>
-              <td>
-                <span class="trn-badge" :class="stateTone(version.state)">{{ stateLabel(version.state) }}</span>
-              </td>
-              <!-- The version's OWN authored threshold. It is shown here, on the thing that carries
-                   it, and nowhere near a completion's score — see the note under the record form. -->
-              <td>{{ version.passThresholdPercent }}%</td>
-              <td>
-                <span class="trn-ref" :title="version.contentHash">{{ shortHash(version.contentHash) }}</span>
-              </td>
-              <td>{{ stamp(instant(version.publishedAtUtc)) }}</td>
-              <td>
-                <button
-                  v-if="version.state === 'Draft'"
-                  class="trn-btn trn-btn--small"
-                  type="button"
-                  :disabled="busy"
-                  data-test="version-publish"
-                  @click="$emit('publish', version.versionNo)"
-                >
-                  {{ $i('trn_version_publish') }}
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div v-else class="trn-table-scroll">
+          <table class="trn-table" data-test="versions-table">
+            <thead>
+              <tr>
+                <th>{{ $i('trn_col_version') }}</th>
+                <th>{{ $i('trn_col_state') }}</th>
+                <th>{{ $i('trn_col_threshold') }}</th>
+                <th>{{ $i('trn_col_hash') }}</th>
+                <th>{{ $i('trn_col_published') }}</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="version in detail.versions" :key="version.courseVersionId" data-test="version-row">
+                <td>v{{ version.versionNo }}</td>
+                <td>
+                  <span class="trn-badge" :class="stateTone(version.state)">{{ stateLabel(version.state) }}</span>
+                </td>
+                <!-- The version's OWN authored threshold. It is shown here, on the thing that carries
+                     it, and nowhere near a completion's score — see the note under the record form. -->
+                <td>{{ version.passThresholdPercent }}%</td>
+                <td>
+                  <span class="trn-ref" :title="version.contentHash">{{ shortHash(version.contentHash) }}</span>
+                </td>
+                <td>{{ stamp(instant(version.publishedAtUtc)) }}</td>
+                <td>
+                  <button
+                    v-if="version.state === 'Draft'"
+                    class="trn-btn trn-btn--small"
+                    type="button"
+                    :disabled="busy"
+                    data-test="version-publish"
+                    @click="$emit('publish', version.versionNo)"
+                  >
+                    {{ $i('trn_version_publish') }}
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <p class="trn-form__hint">
           {{ $i('trn_version_publish_note') }}
         </p>

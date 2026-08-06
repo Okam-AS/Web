@@ -1,0 +1,49 @@
+=== label    : A0-baseline-changed
+=== worktree : /Users/svendaneel/okam/web-waitdiag
+=== commit   : 8ac6f63648015d8c7a230181a7f07bf303d43268
+=== dirty    : 1 path(s) before the run
+=== helper   : 7383e6b20ade177b754219c1b1f83f7d7d632e98 test/e2e/support/admin.js
+=== spec sha : ff03d2a26d5c8c0c143a54adb9331f0643a4baae
+=== ports    : web=3877 fixture=4877 (4010/4971/4973 never bound, never signalled)
+=== kill arm : none
+=== started  : 2026-08-06T10:58:31Z
+[WebServer] [fixture] listening on http://127.0.0.1:4877
+
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://192.168.68.111:3877/
+
+[WebServer] [info] Preparing project for development
+
+[WebServer] [info] Initial build may take a while
+
+
+Running 1 test using 1 worker
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+[WebServer] [success] Builder initialized
+
+[1/1] [chromium] › test/e2e/journeys/growth-newsletter-send-gate.spec.js:95:1 › An operator drafts and approves a newsletter, and the send gate opens only when both switches are up @fixture
+[WebServer] [success] Nuxt files generated
+
+[WebServer] [info] Waiting for file changes
+
+[WebServer] [info] Memory usage: 1.05 GB (RSS: 2.61 GB)
+
+[WebServer] [info] Listening on: http://192.168.68.111:3877/
+
+  1 passed (51.4s)
+=== finished : 2026-08-06T10:59:24Z
+=== dirty after : 1 path(s)
+RESULT A0-baseline-changed PASS rc=0

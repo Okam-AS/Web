@@ -1,0 +1,25 @@
+MUTATION PROOF — the arms this lane added, each broken on purpose
+tree: lane/collapse-the-two-hook-sweeps worktree, core 1bcab0b, Vue 2.7.14
+
+M0 unmutated: every arm passes
+  OK   directive-hook arm -> pass (wanted pass)
+  OK   inline-component arm -> pass (wanted pass)
+  OK   estate unparseable arm -> pass (wanted pass)
+  OK   uniqueness arm -> pass (wanted pass)
+
+M1 the scan stops descending into `directives:` (the nested reach inherited from the removed sweep)
+  OK   directive-hook arm -> fail (wanted fail)
+
+M2 the scan stops descending into `components:`
+  OK   inline-component arm -> fail (wanted fail)
+
+M3 a directive hook name is denied but never reported (the deny list emptied)
+  OK   directive-hook arm -> fail (wanted fail)
+
+M4 an unreadable file is swallowed instead of reported — the exact defect of the removed sweep
+  OK   estate unparseable arm -> fail (wanted fail)
+
+M5 the removed sweep is put back — the tripwire against the pair returning
+  OK   uniqueness arm -> fail (wanted fail)
+
+restored:  2 files changed, 257 insertions(+), 69 deletions(-)

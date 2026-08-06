@@ -78,10 +78,11 @@
               :key="t.id"
               type="button"
               class="rm-combine-chip"
-              :class="{ 'is-on': (draft.extraTableIds || []).includes(t.id) }"
+              :data-table-id="t.id"
+              :class="{ 'is-on': (draft.extraTableIds || []).includes(t.id), 'is-busy': isBusy(t.id) }"
               @click="toggleExtra(t.id)"
             >
-              {{ t.name || $i('res_table_number', { number: t.number }) }}
+              {{ t.name || $i('res_table_number', { number: t.number }) }}<span v-if="isBusy(t.id)" class="rm-combine-busy"> — {{ $i('res_busy') }}</span>
             </button>
           </div>
         </div>
@@ -165,11 +166,14 @@ export default {
     selectedTable () {
       return this.tables.find(t => t.id === this.draft.tableId) || null;
     },
+    // The whole seating, not only the primary: a draft that combines onto a table another party
+    // already holds is just as double-booked as one whose primary is taken, and the server refuses
+    // both. The draft object carries its own combination (`tableId` + `extraTableIds`).
     conflictNow () {
       if (!this.draft.tableId) { return false; }
       return this.checkConflict(
         this.isNew ? null : this.draft.id,
-        this.draft.tableId,
+        this.draft,
         this.draft.startMin,
         this.draft.durationMin,
         this.draft.dateKey
@@ -208,6 +212,9 @@ export default {
       const key = STATUS_KEYS[status];
       return key ? this.$i(key) : status;
     },
+    // Asks about ONE candidate table — for the primary picker and for a combine chip the operator
+    // has not taken yet. The draft's own tables are excluded by id, so an edit never calls itself
+    // busy.
     isBusy (tableId) {
       return this.checkConflict(
         this.isNew ? null : this.draft.id,
@@ -451,5 +458,18 @@ export default {
     border-color: #1bb776;
     color: #fff;
   }
+
+  // Still clickable — the operator may be about to move the other party — but never silent about
+  // it, and picking it turns the conflict line on and Save off.
+  &.is-busy {
+    border-color: #ef4444;
+    color: #ef4444;
+
+    &.is-on {
+      background: #ef4444;
+      color: #fff;
+    }
+  }
 }
+.rm-combine-busy { font-weight: 500; opacity: 0.85; }
 </style>

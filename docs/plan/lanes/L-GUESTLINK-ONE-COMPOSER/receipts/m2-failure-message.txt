@@ -1,0 +1,11 @@
+  Failed WebApi.Tests.Events.EventsGuestLinkSoleComposerTests.The_guest_page_address_is_composed_in_exactly_one_production_file [122 ms]
+  Error Message:
+   A guest page URL is composed outside Helpers/Events/EventsGuestLink.cs. Two composers of the same address drift silently — the guest is mailed one origin and returned by the payment provider to another, reads "not paid" for a deposit they just paid, and nothing in either code path looks wrong. Call EventsGuestLink.DepositPagePrefix / ProposalPagePrefix and append the token:
+  Services/Events/EventsEmailNotificationDelivery.cs:149: var candidate = _settings.PublicBaseUrl.TrimEnd('/') + "/events/" + segment + "/"
+Expected: True
+Actual:   False
+  Stack Trace:
+     at WebApi.Tests.Events.EventsGuestLinkSoleComposerTests.The_guest_page_address_is_composed_in_exactly_one_production_file() in /Users/svendaneel/okam/wt-guestlink/WebApi.Tests/Events/EventsGuestLinkSoleComposerTests.cs:line 138
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+

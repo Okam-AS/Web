@@ -1,0 +1,12 @@
+=== JEST under mutation ===
+    ✕ a manual delivery with no worker act is manager-recorded, not confirmed (1 ms)
+    ✕ each attestation lands in its own bucket
+Tests:       2 failed, 25 passed, 27 total
+=== JOURNEY under mutation ===
+  ✘  1 [chromium] › test/e2e/journeys/workforce-publication-receipts.spec.js:59:1 › A manager publishes a week and can show who confirmed it, separately from what was merely sent @fixture (15.2s)
+    Error: expect(locator).toBeVisible() failed
+    Error: element(s) not found
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/workforce-publication-receipts.spec.js:206:28
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/workforce-publication-receipts.spec.js:198:5
+    artifacts/playwright-output/workforce-publication-rece-585b9-y-from-what-was-merely-sent-chromium/test-failed-1.png
+  1 failed

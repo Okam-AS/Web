@@ -1,0 +1,7 @@
+
+[1m== 5b. Nora joins (POST staff/{id}/invitations -> POST /workforce/me/invitations/claim)[0m
+   Nora claimed her own engagement -> person 22222222-2222-2222-2222-222222222222 is Claimed (+4790000001)
+
+[1m== 14b. The worker's own page, read back as the WORKER[0m
+     Nora Berg  store=42  roles=Servitor  active=true
+     1 published shift(s) visible to Nora in week C

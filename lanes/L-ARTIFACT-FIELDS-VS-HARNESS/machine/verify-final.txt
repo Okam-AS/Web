@@ -1,0 +1,161 @@
+### ancestry violations (producer must NOT be reachable from the holding rev)
+  violations: 0
+
+### scope tally
+  refs measured                       : 137
+  committed journey receipts (path,blob): 65   distinct paths: 58
+  named *.playwright.json             : 55
+  other .json, journey-shaped         : 10
+  mismatching A / B / union / clean   : 15 / 19 / 19 / 46
+
+### within-commit discrimination
+
+ fadc84a3 2026-08-02T13:46:56+02:00
+   clean    events-deposit-precondition.live.playwright.json     []
+   MISMATCH workforce-flag-lever.live.playwright.json            ['backendBuild', 'canonicalHeldBy', 'provisional']
+   clean    workforce-schedule-publish.live.playwright.json      []
+
+ 337f9bf2 2026-08-02T13:50:51+02:00
+   clean    01-workforce-flag-lever.live.json                    []
+   clean    03-journeyB-without-reset.json                       []
+   clean    05-workforce-schedule-publish.live.json              []
+   clean    06-journeyA-without-reset.json                       []
+   clean    08-workforce-flag-lever.live.json                    []
+   MISMATCH chain-events-deposit-precondition.live.json          ['backendBuild', 'canonicalHeldBy', 'provisional']
+   MISMATCH chain-workforce-flag-lever.live.json                 ['backendBuild', 'canonicalHeldBy', 'provisional']
+   MISMATCH chain-workforce-schedule-publish.live.json           ['backendBuild', 'canonicalHeldBy', 'provisional']
+
+### final finding table
+
+artifacts/journeys/growth-guest-lifecycle.playwright.json  [10d5f376]
+  keys       : ['proxiedSubjectSample', 'proxiedSubjectServed']
+  producers  : ['9d4399a', '097c3c9']
+  sits on 1 refs; cannot-emit on 1: ['lane/L-JOURNEY-GROWTH']
+  introduced by: ef2d6be@2026-08-04T16:08:59+02:00
+  of which cannot-emit: ['ef2d6be']
+
+artifacts/journeys/growth-guest-lifecycle.playwright.json  [f2d5f373]
+  keys       : ['proxiedSubjectSample', 'proxiedSubjectServed']
+  producers  : ['9d4399a', '097c3c9']
+  sits on 1 refs; cannot-emit on 1: ['salvage/dangling-1890c9a3']
+  introduced by: 1890c9a@2026-08-04T16:06:30+02:00
+  of which cannot-emit: ['1890c9a']
+
+artifacts/journeys/growth-testsend-refusal.playwright.json  [4b8751af]
+  keys       : ['proxiedSubjectSample', 'proxiedSubjectServed']
+  producers  : ['9d4399a', '097c3c9']
+  sits on 1 refs; cannot-emit on 1: ['lane/L-JOURNEY-GROWTH']
+  introduced by: ef2d6be@2026-08-04T16:08:59+02:00
+  of which cannot-emit: ['ef2d6be']
+
+artifacts/journeys/growth-testsend-refusal.playwright.json  [9ffabf89]
+  keys       : ['proxiedSubjectSample', 'proxiedSubjectServed']
+  producers  : ['9d4399a', '097c3c9']
+  sits on 1 refs; cannot-emit on 1: ['salvage/dangling-1890c9a3']
+  introduced by: 1890c9a@2026-08-04T16:06:30+02:00
+  of which cannot-emit: ['1890c9a']
+
+artifacts/journeys/workforce-timesheet-export.playwright.json  [16f6fe0c]
+  keys       : ['proxiedSubjectSample', 'proxiedSubjectServed']
+  producers  : ['9d4399a', '097c3c9']
+  sits on 1 refs; cannot-emit on 1: ['lane/wf-timesheet-ui']
+  introduced by: 618efc8@2026-08-04T23:12:57+02:00
+  of which cannot-emit: ['618efc8']
+
+lanes/L-JOURNEY-MEALS/capture-meals-admin-setup.playwright.json  [1f378555]
+  keys       : ['proxiedSubjectSample', 'proxiedSubjectServed']
+  producers  : ['9d4399a', '097c3c9']
+  sits on 5 refs; cannot-emit on 2: ['lane/fe-journey-meals', 'lanes/plan-snapshot']
+  introduced by: 5197056@2026-08-05T01:22:39+02:00, 8a77326@2026-08-04T16:01:51+02:00
+  of which cannot-emit: ['5197056', '8a77326']
+
+lanes/L-JOURNEY-MEALS/capture-meals-guest-claim.playwright.json  [54739741]
+  keys       : ['proxiedSubjectSample', 'proxiedSubjectServed']
+  producers  : ['9d4399a', '097c3c9']
+  sits on 5 refs; cannot-emit on 2: ['lane/fe-journey-meals', 'lanes/plan-snapshot']
+  introduced by: 5197056@2026-08-05T01:22:39+02:00, 8a77326@2026-08-04T16:01:51+02:00
+  of which cannot-emit: ['5197056', '8a77326']
+
+lanes/L-JOURNEY-PORT-HARDCODED/artifact-backup/meals-statement-month.playwright.json  [9696ab28]
+  keys       : ['proxiedSubjectSample', 'proxiedSubjectServed']
+  producers  : ['9d4399a', '097c3c9']
+  sits on 2 refs; cannot-emit on 2: ['lane/L-JOURNEY-PORT-HARDCODED', 'lanes/plan-snapshot']
+  introduced by: 5197056@2026-08-05T01:22:39+02:00, 4772c13@2026-08-04T16:21:35+02:00
+  of which cannot-emit: ['4772c13', '5197056']
+
+lanes/L-JOURNEY-PORT-HARDCODED/artifact-backup/runs/meals-statement-month.fixture.playwright.json  [9696ab28]
+  keys       : ['proxiedSubjectSample', 'proxiedSubjectServed']
+  producers  : ['9d4399a', '097c3c9']
+  sits on 2 refs; cannot-emit on 2: ['lane/L-JOURNEY-PORT-HARDCODED', 'lanes/plan-snapshot']
+  introduced by: 5197056@2026-08-05T01:22:39+02:00, 4772c13@2026-08-04T16:21:35+02:00
+  of which cannot-emit: ['4772c13', '5197056']
+
+lanes/L-LIVE-SEED-VIA-PRODUCT/workforce-flag-lever.live.playwright.json  [de773948]
+  keys       : ['backendBuild', 'canonicalHeldBy', 'provisional']
+  producers  : ['533aea4']
+  sits on 80 refs; cannot-emit on 0: []
+  introduced by: fadc84a@2026-08-02T13:46:56+02:00
+  of which cannot-emit: ['fadc84a']
+
+lanes/L-LIVE-WORLD-RESTORE/chain-events-deposit-precondition.live.json  [7e176a48]
+  keys       : ['backendBuild', 'canonicalHeldBy', 'provisional']
+  producers  : ['533aea4']
+  sits on 80 refs; cannot-emit on 0: []
+  introduced by: 337f9bf@2026-08-02T13:50:51+02:00
+  of which cannot-emit: ['337f9bf']
+
+lanes/L-LIVE-WORLD-RESTORE/chain-workforce-flag-lever.live.json  [5f10b01b]
+  keys       : ['backendBuild', 'canonicalHeldBy', 'provisional']
+  producers  : ['533aea4']
+  sits on 80 refs; cannot-emit on 0: []
+  introduced by: 337f9bf@2026-08-02T13:50:51+02:00
+  of which cannot-emit: ['337f9bf']
+
+lanes/L-LIVE-WORLD-RESTORE/chain-workforce-schedule-publish.live.json  [fedbc64c]
+  keys       : ['backendBuild', 'canonicalHeldBy', 'provisional']
+  producers  : ['533aea4']
+  sits on 80 refs; cannot-emit on 0: []
+  introduced by: 337f9bf@2026-08-02T13:50:51+02:00
+  of which cannot-emit: ['337f9bf']
+
+lanes/L-WF-PUNCH-UI/evidence/workforce-pos-punch.playwright.json  [f4d5d876]
+  keys       : ['proxiedSubjectSample', 'proxiedSubjectServed']
+  producers  : ['9d4399a', '097c3c9']
+  sits on 1 refs; cannot-emit on 1: ['lanes/plan-snapshot']
+  introduced by: 5197056@2026-08-05T01:22:39+02:00
+  of which cannot-emit: ['5197056']
+
+lanes/L-WORLD-STAMP-WINDOWS/provenance-arms/arm-1.provenance-probe.playwright.json  [7fbeb7ba]
+  keys       : ['proxiedSubjectSample', 'proxiedSubjectServed']
+  producers  : ['9d4399a', '097c3c9']
+  sits on 5 refs; cannot-emit on 2: ['lanes/L-WORLD-STAMP-WINDOWS', 'lanes/plan-snapshot']
+  introduced by: 5197056@2026-08-05T01:22:39+02:00, 997936a@2026-08-04T23:31:34+02:00
+  of which cannot-emit: ['5197056', '997936a']
+
+lanes/L-WORLD-STAMP-WINDOWS/provenance-arms/arm-2.provenance-probe.playwright.json  [a1ef2e22]
+  keys       : ['proxiedSubjectSample', 'proxiedSubjectServed']
+  producers  : ['9d4399a', '097c3c9']
+  sits on 5 refs; cannot-emit on 2: ['lanes/L-WORLD-STAMP-WINDOWS', 'lanes/plan-snapshot']
+  introduced by: 5197056@2026-08-05T01:22:39+02:00, 997936a@2026-08-04T23:31:34+02:00
+  of which cannot-emit: ['5197056', '997936a']
+
+lanes/L-WORLD-STAMP-WINDOWS/provenance-arms/arm-3.provenance-probe.playwright.json  [bfd77d89]
+  keys       : ['proxiedSubjectSample', 'proxiedSubjectServed']
+  producers  : ['9d4399a', '097c3c9']
+  sits on 5 refs; cannot-emit on 2: ['lanes/L-WORLD-STAMP-WINDOWS', 'lanes/plan-snapshot']
+  introduced by: 5197056@2026-08-05T01:22:39+02:00, 997936a@2026-08-04T23:31:34+02:00
+  of which cannot-emit: ['5197056', '997936a']
+
+lanes/L-WORLD-STAMP-WINDOWS/provenance-arms/arm-4.provenance-probe.playwright.json  [be42d763]
+  keys       : ['proxiedSubjectSample', 'proxiedSubjectServed']
+  producers  : ['9d4399a', '097c3c9']
+  sits on 5 refs; cannot-emit on 2: ['lanes/L-WORLD-STAMP-WINDOWS', 'lanes/plan-snapshot']
+  introduced by: 5197056@2026-08-05T01:22:39+02:00, 997936a@2026-08-04T23:31:34+02:00
+  of which cannot-emit: ['5197056', '997936a']
+
+lanes/L-WORLD-STAMP-WINDOWS/provenance-arms/arm-5.provenance-probe.playwright.json  [c1ed83cd]
+  keys       : ['proxiedSubjectSample', 'proxiedSubjectServed']
+  producers  : ['9d4399a', '097c3c9']
+  sits on 5 refs; cannot-emit on 2: ['lanes/L-WORLD-STAMP-WINDOWS', 'lanes/plan-snapshot']
+  introduced by: 5197056@2026-08-05T01:22:39+02:00, 997936a@2026-08-04T23:31:34+02:00
+  of which cannot-emit: ['5197056', '997936a']

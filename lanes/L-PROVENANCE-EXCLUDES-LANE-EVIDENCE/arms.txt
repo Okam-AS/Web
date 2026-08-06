@@ -1,0 +1,76 @@
+BEFORE — pristine 7030c00 at /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/wt-before (the ref both provers are green at)
+--- B0  clean tree
+  repo               wt-before
+  HEAD               7030c00122e026f077bdb1bfecee1c916ca72d67
+  git porcelain      0 entries
+  BUILD ID           fixture@7030c00122e026f077bdb1bfecee1c916ca72d67
+  short              7030c00
+  detail             the in-repo fixture backend, not an API build (branch HEAD)
+  world-stamp token  (no buildTokenOf at this ref)
+  named exclusions   null
+--- B1  ONE run log under lanes/<L>/runs/   <- THE DEFECT
+  repo               wt-before
+  HEAD               7030c00122e026f077bdb1bfecee1c916ca72d67
+  git porcelain      1 entry  ["?? lanes/L-PROVENANCE-EXCLUDES-LANE-EVIDENCE/"]
+  BUILD ID           fixture@7030c00122e026f077bdb1bfecee1c916ca72d67+dirty
+  short              7030c00-dirty
+  detail             the in-repo fixture backend, not an API build (branch HEAD)
+  world-stamp token  (no buildTokenOf at this ref)
+  named exclusions   null
+
+AFTER — 607f138 at /Users/svendaneel/okam/web-provexcl
+--- A0  clean tree
+  repo               web-provexcl
+  HEAD               607f1385adeb430668d15e3259cc84bfc0d8fc5e
+  git porcelain      1 entry  ["?? lanes/L-PROVENANCE-EXCLUDES-LANE-EVIDENCE/"]
+  BUILD ID           fixture@607f1385adeb430668d15e3259cc84bfc0d8fc5e
+  short              607f138
+  detail             the in-repo fixture backend, not an API build (branch lane/provenance-excludes-lane-evidence; 1 untracked path under lanes/ or docs/plan/ ignored as lane evidence)
+  world-stamp token  607f1385adeb430668d15e3259cc84bfc0d8fc5e
+  named exclusions   ["lanes/","docs/plan/"]
+--- A1  3 evidence files, lanes/ AND docs/plan/   <- must NOT dirty
+  repo               web-provexcl
+  HEAD               607f1385adeb430668d15e3259cc84bfc0d8fc5e
+  git porcelain      2 entries  ["?? docs/plan/","?? lanes/L-PROVENANCE-EXCLUDES-LANE-EVIDENCE/"]
+  BUILD ID           fixture@607f1385adeb430668d15e3259cc84bfc0d8fc5e
+  short              607f138
+  detail             the in-repo fixture backend, not an API build (branch lane/provenance-excludes-lane-evidence; 4 untracked paths under lanes/ or docs/plan/ ignored as lane evidence)
+  world-stamp token  607f1385adeb430668d15e3259cc84bfc0d8fc5e
+  named exclusions   ["lanes/","docs/plan/"]
+    mutation landed, occurrences: 1
+--- A2  the same tree + ONE source line       <- must dirty
+  repo               web-provexcl
+  HEAD               607f1385adeb430668d15e3259cc84bfc0d8fc5e
+  git porcelain      3 entries  [" M utils/price.js","?? docs/plan/","?? lanes/L-PROVENANCE-EXCLUDES-LANE-EVIDENCE/"]
+  BUILD ID           fixture@607f1385adeb430668d15e3259cc84bfc0d8fc5e+dirty
+  short              607f138-dirty
+  detail             the in-repo fixture backend, not an API build (branch lane/provenance-excludes-lane-evidence; 4 untracked paths under lanes/ or docs/plan/ ignored as lane evidence)
+  world-stamp token  607f1385adeb430668d15e3259cc84bfc0d8fc5e+dirty
+  named exclusions   ["lanes/","docs/plan/"]
+--- A3  a COMMITTED receipt under lanes/ rewritten  <- must dirty
+  repo               web-provexcl
+  HEAD               607f1385adeb430668d15e3259cc84bfc0d8fc5e
+  git porcelain      3 entries  [" M lanes/L-LIVE-BUILD-EXPORT/journey-artifacts/arm-3.provenance-probe.playwright.json","?? docs/plan/","?? lanes/L-PROVENANCE-EXCLUDES-LANE-EVIDENCE/"]
+  BUILD ID           fixture@607f1385adeb430668d15e3259cc84bfc0d8fc5e+dirty
+  short              607f138-dirty
+  detail             the in-repo fixture backend, not an API build (branch lane/provenance-excludes-lane-evidence; 4 untracked paths under lanes/ or docs/plan/ ignored as lane evidence)
+  world-stamp token  607f1385adeb430668d15e3259cc84bfc0d8fc5e+dirty
+  named exclusions   ["lanes/","docs/plan/"]
+--- A4  lanes-archive/ — a name starting with a root  <- must dirty
+  repo               web-provexcl
+  HEAD               607f1385adeb430668d15e3259cc84bfc0d8fc5e
+  git porcelain      3 entries  ["?? docs/plan/","?? lanes-archive/","?? lanes/L-PROVENANCE-EXCLUDES-LANE-EVIDENCE/"]
+  BUILD ID           fixture@607f1385adeb430668d15e3259cc84bfc0d8fc5e+dirty
+  short              607f138-dirty
+  detail             the in-repo fixture backend, not an API build (branch lane/provenance-excludes-lane-evidence; 4 untracked paths under lanes/ or docs/plan/ ignored as lane evidence)
+  world-stamp token  607f1385adeb430668d15e3259cc84bfc0d8fc5e+dirty
+  named exclusions   ["lanes/","docs/plan/"]
+--- A5  evidence only again                   <- clean, so A2-A4 were the cause
+  repo               web-provexcl
+  HEAD               607f1385adeb430668d15e3259cc84bfc0d8fc5e
+  git porcelain      2 entries  ["?? docs/plan/","?? lanes/L-PROVENANCE-EXCLUDES-LANE-EVIDENCE/"]
+  BUILD ID           fixture@607f1385adeb430668d15e3259cc84bfc0d8fc5e
+  short              607f138
+  detail             the in-repo fixture backend, not an API build (branch lane/provenance-excludes-lane-evidence; 4 untracked paths under lanes/ or docs/plan/ ignored as lane evidence)
+  world-stamp token  607f1385adeb430668d15e3259cc84bfc0d8fc5e
+  named exclusions   ["lanes/","docs/plan/"]

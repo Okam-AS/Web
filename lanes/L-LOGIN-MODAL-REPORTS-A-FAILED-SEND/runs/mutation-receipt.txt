@@ -1,0 +1,23 @@
+BASELINE (no mutation) — every mutant's red must be earned, not inherited
+  11 test(s), 0 failing 
+
+M1 the original defect restored: advance from a .then() that ignores its value
+  KILLED — reds: ['A', 'B', 'G'] | expected at least: ['A', 'B', 'C'] | MISSED: ['C']
+M2 the guard is always true: advance whatever the send returned
+  KILLED — reds: ['A', 'B', 'G'] | expected at least: ['A', 'B']
+M3 the failure is silent: do not advance, but say nothing either
+  KILLED — reds: ['A', 'B', 'G'] | expected at least: ['A', 'B']
+M4 the message claims a wrong number again, which a false cannot know
+  KILLED — reds: ['A', 'F'] | expected at least: ['A', 'B', 'C', 'F'] | MISSED: ['B', 'C']
+M5 the guard is inverted: a code that WAS sent no longer opens the boxes
+  KILLED — reds: ['A', 'B', 'D', 'G'] | expected at least: ['A', 'B', 'D']
+M6 the loading flag is never cleared, so the modal stays stuck
+  KILLED — reds: ['A', 'D', 'E', 'G'] | expected at least: ['E']
+M7 PostRequest rejects instead of resolving — the premise itself changes
+  KILLED — reds: ['PREMISE'] | expected at least: ['PREMISE']
+M8 SendVerificationToken always claims success
+  KILLED — reds: ['A', 'PREMISE'] | expected at least: ['PREMISE', 'A']
+M9 the previous error is never cleared, so a stale failure survives a retry
+  KILLED — reds: ['G'] | expected at least: ['G']
+
+SURVIVORS: none — every mutant was killed

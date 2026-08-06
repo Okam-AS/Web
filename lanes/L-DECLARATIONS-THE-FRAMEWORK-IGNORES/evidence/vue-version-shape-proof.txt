@@ -1,0 +1,46 @@
+installed vue          : 2.7.14
+vue-template-compiler  : 2.7.14
+package.json declares  : ^2.6.14
+
+== PROOF 1: components/molecules/FocusTrap.vue -- options `unmounted()` is never called ==
+  option keys present   : props, data, computed, watch, mounted, methods, unmounted
+  typeof options.unmounted = function
+  typeof options.destroyed = undefined
+  typeof options.beforeDestroy = undefined
+  listeners before mount: {}
+  listeners after  mount: {"document:focusin":1,"document:focusout":1,"window:blur":1}
+  listeners after destroy: {"document:focusin":1,"document:focusout":1,"window:blur":1}
+  PASS  unmounted() body never executed after $destroy()   [call count = 0]
+  PASS  document/window listeners still attached after destroy (leak)   [{"document:focusin":1,"document:focusout":1,"window:blur":1}]
+  PASS  Vue never merged `unmounted` as a hook   [$options.unmounted is function (raw, unmerged)]
+
+== CONTROL: identical body renamed `unmounted` -> `destroyed` ==
+  listeners before mount: {"document:focusin":1,"document:focusout":1,"window:blur":1}
+  listeners after  mount: {"document:focusin":1,"document:focusout":1,"window:blur":1}
+  listeners after destroy: {"document:focusin":1,"document:focusout":1,"window:blur":1}
+  PASS  destroyed() body DID execute (harness can observe hooks)   [call count = 1]
+  PASS  renaming restores detachHandler() -- listeners released   [{"document:focusin":1,"document:focusout":1,"window:blur":1}]
+  PASS  returnFocus path only reachable via the renamed hook
+
+== PROOF 2: Vue 2.7.14 does not proxy data() keys beginning with _ or $ ==
+  this.tick    = "DECLARED"
+  this._tick   = undefined
+  this.$weird  = undefined
+  this.$data._tick = "DECLARED"
+  PASS  un-prefixed key IS proxied
+  PASS  _-prefixed key is NOT on the instance
+  PASS  $-prefixed key is NOT on the instance
+  PASS  the value does exist on $data (declared, unreachable)
+  PASS  this._tick=... writes a separate non-reactive slot, $data untouched
+  PASS  methods with _ prefix ARE installed (rule is data-only)
+
+== PROOF 3: `emits` option is inert in 2.7.14 (components/atoms/Modal.vue:97) ==
+  $options.emits = ["close"]
+  warnings captured while emitting an UNDECLARED event: []
+  PASS  emitting an event absent from `emits` produces no warning (no validation)
+  PASS  `emits` survives only as inert metadata on $options
+
+== CONTROL 2: 2.7 DOES accept some Vue 3 shapes -- renderTracked ==
+  PASS  renderTracked (a Vue 3 hook name) IS called by 2.7.14   [calls = 1]
+
+ALL ASSERTIONS HELD (0 failures)

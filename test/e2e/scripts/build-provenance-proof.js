@@ -307,7 +307,16 @@ async function main () {
   for (const arm of arms) {
     stamps.clearStamp(liveOrigin);
     if (arm.stamp) {
-      const written = stamps.writeStamp({ apiBaseUrl: liveOrigin, repo: arm.stamp.repo, pid: process.pid });
+      // `launchedPid` is this process, which is also the one holding `liveOrigin` — the stand-in API
+      // is an `http.createServer` in here — so the stamp resolves the socket holder back to us. And
+      // `builtFrom` is the token the checkout was made at, which is the same thing `live-world.sh`
+      // reads at build time; a stamp cannot be written without it.
+      const written = stamps.writeStamp({
+        apiBaseUrl: liveOrigin,
+        repo: arm.stamp.repo,
+        launchedPid: process.pid,
+        builtFrom: arm.stamp.head
+      });
       if (arm.invalidate) {
         // The state every stamp reaches eventually: it outlived the world it describes. Written as a
         // pid that is not running, which is what `readStamp` refuses on.

@@ -18,6 +18,7 @@
 //   GET    /training/stores/{storeId}/certificates                                #12
 //   POST   /training/stores/{storeId}/certificates                                #12
 //   GET    /training/stores/{storeId}/competency/holdings?person=                 #15
+//   GET    /training/stores/{storeId}/evidence?personRef=                         #16
 //   GET    /training/stores/{storeId}/evidence/disclosures[?personRef=]           #17
 //
 // THE FOUR ROUTES DELIBERATELY ABSENT, and why, so nobody adds them back by reflex:
@@ -323,6 +324,50 @@ export class TrainingStoreService extends WorkforceClientBase {
    */
   GetHoldings (storeId, personRef) {
     return this._request('GET', this._base(storeId) + '/competency/holdings?person=' + encodeURIComponent(personRef));
+  }
+
+  /**
+   * #16: ONE PERSON'S EVIDENCE DOCUMENT — the thing a tilsyn is actually handed.
+   *
+   * Everything else on this client is a working surface: a list to act on, a form to file against.
+   * This is the assembled record — the completions with the frozen material they were taken against,
+   * the certificates, and the ledger rows that name who wrote each one — and it is the only read on
+   * the module whose output is meant to be shown to somebody outside the venue.
+   *
+   * NOTHING IN IT IS RECOMPUTED, HERE OR THERE. The verdict is the one the server derived at
+   * recording time and the certificate status is the certificate service's own projection
+   * (`TrainingEvidenceModels` says so in as many words: «a read that re-graded would silently restate
+   * history the day a course's later version moved the bar»). The document prints the raw values
+   * BESIDE each derived claim — score beside threshold, hash beside the pages and quiz it was
+   * computed over — so a reader can re-check both without trusting it. That is the entire reason the
+   * route exists, and it is why no caller of this method may substitute its own arithmetic for the
+   * printed answer.
+   *
+   * A GET THAT WRITES, AND THE ONLY ONE ON THIS CLIENT. Asking for a named person's training record
+   * is a disclosure of personal data about them, so the server appends an `evidence.read` row to the
+   * same append-only ledger the mutations use — actor, person, and the COUNT of what was handed over,
+   * never a score or a certificate type — and commits it in the same request
+   * (`TrainingEvidenceService.RecordDisclosureAsync`, which calls `SaveChangesAsync` immediately
+   * after `ITrainingAuditWriter.Append` stages the row). A refused read appends nothing: the write is
+   * staged after the document is assembled, so a caller the gate turned away discloses nothing and
+   * records nothing.
+   *
+   * SO THIS MUST NOT BE POLLED, AND MUST NOT BE FETCHED ON MOUNT. Every call is a permanent row in a
+   * ledger made immutable by a database trigger, and there is no path that removes one. A page that
+   * loaded this when it happened to be opened would write "somebody read this person's training file"
+   * for every visit that was about something else. The caller asks explicitly, once, per person.
+   *
+   * WHAT THE DOCUMENT'S OWN `auditChain` DOES NOT CONTAIN is these disclosures: it carries the ledger
+   * rows about the completion and certificate ROWS, and the read events are deliberately excluded
+   * (pinned by `TrainingEvidenceReadTests`). Nothing built on this may present the chain as an access
+   * log — it is the provenance of the evidence, not a record of who has seen it.
+   *
+   * `personRef` is REQUIRED and store-scoped like everything else here. An empty one is a 400 from
+   * the controller before the service is reached; one belonging to another store's record is the same
+   * opaque 404 as an id that exists nowhere.
+   */
+  GetEvidence (storeId, personRef) {
+    return this._request('GET', this._base(storeId) + '/evidence?personRef=' + encodeURIComponent(personRef));
   }
 
   /**

@@ -1,0 +1,16 @@
+BASELINE — the real module, unmutated
+  10 tests, 0 not passing
+
+MUTANT W1 — the build is read at STAMP time again, so a moved head is recorded instead of refused
+  red as required   refuses when the checkout has been rebased onto a different commit since the build
+  red as required   refuses when the tree merely gained an edit after the build, because that is not the tree that was built
+  red as required   will not stamp at all when nobody says which build it is stamping
+
+MUTANT W2 — the launcher pid is stamped again, so liveness proves "the launcher is alive" and nothing more
+  red as required   records the process serving the port, not the launcher that started it
+  red as required   loses its answer when the server dies — even though the launcher is still alive
+  red as required   refuses when the port is held by a process this run did not start
+  red as required   refuses when nothing is listening on the origin at all
+
+Both guards are pinned: removing either one reds the test written for it, and the unmutated
+module is green. Nothing in the checkout was edited to find that out.

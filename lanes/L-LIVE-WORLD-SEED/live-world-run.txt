@@ -27,7 +27,7 @@ A LIVE world is up.
     API        http://127.0.0.1:5951           (pid 67099, log /tmp/okam-live-world-api.log)
     database   OkamLiveJourney on localhost,15433   (127 migrations, 211 tables)
     store      1  "Live Journey Kafé"
-    manager    99999999 / 123123   (the app prefixes +47 itself)
+    manager    99999999 / AppSettings__DemoVerificationCode__REDACTED   (the app prefixes +47 itself)
 
 Run the live journeys against it:
 

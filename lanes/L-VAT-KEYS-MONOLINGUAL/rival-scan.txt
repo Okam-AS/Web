@@ -1,0 +1,14 @@
+# rival-version scan — do the 19 keys have a second author anywhere?
+# every refs/heads + refs/lanes, plus the dirty working tree, at 2026-08-05T03:36Z
+
+refs scanned                              : 120
+distinct translation blobs parsed         : 198
+refs whose no.ts holds all 19             : 117
+refs predating the feature (hold none)    : ['refs/heads/feature/swiss', 'refs/heads/main', 'refs/heads/swiss']
+refs whose en.ts holds ANY of the 19      : 0
+refs whose de.ts holds ANY of the 19      : 0
+
+NO RIVAL VERSION ANYWHERE. Every claimant holding one of the 19 holds the byte-identical
+baseline Norwegian value; not one claimant holds an English or German version; the dirty
+working tree neither rewords nor deletes any of them. These 19 keys have no second author,
+so nothing written here overwrites an authored sentence.

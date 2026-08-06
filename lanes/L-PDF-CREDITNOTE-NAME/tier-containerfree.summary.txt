@@ -1,0 +1,12 @@
+      Failed to determine the https port for redirect.
+      Failed to determine the https port for redirect.
+      Failed to determine the https port for redirect.
+      Failed executing DbCommand (0ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = Guid), @p2='?' (DbType = DateTime), @p3='?' (DbType = DateTime), @p4='?' (Size = 13), @p5='?' (Size = 64), @p6='?', @p7='?' (DbType = Int32), @p8='?' (Size = 22)], CommandType='Text', CommandTimeout='30']
+      Failed to validate the token.
+      Failed to validate the token.
+      Failed to determine the https port for redirect.
+      Failed to determine the https port for redirect.
+      Failed to determine the https port for redirect.
+      Failed to determine the https port for redirect.
+      Failed to determine the https port for redirect.
+Passed!  - Failed:     0, Passed:  4639, Skipped:    12, Total:  4651, Duration: 5 m 50 s - WebApi.Tests.dll (net8.0)

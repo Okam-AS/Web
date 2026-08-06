@@ -1,0 +1,110 @@
+{
+  "journey": "modal-scroll-lock",
+  "title": "A modal holds the page behind it still, and lets go when it closes",
+  "status": "passed",
+  "startedAtUtc": "2026-08-01T13:44:43.731Z",
+  "finishedAtUtc": "2026-08-01T13:44:52.152Z",
+  "durationMs": 8421,
+  "capabilities": [
+    "ui.modal.scroll-lock"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3266",
+  "apiBaseUrl": "http://127.0.0.1:4266",
+  "commit": "a234509c1b7924f741c013a37b900a3d753ca773",
+  "underTest": null,
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "ask for an admin page while signed out",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T13:44:43.731Z",
+      "durationMs": 864,
+      "detail": "redirected to ?redirect=%2Fadmin%2Flang with the login modal open",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "THE LOGIN MODAL HOLDS THE LOCK, and keeps holding it across a head update",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T13:44:44.595Z",
+      "durationMs": 517,
+      "detail": "body class \"noscroll\", overflow hidden; nothing scrollable behind the login screen (doc 720px vs viewport 720px)",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "sign in and land on the page that was asked for",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T13:44:45.131Z",
+      "durationMs": 312,
+      "detail": "on /admin/lang, 4662px of page in a 720px viewport; lock released",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "with no modal open, a wheel moves the page — the control",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T13:44:45.443Z",
+      "durationMs": 627,
+      "detail": "wheel 600 moved the page 1200 -> 1800",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "open a modal, and the wheel stops moving the page",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T13:44:46.070Z",
+      "durationMs": 1669,
+      "detail": "body hidden; wheel 600 then 3000 left the page at 1200",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "a navigation with the modal still open does not release it",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T13:44:47.942Z",
+      "durationMs": 1093,
+      "detail": "after $router.replace the body is still \"noscroll\" and the page has not moved",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "closing one of two open modals does not release the lock",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T13:44:49.035Z",
+      "durationMs": 1706,
+      "detail": "two modals -> closed one -> body still \"noscroll\", page still at 1200",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "closing the last one releases it, and the wheel works again",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T13:44:50.741Z",
+      "durationMs": 1197,
+      "detail": "lock released, page resumed at 1199 and wheeled to 1799",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "note",
+      "summary": "EditLangRowModal does not act on the Modal close event",
+      "detail": "components/organisms/EditLangRowModal.vue wraps atoms/Modal but binds no @close, so Escape runs Modal.close() and nothing happens — the modal can only be dismissed with Avbryt. Pre-existing, unrelated to the scroll lock, and not fixed by this lane; noticed while driving the journey."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Flang\" to \"/admin?redirect=%2Fadmin%2Flang&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Flang\" to \"/admin?redirect=%2Fadmin%2Flang&storeId=42\" with a new navigation."
+  ],
+  "failedRequests": [],
+  "screenshots": [
+    "modal-scroll-lock/01-login-modal-body-locked.png",
+    "modal-scroll-lock/02-modal-open-page-behind-held-at-1200.png",
+    "modal-scroll-lock/03-all-modals-closed-page-free-again.png"
+  ],
+  "error": null
+}

@@ -1,0 +1,55 @@
+RED — OkamAPI-pdfnull @ lane/pdf-nullderef, with the fix MUTATED AWAY
+(Services/OkamFunctionsDocumentRenderer.Post restored to `return response.IsSuccessStatusCode ? response : null;`)
+
+$ dotnet test WebApi.Tests/WebApi.Tests.csproj --no-build \
+    --filter "FullyQualifiedName~PdfRendererOutageWireTests|FullyQualifiedName~DocumentRendererFailureTests|FullyQualifiedName~PdfDownloadWireTests|FullyQualifiedName~WireContainmentTests"
+
+Failed!  - Failed: 16, Passed: 30, Skipped: 0, Total: 46
+
+THE SIX LIVE DOWNLOAD ROUTES — every one a 500 carrying a NullReferenceException, over the real
+pipeline, with the renderer answering a real 503 through the production OkamFunctionsDocumentRenderer.
+Distinct frames from the host's own log:
+
+  at WebApi.Controllers.OrdersController.GetReceipt(String orderCode)        Controllers/OrdersController.cs:170
+  at WebApi.Controllers.OrdersController.GetReceiptForce(String orderCode)   Controllers/OrdersController.cs:225
+  at WebApi.Controllers.GiftcardController.GetReceipt(Guid giftcardId)       Controllers/GiftcardController.cs:106
+  at WebApi.Controllers.GiftcardController.GetReceiptForce(Guid giftcardId)  Controllers/GiftcardController.cs:131
+  at WebApi.Controllers.InvoicesController.GetPdf(Int32 invoiceId)           Controllers/InvoicesController.cs:162
+  at WebApi.Controllers.InvoicesController.CreateCreditNote(Int32 invoiceId) Controllers/InvoicesController.cs:142
+
+Each theory case:
+  Assert.Equal() Failure   Expected: BadGateway   Actual: InternalServerError
+
+TWO MORE THE BRIEF DID NOT COUNT — the same null, dereferenced one hop later inside the mail builder.
+Both are live routes (POST /invoices/RetrySendingExistingInvoices, POST /payouts/send-mail/{id}):
+
+  System.NullReferenceException
+     at ...RecordingBuiltMail.BuildInvoiceMessage(...)                        [mirrors EmailService.cs:42]
+     at WebApi.Services.InvoiceService.BuildInvoiceMessages(...)              Services/InvoiceService.cs:621
+     at WebApi.Services.InvoiceService.RetrySendingExistingInvoices()         Services/InvoiceService.cs:100
+
+  Assert.Throws() Failure  Expected: DocumentRenderException
+                           Actual:   System.NullReferenceException
+     at WebApi.Services.OkamPayoutService.BuildInvoiceMessage(...)            Services/OkamPayoutService.cs:258
+     at WebApi.Services.OkamPayoutService.SendPayoutInvoice(Int32)            Services/OkamPayoutService.cs:243
+
+THE PORT ITSELF:
+  A_non_success_answer_raises_instead_of_handing_back_null(503|500|401|404)
+    Assert.Throws() Failure  Expected: DocumentRenderException  Actual: (No exception was thrown)
+
+OTHER MUTATIONS RUN, each rebuilt and each with the assembly mtime checked (never --no-build over a
+restored file):
+
+  2. `app.UseMiddleware<DocumentRenderExceptionMiddleware>()` deleted from Program.cs
+     -> all six routes 500 instead of 502; 9 failed / 6 passed of 15.
+  3. the request URI put into DocumentRenderException's message
+     -> all six routes AND the port's C7 pin red:
+        Assert.DoesNotContain() Failure  Found: https://okamnodefunctions.azurewebsites.net/api/
+  3b. the KEY assertion proved live without committing the key a second time: the test's own subject
+     string was appended with the reflected FunctionKey -> Assert.DoesNotContain() Failure.
+  4. TryAttachPdf's catch returns true (swallow, hand the unrendered model on anyway)
+     -> A_bulk_invoice_run_leaves_out_the_store_it_could_not_render: NullReferenceException.
+  5. ReceiptService.SendReceipt's catch rethrows instead of answering false
+     -> Mailing_a_receipt_still_answers_false...: Expected OK, Actual BadGateway.
+
+GREEN after restoring each: 47 passed / 0 failed of 47 in the same filter.

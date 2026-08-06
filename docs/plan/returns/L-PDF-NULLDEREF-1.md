@@ -1,0 +1,23 @@
+```
+RETURN: L-PDF-NULLDEREF
+brief: 7bfeda38
+verdict: built
+evidence: OkamAPI-pdfnull 2497ce9d + receipt 17198f14 (lane/pdf-nullderef, local, not pushed) - WebApi.Tests/Wire/PdfRendererOutageWireTests.cs - WebApi.Tests/Services/DocumentRendererFailureTests.cs - artifacts/tests/2497ce9d-fast-tier.trx + 2497ce9d.../RUN.md - lanes/L-PDF-NULLDEREF/{red.txt,decision.md}
+log:
+- BASE, measured not inherited: 4373 passed / 0 failed / 12 skipped of 4385, on this lane's own worktree at a7b90cbd before any edit. HEAD 4399 / 0 / 12 of 4411, from a clean detached checkout of the commit. The +26 is exactly the number of tests added.
+- BASE DEVIATION, named: branched off lane/download-pdf-wire (a7b90cbd, unmerged, local), not the branch tip. Without its IDocumentRenderer port nothing in this process can make a renderer answer non-2xx, so every assertion here would have been unreachable off the tip.
+- THE BRIEF IS RIGHT ABOUT SIX AND UNDERCOUNTS THE TOTAL. GeneratePdf has TWELVE call sites; the six named are the six that dereference directly. Each was driven to a real 500 with its NullReferenceException frame captured (red.txt), not read off the source.
+- TWO MORE LIVE ROUTES, same defect one hop later: InvoiceService.RetrySendingExistingInvoices and OkamPayoutService.SendPayoutInvoice hand the null to EmailService.BuildInvoiceMessage, which reads PdfResponse.Content. EIGHT routes, not six. Both fixed, both pinned, both red-proved with the real NRE.
+- THE FIX: the port raises DocumentRenderException on a non-2xx instead of returning null; a middleware maps it to 502, in the shape this repo already uses for OperatorSessionException -> 401. No controller changed. A null must be remembered at twelve call sites and was forgotten at six; an exception cannot be silently dereferenced.
+- REJECTED, and it is the tempting one: deriving from AppException, which all eight routes already catch - one word, zero new code. It answers 400, and a well-formed request told "bad request" gives a client no reason to retry and fires no 5xx alert for an outage that is entirely ours.
+- BEHAVIOUR PRESERVED ON PURPOSE: the three bulk invoice runs still notify-and-skip (now one TryAttachPdf instead of three copies of the branch); SendPayoutInvoice deliberately does NOT catch, because continuing would mail an empty report and then set InvoiceSent, the flag that stops a retry.
+- THE OUTAGE IS REAL: RendererAnswering puts the PRODUCTION OkamFunctionsDocumentRenderer in the live host's path over a transport handing it a genuine non-2xx HttpResponseMessage. A double that simply threw would have made every "the route handled it" assertion a statement about the test host.
+- CONTAINMENT NOT WEAKENED: nothing removed from QuarantinedSeams, no key un-blanked, NO client exempted inside DenyOutboundHttpFilter. WireContainmentTests passes unchanged. IOkamPayoutService IS quarantined, so route 8 is pinned at the service tier rather than by opening that seam for a test's convenience.
+- MUTATIONS, each rebuilt with the assembly mtime checked and never --no-build over a restored file: null return restored -> all six routes 500 with the NRE plus routes 7 and 8; middleware unregistered -> six routes 500; URI put into the message -> six routes plus the C7 pin red; TryAttachPdf swallowing -> the bulk run NREs; SendReceipt rethrowing -> its Ok(false) pin red.
+- C7: the exception carries the status and function name only, the middleware template the same two values. The key is read off the production type by reflection, so this lane does NOT commit it a second time - and the key assertion was still proved live by appending the reflected value to the test's own subject string. The committed trx was scanned: no key, no functions host.
+- THE KEY ITSELF IS UNTOUCHED. Rotation stays the owner's, exactly as the sibling left it. The credit-note filename defect was not touched either.
+- RECORDED NOT CHANGED: a credit note ROW is written and committed before the render, so an outage leaves a real credit note in the ledger behind a 502 - equally true of the 500 it replaces, pinned as it behaves. Also found while reading: POST /invoices/RetrySendingExistingInvoices carries no [Authorize] and iterates every unsent invoice in the database.
+- NO MIGRATION, no append-only mutation, no statutory claim. C3 by construction (exception + middleware + registration + existing routes in one diff). C4: every money-path write is driven over HTTP as a genuine seeded principal or the fixture's PowerUser, never an ambient actor. C5: a suite result, not acceptance.
+- SQL TIER NOT RUN - no slot granted, three foreign containers up, none started or touched. Journey-artifact churn reverted, build output deleted, own worktree, nothing pushed.
+END RETURN
+```

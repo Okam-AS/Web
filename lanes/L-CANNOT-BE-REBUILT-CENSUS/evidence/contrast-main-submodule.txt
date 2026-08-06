@@ -1,0 +1,3 @@
+Submodule 'core' (https://github.com/Okam-AS/Core.git) registered for path 'core'
+Cloning into '/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/fresh-web/core'...
+Submodule path 'core': checked out '2a2e7b3effe6cefb82b7812e0fd0930b55e2b429'

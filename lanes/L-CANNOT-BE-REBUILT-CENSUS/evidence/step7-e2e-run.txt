@@ -1,0 +1,105 @@
+
+> okam-consumer@1.0.0 test:e2e
+> playwright test
+
+[WebServer] 
+[WebServer]  WARN  You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  Module @nuxt/image is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version >=3.1.0 is required but currently using 2.17.1
+[WebServer] 
+[WebServer] ℹ Parsed 0 files in 0.0 seconds
+[WebServer] ℹ [HPM] Proxy created: /  -> http://127.0.0.1:5080
+[WebServer] ℹ [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+[WebServer] ℹ Listening on: http://192.168.1.114:3010/
+[WebServer] ℹ Preparing project for development
+[WebServer] ℹ Initial build may take a while
+[WebServer] ℹ Discovered Components: .nuxt/components/readme.md
+[WebServer] ✔ Builder initialized
+
+Running 22 tests using 1 worker
+
+[WebServer] ✔ Nuxt files generated
+[WebServer] 
+[WebServer]  WARN  Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[WebServer] 
+[WebServer] ℹ Compiling Server
+[WebServer] ℹ Compiling Client
+[WebServer] ✔ Server: Compiled successfully in 29.07s
+[WebServer] ✔ Client: Compiled successfully in 33.39s
+[WebServer] ℹ Waiting for file changes
+[WebServer] ℹ Memory usage: 1.01 GB (RSS: 2.47 GB)
+[WebServer] ℹ Listening on: http://192.168.1.114:3010/
+  ✓   1 [chromium] › test/e2e/journeys/account-email-confirm.spec.js:77:1 › A phone-signup administrator is refused a test-send, confirms her address from admin, and is then allowed it @fixture (38.7s)
+  ✓   2 [chromium] › test/e2e/journeys/admin-refusal-worker.spec.js:24:1 › A worker is refused the store-admin schedule and is given their own page instead @fixture (2.5s)
+  ✓   3 [chromium] › test/e2e/journeys/events-deposit-precondition.spec.js:65:1 › the operator reads the deposit precondition on the row before arming the money path @live (1.4s)
+  ✓   4 [chromium] › test/e2e/journeys/events-enquiry-to-settlement.spec.js:184:1 › A private booking runs from a public enquiry to a settled statement, and the accept refuses while the module is off @fixture (9.8s)
+  ✓   5 [chromium] › test/e2e/journeys/events-guest-proposal.spec.js:147:1 › A guest reads the offer their venue just sent and accepts it, and the receipt names what was on screen @fixture (5.0s)
+  ✓   6 [chromium] › test/e2e/journeys/events-runsheet-onboarding.spec.js:96:1 › A store still in onboarding prints the run sheet, and the setup banner is not on it @fixture (2.8s)
+  ✓   7 [chromium] › test/e2e/journeys/events-runsheet-print.spec.js:78:1 › A host prints the run sheet: the dietary requirement is on it and the guest links are not @fixture (2.9s)
+  ✓   8 [chromium] › test/e2e/journeys/growth-guest-consent.spec.js:51:1 › A guest reads the consent wording verbatim, is refused without ticking it, and then subscribes @fixture (3.8s)
+  ✓   9 [chromium] › test/e2e/journeys/growth-newsletter-send-gate.spec.js:95:1 › An operator drafts and approves a newsletter, and the send gate opens only when both switches are up @fixture (5.3s)
+  ✓  10 [chromium] › test/e2e/journeys/growth-privacy-queue.spec.js:52:1 › a venue sees a guest's erasure request on its privacy queue and resolves it @fixture (3.7s)
+  ✓  11 [chromium] › test/e2e/journeys/margin-recipe-to-margin.spec.js:51:1 › A chef switches Margin on, costs a recipe, sells it as a dish, and meets the statements gate @fixture (6.7s)
+  ✓  12 [chromium] › test/e2e/journeys/margin-statement-week.spec.js:41:1 › A venue opens a week, enters its purchase spend, finalises it, and finds it frozen @fixture (5.6s)
+  ✓  13 [chromium] › test/e2e/journeys/margin-supplier-to-plate.spec.js:70:1 › A venue records a supplier, an article and a price, and a plate cost stops being unknown @fixture (7.9s)
+  ✓  14 [chromium] › test/e2e/journeys/margin-week-freeze.spec.js:69:1 › A frozen week is asked to take an edit, refuses it, and takes the same edit on its correction @fixture (5.3s)
+  ✓  15 [chromium] › test/e2e/journeys/meals-admin-setup.spec.js:31:1 › A concierge creates a company, signs its corridor, runs a programme and issues an invitation @fixture (2.0s)
+  ✓  16 [chromium] › test/e2e/journeys/meals-guest-claim.spec.js:46:1 › An employee is refused a stranger's invitation without being told whose it is, then claims their own @fixture (1.6s)
+  ✓  17 [chromium] › test/e2e/journeys/modal-estate-scroll-lock.spec.js:87:1 › Two different modals hold the page, and closing one does not let go @fixture (8.1s)
+  ✓  18 [chromium] › test/e2e/journeys/modal-scroll-lock.spec.js:105:1 › A modal holds the page behind it still, and lets go when it closes @fixture (8.4s)
+  ✓  19 [chromium] › test/e2e/journeys/training-course-to-evidence.spec.js:63:1 › A manager opens Training, publishes a course version, files a failing score, and the SERVER calls it not passed @fixture (5.7s)
+  ✓  20 [chromium] › test/e2e/journeys/workforce-flag-lever.spec.js:40:1 › an operator turns the schedule publication switch off and the publish becomes its typed refusal @live (5.6s)
+  ✓  21 [chromium] › test/e2e/journeys/workforce-invitation-onboarding.spec.js:57:1 › A manager invites a new hire, who claims the code and sees their published shift @fixture (7.9s)
+  ✘  22 [chromium] › test/e2e/journeys/workforce-schedule-publish.spec.js:37:1 › A manager creates a draft week, staffs a shift, validates it and publishes it @live (3.3s)
+
+
+  1) [chromium] › test/e2e/journeys/workforce-schedule-publish.spec.js:37:1 › A manager creates a draft week, staffs a shift, validates it and publishes it @live 
+
+    Error: The validation panel is not the pack. Expected 11 rule results (break-required, daily-rest, minor-block, night-window, ordinary-weekly-hours, overtime-annual, overtime-four-weeks, overtime-weekly, plan-notice-lead, scheduled-vs-contract, weekly-rest) and got 2 (workforce.rest-period, workforce.weekly-hours). Missing: break-required, daily-rest, minor-block, night-window, ordinary-weekly-hours, overtime-annual, overtime-four-weeks, overtime-weekly, plan-notice-lead, scheduled-vs-contract, weekly-rest. Unexpected: workforce.rest-period, workforce.weekly-hours.
+
+       at ../support/journey-assertions.js:184
+
+      182 |   const extra = got.filter(id => !want.includes(id));
+      183 |   if (missing.length || extra.length || got.length !== want.length) {
+    > 184 |     throw new Error(
+          |           ^
+      185 |       'The validation panel is not the pack. Expected ' + want.length + ' rule results ' +
+      186 |       '(' + want.join(', ') + ') and got ' + got.length + ' (' + got.join(', ') + ').' +
+      187 |       (missing.length ? ' Missing: ' + missing.join(', ') + '.' : '') +
+        at assertRulePackResults (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/fe-int/test/e2e/support/journey-assertions.js:184:11)
+        at /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/fe-int/test/e2e/journeys/workforce-schedule-publish.spec.js:267:7
+        at JourneyRecorder.step (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/fe-int/test/e2e/support/journey.js:347:22)
+        at /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/fe-int/test/e2e/journeys/workforce-schedule-publish.spec.js:249:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/workforce-schedule-publish-2202b-lidates-it-and-publishes-it-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/workforce-schedule-publish.fixture.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/workforce-schedule-publish.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/workforce-schedule-publish-2202b-lidates-it-and-publishes-it-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/workforce-schedule-publish-2202b-lidates-it-and-publishes-it-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/workforce-schedule-publish-2202b-lidates-it-and-publishes-it-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › test/e2e/journeys/workforce-schedule-publish.spec.js:37:1 › A manager creates a draft week, staffs a shift, validates it and publishes it @live 
+  21 passed (2.5m)

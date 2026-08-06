@@ -1,0 +1,15 @@
+# commit 627e34ae5eced9af7d8931529a1108db97241c9e  tree clean: 0 modified paths
+# files: the seven this lane's commit touches
+
+/Users/svendaneel/okam/web-mixinlabels/translations/de.ts
+  698:1  warning  Expected indentation of 2 spaces but found 6  indent
+
+/Users/svendaneel/okam/web-mixinlabels/translations/en.ts
+  698:1  warning  Expected indentation of 2 spaces but found 6  indent
+
+/Users/svendaneel/okam/web-mixinlabels/translations/no.ts
+  715:1  warning  Expected indentation of 2 spaces but found 6  indent
+
+✖ 3 problems (0 errors, 3 warnings)
+  0 errors and 3 warnings potentially fixable with the `--fix` option.
+

@@ -1,0 +1,203 @@
+{
+  "journey": "meals-guest-claim",
+  "title": "An employee is refused a stranger's invitation without being told whose it is, then claims their own",
+  "status": "passed",
+  "startedAtUtc": "2026-08-04T13:59:56.221Z",
+  "finishedAtUtc": "2026-08-04T13:59:58.123Z",
+  "durationMs": 1902,
+  "capabilities": [
+    "meals.claim.paste-surface",
+    "meals.claim.authentication-required",
+    "meals.invitation.session",
+    "meals.invitation.claim",
+    "meals.invitation.refusal.unknown-code",
+    "meals.invitation.refusal.already-used",
+    "meals.invitation.refusal.contact-mismatch"
+  ],
+  "surface": "public",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3760",
+  "apiBaseUrl": "http://127.0.0.1:4760",
+  "commit": "e34977acebd59b223584158c33451b6f1ffd82c1",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": {
+    "id": "fixture@e34977acebd59b223584158c33451b6f1ffd82c1+dirty",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "e34977a-dirty",
+    "detail": "the in-repo fixture backend, not an API build (branch feature/restaurant-modules)"
+  },
+  "backendServed": 11,
+  "backendSubjectServed": 7,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "proxiedSubjectServed": 0,
+  "proxiedSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:4760/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:4760/user/login -> 200",
+    "POST http://127.0.0.1:4760/v1/meals/invitations/session -> 404",
+    "POST http://127.0.0.1:4760/v1/meals/invitations/session -> 200",
+    "POST http://127.0.0.1:4760/v1/meals/invitations/claim -> 409",
+    "POST http://127.0.0.1:4760/v1/meals/invitations/session -> 200",
+    "POST http://127.0.0.1:4760/v1/meals/invitations/claim -> 403",
+    "POST http://127.0.0.1:4760/user/sendverificationtoken -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "open the claim page with no code at all",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T13:59:56.222Z",
+      "durationMs": 1196,
+      "detail": "paste screen, no token",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "an empty paste is refused locally",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T13:59:57.418Z",
+      "durationMs": 29,
+      "detail": "refused before anything was sent",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "a code held by nobody signed in asks them to sign in",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T13:59:57.447Z",
+      "durationMs": 28,
+      "detail": "sign-in required, and no invitee call was attempted without one",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "sign in as somebody who was not invited",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T13:59:57.475Z",
+      "durationMs": 104,
+      "detail": "signed in as +4790000001 (Ola Ansatt)",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "THE FIX — the sign-in now reaches the claim client",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T13:59:57.579Z",
+      "durationMs": 4,
+      "detail": "[{\"route\":\"invitations/session\",\"authorization\":\"present\"}]",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "the unknown code is refused, and names BOTH possibilities",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T13:59:57.583Z",
+      "durationMs": 15,
+      "detail": "Vi kjenner ikke igjen denne koden",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "a code somebody has already used says so, not \"no longer claimable\"",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T13:59:57.612Z",
+      "durationMs": 125,
+      "detail": "meals.invitation-not-claimable · currentState Claimed → \"Koden er allerede brukt\"",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "THE ONE THAT MATTERS: refused for the right code and the wrong account",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T13:59:57.737Z",
+      "durationMs": 113,
+      "detail": "meals.invitation-contact-mismatch, with a way to come back as somebody else",
+      "error": null
+    },
+    {
+      "n": 9,
+      "name": "AND IT DOES NOT SAY WHOSE INVITATION IT IS",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T13:59:57.850Z",
+      "durationMs": 7,
+      "detail": "none of [\"marit@example.test\",\"marit\",\"99999999\",\"Marit\"] appears anywhere in the rendered page",
+      "error": null
+    },
+    {
+      "n": 10,
+      "name": "come back as the person the code actually names",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T13:59:57.895Z",
+      "durationMs": 154,
+      "detail": "signed in as +4799999999; the held code survived and no reload was needed",
+      "error": null
+    },
+    {
+      "n": 11,
+      "name": "the invitation says what it can and names what it cannot",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T13:59:58.049Z",
+      "durationMs": 5,
+      "detail": "Rolle Ansatt Gyldig til 4. august kl. 16:09",
+      "error": null
+    },
+    {
+      "n": 12,
+      "name": "claim it",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T13:59:58.054Z",
+      "durationMs": 50,
+      "detail": "membership reference mem-1; 7 invitee calls, all authenticated",
+      "error": null
+    },
+    {
+      "n": 13,
+      "name": "what the browser said while this ran",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T13:59:58.122Z",
+      "durationMs": 0,
+      "detail": "nothing",
+      "error": null
+    }
+  ],
+  "findings": [],
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 409 (Conflict)",
+    "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+  ],
+  "failedRequests": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:4760/v1/meals/invitations/session",
+      "status": 404
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:4760/v1/meals/invitations/claim",
+      "status": 409
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:4760/v1/meals/invitations/claim",
+      "status": 403
+    }
+  ],
+  "screenshots": [
+    "meals-guest-claim/fixture/01-an-unknown-code.png",
+    "meals-guest-claim/fixture/02-refused-and-withholding.png",
+    "meals-guest-claim/fixture/03-the-membership-receipt.png"
+  ],
+  "error": null,
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/meals-guest-claim.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false,
+    "supersedes": null
+  }
+}

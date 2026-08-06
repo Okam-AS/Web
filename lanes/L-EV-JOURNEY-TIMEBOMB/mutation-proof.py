@@ -77,6 +77,54 @@ MUTATIONS = [
        "literal: '2026-11-30', why: 'x'.repeat(50) },\n  {")],
      'a registered journey excusing its own countdown by writing itself into the ledger',
      'a registered journey cannot buy an exemption'),
+
+    # ---- the THIRD fault: a walk that raises a lever and never puts it back --------------------
+    ('J-lever-restore-deleted', SPEC,
+     [("await flip(page, 'clear', world.EVENTS_SETTLEMENT_FLAG);", "// restore removed"),
+      ("await flip(page, 'clear', world.EVENTS_CORE_FLAG);", "// restore removed")],
+     'the walk ending with both Events levers still up, which is how it stood when run 2 died at '
+     'the darkness assertion',
+     'ends with no lever switched on'),
+
+    ('K-refusal-copy-rewritten-and-restore-deleted', SPEC,
+     [("const NOT_ENABLED = 'ikke slått på for dette utsalgsstedet';", "const NOT_ENABLED = 'x-gate';"),
+      ("const REFUSED_UNAVAILABLE = 'Dette er ikke tilgjengelig akkurat nå';",
+       "const REFUSED_UNAVAILABLE = 'y-gate';"),
+      ("await flip(page, 'clear', world.EVENTS_SETTLEMENT_FLAG);", "// restore removed"),
+      ("await flip(page, 'clear', world.EVENTS_CORE_FLAG);", "// restore removed")],
+     'the same fault WITH both Norwegian sentences rewritten -- the rename a rule keyed to one '
+     'literal would have passed clean. Checked afterwards rather than assumed: what still finds the '
+     'spec is the ENGLISH phrase in its own test title ("while the module is off") and the wire code '
+     'EVENTS_DISABLED in its finding string. The prediction written here first -- that only the wire '
+     'code would be left and the dialect self-check would red beside it -- was wrong, and the '
+     'vocabulary held for a reason its author had not counted on',
+     'ends with no lever switched on'),
+
+    ('L-restore-hidden-behind-a-loop-variable', SPEC,
+     [("await flip(page, 'clear', world.EVENTS_SETTLEMENT_FLAG);", "await flip(page, 'clear', flagKey);")],
+     'the restore written through a loop variable -- it reads correctly, it would even work, and it '
+     'makes the rule that requires it unable to see which lever was put back',
+     'names a flag this reader can resolve'),
+
+    ('M-lever-ledger-goes-stale', GUARD,
+     [("lever: 'EVENTS_CORE',", "lever: 'EVENTS_NOPE',")],
+     'the lever ledger pointed at a lever nothing leaves up, which is both an unaccounted lever in '
+     'the corpus and a ledger entry naming nothing',
+     'still names a lever that is really left up'),
+
+    ('N-darkness-asserting-spec-buys-the-exemption', GUARD,
+     [("const LEVERS_LEFT_ON = [\n  {",
+       "const LEVERS_LEFT_ON = [\n  { file: 'events-enquiry-to-settlement.spec.js', "
+       "lever: 'world.EVENTS_CORE_FLAG', why: 'x'.repeat(50) },\n  {")],
+     'the cheapest way to make the restore rule green -- the journey that asserts darkness writing '
+     'itself into the ledger instead of restoring anything',
+     'cannot buy its way into the ledger'),
+
+    ('O-lever-reader-goes-blind', SPEC,
+     [("await flip(page, 'off', world.EVENTS_CORE_FLAG);", "await flip(page, offAction, world.EVENTS_CORE_FLAG);")],
+     'a lever call written in a shape the static reader cannot parse. It does not make the reader '
+     'fail -- it makes it see one fewer lever, which is the failure mode this whole rule has',
+     'went unparsed'),
 ]
 
 

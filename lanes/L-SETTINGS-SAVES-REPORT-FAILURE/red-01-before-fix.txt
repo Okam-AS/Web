@@ -1,0 +1,140 @@
+watchman warning:  Recrawled this watch 57 times, most recently because:
+MustScanSubDirs UserDroppedTo resolve, please review the information on
+https://facebook.github.io/watchman/docs/troubleshooting.html#recrawl
+To clear this warning, run:
+`watchman watch-del '/Users/svendaneel/okam/Web-modules' ; watchman watch-project '/Users/svendaneel/okam/Web-modules'`
+
+FAIL test/delivery-save-failure.test.js
+  a store-service toggle reports a write that did not land as `false`, not as a throw
+    ✓ a 204 resolves false — the toggle the operator moved was not written
+    ✓ a 200 whose body cannot be read resolves false (1 ms)
+    ✓ a 200 with a body resolves true, so `false` is not what every response produces
+  a self-pickup switch that did not save says so, and goes back
+    ✓ the successful arm: the switch moves, it is confirmed, and the store is re-read (16 ms)
+    ✕ the refused arm: the switch does not stay flipped over a value the server never took (4 ms)
+    ✕ the refused arm: the operator is told the change was not saved (3 ms)
+    ✕ the refused arm: the store is re-read, so the screen shows the server and not the click (3 ms)
+    ✕ a refused re-read still leaves the switch on the last value the server gave (4 ms)
+  the home-delivery switch, whose call site never looked at the booleans at all
+    ✕ a refused home-delivery write is not announced as an activation (4 ms)
+    ✓ the successful arm still confirms and re-reads (3 ms)
+  the minimum-order field shows what is stored and what would be written
+    ✓ nothing edited, whole-kroner minimum: no Save is offered (3 ms)
+    ✕ nothing edited, a minimum carrying øre: still no Save is offered (2 ms)
+    ✓ a minimum carrying øre is never silently rounded down by a Save the operator did not ask for (2 ms)
+    ✓ a real edit is still offered and still saves (3 ms)
+    ✕ typed øre are not accepted-looking and then dropped: the field shows what would be written (3 ms)
+    ✕ an unreadable entry shows the zero it would write rather than hiding it (2 ms)
+    ✕ a refused minimum-order save is reported and the field goes back to what is stored (3 ms)
+  an address with an empty field does not offer a Save nobody asked for
+    ✕ a null city does not leave the page permanently dirty (2 ms)
+    ✕ a store with no address at all does not leave the page permanently dirty (2 ms)
+    ✓ editing the city still offers Save (2 ms)
+  the notification timer does not outlive the page
+    ✕ leaving the page clears an armed notification timeout (2 ms)
+
+  ● a self-pickup switch that did not save says so, and goes back › the refused arm: the switch does not stay flipped over a value the server never took
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      222 |
+      223 |     // ...so the venue must not be looking at an OFF switch
+    > 224 |     expect(selfPickUpSwitch(wrapper).element.checked).toBe(true)
+          |                                                       ^
+      225 |   })
+      226 |
+      227 |   test('the refused arm: the operator is told the change was not saved', async () => {
+
+      at Object.<anonymous> (test/delivery-save-failure.test.js:224:55)
+
+  ● a self-pickup switch that did not save says so, and goes back › the refused arm: the operator is told the change was not saved
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      232 |     await settle(wrapper)
+      233 |
+    > 234 |     expect(notification(wrapper).exists()).toBe(true)
+          |                                            ^
+      235 |     expect(notification(wrapper).classes()).toContain('notification--error')
+      236 |     expect(notification(wrapper).text()).toBe(translations.no.delivery_saveChangeError)
+      237 |   })
+
+      at Object.<anonymous> (test/delivery-save-failure.test.js:234:44)
+
+  ● a self-pickup switch that did not save says so, and goes back › the refused arm: the store is re-read, so the screen shows the server and not the click
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 2
+    Received: 1
+
+      245 |     await settle(wrapper)
+      246 |
+    > 247 |     expect(backend.calls.get).toBe(2)
+          |                               ^
+      248 |   })
+      249 |
+      250 |   test('a refused re-read still leaves the switch on the last value the server gave', async () => {
+
+      at Object.<anonymous> (test/delivery-save-failure.test.js:247:31)
+
+  ● a self-pickup switch that did not save says so, and goes back › a refused re-read still leaves the switch on the last value the server gave
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      259 |     await settle(wrapper)
+      260 |
+    > 261 |     expect(selfPickUpSwitch(wrapper).element.checked).toBe(true)
+          |                                                       ^
+      262 |     expect(notification(wrapper).classes()).toContain('notification--error')
+      263 |     expect(notification(wrapper).text()).toBe(translations.no.delivery_saveChangeError)
+      264 |   })
+
+      at Object.<anonymous> (test/delivery-save-failure.test.js:261:55)
+
+  ● the home-delivery switch, whose call site never looked at the booleans at all › a refused home-delivery write is not announced as an activation
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected value: "notification--error"
+    Received array: ["notification", "notification--success"]
+
+      279 |     expect(backend.store.homeDeliveryEnabled).toBe(false)
+      280 |     expect(homeDeliverySwitch(wrapper).element.checked).toBe(false)
+    > 281 |     expect(notification(wrapper).classes()).toContain('notification--error')
+          |                                             ^
+      282 |   })
+      283 |
+      284 |   test('the successful arm still confirms and re-reads', async () => {
+
+      at Object.<anonymous> (test/delivery-save-failure.test.js:281:45)
+
+  ● the minimum-order field shows what is stored and what would be written › nothing edited, a minimum carrying øre: still no Save is offered
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      330 |   test('nothing edited, a minimum carrying øre: still no Save is offered', async () => {
+      331 |     const wrapper = await mountDelivery(withHomeDelivery({ minimumOrderPriceForHomeDelivery: 15050 }))
+    > 332 |     expect(saveButton(wrapper).exists()).toBe(false)
+          |                                          ^
+      333 |   })
+      334 |
+      335 |   test('a minimum carrying øre is never silently rounded down by a Save the operator did not ask for', async () => {
+
+      at Object.<anonymous> (test/delivery-save-failure.test.js:332:42)
+
+  ● the minimum-order field shows what is stored and what would be written › typed øre are not accepted-looking and then dropped: the field shows what would be written
+
+    expect(received).toBe(expected) // Object.is equality

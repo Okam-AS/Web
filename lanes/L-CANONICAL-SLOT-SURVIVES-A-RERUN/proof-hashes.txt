@@ -1,0 +1,66 @@
+PROOF — a re-run leaves every tracked artifact byte-identical
+repo: /Users/svendaneel/okam/Web-modules   base commit: 8ac6f63648015d8c7a230181a7f07bf303d43268 (lane/focustrap-teardown)
+instrument: git ls-files artifacts/ | shasum -a 256   (ls-files, not find: artifacts/ is ignored wholesale with 16 files force-added)
+re-run: npx playwright test modal-scroll-lock modal-estate-scroll-lock workforce-invitation-onboarding, E2E_WEB_PORT=3077 E2E_FIXTURE_PORT=4077 (4010 left alone)
+
+================ RED — base commit, before the fix ================
+-- hash diff, before vs after one re-run --
+3c3
+< 750536e0be53a8e5ec7acbb4ee0b3205c2846e89d487da76d9053973a65664c7  artifacts/journeys/modal-estate-scroll-lock.playwright.json
+---
+> e185767dd925b642e6c8dcd89449de8a4df832cd20a6c343183f0991a251606f  artifacts/journeys/modal-estate-scroll-lock.playwright.json
+7c7
+< dc666e487fd3d2219c6563711f6d895b7439130caee8856cd1742d145079b3d9  artifacts/journeys/modal-scroll-lock.playwright.json
+---
+> 2a98d75f70a6bcec12b68d33ee5daff5cb635ce5e8bf61af2695dc27aa4e7652  artifacts/journeys/modal-scroll-lock.playwright.json
+11c11
+< b9768d450333ef026efb0cd95cc149941d6a763ee280df626813766934f3239f  artifacts/journeys/workforce-invitation-onboarding.playwright.json
+---
+> 1386f0571d329af561fd9b902eef414b98fae2ecb6638644756ad892fa6ac483  artifacts/journeys/workforce-invitation-onboarding.playwright.json
+13c13
+< 0239ed93c4a2ba38d4d5515f5c735f488f53d5aa5e012cefec1c3a6cc7e83521  artifacts/journeys/workforce-invitation-onboarding/fixture/02-the-invitation-code-shown-once.png
+---
+> b9c209d34d783d533086583c497f5ab40f15ebdb6c645b99fad4ba9e0d167d35  artifacts/journeys/workforce-invitation-onboarding/fixture/02-the-invitation-code-shown-once.png
+18c18
+< f1f49b37c00901ca1ab2893506f5571e0c8a2382ad2a593894c36340261e4a94  artifacts/journeys/workforce-invitation-onboarding/fixture/07-the-roster-after-the-claim.png
+---
+> 8ce184c2dc1f9953d5bdb281a4d3b25a47bb4d13917bc757f115c06925703989  artifacts/journeys/workforce-invitation-onboarding/fixture/07-the-roster-after-the-claim.png
+19a20,21
+>  M artifacts/journeys/modal-estate-scroll-lock.playwright.json
+>  M artifacts/journeys/modal-scroll-lock.playwright.json
+
+5 of 16 tracked artifacts changed. 3 JSON records + 2 of the 7 workforce PNGs.
+
+-- the orphaning path, which the picture hashes cannot show --
+== modal-scroll-lock ==  status=passed  screenshots=3
+   on-disk record points at: artifacts/journeys/modal-scroll-lock/fixture/01-login-modal-body-locked.png
+                             artifacts/journeys/modal-scroll-lock/fixture/02-modal-open-page-behind-held-at-1200.png
+                             artifacts/journeys/modal-scroll-lock/fixture/03-all-modals-closed-page-free-again.png
+   tracked picture artifacts/journeys/modal-scroll-lock/01-login-modal-body-locked.png -> ORPHANED (tracked, unreferenced by the record on disk)
+   tracked picture artifacts/journeys/modal-scroll-lock/02-modal-open-page-behind-held-at-1200.png -> ORPHANED (tracked, unreferenced by the record on disk)
+   tracked picture artifacts/journeys/modal-scroll-lock/03-all-modals-closed-page-free-again.png -> ORPHANED (tracked, unreferenced by the record on disk)
+   referenced path artifacts/journeys/modal-scroll-lock/fixture/01-login-modal-body-locked.png -> exists on disk, IGNORED — git does not keep it
+   referenced path artifacts/journeys/modal-scroll-lock/fixture/02-modal-open-page-behind-held-at-1200.png -> exists on disk, IGNORED — git does not keep it
+   referenced path artifacts/journeys/modal-scroll-lock/fixture/03-all-modals-closed-page-free-again.png -> exists on disk, IGNORED — git does not keep it
+== modal-estate-scroll-lock ==  status=failed  screenshots=0
+   on-disk record points at: 
+   tracked picture artifacts/journeys/modal-estate-scroll-lock/01-receipt-modal-open-board-behind-held.png -> ORPHANED (tracked, unreferenced by the record on disk)
+   tracked picture artifacts/journeys/modal-estate-scroll-lock/02-one-of-two-closed-board-still-held.png -> ORPHANED (tracked, unreferenced by the record on disk)
+   tracked picture artifacts/journeys/modal-estate-scroll-lock/03-all-modals-closed-board-free-again.png -> ORPHANED (tracked, unreferenced by the record on disk)
+
+================ GREEN — with the fix ================
+-- hash diff, before vs after the same re-run --
+(no output above) ALL 16 TRACKED ARTIFACTS BYTE-IDENTICAL ACROSS THE RE-RUN
+
+-- and the committed records still cite pictures git keeps --
+modal-scroll-lock            3 cited, 0 dangling, 0 orphaned
+modal-estate-scroll-lock     3 cited, 0 dangling, 0 orphaned
+workforce-invitation-onboarding  7 cited, 0 dangling, 0 orphaned
+playwright: 3 passed (51.9s), all three filed under runs/ with canonicalTracked=true
+
+-- pre-existing dirt, untouched by this lane --
+ M artifacts/journeys/workforce-invitation-onboarding.playwright.json
+ M artifacts/journeys/workforce-invitation-onboarding/fixture/01-the-roster-before-an-invitation.png
+ M artifacts/journeys/workforce-invitation-onboarding/fixture/02-the-invitation-code-shown-once.png
+ M artifacts/journeys/workforce-invitation-onboarding/fixture/07-the-roster-after-the-claim.png
+(the same four files, and the same bytes, this lane found at 08:02Z; see 00-preexisting-dirt.txt)

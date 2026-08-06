@@ -20,6 +20,7 @@
     "test:e2e:fixture-divergence": "node test/e2e/scripts/fixture-divergence.js",
     "test:e2e:fixture-divergence:prove": "node test/e2e/scripts/fixture-divergence.js --prove",
     "test:e2e:live-world-banner": "node test/e2e/scripts/live-world-banner-check.js",
+    "test:e2e:live-world-stamp": "node test/e2e/scripts/live-world-stamp-wiring-check.js",
     "reinstall": "rm -rf node_modules && npm i",
     "heroku login": "heroku login",
     "heroku deploy": "git push heroku master",

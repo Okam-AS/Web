@@ -1,0 +1,4264 @@
+[
+ {
+  "name": "AccountingExportTarget",
+  "path": "Enums/AccountingExportTarget.cs",
+  "members": [
+   {
+    "name": "EmonkeyWebhook",
+    "value": 0
+   },
+   {
+    "name": "Tripletex",
+    "value": 1
+   }
+  ]
+ },
+ {
+  "name": "ClientTheme",
+  "path": "Enums/ClientTheme.cs",
+  "members": [
+   {
+    "name": "Okam",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "JungelPizza",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "Lora",
+    "value": 2,
+    "implicit": true
+   },
+   {
+    "name": "ArvLokalmat",
+    "value": 3,
+    "implicit": true
+   },
+   {
+    "name": "Mathavna",
+    "value": 4,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "CurrencySymbolPosition",
+  "path": "Enums/CurrencySymbolPosition.cs",
+  "members": [
+   {
+    "name": "SymbolFirstNoSpace",
+    "value": 0
+   },
+   {
+    "name": "SymbolLastNoSpace",
+    "value": 1
+   },
+   {
+    "name": "SymbolFirstWithSpace",
+    "value": 2
+   },
+   {
+    "name": "SymbolLastWithSpace",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "DeliveryFilter",
+  "path": "Enums/DeliveryFilter.cs",
+  "members": [
+   {
+    "name": "SelfPickup",
+    "value": 10
+   },
+   {
+    "name": "HomeDelivery",
+    "value": 20
+   }
+  ]
+ },
+ {
+  "name": "DeliveryType",
+  "path": "Enums/DeliveryType.cs",
+  "members": [
+   {
+    "name": "NotSet",
+    "value": 0
+   },
+   {
+    "name": "SelfPickup",
+    "value": 100
+   },
+   {
+    "name": "InstantHomeDelivery",
+    "value": 200
+   },
+   {
+    "name": "DineHomeDelivery",
+    "value": 350
+   },
+   {
+    "name": "WoltDelivery",
+    "value": 375
+   },
+   {
+    "name": "WoltMarketplaceDelivery",
+    "value": 380
+   },
+   {
+    "name": "TableDelivery",
+    "value": 400
+   }
+  ]
+ },
+ {
+  "name": "DineHomeStatus",
+  "path": "Enums/DineHomeStatus.cs",
+  "members": [
+   {
+    "name": "NotSet",
+    "value": 0
+   },
+   {
+    "name": "Accepted",
+    "value": 1
+   },
+   {
+    "name": "PickedUp",
+    "value": 2
+   },
+   {
+    "name": "ReachedDestination",
+    "value": 3
+   },
+   {
+    "name": "Completed",
+    "value": 4
+   },
+   {
+    "name": "Canceled",
+    "value": 5
+   }
+  ]
+ },
+ {
+  "name": "DinteroStatus",
+  "path": "Enums/DinteroStatus.cs",
+  "members": [
+   {
+    "name": "INITIATED",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "AUTHORIZED",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "AUTHORIZATION_VOIDED",
+    "value": 2,
+    "implicit": true
+   },
+   {
+    "name": "CAPTURED",
+    "value": 3,
+    "implicit": true
+   },
+   {
+    "name": "PARTIALLY_CAPTURED",
+    "value": 4,
+    "implicit": true
+   },
+   {
+    "name": "REFUNDED",
+    "value": 5,
+    "implicit": true
+   },
+   {
+    "name": "PARTIALLY_REFUNDED",
+    "value": 6,
+    "implicit": true
+   },
+   {
+    "name": "DECLINED",
+    "value": 7,
+    "implicit": true
+   },
+   {
+    "name": "FAILED",
+    "value": 8,
+    "implicit": true
+   },
+   {
+    "name": "UNKNOWN",
+    "value": 9,
+    "implicit": true
+   },
+   {
+    "name": "PARTIALLY_CAPTURED_REFUNDED",
+    "value": 10,
+    "implicit": true
+   },
+   {
+    "name": "ON_HOLD",
+    "value": 11,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "DinteroTerminalStatus",
+  "path": "Enums/DinteroTerminalStatus.cs",
+  "members": [
+   {
+    "name": "NotSet",
+    "value": 0
+   },
+   {
+    "name": "Waiting",
+    "value": 1
+   },
+   {
+    "name": "Success",
+    "value": 2
+   },
+   {
+    "name": "Fail",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "DinteroVerifyStatus",
+  "path": "Enums/DinteroVerifyStatus.cs",
+  "members": [
+   {
+    "name": "NotSet",
+    "value": 0
+   },
+   {
+    "name": "Waiting",
+    "value": 100
+   },
+   {
+    "name": "Success",
+    "value": 200
+   },
+   {
+    "name": "Fail",
+    "value": 300
+   }
+  ]
+ },
+ {
+  "name": "OkamDiscordChannel",
+  "path": "Enums/DiscordOkamChannel.cs",
+  "members": [
+   {
+    "name": "Unknown",
+    "value": 0
+   },
+   {
+    "name": "Invoice",
+    "value": 10
+   },
+   {
+    "name": "Store",
+    "value": 20
+   },
+   {
+    "name": "Order",
+    "value": 30
+   },
+   {
+    "name": "Contact",
+    "value": 40
+   },
+   {
+    "name": "Offer",
+    "value": 45
+   },
+   {
+    "name": "System",
+    "value": 50
+   }
+  ]
+ },
+ {
+  "name": "DiscountApplicability",
+  "path": "Enums/DiscountApplicability.cs",
+  "members": [
+   {
+    "name": "Order",
+    "value": 10
+   },
+   {
+    "name": "HomeDeliveryOrder",
+    "value": 11
+   },
+   {
+    "name": "SelfPickupOrder",
+    "value": 12
+   },
+   {
+    "name": "TableDeliveryOrder",
+    "value": 13
+   },
+   {
+    "name": "ProductsInclusive",
+    "value": 20
+   },
+   {
+    "name": "ProductsExclusive",
+    "value": 30
+   }
+  ]
+ },
+ {
+  "name": "DiscountType",
+  "path": "Enums/DiscountType.cs",
+  "members": [
+   {
+    "name": "Amount",
+    "value": 10
+   },
+   {
+    "name": "Percent",
+    "value": 20
+   }
+  ]
+ },
+ {
+  "name": "EventSource",
+  "path": "Enums/Events/EventSource.cs",
+  "members": [
+   {
+    "name": "ConsumerInquiry",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Manual",
+    "value": 1,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "EventStatus",
+  "path": "Enums/Events/EventStatus.cs",
+  "members": [
+   {
+    "name": "Inquiry",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Proposing",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "ProposalSent",
+    "value": 2,
+    "implicit": true
+   },
+   {
+    "name": "Accepted",
+    "value": 3,
+    "implicit": true
+   },
+   {
+    "name": "DepositPending",
+    "value": 4,
+    "implicit": true
+   },
+   {
+    "name": "Confirmed",
+    "value": 5,
+    "implicit": true
+   },
+   {
+    "name": "InService",
+    "value": 6,
+    "implicit": true
+   },
+   {
+    "name": "Settling",
+    "value": 7,
+    "implicit": true
+   },
+   {
+    "name": "Settled",
+    "value": 8,
+    "implicit": true
+   },
+   {
+    "name": "Lost",
+    "value": 9,
+    "implicit": true
+   },
+   {
+    "name": "Cancelled",
+    "value": 10,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "EventsActorKind",
+  "path": "Enums/Events/EventsActorKind.cs",
+  "members": [
+   {
+    "name": "Admin",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Guest",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "System",
+    "value": 2,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "EventsDepositResolution",
+  "path": "Enums/Events/EventsDepositResolution.cs",
+  "members": [
+   {
+    "name": "Refund",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Forfeit",
+    "value": 1,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "EventsDepositStatus",
+  "path": "Enums/Events/EventsDepositStatus.cs",
+  "members": [
+   {
+    "name": "Requested",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Pending",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "Paid",
+    "value": 2,
+    "implicit": true
+   },
+   {
+    "name": "PartiallyRefunded",
+    "value": 3,
+    "implicit": true
+   },
+   {
+    "name": "Refunded",
+    "value": 4,
+    "implicit": true
+   },
+   {
+    "name": "Forfeited",
+    "value": 5,
+    "implicit": true
+   },
+   {
+    "name": "Expired",
+    "value": 6,
+    "implicit": true
+   },
+   {
+    "name": "Failed",
+    "value": 7,
+    "implicit": true
+   },
+   {
+    "name": "LatePaid",
+    "value": 8,
+    "implicit": true
+   },
+   {
+    "name": "Quarantined",
+    "value": 9,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "EventsLossReason",
+  "path": "Enums/Events/EventsLossReason.cs",
+  "members": [
+   {
+    "name": "Declined",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Expired",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "Other",
+    "value": 2,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "EventsNotificationChannel",
+  "path": "Enums/Events/EventsNotificationChannel.cs",
+  "members": [
+   {
+    "name": "Email",
+    "value": 1
+   }
+  ]
+ },
+ {
+  "name": "EventsNotificationKind",
+  "path": "Enums/Events/EventsNotificationKind.cs",
+  "members": [
+   {
+    "name": "ProposalLink",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "DepositLink",
+    "value": 1,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "EventsNotificationOutboxStatus",
+  "path": "Enums/Events/EventsNotificationOutboxStatus.cs",
+  "members": [
+   {
+    "name": "Pending",
+    "value": 1
+   },
+   {
+    "name": "Leased",
+    "value": 2
+   },
+   {
+    "name": "Sent",
+    "value": 3
+   },
+   {
+    "name": "Failed",
+    "value": 4
+   },
+   {
+    "name": "DeadLettered",
+    "value": 5
+   }
+  ]
+ },
+ {
+  "name": "EventsPaymentReceiptKind",
+  "path": "Enums/Events/EventsPaymentReceiptKind.cs",
+  "members": [
+   {
+    "name": "Initiated",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "LinkIssued",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "ProviderConfirmed",
+    "value": 2,
+    "implicit": true
+   },
+   {
+    "name": "RefundIssued",
+    "value": 3,
+    "implicit": true
+   },
+   {
+    "name": "ProviderRefundConfirmed",
+    "value": 4,
+    "implicit": true
+   },
+   {
+    "name": "Forfeited",
+    "value": 5,
+    "implicit": true
+   },
+   {
+    "name": "Failed",
+    "value": 6,
+    "implicit": true
+   },
+   {
+    "name": "Expired",
+    "value": 7,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "EventsProposalLineKind",
+  "path": "Enums/Events/EventsProposalLineKind.cs",
+  "members": [
+   {
+    "name": "Package",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "MenuItem",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "AddOn",
+    "value": 2,
+    "implicit": true
+   },
+   {
+    "name": "RoomFee",
+    "value": 3,
+    "implicit": true
+   },
+   {
+    "name": "Custom",
+    "value": 4,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "EventsProposalVersionStatus",
+  "path": "Enums/Events/EventsProposalVersionStatus.cs",
+  "members": [
+   {
+    "name": "Draft",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Sent",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "Accepted",
+    "value": 2,
+    "implicit": true
+   },
+   {
+    "name": "Declined",
+    "value": 3,
+    "implicit": true
+   },
+   {
+    "name": "Expired",
+    "value": 4,
+    "implicit": true
+   },
+   {
+    "name": "Superseded",
+    "value": 5,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "EventsRunSheetSection",
+  "path": "Enums/Events/EventsRunSheetSection.cs",
+  "members": [
+   {
+    "name": "Timeline",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Space",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "Menu",
+    "value": 2,
+    "implicit": true
+   },
+   {
+    "name": "Dietary",
+    "value": 3,
+    "implicit": true
+   },
+   {
+    "name": "Staffing",
+    "value": 4,
+    "implicit": true
+   },
+   {
+    "name": "Contacts",
+    "value": 5,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "EventsRunSheetStatus",
+  "path": "Enums/Events/EventsRunSheetStatus.cs",
+  "members": [
+   {
+    "name": "Draft",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Issued",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "Superseded",
+    "value": 2,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "EventsSettlementLineKind",
+  "path": "Enums/Events/EventsSettlementLineKind.cs",
+  "members": [
+   {
+    "name": "DepositApplied",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "PosCheck",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "Invoice",
+    "value": 2,
+    "implicit": true
+   },
+   {
+    "name": "Refund",
+    "value": 3,
+    "implicit": true
+   },
+   {
+    "name": "Adjustment",
+    "value": 4,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "EventsSettlementMatchState",
+  "path": "Enums/Events/EventsSettlementMatchState.cs",
+  "members": [
+   {
+    "name": "Unverified",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Matched",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "Mismatch",
+    "value": 2,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "EventsSettlementSourceKind",
+  "path": "Enums/Events/EventsSettlementSourceKind.cs",
+  "members": [
+   {
+    "name": "Deposit",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "JournalRef",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "OrderRef",
+    "value": 2,
+    "implicit": true
+   },
+   {
+    "name": "InvoiceRef",
+    "value": 3,
+    "implicit": true
+   },
+   {
+    "name": "Manual",
+    "value": 4,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "EventsSettlementStatus",
+  "path": "Enums/Events/EventsSettlementStatus.cs",
+  "members": [
+   {
+    "name": "Draft",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Discrepancy",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "Reconciled",
+    "value": 2,
+    "implicit": true
+   },
+   {
+    "name": "Closed",
+    "value": 3,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "EventsVatWithholdingReason",
+  "path": "Enums/Events/EventsVatWithholdingReason.cs",
+  "members": [
+   {
+    "name": "DepositPrepaymentTreatmentUnconfigured",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "NoVatRateOnLine",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "UnsupportedVatRate",
+    "value": 2,
+    "implicit": true
+   },
+   {
+    "name": "ZeroRateIndistinguishableFromUnset",
+    "value": 3,
+    "implicit": true
+   },
+   {
+    "name": "SourceCarriesNoVatBreakdown",
+    "value": 4,
+    "implicit": true
+   },
+   {
+    "name": "NotReconciledAgainstFiscalTruth",
+    "value": 5,
+    "implicit": true
+   },
+   {
+    "name": "FiscalTruthCarriesNoTaxLines",
+    "value": 6,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "ReservationStatus",
+  "path": "Enums/FloorPlan/ReservationStatus.cs",
+  "members": [
+   {
+    "name": "Requested",
+    "value": 0
+   },
+   {
+    "name": "Confirmed",
+    "value": 10
+   },
+   {
+    "name": "Seated",
+    "value": 20
+   },
+   {
+    "name": "Completed",
+    "value": 30
+   },
+   {
+    "name": "NoShow",
+    "value": 40
+   },
+   {
+    "name": "Cancelled",
+    "value": 50
+   }
+  ]
+ },
+ {
+  "name": "TableShape",
+  "path": "Enums/FloorPlan/TableShape.cs",
+  "members": [
+   {
+    "name": "Round",
+    "value": 0
+   },
+   {
+    "name": "Square",
+    "value": 1
+   },
+   {
+    "name": "Rectangle",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "GiftcardStatus",
+  "path": "Enums/GiftcardStatus.cs",
+  "members": [
+   {
+    "name": "Initiated",
+    "value": 0
+   },
+   {
+    "name": "AwaitingReceiver",
+    "value": 10
+   },
+   {
+    "name": "Transferred",
+    "value": 50
+   },
+   {
+    "name": "Completed",
+    "value": 100
+   },
+   {
+    "name": "Canceled",
+    "value": 110
+   }
+  ]
+ },
+ {
+  "name": "GiftcardTransactionType",
+  "path": "Enums/GiftcardTransactionType.cs",
+  "members": [
+   {
+    "name": "NotSet",
+    "value": 0
+   },
+   {
+    "name": "AwaitingReceiver",
+    "value": 1
+   },
+   {
+    "name": "Transferred",
+    "value": 5
+   },
+   {
+    "name": "Purchased",
+    "value": 10
+   },
+   {
+    "name": "Redeemed",
+    "value": 20
+   },
+   {
+    "name": "Canceled",
+    "value": 40
+   }
+  ]
+ },
+ {
+  "name": "GrowthAuditActorKind",
+  "path": "Enums/Growth/GrowthAuditActorKind.cs",
+  "members": [
+   {
+    "name": "Admin",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Guest",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "System",
+    "value": 2,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "GrowthChannel",
+  "path": "Enums/Growth/GrowthChannel.cs",
+  "members": [
+   {
+    "name": "Email",
+    "value": 1
+   }
+  ]
+ },
+ {
+  "name": "GrowthConsentAction",
+  "path": "Enums/Growth/GrowthConsentAction.cs",
+  "members": [
+   {
+    "name": "Granted",
+    "value": 1
+   },
+   {
+    "name": "Withdrawn",
+    "value": 2
+   },
+   {
+    "name": "Reconfirmed",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "GrowthConsentCheckDecision",
+  "path": "Enums/Growth/GrowthConsentCheckDecision.cs",
+  "members": [
+   {
+    "name": "Allow",
+    "value": 1
+   },
+   {
+    "name": "Deny",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "GrowthConsentDenyReason",
+  "path": "Enums/Growth/GrowthConsentDenyReason.cs",
+  "members": [
+   {
+    "name": "None",
+    "value": 0
+   },
+   {
+    "name": "NoConsent",
+    "value": 1
+   },
+   {
+    "name": "Withdrawn",
+    "value": 2
+   },
+   {
+    "name": "Suppressed",
+    "value": 3
+   },
+   {
+    "name": "Unverified",
+    "value": 4
+   },
+   {
+    "name": "FrequencyCapped",
+    "value": 5
+   },
+   {
+    "name": "DispatchPaused",
+    "value": 6
+   },
+   {
+    "name": "ChannelUnsupported",
+    "value": 7
+   }
+  ]
+ },
+ {
+  "name": "GrowthDeliveryStatus",
+  "path": "Enums/Growth/GrowthDeliveryStatus.cs",
+  "members": [
+   {
+    "name": "Queued",
+    "value": 1
+   },
+   {
+    "name": "Claimed",
+    "value": 2
+   },
+   {
+    "name": "Suppressed",
+    "value": 3
+   },
+   {
+    "name": "Submitting",
+    "value": 4
+   },
+   {
+    "name": "AmbiguousReview",
+    "value": 5
+   },
+   {
+    "name": "ProviderAccepted",
+    "value": 6
+   },
+   {
+    "name": "Delivered",
+    "value": 7
+   },
+   {
+    "name": "Deferred",
+    "value": 8
+   },
+   {
+    "name": "Bounced",
+    "value": 9
+   },
+   {
+    "name": "Complained",
+    "value": 10
+   },
+   {
+    "name": "Failed",
+    "value": 11
+   }
+  ]
+ },
+ {
+  "name": "GrowthDispatchRunState",
+  "path": "Enums/Growth/GrowthDispatchRunState.cs",
+  "members": [
+   {
+    "name": "Pending",
+    "value": 1
+   },
+   {
+    "name": "InProgress",
+    "value": 2
+   },
+   {
+    "name": "Completed",
+    "value": 3
+   },
+   {
+    "name": "ReconciliationRequired",
+    "value": 4
+   }
+  ]
+ },
+ {
+  "name": "GrowthMailProviderKind",
+  "path": "Enums/Growth/GrowthMailProviderKind.cs",
+  "members": [
+   {
+    "name": "Fake",
+    "value": 0
+   },
+   {
+    "name": "Smtp",
+    "value": 1
+   },
+   {
+    "name": "Postmark",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "GrowthNewsletterState",
+  "path": "Enums/Growth/GrowthNewsletterState.cs",
+  "members": [
+   {
+    "name": "Draft",
+    "value": 1
+   },
+   {
+    "name": "Approved",
+    "value": 2
+   },
+   {
+    "name": "Dispatching",
+    "value": 3
+   },
+   {
+    "name": "Completed",
+    "value": 4
+   },
+   {
+    "name": "ReconciliationRequired",
+    "value": 5
+   }
+  ]
+ },
+ {
+  "name": "GrowthPrivacyNoticeDelivery",
+  "path": "Enums/Growth/GrowthPrivacyNoticeDelivery.cs",
+  "members": [
+   {
+    "name": "NotAttempted",
+    "value": 1
+   },
+   {
+    "name": "SubmittedToTransport",
+    "value": 2
+   },
+   {
+    "name": "AttemptedAndFailed",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "GrowthPrivacyRequestState",
+  "path": "Enums/Growth/GrowthPrivacyRequestState.cs",
+  "members": [
+   {
+    "name": "Received",
+    "value": 1
+   },
+   {
+    "name": "InProgress",
+    "value": 2
+   },
+   {
+    "name": "Fulfilled",
+    "value": 3
+   },
+   {
+    "name": "RejectedWithReason",
+    "value": 4
+   }
+  ]
+ },
+ {
+  "name": "GrowthPrivacyRequestType",
+  "path": "Enums/Growth/GrowthPrivacyRequestType.cs",
+  "members": [
+   {
+    "name": "Access",
+    "value": 1
+   },
+   {
+    "name": "Erasure",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "GrowthProviderEventType",
+  "path": "Enums/Growth/GrowthProviderEventType.cs",
+  "members": [
+   {
+    "name": "Delivered",
+    "value": 1
+   },
+   {
+    "name": "Deferred",
+    "value": 2
+   },
+   {
+    "name": "Bounced",
+    "value": 3
+   },
+   {
+    "name": "Complained",
+    "value": 4
+   },
+   {
+    "name": "Unsubscribed",
+    "value": 5
+   },
+   {
+    "name": "Opened",
+    "value": 6
+   }
+  ]
+ },
+ {
+  "name": "GrowthPurpose",
+  "path": "Enums/Growth/GrowthPurpose.cs",
+  "members": [
+   {
+    "name": "Newsletter",
+    "value": 1
+   }
+  ]
+ },
+ {
+  "name": "GrowthSuppressionReason",
+  "path": "Enums/Growth/GrowthSuppressionReason.cs",
+  "members": [
+   {
+    "name": "Unsubscribe",
+    "value": 1
+   },
+   {
+    "name": "Objection",
+    "value": 2
+   },
+   {
+    "name": "HardBounce",
+    "value": 3
+   },
+   {
+    "name": "Complaint",
+    "value": 4
+   },
+   {
+    "name": "InvalidAddress",
+    "value": 5
+   },
+   {
+    "name": "AdminBlock",
+    "value": 6
+   },
+   {
+    "name": "Erasure",
+    "value": 7
+   }
+  ]
+ },
+ {
+  "name": "GrowthSuppressionScope",
+  "path": "Enums/Growth/GrowthSuppressionScope.cs",
+  "members": [
+   {
+    "name": "StoreScoped",
+    "value": 1
+   },
+   {
+    "name": "ChannelGlobal",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "GrowthVerificationState",
+  "path": "Enums/Growth/GrowthVerificationState.cs",
+  "members": [
+   {
+    "name": "Unverified",
+    "value": 1
+   },
+   {
+    "name": "Verified",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "CashDrawerTransactionType",
+  "path": "Enums/Kassa/CashDrawerTransactionType.cs",
+  "members": [
+   {
+    "name": "OpenFloat",
+    "value": 1
+   },
+   {
+    "name": "Sale",
+    "value": 2
+   },
+   {
+    "name": "Change",
+    "value": 3
+   },
+   {
+    "name": "PayIn",
+    "value": 4
+   },
+   {
+    "name": "PayOut",
+    "value": 5
+   },
+   {
+    "name": "Refund",
+    "value": 6
+   },
+   {
+    "name": "BankDeposit",
+    "value": 7
+   },
+   {
+    "name": "CloseCount",
+    "value": 8
+   }
+  ]
+ },
+ {
+  "name": "CheckSplitMode",
+  "path": "Enums/Kassa/CheckSplitMode.cs",
+  "members": [
+   {
+    "name": "ByItem",
+    "value": 1
+   },
+   {
+    "name": "EqualParts",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "KassaBusinessDateEpoch",
+  "path": "Enums/Kassa/KassaBusinessDateEpoch.cs",
+  "members": [
+   {
+    "name": "LegacyUtcRelabel",
+    "value": 0
+   },
+   {
+    "name": "StoreWallClock",
+    "value": 1
+   },
+   {
+    "name": "KassaZoneToStoreZone",
+    "value": 2
+   },
+   {
+    "name": "TradingDay",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "KassaEventType",
+  "path": "Enums/Kassa/KassaEventType.cs",
+  "members": [
+   {
+    "name": "POSSTART",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "POSEND",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "EMPIN",
+    "value": 2,
+    "implicit": true
+   },
+   {
+    "name": "EMPOUT",
+    "value": 3,
+    "implicit": true
+   },
+   {
+    "name": "SALREC",
+    "value": 4,
+    "implicit": true
+   },
+   {
+    "name": "RETREC",
+    "value": 5,
+    "implicit": true
+   },
+   {
+    "name": "COPYREC",
+    "value": 6,
+    "implicit": true
+   },
+   {
+    "name": "PROREC",
+    "value": 7,
+    "implicit": true
+   },
+   {
+    "name": "UTLEVREC",
+    "value": 8,
+    "implicit": true
+   },
+   {
+    "name": "TRAINREC",
+    "value": 9,
+    "implicit": true
+   },
+   {
+    "name": "LINEDELETE",
+    "value": 10,
+    "implicit": true
+   },
+   {
+    "name": "PRICELOOKUP",
+    "value": 11,
+    "implicit": true
+   },
+   {
+    "name": "DRAWOPEN",
+    "value": 12,
+    "implicit": true
+   },
+   {
+    "name": "DRAWOPENMAN",
+    "value": 13,
+    "implicit": true
+   },
+   {
+    "name": "ZREP",
+    "value": 14,
+    "implicit": true
+   },
+   {
+    "name": "XREP",
+    "value": 15,
+    "implicit": true
+   },
+   {
+    "name": "DISCOUNT",
+    "value": 16,
+    "implicit": true
+   },
+   {
+    "name": "VOIDTRANS",
+    "value": 17,
+    "implicit": true
+   },
+   {
+    "name": "PAYIN",
+    "value": 18,
+    "implicit": true
+   },
+   {
+    "name": "PAYOUT",
+    "value": 19,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "KassaReceiptSeries",
+  "path": "Enums/Kassa/KassaReceiptSeries.cs",
+  "members": [
+   {
+    "name": "JournalSequence",
+    "value": 1
+   },
+   {
+    "name": "Sale",
+    "value": 2
+   },
+   {
+    "name": "Return",
+    "value": 3
+   },
+   {
+    "name": "Copy",
+    "value": 4
+   },
+   {
+    "name": "Provisional",
+    "value": 5
+   },
+   {
+    "name": "Training",
+    "value": 6
+   },
+   {
+    "name": "ZReport",
+    "value": 7
+   },
+   {
+    "name": "Delivery",
+    "value": 8
+   }
+  ]
+ },
+ {
+  "name": "KassaReceiptType",
+  "path": "Enums/Kassa/KassaReceiptType.cs",
+  "members": [
+   {
+    "name": "Sale",
+    "value": 1
+   },
+   {
+    "name": "Return",
+    "value": 2
+   },
+   {
+    "name": "Correction",
+    "value": 3
+   },
+   {
+    "name": "Copy",
+    "value": 4
+   },
+   {
+    "name": "Provisional",
+    "value": 5
+   },
+   {
+    "name": "Training",
+    "value": 6
+   },
+   {
+    "name": "Delivery",
+    "value": 7
+   }
+  ]
+ },
+ {
+  "name": "OrderLineItemStatus",
+  "path": "Enums/Kassa/OrderLineItemStatus.cs",
+  "members": [
+   {
+    "name": "Pending",
+    "value": 1
+   },
+   {
+    "name": "Sent",
+    "value": 2
+   },
+   {
+    "name": "Fired",
+    "value": 3
+   },
+   {
+    "name": "Ready",
+    "value": 4
+   },
+   {
+    "name": "Served",
+    "value": 5
+   }
+  ]
+ },
+ {
+  "name": "OrderPaymentStatus",
+  "path": "Enums/Kassa/OrderPaymentStatus.cs",
+  "members": [
+   {
+    "name": "Pending",
+    "value": 1
+   },
+   {
+    "name": "Confirmed",
+    "value": 2
+   },
+   {
+    "name": "Failed",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "PosReasonType",
+  "path": "Enums/Kassa/PosReasonType.cs",
+  "members": [
+   {
+    "name": "None",
+    "value": 0
+   },
+   {
+    "name": "AngretKjop",
+    "value": 10
+   },
+   {
+    "name": "FeilVare",
+    "value": 11
+   },
+   {
+    "name": "Reklamasjon",
+    "value": 12
+   },
+   {
+    "name": "Feilslag",
+    "value": 13
+   },
+   {
+    "name": "KundeAvbrot",
+    "value": 20
+   },
+   {
+    "name": "Tellefeil",
+    "value": 30
+   },
+   {
+    "name": "FeilVekselGitt",
+    "value": 31
+   },
+   {
+    "name": "Ukjent",
+    "value": 32
+   },
+   {
+    "name": "Annet",
+    "value": 99
+   }
+  ]
+ },
+ {
+  "name": "PosSettlementStatus",
+  "path": "Enums/Kassa/PosSettlementStatus.cs",
+  "members": [
+   {
+    "name": "Open",
+    "value": 1
+   },
+   {
+    "name": "Finalized",
+    "value": 2
+   },
+   {
+    "name": "Aborted",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "TerminalProvider",
+  "path": "Enums/Kassa/TerminalProvider.cs",
+  "members": [
+   {
+    "name": "Auto",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Surfboard",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "Dintero",
+    "value": 2,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "KeyAccountManagerStatus",
+  "path": "Enums/KeyAccountManagerStatus.cs",
+  "members": [
+   {
+    "name": "MissingSetup",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "ReadyForDemo",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "WaitingForCustomerResponse",
+    "value": 2,
+    "implicit": true
+   },
+   {
+    "name": "RequiresFollowUp",
+    "value": 3,
+    "implicit": true
+   },
+   {
+    "name": "InOperation",
+    "value": 4,
+    "implicit": true
+   },
+   {
+    "name": "Deleted",
+    "value": 5,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "MarginBaseUnit",
+  "path": "Enums/Margin/MarginBaseUnit.cs",
+  "members": [
+   {
+    "name": "Gram",
+    "value": 1
+   },
+   {
+    "name": "Kilogram",
+    "value": 2
+   },
+   {
+    "name": "Milliliter",
+    "value": 3
+   },
+   {
+    "name": "Liter",
+    "value": 4
+   },
+   {
+    "name": "Piece",
+    "value": 5
+   }
+  ]
+ },
+ {
+  "name": "MarginLifecycleStatus",
+  "path": "Enums/Margin/MarginLifecycleStatus.cs",
+  "members": [
+   {
+    "name": "Active",
+    "value": 1
+   },
+   {
+    "name": "Archived",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "MarginMenuPriceBasis",
+  "path": "Enums/Margin/MarginMenuPriceBasis.cs",
+  "members": [
+   {
+    "name": "Base",
+    "value": 0
+   },
+   {
+    "name": "Table",
+    "value": 1
+   },
+   {
+    "name": "Delivery",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "MarginPriceImportBatchState",
+  "path": "Enums/Margin/MarginPriceImportBatchState.cs",
+  "members": [
+   {
+    "name": "Uploaded",
+    "value": 1
+   },
+   {
+    "name": "Mapping",
+    "value": 2
+   },
+   {
+    "name": "Approved",
+    "value": 3
+   },
+   {
+    "name": "Applied",
+    "value": 4
+   },
+   {
+    "name": "Rejected",
+    "value": 5
+   }
+  ]
+ },
+ {
+  "name": "MarginPriceImportRowResolution",
+  "path": "Enums/Margin/MarginPriceImportRowResolution.cs",
+  "members": [
+   {
+    "name": "Pending",
+    "value": 1
+   },
+   {
+    "name": "Mapped",
+    "value": 2
+   },
+   {
+    "name": "Skipped",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "MarginPriceSource",
+  "path": "Enums/Margin/MarginPriceSource.cs",
+  "members": [
+   {
+    "name": "Manual",
+    "value": 1
+   },
+   {
+    "name": "Import",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "MarginRecipeKind",
+  "path": "Enums/Margin/MarginRecipeKind.cs",
+  "members": [
+   {
+    "name": "Sellable",
+    "value": 1
+   },
+   {
+    "name": "SubRecipe",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "MarginRecipeVersionState",
+  "path": "Enums/Margin/MarginRecipeVersionState.cs",
+  "members": [
+   {
+    "name": "Draft",
+    "value": 1
+   },
+   {
+    "name": "Active",
+    "value": 2
+   },
+   {
+    "name": "Superseded",
+    "value": 3
+   },
+   {
+    "name": "Retired",
+    "value": 4
+   }
+  ]
+ },
+ {
+  "name": "MarginStatementState",
+  "path": "Enums/Margin/MarginStatementState.cs",
+  "members": [
+   {
+    "name": "Open",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Finalized",
+    "value": 1,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "MealsAgreementStatus",
+  "path": "Enums/Meals/MealsAgreementStatus.cs",
+  "members": [
+   {
+    "name": "Active",
+    "value": 1
+   },
+   {
+    "name": "Ended",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "MealsAllocationKind",
+  "path": "Enums/Meals/MealsAllocationKind.cs",
+  "members": [
+   {
+    "name": "Capture",
+    "value": 1
+   },
+   {
+    "name": "Reversal",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "MealsBindingOutcome",
+  "path": "Enums/Meals/MealsBindingOutcome.cs",
+  "members": [
+   {
+    "name": "Bound",
+    "value": 1
+   },
+   {
+    "name": "Denied",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "MealsCompanyRole",
+  "path": "Enums/Meals/MealsCompanyRole.cs",
+  "members": [
+   {
+    "name": "CompanyAdmin",
+    "value": 1
+   },
+   {
+    "name": "Employee",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "MealsCompanyStatus",
+  "path": "Enums/Meals/MealsCompanyStatus.cs",
+  "members": [
+   {
+    "name": "Active",
+    "value": 1
+   },
+   {
+    "name": "Archived",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "MealsInvitationState",
+  "path": "Enums/Meals/MealsInvitationState.cs",
+  "members": [
+   {
+    "name": "Pending",
+    "value": 1
+   },
+   {
+    "name": "Claimed",
+    "value": 2
+   },
+   {
+    "name": "Revoked",
+    "value": 3
+   },
+   {
+    "name": "Expired",
+    "value": 4
+   }
+  ]
+ },
+ {
+  "name": "MealsJournalReceiptKind",
+  "path": "Enums/Meals/MealsJournalReceiptKind.cs",
+  "members": [
+   {
+    "name": "Sale",
+    "value": 1
+   },
+   {
+    "name": "Return",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "MealsMembershipState",
+  "path": "Enums/Meals/MealsMembershipState.cs",
+  "members": [
+   {
+    "name": "Active",
+    "value": 1
+   },
+   {
+    "name": "Revoked",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "MealsPolicyPeriodKind",
+  "path": "Enums/Meals/MealsPolicyPeriodKind.cs",
+  "members": [
+   {
+    "name": "IsoWeek",
+    "value": 1
+   },
+   {
+    "name": "CalendarMonth",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "MealsProgramMemberState",
+  "path": "Enums/Meals/MealsProgramMemberState.cs",
+  "members": [
+   {
+    "name": "Enrolled",
+    "value": 1
+   },
+   {
+    "name": "Removed",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "MealsProgramStatus",
+  "path": "Enums/Meals/MealsProgramStatus.cs",
+  "members": [
+   {
+    "name": "Active",
+    "value": 1
+   },
+   {
+    "name": "Archived",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "MealsReconciliationExceptionKind",
+  "path": "Enums/Meals/MealsReconciliationExceptionKind.cs",
+  "members": [
+   {
+    "name": "ExpiredBoundReservation",
+    "value": 1
+   },
+   {
+    "name": "UnmatchedJournalReceipt",
+    "value": 2
+   },
+   {
+    "name": "FundingApplyFailed",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "MealsReconciliationState",
+  "path": "Enums/Meals/MealsReconciliationState.cs",
+  "members": [
+   {
+    "name": "Open",
+    "value": 1
+   },
+   {
+    "name": "Acknowledged",
+    "value": 2
+   },
+   {
+    "name": "Resolved",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "MealsReleaseCause",
+  "path": "Enums/Meals/MealsReleaseCause.cs",
+  "members": [
+   {
+    "name": "Cancelled",
+    "value": 1
+   },
+   {
+    "name": "OrderCreationFailed",
+    "value": 2
+   },
+   {
+    "name": "Superseded",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "MealsReleaseOutcome",
+  "path": "Enums/Meals/MealsReleaseOutcome.cs",
+  "members": [
+   {
+    "name": "Released",
+    "value": 1
+   },
+   {
+    "name": "AlreadyReleased",
+    "value": 2
+   },
+   {
+    "name": "DeniedCaptured",
+    "value": 3
+   },
+   {
+    "name": "DeniedBound",
+    "value": 4
+   },
+   {
+    "name": "DeniedNotFound",
+    "value": 5
+   }
+  ]
+ },
+ {
+  "name": "MealsReservationState",
+  "path": "Enums/Meals/MealsReservationState.cs",
+  "members": [
+   {
+    "name": "Reserved",
+    "value": 1
+   },
+   {
+    "name": "Bound",
+    "value": 2
+   },
+   {
+    "name": "Captured",
+    "value": 3
+   },
+   {
+    "name": "Released",
+    "value": 4
+   }
+  ]
+ },
+ {
+  "name": "MealsStatementStatus",
+  "path": "Enums/Meals/MealsStatementStatus.cs",
+  "members": [
+   {
+    "name": "Draft",
+    "value": 1
+   },
+   {
+    "name": "Finalized",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "MealsTenderAuthorizationOutcome",
+  "path": "Enums/Meals/MealsTenderAuthorizationOutcome.cs",
+  "members": [
+   {
+    "name": "Authorized",
+    "value": 1
+   },
+   {
+    "name": "Denied",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "NotificationHub",
+  "path": "Enums/NotificationHub.cs",
+  "members": [
+   {
+    "name": "NotSet",
+    "value": 0
+   },
+   {
+    "name": "OkamConsumer",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "OkamAdmin",
+    "value": 2,
+    "implicit": true
+   },
+   {
+    "name": "JungelPizza",
+    "value": 3,
+    "implicit": true
+   },
+   {
+    "name": "Lora",
+    "value": 4,
+    "implicit": true
+   },
+   {
+    "name": "ArvLokalmat",
+    "value": 5,
+    "implicit": true
+   },
+   {
+    "name": "Mathavna",
+    "value": 6,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "OfferProposalStatus",
+  "path": "Enums/OfferProposalStatus.cs",
+  "members": [
+   {
+    "name": "Created",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Sent",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "Read",
+    "value": 2,
+    "implicit": true
+   },
+   {
+    "name": "Accepted",
+    "value": 3,
+    "implicit": true
+   },
+   {
+    "name": "StoreRegistered",
+    "value": 4,
+    "implicit": true
+   },
+   {
+    "name": "Rejected",
+    "value": 5,
+    "implicit": true
+   },
+   {
+    "name": "Cancelled",
+    "value": 6,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "OrderKind",
+  "path": "Enums/OrderKind.cs",
+  "members": [
+   {
+    "name": "Consumer",
+    "value": 0
+   },
+   {
+    "name": "PosCheck",
+    "value": 1
+   }
+  ]
+ },
+ {
+  "name": "OrderStatus",
+  "path": "Enums/OrderStatus.cs",
+  "members": [
+   {
+    "name": "OpenCheck",
+    "value": 10
+   },
+   {
+    "name": "Accepted",
+    "value": 20
+   },
+   {
+    "name": "Processing",
+    "value": 30
+   },
+   {
+    "name": "ReadyForPickup",
+    "value": 40
+   },
+   {
+    "name": "ReadyForDriver",
+    "value": 50
+   },
+   {
+    "name": "DriverPickedUp",
+    "value": 60
+   },
+   {
+    "name": "Served",
+    "value": 70
+   },
+   {
+    "name": "Completed",
+    "value": 100
+   },
+   {
+    "name": "Canceled",
+    "value": 110
+   }
+  ]
+ },
+ {
+  "name": "OrderStatusFilter",
+  "path": "Enums/OrderStatusFilter.cs",
+  "members": [
+   {
+    "name": "Remaining",
+    "value": 10
+   },
+   {
+    "name": "Completed",
+    "value": 100
+   },
+   {
+    "name": "Canceled",
+    "value": 110
+   }
+  ]
+ },
+ {
+  "name": "PaymentType",
+  "path": "Enums/PaymentType.cs",
+  "members": [
+   {
+    "name": "NotSet",
+    "value": 0
+   },
+   {
+    "name": "Giftcard",
+    "value": 75
+   },
+   {
+    "name": "PayInStore",
+    "value": 100
+   },
+   {
+    "name": "Cash",
+    "value": 110
+   },
+   {
+    "name": "Stripe",
+    "value": 200
+   },
+   {
+    "name": "Vipps",
+    "value": 300
+   },
+   {
+    "name": "Dintero",
+    "value": 400
+   },
+   {
+    "name": "DinteroVipps",
+    "value": 410
+   },
+   {
+    "name": "DinteroBillie",
+    "value": 420
+   },
+   {
+    "name": "DinteroKlarna",
+    "value": 430
+   },
+   {
+    "name": "DinteroKravia",
+    "value": 440
+   },
+   {
+    "name": "DinteroTerminal",
+    "value": 450
+   },
+   {
+    "name": "WoltMarketplace",
+    "value": 500
+   },
+   {
+    "name": "Surfboard",
+    "value": 600
+   },
+   {
+    "name": "SurfboardVipps",
+    "value": 610
+   },
+   {
+    "name": "SurfboardTerminal",
+    "value": 650
+   },
+   {
+    "name": "CompanyAccount",
+    "value": 120
+   }
+  ]
+ },
+ {
+  "name": "PaymentTypeFilter",
+  "path": "Enums/PaymentTypeFilter.cs",
+  "members": [
+   {
+    "name": "PayInStore",
+    "value": 10
+   },
+   {
+    "name": "Stripe",
+    "value": 20
+   },
+   {
+    "name": "Vipps",
+    "value": 30
+   },
+   {
+    "name": "Giftcard",
+    "value": 40
+   },
+   {
+    "name": "Dintero",
+    "value": 50
+   },
+   {
+    "name": "DinteroVipps",
+    "value": 60
+   },
+   {
+    "name": "DinteroBillie",
+    "value": 70
+   },
+   {
+    "name": "DinteroKlarna",
+    "value": 80
+   },
+   {
+    "name": "WoltMarketplace",
+    "value": 90
+   },
+   {
+    "name": "DinteroKravia",
+    "value": 100
+   },
+   {
+    "name": "Surfboard",
+    "value": 110
+   },
+   {
+    "name": "SurfboardTerminal",
+    "value": 120
+   }
+  ]
+ },
+ {
+  "name": "RewardTransactionType",
+  "path": "Enums/RewardTransactionType.cs",
+  "members": [
+   {
+    "name": "NotSet",
+    "value": 0
+   },
+   {
+    "name": "Received",
+    "value": 10
+   },
+   {
+    "name": "Spent",
+    "value": 20
+   },
+   {
+    "name": "Canceled",
+    "value": 40
+   }
+  ]
+ },
+ {
+  "name": "SafTVatCode",
+  "path": "Enums/SafTVatCode.cs",
+  "members": [
+   {
+    "name": "TwentyFivePercent",
+    "value": 3
+   },
+   {
+    "name": "FifteenPercent",
+    "value": 31
+   },
+   {
+    "name": "TwelvePercent",
+    "value": 33
+   },
+   {
+    "name": "ZeroPercent",
+    "value": 0
+   }
+  ]
+ },
+ {
+  "name": "TrainingAssignmentScope",
+  "path": "Enums/Training/TrainingAssignmentScope.cs",
+  "members": [
+   {
+    "name": "Role",
+    "value": 1
+   },
+   {
+    "name": "Person",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "TrainingCertificateStatus",
+  "path": "Enums/Training/TrainingCertificateStatus.cs",
+  "members": [
+   {
+    "name": "Valid",
+    "value": 1
+   },
+   {
+    "name": "Expiring",
+    "value": 2
+   },
+   {
+    "name": "Expired",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "TrainingCompletionSource",
+  "path": "Enums/Training/TrainingCompletionSource.cs",
+  "members": [
+   {
+    "name": "Quiz",
+    "value": 1
+   },
+   {
+    "name": "ManagerRecorded",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "TrainingCourseVersionState",
+  "path": "Enums/Training/TrainingCourseVersionState.cs",
+  "members": [
+   {
+    "name": "Draft",
+    "value": 1
+   },
+   {
+    "name": "Published",
+    "value": 2
+   },
+   {
+    "name": "Retired",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "TrainingEvidenceTrainingState",
+  "path": "Enums/Training/TrainingEvidenceStates.cs",
+  "members": [
+   {
+    "name": "NoCompletionOnFile",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "RecordedWithoutAPass",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "RecordedAsPassed",
+    "value": 2,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "TrainingEvidenceAuditCoverage",
+  "path": "Enums/Training/TrainingEvidenceStates.cs",
+  "members": [
+   {
+    "name": "NoAuditEventForThisRow",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Covered",
+    "value": 1,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "TrainingEvidenceContentHashLinkage",
+  "path": "Enums/Training/TrainingEvidenceStates.cs",
+  "members": [
+   {
+    "name": "Intact",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Broken",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "Unresolvable",
+    "value": 2,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "TrainingIdempotencyRecordStatus",
+  "path": "Enums/Training/TrainingIdempotencyRecordStatus.cs",
+  "members": [
+   {
+    "name": "InProgress",
+    "value": 1
+   },
+   {
+    "name": "Completed",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "TripletexTokenType",
+  "path": "Enums/TripletexTokenType.cs",
+  "members": [
+   {
+    "name": "CompanyJwt",
+    "value": 0
+   },
+   {
+    "name": "EmployeeToken",
+    "value": 1
+   }
+  ]
+ },
+ {
+  "name": "TripletexVoucherKind",
+  "path": "Enums/TripletexVoucherEnums.cs",
+  "members": [
+   {
+    "name": "OnlineDaily",
+    "value": 0
+   },
+   {
+    "name": "Pos",
+    "value": 1
+   },
+   {
+    "name": "Payout",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "TripletexVoucherStatus",
+  "path": "Enums/TripletexVoucherEnums.cs",
+  "members": [
+   {
+    "name": "Posted",
+    "value": 0
+   },
+   {
+    "name": "Failed",
+    "value": 1
+   },
+   {
+    "name": "Reversed",
+    "value": 2
+   },
+   {
+    "name": "Skipped",
+    "value": 3
+   },
+   {
+    "name": "Pending",
+    "value": 4
+   }
+  ]
+ },
+ {
+  "name": "VippsVerifyStatus",
+  "path": "Enums/VippsVerifyStatus.cs",
+  "members": [
+   {
+    "name": "NotSet",
+    "value": 0
+   },
+   {
+    "name": "Waiting",
+    "value": 100
+   },
+   {
+    "name": "Success",
+    "value": 200
+   },
+   {
+    "name": "Fail",
+    "value": 300
+   }
+  ]
+ },
+ {
+  "name": "WoltStatus",
+  "path": "Enums/WoltStatus.cs",
+  "members": [
+   {
+    "name": "NotSet",
+    "value": 0
+   },
+   {
+    "name": "OrderReceived",
+    "value": 1
+   },
+   {
+    "name": "OrderRejected",
+    "value": 2
+   },
+   {
+    "name": "PickupEtaUpdated",
+    "value": 3
+   },
+   {
+    "name": "PickupStarted",
+    "value": 4
+   },
+   {
+    "name": "PickedUp",
+    "value": 5
+   },
+   {
+    "name": "PickupArrival",
+    "value": 6
+   },
+   {
+    "name": "DropoffStarted",
+    "value": 7
+   },
+   {
+    "name": "DropoffArrival",
+    "value": 8
+   },
+   {
+    "name": "DropoffCompleted",
+    "value": 9
+   },
+   {
+    "name": "Delivered",
+    "value": 10
+   },
+   {
+    "name": "CustomerNoShow",
+    "value": 11
+   },
+   {
+    "name": "LocationUpdated",
+    "value": 12
+   },
+   {
+    "name": "DropoffEtaUpdated",
+    "value": 13
+   },
+   {
+    "name": "HandshakeDelivery",
+    "value": 14
+   }
+  ]
+ },
+ {
+  "name": "WorkforceAttendanceAdjustmentApproval",
+  "path": "Enums/Workforce/WorkforceAttendanceAdjustmentApproval.cs",
+  "members": [
+   {
+    "name": "Pending",
+    "value": 1
+   },
+   {
+    "name": "Approved",
+    "value": 2
+   },
+   {
+    "name": "Rejected",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "WorkforceAvailabilityKind",
+  "path": "Enums/Workforce/WorkforceAvailabilityKind.cs",
+  "members": [
+   {
+    "name": "Available",
+    "value": 1
+   },
+   {
+    "name": "Unavailable",
+    "value": 2
+   },
+   {
+    "name": "Preferred",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "WorkforceCapability",
+  "path": "Enums/Workforce/WorkforceCapability.cs",
+  "members": [
+   {
+    "name": "None",
+    "value": 0
+   },
+   {
+    "name": "WorkforceSelf",
+    "value": 1
+   },
+   {
+    "name": "WorkforceScheduler",
+    "value": 2
+   },
+   {
+    "name": "WorkforceManager",
+    "value": 4
+   },
+   {
+    "name": "WorkforcePayrollApprover",
+    "value": 8
+   }
+  ]
+ },
+ {
+  "name": "WorkforceClockEventSource",
+  "path": "Enums/Workforce/WorkforceClockEventSource.cs",
+  "members": [
+   {
+    "name": "Pos",
+    "value": 1
+   },
+   {
+    "name": "Manual",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "WorkforceClockEventType",
+  "path": "Enums/Workforce/WorkforceClockEventType.cs",
+  "members": [
+   {
+    "name": "ClockIn",
+    "value": 1
+   },
+   {
+    "name": "ClockOut",
+    "value": 2
+   },
+   {
+    "name": "BreakStart",
+    "value": 3
+   },
+   {
+    "name": "BreakEnd",
+    "value": 4
+   }
+  ]
+ },
+ {
+  "name": "WorkforceEnforcementMode",
+  "path": "Enums/Workforce/WorkforceEnforcementMode.cs",
+  "members": [
+   {
+    "name": "Shadow",
+    "value": 1
+   },
+   {
+    "name": "Advisory",
+    "value": 2
+   },
+   {
+    "name": "Blocking",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "WorkforceEvidenceType",
+  "path": "Enums/Workforce/WorkforceEvidenceType.cs",
+  "members": [
+   {
+    "name": "Agreement",
+    "value": 1
+   },
+   {
+    "name": "Permit",
+    "value": 2
+   },
+   {
+    "name": "Consultation",
+    "value": 3
+   },
+   {
+    "name": "Emergency",
+    "value": 4
+   }
+  ]
+ },
+ {
+  "name": "WorkforceExchangeCandidateDecision",
+  "path": "Enums/Workforce/WorkforceExchangeCandidateDecision.cs",
+  "members": [
+   {
+    "name": "Pending",
+    "value": 1
+   },
+   {
+    "name": "Accepted",
+    "value": 2
+   },
+   {
+    "name": "Declined",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "WorkforceInvitationState",
+  "path": "Enums/Workforce/WorkforceInvitationState.cs",
+  "members": [
+   {
+    "name": "Pending",
+    "value": 1
+   },
+   {
+    "name": "Claimed",
+    "value": 2
+   },
+   {
+    "name": "Revoked",
+    "value": 3
+   },
+   {
+    "name": "Expired",
+    "value": 4
+   }
+  ]
+ },
+ {
+  "name": "WorkforceNotificationChannel",
+  "path": "Enums/Workforce/WorkforceNotificationChannel.cs",
+  "members": [
+   {
+    "name": "InApp",
+    "value": 1
+   },
+   {
+    "name": "Push",
+    "value": 2
+   },
+   {
+    "name": "Sms",
+    "value": 3
+   },
+   {
+    "name": "Email",
+    "value": 4
+   }
+  ]
+ },
+ {
+  "name": "WorkforceNotificationDeliveryOutcome",
+  "path": "Enums/Workforce/WorkforceNotificationDeliveryOutcome.cs",
+  "members": [
+   {
+    "name": "Delivered",
+    "value": 1
+   },
+   {
+    "name": "Failed",
+    "value": 2
+   },
+   {
+    "name": "Withheld",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "WorkforceNotificationOutboxStatus",
+  "path": "Enums/Workforce/WorkforceNotificationOutboxStatus.cs",
+  "members": [
+   {
+    "name": "Pending",
+    "value": 1
+   },
+   {
+    "name": "Leased",
+    "value": 2
+   },
+   {
+    "name": "Sent",
+    "value": 3
+   },
+   {
+    "name": "Failed",
+    "value": 4
+   },
+   {
+    "name": "DeadLettered",
+    "value": 5
+   },
+   {
+    "name": "Withheld",
+    "value": 6
+   }
+  ]
+ },
+ {
+  "name": "WorkforcePersonState",
+  "path": "Enums/Workforce/WorkforcePersonState.cs",
+  "members": [
+   {
+    "name": "Invited",
+    "value": 1
+   },
+   {
+    "name": "Claimed",
+    "value": 2
+   },
+   {
+    "name": "Archived",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "WorkforcePersonnelParticipantCategory",
+  "path": "Enums/Workforce/WorkforcePersonnelParticipantCategory.cs",
+  "members": [
+   {
+    "name": "Employee",
+    "value": 1
+   },
+   {
+    "name": "WorkingOwnerManager",
+    "value": 2
+   },
+   {
+    "name": "Unpaid",
+    "value": 3
+   },
+   {
+    "name": "HiredIn",
+    "value": 4
+   }
+  ]
+ },
+ {
+  "name": "WorkforcePersonnelPresenceEventType",
+  "path": "Enums/Workforce/WorkforcePersonnelPresenceEventType.cs",
+  "members": [
+   {
+    "name": "OnSiteStart",
+    "value": 1
+   },
+   {
+    "name": "OnSiteEnd",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "WorkforcePublicationDeliveryState",
+  "path": "Enums/Workforce/WorkforcePublicationDeliveryState.cs",
+  "members": [
+   {
+    "name": "Pending",
+    "value": 1
+   },
+   {
+    "name": "Delivered",
+    "value": 2
+   },
+   {
+    "name": "Failed",
+    "value": 3
+   },
+   {
+    "name": "ManuallyDelivered",
+    "value": 4
+   }
+  ]
+ },
+ {
+  "name": "WorkforceScheduleRevisionState",
+  "path": "Enums/Workforce/WorkforceScheduleRevisionState.cs",
+  "members": [
+   {
+    "name": "Draft",
+    "value": 1
+   },
+   {
+    "name": "Validated",
+    "value": 2
+   },
+   {
+    "name": "Published",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "WorkforceShiftAssignmentState",
+  "path": "Enums/Workforce/WorkforceShiftAssignmentState.cs",
+  "members": [
+   {
+    "name": "Draft",
+    "value": 1
+   },
+   {
+    "name": "Published",
+    "value": 2
+   },
+   {
+    "name": "Cancelled",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "WorkforceShiftExchangeKind",
+  "path": "Enums/Workforce/WorkforceShiftExchangeKind.cs",
+  "members": [
+   {
+    "name": "GiveAway",
+    "value": 1
+   },
+   {
+    "name": "DirectSwap",
+    "value": 2
+   },
+   {
+    "name": "OpenPool",
+    "value": 3
+   },
+   {
+    "name": "OpenShiftRequest",
+    "value": 4
+   }
+  ]
+ },
+ {
+  "name": "WorkforceShiftExchangeStatus",
+  "path": "Enums/Workforce/WorkforceShiftExchangeStatus.cs",
+  "members": [
+   {
+    "name": "Open",
+    "value": 1
+   },
+   {
+    "name": "RequestSubmitted",
+    "value": 2
+   },
+   {
+    "name": "Awarded",
+    "value": 3
+   },
+   {
+    "name": "NotAwarded",
+    "value": 4
+   },
+   {
+    "name": "Withdrawn",
+    "value": 5
+   },
+   {
+    "name": "Expired",
+    "value": 6
+   }
+  ]
+ },
+ {
+  "name": "WorkforceTimeOffRequestStatus",
+  "path": "Enums/Workforce/WorkforceTimeOffRequestStatus.cs",
+  "members": [
+   {
+    "name": "Submitted",
+    "value": 1
+   },
+   {
+    "name": "UnderReview",
+    "value": 2
+   },
+   {
+    "name": "Approved",
+    "value": 3
+   },
+   {
+    "name": "Rejected",
+    "value": 4
+   },
+   {
+    "name": "Withdrawn",
+    "value": 5
+   },
+   {
+    "name": "Expired",
+    "value": 6
+   }
+  ]
+ },
+ {
+  "name": "WorkforceTimeOffVisibility",
+  "path": "Enums/Workforce/WorkforceTimeOffVisibility.cs",
+  "members": [
+   {
+    "name": "Managers",
+    "value": 1
+   },
+   {
+    "name": "Team",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "GrowthMailSubmissionStatusDto",
+  "path": "Models/Growth/GrowthNewsletterModels.cs",
+  "members": [
+   {
+    "name": "Accepted",
+    "value": 0
+   },
+   {
+    "name": "Rejected",
+    "value": 1
+   },
+   {
+    "name": "Duplicate",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "KitchenTicketSource",
+  "path": "Models/Kassa/KitchenBoardModels.cs",
+  "members": [
+   {
+    "name": "PosTable",
+    "value": 1
+   },
+   {
+    "name": "Online",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "TerminalPaymentState",
+  "path": "Models/Kassa/TerminalPaymentModels.cs",
+  "members": [
+   {
+    "name": "Unknown",
+    "value": 0
+   },
+   {
+    "name": "NoTransaction",
+    "value": 1
+   },
+   {
+    "name": "Authorized",
+    "value": 2
+   },
+   {
+    "name": "PartiallyCaptured",
+    "value": 3
+   },
+   {
+    "name": "Captured",
+    "value": 4
+   },
+   {
+    "name": "Declined",
+    "value": 5
+   },
+   {
+    "name": "Failed",
+    "value": 6
+   },
+   {
+    "name": "AuthorizationVoided",
+    "value": 7
+   },
+   {
+    "name": "PartiallyRefunded",
+    "value": 8
+   },
+   {
+    "name": "Refunded",
+    "value": 9
+   }
+  ]
+ },
+ {
+  "name": "VippsSettlementTransactionType",
+  "path": "Models/Payment/Vipps/VippsSettlementTransactionModel.cs",
+  "members": [
+   {
+    "name": "PayoutScheduled",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "FeesRetained",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "Capture",
+    "value": 2,
+    "implicit": true
+   },
+   {
+    "name": "Refund",
+    "value": 3,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "TripletexSettlementProvider",
+  "path": "Models/Tripletex/TripletexPayoutModels.cs",
+  "members": [
+   {
+    "name": "Dintero",
+    "value": 0
+   },
+   {
+    "name": "Surfboard",
+    "value": 1
+   }
+  ]
+ },
+ {
+  "name": "WoltOrderStatus",
+  "path": "Models/Wolt/Marketplace/WoltOrderWebhookPayload.cs",
+  "members": [
+   {
+    "name": "CREATED",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "PRODUCTION",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "READY",
+    "value": 2,
+    "implicit": true
+   },
+   {
+    "name": "DELIVERED",
+    "value": 3,
+    "implicit": true
+   },
+   {
+    "name": "CANCELED",
+    "value": 4,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "WorkforceClockIngestOutcome",
+  "path": "Models/Workforce/WorkforceClockModels.cs",
+  "members": [
+   {
+    "name": "SessionOpened",
+    "value": 1
+   },
+   {
+    "name": "SessionClosed",
+    "value": 2
+   },
+   {
+    "name": "BreakStarted",
+    "value": 3
+   },
+   {
+    "name": "BreakEnded",
+    "value": 4
+   },
+   {
+    "name": "DuplicateIgnored",
+    "value": 5
+   },
+   {
+    "name": "CrossEngagementException",
+    "value": 6
+   },
+   {
+    "name": "MissingPunchException",
+    "value": 7
+   }
+  ]
+ },
+ {
+  "name": "WorkforceContractExposureState",
+  "path": "Models/Workforce/WorkforceContractExposureModels.cs",
+  "members": [
+   {
+    "name": "Measured",
+    "value": 1
+   },
+   {
+    "name": "NoTerm",
+    "value": 2
+   },
+   {
+    "name": "SizeNotStated",
+    "value": 3
+   },
+   {
+    "name": "PartialTermCoverage",
+    "value": 4
+   },
+   {
+    "name": "NoWorkRecord",
+    "value": 5
+   }
+  ]
+ },
+ {
+  "name": "WorkforceHoursPayCode",
+  "path": "Models/Workforce/WorkforceHoursExportModels.cs",
+  "members": [
+   {
+    "name": "Ordinary",
+    "value": 1
+   },
+   {
+    "name": "UnpaidBreak",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "WorkforceHoursRowStatus",
+  "path": "Models/Workforce/WorkforceHoursExportModels.cs",
+  "members": [
+   {
+    "name": "Complete",
+    "value": 1
+   },
+   {
+    "name": "OpenSession",
+    "value": 2
+   },
+   {
+    "name": "MissingPunch",
+    "value": 3
+   },
+   {
+    "name": "UnsupportedAdjustment",
+    "value": 4
+   },
+   {
+    "name": "InconsistentTimes",
+    "value": 5
+   }
+  ]
+ },
+ {
+  "name": "WorkforceOperatorImportOutcome",
+  "path": "Models/Workforce/WorkforceOperatorImportModels.cs",
+  "members": [
+   {
+    "name": "Imported",
+    "value": 1
+   },
+   {
+    "name": "AlreadyImported",
+    "value": 2
+   },
+   {
+    "name": "Conflict",
+    "value": 3
+   },
+   {
+    "name": "HiddenConflict",
+    "value": 4
+   },
+   {
+    "name": "OperatorNotFound",
+    "value": 5
+   },
+   {
+    "name": "StoreAdminSkipped",
+    "value": 6
+   }
+  ]
+ },
+ {
+  "name": "WorkforcePosSessionState",
+  "path": "Models/Workforce/WorkforcePosModels.cs",
+  "members": [
+   {
+    "name": "Open",
+    "value": 1
+   },
+   {
+    "name": "Closed",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "WorkforceRateSource",
+  "path": "Models/Workforce/WorkforceRateModels.cs",
+  "members": [
+   {
+    "name": "EngagementOverride",
+    "value": 1
+   },
+   {
+    "name": "RoleDefault",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "WorkforceSupplementStacking",
+  "path": "Models/Workforce/WorkforceSupplementModels.cs",
+  "members": [
+   {
+    "name": "Additive",
+    "value": 1
+   },
+   {
+    "name": "HighestOnly",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "CircuitBreakerState",
+  "path": "Services/CircuitBreakerService.cs",
+  "members": [
+   {
+    "name": "Closed",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Open",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "HalfOpen",
+    "value": 2,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "ConfirmRefusal",
+  "path": "Services/EmailConfirmationRateLimiter.cs",
+  "members": [
+   {
+    "name": "None",
+    "value": 0
+   },
+   {
+    "name": "AccountBudgetSpent",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "SourceBudgetSpent",
+    "value": 2,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "EventsDepositProviderOutcome",
+  "path": "Services/Events/EventsDepositPaymentContracts.cs",
+  "members": [
+   {
+    "name": "Completed",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Failed",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "Expired",
+    "value": 2,
+    "implicit": true
+   },
+   {
+    "name": "Cancelled",
+    "value": 3,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "EventsDepositProviderState",
+  "path": "Services/Events/EventsDepositPaymentContracts.cs",
+  "members": [
+   {
+    "name": "None",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Initiated",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "Authorized",
+    "value": 2,
+    "implicit": true
+   },
+   {
+    "name": "Captured",
+    "value": 3,
+    "implicit": true
+   },
+   {
+    "name": "Failed",
+    "value": 4,
+    "implicit": true
+   },
+   {
+    "name": "Cancelled",
+    "value": 5,
+    "implicit": true
+   },
+   {
+    "name": "Refunded",
+    "value": 6,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "LostCompletionRecovery",
+  "path": "Services/Events/EventsDepositService.cs",
+  "members": [
+   {
+    "name": "Collected",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Deferred",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "NotCollectable",
+    "value": 2,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "EventsUniqueViolationKind",
+  "path": "Services/Events/EventsUniqueViolation.cs",
+  "members": [
+   {
+    "name": "None",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "OneSentProposal",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "OneAcceptedProposal",
+    "value": 2,
+    "implicit": true
+   },
+   {
+    "name": "OneActiveDeposit",
+    "value": 3,
+    "implicit": true
+   },
+   {
+    "name": "Other",
+    "value": 4,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "GrowthConsentTextSeedOutcome",
+  "path": "Services/Growth/GrowthConsentTextSeed.cs",
+  "members": [
+   {
+    "name": "BaselineInserted",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "AlreadyAuthored",
+    "value": 1,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "GrowthMailKind",
+  "path": "Services/Growth/GrowthMailProviderContracts.cs",
+  "members": [
+   {
+    "name": "DoubleOptInConfirmation",
+    "value": 0
+   },
+   {
+    "name": "PrivacyNotice",
+    "value": 1
+   },
+   {
+    "name": "Newsletter",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "GrowthMailSubmissionStatus",
+  "path": "Services/Growth/GrowthMailProviderContracts.cs",
+  "members": [
+   {
+    "name": "Accepted",
+    "value": 0
+   },
+   {
+    "name": "Rejected",
+    "value": 1
+   },
+   {
+    "name": "Duplicate",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "GrowthWebhookIngestOutcome",
+  "path": "Services/Growth/GrowthWebhookIngestionService.cs",
+  "members": [
+   {
+    "name": "Accepted",
+    "value": 0
+   },
+   {
+    "name": "Duplicate",
+    "value": 1
+   },
+   {
+    "name": "Unverified",
+    "value": 2
+   },
+   {
+    "name": "Malformed",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "GrowthMailSendOutcome",
+  "path": "Services/Growth/IGrowthTransactionalMailSender.cs",
+  "members": [
+   {
+    "name": "Submitted",
+    "value": 1
+   },
+   {
+    "name": "Refused",
+    "value": 2
+   }
+  ]
+ },
+ {
+  "name": "RedisUnavailablePolicy",
+  "path": "Services/Jobs/MaintenanceJobBase.cs",
+  "members": [
+   {
+    "name": "RunUnleased",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "SkipRun",
+    "value": 1,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "IfMatchDefect",
+  "path": "Services/Margin/MarginContractSupport.cs",
+  "members": [
+   {
+    "name": "None",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Missing",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "Undecodable",
+    "value": 2,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "UnitFamily",
+  "path": "Services/Margin/MarginRecipeSupport.cs",
+  "members": [
+   {
+    "name": "Mass",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Volume",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "Count",
+    "value": 2,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "MealsLedgerOutcome",
+  "path": "Services/Meals/Interfaces/IMealsFundingLedgerService.cs",
+  "members": [
+   {
+    "name": "Captured",
+    "value": 1
+   },
+   {
+    "name": "Reversed",
+    "value": 2
+   },
+   {
+    "name": "AlreadyApplied",
+    "value": 3
+   },
+   {
+    "name": "NoAttribution",
+    "value": 4
+   },
+   {
+    "name": "UnmatchedReversal",
+    "value": 5
+   }
+  ]
+ },
+ {
+  "name": "MealsReceiptDisposition",
+  "path": "Services/Meals/MealsCommandReceiptReservation.cs",
+  "members": [
+   {
+    "name": "Proceed",
+    "value": 1
+   },
+   {
+    "name": "Replay",
+    "value": 2
+   },
+   {
+    "name": "InProgress",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "ReleaseOutcome",
+  "path": "Services/Meals/MealsReconciliationWorker.cs",
+  "members": [
+   {
+    "name": "Skipped",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "ReleasedReserved",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "ReleasedBound",
+    "value": 2,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "Outcome",
+  "path": "Services/PowerUserRoleSeed.cs",
+  "members": [
+   {
+    "name": "NotConfigured",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "AdminAccountMissing",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "GrantFailed",
+    "value": 2,
+    "implicit": true
+   },
+   {
+    "name": "AlreadyHeld",
+    "value": 3,
+    "implicit": true
+   },
+   {
+    "name": "Granted",
+    "value": 4,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "TrainingIdempotencyDisposition",
+  "path": "Services/Training/TrainingIdempotencyReservation.cs",
+  "members": [
+   {
+    "name": "Proceed",
+    "value": 1
+   },
+   {
+    "name": "Replay",
+    "value": 2
+   },
+   {
+    "name": "InProgress",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "WorkforceContractSizeState",
+  "path": "Services/Workforce/WorkforceContractFacts.cs",
+  "members": [
+   {
+    "name": "Stated",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "NoTerm",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "SizeNotStated",
+    "value": 2,
+    "implicit": true
+   },
+   {
+    "name": "ChangedInRange",
+    "value": 3,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "WorkforceIdempotencyDisposition",
+  "path": "Services/Workforce/WorkforceIdempotencyReservation.cs",
+  "members": [
+   {
+    "name": "Proceed",
+    "value": 1
+   },
+   {
+    "name": "Replay",
+    "value": 2
+   },
+   {
+    "name": "InProgress",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "name": "VippsRailState",
+  "path": "WebApi.Tests/Events/EventsProviderFixtures.cs",
+  "members": [
+   {
+    "name": "Initiated",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Reserved",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "Captured",
+    "value": 2,
+    "implicit": true
+   },
+   {
+    "name": "PartiallyCaptured",
+    "value": 3,
+    "implicit": true
+   },
+   {
+    "name": "Refunded",
+    "value": 4,
+    "implicit": true
+   },
+   {
+    "name": "PartiallyRefunded",
+    "value": 5,
+    "implicit": true
+   },
+   {
+    "name": "Cancelled",
+    "value": 6,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "TransportFailure",
+  "path": "WebApi.Tests/Growth/GrowthPrivacyDeliveryEvidenceTests.cs",
+  "members": [
+   {
+    "name": "Refuses",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Throws",
+    "value": 1,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "OpKind",
+  "path": "WebApi.Tests/Kassa/Prop_DrawerExpectedCashLedgerInvariant.cs",
+  "members": [
+   {
+    "name": "Sale",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "PayIn",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "PayOut",
+    "value": 2,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "DiscriminatorVerdict",
+  "path": "WebApi.Tests/Modules/ModuleAuditActorCallSiteTests.cs",
+  "members": [
+   {
+    "name": "Rejected",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Settled",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "ApplyBlankRule",
+    "value": 2,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "CensusMethod",
+  "path": "WebApi.Tests/Modules/ModuleFlagCensus.cs",
+  "members": [
+   {
+    "name": "Behavioural",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "Static",
+    "value": 1,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "Gating",
+  "path": "WebApi.Tests/Modules/ModuleGateOrderingTests.cs",
+  "members": [
+   {
+    "name": "InAction",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "AboveAction",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "NotOpaque",
+    "value": 2,
+    "implicit": true
+   }
+  ]
+ },
+ {
+  "name": "Scoping",
+  "path": "WebApi.Tests/Training/TrainingTenantIsolationTests.cs",
+  "members": [
+   {
+    "name": "Value",
+    "value": 0,
+    "implicit": true
+   },
+   {
+    "name": "ResolvedStoreScoped",
+    "value": 1,
+    "implicit": true
+   },
+   {
+    "name": "UnresolvedByValue",
+    "value": 2,
+    "implicit": true
+   },
+   {
+    "name": "ResolvedExistsNotStoreScoped",
+    "value": 3,
+    "implicit": true
+   }
+  ]
+ }
+]

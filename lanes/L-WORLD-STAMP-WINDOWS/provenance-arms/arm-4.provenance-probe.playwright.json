@@ -1,0 +1,63 @@
+{
+  "journey": "provenance-probe",
+  "title": "the page loads and says who served it",
+  "status": "passed",
+  "startedAtUtc": "2026-08-04T21:24:02.143Z",
+  "finishedAtUtc": "2026-08-04T21:24:02.165Z",
+  "durationMs": 22,
+  "capabilities": [
+    "harness.provenance.probe"
+  ],
+  "surface": "public",
+  "backend": "live",
+  "baseUrl": "http://127.0.0.1:59872",
+  "apiBaseUrl": "http://127.0.0.1:59871",
+  "commit": null,
+  "underTest": null,
+  "backendProbe": {
+    "url": "http://127.0.0.1:59871/health",
+    "status": 200,
+    "body": "Healthy"
+  },
+  "backendBuild": {
+    "id": "okamapi-alpha@c1b97d683fdc6322c3fdf41e53e434c353dda25d",
+    "source": "stamp:artifacts/world/live/127-0-0-1-59871.json",
+    "short": "c1b97d6",
+    "detail": "branch main, stamped by build-provenance-proof.js at 2026-08-04T21:24:01.616Z, pid 89618 (which was serving this origin) still running; this overrode E2E_API_BUILD=\"okamapi-beta@aa26c1b1ebcb87ce2ab63814c1ad3d16b4c430d5\", which names a different build and is checked against nothing"
+  },
+  "backendServed": 2,
+  "backendSubjectServed": 1,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "proxiedSubjectServed": 0,
+  "proxiedSubjectSample": [],
+  "backendSample": [
+    "GET http://127.0.0.1:59871/user -> 200",
+    "GET http://127.0.0.1:59871/workforce/stores/1/context -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "open the page",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T21:24:02.145Z",
+      "durationMs": 20,
+      "detail": "served by live",
+      "error": null
+    }
+  ],
+  "findings": [],
+  "consoleErrors": [],
+  "failedRequests": [],
+  "screenshots": [],
+  "error": null,
+  "artifact": {
+    "key": "live-59871-c1b97d6",
+    "file": "artifacts/journeys/runs/provenance-probe.live-59871-c1b97d6.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "live-59871-c1b97d6",
+    "provisional": false,
+    "supersedes": null
+  }
+}

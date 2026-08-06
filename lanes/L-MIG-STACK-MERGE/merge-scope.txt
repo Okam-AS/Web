@@ -1,0 +1,49 @@
+# What the merge actually carried (measured at 7e7c0a3e, base 3579bbbc)
+
+## Stack side vs merge-base
+total files: 145
+inside Migrations/: 19
+outside Migrations/: 126
+
+## Outside-Migrations breakdown
+  17 artifacts/tests
+  13 WebApi.Tests/Workforce
+  13 WebApi.Tests/Margin
+  13 Services/Workforce
+   8 Enums/Training
+   6 lanes/L-WF-EXPORT-DUPLICATE
+   6 Entities/Training
+   5 lanes/L-WF-W5-TIMESHEET
+   5 WebApi.Tests/Training
+   4 Services/Margin
+   4 Entities/Workforce
+   3 docs/plans
+   3 WebApi.Tests/Kassa
+   2 artifacts/journeys
+   2 Services/Tripletex
+   2 Models/Margin
+   2 Enums/Margin
+   2 Entities/Margin
+   1 artifacts/mig7
+   1 WebApi.Tests/StoreMarket
+   1 WebApi.Tests/Events
+   1 Services/StoreMarketService.cs
+   1 Services/AccountingSummaryService.cs
+   1 Program.cs/
+   1 Models/Workforce
+   1 Models/Tripletex
+   1 Helpers/StoreMarketHistory.cs
+   1 Helpers/Margin
+   1 Helpers/ApplicationDbContext.cs
+   1 Enums/Workforce
+   1 Entities/Tripletex
+   1 Controllers/WorkforceTimesheetsController.cs
+   1 Controllers/MarginWasteController.cs
+   1 .gitignore/
+
+## Meals SERVICES on the stack side (brief claims none)
+  (none - claim holds)
+
+## Meals files of any kind on the stack side
+Migrations/20260803090036_Meals_CompanyReceivableAccount.Designer.cs
+Migrations/20260803090036_Meals_CompanyReceivableAccount.cs

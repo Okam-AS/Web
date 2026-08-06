@@ -1,0 +1,56 @@
+THE ARM: the fixture API is KILLED mid-journey and the journey's own message is read.
+
+worktrees : /Users/svendaneel/okam/web-waitdiag        (changed)  lane/admin-journey-wait-diagnoses ac77d25
+            /Users/svendaneel/okam/web-waitdiag-before (stock)    detached 8ac6f63
+both detached/clean, core populated, node_modules symlinked. Ports bound: web 3877/3878, fixture
+4877/4878. 4010, 4971 and 4973 were never bound, never probed and never signalled.
+helper sha : 6b3fe7f8d2387f76d879e67151b0fc9d7caf4b40 (stock)  ->  changed in ac77d25
+
+--- BASELINE : nothing killed -----------------------------------------------------------------
+    A0-baseline-stock     PASS  backendServed=58
+    A0-baseline-changed   PASS  backendServed=58     the success path is untouched
+    R1-regression-changed 5 passed (45.3s)           training / meals / events / margin / refusal
+
+--- THE KILL : same journey, same wait, same fault --------------------------------------------
+The fixture is SIGTERMed 2s after the test starts — after the harness's /__fixture/reset (which
+runs before the browser opens and would otherwise abort the run pre-browser) and before the
+browser's first API call. Both arms recorded backendServed=0: no API response ever reached the
+browser, which is the same number the 2026-08-03 artifact carries.
+
+    C1-api-killed-stock    artifact step error:
+        page.waitForURL: Timeout 30000ms exceeded.
+        waiting for navigation until "load"
+
+    K1-api-killed-changed  artifact step error:
+        ADMIN SIGN-IN GAVE UP WAITING FOR the redirect after sign-in.
+        THE API IS NOT LISTENING — the application is up, the shell rendered, and nothing answered
+        http://127.0.0.1:4877. Sign-in cannot complete because no request can.
+          application : http://127.0.0.1:3877 — answered HTTP 200
+          api         : http://127.0.0.1:4877 — no answer (ECONNREFUSED)
+          browser at  : http://127.0.0.1:3877/admin?redirect=%2Fadmin%2Fgrowth-newsletter
+          expected    : /admin/growth-newsletter
+          shell       : #__nuxt present, 239 chars
+          modal       : open, 6 otp box(es)
+          modal says  : «Feil kode»
+        The runner reported: page.waitForURL: Timeout 30000ms exceeded. ...
+
+VERDICT: the message is in the ARTIFACT, not only the console — the artifact is what stood as
+evidence for three days. C1's artifact reproduces the 2026-08-03 record's signature exactly
+(status failed, backendServed 0, the identical waitForURL sentence), so a fixture that stopped
+answering is sufficient to produce that red.
+
+--- WHAT THE ARMS DID NOT SHOW ----------------------------------------------------------------
+The APPLICATION-IS-NOT-LISTENING branch never fired. Killing the dev server (K2, K5) stops the run
+EARLIER, at page.goto, with net::ERR_EMPTY_RESPONSE — which already names its own cause and is not
+the failure this lane exists to fix. Killing both at the browser's first API call (K3, K6, K7) lost
+the race three times out of three: the window is the six fill() calls between sendverificationtoken
+and login, and login got through each time, so the journey signed in and failed later on data.
+Recorded rather than claimed; the branch is marked NOT-shown in the source.
+
+--- A PRODUCT DEFECT THIS ARM EXPOSED (not fixed here) ----------------------------------------
+With NOTHING listening on the API, the login modal still advances to the OTP step and offers six
+boxes for a code it never sent. RequestService.PostRequest RESOLVES a failed request to the axios
+error object instead of rejecting; UserService.SendVerificationToken turns that into false; and
+LoginModal.getCode sets smsSent = true in a .then() that never reads the value. Its
+«Feil telefonnummer» arm is therefore unreachable for any server-side failure. Out of this lane's
+scope — thirty-one journeys share signIn and none of them is about the modal's honesty.

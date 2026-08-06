@@ -1,0 +1,124 @@
+BASELINE
+  test/journey-teardown.test.js: 0 failing
+  test/journey-rerunnability.test.js: 0 failing
+
+------------------------------------------------------------------------------
+MUTATION A  release moved above the walk
+  predicted red: it does so AFTER the walk
+  reds: ['the restore is a teardown, not a step it does so AFTER the walk, in the teardown half of the fixture', 'the restore is a teardown, not a step it is inside a finally, so nothing that throws first can skip it']
+  verdict: AS PREDICTED
+
+------------------------------------------------------------------------------
+MUTATION B  release made conditional on a pass
+  predicted red: it is UNCONDITIONAL
+  reds: ['the restore is a teardown, not a step it is UNCONDITIONAL — no branch stands between the teardown and the restore']
+  verdict: AS PREDICTED
+
+------------------------------------------------------------------------------
+MUTATION C  release moved out of the finally
+  predicted red: the journey fixture lowers the levers it raised
+  reds: ['the restore is a teardown, not a step the journey fixture lowers the levers it raised', 'the restore is a teardown, not a step it does so AFTER the walk, in the teardown half of the fixture', 'the restore is a teardown, not a step it is inside a finally, so nothing that throws first can skip it']
+  verdict: AS PREDICTED
+
+------------------------------------------------------------------------------
+MUTATION D  a clearing step written back into a journey body
+  predicted red: no spec ends its lever operations with a clear
+  reds: ["no journey does the teardown's job in its own body no spec ends its lever operations with a clear", "no journey does the teardown's job in its own body the two journeys that used to clear as housekeeping no longer do"]
+  verdict: AS PREDICTED
+
+------------------------------------------------------------------------------
+MUTATION E  lease route back to POST (the deadlock)
+  predicted red: the lease route is a GET
+  reds: ['the lease survives what the process does not the lease route is a GET, because the fixture reads a POST body before routing', "the lease survives what the process does not a superseded lease dying later does NOT lower the fresh run's levers"]
+  verdict: AS PREDICTED
+
+------------------------------------------------------------------------------
+MUTATION F  reset stops emptying the lease
+  predicted red: the reset empties what the lease is holding
+  reds: ['the lease survives what the process does not the reset empties what the lease is holding']
+  verdict: AS PREDICTED
+
+------------------------------------------------------------------------------
+MUTATION G  lease no longer released on socket close
+  predicted red: releases it on socket close
+  reds: ['the lease survives what the process does not the fixture answers a lease route and releases it on socket close']
+  verdict: AS PREDICTED
+
+------------------------------------------------------------------------------
+MUTATION P  stale lease handler unguarded again
+  predicted red: superseded lease dying later
+  reds: ["the lease survives what the process does not a superseded lease dying later does NOT lower the fresh run's levers"]
+  verdict: AS PREDICTED
+
+------------------------------------------------------------------------------
+MUTATION H  the clear is never actually issued
+  predicted red: release() really issues the clears
+  reds: ['the ledger lowers what a walk raised release() really issues the clears, newest lever first', 'the ledger lowers what a walk raised the bearer the browser sent is the bearer the clear uses', 'the ledger lowers what a walk raised a backend that refuses the clear is reported, not swallowed']
+  verdict: AS PREDICTED
+
+------------------------------------------------------------------------------
+MUTATION I  levers lowered oldest-first instead of newest-first
+  predicted red: release() really issues the clears
+  reds: ['the ledger lowers what a walk raised release() really issues the clears, newest lever first']
+  verdict: AS PREDICTED
+
+------------------------------------------------------------------------------
+MUTATION J  an explicit OFF stops counting as an override
+  predicted red: an explicit OFF is still a lever held
+  reds: ['the ledger lowers what a walk raised an explicit OFF is still a lever held, because it is still an override row']
+  verdict: AS PREDICTED
+
+------------------------------------------------------------------------------
+MUTATION K  the bearer written to the on-disk ledger
+  predicted red: no credential is written to the on-disk ledger
+  reds: ['the mechanism keeps its own promises no credential is written to the on-disk ledger']
+  verdict: AS PREDICTED
+
+------------------------------------------------------------------------------
+MUTATION L  the reader stops seeing raw switchboard clicks
+  predicted red: it sees both shapes this corpus uses
+  reds: ["no journey does the teardown's job in its own body the two journeys that used to clear as housekeeping no longer do", 'the reader read levers it sees both shapes this corpus uses', 'the reader read levers the reader finds every spec in the census, not merely several', 'the reader read levers all three helper-bypassing raisers are among them', 'the reader read levers nothing that looks like a lever control went unparsed']
+  verdict: AS PREDICTED
+
+------------------------------------------------------------------------------
+MUTATION M  globalTeardown stops reporting held levers
+  predicted red: globalTeardown really prints what was left up
+  reds: ['the mechanism keeps its own promises globalTeardown really prints what was left up']
+  verdict: AS PREDICTED
+
+------------------------------------------------------------------------------
+MUTATION N  the lease opened after the walk instead of before
+  predicted red: the lease is opened before the walk
+  reds: ['the restore is a teardown, not a step the lease is opened before the walk, not after it']
+  verdict: AS PREDICTED
+
+------------------------------------------------------------------------------
+MUTATION O  the teardown pin deleted outright
+  predicted red: the teardown pin exists and is about this subject
+  reds: ['the lever rules moved, and this file says where the teardown pin exists and is about this subject']
+  verdict: AS PREDICTED
+
+RESTORED -- re-running both suites green
+  test/journey-teardown.test.js: 0 failing
+  test/journey-rerunnability.test.js: 0 failing
+
+==============================================================================
+  A  release moved above the walk                      red by name
+  B  release made conditional on a pass                red by name
+  C  release moved out of the finally                  red by name
+  D  a clearing step written back into a journey body  red by name
+  E  lease route back to POST (the deadlock)           red by name
+  F  reset stops emptying the lease                    red by name
+  G  lease no longer released on socket close          red by name
+  P  stale lease handler unguarded again               red by name
+  H  the clear is never actually issued                red by name
+  I  levers lowered oldest-first instead of newest-first red by name
+  J  an explicit OFF stops counting as an override     red by name
+  K  the bearer written to the on-disk ledger          red by name
+  L  the reader stops seeing raw switchboard clicks    red by name
+  M  globalTeardown stops reporting held levers        red by name
+  N  the lease opened after the walk instead of before red by name
+  O  the teardown pin deleted outright                 red by name
+  16/16 mutations red the test they named
+  suites restored green: True
+==============================================================================

@@ -1,0 +1,97 @@
+=== commit 9f7d8dfc78dceaaa9c52c72ba470a34eb904a130 ===
+9f7d8df Correction: the modal shadow I said stayed open was already closed
+=== core: 10 entries | spec sha: 240787602ca928c1ab06daffeb4130a715171961 ===
+[WebServer] [fixture] listening on http://127.0.0.1:4777
+
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://172.20.10.4:3777/
+
+[WebServer] [info] Preparing project for development
+
+[WebServer] [info] Initial build may take a while
+
+
+Running 1 test using 1 worker
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+[WebServer] [success] Builder initialized
+
+[WebServer] [success] Nuxt files generated
+
+[1/1] [chromium] › test/e2e/journeys/meals-admin-setup.spec.js:31:1 › A concierge creates a company, signs its corridor, runs a programme and issues an invitation @fixture
+[WebServer] [warn] Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[WebServer] [info] Waiting for file changes
+
+[WebServer] [info] Memory usage: 1.34 GB (RSS: 2.24 GB)
+
+[WebServer] [info] Listening on: http://172.20.10.4:3777/
+
+  1) [chromium] › test/e2e/journeys/meals-admin-setup.spec.js:31:1 › A concierge creates a company, signs its corridor, runs a programme and issues an invitation @fixture 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.meals-programs .mls-note--warn')
+    Expected substring: "leser"
+    Error: strict mode violation: locator('.meals-programs .mls-note--warn') resolved to 4 elements:
+        1) <p data-v-006c1946="" class="mls-note mls-note--warn">↵      Vi kan si hvilken versjon som er gjeldende…</p> aka getByText('Vi kan si hvilken versjon som')
+        2) <p data-v-006c1946="" data-test="enrol-replaces" class="mls-note mls-note--warn">↵        Listen du sender inn er hele påmeldingen…</p> aka locator('[data-test="enrol-replaces"]')
+        3) <p data-v-006c1946="" data-test="enrol-unread" class="mls-note mls-note--warn">↵          Vi fikk ikke lest hvem som står påmeld…</p> aka locator('[data-test="enrol-unread"]')
+        4) <p data-v-006c1946="" class="mls-note mls-note--warn" data-test="enrol-unread-refusal">↵          Denne serveren svarte ikke som Company…</p> aka locator('[data-test="enrol-unread-refusal"]')
+
+    Call log:
+      - Expect "toContainText" with timeout 10000ms
+      - waiting for locator('.meals-programs .mls-note--warn')
+
+
+      129 |       // route that reads a policy version BACK. A programme carries its latest version NUMBER and
+      130 |       // nothing else.
+    > 131 |       await expect(page.locator('.meals-programs .mls-note--warn')).toContainText('leser');
+          |                                                                     ^
+      132 |
+      133 |       await field('.meals-programs', 'Beløpsgrense per periode').fill('120,00');
+      134 |       await field('.meals-programs', 'Tidssone').fill('Europe/Oslo');
+        at /Users/svendaneel/okam/web-jrbisect/test/e2e/journeys/meals-admin-setup.spec.js:131:69
+        at JourneyRecorder.step (/Users/svendaneel/okam/web-jrbisect/test/e2e/support/journey.js:387:22)
+        at /Users/svendaneel/okam/web-jrbisect/test/e2e/journeys/meals-admin-setup.spec.js:122:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/meals-admin-setup-A-concie-fc342-me-and-issues-an-invitation-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/meals-admin-setup.fixture.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/meals-admin-setup.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/meals-admin-setup-A-concie-fc342-me-and-issues-an-invitation-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/meals-admin-setup-A-concie-fc342-me-and-issues-an-invitation-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/meals-admin-setup-A-concie-fc342-me-and-issues-an-invitation-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+  1 failed
+    [chromium] › test/e2e/journeys/meals-admin-setup.spec.js:31:1 › A concierge creates a company, signs its corridor, runs a programme and issues an invitation @fixture 
+RESULT B-cand 9f7d8df FAIL-ASSERT rc=1

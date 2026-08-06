@@ -1,0 +1,12 @@
+files with <script>: 4 / 4 .vue files
+files with no recognised data block: 0
+
+--- data() top-level keys starting with _ or $ (NOT proxied by Vue 2.7 initData) ---
+/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/ignored-decl/control/A.vue:8  key=_tick
+/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/ignored-decl/control/A.vue:9  key=$weird
+/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/ignored-decl/control/B.vue:4  key=_arrowKey
+/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/ignored-decl/control/C.vue:5  key=_fnKey
+/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/ignored-decl/control/C.vue:5  key=_tick (shorthand)
+
+--- watch keys starting with _ or $ ---
+/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/ignored-decl/control/A.vue:14  key=_tick

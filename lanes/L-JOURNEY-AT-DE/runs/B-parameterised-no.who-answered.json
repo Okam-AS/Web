@@ -1,0 +1,12 @@
+{
+  "label": "B-parameterised-no",
+  "edition": "no",
+  "grantedFixturePort": 4823,
+  "grantedWebPort": 3823,
+  "health": "{\"ok\":true,\"port\":4823}",
+  "holderPid": "72040",
+  "holderCwd": "/Users/svendaneel/okam/web-atde",
+  "holderCommand": "node test/e2e/fixture/api-server.js",
+  "lsof": "p72040 f12 n127.0.0.1:4823 ",
+  "capturedAt": "2026-08-05T04:53:39Z"
+}

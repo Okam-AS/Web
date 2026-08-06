@@ -127,11 +127,26 @@
 # decision, and a stale rule in it is read as the rule.
 #
 # Those two variables are enough, and that is the point: once the world is healthy this script writes
-# `artifacts/world/live/<host>-<port>.json` naming the checkout it built from and the process it
-# started, so the run identifies the backend from what the BUILD left behind rather than by asking
-# whoever holds the port. The banner still prints E2E_API_BUILD as well — it costs nothing, it works
-# when the runner is on a different machine's shell, and when the two disagree the stamp wins and the
-# artifact records that it did. See test/e2e/support/world-stamp.js.
+# `artifacts/world/live/<host>-<port>.json` naming the checkout it built from and the process serving
+# it, so the run identifies the backend from what the BUILD left behind rather than by asking whoever
+# holds the port. The banner still prints E2E_API_BUILD as well — it costs nothing, it works when the
+# runner is on a different machine's shell, and when the two disagree the stamp wins and the artifact
+# records that it did. See test/e2e/support/world-stamp.js.
+#
+# TWO THINGS THIS SCRIPT HAS TO GET RIGHT FOR ANY OF THAT TO BE WORTH HAVING, both of them found by a
+# review of the stamp's own claim ("it can lose its answer; it cannot invent a wrong one") and both of
+# them living HERE, in the wiring, rather than in the module:
+#
+#   WHICH BUILD    the head can move under this script — shared worktrees are routine on this estate —
+#                  so the build token is read at the moment the binary is BUILT (step 3) and handed to
+#                  the stamp, which recomputes it and REFUSES if the checkout has moved since. A stamp
+#                  that names a commit the running binary was not built from is worse than no stamp:
+#                  it is verified-alive, origin-matched and wrong, and every artifact citing it
+#                  inherits the error.
+#   WHICH PROCESS  `$!` below is the pid of the `dotnet run` LAUNCHER, and the child it execs is what
+#                  holds the socket. So the launcher pid is handed over as the thing this script
+#                  STARTED, and the stamp records the process actually serving the port — which must
+#                  be that process or a descendant of it, or there is no stamp at all.
 #
 set -euo pipefail
 
@@ -184,16 +199,14 @@ safe_conn() { printf '%s' "$CONN" | sed 's/Password=[^;]*/Password=***/'; }
 # `+dirty` is part of the answer, not noise: a dirty tree is NOT the commit it sits on, and two dirty
 # trees on one commit are not each other. The store keys artifacts by this token, so dropping it would
 # let a clean and a modified build overwrite each other's record under one name.
-API_HEAD="$(git -C "$OKAM_API_REPO" rev-parse HEAD 2>/dev/null || true)"
-if [ -n "$API_HEAD" ]; then
-    [ -z "$(git -C "$OKAM_API_REPO" status --porcelain 2>/dev/null)" ] || API_HEAD="$API_HEAD+dirty"
-    API_BUILD="$(basename "$OKAM_API_REPO")@$API_HEAD"
-else
-    # Not a checkout. Named as such rather than left empty: `unknown` in the artifact is an answer, and
-    # an unset variable would silently fall back to whatever the runner's shell happened to carry.
-    API_BUILD=""
-fi
-export E2E_API_BUILD="$API_BUILD"
+#
+# THE ANSWER IS NOT COMPUTED HERE, though, and that is the whole of W1. This script spends about a
+# minute dropping and rebuilding a database between this point and the `dotnet build` in step 3, and a
+# rebase in the API worktree during that minute would leave every line below naming a commit the binary
+# was not built from. So all that is taken here is the sha, to be COMPARED after the build; the build
+# token itself is read at the moment the binary exists, by the one implementation of it
+# (`world-stamp.js built`), so this shell and the stamp cannot disagree about what "dirty" means.
+API_SHA_BEFORE="$(git -C "$OKAM_API_REPO" rev-parse HEAD 2>/dev/null || true)"
 
 # Checked here rather than at first use: every seeding step below builds its request body with jq, and
 # a missing tool should stop the run before a database is dropped, not sixty seconds into it.
@@ -266,6 +279,36 @@ command -v dotnet-ef >/dev/null || die "dotnet-ef not installed: dotnet tool ins
 ( cd "$OKAM_API_REPO" && dotnet build WebApi.csproj -v q --nologo >/dev/null \
   && dotnet ef database update --project WebApi.csproj --connection "$CONN" --no-build >/dev/null 2>&1 ) \
   || die "migration failed -- rerun the dotnet ef command without output suppressed to see it"
+
+# ---- WHICH BUILD THIS WORLD IS, ANSWERED WHERE THE ANSWER IS TRUE (W1) -------------------------
+#
+# The binary now exists. THIS is the moment that defines "what the running binary was built from", so
+# this is where the answer is taken.
+#
+# First the hard refusal: if the commit moved while the build was running, the binary is of an
+# ambiguous tree and no token describes it. That kills the world rather than the stamp, because a
+# world nobody can name is not one to run journeys against. It compares the SHA ONLY -- a build writes
+# into obj/ and bin/, and if a checkout ever stopped ignoring those the dirty flag would flip for a
+# reason that has nothing to do with a head moving.
+API_SHA_AFTER="$(git -C "$OKAM_API_REPO" rev-parse HEAD 2>/dev/null || true)"
+[ "$API_SHA_AFTER" = "$API_SHA_BEFORE" ] || die "the API checkout moved WHILE it was being built:
+    $OKAM_API_REPO was at ${API_SHA_BEFORE:-<not a checkout>} and is now at ${API_SHA_AFTER:-<not a checkout>}.
+    The binary is of a tree no commit names. Rebuild on a settled worktree."
+
+# Then the token the stamp will be held to. Read through world-stamp.js so there is ONE definition of
+# a build token in this repo; a second one spelled out in shell would eventually disagree with it and
+# the comparison at stamp time would be a comparison of two dialects.
+API_BUILT="$(node "$WEB_REPO/test/e2e/support/world-stamp.js" built "$OKAM_API_REPO" 2>/dev/null || true)"
+if [ -n "$API_BUILT" ]; then
+    API_BUILD="$(basename "$OKAM_API_REPO")@$API_BUILT"
+else
+    # Not a checkout. Named as such rather than left empty: `unknown` in the artifact is an answer, and
+    # an unset variable would silently fall back to whatever the runner's shell happened to carry.
+    API_BUILD=""
+fi
+export E2E_API_BUILD="$API_BUILD"
+note "built from ${API_BUILD:-UNKNOWN -- $OKAM_API_REPO is not a git checkout}"
+
 APPLIED="$(sqld -Q "SET NOCOUNT ON; SELECT CAST(COUNT(*) AS varchar) FROM __EFMigrationsHistory;" | tr -d ' \r\n')"
 TABLES="$(sqld -Q "SET NOCOUNT ON; SELECT CAST(COUNT(*) AS varchar) FROM sys.tables;" | tr -d ' \r\n')"
 TRIGGERS="$(sqld -Q "SET NOCOUNT ON; SELECT CAST(COUNT(*) AS varchar) FROM sys.triggers WHERE is_ms_shipped=0;" | tr -d ' \r\n')"
@@ -315,26 +358,41 @@ for _ in $(seq 1 60); do
 done
 curl -fsS -o /dev/null "$API_BASE/health" || die "API did not come up; see $LOG"
 grep -q "Failed to bind to address" "$LOG" && die "the API could not bind :$API_PORT; see $LOG"
-note "healthy (pid $API_PID, log: $LOG)"
+note "healthy (launcher pid $API_PID, log: $LOG)"
 
 # ---- AND NOW THE WORLD SAYS SO, ON DISK -------------------------------------------------------
 #
-# Written HERE and not a line earlier: the stamp asserts that pid $API_PID is serving $API_BASE, and
-# that is only true once the health check above has passed. It names the checkout this script built
-# from and the process it started, so a journey run in ANY shell -- with no E2E_API_BUILD, no
+# Written HERE and not a line earlier: the stamp asserts that a process is serving $API_BASE, and that
+# is only true once the health check above has passed. It names the checkout this script built from and
+# the process serving the port, so a journey run in ANY shell -- with no E2E_API_BUILD, no
 # OKAM_API_REPO and without asking lsof who holds the port -- files an artifact naming this build.
 # See test/e2e/support/world-stamp.js for why a stamp may be believed and exactly when it may not.
 #
+# THE TWO ARGUMENTS THAT CARRY THE GUARDS, and neither is optional at the other end:
+#
+#   $API_PID     what this script STARTED, which is the `dotnet run` launcher and NOT the process
+#                holding the socket -- `dotnet run` execs a child named plainly `WebApi`, which is the
+#                same fact step 1 kills by port for. world-stamp.js resolves the holder from the port
+#                and refuses unless it is this pid or a descendant of it, so what lands in the stamp is
+#                the process whose death should invalidate the answer. Stamping the launcher instead
+#                would mean a stamp that stays valid while a stranger serves the port (W2).
+#   $API_BUILT   the token read at the moment the binary was built, up in step 3. world-stamp.js
+#                recomputes it and refuses if the checkout has moved since (W1).
+#
 # A failure here does NOT tear the world down. The world is good; only its provenance would be
-# missing, and the run command below still carries E2E_API_BUILD. Said out loud rather than swallowed,
-# because the difference shows up much later as an artifact filed `-unidentified`.
-if node "$WEB_REPO/test/e2e/support/world-stamp.js" \
-        write "$API_BASE" "$OKAM_API_REPO" "$API_PID" "test/e2e/scripts/live-world.sh" >/dev/null 2>&1; then
-    note "stamped: artifacts/world/live/127-0-0-1-$API_PORT.json names $API_BUILD (pid $API_PID)"
+# missing, and the run command below still carries E2E_API_BUILD. The REASON is printed rather than
+# swallowed -- every refusal above is a sentence naming what it saw, and a run filed `-unidentified`
+# an hour later is a much more expensive way to learn it.
+if STAMP_SAID="$(node "$WEB_REPO/test/e2e/support/world-stamp.js" \
+        write "$API_BASE" "$OKAM_API_REPO" "$API_PID" "${API_BUILT:-}" "test/e2e/scripts/live-world.sh" 2>&1)"; then
+    note "stamped: $STAMP_SAID"
 else
     printf '   \033[33m%s\033[0m\n' "could NOT stamp this world -- a run that forgets E2E_API_BUILD will be filed unidentified.
-    Reason:  node $WEB_REPO/test/e2e/support/world-stamp.js write $API_BASE $OKAM_API_REPO $API_PID"
+    $STAMP_SAID"
 fi
+# Who is actually on the socket, for the operator lines at the bottom. Read the same way the stamp
+# resolved it; empty if lsof cannot say, and every use of it below tolerates that.
+SERVING_PID="$(lsof -nP -iTCP:"$API_PORT" -sTCP:LISTEN -t 2>/dev/null | head -1 || true)"
 
 say "5/5  Seeding the smallest world a journey can run against"
 
@@ -689,7 +747,7 @@ cat <<EOF
 -------------------------------------------------------------------------------
 A LIVE world is up.
 
-    API        $API_BASE           (pid $API_PID, log $LOG)
+    API        $API_BASE           (serving pid ${SERVING_PID:-?}, launcher $API_PID, log $LOG)
     build      ${API_BUILD:-UNKNOWN -- $OKAM_API_REPO is not a git checkout}
     database   $DB_NAME on localhost,$SQL_PORT   ($APPLIED migrations, $TABLES tables)
     store      $STORE_ID  "$STORE_NAME"   registered through POST /Stores/register, org.nr $STORE_ORGNR
@@ -709,12 +767,16 @@ Run ONE live journey against it:
 
 THE ARTIFACT NAMES THIS BUILD WITHOUT THE E2E_API_BUILD LINE, because the world was stamped:
 
-    artifacts/world/live/127-0-0-1-$API_PORT.json   ->  ${API_BUILD:-UNKNOWN}   (pid $API_PID)
+    artifacts/world/live/127-0-0-1-$API_PORT.json   ->  ${API_BUILD:-UNKNOWN}   (serving pid ${SERVING_PID:-?})
 
-That file is what a journey reads first, and it is refused the moment pid $API_PID is gone -- so it
-can lose its answer and cannot invent a wrong one. E2E_API_BUILD is kept in the line above because it
-still carries the case where the runner is somewhere this file is not; when the two disagree the
-stamp wins and the artifact says which declaration it overrode. Inspect it with:
+That file is what a journey reads first, and it is refused the moment the process it names is gone --
+so it can lose its answer and cannot invent a wrong one. TWO THINGS MAKE THAT SENTENCE TRUE rather
+than merely printed: it names the build read when the binary was BUILT and refuses if this checkout
+has moved since, and it names the process HOLDING THE SOCKET rather than the \`dotnet run\` launcher
+that started it -- so a launcher outliving a dead server cannot keep the answer alive. E2E_API_BUILD
+is kept in the line above because it still carries the case where the runner is somewhere this file is
+not; when the two disagree the stamp wins and the artifact says which declaration it overrode.
+Inspect it with:
 
     node test/e2e/support/world-stamp.js show $API_BASE
 
@@ -754,6 +816,8 @@ never reached that origin, so the label cannot be produced without the traffic. 
 the STRONGEST run on record rather than the last one written, keyed by origin AND build, so a run
 against this world cannot overwrite the record of a different one. See support/artifact-store.js.
 
-Stop it with:   kill $API_PID
+Stop it with:   kill ${SERVING_PID:-$API_PID} $API_PID
+                (the server and the launcher that started it -- killing only the launcher can leave
+                 the server holding :$API_PORT, which is why step 1 of a rebuild kills by port)
 -------------------------------------------------------------------------------
 EOF

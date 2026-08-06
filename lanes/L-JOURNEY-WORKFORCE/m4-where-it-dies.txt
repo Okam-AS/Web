@@ -1,0 +1,5 @@
+MUTANT M4 (server withholds rows[].sessions[].clockSessionId)
+exit=1 artifact=failed steps_recorded=3 of 8
+  1 passed | sign in as the manager and open the hours
+  2 passed | R1 · the pay rates are refused while the timesheet is not
+  3 failed | the punches behind the rows each name a clock session

@@ -1,0 +1,52 @@
+worktree      /Users/svendaneel/okam/wt-xzprinted
+production    Services/Kassa/EscPosXZReportBuilder.cs
+filter        Database!=SqlServer&FullyQualifiedName~WebApi.Tests.Kassa
+
+BASELINE  WebApi.dll 14:43:04  Passed!  - Failed:     0, Passed:   913, Skipped:     0, Total:   913, Duration: 2 m 42 s - WebApi.Tests.dll (net8.0)
+
+====================================================================================================
+M1-revert-the-sign-allowance
+  removes: the named change itself: a trailing count must be all digits again
+  reached the file: yes (36 chars changed)
+  MUTANT    WebApi.dll 14:51:16  Failed!  - Failed:    34, Passed:   879, Skipped:     0, Total:   913, Duration: 2 m 18 s - WebApi.Tests.dll (net8.0)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.A_negative_goods_group_quantity_keeps_its_sign_and_its_digits(quantity: -12, amount: -123400)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.A_negative_goods_group_quantity_keeps_its_sign_and_its_digits(quantity: -123, amount: -1200)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.A_negative_goods_group_quantity_keeps_its_sign_and_its_digits(quantity: -123, amount: -12300)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.A_negative_goods_group_quantity_keeps_its_sign_and_its_digits(quantity: -1234, amount: -9900000027)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.A_negative_goods_group_quantity_keeps_its_sign_and_its_digits(quantity: -5, amount: -123400)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_x_keeps_its_digits(amountWidth: "10ch", amountBase: 99000000, countDigits: 3)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_x_keeps_its_digits(amountWidth: "10ch", amountBase: 99000000, countDigits: 4)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_x_keeps_its_digits(amountWidth: "10ch", amountBase: 99000000, countDigits: 6)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_x_keeps_its_digits(amountWidth: "12ch", amountBase: 120000000, countDigits: 1)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_x_keeps_its_digits(amountWidth: "12ch", amountBase: 120000000, countDigits: 2)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_x_keeps_its_digits(amountWidth: "12ch", amountBase: 120000000, countDigits: 3)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_x_keeps_its_digits(amountWidth: "12ch", amountBase: 120000000, countDigits: 4)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_x_keeps_its_digits(amountWidth: "12ch", amountBase: 120000000, countDigits: 6)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_x_keeps_its_digits(amountWidth: "13ch", amountBase: 9900000000, countDigits: 1)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_x_keeps_its_digits(amountWidth: "13ch", amountBase: 9900000000, countDigits: 2)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_x_keeps_its_digits(amountWidth: "13ch", amountBase: 9900000000, countDigits: 3)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_x_keeps_its_digits(amountWidth: "13ch", amountBase: 9900000000, countDigits: 4)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_x_keeps_its_digits(amountWidth: "13ch", amountBase: 9900000000, countDigits: 6)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_x_keeps_its_digits(amountWidth: "8ch", amountBase: 100000, countDigits: 6)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_z_keeps_its_digits(amountWidth: "10ch", amountBase: 99000000, countDigits: 3)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_z_keeps_its_digits(amountWidth: "10ch", amountBase: 99000000, countDigits: 4)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_z_keeps_its_digits(amountWidth: "10ch", amountBase: 99000000, countDigits: 6)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_z_keeps_its_digits(amountWidth: "12ch", amountBase: 120000000, countDigits: 1)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_z_keeps_its_digits(amountWidth: "12ch", amountBase: 120000000, countDigits: 2)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_z_keeps_its_digits(amountWidth: "12ch", amountBase: 120000000, countDigits: 3)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_z_keeps_its_digits(amountWidth: "12ch", amountBase: 120000000, countDigits: 4)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_z_keeps_its_digits(amountWidth: "12ch", amountBase: 120000000, countDigits: 6)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_z_keeps_its_digits(amountWidth: "13ch", amountBase: 9900000000, countDigits: 1)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_z_keeps_its_digits(amountWidth: "13ch", amountBase: 9900000000, countDigits: 2)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_z_keeps_its_digits(amountWidth: "13ch", amountBase: 9900000000, countDigits: 3)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_z_keeps_its_digits(amountWidth: "13ch", amountBase: 9900000000, countDigits: 4)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_z_keeps_its_digits(amountWidth: "13ch", amountBase: 9900000000, countDigits: 6)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_z_keeps_its_digits(amountWidth: "8ch", amountBase: 100000, countDigits: 6)
+      red: WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.The_sweep_reaches_widths_where_the_label_must_give_way
+  RESTORED  WebApi.dll 14:53:51  Passed!  - Failed:     0, Passed:   913, Skipped:     0, Total:   913, Duration: 2 m 8 s - WebApi.Tests.dll (net8.0)
+  verdict: KILLED
+
+====================================================================================================
+KILLED          M1-revert-the-sign-allowance                  34 failing, 34 distinct tests
+
+production file restored byte-for-byte

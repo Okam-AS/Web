@@ -1,0 +1,30 @@
+F1.01	lane/fe-training-meals-surfaces	CONFLICT
+F1.02	feature/swiss	CONFLICT
+F1.03	lane/ev-stale-cause	CONFLICT
+F1.04	lane/fe-events-margin-surfaces	CONFLICT
+F1.05	lane/statute-evidence-world	CONFLICT
+F1.06	lane/fe-wf-link-deadend	CONFLICT
+F1.07	lane/fe-wf-self	CONFLICT
+F1.09	lane/menu-allergen-matrix	CONFLICT
+F1.12	lane/wf-pubhist	CONFLICT
+F1.14	lane/margin-menu-margin-ui	CONFLICT
+F1.15	lane/meals-admin	CONFLICT
+F1.17	lane/events-admin	CONFLICT
+F1.19	lane/margin-recipes	CONFLICT
+F1.20	lane/training-admin	CONFLICT
+F1.24	lane/fe-wf-bootstrap	CONFLICT
+F1.26	lane/fe-wf-correction-path	CONFLICT
+F1.27	lane/growth-admin	CONFLICT
+F1.32	lane/mrg-waste-frontend	CONFLICT
+F1.33	lane/train-readonly-visible	CONFLICT
+F1.34	lane/wf-adjust-address	CONFLICT
+F1.36	lane/workforce-roster	CONFLICT
+F1.37	lane/L-JOURNEY-GROWTH	CONFLICT
+F1.38	lane/modal-broken-two	CONFLICT
+F1.40	lane/journey-teardown	CONFLICT
+F1.41	lane/fe-gr-exit-wire-the-mail	CONFLICT
+F2.01	lane/fe-meals-docsync	CONFLICT
+F2.07	lane/L-JOURNEY-PORT-HARDCODED	CONFLICT
+F3.01	lane/L-PRICE-SHADOW-GUARD	RED	2-failed-tests
+F3.09	lane/wf-timesheet-ui	RED	22-failed-tests
+F5.01	lanes/L-XZ-NEGATED-ABSENCE	CONFLICT

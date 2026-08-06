@@ -1,0 +1,9 @@
+L-COMPROOT-FAMILY-LAND - fast tier, filter "Database!=SqlServer", worktree /Users/svendaneel/okam/wt-comprootfam
+
+BASELINE  a273e013  Passed!  - Failed:     0, Passed:  4387, Skipped:    12, Total:  4399, Duration: 6 m 55 s - WebApi.Tests.dll (net8.0)
+COMPOSED  eca0791a  Passed!  - Failed:     0, Passed:  4447, Skipped:    12, Total:  4459, Duration: 6 m 18 s - WebApi.Tests.dll (net8.0)
+FORWARD   3b4b14d5  Passed!  - Failed:     0, Passed:  4454, Skipped:    12, Total:  4466, Duration: 5 m 39 s - WebApi.Tests.dll (net8.0)
+LANDED    35696d6b  Passed!  - Failed:     0, Passed:  4466, Skipped:    12, Total:  4478, Duration: 5 m 5 s - WebApi.Tests.dll (net8.0)
+
+Family delta over its own baseline: +60 tests, +60 passing, 0 failed, skipped unchanged at 12.
+Skip list identical to the baseline's, name for name, in every run.

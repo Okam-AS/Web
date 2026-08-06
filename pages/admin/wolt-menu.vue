@@ -948,6 +948,7 @@
 import AdminPage from "~/components/organisms/AdminPage.vue";
 import Loading from "~/components/atoms/Loading.vue";
 import LoginModal from "~/components/molecules/LoginModal.vue";
+import { amountInputValue, amountLabel, isAmountStated } from "~/utils/price";
 
 export default {
   name: "WoltMenu",
@@ -1163,21 +1164,20 @@ export default {
       }
       return this.menuData.menu.options.find(option => option.id === optionId);
     },
+    // Both of these already asked the right question — `!price && price !== 0` does separate absence
+    // from a genuine zero — and then answered it with a price anyway. An item Wolt has no price for
+    // read as an item Wolt gives away.
+    // Prices are in the smallest currency unit (øre for NOK); `amountLabel` divides by 100.
     formatPrice(price) {
-      if (!price && price !== 0) {
-        return '0 kr';
-      }
-      // Prices are in smallest currency unit (øre for NOK), so divide by 100
-      const amount = price / 100;
-      return `${amount.toFixed(2)} kr`;
+      return amountLabel(price, { suffix: "kr" });
     },
+    // This one seeded an `<input type="number">`, so it was not merely a misleading label: it put the
+    // characters "0.00" in a field bound to `@blur="updateItemPrice"`, and an operator who tabbed
+    // through the row published a real zero price to Wolt in place of one nobody knew. A blank field
+    // is the honest seed — there is no number to show — and `updateItemPrice` now leaves a blank
+    // field alone rather than writing anything at all.
     formatPriceForInput(price) {
-      if (!price && price !== 0) {
-        return '0.00';
-      }
-      // Convert from øre to kroner for display in input
-      const amount = price / 100;
-      return amount.toFixed(2);
+      return amountInputValue(price);
     },
     toggleItemEnabled(item, enabled) {
       if (!item || !item.woltItemId) {
@@ -1218,6 +1218,13 @@ export default {
     updateItemPrice(item, newPrice) {
       if (!item || !item.woltItemId) {
         alert(this.$i('woltMenu_alertMissingWoltId'));
+        return;
+      }
+
+      // A blank field is an item whose price is not known — the seed `formatPriceForInput` now gives
+      // an unpriced row. Tabbing past it must write nothing and must not scold the operator for a
+      // price they never had; only a field somebody actually typed into can be invalid.
+      if (typeof newPrice === 'string' && newPrice.trim() === '') {
         return;
       }
 
@@ -1279,7 +1286,11 @@ export default {
           category.items.forEach(item => {
             if (item.woltItemId) {
               snapshot.items[item.woltItemId] = {
-                price: item.price || 0,
+                // Not `item.price || 0`: that recorded an unpriced item as costing zero, so setting
+                // it to a genuine zero left the snapshot identical and the change went undetected.
+                // Both sides of the comparison are built here, so recording absence as absence is
+                // the only thing that changes.
+                price: isAmountStated(item.price) ? Number(item.price) : null,
                 enabled: !!item.enabled,
                 inStock: !!item.inStock
               };

@@ -1,0 +1,76 @@
+== TREE UNDER MEASUREMENT ==
+worktree:  /Users/svendaneel/okam/web-lint2defects
+HEAD:      8ad3358 (The linter that was configured but unreachable now has one c)
+node:      v24.15.0
+eslint:    7.32.0
+vue:       2.7.14
+date(UTC): 2026-08-05T04:20:06Z
+
+===== BASELINE: both defects FIXED =====
+---- jest: fixed ----
+    ✓ the rule that found it still reports it when the defect is restored (636 ms)
+    ✓ the real component declares no data key Vue refuses to proxy (59 ms)
+    ✓ every key data() returns is one Vue will expose on the instance
+    ✓ the ticker is still started on mount and cleared on destroy (8 ms)
+    ✓ the rule that found it still reports it when the defect is restored (622 ms)
+    ✓ the real page declares each watched key exactly once (95 ms)
+    ✓ the watcher that survives is the one that normalises missing KAM ids
+    ✓ the totals the dropped body recomputed are still recomputed by the sortedStores watcher (1 ms)
+Test Suites: 2 passed, 2 total
+Tests:       8 passed, 8 total
+
+===== M1: duplicate storeOverview watcher RESTORED =====
+applied: storeOverview keys now = 2
+---- jest: M1 ----
+    ✓ the rule that found it still reports it when the defect is restored (624 ms)
+    ✓ the real component declares no data key Vue refuses to proxy (56 ms)
+    ✓ every key data() returns is one Vue will expose on the instance (1 ms)
+    ✓ the ticker is still started on mount and cleared on destroy (7 ms)
+    ✓ the rule that found it still reports it when the defect is restored (618 ms)
+    ✕ the real page declares each watched key exactly once (99 ms)
+    ✓ the watcher that survives is the one that normalises missing KAM ids
+    ✓ the totals the dropped body recomputed are still recomputed by the sortedStores watcher
+Test Suites: 1 failed, 1 passed, 2 total
+Tests:       1 failed, 7 passed, 8 total
+
+===== M2: _tick RESTORED to ClockScreen data() =====
+applied: unproxyable data keys now = ["_tick"]
+---- jest: M2 ----
+    ✓ the rule that found it still reports it when the defect is restored (630 ms)
+    ✕ the real component declares no data key Vue refuses to proxy (59 ms)
+    ✕ every key data() returns is one Vue will expose on the instance
+    ✕ the ticker is still started on mount and cleared on destroy (8 ms)
+    ✓ the rule that found it still reports it when the defect is restored (626 ms)
+    ✓ the real page declares each watched key exactly once (96 ms)
+    ✓ the watcher that survives is the one that normalises missing KAM ids
+    ✓ the totals the dropped body recomputed are still recomputed by the sortedStores watcher
+Test Suites: 1 failed, 1 passed, 2 total
+Tests:       3 failed, 5 passed, 8 total
+
+===== M3: de-duplicated the WRONG way (kept the dropped body) =====
+eslint no-dupe-keys errors on the M3 file: 0  <- the linter sees nothing wrong
+---- jest: M3 ----
+    ✓ the rule that found it still reports it when the defect is restored (692 ms)
+    ✓ the real component declares no data key Vue refuses to proxy (57 ms)
+    ✓ every key data() returns is one Vue will expose on the instance (1 ms)
+    ✓ the ticker is still started on mount and cleared on destroy (7 ms)
+    ✓ the rule that found it still reports it when the defect is restored (690 ms)
+    ✓ the real page declares each watched key exactly once (97 ms)
+    ✕ the watcher that survives is the one that normalises missing KAM ids (1 ms)
+    ✓ the totals the dropped body recomputed are still recomputed by the sortedStores watcher (1 ms)
+Test Suites: 1 failed, 1 passed, 2 total
+Tests:       1 failed, 7 passed, 8 total
+
+===== RESTORED: both defects FIXED again =====
+---- jest: restored ----
+    ✓ the rule that found it still reports it when the defect is restored (639 ms)
+    ✓ the real component declares no data key Vue refuses to proxy (60 ms)
+    ✓ every key data() returns is one Vue will expose on the instance
+    ✓ the ticker is still started on mount and cleared on destroy (8 ms)
+    ✓ the rule that found it still reports it when the defect is restored (630 ms)
+    ✓ the real page declares each watched key exactly once (98 ms)
+    ✓ the watcher that survives is the one that normalises missing KAM ids
+    ✓ the totals the dropped body recomputed are still recomputed by the sortedStores watcher
+Test Suites: 2 passed, 2 total
+Tests:       8 passed, 8 total
+

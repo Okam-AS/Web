@@ -1,0 +1,38 @@
+[WebServer] [fixture] listening on http://127.0.0.1:4910
+[WebServer] 
+[WebServer]  WARN  You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  Module @nuxt/image is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version >=3.1.0 is required but currently using 2.17.1
+[WebServer] 
+[WebServer] ℹ Parsed 0 files in 0.0 seconds
+[WebServer] ℹ [HPM] Proxy created: /  -> http://127.0.0.1:5080
+[WebServer] ℹ [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+[WebServer] ℹ Listening on: http://172.20.10.4:3910/
+[WebServer] ℹ Preparing project for development
+[WebServer] ℹ Initial build may take a while
+
+Running 1 test using 1 worker
+
+[WebServer] ℹ Discovered Components: .nuxt/components/readme.md
+[WebServer] ✔ Builder initialized
+[WebServer] ✔ Nuxt files generated
+[WebServer] 
+[WebServer]  WARN  Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[WebServer] 
+[WebServer] ℹ Compiling Server
+[WebServer] ℹ Compiling Client
+[WebServer] ✔ Server: Compiled successfully in 11.89s
+[WebServer] ✔ Client: Compiled successfully in 14.52s
+[WebServer] ℹ Waiting for file changes
+[WebServer] ℹ Memory usage: 1.23 GB (RSS: 2.03 GB)
+[WebServer] ℹ Listening on: http://172.20.10.4:3910/
+  ✓  1 [chromium] › test/e2e/journeys/margin-statement-week.spec.js:41:1 › A venue opens a week, enters its purchase spend, finalises it, and finds it frozen @fixture (22.7s)
+
+  1 passed (24.3s)

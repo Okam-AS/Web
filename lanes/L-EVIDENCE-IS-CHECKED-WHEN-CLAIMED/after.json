@@ -1,0 +1,2221 @@
+{
+  "board": {
+    "L-ABSENCE-AUDIT-CONDITIONS": {
+      "admitted": true,
+      "evidence": "lanes/L-ABSENCE-AUDIT-CONDITIONS/applied.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-ABSENCE-CLAIMS-AUDIT": {
+      "admitted": true,
+      "evidence": "lanes/L-ABSENCE-CLAIMS-AUDIT/absences.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-ACCOUNTING-EXPORT-SILENT": {
+      "admitted": true,
+      "evidence": "lanes/L-ACCOUNTING-EXPORT-SILENT/mutation-log.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-ACK-RECEIPT-SURVIVES-A-RELOAD": {
+      "admitted": true,
+      "evidence": "/Users/svendaneel/okam/Web-modules/lanes/L-ACK-RECEIPT-SURVIVES-A-RELOAD/finding.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-AI-MIDDLEWARE-DELETE": {
+      "admitted": false,
+      "evidence": "OkamAPI lane/ai-middleware-delete @ 5b2e99c8 (worktree ~/okam/wt-aimw, cut from feature/restaurant-modules 3579bbbc; local, not pushed) - container-free tier 4370 passed / 0 failed / 12 skipped (5m49s) vs clean-checkout base 4369/0/12 at 3579bbbc, delta is the one new test - WebApi.Tests/Wire/RequestBodyTelemetryPinTests.cs - lanes/L-AI-MIDDLEWARE-DELETE/mutations.txt",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI lane/ai-middleware-delete @ 5b2e99c8 (worktree ~/okam/wt-aimw, cut from feature/restaurant-modules 3579bbbc; local, not pushed) - container-free tier 4370 passed / 0 failed / 12 skipped (5m49s) vs clean-checkout base 4369/0/12 at 3579bbbc, delta is the one new test - WebApi.Tests/Wire/RequestBodyTelemetryPinTests.cs - lanes/L-AI-MIDDLEWARE-DELETE/mutations.txt"
+    },
+    "L-ALIASING-NEEDLE-SWEEP": {
+      "admitted": true,
+      "evidence": "lanes/L-ALIASING-NEEDLE-SWEEP/census.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-ARM-RECEIPTS-RECAPTURE": {
+      "admitted": true,
+      "evidence": "lanes/L-ARM-RECEIPTS-RECAPTURE/recaptured.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-ARTIFACT-FIELDS-VS-HARNESS": {
+      "admitted": true,
+      "evidence": "lanes/L-ARTIFACT-FIELDS-VS-HARNESS/mismatches.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-ARTIFACT-NAMES-ITS-LOCALE": {
+      "admitted": true,
+      "evidence": "lanes/L-ARTIFACT-NAMES-ITS-LOCALE/run.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-ARTIFACT-NAMES-ITS-MODULE-TREE": {
+      "admitted": false,
+      "evidence": "lanes/L-ARTIFACT-NAMES-ITS-MODULE-TREE/run.md",
+      "state": "built-unverified",
+      "why": "exit: “a journey artifact carries the realpath of the node_modules it built against and the build directory used, and a capture produced through a symlinked module tree is distinguishable from one produced with its own” does not name lanes/L-ARTIFACT-NAMES-ITS-MODULE-TREE/run.md"
+    },
+    "L-ARTIFACT-PROVENANCE": {
+      "admitted": false,
+      "evidence": "lanes/L-ARTIFACT-PROVENANCE/evidence.md (commit 533aea4, 5 files, pathspec) + artifacts/journeys/runs/ledger.jsonl",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-ARTIFACT-PROVENANCE/evidence.md (commit 533aea4, 5 files, pathspec) + artifacts/journeys/runs/ledger.jsonl"
+    },
+    "L-ARTIFACT-RANK-KEY": {
+      "admitted": false,
+      "evidence": "lanes/L-ARTIFACT-RANK-KEY/evidence.md (commits 397f4ab + 5407589, pathspec) + lanes/L-ARTIFACT-RANK-KEY/mutants/mutation-report.txt",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-ARTIFACT-RANK-KEY/evidence.md (commits 397f4ab + 5407589, pathspec) + lanes/L-ARTIFACT-RANK-KEY/mutants/mutation-report.txt"
+    },
+    "L-ATDE-REVIEW-CONDITIONS": {
+      "admitted": true,
+      "evidence": "lanes/L-JOURNEY-AT-DE/mutation-log.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-BARE-PATHSPEC-SWEEP": {
+      "admitted": true,
+      "evidence": "lanes/L-BARE-PATHSPEC-SWEEP/pathspecs.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-BLOCKER-RESTATE": {
+      "admitted": false,
+      "evidence": "lanes/L-BLOCKER-RESTATE/verdicts.md",
+      "state": "built-unverified",
+      "why": "exit: “each open blocker flag is recorded as still-true, already-fixed, or partly-true-with-the-false-clause-named, each verdict citing the commit or the code that settles it, merged from a RETURN” does not name lanes/L-BLOCKER-RESTATE/verdicts.md"
+    },
+    "L-BLOCKER-RESTATE-RECHECK": {
+      "admitted": true,
+      "evidence": "lanes/L-BLOCKER-RESTATE-RECHECK/recheck.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-BLOCKER-STALE-RERULE": {
+      "admitted": true,
+      "evidence": "lanes/L-BLOCKER-STALE-RERULE/rerule.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-BUILT-BUT-ON-NO-REF": {
+      "admitted": true,
+      "evidence": "lanes/L-BUILT-BUT-ON-NO-REF/onref.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-CANDIDATE-JOURNEYS-ON-ARRIVAL": {
+      "admitted": true,
+      "evidence": "lanes/L-CANDIDATE-JOURNEYS-ON-ARRIVAL/triage.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-CANONICAL-SLOT-SURVIVES-A-RERUN": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/Web-modules/lanes/L-CANONICAL-SLOT-SURVIVES-A-RERUN/proof-hashes.txt",
+      "state": "built-unverified",
+      "why": "exit: “re-running a journey whose capture is committed leaves that tracked file byte-identical and leaves its screenshots' paths unchanged, shown by a before-and-after hash of every tracked artifact” does not name /Users/svendaneel/okam/Web-modules/lanes/L-CANONICAL-SLOT-SURVIVES-A-RERUN/proof-hashes.txt"
+    },
+    "L-CENSUS-CORRECTIONS": {
+      "admitted": true,
+      "evidence": "lanes/L-CENSUS-CORRECTIONS/evidence.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-CENSUS-FLOORS-DERIVED": {
+      "admitted": false,
+      "evidence": "OkamAPI worktree /Users/svendaneel/okam/OkamAPI-censusfloors, branch lane/census-floors-derived @ 75dcc2ff, base feature/restaurant-modules @ 3579bbbc",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI worktree /Users/svendaneel/okam/OkamAPI-censusfloors, branch lane/census-floors-derived @ 75dcc2ff, base feature/restaurant-modules @ 3579bbbc"
+    },
+    "L-CHECK-DISCOUNT-SUM-COUPLED": {
+      "admitted": true,
+      "evidence": "lanes/L-CHECK-DISCOUNT-SUM-COUPLED/mutation-log.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-CHECK-LINEAMOUNT-UNGATED-SUM": {
+      "admitted": true,
+      "evidence": "lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM/mutation-log.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-CLIENT-TRAILING-SLASH": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/Web-modules/lanes/L-CLIENT-TRAILING-SLASH/mutation-receipt.md",
+      "state": "built-unverified",
+      "why": "exit: “the confirm route is posted in the same shape as its siblings, and a check reds if a route path diverges from the convention” does not name /Users/svendaneel/okam/Web-modules/lanes/L-CLIENT-TRAILING-SLASH/mutation-receipt.md"
+    },
+    "L-CLOCK-CLIENT-READS-THE-WIRE": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/web-clockclient/lanes/L-CLOCK-CLIENT-READS-THE-WIRE/evidence.md",
+      "state": "built-unverified",
+      "why": "exit: “the POS clock client reads sessionState rather than inferring from the session id, and a cross-engagement punch reports the exception state, pinned by a test that reds if the inference returns” does not name /Users/svendaneel/okam/web-clockclient/lanes/L-CLOCK-CLIENT-READS-THE-WIRE/evidence.md"
+    },
+    "L-CLOCKOUT-STATE-IS-NOT-OPEN": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/wt-clockoutstate/lanes/L-CLOCKOUT-STATE-IS-NOT-OPEN/evidence.md",
+      "state": "built-unverified",
+      "why": "exit: “a clock-out with no open session is refused or answers a state that is not Open, pinned by a wire assertion over the response that reds when the derivation reverts” does not name /Users/svendaneel/okam/wt-clockoutstate/lanes/L-CLOCKOUT-STATE-IS-NOT-OPEN/evidence.md"
+    },
+    "L-COERCION-WRITE-PATHS": {
+      "admitted": false,
+      "evidence": "lanes/L-COERCION-WRITE-PATHS/mutation-log.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-COERCION-WRITE-PATHS/mutation-log.md"
+    },
+    "L-COLLAPSE-THE-TWO-HOOK-SWEEPS": {
+      "admitted": false,
+      "evidence": "lanes/L-COLLAPSE-THE-TWO-HOOK-SWEEPS/collapse.md",
+      "state": "built-unverified",
+      "why": "exit: “exactly one estate sweep for Vue 3 option names survives in the test tree, it denies emits as well as the two hooks, and it reds on a file it cannot parse” does not name lanes/L-COLLAPSE-THE-TWO-HOOK-SWEEPS/collapse.md"
+    },
+    "L-COLLECT-REVIEW-CONDITIONS": {
+      "admitted": true,
+      "evidence": "lanes/L-COLLECT-REVIEW-CONDITIONS/applied.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-COLLECTED-PATHS": {
+      "admitted": false,
+      "evidence": "lanes/L-COLLECTED-PATHS/collected.txt — committed 6f03b18 on lane/collected-paths; regenerate with lanes/L-COLLECTED-PATHS/rerun.sh (20/20 assertions pass after the cwd fix and five positive controls, at 808d509)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-COLLECTED-PATHS/collected.txt — committed 6f03b18 on lane/collected-paths; regenerate with lanes/L-COLLECTED-PATHS/rerun.sh (20/20 assertions pass after the cwd fix and five positive controls, at 808d509)"
+    },
+    "L-COMPOSE-CENSUS": {
+      "admitted": true,
+      "evidence": "lanes/L-COMPOSE-CENSUS/compose.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-COMPOSE-FE-CANDIDATE": {
+      "admitted": true,
+      "evidence": "lanes/L-COMPOSE-FE-CANDIDATE/compose-run.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-COMPOSITION-ROOT-CHECK": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/wt-comproot @ bfe57c3c (lane/composition-root-check, off 8704ff63, local, unpushed) - WebApi.Tests/Wire/CompositionRootLimiterWireTests.cs - artifacts/tests/lane-composition-root-fast-tier.trx 4419/4406/1/12 - artifacts/tests/base-8704ff63-fast-tier.trx 4410/4398/0/12 measured myself from this clean worktree - lanes/L-COMPOSITION-ROOT-CHECK/{evidence.md,mutations.txt}",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: /Users/svendaneel/okam/wt-comproot @ bfe57c3c (lane/composition-root-check, off 8704ff63, local, unpushed) - WebApi.Tests/Wire/CompositionRootLimiterWireTests.cs - artifacts/tests/lane-composition-root-fast-tier.trx 4419/4406/1/12 - artifacts/tests/base-8704ff63-fast-tier.trx 4410/4398/0/12 measured myself from this clean worktree - lanes/L-COMPOSITION-ROOT-CHECK/{evidence.md,mutations.txt}"
+    },
+    "L-COMPROOT-FAMILY-LAND": {
+      "admitted": true,
+      "evidence": "lanes/L-COMPROOT-FAMILY-LAND/merge-receipt.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-COMPROOT-PIN-OVERDETERMINED": {
+      "admitted": false,
+      "evidence": "02c077cb on lane/confirm-postmerge-pin (/Users/svendaneel/okam/wt-postmergepin), WebApi.Tests/Wire/CompositionRootLimiterWireTests.cs",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: 02c077cb on lane/confirm-postmerge-pin (/Users/svendaneel/okam/wt-postmergepin), WebApi.Tests/Wire/CompositionRootLimiterWireTests.cs"
+    },
+    "L-CONFIRM-ADMIN-SURFACE": {
+      "admitted": false,
+      "evidence": "artifacts/journeys/account-email-confirm.playwright.json",
+      "state": "verified",
+      "why": "exit: names the directory `artifacts/journeys/`, not an artifact — any of its 78 entries would satisfy it equally, so `artifacts/journeys/account-email-confirm.playwright.json` demonstrates nothing.  Name the artifact that shows the run in `exit:`, then offer that file."
+    },
+    "L-CONFIRM-CHAIN-REVIEW": {
+      "admitted": true,
+      "evidence": "docs/plan/reviews/L-CONFIRM-CHAIN-REVIEW.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-CONFIRM-CONAT-RETIRE": {
+      "admitted": false,
+      "evidence": "OkamAPI 6771ba9a on lane/confirm-conat-retire (worktree /Users/svendaneel/okam/wt-conatretire, local, not pushed) + lanes/L-CONFIRM-CONAT-RETIRE/evidence.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI 6771ba9a on lane/confirm-conat-retire (worktree /Users/svendaneel/okam/wt-conatretire, local, not pushed) + lanes/L-CONFIRM-CONAT-RETIRE/evidence.md"
+    },
+    "L-CONFIRM-FAMILY-MERGE": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/wt-confirmfam/artifacts/tests/72cf3e0a34b278514bb6872c8803a52384a80000/RUN.md",
+      "state": "built-unverified",
+      "why": "exit: “the five true heads of the confirm family are merged in the reviewed order, the composed tree builds and its fast tier is green at the merge commit, and both base receipts survive under distinct names” does not name /Users/svendaneel/okam/wt-confirmfam/artifacts/tests/72cf3e0a34b278514bb6872c8803a52384a80000/RUN.md"
+    },
+    "L-CONFIRM-POSTMERGE-PIN": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/wt-postmergepin @ 02c077cb on lane/confirm-postmerge-pin off d9189fbd (1 file, pathspec commit, unpushed)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: /Users/svendaneel/okam/wt-postmergepin @ 02c077cb on lane/confirm-postmerge-pin off d9189fbd (1 file, pathspec commit, unpushed)"
+    },
+    "L-CONFIRM-SERVER-HALVES": {
+      "admitted": false,
+      "evidence": "OkamAPI worktree /Users/svendaneel/okam/wt-confirm-halves, branch lane/confirm-server-halves @ 8704ff63 (off c96cd21e, local, unpushed) - lanes/L-CONFIRM-SERVER-HALVES/evidence.md - artifacts/tests/base-c96cd21e-fast-tier.trx 4403/4391/0/12 from a clean checkout of the base - artifacts/tests/lane-confirm-halves-fast-tier.trx 4410/4398/0/12",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI worktree /Users/svendaneel/okam/wt-confirm-halves, branch lane/confirm-server-halves @ 8704ff63 (off c96cd21e, local, unpushed) - lanes/L-CONFIRM-SERVER-HALVES/evidence.md - artifacts/tests/base-c96cd21e-fast-tier.trx 4403/4391/0/12 from a clean checkout of the base - artifacts/tests/lane-confirm-halves-fast-tier.trx 4410/4398/0/12"
+    },
+    "L-CONSENT-REASON-VOCABULARY": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/web-consentvocab/lanes/L-CONSENT-REASON-VOCABULARY/vocabulary.md",
+      "state": "built-unverified",
+      "why": "exit: “every suppression reason the consent fixture reports exists in the backend enum, or each divergence is recorded with the reason it is deliberate, in lanes/L-CONSENT-REASON-VOCABULARY/vocabulary.md” does not name /Users/svendaneel/okam/web-consentvocab/lanes/L-CONSENT-REASON-VOCABULARY/vocabulary.md"
+    },
+    "L-CORE-ORE-LABEL": {
+      "admitted": false,
+      "evidence": "lanes/L-CORE-ORE-LABEL/consumerapp-red-run.txt, lanes/L-CORE-ORE-LABEL/consumerapp-revert-red.txt, lanes/L-CORE-ORE-LABEL/consumerapp-green-run.txt, lanes/L-CORE-ORE-LABEL/residual-unfixed-cores.txt, ConsumerApp/checks/price-label-ore.mjs",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-CORE-ORE-LABEL/consumerapp-red-run.txt, lanes/L-CORE-ORE-LABEL/consumerapp-revert-red.txt, lanes/L-CORE-ORE-LABEL/consumerapp-green-run.txt, lanes/L-CORE-ORE-LABEL/residual-unfixed-cores.txt, ConsumerApp/checks/price-label-ore.mjs"
+    },
+    "L-CORS-CREDENTIALED-ORIGIN": {
+      "admitted": true,
+      "evidence": "lanes/L-CORS-CREDENTIALED-ORIGIN/evidence.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-CORS-FOLLOWUPS": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/Web-modules/lanes/L-CORS-FOLLOWUPS/evidence.md",
+      "state": "built-unverified",
+      "why": "exit: “AddOkamCors drops loopback origins outside Development with a unit test that reds if the filter is removed, and neither the guest client nor the preference page states that same-site serving or the named policy would suffice alone” does not name /Users/svendaneel/okam/Web-modules/lanes/L-CORS-FOLLOWUPS/evidence.md"
+    },
+    "L-CORS-LAND-FOLLOWUPS": {
+      "admitted": true,
+      "evidence": "lanes/L-CORS-LAND-FOLLOWUPS/evidence.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-CREDIT-NOTE-NUMBER": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/Web-modules/lanes/L-CREDIT-NOTE-NUMBER/receipt.md",
+      "state": "built-unverified",
+      "why": "exit: “a credit note downloads under its own invoice number rather than the credited one, pinned by a test that reds if the filename is taken from the route parameter again” does not name /Users/svendaneel/okam/Web-modules/lanes/L-CREDIT-NOTE-NUMBER/receipt.md"
+    },
+    "L-CRYPTO-PIN-BYFORM": {
+      "admitted": false,
+      "evidence": "OkamAPI worktree /Users/svendaneel/okam/wt-cryptopin, branch lane/crypto-pin-byform @ cfb3b14a (code 35630600, off 6771ba9a, local, unpushed) - lanes/L-CRYPTO-PIN-BYFORM/evidence.md - artifacts/tests/lane-crypto-pin-byform-fast-tier.trx 4418/4406/0/12 - artifacts/tests/base-6771ba9a-fast-tier.trx 4415/4402/1/12",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI worktree /Users/svendaneel/okam/wt-cryptopin, branch lane/crypto-pin-byform @ cfb3b14a (code 35630600, off 6771ba9a, local, unpushed) - lanes/L-CRYPTO-PIN-BYFORM/evidence.md - artifacts/tests/lane-crypto-pin-byform-fast-tier.trx 4418/4406/0/12 - artifacts/tests/base-6771ba9a-fast-tier.trx 4415/4402/1/12"
+    },
+    "L-DATED-TEST-OUTPUT": {
+      "admitted": true,
+      "evidence": "lanes/L-DATED-TEST-OUTPUT/evidence.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-DECLARATIONS-THE-FRAMEWORK-IGNORES": {
+      "admitted": true,
+      "evidence": "lanes/L-DECLARATIONS-THE-FRAMEWORK-IGNORES/ignored.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-DI-COLLECTION-SILENT": {
+      "admitted": true,
+      "evidence": "lanes/L-DI-COLLECTION-SILENT/census.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-DOWNLOAD-HEADERS": {
+      "admitted": false,
+      "evidence": "OkamAPI-dlhdr 9207f480 (lane/download-headers, local, not pushed) · WebApi.Tests/Wire/DownloadHeaderWireTests.cs · WebApi.Tests/Wire/MealsDownloadHeaderWireTests.cs · Helpers/BrowserReadableHeaders.cs · lanes/L-DOWNLOAD-HEADERS/red.txt",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI-dlhdr 9207f480 (lane/download-headers, local, not pushed) · WebApi.Tests/Wire/DownloadHeaderWireTests.cs · WebApi.Tests/Wire/MealsDownloadHeaderWireTests.cs · Helpers/BrowserReadableHeaders.cs · lanes/L-DOWNLOAD-HEADERS/red.txt"
+    },
+    "L-DOWNLOAD-PDF-WIRE": {
+      "admitted": false,
+      "evidence": "OkamAPI-dlpdf a7b90cbd (lane/download-pdf-wire, local, not pushed) · WebApi.Tests/Wire/PdfDownloadWireTests.cs · Services/Interfaces/IDocumentRenderer.cs · Services/OkamFunctionsDocumentRenderer.cs · WireContainmentTests.The_substituted_pdf_renderer_cannot_become_the_production_path · lanes/L-DOWNLOAD-PDF-WIRE/{red.txt,decision.md}",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI-dlpdf a7b90cbd (lane/download-pdf-wire, local, not pushed) · WebApi.Tests/Wire/PdfDownloadWireTests.cs · Services/Interfaces/IDocumentRenderer.cs · Services/OkamFunctionsDocumentRenderer.cs · WireContainmentTests.The_substituted_pdf_renderer_cannot_become_the_production_path · lanes/L-DOWNLOAD-PDF-WIRE/{red.txt,decision.md}"
+    },
+    "L-DUPLICATE-KEY-GUARD": {
+      "admitted": true,
+      "evidence": "/Users/svendaneel/okam/Web-modules/lanes/L-DUPLICATE-KEY-GUARD/mutation-log.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-DUPLICATE-KEY-IN-THE-BUILD": {
+      "admitted": true,
+      "evidence": "/Users/svendaneel/okam/Web-modules/lanes/L-DUPLICATE-KEY-IN-THE-BUILD/finding.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-EF-INDEX-SHADOW-SWEEP": {
+      "admitted": false,
+      "evidence": "OkamAPI lane/ef-index-shadow-sweep @ 08309e39, off integration/mig-stack-land 4b37f81b; WebApi.Tests/Modules/IndexConfigurationSweep.cs + ModelIndexShadowSweepTests.cs + ModelIndexShadowGuardSelfTests.cs; lanes/L-EF-INDEX-SHADOW-SWEEP/evidence.md; fast tier 4450/0/10",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI lane/ef-index-shadow-sweep @ 08309e39, off integration/mig-stack-land 4b37f81b; WebApi.Tests/Modules/IndexConfigurationSweep.cs + ModelIndexShadowSweepTests.cs + ModelIndexShadowGuardSelfTests.cs; lanes/L-EF-INDEX-SHADOW-SWEEP/evidence.md; fast tier 4450/0/10"
+    },
+    "L-ENUM-MIRROR-CENSUS": {
+      "admitted": true,
+      "evidence": "lanes/L-ENUM-MIRROR-CENSUS/mirrors.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-EOD-CREDIT-SPLIT": {
+      "admitted": true,
+      "evidence": "lanes/L-EOD-CREDIT-SPLIT/mutation-log.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-ESCPOS-COMPANYACCOUNT-LABEL": {
+      "admitted": true,
+      "evidence": "lanes/L-ESCPOS-COMPANYACCOUNT-LABEL/finding.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-ESCPOS-LADDER-NAMES-THE-TENDER": {
+      "admitted": false,
+      "evidence": "lanes/L-ESCPOS-LADDER-NAMES-THE-TENDER/finding.md",
+      "state": "built-unverified",
+      "why": "exit: “a test reds for every PaymentType member whose printed payer line is a raw enum name, across both the receipt builder and its X/Z twin, and passes once each is labelled” does not name lanes/L-ESCPOS-LADDER-NAMES-THE-TENDER/finding.md"
+    },
+    "L-EV-ACCEPT-GATE": {
+      "admitted": false,
+      "evidence": "worktree ~/okam/OkamAPI-ev-acceptgate, branch lane/ev-accept-gate, commit 8eee00f7, NOT pushed, based on feature/restaurant-modules @ 3579bbbc (the stated integration tip; OkamAPI-modules is on lane/meals-grace-pins and was not used) - container-free tier 4374/0/12 vs baseline 4369/0/12 measured in a clean checkout of 3579bbbc, delta +5 = the 5 new tests, 0 regressions - WebApi.Tests/Events/EventsPublicProposalWriteGateTests.cs (3), WebApi.Tests/Wire/EventsProposalGateWiringTests.cs (2)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: worktree ~/okam/OkamAPI-ev-acceptgate, branch lane/ev-accept-gate, commit 8eee00f7, NOT pushed, based on feature/restaurant-modules @ 3579bbbc (the stated integration tip; OkamAPI-modules is on lane/meals-grace-pins and was not used) - container-free tier 4374/0/12 vs baseline 4369/0/12 measured in a clean checkout of 3579bbbc, delta +5 = the 5 new tests, 0 regressions - WebApi.Tests/Events/EventsPublicProposalWriteGateTests.cs (3), WebApi.Tests/Wire/EventsProposalGateWiringTests.cs (2)"
+    },
+    "L-EV-CALLBACK-SWEEP": {
+      "admitted": false,
+      "evidence": "lanes/L-EV-CALLBACK-SWEEP/flag-correction.md",
+      "state": "built-unverified",
+      "why": "exit: “a deposit authorized at the provider whose callback never arrives is captured and promoted by the expiry sweep rather than released, shown by a test written red before the fix” does not name lanes/L-EV-CALLBACK-SWEEP/flag-correction.md"
+    },
+    "L-EV-DEPOSITS-PRECONDITION": {
+      "admitted": true,
+      "evidence": "artifacts/journeys/events-deposit-precondition.playwright.json",
+      "state": "verified",
+      "why": ""
+    },
+    "L-EV-EXTDEP-GUARDS": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/wt-evextguards/artifacts/lanes/L-EV-EXTDEP-GUARDS/EVIDENCE.md (commit 07247536, lane/ev-extdep-guards, local, unpushed)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: /Users/svendaneel/okam/wt-evextguards/artifacts/lanes/L-EV-EXTDEP-GUARDS/EVIDENCE.md (commit 07247536, lane/ev-extdep-guards, local, unpushed)"
+    },
+    "L-EV-FAMILY-LAND": {
+      "admitted": true,
+      "evidence": "lanes/L-EV-FAMILY-LAND/merge-receipt.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-EV-GUEST-ORIGIN": {
+      "admitted": false,
+      "evidence": "OkamAPI lane/ev-guest-origin @ b0b501a5, NOT pushed, based on feature/restaurant-modules @ 3579bbbc - worktree ~/okam/OkamAPI-ev-guestorigin - container-free tier 4371/0/12 vs baseline 4369/0/12 measured in the same worktree at 3579bbbc, delta +2 = the 2 new tests, 0 regressions - WebApi.Tests/Wire/EventsGuestOriginConfigurationWireTests.cs",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI lane/ev-guest-origin @ b0b501a5, NOT pushed, based on feature/restaurant-modules @ 3579bbbc - worktree ~/okam/OkamAPI-ev-guestorigin - container-free tier 4371/0/12 vs baseline 4369/0/12 measured in the same worktree at 3579bbbc, delta +2 = the 2 new tests, 0 regressions - WebApi.Tests/Wire/EventsGuestOriginConfigurationWireTests.cs"
+    },
+    "L-EV-GUESTLINK-ONE-COMPOSER": {
+      "admitted": true,
+      "evidence": "lanes/L-EV-GUESTLINK-ONE-COMPOSER/evidence.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-EV-INQUIRY-GATE": {
+      "admitted": false,
+      "evidence": "backend lane/ev-inquiry-gate 8ecb47df (174/174 SQLite-tier Events+Modules) · frontend lane/fe-ev-inquiry-gate f7695bc (94 suites / 2199 tests)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: backend lane/ev-inquiry-gate 8ecb47df (174/174 SQLite-tier Events+Modules) · frontend lane/fe-ev-inquiry-gate f7695bc (94 suites / 2199 tests)"
+    },
+    "L-EV-INQUIRY-REVIEW": {
+      "admitted": true,
+      "evidence": "docs/plan/reviews/L-EV-INQUIRY-REVIEW.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-EV-JOURNEY-TIMEBOMB": {
+      "admitted": false,
+      "evidence": "lanes/L-EV-JOURNEY-TIMEBOMB/ at lane/ev-journey-timebomb b7a9f389 (parent 4b5c5c2; feature/restaurant-modules NOT moved, still 4b5c5c2)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-EV-JOURNEY-TIMEBOMB/ at lane/ev-journey-timebomb b7a9f389 (parent 4b5c5c2; feature/restaurant-modules NOT moved, still 4b5c5c2)"
+    },
+    "L-EV-ONBOARD-PRINT-BLEED": {
+      "admitted": false,
+      "evidence": "lanes/L-EV-ONBOARD-PRINT-BLEED/evidence.md",
+      "state": "built-unverified",
+      "why": "exit: “the run sheet printed from a store still in onboarding carries no notification banner, measured on the produced PDF rather than on screen” does not name lanes/L-EV-ONBOARD-PRINT-BLEED/evidence.md"
+    },
+    "L-EV-OUTBOX-FLAKE": {
+      "admitted": false,
+      "evidence": "OkamAPI lane/ev-outbox-flake 59a1d607 (base 5df07afa, worktree /Users/svendaneel/okam/OkamAPI-evoutboxflake)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI lane/ev-outbox-flake 59a1d607 (base 5df07afa, worktree /Users/svendaneel/okam/OkamAPI-evoutboxflake)"
+    },
+    "L-EV-OUTBOX-GUID-SUBSTRING": {
+      "admitted": false,
+      "evidence": "OkamAPI-modules lane/ev-outbox-guid-substring 79f9dd7d (worktree /Users/svendaneel/okam/wt-evoutboxguid, off feature/restaurant-modules 3579bbbc, local, unpushed); after 4383/0/12 vs base 4369/0/12 measured myself, filter \"Database!=SqlServer\", no container started; .lane/base-3579bbbc.trx, .lane/after-lane.trx, .lane/repeat-runs.txt, .lane/L-EV-OUTBOX-GUID-SUBSTRING-detail.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI-modules lane/ev-outbox-guid-substring 79f9dd7d (worktree /Users/svendaneel/okam/wt-evoutboxguid, off feature/restaurant-modules 3579bbbc, local, unpushed); after 4383/0/12 vs base 4369/0/12 measured myself, filter \"Database!=SqlServer\", no container started; .lane/base-3579bbbc.trx, .lane/after-lane.trx, .lane/repeat-runs.txt, .lane/L-EV-OUTBOX-GUID-SUBSTRING-detail.md"
+    },
+    "L-EV-REFUND-FAKE-ARG": {
+      "admitted": false,
+      "evidence": "lanes/L-EV-REFUND-FAKE-ARG/commit-events-sqlserver.trx (25/25, chain-built) + commit-events-fast.trx (458/458) at OkamAPI lane/ev-refund-fake-arg db9b39a1",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-EV-REFUND-FAKE-ARG/commit-events-sqlserver.trx (25/25, chain-built) + commit-events-fast.trx (458/458) at OkamAPI lane/ev-refund-fake-arg db9b39a1"
+    },
+    "L-EV-REVIEW": {
+      "admitted": true,
+      "evidence": "docs/plan/reviews/L-EV-REVIEW.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-EV-RUNSHEET-PRINT": {
+      "admitted": false,
+      "evidence": "artifacts/journeys/events-runsheet-print.playwright.json",
+      "state": "verified",
+      "why": "exit: names the directory `artifacts/journeys/`, not an artifact — any of its 78 entries would satisfy it equally, so `artifacts/journeys/events-runsheet-print.playwright.json` demonstrates nothing.  Name the artifact that shows the run in `exit:`, then offer that file."
+    },
+    "L-EV-STALE-CAUSE": {
+      "admitted": false,
+      "evidence": "../web-evstale/artifacts/journeys/events-stale-cause.playwright.json (6/6 steps, 3 PNGs, commit 2bc18da) + ../OkamAPI-modules worktree ../wt-evstale artifacts/lanes/L-EV-STALE-CAUSE/EVIDENCE.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: ../web-evstale/artifacts/journeys/events-stale-cause.playwright.json (6/6 steps, 3 PNGs, commit 2bc18da) + ../OkamAPI-modules worktree ../wt-evstale artifacts/lanes/L-EV-STALE-CAUSE/EVIDENCE.md"
+    },
+    "L-EV-URI-RELATIVE": {
+      "admitted": false,
+      "evidence": "lane/ev-uri-relative @ 6a7bf75b (wt-evuri) · artifacts/lanes/L-EV-URI-RELATIVE/RUN.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lane/ev-uri-relative @ 6a7bf75b (wt-evuri) · artifacts/lanes/L-EV-URI-RELATIVE/RUN.md"
+    },
+    "L-EV-VIPPS-FALLBACK": {
+      "admitted": false,
+      "evidence": "lane/ev-vipps-fallback-2 @ fc09be1d off feature/restaurant-modules 3579bbbc, worktree ../wt-evvippsfb2, local, unpushed - container-free tier (Database!=SqlServer) 4380 passed / 0 failed / 12 skipped, zero containers started - WebApi.Tests/Events/EventsDepositVippsFallbackTests.cs 11/11",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lane/ev-vipps-fallback-2 @ fc09be1d off feature/restaurant-modules 3579bbbc, worktree ../wt-evvippsfb2, local, unpushed - container-free tier (Database!=SqlServer) 4380 passed / 0 failed / 12 skipped, zero containers started - WebApi.Tests/Events/EventsDepositVippsFallbackTests.cs 11/11"
+    },
+    "L-EVIDENCE-CITATIONS-RESOLVE": {
+      "admitted": true,
+      "evidence": "lanes/L-EVIDENCE-CITATIONS-RESOLVE/citations.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-EXIT-INSTRUMENT-CENSUS": {
+      "admitted": true,
+      "evidence": "lanes/L-EXIT-INSTRUMENT-CENSUS/census.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-EXIT-INSTRUMENT-SWEEP": {
+      "admitted": true,
+      "evidence": "lanes/L-EXIT-INSTRUMENT-SWEEP/map.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-FE-JOURNEYS-MERGE": {
+      "admitted": false,
+      "evidence": "commit ddc27fa on feature/restaurant-modules (ff, no merge commit) - lanes/L-FE-JOURNEYS-MERGE/{bookkeeping.md,suite-18-of-18.log,mutation-proof.log,first-port-attempt-3-red.log}",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: commit ddc27fa on feature/restaurant-modules (ff, no merge commit) - lanes/L-FE-JOURNEYS-MERGE/{bookkeeping.md,suite-18-of-18.log,mutation-proof.log,first-port-attempt-3-red.log}"
+    },
+    "L-FE-WF-ONBOARD-WALK": {
+      "admitted": false,
+      "evidence": "commit 35440cf on feature/restaurant-modules (ff, no merge commit) - artifacts/journeys/workforce-invitation-onboarding.playwright.json + lanes/L-FE-WF-ONBOARD-WALK/{mutation-proof,run-1,run-2,run-final,suite-journeys,suite-journeys-2,suite-jest}.txt",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: commit 35440cf on feature/restaurant-modules (ff, no merge commit) - artifacts/journeys/workforce-invitation-onboarding.playwright.json + lanes/L-FE-WF-ONBOARD-WALK/{mutation-proof,run-1,run-2,run-final,suite-journeys,suite-journeys-2,suite-jest}.txt"
+    },
+    "L-FIX-BRANCH-MANIFEST": {
+      "admitted": true,
+      "evidence": "lanes/L-FIX-BRANCH-MANIFEST/manifest.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-FIXTURE-DIVERGENCE": {
+      "admitted": false,
+      "evidence": "lanes/L-FIXTURE-DIVERGENCE/receipts.txt - commits a62160e, 61a76ef off base 31fc45d",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-FIXTURE-DIVERGENCE/receipts.txt - commits a62160e, 61a76ef off base 31fc45d"
+    },
+    "L-FIXTURE-DIVERGENCE-RECEIPT": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/web-fixdiv/lanes/L-FIXTURE-DIVERGENCE-RECEIPT/receipt.md",
+      "state": "built-unverified",
+      "why": "exit: “the fixture-divergence check has been run at the integration tip and its receipt is committed at lanes/L-FIXTURE-DIVERGENCE-RECEIPT/receipt.md, with an arm deliberately broken to show the run reds rather than passing vacuously” does not name /Users/svendaneel/okam/web-fixdiv/lanes/L-FIXTURE-DIVERGENCE-RECEIPT/receipt.md"
+    },
+    "L-FIXTURE-FLAG-STORE": {
+      "admitted": false,
+      "evidence": "lanes/L-FIXTURE-FLAG-STORE/mutation-report.txt",
+      "state": "built-unverified",
+      "why": "exit: “the fixture models the flag store for every gated surface a journey walks, and each such journey turns its own switch on through the product, shown by a journey that reds when its switch is left off” does not name lanes/L-FIXTURE-FLAG-STORE/mutation-report.txt"
+    },
+    "L-FIXTURE-RENDERED-VALUES-FIX": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/web-fixrendered/lanes/L-FIXTURE-RENDERED-VALUES-FIX/mutation-log.md",
+      "state": "built-unverified",
+      "why": "exit: “every fixture value the sweep found rendered to an operator is a member of the enum its reading code binds it to, or is left with the reason recorded, shown by a mounted assertion per site in lanes/L-FIXTURE-RENDERED-VALUES-FIX/mutation-log.md” does not name /Users/svendaneel/okam/web-fixrendered/lanes/L-FIXTURE-RENDERED-VALUES-FIX/mutation-log.md"
+    },
+    "L-FIXTURE-SUPPRESSED-REFUSAL": {
+      "admitted": false,
+      "evidence": "lanes/L-FIXTURE-SUPPRESSED-REFUSAL/run.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-FIXTURE-SUPPRESSED-REFUSAL/run.md"
+    },
+    "L-FIXTURE-TITLES-FOLLOW-THE-FLAGS": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/web-fixtitles/lanes/L-FIXTURE-TITLES-FOLLOW-THE-FLAGS/receipt.md",
+      "state": "built-unverified",
+      "why": "exit: “no flag title in test/e2e/fixture/world.js contradicts the descriptor it mirrors, checked against the backend descriptors rather than against itself” does not name /Users/svendaneel/okam/web-fixtitles/lanes/L-FIXTURE-TITLES-FOLLOW-THE-FLAGS/receipt.md"
+    },
+    "L-FIXTURE-VOCABULARY-SWEEP": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/web-vocabsweep/lanes/L-FIXTURE-VOCABULARY-SWEEP/vocabulary.md",
+      "state": "built-unverified",
+      "why": "exit: “every string the e2e fixture emits in a field backed by a backend enum is checked against that enum at 8e2b57de, and each value with no member behind it is named with its field, its intended member and whether anything renders it, in lanes/L-FIXTURE-VOCABULARY-SWEEP/vocabulary.md” does not name /Users/svendaneel/okam/web-vocabsweep/lanes/L-FIXTURE-VOCABULARY-SWEEP/vocabulary.md"
+    },
+    "L-FLAG-CONDITIONS-TESTABLE": {
+      "admitted": true,
+      "evidence": "lanes/L-FLAG-CONDITIONS-TESTABLE/conditions.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-FLAGS-EFFECTIVE-RESOLVERS": {
+      "admitted": false,
+      "evidence": "lane/flags-effective-resolvers @ e45ec4c1 (worktree /Users/svendaneel/okam/OkamAPI-flagseff); trx at lanes/L-FLAGS-EFFECTIVE-RESOLVERS/fast-tier.trx",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lane/flags-effective-resolvers @ e45ec4c1 (worktree /Users/svendaneel/okam/OkamAPI-flagseff); trx at lanes/L-FLAGS-EFFECTIVE-RESOLVERS/fast-tier.trx"
+    },
+    "L-FLAGS-EXCUSE-BYFLAG": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/OkamAPI-flagsexcuse/lanes/L-FLAGS-EXCUSE-BYFLAG/mutation-receipt.md",
+      "state": "built-unverified",
+      "why": "exit: “deleting any effective-flag resolver registration reds the catalog guard, and every excuse names one flag with a reason that is true” does not name /Users/svendaneel/okam/OkamAPI-flagsexcuse/lanes/L-FLAGS-EXCUSE-BYFLAG/mutation-receipt.md"
+    },
+    "L-FLAGS-IMPOSSIBLE-COMMENT": {
+      "admitted": false,
+      "evidence": "commit 89c2c1f on feature/restaurant-modules (base 35440cfb, local, not pushed) - lanes/L-FLAGS-IMPOSSIBLE-COMMENT/{notes.md,mutation-proof.txt,suite-base.txt,suite-after.txt}",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: commit 89c2c1f on feature/restaurant-modules (base 35440cfb, local, not pushed) - lanes/L-FLAGS-IMPOSSIBLE-COMMENT/{notes.md,mutation-proof.txt,suite-base.txt,suite-after.txt}"
+    },
+    "L-FLAGS-JOURNEY-SWEEP": {
+      "admitted": false,
+      "evidence": "lanes/L-FLAGS-JOURNEY-SWEEP/census.md (all 12 journeys) · mutation-{a,b,c-a,c-b}.log · commit bb1bf0c · artifacts/journeys/*.playwright.json 12/12 passed",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-FLAGS-JOURNEY-SWEEP/census.md (all 12 journeys) · mutation-{a,b,c-a,c-b}.log · commit bb1bf0c · artifacts/journeys/*.playwright.json 12/12 passed"
+    },
+    "L-FLAGS-NOTE-FALSIFIABLE": {
+      "admitted": false,
+      "evidence": "7c9f172 · artifacts/journeys/workforce-flag-lever.playwright.json",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: 7c9f172 · artifacts/journeys/workforce-flag-lever.playwright.json"
+    },
+    "L-FLAGS-RESOLVERS-REVIEW": {
+      "admitted": true,
+      "evidence": "docs/plan/reviews/L-FLAGS-RESOLVERS-REVIEW.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-FLAGS-UI-REVIEW": {
+      "admitted": true,
+      "evidence": "docs/plan/reviews/L-FLAGS-UI-REVIEW.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-FOCUSTRAP-TEARDOWN": {
+      "admitted": false,
+      "evidence": "lanes/L-FOCUSTRAP-TEARDOWN/01-red-before-fix.txt",
+      "state": "built-unverified",
+      "why": "exit: “a test reds when the release is removed, and the trap's teardown runs under Vue 2.7 as shown by that test passing with it restored” does not name lanes/L-FOCUSTRAP-TEARDOWN/01-red-before-fix.txt"
+    },
+    "L-FRAGILE-NEEDLES": {
+      "admitted": false,
+      "evidence": "lanes/L-FRAGILE-NEEDLES/mutation-log.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-FRAGILE-NEEDLES/mutation-log.md"
+    },
+    "L-GERMAN-IDENTIFIER-LABELS": {
+      "admitted": true,
+      "evidence": "lanes/L-GERMAN-IDENTIFIER-LABELS/mutation-log.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-GR-APPROVAL-STATE": {
+      "admitted": false,
+      "evidence": "OkamAPI-modules lane/gr-approval-state @ 3ea531f5 (worktree ../wt-gr-approval, off feature/restaurant-modules de1e5c5e, local only); fast tier 4361 passed / 0 failed / 12 skipped; lanes/L-GR-APPROVAL-STATE/{red-1-projection.txt,mutations.txt,fast-tier.txt}",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI-modules lane/gr-approval-state @ 3ea531f5 (worktree ../wt-gr-approval, off feature/restaurant-modules de1e5c5e, local only); fast tier 4361 passed / 0 failed / 12 skipped; lanes/L-GR-APPROVAL-STATE/{red-1-projection.txt,mutations.txt,fast-tier.txt}"
+    },
+    "L-GR-CONFIRM-STALE": {
+      "admitted": false,
+      "evidence": "OkamAPI-modules lane/gr-confirm-stale @ 771c0fc0 (own worktree /Users/svendaneel/okam/wt-gr-confirm-stale, off 48950702) · artifacts/tests/771c0fc0a6504971fb1cfdab5eed4ab878582ab5/RUN.md + artifacts/tests/771c0fc0-fast-tier.trx (fast tier Database!=SqlServer, 4380 total / 4368 passed / 0 failed / 12 skipped) · WebApi.Tests/Growth/GrowthTestSendReachabilityTests.cs",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI-modules lane/gr-confirm-stale @ 771c0fc0 (own worktree /Users/svendaneel/okam/wt-gr-confirm-stale, off 48950702) · artifacts/tests/771c0fc0a6504971fb1cfdab5eed4ab878582ab5/RUN.md + artifacts/tests/771c0fc0-fast-tier.trx (fast tier Database!=SqlServer, 4380 total / 4368 passed / 0 failed / 12 skipped) · WebApi.Tests/Growth/GrowthTestSendReachabilityTests.cs"
+    },
+    "L-GR-CONFIRMED-EMAIL": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/wt-gr-confirmed @ 801d36a3 (lane/gr-confirmed-email, off 5719fc96, local, unpushed) · WebApi.Tests/Growth/GrowthTestSendBindingTests.cs · artifacts/tests/a7697121-fast-tier.trx = fast tier 4376 run / 4364 passed / 0 failed / 12 skipped, from a clean detached checkout of a7697121",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: /Users/svendaneel/okam/wt-gr-confirmed @ 801d36a3 (lane/gr-confirmed-email, off 5719fc96, local, unpushed) · WebApi.Tests/Growth/GrowthTestSendBindingTests.cs · artifacts/tests/a7697121-fast-tier.trx = fast tier 4376 run / 4364 passed / 0 failed / 12 skipped, from a clean detached checkout of a7697121"
+    },
+    "L-GR-CONFIRMED-PIN-FIX": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/wt-gr-confirmed @ 48950702 (lane/gr-confirmed-email, local, unpushed) · code 3cf288fb · artifacts/tests/3cf288fb-fast-tier.trx + .../3cf288fb.../RUN.md = 4376 run / 4364 passed / 0 failed / 12 skipped",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: /Users/svendaneel/okam/wt-gr-confirmed @ 48950702 (lane/gr-confirmed-email, local, unpushed) · code 3cf288fb · artifacts/tests/3cf288fb-fast-tier.trx + .../3cf288fb.../RUN.md = 4376 run / 4364 passed / 0 failed / 12 skipped"
+    },
+    "L-GR-CONFIRMED-REVIEW": {
+      "admitted": true,
+      "evidence": "docs/plan/reviews/L-GR-CONFIRMED-REVIEW.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-GR-DEADLINE-COPY": {
+      "admitted": false,
+      "evidence": "lanes/L-GR-DEADLINE-COPY/DETAIL.md · frontend 7a2c789 · backend 3b42da1d (lane/gr-deadline-onwire)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-GR-DEADLINE-COPY/DETAIL.md · frontend 7a2c789 · backend 3b42da1d (lane/gr-deadline-onwire)"
+    },
+    "L-GR-DEADLINE-ONWIRE": {
+      "admitted": true,
+      "evidence": "artifacts/journeys/growth-privacy-queue.playwright.json",
+      "state": "verified",
+      "why": ""
+    },
+    "L-GR-DEADLINE-STATUTE": {
+      "admitted": false,
+      "evidence": "lane/gr-deadline-statute f7abfd8e (wt /Users/svendaneel/okam/wt-gr-statute, off 3b42da1d) · lanes/L-GR-DEADLINE-STATUTE/growth-scoped.trx",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lane/gr-deadline-statute f7abfd8e (wt /Users/svendaneel/okam/wt-gr-statute, off 3b42da1d) · lanes/L-GR-DEADLINE-STATUTE/growth-scoped.trx"
+    },
+    "L-GR-DISPATCH-ACTOR": {
+      "admitted": false,
+      "evidence": "lane/gr-dispatch-actor@a1e2655f (worktree /Users/svendaneel/okam/wt-gr-dispatch-actor); detail in lanes/L-GR-DISPATCH-ACTOR/detail.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lane/gr-dispatch-actor@a1e2655f (worktree /Users/svendaneel/okam/wt-gr-dispatch-actor); detail in lanes/L-GR-DISPATCH-ACTOR/detail.md"
+    },
+    "L-GR-EXIT-WIRE-THE-MAIL": {
+      "admitted": true,
+      "evidence": "lanes/L-GR-EXIT-WIRE-THE-MAIL/evidence.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-GR-NEWSLETTER-CROSS": {
+      "admitted": false,
+      "evidence": "lanes/L-GR-NEWSLETTER-CROSS/landing.md",
+      "state": "built-unverified",
+      "why": "exit: “the cross-store refusal on the four newsletter authoring writes is proven at the wire and equal to an absent resource, at a tip that carries the proof” does not name lanes/L-GR-NEWSLETTER-CROSS/landing.md"
+    },
+    "L-GR-POSTMARK-WEBHOOK": {
+      "admitted": false,
+      "evidence": "lane/gr-postmark-webhook 5b895dc4 (worktree ../wt-gr-postmark) — Wire/GrowthPostmarkWebhookWireTests 8/8, Growth/GrowthPostmarkEventReaderTests 38/38, Growth non-SQL 544/0, Wire+Modules 377/0",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lane/gr-postmark-webhook 5b895dc4 (worktree ../wt-gr-postmark) — Wire/GrowthPostmarkWebhookWireTests 8/8, Growth/GrowthPostmarkEventReaderTests 38/38, Growth non-SQL 544/0, Wire+Modules 377/0"
+    },
+    "L-GR-PRIVACY-REVIEW": {
+      "admitted": true,
+      "evidence": "docs/plan/reviews/L-GR-PRIVACY-REVIEW.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-GR-PRIVACY-VENUE": {
+      "admitted": true,
+      "evidence": "artifacts/journeys/growth-privacy-queue.playwright.json",
+      "state": "verified",
+      "why": ""
+    },
+    "L-GR-RATELIMIT-REVIEW": {
+      "admitted": true,
+      "evidence": "docs/plan/reviews/L-GR-RATELIMIT-REVIEW.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-GR-REVIEW": {
+      "admitted": true,
+      "evidence": "docs/plan/reviews/L-GR-REVIEW.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-GR-TESTSEND-ERRORCODE": {
+      "admitted": false,
+      "evidence": "lanes/L-GR-TESTSEND-ERRORCODE/DETAIL.md (commit 2a3a881 on feature/restaurant-modules, local)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-GR-TESTSEND-ERRORCODE/DETAIL.md (commit 2a3a881 on feature/restaurant-modules, local)"
+    },
+    "L-GR-TESTSEND-GUARD": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/wt-gr-testsend @ 5719fc96 · WebApi.Tests/Growth/GrowthTestSendBindingTests.cs · Growth 460/0/1 (SqlServer excluded, no slot held)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: /Users/svendaneel/okam/wt-gr-testsend @ 5719fc96 · WebApi.Tests/Growth/GrowthTestSendBindingTests.cs · Growth 460/0/1 (SqlServer excluded, no slot held)"
+    },
+    "L-GR-TESTSEND-RATELIMIT": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/wt-gr-ratelimit @ c96cd21e (lane/gr-testsend-ratelimit, off 801d36a3, local, unpushed) · artifacts/tests/lane-fast-tier.trx 4403/4391/0/12 · artifacts/tests/base-801d36a3.trx 4376/4364/0/12, measured myself from a clean checkout of the base",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: /Users/svendaneel/okam/wt-gr-ratelimit @ c96cd21e (lane/gr-testsend-ratelimit, off 801d36a3, local, unpushed) · artifacts/tests/lane-fast-tier.trx 4403/4391/0/12 · artifacts/tests/base-801d36a3.trx 4376/4364/0/12, measured myself from a clean checkout of the base"
+    },
+    "L-GR-TESTSEND-RECORD": {
+      "admitted": false,
+      "evidence": "lane/growth-audit-ledger@bd3a840f (worktree /Users/svendaneel/okam/wt-gr-ledger)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lane/growth-audit-ledger@bd3a840f (worktree /Users/svendaneel/okam/wt-gr-ledger)"
+    },
+    "L-GR-TESTSEND-REVIEW": {
+      "admitted": true,
+      "evidence": "docs/plan/reviews/L-GR-TESTSEND-REVIEW.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-GR-WITHDRAW-ORIGIN": {
+      "admitted": false,
+      "evidence": "lanes/L-GR-WITHDRAW-ORIGIN/RUNS-2.md; OkamAPI lane/gr-withdraw-origin @ e0c2b02f (base lane/growth-prefcentre 2a052800, worktree ~/okam/OkamAPI-grwithdraw); Web-modules lane/fe-gr-withdraw-origin @ 8049332 (base lane/fe-growth-prefcentre 7a8b0d3, worktree ~/okam/web-grwithdraw); neither pushed",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-GR-WITHDRAW-ORIGIN/RUNS-2.md; OkamAPI lane/gr-withdraw-origin @ e0c2b02f (base lane/growth-prefcentre 2a052800, worktree ~/okam/OkamAPI-grwithdraw); Web-modules lane/fe-gr-withdraw-origin @ 8049332 (base lane/fe-growth-prefcentre 7a8b0d3, worktree ~/okam/web-grwithdraw); neither pushed"
+    },
+    "L-GROWTH-FAMILY-LAND": {
+      "admitted": false,
+      "evidence": "lanes/L-GROWTH-FAMILY-LAND/merge-receipt.md on feature/restaurant-modules @ 4685fb01 (local, unpushed); merges f58109e6 + 029e2869 over measured tip 35696d6b",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-GROWTH-FAMILY-LAND/merge-receipt.md on feature/restaurant-modules @ 4685fb01 (local, unpushed); merges f58109e6 + 029e2869 over measured tip 35696d6b"
+    },
+    "L-GROWTH-HEALTH-HONEST": {
+      "admitted": false,
+      "evidence": "OkamAPI-modules lane/growth-health-honest @ c11e78a6 (worktree ../wt-growth-health, off feature/restaurant-modules 24dec838); fast tier 4360 passed / 0 failed / 12 skipped, `dotnet test --filter \"Database!=SqlServer\"`; per-mutation detail at ../wt-growth-health/.lane/L-GROWTH-HEALTH-HONEST-detail.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI-modules lane/growth-health-honest @ c11e78a6 (worktree ../wt-growth-health, off feature/restaurant-modules 24dec838); fast tier 4360 passed / 0 failed / 12 skipped, `dotnet test --filter \"Database!=SqlServer\"`; per-mutation detail at ../wt-growth-health/.lane/L-GROWTH-HEALTH-HONEST-detail.md"
+    },
+    "L-GROWTH-LAND": {
+      "admitted": false,
+      "evidence": "../OkamAPI-modules/artifacts/tests/99855b1d1d35ab35c1c09e072da0fc6d42421e56/RUN.md",
+      "state": "built-unverified",
+      "why": "exit: “growth-mail-postmark, growth-privacy-evidence, unsub-oneclick and growth-webhook-auth are ancestors of feature/restaurant-modules AND fact:growth.mail.provider flips, with fact:be.tests ok at the merged tip” does not name ../OkamAPI-modules/artifacts/tests/99855b1d1d35ab35c1c09e072da0fc6d42421e56/RUN.md"
+    },
+    "L-GROWTH-MAIL": {
+      "admitted": false,
+      "evidence": "artifacts/journeys/growth-doi-postmark-sandbox.json",
+      "state": "verified",
+      "why": "artifacts/journeys/growth-doi-postmark-sandbox.json declares no outcome — none of `status`, `result`, `outcome`, `verdict`, `conclusion` is in it, so nothing in the file says whether the run it records passed.  A record that does not say is not read as green"
+    },
+    "L-GROWTH-NEWSLETTER-WIRE": {
+      "admitted": false,
+      "evidence": "OkamAPI-modules lane/growth-newsletter-wire @ 87600a1c (worktree ../wt-gr-nlwire, off feature/restaurant-modules de1e5c5e); fast tier 4363 passed / 0 failed / 12 skipped, `dotnet test --filter \"Database!=SqlServer\"`; per-mutation detail at ../wt-gr-nlwire/.lane/L-GROWTH-NEWSLETTER-WIRE-detail.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI-modules lane/growth-newsletter-wire @ 87600a1c (worktree ../wt-gr-nlwire, off feature/restaurant-modules de1e5c5e); fast tier 4363 passed / 0 failed / 12 skipped, `dotnet test --filter \"Database!=SqlServer\"`; per-mutation detail at ../wt-gr-nlwire/.lane/L-GROWTH-NEWSLETTER-WIRE-detail.md"
+    },
+    "L-GROWTH-SQL-CATCH-TYPED": {
+      "admitted": true,
+      "evidence": "lanes/L-GROWTH-SQL-CATCH-TYPED/mutation-log.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-GROWTH-SUPPRESSED-ERROR-KEY": {
+      "admitted": true,
+      "evidence": "lanes/L-GROWTH-SUPPRESSED-ERROR-KEY/mutation-log.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-GROWTHAUDIT-TABLE-ABSENT": {
+      "admitted": true,
+      "evidence": "lanes/L-GROWTHAUDIT-TABLE-ABSENT/finding.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-GUARD-REPAIR-LANDS": {
+      "admitted": true,
+      "evidence": "lanes/L-GUARD-REPAIR-LANDS/run.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-GUARD-W0": {
+      "admitted": false,
+      "evidence": "lanes/L-GUARD-DEMO/demo-run.txt",
+      "state": "built-unverified",
+      "why": "exit: “a session started with a sibling checkout on the wrong branch receives the mismatch in its opening context without anyone asking for it, and the same session started with every checkout correct receives no such line — both shown by the recorded hook output” does not name lanes/L-GUARD-DEMO/demo-run.txt"
+    },
+    "L-HOSTED-SERVICE-FLOOR": {
+      "admitted": false,
+      "evidence": "lanes/L-HOSTED-SERVICE-FLOOR/mutation-log.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-HOSTED-SERVICE-FLOOR/mutation-log.md"
+    },
+    "L-IDENTITY-STUB-TESTS": {
+      "admitted": true,
+      "evidence": "lanes/L-IDENTITY-STUB-TESTS/stubs.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-INVOICE-AUTHORIZE": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/wt-invauth @ d7ffdae9 (lane/invoice-authorize, off feature/restaurant-modules 3579bbbc, local, unpushed) - Controllers/InvoicesController.cs - WebApi.Tests/Wire/InvoicesAuthorizationWireTests.cs (26 tests) - lanes/L-INVOICE-AUTHORIZE/evidence.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: /Users/svendaneel/okam/wt-invauth @ d7ffdae9 (lane/invoice-authorize, off feature/restaurant-modules 3579bbbc, local, unpushed) - Controllers/InvoicesController.cs - WebApi.Tests/Wire/InvoicesAuthorizationWireTests.cs (26 tests) - lanes/L-INVOICE-AUTHORIZE/evidence.md"
+    },
+    "L-INVOICE-AUTHORIZE-LAND": {
+      "admitted": false,
+      "evidence": "lanes/L-INVOICE-AUTHORIZE-LAND/merge-receipt.md on feature/restaurant-modules @ 26599c6e (local, unpushed); merge 21510917 brings d7ffdae9 over measured tip 5df07afa",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-INVOICE-AUTHORIZE-LAND/merge-receipt.md on feature/restaurant-modules @ 26599c6e (local, unpushed); merge 21510917 brings d7ffdae9 over measured tip 5df07afa"
+    },
+    "L-INVOICE-RETRY-RETIREMENT": {
+      "admitted": false,
+      "evidence": "wt-invretire f18ffeda (fix+test) + receipt 1a0c0cbb, branch lane/invoice-retry-retirement off lane/pdf-nullderef (17198f14), local, not pushed - Services/InvoiceService.cs:89-102 - WebApi.Tests/Services/DocumentRendererFailureTests.cs - artifacts/tests/f18ffeda-fast-tier.trx + f18ffeda.../RUN.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: wt-invretire f18ffeda (fix+test) + receipt 1a0c0cbb, branch lane/invoice-retry-retirement off lane/pdf-nullderef (17198f14), local, not pushed - Services/InvoiceService.cs:89-102 - WebApi.Tests/Services/DocumentRendererFailureTests.cs - artifacts/tests/f18ffeda-fast-tier.trx + f18ffeda.../RUN.md"
+    },
+    "L-JEST-COLLECTS-LANES": {
+      "admitted": true,
+      "evidence": "lanes/L-JEST-COLLECTS-LANES/evidence.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-JOURNEY-ARTIFACTS-UNWITNESSED": {
+      "admitted": true,
+      "evidence": "lanes/L-JOURNEY-ARTIFACTS-UNWITNESSED/witnessed.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-JOURNEY-AT-DE": {
+      "admitted": true,
+      "evidence": "lanes/L-JOURNEY-AT-DE/mutation-log.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-JOURNEY-COVERAGE-THREE": {
+      "admitted": false,
+      "evidence": "artifacts/journeys/",
+      "state": "verified",
+      "why": "artifacts/journeys/ is a directory — a directory records no run and cannot be read; name the artifact inside it that does"
+    },
+    "L-JOURNEY-EVENTS": {
+      "admitted": true,
+      "evidence": "artifacts/journeys/events-enquiry-to-settlement.playwright.json",
+      "state": "verified",
+      "why": ""
+    },
+    "L-JOURNEY-EVIDENCE-SWEEP": {
+      "admitted": false,
+      "evidence": "lanes/L-JOURNEY-EVIDENCE-SWEEP/verification-map.md",
+      "state": "built-unverified",
+      "why": "exit: “each built-unverified lane either names an artifact path that exists, or is listed with the specific journey that would verify it, merged from a RETURN” does not name lanes/L-JOURNEY-EVIDENCE-SWEEP/verification-map.md"
+    },
+    "L-JOURNEY-GROWTH": {
+      "admitted": false,
+      "evidence": "artifacts/journeys/growth-guest-lifecycle.playwright.json, artifacts/journeys/growth-testsend-refusal.playwright.json",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: artifacts/journeys/growth-guest-lifecycle.playwright.json, artifacts/journeys/growth-testsend-refusal.playwright.json"
+    },
+    "L-JOURNEY-GUARD-FAIL": {
+      "admitted": false,
+      "evidence": "test/e2e/scripts/guard-proof.js @ 31fc45d",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: test/e2e/scripts/guard-proof.js @ 31fc45d"
+    },
+    "L-JOURNEY-MARGIN": {
+      "admitted": true,
+      "evidence": "artifacts/journeys/margin-supplier-to-plate.playwright.json",
+      "state": "verified",
+      "why": ""
+    },
+    "L-JOURNEY-PORT-HARDCODED": {
+      "admitted": true,
+      "evidence": "lanes/L-JOURNEY-PORT-HARDCODED/evidence.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-JOURNEY-PROXY-BLINDSPOT": {
+      "admitted": true,
+      "evidence": "lanes/L-JOURNEY-PROXY-BLINDSPOT/guard-proof.txt",
+      "state": "verified",
+      "why": ""
+    },
+    "L-JOURNEY-RECEIPT-RECORDS-WHAT-ANSWERED": {
+      "admitted": true,
+      "evidence": "lanes/L-JOURNEY-RECEIPT-RECORDS-WHAT-ANSWERED/mutation-log.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-JOURNEY-REGRESSION-BISECT": {
+      "admitted": true,
+      "evidence": "lanes/L-JOURNEY-REGRESSION-BISECT/bisect.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-JOURNEY-TEARDOWN": {
+      "admitted": true,
+      "evidence": "lanes/L-JOURNEY-TEARDOWN/mutation-log.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-JOURNEY-WORKFORCE": {
+      "admitted": false,
+      "evidence": "branch lane/journey-workforce @ eb8f412 (both artifacts force-added) + lanes/L-JOURNEY-WORKFORCE/mutation-proof.txt",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: branch lane/journey-workforce @ eb8f412 (both artifacts force-added) + lanes/L-JOURNEY-WORKFORCE/mutation-proof.txt"
+    },
+    "L-LANES-OUT-OF-THE-ASSEMBLY": {
+      "admitted": false,
+      "evidence": "lanes/L-LANES-OUT-OF-THE-ASSEMBLY/mutation-log.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-LANES-OUT-OF-THE-ASSEMBLY/mutation-log.md"
+    },
+    "L-LEDGER-BUILD-STATE-RECONCILE": {
+      "admitted": true,
+      "evidence": "lanes/L-LEDGER-BUILD-STATE-RECONCILE/state.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-LINT-RUNNABLE": {
+      "admitted": true,
+      "evidence": "/Users/svendaneel/okam/Web-modules/lanes/L-LINT-RUNNABLE/run.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-LINT-RUNS-ON-SOMETHING": {
+      "admitted": false,
+      "evidence": "lanes/L-LINT-RUNS-ON-SOMETHING/evidence.md",
+      "state": "built-unverified",
+      "why": "exit: “a change to a translations dictionary is linted by a script, a hook or a workflow that a person or CI actually invokes, shown by a run that reds on a rule already configured as error” does not name lanes/L-LINT-RUNS-ON-SOMETHING/evidence.md"
+    },
+    "L-LINT-TWO-REAL-DEFECTS": {
+      "admitted": true,
+      "evidence": "/Users/svendaneel/okam/Web-modules/lanes/L-LINT-TWO-REAL-DEFECTS/mutation-log.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-LIVE-ASSERTION-FLOORS": {
+      "admitted": false,
+      "evidence": "lanes/L-LIVE-ASSERTION-FLOORS/ (guard-proof.txt, jest-new-suite.txt, jest-full.txt); commit 22f2108",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-LIVE-ASSERTION-FLOORS/ (guard-proof.txt, jest-new-suite.txt, jest-full.txt); commit 22f2108"
+    },
+    "L-LIVE-BUILD-EXPORT": {
+      "admitted": false,
+      "evidence": "lanes/L-LIVE-BUILD-EXPORT/evidence.md (commit 94fa256, 6 files by pathspec) + lanes/L-LIVE-BUILD-EXPORT/journey-artifacts/arm-1.provenance-probe.playwright.json",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-LIVE-BUILD-EXPORT/evidence.md (commit 94fa256, 6 files by pathspec) + lanes/L-LIVE-BUILD-EXPORT/journey-artifacts/arm-1.provenance-probe.playwright.json"
+    },
+    "L-LIVE-HARNESS-REVIEW": {
+      "admitted": true,
+      "evidence": "docs/plan/reviews/L-LIVE-HARNESS-REVIEW.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-LIVE-SEED-VIA-PRODUCT": {
+      "admitted": false,
+      "evidence": "test/e2e/scripts/live-world.sh (Web-modules feature/restaurant-modules, local commit) - three live artifacts under lanes/L-LIVE-SEED-VIA-PRODUCT/ all \"backend\":\"live\" \"apiBaseUrl\":\"http://127.0.0.1:5956\" (workforce-schedule-publish backendServed=48, workforce-flag-lever=80, events-deposit-precondition=12) - seed receipt lanes/L-LIVE-SEED-VIA-PRODUCT/live-world-run.txt (127 migrations, 211 tables, 25 append-only triggers, from EMPTY)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: test/e2e/scripts/live-world.sh (Web-modules feature/restaurant-modules, local commit) - three live artifacts under lanes/L-LIVE-SEED-VIA-PRODUCT/ all \"backend\":\"live\" \"apiBaseUrl\":\"http://127.0.0.1:5956\" (workforce-schedule-publish backendServed=48, workforce-flag-lever=80, events-deposit-precondition=12) - seed receipt lanes/L-LIVE-SEED-VIA-PRODUCT/live-world-run.txt (127 migrations, 211 tables, 25 append-only triggers, from EMPTY)"
+    },
+    "L-LIVE-WORLD-BANNER": {
+      "admitted": true,
+      "evidence": "lanes/L-LIVE-WORLD-BANNER/evidence.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-LIVE-WORLD-RESTORE": {
+      "admitted": false,
+      "evidence": "lanes/L-LIVE-WORLD-RESTORE/live-world-reset-run.txt (commit 337f9bf)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-LIVE-WORLD-RESTORE/live-world-reset-run.txt (commit 337f9bf)"
+    },
+    "L-LIVE-WORLD-SEED": {
+      "admitted": false,
+      "evidence": "Web-modules feature/restaurant-modules @ 9a5900a (local, not pushed) · artifact lanes/L-LIVE-WORLD-SEED/events-deposit-precondition.live.playwright.json = {\"backend\":\"live\",\"apiBaseUrl\":\"http://127.0.0.1:5951\",\"backendProbe\":{\"status\":200,\"body\":\"Healthy\"},\"backendServed\":12} · seed receipt lanes/L-LIVE-WORLD-SEED/live-world-run.txt (127 migrations, 211 tables, 25 append-only triggers, from EMPTY)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: Web-modules feature/restaurant-modules @ 9a5900a (local, not pushed) · artifact lanes/L-LIVE-WORLD-SEED/events-deposit-precondition.live.playwright.json = {\"backend\":\"live\",\"apiBaseUrl\":\"http://127.0.0.1:5951\",\"backendProbe\":{\"status\":200,\"body\":\"Healthy\"},\"backendServed\":12} · seed receipt lanes/L-LIVE-WORLD-SEED/live-world-run.txt (127 migrations, 211 tables, 25 append-only triggers, from EMPTY)"
+    },
+    "L-LIVE-WORLD-STAFF": {
+      "admitted": false,
+      "evidence": "lanes/L-LIVE-WORLD-STAFF/live-world-run.txt (commit 538abe6)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-LIVE-WORLD-STAFF/live-world-run.txt (commit 538abe6)"
+    },
+    "L-MANIFEST-CONDITIONS": {
+      "admitted": true,
+      "evidence": "lanes/L-MANIFEST-CONDITIONS/applied.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-MARGIN-VIOLATION-ANCHOR": {
+      "admitted": false,
+      "evidence": "lanes/L-MARGIN-VIOLATION-ANCHOR/mutation-log.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-MARGIN-VIOLATION-ANCHOR/mutation-log.md"
+    },
+    "L-MEALS-AGREEMENT-PIN-INVERTS": {
+      "admitted": false,
+      "evidence": "lanes/L-MEALS-AGREEMENT-PIN-INVERTS/adoption-review.md",
+      "state": "built-unverified",
+      "why": "exit: “MealsAgreementWriterTests asserts that a refused agreement write replays its refusal rather than that it strands its key, and the one-active-corridor stranding site records a refusal, pinned by a test that reds if either goes back, recorded in lanes/L-MEALS-AGREEMENT-PIN-INVERTS/mutation-log.md” does not name lanes/L-MEALS-AGREEMENT-PIN-INVERTS/adoption-review.md"
+    },
+    "L-MEALS-CLAIM-RECEIPT": {
+      "admitted": false,
+      "evidence": "lanes/L-MEALS-CLAIM-RECEIPT/evidence.md",
+      "state": "built-unverified",
+      "why": "exit: “when the claim response carries an employee reference the receipt prints it as the statement reference, falling back to the membership id only when absent, asserted for both wire shapes” does not name lanes/L-MEALS-CLAIM-RECEIPT/evidence.md"
+    },
+    "L-MEALS-DEGENERATE-TWO": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/OkamAPI-mealsdegen2/lanes/L-MEALS-DEGENERATE-TWO/evidence.md",
+      "state": "built-unverified",
+      "why": "exit: “both release-path guard pins hold a second reservation, proven by a clamp mutation that reds them” does not name /Users/svendaneel/okam/OkamAPI-mealsdegen2/lanes/L-MEALS-DEGENERATE-TWO/evidence.md"
+    },
+    "L-MEALS-DOCSYNC": {
+      "admitted": false,
+      "evidence": "lanes/L-MEALS-DOCSYNC/evidence.md",
+      "state": "built-unverified",
+      "why": "exit: “no comment or document in the Meals surface asserts a fact the branch has falsified, and the knowledge check is clean” does not name lanes/L-MEALS-DOCSYNC/evidence.md"
+    },
+    "L-MEALS-EIGHTH-PIN": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/wt-mealseighth/lanes/L-MEALS-EIGHTH-PIN/evidence.md — lane/meals-eighth-pin @ 9fe599c6 off d5483cb3, local only",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: /Users/svendaneel/okam/wt-mealseighth/lanes/L-MEALS-EIGHTH-PIN/evidence.md — lane/meals-eighth-pin @ 9fe599c6 off d5483cb3, local only"
+    },
+    "L-MEALS-EIGHTH-READ": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/wt-meals-eighth-read/lanes/L-MEALS-EIGHTH-READ/evidence-2.md",
+      "state": "built-unverified",
+      "why": "exit: “the superseded-release site holds an uninvolved reservation across the supersede, and a clamp mutant reds, where today it passes every test and the browser journey” does not name /Users/svendaneel/okam/wt-meals-eighth-read/lanes/L-MEALS-EIGHTH-READ/evidence-2.md"
+    },
+    "L-MEALS-ENROL-JOURNEY-LOCATOR": {
+      "admitted": true,
+      "evidence": "lanes/L-MEALS-ENROL-JOURNEY-LOCATOR/mutation-log.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-MEALS-ENROL-PRETICK": {
+      "admitted": false,
+      "evidence": "lanes/L-MEALS-ENROL-PRETICK/evidence.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-MEALS-ENROL-PRETICK/evidence.md"
+    },
+    "L-MEALS-ENROL-UI": {
+      "admitted": false,
+      "evidence": "lanes/L-MEALS-ENROL-UI/evidence.md",
+      "state": "built-unverified",
+      "why": "exit: “an invitation claimed at the join page can be enrolled from the admin surface and the eligibility read answers eligible, driven by a page test through the admin client” does not name lanes/L-MEALS-ENROL-UI/evidence.md"
+    },
+    "L-MEALS-FLOOR-PINS": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/OkamAPI-mealsfloor/lanes/L-MEALS-FLOOR-PINS/evidence.md (commit 5a254d72 on lane/meals-floor-pins, off feature/restaurant-modules de1e5c5e; not pushed)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: /Users/svendaneel/okam/OkamAPI-mealsfloor/lanes/L-MEALS-FLOOR-PINS/evidence.md (commit 5a254d72 on lane/meals-floor-pins, off feature/restaurant-modules de1e5c5e; not pushed)"
+    },
+    "L-MEALS-FOURWAY-TIER": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/wt-meals-fourway-tier/lanes/L-MEALS-FOURWAY-TIER/ (commit 702d9481, trx f72c7a81-fourway-fast-tier.trx)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: /Users/svendaneel/okam/wt-meals-fourway-tier/lanes/L-MEALS-FOURWAY-TIER/ (commit 702d9481, trx f72c7a81-fourway-fast-tier.trx)"
+    },
+    "L-MEALS-FUNDED": {
+      "admitted": true,
+      "evidence": "artifacts/journeys/meals-funded-checkout.playwright.json",
+      "state": "verified",
+      "why": ""
+    },
+    "L-MEALS-GRACE-PINS": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/OkamAPI-modules/lanes/L-MEALS-GRACE-PINS/evidence.md (commit 34c6c103 on lane/meals-grace-pins, off feature/restaurant-modules de1e5c5e; not pushed)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: /Users/svendaneel/okam/OkamAPI-modules/lanes/L-MEALS-GRACE-PINS/evidence.md (commit 34c6c103 on lane/meals-grace-pins, off feature/restaurant-modules de1e5c5e; not pushed)"
+    },
+    "L-MEALS-IDEMPOTENCY-REFUSAL": {
+      "admitted": false,
+      "evidence": "lanes/L-MEALS-IDEMPOTENCY-REFUSAL/mutation-log.md",
+      "state": "built-unverified",
+      "why": "exit: “a refused meals command replays its refusal on a same-key retry rather than answering idempotency-in-progress, pinned per backstop by a test that reds if the recording is removed, and the accepted-defect comment is replaced by what the code now does” does not name lanes/L-MEALS-IDEMPOTENCY-REFUSAL/mutation-log.md"
+    },
+    "L-MEALS-LEVER-WITHHOLD": {
+      "admitted": false,
+      "evidence": "lanes/L-MEALS-LEVER-WITHHOLD/retitle-and-pin.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-MEALS-LEVER-WITHHOLD/retitle-and-pin.md"
+    },
+    "L-MEALS-MEMBERS-READ": {
+      "admitted": false,
+      "evidence": "lanes/L-MEALS-MEMBERS-READ/mutation-log.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-MEALS-MEMBERS-READ/mutation-log.md"
+    },
+    "L-MEALS-MEMBERS-READ-LAND-CHECK": {
+      "admitted": true,
+      "evidence": "lanes/L-MEALS-MEMBERS-READ-LAND-CHECK/combinations.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-MEALS-POS-TENDER-WIRE": {
+      "admitted": false,
+      "evidence": "worktree ~/okam/OkamAPI-postender, branch lane/meals-pos-tender-wire, commit 32fd5a86 off lane/meals-utlkvit 1a03bc6c, NOT pushed. Container-free tier (dotnet test --filter \"Database!=SqlServer\"): base 1a03bc6c clean checkout 4366 passed / 0 failed / 12 skipped / 4378 total; mine 32fd5a86 4370 / 0 / 12 / 4382 - delta is exactly the 4 new tests. New file WebApi.Tests/Meals/MealsPosCreditTenderReachabilityTests.cs.",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: worktree ~/okam/OkamAPI-postender, branch lane/meals-pos-tender-wire, commit 32fd5a86 off lane/meals-utlkvit 1a03bc6c, NOT pushed. Container-free tier (dotnet test --filter \"Database!=SqlServer\"): base 1a03bc6c clean checkout 4366 passed / 0 failed / 12 skipped / 4378 total; mine 32fd5a86 4370 / 0 / 12 / 4382 - delta is exactly the 4 new tests. New file WebApi.Tests/Meals/MealsPosCreditTenderReachabilityTests.cs."
+    },
+    "L-MEALS-POSREL-LAND": {
+      "admitted": true,
+      "evidence": "lanes/L-MEALS-POSREL-LAND/merge-receipt.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-MEALS-PRETICK-NEVER-WALKED": {
+      "admitted": true,
+      "evidence": "lanes/L-MEALS-PRETICK-NEVER-WALKED/mutation-log.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-MEALS-PROJECTION-LAG-VISIBLE": {
+      "admitted": false,
+      "evidence": "lanes/L-MEALS-PROJECTION-LAG-VISIBLE/evidence.md",
+      "state": "built-unverified",
+      "why": "exit: “a venue reading the settlement surface can see the projection lag that gates it, or the surface says why it cannot” does not name lanes/L-MEALS-PROJECTION-LAG-VISIBLE/evidence.md"
+    },
+    "L-MEALS-QUOTE-RETRY": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/wt-mealsqretry/lanes/L-MEALS-QUOTE-RETRY/evidence.md — lane/meals-quote-retry @ 92d45967, local only (base 46519562 = supersede-sql 7dafec47 + eighth-pin 9fe599c6 merged; disjoint files)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: /Users/svendaneel/okam/wt-mealsqretry/lanes/L-MEALS-QUOTE-RETRY/evidence.md — lane/meals-quote-retry @ 92d45967, local only (base 46519562 = supersede-sql 7dafec47 + eighth-pin 9fe599c6 merged; disjoint files)"
+    },
+    "L-MEALS-REACHABLE": {
+      "admitted": false,
+      "evidence": "lane/meals-reachable-api@02f27b95 (backend 28/28 container-free); lane/meals-reachable-web@f65595d (frontend 55/55 flag suites)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lane/meals-reachable-api@02f27b95 (backend 28/28 container-free); lane/meals-reachable-web@f65595d (frontend 55/55 flag suites)"
+    },
+    "L-MEALS-RECONCILE-UI": {
+      "admitted": false,
+      "evidence": "lanes/L-MEALS-RECONCILE-UI/evidence.md",
+      "state": "built-unverified",
+      "why": "exit: “a seeded expiry exception is visible on the venue surface and resolvable from it, and a blocked finalize names the exception that blocks it” does not name lanes/L-MEALS-RECONCILE-UI/evidence.md"
+    },
+    "L-MEALS-RELEASE": {
+      "admitted": false,
+      "evidence": "OkamAPI-meals-release 0659666f (lane/meals-release, local, not pushed) · WebApi.Tests/Wire/MealsQuoteReleaseWireTests.cs · lanes/L-MEALS-RELEASE/red-no-route.txt · lanes/L-MEALS-RELEASE/evidence.md · receipt artifacts/tests/0659666f33e500ce3fad3c456f5d01d2ac68ac9b/RUN.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI-meals-release 0659666f (lane/meals-release, local, not pushed) · WebApi.Tests/Wire/MealsQuoteReleaseWireTests.cs · lanes/L-MEALS-RELEASE/red-no-route.txt · lanes/L-MEALS-RELEASE/evidence.md · receipt artifacts/tests/0659666f33e500ce3fad3c456f5d01d2ac68ac9b/RUN.md"
+    },
+    "L-MEALS-RELEASE-CLUSTER-REVIEW": {
+      "admitted": true,
+      "evidence": "docs/plan/reviews/L-MEALS-RELEASE-CLUSTER-REVIEW.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-MEALS-RELEASE-RACE": {
+      "admitted": false,
+      "evidence": "lanes/L-MEALS-RELEASE-RACE/evidence.md — worktree /Users/svendaneel/okam/OkamAPI-meals-race, branch lane/meals-release-race, commit f70a0254 (off feature/restaurant-modules de1e5c5e, local only)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-MEALS-RELEASE-RACE/evidence.md — worktree /Users/svendaneel/okam/OkamAPI-meals-race, branch lane/meals-release-race, commit f70a0254 (off feature/restaurant-modules de1e5c5e, local only)"
+    },
+    "L-MEALS-REQUOTE-RELEASE": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/wt-mealsrequote/lanes/L-MEALS-REQUOTE-RELEASE/evidence.md",
+      "state": "built-unverified",
+      "why": "exit: “the stale-token re-quote journey passes on the smaller allowance it was written for, rather than the doubled one it needs today” does not name /Users/svendaneel/okam/wt-mealsrequote/lanes/L-MEALS-REQUOTE-RELEASE/evidence.md"
+    },
+    "L-MEALS-REVIEW": {
+      "admitted": true,
+      "evidence": "docs/plan/reviews/L-MEALS-REVIEW.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-MEALS-STALE-TOKEN": {
+      "admitted": false,
+      "evidence": "artifacts/journeys/meals-stale-token-requote.playwright.json",
+      "state": "verified",
+      "why": "exit: names the directory `artifacts/journeys/`, not an artifact — any of its 78 entries would satisfy it equally, so `artifacts/journeys/meals-stale-token-requote.playwright.json` demonstrates nothing.  Name the artifact that shows the run in `exit:`, then offer that file."
+    },
+    "L-MEALS-SUPERSEDE-SQL": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/wt-mealssupsql/lanes/L-MEALS-SUPERSEDE-SQL/evidence.md (commit 7dafec47; trx supersede-sql-clean, mutant-clamp, mutant-repeat-decrement, mutant-no-detach, trait-guard)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: /Users/svendaneel/okam/wt-mealssupsql/lanes/L-MEALS-SUPERSEDE-SQL/evidence.md (commit 7dafec47; trx supersede-sql-clean, mutant-clamp, mutant-repeat-decrement, mutant-no-detach, trait-guard)"
+    },
+    "L-MEALS-SWEEP-GUARD": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/OkamAPI-sweepguard/lanes/L-MEALS-SWEEP-GUARD/evidence.md — lane/meals-sweep-guard @ 4bddfc7d (fix e828bcdf) off de1e5c5e, local only",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: /Users/svendaneel/okam/OkamAPI-sweepguard/lanes/L-MEALS-SWEEP-GUARD/evidence.md — lane/meals-sweep-guard @ 4bddfc7d (fix e828bcdf) off de1e5c5e, local only"
+    },
+    "L-MEALS-SWEEP-REVIEW": {
+      "admitted": true,
+      "evidence": "docs/plan/reviews/L-MEALS-SWEEP-REVIEW.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-MEALS-UTLKVIT": {
+      "admitted": false,
+      "evidence": "OkamAPI worktree /Users/svendaneel/okam/wt-utlkvit, branch lane/meals-utlkvit @ 1a03bc6c (local, not pushed) · SQL TIER WebApi.Tests/Meals/MealsDeliveryReceiptSqlServerTests.cs (3/3 green, Meals SQL collection 101/101) · WebApi.Tests/Kassa/DeliveryReceiptComplianceTests.cs (9 pins) · fact:meals.utlkvit present on the branch (PosReceiptService.cs, 2 hits)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI worktree /Users/svendaneel/okam/wt-utlkvit, branch lane/meals-utlkvit @ 1a03bc6c (local, not pushed) · SQL TIER WebApi.Tests/Meals/MealsDeliveryReceiptSqlServerTests.cs (3/3 green, Meals SQL collection 101/101) · WebApi.Tests/Kassa/DeliveryReceiptComplianceTests.cs (9 pins) · fact:meals.utlkvit present on the branch (PosReceiptService.cs, 2 hits)"
+    },
+    "L-MEALS-VIOLATION-EXACT": {
+      "admitted": false,
+      "evidence": "lanes/L-MEALS-VIOLATION-EXACT/mutation-log.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-MEALS-VIOLATION-EXACT/mutation-log.md"
+    },
+    "L-MEALS-XZ-CREDIT": {
+      "admitted": false,
+      "evidence": "OkamAPI worktree /Users/svendaneel/okam/wt-xzcredit, branch lane/meals-xz-credit @ 25586d86 (local, not pushed) · ARTIFACT WebApi.Tests/Meals/Fixtures/zreport-kredittsalg.txt · WebApi.Tests/Meals/MealsXZCreditSaleTests.cs (7 pins) · WebApi.Tests/Kassa/EodServiceTests.cs::GetSummary_CompanyAccount_IsCreditNotOtherTakings",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI worktree /Users/svendaneel/okam/wt-xzcredit, branch lane/meals-xz-credit @ 25586d86 (local, not pushed) · ARTIFACT WebApi.Tests/Meals/Fixtures/zreport-kredittsalg.txt · WebApi.Tests/Meals/MealsXZCreditSaleTests.cs (7 pins) · WebApi.Tests/Kassa/EodServiceTests.cs::GetSummary_CompanyAccount_IsCreditNotOtherTakings"
+    },
+    "L-MENU-ALLERGEN-MATRIX": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/web-menu-allergen/artifacts/journeys/menu-allergen-matrix.playwright.json (16/16 steps passed; 3 screenshots + print-preview.pdf, one A4 landscape page) · commit f1b0d1a on lane/menu-allergen-matrix (local, unpushed)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: /Users/svendaneel/okam/web-menu-allergen/artifacts/journeys/menu-allergen-matrix.playwright.json (16/16 steps passed; 3 screenshots + print-preview.pdf, one A4 landscape page) · commit f1b0d1a on lane/menu-allergen-matrix (local, unpushed)"
+    },
+    "L-MIG-COMPANY-RECEIVABLE": {
+      "admitted": false,
+      "evidence": "OkamAPI lane/mig-company-receivable @ 32c56fa4, off chain tip cff1c005; Migrations/20260803090036_Meals_CompanyReceivableAccount.cs; fast tier 4368/0/7",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI lane/mig-company-receivable @ 32c56fa4, off chain tip cff1c005; Migrations/20260803090036_Meals_CompanyReceivableAccount.cs; fast tier 4368/0/7"
+    },
+    "L-MIG-NUMBER-CLAIMS": {
+      "admitted": true,
+      "evidence": "lanes/L-MIG-NUMBER-CLAIMS/claims.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-MIG-STACK-RECORD": {
+      "admitted": true,
+      "evidence": "/Users/svendaneel/okam/Web-modules/lanes/L-MIG-STACK-RECORD/stack.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-MIRROR-HOLDS-ONLY-REAL-MEMBERS": {
+      "admitted": true,
+      "evidence": "lanes/L-MIRROR-HOLDS-ONLY-REAL-MEMBERS/census.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-MIXIN-LABELS-TRANSLATE": {
+      "admitted": false,
+      "evidence": "lanes/L-MIXIN-LABELS-TRANSLATE/mutation-log.md",
+      "state": "built-unverified",
+      "why": "exit: “paymentTypeLabel, deliveryTypeLabel and orderStatusLabel resolve through the i18n layer, and a journey at the CH locale reds when the German string for one of them is corrupted” does not name lanes/L-MIXIN-LABELS-TRANSLATE/mutation-log.md"
+    },
+    "L-MODAL-BROKEN-TWO": {
+      "admitted": false,
+      "evidence": "lanes/L-MODAL-BROKEN-TWO/detail.md · artifacts/journeys/admin-single-login-prompt · artifacts/journeys/admin-change-delivery-type · lane/modal-broken-two @ 6348944 (worktree ~/okam/web-modal-two, not pushed)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-MODAL-BROKEN-TWO/detail.md · artifacts/journeys/admin-single-login-prompt · artifacts/journeys/admin-change-delivery-type · lane/modal-broken-two @ 6348944 (worktree ~/okam/web-modal-two, not pushed)"
+    },
+    "L-MODAL-LAND": {
+      "admitted": true,
+      "evidence": "artifacts/journeys/modal-scroll-lock.playwright.json",
+      "state": "verified",
+      "why": ""
+    },
+    "L-MODAL-SCROLLLOCK": {
+      "admitted": false,
+      "evidence": "artifacts/journeys/modal-scroll-lock.playwright.json",
+      "state": "verified",
+      "why": "exit: names the directory `artifacts/journeys/`, not an artifact — any of its 78 entries would satisfy it equally, so `artifacts/journeys/modal-scroll-lock.playwright.json` demonstrates nothing.  Name the artifact that shows the run in `exit:`, then offer that file."
+    },
+    "L-MODULES-PREFLIGHT-FAILS-LOUD": {
+      "admitted": true,
+      "evidence": "/Users/svendaneel/okam/Web-modules/lanes/L-MODULES-PREFLIGHT-FAILS-LOUD/run.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-MONEYPATH-PAIR-REVIEW": {
+      "admitted": true,
+      "evidence": "docs/plan/reviews/L-MONEYPATH-PAIR-REVIEW.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-MRG-COVERAGE-PANEL-SAYS-ABSENT": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/web-mrgcovabsent/lanes/L-MRG-COVERAGE-PANEL-SAYS-ABSENT/evidence.md",
+      "state": "built-unverified",
+      "why": "exit: “the coverage panel renders an absent state rather than an unknown for the waste feature, shown by a test that reds if the absence is presented as a failed read” does not name /Users/svendaneel/okam/web-mrgcovabsent/lanes/L-MRG-COVERAGE-PANEL-SAYS-ABSENT/evidence.md"
+    },
+    "L-MRG-COVERAGE-UNKNOWN": {
+      "admitted": false,
+      "evidence": "lanes/L-MRG-COVERAGE-UNKNOWN/evidence.md",
+      "state": "built-unverified",
+      "why": "exit: “a coverage response with no waste block renders the unknown state rather than nothing-recorded, reds if the distinction is removed” does not name lanes/L-MRG-COVERAGE-UNKNOWN/evidence.md"
+    },
+    "L-MRG-PAGE-TEST-VACUOUS": {
+      "admitted": false,
+      "evidence": "lanes/L-MRG-PAGE-TEST-VACUOUS/mutation-log.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-MRG-PAGE-TEST-VACUOUS/mutation-log.md"
+    },
+    "L-MRG-RECIPE-REVISE-UI": {
+      "admitted": false,
+      "evidence": "lanes/L-MRG-RECIPE-REVISE-UI/evidence.md",
+      "state": "built-unverified",
+      "why": "exit: “an active recipe gains a new-draft, edit, activate and retire round trip in the browser, driven by a test against the mocked wire” does not name lanes/L-MRG-RECIPE-REVISE-UI/evidence.md"
+    },
+    "L-MRG-RECIPE-TRANSITIONS-PINNED": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/web-mrgtrans/lanes/L-MRG-RECIPE-TRANSITIONS-PINNED/mutation-log.md",
+      "state": "built-unverified",
+      "why": "exit: “unbinding newDraft, saveDraft, addDraftComponent, removeDraftComponent or retire each reds a test in the margin-recipes suite, with each mutation shown red individually” does not name /Users/svendaneel/okam/web-mrgtrans/lanes/L-MRG-RECIPE-TRANSITIONS-PINNED/mutation-log.md"
+    },
+    "L-MRG-REVIEW": {
+      "admitted": true,
+      "evidence": "docs/plan/reviews/L-MRG-REVIEW.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-MRG-REVISE-LAND": {
+      "admitted": true,
+      "evidence": "lanes/L-MRG-REVISE-LAND/evidence.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-MRG-STARTER-150": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/wt-mrg150fill/lanes/L-MRG-STARTER-150/evidence.md",
+      "state": "built-unverified",
+      "why": "exit: “the ingredients read serves the approved curation and a test pins its count, units and conversions” does not name /Users/svendaneel/okam/wt-mrg150fill/lanes/L-MRG-STARTER-150/evidence.md"
+    },
+    "L-MRG-WASTE": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/wt-mrgwaste/artifacts/tests/50b85657/RUN.md",
+      "state": "built-unverified",
+      "why": "exit: “a waste entry with a reason code lands in the statement week's coverage read AND the finalize trigger rolls back any post-freeze write to it, on a chain-built database” does not name /Users/svendaneel/okam/wt-mrgwaste/artifacts/tests/50b85657/RUN.md"
+    },
+    "L-MRG-WASTE-500": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/wt-mrgwaste500/artifacts/tests/L-MRG-WASTE-500/RUN.md",
+      "state": "built-unverified",
+      "why": "exit: “a waste entry naming a nonexistent or foreign ingredient answers a coded refusal, and a cross-tenant create is pinned” does not name /Users/svendaneel/okam/wt-mrgwaste500/artifacts/tests/L-MRG-WASTE-500/RUN.md"
+    },
+    "L-MRG-WASTE-FRONTEND": {
+      "admitted": false,
+      "evidence": "lanes/L-MRG-WASTE-FRONTEND/evidence.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-MRG-WASTE-FRONTEND/evidence.md"
+    },
+    "L-MRG-WASTE-PANEL-SAYS-ABSENT": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/web-wasteabsent/lanes/L-MRG-WASTE-PANEL-SAYS-ABSENT/evidence.md",
+      "state": "built-unverified",
+      "why": "exit: “the statement waste panel either calls routes a backend checkout publishes, or renders an absent-feature state, shown by a test that reds if a 404 is presented as a failed read” does not name /Users/svendaneel/okam/web-wasteabsent/lanes/L-MRG-WASTE-PANEL-SAYS-ABSENT/evidence.md"
+    },
+    "L-MRG-WASTE-RECEIPTS": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/web-wastereceipts/lanes/L-MRG-WASTE-RECEIPTS/RUN.md @ 87702ef",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: /Users/svendaneel/okam/web-wastereceipts/lanes/L-MRG-WASTE-RECEIPTS/RUN.md @ 87702ef"
+    },
+    "L-MRG-WASTE-REVIEW": {
+      "admitted": true,
+      "evidence": "docs/plan/reviews/L-MRG-WASTE-REVIEW.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-NORWEGIAN-ONLY-KEYS-TRANSLATE": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/web-noonly/lanes/L-NORWEGIAN-ONLY-KEYS-TRANSLATE/keys.md",
+      "state": "built-unverified",
+      "why": "exit: “the 34 Norwegian-only rendered keys pinned by L-MRG-WASTE-RECEIPTS carry en and de strings, and the ratchet that counts them reds if the count rises” does not name /Users/svendaneel/okam/web-noonly/lanes/L-NORWEGIAN-ONLY-KEYS-TRANSLATE/keys.md"
+    },
+    "L-OFFER-PARTIAL-SUBTOTAL": {
+      "admitted": false,
+      "evidence": "lanes/L-OFFER-PARTIAL-SUBTOTAL/mutation-log.md (on lane/offer-partial-subtotal @ 35e5cdd)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-OFFER-PARTIAL-SUBTOTAL/mutation-log.md (on lane/offer-partial-subtotal @ 35e5cdd)"
+    },
+    "L-OFFERS-PAGE-HUNDREDFOLD": {
+      "admitted": true,
+      "evidence": "lanes/L-OFFERS-PAGE-HUNDREDFOLD/evidence.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-PATH-EVIDENCE-IS-READ": {
+      "admitted": true,
+      "evidence": "lanes/L-PATH-EVIDENCE-IS-READ/finding.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-PAYMENT-LABEL-UKJENT": {
+      "admitted": true,
+      "evidence": "lanes/L-PAYMENT-LABEL-UKJENT/mutation-log.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-PAYMENTTYPE-FROM-CLIENT-UNGUARDED": {
+      "admitted": true,
+      "evidence": "lanes/L-PAYMENTTYPE-FROM-CLIENT-UNGUARDED/finding.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-PDF-CREDITNOTE-NAME": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/Web-modules/lanes/L-PDF-CREDITNOTE-NAME/receipt.md",
+      "state": "built-unverified",
+      "why": "exit: “two credit notes against one invoice download under distinct filenames, each naming the credit note rather than the invoice” does not name /Users/svendaneel/okam/Web-modules/lanes/L-PDF-CREDITNOTE-NAME/receipt.md"
+    },
+    "L-PDF-FAMILY-LAND": {
+      "admitted": true,
+      "evidence": "lanes/L-PDF-FAMILY-LAND/merge-receipt.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-PDF-NULLDEREF": {
+      "admitted": false,
+      "evidence": "OkamAPI-pdfnull 2497ce9d + receipt 17198f14 (lane/pdf-nullderef, local, not pushed) - WebApi.Tests/Wire/PdfRendererOutageWireTests.cs - WebApi.Tests/Services/DocumentRendererFailureTests.cs - artifacts/tests/2497ce9d-fast-tier.trx + 2497ce9d.../RUN.md - lanes/L-PDF-NULLDEREF/{red.txt,decision.md}",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI-pdfnull 2497ce9d + receipt 17198f14 (lane/pdf-nullderef, local, not pushed) - WebApi.Tests/Wire/PdfRendererOutageWireTests.cs - WebApi.Tests/Services/DocumentRendererFailureTests.cs - artifacts/tests/2497ce9d-fast-tier.trx + 2497ce9d.../RUN.md - lanes/L-PDF-NULLDEREF/{red.txt,decision.md}"
+    },
+    "L-PHONE-IN-PATH": {
+      "admitted": false,
+      "evidence": "backend OkamAPI lane/phone-in-path @ a60da359 (fix c7422096 + finding-closure a60da359), worktree ~/okam/wt-phoneinpath, based on feature/restaurant-modules @ 35696d6b, NOT pushed - container-free tier (--filter \"Database!=SqlServer\") 4505/0/12 vs a base 4466/0/12 I measured myself at 35696d6b in a clean detached worktree, delta +39 = exactly the new tests, 0 regressions - WebApi.Tests/Observability/PersonalIdentifierRouteShapeTests.cs (39) | mutations: lanes/L-PHONE-IN-PATH/mutations.txt | tiers: lanes/L-PHONE-IN-PATH/{base,containerfree}-tier.summary.txt | detail: lanes/L-PHONE-IN-PATH/evidence.md and artifacts/security/L-PHONE-IN-PATH-mutation.md | stale finding closed in artifacts/security/L-VIPPS-LOG-mutation.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: backend OkamAPI lane/phone-in-path @ a60da359 (fix c7422096 + finding-closure a60da359), worktree ~/okam/wt-phoneinpath, based on feature/restaurant-modules @ 35696d6b, NOT pushed - container-free tier (--filter \"Database!=SqlServer\") 4505/0/12 vs a base 4466/0/12 I measured myself at 35696d6b in a clean detached worktree, delta +39 = exactly the new tests, 0 regressions - WebApi.Tests/Observability/PersonalIdentifierRouteShapeTests.cs (39) | mutations: lanes/L-PHONE-IN-PATH/mutations.txt | tiers: lanes/L-PHONE-IN-PATH/{base,containerfree}-tier.summary.txt | detail: lanes/L-PHONE-IN-PATH/evidence.md and artifacts/security/L-PHONE-IN-PATH-mutation.md | stale finding closed in artifacts/security/L-VIPPS-LOG-mutation.md"
+    },
+    "L-PRESERVE-UNREFERENCED-WORK": {
+      "admitted": true,
+      "evidence": "lanes/L-PRESERVE-UNREFERENCED-WORK/preserved.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-PRICE-BYPASS-FIVE": {
+      "admitted": false,
+      "evidence": "refs/lanes/L-PRICE-BYPASS-FIVE = 8c6e91fa (parent e34977ac); 39/39 pins",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: refs/lanes/L-PRICE-BYPASS-FIVE = 8c6e91fa (parent e34977ac); 39/39 pins"
+    },
+    "L-PRICE-CLEANUP-TWO": {
+      "admitted": false,
+      "evidence": "lanes/L-PRICE-CLEANUP-TWO/notes.md",
+      "state": "built-unverified",
+      "why": "exit: “the dead import is gone and the rate reader rejects a non-finite number, each pinned” does not name lanes/L-PRICE-CLEANUP-TWO/notes.md"
+    },
+    "L-PRICE-CROSSCURRENCY": {
+      "admitted": false,
+      "evidence": "commit 17fe84ae on refs/heads/lane/price-crosscurrency (baseline e34977ac, feature/restaurant-modules UNMOVED, never pushed) · utils/cross-currency.js · test/price-crosscurrency.test.js 30/30 · lanes/L-PRICE-CROSSCURRENCY/{mutation-proof.txt,census.txt,attribution.txt,mutate.py,census.py,attribute-sibling-red.py}",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: commit 17fe84ae on refs/heads/lane/price-crosscurrency (baseline e34977ac, feature/restaurant-modules UNMOVED, never pushed) · utils/cross-currency.js · test/price-crosscurrency.test.js 30/30 · lanes/L-PRICE-CROSSCURRENCY/{mutation-proof.txt,census.txt,attribution.txt,mutate.py,census.py,attribute-sibling-red.py}"
+    },
+    "L-PRICE-NULL-ZERO": {
+      "admitted": false,
+      "evidence": "lanes/L-PRICE-NULL-ZERO/before-after.txt · lanes/L-PRICE-NULL-ZERO/mutation-proof.txt · lanes/L-PRICE-NULL-ZERO/lane-notes.md · test/price-absence.test.js · commit a48fb78 on feature/restaurant-modules, not pushed",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-PRICE-NULL-ZERO/before-after.txt · lanes/L-PRICE-NULL-ZERO/mutation-proof.txt · lanes/L-PRICE-NULL-ZERO/lane-notes.md · test/price-absence.test.js · commit a48fb78 on feature/restaurant-modules, not pushed"
+    },
+    "L-PRICE-REVIEW": {
+      "admitted": true,
+      "evidence": "docs/plan/reviews/L-PRICE-REVIEW.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-PRICE-SHADOW-GUARD": {
+      "admitted": false,
+      "evidence": "lanes/L-PRICE-SHADOW-GUARD/ (state-A..E.txt, plant-proof.sh) + test/price-gate-shadow.test.js",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-PRICE-SHADOW-GUARD/ (state-A..E.txt, plant-proof.sh) + test/price-gate-shadow.test.js"
+    },
+    "L-PRINT-HOST": {
+      "admitted": false,
+      "evidence": "lane/print-host @ 6e6acd0 · artifacts/journeys/admin-print-host/ (5 PDFs, read) · artifacts/journeys/admin-print-host.playwright.json",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lane/print-host @ 6e6acd0 · artifacts/journeys/admin-print-host/ (5 PDFs, read) · artifacts/journeys/admin-print-host.playwright.json"
+    },
+    "L-PROVENANCE-EXCLUDES-LANE-EVIDENCE": {
+      "admitted": true,
+      "evidence": "lanes/L-PROVENANCE-EXCLUDES-LANE-EVIDENCE/run.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-PUSH-TOKEN-IN-PATH": {
+      "admitted": false,
+      "evidence": "lanes/L-PUSH-TOKEN-IN-PATH/mutation-log.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-PUSH-TOKEN-IN-PATH/mutation-log.md"
+    },
+    "L-RECEIPT-DISCOUNT-ROW-DROPPED": {
+      "admitted": true,
+      "evidence": "lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED/mutation-log.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-RECEIPT-JOURNEY-AT-DE": {
+      "admitted": true,
+      "evidence": "lanes/L-RECEIPT-JOURNEY-AT-DE/mutation-log.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-RECEIPT-PAYER-LINE-LOCATE": {
+      "admitted": true,
+      "evidence": "lanes/L-RECEIPT-PAYER-LINE-LOCATE/finding.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-REPLAY-PINS-CLOSE": {
+      "admitted": true,
+      "evidence": "lanes/L-REPLAY-PINS-CLOSE/mutation-log.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-REPLAY-PINS-RECHECK": {
+      "admitted": true,
+      "evidence": "lanes/L-REPLAY-PINS-RECHECK/census.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-RESERVATION-LIMITER-MOVE": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/OkamAPI-reslimiter/lanes/L-RESERVATION-LIMITER-MOVE/evidence.md (commit d9189fbd, branch lane/reservation-limiter-move, local)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: /Users/svendaneel/okam/OkamAPI-reslimiter/lanes/L-RESERVATION-LIMITER-MOVE/evidence.md (commit d9189fbd, branch lane/reservation-limiter-move, local)"
+    },
+    "L-REVIEW-RESIDUALS": {
+      "admitted": false,
+      "evidence": "OkamAPI-modules lane/review-residuals-provider @ bd765c7d (worktree ../wt-resid-provider, off lane/growth-health-honest c11e78a6) and lane/review-residuals-rezone @ 15a1d0b7 (worktree ../wt-resid-rezone, off lane/wf-export-duplicate 3a4442a7); trx committed at artifacts/tests/3bdef5c6-fast-tier.trx and artifacts/tests/4a9cbb9c-fast-tier.trx; per-guard detail at ../wt-resid-provider/.lane/L-REVIEW-RESIDUALS-provider.md and ../wt-resid-rezone/.lane/L-REVIEW-RESIDUALS-rezone.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI-modules lane/review-residuals-provider @ bd765c7d (worktree ../wt-resid-provider, off lane/growth-health-honest c11e78a6) and lane/review-residuals-rezone @ 15a1d0b7 (worktree ../wt-resid-rezone, off lane/wf-export-duplicate 3a4442a7); trx committed at artifacts/tests/3bdef5c6-fast-tier.trx and artifacts/tests/4a9cbb9c-fast-tier.trx; per-guard detail at ../wt-resid-provider/.lane/L-REVIEW-RESIDUALS-provider.md and ../wt-resid-rezone/.lane/L-REVIEW-RESIDUALS-rezone.md"
+    },
+    "L-ROLLBACK-TRACKED-SWEEP": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/wt-rbtracked/lanes/L-ROLLBACK-TRACKED-SWEEP/evidence.md",
+      "state": "built-unverified",
+      "why": "exit: “a sweep names every site where a guard throws after mutating a tracked entity, each site either stages the write after the decision or is pinned as safe, shown by a test that reds when a throw is moved back after a mutation” does not name /Users/svendaneel/okam/wt-rbtracked/lanes/L-ROLLBACK-TRACKED-SWEEP/evidence.md"
+    },
+    "L-ROUTE-GUARD-GAPS": {
+      "admitted": false,
+      "evidence": "lanes/L-ROUTE-GUARD-GAPS/mutation-log.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-ROUTE-GUARD-GAPS/mutation-log.md"
+    },
+    "L-ROW-FIT-GOODS-GROUPS": {
+      "admitted": true,
+      "evidence": "lanes/L-ROW-FIT-GOODS-GROUPS/mutation-log.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-SHARED-DIRT-CENSUS": {
+      "admitted": true,
+      "evidence": "lanes/L-SHARED-DIRT-CENSUS/dirt.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-STATUTE-EVIDENCE-WORLD": {
+      "admitted": false,
+      "evidence": "worktree /Users/svendaneel/okam/web-statute-world @ 2ee3fd7 (branch lane/statute-evidence-world, off lane/statute-honesty f01886a, not pushed); artifacts/journeys/statute-honesty/01-personalliste-with-coverage-caveat.pdf; lanes/L-STATUTE-EVIDENCE-WORLD/{EVIDENCE.md,mutation-log.txt}",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: worktree /Users/svendaneel/okam/web-statute-world @ 2ee3fd7 (branch lane/statute-evidence-world, off lane/statute-honesty f01886a, not pushed); artifacts/journeys/statute-honesty/01-personalliste-with-coverage-caveat.pdf; lanes/L-STATUTE-EVIDENCE-WORLD/{EVIDENCE.md,mutation-log.txt}"
+    },
+    "L-STATUTE-HONESTY": {
+      "admitted": false,
+      "evidence": "Web-modules lane/statute-honesty @ f01886a (worktree ../web-statute) + OkamAPI-modules lane/statute-honesty @ 485959ab (worktree ../OkamAPI-statute); artifacts/journeys/statute-honesty/ incl. the A4 portrait PDF; neither pushed",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: Web-modules lane/statute-honesty @ f01886a (worktree ../web-statute) + OkamAPI-modules lane/statute-honesty @ 485959ab (worktree ../OkamAPI-statute); artifacts/journeys/statute-honesty/ incl. the A4 portrait PDF; neither pushed"
+    },
+    "L-TELEMETRY-INITIALIZER-FLOOR": {
+      "admitted": false,
+      "evidence": "lanes/L-TELEMETRY-INITIALIZER-FLOOR/mutation-log.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-TELEMETRY-INITIALIZER-FLOOR/mutation-log.md"
+    },
+    "L-TESTS-THAT-WRITE-ARTIFACTS": {
+      "admitted": true,
+      "evidence": "lanes/L-TESTS-THAT-WRITE-ARTIFACTS/census.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-TRAIN-DISCLOSURE": {
+      "admitted": false,
+      "evidence": "OkamAPI-modules 06b8b582 (lane/train-disclosure) + Web-modules 2d3488c; artifacts/tests/L-TRAIN-DISCLOSURE/after.trx",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI-modules 06b8b582 (lane/train-disclosure) + Web-modules 2d3488c; artifacts/tests/L-TRAIN-DISCLOSURE/after.trx"
+    },
+    "L-TRAIN-EVID-LAND": {
+      "admitted": false,
+      "evidence": "OkamAPI-modules/artifacts/tests/f8b3a30f2ecfaf00beab1e903dd68193fbc8eca2/RUN.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI-modules/artifacts/tests/f8b3a30f2ecfaf00beab1e903dd68193fbc8eca2/RUN.md"
+    },
+    "L-TRAIN-EVIDENCE-NAMES-COURSE": {
+      "admitted": false,
+      "evidence": "OkamAPI wt-trn-names lane/trn-evidence-names fcb5181a + b560bc3a (artifacts/tests/L-TRAIN-EVIDENCE-NAMES-COURSE/RUN.md, base.trx, after.trx) . Web-modules cff41c8 . artifacts/journeys/training-course-to-evidence.playwright.json (19 steps, passed)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI wt-trn-names lane/trn-evidence-names fcb5181a + b560bc3a (artifacts/tests/L-TRAIN-EVIDENCE-NAMES-COURSE/RUN.md, base.trx, after.trx) . Web-modules cff41c8 . artifacts/journeys/training-course-to-evidence.playwright.json (19 steps, passed)"
+    },
+    "L-TRAIN-EVIDENCE-PACK-UI": {
+      "admitted": false,
+      "evidence": "commit af0a4a13 on refs/heads/lane/train-evidence-pack-ui; journey test/e2e/journeys/training-evidence-document.spec.js 18/18 green; full detail incl. what is NOT committed (artifacts/ is gitignored: journey JSON + 2 screenshots) in lanes/L-TRAIN-EVIDENCE-PACK-UI/NOTES.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: commit af0a4a13 on refs/heads/lane/train-evidence-pack-ui; journey test/e2e/journeys/training-evidence-document.spec.js 18/18 green; full detail incl. what is NOT committed (artifacts/ is gitignored: journey JSON + 2 screenshots) in lanes/L-TRAIN-EVIDENCE-PACK-UI/NOTES.md"
+    },
+    "L-TRAIN-IDEMPOTENCY-REFUSAL": {
+      "admitted": false,
+      "evidence": "lanes/L-TRAIN-IDEMPOTENCY-REFUSAL/mutation-log.md",
+      "state": "built-unverified",
+      "why": "exit: “a refused training command replays its refusal on a same-key retry rather than answering idempotency-in-progress, pinned per backstop by a test that reds if the recording is removed” does not name lanes/L-TRAIN-IDEMPOTENCY-REFUSAL/mutation-log.md"
+    },
+    "L-TRAIN-PUBLISH-UNCLICKABLE": {
+      "admitted": false,
+      "evidence": "commit 28548f96 on refs/heads/lane/train-publish-unclickable (base e34977ac, NOT pushed) - lanes/L-TRAIN-PUBLISH-UNCLICKABLE/{probe-before.txt,probe-after.txt,mutation-proof.txt,probe.spec.js,shot-1280-after-publish.png}",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: commit 28548f96 on refs/heads/lane/train-publish-unclickable (base e34977ac, NOT pushed) - lanes/L-TRAIN-PUBLISH-UNCLICKABLE/{probe-before.txt,probe-after.txt,mutation-proof.txt,probe.spec.js,shot-1280-after-publish.png}"
+    },
+    "L-TRAIN-READONLY-VISIBLE": {
+      "admitted": false,
+      "evidence": "lane/train-readonly-visible @ abef9aac · lanes/L-TRAIN-READONLY-VISIBLE/shots/{before,after}-setup-row.png · mutation-proof.txt",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lane/train-readonly-visible @ abef9aac · lanes/L-TRAIN-READONLY-VISIBLE/shots/{before,after}-setup-row.png · mutation-proof.txt"
+    },
+    "L-TRAIN-REVIEW": {
+      "admitted": true,
+      "evidence": "docs/plan/reviews/L-TRAIN-REVIEW.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-TRAIN-W3-SCHEMA": {
+      "admitted": false,
+      "evidence": "artifacts/tests/1da15fb113ae72a8f71ed68ef758bb1a8a30d69b/RUN.md (SQL tier 557/557, fast 4313/0/9) + OkamAPI-modules 3993f797 in detached worktree /Users/svendaneel/okam/wt-trainw3, NOT pushed. fact:train.checklists probes ../OkamAPI-modules and will read present only AFTER this lane is merged; the entities exist only in my worktree.",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: artifacts/tests/1da15fb113ae72a8f71ed68ef758bb1a8a30d69b/RUN.md (SQL tier 557/557, fast 4313/0/9) + OkamAPI-modules 3993f797 in detached worktree /Users/svendaneel/okam/wt-trainw3, NOT pushed. fact:train.checklists probes ../OkamAPI-modules and will read present only AFTER this lane is merged; the entities exist only in my worktree."
+    },
+    "L-TRANSLATION-STALE-SWEEP": {
+      "admitted": true,
+      "evidence": "lanes/L-TRANSLATION-STALE-SWEEP/stale.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-TRANSLATIONS-COLLISION": {
+      "admitted": true,
+      "evidence": "lanes/L-TRANSLATIONS-COLLISION/keys.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-UTLKVIT-REPLAY-SOURCE": {
+      "admitted": false,
+      "evidence": "commit 3a509b68 on lane/utlkvit-replay-source (worktree /Users/svendaneel/okam/wt-utlkvitreplay); base 1a03bc6c fast tier 4366 passed / 0 failed / 12 skipped / 4378; after 3a509b68 fast tier 4368 / 0 / 12 / 4380",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: commit 3a509b68 on lane/utlkvit-replay-source (worktree /Users/svendaneel/okam/wt-utlkvitreplay); base 1a03bc6c fast tier 4366 passed / 0 failed / 12 skipped / 4378; after 3a509b68 fast tier 4368 / 0 / 12 / 4380"
+    },
+    "L-UTLKVIT-REPRINT-KIND": {
+      "admitted": false,
+      "evidence": "worktree /Users/svendaneel/okam/wt-utlkvit-reprint, branch lane/utlkvit-reprint-kind @ 88b7307f (local, never pushed, merge base fb522bdd = sale-row 1854f594 + replay-source 3a509b68) - fast tier base fb522bdd 4375 passed / 0 failed / 12 skipped / 4387, after 88b7307f 4379 / 0 / 12 / 4391, filter \"Database!=SqlServer\", separate clean detached checkouts, zero containers started - mutation 11 green -> 8 red -> 11 green - summaries and the red set in lanes/L-UTLKVIT-REPRINT-KIND/",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: worktree /Users/svendaneel/okam/wt-utlkvit-reprint, branch lane/utlkvit-reprint-kind @ 88b7307f (local, never pushed, merge base fb522bdd = sale-row 1854f594 + replay-source 3a509b68) - fast tier base fb522bdd 4375 passed / 0 failed / 12 skipped / 4387, after 88b7307f 4379 / 0 / 12 / 4391, filter \"Database!=SqlServer\", separate clean detached checkouts, zero containers started - mutation 11 green -> 8 red -> 11 green - summaries and the red set in lanes/L-UTLKVIT-REPRINT-KIND/"
+    },
+    "L-UTLKVIT-REVIEW": {
+      "admitted": true,
+      "evidence": "docs/plan/reviews/L-UTLKVIT-REVIEW.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-UTLKVIT-SALE-ROW": {
+      "admitted": false,
+      "evidence": "worktree /Users/svendaneel/okam/wt-utlkvit-salerow, branch lane/utlkvit-sale-row @ 1854f594 (local, not pushed, off lane/meals-utlkvit 1a03bc6c) - WebApi.Tests/Kassa/CreditSaleDocumentRoutingTests.cs (7 pins) - base 4366/0/12 at 1a03bc6c clean, after 4373/0/12, filter \"Database!=SqlServer\", no container started",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: worktree /Users/svendaneel/okam/wt-utlkvit-salerow, branch lane/utlkvit-sale-row @ 1854f594 (local, not pushed, off lane/meals-utlkvit 1a03bc6c) - WebApi.Tests/Kassa/CreditSaleDocumentRoutingTests.cs (7 pins) - base 4366/0/12 at 1a03bc6c clean, after 4373/0/12, filter \"Database!=SqlServer\", no container started"
+    },
+    "L-VAT-KEYS-MONOLINGUAL": {
+      "admitted": true,
+      "evidence": "lanes/L-VAT-KEYS-MONOLINGUAL/keys.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-VIOLATION-EXACT-LAND": {
+      "admitted": false,
+      "evidence": "lanes/L-VIOLATION-EXACT-LAND/merge-receipt.md (OkamAPI, at feature/restaurant-modules 8e2b57de)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-VIOLATION-EXACT-LAND/merge-receipt.md (OkamAPI, at feature/restaurant-modules 8e2b57de)"
+    },
+    "L-VIPPS-REDACT-404": {
+      "admitted": false,
+      "evidence": "OkamAPI worktree /Users/svendaneel/okam/wt-vippsredact, branch lane/vipps-redact-404, commit cb18cab4, base feature/restaurant-modules 3579bbbc",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI worktree /Users/svendaneel/okam/wt-vippsredact, branch lane/vipps-redact-404, commit cb18cab4, base feature/restaurant-modules 3579bbbc"
+    },
+    "L-VUE-JEST-UPGRADE-MEASURED": {
+      "admitted": true,
+      "evidence": "/Users/svendaneel/okam/Web-modules/lanes/L-VUE-JEST-UPGRADE-MEASURED/finding.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-VUE3-SHAPE-GUARD": {
+      "admitted": false,
+      "evidence": "lanes/L-VUE3-SHAPE-GUARD/vue3-shape-guard.md",
+      "state": "built-unverified",
+      "why": "exit: “a check reds on a planted `unmounted()` hook and on a planted `emits:` block, and passes on the tree once the two known instances are repaired” does not name lanes/L-VUE3-SHAPE-GUARD/vue3-shape-guard.md"
+    },
+    "L-WF-ACKNOWLEDGE-RECEIPT-VISIBLE": {
+      "admitted": false,
+      "evidence": "lanes/L-WF-ACKNOWLEDGE-RECEIPT-VISIBLE/receipt-visible.md",
+      "state": "built-unverified",
+      "why": "exit: “the workforce week-run journey asserts the receipt is visible after Bekreft, replacing the assertion that currently pins its absence, and reds when the receipt render is removed” does not name lanes/L-WF-ACKNOWLEDGE-RECEIPT-VISIBLE/receipt-visible.md"
+    },
+    "L-WF-ADJUST-ADDRESS": {
+      "admitted": false,
+      "evidence": "OkamAPI-wfadjust f3887f9a + web-wf-adjust e9ba89e",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI-wfadjust f3887f9a + web-wf-adjust e9ba89e"
+    },
+    "L-WF-BLIND-BIND-NAME": {
+      "admitted": false,
+      "evidence": "backend OkamAPI lane/wf-blind-bind-name @ 3b593fef, worktree ~/okam/wt-wfblindbind, based on feature/restaurant-modules @ 3579bbbc, NOT pushed - container-free tier 4392/0/12 vs a 4369/0/12 baseline measured in the same worktree at a clean 3579bbbc, delta +23 = the new tests, 0 regressions - WebApi.Tests/Workforce/WorkforceOperatorLinkReviewTests.cs (16), WebApi.Tests/Wire/WorkforceOperatorLinkWireTests.cs (5), 2 contract fixtures | frontend Web lane/fe-wf-blind-bind-name @ c67df92, worktree ~/okam/web-blindbind, based on lane/fe-wf-oplink @ 3e811b2 (the only branch carrying the operator surface), NOT pushed - Jest 2278/0 across 99 suites vs 2268/0 on the parent, +10 | detail: lanes/L-WF-BLIND-BIND-NAME/detail.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: backend OkamAPI lane/wf-blind-bind-name @ 3b593fef, worktree ~/okam/wt-wfblindbind, based on feature/restaurant-modules @ 3579bbbc, NOT pushed - container-free tier 4392/0/12 vs a 4369/0/12 baseline measured in the same worktree at a clean 3579bbbc, delta +23 = the new tests, 0 regressions - WebApi.Tests/Workforce/WorkforceOperatorLinkReviewTests.cs (16), WebApi.Tests/Wire/WorkforceOperatorLinkWireTests.cs (5), 2 contract fixtures | frontend Web lane/fe-wf-blind-bind-name @ c67df92, worktree ~/okam/web-blindbind, based on lane/fe-wf-oplink @ 3e811b2 (the only branch carrying the operator surface), NOT pushed - Jest 2278/0 across 99 suites vs 2268/0 on the parent, +10 | detail: lanes/L-WF-BLIND-BIND-NAME/detail.md"
+    },
+    "L-WF-BOOTSTRAP": {
+      "admitted": false,
+      "evidence": "OkamAPI lane/wf-bootstrap @ 9d1719df (worktree ../wt-wfboot, off feature/restaurant-modules 3579bbbc); fast tier 4374 passed / 0 failed / 12 skipped vs BASE 4369 / 0 / 12 from a clean checkout of 3579bbbc, `dotnet test --filter \"Database!=SqlServer\"`, assembly mtime 11:17:43 > newest source 11:13:16. Web-modules lane/fe-wf-bootstrap @ 9264904 (worktree ../web-wfboot, off 89c2c1f); jest 109 suites / 2469 passed / 1 failed (journey-artifact-store asserts the checkout is named Web-modules; this is a worktree).",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI lane/wf-bootstrap @ 9d1719df (worktree ../wt-wfboot, off feature/restaurant-modules 3579bbbc); fast tier 4374 passed / 0 failed / 12 skipped vs BASE 4369 / 0 / 12 from a clean checkout of 3579bbbc, `dotnet test --filter \"Database!=SqlServer\"`, assembly mtime 11:17:43 > newest source 11:13:16. Web-modules lane/fe-wf-bootstrap @ 9264904 (worktree ../web-wfboot, off 89c2c1f); jest 109 suites / 2469 passed / 1 failed (journey-artifact-store asserts the checkout is named Web-modules; this is a worktree)."
+    },
+    "L-WF-CLOCK-WIRE": {
+      "admitted": false,
+      "evidence": "OkamAPI lane/wf-clock-wire f14c91ec (base feature/restaurant-modules 3579bbbc); container-free tier 4377/0/12 vs base 4369/0/12",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI lane/wf-clock-wire f14c91ec (base feature/restaurant-modules 3579bbbc); container-free tier 4377/0/12 vs base 4369/0/12"
+    },
+    "L-WF-CONTACT-IMPORTED": {
+      "admitted": false,
+      "evidence": "backend OkamAPI-wfcontact lane/wf-contact-imported @ 833fd2f1 (off feature/restaurant-modules 3579bbbc, local, not pushed), container-free tier 4376 passed / 0 failed / 12 skipped, post-commit wire+workforce 859/0/5 | frontend web-wf-contact lane/fe-wf-contact-imported @ 61b053b (off feature/restaurant-modules a1a1ec8, local, not pushed), jest 2493 passed / 1 pre-existing environmental failure / 111 suites | lanes/L-WF-CONTACT-IMPORTED/DETAIL.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: backend OkamAPI-wfcontact lane/wf-contact-imported @ 833fd2f1 (off feature/restaurant-modules 3579bbbc, local, not pushed), container-free tier 4376 passed / 0 failed / 12 skipped, post-commit wire+workforce 859/0/5 | frontend web-wf-contact lane/fe-wf-contact-imported @ 61b053b (off feature/restaurant-modules a1a1ec8, local, not pushed), jest 2493 passed / 1 pre-existing environmental failure / 111 suites | lanes/L-WF-CONTACT-IMPORTED/DETAIL.md"
+    },
+    "L-WF-CONTACT-PINS": {
+      "admitted": true,
+      "evidence": "lanes/L-WF-CONTACT-PINS/mutation-log.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-WF-CORRECTION-PATH": {
+      "admitted": false,
+      "evidence": "OkamAPI lane/wf-correction-path @ 305dbe79 off feature/restaurant-modules a273e013; Web lane/fe-wf-correction-path @ 6a641bc7 off a1a1ec8; Controllers/WorkforcePersonnelListController.cs; WebApi.Tests/Wire/WorkforceWireTests.cs; WebApi.Tests/Workforce/PersonnelListCorrectionTests.cs; backend container-free 4399/0/12; frontend jest 2491/1; lanes/L-WF-CORRECTION-PATH/DETAIL.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI lane/wf-correction-path @ 305dbe79 off feature/restaurant-modules a273e013; Web lane/fe-wf-correction-path @ 6a641bc7 off a1a1ec8; Controllers/WorkforcePersonnelListController.cs; WebApi.Tests/Wire/WorkforceWireTests.cs; WebApi.Tests/Workforce/PersonnelListCorrectionTests.cs; backend container-free 4399/0/12; frontend jest 2491/1; lanes/L-WF-CORRECTION-PATH/DETAIL.md"
+    },
+    "L-WF-CORRECTION-PINS": {
+      "admitted": true,
+      "evidence": "lanes/L-WF-CORRECTION-PINS/mutation-log.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-WF-DEMO-PRESENCE": {
+      "admitted": false,
+      "evidence": "OkamAPI worktree /Users/svendaneel/okam/wt-wfdemopres, branch lane/wf-demo-presence @ 8a9080c8 (local, not pushed; off feature/restaurant-modules de1e5c5e) · six full `Scripts/demo/demo-up.sh` runs from an EMPTY database against my own container, final green run captured at /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/final-run.txt · step 13b prints `2026-07-20: Jonas Lie 08:02-16:04, Nora Berg 13:58-20:04` / `2026-07-21: Jonas Lie 07:58-16:12, Nora Berg 16:01-00:19`",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI worktree /Users/svendaneel/okam/wt-wfdemopres, branch lane/wf-demo-presence @ 8a9080c8 (local, not pushed; off feature/restaurant-modules de1e5c5e) · six full `Scripts/demo/demo-up.sh` runs from an EMPTY database against my own container, final green run captured at /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/final-run.txt · step 13b prints `2026-07-20: Jonas Lie 08:02-16:04, Nora Berg 13:58-20:04` / `2026-07-21: Jonas Lie 07:58-16:12, Nora Berg 16:01-00:19`"
+    },
+    "L-WF-DIGEST-TAUTOLOGY": {
+      "admitted": false,
+      "evidence": "OkamAPI-modules lane/wf-digest-tautology @ 4b911917 (worktree ~/okam/wt-wfdigest, cut from lane/wf-w5-timesheet 9e82b286; local, not pushed) · WorkforceEndToEndJourneyTests + WorkforceTimesheetTests 33 passed / 0 failed / 1 skipped · lanes/L-WF-DIGEST-TAUTOLOGY/{evidence.md,fix.diff,commit.txt}",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI-modules lane/wf-digest-tautology @ 4b911917 (worktree ~/okam/wt-wfdigest, cut from lane/wf-w5-timesheet 9e82b286; local, not pushed) · WorkforceEndToEndJourneyTests + WorkforceTimesheetTests 33 passed / 0 failed / 1 skipped · lanes/L-WF-DIGEST-TAUTOLOGY/{evidence.md,fix.diff,commit.txt}"
+    },
+    "L-WF-EXCHANGE-AWARD-UNGATED": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/Web-modules/lanes/L-WF-EXCHANGE-AWARD-UNGATED/EVIDENCE.md",
+      "state": "built-unverified",
+      "why": "exit: “the award write refuses when the exchange stage flag is off, pinned by a test that reds if the gate is removed” does not name /Users/svendaneel/okam/Web-modules/lanes/L-WF-EXCHANGE-AWARD-UNGATED/EVIDENCE.md"
+    },
+    "L-WF-EXCHANGE-MOVE": {
+      "admitted": false,
+      "evidence": "OkamAPI-modules a5ff40f2 on lane/wf-exchange-move (worktree ~/okam/wt-wfexmove) · fact:wf.journeys now 13 (WebApi.Tests/Workforce/WORKFORCE-JOURNEY-MANIFEST.md, WFJ-11 VERIFIED-GREEN) · Workforce fast suite 625/2 skipped/0 failed",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI-modules a5ff40f2 on lane/wf-exchange-move (worktree ~/okam/wt-wfexmove) · fact:wf.journeys now 13 (WebApi.Tests/Workforce/WORKFORCE-JOURNEY-MANIFEST.md, WFJ-11 VERIFIED-GREEN) · Workforce fast suite 625/2 skipped/0 failed"
+    },
+    "L-WF-EXPORT-DUPLICATE": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/wt-wfexpdup/lanes/L-WF-EXPORT-DUPLICATE/{evidence.md,injection-probe-red.txt,sql-tier.txt,export-duplicate-race.trx,fast-tier.trx,sql-tier-workforce.trx} - lane/wf-export-duplicate @ 3a4442a7, local only",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: /Users/svendaneel/okam/wt-wfexpdup/lanes/L-WF-EXPORT-DUPLICATE/{evidence.md,injection-probe-red.txt,sql-tier.txt,export-duplicate-race.trx,fast-tier.trx,sql-tier-workforce.trx} - lane/wf-export-duplicate @ 3a4442a7, local only"
+    },
+    "L-WF-FAILURES-SURFACE": {
+      "admitted": false,
+      "evidence": "lanes/L-WF-FAILURES-SURFACE/evidence.md",
+      "state": "built-unverified",
+      "why": "exit: “a manager can see which publications reached nobody without curl, with waiting distinguishable from broken on screen, shown by a browser journey that reds if the surface stops naming the withheld state” does not name lanes/L-WF-FAILURES-SURFACE/evidence.md"
+    },
+    "L-WF-FLAGS-UI": {
+      "admitted": true,
+      "evidence": "artifacts/journeys/workforce-flag-lever.playwright.json",
+      "state": "verified",
+      "why": ""
+    },
+    "L-WF-IDEMPOTENCY-REFUSAL": {
+      "admitted": false,
+      "evidence": "backend OkamAPI lane/wf-idempotency-refusal @ a1d57208, worktree ~/okam/OkamAPI-wfidemref, based on feature/restaurant-modules @ 9888178f, NOT pushed - container-free tier (dotnet test --filter \"Database!=SqlServer\") 4402/0/12 vs a 4394/0/12 baseline measured in the same worktree at a clean 9888178f, delta +8 = WebApi.Tests/Workforce/WorkforceIdempotencyTests.cs (6) and WebApi.Tests/Workforce/WorkforceShiftExchangeTests.cs (2)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: backend OkamAPI lane/wf-idempotency-refusal @ a1d57208, worktree ~/okam/OkamAPI-wfidemref, based on feature/restaurant-modules @ 9888178f, NOT pushed - container-free tier (dotnet test --filter \"Database!=SqlServer\") 4402/0/12 vs a 4394/0/12 baseline measured in the same worktree at a clean 9888178f, delta +8 = WebApi.Tests/Workforce/WorkforceIdempotencyTests.cs (6) and WebApi.Tests/Workforce/WorkforceShiftExchangeTests.cs (2)"
+    },
+    "L-WF-IDEMPOTENCY-REFUSAL-REST": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/OkamAPI-wfrefusalrest @ 02684ecc (branch lane/wf-idempotency-refusal-rest, base a1d57208 = the sibling lane; 0 Workforce files drifted between 9888178f and the tip, so it merges clean)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: /Users/svendaneel/okam/OkamAPI-wfrefusalrest @ 02684ecc (branch lane/wf-idempotency-refusal-rest, base a1d57208 = the sibling lane; 0 Workforce files drifted between 9888178f and the tip, so it merges clean)"
+    },
+    "L-WF-INVITE-LIST-REVOKE": {
+      "admitted": false,
+      "evidence": "lanes/L-WF-INVITE-LIST-REVOKE/evidence.md · backend branch lane/wf-invite-list-revoke @ 68f2472c (forked from 8e2b57de, not pushed)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-WF-INVITE-LIST-REVOKE/evidence.md · backend branch lane/wf-invite-list-revoke @ 68f2472c (forked from 8e2b57de, not pushed)"
+    },
+    "L-WF-KODEOVERSIKT-UI": {
+      "admitted": false,
+      "evidence": "lanes/L-WF-KODEOVERSIKT-UI/{evidence.md,journey-green.json} on lane/wf-kodeoversikt-ui @ f4c355b (worktree /Users/svendaneel/okam/web-kodeui, 4 commits, nothing pushed) + test/e2e/journeys/workforce-kodeoversikt.spec.js",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-WF-KODEOVERSIKT-UI/{evidence.md,journey-green.json} on lane/wf-kodeoversikt-ui @ f4c355b (worktree /Users/svendaneel/okam/web-kodeui, 4 commits, nothing pushed) + test/e2e/journeys/workforce-kodeoversikt.spec.js"
+    },
+    "L-WF-LEVER-TITLE-NAMES-ITS-REACH": {
+      "admitted": false,
+      "evidence": "lanes/L-WF-LEVER-TITLE-NAMES-ITS-REACH/retitle-and-pin.md",
+      "state": "built-unverified",
+      "why": "exit: “the workforce module descriptor's title is derived-checkable against its own route-gate reach, pinned by a test that reds when either the title or the reach moves without the other” does not name lanes/L-WF-LEVER-TITLE-NAMES-ITS-REACH/retitle-and-pin.md"
+    },
+    "L-WF-LINK-DEADEND": {
+      "admitted": false,
+      "evidence": "backend OkamAPI lane/wf-link-deadend @ a3a526ae, worktree ~/okam/wt-wflinkdead, based on lane/wf-blind-bind-name @ 3b593fef, NOT pushed - container-free tier (--filter \"Database!=SqlServer\") 4397/0/12 vs the parent's recorded 4392/0/12, delta +5 = the new tests, 0 regressions - WebApi.Tests/Workforce/WorkforceOperatorLinkDeadEndTests.cs (3), WebApi.Tests/Wire/WorkforceOperatorLinkWireTests.cs (+2) | frontend Web lane/fe-wf-link-deadend @ bed932e, worktree ~/okam/web-linkdeadend, based on lane/fe-wf-blind-bind-name @ c67df92, NOT pushed - jest 99 suites/2296 vs a 2292 baseline I measured myself at c67df92 in a throwaway worktree, delta +4 | runs: lanes/L-WF-LINK-DEADEND/{backend-containerfree.txt,frontend-jest.txt,frontend-jest-baseline.txt} | detail: lanes/L-WF-LINK-DEADEND/detail.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: backend OkamAPI lane/wf-link-deadend @ a3a526ae, worktree ~/okam/wt-wflinkdead, based on lane/wf-blind-bind-name @ 3b593fef, NOT pushed - container-free tier (--filter \"Database!=SqlServer\") 4397/0/12 vs the parent's recorded 4392/0/12, delta +5 = the new tests, 0 regressions - WebApi.Tests/Workforce/WorkforceOperatorLinkDeadEndTests.cs (3), WebApi.Tests/Wire/WorkforceOperatorLinkWireTests.cs (+2) | frontend Web lane/fe-wf-link-deadend @ bed932e, worktree ~/okam/web-linkdeadend, based on lane/fe-wf-blind-bind-name @ c67df92, NOT pushed - jest 99 suites/2296 vs a 2292 baseline I measured myself at c67df92 in a throwaway worktree, delta +4 | runs: lanes/L-WF-LINK-DEADEND/{backend-containerfree.txt,frontend-jest.txt,frontend-jest-baseline.txt} | detail: lanes/L-WF-LINK-DEADEND/detail.md"
+    },
+    "L-WF-ONBOARD": {
+      "admitted": false,
+      "evidence": "commit de0811f6 on lane/wf-onboard-claim in OkamAPI-modules (parent 8e2b57de, ff) + lanes/L-WF-ONBOARD/evidence.txt with evidence/{invitation-contract-suite,join-block-happy-path,join-block-mutations}.txt and harness/",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: commit de0811f6 on lane/wf-onboard-claim in OkamAPI-modules (parent 8e2b57de, ff) + lanes/L-WF-ONBOARD/evidence.txt with evidence/{invitation-contract-suite,join-block-happy-path,join-block-mutations}.txt and harness/"
+    },
+    "L-WF-ONBOARD-DEMO-RUN": {
+      "admitted": false,
+      "evidence": "lanes/L-WF-ONBOARD-DEMO-RUN/evidence.md with evidence/{demo-run-1,demo-run-2,caller-binds}.txt + api.log, run from wt-L-WF-ONBOARD-DEMO-RUN @ de0811f6 against my own container okam-lwfodr-sql",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-WF-ONBOARD-DEMO-RUN/evidence.md with evidence/{demo-run-1,demo-run-2,caller-binds}.txt + api.log, run from wt-L-WF-ONBOARD-DEMO-RUN @ de0811f6 against my own container okam-lwfodr-sql"
+    },
+    "L-WF-OPLINK": {
+      "admitted": false,
+      "evidence": "artifacts/journeys/wf-operator-import-clock.playwright.json (11/11 steps passed, commit 3e811b2, 0 failed requests, 6 screenshots) in worktree ~/okam/web-wf-oplink, copied to lanes/L-WF-OPLINK/artifacts/journeys/ · branch lane/fe-wf-oplink, commit 3e811b2, not pushed · Jest 98 suites / 2282 tests, 5/5 browser journeys",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: artifacts/journeys/wf-operator-import-clock.playwright.json (11/11 steps passed, commit 3e811b2, 0 failed requests, 6 screenshots) in worktree ~/okam/web-wf-oplink, copied to lanes/L-WF-OPLINK/artifacts/journeys/ · branch lane/fe-wf-oplink, commit 3e811b2, not pushed · Jest 98 suites / 2282 tests, 5/5 browser journeys"
+    },
+    "L-WF-PIVOT-DEFECTS": {
+      "admitted": false,
+      "evidence": "lanes/L-WF-PIVOT-DEFECTS/{workforce-schedule-publish.live.playwright.json,live-run-after.txt,probe-fixed.txt,probe-mutant-defect1.txt,probe-mutant-defect2.txt,probe-restored.txt,shots-after/,shots-mutant/}",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-WF-PIVOT-DEFECTS/{workforce-schedule-publish.live.playwright.json,live-run-after.txt,probe-fixed.txt,probe-mutant-defect1.txt,probe-mutant-defect2.txt,probe-restored.txt,shots-after/,shots-mutant/}"
+    },
+    "L-WF-PUBHIST": {
+      "admitted": false,
+      "evidence": "lanes/L-WF-PUBHIST/evidence.md",
+      "state": "built-unverified",
+      "why": "exit: “either a surface consumes the publication-history method and binds the recipients endpoint, or both are deleted, with nothing left bound and uncalled” does not name lanes/L-WF-PUBHIST/evidence.md"
+    },
+    "L-WF-PUNCH-UI": {
+      "admitted": false,
+      "evidence": "lanes/L-WF-PUNCH-UI/evidence.md",
+      "state": "built-unverified",
+      "why": "exit: “a person clocks in from the browser and the same browser's personnel list shows the presence row for the venue's today, captured under artifacts/journeys/” does not name lanes/L-WF-PUNCH-UI/evidence.md"
+    },
+    "L-WF-PUSH-LAND": {
+      "admitted": true,
+      "evidence": "lanes/L-WF-PUSH-LAND/merge-receipt.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-WF-PUSH-SILENT": {
+      "admitted": false,
+      "evidence": "OkamAPI lane/wf-push-silent 991c21f6 (base lane/wf-push-notify f5305ced); WebApi.Tests/Workforce/WorkforceNotificationTransportTests.cs",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI lane/wf-push-silent 991c21f6 (base lane/wf-push-notify f5305ced); WebApi.Tests/Workforce/WorkforceNotificationTransportTests.cs"
+    },
+    "L-WF-PUSH-STILL-LIES": {
+      "admitted": false,
+      "evidence": "OkamAPI lane/wf-push-still-lies 100ae000 (base feature/restaurant-modules 569887a5, unmoved); WebApi.Tests/Workforce/WorkforceNotificationTransportTests.cs, WebApi.Tests/Workforce/ScheduleAuditLedgerTests.cs, WebApi.Tests/Wire/WorkforceWireTests.cs",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI lane/wf-push-still-lies 100ae000 (base feature/restaurant-modules 569887a5, unmoved); WebApi.Tests/Workforce/WorkforceNotificationTransportTests.cs, WebApi.Tests/Workforce/ScheduleAuditLedgerTests.cs, WebApi.Tests/Wire/WorkforceWireTests.cs"
+    },
+    "L-WF-REVIEW": {
+      "admitted": true,
+      "evidence": "docs/plan/reviews/L-WF-REVIEW.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-WF-ROLES-UI": {
+      "admitted": false,
+      "evidence": "commit ff21e48 on refs/heads/lane/wf-roles-ui; journey artifacts/journeys/workforce-role-catalogue.playwright.json (passed, 10 steps, 4 shots); full detail in lanes/L-WF-ROLES-UI/NOTES.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: commit ff21e48 on refs/heads/lane/wf-roles-ui; journey artifacts/journeys/workforce-role-catalogue.playwright.json (passed, 10 steps, 4 shots); full detail in lanes/L-WF-ROLES-UI/NOTES.md"
+    },
+    "L-WF-TIMEOFF-DECIDE-GATE": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/Web-modules/lanes/L-WF-TIMEOFF-DECIDE-GATE/EVIDENCE.md",
+      "state": "built-unverified",
+      "why": "exit: “an approve on a time-off request refuses when workforce.selfservice is off while the reject stays reachable, pinned by a test that reds if the gate is removed, and the flag census comment quotes only what the spec says” does not name /Users/svendaneel/okam/Web-modules/lanes/L-WF-TIMEOFF-DECIDE-GATE/EVIDENCE.md"
+    },
+    "L-WF-TIMESHEET-RACE": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/wt-wftsrace/lanes/L-WF-TIMESHEET-RACE/{evidence.md,mutations.txt,mutate.py} - branch lane/wf-timesheet-race @ bc9c7e96, worktree wt-wftsrace, not pushed",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: /Users/svendaneel/okam/wt-wftsrace/lanes/L-WF-TIMESHEET-RACE/{evidence.md,mutations.txt,mutate.py} - branch lane/wf-timesheet-race @ bc9c7e96, worktree wt-wftsrace, not pushed"
+    },
+    "L-WF-TIMESHEET-UI": {
+      "admitted": false,
+      "evidence": "commit 618efc88 on refs/heads/lane/wf-timesheet-ui; journey artifacts/journeys/workforce-timesheet-export.playwright.json 15/15 steps + 6 screenshots (COMMITTED, force-added); full detail in lanes/L-WF-TIMESHEET-UI/NOTES.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: commit 618efc88 on refs/heads/lane/wf-timesheet-ui; journey artifacts/journeys/workforce-timesheet-export.playwright.json 15/15 steps + 6 screenshots (COMMITTED, force-added); full detail in lanes/L-WF-TIMESHEET-UI/NOTES.md"
+    },
+    "L-WF-TIMESHEET-WIRE": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/wt-wftswire/lanes/L-WF-TIMESHEET-WIRE/evidence.md",
+      "state": "built-unverified",
+      "why": "exit: “the timesheet endpoints answer over the real pipeline, pinned by wire tests that red if routing, binding or DI is broken” does not name /Users/svendaneel/okam/wt-wftswire/lanes/L-WF-TIMESHEET-WIRE/evidence.md"
+    },
+    "L-WF-VIOLATION-EXACT": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/wt-wfviolexact @ cdb4c66c (lane/wf-violation-exact, parent 569887a5, unpushed)",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: /Users/svendaneel/okam/wt-wfviolexact @ cdb4c66c (lane/wf-violation-exact, parent 569887a5, unpushed)"
+    },
+    "L-WF-W5-REVIEW": {
+      "admitted": true,
+      "evidence": "docs/plan/reviews/L-WF-W5-REVIEW.md",
+      "state": "verified",
+      "why": ""
+    },
+    "L-WF-W5-TIMESHEET": {
+      "admitted": false,
+      "evidence": "OkamAPI-modules lane/wf-w5-timesheet @ 9e82b286 (worktree ~/okam/wt-wfw5, cut from lane/margin-waste afcfddbc — the real chain tip, three migrations ahead of feature/restaurant-modules; local, not pushed) · fast tier 4362 passed / 0 failed / 7 skipped · SQL tier 26/26 (WorkforceTimesheetImmutabilitySqlServerTests + WorkforceW4MigrationLineageTests + RestaurantModulesMigrationRoundTripTests) · WORKFORCE-JOURNEY-MANIFEST.md on this branch reads 14 journeys VERIFIED-GREEN / 1 BLOCKED-ON-GAP · lanes/L-WF-W5-TIMESHEET/{evidence.md,mutations.md,fast-tier.txt,sql-tier.txt}",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: OkamAPI-modules lane/wf-w5-timesheet @ 9e82b286 (worktree ~/okam/wt-wfw5, cut from lane/margin-waste afcfddbc — the real chain tip, three migrations ahead of feature/restaurant-modules; local, not pushed) · fast tier 4362 passed / 0 failed / 7 skipped · SQL tier 26/26 (WorkforceTimesheetImmutabilitySqlServerTests + WorkforceW4MigrationLineageTests + RestaurantModulesMigrationRoundTripTests) · WORKFORCE-JOURNEY-MANIFEST.md on this branch reads 14 journeys VERIFIED-GREEN / 1 BLOCKED-ON-GAP · lanes/L-WF-W5-TIMESHEET/{evidence.md,mutations.md,fast-tier.txt,sql-tier.txt}"
+    },
+    "L-WF-WITHHELD-BOUND": {
+      "admitted": false,
+      "evidence": "/Users/svendaneel/okam/wt-wfwithheld @ 74405b34 (lane/wf-withheld-bound off feature/restaurant-modules 569887a5); pin WebApi.Tests/Workforce/WorkforceNotificationBacklogBoundTests.cs; four-state record lanes/L-WF-WITHHELD-BOUND/mutation_check.py + trx/",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: /Users/svendaneel/okam/wt-wfwithheld @ 74405b34 (lane/wf-withheld-bound off feature/restaurant-modules 569887a5); pin WebApi.Tests/Workforce/WorkforceNotificationBacklogBoundTests.cs; four-state record lanes/L-WF-WITHHELD-BOUND/mutation_check.py + trx/"
+    },
+    "L-WFR-ACCESS-STRING-TRUTH": {
+      "admitted": true,
+      "evidence": "lanes/L-WFR-ACCESS-STRING-TRUTH/verdict.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-WHICH-EVIDENCE-CAME-FROM-A-BORROWED-TREE": {
+      "admitted": true,
+      "evidence": "/Users/svendaneel/okam/Web-modules/lanes/L-WHICH-EVIDENCE-CAME-FROM-A-BORROWED-TREE/census.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-WOLT-SYNC": {
+      "admitted": false,
+      "evidence": "lanes/L-WOLT-SYNC/evidence.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-WOLT-SYNC/evidence.md"
+    },
+    "L-WORKTREE-BASENAME-PIN": {
+      "admitted": true,
+      "evidence": "lanes/L-WORKTREE-BASENAME-PIN/evidence.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-WORKTREE-BASENAME-TAX": {
+      "admitted": true,
+      "evidence": "lanes/L-WORKTREE-BASENAME-TAX/run.md",
+      "state": "built-unverified",
+      "why": ""
+    },
+    "L-WORLD-STAMP-WINDOWS": {
+      "admitted": false,
+      "evidence": "lanes/L-WORLD-STAMP-WINDOWS/evidence.md",
+      "state": "built-unverified",
+      "why": "exit: “the stamp records the process holding the socket and refuses when the repository head has moved since the build, pinned by a test per window that reds if either guard is removed” does not name lanes/L-WORLD-STAMP-WINDOWS/evidence.md"
+    },
+    "L-XZ-CREDIT-FIELDS": {
+      "admitted": false,
+      "evidence": "lanes/L-XZ-CREDIT-FIELDS/evidence.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-XZ-CREDIT-FIELDS/evidence.md"
+    },
+    "L-XZ-NEGATED-ABSENCE": {
+      "admitted": false,
+      "evidence": "lanes/L-XZ-NEGATED-ABSENCE/mutation-log.md · commit b150668b on refs/lanes/L-XZ-NEGATED-ABSENCE",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-XZ-NEGATED-ABSENCE/mutation-log.md · commit b150668b on refs/lanes/L-XZ-NEGATED-ABSENCE"
+    },
+    "L-XZ-PRINTED-DEFECTS": {
+      "admitted": false,
+      "evidence": "lanes/L-XZ-PRINTED-DEFECTS/mutation-log.md",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-XZ-PRINTED-DEFECTS/mutation-log.md"
+    },
+    "L-XZ-RESIDUAL-SITES": {
+      "admitted": false,
+      "evidence": "lanes/L-XZ-RESIDUAL-SITES/mutation-log.md · commit 799f05d5 on refs/lanes/L-XZ-RESIDUAL-SITES",
+      "state": "built-unverified",
+      "why": "evidence path does not exist: lanes/L-XZ-RESIDUAL-SITES/mutation-log.md · commit 799f05d5 on refs/lanes/L-XZ-RESIDUAL-SITES"
+    },
+    "L-XZ-SIGNED-COUNT": {
+      "admitted": true,
+      "evidence": "lanes/L-XZ-SIGNED-COUNT/mutation-log.md",
+      "state": "verified",
+      "why": ""
+    }
+  },
+  "deliberate_red": {
+    "L-JOURNEY-PROXY-BLINDSPOT (as recorded, end to end)": {
+      "admitted": true,
+      "why": ""
+    },
+    "lanes/L-JOURNEY-PROXY-BLINDSPOT/guard-proof.txt": {
+      "admitted": true,
+      "why": ""
+    },
+    "lanes/L-LIVE-WORLD-STAFF/live-world-run.txt": {
+      "admitted": true,
+      "why": ""
+    }
+  },
+  "instrument": "/Users/svendaneel/.local/bin/plan",
+  "six_admissions": {
+    "artifacts": {
+      "FT-EVENTS": {
+        "admitted": false,
+        "why": "artifacts is a directory — a directory records no run and cannot be read; name the artifact inside it that does"
+      },
+      "FT-GROWTH": {
+        "admitted": false,
+        "why": "artifacts is a directory — a directory records no run and cannot be read; name the artifact inside it that does"
+      },
+      "FT-MARGIN": {
+        "admitted": false,
+        "why": "artifacts is a directory — a directory records no run and cannot be read; name the artifact inside it that does"
+      },
+      "FT-MEALS": {
+        "admitted": false,
+        "why": "artifacts is a directory — a directory records no run and cannot be read; name the artifact inside it that does"
+      },
+      "FT-TRAINING": {
+        "admitted": false,
+        "why": "artifacts is a directory — a directory records no run and cannot be read; name the artifact inside it that does"
+      },
+      "FT-WORKFORCE": {
+        "admitted": false,
+        "why": "artifacts is a directory — a directory records no run and cannot be read; name the artifact inside it that does"
+      }
+    },
+    "artifacts/": {
+      "FT-EVENTS": {
+        "admitted": false,
+        "why": "artifacts/ is a directory — a directory records no run and cannot be read; name the artifact inside it that does"
+      },
+      "FT-GROWTH": {
+        "admitted": false,
+        "why": "artifacts/ is a directory — a directory records no run and cannot be read; name the artifact inside it that does"
+      },
+      "FT-MARGIN": {
+        "admitted": false,
+        "why": "artifacts/ is a directory — a directory records no run and cannot be read; name the artifact inside it that does"
+      },
+      "FT-MEALS": {
+        "admitted": false,
+        "why": "artifacts/ is a directory — a directory records no run and cannot be read; name the artifact inside it that does"
+      },
+      "FT-TRAINING": {
+        "admitted": false,
+        "why": "artifacts/ is a directory — a directory records no run and cannot be read; name the artifact inside it that does"
+      },
+      "FT-WORKFORCE": {
+        "admitted": false,
+        "why": "artifacts/ is a directory — a directory records no run and cannot be read; name the artifact inside it that does"
+      }
+    },
+    "artifacts/journeys/": {
+      "FT-EVENTS": {
+        "admitted": false,
+        "why": "artifacts/journeys/ is a directory — a directory records no run and cannot be read; name the artifact inside it that does"
+      },
+      "FT-GROWTH": {
+        "admitted": false,
+        "why": "artifacts/journeys/ is a directory — a directory records no run and cannot be read; name the artifact inside it that does"
+      },
+      "FT-MARGIN": {
+        "admitted": false,
+        "why": "artifacts/journeys/ is a directory — a directory records no run and cannot be read; name the artifact inside it that does"
+      },
+      "FT-MEALS": {
+        "admitted": false,
+        "why": "artifacts/journeys/ is a directory — a directory records no run and cannot be read; name the artifact inside it that does"
+      },
+      "FT-TRAINING": {
+        "admitted": false,
+        "why": "artifacts/journeys/ is a directory — a directory records no run and cannot be read; name the artifact inside it that does"
+      },
+      "FT-WORKFORCE": {
+        "admitted": false,
+        "why": "artifacts/journeys/ is a directory — a directory records no run and cannot be read; name the artifact inside it that does"
+      }
+    },
+    "artifacts/journeys/growth-newsletter-send-gate.playwright.json": {
+      "FT-EVENTS": {
+        "admitted": false,
+        "why": "artifacts/journeys/growth-newsletter-send-gate.playwright.json reads `status: failed` — the artifact records its own failure, and a run that failed does not demonstrate the exit it was run for"
+      },
+      "FT-GROWTH": {
+        "admitted": false,
+        "why": "artifacts/journeys/growth-newsletter-send-gate.playwright.json reads `status: failed` — the artifact records its own failure, and a run that failed does not demonstrate the exit it was run for"
+      },
+      "FT-MARGIN": {
+        "admitted": false,
+        "why": "artifacts/journeys/growth-newsletter-send-gate.playwright.json reads `status: failed` — the artifact records its own failure, and a run that failed does not demonstrate the exit it was run for"
+      },
+      "FT-MEALS": {
+        "admitted": false,
+        "why": "artifacts/journeys/growth-newsletter-send-gate.playwright.json reads `status: failed` — the artifact records its own failure, and a run that failed does not demonstrate the exit it was run for"
+      },
+      "FT-TRAINING": {
+        "admitted": false,
+        "why": "artifacts/journeys/growth-newsletter-send-gate.playwright.json reads `status: failed` — the artifact records its own failure, and a run that failed does not demonstrate the exit it was run for"
+      },
+      "FT-WORKFORCE": {
+        "admitted": false,
+        "why": "artifacts/journeys/growth-newsletter-send-gate.playwright.json reads `status: failed` — the artifact records its own failure, and a run that failed does not demonstrate the exit it was run for"
+      }
+    },
+    "artifacts/journeys/modal-scroll-lock.playwright.json": {
+      "FT-EVENTS": {
+        "admitted": false,
+        "why": "exit: names the directory `artifacts/journeys/`, not an artifact — any of its 78 entries would satisfy it equally, so `artifacts/journeys/modal-scroll-lock.playwright.json` demonstrates nothing.  Name the artifact that shows the run in `exit:`, then offer that file."
+      },
+      "FT-GROWTH": {
+        "admitted": false,
+        "why": "exit: names the directory `artifacts/journeys/`, not an artifact — any of its 78 entries would satisfy it equally, so `artifacts/journeys/modal-scroll-lock.playwright.json` demonstrates nothing.  Name the artifact that shows the run in `exit:`, then offer that file."
+      },
+      "FT-MARGIN": {
+        "admitted": false,
+        "why": "exit: names the directory `artifacts/journeys/`, not an artifact — any of its 78 entries would satisfy it equally, so `artifacts/journeys/modal-scroll-lock.playwright.json` demonstrates nothing.  Name the artifact that shows the run in `exit:`, then offer that file."
+      },
+      "FT-MEALS": {
+        "admitted": false,
+        "why": "exit: names the directory `artifacts/journeys/`, not an artifact — any of its 78 entries would satisfy it equally, so `artifacts/journeys/modal-scroll-lock.playwright.json` demonstrates nothing.  Name the artifact that shows the run in `exit:`, then offer that file."
+      },
+      "FT-TRAINING": {
+        "admitted": false,
+        "why": "exit: names the directory `artifacts/journeys/`, not an artifact — any of its 78 entries would satisfy it equally, so `artifacts/journeys/modal-scroll-lock.playwright.json` demonstrates nothing.  Name the artifact that shows the run in `exit:`, then offer that file."
+      },
+      "FT-WORKFORCE": {
+        "admitted": false,
+        "why": "exit: names the directory `artifacts/journeys/`, not an artifact — any of its 78 entries would satisfy it equally, so `artifacts/journeys/modal-scroll-lock.playwright.json` demonstrates nothing.  Name the artifact that shows the run in `exit:`, then offer that file."
+      }
+    },
+    "artifacts/journeys/training-course-to-evidence.playwright.json": {
+      "FT-EVENTS": {
+        "admitted": false,
+        "why": "artifacts/journeys/training-course-to-evidence.playwright.json reads `status: failed` — the artifact records its own failure, and a run that failed does not demonstrate the exit it was run for"
+      },
+      "FT-GROWTH": {
+        "admitted": false,
+        "why": "artifacts/journeys/training-course-to-evidence.playwright.json reads `status: failed` — the artifact records its own failure, and a run that failed does not demonstrate the exit it was run for"
+      },
+      "FT-MARGIN": {
+        "admitted": false,
+        "why": "artifacts/journeys/training-course-to-evidence.playwright.json reads `status: failed` — the artifact records its own failure, and a run that failed does not demonstrate the exit it was run for"
+      },
+      "FT-MEALS": {
+        "admitted": false,
+        "why": "artifacts/journeys/training-course-to-evidence.playwright.json reads `status: failed` — the artifact records its own failure, and a run that failed does not demonstrate the exit it was run for"
+      },
+      "FT-TRAINING": {
+        "admitted": false,
+        "why": "artifacts/journeys/training-course-to-evidence.playwright.json reads `status: failed` — the artifact records its own failure, and a run that failed does not demonstrate the exit it was run for"
+      },
+      "FT-WORKFORCE": {
+        "admitted": false,
+        "why": "artifacts/journeys/training-course-to-evidence.playwright.json reads `status: failed` — the artifact records its own failure, and a run that failed does not demonstrate the exit it was run for"
+      }
+    }
+  },
+  "status_less": {
+    "end_to_end": {
+      "admitted": false,
+      "why": "artifacts/journeys/growth-doi-postmark-sandbox.json declares no outcome — none of `status`, `result`, `outcome`, `verdict`, `conclusion` is in it, so nothing in the file says whether the run it records passed.  A record that does not say is not read as green"
+    },
+    "kind_and_status_only": {
+      "admitted": false,
+      "why": "artifacts/journeys/growth-doi-postmark-sandbox.json declares no outcome — none of `status`, `result`, `outcome`, `verdict`, `conclusion` is in it, so nothing in the file says whether the run it records passed.  A record that does not say is not read as green"
+    }
+  }
+}

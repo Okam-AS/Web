@@ -1,0 +1,42 @@
+### STATE A — clean tree, CustomerInfoModal shadow resolved, kravia pinned
+
+PASS test/price-gate-shadow.test.js
+  the extractor tells a definition apart from a call
+    ✓ a method a component declares IS found (1 ms)
+    ✓ the same name declared as a computed or a prop is found too
+    ✓ an `async` or quoted key is still a key
+    ✓ a quoted shadow is found: double-quoted, function value
+    ✓ a quoted shadow is found: single-quoted, function value
+    ✓ a quoted shadow is found: double-quoted, arrow value
+    ✓ a quoted shadow is found: quoted, after a string-valued property
+    ✓ a quoted shadow is found: quoted, after a shorthand method
+    ✓ a quoted shadow is found: quoted, in computed
+    ✓ a quoted shadow is found: quoted, in props
+    ✓ a quoted shadow is found: quoted, value on the next line
+    ✓ a quoted shadow is found: quoted, with a stray brace inside a neighbouring string
+    ✓ a CALL inside a method body is not a definition
+    ✓ a call in the TEMPLATE is not a definition
+    ✓ a key of a NESTED object inside a method is not a component member
+    ✓ the name inside a comment or a string cannot fake a definition
+    ✓ the KNOWN LIMIT is a data-declared shadow, and it is stated rather than implied
+  the guard is actually looking at something
+    ✓ the guarded names are real members of the shipped mixin
+    ✓ the walk opened the estate, not an empty directory
+    ✓ and it parsed real option blocks out of them
+  no component takes a silent exit from the money gate
+    ✓ every component that redeclares a gated money member is one the ledger already names
+    ✓ every ledger entry still describes a shadow that is really there
+    ✓ every ledger entry names an owner and says why, at length
+    ✓ there is no ledger left: every surface in the estate is on the gate
+  the customer modal, in a real DOM, after its shadow was removed
+    ✓ a balance that never arrived is withheld, with the estate mark (13 ms)
+    ✓ a genuine zero balance is still a figure (2 ms)
+    ✓ a real balance prints in the shape the rest of this admin uses (2 ms)
+    ✓ absent, zero and a real balance are three different renderings (4 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       28 passed, 28 total
+Snapshots:   0 total
+Time:        1.472 s, estimated 2 s
+Ran all test suites matching /test\/price-gate-shadow.test.js/i.
+VERDICT: GREEN

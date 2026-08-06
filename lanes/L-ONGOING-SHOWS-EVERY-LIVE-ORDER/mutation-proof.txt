@@ -1,0 +1,49 @@
+=== MUTATION 1: the DriverPickedUp row deleted from BOARD entirely ===
+FAIL test/ongoing-board-covers-every-live-status.test.js
+    ✕ no member of OrderStatus is left unplaced and unexcluded (2 ms)
+    ✓ the enum it walks is the shipped one
+    ✕ the column and the action agree with the placement the board renders (1 ms)
+    ✓ an unrecognised status gets a column and no action
+    ✓ no live status renders in no column (15 ms)
+    ✕ each live order is rendered once, in exactly one column (7 ms)
+    ✕ each live status lands in its named column with its named action (4 ms)
+    ✕ an order whose driver has collected it can still be completed from this screen (4 ms)
+    ✓ completed and cancelled orders are excluded, and that exclusion is deliberate (2 ms)
+    ✓ a status this build has never heard of is surfaced, not dropped (1 ms)
+Test Suites: 1 failed, 1 total
+Tests:       5 failed, 5 passed, 10 total
+
+=== MUTATION 2: DriverPickedUp moved to OFF_BOARD (classified, but hidden) ===
+FAIL test/ongoing-board-covers-every-live-status.test.js
+    ✓ no member of OrderStatus is left unplaced and unexcluded (1 ms)
+    ✓ the enum it walks is the shipped one
+    ✕ the column and the action agree with the placement the board renders (1 ms)
+    ✓ an unrecognised status gets a column and no action
+    ✕ no live status renders in no column (16 ms)
+    ✕ each live order is rendered once, in exactly one column (8 ms)
+    ✕ each live status lands in its named column with its named action (4 ms)
+    ✕ an order whose driver has collected it can still be completed from this screen (4 ms)
+    ✓ completed and cancelled orders are excluded, and that exclusion is deliberate (2 ms)
+    ✓ a status this build has never heard of is surfaced, not dropped (2 ms)
+Test Suites: 1 failed, 1 total
+Tests:       5 failed, 5 passed, 10 total
+
+=== MUTATION 3: OpenCheck removed from BOARD ===
+FAIL test/ongoing-board-covers-every-live-status.test.js
+    ✕ no member of OrderStatus is left unplaced and unexcluded (2 ms)
+    ✓ the enum it walks is the shipped one (1 ms)
+    ✓ the column and the action agree with the placement the board renders
+    ✓ an unrecognised status gets a column and no action
+    ✓ no live status renders in no column (15 ms)
+    ✓ each live order is rendered once, in exactly one column (8 ms)
+    ✓ each live status lands in its named column with its named action (3 ms)
+    ✓ an order whose driver has collected it can still be completed from this screen (5 ms)
+    ✓ completed and cancelled orders are excluded, and that exclusion is deliberate (4 ms)
+    ✓ a status this build has never heard of is surfaced, not dropped (2 ms)
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 9 passed, 10 total
+
+=== RESTORED: baseline re-run ===
+PASS test/ongoing-board-covers-every-live-status.test.js
+Test Suites: 1 passed, 1 total
+Tests:       10 passed, 10 total

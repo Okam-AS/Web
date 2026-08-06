@@ -1,0 +1,1239 @@
+# Pending migrations ledger
+
+**Written 2026-07-30.** Every schema change deferred behind the single-migration-author rule, plus the
+schema debts that converge on the pre-deploy POS squash. This file exists because a durability review found
+four fully-specified migrations living **only in a lane report, committed nowhere** — one session end from
+being lost. Nothing here is authored; everything here is specified.
+
+> **Read `docs/plans/pos-review-triage.md` (§ squash) and `CLAUDE.md` (EF Core migrations) first.** The
+> squash is a one-shot, hand-run production event and it is a *regeneration* — see the ⚠️ section at the end,
+> which is the reason this ledger is not just a to-do list.
+
+---
+
+## ✅ STATUS UPDATE — section A is AUTHORED (2026-07-30, `lane/attribution-migrations` @ `d6e35955`)
+
+MIG-1, MIG-2, MIG-4, MIG-5 and MIG-9 are written and verified; **MIG-3 was declined with reasoning**
+(see below). Section A is kept for the record because its *constraints* are still the load-bearing part.
+
+The no-backfill warning was **proven, not assumed**: a receipt seeded before the migration reads
+`System`/`NULL` after it, and the exact backfill statement returns
+`Msg 50022 … EventsPaymentReceipts is append-only: UPDATE and DELETE are not permitted.` Replay-from-empty
+and an up→down→up round trip both pass on a localhost scratch DB; `has-pending-model-changes` is clean.
+
+**MIG-3 declined, better argument than the original:** `ReconciledByUserId` must pair with
+`ReconciledAtUtc`, which reconcile **nulls** when it ends in Discrepancy — so the column would name an actor
+only in the case where the next act (T13 close) already records `ClosedByUserId`, and be blank exactly where
+it would have been new information. Symmetry is not enough for a schema change heading into the squash.
+
+**These still belong in the pre-deploy squash when it happens** — but not folded in now, because the entities
+are still moving and the squash is explicitly the last step before deploy. They are additive and replay clean
+until then.
+
+---
+
+## A. Actor columns — money-path attribution
+
+From `lane/money-path-attribution` (`fff3af88`). Seven money-or-destruction paths recorded no actor. The
+refusals now land **before** the irreversible effect, but three operations still write no actor to the
+database because no column can hold one: the Events **deposit refund**, the Events **settlement adjustment
+line**, and the Margin **price approval**.
+
+### MIG-1 `Events_PaymentReceiptActor`
+`EventsPaymentReceipts` + `ActorKind nvarchar(16) NOT NULL`, `ActorUserId nvarchar(128) NULL`
+(matching `EventsStateTransitions`; opaque reference, no FK).
+
+⚠️ **The table is append-only in two layers** — EF `GuardAppendOnly` and `TR_EventsPaymentReceipts_AppendOnly`
+(AFTER UPDATE/DELETE → THROW 50022). **A backfill `UPDATE` will be rolled back by the trigger.** Add the
+column with `DEFAULT 'System'` and **never backfill**. `System` is also the truthful default: existing rows
+are webhook/sink-written or unattributed.
+
+Coherence rule to honour (established by `lane/module-audit-pins`): `Admin` requires a non-blank actor;
+`Guest`/`System` require the actor to be **exactly null** — not merely blank, because an empty string with
+`ActorKind = System` says "no human" while a reader testing `!= null` counts the row as naming one.
+
+### MIG-2 `Events_SettlementLineActor`
+`EventsSettlementLines.EnteredByUserId nvarchar(128) NULL`.
+
+### MIG-3 `Events_SettlementReconciledBy` — **OPTIONAL, and the lane ruled it not a defect**
+`EventsSettlements.ReconciledByUserId nvarchar(128) NULL`. Reconcile re-derives truth from the read seams and
+writes nothing of its own; the act it unlocks (T13 close) already records `ClosedByUserId` *and* an Admin
+transition. Symmetry only. Land it or don't — but decide deliberately.
+
+### MIG-4 `Margin_PriceImportApprovedBy`
+`MarginPriceImportBatches.ApprovedByReference nvarchar(256) NULL`, mirroring `UploadedByReference`, stamped
+from the **truncated** value (300 spaces + a name passes a caller's own `IsNullOrWhiteSpace` and reaches a
+256-wide column blank). Existing rows NULL — unknown is the truthful answer.
+
+### MIG-5 `Growth_NewsletterVersionAuthor`
+`GrowthNewsletterVersions.CreatedByUserId nvarchar(450) NULL` and
+`GrowthNewsletterApprovals.InvalidatedByUserId nvarchar(450) NULL` (Growth's copied-value width, no FK).
+
+---
+
+## B. Fiscal / legal
+
+### MIG-6 Kassa journal append-only triggers — **legally required, exist only as prose**
+`docs/okam-kassa/sql/journal-append-only-triggers.sql` is applied by **nothing**, including production.
+6 tables: `JournalEntries`, `JournalLines`, `JournalTaxLines`, `JournalPaymentLines`, `ZReports`,
+`JournalAccessLogs`.
+
+- `AFTER UPDATE, DELETE` — **never `INSTEAD OF`**: SQL Server forbids those on a table targeted by a
+  cascading FK, and three child tables are `ON DELETE CASCADE` from `JournalEntries`.
+- Body: `SET NOCOUNT ON; ROLLBACK TRANSACTION; THROW 5000n, '<Table> is append-only…', 1;`
+- Error numbers **50001-50006** (free, reserved for Kassa by estate convention; modules occupy 50010-50073 —
+  Workforce 50010-50019, Events 50020-50029, Growth 50030-50039, Meals 50040-50049, Training 50050-50059,
+  Margin 50060-50069, and Workforce W5's timesheet family 50070-50073, which took a fresh block because the
+  Workforce one was exhausted by MIG-24's time. Re-verify by grep before authoring — the band is allocated
+  that way and has moved under an author before).
+- Strip the `.sql` file's `GO` separators — `GO` is a sqlcmd batch separator, not T-SQL. One
+  `migrationBuilder.Sql(@"…")` per trigger (each `CREATE TRIGGER` must be first in its batch). `DROP TRIGGER`
+  ×6 in `Down`. No `OnModelCreating` counterpart, so `HasPendingModelChanges()` stays clean.
+- Consequences to plan for, not discover: the `ROLLBACK` unwinds the **whole ambient transaction**, so an
+  illegal update poisons any legitimate append sharing it; and any SQL Server variant of the eight raw-SQL
+  tamper tests will start failing (they pass today only on SQLite).
+- **Compliance note:** in-process `GuardAppendOnly` alone is arguably insufficient — `kassasystemforskrifta
+  § 2-6 andre ledd` regulates what the software can be *connected to*, not what it does, and the journal sits
+  in a database reachable by SSMS/portal/reporting tools. See [[okam-rf1313-false-control]] reasoning in
+  `lane/kassa-journal-triggers` (`041b077e`).
+
+### MIG-7 `AccountingSummaries` unique index — ✅ AUTHORED as `20260803093235`, and the ruling contradiction is now settled by measurement
+
+**Authored 2026-08-03, lane `L-ACCT-UIDX`** (`D-ACCT-TIMING = hand-author-now`), off the chain tip
+`20260803090036_Meals_CompanyReceivableAccount`. **Kept its own number**: MIG-7 is this change and has been
+since the ledger was written; minting MIG-28 for it would have put two entries on one migration, which is
+the failure mode MIG-22's renumbering exists to prevent. **MIG-28 is therefore still free.**
+
+**⚠️ APPLIED TO NO DATABASE, AND NOT PROVEN ON SQL SERVER.** Five foreign containers held 6.15 GiB of the
+Docker VM's 7.65 for the whole lane; a sixth needs 1.3–1.4 and would have OOM-killed another lane's world.
+The SQL tier below is written and compiles and **has never run**. See the unproven list at the end of this
+entry — it is the shortest path to closing this out and it is one container-hour of work.
+
+**The contradiction is resolved, empirically, and `OVERNIGHT-RUN-LOG.md` was right.** The migration was
+scaffolded with `ef migrations add` and **arrived with an empty `Up`** — because
+`ApplicationDbContextModelSnapshot` was regenerated after the model gained the index (`83ae75c5` put it in
+`OnModelCreating`; the snapshot picked it up by `b1b381d0`/`c02af3a3`), so the snapshot already claims the
+end state and there is nothing left for the differ to emit. `has-pending-model-changes` reports clean both
+before and after this migration, which is exactly why the drift was invisible. **Nothing that regenerates
+against THIS snapshot will ever produce these operations.**
+
+`IMPLEMENTATION-PLAN.md:313` is not thereby refuted — it is about a *different diff*, the squash's
+regeneration against **master's** snapshot, which does not contain the index and would emit the ops. That
+claim stays **untested**, and the rehearsal below is still worth running. What is now certain is that it was
+never a reason to defer: the deferral rested on a regeneration that had already happened.
+
+**Three operations, matching what `pos-review-triage.md` § OD-1 predicts the squash will emit:** drop
+`IX_AccountingSummaries_StoreId` (the composite leads with the same column and replaces it), narrow `Date`
+`nvarchar(max)` → `nvarchar(10)`, and create `IX_AccountingSummaries_StoreId_Date` UNIQUE filtered
+`WHERE [Date] IS NOT NULL`. The narrowing is load-bearing, not tidiness: SQL Server refuses `nvarchar(max)`
+as an index key column (Msg 1919), so without it the index cannot be created at all.
+
+**No THROW number claimed, and none needed.** 50073 re-verified as still the ceiling across the whole chain.
+The runtime refusal is SQL Server's own **2601** (duplicate key in a unique index), which is what
+`AccountingSummaryService`'s `DbUpdateException` catch already reads; the deploy-time guard below raises the
+generic ad-hoc 50000 via `RAISERROR` rather than consuming a number from the 50001–50073 deny-trigger band,
+because it is a pre-flight and not a control.
+
+#### It REFUSES; it does not repair. (C1)
+
+An index cannot be created over existing duplicates, and on a database that has already double-posted there
+will be some. **This migration deletes nothing.** Each duplicate row is a claim that a day was posted and
+where two exist **both may have reached the eMonkey webhook**, so which is the real claim is an accounting
+decision about vouchers already sitting in someone's ledger — not something a deploy step may take
+unattended. `Up` counts the affected days, names them, and stops.
+
+**Both halves of `Up` — the guard and the three operations — are ONE raw batch, deliberately.** Each
+`MigrationBuilder` operation becomes its own `GO`-separated batch in a generated script, and `RAISERROR` at
+severity 16 aborts a batch but not a script: run through sqlcmd without `-b`, a guard in its own batch would
+refuse and the drop and the narrowing after it would run anyway and be committed by the script's trailing
+`COMMIT`. In one batch the `RETURN` reaches all of them.
+
+⚠️ **Apply this with `dotnet ef database update`, or with sqlcmd `-b`.** A generated script's
+`INSERT INTO __EFMigrationsHistory` is a later batch, so without `-b` a refused migration still records
+itself as applied. That is a property of every EF script, not of this guard, but this is the one where it
+would matter most.
+
+#### The sweep — a query, and an owner action
+
+**Never run against production by an agent, and the dedup is Ali's, never an agent's.** Run the count first;
+it touches nothing:
+
+```sql
+SELECT COUNT(*) AS DuplicateDays FROM (
+    SELECT StoreId, [Date] FROM dbo.AccountingSummaries
+    WHERE [Date] IS NOT NULL GROUP BY StoreId, [Date] HAVING COUNT(*) > 1) g;
+
+-- The rows themselves, worst first. SendingSuccessful and ErrorMessage are what say whether a claim ever
+-- reached the receiver: PENDING_SEND or a transport marker means it may not have, an HTTP status means the
+-- receiver answered and may well have booked it.
+SELECT s.Id, s.StoreId, s.[Date], s.DaysTakings, s.Amount, s.CreatedAt, s.SendingSuccessful, s.ErrorMessage
+FROM dbo.AccountingSummaries s
+JOIN (SELECT StoreId, [Date] FROM dbo.AccountingSummaries
+      WHERE [Date] IS NOT NULL GROUP BY StoreId, [Date] HAVING COUNT(*) > 1) d
+  ON d.StoreId = s.StoreId AND d.[Date] = s.[Date]
+ORDER BY s.StoreId, s.[Date], s.CreatedAt;
+
+-- Width, separately: the ALTER refuses anything over 10 characters and the guard checks this first.
+SELECT Id, StoreId, [Date] FROM dbo.AccountingSummaries WHERE LEN([Date]) > 10;
+```
+
+**Not run anywhere by this lane, and it could not have been.** No SQL Server was reachable: the resolved
+`WebApiDatabase` is `localhost,1433` / `okam_test_local` (confirmed local, never production) and **nothing
+is listening on 1433**; the only live servers on the host are the five foreign lane containers, which are
+another lane's fixtures and are not to be touched. So the count for okam_local, okamtest and prod is
+**unknown**, and `pos-review-triage.md`'s "the duplicate store-days that exist today" remains an unverified
+claim about all three.
+
+**Deleting a duplicate is a C1 exception and must be written down as one when it happens** —
+`AccountingSummaries` is money-path history and this table is append-only-adjacent by use even though no
+trigger enforces it. Record, per row removed: the store, the date, both rows' `CreatedAt` /
+`SendingSuccessful` / `ErrorMessage`, which was kept and why, and whether the discarded claim's voucher was
+reversed on the receiving side. A row deleted without that record turns a known double-post into an
+unexplained gap in the store's `DaysTakings` sequence.
+
+#### Still unproven, and this is the whole of what is left
+
+- **The exit criterion.** `WebApi.Tests/Kassa/AccountingSummaryDayIndexSqlServerTests.cs` asserts the index
+  by property on the fixture's chain-built catalog and then, on its own throwaway catalog, inserts a claim,
+  inserts a second for the same store and day, and requires the `DbUpdateException` / SqlException **2601**
+  the production backstop is written to catch — with a falsification control that drops the index and
+  requires the duplicate to LAND. Written, compiles, **never run**.
+- **The round trip.** `RestaurantModulesMigrationRoundTripTests` now probes MIG-7 in all three phases.
+  **This is the one to run first**: `Down` had to be written as raw SQL because the typed `AlterColumn`
+  resolves the indexes to preserve from the migration's *target model* — which still declares the unique
+  index — so the generated rollback dropped it twice and then RE-CREATED it on the widened column, a unique
+  index over `nvarchar(max)` that SQL Server refuses (Msg 1919). **The generated rollback could never have
+  run**, and it was found by reading the generated script, not by reading the C#.
+- **The squash rehearsal**, unchanged and still the cheapest thing on the branch: it is the only way to
+  test `IMPLEMENTATION-PLAN.md:313`'s half of the old contradiction.
+
+### MIG-8 `ZReport` credit-sale columns — § 2-8-2 t/v
+6 columns (`CreditSales*`, `CreditReturns*`, `DeliveryReceipt*`). The Z is *persisted* and both the reprint
+(`XZReportService.MapEntityToModel`) and SAF-T (`SaftCashRegisterExportService.Transactions.cs:159`, which
+hardcodes `reportReceiptDeliveryNum = 0`) read the stored row — so building only the X half yields a Z that
+prints zero for documents that exist. XSD is already ready (`reportCreditSales`/`reportCreditMemos` are
+`minOccurs="0"`). Gated on the § 5-3-1 a ruling (`docs/plans/pos-open-decisions.md` item 1).
+
+---
+
+## C. Module debts
+
+### MIG-9 `GrowthConsentTextVersion` layer-2 trigger
+Every other append-only Growth family has a SQL trigger; this one has only the EF guard
+(`lane/growth-consent-text` added the layer-1 branch and could not author the trigger).
+
+### MIG-10 Meals `TradingDay` column — SB-2
+`MealsFundingAllocation` has no trading-day column, so Meals lands one epoch short of D-01's ruling
+(`KassaZoneToStoreZone`, identical to `StoreWallClock` for every market the estate has today). Pinned as a
+*measured* residual by `MealsStatementPeriodEpochTests`, not a note.
+
+### MIG-12 `Training_W2_Onboarding` — **4 tables, not built**
+`training.onboarding` is advertised in the shared operator catalog and gates **nothing**: an operator can
+flip it and `GET /context` reports the stage live while no table, service or route exists behind it
+(measured by `TrainingFlagConsumptionTests`). The wave, per `60-training-internkontroll-spec.md` §4.1:
+
+| Table | Content / physical notes |
+| --- | --- |
+| `TrainingOnboardingTracks` | template envelope for a `RoleRef` (value); composite `StoreId`; `rowversion` |
+| `TrainingOnboardingSteps` | kind (`Course`/`DocumentToRead`/`ManualSignoff`) + order; optional course-version ref; **unique (`TrackId`, `Order`)** |
+| `TrainingOnboardingRuns` | `PersonRef` (value); status; `Source` (`Manual`/`EngagementEnvelope`); **filtered unique (`TrackId`, `PersonRef`) where active** — one live run per person per track |
+| `TrainingOnboardingStepResults` | per-run step state; **unique (`RunId`, `StepId`)** |
+
+No new trigger. `PersonRef`/`RoleRef` are stored **by value with no FK** into `Workforce*` — the module's
+isolation law, and the reason the whole family stays droppable. The filtered unique index is the one piece
+`ef migrations add` regeneration handles badly (see the ⚠️ section): it must survive the squash.
+
+### MIG-13 `Training_W3_ChecklistsAndDeviations` — ✅ LANDED as `20260801113131`, and this is the internkontroll
+
+**Authored 2026-08-01, lane `L-TRAIN-W3-SCHEMA`**, off the chain tip `20260801102621_Workforce_PublicationReceiptUniqueness`
+(the generated Designer snapshot differs from that migration's by these six tables and its own class identity
+and by nothing else, so the model matched the chain both before and after). Applied to no database by this
+lane — deployment is the owner's, as everywhere here.
+
+Two departures from the specification below, both deliberate and both to make a guard real rather than
+nominal:
+
+- **`BusinessDate` is `date`, not `datetime2`.** Against `datetime2`, two runs stamped 00:00 and 12:00 on one
+  day are two distinct keys and the unique index waves both through — the invariant would have been present
+  and unenforced. `KassaBusinessDate` already returns a midnight `Unspecified` DateTime, so the seam needs no
+  change; the column type is what closes the gap for every OTHER writer.
+- **`Order` is spelled `Ordinal`** on `TrainingChecklistTemplateItems`. `ORDER` is a T-SQL reserved word and
+  every raw statement, trigger body and catalog query touching it would need bracketing to parse.
+
+**The trigger band was re-verified before authoring, as this entry demanded.** `50051` was free: the chain
+carried 50050, 50052 and 50053 (Training's live three) and nothing at 50051. **MIG-13 itself was verified
+unclaimed** against the whole ledger — MIG-21 and MIG-22 had been taken the same morning and the numbering had
+already been corrected once.
+
+`TrainingDeviationEvents` carries **no foreign key in either direction**, which is a correctness requirement
+and not a style: SQL Server evaluates FK constraints BEFORE an `AFTER` trigger fires, so a table with children
+refuses a DELETE on the reference check and the trigger never runs — the shape that lets an immutability test
+pass against a database whose trigger has been dropped. The suite asserts the absence of incoming FKs from
+`sys.foreign_keys` and then issues the DELETE against the EMPTY table, where a 0-row DELETE still fires the
+AFTER trigger and nothing else can refuse it, pinning `ex.Number == 50051` rather than the message.
+
+Certified by `WebApi.Tests/Training/TrainingW3MigrationLineageTests.cs` on a chain-built catalog, and by
+`RestaurantModulesMigrationRoundTripTests` from EMPTY → rollback → re-apply. The unique index is asserted by
+**property** in all four places (`is_unique = 1 AND has_filter = 0`, the exact ordered column list, and every
+key column `is_nullable = 0`), never by name.
+
+**Still owed on top of this schema:** the `training.checklists` and `training.deviations` flags gate nothing
+until a service and a route read these tables — schema is not reachability (lanes L-TRAIN-W3-CHECKS and
+L-TRAIN-W3-AVVIK). `PosDayRef` exists and no writer sets it yet; the POS-day anchor is the differentiator and
+it is a column until the checks lane resolves it through the business-date seam.
+
+---
+
+The specification this was built from, kept for the record:
+
+`training.checklists` and `training.deviations` are advertised and gate nothing, exactly as above. This is
+the wave that carries the module's *internal control* claim: without it Training documents **training**, not
+internkontroll — no temperature routine, no cleaning routine, no deviation log with corrective action
+(`docs/plans/PROOF-BENCHMARKS.md` §2.4 lists the obligations against their legal sources). Per spec §4.1:
+
+| Table | Content / physical notes |
+| --- | --- |
+| `TrainingChecklistTemplates` | store/station; type (`Open`/`Close`/`Clean`); schedule; active |
+| `TrainingChecklistTemplateItems` | kind (`Check`/`NumericReading`/`FreeText`); expected min/max for `NumericReading`; **unique (`TemplateId`, `Order`)** |
+| `TrainingChecklistRuns` | **unique (`StoreId`, `TemplateId`, `BusinessDate`)**; `PosDayRef` (value, null); status |
+| `TrainingChecklistItemResults` | raw value per kind — a **raw `decimal`** for `NumericReading`, never rounded and never reduced to a boolean; derived pass/fail is a separate column; `RaisedDeviationId` (value, null); **unique (`RunId`, `ItemId`)** |
+| `TrainingDeviations` | mutable envelope; severity; status; `AssigneeRef` (value, null); `rowversion` |
+| `TrainingDeviationEvents` | **append-only** history; trigger `TR_TrainingDeviationEvents_AppendOnly` → **`THROW 50051`** + the EF `GuardAppendOnly` |
+
+**Trigger band.** Training claims `50050–50059`; `50050` (`TR_TrainingCompletions_AppendOnly`), `50052`
+(`TR_TrainingAuditEvents_AppendOnly`) and `50053` (`TR_TrainingCourseVersions_ImmutableAfterPublish`) are
+already live in `20260727221455_RestaurantModules_Initial.cs`. **`50051` is reserved for this table and is
+free** — verified against every `THROW 500` in the migration chain at the time of writing. Re-verify before
+authoring: the band was allocated by grep, and this is the third module to do that.
+
+`BusinessDate` is a store-local calendar date, resolved through `IStoreTimeZoneResolver` and
+`KassaBusinessDate` — the same date-against-date epoch D-01 settled for certificate expiry. It must not be
+an instant.
+
+### MIG-15 (BLOCKED on a ruling) Growth retention vs the append-only deny-triggers — **the spec contradicts itself**
+Spec §13 *Retention* gives three Growth tables a finite life: **consent-check receipts 24 months**, **delivery
++ provider event rows 24 months then reduced to aggregate counts**, and consent/suppression receipts
+"life + 3 years". Spec §4 makes three of those same tables **append-only with DB deny-triggers**, and they are
+installed and live: `TR_GrowthSuppressions_AppendOnly` (50031), `TR_GrowthConsentCheckReceipts_AppendOnly`
+(50032), `TR_GrowthProviderEventReceipts_AppendOnly` (50033), all
+`Migrations/20260727221455_RestaurantModules_Initial.cs:4109-4133`.
+
+**A retention purge is therefore physically impossible, not merely unbuilt** — any `DELETE` rolls back and
+throws. There is no retention job today for any of the five §13 rules, so nothing has hit this yet; the first
+attempt to write one does.
+
+⚠️ **Do not resolve this by weakening a trigger.** The append-only property is the evidential basis of the
+whole consent ledger (GRW-LEDGER-001) and the §10 gate. The ruling comes first — Sven and the spec — and only
+then the schema change it implies. Three shapes exist, in ascending order of what they give up:
+1. **Amend §13** so the append-only tables are retained for the life of the controller relationship and are
+   never purged (no migration at all; the honest option if the evidence is the point).
+2. **Purge by a dated carve-out**: `ALTER` each trigger to permit `DELETE` only where `EvaluatedAt`/`ReceivedAt`
+   is older than the retention horizon. A trigger that permits some deletes is a materially weaker control and
+   needs its own tamper tests.
+3. **Reduce to aggregates** (what §13 already says for delivery/provider rows): a new summary table plus a
+   trigger carve-out for the reduced source rows.
+
+**Newly urgent as of `lane/growth-next`:** the dispatcher now appends one `GrowthConsentCheckReceipts` row per
+recipient per send (the §10 gate needs it — the table previously had zero production writers). That table's
+growth rate is now proportional to mail volume rather than to gate calls that never happened, so "no retention
+job" stopped being theoretical.
+
+### MIG-16 `Events_VenueSettings` — the fourteenth Events table the settings endpoint needs
+From `lane/events-next`. Spec §5 specifies `GET/PUT /events/admin/{storeId}/settings` as "Spaces, default
+deposit policy, default terms text, proposal expiry default", and spec §4 freezes the module at **13 tables**,
+none of which holds venue defaults. The endpoint therefore cannot be built as specified without a fourteenth
+table. **The spaces half shipped** (`EventsSettingsController`, which finally gives `EventsSpaces` a
+production writer); the three defaults are ABSENT from the contract rather than accepted-and-dropped.
+
+```
+EventsVenueSettings
+  Id int PK
+  StoreId int NOT NULL   -- FK -> Store (identity seam, the one permitted out-of-prefix FK), UNIQUE
+  DefaultDepositPercent decimal(5,2) NULL      -- exactly one of percent/amount, or neither
+  DefaultDepositAmountMinor bigint NULL
+  DefaultTermsText nvarchar(max) NULL
+  DefaultProposalExpiryDays int NULL
+  UpdatedByUserId nvarchar(450) NULL           -- copied value, no FK (EventsProposalVersion convention)
+  UpdatedAtUtc datetime2 NOT NULL
+```
+
+Constraints to honour:
+- **Unique on `StoreId`** — one settings row per venue; the write is an upsert and a second row would make
+  "the venue's default terms" ambiguous on the document a guest signs.
+- Mutable, so **not** append-only: no trigger, no `GuardAppendOnly` entry. This is the first mutable
+  `Events*` table besides `EventsEvents`/`EventsDeposits`/`EventsSettlements`, all of which carry a
+  `RowVersion`; add one here too if the settings screen ever gets a concurrent editor, but v1 is one
+  operator per venue and a rowversion with no `If-Match` plumbing is a column nobody reads.
+- Defaults are **suggestions the draft builder copies at creation time**, never a live reference: a proposal
+  version is immutable from `Sent` and hash-pinned, so a version must never re-read a default that changed
+  after it was sent.
+
+⚠️ **Spec inconsistency needing a Sven ruling, not just a migration:** §4's "13 tables total" and §5's
+settings endpoint contradict each other. Either §4's count moves to 14, or §5's three defaults leave v1.
+Until that is decided this migration should not be authored — the shape above is the answer to the first
+option only.
+### MIG-17 Meals member reference — **has a DEADLINE, not just a priority**
+Spec §13.3 says the statement CSV carries a **member display name** per line. It carries
+`MembershipId.ToString()` — a bare GUID (`MealsStatementService.cs:467,506`), so the accountant cannot
+reconcile a line to a person. Pinned as a *measured* residual by `MealsStatementMemberReferenceTests`.
+
+Two columns, both `nvarchar(128) NULL`, no FK, no index (they are display values, never a key):
+`MealsInvitation.EmployeeReference` and `MealsMembership.EmployeeReference` — the second copied from the
+first at claim, so a revoked or re-invited person keeps the reference their statement lines already used.
+Then `MemberDisplayRef` reads the membership's value and falls back to the id when it is null.
+
+The value is **supplied by the buying company**, never lifted from identity, and **never a fødselsnummer**
+(decision D-d). That is why it has to be captured at *invitation*: the company is in the loop at exactly
+that moment and nowhere else in the flow.
+
+⚠️ **This must land before the pilot's first invitation is sent.** A membership claimed without the
+reference cannot acquire one retroactively (the invitation that would have carried it is `Claimed`), and
+finalized statement lines are immutable by trigger — so the first month's statement would be permanently
+un-fixable. Of everything in this ledger, this is the only entry whose cost rises the day the pilot starts
+rather than the day the squash runs.
+
+### MIG-11 (conditional) `MarginPeriodStatement.TheoreticalIngredientCostMinor` `long` → `long?`
+Only if a future ruling wants a partial theoretical cost **absent** rather than a lower bound. Single additive
+`AlterColumn`, no trigger, no index; `TheoreticalFoodCostPercent`/`GapPercentagePoints` are already nullable.
+The current convention (lower bound + `TheoreticalCostComplete`) is pinned by a test — changing it is a
+contract change for *every* cause of partiality.
+
+**Pin audit (`lane/margin-next`, 2026-07-30): the convention is real, but only one of its three causes was
+measured, and it was the least discriminating one.** `MarginStatementLifecycleTests`
+`A_recipe_cost_in_another_currency_is_left_out_of_the_theoretical_total_and_named` covers the currency
+exclusion, where the total collapses to **0** — a value a nullable column, a suppressed figure and a genuine
+lower bound are all consistent with, so it could not tell the convention apart from the alternatives it is
+chosen over. `MarginTheoreticalCostLowerBoundTests` now adds the discriminating case (an **unpriced
+ingredient** leaves a real partial sum: `> 0`, `<` the complete total, with the percentage reported as that
+same bound rather than suppressed) plus the third cause (**no active recipe version** at the sale instant)
+and a complete-world positive control. Verified able to fail against both plausible re-implementations:
+skipping an incomplete version's contribution, and hard-coding `TheoreticalCostComplete = true`. **No
+behaviour was changed — MIG-11 stays conditional and unauthored.**
+
+### MIG-14 Workforce schedule evidence-receipt triggers — layer 2 for the two tables that had NEITHER layer
+`lane/wf-schedimm2` found that **every** other evidence-receipt family in the estate is append-only in two
+layers (`GrowthConsentReceipts` 50030, `GrowthConsentCheckReceipts` 50032, `GrowthProviderEventReceipts`
+50033, `EventsAcceptanceReceipts` 50020, `EventsPaymentReceipts` 50022) while the two Workforce ones had
+**no rule at either layer**. The layer-1 `GuardAppendOnly` branch is now in
+`Helpers/ApplicationDbContext.cs` and pinned by
+`WorkforceSelfServiceTests.Schedule_evidence_receipts_cannot_be_updated_or_deleted` (proven red: with the
+branch disabled a forged `DraftChecksum` is written and no exception is raised). The triggers are owed.
+
+Two triggers, same body shape as the eight Workforce triggers already in
+`Migrations/20260727221455_RestaurantModules_Initial.cs`:
+
+- `TR_WorkforceScheduleValidationReceipts_AppendOnly` on `[dbo].[WorkforceScheduleValidationReceipts]`,
+  `THROW 50018, 'WorkforceScheduleValidationReceipts is append-only: UPDATE and DELETE are not permitted (re-validating writes a NEW receipt).', 1;`
+- `TR_WorkforceSchedulePublicationReceipts_AppendOnly` on `[dbo].[WorkforceSchedulePublicationReceipts]`,
+  `THROW 50019, 'WorkforceSchedulePublicationReceipts is append-only: UPDATE and DELETE are not permitted.', 1;`
+
+Conventions to honour, all of them already established by the eight in place:
+- `AFTER UPDATE, DELETE` — **never `INSTEAD OF`** (both tables are FK children, and `INSTEAD OF DELETE` is
+  forbidden on a table targeted by a cascading FK).
+- Body: `SET NOCOUNT ON; ROLLBACK TRANSACTION; THROW 500nn, '…', 1;`
+- ⚠ **Stale on the numbers, corrected here rather than rewritten above.** 50018 was consumed the next day by
+  `Workforce_IdentityCodeRegisterIssues`, and MIG-24 then found the whole Workforce block exhausted and took
+  a fresh 50070-50073. **50019 is the last free number in the Workforce block**, so this pair now needs 50019
+  plus one number from a fresh block. Re-verify by grep before authoring.
+- One `migrationBuilder.Sql(@"…")` per trigger (each `CREATE TRIGGER` must be first in its batch); no `GO`
+  separators. `DROP TRIGGER` ×2 in `Down`. No `OnModelCreating` counterpart, so `HasPendingModelChanges()`
+  stays clean.
+- ⚠ Neither table may take a rowversion or a store-generated column afterwards: an `OUTPUT` clause on
+  `INSERT` collides with an `AFTER` trigger (SQL error 334). Both use app-assigned `Guid` keys today, which
+  is why `WorkforceSchedulePublications` could carry its trigger. (MIG-22 narrows this: EF Core 7+'s
+  `HasTrigger` opt-out makes a rowversion and an `AFTER` trigger co-exist — but it requires a regenerated
+  snapshot, so it is a deliberate act, not a default.)
+- ⚠ **Sequence the receipts trigger AFTER `20260801102621_Workforce_PublicationReceiptUniqueness`** (MIG-21,
+  landed). That migration's `ALTER COLUMN ReceiptType … NOT NULL` would be rolled back by an append-only
+  trigger already in place. Order is the whole fix; nothing else about the two conflicts.
+- **Precedence gotcha the lane proved:** SQL Server evaluates FOREIGN KEY constraints *before* an `AFTER`
+  trigger fires, so a `DELETE` of a row that still has FK children is refused with `REFERENCE constraint`
+  and the trigger never runs. Any test asserting the immutability message must clear the children first, or
+  it certifies the FK and not the trigger — see
+  `SchedulePublishSqlServerTests.A_published_snapshot_cannot_be_mutated`.
+
+### MIG-22 `Margin_PeriodStatementFinalizedImmutable` — ✅ LANDED as `20260801084923`
+`lane/margin-finalize-lag`. **Numbered 22, not 21.** The lane wrote this entry as MIG-21, which was already
+taken by the `WorkforceSchedulePublicationReceipts` uniqueness index further down — and that number is load-
+bearing there, pinned by `[Trait("PendingMigration", "MIG-21")]` on
+`PublicationAcknowledgementRaceSqlServerTests`. Two lanes claiming one MIG number is how this ledger stops
+being an index; renumbered on landing.
+
+`MarginSalesFacts` — the rows a statement is *computed from* — have had a
+layer-2 append-only trigger since `RestaurantModules_Initial` (50060). `MarginPeriodStatements`, the artifact
+an accountant books from, had **no database-layer freeze at all**: its immutability was
+`MarginStatementService`'s `requireOpen` check, i.e. one code path. Now three layers — service guard, EF
+`GuardAppendOnly` branch (pinned red-then-green by `MarginStatementImmutabilityTests`), and
+`TR_MarginPeriodStatements_FinalizedImmutable`, `AFTER UPDATE, DELETE`, **THROW 50061**, conditional on the
+*pre-image* `State = 'Finalized'` (`Open → Finalized` passes; `Finalized` is terminal, so unlike
+`TR_TrainingCourseVersions_ImmutableAfterPublish` there is no carve-out).
+
+**Regenerated on landing.** The lane authored it as `20260731203011`, off the same Designer parent
+(`20260730150953_Growth_ConsentTextVersionAppendOnly`) as `20260731210732_Events_DietaryRequirements`, so
+landing it at that id would have forked the chain and left three downstream Designer snapshots ignorant of
+the `HasTrigger` declaration — invisible on an already-migrated database, fatal on a fresh one. Re-added on
+top of the then-tip `20260731220005_Workforce_IdentityCodeRegisterIssues`; the trigger body is the lane's,
+unchanged, and the regenerated migration still produces **zero operations**.
+
+**PROVEN ON SQL SERVER**, receipt `artifacts/tests/2eeff48f405d09427bd509b0c68686797c64afd6/RUN.md` — the
+first run of the SQL tier at any SHA (537/538, the one red being MIG-21 below). Error 334 is suppressed:
+the six new immutability tests and the four pre-existing `MarginStatementSqlServerTests` all write to the
+triggered table and pass, where a live 334 would have failed every statement write while the SQLite suite
+stayed green. `RestaurantModulesMigrationRoundTripTests` applies the chain into an EMPTY catalog and rolls
+it back — the assertion a forked Designer parent breaks — and passes.
+
+**This corrects MIG-14's rowversion warning, and the correction unblocks work.** MIG-14 says a table with an
+`AFTER` trigger "may not take a rowversion" because EF's `OUTPUT` clause collides with it (error 334). True
+by default — but EF Core 7+ has the documented opt-out: `b.ToTable(t => t.HasTrigger("TR_…"))` makes EF emit
+`OUTPUT … INTO` a table variable instead, which triggers permit. `MarginPeriodStatements` carries a
+rowversion and now carries a trigger. Measured, not assumed: the declaration adds
+`t.HasTrigger(...)` + `SqlServer:UseSqlOutputClause = false` to `ApplicationDbContextModelSnapshot.cs` and
+generates **no migration operations**, so it must ship with a regenerated snapshot (this lane's does) — the
+one place the estate's "a raw trigger has no snapshot counterpart" convention does not hold.
+
+Consequence: **`MealsStatementRun` is now unblocked too.** It is the estate's other rowversion-bearing
+finalize aggregate, its layer-2 was skipped for exactly this reason (see `MealsW3Builder`'s comment on
+`MealsStatementLine`, and layer 1 in `GuardAppendOnly`), and only its *lines* got a trigger (50043). The run
+row itself is still mutable below the service layer. Same pattern, next free Meals number.
+
+### MIG-23 `Margin_WasteEntries` — ✅ LANDED as `20260801132512`, and it is the module's cheapest real answer
+
+`lane/margin-waste`. **Number checked, not taken on trust:** 1–22 are all claimed above (21 and 22 were
+both taken on 2026-08-01 and the numbering had already been corrected once), so 23 was the next free one.
+Authored off the chain tip `20260801113131_Training_W3_ChecklistsAndDeviations`, whose Designer this one's
+differs from by this table and by NOTHING else — diffed line by line: 79 additions, 0 removals. The tip is
+**not** reachable from `feature/restaurant-modules`: it sits on the previous migration author's branch, and
+authoring off the feature branch would have forked the chain a third way.
+
+**One new table, `MarginWasteEntries`**, plus one trigger. A reason-coded record of food that left the
+kitchen without being sold: `(StoreId, WasteDate)`, a closed `MarginWasteReason` vocabulary, an optional
+intra-Margin ingredient FK with a quantity in the ingredient's base unit, a nullable `ValueMinor` with a
+`MarginWasteValuationSource` beside it, a rowversion, and the actor that recorded it.
+
+**Why the table hangs off (store, date) and not off a statement id.** Waste is recorded as it happens, days
+before anyone opens the week, and a week carries several statement REVISIONS — an entry owned by statement id
+would either belong to the superseded revision or have to be copied forward, and copying an operator's record
+of a loss is the rewrite this estate forbids everywhere else.
+
+**`WasteDate` is `date`, not `datetime2`, and that is the guard rather than a style choice.** The trigger
+asks whether an entry's day falls inside a finalized Mon–Sun period with a `BETWEEN`; against `datetime2` a
+row stamped 12:00 on the period's last day is greater than a `PeriodEnd` of midnight, so **the final day of
+every frozen week would stay writable** while the trigger read present and enabled. Same shape as MIG-13's
+`BusinessDate`, in its other form: there it admitted a duplicate, here it would admit a rewrite. Asserted as
+a type in both the lineage suite and the round trip, and exercised by a refusal test on the last day itself.
+
+**`TR_MarginWasteEntries_FrozenWeekImmutable`, THROW 50062** — the next number in Margin's 5006x block
+(50060 facts, 50061 statement freeze), re-verified unclaimed across the whole chain. **AFTER INSERT, UPDATE,
+DELETE**: appending waste to an already-published week changes what that week is recorded as having
+explained, which is the same defect as editing an entry inside it (`TR_MealsStatementLines_FinalizedImmutable`
+draws the line in the same place). The pseudo-tables are UNIONed, so an entry can be moved neither INTO a
+frozen week nor OUT of one.
+
+**Inseparable from `ApplicationDbContext`'s `b.ToTable(t => t.HasTrigger(MarginWasteFreezeTrigger))`.** This
+is the second rowversion-bearing table in the estate to take a trigger, so error 334 applies exactly as it
+does to `MarginPeriodStatements`: without the declaration the trigger breaks EVERY waste write on SQL Server
+while the whole SQLite suite stays green. Pinned by an ordinary create/update/delete through the service on
+the SQL tier.
+
+**Three layers, and the middle one is not the service.** `MarginWasteService` refuses a frozen week with a
+coded 400 so the operator gets a message rather than a 500; `GuardWasteEntryFrozenWeekImmutable` covers every
+EF writer on every provider (it resolves the covering statement from the tracker OR the database, deny-closed,
+because the writer has no reason to have loaded it — the defect the Meals owner-resolution had to be fixed
+for); the trigger covers what never comes through a `DbContext`.
+
+**FALSIFIED, not merely asserted.** `MarginWasteFrozenWeekSqlServerTests` drops the trigger on the harness's
+own throwaway catalog, watches the identical write be ACCEPTED, and re-creates it — the only evidence the
+refusals measure this trigger. Every refusal is additionally paired with an open-week control performing the
+identical statement, and the DELETE proof asserts from `sys.foreign_keys` that **nothing references the
+table** before issuing it, because SQL Server evaluates FK constraints before an AFTER trigger.
+
+**No unique index, deliberately.** A kitchen throws out tomatoes twice on a Tuesday; uniqueness here would be
+a silent de-duplicator of real losses. The `(StoreId, WasteDate)` read index is asserted `is_unique = 0` for
+that reason, the mirror image of how the estate's uniqueness guards are asserted.
+
+**Waste changes NO statement figure**, and that is pinned on both tiers: it is already inside purchase spend,
+so adding it to the actual side would count the same kroner twice and make the gap it exists to explain look
+larger. It rides on the coverage read as an additive bucket instead.
+
+**PROVEN ON SQL SERVER**, receipt `artifacts/tests/50b85657/RUN.md` — **568/568 on the SQL tier** (11 added,
+0 removed against the 557 baseline) and 4342/0/9 on the fast tier, both at one SHA. The falsification is
+executed rather than described: the suite drops the trigger on its own throwaway catalog, watches the
+identical INSERT be ACCEPTED, and re-creates it. Every `THROW 50062` refusal is paired with an open-week
+control; the DELETE proof first asserts from `sys.foreign_keys` that nothing references the table; the last
+day of the frozen week is exercised explicitly. `RestaurantModulesMigrationRoundTripTests` applies the chain
+into an EMPTY catalog, rolls back and re-applies, asserting the trigger present → gone → present and
+`WasteDate`'s `date` type in all three phases.
+
+An earlier attempt at this tier was killed mid-run when the host's Docker VM remounted its filesystem
+read-only under disk exhaustion — an infrastructure failure, not a property of this migration. That run did
+find one real defect before it died: `MarginW2MigrationLineageTests` holds a SECOND exact-full-Margin-set
+assertion, which the fast tier cannot see and which this table broke until it was added there too.
+
+### MIG-24 `Workforce_W5_Timesheets` — ✅ LANDED as `20260801174639`, and it is the payroll tail W5 was missing
+
+`lane/wf-w5-timesheet` (lane L-WF-W5-TIMESHEET). **Number checked, not taken on trust:** 1–23 are all claimed
+above, so 24 was the next free one.
+
+**Authored off the chain tip `20260801132512_Margin_WasteEntries`**, whose Designer this one's differs from by
+these four tables and by NOTHING else — verified by stripping the four new entity blocks out of the generated
+snapshot and diffing what remained against the tip's, which came back identical. That tip is **not** reachable
+from `feature/restaurant-modules`: it sits on the previous migration author's branch, three migrations ahead
+of the feature branch, and authoring off the feature branch would have forked the chain a fourth way. This
+branch therefore carries `lane/margin-waste` merged in, exactly as the W3 lane carried the detached tip.
+
+**Four tables (spec §3.5, §4.1), the whole W5 wave:**
+
+| Table | Content |
+| --- | --- |
+| `WorkforceTimesheetPeriods` | the approved immutable snapshot; unique `(StoreId, FromBusinessDate, ToBusinessDate)` |
+| `WorkforceTimesheetLines` | the frozen payroll rows; unique `(TimesheetPeriodId, StaffMemberId, BusinessDate, PayCode)` |
+| `WorkforceTimesheetExportBatches` | provider, exact payload + SHA-256, outcome; unique `(StoreId, ProviderKey, BatchKey)` |
+| `WorkforceTimesheetAdjustmentBatches` | the post-export reconciliation; unique `(StoreId, ProviderKey, BatchKey)` |
+
+**Trigger band 50070–50073, a FRESH block rather than the Workforce one.** Workforce's original 50010–50019 is
+exhausted: 50010–50018 are installed and 50019 is claimed by MIG-14 above, and 50020 belongs to Events. The
+band was re-verified free by grep across the whole chain immediately before authoring, the way MIG-13's entry
+demands. All four tables are immutable once written, so all four carry an `AFTER UPDATE, DELETE` trigger.
+
+**No foreign key anywhere in the family, in either direction, and that is a correctness requirement.** SQL
+Server evaluates FK constraints BEFORE an AFTER trigger fires, so a period with lines would refuse a DELETE on
+the reference check and its immutability trigger would never run — the shape that lets an immutability test
+pass against a database whose trigger has been dropped. The references are values with indexes; nothing in
+the family is ever deleted, so there is no cascade a constraint would protect.
+`WorkforceTimesheetImmutabilitySqlServerTests` asserts the absence from `sys.foreign_keys` in both directions
+before issuing its DELETEs, and pins each refusal by THROW number rather than by message.
+
+**No rowversion anywhere in the family**, so every INSERT emits no OUTPUT clause and the AFTER triggers permit
+it (error 334) — the coupling that forced MIG-22 and MIG-23 to declare `HasTrigger` in the model. Nothing here
+needs one: an immutable row has no update race to lose, and consequently this migration adds **no**
+`OnModelCreating` trigger declaration, keeping the estate's ordinary "a raw trigger has no snapshot
+counterpart" convention.
+
+**Both business-date pairs are `date`, never `datetime2`** — MIG-13's and MIG-23's finding in its third form.
+Against `datetime2` a row stamped midday on a period's last day falls outside a window whose end is midnight,
+so every comparison at a payroll boundary would silently admit or exclude the final day. Asserted as a column
+type on the SQL tier.
+
+**The unique indexes are UNFILTERED, including the export batch key.** A filtered index on
+`Outcome = 'Succeeded'` would have let one batch key name two different attempts; instead a failed export
+spends its key permanently and a retry brings a fresh one — which is the same contract
+`WorkforceScheduleCommit`'s stuck-reservation tradeoff already gives every other Workforce mutation. Filtered
+indexes are also the one shape the pre-deploy squash regenerates badly, and this avoids adding a third.
+
+> ⚠️ **CORRECTED BY MIG-25.** The paragraph above is right about the question it answers — whether ONE KEY
+> may name TWO ATTEMPTS — and it does not answer, or acknowledge, a different one: whether TWO KEYS may name
+> ONE EXPORT. They could. `(StoreId, ProviderKey, BatchKey)` cannot refuse a second full export because
+> BatchKey **is** the per-request key, and the service's last-succeeded read runs before the commit. Two
+> concurrent exports under different keys both wrote a succeeded full batch — reproduced on a migrated
+> catalog, `Expected: 1 / Actual: 2`. MIG-25 adds a SECOND index, filtered, that states the other invariant.
+> The two are not alternatives.
+
+**One departure from the §3.5 sentence, stated rather than buried.** §3.5 lists "reconciliation state" as a
+column of the export batch. A state that advances after the row is written needs an UPDATE, and the table is
+append-only — the control C1 exists to keep. The reconciliation therefore lands where §3.5's own next sentence
+puts it: a `WorkforceTimesheetAdjustmentBatches` row referencing the batch, which is appended rather than
+overwritten. For the same reason that table carries counts (`Added`/`Changed`/`Removed`) instead of an
+adjustment-versus-reversal enum: the two words describe what a delta CONTAINS, and an enum would have shipped
+a value nothing in v1 produces.
+
+**`Down()` drops the four triggers BEFORE the tables**, or the round trip fails on the second `Up`, not the
+first.
+
+### MIG-25 `Workforce_TimesheetExportSingleSucceeded` — ✅ LANDED as `20260802103646`, and it is the second half of MIG-24's answer
+
+`lane/wf-export-duplicate` (lane L-WF-EXPORT-DUPLICATE), cut from `lane/wf-w5-timesheet`. **Number checked,
+not taken on trust:** 1–24 are all claimed above, so 25 was the next free one.
+
+**Authored off the chain tip `20260801174639_Workforce_W5_Timesheets` (MIG-24)**, whose Designer this one's
+differs from by this single index and by NOTHING else — verified by diffing the two Designer files with the
+class name normalised, which came back as the `[Migration]` attribute plus five lines of index. That tip is
+**not** reachable from `feature/restaurant-modules`: measured, it is **five migrations** behind and not an
+ancestor of it. This branch therefore stacks on `lane/wf-w5-timesheet`, which itself carries
+`lane/margin-waste` — a third link in the chain F-MIG-CHAIN-STACKED names, and unavoidable here, because the
+table this index constrains exists only on that branch.
+
+**What it closes, and it was reproduced rather than reasoned about.**
+`WorkforceTimesheetService.ExportAsync` reads the last SUCCEEDED batch to decide full-versus-delta, and that
+read runs inside `onProceed` — before the single `SaveChanges`. Two exports of one period in flight with
+DIFFERENT idempotency keys both reserve (different keys, so the unique `(Scope, Key)` index does not touch
+them), both read "never exported", and both write a succeeded FULL batch. A probe held one caller at its
+second `SaveChanges` on a migrated catalog and got `Expected: 1 / Actual: 2` before this index existed.
+The rows are immutable in `TR_WorkforceTimesheetExportBatches_Immutable`, so the duplicate is permanent:
+an accountant receives two complete months for one month. **This is the `AccountingSummaries` double-post
+shape** — the live production defect this estate already carries — arriving in a new table family.
+
+| Index | Columns | Filter |
+| --- | --- | --- |
+| `UX_WorkforceTimesheetExportBatches_OneSucceededPerPeriodProvider` | `(StoreId, TimesheetPeriodId, ProviderKey)` | `[Outcome] = 'Succeeded'` |
+
+**FILTERED, and MIG-24's argument against filtering does not apply to it.** That argument is about the
+BATCH-KEY index: filtering it would have let one key name two attempts. This index states a different
+invariant — at most one SUCCEEDED full export exists per period per provider — and a FAILED attempt must
+stay free to repeat, so the uniqueness has to be a property of the succeeded rows alone. The squash cost
+MIG-24 names is real and is accepted: no unfiltered index can express this, and the module already carries
+three filtered ones (D1 active engagement, one-person-per-login, pending invitation).
+
+**No trigger, so NO THROW number is claimed.** A unique index refuses with SQL Server 2601, which
+`WorkforceDbViolations.IsSucceededTimesheetExportViolation` maps to the typed 409
+`workforce.timesheet-period-already-exported`. MIG-24's band 50070–50073 is untouched and **50073 remains
+the highest number claimed anywhere**. Anyone reading only from a branch below the tip sees 50060 and will
+reach for 50061, which Margin holds — re-verify by grep across the whole chain, from the tip.
+
+**The loser is refused, not handed the winner's batch.** The acknowledgement race (MIG-21) returns the
+winner's row because both callers asked for the same idempotent fact; these two did not. This caller asked
+for a file to be produced under ITS key, and handing back a batch it did not create would put a payroll
+artifact's id in a response whose `Idempotency-Key` never made one. The refusal is `retryable: true` and
+names a fresh key, because this caller's own key is spent on a reservation that will never complete — the
+composition's documented stuck-reservation tradeoff, identical to MIG-21's.
+
+**ACCEPTED RESIDUAL — the adjustment path keeps the same window, and no index can close it.** The full
+path's invariant is ABSOLUTE, so a constraint states it exactly. The adjustment's is RELATIVE: a delta is
+computed against the frozen lines, so it may legitimately REPEAT an earlier one (correct a figure,
+over-correct it, then correct it back), and uniqueness on the payload digest — or on
+`SupersedesExportBatchId`, which several legitimate adjustments share — would refuse a file the accountant
+is owed. Its real invariant is "differs from the LAST adjustment", which a unique index cannot express.
+**The shape of the fix**: an ordinal on `WorkforceTimesheetAdjustmentBatches`, unique per
+`(StoreId, TimesheetPeriodId, ProviderKey)`, computed from the current maximum inside `onProceed` — two
+concurrent adjustments both compute the same next ordinal and the database refuses one. That is a column,
+so it is a migration and a separate lane, not a follow-on edit to this one.
+
+> ✅ **CLOSED BY MIG-26** below. The residual and its prescribed shape were both right; ONE argument in the
+> paragraph above is wrong in detail and is corrected there — the correct / over-correct / correct-back
+> sequence does **not** repeat a digest on a single line, because the rendered file carries the
+> approved-correction COUNT and that only grows. A digest repeat is still real and still legitimate; it takes
+> two lines, and MIG-26's lane built the case rather than asserting it.
+
+**Evidence.** `TimesheetExportDuplicateRaceSqlServerTests`, three tests on a migrated catalog: the race
+leaves one succeeded batch and a typed 409; `sys.indexes` reports the index unique, filtered on
+`Succeeded`, and not disabled — the chain built it, not the model, which is the `AccountingSummaries`
+lesson as an assertion; and a falsification control drops the index on its own throwaway catalog and asserts
+the duplicate APPEARS, so the first test's single row is attributable to the index and to nothing else.
+Both halves were mutated away and confirmed red: without the migration's `CreateIndex` all three go red
+(`Expected: 1 / Actual: 2`); without the mapping the loser surfaces a raw `DbUpdateException`, which is a
+500 for an operation the database decided perfectly well.
+
+### MIG-26 `Workforce_TimesheetAdjustmentOrdinal` — ✅ LANDED as `20260802151208`, and it closes the residual MIG-25 named
+
+`lane/wf-adjustment-ordinal` (lane L-WF-ADJUSTMENT-ORDINAL), cut from `lane/wf-export-duplicate`. **Number
+checked, not taken on trust:** 1–25 are all claimed above and 26 appeared in no ledger on any branch in the
+repository, so it was free.
+
+**Authored off the chain tip `20260802103646_Workforce_TimesheetExportSingleSucceeded` (MIG-25)**, whose
+Designer this one's differs from by one property, one index and its own `[Migration]` attribute and by
+NOTHING else — verified by diffing the two Designer files with the class name normalised. That tip is **not**
+reachable from `feature/restaurant-modules`: measured with `git merge-base --is-ancestor` in both directions,
+the two have diverged (merge-base `968fd273`, 22 commits on the feature branch, 23 on the stack) and the
+stack carries **SIX** migrations the feature branch does not. This branch is therefore the fourth link:
+`lane/margin-waste` → `lane/wf-w5-timesheet` (MIG-24) → `lane/wf-export-duplicate` (MIG-25) → here.
+
+> ⚠️ **MIG-25's entry says "five migrations", and so does the plan.** That was true when MIG-25 was authored
+> and counted from MIG-24's tip; MIG-25 then landed and made it six. Re-measure rather than inherit the
+> number — this is the second time it has been carried forward stale.
+
+| Index | Columns | Filter |
+| --- | --- | --- |
+| `UX_WorkforceTimesheetAdjustmentBatches_OrdinalPerPeriodProvider` | `(StoreId, TimesheetPeriodId, ProviderKey, Ordinal)` | none |
+
+**What it closes.** `ExportAsync` computes the delta against the frozen lines inside `onProceed`, before the
+single `SaveChanges`. Two reconciliations in flight under DIFFERENT idempotency keys both reserve (different
+keys, so the `(Scope, Key)` index does not touch them), both read the same last adjustment, and both append —
+the accountant receives two corrections that each claim to correct one already-sent file, in a table whose
+rows a trigger makes permanent. The window is MIG-25's, one table over.
+
+**UNFILTERED, and MIG-24's argument for that applies here where it did not apply to MIG-25.** MIG-25 had to
+filter on `Outcome = 'Succeeded'` because a FAILED attempt must stay free to repeat. **This table has no
+failed rows to exempt**: a provider that refuses writes a Failed `WorkforceTimesheetExportBatch` whatever the
+snapshot kind, so every row here is a file that left. That spares the pre-deploy squash a fourth filtered
+index, the one shape it regenerates badly.
+
+**No trigger, so NO THROW number is claimed.** A unique index refuses with SQL Server 2601, which
+`WorkforceDbViolations.IsAdjustmentOrdinalViolation` maps to the typed 409
+`workforce.timesheet-adjustment-superseded`. The band was re-verified by grep from this tip as this ledger
+demands: **50073 is still the highest number claimed anywhere**, MIG-24's 50070–50073 is untouched.
+
+**The column and the index land in one migration, which is safe HERE and would not be everywhere.** Every
+pre-existing row would take `Ordinal = 0` from the default, so a catalog already holding two adjustments for
+one `(store, period, provider)` would refuse the `CreateIndex`. None does — the whole W5 family arrived in
+MIG-24 and is deployed nowhere, and replay-from-empty has no rows. Stated because a squash rehearsal must
+re-check it against whatever data exists then. Neither operation touches a row: `ALTER TABLE … ADD` and
+`CREATE INDEX` are DDL, so the append-only trigger does not fire and C1 is not engaged.
+
+**The index alone is not the whole fix, and the service half is the invariant.** "Differs from the LAST
+adjustment" is a comparison against one moving row, so it lives in `ExportAsync`: the rendered digest is
+compared to that same last adjustment's, and a repeat is refused as `NothingToReconcile`. The ordinal is what
+makes that comparison sound — without it the row being compared against can be stale, and with it a loser is
+forced to re-read. **This half closes a defect that is not a race at all**: because the delta is diffed
+against the FROZEN lines, which never move, the diff stays non-empty for as long as a correction stands, so
+before this lane a third, fourth and fifth call to endpoint 29 each produced another byte-identical
+correction. Deterministic, reproducible on SQLite, and not previously recorded anywhere.
+
+**A CORRECTION to MIG-25's residual paragraph, which is the reason this lane is worth reading.** That
+paragraph justifies "no index can close it" with a correct / over-correct / correct-back sequence on one
+line. **That sequence does not repeat a digest in this codebase**: the rendered file carries
+`approvedAdjustments` per line, which is the count of approved corrections and only grows, so the third file
+differs from the first in that column. The conclusion survives, by a different construction the lane BUILT
+rather than asserted: with **two** people on the day, a second person's line enters the delta and then leaves
+it again when its minutes are corrected back to the frozen value (`Diff` tests minutes, planned minutes and
+status — not the count), and the third file is then byte-identical to the first while being a file the
+accountant is owed, because the file they hold says 180 minutes for someone who worked 240. A unique index on
+`PayloadSha256` would refuse it. The `SupersedesExportBatchId` half of the original argument is exactly right
+and is asserted directly: all three adjustments share one superseded export.
+
+**Evidence.** Fast tier — `WorkforceTimesheetTests`, two new tests: the deterministic repeat is refused and
+leaves one batch; and the three-file sequence lands ordinals 1/2/3 with digest 3 == digest 1 != digest 2, one
+shared `SupersedesExportBatchId`, and a non-blank actor on every row (C4). Both were mutated away and
+confirmed red at the intended test: deleting the digest comparison reds the repeat test, and pinning the
+ordinal to a constant reds the sequence test. SQL tier — `TimesheetAdjustmentOrdinalRaceSqlServerTests`,
+three tests on a migrated catalog, asserting the index by PROPERTY (`is_unique`, `has_filter = 0`, not
+disabled, the exact ordered key, every key column `is_nullable = 0`) rather than by name, the race leaving
+exactly one batch at ordinal 1 with a typed 409 carrying `retryable: true`, and a falsification control that
+drops the index on its own throwaway catalog and asserts BOTH rows appear at ordinal 1.
+
+> ⚠️ **The SQL tier of this lane has NOT been executed.** The host had ~1.2 GiB free against five other
+> lanes' live SQL containers, and starting a sixth risked an OOM kill taking out four other lanes' worlds.
+> The three SQL-tier tests above are written, compile, and are **unrun**. Everything above the SQL-tier
+> paragraph is measured; the SQL-tier paragraph is a specification of what must be run before this lands.
+
+### MIG-27 `Meals_CompanyReceivableAccount` — ✅ LANDED as `20260803090036`, and it is where a company receivable finally has an account to be
+
+`lane/mig-company-receivable` (lane L-MIG-COMPANY-RECEIVABLE), cut from `lane/wf-adjustment-ordinal`.
+**Number checked, not taken on trust:** every ledger on every branch in the repository was grepped for
+`MIG-27` and higher and none exists, and 1–26 are all claimed above.
+
+**Authored off the chain tip `20260802151208_Workforce_TimesheetAdjustmentOrdinal` (MIG-26)**, whose
+Designer this one's differs from by ONE property and its own `[Migration]` attribute and by nothing else —
+verified by diffing the two Designer files with the class name and migration id normalised. The generated
+snapshot diff is the same three lines, so the model matched the chain both before and after.
+
+> ⚠️ **The count is now SEVEN, not six and not five.** MIG-26's entry says six and MIG-25's says five; each
+> was true when written and stale by the next lane. Measured from a clean checkout at this tip:
+> `feature/restaurant-modules` ends at `20260731220005_Workforce_IdentityCodeRegisterIssues` and the stack
+> carries `20260801084923`, `20260801102621`, `20260801113131`, `20260801132512`, `20260801174639`,
+> `20260802103646`, `20260802151208` on top of it — **seven**. The tip is still not reachable from the
+> feature branch (`git merge-base --is-ancestor` fails in both directions). This is the fifth link:
+> `lane/margin-waste` -> `lane/wf-w5-timesheet` (MIG-24) -> `lane/wf-export-duplicate` (MIG-25) ->
+> `lane/wf-adjustment-ordinal` (MIG-26) -> here. **Re-measure; do not inherit this number either.**
+
+One additive nullable column, no index, no trigger, no THROW number claimed (50073 re-verified by grep from
+this tip as still the highest anywhere; MIG-24's 50070–50073 untouched).
+
+```
+TripletexConnections
+  CompanyReceivableAccountNumber nvarchar(max) NULL
+```
+
+**Why a column on the connection and not the shared receivables account.** `D-MEALS-CREDIT-ACCOUNT` was
+ruled `own-interim-account`. The two sibling columns beside it — `DinteroIntermediaryAccountNumber` and
+`SurfboardIntermediaryAccountNumber` — exist for exactly this reason, spelled out in
+`TripletexAccountingExportProvider.SplitReceivablesPerProviderAsync`: *both sides of the same money must
+meet on one account*. The company's settlement of the monthly Meals statement is the other side of a credit
+sale, so it needs its own account or the residual stops meaning anything. Posting into
+`AccountingConfiguration.AccountNumberReceivables` instead puts a company debt into the account the online
+day voucher debits and the payout voucher clears against the two intermediaries — nothing in that flow ever
+clears a company debt, so its balance counts the same krone twice. A **reskontro** account was also refused:
+a customer sub-ledger posting needs a customer id on the line and no code in this estate sets one.
+
+**Read by the export, which is the half that makes it not a dead column.**
+`TripletexPosService.PaymentAccountNumber` now has a `PaymentType.CompanyAccount` branch returning it;
+before this the tender fell through `default -> config?.AccountNumberReceivables`. **Reachable as of
+today**, not theoretical: `lane/meals-pos-tender-wire` (`32fd5a86`) landed the production write path that
+settles a company-account tender at a till, and the same lane reports the Z summary's
+`default -> OtherTotal` branch became reachable with it. Also plumbed through the power-user admin surface
+(`UpsertTripletexConnectionModel`, `TripletexConnectionStatusModel`, the `Coalesce` upsert, the
+auto-creatable chart-of-accounts list as *Mellomkonto bedriftskreditt* `ASSETS`, and the missing-account
+scan), so the account can actually be set and provisioned.
+
+**Blank REFUSES the Z voucher; it does not fall back.** An unset account lands in `missingRoles` as
+`betalingskonto CompanyAccount` and the export throws, isolated to that Z by
+`ExportPendingForStoreAsync`'s per-Z try/catch. A fallback to receivables would silently restore the
+mis-posting this entry exists to remove, and the two card rails already establish the convention (neither
+falls back either).
+
+**No backfill, and none is possible to want:** every existing row predates any company tender, and NULL is
+the truthful "not configured". `TripletexConnections` is not append-only and carries no trigger, so C1 is
+not engaged; `ALTER TABLE … ADD` is DDL and touches no row.
+
+**Evidence.** Fast tier — `WebApi.Tests/Kassa/Cov_TripletexPosExportTests.cs`, three new tests: a
+company-account tender settles on the interim account with nothing on the shared receivable, the cashbox or
+a VAT type; an unset account refuses with the named role and posts no voucher; and a mixed card+credit day
+keeps the two on separate accounts. All three were **proven red** against the mutant (the
+`PaymentType.CompanyAccount` branch deleted so it falls back to receivables again) and green after
+restoring, with a real rebuild between the two. `has-pending-model-changes` reports no changes.
+
+> ⚠️ **The SQL tier of this lane has NOT been executed.** Measured with `docker stats` at authoring time,
+> not inherited: five foreign SQL containers (`okam-lvsp-sql`, `okam-lwr-sql`, `okam-lws-staff-sql`,
+> `okam-lws-sql`, `zen_pasteur`) held 6.12 GiB of the VM's 7.65 GiB, and a sixth SQL Server needs
+> 1.3–1.4 GiB — it would have OOM-killed other lanes' worlds. Nothing in this entry needs SQL Server to be
+> *decided*: there is no index, no trigger and no constraint, and the fast tier runs the export path on
+> Sqlite. But the migration has been applied to **no database**, so replay-from-empty and the up/down round
+> trip are UNPROVEN and are what a squash rehearsal must run.
+
+### MIG-28 `Workforce_BootstrapFirstEngagement` — AUTHORED as `20260803124302`, and the first engagement is now one per store in the schema
+
+**Authored 2026-08-03, lane `L-WF-BOOTSTRAP-ONE-ENGAGEMENT`**, off the chain tip
+`20260803093235_Kassa_AccountingSummaryDayUniqueIndex` (MIG-7). The Designer differs from MIG-7's by the
+new column and the new index and by nothing else (C2, verified by diffing the two Designer files).
+
+**Number verified free before authoring**, not inherited: `MIG-28` was grepped across the ledger on every
+local branch. It appears only in MIG-7's entry above, which explains why it deliberately did NOT take it.
+
+> ⚠️ **THE CHAIN, RE-MEASURED — and the dispatch brief had the hazard backwards.** The brief warned that
+> "authoring off the integration branch would fork a chain that is nine deep". Measured with git, the
+> opposite is true and authoring off `feature/restaurant-modules` is what would have forked it:
+>
+> - `feature/restaurant-modules` = `3579bbbc`, and it carries NO August migration. It is **34 commits
+>   behind** `integration/mig-stack-land` and **9 migrations behind** the chain tip.
+> - `integration/mig-stack-land` = `4b37f81b` carries all nine, and `git merge-base --is-ancestor
+>   feature/restaurant-modules integration/mig-stack-land` answers YES — the feature branch IS an
+>   ancestor of the merged stack, so the stack strictly extends it and forks nothing.
+> - `lane/acct-uidx` (which authored MIG-7, the tip) is likewise an ancestor of the stack: `integration`
+>   is 30 commits ahead of it and 0 behind.
+> - Nine migrations across **eight** merge commits, not seven; seven are labelled `link N/7` and the
+>   eighth is `65b8f1c2`, an earlier "take the previous migration author's chain tip" merge.
+>
+> This lane therefore branched from `integration/mig-stack-land` and merged `lane/wf-bootstrap`
+> (`9d1719df`, which is NOT on the stack — it was cut from `3579bbbc`) to get the service under test.
+> **Re-measure before the next migration; do not inherit these numbers either**, including the correction.
+
+**What it closes.** `WorkforceBootstrapService` decides a store has no workforce yet from
+`WorkforceStaffMembers.AnyAsync(StoreId)`, and that read runs before the single `SaveChanges` inside
+`CompleteAsync` that commits the engagement. Two bootstraps of one store in flight with DIFFERENT
+idempotency keys both reserve (different keys, so the unique `(Scope, Key)` index does not touch them),
+both read "no workforce", and both commit a `WorkforceSelf | WorkforceScheduler | WorkforceManager`
+engagement. The store ends with two managers nobody granted, each able to hire, to schedule and to hand
+out `WorkforcePayrollApprover` — on the module that decides whose pay a punch lands on. It is the
+`AccountingSummaries` double-post shape and the MIG-25 shape again: a read-then-write with no schema
+behind it.
+
+> **THE GAP IS WIDER THAN IT WAS REPORTED, and the wider half is the one that matters.** The brief and
+> `IWorkforceBootstrapService`'s own remarks both name a single surviving case — a caller who ALREADY
+> carries a `WorkforcePerson` double-submitting, so both calls attach to it and the one-person-per-login
+> index is never reached. True, and measured. But a **second, larger** case survives that neither names:
+> **two DIFFERENT administrators of one store**, neither carrying a person row. Two logins mint two
+> persons, the `ApplicationUserId` values differ, and the login index is not touched either. Nothing about
+> that case is rarer — a store with two admins is ordinary, and both clicking "open Workforce" on a fresh
+> store is the likeliest way this ever happens in the field. Both are covered by this index and both are
+> pinned in `BootstrapFirstEngagementRaceSqlServerTests`.
+
+**One nullable column and one filtered unique index.** `WorkforceStaffMembers.IsFirstEngagement bit NULL`
+plus `UX_WorkforceStaffMembers_OneFirstEngagementPerStore` UNIQUE on `(StoreId)` filtered
+`WHERE [IsFirstEngagement] = 1`. The marker is written ONLY by the bootstrap; every later hire goes
+through a manager who already holds an engagement and leaves it NULL.
+
+**NULLABLE with no backfill (C1), and that is load-bearing rather than tidiness.** Every engagement that
+predates MIG-28 stays NULL and so sits outside the filter — which is what makes the index creatable at
+all on a store that already has a workforce. A NOT NULL column with a default would have rewritten every
+existing row on a live table to deploy a constraint about rows that do not exist yet.
+
+**FILTERED, because a store legitimately has many engagements and only the FIRST is unique.** An
+unfiltered unique index on `StoreId` would pass a naive "second bootstrap refused" test and cap every
+store at one worker forever; `Ordinary_engagements_in_the_same_store_are_unaffected` is the pin against
+that.
+
+**The index is in `OnModelCreating`, following MIG-25/MIG-26 and NOT the `RestaurantModules_Initial`
+discipline.** The D1 index `UX_WorkforceStaffMembers_ActiveEngagement` on this same table is a
+migration-only operation with no model counterpart, which is precisely why the port lost it and why a
+snapshot diff cannot see it. Declaring this one in the model means the migration was derived from it,
+both providers get it, and a later edit that widens or unfilters it regenerates visibly.
+
+> ⚠️ **The NAMED `HasIndex` overload is required here and a plain one would have been silently wrong.**
+> EF keys an unnamed index by its columns alone, so a second `b.HasIndex(x => x.StoreId)` would have
+> RECONFIGURED the existing non-unique store index into this unique filtered one rather than adding a
+> second index — every store-scoped roster read would have quietly lost its index while the new
+> constraint still worked and every test still passed. Both tiers assert two indexes on `StoreId`.
+
+**No trigger, so no THROW number is claimed.** A unique index refuses with SQL Server 2601, which
+`WorkforceDbViolations.IsFirstEngagementViolation` maps to the existing typed 409
+`workforce.already-bootstrapped` (`retryable:false` — the door is shut for good, so a client told to retry
+would retry forever). **50073 is still the highest number claimed anywhere**; MIG-24's 50070–50073 is
+untouched.
+
+> **A MEASURED CORRECTION to the by-name discriminator pattern MIG-25 and MIG-26 established.** Their
+> SQLite fallbacks match on the constraint's own distinguishing COLUMN. That does not work here and the
+> first draft of this one was wrong because of it: SQLite's message is
+> `UNIQUE constraint failed: WorkforceStaffMembers.StoreId` — the INDEXED column, and neither the index
+> name nor the filter column `IsFirstEngagement` appears anywhere in it. The discriminator therefore keys
+> on `StoreId` WITHOUT `StaffMemberId`, which separates it from the `(StoreId, StaffMemberId)` alternate
+> key (names both) and the primary key (names only `StaffMemberId`), and is safe on SQL Server too, where
+> messages carry constraint names and no column names at all. **This was caught by running the fast tier,
+> not by reading the pattern**, and `A_key_collision_on_the_same_table_is_not_claimed_as_a_first_engagement_violation`
+> is the control that keeps it honest.
+
+**The service's catch is now narrowed to the two indexes this race can trip** (`IsFirstEngagementViolation
+|| IsPersonLoginViolation`) instead of swallowing any `DbUpdateException` whose re-read finds a workforce.
+The winner has necessarily COMMITTED when a unique violation is raised — the second writer blocks on its
+lock until then — so the loser's re-read is guaranteed to see it and cannot answer 409 for a store that
+has no workforce after all.
+
+> ⚠️ **THE SQL TIER HAS NOT BEEN EXECUTED, AND THE EXIT IS THEREFORE UNPROVEN.** Measured with
+> `docker stats --no-stream` at authoring time, not inherited: five foreign SQL containers
+> (`okam-lvsp-sql`, `okam-lwr-sql`, `okam-lws-staff-sql`, `okam-lws-sql`, `zen_pasteur`) held 6.28 GiB of
+> the VM's 7.65 GiB with **690 MB available and swap at 937/1024 MB (91%)**. A sixth SQL Server needs
+> 1.3–1.4 GiB and would have OOM-killed another lane's world.
+>
+> `BootstrapFirstEngagementRaceSqlServerTests` is written and compiles and **has never run**. What is
+> genuinely unproven is the part only two connections can show: that the refusal lands on the OVERLAPPING
+> caller, that the loser is told 409 rather than 500, that the loser's legal employer rolls back rather
+> than orphaning, and that the migration installs the index on a catalog migrated from empty.
+> `BootstrapFirstEngagementConstraintTests` (4/4 green, container-free) proves the complementary half —
+> the model declares it, a database really refuses a second first-engagement, ordinary engagements are
+> unaffected, and the discriminator recognises it and not its neighbours — and does **not** claim to
+> substitute for the race. Closing this out is one container-hour of work.
+
+### MIG-18 (CONDITIONAL on a Sven ruling) `MealsGuardDriftObservation` — drift history
+
+Only if the guard-drift repair decision lands on an option that needs a HISTORY of when drift appeared and
+when it was corrected. See `docs/plans/meals-guard-drift-repair-decision.md` § D-3; the lane's own
+recommendation is that the audit event on the repair is enough for pilot and this table is **not** taken.
+
+Detection itself needs nothing: it is a fold computed on demand and logged, and it writes nothing today.
+
+If ruled in — one table, additive, no trigger:
+
+`MealsGuardDriftObservations`
+`ObservationId uniqueidentifier NOT NULL` (PK, app-assigned — no rowversion, see the MIG-14 `OUTPUT`/trigger
+gotcha), `CompanyId uniqueidentifier NOT NULL`, `ProgramId uniqueidentifier NOT NULL`,
+`MembershipId uniqueidentifier NOT NULL`, `PeriodKey nvarchar(16) NOT NULL`,
+`GuardRowMissing bit NOT NULL`, `StoredReservedMinor bigint NOT NULL`, `StoredCapturedMinor bigint NOT NULL`,
+`LedgerReservedMinor bigint NOT NULL`, `LedgerCapturedMinor bigint NOT NULL`,
+`ObservedAtUtc datetime2 NOT NULL`, `ClearedAtUtc datetime2 NULL`.
+
+Index `(CompanyId, ProgramId, MembershipId, PeriodKey)` and a filtered
+`WHERE [ClearedAtUtc] IS NULL` for the open set. **No FK** — it mirrors `MealsFundingAllocation`, whose
+references are all stored by value so the row survives any cascade and stays self-contained.
+
+⚠️ It would be written by a hosted loop that **has no Redis lease**, so a scaled-out App Service would
+insert one row per instance per pass. Either lease the loop first (the `DailyMaintenanceBackgroundService`
+precedent) or make `(ProgramId, MembershipId, PeriodKey)` unique-while-open, before this table exists.
+
+### MIG-19 `Events_LineVatRate` — the VAT a settlement line has nowhere to put
+
+From `lane/ev-vat`. The settlement statement now carries a per-rate MVA roll-up
+(`EventsSettlementView.Vat`), derived at projection time from the signed POS journal. It covers exactly one
+kind of line — a `PosCheck` referencing `JournalRef` that reconciled `Matched` — because that is the only
+line whose VAT any record in this database establishes. `Invoice`, `Refund` and `Adjustment` lines are
+withheld with reason `NoVatRateOnLine`, and that reason is **a schema gap, not an unknowable fact**: the
+operator recording an invoice remainder is reading the rate off the invoice in front of them and has nowhere
+to type it. Two additive columns close it.
+
+```
+EventsSettlementLines
+  VatPercent int NULL          -- whole percent, the fiscal side's unit: {0, 12, 15, 25} only
+  VatRateSource nvarchar(16) NULL   -- 'Operator' | 'FiscalTruth', stored via EnumToStringConverter
+
+EventsProposalLines
+  VatRate decimal(6,4) NULL    -- WIDEN TO NULL from NOT NULL; existing rows keep their value
+```
+
+Constraints to honour:
+
+- **`EventsSettlementLines.VatPercent` is `int`, not `decimal`, and deliberately disagrees with
+  `EventsProposalLines.VatRate`.** The fiscal estate speaks whole percent everywhere
+  (`JournalLine.VatPercent`, `JournalTaxLine.VatPercent`, `GoodsGroup.*VatPercent`, `Product.Tax`) and
+  `AccountingHelper.GetVatRateFromPercentage` is the single chokepoint mapping it to a `SafTVatCode`. A
+  settlement line is reconciled against journal rows, so it must key on the same unit they do. The
+  proposal's fraction is the outlier and is NOT being changed here — see the hash note below.
+- **NULL is the default and means "not stated", never 0 %.** Zero is a real Norwegian rate. **Never
+  backfill**: an existing settlement line's rate was never captured and inventing one retrospectively would
+  put a fabricated tax figure on a document that may already have gone to an accountant. The roll-up reads
+  NULL as withheld, which is what it does today with no column at all.
+- **Application-level validation, not a CHECK constraint.** `AccountingHelper.EnsureSupportedVatRate` is the
+  estate's guard at every other entry point (product save, goods-group upsert, journal build); a CHECK would
+  be a second, silently divergent copy of the rate set — and the set changes by annual Stortingsvedtak.
+- **`VatRateSource` exists so a hand-typed rate can never be mistaken for the journal's.** The roll-up must
+  keep treating a `Matched` `JournalRef` line's fiscal breakdown as authoritative and must not let an
+  operator's typed rate override it; without the discriminator, `VatPercent` on a `PosCheck` line would be
+  ambiguous the moment anyone sets it.
+- **No index.** Both columns are read only as part of the owning settlement's line set, which is already
+  reached through `IX`/`UX_EventsSettlementLines (SettlementId, LineNo)`. A VAT-rate index would serve no
+  query that exists.
+- **No trigger, and no append-only family is affected.** `EventsSettlements`/`EventsSettlementLines` are
+  deliberately OUTSIDE the append-only guard (the settlement mutates across Draft → Reconciled → Closed and
+  carries a `RowVersion` instead) — see `Entities/Events/EventsSettlement.cs` class remarks and the absence
+  of an entry in `GuardAppendOnly`. So this entry claims **no THROW number**; Events' band 50020–50029 is
+  untouched. `EventsProposalLines` is likewise not append-only (immutability is enforced at the *version*
+  level, invariant 2).
+
+⚠️ **The `EventsProposalLines.VatRate` widening touches the proposal content hash — read this before
+authoring.** `EventsProposalContentHash` renders the rate at fixed scale 4 (`Scale(line.VatRate, 4)`) into
+the SHA-256 that every sent version is pinned with and re-verified against at acceptance. Making the column
+nullable is safe *only* because no existing row is null, so every stored version rehashes identically. The
+migration must land **with** the hash change that renders a null as the empty string — the convention
+`CurrencyCode ?? string.Empty` already uses — in the same commit, or a null-rate draft will hash as
+`"0.0000"` and be indistinguishable from a zero-rated one in the very artefact that exists to distinguish
+content.
+
+⚠️ **A ruling is needed before the settlement columns are worth authoring**, and it is not about the schema:
+`docs/plans/events-settlement-vat-decision.md` asks whether a `DepositApplied` line is a taxable advance or
+an on-account liability with no VAT until delivery (spec §13 assigns this to Sven, with the venue's
+accountant, before the first live pilot deposit). Until it is ruled, **every settlement carrying a deposit
+publishes no VAT total regardless of these columns** — because the deposit, not the invoice line, is what
+withholds it on the realistic pilot statement. Authoring MIG-19 first would add columns that change nothing
+anybody sees. The proposal widening has no such dependency and can land alone.
+
+### MIG-20 `Events_DietaryRequirements` — the field the run sheet had to lie about
+
+✅ **AUTHORED AND LANDED 2026-07-31** as `Migrations/20260731210732_Events_DietaryRequirements.cs`, off the
+chain tip `20260730150953_Growth_ConsentTextVersionAppendOnly` (the generated snapshot diff is these columns
+and nothing else, so the model matched the chain both before and after). It is **applied to no database by
+this lane** — like every entry here, deployment is the owner's.
+
+Three columns, not the two specified below: `DietaryRequirementsUpdatedByUserId` (`nvarchar(128) NULL`, no FK
+and no index) was added because nothing else records who stated a requirement, and a health-adjacent claim
+printed onto a kitchen document with no author is the shape this module refuses everywhere else. It is
+current-state provenance on a mutable row — the same shape as `EventsRunSheet.IssuedByUserId` — so it stays
+outside `ModuleActorStamps.Events`, whose remarks already name that class of column and why.
+
+The dependencies below are answered rather than waived: the write path is
+`PUT /events/admin/{storeId}/events/{eventId}/dietary` → `EventsInquiryService.RecordDietaryStatementAsync`
+(store-admin gated, refuses an unattributable caller, refuses an EMPTY statement so a blank can never be
+stored as an absence), the read-back is `EventsEventDetailView.Dietary`, and the printed result is captured
+at `artifacts/journeys/ev-dietary/run-sheet.md`. What remains unanswered is the retention promise below.
+
+`EventsEvents` + two additive nullable columns:
+
+| Column | Type | Notes |
+|---|---|---|
+| `DietaryRequirements` | `nvarchar(max) NULL` | Guest/staff free text, authoritative. `max` deliberately: an allergen statement truncated by a column width is the same false-negative this entry exists to close, in the storage layer. |
+| `DietaryRequirementsUpdatedAtUtc` | `datetime2 NULL` | When it was last stated. A stale requirement and a never-stated one are different facts and the sheet must be able to tell them apart. |
+
+**No backfill.** `EventsEvents` is NOT append-only (it carries a `RowVersion` and mutates across the
+lifecycle — see `Entities/Events/EventsEvent.cs`), so no trigger blocks an `UPDATE`, and that is exactly why
+the rule has to be written down: **there is nothing to migrate from.** Any backfill would invent a dietary
+statement, which is the defect wearing a new hat. Existing rows are `NULL` = never stated, and `NULL` is the
+only truthful value for them.
+
+**No index.** The column is read only as part of the owning event, already reached by PK.
+
+**No trigger, no append-only band.** Events' THROW band 50020–50029 is untouched.
+
+⚠️ **A `NULL` column must never restore the "none recorded" sentence.** Three distinct states exist and the
+composer must keep them distinct: *never asked* (`NULL`), *asked, guest stated none* (a non-empty string
+saying so), *asked, guest stated a requirement*. Only the second may be printed as an absence, and only
+because a human wrote it. The composer's honest-limitation line stays for `NULL` — it is not scaffolding to
+delete when the column lands. `WebApi.Tests/Events/EventsRunSheetDietaryTests.cs` is the standing guard.
+
+⚠️ **Optional structured tags are a SEPARATE, LATER entry — do not fold them in.** A
+`EventsEventDietaryTags` child table (or a reuse of `Allergen`) would let a proposal line containing nuts
+raise an alert. It is not part of this migration, it must never become the authoritative store (the free
+text is), and the reasoning against reusing `ProductAllergen` as the requirement model is in
+`docs/plans/events-dietary-capture-decision.md` §5.
+
+⚠️ **This column inherits an unimplemented promise.** Spec §13 (`docs/plans/modules/40-events-spec.md:345`)
+commits to anonymising dietary text and contact fields 90 days after the event ends; **nothing implements
+it** (BE-EVT-13 / M6). The lane that landed the run-sheet fix already copies guest free text onto persisted
+`EventsRunSheetItems` rows, so an erasure job must reach **two** tables, not one. Authoring MIG-20 without
+that job in sight adds a third place health-adjacent text accumulates with no exit.
+
+**Depends on a guest-side field to fill it** — `EventsProposalAcceptRequest` has `AcceptorName` and
+`AcceptorEmail` and nothing else, and there is no Events frontend at all. Authoring MIG-20 before either
+exists adds a column only staff could ever populate, and only through an endpoint that does not exist yet.
+
+↳ **Answered by half, 2026-07-31.** The staff endpoint now exists and is driven end to end over HTTP, so the
+column is populated by a real caller rather than by nobody. The GUEST half is still open and is still the
+better capture point: the only prompt a guest ever sees is the enquiry message, months before the menu and
+the guest list are settled. `EventsProposalAcceptRequest` still carries no dietary field, and there is still
+no Events UI of any kind — which is also why the journey capture is the API's own printed sheet.
+
+### MIG-21 `WorkforceSchedulePublicationReceipts` uniqueness — ✅ LANDED as `20260801102621`
+
+**Numbered 21, not 22.** MIG-22 was already taken by the Margin statement freeze above, which was itself
+renumbered off 21 *because* this entry held it — the number is load-bearing in a test trait, and two lanes
+claiming one number is how this ledger stops being an index. Checked before writing, not after.
+
+Authored as `Migrations/20260801102621_Workforce_PublicationReceiptUniqueness.cs`, off the chain tip
+`20260801084923_Margin_PeriodStatementFinalizedImmutable` — its Designer snapshot carries that migration's
+`HasTrigger` declaration, which is how a forked parent shows itself before it is landed.
+
+**Two changes, both part of one guard.** The unique index is **unfiltered** on all four columns as
+recommended below. `ReceiptType` also widened to **NOT NULL**: the SQL Server provider filters a unique
+index over a nullable column with `WHERE [col] IS NOT NULL`, so the first-cut migration would have let two
+*untyped* receipts for one (publication, worker) through the index that exists to stop them. The scaffolded
+`defaultValue: ""` was removed from the `AlterColumn` — it would have rewritten a null to an empty string on
+an append-only row that can never be corrected, and left a DEFAULT constraint the model does not declare.
+
+**The service half landed with it**, as this entry required: `WorkforceDbViolations.IsPublicationReceiptViolation`
++ a catch in `WorkforceSelfService.AcknowledgePublicationAsync` that returns the winner's receipt (the
+documented no-op) instead of a 500. The discriminator matches the table **and** the natural key, not the
+table alone like `IsOneAwardViolation`: this table has a second unique index — its primary key — whose
+violation must keep propagating. **Known consequence, documented in code:** the loser's idempotency
+reservation stays `Reserved`, so a *same-key* retry of a succeeded acknowledgement answers in-progress; that
+is `WorkforceScheduleCommit`'s existing stuck-reservation tradeoff, and a fresh key returns the receipt.
+
+**PROVEN ON SQL SERVER.** `PublicationAcknowledgementRaceSqlServerTests` went from
+`Assert.Equal() Failure / Expected: 1 / Actual: 2` at `2eeff48f` to **passing**; its
+`[Trait("PendingMigration", "MIG-21")]` is removed and its class remarks now state what it certifies rather
+than what it is waiting for. `RestaurantModulesMigrationRoundTripTests` applies the whole chain into an
+EMPTY catalog, rolls back and re-applies, and now asserts the index by **property** —
+`is_unique = 1 AND has_filter = 0`, plus `ReceiptType.is_nullable = 0` — because an index of the right name
+that is filtered or non-unique passes a name check while enforcing nothing. `has-pending-model-changes` is
+clean.
+
+⚠️ **Ordering constraint for MIG-14**: its `AFTER UPDATE, DELETE` trigger on this table must be sequenced
+**after** this migration. An append-only trigger already in place would roll back this migration's
+`ALTER COLUMN`. An index and that trigger are otherwise compatible — the rowversion/`OUTPUT` collision
+(error 334) MIG-14 warns about is a column problem, not an index one.
+
+<details><summary>The original entry, kept for the reasoning that is still the load-bearing part</summary>
+
+From `lane/wf-cost-stability`. A review flagged that the acknowledgement's unique-index backstop had no
+concurrent-race test. It has no **index**. `Helpers/ApplicationDbContext.cs` configures exactly one index on
+the table — the non-unique `HasIndex(x => new { x.StoreId, x.SchedulePublicationId })` — and no migration
+adds another. The sibling `WorkforceSchedulePublicationRecipients` *does* carry
+`HasIndex(SchedulePublicationId, StaffMemberId).IsUnique()`, which is probably why the receipt table read as
+guarded.
+
+**What is reachable today.** `WorkforceSelfService.AcknowledgePublicationAsync` is idempotent on the natural
+key only through an in-memory read (`existing != null`) inside the reserve→stage→complete composition. Two
+acks with **different** idempotency keys are two different reservations — the unique `(Scope, Key)` index
+never sees them as one act — so both read "no receipt" and both insert one. `WorkforceSchedulePublicationReceipt`
+is in the `GuardAppendOnly` branch, so the duplicate can never be deleted through the application. A reader
+counting acknowledgements then counts two people where there is one.
+
+**The index.** Filtered unique on `(StoreId, SchedulePublicationId, StaffMemberId, ReceiptType)`, or unfiltered
+on those four columns — `ReceiptType` is `nvarchar(32)` and only `Acknowledged` is written today, so a
+filtered variant would have to be revisited the moment a second receipt type appears. Recommend **unfiltered
+unique on all four**, which needs no predicate maintenance and still admits a future second type.
+
+⚠ Conventions that bind here:
+- The service must MAP the resulting unique violation, or the loser gets a 500 for an operation the database
+  decided correctly. `WorkforceDbViolations.IsUniqueViolation` + a `NamesReceiptTable` discriminator, in the
+  shape of `WorkforceExchangeProblems.IsOneAwardViolation`. Note the violation surfaces inside
+  `WorkforceIdempotency.CompleteAsync`'s single SaveChanges, whose existing catch is deliberately narrow
+  (`IsCompletionRowDuplicate`) and must stay so.
+- The table is also owed MIG-14's `AFTER UPDATE, DELETE` trigger. **A rowversion may not be added to it**
+  (`OUTPUT` collides with an `AFTER` trigger, SQL error 334) — an index does not, so the two are compatible.
+
+`WebApi.Tests/Workforce/PublicationAcknowledgementRaceSqlServerTests.cs` is written and traited
+`[Trait("PendingMigration", "MIG-21")]`. It is **expected red on the SQL tier until this lands**; it holds one
+racer at its second `SaveChanges` (the commit that writes the receipt) so the overlap is a fixture fact, and
+it refuses to run on SQLite, where no such guard exists and the test could not fail.
+
+</details>
+
+---
+
+## ⚠️ The squash is a REGENERATION, and that is the largest risk on this branch
+
+`Migrations/20260727221455_RestaurantModules_Initial.cs` carries **23 module triggers plus
+`UX_WorkforceStaffMembers_ActiveEngagement` as raw SQL** that any `ef migrations add` regeneration silently
+destroys. **This has already happened once** and was restored by hand (`549907f4`). The squash *is* a
+regeneration.
+
+Five debts converge on one unrehearsed, hand-run, one-shot-ordered production event:
+1. the catch-up script "only works one way", is unrecoverable if inverted, and **does not exist**;
+2. ~~the OD-1 contradiction above~~ — **half settled 2026-08-03**: MIG-7 is hand-authored, and
+   `ef migrations add` against THIS snapshot demonstrably emits nothing. What the squash's regeneration
+   against *master's* snapshot emits is still untested, and MIG-7 is now itself one of the raw-SQL
+   migrations item 3 is about;
+3. the 23 raw-SQL triggers + the filtered unique index that regeneration drops;
+4. the 6 Kassa triggers that nothing asserts (`demo-up.sh` only *echoes* a count);
+5. everything in this ledger.
+
+**Cheapest defusal, available today:** rehearse the squash once on a scratch Docker SQL database. One run
+empirically settles the OD-1 contradiction (regeneration either re-emits the drift ops or it does not — it is
+observable), proves the trigger-restoration step, and converts a production event into a script plus a
+checklist. Hours of work against the least reversible layer in the estate.
+
+**Also worth doing cheaply:** a `sys.triggers` catalog assertion in the SQL tier — 0 of the 6 Kassa triggers
+are covered today, while ~15 of the 23 module triggers already are.

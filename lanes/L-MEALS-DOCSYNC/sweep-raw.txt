@@ -1,0 +1,580 @@
+=== FILES ENUMERATED (backend) ===
+  BE Controllers/Meals/MealsAgreementController.cs
+  BE Controllers/Meals/MealsCompanyController.cs
+  BE Controllers/Meals/MealsControllerBase.cs
+  BE Controllers/Meals/MealsFundingController.cs
+  BE Controllers/Meals/MealsMembershipController.cs
+  BE Controllers/Meals/MealsProgramController.cs
+  BE Controllers/Meals/MealsReconciliationController.cs
+  BE Controllers/Meals/MealsStatementController.cs
+  BE Entities/Meals/MealsAgreement.cs
+  BE Entities/Meals/MealsAuditEvent.cs
+  BE Entities/Meals/MealsBudgetGuard.cs
+  BE Entities/Meals/MealsCommandReceipt.cs
+  BE Entities/Meals/MealsCompany.cs
+  BE Entities/Meals/MealsCreditAdjustment.cs
+  BE Entities/Meals/MealsFundingAllocation.cs
+  BE Entities/Meals/MealsFundingReservation.cs
+  BE Entities/Meals/MealsInvitation.cs
+  BE Entities/Meals/MealsMembership.cs
+  BE Entities/Meals/MealsOrderAttribution.cs
+  BE Entities/Meals/MealsPolicyVersion.cs
+  BE Entities/Meals/MealsProgram.cs
+  BE Entities/Meals/MealsProgramMember.cs
+  BE Entities/Meals/MealsProjectionCheckpoint.cs
+  BE Entities/Meals/MealsReconciliationException.cs
+  BE Entities/Meals/MealsStatementLine.cs
+  BE Entities/Meals/MealsStatementRun.cs
+  BE Enums/Meals/MealsAgreementStatus.cs
+  BE Enums/Meals/MealsAllocationKind.cs
+  BE Enums/Meals/MealsBindingOutcome.cs
+  BE Enums/Meals/MealsCompanyRole.cs
+  BE Enums/Meals/MealsCompanyStatus.cs
+  BE Enums/Meals/MealsInvitationState.cs
+  BE Enums/Meals/MealsJournalReceiptKind.cs
+  BE Enums/Meals/MealsMembershipState.cs
+  BE Enums/Meals/MealsPolicyPeriodKind.cs
+  BE Enums/Meals/MealsProgramMemberState.cs
+  BE Enums/Meals/MealsProgramStatus.cs
+  BE Enums/Meals/MealsReconciliationExceptionKind.cs
+  BE Enums/Meals/MealsReconciliationState.cs
+  BE Enums/Meals/MealsReleaseCause.cs
+  BE Enums/Meals/MealsReleaseOutcome.cs
+  BE Enums/Meals/MealsReservationState.cs
+  BE Enums/Meals/MealsStatementStatus.cs
+  BE Enums/Meals/MealsTenderAuthorizationOutcome.cs
+  BE Helpers/Meals/MealsModuleServiceCollectionExtensions.cs
+  BE Helpers/Meals/MealsProblemCodes.cs
+  BE Helpers/Meals/MealsProblemDetails.cs
+  BE Helpers/Meals/MealsProblemException.cs
+  BE Helpers/Meals/MealsRevision.cs
+  BE Helpers/Meals/MealsVatLines.cs
+  BE Models/Meals/MealsAgreementModels.cs
+  BE Models/Meals/MealsFeatureSettings.cs
+  BE Models/Meals/MealsFundingModels.cs
+  BE Models/Meals/MealsMembershipModels.cs
+  BE Models/Meals/MealsPolicyVersionModels.cs
+  BE Models/Meals/MealsProgramMemberModels.cs
+  BE Models/Meals/MealsProgramModels.cs
+  BE Models/Meals/MealsReconciliationModels.cs
+  BE Models/Meals/MealsStatementModels.cs
+  BE Scripts/demo/RUNBOOK.md
+  BE Scripts/demo/demo-common.sh
+  BE Scripts/demo/demo-up.sh
+  BE Scripts/demo/seed-meals-demo.sh
+  BE Services/Meals/DenyClosedMealsFundingAuthority.cs
+  BE Services/Meals/DenyClosedMealsJournalProjectionSource.cs
+  BE Services/Meals/Interfaces/IMealsAgreementService.cs
+  BE Services/Meals/Interfaces/IMealsAuditWriter.cs
+  BE Services/Meals/Interfaces/IMealsAuthorizationService.cs
+  BE Services/Meals/Interfaces/IMealsAuthorizationTokenService.cs
+  BE Services/Meals/Interfaces/IMealsCommandReceiptService.cs
+  BE Services/Meals/Interfaces/IMealsCompanyService.cs
+  BE Services/Meals/Interfaces/IMealsFeatureGate.cs
+  BE Services/Meals/Interfaces/IMealsFundingAuthority.cs
+  BE Services/Meals/Interfaces/IMealsFundingLedgerService.cs
+  BE Services/Meals/Interfaces/IMealsInvitationTokenService.cs
+  BE Services/Meals/Interfaces/IMealsJournalProjectionSource.cs
+  BE Services/Meals/Interfaces/IMealsMembershipService.cs
+  BE Services/Meals/Interfaces/IMealsProgramService.cs
+  BE Services/Meals/Interfaces/IMealsProjectionWorker.cs
+  BE Services/Meals/Interfaces/IMealsQuoteService.cs
+  BE Services/Meals/Interfaces/IMealsReconciliationService.cs
+  BE Services/Meals/Interfaces/IMealsReconciliationWorker.cs
+  BE Services/Meals/Interfaces/IMealsStatementExportService.cs
+  BE Services/Meals/Interfaces/IMealsStatementService.cs
+  BE Services/Meals/Interfaces/IMealsStoreAccess.cs
+  BE Services/Meals/Interfaces/IMealsStoreFeatureFlags.cs
+  BE Services/Meals/MealsAgreementService.cs
+  BE Services/Meals/MealsAuditEntry.cs
+  BE Services/Meals/MealsAuditWriter.cs
+  BE Services/Meals/MealsAuthorizationService.cs
+  BE Services/Meals/MealsAuthorizationTokenService.cs
+  BE Services/Meals/MealsBindingResult.cs
+  BE Services/Meals/MealsCommandReceiptReservation.cs
+  BE Services/Meals/MealsCommandReceiptService.cs
+  BE Services/Meals/MealsCompanyService.cs
+  BE Services/Meals/MealsDbViolations.cs
+  BE Services/Meals/MealsEligibility.cs
+  BE Services/Meals/MealsEmployeeReference.cs
+  BE Services/Meals/MealsFeatureFlags.cs
+  BE Services/Meals/MealsFeatureGate.cs
+  BE Services/Meals/MealsFundingAuthority.cs
+  BE Services/Meals/MealsFundingLedgerService.cs
+  BE Services/Meals/MealsIdempotencyScope.cs
+  BE Services/Meals/MealsIdempotentMutation.cs
+  BE Services/Meals/MealsInvitationTokenService.cs
+  BE Services/Meals/MealsJournalProjectionSource.cs
+  BE Services/Meals/MealsJournalReceiptProjection.cs
+  BE Services/Meals/MealsMembershipService.cs
+  BE Services/Meals/MealsPeriodKey.cs
+  BE Services/Meals/MealsProgramService.cs
+  BE Services/Meals/MealsProjectionWorker.cs
+  BE Services/Meals/MealsQuoteService.cs
+  BE Services/Meals/MealsReasonCodes.cs
+  BE Services/Meals/MealsReconciliationService.cs
+  BE Services/Meals/MealsReconciliationWorker.cs
+  BE Services/Meals/MealsReleaseResult.cs
+  BE Services/Meals/MealsStatementExportService.cs
+  BE Services/Meals/MealsStatementService.cs
+  BE Services/Meals/MealsStoreAccess.cs
+  BE Services/Meals/MealsTenderAuthorizationResult.cs
+  BE Services/Meals/MealsTimeZones.cs
+  BE Services/Meals/StoreBackedMealsFeatureFlags.cs
+  BE WebApi.Tests/Meals/AccountingSummaryCompanyAccountTests.cs
+  BE WebApi.Tests/Meals/CheckoutCompanyAccountGuardTests.cs
+  BE WebApi.Tests/Meals/CompanyAccountClassificationTests.cs
+  BE WebApi.Tests/Meals/FakeMealsJournalProjectionSource.cs
+  BE WebApi.Tests/Meals/MEALS-MEMBERSHIP-JOURNEY-MANIFEST.md
+  BE WebApi.Tests/Meals/MealsAgreementWriterTests.cs
+  BE WebApi.Tests/Meals/MealsAuditWriterActorNetTests.cs
+  BE WebApi.Tests/Meals/MealsCaptureLedgerTests.cs
+  BE WebApi.Tests/Meals/MealsCaptureReversalTailingTests.cs
+  BE WebApi.Tests/Meals/MealsCheckoutJourneyKit.cs
+  BE WebApi.Tests/Meals/MealsClock.cs
+  BE WebApi.Tests/Meals/MealsCommandReceiptIdempotencyTests.cs
+  BE WebApi.Tests/Meals/MealsCommandReceiptSqlServerTests.cs
+  BE WebApi.Tests/Meals/MealsCompanyContractTests.cs
+  BE WebApi.Tests/Meals/MealsConstraintViolationExactnessTests.cs
+  BE WebApi.Tests/Meals/MealsContractFixtureTests.cs
+  BE WebApi.Tests/Meals/MealsCreditAdjustmentNettingTests.cs
+  BE WebApi.Tests/Meals/MealsCurrencyWidthGuardTests.cs
+  BE WebApi.Tests/Meals/MealsDarkSurfaceIndistinguishabilityTests.cs
+  BE WebApi.Tests/Meals/MealsDeliveryReceiptSqlServerTests.cs
+  BE WebApi.Tests/Meals/MealsEmployeeReferenceSqlServerTests.cs
+  BE WebApi.Tests/Meals/MealsEmployeeReferenceTests.cs
+  BE WebApi.Tests/Meals/MealsEmployeeSurfaceNavigabilityTests.cs
+  BE WebApi.Tests/Meals/MealsExpiryGraceReconciliationTests.cs
+  BE WebApi.Tests/Meals/MealsExportDeterminismTests.cs
+  BE WebApi.Tests/Meals/MealsFeatureFlagCompositionTests.cs
+  BE WebApi.Tests/Meals/MealsFeatureSettingsBindingTests.cs
+  BE WebApi.Tests/Meals/MealsFinalizedStatementLineImmutabilityTests.cs
+  BE WebApi.Tests/Meals/MealsFundingConcurrencyTests.cs
+  BE WebApi.Tests/Meals/MealsFundingPathHardeningTests.cs
+  BE WebApi.Tests/Meals/MealsFundingTestKit.cs
+  BE WebApi.Tests/Meals/MealsGateDeploymentReachTests.cs
+  BE WebApi.Tests/Meals/MealsGovernanceJourneyTests.cs
+  BE WebApi.Tests/Meals/MealsGuardDriftDetectionTests.cs
+  BE WebApi.Tests/Meals/MealsHarness.cs
+  BE WebApi.Tests/Meals/MealsHarnessSmokeTests.cs
+  BE WebApi.Tests/Meals/MealsHarnessSqlServerSmokeTests.cs
+  BE WebApi.Tests/Meals/MealsInvitationIdentityBindingTests.cs
+  BE WebApi.Tests/Meals/MealsInvitationIntendedContactTests.cs
+  BE WebApi.Tests/Meals/MealsInvitationMembershipContractTests.cs
+  BE WebApi.Tests/Meals/MealsInvitationTokenServiceTests.cs
+  BE WebApi.Tests/Meals/MealsKredittsalgJournalTests.cs
+  BE WebApi.Tests/Meals/MealsLineageCatalog.cs
+  BE WebApi.Tests/Meals/MealsMembershipSqlServerTests.cs
+  BE WebApi.Tests/Meals/MealsMembershipTestHost.cs
+  BE WebApi.Tests/Meals/MealsOperatorLeverReachTests.cs
+  BE WebApi.Tests/Meals/MealsOrderLoopJourneyTests.cs
+  BE WebApi.Tests/Meals/MealsOrphanReversalTests.cs
+  BE WebApi.Tests/Meals/MealsPilotFullLoopJourneyTests.cs
+  BE WebApi.Tests/Meals/MealsPoisonedModuleGraph.cs
+  BE WebApi.Tests/Meals/MealsPolicyVersionImmutabilityTests.cs
+  BE WebApi.Tests/Meals/MealsPosCreditTenderReachabilityTests.cs
+  BE WebApi.Tests/Meals/MealsProgramContractTests.cs
+  BE WebApi.Tests/Meals/MealsProgramDarkModuleTests.cs
+  BE WebApi.Tests/Meals/MealsProgramTestHost.cs
+  BE WebApi.Tests/Meals/MealsProjectionCheckpointReplayTests.cs
+  BE WebApi.Tests/Meals/MealsProjectionRebuildTests.cs
+  BE WebApi.Tests/Meals/MealsProjectionSignConventionTests.cs
+  BE WebApi.Tests/Meals/MealsProjectionTestKit.cs
+  BE WebApi.Tests/Meals/MealsQuotePolicyPinSqlServerTests.cs
+  BE WebApi.Tests/Meals/MealsReconciliationOrphanJourneyTests.cs
+  BE WebApi.Tests/Meals/MealsReconciliationTests.cs
+  BE WebApi.Tests/Meals/MealsReservationStateMachineTests.cs
+  BE WebApi.Tests/Meals/MealsResults.cs
+  BE WebApi.Tests/Meals/MealsRevisionCasSqlServerTests.cs
+  BE WebApi.Tests/Meals/MealsRouteGateMap.cs
+  BE WebApi.Tests/Meals/MealsRouteGateReachabilityTests.cs
+  BE WebApi.Tests/Meals/MealsSaftJournalKit.cs
+  BE WebApi.Tests/Meals/MealsSaftPaymentMediumTests.cs
+  BE WebApi.Tests/Meals/MealsSeamContractTests.cs
+  BE WebApi.Tests/Meals/MealsSqlServerFixture.cs
+  BE WebApi.Tests/Meals/MealsStatementActorAttributionTests.cs
+  BE WebApi.Tests/Meals/MealsStatementJournalTruthOracleTests.cs
+  BE WebApi.Tests/Meals/MealsStatementLifecycleTests.cs
+  BE WebApi.Tests/Meals/MealsStatementMemberReferenceTests.cs
+  BE WebApi.Tests/Meals/MealsStatementPeriodEpochTests.cs
+  BE WebApi.Tests/Meals/MealsStatementSqlServerTests.cs
+  BE WebApi.Tests/Meals/MealsStatementTestHost.cs
+  BE WebApi.Tests/Meals/MealsStatementTestKit.cs
+  BE WebApi.Tests/Meals/MealsStoreAccessTests.cs
+  BE WebApi.Tests/Meals/MealsStoreCancelReleaseTests.cs
+  BE WebApi.Tests/Meals/MealsW1MigrationLineageTests.cs
+  BE WebApi.Tests/Meals/MealsW2MigrationLineageTests.cs
+  BE WebApi.Tests/Meals/MealsW3HarnessSmokeTests.cs
+  BE WebApi.Tests/Meals/MealsW3HarnessSqlServerSmokeTests.cs
+  BE WebApi.Tests/Meals/MealsW3IntegrationJourneyTests.cs
+  BE WebApi.Tests/Meals/MealsW3MigrationLineageTests.cs
+  BE WebApi.Tests/Meals/MealsWorld.cs
+  BE WebApi.Tests/Meals/MealsWorldAssertions.cs
+  BE WebApi.Tests/Meals/PaymentServiceCompanyAccountTests.cs
+  BE docs/plans/replan/b-meals-completeness.md
+=== FILES ENUMERATED (frontend) ===
+  FE components/admin/meals/MealsAgreementList.vue
+  FE components/admin/meals/MealsCompanyPanel.vue
+  FE components/admin/meals/MealsCompanyPicker.vue
+  FE components/admin/meals/MealsCorridorPanel.vue
+  FE components/admin/meals/MealsFundedOrders.vue
+  FE components/admin/meals/MealsPeoplePanel.vue
+  FE components/admin/meals/MealsProgramPanel.vue
+  FE components/admin/meals/MealsWriteFailure.vue
+  FE components/admin/meals/_meals-admin.scss
+  FE pages/admin/meals-agreements.vue
+  FE pages/admin/meals-companies.vue
+  FE pages/meals/join.vue
+  FE test/e2e/fixture/consumer-api-server.js
+  FE test/e2e/fixture/consumer-world.js
+  FE test/e2e/fixture/meals.js
+  FE test/e2e/journeys/consumer/meals-funded-checkout.spec.js
+  FE test/e2e/journeys/consumer/meals-funded-guard.spec.js
+  FE test/e2e/journeys/consumer/meals-funded-over-allowance.spec.js
+  FE test/e2e/journeys/consumer/meals-module-dark.spec.js
+  FE test/e2e/journeys/consumer/meals-stale-token-refused.spec.js
+  FE test/e2e/journeys/consumer/meals-stale-token-requote.spec.js
+  FE test/e2e/journeys/meals-admin-setup.spec.js
+  FE test/e2e/journeys/meals-guest-claim.spec.js
+  FE test/e2e/support/consumer-guest.js
+  FE test/meals-admin-client.test.js
+  FE test/meals-admin-components.test.js
+  FE test/meals-admin-picker.test.js
+  FE test/meals-admin-view.test.js
+  FE test/meals-claim-page.test.js
+  FE test/meals-client.test.js
+  FE test/meals-companies-page.test.js
+  FE test/meals-components.test.js
+  FE test/meals-page.test.js
+  FE test/meals-store-view.test.js
+  FE utils/meals/admin-client.js
+  FE utils/meals/admin-view.js
+  FE utils/meals/claim-client.js
+  FE utils/meals/meals-client.js
+  FE utils/meals/refusal-copy.js
+  FE utils/meals/store-view.js
+
+=== ABSENCE-SHAPED ASSERTIONS, ONE PER LINE ===
+BE Controllers/Meals/MealsAgreementController.cs:13: /// whole module hangs off. Until this route existed <c>MealsAgreementService</c> had no caller at all —
+BE Controllers/Meals/MealsFundingController.cs:52: /// The operation the other two reads below cannot be reached without. Both demand a
+BE Controllers/Meals/MealsFundingController.cs:54: /// there — the employee surface was route-reachable and caller-unreachable. Owner-scoped, so it
+BE Entities/Meals/MealsAgreement.cs:14: /// <para><see cref="StoreId"/> is the store seam reference stored BY VALUE — there is NO physical
+BE Entities/Meals/MealsInvitation.cs:16: /// membership's composite foreign key targets, so cross-company linkage is impossible in SQL (spec
+BE Entities/Meals/MealsMembership.cs:44: // ClaimedFromInvitation because a concierge-bootstrapped founding admin has no invitation at all,
+BE Entities/Meals/MealsReconciliationException.cs:7: /// A funding-vs-journal reconciliation exception (spec §3, entity 18): an unmatched or impossible
+BE Enums/Meals/MealsInvitationState.cs:11: // Issued, hashed, not yet claimed and not yet expired.
+BE Helpers/Meals/MealsModuleServiceCollectionExtensions.cs:13: /// <para><b>The hazard this closes.</b> An <c>IOptionsMonitor&lt;T&gt;</c> whose <c>T</c> was never bound
+BE Helpers/Meals/MealsModuleServiceCollectionExtensions.cs:14: /// resolves successfully and returns <c>new T()</c>. There is no startup failure, no log line and no
+BE Helpers/Meals/MealsModuleServiceCollectionExtensions.cs:17: /// reach an unbound options type.</para>
+BE Helpers/Meals/MealsProblemCodes.cs:44: /// A concurrent request with the SAME key + payload holds the command receipt but has not yet
+BE Helpers/Meals/MealsRevision.cs:14: /// <para>On SQLite (the fast suite) there is no server-generated rowversion, so the token is
+BE Models/Meals/MealsFundingModels.cs:68: /// put it in; this operation has no such history, and a capability in a URL is a capability in request
+BE Models/Meals/MealsMembershipModels.cs:32: /// <summary>Opaque optimistic-concurrency / ETag token; null when the provider has no rowversion (SQLite).</summary>
+BE Models/Meals/MealsMembershipModels.cs:41: /// account is meaningless without an admin to run it, and there is no other bootstrap path to the first
+BE Models/Meals/MealsProgramMemberModels.cs:27: /// <summary>The program's new opaque revision after the mutation; null when the provider has no rowversion (SQLite).</summary>
+BE Models/Meals/MealsProgramModels.cs:24: /// concurrency token (null on SQLite — the fast suite has no server rowversion).
+BE Models/Meals/MealsProgramModels.cs:42: /// <summary>Opaque optimistic-concurrency revision token; null when the provider has no rowversion (SQLite).</summary>
+BE Models/Meals/MealsReconciliationModels.cs:54: /// the live reservations — an OBSERVATION, not a filed exception. It has no id, no state and no resolve
+BE Models/Meals/MealsReconciliationModels.cs:55: /// route on purpose: it is derived fresh on every read, it blocks nothing, and there is no repair path
+BE Models/Meals/MealsReconciliationModels.cs:67: // impossible in a healthy state, and worse than a numeric drift (the next quote starts a fresh 0/0
+BE Scripts/demo/RUNBOOK.md:35: Its funded-order half **cannot be reached in any deployment** — not by a flag, not by an environment
+BE Scripts/demo/RUNBOOK.md:36: variable — because `Configure<MealsFeatureSettings>` is never called in the backend, so the
+BE Scripts/demo/RUNBOOK.md:160: - The PowerUser has no store, so a module page reads nothing. (A PowerUser *can* force one with a query
+BE Scripts/demo/RUNBOOK.md:199: | **Selma Haug** | Thu `11:00–17:00 Kokk` — **"Mangler sats"**. The Kokk role has no rate and she has no override, so the money layer **refuses** rather than guessing. |
+BE Scripts/demo/RUNBOOK.md:230: terminal once published, so there is no longer a draft for that week. Switch the toggle to **Publisert**.
+BE Scripts/demo/RUNBOOK.md:256: ### 5.5 Attendance and the hours export (no UI — HTTP only)
+BE Scripts/demo/RUNBOOK.md:311: | **Safranrisotto (oppskrift)** | **"minst kr …"**, and the margin **WITHHELD** | Safran has no supplier price, so the total is a *lower bound*. This row must never render a food-cost percentage |
+BE Scripts/demo/RUNBOOK.md:343: | **Forespørsel** | Fagdag for Nordsjø Consulting | a guest enquiry nobody has answered |
+BE Scripts/demo/RUNBOOK.md:401: | `openRate` | *null* | no delivered mail, so there is no denominator. The label on screen says the figure would be event-deduped, never unique-recipient |
+BE Scripts/demo/RUNBOOK.md:430: performs no network I/O and exposes no endpoint, so there is no mailbox on this machine to open. The seed
+BE Scripts/demo/RUNBOOK.md:457: admin account does not exist yet. Without that check the identity looks fine, and the refusal arrives much
+BE Scripts/demo/RUNBOOK.md:458: later as the concealment `404` — "no such thing" rather than "not you", which reads as a broken seed.
+BE Scripts/demo/RUNBOOK.md:484: is never bound and `IOptionsMonitor<MealsFeatureSettings>.CurrentValue` is a default-constructed instance
+BE Scripts/demo/RUNBOOK.md:490: the **2** that answer, and the client has no method for the others — a client function for a route that
+BE Scripts/demo/RUNBOOK.md:547: 80 is a fail that no caller can talk their way out of, on a row nobody can ever edit. The seed proves
+BE Scripts/demo/RUNBOOK.md:565: - **No reminders.** `training.reminders` reads nothing: there is no dispatcher and no outbox seam.
+BE Scripts/demo/RUNBOOK.md:625: | Meals **Bestillinger** | no order can be funded — `Features:Meals` is unbound (§ 9) |
+BE Scripts/demo/RUNBOOK.md:632: ## 11. What has no UI at all
+BE Scripts/demo/RUNBOOK.md:643: Clock punches also have no UI in this admin: `/pos/clock` lives in the React `admin-web`, on a branch. The
+BE Scripts/demo/demo-common.sh:102: # cheap, and a config value that does not match this account still yields a token holding no capability. The routes that need it then answer the CONCEALMENT 404 rather than 403 -- "no such thing" rather
+BE Scripts/demo/demo-common.sh:108: identity has NO concierge authority and every capability-gated route will refuse it.
+BE Scripts/demo/demo-common.sh:173: # Two seeds need it and neither uses it for anything an endpoint can do: Growth has no route that
+BE Scripts/demo/demo-common.sh:175: # config section nothing binds. Each call site says which of the two it is.
+BE Scripts/demo/demo-common.sh:205: # substitute for the one thing a laptop has no interface for: reading the guest's inbox.
+BE Scripts/demo/demo-up.sh:117: #   Growth:PublicApiBaseUrl  has NO default and MUST be https (RFC 8058 §3.1). Absent, GrowthDispatch-
+BE Scripts/demo/seed-meals-demo.sh:7: # signed here over HTTP. The funded-order half CANNOT be reached in any deployment, and no flag, config
+BE Scripts/demo/seed-meals-demo.sh:10: #   Configure<MealsFeatureSettings> is never called anywhere in the backend. The `Features:Meals`
+BE Scripts/demo/seed-meals-demo.sh:11: #   section is therefore never bound, so IOptionsMonitor<MealsFeatureSettings>.CurrentValue is a
+BE Scripts/demo/seed-meals-demo.sh:15: #   nothing, because nothing reads the section.
+BE Scripts/demo/seed-meals-demo.sh:56: # the reason it is worth asserting: an empty answer means "this venue has no company agreements", while a
+BE Scripts/demo/seed-meals-demo.sh:144: # corridor is Ended-then-sign; there is no in-place edit path at all.
+BE Scripts/demo/seed-meals-demo.sh:182: # RequireOrderingVisible() = Module && Ordering, both from the unbound config section. This is the wall.
+BE Scripts/demo/seed-meals-demo.sh:208: storeId=$STORE_ID   flags: meals.module=on (per store), Features:Meals UNBOUND (all four false)
+BE Services/Meals/DenyClosedMealsFundingAuthority.cs:15: /// idempotent no-op <see cref="MealsReleaseOutcome.AlreadyReleased"/>: with the module off there is no
+BE Services/Meals/Interfaces/IMealsCommandReceiptService.cs:19: /// completed) or <c>InProgress</c> (if not yet); a different hash throws
+BE Services/Meals/Interfaces/IMealsCompanyService.cs:14: /// company has no admin yet at creation, spec §2), while read/update is COMPANY authority resolved ONLY
+BE Services/Meals/Interfaces/IMealsFundingAuthority.cs:11: /// no one as a read model. <see cref="ReleaseSupersededAsync"/> is the one member core does NOT call —
+BE Services/Meals/Interfaces/IMealsFundingAuthority.cs:55: /// order with <c>PaymentType.CompanyAccount</c>. Without it the register has no way to register a
+BE Services/Meals/Interfaces/IMealsFundingAuthority.cs:81: /// counts as attributed while it names nobody is worse than no row at all.
+BE Services/Meals/Interfaces/IMealsFundingLedgerService.cs:69: // A Return receipt matched a valid attribution but there is NO prior Capture for that SAME
+BE Services/Meals/Interfaces/IMealsFundingLedgerService.cs:141: /// exists. Structurally impossible in a healthy state (the ledger refuses a capture whose guard
+BE Services/Meals/Interfaces/IMealsFundingLedgerService.cs:165: /// detector nobody can tell is running is not a detector.
+BE Services/Meals/Interfaces/IMealsQuoteService.cs:57: /// release existed on <c>IMealsFundingAuthority</c> and no route reached it — so a guest who changed
+BE Services/Meals/Interfaces/IMealsQuoteService.cs:93: /// operation that does not need a <c>companyId</c> it has no way to obtain.
+BE Services/Meals/Interfaces/IMealsQuoteService.cs:98: /// company am I ordering for". Route-reachable, caller-unreachable.</para>
+BE Services/Meals/Interfaces/IMealsQuoteService.cs:102: /// empty list is the honest answer for a signed-in user who is nobody's employee — not a 404, which
+BE Services/Meals/MealsAgreementService.cs:45: /// config gate would have made the route unreachable in every deployment rather than merely dark.</para>
+BE Services/Meals/MealsAgreementService.cs:261: /// <para>Refuses rather than stamping an empty actor, and all but unreachable on these routes: the
+BE Services/Meals/MealsAuditWriter.cs:40: // `ActorReference != null` counts as attributed while it names nobody, into a ledger made
+BE Services/Meals/MealsAuditWriter.cs:46: // named nobody. ModuleAuditActorCallSiteTests is what keeps the call sites guarded; this catches
+BE Services/Meals/MealsAuthorizationService.cs:15: /// <see cref="IMealsAuthorizationService"/>). It has NO access to <c>StoreAdmin</c>/<c>PowerUser</c>
+BE Services/Meals/MealsCommandReceiptReservation.cs:20: /// same-key race loser). There is no stored outcome to replay; the caller surfaces a retryable
+BE Services/Meals/MealsCompanyService.cs:24: /// PowerUser role (there is no company admin yet at creation); read/update resolve company authority ONLY
+BE Services/Meals/MealsCompanyService.cs:30: /// in-flight receipt BEFORE the company exists — cannot be used for a company that does not yet exist.
+BE Services/Meals/MealsCompanyService.cs:445: // module-wide gate — which is also the value the per-store seam falls back to when a store has no row.
+BE Services/Meals/MealsCompanyService.cs:478: /// <para>Refuses rather than stamping an empty actor, and all but unreachable on these routes: the
+BE Services/Meals/MealsCompanyService.cs:510: // TOCTOU backstop). On SQLite there is no rowversion; the Modified marker is a harmless rewrite.
+BE Services/Meals/MealsFundingAuthority.cs:192: // to charge an account nobody authorized — the deny that makes the tender unforgeable at the
+BE Services/Meals/MealsFundingAuthority.cs:235: // there is no split to fall back to and the operator must re-tender.
+BE Services/Meals/MealsFundingAuthority.cs:241: // NOT an expiry check. The quote's 15-minute TTL bounds how long an unbound authorization may
+BE Services/Meals/MealsFundingAuthority.cs:244: // nobody can settle. Expiry is the bind's gate, not the settlement's.
+BE Services/Meals/MealsFundingLedgerService.cs:161: // with no surface ever showing it. The guard is seeded at quote time and incremented at
+BE Services/Meals/MealsFundingLedgerService.cs:370: // The guard-row window has no counterpart here (there is no guard row to date), so the
+BE Services/Meals/MealsJournalProjectionSource.cs:50: /// a property of the drawer session, and the append-only allocation ledger has no column to carry it
+BE Services/Meals/MealsMembershipService.cs:206: // The company's own reference for the invitee, captured HERE because there is no later moment:
+BE Services/Meals/MealsMembershipService.cs:430: // attributed while it names nobody, in an append-only ledger. IsNullOrEmpty happened to suffice
+BE Services/Meals/MealsMembershipService.cs:475: // and a concierge-bootstrapped admin has no invitation at all (decision
+BE Services/Meals/MealsProgramService.cs:478: // a store has no override row. Resolving a program's store would mean loading its agreement, and that
+BE Services/Meals/MealsProgramService.cs:577: // version and CAS-checks the expected version at the DB (TOCTOU guard). On SQLite there is no
+BE Services/Meals/MealsQuoteService.cs:407: // Unreachable: the authority resolved this reservation a moment ago and nothing deletes one.
+BE Services/Meals/MealsReconciliationService.cs:239: // pin). SQL Server only; SQLite has no rowversion (§8.1).
+BE Services/Meals/MealsReconciliationService.cs:357: /// <para>Refuses rather than stamping an empty actor, and all but unreachable on these routes: the
+BE Services/Meals/MealsReconciliationWorker.cs:307: /// money-path invariant that has already broken and that no surface, alarm or gate would otherwise
+BE Services/Meals/MealsReconciliationWorker.cs:310: /// an hourly line nobody reads.</para>
+BE Services/Meals/MealsStatementService.cs:271: // loaded original (no optimistic pin). SQLite has no rowversion (§8.1).
+BE Services/Meals/MealsStatementService.cs:825: /// attributed while it names nobody. The refusal is near-unreachable there by construction —
+BE Services/Meals/MealsStatementService.cs:835: /// raises, and the store-admin branch has already returned before it can be reached — so no caller
+BE Services/Meals/MealsStoreAccess.cs:20: /// <para>The <c>Store</c> is read as a SEAM (spec §7: "Store — read"); there is NO <c>Meals*</c> FK into
+BE Services/Meals/StoreBackedMealsFeatureFlags.cs:11: /// fall back to the module's own master value when the store has no row. Here the master is the
+BE WebApi.Tests/Meals/CheckoutCompanyAccountGuardTests.cs:44: // The unbound CompanyAccount checkout must be refused with the seam's stable reason code.
+BE WebApi.Tests/Meals/MEALS-MEMBERSHIP-JOURNEY-MANIFEST.md:23: 2. Concierge fixture: seed the corridor **agreement** (spec §5 — agreements have no create endpoint in v1).
+BE WebApi.Tests/Meals/MealsAgreementWriterTests.cs:77: /// real store-backed flag seam whose config fallback is OFF, as the unbound section leaves it.
+BE WebApi.Tests/Meals/MealsAuditWriterActorNetTests.cs:19: /// non-blank while naming nobody. Both reasons are why
+BE WebApi.Tests/Meals/MealsCompanyContractTests.cs:28: private const string Stranger = "meals-user-nobody-9999";
+BE WebApi.Tests/Meals/MealsCompanyContractTests.cs:194: ExpectedVersion = null, // SQLite has no server rowversion; the CAS is skipped (documented)
+BE WebApi.Tests/Meals/MealsConstraintViolationExactnessTests.cs:49: /// <c>IX_MealsOrderAttributions_OrderId</c>. The non-uniqueness failure is NOT reachable from production
+BE WebApi.Tests/Meals/MealsConstraintViolationExactnessTests.cs:206: Assert.Equal(MealsReservationState.Reserved, reservation.State); // never bound
+BE WebApi.Tests/Meals/MealsDarkSurfaceIndistinguishabilityTests.cs:31: /// company/resource that does not exist — and the four RENDERED answers are compared to EACH OTHER, byte for
+BE WebApi.Tests/Meals/MealsDarkSurfaceIndistinguishabilityTests.cs:300: AdminApplicationUserId = "nobody-at-all",
+BE WebApi.Tests/Meals/MealsDeliveryReceiptSqlServerTests.cs:169: /// Meals world has no cash point, and a sibling lane's harness is not this lane's to reshape.
+BE WebApi.Tests/Meals/MealsEmployeeReferenceSqlServerTests.cs:32: /// <c>TR_MealsStatementLines_FinalizedImmutable</c> and this UPDATE simply succeeds — there is no other error
+BE WebApi.Tests/Meals/MealsExpiryGraceReconciliationTests.cs:18: /// reservation is never swept (journal truth wins); a reservation still within grace is not yet swept; and
+BE WebApi.Tests/Meals/MealsFeatureFlagCompositionTests.cs:252: /// addressed by exceptionId — reads the module-wide <c>Features:Meals</c> config gate, because there is no
+BE WebApi.Tests/Meals/MealsFeatureFlagCompositionTests.cs:255: /// <para>The consequence, stated so nobody has to rediscover it: the admin lever ALONE cannot make the
+BE WebApi.Tests/Meals/MealsFeatureSettingsBindingTests.cs:19: /// <c>IOptionsMonitor&lt;MealsFeatureSettings&gt;</c>. An options type nobody bound still resolves and still
+BE WebApi.Tests/Meals/MealsGateDeploymentReachTests.cs:228: var unbound = services.BuildServiceProvider().GetRequiredService<IMealsFeatureGate>();
+BE WebApi.Tests/Meals/MealsGateDeploymentReachTests.cs:231: await MealsPoisonedModuleGraph.ProgramController(unbound).ListPrograms(MealsWorld.CompanyId),
+BE WebApi.Tests/Meals/MealsGuardDriftDetectionTests.cs:20: /// then asserts a clean world reports nothing — a detector nobody has watched fire is indistinguishable
+BE WebApi.Tests/Meals/MealsHarness.cs:30: /// (<c>byte[] ConcurrencyVersion</c>). SQLite has no server-generated rowversion, so under the fast suite
+BE WebApi.Tests/Meals/MealsInvitationIdentityBindingTests.cs:87: /// The ordinary world: the employee's address identifies them and nobody else.
+BE WebApi.Tests/Meals/MealsInvitationIdentityBindingTests.cs:92: /// nobody on that address can claim at all. A property about single use, about binding, or about a
+BE WebApi.Tests/Meals/MealsInvitationIdentityBindingTests.cs:93: /// refusal leaving no residue must hold whichever remedy lands, so none of them may depend on an
+BE WebApi.Tests/Meals/MealsInvitationIdentityBindingTests.cs:186: /// candidate remedy changes who may claim, and none of them may change who a claimed membership belongs
+BE WebApi.Tests/Meals/MealsInvitationIdentityBindingTests.cs:282: /// invitation, and no idempotency receipt left holding a key nobody can use. That last one is the quiet
+BE WebApi.Tests/Meals/MealsInvitationIdentityBindingTests.cs:283: /// failure — a reserved-and-never-completed receipt is a consumed token nobody holds, and the caller who
+BE WebApi.Tests/Meals/MealsInvitationMembershipContractTests.cs:26: private const string Stranger = "meals-user-nobody-9999";
+BE WebApi.Tests/Meals/MealsKredittsalgJournalTests.cs:51: // The cash-sale code is NOT declared — there is no cash sale in this window.
+BE WebApi.Tests/Meals/MealsMembershipSqlServerTests.cs:27: /// scheduler. A claim decides in memory that the invitation is Pending and that the claimant is not yet a
+BE WebApi.Tests/Meals/MealsMembershipTestHost.cs:22: /// Hand-rolled (the repo has no mocking library), mirroring <see cref="MealsProgramTestHost"/>.
+BE WebApi.Tests/Meals/MealsOperatorLeverReachTests.cs:20: /// when a store has no row. A route can consult the per-store gate only if a store is knowable from ROUTE
+BE WebApi.Tests/Meals/MealsOperatorLeverReachTests.cs:27: /// nobody mentioned, which is why the split is pinned here rather than left to be rediscovered.
+BE WebApi.Tests/Meals/MealsPilotFullLoopJourneyTests.cs:83: // there is deliberately no agreement-create endpoint in v1).
+BE WebApi.Tests/Meals/MealsPilotFullLoopJourneyTests.cs:254: /// concierge writes; there is no agreement-create endpoint in v1). Returns the agreement id.
+BE WebApi.Tests/Meals/MealsProgramContractTests.cs:28: private const string Stranger = "meals-user-nobody-9999";
+BE WebApi.Tests/Meals/MealsProgramContractTests.cs:51: // SQLite has no server rowversion — the revision is null here (documented; enforced on SQL Server).
+BE WebApi.Tests/Meals/MealsProgramContractTests.cs:73: // The other company's admin has NO authority over this company. The 403-cross-company posture is set
+BE WebApi.Tests/Meals/MealsProgramTestHost.cs:20: /// dark surface through the same real endpoint. Hand-rolled (the repo has no mocking library), mirroring the
+BE WebApi.Tests/Meals/MealsProgramTestHost.cs:43: /// proof (an admin of company B has no authority over company A's resources).
+BE WebApi.Tests/Meals/MealsRouteGateMap.cs:24: /// settable by the person who needs this route — is the fact nobody held, and it is the only one that answers
+BE WebApi.Tests/Meals/MealsRouteGateMap.cs:304: // The store-backed seam falls back to the module-wide gate when a store has no row, so a store-gated
+BE WebApi.Tests/Meals/MealsRouteGateReachabilityTests.cs:16: /// REACHABILITY BY THE PERSON WHO NEEDS IT. Meals is the estate's clearest case of complete-but-unreachable:
+BE WebApi.Tests/Meals/MealsRouteGateReachabilityTests.cs:23: /// <para>This is the per-route join nobody held. The aggregate facts were all green on the day it shipped:
+BE WebApi.Tests/Meals/MealsRouteGateReachabilityTests.cs:30: /// answers the module's OPAQUE 404 — byte-identical to the answer for a resource that does not exist, naming
+BE WebApi.Tests/Meals/MealsRouteGateReachabilityTests.cs:31: /// no flag, no section and no module state. That is a deliberate choice against the alternative (a 404 whose
+BE WebApi.Tests/Meals/MealsRouteGateReachabilityTests.cs:65: // ---- 2. no route is ungated ----------------------------------------------------------------------
+BE WebApi.Tests/Meals/MealsRouteGateReachabilityTests.cs:97: ///   <item>the settings type is bound to a section — an unbound <c>IOptionsMonitor&lt;T&gt;</c> resolves
+BE WebApi.Tests/Meals/MealsRouteGateReachabilityTests.cs:99: ///   <item>the binding is REGISTERED from the composition root — a binding extension nothing calls is
+BE WebApi.Tests/Meals/MealsRouteGateReachabilityTests.cs:238: /// A route disabled by configuration must not be distinguishable from a route that does not exist.
+BE WebApi.Tests/Meals/MealsRouteGateReachabilityTests.cs:240: /// not-found factory, and the documents those factories render carry 404 and no module state — no flag
+BE WebApi.Tests/Meals/MealsRouteGateReachabilityTests.cs:428: /// compiles and is never called leaves every flag reading false with no startup failure and no log line.
+BE WebApi.Tests/Meals/MealsRouteGateReachabilityTests.cs:477: /// exist anywhere": a binding called only from a method nothing calls is exactly as inert as one nobody
+BE WebApi.Tests/Meals/MealsSaftJournalKit.cs:206: // used above never reads it. Returns benign values so nothing reads as locked or rate-limited.
+BE WebApi.Tests/Meals/MealsStatementActorAttributionTests.cs:15: /// fiscal ledger row that then reads as attributed (<c>ActorReference != null</c>) while naming nobody.
+BE WebApi.Tests/Meals/MealsStatementJournalTruthOracleTests.cs:113: Assert.Equal(1, drain.Unmatched);   // the walk-in's sale has no attribution — never funded, never filed
+BE WebApi.Tests/Meals/MealsStatementMemberReferenceTests.cs:24: /// permanent consequence of issuing an invitation without a reference: no endpoint sets one afterwards, and
+BE WebApi.Tests/Meals/MealsStatementPeriodEpochTests.cs:30: /// session and the append-only allocation ledger has no column to carry it. It asserts what the code does
+BE WebApi.Tests/Meals/MealsStatementTestHost.cs:24: /// end-to-end in <c>MealsStoreAccessTests</c>). Hand-rolled (the repo has no mocking library), mirroring the
+BE WebApi.Tests/Meals/MealsStoreCancelReleaseTests.cs:139: // ...and the sweep therefore has no strand left to file an exception for, so the period stays
+BE WebApi.Tests/Meals/MealsW1MigrationLineageTests.cs:19: /// table — Meals owns its tables); that W1 is on the migration chain; and that the model has no pending
+BE WebApi.Tests/Meals/MealsW1MigrationLineageTests.cs:35: // The dissolved CA0 shared "Commercial Accounts" context (spec §7): no such shared-identity table may
+BE WebApi.Tests/Meals/MealsW1MigrationLineageTests.cs:217: // composite FK in W1; it must carry the tenant so cross-company linkage is impossible in SQL.
+BE WebApi.Tests/Meals/MealsW2MigrationLineageTests.cs:20: /// seam values with no FK); that W2 is on the migration chain; and that the model has no pending changes.
+BE WebApi.Tests/Meals/MealsW2MigrationLineageTests.cs:287: // is impossible in SQL (spec §3 invariants). This spans the whole Meals* set (W1 + W2).
+BE WebApi.Tests/Meals/MealsW3MigrationLineageTests.cs:26: /// that the model has no pending changes.
+BE WebApi.Tests/Meals/MealsWorld.cs:61: // materialises real AspNetUsers rows for its people. A membership whose person does not exist is not a
+BE docs/plans/replan/b-meals-completeness.md:38: **F3 — the corridor agreement has no production write path. VERIFIED.**
+BE docs/plans/replan/b-meals-completeness.md:45: **The Web repo has zero Meals code. VERIFIED.** `grep -ril meals` over `Web/pages`, `Web/components`, `Web/store` and `Web/core` returns **0 files**. `git ls-tree -r origin/feature/POS -- pages/admin` lists **46 pages**, none of them Meals. `Web/core/services/` at the pinned commit holds **56 services**; there is no `meals-service.ts`, and `git grep -il meals` at that Core ref returns nothing.
+BE docs/plans/replan/b-meals-completeness.md:80: Justification: F1 and F2 above. `Features:Meals` is absent from both appsettings files, and `meals.module` is not in the flag catalog, so `PUT /stores/{id}/feature-flags` 400s. There is no configuration a customer or an operator can reach that makes any Meals endpoint answer.
+BE docs/plans/replan/b-meals-completeness.md:106: ### Contract boundary (Core) — the number nobody has been tracking
+BE docs/plans/replan/b-meals-completeness.md:166: **Not in `Web`:** the company-admin self-service area (`/company/:id/meals/*` in spec §6) and the **employee ordering surface**. `Web` has no consumer ordering flow — `pages/store/_slug.vue` is a 109-line app-download landing page. Feature 4 needs a repo decision first (M9). Size once decided: **L**.
+BE docs/plans/replan/b-meals-completeness.md:175: *Funding (feature 4)* — `GetContext`, `CreateQuote`, `GetMyOrders`, and **`GetMyCompanies` (backend route does not exist yet — M/feature 4)**.
+BE docs/plans/replan/b-meals-completeness.md:183: - `core/services/cart-service.ts:57-58` — `Complete(storeId)` must accept and send `?reservationToken=`. Without it no client can complete a company-funded checkout. **S.**
+BE docs/plans/replan/b-meals-completeness.md:201: - **Lane A (contract, unblocks all frontend): Core.** `meals-service.ts` + models + `payment-type.ts` + `cart-service.ts`. Depends on nothing but the route list, which is frozen. **Start this on day one** — it is the longest-lead item nobody has budgeted (M1), and every Vue screen is blocked behind it.
+FE components/admin/meals/MealsCompanyPanel.vue:8: account does not hold the authority: a form nobody here can submit is a menu of dead ends,
+FE components/admin/meals/MealsCompanyPanel.vue:185: * no revision at all (SQLite has no rowversion, so the fast test suite is one such server) the
+FE components/admin/meals/MealsCompanyPicker.vue:63: has been created and not yet signed. Naming that is how somebody knows the next
+FE components/admin/meals/MealsCompanyPicker.vue:74: agreement HERE. So a company created in an earlier session and not yet signed is reachable
+FE components/admin/meals/MealsCompanyPicker.vue:115: * because it exposes no route that lists company accounts. The refusal therefore keys on the STORE
+FE components/admin/meals/MealsCorridorPanel.vue:13: and currency is refused by a unique index — the fix is to end the first one, and there is no
+FE components/admin/meals/MealsCorridorPanel.vue:134: * says so instead of offering a date it has no reason to vary.
+FE components/admin/meals/MealsCorridorPanel.vue:136: * THE SELLER SNAPSHOT IS IMMUTABLE. There is no update route for an agreement — superseding one is
+FE components/admin/meals/MealsCorridorPanel.vue:137: * Ended-then-sign — and no route on this surface can end one. So the four seller fields are stated
+FE components/admin/meals/MealsFundedOrders.vue:73: THERE IS NO TOTALS ROW, AND THAT IS THE POINT.
+FE components/admin/meals/MealsFundedOrders.vue:215: * timezone: there is no Meals context endpoint, the market config carries no zone, and the
+FE components/admin/meals/MealsFundedOrders.vue:285: dash-producing states are tinted differently: "not yet" is neutral, "we do not know" is the
+FE components/admin/meals/MealsPeoplePanel.vue:18: of notice people learn to click past, and the acknowledgement exists so that nobody does this
+FE components/admin/meals/MealsPeoplePanel.vue:276: * ONE: NOTHING SENDS AN INVITATION. There is no outbox, no mail and no SMS anywhere in the module;
+FE components/admin/meals/MealsPeoplePanel.vue:279: * nobody at all — and the screen has to be unmistakable that the product did not deliver it. There
+FE components/admin/meals/MealsProgramPanel.vue:216: * change is always a NEW version (`CreateMealsPolicyVersionRequest` has no counterpart update
+FE components/admin/meals/MealsProgramPanel.vue:229: * THERE IS NO POLICY-VERSION READ. The module exposes no route that lists or fetches a policy
+FE components/admin/meals/MealsProgramPanel.vue:352: * trip — and none of them relaxes a server rule.
+FE pages/admin/meals-agreements.vue:65: *     `IOptionsMonitor<T>` over an unbound `T` hands back a default-constructed instance, so that
+FE pages/admin/meals-companies.vue:129: * WHAT THIS PAGE STILL CANNOT DO, and why no control pretends otherwise:
+FE pages/admin/meals-companies.vue:131: *   • NOTHING HERE SENDS AN INVITATION. The module has no outbox at all — see `MealsPeoplePanel`.
+FE pages/admin/meals-companies.vue:132: *   • NOBODY ORDERS. The employee funding path (quotes, checkout) needs a reservation token no cart
+FE pages/admin/meals-companies.vue:133: *     in this estate sends and a company-account payer no client offers, and it sits behind its own
+FE pages/admin/meals-companies.vue:136: *   • THERE IS NO STATEMENT. Billing sits behind `meals.statements` and is a surface of its own.
+FE pages/admin/meals-companies.vue:173: // corridor is signed for them, and the module has no route that lists company accounts, so
+FE pages/admin/meals-companies.vue:178: // until the operator dismisses it — no route can produce it a second time.
+FE pages/meals/join.vue:149: Both invitee routes sit behind the controller's `[Authorize]`, so there is no anonymous
+FE pages/meals/join.vue:188: those would read as "there is no budget attached"; naming the gap is the difference
+FE pages/meals/join.vue:274: * The claimant is a shop assistant, a nurse, a driver. They administer no store, they are not yet a
+FE pages/meals/join.vue:305: * There is no round trip to survive: signing in mounts a modal inside this page, so no navigation
+FE pages/meals/join.vue:308: * NOTHING IN THE ESTATE MINTS SUCH A LINK, deliberately: `MealsPeoplePanel` copies the bare code and
+FE pages/meals/join.vue:317: * `MealsMembership.EmployeeReference` does not exist. The reference can only be captured AT
+FE pages/meals/join.vue:349: // render therefore produce the same markup, so there is no hydration mismatch to repair — the
+FE pages/meals/join.vue:391: *   • Both invitee routes carry `[Authorize]` (`MealsMembershipController` has no opt-out), so
+FE pages/meals/join.vue:395: * The whole claim surface was unreachable: no invited employee could see or accept an
+FE test/e2e/fixture/consumer-api-server.js:21: //     FULLY or not at all — there is no split tender in the backend and there is none here.
+FE test/e2e/fixture/consumer-api-server.js:105: // than trusting the seed is the difference between modelling the hierarchy and assuming nobody will
+FE test/e2e/fixture/consumer-api-server.js:106: // construct the impossible world.
+FE test/e2e/fixture/consumer-api-server.js:333: // refused bind cancels it. Modelled, because "no order ever stands unbound" is the claim.
+FE test/e2e/fixture/consumer-world.js:35: // THERE IS NO PER-STORE LEVER FOR ANY OF IT. `meals.module` is the module's only catalog entry and
+FE test/e2e/fixture/meals.js:9: //     THE SAME RESPONSE. There is no extension separating them (`_authorization.NotFound()` and
+FE test/e2e/fixture/meals.js:126: // hash, so there is no route that can show it again.
+FE test/e2e/fixture/meals.js:154: //      model has no `storeId` at all: a cross-store write is unrepresentable, not merely refused.
+FE test/e2e/fixture/meals.js:159: if (!state.companies[companyId]) { return refuse(ctx, 404, 'meals.not-found', 'No such company.'); }
+FE test/e2e/fixture/meals.js:161: // End-then-sign, and there is no update route.
+FE test/e2e/fixture/meals.js:202: //   for a well-formed token nobody issued.
+FE test/e2e/fixture/meals.js:222: // as "there is no budget attached".
+FE test/e2e/fixture/meals.js:249: // 403, AND THE DOCUMENT NAMES NOBODY. `MealsProblemCodes.InvitationContactMismatch`
+FE test/e2e/fixture/meals.js:310: if (!company) { return refuse(ctx, 404, 'meals.not-found', 'No such company.'); }
+FE test/e2e/fixture/meals.js:339: return refuse(ctx, 404, 'meals.not-found', 'No such agreement.');
+FE test/e2e/fixture/meals.js:389: // The plaintext token is handed back HERE AND TO NOBODY ELSE. The module has no outbox, no SMS
+FE test/e2e/fixture/meals.js:400: if (!invitation) { return refuse(ctx, 404, 'meals.not-found', 'No such invitation.'); }
+FE test/e2e/fixture/meals.js:420: if (!program) { return refuse(ctx, 404, 'meals.not-found', 'No such programme.'); }
+FE test/e2e/fixture/meals.js:425: // version and there is no edit route.
+FE test/e2e/journeys/consumer/meals-funded-checkout.spec.js:4: // shipped, and no client could ask it to: cart completion refuses a `CompanyAccount` tender without
+FE test/e2e/journeys/consumer/meals-funded-checkout.spec.js:5: // a `reservationToken`, no client bound the quote endpoint that mints one, and no frontend enum even
+FE test/e2e/journeys/consumer/meals-funded-checkout.spec.js:13: // answers are asserted to be what the code says they are, not observed from it. Nobody has driven
+FE test/e2e/journeys/consumer/meals-funded-checkout.spec.js:105: journey.finding('note', 'v1 funds an order fully or not at all — there is no split tender',
+FE test/e2e/journeys/consumer/meals-funded-guard.spec.js:7: // with the stable reason and the reservation is left unbound. Same page, same clicks, one byte-level
+FE test/e2e/journeys/consumer/meals-funded-guard.spec.js:66: // Still Reserved, never Bound: the refused order took no allowance with it, and the guest can
+FE test/e2e/journeys/consumer/meals-funded-guard.spec.js:68: expect(after.reservations[0].state, 'the reservation was NOT bound').toBe('Reserved');
+FE test/e2e/journeys/consumer/meals-funded-over-allowance.spec.js:6: // MEALS_OVER_RESERVED_CAP whenever the cart total exceeds the reserved cap, and no endpoint accepts
+FE test/e2e/journeys/consumer/meals-module-dark.spec.js:17: // what makes that impossible. It stands the same world up with the switch DOWN and asserts the guest
+FE test/e2e/journeys/consumer/meals-module-dark.spec.js:25: // entry, is read per-store at three ADMIN routes, none of them on this path. So `/admin/feature-flags`
+FE test/e2e/journeys/consumer/meals-module-dark.spec.js:109: // The other half of the claim. Absence on screen could also mean the client never called at
+FE test/e2e/journeys/consumer/meals-stale-token-refused.spec.js:7: // Now the client refuses before anything is sent, so there is no order to cancel and no attribution
+FE test/e2e/journeys/consumer/meals-stale-token-requote.spec.js:16: // the client provably has no fresh reservation, whatever its timers did.
+FE test/e2e/journeys/meals-admin-setup.spec.js:7: // a person solely because a human relays it, since the module has no outbox at all.
+FE test/e2e/journeys/meals-admin-setup.spec.js:19: // WHAT THIS PAGE STILL CANNOT DO is asserted too, because a screen that made a pilot look ready when
+FE test/e2e/journeys/meals-admin-setup.spec.js:20: // nobody can order a lunch is the more expensive failure: the ordering banner is on screen from the
+FE test/e2e/journeys/meals-admin-setup.spec.js:21: // first paint, and the policy panel says out loud that no route reads a policy version back.
+FE test/e2e/journeys/meals-admin-setup.spec.js:55: // admin is shown a stated refusal instead of a form nobody here can submit. Every OTHER
+FE test/e2e/journeys/meals-admin-setup.spec.js:64: // reservation token no cart in this estate sends, and sits behind its own `meals.ordering`
+FE test/e2e/journeys/meals-admin-setup.spec.js:83: // see a company with no corridor yet, and the module has no route that lists company accounts.
+FE test/e2e/journeys/meals-admin-setup.spec.js:177: // NOTHING IS SENT. The module has no outbox, no SMS and no mail: the token is handed back on
+FE test/e2e/journeys/meals-admin-setup.spec.js:178: // this response and to nobody else, which is why the panel names the claim page's address
+FE test/e2e/journeys/meals-admin-setup.spec.js:186: // value from the invitation id, so there is no route that can produce it a second time.
+FE test/e2e/journeys/meals-admin-setup.spec.js:188: // RELAYED it, because nothing else will: the module has no outbox, and once this card is gone
+FE test/e2e/journeys/meals-admin-setup.spec.js:205: journey.finding('note', 'the Meals admin surface has no data-test attributes',
+FE test/e2e/journeys/meals-admin-setup.spec.js:214: await journey.step('the gate on this surface has NO lever, and the walk says so', () => {
+FE test/e2e/journeys/meals-admin-setup.spec.js:231: return 'recorded: Features:Meals is host config, so this walk has no flip to make';
+FE test/e2e/journeys/meals-guest-claim.spec.js:92: await journey.step('a code held by nobody signed in asks them to sign in', async () => {
+FE test/e2e/journeys/meals-guest-claim.spec.js:93: // Both invitee routes sit behind the controller's class-level `[Authorize]`, so there is no
+FE test/e2e/journeys/meals-guest-claim.spec.js:246: // MIG-17, from the claimant's side. `MealsMembership.EmployeeReference` does not exist, so
+FE test/e2e/journeys/meals-guest-claim.spec.js:256: // it: there is no second chance at this screen and no route that can show it again.
+FE test/e2e/support/consumer-guest.js:74: * happens to run after the timer, and nobody can tell a real fix from a lucky schedule. Holding the
+FE test/meals-admin-client.test.js:71: // THE STORE IS IN THE PATH, and this is the assertion that keeps it there. The request model has no
+FE test/meals-admin-client.test.js:193: // enrolment has no candidates until somebody claims, and claim/session belong to the invitee.
+FE test/meals-admin-components.test.js:108: // The registration identity has no field on this route and must not acquire one here.
+FE test/meals-admin-components.test.js:135: test('there is no currency input at all — it is shown as a fact', () => {
+FE test/meals-admin-components.test.js:178: test('and is withheld when there is no company at all', () => {
+FE test/meals-admin-components.test.js:321: test('the panel says it cannot read a policy back, so nobody supersedes one blind', () => {
+FE test/meals-admin-components.test.js:411: test('with a token on screen there is NO send control of any kind', () => {
+FE test/meals-admin-picker.test.js:6: // "there is no route that lists company accounts" becomes a thing an operator has to be told.
+FE test/meals-admin-view.test.js:74: describe('the company picker, where there is no list endpoint to pick from', () => {
+FE test/meals-admin-view.test.js:218: // does, or the screen would show an empty cell with no flag on a row that bills as an identifier.
+FE test/meals-admin-view.test.js:246: // Bits above Sunday are ignored rather than turned into a day nobody chose.
+FE test/meals-claim-page.test.js:165: // Both invitee routes sit behind the controller's class-level `[Authorize]`, so there is no
+FE test/meals-claim-page.test.js:167: test('a held code with nobody signed in issues NO request and says why', async () => {
+FE test/meals-claim-page.test.js:225: // THE HONESTY OBLIGATION. `MealsInvitationSessionModel` has no allowance, no venue and no inviter
+FE test/meals-claim-page.test.js:226: // on it. A claim page that quietly omitted them would read as "there is no budget attached"; this
+FE test/meals-claim-page.test.js:384: // The 404 conflates "no such invitation" with "module switched off" — `_authorization.NotFound()`
+FE test/meals-claim-page.test.js:409: test('the wrong-person refusal blames nobody, names no address, and offers the way out', async () => {
+FE test/meals-client.test.js:69: // so it is unreachable wherever these reads are reachable. A method for it would be a button that
+FE test/meals-components.test.js:96: test('an unknown directory says so, and does NOT say the venue has no agreements', () => {
+FE test/meals-components.test.js:176: // And structurally: the table has no footer to put one in.
+FE test/meals-components.test.js:232: test('a missing figure is a THIRD rendering, not the same dash as "not yet"', () => {
+FE test/meals-page.test.js:230: test('with the directory known and complete there is no notice at all', async () => {
+FE test/meals-store-view.test.js:244: test('while the directory is UNKNOWN nothing is called unlisted — there is no list to check', () => {
+FE utils/meals/admin-client.js:31: // header says the module-wide gate would have made it unreachable rather than merely dark.)
+FE utils/meals/admin-client.js:41: // ROUTES THAT EXIST AND ARE DELIBERATELY NOT BOUND HERE, each a decision rather than an oversight:
+FE utils/meals/admin-client.js:42: //   • `POST /companies/{id}/archive` — Active → Archived has NO inverse route. There is no
+FE utils/meals/admin-client.js:49: //     anything left out is removed; and today it has no candidates, because a membership only
+FE utils/meals/admin-client.js:50: //     exists once somebody claims an invitation and no client in the estate claims one. It is
+FE utils/meals/admin-client.js:56: //     (`meals.ordering`, `meals.statements`), and none of them is part of setting a company up.
+FE utils/meals/admin-client.js:107: * route — the server ignores neither, it simply has no field for them. `expectedVersion` is the
+FE utils/meals/admin-client.js:122: * THE STORE IS IN THE PATH, NOT THE BODY, and the request model has no `storeId` at all — one
+FE utils/meals/admin-client.js:131: * `meals.validation` 400, and superseding one is Ended-then-sign — there is no update route.
+FE utils/meals/admin-client.js:160: * version — there is no edit route, and none is coming.
+FE utils/meals/admin-client.js:188: * re-derives the plaintext from the invitation id, so there is no route that can show it again.
+FE utils/meals/admin-client.js:197: * NOTHING IS SENT. The module has no outbox, no SMS and no mail: the token is handed back on this
+FE utils/meals/admin-client.js:198: * response and to nobody else, so an invitation reaches a person only because a human relays it.
+FE utils/meals/admin-client.js:216: * A reissue is a NEW invitation with a NEW token; there is no un-revoke.
+FE utils/meals/admin-view.js:11: //   ...and a loaded-but-empty list is a positive claim ("this company has invited nobody"), which is
+FE utils/meals/admin-view.js:14: // THERE IS NO "LIST COMPANIES" ENDPOINT, and that shapes the whole page. The module exposes exactly
+FE utils/meals/admin-view.js:46: * hiding it: a company with no agreement at this store cannot yet carry a programme.
+FE utils/meals/admin-view.js:73: * programme has no policy yet" (`CreateMealsPolicyVersionRequest.ExpectedCurrentVersion`). It is
+FE utils/meals/admin-view.js:183: // is a picker nobody trusts. The directory wins on the overlap because it is the server's answer;
+FE utils/meals/admin-view.js:184: // the session entry is only ever a stand-in for a company the directory cannot yet know about.
+FE utils/meals/admin-view.js:241: * read has no business submitting an edit.
+FE utils/meals/admin-view.js:286: * a silently-zero window would be a policy nobody stated.
+FE utils/meals/claim-client.js:29: * module-wide `Features:Meals` gate and has no per-store dimension at all.
+FE utils/meals/claim-client.js:36: * `companyDisplayName`, `intendedRole`. That is the WHOLE projection: there is no allowance, no
+FE utils/meals/meals-client.js:16: // own sub-flags and belong to surfaces that do not exist yet; a client method for a route no screen
+FE utils/meals/meals-client.js:35: // collapsed, because collapsing them is how "we could not read this" becomes "this venue has no
+FE utils/meals/meals-client.js:71: * unrouted 404 has no code at all, and a 404 minted by anything other than this module has no
+FE utils/meals/meals-client.js:95: * Both are GETs and neither carries an `Idempotency-Key`; there is no mutation on THIS service, so
+FE utils/meals/meals-client.js:96: * `_mutate` is deliberately never called here (`MealsAdminService` calls it for every one of its
+FE utils/meals/meals-client.js:123: * Takes NO company filter — the route has no query parameter, so the store's whole attributed set
+FE utils/meals/meals-client.js:124: * comes back and the view groups it. It is NOT paged either; there is no cursor in the contract,
+FE utils/meals/refusal-copy.js:169: // employee who has never seen it, is on a phone, opened a code somebody messaged them, and has no
+FE utils/meals/refusal-copy.js:190: // from `_authorization.NotFound()` and `RequireVisible()` respectively. There is no extension
+FE utils/meals/refusal-copy.js:202: /** Offer the sign-in control: the caller has no usable token, or none at all. */
+FE utils/meals/refusal-copy.js:224: // A blank caller id. Reachable only with a token the server accepted but that names nobody, which
+FE utils/meals/store-view.js:11: //   ...and a loaded-but-empty list is a positive claim ("this store has no company agreements"),
+FE utils/meals/store-view.js:48: * "not yet" is a dash, a zero that means "captured, then reversed to nothing" is a zero.
+
+=== END (213 files backend, 40 files frontend, 321 candidate lines) ===

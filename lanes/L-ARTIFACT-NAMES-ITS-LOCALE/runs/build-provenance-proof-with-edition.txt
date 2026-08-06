@@ -1,0 +1,23 @@
+support files under test
+  artifact-store.js     043b5af70cc28ec9f2e0a65ceab8b59c58c7b74d6196489603acf7bee64cf3ed
+  edition.js            a6bbfc7c971c4a1d94eda9a107e8b930468f170dea3a78a7be6e97d17479ad07
+  fixture-provenance.js d022ff24ed16f876ad3b4c5af216015ed8b0d094c720a742661f8596078712fb
+  journey-assertions.js 4ddbed1671a04c71405c64657976b6b9a4debe479bf0a85bfde90565f4f07532
+  journey.js            f12aeb93eee6e5683f7b026836d34955478af822ed79c17c3b1871c1abc8f866
+  world-stamp.js        ec4089ffaff867f8d7888055ca68c7723109bfb0945a91902e19d09d01cb2c97
+stand-in live api      http://127.0.0.1:58249   (served by pid 49118, cwd web-artloc)
+stand-in app           http://127.0.0.1:58250
+the port would say     web-artloc@7030c00122e026f077bdb1bfecee1c916ca72d67+dirty   <- the wrong answer, available in every arm
+checkout alpha         okamapi-alpha@9627c4316e26f79adfc23a8ae7d6671caa01746e
+checkout beta          okamapi-beta@4d8afc5d7737256acb7389ef26b3298d1d537788
+
+  ok    1  okamapi-alpha@9627c4316e26f79adfc23a8ae7d6671caa01746e  stamp:artifacts/world/live/127-0-0-1-58249.json  stamped from checkout ALPHA, nothing declared
+  ok    2  okamapi-beta@4d8afc5d7737256acb7389ef26b3298d1d537788  stamp:artifacts/world/live/127-0-0-1-58249.json  the same world stamped from a DIFFERENT checkout (BETA)
+  ok    3  web-artloc@7030c00122e026f077bdb1bfecee1c916ca72d67+dirty  process:127.0.0.1:58249             stamp INVALIDATED (its world is gone) — must fall back to the port and be WRONG
+  ok    4  okamapi-alpha@9627c4316e26f79adfc23a8ae7d6671caa01746e  stamp:artifacts/world/live/127-0-0-1-58249.json  stamped ALPHA while the shell declares BETA — a command copied from an older world
+  ok    5  okamapi-alpha@9627c4316e26f79adfc23a8ae7d6671caa01746e  env:E2E_API_BUILD                   NO stamp, the shell declares ALPHA — the declaration still carries a remote runner
+
+All 5 arms held. A live journey artifact names the checkout the world script
+recorded, changes when that checkout changes, and — arm 3 — names the port's wrong answer the
+moment the stamp is no longer verifiable. Nothing asked the API what it was.
+EXIT=0

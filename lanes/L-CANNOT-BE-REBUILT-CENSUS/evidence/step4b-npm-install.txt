@@ -1,0 +1,44 @@
+npm warn ERESOLVE overriding peer dependency
+npm warn While resolving: eslint-plugin-vue@6.2.2
+npm warn Found: eslint@7.32.0
+npm warn node_modules/eslint
+npm warn   dev eslint@"^7.10.0" from the root project
+npm warn   26 more (@babel/eslint-parser, @nuxtjs/eslint-config, ...)
+npm warn
+npm warn Could not resolve dependency:
+npm warn peer eslint@"^5.0.0 || ^6.0.0" from eslint-plugin-vue@6.2.2
+npm warn node_modules/eslint-plugin-vue
+npm warn   eslint-plugin-vue@"^6.2.2" from @nuxtjs/eslint-config@3.1.0
+npm warn   node_modules/@nuxtjs/eslint-config
+npm warn   1 more (eslint-plugin-nuxt)
+npm warn
+npm warn Conflicting peer dependency: eslint@6.8.0
+npm warn node_modules/eslint
+npm warn   peer eslint@"^5.0.0 || ^6.0.0" from eslint-plugin-vue@6.2.2
+npm warn   node_modules/eslint-plugin-vue
+npm warn     eslint-plugin-vue@"^6.2.2" from @nuxtjs/eslint-config@3.1.0
+npm warn     node_modules/@nuxtjs/eslint-config
+npm warn     1 more (eslint-plugin-nuxt)
+npm warn EBADENGINE Unsupported engine {
+npm warn EBADENGINE   package: 'okam-consumer@1.0.0',
+npm warn EBADENGINE   required: { node: '22.x' },
+npm warn EBADENGINE   current: { node: 'v24.15.0', npm: '11.14.1' }
+npm warn EBADENGINE }
+
+up to date, audited 2613 packages in 3s
+
+380 packages are looking for funding
+  run `npm fund` for details
+
+145 vulnerabilities (18 low, 55 moderate, 61 high, 11 critical)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues possible (including breaking changes), run:
+  npm audit fix --force
+
+Some issues need review, and may require choosing
+a different dependency.
+
+Run `npm audit` for details.

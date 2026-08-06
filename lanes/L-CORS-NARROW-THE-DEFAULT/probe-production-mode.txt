@@ -1,0 +1,52 @@
+probe run: 2026-08-06T12:41:16Z  deployed=https://api.okam.no  local=http://127.0.0.1:5391 (ASPNETCORE_ENVIRONMENT=Production)
+
+== A  preflight for a bearer PUT on an [Authorize] route
+   origin: https://evil.example
+   deployed  status=204  allow-origin=*  allow-headers=authorization,content-type  allow-credentials=<none>
+   local     status=204  allow-origin=<none>  allow-headers=<none>  allow-credentials=<none>
+
+== B  same preflight from an enumerated origin
+   origin: https://okam.no
+   deployed  status=204  allow-origin=*  allow-headers=authorization,content-type  allow-credentials=<none>
+   local     status=204  allow-origin=https://okam.no  allow-headers=authorization,content-type  allow-credentials=<none>
+
+== C  preflight naming the Edda integration key
+   origin: https://evil.example
+   deployed  status=204  allow-origin=*  allow-headers=x-okam-apikey  allow-credentials=<none>
+   local     status=204  allow-origin=<none>  allow-headers=<none>  allow-credentials=<none>
+
+== D  preflight naming the external menu key
+   origin: https://evil.example
+   deployed  status=204  allow-origin=*  allow-headers=x-api-key  allow-credentials=<none>
+   local     status=204  allow-origin=<none>  allow-headers=<none>  allow-credentials=<none>
+
+== E  actual 401 on the external menu route
+   origin: https://evil.example
+   deployed  status=401  allow-origin=*  allow-headers=<none>  allow-credentials=<none>
+   local     status=401  allow-origin=<none>  allow-headers=<none>  allow-credentials=<none>
+
+== F  actual 401 on the Edda orders route
+   origin: https://evil.example
+   deployed  status=401  allow-origin=*  allow-headers=<none>  allow-credentials=<none>
+   local     status=401  allow-origin=<none>  allow-headers=<none>  allow-credentials=<none>
+
+== G  actual 401 on an [Authorize] route
+   origin: https://evil.example
+   deployed  status=401  allow-origin=*  allow-headers=<none>  allow-credentials=<none>
+   local     status=401  allow-origin=<none>  allow-headers=<none>  allow-credentials=<none>
+
+== H  public 200
+   origin: https://evil.example
+   deployed  status=200  allow-origin=*  allow-headers=<none>  allow-credentials=<none>
+   local     status=200  allow-origin=<none>  allow-headers=<none>  allow-credentials=<none>
+
+== I  public 200 from the Swiss origin
+   origin: https://www.okam-swiss.ch
+   deployed  status=200  allow-origin=*  allow-headers=<none>  allow-credentials=<none>
+   local     status=200  allow-origin=https://www.okam-swiss.ch  allow-headers=<none>  allow-credentials=<none>
+
+== J  public 200 from a loopback origin
+   origin: http://localhost:3000
+   deployed  status=200  allow-origin=*  allow-headers=<none>  allow-credentials=<none>
+   local     status=200  allow-origin=<none>  allow-headers=<none>  allow-credentials=<none>
+

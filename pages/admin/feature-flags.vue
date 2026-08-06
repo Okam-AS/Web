@@ -100,6 +100,17 @@
               {{ $i(preconditionKey(row)) }}
             </p>
 
+            <!-- What OFF does to this module, for the flags where "off" does not mean "gone". Above
+                 the control for the same reason the precondition is: it is read at the moment of the
+                 click, by someone who may be mid-incident and expecting the module to disappear. -->
+            <p
+              v-if="offBehaviourKey(row)"
+              class="ff-row__offmeaning"
+              :data-off-meaning="row.flagKey"
+            >
+              {{ $i(offBehaviourKey(row)) }}
+            </p>
+
             <!-- A key the catalog does not carry is not writable: the PUT answers 400 for it. No
                  toggle is drawn, because an affordance certain to be refused is worse than none. -->
             <p v-if="row.writable === false" class="ff-row__warn">
@@ -193,6 +204,35 @@ import { buildBoard, isOverruled, BOARD_UNKNOWN } from '~/utils/platform/flag-bo
 // of the page would be read as covering all eighteen rows, which is a different and false claim.
 const FLAG_PRECONDITIONS = {
   'Events.Deposits': 'ff_precondition_events_deposits'
+};
+
+// What turning a flag OFF actually does to the module — stated on the row, for the flags whose
+// answer is not the one the word "off" suggests.
+//
+// WHY THIS IS NOT ONE SENTENCE AT THE TOP. It used to be: `ff_page_intro` promised, for all six
+// modules at once, that a switch which is not on "refuses writes — reads and exports of what is
+// already recorded keep working". That is true of Training and FALSE of Events, whose gate answers
+// 404 `EVENTS_DISABLED` and takes the whole module dark, reads included
+// (`Services/Events/EventsModuleGate.cs`: "False ⇒ the caller returns 404 … the module is invisible
+// for this store"). A promise that holds for some modules and not others is not information, so the
+// intro no longer makes it and the rows that can back it make it themselves.
+//
+// TRAINING'S ANSWER, read off `Services/Training/TrainingModuleGate.cs` rather than off the flag.
+// Its eight read paths call `EnsureVisibleAsync`, which consults no flag beyond visibility; its
+// writes call `EnsureWritableAsync(flag)`, which — flag off, store visible — throws
+// `FlagDisabledReadOnly` (409 `training.flag-disabled-read-only`). Visible means `training.setup` on
+// OR any TrainingCourses/Certificates/Assignments/Completions row for the store. So off refuses the
+// write and leaves the lists, the form and its live submit exactly where they were, and a journey
+// walked precisely that. The one case where the module DOES vanish is a store that has never
+// recorded anything, and only `training.setup` decides it — which is why the two rows say different
+// things instead of sharing one sentence.
+//
+// KEYED ON THE EXACT KEY, like the preconditions above and for the same reason: the five withheld
+// `training.*` flags gate nothing today, and a prefix match would put this behaviour claim on the
+// first of them that is ever advertised, whatever gate it turns out to have.
+const FLAG_OFF_BEHAVIOUR = {
+  'training.setup': 'ff_off_training_setup',
+  'training.assignments': 'ff_off_training_assignments'
 };
 
 export default {
@@ -366,6 +406,19 @@ export default {
         ? FLAG_PRECONDITIONS[row.flagKey]
         : null;
     },
+    /**
+     * The i18n key describing what this flag being OFF does to its module, or null when no owner has
+     * had that read out of its gate. Exact-key, never a prefix: see `FLAG_OFF_BEHAVIOUR`.
+     *
+     * Deliberately independent of `row.state`. It is a standing property of the flag, not a reaction
+     * to the value this store happens to hold — an operator about to press "off" has to read it
+     * BEFORE the value changes, which is the only moment it can still prevent anything.
+     */
+    offBehaviourKey (row) {
+      return (row && Object.prototype.hasOwnProperty.call(FLAG_OFF_BEHAVIOUR, row.flagKey))
+        ? FLAG_OFF_BEHAVIOUR[row.flagKey]
+        : null;
+    },
     stateLabel (row) {
       if (row.state === null) { return this.$i('ff_state_unknown'); }
       return row.state ? this.$i('ff_state_on') : this.$i('ff_state_off');
@@ -450,6 +503,12 @@ export default {
    two as the same thing is what makes a permanent banner invisible. Same amber family so it still
    reads as caution on a money path, a left rule instead of a filled box so it reads as standing. */
 .ff-row__precondition { margin: 10px 0 0; padding: 8px 12px; border-left: 3px solid #92400e; background: #fffdf5; color: #92400e; font-size: 0.82rem; line-height: 1.45; }
+/* Standing, like the precondition — a left rule rather than a filled box — but deliberately NOT
+   amber. Amber on this page means caution about a money path or a fault the server has reported;
+   this is neither. It is the plain answer to "what does off do here", it is true whichever way the
+   row is set, and it has to stay legible rather than decorative: full-strength body colour, because
+   an operator mid-incident is going to read this sentence and act on it. */
+.ff-row__offmeaning { margin: 10px 0 0; padding: 8px 12px; border-left: 3px solid #64748b; background: #f8f9fa; color: #292c34; font-size: 0.82rem; line-height: 1.45; }
 .ff-row__meta { margin: 8px 0 0; color: #94a3b8; font-size: 0.78rem; }
 
 .ff-row__note { display: flex; flex-direction: column; gap: 4px; margin-top: 10px; }

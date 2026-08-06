@@ -1,0 +1,728 @@
+<template>
+  <AdminPage>
+    <div class="ongoing-orders">
+      <div class="page-header">
+        <h1>{{ $i('ongoing_title') }}</h1>
+      </div>
+
+      <p
+        v-show="adminStores.length > 1"
+        class="page-description"
+      >
+        {{ $i('ongoing_pageDescription', { count: adminStores.length }) }}
+      </p>
+
+      <div
+        v-if="isLoading"
+        class="loading-container"
+      >
+        <Loading :loading="true" />
+      </div>
+
+      <div
+        v-else
+        class="orders-grid"
+      >
+        <!-- New Orders Column -->
+        <div
+          class="orders-column"
+        >
+          <div
+            class="column-header"
+          >
+            <h2>{{ $i('ongoing_columnNew') }}</h2>
+            <span
+              v-if="newOrders.length"
+              class="count-badge"
+            >{{ newOrders.length }}</span>
+          </div>
+          <div
+            v-if="newOrders.length"
+            class="orders-list"
+          >
+            <OrderCard
+              v-for="order in newOrders"
+              :key="order.id"
+              :order="order"
+              :expanded-order-id="showOrderId"
+              :admin-stores="adminStores"
+              :primary-action-button="primaryActionLabel(order)"
+              @toggle-expand="toggleOrderExpand"
+              @primary-action="startProcessing"
+              @transfer="transferOrder"
+              @change-delivery="changeDeliveryType"
+              @sms-driver="openSmsDriver"
+              @receipt="openReceipt"
+              @cancel="cancelOrder"
+              @open-customer="openCustomerModal"
+            />
+          </div>
+          <div
+            v-else
+            class="empty-state"
+          >
+            {{ $i('ongoing_emptyNew') }}
+          </div>
+        </div>
+
+        <!-- Processing Orders Column -->
+        <div
+          class="orders-column"
+        >
+          <div
+            class="column-header"
+          >
+            <h2>{{ $i('ongoing_columnProcessing') }}</h2>
+            <span
+              v-if="processingOrders.length"
+              class="count-badge"
+            >{{ processingOrders.length }}</span>
+          </div>
+          <div
+            class="orders-list"
+          >
+            <div v-if="processingOrders.length">
+              <OrderCard
+                v-for="order in processingOrders"
+                :key="order.id"
+                :order="order"
+                :expanded-order-id="showOrderId"
+                :admin-stores="adminStores"
+                :primary-action-button="primaryActionLabel(order)"
+                @toggle-expand="toggleOrderExpand"
+                @primary-action="updateOrderToReady"
+                @transfer="transferOrder"
+                @change-delivery="changeDeliveryType"
+                @sms-driver="openSmsDriver"
+                @receipt="openReceipt"
+                @cancel="cancelOrder"
+                @open-customer="openCustomerModal"
+              />
+            </div>
+            <div
+              v-else
+              class="empty-state"
+            >
+              {{ $i('ongoing_emptyProcessing') }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Ready Orders Column -->
+        <div
+          class="orders-column"
+        >
+          <div
+            class="column-header"
+          >
+            <h2>{{ $i('ongoing_columnReady') }}</h2>
+            <span
+              v-if="readyOrders.length"
+              class="count-badge"
+            >{{ readyOrders.length }}</span>
+          </div>
+          <div
+            class="orders-list"
+          >
+            <div v-if="readyOrders.length">
+              <OrderCard
+                v-for="order in readyOrders"
+                :key="order.id"
+                :order="order"
+                :expanded-order-id="showOrderId"
+                :admin-stores="adminStores"
+                :primary-action-button="primaryActionLabel(order)"
+                @toggle-expand="toggleOrderExpand"
+                @primary-action="completeOrder"
+                @transfer="transferOrder"
+                @change-delivery="changeDeliveryType"
+                @sms-driver="openSmsDriver"
+                @receipt="openReceipt"
+                @cancel="cancelOrder"
+                @open-customer="openCustomerModal"
+              />
+            </div>
+            <div
+              v-else
+              class="empty-state"
+            >
+              {{ $i('ongoing_emptyReady') }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <LoginModal
+        v-if="showLogin"
+        @close="closeLoginModal"
+      />
+
+      <OrderProcessingModal
+        v-if="showProcessingModal && currentOrder"
+        :order="currentOrder"
+        @close="closeProcessingModal"
+      />
+
+      <ReceiptModal
+        v-if="showReceiptModal && currentOrder"
+        :order="currentOrder"
+        @close="closeReceiptModal"
+      />
+
+      <TransferOrderModal
+        v-if="showTransferModal && currentOrder"
+        :order="currentOrder"
+        :stores="adminStores"
+        @close="closeTransferModal"
+      />
+
+      <ChangeDeliveryTypeModal
+        v-if="showChangeDeliveryModal && currentOrder"
+        :order="currentOrder"
+        @close="closeChangeDeliveryModal"
+      />
+
+      <SmsDriverModal
+        v-if="showSmsDriverModal && currentOrder"
+        :order="currentOrder"
+        @close="closeSmsDriverModal"
+        @success="onSmsSuccess"
+      />
+
+      <CustomerInfoModal
+        v-if="showCustomerModal && currentOrder"
+        :user-id="currentOrder.userId || (currentOrder.user && currentOrder.user.id)"
+        :store-id="currentOrder.storeId"
+        :customer-name="currentOrder.userFullName"
+        :customer-phone="currentOrder.user && currentOrder.user.phoneNumber"
+        @close="closeCustomerModal"
+      />
+
+      <!-- Info Banner -->
+      <div
+        v-if="!hideBanner"
+        class="info-banner"
+      >
+        <div class="banner-content">
+          <span class="banner-text">
+            {{ $i('ongoing_bannerText') }}
+          </span>
+          <NuxtLink
+            to="/admin/statistics"
+            class="banner-link"
+          >
+            {{ $i('ongoing_bannerLink') }}
+          </NuxtLink>
+        </div>
+        <button
+          class="banner-close"
+          @click="hideBanner = true"
+        >
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+    </div>
+  </AdminPage>
+</template>
+<script>
+import AdminPage from '~/components/organisms/AdminPage.vue';
+import Loading from '~/components/atoms/Loading.vue';
+import LoginModal from '~/components/molecules/LoginModal.vue';
+import OrderProcessingModal from '~/components/molecules/OrderProcessingModal.vue';
+import ReceiptModal from '~/components/molecules/ReceiptModal.vue';
+import TransferOrderModal from '~/components/molecules/TransferOrderModal.vue';
+import ChangeDeliveryTypeModal from '~/components/molecules/ChangeDeliveryTypeModal.vue';
+import SmsDriverModal from '~/components/molecules/SmsDriverModal.vue';
+import CustomerInfoModal from '~/components/molecules/CustomerInfoModal.vue';
+import OrderCard from '~/components/molecules/OrderCard.vue';
+import {
+  COLUMN_NEW,
+  COLUMN_PROCESSING,
+  COLUMN_READY,
+  ACTION_NEXT,
+  ACTION_COMPLETE,
+  ordersInColumn,
+  actionForStatus
+} from '~/utils/admin/ongoing-columns';
+
+export default {
+  components: { AdminPage, LoginModal, Loading, OrderProcessingModal, ReceiptModal, TransferOrderModal, ChangeDeliveryTypeModal, SmsDriverModal, CustomerInfoModal, OrderCard },
+  data: () => ({
+    showLogin: false,
+    isLoading: false,
+    orders: [],
+    showOrderId: '',
+    isMobile: false,
+    refreshInterval: null,
+    adminStores: [],
+    showProcessingModal: false,
+    currentOrder: null,
+    showReceiptModal: false,
+    showTransferModal: false,
+    showChangeDeliveryModal: false,
+    showSmsDriverModal: false,
+    showCustomerModal: false,
+    hideBanner: true
+  }),
+  computed: {
+    // The three columns are derived from `OrderStatus` in `~/utils/admin/ongoing-columns`, not
+    // listed here. They used to be three hand-written status lists, and between them those lists
+    // covered five of the seven statuses a live order can hold: an order in `DriverPickedUp` or
+    // `OpenCheck` was loaded by `loadOrders()` and then rendered by no column at all — invisible on
+    // this board and, because `Fullfør` lives on the card, impossible to close from it. Nothing
+    // errored; the order was simply not there. That is why the rule now lives in one total table
+    // over the enum, where a status added later fails a test instead of vanishing on a Saturday.
+    newOrders () {
+      return ordersInColumn(this.orders, COLUMN_NEW);
+    },
+    processingOrders () {
+      return ordersInColumn(this.orders, COLUMN_PROCESSING);
+    },
+    readyOrders () {
+      return ordersInColumn(this.orders, COLUMN_READY);
+    }
+  },
+  mounted () {
+    if (!this.$store.getters.userIsLoggedIn) {
+      this.showLogin = true;
+      return;
+    }
+    this.adminStores = this.$store.state.currentUser.adminIn;
+    this.loadOrders();
+    this.checkMobile();
+    window.addEventListener('resize', this.checkMobile);
+    this.startAutoRefresh();
+  },
+  beforeDestroy () {
+    window.removeEventListener('resize', this.checkMobile);
+    this.stopAutoRefresh();
+  },
+  methods: {
+    closeLoginModal (isLoggedIn) {
+      this.showLogin = !isLoggedIn;
+      if (isLoggedIn) {
+        this.loadOrders();
+      }
+    },
+    loadOrders () {
+      this.isLoading = true;
+      this._orderService
+        .GetAllOngoing()
+        .then((orders) => {
+          this.orders = orders;
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+    checkMobile () {
+      this.isMobile = window.innerWidth <= 768;
+    },
+    startAutoRefresh () {
+      this.refreshInterval = setInterval(() => {
+        this._orderService.GetAllOngoing().then((orders) => {
+          this.orders = orders;
+        });
+      }, 7000);
+    },
+    stopAutoRefresh () {
+      if (this.refreshInterval) {
+        clearInterval(this.refreshInterval);
+      }
+    },
+    toggleOrderExpand (orderId) {
+      this.showOrderId = this.showOrderId === orderId ? '' : orderId;
+    },
+    // The card's primary button, decided by the same table that decided its column so the two can
+    // never disagree. `DriverPickedUp` gets `Fullfør` here: putting the card back on the board
+    // without the control that closes the order would have been half a fix — visible, still stuck.
+    // A status this build cannot name gets no button, because it cannot know which move is legal.
+    primaryActionLabel (order) {
+      const action = actionForStatus(order && order.status);
+      if (action === ACTION_NEXT) { return this.$i('ongoing_actionNext'); }
+      if (action === ACTION_COMPLETE) { return this.$i('ongoing_actionComplete'); }
+      return null;
+    },
+    startProcessing (order) {
+      this.currentOrder = order;
+      this.showProcessingModal = true;
+    },
+    closeProcessingModal (success) {
+      this.showProcessingModal = false;
+      if (success) {
+        this.loadOrders();
+      }
+      this.currentOrder = null;
+    },
+    transferOrder (order) {
+      if (!order || this.adminStores.length <= 1) { return; }
+      this.currentOrder = order;
+      this.showTransferModal = true;
+    },
+    closeTransferModal (success) {
+      this.showTransferModal = false;
+      if (success) {
+        this.loadOrders();
+      }
+      this.currentOrder = null;
+    },
+    changeDeliveryType (order) {
+      if (!order) { return; }
+      this.currentOrder = order;
+      this.showChangeDeliveryModal = true;
+    },
+    closeChangeDeliveryModal (success) {
+      this.showChangeDeliveryModal = false;
+      if (success) {
+        this.loadOrders();
+      }
+      this.currentOrder = null;
+    },
+    openReceipt (order) {
+      this.currentOrder = order;
+      this.showReceiptModal = true;
+    },
+    closeReceiptModal () {
+      this.showReceiptModal = false;
+      this.currentOrder = null;
+    },
+    updateOrderToReady (order) {
+      if (!order) { return; }
+
+      let nextStatus;
+
+      // Determine the correct "ready" status based on delivery type
+      if (order.deliveryType === 'SelfPickup') {
+        nextStatus = 'ReadyForPickup';
+      } else if (order.deliveryType === 'InstantHomeDelivery' || order.deliveryType === 'DineHomeDelivery' || order.deliveryType === 'WoltDelivery') {
+        nextStatus = 'ReadyForDriver';
+      } else if (order.deliveryType === 'TableDelivery') {
+        nextStatus = 'Served';
+      } else {
+        // Fallback for any other delivery types
+        nextStatus = 'ReadyForPickup';
+      }
+
+      this._orderService
+        .UpdateStatus(order.id, nextStatus)
+        .then(() => {
+          this.loadOrders();
+        })
+        .catch((error) => {
+          alert(this.$i('ongoing_errorUpdate', { error: error.message || this.$i('ongoing_unknownError') }));
+        });
+    },
+    completeOrder (order) {
+      if (!order) { return; }
+
+      let confirmMessage = this.$i('ongoing_confirmComplete', { orderId: order.friendlyOrderId });
+
+      // Special confirmation for delivery orders that haven't been delivered yet
+      if (order.deliveryType === 'WoltDelivery' &&
+          order.woltDeliveryInfo &&
+          order.woltDeliveryInfo.status !== 'Delivered') {
+        confirmMessage = this.$i('ongoing_confirmCompleteNotDelivered', { orderId: order.friendlyOrderId });
+      } else if (order.deliveryType === 'DineHomeDelivery' &&
+                 order.dineHomeStatus !== 'Completed') {
+        confirmMessage = this.$i('ongoing_confirmCompleteNotDelivered', { orderId: order.friendlyOrderId });
+      }
+
+      const confirmed = confirm(confirmMessage);
+
+      if (!confirmed) { return; }
+
+      this._orderService
+        .UpdateStatus(order.id, 'Completed')
+        .then(() => {
+          this.loadOrders();
+        })
+        .catch((error) => {
+          alert(this.$i('ongoing_errorComplete', { error: error.message || this.$i('ongoing_unknownError') }));
+        });
+    },
+    cancelOrder (order) {
+      if (!order) { return; }
+
+      const confirmed = confirm(
+        this.$i('ongoing_confirmCancel', { storeName: order.storeLegalName, orderId: order.friendlyOrderId })
+      );
+
+      if (!confirmed) { return; }
+
+      this._orderService
+        .UpdateStatus(order.id, 'Canceled')
+        .then(() => {
+          this.loadOrders();
+        })
+        .catch((error) => {
+          alert(this.$i('ongoing_errorCancel', { error: error.message || this.$i('ongoing_unknownError') }));
+        });
+    },
+    openSmsDriver (order) {
+      this.currentOrder = order;
+      this.showSmsDriverModal = true;
+    },
+    closeSmsDriverModal () {
+      this.showSmsDriverModal = false;
+      this.currentOrder = null;
+    },
+    onSmsSuccess () {
+      // Optionally reload orders or show a notification
+      this.loadOrders();
+    },
+    openCustomerModal (order) {
+      if (!order || !order.userId || !order.storeId) { return; }
+      this.currentOrder = order;
+      this.showCustomerModal = true;
+    },
+    closeCustomerModal () {
+      this.showCustomerModal = false;
+      this.currentOrder = null;
+    }
+  }
+};
+</script>
+<style lang="scss">
+@import "../../assets/sass/common.scss";
+
+.ongoing-orders {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+}
+
+.page-header {
+  margin-bottom: 16px;
+  margin-top: 16px;
+
+  h1 {
+    font-size: 2em;
+    font-weight: 600;
+    color: #292c34;
+    margin: 0;
+
+    @media (max-width: 768px) {
+      font-size: 1.5em;
+    }
+  }
+}
+
+.page-description {
+  color: #666;
+  font-size: 0.9em;
+  line-height: 1.5;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  padding: 60px 24px;
+}
+
+.orders-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  margin-bottom: 32px;
+  margin-top: 32px;
+  align-items: start;
+
+  @media (max-width: 1200px) {
+    gap: 16px;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+}
+
+.orders-column {
+  background: #fff;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e8e8e8;
+  transition: all 0.2s ease;
+
+  @media (min-width: 769px) {
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+  }
+
+  .column-header {
+    padding: 20px;
+    background: linear-gradient(135deg, #292c34 0%, #1a1d23 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+    transition: all 0.2s ease;
+    min-height: 64px;
+
+    @media (max-width: 768px) {
+      padding: 16px 20px;
+      min-height: 56px;
+    }
+
+    h2 {
+      color: #d5f6e5;
+      margin: 0;
+      font-size: 1.1em;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+
+      @media (max-width: 768px) {
+        font-size: 1em;
+      }
+    }
+  }
+
+  .orders-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: #f8f9fa;
+    height: calc(100% - 64px);
+
+    @media (max-width: 768px) {
+      padding: 16px;
+    }
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #cbd5e0;
+      border-radius: 4px;
+      transition: background 0.2s ease;
+
+      &:hover {
+        background: #a0aec0;
+      }
+    }
+  }
+}
+
+.count-badge {
+  background: rgba(213, 246, 229, 0.95);
+  color: #292c34;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85em;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  min-width: 32px;
+  text-align: center;
+  display: inline-block;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: #a0aec0;
+  font-size: 0.95em;
+  font-weight: 500;
+  background: transparent;
+  border-radius: 8px;
+  margin: 0;
+}
+
+.info-banner {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+
+  @media (max-width: 768px) {
+    padding: 14px 16px;
+    margin-bottom: 24px;
+  }
+
+  .banner-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    flex-wrap: wrap;
+
+    .banner-text {
+      color: #4a5568;
+      font-size: 0.9em;
+      font-weight: 500;
+    }
+
+    .banner-link {
+      color: #1bb776;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.9em;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+
+      &:hover {
+        text-decoration: underline;
+        color: #158c5a;
+      }
+    }
+  }
+
+  .banner-close {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+
+    .material-icons {
+      color: #a0aec0;
+      font-size: 20px;
+    }
+
+    &:hover {
+      background: #f8f9fa;
+
+      .material-icons {
+        color: #4a5568;
+      }
+    }
+  }
+}
+
+</style>

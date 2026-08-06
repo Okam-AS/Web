@@ -1,0 +1,48 @@
+{
+ "fe": [
+  "lane/exit-instrument-census",
+  "lane/fe-journeys",
+  "lane/fe-wf-onboard"
+ ],
+ "be": [
+  "lane/ai-middleware-delete",
+  "lane/composition-root-check",
+  "lane/confirm-conat-retire",
+  "lane/confirm-postmerge-pin",
+  "lane/confirm-server-halves",
+  "lane/cors-followups",
+  "lane/credit-note-number",
+  "lane/crypto-pin-byform",
+  "lane/download-headers",
+  "lane/download-pdf-wire",
+  "lane/ev-accept-gate",
+  "lane/ev-guest-origin",
+  "lane/ev-rails",
+  "lane/ev-vat",
+  "lane/ev-vipps-fallback",
+  "lane/gr-confirm-stale",
+  "lane/gr-confirmed-email",
+  "lane/gr-dispatch-actor",
+  "lane/gr-testsend-guard",
+  "lane/gr-testsend-ratelimit",
+  "lane/growth-audit-ledger",
+  "lane/invoice-authorize",
+  "lane/invoice-retry-retirement",
+  "lane/meals-grace-pins",
+  "lane/meals-pos-tender-wire",
+  "lane/meals-release",
+  "lane/meals-xz-credit",
+  "lane/pdf-creditnote-name",
+  "lane/pdf-nullderef",
+  "lane/reservation-limiter-move",
+  "lane/wf-blind-bind-name",
+  "lane/wf-digest-tautology",
+  "lane/wf-push-notify",
+  "lane/wf-push-silent",
+  "lane/wf-w5-timesheet"
+ ],
+ "both": [
+  "feature/restaurant-modules"
+ ],
+ "neither": []
+}

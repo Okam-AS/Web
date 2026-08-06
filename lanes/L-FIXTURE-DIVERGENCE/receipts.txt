@@ -1,0 +1,85 @@
+BASE: Web-modules 31fc45da44faa590a6a095f30780b3f627d32049 [feature/restaurant-modules], clean of tracked modifications at lane start
+
+=== 1. the seven-armed proof (no checkout needed)
+
+  SEVEN ARMS AGAINST A STAND-IN WORLD
+
+  ok    level           green             a fixture that mirrors its backend
+  ok    removed         fixture-behind    one refusal deleted from the fixture
+  ok    restatused      status-mismatch   the refusal kept, answered at 400 instead of 403 (the defect that was found)
+  ok    invented        fixture-ahead     a refusal the backend cannot give
+  ok    benign-fixture  green             helper renamed, message rewritten, handlers reordered, a field added to the 200
+  ok    benign-backend  green             backend message rewritten, a helper added, a whole new route with its own refusals
+  ok    stale-exemption stale-exemption   an exemption naming a refusal the backend does not have
+
+  the check reds on divergence in three directions and stays green through benign change on both sides.
+
+
+=== 2. level against the checkout that carries the confirmed-address clause
+
+  fixture   test/e2e/fixture  (12 anchored routes)
+  backend   /Users/svendaneel/okam/wt-gr-confirmed
+            48950702 [lane/gr-confirmed-email], 638 routes, 6 typed error families
+  12 anchored routes refuse exactly what that checkout refuses.
+
+exit=0
+
+=== 3. the same fixture against the integration branch
+
+  fixture   test/e2e/fixture  (12 anchored routes)
+  backend   /Users/svendaneel/okam/OkamAPI-restaurant-control
+            903b70d1 [feature/restaurant-control-stage0], 639 routes, 6 typed error families
+
+  THE FIXTURE IS AHEAD — the fixture refuses and the API does not
+    POST /v1/growth/stores/{storeId}/newsletters/{newsletterId}/dispatch
+      growth-newsletter.js:403  the fixture answers 409 growth.dispatch_disabled and Controllers/GrowthNewslettersController.cs never does
+    POST /v1/growth/stores/{storeId}/newsletters/{newsletterId}/test-sends
+      growth-newsletter.js:332  the fixture answers 403 growth.test_address_not_own and Controllers/GrowthNewslettersController.cs never does
+    POST /v1/meals/invitations/claim
+      meals.js:229  the fixture answers 403 meals.invitation-contact-mismatch and Controllers/Meals/MealsMembershipController.cs never does
+
+  AN EXEMPTION THAT HAS OUTLIVED ITS REASON
+    (file)
+      growth-newsletter.js:51  declares 401 growth.unattributed unmodelled, but no anchored route in this file can answer it
+    (file)
+      growth-newsletter.js:54  declares 409 growth.preference_centre_unconfigured unmodelled, but no anchored route in this file can answer it
+    (file)
+      growth-newsletter.js:56  declares 409 growth.unsubscribe_unconfigured unmodelled, but no anchored route in this file can answer it
+    (file)
+      growth-newsletter.js:58  declares 409 growth.provider_paused unmodelled, but no anchored route in this file can answer it
+    (file)
+      meals.js:194  declares 404 MEALS_NOT_FOUND unmodelled, but no anchored route in this file can answer it
+  8 divergence(s) across 12 anchored routes.
+
+exit=1
+=== 4. the exit criterion, on the REAL fixture against the REAL backend
+--- remove the test-send refusal from test/e2e/fixture/growth-newsletter.js
+
+  fixture   test/e2e/fixture  (12 anchored routes)
+  backend   /Users/svendaneel/okam/wt-gr-confirmed
+            48950702 [lane/gr-confirmed-email], 638 routes, 6 typed error families
+
+  THE FIXTURE IS BEHIND — the API refuses and the fixture does not
+    POST /v1/growth/stores/{storeId}/newsletters/{newsletterId}/test-sends
+      growth-newsletter.js:332  Controllers/GrowthNewslettersController.cs can answer 403 growth.test_address_not_own and the fixture never does
+  1 divergence(s) across 12 anchored routes.
+
+exit=1  (expected 1)
+--- restored
+
+  fixture   test/e2e/fixture  (12 anchored routes)
+  backend   /Users/svendaneel/okam/wt-gr-confirmed
+            48950702 [lane/gr-confirmed-email], 638 routes, 6 typed error families
+  12 anchored routes refuse exactly what that checkout refuses.
+
+exit=0  (expected 0)
+
+=== 5. benign change to the SAME real fixture: two messages rewritten, the concealment helper
+       renamed, a field added to a 200 body
+
+  fixture   test/e2e/fixture  (12 anchored routes)
+  backend   /Users/svendaneel/okam/wt-gr-confirmed
+            48950702 [lane/gr-confirmed-email], 638 routes, 6 typed error families
+  12 anchored routes refuse exactly what that checkout refuses.
+
+exit=0  (expected 0 -- a divergence check, not a diff)

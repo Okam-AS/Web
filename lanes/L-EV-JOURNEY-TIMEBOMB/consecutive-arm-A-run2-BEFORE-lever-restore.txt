@@ -1,0 +1,55 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › test/e2e/journeys/events-enquiry-to-settlement.spec.js:184:1 › A private booking runs from a public enquiry to a settled statement, and the accept refuses while the module is off @fixture (1.0m)
+
+
+  1) [chromium] › test/e2e/journeys/events-enquiry-to-settlement.spec.js:184:1 › A private booking runs from a public enquiry to a settled statement, and the accept refuses while the module is off @fixture 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.ev-pipeline__notice')
+    Expected: visible
+    Timeout: 60000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 60000ms
+      - waiting for locator('.ev-pipeline__notice')
+
+
+      255 |       // CONFIGURATION reason the page says out loud rather than reporting an empty list.
+      256 |       const notice = page.locator('.ev-pipeline__notice');
+    > 257 |       await expect(notice).toBeVisible({ timeout: 60000 });
+          |                            ^
+      258 |       await expect(notice).toContainText(NOT_ENABLED);
+      259 |       await expect(page.locator('.ev-pipeline__row')).toHaveCount(0);
+      260 |       journey.finding(
+        at fn (/Users/svendaneel/okam/wt-evtb/test/e2e/journeys/events-enquiry-to-settlement.spec.js:257:28)
+        at JourneyRecorder.step (/Users/svendaneel/okam/wt-evtb/test/e2e/support/journey.js:347:28)
+        at /Users/svendaneel/okam/wt-evtb/test/e2e/journeys/events-enquiry-to-settlement.spec.js:252:19
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/events-enquiry-to-settleme-82195-ses-while-the-module-is-off-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/events-enquiry-to-settlement.fixture.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/events-enquiry-to-settlement.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/events-enquiry-to-settleme-82195-ses-while-the-module-is-off-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/events-enquiry-to-settleme-82195-ses-while-the-module-is-off-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/events-enquiry-to-settleme-82195-ses-while-the-module-is-off-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › test/e2e/journeys/events-enquiry-to-settlement.spec.js:184:1 › A private booking runs from a public enquiry to a settled statement, and the accept refuses while the module is off @fixture 

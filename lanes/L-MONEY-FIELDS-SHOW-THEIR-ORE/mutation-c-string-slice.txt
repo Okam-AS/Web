@@ -1,0 +1,51 @@
+watchman warning:  Recrawled this watch 59 times, most recently because:
+MustScanSubDirs UserDroppedTo resolve, please review the information on
+https://facebook.github.io/watchman/docs/troubleshooting.html#recrawl
+To clear this warning, run:
+`watchman watch-del '/Users/svendaneel/okam/Web-modules' ; watchman watch-project '/Users/svendaneel/okam/Web-modules'`
+
+FAIL test/delivery-minimum-ore.test.js
+  a stored minimum-order amount is shown to the last øre
+    ✓ 150,50 kr is shown as 150,50 and not as 150 (16 ms)
+    ✓ a whole-kroner minimum still reads as whole kroner (4 ms)
+    ✓ a minimum below one krone is shown as the amount it is, not as nothing (3 ms)
+    ✓ a genuinely absent minimum still reads as zero (2 ms)
+    ✓ the two boxes say which unit each one takes (3 ms)
+    ✕ EVERY amount the column can hold survives the round trip to the screen and back (29 ms)
+    ✓ a negative stored minimum is shown as it is, and is not quietly rewritten (3 ms)
+  what the field shows is what the field writes
+    ✓ øre typed into the øre box reach the server as øre (4 ms)
+    ✓ editing the kroner does not throw away the øre that were already stored (3 ms)
+    ✓ the øre can be cleared, which is the correction the floored field made impossible (7 ms)
+    ✓ a saved amount comes back onto the screen as the amount that was saved (3 ms)
+    ✓ a whole-kroner edit still writes whole kroner (3 ms)
+    ✓ nothing is written when nothing was edited, however many øre are stored (2 ms)
+    ✓ saving the address alone does not touch the minimum (3 ms)
+  the boxes normalise on blur, so what is on screen is what would be written
+    ✓ one digit in the øre box is øre, not tenths of a krone (3 ms)
+    ✓ an unreadable øre entry shows the zero it would write (2 ms)
+    ✓ an øre entry past 99 is shown clamped rather than silently folded into the kroner (3 ms)
+    ✓ a decimal typed into the kroner box still shows the whole kroner it would write (2 ms)
+
+  ● a stored minimum-order amount is shown to the last øre › EVERY amount the column can hold survives the round trip to the screen and back
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "-0,01"
+    Received: "0,-1"
+
+      111 |       const backend = withStoredMinimum(stored)
+      112 |       const wrapper = await mountDelivery(backend)
+    > 113 |       expect(shownMinimum(wrapper)).toBe(asKronerAndOre(stored))
+          |                                     ^
+      114 |       expect(saveButton(wrapper).exists()).toBe(false)
+      115 |       wrapper.destroy()
+      116 |     }
+
+      at Object.<anonymous> (test/delivery-minimum-ore.test.js:113:37)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 17 passed, 18 total
+Snapshots:   0 total
+Time:        0.684 s, estimated 1 s
+Ran all test suites matching /test\/delivery-minimum-ore.test.js/i.

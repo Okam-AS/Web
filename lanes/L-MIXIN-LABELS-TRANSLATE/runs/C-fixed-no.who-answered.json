@@ -1,0 +1,14 @@
+{
+  "label": "C-fixed-no",
+  "edition": "no",
+  "grantedFixturePort": 4853,
+  "grantedWebPort": 3853,
+  "health": "{\"ok\":true,\"port\":4853}",
+  "holderPid": "21575",
+  "holderCwd": "/Users/svendaneel/okam/web-mixinlabels",
+  "holderCommand": "node test/e2e/fixture/api-server.js",
+  "webPid": "21577",
+  "webCwd": "/Users/svendaneel/okam/web-mixinlabels",
+  "lsof": "p21575 f12 n127.0.0.1:4853 ",
+  "capturedAt": "2026-08-05T06:04:31Z"
+}

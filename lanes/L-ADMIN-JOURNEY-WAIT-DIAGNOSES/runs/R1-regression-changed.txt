@@ -1,0 +1,44 @@
+=== commit 8ac6f63648015d8c7a230181a7f07bf303d43268 helper 447a8b8c5b16a96fbe63c21c69af5ad70cf123eb
+[WebServer] [fixture] listening on http://127.0.0.1:4877
+
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://192.168.68.111:3877/
+
+[WebServer] [info] Preparing project for development
+[WebServer] [info] Initial build may take a while
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+
+[WebServer] [success] Builder initialized
+
+[WebServer] [success] Nuxt files generated
+
+[WebServer] [warn] Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+
+Running 5 tests using 1 worker
+
+[WebServer] [info] Waiting for file changes
+[WebServer] [info] Memory usage: 1.25 GB (RSS: 2.06 GB)
+[WebServer] [info] Listening on: http://192.168.68.111:3877/
+
+[1/5] [chromium] › test/e2e/journeys/admin-refusal-worker.spec.js:24:1 › A worker is refused the store-admin schedule and is given their own page instead @fixture
+[2/5] [chromium] › test/e2e/journeys/events-runsheet-print.spec.js:78:1 › A host prints the run sheet: the dietary requirement is on it and the guest links are not @fixture
+[3/5] [chromium] › test/e2e/journeys/margin-week-freeze.spec.js:69:1 › A frozen week is asked to take an edit, refuses it, and takes the same edit on its correction @fixture
+[4/5] [chromium] › test/e2e/journeys/meals-admin-setup.spec.js:31:1 › A concierge creates a company, signs its corridor, runs a programme and issues an invitation @fixture
+[5/5] [chromium] › test/e2e/journeys/training-course-to-evidence.spec.js:63:1 › A manager opens Training, publishes a course version, files a failing score, and the SERVER calls it not passed @fixture
+  5 passed (45.3s)

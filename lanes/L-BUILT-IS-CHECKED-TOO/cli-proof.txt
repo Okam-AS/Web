@@ -1,0 +1,36 @@
+### the copy this proof runs against
+acb4d8414821df860beeacbdb93183b3e46f688f3f7b2ec8d57f0178508764b5  /Users/svendaneel/okam/Web-modules/lanes/L-BUILT-IS-CHECKED-TOO/sandbox/plan/plan.md
+acb4d8414821df860beeacbdb93183b3e46f688f3f7b2ec8d57f0178508764b5  /Users/svendaneel/okam/Web-modules/docs/plan/plan.md
+
+### PROOF 1 — cmd_built takes a sentence no checker would ever admit
+L-BUILT-IS-CHECKED-TOO running -> built-unverified
+rc=0
+
+### PROOF 2 — the identical string at verify, which does call the checker
+plan: evidence inadmissible — evidence path does not exist: I looked at it and it seemed fine; no file was written
+rc=6
+
+### PROOF 3 — one row per repair class, predicate vs real CLI
+R0   L-ABSENCE-AUDIT-CONDITIONS         predicate=ADMIT  cli(rc=0)=ADMIT  OK
+        L-ABSENCE-AUDIT-CONDITIONS built-unverified -> verified
+R1   L-COLLECTED-PATHS                  predicate=REFUSE cli(rc=6)=REFUSE OK
+        plan: evidence inadmissible — evidence path does not exist: lanes/L-COLLECTED-PATHS/collected.txt — committed 6f03b18 on lane/collected-paths; regener
+R2   L-ARTIFACT-NAMES-ITS-MODULE-TREE   predicate=REFUSE cli(rc=6)=REFUSE OK
+        plan: evidence inadmissible — exit: “a journey artifact carries the realpath of the node_modules it built against and the build directory used, and a 
+R3   L-WF-PUNCH-UI                      predicate=REFUSE cli(rc=6)=REFUSE OK
+        plan: evidence inadmissible — exit: “a person clocks in from the browser and the same browser's personnel list shows the presence row for the venue's 
+R4   L-ESCPOS-LADDER-NAMES-THE-TENDER   predicate=REFUSE cli(rc=6)=REFUSE OK
+        plan: evidence inadmissible — exit: “a test reds for every PaymentType member whose printed payer line is a raw enum name, across both the receipt bui
+R5   L-CONSENT-REASON-VOCABULARY        predicate=REFUSE cli(rc=6)=REFUSE OK
+        plan: evidence inadmissible — exit: “every suppression reason the consent fixture reports exists in the backend enum, or each divergence is recorded w
+R6   L-COERCION-WRITE-PATHS             predicate=REFUSE cli(rc=6)=REFUSE OK
+        plan: evidence inadmissible — evidence path does not exist: lanes/L-COERCION-WRITE-PATHS/mutation-log.md
+R6   L-FRAGILE-NEEDLES                  predicate=REFUSE cli(rc=6)=REFUSE OK
+        plan: evidence inadmissible — evidence path does not exist: lanes/L-FRAGILE-NEEDLES/mutation-log.md
+R7   L-WF-ADJUST-ADDRESS                predicate=REFUSE cli(rc=6)=REFUSE OK
+        plan: evidence inadmissible — evidence path does not exist: OkamAPI-wfadjust f3887f9a + web-wf-adjust e9ba89e
+
+predicate/CLI agreement: 9/9
+
+### the real board is byte-identical afterwards
+acb4d8414821df860beeacbdb93183b3e46f688f3f7b2ec8d57f0178508764b5  /Users/svendaneel/okam/Web-modules/docs/plan/plan.md

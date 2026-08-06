@@ -1,0 +1,40 @@
+Test run for /Users/svendaneel/okam/wt-mrgprice/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+Microsoft (R) Test Execution Command Line Tool Version 17.8.0 (arm64)
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:05.63]     WebApi.Tests.Margin.MarginFrozenWeekRepricingTests.A_later_price_on_the_item_refuses_every_instant_that_covers_the_frozen_week [FAIL]
+  Failed WebApi.Tests.Margin.MarginFrozenWeekRepricingTests.A_later_price_on_the_item_refuses_every_instant_that_covers_the_frozen_week [3 s]
+  Error Message:
+   Assert.Throws() Failure
+Expected: typeof(WebApi.Helpers.AppException)
+Actual:   (No exception was thrown)
+  Stack Trace:
+     at WebApi.Tests.Margin.MarginFrozenWeekRepricingTests.A_later_price_on_the_item_refuses_every_instant_that_covers_the_frozen_week() in /Users/svendaneel/okam/wt-mrgprice/WebApi.Tests/Margin/MarginFrozenWeekRepricingTests.cs:line 166
+   at WebApi.Tests.Margin.MarginFrozenWeekRepricingTests.A_later_price_on_the_item_refuses_every_instant_that_covers_the_frozen_week() in /Users/svendaneel/okam/wt-mrgprice/WebApi.Tests/Margin/MarginFrozenWeekRepricingTests.cs:line 169
+   at WebApi.Tests.Margin.MarginFrozenWeekRepricingTests.A_later_price_on_the_item_refuses_every_instant_that_covers_the_frozen_week() in /Users/svendaneel/okam/wt-mrgprice/WebApi.Tests/Margin/MarginFrozenWeekRepricingTests.cs:line 173
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:06.26]     WebApi.Tests.Margin.MarginFrozenWeekRepricingTests.A_price_effective_at_the_weeks_first_midnight_cannot_be_corrected_at_that_instant [FAIL]
+[xUnit.net 00:00:06.82]     WebApi.Tests.Margin.MarginFrozenWeekRepricingTests.A_correction_reprices_the_frozen_week_while_the_wrong_price_is_still_the_newest_row [FAIL]
+  Failed WebApi.Tests.Margin.MarginFrozenWeekRepricingTests.A_price_effective_at_the_weeks_first_midnight_cannot_be_corrected_at_that_instant [236 ms]
+  Error Message:
+   Assert.Throws() Failure
+Expected: typeof(WebApi.Helpers.AppException)
+Actual:   (No exception was thrown)
+  Stack Trace:
+     at WebApi.Tests.Margin.MarginFrozenWeekRepricingTests.A_price_effective_at_the_weeks_first_midnight_cannot_be_corrected_at_that_instant() in /Users/svendaneel/okam/wt-mrgprice/WebApi.Tests/Margin/MarginFrozenWeekRepricingTests.cs:line 229
+   at WebApi.Tests.Margin.MarginFrozenWeekRepricingTests.A_price_effective_at_the_weeks_first_midnight_cannot_be_corrected_at_that_instant() in /Users/svendaneel/okam/wt-mrgprice/WebApi.Tests/Margin/MarginFrozenWeekRepricingTests.cs:line 232
+   at WebApi.Tests.Margin.MarginFrozenWeekRepricingTests.A_price_effective_at_the_weeks_first_midnight_cannot_be_corrected_at_that_instant() in /Users/svendaneel/okam/wt-mrgprice/WebApi.Tests/Margin/MarginFrozenWeekRepricingTests.cs:line 242
+--- End of stack trace from previous location ---
+  Failed WebApi.Tests.Margin.MarginFrozenWeekRepricingTests.A_correction_reprices_the_frozen_week_while_the_wrong_price_is_still_the_newest_row [315 ms]
+  Error Message:
+   Assert.NotEqual() Failure
+Expected: Not 10860
+Actual:   10860
+  Stack Trace:
+     at WebApi.Tests.Margin.MarginFrozenWeekRepricingTests.A_correction_reprices_the_frozen_week_while_the_wrong_price_is_still_the_newest_row() in /Users/svendaneel/okam/wt-mrgprice/WebApi.Tests/Margin/MarginFrozenWeekRepricingTests.cs:line 121
+   at WebApi.Tests.Margin.MarginFrozenWeekRepricingTests.A_correction_reprices_the_frozen_week_while_the_wrong_price_is_still_the_newest_row() in /Users/svendaneel/okam/wt-mrgprice/WebApi.Tests/Margin/MarginFrozenWeekRepricingTests.cs:line 131
+--- End of stack trace from previous location ---
+
+Failed!  - Failed:     3, Passed:     2, Skipped:     0, Total:     5, Duration: 1 s - WebApi.Tests.dll (net8.0)

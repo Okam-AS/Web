@@ -10,7 +10,10 @@
 //   GET  /margin/recipes?storeId                                      MarginRecipesController
 //   POST /margin/recipes?storeId                                      MarginRecipesController
 //   GET  /margin/recipes/{recipeId}?storeId                           MarginRecipesController
+//   POST /margin/recipes/{recipeId}/versions?storeId                  MarginRecipesController
+//   PUT  /margin/recipes/{recipeId}/versions/{versionId}?storeId      MarginRecipesController (If-Match)
 //   POST /margin/recipes/{recipeId}/versions/{versionId}/activate     MarginRecipesController (If-Match)
+//   POST /margin/recipes/{recipeId}/retire?storeId                    MarginRecipesController (If-Match)
 //   GET  /margin/recipes/{recipeId}/product-links?storeId             MarginRecipesController
 //   PUT  /margin/recipes/{recipeId}/product-links?storeId             MarginRecipesController
 //   GET  /margin/menu-margin?storeId                                  MarginMenuMarginController
@@ -23,7 +26,6 @@
 //    is wrong every evening; the epoch ruling has since landed (the projector takes its business date
 //    from `IKassaBusinessDateResolver`, and `MarginBusinessDateEpochSwitchTests` is the after picture
 //    with the legacy relabel kept as its discriminating control), so the block is lifted.
-//  • the draft edit and retire surfaces — other journeys.
 //
 // The supplier, ingredient, price and import surfaces now exist too, as
 // `~/utils/margin/supplier-client`, `~/utils/margin/ingredient-client` and
@@ -95,6 +97,63 @@ export class MarginRecipeService extends MarginModuleClient {
   }
 
   /**
+   * A NEW Draft, cloned from the recipe's current ACTIVE version.
+   *
+   * This is the only way to change a recipe once it is live: an Active version is immutable (R4), so
+   * a fix is a new draft, edited, then activated in the old one's place. A recipe with no Active
+   * version is refused by CODE (`margin.no-active-version`) rather than by a precondition — there is
+   * nothing to clone.
+   *
+   * NO `If-Match`. The controller routes this action through `Run` rather than `RunWithIfMatch` and
+   * asks for no header, so sending a revision would be a guard the server does not check — which
+   * reads as a guarantee and is not one. Nothing is overwritten either way: the clone is a new row.
+   *
+   * The body carries `notes` only, and OMITTING it is meaningful: the server falls back to the
+   * Active version's notes (`request?.Notes ?? active.Notes`), which is what a clone should inherit.
+   */
+  CreateVersion (storeId, recipeId, request) {
+    return this._mutate('POST', scoped(this._versionsPath(recipeId), storeId), request || {});
+  }
+
+  /**
+   * Replaces a DRAFT version's whole content. The DRAFT's own revision travels in `If-Match`.
+   *
+   * REPLACE, NOT PATCH, and that is the trap every caller above this has to respect:
+   * `MarginRecipeService.EditDraftAsync` ASSIGNS `YieldQuantity`, `YieldUnit`, `PortionCount`,
+   * `Notes` and the whole component set unconditionally. A body that omits `components` therefore
+   * DELETES every component line — including sub-recipe lines, which cost a different dish — and one
+   * that omits `notes` blanks a note the caller may never have offered to change. The caller sends
+   * the version whole or it silently loses what it did not send.
+   *
+   * Only a Draft is editable; Active, Superseded and Retired are immutable and answer
+   * `margin.version-not-draft`.
+   */
+  UpdateVersion (storeId, recipeId, versionId, request, revision) {
+    const path = this._versionsPath(recipeId) + '/' + encodeURIComponent(versionId);
+    return this._mutateWithRevision('PUT', scoped(path, storeId), request, revision);
+  }
+
+  /**
+   * Ends the recipe's costing: its ACTIVE version becomes Retired and the recipe has none.
+   *
+   * THE REVISION IS THE ACTIVE VERSION'S — the row the server actually guards
+   * (`ApplyRevisionGuard(active, ifMatch)`) — and NOT the recipe header's, which the detail document
+   * carries one level up under the same field name. Sending the header's would compare a recipe
+   * rowversion against a version rowversion: a spurious 409, or worse, a pass.
+   *
+   * Reachable only FROM ACTIVE. There is no route that retires a draft, and a recipe with no Active
+   * version answers `margin.no-active-version`.
+   *
+   * `EffectiveFrom` is deliberately not sent, exactly as on activate: it defaults to the server's
+   * injected clock, and a client-supplied instant has no business entering a module whose journal
+   * epoch is an open defect.
+   */
+  Retire (storeId, recipeId, revision) {
+    const path = '/margin/recipes/' + encodeURIComponent(recipeId) + '/retire';
+    return this._mutateWithRevision('POST', scoped(path, storeId), {}, revision);
+  }
+
+  /**
    * The recipe's product links — the dishes it is sold as.
    *
    * Read even though `GET /margin/menu-margin` already reports a link per row: the menu margin is
@@ -145,6 +204,10 @@ export class MarginRecipeService extends MarginModuleClient {
 
   _linksPath (recipeId) {
     return '/margin/recipes/' + encodeURIComponent(recipeId) + '/product-links';
+  }
+
+  _versionsPath (recipeId) {
+    return '/margin/recipes/' + encodeURIComponent(recipeId) + '/versions';
   }
 }
 

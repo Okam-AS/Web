@@ -1,0 +1,4 @@
+  Skipped WebApi.Tests.Growth.GrowthPostmarkSandboxSmokeTests.A_double_opt_in_confirmation_is_accepted_by_the_postmark_sandbox [1 ms]
+Results File: /Users/svendaneel/okam/Web-modules/lanes/L-MRG-PRICE-CORRECTION/fast-tier.trx
+
+Passed!  - Failed:     0, Passed:  4374, Skipped:    12, Total:  4386, Duration: 6 m 5 s - WebApi.Tests.dll (net8.0)

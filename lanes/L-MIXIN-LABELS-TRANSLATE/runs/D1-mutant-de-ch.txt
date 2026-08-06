@@ -1,0 +1,123 @@
+=== label        : D1-mutant-de-ch
+=== edition      : OKAM_EDITION=ch
+=== worktree     : /Users/svendaneel/okam/web-mixinlabels
+=== commit       : fff21f6c3402d95c2859383f401d9ebcd790e00e
+=== spec sha     : 28b9c0177ef7dda0285effb37ea4b136e6adc57c
+=== mixin sha    : 23eafd4bb413b9bd337572d48f4a38a1ff9295b8
+=== de.ts sha    : be88dcc0e923a7621319367d6fb4db6afe3819d7
+=== no.ts sha    : bac24ce17c99876d78d17e44982d97620b5e7870
+=== en.ts sha    : cf769abbe7e0edee0eded7a83ab2eeec86cf0116
+=== world.js sha : 307a7cc9e12294b21b2840bc35ec4707609e97c8
+=== ports        : web=3853 fixture=4853 (4010 never bound, pid 73160 never signalled; 3847/4847 not this lane's)
+=== core         : 10 entries
+=== dirty        : verbatim `git status --porcelain -- ':!core' ':!artifacts'` <<<
+ M plugins/global-mixin.js
+ M test/e2e/fixture/world.js
+ M test/e2e/journeys/modal-estate-scroll-lock.spec.js
+ M translations/de.ts
+ M translations/en.ts
+ M translations/no.ts
+=== dirty end    : >>>
+[WebServer] [fixture] listening on http://127.0.0.1:4853
+
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://172.20.10.4:3853/
+
+[WebServer] [info] Preparing project for development
+
+[WebServer] [info] Initial build may take a while
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+
+[WebServer] [success] Builder initialized
+
+[WebServer] [success] Nuxt files generated
+
+[WebServer] [warn] Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+
+Running 1 test using 1 worker
+
+[WebServer] [info] Waiting for file changes
+
+[WebServer] [info] Memory usage: 1.29 GB (RSS: 2.14 GB)
+
+[WebServer] [info] Listening on: http://172.20.10.4:3853/
+
+[1/1] [chromium] › test/e2e/journeys/modal-estate-scroll-lock.spec.js:233:1 › Two different modals hold the page, and closing one does not let go — at the Swiss edition, with the receipt read in German @fixture
+  1) [chromium] › test/e2e/journeys/modal-estate-scroll-lock.spec.js:233:1 › Two different modals hold the page, and closing one does not let go — at the Swiss edition, with the receipt read in German @fixture 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator: locator('.modal-backdrop').locator('.order-details .detail-row .value')
+    Timeout: 10000ms
+    - Expected  - 1
+    + Received  + 1
+
+      Array [
+        "1004 (order-4)",
+        "Gjest 4",
+        "Im Geschäft bezahlen",
+    -   "Selbstabholung",
+    +   "Selbstabholunk",
+        "01.08.26 11:03",
+        "Angefragt",
+      ]
+
+    Call log:
+      - Expect "toHaveText" with timeout 10000ms
+      - waiting for locator('.modal-backdrop').locator('.order-details .detail-row .value')
+        24 × locator resolved to 6 elements
+
+
+      360 |       // written at all. Asserted as the whole ordered row set for the same reason the labels are:
+      361 |       // a row that disappears has to be a failure too.
+    > 362 |       await expect(receipt.locator('.order-details .detail-row .value')).toHaveText(t.detailValues);
+          |                                                                          ^
+      363 |       await expect(receipt.locator('.items-header > span')).toHaveText(t.itemColumns);
+      364 |       await expect(receipt.locator('.total-section .total-label')).toHaveText(t.total);
+      365 |
+        at /Users/svendaneel/okam/web-mixinlabels/test/e2e/journeys/modal-estate-scroll-lock.spec.js:362:74
+        at JourneyRecorder.step (/Users/svendaneel/okam/web-mixinlabels/test/e2e/support/journey.js:347:22)
+        at /Users/svendaneel/okam/web-mixinlabels/test/e2e/journeys/modal-estate-scroll-lock.spec.js:346:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/modal-estate-scroll-lock-T-17a6c--the-receipt-read-in-German-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/modal-estate-scroll-lock-de.fixture.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/modal-estate-scroll-lock-de.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/modal-estate-scroll-lock-T-17a6c--the-receipt-read-in-German-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/modal-estate-scroll-lock-T-17a6c--the-receipt-read-in-German-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/modal-estate-scroll-lock-T-17a6c--the-receipt-read-in-German-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+  1 failed
+    [chromium] › test/e2e/journeys/modal-estate-scroll-lock.spec.js:233:1 › Two different modals hold the page, and closing one does not let go — at the Swiss edition, with the receipt read in German @fixture 
+RESULT D1-mutant-de-ch edition=ch FAIL-ASSERT rc=1

@@ -1,0 +1,30 @@
+Test run for /Users/svendaneel/okam/wt-mrgprice/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+Microsoft (R) Test Execution Command Line Tool Version 17.8.0 (arm64)
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:05.81]     WebApi.Tests.Margin.MarginFrozenWeekRepricingTests.A_later_price_on_the_item_refuses_every_instant_that_covers_the_frozen_week [FAIL]
+  Failed WebApi.Tests.Margin.MarginFrozenWeekRepricingTests.A_later_price_on_the_item_refuses_every_instant_that_covers_the_frozen_week [3 s]
+  Error Message:
+   Assert.Throws() Failure
+Expected: typeof(WebApi.Helpers.AppException)
+Actual:   (No exception was thrown)
+  Stack Trace:
+     at WebApi.Tests.Margin.MarginFrozenWeekRepricingTests.A_later_price_on_the_item_refuses_every_instant_that_covers_the_frozen_week() in /Users/svendaneel/okam/wt-mrgprice/WebApi.Tests/Margin/MarginFrozenWeekRepricingTests.cs:line 157
+   at WebApi.Tests.Margin.MarginFrozenWeekRepricingTests.A_later_price_on_the_item_refuses_every_instant_that_covers_the_frozen_week() in /Users/svendaneel/okam/wt-mrgprice/WebApi.Tests/Margin/MarginFrozenWeekRepricingTests.cs:line 159
+   at WebApi.Tests.Margin.MarginFrozenWeekRepricingTests.A_later_price_on_the_item_refuses_every_instant_that_covers_the_frozen_week() in /Users/svendaneel/okam/wt-mrgprice/WebApi.Tests/Margin/MarginFrozenWeekRepricingTests.cs:line 173
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:06.58]     WebApi.Tests.Margin.MarginFrozenWeekRepricingTests.With_the_week_unpriceable_the_correction_revision_reproduces_the_identical_wrong_cost [FAIL]
+  Failed WebApi.Tests.Margin.MarginFrozenWeekRepricingTests.With_the_week_unpriceable_the_correction_revision_reproduces_the_identical_wrong_cost [269 ms]
+  Error Message:
+   Assert.Throws() Failure
+Expected: typeof(WebApi.Helpers.AppException)
+Actual:   (No exception was thrown)
+  Stack Trace:
+     at WebApi.Tests.Margin.MarginFrozenWeekRepricingTests.With_the_week_unpriceable_the_correction_revision_reproduces_the_identical_wrong_cost() in /Users/svendaneel/okam/wt-mrgprice/WebApi.Tests/Margin/MarginFrozenWeekRepricingTests.cs:line 197
+   at WebApi.Tests.Margin.MarginFrozenWeekRepricingTests.With_the_week_unpriceable_the_correction_revision_reproduces_the_identical_wrong_cost() in /Users/svendaneel/okam/wt-mrgprice/WebApi.Tests/Margin/MarginFrozenWeekRepricingTests.cs:line 199
+   at WebApi.Tests.Margin.MarginFrozenWeekRepricingTests.With_the_week_unpriceable_the_correction_revision_reproduces_the_identical_wrong_cost() in /Users/svendaneel/okam/wt-mrgprice/WebApi.Tests/Margin/MarginFrozenWeekRepricingTests.cs:line 206
+--- End of stack trace from previous location ---
+
+Failed!  - Failed:     2, Passed:     3, Skipped:     0, Total:     5, Duration: 1 s - WebApi.Tests.dll (net8.0)

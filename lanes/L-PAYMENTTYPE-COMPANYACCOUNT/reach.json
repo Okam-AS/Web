@@ -1,0 +1,24 @@
+{
+ "files": 630,
+ "imports_core_pinia": [
+  "test/e2e/journeys/consumer/meals-funded-checkout.spec.js",
+  "test/e2e/journeys/consumer/meals-stale-token-requote.spec.js"
+ ],
+ "imports_PaymentType": [],
+ "PaymentType_dot": [
+  "test/e2e/journeys/consumer/meals-funded-checkout.spec.js",
+  "test/e2e/journeys/consumer/meals-funded-over-allowance.spec.js"
+ ],
+ "calls_paymentLabel": [
+  "components/admin/pos/XReportView.vue",
+  "components/admin/pos/PosReceiptView.vue"
+ ],
+ "calls_payedLabel": [],
+ "renders_paymentTypeLabel": [
+  "plugins/global-mixin.js",
+  "components/molecules/OrderModal.vue",
+  "components/molecules/ReceiptModal.vue",
+  "components/molecules/OrderCard.vue",
+  "components/organisms/OrderModal.vue"
+ ]
+}

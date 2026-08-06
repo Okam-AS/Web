@@ -1,0 +1,862 @@
+{
+ "artifacts/journeys/workforce-invitation-onboarding.playwright.json": {
+  "added": 51,
+  "orphan_lines": 51,
+  "owner_groups": [],
+  "orphan_examples": [
+   "\"startedAtUtc\": \"2026-08-04T20:53:29.805Z\",",
+   "\"finishedAtUtc\": \"2026-08-04T20:53:40.774Z\",",
+   "\"durationMs\": 10969,"
+  ]
+ },
+ "components/admin/pos/PosShell.vue": {
+  "added": 10,
+  "orphan_lines": 7,
+  "owner_groups": [
+   {
+    "refs": [
+     "refs/heads/lane/fe-pos-clock",
+     "refs/heads/lane/fe-wf-blind-bind-name",
+     "refs/heads/lane/fe-wf-link-deadend",
+     "refs/heads/lane/fe-wf-oplink"
+    ],
+    "lines": 3,
+    "example": [
+     "<ClockScreen v-else-if=\"mode === 'clock'\" />"
+    ]
+   }
+  ],
+  "orphan_examples": [
+   "// Stempling is exempt alongside Dag and Kvitteringer, and for a stronger reason than eith",
+   "// arriving at work happens BEFORE the trading day is opened. The first person in unlocks ",
+   "// door, clocks in, and only then opens the register \u2014 so gating the clock behind BeginDay"
+  ]
+ },
+ "components/admin/pos/PosTopBar.vue": {
+  "added": 36,
+  "orphan_lines": 30,
+  "owner_groups": [
+   {
+    "refs": [
+     "refs/heads/lane/fe-pos-clock",
+     "refs/heads/lane/fe-wf-blind-bind-name",
+     "refs/heads/lane/fe-wf-link-deadend",
+     "refs/heads/lane/fe-wf-oplink"
+    ],
+    "lines": 6,
+    "example": [
+     "{ key: 'receipts', label: this.$i('pos_mode_receipts'), icon: ICON_RECEIPTS },"
+    ]
+   }
+  ],
+  "orphan_examples": [
+   "const ICON_CLOCK = '<svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 24 24",
+   "{ key: 'clock', label: this.$i('pos_mode_clock'), icon: ICON_CLOCK }",
+   "/* Above BeginDayModal (850), which is `position: absolute; inset: 0` and therefore covere"
+  ]
+ },
+ "components/organisms/AdminPageHeader.vue": {
+  "added": 73,
+  "orphan_lines": 16,
+  "owner_groups": [
+   {
+    "refs": [
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 23,
+    "example": [
+     "// An envelope with a warning mark: the notification that did not arrive."
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/wf-roles-ui"
+    ],
+    "lines": 13,
+    "example": [
+     "// A TAG, and deliberately not a person or a calendar: this entry sits between `workforceR"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/train-evidence-pack-ui",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 10,
+    "example": [
+     "// A stamped document, deliberately NOT the graduation cap beside it: the cap is the teach"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/fe-meals-statement-surface",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 9,
+    "example": [
+     "// A receipt: a document with a torn foot. Deliberately neither of the two buildings besid"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/fe-training-meals-surfaces",
+     "refs/heads/lane/train-evidence-pack-ui",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 1,
+    "example": [
+     "{ label: this.$i('nav_training_evidence'), path: '/admin/training-evidence', icon: icons.t"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/fe-meals-statement-surface",
+     "refs/heads/lane/fe-training-meals-surfaces",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 1,
+    "example": [
+     "{ label: this.$i('nav_meals_statements'), path: '/admin/meals-statements', icon: icons.mea"
+    ]
+   }
+  ],
+  "orphan_examples": [
+   "// A document with a clock on it \u2014 deliberately BOTH marks, because the two neighbours it ",
+   "// be mistaken for each carry one of them alone: `workforceRates` is a bare clock (what an",
+   "// worth) and `trainingEvidence` is a bare document. A timesheet is the sheet AND the hour"
+  ]
+ },
+ "pages/admin/workforce-schedule.vue": {
+  "added": 15,
+  "orphan_lines": 14,
+  "owner_groups": [
+   {
+    "refs": [
+     "(aggregator-only)",
+     "refs/heads/candidate/fe-compose-2026-08-05",
+     "refs/heads/lane/collect-review-conditions"
+    ],
+    "lines": 1,
+    "example": []
+   }
+  ],
+  "orphan_examples": [
+   "<!-- The way OUT of the publish flow and into what the publish actually reached. The",
+   "toast beside it reports a recipient COUNT, which is how many outbox rows were",
+   "enqueued and not how many arrived; this is the only link on the surface that leads"
+  ]
+ },
+ "pages/preferences/communications.vue": {
+  "added": 13,
+  "orphan_lines": 13,
+  "owner_groups": [],
+  "orphan_examples": [
+   "// \u26a0 THE SESSION COOKIE CANNOT REACH THE API AS THIS APP IS DEPLOYED TODAY, and it takes T",
+   "// fixes rather than either one. The cookie is HttpOnly + Secure + SameSite=Strict on the ",
+   "// so it rides a request only when BOTH of the following hold:"
+  ]
+ },
+ "test/admin-nav-access.test.js": {
+  "added": 44,
+  "orphan_lines": 6,
+  "owner_groups": [
+   {
+    "refs": [
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 16,
+    "example": [
+     "'/admin/workforce-rates', '/admin/workforce-personnel-list',"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/wf-roles-ui"
+    ],
+    "lines": 12,
+    "example": [
+     "// The role catalogue, between the roster and the rates. `PUT /workforce/stores/{id}/roles"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/fe-meals-statement-surface",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 4,
+    "example": [
+     "// The third Meals link: the month statement, endpoints #19\u2013#23. It is on this list rather"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/train-evidence-pack-ui",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 3,
+    "example": [
+     "// Training's second surface: one person's assembled record, endpoint #16. Store-admin gat"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/fe-meals-statement-surface",
+     "refs/heads/lane/fe-training-meals-surfaces",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 2,
+    "example": [
+     "'/admin/meals-agreements', '/admin/meals-companies',"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/fe-training-meals-surfaces",
+     "refs/heads/lane/train-evidence-pack-ui",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 1,
+    "example": [
+     "'/admin/training-evidence',"
+    ]
+   }
+  ],
+  "orphan_examples": [
+   "// The payroll batch \u2014 endpoints #27, #28, #29 plus the two reads beside them. On this lis",
+   "// than in a role group for the same reason every module page is: the sidebar's audience i",
+   "// store-admin, and the page renders its own refusal when the backend withholds"
+  ]
+ },
+ "test/e2e/fixture/api-server.js": {
+  "added": 307,
+  "orphan_lines": 61,
+  "owner_groups": [
+   {
+    "refs": [
+     "refs/heads/lane/wf-roles-ui"
+    ],
+    "lines": 104,
+    "example": [
+     "const crypto = require('crypto');"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 74,
+    "example": [
+     "// The notification outbox behind a publication: what the enqueued commands became. Its ow"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/train-evidence-pack-ui",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 26,
+    "example": [
+     "// WHAT THE APPEND-ONLY LEDGER RECORDED ABOUT A READ, for the one journey that has to prov"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/L-JOURNEY-GROWTH",
+     "refs/heads/lane/train-evidence-pack-ui",
+     "refs/heads/lane/wf-pubhist",
+     "refs/salvage/dangling-1890c9a3"
+    ],
+    "lines": 14,
+    "example": [
+     "// THE GUEST'S MAILBOX, for exactly the same reason and under exactly the same rules."
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/L-JOURNEY-GROWTH",
+     "refs/heads/lane/fe-gr-exit-wire-the-mail",
+     "refs/heads/lane/fe-gr-withdraw-origin",
+     "refs/heads/lane/fe-growth-prefcentre",
+     "refs/heads/lane/fe-wf-invite-list-revoke",
+     "refs/heads/lane/journey-teardown",
+     "refs/heads/lane/journey-workforce",
+     "refs/heads/lane/train-evidence-pack-ui",
+     "refs/heads/lane/wf-kodeoversikt-ui",
+     "refs/heads/lane/wf-pubhist",
+     "refs/heads/lane/wf-roles-ui",
+     "refs/salvage/dangling-1890c9a3",
+     "refs/salvage/dangling-1b324667",
+     "refs/salvage/dangling-59f5fabf",
+     "refs/salvage/dangling-6f7f155c"
+    ],
+    "lines": 8,
+    "example": [
+     "return problem(res, 409, 'workforce.flag-disabled-read-only',"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/L-JOURNEY-GROWTH",
+     "refs/heads/lane/ev-stale-cause",
+     "refs/heads/lane/fe-events-margin-surfaces",
+     "refs/heads/lane/fe-gr-exit-wire-the-mail",
+     "refs/heads/lane/fe-gr-withdraw-origin",
+     "refs/heads/lane/fe-growth-prefcentre",
+     "refs/heads/lane/fe-journeys",
+     "refs/heads/lane/fe-pos-clock",
+     "refs/heads/lane/fe-training-meals-surfaces",
+     "refs/heads/lane/fe-wf-blind-bind-name",
+     "refs/heads/lane/fe-wf-invite-list-revoke",
+     "refs/heads/lane/fe-wf-link-deadend",
+     "refs/heads/lane/fe-wf-onboard",
+     "refs/heads/lane/fe-wf-oplink",
+     "refs/heads/lane/fe-wf-self",
+     "refs/heads/lane/journey-teardown",
+     "refs/heads/lane/journey-workforce",
+     "refs/heads/lane/menu-allergen-matrix",
+     "refs/heads/lane/modal-broken-two",
+     "refs/heads/lane/print-host",
+     "refs/heads/lane/statute-evidence-world",
+     "refs/heads/lane/statute-honesty",
+     "refs/heads/lane/train-evidence-pack-ui",
+     "refs/heads/lane/wf-kodeoversikt-ui",
+     "refs/heads/lane/wf-pubhist",
+     "refs/heads/lane/wf-roles-ui",
+     "refs/salvage/dangling-1890c9a3",
+     "refs/salvage/dangling-1b324667",
+     "refs/salvage/dangling-59f5fabf",
+     "refs/salvage/dangling-6f7f155c"
+    ],
+    "lines": 6,
+    "example": [
+     "return {"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/L-JOURNEY-GROWTH",
+     "refs/heads/lane/fe-gr-exit-wire-the-mail",
+     "refs/heads/lane/fe-gr-withdraw-origin",
+     "refs/heads/lane/fe-growth-prefcentre",
+     "refs/heads/lane/fe-journeys",
+     "refs/heads/lane/fe-training-meals-surfaces",
+     "refs/heads/lane/fe-wf-invite-list-revoke",
+     "refs/heads/lane/journey-teardown",
+     "refs/heads/lane/journey-workforce",
+     "refs/heads/lane/train-evidence-pack-ui",
+     "refs/heads/lane/wf-kodeoversikt-ui",
+     "refs/heads/lane/wf-pubhist",
+     "refs/heads/lane/wf-roles-ui",
+     "refs/salvage/dangling-1890c9a3",
+     "refs/salvage/dangling-1b324667",
+     "refs/salvage/dangling-59f5fabf",
+     "refs/salvage/dangling-6f7f155c"
+    ],
+    "lines": 5,
+    "example": [
+     "req,"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/fe-wf-blind-bind-name",
+     "refs/heads/lane/fe-wf-link-deadend",
+     "refs/heads/lane/fe-wf-oplink",
+     "refs/heads/lane/fe-wf-self",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 3,
+    "example": [
+     "storeId,"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/L-JOURNEY-GROWTH",
+     "refs/heads/lane/ev-stale-cause",
+     "refs/heads/lane/fe-events-margin-surfaces",
+     "refs/heads/lane/fe-gr-exit-wire-the-mail",
+     "refs/heads/lane/fe-journeys",
+     "refs/heads/lane/fe-pos-clock",
+     "refs/heads/lane/fe-training-meals-surfaces",
+     "refs/heads/lane/fe-wf-blind-bind-name",
+     "refs/heads/lane/fe-wf-invite-list-revoke",
+     "refs/heads/lane/fe-wf-link-deadend",
+     "refs/heads/lane/fe-wf-onboard",
+     "refs/heads/lane/fe-wf-oplink",
+     "refs/heads/lane/fe-wf-self",
+     "refs/heads/lane/journey-teardown",
+     "refs/heads/lane/journey-workforce",
+     "refs/heads/lane/menu-allergen-matrix",
+     "refs/heads/lane/modal-broken-two",
+     "refs/heads/lane/print-host",
+     "refs/heads/lane/statute-evidence-world",
+     "refs/heads/lane/statute-honesty",
+     "refs/heads/lane/train-evidence-pack-ui",
+     "refs/heads/lane/wf-kodeoversikt-ui",
+     "refs/heads/lane/wf-pubhist",
+     "refs/heads/lane/wf-roles-ui",
+     "refs/salvage/dangling-1890c9a3",
+     "refs/salvage/dangling-1b324667",
+     "refs/salvage/dangling-6f7f155c"
+    ],
+    "lines": 2,
+    "example": [
+     "res.writeHead(status, Object.assign({"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/fe-pos-clock",
+     "refs/heads/lane/fe-wf-blind-bind-name",
+     "refs/heads/lane/fe-wf-link-deadend",
+     "refs/heads/lane/fe-wf-oplink"
+    ],
+    "lines": 1,
+    "example": [
+     "'Access-Control-Allow-Headers': 'Authorization, Content-Type, Accept, Idempotency-Key, If-"
+    ]
+   }
+  ],
+  "orphan_examples": [
+   "const workforceTimesheetsFixture = require('./workforce-timesheets');",
+   "workforcePublications: workforcePublicationsFixture.fresh(),",
+   "workforceTimesheets: workforceTimesheetsFixture.fresh()"
+  ]
+ },
+ "test/e2e/fixture/world.js": {
+  "added": 101,
+  "orphan_lines": 26,
+  "owner_groups": [
+   {
+    "refs": [
+     "refs/heads/lane/wf-roles-ui"
+    ],
+    "lines": 66,
+    "example": [
+     "// ---- THE SECOND VENUE: a store nobody has ever curled ---------------------------------"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/fe-gr-withdraw-origin",
+     "refs/heads/lane/fe-growth-prefcentre",
+     "refs/heads/lane/fe-wf-invite-list-revoke",
+     "refs/heads/lane/wf-kodeoversikt-ui",
+     "refs/heads/lane/wf-roles-ui",
+     "refs/salvage/dangling-59f5fabf",
+     "refs/salvage/dangling-6f7f155c"
+    ],
+    "lines": 4,
+    "example": [
+     "personState: 'Invited',"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/menu-allergen-matrix",
+     "refs/heads/lane/wf-roles-ui"
+    ],
+    "lines": 2,
+    "example": [
+     "adminIn: ["
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/fe-gr-withdraw-origin",
+     "refs/heads/lane/fe-growth-prefcentre",
+     "refs/heads/lane/fe-journeys",
+     "refs/heads/lane/fe-pos-clock",
+     "refs/heads/lane/fe-training-meals-surfaces",
+     "refs/heads/lane/fe-wf-blind-bind-name",
+     "refs/heads/lane/fe-wf-invite-list-revoke",
+     "refs/heads/lane/fe-wf-link-deadend",
+     "refs/heads/lane/fe-wf-oplink",
+     "refs/heads/lane/wf-kodeoversikt-ui",
+     "refs/heads/lane/wf-roles-ui",
+     "refs/salvage/dangling-1b324667",
+     "refs/salvage/dangling-59f5fabf",
+     "refs/salvage/dangling-6f7f155c"
+    ],
+    "lines": 2,
+    "example": [
+     "isActive: true,"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/ev-stale-cause",
+     "refs/heads/lane/fe-gr-withdraw-origin",
+     "refs/heads/lane/fe-growth-prefcentre",
+     "refs/heads/lane/fe-journeys",
+     "refs/heads/lane/fe-pos-clock",
+     "refs/heads/lane/fe-training-meals-surfaces",
+     "refs/heads/lane/fe-wf-blind-bind-name",
+     "refs/heads/lane/fe-wf-invite-list-revoke",
+     "refs/heads/lane/fe-wf-link-deadend",
+     "refs/heads/lane/fe-wf-onboard",
+     "refs/heads/lane/fe-wf-oplink",
+     "refs/heads/lane/fe-wf-self",
+     "refs/heads/lane/menu-allergen-matrix",
+     "refs/heads/lane/modal-broken-two",
+     "refs/heads/lane/print-host",
+     "refs/heads/lane/statute-evidence-world",
+     "refs/heads/lane/statute-honesty",
+     "refs/heads/lane/wf-kodeoversikt-ui",
+     "refs/heads/lane/wf-roles-ui",
+     "refs/salvage/dangling-1b324667",
+     "refs/salvage/dangling-59f5fabf",
+     "refs/salvage/dangling-6f7f155c"
+    ],
+    "lines": 1,
+    "example": [
+     "return {"
+    ]
+   }
+  ],
+  "orphan_examples": [
+   "// WHAT IS DELIBERATELY ABSENT. Six declared flags are WITHHELD from the catalog by their ",
+   "// modules \u2014 `workforce.personnel-list` and five `training.*` \u2014 each because its enforceme",
+   "// would be unlawful (gating the personalliste an inspector may demand) or does not exist."
+  ]
+ },
+ "translations/de.ts": {
+  "added": 368,
+  "orphan_lines": 69,
+  "owner_groups": [
+   {
+    "refs": [
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 126,
+    "example": [
+     "pos_mode_clock: 'Zeiterfassung',"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/fe-meals-statement-surface",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 56,
+    "example": [
+     "nav_meals_statements: 'Monatsabrechnung Firma',"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/train-evidence-pack-ui",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 49,
+    "example": [
+     "nav_training_evidence: 'Schulungsnachweis',"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/wf-roles-ui"
+    ],
+    "lines": 40,
+    "example": [
+     "ae_signed_out: 'Sie m\u00fcssen angemeldet sein, um die Adresse Ihres Kontos zu sehen.',"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/mrg-recipe-revise-ui",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 15,
+    "example": [
+     "// Korrigieren und Beenden \u2014 die zwei Dinge, die nach der Aktivierung passieren k\u00f6nnen"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/fe-training-meals-surfaces",
+     "refs/heads/lane/train-evidence-pack-ui",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 6,
+    "example": [
+     "trn_ev_completions_title: 'Abschl\u00fcsse',"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/train-readonly-visible",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 6,
+    "example": [
+     "ff_page_intro: 'Die Schalter, die bestimmen, was die sechs Module f\u00fcr dieses Lokal schreib"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/fe-meals-statement-surface",
+     "refs/heads/lane/mrg-coverage-unknown",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 1,
+    "example": [
+     "mrgs_waste_coverage_unknown: 'Zum Schwund in diesem Zeitraum haben wir keine Angabe erhalt"
+    ]
+   }
+  ],
+  "orphan_examples": [
+   "// ---- Timesheets (W5): the payroll batch a manager freezes and sends -------------------",
+   "wft_page_title: 'Arbeitszeitlisten',",
+   "wft_page_intro: 'Genehmigen Sie eine Periode und senden Sie sie an die Lohnbuchhaltung. Ei"
+  ]
+ },
+ "translations/en.ts": {
+  "added": 367,
+  "orphan_lines": 69,
+  "owner_groups": [
+   {
+    "refs": [
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 125,
+    "example": [
+     "pos_mode_clock: 'Time clock',"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/fe-meals-statement-surface",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 56,
+    "example": [
+     "nav_meals_statements: 'Company monthly statement',"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/train-evidence-pack-ui",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 49,
+    "example": [
+     "nav_training_evidence: 'Training record',"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/wf-roles-ui"
+    ],
+    "lines": 40,
+    "example": [
+     "ae_signed_out: 'You have to be signed in to see the address on your account.',"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/mrg-recipe-revise-ui",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 15,
+    "example": [
+     "// Fixing and ending \u2014 the two things that can happen once a recipe is live"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/fe-training-meals-surfaces",
+     "refs/heads/lane/train-evidence-pack-ui",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 6,
+    "example": [
+     "trn_ev_completions_title: 'Completions',"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/train-readonly-visible",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 6,
+    "example": [
+     "ff_page_intro: 'The switches that decide what the six modules may write for this store. Ev"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/fe-meals-statement-surface",
+     "refs/heads/lane/mrg-coverage-unknown",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 1,
+    "example": [
+     "mrgs_waste_coverage_unknown: 'We were told nothing about waste for this window. It is unkn"
+    ]
+   }
+  ],
+  "orphan_examples": [
+   "// ---- Timesheets (W5): the payroll batch a manager freezes and sends -------------------",
+   "wft_page_title: 'Timesheets',",
+   "wft_page_intro: 'Approve a period and send it to payroll. An approved period is frozen \u2014 a"
+  ]
+ },
+ "translations/no.ts": {
+  "added": 376,
+  "orphan_lines": 72,
+  "owner_groups": [
+   {
+    "refs": [
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 124,
+    "example": [
+     "posclk_in: 'Stemple inn',"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/fe-meals-statement-surface",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 56,
+    "example": [
+     "nav_meals_statements: 'M\u00e5nedsoppgj\u00f8r bedrift',"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/train-evidence-pack-ui",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 54,
+    "example": [
+     "nav_training_evidence: 'Dokumentasjon',"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/wf-roles-ui"
+    ],
+    "lines": 40,
+    "example": [
+     "ae_signed_out: 'Du m\u00e5 v\u00e6re innlogget for \u00e5 se adressen p\u00e5 kontoen din.',"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/mrg-recipe-revise-ui",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 15,
+    "example": [
+     "// Retting og avslutning \u2014 de to tingene som kan skje etter at oppskriften er tatt i bruk"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/fe-training-meals-surfaces",
+     "refs/heads/lane/train-evidence-pack-ui",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 7,
+    "example": [
+     "trn_ev_completions_title: 'Gjennomf\u00f8ringer',"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/train-readonly-visible",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 6,
+    "example": [
+     "ff_page_intro: 'Bryterne som avgj\u00f8r hva de seks modulene f\u00e5r lov til \u00e5 skrive for denne bu"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/fe-pos-clock",
+     "refs/heads/lane/fe-wf-blind-bind-name",
+     "refs/heads/lane/fe-wf-link-deadend",
+     "refs/heads/lane/fe-wf-oplink",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 1,
+    "example": [
+     "pos_mode_clock: 'Stempling',"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/fe-meals-statement-surface",
+     "refs/heads/lane/mrg-coverage-unknown",
+     "refs/heads/lane/wf-pubhist"
+    ],
+    "lines": 1,
+    "example": [
+     "mrgs_waste_coverage_unknown: 'Vi fikk ingen svinntall for dette vinduet. Det er ukjent \u2014 d"
+    ]
+   }
+  ],
+  "orphan_examples": [
+   "// ---- Timesheets (W5): the payroll batch a manager freezes and sends -------------------",
+   "// No statute or \u00a7 is named anywhere in this block. The page produces a neutral hours file",
+   "// immutable record of who froze it; it does not produce any document a statutory provisio"
+  ]
+ },
+ "utils/growth/growth-guest-client.js": {
+  "added": 20,
+  "orphan_lines": 20,
+  "owner_groups": [],
+  "orphan_examples": [
+   "// \u26a0 TWO CONDITIONS MUST BOTH HOLD BEFORE THAT COOKIE WORKS, and neither is fixable from t",
+   "// Neither substitutes for the other, which is the trap: each one reads like it should hav",
+   "// the other, and satisfying one alone leaves the surface just as broken."
+  ]
+ },
+ "utils/workforce-rates/rates-client.js": {
+  "added": 6,
+  "orphan_lines": 6,
+  "owner_groups": [],
+  "orphan_examples": [
+   "import { WorkforceClientBase, assertBusinessDate, fileNameFrom } from '~/utils/workforce/a",
+   "// `fileNameFrom` and the `text/csv` read below made the same move when the timesheet batc",
+   "// became the SECOND route in this module whose body is a file rather than JSON. Re-export"
+  ]
+ },
+ "utils/workforce/api-client.js": {
+  "added": 38,
+  "orphan_lines": 16,
+  "owner_groups": [
+   {
+    "refs": [
+     "refs/heads/lane/wf-idreg",
+     "refs/heads/lane/wf-kodeoversikt-ui"
+    ],
+    "lines": 17,
+    "example": [
+     "* wrapped in `{ detail }` \u2014 a shape that happens to work only because a CSV never parses a"
+    ]
+   },
+   {
+    "refs": [
+     "refs/heads/lane/wf-idreg",
+     "refs/heads/lane/wf-kodeoversikt-ui",
+     "refs/heads/lane/workforce-roster"
+    ],
+    "lines": 5,
+    "example": [
+     "const response = await fetch(this._baseUrl + path, {"
+    ]
+   }
+  ],
+  "orphan_examples": [
+   "* A read whose body is a FILE rather than JSON.",
+   "* Deliberately NOT `_request`, which parses every body as JSON and would hand a caller the",
+   "* It lived on `WorkforceRatesService` while the payroll hours export was the only such rou"
+  ]
+ }
+}

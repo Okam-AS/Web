@@ -1,0 +1,67 @@
+MUTATION PROOF - L-JOURNEY-MEALS
+fixture: test/e2e/fixture/meals.js  sha256 cf1f7e789772250112f97df2f9fa391094568efc4a51a0c87bff7eaa5bc0f293
+ports: web 3760 / fixture 4760
+
+================================================================================================
+ARM A1 exactly-one-contact-channel
+  capability switched off : meals.invitation.create / exactly one contact channel
+  journey                 : meals-admin-setup
+  expected to red at      : an invitation naming BOTH channels is refused by the server
+  exit code               : 1
+  reporter                : 1 failed
+  artifact status         : failed
+  walk stopped after step : an invitation naming BOTH channels is refused by the server
+  DIAGNOSIS: the step ran and its assertion failed - the refusal still happened but
+             said something different.
+  RESULT: RED, as required.
+  fixture restored        : cf1f7e789772250112f97df2f9fa391094568efc4a51a0c87bff7eaa5bc0f293 (identical)
+
+================================================================================================
+ARM A2 contact-mismatch refusal removed
+  capability switched off : meals.invitation.refusal.contact-mismatch
+  journey                 : meals-guest-claim
+  expected to red at      : THE ONE THAT MATTERS: refused for the right code and the wrong account
+  exit code               : 1
+  reporter                : 1 failed
+  artifact status         : failed
+  walk stopped after step : THE ONE THAT MATTERS: refused for the right code and the wrong account
+  DIAGNOSIS: the step ran and its assertion failed - the refusal still happened but
+             said something different.
+  RESULT: RED, as required.
+  fixture restored        : cf1f7e789772250112f97df2f9fa391094568efc4a51a0c87bff7eaa5bc0f293 (identical)
+
+================================================================================================
+ARM A3 contact-mismatch refusal LEAKS the invitee
+  capability switched off : the withholding half of meals.invitation.refusal.contact-mismatch
+  journey                 : meals-guest-claim
+  expected to red at      : AND IT DOES NOT SAY WHOSE INVITATION IT IS
+  exit code               : 0
+  reporter                : 1 passed (18.9s)
+  artifact status         : passed
+  walk stopped after step : what the browser said while this ran
+  RESULT: *** STAYED GREEN WITH THE CAPABILITY OFF ***
+          The journey does not actually watch this clause.
+  fixture restored        : cf1f7e789772250112f97df2f9fa391094568efc4a51a0c87bff7eaa5bc0f293 (identical)
+
+================================================================================================
+ARM A4 already-claimed refusal removed
+  capability switched off : meals.invitation.refusal.already-used
+  journey                 : meals-guest-claim
+  expected to red at      : a code somebody has already used says so, not "no longer claimable"
+  exit code               : 1
+  reporter                : 1 failed
+  artifact status         : failed
+  walk stopped after step : a code somebody has already used says so, not "no longer claimable"
+  DIAGNOSIS: the step ran and its assertion failed - the refusal still happened but
+             said something different.
+  RESULT: RED, as required.
+  fixture restored        : cf1f7e789772250112f97df2f9fa391094568efc4a51a0c87bff7eaa5bc0f293 (identical)
+
+================================================================================================
+CONTROL - both walks with nothing mutated
+  meals-admin-setup: exit 0, artifact passed
+  meals-guest-claim: exit 0, artifact passed
+
+final fixture sha256: cf1f7e789772250112f97df2f9fa391094568efc4a51a0c87bff7eaa5bc0f293
+VERDICT: AT LEAST ONE ARM DID NOT HOLD - read above.
+EXIT=1

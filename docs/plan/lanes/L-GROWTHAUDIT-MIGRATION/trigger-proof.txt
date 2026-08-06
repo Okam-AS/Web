@@ -1,0 +1,25 @@
+# layer-2 proof on the SAME chain-built catalog (LgamChain), 15:06:58
+
+== 1. INSERT is accepted despite the trigger ==
+rows_after_insert
+-----------------
+1
+
+== 2. DELETE of a COMMITTED row is refused ==
+Msg 50074, Level 16, State 1, Server 197e27bae0aa, Procedure TR_GrowthAuditEvents_AppendOnly, Line 8
+GrowthAuditEvents is append-only: UPDATE and DELETE are not permitted (a correction is a new event).
+
+== 3. UPDATE is refused ==
+Msg 50074, Level 16, State 1, Server 197e27bae0aa, Procedure TR_GrowthAuditEvents_AppendOnly, Line 8
+GrowthAuditEvents is append-only: UPDATE and DELETE are not permitted (a correction is a new event).
+
+== 4. MUTATION: drop the trigger and the SAME DELETE succeeds -- so the trigger is what refuses, not an FK ==
+rows_after_delete_without_trigger
+---------------------------------
+0
+
+== 5. RESTORE the trigger from the migration body and re-verify the refusal ==
+
+(1 rows affected)
+Msg 50074, Level 16, State 1, Server 197e27bae0aa, Procedure TR_GrowthAuditEvents_AppendOnly, Line 8
+GrowthAuditEvents is append-only: UPDATE and DELETE are not permitted (a correction is a new event).

@@ -1,0 +1,67 @@
+RED — OkamAPI-dlhdr @ de1e5c5e + the new pins, Program.cs still `WithExposedHeaders("ETag")`
+$ dotnet test WebApi.Tests/WebApi.Tests.csproj --filter "FullyQualifiedName~DownloadHeader"
+
+Failed  DownloadHeaderWireTests.A_cross_origin_browser_can_read_the_name_of_every_download
+        (what: "margin statement export", url: "/margin/statements/d0117104-.../export?storeId=4190",
+         userId: "wire-download-admin", expectedFileName: "margin-statement-2026-06-01-rev1.csv")
+  Assert.Contains() Failure
+  Not found: Content-Disposition
+  In value:  List<String> ["ETag"]
+
+Failed  ... (what: "workforce kodeoversikt", expectedFileName: "okam-kodeoversikt-4101-2026-08-01.csv")
+  Assert.Contains() Failure / Not found: Content-Disposition / In value: List<String> ["ETag"]
+
+Failed  ... (what: "saf-t cash register export", expectedFileName: "SAF-T Cash Register_")
+  Assert.Contains() Failure / Not found: Content-Disposition / In value: List<String> ["ETag"]
+
+Failed  ... (what: "margin price-import template", expectedFileName: "margin-price-import-template.csv")
+  Assert.Contains() Failure / Not found: Content-Disposition / In value: List<String> ["ETag"]
+
+Failed  ... (what: "workforce hours export", expectedFileName: "okam-hours-4190-2026-07-06-2026-07-07.csv")
+  Assert.Contains() Failure / Not found: Content-Disposition / In value: List<String> ["ETag"]
+
+Failed  DownloadHeaderWireTests.The_default_cors_policy_exposes_exactly_the_declared_browser_readable_headers
+  Assert.Equal() Failure
+  Expected: ["Content-Disposition", "ETag", "X-Meals-Content-Hash"]
+  Actual:   ["ETag"]
+
+Failed  DownloadHeaderWireTests.The_exposure_is_declared_by_the_policy_and_not_by_a_successful_action
+  Assert.Contains() Failure / Not found: Content-Disposition / In value: List<String> ["ETag"]
+
+Failed  MealsDownloadHeaderWireTests.A_cross_origin_browser_can_read_both_the_name_and_the_content_hash_of_a_statement_export
+  Assert.Contains() Failure / Not found: Content-Disposition / In value: List<String> ["ETag"]
+
+Failed!  - Failed: 8, Passed: 1, Skipped: 0, Total: 9
+
+Every case reached HTTP 200 and carried a real Content-Disposition first; only the exposure was
+missing. The one PASS is the source-derived census — every file-serving controller already names
+its download, so "sets no filename" was NOT the defect anywhere.
+
+----------------------------------------------------------------------------------------------
+GREEN, after Program.cs -> WithExposedHeaders(BrowserReadableHeaders.All)
+$ dotnet test ... --filter "FullyQualifiedName~DownloadHeader"
+Passed!  - Failed: 0, Passed: 9, Skipped: 0, Total: 9
+
+$ dotnet test ... --filter "FullyQualifiedName~WebApi.Tests.Wire"
+Passed!  - Failed: 0, Passed: 205, Skipped: 2, Total: 207
+
+$ dotnet test WebApi.Tests/WebApi.Tests.csproj          (whole assembly)
+Failed!  - Failed: 532, Passed: 4366, Skipped: 12, Total: 4910
+  all 532 classified from the .trx: DockerUnavailableException / Testcontainers. Zero OTHER.
+
+----------------------------------------------------------------------------------------------
+MUTATION — the census pin, both branches, each rebuilt (no --no-build over a restored file)
+
+1. MarginPriceImportsController: File(bytes, "text/csv", "margin-price-import-template.csv")
+                             -> File(bytes, "text/csv")
+   Failed  Every_controller_that_serves_a_file_names_it_and_is_accounted_for
+     these file responses carry no download name, so a browser has nothing to read even once
+     the header is exposed:
+       MarginPriceImportsController.cs: File(bytes, "text/csv")
+
+2. GiftcardController: new FileContentResult(content, "application/pdf") { FileDownloadName = fileName }
+                    -> new FileContentResult(content, "application/pdf") { }
+   Failed  Every_controller_that_serves_a_file_names_it_and_is_accounted_for
+       GiftcardController.cs: new FileContentResult(content, "application/pdf")
+
+Both restored with cp + touch and re-observed green.

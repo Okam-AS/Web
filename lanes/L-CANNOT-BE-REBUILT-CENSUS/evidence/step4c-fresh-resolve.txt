@@ -1,0 +1,25 @@
+npm warn ERESOLVE overriding peer dependency
+npm warn While resolving: eslint-plugin-vue@6.2.2
+npm warn Found: eslint@7.32.0
+npm warn node_modules/eslint
+npm warn   dev eslint@"^7.10.0" from the root project
+npm warn   20 more (@nuxtjs/eslint-config, @nuxtjs/eslint-module, ...)
+npm warn
+npm warn Could not resolve dependency:
+npm warn peer eslint@"^5.0.0 || ^6.0.0" from eslint-plugin-vue@6.2.2
+npm warn node_modules/eslint-plugin-vue
+npm warn   eslint-plugin-vue@"^6.2.2" from @nuxtjs/eslint-config@3.1.0
+npm warn   node_modules/@nuxtjs/eslint-config
+npm warn   1 more (eslint-plugin-nuxt)
+npm warn
+npm warn Conflicting peer dependency: eslint@6.8.0
+npm warn node_modules/eslint
+npm warn   peer eslint@"^5.0.0 || ^6.0.0" from eslint-plugin-vue@6.2.2
+npm warn   node_modules/eslint-plugin-vue
+npm warn     eslint-plugin-vue@"^6.2.2" from @nuxtjs/eslint-config@3.1.0
+npm warn     node_modules/@nuxtjs/eslint-config
+npm warn     1 more (eslint-plugin-nuxt)
+npm error code ETARGET
+npm error notarget No matching version found for @nuxt/cli-edge@*.
+npm error notarget In most cases you or one of your dependencies are requesting a package version that doesn't exist.
+npm error A complete log of this run can be found in: /Users/svendaneel/.npm/_logs/2026-08-05T16_04_03_825Z-debug-0.log

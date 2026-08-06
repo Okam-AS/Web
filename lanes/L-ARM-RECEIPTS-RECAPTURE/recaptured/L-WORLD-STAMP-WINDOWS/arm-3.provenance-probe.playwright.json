@@ -1,0 +1,67 @@
+{
+  "journey": "provenance-probe",
+  "title": "the page loads and says who served it",
+  "status": "passed",
+  "startedAtUtc": "2026-08-05T03:11:13.512Z",
+  "finishedAtUtc": "2026-08-05T03:11:13.535Z",
+  "durationMs": 23,
+  "capabilities": [
+    "harness.provenance.probe"
+  ],
+  "surface": "public",
+  "backend": "live",
+  "baseUrl": "http://127.0.0.1:52946",
+  "apiBaseUrl": "http://127.0.0.1:52945",
+  "commit": null,
+  "underTest": null,
+  "backendProbe": {
+    "url": "http://127.0.0.1:52945/health",
+    "status": 200,
+    "body": "Healthy"
+  },
+  "backendBuild": {
+    "id": "web-armrecapture@7030c00122e026f077bdb1bfecee1c916ca72d67",
+    "source": "process:127.0.0.1:52945",
+    "short": "7030c00",
+    "detail": "branch HEAD"
+  },
+  "backendServed": 2,
+  "backendSubjectServed": 1,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "backendSample": [
+    "GET http://127.0.0.1:52945/user -> 200",
+    "GET http://127.0.0.1:52945/workforce/stores/1/context -> 200"
+  ],
+  "servingFixture": {
+    "origin": "http://127.0.0.1:52945",
+    "identitySource": "none",
+    "unresolved": "live backend — which build answered is recorded in `backendBuild`, and a live API's working directory is not this checkout by design"
+  },
+  "nodeCalls": [],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "open the page",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T03:11:13.514Z",
+      "durationMs": 20,
+      "detail": "served by live",
+      "error": null
+    }
+  ],
+  "findings": [],
+  "consoleErrors": [],
+  "failedRequests": [],
+  "screenshots": [],
+  "error": null,
+  "artifact": {
+    "key": "live-52945-7030c00",
+    "file": "artifacts/journeys/runs/provenance-probe.live-52945-7030c00.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "live-52945-7030c00",
+    "provisional": false,
+    "supersedes": null
+  }
+}

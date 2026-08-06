@@ -1,0 +1,14 @@
+watchman warning:  Recrawled this watch 45 times, most recently because:
+MustScanSubDirs UserDroppedTo resolve, please review the information on
+https://facebook.github.io/watchman/docs/troubleshooting.html#recrawl
+To clear this warning, run:
+`watchman watch-del '/Users/svendaneel/okam/Web-modules' ; watchman watch-project '/Users/svendaneel/okam/Web-modules'`
+
+PASS test/world-stamp-windows.test.js
+PASS test/journey-artifact-store.test.js
+
+Test Suites: 2 passed, 2 total
+Tests:       48 passed, 48 total
+Snapshots:   0 total
+Time:        3.329 s
+Ran all test suites matching /test\/world-stamp-windows.test.js|test\/journey-artifact-store.test.js/i.

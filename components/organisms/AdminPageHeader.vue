@@ -246,6 +246,11 @@ const icons = {
   // it. The tick is the whole difference and it is the subject of the page.
   accountEmail: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h9M5 19a2 2 0 01-2-2V7a2 2 0 012-2h14a2 2 0 012 2v5" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l2 2 4-4" /></svg>',
   workforceRoster: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>',
+  // A TAG, and deliberately not a person or a calendar: this entry sits between `workforceRoster`
+  // (people) and `workforceRates` (a clock) in the same group, and a role is neither of those — it
+  // is the label a shift gets filed under. An icon that read as "people" would make the catalogue
+  // look like a second roster, which is the exact confusion the page's own note exists to prevent.
+  workforceRoles: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>',
   marginRecipes: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>',
   // A balance, not a second clipboard: this page weighs two totals against each other (what the
   // recipes say the week should have cost against what the venue actually bought), and it has to read
@@ -260,6 +265,10 @@ const icons = {
   // An office block with people beside it, distinct from `mealsAgreements` (a plain building) in the
   // same group: that page monitors this venue's agreements, this one sets a company account up.
   mealsCompanies: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21h8V3H3v18zm0 0h18M14 21h7V9h-7v12zM6 7h2M6 11h2M6 15h2M17 13h1m-1 4h1" /></svg>',
+  // A receipt: a document with a torn foot. Deliberately neither of the two buildings beside it and
+  // deliberately not `marginStatements` (a chart) either — this page produces a BILL, and it is the
+  // only Meals link that writes one.
+  mealsStatements: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 3h12a1 1 0 011 1v17l-3-2-3 2-3-2-3 2V4a1 1 0 011-1zM9 8h6M9 12h6M9 16h3" /></svg>',
   growthNewsletter: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>',
   // A shield, not the envelope beside it: this page is the venue's obligation to the guest, and it
   // must not read as a second mailing screen. Deliberately NOT a padlock — nothing here is locked;
@@ -275,10 +284,26 @@ const icons = {
   // A clipboard, not people and not a calendar: the personalliste is the DOCUMENT an inspector asks
   // for, and the two workforce icons already in this group are a calendar and a group of people.
   workforcePersonnelList: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9h6m-6 4h4" /></svg>',
+  // An envelope with a warning mark: the notification that did not arrive.
+  workforceDelivery: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>',
+  // A speech bubble with a tick, and deliberately none of the four glyphs already in this group. The
+  // envelope beside it is what WE sent; this page is what came BACK from a person, so it is drawn as
+  // a reply rather than as another piece of outbound post. Not the shield-with-tick either — that is
+  // already `onboarding`, and at sidebar size two ticked outlines would be one icon.
+  workforcePublications: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11l2 2 4-4M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>',
   training: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" /></svg>',
+  // A stamped document, deliberately NOT the graduation cap beside it: the cap is the teaching, this
+  // is the record the teaching left behind. The seal reads as "signed off", which is what the hash
+  // linkage and the audit chain on that page are for.
+  trainingEvidence: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h4M9 8h6M7 3h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z" /><circle cx="15" cy="16" r="2.5" stroke-width="2" /></svg>',
+  // A document with a clock on it — deliberately BOTH marks, because the two neighbours it must not
+  // be mistaken for each carry one of them alone: `workforceRates` is a bare clock (what an hour is
+  // worth) and `trainingEvidence` is a bare document. A timesheet is the sheet AND the hours.
+  workforceTimesheets: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 4H7a2 2 0 00-2 2v13a2 2 0 002 2h10a2 2 0 002-2v-5M9 8h5M9 12h3" /><circle cx="17" cy="7" r="4" stroke-width="2" /><path stroke-linecap="round" stroke-width="2" d="M17 5.5V7l1 1" /></svg>',
   // Two toggle switches, not the settings cog: `posSettings` is already a cog in the PowerUser group,
   // and this page is not configuration — it is the row of kill switches somebody reaches for during
-  // an incident. It sits last in the modules group because it governs every link above it.
+  // an incident. It sat last in the single modules group while there was one; now that the modules
+  // are six groups it sits last in Operations, immediately ABOVE all six, because it governs them.
   featureFlags: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="2" y="4" width="20" height="7" rx="3.5" stroke-width="2" /><circle cx="17" cy="7.5" r="2" fill="currentColor" stroke="none" /><rect x="2" y="13" width="20" height="7" rx="3.5" stroke-width="2" /><circle cx="7" cy="16.5" r="2" fill="currentColor" stroke="none" /></svg>'
 };
 
@@ -338,18 +363,72 @@ export default {
               { label: this.$i('nav_dashboard'), path: '/admin', icon: icons.dashboard },
               { label: this.$i('nav_ongoing'), path: '/admin/ongoing', icon: icons.ongoing },
               { label: this.$i('nav_history'), path: '/admin/orders', icon: icons.orders },
-              { label: this.$i('nav_statistics'), path: '/admin/statistics', icon: icons.statistics }
+              { label: this.$i('nav_statistics'), path: '/admin/statistics', icon: icons.statistics },
+              // The switchboard, and the one link in this file that is NOT a module. It was last in
+              // the single modules group while there was one; it is here now for the reason it was
+              // last there — it governs every module link, so it cannot be filed inside any one of
+              // them without reading as that module's own setting. It is not a seventh module group
+              // either: a group whose heading and whose only row say the same word is a heading that
+              // earns nothing. Operations is where it belongs on its own merits — each module gates
+              // its writes on deny-closed per-store flags, and this is the row of switches somebody
+              // reaches for during an incident, next to the four screens they are already watching.
+              // Placed LAST in this group so it sits immediately above the six groups it governs,
+              // and it keeps its NYHET badge like every module link below it. Store-admin gated like
+              // its siblings — the API answers 403 to anyone else and the page says so.
+              { label: this.$i('nav_feature_flags'), path: '/admin/feature-flags', icon: icons.featureFlags, isNew: true }
             ]
           },
-          // The six restaurant modules, in ONE group, by the owner's instruction: they were previously
-          // spread across Menu (recipes), Sales (newsletter, events) and Administration (the four
-          // workforce links plus company agreements), which is correct by subject matter and useless
-          // for finding them. They are the newest surfaces and the ones under active acceptance, so
-          // being locatable beats being filed. Every gate is store-admin — identical to the groups
-          // they came from — so nothing here widens or narrows who is admitted; each page still
-          // renders its own capability refusal when the backend withholds one.
+          // ── THE SIX RESTAURANT MODULES, ONE GROUP EACH ────────────────────────────────────────
+          //
+          // HISTORY, in two rulings, because the second only makes sense against the first, and the
+          // first is why these links are not back under Menu and Sales today:
+          //
+          //   1. They were once spread across Menu (recipes), Sales (newsletter, events) and
+          //      Administration (the workforce links plus company agreements). That filing was
+          //      correct by subject matter and useless for finding anything, so by the owner's
+          //      instruction they were pulled into ONE group titled `nav_group_modules` ("Moduler"):
+          //      they are the newest surfaces and the ones under active acceptance, and being
+          //      locatable beat being filed.
+          //   2. The owner reversed the single group once it had grown to 22 links, in his words
+          //      "there is a massive amount of new things — can you actually separate them and group
+          //      them based on the different functionality and module they are part of". One list of
+          //      22 is the same unscannable wall as five scattered ones, arrived at from the other
+          //      side. Ruling 1 is not undone by this — the links stay out of Menu and Sales, and
+          //      stay together as the newest surfaces; only the single heading is replaced by six.
+          //
+          // ORDERED BY HOW FINISHED EACH MODULE IS, best first — Margin, Workforce, Training, Events,
+          // Growth, Meals — because that is the order an owner verifying the product should meet them
+          // in, and Meals is the one that cannot yet be walked end to end.
+          //
+          // SIX TOP-LEVEL GROUPS RATHER THAN A NESTED LEVEL. The template renders a group as a title
+          // and a flat list of links and has no concept of a sub-heading; introducing one would mean
+          // a new template branch and new CSS for a shape nothing else in this sidebar needs. Six
+          // groups is the SAME rendering with more data, so the whole of this change is data.
+          //
+          // NOTHING HERE CHANGES WHO IS ADMITTED. All 22 links are inside the same
+          // `showsStoreAdminNav` branch they were already inside, and not one entered or left it.
+          // Splitting one array into six moves rows on a screen and nothing else; every page still
+          // renders its own capability refusal when the backend withholds a grant.
+          //
+          // `isNew` IS KEPT ON EVERY LINK, per the owner: the NYHET badge is how he knows what is
+          // new. It stays on the link rather than moving to the heading — a badge on a heading goes
+          // stale the moment one link in that group stops being new, and it would stop telling him
+          // anything about the other links beside it.
           {
-            title: this.$i('nav_group_modules'),
+            title: this.$i('nav_group_module_margin'),
+            items: [
+              { label: this.$i('nav_margin_recipes'), path: '/admin/margin-recipes', icon: icons.marginRecipes, isNew: true },
+              // The two surfaces that make the recipe page's plate cost possible at all: a plate
+              // cost is only ever built from supplier price data, and these are the only screens
+              // that can create any. Adjacent to the recipes link, in that order, because that is
+              // the order the backend requires — ingredient, supplier, article, price, cost.
+              { label: this.$i('nav_margin_suppliers'), path: '/admin/margin-suppliers', icon: icons.marginSuppliers, isNew: true },
+              { label: this.$i('nav_margin_price_imports'), path: '/admin/margin-price-imports', icon: icons.marginPriceImports, isNew: true },
+              { label: this.$i('nav_margin_statements'), path: '/admin/margin-statements', icon: icons.marginStatements, isNew: true }
+            ]
+          },
+          {
+            title: this.$i('nav_group_module_workforce'),
             items: [
               { label: this.$i('nav_workforce_schedule'), path: '/admin/workforce-schedule', icon: icons.workforceSchedule, isNew: true },
               // Next to the schedule, not inside it. The inbox decides on a different aggregate under
@@ -358,26 +437,73 @@ export default {
               // itself when the backend withholds WorkforceManager.
               { label: this.$i('nav_workforce_requests'), path: '/admin/workforce-requests', icon: icons.workforceRequests, isNew: true },
               { label: this.$i('nav_workforce_roster'), path: '/admin/workforce-roster', icon: icons.workforceRoster, isNew: true },
+              // Between the roster and the rates, because that is the order the three are actually
+              // used in: who works here, what stations the place runs, what an hour on one costs.
+              // It is its own entry rather than a section of the roster for the reason the roster's
+              // own client records — a roster that created a role because somebody typed a name
+              // would make the catalogue unownable — and until this link existed the write behind it
+              // (`PUT /roles`, live on the wire since W1) had no caller in any browser at all, so a
+              // store nobody had curled had an empty role axis on all three pages around it.
+              { label: this.$i('nav_workforce_roles'), path: '/admin/workforce-roles', icon: icons.workforceRoles, isNew: true },
               { label: this.$i('nav_workforce_rates'), path: '/admin/workforce-rates', icon: icons.workforceRates, isNew: true },
               { label: this.$i('nav_workforce_personnel_list'), path: '/admin/workforce-personnel-list', icon: icons.workforcePersonnelList, isNew: true },
+              // The delivery report. Its own entry rather than a tab inside the schedule, because
+              // the outbox is STORE-scoped and outlives the week that filled it: a dead letter from
+              // last Tuesday's publication is still undelivered while the manager is planning next
+              // month, and a week-scoped surface would show it only to somebody who happened to
+              // navigate back to that week. Store-admin gated like every sibling; the page renders
+              // its own refusal when the backend withholds WorkforceManager.
+              { label: this.$i('nav_workforce_delivery'), path: '/admin/workforce-delivery', icon: icons.workforceDelivery, isNew: true },
+              // The publication receipts. Its own entry rather than a section inside the delivery
+              // report, because the two answer opposite questions: delivery lists what the OUTBOX
+              // could not get out, this lists what came BACK from the people it did reach. A store
+              // with an empty delivery report and nobody having confirmed anything is the case that
+              // makes them different, and folding one into the other would hide exactly that store.
+              // Store-admin gated like every sibling; the page renders its own refusal for the
+              // schedule grant, and a second one for the recipient roster, which the backend gates
+              // on WorkforceManager separately.
+              { label: this.$i('nav_workforce_publications'), path: '/admin/workforce-publications', icon: icons.workforcePublications, isNew: true },
+              // The payroll batch. Its own entry rather than a section on the rates page, even
+              // though both are `WorkforcePayrollApprover`: rates state what an hour is WORTH going
+              // forward and are an append-only timeline, while this freezes what was WORKED in a
+              // closed period and sends it. The two are read at different moments by the same person
+              // — a rate is set when somebody is hired, a period is approved every fortnight — and
+              // folding one into the other would bury the recurring act inside the rare one. Last of
+              // the Workforce links because it is the end of that module's sequence: everything above
+              // it produces the hours this one accounts for. Store-admin gated like every sibling;
+              // the page renders its own refusal when the backend withholds the payroll grant, which
+              // it does for the WHOLE surface — a timesheet line is the wage record and there is
+              // nothing left to partially withhold.
+              { label: this.$i('nav_workforce_timesheets'), path: '/admin/workforce-timesheets', icon: icons.workforceTimesheets, isNew: true }
+            ]
+          },
+          {
+            title: this.$i('nav_group_module_training'),
+            items: [
               { label: this.$i('nav_training_courses'), path: '/admin/training-courses', icon: icons.training, isNew: true },
-              { label: this.$i('nav_margin_recipes'), path: '/admin/margin-recipes', icon: icons.marginRecipes, isNew: true },
-              // The two surfaces that make the recipe page's plate cost possible at all: a plate
-              // cost is only ever built from supplier price data, and these are the only screens
-              // that can create any. Adjacent to the recipes link, in that order, because that is
-              // the order the backend requires — ingredient, supplier, article, price, cost.
-              { label: this.$i('nav_margin_suppliers'), path: '/admin/margin-suppliers', icon: icons.marginSuppliers, isNew: true },
-              { label: this.$i('nav_margin_price_imports'), path: '/admin/margin-price-imports', icon: icons.marginPriceImports, isNew: true },
-              { label: this.$i('nav_margin_statements'), path: '/admin/margin-statements', icon: icons.marginStatements, isNew: true },
-              { label: this.$i('nav_meals'), path: '/admin/meals-agreements', icon: icons.mealsAgreements, isNew: true },
-              // Beside the venue's Meals page rather than in a group of its own: same module, and
-              // the two are read together (what this venue has, and setting the next one up). Same
-              // store-admin gate as every other link here — the concierge and company-admin
-              // authorities the page's own controls need are resolved by the backend and refused on
-              // screen, never by hiding the link, which would leave the pages that DO admit somebody
-              // reachable only by typing a URL.
-              { label: this.$i('nav_meals_companies'), path: '/admin/meals-companies', icon: icons.mealsCompanies, isNew: true },
-              { label: this.$i('nav_events'), path: '/admin/events-pipeline', icon: icons.eventsPipeline, isNew: true },
+              // The OTHER half of Training, and the only reason the half above it is worth filing:
+              // the courses page is where a venue works, this is where one named person's record is
+              // read out — by somebody from outside the venue. Same store-admin gate as its sibling
+              // (`RequireStoreAdminAsync` on the evidence read), so the audience the sidebar offers it
+              // to is the audience the API admits. Immediately after the courses link because it is
+              // the end of that page's sequence, not a separate subject.
+              { label: this.$i('nav_training_evidence'), path: '/admin/training-evidence', icon: icons.trainingEvidence, isNew: true }
+            ]
+          },
+          // One link, and still a heading of its own rather than a lodger in the group above or
+          // below it. A module with one surface is a fact about the module, not a reason to hide
+          // which module the surface belongs to — and the heading is what stops `/admin/events-
+          // pipeline` reading as a Training page or a Growth one, which is the whole point of this
+          // split.
+          {
+            title: this.$i('nav_group_module_events'),
+            items: [
+              { label: this.$i('nav_events'), path: '/admin/events-pipeline', icon: icons.eventsPipeline, isNew: true }
+            ]
+          },
+          {
+            title: this.$i('nav_group_module_growth'),
+            items: [
               { label: this.$i('nav_growth_newsletter'), path: '/admin/growth-newsletter', icon: icons.growthNewsletter, isNew: true },
               // Immediately after the newsletter link, because it is the same module's other half and
               // the one with a statutory clock on it. The guest is already told on screen that this
@@ -386,13 +512,26 @@ export default {
               // promise was made on a surface and kept on none. Same store-admin gate as its siblings
               // — the API answers an opaque 404 to anyone else and the page says so, rather than the
               // link being hidden, which would leave the page reachable only by typing a URL.
-              { label: this.$i('nav_growth_privacy'), path: '/admin/growth-privacy', icon: icons.growthPrivacy, isNew: true },
-              // Last in this group, and in this group rather than under Administration, because it
-              // is the switchboard for every link above it: each of those six modules gates its
-              // write surfaces on deny-closed per-store flags, and until this page existed the only
-              // way to move one was a curl against `PUT /stores/{id}/feature-flags`. Store-admin
-              // gated like its siblings — the API answers 403 to anyone else and the page says so.
-              { label: this.$i('nav_feature_flags'), path: '/admin/feature-flags', icon: icons.featureFlags, isNew: true }
+              { label: this.$i('nav_growth_privacy'), path: '/admin/growth-privacy', icon: icons.growthPrivacy, isNew: true }
+            ]
+          },
+          {
+            title: this.$i('nav_group_module_meals'),
+            items: [
+              { label: this.$i('nav_meals'), path: '/admin/meals-agreements', icon: icons.mealsAgreements, isNew: true },
+              // Beside the venue's Meals page rather than in a group of its own: same module, and
+              // the two are read together (what this venue has, and setting the next one up). Same
+              // store-admin gate as every other link here — the concierge and company-admin
+              // authorities the page's own controls need are resolved by the backend and refused on
+              // screen, never by hiding the link, which would leave the pages that DO admit somebody
+              // reachable only by typing a URL.
+              { label: this.$i('nav_meals_companies'), path: '/admin/meals-companies', icon: icons.mealsCompanies, isNew: true },
+              // Third of the Meals links and the one that WRITES a bookkeeping document. Same
+              // store-admin gate as the two above it, and this time the gate matches the route: draft
+              // and finalize are `RequireStoreAdminAsync`, so the person offered this link is exactly
+              // the person the API admits. It is last of the three because it is the end of the
+              // month's sequence — agreement, people, then the bill.
+              { label: this.$i('nav_meals_statements'), path: '/admin/meals-statements', icon: icons.mealsStatements, isNew: true }
             ]
           },
           {

@@ -1,0 +1,23 @@
+MUTATION PROOF - growth-testsend-refusal
+fixture: test/e2e/fixture/growth-newsletter.js  sha256[:12]=365347c31b3e
+clause removed: ctx.caller.emailConfirmed === true &&
+
+ARM 1  confirmation clause REMOVED
+   playwright exit code : 1   (expected: non-zero)
+   artifact status      : failed   (expected: failed)
+   failed steps         : ["THE WALL: the test-send is refused to the account's OWN address"]
+   ARM 1 PASS - the walk reds, and only at the refusal step
+
+fixture restored, sha256[:12]=365347c31b3e  identical=True
+
+ARM 2  confirmation clause RESTORED
+   playwright exit code : 0   (expected: 0)
+   artifact status      : passed   (expected: passed)
+   failed steps         : (none)
+   ARM 2 PASS - the walk is green again, so ARM 1 was the clause and not damage
+
+VERDICT: PROVEN - the refusal walk reds when the confirmed-address requirement is removed, and greens when it is restored
+
+Note: the canonical artifact on disk after this script is ARM 2's, i.e. the green
+one. ARM 1's failed record is kept by the artifact store under runs/ and in the
+ledger, which is where a reader checks that the red really happened.

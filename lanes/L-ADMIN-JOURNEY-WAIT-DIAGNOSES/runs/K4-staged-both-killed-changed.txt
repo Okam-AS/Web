@@ -1,0 +1,115 @@
+=== label    : K4-staged-both-killed-changed
+=== worktree : /Users/svendaneel/okam/web-waitdiag
+=== commit   : 8ac6f63648015d8c7a230181a7f07bf303d43268
+=== dirty    : 1 path(s) before the run
+=== helper   : d875bdeac5db2fab74f63bdd1640acd420ccd272 test/e2e/support/admin.js
+=== spec sha : ff03d2a26d5c8c0c143a54adb9331f0643a4baae
+=== ports    : web=3877 fixture=4877 (4010/4971/4973 never bound, never signalled)
+=== kill arm : staged
+=== started  : 2026-08-06T11:07:41Z
+[WebServer] [fixture] listening on http://127.0.0.1:4877
+
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://192.168.68.111:3877/
+
+[WebServer] [info] Preparing project for development
+
+[WebServer] [info] Initial build may take a while
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+
+[WebServer] [success] Builder initialized
+
+[WebServer] [success] Nuxt files generated
+
+[WebServer] [warn] Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+
+Running 1 test using 1 worker
+
+[WebServer] [info] Waiting for file changes
+
+[WebServer] [info] Memory usage: 1.25 GB (RSS: 1.79 GB)
+[WebServer] [info] Listening on: http://192.168.68.111:3877/
+
+[1/1] [chromium] › test/e2e/journeys/growth-newsletter-send-gate.spec.js:95:1 › An operator drafts and approves a newsletter, and the send gate opens only when both switches are up @fixture
+[killer] stage 1: killing api at 2026-08-06T11:08:13Z
+[killer] SIGTERM fixture pid 64954
+[killer] stage 2: killing app at 2026-08-06T11:08:25Z
+[killer] SIGTERM web pid 64956
+  1) [chromium] › test/e2e/journeys/growth-newsletter-send-gate.spec.js:95:1 › An operator drafts and approves a newsletter, and the send gate opens only when both switches are up @fixture 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator: locator('.growth-page__panel').filter({ has: locator('h2.growth-page__panel-title').filter({ hasText: 'Godkjenning' }) }).locator('.growth-page__badge')
+    Timeout: 15000ms
+    - Expected  - 1
+    + Received  + 3
+
+    - Godkjent
+    +
+    +               Ikke godkjent
+    +             
+
+    Call log:
+      - Expect "toHaveText" with timeout 15000ms
+      - waiting for locator('.growth-page__panel').filter({ has: locator('h2.growth-page__panel-title').filter({ hasText: 'Godkjenning' }) }).locator('.growth-page__badge')
+        34 × locator resolved to <span data-v-3af62fd6="" data-v-70f5b8c5="" class="growth-page__badge growth-page__badge--none">↵              Ikke godkjent↵            </span>
+           - unexpected value "
+                  Ikke godkjent
+                "
+
+
+      222 |       const approval = panel(page, 'Godkjenning');
+      223 |       await approval.getByRole('button', { name: 'Godkjenn denne versjonen' }).click();
+    > 224 |       await expect(approval.locator('.growth-page__badge')).toHaveText('Godkjent', { timeout: 15000 });
+          |                                                             ^
+      225 |       // The button is not left live beside a granted approval.
+      226 |       await expect(approval.getByRole('button', { name: 'Godkjenn denne versjonen' })).toBeDisabled();
+      227 |
+        at /Users/svendaneel/okam/web-waitdiag/test/e2e/journeys/growth-newsletter-send-gate.spec.js:224:61
+        at JourneyRecorder.step (/Users/svendaneel/okam/web-waitdiag/test/e2e/support/journey.js:347:22)
+        at /Users/svendaneel/okam/web-waitdiag/test/e2e/journeys/growth-newsletter-send-gate.spec.js:221:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/growth-newsletter-send-gat-b49d0-y-when-both-switches-are-up-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/growth-newsletter-send-gate.fixture.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/growth-newsletter-send-gate.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/growth-newsletter-send-gat-b49d0-y-when-both-switches-are-up-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/growth-newsletter-send-gat-b49d0-y-when-both-switches-are-up-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/growth-newsletter-send-gat-b49d0-y-when-both-switches-are-up-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+  1 failed
+    [chromium] › test/e2e/journeys/growth-newsletter-send-gate.spec.js:95:1 › An operator drafts and approves a newsletter, and the send gate opens only when both switches are up @fixture 
+=== finished : 2026-08-06T11:08:29Z
+=== dirty after : 1 path(s)
+RESULT K4-staged-both-killed-changed FAIL-ASSERT rc=1

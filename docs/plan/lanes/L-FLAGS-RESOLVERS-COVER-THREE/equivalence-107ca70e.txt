@@ -1,0 +1,56 @@
+# Blob/patch equivalence: 107ca70e vs e45ec4c1 + 6ae0b8db
+
+generated 2026-08-06T11:58:40Z by agent:L-FLAGS-RESOLVERS-COVER-THREE
+
+## Per-file blob identity (git rev-parse <ref>:<path>)
+
+file                                                       e45ec4c1                                   6ae0b8db                                   107ca70e                                   verdict
+Services/Events/EventsModuleFlagEffectiveResolver.cs       44d281b9547b1245e90fb79372abcf5ea8ecf88b   44d281b9547b1245e90fb79372abcf5ea8ecf88b   44d281b9547b1245e90fb79372abcf5ea8ecf88b   107==e45 107==6ae
+Services/Growth/GrowthModuleFlagEffectiveResolver.cs       557dfaec8651eb7df9ee197887ee67eaf844548f   557dfaec8651eb7df9ee197887ee67eaf844548f   557dfaec8651eb7df9ee197887ee67eaf844548f   107==e45 107==6ae
+Services/Meals/MealsModuleFlagEffectiveResolver.cs         7499bb73771da2bbed6752d41bba6ccfa92f604b   7499bb73771da2bbed6752d41bba6ccfa92f604b   7499bb73771da2bbed6752d41bba6ccfa92f604b   107==e45 107==6ae
+WebApi.Tests/Events/EventsFeatureFlagEffectiveTests.cs     6271766bed7952492875b9750c2e10c6db5a2a83   6271766bed7952492875b9750c2e10c6db5a2a83   6271766bed7952492875b9750c2e10c6db5a2a83   107==e45 107==6ae
+WebApi.Tests/Growth/GrowthFeatureFlagEffectiveTests.cs     60cf6a784c747a0de446a1eab9ae1a1c40881bc5   60cf6a784c747a0de446a1eab9ae1a1c40881bc5   60cf6a784c747a0de446a1eab9ae1a1c40881bc5   107==e45 107==6ae
+WebApi.Tests/Meals/MealsFeatureFlagEffectiveTests.cs       e9d49aa148050c492c2ee27b661999c6fd7d54da   e9d49aa148050c492c2ee27b661999c6fd7d54da   e9d49aa148050c492c2ee27b661999c6fd7d54da   107==e45 107==6ae
+WebApi.Tests/Wire/FlagEffectiveResolverWireTests.cs        980a7383c2e967e743871e3b7ddb0be37fe24eca   29b029e3058f52be55637358be557f875ce67cb3   29b029e3058f52be55637358be557f875ce67cb3   - 107==6ae
+
+## Patch identity for the three files that existed at base (base drift makes blobs differ)
+Program.cs                                                 PATCH IDENTICAL
+WebApi.Tests/Meals/MealsFeatureFlagCompositionTests.cs     PATCH IDENTICAL
+WebApi.Tests/Meals/MealsOperatorLeverReachTests.cs         PATCH IDENTICAL
+
+## Topology
+merge-base(8e2b57de,107ca70e) = 8e2b57de8442a389a9b5f8025312c9750614c85e  == tip
+merge-base(8e2b57de,e45ec4c1) = de1e5c5e96dcedb597b1c4bf94d6d2039ae8dfc7  (63 commits behind)
+commits 8e2b57de..107ca70e:
+107ca70e The Growth flag board stops reporting a dark capture surface as live
+
+## Non-source paths present only in one
+  lanes/L-COMPOSITION-ROOT-CHECK/base-fast-tier.summary.txt
+  lanes/L-COMPOSITION-ROOT-CHECK/evidence.md
+  lanes/L-COMPOSITION-ROOT-CHECK/lane-fast-tier.summary.txt
+  lanes/L-COMPOSITION-ROOT-CHECK/mutations.txt
+  lanes/L-CONFIRM-CONAT-RETIRE/base-fast-tier.summary.txt
+  lanes/L-CONFIRM-CONAT-RETIRE/evidence.md
+  lanes/L-CONFIRM-CONAT-RETIRE/lane-fast-tier.summary.txt
+  lanes/L-CONFIRM-SERVER-HALVES/base-fast-tier.summary.txt
+  lanes/L-CONFIRM-SERVER-HALVES/evidence.md
+  lanes/L-CONFIRM-SERVER-HALVES/lane-fast-tier.summary.txt
+  lanes/L-CRYPTO-PIN-BYFORM/base-fast-tier.summary.txt
+  lanes/L-CRYPTO-PIN-BYFORM/evidence.md
+  lanes/L-CRYPTO-PIN-BYFORM/lane-fast-tier.summary.txt
+  lanes/L-FLAGS-EFFECTIVE-RESOLVERS/fast-tier.trx
+  lanes/L-GROWTH-EFFECTIVE-RESOLVER/baseline-8e2b57de.txt
+  lanes/L-GROWTH-EFFECTIVE-RESOLVER/containers-after.txt
+  lanes/L-GROWTH-EFFECTIVE-RESOLVER/containers-before.txt
+  lanes/L-GROWTH-EFFECTIVE-RESOLVER/fast-tier.trx
+  lanes/L-GROWTH-EFFECTIVE-RESOLVER/mutation-receipt.md
+  lanes/L-GROWTH-FAMILY-LAND/merge-receipt.md
+  lanes/L-INVOICE-AUTHORIZE-LAND/merge-receipt.md
+  lanes/L-INVOICE-AUTHORIZE/evidence.md
+  lanes/L-MEALS-RELEASE/evidence.md
+  lanes/L-MEALS-RELEASE/red-no-route.txt
+  lanes/L-RESERVATION-LIMITER-MOVE/base-fast-tier.summary.txt
+  lanes/L-RESERVATION-LIMITER-MOVE/evidence.md
+  lanes/L-RESERVATION-LIMITER-MOVE/lane-fast-tier.summary.txt
+  lanes/L-RESERVATION-LIMITER-MOVE/mutations.txt
+  lanes/L-VIOLATION-EXACT-LAND/merge-receipt.md

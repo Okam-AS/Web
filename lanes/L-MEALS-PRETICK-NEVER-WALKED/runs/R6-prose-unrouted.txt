@@ -1,0 +1,52 @@
+=== label R6-prose-unrouted | arm unrouted | base commit d320105f289c4e385a92879a0766bf4d1c3770bd ===
+d320105 The policy assertion names the sentence it means, not a class it shared
+=== core: 10 entries ===
+=== working tree vs base ===
+ M test/e2e/fixture/meals.js
+ M test/e2e/journeys/meals-admin-setup.spec.js
+=== spec blob:    f213e9ec4c19d16f2493dbff967d2720a8fa4f39 ===
+=== fixture blob: 84f00ee73363f37d48449653ef533afb297706fc ===
+=== panel blob:   9e13f43b0b4eea5271dc34f5fa75e711551872d7 ===
+[WebServer] [fixture] listening on http://127.0.0.1:4779
+
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://172.20.10.4:3779/
+
+[WebServer] [info] Preparing project for development
+
+[WebServer] [info] Initial build may take a while
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+
+[WebServer] [success] Builder initialized
+
+[WebServer] [success] Nuxt files generated
+
+[WebServer] [warn] Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+
+Running 1 test using 1 worker
+
+[WebServer] [info] Waiting for file changes
+
+[WebServer] [info] Memory usage: 992 MB (RSS: 1.88 GB)
+
+[WebServer] [info] Listening on: http://172.20.10.4:3779/
+
+[1/1] [chromium] › test/e2e/journeys/meals-admin-setup.spec.js:48:1 › A concierge creates a company, signs its corridor, runs a programme and issues an invitation @fixture
+  1 passed (17.7s)
+RESULT R6-prose-unrouted arm=unrouted d320105 PASS rc=0

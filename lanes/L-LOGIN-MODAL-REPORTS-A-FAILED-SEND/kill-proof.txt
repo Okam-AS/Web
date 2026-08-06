@@ -1,0 +1,101 @@
+THE ARM: the login modal is asked for a code with NOTHING LISTENING on the API, and what it does is
+read rather than reasoned about.
+
+worktrees : /Users/svendaneel/okam/web-loginsend        (fixed)  detached 8ac6f63
+            /Users/svendaneel/okam/web-loginsend-before (stock)  detached 8ac6f63
+both detached and clean at start, core populated by submodule, node_modules symlinked.
+PORTS BOUND: web 3881 (fixed) / 3882 (stock); fixture 4882 (fixed) / 4881 (stock); 4883 held DEAD on
+purpose and never bound by anything. 4010, 4971 and 4973 were never bound, never probed and never
+signalled. No container or process not started by this lane was ever touched.
+
+stock modal sha : 7213119e136338ede0dbaff91dfb2a2604eec6fe
+fixed modal sha : 1bac648211e8f1e4fe0158380622aa1f0bd5635e
+
+--- WHICH LAYER WAS FIXED, AND WHY -------------------------------------------------------------
+THE MODAL, not the request layer. The brief is right that the resolve is the deeper cause, but:
+
+  • `RequestService.PostRequest` resolving a failed request is a DOCUMENTED, DEPENDED-ON contract.
+    Its own source says so, and the `SafeGetRequest` / `SafePutRequest` / `SafeDeleteRequest`
+    variants exist for the sole purpose of making the other verbs behave the SAME way — "PostRequest
+    already behaves this way" is a comment in that file. `TryParseResponseWithError` unwraps the
+    axios error deliberately.
+  • 205 call sites read a request result through `TryParseResponse` / `TryParseResponseWithError`.
+    Making PostRequest reject turns every one of those `false` returns into an unhandled rejection.
+  • The honest boolean was ALREADY on the signature the modal called:
+    `SendVerificationToken(phoneNumber): Promise<boolean>`. Three of its four callers already read
+    it — core/pinia/user.ts:150, pages/registrer.vue:573, components/molecules/EmployeeManager.vue:177.
+    LoginModal was the only one that threw the value away.
+
+So this is a caller bug, not a layer bug, and the brief's own warning — "the next caller will make
+the same assumption" — is already answered by the typed boolean the layer returns. The request layer
+was NOT touched. Neither was test/e2e/support/admin.js, which 31 journeys share.
+
+--- BASELINE : the API answering normally ------------------------------------------------------
+    A4-regression-fixed  1 passed (42.0s)   growth-newsletter-send-gate — a real journey that signs
+                                            in through this modal. The success path is untouched.
+    jest, fixed worktree                    76/76 across the 4 suites that touch LoginModal
+                                            (login-modal-failed-send, focus-trap-teardown,
+                                             meals-claim-page, workforce-join-page)
+
+--- THE ARM : nothing listening, same spec on both worktrees -----------------------------------
+E2E_API_BASE_URL=http://127.0.0.1:4883 starts NO fixture (playwright.config.js starts only the dev
+server in live mode) and points the app at a port nothing is bound to, so every API call is refused
+by the OS. No process is killed to arrange this, so there is no race to lose. The dead port was
+asserted unbound before AND after each run. Instrument identical on both arms:
+spec sha 4e89c58103758f18a07e08b4c4f0e7752cec1a7c.
+
+    B3-dead-stock   FAIL   api traffic : FAILED .../user/sendverificationtoken ERR_CONNECTION_REFUSED
+                           otp boxes shown : 6
+                           phone inputs    : 0
+                           modal says      : (no error shown)
+
+    A2-dead-fixed   PASS   api traffic : FAILED .../user/sendverificationtoken ERR_CONNECTION_REFUSED
+                           otp boxes shown : 0
+                           phone inputs    : 1  visible=true  box=284x44
+                           modal says      : Vi kunne ikke sende koden. Sjekk nummeret, eller prøv
+                                             igjen om litt.
+
+That is the whole defect and the whole fix, measured rather than argued: six boxes for a code that
+was never sent, against none.
+
+--- THE COMMITTED PIN, RUN BOTH WAYS -----------------------------------------------------------
+test/e2e/journeys/login-modal-failed-send.spec.js (sha 60ac1cf), fixture mode, both worktrees:
+
+    B6-pin-stock    FAIL   expect(anyCodeBox).toHaveCount(0)  Expected: 0  Received: 6
+    A6-pin-fixed    PASS   1 passed (30.1s)
+
+--- TWO THINGS THE ARMS CORRECTED, RECORDED RATHER THAN QUIETLY FIXED --------------------------
+1. TWO LOGIN MODALS. `/admin/lang` really does mount two `.login-modal` elements — the page mounts
+   its own on top of the one `AdminPage` renders, and eleven other admin pages do the same. On
+   `/admin` in FIXTURE mode a second one also appeared after the first data load
+   (runs/A3-pin-fixed.txt). The first B1 arm died on that as a strict-mode violation. The pin now
+   counts code inputs across EVERY login modal on the page rather than inside one, which is the
+   stricter rule and cannot be fooled by a duplicate. The duplication itself is a real oddity and is
+   NOT this lane's to fix.
+2. A MID-TRANSITION READ. `mode="out-in"` keeps the outgoing step mounted for its animation, so the
+   first A1 arm read the DOM while the modal was still swapping and reported the step on its way
+   out. Both specs now settle 1200ms before measuring. The first A1 arm also swallowed the reason
+   behind `.catch(() => false)`; that swallow was removed rather than worked around.
+
+--- MUTATION : runs/mutation-receipt.txt, 9 mutants, 0 survivors -------------------------------
+Guards: a mutant whose search string is not found EXACTLY ONCE aborts the run (a substitution that
+did nothing would otherwise score as "survived"), and the baseline must be green first.
+
+EIGHT-FOR-EIGHT ON THE FIRST TRY WAS NOT TREATED AS DONE. All eight opening mutants were written
+against the branch this lane changed, so their dying proves that branch is pinned and says nothing
+about the line above it. M9 — deleting `this.errorMessage = ""` from the top of `getCode` — was
+added afterwards and WOULD HAVE SURVIVED the original eight-test suite: nothing had ever asked for a
+second attempt, so a stale «we could not send the code» could ride onto a send that actually worked,
+which is the same class of lie as the original defect pointing the other way. Test G closes it.
+
+Two predictions missed, both correct-by-design rather than gaps:
+  • M1 did not red C. C is the genuine-rejection case and M1 leaves the `.catch()` arm untouched.
+  • M4 did not red B or C. Those assert `errorMessage === SEND_FAILED` — behaviour, against the
+    imported constant, which M4 also moves. The constant's TEXT is pinned by F and end-to-end by A.
+
+--- WHAT IS DELIBERATELY NOT DONE --------------------------------------------------------------
+• The message is hard-coded Norwegian, matching the two error strings already in this file. Routing
+  it through `$t` means editing shared locale files that three other lanes currently own.
+• `login()` at LoginModal.vue:203 sets `errorMessage = JSON.stringify(response)` on the SUCCESS
+  path. Harmless today because the modal closes immediately after, but it is wrong. Not this lane.
+• `RequestService.PostRequest` and test/e2e/support/admin.js were not touched.

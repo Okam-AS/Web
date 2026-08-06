@@ -1,0 +1,31 @@
+[WebServer] [fixture] listening on http://127.0.0.1:4907
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+[WebServer] [info] Listening on: http://192.168.68.111:3907/
+[WebServer] [info] Preparing project for development
+[WebServer] [info] Initial build may take a while
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+[WebServer] [success] Builder initialized
+
+Running 1 test using 1 worker
+
+[WebServer] [success] Nuxt files generated
+[WebServer] [warn] Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[WebServer] [info] Waiting for file changes
+[WebServer] [info] Memory usage: 1.28 GB (RSS: 1.99 GB)
+[WebServer] [info] Listening on: http://192.168.68.111:3907/
+[journey] modal-estate-scroll-lock: filed as artifacts/journeys/runs/modal-estate-scroll-lock.fixture.playwright.json.
+          artifacts/journeys/modal-estate-scroll-lock.playwright.json is COMMITTED EVIDENCE — git keeps it,
+          so no run overwrites it, and this run's screenshots went to artifacts/journeys/runs/modal-estate-scroll-lock.fixture/
+          rather than over the pictures that record cites.
+          To regenerate it deliberately, delete it, run again, and `git add -f` the record and its pictures.
+  ✓  1 [chromium] › test/e2e/journeys/modal-estate-scroll-lock.spec.js:87:1 › Two different modals hold the page, and closing one does not let go @fixture (25.9s)
+
+  1 passed (27.3s)

@@ -1,0 +1,2280 @@
+{
+ "L-REVIEW-RESIDUALS": {
+  "entries": [
+   {
+    "label": "provider fast tier",
+    "sha": "3bdef5c6",
+    "repo": "OkamAPI",
+    "trx": "/Users/svendaneel/okam/wt-resid-provider/artifacts/tests/3bdef5c6-fast-tier.trx",
+    "is_merge": false,
+    "commit_err": null,
+    "claimed": 0,
+    "modified": 3,
+    "renamed_away": [],
+    "present": [],
+    "missing": [],
+    "filtered": [],
+    "skipped": [],
+    "mod_present": [
+     {
+      "fqn": "WebApi.Tests.Growth.GrowthMailProviderContractTests.Every_adapters_event_ingestion_declaration_matches_whether_it_can_verify_a_signed_webhook",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 29,
+      "ns_count": 404,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Growth.GrowthMailProviderContractTests.No_type_outside_growth_services_references_the_mail_provider_boundary",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 29,
+      "ns_count": 404,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Growth.GrowthMailProviderContractTests.The_named_postmark_client_redacts_the_header_that_carries_the_server_token",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 29,
+      "ns_count": 404,
+      "how": "exact"
+     }
+    ],
+    "mod_missing": [],
+    "stale_names": [],
+    "trx_err": null,
+    "trx_total": 4372,
+    "mode": "non-sql",
+    "sql_present": 0,
+    "nonsql_present": 3696,
+    "trx_start": "2026-08-02T16:20:33.087325+02:00",
+    "commit_time": "2026-08-02T16:28:22+02:00",
+    "trx_predates_commit": true
+   },
+   {
+    "label": "rezone fast tier",
+    "sha": "4a9cbb9c",
+    "repo": "OkamAPI",
+    "trx": "/Users/svendaneel/okam/wt-resid-rezone/artifacts/tests/4a9cbb9c-fast-tier.trx",
+    "is_merge": false,
+    "commit_err": null,
+    "claimed": 3,
+    "modified": 0,
+    "renamed_away": [],
+    "present": [
+     {
+      "fqn": "WebApi.Tests.StoreMarket.StoreMarketAnchorBehaviourTests.A_row_in_a_declared_money_anchor_refuses_a_relabelling_and_only_for_its_own_store",
+      "kind": "Theory",
+      "traits": [],
+      "cls_count": 3,
+      "ns_count": 37,
+      "how": "theory"
+     },
+     {
+      "fqn": "WebApi.Tests.StoreMarket.StoreMarketAnchorBehaviourTests.A_row_in_a_declared_zone_anchor_refuses_a_re_zoning_and_only_for_its_own_store",
+      "kind": "Theory",
+      "traits": [],
+      "cls_count": 3,
+      "ns_count": 37,
+      "how": "theory"
+     },
+     {
+      "fqn": "WebApi.Tests.StoreMarket.StoreMarketAnchorBehaviourTests.There_is_a_case_for_every_declared_anchor_and_the_declared_lists_are_not_empty",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 3,
+      "ns_count": 37,
+      "how": "exact"
+     }
+    ],
+    "missing": [],
+    "filtered": [],
+    "skipped": [],
+    "mod_present": [],
+    "mod_missing": [],
+    "stale_names": [],
+    "trx_err": null,
+    "trx_total": 4380,
+    "mode": "non-sql",
+    "sql_present": 0,
+    "nonsql_present": 3701,
+    "trx_start": "2026-08-02T16:38:23.321641+02:00",
+    "commit_time": "2026-08-02T16:44:44+02:00",
+    "trx_predates_commit": true
+   }
+  ]
+ },
+ "L-TRAIN-DISCLOSURE": {
+  "entries": [
+   {
+    "label": "after",
+    "sha": "06b8b582",
+    "repo": "OkamAPI",
+    "trx": "/Users/svendaneel/okam/wt-traindisc/artifacts/tests/L-TRAIN-DISCLOSURE/after.trx",
+    "is_merge": false,
+    "commit_err": null,
+    "claimed": 14,
+    "modified": 2,
+    "renamed_away": [
+     "Only_the_evidence_read_can_read_the_training_audit_ledger",
+     "The_training_request_surface_is_the_management_handlers_plus_the_one_evidence_read"
+    ],
+    "present": [
+     {
+      "fqn": "WebApi.Tests.Training.TrainingInspectorEvidencePackTests.Only_a_disclosure_recording_read_can_read_the_training_audit_ledger",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 11,
+      "ns_count": 96,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Wire.TrainingWireTests.The_disclosure_log_admits_the_subject_and_the_stores_admin_and_nobody_else",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 12,
+      "ns_count": 146,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Training.TrainingInspectorEvidencePackTests.The_training_request_surface_is_the_management_handlers_plus_the_two_evidence_reads",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 11,
+      "ns_count": 96,
+      "how": "exact"
+     }
+    ],
+    "missing": [
+     {
+      "fqn": "WebApi.Tests.Training.TrainingDisclosureLogTests.A_caller_who_names_nobody_and_is_nobody_is_refused_rather_than_answered_empty",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 0,
+      "ns_count": 96
+     },
+     {
+      "fqn": "WebApi.Tests.Training.TrainingDisclosureLogTests.A_managers_read_of_the_log_is_recorded_and_the_subject_sees_it",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 0,
+      "ns_count": 96
+     },
+     {
+      "fqn": "WebApi.Tests.Training.TrainingDisclosureLogTests.A_never_enabled_store_is_the_opaque_404_on_both_branches",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 0,
+      "ns_count": 96
+     },
+     {
+      "fqn": "WebApi.Tests.Training.TrainingDisclosureLogTests.A_refused_read_of_the_log_writes_no_disclosure",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 0,
+      "ns_count": 96
+     },
+     {
+      "fqn": "WebApi.Tests.Training.TrainingDisclosureLogTests.Each_entry_carries_the_ledger_row_verbatim",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 0,
+      "ns_count": 96
+     },
+     {
+      "fqn": "WebApi.Tests.Training.TrainingDisclosureLogTests.Naming_another_person_never_admits_a_caller_on_the_subject_branch",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 0,
+      "ns_count": 96
+     },
+     {
+      "fqn": "WebApi.Tests.Training.TrainingDisclosureLogTests.Neither_disclosure_event_type_reaches_the_evidence_packs_audit_chain",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 0,
+      "ns_count": 96
+     },
+     {
+      "fqn": "WebApi.Tests.Wire.TrainingWireTests.Reading_the_disclosure_log_is_itself_recorded_and_the_subject_sees_who_looked",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 12,
+      "ns_count": 146
+     },
+     {
+      "fqn": "WebApi.Tests.Training.TrainingDisclosureLogTests.The_log_returns_every_reader_of_this_persons_record_in_this_store_and_no_other_row",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 0,
+      "ns_count": 96
+     },
+     {
+      "fqn": "WebApi.Tests.Wire.TrainingWireTests.The_person_a_record_is_about_can_see_who_read_it_and_sees_no_other_stores_or_persons",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 12,
+      "ns_count": 146
+     },
+     {
+      "fqn": "WebApi.Tests.Training.TrainingDisclosureLogTests.The_subject_reads_their_own_log_through_a_gate_that_refuses_everyone_else",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 0,
+      "ns_count": 96
+     }
+    ],
+    "filtered": [],
+    "skipped": [],
+    "mod_present": [
+     {
+      "fqn": "WebApi.Tests.Training.TrainingInspectorEvidencePackTests.Evidence_for_a_person_is_scoped_to_the_store_that_recorded_it",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 11,
+      "ns_count": 96,
+      "how": "exact"
+     }
+    ],
+    "mod_missing": [
+     {
+      "fqn": "WebApi.Tests.Wire.TrainingWireTests.An_evidence_read_records_who_asked_attributed_to_the_token_the_bearer_handler_resolved",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 12,
+      "ns_count": 146
+     }
+    ],
+    "stale_names": [],
+    "trx_err": null,
+    "trx_total": 962,
+    "mode": "non-sql",
+    "sql_present": 0,
+    "nonsql_present": 773,
+    "trx_start": "2026-08-02T16:22:26.216241+02:00",
+    "commit_time": "2026-08-02T16:26:16+02:00",
+    "trx_predates_commit": true
+   }
+  ]
+ },
+ "L-TRAIN-EVIDENCE-NAMES-COURSE": {
+  "entries": [
+   {
+    "label": "after",
+    "sha": "fcb5181a",
+    "repo": "OkamAPI",
+    "trx": "/Users/svendaneel/okam/wt-trn-names/artifacts/tests/L-TRAIN-EVIDENCE-NAMES-COURSE/after.trx",
+    "is_merge": false,
+    "commit_err": null,
+    "claimed": 9,
+    "modified": 1,
+    "renamed_away": [],
+    "present": [
+     {
+      "fqn": "WebApi.Tests.Wire.TrainingWireTests.A_completion_read_over_the_wire_names_its_course_and_the_version_actually_completed",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 24,
+      "ns_count": 24,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Training.TrainingCompletionNamesCourseTests.A_completion_whose_version_cannot_be_resolved_is_still_listed_rather_than_dropped",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 138,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Training.TrainingCompletionNamesCourseTests.A_filed_completion_names_the_course_and_the_exact_version_on_the_write_and_on_the_list",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 138,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Training.TrainingCourseNoEnvelopeMutationTests.No_training_route_can_rename_or_delete_a_course_envelope",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 3,
+      "ns_count": 138,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Training.TrainingCompletionNamesCourseTests.Publishing_a_later_version_does_not_move_what_an_already_filed_completion_names",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 138,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Training.TrainingCompletionNamesCourseTests.Retiring_the_completed_version_does_not_unname_the_completion",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 138,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Training.TrainingCourseNoEnvelopeMutationTests.The_envelope_routes_this_guard_watches_exist",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 3,
+      "ns_count": 138,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Training.TrainingCourseNoEnvelopeMutationTests.The_only_write_on_the_course_envelope_route_is_the_create",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 3,
+      "ns_count": 138,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Training.TrainingCompletionNamesCourseTests.The_person_and_course_filters_still_narrow_the_named_list",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 138,
+      "how": "exact"
+     }
+    ],
+    "missing": [],
+    "filtered": [],
+    "skipped": [],
+    "mod_present": [
+     {
+      "fqn": "WebApi.Tests.Wire.TrainingWireTests.The_flag_lever_takes_a_never_enabled_store_from_an_opaque_404_to_a_walked_journey",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 24,
+      "ns_count": 24,
+      "how": "exact"
+     }
+    ],
+    "mod_missing": [],
+    "stale_names": [],
+    "trx_err": null,
+    "trx_total": 241,
+    "mode": "non-sql",
+    "sql_present": 0,
+    "nonsql_present": 162,
+    "trx_start": "2026-08-02T16:58:16.575854+02:00",
+    "commit_time": "2026-08-02T16:50:49+02:00",
+    "trx_predates_commit": false
+   }
+  ]
+ },
+ "L-PDF-NULLDEREF": {
+  "entries": [
+   {
+    "label": "fast tier",
+    "sha": "2497ce9d",
+    "repo": "OkamAPI",
+    "trx": "/Users/svendaneel/okam/wt-guestlink/artifacts/tests/2497ce9d-fast-tier.trx",
+    "is_merge": false,
+    "commit_err": null,
+    "claimed": 13,
+    "modified": 0,
+    "renamed_away": [
+     "RenderInvoice",
+     "RenderReceipt"
+    ],
+    "present": [
+     {
+      "fqn": "WebApi.Tests.Services.DocumentRendererFailureTests.A_bulk_invoice_run_leaves_out_the_store_it_could_not_render",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 7,
+      "ns_count": 16,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Wire.PdfRendererOutageWireTests.A_credit_note_is_already_in_the_ledger_when_the_render_fails",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 6,
+      "ns_count": 213,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.DocumentRendererFailureTests.A_non_success_answer_raises_instead_of_handing_back_null",
+      "kind": "Theory",
+      "traits": [],
+      "cls_count": 7,
+      "ns_count": 16,
+      "how": "theory"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.DocumentRendererFailureTests.A_payout_report_that_cannot_be_rendered_leaves_the_payout_unsent",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 7,
+      "ns_count": 16,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Wire.PdfRendererOutageWireTests.A_renderer_outage_is_a_handled_502_on_every_download_route",
+      "kind": "Theory",
+      "traits": [],
+      "cls_count": 6,
+      "ns_count": 213,
+      "how": "theory"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.DocumentRendererFailureTests.A_success_answer_is_handed_back_whole",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 7,
+      "ns_count": 16,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.DocumentRendererFailureTests.Invoice_mail_dereferences_the_render_it_was_handed",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 7,
+      "ns_count": 16,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Wire.PdfRendererOutageWireTests.Mailing_a_receipt_still_answers_false_rather_than_502_when_the_renderer_is_down",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 6,
+      "ns_count": 213,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Wire.PdfRendererOutageWireTests.Nothing_is_recorded_as_rendered_while_the_renderer_is_down",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 6,
+      "ns_count": 213,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.DocumentRendererFailureTests.The_failure_names_neither_the_functions_host_nor_its_key",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 7,
+      "ns_count": 16,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Wire.PdfRendererOutageWireTests.The_outage_is_logged_by_status_and_function_and_by_nothing_else",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 6,
+      "ns_count": 213,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Wire.PdfRendererOutageWireTests.The_same_route_serves_the_document_when_the_renderer_answers",
+      "kind": "Theory",
+      "traits": [],
+      "cls_count": 6,
+      "ns_count": 213,
+      "how": "theory"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.DocumentRendererFailureTests.The_same_run_mails_the_store_when_the_renderer_answers",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 7,
+      "ns_count": 16,
+      "how": "exact"
+     }
+    ],
+    "missing": [],
+    "filtered": [],
+    "skipped": [],
+    "mod_present": [],
+    "mod_missing": [],
+    "stale_names": [],
+    "trx_err": null,
+    "trx_total": 4411,
+    "mode": "non-sql",
+    "sql_present": 0,
+    "nonsql_present": 3715,
+    "trx_start": "2026-08-02T13:39:13.216185+02:00",
+    "commit_time": "2026-08-02T13:38:13+02:00",
+    "trx_predates_commit": false
+   }
+  ]
+ },
+ "L-FLAGS-EFFECTIVE-RESOLVERS": {
+  "entries": [
+   {
+    "label": "fast tier",
+    "sha": "e45ec4c1",
+    "repo": "OkamAPI",
+    "trx": "/Users/svendaneel/okam/OkamAPI-flagseff/lanes/L-FLAGS-EFFECTIVE-RESOLVERS/fast-tier.trx",
+    "is_merge": false,
+    "commit_err": null,
+    "claimed": 15,
+    "modified": 2,
+    "renamed_away": [],
+    "present": [
+     {
+      "fqn": "WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.A_row_flipped_on_under_an_undeployed_module_is_reported_dark",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 317,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.A_store_enabled_only_by_configuration_is_reported_effective_not_hidden",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 4,
+      "ns_count": 333,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.An_explicit_row_still_decides_in_both_directions",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 4,
+      "ns_count": 333,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.Clearing_a_row_reverts_to_the_configuration_rather_than_to_the_advertised_default",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 4,
+      "ns_count": 333,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_catalog_flag_is_either_claimed_by_a_registered_resolver_or_excused_with_a_reason",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 4,
+      "ns_count": 202,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.Every_events_flag_answers_for_the_undeployed_case_not_only_the_core_one",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 317,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_excused_module_still_has_an_unclaimed_catalog_flag",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 4,
+      "ns_count": 202,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_registered_resolver_is_asked_before_the_row_for_at_least_one_real_catalog_key",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 4,
+      "ns_count": 202,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Wire.FlagEffectiveResolverWireTests.No_two_registered_resolvers_claim_the_same_flag",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 4,
+      "ns_count": 202,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.On_a_deployed_module_the_row_still_decides_in_both_directions",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 317,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_dispatch_kill_switch_answers_for_the_undeployed_case_too",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 400,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Meals.MealsOperatorLeverReachTests.The_effective_value_reporter_reports_and_does_not_refuse",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 333,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.The_resolver_claims_every_key_the_module_advertises",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 317,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.The_resolver_claims_the_one_key_the_catalog_carries_and_no_money_path_key",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 4,
+      "ns_count": 333,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.The_write_response_does_not_promise_a_surface_the_deployment_has_not_turned_on",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 317,
+      "how": "exact"
+     }
+    ],
+    "missing": [],
+    "filtered": [],
+    "skipped": [],
+    "mod_present": [
+     {
+      "fqn": "WebApi.Tests.Meals.MealsOperatorLeverReachTests.Only_three_services_can_answer_from_the_per_store_row",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 333,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Meals.MealsOperatorLeverReachTests.The_meals_surface_is_mostly_out_of_the_operator_levers_reach",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 333,
+      "how": "exact"
+     }
+    ],
+    "mod_missing": [],
+    "stale_names": [],
+    "trx_err": null,
+    "trx_total": 4388,
+    "mode": "non-sql",
+    "sql_present": 0,
+    "nonsql_present": 3712,
+    "trx_start": "2026-08-01T21:39:41.075118+02:00",
+    "commit_time": "2026-08-01T21:46:09+02:00",
+    "trx_predates_commit": true
+   }
+  ]
+ },
+ "L-EV-REFUND-FAKE-ARG": {
+  "entries": [
+   {
+    "label": "events fast",
+    "sha": "db9b39a1",
+    "repo": "OkamAPI",
+    "trx": "/Users/svendaneel/okam/Web-modules/lanes/L-EV-REFUND-FAKE-ARG/commit-events-fast.trx",
+    "is_merge": false,
+    "commit_err": null,
+    "claimed": 5,
+    "modified": 3,
+    "renamed_away": [
+     "SeedProviderConfirmedAsync"
+    ],
+    "present": [
+     {
+      "fqn": "WebApi.Tests.Events.EventsRailArmingPinTests.A_rail_that_did_not_come_from_the_seeding_act_cannot_pass_for_the_domain_refusing",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 317,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Events.EventsRailArmingPinTests.No_events_act_accepts_a_rail_double_that_defaults_to_nothing",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 317,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Events.EventsRailArmingPinTests.No_events_test_seeds_provider_truth_and_then_builds_a_rail_of_its_own",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 317,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Events.EventsRailArmingPinTests.The_rail_the_seeding_act_returns_can_refund_what_the_receipt_says_was_collected",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 317,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Events.EventsRailArmingPinTests.The_seeding_act_hands_back_the_rail_it_armed",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 317,
+      "how": "exact"
+     }
+    ],
+    "missing": [],
+    "filtered": [
+     {
+      "fqn": "WebApi.Tests.Events.EventsSettlementLifecycleTests.Cancel_a_confirmed_event_with_a_paid_deposit_refunds_through_the_rail_and_cancels",
+      "kind": "Fact",
+      "traits": [
+       [
+        "Database",
+        "SqlServer"
+       ]
+      ],
+      "cls_count": 0,
+      "ns_count": 317,
+      "why": "trait Database=SqlServer excluded by non-sql run"
+     }
+    ],
+    "skipped": [],
+    "mod_present": [
+     {
+      "fqn": "WebApi.Tests.Events.EventsAttributionRefusalTests.A_refund_by_a_named_admin_still_moves_the_money",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 6,
+      "ns_count": 317,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Events.EventsMoneyPathActorTests.A_refund_names_the_admin_who_authorised_it_on_both_receipts",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 11,
+      "ns_count": 317,
+      "how": "exact"
+     }
+    ],
+    "mod_missing": [],
+    "stale_names": [],
+    "trx_err": null,
+    "trx_total": 460,
+    "mode": "non-sql",
+    "sql_present": 0,
+    "nonsql_present": 317,
+    "trx_start": "2026-08-02T10:21:19.754177+02:00",
+    "commit_time": "2026-08-02T10:19:41+02:00",
+    "trx_predates_commit": false
+   },
+   {
+    "label": "events sqlserver",
+    "sha": "db9b39a1",
+    "repo": "OkamAPI",
+    "trx": "/Users/svendaneel/okam/Web-modules/lanes/L-EV-REFUND-FAKE-ARG/commit-events-sqlserver.trx",
+    "is_merge": false,
+    "commit_err": null,
+    "claimed": 5,
+    "modified": 3,
+    "renamed_away": [
+     "SeedProviderConfirmedAsync"
+    ],
+    "present": [],
+    "missing": [],
+    "filtered": [
+     {
+      "fqn": "WebApi.Tests.Events.EventsRailArmingPinTests.A_rail_that_did_not_come_from_the_seeding_act_cannot_pass_for_the_domain_refusing",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 0,
+      "ns_count": 25,
+      "why": "non-SqlServer test excluded by sql-only run"
+     },
+     {
+      "fqn": "WebApi.Tests.Events.EventsRailArmingPinTests.No_events_act_accepts_a_rail_double_that_defaults_to_nothing",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 0,
+      "ns_count": 25,
+      "why": "non-SqlServer test excluded by sql-only run"
+     },
+     {
+      "fqn": "WebApi.Tests.Events.EventsRailArmingPinTests.No_events_test_seeds_provider_truth_and_then_builds_a_rail_of_its_own",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 0,
+      "ns_count": 25,
+      "why": "non-SqlServer test excluded by sql-only run"
+     },
+     {
+      "fqn": "WebApi.Tests.Events.EventsRailArmingPinTests.The_rail_the_seeding_act_returns_can_refund_what_the_receipt_says_was_collected",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 0,
+      "ns_count": 25,
+      "why": "non-SqlServer test excluded by sql-only run"
+     },
+     {
+      "fqn": "WebApi.Tests.Events.EventsRailArmingPinTests.The_seeding_act_hands_back_the_rail_it_armed",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 0,
+      "ns_count": 25,
+      "why": "non-SqlServer test excluded by sql-only run"
+     },
+     {
+      "fqn": "WebApi.Tests.Events.EventsAttributionRefusalTests.A_refund_by_a_named_admin_still_moves_the_money",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 0,
+      "ns_count": 25,
+      "why": "non-SqlServer test excluded by sql-only run"
+     },
+     {
+      "fqn": "WebApi.Tests.Events.EventsMoneyPathActorTests.A_refund_names_the_admin_who_authorised_it_on_both_receipts",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 0,
+      "ns_count": 25,
+      "why": "non-SqlServer test excluded by sql-only run"
+     }
+    ],
+    "skipped": [],
+    "mod_present": [
+     {
+      "fqn": "WebApi.Tests.Events.EventsSettlementLifecycleTests.Cancel_a_confirmed_event_with_a_paid_deposit_refunds_through_the_rail_and_cancels",
+      "kind": "Fact",
+      "traits": [
+       [
+        "Database",
+        "SqlServer"
+       ]
+      ],
+      "cls_count": 17,
+      "ns_count": 25,
+      "how": "exact"
+     }
+    ],
+    "mod_missing": [],
+    "stale_names": [],
+    "trx_err": null,
+    "trx_total": 25,
+    "mode": "sql-only",
+    "sql_present": 25,
+    "nonsql_present": 0,
+    "trx_start": "2026-08-02T10:21:47.709220+02:00",
+    "commit_time": "2026-08-02T10:19:41+02:00",
+    "trx_predates_commit": false
+   }
+  ]
+ },
+ "L-GR-CONFIRMED-EMAIL": {
+  "entries": [
+   {
+    "label": "fast tier",
+    "sha": "a7697121",
+    "repo": "OkamAPI",
+    "trx": "/Users/svendaneel/okam/wt-gr-confirmed/artifacts/tests/a7697121-fast-tier.trx",
+    "is_merge": false,
+    "commit_err": null,
+    "claimed": 1,
+    "modified": 2,
+    "renamed_away": [
+     "SeedStoreWithAdminAsync"
+    ],
+    "present": [
+     {
+      "fqn": "WebApi.Tests.Growth.GrowthTestSendBindingTests.An_address_the_account_holds_but_has_never_confirmed_is_not_a_provable_own_address",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 400,
+      "how": "exact"
+     }
+    ],
+    "missing": [],
+    "filtered": [],
+    "skipped": [],
+    "mod_present": [
+     {
+      "fqn": "WebApi.Tests.Growth.GrowthTestSendBindingTests.A_test_send_to_an_address_that_is_not_the_admins_own_is_refused_and_composes_nothing",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 400,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Growth.GrowthNewsletterLifecycleTests.Test_send_submits_the_current_version_through_the_provider_and_reports_no_address",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 11,
+      "ns_count": 400,
+      "how": "exact"
+     }
+    ],
+    "mod_missing": [],
+    "stale_names": [],
+    "trx_err": null,
+    "trx_total": 4376,
+    "mode": "non-sql",
+    "sql_present": 0,
+    "nonsql_present": 3698,
+    "trx_start": "2026-08-02T10:38:39.764571+02:00",
+    "commit_time": "2026-08-02T10:37:59+02:00",
+    "trx_predates_commit": false
+   }
+  ]
+ },
+ "L-GR-TESTSEND-RATELIMIT": {
+  "entries": [
+   {
+    "label": "lane fast tier",
+    "sha": "c96cd21e",
+    "repo": "OkamAPI",
+    "trx": "/Users/svendaneel/okam/wt-guestlink/artifacts/tests/lane-fast-tier.trx",
+    "is_merge": false,
+    "commit_err": null,
+    "claimed": 27,
+    "modified": 1,
+    "renamed_away": [],
+    "present": [
+     {
+      "fqn": "WebApi.Tests.Services.EmailConfirmationRateLimitTests.A_mailbox_takes_the_per_address_cap_and_no_more__another_mailbox_is_still_reachable",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 14,
+      "ns_count": 26,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.EmailConfirmationRateLimitTests.An_account_guessing_its_own_code_meets_the_attempt_cap",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 14,
+      "ns_count": 26,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Growth.GrowthTestSendRateLimitTests.An_administrator_past_the_test_send_cap_is_refused_while_a_colleague_is_still_served",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 7,
+      "ns_count": 407,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Growth.GrowthTestSendRateLimitTests.An_unidentifiable_caller_falls_to_the_per_ip_bucket_rather_than_through",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 7,
+      "ns_count": 407,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.EmailConfirmationRateLimitTests.Clearing_a_profile_address_never_charges_a_recipient_bucket",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 14,
+      "ns_count": 26,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.EmailConfirmationRateLimitTests.Differently_typed_forms_of_one_mailbox_share_its_cap",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 14,
+      "ns_count": 26,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.NumericConfirmationCodeTests.Every_code_is_six_digits_inside_the_declared_range",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 3,
+      "ns_count": 26,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.EmailConfirmationRateLimitTests.Guessing_from_many_sources_does_not_lift_one_accounts_attempt_cap",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 14,
+      "ns_count": 26,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.EmailConfirmationRateLimitTests.One_account_walking_many_mailboxes_meets_the_account_cap",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 14,
+      "ns_count": 26,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.EmailConfirmationRateLimitTests.One_source_driving_many_accounts_meets_the_ip_cap",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 14,
+      "ns_count": 26,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.EmailConfirmationRateLimitTests.One_source_farming_accounts_meets_the_guess_ip_cap",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 14,
+      "ns_count": 26,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.EmailConfirmationRateLimitTests.Requesting_a_code_and_guessing_at_one_do_not_starve_each_other",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 14,
+      "ns_count": 26,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Growth.GrowthTestSendRateLimitTests.Rotating_the_requested_address_buys_no_fresh_budget",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 7,
+      "ns_count": 407,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Growth.GrowthTestSendRateLimitTests.Rotating_the_source_address_does_not_lift_one_administrators_cap",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 7,
+      "ns_count": 407,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.EmailConfirmationRateLimitTests.The_attempt_budget_leaves_a_guessing_run_hopeless_within_one_codes_life",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 14,
+      "ns_count": 26,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.NumericConfirmationCodeTests.The_confirmation_code_is_not_minted_from_System_Random",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 3,
+      "ns_count": 26,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Wire.ArbitraryAddressMailRateLimitWireTests.The_confirmation_code_route_stops_mailing_one_address_past_its_cap",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 3,
+      "ns_count": 201,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Growth.GrowthTestSendRateLimitTests.The_filter_short_circuits_a_bombed_test_send_and_never_reaches_the_mail_path",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 7,
+      "ns_count": 407,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Wire.ArbitraryAddressMailRateLimitWireTests.The_guess_route_stops_an_account_past_its_attempt_cap_and_retires_the_code",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 3,
+      "ns_count": 201,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.EmailConfirmationRateLimitTests.The_guess_window_resets",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 14,
+      "ns_count": 26,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.EmailConfirmationRateLimitTests.The_recipient_bucket_is_charged_before_the_callers_own_budget_can_mask_it",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 14,
+      "ns_count": 26,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.NumericConfirmationCodeTests.The_space_is_the_whole_six_digit_range_including_its_last_value",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 3,
+      "ns_count": 26,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Growth.GrowthTestSendRateLimitTests.The_subscribe_and_test_send_budgets_are_separate",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 7,
+      "ns_count": 407,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Wire.ArbitraryAddressMailRateLimitWireTests.The_test_send_route_stops_one_administrator_past_the_cap_and_serves_the_next",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 3,
+      "ns_count": 201,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.EmailConfirmationRateLimitTests.The_victim_bucket_holds_across_every_account_and_every_source",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 14,
+      "ns_count": 26,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Growth.GrowthTestSendRateLimitTests.The_window_resets_and_the_administrator_can_test_send_again",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 7,
+      "ns_count": 407,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.EmailConfirmationRateLimitTests.The_window_resets_and_the_mailbox_is_reachable_again",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 14,
+      "ns_count": 26,
+      "how": "exact"
+     }
+    ],
+    "missing": [],
+    "filtered": [],
+    "skipped": [],
+    "mod_present": [
+     {
+      "fqn": "WebApi.Tests.Observability.OperationalNotificationPiiTests.An_offer_proposal_written_without_an_address_is_told_apart_from_one_written_with_one",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 8,
+      "ns_count": 54,
+      "how": "exact"
+     }
+    ],
+    "mod_missing": [],
+    "stale_names": [],
+    "trx_err": null,
+    "trx_total": 4403,
+    "mode": "non-sql",
+    "sql_present": 0,
+    "nonsql_present": 3725,
+    "trx_start": "2026-08-02T11:23:24.547237+02:00",
+    "commit_time": "2026-08-02T11:29:23+02:00",
+    "trx_predates_commit": true
+   }
+  ]
+ },
+ "L-GR-DEADLINE-STATUTE": {
+  "entries": [
+   {
+    "label": "growth-scoped",
+    "sha": "f7abfd8e",
+    "repo": "OkamAPI",
+    "trx": "/Users/svendaneel/okam/Web-modules/lanes/L-GR-DEADLINE-STATUTE/growth-scoped.trx",
+    "is_merge": false,
+    "commit_err": null,
+    "claimed": 3,
+    "modified": 1,
+    "renamed_away": [],
+    "present": [
+     {
+      "fqn": "WebApi.Tests.Growth.GrowthPrivacyDeadlineTests.A_deadline_that_lands_on_a_Norwegian_public_holiday_is_returned_unextended",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 8,
+      "ns_count": 403,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Growth.GrowthPrivacyDeadlineTests.A_deadline_that_lands_on_a_Saturday_is_returned_unextended",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 8,
+      "ns_count": 403,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Growth.GrowthPrivacyDeadlineTests.The_clamp_runs_on_the_UTC_day_number_and_reads_a_day_later_than_the_venue_local_one",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 8,
+      "ns_count": 403,
+      "how": "exact"
+     }
+    ],
+    "missing": [],
+    "filtered": [],
+    "skipped": [],
+    "mod_present": [
+     {
+      "fqn": "WebApi.Tests.Growth.GrowthPrivacyDeadlineTests.A_settled_request_still_reports_the_date_its_answer_was_owed",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 8,
+      "ns_count": 403,
+      "how": "exact"
+     }
+    ],
+    "mod_missing": [],
+    "stale_names": [],
+    "trx_err": null,
+    "trx_total": 437,
+    "mode": "non-sql",
+    "sql_present": 0,
+    "nonsql_present": 403,
+    "trx_start": "2026-08-02T10:41:27.277472+02:00",
+    "commit_time": "2026-08-02T10:42:47+02:00",
+    "trx_predates_commit": true
+   }
+  ]
+ },
+ "L-WF-EXPORT-DUPLICATE": {
+  "entries": [
+   {
+    "label": "fast tier",
+    "sha": "3a4442a7",
+    "repo": "OkamAPI",
+    "trx": "/Users/svendaneel/okam/wt-wfexpdup/lanes/L-WF-EXPORT-DUPLICATE/fast-tier.trx",
+    "is_merge": false,
+    "commit_err": null,
+    "claimed": 3,
+    "modified": 0,
+    "renamed_away": [],
+    "present": [],
+    "missing": [],
+    "filtered": [
+     {
+      "fqn": "WebApi.Tests.Workforce.TimesheetExportDuplicateRaceSqlServerTests.The_chain_installs_the_one_succeeded_export_index_and_it_is_filtered",
+      "kind": "Fact",
+      "traits": [
+       [
+        "Database",
+        "SqlServer"
+       ]
+      ],
+      "cls_count": 0,
+      "ns_count": 583,
+      "why": "trait Database=SqlServer excluded by non-sql run"
+     },
+     {
+      "fqn": "WebApi.Tests.Workforce.TimesheetExportDuplicateRaceSqlServerTests.Two_concurrent_full_exports_leave_exactly_one_succeeded_batch",
+      "kind": "Fact",
+      "traits": [
+       [
+        "Database",
+        "SqlServer"
+       ]
+      ],
+      "cls_count": 0,
+      "ns_count": 583,
+      "why": "trait Database=SqlServer excluded by non-sql run"
+     },
+     {
+      "fqn": "WebApi.Tests.Workforce.TimesheetExportDuplicateRaceSqlServerTests.With_the_index_dropped_the_same_race_writes_the_duplicate",
+      "kind": "Fact",
+      "traits": [
+       [
+        "Database",
+        "SqlServer"
+       ]
+      ],
+      "cls_count": 0,
+      "ns_count": 583,
+      "why": "trait Database=SqlServer excluded by non-sql run"
+     }
+    ],
+    "skipped": [],
+    "mod_present": [],
+    "mod_missing": [],
+    "stale_names": [],
+    "trx_err": null,
+    "trx_total": 4369,
+    "mode": "non-sql",
+    "sql_present": 0,
+    "nonsql_present": 3698,
+    "trx_start": "2026-08-02T12:55:30.571266+02:00",
+    "commit_time": "2026-08-02T13:15:59+02:00",
+    "trx_predates_commit": true
+   },
+   {
+    "label": "sql-tier-workforce",
+    "sha": "3a4442a7",
+    "repo": "OkamAPI",
+    "trx": "/Users/svendaneel/okam/wt-wfexpdup/WebApi.Tests/TestResults/sql-tier-workforce.trx",
+    "is_merge": false,
+    "commit_err": null,
+    "claimed": 3,
+    "modified": 0,
+    "renamed_away": [],
+    "present": [
+     {
+      "fqn": "WebApi.Tests.Workforce.TimesheetExportDuplicateRaceSqlServerTests.The_chain_installs_the_one_succeeded_export_index_and_it_is_filtered",
+      "kind": "Fact",
+      "traits": [
+       [
+        "Database",
+        "SqlServer"
+       ]
+      ],
+      "cls_count": 3,
+      "ns_count": 132,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Workforce.TimesheetExportDuplicateRaceSqlServerTests.Two_concurrent_full_exports_leave_exactly_one_succeeded_batch",
+      "kind": "Fact",
+      "traits": [
+       [
+        "Database",
+        "SqlServer"
+       ]
+      ],
+      "cls_count": 3,
+      "ns_count": 132,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Workforce.TimesheetExportDuplicateRaceSqlServerTests.With_the_index_dropped_the_same_race_writes_the_duplicate",
+      "kind": "Fact",
+      "traits": [
+       [
+        "Database",
+        "SqlServer"
+       ]
+      ],
+      "cls_count": 3,
+      "ns_count": 132,
+      "how": "exact"
+     }
+    ],
+    "missing": [],
+    "filtered": [],
+    "skipped": [],
+    "mod_present": [],
+    "mod_missing": [],
+    "stale_names": [],
+    "trx_err": null,
+    "trx_total": 136,
+    "mode": "sql-only",
+    "sql_present": 136,
+    "nonsql_present": 0,
+    "trx_start": "2026-08-02T13:02:27.503008+02:00",
+    "commit_time": "2026-08-02T13:15:59+02:00",
+    "trx_predates_commit": true
+   },
+   {
+    "label": "export-duplicate-race",
+    "sha": "3a4442a7",
+    "repo": "OkamAPI",
+    "trx": "/Users/svendaneel/okam/wt-wfexpdup/WebApi.Tests/TestResults/export-duplicate-race.trx",
+    "is_merge": false,
+    "commit_err": null,
+    "claimed": 3,
+    "modified": 0,
+    "renamed_away": [],
+    "present": [
+     {
+      "fqn": "WebApi.Tests.Workforce.TimesheetExportDuplicateRaceSqlServerTests.The_chain_installs_the_one_succeeded_export_index_and_it_is_filtered",
+      "kind": "Fact",
+      "traits": [
+       [
+        "Database",
+        "SqlServer"
+       ]
+      ],
+      "cls_count": 3,
+      "ns_count": 3,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Workforce.TimesheetExportDuplicateRaceSqlServerTests.Two_concurrent_full_exports_leave_exactly_one_succeeded_batch",
+      "kind": "Fact",
+      "traits": [
+       [
+        "Database",
+        "SqlServer"
+       ]
+      ],
+      "cls_count": 3,
+      "ns_count": 3,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Workforce.TimesheetExportDuplicateRaceSqlServerTests.With_the_index_dropped_the_same_race_writes_the_duplicate",
+      "kind": "Fact",
+      "traits": [
+       [
+        "Database",
+        "SqlServer"
+       ]
+      ],
+      "cls_count": 3,
+      "ns_count": 3,
+      "how": "exact"
+     }
+    ],
+    "missing": [],
+    "filtered": [],
+    "skipped": [],
+    "mod_present": [],
+    "mod_missing": [],
+    "stale_names": [],
+    "trx_err": null,
+    "trx_total": 3,
+    "mode": "sql-only",
+    "sql_present": 3,
+    "nonsql_present": 0,
+    "trx_start": "2026-08-02T12:45:14.667054+02:00",
+    "commit_time": "2026-08-02T13:15:59+02:00",
+    "trx_predates_commit": true
+   }
+  ]
+ },
+ "L-MEALS-SUPERSEDE-SQL": {
+  "entries": [
+   {
+    "label": "supersede-sql-clean",
+    "sha": "7dafec47",
+    "repo": "OkamAPI",
+    "trx": "/Users/svendaneel/okam/wt-mealssupsql/WebApi.Tests/TestResults/supersede-sql-clean.trx",
+    "is_merge": false,
+    "commit_err": null,
+    "claimed": 3,
+    "modified": 0,
+    "renamed_away": [],
+    "present": [
+     {
+      "fqn": "WebApi.Tests.Meals.MealsRequoteSupersedeSqlServerTests.A_requote_frees_exactly_the_superseded_cap_on_real_sql_server",
+      "kind": "Fact",
+      "traits": [
+       [
+        "Database",
+        "SqlServer"
+       ]
+      ],
+      "cls_count": 3,
+      "ns_count": 18,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Meals.MealsRequoteSupersedeSqlServerTests.A_requote_that_only_a_zeroed_row_could_fund_is_refused_and_its_release_rolls_back",
+      "kind": "Fact",
+      "traits": [
+       [
+        "Database",
+        "SqlServer"
+       ]
+      ],
+      "cls_count": 3,
+      "ns_count": 18,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Meals.MealsRequoteSupersedeSqlServerTests.A_transient_commit_failure_retries_and_the_supersede_releases_on_the_re_read",
+      "kind": "Fact",
+      "traits": [
+       [
+        "Database",
+        "SqlServer"
+       ]
+      ],
+      "cls_count": 3,
+      "ns_count": 18,
+      "how": "exact"
+     }
+    ],
+    "missing": [],
+    "filtered": [],
+    "skipped": [],
+    "mod_present": [],
+    "mod_missing": [],
+    "stale_names": [],
+    "trx_err": null,
+    "trx_total": 18,
+    "mode": "mixed",
+    "sql_present": 9,
+    "nonsql_present": 9,
+    "trx_start": "2026-08-02T11:17:14.496280+02:00",
+    "commit_time": "2026-08-02T11:20:56+02:00",
+    "trx_predates_commit": true
+   },
+   {
+    "label": "trait-guard",
+    "sha": "7dafec47",
+    "repo": "OkamAPI",
+    "trx": "/Users/svendaneel/okam/wt-mealssupsql/WebApi.Tests/TestResults/trait-guard.trx",
+    "is_merge": false,
+    "commit_err": null,
+    "claimed": 3,
+    "modified": 0,
+    "renamed_away": [],
+    "present": [],
+    "missing": [],
+    "filtered": [
+     {
+      "fqn": "WebApi.Tests.Meals.MealsRequoteSupersedeSqlServerTests.A_requote_frees_exactly_the_superseded_cap_on_real_sql_server",
+      "kind": "Fact",
+      "traits": [
+       [
+        "Database",
+        "SqlServer"
+       ]
+      ],
+      "cls_count": 0,
+      "ns_count": 0,
+      "why": "trait Database=SqlServer excluded by non-sql run"
+     },
+     {
+      "fqn": "WebApi.Tests.Meals.MealsRequoteSupersedeSqlServerTests.A_requote_that_only_a_zeroed_row_could_fund_is_refused_and_its_release_rolls_back",
+      "kind": "Fact",
+      "traits": [
+       [
+        "Database",
+        "SqlServer"
+       ]
+      ],
+      "cls_count": 0,
+      "ns_count": 0,
+      "why": "trait Database=SqlServer excluded by non-sql run"
+     },
+     {
+      "fqn": "WebApi.Tests.Meals.MealsRequoteSupersedeSqlServerTests.A_transient_commit_failure_retries_and_the_supersede_releases_on_the_re_read",
+      "kind": "Fact",
+      "traits": [
+       [
+        "Database",
+        "SqlServer"
+       ]
+      ],
+      "cls_count": 0,
+      "ns_count": 0,
+      "why": "trait Database=SqlServer excluded by non-sql run"
+     }
+    ],
+    "skipped": [],
+    "mod_present": [],
+    "mod_missing": [],
+    "stale_names": [],
+    "trx_err": null,
+    "trx_total": 3,
+    "mode": "non-sql",
+    "sql_present": 0,
+    "nonsql_present": 3,
+    "trx_start": "2026-08-02T11:19:35.015918+02:00",
+    "commit_time": "2026-08-02T11:20:56+02:00",
+    "trx_predates_commit": true
+   }
+  ]
+ },
+ "L-MEALS-FOURWAY-TIER": {
+  "entries": [
+   {
+    "label": "fourway fast tier",
+    "sha": "f72c7a81",
+    "repo": "OkamAPI",
+    "trx": "/Users/svendaneel/okam/wt-meals-fourway-tier/lanes/L-MEALS-FOURWAY-TIER/f72c7a81-fourway-fast-tier.trx",
+    "is_merge": true,
+    "commit_err": null,
+    "claimed": 9,
+    "modified": 0,
+    "renamed_away": [],
+    "present": [
+     {
+      "fqn": "WebApi.Tests.Meals.MealsRequoteSupersedeTests.A_bound_reservation_is_never_released_by_a_requote",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 9,
+      "ns_count": 337,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Meals.MealsRequoteSupersedeTests.A_coworkers_reservation_is_never_released_by_someone_elses_requote",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 9,
+      "ns_count": 337,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Meals.MealsRequoteSupersedeTests.A_refused_requote_rolls_its_release_back_and_the_earlier_hold_survives",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 9,
+      "ns_count": 337,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Meals.MealsRequoteSupersedeTests.A_requote_naming_the_reservation_it_replaces_holds_the_allowance_once",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 9,
+      "ns_count": 337,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Meals.MealsRequoteSupersedeTests.An_expired_predecessor_is_left_for_the_sweep_to_release",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 9,
+      "ns_count": 337,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Meals.MealsRequoteSupersedeTests.An_unknown_supersede_token_does_not_refuse_the_quote",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 9,
+      "ns_count": 337,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Meals.MealsRequoteSupersedeTests.Quotes_that_name_no_predecessor_each_keep_holding_their_own_cap",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 9,
+      "ns_count": 337,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Meals.MealsRequoteSupersedeTests.Replaying_a_requote_key_reserves_and_releases_nothing_further",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 9,
+      "ns_count": 337,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Meals.MealsRequoteSupersedeTests.Two_requotes_naming_one_token_free_its_cap_exactly_once",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 9,
+      "ns_count": 337,
+      "how": "exact"
+     }
+    ],
+    "missing": [],
+    "filtered": [],
+    "skipped": [],
+    "mod_present": [],
+    "mod_missing": [],
+    "stale_names": [],
+    "trx_err": null,
+    "trx_total": 4378,
+    "mode": "non-sql",
+    "sql_present": 0,
+    "nonsql_present": 3702,
+    "trx_start": "2026-08-02T10:47:42.244089+02:00",
+    "commit_time": "2026-08-02T10:46:27+02:00",
+    "trx_predates_commit": false
+   }
+  ]
+ },
+ "L-GR-CONFIRMED-PIN-FIX": {
+  "entries": [
+   {
+    "label": "fast tier",
+    "sha": "3cf288fb",
+    "repo": "OkamAPI",
+    "trx": "/Users/svendaneel/okam/wt-gr-confirmed/artifacts/tests/3cf288fb-fast-tier.trx",
+    "is_merge": false,
+    "commit_err": null,
+    "claimed": 0,
+    "modified": 2,
+    "renamed_away": [],
+    "present": [],
+    "missing": [],
+    "filtered": [],
+    "skipped": [],
+    "mod_present": [
+     {
+      "fqn": "WebApi.Tests.Growth.GrowthTestSendBindingTests.A_test_send_that_cannot_name_its_actor_is_refused_before_anything_is_composed",
+      "kind": "Theory",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 400,
+      "how": "theory"
+     },
+     {
+      "fqn": "WebApi.Tests.Growth.GrowthTestSendBindingTests.An_actor_with_no_account_address_on_file_cannot_test_send_at_all",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 400,
+      "how": "exact"
+     }
+    ],
+    "mod_missing": [],
+    "stale_names": [],
+    "trx_err": null,
+    "trx_total": 4376,
+    "mode": "non-sql",
+    "sql_present": 0,
+    "nonsql_present": 3698,
+    "trx_start": "2026-08-02T11:40:57.217458+02:00",
+    "commit_time": "2026-08-02T11:40:14+02:00",
+    "trx_predates_commit": false
+   }
+  ]
+ },
+ "L-GR-CONFIRM-STALE": {
+  "entries": [
+   {
+    "label": "fast tier",
+    "sha": "771c0fc0",
+    "repo": "OkamAPI",
+    "trx": "/Users/svendaneel/okam/wt-guestlink/artifacts/tests/771c0fc0-fast-tier.trx",
+    "is_merge": false,
+    "commit_err": null,
+    "claimed": 4,
+    "modified": 0,
+    "renamed_away": [],
+    "present": [
+     {
+      "fqn": "WebApi.Tests.Growth.GrowthTestSendReachabilityTests.A_suppression_a_fresh_opt_in_could_lift_does_not_refuse_an_administrators_own_test_send",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 4,
+      "ns_count": 404,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Growth.GrowthTestSendReachabilityTests.A_suppression_on_a_shredded_earlier_version_of_the_address_still_refuses",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 4,
+      "ns_count": 404,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Growth.GrowthTestSendReachabilityTests.An_address_the_channel_has_since_recorded_as_undeliverable_cannot_authorise_a_test_send",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 4,
+      "ns_count": 404,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Growth.GrowthTestSendReachabilityTests.Another_venues_store_scoped_suppression_does_not_refuse_a_test_send_here",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 4,
+      "ns_count": 404,
+      "how": "exact"
+     }
+    ],
+    "missing": [],
+    "filtered": [],
+    "skipped": [],
+    "mod_present": [],
+    "mod_missing": [],
+    "stale_names": [],
+    "trx_err": null,
+    "trx_total": 4380,
+    "mode": "non-sql",
+    "sql_present": 0,
+    "nonsql_present": 3702,
+    "trx_start": "2026-08-02T12:18:37.721449+02:00",
+    "commit_time": "2026-08-02T12:18:03+02:00",
+    "trx_predates_commit": false
+   }
+  ]
+ },
+ "L-CONFIRM-SERVER-HALVES": {
+  "entries": [
+   {
+    "label": "lane fast tier",
+    "sha": "8704ff63",
+    "repo": "OkamAPI",
+    "trx": "/Users/svendaneel/okam/wt-guestlink/artifacts/tests/lane-confirm-halves-fast-tier.trx",
+    "is_merge": false,
+    "commit_err": null,
+    "claimed": 7,
+    "modified": 1,
+    "renamed_away": [
+     "AuthenticateAsync",
+     "ConnectAsync",
+     "DisconnectAsync",
+     "Dispose",
+     "SendAsync"
+    ],
+    "present": [
+     {
+      "fqn": "WebApi.Tests.Services.EmailConfirmationSendOutcomeTests.A_malformed_address_is_refused_before_the_account_is_written_or_any_mail_leaves",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 31,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Wire.EmailConfirmationFailureWireTests.A_malformed_address_is_refused_rather_than_thrown_out_of_the_action",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 2,
+      "ns_count": 203,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.EmailConfirmationSendOutcomeTests.A_send_the_mail_server_accepts_is_reported_as_sent_and_carries_the_stored_code",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 31,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Wire.EmailConfirmationFailureWireTests.A_send_the_mail_server_refuses_answers_false_rather_than_true",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 2,
+      "ns_count": 203,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.EmailConfirmationSendOutcomeTests.A_send_the_mail_server_refuses_is_reported_to_the_caller",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 31,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.EmailConfirmationSendOutcomeTests.An_account_write_identity_refuses_is_not_reported_as_a_code_that_was_sent",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 31,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.EmailConfirmationSendOutcomeTests.Clearing_an_address_reports_whether_the_clear_was_actually_written",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 5,
+      "ns_count": 31,
+      "how": "exact"
+     }
+    ],
+    "missing": [],
+    "filtered": [],
+    "skipped": [],
+    "mod_present": [
+     {
+      "fqn": "WebApi.Tests.Services.EmailServiceRecipientRedactionTests.A_message_that_carries_no_message_id_is_given_one_so_a_send_is_never_unidentifiable",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 8,
+      "ns_count": 31,
+      "how": "exact"
+     }
+    ],
+    "mod_missing": [],
+    "stale_names": [],
+    "trx_err": null,
+    "trx_total": 4410,
+    "mode": "non-sql",
+    "sql_present": 0,
+    "nonsql_present": 3732,
+    "trx_start": "2026-08-02T12:52:03.917675+02:00",
+    "commit_time": "2026-08-02T13:00:26+02:00",
+    "trx_predates_commit": true
+   }
+  ]
+ },
+ "L-COMPOSITION-ROOT-CHECK": {
+  "entries": [
+   {
+    "label": "lane fast tier",
+    "sha": "bfe57c3c",
+    "repo": "OkamAPI",
+    "trx": "/Users/svendaneel/okam/wt-guestlink/artifacts/tests/lane-composition-root-fast-tier.trx",
+    "is_merge": false,
+    "commit_err": null,
+    "claimed": 8,
+    "modified": 0,
+    "renamed_away": [],
+    "present": [
+     {
+      "fqn": "WebApi.Tests.Wire.CompositionRootRegistrationOrderTests.An_empty_mcp_section_outside_development_throws_before_any_limiter_is_registered",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 1,
+      "ns_count": 211,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Wire.CompositionRootLimiterWireTests.An_ordinary_non_mcp_route_answers_non_500",
+      "kind": "Theory",
+      "traits": [],
+      "cls_count": 7,
+      "ns_count": 211,
+      "how": "theory"
+     },
+     {
+      "fqn": "WebApi.Tests.Wire.CompositionRootLimiterWireTests.An_ordinary_route_still_refuses_past_its_cap_and_serves_a_fresh_key",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 7,
+      "ns_count": 211,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Wire.CompositionRootLimiterWireTests.Every_reachable_limiter_still_resolves_after_the_failure",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 7,
+      "ns_count": 211,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Wire.CompositionRootLimiterWireTests.The_broken_configuration_really_failed_before_the_registrations",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 7,
+      "ns_count": 211,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Wire.CompositionRootLimiterWireTests.The_globally_registered_filter_is_constructible_after_the_failure",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 7,
+      "ns_count": 211,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Wire.CompositionRootLimiterWireTests.The_mcp_surface_is_dark_and_answers_so",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 7,
+      "ns_count": 211,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Wire.CompositionRootLimiterWireTests.The_reservation_limiter_still_resolves_after_the_failure",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 7,
+      "ns_count": 211,
+      "how": "exact"
+     }
+    ],
+    "missing": [],
+    "filtered": [],
+    "skipped": [],
+    "mod_present": [],
+    "mod_missing": [],
+    "stale_names": [],
+    "trx_err": null,
+    "trx_total": 4419,
+    "mode": "non-sql",
+    "sql_present": 0,
+    "nonsql_present": 3740,
+    "trx_start": "2026-08-02T14:11:11.195310+02:00",
+    "commit_time": "2026-08-02T14:17:23+02:00",
+    "trx_predates_commit": true
+   }
+  ]
+ },
+ "L-CRYPTO-PIN-BYFORM": {
+  "entries": [
+   {
+    "label": "lane fast tier",
+    "sha": "35630600",
+    "repo": "OkamAPI",
+    "trx": "/Users/svendaneel/okam/wt-guestlink/artifacts/tests/lane-crypto-pin-byform-fast-tier.trx",
+    "is_merge": false,
+    "commit_err": null,
+    "claimed": 4,
+    "modified": 3,
+    "renamed_away": [
+     "The_confirmation_code_is_not_minted_from_System_Random"
+    ],
+    "present": [
+     {
+      "fqn": "WebApi.Tests.Services.ConfirmationCodeEntropySourceTests.Every_writer_of_the_confirmation_code_mints_it_through_the_named_generator",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 4,
+      "ns_count": 39,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.ConfirmationCodeEntropySourceTests.No_code_that_writes_the_confirmation_code_can_reach_System_Random",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 4,
+      "ns_count": 39,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.ConfirmationCodeEntropySourceTests.The_excusal_catalog_cannot_be_widened_into_a_source_of_randomness",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 4,
+      "ns_count": 39,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.ConfirmationCodeEntropySourceTests.The_generator_draws_from_a_cryptographic_source_and_from_nothing_else",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 4,
+      "ns_count": 39,
+      "how": "exact"
+     }
+    ],
+    "missing": [],
+    "filtered": [],
+    "skipped": [],
+    "mod_present": [
+     {
+      "fqn": "WebApi.Tests.Services.NumericConfirmationCodeTests.Every_code_is_six_digits_inside_the_declared_range",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 2,
+      "ns_count": 39,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Growth.GrowthProviderSeamScanTests.No_type_outside_growth_services_touches_the_mail_provider_boundary_in_any_member_or_method_body",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 1,
+      "ns_count": 407,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.NumericConfirmationCodeTests.The_space_is_the_whole_six_digit_range_including_its_last_value",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 2,
+      "ns_count": 39,
+      "how": "exact"
+     }
+    ],
+    "mod_missing": [],
+    "stale_names": [],
+    "trx_err": null,
+    "trx_total": 4418,
+    "mode": "non-sql",
+    "sql_present": 0,
+    "nonsql_present": 3740,
+    "trx_start": "2026-08-02T16:39:22.170107+02:00",
+    "commit_time": "2026-08-02T16:38:49+02:00",
+    "trx_predates_commit": false
+   }
+  ]
+ },
+ "L-INVOICE-RETRY-RETIREMENT": {
+  "entries": [
+   {
+    "label": "fast tier",
+    "sha": "f18ffeda",
+    "repo": "OkamAPI",
+    "trx": "/Users/svendaneel/okam/wt-guestlink/artifacts/tests/f18ffeda-fast-tier.trx",
+    "is_merge": false,
+    "commit_err": null,
+    "claimed": 0,
+    "modified": 4,
+    "renamed_away": [],
+    "present": [],
+    "missing": [],
+    "filtered": [],
+    "skipped": [],
+    "mod_present": [
+     {
+      "fqn": "WebApi.Tests.Services.DocumentRendererFailureTests.A_bulk_invoice_run_leaves_out_the_store_it_could_not_render",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 7,
+      "ns_count": 16,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.DocumentRendererFailureTests.A_payout_report_that_cannot_be_rendered_leaves_the_payout_unsent",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 7,
+      "ns_count": 16,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.DocumentRendererFailureTests.Invoice_mail_dereferences_the_render_it_was_handed",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 7,
+      "ns_count": 16,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Services.DocumentRendererFailureTests.The_same_run_mails_the_store_when_the_renderer_answers",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 7,
+      "ns_count": 16,
+      "how": "exact"
+     }
+    ],
+    "mod_missing": [],
+    "stale_names": [],
+    "trx_err": null,
+    "trx_total": 4411,
+    "mode": "non-sql",
+    "sql_present": 0,
+    "nonsql_present": 3715,
+    "trx_start": "2026-08-02T17:04:48.380386+02:00",
+    "commit_time": "2026-08-02T17:04:02+02:00",
+    "trx_predates_commit": false
+   }
+  ]
+ },
+ "L-EV-OUTBOX-GUID-SUBSTRING": {
+  "entries": [
+   {
+    "label": "after lane",
+    "sha": "79f9dd7d",
+    "repo": "OkamAPI",
+    "trx": "/Users/svendaneel/okam/wt-evoutboxguid/.lane/after-lane.trx",
+    "is_merge": false,
+    "commit_err": null,
+    "claimed": 3,
+    "modified": 2,
+    "renamed_away": [],
+    "present": [
+     {
+      "fqn": "WebApi.Tests.Events.EventsOutboxDeliveryTests.A_link_token_that_spells_an_amount_is_not_read_as_a_leaked_amount",
+      "kind": "Theory",
+      "traits": [],
+      "cls_count": 18,
+      "ns_count": 315,
+      "how": "theory"
+     },
+     {
+      "fqn": "WebApi.Tests.Events.EventsOutboxDeliveryTests.A_second_identifier_in_the_body_is_itself_a_failure",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 18,
+      "ns_count": 315,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Events.EventsOutboxDeliveryTests.The_guest_data_check_still_fails_a_leak_that_is_outside_the_token",
+      "kind": "Theory",
+      "traits": [],
+      "cls_count": 18,
+      "ns_count": 315,
+      "how": "theory"
+     }
+    ],
+    "missing": [],
+    "filtered": [],
+    "skipped": [],
+    "mod_present": [
+     {
+      "fqn": "WebApi.Tests.Events.EventsOutboxDeliveryTests.A_deposit_link_points_at_the_deposit_page_not_the_proposal_page",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 18,
+      "ns_count": 315,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Events.EventsOutboxDeliveryTests.The_message_carries_the_link_and_no_other_guest_data",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 18,
+      "ns_count": 315,
+      "how": "exact"
+     }
+    ],
+    "mod_missing": [],
+    "stale_names": [],
+    "trx_err": null,
+    "trx_total": 4395,
+    "mode": "non-sql",
+    "sql_present": 0,
+    "nonsql_present": 3703,
+    "trx_start": "2026-08-03T17:22:59.038325+02:00",
+    "commit_time": "2026-08-03T17:35:14+02:00",
+    "trx_predates_commit": true
+   }
+  ]
+ },
+ "L-WF-WITHHELD-BOUND": {
+  "entries": [
+   {
+    "label": "final-workforce",
+    "sha": "74405b34",
+    "repo": "OkamAPI",
+    "trx": "/Users/svendaneel/okam/wt-wfwithheld/lanes/L-WF-WITHHELD-BOUND/trx/final-workforce.trx",
+    "is_merge": false,
+    "commit_err": null,
+    "claimed": 2,
+    "modified": 0,
+    "renamed_away": [],
+    "present": [
+     {
+      "fqn": "WebApi.Tests.Workforce.WorkforceNotificationBacklogBoundTests.A_withheld_command_whose_week_is_still_ahead_is_kept_and_still_re_polled",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 2,
+      "ns_count": 593,
+      "how": "exact"
+     },
+     {
+      "fqn": "WebApi.Tests.Workforce.WorkforceNotificationBacklogBoundTests.Superseding_cancels_the_week_it_replaced_and_a_withheld_week_that_has_ended_expires",
+      "kind": "Fact",
+      "traits": [],
+      "cls_count": 2,
+      "ns_count": 593,
+      "how": "exact"
+     }
+    ],
+    "missing": [],
+    "filtered": [],
+    "skipped": [],
+    "mod_present": [],
+    "mod_missing": [],
+    "stale_names": [],
+    "trx_err": null,
+    "trx_total": 655,
+    "mode": "non-sql",
+    "sql_present": 0,
+    "nonsql_present": 593,
+    "trx_start": "2026-08-04T10:58:46.413859+02:00",
+    "commit_time": "2026-08-04T10:59:59+02:00",
+    "trx_predates_commit": true
+   }
+  ]
+ }
+}

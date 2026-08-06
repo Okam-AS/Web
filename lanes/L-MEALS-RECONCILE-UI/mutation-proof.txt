@@ -1,0 +1,23 @@
+tree   : /Users/svendaneel/okam/web-mealsrecon
+branch : lane/fe-meals-reconcile-ui
+BASE      : GREEN  Tests:       77 passed, 77 total
+MUTANT    : mutant RED   | restore GREEN | M1 namedBlockers stops scoping to the billed company
+            mutant Tests:       5 failed, 72 passed, 77 total
+MUTANT    : mutant RED   | restore GREEN | M2 namedBlockers names resolved rows too
+            mutant Tests:       4 failed, 73 passed, 77 total
+MUTANT    : mutant RED   | restore GREEN | M3 namedIsComplete always claims completeness
+            mutant Tests:       1 failed, 76 passed, 77 total
+MUTANT    : mutant RED   | restore GREEN | M4 the resolve control is unbound
+            mutant Tests:       7 failed, 70 passed, 77 total
+MUTANT    : mutant RED   | restore GREEN | M5 the page stops listening for the queue resolve event
+            mutant Tests:       3 failed, 74 passed, 77 total
+MUTANT    : mutant RED   | restore GREEN | M6 the venue page stops reading the queue
+            mutant Tests:       16 failed, 61 passed, 77 total
+MUTANT    : mutant RED   | restore GREEN | M7 a blocked finalize stops re-reading the queue it was refused over
+            mutant Tests:       3 failed, 74 passed, 77 total
+MUTANT    : mutant RED   | restore GREEN | M8 the blocked banner counts instead of naming (the defect this lane exists for)
+            mutant Tests:       3 failed, 74 passed, 77 total
+MUTANT    : mutant RED   | restore GREEN | M9 the sidebar drops the venue surface entirely
+            mutant Tests:       3 failed, 74 passed, 77 total
+
+ALL 9 MUTANTS KILLED; every restore green.

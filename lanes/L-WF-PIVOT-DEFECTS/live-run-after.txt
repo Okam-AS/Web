@@ -1,0 +1,34 @@
+[WebServer] [dev-server] borrowed core from /Users/svendaneel/okam/Web-modules/core
+[WebServer] 
+[WebServer]  WARN  You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  Module @nuxt/image is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version >=3.1.0 is required but currently using 2.17.1
+[WebServer] 
+[WebServer] ℹ Parsed 0 files in 0.0 seconds
+[WebServer] ℹ [HPM] Proxy created: /  -> http://127.0.0.1:5080
+[WebServer] ℹ [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+[WebServer] ℹ Listening on: http://172.20.10.4:3904/
+[WebServer] ℹ Preparing project for development
+[WebServer] ℹ Initial build may take a while
+[WebServer] ℹ Discovered Components: .nuxt/components/readme.md
+[WebServer] ✔ Builder initialized
+[WebServer] ✔ Nuxt files generated
+[WebServer] ℹ Compiling Server
+[WebServer] ℹ Compiling Client
+[WebServer] ✔ Server: Compiled successfully in 23.12s
+[WebServer] ✔ Client: Compiled successfully in 25.93s
+
+Running 1 test using 1 worker
+
+[WebServer] ℹ Waiting for file changes
+[WebServer] ℹ Memory usage: 1.29 GB (RSS: 2.4 GB)
+[WebServer] ℹ Listening on: http://172.20.10.4:3904/
+  ✓  1 [chromium] › test/e2e/journeys/workforce-schedule-publish.spec.js:37:1 › A manager creates a draft week, staffs a shift, validates it and publishes it @live (5.5s)
+[teardown] returned core/ to an empty submodule mount
+
+  1 passed (34.4s)

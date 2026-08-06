@@ -1,0 +1,643 @@
+PASS test/journey-artifact-store.test.js (5.021 s)
+  the canonical slot
+    ✓ is not taken from a live pass by a fixture re-run of the same journey (4 ms)
+    ✓ is not taken from a live pass by a live run against a DIFFERENT build on the same port (2 ms)
+    ✓ IS taken by a live pass standing over a fixture pass, because live outranks fixture (2 ms)
+    ✓ IS taken by a live run that names its build from one that could not (1 ms)
+    ✓ is handed back by its own backend when that backend starts failing (2 ms)
+    ✓ is not taken by a WEAKER run even when that run is the most recent (1 ms)
+    ✓ is re-elected freely once the file is deleted — the documented way to hand it over (1 ms)
+  the record a run replaces with a worse one of its own backend
+    ✓ is kept whole, and the run that replaced it says where (2 ms)
+    ✓ is not itself lost when the SAME backend then fails again, or is killed mid-run (2 ms)
+    ✓ is NOT written when the replacement is not weaker — that is an ordinary re-run (2 ms)
+    ✓ is NOT written for a loser, which was never overwritten in the first place (1 ms)
+    ✓ names the kept file in the ledger too, so the append-only history points at it (2 ms)
+  a run that never finishes
+    ✓ leaves its own backend visibly unfinished rather than its predecessor passing (1 ms)
+    ✓ cannot take the canonical slot from another backend merely by starting (1 ms)
+    ✓ is replaced by its own final record when it does finish (1 ms)
+  the ledger
+    ✓ keeps every run, including the ones that lost the slot and the one that never finished (1 ms)
+  backend identity
+    ✓ takes the build a world script declared, over anything it could infer (1 ms)
+    ✓ asks the named checkout for its own HEAD when nothing declared one (281 ms)
+    ✓ asks whoever is holding the port what directory they are running from (268 ms)
+    ✓ does not inspect a process it has no business inspecting, nor a port nobody holds (92 ms)
+    ✓ is null rather than guessed when nothing can say — and null is not this repo's commit
+    ✓ keys a live backend by origin AND build, so one port cannot hold two builds at one name
+    ✓ lets the fixture answer for itself, under a name no reader can mistake for an API build (112 ms)
+    ✓ does not let a fixture run outrank a live one just because it can now name its build (3 ms)
+    ✓ keeps `+dirty` in the key, so a modified tree cannot overwrite the clean commit it sits on (1 ms)
+    ✓ reads a legacy artifact — one written before builds were recorded — as unidentified, not as a match (1 ms)
+    the world stamp
+      ✓ names the checkout the world script recorded, not the one holding the port (518 ms)
+      ✓ records a DIFFERENT build when a different checkout built the world (1100 ms)
+      ✓ is refused when the world it describes is gone, and the run falls through to the port (498 ms)
+      ✓ is refused when its pid has been reused by a process it did not stamp (255 ms)
+      ✓ is refused when it is about a different origin, however it got that filename (177 ms)
+      ✓ outranks a declared build that disagrees, and says in the artifact what it overrode (106 ms)
+      ✓ records that the declaration agreed, when it did (100 ms)
+      ✓ leaves the declared build in charge when there is no stamp to prefer (1 ms)
+      ✓ is neither written nor read for an origin on another machine (64 ms)
+      ✓ refuses to stamp a world whose process is not running, rather than writing an unverifiable one (78 ms)
+      ✓ records who wrote it, rather than claiming an authorship it does not have (139 ms)
+      ✓ keys a stamped dirty tree the same way every other route keys it (102 ms)
+
+Failed to collect coverage from /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/components/molecules/ReceiptModal.vue
+ERROR: Unexpected token (1:1470)
+STACK: SyntaxError: Unexpected token (1:1470)
+    at pp$4.raise (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2757:13)
+    at pp.unexpected (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:647:8)
+    at pp$3.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2196:10)
+    at Parser.<anonymous> (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1954:28)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseParenAndDistinguishExpression (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2238:30)
+    at pp$3.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2163:41)
+    at Parser.<anonymous> (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+Failed to collect coverage from /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/components/onboarding/OnboardingProductImages.vue
+ERROR: Unexpected token (2:133)
+STACK: SyntaxError: Unexpected token (2:133)
+    at pp$4.raise (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2757:13)
+    at pp.unexpected (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:647:8)
+    at pp$3.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2196:10)
+    at Parser.<anonymous> (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1954:28)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseParenAndDistinguishExpression (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2238:30)
+    at pp$3.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2163:41)
+    at Parser.<anonymous> (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+Failed to collect coverage from /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/pages/admin/offers.vue
+ERROR: Unexpected token (1:15427)
+STACK: SyntaxError: Unexpected token (1:15427)
+    at pp$4.raise (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2757:13)
+    at pp.unexpected (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:647:8)
+    at pp$3.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2196:10)
+    at Parser.<anonymous> (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1954:28)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+Failed to collect coverage from /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/pages/admin/wolt-menu.vue
+ERROR: Unexpected token (1:903)
+STACK: SyntaxError: Unexpected token (1:903)
+    at pp$4.raise (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2757:13)
+    at pp.unexpected (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:647:8)
+    at pp$3.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2196:10)
+    at Parser.<anonymous> (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1954:28)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parsePropertyValue (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2443:87)
+    at pp$3.parseProperty (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2434:8)
+    at pp$3.parseObj (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2380:23)
+    at pp$3.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2179:17)
+    at Parser.<anonymous> (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+Failed to collect coverage from /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/pages/admin/products.vue
+ERROR: Unexpected token (2:922)
+STACK: SyntaxError: Unexpected token (2:922)
+    at pp$4.raise (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2757:13)
+    at pp.unexpected (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:647:8)
+    at pp$3.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2196:10)
+    at Parser.<anonymous> (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1954:28)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseParenAndDistinguishExpression (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2238:30)
+    at pp$3.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2163:41)
+    at Parser.<anonymous> (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2175:26)
+    at Parser.<anonymous> (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6003:24)
+    at Parser.parseExprAtom (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:6129:31)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2047:19)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+    at pp$3.parseExprOps (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1966:19)
+    at pp$3.parseMaybeConditional (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1949:19)
+    at pp$3.parseMaybeAssign (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:1925:19)
+    at pp$3.parseExprList (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2663:20)
+    at pp$3.parseSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2075:29)
+    at pp$3.parseExprSubscripts (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2050:21)
+    at pp$3.parseMaybeUnary (/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/census/Web-modules/node_modules/vue-template-es2015-compiler/buble.js:2024:17)
+----------------------------------|---------|----------|---------|---------|-------------------
+File                              | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+----------------------------------|---------|----------|---------|---------|-------------------
+All files                         |       0 |        0 |       0 |       0 |                   
+ components/admin                 |       0 |        0 |       0 |       0 |                   
+  AllergensManager.vue            |       0 |      100 |     100 |       0 | 70                
+  CategoryProductList.vue         |       0 |        0 |       0 |       0 | 85-87             
+  CopyProductToStoresModal.vue    |       0 |        0 |       0 |       0 | 59-61             
+  CopyVariantToTargetsModal.vue   |       0 |        0 |       0 |       0 | 71-73             
+  LanguageSwitcher.vue            |       0 |      100 |     100 |       0 | 56-69             
+  MultiDateCalendar.vue           |       0 |      100 |     100 |       0 | 37-38             
+  ProductSelectorModal.vue        |       0 |        0 |       0 |       0 | 128-132           
+  PublishingRuleEditor.vue        |       0 |      100 |     100 |       0 | 92                
+  StoreMarketCard.vue             |       0 |      100 |     100 |       0 | 174-197           
+  StoreSelector.vue               |       0 |      100 |     100 |       0 | 62                
+  SuggestInput.vue                |       0 |      100 |     100 |       0 | 35                
+  VariantEditorModal.vue          |       0 |        0 |       0 |       0 | 150-165           
+  VariantSelectorModal.vue        |       0 |        0 |       0 |       0 | 163-166           
+ components/admin/events          |       0 |      100 |     100 |       0 |                   
+  EventsJourney.vue               |       0 |      100 |     100 |       0 | 349-372           
+  EventsPipeline.vue              |       0 |      100 |     100 |       0 | 62-79             
+ components/admin/floorplan       |       0 |        0 |       0 |       0 |                   
+  FloorPlanEditor.vue             |       0 |        0 |       0 |       0 | 267-311           
+  FloorPlanTable.vue              |       0 |      100 |     100 |       0 | 82-84             
+ components/admin/growth          |       0 |      100 |     100 |       0 |                   
+  GrowthAudiencePanel.vue         |       0 |      100 |     100 |       0 | 78-80             
+  GrowthConsentStanding.vue       |       0 |      100 |     100 |       0 | 76-78             
+  GrowthRunOutcome.vue            |       0 |      100 |     100 |       0 | 115-120           
+  GrowthSendGate.vue              |       0 |      100 |     100 |       0 | 88-119            
+ components/admin/kitchen         |       0 |        0 |       0 |       0 |                   
+  CourseSection.vue               |       0 |        0 |       0 |       0 | 29-31             
+  KitchenLine.vue                 |       0 |      100 |     100 |       0 | 74                
+  KitchenTicket.vue               |       0 |        0 |       0 |       0 | 83-85             
+ components/admin/margin          |       0 |        0 |       0 |       0 |                   
+  MarginConversionEditor.vue      |       0 |      100 |     100 |       0 | 50-52             
+  MarginCostPanel.vue             |       0 |      100 |     100 |       0 | 72-83             
+  MarginCoveragePanel.vue         |       0 |      100 |     100 |       0 | 180-183           
+  MarginImportRowsPanel.vue       |       0 |      100 |     100 |       0 | 137-140           
+  MarginIngredientPanel.vue       |       0 |        0 |       0 |       0 | 183-187           
+  MarginMenuMarginPanel.vue       |       0 |      100 |     100 |       0 | 102-129           
+  MarginPriceTimelinePanel.vue    |       0 |      100 |       0 |       0 | 107-124           
+  MarginProductLinkPanel.vue      |       0 |      100 |     100 |       0 | 74                
+  MarginSpendPanel.vue            |       0 |      100 |       0 |       0 | 189-210           
+  MarginStatementFiguresPanel.vue |       0 |      100 |     100 |       0 | 158-166           
+  MarginSupplierItemPanel.vue     |       0 |      100 |       0 |       0 | 134-136           
+  MarginWastePanel.vue            |       0 |      100 |     100 |       0 | 170-191           
+ components/admin/meals           |       0 |        0 |       0 |       0 |                   
+  MealsAgreementList.vue          |       0 |      100 |     100 |       0 | 79-87             
+  MealsCompanyPanel.vue           |       0 |        0 |       0 |       0 | 171-175           
+  MealsCompanyPicker.vue          |       0 |      100 |     100 |       0 | 103-110           
+  MealsCorridorPanel.vue          |       0 |        0 |       0 |       0 | 119-121           
+  MealsFundedOrders.vue           |       0 |      100 |     100 |       0 | 93-97             
+  MealsPeoplePanel.vue            |       0 |        0 |       0 |       0 | 268-273           
+  MealsProgramPanel.vue           |       0 |        0 |       0 |       0 | 206-212           
+  MealsWriteFailure.vue           |       0 |      100 |     100 |       0 | 13                
+ components/admin/pos             |       0 |        0 |       0 |       0 |                   
+  AmountPad.vue                   |       0 |        0 |       0 |       0 | 24-29             
+  BeginDayModal.vue               |       0 |        0 |       0 |       0 | 34-38             
+  BoardView.vue                   |       0 |        0 |       0 |       0 | 158-164           
+  CardTerminalStatus.vue          |       0 |      100 |     100 |       0 | 40                
+  CashPad.vue                     |       0 |        0 |       0 |       0 | 28-31             
+  CashPointPicker.vue             |       0 |      100 |     100 |       0 | 35                
+  CheckLine.vue                   |       0 |      100 |     100 |       0 | 102               
+  CheckPanel.vue                  |       0 |        0 |       0 |       0 | 170-173           
+  DayFlow.vue                     |       0 |        0 |       0 |       0 | 119-126           
+  DiscountModal.vue               |       0 |        0 |       0 |       0 | 42-44             
+  DrawerTransactionModal.vue      |       0 |        0 |       0 |       0 | 35-38             
+  EodWizard.vue                   |       0 |        0 |       0 |       0 | 106-112           
+  LineNoteModal.vue               |       0 |        0 |       0 |       0 | 49-52             
+  OpenPriceModal.vue              |       0 |        0 |       0 |       0 | 109-113           
+  OperatorLoginScreen.vue         |       0 |        0 |       0 |       0 | 70-77             
+  OptionPicker.vue                |       0 |      100 |     100 |       0 | 64                
+  PaymentScreen.vue               |       0 |        0 |       0 |       0 | 244-264           
+  PhonePad.vue                    |       0 |        0 |       0 |       0 | 11-14             
+  PinPadModal.vue                 |       0 |        0 |       0 |       0 | 59-67             
+  PosConfirm.vue                  |       0 |      100 |       0 |       0 | 38-39             
+  PosNumpad.vue                   |       0 |      100 |     100 |       0 | 22                
+  PosReceiptView.vue              |       0 |      100 |     100 |       0 | 119-137           
+  PosShell.vue                    |       0 |        0 |       0 |       0 | 152-166           
+  PosStatusChip.vue               |       0 |      100 |     100 |       0 | 88                
+  PosToast.vue                    |       0 |      100 |     100 |       0 | 57                
+  PosTopBar.vue                   |       0 |        0 |       0 |       0 | 65-70             
+  ProductGrid.vue                 |       0 |        0 |       0 |       0 | 170-174           
+  ProductTile.vue                 |       0 |      100 |     100 |       0 | 30                
+  ReasonPicker.vue                |       0 |      100 |     100 |       0 | 32-51             
+  ReceiptSend.vue                 |       0 |      100 |     100 |       0 | 50-56             
+  ReceiptsView.vue                |       0 |        0 |       0 |       0 | 129-137           
+  RefundModal.vue                 |       0 |        0 |       0 |       0 | 91-106            
+  ReturnBuilder.vue               |       0 |        0 |       0 |       0 | 239-256           
+  SeatPickerModal.vue             |       0 |        0 |       0 |       0 | 52-55             
+  SellScreen.vue                  |       0 |        0 |       0 |       0 | 234-254           
+  SignaturePad.vue                |       0 |      100 |     100 |       0 | 26                
+  SplitBillModal.vue              |       0 |        0 |       0 |       0 | 185-190           
+  VoidModal.vue                   |       0 |        0 |       0 |       0 | 38-42             
+  XReportView.vue                 |       0 |      100 |     100 |       0 | 195               
+ components/admin/pos-settings    |       0 |      100 |     100 |       0 |                   
+  CashPointsTab.vue               |       0 |      100 |     100 |       0 | 118               
+  GoodsGroupsTab.vue              |       0 |      100 |     100 |       0 | 85                
+  OperatorsTab.vue                |       0 |      100 |     100 |       0 | 85                
+ components/admin/reservations    |       0 |        0 |       0 |       0 |                   
+  ReservationFloorView.vue        |       0 |        0 |       0 |       0 | 57-59             
+  ReservationList.vue             |       0 |      100 |     100 |       0 | 63-70             
+  ReservationModal.vue            |       0 |        0 |       0 |       0 | 122-130           
+  ReservationSettingsPanel.vue    |       0 |      100 |       0 |       0 | 158-175           
+  ReservationTimeline.vue         |       0 |      100 |     100 |       0 | 60-65             
+ components/admin/statistics      |       0 |      100 |     100 |       0 |                   
+  AIQueryBox.vue                  |       0 |      100 |     100 |       0 | 63                
+ components/admin/training        |       0 |        0 |       0 |       0 |                   
+  TrainingAssignmentPanel.vue     |       0 |        0 |       0 |       0 | 118-121           
+  TrainingCertificatePanel.vue    |       0 |        0 |       0 |       0 | 112-115           
+  TrainingCompletionPanel.vue     |       0 |        0 |       0 |       0 | 122-127           
+  TrainingContextPanel.vue        |       0 |      100 |     100 |       0 | 47-49             
+  TrainingCourseList.vue          |       0 |      100 |     100 |       0 | 88-90             
+  TrainingDisclosurePanel.vue     |       0 |        0 |       0 |       0 | 82-86             
+  TrainingHoldingsPanel.vue       |       0 |        0 |       0 |       0 | 92-95             
+  TrainingReferenceField.vue      |       0 |      100 |     100 |       0 | 40-42             
+  TrainingVersionPanel.vue        |       0 |      100 |     100 |       0 | 101-105           
+ components/admin/workforce       |       0 |      100 |     100 |       0 |                   
+  WorkforceAddPersonForm.vue      |       0 |      100 |     100 |       0 | 125-132           
+  WorkforceEngagementPanel.vue    |       0 |      100 |     100 |       0 | 436-453           
+  WorkforceMonthGrid.vue          |       0 |      100 |     100 |       0 | 118-125           
+  WorkforcePersonnelListSheet.vue |       0 |      100 |     100 |       0 | 141-165           
+  WorkforceRequestCard.vue        |       0 |      100 |     100 |       0 | 83-106            
+  WorkforceRoleGrid.vue           |       0 |      100 |     100 |       0 | 190-198           
+  WorkforceRosterTable.vue        |       0 |      100 |     100 |       0 | 84-89             
+  WorkforceWeekGrid.vue           |       0 |      100 |     100 |       0 | 294-310           
+ components/admin/workforce-me    |       0 |      100 |     100 |       0 |                   
+  WorkforceAvailabilityForm.vue   |       0 |      100 |     100 |       0 | 114-127           
+  WorkforceOpenShiftCard.vue      |       0 |      100 |     100 |       0 | 55-59             
+  WorkforcePublicationNotice.vue  |       0 |      100 |     100 |       0 | 50-59             
+  WorkforceShiftCard.vue          |       0 |      100 |     100 |       0 | 28-31             
+  WorkforceTimeOffForm.vue        |       0 |      100 |     100 |       0 | 94-108            
+ components/admin/workforce-rates |       0 |      100 |     100 |       0 |                   
+  WorkforceAttendanceTable.vue    |       0 |      100 |     100 |       0 | 105-108           
+  WorkforceHoursExportPanel.vue   |       0 |      100 |     100 |       0 | 87-97             
+  WorkforceRateTimeline.vue       |       0 |      100 |     100 |       0 | 135-152           
+ components/atoms                 |       0 |        0 |       0 |       0 |                   
+  AutocompleteInput.vue           |       0 |      100 |     100 |       0 | 29                
+  CheckInfo.vue                   |       0 |      100 |     100 |       0 | 18                
+  ContinueButton.vue              |       0 |      100 |     100 |       0 | 8                 
+  FaqItem.vue                     |       0 |      100 |     100 |       0 | 25                
+  FeatureInfo.vue                 |       0 |      100 |     100 |       0 | 16                
+  Loading.vue                     |       0 |      100 |     100 |       0 | 22                
+  Modal.vue                       |       0 |        0 |       0 |       0 | 32-74             
+  MyUserDropdown.vue              |       0 |        0 |       0 |       0 | 27-29             
+  OtherPriceItem.vue              |       0 |      100 |     100 |       0 | 16                
+  OtpInput.vue                    |       0 |        0 |       0 |       0 | 26-35             
+  PriceInput.vue                  |       0 |      100 |     100 |       0 | 18                
+  PriceItem.vue                   |       0 |      100 |     100 |       0 | 11                
+  PriceSlide.vue                  |       0 |      100 |     100 |       0 | 62                
+  SelectButton.vue                |       0 |      100 |     100 |       0 | 27                
+  TeamMember.vue                  |       0 |      100 |     100 |       0 | 12                
+  VatAutocompleteInput.vue        |       0 |      100 |     100 |       0 | 37                
+ components/events                |       0 |      100 |     100 |       0 |                   
+  GuestShell.vue                  |       0 |      100 |     100 |       0 | 52-64             
+ components/modals                |       0 |        0 |       0 |       0 |                   
+  TermsModal.vue                  |       0 |        0 |       0 |       0 | 23-26             
+ components/molecules             |       0 |        0 |       0 |       0 |                   
+  BookDemoButton.vue              |       0 |      100 |     100 |       0 | 24-26             
+  ChangeDeliveryTypeModal.vue     |       0 |        0 |       0 |       0 | 80-82             
+  CustomerInfoModal.vue           |       0 |        0 |       0 |       0 | 124-126           
+  EmployeeManager.vue             |       0 |        0 |       0 |       0 | 99-101            
+  FocusTrap.vue                   |       0 |        0 |       0 |       0 | 15-88             
+  LoadingSkeleton.vue             |       0 |      100 |     100 |       0 | 31                
+  LoginModal.vue                  |       0 |        0 |       0 |       0 | 129-133           
+  MultiSelectDropdown.vue         |       0 |      100 |     100 |       0 | 68                
+  OrderCard.vue                   |       0 |      100 |     100 |       0 | 222               
+  OrderModal.vue                  |       0 |        0 |       0 |       0 | 164-166           
+  OrderProcessingModal.vue        |       0 |        0 |       0 |       0 | 105-107           
+  PeakPerformanceHeatmap.vue      |       0 |      100 |     100 |       0 | 112               
+  SmsDriverModal.vue              |       0 |        0 |       0 |       0 | 68-70             
+  StatisticsChart.vue             |       0 |      100 |     100 |       0 | 6                 
+  Stepper.vue                     |       0 |      100 |     100 |       0 | 18                
+  TransferOrderModal.vue          |       0 |        0 |       0 |       0 | 69-71             
+ components/onboarding            |       0 |        0 |       0 |       0 |                   
+  OnboardingAIImport.vue          |       0 |      100 |     100 |       0 | 201               
+  OnboardingLogoUpload.vue        |       0 |        0 |       0 |       0 | 38-41             
+ components/organisms             |       0 |        0 |       0 |       0 |                   
+  AdminPage.vue                   |       0 |        0 |       0 |       0 | 27-32             
+  AdminPageFooter.vue             |       0 |      100 |     100 |       0 | 51                
+  AdminPageHeader.vue             |       0 |        0 |       0 |       0 | 206-283           
+  EditLangRowModal.vue            |       0 |        0 |       0 |       0 | 21-23             
+  EmployeeManagerModal.vue        |       0 |        0 |       0 |       0 | 16-19             
+  OnboardingNotification.vue      |       0 |      100 |     100 |       0 | 25                
+  OrderModal.vue                  |       0 |        0 |       0 |       0 | 213-217           
+  PageFooter.vue                  |       0 |      100 |     100 |       0 | 90                
+  PageHeader.vue                  |       0 |        0 |       0 |       0 | 107-109           
+  Product.vue                     |       0 |      100 |     100 |       0 | 46                
+  ProductConfig.vue               |       0 |        0 |       0 |       0 | 70-72             
+  RedirectToNewStore.vue          |       0 |        0 |       0 |       0 | 8                 
+  SalesLetter.vue                 |       0 |      100 |     100 |       0 | 82                
+ components/shared                |       0 |      100 |     100 |       0 |                   
+  OfferDocument.vue               |       0 |      100 |     100 |       0 | 148-150           
+  TermsContent.vue                |       0 |      100 |     100 |       0 | 32                
+ components/wrapped               |       0 |        0 |       0 |       0 |                   
+  WrappedBanner.vue               |       0 |      100 |     100 |       0 | 19                
+  WrappedSlideshow.vue            |       0 |        0 |       0 |       0 | 64-77             
+  WrappedStoreSelector.vue        |       0 |      100 |     100 |       0 | 29                
+ components/wrapped/slides        |       0 |      100 |     100 |       0 |                   
+  Slide2026.vue                   |       0 |      100 |     100 |       0 | 55                
+  SlideBusiestDay.vue             |       0 |      100 |     100 |       0 | 35                
+  SlideDelivery.vue               |       0 |      100 |     100 |       0 | 58                
+  SlideFunFacts.vue               |       0 |      100 |     100 |       0 | 42                
+  SlideIntro.vue                  |       0 |      100 |     100 |       0 | 31                
+  SlideNotEnoughData.vue          |       0 |      100 |     100 |       0 | 33                
+  SlideOkamHighlights.vue         |       0 |      100 |     100 |       0 | 76                
+  SlideOverview.vue               |       0 |      100 |     100 |       0 | 37                
+  SlidePayments.vue               |       0 |      100 |     100 |       0 | 29                
+  SlidePlatforms.vue              |       0 |      100 |     100 |       0 | 54                
+  SlideTips.vue                   |       0 |      100 |     100 |       0 | 21                
+  SlideTopProducts.vue            |       0 |      100 |     100 |       0 | 59                
+ pages                            |       0 |        0 |       0 |       0 |                   
+  2000-brukere-i-sogn.vue         |       0 |        0 |       0 |       0 | 52-55             
+  agb.vue                         |       0 |        0 |       0 |       0 | 49-52             
+  datenschutz.vue                 |       0 |        0 |       0 |       0 | 80-83             
+  egen-app-kampanje.vue           |       0 |        0 |       0 |       0 | 243-247           
+  egen-app.vue                    |       0 |        0 |       0 |       0 | 222-228           
+  impressum.vue                   |       0 |        0 |       0 |       0 | 63-66             
+  index.vue                       |       0 |        0 |       0 |       0 | 307-311           
+  kontakt.vue                     |       0 |        0 |       0 |       0 | 94-98             
+  last-ned.vue                    |       0 |        0 |       0 |       0 | 130-133           
+  menneskene.vue                  |       0 |      100 |     100 |       0 | 4                 
+  menu.vue                        |       0 |      100 |     100 |       0 | 31                
+  om-oss.vue                      |       0 |        0 |       0 |       0 | 90-93             
+  personvern-og-vilkar.vue        |       0 |        0 |       0 |       0 | 33-36             
+  personvern.vue                  |       0 |        0 |       0 |       0 | 42-45             
+  priser.vue                      |       0 |        0 |       0 |       0 | 140-144           
+  registrer.vue                   |       0 |        0 |       0 |       0 | 312-316           
+  registrert-ferdig.vue           |       0 |        0 |       0 |       0 | 35-38             
+  terms.vue                       |       0 |        0 |       0 |       0 | 6-8               
+  vilkar-store.vue                |       0 |      100 |     100 |       0 | 92                
+  vilkar.vue                      |       0 |        0 |       0 |       0 | 86-89             
+  wolt-callback.vue               |       0 |        0 |       0 |       0 | 8                 
+  wolt.vue                        |       0 |        0 |       0 |       0 | 167-170           
+ pages/admin                      |       0 |        0 |       0 |       0 |                   
+  account-email.vue               |       0 |        0 |       0 |       0 | 133-169           
+  allergens.vue                   |       0 |        0 |       0 |       0 | 28-32             
+  brev.vue                        |       0 |        0 |       0 |       0 | 11-15             
+  categories.vue                  |       0 |        0 |       0 |       0 | 159-163           
+  category-editor.vue             |       0 |        0 |       0 |       0 | 345-357           
+  customers.vue                   |       0 |        0 |       0 |       0 | 153-158           
+  delivery.vue                    |       0 |        0 |       0 |       0 | 336-339           
+  dinehome.vue                    |       0 |        0 |       0 |       0 | 195-199           
+  dintero-terminal.vue            |       0 |        0 |       0 |       0 | 167-169           
+  dintero.vue                     |       0 |        0 |       0 |       0 | 491-496           
+  discount.vue                    |       0 |        0 |       0 |       0 | 299-303           
+  discounts.vue                   |       0 |        0 |       0 |       0 | 77-80             
+  employees.vue                   |       0 |        0 |       0 |       0 | 22-25             
+  events-pipeline.vue             |       0 |        0 |       0 |       0 | 425-485           
+  feature-flags.vue               |       0 |        0 |       0 |       0 | 156-196           
+  goods.vue                       |       0 |        0 |       0 |       0 | 321-326           
+  growth-newsletter.vue           |       0 |        0 |       0 |       0 | 218-298           
+  growth-privacy.vue              |       0 |        0 |       0 |       0 | 206-277           
+  import.vue                      |       0 |        0 |       0 |       0 | 321-328           
+  index.vue                       |       0 |        0 |       0 |       0 | 383-389           
+  kam.vue                         |       0 |        0 |       0 |       0 | 184-187           
+  kitchen.vue                     |       0 |        0 |       0 |       0 | 86-91             
+  kravia-invoice.vue              |       0 |        0 |       0 |       0 | 298-302           
+  lang.vue                        |       0 |        0 |       0 |       0 | 67-72             
+  margin-price-imports.vue        |       0 |        0 |       0 |       0 | 146-160           
+  margin-recipes.vue              |       0 |        0 |       0 |       0 | 241-299           
+  margin-statements.vue           |       0 |        0 |       0 |       0 | 216-271           
+  margin-suppliers.vue            |       0 |        0 |       0 |       0 | 195-211           
+  meals-agreements.vue            |       0 |        0 |       0 |       0 | 44-50             
+  meals-companies.vue             |       0 |        0 |       0 |       0 | 98-110            
+  onboarding.vue                  |       0 |        0 |       0 |       0 | 240-246           
+  ongoing.vue                     |       0 |        0 |       0 |       0 | 226-237           
+  orders.vue                      |       0 |        0 |       0 |       0 | 392-398           
+  overview.vue                    |       0 |        0 |       0 |       0 | 421-428           
+  payment.vue                     |       0 |        0 |       0 |       0 | 161-164           
+  payouts.vue                     |       0 |        0 |       0 |       0 | 70-74             
+  pos-reports.vue                 |       0 |        0 |       0 |       0 | 200-205           
+  pos-settings.vue                |       0 |        0 |       0 |       0 | 46-54             
+  pos.vue                         |       0 |        0 |       0 |       0 | 8-13              
+  poweruser-growth.vue            |       0 |        0 |       0 |       0 | 115-151           
+  reservation.vue                 |       0 |      100 |     100 |       0 | 3                 
+  reservations.vue                |       0 |        0 |       0 |       0 | 135-165           
+  reward-members.vue              |       0 |        0 |       0 |       0 | 69-72             
+  rewards.vue                     |       0 |        0 |       0 |       0 | 226-230           
+  settlements.vue                 |       0 |        0 |       0 |       0 | 179-182           
+  statistics.vue                  |       0 |        0 |       0 |       0 | 449-458           
+  surfboard.vue                   |       0 |        0 |       0 |       0 | 875-879           
+  tables.vue                      |       0 |        0 |       0 |       0 | 17-20             
+  terminals.vue                   |       0 |        0 |       0 |       0 | 259-272           
+  training-courses.vue            |       0 |        0 |       0 |       0 | 119-187           
+  tripletex.vue                   |       0 |        0 |       0 |       0 | 338-341           
+  wolt-calc.vue                   |       0 |        0 |       0 |       0 | 162-165           
+  wolt-drive-invoice.vue          |       0 |        0 |       0 |       0 | 180-183           
+  wolt.vue                        |       0 |        0 |       0 |       0 | 418-421           
+  workforce-me.vue                |       0 |        0 |       0 |       0 | 275-306           
+  workforce-personnel-list.vue    |       0 |        0 |       0 |       0 | 84-114            
+  workforce-rates.vue             |       0 |        0 |       0 |       0 | 129-166           
+  workforce-requests.vue          |       0 |        0 |       0 |       0 | 162-192           
+  workforce-roster.vue            |       0 |        0 |       0 |       0 | 115-153           
+  workforce-schedule.vue          |       0 |        0 |       0 |       0 | 312-345           
+  wrapped.vue                     |       0 |        0 |       0 |       0 | 34-37             
+ pages/events/deposit             |       0 |        0 |       0 |       0 |                   
+  _token.vue                      |       0 |        0 |       0 |       0 | 113-159           
+ pages/events/inquiry             |       0 |        0 |       0 |       0 |                   
+  _store.vue                      |       0 |        0 |       0 |       0 | 129-147           
+ pages/events/proposal            |       0 |        0 |       0 |       0 |                   
+  _token.vue                      |       0 |        0 |       0 |       0 | 324-371           
+ pages/kvittering/_id             |       0 |        0 |       0 |       0 |                   
+  _token.vue                      |       0 |        0 |       0 |       0 | 17-20             
+ pages/meals                      |       0 |        0 |       0 |       0 |                   
+  join.vue                        |       0 |        0 |       0 |       0 | 251-269           
+ pages/offer                      |       0 |        0 |       0 |       0 |                   
+  _code.vue                       |       0 |        0 |       0 |       0 | 217-221           
+ pages/preferences                |       0 |        0 |       0 |       0 |                   
+  communications.vue              |       0 |        0 |       0 |       0 | 275-322           
+  unsubscribe.vue                 |       0 |        0 |       0 |       0 | 73-108            
+ pages/store                      |       0 |        0 |       0 |       0 |                   
+  _slug.vue                       |       0 |        0 |       0 |       0 | 57-60             
+  notfound.vue                    |       0 |        0 |       0 |       0 | 14-17             
+ pages/subscribe                  |       0 |        0 |       0 |       0 |                   
+  _store.vue                      |       0 |        0 |       0 |       0 | 148-188           
+  confirm.vue                     |       0 |        0 |       0 |       0 | 81-112            
+ pages/webshop                    |       0 |        0 |       0 |       0 |                   
+  3d.vue                          |       0 |        0 |       0 |       0 | 8                 
+  checkout.vue                    |       0 |        0 |       0 |       0 | 8                 
+  index.vue                       |       0 |        0 |       0 |       0 | 8                 
+  mycards.vue                     |       0 |        0 |       0 |       0 | 8                 
+  orders.vue                      |       0 |        0 |       0 |       0 | 8                 
+  vipps.vue                       |       0 |        0 |       0 |       0 | 8                 
+ pages/workforce                  |       0 |        0 |       0 |       0 |                   
+  join.vue                        |       0 |        0 |       0 |       0 | 251-271           
+----------------------------------|---------|----------|---------|---------|-------------------
+Test Suites: 1 passed, 1 total
+Tests:       38 passed, 38 total
+Snapshots:   0 total
+Time:        8.937 s
+Ran all test suites matching /test\/journey-artifact-store.test.js/i.

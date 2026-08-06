@@ -208,6 +208,7 @@ import { DATA_UNKNOWN, WEEKDAY_KEYS, minutesFromClock, weekdayMaskFrom } from '~
 import { refusalKey, SCOPE_COMPANY } from '~/utils/meals/refusal-copy';
 import { zoneSuggestions } from '~/utils/store-market/market-view';
 import { parseRateAmount } from '~/utils/workforce-rates/rate-amount';
+import { crossCurrencyLabel } from '~/utils/cross-currency';
 
 /**
  * A company's meal programmes, and the immutable policy versions that price them.
@@ -300,7 +301,7 @@ export default {
       if (parsed.error) { return null; }
       const wire = this.selectedProgram && this.selectedProgram.currency;
       if (wire && this.currency && wire !== this.currency) {
-        return this.wholeAmount(parsed.minor) + ',' + this.fractionAmount(parsed.minor) + ' ' + wire;
+        return crossCurrencyLabel(parsed.minor, wire, this);
       }
       return this.priceLabel(parsed.minor);
     }

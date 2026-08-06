@@ -1,0 +1,39 @@
+files scanned: 301
+no default export (or no <script>): 2
+  components/atoms/CloseButton.vue
+  components/molecules/PriceTable.vue
+UNRESOLVED (guard must fail on these, never clear them): 1
+  pages/wolt-callback.vue  PARSE ERROR: Line 7: Unexpected token, expected ","
+
+   5 |   mounted() {
+   6 |     const ngrokUrl = 'https://successive-emogene-unsyncopated.ngrok-free.dev/wolt-callback'
+>  7 |     const queryString = new URLSearchParams(this.$route.query as Record<string, string>).toString()
+     |                                                               ^
+   8 |     const redirectUrl = queryString ? `${ngrokUrl}?${queryString}` : ngrokUrl
+   9 |     window.location.href = redirectUrl
+  10 |   }
+spread / computed top-level keys: 0
+
+distinct top-level option keys: 22
+  asyncData                 2   pages/offer/index.vue, pages/store/_slug.vue
+  beforeDestroy            59
+  beforeRouteLeave          1   pages/admin/category-editor.vue
+  components              154
+  computed                226
+  created                  17
+  data                    214
+  destroyed                 1   components/molecules/FocusTrap.vue
+  directives                1   components/admin/LanguageSwitcher.vue
+  emits                     1   components/atoms/Modal.vue
+  head                     19
+  inject                   15
+  layout                   11
+  methods                 238
+  middleware                5
+  mixins                   37
+  mounted                 123
+  name                    202
+  props                   164
+  provide                   1   components/admin/pos/PosShell.vue
+  render                    1   pages/admin/reservation.vue
+  watch                    87

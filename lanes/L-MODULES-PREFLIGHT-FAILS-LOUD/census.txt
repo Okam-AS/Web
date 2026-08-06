@@ -1,0 +1,119 @@
+measured 2026-08-05T04:09:32Z
+worktrees carrying a package.json ......... 115
+  node_modules ABSENT ..................... 21   (the suite cannot start)
+  node_modules symlinked elsewhere ........ 80
+    ...of those, linked at a checkout whose package-lock.json DIFFERS: 16
+  node_modules a real directory ........... 14
+  core/ present but EMPTY ................. 68   (the suite runs and undercounts)
+  core/ populated ......................... 47
+
+-- node_modules absent --
+/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/ancestor/tree
+/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/wt-german-ids
+/Users/svendaneel/okam/web-admincred
+/Users/svendaneel/okam/web-evinqgate
+/Users/svendaneel/okam/web-fe-growth-honesty
+/Users/svendaneel/okam/web-fe-margin-statement
+/Users/svendaneel/okam/web-fe-suppbasis
+/Users/svendaneel/okam/web-fe-training-fixes
+/Users/svendaneel/okam/web-fe-wf-inbox
+/Users/svendaneel/okam/web-fe-wf-personnel
+/Users/svendaneel/okam/web-fieldsvsharness
+/Users/svendaneel/okam/web-fixdiv
+/Users/svendaneel/okam/web-lint2defects
+/Users/svendaneel/okam/web-mealsdocsync
+/Users/svendaneel/okam/web-mrgcovunknown
+/Users/svendaneel/okam/web-preflight-missing
+/Users/svendaneel/okam/web-tierartifacts
+/Users/svendaneel/okam/web-vocabsweep
+/Users/svendaneel/okam/web-wf-contact
+/Users/svendaneel/okam/web-wf-oplink
+/Users/svendaneel/okam/wt-prefcentre-fe
+
+-- symlinked at a lock that differs --
+/Users/svendaneel/okam/web-fe-meals-claim -> /Users/svendaneel/okam/Web-modules/node_modules
+/Users/svendaneel/okam/wt-author -> /Users/svendaneel/okam/Web-modules/node_modules
+/Users/svendaneel/okam/wt-events -> /Users/svendaneel/okam/Web-modules/node_modules
+/Users/svendaneel/okam/wt-fe4 -> /Users/svendaneel/okam/Web-modules/node_modules
+/Users/svendaneel/okam/wt-fe5 -> /Users/svendaneel/okam/Web-modules/node_modules
+/Users/svendaneel/okam/wt-feclient -> /Users/svendaneel/okam/Web-modules/node_modules
+/Users/svendaneel/okam/wt-growth -> /Users/svendaneel/okam/Web-modules/node_modules
+/Users/svendaneel/okam/wt-margin -> /Users/svendaneel/okam/Web-modules/node_modules
+/Users/svendaneel/okam/wt-marginui -> /Users/svendaneel/okam/Web-modules/node_modules
+/Users/svendaneel/okam/wt-marketui -> /Users/svendaneel/okam/Web-modules/node_modules
+/Users/svendaneel/okam/wt-meals -> /Users/svendaneel/okam/Web-modules/node_modules
+/Users/svendaneel/okam/wt-merge -> /Users/svendaneel/okam/Web-modules/node_modules
+/Users/svendaneel/okam/wt-nav -> /Users/svendaneel/okam/Web-modules/node_modules
+/Users/svendaneel/okam/wt-rateui -> /Users/svendaneel/okam/Web-modules/node_modules
+/Users/svendaneel/okam/wt-roster -> /Users/svendaneel/okam/Web-modules/node_modules
+/Users/svendaneel/okam/wt-training -> /Users/svendaneel/okam/Web-modules/node_modules
+
+-- core/ present but empty --
+/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/ancestor/tree
+/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/wt-before
+/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/wt-german-ids
+/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/wt-offer-subtotal
+/Users/svendaneel/okam/web-admincred
+/Users/svendaneel/okam/web-blindbind
+/Users/svendaneel/okam/web-coercwrite
+/Users/svendaneel/okam/web-collectcond
+/Users/svendaneel/okam/web-collected
+/Users/svendaneel/okam/web-evinqgate
+/Users/svendaneel/okam/web-evstale
+/Users/svendaneel/okam/web-fe-ci
+/Users/svendaneel/okam/web-fe-em
+/Users/svendaneel/okam/web-fe-events-guest
+/Users/svendaneel/okam/web-fe-growth-honesty
+/Users/svendaneel/okam/web-fe-invlist
+/Users/svendaneel/okam/web-fe-margin-statement
+/Users/svendaneel/okam/web-fe-margin-supplier
+/Users/svendaneel/okam/web-fe-meals-claim
+/Users/svendaneel/okam/web-fe-meals-write
+/Users/svendaneel/okam/web-fe-suppbasis
+/Users/svendaneel/okam/web-fe-training-fixes
+/Users/svendaneel/okam/web-fe-wf-inbox
+/Users/svendaneel/okam/web-fe-wf-personnel
+/Users/svendaneel/okam/web-fe-wf-self
+/Users/svendaneel/okam/web-fieldsvsharness
+/Users/svendaneel/okam/web-grwithdraw
+/Users/svendaneel/okam/web-journeys
+/Users/svendaneel/okam/web-lint2defects
+/Users/svendaneel/okam/web-mealsdocsync
+/Users/svendaneel/okam/web-menu-allergen
+/Users/svendaneel/okam/web-modal-scrolllock
+/Users/svendaneel/okam/web-modal-seven
+/Users/svendaneel/okam/web-modal-two
+/Users/svendaneel/okam/web-mrgcovunknown
+/Users/svendaneel/okam/web-playwright
+/Users/svendaneel/okam/web-pos-clock
+/Users/svendaneel/okam/web-preflight-missing
+/Users/svendaneel/okam/web-print-host
+/Users/svendaneel/okam/web-statute-world
+/Users/svendaneel/okam/web-tierartifacts
+/Users/svendaneel/okam/web-vocabsweep
+/Users/svendaneel/okam/web-wf-contact
+/Users/svendaneel/okam/web-wf-idreg
+/Users/svendaneel/okam/web-wf-onboard
+/Users/svendaneel/okam/web-wf-oplink
+/Users/svendaneel/okam/web-wfcorrect
+/Users/svendaneel/okam/web-wtbasename
+/Users/svendaneel/okam/wt-author
+/Users/svendaneel/okam/wt-events
+/Users/svendaneel/okam/wt-fe-exitmail
+/Users/svendaneel/okam/wt-fe4
+/Users/svendaneel/okam/wt-fe5
+/Users/svendaneel/okam/wt-feclient
+/Users/svendaneel/okam/wt-growth
+/Users/svendaneel/okam/wt-jwf
+/Users/svendaneel/okam/wt-margin
+/Users/svendaneel/okam/wt-marginui
+/Users/svendaneel/okam/wt-marketui
+/Users/svendaneel/okam/wt-meals
+/Users/svendaneel/okam/wt-meals-reachable-web
+/Users/svendaneel/okam/wt-merge
+/Users/svendaneel/okam/wt-nav
+/Users/svendaneel/okam/wt-prefcentre-fe
+/Users/svendaneel/okam/wt-rateui
+/Users/svendaneel/okam/wt-roster
+/Users/svendaneel/okam/wt-training
+/Users/svendaneel/okam/wt-wfinvite

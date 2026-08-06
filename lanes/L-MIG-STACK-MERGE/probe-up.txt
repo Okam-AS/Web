@@ -1,0 +1,32 @@
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.CreateTable(
+                name: "GrowthAuditEvents",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StoreId = table.Column<int>(type: "int", nullable: true),
+                    ActorKind = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
+                    ActorReference = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EventType = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    AggregateType = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    AggregateId = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    CorrelationId = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    SemanticDeltaJson = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OccurredAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GrowthAuditEvents", x => x.Id);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GrowthAuditEvents_AggregateType_AggregateId",
+                table: "GrowthAuditEvents",
+                columns: new[] { "AggregateType", "AggregateId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GrowthAuditEvents_StoreId_OccurredAt",
+                table: "GrowthAuditEvents",
+                columns: new[] { "StoreId", "OccurredAt" });
+        }

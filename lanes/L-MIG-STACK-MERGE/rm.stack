@@ -1,0 +1,104 @@
+# artifacts/tests — backend suite receipts
+
+A number without a commit is not a measurement. Every file here belongs to one SHA, and the SHA is
+named in the filename and again inside the receipt beside it.
+
+## What is here
+
+| file | SHA it ran against | tier | result |
+| --- | --- | --- | --- |
+| `8c8a243d-fast-tier.trx` | `8c8a243dad403d184d53a373ba2d3283eacfe210` | fast (`Database!=SqlServer`) | 4095 passed / 0 failed / 8 skipped |
+| `6f26ad2b-fast-tier.trx` | `6f26ad2b2becc2394071edba2452ec91bcb5bd5d` | fast (`Database!=SqlServer`) | 4117 passed / 0 failed / 8 skipped |
+| `ffb29e4e-fast-tier.trx` | `ffb29e4e603972a7bf6d9742f38177103400a051` | fast (`Database!=SqlServer`) | 4110 passed / 0 failed / 9 skipped |
+| `baa5e38a-fast-tier.trx` | `baa5e38a17ab188869049a581570eea64c464bae` | fast (`Database!=SqlServer`) | 4292 passed / 0 failed / 10 skipped |
+| `2eeff48f-sql-tier.trx` | `2eeff48f405d09427bd509b0c68686797c64afd6` | **SQL (`Database=SqlServer`)** | 537 passed / 1 failed / 0 skipped |
+| `f8b3a30f-fast-tier.trx` | `f8b3a30f2ecfaf00beab1e903dd68193fbc8eca2` | fast (`Database!=SqlServer`) | 4304 passed / 0 failed / 9 skipped |
+| `23f6bbeb-fast-tier.trx` | `23f6bbebd78c27da341b3d78778ecf3c5f7fdd5c` | fast (`Database!=SqlServer`) | 4297 passed / 0 failed / 10 skipped |
+| `23f6bbeb-sql-tier.trx` | `23f6bbebd78c27da341b3d78778ecf3c5f7fdd5c` | **SQL (`Database=SqlServer`)** | 538 passed / 0 failed / 0 skipped |
+| `99855b1d-fast-tier.trx` | `99855b1d1d35ab35c1c09e072da0fc6d42421e56` | fast (`Database!=SqlServer`) | 4351 passed / 0 failed / 12 skipped |
+| `1da15fb1-fast-tier.trx` | `1da15fb113ae72a8f71ed68ef758bb1a8a30d69b` | fast (`Database!=SqlServer`) | 4313 passed / 0 failed / 9 skipped |
+| `1da15fb1-sql-tier.trx` | `1da15fb113ae72a8f71ed68ef758bb1a8a30d69b` | **SQL (`Database=SqlServer`)** | 557 passed / 0 failed / 0 skipped |
+| `13217cfd-fast-tier.trx` | `13217cfdd5a61c7897f3d4e116b571897d2405de` | fast (`Database!=SqlServer`) | 4342 passed / 0 failed / 9 skipped |
+| *(none)* | `13217cfdd5a61c7897f3d4e116b571897d2405de` | **SQL (`Database=SqlServer`)** | **UNRUNNABLE — Docker VM filesystem went read-only mid-run** |
+| `50b85657-fast-tier.trx` | `50b85657a103d5a159a3d7458c6b5e473fd50766` | fast (`Database!=SqlServer`) | 4342 passed / 0 failed / 9 skipped |
+| `50b85657-sql-tier.trx` | `50b85657a103d5a159a3d7458c6b5e473fd50766` | **SQL (`Database=SqlServer`)** | 568 passed / 0 failed / 0 skipped |
+| `bb82b3a0-fast-tier.trx` | `bb82b3a0575a6f75c235c6e83d3c84bc917a4a3d` | fast (`Database!=SqlServer`) | 4369 passed / 0 failed / 12 skipped |
+| `1de06906-fast-tier.trx` | `1de069061c08b8e86755d16a884da72f0aa725ec` | fast (`Database!=SqlServer`) | 4433 passed / 0 failed / 10 skipped |
+
+`2eeff48f` was the **first run of the SQL tier at any SHA**. Every fast-tier receipt above it records that
+tier as unmeasured; it no longer is. Its one failure was a declared expected-red
+(`PendingMigration=MIG-21`), not a regression — the `RUN.md` beside it says why, and a red receipt is still
+a receipt.
+
+`23f6bbeb` is the first SHA where **both tiers ran at the same commit**, and the first with no red in
+either: MIG-21 landed, so the expected-red is now a passing guard and its trait is gone. Note that a tier is
+named in the table because the two are not interchangeable: a fast-tier green says nothing about the
+triggers, filtered indexes and races that only exist on a real SQL Server catalog.
+
+`f8b3a30f` and `23f6bbeb` were measured on two lanes that had not yet met; the rows are both true and
+neither supersedes the other. `1da15fb1` is where they meet — the Training W3 lane merged the migration
+author's chain tip before authoring on it, so it is the first SHA whose SQL tier covers both `23f6bbeb`'s
+population and this branch's.
+
+The rows above interleave two sets of runs measured on branches that had not met until the migration stack
+was landed: some come from the integration branch, the rest from the migration chain that ran eight links
+ahead of it. They are ordered by the wall-clock time of the SHA each ran against, and every one of them is
+still true of the commit it names — **none supersedes another merely by sitting below it**, and none was
+measured at a SHA that contains the other set. The merge kept both sets in full: taking either side would
+have deleted true receipts, including every SQL-tier run that exists anywhere. Note the consequence for any
+`RUN.md` written before the stack landed — `bb82b3a0`'s says the SQL tier "still has no run recorded against
+any SHA", which was true of what its branch could see and is false of this table. A receipt is evidence
+about its own SHA, not about the repository.
+
+The full receipt for each run — command, environment, what was excluded and what is still unmeasured —
+is the `RUN.md` in the directory named for its SHA.
+
+`ffb29e4e` is a LANE commit, not an ancestor of any receipt above it: it ran on
+`lane/growth-mail-postmark` off `349d8806`, which is why its count sits below the row before it.
+
+`13217cfd` is the first row here whose SQL tier is **unrunnable rather than unrun**, and the distinction is
+the whole reason it has a row at all. The tier was started twice on this branch: the first run found one
+genuine failure (a second exact-full-Margin-set assertion the fast tier cannot see, fixed in this SHA), and
+the second died with every remaining test reporting `Connection was terminated` after Docker's VM remounted
+its filesystem read-only — the host volume is at 97 % and the VM's sparse disk image had grown until there
+was nothing left. That is an estate-level incident, not a property of the commit, and **every
+Testcontainers tier run on this host will keep inflating that image until somebody reclaims it.** The
+`RUN.md` beside this row names exactly which tests are still owed and what they would have proven.
+
+`50b85657` **supersedes that row**: the owner authorised a Docker recovery, and the same work then ran both
+tiers at one SHA on a healthy host — **568/568 on the SQL tier**, 11 added and 0 removed, every outcome read
+individually from the `.trx` rather than inferred from the summary. It is the first SHA at which MIG-23's
+`THROW 50062` trigger, its `date` column and its deliberately non-unique read index exist on a chain-built
+database, and the first at which the drop-the-trigger falsification has actually been executed. The
+`13217cfd` row stays: a superseded run is still the honest record of what was true that hour.
+
+`1de06906` is the SHA where the **migration stack meets the integration branch** — the end of a seven-link
+landing, with the fast tier run at every one of the seven merge commits and not only at the last. Its
+`RUN.md` carries the per-link table, the `has-pending-model-changes` result that proves the auto-merged
+model snapshot did not fork, and the analysis of the one red: a **pre-existing non-deterministic test**
+(`EventsOutboxDeliveryTests.The_message_carries_the_link_and_no_other_guest_data`) whose
+`Assert.DoesNotContain("250", body)` matched inside a random GUID in the proposal link rather than on a
+leaked amount. The failing `.trx` is kept beside the receipt as `…-FLAKE.trx`; that test fires on the order
+of once per ~130 runs and will keep failing merges until the absence assertions are run against the body
+with the link removed.
+
+## The rule this directory keeps
+
+A run recorded here was produced from a **clean checkout of one commit**, not from a working tree. The
+run above was executed in a throwaway `git worktree` detached at the SHA, which is why the paths inside
+the `.trx` read `wt-be-receipt` rather than the main checkout: a suite run in a shared worktree while
+sibling lanes are editing it measures no commit at all, and that is the exact defect this directory
+exists to stop.
+
+Adding a run means: run it at a SHA, drop the `.trx` in with that SHA leading its name, add a row above,
+and write the `RUN.md` beside it. Do not overwrite an existing row — a superseded run is still the
+honest record of what was true that day.
+
+The other way a number here can measure the wrong thing is `--no-build` over a stale assembly: see the
+`--no-build` note in the repo's `CLAUDE.md` under **Commands → Tests** before recording any run produced
+with it.
+
+## What a green suite here is not
+
+It is evidence that code behaves. It is not evidence that a capability exists or is reachable, and it
+is never acceptance — acceptance is a person completing the journey.

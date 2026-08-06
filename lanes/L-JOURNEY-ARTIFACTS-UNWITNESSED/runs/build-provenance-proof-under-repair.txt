@@ -1,0 +1,135 @@
+support files under test
+  journey.js            6dd043e1f34648c3fc5f322c0a777247b35c1d591766991b8ff0621c51e631c2
+  artifact-store.js     f8bd6ddb57294f133b17bb2e90a5941b825d270b5486682b572f952d450c3ab8
+  journey-assertions.js 4ddbed1671a04c71405c64657976b6b9a4debe479bf0a85bfde90565f4f07532
+  world-stamp.js        ec4089ffaff867f8d7888055ca68c7723109bfb0945a91902e19d09d01cb2c97
+stand-in live api      http://127.0.0.1:58107   (served by pid 51103, cwd web-unwitnessed)
+stand-in app           http://127.0.0.1:58108
+the port would say     web-unwitnessed@e34977acebd59b223584158c33451b6f1ffd82c1+dirty   <- the wrong answer, available in every arm
+checkout alpha         okamapi-alpha@d5c22f301e5f8b1c12d75f9b57b565d63a57a317
+checkout beta          okamapi-beta@73d364d63706ff74f8253e74c9713eb12612017d
+
+  FAIL  1  NO BUILD                                              -                                   stamped from checkout ALPHA, nothing declared
+        expected okamapi-alpha@d5c22f301e5f8b1c12d75f9b57b565d63a57a317 from /^stamp:/
+  FAIL  2  NO BUILD                                              -                                   the same world stamped from a DIFFERENT checkout (BETA)
+        expected okamapi-beta@73d364d63706ff74f8253e74c9713eb12612017d from /^stamp:/
+  FAIL  3  NO BUILD                                              -                                   stamp INVALIDATED (its world is gone) — must fall back to the port and be WRONG
+        expected web-unwitnessed@e34977acebd59b223584158c33451b6f1ffd82c1+dirty from /^process:/
+  FAIL  4  NO BUILD                                              -                                   stamped ALPHA while the shell declares BETA — a command copied from an older world
+        expected okamapi-alpha@d5c22f301e5f8b1c12d75f9b57b565d63a57a317 from /^stamp:/
+  FAIL  5  NO BUILD                                              -                                   NO stamp, the shell declares ALPHA — the declaration still carries a remote runner
+        expected okamapi-alpha@d5c22f301e5f8b1c12d75f9b57b565d63a57a317 from /^env:E2E_API_BUILD$/
+
+5 of 5 arms did not do what they must.
+
+---- arm 1 (stamped from checkout ALPHA, nothing declared) ----
+Error: Cannot find module './fixture-provenance'
+Require stack:
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-IDqQRo/harness/test/e2e/support/journey.js
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-IDqQRo/harness/test/e2e/journeys/provenance-probe.spec.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/common/index.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/program.js
+- /Users/svendaneel/okam/Web-modules/node_modules/@playwright/test/cli.js
+
+   at ../support/journey.js:150
+
+  148 | const base = require('@playwright/test');
+  149 | const store = require('./artifact-store');
+> 150 | const provenance = require('./fixture-provenance');
+      |                    ^
+  151 |
+  152 | // THE REAL `fetch`, TAKEN BEFORE ANYBODY CAN REPLACE IT — including this file, which replaces it
+  153 | // below to see the Node-side calls a spec makes. Every request the HARNESS itself sends goes through
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-IDqQRo/harness/test/e2e/support/journey.js:150:20)
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-IDqQRo/harness/test/e2e/journeys/provenance-probe.spec.js:1:42)
+Error: No tests found
+
+---- arm 2 (the same world stamped from a DIFFERENT checkout (BETA)) ----
+Error: Cannot find module './fixture-provenance'
+Require stack:
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-IDqQRo/harness/test/e2e/support/journey.js
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-IDqQRo/harness/test/e2e/journeys/provenance-probe.spec.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/common/index.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/program.js
+- /Users/svendaneel/okam/Web-modules/node_modules/@playwright/test/cli.js
+
+   at ../support/journey.js:150
+
+  148 | const base = require('@playwright/test');
+  149 | const store = require('./artifact-store');
+> 150 | const provenance = require('./fixture-provenance');
+      |                    ^
+  151 |
+  152 | // THE REAL `fetch`, TAKEN BEFORE ANYBODY CAN REPLACE IT — including this file, which replaces it
+  153 | // below to see the Node-side calls a spec makes. Every request the HARNESS itself sends goes through
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-IDqQRo/harness/test/e2e/support/journey.js:150:20)
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-IDqQRo/harness/test/e2e/journeys/provenance-probe.spec.js:1:42)
+Error: No tests found
+
+---- arm 3 (stamp INVALIDATED (its world is gone) — must fall back to the port and be WRONG) ----
+Error: Cannot find module './fixture-provenance'
+Require stack:
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-IDqQRo/harness/test/e2e/support/journey.js
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-IDqQRo/harness/test/e2e/journeys/provenance-probe.spec.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/common/index.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/program.js
+- /Users/svendaneel/okam/Web-modules/node_modules/@playwright/test/cli.js
+
+   at ../support/journey.js:150
+
+  148 | const base = require('@playwright/test');
+  149 | const store = require('./artifact-store');
+> 150 | const provenance = require('./fixture-provenance');
+      |                    ^
+  151 |
+  152 | // THE REAL `fetch`, TAKEN BEFORE ANYBODY CAN REPLACE IT — including this file, which replaces it
+  153 | // below to see the Node-side calls a spec makes. Every request the HARNESS itself sends goes through
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-IDqQRo/harness/test/e2e/support/journey.js:150:20)
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-IDqQRo/harness/test/e2e/journeys/provenance-probe.spec.js:1:42)
+Error: No tests found
+
+---- arm 4 (stamped ALPHA while the shell declares BETA — a command copied from an older world) ----
+Error: Cannot find module './fixture-provenance'
+Require stack:
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-IDqQRo/harness/test/e2e/support/journey.js
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-IDqQRo/harness/test/e2e/journeys/provenance-probe.spec.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/common/index.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/program.js
+- /Users/svendaneel/okam/Web-modules/node_modules/@playwright/test/cli.js
+
+   at ../support/journey.js:150
+
+  148 | const base = require('@playwright/test');
+  149 | const store = require('./artifact-store');
+> 150 | const provenance = require('./fixture-provenance');
+      |                    ^
+  151 |
+  152 | // THE REAL `fetch`, TAKEN BEFORE ANYBODY CAN REPLACE IT — including this file, which replaces it
+  153 | // below to see the Node-side calls a spec makes. Every request the HARNESS itself sends goes through
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-IDqQRo/harness/test/e2e/support/journey.js:150:20)
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-IDqQRo/harness/test/e2e/journeys/provenance-probe.spec.js:1:42)
+Error: No tests found
+
+---- arm 5 (NO stamp, the shell declares ALPHA — the declaration still carries a remote runner) ----
+Error: Cannot find module './fixture-provenance'
+Require stack:
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-IDqQRo/harness/test/e2e/support/journey.js
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-IDqQRo/harness/test/e2e/journeys/provenance-probe.spec.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/common/index.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/program.js
+- /Users/svendaneel/okam/Web-modules/node_modules/@playwright/test/cli.js
+
+   at ../support/journey.js:150
+
+  148 | const base = require('@playwright/test');
+  149 | const store = require('./artifact-store');
+> 150 | const provenance = require('./fixture-provenance');
+      |                    ^
+  151 |
+  152 | // THE REAL `fetch`, TAKEN BEFORE ANYBODY CAN REPLACE IT — including this file, which replaces it
+  153 | // below to see the Node-side calls a spec makes. Every request the HARNESS itself sends goes through
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-IDqQRo/harness/test/e2e/support/journey.js:150:20)
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-IDqQRo/harness/test/e2e/journeys/provenance-probe.spec.js:1:42)
+Error: No tests found
+
+EXIT=1

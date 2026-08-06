@@ -1,0 +1,58 @@
+=== label      : B2-final-no
+=== edition    : OKAM_EDITION=no
+=== worktree   : /Users/svendaneel/okam/web-atde
+=== commit     : e34977acebd59b223584158c33451b6f1ffd82c1
+=== spec sha   : 8ebe68bc58475753ec7adaa92d13b4dfb89b9c8b
+=== flags sha  : b48d1b9b10b8709097cda15d3e6cc06d4f824c7f
+=== de.ts sha  : cc6e56d4b4f89df4d03bef00d84bce081872d89e
+=== no.ts sha  : 03fbae5be5671ee23cdb88f1829dfab1b94c4eb5
+=== en.ts sha  : e2298392df775e8f68ec09171624abc8ecfe508e
+=== ports      : web=3823 fixture=4823 (4010 never bound, pid 73160 never signalled)
+=== core       : 10 entries
+=== dirty      : verbatim `git status --porcelain -- ':!core'` <<<
+ M test/e2e/journeys/margin-statement-week.spec.js
+ M test/e2e/support/flags.js
+=== dirty end  : >>>
+[WebServer] [fixture] listening on http://127.0.0.1:4823
+
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://172.20.10.4:3823/
+
+[WebServer] [info] Preparing project for development
+
+[WebServer] [info] Initial build may take a while
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+
+[WebServer] [success] Builder initialized
+
+[WebServer] [success] Nuxt files generated
+
+[WebServer] [warn] Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+
+Running 1 test using 1 worker
+
+[WebServer] [info] Waiting for file changes
+
+[WebServer] [info] Memory usage: 1 GB (RSS: 1.9 GB)
+
+[WebServer] [info] Listening on: http://172.20.10.4:3823/
+
+[1/1] [chromium] › test/e2e/journeys/margin-statement-week.spec.js:136:1 › A venue opens a week, enters its purchase spend, finalises it, and finds it frozen @fixture
+  1 passed (22.1s)
+RESULT B2-final-no edition=no PASS rc=0

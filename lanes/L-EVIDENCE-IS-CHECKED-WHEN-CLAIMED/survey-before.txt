@@ -1,0 +1,113 @@
+=== path-shaped evidence, by artifact class ===
+built-unverified   MISSING             149
+built-unverified   OPAQUE(.md)         132
+built-unverified   OPAQUE(.txt)          4
+verified           DIRECTORY             1
+verified           JSON-NO-STATUS        1
+verified           JSON-STATUS          12
+verified           OPAQUE(.md)          39
+verified           OPAQUE(.txt)          1
+
+=== verified rows only, in full ===
+  L-JOURNEY-COVERAGE-THREE     DIRECTORY        artifacts/journeys/
+  L-GROWTH-MAIL                JSON-NO-STATUS   artifacts/journeys/growth-doi-postmark-sandbox.json
+                                 -> journey,title,decision,lane,ranAt,path
+  L-CONFIRM-ADMIN-SURFACE      JSON-STATUS      artifacts/journeys/account-email-confirm.playwright.json
+                                 -> status='passed'
+  L-EV-DEPOSITS-PRECONDITION   JSON-STATUS      artifacts/journeys/events-deposit-precondition.playwright.json
+                                 -> status='passed'
+  L-EV-RUNSHEET-PRINT          JSON-STATUS      artifacts/journeys/events-runsheet-print.playwright.json
+                                 -> status='passed'
+  L-GR-DEADLINE-ONWIRE         JSON-STATUS      artifacts/journeys/growth-privacy-queue.playwright.json
+                                 -> status='passed'
+  L-GR-PRIVACY-VENUE           JSON-STATUS      artifacts/journeys/growth-privacy-queue.playwright.json
+                                 -> status='passed'
+  L-JOURNEY-EVENTS             JSON-STATUS      artifacts/journeys/events-enquiry-to-settlement.playwright.json
+                                 -> status='passed'
+  L-JOURNEY-MARGIN             JSON-STATUS      artifacts/journeys/margin-supplier-to-plate.playwright.json
+                                 -> status='passed'
+  L-MEALS-FUNDED               JSON-STATUS      artifacts/journeys/meals-funded-checkout.playwright.json
+                                 -> status='passed'
+  L-MEALS-STALE-TOKEN          JSON-STATUS      artifacts/journeys/meals-stale-token-requote.playwright.json
+                                 -> status='passed'
+  L-MODAL-LAND                 JSON-STATUS      artifacts/journeys/modal-scroll-lock.playwright.json
+                                 -> status='passed'
+  L-MODAL-SCROLLLOCK           JSON-STATUS      artifacts/journeys/modal-scroll-lock.playwright.json
+                                 -> status='passed'
+  L-WF-FLAGS-UI                JSON-STATUS      artifacts/journeys/workforce-flag-lever.playwright.json
+                                 -> status='passed'
+  L-ALIASING-NEEDLE-SWEEP      OPAQUE(.md)      lanes/L-ALIASING-NEEDLE-SWEEP/census.md
+  L-CENSUS-CORRECTIONS         OPAQUE(.md)      lanes/L-CENSUS-CORRECTIONS/evidence.md
+  L-COMPROOT-FAMILY-LAND       OPAQUE(.md)      lanes/L-COMPROOT-FAMILY-LAND/merge-receipt.md
+  L-CONFIRM-CHAIN-REVIEW       OPAQUE(.md)      docs/plan/reviews/L-CONFIRM-CHAIN-REVIEW.md
+  L-CORS-CREDENTIALED-ORIGIN   OPAQUE(.md)      lanes/L-CORS-CREDENTIALED-ORIGIN/evidence.md
+  L-DI-COLLECTION-SILENT       OPAQUE(.md)      lanes/L-DI-COLLECTION-SILENT/census.md
+  L-EV-FAMILY-LAND             OPAQUE(.md)      lanes/L-EV-FAMILY-LAND/merge-receipt.md
+  L-EV-INQUIRY-REVIEW          OPAQUE(.md)      docs/plan/reviews/L-EV-INQUIRY-REVIEW.md
+  L-EV-REVIEW                  OPAQUE(.md)      docs/plan/reviews/L-EV-REVIEW.md
+  L-EXIT-INSTRUMENT-SWEEP      OPAQUE(.md)      lanes/L-EXIT-INSTRUMENT-SWEEP/map.md
+  L-FLAGS-RESOLVERS-REVIEW     OPAQUE(.md)      docs/plan/reviews/L-FLAGS-RESOLVERS-REVIEW.md
+  L-FLAGS-UI-REVIEW            OPAQUE(.md)      docs/plan/reviews/L-FLAGS-UI-REVIEW.md
+  L-GR-CONFIRMED-REVIEW        OPAQUE(.md)      docs/plan/reviews/L-GR-CONFIRMED-REVIEW.md
+  L-GR-PRIVACY-REVIEW          OPAQUE(.md)      docs/plan/reviews/L-GR-PRIVACY-REVIEW.md
+  L-GR-RATELIMIT-REVIEW        OPAQUE(.md)      docs/plan/reviews/L-GR-RATELIMIT-REVIEW.md
+  L-GR-REVIEW                  OPAQUE(.md)      docs/plan/reviews/L-GR-REVIEW.md
+  L-GR-TESTSEND-REVIEW         OPAQUE(.md)      docs/plan/reviews/L-GR-TESTSEND-REVIEW.md
+  L-JOURNEY-TEARDOWN           OPAQUE(.md)      lanes/L-JOURNEY-TEARDOWN/mutation-log.md
+  L-LIVE-HARNESS-REVIEW        OPAQUE(.md)      docs/plan/reviews/L-LIVE-HARNESS-REVIEW.md
+  L-MEALS-POSREL-LAND          OPAQUE(.md)      lanes/L-MEALS-POSREL-LAND/merge-receipt.md
+  L-MEALS-RELEASE-CLUSTER-REVIEW OPAQUE(.md)      docs/plan/reviews/L-MEALS-RELEASE-CLUSTER-REVIEW.md
+  L-MEALS-REVIEW               OPAQUE(.md)      docs/plan/reviews/L-MEALS-REVIEW.md
+  L-MEALS-SWEEP-REVIEW         OPAQUE(.md)      docs/plan/reviews/L-MEALS-SWEEP-REVIEW.md
+  L-MONEYPATH-PAIR-REVIEW      OPAQUE(.md)      docs/plan/reviews/L-MONEYPATH-PAIR-REVIEW.md
+  L-MRG-REVIEW                 OPAQUE(.md)      docs/plan/reviews/L-MRG-REVIEW.md
+  L-MRG-REVISE-LAND            OPAQUE(.md)      lanes/L-MRG-REVISE-LAND/evidence.md
+  L-MRG-WASTE-REVIEW           OPAQUE(.md)      docs/plan/reviews/L-MRG-WASTE-REVIEW.md
+  L-PDF-FAMILY-LAND            OPAQUE(.md)      lanes/L-PDF-FAMILY-LAND/merge-receipt.md
+  L-PRICE-REVIEW               OPAQUE(.md)      docs/plan/reviews/L-PRICE-REVIEW.md
+  L-REPLAY-PINS-RECHECK        OPAQUE(.md)      lanes/L-REPLAY-PINS-RECHECK/census.md
+  L-ROW-FIT-GOODS-GROUPS       OPAQUE(.md)      lanes/L-ROW-FIT-GOODS-GROUPS/mutation-log.md
+  L-TRAIN-REVIEW               OPAQUE(.md)      docs/plan/reviews/L-TRAIN-REVIEW.md
+  L-UTLKVIT-REVIEW             OPAQUE(.md)      docs/plan/reviews/L-UTLKVIT-REVIEW.md
+  L-WF-CONTACT-PINS            OPAQUE(.md)      lanes/L-WF-CONTACT-PINS/mutation-log.md
+  L-WF-CORRECTION-PINS         OPAQUE(.md)      lanes/L-WF-CORRECTION-PINS/mutation-log.md
+  L-WF-PUSH-LAND               OPAQUE(.md)      lanes/L-WF-PUSH-LAND/merge-receipt.md
+  L-WF-REVIEW                  OPAQUE(.md)      docs/plan/reviews/L-WF-REVIEW.md
+  L-WF-W5-REVIEW               OPAQUE(.md)      docs/plan/reviews/L-WF-W5-REVIEW.md
+  L-XZ-SIGNED-COUNT            OPAQUE(.md)      lanes/L-XZ-SIGNED-COUNT/mutation-log.md
+  L-JOURNEY-PROXY-BLINDSPOT    OPAQUE(.txt)     lanes/L-JOURNEY-PROXY-BLINDSPOT/guard-proof.txt
+
+=== every distinct JSON status value in play ===
+  status='passed'                          12  L-MEALS-FUNDED, L-MEALS-STALE-TOKEN, L-MODAL-SCROLLLOCK, L-MODAL-LAND
+
+=== the two rows that must keep passing ===
+  L-LIVE-WORLD-STAFF  state=built-unverified
+    exit:     the two workforce journeys run live on a seeded world, with artifacts naming the live backend
+    evidence: lanes/L-LIVE-WORLD-STAFF/live-world-run.txt (commit 538abe6)
+    tokens:   ([], [])
+    TODAY:    refused evidence path does not exist: lanes/L-LIVE-WORLD-STAFF/live-world-run.txt (commit 538abe6)
+  L-GROWTH-MAIL  state=verified
+    exit:     fact:growth.mail.provider is present AND one double-opt-in confirmation is accepted by the ruled provider's sandbox, recorded under artifacts/journeys/
+    evidence: artifacts/journeys/growth-doi-postmark-sandbox.json
+    tokens:   (['fact:growth.mail.provider'], ['artifacts/journeys/'])
+    TODAY:    ADMITTED 
+
+=== the six Feature exits ===
+  FT-WORKFORCE   state=built-unverified   ev=''
+    exit:   a manager walks plan, publish, punch, decide a request and open the personalliste in a browser and the walk is captured under artifacts/journeys/, AND the kodeoversikt for that business day can be produced
+    tokens: ['artifacts/journeys/']
+  FT-MARGIN      state=built-unverified   ev=''
+    exit:   a chef enters an ingredient, a supplier price and a recipe, then opens, costs, freezes and corrects one week in a browser, captured under artifacts/journeys/
+    tokens: ['artifacts/journeys/']
+  FT-EVENTS      state=built-unverified   ev=''
+    exit:   a host takes one booking from the public enquiry page through a paid Vipps deposit to a settled statement in a browser, captured under artifacts/journeys/, AND the run sheet prints a recorded dietary requirement
+    tokens: ['artifacts/journeys/']
+  FT-MEALS       state=built-unverified   ev=''
+    exit:   an invited employee claims a membership, places a funded order a company budget pays for, and the month reaches a finalized statement line naming that employee, captured under artifacts/journeys/
+    tokens: ['artifacts/journeys/']
+  FT-TRAINING    state=built-unverified   ev=''
+    exit:   a manager authors a course, assigns it, a worker passes the quiz, and the completion is readable as evidence in a browser, captured under artifacts/journeys/
+    tokens: ['artifacts/journeys/']
+  FT-GROWTH      state=built-unverified   ev=''
+    exit:   a guest subscribes from the public page, receives a real double-opt-in mail from the ruled provider, confirms, then withdraws from the preference centre at the deployed origins, captured under artifacts/journeys/
+    tokens: ['artifacts/journeys/']

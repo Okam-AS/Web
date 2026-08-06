@@ -1,0 +1,13 @@
+=== TRUTHS RESOLVED AT RUN TIME ===
+  OPTIONS-BOUND      EXISTS      Program.cs calls AddMealsFeatureOptions() and the extension calls BindConfiguration (d81f037b); appsettings.json ships the section (bf650efd).
+  AGREEMENT-CREATE   EXISTS      MealsAgreementController exposes POST .../agreements (588061e7).
+  RESERVATION-TOKEN  EXISTS      Core cart-service.ts puts ?reservationToken= on the wire (Core ef833ca); ConsumerWeb CheckoutMeals.vue offers the payer (ac264e5); CartsController.Complete receives it.
+  INVITATION-CLAIM   EXISTS      pages/meals/join.vue claims invitations (a3f6100).
+
+=== SURFACE SCANNED ===
+  255 files under the Meals surface of both repos
+
+=== REASSERTED FALSE CLAIMS ===
+  none
+
+=== CLEAN ===

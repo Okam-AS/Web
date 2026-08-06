@@ -1,0 +1,78 @@
+[WebServer] [fixture] listening on http://127.0.0.1:4904
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+[WebServer] [info] Listening on: http://192.168.68.111:3904/
+[WebServer] [info] Preparing project for development
+[WebServer] [info] Initial build may take a while
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+[WebServer] [success] Builder initialized
+
+Running 1 test using 1 worker
+
+[WebServer] [success] Nuxt files generated
+[WebServer] [warn] Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[WebServer] [info] Waiting for file changes
+[WebServer] [info] Memory usage: 1.3 GB (RSS: 2.03 GB)
+[WebServer] [info] Listening on: http://192.168.68.111:3904/
+  ✘  1 [chromium] › test/e2e/journeys/ongoing-board-live-statuses.spec.js:61:1 › Every live order the API returns is on the board, including the one out with a driver @fixture (18.5s)
+
+
+  1) [chromium] › test/e2e/journeys/ongoing-board-live-statuses.spec.js:61:1 › Every live order the API returns is on the board, including the one out with a driver @fixture 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 2
+    + Received  + 0
+
+    @@ -11,8 +11,6 @@
+        "1010",
+        "1011",
+        "1012",
+        "1013",
+        "1014",
+    -   "1015",
+    -   "1016",
+      ]
+
+      100 |       const sent = served.map(order => String(order.friendlyOrderId)).sort();
+      101 |       const shown = drawn.map(card => card.friendlyOrderId).sort();
+    > 102 |       expect(shown).toEqual(sent);
+          |                     ^
+      103 |
+      104 |       return served.length + ' orders sent, ' + drawn.length + ' cards drawn, same ids';
+      105 |     });
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/ongoing-board-live-statuses.spec.js:102:21
+        at JourneyRecorder.step (/Users/svendaneel/okam/Web-modules/test/e2e/support/journey.js:399:22)
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/ongoing-board-live-statuses.spec.js:95:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/ongoing-board-live-statuse-ae359-g-the-one-out-with-a-driver-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/ongoing-board-live-statuses.fixture.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/ongoing-board-live-statuses.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/ongoing-board-live-statuse-ae359-g-the-one-out-with-a-driver-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/ongoing-board-live-statuse-ae359-g-the-one-out-with-a-driver-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/ongoing-board-live-statuse-ae359-g-the-one-out-with-a-driver-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › test/e2e/journeys/ongoing-board-live-statuses.spec.js:61:1 › Every live order the API returns is on the board, including the one out with a driver @fixture 

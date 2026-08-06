@@ -1,0 +1,14 @@
+{
+  "label": "D2-mutant-no-value-ch",
+  "edition": "ch",
+  "grantedFixturePort": 4847,
+  "grantedWebPort": 3847,
+  "health": "{\"ok\":true,\"port\":4847}",
+  "holderPid": "56356",
+  "holderCwd": "/Users/svendaneel/okam/web-rcptde",
+  "holderCommand": "node test/e2e/fixture/api-server.js",
+  "webPid": "56358",
+  "webCwd": "/Users/svendaneel/okam/web-rcptde",
+  "lsof": "p56356 f12 n127.0.0.1:4847 ",
+  "capturedAt": "2026-08-05T05:37:49Z"
+}

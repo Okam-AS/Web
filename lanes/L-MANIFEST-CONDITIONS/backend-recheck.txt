@@ -1,0 +1,46 @@
+# Backend facts re-measured by L-MANIFEST-CONDITIONS, 2026-08-05T04:21Z, git -C /Users/svendaneel/okam/OkamAPI-modules
+
+## Idempotency family ancestry (git merge-base --is-ancestor, by object)
+  a1d57208 is NOT an ancestor of 4bbf34a5
+  54714dd6 IS ancestor of 4bbf34a5
+  4bbf34a5 IS ancestor of a6583a02
+  a1d57208 IS ancestor of a6583a02
+  54714dd6 IS ancestor of a6583a02
+  a1d57208 IS ancestor of 02684ecc
+  02684ecc is NOT an ancestor of a6583a02
+  01cd5eee is NOT an ancestor of a6583a02
+  01cd5eee is NOT an ancestor of 02684ecc
+
+## First-parent shape of a6583a02 (lane/replay-pins-close)
+* a6583a02 (lane/replay-pins-close) The competing-award interceptor's doc says when it actually fires
+* 6278f0b5 Three refusal-replay pins repair the precondition between the calls, so a re-decide would succeed
+*   887f0512 base: merge lane/wf-idempotency-refusal into the replay-pin base
+|\  
+| * a1d57208 (lane/wf-idempotency-refusal) A refused write is an outcome, so it stops poisoning its own key
+* |   4e87d0f9 base: merge lane/meals-agreement-pin-inverts into the replay-pin base
+|\ \  
+| * | 4bbf34a5 (lane/meals-agreement-pin-inverts) The corridor test pins the replayed refusal, and pins the in-flight guard beside it
+
+  rev-list --count 4bbf34a5..a6583a02 = 10
+  rev-list --count 54714dd6..4bbf34a5 = 1
+
+## CORS pair
+  2a052800 parent=3579bbbc authored=2026-08-03 11:22:27 +0200 committed=2026-08-03 11:22:27 +0200
+  3c71b323 parent=8e2b57de authored=2026-08-03 11:22:27 +0200 committed=2026-08-04 20:24:26 +0200
+  2a052800 Helpers/ServiceCollectionExtensions.cs : 64:                          .AllowAnyHeader().WithExposedHeaders("ETag");
+  3c71b323 Helpers/ServiceCollectionExtensions.cs : 70:                          .AllowAnyHeader().WithExposedHeaders(BrowserReadableHeaders.All);
+  Program.cs at 3579bbbc (2a052800's base) : 102:                          .AllowAnyHeader().WithExposedHeaders("ETag");
+  Program.cs at 8e2b57de (modules tip)     : 102:                          .AllowAnyHeader().WithExposedHeaders(BrowserReadableHeaders.All);
+  Helpers/BrowserReadableHeaders.cs exists at 3579bbbc: NO
+  Helpers/BrowserReadableHeaders.cs exists at 8e2b57de: yes
+
+## The wire test that would red arrives WITH the fix
+87	0	Helpers/GrowthGuestCorsOrigins.cs
+109	0	WebApi.Tests/Growth/GrowthGuestCorsOriginsTests.cs
+162	0	WebApi.Tests/Wire/GrowthPreferenceCentreCorsWireTests.cs
+87	0	Helpers/GrowthGuestCorsOrigins.cs
+109	0	WebApi.Tests/Growth/GrowthGuestCorsOriginsTests.cs
+162	0	WebApi.Tests/Wire/GrowthPreferenceCentreCorsWireTests.cs
+
+## Backend ref drift since the census
+  refs/heads now = 317, census listed 317; added=0 gone=0 (comm against appendix-backend.txt)

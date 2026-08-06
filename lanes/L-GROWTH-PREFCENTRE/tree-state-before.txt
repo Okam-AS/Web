@@ -1,0 +1,340 @@
+ M .gitignore
+ M artifacts/journeys/workforce-invitation-onboarding.playwright.json
+ M artifacts/journeys/workforce-invitation-onboarding/fixture/01-the-roster-before-an-invitation.png
+ M artifacts/journeys/workforce-invitation-onboarding/fixture/02-the-invitation-code-shown-once.png
+ M artifacts/journeys/workforce-invitation-onboarding/fixture/07-the-roster-after-the-claim.png
+ M components/admin/events/EventsJourney.vue
+ M components/admin/margin/MarginCoveragePanel.vue
+ M components/admin/meals/MealsFundedOrders.vue
+ M components/admin/meals/MealsProgramPanel.vue
+ M components/admin/pos/PosShell.vue
+ M components/admin/pos/PosTopBar.vue
+ M components/admin/pos/XReportView.vue
+ M components/admin/training/TrainingAssignmentPanel.vue
+ M components/admin/training/TrainingCertificatePanel.vue
+ M components/admin/training/TrainingCompletionPanel.vue
+ M components/admin/training/TrainingCourseList.vue
+ M components/admin/training/TrainingDisclosurePanel.vue
+ M components/admin/training/TrainingHoldingsPanel.vue
+ M components/admin/training/TrainingVersionPanel.vue
+ M components/admin/training/_training-panel.scss
+ M components/admin/workforce-rates/WorkforceRateTimeline.vue
+ M components/admin/workforce/WorkforceWeekGrid.vue
+ M components/molecules/CustomerInfoModal.vue
+ M components/onboarding/OnboardingProductImages.vue
+ M components/organisms/AdminPageHeader.vue
+ M components/shared/OfferDocument.vue
+ M jest.config.js
+ M lanes/L-EV-JOURNEY-TIMEBOMB/mutation-proof.py
+ M lanes/L-EV-JOURNEY-TIMEBOMB/mutation-proof.txt
+ M package.json
+ M pages/admin/feature-flags.vue
+ M pages/admin/kravia-invoice.vue
+ M pages/admin/margin-recipes.vue
+ M pages/admin/offers.vue
+ M pages/admin/overview.vue
+ M pages/admin/products.vue
+ M pages/admin/reward-members.vue
+ M pages/admin/settlements.vue
+ M pages/admin/wolt-menu.vue
+ M pages/admin/workforce-schedule.vue
+ M pages/preferences/communications.vue
+ M plugins/global-mixin.js
+ M test/admin-nav-access.test.js
+ M test/e2e/fixture/api-server.js
+ M test/e2e/fixture/growth.js
+ M test/e2e/fixture/meals.js
+ M test/e2e/fixture/training.js
+ M test/e2e/fixture/world.js
+ M test/e2e/journeys/admin-refusal-worker.spec.js
+ M test/e2e/journeys/training-course-to-evidence.spec.js
+ M test/e2e/scripts/build-provenance-proof.js
+ M test/e2e/scripts/guard-proof.js
+ M test/e2e/scripts/live-world.sh
+ M test/e2e/support/artifact-store.js
+ M test/e2e/support/journey-assertions.js
+ M test/e2e/support/journey.js
+ M test/e2e/support/world-stamp.js
+ M test/feature-flags-page.test.js
+ M test/journey-artifact-store.test.js
+ M test/journey-assertions.test.js
+ M test/margin-recipe-client.test.js
+ M test/margin-statements-page.test.js
+ M test/margin-waste.test.js
+ M test/price-absence.test.js
+ M test/workforce-rates-timeline.test.js
+ M translations/de.ts
+ M translations/en.ts
+ M translations/no.ts
+ M utils/growth/growth-guest-client.js
+ M utils/margin/money.js
+ M utils/margin/recipe-client.js
+ M utils/margin/statement-view.js
+ M utils/price.js
+ M utils/training/training-client.js
+ M utils/workforce-rates/rate-timeline.js
+ M utils/workforce-rates/rates-client.js
+ M utils/workforce/api-client.js
+ M utils/workforce/roster-client.js
+ M utils/workforce/schedule-client.js
+?? components/admin/meals/MealsStatementLines.vue
+?? components/admin/pos/ClockScreen.vue
+?? components/admin/training/TrainingEvidenceDocument.vue
+?? components/admin/workforce/WorkforceDeliveryGroup.vue
+?? components/admin/workforce/WorkforceDeliveryPanel.vue
+?? components/admin/workforce/WorkforcePublicationList.vue
+?? components/admin/workforce/WorkforcePublicationReceiptGroup.vue
+?? components/admin/workforce/WorkforcePublicationRecipients.vue
+?? components/admin/workforce/WorkforceTimesheetBatchList.vue
+?? components/admin/workforce/WorkforceTimesheetPanel.vue
+?? docs/plan/
+?? lanes/L-ABSENCE-AUDIT-CONDITIONS/
+?? lanes/L-ABSENCE-CLAIMS-AUDIT/
+?? lanes/L-ACCOUNTING-EXPORT-SILENT/
+?? lanes/L-ACK-RECEIPT-SURVIVES-A-RELOAD/
+?? lanes/L-AI-MIDDLEWARE-DELETE/
+?? lanes/L-ARM-RECEIPTS-RECAPTURE/
+?? lanes/L-ARTIFACT-FIELDS-VS-HARNESS/
+?? lanes/L-ARTIFACT-NAMES-ITS-LOCALE/
+?? lanes/L-ARTIFACT-NAMES-ITS-MODULE-TREE/
+?? lanes/L-ARTIFACT-PROVENANCE/
+?? lanes/L-BARE-PATHSPEC-SWEEP/
+?? lanes/L-BLOCKER-RESTATE-RECHECK/
+?? lanes/L-BLOCKER-RESTATE/
+?? lanes/L-BLOCKER-STALE-RERULE/
+?? lanes/L-BUILT-BUT-ON-NO-REF/
+?? lanes/L-CANDIDATE-JOURNEYS-ON-ARRIVAL/
+?? lanes/L-CANONICAL-SLOT-SURVIVES-A-RERUN/
+?? lanes/L-CHECK-DISCOUNT-SUM-COUPLED/
+?? lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM/
+?? lanes/L-CLIENT-TRAILING-SLASH/
+?? lanes/L-COLLAPSE-THE-TWO-HOOK-SWEEPS/
+?? lanes/L-COLLECT-REVIEW-CONDITIONS/
+?? lanes/L-COLLECTED-PATHS/
+?? lanes/L-COMPOSE-CENSUS/
+?? lanes/L-COMPOSE-FE-CANDIDATE/
+?? lanes/L-COMPROOT-FAMILY-LAND/
+?? lanes/L-CORE-ORE-LABEL/consumerapp-green-run.txt
+?? lanes/L-CORE-ORE-LABEL/consumerapp-red-run.txt
+?? lanes/L-CORE-ORE-LABEL/consumerapp-revert-red.txt
+?? lanes/L-CORE-ORE-LABEL/residual-unfixed-cores.txt
+?? lanes/L-CORS-CREDENTIALED-ORIGIN/
+?? lanes/L-CORS-FOLLOWUPS/
+?? lanes/L-CORS-LAND-FOLLOWUPS/
+?? lanes/L-CREDIT-NOTE-NUMBER/
+?? lanes/L-DATED-TEST-OUTPUT/
+?? lanes/L-DECLARATIONS-THE-FRAMEWORK-IGNORES/
+?? lanes/L-DOWNLOAD-HEADERS/
+?? lanes/L-DOWNLOAD-PDF-WIRE/
+?? lanes/L-DUPLICATE-KEY-GUARD/
+?? lanes/L-DUPLICATE-KEY-IN-THE-BUILD/
+?? lanes/L-EF-INDEX-SHADOW-SWEEP/
+?? lanes/L-ENUM-MIRROR-CENSUS/
+?? lanes/L-EOD-CREDIT-SPLIT/
+?? lanes/L-ESCPOS-COMPANYACCOUNT-LABEL/
+?? lanes/L-ESCPOS-LADDER-NAMES-THE-TENDER/
+?? lanes/L-EV-CALLBACK-SWEEP/
+?? lanes/L-EV-FAMILY-LAND/
+?? lanes/L-EV-GUESTLINK-ONE-COMPOSER/
+?? lanes/L-EV-JOURNEY-TIMEBOMB/consecutive-arm-A-run1.txt
+?? lanes/L-EV-JOURNEY-TIMEBOMB/consecutive-arm-A-run2-BEFORE-lever-restore.txt
+?? lanes/L-EV-JOURNEY-TIMEBOMB/consecutive-arm-A-run2.txt
+?? lanes/L-EV-JOURNEY-TIMEBOMB/consecutive-arm-B-run1.txt
+?? lanes/L-EV-JOURNEY-TIMEBOMB/consecutive-arm-B-run2.txt
+?? lanes/L-EV-JOURNEY-TIMEBOMB/consecutive-run-proof.py
+?? lanes/L-EV-JOURNEY-TIMEBOMB/consecutive-run-proof.txt
+?? lanes/L-EV-ONBOARD-PRINT-BLEED/
+?? lanes/L-EV-REFUND-FAKE-ARG/
+?? lanes/L-EV-SEED-DEPOSITS/
+?? lanes/L-EVIDENCE-CITATIONS-RESOLVE/
+?? lanes/L-EXIT-INSTRUMENT-CENSUS/
+?? lanes/L-EXIT-INSTRUMENT-SWEEP/
+?? lanes/L-FE-JOURNEYS-MERGE/
+?? lanes/L-FIX-BRANCH-MANIFEST/
+?? lanes/L-FIXTURE-DIVERGENCE/
+?? lanes/L-FLAG-CONDITIONS-TESTABLE/
+?? lanes/L-FLAGS-EXCUSE-BYFLAG/
+?? lanes/L-FLAGS-JOURNEY-SWEEP/
+?? lanes/L-GERMAN-IDENTIFIER-LABELS/
+?? lanes/L-GR-DEADLINE-COPY/
+?? lanes/L-GR-DEADLINE-STATUTE/
+?? lanes/L-GR-DELIVERY-RECORD/
+?? lanes/L-GR-DISPATCH-ACTOR/
+?? lanes/L-GR-EXIT-WIRE-THE-MAIL/
+?? lanes/L-GR-NEWSLETTER-CROSS/
+?? lanes/L-GR-TESTSEND-ERRORCODE/
+?? lanes/L-GR-TESTSEND-RECORD/
+?? lanes/L-GR-WITHDRAW-ORIGIN/
+?? lanes/L-GROWTH-PREFCENTRE/
+?? lanes/L-GROWTH-SQL-CATCH-TYPED/
+?? lanes/L-GROWTH-SUPPRESSED-ERROR-KEY/
+?? lanes/L-GROWTHAUDIT-TABLE-ABSENT/
+?? lanes/L-GUARD-DEMO/
+?? lanes/L-GUARD-REPAIR-LANDS/
+?? lanes/L-IDENTITY-STUB-TESTS/
+?? lanes/L-JEST-COLLECTS-LANES/
+?? lanes/L-JOURNEY-ARTIFACTS-UNWITNESSED/
+?? lanes/L-JOURNEY-AT-DE/
+?? lanes/L-JOURNEY-COVERAGE-THREE/
+?? lanes/L-JOURNEY-EVENTS/
+?? lanes/L-JOURNEY-EVIDENCE-SWEEP/
+?? lanes/L-JOURNEY-GROWTH/
+?? lanes/L-JOURNEY-MEALS/
+?? lanes/L-JOURNEY-PORT-HARDCODED/
+?? lanes/L-JOURNEY-PROXY-BLINDSPOT/
+?? lanes/L-JOURNEY-RECEIPT-RECORDS-WHAT-ANSWERED/
+?? lanes/L-JOURNEY-REGRESSION-BISECT/
+?? lanes/L-JOURNEY-TEARDOWN/
+?? lanes/L-JOURNEY-TRAINING/
+?? lanes/L-JOURNEY-WORKFORCE/
+?? lanes/L-LEDGER-BUILD-STATE-RECONCILE/
+?? lanes/L-LINT-RUNNABLE/
+?? lanes/L-LINT-RUNS-ON-SOMETHING/
+?? lanes/L-LINT-TWO-REAL-DEFECTS/
+?? lanes/L-LIVE-ASSERTION-FLOORS/
+?? lanes/L-LIVE-WORLD-ADMINCRED/
+?? lanes/L-LIVE-WORLD-RESET/
+?? lanes/L-MANIFEST-CONDITIONS/
+?? lanes/L-MEALS-AGREEMENT-PIN-INVERTS/
+?? lanes/L-MEALS-CLAIM-RECEIPT/
+?? lanes/L-MEALS-DOCSYNC/
+?? lanes/L-MEALS-ENROL-JOURNEY-LOCATOR/
+?? lanes/L-MEALS-ENROL-UI/
+?? lanes/L-MEALS-IDEMPOTENCY-REFUSAL/
+?? lanes/L-MEALS-MEMBERS-READ-LAND-CHECK/
+?? lanes/L-MEALS-POSREL-LAND/
+?? lanes/L-MEALS-PRETICK-NEVER-WALKED/
+?? lanes/L-MEALS-PROJECTION-LAG-VISIBLE/
+?? lanes/L-MEALS-REACHABLE/
+?? lanes/L-MEALS-RECONCILE-UI/
+?? lanes/L-MEALS-RELEASE-RACE/
+?? lanes/L-MEALS-STALE-TOKEN/
+?? lanes/L-MEALS-STATEMENT-SURFACE/
+?? lanes/L-MIG-NUMBER-CLAIMS/
+?? lanes/L-MIG-STACK-RECORD/
+?? lanes/L-MIG-TRAIN-DISPLAY-SNAPSHOT/
+?? lanes/L-MIRROR-HOLDS-ONLY-REAL-MEMBERS/
+?? lanes/L-MIXIN-LABELS-TRANSLATE/
+?? lanes/L-MODAL-BROKEN-TWO/
+?? lanes/L-MODULES-PREFLIGHT-FAILS-LOUD/
+?? lanes/L-MRG-COVERAGE-UNKNOWN/
+?? lanes/L-MRG-PRICE-CORRECTION/
+?? lanes/L-MRG-RECIPE-REVISE-UI/
+?? lanes/L-MRG-REVISE-LAND/
+?? lanes/L-MRG-STARTER-150/
+?? lanes/L-MRG-WASTE/
+?? lanes/L-OFFER-PARTIAL-SUBTOTAL/
+?? lanes/L-OFFERS-PAGE-HUNDREDFOLD/
+?? lanes/L-PAYMENT-LABEL-UKJENT/
+?? lanes/L-PAYMENTTYPE-COMPANYACCOUNT/
+?? lanes/L-PAYMENTTYPE-FROM-CLIENT-UNGUARDED/
+?? lanes/L-PDF-CREDITNOTE-NAME/
+?? lanes/L-PDF-FAMILY-LAND/
+?? lanes/L-PDF-NULLDEREF/
+?? lanes/L-POS-TENDER-WIRE-REBASE/
+?? lanes/L-PRESERVE-UNREFERENCED-WORK/
+?? lanes/L-PRICE-BYPASS-FIVE/
+?? lanes/L-PRICE-CLEANUP-TWO/
+?? lanes/L-PRICE-CROSSCURRENCY/
+?? lanes/L-PRICE-SHADOW-GUARD/
+?? lanes/L-PROBE-DROP-CONSUMERWEB/
+?? lanes/L-PROVENANCE-EXCLUDES-LANE-EVIDENCE/
+?? lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED/
+?? lanes/L-RECEIPT-JOURNEY-AT-DE/
+?? lanes/L-RECEIPT-PAYER-LINE-LOCATE/
+?? lanes/L-REPLAY-PINS-CLOSE/
+?? lanes/L-REPLAY-PINS-RECHECK/
+?? lanes/L-ROW-FIT-GOODS-GROUPS/
+?? lanes/L-SHARED-DIRT-CENSUS/
+?? lanes/L-TESTS-THAT-WRITE-ARTIFACTS/
+?? lanes/L-TIER-ARTIFACTS/
+?? lanes/L-TRAIN-DEMO-SEED/
+?? lanes/L-TRAIN-DISPLAY-SNAPSHOT/
+?? lanes/L-TRAIN-EVIDENCE-PACK-UI/
+?? lanes/L-TRAIN-IDEMPOTENCY-REFUSAL/
+?? lanes/L-TRAIN-PUBLISH-UNCLICKABLE/
+?? lanes/L-TRAIN-READONLY-VISIBLE/
+?? lanes/L-TRANSLATION-STALE-SWEEP/
+?? lanes/L-TRANSLATIONS-COLLISION/
+?? lanes/L-UTLKVIT-FAMILY-LAND/
+?? lanes/L-UTLKVIT-REPRINT-KIND/
+?? lanes/L-VAT-KEYS-MONOLINGUAL/
+?? lanes/L-VUE-JEST-UPGRADE-MEASURED/
+?? lanes/L-VUE3-SHAPE-GUARD/
+?? lanes/L-WF-ACKNOWLEDGE-RECEIPT-VISIBLE/
+?? lanes/L-WF-BLIND-BIND-NAME/
+?? lanes/L-WF-CONTACT-IMPORTED/
+?? lanes/L-WF-CONTACT-PINS/
+?? lanes/L-WF-CORRECTION-PATH/
+?? lanes/L-WF-CORRECTION-PINS/
+?? lanes/L-WF-DIGEST-TAUTOLOGY/
+?? lanes/L-WF-EXCHANGE-AWARD-UNGATED/
+?? lanes/L-WF-FAILURES-SURFACE/
+?? lanes/L-WF-INVITE-LIST-REVOKE/
+?? lanes/L-WF-INVITE-SURFACE/
+?? lanes/L-WF-LINK-DEADEND/
+?? lanes/L-WF-ONBOARD-DEMO-RUN/
+?? lanes/L-WF-ONBOARD/
+?? lanes/L-WF-PIVOT-DEFECTS/
+?? lanes/L-WF-PUBHIST/
+?? lanes/L-WF-PUNCH-UI/
+?? lanes/L-WF-PUSH-LAND/
+?? lanes/L-WF-ROLES-UI/
+?? lanes/L-WF-TIMEOFF-DECIDE-GATE/
+?? lanes/L-WF-TIMESHEET-UI/
+?? lanes/L-WFR-ACCESS-STRING-TRUTH/
+?? lanes/L-WHICH-EVIDENCE-CAME-FROM-A-BORROWED-TREE/
+?? lanes/L-WORKTREE-BASENAME-PIN/
+?? lanes/L-WORKTREE-BASENAME-TAX/
+?? lanes/L-WORLD-STAMP-WINDOWS/
+?? lanes/L-XZ-NEGATED-ABSENCE/
+?? lanes/L-XZ-SIGNED-COUNT/
+?? pages/admin/meals-statements.vue
+?? pages/admin/training-evidence.vue
+?? pages/admin/workforce-delivery.vue
+?? pages/admin/workforce-publications.vue
+?? pages/admin/workforce-roles.vue
+?? pages/admin/workforce-timesheets.vue
+?? scripts/
+?? test/e2e/fixture/workforce-delivery.js
+?? test/e2e/fixture/workforce-publications.js
+?? test/e2e/fixture/workforce-punch.js
+?? test/e2e/fixture/workforce-timesheets.js
+?? test/e2e/journeys/growth-guest-lifecycle.spec.js
+?? test/e2e/journeys/growth-testsend-refusal.spec.js
+?? test/e2e/journeys/meals-statement-month.spec.js
+?? test/e2e/journeys/training-evidence-document.spec.js
+?? test/e2e/journeys/workforce-delivery-failures.spec.js
+?? test/e2e/journeys/workforce-pos-punch.spec.js
+?? test/e2e/journeys/workforce-publication-receipts.spec.js
+?? test/e2e/journeys/workforce-role-catalogue.spec.js
+?? test/e2e/journeys/workforce-timesheet-export.spec.js
+?? test/e2e/scripts/live-world-stamp-wiring-check.js
+?? test/margin-recipe-revise.test.js
+?? test/meals-statement-view.test.js
+?? test/overview-watch-duplicate.test.js
+?? test/pos-clock-reserved-key.test.js
+?? test/price-bypass-legacy.test.js
+?? test/price-crosscurrency.test.js
+?? test/price-gate-shadow.test.js
+?? test/workforce-delivery-failures.test.js
+?? test/workforce-pos-clock.test.js
+?? test/workforce-publication-receipts.test.js
+?? test/workforce-roles-page.test.js
+?? test/workforce-timesheet-client.test.js
+?? test/workforce-timesheet-components.test.js
+?? test/workforce-timesheet.test.js
+?? test/world-stamp-windows.test.js
+?? test/xz-negated-absence.test.js
+?? utils/cross-currency.js
+?? utils/meals/statement-client.js
+?? utils/meals/statement-view.js
+?? utils/training/evidence.js
+?? utils/workforce/delivery-failures.js
+?? utils/workforce/pos-clock-client.js
+?? utils/workforce/pos-clock-state.js
+?? utils/workforce/publication-receipts.js
+?? utils/workforce/timesheet-client.js
+?? utils/workforce/timesheet.js
+?? world.config
+8ac6f63648015d8c7a230181a7f07bf303d43268

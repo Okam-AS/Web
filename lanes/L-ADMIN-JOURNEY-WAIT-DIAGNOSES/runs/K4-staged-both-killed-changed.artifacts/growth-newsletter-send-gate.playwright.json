@@ -1,0 +1,178 @@
+{
+  "journey": "growth-newsletter-send-gate",
+  "title": "An operator drafts and approves a newsletter, and the send gate opens only when both switches are up",
+  "status": "failed",
+  "startedAtUtc": "2026-08-06T11:08:11.883Z",
+  "finishedAtUtc": "2026-08-06T11:08:28.900Z",
+  "durationMs": 17017,
+  "capabilities": [
+    "platform.feature-flags.write",
+    "growth.consent.standing.read",
+    "growth.audience.snapshot",
+    "growth.newsletter.author",
+    "growth.newsletter.test-send",
+    "growth.newsletter.approve",
+    "growth.send-gate.fail-closed"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3877",
+  "apiBaseUrl": "http://127.0.0.1:4877",
+  "commit": "8ac6f63648015d8c7a230181a7f07bf303d43268",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": {
+    "id": "fixture@8ac6f63648015d8c7a230181a7f07bf303d43268+dirty",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "8ac6f63-dirty",
+    "detail": "the in-repo fixture backend, not an API build (branch HEAD)"
+  },
+  "backendServed": 14,
+  "backendSubjectServed": 7,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:4877/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:4877/user/login -> 200",
+    "GET http://127.0.0.1:4877/user -> 200",
+    "GET http://127.0.0.1:4877/stores/42/market -> 200",
+    "GET http://127.0.0.1:4877/stores/42 -> 200",
+    "GET http://127.0.0.1:4877/user -> 200",
+    "GET http://127.0.0.1:4877/v1/growth/stores/42/consents/summary -> 200",
+    "GET http://127.0.0.1:4877/v1/growth/stores/42/newsletters -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in and open the newsletter screen",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T11:08:11.885Z",
+      "durationMs": 1606,
+      "detail": "on /admin/growth-newsletter, no blocker",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "the consent standing is the SERVER's four figures, not a total",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T11:08:13.491Z",
+      "durationMs": 19,
+      "detail": "samtykket 214 · trukket 18 · sperret 7 · venter 5",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "there is no gate yet, and there is no draft form either",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T11:08:13.510Z",
+      "durationMs": 7,
+      "detail": "no gate, no draft form; the audience is the stated precondition",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "compute the audience — and it is NOT the consent total",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T11:08:13.517Z",
+      "durationMs": 57,
+      "detail": "209 will receive, 5 excluded, watermark a91c4f7e20b8",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "write the newsletter",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T11:08:13.574Z",
+      "durationMs": 78,
+      "detail": "version 1 saved",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "THE FIRST STOP: the gate arrives closed, and both switches are named",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T11:08:13.652Z",
+      "durationMs": 22,
+      "detail": "3 reasons, both flags among them; the send button is drawn and disabled",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "the module switch also closes the TEST route, and the panel says so",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T11:08:13.787Z",
+      "durationMs": 14,
+      "detail": "test route closed by growth.module, input disabled",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "right after a save the approval is informed, and the panel does not warn",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T11:08:13.801Z",
+      "durationMs": 9,
+      "detail": "no unseen-body warning: the boxes are the version being approved",
+      "error": null
+    },
+    {
+      "n": 9,
+      "name": "approve it — and now ONLY the two switches are left",
+      "status": "failed",
+      "startedAtUtc": "2026-08-06T11:08:13.810Z",
+      "durationMs": 15035,
+      "detail": null,
+      "error": "\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.growth-page__panel').filter({ has: locator('h2.growth-page__panel-title').filter({ hasText: 'Godkjenning' }) }).locator('.growth-page__badge')\nTimeout: 15000ms\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 3\u001b[39m\n\n\u001b[32m- Godkjent\u001b[39m\n\u001b[31m+\u001b[39m\n\u001b[31m+               Ikke godkjent\u001b[39m\n\u001b[31m+ \u001b[43m            \u001b[49m\u001b[39m\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('.growth-page__panel').filter({ has: locator('h2.growth-page__panel-title').filter({ hasText: 'Godkjenning' }) }).locator('.growth-page__badge')\u001b[22m\n\u001b[2m    34 × locator resolved to <span data-v-3af62fd6=\"\" data-v-70f5b8c5=\"\" class=\"growth-page__badge growth-page__badge--none\">↵              Ikke godkjent↵            </span>\u001b[22m\n\u001b[2m       - unexpected value \"\u001b[22m\n\u001b[2m              Ikke godkjent\u001b[22m\n\u001b[2m            \"\u001b[22m\n"
+    }
+  ],
+  "findings": [],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fgrowth-newsletter\" to \"/admin?redirect=%2Fadmin%2Fgrowth-newsletter&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fgrowth-newsletter\" to \"/admin?redirect=%2Fadmin%2Fgrowth-newsletter&storeId=42\" with a new navigation.",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+    "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+    "WebSocket connection to 'ws://127.0.0.1:3877/_content/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://127.0.0.1:3877/_content/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://127.0.0.1:3877/_content/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED"
+  ],
+  "failedRequests": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:4877/v1/growth/stores/42/newsletters/2/approval",
+      "status": null,
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:3877/_loading/sse",
+      "status": null,
+      "failure": "net::ERR_INCOMPLETE_CHUNKED_ENCODING"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:3877/__webpack_hmr/client",
+      "status": null,
+      "failure": "net::ERR_INCOMPLETE_CHUNKED_ENCODING"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:3877/_loading/sse",
+      "status": null,
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    }
+  ],
+  "screenshots": [
+    "growth-newsletter-send-gate/fixture/01-the-gate-closed-on-three-counts.png"
+  ],
+  "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.growth-page__panel').filter({ has: locator('h2.growth-page__panel-title').filter({ hasText: 'Godkjenning' }) }).locator('.growth-page__badge')\nTimeout: 15000ms\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 3\u001b[39m\n\n\u001b[32m- Godkjent\u001b[39m\n\u001b[31m+\u001b[39m\n\u001b[31m+               Ikke godkjent\u001b[39m\n\u001b[31m+ \u001b[43m            \u001b[49m\u001b[39m\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('.growth-page__panel').filter({ has: locator('h2.growth-page__panel-title').filter({ hasText: 'Godkjenning' }) }).locator('.growth-page__badge')\u001b[22m\n\u001b[2m    34 × locator resolved to <span data-v-3af62fd6=\"\" data-v-70f5b8c5=\"\" class=\"growth-page__badge growth-page__badge--none\">↵              Ikke godkjent↵            </span>\u001b[22m\n\u001b[2m       - unexpected value \"\u001b[22m\n\u001b[2m              Ikke godkjent\u001b[22m\n\u001b[2m            \"\u001b[22m\n",
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/growth-newsletter-send-gate.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false,
+    "supersedes": null
+  }
+}

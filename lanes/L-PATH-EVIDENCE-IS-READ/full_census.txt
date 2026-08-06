@@ -1,0 +1,248 @@
+entities with evidence: 348  (fact: 10, path-shaped: 338)
+
+==============================================================================
+STATE 3 — the recorded artifact RECORDS ITS OWN FAILURE
+==============================================================================
+
+L-TRAIN-EVIDENCE-NAMES-COURSE      built-unverified
+  exit    : every completion row displays the course title and version, pinned by both a component test and a wire test
+  evidence: OkamAPI wt-trn-names lane/trn-evidence-names fcb5181a + b560bc3a (artifacts/tests/L-TRAIN-EVIDENCE-NAMES-COURSE/RUN.md, base.trx, after.trx) . Web-modules cff41c8 . artifacts/journeys/training-course-to-evidence.playwright.json (19 steps, passed)
+  -> artifacts/journeys/training-course-to-evidence.playwright.json         FAIL
+     status=failed, 9 steps, 1 not-passed; journey=training-course-to-evidence
+
+L-LIVE-WORLD-STAFF                 built-unverified
+  exit    : the two workforce journeys run live on a seeded world, with artifacts naming the live backend
+  evidence: lanes/L-LIVE-WORLD-STAFF/live-world-run.txt (commit 538abe6)
+  -> lanes/L-LIVE-WORLD-STAFF/live-world-run.txt                            TEXT-FAIL
+     self-declared [('status', 'failed'), ('status', 'failed')]; first line:    target: Server=localhost,15434;Database=OkamLiveJourneyStaff;User Id=sa;Password=***;Tr
+
+count: 2
+
+==============================================================================
+evidence that resolves to a DIRECTORY (a prefix, not an artifact)
+==============================================================================
+
+L-MEALS-UTLKVIT                    built-unverified   OkamAPI worktree /Users/svendaneel/okam/wt-utlkvit, branch lane/meals-utlkvit @ 1a03bc6c (local, not pushed) · SQL TIER 
+  -> dir token: /Users/svendaneel/okam/wt-utlkvit
+
+L-MEALS-XZ-CREDIT                  built-unverified   OkamAPI worktree /Users/svendaneel/okam/wt-xzcredit, branch lane/meals-xz-credit @ 25586d86 (local, not pushed) · ARTIFA
+  -> dir token: /Users/svendaneel/okam/wt-xzcredit
+
+L-TRAIN-W3-SCHEMA                  built-unverified   artifacts/tests/1da15fb113ae72a8f71ed68ef758bb1a8a30d69b/RUN.md (SQL tier 557/557, fast 4313/0/9) + OkamAPI-modules 3993
+  -> dir token: /Users/svendaneel/okam/wt-trainw3
+  -> dir token: ../OkamAPI-modules
+
+L-WF-OPLINK                        built-unverified   artifacts/journeys/wf-operator-import-clock.playwright.json (11/11 steps passed, commit 3e811b2, 0 failed requests, 6 sc
+  -> dir token: ~/okam/web-wf-oplink
+  -> dir token: lanes/L-WF-OPLINK/artifacts/journeys/
+
+L-WF-EXCHANGE-MOVE                 built-unverified   OkamAPI-modules a5ff40f2 on lane/wf-exchange-move (worktree ~/okam/wt-wfexmove) · fact:wf.journeys now 13 (WebApi.Tests/
+  -> dir token: ~/okam/wt-wfexmove
+
+L-WF-W5-TIMESHEET                  built-unverified   OkamAPI-modules lane/wf-w5-timesheet @ 9e82b286 (worktree ~/okam/wt-wfw5, cut from lane/margin-waste afcfddbc — the real
+  -> dir token: ~/okam/wt-wfw5
+
+L-STATUTE-HONESTY                  built-unverified   Web-modules lane/statute-honesty @ f01886a (worktree ../web-statute) + OkamAPI-modules lane/statute-honesty @ 485959ab (
+  -> dir token: ../web-statute
+  -> dir token: ../OkamAPI-statute
+
+L-GROWTH-HEALTH-HONEST             built-unverified   OkamAPI-modules lane/growth-health-honest @ c11e78a6 (worktree ../wt-growth-health, off feature/restaurant-modules 24dec
+  -> dir token: ../wt-growth-health
+
+L-VIPPS-REDACT-404                 built-unverified   OkamAPI worktree /Users/svendaneel/okam/wt-vippsredact, branch lane/vipps-redact-404, commit cb18cab4, base feature/rest
+  -> dir token: /Users/svendaneel/okam/wt-vippsredact
+
+L-WF-VIOLATION-EXACT               built-unverified   /Users/svendaneel/okam/wt-wfviolexact @ cdb4c66c (lane/wf-violation-exact, parent 569887a5, unpushed)
+  -> dir token: /Users/svendaneel/okam/wt-wfviolexact
+
+L-REVIEW-RESIDUALS                 built-unverified   OkamAPI-modules lane/review-residuals-provider @ bd765c7d (worktree ../wt-resid-provider, off lane/growth-health-honest 
+  -> dir token: ../wt-resid-provider
+  -> dir token: ../wt-resid-rezone
+
+L-EV-STALE-CAUSE                   built-unverified   ../web-evstale/artifacts/journeys/events-stale-cause.playwright.json (6/6 steps, 3 PNGs, commit 2bc18da) + ../OkamAPI-mo
+  -> dir token: ../OkamAPI-modules
+  -> dir token: ../wt-evstale
+
+L-MEALS-RELEASE-RACE               built-unverified   lanes/L-MEALS-RELEASE-RACE/evidence.md — worktree /Users/svendaneel/okam/OkamAPI-meals-race, branch lane/meals-release-r
+  -> dir token: /Users/svendaneel/okam/OkamAPI-meals-race
+
+L-GROWTH-NEWSLETTER-WIRE           built-unverified   OkamAPI-modules lane/growth-newsletter-wire @ 87600a1c (worktree ../wt-gr-nlwire, off feature/restaurant-modules de1e5c5
+  -> dir token: ../wt-gr-nlwire
+
+L-STATUTE-EVIDENCE-WORLD           built-unverified   worktree /Users/svendaneel/okam/web-statute-world @ 2ee3fd7 (branch lane/statute-evidence-world, off lane/statute-honest
+  -> dir token: /Users/svendaneel/okam/web-statute-world
+
+L-MODAL-BROKEN-TWO                 built-unverified   lanes/L-MODAL-BROKEN-TWO/detail.md · artifacts/journeys/admin-single-login-prompt · artifacts/journeys/admin-change-deli
+  -> dir token: ~/okam/web-modal-two
+
+L-GR-APPROVAL-STATE                built-unverified   OkamAPI-modules lane/gr-approval-state @ 3ea531f5 (worktree ../wt-gr-approval, off feature/restaurant-modules de1e5c5e, 
+  -> dir token: ../wt-gr-approval
+
+L-WF-BOOTSTRAP                     built-unverified   OkamAPI lane/wf-bootstrap @ 9d1719df (worktree ../wt-wfboot, off feature/restaurant-modules 3579bbbc); fast tier 4374 pa
+  -> dir token: ../wt-wfboot
+  -> dir token: ../web-wfboot
+
+L-WF-KODEOVERSIKT-UI               built-unverified   lanes/L-WF-KODEOVERSIKT-UI/{evidence.md,journey-green.json} on lane/wf-kodeoversikt-ui @ f4c355b (worktree /Users/svenda
+  -> dir token: /Users/svendaneel/okam/web-kodeui
+
+L-WF-DEMO-PRESENCE                 built-unverified   OkamAPI worktree /Users/svendaneel/okam/wt-wfdemopres, branch lane/wf-demo-presence @ 8a9080c8 (local, not pushed; off f
+  -> dir token: /Users/svendaneel/okam/wt-wfdemopres
+
+L-EV-VIPPS-FALLBACK                built-unverified   lane/ev-vipps-fallback-2 @ fc09be1d off feature/restaurant-modules 3579bbbc, worktree ../wt-evvippsfb2, local, unpushed 
+  -> dir token: ../wt-evvippsfb2
+
+L-GR-WITHDRAW-ORIGIN               built-unverified   lanes/L-GR-WITHDRAW-ORIGIN/RUNS-2.md; OkamAPI lane/gr-withdraw-origin @ e0c2b02f (base lane/growth-prefcentre 2a052800, 
+  -> dir token: ~/okam/OkamAPI-grwithdraw
+  -> dir token: ~/okam/web-grwithdraw
+
+L-GR-TESTSEND-GUARD                built-unverified   /Users/svendaneel/okam/wt-gr-testsend @ 5719fc96 · WebApi.Tests/Growth/GrowthTestSendBindingTests.cs · Growth 460/0/1 (S
+  -> dir token: /Users/svendaneel/okam/wt-gr-testsend
+
+L-GR-POSTMARK-WEBHOOK              built-unverified   lane/gr-postmark-webhook 5b895dc4 (worktree ../wt-gr-postmark) — Wire/GrowthPostmarkWebhookWireTests 8/8, Growth/GrowthP
+  -> dir token: ../wt-gr-postmark
+
+L-PRICE-SHADOW-GUARD               built-unverified   lanes/L-PRICE-SHADOW-GUARD/ (state-A..E.txt, plant-proof.sh) + test/price-gate-shadow.test.js
+  -> dir token: lanes/L-PRICE-SHADOW-GUARD/
+
+L-FLAGS-JOURNEY-SWEEP              built-unverified   lanes/L-FLAGS-JOURNEY-SWEEP/census.md (all 12 journeys) · mutation-{a,b,c-a,c-b}.log · commit bb1bf0c · artifacts/journe
+  -> dir token: artifacts/journeys/
+
+L-JOURNEY-COVERAGE-THREE           verified           WHOLE STRING IS A DIRECTORY: artifacts/journeys/
+  exit: Margin, Training and Growth each hold one journey walking their stated exit, captured under artifacts/journeys/
+
+L-FLAGS-EFFECTIVE-RESOLVERS        built-unverified   lane/flags-effective-resolvers @ e45ec4c1 (worktree /Users/svendaneel/okam/OkamAPI-flagseff); trx at lanes/L-FLAGS-EFFEC
+  -> dir token: /Users/svendaneel/okam/OkamAPI-flagseff
+
+L-UTLKVIT-SALE-ROW                 built-unverified   worktree /Users/svendaneel/okam/wt-utlkvit-salerow, branch lane/utlkvit-sale-row @ 1854f594 (local, not pushed, off lane
+  -> dir token: /Users/svendaneel/okam/wt-utlkvit-salerow
+
+L-UTLKVIT-REPLAY-SOURCE            built-unverified   commit 3a509b68 on lane/utlkvit-replay-source (worktree /Users/svendaneel/okam/wt-utlkvitreplay); base 1a03bc6c fast tie
+  -> dir token: /Users/svendaneel/okam/wt-utlkvitreplay
+
+L-GR-TESTSEND-RECORD               built-unverified   lane/growth-audit-ledger@bd3a840f (worktree /Users/svendaneel/okam/wt-gr-ledger)
+  -> dir token: /Users/svendaneel/okam/wt-gr-ledger
+
+L-GR-CONFIRMED-EMAIL               built-unverified   /Users/svendaneel/okam/wt-gr-confirmed @ 801d36a3 (lane/gr-confirmed-email, off 5719fc96, local, unpushed) · WebApi.Test
+  -> dir token: /Users/svendaneel/okam/wt-gr-confirmed
+
+L-GR-TESTSEND-RATELIMIT            built-unverified   /Users/svendaneel/okam/wt-gr-ratelimit @ c96cd21e (lane/gr-testsend-ratelimit, off 801d36a3, local, unpushed) · artifact
+  -> dir token: /Users/svendaneel/okam/wt-gr-ratelimit
+
+L-GR-DEADLINE-STATUTE              built-unverified   lane/gr-deadline-statute f7abfd8e (wt /Users/svendaneel/okam/wt-gr-statute, off 3b42da1d) · lanes/L-GR-DEADLINE-STATUTE/
+  -> dir token: /Users/svendaneel/okam/wt-gr-statute
+
+L-WF-DIGEST-TAUTOLOGY              built-unverified   OkamAPI-modules lane/wf-digest-tautology @ 4b911917 (worktree ~/okam/wt-wfdigest, cut from lane/wf-w5-timesheet 9e82b286
+  -> dir token: ~/okam/wt-wfdigest
+
+L-MEALS-FOURWAY-TIER               built-unverified   /Users/svendaneel/okam/wt-meals-fourway-tier/lanes/L-MEALS-FOURWAY-TIER/ (commit 702d9481, trx f72c7a81-fourway-fast-tie
+  -> dir token: /Users/svendaneel/okam/wt-meals-fourway-tier/lanes/L-MEALS-FOURWAY-TIER/
+
+L-GR-CONFIRMED-PIN-FIX             built-unverified   /Users/svendaneel/okam/wt-gr-confirmed @ 48950702 (lane/gr-confirmed-email, local, unpushed) · code 3cf288fb · artifacts
+  -> dir token: /Users/svendaneel/okam/wt-gr-confirmed
+
+L-GR-CONFIRM-STALE                 built-unverified   OkamAPI-modules lane/gr-confirm-stale @ 771c0fc0 (own worktree /Users/svendaneel/okam/wt-gr-confirm-stale, off 48950702)
+  -> dir token: /Users/svendaneel/okam/wt-gr-confirm-stale
+
+L-CONFIRM-SERVER-HALVES            built-unverified   OkamAPI worktree /Users/svendaneel/okam/wt-confirm-halves, branch lane/confirm-server-halves @ 8704ff63 (off c96cd21e, l
+  -> dir token: /Users/svendaneel/okam/wt-confirm-halves
+
+L-LIVE-SEED-VIA-PRODUCT            built-unverified   test/e2e/scripts/live-world.sh (Web-modules feature/restaurant-modules, local commit) - three live artifacts under lanes
+  -> dir token: lanes/L-LIVE-SEED-VIA-PRODUCT/
+
+L-LIVE-ASSERTION-FLOORS            built-unverified   lanes/L-LIVE-ASSERTION-FLOORS/ (guard-proof.txt, jest-new-suite.txt, jest-full.txt); commit 22f2108
+  -> dir token: lanes/L-LIVE-ASSERTION-FLOORS/
+
+L-COMPOSITION-ROOT-CHECK           built-unverified   /Users/svendaneel/okam/wt-comproot @ bfe57c3c (lane/composition-root-check, off 8704ff63, local, unpushed) - WebApi.Test
+  -> dir token: /Users/svendaneel/okam/wt-comproot
+
+L-CONFIRM-CONAT-RETIRE             built-unverified   OkamAPI 6771ba9a on lane/confirm-conat-retire (worktree /Users/svendaneel/okam/wt-conatretire, local, not pushed) + lane
+  -> dir token: /Users/svendaneel/okam/wt-conatretire
+
+L-CRYPTO-PIN-BYFORM                built-unverified   OkamAPI worktree /Users/svendaneel/okam/wt-cryptopin, branch lane/crypto-pin-byform @ cfb3b14a (code 35630600, off 6771b
+  -> dir token: /Users/svendaneel/okam/wt-cryptopin
+
+L-COMPROOT-PIN-OVERDETERMINED      built-unverified   02c077cb on lane/confirm-postmerge-pin (/Users/svendaneel/okam/wt-postmergepin), WebApi.Tests/Wire/CompositionRootLimite
+  -> dir token: /Users/svendaneel/okam/wt-postmergepin
+
+L-CONFIRM-POSTMERGE-PIN            built-unverified   /Users/svendaneel/okam/wt-postmergepin @ 02c077cb on lane/confirm-postmerge-pin off d9189fbd (1 file, pathspec commit, u
+  -> dir token: /Users/svendaneel/okam/wt-postmergepin
+
+L-MEALS-POS-TENDER-WIRE            built-unverified   worktree ~/okam/OkamAPI-postender, branch lane/meals-pos-tender-wire, commit 32fd5a86 off lane/meals-utlkvit 1a03bc6c, N
+  -> dir token: ~/okam/OkamAPI-postender
+
+L-UTLKVIT-REPRINT-KIND             built-unverified   worktree /Users/svendaneel/okam/wt-utlkvit-reprint, branch lane/utlkvit-reprint-kind @ 88b7307f (local, never pushed, me
+  -> dir token: /Users/svendaneel/okam/wt-utlkvit-reprint
+  -> dir token: lanes/L-UTLKVIT-REPRINT-KIND/
+
+L-INVOICE-AUTHORIZE                built-unverified   /Users/svendaneel/okam/wt-invauth @ d7ffdae9 (lane/invoice-authorize, off feature/restaurant-modules 3579bbbc, local, un
+  -> dir token: /Users/svendaneel/okam/wt-invauth
+
+L-AI-MIDDLEWARE-DELETE             built-unverified   OkamAPI lane/ai-middleware-delete @ 5b2e99c8 (worktree ~/okam/wt-aimw, cut from feature/restaurant-modules 3579bbbc; loc
+  -> dir token: ~/okam/wt-aimw
+
+L-WF-BLIND-BIND-NAME               built-unverified   backend OkamAPI lane/wf-blind-bind-name @ 3b593fef, worktree ~/okam/wt-wfblindbind, based on feature/restaurant-modules 
+  -> dir token: ~/okam/wt-wfblindbind
+  -> dir token: ~/okam/web-blindbind
+
+L-EV-ACCEPT-GATE                   built-unverified   worktree ~/okam/OkamAPI-ev-acceptgate, branch lane/ev-accept-gate, commit 8eee00f7, NOT pushed, based on feature/restaur
+  -> dir token: ~/okam/OkamAPI-ev-acceptgate
+
+L-EV-GUEST-ORIGIN                  built-unverified   OkamAPI lane/ev-guest-origin @ b0b501a5, NOT pushed, based on feature/restaurant-modules @ 3579bbbc - worktree ~/okam/Ok
+  -> dir token: ~/okam/OkamAPI-ev-guestorigin
+
+L-GR-DISPATCH-ACTOR                built-unverified   lane/gr-dispatch-actor@a1e2655f (worktree /Users/svendaneel/okam/wt-gr-dispatch-actor); detail in lanes/L-GR-DISPATCH-AC
+  -> dir token: /Users/svendaneel/okam/wt-gr-dispatch-actor
+
+L-EV-OUTBOX-GUID-SUBSTRING         built-unverified   OkamAPI-modules lane/ev-outbox-guid-substring 79f9dd7d (worktree /Users/svendaneel/okam/wt-evoutboxguid, off feature/res
+  -> dir token: /Users/svendaneel/okam/wt-evoutboxguid
+
+L-CENSUS-FLOORS-DERIVED            built-unverified   OkamAPI worktree /Users/svendaneel/okam/OkamAPI-censusfloors, branch lane/census-floors-derived @ 75dcc2ff, base feature
+  -> dir token: /Users/svendaneel/okam/OkamAPI-censusfloors
+
+L-WF-LINK-DEADEND                  built-unverified   backend OkamAPI lane/wf-link-deadend @ a3a526ae, worktree ~/okam/wt-wflinkdead, based on lane/wf-blind-bind-name @ 3b593
+  -> dir token: ~/okam/wt-wflinkdead
+  -> dir token: ~/okam/web-linkdeadend
+
+L-WF-IDEMPOTENCY-REFUSAL           built-unverified   backend OkamAPI lane/wf-idempotency-refusal @ a1d57208, worktree ~/okam/OkamAPI-wfidemref, based on feature/restaurant-m
+  -> dir token: ~/okam/OkamAPI-wfidemref
+
+L-PHONE-IN-PATH                    built-unverified   backend OkamAPI lane/phone-in-path @ a60da359 (fix c7422096 + finding-closure a60da359), worktree ~/okam/wt-phoneinpath,
+  -> dir token: ~/okam/wt-phoneinpath
+
+L-EV-OUTBOX-FLAKE                  built-unverified   OkamAPI lane/ev-outbox-flake 59a1d607 (base 5df07afa, worktree /Users/svendaneel/okam/OkamAPI-evoutboxflake)
+  -> dir token: /Users/svendaneel/okam/OkamAPI-evoutboxflake
+
+L-WF-IDEMPOTENCY-REFUSAL-REST      built-unverified   /Users/svendaneel/okam/OkamAPI-wfrefusalrest @ 02684ecc (branch lane/wf-idempotency-refusal-rest, base a1d57208 = the si
+  -> dir token: /Users/svendaneel/okam/OkamAPI-wfrefusalrest
+
+L-EV-JOURNEY-TIMEBOMB              built-unverified   lanes/L-EV-JOURNEY-TIMEBOMB/ at lane/ev-journey-timebomb b7a9f389 (parent 4b5c5c2; feature/restaurant-modules NOT moved,
+  -> dir token: lanes/L-EV-JOURNEY-TIMEBOMB/
+
+L-WF-WITHHELD-BOUND                built-unverified   /Users/svendaneel/okam/wt-wfwithheld @ 74405b34 (lane/wf-withheld-bound off feature/restaurant-modules 569887a5); pin We
+  -> dir token: /Users/svendaneel/okam/wt-wfwithheld
+
+==============================================================================
+exit satisfied by PREFIX, not by naming the artifact
+==============================================================================
+L-GROWTH-MAIL                      verified           ev=artifacts/journeys/growth-doi-postmark-sandbox.json        tok=['artifacts/journeys/']
+L-WF-OPLINK                        built-unverified   ev=artifacts/journeys/wf-operator-import-clock.playwright.jso tok=['artifacts/journeys/']
+L-MEALS-STALE-TOKEN                verified           ev=artifacts/journeys/meals-stale-token-requote.playwright.js tok=['artifacts/journeys/']
+L-MODAL-SCROLLLOCK                 verified           ev=artifacts/journeys/modal-scroll-lock.playwright.json       tok=['artifacts/journeys/']
+L-EV-RUNSHEET-PRINT                verified           ev=artifacts/journeys/events-runsheet-print.playwright.json   tok=['artifacts/journeys/']
+L-CONFIRM-ADMIN-SURFACE            verified           ev=artifacts/journeys/account-email-confirm.playwright.json   tok=['artifacts/journeys/']
+L-JOURNEY-GROWTH                   built-unverified   ev=artifacts/journeys/growth-guest-lifecycle.playwright.json, tok=['artifacts/journeys/growth-guest-lifecycle.playwright.json']
+L-GROWTH-FAMILY-LAND               built-unverified   ev=lanes/L-GROWTH-FAMILY-LAND/merge-receipt.md on feature/res tok=['lanes/L-GROWTH-FAMILY-LAND/merge-receipt.md']
+L-INVOICE-AUTHORIZE-LAND           built-unverified   ev=lanes/L-INVOICE-AUTHORIZE-LAND/merge-receipt.md on feature tok=['lanes/L-INVOICE-AUTHORIZE-LAND/merge-receipt.md']
+L-VIOLATION-EXACT-LAND             built-unverified   ev=lanes/L-VIOLATION-EXACT-LAND/merge-receipt.md (OkamAPI, at tok=['lanes/L-VIOLATION-EXACT-LAND/merge-receipt.md']
+L-OFFER-PARTIAL-SUBTOTAL           built-unverified   ev=lanes/L-OFFER-PARTIAL-SUBTOTAL/mutation-log.md (on lane/of tok=['lanes/L-OFFER-PARTIAL-SUBTOTAL/mutation-log.md']
+L-XZ-NEGATED-ABSENCE               built-unverified   ev=lanes/L-XZ-NEGATED-ABSENCE/mutation-log.md · commit b15066 tok=['lanes/L-XZ-NEGATED-ABSENCE/mutation-log.md']
+L-WF-INVITE-LIST-REVOKE            built-unverified   ev=lanes/L-WF-INVITE-LIST-REVOKE/evidence.md · backend branch tok=['lanes/L-WF-INVITE-LIST-REVOKE/evidence.md']
+L-WF-ONBOARD-DEMO-RUN              built-unverified   ev=lanes/L-WF-ONBOARD-DEMO-RUN/evidence.md with evidence/{dem tok=['lanes/L-WF-ONBOARD-DEMO-RUN/evidence.md']
+L-COLLECTED-PATHS                  built-unverified   ev=lanes/L-COLLECTED-PATHS/collected.txt — committed 6f03b18  tok=['lanes/', 'lanes/L-COLLECTED-PATHS/collected.txt']
+L-XZ-RESIDUAL-SITES                built-unverified   ev=lanes/L-XZ-RESIDUAL-SITES/mutation-log.md · commit 799f05d tok=['lanes/L-XZ-RESIDUAL-SITES/mutation-log.md']
+
+==============================================================================
+evidence string that is NOT a path at all (prose) — never checkable
+==============================================================================
+count: 149 of 338
+  built-unverified     149

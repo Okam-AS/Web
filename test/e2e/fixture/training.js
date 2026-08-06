@@ -24,6 +24,14 @@
 //     two pickers are built from the two different filters.
 //   • PUBLISHING FREEZES. A second publish of the same version is `training.course-version-immutable`.
 //   • Every mutation needs an `Idempotency-Key`; the shared guard in `api-server.js` enforces it.
+//   • THE EVIDENCE READ (#16) WRITES. It is the one GET on the surface that appends to the ledger,
+//     because asking for a named person's training record is itself a disclosure of personal data.
+//     The row is appended AFTER the document is assembled and only on the answered path, so a refused
+//     read records nothing — and the disclosures never appear inside the document's own audit chain,
+//     which is about the completion and certificate ROWS and is not an access log. All three are
+//     backend properties (`TrainingEvidenceService`, pinned by `TrainingEvidenceReadTests`), and a
+//     fixture that answered the document without recording the read would let the page print
+//     «opening this is recorded» and stay green with nothing behind the sentence.
 //
 // WHAT IT IS NOT: it holds no quiz content model (nothing in the estate authors one — §5.2 does not
 // exist in this wave, which is why every completion filed here is `ManagerRecorded`), and no
@@ -65,7 +73,13 @@ function fresh () {
     courses: {},
     assignments: [],
     completions: [],
-    certificates: []
+    certificates: [],
+    // THE APPEND-ONLY LEDGER, modelled because the evidence read (#16) is a projection OF it and
+    // would otherwise be a document about nothing. One row per privileged mutation, plus one per
+    // evidence read — and the two kinds are told apart by `eventType`, exactly as the backend's
+    // `TrainingAuditWriter` does. Nothing ever removes a row from this array, which is the property
+    // the SQL trigger enforces there and the reason a retake is a second row rather than an edit.
+    auditEvents: []
   };
 }
 
@@ -81,6 +95,62 @@ function nextId (state) {
 
 function known (personRef) {
   return world.STAFF.some(s => s.workforcePersonId === String(personRef || '').toLowerCase());
+}
+
+function staffMember (personRef) {
+  return world.STAFF.find(s => s.workforcePersonId === String(personRef || '').toLowerCase()) || null;
+}
+
+// ---- the ledger ---------------------------------------------------------------------------------
+//
+// `TrainingAuditWriter.Append` STAGES a row into the caller's own unit of work, so the audit row and
+// the domain row commit together or not at all. Here that is one push at the end of a handler that
+// has already decided to answer 200, which has the same observable consequence: a refused write
+// leaves no ledger row.
+//
+// THE SEMANTIC DELTA IS SERIALISED KEY-SORTED AND ITS VALUES ARE STRINGS — both are the backend's
+// contract, not incidental. `TrainingEvidenceReadTests` asserts a disclosure's `PayloadSnapshotJson`
+// byte-for-byte against `{"disclosedCertificates":"1","disclosedCompletions":"1","personRef":"…"}`,
+// and `utils/training/disclosure.js` reads the counts back out as strings for exactly this reason.
+// A fixture that emitted numbers, or emitted keys in insertion order, would let a client ship that
+// only works against itself.
+function appendAudit (state, ctx, storeId, eventType, aggregateType, aggregateId, delta) {
+  const sorted = {};
+  Object.keys(delta).sort().forEach((key) => { sorted[key] = String(delta[key]); });
+  state.auditEvents.push({
+    storeId: Number(storeId),
+    eventType,
+    aggregateType,
+    aggregateId: String(aggregateId),
+    // The caller's own id. `TrainingEvidenceService.CurrentUserId` REFUSES rather than defaulting
+    // when it cannot resolve one, so there is no such thing as an unattributed row here either.
+    actorReference: (ctx.caller && ctx.caller.id) || null,
+    payloadSnapshotJson: JSON.stringify(sorted),
+    occurredAtUtc: stamp()
+  });
+}
+
+/**
+ * A UTC stamp rendered as the store's own wall clock, which is what `*StoreLocal` denotes.
+ *
+ * It exists so this fixture answers a document where the two halves of every stamp pair DIFFER —
+ * Europe/Oslo is an hour or two ahead of UTC all year. That difference is load-bearing evidence: the
+ * client deliberately parses only the `*Utc` half (a bare `*StoreLocal` fed to `parseApiInstant`
+ * would be read as UTC and shift every timestamp on an inspector's document by the store's offset),
+ * and a fixture that emitted the two identically could not tell the correct wiring from the bug.
+ */
+function storeLocal (utcStamp) {
+  const parts = new Intl.DateTimeFormat('sv-SE', {
+    timeZone: world.TIME_ZONE,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  }).format(new Date(utcStamp.endsWith('Z') ? utcStamp : utcStamp + 'Z'));
+  return parts.replace(' ', 'T');
 }
 
 function versionsOf (course) {
@@ -391,6 +461,16 @@ function route (ctx) {
     // APPEND-ONLY. A retake is a second row; the first one survives, which is the whole reason the
     // ledger is not an upsert.
     state.completions.push(completion);
+    // …and the ledger row that makes this completion say WHO recorded it. `TrainingCompletion`
+    // carries no recorder column, so the evidence read recovers `recordedBy` from here and from
+    // nowhere else — a completion filed without this row would come back naming nobody, which is
+    // precisely the `NoAuditEventForThisRow` finding the document reports.
+    appendAudit(state, ctx, storeId, 'completion.recorded', 'TrainingCompletion', completion.completionId, {
+      personRef: completion.personRef,
+      courseVersionId: completion.courseVersionId,
+      scorePercent: completion.scorePercent,
+      passed: completion.passed
+    });
     ctx.send(200, named(state, completion));
     return true;
   }
@@ -422,7 +502,161 @@ function route (ctx) {
       createdAtUtc: bare()
     };
     state.certificates.push(certificate);
+    // The type and the issuer are ON the allowlist for this event (they are what was registered);
+    // the document reference is NOT, and is deliberately absent — a ledger that restated the evidence
+    // it recorded would put a second copy of it somewhere a reader of the first has no reason to look.
+    appendAudit(state, ctx, storeId, 'certificate.registered', 'TrainingCertificate', certificate.certificateId, {
+      personRef: certificate.personRef,
+      type: certificate.type
+    });
     ctx.send(200, certificate);
+    return true;
+  }
+
+  // ---- #16 the evidence document ----------------------------------------------------------------
+  //
+  // THE ONE READ ON THIS SURFACE THAT WRITES, and the reason it is worth modelling here rather than
+  // stubbing: the whole point of the route is that asking for a named person's training record is
+  // itself a disclosure, so the server appends an `evidence.read` row and commits it in the same
+  // request (`TrainingEvidenceService.RecordDisclosureAsync` → `SaveChangesAsync`). A fixture that
+  // answered the document without recording the read would let a page print «opening this is
+  // recorded» and be green while the control behind the sentence did nothing.
+  //
+  // THE DISCLOSURE IS COMMITTED AFTER THE DOCUMENT IS ASSEMBLED, and both refusals below return
+  // before that point — because a request the gate turned away discloses nothing and must record
+  // nothing. `TrainingEvidenceReadTests.A_refused_read_writes_no_disclosure` pins that on the server,
+  // with a positive control so the emptiness cannot be a writer that never works; the same ordering
+  // is what makes it true here.
+  //
+  // NOTHING IS RECOMPUTED ON THE WAY OUT. `passed` is the verdict written at recording time and
+  // `status` is the certificate projection — both copied off the stored row. What IS derived here is
+  // only what the backend derives at read time too: the audit coverage, the hash linkage, and the
+  // three-state training state, all of them comparisons over rows this file already holds.
+  if (rest === '/evidence' && method === 'GET') {
+    const personRef = String(url.searchParams.get('personRef') || '').toLowerCase();
+    if (!personRef) {
+      // The CONTROLLER's own guard, before the service is reached — and it is a `ModuleProblem`,
+      // which carries no `training.*` code at all. The page must land on its unknown sentence rather
+      // than on a Training-specific one, so this must not be given a code it does not have.
+      ctx.problem(400, null, 'A personRef query parameter is required for the evidence read.');
+      return true;
+    }
+
+    const person = staffMember(personRef);
+    const completions = state.completions.filter(c => c.personRef === personRef);
+    const certificates = state.certificates.filter(c => c.personRef === personRef);
+    const rowIds = completions.map(c => c.completionId).concat(certificates.map(c => c.certificateId));
+
+    // Only the events naming THIS document's rows, which is why the disclosures appended by earlier
+    // reads never appear in it: they are keyed to the PERSON, not to a completion or a certificate.
+    // `TrainingEvidenceReadTests` asserts that absence directly — the chain is the provenance of the
+    // evidence, not a record of who has seen it, and a surface that conflated the two would present
+    // an access log as a training record.
+    const chain = state.auditEvents
+      .filter(e => e.storeId === Number(storeId) && rowIds.includes(e.aggregateId))
+      .slice()
+      .sort((a, b) => (a.occurredAtUtc < b.occurredAtUtc ? -1 : a.occurredAtUtc > b.occurredAtUtc ? 1 : 0));
+
+    const coverageOf = id => (state.auditEvents.some(e => e.aggregateId === id) ? 'Covered' : 'NoAuditEventForThisRow');
+    const recordedByOf = (id) => {
+      const event = state.auditEvents.find(e => e.aggregateId === id);
+      return event ? event.actorReference : null;
+    };
+
+    const completionRows = completions.map((c) => {
+      const found = findVersion(state, c.courseVersionId);
+      const version = found ? found.version : null;
+      return {
+        completionId: c.completionId,
+        courseId: c.courseId,
+        courseTitle: found ? found.course.title : null,
+        courseVersionId: c.courseVersionId,
+        versionNo: version ? version.versionNo : null,
+        // THE FROZEN MATERIAL, printed so the hash beside it can be recomputed by hand. This is the
+        // whole difference between an evidence document and a report: an inspector does not have to
+        // believe the hash, they can re-derive it from these three fields.
+        contentPagesJson: version ? version.contentPagesJson : null,
+        quizJson: version ? version.quizJson : null,
+        passThresholdPercent: version ? version.passThresholdPercent : null,
+        // The hash the COMPLETION froze, not the version's current one — comparing the two is the
+        // linkage below, and reading both off the same place would make that comparison vacuous.
+        contentHash: c.versionContentHash,
+        scorePercent: c.scorePercent,
+        passed: c.passed,
+        source: c.source,
+        recordedBy: recordedByOf(c.completionId),
+        completedAtUtc: c.completedAtUtc,
+        completedAtStoreLocal: storeLocal(c.completedAtUtc),
+        auditCoverage: coverageOf(c.completionId),
+        contentHashLinkage: !version
+          ? 'Unresolvable'
+          : (version.contentHash === c.versionContentHash ? 'Intact' : 'Broken')
+      };
+    });
+
+    const certificateRows = certificates.map(c => ({
+      certificateId: c.certificateId,
+      type: c.type,
+      issuer: c.issuer,
+      issueDateUtc: c.issueDateUtc,
+      expiryDateUtc: c.expiryDateUtc,
+      documentReference: c.documentReference,
+      status: c.status,
+      auditCoverage: coverageOf(c.certificateId)
+    }));
+
+    // Broken outranks Unresolvable outranks Intact — a precedence a weaker answer can never win,
+    // because the document's own summary must not be able to report clean while a row underneath it
+    // is not.
+    const linkages = completionRows.map(c => c.contentHashLinkage);
+    const combined = linkages.includes('Broken')
+      ? 'Broken'
+      : (linkages.includes('Unresolvable') ? 'Unresolvable' : 'Intact');
+
+    const document = {
+      storeId: Number(storeId),
+      personRef,
+      // NULL when the id names nobody. An invented Guid and a person who was never trained produce
+      // the same empty document, so the two are separated HERE — otherwise a manager could hand over
+      // an empty file as evidence about a colleague it does not describe.
+      displayName: person ? person.displayName : null,
+      personOnFile: !!person,
+      timeZoneId: world.TIME_ZONE,
+      timeZoneIsFallback: false,
+      // Three states, never two: no record is not a failure and not a pass.
+      trainingState: completionRows.length === 0
+        ? 'NoCompletionOnFile'
+        : (completionRows.some(c => c.passed) ? 'RecordedAsPassed' : 'RecordedWithoutAPass'),
+      completions: completionRows,
+      certificates: certificateRows,
+      auditChain: chain.map(e => ({
+        eventType: e.eventType,
+        aggregateType: e.aggregateType,
+        aggregateId: e.aggregateId,
+        actorReference: e.actorReference,
+        payloadSnapshotJson: e.payloadSnapshotJson,
+        occurredAtUtc: e.occurredAtUtc,
+        occurredAtStoreLocal: storeLocal(e.occurredAtUtc),
+        linkedTo: completions.some(c => c.completionId === e.aggregateId) ? 'completion' : 'certificate'
+      })),
+      integrity: {
+        contentHashLinkage: combined,
+        rowsWithoutAuditEvent:
+          completionRows.filter(c => c.auditCoverage === 'NoAuditEventForThisRow').length +
+          certificateRows.filter(c => c.auditCoverage === 'NoAuditEventForThisRow').length
+      },
+      asOfUtc: stamp()
+    };
+
+    // The counts, never the evidence. A disclosure event that restated a score or a certificate type
+    // would put the record into a second ledger — one whose readers came for an access log.
+    appendAudit(state, ctx, storeId, 'evidence.read', 'TrainingEvidence', personRef, {
+      personRef,
+      disclosedCompletions: completionRows.length,
+      disclosedCertificates: certificateRows.length
+    });
+
+    ctx.send(200, document);
     return true;
   }
 

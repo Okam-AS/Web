@@ -1,0 +1,30 @@
+=================================================================
+  LIVE ARM -- the real tool, the real trees, read-only
+  declared world (world.config): feature/restaurant-modules
+=================================================================
+
+  dir ../OkamAPI-modules
+    repo   ok      /Users/svendaneel/okam/OkamAPI/.git/worktrees/OkamAPI-modules
+    ref    declared=feature/restaurant-modules  found=lane/meals-grace-pins
+    pin    unconf  -> MISMATCH
+
+  dir .  (the hub itself)
+    repo   ok      /Users/svendaneel/okam/Web/.git/worktrees/Web-modules
+    ref    declared=feature/restaurant-modules  found=lane/focustrap-teardown
+    pin    unconf  -> MISMATCH
+
+  --- the facts the plan carries for the same question today ---
+    <!--fact fe.world.branch 2026-08-04T21:52Z ok-->feature/restaurant-modules<!--/fact-->
+    <!--fact fe.world 2026-08-04T21:52Z ok-->True<!--/fact-->
+    <!--fact be.world.branch 2026-08-04T21:52Z ok-->lane/meals-grace-pins<!--/fact-->
+    (source: artifacts/world/WORLD.json, stamped 2026-08-03T08:14:34Z / 2026-08-03T09:23:34Z)
+
+  --- git itself, for comparison ---
+    Web-modules      lane/focustrap-teardown
+    OkamAPI-modules  lane/meals-grace-pins
+
+  --- relative form resolves to the same files (this is what the plan gets) ---
+    ../OkamAPI-modules/.git                        -> SAME FILE
+    ../OkamAPI/.git/worktrees/OkamAPI-modules/HEAD -> SAME FILE
+    .git                                           -> SAME FILE
+    ../Web/.git/worktrees/Web-modules/HEAD         -> SAME FILE

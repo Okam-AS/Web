@@ -1,0 +1,13 @@
+A lanes/L-VUE-JEST-UPGRADE-MEASURED/evidence/baseline.json
+  suites 112P/1F/113T  tests 2587P/2F/0skip/2589T
+B lanes/L-VUE-JEST-UPGRADE-MEASURED/evidence/upgrade-vuejest401.json
+  suites 112P/1F/113T  tests 2587P/2F/0skip/2589T
+
+SUITES differing: 0
+
+TESTS differing: 0
+
+failing suites in A: test/journey-artifact-store.test.js
+failing suites in B: test/journey-artifact-store.test.js
+
+VERDICT: IDENTICAL outcome sets (no suite and no test changed side)

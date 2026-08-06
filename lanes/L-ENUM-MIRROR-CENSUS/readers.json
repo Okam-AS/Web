@@ -1,0 +1,745 @@
+{
+ "corpus_files": 918,
+ "rows": [
+  {
+   "mirror": "HttpProperty",
+   "path": "core/enums/http-property.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/services/request-service.ts"
+   ],
+   "usages": [
+    {
+     "path": "core/services/request-service.ts",
+     "n": 22,
+     "members": [
+      "Authorization",
+      "ClientAppVersion",
+      "ClientFeatures",
+      "ClientPlatform",
+      "Content",
+      "ContentType",
+      "Data",
+      "Language",
+      "Method",
+      "SelectedTheme",
+      "Url"
+     ]
+    }
+   ],
+   "n_importers": 1,
+   "n_usage_files": 1
+  },
+  {
+   "mirror": "StatisticDateFilter",
+   "path": "core/enums/statistic-date-filter.ts",
+   "in_barrel": true,
+   "importers": [],
+   "usages": [],
+   "n_importers": 0,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "HttpMethod",
+   "path": "core/enums/http-method.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/services/product-service.ts",
+    "core/services/request-service.ts",
+    "core/services/image-carousel-service.ts",
+    "core/services/category-service.ts",
+    "core/services/store-service.ts"
+   ],
+   "usages": [
+    {
+     "path": "core/services/product-service.ts",
+     "n": 1,
+     "members": [
+      "POST"
+     ]
+    },
+    {
+     "path": "core/services/request-service.ts",
+     "n": 7,
+     "members": [
+      "DELETE",
+      "GET",
+      "PATCH",
+      "POST",
+      "PUT"
+     ]
+    },
+    {
+     "path": "core/services/image-carousel-service.ts",
+     "n": 1,
+     "members": [
+      "POST"
+     ]
+    },
+    {
+     "path": "core/services/category-service.ts",
+     "n": 1,
+     "members": [
+      "POST"
+     ]
+    },
+    {
+     "path": "core/services/store-service.ts",
+     "n": 1,
+     "members": [
+      "POST"
+     ]
+    }
+   ],
+   "n_importers": 5,
+   "n_usage_files": 5
+  },
+  {
+   "mirror": "PosReasonType",
+   "path": "core/enums/pos-reason-type.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/kassa/cash-drawer-models.ts",
+    "core/models/kassa/pos-discount-models.ts",
+    "core/models/kassa/unreferenced-return-models.ts",
+    "core/models/kassa/card-payment-models.ts"
+   ],
+   "usages": [],
+   "n_importers": 4,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "ReservationStatus",
+   "path": "core/enums/reservation-status.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/floorplan/reservation-models.ts",
+    "core/models/kassa/board-status-models.ts"
+   ],
+   "usages": [],
+   "n_importers": 2,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "DiscountApplicability",
+   "path": "core/enums/discount-applicability.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/discount/discount.ts"
+   ],
+   "usages": [],
+   "n_importers": 1,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "PosSettlementStatus",
+   "path": "core/enums/pos-settlement-status.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/kassa/settlement-models.ts"
+   ],
+   "usages": [],
+   "n_importers": 1,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "PaymentType",
+   "path": "core/enums/payment-type.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/dintero/dintero-initiate-payment-model.ts",
+    "core/models/order/order.ts",
+    "core/models/payment/payment-method.ts",
+    "core/models/surfboard/surfboard-online-models.ts",
+    "core/models/cart/cart.ts",
+    "core/models/giftcard/initiate-giftcard-purchase.ts",
+    "core/models/giftcard/giftcard.ts",
+    "core/models/kassa/journal-models.ts",
+    "core/models/kassa/report-models.ts",
+    "core/models/kassa/pos-receipt-models.ts",
+    "core/models/kassa/settlement-models.ts",
+    "core/pinia/checkout.ts",
+    "core/pinia/order.ts"
+   ],
+   "usages": [
+    {
+     "path": "core/models/surfboard/surfboard-online-models.ts",
+     "n": 2,
+     "members": [
+      "Surfboard",
+      "SurfboardVipps"
+     ]
+    },
+    {
+     "path": "core/models/cart/cart.ts",
+     "n": 1,
+     "members": [
+      "NotSet"
+     ]
+    },
+    {
+     "path": "core/pinia/checkout.ts",
+     "n": 11,
+     "members": [
+      "Dintero",
+      "DinteroBillie",
+      "DinteroKlarna",
+      "DinteroKravia",
+      "DinteroVipps",
+      "Giftcard",
+      "NotSet",
+      "PayInStore",
+      "Stripe",
+      "Vipps"
+     ]
+    },
+    {
+     "path": "core/pinia/order.ts",
+     "n": 10,
+     "members": [
+      "Dintero",
+      "DinteroBillie",
+      "DinteroKlarna",
+      "DinteroKravia",
+      "DinteroVipps",
+      "Giftcard",
+      "PayInStore",
+      "Stripe",
+      "Vipps",
+      "WoltMarketplace"
+     ]
+    },
+    {
+     "path": "test/e2e/journeys/consumer/meals-funded-checkout.spec.js",
+     "n": 1,
+     "members": [
+      "CompanyAccount"
+     ]
+    },
+    {
+     "path": "test/e2e/journeys/consumer/meals-funded-over-allowance.spec.js",
+     "n": 1,
+     "members": [
+      "CompanyAccount"
+     ]
+    }
+   ],
+   "n_importers": 13,
+   "n_usage_files": 6
+  },
+  {
+   "mirror": "TerminalPaymentState",
+   "path": "core/enums/terminal-payment-state.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/kassa/terminal-payment-models.ts"
+   ],
+   "usages": [],
+   "n_importers": 1,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "KitchenTicketSource",
+   "path": "core/enums/kitchen-ticket-source.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/kassa/kitchen-board-models.ts"
+   ],
+   "usages": [],
+   "n_importers": 1,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "OrderStatus",
+   "path": "core/enums/order-status.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/order/order.ts",
+    "core/models/kassa/open-check-models.ts",
+    "core/models/kassa/kitchen-board-models.ts",
+    "core/pinia/order.ts",
+    "core/helpers/tools.ts",
+    "core/services/order-service.ts"
+   ],
+   "usages": [
+    {
+     "path": "core/pinia/order.ts",
+     "n": 23,
+     "members": [
+      "Accepted",
+      "Canceled",
+      "Completed",
+      "DriverPickedUp",
+      "Processing",
+      "ReadyForDriver",
+      "ReadyForPickup",
+      "Served"
+     ]
+    },
+    {
+     "path": "core/helpers/tools.ts",
+     "n": 16,
+     "members": [
+      "Accepted",
+      "Canceled",
+      "Completed",
+      "DriverPickedUp",
+      "Processing",
+      "ReadyForDriver",
+      "ReadyForPickup",
+      "Served"
+     ]
+    }
+   ],
+   "n_importers": 6,
+   "n_usage_files": 2
+  },
+  {
+   "mirror": "TerminalProvider",
+   "path": "core/enums/terminal-provider.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/kassa/cash-point.ts",
+    "core/models/store/store-payment-config.ts",
+    "core/services/store-service.ts"
+   ],
+   "usages": [],
+   "n_importers": 3,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "DeliveryType",
+   "path": "core/enums/delivery-type.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/order/order.ts",
+    "core/models/category/category-search-options.ts",
+    "core/models/category/category.ts",
+    "core/models/product/product.ts",
+    "core/models/cart/cart.ts",
+    "core/models/statistic/statistic-query-orders.ts",
+    "core/models/kassa/open-check-models.ts",
+    "core/models/kassa/receipt-request-models.ts",
+    "core/models/kassa/kitchen-board-models.ts",
+    "core/models/kassa/unreferenced-return-models.ts",
+    "core/pinia/checkout.ts",
+    "core/pinia/order.ts",
+    "core/pinia/cart.ts",
+    "core/pinia/store.ts",
+    "core/helpers/tools.ts",
+    "core/interfaces/i-cart-root-properties.ts"
+   ],
+   "usages": [
+    {
+     "path": "core/models/cart/cart.ts",
+     "n": 1,
+     "members": [
+      "NotSet"
+     ]
+    },
+    {
+     "path": "core/models/kassa/receipt-request-models.ts",
+     "n": 1,
+     "members": [
+      "vatContext"
+     ]
+    },
+    {
+     "path": "core/pinia/checkout.ts",
+     "n": 6,
+     "members": [
+      "DineHomeDelivery",
+      "InstantHomeDelivery",
+      "NotSet",
+      "TableDelivery",
+      "WoltDelivery"
+     ]
+    },
+    {
+     "path": "core/pinia/order.ts",
+     "n": 5,
+     "members": [
+      "DineHomeDelivery",
+      "InstantHomeDelivery",
+      "SelfPickup",
+      "TableDelivery",
+      "WoltDelivery"
+     ]
+    },
+    {
+     "path": "core/pinia/cart.ts",
+     "n": 3,
+     "members": [
+      "DineHomeDelivery",
+      "InstantHomeDelivery",
+      "WoltDelivery"
+     ]
+    },
+    {
+     "path": "core/pinia/store.ts",
+     "n": 2,
+     "members": [
+      "NotSet",
+      "WoltDelivery"
+     ]
+    },
+    {
+     "path": "core/helpers/tools.ts",
+     "n": 6,
+     "members": [
+      "DineHomeDelivery",
+      "InstantHomeDelivery",
+      "SelfPickup",
+      "TableDelivery",
+      "WoltDelivery",
+      "WoltMarketplaceDelivery"
+     ]
+    }
+   ],
+   "n_importers": 16,
+   "n_usage_files": 7
+  },
+  {
+   "mirror": "DiscountType",
+   "path": "core/enums/discount-type.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/discount/discount.ts"
+   ],
+   "usages": [],
+   "n_importers": 1,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "OrderPaymentStatus",
+   "path": "core/enums/order-payment-status.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/kassa/settlement-models.ts"
+   ],
+   "usages": [],
+   "n_importers": 1,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "OrderPaymentTypeFilter",
+   "path": "core/enums/order-payment-type-filter.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/statistic/statistic-query-orders.ts"
+   ],
+   "usages": [],
+   "n_importers": 1,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "DineHomeStatus",
+   "path": "core/enums/dinehome-status.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/order/order.ts"
+   ],
+   "usages": [],
+   "n_importers": 1,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "TableShape",
+   "path": "core/enums/table-shape.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/floorplan/floor-plan-models.ts"
+   ],
+   "usages": [],
+   "n_importers": 1,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "DinteroTerminalStatus",
+   "path": "core/enums/dintero-terminal-status.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/dintero-terminal/dintero-terminal-models.ts"
+   ],
+   "usages": [],
+   "n_importers": 1,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "ActionName",
+   "path": "core/enums/action-name.ts",
+   "in_barrel": true,
+   "importers": [
+    "store/index.js"
+   ],
+   "usages": [
+    {
+     "path": "store/index.js",
+     "n": 5,
+     "members": [
+      "ClearState",
+      "Load",
+      "SetCurrentUser",
+      "SetDeliveryAddress",
+      "SetNotificationApproved"
+     ]
+    }
+   ],
+   "n_importers": 1,
+   "n_usage_files": 1
+  },
+  {
+   "mirror": "AppSettingKey",
+   "path": "core/enums/app-setting-key.ts",
+   "in_barrel": true,
+   "importers": [],
+   "usages": [],
+   "n_importers": 0,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "OfferProposalStatus",
+   "path": "core/enums/offer-proposal-status.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/offer/offer-proposal-model.ts"
+   ],
+   "usages": [],
+   "n_importers": 1,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "MutationName",
+   "path": "core/enums/mutation-name.ts",
+   "in_barrel": true,
+   "importers": [
+    "store/index.js"
+   ],
+   "usages": [
+    {
+     "path": "store/index.js",
+     "n": 20,
+     "members": [
+      "ClearCurrentUser",
+      "Load",
+      "RemoveCart",
+      "RemoveCartItems",
+      "RemoveLineItem",
+      "SetCartIsLoading",
+      "SetCartRootProperties",
+      "SetCarts",
+      "SetCurrentUser",
+      "SetDeliveryAddress",
+      "SetLineItem",
+      "SetOrders",
+      "SetStore",
+      "SetStores"
+     ]
+    }
+   ],
+   "n_importers": 1,
+   "n_usage_files": 1
+  },
+  {
+   "mirror": "KeyAccountManagerStatus",
+   "path": "core/enums/key-account-manager-status.ts",
+   "in_barrel": true,
+   "importers": [
+    "pages/admin/overview.vue"
+   ],
+   "usages": [
+    {
+     "path": "pages/admin/overview.vue",
+     "n": 6,
+     "members": [
+      "Deleted",
+      "InOperation",
+      "MissingSetup",
+      "ReadyForDemo",
+      "RequiresFollowUp",
+      "WaitingForCustomerResponse"
+     ]
+    }
+   ],
+   "n_importers": 1,
+   "n_usage_files": 1
+  },
+  {
+   "mirror": "VippsVerifyStatus",
+   "path": "core/enums/vipps-verify-status.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/payment/vipps-verify-response.ts"
+   ],
+   "usages": [],
+   "n_importers": 1,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "CheckSplitMode",
+   "path": "core/enums/check-split-mode.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/kassa/check-split-models.ts"
+   ],
+   "usages": [],
+   "n_importers": 1,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "RewardTransactionType",
+   "path": "core/enums/reward-transaction-type.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/reward/reward-transaction.ts"
+   ],
+   "usages": [],
+   "n_importers": 1,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "KassaReceiptType",
+   "path": "core/enums/kassa-receipt-type.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/kassa/journal-models.ts",
+    "core/models/kassa/pos-receipt-models.ts"
+   ],
+   "usages": [],
+   "n_importers": 2,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "NotificationPlatform",
+   "path": "core/enums/notification-platform.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/notification/notification-registration.ts",
+    "core/services/notification-service.ts"
+   ],
+   "usages": [],
+   "n_importers": 2,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "SafTVatCode",
+   "path": "core/enums/saf-t-vat-code.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/kassa/journal-models.ts",
+    "core/models/kassa/report-models.ts"
+   ],
+   "usages": [],
+   "n_importers": 2,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "KassaReceiptSeries",
+   "path": "core/enums/kassa-receipt-series.ts",
+   "in_barrel": true,
+   "importers": [],
+   "usages": [],
+   "n_importers": 0,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "OrderLineItemStatus",
+   "path": "core/enums/order-line-item-status.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/kassa/open-check-models.ts",
+    "core/models/kassa/kitchen-board-models.ts",
+    "core/models/kassa/board-status-models.ts",
+    "core/services/kitchen-service.ts"
+   ],
+   "usages": [],
+   "n_importers": 4,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "OrderKind",
+   "path": "core/enums/order-kind.ts",
+   "in_barrel": true,
+   "importers": [],
+   "usages": [],
+   "n_importers": 0,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "OrderStatusFilter",
+   "path": "core/enums/order-status-filter.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/statistic/statistic-query-orders.ts"
+   ],
+   "usages": [],
+   "n_importers": 1,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "KassaEventType",
+   "path": "core/enums/kassa-event-type.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/kassa/journal-models.ts"
+   ],
+   "usages": [],
+   "n_importers": 1,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "GiftcardStatus",
+   "path": "core/enums/giftcard-status.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/giftcard/giftcard.ts"
+   ],
+   "usages": [],
+   "n_importers": 1,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "GiftcardTransactionType",
+   "path": "core/enums/giftcard-transaction-type.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/giftcard/giftcard-transaction.ts",
+    "core/models/giftcard/users-giftcard-balance-transaction.ts"
+   ],
+   "usages": [],
+   "n_importers": 2,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "SurfboardApplicationStatus",
+   "path": "core/enums/surfboard-application-status.ts",
+   "in_barrel": true,
+   "importers": [],
+   "usages": [],
+   "n_importers": 0,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "CashDrawerTransactionType",
+   "path": "core/enums/cash-drawer-transaction-type.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/kassa/cash-drawer-models.ts"
+   ],
+   "usages": [],
+   "n_importers": 1,
+   "n_usage_files": 0
+  },
+  {
+   "mirror": "DinteroVerifyStatus",
+   "path": "core/enums/dintero-verify-status.ts",
+   "in_barrel": true,
+   "importers": [
+    "core/models/payment/dintero-verify-response.ts"
+   ],
+   "usages": [],
+   "n_importers": 1,
+   "n_usage_files": 0
+  }
+ ]
+}

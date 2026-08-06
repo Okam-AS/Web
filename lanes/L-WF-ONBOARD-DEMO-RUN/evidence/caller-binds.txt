@@ -1,0 +1,30 @@
+manager user = 2a0f5c19-7945-4770-957d-239d4be1a260
+worker  user = 5d755b5a-434f-4a27-8265-c6674fbd1053
+
+== issue ONE fresh invitation for Nora's engagement (manager, endpoint 6)
+   response (token removed): {"invitationId":"c12d526a-ce2d-4cfe-a98e-191c51392dc7","storeId":1,"staffMemberId":"7635bbf6-c883-40d9-a6f4-afda251c44cf","expiresAtUtc":"2026-08-18T20:03:47.663927Z","createdAtUtc":"2026-08-04T20:03:47.663927Z"}
+   token issued; server-side hash = sha256:854bf735525256db4712409018a116d5963f4a32d2e717cfac94ec1d5b52e608
+   row now: Pending hash=sha256:854bf735525256db4712409018a116d5963f4a32d2e717cfac94ec1d5b52e608
+
+== ATTEMPT 1 -- the MANAGER presents Nora's token
+   -> 404 {"type":"https://okam.no/problems/workforce/invitation-invalid","title":"Not Found","status":404,"detail":"The invitation could not be claimed.","code":"workforce.invitation-invalid","traceId":"0HNNICDKNHTUF:00000001"}
+   Nora's person after attempt 1: Claimed user=5d755b5a-434f-4a27-8265-c6674fbd1053
+   invitation after attempt 1  : Pending claimedBy=<null>
+
+== ATTEMPT 2 -- the WORKER presents the SAME token
+   -> 200 {"staffMemberId":"7635bbf6-c883-40d9-a6f4-afda251c44cf","storeId":1,"workforcePersonId":"6b8beb8d-6a1e-4aae-bef0-4bfd7d0607b0","personState":"Claimed","capabilities":["WorkforceSelf"]}
+   invitation after attempt 2  : Claimed claimedBy=5d755b5a-434f-4a27-8265-c6674fbd1053
+
+== VERDICT
+   ok  manager REFUSED with 404
+   ok  worker ACCEPTED with 200 on the SAME token -- only the bearer differed
+   ok  bound person = Nora's (6b8beb8d-6a1e-4aae-bef0-4bfd7d0607b0)
+   ok  claimedBy = the WORKER's login, never the manager's
+
+== C7 sweep against the REAL backend
+   raw invitation token in api.log : 0   (must be 0)
+   raw invitation token in lane dir: 0 files   (must be 0)
+   manager bearer in api.log       : 0   (must be 0)
+   worker  bearer in api.log       : 0   (must be 0)
+
+ALL GREEN

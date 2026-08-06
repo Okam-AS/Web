@@ -1,0 +1,48 @@
+=== ref 9f7d8dfc78dceaaa9c52c72ba470a34eb904a130 -> 9f7d8dfc78dceaaa9c52c72ba470a34eb904a130 ===
+9f7d8df Correction: the modal shadow I said stayed open was already closed
+=== spec: workforce-punch-correction | spec blob: 531bdad67d43709929e1e8a5b6421ee49cd7a272 | patch: none ===
+=== core: 10 entries | core sha: 1bcab0b6b3882bc232795437d7ad48455a5af0a6 ===
+=== ports web=3889 fixture=4889 CI=1 E2E_API_BASE_URL=<unset> ===
+=== started 2026-08-05T00:11:53Z ===
+[WebServer] [fixture] listening on http://127.0.0.1:4889
+
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://172.20.10.4:3889/
+
+[WebServer] [info] Preparing project for development
+
+[WebServer] [info] Initial build may take a while
+
+
+Running 1 test using 1 worker
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+[WebServer] [success] Builder initialized
+
+[WebServer] [success] Nuxt files generated
+
+[1/1] [chromium] › test/e2e/journeys/workforce-punch-correction.spec.js:49:1 › A manager corrects a clocked punch, and is refused the day payroll has closed @fixture
+[WebServer] [warn] Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[WebServer] [info] Waiting for file changes
+
+[WebServer] [info] Memory usage: 1.33 GB (RSS: 2.3 GB)
+
+[WebServer] [info] Listening on: http://172.20.10.4:3889/
+
+  1 passed (20.8s)
+RESULT C2-punch-candidate 9f7d8df PASS rc=0

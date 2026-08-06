@@ -1,0 +1,5 @@
+4b911917b930272a8beaef32c464a4d0a652c5f0
+WFJ-15: compare the served bytes against the recorded digest
+
+ WebApi.Tests/Workforce/WorkforceEndToEndJourneyTests.cs | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)

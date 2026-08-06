@@ -1,0 +1,18 @@
+Test run for /Users/svendaneel/okam/wt-mrg150/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+Microsoft (R) Test Execution Command Line Tool Version 17.8.0 (arm64)
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:03.10]     WebApi.Tests.Margin.MarginStarterLibraryTests.No_curated_conversion_contradicts_the_universal_unit_family [FAIL]
+  Failed WebApi.Tests.Margin.MarginStarterLibraryTests.No_curated_conversion_contradicts_the_universal_unit_family [1 ms]
+  Error Message:
+   Starter candidate 'Hvetemel' declares 1 kg = 100 Gram, but the universal unit family already answers 1000. An ingredient's own conversion is resolved BEFORE the family, so this row would silently replace the correct answer in every recipe costed in that unit.
+Expected: True
+Actual:   False
+  Stack Trace:
+     at WebApi.Tests.Margin.MarginStarterLibraryTests.No_curated_conversion_contradicts_the_universal_unit_family() in /Users/svendaneel/okam/wt-mrg150/WebApi.Tests/Margin/MarginStarterLibraryTests.cs:line 48
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     1, Passed:     5, Skipped:     0, Total:     6, Duration: 210 ms - WebApi.Tests.dll (net8.0)

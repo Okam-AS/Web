@@ -1,0 +1,117 @@
+# artifacts/tests — backend suite receipts
+
+A number without a commit is not a measurement. Every file here belongs to one SHA, and the SHA is
+named in the filename and again inside the receipt beside it.
+
+## What is here
+
+| file | SHA it ran against | tier | result |
+| --- | --- | --- | --- |
+| `8c8a243d-fast-tier.trx` | `8c8a243dad403d184d53a373ba2d3283eacfe210` | fast (`Database!=SqlServer`) | 4095 passed / 0 failed / 8 skipped |
+| `6f26ad2b-fast-tier.trx` | `6f26ad2b2becc2394071edba2452ec91bcb5bd5d` | fast (`Database!=SqlServer`) | 4117 passed / 0 failed / 8 skipped |
+| `ffb29e4e-fast-tier.trx` | `ffb29e4e603972a7bf6d9742f38177103400a051` | fast (`Database!=SqlServer`) | 4110 passed / 0 failed / 9 skipped |
+| `baa5e38a-fast-tier.trx` | `baa5e38a17ab188869049a581570eea64c464bae` | fast (`Database!=SqlServer`) | 4292 passed / 0 failed / 10 skipped |
+| `f8b3a30f-fast-tier.trx` | `f8b3a30f2ecfaf00beab1e903dd68193fbc8eca2` | fast (`Database!=SqlServer`) | 4304 passed / 0 failed / 9 skipped |
+| `99855b1d-fast-tier.trx` | `99855b1d1d35ab35c1c09e072da0fc6d42421e56` | fast (`Database!=SqlServer`) | 4351 passed / 0 failed / 12 skipped |
+| `a7697121-fast-tier.trx` | `a769712113160fecdaedf21458de1cbb145d0b30` | fast (`Database!=SqlServer`) | 4364 passed / 0 failed / 12 skipped |
+| `bb82b3a0-fast-tier.trx` | `bb82b3a0575a6f75c235c6e83d3c84bc917a4a3d` | fast (`Database!=SqlServer`) | 4369 passed / 0 failed / 12 skipped |
+| `0659666f-fast-tier.trx` | `0659666f33e500ce3fad3c456f5d01d2ac68ac9b` | fast (`Database!=SqlServer`) | 4359 passed / 0 failed / 12 skipped |
+| `base-bfe57c3c-fast-tier.trx` | `bfe57c3c58acff6ae2f8ac6575791b790dd7c926` | fast (`Database!=SqlServer`) | 4406 passed / **1 failed** / 12 skipped |
+| `lane-reservation-limiter-move-fast-tier.trx` | `d9189fbd` (`lane/reservation-limiter-move`) | fast (`Database!=SqlServer`) | 4407 passed / 0 failed / 12 skipped |
+| `base-6771ba9a-fast-tier.trx` | `6771ba9ad9c9db0914e10c61e9d21740af7f5cb6` | fast (`Database!=SqlServer`) | 4402 passed / 1 failed / 12 skipped |
+| `lane-crypto-pin-byform-fast-tier.trx` | `35630600…` (`lane/crypto-pin-byform`) | fast (`Database!=SqlServer`) | 4406 passed / 0 failed / 12 skipped |
+| `3cf288fb-fast-tier.trx` | `3cf288fb9b5465472dd0a50d50d949dbce8f4d19` | fast (`Database!=SqlServer`) | 4364 passed / 0 failed / 12 skipped |
+| `771c0fc0-fast-tier.trx` | `771c0fc0a6504971fb1cfdab5eed4ab878582ab5` | fast (`Database!=SqlServer`) | 4368 passed / 0 failed / 12 skipped |
+| `2497ce9d-fast-tier.trx` | `2497ce9def286463dca9987152c3552b7d939274` | fast (`Database!=SqlServer`) | 4399 passed / 0 failed / 12 skipped |
+| `f18ffeda-fast-tier.trx` | `f18ffeda58137e9d2b58e109466d380d0847364c` | fast (`Database!=SqlServer`) | 4399 passed / 0 failed / 12 skipped |
+| `base-569887a5-fast-tier.trx` | `569887a51bca627b5bd79d6908abf21d2d3b9783` | fast (`Database!=SqlServer`) | 4629 passed / 0 failed / 12 skipped |
+| `merge-ef2bd5c8-fast-tier.trx` | `ef2bd5c851e34f0f2683cf81bf9bf2efebc1675b` | fast (`Database!=SqlServer`) | 4638 passed / 0 failed / 12 skipped |
+
+L-VIOLATION-EXACT-LAND's pair is `base-569887a5` and `merge-ef2bd5c8`: the `feature/restaurant-modules`
+tip and the commit that lands `lane/wf-violation-exact` and `lane/meals-violation-exact` on it together.
+The +9 is exactly the two lanes' exactness suites and nothing else -- the discovered-test-set diff between
+the two `.trx` files is 0 removed / 9 added, which is the number that matters here rather than the delta.
+The base was measured twice, independently, before the merge (4629 / 0 / 12 both times, byte-identical
+test sets); the `.trx` kept is the second run. Its full receipt is
+`lanes/L-VIOLATION-EXACT-LAND/merge-receipt.md` rather than a `RUN.md` here, following the landing lanes.
+
+L-RESERVATION-LIMITER-MOVE's pair is `base-bfe57c3c` and `lane-reservation-limiter-move`, and the
+`1 failed` in the first is not a regression: `bfe57c3c` (`lane/composition-root-check`) landed a check
+that was deliberately red, pending the one-line move `d9189fbd` makes. Their receipt is
+`lanes/L-RESERVATION-LIMITER-MOVE/evidence.md` rather than a `RUN.md` here, following the lane above
+them. `bfe57c3c`'s own pair — `base-8704ff63-fast-tier.trx` and `lane-composition-root-fast-tier.trx`
+— are in this directory with no row; that lane's numbers are in `lanes/L-COMPOSITION-ROOT-CHECK/`.
+(The `lane-reservation-limiter-move` row read `this commit` on `lane/confirm-postmerge-pin`, where that
+was true; the merge that brought it here would have made it name the merge instead, so the SHA it
+actually ran against is written out.)
+
+`base-6771ba9a` and `lane-crypto-pin-byform` belong to the e-mail-confirmation lane family, all LANE
+commits off `801d36a3`. `base-6771ba9a-fast-tier.trx` is the only receipt here that records a FAILURE, and it
+records it deliberately: `EventsOutboxDeliveryTests.The_message_carries_the_link_and_no_other_guest_data`
+asserts `DoesNotContain("250", …)` against a body carrying a random `PublicToken`, and the token drawn that
+run contained `250`. Green on three immediate re-runs. Keeping the honest receipt beats re-rolling until the
+number looks tidy — the flake is the finding.
+
+`base-8704ff63-fast-tier.trx` was written twice, independently: L-COMPOSITION-ROOT-CHECK ran the base at
+13:55 and L-CONFIRM-CONAT-RETIRE ran it again at 13:57 on 2026-08-02, and the two branches then carried
+byte-different files at the same path. Both report the same run of the same commit — total 4410, passed
+4398, failed 0, skipped 12 — so this merge keeps the first (blob `51e97fa2`) and does not keep the second
+(blob `10a733ea`, still readable at `cfb3b14a:artifacts/tests/base-8704ff63-fast-tier.trx`). The two rows
+above are both preserved because they measure different commits; these two measured one.
+
+The full receipt for each run — command, environment, what was excluded and what is still unmeasured —
+is the `RUN.md` in the directory named for its SHA.
+
+`ffb29e4e` is a LANE commit, not an ancestor of any receipt above it: it ran on
+`lane/growth-mail-postmark` off `349d8806`, which is why its count sits below the row before it.
+
+`a7697121` is also a LANE commit — `lane/gr-confirmed-email`, one commit above the unmerged
+`lane/gr-testsend-guard` — but unlike `ffb29e4e` it descends from the row above it, so its count is
+comparable to `99855b1d` directly.
+
+`3cf288fb` is the same lane two commits later and carries the identical count. It changes tests and
+comments only, so ±0 is the expected result rather than a suspicious one — what changed is whether one
+pin can fail, which a green tier cannot show. Its `RUN.md` records the mutations that can.
+
+`771c0fc0` is on `lane/gr-confirm-stale`, branched off `48950702` (the receipt commit above `3cf288fb`),
+so it descends from every row above it. Its +4 is one new test class; its base was re-measured at
+`48950702` rather than inherited, and reproduced `4376 / 4364 / 12` exactly.
+
+`0659666f` is a LANE commit too: `lane/meals-release` off `24dec838`, which is two commits ahead of
+`99855b1d` on `feature/restaurant-modules`.
+
+`2497ce9d` is a LANE commit too, on `lane/pdf-nullderef` off `lane/download-pdf-wire` (`a7b90cbd`), which
+was itself unmerged when the row was written. Its row is not comparable to any row above it — when it was
+written the row above it was `99855b1d`, and L-PDF-FAMILY-LAND's union has since put six other lanes'
+rows between them. The base it IS comparable to is 4373 / 0 / 12, measured at `a7b90cbd` on that lane's
+own worktree and recorded in its `RUN.md`.
+
+`f18ffeda` continues that same stack, on `lane/invoice-retry-retirement` off `17198f14`. Its
+count is IDENTICAL to `2497ce9d` on purpose: it adds assertions to two existing tests rather than new
+tests, so an unchanged total is the expected reading. What changed is proved by mutation instead, and
+the mutations are recorded in its `RUN.md`.
+
+Both stacks landed on `feature/restaurant-modules` through L-PDF-FAMILY-LAND, whose own numbers —
+baseline `4685fb01` and the merge commit — are in `lanes/L-PDF-FAMILY-LAND/merge-receipt.md` rather than
+here, following the landing lanes above.
+
+## The rule this directory keeps
+
+A run recorded here was produced from a **clean checkout of one commit**, not from a working tree. The
+run above was executed in a throwaway `git worktree` detached at the SHA, which is why the paths inside
+the `.trx` read `wt-be-receipt` rather than the main checkout: a suite run in a shared worktree while
+sibling lanes are editing it measures no commit at all, and that is the exact defect this directory
+exists to stop.
+
+Adding a run means: run it at a SHA, drop the `.trx` in with that SHA leading its name, add a row above,
+and write the `RUN.md` beside it. Do not overwrite an existing row — a superseded run is still the
+honest record of what was true that day.
+
+The other way a number here can measure the wrong thing is `--no-build` over a stale assembly: see the
+`--no-build` note in the repo's `CLAUDE.md` under **Commands → Tests** before recording any run produced
+with it.
+
+## What a green suite here is not
+
+It is evidence that code behaves. It is not evidence that a capability exists or is reachable, and it
+is never acceptance — acceptance is a person completing the journey.

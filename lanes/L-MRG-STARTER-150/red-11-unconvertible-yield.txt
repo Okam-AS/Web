@@ -1,0 +1,10 @@
+MUTATION: Salt;g;;kg=1000;  ->  Salt;g;1,4;kg=1000;
+---
+  Failed WebApi.Tests.Margin.MarginStarterLibraryTests.The_curation_parses_without_a_single_refusal [< 1 ms]
+   The authored starter curation (Services/Margin/margin-starter-ingredients.csv) has lines the product refused to serve. A refused line is DROPPED, not corrected, so shipping this would give every venue a shorter library than the author believes they wrote:
+  line 86: 'Salt' has yield 1,4, which is outside (0,1]. A yield is the fraction LEFT after loss, so it is never zero and never more than the whole. Note that a dot is a thousands separator in this file, so 0.88 reads as 88.
+[xUnit.net 00:00:03.22]     WebApi.Tests.Margin.MarginStarterLibraryTests.The_library_serves_every_row_the_curation_declares [FAIL]
+  Failed WebApi.Tests.Margin.MarginStarterLibraryTests.The_library_serves_every_row_the_curation_declares [< 1 ms]
+   The curation declares 'rows: 16' but 15 ingredient lines survived. Either the file arrived short — a paste that dropped the tail is the failure this counter exists to catch — or a line was refused and dropped (the refusal pin says which), or the counter was not updated after an edit.
+     at WebApi.Tests.Margin.MarginStarterLibraryTests.The_library_serves_every_row_the_curation_declares() in /Users/svendaneel/okam/wt-mrg150b/WebApi.Tests/Margin/MarginStarterLibraryTests.cs:line 230
+Failed!  - Failed:     2, Passed:    13, Skipped:     0, Total:    15, Duration: 188 ms - WebApi.Tests.dll (net8.0)

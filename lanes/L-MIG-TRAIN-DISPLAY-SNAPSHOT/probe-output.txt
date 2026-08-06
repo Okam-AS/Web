@@ -1,0 +1,83 @@
+PROBE: L-MIG-TRAIN-DISPLAY-SNAPSHOT (independent re-execution)
+base: lane/mig-train-display-snapshot @ 32c56fa4 (off lane/mig-company-receivable)
+tier: SQLite, container-free
+
+subject line BEFORE rename : Kari Nordmann
+subject line AFTER  rename : Kari Hansen
+completions before/after   : 1/1
+certificates before/after  : 1/1
+audit rows before/after    : 2/2
+
+documents identical apart from the subject line: True
+the string 'Kari Nordmann' survives anywhere in the reprint: False
+
+---- reprinted pack AFTER the rename ----
+{
+  "StoreId": 96001,
+  "PersonRef": "d1500000-0000-0000-0000-000000000001",
+  "DisplayName": "Kari Hansen",
+  "PersonOnFile": true,
+  "TimeZoneId": "Europe/Oslo",
+  "TimeZoneIsFallback": true,
+  "TrainingState": 2,
+  "Completions": [
+    {
+      "CompletionId": "edf4bb83-7e24-4839-ba84-5c894c13c1cf",
+      "CourseId": "c1000000-0000-0000-0000-000000000001",
+      "CourseTitle": "Ansvarlig alkoholservering",
+      "CourseVersionId": "c2000000-0000-0000-0000-000000000001",
+      "VersionNo": 1,
+      "ContentPagesJson": "[{\u0022title\u0022:\u0022Alkoholloven\u0022,\u0022body\u0022:\u0022Serving rules\u0022}]",
+      "QuizJson": "[{\u0022q\u0022:\u0022Age limit?\u0022,\u0022a\u0022:18}]",
+      "PassThresholdPercent": 80,
+      "ContentHash": "sha256:1a19bd0636797c252cd4bb022f731da9dd86d3a5ce4a714bc2ceb4aedea2273c",
+      "ScorePercent": 90.0,
+      "Passed": true,
+      "Source": 2,
+      "RecordedBy": "test-manager",
+      "CompletedAtUtc": "2026-07-15T10:00:00",
+      "CompletedAtStoreLocal": "2026-07-15T12:00:00",
+      "AuditCoverage": 1,
+      "ContentHashLinkage": 0
+    }
+  ],
+  "Certificates": [
+    {
+      "CertificateId": "5d7c2c64-8263-4764-bfe6-283fbad19594",
+      "Type": "food-hygiene",
+      "Issuer": "Mattilsynet",
+      "IssueDateUtc": "2025-01-02T00:00:00",
+      "ExpiryDateUtc": "2027-07-15T00:00:00",
+      "DocumentReference": null,
+      "Status": 1,
+      "AuditCoverage": 1
+    }
+  ],
+  "AuditChain": [
+    {
+      "EventType": "certificate.register",
+      "AggregateType": "TrainingCertificate",
+      "AggregateId": "5d7c2c64-8263-4764-bfe6-283fbad19594",
+      "ActorReference": "test-manager",
+      "PayloadSnapshotJson": "{\u0022certificateType\u0022:\u0022food-hygiene\u0022,\u0022expiryDateUtc\u0022:\u00222027-07-15T00:00:00.0000000Z\u0022,\u0022issueDateUtc\u0022:\u00222025-01-02T00:00:00.0000000Z\u0022,\u0022issuer\u0022:\u0022Mattilsynet\u0022}",
+      "OccurredAtUtc": "2026-07-15T10:00:00",
+      "OccurredAtStoreLocal": "2026-07-15T12:00:00",
+      "LinkedTo": "certificate"
+    },
+    {
+      "EventType": "completion.record",
+      "AggregateType": "TrainingCompletion",
+      "AggregateId": "edf4bb83-7e24-4839-ba84-5c894c13c1cf",
+      "ActorReference": "test-manager",
+      "PayloadSnapshotJson": "{\u0022completionSource\u0022:\u0022ManagerRecorded\u0022,\u0022passed\u0022:\u0022true\u0022,\u0022scorePercent\u0022:\u002290\u0022}",
+      "OccurredAtUtc": "2026-07-15T10:00:00",
+      "OccurredAtStoreLocal": "2026-07-15T12:00:00",
+      "LinkedTo": "completion"
+    }
+  ],
+  "Integrity": {
+    "ContentHashLinkage": 0,
+    "RowsWithoutAuditEvent": 0
+  },
+  "AsOfUtc": "2026-07-15T10:00:00Z"
+}

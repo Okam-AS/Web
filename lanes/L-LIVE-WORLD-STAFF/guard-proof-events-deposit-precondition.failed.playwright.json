@@ -27,7 +27,7 @@
   "steps": [
     {
       "n": 1,
-      "name": "sign in as the manager (99999999 / 123123)",
+      "name": "sign in as the manager (99999999 / AppSettings__DemoVerificationCode__REDACTED)",
       "status": "passed",
       "startedAtUtc": "2026-08-02T09:42:11.389Z",
       "durationMs": 1342,

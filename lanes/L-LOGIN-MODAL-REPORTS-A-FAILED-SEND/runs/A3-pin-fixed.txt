@@ -1,0 +1,103 @@
+=== label     : A3-pin-fixed
+=== worktree  : /Users/svendaneel/okam/web-loginsend
+=== commit    : 8ac6f63648015d8c7a230181a7f07bf303d43268
+=== dirty     : 4 path(s) before the run
+=== modal sha : 1bac648211e8f1e4fe0158380622aa1f0bd5635e components/molecules/LoginModal.vue
+=== spec sha  : cbc60f617cc603f202e211df0613fc2e1ff318ce  test/e2e/journeys/login-modal-failed-send.spec.js
+=== mode      : fixture   api=127.0.0.1:4882   web=127.0.0.1:3881
+=== ports     : 4010/4971/4973 never bound, never probed, never signalled
+=== started   : 2026-08-06T11:54:21Z
+[WebServer] [fixture] listening on http://127.0.0.1:4882
+
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://192.168.68.111:3881/
+
+[WebServer] [info] Preparing project for development
+
+[WebServer] [info] Initial build may take a while
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+
+[WebServer] [success] Builder initialized
+
+[WebServer] [success] Nuxt files generated
+
+
+Running 1 test using 1 worker
+
+[WebServer] [warn] Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1/1] [chromium] › test/e2e/journeys/login-modal-failed-send.spec.js:34:1 › a verification send that fails leaves the modal on the phone step, saying so @fixture
+[WebServer] [info] Waiting for file changes
+
+[WebServer] [info] Memory usage: 1.24 GB (RSS: 1.94 GB)
+
+[WebServer] [info] Listening on: http://192.168.68.111:3881/
+
+  1) [chromium] › test/e2e/journeys/login-modal-failed-send.spec.js:34:1 › a verification send that fails leaves the modal on the phone step, saying so @fixture 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.login-modal').locator('.input-wrapper input[type="tel"]')
+    Expected: visible
+    Error: strict mode violation: locator('.login-modal').locator('.input-wrapper input[type="tel"]') resolved to 2 elements:
+        1) <input type="tel" class="input" data-v-eba95b7e="" placeholder="Telefon"/> aka getByRole('textbox', { name: 'Telefon' }).first()
+        2) <input type="tel" class="input" data-v-eba95b7e="" placeholder="Telefon"/> aka getByRole('textbox', { name: 'Telefon' }).nth(1)
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for locator('.login-modal').locator('.input-wrapper input[type="tel"]')
+
+
+      86 |       // The measurement. Six here is the defect, restated: boxes for a code that was never sent.
+      87 |       await expect(boxes).toHaveCount(0);
+    > 88 |       await expect(phoneField).toBeVisible();
+         |                                ^
+      89 |       return 'no code inputs exist; the phone field is still the thing on screen';
+      90 |     });
+      91 |
+        at /Users/svendaneel/okam/web-loginsend/test/e2e/journeys/login-modal-failed-send.spec.js:88:32
+        at JourneyRecorder.step (/Users/svendaneel/okam/web-loginsend/test/e2e/support/journey.js:347:22)
+        at /Users/svendaneel/okam/web-loginsend/test/e2e/journeys/login-modal-failed-send.spec.js:85:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/login-modal-failed-send-a--eb1c4-on-the-phone-step-saying-so-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/login-modal-failed-send.fixture.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/login-modal-failed-send.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/login-modal-failed-send-a--eb1c4-on-the-phone-step-saying-so-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/login-modal-failed-send-a--eb1c4-on-the-phone-step-saying-so-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/login-modal-failed-send-a--eb1c4-on-the-phone-step-saying-so-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+  1 failed
+    [chromium] › test/e2e/journeys/login-modal-failed-send.spec.js:34:1 › a verification send that fails leaves the modal on the phone step, saying so @fixture 
+=== finished  : 2026-08-06T11:54:48Z
+RESULT A3-pin-fixed FAIL-ASSERT rc=1

@@ -1,0 +1,60 @@
+# HUNK INVENTORY — which of the working-tree changes in these three files this lane authored.
+# base commit 8ac6f63648015d8c7a230181a7f07bf303d43268. The rest was already uncommitted when
+# this lane opened (git status showed all three as ` M` at 08:02Z) and belongs to sibling lanes.
+
+== test/e2e/support/artifact-store.js
+   MINE     -56,0 +57,38  | // ---- EXCEPT THAT A RECORD GIT KEEPS IS NOT A SLOT AT ALL ------------------------------
+   MINE     -181,0 +220,22  | /**
+   INHERITED -251 +311,4  | if (!port || !(host === '127.0.0.1' || host === 'localhost' || host === '::1')) { return n
+   INHERITED -332 +395  | const loopback = host === '127.0.0.1' || host === 'localhost' || host === '::1';
+   MINE     -389,0 +453,3  | *
+   MINE     -391 +457  | function canTakeCanonical (incoming, standing, provisional) {
+   MINE     -392,0 +459,7  | // ASKED BEFORE LINEAGE AND BEFORE RANK, because each of the two rules below would let a r
+   MINE     -457,0 +531,5  | // Read from disk on every run rather than passed in by the caller: whether a record is un
+   INHERITED -459 +537  | const takes = canTakeCanonical(incoming, standing, !!opts.provisional);
+   MINE     -475,0 +554,4  | // WHY it did not take the name, which `canonicalHeldBy` alone cannot say. "A stronger run
+   MINE     -503,0 +586  | canonicalTracked: tracked,
+   MINE     -511,0 +595  | canonicalTracked: tracked,
+   MINE     -538,0 +623  | isTracked,
+   -> 10 hunks authored by this lane, 3 inherited
+
+== test/e2e/support/journey.js
+   MINE     -15,0 +16,4  | //   artifacts/journeys/runs/<name>.<backendKey>/NN-<slug>.png    ...and where those go in
+   MINE     -54,0 +59  | //                      "canonicalTracked": false,        // true = git keeps that file, s
+   INHERITED -64,0 +70,4  | //   "proxiedSubjectServed": 0,                       // …and the same again, answered by 
+   INHERITED -95,0 +105,7  | //   proxy     and, because that split is attributed BY ORIGIN and same-origin traffic is 
+   INHERITED -141 +157  | const { isShellPath, judgeSubjectOrigin } = require('./journey-assertions');
+   INHERITED -274,0 +291,9  | // ...AND THE ONES THE APP ANSWERED ON THE BACKEND'S BEHALF. The two counters above split 
+   MINE     -277,0 +303,7  | // ...AND WHETHER THIS JOURNEY'S RECORD IS ONE GIT KEEPS. Asked once here rather than per
+   INHERITED -304,0 +337,8  | // The path the BACKEND would have seen for a call the app proxied on its behalf, or null 
+   INHERITED -313,0 +354,12  | } else if (proxied !== null && proxied !== '/' && !isShellPath(proxied)) {
+   INHERITED -365 +417,2  | * WHERE THIS RUN'S FILES GO — screenshots, and the PDFs two journeys print.
+   INHERITED -369,0 +423,7  | *
+   MINE     -371,2 +431,2  | get dir () {
+   MINE     -375,3 +435,5  | /** The same, written the way an artifact or a review should quote it — never an absolute 
+   MINE     -380 +442,10  | /** A screenshot, filed under this journey and this backend, and referenced from its JSON.
+   MINE     -386 +457  | const relative = this.meta.journey + '/' + this.backendKey + '/' + file;
+   INHERITED -423,0 +495,6  | // AND THE THIRD PLACE A SUBJECT CALL CAN GO, which neither of the two above can represent
+   INHERITED -679,0 +757,26  | // THE SAME LIE THROUGH THE APP'S OWN FRONT DOOR, which even the split above cannot see. I
+   MINE     -692,0 +796,3  | // TWO DIFFERENT REASONS, and they send the reader to two different places. "A stronger ru
+   MINE     -695,3 +801,8  | '          artifacts/journeys/' + meta.journey + '.playwright.json still belongs to `' + f
+   -> 9 hunks authored by this lane, 10 inherited
+
+== test/journey-artifact-store.test.js
+   INHERITED -22,0 +23,19  | // THE NAME OF THE CHECKOUT THIS SUITE IS RUNNING IN — derived, never spelled.
+   MINE     -141,0 +161,117  | // A RECORD GIT KEEPS IS NOT A SLOT, and these need a real index to say so: the whole poin
+   INHERITED -295 +431,4  | expect(build.id).toMatch(/^Web-modules@[0-9a-f]{40}(\+dirty)?$/);
+   INHERITED -347 +486  | expect(build.id).not.toContain('Web-modules@');
+   INHERITED -386 +525  | // field is merely populated would pass against a store that resolved everything to `Web-m
+   INHERITED -419 +558  | // checkout — so the port's answer is `Web-modules@…` and a stamp's answer must not be.
+   INHERITED -430,0 +570,4  | // `launchedPid` is this jest process, which is also the one holding `origin` — the listen
+   INHERITED -433 +576,2  | const written = store.writeWorldStamp({ apiBaseUrl: origin, repo: from.repo, pid: process.
+   INHERITED -456,3 +600,3  | // is running out of the Web-modules checkout and holds that socket.
+   INHERITED -554 +698,2  | expect(() => store.writeWorldStamp({ apiBaseUrl: 'https://api.okam.no', repo: api.repo, pi
+   INHERITED -562 +707  | it('refuses to stamp a world whose process is not running, rather than writing an unverifi
+   INHERITED -566,3 +711,7  | expect(() => store.writeWorldStamp({ apiBaseUrl: origin, repo: api.repo, pid: 2147483646 }
+   INHERITED -578 +727  | { apiBaseUrl: origin, repo: api.repo, pid: process.pid, writtenBy: 'test/e2e/scripts/live-
+   INHERITED -585 +734,2  | const byNobody = store.writeWorldStamp({ apiBaseUrl: origin, repo: api.repo, pid: process.
+   INHERITED -592,2 +742,4  | fs.writeFileSync(path.join(api.repo, 'Program.cs'), '// edited after the build\n');
+   -> 1 hunks authored by this lane, 14 inherited
+

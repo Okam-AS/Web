@@ -156,6 +156,33 @@ function dateKeyOf (date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 }
 
+// EVERY table a booking occupies, as a de-duplicated list.
+//
+// A reservation is not one table. `fromApi` reads the L3c combination off `r.tables` into
+// `tableIds`/`extraTableIds`, and `toApi` sends the whole set back — so both sides of a conflict
+// test are SETS, and comparing the single denormalized `tableId` misses every secondary table of a
+// combined booking in both directions: the ones an existing booking already holds, and the ones a
+// draft is about to take. Accepts a bare id, a list of ids, or a reservation/draft to read.
+function tableIdsOf (value) {
+  const ids = [];
+  const add = (id) => {
+    if (id === null || id === undefined || id === '') { return; }
+    if (!ids.includes(id)) { ids.push(id); }
+  };
+  if (Array.isArray(value)) {
+    value.forEach(add);
+  } else if (value && typeof value === 'object') {
+    // The primary is added last but is normally already first in `tableIds`; order is irrelevant to
+    // an intersection test, and the fallback covers a row that carries only the primary.
+    (value.tableIds || []).forEach(add);
+    (value.extraTableIds || []).forEach(add);
+    add(value.tableId);
+  } else {
+    add(value);
+  }
+  return ids;
+}
+
 // Parses the API's local "yyyy-MM-ddTHH:mm:ss" into a local Date plus its hour/minute.
 function parseLocalDateTime (iso) {
   const [datePart, timePart = '00:00'] = (iso || '').split('T');
@@ -455,17 +482,24 @@ export default {
     },
 
     // --- conflicts ----------------------------------------------------------
-    checkConflict (excludeId, tableId, startMin, durationMin, dateKey) {
+    // `tables` is one table id, a list of them, or a reservation/draft to read the combination off.
+    // Two bookings collide when they share ANY table, so both sides go through `tableIdsOf`: a
+    // combined 1+2 makes table 2 busy, and a draft combining onto a taken table is refused even
+    // when its primary is free.
+    checkConflict (excludeId, tables, startMin, durationMin, dateKey) {
+      const wanted = tableIdsOf(tables);
+      if (!wanted.length) { return false; }
       const end = startMin + durationMin;
       return this.reservations.some((r) => {
         if (r.id === excludeId) { return false; }
-        if (r.tableId !== tableId || r.dateKey !== dateKey) { return false; }
+        if (r.dateKey !== dateKey) { return false; }
         if (!ACTIVE_STATUSES.includes(r.status)) { return false; }
+        if (!tableIdsOf(r).some(id => wanted.includes(id))) { return false; }
         return r.startMin < end && startMin < r.startMin + r.durationMin;
       });
     },
-    conflictForDay (excludeId, tableId, startMin, durationMin) {
-      return this.checkConflict(excludeId, tableId, startMin, durationMin, this.dateKey);
+    conflictForDay (excludeId, tables, startMin, durationMin) {
+      return this.checkConflict(excludeId, tables, startMin, durationMin, this.dateKey);
     },
 
     // --- CRUD -----------------------------------------------------------------

@@ -91,10 +91,23 @@ sw.*
 # Vim swap files
 *.swp
 
-# Browser-journey evidence. The FILES are a record of a run, not source, so they are not committed —
-# but the CONTRACT is (test/e2e/support/journey.js): the path artifacts/journeys/<name>.playwright.json
-# and the JSON shape are stable, because probes read them. Delete this directory and the next run
-# rebuilds it; change the path or the shape and every probe breaks.
+# Browser-journey evidence. The FILES are a record of a run, not source, so they are ignored BY
+# DEFAULT — but the CONTRACT is committed (test/e2e/support/journey.js): the path
+# artifacts/journeys/<name>.playwright.json and the JSON shape are stable, because probes read them.
+# Delete this directory and the next run rebuilds it; change the path or the shape and every probe
+# breaks.
+#
+# EXCEPT WHERE A LANE'S EXIT NAMES THE FILE ITSELF. Some exits are written as "artifacts/journeys/
+# <name>.playwright.json captures a completed walk". An exit whose evidence is regenerated-or-absent
+# can be neither reviewed after the fact nor shown to fail, so those records are force-added past
+# this line (`git add -f`) and are the only artifacts under version control:
+#
+#   modal-scroll-lock, modal-estate-scroll-lock, workforce-invitation-onboarding
+#   growth-guest-lifecycle, growth-testsend-refusal        (L-JOURNEY-GROWTH)
+#
+# Each is committed WITH the screenshots its own `screenshots` array names, because a committed
+# record pointing at ignored pictures is a dangling reference. Everything else here stays ignored:
+# tracking every run would put a merge conflict on the output of a test.
 artifacts/
 
 # Playwright's own caches

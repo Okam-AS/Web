@@ -1,0 +1,15 @@
+MUTATION: Salt;g;;kg=1000;  ->  Salt;;;kg=1000;
+---
+  Failed WebApi.Tests.Margin.MarginStarterLibraryTests.The_curation_parses_without_a_single_refusal [< 1 ms]
+   The authored starter curation (Services/Margin/margin-starter-ingredients.csv) has lines the product refused to serve. A refused line is DROPPED, not corrected, so shipping this would give every venue a shorter library than the author believes they wrote:
+  line 86: 'Salt' declares no base unit. Every quantity and every cost for an ingredient is measured in it and the venue can never change it afterwards, so it cannot be inferred. Use one of g, kg, ml, l, stk.
+     at WebApi.Tests.Margin.MarginStarterLibraryTests.The_curation_parses_without_a_single_refusal() in /Users/svendaneel/okam/wt-mrg150b/WebApi.Tests/Margin/MarginStarterLibraryTests.cs:line 217
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:03.49]     WebApi.Tests.Margin.MarginStarterLibraryTests.The_library_serves_every_row_the_curation_declares [FAIL]
+  Failed WebApi.Tests.Margin.MarginStarterLibraryTests.The_library_serves_every_row_the_curation_declares [< 1 ms]
+   The curation declares 'rows: 16' but 15 ingredient lines survived. Either the file arrived short — a paste that dropped the tail is the failure this counter exists to catch — or a line was refused and dropped (the refusal pin says which), or the counter was not updated after an edit.
+     at WebApi.Tests.Margin.MarginStarterLibraryTests.The_library_serves_every_row_the_curation_declares() in /Users/svendaneel/okam/wt-mrg150b/WebApi.Tests/Margin/MarginStarterLibraryTests.cs:line 230
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+Failed!  - Failed:     2, Passed:    13, Skipped:     0, Total:    15, Duration: 208 ms - WebApi.Tests.dll (net8.0)

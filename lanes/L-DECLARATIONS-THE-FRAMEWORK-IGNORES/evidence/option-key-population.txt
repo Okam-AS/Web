@@ -1,0 +1,41 @@
+parsed default-export option objects: 313 / 317 .vue files
+NOT parsed (4):
+   components/atoms/CloseButton.vue (no <script>)
+   components/molecules/PriceTable.vue (no <script>)
+   pages/admin/orders.vue (unbalanced)
+   pages/wolt-callback.vue (no `export default {`)
+
+--- every top-level option key observed, with count ---
+   251  methods
+   236  computed
+   222  data
+   210  name
+   173  props
+   161  components
+   129  mounted
+    94  watch
+    61  beforeDestroy
+    37  mixins
+    19  head
+    16  inject
+    16  created
+    11  layout
+     5  middleware
+     2  asyncData
+     1  directives
+     1  provide
+     1  emits   <== NOT a Vue 2.7 or Nuxt 2 option
+     1  unmounted   <== NOT a Vue 2.7 or Nuxt 2 option
+     1  beforeRouteLeave   <== NOT a Vue 2.7 or Nuxt 2 option
+     1  render
+
+--- UNRECOGNISED keys, with every site ---
+  emits:
+      components/atoms/Modal.vue:97
+  unmounted:
+      components/molecules/FocusTrap.vue:147
+  beforeRouteLeave:
+      pages/admin/category-editor.vue:460
+
+--- NUXT PAGE-ONLY options declared under components/ (ignored there) ---
+  (none)

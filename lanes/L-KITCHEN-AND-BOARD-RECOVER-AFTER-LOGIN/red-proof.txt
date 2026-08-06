@@ -1,0 +1,137 @@
+watchman warning:  Recrawled this watch 57 times, most recently because:
+MustScanSubDirs UserDroppedTo resolve, please review the information on
+https://facebook.github.io/watchman/docs/troubleshooting.html#recrawl
+To clear this warning, run:
+`watchman watch-del '/Users/svendaneel/okam/Web-modules' ; watchman watch-project '/Users/svendaneel/okam/Web-modules'`
+
+FAIL test/kitchen-and-board-resume-after-login.test.js
+  /admin/kitchen — signing in through the page brings the ticket clock with it
+    ✕ a ticket sent at sign-in ages on screen instead of sitting at 0:00 (17 ms)
+    ✓ the board keeps polling after the sign-in, not just once (3 ms)
+    ✕ the fullscreen state tracks the document after the sign-in (3 ms)
+    ✕ a repeated sign-in leaves exactly one clock and one poll behind (2 ms)
+  /admin/ongoing — signing in through the page brings the live board with it
+    ✕ an order placed after the sign-in appears on the board without a reload (6 ms)
+    ✕ the stores an order can be transferred to are known after the sign-in (3 ms)
+    ✕ a repeated sign-in leaves exactly one poll behind (2 ms)
+
+  ● /admin/kitchen — signing in through the page brings the ticket clock with it › a ticket sent at sign-in ages on screen instead of sitting at 0:00
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected substring: "9:00"
+    Received string:    "schedule0:00"
+
+      197 |     await advance(9 * 60 * 1000)
+      198 |
+    > 199 |     expect(timerText(wrapper)).toContain('9:00')
+          |                                ^
+      200 |     expect(timerIsAmber(wrapper)).toBe(true)
+      201 |     expect(timerIsRed(wrapper)).toBe(false)
+      202 |
+
+      at Object.<anonymous> (test/kitchen-and-board-resume-after-login.test.js:199:32)
+
+  ● /admin/kitchen — signing in through the page brings the ticket clock with it › the fullscreen state tracks the document after the sign-in
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      266 |     await flush()
+      267 |
+    > 268 |     expect(wrapper.vm.isFullscreen).toBe(true)
+          |                                     ^
+      269 |
+      270 |     delete document.fullscreenElement
+      271 |     wrapper.destroy()
+
+      at Object.<anonymous> (test/kitchen-and-board-resume-after-login.test.js:268:37)
+
+  ● /admin/kitchen — signing in through the page brings the ticket clock with it › a repeated sign-in leaves exactly one clock and one poll behind
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 0
+    Received: 1
+
+      290 |     // interval started over the top of the first is one this page can never clear.
+      291 |     wrapper.destroy()
+    > 292 |     expect(jest.getTimerCount()).toBe(0)
+          |                                  ^
+      293 |   })
+      294 | })
+      295 |
+
+      at Object.<anonymous> (test/kitchen-and-board-resume-after-login.test.js:292:34)
+
+  ● /admin/ongoing — signing in through the page brings the live board with it › an order placed after the sign-in appears on the board without a reload
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 3
+    + Received  + 1
+
+    - Array [
+    -   "order-2001",
+    - ]
+    + Array []
+
+      367 |     await advance(7000)
+      368 |
+    > 369 |     expect(cardIds(wrapper)).toEqual(['order-2001'])
+          |                              ^
+      370 |
+      371 |     // And it keeps going — a second order lands on a later poll.
+      372 |     orders = [orderWith('order-2001'), orderWith('order-2002')]
+
+      at Object.<anonymous> (test/kitchen-and-board-resume-after-login.test.js:369:30)
+
+  ● /admin/ongoing — signing in through the page brings the live board with it › the stores an order can be transferred to are known after the sign-in
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 6
+    + Received  + 1
+
+    - Array [
+    -   Object {
+    -     "id": 42,
+    -     "name": "Testkroa",
+    -   },
+    - ]
+    + Array []
+
+      391 |     await flush()
+      392 |
+    > 393 |     expect(wrapper.vm.adminStores).toEqual([{ id: 42, name: 'Testkroa' }])
+          |                                    ^
+      394 |
+      395 |     wrapper.destroy()
+      396 |   })
+
+      at Object.<anonymous> (test/kitchen-and-board-resume-after-login.test.js:393:36)
+
+  ● /admin/ongoing — signing in through the page brings the live board with it › a repeated sign-in leaves exactly one poll behind
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1
+    Received: 0
+
+      407 |     await flush()
+      408 |
+    > 409 |     expect(jest.getTimerCount()).toBe(1)
+          |                                  ^
+      410 |     wrapper.destroy()
+      411 |     expect(jest.getTimerCount()).toBe(0)
+      412 |   })
+
+      at Object.<anonymous> (test/kitchen-and-board-resume-after-login.test.js:409:34)
+
+Test Suites: 1 failed, 1 total
+Tests:       6 failed, 1 passed, 7 total
+Snapshots:   0 total
+Time:        0.592 s, estimated 1 s
+Ran all test suites matching /test\/kitchen-and-board-resume-after-login.test.js/i.

@@ -1,0 +1,3 @@
+1c1fd14aa013492f3cf452ca7198fd8f8de314e78a45439e7d48ae58941d04e0  translations/de.ts
+e3da944331c80f2fbe7fcc4c62d5ef3552d3e0a446588bbf91cae22d574fd367  translations/en.ts
+f4bff5553eb64b1f7bf638f8c08d2a5e84f7302fdbe9358149992dc34a209a6e  translations/no.ts

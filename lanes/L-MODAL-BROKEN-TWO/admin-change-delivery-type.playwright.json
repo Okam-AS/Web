@@ -1,0 +1,122 @@
+{
+  "journey": "admin-change-delivery-type",
+  "title": "A manager changes an order from self-pickup to dine-in from the ongoing board",
+  "status": "passed",
+  "startedAtUtc": "2026-08-01T17:02:11.239Z",
+  "finishedAtUtc": "2026-08-01T17:02:13.742Z",
+  "durationMs": 2503,
+  "capabilities": [
+    "orders.ongoing.board",
+    "orders.delivery-type.change",
+    "admin.modal.change-delivery-type.renders"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3120",
+  "apiBaseUrl": "http://127.0.0.1:4120",
+  "commit": "7b99f2a0b94b115d990a8503e5aeaea0128998c5",
+  "underTest": null,
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in and land on the ongoing board",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T17:02:11.239Z",
+      "durationMs": 1664,
+      "detail": "one order on the board, #shopping_bag\n1042",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "open the order and its action row",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T17:02:12.903Z",
+      "durationMs": 386,
+      "detail": "expanded-actions visible",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "the delivery-type button opens a modal rather than throwing",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T17:02:13.395Z",
+      "durationMs": 44,
+      "detail": "modal rendered",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "the mixin helper resolved: the current type is a LABEL, not the enum",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T17:02:13.439Z",
+      "durationMs": 9,
+      "detail": "current type reads \"Hent selv\"",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "the option list is the modal's own, with the current type filtered out",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T17:02:13.448Z",
+      "durationMs": 16,
+      "detail": "radio_button_unchecked delivery_dining Hjemlevering Leveres hjem til kunde | radio_button_unchecked deck Spis inne Serveres ved bord | radio_button_unchecked delivery_dining Wolt Leveres via Wolt",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "choosing dine-in and confirming writes the change",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T17:02:13.543Z",
+      "durationMs": 79,
+      "detail": "modal closed after PUT /orders/change-delivery-type",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "and the board now says dine-in",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T17:02:13.622Z",
+      "durationMs": 12,
+      "detail": "order card delivery row reads \"Levering: Spis inne\"",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "what the browser said while this ran",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T17:02:13.735Z",
+      "durationMs": 3,
+      "detail": "2 browser errors, 0 attributable to this modal",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "note",
+      "summary": "pre-existing router navigation race on /admin",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fongoing\" to \"/admin?redirect=%2Fadmin%2Fongoing&storeId=42\" with a new navigation."
+    },
+    {
+      "severity": "note",
+      "summary": "pre-existing router navigation race on /admin",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fongoing\" to \"/admin?redirect=%2Fadmin%2Fongoing&storeId=42\" with a new navigation."
+    },
+    {
+      "severity": "note",
+      "summary": "ChangeDeliveryTypeModal renders without error; `deliveryTypeLabel` resolves from the global mixin",
+      "detail": "The brief for L-MODAL-BROKEN-TWO reported this modal as throwing on render for a missing label helper. plugins/global-mixin.js:97 defines deliveryTypeLabel and nuxt.config.js:189 registers the mixin (ssr:false, and this surface is inside AdminPage's <client-only>), so the helper is on every component. `git log -S` puts it in the tree well before the modal was written. Nothing was repaired and nothing was deleted: the modal is reachable — OrderCard emits change-delivery, ongoing.vue mounts it, OrderService.ChangeDeliveryType PUTs /orders/change-delivery-type — and it works end to end, as these steps show."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fongoing\" to \"/admin?redirect=%2Fadmin%2Fongoing&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fongoing\" to \"/admin?redirect=%2Fadmin%2Fongoing&storeId=42\" with a new navigation."
+  ],
+  "failedRequests": [],
+  "screenshots": [
+    "admin-change-delivery-type/01-the-order-actions.png",
+    "admin-change-delivery-type/02-the-delivery-type-modal.png",
+    "admin-change-delivery-type/03-the-board-after-the-change.png"
+  ],
+  "error": null
+}

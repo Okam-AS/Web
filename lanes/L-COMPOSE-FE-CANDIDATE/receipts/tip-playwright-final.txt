@@ -1,0 +1,32 @@
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/workforce-schedule-publish.fixture.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/workforce-schedule-publish.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/workforce-schedule-publish-2202b-lidates-it-and-publishes-it-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/workforce-schedule-publish-2202b-lidates-it-and-publishes-it-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/workforce-schedule-publish-2202b-lidates-it-and-publishes-it-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[29/29] [chromium] › test/e2e/journeys/workforce-week-run.spec.js:68:1 › A manager plans and publishes a week; the worker sees it and confirms it @fixture
+  8 failed
+    [chromium] › test/e2e/journeys/growth-preference-withdrawal.spec.js:46:1 › A guest opens their private link and withdraws consent — once the two origins let the session cookie through @fixture 
+    [chromium] › test/e2e/journeys/meals-admin-setup.spec.js:31:1 › A concierge creates a company, signs its corridor, runs a programme and issues an invitation @fixture 
+    [chromium] › test/e2e/journeys/meals-statement-month.spec.js:59:1 › A venue reads the month statement, sees the reference each line was written with, and exports it @fixture 
+    [chromium] › test/e2e/journeys/training-evidence-document.spec.js:90:1 › A manager opens one person's training record from the sidebar, and opening it is recorded @fixture 
+    [chromium] › test/e2e/journeys/workforce-kodeoversikt.spec.js:74:1 › a manager downloads the § 8-5-6 kodeoversikt from the personnel list and the issue is recorded @fixture 
+    [chromium] › test/e2e/journeys/workforce-punch-correction.spec.js:49:1 › A manager corrects a clocked punch, and is refused the day payroll has closed @fixture 
+    [chromium] › test/e2e/journeys/workforce-role-catalogue.spec.js:43:1 › A manager creates a role on a store that has none, and it reaches the schedule editor @fixture 
+    [chromium] › test/e2e/journeys/workforce-schedule-publish.spec.js:37:1 › A manager creates a draft week, staffs a shift, validates it and publishes it @live 
+  21 passed (4.1m)
+npx playwright test --reporter=line 2>&1  234.54s user 36.65s system 111% cpu 4:03.68 total
+tail -30  0.00s user 0.00s system 0% cpu 4:03.68 total

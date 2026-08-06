@@ -1,0 +1,13 @@
+=== A: bare client (committed) x strict fixture ===
+  ✓  1 [chromium] › test/e2e/journeys/account-email-confirm.spec.js:77:1 › A phone-signup administrator is refused a test-send, confirms her address from admin, and is then allowed it @fixture (8.0s)
+  1 passed (9.3s)
+=== B: SLASHED client x strict fixture ===
+  ✘  1 [chromium] › test/e2e/journeys/account-email-confirm.spec.js:77:1 › A phone-signup administrator is refused a test-send, confirms her address from admin, and is then allowed it @fixture (20.1s)
+    Locator: locator('.ae-page__panel--code')
+  1 failed
+=== A': bare client restored x strict fixture ===
+  ✓  1 [chromium] › test/e2e/journeys/account-email-confirm.spec.js:77:1 › A phone-signup administrator is refused a test-send, confirms her address from admin, and is then allowed it @fixture (5.2s)
+  1 passed (5.9s)
+=== FINAL: committed state (bare client x committed tolerant fixture) ===
+  ✓  1 [chromium] › test/e2e/journeys/account-email-confirm.spec.js:77:1 › A phone-signup administrator is refused a test-send, confirms her address from admin, and is then allowed it @fixture (5.6s)
+  1 passed (6.4s)

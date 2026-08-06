@@ -1,0 +1,64 @@
+npm warn ERESOLVE overriding peer dependency
+npm warn While resolving: eslint-plugin-vue@6.2.2
+npm warn Found: eslint@7.32.0
+npm warn node_modules/eslint
+npm warn   dev eslint@"^7.10.0" from the root project
+npm warn   26 more (@babel/eslint-parser, @nuxtjs/eslint-config, ...)
+npm warn
+npm warn Could not resolve dependency:
+npm warn peer eslint@"^5.0.0 || ^6.0.0" from eslint-plugin-vue@6.2.2
+npm warn node_modules/eslint-plugin-vue
+npm warn   eslint-plugin-vue@"^6.2.2" from @nuxtjs/eslint-config@3.1.0
+npm warn   node_modules/@nuxtjs/eslint-config
+npm warn   1 more (eslint-plugin-nuxt)
+npm warn
+npm warn Conflicting peer dependency: eslint@6.8.0
+npm warn node_modules/eslint
+npm warn   peer eslint@"^5.0.0 || ^6.0.0" from eslint-plugin-vue@6.2.2
+npm warn   node_modules/eslint-plugin-vue
+npm warn     eslint-plugin-vue@"^6.2.2" from @nuxtjs/eslint-config@3.1.0
+npm warn     node_modules/@nuxtjs/eslint-config
+npm warn     1 more (eslint-plugin-nuxt)
+npm warn deprecated async-cache@1.1.0: No longer maintained. Use [lru-cache](http://npm.im/lru-cache) version 7.6 or higher, and provide an asynchronous `fetchMethod` option.
+npm warn deprecated @npmcli/move-file@1.1.2: This functionality has been moved to @npmcli/fs
+npm warn deprecated stable@0.1.8: Modern JS already guarantees Array#sort() is a stable sort, so this library is deprecated. See the compatibility table on MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#browser_compatibility
+npm warn deprecated source-map-url@0.4.1: See https://github.com/lydell/source-map-url#deprecated
+npm warn deprecated @babel/plugin-proposal-unicode-property-regex@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-unicode-property-regex instead.
+npm warn deprecated @babel/plugin-proposal-private-methods@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-private-methods instead.
+npm warn deprecated @babel/plugin-proposal-class-properties@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-class-properties instead.
+npm warn deprecated @babel/plugin-proposal-nullish-coalescing-operator@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-nullish-coalescing-operator instead.
+npm warn deprecated @stylelint/postcss-markdown@0.36.2: Use the original unforked package instead: postcss-markdown
+npm warn deprecated urix@0.1.0: Please see https://github.com/lydell/urix#deprecated
+npm warn deprecated resolve-url@0.2.1: https://github.com/lydell/resolve-url#deprecated
+npm warn deprecated consolidate@0.15.1: Please upgrade to consolidate v1.0.0+ as it has been modernized with several long-awaited fixes implemented. Maintenance is supported by Forward Email at https://forwardemail.net ; follow/watch https://github.com/ladjs/consolidate for updates and release changelog
+npm warn deprecated @babel/plugin-proposal-private-property-in-object@7.21.11: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-private-property-in-object instead.
+npm warn deprecated @babel/plugin-proposal-optional-chaining@7.21.0: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-optional-chaining instead.
+npm warn deprecated vue-analytics@5.22.1: Sorry but vue-analytics is no longer maintained. I would suggest you switch to vue-gtag, with love, the guy who made the package.
+npm warn deprecated source-map-resolve@0.5.3: See https://github.com/lydell/source-map-resolve#deprecated
+npm warn deprecated chokidar@2.1.8: Chokidar 2 does not receive security updates since 2019. Upgrade to chokidar 3 with 15x fewer dependencies
+npm warn deprecated w3c-hr-time@1.0.2: Use your platform's native performance.now() and performance.timeOrigin.
+npm warn deprecated @stylelint/postcss-css-in-js@0.37.3: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+npm warn deprecated fsevents@1.2.13: The v1 package contains DANGEROUS / INSECURE binaries. Upgrade to safe fsevents v2
+npm warn deprecated sane@4.1.0: some dependency vulnerabilities fixed, support for node < 10 dropped, and newer ECMAScript syntax/features added
+npm warn deprecated eslint-loader@4.0.2: This loader has been deprecated. Please use eslint-webpack-plugin
+npm warn deprecated babel-eslint@10.1.0: babel-eslint is now @babel/eslint-parser. This package will no longer receive updates.
+npm warn deprecated nuxt-i18n@6.28.1: Please use the @nuxtjs/i18n package going forward
+npm warn deprecated core-js@2.6.12: core-js@<3.23.3 is no longer maintained and not recommended for usage due to the number of issues. Because of the V8 engine whims, feature detection in old core-js versions could cause a slowdown up to 100x even if nothing is polyfilled. Some versions have web compatibility issues. Please, upgrade your dependencies to the actual version of core-js.
+
+added 2611 packages, and audited 2613 packages in 8s
+
+380 packages are looking for funding
+  run `npm fund` for details
+
+145 vulnerabilities (17 low, 56 moderate, 61 high, 11 critical)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues possible (including breaking changes), run:
+  npm audit fix --force
+
+Some issues need review, and may require choosing
+a different dependency.
+
+Run `npm audit` for details.

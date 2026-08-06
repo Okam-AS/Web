@@ -1,0 +1,59 @@
+MEASUREMENTS — L-SETTINGS-SAVES-REPORT-FAILURE
+checkout: branch lane/focustrap-teardown @ 8ac6f63648015d8c7a230181a7f07bf303d43268 (working tree, ~394 uncommitted paths from other lanes)
+files touched by this lane: pages/admin/delivery.vue (M), test/delivery-save-failure.test.js (new)
+no container started/stopped/entered; no dev server; no network — the http module is faked, so nothing addressed the production API_BASE_URL default
+
+=== RUN 1 — the shipped page, before any edit: 12 failed / 9 passed of 21 ===
+(full capture: red-01-before-fix.txt)
+  the switch stays flipped        checked=false while the server still held selfPickUp=true
+  nothing is said                 .notification did not exist
+  no re-read                      Get call count 1, not 2
+  home delivery refused           announced with class notification--success
+  minimum 15050 øre               Save offered with nothing edited  <- reported defect 2, CONFIRMED
+  field showed 150.5 / 'to hundre' while 15000 / 0 would be written
+  null city / null address        Save offered with nothing edited  <- third instance, found here
+  notification setTimeout survived destroy()
+
+=== RUN 2 — mutation A: hasMinimumAmountChanges reverted to the raw-øre compare ===
+  1 failed: 'silently rounded down' — saveChanges posted SetMinimumAmountForDelivery 15000 over a stored 15050
+
+=== RUN 3 — mutation B: requireSaved made a no-op (all four call sites ignore the boolean again) ===
+  5 failed: told-the-change-was-not-saved / refused-re-read / home-delivery-not-announced /
+            partly-applied-carrier-switch / refused-minimum-order-save
+  note: 'switch stays flipped' and 'store is re-read' PASS under B and FAIL under RUN 1 —
+        B keeps the unconditional refreshStore, the shipped code had none. Both runs together
+        cover every failure arm.
+
+=== RUN 4 — the fix, this file alone ===
+    ✓ a 204 resolves false — the toggle the operator moved was not written (1 ms)
+    ✓ a 200 whose body cannot be read resolves false
+    ✓ a 200 with a body resolves true, so `false` is not what every response produces
+    ✓ the successful arm: the switch moves, it is confirmed, and the store is re-read (17 ms)
+    ✓ the refused arm: the switch does not stay flipped over a value the server never took (5 ms)
+    ✓ the refused arm: the operator is told the change was not saved (4 ms)
+    ✓ the refused arm: the store is re-read, so the screen shows the server and not the click (5 ms)
+    ✓ a refused re-read still leaves the switch on the last value the server gave (4 ms)
+    ✓ a refused home-delivery write is not announced as an activation (4 ms)
+    ✓ the successful arm still confirms and re-reads (3 ms)
+    ✓ a PARTLY applied carrier switch is shown as the third state it left behind (4 ms)
+    ✓ nothing edited, whole-kroner minimum: no Save is offered (3 ms)
+    ✓ nothing edited, a minimum carrying øre: still no Save is offered (3 ms)
+    ✓ a minimum carrying øre is never silently rounded down by a Save the operator did not ask for (3 ms)
+    ✓ a real edit is still offered and still saves (4 ms)
+    ✓ typed øre are not accepted-looking and then dropped: the field shows what would be written (3 ms)
+    ✓ an unreadable entry shows the zero it would write rather than hiding it (3 ms)
+    ✓ a refused minimum-order save is reported, and the form still reads as unsaved (3 ms)
+    ✓ a null city does not leave the page permanently dirty (3 ms)
+    ✓ a store with no address at all does not leave the page permanently dirty (2 ms)
+    ✓ editing the city still offers Save (3 ms)
+    ✓ leaving the page clears an armed notification timeout (3 ms)
+Test Suites: 1 passed, 1 total
+Tests:       22 passed, 22 total
+
+=== RUN 5 — the whole jest suite ===
+Test Suites: 133 passed, 133 total
+Tests:       3069 passed, 3069 total
+
+=== eslint, the two touched files ===
+✖ 144 problems (0 errors, 144 warnings)
+(144 style warnings, 0 errors; the warnings are the file's pre-existing double-quote/space house style)

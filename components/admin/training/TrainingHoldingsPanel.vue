@@ -52,31 +52,33 @@
       <p v-if="!certificates.length" class="trn-note" data-test="holdings-no-certs">
         {{ $i('trn_holdings_no_certs') }}
       </p>
-      <table v-else class="trn-table" data-test="holdings-certs">
-        <thead>
-          <tr>
-            <th>{{ $i('trn_col_type') }}</th>
-            <th>{{ $i('trn_col_issuer') }}</th>
-            <th>{{ $i('trn_col_issue') }}</th>
-            <th>{{ $i('trn_col_expiry') }}</th>
-            <th>{{ $i('trn_col_status') }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(cert, index) in certificates" :key="cert.type + '-' + index" data-test="holdings-cert-row">
-            <td>{{ cert.type || dash }}</td>
-            <td>{{ cert.issuer || dash }}</td>
-            <td>{{ cert.issueDate || dash }}</td>
-            <td>
-              <span :title="cert.hasExpiry ? null : $i('trn_cert_no_expiry')">{{ cert.expiryDate || dash }}</span>
-            </td>
-            <td>
-              <span v-if="cert.status === null" :title="$i('trn_status_unknown')">{{ dash }}</span>
-              <span v-else class="trn-badge" :class="statusTone(cert.status)">{{ statusLabel(cert.status) }}</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div v-else class="trn-table-scroll">
+        <table class="trn-table" data-test="holdings-certs">
+          <thead>
+            <tr>
+              <th>{{ $i('trn_col_type') }}</th>
+              <th>{{ $i('trn_col_issuer') }}</th>
+              <th>{{ $i('trn_col_issue') }}</th>
+              <th>{{ $i('trn_col_expiry') }}</th>
+              <th>{{ $i('trn_col_status') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(cert, index) in certificates" :key="cert.type + '-' + index" data-test="holdings-cert-row">
+              <td>{{ cert.type || dash }}</td>
+              <td>{{ cert.issuer || dash }}</td>
+              <td>{{ cert.issueDate || dash }}</td>
+              <td>
+                <span :title="cert.hasExpiry ? null : $i('trn_cert_no_expiry')">{{ cert.expiryDate || dash }}</span>
+              </td>
+              <td>
+                <span v-if="cert.status === null" :title="$i('trn_status_unknown')">{{ dash }}</span>
+                <span v-else class="trn-badge" :class="statusTone(cert.status)">{{ statusLabel(cert.status) }}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <p class="trn-form__hint" data-test="holdings-not-a-verdict">
         {{ $i('trn_holdings_not_a_verdict') }}

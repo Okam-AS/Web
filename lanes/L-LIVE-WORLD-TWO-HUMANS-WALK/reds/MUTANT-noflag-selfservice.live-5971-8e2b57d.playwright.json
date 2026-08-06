@@ -1,0 +1,254 @@
+{
+  "journey": "MUTANT-noflag-selfservice",
+  "title": "A manager publishes a week and a second human acknowledges it, in one live world",
+  "status": "failed",
+  "startedAtUtc": "2026-08-06T14:36:26.269Z",
+  "finishedAtUtc": "2026-08-06T14:37:01.757Z",
+  "durationMs": 35488,
+  "capabilities": [
+    "workforce.staff.invite",
+    "workforce.me.invitation-claim",
+    "workforce.schedule.draft",
+    "workforce.schedule.author",
+    "workforce.schedule.validate",
+    "workforce.schedule.publish",
+    "workforce.me.schedule",
+    "workforce.me.publication-acknowledge",
+    "workforce.publication.history",
+    "workforce.publication.recipients"
+  ],
+  "surface": "admin",
+  "backend": "live",
+  "baseUrl": "http://127.0.0.1:3971",
+  "apiBaseUrl": "http://127.0.0.1:5971",
+  "commit": "8ac6f63648015d8c7a230181a7f07bf303d43268",
+  "underTest": null,
+  "backendProbe": {
+    "url": "http://127.0.0.1:5971/health",
+    "status": 200,
+    "body": "Healthy"
+  },
+  "backendBuild": {
+    "id": "wt-lwtwo-api@8e2b57de8442a389a9b5f8025312c9750614c85e",
+    "source": "stamp:artifacts/world/live/127-0-0-1-5971.json",
+    "short": "8e2b57d",
+    "detail": "branch HEAD, stamped by test/e2e/scripts/live-world.sh at 2026-08-06T14:19:12.523Z, pid 96293 (which was serving this origin) still running"
+  },
+  "backendServed": 95,
+  "backendSubjectServed": 71,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "proxiedSubjectServed": 0,
+  "proxiedSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:5971/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:5971/user/login -> 200",
+    "GET http://127.0.0.1:5971/user -> 200",
+    "GET http://127.0.0.1:5971/stores/1/market -> 200",
+    "GET http://127.0.0.1:5971/user -> 200",
+    "GET http://127.0.0.1:5971/feature-flags/catalog -> 200",
+    "GET http://127.0.0.1:5971/stores/1/feature-flags -> 200",
+    "GET http://127.0.0.1:5971/stores/1 -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in as the manager through the platform-admin door",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:36:26.296Z",
+      "durationMs": 1109,
+      "detail": "signed in on /admin/feature-flags as applicationUserId 6ba6dd27-42b0-4ba9-807b-96930c735f2f",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "both flags this week-run depends on are deny-closed",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:36:27.405Z",
+      "durationMs": 26,
+      "detail": "workforce.publication = Av, workforce.selfservice = Av",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "PROBE: with workforce.publication down, the week cannot even be drafted",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:36:27.566Z",
+      "durationMs": 2493,
+      "detail": "Vaktplanen er skrivebeskyttet Bryteren workforce.publication står av for denne butikken, så vaktplanen kan leses, men ikke endres eller publ",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "the manager turns schedule publication on",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:36:30.111Z",
+      "durationMs": 726,
+      "detail": "workforce.publication = På, flipped on /admin/feature-flags",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "the seeded colleague is on the roster with no login",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:36:30.837Z",
+      "durationMs": 710,
+      "detail": "Astrid Vik: Ingen innlogging er koblet til engasjementet ennå. Personen kan settes opp på vakter, men kan ikke logge inn og se dem.",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "issue the claim code, which is shown exactly once",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:36:31.547Z",
+      "durationMs": 105,
+      "detail": "a 43-character claim code was issued and withheld from this record",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "build the week: draft, one shift for the colleague, validated",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:36:31.737Z",
+      "durationMs": 1285,
+      "detail": "08:00–16:00 Barista for Astrid Vik, week validated",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "publish it",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:36:33.022Z",
+      "durationMs": 209,
+      "detail": "Publisert til 1 mottakere.",
+      "error": null
+    },
+    {
+      "n": 9,
+      "name": "a DIFFERENT person signs in and claims the code",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:36:33.276Z",
+      "durationMs": 3400,
+      "detail": "claimed by applicationUserId eac8b9d0-1bdc-42f7-b294-ded88152a380, which is NOT the publisher 6ba6dd27-42b0-4ba9-807b-96930c735f2f",
+      "error": null
+    },
+    {
+      "n": 10,
+      "name": "the worker sees the shift the manager published",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:36:36.691Z",
+      "durationMs": 647,
+      "detail": "first shift card: 08:00–16:00 Barista Betalt tid 7t 30m Åpningsvakt Fra publisering 1",
+      "error": null
+    },
+    {
+      "n": 11,
+      "name": "PROBE: with workforce.selfservice down, the confirmation is refused",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:36:37.338Z",
+      "durationMs": 52,
+      "detail": "refused: \"Kunne ikke bekrefte mottak.\" — the notice is still unread",
+      "error": null
+    },
+    {
+      "n": 12,
+      "name": "the manager turns self-service on",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:36:37.427Z",
+      "durationMs": 1427,
+      "detail": "workforce.selfservice = På, flipped by 6ba6dd27-42b0-4ba9-807b-96930c735f2f",
+      "error": null
+    },
+    {
+      "n": 13,
+      "name": "the worker confirms, and is shown NOTHING (F-WF-ACKNOWLEDGE-SHOWS-NOTHING)",
+      "status": "failed",
+      "startedAtUtc": "2026-08-06T14:36:38.854Z",
+      "durationMs": 22888,
+      "detail": null,
+      "error": "\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.wfme-pub')\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  20000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for locator('.wfme-pub')\u001b[22m\n\u001b[2m    44 × locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n"
+    }
+  ],
+  "findings": [],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=1\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=1\" with a new navigation.",
+    "Failed to load resource: the server responded with a status of 409 (Conflict)",
+    "Failed to load resource: the server responded with a status of 409 (Conflict)",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=1\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=1\" with a new navigation.",
+    "Failed to load resource: the server responded with a status of 409 (Conflict)",
+    "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+    "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+    "WebSocket connection to 'ws://127.0.0.1:3971/_content/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://127.0.0.1:3971/_content/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://127.0.0.1:3971/_content/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://127.0.0.1:3971/_content/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://127.0.0.1:3971/_content/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://127.0.0.1:3971/_content/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://127.0.0.1:3971/_content/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://127.0.0.1:3971/_content/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED"
+  ],
+  "failedRequests": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:5971/workforce/stores/1/schedules/drafts",
+      "status": 409
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:5971/workforce/me/publications/9bba2876-45c3-4bd0-846d-8b2d4472be6d/acknowledgements",
+      "status": 409
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:5971/workforce/me/publications/9bba2876-45c3-4bd0-846d-8b2d4472be6d/acknowledgements",
+      "status": 409
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:3971/_loading/sse",
+      "status": null,
+      "failure": "net::ERR_INCOMPLETE_CHUNKED_ENCODING"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:3971/__webpack_hmr/client",
+      "status": null,
+      "failure": "net::ERR_INCOMPLETE_CHUNKED_ENCODING"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:3971/_loading/sse",
+      "status": null,
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:3971/_loading/sse",
+      "status": null,
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    }
+  ],
+  "screenshots": [
+    "MUTANT-noflag-selfservice/live-5971-unidentified/01-both-flags-down-before-the-week-run.png",
+    "MUTANT-noflag-selfservice/live-5971-unidentified/02-the-draft-refused-and-the-banner-names-the-lever.png",
+    "MUTANT-noflag-selfservice/live-5971-unidentified/03-the-roster-code-issued-and-taken-off-screen.png",
+    "MUTANT-noflag-selfservice/live-5971-unidentified/04-the-published-week-by-the-manager.png",
+    "MUTANT-noflag-selfservice/live-5971-unidentified/05-the-second-human-is-in.png",
+    "MUTANT-noflag-selfservice/live-5971-unidentified/06-the-worker-can-see-the-week-and-cannot-confirm-i.png"
+  ],
+  "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.wfme-pub')\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  20000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for locator('.wfme-pub')\u001b[22m\n\u001b[2m    44 × locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n",
+  "artifact": {
+    "key": "live-5971-8e2b57d",
+    "file": "artifacts/journeys/runs/MUTANT-noflag-selfservice.live-5971-8e2b57d.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "live-5971-8e2b57d",
+    "canonicalTracked": false,
+    "provisional": false,
+    "supersedes": null
+  }
+}

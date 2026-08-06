@@ -1,0 +1,147 @@
+
+===== 0. TREE UNDER MEASUREMENT =====
+9f7d8dfc78dceaaa9c52c72ba470a34eb904a130
+ M package.json
+?? scripts/translation-duplicate-keys.js
+?? test/translations-duplicate-keys.test.js
+
+===== 1. CLEAN TIP — the guard must be GREEN, and must say what it looked at =====
+root: /Users/svendaneel/okam/web-dupkeyguard
+dictionaries scanned: 7
+  core/translations/de.ts  (1 object literals, 404 keys)
+  core/translations/en.ts  (1 object literals, 404 keys)
+  core/translations/no.ts  (1 object literals, 404 keys)
+  translations/de.ts  (1 object literals, 5055 keys)
+  translations/en.ts  (1 object literals, 5055 keys)
+  translations/index.js  (1 object literals, 3 keys)
+  translations/no.ts  (1 object literals, 5090 keys)
+duplicate keys: none
+cli exit=0
+Test Suites: 1 passed, 1 total
+Tests:       6 passed, 6 total
+
+===== CASE: MONEY — one variant says the week was not frozen, the other says the figures are a floor  —  lane/fe-events-margin-surfaces INTO candidate/fe-compose-2026-08-05  ->  translations/en.ts =====
+merge-base      : 27e33a7d0b6c
+ours   (candidate/fe-compose-2026-08-05) x theirs (lane/fe-events-margin-surfaces)
+path            : translations/en.ts
+wrote           : /Users/svendaneel/okam/Web-modules/lanes/L-DUPLICATE-KEY-GUARD/merged.tmp.ts  (5551 lines)
+git merge-file rc (conflict count): 0
+conflict markers in output       : 0
+duplicated keys                  : 2
+  mrgs_err_projection_behind at lines [3627, 3639]   (JS keeps line 3639)
+  mrgs_err_projection_behind_unsized at lines [3628, 3640]   (JS keeps line 3640)
+control key aIQueryBox_example1 occurrences   : 1
+mutation landed: files-changed=1 conflict-markers=0 occurrences-of-mrgs_err_projection_behind=2
+typescript parses it with 0 syntax diagnostics — nothing else would complain
+--- guard CLI ---
+root: /Users/svendaneel/okam/web-dupkeyguard
+dictionaries scanned: 7
+  core/translations/de.ts  (1 object literals, 404 keys)
+  core/translations/en.ts  (1 object literals, 404 keys)
+  core/translations/no.ts  (1 object literals, 404 keys)
+  translations/de.ts  (1 object literals, 5055 keys)
+  translations/en.ts  (1 object literals, 5154 keys)
+  translations/index.js  (1 object literals, 3 keys)
+  translations/no.ts  (1 object literals, 5090 keys)
+duplicate keys: 2
+  translations/en.ts: 'mrgs_err_projection_behind' at 3627:3, 3639:3  -> line 3639 is the one that ships
+  translations/en.ts: 'mrgs_err_projection_behind_unsized' at 3628:3, 3640:3  -> line 3640 is the one that ships
+
+Do not delete one at random: the two occurrences may say different things, and which
+one currently ships was decided by line position, not by an author. Read both, decide
+which sentence is correct, and keep that one.
+cli exit=1  (expected 1)
+--- the gate: the whole jest suite, the one `npm test` runs ---
+Test Suites: 2 failed, 125 passed, 127 total
+Tests:       2 failed, 2963 passed, 2965 total
+suites that failed: FAIL test/events-surface.test.js FAIL test/translations-duplicate-keys.test.js FAIL test/events-surface.test.js FAIL test/translations-duplicate-keys.test.js 
+jest exit=1  (expected non-zero)
+restored translations/en.ts
+
+===== CASE: VALIDATION CONTRACT — greater than zero, or may be left empty  —  lane/mrg-waste-frontend INTO candidate/fe-compose-2026-08-05  ->  translations/no.ts =====
+merge-base      : 3cd25709ec6a
+ours   (candidate/fe-compose-2026-08-05) x theirs (lane/mrg-waste-frontend)
+path            : translations/no.ts
+wrote           : /Users/svendaneel/okam/Web-modules/lanes/L-DUPLICATE-KEY-GUARD/merged.tmp.ts  (5523 lines)
+git merge-file rc (conflict count): 0
+conflict markers in output       : 0
+duplicated keys                  : 1
+  mrgs_waste_err_quantity at lines [3651, 3653]   (JS keeps line 3653)
+control key aIQueryBox_example1 occurrences   : 1
+mutation landed: files-changed=1 conflict-markers=0 occurrences-of-mrgs_waste_err_quantity=2
+typescript parses it with 0 syntax diagnostics — nothing else would complain
+--- guard CLI ---
+root: /Users/svendaneel/okam/web-dupkeyguard
+dictionaries scanned: 7
+  core/translations/de.ts  (1 object literals, 404 keys)
+  core/translations/en.ts  (1 object literals, 404 keys)
+  core/translations/no.ts  (1 object literals, 404 keys)
+  translations/de.ts  (1 object literals, 5055 keys)
+  translations/en.ts  (1 object literals, 5055 keys)
+  translations/index.js  (1 object literals, 3 keys)
+  translations/no.ts  (1 object literals, 5095 keys)
+duplicate keys: 1
+  translations/no.ts: 'mrgs_waste_err_quantity' at 3651:3, 3653:3  -> line 3653 is the one that ships
+
+Do not delete one at random: the two occurrences may say different things, and which
+one currently ships was decided by line position, not by an author. Read both, decide
+which sentence is correct, and keep that one.
+cli exit=1  (expected 1)
+--- the gate: the whole jest suite, the one `npm test` runs ---
+Test Suites: 1 failed, 126 passed, 127 total
+Tests:       1 failed, 2964 passed, 2965 total
+suites that failed: FAIL test/translations-duplicate-keys.test.js FAIL test/translations-duplicate-keys.test.js 
+jest exit=1  (expected non-zero)
+restored translations/no.ts
+
+===== 4. THE FOURTH FILE — a locale nobody listed here =====
+root: /Users/svendaneel/okam/web-dupkeyguard
+dictionaries scanned: 9
+  core/translations/de.ts  (1 object literals, 404 keys)
+  core/translations/en.ts  (1 object literals, 404 keys)
+  core/translations/no.ts  (1 object literals, 404 keys)
+  platform/locales/fr.ts  (1 object literals, 2 keys)
+  translations/de.ts  (1 object literals, 5055 keys)
+  translations/en.ts  (1 object literals, 5055 keys)
+  translations/index.js  (1 object literals, 3 keys)
+  translations/no.ts  (1 object literals, 5090 keys)
+  translations/sv.ts  (1 object literals, 3 keys)
+duplicate keys: 2
+  platform/locales/fr.ts: 'c_key' at 2:3, 3:3  -> line 3 is the one that ships
+  translations/sv.ts: 'a_key' at 2:3, 4:3  -> line 4 is the one that ships
+
+Do not delete one at random: the two occurrences may say different things, and which
+one currently ships was decided by line position, not by an author. Read both, decide
+which sentence is correct, and keep that one.
+cli exit=1  (expected 1)
+
+===== 5. BACK TO CLEAN =====
+ M package.json
+?? scripts/translation-duplicate-keys.js
+?? test/translations-duplicate-keys.test.js
+root: /Users/svendaneel/okam/web-dupkeyguard
+dictionaries scanned: 7
+  core/translations/de.ts  (1 object literals, 404 keys)
+  core/translations/en.ts  (1 object literals, 404 keys)
+  core/translations/no.ts  (1 object literals, 404 keys)
+  translations/de.ts  (1 object literals, 5055 keys)
+  translations/en.ts  (1 object literals, 5055 keys)
+  translations/index.js  (1 object literals, 3 keys)
+  translations/no.ts  (1 object literals, 5090 keys)
+duplicate keys: none
+cli exit=0  (expected 0)
+
+===== 6. THE SHARED CHECKOUT'S WORKING TREE, read-only =====
+root: /Users/svendaneel/okam/Web-modules
+dictionaries scanned: 7
+  core/translations/de.ts  (1 object literals, 404 keys)
+  core/translations/en.ts  (1 object literals, 404 keys)
+  core/translations/no.ts  (1 object literals, 404 keys)
+  translations/de.ts  (1 object literals, 5129 keys)
+  translations/en.ts  (1 object literals, 5129 keys)
+  translations/index.js  (1 object literals, 3 keys)
+  translations/no.ts  (1 object literals, 5164 keys)
+duplicate keys: none
+cli exit=0
+
+===== DONE =====

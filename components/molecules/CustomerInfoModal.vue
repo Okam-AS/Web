@@ -326,18 +326,13 @@ export default {
       }
     },
 
-    priceLabel(amount) {
-      if (!amount && amount !== 0) {
-        return "-";
-      }
-      const amountInKroner = amount / 100;
-      return new Intl.NumberFormat("no-NO", {
-        style: "currency",
-        currency: "NOK",
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(amountInKroner);
-    },
+    // There is deliberately no `priceLabel` here. This component used to declare one, and in Vue 2 a
+    // component's own method beats the mixin's of the same name — so the reward balance below was the
+    // one figure in this modal that the global money gate could not reach, however correct the gate
+    // was. The local copy also answered absence with an ASCII hyphen instead of the em dash every
+    // other surface uses, and printed "123,45 kr" where the rest of this admin prints "kr 123,45".
+    // Rendering through the mixin fixes all three at once. `test/price-gate-shadow.test.js` is what
+    // stops it coming back.
   },
 };
 </script>

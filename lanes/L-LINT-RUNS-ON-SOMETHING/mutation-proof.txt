@@ -1,0 +1,43 @@
+MUTATION PROOFS - test/translations-lint.test.js at 9f7d8df + working tree
+
+== M0 baseline, nothing mutated ==
+    ✓ package.json declares the script this suite invokes, pointed at the dictionaries (1 ms)
+    ✓ runs that script, and the dictionaries carry no error-severity violation (943 ms)
+    ✓ the rule that catches a duplicate key is error, and reports one, in a dictionary (676 ms)
+    ✓ every shipped dictionary is actually read by that run, none ignored away (932 ms)
+Tests:       4 passed, 4 total
+
+== M1 remove the npm script from package.json ==
+    ✕ package.json declares the script this suite invokes, pointed at the dictionaries (1 ms)
+    ✕ runs that script, and the dictionaries carry no error-severity violation (84 ms)
+    ✓ the rule that catches a duplicate key is error, and reports one, in a dictionary (644 ms)
+    ✕ every shipped dictionary is actually read by that run, none ignored away (83 ms)
+Tests:       3 failed, 1 passed, 4 total
+
+== M2 dictionary carries a duplicate key ==
+    ✓ package.json declares the script this suite invokes, pointed at the dictionaries
+    ✕ runs that script, and the dictionaries carry no error-severity violation (940 ms)
+    ✓ the rule that catches a duplicate key is error, and reports one, in a dictionary (683 ms)
+    ✓ every shipped dictionary is actually read by that run, none ignored away (947 ms)
+Tests:       1 failed, 3 passed, 4 total
+
+== M3 switch no-dupe-keys off in .eslintrc.js ==
+    ✓ package.json declares the script this suite invokes, pointed at the dictionaries (1 ms)
+    ✓ runs that script, and the dictionaries carry no error-severity violation (925 ms)
+    ✕ the rule that catches a duplicate key is error, and reports one, in a dictionary (762 ms)
+    ✕ every shipped dictionary is actually read by that run, none ignored away (998 ms)
+Tests:       2 failed, 2 passed, 4 total
+
+== M4 .eslintignore hides translations/ from the run ==
+    ✓ package.json declares the script this suite invokes, pointed at the dictionaries (1 ms)
+    ✕ runs that script, and the dictionaries carry no error-severity violation (489 ms)
+    ✕ the rule that catches a duplicate key is error, and reports one, in a dictionary (596 ms)
+    ✕ every shipped dictionary is actually read by that run, none ignored away (509 ms)
+Tests:       3 failed, 1 passed, 4 total
+
+== M5 restore, all mutations reverted ==
+    ✓ package.json declares the script this suite invokes, pointed at the dictionaries (1 ms)
+    ✓ runs that script, and the dictionaries carry no error-severity violation (926 ms)
+    ✓ the rule that catches a duplicate key is error, and reports one, in a dictionary (625 ms)
+    ✓ every shipped dictionary is actually read by that run, none ignored away (874 ms)
+Tests:       4 passed, 4 total

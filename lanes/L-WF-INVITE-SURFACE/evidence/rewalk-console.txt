@@ -1,0 +1,7 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › test/e2e/journeys/workforce-invitation-onboarding.spec.js:57:1 › A manager invites a new hire, who claims the code and sees their published shift @fixture (1.8m)
+[teardown] returned core/ to an empty submodule mount
+
+  1 passed (1.9m)

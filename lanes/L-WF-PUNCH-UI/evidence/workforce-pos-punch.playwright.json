@@ -1,0 +1,301 @@
+{
+  "journey": "workforce-pos-punch",
+  "title": "A person clocks in and out at the register, and the personnel list carries both times",
+  "status": "passed",
+  "startedAtUtc": "2026-08-04T20:29:42.369Z",
+  "finishedAtUtc": "2026-08-04T20:30:05.977Z",
+  "durationMs": 23608,
+  "capabilities": [
+    "workforce.pos.clock-in",
+    "workforce.pos.clock-out",
+    "workforce.pos.clock-refusal",
+    "workforce.pos.personnel-list"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3021",
+  "apiBaseUrl": "http://127.0.0.1:4021",
+  "commit": "e34977acebd59b223584158c33451b6f1ffd82c1",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": {
+    "id": "fixture@e34977acebd59b223584158c33451b6f1ffd82c1+dirty",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "e34977a-dirty",
+    "detail": "the in-repo fixture backend, not an API build (branch feature/restaurant-modules)"
+  },
+  "backendServed": 70,
+  "backendSubjectServed": 59,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "proxiedSubjectServed": 0,
+  "proxiedSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:4021/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:4021/user/login -> 200",
+    "GET http://127.0.0.1:4021/user -> 200",
+    "GET http://127.0.0.1:4021/stores/42/market -> 200",
+    "GET http://127.0.0.1:4021/user -> 200",
+    "GET http://127.0.0.1:4021/CashPoint?storeId=42 -> 200",
+    "GET http://127.0.0.1:4021/stores/42 -> 200",
+    "GET http://127.0.0.1:4021/Operator?storeId=42 -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in and open the register",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T20:29:42.377Z",
+      "durationMs": 20252,
+      "detail": "the register booted to its operator sign-in",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "the operator signs in on the PIN pad",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T20:30:02.629Z",
+      "durationMs": 110,
+      "detail": "operator session held by the shell",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "the clock is reachable from the register top bar",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T20:30:02.739Z",
+      "durationMs": 35,
+      "detail": "pressed Stempling in the top bar",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "the register is empty, and both halves of the pair are offered",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T20:30:02.805Z",
+      "durationMs": 6,
+      "detail": "no punches yet; clock in and clock out both offered",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "the first press is refused: the store has not switched clocking on",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T20:30:02.811Z",
+      "durationMs": 47,
+      "detail": "Stempling er slått av for dette stedet. Skriv ned tiden, og si fra til leder.",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "a manager pulls the real lever on the switchboard",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T20:30:02.871Z",
+      "durationMs": 720,
+      "detail": "workforce.clock is now På for this store",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "back at the register, the person clocks in",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T20:30:03.591Z",
+      "durationMs": 727,
+      "detail": "Stemplet inn 22:30.",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "the punch is on the personnel list, with an open window",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T20:30:04.318Z",
+      "durationMs": 7,
+      "detail": "Kari Nordmann Ansatt 22:30 På jobb",
+      "error": null
+    },
+    {
+      "n": 9,
+      "name": "having clocked in, the wrong button is not there to press",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T20:30:04.346Z",
+      "durationMs": 4,
+      "detail": "clock in disabled, clock out offered",
+      "error": null
+    },
+    {
+      "n": 10,
+      "name": "clocking in twice is refused, and the screen learns the truth",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T20:30:04.350Z",
+      "durationMs": 661,
+      "detail": "Du er allerede stemplet inn. Bruk Stemple ut når vakten er ferdig.",
+      "error": null
+    },
+    {
+      "n": 11,
+      "name": "the person clocks out, and the window gets its end time",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T20:30:05.011Z",
+      "durationMs": 68,
+      "detail": "on site 22:30–22:30",
+      "error": null
+    },
+    {
+      "n": 12,
+      "name": "clocking out with nothing open never reads as clocked in",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T20:30:05.096Z",
+      "durationMs": 658,
+      "detail": "Stemplingen er registrert, men du hadde ingen åpen økt å stemple ut av. Si fra til leder, som kan rette det opp.",
+      "error": null
+    },
+    {
+      "n": 13,
+      "name": "an operator nobody linked is refused, and told who can fix it",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T20:30:05.771Z",
+      "durationMs": 180,
+      "detail": "Denne operatøren er ikke koblet til en ansatt. Leder må koble deg opp før du kan stemple.",
+      "error": null
+    }
+  ],
+  "findings": [],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fpos\" to \"/admin?redirect=%2Fadmin%2Fpos&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fpos\" to \"/admin?redirect=%2Fadmin%2Fpos&storeId=42\" with a new navigation.",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 409 (Conflict)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 409 (Conflict)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+  ],
+  "failedRequests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4021/GoodsGroup?storeId=42",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4021/OpenPricePreset?storeId=42",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4021/discount/store/42",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4021/stores/42/cashpoints/7/terminal-status",
+      "status": 404
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:4021/workforce/pos/clock-events",
+      "status": 409
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4021/stores/42/cashpoints/7/terminal-status",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4021/GoodsGroup?storeId=42",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4021/OpenPricePreset?storeId=42",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4021/discount/store/42",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4021/stores/42/cashpoints/7/terminal-status",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4021/GoodsGroup?storeId=42",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4021/OpenPricePreset?storeId=42",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4021/discount/store/42",
+      "status": 404
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:4021/workforce/pos/clock-events",
+      "status": 409
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4021/stores/42/cashpoints/7/terminal-status",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4021/GoodsGroup?storeId=42",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4021/OpenPricePreset?storeId=42",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4021/discount/store/42",
+      "status": 404
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:4021/workforce/pos/clock-events",
+      "status": 403
+    }
+  ],
+  "screenshots": [
+    "workforce-pos-punch/fixture/01-the-clock-before-anything-is-punched.png",
+    "workforce-pos-punch/fixture/02-the-refusal-a-store-meets-out-of-the-box.png",
+    "workforce-pos-punch/fixture/03-clocked-in-and-on-the-personnel-list.png",
+    "workforce-pos-punch/fixture/04-clocked-out-with-both-times-on-the-register.png",
+    "workforce-pos-punch/fixture/05-a-clock-out-with-nothing-open-told-honestly.png",
+    "workforce-pos-punch/fixture/06-an-unlinked-operator-refused.png"
+  ],
+  "error": null,
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/workforce-pos-punch.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false,
+    "supersedes": null
+  }
+}

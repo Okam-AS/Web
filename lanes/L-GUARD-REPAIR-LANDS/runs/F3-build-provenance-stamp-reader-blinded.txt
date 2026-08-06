@@ -1,0 +1,161 @@
+support files under test
+  artifact-store.js     f8bd6ddb57294f133b17bb2e90a5941b825d270b5486682b572f952d450c3ab8
+  fixture-provenance.js d022ff24ed16f876ad3b4c5af216015ed8b0d094c720a742661f8596078712fb
+  journey-assertions.js 4ddbed1671a04c71405c64657976b6b9a4debe479bf0a85bfde90565f4f07532
+  journey.js            6dd043e1f34648c3fc5f322c0a777247b35c1d591766991b8ff0621c51e631c2
+  world-stamp.js        9e02b3acca0b8548ac3559af61b3b7520224c8122740b75e593908778a3fa7bf
+stand-in live api      http://127.0.0.1:50324   (served by pid 79584, cwd web-guardland)
+stand-in app           http://127.0.0.1:50325
+the port would say     web-guardland@7030c00122e026f077bdb1bfecee1c916ca72d67+dirty   <- the wrong answer, available in every arm
+checkout alpha         okamapi-alpha@6153f53bedc0b35b1e5b87689a4c498279bebdea
+checkout beta          okamapi-beta@907b0b59898fec09aabd7888b0365937bf303c99
+
+  FAIL  1  NO BUILD                                              -                                   stamped from checkout ALPHA, nothing declared
+        expected okamapi-alpha@6153f53bedc0b35b1e5b87689a4c498279bebdea from /^stamp:/
+  FAIL  2  NO BUILD                                              -                                   the same world stamped from a DIFFERENT checkout (BETA)
+        expected okamapi-beta@907b0b59898fec09aabd7888b0365937bf303c99 from /^stamp:/
+  FAIL  3  NO BUILD                                              -                                   stamp INVALIDATED (its world is gone) — must fall back to the port and be WRONG
+        expected web-guardland@7030c00122e026f077bdb1bfecee1c916ca72d67+dirty from /^process:/
+  FAIL  4  NO BUILD                                              -                                   stamped ALPHA while the shell declares BETA — a command copied from an older world
+        expected okamapi-alpha@6153f53bedc0b35b1e5b87689a4c498279bebdea from /^stamp:/
+  FAIL  5  NO BUILD                                              -                                   NO stamp, the shell declares ALPHA — the declaration still carries a remote runner
+        expected okamapi-alpha@6153f53bedc0b35b1e5b87689a4c498279bebdea from /^env:E2E_API_BUILD$/
+
+5 of 5 arms did not do what they must.
+
+---- arm 1 (stamped from checkout ALPHA, nothing declared) ----
+fatal: not a git repository (or any of the parent directories): .git
+  ✘  1 [chromium] › test/e2e/journeys/provenance-probe.spec.js:5:1 › the page loads and says who served it @live (64ms)
+
+
+  1) [chromium] › test/e2e/journeys/provenance-probe.spec.js:5:1 › the page loads and says who served it @live 
+
+    TypeError: Cannot read properties of null (reading 'ok')
+
+       at ../support/world-stamp.js:249
+
+      247 | function buildFromWorldStamp (apiBaseUrl, dir) {
+      248 |   const read = readStamp(apiBaseUrl, dir);
+    > 249 |   if (!read.ok) { return null; }
+          |             ^
+      250 |   const detail = ['stamped by ' + read.stamp.writtenBy + ' at ' + read.stamp.stampedAtUtc,
+      251 |     'pid ' + read.stamp.pid + ' still running'];
+      252 |   if (read.stamp.build.branch) { detail.unshift('branch ' + read.stamp.build.branch); }
+        at Object.buildFromWorldStamp (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-QUoHUU/harness/test/e2e/support/world-stamp.js:249:13)
+        at Object.resolveBackendBuild (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-QUoHUU/harness/test/e2e/support/artifact-store.js:289:43)
+        at Object.base.test.extend.journey.auto (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-QUoHUU/harness/test/e2e/support/journey.js:627:33)
+
+    Error Context: artifacts/playwright-output/provenance-probe-the-page-loads-and-says-who-served-it-chromium/error-context.md
+
+  1 failed
+    [chromium] › test/e2e/journeys/provenance-probe.spec.js:5:1 › the page loads and says who served it @live
+
+---- arm 2 (the same world stamped from a DIFFERENT checkout (BETA)) ----
+fatal: not a git repository (or any of the parent directories): .git
+  ✘  1 [chromium] › test/e2e/journeys/provenance-probe.spec.js:5:1 › the page loads and says who served it @live (63ms)
+
+
+  1) [chromium] › test/e2e/journeys/provenance-probe.spec.js:5:1 › the page loads and says who served it @live 
+
+    TypeError: Cannot read properties of null (reading 'ok')
+
+       at ../support/world-stamp.js:249
+
+      247 | function buildFromWorldStamp (apiBaseUrl, dir) {
+      248 |   const read = readStamp(apiBaseUrl, dir);
+    > 249 |   if (!read.ok) { return null; }
+          |             ^
+      250 |   const detail = ['stamped by ' + read.stamp.writtenBy + ' at ' + read.stamp.stampedAtUtc,
+      251 |     'pid ' + read.stamp.pid + ' still running'];
+      252 |   if (read.stamp.build.branch) { detail.unshift('branch ' + read.stamp.build.branch); }
+        at Object.buildFromWorldStamp (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-QUoHUU/harness/test/e2e/support/world-stamp.js:249:13)
+        at Object.resolveBackendBuild (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-QUoHUU/harness/test/e2e/support/artifact-store.js:289:43)
+        at Object.base.test.extend.journey.auto (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-QUoHUU/harness/test/e2e/support/journey.js:627:33)
+
+    Error Context: artifacts/playwright-output/provenance-probe-the-page-loads-and-says-who-served-it-chromium/error-context.md
+
+  1 failed
+    [chromium] › test/e2e/journeys/provenance-probe.spec.js:5:1 › the page loads and says who served it @live
+
+---- arm 3 (stamp INVALIDATED (its world is gone) — must fall back to the port and be WRONG) ----
+fatal: not a git repository (or any of the parent directories): .git
+  ✘  1 [chromium] › test/e2e/journeys/provenance-probe.spec.js:5:1 › the page loads and says who served it @live (63ms)
+
+
+  1) [chromium] › test/e2e/journeys/provenance-probe.spec.js:5:1 › the page loads and says who served it @live 
+
+    TypeError: Cannot read properties of null (reading 'ok')
+
+       at ../support/world-stamp.js:249
+
+      247 | function buildFromWorldStamp (apiBaseUrl, dir) {
+      248 |   const read = readStamp(apiBaseUrl, dir);
+    > 249 |   if (!read.ok) { return null; }
+          |             ^
+      250 |   const detail = ['stamped by ' + read.stamp.writtenBy + ' at ' + read.stamp.stampedAtUtc,
+      251 |     'pid ' + read.stamp.pid + ' still running'];
+      252 |   if (read.stamp.build.branch) { detail.unshift('branch ' + read.stamp.build.branch); }
+        at Object.buildFromWorldStamp (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-QUoHUU/harness/test/e2e/support/world-stamp.js:249:13)
+        at Object.resolveBackendBuild (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-QUoHUU/harness/test/e2e/support/artifact-store.js:289:43)
+        at Object.base.test.extend.journey.auto (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-QUoHUU/harness/test/e2e/support/journey.js:627:33)
+
+    Error Context: artifacts/playwright-output/provenance-probe-the-page-loads-and-says-who-served-it-chromium/error-context.md
+
+  1 failed
+    [chromium] › test/e2e/journeys/provenance-probe.spec.js:5:1 › the page loads and says who served it @live
+
+---- arm 4 (stamped ALPHA while the shell declares BETA — a command copied from an older world) ----
+fatal: not a git repository (or any of the parent directories): .git
+  ✘  1 [chromium] › test/e2e/journeys/provenance-probe.spec.js:5:1 › the page loads and says who served it @live (62ms)
+
+
+  1) [chromium] › test/e2e/journeys/provenance-probe.spec.js:5:1 › the page loads and says who served it @live 
+
+    TypeError: Cannot read properties of null (reading 'ok')
+
+       at ../support/world-stamp.js:249
+
+      247 | function buildFromWorldStamp (apiBaseUrl, dir) {
+      248 |   const read = readStamp(apiBaseUrl, dir);
+    > 249 |   if (!read.ok) { return null; }
+          |             ^
+      250 |   const detail = ['stamped by ' + read.stamp.writtenBy + ' at ' + read.stamp.stampedAtUtc,
+      251 |     'pid ' + read.stamp.pid + ' still running'];
+      252 |   if (read.stamp.build.branch) { detail.unshift('branch ' + read.stamp.build.branch); }
+        at Object.buildFromWorldStamp (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-QUoHUU/harness/test/e2e/support/world-stamp.js:249:13)
+        at Object.resolveBackendBuild (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-QUoHUU/harness/test/e2e/support/artifact-store.js:289:43)
+        at Object.base.test.extend.journey.auto (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-QUoHUU/harness/test/e2e/support/journey.js:627:33)
+
+    Error Context: artifacts/playwright-output/provenance-probe-the-page-loads-and-says-who-served-it-chromium/error-context.md
+
+  1 failed
+    [chromium] › test/e2e/journeys/provenance-probe.spec.js:5:1 › the page loads and says who served it @live
+
+---- arm 5 (NO stamp, the shell declares ALPHA — the declaration still carries a remote runner) ----
+fatal: not a git repository (or any of the parent directories): .git
+  ✘  1 [chromium] › test/e2e/journeys/provenance-probe.spec.js:5:1 › the page loads and says who served it @live (61ms)
+
+
+  1) [chromium] › test/e2e/journeys/provenance-probe.spec.js:5:1 › the page loads and says who served it @live 
+
+    TypeError: Cannot read properties of null (reading 'ok')
+
+       at ../support/world-stamp.js:249
+
+      247 | function buildFromWorldStamp (apiBaseUrl, dir) {
+      248 |   const read = readStamp(apiBaseUrl, dir);
+    > 249 |   if (!read.ok) { return null; }
+          |             ^
+      250 |   const detail = ['stamped by ' + read.stamp.writtenBy + ' at ' + read.stamp.stampedAtUtc,
+      251 |     'pid ' + read.stamp.pid + ' still running'];
+      252 |   if (read.stamp.build.branch) { detail.unshift('branch ' + read.stamp.build.branch); }
+        at Object.buildFromWorldStamp (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-QUoHUU/harness/test/e2e/support/world-stamp.js:249:13)
+        at Object.resolveBackendBuild (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-QUoHUU/harness/test/e2e/support/artifact-store.js:289:43)
+        at Object.base.test.extend.journey.auto (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-provenance-proof-QUoHUU/harness/test/e2e/support/journey.js:627:33)
+
+    Error Context: artifacts/playwright-output/provenance-probe-the-page-loads-and-says-who-served-it-chromium/error-context.md
+
+  1 failed
+    [chromium] › test/e2e/journeys/provenance-probe.spec.js:5:1 › the page loads and says who served it @live
+
+EXIT=1

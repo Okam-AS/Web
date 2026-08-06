@@ -20,6 +20,25 @@ const { execFileSync } = require('child_process');
 
 const store = require('./e2e/support/artifact-store');
 
+// THE NAME OF THE CHECKOUT THIS SUITE IS RUNNING IN — derived, never spelled.
+//
+// `buildFromCheckout` puts `path.basename(<checkout>)` before the `@`, so a build id is
+// `<checkout name>@<sha>[+dirty]`: it says WHICH TREE produced the artifact, and says it by name
+// rather than by absolute path so the record stays readable in a review. That property is worth
+// asserting and the assertions below still assert it.
+//
+// What is NOT worth asserting is the literal `Web-modules`. Every lane in this program works in its
+// own worktree, and a worktree is never named that — so a literal here reds for every lane that
+// follows the rule, and the red says nothing about the store. Worse in the other direction: the
+// negative forms (`not.toContain(...)`) went quietly VACUOUS in exactly those worktrees, asserting
+// nothing at all in the trees where the lanes actually run.
+//
+// Deriving it from `__dirname` is not circular. The code under test learns the checkout from a
+// completely different source — lsof's answer for the cwd of whoever holds the port — so these still
+// prove that the right process was found and its tree correctly identified. They would still catch a
+// build id that carried an absolute path, dropped the sha, or named the wrong checkout entirely.
+const SELF = path.basename(path.resolve(__dirname, '..'));
+
 let dir;
 
 beforeEach(() => {
@@ -136,6 +155,123 @@ describe('the canonical slot', () => {
 
     expect(filed.canonical).toBe(true);
     expect(canonical().backend).toBe('fixture');
+  });
+});
+
+// A RECORD GIT KEEPS IS NOT A SLOT, and these need a real index to say so: the whole point of the
+// rule is that `.gitignore` ignores `artifacts/` wholesale while sixteen records are force-added past
+// it, so `check-ignore` calls the protected files ignored and only index membership tells them apart.
+// A tmpdir that is not a repository proves nothing here — it is the state every OTHER test in this
+// file runs in, which is exactly why the defect survived them all.
+//
+// `git add` and no commit on purpose: `ls-files` reads the INDEX, so this is the smallest world in
+// which the question has the same answer it has in the checkout, and it does not need an identity,
+// a signing key or a default-branch name.
+describe('a canonical record that git keeps', () => {
+  let repo;
+
+  /** A tmpdir that IS a repository, with `dir` inside it, so `git ls-files` has something to answer. */
+  function initRepo () {
+    // The outer `beforeEach` has already made a plain tmpdir and pointed `dir` at it. Dropped rather
+    // than left behind, because `dir` is about to mean something else and nothing would remove it.
+    fs.rmSync(dir, { recursive: true, force: true });
+    repo = fs.mkdtempSync(path.join(os.tmpdir(), 'journey-artifacts-repo-'));
+    execFileSync('git', ['init', '-q', repo], { stdio: 'ignore' });
+    dir = path.join(repo, 'artifacts', 'journeys');
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(path.join(repo, '.gitignore'), 'artifacts/\n');
+  }
+
+  /** The force-add that puts a record under version control past that ignore rule. */
+  function track (file) {
+    execFileSync('git', ['add', '-f', '--', file], { cwd: repo, stdio: 'ignore' });
+  }
+
+  beforeEach(initRepo);
+  afterEach(() => { fs.rmSync(repo, { recursive: true, force: true }); });
+
+  it('is not overwritten by a re-run of its own lineage, which is how the workforce record was rewritten', () => {
+    store.writeRun(dir, record(FIXTURE_RUN));
+    const file = path.join(dir, JOURNEY + '.playwright.json');
+    track(file);
+    const before = fs.readFileSync(file);
+
+    // The same journey, the same fixture backend: the same lineage, which used to be answered `true`
+    // before rank was consulted at all.
+    const filed = store.writeRun(dir, record(Object.assign({}, FIXTURE_RUN, { backendServed: 999 })));
+
+    expect(filed.canonical).toBe(false);
+    expect(filed.canonicalTracked).toBe(true);
+    expect(fs.readFileSync(file)).toEqual(before);
+    // Not lost: filed whole under its own key, and its record says why it did not take the name.
+    expect(JSON.parse(fs.readFileSync(filed.runFile, 'utf8')).backendServed).toBe(999);
+    expect(JSON.parse(fs.readFileSync(filed.runFile, 'utf8')).artifact.canonicalTracked).toBe(true);
+  });
+
+  it('is not overwritten by a run that OUTRANKS it — the case reordering rank would have missed', () => {
+    // The two `modal-*` records are exactly this shape: written before builds were recorded, so they
+    // carry no `backendBuild` and no `artifact` block, and any run that can name its build outranks
+    // them on identity. Checking rank before lineage would have let this through.
+    store.writeRun(dir, record(Object.assign({}, FIXTURE_RUN, { backendBuild: null })));
+    const file = path.join(dir, JOURNEY + '.playwright.json');
+    track(file);
+    const before = fs.readFileSync(file);
+
+    const identified = { backendBuild: { id: 'fixture@bbbbbbb', source: 'fixture:test/e2e/fixture/api-server.js', short: 'bbbbbbb', detail: null } };
+    expect(store.compareRank(record(Object.assign({}, FIXTURE_RUN, identified)), record(Object.assign({}, FIXTURE_RUN, { backendBuild: null })))).toBe(1);
+
+    const filed = store.writeRun(dir, record(Object.assign({}, FIXTURE_RUN, identified)));
+
+    expect(filed.canonical).toBe(false);
+    expect(fs.readFileSync(file)).toEqual(before);
+  });
+
+  it('is not replaced by the provisional `running` record a run files before the browser opens', () => {
+    store.writeRun(dir, record(FIXTURE_RUN));
+    const file = path.join(dir, JOURNEY + '.playwright.json');
+    track(file);
+
+    store.beginRun(dir, record(FIXTURE_RUN));
+
+    // The defect this closes: an abandoned run left `"status": "running"` where the evidence was.
+    expect(JSON.parse(fs.readFileSync(file, 'utf8')).status).toBe('passed');
+    expect(JSON.parse(fs.readFileSync(path.join(dir, store.RUNS_DIRNAME, JOURNEY + '.fixture.playwright.json'), 'utf8')).status).toBe('running');
+  });
+
+  it('is regenerated the documented way — deleted, re-run, re-added — because a deleted file has no bytes to keep', () => {
+    store.writeRun(dir, record(FIXTURE_RUN));
+    const file = path.join(dir, JOURNEY + '.playwright.json');
+    track(file);
+    fs.rmSync(file);
+
+    const filed = store.writeRun(dir, record(Object.assign({}, FIXTURE_RUN, { backendServed: 999 })));
+
+    expect(filed.canonical).toBe(true);
+    expect(filed.canonicalTracked).toBe(false);
+    expect(JSON.parse(fs.readFileSync(file, 'utf8')).backendServed).toBe(999);
+  });
+
+  it('is answered `false` outside a checkout, so the harnesses that copy these files into temp trees still write', () => {
+    // `guard-proof.js` and `fixture-divergence.js` do exactly that. Unknown must behave like "nothing
+    // here is under review", never like a lock — a guard that stops those writing gets deleted.
+    const loose = fs.mkdtempSync(path.join(os.tmpdir(), 'journey-artifacts-loose-'));
+    try {
+      store.writeRun(loose, record(FIXTURE_RUN));
+      expect(store.isTracked(path.join(loose, JOURNEY + '.playwright.json'))).toBe(false);
+      expect(store.writeRun(loose, record(FIXTURE_RUN)).canonical).toBe(true);
+    } finally {
+      fs.rmSync(loose, { recursive: true, force: true });
+    }
+  });
+
+  it('is told apart from the ignored run output beside it, which `git check-ignore` cannot do', () => {
+    store.writeRun(dir, record(FIXTURE_RUN));
+    const file = path.join(dir, JOURNEY + '.playwright.json');
+    track(file);
+
+    // Both are under `artifacts/`, so both are ignored. Only one is in the index.
+    expect(store.isTracked(file)).toBe(true);
+    expect(store.isTracked(path.join(dir, store.RUNS_DIRNAME, JOURNEY + '.fixture.playwright.json'))).toBe(false);
   });
 });
 
@@ -292,7 +428,10 @@ describe('backend identity', () => {
 
       expect(build).not.toBeNull();
       expect(build.source).toBe('process:127.0.0.1:' + port);
-      expect(build.id).toMatch(/^Web-modules@[0-9a-f]{40}(\+dirty)?$/);
+      // The shape, and then the name: `<checkout>@<sha>[+dirty]`, where the checkout is the one this
+      // process is running out of — whatever that tree happens to be called.
+      expect(build.id).toMatch(/^[^@]+@[0-9a-f]{40}(\+dirty)?$/);
+      expect(build.id.split('@')[0]).toBe(SELF);
       // The checkout's name identifies it; its absolute path is the laptop's business and stays out of
       // a file that gets pasted into reviews.
       expect(JSON.stringify(build)).not.toContain(path.resolve(__dirname, '..'));
@@ -344,7 +483,7 @@ describe('backend identity', () => {
     const build = store.fixtureBuild(path.resolve(__dirname, '..'));
 
     expect(build.id).toMatch(/^fixture@[0-9a-f]{40}(\+dirty)?$/);
-    expect(build.id).not.toContain('Web-modules@');
+    expect(build.id).not.toContain(SELF + '@');
     expect(build.source).toBe('fixture:test/e2e/fixture/api-server.js');
     expect(build.detail).toContain('not an API build');
     // The same null every other source returns when it cannot say, rather than an invented id.
@@ -383,7 +522,7 @@ describe('backend identity', () => {
   // discipline of this block: a stamp is only worth having if the run would otherwise have said
   // something else, so each arm stands a real listening process (whose checkout is THIS repo) against
   // a stamp naming a different real checkout, and reads which one came back. An assertion that the
-  // field is merely populated would pass against a store that resolved everything to `Web-modules`.
+  // field is merely populated would pass against a store that resolved everything to THIS checkout.
   describe('the world stamp', () => {
     // Real checkouts, not fixtures of one: `writeStamp` asks git for the HEAD and whether the tree is
     // dirty, and a stubbed git would only prove that the stub was read.
@@ -416,7 +555,7 @@ describe('backend identity', () => {
       stamps = fs.mkdtempSync(path.join(os.tmpdir(), 'world-stamps-'));
       // A REAL process on a REAL port, so that "the port would have said something else" is a fact
       // about this machine and not a mock's opinion. It is this jest process, whose cwd is this
-      // checkout — so the port's answer is `Web-modules@…` and a stamp's answer must not be.
+      // checkout — so the port's answer is `<this checkout>@…` and a stamp's answer must not be.
       listener = http.createServer((_req, res) => res.end('ok'));
       await new Promise(resolve => listener.listen(0, '127.0.0.1', resolve));
       origin = 'http://127.0.0.1:' + listener.address().port;
@@ -428,9 +567,14 @@ describe('backend identity', () => {
       while (made.length) { fs.rmSync(made.pop(), { recursive: true, force: true }); }
     });
 
+    // `launchedPid` is this jest process, which is also the one holding `origin` — the listener above
+    // is an `http.createServer` in here — so the stamp resolves the socket holder straight back to it.
+    // `builtFrom` is the token the checkout was made at; without it a stamp is refused, which is W1's
+    // guard and is proved on its own in test/world-stamp-windows.test.js.
     function stamp (from, overrides) {
       made.push(from.repo);
-      const written = store.writeWorldStamp({ apiBaseUrl: origin, repo: from.repo, pid: process.pid }, stamps);
+      const written = store.writeWorldStamp(
+        { apiBaseUrl: origin, repo: from.repo, launchedPid: process.pid, builtFrom: from.token || from.head }, stamps);
       if (overrides) {
         fs.writeFileSync(written.file, JSON.stringify(Object.assign(written.stamp, overrides), null, 2) + '\n');
       }
@@ -453,9 +597,9 @@ describe('backend identity', () => {
       // The stamp's directory is this laptop's business and stays out of a file read in reviews.
       expect(JSON.stringify(build)).not.toContain(stamps);
       // The answer the port would have given, and the one this run must NOT have taken: this process
-      // is running out of the Web-modules checkout and holds that socket.
-      expect(store.buildFromListeningProcess(origin).id).toMatch(/^Web-modules@/);
-      expect(build.id).not.toMatch(/^Web-modules@/);
+      // is running out of THIS checkout and holds that socket.
+      expect(store.buildFromListeningProcess(origin).id.split('@')[0]).toBe(SELF);
+      expect(build.id.split('@')[0]).not.toBe(SELF);
     });
 
     it('records a DIFFERENT build when a different checkout built the world', () => {
@@ -551,7 +695,8 @@ describe('backend identity', () => {
       const api = checkout('alpha');
       made.push(api.repo);
 
-      expect(() => store.writeWorldStamp({ apiBaseUrl: 'https://api.okam.no', repo: api.repo, pid: process.pid }, stamps))
+      expect(() => store.writeWorldStamp(
+        { apiBaseUrl: 'https://api.okam.no', repo: api.repo, launchedPid: process.pid, builtFrom: api.head }, stamps))
         .toThrow(/loopback/);
       expect(store.buildFromWorldStamp('https://api.okam.no', stamps)).toBeNull();
       // A pid is a statement about THIS machine; a stamp asserting one about a remote world would be
@@ -559,13 +704,17 @@ describe('backend identity', () => {
       expect(store.readWorldStamp('https://api.okam.no', stamps).reason).toBe('not a loopback origin');
     });
 
-    it('refuses to stamp a world whose process is not running, rather than writing an unverifiable one', () => {
+    it('refuses to stamp a world it cannot tie to a process it started, rather than writing an unverifiable one', () => {
       const api = checkout('alpha');
       made.push(api.repo);
 
-      expect(() => store.writeWorldStamp({ apiBaseUrl: origin, repo: api.repo, pid: 2147483646 }, stamps))
-        .toThrow(/no process 2147483646 is running/);
-      expect(() => store.writeWorldStamp({ apiBaseUrl: origin, repo: '/no/such/checkout', pid: process.pid }, stamps))
+      // A pid that is not running cannot have started the process on that socket, so the port is
+      // being held by somebody this caller has no claim over.
+      expect(() => store.writeWorldStamp(
+        { apiBaseUrl: origin, repo: api.repo, launchedPid: 2147483646, builtFrom: api.head }, stamps))
+        .toThrow(/a process this run did not start/);
+      expect(() => store.writeWorldStamp(
+        { apiBaseUrl: origin, repo: '/no/such/checkout', launchedPid: process.pid, builtFrom: api.head }, stamps))
         .toThrow(/not a git checkout/);
       expect(fs.readdirSync(stamps)).toEqual([]);
     });
@@ -575,22 +724,25 @@ describe('backend identity', () => {
       made.push(api.repo);
 
       const byScript = store.writeWorldStamp(
-        { apiBaseUrl: origin, repo: api.repo, pid: process.pid, writtenBy: 'test/e2e/scripts/live-world.sh' }, stamps);
+        { apiBaseUrl: origin, repo: api.repo, launchedPid: process.pid, builtFrom: api.head, writtenBy: 'test/e2e/scripts/live-world.sh' }, stamps);
       expect(byScript.stamp.writtenBy).toBe('test/e2e/scripts/live-world.sh');
       // It travels into the artifact, so a reader of a live artifact learns where the claim came from.
       expect(store.buildFromWorldStamp(origin, stamps).detail).toContain('stamped by test/e2e/scripts/live-world.sh');
 
       // …and a caller that does not say gets the program that actually ran. A constant here would put
       // that script's name on every stamp this repo's own harnesses write.
-      const byNobody = store.writeWorldStamp({ apiBaseUrl: origin, repo: api.repo, pid: process.pid }, stamps);
+      const byNobody = store.writeWorldStamp(
+        { apiBaseUrl: origin, repo: api.repo, launchedPid: process.pid, builtFrom: api.head }, stamps);
       expect(byNobody.stamp.writtenBy).not.toBe('test/e2e/scripts/live-world.sh');
     });
 
     it('keys a stamped dirty tree the same way every other route keys it', () => {
       const api = checkout('alpha');
       made.push(api.repo);
-      fs.writeFileSync(path.join(api.repo, 'Program.cs'), '// edited after the build\n');
-      const written = store.writeWorldStamp({ apiBaseUrl: origin, repo: api.repo, pid: process.pid }, stamps);
+      fs.writeFileSync(path.join(api.repo, 'Program.cs'), '// edited before the build\n');
+      // `+dirty` is part of the token the build was taken at, so it is what the stamp is held to.
+      const written = store.writeWorldStamp(
+        { apiBaseUrl: origin, repo: api.repo, launchedPid: process.pid, builtFrom: api.head + '+dirty' }, stamps);
 
       const build = store.buildFromWorldStamp(origin, stamps);
 

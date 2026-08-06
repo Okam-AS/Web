@@ -1,0 +1,93 @@
+{
+ "backend_members": [
+  "NotSet",
+  "Giftcard",
+  "PayInStore",
+  "Cash",
+  "Stripe",
+  "Vipps",
+  "Dintero",
+  "DinteroVipps",
+  "DinteroBillie",
+  "DinteroKlarna",
+  "DinteroKravia",
+  "DinteroTerminal",
+  "WoltMarketplace",
+  "Surfboard",
+  "SurfboardVipps",
+  "SurfboardTerminal",
+  "CompanyAccount"
+ ],
+ "backend_count": 17,
+ "mirror_members": [
+  "NotSet",
+  "Giftcard",
+  "PayInStore",
+  "Stripe",
+  "Vipps",
+  "Dintero",
+  "DinteroVipps",
+  "DinteroBillie",
+  "DinteroKlarna",
+  "DinteroKravia",
+  "WoltMarketplace",
+  "Cash",
+  "DinteroTerminal",
+  "Surfboard",
+  "SurfboardVipps",
+  "SurfboardTerminal"
+ ],
+ "mirror_count": 16,
+ "missing_from_mirror": [
+  "CompanyAccount"
+ ],
+ "extra_in_mirror": [],
+ "global_mixin_cases": [
+  "PayInStore",
+  "Stripe",
+  "Vipps",
+  "Giftcard",
+  "Dintero",
+  "DinteroVipps",
+  "DinteroBillie",
+  "DinteroKlarna",
+  "DinteroKravia",
+  "WoltMarketplace"
+ ],
+ "global_mixin_has_default": true,
+ "global_mixin_default_returns": "Ukjent",
+ "backend_members_falling_to_default": [
+  "NotSet",
+  "Cash",
+  "DinteroTerminal",
+  "Surfboard",
+  "SurfboardVipps",
+  "SurfboardTerminal",
+  "CompanyAccount"
+ ],
+ "checkout_ladder_branches": [
+  "Stripe",
+  "Vipps",
+  "PayInStore",
+  "Giftcard",
+  "Dintero",
+  "DinteroVipps",
+  "DinteroBillie",
+  "DinteroKravia",
+  "DinteroKlarna"
+ ],
+ "checkout_ladder_tail": "return \"\";",
+ "order_ladder_branches": [
+  "Dintero",
+  "DinteroBillie",
+  "DinteroKlarna",
+  "DinteroKravia",
+  "DinteroVipps",
+  "Giftcard",
+  "PayInStore",
+  "Stripe",
+  "Vipps",
+  "WoltMarketplace"
+ ],
+ "order_ladder_tail": "return $i(\"paymentType_unknown\");"
+}

@@ -43,7 +43,7 @@
   "steps": [
     {
       "n": 1,
-      "name": "sign in as the venue's host (99999999 / 123123)",
+      "name": "sign in as the venue's host (99999999 / AppSettings__DemoVerificationCode__REDACTED)",
       "status": "passed",
       "startedAtUtc": "2026-08-04T01:20:21.720Z",
       "durationMs": 16566,

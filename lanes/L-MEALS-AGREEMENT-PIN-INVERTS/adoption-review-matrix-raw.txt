@@ -1,0 +1,93 @@
+==============================================================================
+BASELINE
+  Test run for /Users/svendaneel/okam/OkamAPI-agrpinrev/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+  Passed!  - Failed:     0, Passed:    36, Skipped:     0, Total:    36, Duration: 7 s - WebApi.Tests.dll (net8.0)
+  failed: NONE
+==============================================================================
+MUTANT M-REDECIDE
+  Test run for /Users/svendaneel/okam/OkamAPI-agrpinrev/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+  Failed!  - Failed:    11, Passed:    25, Skipped:     0, Total:    36, Duration: 7 s - WebApi.Tests.dll (net8.0)
+  failed: ['WebApi.Tests.Meals.MealsAgreementWriterTests.A_recorded_corridor_refusal_is_replayed_even_after_the_corridor_it_named_is_ended', 'WebApi.Tests.Meals.MealsCommandReceiptIdempotencyTests.A_refused_command_is_recorded_as_a_completion_and_a_same_key_retry_replays_the_refusal', 'WebApi.Tests.Meals.MealsCommandReceiptIdempotencyTests.An_in_flight_duplicate_is_still_in_progress_and_only_the_recorded_refusal_moves_that_answer', 'WebApi.Tests.Meals.MealsIdempotencyRefusalTests.Company_archive_refused_at_the_commit_backstop_replays_that_refusal_on_the_same_key', 'WebApi.Tests.Meals.MealsIdempotencyRefusalTests.Company_update_refused_at_the_commit_backstop_replays_that_refusal_on_the_same_key', 'WebApi.Tests.Meals.MealsIdempotencyRefusalTests.Invitation_claim_refused_at_the_commit_backstop_replays_that_refusal_on_the_same_key', 'WebApi.Tests.Meals.MealsIdempotencyRefusalTests.Invitation_revoke_refused_at_the_commit_backstop_replays_that_refusal_on_the_same_key', 'WebApi.Tests.Meals.MealsIdempotencyRefusalTests.Membership_revoke_refused_at_the_commit_backstop_replays_that_refusal_on_the_same_key', 'WebApi.Tests.Meals.MealsIdempotencyRefusalTests.Program_members_refused_at_the_commit_backstop_replays_that_refusal_on_the_same_key', 'WebApi.Tests.Meals.MealsIdempotencyRefusalTests.Reconciliation_resolve_refused_at_the_commit_backstop_replays_that_refusal_on_the_same_key', 'WebApi.Tests.Meals.MealsIdempotencyRefusalTests.Statement_finalize_refused_at_the_commit_backstop_replays_that_refusal_on_the_same_key']
+   | Assert.Throws() Failure
+   | Expected: typeof(WebApi.Helpers.Meals.MealsProblemException)
+   | Actual:   (No exception was thrown)
+   | Assert.IsType() Failure
+   | Expected: Microsoft.AspNetCore.Mvc.ObjectResult
+   | Actual:   Microsoft.AspNetCore.Mvc.OkObjectResult
+   | Assert.IsType() Failure
+   | Expected: Microsoft.AspNetCore.Mvc.ObjectResult
+   | Actual:   Microsoft.AspNetCore.Mvc.OkObjectResult
+   | Assert.IsType() Failure
+   | Expected: Microsoft.AspNetCore.Mvc.ObjectResult
+   | Actual:   Microsoft.AspNetCore.Mvc.OkObjectResult
+   | Assert.IsType() Failure
+   | Expected: Microsoft.AspNetCore.Mvc.ObjectResult
+   | Actual:   Microsoft.AspNetCore.Mvc.OkObjectResult
+   | Assert.IsType() Failure
+   | Expected: Microsoft.AspNetCore.Mvc.ObjectResult
+   | Actual:   Microsoft.AspNetCore.Mvc.OkObjectResult
+   | Assert.IsType() Failure
+   | Expected: Microsoft.AspNetCore.Mvc.ObjectResult
+   | Actual:   Microsoft.AspNetCore.Mvc.OkObjectResult
+   | Assert.IsType() Failure
+   | Expected: Microsoft.AspNetCore.Mvc.ObjectResult
+   | Actual:   Microsoft.AspNetCore.Mvc.OkObjectResult
+   | Assert.IsType() Failure
+   | Expected: Microsoft.AspNetCore.Mvc.ObjectResult
+   | Actual:   Microsoft.AspNetCore.Mvc.OkObjectResult
+   | Assert.Throws() Failure
+   | Expected: typeof(WebApi.Helpers.Meals.MealsProblemException)
+   | Actual:   (No exception was thrown)
+   | Assert.Throws() Failure
+   | Expected: typeof(WebApi.Helpers.Meals.MealsProblemException)
+   | Actual:   (No exception was thrown)
+==============================================================================
+MUTANT M-DETAIL
+  Test run for /Users/svendaneel/okam/OkamAPI-agrpinrev/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+  Failed!  - Failed:     2, Passed:    34, Skipped:     0, Total:    36, Duration: 8 s - WebApi.Tests.dll (net8.0)
+  failed: ['WebApi.Tests.Meals.MealsAgreementWriterTests.A_recorded_corridor_refusal_is_replayed_even_after_the_corridor_it_named_is_ended', 'WebApi.Tests.Meals.MealsAgreementWriterTests.A_second_active_agreement_on_the_same_corridor_is_refused']
+   | Assert.Equal() Failure
+   | Expected: An active corridor agreement already exist···
+   | Actual:   A Company Meals command was refused.
+   | Assert.Equal() Failure
+   | Expected: An active corridor agreement already exist···
+   | Actual:   A Company Meals command was refused.
+==============================================================================
+MUTANT M-INFLIGHT-ENV
+  Test run for /Users/svendaneel/okam/OkamAPI-agrpinrev/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+  Failed!  - Failed:     1, Passed:    35, Skipped:     0, Total:    36, Duration: 8 s - WebApi.Tests.dll (net8.0)
+  failed: ['WebApi.Tests.Meals.MealsAgreementWriterTests.A_genuinely_in_flight_key_still_answers_in_progress_and_signs_nothing']
+   | Assert.Throws() Failure
+   | Expected: typeof(WebApi.Helpers.Meals.MealsProblemException)
+   | Actual:   typeof(System.InvalidOperationException): CompleteAsync is only valid for a Proceed reservation; a Replay/InProgress caller does not execute the opera
+==============================================================================
+MUTANT M-INFLIGHT-SVC
+  Test run for /Users/svendaneel/okam/OkamAPI-agrpinrev/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+  Failed!  - Failed:     3, Passed:    33, Skipped:     0, Total:    36, Duration: 7 s - WebApi.Tests.dll (net8.0)
+  failed: ['WebApi.Tests.Meals.MealsAgreementWriterTests.A_genuinely_in_flight_key_still_answers_in_progress_and_signs_nothing', 'WebApi.Tests.Meals.MealsCommandReceiptIdempotencyTests.A_reserved_but_not_completed_key_reserves_again_as_in_progress', 'WebApi.Tests.Meals.MealsCommandReceiptIdempotencyTests.An_in_flight_duplicate_is_still_in_progress_and_only_the_recorded_refusal_moves_that_answer']
+   | Assert.Throws() Failure
+   | Expected: typeof(WebApi.Helpers.Meals.MealsProblemException)
+   | Actual:   (No exception was thrown)
+   | Assert.Equal() Failure
+   | Expected: InProgress
+   | Actual:   Proceed
+   | Assert.Equal() Failure
+   | Expected: InProgress
+   | Actual:   Proceed
+==============================================================================
+MUTANT M-NORECORD
+  Test run for /Users/svendaneel/okam/OkamAPI-agrpinrev/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+  Failed!  - Failed:     3, Passed:    33, Skipped:     0, Total:    36, Duration: 6 s - WebApi.Tests.dll (net8.0)
+  failed: ['WebApi.Tests.Meals.MealsAgreementWriterTests.A_recorded_corridor_refusal_is_replayed_even_after_the_corridor_it_named_is_ended', 'WebApi.Tests.Meals.MealsAgreementWriterTests.A_second_active_agreement_on_the_same_corridor_is_refused', 'WebApi.Tests.Meals.MealsIdempotencyRefusalTests.A_stateful_check_refusing_after_the_reservation_replays_its_refusal_on_the_same_key']
+   | Assert.Equal() Failure
+   | Expected: meals.invitation-not-claimable
+   | Actual:   meals.idempotency-in-progress
+   | Assert.NotNull() Failure
+   | Assert.Equal() Failure
+   | Expected: meals.validation
+   | Actual:   meals.idempotency-in-progress
+==============================================================================
+RESTORED
+  Test run for /Users/svendaneel/okam/OkamAPI-agrpinrev/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+  Passed!  - Failed:     0, Passed:    36, Skipped:     0, Total:    36, Duration: 7 s - WebApi.Tests.dll (net8.0)
+  failed: NONE

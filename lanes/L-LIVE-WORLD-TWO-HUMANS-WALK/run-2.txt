@@ -1,0 +1,43 @@
+[WebServer] 
+[WebServer]  WARN  You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  Module @nuxt/image is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version >=3.1.0 is required but currently using 2.17.1
+[WebServer] 
+[WebServer] ℹ Parsed 0 files in 0.0 seconds
+[WebServer] ℹ [HPM] Proxy created: /  -> http://127.0.0.1:5080
+[WebServer] ℹ [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+[WebServer] ℹ Listening on: http://192.168.68.111:3971/
+[WebServer] ℹ Preparing project for development
+[WebServer] ℹ Initial build may take a while
+[WebServer] ℹ Discovered Components: .nuxt/components/readme.md
+[WebServer] ✔ Builder initialized
+
+Running 1 test using 1 worker
+
+[WebServer] ✔ Nuxt files generated
+[WebServer] 
+[WebServer]  WARN  Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[WebServer] 
+[WebServer] ℹ Compiling Server
+[WebServer] ℹ Compiling Client
+[WebServer] ✔ Server: Compiled successfully in 14.24s
+[WebServer] ✔ Client: Compiled successfully in 16.80s
+[WebServer] ℹ Waiting for file changes
+[WebServer] ℹ Memory usage: 1.01 GB (RSS: 1.93 GB)
+[WebServer] ℹ Listening on: http://192.168.68.111:3971/
+[WebServer] ↻ Updated pages/admin/ongoing.vue
+[WebServer] ℹ Compiling Server
+[WebServer] ℹ Compiling Client
+[WebServer] ✔ Server: Compiled successfully in 383.57ms
+[WebServer] ✔ Client: Compiled successfully in 530.59ms
+  ✓  1 [chromium] › test/e2e/journeys/workforce-week-run-two-humans.spec.js:143:3 › workforce week-run › A manager publishes a week and a second human acknowledges it, in one live world @live (33.7s)
+
+  1 passed (35.2s)
+exit=0

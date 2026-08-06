@@ -16,17 +16,28 @@
 //   PATCH /workforce/stores/{storeId}/staff/{id}                       #5   (:122)
 //   POST  /workforce/stores/{storeId}/staff/{id}/invitations           #6   (:156)
 //   GET   /workforce/stores/{storeId}/roles                            #8   (:203)
+//   PUT   /workforce/stores/{storeId}/roles                            #9   (:218)
 //   GET   /workforce/stores/{storeId}/staff/{id}/roles                 #10  (:243)
 //   PUT   /workforce/stores/{storeId}/staff/{id}/roles                 #11  (:258)
 //   GET   /workforce/stores/{storeId}/staff/{id}/employment-terms      #12  (:283)
 //   PUT   /workforce/stores/{storeId}/staff/{id}/employment-terms      #13  (:298)
 //   GET   /workforce/stores/{storeId}/attendance?from&to               #25  (WorkforceAttendanceController:55)
 //
+// `PUT /roles` (#9) IS BOUND HERE NOW, AND THE SCREEN IT WAS WAITING FOR IS `/admin/workforce-roles`.
+// This paragraph used to say the route was deliberately unbound because "creating and retiring the
+// store's job-role catalogue is a screen of its own" — a correct decision that was never finished,
+// and the cost of leaving it there was not theoretical. A store whose catalogue nobody had seeded
+// out of band had an EMPTY ROLE AXIS everywhere it mattered: `workforce-schedule.vue`'s shift editor
+// offered a role select with no options, `workforce-rates.vue` could not open a role rate at all,
+// and `WorkforceEngagementPanel.vue` said "no roles defined" while offering no way to define one.
+// Planning a week was therefore impossible on any store that had never been curled.
+//
+// The reasoning the old note gave still holds and is why the write lives on its OWN page rather than
+// being smuggled into the roster: a roster that silently created a role because a manager typed a
+// name would make the role list unownable. The roster page still only ASSIGNS roles that exist.
+//
 // ROUTES THAT EXIST AND ARE DELIBERATELY NOT BOUND HERE, each a recorded decision rather than an
 // oversight:
-//   • `PUT /roles` (#9) — creating and retiring the store's job-role catalogue is a screen of its
-//     own. This page assigns roles that exist; it does not define them, and a roster that silently
-//     created a role because a manager typed a name would make the role list unownable.
 //   • `POST /staff/pos-operator-import` (#7) — the manager-reviewed bulk link of existing POS
 //     operators to engagements. A per-item outcome report, not a roster action.
 //
@@ -147,6 +158,34 @@ export class WorkforceRosterService extends WorkforceClientBase {
    */
   ListRoles (storeId) {
     return this._request('GET', '/workforce/stores/' + storeId + '/roles');
+  }
+
+  /**
+   * #9: author the store's job-role catalogue — the write `ListRoles` above reads back.
+   *
+   * A MERGE, NOT A REPLACE, and the difference is the whole safety of this method.
+   * `WorkforceStaffService.UpsertRolesAsync` loads the store's existing roles TRACKED and walks only
+   * the items it was sent: an item WITH a `roleId` edits that role in place, an item WITHOUT one
+   * becomes a new role, and — the part a caller must not get wrong the other way round —
+   * "roles not present in the request are left untouched". So sending one item adds or edits exactly
+   * one role, and a caller must NEVER send the full catalogue in order to append to it. That is the
+   * opposite of `AssignStaffRoles` (#11) directly below, which is a full replace, and the two verbs
+   * being both `PUT` is precisely why this paragraph is here.
+   *
+   * THERE IS NO DELETE, on this route or any other in the family. A role leaves the working
+   * catalogue by being given an `effectiveToUtc` — it keeps existing, keeps its id, and keeps
+   * appearing in `ListRoles`, because a week already planned against it must still be able to name
+   * it. Retiring is therefore an upsert like any other, not a second verb.
+   *
+   * Requires `WorkforceManager` (the read needs only `WorkforceScheduler`) and the `workforce.setup`
+   * stage flag, which is the one flag in the family that is ON by default. The `Idempotency-Key`
+   * every Workforce mutation needs is supplied by `_mutate`.
+   *
+   * @param roles array of `{ roleId?, name, station, color, sortOrder, effectiveFromUtc?, effectiveToUtc? }`
+   * @returns the FULL role list after the write, ordered by sortOrder then name — not just the items sent.
+   */
+  UpsertRoles (storeId, roles) {
+    return this._mutate('PUT', '/workforce/stores/' + storeId + '/roles', { roles });
   }
 
   /** #10: the roles one engagement holds. */

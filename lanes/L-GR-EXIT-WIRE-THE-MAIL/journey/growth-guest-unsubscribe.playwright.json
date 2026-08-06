@@ -1,0 +1,133 @@
+{
+  "journey": "growth-guest-unsubscribe",
+  "title": "A recipient opens the unsubscribe link their newsletter carried and the withdrawal completes",
+  "status": "passed",
+  "startedAtUtc": "2026-08-04T19:21:31.781Z",
+  "finishedAtUtc": "2026-08-04T19:21:35.385Z",
+  "durationMs": 3604,
+  "capabilities": [
+    "growth.guest.unsubscribe",
+    "growth.guest.unsubscribe.session-free",
+    "growth.guest.unsubscribe.from-footer-link",
+    "growth.guest.unsubscribe.token-dead",
+    "growth.guest.unsubscribe.no-token"
+  ],
+  "surface": "public",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3143",
+  "apiBaseUrl": "http://127.0.0.1:4143",
+  "commit": "8928765738dd89b367613bee841475437a677a23",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": {
+    "id": "fixture@8928765738dd89b367613bee841475437a677a23+dirty",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "8928765-dirty",
+    "detail": "the in-repo fixture backend, not an API build (branch lane/fe-gr-exit-wire-the-mail)"
+  },
+  "backendServed": 3,
+  "backendSubjectServed": 3,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:4143/v1/growth/unsubscribe -> 200",
+    "POST http://127.0.0.1:4143/v1/growth/unsubscribe -> 200",
+    "POST http://127.0.0.1:4143/v1/growth/unsubscribe -> 410"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "read the exit link out of the dispatched message body",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T19:21:31.783Z",
+      "durationMs": 2,
+      "detail": "captured link path /preferences/unsubscribe, fragment carries a 46-character u1. capability token",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "open it in a browser, exactly as the recipient would",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T19:21:31.785Z",
+      "durationMs": 1628,
+      "detail": "the done card rendered without any confirmation step",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "the credential the browser spent is the one the dispatcher composed",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T19:21:33.437Z",
+      "durationMs": 6,
+      "detail": "the backend recorded exactly 1 withdrawal, and it was for the captured token",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "the token is gone from the address bar",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T19:21:33.443Z",
+      "durationMs": 1,
+      "detail": "address bar reads /preferences/unsubscribe with no token",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "a second click on the same link is still a done card, never a failure",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T19:21:33.444Z",
+      "durationMs": 604,
+      "detail": "replayed once more; still one recorded withdrawal, still the done card",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "an expired or already-spent link says so instead of claiming success",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T19:21:34.048Z",
+      "durationMs": 630,
+      "detail": "the token-dead card rendered, and no withdrawal was claimed",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "arriving with no token at all is a stated state, not a blank page",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T19:21:34.704Z",
+      "durationMs": 675,
+      "detail": "the no-token card rendered",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "note",
+      "summary": "the browser leg runs against the fixture backend",
+      "detail": "The link, the token and the page are real; the endpoint behind them is the fixture. That the withdrawal SUPPRESSES the next campaign is proved against real code in WebApi.Tests/Growth/GrowthUnsubscribeExitReachabilityTests."
+    }
+  ],
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 410 (Gone)"
+  ],
+  "failedRequests": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:4143/v1/growth/unsubscribe",
+      "status": 410
+    }
+  ],
+  "screenshots": [
+    "growth-guest-unsubscribe/fixture/01-the-withdrawal-confirmed.png",
+    "growth-guest-unsubscribe/fixture/02-a-dead-link-refused-honestly.png"
+  ],
+  "error": null,
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/growth-guest-unsubscribe.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false,
+    "supersedes": null
+  }
+}

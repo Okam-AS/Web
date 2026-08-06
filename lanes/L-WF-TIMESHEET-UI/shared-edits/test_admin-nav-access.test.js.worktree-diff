@@ -1,0 +1,78 @@
+diff --git a/test/admin-nav-access.test.js b/test/admin-nav-access.test.js
+index 0b3e857..f741e75 100644
+--- a/test/admin-nav-access.test.js
++++ b/test/admin-nav-access.test.js
+@@ -92,16 +92,55 @@ describe('storeAdminAccess — unknown is a state, not a refusal', () => {
+ // group by the owner's instruction — filed by subject matter they were correct and unfindable, and the
+ // six restaurant modules are the surfaces under active acceptance. Same store-admin gate as the groups
+ // they came from, so this reorder moves no link between audiences; only its position changed.
+ const STORE_ADMIN_PATHS = [
+   '/admin', '/admin/ongoing', '/admin/orders', '/admin/statistics',
+   '/admin/workforce-schedule', '/admin/workforce-requests', '/admin/workforce-roster',
+-  '/admin/workforce-rates', '/admin/workforce-personnel-list', '/admin/training-courses',
++  // The role catalogue, between the roster and the rates. `PUT /workforce/stores/{id}/roles` (#9)
++  // was live on the wire with no caller in any browser, and the roster client recorded the omission
++  // as "a screen of its own" that was never built — so a store nobody had seeded by curl had an
++  // EMPTY ROLE AXIS in the schedule's shift editor, on the rates page's role scope, and on the
++  // engagement panel, which printed "no roles defined" beside no way to define one. Store-admin
++  // gated like its siblings; the write itself is WorkforceManager and the page renders its own
++  // refusal when that grant is withheld, while still showing the list the read (WorkforceScheduler)
++  // does return.
++  '/admin/workforce-roles',
++  '/admin/workforce-rates', '/admin/workforce-personnel-list',
++  // What a publication actually reached. The publish button answers with a recipient COUNT — how
++  // many outbox rows were enqueued, not how many arrived — so until this page existed the only
++  // account of a schedule that reached nobody was `GET .../schedules/notification-failures` read
++  // with a bearer token and curl. Store-admin gated like its siblings; the read itself is
++  // `WorkforceManager` and the page renders its own refusal when that grant is withheld.
++  '/admin/workforce-delivery',
++  // Who a published week actually reached — endpoints #21 and #22. The delivery report above says
++  // what the outbox could not get OUT; this says what came BACK from the people it did reach, which
++  // is the only thing a venue asked to show that it rostered somebody can actually produce. Both
++  // endpoints were bound to nothing before this page: `GetPublicationHistory` sat in the client with
++  // zero callers, and the recipients route had no client method at all. Store-admin gated like its
++  // siblings; the history read is `WorkforceScheduler` and the recipient roster `WorkforceManager`,
++  // and the page renders a separate refusal for each.
++  '/admin/workforce-publications',
++  // The payroll batch — endpoints #27, #28, #29 plus the two reads beside them. On this list rather
++  // than in a role group for the same reason every module page is: the sidebar's audience is
++  // store-admin, and the page renders its own refusal when the backend withholds
++  // `WorkforcePayrollApprover` — which gates the WHOLE surface here, reads included, because a
++  // timesheet line is the wage record and there is nothing left to partially withhold.
++  '/admin/workforce-timesheets',
++  '/admin/training-courses',
++  // Training's second surface: one person's assembled record, endpoint #16. Store-admin gated like
++  // the courses page beside it — the evidence read resolves `RequireStoreAdminAsync` — and it is on
++  // this list rather than in a role group for the same reason every module page is.
++  '/admin/training-evidence',
+   '/admin/margin-recipes', '/admin/margin-suppliers', '/admin/margin-price-imports',
+   '/admin/margin-statements',
+-  '/admin/meals-agreements', '/admin/meals-companies', '/admin/events-pipeline', '/admin/growth-newsletter',
++  '/admin/meals-agreements', '/admin/meals-companies',
++  // The third Meals link: the month statement, endpoints #19–#23. It is on this list rather than in
++  // a role group because draft and finalize are `RequireStoreAdminAsync` — the venue's own acts — so
++  // the audience the sidebar offers it to is the audience the API admits.
++  '/admin/meals-statements',
++  '/admin/events-pipeline', '/admin/growth-newsletter',
+   // Growth's other half, beside the newsletter link. The guest is told on screen that this venue
+   // answers a privacy request within one month (GDPR art. 12); the two routes that let anybody answer
+   // had no caller in this app at all, so the promise was printed on one surface and keepable on none.
+   '/admin/growth-privacy',
+   // Last in the modules group, and the switchboard for every link above it: each of those modules
+   // gates its writes on deny-closed per-store flags, and until this page existed the only way to move
+@@ -129,12 +168,15 @@ const WORKER_PATHS = ['/admin/workforce-me', '/admin/account-email']
+ // The links this file's `MANAGER-REACHABLE` tests are about — the ones a manager could not reach by
+ // navigating — named once so the assertions below cannot drift apart from each other. The decision
+ // inbox joins them: without a sidebar entry the only surface that can approve anything is
+ // unreachable, which is the exact failure this list exists to prevent.
+ const MANAGER_MODULE_PATHS = [
+   '/admin/workforce-schedule', '/admin/workforce-requests', '/admin/workforce-roster', '/admin/workforce-rates',
++  // The role catalogue is a manager surface like the four beside it: the write is WorkforceManager,
++  // and the roster, the rates and the schedule all pivot on the axis it authors.
++  '/admin/workforce-roles',
+   '/admin/training-courses', '/admin/events-pipeline'
+ ]
+ 
+ // The three languages `LanguageSwitcher` offers, so the three sidebars that actually get rendered.
+ const DICTIONARIES = { no, en, de }
+ 

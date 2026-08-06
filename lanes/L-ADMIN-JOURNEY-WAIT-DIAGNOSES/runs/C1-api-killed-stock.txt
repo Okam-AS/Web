@@ -1,0 +1,102 @@
+=== label    : C1-api-killed-stock
+=== worktree : /Users/svendaneel/okam/web-waitdiag-before
+=== commit   : 8ac6f63648015d8c7a230181a7f07bf303d43268
+=== dirty    : 0 path(s) before the run
+=== helper   : 6b3fe7f8d2387f76d879e67151b0fc9d7caf4b40 test/e2e/support/admin.js
+=== spec sha : ff03d2a26d5c8c0c143a54adb9331f0643a4baae
+=== ports    : web=3878 fixture=4878 (4010/4971/4973 never bound, never signalled)
+=== kill arm : api
+=== started  : 2026-08-06T11:01:57Z
+[WebServer] [fixture] listening on http://127.0.0.1:4878
+
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://192.168.68.111:3878/
+
+[WebServer] [info] Preparing project for development
+
+[WebServer] [info] Initial build may take a while
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+
+[WebServer] [success] Builder initialized
+
+
+Running 1 test using 1 worker
+
+[1/1] [chromium] › test/e2e/journeys/growth-newsletter-send-gate.spec.js:95:1 › An operator drafts and approves a newsletter, and the send gate opens only when both switches are up @fixture
+[WebServer] [success] Nuxt files generated
+
+[WebServer] [warn] Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[killer] test started, served=0 -> killing api at 2026-08-06T11:02:04Z
+[killer] SIGTERM fixture pid 52852
+[killer] after: web=52857 none fixture=none
+[WebServer] [info] Waiting for file changes
+
+[WebServer] [info] Memory usage: 1.26 GB (RSS: 1.98 GB)
+
+[WebServer] [info] Listening on: http://192.168.68.111:3878/
+
+  1) [chromium] › test/e2e/journeys/growth-newsletter-send-gate.spec.js:95:1 › An operator drafts and approves a newsletter, and the send gate opens only when both switches are up @fixture 
+
+    TimeoutError: page.waitForURL: Timeout 30000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+
+       at ../support/admin.js:47
+
+      45 |
+      46 |   if (expectPath) {
+    > 47 |     await page.waitForURL(url => url.pathname === expectPath, { timeout: 30000 });
+         |                ^
+      48 |   }
+      49 |   await expect(modal).toHaveCount(0, { timeout: 15000 });
+      50 | }
+        at signIn (/Users/svendaneel/okam/web-waitdiag-before/test/e2e/support/admin.js:47:16)
+        at /Users/svendaneel/okam/web-waitdiag-before/test/e2e/journeys/growth-newsletter-send-gate.spec.js:114:7
+        at JourneyRecorder.step (/Users/svendaneel/okam/web-waitdiag-before/test/e2e/support/journey.js:347:22)
+        at /Users/svendaneel/okam/web-waitdiag-before/test/e2e/journeys/growth-newsletter-send-gate.spec.js:111:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/growth-newsletter-send-gat-b49d0-y-when-both-switches-are-up-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/growth-newsletter-send-gate.fixture.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/growth-newsletter-send-gate.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/growth-newsletter-send-gat-b49d0-y-when-both-switches-are-up-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/growth-newsletter-send-gat-b49d0-y-when-both-switches-are-up-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/growth-newsletter-send-gat-b49d0-y-when-both-switches-are-up-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+  1 failed
+    [chromium] › test/e2e/journeys/growth-newsletter-send-gate.spec.js:95:1 › An operator drafts and approves a newsletter, and the send gate opens only when both switches are up @fixture 
+=== finished : 2026-08-06T11:03:05Z
+=== dirty after : 0 path(s)
+RESULT C1-api-killed-stock FAIL-ASSERT rc=1

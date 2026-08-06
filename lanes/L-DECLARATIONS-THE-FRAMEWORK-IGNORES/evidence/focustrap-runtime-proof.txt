@@ -1,0 +1,18 @@
+vue 2.7.14 / compiler 2.7.14 / package.json declares ^2.6.14
+
+== A: components/molecules/FocusTrap.vue as written (`unmounted`), 5 mount/destroy cycles ==
+  census after 5 mount+destroy cycles: {"document:focusin":1,"document:focusout":1,"window:blur":1}
+  PASS  unmounted() body executed 0 times across 5 destroys   [calls=0]
+  PASS  attachHandler ran exactly ONCE for 5 traps -> `instances` never empties   [{"document:focusin":1,"document:focusout":1,"window:blur":1}]
+  PASS  every listener still attached after all 5 destroyed
+
+== B: CONTROL - identical body renamed to `destroyed`, fresh module, 5 cycles ==
+  census after 5 mount+destroy cycles: {"document:focusin":0,"document:focusout":0,"window:blur":0}
+  PASS  destroyed() body executed 5 times   [calls=5]
+  PASS  listeners fully released (net zero) - the leak is the hook name alone   [{"document:focusin":0,"document:focusout":0,"window:blur":0}]
+
+== C: what depends on it - the `returnFocus` prop ==
+  activeElement before mount: INPUT, after destroy: INPUT
+  PASS  returnFocus=true never restores focus (its only consumer is the dead hook)
+
+ALL ASSERTIONS HELD

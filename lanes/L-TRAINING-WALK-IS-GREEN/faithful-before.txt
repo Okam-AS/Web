@@ -1,0 +1,21 @@
+=== worktree   : /Users/svendaneel/okam/web-trainwalk-after
+=== commit     : 28548f96036f6118e5523bd963632ddf5ea3af63
+=== spec kept  : 20aa50da33574f430f45163a3e1a37997b45a9bf (repaired, from 28548f96)
+=== product to : e34977acebd59b223584158c33451b6f1ffd82c1 (unrepaired, the commit the failed artifact names)
+
+--- ARM M0 : repaired WALK x unrepaired PRODUCT
+    reverted  : 0 file(s)
+    wrappers  : 0 file(s) still mention trn-table-scroll (expect 0)
+    RESULT M0-faithful-before FAIL-ASSERT rc=1
+    declared  : failed (9 steps)
+    served    : 58 requests, 48 to the subject
+    stopped at: 9 the publish control is reachable BY POINTER at this viewport
+    instrument: expect(received).not.toBe(expected) // Object.is equality
+    covered by: NOT the trial click — no interception line
+
+--- ARM M0R : product restored to 28548f96
+    dirty     : 0 tracked path(s)
+    RESULT M0R-restored PASS rc=0
+    declared  : passed (19 steps)
+    step 9    : passed — clickable by pointer at 1280×720; the table scrolls inside its column (overflow-x: auto) and paints 0px inside its right edge
+    step 10   : passed — v1 Published, content hash 00ad7cd4bb4f…

@@ -1,0 +1,60 @@
+
+M1  the gate is deleted from crossCurrencyLabel
+    BEFORE     passed=32 failed=0
+    MUTATED    passed=17 failed=15
+      RED: crossCurrencyLabel: three worlds, not two › and a genuine zero is now DISTINGUISHABLE from an absence, which is the whole point
+      RED: crossCurrencyLabel: three worlds, not two › but a blank string is an absence, not a zero
+      RED: crossCurrencyLabel: three worlds, not two › withholds the currency code with it, not just the digits
+      RED: crossCurrencyLabel: three worlds, not two › withholds the figure when the amount is Infinity
+      RED: crossCurrencyLabel: three worlds, not two › withholds the figure when the amount is NaN
+      RED: crossCurrencyLabel: three worlds, not two › withholds the figure when the amount is a blank string
+      RED: ... and 9 more
+      expects red in "every module mixin composes through the gate": YES
+      expects red in "crossCurrencyLabel: three worlds, not two": YES
+    RESTORED   re-read bytes identical to original: True
+    AFTER      passed=32 failed=0
+    VERDICT    PIN FIRES
+
+M2  the gate becomes falsiness (!minor) instead of !isAmountStated(minor)
+    BEFORE     passed=32 failed=0
+    MUTATED    passed=21 failed=11
+      RED: crossCurrencyLabel: three worlds, not two › and a genuine zero is now DISTINGUISHABLE from an absence, which is the whole point
+      RED: crossCurrencyLabel: three worlds, not two › prints a genuine zero as a real amount
+      RED: crossCurrencyLabel: three worlds, not two › withholds the figure when the amount is Infinity
+      RED: crossCurrencyLabel: three worlds, not two › withholds the figure when the amount is a blank string
+      RED: crossCurrencyLabel: three worlds, not two › withholds the figure when the amount is an object
+      RED: every module mixin composes through the gate › EventsJourney.amount
+      RED: ... and 5 more
+      expects red in "prints a genuine zero as a real amount": YES
+    RESTORED   re-read bytes identical to original: True
+    AFTER      passed=32 failed=0
+    VERDICT    PIN FIRES
+
+M3  the gate answers "0,00" instead of the unknown mark
+    BEFORE     passed=32 failed=0
+    MUTATED    passed=17 failed=15
+      RED: crossCurrencyLabel: three worlds, not two › and a genuine zero is now DISTINGUISHABLE from an absence, which is the whole point
+      RED: crossCurrencyLabel: three worlds, not two › but a blank string is an absence, not a zero
+      RED: crossCurrencyLabel: three worlds, not two › withholds the currency code with it, not just the digits
+      RED: crossCurrencyLabel: three worlds, not two › withholds the figure when the amount is Infinity
+      RED: crossCurrencyLabel: three worlds, not two › withholds the figure when the amount is NaN
+      RED: crossCurrencyLabel: three worlds, not two › withholds the figure when the amount is a blank string
+      RED: ... and 9 more
+      expects red in "withholds the figure when the amount is null": YES
+    RESTORED   re-read bytes identical to original: True
+    AFTER      passed=32 failed=0
+    VERDICT    PIN FIRES
+
+M4  MealsFundedOrders re-inlines the raw composition
+    BEFORE     passed=32 failed=0
+    MUTATED    passed=30 failed=2
+      RED: every module mixin composes through the gate › MealsFundedOrders.amount
+      RED: no surface composes money digits by hand, in either of the two idioms policed here › the composition exists in exactly one file, and it is the gated one
+      expects red in "MealsFundedOrders.amount": YES
+      expects red in "no surface composes money digits by hand": YES
+    RESTORED   re-read bytes identical to original: True
+    AFTER      passed=32 failed=0
+    VERDICT    PIN FIRES
+
+==============================================================================
+ALL FOUR MUTATIONS FIRED

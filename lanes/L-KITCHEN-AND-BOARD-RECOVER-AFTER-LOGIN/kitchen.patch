@@ -1,0 +1,91 @@
+--- lanes/L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN/baseline/kitchen.vue.base	2026-08-06 16:25:40
++++ pages/admin/kitchen.vue	2026-08-06 16:37:50
+@@ -138,17 +138,40 @@
+       this.isLoading = false
+       return
+     }
+-    this.refresh()
+-    this.startAutoRefresh()
+-    this.clockInterval = setInterval(() => { this.now = Date.now() }, 1000)
+-    document.addEventListener('fullscreenchange', this.onFullscreenChange)
++    this.startLiveBoard()
+   },
+   beforeDestroy () {
+-    this.stopAutoRefresh()
+-    if (this.clockInterval) { clearInterval(this.clockInterval) }
+-    document.removeEventListener('fullscreenchange', this.onFullscreenChange)
++    this.stopLiveBoard()
+   },
+   methods: {
++    // THE ONE STARTER LIST for this screen. `mounted` runs it for a cook who arrives already signed
++    // in, and `closeLoginModal` runs the SAME one for a cook who signs in on the page — because a
++    // signed-out visitor is not always bounced to /admin first: `AdminPage.initAuth` skips the
++    // bounce when a `redirect` query is already present (AdminPage.vue:99), which is exactly the
++    // post-login return path, so this page does render with its own sign-in modal over it.
++    //
++    // It is one list rather than two so a starter added later cannot be added to only one path.
++    // That is not hypothetical: the per-second clock below was started on page load and not on
++    // sign-in, so `this.now` stayed frozen at the moment the screen was opened. `KitchenTicket`
++    // ages a ticket as `now - createdAt` clamped at zero, so every ticket sent after the screen was
++    // opened — which on a kitchen display is every ticket — read `0:00` for the rest of service and
++    // never went amber or red. The board looked alive; the timers on it were furniture.
++    startLiveBoard () {
++      this.isLoading = true
++      this.refresh()
++      this.startAutoRefresh()
++      this.startClock()
++      document.addEventListener('fullscreenchange', this.onFullscreenChange)
++    },
++    // The exact inverse, and the reason both starters below clear before they set: `beforeDestroy`
++    // holds ONE handle per interval, so a second interval started over the top of the first is one
++    // this page can never stop. It would keep polling and keep writing `now` after the screen is
++    // gone.
++    stopLiveBoard () {
++      this.stopAutoRefresh()
++      this.stopClock()
++      document.removeEventListener('fullscreenchange', this.onFullscreenChange)
++    },
+     refresh () {
+       const storeId = this.selectedStore
+       if (!storeId || this.isRefreshing) { return Promise.resolve() }
+@@ -165,11 +188,23 @@
+         })
+     },
+     startAutoRefresh () {
++      this.stopAutoRefresh()
+       this.refreshInterval = setInterval(this.refresh, 5000)
+     },
+     stopAutoRefresh () {
+       if (this.refreshInterval) { clearInterval(this.refreshInterval) }
++      this.refreshInterval = null
+     },
++    // The ticking clock every ticket age is measured against. Nothing else writes `now`, so if this
++    // is not running the whole wall of timers is frozen at whatever `data()` set on page load.
++    startClock () {
++      this.stopClock()
++      this.clockInterval = setInterval(() => { this.now = Date.now() }, 1000)
++    },
++    stopClock () {
++      if (this.clockInterval) { clearInterval(this.clockInterval) }
++      this.clockInterval = null
++    },
+     // Diff the incoming board against current state and update tickets/lines in place (keyed by
+     // orderId / orderLineItemId) so Vue patches rather than recreates — no flicker, no lost scroll.
+     mergeBoard (newBoard) {
+@@ -241,12 +276,13 @@
+     reportError (error) {
+       alert(this.$i('ongoing_errorUpdate', { error: (error && error.message) || this.$i('ongoing_unknownError') }))
+     },
++    // A session arrived on the page itself. Recovery is the one starter list, not a copy of the
++    // parts of it somebody remembered — which is what this handler used to be, and why the clock
++    // and the fullscreen listener were missing from it.
+     closeLoginModal (isLoggedIn) {
+       this.showLogin = !isLoggedIn
+       if (isLoggedIn) {
+-        this.isLoading = true
+-        this.refresh()
+-        this.startAutoRefresh()
++        this.startLiveBoard()
+       }
+     },
+     toggleFullscreen () {

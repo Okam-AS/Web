@@ -1,0 +1,47 @@
+=== label      : A-baseline-no
+=== edition    : OKAM_EDITION=no
+=== worktree   : /Users/svendaneel/okam/web-atde
+=== commit     : e34977acebd59b223584158c33451b6f1ffd82c1
+=== dirty      : 0 tracked path(s) modified
+=== spec sha   : 820c847345648e226b5c440b8be5745e53e83d6e
+=== de.ts sha  : cc6e56d4b4f89df4d03bef00d84bce081872d89e
+=== ports      : web=3823 fixture=4823 (4010 never bound, pid 73160 never signalled)
+=== core       : 10 entries
+[WebServer] [fixture] listening on http://127.0.0.1:4823
+
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://172.20.10.4:3823/
+
+[WebServer] [info] Preparing project for development
+
+[WebServer] [info] Initial build may take a while
+
+
+Running 1 test using 1 worker
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+[WebServer] [success] Builder initialized
+
+[WebServer] [success] Nuxt files generated
+
+[1/1] [chromium] › test/e2e/journeys/margin-statement-week.spec.js:41:1 › A venue opens a week, enters its purchase spend, finalises it, and finds it frozen @fixture
+[WebServer] [info] Waiting for file changes
+
+[WebServer] [info] Memory usage: 1.24 GB (RSS: 2.76 GB)
+
+[WebServer] [info] Listening on: http://172.20.10.4:3823/
+
+  1 passed (32.9s)
+RESULT A-baseline-no edition=no PASS rc=0

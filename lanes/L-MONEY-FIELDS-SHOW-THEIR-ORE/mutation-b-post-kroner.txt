@@ -1,0 +1,157 @@
+watchman warning:  Recrawled this watch 59 times, most recently because:
+MustScanSubDirs UserDroppedTo resolve, please review the information on
+https://facebook.github.io/watchman/docs/troubleshooting.html#recrawl
+To clear this warning, run:
+`watchman watch-del '/Users/svendaneel/okam/Web-modules' ; watchman watch-project '/Users/svendaneel/okam/Web-modules'`
+
+FAIL test/delivery-minimum-ore.test.js
+  ● what the field shows is what the field writes › øre typed into the øre box reach the server as øre
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Array [
+        Object {
+          "name": "SetMinimumAmountForDelivery",
+    -     "newValue": 15050,
+    +     "newValue": 150,
+        },
+      ]
+
+      143 |     await settle(wrapper)
+      144 |
+    > 145 |     expect(backend.calls.writes).toEqual([{ name: 'SetMinimumAmountForDelivery', newValue: 15050 }])
+          |                                  ^
+      146 |     expect(backend.store.minimumOrderPriceForHomeDelivery).toBe(15050)
+      147 |   })
+      148 |
+
+      at Object.<anonymous> (test/delivery-minimum-ore.test.js:145:34)
+
+  ● what the field shows is what the field writes › editing the kroner does not throw away the øre that were already stored
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 20050
+    Received: 200
+
+      156 |     await settle(wrapper)
+      157 |
+    > 158 |     expect(backend.store.minimumOrderPriceForHomeDelivery).toBe(20050)
+          |                                                            ^
+      159 |   })
+      160 |
+      161 |   test('the øre can be cleared, which is the correction the floored field made impossible', async () => {
+
+      at Object.<anonymous> (test/delivery-minimum-ore.test.js:158:60)
+
+  ● what the field shows is what the field writes › the øre can be cleared, which is the correction the floored field made impossible
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 15000
+    Received: 150
+
+      172 |     await settle(wrapper)
+      173 |
+    > 174 |     expect(backend.store.minimumOrderPriceForHomeDelivery).toBe(15000)
+          |                                                            ^
+      175 |   })
+      176 |
+      177 |   test('a saved amount comes back onto the screen as the amount that was saved', async () => {
+
+      at Object.<anonymous> (test/delivery-minimum-ore.test.js:174:60)
+
+  ● what the field shows is what the field writes › a saved amount comes back onto the screen as the amount that was saved
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 24990
+    Received: 249
+
+      185 |     await settle(wrapper)
+      186 |
+    > 187 |     expect(backend.store.minimumOrderPriceForHomeDelivery).toBe(24990)
+          |                                                            ^
+      188 |     expect(shownMinimum(wrapper)).toBe('249,90')
+      189 |     expect(saveButton(wrapper).exists()).toBe(false)
+      190 |   })
+
+      at Object.<anonymous> (test/delivery-minimum-ore.test.js:187:60)
+
+  ● what the field shows is what the field writes › a whole-kroner edit still writes whole kroner
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 20000
+    Received: 200
+
+      199 |     await settle(wrapper)
+      200 |
+    > 201 |     expect(backend.store.minimumOrderPriceForHomeDelivery).toBe(20000)
+          |                                                            ^
+      202 |   })
+      203 |
+      204 |   test('nothing is written when nothing was edited, however many øre are stored', async () => {
+
+      at Object.<anonymous> (test/delivery-minimum-ore.test.js:201:60)
+
+  ● the boxes normalise on blur, so what is on screen is what would be written › one digit in the øre box is øre, not tenths of a krone
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 15005
+    Received: 150
+
+      244 |     await saveButton(wrapper).trigger('click')
+      245 |     await settle(wrapper)
+    > 246 |     expect(backend.store.minimumOrderPriceForHomeDelivery).toBe(15005)
+          |                                                            ^
+      247 |   })
+      248 |
+      249 |   test('an unreadable øre entry shows the zero it would write', async () => {
+
+      at Object.<anonymous> (test/delivery-minimum-ore.test.js:246:60)
+
+  ● the boxes normalise on blur, so what is on screen is what would be written › an øre entry past 99 is shown clamped rather than silently folded into the kroner
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 15099
+    Received: 150
+
+      272 |     await saveButton(wrapper).trigger('click')
+      273 |     await settle(wrapper)
+    > 274 |     expect(backend.store.minimumOrderPriceForHomeDelivery).toBe(15099)
+          |                                                            ^
+      275 |   })
+      276 |
+      277 |   test('a decimal typed into the kroner box still shows the whole kroner it would write', async () => {
+
+      at Object.<anonymous> (test/delivery-minimum-ore.test.js:274:60)
+
+FAIL test/delivery-save-failure.test.js
+  ● the minimum-order field shows what is stored and what would be written › a real edit is still offered and still saves
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 20000
+    Received: 200
+
+      294 |     await settle(wrapper)
+      295 |
+    > 296 |     expect(backend.store.minimumOrderPriceForHomeDelivery).toBe(20000)
+          |                                                            ^
+      297 |     expect(saveButton(wrapper).exists()).toBe(false)
+      298 |   })
+      299 |
+
+      at Object.<anonymous> (test/delivery-save-failure.test.js:296:60)
+
+Test Suites: 2 failed, 2 total
+Tests:       8 failed, 32 passed, 40 total
+Snapshots:   0 total
+Time:        0.906 s, estimated 1 s
+Ran all test suites matching /test\/delivery-minimum-ore.test.js|test\/delivery-save-failure.test.js/i.

@@ -1,0 +1,26 @@
+(node:49006) [DEP0147] DeprecationWarning: In future versions of Node.js, fs.rmdir(path, { recursive: true }) will be removed. Use fs.rm(path, { recursive: true }) instead
+(Use `node --trace-deprecation ...` to show where the warning was created)
+PASS test/vue3-shape-guard.test.js
+  which option names this Vue actually consumes
+    ✓ exactly two Vue 3 lifecycle hooks are absent from this runtime, and they are the two denied (1 ms)
+    ✓ `emits` does not occur once in the installed runtime, which is why it is denied (1 ms)
+    ✓ the hooks are called or not called as claimed — measured, and silently (8 ms)
+  the guard, planted both ways
+    ✓ it reds on a planted `unmounted()` hook, naming the file, key and line (1 ms)
+    ✓ it reds on a planted `emits:` block, naming the file, key and line (1 ms)
+    ✓ it reds on `beforeUnmount` and on a quoted key, and finds every offender rather than the first (2 ms)
+    ✓ it stays silent on the valid Vue 2.7 shapes a blunt check would reject (2 ms)
+    ✓ a file the scanner cannot read is reported, never counted as clean (1 ms)
+  the estate
+    ✓ the walker reached the estate rather than an empty directory
+    ✓ every component resolved — nothing was skipped and then reported clean
+    ✓ no component declares an option this Vue never reads
+  the Vue version this repository declares
+    ✓ the declared range starts at the minor line that is actually installed
+
+Test Suites: 1 passed, 1 total
+Tests:       12 passed, 12 total
+Snapshots:   0 total
+Time:        2.962 s, estimated 6 s
+Ran all test suites matching /test\/vue3-shape-guard.test.js/i.
+exit=0

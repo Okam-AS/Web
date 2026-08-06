@@ -1,0 +1,77 @@
+[WebServer] [fixture] listening on http://127.0.0.1:4931
+[WebServer] [dev-server] borrowed core from /Users/svendaneel/okam/Web-modules/core
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+[WebServer] [info] Listening on: http://172.20.10.4:3931/
+[WebServer] [info] Preparing project for development
+[WebServer] [info] Initial build may take a while
+
+Running 1 test using 1 worker
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+[WebServer] [success] Builder initialized
+[WebServer] [success] Nuxt files generated
+[WebServer] [warn] Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[WebServer] [info] Waiting for file changes
+[WebServer] [info] Memory usage: 1.3 GB (RSS: 2.09 GB)
+[WebServer] [info] Listening on: http://172.20.10.4:3931/
+  ✘  1 [chromium] › test/e2e/journeys/workforce-week-run.spec.js:77:1 › A manager plans and publishes a week; the worker sees it and confirms it @fixture (41.0s)
+[teardown] returned core/ to an empty submodule mount
+
+
+  1) [chromium] › test/e2e/journeys/workforce-week-run.spec.js:77:1 › A manager plans and publishes a week; the worker sees it and confirms it @fixture 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.wfme-pub')
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 15000ms
+      - waiting for locator('.wfme-pub')
+
+
+      290 |     await journey.step('...and the receipt is on screen, naming when it happened', async () => {
+      291 |       const notice = page.locator('.wfme-pub');
+    > 292 |       await expect(notice).toBeVisible({ timeout: 15000 });
+          |                            ^
+      293 |
+      294 |       const receipt = notice.locator('.wfme-pub__receipt');
+      295 |       await expect(receipt).toHaveCount(1);
+        at fn (/Users/svendaneel/okam/web-wfack/test/e2e/journeys/workforce-week-run.spec.js:292:28)
+        at JourneyRecorder.step (/Users/svendaneel/okam/web-wfack/test/e2e/support/journey.js:387:28)
+        at /Users/svendaneel/okam/web-wfack/test/e2e/journeys/workforce-week-run.spec.js:290:19
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/workforce-week-run-A-manag-fe486-ker-sees-it-and-confirms-it-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/workforce-week-run.fixture.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/workforce-week-run.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/workforce-week-run-A-manag-fe486-ker-sees-it-and-confirms-it-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/workforce-week-run-A-manag-fe486-ker-sees-it-and-confirms-it-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/workforce-week-run-A-manag-fe486-ker-sees-it-and-confirms-it-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › test/e2e/journeys/workforce-week-run.spec.js:77:1 › A manager plans and publishes a week; the worker sees it and confirms it @fixture 

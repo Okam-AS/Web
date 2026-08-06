@@ -1,0 +1,89 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › test/e2e/journeys/zz-mutant-lwtwo.spec.js:143:3 › workforce week-run › A manager publishes a week and a second human acknowledges it, in one live world @live (35.6s)
+
+
+  1) [chromium] › test/e2e/journeys/zz-mutant-lwtwo.spec.js:143:3 › workforce week-run › A manager publishes a week and a second human acknowledges it, in one live world @live 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('.wfme-pub')
+    Expected: 0
+    Received: 1
+    Timeout:  20000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 20000ms
+      - waiting for locator('.wfme-pub')
+        44 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      443 |         // header. Landing it must red exactly here, which is the point of asserting rather than
+      444 |         // narrating.
+    > 445 |         await expect(page.locator('.wfme-pub')).toHaveCount(0, { timeout: 20000 });
+          |                                                 ^
+      446 |         await expect(page.locator('.wfme-pub__receipt')).toHaveCount(0);
+      447 |         await expect(page.locator('.wfme__toast')).toHaveCount(0);
+      448 |
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/zz-mutant-lwtwo.spec.js:445:49
+        at JourneyRecorder.step (/Users/svendaneel/okam/Web-modules/test/e2e/support/journey.js:399:22)
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/zz-mutant-lwtwo.spec.js:419:7
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/zz-mutant-lwtwo-workforce--7e184-ledges-it-in-one-live-world-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/MUTANT-noflag-selfservice.live-5971-8e2b57d.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/MUTANT-noflag-selfservice.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/zz-mutant-lwtwo-workforce--7e184-ledges-it-in-one-live-world-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/zz-mutant-lwtwo-workforce--7e184-ledges-it-in-one-live-world-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/zz-mutant-lwtwo-workforce--7e184-ledges-it-in-one-live-world-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › test/e2e/journeys/zz-mutant-lwtwo.spec.js:143:3 › workforce week-run › A manager publishes a week and a second human acknowledges it, in one live world @live 
+ MANAGER.phone, code: MANAGER.code, expectPath: '/admin/feature-flags' });
+      202 |         await expect(page.locator('.ff-page__title')).toBeVisible({ timeout: 30000 });
+      203 |         managerUserId = await signedInUserId(page);
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/zz-mutant-lwtwo.spec.js:200:20
+        at JourneyRecorder.step (/Users/svendaneel/okam/Web-modules/test/e2e/support/journey.js:399:22)
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/zz-mutant-lwtwo.spec.js:198:7
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/zz-mutant-lwtwo-workforce--7e184-ledges-it-in-one-live-world-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/MUTANT-noflag-selfservice.live-5971-8e2b57d.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/MUTANT-noflag-selfservice.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/zz-mutant-lwtwo-workforce--7e184-ledges-it-in-one-live-world-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/zz-mutant-lwtwo-workforce--7e184-ledges-it-in-one-live-world-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/zz-mutant-lwtwo-workforce--7e184-ledges-it-in-one-live-world-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › test/e2e/journeys/zz-mutant-lwtwo.spec.js:143:3 › workforce week-run › A manager publishes a week and a second human acknowledges it, in one live world @live 
+exit=1

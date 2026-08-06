@@ -1,0 +1,27 @@
+WITH THE GATE DELETED, 15 tests go red:
+
+  crossCurrencyLabel: three worlds, not two › and a genuine zero is now DISTINGUISHABLE from an absence, which is the whole point
+  crossCurrencyLabel: three worlds, not two › but a blank string is an absence, not a zero
+  crossCurrencyLabel: three worlds, not two › withholds the currency code with it, not just the digits
+  crossCurrencyLabel: three worlds, not two › withholds the figure when the amount is Infinity
+  crossCurrencyLabel: three worlds, not two › withholds the figure when the amount is NaN
+  crossCurrencyLabel: three worlds, not two › withholds the figure when the amount is a blank string
+  crossCurrencyLabel: three worlds, not two › withholds the figure when the amount is a boolean
+  crossCurrencyLabel: three worlds, not two › withholds the figure when the amount is an empty string
+  crossCurrencyLabel: three worlds, not two › withholds the figure when the amount is an object
+  crossCurrencyLabel: three worlds, not two › withholds the figure when the amount is null
+  crossCurrencyLabel: three worlds, not two › withholds the figure when the amount is undefined
+  every module mixin composes through the gate › MealsFundedOrders.amount
+  every module mixin composes through the gate › WorkforceRateTimeline.amountLabel
+  every module mixin composes through the gate › WorkforceWeekGrid.amount
+  every module mixin composes through the gate › marginMoney.amount and signedAmount
+
+PER SITE:
+  WorkforceWeekGrid.amount               DEPENDS ON THE GATE
+  WorkforceRateTimeline.amountLabel      DEPENDS ON THE GATE
+  MealsFundedOrders.amount               DEPENDS ON THE GATE
+  MealsProgramPanel.allowancePreview     already guarded upstream
+  EventsJourney.amount                   already guarded upstream
+  marginMoney.amount and signedAmount    DEPENDS ON THE GATE
+
+restored: re-read bytes identical to original: True

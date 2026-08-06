@@ -1,0 +1,42 @@
+
+      182 |   const extra = got.filter(id => !want.includes(id));
+      183 |   if (missing.length || extra.length || got.length !== want.length) {
+    > 184 |     throw new Error(
+          |           ^
+      185 |       'The validation panel is not the pack. Expected ' + want.length + ' rule results ' +
+      186 |       '(' + want.join(', ') + ') and got ' + got.length + ' (' + got.join(', ') + ').' +
+      187 |       (missing.length ? ' Missing: ' + missing.join(', ') + '.' : '') +
+        at assertRulePackResults (/Users/svendaneel/okam/web-fe-candidate/test/e2e/support/journey-assertions.js:184:11)
+        at /Users/svendaneel/okam/web-fe-candidate/test/e2e/journeys/workforce-schedule-publish.spec.js:267:7
+        at JourneyRecorder.step (/Users/svendaneel/okam/web-fe-candidate/test/e2e/support/journey.js:347:22)
+        at /Users/svendaneel/okam/web-fe-candidate/test/e2e/journeys/workforce-schedule-publish.spec.js:249:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/workforce-schedule-publish-2202b-lidates-it-and-publishes-it-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/workforce-schedule-publish.fixture.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/workforce-schedule-publish.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/workforce-schedule-publish-2202b-lidates-it-and-publishes-it-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/workforce-schedule-publish-2202b-lidates-it-and-publishes-it-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/workforce-schedule-publish-2202b-lidates-it-and-publishes-it-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+  2 failed
+    [chromium] › test/e2e/journeys/account-email-confirm.spec.js:77:1 › A phone-signup administrator is refused a test-send, confirms her address from admin, and is then allowed it @fixture 
+    [chromium] › test/e2e/journeys/workforce-schedule-publish.spec.js:37:1 › A manager creates a draft week, staffs a shift, validates it and publishes it @live 
+  20 passed (5.4m)
+npx playwright test --reporter=line 2>&1  199.93s user 37.03s system 73% cpu 5:23.53 total
+tail -40  0.00s user 0.00s system 0% cpu 5:23.53 total

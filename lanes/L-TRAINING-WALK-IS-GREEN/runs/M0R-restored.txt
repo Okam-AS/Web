@@ -1,0 +1,55 @@
+=== label    : M0R-restored
+=== worktree : /Users/svendaneel/okam/web-trainwalk-after
+=== commit   : 28548f96036f6118e5523bd963632ddf5ea3af63
+=== dirty    : 0 path(s) before the run
+=== spec sha : 20aa50da33574f430f45163a3e1a37997b45a9bf
+=== panel sha: 829d48a758ff96fa7e4493a7bb7a6f22d79ea8f6
+=== scss sha : 6c53cee49a26ea5dadeea1f298b8b5dc36870632
+=== overflow : .trn-table-scroll { overflow-x: auto; // The wrapper is a flex item in `.trn-page__column`; without an explicit floor it would adopt its 
+=== ports    : web=3082 fixture=4082 (4010/4971/4973 never bound, never signalled)
+=== core     : 10 entries
+=== started  : 2026-08-06T11:41:29Z
+[WebServer] [fixture] listening on http://127.0.0.1:4082
+
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+
+[WebServer] [info] Listening on: http://192.168.68.111:3082/
+
+[WebServer] [info] Preparing project for development
+
+[WebServer] [info] Initial build may take a while
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+
+[WebServer] [success] Builder initialized
+
+
+Running 1 test using 1 worker
+
+[WebServer] [success] Nuxt files generated
+
+[WebServer] [warn] Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1/1] [chromium] › test/e2e/journeys/training-course-to-evidence.spec.js:63:1 › A manager opens Training, publishes a course version, files a failing score, and the SERVER calls it not passed @fixture
+[WebServer] [info] Waiting for file changes
+
+[WebServer] [info] Memory usage: 1.27 GB (RSS: 1.83 GB)
+[WebServer] [info] Listening on: http://192.168.68.111:3082/
+
+  1 passed (33.7s)
+=== finished : 2026-08-06T11:42:04Z
+=== declared : passed
+=== failedStep: none — 19 steps all passed
+RESULT M0R-restored PASS rc=0

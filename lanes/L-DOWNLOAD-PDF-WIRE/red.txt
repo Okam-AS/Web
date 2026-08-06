@@ -1,0 +1,35 @@
+RED — OkamAPI-dlpdf @ 9207f480 (lane/download-headers tip) + PdfDownloadWireTests, no seam yet
+$ dotnet test WebApi.Tests/WebApi.Tests.csproj --filter "FullyQualifiedName~PdfDownloadWireTests"
+
+Failed  A_cross_origin_browser_can_read_the_name_of_every_pdf_download
+        (what: "order receipt", url: "/orders/receipt/nzo0y5",
+         userId: "wire-pdf-admin", expectedFileName: "Kvittering-990001.pdf")
+  Assert.Equal() Failure
+  Expected: OK
+  Actual:   InternalServerError
+
+Failed  ... (what: "giftcard receipt", url: "/giftcard/receipt/9df00000-...-000000000001")
+  Assert.Equal() Failure / Expected: OK / Actual: InternalServerError
+
+Failed  ... (what: "invoice", url: "/invoices/pdf/990501", expectedFileName: "RAPPORT-990501.pdf")
+  Assert.Equal() Failure / Expected: OK / Actual: InternalServerError
+
+Passed  ... (what: "wolt drive invoice report", url: "/statistics/wolt-drive-invoice/pdf",
+              expectedFileName: "wolt-drive-invoice-kaia-brygge-kro-20260601-20260630.pdf")
+
+Failed!  - Failed: 3, Passed: 1, Skipped: 0, Total: 4
+
+THE CAUSE of the three, from the host's own log (the request really reached the renderer):
+  WebApi.Tests.Wire.WireEgressBlockedException: The wire host blocked outbound HTTP POST
+  https://okamnodefunctions.azurewebsites.net/api/GetReceipt?code=<REDACTED — see FINDING 2>
+  on HttpClient '(default)'. The wire tier never talks to a real provider.
+     at WebApi.Tests.Wire.WireHost.DenyOutboundHttpHandler.SendAsync(...)   WireHost.cs:593
+     at WebApi.Services.ReceiptService.GeneratePdf(ReceiptModel model)      ReceiptService.cs:143
+     at WebApi.Controllers.OrdersController.GetReceipt(String orderCode)    OrdersController.cs:168
+  Request finished HTTP/1.1 GET /orders/receipt/nzo0y5 - 500
+
+THE FOURTH CASE PASSED AT HEAD, WITH NO SEAM AND NO PRODUCTION CHANGE. The brief and the header
+lane's return both say the Wolt-drive statistics PDF renders "through an external function call the
+wire host severs by design". It does not. StatisticsService.GenerateWoltDriveInvoicePdf builds the
+bytes in process out of a StringBuilder; GetWoltDriveInvoiceReport touches only ApplicationDbContext
+(not _dinteroService, not _redisService, no HttpClient). One of the four was never blocked.

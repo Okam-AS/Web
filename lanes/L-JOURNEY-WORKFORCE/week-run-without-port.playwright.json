@@ -1,0 +1,240 @@
+{
+  "journey": "workforce-week-run",
+  "title": "A manager plans and publishes a week; the worker sees it and confirms it",
+  "status": "passed",
+  "startedAtUtc": "2026-08-04T14:29:49.423Z",
+  "finishedAtUtc": "2026-08-04T14:29:57.490Z",
+  "durationMs": 8067,
+  "capabilities": [
+    "workforce.schedule.draft",
+    "workforce.schedule.publish",
+    "workforce.flag.read-only-refusal",
+    "workforce.me.schedule",
+    "workforce.me.inbox",
+    "workforce.me.publication-acknowledge"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3974",
+  "apiBaseUrl": "http://127.0.0.1:4974",
+  "commit": "8d95445e68d5c44d8fc92bc70e17a1dedae6326f",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": {
+    "id": "fixture@8d95445e68d5c44d8fc92bc70e17a1dedae6326f+dirty",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "8d95445-dirty",
+    "detail": "the in-repo fixture backend, not an API build (branch HEAD)"
+  },
+  "backendServed": 64,
+  "backendSubjectServed": 50,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:4974/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:4974/user/login -> 200",
+    "GET http://127.0.0.1:4974/user -> 200",
+    "GET http://127.0.0.1:4974/stores/42/market -> 200",
+    "GET http://127.0.0.1:4974/user -> 200",
+    "GET http://127.0.0.1:4974/workforce/stores/42/context -> 200",
+    "GET http://127.0.0.1:4974/stores/42 -> 200",
+    "GET http://127.0.0.1:4974/stores/42/specialopeninghours -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "R1 · an anonymous visitor is refused the schedule",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:29:49.425Z",
+      "durationMs": 1882,
+      "detail": "bounced to /admin, redirect=/admin/workforce-schedule",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "sign in as the manager (99999999)",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:29:51.307Z",
+      "durationMs": 220,
+      "detail": "landed on /admin/workforce-schedule",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "R2 · creating the draft is refused while the switch is off",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:29:51.527Z",
+      "durationMs": 63,
+      "detail": "Vaktplanen er skrivebeskyttet Bryteren workforce.publication står av for denne butikken, så vaktplanen kan leses, men ikke endres …",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "turn the publication switch on, through the operator page",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:29:51.660Z",
+      "durationMs": 791,
+      "detail": "workforce.publication now reads På for this store",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "create the draft, now that it is allowed",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:29:52.451Z",
+      "durationMs": 833,
+      "detail": "Revisjon 1",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "staff a shift to Ola Ansatt by name",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:29:53.284Z",
+      "durationMs": 120,
+      "detail": "Ola Ansatt 07:00–15:00, 07:00–15:00",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "validate and publish the week",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:29:53.404Z",
+      "durationMs": 93,
+      "detail": "Publisert til 1 mottakere.",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "R3 · the worker is refused the manager's schedule page",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:29:53.559Z",
+      "durationMs": 2465,
+      "detail": "worker landed on /registrer without the authoring surface",
+      "error": null
+    },
+    {
+      "n": 9,
+      "name": "the worker sees the shift the manager just published",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:29:56.024Z",
+      "durationMs": 730,
+      "detail": "first shift card: 07:00–15:00 Uten rolle Betalt tid 8t Fra publisering 1",
+      "error": null
+    },
+    {
+      "n": 10,
+      "name": "the publication notice is on the worker's screen at all",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:29:56.754Z",
+      "durationMs": 11,
+      "detail": "1 unread publication, disclaimer shown, no receipt yet",
+      "error": null
+    },
+    {
+      "n": 11,
+      "name": "the worker confirms, and the server records it",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:29:56.781Z",
+      "durationMs": 19,
+      "detail": "POST …/acknowledgements → 200, occurredAtUtc 2026-08-04T14:29:56Z, alreadyAcknowledged=false",
+      "error": null
+    },
+    {
+      "n": 12,
+      "name": "...and the confirmation vanishes without a trace on screen",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:29:56.800Z",
+      "durationMs": 5,
+      "detail": "notice and receipt both gone; the confirmation is invisible to the worker",
+      "error": null
+    },
+    {
+      "n": 13,
+      "name": "the idempotent replay has no caller a worker can reach",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:29:56.826Z",
+      "durationMs": 651,
+      "detail": "no acknowledge button after the press, and none after a reload",
+      "error": null
+    },
+    {
+      "n": 14,
+      "name": "the shift itself is still there, so this is not a blank page",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:29:57.477Z",
+      "durationMs": 6,
+      "detail": "shift card still shown: 07:00–15:00 Uten rolle Betalt tid 8t Fra publisering 1",
+      "error": null
+    },
+    {
+      "n": 15,
+      "name": "what the week could NOT tell anybody",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:29:57.483Z",
+      "durationMs": 0,
+      "detail": "3 browser errors recorded as findings",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "defect",
+      "summary": "the worker is shown nothing after confirming a published week",
+      "detail": "pages/admin/workforce-me.vue:751 `acknowledge()` writes the #44 receipt into `ackReceipts` and then reloads the inbox. Acknowledging implies seen, so the item returns `isRead: true`, `unreadPublications()` (utils/workforce-me/inbox-filter.js:114) drops it, and the whole `WorkforcePublicationNotice` section is v-if'd away — taking the receipt line (WorkforcePublicationNotice.vue:17-19) with it. There is no toast on the success path (only on failure, :761), so the worker gets NO confirmation of an act the law-facing side of this module treats as evidence. The receipt renderer is unreachable in production: it needs an item that is unread AND acknowledged, and the acknowledging is what makes it read."
+    },
+    {
+      "severity": "gap",
+      "summary": "the already-acknowledged replay string is unreachable",
+      "detail": "`wfme_pub_receipt_already` and the `alreadyAcknowledged: true` branch of WorkforcePublicationNotice.vue:75-78 have no browser-reachable caller: the acknowledge button lives inside the notice, and the first press removes the notice. Survives a reload, so the worker cannot re-read or re-confirm what they acknowledged."
+    },
+    {
+      "severity": "gap",
+      "summary": "a manager cannot see who acknowledged a published week",
+      "detail": "The worker acknowledgement (#44) is written and receipted on the worker's own screen, but no manager-facing read of publication recipients is bound in the frontend — `utils/workforce/schedule-client.js` binds `GetPublicationHistory` and no recipient list. The publish toast's `recipientCount` is a send-time count and is not evidence of receipt. A venue that must show it rostered someone cannot produce that from this UI."
+    },
+    {
+      "severity": "defect",
+      "summary": "browser error during the week run",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-schedule\" to \"/admin?redirect=%2Fadmin%2Fworkforce-schedule&storeId=42\" with a new navigation."
+    },
+    {
+      "severity": "defect",
+      "summary": "browser error during the week run",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-schedule\" to \"/admin?redirect=%2Fadmin%2Fworkforce-schedule&storeId=42\" with a new navigation."
+    },
+    {
+      "severity": "defect",
+      "summary": "browser error during the week run",
+      "detail": "Failed to load resource: the server responded with a status of 409 (Conflict)"
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-schedule\" to \"/admin?redirect=%2Fadmin%2Fworkforce-schedule&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-schedule\" to \"/admin?redirect=%2Fadmin%2Fworkforce-schedule&storeId=42\" with a new navigation.",
+    "Failed to load resource: the server responded with a status of 409 (Conflict)"
+  ],
+  "failedRequests": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:4974/workforce/stores/42/schedules/drafts",
+      "status": 409
+    }
+  ],
+  "screenshots": [
+    "workforce-week-run/fixture/01-the-week-refused-while-the-switch-is-off.png",
+    "workforce-week-run/fixture/02-the-published-week.png",
+    "workforce-week-run/fixture/03-the-worker-sees-the-published-week-and-is-asked-.png",
+    "workforce-week-run/fixture/04-after-confirming-the-notice-is-simply-gone.png"
+  ],
+  "error": null,
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/workforce-week-run.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false,
+    "supersedes": null
+  }
+}

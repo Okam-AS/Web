@@ -1,0 +1,58 @@
+=== M1-accounting-count-reports-eligible : assertion detail ===
+  MaintenanceEmptyCollectionReportingTests.An_export_with_no_provider_registered_reports_that_it_exported_nothing
+      Assert.Equal() Failure
+      Expected: 0
+      Actual:   3
+  MaintenanceEmptyCollectionReportingTests.A_failing_store_is_eligible_but_not_exported
+      Assert.Equal() Failure
+      Expected: 1
+      Actual:   3
+  MaintenanceEmptyCollectionReportingTests.The_same_world_with_a_provider_registered_reports_the_stores_it_actually_exported
+      Assert.Equal() Failure
+      Expected: 2
+      Actual:   3
+  MaintenanceEmptyCollectionReportingTests.The_operator_route_reports_what_was_exported_next_to_what_was_due
+      Assert.Equal() Failure
+      Expected: 2
+      Actual:   3
+  MaintenanceEmptyCollectionReportingTests.A_store_whose_pos_vouchers_posted_is_not_exported_when_its_daily_export_never_ran
+      Assert.Equal() Failure
+      Expected: 0
+      Actual:   3
+  MaintenanceServiceTests.DailyMaintenance_KeepsExportingAfterOneStoreFails
+      Assert.Equal() Failure
+      Expected: 2
+      Actual:   3
+=== M2-capture-sweep-empty-is-clean : assertion detail ===
+  MaintenanceEmptyCollectionReportingTests.A_capture_sweep_with_no_sweeper_registered_is_not_a_clean_sweep
+      Assert.Contains() Failure
+      Not found: (filter expression)
+      In value:  List<String> []
+  MaintenanceEmptyCollectionReportingTests.The_operator_route_shows_the_capture_sweep_that_could_not_run
+      Assert.Contains() Failure
+      Not found: (filter expression)
+      In value:  List<String> []
+=== M3-orchestrator-empty-is-silent : assertion detail ===
+  MaintenanceEmptyCollectionReportingTests.An_export_with_no_provider_registered_reports_that_it_exported_nothing
+      Assert.Equal() Failure
+      ↓ (pos 0)
+      Expected: [1, 2, 3]
+      Actual:   []
+      ↑ (pos 0)
+=== M4-pos-half-substitutes-for-daily : assertion detail ===
+  MaintenanceEmptyCollectionReportingTests.A_failing_store_is_eligible_but_not_exported
+      Assert.Equal() Failure
+      Expected: 1
+      Actual:   2
+  MaintenanceEmptyCollectionReportingTests.The_same_world_with_a_provider_registered_reports_the_stores_it_actually_exported
+      Assert.Equal() Failure
+      Expected: 2
+      Actual:   3
+  MaintenanceEmptyCollectionReportingTests.The_operator_route_reports_what_was_exported_next_to_what_was_due
+      Assert.Equal() Failure
+      Expected: 2
+      Actual:   3
+  MaintenanceEmptyCollectionReportingTests.A_store_whose_pos_vouchers_posted_is_not_exported_when_its_daily_export_never_ran
+      Assert.Equal() Failure
+      Expected: 2
+      Actual:   3

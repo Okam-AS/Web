@@ -1,0 +1,9 @@
+MUTATION: Revet ost;g;;kg=1000|pose=1000;  ->  
+---
+[xUnit.net 00:00:03.36]     WebApi.Tests.Margin.MarginStarterLibraryTests.The_library_serves_every_row_the_curation_declares [FAIL]
+  Failed WebApi.Tests.Margin.MarginStarterLibraryTests.The_library_serves_every_row_the_curation_declares [< 1 ms]
+   The curation declares 'rows: 16' but 15 ingredient lines survived. Either the file arrived short — a paste that dropped the tail is the failure this counter exists to catch — or a line was refused and dropped (the refusal pin says which), or the counter was not updated after an edit.
+     at WebApi.Tests.Margin.MarginStarterLibraryTests.The_library_serves_every_row_the_curation_declares() in /Users/svendaneel/okam/wt-mrg150b/WebApi.Tests/Margin/MarginStarterLibraryTests.cs:line 230
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+Failed!  - Failed:     1, Passed:    14, Skipped:     0, Total:    15, Duration: 192 ms - WebApi.Tests.dll (net8.0)

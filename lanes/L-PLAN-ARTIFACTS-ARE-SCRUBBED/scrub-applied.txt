@@ -1,0 +1,68 @@
+SCRUB docs/plan/log.md  AppSettings__DemoVerificationCodex1
+SCRUB docs/plan/render/plan.html  AppSettings__DemoVerificationCodex1
+SCRUB docs/plan/returns/L-LIVE-WORLD-STAFF-1.md  AppSettings__DemoVerificationCodex1
+SCRUB docs/plan/returns/L-WF-ONBOARD-DEMO-RUN-1.md  AppSettings__PowerUserVerificationCodex1 AppSettings__DemoVerificationCodex1
+SCRUB docs/plan/returns/L-EV-RUNSHEET-PRINT-1.md  AppSettings__DemoVerificationCodex1
+SCRUB docs/plan/returns/L-LIVE-SEED-VIA-PRODUCT-1.md  AppSettings__DemoVerificationCodex1
+SCRUB docs/plan/returns/L-PRESERVE-UNREFERENCED-WORK-1.md  AppSettings__DemoVerificationCodex2
+SCRUB docs/plan/returns/L-LIVE-WORLD-RESTORE-1.md  AppSettings__DemoVerificationCodex1
+SCRUB docs/plan/returns/L-LIVE-WORLD-SEED-1.md  AppSettings__PowerUserVerificationCodex1 AppSettings__DemoVerificationCodex2
+SCRUB lanes/L-LIVE-SEED-VIA-PRODUCT/live-world-run.txt  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-LIVE-SEED-VIA-PRODUCT/workforce-flag-lever.live.playwright.json  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-LIVE-SEED-VIA-PRODUCT/events-deposit-precondition.live.playwright.json  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-LIVE-SEED-VIA-PRODUCT/workforce-schedule-publish.live.playwright.json  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-TRAIN-PUBLISH-UNCLICKABLE/probe.spec.js  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-FE-JOURNEYS-MERGE/mutation-proof.log  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-TRAIN-READONLY-VISIBLE/train-rows.probe.spec.js  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-EV-DEPOSITS-PRECONDITION/artifacts/journeys/events-deposit-precondition.playwright.json  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-LIVE-WORLD-RESTORE/01-workforce-flag-lever.live.json  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-LIVE-WORLD-RESTORE/chain-events-deposit-precondition.live.json  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-LIVE-WORLD-RESTORE/05-workforce-schedule-publish.live.json  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-LIVE-WORLD-RESTORE/chain-workforce-schedule-publish.live.json  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-LIVE-WORLD-RESTORE/chain-workforce-flag-lever.live.json  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-LIVE-WORLD-RESTORE/03-journeyB-without-reset.json  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-LIVE-WORLD-RESTORE/06-journeyA-without-reset.json  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-LIVE-WORLD-RESTORE/08-workforce-flag-lever.live.json  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-JOURNEY-EVENTS/mutant-run-artifact.json  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-LIVE-WALK-WORKFORCE/evidence.md  AppSettings__PowerUserVerificationCodex1 AppSettings__DemoVerificationCodex4
+SCRUB lanes/L-LIVE-WALK-WORKFORCE/week-run.spec.js  AppSettings__DemoVerificationCodex2
+SCRUB lanes/L-WHICH-EVIDENCE-CAME-FROM-A-BORROWED-TREE/buildish-lines.txt  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-PLAN-LIVES-IN-GIT/fresh-clone/docs/plan/log.md  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-PLAN-LIVES-IN-GIT/fresh-clone/docs/plan/returns/L-LIVE-WORLD-STAFF-1.md  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-PLAN-LIVES-IN-GIT/fresh-clone/docs/plan/returns/L-WF-ONBOARD-DEMO-RUN-1.md  AppSettings__PowerUserVerificationCodex1 AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-PLAN-LIVES-IN-GIT/fresh-clone/docs/plan/returns/L-EV-RUNSHEET-PRINT-1.md  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-PLAN-LIVES-IN-GIT/fresh-clone/docs/plan/returns/L-LIVE-SEED-VIA-PRODUCT-1.md  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-PLAN-LIVES-IN-GIT/fresh-clone/docs/plan/returns/L-PRESERVE-UNREFERENCED-WORK-1.md  AppSettings__DemoVerificationCodex2
+SCRUB lanes/L-PLAN-LIVES-IN-GIT/fresh-clone/docs/plan/returns/L-LIVE-WORLD-RESTORE-1.md  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-PLAN-LIVES-IN-GIT/fresh-clone/docs/plan/returns/L-LIVE-WORLD-SEED-1.md  AppSettings__PowerUserVerificationCodex1 AppSettings__DemoVerificationCodex2
+SCRUB lanes/L-LIVE-WORLD-STAFF/live-world-run.txt  AppSettings__DemoVerificationCodex3
+SCRUB lanes/L-LIVE-WORLD-STAFF/mutant-schedule-publish-flip-inverted.failed.playwright.json  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-LIVE-WORLD-STAFF/workforce-flag-lever.live.playwright.json  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-LIVE-WORLD-STAFF/workforce-schedule-publish.live.playwright.json  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-LIVE-WORLD-STAFF/guard-proof-events-deposit-precondition.failed.playwright.json  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-WF-TIMESHEET-UI/shared-edits/test_e2e_fixture_world.js.worktree-diff  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-LINT-RUNNABLE/shared-checkout.json  AppSettings__DemoVerificationCodex4
+SCRUB lanes/L-LINT-RUNNABLE/full-all.json  AppSettings__DemoVerificationCodex6
+SCRUB lanes/L-LINT-RUNNABLE/run-final.json  AppSettings__DemoVerificationCodex5
+SCRUB lanes/L-LINT-RUNNABLE/run-mutated-repo.json  AppSettings__DemoVerificationCodex5
+SCRUB lanes/L-PRESERVE-UNREFERENCED-WORK/preserved.md  AppSettings__DemoVerificationCodex2
+SCRUB lanes/L-WF-PIVOT-DEFECTS/workforce-schedule-publish.live-5961-3579bbb.playwright.json  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-WF-PIVOT-DEFECTS/wf-pivot-probe-roles.spec.js  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-WF-PIVOT-DEFECTS/wf-pivot-probe.spec.js  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-WF-PIVOT-DEFECTS/workforce-schedule-publish.live.playwright.json  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-LIVE-WORLD-DISCOVER/green-fixture.playwright.json  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-ADMIN-JOURNEY-WAIT-DIAGNOSES/runs/K5-staged-both-killed-changed.txt  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-ADMIN-JOURNEY-WAIT-DIAGNOSES/runs/K2-app-killed-changed.txt  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-WF-ONBOARD-DEMO-RUN/prove-caller-binds.sh  AppSettings__PowerUserVerificationCodex1 AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-WF-ONBOARD-DEMO-RUN/evidence.md  AppSettings__PowerUserVerificationCodex1 AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-WF-ONBOARD-DEMO-RUN/evidence/demo-run-2.txt  AppSettings__PowerUserVerificationCodex2 AppSettings__DemoVerificationCodex2
+SCRUB lanes/L-WF-ONBOARD-DEMO-RUN/evidence/demo-run-1.txt  AppSettings__PowerUserVerificationCodex2 AppSettings__DemoVerificationCodex2
+SCRUB lanes/L-LIVE-WORLD-SEED/live-world-run.txt  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-LIVE-WORLD-SEED/events-deposit-precondition.live.playwright.json  AppSettings__DemoVerificationCodex1
+SCRUB lanes/L-LIVE-WALK-MEALS/evidence.md  AppSettings__DemoVerificationCodex3
+FILES 62
+  AppSettings__Secret: 0
+  AppSettings__PowerUserVerificationCode: 11
+  AppSettings__DemoVerificationCode: 93
+  StoresController__XOkamApiKey: 0
+  OkamFunctionsDocumentRenderer__FunctionKey: 0

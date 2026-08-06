@@ -1,0 +1,104 @@
+{
+  "journey": "serving-fixture-probe",
+  "title": "the page loads and the spec reads the API",
+  "status": "failed",
+  "startedAtUtc": "2026-08-05T02:31:21.650Z",
+  "finishedAtUtc": "2026-08-05T02:31:21.808Z",
+  "durationMs": 158,
+  "capabilities": [
+    "harness.serving-fixture.probe"
+  ],
+  "surface": "public",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:55370",
+  "apiBaseUrl": "http://127.0.0.1:55357",
+  "commit": null,
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": null,
+  "backendServed": 2,
+  "backendSubjectServed": 1,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "backendSample": [
+    "GET http://127.0.0.1:55357/user -> 200",
+    "GET http://127.0.0.1:55357/workforce/stores/1/context -> 200"
+  ],
+  "servingFixture": {
+    "origin": "http://127.0.0.1:55357",
+    "askedPort": 55357,
+    "reportedPort": 55357,
+    "reportedPid": 91245,
+    "reportedCwd": "/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/serving-fixture-proof-W8hrL7/pristine",
+    "holderPid": 91245,
+    "holderCwd": "/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/serving-fixture-proof-W8hrL7/pristine",
+    "holderCommand": "/Users/svendaneel/.nvm/versions/node/v24.15.0/bin/node /var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/serving-fixture-proof-W8hrL7/fixture-stub.js",
+    "identitySource": "health+lsof",
+    "unresolved": null
+  },
+  "nodeCalls": [
+    {
+      "origin": "http://127.0.0.1:55364",
+      "calls": 1,
+      "via": [
+        "fetch"
+      ],
+      "role": "bypassed",
+      "sample": [
+        "http://127.0.0.1:55364/v1/meals/statements"
+      ],
+      "servedBy": {
+        "origin": "http://127.0.0.1:55364",
+        "askedPort": 55364,
+        "reportedPort": 55364,
+        "reportedPid": 91248,
+        "reportedCwd": "/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/serving-fixture-proof-W8hrL7/foreign-checkout",
+        "holderPid": 91248,
+        "holderCwd": "/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/serving-fixture-proof-W8hrL7/foreign-checkout",
+        "holderCommand": "/Users/svendaneel/.nvm/versions/node/v24.15.0/bin/node /var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/serving-fixture-proof-W8hrL7/fixture-stub.js",
+        "identitySource": "health+lsof",
+        "unresolved": null
+      }
+    }
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "open the page",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:31:21.653Z",
+      "durationMs": 63,
+      "detail": "served by fixture",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "read the month statement",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:31:21.716Z",
+      "durationMs": 3,
+      "detail": "read http://127.0.0.1:55364",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "defect",
+      "summary": "the spec called an origin this run was not granted",
+      "detail": "This run was granted http://127.0.0.1:55357, and the spec made calls from Node to an origin it was never given:\n  http://127.0.0.1:55364 — 1 call via fetch (pid 91248, cwd /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/serving-fixture-proof-W8hrL7/foreign-checkout, which reports itself on port 55364)\nThose calls did not reach the fixture this artifact names. If the other end is another lane's fixture, this journey has just read — and possibly written — a world it did not build, and the result says nothing about this checkout. A base URL that ignores `E2E_FIXTURE_PORT` is how this happens; see test/e2e/journeys/meals-statement-month.spec.js and its sibling specs for the expression that honours it."
+    }
+  ],
+  "consoleErrors": [],
+  "failedRequests": [],
+  "screenshots": [],
+  "error": "This run was granted http://127.0.0.1:55357, and the spec made calls from Node to an origin it was never given:\n  http://127.0.0.1:55364 — 1 call via fetch (pid 91248, cwd /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/serving-fixture-proof-W8hrL7/foreign-checkout, which reports itself on port 55364)\nThose calls did not reach the fixture this artifact names. If the other end is another lane's fixture, this journey has just read — and possibly written — a world it did not build, and the result says nothing about this checkout. A base URL that ignores `E2E_FIXTURE_PORT` is how this happens; see test/e2e/journeys/meals-statement-month.spec.js and its sibling specs for the expression that honours it.",
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/serving-fixture-probe.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false,
+    "supersedes": null
+  }
+}

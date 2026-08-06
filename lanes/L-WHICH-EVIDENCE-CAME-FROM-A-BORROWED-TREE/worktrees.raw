@@ -1,0 +1,496 @@
+worktree /Users/svendaneel/okam/Web
+HEAD da1d381336899715cdf1d11955ca050c0364d332
+branch refs/heads/feature/POS
+
+worktree /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/Web-modules
+HEAD 0cea96acc87e29ea7a81460619e64b9060236de7
+detached
+
+worktree /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/wt-german-ids
+HEAD bfa19920e871508b7f12845e4f4bf97abf968f9d
+detached
+
+worktree /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/wt-offer-subtotal
+HEAD 35e5cdd68314462bfc0d7b9f3f016d7c6b9dbed6
+branch refs/heads/lane/offer-partial-subtotal
+
+worktree /Users/svendaneel/okam/web-admincred
+HEAD 478ced7306d8fa7f4d1a3b0de8b20d72ef60f8e0
+branch refs/heads/lane/fe-admin-refusal-credential
+
+worktree /Users/svendaneel/okam/web-armrecapture
+HEAD 7030c00122e026f077bdb1bfecee1c916ca72d67
+detached
+
+worktree /Users/svendaneel/okam/web-arrival
+HEAD 9f7d8dfc78dceaaa9c52c72ba470a34eb904a130
+detached
+
+worktree /Users/svendaneel/okam/web-artloc
+HEAD adde9364eee47a71a9feb97c1b807896e9af40cb
+branch refs/heads/lane/artifact-names-its-locale
+
+worktree /Users/svendaneel/okam/web-atde
+HEAD e34977acebd59b223584158c33451b6f1ffd82c1
+detached
+
+worktree /Users/svendaneel/okam/web-blindbind
+HEAD c67df92a2762110a2664da954ba64940b869ff00
+branch refs/heads/lane/fe-wf-blind-bind-name
+
+worktree /Users/svendaneel/okam/web-check-discount-sum
+HEAD c8f26d5248e43a4868b58cbd000d5a3be7f2c93f
+branch refs/heads/lane/check-discount-sum-coupled
+
+worktree /Users/svendaneel/okam/web-check-lineamount
+HEAD c32cda3cbc354b94c0ad81c8c980ad233aec7960
+branch refs/heads/lane/check-lineamount-ungated-sum
+
+worktree /Users/svendaneel/okam/web-coercwrite
+HEAD 4351f8f7ebc9a95c8d3f833cc3180d5360c27a90
+branch refs/heads/lane/coercion-write-paths
+
+worktree /Users/svendaneel/okam/web-collectcond
+HEAD 808d509582199e68721fbdfc16464e371274541d
+branch refs/heads/lane/collect-review-conditions
+
+worktree /Users/svendaneel/okam/web-collected
+HEAD 6f03b1874833e188fd045010a5585721985d9908
+branch refs/heads/lane/collected-paths
+
+worktree /Users/svendaneel/okam/web-consentvocab
+HEAD 038612f8e1bbb28fdaf1912e031854edae0f739e
+branch refs/heads/lane/consent-reason-vocabulary
+
+worktree /Users/svendaneel/okam/web-dupbuild
+HEAD b4300b41375cfed1ba803cddc8a0de80f575525a
+branch refs/heads/lane/duplicate-key-in-the-build
+
+worktree /Users/svendaneel/okam/web-dupkeyguard
+HEAD cb2cee6f6a1e3c5cd02d351236864a7963f5e891
+branch refs/heads/lane/duplicate-key-guard
+
+worktree /Users/svendaneel/okam/web-evinqgate
+HEAD f7695bcbfa00805d4597338494a00ac642c4fcf8
+branch refs/heads/lane/fe-ev-inquiry-gate
+
+worktree /Users/svendaneel/okam/web-evstale
+HEAD 818c48a90956a323f4da6f19bb3979f4840816e6
+branch refs/heads/lane/ev-stale-cause
+
+worktree /Users/svendaneel/okam/web-fe-candidate
+HEAD 9f7d8dfc78dceaaa9c52c72ba470a34eb904a130
+branch refs/heads/candidate/fe-compose-2026-08-05
+
+worktree /Users/svendaneel/okam/web-fe-ci
+HEAD 36ce9ae0eee9445269d87bd6cb899a3a07eba704
+branch refs/heads/lane/fe-ci
+
+worktree /Users/svendaneel/okam/web-fe-em
+HEAD e8b58ec16602fe6f1ebca3d415668596a0d95f73
+branch refs/heads/lane/fe-events-margin-surfaces
+
+worktree /Users/svendaneel/okam/web-fe-events-guest
+HEAD 2eb122225779893c71a7c37edf46d6da45394cde
+branch refs/heads/lane/fe-events-guest
+
+worktree /Users/svendaneel/okam/web-fe-growth-guest
+HEAD d6c0b1252270584f44dbff6762668fca9406bf84
+branch refs/heads/lane/fe-growth-guest
+
+worktree /Users/svendaneel/okam/web-fe-growth-honesty
+HEAD a70cf04da2fa13e1e02b2a735d03e1eec37ee371
+branch refs/heads/lane/fe-growth-honesty
+
+worktree /Users/svendaneel/okam/web-fe-invlist
+HEAD e8d69fc3cec84173ebffc75b82938cb13fe5d955
+branch refs/heads/lane/fe-wf-invite-list-revoke
+
+worktree /Users/svendaneel/okam/web-fe-margin-statement
+HEAD c1f34c4f67775223d0c311eaf0a68793c52d9abd
+branch refs/heads/lane/fe-margin-statement
+
+worktree /Users/svendaneel/okam/web-fe-margin-supplier
+HEAD fecf96149e2a08b807b0bbea0e7fc375a04ff521
+branch refs/heads/lane/fe-margin-supplier
+
+worktree /Users/svendaneel/okam/web-fe-meals-claim
+HEAD a3f61009bcb0cd34eaf285157c3a942cb5b9cd95
+branch refs/heads/lane/fe-meals-claim
+
+worktree /Users/svendaneel/okam/web-fe-meals-write
+HEAD 8bc4155d25564b8cd05f785e9e7f17259b08485a
+branch refs/heads/lane/fe-meals-write
+
+worktree /Users/svendaneel/okam/web-fe-suppbasis
+HEAD e215db000557dd81e0909bf835d640db1190d1a6
+branch refs/heads/lane/fe-wf-supplement-basis
+
+worktree /Users/svendaneel/okam/web-fe-tm
+HEAD 20693381f8b9e9e2c2c42d4e9fb720bcc124d811
+branch refs/heads/lane/fe-training-meals-surfaces
+
+worktree /Users/svendaneel/okam/web-fe-training-fixes
+HEAD fcf5a3e4e0c640dfe095c894b1f8a319965207d9
+branch refs/heads/lane/fe-training-fixes
+
+worktree /Users/svendaneel/okam/web-fe-wf-inbox
+HEAD 4e5ad7e6c2467c9f65395ee3f6a6b1f19dea0c07
+branch refs/heads/lane/fe-wf-inbox
+
+worktree /Users/svendaneel/okam/web-fe-wf-personnel
+HEAD 3374a5816316107c57ec72cd865016ea38434b15
+branch refs/heads/lane/fe-wf-personnel
+
+worktree /Users/svendaneel/okam/web-fe-wf-self
+HEAD 5886ba3014eb84e1d544d87ad1fcf18a685b4767
+branch refs/heads/lane/fe-wf-self
+
+worktree /Users/svendaneel/okam/web-fieldsvsharness
+HEAD e34977acebd59b223584158c33451b6f1ffd82c1
+detached
+
+worktree /Users/svendaneel/okam/web-fixdiv
+HEAD 0dbec34b36e887b65925fd4deba5b79b2fa72658
+branch refs/heads/lane/fixture-divergence-receipt
+
+worktree /Users/svendaneel/okam/web-fixrendered
+HEAD 038612f8e1bbb28fdaf1912e031854edae0f739e
+branch refs/heads/lane/fixture-rendered-values
+
+worktree /Users/svendaneel/okam/web-grwithdraw
+HEAD 80493321cb947105fc1c02e69aa77fb16af132db
+branch refs/heads/lane/fe-gr-withdraw-origin
+
+worktree /Users/svendaneel/okam/web-guardland
+HEAD 7030c00122e026f077bdb1bfecee1c916ca72d67
+branch refs/heads/lane/guard-repair-lands
+
+worktree /Users/svendaneel/okam/web-jestlanes
+HEAD cbb5a98ce02bf8ab85f88d4d89ddb7e5fd4cd837
+detached
+
+worktree /Users/svendaneel/okam/web-journeys
+HEAD de0d66b9470177e5b2f6d1788edf6590ba8d3eee
+branch refs/heads/lane/fe-journeys
+
+worktree /Users/svendaneel/okam/web-jrbisect
+HEAD 2e3f39d1441428b548403822e6dd6e4539416678
+detached
+
+worktree /Users/svendaneel/okam/web-kodeui
+HEAD 19ad0015ed62c0854300ec3268fb0c8d5eca5eeb
+branch refs/heads/lane/wf-kodeoversikt-ui
+
+worktree /Users/svendaneel/okam/web-linkdeadend
+HEAD bed932e34eba0ad269bec134ce489ed96a2d3bd8
+branch refs/heads/lane/fe-wf-link-deadend
+
+worktree /Users/svendaneel/okam/web-lint2defects
+HEAD aec051a3ee9d96e49443fedc170150004625eff7
+branch refs/heads/lane/lint-two-real-defects
+
+worktree /Users/svendaneel/okam/web-lintrunnable
+HEAD 8ad3358e432505fd62ed5e98a6e2a9dd5d54d193
+branch refs/heads/lane/lint-runnable
+
+worktree /Users/svendaneel/okam/web-lintruns
+HEAD 9f7d8dfc78dceaaa9c52c72ba470a34eb904a130
+branch refs/heads/lane/lint-runs-on-something
+
+worktree /Users/svendaneel/okam/web-meals-claim-receipt
+HEAD d833d19714bf86ce1fbcae59775be8e5a7edd81d
+branch refs/heads/lane/fe-meals-claim-receipt
+
+worktree /Users/svendaneel/okam/web-mealsdocsync
+HEAD 7ac2f929b90f7ae6e2271f932ab5c9d475d50dc3
+branch refs/heads/lane/fe-meals-docsync
+
+worktree /Users/svendaneel/okam/web-mealsrecon
+HEAD e0729488ab1d46e46fa4721e1964470bfca99709
+branch refs/heads/lane/fe-meals-reconcile-ui
+
+worktree /Users/svendaneel/okam/web-menu-allergen
+HEAD f1b0d1a912e26e2a0060785e36d52d5cd3867895
+branch refs/heads/lane/menu-allergen-matrix
+
+worktree /Users/svendaneel/okam/web-mixinlabels
+HEAD 627e34ae5eced9af7d8931529a1108db97241c9e
+branch refs/heads/lane/mixin-labels-translate
+
+worktree /Users/svendaneel/okam/web-mjloc
+HEAD d320105f289c4e385a92879a0766bf4d1c3770bd
+branch refs/heads/lane/fe-meals-journey-locator
+
+worktree /Users/svendaneel/okam/web-modal-scrolllock
+HEAD 178c89510a8dba3a63275bf4f8f8a122b9eef710
+branch refs/heads/lane/modal-scrolllock
+
+worktree /Users/svendaneel/okam/web-modal-seven
+HEAD 839d377f86feda97d1ce807af7344a470099b187
+branch refs/heads/lane/modal-seven
+
+worktree /Users/svendaneel/okam/web-modal-two
+HEAD 63489442c135e40d1ce2134c9e3b6afe27a91939
+branch refs/heads/lane/modal-broken-two
+
+worktree /Users/svendaneel/okam/Web-modules
+HEAD 8ac6f63648015d8c7a230181a7f07bf303d43268
+branch refs/heads/lane/focustrap-teardown
+
+worktree /Users/svendaneel/okam/Web-modules-wt/L-COLLAPSE-THE-TWO-HOOK-SWEEPS
+HEAD cffede38b746ca0b61977edfa88ec2dc5d803d5a
+branch refs/heads/lane/collapse-the-two-hook-sweeps
+
+worktree /Users/svendaneel/okam/web-mpretick
+HEAD 9fbed8069a4c50211056586d9130adb9a1141e7b
+branch refs/heads/lane/fe-meals-pretick-walked
+
+worktree /Users/svendaneel/okam/web-mrgcovunknown
+HEAD 455702764ae4ae0a09c5d22725253def1eda4fe3
+branch refs/heads/lane/mrg-coverage-unknown
+
+worktree /Users/svendaneel/okam/web-mrgpagevac
+HEAD 8ac314cd8508e58818eeb713473d3bce0f32f81e
+branch refs/heads/lane/mrg-page-test-vacuous
+
+worktree /Users/svendaneel/okam/web-mrgwastefe
+HEAD 804fe2385bc8e6a6005ec4d4c47999f341666d21
+branch refs/heads/lane/mrg-waste-frontend
+
+worktree /Users/svendaneel/okam/web-noonly
+HEAD a8177f848a47ffa887918703673a1a5e1e9f2c89
+branch refs/heads/lane/norwegian-only-keys-translate
+
+worktree /Users/svendaneel/okam/web-paylabel
+HEAD 4465d02194b03358103694452c37fe7ffe6ea846
+branch refs/heads/lane/payment-label-ukjent
+
+worktree /Users/svendaneel/okam/web-playwright
+HEAD d6c4f4f78a4897c9f90ef8137ecb888277b6211e
+branch refs/heads/lane/fe-playwright
+
+worktree /Users/svendaneel/okam/web-pos-clock
+HEAD 7c3a1e1f2d3e2b5bdcb452f4d662f5add23b2923
+branch refs/heads/lane/fe-pos-clock
+
+worktree /Users/svendaneel/okam/web-preflight
+HEAD eb9d52e2c2297e59c5e9446db03fdff0383b7879
+detached
+
+worktree /Users/svendaneel/okam/web-preflight-missing
+HEAD eb9d52e2c2297e59c5e9446db03fdff0383b7879
+detached
+
+worktree /Users/svendaneel/okam/web-print-host
+HEAD 6e6acd06e1f87ffd6b162950c7634cc27fae0936
+branch refs/heads/lane/print-host
+
+worktree /Users/svendaneel/okam/web-provexcl
+HEAD 607f1385adeb430668d15e3259cc84bfc0d8fc5e
+branch refs/heads/lane/provenance-excludes-lane-evidence
+
+worktree /Users/svendaneel/okam/web-rcptde
+HEAD e34977acebd59b223584158c33451b6f1ffd82c1
+detached
+
+worktree /Users/svendaneel/okam/web-receipt-discount-row
+HEAD 7a72c02c0adef69c9a69218bf86a756fb32b53d2
+branch refs/heads/lane/receipt-discount-row-dropped
+
+worktree /Users/svendaneel/okam/web-statute
+HEAD f01886a0864bf852000ea01e494ce5a9ad00c7eb
+branch refs/heads/lane/statute-honesty
+
+worktree /Users/svendaneel/okam/web-statute-world
+HEAD 2ee3fd76f4d158c023ba105f1c935dddf1f830e3
+branch refs/heads/lane/statute-evidence-world
+
+worktree /Users/svendaneel/okam/web-suppkey
+HEAD 775d45e2feda8d83a4743f765b5ff4a3b74c4810
+branch refs/heads/lane/fe-growth-suppressed-key
+
+worktree /Users/svendaneel/okam/web-suppressed
+HEAD 3d2045115241b5854d7f240980b89aded80f2323
+branch refs/heads/lane/fixture-suppressed-refusal
+
+worktree /Users/svendaneel/okam/web-tierartifacts
+HEAD 2a7bf12143317e9ab25cf4a04d7f00aa672ea6fb
+branch refs/heads/lane/tier-artifacts
+
+worktree /Users/svendaneel/okam/web-unwitnessed
+HEAD e34977acebd59b223584158c33451b6f1ffd82c1
+detached
+
+worktree /Users/svendaneel/okam/web-vatkeys
+HEAD 686e3c5f7babe27c90b7d47b172271f7758b8f2f
+branch refs/heads/lane/vat-keys-monolingual
+
+worktree /Users/svendaneel/okam/web-vocabsweep
+HEAD 038612f8e1bbb28fdaf1912e031854edae0f739e
+detached
+
+worktree /Users/svendaneel/okam/web-vue3shape
+HEAD cffede38b746ca0b61977edfa88ec2dc5d803d5a
+branch refs/heads/lane/vue3-shape-guard
+
+worktree /Users/svendaneel/okam/web-wastereceipts
+HEAD 87702ef04799364f5b6d12d8b949bb97e52e5a89
+branch refs/heads/lane/mrg-waste-receipts
+
+worktree /Users/svendaneel/okam/web-wastereceipts-at7b99f2a
+HEAD 7b99f2a0b94b115d990a8503e5aeaea0128998c5
+detached
+
+worktree /Users/svendaneel/okam/web-wastereceipts-parent
+HEAD a234509c1b7924f741c013a37b900a3d753ca773
+detached
+
+worktree /Users/svendaneel/okam/web-wf-adjust
+HEAD e9ba89e225c7d764c94bac8037eaac26e00496a4
+branch refs/heads/lane/wf-adjust-address
+
+worktree /Users/svendaneel/okam/web-wf-contact
+HEAD 3583b9f1b1c66f8c7d48313c14b490df57de2d28
+branch refs/heads/lane/fe-wf-contact-imported
+
+worktree /Users/svendaneel/okam/web-wf-idreg
+HEAD a649e080fe3444894476bcde8297e7f84ce54b0d
+branch refs/heads/lane/wf-idreg
+
+worktree /Users/svendaneel/okam/web-wf-onboard
+HEAD 9ec1100dbc1451b743b92ff4ee4582845ad6aae3
+branch refs/heads/lane/fe-wf-onboard
+
+worktree /Users/svendaneel/okam/web-wf-oplink
+HEAD 3e811b222dfd42a018f1f3b792a577a930024a93
+branch refs/heads/lane/fe-wf-oplink
+
+worktree /Users/svendaneel/okam/web-wfack
+HEAD 8539b3fda7356a433551d1d11de6873d702a2680
+branch refs/heads/lane/wf-acknowledge-receipt-visible
+
+worktree /Users/svendaneel/okam/web-wfboot
+HEAD 9264904d1082b6538b3b9ec56b64b4ed4b0f0aa1
+branch refs/heads/lane/fe-wf-bootstrap
+
+worktree /Users/svendaneel/okam/web-wfcorrect
+HEAD b4dd5282ac088ea5918bd7852c98b770171638e7
+branch refs/heads/lane/fe-wf-correction-path
+
+worktree /Users/svendaneel/okam/web-whoanswered
+HEAD e34977acebd59b223584158c33451b6f1ffd82c1
+detached
+
+worktree /Users/svendaneel/okam/web-wtbasename
+HEAD 0cea96acc87e29ea7a81460619e64b9060236de7
+branch refs/heads/lane/worktree-basename-pin
+
+worktree /Users/svendaneel/okam/web-wtbasename-tax
+HEAD 0cea96acc87e29ea7a81460619e64b9060236de7
+detached
+
+worktree /Users/svendaneel/okam/web-xz-residual
+HEAD 799f05d4f6f4f7ebd1539433d91061c9584548c6
+detached
+
+worktree /Users/svendaneel/okam/wt-author
+HEAD 7c91177da8e5806b1c9476e5b9e9edca041601fc
+detached
+
+worktree /Users/svendaneel/okam/wt-events
+HEAD 6790589e3b347396ab9aebd72ca95dee38b585dc
+branch refs/heads/lane/events-admin
+
+worktree /Users/svendaneel/okam/wt-evtb
+HEAD b7a9f389bd8fe3c4867b19de03e71e7c1d3a1c6d
+branch refs/heads/lane/ev-journey-timebomb
+
+worktree /Users/svendaneel/okam/wt-fe-exitmail
+HEAD 814f04d6083e859e2f585fcbb1931b4f9dc46e01
+branch refs/heads/lane/fe-gr-exit-wire-the-mail
+
+worktree /Users/svendaneel/okam/wt-fe4
+HEAD 0a78ff506c75cb8791c33fcfb250d2aa7f0ac44d
+detached
+
+worktree /Users/svendaneel/okam/wt-fe5
+HEAD 44de7f449be7aecc5a390ffb887f1ff39c69e7d5
+detached
+
+worktree /Users/svendaneel/okam/wt-feclient
+HEAD 6b11a649ae25852a8e26cd8fa78cbc570c32f5df
+branch refs/heads/lane/events-margin-client
+
+worktree /Users/svendaneel/okam/wt-growth
+HEAD f866024ae56e03cf2daaa6afb026bf0c139ffe7b
+branch refs/heads/lane/growth-admin
+
+worktree /Users/svendaneel/okam/wt-jteardown
+HEAD b8ba80302daabc6ee591aa767f71176706656398
+branch refs/heads/lane/journey-teardown
+
+worktree /Users/svendaneel/okam/wt-jwf
+HEAD eb8f41217d8286d50443ae20994b3d3462c52614
+detached
+
+worktree /Users/svendaneel/okam/wt-margin
+HEAD c3974fdbbcccd86dd16795a401986e434c7c5129
+branch refs/heads/lane/margin-recipes
+
+worktree /Users/svendaneel/okam/wt-marginui
+HEAD 36600c1fec7af700c395e307d88fc13c9231767f
+branch refs/heads/lane/margin-menu-margin-ui
+
+worktree /Users/svendaneel/okam/wt-marketui
+HEAD 3efa5d9efe6e1f4d43960c842d815b979dd9e48d
+branch refs/heads/lane/store-market-ui
+
+worktree /Users/svendaneel/okam/wt-meals
+HEAD 7890f691856ce73c69ddcd458a9357c7c1e982de
+branch refs/heads/lane/meals-admin
+
+worktree /Users/svendaneel/okam/wt-meals-enrol-pretick
+HEAD 2e3f39d1441428b548403822e6dd6e4539416678
+branch refs/heads/lane/meals-enrol-pretick
+
+worktree /Users/svendaneel/okam/wt-meals-enrol-ui
+HEAD 802041a86aeddb5db68cba1a791add811246fabc
+branch refs/heads/lane/meals-enrol-ui
+
+worktree /Users/svendaneel/okam/wt-meals-reachable-web
+HEAD f65595d61e54bf375eb75cffcf08d4fd672a378e
+branch refs/heads/lane/meals-reachable-web
+
+worktree /Users/svendaneel/okam/wt-merge
+HEAD e7e81c1b4d03e1968eb18de3f047fca901bc1721
+detached
+
+worktree /Users/svendaneel/okam/wt-mrglagvis
+HEAD b2aa72e81cf86915d020cb475414945801cf9b03
+branch refs/heads/lane/mrg-lag-visible
+
+worktree /Users/svendaneel/okam/wt-nav
+HEAD 11808919948ad8029c89007006cfafdc9250e21d
+branch refs/heads/lane/admin-nav-links
+
+worktree /Users/svendaneel/okam/wt-prefcentre-fe
+HEAD 7a8b0d3a0f5e853e5d0db1513400b92446dd2756
+branch refs/heads/lane/fe-growth-prefcentre
+
+worktree /Users/svendaneel/okam/wt-rateui
+HEAD 17b5cc3dc41a0e4ef158504595643586872ba0e5
+detached
+
+worktree /Users/svendaneel/okam/wt-roster
+HEAD 319ec2534dba7ef87fb29f340e0aacb5e3f6953f
+branch refs/heads/lane/workforce-roster
+
+worktree /Users/svendaneel/okam/wt-training
+HEAD 4727090d0b74d394f18beba845e78603fc4c5368
+branch refs/heads/lane/training-admin
+
+worktree /Users/svendaneel/okam/wt-wfinvite
+HEAD e34977acebd59b223584158c33451b6f1ffd82c1
+branch refs/heads/lane/wf-invite-surface
+

@@ -1,0 +1,439 @@
+# MUTATION PROOF — same suite, en.ts and de.ts reverted to e34977ac
+# the suite must go RED, or it is not measuring the degradation it claims to fix
+FAIL test/vat-goods-group-locales.test.js
+  the nineteen VAT keys are authored in en and de rather than inherited from no
+    ✕ every key is an own entry of en.ts and de.ts (2 ms)
+    ✕ every key resolves to something other than the Norwegian sentence, bar the two identical by design
+    ✕ the two identical-by-design keys are present, not inherited (1 ms)
+    ✕ the repricing warning still says FUTURE sales in every locale
+    ✕ the VAT note keeps all three interpolation tokens in every locale
+  the posset_ and products_ blocks carry the same key set in all three dictionaries
+    ✓ posset_is the size these surfaces need (1 ms)
+    ✕ posset_no, en and de carry exactly the same keys (1 ms)
+    ✕ posset_every value is a non-empty string in every locale (2 ms)
+    ✓ products_is the size these surfaces need
+    ✕ products_no, en and de carry exactly the same keys (1 ms)
+    ✕ products_every value is a non-empty string in every locale (7 ms)
+  GoodsGroupsTab renders the VAT profile block in the operator’s language
+    ✓ Norwegian is unchanged (10 ms)
+    ✕ English reads English, and no Norwegian sentence survives on the surface (5 ms)
+    ✕ German reads German, and no Norwegian sentence survives on the surface (2 ms)
+    ✕ the incomplete-profile refusal reads in the operator’s language (9 ms)
+    ✕ the seeded confirmation is emitted in the operator’s language (10 ms)
+  the product editor’s goods-group block renders in the operator’s language
+    ✓ no (8 ms)
+    ✕ en (1 ms)
+    ✕ de
+    ✕ neither foreign locale renders the Norwegian note (1 ms)
+
+  ● the nineteen VAT keys are authored in en and de rather than inherited from no › every key is an own entry of en.ts and de.ts
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 21
+
+      Object {
+        "locale": "en",
+    -   "missing": Array [],
+    +   "missing": Array [
+    +     "posset_goods_seed",
+    +     "posset_goods_seeded",
+    +     "posset_col_profile",
+    +     "posset_goods_profile",
+    +     "posset_goods_profile_hint",
+    +     "posset_goods_preset_food",
+    +     "posset_goods_preset_standard",
+    +     "posset_goods_preset_free",
+    +     "posset_goods_takeaway",
+    +     "posset_goods_eatin",
+    +     "posset_goods_delivery",
+    +     "posset_goods_rate_none",
+    +     "posset_goods_profile_incomplete",
+    +     "posset_goods_profile_reprice",
+    +     "products_goodsGroup",
+    +     "products_goodsGroup_none",
+    +     "products_goodsGroupVatNote",
+    +     "products_vatAdvancedShow",
+    +     "products_vatAdvancedHide",
+    +   ],
+      }
+
+      127 |     for (const locale of ['en', 'de']) {
+      128 |       const missing = VAT_KEYS.filter(k => !Object.prototype.hasOwnProperty.call(translations[locale], k))
+    > 129 |       expect({ locale, missing }).toEqual({ locale, missing: [] })
+          |                                   ^
+      130 |     }
+      131 |   })
+      132 |
+
+      at Object.<anonymous> (test/vat-goods-group-locales.test.js:129:35)
+
+  ● the nineteen VAT keys are authored in en and de rather than inherited from no › every key resolves to something other than the Norwegian sentence, bar the two identical by design
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 19
+
+      Object {
+    -   "fellBack": Array [],
+    +   "fellBack": Array [
+    +     "posset_goods_seed",
+    +     "posset_goods_seeded",
+    +     "posset_col_profile",
+    +     "posset_goods_profile",
+    +     "posset_goods_profile_hint",
+    +     "posset_goods_preset_food",
+    +     "posset_goods_preset_free",
+    +     "posset_goods_takeaway",
+    +     "posset_goods_eatin",
+    +     "posset_goods_delivery",
+    +     "posset_goods_profile_incomplete",
+    +     "posset_goods_profile_reprice",
+    +     "products_goodsGroup",
+    +     "products_goodsGroup_none",
+    +     "products_goodsGroupVatNote",
+    +     "products_vatAdvancedShow",
+    +     "products_vatAdvancedHide",
+    +   ],
+        "locale": "en",
+      }
+
+      136 |         .filter(k => IDENTICAL_BY_DESIGN.indexOf(k) === -1)
+      137 |         .filter(k => translate(locale, k) === translations.no[k])
+    > 138 |       expect({ locale, fellBack }).toEqual({ locale, fellBack: [] })
+          |                                    ^
+      139 |     }
+      140 |   })
+      141 |
+
+      at Object.<anonymous> (test/vat-goods-group-locales.test.js:138:36)
+
+  ● the nineteen VAT keys are authored in en and de rather than inherited from no › the two identical-by-design keys are present, not inherited
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      143 |     for (const locale of ['en', 'de']) {
+      144 |       for (const k of IDENTICAL_BY_DESIGN) {
+    > 145 |         expect(Object.prototype.hasOwnProperty.call(translations[locale], k)).toBe(true)
+          |                                                                               ^
+      146 |         expect(translations[locale][k]).toBe(translations.no[k])
+      147 |       }
+      148 |     }
+
+      at Object.<anonymous> (test/vat-goods-group-locales.test.js:145:79)
+
+  ● the nineteen VAT keys are authored in en and de rather than inherited from no › the repricing warning still says FUTURE sales in every locale
+
+    expect(received).toContain(expected) // indexOf
+
+    Matcher error: received value must not be null nor undefined
+
+    Received has value: undefined
+
+      151 |   it('the repricing warning still says FUTURE sales in every locale', () => {
+      152 |     expect(translations.no.posset_goods_profile_reprice).toContain('fremtidige')
+    > 153 |     expect(translations.en.posset_goods_profile_reprice).toContain('future')
+          |                                                          ^
+      154 |     expect(translations.de.posset_goods_profile_reprice).toContain('künftiger')
+      155 |   })
+      156 |
+
+      at Object.<anonymous> (test/vat-goods-group-locales.test.js:153:58)
+
+  ● the nineteen VAT keys are authored in en and de rather than inherited from no › the VAT note keeps all three interpolation tokens in every locale
+
+    TypeError: Cannot read properties of undefined (reading 'indexOf')
+
+      159 |       const raw = translations[locale].products_goodsGroupVatNote
+      160 |       for (const token of ['{takeaway}', '{eatin}', '{delivery}']) {
+    > 161 |         expect({ locale, token, present: raw.indexOf(token) !== -1 }).toEqual({ locale, token, present: true })
+          |                                              ^
+      162 |       }
+      163 |     }
+      164 |   })
+
+      at Object.<anonymous> (test/vat-goods-group-locales.test.js:161:46)
+
+  ● the posset_ and products_ blocks carry the same key set in all three dictionaries › posset_no, en and de carry exactly the same keys
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 14
+    + Received  +  0
+
+    @@ -7,11 +7,10 @@
+        "posset_alg_seed",
+        "posset_alg_seeded",
+        "posset_col_active",
+        "posset_col_code",
+        "posset_col_name",
+    -   "posset_col_profile",
+        "posset_col_sort",
+        "posset_cp_dt_payout",
+        "posset_cp_dt_profile",
+        "posset_cp_dt_store",
+        "posset_cp_dt_terminal",
+    @@ -31,26 +30,13 @@
+        "posset_cp_sb_no_terminals_hint",
+        "posset_cp_sb_terminal",
+        "posset_cp_sb_terminal_ph",
+        "posset_cp_sb_unknown_terminal",
+        "posset_goods_code_ph",
+    -   "posset_goods_delivery",
+    -   "posset_goods_eatin",
+        "posset_goods_edit",
+        "posset_goods_hint",
+        "posset_goods_new",
+    -   "posset_goods_preset_food",
+    -   "posset_goods_preset_free",
+    -   "posset_goods_preset_standard",
+    -   "posset_goods_profile",
+    -   "posset_goods_profile_hint",
+    -   "posset_goods_profile_incomplete",
+    -   "posset_goods_profile_reprice",
+    -   "posset_goods_rate_none",
+    -   "posset_goods_seed",
+    -   "posset_goods_seeded",
+    -   "posset_goods_takeaway",
+        "posset_intro",
+        "posset_none",
+        "posset_op_col_locked",
+        "posset_op_col_pin",
+        "posset_op_edit",
+
+      178 |
+      179 |     it(prefix + 'no, en and de carry exactly the same keys', () => {
+    > 180 |       expect(keysIn('en', prefix)).toEqual(keysIn('no', prefix))
+          |                                    ^
+      181 |       expect(keysIn('de', prefix)).toEqual(keysIn('no', prefix))
+      182 |     })
+      183 |
+
+      at Object.<anonymous> (test/vat-goods-group-locales.test.js:180:36)
+
+  ● the posset_ and products_ blocks carry the same key set in all three dictionaries › posset_every value is a non-empty string in every locale
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "string"
+    Received: "undefined"
+
+      185 |       for (const key of keysIn('no', prefix)) {
+      186 |         for (const locale of ['no', 'en', 'de']) {
+    > 187 |           expect(typeof translations[locale][key]).toBe('string')
+          |                                                    ^
+      188 |           expect(translations[locale][key].length).toBeGreaterThan(0)
+      189 |         }
+      190 |       }
+
+      at Object.<anonymous> (test/vat-goods-group-locales.test.js:187:52)
+
+  ● the posset_ and products_ blocks carry the same key set in all three dictionaries › products_no, en and de carry exactly the same keys
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 5
+    + Received  + 0
+
+    @@ -55,13 +55,10 @@
+        "products_filterNoImage",
+        "products_filterPlaceholder",
+        "products_filterSoldOut",
+        "products_filterVariants",
+        "products_filterVisible",
+    -   "products_goodsGroup",
+    -   "products_goodsGroupVatNote",
+    -   "products_goodsGroup_none",
+        "products_hideForDeliveryType",
+        "products_hideForHomeDelivery",
+        "products_hideForSelfPickup",
+        "products_hideForTableDelivery",
+        "products_hideHelper",
+    @@ -108,11 +105,9 @@
+        "products_toastSaveVariantsFailed",
+        "products_toastVariantsSaved",
+        "products_variantsHelper",
+        "products_variantsLabel",
+        "products_vat",
+    -   "products_vatAdvancedHide",
+    -   "products_vatAdvancedShow",
+        "products_vatHelperDelivery",
+        "products_vatHelperDineIn",
+        "products_vatHelperTakeaway",
+      ]
+
+      178 |
+      179 |     it(prefix + 'no, en and de carry exactly the same keys', () => {
+    > 180 |       expect(keysIn('en', prefix)).toEqual(keysIn('no', prefix))
+          |                                    ^
+      181 |       expect(keysIn('de', prefix)).toEqual(keysIn('no', prefix))
+      182 |     })
+      183 |
+
+      at Object.<anonymous> (test/vat-goods-group-locales.test.js:180:36)
+
+  ● the posset_ and products_ blocks carry the same key set in all three dictionaries › products_every value is a non-empty string in every locale
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "string"
+    Received: "undefined"
+
+      185 |       for (const key of keysIn('no', prefix)) {
+      186 |         for (const locale of ['no', 'en', 'de']) {
+    > 187 |           expect(typeof translations[locale][key]).toBe('string')
+          |                                                    ^
+      188 |           expect(translations[locale][key].length).toBeGreaterThan(0)
+      189 |         }
+      190 |       }
+
+      at Object.<anonymous> (test/vat-goods-group-locales.test.js:187:52)
+
+  ● GoodsGroupsTab renders the VAT profile block in the operator’s language › English reads English, and no Norwegian sentence survives on the surface
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected substring: "VAT profile (optional)"
+    Received string:    "Goods groups Opprett standardgrupper + New goods group Goods groups are used for SAF-T grouping. Open-price lines require a goods group. NameCodeMVA-profilSort orderActive  Mat FOOD 15 / 25 / 15 1 ✓ Edit Edit goods group Name Code Sort order  Active MVA-profil (valgfri) Sett alle tre satsene for at gruppen skal styre MVA på produktene sine (sats følger av gruppe × kontekst). La stå tomme for en ren SAF-T-gruppe. Mat og drikke · 15/25/15 Standard · 25/25/25 Avgiftsfri · 0/0/0 Ta med
+              — 0 %12 %15 %25 % Spis her
+              — 0 %12 %15 %25 % Levering
+              — 0 %12 %15 %25 % ⚠ Endring av satsene re-priser fremtidige salg for alle produkter i denne gruppen. Cancel Save"
+
+      207 |   it('English reads English, and no Norwegian sentence survives on the surface', async () => {
+      208 |     const text = (await mountGoodsGroupsTab('en')).text()
+    > 209 |     expect(text).toContain('VAT profile (optional)')
+          |                  ^
+      210 |     expect(text).toContain('Set all three rates so the group governs VAT on its products')
+      211 |     expect(text).toContain('Food and drink · 15/25/15')
+      212 |     expect(text).toContain('Standard · 25/25/25')
+
+      at Object.<anonymous> (test/vat-goods-group-locales.test.js:209:18)
+
+  ● GoodsGroupsTab renders the VAT profile block in the operator’s language › German reads German, and no Norwegian sentence survives on the surface
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected substring: "MwSt.-Profil (optional)"
+    Received string:    "Warengruppen Opprett standardgrupper + Neue Warengruppe Warengruppen werden für die SAF-T-Gruppierung verwendet. Zeilen mit offenem Preis erfordern eine Warengruppe. NameCodeMVA-profilSortierungAktiv  Mat FOOD 15 / 25 / 15 1 ✓ Bearbeiten Warengruppe bearbeiten Name Code Sortierung  Aktiv MVA-profil (valgfri) Sett alle tre satsene for at gruppen skal styre MVA på produktene sine (sats følger av gruppe × kontekst). La stå tomme for en ren SAF-T-gruppe. Mat og drikke · 15/25/15 Standard · 25/25/25 Avgiftsfri · 0/0/0 Ta med
+              — 0 %12 %15 %25 % Spis her
+              — 0 %12 %15 %25 % Levering
+              — 0 %12 %15 %25 % ⚠ Endring av satsene re-priser fremtidige salg for alle produkter i denne gruppen. Abbrechen Speichern"
+
+      224 |   it('German reads German, and no Norwegian sentence survives on the surface', async () => {
+      225 |     const text = (await mountGoodsGroupsTab('de')).text()
+    > 226 |     expect(text).toContain('MwSt.-Profil (optional)')
+          |                  ^
+      227 |     expect(text).toContain('Setze alle drei Sätze, damit die Gruppe die MwSt. ihrer Produkte steuert')
+      228 |     expect(text).toContain('Speisen und Getränke · 15/25/15')
+      229 |     expect(text).toContain('Standard · 25/25/25')
+
+      at Object.<anonymous> (test/vat-goods-group-locales.test.js:226:18)
+
+  ● GoodsGroupsTab renders the VAT profile block in the operator’s language › the incomplete-profile refusal reads in the operator’s language
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "The VAT profile must be either completely empty or carry all three rates."
+    Received: "MVA-profilen må enten være helt tom eller ha alle tre satsene."
+
+      250 |       w.vm.form.deliveryVatPercent = null
+      251 |       await w.vm.$nextTick()
+    > 252 |       expect(w.find('.gg-profile__warn').text()).toBe(cases[locale])
+          |                                                  ^
+      253 |     }
+      254 |   })
+      255 |
+
+      at Object.<anonymous> (test/vat-goods-group-locales.test.js:252:50)
+
+  ● GoodsGroupsTab renders the VAT profile block in the operator’s language › the seeded confirmation is emitted in the operator’s language
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Default groups created."
+    Received: "Standardgrupper opprettet."
+
+      260 |       await w.vm.seedStandard()
+      261 |       await settled()
+    > 262 |       expect(w.emitted().notify[0][0]).toBe(cases[locale])
+          |                                        ^
+      263 |     }
+      264 |   })
+      265 | })
+
+      at Object.<anonymous> (test/vat-goods-group-locales.test.js:262:40)
+
+  ● the product editor’s goods-group block renders in the operator’s language › en
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected substring: "Goods group"
+    Received string:    "Varegruppe Ingen varegruppe·
+                      Mat··················
+                    MVA styres av varegruppen: 15 % ta med · 25 % spis her · 15 % levering.
+                    Vis råfelter"
+
+      295 |       await w.vm.$nextTick()
+      296 |       const text = w.text()
+    > 297 |       expect(text).toContain(expected[locale].label)
+          |                    ^
+      298 |       expect(text).toContain(expected[locale].none)
+      299 |       // The rates come from the group object, so this asserts the sentence AND that the three
+      300 |       // placeholders survived translation.
+
+      at Object.<anonymous> (test/vat-goods-group-locales.test.js:297:20)
+
+  ● the product editor’s goods-group block renders in the operator’s language › de
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected substring: "Warengruppe"
+    Received string:    "Varegruppe Ingen varegruppe·
+                      Mat··················
+                    MVA styres av varegruppen: 15 % ta med · 25 % spis her · 15 % levering.
+                    Vis råfelter"
+
+      295 |       await w.vm.$nextTick()
+      296 |       const text = w.text()
+    > 297 |       expect(text).toContain(expected[locale].label)
+          |                    ^
+      298 |       expect(text).toContain(expected[locale].none)
+      299 |       // The rates come from the group object, so this asserts the sentence AND that the three
+      300 |       // placeholders survived translation.
+
+      at Object.<anonymous> (test/vat-goods-group-locales.test.js:297:20)
+
+  ● the product editor’s goods-group block renders in the operator’s language › neither foreign locale renders the Norwegian note
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "leaked": false,
+    +   "leaked": true,
+        "locale": "en",
+        "norwegian": "MVA styres av varegruppen",
+      }
+
+      314 |       const text = w.text()
+      315 |       for (const norwegian of ['MVA styres av varegruppen', 'råfelter', 'Ingen varegruppe']) {
+    > 316 |         expect({ locale, norwegian, leaked: text.indexOf(norwegian) !== -1 }).toEqual({ locale, norwegian, leaked: false })
+          |                                                                               ^
+      317 |       }
+      318 |     }
+      319 |   })
+
+      at Object.<anonymous> (test/vat-goods-group-locales.test.js:316:79)
+
+Test Suites: 1 failed, 1 total
+Tests:       16 failed, 4 passed, 20 total
+Snapshots:   0 total
+Time:        0.487 s, estimated 1 s
+Ran all test suites matching /test\/vat-goods-group-locales.test.js/i.

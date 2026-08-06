@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils'
+import { mount, shallowMount } from '@vue/test-utils'
 // eslint-disable-next-line import/first -- the mocks must be registered before the page is imported,
 // and `jest.mock` is hoisted above imports while the page import is not.
 import MarginStatementsPage from '~/pages/admin/margin-statements.vue'
@@ -164,25 +164,50 @@ jest.mock('~/utils/margin/statement-client', () => {
 
 const settled = () => new Promise(resolve => setTimeout(resolve, 0))
 
+function pageMocks (user, i18n) {
+  return {
+    $i: i18n || ((key, params) => (params ? key + ':' + JSON.stringify(params) : key)),
+    priceLabel: minor => 'kr ' + minor,
+    wholeAmount: minor => String(Math.trunc(minor / 100)),
+    fractionAmount: minor => String(Math.abs(minor) % 100).padStart(2, '0'),
+    marketConfig: { currency: 'NOK' },
+    $store: {
+      getters: { userIsLoggedIn: true },
+      state: {
+        selectedAdminStore: 42,
+        adminLocale: 'no',
+        currentUser: Object.assign({ id: 1, adminIn: [{ id: 42 }] }, user || {})
+      }
+    },
+    _coreInitializer: { bearerToken: 'tok' }
+  }
+}
+
 function mountPage (user) {
   return shallowMount(MarginStatementsPage, {
-    mocks: {
-      $i: (key, params) => (params ? key + ':' + JSON.stringify(params) : key),
-      priceLabel: minor => 'kr ' + minor,
-      wholeAmount: minor => String(Math.trunc(minor / 100)),
-      fractionAmount: minor => String(Math.abs(minor) % 100).padStart(2, '0'),
-      marketConfig: { currency: 'NOK' },
-      $store: {
-        getters: { userIsLoggedIn: true },
-        state: {
-          selectedAdminStore: 42,
-          adminLocale: 'no',
-          currentUser: Object.assign({ id: 1, adminIn: [{ id: 42 }] }, user || {})
-        }
-      },
-      _coreInitializer: { bearerToken: 'tok' }
-    },
+    mocks: pageMocks(user),
     stubs: { AdminPage: { template: '<div><slot /></div>' } }
+  })
+}
+
+/**
+ * The same page with ONE real child: `MarginCoveragePanel`.
+ *
+ * `shallowMount` stubs every panel, so an assertion made against it is an assertion about a stub's
+ * props — the shape a sibling lane found asserting nothing at all. This mounts the coverage panel for
+ * real so the claim under test is the SENTENCE A VENUE READS, produced by the page's own wire read
+ * going through `readCoverage`, and stubs the other three panels so this block can fail for one
+ * reason only.
+ */
+function mountPageWithCoverage (user, i18n) {
+  return mount(MarginStatementsPage, {
+    mocks: pageMocks(user, i18n),
+    stubs: {
+      AdminPage: { template: '<div><slot /></div>' },
+      MarginStatementFiguresPanel: true,
+      MarginSpendPanel: true,
+      MarginWastePanel: true
+    }
   })
 }
 
@@ -571,6 +596,146 @@ describe('failures', () => {
   test('the refusal frame keeps the {detail} slot in every language', () => {
     for (const locale of ['no', 'en', 'de']) {
       expect(translations[locale].mrgs_err_refused).toContain('{detail}')
+    }
+  })
+})
+
+// THREE STATES, NOT TWO — driven through the page, in the words a venue actually reads.
+//
+// The coverage response carries a reason-coded waste block. When it does not carry one, the panel
+// used to print "Ingenting er registrert som svinn i dette vinduet." — a statement of fact about a
+// kitchen nobody had measured. "There is no waste block" and "the waste was recorded as none" are
+// different claims and only the second one is a measurement.
+//
+// Three worlds and not two on purpose: the middle one (a block that IS present and IS zero) is what
+// proves the fix is a new distinction rather than a relabelling. Without it a panel that answered
+// "unknown" to everything would pass this block.
+describe('an absent waste block reads as unknown, a zeroed one reads as zero', () => {
+  beforeEach(reset)
+
+  // The REAL Norwegian dictionary rather than the key-echoing mock the rest of this file uses: two
+  // states that echo two different KEYS can still be one sentence once the dictionary resolves them,
+  // and the sentence is the thing that misleads a venue. It also fails loudly on a key this build
+  // does not define, which is the other half of shipping a new string.
+  const norwegian = (key, params) => {
+    const template = translations.no[key]
+    if (typeof template !== 'string' || template === '') { throw new Error('no `no` translation for ' + key) }
+    return params
+      ? template.replace(/\{(\w+)\}/g, (_, name) => String(params[name]))
+      : template
+  }
+
+  // The proven journey's own coverage figures (MJ-E2E-09), with the waste block as the ONLY variable.
+  function coverageResponse (waste) {
+    const response = {
+      fromDate: MONDAY + 'T00:00:00Z',
+      toDate: '2026-07-12T00:00:00Z',
+      coveragePercent: 160.98,
+      netFoodSalesMinor: 16400,
+      coveredNetSalesMinor: 26400,
+      uncoveredNetSalesMinor: -10000,
+      currency: 'NOK',
+      uncoveredTopSellers: [],
+      brokenLinks: [],
+      priceFreshness: [],
+      projectionWatermark: 9
+    }
+    // `undefined` means the key is NEVER SET, which is what an API that predates the block sends —
+    // not a `waste: undefined` property that a JSON round-trip would have dropped anyway.
+    if (waste !== undefined) { response.waste = waste }
+    return response
+  }
+
+  async function openWeekWhoseWasteIs (waste) {
+    script.list = () => Promise.resolve({ storeId: 42, statements: [row()] })
+    script.get = () => Promise.resolve(detail())
+    script.coverage = () => Promise.resolve(coverageResponse(waste))
+    const wrapper = mountPageWithCoverage(null, norwegian)
+    await settled()
+    wrapper.find('[data-test="period-row"]').trigger('click')
+    await settled()
+    return wrapper
+  }
+
+  const RECORDED = {
+    valuedMinor: 3000,
+    entryCount: 2,
+    unvaluedEntryCount: 0,
+    byReason: [{ reason: 'Spoilage', valuedMinor: 3000, entryCount: 2, unvaluedEntryCount: 0 }]
+  }
+  const MEASURED_AS_NONE = { valuedMinor: 0, entryCount: 0, unvaluedEntryCount: 0, byReason: [] }
+
+  test('WORLD 1 — waste recorded with a value: the page prints the total the server sent', async () => {
+    const wrapper = await openWeekWhoseWasteIs(RECORDED)
+
+    expect(wrapper.find('[data-test="waste-total"]').text())
+      .toBe('Registrert svinn: kr 3000.')
+    expect(wrapper.find('[data-test="waste-none"]').exists()).toBe(false)
+    expect(wrapper.find('[data-test="coverage-waste-unknown"]').exists()).toBe(false)
+  })
+
+  test('WORLD 2 — waste recorded AS NONE: the page still says nothing was recorded', async () => {
+    const wrapper = await openWeekWhoseWasteIs(MEASURED_AS_NONE)
+
+    // The server looked at the week and found no entry. That is an answer, and it stays one.
+    expect(wrapper.find('[data-test="waste-none"]').text())
+      .toBe('Ingenting er registrert som svinn i dette vinduet.')
+    expect(wrapper.find('[data-test="coverage-waste-unknown"]').exists()).toBe(false)
+    expect(wrapper.find('[data-test="waste-total"]').exists()).toBe(false)
+  })
+
+  test('WORLD 3 — NO waste block at all: the page says it could not tell, and claims no zero', async () => {
+    const wrapper = await openWeekWhoseWasteIs(undefined)
+
+    const text = wrapper.find('[data-test="coverage-waste-unknown"]').text()
+    expect(text).toBe('Vi fikk ingen svinntall for dette vinduet. Det er ukjent — det betyr ikke at ingenting ble kastet.')
+    // The sentence a venue must NOT be shown here, spelled out rather than referred to by key.
+    expect(text).not.toBe('Ingenting er registrert som svinn i dette vinduet.')
+    expect(wrapper.find('[data-test="waste-none"]').exists()).toBe(false)
+    expect(wrapper.find('[data-test="waste-total"]').exists()).toBe(false)
+    // Not a zero anywhere on the way in either: the read model withholds rather than defaults.
+    expect(wrapper.vm.coverage.waste).toBeNull()
+  })
+
+  // The whole lane in one assertion: the three worlds must be three different sentences on screen.
+  // Collapsing any two of them is the defect, whichever direction it is collapsed in.
+  test('the three worlds are three different sentences, not two', async () => {
+    const said = []
+    for (const waste of [RECORDED, MEASURED_AS_NONE, undefined]) {
+      const wrapper = await openWeekWhoseWasteIs(waste)
+      const shown = ['waste-total', 'waste-none', 'coverage-waste-unknown']
+        .map(hook => wrapper.find('[data-test="' + hook + '"]'))
+        .filter(node => node.exists())
+      expect(shown).toHaveLength(1)
+      said.push(shown[0].text())
+      reset()
+    }
+    expect(new Set(said).size).toBe(3)
+  })
+
+  // A read that never answered is a fourth thing again, and it must not have been swallowed by the
+  // new branch: the panel still refuses the whole surface rather than reporting on the waste alone.
+  test('a coverage read that FAILED still hides the whole panel body, waste included', async () => {
+    script.list = () => Promise.resolve({ storeId: 42, statements: [row()] })
+    script.get = () => Promise.resolve(detail())
+    script.coverage = () => Promise.reject(new MarginApiError(500, { detail: 'boom' }))
+    const wrapper = mountPageWithCoverage(null, norwegian)
+    await settled()
+    wrapper.find('[data-test="period-row"]').trigger('click')
+    await settled()
+
+    expect(wrapper.find('[data-test="coverage-unknown"]').exists()).toBe(true)
+    expect(wrapper.find('[data-test="coverage-waste-unknown"]').exists()).toBe(false)
+    expect(wrapper.find('[data-test="waste-none"]').exists()).toBe(false)
+  })
+
+  test('the unknown copy exists, is non-empty, and differs from the none copy in all three dictionaries', () => {
+    for (const locale of ['no', 'en', 'de']) {
+      const unknown = translations[locale].mrgs_waste_coverage_unknown
+      const none = translations[locale].mrgs_waste_coverage_none
+      expect(typeof unknown).toBe('string')
+      expect(unknown.trim().length).toBeGreaterThan(0)
+      expect(unknown).not.toBe(none)
     }
   })
 })

@@ -1,0 +1,23 @@
+journey.js under test  1870418d3153bc8369531895400adc28fff8f47d27993b3b24d67ffea3d75810
+  pristine copy        1870418d3153bc8369531895400adc28fff8f47d27993b3b24d67ffea3d75810
+  mutant copy          6fab500f70377a2efba4b2a73deb5975ff68d4d6face1b0a0eeb4233eba8f624   (re-throw removed)
+  split-mutant copy    a684fb243ada3a22a9d5703a4a7345e20edc656e072289d6c40a92f0e5b20d65   (split-origin guard disabled)
+stand-in live api      http://127.0.0.1:61282
+stand-in fixture       http://127.0.0.1:61283
+stand-in app           http://127.0.0.1:61284
+
+  ok    1    exit 1     artifact failed   1 failed                live-labelled, app compiled against the FIXTURE
+  ok    2    exit 1     artifact failed   1 failed                fixture-labelled, app compiled against a LIVE api
+  ok    3    exit 1     artifact NONE     1 failed                live-labelled, pointed AT the throwaway fixture
+  ok    4    exit 0     artifact passed   1 passed (494ms)        live-labelled, app compiled against that LIVE api (honest)
+  ok    5    exit 0     artifact passed   1 passed (368ms)        fixture-labelled, app compiled against that FIXTURE (honest)
+  ok    S1   exit 1     artifact failed   1 failed                live-labelled; signs in at the named api, fetches its SUBJECT elsewhere
+  ok    S2   exit 1     artifact failed   1 failed                fixture-labelled; signs in at the fixture, fetches its SUBJECT elsewhere
+  ok    M1   exit 0     artifact failed   1 passed (538ms)        arm 1 with the re-throw REMOVED — must go green again
+  ok    M2   exit 0     artifact failed   1 passed (375ms)        arm 2 with the re-throw REMOVED — must go green again
+  ok    M3   exit 0     artifact passed   1 passed (525ms)        arm S1 with the split-origin guard DISABLED — must go green again
+
+All 10 arms held. A mislabelled run fails the process, and so does one whose
+subject calls left for another origin behind an honest sign-in; removing the re-throw, or the
+split-origin branch, makes the matching run green again — which is what makes the rest mean
+something.

@@ -1,0 +1,9 @@
+MUTATION: Salt;g;;kg=1000;  ->  Salt;g;0,88;kg=1000;
+---
+[xUnit.net 00:00:03.00]     WebApi.Tests.Margin.MarginStarterLibraryTests.The_library_carries_every_yield_the_curation_declares [FAIL]
+  Failed WebApi.Tests.Margin.MarginStarterLibraryTests.The_library_carries_every_yield_the_curation_declares [< 1 ms]
+   The curation declares 'yields: 0' but 1 of its 16 rows carry one. A yield is an arithmetic input to every plate that uses the ingredient, so a column that arrived empty must not pass for an author who chose to leave it empty.
+     at WebApi.Tests.Margin.MarginStarterLibraryTests.The_library_carries_every_yield_the_curation_declares() in /Users/svendaneel/okam/wt-mrg150b/WebApi.Tests/Margin/MarginStarterLibraryTests.cs:line 251
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+Failed!  - Failed:     1, Passed:    14, Skipped:     0, Total:    15, Duration: 190 ms - WebApi.Tests.dll (net8.0)

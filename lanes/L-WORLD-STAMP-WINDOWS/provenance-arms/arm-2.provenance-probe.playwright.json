@@ -1,0 +1,63 @@
+{
+  "journey": "provenance-probe",
+  "title": "the page loads and says who served it",
+  "status": "passed",
+  "startedAtUtc": "2026-08-04T21:24:00.637Z",
+  "finishedAtUtc": "2026-08-04T21:24:00.666Z",
+  "durationMs": 29,
+  "capabilities": [
+    "harness.provenance.probe"
+  ],
+  "surface": "public",
+  "backend": "live",
+  "baseUrl": "http://127.0.0.1:59872",
+  "apiBaseUrl": "http://127.0.0.1:59871",
+  "commit": null,
+  "underTest": null,
+  "backendProbe": {
+    "url": "http://127.0.0.1:59871/health",
+    "status": 200,
+    "body": "Healthy"
+  },
+  "backendBuild": {
+    "id": "okamapi-beta@aa26c1b1ebcb87ce2ab63814c1ad3d16b4c430d5",
+    "source": "stamp:artifacts/world/live/127-0-0-1-59871.json",
+    "short": "aa26c1b",
+    "detail": "branch main, stamped by build-provenance-proof.js at 2026-08-04T21:24:00.103Z, pid 89618 (which was serving this origin) still running"
+  },
+  "backendServed": 2,
+  "backendSubjectServed": 1,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "proxiedSubjectServed": 0,
+  "proxiedSubjectSample": [],
+  "backendSample": [
+    "GET http://127.0.0.1:59871/user -> 200",
+    "GET http://127.0.0.1:59871/workforce/stores/1/context -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "open the page",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T21:24:00.638Z",
+      "durationMs": 28,
+      "detail": "served by live",
+      "error": null
+    }
+  ],
+  "findings": [],
+  "consoleErrors": [],
+  "failedRequests": [],
+  "screenshots": [],
+  "error": null,
+  "artifact": {
+    "key": "live-59871-aa26c1b",
+    "file": "artifacts/journeys/runs/provenance-probe.live-59871-aa26c1b.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "live-59871-aa26c1b",
+    "provisional": false,
+    "supersedes": null
+  }
+}

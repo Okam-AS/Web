@@ -1,0 +1,152 @@
+{
+  "journey": "modal-scroll-lock",
+  "title": "A modal holds the page behind it still, and lets go when it closes",
+  "status": "passed",
+  "startedAtUtc": "2026-08-05T02:47:16.276Z",
+  "finishedAtUtc": "2026-08-05T02:47:24.838Z",
+  "durationMs": 8562,
+  "capabilities": [
+    "ui.modal.scroll-lock"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3861",
+  "apiBaseUrl": "http://127.0.0.1:4861",
+  "commit": "e34977acebd59b223584158c33451b6f1ffd82c1",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": {
+    "id": "fixture@e34977acebd59b223584158c33451b6f1ffd82c1+dirty",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "e34977a-dirty",
+    "detail": "the in-repo fixture backend, not an API build (branch HEAD)"
+  },
+  "backendServed": 8,
+  "backendSubjectServed": 1,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:4861/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:4861/user/login -> 200",
+    "GET http://127.0.0.1:4861/user -> 200",
+    "GET http://127.0.0.1:4861/stores/42/market -> 200",
+    "GET http://127.0.0.1:4861/stores/42 -> 200",
+    "GET http://127.0.0.1:4861/user -> 200",
+    "GET http://127.0.0.1:4861/culture -> 200",
+    "GET http://127.0.0.1:4861/stores/42/specialopeninghours -> 200"
+  ],
+  "servingFixture": {
+    "origin": "http://127.0.0.1:4861",
+    "askedPort": 4861,
+    "reportedPort": 4861,
+    "reportedPid": 29977,
+    "reportedCwd": "/Users/svendaneel/okam/web-unwitnessed",
+    "holderPid": 29977,
+    "holderCwd": "/Users/svendaneel/okam/web-unwitnessed",
+    "holderCommand": "node test/e2e/fixture/api-server.js",
+    "identitySource": "health+lsof",
+    "unresolved": null
+  },
+  "nodeCalls": [],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "ask for an admin page while signed out",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:47:16.278Z",
+      "durationMs": 1219,
+      "detail": "redirected to ?redirect=%2Fadmin%2Flang with the login modal open",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "THE LOGIN MODAL HOLDS THE LOCK, and keeps holding it across a head update",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:47:17.497Z",
+      "durationMs": 495,
+      "detail": "body class \"noscroll\", overflow hidden; nothing scrollable behind the login screen (doc 720px vs viewport 720px)",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "sign in and land on the page that was asked for",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:47:18.015Z",
+      "durationMs": 223,
+      "detail": "on /admin/lang, 4662px of page in a 720px viewport; lock released",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "with no modal open, a wheel moves the page — the control",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:47:18.238Z",
+      "durationMs": 625,
+      "detail": "wheel 600 moved the page 1200 -> 1800",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "open a modal, and the wheel stops moving the page",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:47:18.863Z",
+      "durationMs": 1616,
+      "detail": "body hidden; wheel 600 then 3000 left the page at 1200",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "a navigation with the modal still open does not release it",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:47:20.664Z",
+      "durationMs": 1082,
+      "detail": "after $router.replace the body is still \"noscroll\" and the page has not moved",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "closing one of two open modals does not release the lock",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:47:21.746Z",
+      "durationMs": 1699,
+      "detail": "two modals -> closed one -> body still \"noscroll\", page still at 1200",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "closing the last one releases it, and the wheel works again",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T02:47:23.445Z",
+      "durationMs": 1187,
+      "detail": "lock released, page resumed at 1199 and wheeled to 1799",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "note",
+      "summary": "EditLangRowModal does not act on the Modal close event",
+      "detail": "components/organisms/EditLangRowModal.vue wraps atoms/Modal but binds no @close, so Escape runs Modal.close() and nothing happens — the modal can only be dismissed with Avbryt. Pre-existing, unrelated to the scroll lock, and not fixed by this lane; noticed while driving the journey."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Flang\" to \"/admin?redirect=%2Fadmin%2Flang&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Flang\" to \"/admin?redirect=%2Fadmin%2Flang&storeId=42\" with a new navigation."
+  ],
+  "failedRequests": [],
+  "screenshots": [
+    "modal-scroll-lock/fixture/01-login-modal-body-locked.png",
+    "modal-scroll-lock/fixture/02-modal-open-page-behind-held-at-1200.png",
+    "modal-scroll-lock/fixture/03-all-modals-closed-page-free-again.png"
+  ],
+  "error": null,
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/modal-scroll-lock.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false,
+    "supersedes": null
+  }
+}

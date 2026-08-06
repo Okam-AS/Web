@@ -1,0 +1,57 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  WebApi -> /Users/svendaneel/okam/wt-replaypins/bin/Debug/net8.0/WebApi.dll
+  WebApi.Tests -> /Users/svendaneel/okam/wt-replaypins/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll
+Test run for /Users/svendaneel/okam/wt-replaypins/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+Microsoft (R) Test Execution Command Line Tool Version 17.8.0 (arm64)
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:04.68]     WebApi.Tests.Workforce.WorkforceShiftExchangeTests.Declining_again_with_the_SAME_key_replays_the_stored_decline_instead_of_a_409 [FAIL]
+[xUnit.net 00:00:05.25]     WebApi.Tests.Workforce.WorkforceShiftExchangeTests.Awarding_again_with_the_SAME_key_replays_the_stored_award_instead_of_a_409 [FAIL]
+  Failed WebApi.Tests.Workforce.WorkforceShiftExchangeTests.Declining_again_with_the_SAME_key_replays_the_stored_decline_instead_of_a_409 [207 ms]
+  Error Message:
+   Assert.IsType() Failure
+Expected: Microsoft.AspNetCore.Mvc.OkObjectResult
+Actual:   Microsoft.AspNetCore.Mvc.ObjectResult
+  Stack Trace:
+     at WebApi.Tests.Workforce.WorkforceStaffResults.Ok[T](IActionResult result) in /Users/svendaneel/okam/wt-replaypins/WebApi.Tests/Workforce/WorkforceStaffResults.cs:line 11
+   at WebApi.Tests.Workforce.WorkforceShiftExchangeTests.Declining_again_with_the_SAME_key_replays_the_stored_decline_instead_of_a_409() in /Users/svendaneel/okam/wt-replaypins/WebApi.Tests/Workforce/WorkforceShiftExchangeTests.cs:line 522
+   at WebApi.Tests.Workforce.WorkforceShiftExchangeTests.Declining_again_with_the_SAME_key_replays_the_stored_decline_instead_of_a_409() in /Users/svendaneel/okam/wt-replaypins/WebApi.Tests/Workforce/WorkforceShiftExchangeTests.cs:line 533
+--- End of stack trace from previous location ---
+  Failed WebApi.Tests.Workforce.WorkforceShiftExchangeTests.Awarding_again_with_the_SAME_key_replays_the_stored_award_instead_of_a_409 [192 ms]
+  Error Message:
+   Assert.IsType() Failure
+Expected: Microsoft.AspNetCore.Mvc.OkObjectResult
+Actual:   Microsoft.AspNetCore.Mvc.ObjectResult
+  Stack Trace:
+     at WebApi.Tests.Workforce.WorkforceStaffResults.Ok[T](IActionResult result) in /Users/svendaneel/okam/wt-replaypins/WebApi.Tests/Workforce/WorkforceStaffResults.cs:line 11
+   at WebApi.Tests.Workforce.WorkforceShiftExchangeTests.Awarding_again_with_the_SAME_key_replays_the_stored_award_instead_of_a_409() in /Users/svendaneel/okam/wt-replaypins/WebApi.Tests/Workforce/WorkforceShiftExchangeTests.cs:line 429
+   at WebApi.Tests.Workforce.WorkforceShiftExchangeTests.Awarding_again_with_the_SAME_key_replays_the_stored_award_instead_of_a_409() in /Users/svendaneel/okam/wt-replaypins/WebApi.Tests/Workforce/WorkforceShiftExchangeTests.cs:line 441
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:07.29]     WebApi.Tests.Workforce.WorkforceShiftExchangeTests.A_refused_award_replays_its_refusal_to_a_retry_of_the_SAME_key [FAIL]
+[xUnit.net 00:00:08.04]     WebApi.Tests.Workforce.WorkforceShiftExchangeTests.Withdrawing_the_offer_again_with_the_SAME_key_replays_the_stored_withdrawal_instead_of_a_409 [FAIL]
+  Failed WebApi.Tests.Workforce.WorkforceShiftExchangeTests.A_refused_award_replays_its_refusal_to_a_retry_of_the_SAME_key [241 ms]
+  Error Message:
+   Assert.IsType() Failure
+Expected: Microsoft.AspNetCore.Mvc.ObjectResult
+Actual:   Microsoft.AspNetCore.Mvc.OkObjectResult
+  Stack Trace:
+     at WebApi.Tests.Workforce.WorkforceStaffResults.ProblemOf(IActionResult result, Int32 expectedStatus) in /Users/svendaneel/okam/wt-replaypins/WebApi.Tests/Workforce/WorkforceStaffResults.cs:line 17
+   at WebApi.Tests.Workforce.WorkforceStaffResults.Problem(IActionResult result, Int32 expectedStatus, String expectedCode) in /Users/svendaneel/okam/wt-replaypins/WebApi.Tests/Workforce/WorkforceStaffResults.cs:line 26
+   at WebApi.Tests.Workforce.WorkforceShiftExchangeTests.A_refused_award_replays_its_refusal_to_a_retry_of_the_SAME_key() in /Users/svendaneel/okam/wt-replaypins/WebApi.Tests/Workforce/WorkforceShiftExchangeTests.cs:line 299
+   at WebApi.Tests.Workforce.WorkforceShiftExchangeTests.A_refused_award_replays_its_refusal_to_a_retry_of_the_SAME_key() in /Users/svendaneel/okam/wt-replaypins/WebApi.Tests/Workforce/WorkforceShiftExchangeTests.cs:line 319
+--- End of stack trace from previous location ---
+  Failed WebApi.Tests.Workforce.WorkforceShiftExchangeTests.Withdrawing_the_offer_again_with_the_SAME_key_replays_the_stored_withdrawal_instead_of_a_409 [240 ms]
+  Error Message:
+   Assert.IsType() Failure
+Expected: Microsoft.AspNetCore.Mvc.OkObjectResult
+Actual:   Microsoft.AspNetCore.Mvc.ObjectResult
+  Stack Trace:
+     at WebApi.Tests.Workforce.WorkforceStaffResults.Ok[T](IActionResult result) in /Users/svendaneel/okam/wt-replaypins/WebApi.Tests/Workforce/WorkforceStaffResults.cs:line 11
+   at WebApi.Tests.Workforce.WorkforceShiftExchangeTests.Withdrawing_the_offer_again_with_the_SAME_key_replays_the_stored_withdrawal_instead_of_a_409() in /Users/svendaneel/okam/wt-replaypins/WebApi.Tests/Workforce/WorkforceShiftExchangeTests.cs:line 578
+   at WebApi.Tests.Workforce.WorkforceShiftExchangeTests.Withdrawing_the_offer_again_with_the_SAME_key_replays_the_stored_withdrawal_instead_of_a_409() in /Users/svendaneel/okam/wt-replaypins/WebApi.Tests/Workforce/WorkforceShiftExchangeTests.cs:line 596
+--- End of stack trace from previous location ---
+
+Failed!  - Failed:     4, Passed:    19, Skipped:     0, Total:    23, Duration: 4 s - WebApi.Tests.dll (net8.0)

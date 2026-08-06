@@ -47,7 +47,7 @@
     },
     {
       "n": 2,
-      "name": "sign in as the manager (99999999 / 123123)",
+      "name": "sign in as the manager (99999999 / AppSettings__DemoVerificationCode__REDACTED)",
       "status": "passed",
       "startedAtUtc": "2026-08-02T11:33:20.319Z",
       "durationMs": 293,

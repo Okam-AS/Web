@@ -1,0 +1,21 @@
+support files under test
+  artifact-store.js     5ba22a14eeaab88aabfb37acb5f891c8f2b78275189abfe7e8168a3236e853ca
+  fixture-provenance.js d022ff24ed16f876ad3b4c5af216015ed8b0d094c720a742661f8596078712fb
+  journey-assertions.js 4ddbed1671a04c71405c64657976b6b9a4debe479bf0a85bfde90565f4f07532
+  journey.js            6dd043e1f34648c3fc5f322c0a777247b35c1d591766991b8ff0621c51e631c2
+  world-stamp.js        834701aaa5199a14ca2e598afe636577d75f1b6f5333ba5731314414ba0edf88
+stand-in live api      http://127.0.0.1:54749   (served by pid 80678, cwd web-provexcl)
+stand-in app           http://127.0.0.1:54750
+the port would say     web-provexcl@607f1385adeb430668d15e3259cc84bfc0d8fc5e+dirty   <- the wrong answer, available in every arm
+checkout alpha         okamapi-alpha@11c99410deae24fa33fae04b13345cb5f1abc875
+checkout beta          okamapi-beta@618bb82bfe27f09c1809b8f9e08774c07b27b728
+
+  ok    1  okamapi-alpha@11c99410deae24fa33fae04b13345cb5f1abc875  stamp:artifacts/world/live/127-0-0-1-54749.json  stamped from checkout ALPHA, nothing declared
+  ok    2  okamapi-beta@618bb82bfe27f09c1809b8f9e08774c07b27b728  stamp:artifacts/world/live/127-0-0-1-54749.json  the same world stamped from a DIFFERENT checkout (BETA)
+  ok    3  web-provexcl@607f1385adeb430668d15e3259cc84bfc0d8fc5e+dirty  process:127.0.0.1:54749             stamp INVALIDATED (its world is gone) — must fall back to the port and be WRONG
+  ok    4  okamapi-alpha@11c99410deae24fa33fae04b13345cb5f1abc875  stamp:artifacts/world/live/127-0-0-1-54749.json  stamped ALPHA while the shell declares BETA — a command copied from an older world
+  ok    5  okamapi-alpha@11c99410deae24fa33fae04b13345cb5f1abc875  env:E2E_API_BUILD                   NO stamp, the shell declares ALPHA — the declaration still carries a remote runner
+
+All 5 arms held. A live journey artifact names the checkout the world script
+recorded, changes when that checkout changes, and — arm 3 — names the port's wrong answer the
+moment the stamp is no longer verifiable. Nothing asked the API what it was.

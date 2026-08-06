@@ -161,13 +161,13 @@
             <h3>{{ product.name }}</h3>
             <p>{{ product.description }}</p>
             <div class="price-container">
-              <div class="price">{{ (product.amount / 100).toFixed(2) }} {{ product.currency }}</div>
+              <div class="price">{{ productPrice(product.amount, product.currency) }}</div>
               <div
                 v-if="product.tablePriceEnabled"
                 class="table-price"
               >
                 <span class="table-label">{{ $i('products_dineInLabel') }}</span>
-                {{ ((product.amount + product.tableAdditionalAmount) / 100).toFixed(2) }} {{ product.currency }}
+                {{ productPrice(statedSum(product.amount, product.tableAdditionalAmount), product.currency) }}
               </div>
             </div>
             <button
@@ -785,6 +785,7 @@ import axios from "axios";
 import $config from "~/core/helpers/configuration";
 import { mergeVariantByName } from "~/core/helpers/variant-copy";
 import bodyScrollLock, { BODY_SCROLL_LOCK_CLASS_MOBILE } from "~/utils/body-scroll-lock";
+import { amountLabel, statedSum } from "~/utils/price";
 
 export default {
   components: {
@@ -1071,6 +1072,19 @@ export default {
   },
 
   methods: {
+    statedSum,
+    // The product cards used to divide the raw field: `(product.amount / 100).toFixed(2)`. That has
+    // two different wrong answers depending on how the API declined to send the price — `null / 100`
+    // is `0`, printing a real "0.00 kr" for a product nobody priced, and `undefined / 100` is `NaN`,
+    // printing the letters "NaN" beside the currency code. `product.amount` is typed `number` in
+    // `core/models/product/product.ts`, but that is a compile-time claim and the client narrows
+    // nothing at runtime, so both arrive here in practice.
+    //
+    // The currency is folded in deliberately: it is printed next to the figure in the template, and
+    // "— kr" would still assert that somebody priced this in kroner.
+    productPrice(amountInOre, currency) {
+      return amountLabel(amountInOre, { suffix: currency });
+    },
     // Show the profile in the picker so choosing a group is choosing the rates:
     // "Mat og drikke · 15/25/15 %". Legacy groups without a profile keep name (code).
     goodsGroupOptionLabel(g) {

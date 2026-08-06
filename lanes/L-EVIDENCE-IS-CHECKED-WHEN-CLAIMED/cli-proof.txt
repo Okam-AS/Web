@@ -1,0 +1,44 @@
+######## NEGATIVE — the six admissions the census listed, asked of FT-MEALS
+######## rc 6 = EX_EVIDENCE.  Before this repair every one of them was rc 0.
+ OK  rc=6  (want 6)  verify FT-MEALS --evidence artifacts
+        plan: evidence inadmissible — artifacts is a directory — a directory records no run and cannot be read; name the artifact inside it that does
+ OK  rc=6  (want 6)  verify FT-MEALS --evidence artifacts/
+        plan: evidence inadmissible — artifacts/ is a directory — a directory records no run and cannot be read; name the artifact inside it that does
+ OK  rc=6  (want 6)  verify FT-MEALS --evidence artifacts/journeys/
+        plan: evidence inadmissible — artifacts/journeys/ is a directory — a directory records no run and cannot be read; name the artifact inside it that does
+ OK  rc=6  (want 6)  verify FT-MEALS --evidence artifacts/journeys/modal-scroll-lock.playwright.json
+        plan: evidence inadmissible — exit: names the directory `artifacts/journeys/`, not an artifact — any of its 78 entries would satisfy it equally, so `artifacts/journeys/modal-scroll-lock.playwright.json` demonstrates nothing.  Name the artifact that shows the run in `exit:`, then offer that file.
+ OK  rc=6  (want 6)  verify FT-MEALS --evidence artifacts/journeys/growth-newsletter-send-gate.playwright.json
+        plan: evidence inadmissible — artifacts/journeys/growth-newsletter-send-gate.playwright.json reads `status: failed` — the artifact records its own failure, and a run that failed does not demonstrate the exit it was run for
+ OK  rc=6  (want 6)  verify FT-MEALS --evidence artifacts/journeys/training-course-to-evidence.playwright.json
+        plan: evidence inadmissible — artifacts/journeys/training-course-to-evidence.playwright.json reads `status: failed` — the artifact records its own failure, and a run that failed does not demonstrate the exit it was run for
+
+######## the six refusals mutated nothing
+ OK  sandbox plan.md still identical to the real one
+
+######## POSITIVE — a guard that refuses everything is not a guard
+ OK  rc=0  (want 0)  verify L-LINT-RUNNABLE (prose artifact its exit names, absolute spelling)
+        L-LINT-RUNNABLE built-unverified -> verified
+ OK  rc=0  (want 0)  unverify L-JOURNEY-MARGIN
+        L-JOURNEY-MARGIN verified -> built-unverified (evidence artifacts/journeys/margin-supplier-to-plate.playwright.json withdrawn)
+ OK  rc=0  (want 0)  verify L-JOURNEY-MARGIN (JSON run record reading status: passed)
+        L-JOURNEY-MARGIN built-unverified -> verified
+
+######## POSITIVE — THE DELIBERATE RED.  guard-proof.txt says 'failed' nine
+######## times; every one is an arm's SUBJECT, none is the run's OUTCOME.
+ OK  rc=0  (want 0)  unverify L-JOURNEY-PROXY-BLINDSPOT
+        L-JOURNEY-PROXY-BLINDSPOT verified -> built-unverified (evidence lanes/L-JOURNEY-PROXY-BLINDSPOT/guard-proof.txt withdrawn)
+ OK  rc=0  (want 0)  verify L-JOURNEY-PROXY-BLINDSPOT --evidence lanes/…/guard-proof.txt
+        L-JOURNEY-PROXY-BLINDSPOT built-unverified -> verified
+
+######## NEGATIVE — the one materially false row cannot be put back
+ OK  rc=0  (want 0)  unverify L-JOURNEY-COVERAGE-THREE
+        L-JOURNEY-COVERAGE-THREE verified -> built-unverified (evidence artifacts/journeys/ withdrawn)
+ OK  rc=6  (want 6)  re-verify on the directory it was verified against
+        plan: evidence inadmissible — artifacts/journeys/ is a directory — a directory records no run and cannot be read; name the artifact inside it that does
+ OK  rc=6  (want 6)  re-verify on the Training artifact its exit names
+        plan: evidence inadmissible — artifacts/journeys/training-course-to-evidence.playwright.json reads `status: failed` — the artifact records its own failure, and a run that failed does not demonstrate the exit it was run for
+ OK  rc=6  (want 6)  re-verify on the Margin artifact, which passed
+        plan: evidence inadmissible — exit: names the directory `artifacts/journeys/`, not an artifact — any of its 78 entries would satisfy it equally, so `artifacts/journeys/margin-recipe-to-margin.playwright.json` demonstrates nothing.  Name the artifact that shows the run in `exit:`, then offer that file.
+
+######## the shared docs/plan was never opened for write by this script

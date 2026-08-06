@@ -1,0 +1,46 @@
+L-MEALS-STATEMENT-SURFACE — non-vacuity of the member-reference assertion
+=========================================================================
+Instrument: test/e2e/journeys/meals-statement-month.spec.js (Chromium, fixture backend,
+127.0.0.1:3010 app / 127.0.0.1:4010 fixture). Every run below is a real browser run.
+
+WHY A CONTROL IS NEEDED
+"the finalized line shows the persisted member reference" is only evidence if the value the page
+prints could not have been reconstructed from something it already held. Two arms were run to show
+that it could not.
+
+ARM A — as built                                                              PASSED
+  step 5  draft renders   ANS-2287 + 4b050000-0000-0000-0000-000000000002
+  step 7  finalized reads ANS-2287 + 4b050000-0000-0000-0000-000000000002
+  step 8  CSV column 5 =  4b050000-0000-0000-0000-000000000002 + ANS-2287
+  Artifact: artifacts/journeys/meals-statement-month.playwright.json (copied here as
+            armA-green.playwright.json)
+
+MUTANT B — the page DERIVES the reference from an id it already has            FAILED, as required
+  utils/meals/statement-view.js, readLine:
+    -  const memberDisplayRef = text(l.memberDisplayRef);
+    +  const memberDisplayRef = text(l.allocationId);
+  Failed at spec line 141, step 5:
+    Error: expect(received).toContain(expected)
+    Expected value: "ANS-2287"
+    Received array: ["alc-2026-06-0001", "alc-2026-06-0002"]
+  So the assertion discriminates: a page that printed the nearest available identifier reds.
+
+MUTANT C — the FILE names the allocation instead of the member                 FAILED, as required
+  test/e2e/fixture/meals.js, csvOf: column five l.memberDisplayRef -> l.allocationId
+  Failed at spec line 187, step 8 (toEqual on the sorted column-five values).
+  So the export assertion is not carried by the screen: a page rendering correctly over a wrong
+  file still reds.
+
+RESTORE — both files restored by content copy (never mv), then re-run           PASSED
+  diff against the pre-mutation copies is empty; the final green run above is the artifact on disk.
+
+WHY THE VALUES CANNOT BE GUESSED IN THE FIRST PLACE
+  * `MealsStatementLine` carries NO membershipId and NO applicationUserId, on the entity or the DTO.
+    The membership id reaches the wire only AS THE VALUE of memberDisplayRef, in the no-reference
+    case. There is no second field to join against.
+  * The two rendered values are drawn from different alphabets and match nothing else on the payload:
+      ANS-2287                                    a company payroll code
+      4b050000-0000-0000-0000-000000000002        a bare membership id
+      stl-… / alc-… / ord-… / K-2026-…            every other identifier on the same rows
+    A page printing a constant fails one; a page printing a prefix-plus-an-id fails both.
+  * Asserted with toContain/toEqual BY VALUE, never on non-emptiness.

@@ -1,0 +1,124 @@
+watchman warning:  Recrawled this watch 3 times, most recently because:
+MustScanSubDirs UserDroppedTo resolve, please review the information on
+https://facebook.github.io/watchman/docs/troubleshooting.html#recrawl
+To clear this warning, run:
+`watchman watch-del '/Users/svendaneel/okam/web-fe-candidate' ; watchman watch-project '/Users/svendaneel/okam/web-fe-candidate'`
+
+PASS test/training-page.test.js
+PASS test/events-page.test.js
+PASS test/margin-suppliers-page.test.js
+PASS test/feature-flags-page.test.js
+PASS test/workforce-roster-components.test.js
+PASS test/events-surface.test.js
+PASS test/margin-recipes-page.test.js
+PASS test/training-components.test.js
+PASS test/workforce-week-grid.component.test.js
+PASS test/admin-nav-access.test.js
+PASS test/margin-statements-page.test.js
+PASS test/meals-claim-page.test.js
+PASS test/growth-newsletter-page.test.js
+PASS test/price-absence.test.js
+PASS test/workforce-pivot-components.test.js
+PASS test/workforce-schedule-authoring-page.test.js
+PASS test/modal-scroll-lock-estate.test.js
+PASS test/meals-admin-components.test.js
+PASS test/growth-guest-pages.test.js
+PASS test/workforce-me-training-disclosure.test.js
+PASS test/workforce-me-self-service.test.js
+PASS test/growth-privacy-page.test.js
+PASS test/workforce-requests-page.test.js
+PASS test/events-guest-pages.test.js
+PASS test/meals-page.test.js
+PASS test/meals-companies-page.test.js
+PASS test/margin-price-imports-page.test.js
+PASS test/workforce-personnel-list-components.test.js
+PASS test/margin-menu-margin-panel.component.test.js
+PASS test/workforce-roster-page.test.js
+PASS test/core-request-path-shape.test.js
+PASS test/growth-components.test.js
+PASS test/workforce-schedule-page.test.js
+PASS test/workforce-external-commitments.test.js
+PASS test/events-guest.test.js
+PASS test/store-market-dashboard.test.js
+PASS test/training-disclosure.test.js
+PASS test/account-email-page.test.js
+PASS test/workforce-personnel-list-page.test.js
+PASS test/fixture-refusal-divergence.test.js
+PASS test/workforce-rates-components.test.js
+PASS test/workforce-rates-page.test.js
+PASS test/margin-supplier-panels.component.test.js
+PASS test/journey-rerunnability.test.js
+PASS test/workforce-join-page.test.js
+PASS test/workforce-schedule-flag-refusal.test.js
+PASS test/margin-statement-components.test.js
+PASS test/margin-cost-panel.component.test.js
+PASS test/margin-product-links.component.test.js
+PASS test/growth-guest.test.js
+PASS test/modal-scroll-lock.test.js
+PASS test/workforce-me-shift-view.test.js
+PASS test/admin-page-auth.test.js
+PASS test/margin-supplier-client.test.js
+PASS test/workforce-schedule-authoring.test.js
+PASS test/margin-waste.test.js
+PASS test/workforce-roster.test.js
+PASS test/workforce-month-grid.test.js
+PASS test/workforce-rates-timeline.test.js
+PASS test/store-market-view.test.js
+PASS test/growth-send-gate.test.js
+PASS test/workforce-requests-inbox.test.js
+PASS test/store-market-card.component.test.js
+PASS test/workforce-rates-hours-export.test.js
+PASS test/workforce-me-components.test.js
+PASS test/workforce-me-client.test.js
+PASS test/core-price-label.test.js
+PASS test/margin-cost-preview.test.js
+PASS test/margin-recipe-client.test.js
+PASS test/workforce-personnel-list.test.js
+PASS test/meals-admin-picker.test.js
+PASS test/margin-spend-amount.test.js
+PASS test/workforce-me-self-requests.test.js
+PASS test/meals-admin-view.test.js
+PASS test/meals-store-view.test.js
+PASS test/meals-components.test.js
+PASS test/workforce-role-grid.test.js
+PASS test/margin-price-import-client.test.js
+PASS test/margin-money-input.test.js
+PASS test/platform-feature-flags-client.test.js
+PASS test/workforce-week-range.test.js
+PASS test/workforce-week-grid.test.js
+PASS test/margin-menu-margin.test.js
+PASS test/events-journey.test.js
+PASS test/training-client.test.js
+PASS test/workforce-me-memberships.test.js
+PASS test/journey-assertions.test.js
+PASS test/margin-statement-client.test.js
+PASS test/workforce-schedule-client.test.js
+PASS test/growth-guest-client.test.js
+PASS test/meals-admin-client.test.js
+PASS test/events-client.test.js
+PASS test/platform-flag-board.test.js
+PASS test/workforce-roster-client.test.js
+PASS test/workforce-rates-amount.test.js
+PASS test/workforce-api-client.test.js
+PASS test/margin-price-timeline.test.js
+PASS test/workforce-rates-client.test.js
+PASS test/store-market-client.test.js
+PASS test/meals-client.test.js
+PASS test/training-journey.test.js
+PASS test/margin-statement-view.test.js
+PASS test/growth-privacy-queue.test.js
+PASS test/margin-price-import-model.test.js
+PASS test/workforce-rates-attendance.test.js
+PASS test/workforce-me-claim-outcome.test.js
+PASS test/workforce-me-inbox-filter.test.js
+PASS test/workforce-requests-client.test.js
+PASS test/chf-format.test.js
+PASS test/workforce-me-invitation-claim.test.js
+PASS test/growth-client.test.js
+PASS test/journey-artifact-store.test.js
+
+Test Suites: 112 passed, 112 total
+Tests:       2603 passed, 2603 total
+Snapshots:   0 total
+Time:        5.545 s
+Ran all test suites.

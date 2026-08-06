@@ -1,0 +1,33 @@
+=== BASELINE (unmutated) ===
+    baseline:
+      Passed!  - Failed:     0, Passed:    14, Skipped:     0, Total:    14, Duration: 2 s - WebApi.Tests.dll (net8.0)
+      RED -> (none)
+
+=== M1 : the corridor refusal is not recorded (the stranding defect restored) ===
+    file: Services/Meals/MealsIdempotentMutation.cs
+    mutated:
+      Failed!  - Failed:     2, Passed:    12, Skipped:     0, Total:    14, Duration: 2 s - WebApi.Tests.dll (net8.0)
+      RED -> A_recorded_corridor_refusal_is_replayed_even_after_the_corridor_it_named_is_ended
+      RED -> A_second_active_agreement_on_the_same_corridor_is_refused
+    restored:
+      Passed!  - Failed:     0, Passed:    14, Skipped:     0, Total:    14, Duration: 2 s - WebApi.Tests.dll (net8.0)
+      RED -> (none)
+
+=== M2 : the in-flight guard removed (a reserved key becomes runnable again) ===
+    file: Services/Meals/MealsCommandReceiptService.cs
+    mutated:
+      Failed!  - Failed:     1, Passed:    13, Skipped:     0, Total:    14, Duration: 2 s - WebApi.Tests.dll (net8.0)
+      RED -> A_genuinely_in_flight_key_still_answers_in_progress_and_signs_nothing
+    restored:
+      Passed!  - Failed:     0, Passed:    14, Skipped:     0, Total:    14, Duration: 2 s - WebApi.Tests.dll (net8.0)
+      RED -> (none)
+
+=== M3 : the recorded refusal loses its own detail (a generic refusal is replayed) ===
+    file: Services/Meals/MealsCommandReceiptService.cs
+    mutated:
+      Failed!  - Failed:     2, Passed:    12, Skipped:     0, Total:    14, Duration: 2 s - WebApi.Tests.dll (net8.0)
+      RED -> A_recorded_corridor_refusal_is_replayed_even_after_the_corridor_it_named_is_ended
+      RED -> A_second_active_agreement_on_the_same_corridor_is_refused
+    restored:
+      Passed!  - Failed:     0, Passed:    14, Skipped:     0, Total:    14, Duration: 2 s - WebApi.Tests.dll (net8.0)
+      RED -> (none)

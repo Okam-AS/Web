@@ -1,0 +1,40 @@
+=== A. Does the enum carry [Flags]? ===
+  [Flags] on PaymentType: False
+
+=== B. What a DEFINED but unlabelled member prints on the payer line ===
+  int=120    ToString()="CompanyAccount"   printed=|CompanyAccount            125,00|
+      bytes: 43 6F 6D 70 61 6E 79 41 63 63 6F 75 6E 74 20 20 20 20 20 20 20 20 20 20 20 20 31 32 35 2C 30 30 0A
+  int=0      ToString()="NotSet"           printed=|NotSet                    125,00|
+      bytes: 4E 6F 74 53 65 74 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 31 32 35 2C 30 30 0A
+
+=== C. What an UNDEFINED (out-of-range) value prints on the payer line ===
+  int=999    ToString()="999"              printed=|999                       125,00|
+      bytes: 39 39 39 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 31 32 35 2C 30 30 0A
+  int=7      ToString()="7"                printed=|7                         125,00|
+      bytes: 37 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 31 32 35 2C 30 30 0A
+  int=-1     ToString()="-1"               printed=|-1                        125,00|
+      bytes: 2D 31 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 31 32 35 2C 30 30 0A
+  int=121    ToString()="121"              printed=|121                       125,00|
+      bytes: 31 32 31 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 31 32 35 2C 30 30 0A
+  int=2147483647 ToString()="2147483647"       printed=|2147483647                125,00|
+      bytes: 32 31 34 37 34 38 33 36 34 37 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 31 32 35 2C 30 30 0A
+
+=== D. Enum.IsDefined on those same values ===
+  IsDefined(999   ) = False
+  IsDefined(7     ) = False
+  IsDefined(-1    ) = False
+  IsDefined(121   ) = False
+  IsDefined(120   ) = True
+  IsDefined(110   ) = True
+
+=== E. Does the app's OWN binder (Newtonsoft + StringEnumConverter, exactly
+       Helpers/ServiceCollectionExtensions.cs:168-172) accept an out-of-range int? ===
+  {"Amount":12500,"PaymentType":999}             -> bound as int=999 ToString()="999"
+  {"Amount":12500,"PaymentType":7}               -> bound as int=7 ToString()="7"
+  {"Amount":12500,"PaymentType":"999"}           -> bound as int=999 ToString()="999"
+  {"Amount":12500,"PaymentType":"Bogus"}         -> REJECTED: JsonSerializationException
+  {"Amount":12500,"PaymentType":120}             -> bound as int=120 ToString()="CompanyAccount"
+
+=== F. EF EnumToStringConverter round-trip (Order/PaymentTransaction/Cart columns) ===
+  999    -> column value "999" -> read back int=999
+  120    -> column value "CompanyAccount" -> read back int=120

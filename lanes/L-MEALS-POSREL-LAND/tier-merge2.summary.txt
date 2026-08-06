@@ -1,0 +1,2 @@
+Passed!  - Failed:     0, Passed:  4399, Skipped:    12, Total:  4411, Duration: 6 m 9 s - WebApi.Tests.dll (net8.0)
+EXITCODE=0

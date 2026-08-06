@@ -1,0 +1,50 @@
+DIFFERENTIAL — narrow sweep (8ac6f63) vs survivor (cffede3)
+tree: worktree of lane/collapse-the-two-hook-sweeps at cffede3, clean (git status --porcelain empty), core at 1bcab0b
+estate as seen by this run: 301 .vue under components/pages/layouts
+
+-- copies pinned to their originals before scoring --
+  OK   survivor copy sees the same estate the survivor test does (301 files)
+  OK   survivor copy finds no estate breach, as the survivor test asserts
+  OK   survivor copy leaves nothing unresolved, as the survivor test asserts
+  OK   the runtime subtraction is still the two hooks
+  OK   the directive subtraction reads the five Vue 2 hooks out of the runtime
+  OK   Vue is 2.7.14
+
+-- per case: what should happen, what each detector says --
+  case  should   narrow   survivor  agree?  what it is
+  N1    defect   defect   defect    same    top-level `unmounted ()` shorthand — the FocusTrap defect itself
+  N2    defect   defect   defect    same    top-level `beforeUnmount ()` shorthand
+  N3    defect   defect   defect    same    top-level `unmounted:` function-expression form
+  N4    defect   defect   defect    same    top-level `beforeUnmount:` arrow form
+  N5    defect   defect   defect    same    single-quoted key `'unmounted'`
+  N6    defect   defect   defect    same    double-quoted key `"unmounted"`
+  N7    defect   defect   defect    same    single-quoted key `'beforeUnmount'`
+  N8    defect   defect   defect    same    the `Vue.extend({...})` export form used by pages/wolt-callback.vue
+  N9    defect   valid X  defect    survivor `emits:` — the Modal.vue defect; outside the narrow sweep's two names
+  V1    valid    defect X valid     survivor a METHOD named `unmounted` is legal Vue 2 and must not be flagged
+  V2    valid    defect X valid     survivor the name inside a STRING is not an option key
+  V3    valid    valid    valid     same    `onUnmounted` from the 2.7 composition API is really called here
+  V4    valid    valid    valid     same    `renderTracked`/`renderTriggered` ARE 2.7 hooks — flagging them gets a guard switched off
+  V5    valid    valid    valid     same    the names in a comment are prose; 12 such lines exist in the estate
+  D1    defect   defect   defect    same    Vue 3 directive hook inside an INLINE `directives:` def — Vue 2 directives use bind/inserted/update/componentUpdated/unbind
+  D2    valid    valid    valid     same    Vue 2 directive hooks inside an inline def are correct and must not be flagged
+  C1    defect   defect   defect    same    an INLINE child component options object carrying `unmounted`
+  B1    opaque   defect X opaque    survivor UNPARSEABLE file — a scanner that cannot look must not answer "clean"
+  B2    defect   valid X  defect    survivor a `//` inside a STRING makes stripComments eat the rest of the line, declaration and all
+  B3    defect   valid X  defect    survivor a `/*` in one string and a `*/` in a later one makes stripComments swallow everything between
+  B4    opaque   valid X  opaque    survivor options behind an identifier — nothing can read the keys, so nothing may call it clean
+
+-- the only question that decides whether the removal is safe --
+  cases the narrow sweep caught that the survivor does NOT: 0
+      (none — every case the narrow sweep answered correctly, the survivor also answers correctly)
+  cases the survivor answers correctly and the narrow sweep does not: 7
+      GAINED N9: `emits:` — the Modal.vue defect; outside the narrow sweep's two names
+      GAINED V1: a METHOD named `unmounted` is legal Vue 2 and must not be flagged
+      GAINED V2: the name inside a STRING is not an option key
+      GAINED B1: UNPARSEABLE file — a scanner that cannot look must not answer "clean"
+      GAINED B2: a `//` inside a STRING makes stripComments eat the rest of the line, declaration and all
+      GAINED B3: a `/*` in one string and a `*/` in a later one makes stripComments swallow everything between
+      GAINED B4: options behind an identifier — nothing can read the keys, so nothing may call it clean
+  legal Vue 2.7 the narrow sweep would have flagged (over-rejection, not coverage): 2
+      OVER-REJECT V1: a METHOD named `unmounted` is legal Vue 2 and must not be flagged
+      OVER-REJECT V2: the name inside a STRING is not an option key

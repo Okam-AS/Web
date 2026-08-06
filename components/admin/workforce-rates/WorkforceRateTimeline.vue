@@ -141,6 +141,7 @@ import {
   parseRateAmount
 } from '~/utils/workforce-rates/rate-amount';
 import { RATE_EMPTY, RATE_UNKNOWN, collisionOn, predecessorOn, successorOn } from '~/utils/workforce-rates/rate-timeline';
+import { crossCurrencyLabel } from '~/utils/cross-currency';
 
 const CURRENCY = /^[A-Z]{3}$/;
 
@@ -256,8 +257,14 @@ export default {
      * which is core's for kroner and `formatChf` for francs). When the API stated the rate in some
      * other currency the symbol is withheld and the ISO code printed instead.
      *
-     * Same rule as `WorkforceWeekGrid.vue`'s `amount` and `utils/margin/money.js` — three copies on
-     * this estate now, and it belongs in one shared money util in a cleanup pass.
+     * Same rule as `WorkforceWeekGrid.vue`'s `amount` and `utils/margin/money.js`, and no longer three
+     * copies of it: the composition itself is `crossCurrencyLabel` in `~/utils/cross-currency`, which
+     * is also where its refusal of an unstated amount lives.
+     *
+     * The `=== null` below therefore is not the only thing standing between an absent rate and a
+     * printed "0,00 SEK" any more. It stays because it is the narrower statement — a rate row whose
+     * amount is null is a row this timeline has a specific `dash` for — but removing it no longer
+     * manufactures a figure.
      *
      * No arithmetic: the integer off the wire is what gets formatted. Rates cannot be negative (the
      * server refuses a non-positive one as `workforce.rate-not-positive`), so the sub-krone negative
@@ -266,7 +273,7 @@ export default {
     amountLabel (row) {
       if (row.hourlyRateMinor === null) { return this.dash; }
       if (row.currency && this.currency && row.currency !== this.currency) {
-        return this.wholeAmount(row.hourlyRateMinor) + ',' + this.fractionAmount(row.hourlyRateMinor) + ' ' + row.currency;
+        return crossCurrencyLabel(row.hourlyRateMinor, row.currency, this);
       }
       return this.priceLabel(row.hourlyRateMinor);
     },

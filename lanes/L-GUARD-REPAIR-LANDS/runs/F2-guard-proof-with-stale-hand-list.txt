@@ -1,0 +1,251 @@
+journey.js under test  6dd043e1f34648c3fc5f322c0a777247b35c1d591766991b8ff0621c51e631c2
+  pristine copy        6dd043e1f34648c3fc5f322c0a777247b35c1d591766991b8ff0621c51e631c2
+  mutant copy          190f29efcd81957cb74033bbcc077cddca755f4b00e9095c2511eeef45ffd57f   (re-throw removed)
+  split-mutant copy    3e57975b5f5f4e90f44e9ecae918c8c7eb4e7a7203cb6c1870082183aad959c8   (split-origin guard disabled)
+stand-in live api      http://127.0.0.1:65304
+stand-in fixture       http://127.0.0.1:65305
+stand-in app           http://127.0.0.1:65306
+
+  FAIL  1    exit 1     artifact NONE     (no summary)            live-labelled, app compiled against the FIXTURE
+        expected exit nonzero and artifact failed
+  FAIL  2    exit 1     artifact NONE     (no summary)            fixture-labelled, app compiled against a LIVE api
+        expected exit nonzero and artifact failed
+  ok    3    exit 1     artifact NONE     (no summary)            live-labelled, pointed AT the throwaway fixture
+  FAIL  4    exit 1     artifact NONE     (no summary)            live-labelled, app compiled against that LIVE api (honest)
+        expected exit zero and artifact passed
+  FAIL  5    exit 1     artifact NONE     (no summary)            fixture-labelled, app compiled against that FIXTURE (honest)
+        expected exit zero and artifact passed
+  FAIL  S1   exit 1     artifact NONE     (no summary)            live-labelled; signs in at the named api, fetches its SUBJECT elsewhere
+        expected exit nonzero and artifact failed
+  FAIL  S2   exit 1     artifact NONE     (no summary)            fixture-labelled; signs in at the fixture, fetches its SUBJECT elsewhere
+        expected exit nonzero and artifact failed
+  FAIL  M1   exit 1     artifact NONE     (no summary)            arm 1 with the re-throw REMOVED — must go green again
+        expected exit zero and artifact failed
+  FAIL  M2   exit 1     artifact NONE     (no summary)            arm 2 with the re-throw REMOVED — must go green again
+        expected exit zero and artifact failed
+  FAIL  M3   exit 1     artifact NONE     (no summary)            arm S1 with the split-origin guard DISABLED — must go green again
+        expected exit zero and artifact passed
+
+9 of 10 arms did not do what they must.
+
+---- arm 1 (live-labelled, app compiled against the FIXTURE) ----
+Error: Cannot find module './world-stamp'
+Require stack:
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/support/artifact-store.js
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/support/journey.js
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/journeys/guard-probe.spec.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/common/index.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/program.js
+- /Users/svendaneel/okam/Web-modules/node_modules/@playwright/test/cli.js
+
+   at ../support/artifact-store.js:138
+
+  136 | const crypto = require('crypto');
+  137 | const { execFileSync } = require('child_process');
+> 138 | const worldStamp = require('./world-stamp');
+      |                    ^
+  139 |
+  140 | const RUNS_DIRNAME = 'runs';
+  141 | const LEDGER_NAME = 'ledger.jsonl';
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/support/artifact-store.js:138:20)
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/support/journey.js:149:15)
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/journeys/guard-probe.spec.js:1:42)
+Error: No tests found
+
+---- arm 2 (fixture-labelled, app compiled against a LIVE api) ----
+Error: Cannot find module './world-stamp'
+Require stack:
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/support/artifact-store.js
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/support/journey.js
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/journeys/guard-probe.spec.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/common/index.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/program.js
+- /Users/svendaneel/okam/Web-modules/node_modules/@playwright/test/cli.js
+
+   at ../support/artifact-store.js:138
+
+  136 | const crypto = require('crypto');
+  137 | const { execFileSync } = require('child_process');
+> 138 | const worldStamp = require('./world-stamp');
+      |                    ^
+  139 |
+  140 | const RUNS_DIRNAME = 'runs';
+  141 | const LEDGER_NAME = 'ledger.jsonl';
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/support/artifact-store.js:138:20)
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/support/journey.js:149:15)
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/journeys/guard-probe.spec.js:1:42)
+Error: No tests found
+
+---- arm 4 (live-labelled, app compiled against that LIVE api (honest)) ----
+Error: Cannot find module './world-stamp'
+Require stack:
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/support/artifact-store.js
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/support/journey.js
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/journeys/guard-probe.spec.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/common/index.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/program.js
+- /Users/svendaneel/okam/Web-modules/node_modules/@playwright/test/cli.js
+
+   at ../support/artifact-store.js:138
+
+  136 | const crypto = require('crypto');
+  137 | const { execFileSync } = require('child_process');
+> 138 | const worldStamp = require('./world-stamp');
+      |                    ^
+  139 |
+  140 | const RUNS_DIRNAME = 'runs';
+  141 | const LEDGER_NAME = 'ledger.jsonl';
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/support/artifact-store.js:138:20)
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/support/journey.js:149:15)
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/journeys/guard-probe.spec.js:1:42)
+Error: No tests found
+
+---- arm 5 (fixture-labelled, app compiled against that FIXTURE (honest)) ----
+Error: Cannot find module './world-stamp'
+Require stack:
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/support/artifact-store.js
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/support/journey.js
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/journeys/guard-probe.spec.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/common/index.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/program.js
+- /Users/svendaneel/okam/Web-modules/node_modules/@playwright/test/cli.js
+
+   at ../support/artifact-store.js:138
+
+  136 | const crypto = require('crypto');
+  137 | const { execFileSync } = require('child_process');
+> 138 | const worldStamp = require('./world-stamp');
+      |                    ^
+  139 |
+  140 | const RUNS_DIRNAME = 'runs';
+  141 | const LEDGER_NAME = 'ledger.jsonl';
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/support/artifact-store.js:138:20)
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/support/journey.js:149:15)
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/journeys/guard-probe.spec.js:1:42)
+Error: No tests found
+
+---- arm S1 (live-labelled; signs in at the named api, fetches its SUBJECT elsewhere) ----
+Error: Cannot find module './world-stamp'
+Require stack:
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/support/artifact-store.js
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/support/journey.js
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/journeys/guard-probe.spec.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/common/index.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/program.js
+- /Users/svendaneel/okam/Web-modules/node_modules/@playwright/test/cli.js
+
+   at ../support/artifact-store.js:138
+
+  136 | const crypto = require('crypto');
+  137 | const { execFileSync } = require('child_process');
+> 138 | const worldStamp = require('./world-stamp');
+      |                    ^
+  139 |
+  140 | const RUNS_DIRNAME = 'runs';
+  141 | const LEDGER_NAME = 'ledger.jsonl';
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/support/artifact-store.js:138:20)
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/support/journey.js:149:15)
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/journeys/guard-probe.spec.js:1:42)
+Error: No tests found
+
+---- arm S2 (fixture-labelled; signs in at the fixture, fetches its SUBJECT elsewhere) ----
+Error: Cannot find module './world-stamp'
+Require stack:
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/support/artifact-store.js
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/support/journey.js
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/journeys/guard-probe.spec.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/common/index.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/program.js
+- /Users/svendaneel/okam/Web-modules/node_modules/@playwright/test/cli.js
+
+   at ../support/artifact-store.js:138
+
+  136 | const crypto = require('crypto');
+  137 | const { execFileSync } = require('child_process');
+> 138 | const worldStamp = require('./world-stamp');
+      |                    ^
+  139 |
+  140 | const RUNS_DIRNAME = 'runs';
+  141 | const LEDGER_NAME = 'ledger.jsonl';
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/support/artifact-store.js:138:20)
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/support/journey.js:149:15)
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/pristine/test/e2e/journeys/guard-probe.spec.js:1:42)
+Error: No tests found
+
+---- arm M1 (arm 1 with the re-throw REMOVED — must go green again) ----
+Error: Cannot find module './world-stamp'
+Require stack:
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/mutant/test/e2e/support/artifact-store.js
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/mutant/test/e2e/support/journey.js
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/mutant/test/e2e/journeys/guard-probe.spec.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/common/index.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/program.js
+- /Users/svendaneel/okam/Web-modules/node_modules/@playwright/test/cli.js
+
+   at ../support/artifact-store.js:138
+
+  136 | const crypto = require('crypto');
+  137 | const { execFileSync } = require('child_process');
+> 138 | const worldStamp = require('./world-stamp');
+      |                    ^
+  139 |
+  140 | const RUNS_DIRNAME = 'runs';
+  141 | const LEDGER_NAME = 'ledger.jsonl';
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/mutant/test/e2e/support/artifact-store.js:138:20)
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/mutant/test/e2e/support/journey.js:149:15)
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/mutant/test/e2e/journeys/guard-probe.spec.js:1:42)
+Error: No tests found
+
+---- arm M2 (arm 2 with the re-throw REMOVED — must go green again) ----
+Error: Cannot find module './world-stamp'
+Require stack:
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/mutant/test/e2e/support/artifact-store.js
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/mutant/test/e2e/support/journey.js
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/mutant/test/e2e/journeys/guard-probe.spec.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/common/index.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/program.js
+- /Users/svendaneel/okam/Web-modules/node_modules/@playwright/test/cli.js
+
+   at ../support/artifact-store.js:138
+
+  136 | const crypto = require('crypto');
+  137 | const { execFileSync } = require('child_process');
+> 138 | const worldStamp = require('./world-stamp');
+      |                    ^
+  139 |
+  140 | const RUNS_DIRNAME = 'runs';
+  141 | const LEDGER_NAME = 'ledger.jsonl';
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/mutant/test/e2e/support/artifact-store.js:138:20)
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/mutant/test/e2e/support/journey.js:149:15)
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/mutant/test/e2e/journeys/guard-probe.spec.js:1:42)
+Error: No tests found
+
+---- arm M3 (arm S1 with the split-origin guard DISABLED — must go green again) ----
+Error: Cannot find module './world-stamp'
+Require stack:
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/split-mutant/test/e2e/support/artifact-store.js
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/split-mutant/test/e2e/support/journey.js
+- /private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/split-mutant/test/e2e/journeys/guard-probe.spec.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/common/index.js
+- /Users/svendaneel/okam/Web-modules/node_modules/playwright/lib/program.js
+- /Users/svendaneel/okam/Web-modules/node_modules/@playwright/test/cli.js
+
+   at ../support/artifact-store.js:138
+
+  136 | const crypto = require('crypto');
+  137 | const { execFileSync } = require('child_process');
+> 138 | const worldStamp = require('./world-stamp');
+      |                    ^
+  139 |
+  140 | const RUNS_DIRNAME = 'runs';
+  141 | const LEDGER_NAME = 'ledger.jsonl';
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/split-mutant/test/e2e/support/artifact-store.js:138:20)
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/split-mutant/test/e2e/support/journey.js:149:15)
+    at Object.<anonymous> (/private/var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/journey-guard-proof-rNTniz/split-mutant/test/e2e/journeys/guard-probe.spec.js:1:42)
+Error: No tests found
+
+A MUTANT ARM FAILED. That is not a guard regression — it means this proof is no longer
+measuring the statement it removes, so the arms it backs prove nothing either. Fix the
+mutation first.
+
+EXIT=1

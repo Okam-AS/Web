@@ -1,0 +1,88 @@
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:72 warn W-NEEDS-LONG FT-WORKFORCE has 11 needs — that is a missing Stage
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:288 warn W-NEEDS-LONG FT-EVENTS has 9 needs — that is a missing Stage
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:361 warn W-NEEDS-LONG FT-MEALS has 10 needs — that is a missing Stage
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:572 warn W-NEEDS-LONG FT-GROWTH has 24 needs — that is a missing Stage
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:667 warn W-NEEDS-LONG S-EVIDENCE has 9 needs — that is a missing Stage
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:670 warn W-NEEDS-LONG S-PILOT-SAFE has 19 needs — that is a missing Stage
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:1943 warn W-EXIT-WEASEL exit criterion says `complete` — name the instrument, not the virtue
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:1964 warn W-EXIT-WEASEL exit criterion says `complete` — name the instrument, not the virtue
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:3700 warn W-EXIT-SUITE-ONLY "tests pass" alone is not an exit criterion
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:4003 warn W-EXIT-WEASEL exit criterion says `working` — name the instrument, not the virtue
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:6433 warn W-EXIT-WEASEL exit criterion says `complete` — name the instrument, not the virtue
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:6445 warn W-EXIT-WEASEL exit criterion says `complete` — name the instrument, not the virtue
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:6457 warn W-EXIT-WEASEL exit criterion says `complete` — name the instrument, not the virtue
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:6469 warn W-EXIT-WEASEL exit criterion says `complete` — name the instrument, not the virtue
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:9539 warn W-BANNED banned vocabulary `%` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:10026 warn W-BANNED banned vocabulary `working on` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:10105 warn W-BANNED banned vocabulary `currently` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:10113 warn W-BANNED banned vocabulary `done` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:10531 warn W-BANNED banned vocabulary `NN percent` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:10662 warn W-BANNED banned vocabulary `NN percent` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:10977 warn W-BANNED banned vocabulary `currently` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:10982 warn W-EXIT-WEASEL exit criterion says `correctly` — name the instrument, not the virtue
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:11607 warn W-BANNED banned vocabulary `is working` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:11717 warn W-BANNED banned vocabulary `done` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:12204 warn W-BANNED banned vocabulary `%` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:13114 warn W-BANNED banned vocabulary `currently` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:13386 warn W-BANNED banned vocabulary `%` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:14368 warn W-BANNED banned vocabulary `done` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:14859 warn W-EXIT-WEASEL exit criterion says `complete` — name the instrument, not the virtue
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:14931 warn W-BANNED banned vocabulary `done` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:14935 warn W-BANNED banned vocabulary `currently` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:15159 warn W-BANNED banned vocabulary `currently` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:15588 warn W-DECISION-RECOMMEND Decision D-MEALS-SPLIT: `recommend:` carries no reasoning — write `<slug> — why`, or leave it out
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:16464 warn W-BANNED banned vocabulary `done` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:17535 warn W-BANNED banned vocabulary `done` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:17607 warn W-BANNED banned vocabulary `%` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:17656 warn W-BANNED banned vocabulary `done` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:18003 warn W-DECISION-REOPEN Decision D-SPEC-L-POS-TENDER-WIRE-REBASE is ruled and owes `reopen_when:`
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:18141 warn W-BANNED banned vocabulary `done` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:18473 warn W-DECISION-REOPEN Decision D-SPEC-L-ARM-RECEIPTS-RECAPTURE is ruled and owes `reopen_when:`
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:18534 warn W-BANNED banned vocabulary `done` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:18621 warn W-DECISION-REOPEN Decision D-SPEC-L-PAYMENTTYPE-COMPANYACCOUNT is ruled and owes `reopen_when:`
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:18749 warn W-BANNED banned vocabulary `done` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:18777 warn W-BANNED banned vocabulary `currently` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:18993 warn W-FLAG-PROSE Flag F-WOLT-DEAD: `clears_when` mixes fact references with prose the tool cannot test (or the class gone the owner clears this against that diff) — clearing it will need the owner
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:19273 warn W-BANNED banned vocabulary `currently` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:20255 warn W-BANNED banned vocabulary `done` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:20611 warn W-BANNED banned vocabulary `done` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:20854 warn W-FLAG-INERT Flag F-GR-NO-EXIT-FROM-A-LIST is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:21074 warn W-BANNED banned vocabulary `done` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:21392 warn W-FLAG-INERT Flag F-CORE-PIN-ON-NO-REMOTE is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:21717 warn W-FLAG-INERT Flag F-CLOCKOUT-ANSWERS-OPEN is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:21864 warn W-FLAG-PROSE Flag F-FLAG-CONDITIONS-ARE-NOT-TESTABLE: `clears_when` mixes fact references with prose the tool cannot test (a majority open blocker flags carry a clears_when naming a fact: key so the clerk can clear them by measurement rather than by asking) — clearing it will need the owner
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:21930 warn W-BANNED banned vocabulary `done` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:22056 warn W-FLAG-INERT Flag F-GROWTH-PUBLISH-LIES-ABOUT-WHY-IT-FAILED is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:22097 warn W-FLAG-INERT Flag F-FLAG-PROBES-CANNOT-COMPARE-A-VALUE is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:22128 warn W-BANNED banned vocabulary `currently` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:22169 warn W-FLAG-INERT Flag F-RF1313-CREDIT-SALE-CLAIM-UNBACKED is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:22226 warn W-FLAG-INERT Flag F-MIG22-CLAIMED-TWICE is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:22322 warn W-FLAG-INERT Flag F-NEGATIVE-SALE-REFUNDS-THE-LISTED-PRICE is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:22345 warn W-FLAG-INERT Flag F-JOURNEY-RECEIPT-DOES-NOT-NAME-ITS-FIXTURE is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:22408 warn W-FLAG-INERT Flag F-MIG17-WIDTH-HALF-THE-SPEC is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:22422 warn W-BANNED banned vocabulary `done` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:22426 warn W-FLAG-INERT Flag F-THROW-50018-ALREADY-SPENT is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:22448 warn W-FLAG-INERT Flag F-INT-LEDGER-CEILING-SIX-LOW is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:22516 warn W-FLAG-INERT Flag F-JOURNEY-GUARD-WAS-DEAD is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:22608 warn W-FLAG-INERT Flag F-WORKTREE-WITHOUT-MODULES-FAILS-SILENTLY is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:22731 warn W-BANNED banned vocabulary `NN percent` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:22804 warn W-FLAG-INERT Flag F-TRANSLATION-MERGE-DUPLICATES-A-KEY-SILENTLY is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:22848 warn W-FLAG-INERT Flag F-ARTIFACTS-FROM-A-HARNESS-THE-BRANCH-LACKS is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:22964 warn W-BANNED banned vocabulary `currently` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:22998 warn W-FLAG-INERT Flag F-FIXTURE-PRINTS-WORDS-THE-PRODUCT-CANNOT-SAY is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:23033 warn W-FLAG-INERT Flag F-SV-NUMBER-PASSES-THE-FODSELSNUMMER-GUARD is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:23057 warn W-FLAG-INERT Flag F-CLOCKSCREEN-FOUR-BRANCHES-NO-KEYS is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:23141 warn W-FLAG-INERT Flag F-CH-BUILD-COPY-HAS-NO-DOM-GUARD is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:23182 warn W-FLAG-INERT Flag F-FINISHED-WORK-ON-NO-REF is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:23374 warn W-BANNED banned vocabulary `%` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:23389 warn W-FLAG-INERT Flag F-MIXIN-LABELS-CANNOT-TRANSLATE is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:23435 warn W-FLAG-INERT Flag F-EVERY-LANE-DEPENDENCY-ENDS-AT-SVEN is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:23467 warn W-FLAG-INERT Flag F-SYMLINKED-MODULES-COMPILE-THE-OTHER-TREE is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:23562 warn W-FLAG-INERT Flag F-A-RERUN-TAKES-THE-CANONICAL-SLOT is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:23588 warn W-FLAG-INERT Flag F-NOTHING-RUNS-A-SUITE-IN-CI is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:23628 warn W-BANNED banned vocabulary `currently` in prose
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:23639 warn W-FLAG-INERT Flag F-NPM-INSTALL-CANNOT-SUCCEED is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:23834 warn W-FLAG-INERT Flag F-A-VERIFIED-LANE-RESTS-ON-A-FAILED-RUN is `severity: blocker` and nothing needs it — it colours the headline and gates no lane; add it to a `needs:`/`gate:` or lower the severity
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:23946 warn W-PROBE-PROSE probe `ev.journeys` reads a prose file (../OkamAPI-modules/WebApi.Tests/Events/EVENTS-JOURNEY-MANIFEST.md) — an agent writing a sentence about its own work would satisfy it; point it at an artifact a build produced
+lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/chk/plan.md:23947 warn W-PROBE-PROSE probe `wf.journeys` reads a prose file (../OkamAPI-modules/WebApi.Tests/Workforce/WORKFORCE-JOURNEY-MANIFEST.md) — an agent writing a sentence about its own work would satisfy it; point it at an artifact a build produced
+check: 0 error(s), 87 warning(s)

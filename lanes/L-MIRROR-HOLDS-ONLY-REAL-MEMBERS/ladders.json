@@ -1,0 +1,683 @@
+[
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "pages/admin/statistics.vue",
+  "line": 795,
+  "labels": [
+   "InstantHomeDelivery",
+   "SelfPickup",
+   "TableDelivery",
+   "WoltDelivery"
+  ],
+  "has_default": true,
+  "be": "DeliveryType",
+  "be_path": "Enums/DeliveryType.cs",
+  "score": 0.57,
+  "short": [
+   "DineHomeDelivery",
+   "NotSet",
+   "WoltMarketplaceDelivery"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "pages/admin/statistics.vue",
+  "line": 822,
+  "labels": [
+   "InstantHomeDelivery",
+   "SelfPickup",
+   "TableDelivery",
+   "WoltDelivery"
+  ],
+  "has_default": true,
+  "be": "DeliveryType",
+  "be_path": "Enums/DeliveryType.cs",
+  "score": 0.57,
+  "short": [
+   "DineHomeDelivery",
+   "NotSet",
+   "WoltMarketplaceDelivery"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "pages/admin/statistics.vue",
+  "line": 858,
+  "labels": [
+   "InstantHomeDelivery",
+   "SelfPickup",
+   "TableDelivery",
+   "WoltDelivery"
+  ],
+  "has_default": true,
+  "be": "DeliveryType",
+  "be_path": "Enums/DeliveryType.cs",
+  "score": 0.57,
+  "short": [
+   "DineHomeDelivery",
+   "NotSet",
+   "WoltMarketplaceDelivery"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "pages/admin/statistics.vue",
+  "line": 885,
+  "labels": [
+   "InstantHomeDelivery",
+   "SelfPickup",
+   "TableDelivery",
+   "WoltDelivery"
+  ],
+  "has_default": true,
+  "be": "DeliveryType",
+  "be_path": "Enums/DeliveryType.cs",
+  "score": 0.57,
+  "short": [
+   "DineHomeDelivery",
+   "NotSet",
+   "WoltMarketplaceDelivery"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "plugins/global-mixin.js",
+  "line": 98,
+  "labels": [
+   "DineHomeDelivery",
+   "GroupedHomeDelivery",
+   "InstantHomeDelivery",
+   "SelfPickup",
+   "TableDelivery",
+   "WoltDelivery",
+   "WoltMarketplaceDelivery"
+  ],
+  "has_default": true,
+  "be": "DeliveryType",
+  "be_path": "Enums/DeliveryType.cs",
+  "score": 0.75,
+  "short": [
+   "NotSet"
+  ],
+  "extra": [
+   "GroupedHomeDelivery"
+  ]
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "components/molecules/OrderCard.vue",
+  "line": 303,
+  "labels": [
+   "Accepted",
+   "Canceled",
+   "Completed",
+   "PickedUp",
+   "ReachedDestination"
+  ],
+  "has_default": true,
+  "be": "DineHomeStatus",
+  "be_path": "Enums/DineHomeStatus.cs",
+  "score": 0.83,
+  "short": [
+   "NotSet"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "plugins/global-mixin.js",
+  "line": 110,
+  "labels": [
+   "Accepted",
+   "Canceled",
+   "Completed",
+   "PickedUp",
+   "ReachedDestination"
+  ],
+  "has_default": true,
+  "be": "DineHomeStatus",
+  "be_path": "Enums/DineHomeStatus.cs",
+  "score": 0.83,
+  "short": [
+   "NotSet"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "utils/events/guest.js",
+  "line": 134,
+  "labels": [
+   "Expired",
+   "Failed",
+   "Forfeited",
+   "LatePaid",
+   "Paid",
+   "PartiallyRefunded",
+   "Quarantined",
+   "Refunded"
+  ],
+  "has_default": false,
+  "be": "EventsDepositStatus",
+  "be_path": "Enums/Events/EventsDepositStatus.cs",
+  "score": 0.8,
+  "short": [
+   "Pending",
+   "Requested"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "utils/events/guest.js",
+  "line": 94,
+  "labels": [
+   "Accepted",
+   "Declined",
+   "Expired",
+   "Sent",
+   "Superseded"
+  ],
+  "has_default": true,
+  "be": "EventsProposalVersionStatus",
+  "be_path": "Enums/Events/EventsProposalVersionStatus.cs",
+  "score": 0.83,
+  "short": [
+   "Draft"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "utils/margin/units.js",
+  "line": 40,
+  "labels": [
+   "Gram",
+   "Kilogram",
+   "Liter",
+   "Milliliter",
+   "Piece"
+  ],
+  "has_default": true,
+  "be": "MarginBaseUnit",
+  "be_path": "Enums/Margin/MarginBaseUnit.cs",
+  "score": 1.0,
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "components/admin/meals/MealsCompanyPanel.vue",
+  "line": 230,
+  "labels": [
+   "Active",
+   "Archived"
+  ],
+  "has_default": true,
+  "be": "MarginLifecycleStatus",
+  "be_path": "Enums/Margin/MarginLifecycleStatus.cs",
+  "score": 1.0,
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "components/admin/meals/MealsAgreementList.vue",
+  "line": 118,
+  "labels": [
+   "Active",
+   "Ended"
+  ],
+  "has_default": true,
+  "be": "MealsAgreementStatus",
+  "be_path": "Enums/Meals/MealsAgreementStatus.cs",
+  "score": 1.0,
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "components/admin/meals/MealsAgreementList.vue",
+  "line": 125,
+  "labels": [
+   "Active",
+   "Ended"
+  ],
+  "has_default": true,
+  "be": "MealsAgreementStatus",
+  "be_path": "Enums/Meals/MealsAgreementStatus.cs",
+  "score": 1.0,
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "components/admin/meals/MealsCompanyPicker.vue",
+  "line": 131,
+  "labels": [
+   "Active",
+   "Ended"
+  ],
+  "has_default": true,
+  "be": "MealsAgreementStatus",
+  "be_path": "Enums/Meals/MealsAgreementStatus.cs",
+  "score": 1.0,
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "components/admin/meals/MealsCorridorPanel.vue",
+  "line": 156,
+  "labels": [
+   "Active",
+   "Ended"
+  ],
+  "has_default": true,
+  "be": "MealsAgreementStatus",
+  "be_path": "Enums/Meals/MealsAgreementStatus.cs",
+  "score": 1.0,
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "components/admin/meals/MealsPeoplePanel.vue",
+  "line": 356,
+  "labels": [
+   "CompanyAdmin",
+   "Employee"
+  ],
+  "has_default": true,
+  "be": "MealsCompanyRole",
+  "be_path": "Enums/Meals/MealsCompanyRole.cs",
+  "score": 1.0,
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "pages/meals/join.vue",
+  "line": 404,
+  "labels": [
+   "CompanyAdmin",
+   "Employee"
+  ],
+  "has_default": true,
+  "be": "MealsCompanyRole",
+  "be_path": "Enums/Meals/MealsCompanyRole.cs",
+  "score": 1.0,
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "components/admin/meals/MealsPeoplePanel.vue",
+  "line": 364,
+  "labels": [
+   "Claimed",
+   "Expired",
+   "Pending",
+   "Revoked"
+  ],
+  "has_default": true,
+  "be": "MealsInvitationState",
+  "be_path": "Enums/Meals/MealsInvitationState.cs",
+  "score": 1.0,
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "components/admin/meals/MealsPeoplePanel.vue",
+  "line": 373,
+  "labels": [
+   "Claimed",
+   "Pending"
+  ],
+  "has_default": true,
+  "be": "MealsInvitationState",
+  "be_path": "Enums/Meals/MealsInvitationState.cs",
+  "score": 0.5,
+  "short": [
+   "Expired",
+   "Revoked"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "components/admin/meals/MealsPeoplePanel.vue",
+  "line": 380,
+  "labels": [
+   "Active",
+   "Revoked"
+  ],
+  "has_default": true,
+  "be": "MealsMembershipState",
+  "be_path": "Enums/Meals/MealsMembershipState.cs",
+  "score": 1.0,
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "components/admin/meals/MealsFundedOrders.vue",
+  "line": 139,
+  "labels": [
+   "Bound",
+   "Captured",
+   "Released",
+   "Reserved"
+  ],
+  "has_default": true,
+  "be": "MealsReservationState",
+  "be_path": "Enums/Meals/MealsReservationState.cs",
+  "score": 1.0,
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "components/admin/meals/MealsFundedOrders.vue",
+  "line": 150,
+  "labels": [
+   "Bound",
+   "Captured",
+   "Released",
+   "Reserved"
+  ],
+  "has_default": true,
+  "be": "MealsReservationState",
+  "be_path": "Enums/Meals/MealsReservationState.cs",
+  "score": 1.0,
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "pages/admin/offers.vue",
+  "line": 775,
+  "labels": [
+   "Accepted",
+   "Cancelled",
+   "Created",
+   "Read",
+   "Rejected",
+   "Sent",
+   "StoreRegistered"
+  ],
+  "has_default": true,
+  "be": "OfferProposalStatus",
+  "be_path": "Enums/OfferProposalStatus.cs",
+  "score": 1.0,
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "pages/admin/offers.vue",
+  "line": 796,
+  "labels": [
+   "Accepted",
+   "Cancelled",
+   "Created",
+   "Read",
+   "Rejected",
+   "Sent",
+   "StoreRegistered"
+  ],
+  "has_default": true,
+  "be": "OfferProposalStatus",
+  "be_path": "Enums/OfferProposalStatus.cs",
+  "score": 1.0,
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "components/organisms/OrderModal.vue",
+  "line": 285,
+  "labels": [
+   "Canceled",
+   "Completed",
+   "Processing",
+   "ReadyForPickup"
+  ],
+  "has_default": true,
+  "be": "OrderStatus",
+  "be_path": "Enums/OrderStatus.cs",
+  "score": 0.44,
+  "short": [
+   "Accepted",
+   "DriverPickedUp",
+   "OpenCheck",
+   "ReadyForDriver",
+   "Served"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "pages/admin/orders.vue",
+  "line": 845,
+  "labels": [
+   "Accepted",
+   "Canceled",
+   "Completed",
+   "DriverPickedUp",
+   "Processing",
+   "ReadyForDriver",
+   "ReadyForPickup",
+   "Served"
+  ],
+  "has_default": true,
+  "be": "OrderStatus",
+  "be_path": "Enums/OrderStatus.cs",
+  "score": 0.89,
+  "short": [
+   "OpenCheck"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "plugins/global-mixin.js",
+  "line": 135,
+  "labels": [
+   "Accepted",
+   "Canceled",
+   "Completed",
+   "DriverPickedUp",
+   "Processing",
+   "ReadyForDriver",
+   "ReadyForPickup",
+   "Served"
+  ],
+  "has_default": true,
+  "be": "OrderStatus",
+  "be_path": "Enums/OrderStatus.cs",
+  "score": 0.89,
+  "short": [
+   "OpenCheck"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "plugins/global-mixin.js",
+  "line": 83,
+  "labels": [
+   "Dintero",
+   "DinteroBillie",
+   "DinteroKlarna",
+   "DinteroKravia",
+   "DinteroVipps",
+   "Giftcard",
+   "PayInStore",
+   "Stripe",
+   "Vipps",
+   "WoltMarketplace"
+  ],
+  "has_default": true,
+  "be": "PaymentTypeFilter",
+  "be_path": "Enums/PaymentTypeFilter.cs",
+  "score": 0.83,
+  "short": [
+   "Surfboard",
+   "SurfboardTerminal"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "plugins/global-mixin.js",
+  "line": 120,
+  "labels": [
+   "CustomerNoShow",
+   "Delivered",
+   "DropoffArrival",
+   "DropoffCompleted",
+   "DropoffStarted",
+   "OrderReceived",
+   "OrderRejected",
+   "PickedUp",
+   "PickupArrival",
+   "PickupStarted"
+  ],
+  "has_default": true,
+  "be": "WoltStatus",
+  "be_path": "Enums/WoltStatus.cs",
+  "score": 0.67,
+  "short": [
+   "DropoffEtaUpdated",
+   "HandshakeDelivery",
+   "LocationUpdated",
+   "NotSet",
+   "PickupEtaUpdated"
+  ],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "components/admin/workforce/WorkforceRequestCard.vue",
+  "line": 164,
+  "labels": [
+   "Available",
+   "Preferred",
+   "Unavailable"
+  ],
+  "has_default": true,
+  "be": "WorkforceAvailabilityKind",
+  "be_path": "Enums/Workforce/WorkforceAvailabilityKind.cs",
+  "score": 1.0,
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "components/admin/workforce/WorkforceEngagementPanel.vue",
+  "line": 591,
+  "labels": [
+   "Archived",
+   "Claimed",
+   "Invited"
+  ],
+  "has_default": true,
+  "be": "WorkforcePersonState",
+  "be_path": "Enums/Workforce/WorkforcePersonState.cs",
+  "score": 1.0,
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "pages/admin/workforce-schedule.vue",
+  "line": 563,
+  "labels": [
+   "Draft",
+   "Published",
+   "Validated"
+  ],
+  "has_default": true,
+  "be": "WorkforceScheduleRevisionState",
+  "be_path": "Enums/Workforce/WorkforceScheduleRevisionState.cs",
+  "score": 1.0,
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "components/admin/workforce/WorkforceRequestCard.vue",
+  "line": 154,
+  "labels": [
+   "DirectSwap",
+   "GiveAway",
+   "OpenPool",
+   "OpenShiftRequest"
+  ],
+  "has_default": true,
+  "be": "WorkforceShiftExchangeKind",
+  "be_path": "Enums/Workforce/WorkforceShiftExchangeKind.cs",
+  "score": 1.0,
+  "short": [],
+  "extra": []
+ },
+ {
+  "repo": "Web-modules",
+  "ref": "9f7d8dfc",
+  "path": "utils/workforce-me/self-requests.js",
+  "line": 270,
+  "labels": [
+   "Approved",
+   "Expired",
+   "Rejected",
+   "Submitted",
+   "UnderReview",
+   "Withdrawn"
+  ],
+  "has_default": true,
+  "be": "WorkforceTimeOffRequestStatus",
+  "be_path": "Enums/Workforce/WorkforceTimeOffRequestStatus.cs",
+  "score": 1.0,
+  "short": [],
+  "extra": []
+ }
+]

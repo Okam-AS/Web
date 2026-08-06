@@ -1,0 +1,26 @@
+Would `plan verify <FT> --evidence <X>` be admitted?
+(evidence_admissible = the exact predicate cmd_verify calls)
+
+              artifacts                                 modal-scroll- growth-newsle training-cour 
+FT-WORKFORCE  ADMITTED      ADMITTED      ADMITTED      ADMITTED      ADMITTED      ADMITTED      
+FT-MARGIN     ADMITTED      ADMITTED      ADMITTED      ADMITTED      ADMITTED      ADMITTED      
+FT-EVENTS     ADMITTED      ADMITTED      ADMITTED      ADMITTED      ADMITTED      ADMITTED      
+FT-MEALS      ADMITTED      ADMITTED      ADMITTED      ADMITTED      ADMITTED      ADMITTED      
+FT-TRAINING   ADMITTED      ADMITTED      ADMITTED      ADMITTED      ADMITTED      ADMITTED      
+FT-GROWTH     ADMITTED      ADMITTED      ADMITTED      ADMITTED      ADMITTED      ADMITTED      
+
+refusal reasons, where any:
+  artifacts                                                        ADMITTED
+  artifacts/                                                       ADMITTED
+  artifacts/journeys/                                              ADMITTED
+  artifacts/journeys/modal-scroll-lock.playwright.json             ADMITTED
+  artifacts/journeys/growth-newsletter-send-gate.playwright.json   ADMITTED
+  artifacts/journeys/training-course-to-evidence.playwright.json   ADMITTED
+
+And what each of those artifacts says about itself:
+  artifacts                                                        DIRECTORY (6 entries)
+  artifacts/                                                       DIRECTORY (6 entries)
+  artifacts/journeys/                                              DIRECTORY (78 entries)
+  artifacts/journeys/modal-scroll-lock.playwright.json             status: passed
+  artifacts/journeys/growth-newsletter-send-gate.playwright.json   status: failed
+  artifacts/journeys/training-course-to-evidence.playwright.json   status: failed

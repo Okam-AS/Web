@@ -1,0 +1,13 @@
+=== baseline at 5df07afa (tip named in the brief) ===
+Passed!  - Failed:     0, Passed:  4571, Skipped:    12, Total:  4583, Duration: 5 m 15 s - WebApi.Tests.dll (net8.0)
+EXIT=0
+=== base at 26599c6e (tip the merge actually landed on) ===
+Passed!  - Failed:     0, Passed:  4597, Skipped:    12, Total:  4609, Duration: 5 m 13 s - WebApi.Tests.dll (net8.0)
+EXIT=0
+=== build at merge commit 569887a5 (BEFORE the tier) ===
+Build succeeded.
+    713 Warning(s)
+    0 Error(s)
+=== merged tier at 569887a5 ===
+Passed!  - Failed:     0, Passed:  4629, Skipped:    12, Total:  4641, Duration: 5 m 42 s - WebApi.Tests.dll (net8.0)
+EXIT=0

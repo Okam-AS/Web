@@ -1,0 +1,3 @@
+f58a9b03f9429f626a8fc1d869dc2edaf0d040605b30659919bfb41fe5c0184d  /Users/svendaneel/okam/Web-modules/translations/de.ts
+79eb9ba6a7aa6352f9f266739a43c947470e29d17bcc047cfa6a7085dd308dcc  /Users/svendaneel/okam/Web-modules/translations/en.ts
+735a734c9d79e43185169679c89c9aa25ac9359ae3eca496e91a057a95917449  /Users/svendaneel/okam/Web-modules/translations/no.ts

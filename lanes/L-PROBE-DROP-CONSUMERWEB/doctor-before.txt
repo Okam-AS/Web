@@ -1,0 +1,13 @@
+plan:  /Users/svendaneel/okam/Web-modules/docs/plan/plan.md
+  ok      scripts/worldstamp
+  ok      .claude/hooks/plan-wake.sh
+  ok      .claude/hooks/plan-pulse.sh
+  ok      world.config
+  ok      .claude/settings.json
+
+worlds (. plus every root the probes table names):
+  ok        .  on feature/restaurant-modules
+  UNDECLARED ../ConsumerWeb  on feature/swiss
+  MISMATCH  ../OkamAPI-modules  on lane/meals-grace-pins, expected feature/restaurant-modules (missing 4 landed, carrying 1 unlanded)
+
+NEEDED(138): rule D-EHF-INVOICE-ACCESS; rule D-INTEGRATION-FASTFORWARD; rule D-MRG-CURATION-CONTENT +135 more · run 4/12 ready 17 REFILL-DEBT(2) · flags 58! 86~ · facts 1h, 10 unconf

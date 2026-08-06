@@ -1,0 +1,76 @@
+{
+  "journey": "growth-newsletter-send-gate",
+  "title": "An operator drafts and approves a newsletter, and the send gate opens only when both switches are up",
+  "status": "failed",
+  "startedAtUtc": "2026-08-06T11:02:02.400Z",
+  "finishedAtUtc": "2026-08-06T11:03:04.630Z",
+  "durationMs": 62230,
+  "capabilities": [
+    "platform.feature-flags.write",
+    "growth.consent.standing.read",
+    "growth.audience.snapshot",
+    "growth.newsletter.author",
+    "growth.newsletter.test-send",
+    "growth.newsletter.approve",
+    "growth.send-gate.fail-closed"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3878",
+  "apiBaseUrl": "http://127.0.0.1:4878",
+  "commit": "8ac6f63648015d8c7a230181a7f07bf303d43268",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": {
+    "id": "fixture@8ac6f63648015d8c7a230181a7f07bf303d43268",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "8ac6f63",
+    "detail": "the in-repo fixture backend, not an API build (branch HEAD)"
+  },
+  "backendServed": 0,
+  "backendSubjectServed": 0,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "backendSample": [],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in and open the newsletter screen",
+      "status": "failed",
+      "startedAtUtc": "2026-08-06T11:02:02.403Z",
+      "durationMs": 62193,
+      "detail": null,
+      "error": "page.waitForURL: Timeout 30000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation until \"load\"\n============================================================"
+    }
+  ],
+  "findings": [],
+  "consoleErrors": [
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED"
+  ],
+  "failedRequests": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:4878/user/sendverificationtoken",
+      "status": null,
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:4878/user/login",
+      "status": null,
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    }
+  ],
+  "screenshots": [],
+  "error": "TimeoutError: page.waitForURL: Timeout 30000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation until \"load\"\n============================================================",
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/growth-newsletter-send-gate.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false,
+    "supersedes": null
+  }
+}

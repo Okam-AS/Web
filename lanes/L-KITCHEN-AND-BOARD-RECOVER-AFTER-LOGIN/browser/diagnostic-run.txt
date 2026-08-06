@@ -1,0 +1,51 @@
+fixture up on 4903
+nuxt dev up on 3903
+compile-error lines in the dev-server log: 0  (must be 0)
+
+Running 1 test using 1 worker
+
+[obs] modals on arrival: 2  (the shell mounts one, the page mounts its own)
+[obs] url on arrival:    http://127.0.0.1:3903/admin/ongoing?redirect=%2Fadmin%2Fongoing
+[obs] FIRST sign-in completed: true
+[obs] url after first sign-in:    http://127.0.0.1:3903/admin/ongoing
+[obs] modals after first sign-in: 1
+[obs] --- after ONE sign-in, the sign-in a person actually performs ---
+[obs] /orders/ongoing calls so far:       0 (before the wait: 0)
+[obs] board polled during the 16s wait:   false
+[obs] late order 9911 drawn on the board: false
+[obs] a sign-in modal still covering it:  1
+  ✘  1 [chromium] › lanes/L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN/reachability.arm.playwright.js:34:1 › what a person gets on /admin/ongoing?redirect=… (51.0s)
+
+
+  1) [chromium] › lanes/L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN/reachability.arm.playwright.js:34:1 › what a person gets on /admin/ongoing?redirect=… 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.login-modal').first().locator('.input-wrapper input[type="tel"]')
+    Expected: visible
+    Timeout: 30000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 30000ms
+      - waiting for locator('.login-modal').first().locator('.input-wrapper input[type="tel"]')
+
+
+      60 |   async function signInThrough (modal, label) {
+      61 |     const phoneField = modal.locator('.input-wrapper input[type="tel"]');
+    > 62 |     await expect(phoneField).toBeVisible();
+         |                              ^
+      63 |     await phoneField.fill('99999999');
+      64 |     await modal.getByRole('button', { name: /Send kode|Send|senden/i }).click();
+      65 |
+        at signInThrough (/Users/svendaneel/okam/web-kitchresume/lanes/L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN/reachability.arm.playwright.js:62:30)
+        at /Users/svendaneel/okam/web-kitchresume/lanes/L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN/reachability.arm.playwright.js:104:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    lanes/L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN/runs/playwright-output/reachability.arm.playwrigh-bd900-on-admin-ongoing-redirect-…-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: lanes/L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN/runs/playwright-output/reachability.arm.playwrigh-bd900-on-admin-ongoing-redirect-…-chromium/error-context.md
+
+  1 failed
+    [chromium] › lanes/L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN/reachability.arm.playwright.js:34:1 › what a person gets on /admin/ongoing?redirect=… 

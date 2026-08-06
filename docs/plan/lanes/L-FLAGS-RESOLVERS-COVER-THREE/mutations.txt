@@ -1,0 +1,29 @@
+107ca70efe949fa2313fc1d9e76114fff3914967
+======== control (exit 0)
+Passed!  - Failed:     0, Passed:    18, Skipped:     0, Total:    18, Duration: 6 s - WebApi.Tests.dll (net8.0)
+
+removed Program.cs:795  WebApi.Services.Growth.GrowthModuleFlagEffectiveResolver
+======== MG-growth-unregistered (exit 1)
+Failed!  - Failed:     1, Passed:    17, Skipped:     0, Total:    18, Duration: 7 s - WebApi.Tests.dll (net8.0)
+  Failed WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_catalog_flag_is_either_claimed_by_a_registered_resolver_or_excused_by_name 
+
+removed Program.cs:806  WebApi.Services.Meals.MealsModuleFlagEffectiveResolver
+======== MM-meals-unregistered (exit 1)
+Failed!  - Failed:     1, Passed:    17, Skipped:     0, Total:    18, Duration: 4 s - WebApi.Tests.dll (net8.0)
+  Failed WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_catalog_flag_is_either_claimed_by_a_registered_resolver_or_excused_by_name 
+
+removed Program.cs:1115  WebApi.Services.Events.EventsModuleFlagEffectiveResolver
+======== ME-events-unregistered (exit 1)
+Failed!  - Failed:     1, Passed:    17, Skipped:     0, Total:    18, Duration: 5 s - WebApi.Tests.dll (net8.0)
+  Failed WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_catalog_flag_is_either_claimed_by_a_registered_resolver_or_excused_by_name 
+
+removed Program.cs:795  WebApi.Services.Growth.GrowthModuleFlagEffectiveResolver
+removed Program.cs:806  WebApi.Services.Meals.MealsModuleFlagEffectiveResolver
+removed Program.cs:1115  WebApi.Services.Events.EventsModuleFlagEffectiveResolver
+======== MA-all-three-unregistered (exit 1)
+Failed!  - Failed:     1, Passed:    17, Skipped:     0, Total:    18, Duration: 6 s - WebApi.Tests.dll (net8.0)
+  Failed WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_catalog_flag_is_either_claimed_by_a_registered_resolver_or_excused_by_name 
+
+ M artifacts/journeys/ev-dietary/run-sheet.json
+ M artifacts/journeys/ev-dietary/run-sheet.md
+MUTATIONS COMPLETE

@@ -1,0 +1,27 @@
+BASELINE workforce-week-run.spec.js                     exit=0 artifact=passed
+BASELINE workforce-punch-correction.spec.js             exit=0 artifact=passed
+M1   the inbox stops deriving from published revisions (its state before this lane)
+     exit=1 artifact=failed
+     red at: 10 · the publication notice is on the worker's screen at all
+     VERDICT: HELD (red at the claim)
+     restored → exit=0 artifact=passed
+M2   #44 claims every acknowledgement is a replay
+     exit=1 artifact=failed
+     red at: 11 · the worker confirms, and the server records it
+     VERDICT: HELD (red at the claim)
+     restored → exit=0 artifact=passed
+M3   acknowledging stops implying seen, so the notice would NOT vanish
+     exit=1 artifact=failed
+     red at: 12 · ...and the confirmation vanishes without a trace on screen
+     VERDICT: HELD (red at the claim)
+     restored → exit=0 artifact=passed
+M4   the SERVER withholds clockSessionId from rows[].sessions[]
+     exit=1 artifact=failed
+     red at: 3 · the punches behind the rows each name a clock session
+     VERDICT: HELD (red at the claim)
+     restored → exit=0 artifact=passed
+M5   the CLIENT projector drops clockSessionId on the way in
+     exit=1 artifact=failed
+     red at: 3 · the punches behind the rows each name a clock session
+     VERDICT: HELD (red at the claim)
+     restored → exit=0 artifact=passed

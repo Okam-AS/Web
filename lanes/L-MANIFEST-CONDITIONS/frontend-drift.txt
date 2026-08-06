@@ -1,0 +1,31 @@
+# Frontend ref drift since the census — L-MANIFEST-CONDITIONS
+# method: git for-each-ref refs/heads refs/lanes, sorted, comm'd against the 116 refs listed in appendix-frontend.txt
+# THE COUNT MOVES WHILE LANES RUN. Three readings this pass, all in the same checkout:
+#   census (2026-08-05T03:08Z, per its own return) : 107 heads + 9 lanes = 116
+#   review                                          : reported 112 then 114 heads, 7 new heads named
+#   this lane 2026-08-05T04:12Z                     : 115 heads + 9 lanes = 124   (8 new)
+#   this lane 2026-08-05T04:21Z                     : 116 heads + 9 lanes = 125   (9 new)
+# Anything stated about a ref count without its timestamp is already stale.
+
+candidate/fe-compose-2026-08-05 = 9f7d8dfc78dceaaa9c52c72ba470a34eb904a130  (unmoved since the census)
+feature/restaurant-modules      = e34977acebd59b223584158c33451b6f1ffd82c1  (unmoved since the census)
+
+## Present at 2026-08-05T04:21Z, absent from the census (9), tip authored-time local:
+  7030c00  2026-08-05T04:59 +0200  lane/guard-repair-lands
+  038612f  2026-08-05T05:28 +0200  lane/consent-reason-vocabulary
+  038612f  2026-08-05T05:28 +0200  lane/fixture-rendered-values
+  cb2cee6  2026-08-05T05:38 +0200  lane/duplicate-key-guard
+  8ad3358  2026-08-05T05:59 +0200  lane/lint-runnable
+  607f138  2026-08-05T06:05 +0200  lane/provenance-excludes-lane-evidence
+  eb9d52e  2026-08-05T06:07 +0200  lane/modules-preflight-fails-loud
+  aec051a  2026-08-05T06:21 +0200  lane/lint-two-real-defects
+  e34977a  2026-08-04T15:55 +0200  lane/vat-keys-monolingual
+
+## In the census, gone now: none.
+
+## Measured, not assumed:
+  lane/vat-keys-monolingual points at e34977a = feature/restaurant-modules itself; it carries no commit either anchor lacks.
+  lane/consent-reason-vocabulary and lane/fixture-rendered-values share one oid 038612f — two names, one commit.
+  Not classified here: containment and payload of the other seven. The exit asked for the cut-off to be stated, not for a second census.
+
+## Backend, same instant: 317 heads, 0 lanes. comm against appendix-backend.txt = 0 added, 0 gone. Zero drift.

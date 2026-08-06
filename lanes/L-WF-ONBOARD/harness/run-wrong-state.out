@@ -1,0 +1,3 @@
+
+[1m== 5b. Nora joins (POST staff/{id}/invitations -> POST /workforce/me/invitations/claim)[0m
+[31mFAILED: the claim left the person in state 'Invited', expected Claimed[0m

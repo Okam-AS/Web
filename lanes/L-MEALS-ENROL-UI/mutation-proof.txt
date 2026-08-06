@@ -1,0 +1,40 @@
+ARM baseline                       expected=green observed=green OK
+ARM page-handler-unbound           expected=red   observed=red   OK
+        ✕ the eligibility read answers not-eligible after the claim, and eligible after the enrolment (66 ms)
+        ✕ the same route answers not-eligible for the colleague the same submission left out (22 ms)
+        ✕ a submission that leaves an enrolled member out un-enrols them — the route replaces the set (22 ms)
+        ✕ a revoked membership is offered but not submittable — the server refuses the whole request over one (23 ms)
+ARM panel-submit-unbound           expected=red   observed=red   OK
+        ✕ the eligibility read answers not-eligible after the claim, and eligible after the enrolment (65 ms)
+        ✕ the same route answers not-eligible for the colleague the same submission left out (21 ms)
+        ✕ a submission that leaves an enrolled member out un-enrols them — the route replaces the set (25 ms)
+        ✕ a revoked membership is offered but not submittable — the server refuses the whole request over one (18 ms)
+ARM client-method-deleted          expected=red   observed=red   OK
+        ✕ the eligibility read answers not-eligible after the claim, and eligible after the enrolment (80 ms)
+        ✕ the same route answers not-eligible for the colleague the same submission left out (33 ms)
+        ✕ a submission that leaves an enrolled member out un-enrols them — the route replaces the set (27 ms)
+        ✕ a revoked membership is offered but not submittable — the server refuses the whole request over one (29 ms)
+ARM client-route-company-scoped    expected=red   observed=red   OK
+        ✕ the eligibility read answers not-eligible after the claim, and eligible after the enrolment (68 ms)
+        ✕ the same route answers not-eligible for the colleague the same submission left out (22 ms)
+        ✕ a submission that leaves an enrolled member out un-enrols them — the route replaces the set (25 ms)
+        ✕ a revoked membership is offered but not submittable — the server refuses the whole request over one (21 ms)
+ARM nav-entry-removed              expected=red   observed=red   OK
+        Tests:       3 failed, 31 passed, 34 total
+ARM world-eligible-for-everybody   expected=red   observed=red   OK
+        ✕ the eligibility read answers not-eligible after the claim, and eligible after the enrolment (26 ms)
+        ✕ the same route answers not-eligible for the colleague the same submission left out (52 ms)
+        ✕ a submission that leaves an enrolled member out un-enrols them — the route replaces the set (35 ms)
+ARM world-enrolment-is-a-noop      expected=red   observed=red   OK
+        ✕ the eligibility read answers not-eligible after the claim, and eligible after the enrolment (101 ms)
+        ✕ the same route answers not-eligible for the colleague the same submission left out (28 ms)
+
+---- per-arm verdicts ----
+baseline                       OK
+page-handler-unbound           OK
+panel-submit-unbound           OK
+client-method-deleted          OK
+client-route-company-scoped    OK
+nav-entry-removed              OK
+world-eligible-for-everybody   OK
+world-enrolment-is-a-noop      OK

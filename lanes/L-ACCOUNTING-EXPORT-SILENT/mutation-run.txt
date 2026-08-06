@@ -1,0 +1,67 @@
+--- M1-accounting-count-reports-eligible  MUTATED
+    WebApi.dll       14:19:40 -> 14:21:08   moved=True
+    WebApi.Tests.dll 14:20:39 -> 14:21:21   moved=True
+    Failed WebApi.Tests.MaintenanceEmptyCollectionReportingTests.An_export_with_no_provider_registered_reports_that_it_exported_nothing [298 ms]
+    Error Message:
+    Failed WebApi.Tests.MaintenanceEmptyCollectionReportingTests.A_failing_store_is_eligible_but_not_exported [177 ms]
+    Error Message:
+    Failed WebApi.Tests.MaintenanceEmptyCollectionReportingTests.The_same_world_with_a_provider_registered_reports_the_stores_it_actually_exported [172 ms]
+    Error Message:
+    Failed WebApi.Tests.MaintenanceEmptyCollectionReportingTests.The_operator_route_reports_what_was_exported_next_to_what_was_due [170 ms]
+    Error Message:
+    Failed WebApi.Tests.MaintenanceEmptyCollectionReportingTests.A_store_whose_pos_vouchers_posted_is_not_exported_when_its_daily_export_never_ran [174 ms]
+    Error Message:
+    Failed WebApi.Tests.MaintenanceServiceTests.DailyMaintenance_KeepsExportingAfterOneStoreFails [180 ms]
+    Error Message:
+    Failed!  - Failed:     6, Passed:    18, Skipped:     0, Total:    24, Duration: 2 s - WebApi.Tests.dll (net8.0)
+    verdict=RED expected=RED OK
+--- M1-accounting-count-reports-eligible  RESTORED
+    WebApi.dll       14:21:08 -> 14:21:39   moved=True
+    WebApi.Tests.dll 14:21:21 -> 14:21:43   moved=True
+    Passed!  - Failed:     0, Passed:    24, Skipped:     0, Total:    24, Duration: 3 s - WebApi.Tests.dll (net8.0)
+    verdict=GREEN expected=GREEN OK
+--- M2-capture-sweep-empty-is-clean  MUTATED
+    WebApi.dll       14:21:39 -> 14:22:09   moved=True
+    WebApi.Tests.dll 14:21:43 -> 14:21:43   moved=False
+    Failed WebApi.Tests.MaintenanceEmptyCollectionReportingTests.A_capture_sweep_with_no_sweeper_registered_is_not_a_clean_sweep [165 ms]
+    Error Message:
+    Failed WebApi.Tests.MaintenanceEmptyCollectionReportingTests.The_operator_route_shows_the_capture_sweep_that_could_not_run [167 ms]
+    Error Message:
+    Failed!  - Failed:     2, Passed:    22, Skipped:     0, Total:    24, Duration: 2 s - WebApi.Tests.dll (net8.0)
+    verdict=RED expected=RED OK
+--- M2-capture-sweep-empty-is-clean  RESTORED
+    WebApi.dll       14:22:09 -> 14:22:25   moved=True
+    WebApi.Tests.dll 14:21:43 -> 14:21:43   moved=False
+    Passed!  - Failed:     0, Passed:    24, Skipped:     0, Total:    24, Duration: 2 s - WebApi.Tests.dll (net8.0)
+    verdict=GREEN expected=GREEN OK
+--- M3-orchestrator-empty-is-silent  MUTATED
+    WebApi.dll       14:22:25 -> 14:22:40   moved=True
+    WebApi.Tests.dll 14:21:43 -> 14:21:43   moved=False
+    Failed WebApi.Tests.MaintenanceEmptyCollectionReportingTests.An_export_with_no_provider_registered_reports_that_it_exported_nothing [184 ms]
+    Error Message:
+    Failed!  - Failed:     1, Passed:    23, Skipped:     0, Total:    24, Duration: 2 s - WebApi.Tests.dll (net8.0)
+    verdict=RED expected=RED OK
+--- M3-orchestrator-empty-is-silent  RESTORED
+    WebApi.dll       14:22:40 -> 14:23:01   moved=True
+    WebApi.Tests.dll 14:21:43 -> 14:21:43   moved=False
+    Passed!  - Failed:     0, Passed:    24, Skipped:     0, Total:    24, Duration: 2 s - WebApi.Tests.dll (net8.0)
+    verdict=GREEN expected=GREEN OK
+--- M4-pos-half-substitutes-for-daily  MUTATED
+    WebApi.dll       14:23:01 -> 14:23:22   moved=True
+    WebApi.Tests.dll 14:21:43 -> 14:21:43   moved=False
+    Failed WebApi.Tests.MaintenanceEmptyCollectionReportingTests.A_failing_store_is_eligible_but_not_exported [79 ms]
+    Error Message:
+    Failed WebApi.Tests.MaintenanceEmptyCollectionReportingTests.The_same_world_with_a_provider_registered_reports_the_stores_it_actually_exported [76 ms]
+    Error Message:
+    Failed WebApi.Tests.MaintenanceEmptyCollectionReportingTests.The_operator_route_reports_what_was_exported_next_to_what_was_due [158 ms]
+    Error Message:
+    Failed WebApi.Tests.MaintenanceEmptyCollectionReportingTests.A_store_whose_pos_vouchers_posted_is_not_exported_when_its_daily_export_never_ran [262 ms]
+    Error Message:
+    Failed!  - Failed:     4, Passed:    20, Skipped:     0, Total:    24, Duration: 2 s - WebApi.Tests.dll (net8.0)
+    verdict=RED expected=RED OK
+--- M4-pos-half-substitutes-for-daily  RESTORED
+    WebApi.dll       14:23:22 -> 14:23:50   moved=True
+    WebApi.Tests.dll 14:21:43 -> 14:21:43   moved=False
+    Passed!  - Failed:     0, Passed:    24, Skipped:     0, Total:    24, Duration: 2 s - WebApi.Tests.dll (net8.0)
+    verdict=GREEN expected=GREEN OK
+ALL FOUR-STATE CHECKS OK

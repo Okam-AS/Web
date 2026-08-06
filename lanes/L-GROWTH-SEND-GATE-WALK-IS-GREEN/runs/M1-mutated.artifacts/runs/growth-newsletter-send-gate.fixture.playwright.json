@@ -1,0 +1,117 @@
+{
+  "journey": "growth-newsletter-send-gate",
+  "title": "An operator drafts and approves a newsletter, and the send gate opens only when both switches are up",
+  "status": "failed",
+  "startedAtUtc": "2026-08-06T10:42:22.194Z",
+  "finishedAtUtc": "2026-08-06T10:42:47.995Z",
+  "durationMs": 25801,
+  "capabilities": [
+    "platform.feature-flags.write",
+    "growth.consent.standing.read",
+    "growth.audience.snapshot",
+    "growth.newsletter.author",
+    "growth.newsletter.test-send",
+    "growth.newsletter.approve",
+    "growth.send-gate.fail-closed"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3876",
+  "apiBaseUrl": "http://127.0.0.1:4876",
+  "commit": "8ac6f63648015d8c7a230181a7f07bf303d43268",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": {
+    "id": "fixture@8ac6f63648015d8c7a230181a7f07bf303d43268+dirty",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "8ac6f63-dirty",
+    "detail": "the in-repo fixture backend, not an API build (branch HEAD)"
+  },
+  "backendServed": 14,
+  "backendSubjectServed": 7,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:4876/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:4876/user/login -> 200",
+    "GET http://127.0.0.1:4876/user -> 200",
+    "GET http://127.0.0.1:4876/stores/42/market -> 200",
+    "GET http://127.0.0.1:4876/stores/42 -> 200",
+    "GET http://127.0.0.1:4876/user -> 200",
+    "GET http://127.0.0.1:4876/v1/growth/stores/42/delivery-health -> 200",
+    "GET http://127.0.0.1:4876/v1/growth/stores/42/consents/summary -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in and open the newsletter screen",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T10:42:22.206Z",
+      "durationMs": 25533,
+      "detail": "on /admin/growth-newsletter, no blocker",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "the consent standing is the SERVER's four figures, not a total",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T10:42:47.739Z",
+      "durationMs": 26,
+      "detail": "samtykket 214 · trukket 18 · sperret 7 · venter 5",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "there is no gate yet, and there is no draft form either",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T10:42:47.765Z",
+      "durationMs": 14,
+      "detail": "no gate, no draft form; the audience is the stated precondition",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "compute the audience — and it is NOT the consent total",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T10:42:47.779Z",
+      "durationMs": 80,
+      "detail": "209 will receive, 5 excluded, watermark a91c4f7e20b8",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "write the newsletter",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T10:42:47.859Z",
+      "durationMs": 83,
+      "detail": "version 1 saved",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "THE FIRST STOP: the gate arrives closed, and both switches are named",
+      "status": "failed",
+      "startedAtUtc": "2026-08-06T10:42:47.942Z",
+      "durationMs": 16,
+      "detail": null,
+      "error": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 0\u001b[39m\n\n\u001b[2m  Array [\u001b[22m\n\u001b[2m    \"Denne versjonen er ikke godkjent av et menneske.\",\u001b[22m\n\u001b[2m    \"Nyhetsbrevmodulen er slått av for denne butikken (growth.module), så utsendingsruten svarer ikke i det hele tatt. En plattformansvarlig må slå den på.\",\u001b[22m\n\u001b[32m-   \"Nødbryteren for utsendelse er slått av for denne butikken (growth.dispatch). Ingenting blir opprettet og ingenting blir sendt før den slås på igjen.\",\u001b[39m\n\u001b[2m  ]\u001b[22m"
+    }
+  ],
+  "findings": [],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fgrowth-newsletter\" to \"/admin?redirect=%2Fadmin%2Fgrowth-newsletter&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fgrowth-newsletter\" to \"/admin?redirect=%2Fadmin%2Fgrowth-newsletter&storeId=42\" with a new navigation."
+  ],
+  "failedRequests": [],
+  "screenshots": [],
+  "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 0\u001b[39m\n\n\u001b[2m  Array [\u001b[22m\n\u001b[2m    \"Denne versjonen er ikke godkjent av et menneske.\",\u001b[22m\n\u001b[2m    \"Nyhetsbrevmodulen er slått av for denne butikken (growth.module), så utsendingsruten svarer ikke i det hele tatt. En plattformansvarlig må slå den på.\",\u001b[22m\n\u001b[32m-   \"Nødbryteren for utsendelse er slått av for denne butikken (growth.dispatch). Ingenting blir opprettet og ingenting blir sendt før den slås på igjen.\",\u001b[39m\n\u001b[2m  ]\u001b[22m",
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/growth-newsletter-send-gate.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false,
+    "supersedes": null
+  }
+}

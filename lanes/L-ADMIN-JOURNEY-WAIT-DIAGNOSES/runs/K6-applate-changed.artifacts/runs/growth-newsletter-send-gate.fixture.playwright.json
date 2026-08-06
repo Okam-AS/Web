@@ -1,0 +1,171 @@
+{
+  "journey": "growth-newsletter-send-gate",
+  "title": "An operator drafts and approves a newsletter, and the send gate opens only when both switches are up",
+  "status": "failed",
+  "startedAtUtc": "2026-08-06T11:10:02.344Z",
+  "finishedAtUtc": "2026-08-06T11:10:19.144Z",
+  "durationMs": 16800,
+  "capabilities": [
+    "platform.feature-flags.write",
+    "growth.consent.standing.read",
+    "growth.audience.snapshot",
+    "growth.newsletter.author",
+    "growth.newsletter.test-send",
+    "growth.newsletter.approve",
+    "growth.send-gate.fail-closed"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3877",
+  "apiBaseUrl": "http://127.0.0.1:4877",
+  "commit": "8ac6f63648015d8c7a230181a7f07bf303d43268",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": {
+    "id": "fixture@8ac6f63648015d8c7a230181a7f07bf303d43268+dirty",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "8ac6f63-dirty",
+    "detail": "the in-repo fixture backend, not an API build (branch HEAD)"
+  },
+  "backendServed": 11,
+  "backendSubjectServed": 4,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:4877/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:4877/user/login -> 200",
+    "GET http://127.0.0.1:4877/user -> 200",
+    "GET http://127.0.0.1:4877/stores/42/market -> 200",
+    "GET http://127.0.0.1:4877/stores/42 -> 200",
+    "GET http://127.0.0.1:4877/user -> 200",
+    "GET http://127.0.0.1:4877/v1/growth/stores/42/consents/summary -> 200",
+    "GET http://127.0.0.1:4877/v1/growth/stores/42/newsletters -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in and open the newsletter screen",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T11:10:02.347Z",
+      "durationMs": 1700,
+      "detail": "on /admin/growth-newsletter, no blocker",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "the consent standing is the SERVER's four figures, not a total",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T11:10:04.047Z",
+      "durationMs": 25,
+      "detail": "samtykket 214 · trukket 18 · sperret 7 · venter 5",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "there is no gate yet, and there is no draft form either",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T11:10:04.072Z",
+      "durationMs": 8,
+      "detail": "no gate, no draft form; the audience is the stated precondition",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "compute the audience — and it is NOT the consent total",
+      "status": "failed",
+      "startedAtUtc": "2026-08-06T11:10:04.080Z",
+      "durationMs": 15034,
+      "detail": null,
+      "error": "\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.growth-audience__unknown')\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('.growth-audience__unknown')\u001b[22m\n\u001b[2m    34 × locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n"
+    }
+  ],
+  "findings": [],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fgrowth-newsletter\" to \"/admin?redirect=%2Fadmin%2Fgrowth-newsletter&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fgrowth-newsletter\" to \"/admin?redirect=%2Fadmin%2Fgrowth-newsletter&storeId=42\" with a new navigation.",
+    "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+    "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://127.0.0.1:3877/_content/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://127.0.0.1:3877/_content/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://127.0.0.1:3877/_content/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://127.0.0.1:3877/_content/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://127.0.0.1:3877/_content/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://127.0.0.1:3877/_content/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://127.0.0.1:3877/_content/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://127.0.0.1:3877/_content/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://127.0.0.1:3877/_content/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://127.0.0.1:3877/_content/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://127.0.0.1:3877/_content/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://127.0.0.1:3877/_content/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://127.0.0.1:3877/_content/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://127.0.0.1:3877/_content/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://127.0.0.1:3877/_content/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED"
+  ],
+  "failedRequests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:3877/_loading/sse",
+      "status": null,
+      "failure": "net::ERR_INCOMPLETE_CHUNKED_ENCODING"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:3877/__webpack_hmr/client",
+      "status": null,
+      "failure": "net::ERR_INCOMPLETE_CHUNKED_ENCODING"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:4877/v1/growth/stores/42/segments/newsletter-subscribers/snapshots",
+      "status": null,
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:3877/_loading/sse",
+      "status": null,
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:3877/_loading/sse",
+      "status": null,
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:3877/_loading/sse",
+      "status": null,
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:3877/_loading/sse",
+      "status": null,
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:3877/_loading/sse",
+      "status": null,
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    }
+  ],
+  "screenshots": [],
+  "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.growth-audience__unknown')\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  15000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('.growth-audience__unknown')\u001b[22m\n\u001b[2m    34 × locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n",
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/growth-newsletter-send-gate.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false,
+    "supersedes": null
+  }
+}

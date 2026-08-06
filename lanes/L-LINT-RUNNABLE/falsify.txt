@@ -1,0 +1,71 @@
+
+=== 0. the tree under measurement ===
+worktree  /Users/svendaneel/okam/web-lintrunnable
+branch    lane/lint-runnable
+HEAD      9f7d8dfc78dceaaa9c52c72ba470a34eb904a130
+core@     1bcab0b6b3882bc232795437d7ad48455a5af0a6
+as of     2026-08-05 05:52:51 CEST
+dirty:
+ M README.md
+ M package.json
+?? .eslintignore
+
+=== 1. CLEAN RUN — the repository as it stands ===
+npm run lint  -> exit 1   files 607   errors 678   warnings 7585
+ASSERT OK   clean repo run exits 1 (there is a pre-existing backlog; see run.md) = 1
+
+=== 1b. CLEAN RUN — the two files about to be mutated, before the mutation ===
+ASSERT OK   eslint utils/body-scroll-lock.js exit = 0
+ASSERT OK     errors = 0
+ASSERT OK     warnings = 0
+ASSERT OK   eslint components/admin/growth/GrowthSendGate.vue exit = 0
+ASSERT OK     errors = 0
+ASSERT OK     warnings = 0
+
+=== 2. MUTATION A — eqeqeq (resolved severity: ["error","always",{"null":"ignore"}]) in a .js ===
+ASSERT OK   mutation landed: git numstat (added deleted path) for utils/body-scroll-lock.js = 2 0 utils/body-scroll-lock.js
+ASSERT OK   mutation landed: occurrences of the introduced token in utils/body-scroll-lock.js = 1
+ASSERT OK   mutation landed: git sees utils/body-scroll-lock.js modified =  M utils/body-scroll-lock.js
+eslint utils/body-scroll-lock.js -> exit 1
+ASSERT OK   mutated file run exits 1 = 1
+ASSERT OK     errors in that file = 1
+  the error:
+    eqeqeq @ utils/body-scroll-lock.js:88
+ASSERT OK     it is eqeqeq, and it is the line just added = eqeqeq @ utils/body-scroll-lock.js:88
+
+=== 2b. and the repo-wide command reds by exactly that one ===
+npm run lint -> exit 1   errors 679  (clean was 678)
+ASSERT OK   repo errors moved by exactly 1 = 679
+  the only new error line-item repo-wide:
+    > eqeqeq @ utils/body-scroll-lock.js:88
+ASSERT OK     and it is the introduced one = > eqeqeq @ utils/body-scroll-lock.js:88
+
+=== 3. REMOVE IT — and the same commands green again ===
+ASSERT OK   reverted: git status for utils/body-scroll-lock.js is empty = 
+ASSERT OK   eslint utils/body-scroll-lock.js exit = 0
+ASSERT OK     errors = 0
+
+=== 4. MUTATION B — the same rule inside a .vue <script>, because .vue is most of this repo ===
+ASSERT OK   mutation landed: git numstat (added deleted path) for components/admin/growth/GrowthSendGate.vue = 2 0 components/admin/growth/GrowthSendGate.vue
+ASSERT OK   mutation landed: occurrences of the introduced token in components/admin/growth/GrowthSendGate.vue = 1
+ASSERT OK   mutation landed: git sees components/admin/growth/GrowthSendGate.vue modified =  M components/admin/growth/GrowthSendGate.vue
+eslint components/admin/growth/GrowthSendGate.vue -> exit 1
+ASSERT OK   mutated .vue run exits 1 = 1
+ASSERT OK     errors in that file = 1
+  the error:
+    eqeqeq @ components/admin/growth/GrowthSendGate.vue:130
+ASSERT OK     it is eqeqeq inside the <script> block = eqeqeq @ components/admin/growth/GrowthSendGate.vue:130
+ASSERT OK   reverted: git status for components/admin/growth/GrowthSendGate.vue is empty = 
+ASSERT OK   eslint components/admin/growth/GrowthSendGate.vue exit = 0
+
+=== 5. FINAL CLEAN RUN — back to the number we started from ===
+npm run lint  -> exit 1   files 607   errors 678   warnings 7585
+ASSERT OK   errors back to the baseline = 678
+ASSERT OK   warnings back to the baseline = 7585
+ASSERT OK   files back to the baseline = 607
+ASSERT OK   working tree carries only this lane's three intended files =  M README.md
+ M package.json
+?? .eslintignore
+
+=== RESULT ===
+failed assertions: 0

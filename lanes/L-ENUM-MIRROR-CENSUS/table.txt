@@ -1,0 +1,42 @@
+| `ActionName` | 10 | — none | n/a | value-read | not a backend mirror |
+| `AppSettingKey` | 1 | — none | n/a | NO READER | not a backend mirror |
+| `CashDrawerTransactionType` | 8/8 | `CashDrawerTransactionType` | Enums/Kassa/CashDrawerTransactionType.cs | type-only | exact |
+| `CheckSplitMode` | 2/2 | `CheckSplitMode` | Enums/Kassa/CheckSplitMode.cs | type-only | exact |
+| `DeliveryType` | 7/7 | `DeliveryType` | Enums/DeliveryType.cs | value-read | exact |
+| `DineHomeStatus` | 6/6 | `DineHomeStatus` | Enums/DineHomeStatus.cs | type-only | exact |
+| `DinteroTerminalStatus` | 4/4 | `DinteroTerminalStatus` | Enums/DinteroTerminalStatus.cs | type-only | exact |
+| `DinteroVerifyStatus` | 4/4 | `DinteroTerminalStatus` | Enums/DinteroTerminalStatus.cs | type-only | exact |
+| `DiscountApplicability` | 6/6 | `DiscountApplicability` | Enums/DiscountApplicability.cs | type-only | exact |
+| `DiscountType` | 2/2 | `DiscountType` | Enums/DiscountType.cs | type-only | exact |
+| `GiftcardStatus` | 4/5 | `GiftcardStatus` | Enums/GiftcardStatus.cs | type-only | omits `Transferred` |
+| `GiftcardTransactionType` | 6/6 | `GiftcardTransactionType` | Enums/GiftcardTransactionType.cs | type-only | exact |
+| `HttpMethod` | 5 | — none | n/a | value-read | not a backend mirror |
+| `HttpProperty` | 11 | — none | n/a | value-read | not a backend mirror |
+| `KassaEventType` | 19/20 | `KassaEventType` | Enums/Kassa/KassaEventType.cs | type-only | omits `UTLEVREC` |
+| `KassaReceiptSeries` | 7/8 | `KassaReceiptSeries` | Enums/Kassa/KassaReceiptSeries.cs | NO READER | omits `Delivery` |
+| `KassaReceiptType` | 6/7 | `KassaReceiptType` | Enums/Kassa/KassaReceiptType.cs | type-only | omits `Delivery` |
+| `KeyAccountManagerStatus` | 6/6 | `KeyAccountManagerStatus` | Enums/KeyAccountManagerStatus.cs | value-read | exact |
+| `KitchenTicketSource` | 2/2 | `KitchenTicketSource` | Models/Kassa/KitchenBoardModels.cs | type-only | exact |
+| `MutationName` | 27 | — none | n/a | value-read | not a backend mirror |
+| `NotificationPlatform` | 2 | — none | n/a | type-only | not a backend mirror |
+| `OfferProposalStatus` | 7/7 | `OfferProposalStatus` | Enums/OfferProposalStatus.cs | type-only | exact |
+| `OrderKind` | 2/2 | `OrderKind` | Enums/OrderKind.cs | NO READER | exact |
+| `OrderLineItemStatus` | 5/5 | `OrderLineItemStatus` | Enums/Kassa/OrderLineItemStatus.cs | type-only | exact |
+| `OrderPaymentStatus` | 3/3 | `OrderPaymentStatus` | Enums/Kassa/OrderPaymentStatus.cs | type-only | exact |
+| `OrderPaymentTypeFilter` | 11/12 | `PaymentTypeFilter` | Enums/PaymentTypeFilter.cs | type-only | omits `DinteroKravia` |
+| `OrderStatus` | 9/9 | `OrderStatus` | Enums/OrderStatus.cs | value-read | exact |
+| `OrderStatusFilter` | 3/3 | `OrderStatusFilter` | Enums/OrderStatusFilter.cs | type-only | exact |
+| `PaymentType` | 16/17 | `PaymentType` | Enums/PaymentType.cs | value-read | omits `CompanyAccount` |
+| `PosReasonType` | 10/10 | `PosReasonType` | Enums/Kassa/PosReasonType.cs | type-only | exact |
+| `PosSettlementStatus` | 3/3 | `PosSettlementStatus` | Enums/Kassa/PosSettlementStatus.cs | type-only | exact |
+| `ReservationStatus` | 6/6 | `ReservationStatus` | Enums/FloorPlan/ReservationStatus.cs | type-only | exact |
+| `RewardTransactionType` | 4/4 | `RewardTransactionType` | Enums/RewardTransactionType.cs | type-only | omits `Canceled`; adds `Transferred` |
+| `SafTVatCode` | 3/4 | `SafTVatCode` | Enums/SafTVatCode.cs | type-only | omits `TwelvePercent` |
+| `StatisticDateFilter` | 7 | — none | n/a | NO READER | not a backend mirror |
+| `SurfboardApplicationStatus` | 8 | — none | n/a | NO READER | not a backend mirror |
+| `TableShape` | 3/3 | `TableShape` | Enums/FloorPlan/TableShape.cs | type-only | exact |
+| `TerminalPaymentState` | 10/10 | `TerminalPaymentState` | Models/Kassa/TerminalPaymentModels.cs | type-only | exact |
+| `TerminalProvider` | 3/3 | `TerminalProvider` | Enums/Kassa/TerminalProvider.cs | type-only | exact |
+| `VippsVerifyStatus` | 4/4 | `DinteroTerminalStatus` | Enums/DinteroTerminalStatus.cs | type-only | exact |
+
+EXACT=24 DIVERGENT=8

@@ -1,0 +1,3734 @@
+{
+ "baseline": "e34977acebd59b223584158c33451b6f1ffd82c1",
+ "roots": 140,
+ "extra_roots": {
+  "cbb5a98ce02bf8ab85f88d4d89ddb7e5fd4cd837": "detached:web-jestlanes",
+  "7b99f2a0b94b115d990a8503e5aeaea0128998c5": "detached:web-wastereceipts-at7b99f2a",
+  "a234509c1b7924f741c013a37b900a3d753ca773": "detached:web-wastereceipts-parent",
+  "7c91177da8e5806b1c9476e5b9e9edca041601fc": "detached:wt-author",
+  "0a78ff506c75cb8791c33fcfb250d2aa7f0ac44d": "detached:wt-fe4",
+  "44de7f449be7aecc5a390ffb887f1ff39c69e7d5": "detached:wt-fe5",
+  "e7e81c1b4d03e1968eb18de3f047fca901bc1721": "detached:wt-merge",
+  "17b5cc3dc41a0e4ef158504595643586872ba0e5": "detached:wt-rateui"
+ },
+ "paths": {
+  ".gitignore": {
+   "status": " M",
+   "wt_blob": "44cd6d4e450dd175e6c5dd01aafe813035a15d66",
+   "exact_match_commits": [
+    "1890c9a38a3a9f5eae692d65bdb06b5d996dedf1",
+    "ef2d6be46ee11b76154c639275a360285ad61e8e"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/L-JOURNEY-GROWTH",
+    "refs/salvage/dangling-1890c9a3"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/feature/swiss",
+    "refs/heads/lane/L-JOURNEY-GROWTH",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/tier-artifacts",
+    "refs/remotes/origin/feature/swiss",
+    "refs/salvage/dangling-1890c9a3"
+   ],
+   "n_revisions_seen": 6
+  },
+  "artifacts/journeys/workforce-invitation-onboarding.playwright.json": {
+   "status": " M",
+   "wt_blob": "f0b41030b2739a7b40e47ebe0707780be0b9626f",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions"
+   ],
+   "n_revisions_seen": 2
+  },
+  "artifacts/journeys/workforce-invitation-onboarding/fixture/01-the-roster-before-an-invitation.png": {
+   "status": " M",
+   "wt_blob": "f3dbc8bb900fdf660892657799465d8f72a398b1",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions"
+   ],
+   "n_revisions_seen": 1
+  },
+  "artifacts/journeys/workforce-invitation-onboarding/fixture/02-the-invitation-code-shown-once.png": {
+   "status": " M",
+   "wt_blob": "b64265693b2f4497c981af937b865d358b5d6420",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions"
+   ],
+   "n_revisions_seen": 2
+  },
+  "artifacts/journeys/workforce-invitation-onboarding/fixture/07-the-roster-after-the-claim.png": {
+   "status": " M",
+   "wt_blob": "55ec2ca55d8b9f1c65603e365afabed2b655ffb7",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions"
+   ],
+   "n_revisions_seen": 1
+  },
+  "components/admin/events/EventsJourney.vue": {
+   "status": " M",
+   "wt_blob": "de3b47732cc417b5cc350472abb2b10bb2eb85b2",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "17fe84ae05cde18576317ef357cb25efa5b51fa3",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/price-crosscurrency"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/ev-stale-cause",
+    "refs/heads/lane/events-admin",
+    "refs/heads/lane/fe-events-margin-surfaces",
+    "refs/heads/lane/fe-training-meals-surfaces",
+    "refs/heads/lane/fe-wf-self",
+    "refs/heads/lane/price-crosscurrency",
+    "refs/heads/lane/statute-evidence-world",
+    "refs/heads/lane/statute-honesty"
+   ],
+   "n_revisions_seen": 9
+  },
+  "components/admin/margin/MarginCoveragePanel.vue": {
+   "status": " M",
+   "wt_blob": "e157fc2b2051ecc33c435b8d9a011cf5185cbd9d",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28525fb74edd55cfec9c66d804f95d1a070199d2",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "2f4e389f94da4f0ab702429471369b331859e3df",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "37d8b5748b311fb717f95e0b6b52aac405a58652",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "8341892a3889dd656c31e0a17c934f95b03511e5",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cb15284a2dd82dbf89105c16a3edfbedb036cf1c",
+    "cdd0de523e0434319b8e19b7f772c77617660a2e",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/mrg-coverage-unknown"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/ev-stale-cause",
+    "refs/heads/lane/fe-events-margin-surfaces",
+    "refs/heads/lane/fe-journeys",
+    "refs/heads/lane/fe-training-meals-surfaces",
+    "refs/heads/lane/fe-wf-blind-bind-name",
+    "refs/heads/lane/fe-wf-link-deadend",
+    "refs/heads/lane/fe-wf-oplink",
+    "refs/heads/lane/mrg-coverage-unknown",
+    "refs/heads/lane/statute-evidence-world",
+    "refs/heads/lane/statute-honesty"
+   ],
+   "n_revisions_seen": 6
+  },
+  "components/admin/meals/MealsFundedOrders.vue": {
+   "status": " M",
+   "wt_blob": "e53738b08be1b2c216fa66d1896903a57feeaa63",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "17fe84ae05cde18576317ef357cb25efa5b51fa3",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/price-crosscurrency"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-meals-docsync",
+    "refs/heads/lane/meals-admin",
+    "refs/heads/lane/price-crosscurrency"
+   ],
+   "n_revisions_seen": 3
+  },
+  "components/admin/meals/MealsProgramPanel.vue": {
+   "status": " M",
+   "wt_blob": "4f5c7574d0c2feebf7ac5141838b6cc35733ecce",
+   "exact_match_commits": [
+    "17fe84ae05cde18576317ef357cb25efa5b51fa3"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/price-crosscurrency"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-meals-journey-locator",
+    "refs/heads/lane/fe-meals-pretick-walked",
+    "refs/heads/lane/meals-enrol-pretick",
+    "refs/heads/lane/meals-enrol-ui",
+    "refs/heads/lane/price-crosscurrency"
+   ],
+   "n_revisions_seen": 6
+  },
+  "components/admin/pos/PosShell.vue": {
+   "status": " M",
+   "wt_blob": "36a7f1ade1c5dec3f709462051cc1df194aa1c12",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [
+    "refs/heads/lane/fe-pos-clock",
+    "refs/heads/lane/fe-wf-blind-bind-name",
+    "refs/heads/lane/fe-wf-link-deadend",
+    "refs/heads/lane/fe-wf-oplink"
+   ],
+   "n_revisions_seen": 9
+  },
+  "components/admin/pos/PosTopBar.vue": {
+   "status": " M",
+   "wt_blob": "cf95e968925d3c657f5aff5129edace2666ef047",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [
+    "refs/heads/lane/fe-pos-clock",
+    "refs/heads/lane/fe-wf-blind-bind-name",
+    "refs/heads/lane/fe-wf-link-deadend",
+    "refs/heads/lane/fe-wf-oplink"
+   ],
+   "n_revisions_seen": 5
+  },
+  "components/admin/pos/XReportView.vue": {
+   "status": " M",
+   "wt_blob": "b392c4bffc78feba738e45aad267540b7aa1e20a",
+   "exact_match_commits": [
+    "b150668b7de1992dd858dc2b2d5be4c2b7017def"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/check-discount-sum-coupled",
+    "refs/heads/lane/check-lineamount-ungated-sum",
+    "refs/heads/lane/receipt-discount-row-dropped",
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/check-discount-sum-coupled",
+    "refs/heads/lane/check-lineamount-ungated-sum",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/offer-partial-subtotal",
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/heads/lane/receipt-discount-row-dropped",
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+    "refs/lanes/L-PRICE-BYPASS-FIVE",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ],
+   "n_revisions_seen": 5
+  },
+  "components/admin/training/TrainingAssignmentPanel.vue": {
+   "status": " M",
+   "wt_blob": "f69cdbd9da6d92107d1655338fc4c3783db581e5",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28548f96036f6118e5523bd963632ddf5ea3af63",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/train-publish-unclickable"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/train-publish-unclickable",
+    "refs/heads/lane/training-admin"
+   ],
+   "n_revisions_seen": 3
+  },
+  "components/admin/training/TrainingCertificatePanel.vue": {
+   "status": " M",
+   "wt_blob": "892bb5d27b89d83861d0a19ff25d02875ddb2fca",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28548f96036f6118e5523bd963632ddf5ea3af63",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/train-publish-unclickable"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/train-publish-unclickable",
+    "refs/heads/lane/training-admin"
+   ],
+   "n_revisions_seen": 3
+  },
+  "components/admin/training/TrainingCompletionPanel.vue": {
+   "status": " M",
+   "wt_blob": "38ed01c5e0897e8796338b1e001f234bc1bac778",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28548f96036f6118e5523bd963632ddf5ea3af63",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/train-publish-unclickable"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/train-publish-unclickable",
+    "refs/heads/lane/training-admin"
+   ],
+   "n_revisions_seen": 4
+  },
+  "components/admin/training/TrainingCourseList.vue": {
+   "status": " M",
+   "wt_blob": "4b87005234a438920a2c70da66b1f3b90d8d5d07",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28548f96036f6118e5523bd963632ddf5ea3af63",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/train-publish-unclickable"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/train-publish-unclickable",
+    "refs/heads/lane/training-admin"
+   ],
+   "n_revisions_seen": 2
+  },
+  "components/admin/training/TrainingDisclosurePanel.vue": {
+   "status": " M",
+   "wt_blob": "89c15f6eced9fde3e0cde6379d6bf68bbf3b1391",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28548f96036f6118e5523bd963632ddf5ea3af63",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/train-publish-unclickable"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/train-publish-unclickable"
+   ],
+   "n_revisions_seen": 2
+  },
+  "components/admin/training/TrainingHoldingsPanel.vue": {
+   "status": " M",
+   "wt_blob": "b1e2fb82754a2a5fac75bce83248f9eb1746a099",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28548f96036f6118e5523bd963632ddf5ea3af63",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/train-publish-unclickable"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/train-publish-unclickable",
+    "refs/heads/lane/training-admin"
+   ],
+   "n_revisions_seen": 3
+  },
+  "components/admin/training/TrainingVersionPanel.vue": {
+   "status": " M",
+   "wt_blob": "829d48a758ff96fa7e4493a7bb7a6f22d79ea8f6",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28548f96036f6118e5523bd963632ddf5ea3af63",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/train-publish-unclickable"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/train-publish-unclickable",
+    "refs/heads/lane/training-admin"
+   ],
+   "n_revisions_seen": 3
+  },
+  "components/admin/training/_training-panel.scss": {
+   "status": " M",
+   "wt_blob": "6c53cee49a26ea5dadeea1f298b8b5dc36870632",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28548f96036f6118e5523bd963632ddf5ea3af63",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/train-publish-unclickable"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/train-publish-unclickable",
+    "refs/heads/lane/training-admin"
+   ],
+   "n_revisions_seen": 2
+  },
+  "components/admin/workforce-rates/WorkforceRateTimeline.vue": {
+   "status": " M",
+   "wt_blob": "bb885eb193fc0b416642df4416373c9c4838b830",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "17fe84ae05cde18576317ef357cb25efa5b51fa3",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/price-crosscurrency"
+   ],
+   "interested_refs": [
+    "detached:wt-rateui",
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/price-crosscurrency"
+   ],
+   "n_revisions_seen": 2
+  },
+  "components/admin/workforce/WorkforceWeekGrid.vue": {
+   "status": " M",
+   "wt_blob": "e5ac5567017ed24914cd0aaa94bd3e09389fb1ed",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "17fe84ae05cde18576317ef357cb25efa5b51fa3",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/price-crosscurrency"
+   ],
+   "interested_refs": [
+    "detached:wt-author",
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/price-crosscurrency"
+   ],
+   "n_revisions_seen": 6
+  },
+  "components/molecules/CustomerInfoModal.vue": {
+   "status": " M",
+   "wt_blob": "53212d7fab670347045b35f3d588d6dbcb752af4",
+   "exact_match_commits": [
+    "83952084c2ba007683d58ed7fbdc4cf6333337ad"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/L-PRICE-SHADOW-GUARD",
+    "refs/heads/lane/collect-review-conditions"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/L-PRICE-SHADOW-GUARD",
+    "refs/heads/lane/check-discount-sum-coupled",
+    "refs/heads/lane/check-lineamount-ungated-sum",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/receipt-discount-row-dropped",
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-PRICE-BYPASS-FIVE",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ],
+   "n_revisions_seen": 7
+  },
+  "components/onboarding/OnboardingProductImages.vue": {
+   "status": " M",
+   "wt_blob": "73c96535b0c3d3ed4058a52da94436b2932d6dbd",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "8c6e91fa967fd2aa8eb8a6ac93be869a9a5cbf6f",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "b76cbbb2d2d11c9584dd74128488a5b35d6354f5",
+    "c4a4fa4416df97b0645d579f3565fb80ecc4bd03",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/check-discount-sum-coupled",
+    "refs/heads/lane/check-lineamount-ungated-sum",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/offer-partial-subtotal",
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/heads/lane/receipt-discount-row-dropped",
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+    "refs/lanes/L-PRICE-BYPASS-FIVE",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/feature/swiss",
+    "refs/heads/lane/check-discount-sum-coupled",
+    "refs/heads/lane/check-lineamount-ungated-sum",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/offer-partial-subtotal",
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/heads/lane/receipt-discount-row-dropped",
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+    "refs/lanes/L-PRICE-BYPASS-FIVE",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES",
+    "refs/remotes/origin/feature/swiss"
+   ],
+   "n_revisions_seen": 4
+  },
+  "components/organisms/AdminPageHeader.vue": {
+   "status": " M",
+   "wt_blob": "2ed383c205d968a7038f5014589e8cd508ae3dd0",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/feature/swiss",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-meals-statement-surface",
+    "refs/heads/lane/fe-training-meals-surfaces",
+    "refs/heads/lane/fe-wf-self",
+    "refs/heads/lane/menu-allergen-matrix",
+    "refs/heads/lane/train-evidence-pack-ui",
+    "refs/heads/lane/wf-pubhist",
+    "refs/heads/lane/wf-roles-ui",
+    "refs/heads/lane/workforce-roster",
+    "refs/remotes/origin/feature/dintero-in-person-terminal",
+    "refs/remotes/origin/feature/email-campaign",
+    "refs/remotes/origin/feature/swiss"
+   ],
+   "n_revisions_seen": 59
+  },
+  "components/shared/OfferDocument.vue": {
+   "status": " M",
+   "wt_blob": "7ad3e67a4bcd52b890b8947a969e5286e697a4aa",
+   "exact_match_commits": [
+    "b76cbbb2d2d11c9584dd74128488a5b35d6354f5",
+    "e41cdff2f8b91b7505e3ca34c205afb03de1baeb"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/offer-partial-subtotal",
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/heads/lane/price-cleanup-two",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/offer-partial-subtotal",
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/heads/lane/price-cleanup-two",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+   ],
+   "n_revisions_seen": 4
+  },
+  "jest.config.js": {
+   "status": " M",
+   "wt_blob": "cc1fbe384883e530bdfd63f09b3c0feb19d63431",
+   "exact_match_commits": [
+    "01b868674406021988a5263b0bc3a531d0fd8996",
+    "07e944e4545c0e5a54742fceb8e5dd46cbc8fec7",
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28525fb74edd55cfec9c66d804f95d1a070199d2",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "37d8b5748b311fb717f95e0b6b52aac405a58652",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "55b2dcdc61b0a68f3d8b37af2393b51171283906",
+    "5d95b8499847c9a819eaa17d7663a80d4ff1eee2",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "6fecf0779476d7117c992768577a95ac7b5bb5c4",
+    "82127eb196b3567584f592945688e160e406953c",
+    "8341892a3889dd656c31e0a17c934f95b03511e5",
+    "8859fd6a4a96c10fe5a3c48f97cbd20c7aec4ad0",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "9bc40c6064c0817ae972347379e184cadca5623b",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "b3ccb9333476448251189f9deecd25f415cad3c7",
+    "bba004e7ed5e3094212f528b8cfdcb3b6fab1937",
+    "c14e69e67e12f083bd5bdf25c89d92aea5f479b4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cb15284a2dd82dbf89105c16a3edfbedb036cf1c",
+    "cbb5a98ce02bf8ab85f88d4d89ddb7e5fd4cd837",
+    "cc4084aba59d5a4bbba6cbe4aa2de33f079f9eb8",
+    "cdd0de523e0434319b8e19b7f772c77617660a2e",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "ec6ca4c2d71f33225e2a958908333980c8904cec",
+    "eec2db69c5c6d4f80c00100c18b66a03bbd60426",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "detached:web-jestlanes",
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/jest-collects-lanes"
+   ],
+   "interested_refs": [
+    "detached:web-jestlanes",
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/jest-collects-lanes"
+   ],
+   "n_revisions_seen": 4
+  },
+  "package.json": {
+   "status": " M",
+   "wt_blob": "94bf774729a03c83f9412fccc4606b1bba10fd9b",
+   "exact_match_commits": [
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "997936ad692145ea68eee9865d06c6430c505c8e",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/lanes/L-WORLD-STAMP-WINDOWS"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-wf-blind-bind-name",
+    "refs/heads/lane/fe-wf-link-deadend",
+    "refs/heads/lane/fe-wf-oplink",
+    "refs/heads/lane/journey-teardown",
+    "refs/lanes/L-WORLD-STAMP-WINDOWS"
+   ],
+   "n_revisions_seen": 12
+  },
+  "pages/admin/feature-flags.vue": {
+   "status": " M",
+   "wt_blob": "17434cb7dffbd55468447d0282587e357e34fe8b",
+   "exact_match_commits": [
+    "abef9aacd2fbffa2c98cadfe9521d82981f60bd7"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/train-readonly-visible"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/meals-reachable-web",
+    "refs/heads/lane/train-readonly-visible"
+   ],
+   "n_revisions_seen": 4
+  },
+  "pages/admin/kravia-invoice.vue": {
+   "status": " M",
+   "wt_blob": "77c363d4d05f7015687b06ccd7f753b814bf1e8b",
+   "exact_match_commits": [
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "c4a4fa4416df97b0645d579f3565fb80ecc4bd03",
+    "f1d177f13748e3e593b41e0d16f684c4bdef775f"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/check-discount-sum-coupled",
+    "refs/heads/lane/check-lineamount-ungated-sum",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/receipt-discount-row-dropped",
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-PRICE-BYPASS-FIVE",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/check-discount-sum-coupled",
+    "refs/heads/lane/check-lineamount-ungated-sum",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/offer-partial-subtotal",
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/heads/lane/receipt-discount-row-dropped",
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+    "refs/lanes/L-PRICE-BYPASS-FIVE",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ],
+   "n_revisions_seen": 13
+  },
+  "pages/admin/margin-recipes.vue": {
+   "status": " M",
+   "wt_blob": "ced33bdbb1dc7c3f50d5764c26539d9806812b50",
+   "exact_match_commits": [
+    "0c483de9dbb22220f74f6b3fca9a6c8967d67d85",
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "8341892a3889dd656c31e0a17c934f95b03511e5",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cb15284a2dd82dbf89105c16a3edfbedb036cf1c",
+    "cdd0de523e0434319b8e19b7f772c77617660a2e",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/mrg-recipe-revise-ui"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/margin-menu-margin-ui",
+    "refs/heads/lane/margin-recipes",
+    "refs/heads/lane/mrg-recipe-revise-ui"
+   ],
+   "n_revisions_seen": 5
+  },
+  "pages/admin/offers.vue": {
+   "status": " M",
+   "wt_blob": "d2f4cfaae553dab1d42c8d486d80bfb3da91cbeb",
+   "exact_match_commits": [
+    "021d19c37444dd4ea14dff6c8bb89200e9135b09",
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/offers-page-hundredfold"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/offers-page-hundredfold"
+   ],
+   "n_revisions_seen": 5
+  },
+  "pages/admin/products.vue": {
+   "status": " M",
+   "wt_blob": "f45f7c376d8fa541fb4f3ef5e67acfab0eb3df28",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "8c6e91fa967fd2aa8eb8a6ac93be869a9a5cbf6f",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "b76cbbb2d2d11c9584dd74128488a5b35d6354f5",
+    "c4a4fa4416df97b0645d579f3565fb80ecc4bd03",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/check-discount-sum-coupled",
+    "refs/heads/lane/check-lineamount-ungated-sum",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/offer-partial-subtotal",
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/heads/lane/receipt-discount-row-dropped",
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+    "refs/lanes/L-PRICE-BYPASS-FIVE",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/feature/swiss",
+    "refs/heads/lane/check-discount-sum-coupled",
+    "refs/heads/lane/check-lineamount-ungated-sum",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/offer-partial-subtotal",
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/heads/lane/receipt-discount-row-dropped",
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+    "refs/lanes/L-PRICE-BYPASS-FIVE",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES",
+    "refs/remotes/origin/feature/swiss"
+   ],
+   "n_revisions_seen": 24
+  },
+  "pages/admin/reward-members.vue": {
+   "status": " M",
+   "wt_blob": "47a6d7e248d1b87bca5bf0ad4f205024686b7ca9",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "8c6e91fa967fd2aa8eb8a6ac93be869a9a5cbf6f",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "b76cbbb2d2d11c9584dd74128488a5b35d6354f5",
+    "c4a4fa4416df97b0645d579f3565fb80ecc4bd03",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/check-discount-sum-coupled",
+    "refs/heads/lane/check-lineamount-ungated-sum",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/offer-partial-subtotal",
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/heads/lane/receipt-discount-row-dropped",
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+    "refs/lanes/L-PRICE-BYPASS-FIVE",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/check-discount-sum-coupled",
+    "refs/heads/lane/check-lineamount-ungated-sum",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/offer-partial-subtotal",
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/heads/lane/receipt-discount-row-dropped",
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+    "refs/lanes/L-PRICE-BYPASS-FIVE",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ],
+   "n_revisions_seen": 4
+  },
+  "pages/admin/settlements.vue": {
+   "status": " M",
+   "wt_blob": "248f639a1d1470708f37db18fd8c676c4f439862",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "8c6e91fa967fd2aa8eb8a6ac93be869a9a5cbf6f",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "b76cbbb2d2d11c9584dd74128488a5b35d6354f5",
+    "c4a4fa4416df97b0645d579f3565fb80ecc4bd03",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/check-discount-sum-coupled",
+    "refs/heads/lane/check-lineamount-ungated-sum",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/offer-partial-subtotal",
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/heads/lane/receipt-discount-row-dropped",
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+    "refs/lanes/L-PRICE-BYPASS-FIVE",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/check-discount-sum-coupled",
+    "refs/heads/lane/check-lineamount-ungated-sum",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/offer-partial-subtotal",
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/heads/lane/receipt-discount-row-dropped",
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+    "refs/lanes/L-PRICE-BYPASS-FIVE",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ],
+   "n_revisions_seen": 11
+  },
+  "pages/admin/wolt-menu.vue": {
+   "status": " M",
+   "wt_blob": "4401a89a7dab0b02f71e8d30eb62b5d8f7eca2f3",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "8c6e91fa967fd2aa8eb8a6ac93be869a9a5cbf6f",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "b76cbbb2d2d11c9584dd74128488a5b35d6354f5",
+    "c4a4fa4416df97b0645d579f3565fb80ecc4bd03",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/check-discount-sum-coupled",
+    "refs/heads/lane/check-lineamount-ungated-sum",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/offer-partial-subtotal",
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/heads/lane/receipt-discount-row-dropped",
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+    "refs/lanes/L-PRICE-BYPASS-FIVE",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/feature/swiss",
+    "refs/heads/lane/check-discount-sum-coupled",
+    "refs/heads/lane/check-lineamount-ungated-sum",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/modal-broken-two",
+    "refs/heads/lane/offer-partial-subtotal",
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/heads/lane/receipt-discount-row-dropped",
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+    "refs/lanes/L-PRICE-BYPASS-FIVE",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES",
+    "refs/remotes/origin/feature/swiss"
+   ],
+   "n_revisions_seen": 10
+  },
+  "pages/admin/workforce-schedule.vue": {
+   "status": " M",
+   "wt_blob": "01c7f20341c12cabe470ba293eca26ed8d1302ab",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [
+    "detached:wt-author",
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-wf-onboard",
+    "refs/heads/lane/fe-wf-self"
+   ],
+   "n_revisions_seen": 9
+  },
+  "pages/preferences/communications.vue": {
+   "status": " M",
+   "wt_blob": "0a420cf6336370d3ec922681d4a527ca5ea8d172",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-gr-withdraw-origin"
+   ],
+   "n_revisions_seen": 2
+  },
+  "plugins/global-mixin.js": {
+   "status": " M",
+   "wt_blob": "0c51ca74a9b606a8dd8c5e8b409ad27de0d5f936",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "6f59ba3fdeadab4b4b38f7cca14c7ea3005f3e44",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/price-crosscurrency"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/feature/swiss",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/price-crosscurrency",
+    "refs/remotes/origin/feature/dintero-in-person-terminal",
+    "refs/remotes/origin/feature/email-campaign",
+    "refs/remotes/origin/feature/swiss"
+   ],
+   "n_revisions_seen": 28
+  },
+  "test/admin-nav-access.test.js": {
+   "status": " M",
+   "wt_blob": "f741e757a63c5f69cef775064ef5ba3871f37aff",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-meals-statement-surface",
+    "refs/heads/lane/fe-training-meals-surfaces",
+    "refs/heads/lane/fe-wf-self",
+    "refs/heads/lane/menu-allergen-matrix",
+    "refs/heads/lane/train-evidence-pack-ui",
+    "refs/heads/lane/wf-pubhist",
+    "refs/heads/lane/wf-roles-ui"
+   ],
+   "n_revisions_seen": 26
+  },
+  "test/e2e/fixture/api-server.js": {
+   "status": " M",
+   "wt_blob": "955ff982335b20e2ac005a82914c2ac9fe6be647",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/L-JOURNEY-GROWTH",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/ev-stale-cause",
+    "refs/heads/lane/fe-events-margin-surfaces",
+    "refs/heads/lane/fe-gr-exit-wire-the-mail",
+    "refs/heads/lane/fe-gr-withdraw-origin",
+    "refs/heads/lane/fe-growth-prefcentre",
+    "refs/heads/lane/fe-journeys",
+    "refs/heads/lane/fe-pos-clock",
+    "refs/heads/lane/fe-training-meals-surfaces",
+    "refs/heads/lane/fe-wf-blind-bind-name",
+    "refs/heads/lane/fe-wf-invite-list-revoke",
+    "refs/heads/lane/fe-wf-link-deadend",
+    "refs/heads/lane/fe-wf-onboard",
+    "refs/heads/lane/fe-wf-oplink",
+    "refs/heads/lane/fe-wf-self",
+    "refs/heads/lane/journey-teardown",
+    "refs/heads/lane/journey-workforce",
+    "refs/heads/lane/menu-allergen-matrix",
+    "refs/heads/lane/modal-broken-two",
+    "refs/heads/lane/print-host",
+    "refs/heads/lane/statute-evidence-world",
+    "refs/heads/lane/statute-honesty",
+    "refs/heads/lane/train-evidence-pack-ui",
+    "refs/heads/lane/wf-kodeoversikt-ui",
+    "refs/heads/lane/wf-pubhist",
+    "refs/heads/lane/wf-roles-ui",
+    "refs/salvage/dangling-1890c9a3",
+    "refs/salvage/dangling-1b324667",
+    "refs/salvage/dangling-59f5fabf",
+    "refs/salvage/dangling-6f7f155c"
+   ],
+   "n_revisions_seen": 44
+  },
+  "test/e2e/fixture/growth.js": {
+   "status": " M",
+   "wt_blob": "40dd32c7c494ad8a976416bbae21f50b613fb6ea",
+   "exact_match_commits": [
+    "ef2d6be46ee11b76154c639275a360285ad61e8e"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/L-JOURNEY-GROWTH"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/L-JOURNEY-GROWTH",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-gr-exit-wire-the-mail",
+    "refs/heads/lane/fe-gr-withdraw-origin",
+    "refs/heads/lane/fe-growth-prefcentre",
+    "refs/heads/lane/fe-journeys",
+    "refs/heads/lane/fe-training-meals-surfaces",
+    "refs/salvage/dangling-1890c9a3",
+    "refs/salvage/dangling-59f5fabf"
+   ],
+   "n_revisions_seen": 8
+  },
+  "test/e2e/fixture/meals.js": {
+   "status": " M",
+   "wt_blob": "059e96a46b7a235dc984f7c2dfbb1c6fcaabd57f",
+   "exact_match_commits": [
+    "01b868674406021988a5263b0bc3a531d0fd8996",
+    "07e944e4545c0e5a54742fceb8e5dd46cbc8fec7",
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28525fb74edd55cfec9c66d804f95d1a070199d2",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "37d8b5748b311fb717f95e0b6b52aac405a58652",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "5d95b8499847c9a819eaa17d7663a80d4ff1eee2",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "6fecf0779476d7117c992768577a95ac7b5bb5c4",
+    "8341892a3889dd656c31e0a17c934f95b03511e5",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "9215d3856f04f43334ac59bf0b7a4a6144dc16b4",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cb15284a2dd82dbf89105c16a3edfbedb036cf1c",
+    "cdd0de523e0434319b8e19b7f772c77617660a2e",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "ec6ca4c2d71f33225e2a958908333980c8904cec",
+    "eec2db69c5c6d4f80c00100c18b66a03bbd60426",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-meals-statement-surface"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-journeys",
+    "refs/heads/lane/fe-meals-pretick-walked",
+    "refs/heads/lane/fe-meals-statement-surface",
+    "refs/heads/lane/fe-training-meals-surfaces"
+   ],
+   "n_revisions_seen": 5
+  },
+  "test/e2e/fixture/training.js": {
+   "status": " M",
+   "wt_blob": "757a42d903a5070762e5ba144897a79aa3342fbf",
+   "exact_match_commits": [
+    "01b868674406021988a5263b0bc3a531d0fd8996",
+    "07e944e4545c0e5a54742fceb8e5dd46cbc8fec7",
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28525fb74edd55cfec9c66d804f95d1a070199d2",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "37d8b5748b311fb717f95e0b6b52aac405a58652",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "55b2dcdc61b0a68f3d8b37af2393b51171283906",
+    "5d95b8499847c9a819eaa17d7663a80d4ff1eee2",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "6fecf0779476d7117c992768577a95ac7b5bb5c4",
+    "8341892a3889dd656c31e0a17c934f95b03511e5",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "9bc40c6064c0817ae972347379e184cadca5623b",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "af0a4a131ca72b0dbcbc820876ff5848a215cf64",
+    "b3ccb9333476448251189f9deecd25f415cad3c7",
+    "bba004e7ed5e3094212f528b8cfdcb3b6fab1937",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cb15284a2dd82dbf89105c16a3edfbedb036cf1c",
+    "cdd0de523e0434319b8e19b7f772c77617660a2e",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "ec6ca4c2d71f33225e2a958908333980c8904cec",
+    "eec2db69c5c6d4f80c00100c18b66a03bbd60426",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/train-evidence-pack-ui"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-journeys",
+    "refs/heads/lane/fe-training-meals-surfaces",
+    "refs/heads/lane/train-evidence-pack-ui",
+    "refs/salvage/dangling-1b324667"
+   ],
+   "n_revisions_seen": 5
+  },
+  "test/e2e/fixture/world.js": {
+   "status": " M",
+   "wt_blob": "c77cf9d8fa0f66c4cfb1ef65a45c46acd5cf3d83",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/ev-stale-cause",
+    "refs/heads/lane/fe-gr-withdraw-origin",
+    "refs/heads/lane/fe-growth-prefcentre",
+    "refs/heads/lane/fe-journeys",
+    "refs/heads/lane/fe-pos-clock",
+    "refs/heads/lane/fe-training-meals-surfaces",
+    "refs/heads/lane/fe-wf-blind-bind-name",
+    "refs/heads/lane/fe-wf-invite-list-revoke",
+    "refs/heads/lane/fe-wf-link-deadend",
+    "refs/heads/lane/fe-wf-onboard",
+    "refs/heads/lane/fe-wf-oplink",
+    "refs/heads/lane/fe-wf-self",
+    "refs/heads/lane/menu-allergen-matrix",
+    "refs/heads/lane/modal-broken-two",
+    "refs/heads/lane/print-host",
+    "refs/heads/lane/statute-evidence-world",
+    "refs/heads/lane/statute-honesty",
+    "refs/heads/lane/wf-kodeoversikt-ui",
+    "refs/heads/lane/wf-roles-ui",
+    "refs/salvage/dangling-1b324667",
+    "refs/salvage/dangling-59f5fabf",
+    "refs/salvage/dangling-6f7f155c"
+   ],
+   "n_revisions_seen": 30
+  },
+  "test/e2e/journeys/admin-refusal-worker.spec.js": {
+   "status": " M",
+   "wt_blob": "9df6c8f0cd91ab380d7f9320883541d4638324c9",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "478ced7306d8fa7f4d1a3b0de8b20d72ef60f8e0",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-admin-refusal-credential"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-admin-refusal-credential",
+    "refs/heads/lane/fe-journeys",
+    "refs/heads/lane/fe-training-meals-surfaces"
+   ],
+   "n_revisions_seen": 3
+  },
+  "test/e2e/journeys/training-course-to-evidence.spec.js": {
+   "status": " M",
+   "wt_blob": "20aa50da33574f430f45163a3e1a37997b45a9bf",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28548f96036f6118e5523bd963632ddf5ea3af63",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/train-publish-unclickable"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-journeys",
+    "refs/heads/lane/fe-training-meals-surfaces",
+    "refs/heads/lane/train-publish-unclickable",
+    "refs/salvage/dangling-1b324667"
+   ],
+   "n_revisions_seen": 4
+  },
+  "test/e2e/scripts/build-provenance-proof.js": {
+   "status": " M",
+   "wt_blob": "e04ac4145717e194cc998950c34471ad80cb8efc",
+   "exact_match_commits": [
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "997936ad692145ea68eee9865d06c6430c505c8e",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/lanes/L-WORLD-STAMP-WINDOWS"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/lanes/L-WORLD-STAMP-WINDOWS"
+   ],
+   "n_revisions_seen": 2
+  },
+  "test/e2e/scripts/guard-proof.js": {
+   "status": " M",
+   "wt_blob": "be00d10688d30d35442688b555c24cffcd1908b1",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "6646fa587033c0ed0085cd4291e2509447dfa343",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT",
+    "refs/heads/lane/collect-review-conditions"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/salvage/dangling-097c3c9e"
+   ],
+   "n_revisions_seen": 4
+  },
+  "test/e2e/scripts/live-world.sh": {
+   "status": " M",
+   "wt_blob": "3489d4e971e917210c8bff501f8c91dd4f36b9cb",
+   "exact_match_commits": [
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "997936ad692145ea68eee9865d06c6430c505c8e",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/lanes/L-WORLD-STAMP-WINDOWS"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/journey-teardown",
+    "refs/lanes/L-WORLD-STAMP-WINDOWS",
+    "refs/salvage/dangling-1b324667"
+   ],
+   "n_revisions_seen": 7
+  },
+  "test/e2e/support/artifact-store.js": {
+   "status": " M",
+   "wt_blob": "6014b1238f4e2c7027b21f4b04a2781a1cdb7d95",
+   "exact_match_commits": [
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "997936ad692145ea68eee9865d06c6430c505c8e",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/lanes/L-WORLD-STAMP-WINDOWS"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/lanes/L-WORLD-STAMP-WINDOWS"
+   ],
+   "n_revisions_seen": 4
+  },
+  "test/e2e/support/journey-assertions.js": {
+   "status": " M",
+   "wt_blob": "bb38b5b90be9876036d58333aec68df552f59ac3",
+   "exact_match_commits": [
+    "097c3c9ec82356c292f5f90f5caebfb4ac284f09",
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "9d4399ac94ddd04a6a19163a07c6740fa310554b",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/salvage/dangling-097c3c9e"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/salvage/dangling-097c3c9e"
+   ],
+   "n_revisions_seen": 2
+  },
+  "test/e2e/support/journey.js": {
+   "status": " M",
+   "wt_blob": "4123dab47eff7870153025db02f6688e3cc99411",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "6646fa587033c0ed0085cd4291e2509447dfa343",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT",
+    "refs/heads/lane/collect-review-conditions"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/ev-journey-timebomb",
+    "refs/heads/lane/fe-journeys",
+    "refs/heads/lane/fe-training-meals-surfaces",
+    "refs/heads/lane/fe-wf-blind-bind-name",
+    "refs/heads/lane/fe-wf-link-deadend",
+    "refs/heads/lane/fe-wf-oplink",
+    "refs/heads/lane/journey-teardown",
+    "refs/salvage/dangling-097c3c9e",
+    "refs/salvage/dangling-1b324667"
+   ],
+   "n_revisions_seen": 13
+  },
+  "test/e2e/support/world-stamp.js": {
+   "status": " M",
+   "wt_blob": "3d3a9a01d44a7321e5f61dc6d82e3e20a9d9f8de",
+   "exact_match_commits": [
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "997936ad692145ea68eee9865d06c6430c505c8e",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/lanes/L-WORLD-STAMP-WINDOWS"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/lanes/L-WORLD-STAMP-WINDOWS"
+   ],
+   "n_revisions_seen": 2
+  },
+  "test/feature-flags-page.test.js": {
+   "status": " M",
+   "wt_blob": "82e1236e5cdf62f72f258e538bd052949eeeae5a",
+   "exact_match_commits": [
+    "abef9aacd2fbffa2c98cadfe9521d82981f60bd7"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/train-readonly-visible"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/meals-reachable-web",
+    "refs/heads/lane/train-readonly-visible"
+   ],
+   "n_revisions_seen": 5
+  },
+  "test/journey-artifact-store.test.js": {
+   "status": " M",
+   "wt_blob": "49cc75830be663b79309bca2d26ae4ac1eba795e",
+   "exact_match_commits": [
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "997936ad692145ea68eee9865d06c6430c505c8e",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/lanes/L-WORLD-STAMP-WINDOWS"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/worktree-basename-pin",
+    "refs/lanes/L-WORLD-STAMP-WINDOWS"
+   ],
+   "n_revisions_seen": 5
+  },
+  "test/journey-assertions.test.js": {
+   "status": " M",
+   "wt_blob": "84f77ada88db943e1672f0f1749eef60b3eb0e70",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "6646fa587033c0ed0085cd4291e2509447dfa343",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT",
+    "refs/heads/lane/collect-review-conditions"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/L-JOURNEY-PROXY-BLINDSPOT",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/salvage/dangling-097c3c9e"
+   ],
+   "n_revisions_seen": 3
+  },
+  "test/margin-recipe-client.test.js": {
+   "status": " M",
+   "wt_blob": "cfcb495a2d503ba15b447d4190804af5b11f1af2",
+   "exact_match_commits": [
+    "0c483de9dbb22220f74f6b3fca9a6c8967d67d85",
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "8341892a3889dd656c31e0a17c934f95b03511e5",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cb15284a2dd82dbf89105c16a3edfbedb036cf1c",
+    "cdd0de523e0434319b8e19b7f772c77617660a2e",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/mrg-recipe-revise-ui"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/margin-menu-margin-ui",
+    "refs/heads/lane/margin-recipes",
+    "refs/heads/lane/mrg-recipe-revise-ui"
+   ],
+   "n_revisions_seen": 4
+  },
+  "test/margin-statements-page.test.js": {
+   "status": " M",
+   "wt_blob": "16aa87e5b49589b01f9b992d2c1c63dfd1bee974",
+   "exact_match_commits": [
+    "2f4e389f94da4f0ab702429471369b331859e3df",
+    "37d8b5748b311fb717f95e0b6b52aac405a58652"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/mrg-coverage-unknown"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/ev-stale-cause",
+    "refs/heads/lane/fe-events-margin-surfaces",
+    "refs/heads/lane/fe-wf-blind-bind-name",
+    "refs/heads/lane/fe-wf-link-deadend",
+    "refs/heads/lane/fe-wf-oplink",
+    "refs/heads/lane/mrg-coverage-unknown",
+    "refs/heads/lane/mrg-lag-visible",
+    "refs/heads/lane/statute-evidence-world",
+    "refs/heads/lane/statute-honesty"
+   ],
+   "n_revisions_seen": 6
+  },
+  "test/margin-waste.test.js": {
+   "status": " M",
+   "wt_blob": "264d50c4ac5ab19d68882644e0a3631074f40feb",
+   "exact_match_commits": [
+    "2f4e389f94da4f0ab702429471369b331859e3df"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/mrg-coverage-unknown"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/coercion-write-paths",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/ev-stale-cause",
+    "refs/heads/lane/fe-wf-blind-bind-name",
+    "refs/heads/lane/fe-wf-link-deadend",
+    "refs/heads/lane/fe-wf-oplink",
+    "refs/heads/lane/mrg-coverage-unknown",
+    "refs/heads/lane/statute-evidence-world",
+    "refs/heads/lane/statute-honesty"
+   ],
+   "n_revisions_seen": 4
+  },
+  "test/price-absence.test.js": {
+   "status": " M",
+   "wt_blob": "30d22b3f3238d50461f36353a316b0eb1d2e25bf",
+   "exact_match_commits": [
+    "b76cbbb2d2d11c9584dd74128488a5b35d6354f5",
+    "e41cdff2f8b91b7505e3ca34c205afb03de1baeb"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/offer-partial-subtotal",
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/heads/lane/price-cleanup-two",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/offer-partial-subtotal",
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/heads/lane/price-cleanup-two",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+   ],
+   "n_revisions_seen": 3
+  },
+  "test/workforce-rates-timeline.test.js": {
+   "status": " M",
+   "wt_blob": "bc4aba6b36b93110ffbc4d80c72e6395f93c3f72",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "b76cbbb2d2d11c9584dd74128488a5b35d6354f5",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e41cdff2f8b91b7505e3ca34c205afb03de1baeb",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/offer-partial-subtotal",
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/heads/lane/price-cleanup-two",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+   ],
+   "interested_refs": [
+    "detached:wt-rateui",
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/offer-partial-subtotal",
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/heads/lane/price-cleanup-two",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+   ],
+   "n_revisions_seen": 2
+  },
+  "translations/de.ts": {
+   "status": " M",
+   "wt_blob": "4c5f69a114ea8df7e2a7b7e984b085a13fd0ee0f",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [
+    "detached:wt-author",
+    "detached:wt-rateui",
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/feature/swiss",
+    "refs/heads/lane/check-lineamount-ungated-sum",
+    "refs/heads/lane/coercion-write-paths",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/ev-stale-cause",
+    "refs/heads/lane/events-admin",
+    "refs/heads/lane/fe-events-margin-surfaces",
+    "refs/heads/lane/fe-growth-suppressed-key",
+    "refs/heads/lane/fe-meals-claim-receipt",
+    "refs/heads/lane/fe-meals-journey-locator",
+    "refs/heads/lane/fe-meals-pretick-walked",
+    "refs/heads/lane/fe-meals-reconcile-ui",
+    "refs/heads/lane/fe-meals-statement-surface",
+    "refs/heads/lane/fe-pos-clock",
+    "refs/heads/lane/fe-training-meals-surfaces",
+    "refs/heads/lane/fe-wf-blind-bind-name",
+    "refs/heads/lane/fe-wf-bootstrap",
+    "refs/heads/lane/fe-wf-contact-imported",
+    "refs/heads/lane/fe-wf-correction-path",
+    "refs/heads/lane/fe-wf-invite-list-revoke",
+    "refs/heads/lane/fe-wf-link-deadend",
+    "refs/heads/lane/fe-wf-onboard",
+    "refs/heads/lane/fe-wf-oplink",
+    "refs/heads/lane/fe-wf-self",
+    "refs/heads/lane/growth-admin",
+    "refs/heads/lane/journey-workforce",
+    "refs/heads/lane/margin-menu-margin-ui",
+    "refs/heads/lane/margin-recipes",
+    "refs/heads/lane/meals-admin",
+    "refs/heads/lane/meals-enrol-pretick",
+    "refs/heads/lane/meals-enrol-ui",
+    "refs/heads/lane/meals-reachable-web",
+    "refs/heads/lane/menu-allergen-matrix",
+    "refs/heads/lane/mrg-coverage-unknown",
+    "refs/heads/lane/mrg-lag-visible",
+    "refs/heads/lane/mrg-recipe-revise-ui",
+    "refs/heads/lane/mrg-waste-frontend",
+    "refs/heads/lane/statute-evidence-world",
+    "refs/heads/lane/statute-honesty",
+    "refs/heads/lane/train-evidence-pack-ui",
+    "refs/heads/lane/train-readonly-visible",
+    "refs/heads/lane/training-admin",
+    "refs/heads/lane/wf-adjust-address",
+    "refs/heads/lane/wf-idreg",
+    "refs/heads/lane/wf-kodeoversikt-ui",
+    "refs/heads/lane/wf-pubhist",
+    "refs/heads/lane/wf-roles-ui",
+    "refs/heads/lane/workforce-roster",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/remotes/origin/feature/swiss"
+   ],
+   "n_revisions_seen": 134
+  },
+  "translations/en.ts": {
+   "status": " M",
+   "wt_blob": "3481fc1ed31e3d97c42a6617dc97616eef90a152",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [
+    "detached:wt-author",
+    "detached:wt-rateui",
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/feature/swiss",
+    "refs/heads/lane/check-lineamount-ungated-sum",
+    "refs/heads/lane/coercion-write-paths",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/ev-stale-cause",
+    "refs/heads/lane/events-admin",
+    "refs/heads/lane/fe-events-margin-surfaces",
+    "refs/heads/lane/fe-growth-suppressed-key",
+    "refs/heads/lane/fe-meals-claim-receipt",
+    "refs/heads/lane/fe-meals-journey-locator",
+    "refs/heads/lane/fe-meals-pretick-walked",
+    "refs/heads/lane/fe-meals-reconcile-ui",
+    "refs/heads/lane/fe-meals-statement-surface",
+    "refs/heads/lane/fe-pos-clock",
+    "refs/heads/lane/fe-training-meals-surfaces",
+    "refs/heads/lane/fe-wf-blind-bind-name",
+    "refs/heads/lane/fe-wf-bootstrap",
+    "refs/heads/lane/fe-wf-contact-imported",
+    "refs/heads/lane/fe-wf-correction-path",
+    "refs/heads/lane/fe-wf-invite-list-revoke",
+    "refs/heads/lane/fe-wf-link-deadend",
+    "refs/heads/lane/fe-wf-onboard",
+    "refs/heads/lane/fe-wf-oplink",
+    "refs/heads/lane/fe-wf-self",
+    "refs/heads/lane/growth-admin",
+    "refs/heads/lane/journey-workforce",
+    "refs/heads/lane/margin-menu-margin-ui",
+    "refs/heads/lane/margin-recipes",
+    "refs/heads/lane/meals-admin",
+    "refs/heads/lane/meals-enrol-pretick",
+    "refs/heads/lane/meals-enrol-ui",
+    "refs/heads/lane/meals-reachable-web",
+    "refs/heads/lane/menu-allergen-matrix",
+    "refs/heads/lane/mrg-coverage-unknown",
+    "refs/heads/lane/mrg-lag-visible",
+    "refs/heads/lane/mrg-recipe-revise-ui",
+    "refs/heads/lane/mrg-waste-frontend",
+    "refs/heads/lane/statute-evidence-world",
+    "refs/heads/lane/statute-honesty",
+    "refs/heads/lane/train-evidence-pack-ui",
+    "refs/heads/lane/train-readonly-visible",
+    "refs/heads/lane/training-admin",
+    "refs/heads/lane/wf-adjust-address",
+    "refs/heads/lane/wf-idreg",
+    "refs/heads/lane/wf-kodeoversikt-ui",
+    "refs/heads/lane/wf-pubhist",
+    "refs/heads/lane/wf-roles-ui",
+    "refs/heads/lane/workforce-roster",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/remotes/origin/feature/swiss"
+   ],
+   "n_revisions_seen": 133
+  },
+  "translations/no.ts": {
+   "status": " M",
+   "wt_blob": "2970bc7b1d9d9f337b6668b6023d6f2d1221a19f",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [
+    "detached:wt-author",
+    "detached:wt-rateui",
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/feature/swiss",
+    "refs/heads/lane/check-lineamount-ungated-sum",
+    "refs/heads/lane/coercion-write-paths",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/ev-stale-cause",
+    "refs/heads/lane/events-admin",
+    "refs/heads/lane/fe-events-margin-surfaces",
+    "refs/heads/lane/fe-growth-suppressed-key",
+    "refs/heads/lane/fe-meals-claim-receipt",
+    "refs/heads/lane/fe-meals-journey-locator",
+    "refs/heads/lane/fe-meals-pretick-walked",
+    "refs/heads/lane/fe-meals-reconcile-ui",
+    "refs/heads/lane/fe-meals-statement-surface",
+    "refs/heads/lane/fe-pos-clock",
+    "refs/heads/lane/fe-training-meals-surfaces",
+    "refs/heads/lane/fe-wf-blind-bind-name",
+    "refs/heads/lane/fe-wf-bootstrap",
+    "refs/heads/lane/fe-wf-contact-imported",
+    "refs/heads/lane/fe-wf-correction-path",
+    "refs/heads/lane/fe-wf-invite-list-revoke",
+    "refs/heads/lane/fe-wf-link-deadend",
+    "refs/heads/lane/fe-wf-onboard",
+    "refs/heads/lane/fe-wf-oplink",
+    "refs/heads/lane/fe-wf-self",
+    "refs/heads/lane/growth-admin",
+    "refs/heads/lane/journey-workforce",
+    "refs/heads/lane/margin-menu-margin-ui",
+    "refs/heads/lane/margin-recipes",
+    "refs/heads/lane/meals-admin",
+    "refs/heads/lane/meals-enrol-pretick",
+    "refs/heads/lane/meals-enrol-ui",
+    "refs/heads/lane/meals-reachable-web",
+    "refs/heads/lane/menu-allergen-matrix",
+    "refs/heads/lane/mrg-coverage-unknown",
+    "refs/heads/lane/mrg-lag-visible",
+    "refs/heads/lane/mrg-recipe-revise-ui",
+    "refs/heads/lane/mrg-waste-frontend",
+    "refs/heads/lane/statute-evidence-world",
+    "refs/heads/lane/statute-honesty",
+    "refs/heads/lane/train-evidence-pack-ui",
+    "refs/heads/lane/train-readonly-visible",
+    "refs/heads/lane/training-admin",
+    "refs/heads/lane/wf-adjust-address",
+    "refs/heads/lane/wf-idreg",
+    "refs/heads/lane/wf-kodeoversikt-ui",
+    "refs/heads/lane/wf-pubhist",
+    "refs/heads/lane/wf-roles-ui",
+    "refs/heads/lane/workforce-roster",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/remotes/origin/feature/swiss"
+   ],
+   "n_revisions_seen": 138
+  },
+  "utils/growth/growth-guest-client.js": {
+   "status": " M",
+   "wt_blob": "39acf88db3dcb483755f7dc9ba5d0cb0e69f0e14",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-gr-withdraw-origin"
+   ],
+   "n_revisions_seen": 2
+  },
+  "utils/margin/money.js": {
+   "status": " M",
+   "wt_blob": "ce20f296bdc0424e18d3621e10a3da58f82bbc96",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "17fe84ae05cde18576317ef357cb25efa5b51fa3",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/price-crosscurrency"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/margin-menu-margin-ui",
+    "refs/heads/lane/price-crosscurrency"
+   ],
+   "n_revisions_seen": 2
+  },
+  "utils/margin/recipe-client.js": {
+   "status": " M",
+   "wt_blob": "efa8f91c738d1961b79523baf8ce34fb4e8f11f1",
+   "exact_match_commits": [
+    "0c483de9dbb22220f74f6b3fca9a6c8967d67d85",
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "8341892a3889dd656c31e0a17c934f95b03511e5",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cb15284a2dd82dbf89105c16a3edfbedb036cf1c",
+    "cdd0de523e0434319b8e19b7f772c77617660a2e",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/mrg-recipe-revise-ui"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/margin-menu-margin-ui",
+    "refs/heads/lane/margin-recipes",
+    "refs/heads/lane/mrg-recipe-revise-ui"
+   ],
+   "n_revisions_seen": 6
+  },
+  "utils/margin/statement-view.js": {
+   "status": " M",
+   "wt_blob": "5b7a6d5b615e1a54dfe37485b553ab7908c92aed",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28525fb74edd55cfec9c66d804f95d1a070199d2",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "2f4e389f94da4f0ab702429471369b331859e3df",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "37d8b5748b311fb717f95e0b6b52aac405a58652",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "8341892a3889dd656c31e0a17c934f95b03511e5",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cb15284a2dd82dbf89105c16a3edfbedb036cf1c",
+    "cdd0de523e0434319b8e19b7f772c77617660a2e",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/mrg-coverage-unknown"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/ev-stale-cause",
+    "refs/heads/lane/fe-events-margin-surfaces",
+    "refs/heads/lane/fe-wf-blind-bind-name",
+    "refs/heads/lane/fe-wf-link-deadend",
+    "refs/heads/lane/fe-wf-oplink",
+    "refs/heads/lane/mrg-coverage-unknown",
+    "refs/heads/lane/statute-evidence-world",
+    "refs/heads/lane/statute-honesty"
+   ],
+   "n_revisions_seen": 4
+  },
+  "utils/price.js": {
+   "status": " M",
+   "wt_blob": "4673f24c2d78dff2c7c53acf3b8dad494de294b1",
+   "exact_match_commits": [
+    "b150668b7de1992dd858dc2b2d5be4c2b7017def"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/check-discount-sum-coupled",
+    "refs/heads/lane/check-lineamount-ungated-sum",
+    "refs/heads/lane/receipt-discount-row-dropped",
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/check-discount-sum-coupled",
+    "refs/heads/lane/check-lineamount-ungated-sum",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/offer-partial-subtotal",
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/heads/lane/receipt-discount-row-dropped",
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+    "refs/lanes/L-PRICE-BYPASS-FIVE",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ],
+   "n_revisions_seen": 7
+  },
+  "utils/training/training-client.js": {
+   "status": " M",
+   "wt_blob": "4d167877df6d8b07ead6f204c94edcca83b6bdca",
+   "exact_match_commits": [
+    "01b868674406021988a5263b0bc3a531d0fd8996",
+    "07e944e4545c0e5a54742fceb8e5dd46cbc8fec7",
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28525fb74edd55cfec9c66d804f95d1a070199d2",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "37d8b5748b311fb717f95e0b6b52aac405a58652",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "55b2dcdc61b0a68f3d8b37af2393b51171283906",
+    "5d95b8499847c9a819eaa17d7663a80d4ff1eee2",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "6fecf0779476d7117c992768577a95ac7b5bb5c4",
+    "8341892a3889dd656c31e0a17c934f95b03511e5",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "9bc40c6064c0817ae972347379e184cadca5623b",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "af0a4a131ca72b0dbcbc820876ff5848a215cf64",
+    "b3ccb9333476448251189f9deecd25f415cad3c7",
+    "bba004e7ed5e3094212f528b8cfdcb3b6fab1937",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cb15284a2dd82dbf89105c16a3edfbedb036cf1c",
+    "cdd0de523e0434319b8e19b7f772c77617660a2e",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "ec6ca4c2d71f33225e2a958908333980c8904cec",
+    "eec2db69c5c6d4f80c00100c18b66a03bbd60426",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/train-evidence-pack-ui"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-training-meals-surfaces",
+    "refs/heads/lane/train-evidence-pack-ui",
+    "refs/heads/lane/training-admin"
+   ],
+   "n_revisions_seen": 5
+  },
+  "utils/workforce-rates/rate-timeline.js": {
+   "status": " M",
+   "wt_blob": "2c627a059a92e77420586d265a1d22c6ebb59482",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "b76cbbb2d2d11c9584dd74128488a5b35d6354f5",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e41cdff2f8b91b7505e3ca34c205afb03de1baeb",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/offer-partial-subtotal",
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/heads/lane/price-cleanup-two",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+   ],
+   "interested_refs": [
+    "detached:wt-rateui",
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/offer-partial-subtotal",
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/heads/lane/price-cleanup-two",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL"
+   ],
+   "n_revisions_seen": 2
+  },
+  "utils/workforce-rates/rates-client.js": {
+   "status": " M",
+   "wt_blob": "a7711002b05eccfe29726ae8ee5e6209ff6623df",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [
+    "detached:wt-rateui",
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/wf-idreg",
+    "refs/heads/lane/wf-kodeoversikt-ui"
+   ],
+   "n_revisions_seen": 3
+  },
+  "utils/workforce/api-client.js": {
+   "status": " M",
+   "wt_blob": "7a8f70c96ac726a653c5548386cebe9ca87676d5",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [
+    "detached:wt-author",
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/wf-idreg",
+    "refs/heads/lane/wf-kodeoversikt-ui",
+    "refs/heads/lane/workforce-roster"
+   ],
+   "n_revisions_seen": 7
+  },
+  "utils/workforce/roster-client.js": {
+   "status": " M",
+   "wt_blob": "313985ff4cee716bdcd97a65fc83a02da152ac4f",
+   "exact_match_commits": [
+    "ff21e488eae8181cc8dbe302147d335f9d3ff7ec"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/wf-roles-ui"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-wf-blind-bind-name",
+    "refs/heads/lane/fe-wf-bootstrap",
+    "refs/heads/lane/fe-wf-contact-imported",
+    "refs/heads/lane/fe-wf-invite-list-revoke",
+    "refs/heads/lane/fe-wf-link-deadend",
+    "refs/heads/lane/fe-wf-onboard",
+    "refs/heads/lane/fe-wf-oplink",
+    "refs/heads/lane/fe-wf-self",
+    "refs/heads/lane/journey-workforce",
+    "refs/heads/lane/wf-adjust-address",
+    "refs/heads/lane/wf-roles-ui",
+    "refs/heads/lane/workforce-roster"
+   ],
+   "n_revisions_seen": 12
+  },
+  "utils/workforce/schedule-client.js": {
+   "status": " M",
+   "wt_blob": "cd9f41b8b69e4057224a6a3b661defcc7adf2b81",
+   "exact_match_commits": [
+    "2d86446b746cff8477c4d6dbde316aceecda811b"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/wf-pubhist"
+   ],
+   "interested_refs": [
+    "detached:wt-author",
+    "refs/heads/lane/wf-pubhist"
+   ],
+   "n_revisions_seen": 6
+  },
+  "components/admin/meals/MealsStatementLines.vue": {
+   "status": "??",
+   "wt_blob": "474962a85b80e55e0097a301e690443d8c6f1015",
+   "exact_match_commits": [
+    "01b868674406021988a5263b0bc3a531d0fd8996",
+    "07e944e4545c0e5a54742fceb8e5dd46cbc8fec7",
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28525fb74edd55cfec9c66d804f95d1a070199d2",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "37d8b5748b311fb717f95e0b6b52aac405a58652",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "5d95b8499847c9a819eaa17d7663a80d4ff1eee2",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "6fecf0779476d7117c992768577a95ac7b5bb5c4",
+    "8341892a3889dd656c31e0a17c934f95b03511e5",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "9215d3856f04f43334ac59bf0b7a4a6144dc16b4",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cb15284a2dd82dbf89105c16a3edfbedb036cf1c",
+    "cdd0de523e0434319b8e19b7f772c77617660a2e",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "ec6ca4c2d71f33225e2a958908333980c8904cec",
+    "eec2db69c5c6d4f80c00100c18b66a03bbd60426",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-meals-statement-surface"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-meals-statement-surface"
+   ],
+   "n_revisions_seen": 1
+  },
+  "components/admin/pos/ClockScreen.vue": {
+   "status": "??",
+   "wt_blob": "1faee579386b2d8a8070e3383319d1a0b6504ccd",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [
+    "refs/heads/lane/fe-pos-clock",
+    "refs/heads/lane/fe-wf-blind-bind-name",
+    "refs/heads/lane/fe-wf-link-deadend",
+    "refs/heads/lane/fe-wf-oplink"
+   ],
+   "n_revisions_seen": 1
+  },
+  "components/admin/training/TrainingEvidenceDocument.vue": {
+   "status": "??",
+   "wt_blob": "8f231f773492344145715cdfcf0a4e59fd3838e1",
+   "exact_match_commits": [
+    "01b868674406021988a5263b0bc3a531d0fd8996",
+    "07e944e4545c0e5a54742fceb8e5dd46cbc8fec7",
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28525fb74edd55cfec9c66d804f95d1a070199d2",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "37d8b5748b311fb717f95e0b6b52aac405a58652",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "55b2dcdc61b0a68f3d8b37af2393b51171283906",
+    "5d95b8499847c9a819eaa17d7663a80d4ff1eee2",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "6fecf0779476d7117c992768577a95ac7b5bb5c4",
+    "8341892a3889dd656c31e0a17c934f95b03511e5",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "9bc40c6064c0817ae972347379e184cadca5623b",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "af0a4a131ca72b0dbcbc820876ff5848a215cf64",
+    "b3ccb9333476448251189f9deecd25f415cad3c7",
+    "bba004e7ed5e3094212f528b8cfdcb3b6fab1937",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cb15284a2dd82dbf89105c16a3edfbedb036cf1c",
+    "cdd0de523e0434319b8e19b7f772c77617660a2e",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "ec6ca4c2d71f33225e2a958908333980c8904cec",
+    "eec2db69c5c6d4f80c00100c18b66a03bbd60426",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/train-evidence-pack-ui"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-training-meals-surfaces",
+    "refs/heads/lane/train-evidence-pack-ui"
+   ],
+   "n_revisions_seen": 2
+  },
+  "components/admin/workforce/WorkforceDeliveryGroup.vue": {
+   "status": "??",
+   "wt_blob": "f9ba69a1a98dda8288007617bc123c8dd7295c2f",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [],
+   "n_revisions_seen": 0
+  },
+  "components/admin/workforce/WorkforceDeliveryPanel.vue": {
+   "status": "??",
+   "wt_blob": "9862d783e2c338bce5e95ccc00bb46b1373e1191",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [],
+   "n_revisions_seen": 0
+  },
+  "components/admin/workforce/WorkforcePublicationList.vue": {
+   "status": "??",
+   "wt_blob": "ccecfdecc9816cff14b3c7f44c8b06fcdf7cce6c",
+   "exact_match_commits": [
+    "2d86446b746cff8477c4d6dbde316aceecda811b"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/wf-pubhist"
+   ],
+   "interested_refs": [
+    "refs/heads/lane/wf-pubhist"
+   ],
+   "n_revisions_seen": 1
+  },
+  "components/admin/workforce/WorkforcePublicationReceiptGroup.vue": {
+   "status": "??",
+   "wt_blob": "b04850015c8c51f173bc6e83bede5eb8dcb9b355",
+   "exact_match_commits": [
+    "2d86446b746cff8477c4d6dbde316aceecda811b"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/wf-pubhist"
+   ],
+   "interested_refs": [
+    "refs/heads/lane/wf-pubhist"
+   ],
+   "n_revisions_seen": 1
+  },
+  "components/admin/workforce/WorkforcePublicationRecipients.vue": {
+   "status": "??",
+   "wt_blob": "abd2b186ed940f1a4368ec042242c60019a309c4",
+   "exact_match_commits": [
+    "2d86446b746cff8477c4d6dbde316aceecda811b"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/wf-pubhist"
+   ],
+   "interested_refs": [
+    "refs/heads/lane/wf-pubhist"
+   ],
+   "n_revisions_seen": 1
+  },
+  "components/admin/workforce/WorkforceTimesheetBatchList.vue": {
+   "status": "??",
+   "wt_blob": "2a90d4cf9573a655b557f203616a40d566f76f03",
+   "exact_match_commits": [
+    "618efc88750fa4adb59769b859d3975bfcdc1f3b"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ],
+   "interested_refs": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ],
+   "n_revisions_seen": 1
+  },
+  "components/admin/workforce/WorkforceTimesheetPanel.vue": {
+   "status": "??",
+   "wt_blob": "a69233e7fb32aff3e38e8c9f2d75979079cbc442",
+   "exact_match_commits": [
+    "618efc88750fa4adb59769b859d3975bfcdc1f3b"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ],
+   "interested_refs": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ],
+   "n_revisions_seen": 1
+  },
+  "pages/admin/meals-statements.vue": {
+   "status": "??",
+   "wt_blob": "f524610b8552603498b4d4c4b45d2bba892a0626",
+   "exact_match_commits": [
+    "01b868674406021988a5263b0bc3a531d0fd8996",
+    "07e944e4545c0e5a54742fceb8e5dd46cbc8fec7",
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28525fb74edd55cfec9c66d804f95d1a070199d2",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "37d8b5748b311fb717f95e0b6b52aac405a58652",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "5d95b8499847c9a819eaa17d7663a80d4ff1eee2",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "6fecf0779476d7117c992768577a95ac7b5bb5c4",
+    "8341892a3889dd656c31e0a17c934f95b03511e5",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "9215d3856f04f43334ac59bf0b7a4a6144dc16b4",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cb15284a2dd82dbf89105c16a3edfbedb036cf1c",
+    "cdd0de523e0434319b8e19b7f772c77617660a2e",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "ec6ca4c2d71f33225e2a958908333980c8904cec",
+    "eec2db69c5c6d4f80c00100c18b66a03bbd60426",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-meals-statement-surface"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-meals-statement-surface",
+    "refs/heads/lane/fe-training-meals-surfaces"
+   ],
+   "n_revisions_seen": 2
+  },
+  "pages/admin/training-evidence.vue": {
+   "status": "??",
+   "wt_blob": "e0a913f8ea5ba10a9b89f5ad7c664f4532b249fb",
+   "exact_match_commits": [
+    "01b868674406021988a5263b0bc3a531d0fd8996",
+    "07e944e4545c0e5a54742fceb8e5dd46cbc8fec7",
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28525fb74edd55cfec9c66d804f95d1a070199d2",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "37d8b5748b311fb717f95e0b6b52aac405a58652",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "55b2dcdc61b0a68f3d8b37af2393b51171283906",
+    "5d95b8499847c9a819eaa17d7663a80d4ff1eee2",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "6fecf0779476d7117c992768577a95ac7b5bb5c4",
+    "8341892a3889dd656c31e0a17c934f95b03511e5",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "9bc40c6064c0817ae972347379e184cadca5623b",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "af0a4a131ca72b0dbcbc820876ff5848a215cf64",
+    "b3ccb9333476448251189f9deecd25f415cad3c7",
+    "bba004e7ed5e3094212f528b8cfdcb3b6fab1937",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cb15284a2dd82dbf89105c16a3edfbedb036cf1c",
+    "cdd0de523e0434319b8e19b7f772c77617660a2e",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "ec6ca4c2d71f33225e2a958908333980c8904cec",
+    "eec2db69c5c6d4f80c00100c18b66a03bbd60426",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/train-evidence-pack-ui"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-training-meals-surfaces",
+    "refs/heads/lane/train-evidence-pack-ui"
+   ],
+   "n_revisions_seen": 2
+  },
+  "pages/admin/workforce-delivery.vue": {
+   "status": "??",
+   "wt_blob": "857a800668b81d67c6a783c2cc271120bf0d2c56",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [],
+   "n_revisions_seen": 0
+  },
+  "pages/admin/workforce-publications.vue": {
+   "status": "??",
+   "wt_blob": "669e37466878a10d0bfee3a3929697d444c946eb",
+   "exact_match_commits": [
+    "2d86446b746cff8477c4d6dbde316aceecda811b"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/wf-pubhist"
+   ],
+   "interested_refs": [
+    "refs/heads/lane/wf-pubhist"
+   ],
+   "n_revisions_seen": 1
+  },
+  "pages/admin/workforce-roles.vue": {
+   "status": "??",
+   "wt_blob": "e4719247b226c5767caec5dbbabf9053533ce497",
+   "exact_match_commits": [
+    "01b868674406021988a5263b0bc3a531d0fd8996",
+    "07e944e4545c0e5a54742fceb8e5dd46cbc8fec7",
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28525fb74edd55cfec9c66d804f95d1a070199d2",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "37d8b5748b311fb717f95e0b6b52aac405a58652",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "55b2dcdc61b0a68f3d8b37af2393b51171283906",
+    "5d95b8499847c9a819eaa17d7663a80d4ff1eee2",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "6fecf0779476d7117c992768577a95ac7b5bb5c4",
+    "8341892a3889dd656c31e0a17c934f95b03511e5",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "9bc40c6064c0817ae972347379e184cadca5623b",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cb15284a2dd82dbf89105c16a3edfbedb036cf1c",
+    "cdd0de523e0434319b8e19b7f772c77617660a2e",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "ec6ca4c2d71f33225e2a958908333980c8904cec",
+    "eec2db69c5c6d4f80c00100c18b66a03bbd60426",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42",
+    "ff21e488eae8181cc8dbe302147d335f9d3ff7ec"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/wf-roles-ui"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/wf-roles-ui"
+   ],
+   "n_revisions_seen": 1
+  },
+  "pages/admin/workforce-timesheets.vue": {
+   "status": "??",
+   "wt_blob": "4e65ce1859ae0e152c2a6031a6d6b59af5611922",
+   "exact_match_commits": [
+    "618efc88750fa4adb59769b859d3975bfcdc1f3b"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ],
+   "interested_refs": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ],
+   "n_revisions_seen": 1
+  },
+  "scripts/drift-demo/demo.sh": {
+   "status": "??",
+   "wt_blob": "477156f9b5cd4d6f0d9d8683cd5e6f859444fc6c",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [],
+   "n_revisions_seen": 0
+  },
+  "scripts/worldstamp": {
+   "status": "??",
+   "wt_blob": "db97d1c200eb2a5f5b00c2ea1fb5f73f46227a51",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [],
+   "n_revisions_seen": 0
+  },
+  "test/e2e/fixture/workforce-delivery.js": {
+   "status": "??",
+   "wt_blob": "6cb41ba1acf5d53bf853af39f7169ca1e4d41171",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [],
+   "n_revisions_seen": 0
+  },
+  "test/e2e/fixture/workforce-publications.js": {
+   "status": "??",
+   "wt_blob": "2a10ae273fcbd8d1a2e56cc494357a27b72323db",
+   "exact_match_commits": [
+    "2d86446b746cff8477c4d6dbde316aceecda811b"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/wf-pubhist"
+   ],
+   "interested_refs": [
+    "refs/heads/lane/wf-pubhist"
+   ],
+   "n_revisions_seen": 1
+  },
+  "test/e2e/fixture/workforce-punch.js": {
+   "status": "??",
+   "wt_blob": "e2d2f44317789647131b247d4d1dfd02f4bcae56",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [],
+   "n_revisions_seen": 0
+  },
+  "test/e2e/fixture/workforce-timesheets.js": {
+   "status": "??",
+   "wt_blob": "ff9016f6314edf1e25a8a699942fbcde4aa31fac",
+   "exact_match_commits": [
+    "618efc88750fa4adb59769b859d3975bfcdc1f3b"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ],
+   "interested_refs": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ],
+   "n_revisions_seen": 1
+  },
+  "test/e2e/journeys/growth-guest-lifecycle.spec.js": {
+   "status": "??",
+   "wt_blob": "f12817461e71695c5bd018c76b5ba3f91f567105",
+   "exact_match_commits": [
+    "1890c9a38a3a9f5eae692d65bdb06b5d996dedf1",
+    "ef2d6be46ee11b76154c639275a360285ad61e8e"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/L-JOURNEY-GROWTH",
+    "refs/salvage/dangling-1890c9a3"
+   ],
+   "interested_refs": [
+    "refs/heads/lane/L-JOURNEY-GROWTH",
+    "refs/salvage/dangling-1890c9a3"
+   ],
+   "n_revisions_seen": 2
+  },
+  "test/e2e/journeys/growth-testsend-refusal.spec.js": {
+   "status": "??",
+   "wt_blob": "668b75892bfb91f00345ee5ed4c97f34c94b549a",
+   "exact_match_commits": [
+    "40012fc9d6adba08dd9902f221b1858e18399fb9"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/L-JOURNEY-GROWTH",
+    "refs/salvage/dangling-1890c9a3"
+   ],
+   "interested_refs": [
+    "refs/heads/lane/L-JOURNEY-GROWTH",
+    "refs/salvage/dangling-1890c9a3"
+   ],
+   "n_revisions_seen": 1
+  },
+  "test/e2e/journeys/meals-statement-month.spec.js": {
+   "status": "??",
+   "wt_blob": "9c5beb793764b9371d5e5d433cb295f4c3382762",
+   "exact_match_commits": [
+    "4772c1316ac933bdab6d5d5434111d0479da6b37"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/L-JOURNEY-PORT-HARDCODED"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/L-JOURNEY-PORT-HARDCODED",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-meals-statement-surface"
+   ],
+   "n_revisions_seen": 2
+  },
+  "test/e2e/journeys/training-evidence-document.spec.js": {
+   "status": "??",
+   "wt_blob": "6563a765570183f0b39c5e1568aa3cd42048a5ef",
+   "exact_match_commits": [
+    "01b868674406021988a5263b0bc3a531d0fd8996",
+    "07e944e4545c0e5a54742fceb8e5dd46cbc8fec7",
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28525fb74edd55cfec9c66d804f95d1a070199d2",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "37d8b5748b311fb717f95e0b6b52aac405a58652",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "55b2dcdc61b0a68f3d8b37af2393b51171283906",
+    "5d95b8499847c9a819eaa17d7663a80d4ff1eee2",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "6fecf0779476d7117c992768577a95ac7b5bb5c4",
+    "8341892a3889dd656c31e0a17c934f95b03511e5",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "9bc40c6064c0817ae972347379e184cadca5623b",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "af0a4a131ca72b0dbcbc820876ff5848a215cf64",
+    "b3ccb9333476448251189f9deecd25f415cad3c7",
+    "bba004e7ed5e3094212f528b8cfdcb3b6fab1937",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cb15284a2dd82dbf89105c16a3edfbedb036cf1c",
+    "cdd0de523e0434319b8e19b7f772c77617660a2e",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "ec6ca4c2d71f33225e2a958908333980c8904cec",
+    "eec2db69c5c6d4f80c00100c18b66a03bbd60426",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/train-evidence-pack-ui"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/train-evidence-pack-ui"
+   ],
+   "n_revisions_seen": 1
+  },
+  "test/e2e/journeys/workforce-delivery-failures.spec.js": {
+   "status": "??",
+   "wt_blob": "939f43bcd066a6a9a20f2bfbc38eb13122310059",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [],
+   "n_revisions_seen": 0
+  },
+  "test/e2e/journeys/workforce-pos-punch.spec.js": {
+   "status": "??",
+   "wt_blob": "e19d05366a567d20015881d8de47055c2ce9b7bc",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [],
+   "n_revisions_seen": 0
+  },
+  "test/e2e/journeys/workforce-publication-receipts.spec.js": {
+   "status": "??",
+   "wt_blob": "4dc8d429ce19189199e22a9bd1d31c8ca4807ef4",
+   "exact_match_commits": [
+    "2d86446b746cff8477c4d6dbde316aceecda811b"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/wf-pubhist"
+   ],
+   "interested_refs": [
+    "refs/heads/lane/wf-pubhist"
+   ],
+   "n_revisions_seen": 1
+  },
+  "test/e2e/journeys/workforce-role-catalogue.spec.js": {
+   "status": "??",
+   "wt_blob": "0ba5559b85b85e8af74c610f9c19a23c5a18685f",
+   "exact_match_commits": [
+    "01b868674406021988a5263b0bc3a531d0fd8996",
+    "07e944e4545c0e5a54742fceb8e5dd46cbc8fec7",
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28525fb74edd55cfec9c66d804f95d1a070199d2",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "37d8b5748b311fb717f95e0b6b52aac405a58652",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "55b2dcdc61b0a68f3d8b37af2393b51171283906",
+    "5d95b8499847c9a819eaa17d7663a80d4ff1eee2",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "6fecf0779476d7117c992768577a95ac7b5bb5c4",
+    "8341892a3889dd656c31e0a17c934f95b03511e5",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "9bc40c6064c0817ae972347379e184cadca5623b",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cb15284a2dd82dbf89105c16a3edfbedb036cf1c",
+    "cdd0de523e0434319b8e19b7f772c77617660a2e",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "ec6ca4c2d71f33225e2a958908333980c8904cec",
+    "eec2db69c5c6d4f80c00100c18b66a03bbd60426",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42",
+    "ff21e488eae8181cc8dbe302147d335f9d3ff7ec"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/wf-roles-ui"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/wf-roles-ui"
+   ],
+   "n_revisions_seen": 1
+  },
+  "test/e2e/journeys/workforce-timesheet-export.spec.js": {
+   "status": "??",
+   "wt_blob": "d377196d8cd79630a4ccf024c393a01d96d34dee",
+   "exact_match_commits": [
+    "618efc88750fa4adb59769b859d3975bfcdc1f3b"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ],
+   "interested_refs": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ],
+   "n_revisions_seen": 1
+  },
+  "test/e2e/scripts/live-world-stamp-wiring-check.js": {
+   "status": "??",
+   "wt_blob": "117d9dba1a5e0c60219e40bbc3f4524024b60d77",
+   "exact_match_commits": [
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "997936ad692145ea68eee9865d06c6430c505c8e",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/lanes/L-WORLD-STAMP-WINDOWS"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/lanes/L-WORLD-STAMP-WINDOWS"
+   ],
+   "n_revisions_seen": 1
+  },
+  "test/margin-recipe-revise.test.js": {
+   "status": "??",
+   "wt_blob": "351ed75ce86937db342498fa81bdd074fbdf9a7b",
+   "exact_match_commits": [
+    "0c483de9dbb22220f74f6b3fca9a6c8967d67d85",
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "8341892a3889dd656c31e0a17c934f95b03511e5",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cb15284a2dd82dbf89105c16a3edfbedb036cf1c",
+    "cdd0de523e0434319b8e19b7f772c77617660a2e",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/mrg-recipe-revise-ui"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/mrg-recipe-revise-ui"
+   ],
+   "n_revisions_seen": 1
+  },
+  "test/meals-statement-view.test.js": {
+   "status": "??",
+   "wt_blob": "2917575a1551ae89920c8f7feff093689d38d56d",
+   "exact_match_commits": [
+    "01b868674406021988a5263b0bc3a531d0fd8996",
+    "07e944e4545c0e5a54742fceb8e5dd46cbc8fec7",
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28525fb74edd55cfec9c66d804f95d1a070199d2",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "37d8b5748b311fb717f95e0b6b52aac405a58652",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "5d95b8499847c9a819eaa17d7663a80d4ff1eee2",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "6fecf0779476d7117c992768577a95ac7b5bb5c4",
+    "8341892a3889dd656c31e0a17c934f95b03511e5",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "9215d3856f04f43334ac59bf0b7a4a6144dc16b4",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cb15284a2dd82dbf89105c16a3edfbedb036cf1c",
+    "cdd0de523e0434319b8e19b7f772c77617660a2e",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "ec6ca4c2d71f33225e2a958908333980c8904cec",
+    "eec2db69c5c6d4f80c00100c18b66a03bbd60426",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-meals-statement-surface"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-meals-statement-surface"
+   ],
+   "n_revisions_seen": 1
+  },
+  "test/price-bypass-legacy.test.js": {
+   "status": "??",
+   "wt_blob": "e0389bcbbfd348808f39ed786bcbdbbc3852373f",
+   "exact_match_commits": [
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "c4a4fa4416df97b0645d579f3565fb80ecc4bd03",
+    "f1d177f13748e3e593b41e0d16f684c4bdef775f"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/check-discount-sum-coupled",
+    "refs/heads/lane/check-lineamount-ungated-sum",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/receipt-discount-row-dropped",
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-PRICE-BYPASS-FIVE",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/check-discount-sum-coupled",
+    "refs/heads/lane/check-lineamount-ungated-sum",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/offer-partial-subtotal",
+    "refs/heads/lane/offers-page-hundredfold",
+    "refs/heads/lane/receipt-discount-row-dropped",
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-OFFER-PARTIAL-SUBTOTAL",
+    "refs/lanes/L-PRICE-BYPASS-FIVE",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ],
+   "n_revisions_seen": 2
+  },
+  "test/price-crosscurrency.test.js": {
+   "status": "??",
+   "wt_blob": "a72e02726ef0c638367658d82d670dba8562d9db",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "6f59ba3fdeadab4b4b38f7cca14c7ea3005f3e44",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/price-crosscurrency"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/price-crosscurrency"
+   ],
+   "n_revisions_seen": 2
+  },
+  "test/price-gate-shadow.test.js": {
+   "status": "??",
+   "wt_blob": "e10891c2f5e2a63c7c2a295dfb79d219640e79e6",
+   "exact_match_commits": [
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "a3666858d65f9797aa2c24336554b41f0d6ada63"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/L-PRICE-SHADOW-GUARD",
+    "refs/heads/lane/collect-review-conditions"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/L-PRICE-SHADOW-GUARD",
+    "refs/heads/lane/collect-review-conditions"
+   ],
+   "n_revisions_seen": 2
+  },
+  "test/workforce-delivery-failures.test.js": {
+   "status": "??",
+   "wt_blob": "d6c8c22a92da297a6d07d0bad798d7e4acdbda0c",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [],
+   "n_revisions_seen": 0
+  },
+  "test/workforce-pos-clock.test.js": {
+   "status": "??",
+   "wt_blob": "9f0131d93a82a8017f031289ce41a3efdb7d3149",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [],
+   "n_revisions_seen": 0
+  },
+  "test/workforce-publication-receipts.test.js": {
+   "status": "??",
+   "wt_blob": "d09b64d816e37f478afb395a7a4725a5ceda7fe0",
+   "exact_match_commits": [
+    "2d86446b746cff8477c4d6dbde316aceecda811b"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/wf-pubhist"
+   ],
+   "interested_refs": [
+    "refs/heads/lane/wf-pubhist"
+   ],
+   "n_revisions_seen": 1
+  },
+  "test/workforce-roles-page.test.js": {
+   "status": "??",
+   "wt_blob": "b18fddb0673c3ac8ef311ff86319a8d08b40cad5",
+   "exact_match_commits": [
+    "01b868674406021988a5263b0bc3a531d0fd8996",
+    "07e944e4545c0e5a54742fceb8e5dd46cbc8fec7",
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28525fb74edd55cfec9c66d804f95d1a070199d2",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "37d8b5748b311fb717f95e0b6b52aac405a58652",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "55b2dcdc61b0a68f3d8b37af2393b51171283906",
+    "5d95b8499847c9a819eaa17d7663a80d4ff1eee2",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "6fecf0779476d7117c992768577a95ac7b5bb5c4",
+    "8341892a3889dd656c31e0a17c934f95b03511e5",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "9bc40c6064c0817ae972347379e184cadca5623b",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cb15284a2dd82dbf89105c16a3edfbedb036cf1c",
+    "cdd0de523e0434319b8e19b7f772c77617660a2e",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "ec6ca4c2d71f33225e2a958908333980c8904cec",
+    "eec2db69c5c6d4f80c00100c18b66a03bbd60426",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42",
+    "ff21e488eae8181cc8dbe302147d335f9d3ff7ec"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/wf-roles-ui"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/wf-roles-ui"
+   ],
+   "n_revisions_seen": 1
+  },
+  "test/workforce-timesheet-client.test.js": {
+   "status": "??",
+   "wt_blob": "c7c3ccd5be49f1ac89853f4b778b119e97726186",
+   "exact_match_commits": [
+    "618efc88750fa4adb59769b859d3975bfcdc1f3b"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ],
+   "interested_refs": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ],
+   "n_revisions_seen": 1
+  },
+  "test/workforce-timesheet-components.test.js": {
+   "status": "??",
+   "wt_blob": "98dee0178a3ffc060aa19b5ba8b3349171a7406c",
+   "exact_match_commits": [
+    "618efc88750fa4adb59769b859d3975bfcdc1f3b"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ],
+   "interested_refs": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ],
+   "n_revisions_seen": 1
+  },
+  "test/workforce-timesheet.test.js": {
+   "status": "??",
+   "wt_blob": "918bce3e57d203f265c505b075d19f3ed74175c9",
+   "exact_match_commits": [
+    "618efc88750fa4adb59769b859d3975bfcdc1f3b"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ],
+   "interested_refs": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ],
+   "n_revisions_seen": 1
+  },
+  "test/world-stamp-windows.test.js": {
+   "status": "??",
+   "wt_blob": "cfc11d308239063fd211195132ffe054fca8251f",
+   "exact_match_commits": [
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "997936ad692145ea68eee9865d06c6430c505c8e",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/lanes/L-WORLD-STAMP-WINDOWS"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/lanes/L-WORLD-STAMP-WINDOWS"
+   ],
+   "n_revisions_seen": 1
+  },
+  "test/xz-negated-absence.test.js": {
+   "status": "??",
+   "wt_blob": "a9962cc687df4d2b71f06ff4ada19f9860a89593",
+   "exact_match_commits": [
+    "b150668b7de1992dd858dc2b2d5be4c2b7017def"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/check-discount-sum-coupled",
+    "refs/heads/lane/check-lineamount-ungated-sum",
+    "refs/heads/lane/receipt-discount-row-dropped",
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ],
+   "interested_refs": [
+    "refs/heads/lane/check-discount-sum-coupled",
+    "refs/heads/lane/check-lineamount-ungated-sum",
+    "refs/heads/lane/receipt-discount-row-dropped",
+    "refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED",
+    "refs/lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM",
+    "refs/lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED",
+    "refs/lanes/L-XZ-NEGATED-ABSENCE",
+    "refs/lanes/L-XZ-RESIDUAL-SITES"
+   ],
+   "n_revisions_seen": 2
+  },
+  "utils/cross-currency.js": {
+   "status": "??",
+   "wt_blob": "161752ac7b719e552127b8ea525671376dda8dba",
+   "exact_match_commits": [
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "17fe84ae05cde18576317ef357cb25efa5b51fa3",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/price-crosscurrency"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/price-crosscurrency"
+   ],
+   "n_revisions_seen": 1
+  },
+  "utils/meals/statement-client.js": {
+   "status": "??",
+   "wt_blob": "3359a1d3c821b40f5630706a3e31532b5d733b6f",
+   "exact_match_commits": [
+    "01b868674406021988a5263b0bc3a531d0fd8996",
+    "07e944e4545c0e5a54742fceb8e5dd46cbc8fec7",
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28525fb74edd55cfec9c66d804f95d1a070199d2",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "37d8b5748b311fb717f95e0b6b52aac405a58652",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "5d95b8499847c9a819eaa17d7663a80d4ff1eee2",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "6fecf0779476d7117c992768577a95ac7b5bb5c4",
+    "8341892a3889dd656c31e0a17c934f95b03511e5",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "9215d3856f04f43334ac59bf0b7a4a6144dc16b4",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cb15284a2dd82dbf89105c16a3edfbedb036cf1c",
+    "cdd0de523e0434319b8e19b7f772c77617660a2e",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "ec6ca4c2d71f33225e2a958908333980c8904cec",
+    "eec2db69c5c6d4f80c00100c18b66a03bbd60426",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-meals-statement-surface"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-meals-statement-surface"
+   ],
+   "n_revisions_seen": 1
+  },
+  "utils/meals/statement-view.js": {
+   "status": "??",
+   "wt_blob": "bf9b47292eb12d1c8d550990a83e501f17b8ae5b",
+   "exact_match_commits": [
+    "01b868674406021988a5263b0bc3a531d0fd8996",
+    "07e944e4545c0e5a54742fceb8e5dd46cbc8fec7",
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28525fb74edd55cfec9c66d804f95d1a070199d2",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "37d8b5748b311fb717f95e0b6b52aac405a58652",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "5d95b8499847c9a819eaa17d7663a80d4ff1eee2",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "6fecf0779476d7117c992768577a95ac7b5bb5c4",
+    "8341892a3889dd656c31e0a17c934f95b03511e5",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "9215d3856f04f43334ac59bf0b7a4a6144dc16b4",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cb15284a2dd82dbf89105c16a3edfbedb036cf1c",
+    "cdd0de523e0434319b8e19b7f772c77617660a2e",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "ec6ca4c2d71f33225e2a958908333980c8904cec",
+    "eec2db69c5c6d4f80c00100c18b66a03bbd60426",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-meals-statement-surface"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-meals-statement-surface"
+   ],
+   "n_revisions_seen": 1
+  },
+  "utils/training/evidence.js": {
+   "status": "??",
+   "wt_blob": "d30e2652f0e7431a344a8a54c3f772bd080a43e9",
+   "exact_match_commits": [
+    "01b868674406021988a5263b0bc3a531d0fd8996",
+    "07e944e4545c0e5a54742fceb8e5dd46cbc8fec7",
+    "1561c71e14e3951cd4ae4e9fcb9d6804ebcef254",
+    "28525fb74edd55cfec9c66d804f95d1a070199d2",
+    "2df8ba07a7052beab25483ffb5277b245496829b",
+    "36afade94f7b98e76bf9e9009f88f7bc51a437ae",
+    "37d8b5748b311fb717f95e0b6b52aac405a58652",
+    "408f4c898b8f5b16f2eb05c4e51557f3a7738ec7",
+    "55b2dcdc61b0a68f3d8b37af2393b51171283906",
+    "5d95b8499847c9a819eaa17d7663a80d4ff1eee2",
+    "658811bcf0fb1e71fddf5d0bee18e9d78fedd06c",
+    "67108b88e684474a74bf48e32e7dc6b92fc63a44",
+    "6fecf0779476d7117c992768577a95ac7b5bb5c4",
+    "8341892a3889dd656c31e0a17c934f95b03511e5",
+    "8e1febeff59683e30900fd95858819e75af9213e",
+    "904afeb78e98b9b7cf5fa689f0c0e2241a85f1e7",
+    "990c2db6db3618fdd77556f4b14770e756c92285",
+    "9ab018a913e9eb422039457e692f8c0578af2718",
+    "9bc40c6064c0817ae972347379e184cadca5623b",
+    "a823a6f0d9eb3f1d0d2bdf876305f338ab78f970",
+    "ad7c125824b4e8221c3c1177275b2598c1ad29c4",
+    "af0a4a131ca72b0dbcbc820876ff5848a215cf64",
+    "b3ccb9333476448251189f9deecd25f415cad3c7",
+    "bba004e7ed5e3094212f528b8cfdcb3b6fab1937",
+    "c6f208e0e3a8dd93a352fcce5200b2c7b79e8bff",
+    "cb15284a2dd82dbf89105c16a3edfbedb036cf1c",
+    "cdd0de523e0434319b8e19b7f772c77617660a2e",
+    "cde320ae338855a1c7aa7d33649a4b5de5066158",
+    "dc6560a87f9466b6c8cf1fce69e2d928149e9686",
+    "e13dcf59bb586031cccfe3519bd64e9e73d0cc4e",
+    "ec6ca4c2d71f33225e2a958908333980c8904cec",
+    "eec2db69c5c6d4f80c00100c18b66a03bbd60426",
+    "fa2ed54479221bfc8a0e2ff4d468f42053344b42"
+   ],
+   "exact_match_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/train-evidence-pack-ui"
+   ],
+   "interested_refs": [
+    "refs/heads/candidate/fe-compose-2026-08-05",
+    "refs/heads/lane/collect-review-conditions",
+    "refs/heads/lane/fe-training-meals-surfaces",
+    "refs/heads/lane/train-evidence-pack-ui"
+   ],
+   "n_revisions_seen": 2
+  },
+  "utils/workforce/delivery-failures.js": {
+   "status": "??",
+   "wt_blob": "51d3fdf21eeb431e0b4f344e300fee55206093b9",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [],
+   "n_revisions_seen": 0
+  },
+  "utils/workforce/pos-clock-client.js": {
+   "status": "??",
+   "wt_blob": "5e7030c9b5e94881bbd787c57386e1a8a35fedca",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [
+    "refs/heads/lane/fe-pos-clock",
+    "refs/heads/lane/fe-wf-blind-bind-name",
+    "refs/heads/lane/fe-wf-link-deadend",
+    "refs/heads/lane/fe-wf-oplink"
+   ],
+   "n_revisions_seen": 1
+  },
+  "utils/workforce/pos-clock-state.js": {
+   "status": "??",
+   "wt_blob": "016ece9461d56f13012a7f3667a45e922d9307a4",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [],
+   "n_revisions_seen": 0
+  },
+  "utils/workforce/publication-receipts.js": {
+   "status": "??",
+   "wt_blob": "2440031177cac418fee6ff26d68fea15e99b5412",
+   "exact_match_commits": [
+    "2d86446b746cff8477c4d6dbde316aceecda811b"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/wf-pubhist"
+   ],
+   "interested_refs": [
+    "refs/heads/lane/wf-pubhist"
+   ],
+   "n_revisions_seen": 1
+  },
+  "utils/workforce/timesheet-client.js": {
+   "status": "??",
+   "wt_blob": "6e78582317f697d06f5b291f56d1fc30f020b1d3",
+   "exact_match_commits": [
+    "618efc88750fa4adb59769b859d3975bfcdc1f3b"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ],
+   "interested_refs": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ],
+   "n_revisions_seen": 1
+  },
+  "utils/workforce/timesheet.js": {
+   "status": "??",
+   "wt_blob": "db65eeb6126525e0e17fd14d4208c6b1b1cc37d8",
+   "exact_match_commits": [
+    "618efc88750fa4adb59769b859d3975bfcdc1f3b"
+   ],
+   "exact_match_refs": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ],
+   "interested_refs": [
+    "refs/heads/lane/wf-timesheet-ui"
+   ],
+   "n_revisions_seen": 1
+  },
+  "world.config": {
+   "status": "??",
+   "wt_blob": "78e25318af959462c0d7f3599990e6e25e32c413",
+   "exact_match_commits": [],
+   "exact_match_refs": [],
+   "interested_refs": [],
+   "n_revisions_seen": 0
+  }
+ }
+}

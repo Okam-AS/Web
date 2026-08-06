@@ -1,0 +1,14 @@
+{
+  "label": "A-baseline-no",
+  "edition": "no",
+  "grantedFixturePort": 4847,
+  "grantedWebPort": 3847,
+  "health": "{\"ok\":true,\"port\":4847}",
+  "holderPid": "31950",
+  "holderCwd": "/Users/svendaneel/okam/web-rcptde",
+  "holderCommand": "node test/e2e/fixture/api-server.js",
+  "webPid": "unresolved",
+  "webCwd": "unresolved",
+  "lsof": "p31950 f12 n127.0.0.1:4847 ",
+  "capturedAt": "2026-08-05T05:28:20Z"
+}

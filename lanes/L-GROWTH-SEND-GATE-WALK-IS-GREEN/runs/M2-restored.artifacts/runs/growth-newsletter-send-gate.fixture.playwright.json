@@ -1,0 +1,239 @@
+{
+  "journey": "growth-newsletter-send-gate",
+  "title": "An operator drafts and approves a newsletter, and the send gate opens only when both switches are up",
+  "status": "passed",
+  "startedAtUtc": "2026-08-06T10:43:12.375Z",
+  "finishedAtUtc": "2026-08-06T10:43:18.533Z",
+  "durationMs": 6158,
+  "capabilities": [
+    "platform.feature-flags.write",
+    "growth.consent.standing.read",
+    "growth.audience.snapshot",
+    "growth.newsletter.author",
+    "growth.newsletter.test-send",
+    "growth.newsletter.approve",
+    "growth.send-gate.fail-closed"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3876",
+  "apiBaseUrl": "http://127.0.0.1:4876",
+  "commit": "8ac6f63648015d8c7a230181a7f07bf303d43268",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": {
+    "id": "fixture@8ac6f63648015d8c7a230181a7f07bf303d43268",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "8ac6f63",
+    "detail": "the in-repo fixture backend, not an API build (branch HEAD)"
+  },
+  "backendServed": 58,
+  "backendSubjectServed": 46,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:4876/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:4876/user/login -> 200",
+    "GET http://127.0.0.1:4876/user -> 200",
+    "GET http://127.0.0.1:4876/stores/42/market -> 200",
+    "GET http://127.0.0.1:4876/stores/42 -> 200",
+    "GET http://127.0.0.1:4876/user -> 200",
+    "GET http://127.0.0.1:4876/v1/growth/stores/42/consents/summary -> 200",
+    "GET http://127.0.0.1:4876/v1/growth/stores/42/newsletters -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in and open the newsletter screen",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T10:43:12.378Z",
+      "durationMs": 1446,
+      "detail": "on /admin/growth-newsletter, no blocker",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "the consent standing is the SERVER's four figures, not a total",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T10:43:13.824Z",
+      "durationMs": 19,
+      "detail": "samtykket 214 · trukket 18 · sperret 7 · venter 5",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "there is no gate yet, and there is no draft form either",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T10:43:13.843Z",
+      "durationMs": 8,
+      "detail": "no gate, no draft form; the audience is the stated precondition",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "compute the audience — and it is NOT the consent total",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T10:43:13.851Z",
+      "durationMs": 50,
+      "detail": "209 will receive, 5 excluded, watermark a91c4f7e20b8",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "write the newsletter",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T10:43:13.901Z",
+      "durationMs": 69,
+      "detail": "version 1 saved",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "THE FIRST STOP: the gate arrives closed, and both switches are named",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T10:43:13.970Z",
+      "durationMs": 21,
+      "detail": "3 reasons, both flags among them; the send button is drawn and disabled",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "the module switch also closes the TEST route, and the panel says so",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T10:43:14.100Z",
+      "durationMs": 17,
+      "detail": "test route closed by growth.module, input disabled",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "right after a save the approval is informed, and the panel does not warn",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T10:43:14.117Z",
+      "durationMs": 8,
+      "detail": "no unseen-body warning: the boxes are the version being approved",
+      "error": null
+    },
+    {
+      "n": 9,
+      "name": "approve it — and now ONLY the two switches are left",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T10:43:14.125Z",
+      "durationMs": 44,
+      "detail": "approval Live; the only reasons left are growth.module and growth.dispatch",
+      "error": null
+    },
+    {
+      "n": 10,
+      "name": "turn both Growth switches on from the operator switchboard",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T10:43:14.258Z",
+      "durationMs": 1573,
+      "detail": "both growth.module and growth.dispatch on for store 42",
+      "error": null
+    },
+    {
+      "n": 11,
+      "name": "come back to the newsletter",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T10:43:15.831Z",
+      "durationMs": 786,
+      "detail": "newsletter 1 reopened, still approved — and the screen states it cannot show the body",
+      "error": null
+    },
+    {
+      "n": 12,
+      "name": "a test send may only go to your own address",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T10:43:16.617Z",
+      "durationMs": 54,
+      "detail": "refused: growth.test_address_not_own",
+      "error": null
+    },
+    {
+      "n": 13,
+      "name": "send yourself the test, and read what the answer actually is",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T10:43:16.671Z",
+      "durationMs": 63,
+      "detail": "Testen er sendt inn. Leverandøren svarte: Sent. Det er en innsendingsstatus, ikke en leveringsbekreftelse.",
+      "error": null
+    },
+    {
+      "n": 14,
+      "name": "the gate opens — with everything checked, and one thing it cannot check",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T10:43:16.734Z",
+      "durationMs": 50,
+      "detail": "gate READY, 209 recipients, send enabled — and the caveat on screen",
+      "error": null
+    },
+    {
+      "n": 15,
+      "name": "THE WALK STOPS HERE, deliberately, and this is why",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T10:43:16.891Z",
+      "durationMs": 0,
+      "detail": "stopped at the gate, by choice; the mail path is a fake below this line",
+      "error": null
+    },
+    {
+      "n": 16,
+      "name": "put the kill switch back down, and the same gate closes",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T10:43:16.891Z",
+      "durationMs": 1533,
+      "detail": "one reason, the kill switch; send disabled again — the gate is real",
+      "error": null
+    },
+    {
+      "n": 17,
+      "name": "what the browser said while this ran",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T10:43:18.524Z",
+      "durationMs": 0,
+      "detail": "2 shell-redirect (note), 0 this page's",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "note",
+      "summary": "the operator walk ends at the gate: nothing downstream of it can be shown to work",
+      "detail": "Pressed, `POST .../dispatch` would answer from a fixture, and on the deployment it would hand off to the deterministic fake `Program.cs` binds the mail provider to — the code's own comment is that the anonymous subscribe endpoint is provably incapable of sending real mail until the provider is promoted (F-GROWTH-FAKE-MAIL). So no guest ever receives the double-opt-in mail, /subscribe/confirm is unreachable by a real guest, and FT-GROWTH's stated exit — subscribe, confirm, withdraw at the deployed origins — names four steps of which the first is the only one a person can complete. What IS now shown is the operator half in full: consent standing, a snapshot audience, a draft, a test send, a human approval pinned to a version, and a gate that fails closed on every input it cannot read."
+    },
+    {
+      "severity": "note",
+      "summary": "the admin shell logs a router «Navigation cancelled» pair on every signed-in journey",
+      "detail": "Seen 2 times here and identically in growth-privacy-queue, workforce-flag-lever and workforce-schedule-publish. It is AdminPage's login redirect being superseded by the storeId append, not anything on this page. Recorded so it is not re-diagnosed from here."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fgrowth-newsletter\" to \"/admin?redirect=%2Fadmin%2Fgrowth-newsletter&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fgrowth-newsletter\" to \"/admin?redirect=%2Fadmin%2Fgrowth-newsletter&storeId=42\" with a new navigation.",
+    "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+  ],
+  "failedRequests": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:4876/v1/growth/stores/42/newsletters/2/test-sends",
+      "status": 403
+    }
+  ],
+  "screenshots": [
+    "growth-newsletter-send-gate/fixture/01-the-gate-closed-on-three-counts.png",
+    "growth-newsletter-send-gate/fixture/02-approved-and-held-by-the-switches-alone.png",
+    "growth-newsletter-send-gate/fixture/03-the-gate-open.png",
+    "growth-newsletter-send-gate/fixture/04-the-kill-switch-back-down.png"
+  ],
+  "error": null,
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/growth-newsletter-send-gate.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false,
+    "supersedes": null
+  }
+}

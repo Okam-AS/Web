@@ -1,0 +1,63 @@
+{
+  "journey": "provenance-probe",
+  "title": "the page loads and says who served it",
+  "status": "passed",
+  "startedAtUtc": "2026-08-04T21:24:01.469Z",
+  "finishedAtUtc": "2026-08-04T21:24:01.491Z",
+  "durationMs": 22,
+  "capabilities": [
+    "harness.provenance.probe"
+  ],
+  "surface": "public",
+  "backend": "live",
+  "baseUrl": "http://127.0.0.1:59872",
+  "apiBaseUrl": "http://127.0.0.1:59871",
+  "commit": null,
+  "underTest": null,
+  "backendProbe": {
+    "url": "http://127.0.0.1:59871/health",
+    "status": 200,
+    "body": "Healthy"
+  },
+  "backendBuild": {
+    "id": "Web-modules@e34977acebd59b223584158c33451b6f1ffd82c1+dirty",
+    "source": "process:127.0.0.1:59871",
+    "short": "e34977a-dirty",
+    "detail": "branch feature/restaurant-modules"
+  },
+  "backendServed": 2,
+  "backendSubjectServed": 1,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "proxiedSubjectServed": 0,
+  "proxiedSubjectSample": [],
+  "backendSample": [
+    "GET http://127.0.0.1:59871/user -> 200",
+    "GET http://127.0.0.1:59871/workforce/stores/1/context -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "open the page",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T21:24:01.470Z",
+      "durationMs": 21,
+      "detail": "served by live",
+      "error": null
+    }
+  ],
+  "findings": [],
+  "consoleErrors": [],
+  "failedRequests": [],
+  "screenshots": [],
+  "error": null,
+  "artifact": {
+    "key": "live-59871-e34977a-dirty",
+    "file": "artifacts/journeys/runs/provenance-probe.live-59871-e34977a-dirty.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "live-59871-e34977a-dirty",
+    "provisional": false,
+    "supersedes": null
+  }
+}

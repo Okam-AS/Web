@@ -1,0 +1,141 @@
+watchman warning:  Recrawled this watch 57 times, most recently because:
+MustScanSubDirs UserDroppedTo resolve, please review the information on
+https://facebook.github.io/watchman/docs/troubleshooting.html#recrawl
+To clear this warning, run:
+`watchman watch-del '/Users/svendaneel/okam/Web-modules' ; watchman watch-project '/Users/svendaneel/okam/Web-modules'`
+
+FAIL test/ongoing-board-covers-every-live-status.test.js
+  the ongoing board shows every live order
+    ✕ no live status renders in no column (16 ms)
+    ✕ each live order is rendered once, in exactly one column (3 ms)
+    ✕ each live status lands in its named column with its named action (4 ms)
+    ✕ an order whose driver has collected it can still be completed from this screen (2 ms)
+    ✓ completed and cancelled orders are excluded, and that exclusion is deliberate (2 ms)
+    ✕ a status this build has never heard of is surfaced, not dropped (2 ms)
+
+  ● the ongoing board shows every live order › no live status renders in no column
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 2
+    + Received  + 0
+
+      Array [
+        "Accepted",
+    -   "DriverPickedUp",
+    -   "OpenCheck",
+        "Processing",
+        "ReadyForDriver",
+        "ReadyForPickup",
+        "Served",
+      ]
+
+      162 |
+      163 |     const shown = renderedCards(wrapper).map(card => card.status).sort()
+    > 164 |     expect(shown).toEqual(LIVE_STATUSES.slice().sort())
+          |                   ^
+      165 |   })
+      166 |
+      167 |   test('each live order is rendered once, in exactly one column', async () => {
+
+      at Object.<anonymous> (test/ongoing-board-covers-every-live-status.test.js:164:19)
+
+  ● the ongoing board shows every live order › each live order is rendered once, in exactly one column
+
+    expect(received).toEqual(expected) // deep equality
+
+    Expected: ["ongoing_columnNew"]
+    Received: undefined
+
+      176 |
+      177 |     LIVE_STATUSES.forEach((status) => {
+    > 178 |       expect(byStatus[status]).toEqual([EXPECTED_PLACEMENT[status].column])
+          |                                ^
+      179 |     })
+      180 |   })
+      181 |
+
+      at forEach (test/ongoing-board-covers-every-live-status.test.js:178:32)
+          at Array.forEach (<anonymous>)
+      at Object.<anonymous> (test/ongoing-board-covers-every-live-status.test.js:177:19)
+
+  ● the ongoing board shows every live order › each live status lands in its named column with its named action
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 8
+    + Received  + 0
+
+    @@ -1,18 +1,10 @@
+      Object {
+        "Accepted": Object {
+          "action": "ongoing_actionNext",
+          "column": "ongoing_columnNew",
+        },
+    -   "DriverPickedUp": Object {
+    -     "action": "ongoing_actionComplete",
+    -     "column": "ongoing_columnReady",
+    -   },
+    -   "OpenCheck": Object {
+    -     "action": "",
+    -     "column": "ongoing_columnNew",
+    -   },
+        "Processing": Object {
+          "action": "ongoing_actionNext",
+          "column": "ongoing_columnProcessing",
+        },
+        "ReadyForDriver": Object {
+
+      193 |     })
+      194 |
+    > 195 |     expect(actual).toEqual(EXPECTED_PLACEMENT)
+          |                    ^
+      196 |   })
+      197 |
+      198 |   // The reason the defect mattered: not merely that the card was unseen, but that the only control
+
+      at Object.<anonymous> (test/ongoing-board-covers-every-live-status.test.js:195:20)
+
+  ● the ongoing board shows every live order › an order whose driver has collected it can still be completed from this screen
+
+    expect(received).toBeDefined()
+
+    Received: undefined
+
+      205 |
+      206 |     const card = renderedCards(wrapper).find(c => c.status === OrderStatus.DriverPickedUp)
+    > 207 |     expect(card).toBeDefined()
+          |                  ^
+      208 |     expect(card.action).toBe('ongoing_actionComplete')
+      209 |
+      210 |     const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true)
+
+      at Object.<anonymous> (test/ongoing-board-covers-every-live-status.test.js:207:18)
+
+  ● the ongoing board shows every live order › a status this build has never heard of is surfaced, not dropped
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 3
+    + Received  + 1
+
+    - Array [
+    -   "order-AwaitingCourierHandover",
+    - ]
+    + Array []
+
+      238 |
+      239 |     const shown = renderedCards(wrapper)
+    > 240 |     expect(shown.map(card => card.id)).toEqual([order.id])
+          |                                        ^
+      241 |   })
+      242 | })
+      243 |
+
+      at Object.<anonymous> (test/ongoing-board-covers-every-live-status.test.js:240:40)
+
+Test Suites: 1 failed, 1 total
+Tests:       5 failed, 1 passed, 6 total
+Snapshots:   0 total
+Time:        0.486 s, estimated 1 s
+Ran all test suites matching /test\/ongoing-board-covers-every-live-status.test.js/i.

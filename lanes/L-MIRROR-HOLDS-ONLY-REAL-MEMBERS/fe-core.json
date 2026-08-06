@@ -1,0 +1,1290 @@
+[
+ {
+  "name": "ActionName",
+  "path": "enums/action-name.ts",
+  "members": [
+   {
+    "name": "Load",
+    "value": "Load"
+   },
+   {
+    "name": "SetCurrentUser",
+    "value": "SetCurrentUser"
+   },
+   {
+    "name": "SetDeliveryAddress",
+    "value": "SetDeliveryAddress"
+   },
+   {
+    "name": "SetNotificationId",
+    "value": "SetNotificationId"
+   },
+   {
+    "name": "SetCurrentStore",
+    "value": "SetCurrentStore"
+   },
+   {
+    "name": "FileUploadEvent",
+    "value": "FileUploadEvent"
+   },
+   {
+    "name": "ClearFileUploadEvent",
+    "value": "ClearFileUploadEvent"
+   },
+   {
+    "name": "SetProductsQuery",
+    "value": "SetProductsQuery"
+   },
+   {
+    "name": "SetLastViewedProductId",
+    "value": "SetLastViewedProductId"
+   },
+   {
+    "name": "ClearState",
+    "value": "ClearState"
+   }
+  ]
+ },
+ {
+  "name": "AppSettingKey",
+  "path": "enums/app-setting-key.ts",
+  "members": [
+   {
+    "name": "State",
+    "value": "state"
+   }
+  ]
+ },
+ {
+  "name": "CashDrawerTransactionType",
+  "path": "enums/cash-drawer-transaction-type.ts",
+  "members": [
+   {
+    "name": "OpenFloat",
+    "value": "OpenFloat"
+   },
+   {
+    "name": "Sale",
+    "value": "Sale"
+   },
+   {
+    "name": "Change",
+    "value": "Change"
+   },
+   {
+    "name": "PayIn",
+    "value": "PayIn"
+   },
+   {
+    "name": "PayOut",
+    "value": "PayOut"
+   },
+   {
+    "name": "Refund",
+    "value": "Refund"
+   },
+   {
+    "name": "BankDeposit",
+    "value": "BankDeposit"
+   },
+   {
+    "name": "CloseCount",
+    "value": "CloseCount"
+   }
+  ]
+ },
+ {
+  "name": "CheckSplitMode",
+  "path": "enums/check-split-mode.ts",
+  "members": [
+   {
+    "name": "ByItem",
+    "value": "ByItem"
+   },
+   {
+    "name": "EqualParts",
+    "value": "EqualParts"
+   }
+  ]
+ },
+ {
+  "name": "DeliveryType",
+  "path": "enums/delivery-type.ts",
+  "members": [
+   {
+    "name": "NotSet",
+    "value": "NotSet"
+   },
+   {
+    "name": "SelfPickup",
+    "value": "SelfPickup"
+   },
+   {
+    "name": "InstantHomeDelivery",
+    "value": "InstantHomeDelivery"
+   },
+   {
+    "name": "DineHomeDelivery",
+    "value": "DineHomeDelivery"
+   },
+   {
+    "name": "TableDelivery",
+    "value": "TableDelivery"
+   },
+   {
+    "name": "WoltDelivery",
+    "value": "WoltDelivery"
+   },
+   {
+    "name": "WoltMarketplaceDelivery",
+    "value": "WoltMarketplaceDelivery"
+   }
+  ]
+ },
+ {
+  "name": "DineHomeStatus",
+  "path": "enums/dinehome-status.ts",
+  "members": [
+   {
+    "name": "NotSet",
+    "value": "NotSet"
+   },
+   {
+    "name": "Accepted",
+    "value": "Accepted"
+   },
+   {
+    "name": "PickedUp",
+    "value": "PickedUp"
+   },
+   {
+    "name": "ReachedDestination",
+    "value": "ReachedDestination"
+   },
+   {
+    "name": "Completed",
+    "value": "Completed"
+   },
+   {
+    "name": "Canceled",
+    "value": "Canceled"
+   }
+  ]
+ },
+ {
+  "name": "DinteroTerminalStatus",
+  "path": "enums/dintero-terminal-status.ts",
+  "members": [
+   {
+    "name": "NotSet",
+    "value": "NotSet"
+   },
+   {
+    "name": "Waiting",
+    "value": "Waiting"
+   },
+   {
+    "name": "Success",
+    "value": "Success"
+   },
+   {
+    "name": "Fail",
+    "value": "Fail"
+   }
+  ]
+ },
+ {
+  "name": "DinteroVerifyStatus",
+  "path": "enums/dintero-verify-status.ts",
+  "members": [
+   {
+    "name": "NotSet",
+    "value": "NotSet"
+   },
+   {
+    "name": "Waiting",
+    "value": "Waiting"
+   },
+   {
+    "name": "Success",
+    "value": "Success"
+   },
+   {
+    "name": "Fail",
+    "value": "Fail"
+   }
+  ]
+ },
+ {
+  "name": "DiscountApplicability",
+  "path": "enums/discount-applicability.ts",
+  "members": [
+   {
+    "name": "Order",
+    "value": "Order"
+   },
+   {
+    "name": "HomeDeliveryOrder",
+    "value": "HomeDeliveryOrder"
+   },
+   {
+    "name": "SelfPickupOrder",
+    "value": "SelfPickupOrder"
+   },
+   {
+    "name": "TableDeliveryOrder",
+    "value": "TableDeliveryOrder"
+   },
+   {
+    "name": "ProductsInclusive",
+    "value": "ProductsInclusive"
+   },
+   {
+    "name": "ProductsExclusive",
+    "value": "ProductsExclusive"
+   }
+  ]
+ },
+ {
+  "name": "DiscountType",
+  "path": "enums/discount-type.ts",
+  "members": [
+   {
+    "name": "Amount",
+    "value": "Amount"
+   },
+   {
+    "name": "Percent",
+    "value": "Percent"
+   }
+  ]
+ },
+ {
+  "name": "GiftcardStatus",
+  "path": "enums/giftcard-status.ts",
+  "members": [
+   {
+    "name": "Initiated",
+    "value": "Initiated"
+   },
+   {
+    "name": "AwaitingReceiver",
+    "value": "AwaitingReceiver"
+   },
+   {
+    "name": "Completed",
+    "value": "Completed"
+   },
+   {
+    "name": "Canceled",
+    "value": "Canceled"
+   }
+  ]
+ },
+ {
+  "name": "GiftcardTransactionType",
+  "path": "enums/giftcard-transaction-type.ts",
+  "members": [
+   {
+    "name": "NotSet",
+    "value": "NotSet"
+   },
+   {
+    "name": "AwaitingReceiver",
+    "value": "AwaitingReceiver"
+   },
+   {
+    "name": "Transferred",
+    "value": "Transferred"
+   },
+   {
+    "name": "Purchased",
+    "value": "Purchased"
+   },
+   {
+    "name": "Redeemed",
+    "value": "Redeemed"
+   },
+   {
+    "name": "Canceled",
+    "value": "Canceled"
+   }
+  ]
+ },
+ {
+  "name": "HttpMethod",
+  "path": "enums/http-method.ts",
+  "members": [
+   {
+    "name": "POST",
+    "value": "POST"
+   },
+   {
+    "name": "GET",
+    "value": "GET"
+   },
+   {
+    "name": "PUT",
+    "value": "PUT"
+   },
+   {
+    "name": "PATCH",
+    "value": "PATCH"
+   },
+   {
+    "name": "DELETE",
+    "value": "DELETE"
+   }
+  ]
+ },
+ {
+  "name": "HttpProperty",
+  "path": "enums/http-property.ts",
+  "members": [
+   {
+    "name": "Url",
+    "value": "url"
+   },
+   {
+    "name": "Method",
+    "value": "method"
+   },
+   {
+    "name": "Data",
+    "value": "data"
+   },
+   {
+    "name": "ContentType",
+    "value": "Content-Type"
+   },
+   {
+    "name": "Content",
+    "value": "content"
+   },
+   {
+    "name": "Authorization",
+    "value": "Authorization"
+   },
+   {
+    "name": "ClientAppVersion",
+    "value": "ClientAppVersion"
+   },
+   {
+    "name": "ClientPlatform",
+    "value": "ClientPlatform"
+   },
+   {
+    "name": "ClientFeatures",
+    "value": "ClientFeatures"
+   },
+   {
+    "name": "SelectedTheme",
+    "value": "SelectedTheme"
+   },
+   {
+    "name": "Language",
+    "value": "Language"
+   }
+  ]
+ },
+ {
+  "name": "KassaEventType",
+  "path": "enums/kassa-event-type.ts",
+  "members": [
+   {
+    "name": "POSSTART",
+    "value": "POSSTART"
+   },
+   {
+    "name": "POSEND",
+    "value": "POSEND"
+   },
+   {
+    "name": "EMPIN",
+    "value": "EMPIN"
+   },
+   {
+    "name": "EMPOUT",
+    "value": "EMPOUT"
+   },
+   {
+    "name": "SALREC",
+    "value": "SALREC"
+   },
+   {
+    "name": "RETREC",
+    "value": "RETREC"
+   },
+   {
+    "name": "COPYREC",
+    "value": "COPYREC"
+   },
+   {
+    "name": "PROREC",
+    "value": "PROREC"
+   },
+   {
+    "name": "TRAINREC",
+    "value": "TRAINREC"
+   },
+   {
+    "name": "LINEDELETE",
+    "value": "LINEDELETE"
+   },
+   {
+    "name": "PRICELOOKUP",
+    "value": "PRICELOOKUP"
+   },
+   {
+    "name": "DRAWOPEN",
+    "value": "DRAWOPEN"
+   },
+   {
+    "name": "DRAWOPENMAN",
+    "value": "DRAWOPENMAN"
+   },
+   {
+    "name": "ZREP",
+    "value": "ZREP"
+   },
+   {
+    "name": "XREP",
+    "value": "XREP"
+   },
+   {
+    "name": "DISCOUNT",
+    "value": "DISCOUNT"
+   },
+   {
+    "name": "VOIDTRANS",
+    "value": "VOIDTRANS"
+   },
+   {
+    "name": "PAYIN",
+    "value": "PAYIN"
+   },
+   {
+    "name": "PAYOUT",
+    "value": "PAYOUT"
+   }
+  ]
+ },
+ {
+  "name": "KassaReceiptSeries",
+  "path": "enums/kassa-receipt-series.ts",
+  "members": [
+   {
+    "name": "JournalSequence",
+    "value": "JournalSequence"
+   },
+   {
+    "name": "Sale",
+    "value": "Sale"
+   },
+   {
+    "name": "Return",
+    "value": "Return"
+   },
+   {
+    "name": "Copy",
+    "value": "Copy"
+   },
+   {
+    "name": "Provisional",
+    "value": "Provisional"
+   },
+   {
+    "name": "Training",
+    "value": "Training"
+   },
+   {
+    "name": "ZReport",
+    "value": "ZReport"
+   }
+  ]
+ },
+ {
+  "name": "KassaReceiptType",
+  "path": "enums/kassa-receipt-type.ts",
+  "members": [
+   {
+    "name": "Sale",
+    "value": "Sale"
+   },
+   {
+    "name": "Return",
+    "value": "Return"
+   },
+   {
+    "name": "Correction",
+    "value": "Correction"
+   },
+   {
+    "name": "Copy",
+    "value": "Copy"
+   },
+   {
+    "name": "Provisional",
+    "value": "Provisional"
+   },
+   {
+    "name": "Training",
+    "value": "Training"
+   }
+  ]
+ },
+ {
+  "name": "KeyAccountManagerStatus",
+  "path": "enums/key-account-manager-status.ts",
+  "members": [
+   {
+    "name": "MissingSetup",
+    "value": "MissingSetup"
+   },
+   {
+    "name": "ReadyForDemo",
+    "value": "ReadyForDemo"
+   },
+   {
+    "name": "WaitingForCustomerResponse",
+    "value": "WaitingForCustomerResponse"
+   },
+   {
+    "name": "RequiresFollowUp",
+    "value": "RequiresFollowUp"
+   },
+   {
+    "name": "InOperation",
+    "value": "InOperation"
+   },
+   {
+    "name": "Deleted",
+    "value": "Deleted"
+   }
+  ]
+ },
+ {
+  "name": "KitchenTicketSource",
+  "path": "enums/kitchen-ticket-source.ts",
+  "members": [
+   {
+    "name": "PosTable",
+    "value": "PosTable"
+   },
+   {
+    "name": "Online",
+    "value": "Online"
+   }
+  ]
+ },
+ {
+  "name": "MutationName",
+  "path": "enums/mutation-name.ts",
+  "members": [
+   {
+    "name": "Load",
+    "value": "Load"
+   },
+   {
+    "name": "SetIntroIsSeen",
+    "value": "SetIntroIsSeen"
+   },
+   {
+    "name": "SetCurrentUser",
+    "value": "SetCurrentUser"
+   },
+   {
+    "name": "SetDeliveryAddress",
+    "value": "SetDeliveryAddress"
+   },
+   {
+    "name": "SetUserPosition",
+    "value": "SetUserPosition"
+   },
+   {
+    "name": "ClearCurrentUser",
+    "value": "ClearCurrentUser"
+   },
+   {
+    "name": "SetCarts",
+    "value": "SetCarts"
+   },
+   {
+    "name": "SetOrders",
+    "value": "SetOrders"
+   },
+   {
+    "name": "SetStores",
+    "value": "SetStores"
+   },
+   {
+    "name": "SetStore",
+    "value": "SetStore"
+   },
+   {
+    "name": "SetNotificationId",
+    "value": "SetNotificationId"
+   },
+   {
+    "name": "RemoveCart",
+    "value": "RemoveCart"
+   },
+   {
+    "name": "RemoveCartItems",
+    "value": "RemoveCartItems"
+   },
+   {
+    "name": "SetCartIsLoading",
+    "value": "SetCartIsLoading"
+   },
+   {
+    "name": "SetLineItem",
+    "value": "SetLineItem"
+   },
+   {
+    "name": "SetCartRootProperties",
+    "value": "SetCartRootProperties"
+   },
+   {
+    "name": "RemoveLineItem",
+    "value": "RemoveLineItem"
+   },
+   {
+    "name": "SetCurrentStore",
+    "value": "SetCurrentStore"
+   },
+   {
+    "name": "SetStoreProducts",
+    "value": "SetStoreProducts"
+   },
+   {
+    "name": "ClearCurrentUserAndStore",
+    "value": "clearCurrentUserAndStore"
+   },
+   {
+    "name": "FileUploadEvent",
+    "value": "FileUploadEvent"
+   },
+   {
+    "name": "ClearFileUploadEvent",
+    "value": "ClearFileUploadEvent"
+   },
+   {
+    "name": "SetProductsQuery",
+    "value": "SetProductsQuery"
+   },
+   {
+    "name": "SetNotificationStatus",
+    "value": "SetNotificationStatus"
+   },
+   {
+    "name": "SetLastViewedProductId",
+    "value": "SetLastViewedProductId"
+   },
+   {
+    "name": "StartNewOrderNotificationsInterval",
+    "value": "StartNewOrderNotificationsInterval"
+   },
+   {
+    "name": "StopNewOrderNotificationsInterval",
+    "value": "StopNewOrderNotificationsInterval"
+   }
+  ]
+ },
+ {
+  "name": "NotificationPlatform",
+  "path": "enums/notification-platform.ts",
+  "members": [
+   {
+    "name": "Apns",
+    "value": "Apns"
+   },
+   {
+    "name": "Fcm",
+    "value": "Fcm"
+   }
+  ]
+ },
+ {
+  "name": "OfferProposalStatus",
+  "path": "enums/offer-proposal-status.ts",
+  "members": [
+   {
+    "name": "Created",
+    "value": 0
+   },
+   {
+    "name": "Sent",
+    "value": 1
+   },
+   {
+    "name": "Read",
+    "value": 2
+   },
+   {
+    "name": "Accepted",
+    "value": 3
+   },
+   {
+    "name": "StoreRegistered",
+    "value": 4
+   },
+   {
+    "name": "Rejected",
+    "value": 5
+   },
+   {
+    "name": "Cancelled",
+    "value": 6
+   }
+  ]
+ },
+ {
+  "name": "OrderKind",
+  "path": "enums/order-kind.ts",
+  "members": [
+   {
+    "name": "Consumer",
+    "value": "Consumer"
+   },
+   {
+    "name": "PosCheck",
+    "value": "PosCheck"
+   }
+  ]
+ },
+ {
+  "name": "OrderLineItemStatus",
+  "path": "enums/order-line-item-status.ts",
+  "members": [
+   {
+    "name": "Pending",
+    "value": "Pending"
+   },
+   {
+    "name": "Sent",
+    "value": "Sent"
+   },
+   {
+    "name": "Fired",
+    "value": "Fired"
+   },
+   {
+    "name": "Ready",
+    "value": "Ready"
+   },
+   {
+    "name": "Served",
+    "value": "Served"
+   }
+  ]
+ },
+ {
+  "name": "OrderPaymentStatus",
+  "path": "enums/order-payment-status.ts",
+  "members": [
+   {
+    "name": "Pending",
+    "value": "Pending"
+   },
+   {
+    "name": "Confirmed",
+    "value": "Confirmed"
+   },
+   {
+    "name": "Failed",
+    "value": "Failed"
+   }
+  ]
+ },
+ {
+  "name": "OrderPaymentTypeFilter",
+  "path": "enums/order-payment-type-filter.ts",
+  "members": [
+   {
+    "name": "PayInStore",
+    "value": "PayInStore"
+   },
+   {
+    "name": "Stripe",
+    "value": "Stripe"
+   },
+   {
+    "name": "Vipps",
+    "value": "Vipps"
+   },
+   {
+    "name": "Giftcard",
+    "value": "Giftcard"
+   },
+   {
+    "name": "Dintero",
+    "value": "Dintero"
+   },
+   {
+    "name": "DinteroVipps",
+    "value": "DinteroVipps"
+   },
+   {
+    "name": "DinteroBillie",
+    "value": "DinteroBillie"
+   },
+   {
+    "name": "DinteroKlarna",
+    "value": "DinteroKlarna"
+   },
+   {
+    "name": "WoltMarketplace",
+    "value": "WoltMarketplace"
+   },
+   {
+    "name": "Surfboard",
+    "value": "Surfboard"
+   },
+   {
+    "name": "SurfboardTerminal",
+    "value": "SurfboardTerminal"
+   }
+  ]
+ },
+ {
+  "name": "OrderStatusFilter",
+  "path": "enums/order-status-filter.ts",
+  "members": [
+   {
+    "name": "Remaining",
+    "value": "Remaining"
+   },
+   {
+    "name": "Completed",
+    "value": "Completed"
+   },
+   {
+    "name": "Canceled",
+    "value": "Canceled"
+   }
+  ]
+ },
+ {
+  "name": "OrderStatus",
+  "path": "enums/order-status.ts",
+  "members": [
+   {
+    "name": "OpenCheck",
+    "value": "OpenCheck"
+   },
+   {
+    "name": "Accepted",
+    "value": "Accepted"
+   },
+   {
+    "name": "Processing",
+    "value": "Processing"
+   },
+   {
+    "name": "ReadyForPickup",
+    "value": "ReadyForPickup"
+   },
+   {
+    "name": "ReadyForDriver",
+    "value": "ReadyForDriver"
+   },
+   {
+    "name": "DriverPickedUp",
+    "value": "DriverPickedUp"
+   },
+   {
+    "name": "Served",
+    "value": "Served"
+   },
+   {
+    "name": "Completed",
+    "value": "Completed"
+   },
+   {
+    "name": "Canceled",
+    "value": "Canceled"
+   }
+  ]
+ },
+ {
+  "name": "PaymentType",
+  "path": "enums/payment-type.ts",
+  "members": [
+   {
+    "name": "NotSet",
+    "value": "NotSet"
+   },
+   {
+    "name": "Giftcard",
+    "value": "Giftcard"
+   },
+   {
+    "name": "PayInStore",
+    "value": "PayInStore"
+   },
+   {
+    "name": "Stripe",
+    "value": "Stripe"
+   },
+   {
+    "name": "Vipps",
+    "value": "Vipps"
+   },
+   {
+    "name": "Dintero",
+    "value": "Dintero"
+   },
+   {
+    "name": "DinteroVipps",
+    "value": "DinteroVipps"
+   },
+   {
+    "name": "DinteroBillie",
+    "value": "DinteroBillie"
+   },
+   {
+    "name": "DinteroKlarna",
+    "value": "DinteroKlarna"
+   },
+   {
+    "name": "DinteroKravia",
+    "value": "DinteroKravia"
+   },
+   {
+    "name": "WoltMarketplace",
+    "value": "WoltMarketplace"
+   },
+   {
+    "name": "Cash",
+    "value": "Cash"
+   },
+   {
+    "name": "DinteroTerminal",
+    "value": "DinteroTerminal"
+   },
+   {
+    "name": "Surfboard",
+    "value": "Surfboard"
+   },
+   {
+    "name": "SurfboardVipps",
+    "value": "SurfboardVipps"
+   },
+   {
+    "name": "SurfboardTerminal",
+    "value": "SurfboardTerminal"
+   }
+  ]
+ },
+ {
+  "name": "PosReasonType",
+  "path": "enums/pos-reason-type.ts",
+  "members": [
+   {
+    "name": "None",
+    "value": "None"
+   },
+   {
+    "name": "AngretKjop",
+    "value": "AngretKjop"
+   },
+   {
+    "name": "FeilVare",
+    "value": "FeilVare"
+   },
+   {
+    "name": "Reklamasjon",
+    "value": "Reklamasjon"
+   },
+   {
+    "name": "Feilslag",
+    "value": "Feilslag"
+   },
+   {
+    "name": "KundeAvbrot",
+    "value": "KundeAvbrot"
+   },
+   {
+    "name": "Tellefeil",
+    "value": "Tellefeil"
+   },
+   {
+    "name": "FeilVekselGitt",
+    "value": "FeilVekselGitt"
+   },
+   {
+    "name": "Ukjent",
+    "value": "Ukjent"
+   },
+   {
+    "name": "Annet",
+    "value": "Annet"
+   }
+  ]
+ },
+ {
+  "name": "PosSettlementStatus",
+  "path": "enums/pos-settlement-status.ts",
+  "members": [
+   {
+    "name": "Open",
+    "value": "Open"
+   },
+   {
+    "name": "Finalized",
+    "value": "Finalized"
+   },
+   {
+    "name": "Aborted",
+    "value": "Aborted"
+   }
+  ]
+ },
+ {
+  "name": "ReservationStatus",
+  "path": "enums/reservation-status.ts",
+  "members": [
+   {
+    "name": "Requested",
+    "value": "Requested"
+   },
+   {
+    "name": "Confirmed",
+    "value": "Confirmed"
+   },
+   {
+    "name": "Seated",
+    "value": "Seated"
+   },
+   {
+    "name": "Completed",
+    "value": "Completed"
+   },
+   {
+    "name": "NoShow",
+    "value": "NoShow"
+   },
+   {
+    "name": "Cancelled",
+    "value": "Cancelled"
+   }
+  ]
+ },
+ {
+  "name": "RewardTransactionType",
+  "path": "enums/reward-transaction-type.ts",
+  "members": [
+   {
+    "name": "NotSet",
+    "value": "NotSet"
+   },
+   {
+    "name": "Received",
+    "value": "Received"
+   },
+   {
+    "name": "Spent",
+    "value": "Spent"
+   },
+   {
+    "name": "Transferred",
+    "value": "Transferred"
+   }
+  ]
+ },
+ {
+  "name": "SafTVatCode",
+  "path": "enums/saf-t-vat-code.ts",
+  "members": [
+   {
+    "name": "TwentyFivePercent",
+    "value": "TwentyFivePercent"
+   },
+   {
+    "name": "FifteenPercent",
+    "value": "FifteenPercent"
+   },
+   {
+    "name": "ZeroPercent",
+    "value": "ZeroPercent"
+   }
+  ]
+ },
+ {
+  "name": "StatisticDateFilter",
+  "path": "enums/statistic-date-filter.ts",
+  "members": [
+   {
+    "name": "Today",
+    "value": "Today"
+   },
+   {
+    "name": "Yesterday",
+    "value": "Yesterday"
+   },
+   {
+    "name": "LastSevenDays",
+    "value": "LastSevenDays"
+   },
+   {
+    "name": "ThisMonth",
+    "value": "ThisMonth"
+   },
+   {
+    "name": "LastMonth",
+    "value": "LastMonth"
+   },
+   {
+    "name": "ThisYear",
+    "value": "ThisYear"
+   },
+   {
+    "name": "Custom",
+    "value": "Custom"
+   }
+  ]
+ },
+ {
+  "name": "SurfboardApplicationStatus",
+  "path": "enums/surfboard-application-status.ts",
+  "members": [
+   {
+    "name": "Initiated",
+    "value": "APPLICATION_INITIATED"
+   },
+   {
+    "name": "Submitted",
+    "value": "APPLICATION_SUBMITTED"
+   },
+   {
+    "name": "PendingInformation",
+    "value": "APPLICATION_PENDING_INFORMATION"
+   },
+   {
+    "name": "Signed",
+    "value": "APPLICATION_SIGNED"
+   },
+   {
+    "name": "Rejected",
+    "value": "APPLICATION_REJECTED"
+   },
+   {
+    "name": "Expired",
+    "value": "APPLICATION_EXPIRED"
+   },
+   {
+    "name": "Completed",
+    "value": "APPLICATION_COMPLETED"
+   },
+   {
+    "name": "MerchantCreated",
+    "value": "MERCHANT_CREATED"
+   }
+  ]
+ },
+ {
+  "name": "TableShape",
+  "path": "enums/table-shape.ts",
+  "members": [
+   {
+    "name": "Round",
+    "value": "Round"
+   },
+   {
+    "name": "Square",
+    "value": "Square"
+   },
+   {
+    "name": "Rectangle",
+    "value": "Rectangle"
+   }
+  ]
+ },
+ {
+  "name": "TerminalPaymentState",
+  "path": "enums/terminal-payment-state.ts",
+  "members": [
+   {
+    "name": "Unknown",
+    "value": "Unknown"
+   },
+   {
+    "name": "NoTransaction",
+    "value": "NoTransaction"
+   },
+   {
+    "name": "Authorized",
+    "value": "Authorized"
+   },
+   {
+    "name": "PartiallyCaptured",
+    "value": "PartiallyCaptured"
+   },
+   {
+    "name": "Captured",
+    "value": "Captured"
+   },
+   {
+    "name": "Declined",
+    "value": "Declined"
+   },
+   {
+    "name": "Failed",
+    "value": "Failed"
+   },
+   {
+    "name": "AuthorizationVoided",
+    "value": "AuthorizationVoided"
+   },
+   {
+    "name": "PartiallyRefunded",
+    "value": "PartiallyRefunded"
+   },
+   {
+    "name": "Refunded",
+    "value": "Refunded"
+   }
+  ]
+ },
+ {
+  "name": "TerminalProvider",
+  "path": "enums/terminal-provider.ts",
+  "members": [
+   {
+    "name": "Auto",
+    "value": "Auto"
+   },
+   {
+    "name": "Surfboard",
+    "value": "Surfboard"
+   },
+   {
+    "name": "Dintero",
+    "value": "Dintero"
+   }
+  ]
+ },
+ {
+  "name": "VippsVerifyStatus",
+  "path": "enums/vipps-verify-status.ts",
+  "members": [
+   {
+    "name": "NotSet",
+    "value": "NotSet"
+   },
+   {
+    "name": "Waiting",
+    "value": "Waiting"
+   },
+   {
+    "name": "Success",
+    "value": "Success"
+   },
+   {
+    "name": "Fail",
+    "value": "Fail"
+   }
+  ]
+ }
+]

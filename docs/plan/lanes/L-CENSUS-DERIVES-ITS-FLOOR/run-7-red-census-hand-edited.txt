@@ -1,0 +1,15 @@
+Test run for /Users/svendaneel/okam/OkamAPI-censusderive/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:06.80]     WebApi.Tests.Modules.ModuleAuditActorCallSiteTests.The_census_names_exactly_the_population_the_tree_holds [FAIL]
+  Failed WebApi.Tests.Modules.ModuleAuditActorCallSiteTests.The_census_names_exactly_the_population_the_tree_holds [1 s]
+  Error Message:
+   WebApi.Tests/Modules/actor-stamp-census.txt does not match its own digest, so it was edited by hand rather than derived. A census somebody typed is the instrument this file replaced: it agrees with itself whatever the tree holds. Regenerate it with ACTOR_STAMP_CENSUS_WRITE=1.
+Expected: True
+Actual:   False
+  Stack Trace:
+     at WebApi.Tests.Modules.ModuleAuditActorCallSiteTests.The_census_names_exactly_the_population_the_tree_holds() in /Users/svendaneel/okam/OkamAPI-censusderive/WebApi.Tests/Modules/ModuleAuditActorCallSiteTests.cs:line 370
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     1, Passed:    38, Skipped:     0, Total:    39, Duration: 4 s - WebApi.Tests.dll (net8.0)

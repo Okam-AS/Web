@@ -1,0 +1,162 @@
+target: Server=localhost,15437;Database=OkamDemoWfRun;User Id=sa;Password=***;TrustServerCertificate=True;Encrypt=False;Connect Timeout=60
+
+[1m== 1/5  Stopping any API this script previously started on :5093[0m
+   :5093 is free
+
+[1m== 2/5  Recreating an EMPTY database [OkamDemoWfRun][0m
+   empty: 0 tables
+
+[1m== 3/5  Applying the migration chain from empty[0m
+   127 migrations, 211 tables, 25 append-only triggers
+
+[1m== 4/5  Starting the API on http://127.0.0.1:5093[0m
+   healthy (log: /Users/svendaneel/okam/Web-modules/lanes/L-WF-ONBOARD-DEMO-RUN/evidence/api.log)
+
+[1m== 5/5  Seeding the demo world (six modules)[0m
+
+[1m== Demo weeks (Europe/Oslo)[0m
+   A 2026-07-27..2026-08-02        last week   PUBLISHED, has the punches -> attendance + hours export
+   B 2026-08-03..2026-08-09        this week   DRAFT     -> the cost overlay, and the walk to publish
+   C 2026-08-10..2026-08-16        next week   PUBLISHED -> what the WORKER sees (me-page shows the next 28 days)
+
+[1m== 1. Signing in the manager (+4799999999)[0m
+   manager applicationUserId = 6349c2bb-1ba2-4dfb-8f22-27b4293f5a51
+
+[1m== 1b. Signing in the worker (+4790000001) so /workforce/me has a real caller[0m
+   worker applicationUserId  = d347fe52-8f1a-4e5f-a5df-ffd4c9d919f4
+
+[1m== 2. SQL bootstrap (store, legal employer, first manager engagement, feature flags)[0m
+   storeId = 1
+   manager engagement = 201763f2-fb5c-4c88-b8d8-ca2df29a40f4 (capabilities 15 = Self|Scheduler|Manager|PayrollApprover)
+   8 workforce.* stage flags enabled (all default OFF)
+
+[1m== 3. Manager reaches the surface (GET /context)[0m
+{"storeId":1,"timeZoneId":null,"capabilities":["WorkforceSelf","WorkforceScheduler","WorkforceManager","WorkforcePayrollApprover"]}
+
+[1m== 4. Roles[0m
+   Kokk=b2664b09-1172-491c-a8a1-8b4621de60a2  Servitor=28c0ec5a-a2e1-4c94-abe0-c43ce8a9ed6e
+
+[1m== 5. Staff (through POST /staff -- the real write path)[0m
+   Nora=c9e918c9-5db0-4b88-b546-e8d1b9b49202  Jonas=248ea8ad-1af6-4690-91c0-5b2575dd4d33  Selma=be1af042-82de-4470-83c7-6bc897dd041f
+
+[1m== 5b. Nora joins (POST staff/{id}/invitations -> POST /workforce/me/invitations/claim)[0m
+   Nora claimed her own engagement -> person 2a810797-d392-4cf4-9e30-7547e9966db9 is Claimed (+4790000001)
+
+[1m== 6. Staff roles[0m
+   Nora=Servitor  Jonas=Kokk  Selma=Kokk
+
+[1m== 7. Employment terms[0m
+   Nora 30h/week, Jonas 37.5h/week, Selma 20h/week
+
+[1m== 8. Rates (through PUT .../rates -- the authoring surface, not a SQL insert)[0m
+   Servitor 220.00 -> 245.00 from 2026-07-29 -> 260.00 from 2026-08-05  (a shift crosses each raise)
+   Jonas engagement override 310.00 NOK/h (outranks the role default)
+   Kokk role default: DELIBERATELY ABSENT -> Selma and the open Kokk shift cannot be priced
+
+[1m== 9. Week A (2026-07-27..2026-08-02) -- last week, will be published[0m
+   week A: revision e5f1f664-f22e-4948-8c92-bf162237157f, 8 assignments
+
+[1m== 10. Validate and PUBLISH week A[0m
+   validation: {"outcome":"?","findings":0}
+   published: {"id":"42c99e48-59ed-48e8-9247-b140da172fdf","publicationNumber":1,"recipientCount":3,"contentHash":"1c71bc2266b4..."}
+
+[1m== 11. Week B (2026-08-03..2026-08-09) -- THIS week, stays a DRAFT for the manager to walk[0m
+   week B: revision f9d2ed14-5e63-4eff-a2ad-e540164a37ba, 8 assignments
+
+[1m== 11b. Week C (2026-08-10..2026-08-16) -- next week, published so the worker's own page is not empty[0m
+   week C: revision c6aa3067-a989-4985-a218-893ee27112df, 8 assignments
+   published: {"publicationNumber":1,"recipientCount":3}
+
+[1m== 12. The cost overlay, read back off the wire (week B, the draft)[0m
+{
+  "costComplete": false,
+  "totalMinor": null,
+  "currency": "NOK",
+  "incompleteCode": "workforce.rate-unresolved",
+  "openShiftCount": 1,
+  "pricedShiftCount": 6,
+  "unpricedShiftCount": 1
+}
+   per-day:
+     2026-08-03  complete=true  total=379258  open=0  unpriced=0
+     2026-08-04  complete=true  total=450094  open=0  unpriced=0
+     2026-08-06  complete=false  total=-  open=0  unpriced=1
+     2026-08-07  complete=true  total=0  open=1  unpriced=0
+     2026-08-08  complete=true  total=237563  open=0  unpriced=0
+   the two honest states:
+     workforce.rate-unresolved No rate is in force for this engagement or its role over this window.
+     OPEN SHIFT (a floor, not a zero) 
+
+[1m== 13. Punches so attendance and the hours export have something to say[0m
+   4 closed sessions (8 raw punches); one crosses local midnight
+
+[1m== 14. Attendance and hours export, read back off the wire[0m
+{"rows":7}
+     # okam-workforce-hours
+     # version=2
+     # storeId=1
+     # timeZoneId=Europe/Oslo
+     # fromBusinessDate=2026-07-27
+     # toBusinessDate=2026-08-02
+     # basis=hours-only
+     # wageMath=none
+     # rowCount=11
+     # complete=false
+     # incompleteRowCount=3
+     staffMemberId,employmentNumber,displayName,businessDate,payCode,paid,minutes,plannedMinutes,status,approvedAdjustments
+     ... 12 lines below the envelope (1 header + rows)
+
+[1m== 14b. The worker's own page, read back as the WORKER[0m
+     Nora Berg  store=1  roles=Servitor  active=true
+     3 published shift(s) visible to Nora in week C
+
+[1m== 15. DONE[0m
+
+  Store             : 1  (Bryggen Bistro, Europe/Oslo)
+  Manager sign-in   : +4799999999 / AppSettings__DemoVerificationCode__REDACTED
+  Worker sign-in    : +4790000001 / AppSettings__PowerUserVerificationCode__REDACTED   (Nora Berg)
+  Week A (published): 2026-07-27 .. 2026-08-02  (last week) -- punches, attendance, hours export
+  Week B (draft)    : 2026-08-03 .. 2026-08-09  (THIS week) -- cost overlay, open shift, refusal
+  Week C (published): 2026-08-10 .. 2026-08-16  (next week) -- what the worker sees on /admin/workforce-me
+  Draft revision    : f9d2ed14-5e63-4eff-a2ad-e540164a37ba
+
+  Open the admin web and go to:
+     /admin/workforce-schedule
+     /admin/workforce-me
+
+[1m== skipping margin (SKIP_MARGIN is set) ==[0m
+
+[1m== skipping events (SKIP_EVENTS is set) ==[0m
+
+[1m== skipping growth (SKIP_GROWTH is set) ==[0m
+
+[1m== skipping meals (SKIP_MEALS is set) ==[0m
+
+[1m== skipping training (SKIP_TRAINING is set) ==[0m
+
+-------------------------------------------------------------------------------
+Backend is up. Now start the admin web in ANOTHER terminal:
+
+    cd /Users/svendaneel/okam/Web-modules
+    git submodule update --init core          # once
+    API_BASE_URL=http://127.0.0.1:5093 PORT=3002 npm run dev
+
+Sign in as the MANAGER for all six journeys:    99999999 / AppSettings__DemoVerificationCode__REDACTED
+The WORKER (also the PowerUser) is:             90000001 / AppSettings__PowerUserVerificationCode__REDACTED   -- /admin/workforce-me only
+
+    http://localhost:3002/admin/margin-recipes        in the manager's sidebar
+    http://localhost:3002/admin/growth-newsletter     in the manager's sidebar
+    http://localhost:3002/admin/meals-agreements      in the manager's sidebar
+    http://localhost:3002/admin/workforce-schedule    TYPE IT -- the link is PowerUser-only
+    http://localhost:3002/admin/events-pipeline       TYPE IT -- the link is PowerUser-only
+    http://localhost:3002/admin/training-courses      in the manager's sidebar
+
+The manager is authorised for all six; only those two sidebar LINKS are role-gated. Signing in as
+the PowerUser to get them is a dead end -- that account administers no store. See RUNBOOK.md § 4.
+
+The two "TYPE IT" lines above describe the nav as it was when this text was written. Check the
+sidebar first: Web-modules now files every module page in ONE store-admin group.
+
+Then walk RUNBOOK.md. Meals stops at the agreement half by design -- RUNBOOK.md § 9 says why.
+-------------------------------------------------------------------------------
+=== demo-up.sh exit: 0 ===

@@ -1,0 +1,67 @@
+{
+  "journey": "growth-newsletter-send-gate",
+  "title": "An operator drafts and approves a newsletter, and the send gate opens only when both switches are up",
+  "status": "failed",
+  "startedAtUtc": "2026-08-06T11:06:00.412Z",
+  "finishedAtUtc": "2026-08-06T11:06:02.174Z",
+  "durationMs": 1762,
+  "capabilities": [
+    "platform.feature-flags.write",
+    "growth.consent.standing.read",
+    "growth.audience.snapshot",
+    "growth.newsletter.author",
+    "growth.newsletter.test-send",
+    "growth.newsletter.approve",
+    "growth.send-gate.fail-closed"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3877",
+  "apiBaseUrl": "http://127.0.0.1:4877",
+  "commit": "8ac6f63648015d8c7a230181a7f07bf303d43268",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": {
+    "id": "fixture@8ac6f63648015d8c7a230181a7f07bf303d43268+dirty",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "8ac6f63-dirty",
+    "detail": "the in-repo fixture backend, not an API build (branch HEAD)"
+  },
+  "backendServed": 0,
+  "backendSubjectServed": 0,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "backendSample": [],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in and open the newsletter screen",
+      "status": "failed",
+      "startedAtUtc": "2026-08-06T11:06:00.414Z",
+      "durationMs": 1731,
+      "detail": null,
+      "error": "page.goto: net::ERR_EMPTY_RESPONSE at http://127.0.0.1:3877/admin/growth-newsletter\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:3877/admin/growth-newsletter\", waiting until \"load\"\u001b[22m\n"
+    }
+  ],
+  "findings": [],
+  "consoleErrors": [],
+  "failedRequests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:3877/admin/growth-newsletter",
+      "status": null,
+      "failure": "net::ERR_EMPTY_RESPONSE"
+    }
+  ],
+  "screenshots": [],
+  "error": "Error: page.goto: net::ERR_EMPTY_RESPONSE at http://127.0.0.1:3877/admin/growth-newsletter\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:3877/admin/growth-newsletter\", waiting until \"load\"\u001b[22m\n",
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/growth-newsletter-send-gate.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false,
+    "supersedes": null
+  }
+}

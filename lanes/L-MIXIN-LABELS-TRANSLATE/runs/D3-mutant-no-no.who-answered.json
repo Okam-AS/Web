@@ -1,0 +1,14 @@
+{
+  "label": "D3-mutant-no-no",
+  "edition": "no",
+  "grantedFixturePort": 4853,
+  "grantedWebPort": 3853,
+  "health": "{\"ok\":true,\"port\":4853}",
+  "holderPid": "48303",
+  "holderCwd": "/Users/svendaneel/okam/web-mixinlabels",
+  "holderCommand": "node test/e2e/fixture/api-server.js",
+  "webPid": "unresolved",
+  "webCwd": "unresolved",
+  "lsof": "p48303 f12 n127.0.0.1:4853 ",
+  "capturedAt": "2026-08-05T06:07:08Z"
+}

@@ -1,0 +1,76 @@
+watchman warning:  Recrawled this watch 43 times, most recently because:
+MustScanSubDirs UserDroppedTo resolve, please review the information on
+https://facebook.github.io/watchman/docs/troubleshooting.html#recrawl
+To clear this warning, run:
+`watchman watch-del '/Users/svendaneel/okam/Web-modules' ; watchman watch-project '/Users/svendaneel/okam/Web-modules'`
+
+PASS test/journey-assertions.test.js
+  the wage chip assertion
+    ✓ reds on a zero-priced wage — the answer the old regex accepted (4 ms)
+    ✓ stays green on the wage the live run recorded
+    ✓ accepts the currency-mismatch shape the same component renders
+    ✓ accepts a wage under a thousand, and one with real øre
+    ✓ reds when the server says it did not price the shift (1 ms)
+    ✓ reds on a chip that is not a wage: "Mangler sats"
+    ✓ reds on a chip that is not a wage: "Ikke priset"
+    ✓ reds on a chip that is not a wage: "—"
+    ✓ reds on a chip that is not a wage: ""
+    ✓ reds on a chip that is not a wage: null
+    ✓ reds on a chip that is not a wage: "kr"
+    ✓ reds on a chip that is not a wage: "1650" (1 ms)
+    ✓ reds on a chip that is not a wage: "kr 1 650"
+    ✓ reds on a chip that is not a wage: "ca. kr 1 650,00"
+    ✓ parses nothing out of the refusal labels
+    ✓ reports the implied hourly rate for the step detail
+  the rule-pack assertion
+    ✓ reds on a validation that produced no rule results at all
+    ✓ stays green on the eleven the live run recorded
+    ✓ does not care what order the server emitted them in
+    ✓ reds when a rule goes missing from the pack
+    ✓ reds when a rule is renamed (1 ms)
+    ✓ reds on the fixture's two-rule stand-in, which a count of "more than none" accepted
+    ✓ reds on eleven results that are eleven of the wrong thing
+  the audit-stamp assertion
+    ✓ reds when the flip is attributed to somebody who is not the signed-in user
+    ✓ stays green on the stamp the live run recorded
+    ✓ holds against the fixture world too, with no literal pinned
+    ✓ reds on the unknown-actor fallback
+    ✓ reds on an actor that merely CONTAINS the signed-in id
+    ✓ refuses to pass when the journey could not read who is signed in
+  the first-revision assertion
+    ✓ reds on the second revision — the silent weakening an unreset world produces
+    ✓ stays green on the revision the live run recorded (1 ms)
+    ✓ reds when there is no revision number at all
+  the split-origin guard behind both served floors
+    ✓ classifies /user as shell
+    ✓ classifies /user/login as shell
+    ✓ classifies /user/sendverificationtoken as shell
+    ✓ classifies /stores/42 as shell
+    ✓ classifies /stores/1/market as shell
+    ✓ classifies /stores/42/specialopeninghours as shell
+    ✓ classifies /feature-flags/catalog as the journey's subject
+    ✓ classifies /stores/1/feature-flags as the journey's subject
+    ✓ classifies /workforce/stores/42/context as the journey's subject
+    ✓ classifies /workforce/me/inbox as the journey's subject
+    ✓ classifies /margin/status as the journey's subject
+    ✓ classifies /training/stores/42/context as the journey's subject
+    ✓ classifies /events/admin/42/events as the journey's subject
+    ✓ classifies /v1/growth/stores/42/newsletters as the journey's subject
+    ✓ classifies /user/send-email-confirmation-code as the journey's subject
+    ✓ classifies /user/confirm-email as the journey's subject
+    ✓ reds when the named backend served only the sign-in and another origin served the rest
+    ✓ stays green when the journey's subject reached the backend it names
+    ✓ does not accuse a journey whose subject is the browser rather than the backend
+    ✓ does not accuse a run that also talked to a third party
+  the journeys actually assert these things
+    ✓ the schedule journey no longer accepts any digit-bearing cost
+    ✓ the schedule journey no longer counts a class the empty state also carries
+    ✓ the schedule journey asserts the revision number, not the word
+    ✓ the flag journey compares the stamp with the signed-in user (1 ms)
+    ✓ both served floors ask the split-origin question
+
+Test Suites: 1 passed, 1 total
+Tests:       57 passed, 57 total
+Snapshots:   0 total
+Time:        0.5 s, estimated 1 s
+Ran all test suites matching /test\/journey-assertions.test.js/i.

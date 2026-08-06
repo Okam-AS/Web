@@ -1,0 +1,6 @@
+  ✓  1 [chromium] › test/e2e/journeys/modal-estate-scroll-lock.spec.js:87:1 › Two different modals hold the page, and closing one does not let go @fixture (26.2s)
+  ---- run 1 above ----
+  ✓  1 [chromium] › test/e2e/journeys/modal-estate-scroll-lock.spec.js:87:1 › Two different modals hold the page, and closing one does not let go @fixture (33.3s)
+  ---- run 2 above ----
+  ✓  1 [chromium] › test/e2e/journeys/modal-estate-scroll-lock.spec.js:87:1 › Two different modals hold the page, and closing one does not let go @fixture (25.4s)
+  ---- run 3 above ----

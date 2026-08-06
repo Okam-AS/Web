@@ -138,7 +138,7 @@
                     @mousedown.prevent="selectProduct(line, product)"
                   >
                     <span>{{ product.name }}</span>
-                    <small>{{ $i('kraviaInvoice_priceInclVatSuffix', { price: priceLabel(product.amount) }) }}</small>
+                    <small>{{ $i('kraviaInvoice_priceInclVatSuffix', { price: invoiceAmountLabel(product.amount) }) }}</small>
                   </button>
                 </div>
               </div>
@@ -169,7 +169,7 @@
             </div>
             <div class="line-field">
               <span class="mobile-label">{{ $i('kraviaInvoice_amountInclVat') }}</span>
-              <div class="readonly-amount">{{ priceLabel(lineAmountInclVat(line)) }}</div>
+              <div class="readonly-amount">{{ invoiceAmountLabel(lineAmountInclVat(line)) }}</div>
             </div>
             <div class="line-actions">
               <button type="button" :title="$i('kraviaInvoice_moveUp')" :disabled="index === 0" @click="moveLine(index, -1)">{{ $i('kraviaInvoice_up') }}</button>
@@ -204,7 +204,7 @@
             </div>
             <div class="line-field">
               <span class="mobile-label">{{ $i('kraviaInvoice_unitPriceExVat') }}</span>
-              <div class="fee-text">{{ priceLabel(invoiceFeeExVat) }}</div>
+              <div class="fee-text">{{ invoiceAmountLabel(invoiceFeeExVat) }}</div>
             </div>
             <div class="line-field">
               <span class="mobile-label">{{ $i('kraviaInvoice_discount') }}</span>
@@ -216,7 +216,7 @@
             </div>
             <div class="line-field">
               <span class="mobile-label">{{ $i('kraviaInvoice_amountInclVat') }}</span>
-              <div class="fee-text fee-text--amount">{{ priceLabel(invoiceFeeAmount) }}</div>
+              <div class="fee-text fee-text--amount">{{ invoiceAmountLabel(invoiceFeeAmount) }}</div>
             </div>
           </div>
         </div>
@@ -224,9 +224,9 @@
         <button type="button" class="btn btn-secondary add-line-button" @click="addLine">{{ $i('kraviaInvoice_addLineItem') }}</button>
 
         <div class="totals">
-          <div><span>{{ $i('kraviaInvoice_net') }}</span><strong>{{ priceLabel(totalExVat) }}</strong></div>
-          <div><span>{{ $i('kraviaInvoice_vat') }}</span><strong>{{ priceLabel(totalVat) }}</strong></div>
-          <div><span>{{ $i('kraviaInvoice_total') }}</span><strong>{{ priceLabel(totalInclVat) }}</strong></div>
+          <div><span>{{ $i('kraviaInvoice_net') }}</span><strong>{{ invoiceAmountLabel(totalExVat) }}</strong></div>
+          <div><span>{{ $i('kraviaInvoice_vat') }}</span><strong>{{ invoiceAmountLabel(totalVat) }}</strong></div>
+          <div><span>{{ $i('kraviaInvoice_total') }}</span><strong>{{ invoiceAmountLabel(totalInclVat) }}</strong></div>
         </div>
       </section>
 
@@ -273,13 +273,13 @@
         <div class="confirm-modal">
           <h2>{{ confirmTitle }}</h2>
           <p v-if="manualInvoice">
-            <span v-html="$i('kraviaInvoice_confirmManual', { amount: priceLabel(totalInclVat), company: form.companyName })" />
+            <span v-html="$i('kraviaInvoice_confirmManual', { amount: invoiceAmountLabel(totalInclVat), company: form.companyName })" />
           </p>
           <p v-else-if="isPreorder">
-            <span v-html="$i('kraviaInvoice_confirmPreorder', { amount: priceLabel(totalInclVat), company: form.companyName })" />
+            <span v-html="$i('kraviaInvoice_confirmPreorder', { amount: invoiceAmountLabel(totalInclVat), company: form.companyName })" />
           </p>
           <p v-else>
-            <span v-html="$i('kraviaInvoice_confirmInvoice', { amount: priceLabel(totalInclVat), company: form.companyName })" />
+            <span v-html="$i('kraviaInvoice_confirmInvoice', { amount: invoiceAmountLabel(totalInclVat), company: form.companyName })" />
           </p>
           <div v-if="sendError" class="notification notification--error">
             {{ sendError }}
@@ -300,6 +300,7 @@
 import AdminPage from "~/components/organisms/AdminPage.vue";
 import Loading from "~/components/atoms/Loading.vue";
 import Modal from "~/components/atoms/Modal.vue";
+import { nokAmountLabel } from "~/utils/price";
 
 export default {
   components: { AdminPage, Loading, Modal },
@@ -579,8 +580,22 @@ export default {
     lineAmountInclVat(line) {
       return Math.round(this.lineExVat(line) * (1 + ((Number(line.vatRate) || 0) / 100)));
     },
-    priceLabel(amountOre) {
-      return new Intl.NumberFormat("nb-NO", { style: "currency", currency: "NOK" }).format((amountOre || 0) / 100);
+    // NAMED `invoiceAmountLabel`, not `priceLabel`, and that is the whole point of the name.
+    //
+    // This page used to declare its own `priceLabel`. A component method SHADOWS the global mixin's,
+    // so the absence gate in `plugins/global-mixin.js` never ran on a single figure of an invoice —
+    // including the confirmation dialog an operator approves before one is issued — and the local
+    // `|| 0` turned every amount nobody had stated into a stated zero.
+    //
+    // Gating the local method fixed the output, but left a method whose NAME still collided with the
+    // gated one, so the next person to add a figure here would silently get whichever of the two the
+    // shadowing rules picked. Vacating the name removes that trap.
+    //
+    // DELETING it was not available: the mixin renders core's `kr `-PREFIX format and an invoice
+    // prints nb-NO suffix style ("206,80 kr"), so de-shadowing by deletion would have restyled every
+    // figure on every invoice. The format is the reason this method exists; only the name was wrong.
+    invoiceAmountLabel(amountOre) {
+      return nokAmountLabel(amountOre);
     },
     roundMoney(value) {
       return Math.round((Number(value) || 0) * 100) / 100;

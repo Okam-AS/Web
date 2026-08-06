@@ -1,0 +1,58 @@
+npm run dev          [API_BASE_URL unset]                    | REFUSED TO LOAD
+        
+        API_BASE_URL is not set, and a development build will not guess one.
+        
+        This app inlines ONE backend origin at build time and talks to nothing else. The value that
+        used to be filled in here was the DEPLOYED API, so a dev server started without this variable
+        was a live client against real venues — including admin pages that overwrite a store record on
+        Save. A local build that cannot find a backend is a recoverable problem. A local build that
+        silently found the production one is not.
+        
+        Name the target, then start again:
+        
+            API_BASE_URL=http://localhost:5080 npm run dev
+        
+        or write it once — Nuxt reads .env before this file, and .gitignore already covers it:
+        
+            echo API_BASE_URL=http://localhost:5080 >> .env
+        
+        Pointing a dev build at the deployed API is still allowed. It has to be typed:
+        
+            API_BASE_URL=https://okamapi.azurewebsites.net npm run dev
+        
+        Deployed builds are unaffected: build, generate and start run with NODE_ENV=production and
+        keep https://okamapi.azurewebsites.net as their default.
+        
+npm run dev          [API_BASE_URL=http://localhost:5080]    | API_BASE_URL -> "http://localhost:5080"
+nuxt dev             [NODE_ENV forced to production]         | REFUSED TO LOAD
+        
+        API_BASE_URL is not set, and a development build will not guess one.
+        
+        This app inlines ONE backend origin at build time and talks to nothing else. The value that
+        used to be filled in here was the DEPLOYED API, so a dev server started without this variable
+        was a live client against real venues — including admin pages that overwrite a store record on
+        Save. A local build that cannot find a backend is a recoverable problem. A local build that
+        silently found the production one is not.
+        
+        Name the target, then start again:
+        
+            API_BASE_URL=http://localhost:5080 npm run dev
+        
+        or write it once — Nuxt reads .env before this file, and .gitignore already covers it:
+        
+            echo API_BASE_URL=http://localhost:5080 >> .env
+        
+        Pointing a dev build at the deployed API is still allowed. It has to be typed:
+        
+            API_BASE_URL=https://okamapi.azurewebsites.net npm run dev
+        
+        Deployed builds are unaffected: build, generate and start run with NODE_ENV=production and
+        keep https://okamapi.azurewebsites.net as their default.
+        
+npm run generate     [okam.no, github pages]                 | API_BASE_URL -> "https://okamapi.azurewebsites.net"
+npm run generate     [www.okam-swiss.ch, vercel, EDITION=ch] | API_BASE_URL -> "https://okamapi.azurewebsites.net"   [EDITION=ch]
+npm run build                                                | API_BASE_URL -> "https://okamapi.azurewebsites.net"
+npm run start                                                | API_BASE_URL -> "https://okamapi.azurewebsites.net"
+npm run generate     [API_BASE_URL=https://example.invalid]  | API_BASE_URL -> "https://example.invalid"
+
+rows that refused: 2 of 8
