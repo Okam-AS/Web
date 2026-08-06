@@ -1,5 +1,8 @@
 <template>
-  <AdminPage @login-success="handleLoginSuccess">
+  <AdminPage
+    ref="adminPage"
+    @login-success="handleLoginSuccess"
+  >
     <div class="wolt-menu">
       <h1 class="wolt-menu__title">Wolt</h1>
       <div
@@ -615,11 +618,6 @@
         </div>
       </div>
     </div>
-    <LoginModal
-      v-if="showLogin"
-      @close="closeLoginModal"
-    />
-
     <!-- Create Menu Modal -->
     <div
       v-if="showCreateMenuForm"
@@ -947,7 +945,6 @@
 <script>
 import AdminPage from "~/components/organisms/AdminPage.vue";
 import Loading from "~/components/atoms/Loading.vue";
-import LoginModal from "~/components/molecules/LoginModal.vue";
 import { amountInputValue, amountLabel, isAmountStated } from "~/utils/price";
 
 export default {
@@ -955,7 +952,6 @@ export default {
   components: {
     AdminPage,
     Loading,
-    LoginModal,
   },
   data() {
     return {
@@ -965,7 +961,6 @@ export default {
       deliveryProvider: null,
       fullStore: null, // Full store object with woltMarketplaceConfiguration
       isLoading: false,
-      showLogin: false,
       isEditMode: false,
       isSaving: false,
       isSyncing: false,
@@ -1037,26 +1032,37 @@ export default {
     },
   },
   mounted() {
+    // `AdminPage` opens the one sign-in modal on this route for a signed-out visitor, and emits
+    // `login-success` when a session arrives. Nothing to do here until then.
     if (!this.$store.getters.userIsLoggedIn) {
-      this.showLogin = true;
       return;
     }
-
-    // Update current user information
-    this._userService
-      .Reload()
-      .then((success) => {
-        if (!success) {
-          this.showLogin = true;
-          return;
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching user data:", error);
-        this.showLogin = true;
-      });
+    this.reloadCurrentUser();
   },
   methods: {
+    // `@login-success` was bound to this name before this lane touched the file and NO method
+    // answered to it: the page's own duplicate `<LoginModal>` handled sign-in and the shell's
+    // event went to a handler that did not exist. It exists now, and it does what mount does — a
+    // session that arrives late is the same session mount would have found.
+    handleLoginSuccess () {
+      this.reloadCurrentUser();
+    },
+    reloadCurrentUser () {
+      return this._userService
+        .Reload()
+        .then((success) => {
+          if (!success) {
+            // Signed in as far as the store is concerned, but the token no longer buys anything.
+            // `AdminPage.initAuth` does not read this answer, so ask ITS modal to open rather than
+            // raising a second one on top of it.
+            this.$refs.adminPage.openLogin();
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error);
+          this.$refs.adminPage.openLogin();
+        });
+    },
     fetchStoreData(storeId) {
       if (!storeId || storeId <= 0) {
         this.fullStore = null;
@@ -1076,9 +1082,6 @@ export default {
           this.fullStore = null;
           this.isLoading = false;
         });
-    },
-    closeLoginModal(isLoggedIn) {
-      this.showLogin = !isLoggedIn;
     },
     fetchMenuData(storeId, isPolling = false) {
       if (storeId) {

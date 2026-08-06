@@ -111,6 +111,15 @@ export default {
       }
     }
     },
+    // The shell owns the ONLY sign-in modal on an admin route, so a page that needs to raise one
+    // asks for this one rather than mounting a second of its own. `initAuth` covers the page-load
+    // case; this covers the one case the shell does not see — a session that was present at mount
+    // and turned out to be stale when `_userService.Reload()` answered. `pages/admin/onboarding.vue`
+    // and `pages/admin/wolt-menu.vue` both read that answer, and both used to say so by rendering a
+    // duplicate `<LoginModal>` inside this component's own slot.
+    openLogin () {
+      this.showLogin = true;
+    },
     closeLoginModal(isLoggedIn) {
       this.showLogin = !isLoggedIn;
       if (isLoggedIn) {

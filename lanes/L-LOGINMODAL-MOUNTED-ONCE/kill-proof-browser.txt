@@ -1,0 +1,102 @@
+fixture up on 4891
+
+==== ARM A ====
+nuxt dev up on 3891 for arm A
+
+Running 6 tests using 1 worker
+
+[count] /admin  .login-modal=1  phone inputs=1
+  ✓  1 [chromium] › lanes/L-LOGINMODAL-MOUNTED-ONCE/count.arm.spec.js:31:3 › signed out, /admin shows one sign-in modal (23.6s)
+[count] /admin/lang?redirect=%2Fadmin%2Flang  .login-modal=1  phone inputs=1
+  ✓  2 [chromium] › lanes/L-LOGINMODAL-MOUNTED-ONCE/count.arm.spec.js:31:3 › signed out, /admin/lang?redirect=%2Fadmin%2Flang shows one sign-in modal (534ms)
+[count] /admin/ongoing?redirect=%2Fadmin%2Fongoing  .login-modal=1  phone inputs=1
+  ✓  3 [chromium] › lanes/L-LOGINMODAL-MOUNTED-ONCE/count.arm.spec.js:31:3 › signed out, /admin/ongoing?redirect=%2Fadmin%2Fongoing shows one sign-in modal (555ms)
+[count] /admin/statistics?redirect=%2Fadmin%2Fstatistics  .login-modal=1  phone inputs=1
+  ✓  4 [chromium] › lanes/L-LOGINMODAL-MOUNTED-ONCE/count.arm.spec.js:31:3 › signed out, /admin/statistics?redirect=%2Fadmin%2Fstatistics shows one sign-in modal (572ms)
+[count] /admin/payouts?redirect=%2Fadmin%2Fpayouts  .login-modal=1  phone inputs=1
+  ✓  5 [chromium] › lanes/L-LOGINMODAL-MOUNTED-ONCE/count.arm.spec.js:31:3 › signed out, /admin/payouts?redirect=%2Fadmin%2Fpayouts shows one sign-in modal (546ms)
+[count] /admin/products?redirect=%2Fadmin%2Fproducts  .login-modal=1  phone inputs=1
+  ✓  6 [chromium] › lanes/L-LOGINMODAL-MOUNTED-ONCE/count.arm.spec.js:31:3 › signed out, /admin/products?redirect=%2Fadmin%2Fproducts shows one sign-in modal (556ms)
+
+  6 passed (26.9s)
+
+---- putting pages/admin/lang.vue back to its HEAD content (the defect verbatim) ----
+lang.vue now names LoginModal on 4 lines
+
+==== ARM B ====
+nuxt dev up on 3891 for arm B
+
+Running 6 tests using 1 worker
+
+[count] /admin  .login-modal=1  phone inputs=1
+  ✓  1 [chromium] › lanes/L-LOGINMODAL-MOUNTED-ONCE/count.arm.spec.js:31:3 › signed out, /admin shows one sign-in modal (1.1s)
+[count] /admin/lang?redirect=%2Fadmin%2Flang  .login-modal=2  phone inputs=2
+  ✘  2 [chromium] › lanes/L-LOGINMODAL-MOUNTED-ONCE/count.arm.spec.js:31:3 › signed out, /admin/lang?redirect=%2Fadmin%2Flang shows one sign-in modal (30.6s)
+[count] /admin/ongoing?redirect=%2Fadmin%2Fongoing  .login-modal=1  phone inputs=1
+  ✓  3 [chromium] › lanes/L-LOGINMODAL-MOUNTED-ONCE/count.arm.spec.js:31:3 › signed out, /admin/ongoing?redirect=%2Fadmin%2Fongoing shows one sign-in modal (770ms)
+[count] /admin/statistics?redirect=%2Fadmin%2Fstatistics  .login-modal=1  phone inputs=1
+  ✓  4 [chromium] › lanes/L-LOGINMODAL-MOUNTED-ONCE/count.arm.spec.js:31:3 › signed out, /admin/statistics?redirect=%2Fadmin%2Fstatistics shows one sign-in modal (623ms)
+[count] /admin/payouts?redirect=%2Fadmin%2Fpayouts  .login-modal=1  phone inputs=1
+  ✓  5 [chromium] › lanes/L-LOGINMODAL-MOUNTED-ONCE/count.arm.spec.js:31:3 › signed out, /admin/payouts?redirect=%2Fadmin%2Fpayouts shows one sign-in modal (579ms)
+[count] /admin/products?redirect=%2Fadmin%2Fproducts  .login-modal=1  phone inputs=1
+  ✓  6 [chromium] › lanes/L-LOGINMODAL-MOUNTED-ONCE/count.arm.spec.js:31:3 › signed out, /admin/products?redirect=%2Fadmin%2Fproducts shows one sign-in modal (630ms)
+
+
+  1) [chromium] › lanes/L-LOGINMODAL-MOUNTED-ONCE/count.arm.spec.js:31:3 › signed out, /admin/lang?redirect=%2Fadmin%2Flang shows one sign-in modal 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('.login-modal')
+    Expected: 1
+    Received: 2
+    Timeout:  30000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 30000ms
+      - waiting for locator('.login-modal')
+        64 × locator resolved to 2 elements
+           - unexpected value "2"
+
+
+      40 |     console.log('[count] ' + route + '  .login-modal=' + count + '  phone inputs=' + phoneFields);
+      41 |
+    > 42 |     await expect(modals).toHaveCount(1);
+         |                          ^
+      43 |     // One modal with two phone fields would satisfy the count above and be the same defect wearing
+      44 |     // a different shape, so the input a person actually types into is counted too.
+      45 |     expect(phoneFields).toBe(1);
+        at /Users/svendaneel/okam/web-loginmodalonce/lanes/L-LOGINMODAL-MOUNTED-ONCE/count.arm.spec.js:42:26
+
+    Error Context: lanes/L-LOGINMODAL-MOUNTED-ONCE/runs/playwright-output/count.arm-signed-out-admin-8b948-ang-shows-one-sign-in-modal-chromium/error-context.md
+
+  1 failed
+    [chromium] › lanes/L-LOGINMODAL-MOUNTED-ONCE/count.arm.spec.js:31:3 › signed out, /admin/lang?redirect=%2Fadmin%2Flang shows one sign-in modal 
+  5 passed (36.8s)
+
+---- lang.vue restored ----
+
+==== ARM C ====
+nuxt dev up on 3891 for arm C
+
+Running 6 tests using 1 worker
+
+[count] /admin  .login-modal=1  phone inputs=1
+  ✓  1 [chromium] › lanes/L-LOGINMODAL-MOUNTED-ONCE/count.arm.spec.js:31:3 › signed out, /admin shows one sign-in modal (27.5s)
+[count] /admin/lang?redirect=%2Fadmin%2Flang  .login-modal=1  phone inputs=1
+  ✓  2 [chromium] › lanes/L-LOGINMODAL-MOUNTED-ONCE/count.arm.spec.js:31:3 › signed out, /admin/lang?redirect=%2Fadmin%2Flang shows one sign-in modal (594ms)
+[count] /admin/ongoing?redirect=%2Fadmin%2Fongoing  .login-modal=1  phone inputs=1
+  ✓  3 [chromium] › lanes/L-LOGINMODAL-MOUNTED-ONCE/count.arm.spec.js:31:3 › signed out, /admin/ongoing?redirect=%2Fadmin%2Fongoing shows one sign-in modal (565ms)
+[count] /admin/statistics?redirect=%2Fadmin%2Fstatistics  .login-modal=1  phone inputs=1
+  ✓  4 [chromium] › lanes/L-LOGINMODAL-MOUNTED-ONCE/count.arm.spec.js:31:3 › signed out, /admin/statistics?redirect=%2Fadmin%2Fstatistics shows one sign-in modal (582ms)
+[count] /admin/payouts?redirect=%2Fadmin%2Fpayouts  .login-modal=1  phone inputs=1
+  ✓  5 [chromium] › lanes/L-LOGINMODAL-MOUNTED-ONCE/count.arm.spec.js:31:3 › signed out, /admin/payouts?redirect=%2Fadmin%2Fpayouts shows one sign-in modal (551ms)
+[count] /admin/products?redirect=%2Fadmin%2Fproducts  .login-modal=1  phone inputs=1
+  ✓  6 [chromium] › lanes/L-LOGINMODAL-MOUNTED-ONCE/count.arm.spec.js:31:3 › signed out, /admin/products?redirect=%2Fadmin%2Fproducts shows one sign-in modal (696ms)
+
+  6 passed (30.9s)
+
+==== VERDICT ====
+arm A (fixed)     exit 0  -- must be 0
+arm B (HEAD lang) exit 1  -- must be NON-zero
+arm C (restored)  exit 0  -- must be 0
+BROWSER ARM: the count is load-bearing

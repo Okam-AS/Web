@@ -1,6 +1,9 @@
 <template>
   <div :class="{ 'loading-cursor': isLoading }">
-    <AdminPage>
+    <AdminPage
+      ref="adminPage"
+      @login-success="handleLoginSuccess"
+    >
       <!-- Loading spinner -->
       <div
         v-if="isLoading"
@@ -231,10 +234,6 @@
         </div>
       </div>
     </AdminPage>
-    <LoginModal
-      v-if="showLogin"
-      @close="closeLoginModal"
-    />
   </div>
 </template>
 
@@ -243,7 +242,6 @@ import AdminPage from "~/components/organisms/AdminPage.vue";
 import OnboardingLogoUpload from "~/components/onboarding/OnboardingLogoUpload.vue";
 import OnboardingAIImport from "~/components/onboarding/OnboardingAIImport.vue";
 import OnboardingProductImages from "~/components/onboarding/OnboardingProductImages.vue";
-import LoginModal from "~/components/molecules/LoginModal.vue";
 
 export default {
   components: {
@@ -251,7 +249,6 @@ export default {
     OnboardingLogoUpload,
     OnboardingAIImport,
     OnboardingProductImages,
-    LoginModal,
   },
   data() {
     return {
@@ -269,7 +266,6 @@ export default {
         created: 0,
         deleted: 0,
       },
-      showLogin: false,
       isLoading: true,
       showStoreSelector: false,
     };
@@ -311,9 +307,9 @@ export default {
     },
   },
   mounted() {
-    // Check if user is logged in
+    // `AdminPage` opens the one sign-in modal on this route for a signed-out visitor. All this
+    // has to do is stop the spinner and not call anything until `login-success` says otherwise.
     if (!this.$store.getters.userIsLoggedIn) {
-      this.showLogin = true;
       this.isLoading = false;
       return;
     }
@@ -324,7 +320,9 @@ export default {
       .then((success) => {
         console.log("User data reloaded:", success);
         if (!success) {
-          this.showLogin = true;
+          // The session was present at mount and is not good any more. `AdminPage`'s `initAuth`
+          // does not read this answer, so ask ITS modal to open rather than raising a second.
+          this.$refs.adminPage.openLogin();
           this.isLoading = false;
           return;
         }
@@ -368,7 +366,7 @@ export default {
       })
       .catch((error) => {
         console.error("Error fetching user data:", error);
-        this.showLogin = true;
+        this.$refs.adminPage.openLogin();
         this.isLoading = false;
       });
   },
@@ -485,12 +483,9 @@ export default {
         localStorage.removeItem("onboardingInProgress");
       }
     },
-    closeLoginModal(isLoggedIn) {
-      this.showLogin = !isLoggedIn;
-      if (isLoggedIn) {
-        // Reload the page to start fresh with the new user
-        window.location.reload();
-      }
+    handleLoginSuccess() {
+      // Reload the page to start fresh with the new user
+      window.location.reload();
     },
     toggleStoreSelector() {
       this.showStoreSelector = !this.showStoreSelector;

@@ -1,5 +1,5 @@
 <template>
-  <AdminPage>
+  <AdminPage @login-success="startLiveBoard">
     <div class="ongoing-orders">
       <div class="page-header">
         <h1>{{ $i('ongoing_title') }}</h1>
@@ -152,11 +152,6 @@
         </div>
       </div>
 
-      <LoginModal
-        v-if="showLogin"
-        @close="closeLoginModal"
-      />
-
       <OrderProcessingModal
         v-if="showProcessingModal && currentOrder"
         :order="currentOrder"
@@ -227,7 +222,6 @@
 <script>
 import AdminPage from '~/components/organisms/AdminPage.vue';
 import Loading from '~/components/atoms/Loading.vue';
-import LoginModal from '~/components/molecules/LoginModal.vue';
 import OrderProcessingModal from '~/components/molecules/OrderProcessingModal.vue';
 import ReceiptModal from '~/components/molecules/ReceiptModal.vue';
 import TransferOrderModal from '~/components/molecules/TransferOrderModal.vue';
@@ -246,9 +240,8 @@ import {
 } from '~/utils/admin/ongoing-columns';
 
 export default {
-  components: { AdminPage, LoginModal, Loading, OrderProcessingModal, ReceiptModal, TransferOrderModal, ChangeDeliveryTypeModal, SmsDriverModal, CustomerInfoModal, OrderCard },
+  components: { AdminPage, Loading, OrderProcessingModal, ReceiptModal, TransferOrderModal, ChangeDeliveryTypeModal, SmsDriverModal, CustomerInfoModal, OrderCard },
   data: () => ({
-    showLogin: false,
     isLoading: false,
     orders: [],
     showOrderId: '',
@@ -283,8 +276,9 @@ export default {
     }
   },
   mounted () {
+    // `AdminPage` raises the sign-in modal for a signed-out visitor and emits `login-success` when
+    // one arrives. All this needs to do is not call anything before that happens.
     if (!this.$store.getters.userIsLoggedIn) {
-      this.showLogin = true;
       return;
     }
     this.startLiveBoard();
@@ -293,17 +287,20 @@ export default {
     this.stopLiveBoard();
   },
   methods: {
-    // THE ONE STARTER LIST for this screen, run by `mounted` for a visitor who arrives signed in and
-    // by `closeLoginModal` for one who signs in on the page. A signed-out visitor does reach this
-    // page: `AdminPage.initAuth` skips its bounce to /admin when a `redirect` query is already
-    // present (AdminPage.vue:99), which is exactly the post-login return path.
+    // THE ONE STARTER LIST for this screen, run by `mounted` for a visitor who arrives signed in
+    // and by the shell's `login-success` for one who signs in on the page. A signed-out visitor
+    // does reach this page: `AdminPage.initAuth` skips its bounce to /admin when a `redirect`
+    // query is already present (AdminPage.vue:99), which is exactly the post-login return path.
     //
-    // It is one list rather than two because the second copy went stale. The sign-in handler called
-    // `loadOrders()` and stopped there, so the board a venue signed into showed the snapshot taken
-    // at that instant and never changed again — no order placed afterwards appeared, on the one
-    // screen the kitchen and the counter work from during service, and nothing looked broken.
-    // `adminStores` was left empty by the same omission, which does not break transfer visibly: it
-    // just offers nowhere to send the order.
+    // It is one list rather than two because the second copy went stale. The sign-in handler
+    // called `loadOrders()` and stopped there, so the board a venue signed into showed the
+    // snapshot taken at that instant and never changed again — no order placed afterwards
+    // appeared, on the one screen the kitchen and the counter work from during service, and
+    // nothing looked broken. `adminStores` was left empty by the same omission, which does not
+    // break transfer visibly: it just offers nowhere to send the order.
+    //
+    // The page no longer mounts a sign-in modal of its own, so there is no `closeLoginModal`
+    // here any more; `AdminPage` owns the only modal and this is what it starts.
     startLiveBoard () {
       this.adminStores = (this.$store.state.currentUser && this.$store.state.currentUser.adminIn) || [];
       this.loadOrders();
@@ -314,13 +311,6 @@ export default {
     stopLiveBoard () {
       window.removeEventListener('resize', this.checkMobile);
       this.stopAutoRefresh();
-    },
-    // Recovery is the starter list above, not a hand-picked subset of it.
-    closeLoginModal (isLoggedIn) {
-      this.showLogin = !isLoggedIn;
-      if (isLoggedIn) {
-        this.startLiveBoard();
-      }
     },
     loadOrders () {
       this.isLoading = true;

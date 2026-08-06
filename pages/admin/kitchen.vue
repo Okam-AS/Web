@@ -16,7 +16,7 @@
   always null) — a real sent-at is a later migration/UI pass.
 -->
 <template>
-  <AdminPage full-width>
+  <AdminPage full-width @login-success="startLiveBoard">
     <div
       ref="kdsBoard"
       class="kds-board"
@@ -75,11 +75,6 @@
           @recall-line="(line) => onRecallLine(ticket, line)"
         />
       </div>
-
-      <LoginModal
-        v-if="showLogin"
-        @close="closeLoginModal"
-      />
     </div>
   </AdminPage>
 </template>
@@ -87,13 +82,11 @@
 <script>
 import AdminPage from '~/components/organisms/AdminPage.vue'
 import Loading from '~/components/atoms/Loading.vue'
-import LoginModal from '~/components/molecules/LoginModal.vue'
 import KitchenTicket from '~/components/admin/kitchen/KitchenTicket.vue'
 
 export default {
-  components: { AdminPage, Loading, LoginModal, KitchenTicket },
+  components: { AdminPage, Loading, KitchenTicket },
   data: () => ({
-    showLogin: false,
     isLoading: true,
     board: { tickets: [] },
     now: Date.now(),
@@ -133,8 +126,9 @@ export default {
     }
   },
   mounted () {
+    // `AdminPage` raises the sign-in modal for a signed-out visitor and emits `login-success` when
+    // one arrives; the board must not spin behind it in the meantime.
     if (!this.$store.getters.userIsLoggedIn) {
-      this.showLogin = true
       this.isLoading = false
       return
     }
@@ -145,10 +139,11 @@ export default {
   },
   methods: {
     // THE ONE STARTER LIST for this screen. `mounted` runs it for a cook who arrives already signed
-    // in, and `closeLoginModal` runs the SAME one for a cook who signs in on the page — because a
-    // signed-out visitor is not always bounced to /admin first: `AdminPage.initAuth` skips the
-    // bounce when a `redirect` query is already present (AdminPage.vue:99), which is exactly the
-    // post-login return path, so this page does render with its own sign-in modal over it.
+    // in, and the shell's `login-success` runs the SAME one for a cook who signs in on the page —
+    // because a signed-out visitor is not always bounced to /admin first: `AdminPage.initAuth`
+    // skips the bounce when a `redirect` query is already present (AdminPage.vue:99), which is
+    // exactly the post-login return path, so this page does render with the sign-in modal over it.
+    // The page's own duplicate modal is gone; `AdminPage` owns the only one.
     //
     // It is one list rather than two so a starter added later cannot be added to only one path.
     // That is not hypothetical: the per-second clock below was started on page load and not on
@@ -275,15 +270,6 @@ export default {
     },
     reportError (error) {
       alert(this.$i('ongoing_errorUpdate', { error: (error && error.message) || this.$i('ongoing_unknownError') }))
-    },
-    // A session arrived on the page itself. Recovery is the one starter list, not a copy of the
-    // parts of it somebody remembered — which is what this handler used to be, and why the clock
-    // and the fullscreen listener were missing from it.
-    closeLoginModal (isLoggedIn) {
-      this.showLogin = !isLoggedIn
-      if (isLoggedIn) {
-        this.startLiveBoard()
-      }
     },
     toggleFullscreen () {
       const el = this.$refs.kdsBoard
