@@ -1,0 +1,88 @@
+====================================================================================================
+BASELINE — the fixed modal, unmutated
+  exit=0  failing=none
+
+M1-STOCK  KILLED   the original defect verbatim: JSON.stringify on success, no reset
+                    red: A: the success path leaves errorMessage empty
+                    red: B: a previous failure does not survive a sign-in that worked
+                    red: C7: NOTHING from the response reaches errorMessage or the DOM, whatever Login resolves
+                    red: F: no error box is rendered after a sign-in that worked
+                    red: I: typing the six digits signs in and leaves no error on screen
+
+M2        KILLED   JSON.stringify restored on success, reset kept
+                    red: A: the success path leaves errorMessage empty
+                    red: B: a previous failure does not survive a sign-in that worked
+                    red: C7: NOTHING from the response reaches errorMessage or the DOM, whatever Login resolves
+                    red: F: no error box is rendered after a sign-in that worked
+                    red: I: typing the six digits signs in and leaves no error on screen
+
+M3        KILLED   the naive deletion: drop the reset, assign nothing (stale failure rides a success)
+                    red: B: a previous failure does not survive a sign-in that worked
+
+M4        KILLED   reset moved from the top into the failure branch only
+                    red: B: a previous failure does not survive a sign-in that worked
+
+M5        KILLED   reset weakened to a non-empty string
+                    red: A: the success path leaves errorMessage empty
+                    red: B: a previous failure does not survive a sign-in that worked
+                    red: C7: NOTHING from the response reaches errorMessage or the DOM, whatever Login resolves
+                    red: F: no error box is rendered after a sign-in that worked
+                    red: I: typing the six digits signs in and leaves no error on screen
+
+M6        KILLED   String(response) instead of JSON.stringify — a 'gentler' leak
+                    red: A: the success path leaves errorMessage empty
+                    red: B: a previous failure does not survive a sign-in that worked
+                    red: C7: NOTHING from the response reaches errorMessage or the DOM, whatever Login resolves
+                    red: F: no error box is rendered after a sign-in that worked
+                    red: I: typing the six digits signs in and leaves no error on screen
+
+M7        KILLED   only the token is rendered, not the whole body
+                    red: A: the success path leaves errorMessage empty
+                    red: B: a previous failure does not survive a sign-in that worked
+                    red: C7: NOTHING from the response reaches errorMessage or the DOM, whatever Login resolves
+                    red: I: typing the six digits signs in and leaves no error on screen
+
+M8        KILLED   reset moved into .finally, so a failure is wiped too
+                    red: B: a previous failure does not survive a sign-in that worked
+                    red: D: a wrong code still says so, so the failure branch is untouched
+                    red: E: a genuine rejection still says so, so the catch arm is not merely decorative
+
+M14       KILLED   success reports through the error slot in Norwegian instead of a serialized body
+                    red: A: the success path leaves errorMessage empty
+                    red: B: a previous failure does not survive a sign-in that worked
+                    red: C7: NOTHING from the response reaches errorMessage or the DOM, whatever Login resolves
+                    red: F: no error box is rendered after a sign-in that worked
+                    red: I: typing the six digits signs in and leaves no error on screen
+
+M15       KILLED   the reset is made conditional on there being no code yet
+                    red: B: a previous failure does not survive a sign-in that worked
+
+M9        KILLED   success branch stops emitting close
+                    red: G: the success path still closes the modal and reports it signed in
+                    red: I: typing the six digits signs in and leaves no error on screen
+
+M10       KILLED   success branch stops setting codeSent
+                    red: G: the success path still closes the modal and reports it signed in
+
+M11       KILLED   the wrong-code message is emptied
+                    red: B: a previous failure does not survive a sign-in that worked
+                    red: D: a wrong code still says so, so the failure branch is untouched
+
+M12       KILLED   the catch-arm message is emptied
+                    red: E: a genuine rejection still says so, so the catch arm is not merely decorative
+
+M13       KILLED   the phone/code argument is dropped
+                    red: H: the phone number and code are still sent as the service expects
+
+====================================================================================================
+INVERSES — behaviour-preserving edits that must stay GREEN
+
+INV1      GREEN    the reset is written before the code assignment (same effect)
+
+INV2      GREEN    the reset uses single quotes
+
+INV3      GREEN    the empty string is spelled as a template literal
+
+====================================================================================================
+15 mutants, 0 survivors
+3 inverses, 0 reds

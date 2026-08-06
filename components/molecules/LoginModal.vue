@@ -132,6 +132,11 @@ import Modal from "~/components/atoms/Modal.vue";
 import OtpInput from "~/components/atoms/OtpInput.vue";
 import Loading from "~/components/atoms/Loading.vue";
 
+// Shown when the verification code was NOT sent — see `getCode`. Hard-coded Norwegian to match the
+// two error strings already in this file (`Feil kode`); routing it through `$t` would mean editing
+// the shared locale files, which three other lanes currently own.
+export const SEND_FAILED = "Vi kunne ikke sende koden. Sjekk nummeret, eller prøv igjen om litt.";
+
 export default {
   components: { Modal, OtpInput, Loading },
   props: {
@@ -177,30 +182,78 @@ export default {
       this.codeSent = false;
       this.code = "";
     },
+    // Advance to the six-box code step ONLY when the code was actually sent.
+    //
+    // This used to set `smsSent = true` from a `.then()` that never read the value, and that is a
+    // lie for every server-side failure rather than an edge case: `RequestService.PostRequest`
+    // RESOLVES a rejected request to the axios error object instead of rejecting it, so
+    // `UserService.SendVerificationToken` returns `false` and the promise still fulfils. The
+    // `.catch()` arm below was therefore unreachable for anything the server did — with nothing
+    // listening at all the modal opened six boxes for a code nobody had sent, and the person typed
+    // into them until the wait timed out.
+    //
+    // The fix is here and not in `PostRequest` deliberately. That resolve is a documented contract
+    // 205 call sites read through `TryParseResponse` / `TryParseResponseWithError`, and the
+    // `Safe*Request` variants exist precisely to make the other verbs match it; making it reject
+    // would turn every one of those `false` returns into an unhandled rejection. The honest boolean
+    // was already on `SendVerificationToken`'s signature (`Promise<boolean>`) and three of its four
+    // callers already read it — `core/pinia/user.ts`, `pages/registrer.vue`, `EmployeeManager.vue`.
+    // This modal was the only one that threw it away, which makes this a caller bug, not a layer bug.
+    //
+    // The message covers both causes because the boolean cannot tell them apart: a `false` here is
+    // "wrong number", "server said no" and "nothing answered" alike. Claiming «Feil telefonnummer»
+    // when the API is down would replace one false statement with another.
     getCode() {
       this.errorMessage = "";
       this.isLoading = true;
       this._userService
         .SendVerificationToken(this.countryCode + this.phone.replace(/\s/g, ''))
-        .then(() => {
-          this.smsSent = true;
+        .then((sent) => {
+          if (sent) {
+            this.smsSent = true;
+          } else {
+            this.errorMessage = SEND_FAILED;
+          }
         })
         .catch(() => {
-          this.errorMessage = "Feil telefonnummer";
+          this.errorMessage = SEND_FAILED;
         })
         .finally(() => {
           this.isLoading = false;
         });
     },
+    // A sign-in that WORKED leaves no error behind.
+    //
+    // The success branch used to serialize the sign-in response into `errorMessage` — the slot the
+    // modal uses to say what went wrong. Two separate things were wrong with it, and only the
+    // second is why this method now opens with a reset. (The offending call is deliberately NOT
+    // quoted here: the lane's browser arm decides which build it is looking at by searching the
+    // served chunk for that exact token, and a comment carrying it would defeat the check.)
+    //
+    // 1. It rendered the auth layer's answer into the DOM. Measured, it did NOT leak a credential:
+    //    this modal's `_userService` is `AdminUserService` (plugins/global-mixin.js), whose `Login`
+    //    override collapses the resolved `User` to a boolean before the modal sees it, so the
+    //    assigned string was «true». But the raw `UserService.Login` this adapter wraps resolves the
+    //    whole user — `token` included — and the sibling method `LoginAdmin` in that same adapter
+    //    file already returns the user object rather than a boolean. Nothing in THIS file made the
+    //    difference, so the safe form is to never put a response here at all, whatever `Login`
+    //    happens to resolve today. See lanes/L-LOGINMODAL-SUCCESS-IS-SILENT/notes.md.
+    //
+    // 2. It was, by accident, the only thing clearing a previous «Feil kode». `login` had no reset
+    //    of its own, so simply deleting the line would let a stale failure ride onto a sign-in that
+    //    worked — the same lie pointing the other way, which is the defect a sibling lane's ninth
+    //    mutant found in `getCode`. The reset therefore moves to the top of the method, where
+    //    `getCode` already keeps its own: a fresh attempt starts with no error on screen, the
+    //    failure branches below re-state one, and the success branch says nothing.
     login(code) {
       this.code = code;
+      this.errorMessage = "";
       this.isLoading = true;
       this._userService
         .Login(this.countryCode + this.phone.replace(/\s/g, ''), this.code)
         .then((response) => {
           if(Boolean(response)) {
             this.codeSent = true;
-            this.errorMessage = JSON.stringify(response);
             this.$emit("close", true);
           } else {
             this.errorMessage = "Feil kode";
