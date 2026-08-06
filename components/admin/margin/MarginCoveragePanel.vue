@@ -129,15 +129,27 @@
       <h3 class="mcv__subtitle">
         {{ $i('mrgs_waste_coverage_title') }}
       </h3>
-      <!-- THREE states, not two. "The response carried no waste block" and "the week's waste was
-           recorded as none" are different facts and only the second one is a measurement, so they
-           cannot share a sentence. The first is not a transitional state either: web and API deploy
-           separately, so this build will keep meeting coverage responses that predate the block. -->
-      <!-- `coverage-waste-unknown`, NOT `waste-unknown`: `MarginWastePanel` already owns that hook for
-           its own failed read, and BOTH panels are on this page at once. Sharing one made a probe
-           resolve whichever the DOM ordered first — see the note on `coverage-window-percent` above,
-           which is the same mistake this module has already paid for once. -->
-      <p v-if="wasteUnknown" class="mcv__note" data-test="coverage-waste-unknown">
+      <!-- FOUR states, not one. "This server does not serve waste", "the response carried no waste
+           block", "the week's waste was recorded as none" and a real breakdown are four different
+           facts, and only the last two are measurements. They cannot share a sentence. Neither of the
+           first two is a transitional state: web and API deploy separately, so this build will keep
+           meeting coverage responses that predate the block. -->
+      <!-- `coverage-waste-absent` / `coverage-waste-unknown`, NOT `waste-absent` / `waste-unknown`:
+           `MarginWastePanel` already owns those two hooks for its own read, and BOTH panels are on
+           this page at once. Sharing one made a probe resolve whichever the DOM ordered first — see
+           the note on `coverage-window-percent` above, which is the same mistake this module has
+           already paid for once. -->
+      <!-- ABSENT BEATS UNKNOWN WHEN THE PAGE HAS ASKED AND BEEN TOLD. The waste surface is served by
+           no backend this estate deploys, so the coverage response carries no waste block and
+           `wasteUnknown` is true on every week a venue opens. Saying "we could not tell" there is an
+           alarm about a read, printed under the week's reconciled food-cost figures, for a capability
+           that has never existed on that server. The page's OWN 404 on `GET /margin/waste` is what
+           distinguishes the two, and it is passed in rather than re-derived here: this panel reads
+           `GET /margin/coverage`, whose silence about waste cannot tell absence from an old build. -->
+      <p v-if="wasteNotServed" class="mcv__note" data-test="coverage-waste-absent">
+        {{ $i('mrgs_waste_coverage_absent') }}
+      </p>
+      <p v-else-if="wasteUnknown" class="mcv__note" data-test="coverage-waste-unknown">
         {{ $i('mrgs_waste_coverage_unknown') }}
       </p>
       <p v-else-if="coverage.waste.entryCount === 0" class="mcv__note" data-test="waste-none">
@@ -212,6 +224,23 @@ export default {
     coverage: {
       type: Object,
       default: null
+    },
+    /**
+     * Whether the SERVER THIS PAGE JUST SPOKE TO does not serve the waste surface at all — the page's
+     * own `GET /margin/waste` answered 404.
+     *
+     * A fact about the feature, arriving from a different read than this panel's. It is a prop rather
+     * than something computed here because nothing in a coverage response can carry it: a response
+     * with no waste block is what BOTH an absent capability and an older API version look like from
+     * inside this panel, and only the sibling read can tell them apart.
+     *
+     * DEFAULT FALSE, and that default is load-bearing rather than tidy. Every caller that does not
+     * know keeps the three data states exactly as they were, so this can never turn a real unknown
+     * into a claim about a missing feature by omission.
+     */
+    wasteAbsent: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -231,6 +260,33 @@ export default {
      */
     wasteUnknown () {
       return this.coverage.waste === null || this.coverage.waste.entryCount === null;
+    },
+    /**
+     * Whether this bucket has nothing to say BECAUSE THE CAPABILITY IS NOT SERVED HERE, rather than
+     * because a read came back silent about it.
+     *
+     * Both conjuncts are load-bearing and neither is a belt-and-braces guard:
+     *
+     *   • `wasteAbsent` alone would be wrong the moment a server DOES send waste totals on the
+     *     coverage read while the entry-list route 404s. Those totals are a measurement the server
+     *     made and this panel is the only place they are printed; replacing them with "not available"
+     *     would withhold a figure that arrived, and the sentence would sit where the numbers
+     *     contradicting it should have been. A block that came is always rendered.
+     *   • the silence alone is the defect this exists to remove.
+     *
+     * `coverage.waste === null` RATHER THAN `wasteUnknown`, and the difference is not pedantry.
+     * `wasteUnknown` is true in two worlds: the response carried NO waste block, and a block ARRIVED
+     * whose entry count was withheld. Only the first is a server that has never heard of waste. In the
+     * second the server sent the block — it plainly has the capability — and a 404 on the entry route
+     * there is a gate, not an absence; claiming "there are no waste figures for this window" over a
+     * `valuedMinor` that arrived would be a false statement printed on top of a real one.
+     *
+     * Absence therefore rewrites exactly ONE sentence and touches no data state. The day the waste
+     * controller ships, the 404 stops arriving, this goes false, and the three data states are exactly
+     * what they were — nothing here has to be taken back out.
+     */
+    wasteNotServed () {
+      return this.wasteAbsent && this.coverage.waste === null;
     }
   },
   methods: {

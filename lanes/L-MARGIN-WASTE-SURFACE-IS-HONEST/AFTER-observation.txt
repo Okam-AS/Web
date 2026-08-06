@@ -1,0 +1,50 @@
+GET /margin/waste statuses seen by the browser: 404
+
+--- the waste panel, as a person reads it -------------------------------------
+Svinn
+Svinnregistrering er ikke tilgjengelig her ennå. Det er ingenting å vise og ingenting å registrere — og tallene over er upåvirket uansett, for svinn inngår aldri i dem.
+
+--- the coverage panel's waste section ----------------------------------------
+Hva dekningen består av
+Hvilke av ukas salg en oppskrift kunne forklare, og hvilke den ikke kunne.
+2026-07-20 – 2026-07-26
+OPPSKRIFTSDEKNING
+90,00 %
+SALG EN OPPSKRIFT FORKLARER
+kr 36 000,00
+SALG INGEN OPPSKRIFT FORKLARER
+kr 4 000,00
+SALG INGEN OPPSKRIFT FORKLARER
+PRODUKT	LINJER	NETTO
+Åpen pris, og returer uten produkt	41	kr 2 500,00
+Kaffe	96	kr 1 500,00
+HVOR GAMLE PRISENE ER
+LEVERANDØR	NYESTE PRIS	VARER UTEN PRIS
+Bergen Storkjøkken AS	for 19 dager siden	0
+Nordane Kaffe	for 18 dager siden	1
+SVINN DENNE UKA
+Svinnregistrering er ikke tilgjengelig her ennå, så det finnes ingen svinntall for dette vinduet. Tallene over er upåvirket uansett — svinn inngår aldri i dekket eller udekket omsetning.
+Journalen lest til og med post: 918273
+
+--- which state hooks are present ---------------------------------------------
+  [present] waste-absent
+  [absent ] waste-unknown
+  [absent ] waste-empty
+  [absent ] waste-frozen
+  [absent ] waste-row
+  [present] coverage-waste-absent
+  [absent ] coverage-waste-unknown
+  [absent ] waste-none
+  [absent ] waste-total
+
+--- recording controls offered into a route that 404s -------------------------
+  [absent ] waste-record
+  [absent ] waste-date
+  [absent ] waste-reason
+  [absent ] waste-value
+  [absent ] waste-description
+  [absent ] waste-quantity
+  [absent ] waste-ingredient
+  [absent ] waste-remove
+
+recording controls offered: 0 of 8

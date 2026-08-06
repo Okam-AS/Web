@@ -192,6 +192,7 @@
               <MarginWastePanel
                 ref="wastePanel"
                 :entries="wasteEntries"
+                :absent="wasteAbsent"
                 :ingredients="ingredients"
                 :frozen="statementFinalized"
                 :default-date="statement.periodStart"
@@ -203,7 +204,17 @@
                 @remove="removeWaste"
               />
 
-              <MarginCoveragePanel :coverage="coverage" :currency="currency" :locale="locale" />
+              <!-- `waste-absent` comes from the SIBLING read, not from this panel's own. A coverage
+                   response that says nothing about waste looks identical whether the server has never
+                   heard of the capability or is simply an older build, and only the entry-list 404
+                   tells those apart — so the fact is established once, in `loadWaste`, and handed to
+                   both panels rather than guessed at twice. -->
+              <MarginCoveragePanel
+                :coverage="coverage"
+                :waste-absent="wasteAbsent"
+                :currency="currency"
+                :locale="locale"
+              />
             </template>
           </div>
         </div>
@@ -274,8 +285,15 @@ const ERROR_KEYS = {
  *
  * The journey is the one the backend proves end to end: open the week's statement, enter the purchase
  * spend, recalculate, read the figures with their provenance, finalize (which freezes them), and
- * correct a finalized week by opening the next forward-only revision. Every step is a real endpoint;
- * nothing on this page is a placeholder for one that does not exist.
+ * correct a finalized week by opening the next forward-only revision. Every step of THAT journey is a
+ * real endpoint.
+ *
+ * THE ONE EXCEPTION IS NAMED RATHER THAN LEFT TO BE DISCOVERED. `/margin/waste` — all four routes — is
+ * served by no backend this estate deploys, so the waste panel's read answers 404 on every week. The
+ * panel and the coverage panel's waste bucket both say so plainly (`wasteAbsent`, set in `loadWaste`);
+ * neither offers a control whose only outcome would be a write into a route that does not exist. The
+ * day the controller ships, the 404 stops arriving, the flag goes false on its own and both panels
+ * return to their data states with nothing to take back out.
  *
  * NOTHING ON THIS PAGE ADDS MONEY UP OR TAKES IT AWAY. Net food sales, theoretical ingredient cost,
  * actual purchase spend, the covered/uncovered split and all four percentages are computed by the
@@ -302,6 +320,13 @@ export default {
       // nothing away" or as "this store masters no ingredients".
       wasteEntries: null,
       ingredients: null,
+      // A THIRD state, and the one `wasteEntries: null` cannot express. Null says "the read did not
+      // answer", which is a claim about a request that broke. `wasteAbsent` says "this server does not
+      // serve waste at all", which is a claim about the FEATURE — and while no deployed backend
+      // publishes `/margin/waste` it is the true one, so the two must not share a rendering. Both
+      // panels on this page are told, because both were reporting the same absence as something else.
+      // See `loadWaste`.
+      wasteAbsent: false,
       weekStart: '',
       loading: false,
       creating: false,
@@ -415,6 +440,7 @@ export default {
       this.statement = null;
       this.coverage = null;
       this.wasteEntries = null;
+      this.wasteAbsent = false;
       this.selectedStatementId = null;
       this.exportResult = null;
       this.projection = null;
@@ -467,6 +493,7 @@ export default {
       this.statement = null;
       this.coverage = null;
       this.wasteEntries = null;
+      this.wasteAbsent = false;
       this.exportResult = null;
       this.failure = '';
 
@@ -487,15 +514,51 @@ export default {
      * carries the per-reason TOTALS and this carries the ENTRIES the venue edits, and the panel that
      * records them has to keep working when the coverage read (behind a different gate) fails.
      *
-     * A failure leaves the model null and the panel says the read did not answer — never `[]`, which
-     * is the claim that this venue threw nothing away.
+     * THREE OUTCOMES, NOT TWO, AND THE THIRD IS THE ONE A VENUE MEETS TODAY.
+     *
+     *   • the read answered         → the entries, `[]` included, which is a real "nothing this week";
+     *   • the read answered 404     → the surface IS NOT SERVED HERE, and both panels say ABSENT;
+     *   • anything else went wrong  → null, and the panel says the read did not answer.
+     *
+     * The middle arm exists because it is the arm that is taken. No backend this estate deploys
+     * publishes `/margin/waste` — at the integration tip `8e2b57de` there is no `MarginWasteController`,
+     * no entity and no service, and a live API answers this route with the same status as a route that
+     * was never named — while `GET /margin/status` still answers `statements: true`, which is what puts
+     * this panel on screen in the first place. Collapsing that into the failure arm showed a venue A
+     * READ THAT BROKE where the truth is A FEATURE THAT IS NOT THERE, and the two invite opposite
+     * behaviour: an absence invites a question, a broken read invites a retry, then a support call,
+     * then doubt about the reconciled figures sitting directly above it on the same screen.
+     *
+     * A 404 IS READ OFF THE STATUS, NOT OFF THE CODE. The route-does-not-exist 404 comes from ASP.NET's
+     * router, carries no problem+json and therefore no `margin.*` code at all; only the flag-gated 404
+     * carries `margin.not-found`. Keying on the code would see just the second and would go on
+     * mis-rendering the case this exists for. Every 404 this route can produce — no controller, a
+     * module or stage flag off, a store outside the caller's scope — is one sentence to a venue: this
+     * is not served to you here. None of them is a request that failed.
+     *
+     * ONLY THIS READ INFERS ABSENCE, deliberately. `DELETE /margin/waste/{id}` answers 404 for an entry
+     * that is already gone, so inferring absence there would trade one wrong reading for another; this
+     * route carries no resource in its path and has no such second meaning. The write paths keep
+     * `fail`, and in the absent world they are unreachable anyway — the panel draws no form and no
+     * remove control.
      */
     async loadWaste () {
       const period = this.statement;
-      if (!period || !period.periodStart || !period.periodEnd) { this.wasteEntries = null; return; }
-      const response = await this._wasteService
-        .ListWaste(this.storeId, period.periodStart, period.periodEnd)
-        .catch(() => null);
+      if (!period || !period.periodStart || !period.periodEnd) {
+        this.wasteEntries = null;
+        this.wasteAbsent = false;
+        return;
+      }
+
+      let response = null;
+      let absent = false;
+      try {
+        response = await this._wasteService.ListWaste(this.storeId, period.periodStart, period.periodEnd);
+      } catch (e) {
+        absent = isMarginApiError(e) && e.status === 404;
+      }
+
+      this.wasteAbsent = absent;
       this.wasteEntries = readWasteEntries(response);
     },
 
@@ -585,7 +648,12 @@ export default {
         this.selectedStatementId = this.statement.statementId;
         this.exportResult = null;
         await this.refreshList();
-        await this.loadCoverage();
+        // BOTH READS, because opening a week renders BOTH panels. This used to load coverage alone,
+        // which left the waste panel reporting on a request that was never sent — and, worse, left
+        // `wasteAbsent` false, so the coverage panel said "we could not tell" about waste on the one
+        // path where nobody had asked. A venue who opens a week and one who picks an existing week
+        // must be shown the same thing, because they are looking at the same week.
+        await Promise.all([this.loadCoverage(), this.loadWaste()]);
       } catch (e) {
         this.fail(e);
       }

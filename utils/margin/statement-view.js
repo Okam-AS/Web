@@ -313,12 +313,13 @@ export function readCoverage (response) {
  * count is the only thing that says so. Both are passed through and neither is folded into the other.
  *
  * ABSENT IS NOT ZERO, and this used to say the opposite. A missing block was read as an empty summary
- * — three zeros and no rows — on the stated assumption that the server always sends one. It does not:
- * the coverage endpoint on this branch has no waste block, and even once it has, web and API deploy
- * independently, so a build of this page will keep meeting responses written before the block existed.
- * The window is permanent, not transitional. "Nobody told us" rendered as "the kitchen threw nothing
- * away" is a measurement claimed where none was made — the same defect as a null price rendering as a
- * real price, and the same one `readWasteEntries` thirty lines below already refuses by returning null.
+ * — three zeros and no rows — on the stated assumption that "the server always sends it". It does not:
+ * `MarginCoverageResponse` has no waste field at all on this branch, and even once it has, web and API
+ * deploy independently, so a build of this page will keep meeting responses written before the block
+ * existed. The window is permanent, not transitional. "Nobody told us" rendered as "the kitchen threw
+ * nothing away" is a measurement claimed where none was made — the same defect as a null price
+ * rendering as a real price, and the same one `readWasteEntries` thirty lines below already refuses by
+ * returning null.
  *
  * A present block whose figures ARE zero is a different fact and stays a zero: the server looked at the
  * week and found no entry. Only the block's absence is withheld.

@@ -82,22 +82,49 @@ describe('readWasteEntries / readWasteSummary', () => {
     expect(readWasteEntries({})).toBeNull()
   })
 
-  // This pin used to assert the opposite, on the stated assumption that the server always sends the
-  // block. It does not, and even once it does the two halves deploy separately, so the window never
-  // closes. An absent block is "nobody looked"; a zeroed block is "somebody looked and found none".
-  test('an absent summary block is UNKNOWN, never an empty summary', () => {
+  // FLIPPED, NOT DELETED. This test used to assert the opposite — that an absent block reads as three
+  // zeros — and it is the reason the defect survived: the fabrication had a green test blessing it, so
+  // every later reader was told on good authority that "nobody said anything about waste" and "the
+  // kitchen threw nothing away" were the same fact. They are not, and the assertion that said so is
+  // kept here inverted rather than removed, so the behaviour it protected can never come back quietly.
+  test('an absent summary block is NULL — never three zeros, which claim a measurement nobody made', () => {
     expect(readWasteSummary(undefined)).toBeNull()
     expect(readWasteSummary(null)).toBeNull()
-    // A block that is not a block is unreadable, which is also not zero.
-    expect(readWasteSummary('none')).toBeNull()
-    expect(readWasteSummary(0)).toBeNull()
   })
 
-  test('a PRESENT block of zeros stays a real zero — the distinction is not a relabelling', () => {
+  // A block that is not an object is unreadable, not empty. Withheld under the same copy as an absent
+  // one, because a venue cannot act differently on the two and a zero would be wrong for both.
+  //
+  // `0` and `false` are here for the same reason `entryCount === 0` is guarded below: a FALSY
+  // non-object must reach null through the shape check and never through a truthiness test that
+  // would also swallow a real zero.
+  test('an unreadable summary block is null rather than empty', () => {
+    expect(readWasteSummary('nope')).toBeNull()
+    expect(readWasteSummary('none')).toBeNull()
+    expect(readWasteSummary(7)).toBeNull()
+    expect(readWasteSummary(0)).toBeNull()
+    expect(readWasteSummary(false)).toBeNull()
+  })
+
+  // THE CASE THE NULL MUST NOT SWALLOW. A block that ARRIVED saying zero is a real measurement — the
+  // server looked at the week and found nothing — and it stays a counted zero. The distinction is not
+  // a relabelling: one is "nobody looked", the other is "somebody looked and found none".
+  test('a block that arrived stating zero stays a counted zero', () => {
     const summary = readWasteSummary({ valuedMinor: 0, entryCount: 0, unvaluedEntryCount: 0, byReason: [] })
+    expect(summary).not.toBeNull()
     expect(summary.entryCount).toBe(0)
     expect(summary.valuedMinor).toBe(0)
-    expect(summary.byReason).toEqual([])
+  })
+
+  // No `|| 0` anywhere: a field the server withheld reaches the panel as null and renders as the
+  // unknown mark, rather than as a confident kr 0,00 beside a non-zero count.
+  test('a withheld field inside a block that arrived stays null rather than coercing to zero', () => {
+    const summary = readWasteSummary({ entryCount: 4, byReason: [{ reason: 'Spoilage' }] })
+    expect(summary.valuedMinor).toBeNull()
+    expect(summary.unvaluedEntryCount).toBeNull()
+    expect(summary.entryCount).toBe(4)
+    expect(summary.byReason[0].entryCount).toBeNull()
+    expect(summary.byReason[0].valuedMinor).toBeNull()
   })
 
   // `longOrNull(x) || 0` is `Number(null)` wearing a hat: it turned every field the server withheld

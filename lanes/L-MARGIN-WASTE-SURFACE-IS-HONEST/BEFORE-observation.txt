@@ -1,0 +1,67 @@
+GET /margin/waste statuses seen by the browser: NO REQUEST WAS MADE
+
+--- the waste panel, as a person reads it -------------------------------------
+Svinn
+Hva kjøkkenet kastet denne uka, og hvorfor. Dette forklarer en del av avviket uten at du må telle lager — og det endrer ingen tall på oppgjøret, fordi varene allerede ligger i innkjøpet.
+Vi fikk ikke hentet svinnet. Det er ukjent — det betyr ikke at ingenting er kastet.
+REGISTRER SVINN
+DATO
+ÅRSAK
+Bedervet
+Svinn i produksjon
+Knust eller sølt
+Personalmat
+Laget om for gjest
+Gitt bort
+Annet
+RÅVARE
+Ingen råvare — skriv fritekst
+HVA
+VERDI
+Uten en råvare må du selv oppgi hva det var verdt — ingenting kan prise en fritekstlinje.
+Registrer
+
+--- the coverage panel's waste section ----------------------------------------
+Hva dekningen består av
+Hvilke av ukas salg en oppskrift kunne forklare, og hvilke den ikke kunne.
+2026-07-20 – 2026-07-26
+OPPSKRIFTSDEKNING
+90,00 %
+SALG EN OPPSKRIFT FORKLARER
+kr 36 000,00
+SALG INGEN OPPSKRIFT FORKLARER
+kr 4 000,00
+SALG INGEN OPPSKRIFT FORKLARER
+PRODUKT	LINJER	NETTO
+Åpen pris, og returer uten produkt	41	kr 2 500,00
+Kaffe	96	kr 1 500,00
+HVOR GAMLE PRISENE ER
+LEVERANDØR	NYESTE PRIS	VARER UTEN PRIS
+Bergen Storkjøkken AS	for 19 dager siden	0
+Nordane Kaffe	for 18 dager siden	1
+SVINN DENNE UKA
+Ingenting er registrert som svinn i dette vinduet.
+Journalen lest til og med post: 918273
+
+--- which state hooks are present ---------------------------------------------
+  [absent ] waste-absent
+  [present] waste-unknown
+  [absent ] waste-empty
+  [absent ] waste-frozen
+  [absent ] waste-row
+  [absent ] coverage-waste-absent
+  [absent ] coverage-waste-unknown
+  [present] waste-none
+  [absent ] waste-total
+
+--- recording controls offered into a route that 404s -------------------------
+  [OFFERED] waste-record
+  [OFFERED] waste-date
+  [OFFERED] waste-reason
+  [OFFERED] waste-value
+  [OFFERED] waste-description
+  [absent ] waste-quantity
+  [OFFERED] waste-ingredient
+  [absent ] waste-remove
+
+recording controls offered: 6 of 8
