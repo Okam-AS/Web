@@ -3,165 +3,178 @@
     <h2 class="mwp__title">
       {{ $i('mrgs_waste_title') }}
     </h2>
-    <p class="mwp__lede">
-      {{ $i('mrgs_waste_lede') }}
-    </p>
-
-    <!-- A FINALIZED WEEK CARRIES NO FORM AT ALL. Not a disabled one: a disabled field still says
-         "this is where you would add it", and there is no path on the server that would accept it —
-         the week's waste is frozen with its figures, in three layers. The correction path is a new
-         forward-only revision, which lives beside this panel as an action rather than a refusal. -->
-    <p v-if="frozen" class="mwp__notice" data-test="waste-frozen">
-      {{ $i('mrgs_waste_frozen') }}
-    </p>
-
-    <p v-if="entries === null" class="mwp__note" data-test="waste-unknown">
-      {{ $i('mrgs_waste_unknown') }}
+    <!-- THE FEATURE IS NOT HERE, and that is a different sentence from "the read did not answer".
+         ONE guard rather than a condition on each of the blocks below: absent means there is no lede
+         promising a feature, no unknown note blaming a request, no table, no frozen notice, no form
+         and no record button — and a later edit that adds another block inherits that for free instead
+         of having to remember. The heading stays, so the section is still identifiable and the absence
+         is STATED rather than silent: a panel that vanished would leave a venue who had been told this
+         module records waste with nowhere to see that it does not. -->
+    <p v-if="absent" class="mwp__note" data-test="waste-absent">
+      {{ $i('mrgs_waste_absent') }}
     </p>
 
     <template v-else>
-      <p v-if="!entries.length" class="mwp__note" data-test="waste-empty">
-        {{ $i('mrgs_waste_empty') }}
+      <p class="mwp__lede">
+        {{ $i('mrgs_waste_lede') }}
       </p>
-      <table v-else class="mwp__lines">
-        <thead>
-          <tr>
-            <th>{{ $i('mrgs_waste_date') }}</th>
-            <th>{{ $i('mrgs_waste_reason') }}</th>
-            <th>{{ $i('mrgs_waste_what') }}</th>
-            <th class="mwp__num">
-              {{ $i('mrgs_waste_value') }}
-            </th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="entry in entries" :key="entry.wasteEntryId" data-test="waste-row">
-            <td>{{ entry.wasteDate || unknownMark }}</td>
-            <td>{{ reasonLabel(entry.reason) }}</td>
-            <td>{{ whatLabel(entry) }}</td>
-            <!-- An entry nothing could price shows the unknown mark and the reason, never 0: a loss
-                 the module could not value is not a free one, and a zero would join the total. -->
-            <td class="mwp__num" data-test="waste-row-value">
-              {{ valueLabel(entry) }}
-            </td>
-            <td class="mwp__num">
-              <button
-                v-if="!entry.frozen"
-                class="mwp__remove"
-                :disabled="busy"
-                :aria-label="$i('mrgs_waste_remove')"
-                data-test="waste-remove"
-                @click="$emit('remove', entry)"
-              >
-                ×
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
 
-      <p v-if="unvaluedCount" class="mwp__notice" data-test="waste-floor">
-        {{ $i('mrgs_waste_floor', { count: unvaluedCount }) }}
+      <!-- A FINALIZED WEEK CARRIES NO FORM AT ALL. Not a disabled one: a disabled field still says
+           "this is where you would add it", and there is no path on the server that would accept it —
+           the week's waste is frozen with its figures, in three layers. The correction path is a new
+           forward-only revision, which lives beside this panel as an action rather than a refusal. -->
+      <p v-if="frozen" class="mwp__notice" data-test="waste-frozen">
+        {{ $i('mrgs_waste_frozen') }}
       </p>
-    </template>
 
-    <!-- ---- the form ---------------------------------------------------------------------------- -->
-    <template v-if="!frozen">
-      <h3 class="mwp__subtitle">
-        {{ $i('mrgs_waste_add_title') }}
-      </h3>
+      <p v-if="entries === null" class="mwp__note" data-test="waste-unknown">
+        {{ $i('mrgs_waste_unknown') }}
+      </p>
 
-      <div class="mwp__fields">
-        <label class="mwp__field">
-          <span class="mwp__fieldlabel">{{ $i('mrgs_waste_date') }}</span>
-          <input v-model="draft.wasteDate" class="mwp__input" type="date" :disabled="busy" data-test="waste-date">
-        </label>
+      <template v-else>
+        <p v-if="!entries.length" class="mwp__note" data-test="waste-empty">
+          {{ $i('mrgs_waste_empty') }}
+        </p>
+        <table v-else class="mwp__lines">
+          <thead>
+            <tr>
+              <th>{{ $i('mrgs_waste_date') }}</th>
+              <th>{{ $i('mrgs_waste_reason') }}</th>
+              <th>{{ $i('mrgs_waste_what') }}</th>
+              <th class="mwp__num">
+                {{ $i('mrgs_waste_value') }}
+              </th>
+              <th />
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="entry in entries" :key="entry.wasteEntryId" data-test="waste-row">
+              <td>{{ entry.wasteDate || unknownMark }}</td>
+              <td>{{ reasonLabel(entry.reason) }}</td>
+              <td>{{ whatLabel(entry) }}</td>
+              <!-- An entry nothing could price shows the unknown mark and the reason, never 0: a loss
+                   the module could not value is not a free one, and a zero would join the total. -->
+              <td class="mwp__num" data-test="waste-row-value">
+                {{ valueLabel(entry) }}
+              </td>
+              <td class="mwp__num">
+                <button
+                  v-if="!entry.frozen"
+                  class="mwp__remove"
+                  :disabled="busy"
+                  :aria-label="$i('mrgs_waste_remove')"
+                  data-test="waste-remove"
+                  @click="$emit('remove', entry)"
+                >
+                  ×
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-        <label class="mwp__field">
-          <span class="mwp__fieldlabel">{{ $i('mrgs_waste_reason') }}</span>
-          <select v-model="draft.reason" class="mwp__input" :disabled="busy" data-test="waste-reason">
-            <option v-for="reason in reasons" :key="reason" :value="reason">
-              {{ reasonLabel(reason) }}
-            </option>
-          </select>
-        </label>
-      </div>
+        <p v-if="unvaluedCount" class="mwp__notice" data-test="waste-floor">
+          {{ $i('mrgs_waste_floor', { count: unvaluedCount }) }}
+        </p>
+      </template>
 
-      <!-- TWO WAYS TO SAY WHAT WAS THROWN AWAY, and they are not the same feature. A mastered
-           ingredient plus a quantity lets the module price the loss from the same supplier prices the
-           theoretical cost is built on — which is the whole reason this costs a venue nothing. Free
-           text is for everything the ingredient master does not hold: a finished plate, a delivery
-           that arrived broken. -->
-      <div class="mwp__fields">
-        <label class="mwp__field">
-          <span class="mwp__fieldlabel">{{ $i('mrgs_waste_ingredient') }}</span>
-          <select
-            v-if="ingredients"
-            v-model="draft.ingredientId"
-            class="mwp__input"
-            :disabled="busy"
-            data-test="waste-ingredient"
-          >
-            <option value="">
-              {{ $i('mrgs_waste_ingredient_none') }}
-            </option>
-            <option v-for="ingredient in ingredients" :key="ingredient.id" :value="ingredient.id">
-              {{ ingredient.name }}
-            </option>
-          </select>
-          <span v-else class="mwp__note" data-test="waste-ingredients-unknown">
-            {{ $i('mrgs_waste_ingredients_unknown') }}
-          </span>
-        </label>
+      <!-- ---- the form -------------------------------------------------------------------------- -->
+      <template v-if="!frozen">
+        <h3 class="mwp__subtitle">
+          {{ $i('mrgs_waste_add_title') }}
+        </h3>
 
-        <label v-if="draft.ingredientId" class="mwp__field">
-          <span class="mwp__fieldlabel">{{ quantityLabel }}</span>
+        <div class="mwp__fields">
+          <label class="mwp__field">
+            <span class="mwp__fieldlabel">{{ $i('mrgs_waste_date') }}</span>
+            <input v-model="draft.wasteDate" class="mwp__input" type="date" :disabled="busy" data-test="waste-date">
+          </label>
+
+          <label class="mwp__field">
+            <span class="mwp__fieldlabel">{{ $i('mrgs_waste_reason') }}</span>
+            <select v-model="draft.reason" class="mwp__input" :disabled="busy" data-test="waste-reason">
+              <option v-for="reason in reasons" :key="reason" :value="reason">
+                {{ reasonLabel(reason) }}
+              </option>
+            </select>
+          </label>
+        </div>
+
+        <!-- TWO WAYS TO SAY WHAT WAS THROWN AWAY, and they are not the same feature. A mastered
+             ingredient plus a quantity lets the module price the loss from the same supplier prices the
+             theoretical cost is built on — which is the whole reason this costs a venue nothing. Free
+             text is for everything the ingredient master does not hold: a finished plate, a delivery
+             that arrived broken. -->
+        <div class="mwp__fields">
+          <label class="mwp__field">
+            <span class="mwp__fieldlabel">{{ $i('mrgs_waste_ingredient') }}</span>
+            <select
+              v-if="ingredients"
+              v-model="draft.ingredientId"
+              class="mwp__input"
+              :disabled="busy"
+              data-test="waste-ingredient"
+            >
+              <option value="">
+                {{ $i('mrgs_waste_ingredient_none') }}
+              </option>
+              <option v-for="ingredient in ingredients" :key="ingredient.id" :value="ingredient.id">
+                {{ ingredient.name }}
+              </option>
+            </select>
+            <span v-else class="mwp__note" data-test="waste-ingredients-unknown">
+              {{ $i('mrgs_waste_ingredients_unknown') }}
+            </span>
+          </label>
+
+          <label v-if="draft.ingredientId" class="mwp__field">
+            <span class="mwp__fieldlabel">{{ quantityLabel }}</span>
+            <input
+              v-model="draft.quantity"
+              class="mwp__input"
+              type="text"
+              inputmode="decimal"
+              :disabled="busy"
+              data-test="waste-quantity"
+            >
+          </label>
+
+          <label v-else class="mwp__field mwp__field--wide">
+            <span class="mwp__fieldlabel">{{ $i('mrgs_waste_what') }}</span>
+            <input
+              v-model="draft.description"
+              class="mwp__input"
+              type="text"
+              :disabled="busy"
+              data-test="waste-description"
+            >
+          </label>
+        </div>
+
+        <label class="mwp__field mwp__field--wide">
+          <span class="mwp__fieldlabel">{{ valueFieldLabel }}</span>
           <input
-            v-model="draft.quantity"
+            v-model="draft.value"
             class="mwp__input"
             type="text"
             inputmode="decimal"
+            :placeholder="valuePlaceholder"
             :disabled="busy"
-            data-test="waste-quantity"
+            data-test="waste-value"
           >
         </label>
+        <p class="mwp__note">
+          {{ draft.ingredientId ? $i('mrgs_waste_value_hint_priced') : $i('mrgs_waste_value_hint_stated') }}
+        </p>
 
-        <label v-else class="mwp__field mwp__field--wide">
-          <span class="mwp__fieldlabel">{{ $i('mrgs_waste_what') }}</span>
-          <input
-            v-model="draft.description"
-            class="mwp__input"
-            type="text"
-            :disabled="busy"
-            data-test="waste-description"
-          >
-        </label>
-      </div>
+        <p v-if="error" class="mwp__error" data-test="waste-error">
+          {{ error }}
+        </p>
 
-      <label class="mwp__field mwp__field--wide">
-        <span class="mwp__fieldlabel">{{ valueFieldLabel }}</span>
-        <input
-          v-model="draft.value"
-          class="mwp__input"
-          type="text"
-          inputmode="decimal"
-          :placeholder="valuePlaceholder"
-          :disabled="busy"
-          data-test="waste-value"
-        >
-      </label>
-      <p class="mwp__note">
-        {{ draft.ingredientId ? $i('mrgs_waste_value_hint_priced') : $i('mrgs_waste_value_hint_stated') }}
-      </p>
-
-      <p v-if="error" class="mwp__error" data-test="waste-error">
-        {{ error }}
-      </p>
-
-      <button class="mrg-btn" :disabled="busy || !canRecord" data-test="waste-record" @click="record">
-        {{ recording ? $i('mrgs_waste_recording') : $i('mrgs_waste_record') }}
-      </button>
+        <button class="mrg-btn" :disabled="busy || !canRecord" data-test="waste-record" @click="record">
+          {{ recording ? $i('mrgs_waste_recording') : $i('mrgs_waste_record') }}
+        </button>
+      </template>
     </template>
   </section>
 </template>
@@ -207,6 +220,15 @@ const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
  *
  * A FROZEN WEEK RENDERS NO FORM AND NO REMOVE CONTROL, per-entry: the list can legitimately span both
  * sides of a freeze, so `frozen` is read off each entry rather than assumed for the whole table.
+ *
+ * AND `absent` OUTRANKS ALL OF IT. No backend this estate deploys publishes `/margin/waste` — the
+ * integration tip carries no waste controller, entity or service — so the four routes this panel's
+ * client names answer 404, and the panel then says THE FEATURE IS NOT HERE. It used to say THE READ
+ * FAILED, which is the same screen making the opposite promise: that the capability exists and the
+ * request for it broke. That reading costs a venue a retry, then a support call, then its confidence in
+ * the reconciled figures printed directly above this panel — none of which a plain absence does. And
+ * it drew a full recording form underneath, whose only possible outcome was to post a counted loss
+ * into a route that does not exist.
  */
 export default {
   name: 'MarginWastePanel',
@@ -216,6 +238,24 @@ export default {
     entries: {
       type: Array,
       default: null
+    },
+    /**
+     * True when the waste surface is NOT SERVED by the API this admin is talking to — the page's
+     * `loadWaste` sets it from a 404 on the list route.
+     *
+     * A separate prop rather than a fourth meaning stacked onto `entries`, because `entries` already
+     * carries three claims about the VENUE'S DATA (rows, none, unreadable) and this one is not about
+     * the venue's data at all. It outranks every other state in the template: a feature that is not
+     * there cannot be frozen, cannot be empty, and above all cannot have failed to load — which is
+     * what this panel used to say about it.
+     *
+     * DEFAULT FALSE, and that default is load-bearing rather than tidy: a caller that does not know
+     * keeps the three data states exactly as they were, so this can never turn a real unknown into a
+     * claim about a missing feature by omission.
+     */
+    absent: {
+      type: Boolean,
+      default: false
     },
     /** `[{ id, name, baseUnit }]` for the store's active ingredients, or null when that read did not answer. */
     ingredients: {

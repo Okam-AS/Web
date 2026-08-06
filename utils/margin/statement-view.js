@@ -305,28 +305,43 @@ export function readCoverage (response) {
 }
 
 /**
- * The reason-coded waste breakdown that rides on the coverage read.
+ * The reason-coded waste breakdown that rides on the coverage read, or NULL when the response said
+ * nothing about waste at all.
  *
  * `valuedMinor` is a FLOOR whenever `unvaluedEntryCount` is non-zero: an entry nothing could price is
  * stored with a null value rather than a zero, so the total is short by an unknown amount and the
  * count is the only thing that says so. Both are passed through and neither is folded into the other.
  *
- * An absent block reads as "nothing recorded" (an empty summary) and never as unknown: the server
- * always sends it, and treating a missing one as unknown would put a permanent "we could not tell"
- * on a panel for a store that simply has no waste.
+ * ABSENT IS NOT ZERO, and this used to say the opposite. A missing block was read as an empty summary
+ * — three zeros and no rows — on the stated assumption that "the server always sends it". It does not:
+ * `MarginCoverageResponse` has no waste field at all on this branch, and even once it has, web and API
+ * deploy independently, so a build of this page will keep meeting responses written before the block
+ * existed. The window is permanent, not transitional. "Nobody told us" rendered as "the kitchen threw
+ * nothing away" is a measurement claimed where none was made — the same defect as a null price
+ * rendering as a real price, and the same one `readWasteEntries` thirty lines below already refuses by
+ * returning null.
+ *
+ * A present block whose figures ARE zero is a different fact and stays a zero: the server looked at the
+ * week and found no entry. Only the block's absence is withheld.
+ *
+ * NOTHING HERE COERCES. There is no `|| 0` on any field, because `longOrNull(x) || 0` turns a null into
+ * a confident figure exactly the way `Number(null)` does — a total the server withheld would print as
+ * kr 0,00 beside a non-zero entry count. A field that is not a finite number stays null and reaches the
+ * panel as the unknown mark. A non-object block (a string, a number, `false`) is unreadable rather than
+ * empty and is withheld with the absent case, for the same reason and under the same copy.
  */
 export function readWasteSummary (waste) {
-  const block = waste && typeof waste === 'object' ? waste : {};
+  if (!waste || typeof waste !== 'object') { return null; }
   return {
-    valuedMinor: longOrNull(block.valuedMinor) || 0,
-    entryCount: longOrNull(block.entryCount) || 0,
-    unvaluedEntryCount: longOrNull(block.unvaluedEntryCount) || 0,
+    valuedMinor: longOrNull(waste.valuedMinor),
+    entryCount: longOrNull(waste.entryCount),
+    unvaluedEntryCount: longOrNull(waste.unvaluedEntryCount),
     // Rendered in the server's own value-descending order; the panel never re-sorts.
-    byReason: (block.byReason || []).map(line => ({
+    byReason: (Array.isArray(waste.byReason) ? waste.byReason : []).map(line => ({
       reason: line.reason || null,
-      valuedMinor: longOrNull(line.valuedMinor) || 0,
-      entryCount: longOrNull(line.entryCount) || 0,
-      unvaluedEntryCount: longOrNull(line.unvaluedEntryCount) || 0
+      valuedMinor: longOrNull(line.valuedMinor),
+      entryCount: longOrNull(line.entryCount),
+      unvaluedEntryCount: longOrNull(line.unvaluedEntryCount)
     }))
   };
 }
