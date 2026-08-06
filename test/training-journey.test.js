@@ -7,6 +7,8 @@ import {
   zoneIsFallback,
   assignableVersions,
   recordableVersions,
+  storeVersions,
+  versionsAreUnknown,
   versionLabel,
   instantOf,
   civilDateOf,
@@ -137,45 +139,104 @@ describe('flagState — a flag is on, off, or unknown', () => {
 describe('assignable vs recordable versions — two genuinely different sets', () => {
   // One world holding all three states, so the two filters cannot both be satisfied by returning
   // everything or by returning nothing.
-  const detail = {
-    versions: [
-      { courseVersionId: 'v-draft', versionNo: 3, state: 'Draft' },
-      { courseVersionId: 'v-pub', versionNo: 2, state: 'Published' },
-      { courseVersionId: 'v-ret', versionNo: 1, state: 'Retired' }
-    ]
-  }
+  const versions = [
+    { courseVersionId: 'v-draft', versionNo: 3, state: 'Draft' },
+    { courseVersionId: 'v-pub', versionNo: 2, state: 'Published' },
+    { courseVersionId: 'v-ret', versionNo: 1, state: 'Retired' }
+  ]
 
   test('only a published version may be assigned', () => {
-    expect(assignableVersions(detail).map(v => v.courseVersionId)).toEqual(['v-pub'])
+    expect(assignableVersions(versions).map(v => v.courseVersionId)).toEqual(['v-pub'])
   })
 
   test('a completion may be recorded against a published OR a retired version', () => {
     // A venue that withdraws a course must still be able to file the completions of the people who
     // took it: what a completion needs is a frozen content hash, and retiring does not unfreeze one.
-    expect(recordableVersions(detail).map(v => v.courseVersionId)).toEqual(['v-pub', 'v-ret'])
+    expect(recordableVersions(versions).map(v => v.courseVersionId)).toEqual(['v-pub', 'v-ret'])
   })
 
   test('THE DISTINCTION, varied: the retired version is in exactly one of the two sets', () => {
-    const assignable = assignableVersions(detail).map(v => v.courseVersionId)
-    const recordable = recordableVersions(detail).map(v => v.courseVersionId)
+    const assignable = assignableVersions(versions).map(v => v.courseVersionId)
+    const recordable = recordableVersions(versions).map(v => v.courseVersionId)
     expect(recordable).toContain('v-ret')
     expect(assignable).not.toContain('v-ret')
     expect(assignable).not.toEqual(recordable)
   })
 
   test('neither offers a draft, whose only outcome would be a 400', () => {
-    expect(assignableVersions(detail).map(v => v.state)).not.toContain('Draft')
-    expect(recordableVersions(detail).map(v => v.state)).not.toContain('Draft')
+    expect(assignableVersions(versions).map(v => v.state)).not.toContain('Draft')
+    expect(recordableVersions(versions).map(v => v.state)).not.toContain('Draft')
   })
 
-  test('an unread course offers nothing rather than throwing', () => {
+  test('nothing to filter offers nothing rather than throwing', () => {
     expect(assignableVersions(null)).toEqual([])
-    expect(recordableVersions({})).toEqual([])
+    expect(recordableVersions(undefined)).toEqual([])
   })
 
   test('the picker label carries the state, because that is what separates the two sets', () => {
     expect(versionLabel({ versionNo: 2, state: 'Published' })).toBe('v2 · Published')
     expect(versionLabel(null)).toBeNull()
+  })
+
+  test('a label names its course when the entry carries one, so a store-wide picker is readable', () => {
+    // Five entries all reading `v1 · Published` name nothing. The prefix is conditional, so a picker
+    // built from ONE course's detail does not repeat that course's title on every option.
+    expect(versionLabel({ courseTitle: 'Brannvern', versionNo: 1, state: 'Published' })).toBe('Brannvern · v1 · Published')
+  })
+})
+
+describe('storeVersions — what the STORE holds, which is not what the selection holds', () => {
+  const listing = state => ({
+    state,
+    rows: [
+      {
+        courseId: 'c-1',
+        title: 'Ansvarlig alkoholservering',
+        versions: [
+          { courseVersionId: 'v-1b', versionNo: 2, state: 'Draft', passThresholdPercent: 80 },
+          { courseVersionId: 'v-1a', versionNo: 1, state: 'Published', passThresholdPercent: 80 }
+        ]
+      },
+      {
+        courseId: 'c-2',
+        title: 'Næringsmiddelhygiene',
+        versions: [{ courseVersionId: 'v-2a', versionNo: 1, state: 'Retired', passThresholdPercent: 70 }]
+      },
+      { courseId: 'c-3', title: 'Brannvern', versions: [] }
+    ]
+  })
+
+  test('every version of every course, each carrying the course that owns it', () => {
+    const all = storeVersions(listing('answered'))
+    expect(all.map(v => v.courseVersionId)).toEqual(['v-1b', 'v-1a', 'v-2a'])
+    expect(all.find(v => v.courseVersionId === 'v-2a').courseTitle).toBe('Næringsmiddelhygiene')
+    expect(all.find(v => v.courseVersionId === 'v-1a').courseId).toBe('c-1')
+    // The version's own fields survive the flattening — the completion form reads the threshold off
+    // the entry it was picked from and would otherwise name the wrong number.
+    expect(all.find(v => v.courseVersionId === 'v-2a').passThresholdPercent).toBe(70)
+  })
+
+  test('THE DEFECT: an assign picker built from this offers five where the selection offered none', () => {
+    // With no course selected the form used to be handed [] and announced that no published version
+    // existed to assign. The store's set does not move when the selection does.
+    expect(assignableVersions(storeVersions(listing('answered'))).map(v => v.courseVersionId)).toEqual(['v-1a'])
+    expect(recordableVersions(storeVersions(listing('answered'))).map(v => v.courseVersionId)).toEqual(['v-1a', 'v-2a'])
+  })
+
+  test('an unread or refused course list yields nothing AND says it is unknown, which are two claims', () => {
+    expect(storeVersions(listing('unknown'))).toEqual([])
+    expect(storeVersions(listing('refused'))).toEqual([])
+    expect(storeVersions(null)).toEqual([])
+    expect(versionsAreUnknown(listing('unknown'))).toBe(true)
+    expect(versionsAreUnknown(listing('refused'))).toBe(true)
+    expect(versionsAreUnknown(null)).toBe(true)
+    // An ANSWERED list holding no versions is a different sentence: the store really has none.
+    expect(versionsAreUnknown(listing('answered'))).toBe(false)
+    expect(versionsAreUnknown({ state: 'answered', rows: [] })).toBe(false)
+  })
+
+  test('a course whose versions the wire omitted is skipped rather than throwing', () => {
+    expect(storeVersions({ state: 'answered', rows: [{ courseId: 'c-9', title: 'Ukjent' }] })).toEqual([])
   })
 })
 

@@ -60,7 +60,10 @@
         {{ $i('trn_assign_new_title') }}
       </h3>
 
-      <p v-if="!versions.length" class="trn-note" data-test="assignment-no-published">
+      <p v-if="versionsUnknown" class="trn-note trn-note--unknown" data-test="assignment-versions-unknown">
+        {{ $i('trn_store_versions_unknown') }}
+      </p>
+      <p v-else-if="!versions.length" class="trn-note" data-test="assignment-no-published">
         {{ $i('trn_assign_no_published') }}
       </p>
       <template v-else>
@@ -139,6 +142,14 @@ import { assignmentRow, versionLabel, instantLabel, toApiDate, directoryMatch, i
  *
  * ONLY PUBLISHED VERSIONS ARE OFFERED. `assignableVersions` filters them; a draft or a retired
  * version is a 400 from the server, and a control whose only outcome is a refusal is not a control.
+ *
+ * THE SET IS THE STORE'S, AND THE NOTE BELOW IT SAYS ONLY WHAT IT KNOWS. This form has no course
+ * scope — `POST /assignments` takes a `courseVersionId` and nothing else — so it offers every
+ * published version the venue holds, each labelled with its course. It used to be handed the
+ * expanded course's versions, which meant that with nothing expanded it announced that no published
+ * version existed, to an operator looking at a catalogue full of them. An empty picker now says
+ * "publish one first" only when the course list ANSWERED and held none; when the list was refused or
+ * has not arrived, it says that instead.
  */
 export default {
   name: 'TrainingAssignmentPanel',
@@ -146,8 +157,10 @@ export default {
   props: {
     /** `readListing(payload, error, 'assignments')`. */
     listing: { type: Object, required: true },
-    /** `assignableVersions(detail)` — Published only. */
+    /** `assignableVersions(storeVersions(coursesListing))` — the STORE's Published versions, not the selection's. */
     versions: { type: Array, default: () => [] },
+    /** True when the course list could not be read, so an empty picker means unread and not empty. */
+    versionsUnknown: { type: Boolean, default: false },
     /** `personDirectory(...)` / `roleDirectory(...)` — assists, never gates. */
     peopleDirectory: { type: Object, default: () => ({ state: 'unknown', options: [] }) },
     rolesDirectory: { type: Object, default: () => ({ state: 'unknown', options: [] }) },

@@ -66,6 +66,7 @@
             <TrainingAssignmentPanel
               :listing="assignmentsListing"
               :versions="assignable"
+              :versions-unknown="versionsUnknown"
               :people-directory="peopleDirectory"
               :roles-directory="rolesDirectory"
               :locale="locale"
@@ -78,6 +79,7 @@
             <TrainingCompletionPanel
               :listing="completionsListing"
               :versions="recordable"
+              :versions-unknown="versionsUnknown"
               :people-directory="peopleDirectory"
               :locale="locale"
               :zone-id="zoneId"
@@ -153,6 +155,8 @@ import {
   zoneIsFallback,
   assignableVersions,
   recordableVersions,
+  storeVersions,
+  versionsAreUnknown,
   personDirectory,
   roleDirectory
 } from '~/utils/training/journey';
@@ -325,8 +329,20 @@ export default {
       if (!this.holdingsAsked) { return { state: 'idle' }; }
       return readHoldings(this.holdingsPayload, this.holdingsError);
     },
-    assignable () { return assignableVersions(this.detailView.state === 'answered' ? this.detailView.course : null); },
-    recordable () { return recordableVersions(this.detailView.state === 'answered' ? this.detailView.course : null); },
+    /**
+     * What the two write forms may offer, and it is the STORE's set rather than the selection's.
+     *
+     * These derived from the expanded course alone, so an empty selection read as an empty store and
+     * both forms said so out loud — «Ingen publisert versjon å tildele» and «Ingen låst versjon å føre
+     * mot» — while store 1 carried five published versions. Neither write is course-scoped: `POST
+     * /assignments` and `POST /completions` take a `courseVersionId` and nothing else, so scoping their
+     * pickers to whatever was last clicked was never a rule the server had.
+     */
+    storeVersionSet () { return storeVersions(this.coursesListing); },
+    assignable () { return assignableVersions(this.storeVersionSet); },
+    recordable () { return recordableVersions(this.storeVersionSet); },
+    /** An unread catalogue offers nothing, which is not the same claim as a catalogue holding nothing. */
+    versionsUnknown () { return versionsAreUnknown(this.coursesListing); },
     /**
      * Which clock the instants on this page are printed in. The store zone comes from `GET /context`
      * and is never guessed; when the server said it fell back to Europe/Oslo because the store

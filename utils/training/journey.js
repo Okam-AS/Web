@@ -255,15 +255,60 @@ export function zoneIsFallback (context) {
 // ---- versions ----------------------------------------------------------------------------------
 
 /**
- * The versions of a read course that may be ASSIGNED: `Published` only.
+ * EVERY version the STORE holds, flattened out of the course list and carrying the course that owns
+ * each one.
+ *
+ * The two forms below used to be derived from the SELECTED course, and a form asserting a fact about
+ * the store from a fact about the selection is a form that lies for free: with nothing selected,
+ * «Ny tildeling» read «Ingen publisert versjon å tildele. Publiser en versjon først» against a store
+ * holding five published versions, at the exact moment somebody was trying to assign one.
+ *
+ * The set is the whole store's because the two write forms are: they sit under store-wide tables and
+ * neither route is scoped to a course. So the selection in the left column is a browsing act, and
+ * this stays the same set regardless of it.
+ *
+ * `courseTitle` rides along because the flattened set is otherwise unreadable — five entries all
+ * saying `v1 · Published` name nothing. It is the LIST's title (what the catalogue is called now),
+ * which is right for a picker: the operator is choosing what to assign today. A completion ROW's
+ * title is a different question and the server answers that one, off the version it is stamped to.
+ */
+export function storeVersions (coursesListing) {
+  if (!coursesListing || coursesListing.state !== READ_ANSWERED || !Array.isArray(coursesListing.rows)) { return []; }
+  const versions = [];
+  for (const course of coursesListing.rows) {
+    if (!course || !Array.isArray(course.versions)) { continue; }
+    for (const version of course.versions) {
+      if (!version || !version.courseVersionId) { continue; }
+      versions.push(Object.assign({}, version, {
+        courseId: course.courseId || null,
+        courseTitle: course.title || null
+      }));
+    }
+  }
+  return versions;
+}
+
+/**
+ * Whether the version set above is EMPTY or merely UNREAD, which are not the same sentence.
+ *
+ * A refused or unanswered course list leaves the picker with nothing to offer, and the honest note
+ * for that is "we could not read the catalogue" — never "publish a version first", which is an
+ * instruction the operator may already have carried out.
+ */
+export function versionsAreUnknown (coursesListing) {
+  return !coursesListing || coursesListing.state !== READ_ANSWERED;
+}
+
+/**
+ * The versions that may be ASSIGNED: `Published` only.
  *
  * `TrainingAssignmentService.CreateAssignmentAsync` refuses anything else with a 400
  * ("Only a published course version can be assigned."), and a Retired version is refused too — that
  * is what retiring a version means. Offering a draft or a retired version in an assign picker would
  * be offering a control whose only outcome is a refusal.
  */
-export function assignableVersions (detail) {
-  return versionsOf(detail).filter(v => v.state === 'Published');
+export function assignableVersions (versions) {
+  return versionsOf(versions).filter(v => v.state === 'Published');
 }
 
 /**
@@ -276,19 +321,24 @@ export function assignableVersions (detail) {
  * A venue that retires a course still has to be able to file the completions of the people who took
  * it before it was withdrawn.
  */
-export function recordableVersions (detail) {
-  return versionsOf(detail).filter(v => v.state === 'Published' || v.state === 'Retired');
+export function recordableVersions (versions) {
+  return versionsOf(versions).filter(v => v.state === 'Published' || v.state === 'Retired');
 }
 
-function versionsOf (detail) {
-  return (detail && Array.isArray(detail.versions)) ? detail.versions : [];
+function versionsOf (versions) {
+  return Array.isArray(versions) ? versions : [];
 }
 
-/** A version picker label: `v3 · Published` — state included because the two sets above differ by it. */
+/**
+ * A version picker label: `v3 · Published`, prefixed with the course when the entry names one.
+ *
+ * The prefix is conditional rather than always-on because the same label serves a picker built from
+ * ONE course's detail, where repeating that course's title on every option says nothing.
+ */
 export function versionLabel (version) {
   if (!version) { return null; }
   const no = typeof version.versionNo === 'number' ? 'v' + version.versionNo : null;
-  return [no, version.state].filter(Boolean).join(' · ') || null;
+  return [version.courseTitle || null, no, version.state].filter(Boolean).join(' · ') || null;
 }
 
 // ---- time --------------------------------------------------------------------------------------

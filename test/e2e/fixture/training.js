@@ -164,6 +164,27 @@ function versionsOf (course) {
   }));
 }
 
+/**
+ * The version summaries the course LIST carries, newest number first.
+ *
+ * `TrainingCourseService.ListCoursesAsync` projects these off the same rows it counts, and no
+ * content: the list is read for the whole catalogue and a picker does not need the pages somebody
+ * was tested against. A list without them forces a caller to fetch endpoint 3 once per course before
+ * it can offer anything, which is why the admin surface could only ever offer the expanded course's
+ * versions — and said the store had none whenever nothing was expanded.
+ */
+function versionSummariesOf (course) {
+  return course.versions
+    .slice()
+    .sort((a, b) => b.versionNo - a.versionNo)
+    .map(v => ({
+      courseVersionId: v.courseVersionId,
+      versionNo: v.versionNo,
+      state: v.state,
+      passThresholdPercent: v.passThresholdPercent
+    }));
+}
+
 function courseRow (course) {
   return {
     courseId: course.courseId,
@@ -173,6 +194,7 @@ function courseRow (course) {
     isActive: true,
     versionCount: course.versions.length,
     hasPublishedVersion: course.versions.some(v => v.state === 'Published'),
+    versions: versionSummariesOf(course),
     createdAtUtc: course.createdAtUtc
   };
 }
