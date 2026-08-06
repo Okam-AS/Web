@@ -120,19 +120,50 @@ export default {
     openLogin () {
       this.showLogin = true;
     },
+    // A `redirect` target is a PAGE, so it is compared against the page the visitor is on —
+    // `$route.path`. It used to be compared against `$route.fullPath`, which is the path AND the
+    // query, and the query is where the redirect target itself is written. On `/admin/ongoing?
+    // redirect=/admin/ongoing` the two strings therefore never matched, and the shell answered a
+    // sign-in performed ON the ongoing board by `replace`ing to the board the visitor was already
+    // looking at.
+    //
+    // That is not a navigation. vue-router reuses the component for a same-path route change, so
+    // `mounted` does not run a second time; the URL shed its query and nothing else happened. The
+    // page's own recovery — the poll, the clock, the fullscreen listener — is hung off
+    // `login-success`, and `login-success` was in the branch that was never taken. Measured on this
+    // build before the change: `/orders/ongoing` calls after the sign-in = 0, board frozen, sign-in
+    // still on screen (lanes/.../arm-A0-selfredirect-stock/verdict.json).
+    //
+    // The `replace` branch is still right when the target is a DIFFERENT page: that navigation
+    // mounts the target, whose `mounted` is its own starter. Only the same-page case was wrong.
     closeLoginModal(isLoggedIn) {
       this.showLogin = !isLoggedIn;
       if (isLoggedIn) {
-        // Check if there's a redirect parameter in the URL
-        const redirectPath = this.$route.query.redirect;
-        if (redirectPath && redirectPath !== this.$route.fullPath) {
-          // Navigate to the redirect path and remove the redirect query parameter
-          this.$router.replace(redirectPath);
+        const redirectTarget = this.redirectTargetPath();
+        if (redirectTarget && redirectTarget !== this.$route.path) {
+          // A different page: navigate to it exactly as asked, query and all, and shed the
+          // `redirect` parameter by leaving this URL behind. Unchanged behaviour.
+          this.$router.replace(this.rawRedirect());
         } else {
-          // Emit event to notify parent page to reload data
+          // Already on the page the visitor asked for — tell it a session arrived, because nothing
+          // else will. A page with no `@login-success` binding hears nothing and stays as it was.
           this.$emit('login-success');
         }
       }
+    },
+    // The path half of the `redirect` query. A redirect target may legitimately carry a query of its
+    // own (`/admin/ongoing?storeId=1` — the store selector writes exactly that), and comparing the
+    // whole string to `$route.path` would call that a different page and start the same silent
+    // `replace` over again. vue-router hands back an array when a key is repeated, so the first
+    // value is taken rather than stringifying `[a,b]` into a path that matches nothing.
+    redirectTargetPath () {
+      const value = this.rawRedirect();
+      return value ? value.split('#')[0].split('?')[0] : null;
+    },
+    rawRedirect () {
+      const raw = this.$route.query.redirect;
+      const value = Array.isArray(raw) ? raw[0] : raw;
+      return typeof value === 'string' && value ? value : null;
     },
   },
 };
