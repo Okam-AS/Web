@@ -68,11 +68,15 @@ export default {
     toggleLogoutButton() {
       this.showLogoutButton = !this.showLogoutButton;
     },
+    // The sidebar's rule, for the same reason: clear the session and let `AdminPage` decide where a
+    // signed-out operator lands.
+    //
+    // This button cannot be reached today — the footer renders only when `!userIsLoggedIn` and the
+    // button only when `userIsLoggedIn` — but it carried the identical `window.location.href = "/"`
+    // defect, and a second copy left in place is how this one comes back.
     logout() {
+      this.showLogoutButton = false;
       this._userService.Logout();
-      if (window && window.location) {
-        window.location.href = "/";
-      }
     },
   },
 };

@@ -759,11 +759,16 @@ export default {
       this.drawerOpen = false;
     },
 
+    // Clearing the session is the whole of this action. WHERE a signed-out operator lands is
+    // `AdminPage`'s to decide — it watches `userIsLoggedIn` and puts the sign-in in front of them.
+    //
+    // This was `window.location.href = '/'`: a full reload out of the SPA onto the CONSUMER
+    // storefront, a customer landing page that offers no route back to `/admin`. `Logout()` itself
+    // dispatches `ClearState`, and the store subscriber in `plugins/global-mixin` writes that to
+    // localStorage on the same tick, so the reload was carrying no part of the teardown.
     logout () {
+      this.showLogoutConfirm = false;
       this._userService.Logout();
-      if (window && window.location) {
-        window.location.href = '/';
-      }
     },
 
     getQueryStoreId (query = this.$route.query) {

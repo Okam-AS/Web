@@ -31,6 +31,13 @@ import AdminPageFooter from "~/components/organisms/AdminPageFooter.vue";
 import OnboardingNotification from "~/components/organisms/OnboardingNotification.vue";
 import LoginModal from "~/components/molecules/LoginModal.vue";
 
+// Where a signed-out admin lands. Deliberately the BARE path and not `/admin?redirect=…`:
+// `closeLoginModal` answers a redirect query with `$router.replace` and therefore never emits
+// `login-success`, which is the whole of F-IN-PAGE-SIGN-IN-IS-DEAD-END-TO-END. The bare path takes
+// the emitting branch, and `pages/admin/index.vue` is listening for it — it is also the one admin
+// page that mounts no LoginModal of its own, so nothing stacks on top of the shell's.
+const SIGN_IN_PATH = "/admin";
+
 export default {
   components: {
     AdminPageHeader,
@@ -76,6 +83,32 @@ export default {
     },
     userIsLoggedIn() {
       return this.$store.getters.userIsLoggedIn;
+    },
+  },
+  // Signing out is a STATE change, not a navigation, and this shell is the one place that already
+  // knows what an unauthenticated admin visitor is supposed to see. The sidebar and the footer each
+  // answered it themselves with `window.location.href = '/'` — the CONSUMER storefront, which links
+  // nowhere back into the admin and leaves an operator on a till with no way to sign in again.
+  //
+  // Watching the session rather than being called by the button means every way the session can end
+  // lands in the same place: the sidebar's confirm dialog, the footer's dropdown, and the genuine
+  // 401 that makes `AdminUserService` dispatch `ClearState` mid-navigation.
+  watch: {
+    userIsLoggedIn(isLoggedIn, wasLoggedIn) {
+      if (isLoggedIn || !wasLoggedIn) {
+        return;
+      }
+      this.showLogin = true;
+      if (this.$route && this.$route.path !== SIGN_IN_PATH) {
+        // Not `push`: a history entry pointing back at a page the visitor can no longer read is a
+        // trip through the redirect form this sign-in path exists to avoid.
+        const navigation = this.$router.replace(SIGN_IN_PATH);
+        // vue-router 3.1+ rejects a redundant navigation. The guard above makes that unlikely
+        // rather than impossible, and an unhandled rejection here would be the only thing on screen.
+        if (navigation && typeof navigation.catch === "function") {
+          navigation.catch(() => {});
+        }
+      }
     },
   },
   mounted() {
