@@ -98,6 +98,35 @@ function localToUtc (zone, localStamp) {
 
 const nowUtc = () => new Date().toISOString().slice(0, 19) + 'Z';
 
+/**
+ * The MANAGER'S view of an invitation — the element of the #6b list and the outcome of a #6c revoke.
+ *
+ * IT CARRIES NO TOKEN AND NO TOKEN HASH, at any level. The raw token was answerable exactly once, on
+ * the issue response; the manager surface exists so somebody can know THAT a code is outstanding and
+ * to WHOM it went, never what it is. Everything this returns is built field by field from the stored
+ * row for that reason — spreading the row would put the fixture one added property away from
+ * shipping a credential, and `state.invitations` is keyed by the raw token itself.
+ *
+ * `state` AND `isLive` ARE DIFFERENT CLAIMS AND BOTH ARE ON THE WIRE. `state` is what the row says,
+ * and here it is always `Pending` — the real module writes `Expired` from no code path at all.
+ * `isLive` is whether the code can still be redeemed right now, decided by the SAME `Date.parse`
+ * comparison the claim handler makes against the same field, so a code this reports as live is one
+ * the claim endpoint would still admit. Nothing else may compute liveness.
+ */
+function invitationSummary (invitation, nowMs) {
+  const staff = world.STAFF.find(s => s.staffMemberId === invitation.staffMemberId) || null;
+  return {
+    invitationId: invitation.invitationId,
+    storeId: invitation.storeId,
+    staffMemberId: invitation.staffMemberId,
+    displayName: staff ? staff.displayName : null,
+    state: invitation.state,
+    isLive: invitation.state === 'Pending' && Date.parse(invitation.expiresAtUtc) > nowMs,
+    expiresAtUtc: invitation.expiresAtUtc,
+    createdAtUtc: invitation.createdAtUtc
+  };
+}
+
 // ---- mutable state -----------------------------------------------------------------------------
 
 function freshState () {
@@ -144,12 +173,40 @@ function freshState () {
     // token because that is the only handle a claimant has. The real service stores a SHA-256 hash
     // and compares in constant time; hashing here would prove nothing about the CLIENT, which never
     // sees the hash — what must be enforced is the shape of the contract, not the cryptography.
-    invitations: {},
+    // SEEDED WITH ONE LAPSED CODE, because the difference between the stored state and liveness is
+    // the property the roster's list is most likely to get wrong and a fixture that could not
+    // produce the case would let that regression through.
+    //
+    // `WorkforceInvitationState.Expired` is written by NO code path in the real module: expiry is
+    // decided at read time by comparing `expiresAtUtc`, so a code that lapsed a month ago still sits
+    // at `Pending` in its row. This one does exactly that — `Pending`, expired thirty days ago —
+    // so the list read must answer `state: 'Pending'` and `isLive: false` for it, and any client
+    // that rendered the stored state would show a dead code as outstanding.
+    //
+    // It belongs to `staff-2` (Kari Hansen) rather than to `staff-3`, whose panel the onboarding
+    // journey inspects: that journey asserts the list is EMPTY for its subject before issuing, and a
+    // seed on her row would have it asserting the seed.
+    invitations: {
+      wfinv_seeded_lapsed_kari: {
+        invitationId: 'inv-seeded-lapsed',
+        storeId: Number(world.STORE_ID),
+        staffMemberId: 'staff-2',
+        state: 'Pending',
+        // Relative to the run, never a literal: a hard-coded date is a code that is lapsed today and
+        // silently still live on a machine whose clock disagrees, or on a suite run in the past.
+        expiresAtUtc: new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 19),
+        createdAtUtc: new Date(Date.now() - 44 * 86400000).toISOString().slice(0, 19)
+      }
+    },
     // One PENDING invitation per engagement, mirroring the filtered unique index: a reissue
     // supersedes in place and the previous raw token dies immediately. Without this the fixture
     // would accept an old token after a reissue and the page's "the previous code stops working"
     // sentence would be untested prose.
-    pendingByStaff: {},
+    //
+    // The lapsed seed occupies the slot for `staff-2`, so reissuing for her supersedes it — which is
+    // the real service's behaviour: the filtered unique index does not care that the row is expired,
+    // only that it is Pending.
+    pendingByStaff: { 'staff-2': 'wfinv_seeded_lapsed_kari' },
     // `userId -> [staffMemberId]`. The claim's whole effect. Seeded so the OTHER journeys keep the
     // world they were written against, and so the onboarding journey's account starts with nothing.
     claims: { 'user-worker': ['staff-1'] },
@@ -1457,6 +1514,81 @@ async function route (req, res, url) {
         expiresAtUtc: invitation.expiresAtUtc,
         createdAtUtc: invitation.createdAtUtc
       });
+    }
+
+    // #6b. What is still outstanding in this store, and to whom.
+    //
+    // PENDING ROWS ONLY, mirroring the service: Claimed and Revoked rows are spent, and listing them
+    // would turn "what is outstanding" into a directory of who has and has not signed in yet.
+    //
+    // `isLive` IS COMPUTED WITH THE SAME EXPRESSION THE CLAIM PATH USES (see the claim handler
+    // above), and that identity is the point rather than a coincidence: if the two ever diverged the
+    // fixture could report a code as live that its own claim endpoint would refuse, and a UI built
+    // against it would ship that lie. The stored `state` rides along unchanged so a client that
+    // wrongly rendered IT instead of `isLive` fails visibly here.
+    //
+    // NO TOKEN AND NO TOKEN HASH LEAVE THIS HANDLER. `state.invitations` is keyed BY the raw token,
+    // so the iteration deliberately maps the values and never the keys — the one line where a
+    // careless `Object.entries` would put a live credential on the wire.
+    if (rest === '/invitations' && req.method === 'GET') {
+      const nowMs = Date.now();
+      const outstanding = Object.keys(state.invitations)
+        .map(token => state.invitations[token])
+        .filter(i => i.storeId === Number(storeId) && i.state === 'Pending')
+        .sort((a, b) => String(a.expiresAtUtc).localeCompare(String(b.expiresAtUtc)) ||
+          String(a.invitationId).localeCompare(String(b.invitationId)))
+        .map(i => invitationSummary(i, nowMs));
+      return send(res, 200, outstanding);
+    }
+
+    // #6c. Withdraw one.
+    //
+    // The row is NOT deleted — it transitions to `Revoked` and stays as the record of what was
+    // withdrawn, which is why the claim path then refuses the handed-out token: it admits `Pending`
+    // and nothing else. That refusal is the SAME opaque 404 a fabricated token gets, and it stays
+    // that way because nothing here adds a revoked branch to the claim handler.
+    const revokeInvitation = /^\/invitations\/([^/]+)\/revoke$/.exec(rest);
+    if (revokeInvitation && req.method === 'POST') {
+      const invitationId = revokeInvitation[1];
+      const token = Object.keys(state.invitations).find(t =>
+        state.invitations[t].invitationId === invitationId &&
+        state.invitations[t].storeId === Number(storeId));
+
+      // An invitation in another store is indistinguishable from one that does not exist: the ROUTE
+      // store is authoritative, so the refusal cannot be used to probe for rows the caller may not
+      // see.
+      if (!token) {
+        return problem(res, 404, 'workforce.not-found', 'The requested workforce resource was not found.');
+      }
+
+      const invitation = state.invitations[token];
+
+      // Already withdrawn under a FRESH key: success with the same summary. A manager who clicks
+      // twice must not be told their withdrawal failed.
+      if (invitation.state === 'Revoked') {
+        return send(res, 200, invitationSummary(invitation, Date.now()));
+      }
+
+      // THE REFUSAL THAT MATTERS. Withdrawing an ALREADY-CLAIMED code cannot undo the access it
+      // granted, and the manager is almost always withdrawing because it went to the wrong person —
+      // so a 200 here would say "safe" at the exact moment they are not.
+      if (invitation.state !== 'Pending') {
+        return problem(res, 409, 'workforce.invitation-not-revocable',
+          'This invitation has already been claimed; withdrawing it cannot undo the access it granted.', {
+            conflictKind: 'invitation-not-revocable',
+            retryable: false
+          });
+      }
+
+      // NOT MODELLED, deliberately: `workforce.invitation-revoke-conflict`. It is the lost-update
+      // refusal of a real DB-generated rowversion, so it is a SQL Server answer — the backend's own
+      // note says the fast tier cannot reach it either. A fixture that invented it would be claiming
+      // a race this process cannot have.
+      invitation.state = 'Revoked';
+      if (state.pendingByStaff[invitation.staffMemberId] === token) {
+        delete state.pendingByStaff[invitation.staffMemberId];
+      }
+      return send(res, 200, invitationSummary(invitation, Date.now()));
     }
 
     // ---- Endpoints 8 and 9: the store's job-role catalogue -----------------------------------

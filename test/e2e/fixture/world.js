@@ -178,9 +178,11 @@ const USERS = {
 };
 
 // `personState` is what the roster surfaces as "has a login attached": `Invited` means no
-// ApplicationUser has claimed this engagement's person, `Claimed` means one has. It is the ONLY
-// durable signal the invitation flow has (there is no invitation list endpoint), so a fixture that
-// omitted it would let the access panel render its unknown state and prove nothing. The values here
+// ApplicationUser has claimed this engagement's person, `Claimed` means one has. It was once the
+// only durable signal the invitation flow had; since endpoint 6b it answers alongside the
+// outstanding-code list, and the two are DIFFERENT questions — whether a login is attached, versus
+// whether a code is still redeemable. Neither substitutes for the other, and a fixture that omitted
+// this one would let the access panel render its unknown state and prove nothing. The values here
 // are only the STARTING POINT — `api-server.js` derives what it answers from the claims it has
 // actually recorded, so the roster flips because a claim happened.
 //

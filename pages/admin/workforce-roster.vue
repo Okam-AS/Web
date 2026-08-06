@@ -80,6 +80,7 @@
             :terms="terms"
             :effects="effects"
             :invitation="invitation"
+            :invitations="invitations"
             :can-manage="canManage && canPatch"
             :can-invite="canManage"
             :has-payroll-approver="hasPayrollApprover"
@@ -96,6 +97,7 @@
             @end="endEngagement"
             @reactivate="reactivate"
             @issue-invitation="issueInvitation"
+            @revoke-invitation="revokeInvitation"
             @dismiss-invitation="invitation = null"
           />
         </div>
@@ -178,6 +180,14 @@ export default {
       // not restored on reload. Cleared on every selection change (see `clearSelection`), so one
       // person's code can never be on screen under another person's name.
       invitation: null,
+      // The store's OUTSTANDING invitations (`GET /workforce/stores/{storeId}/invitations`), or null
+      // while unknown. Store-scoped rather than per-engagement because that is the route's shape and
+      // because "which codes are still out there" is a store-wide question; the panel narrows it.
+      //
+      // It carries NO token and no token hash — unlike `invitation` above, this is safe to re-read,
+      // and it is re-read after every issue and every revoke so the list on screen is never a
+      // description of a world one press old.
+      invitations: null,
       conflict: null,
       asOf: new Date(),
       toast: { show: false, message: '', type: 'success' },
@@ -227,6 +237,8 @@ export default {
       case 'workforce.engagement-conflict': return this.$i('wfr_conflict_same_store_title');
       case 'workforce.stale-revision': return this.$i('wfr_conflict_stale_title');
       case 'workforce.invitation-issue-conflict': return this.$i('wfr_conflict_invitation_title');
+      case 'workforce.invitation-not-revocable': return this.$i('wfr_conflict_revoke_claimed_title');
+      case 'workforce.invitation-revoke-conflict': return this.$i('wfr_conflict_revoke_stale_title');
       default: return this.$i('wfr_conflict_generic_title');
       }
     },
@@ -241,6 +253,15 @@ export default {
       // Retryable, and the retry is simply pressing the button again: `_mutate` mints a fresh
       // `Idempotency-Key` per call, which is exactly what this refusal demands.
       case 'workforce.invitation-issue-conflict': return this.$i('wfr_conflict_invitation');
+      // THE ONE REFUSAL A QUIET SUCCESS WOULD MAKE DANGEROUS. A manager withdraws because the code
+      // went to the wrong person; if that person has already signed in, a 200 would tell them they
+      // are safe at the exact moment they are not. Surfaced in full, and it names the thing that
+      // DOES remove access — ending the engagement — because withdrawal cannot undo a link.
+      case 'workforce.invitation-not-revocable': return this.$i('wfr_conflict_revoke_claimed');
+      // Retryable on the wire, but a blind retry is the wrong instruction: the manager decided
+      // against a state that no longer holds, so they are sent back to the list rather than to the
+      // button. The list behind them has already been re-read by the handler.
+      case 'workforce.invitation-revoke-conflict': return this.$i('wfr_conflict_revoke_stale');
       default: return this.conflict.message;
       }
     }
@@ -287,12 +308,16 @@ export default {
       // claiming this store has no staff.
       this.staff = null;
       this.roleCatalogue = null;
+      this.invitations = null;
 
       const [staff, roles] = await Promise.all([
         this._workforceRosterService.ListStaff(this.storeId).catch((e) => { this.notifyError(e); return null; }),
         // The job-role catalogue is a separate read with the same capability. A failure leaves the
         // role list unknown; the panel then says so rather than showing a shorter one.
-        this._workforceRosterService.ListRoles(this.storeId).catch(() => null)
+        this._workforceRosterService.ListRoles(this.storeId).catch(() => null),
+        // Outstanding invitations, read ONCE for the whole store rather than per engagement: the
+        // route is store-scoped, and one read then serves every row the manager clicks through.
+        this.loadInvitations()
       ]);
 
       this.staff = Array.isArray(staff) ? staff : null;
@@ -400,9 +425,80 @@ export default {
           request && request.expiresInHours ? { expiresInHours: request.expiresInHours } : {}
         );
         this.notify(this.$i('wfr_invitation_issued'));
+        // Re-read the outstanding list so the code just minted is in it, and so the one it
+        // superseded is not. This is safe where a roster re-read is not: the list carries no token,
+        // so refreshing it cannot destroy the one thing on this page that is unrecoverable.
+        await this.loadInvitations();
       } catch (e) {
         this.handleMutationError(e);
       } finally {
+        this.busy = false;
+      }
+    },
+
+    /**
+     * Re-read the store's outstanding invitations.
+     *
+     * A FAILURE LEAVES THE LIST UNKNOWN (null), NEVER EMPTY. "No code is outstanding" is the one
+     * answer a manager acts on — it is what tells them the leaked code they are worried about is
+     * already dead — so a read that did not answer must not be able to produce it. The panel prints
+     * "we could not read this" instead, which is a different sentence and a different decision.
+     *
+     * Silent rather than a toast: this read rides along with every roster load and every invitation
+     * write, so a persistent failure would otherwise fire a notification the manager cannot act on.
+     * The unknown state is already on screen in the place it matters.
+     */
+    async loadInvitations () {
+      if (!this.storeId) { return; }
+      try {
+        const items = await this._workforceRosterService.ListInvitations(this.storeId);
+        this.invitations = Array.isArray(items) ? items : null;
+      } catch (e) {
+        this.invitations = null;
+      }
+    },
+
+    /**
+     * Withdraw an outstanding invitation.
+     *
+     * The remedy for a code that went to the wrong person, and the one that does NOT mint a
+     * replacement — a reissue also kills the previous token, but it hands out a new one, which is
+     * not what a manager wants when the answer is "nobody should have a code for this engagement".
+     *
+     * A REFUSAL IS NOT SWALLOWED. `workforce.invitation-not-revocable` means the code was already
+     * used, and it is the one 409 on this page where a quiet success would be actively dangerous:
+     * the manager is withdrawing precisely because they think the wrong person has it, and a 200
+     * would confirm safety at the moment there is none. It goes through the same conflict band as
+     * every other mutation, where the copy names ending the engagement as what actually removes
+     * access.
+     *
+     * The list is re-read on EVERY outcome, refusals included. A refusal means the row was not what
+     * the manager believed it to be, and leaving the stale entry on screen beside the explanation
+     * would have the page contradicting itself.
+     *
+     * AND ON `not-revocable` THE WHOLE ROSTER IS RE-READ, not just the list. That refusal MEANS the
+     * engagement's person state moved to `Claimed` while the list was on screen — so without this
+     * the panel sits there saying "no login is attached to this engagement yet" directly above a
+     * refusal explaining that somebody signed in with the code. Two sentences, one screen, flatly
+     * contradicting each other, in the one moment a manager is relying on the page to tell them
+     * whether the wrong person got in. Found by looking at the screenshot rather than at the
+     * selectors, which is why the journey now asserts the access line catches up.
+     */
+    async revokeInvitation (invite) {
+      if (this.busy || !invite || !invite.invitationId) { return; }
+      this.busy = true;
+      this.conflict = null;
+      let alreadyClaimed = false;
+      try {
+        await this._workforceRosterService.RevokeInvitation(this.storeId, invite.invitationId);
+        this.notify(this.$i('wfr_access_revoked_ok'));
+      } catch (e) {
+        alreadyClaimed = isWorkforceApiError(e) && e.code === 'workforce.invitation-not-revocable';
+        this.handleMutationError(e);
+      } finally {
+        // `loadRoster` re-reads the invitations as part of its own fan-out, so this is one or the
+        // other rather than both.
+        await (alreadyClaimed ? this.loadRoster() : this.loadInvitations());
         this.busy = false;
       }
     },

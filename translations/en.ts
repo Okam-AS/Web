@@ -3140,7 +3140,17 @@ export default {
   wfr_access_state_invited: 'No login is attached to this engagement yet. This person can be put on shifts but cannot sign in and see them.',
   wfr_access_state_archived: 'The person record is archived. History is kept, but the engagement grants no access.',
   wfr_access_state_unknown: 'We do not know whether a login is attached to this engagement.',
-  wfr_access_no_list: 'We cannot show whether a code is live right now, when it expires, or withdraw one — the API has no such routes. Issuing a new code kills the previous one the moment it is minted, and that is the only way to stop a code that went to the wrong person.',
+  wfr_access_list_note: 'This is read from the store\'s outstanding invitations. It never shows the code itself — the server keeps only a fingerprint of it, so no screen can show a code a second time. What it shows is that a code exists, who it went to, and whether it can still be used right now.',
+  wfr_access_live_heading: 'Outstanding codes',
+  wfr_access_live_unknown: 'We could not read the outstanding invitations, so we cannot say whether a code is out there for this person. That is not the same as there being none.',
+  wfr_access_live_none: 'No unused code is outstanding for this person.',
+  wfr_access_live_state: 'Live until {expires}.',
+  wfr_access_live_lapsed: 'Issued {created}, lapsed {expires}. It can no longer be used by anyone.',
+  wfr_access_revoke: 'Withdraw the code',
+  wfr_access_revoke_lapsed: 'Clear the lapsed code',
+  wfr_access_revoke_hint: 'Withdrawing stops the code. Whoever holds it then meets the same refusal as somebody typing a code that never existed — nothing tells them it was pulled back.',
+  wfr_access_revoke_lapsed_hint: 'This code already stopped working when it lapsed. Withdrawing it only takes it off this list.',
+  wfr_access_revoked_ok: 'The code has been withdrawn.',
   wfr_access_expires_label: 'The code lasts (days)',
   wfr_access_expires_hint: 'Between 1 and 60 days. Left blank or out of range, the server uses its own 14-day default.',
   wfr_access_issue: 'Issue an invitation code',
@@ -3162,6 +3172,13 @@ export default {
   wfr_invitation_issued: 'Invitation code issued',
   wfr_conflict_invitation_title: 'Another request holds the slot',
   wfr_conflict_invitation: 'Somebody issued a code for this person at the same moment. Try again — each press sends a new key, which is exactly what the server is asking for.',
+  // Withdrawing a code that has ALREADY been used. The manager's reason for withdrawing is almost
+  // always that it went to the wrong person, so a quiet success here would tell them they are safe at
+  // the exact moment they are not. It names the thing that DOES remove access instead.
+  wfr_conflict_revoke_claimed_title: 'The code has already been used',
+  wfr_conflict_revoke_claimed: 'Somebody signed in with this code before it was withdrawn, so withdrawing it cannot take that access away again. Nothing was changed. If the wrong person got in, end the engagement instead — that is what removes access.',
+  wfr_conflict_revoke_stale_title: 'The code changed while you were deciding',
+  wfr_conflict_revoke_stale: 'Somebody used or reissued this code between the list you read and your press, so the decision was taken against a state that no longer holds. Nothing was changed. Read the list again and decide on what it says now.',
 
   // ---------------------------------------------------------------------------------------------
   // WORKFORCE — the worker's own claim page (/workforce/join)

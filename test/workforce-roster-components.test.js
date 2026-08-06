@@ -409,13 +409,125 @@ describe('WorkforceEngagementPanel — capability is not role, and ending is not
         .toBe(translations.no.wfr_access_state_unknown)
     })
 
-    test('the panel states there is no list and no revoke BEFORE offering the button', () => {
-      // `WorkforceStaffController` binds issue and nothing else — no read of an engagement's
-      // invitations, and no revoke verb, though `WorkforceInvitationState.Revoked` exists. A manager
-      // who believes otherwise goes hunting for a button during an incident.
+    // ---- THE INVERSION -----------------------------------------------------------------------
+    //
+    // This test used to assert the OPPOSITE: that the panel says there is no list and no revoke,
+    // because `WorkforceStaffController` bound issue and nothing else. Endpoints 6b and 6c landed
+    // and that sentence became false, so the assertion is turned around rather than deleted — a
+    // test that pinned a defect is worth keeping in the form that pins the fix.
+    test('the panel no longer claims the API cannot list or revoke — in ANY locale', () => {
       const wrapper = mountPanel([summary({ personState: 'Invited' })])
       expect(wrapper.find('[data-test="access-limits"]').text())
-        .toBe(translations.no.wfr_access_no_list)
+        .toBe(translations.no.wfr_access_list_note)
+
+      // The key itself is gone, not merely reworded: `wfr_access_no_list` named an absence that is
+      // no longer real, and a key whose NAME lies is the next lane's trap.
+      for (const locale of ['no', 'en', 'de']) {
+        expect(translations[locale].wfr_access_no_list).toBeUndefined()
+      }
+
+      // And nothing anywhere in the roster dictionary still says the routes do not exist. Scoped to
+      // the whole `wfr_` namespace rather than to the one key, because the claim was in three
+      // locales and a copy edit that missed one would otherwise pass.
+      const stillClaimsAbsence = /har ingen slike ruter|has no such routes|hat daf(ü|u)r keine Routen/i
+      for (const locale of ['no', 'en', 'de']) {
+        const offenders = Object.keys(translations[locale])
+          .filter(key => key.startsWith('wfr_'))
+          .filter(key => stillClaimsAbsence.test(String(translations[locale][key])))
+        expect(offenders).toEqual([])
+      }
+    })
+
+    // ---- WHAT IS OUTSTANDING -------------------------------------------------------------------
+    //
+    // The half the panel could not answer before. Each of these is a way the surface could look
+    // right and answer the manager's question backwards.
+    describe('the outstanding-code list', () => {
+      const invite = over => Object.assign({
+        invitationId: 'inv-1',
+        storeId: 42,
+        staffMemberId: 'sm-1',
+        displayName: 'Ida Berg',
+        state: 'Pending',
+        isLive: true,
+        expiresAtUtc: '2026-08-12T10:00:00',
+        createdAtUtc: '2026-07-29T10:00:00'
+      }, over)
+
+      const panelWith = invitations => mountPanel([summary({ personState: 'Invited' })], { invitations })
+
+      test('a read that did not answer is UNKNOWN, never "nobody holds a code"', () => {
+        // The one wrong answer a manager acts on. "No code is outstanding" is what tells them the
+        // code they are worried about is already dead, so a failed read must not be able to say it.
+        expect(panelWith(null).find('[data-test="invitations-unknown"]').exists()).toBe(true)
+        expect(panelWith(null).find('[data-test="invitations-none"]').exists()).toBe(false)
+
+        expect(panelWith([]).find('[data-test="invitations-none"]').exists()).toBe(true)
+        expect(panelWith([]).find('[data-test="invitations-unknown"]').exists()).toBe(false)
+      })
+
+      // THE CENTRAL ONE. `Expired` is written by no code path in the module — expiry is a read-time
+      // comparison — so a code that lapsed a month ago is still `Pending` in its row. A panel that
+      // rendered the stored state would tell a manager a dead code is live.
+      test('a LAPSED code still stored as Pending is not shown as live', () => {
+        const wrapper = panelWith([invite({ state: 'Pending', isLive: false })])
+        expect(wrapper.find('[data-test="invitation-lapsed"]').exists()).toBe(true)
+        expect(wrapper.find('[data-test="invitation-live"]').exists()).toBe(false)
+        // And the copy commits to it rather than leaving the manager to infer it from a date.
+        expect(wrapper.text()).toContain('kan ikke brukes av noen lenger')
+      })
+
+      test('a live code is shown as live and offers a withdrawal that names the invitation', () => {
+        const wrapper = panelWith([invite()])
+        expect(wrapper.find('[data-test="invitation-live"]').exists()).toBe(true)
+        expect(wrapper.find('[data-test="revoke-invitation"]').text())
+          .toBe(translations.no.wfr_access_revoke)
+
+        wrapper.find('[data-test="revoke-invitation"]').trigger('click')
+        expect(wrapper.emitted()['revoke-invitation'][0][0].invitationId).toBe('inv-1')
+      })
+
+      // The withdrawal of a dead code is housekeeping, and saying otherwise would have the panel
+      // implying it removed a danger that had already passed.
+      test('withdrawing a lapsed code is offered under different words', () => {
+        const wrapper = panelWith([invite({ isLive: false })])
+        expect(wrapper.find('[data-test="revoke-invitation"]').text())
+          .toBe(translations.no.wfr_access_revoke_lapsed)
+        expect(wrapper.text()).toContain(translations.no.wfr_access_revoke_lapsed_hint)
+      })
+
+      test('the read is store-wide, so only THIS engagement\'s codes are shown', () => {
+        const wrapper = panelWith([invite(), invite({ invitationId: 'inv-2', staffMemberId: 'sm-9', displayName: 'Someone Else' })])
+        expect(wrapper.findAll('[data-test="revoke-invitation"]')).toHaveLength(1)
+        expect(wrapper.text()).not.toContain('Someone Else')
+      })
+
+      test('live codes sort above lapsed ones, whatever their expiry says', () => {
+        // The server orders by expiry, which puts a long-dead code above a live one. A manager
+        // scanning for "is anything out there" needs the live one where their eye lands.
+        const wrapper = panelWith([
+          invite({ invitationId: 'old', isLive: false, expiresAtUtc: '2026-01-01T10:00:00' }),
+          invite({ invitationId: 'now', isLive: true, expiresAtUtc: '2026-08-12T10:00:00' })
+        ])
+        const kinds = wrapper.findAll('.wfr-panel__invite').wrappers.map(w => w.attributes('data-test'))
+        expect(kinds).toEqual(['invitation-live', 'invitation-lapsed'])
+      })
+
+      // C7. The read carries no token and no hash by construction, but the panel is the surface that
+      // would print one if a future response ever grew a field — so it is pinned here too.
+      test('nothing token-shaped is ever rendered, even if the response carries one', () => {
+        const wrapper = panelWith([invite({ token: 'wfinv_should_never_appear', tokenHash: 'deadbeef' })])
+        expect(wrapper.html()).not.toContain('wfinv_should_never_appear')
+        expect(wrapper.html()).not.toContain('deadbeef')
+      })
+
+      test('a read-only caller sees what is outstanding but cannot withdraw it', () => {
+        // Knowing a code is live is not the same permission as stopping it, and the panel must not
+        // hide the fact because it cannot offer the action.
+        const wrapper = mountPanel([summary({ personState: 'Invited' })], { invitations: [invite()], canInvite: false })
+        expect(wrapper.find('[data-test="invitation-live"]').exists()).toBe(true)
+        expect(wrapper.find('[data-test="revoke-invitation"]').attributes('disabled')).toBe('disabled')
+      })
     })
 
     test('issuing is offered without a revision, unlike every other write here', () => {

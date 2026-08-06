@@ -3196,7 +3196,17 @@ export default {
   wfr_access_state_invited: 'Ingen innlogging er koblet til engasjementet ennå. Personen kan settes opp på vakter, men kan ikke logge inn og se dem.',
   wfr_access_state_archived: 'Personposten er arkivert. Historikken er beholdt, men engasjementet gir ingen tilgang.',
   wfr_access_state_unknown: 'Vi vet ikke om en innlogging er koblet til dette engasjementet.',
-  wfr_access_no_list: 'Vi kan ikke vise om det finnes en aktiv kode akkurat nå, når den utløper, eller trekke den tilbake — API-et har ingen slike ruter. Lager du en ny kode, slutter den forrige å virke i samme øyeblikk. Det er den eneste måten å stoppe en kode som er sendt til feil person.',
+  wfr_access_list_note: 'Dette er lest fra butikkens utestående invitasjoner. Selve koden vises aldri — serveren lagrer bare et avtrykk av den, så ingen skjerm kan vise en kode en gang til. Det som vises, er at en kode finnes, hvem den gikk til, og om den fortsatt kan brukes akkurat nå.',
+  wfr_access_live_heading: 'Utestående koder',
+  wfr_access_live_unknown: 'Vi fikk ikke lest de utestående invitasjonene, så vi kan ikke si om det finnes en kode der ute for denne personen. Det er ikke det samme som at det ikke finnes noen.',
+  wfr_access_live_none: 'Ingen ubrukt kode er utestående for denne personen.',
+  wfr_access_live_state: 'Gyldig til {expires}.',
+  wfr_access_live_lapsed: 'Laget {created}, utløpt {expires}. Den kan ikke brukes av noen lenger.',
+  wfr_access_revoke: 'Trekk tilbake koden',
+  wfr_access_revoke_lapsed: 'Fjern den utløpte koden',
+  wfr_access_revoke_hint: 'Å trekke tilbake stopper koden. Den som har den, møter da samme avvisning som en som taster en kode som aldri har eksistert — ingenting røper at den ble trukket tilbake.',
+  wfr_access_revoke_lapsed_hint: 'Denne koden sluttet å virke da den utløp. Å trekke den tilbake fjerner den bare fra denne listen.',
+  wfr_access_revoked_ok: 'Koden er trukket tilbake.',
   wfr_access_expires_label: 'Koden varer i (dager)',
   wfr_access_expires_hint: 'Mellom 1 og 60 dager. Står feltet tomt eller utenfor, bruker serveren sin egen grense på 14 dager.',
   wfr_access_issue: 'Lag invitasjonskode',
@@ -3218,6 +3228,13 @@ export default {
   wfr_invitation_issued: 'Invitasjonskoden er laget',
   wfr_conflict_invitation_title: 'En annen forespørsel holder plassen',
   wfr_conflict_invitation: 'Noen laget en kode for denne personen i samme øyeblikk. Prøv igjen — hvert trykk sender en ny nøkkel, som er akkurat det serveren ber om.',
+  // Å trekke tilbake en kode som ALLEREDE er brukt. Grunnen til å trekke tilbake er nesten alltid at
+  // koden gikk til feil person, så en stille suksess her ville fortalt lederen at alt er trygt i
+  // akkurat det øyeblikket det ikke er det. Den navngir i stedet det som faktisk fjerner tilgangen.
+  wfr_conflict_revoke_claimed_title: 'Koden er allerede brukt',
+  wfr_conflict_revoke_claimed: 'Noen har logget inn med denne koden før den ble trukket tilbake, så å trekke den tilbake kan ikke fjerne den tilgangen igjen. Ingenting ble endret. Er det feil person som har kommet inn, må du avslutte engasjementet i stedet — det er det som fjerner tilgangen.',
+  wfr_conflict_revoke_stale_title: 'Koden endret seg mens du bestemte deg',
+  wfr_conflict_revoke_stale: 'Noen brukte eller fornyet denne koden mellom listen du leste og trykket ditt, så avgjørelsen ble tatt mot en tilstand som ikke gjelder lenger. Ingenting ble endret. Les listen på nytt og bestem ut fra det den sier nå.',
 
   // ---------------------------------------------------------------------------------------------
   // BEMANNING — den ansattes egen innløsningsside (/workforce/join)

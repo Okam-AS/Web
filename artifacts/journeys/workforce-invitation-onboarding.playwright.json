@@ -2,9 +2,9 @@
   "journey": "workforce-invitation-onboarding",
   "title": "A manager invites a new hire, who claims the code and sees their published shift",
   "status": "passed",
-  "startedAtUtc": "2026-08-04T20:53:29.805Z",
-  "finishedAtUtc": "2026-08-04T20:53:40.774Z",
-  "durationMs": 10969,
+  "startedAtUtc": "2026-08-06T18:11:05.750Z",
+  "finishedAtUtc": "2026-08-06T18:11:30.291Z",
+  "durationMs": 24541,
   "capabilities": [
     "workforce.staff.invite",
     "workforce.me.invitation-claim",
@@ -12,32 +12,32 @@
   ],
   "surface": "admin",
   "backend": "fixture",
-  "baseUrl": "http://127.0.0.1:3028",
-  "apiBaseUrl": "http://127.0.0.1:4028",
-  "commit": "e34977acebd59b223584158c33451b6f1ffd82c1",
+  "baseUrl": "http://127.0.0.1:3316",
+  "apiBaseUrl": "http://127.0.0.1:4316",
+  "commit": "698383c943db552f97e97b01a97547300ad21e4b",
   "underTest": null,
   "backendProbe": null,
   "backendBuild": {
-    "id": "fixture@e34977acebd59b223584158c33451b6f1ffd82c1+dirty",
+    "id": "fixture@698383c943db552f97e97b01a97547300ad21e4b+dirty",
     "source": "fixture:test/e2e/fixture/api-server.js",
-    "short": "e34977a-dirty",
-    "detail": "the in-repo fixture backend, not an API build (branch feature/restaurant-modules)"
+    "short": "698383c-dirty",
+    "detail": "the in-repo fixture backend, not an API build (branch lane/wf-invite-pair-fe)"
   },
-  "backendServed": 74,
-  "backendSubjectServed": 55,
+  "backendServed": 77,
+  "backendSubjectServed": 58,
   "foreignSubjectServed": 0,
   "foreignSubjectSample": [],
   "proxiedSubjectServed": 0,
   "proxiedSubjectSample": [],
   "backendSample": [
-    "POST http://127.0.0.1:4028/user/sendverificationtoken -> 200",
-    "POST http://127.0.0.1:4028/user/login -> 200",
-    "GET http://127.0.0.1:4028/user -> 200",
-    "GET http://127.0.0.1:4028/stores/42/market -> 200",
-    "GET http://127.0.0.1:4028/user -> 200",
-    "GET http://127.0.0.1:4028/workforce/stores/42/context -> 200",
-    "GET http://127.0.0.1:4028/stores/42 -> 200",
-    "GET http://127.0.0.1:4028/stores/42/specialopeninghours -> 200"
+    "POST http://127.0.0.1:4316/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:4316/user/login -> 200",
+    "GET http://127.0.0.1:4316/user -> 200",
+    "GET http://127.0.0.1:4316/stores/42/market -> 200",
+    "GET http://127.0.0.1:4316/user -> 200",
+    "GET http://127.0.0.1:4316/workforce/stores/42/context -> 200",
+    "GET http://127.0.0.1:4316/stores/42 -> 200",
+    "GET http://127.0.0.1:4316/stores/42/specialopeninghours -> 200"
   ],
   "browser": "chromium",
   "steps": [
@@ -45,8 +45,8 @@
       "n": 1,
       "name": "sign in as the manager on the roster",
       "status": "passed",
-      "startedAtUtc": "2026-08-04T20:53:29.807Z",
-      "durationMs": 2622,
+      "startedAtUtc": "2026-08-06T18:11:05.751Z",
+      "durationMs": 17426,
       "detail": "landed on /admin/workforce-roster",
       "error": null
     },
@@ -54,26 +54,26 @@
       "n": 2,
       "name": "the new hire is on the roster and has no login",
       "status": "passed",
-      "startedAtUtc": "2026-08-04T20:53:32.429Z",
-      "durationMs": 47,
+      "startedAtUtc": "2026-08-06T18:11:23.177Z",
+      "durationMs": 44,
       "detail": "Ingen innlogging er koblet til engasjementet ennå. Personen kan settes opp på vakter, men kan ikke logge inn og se dem.",
       "error": null
     },
     {
       "n": 3,
-      "name": "the panel says what it cannot do before it offers the button",
+      "name": "the panel no longer claims it cannot list or revoke",
       "status": "passed",
-      "startedAtUtc": "2026-08-04T20:53:32.476Z",
-      "durationMs": 6,
-      "detail": "Vi kan ikke vise om det finnes en aktiv kode akkurat nå, når den utløper, eller trekke den tilbake — API-et har ingen sl…",
+      "startedAtUtc": "2026-08-06T18:11:23.221Z",
+      "durationMs": 11,
+      "detail": "no absence claimed; the list reads EMPTY for an uninvited hire",
       "error": null
     },
     {
       "n": 4,
       "name": "issue the invitation code",
       "status": "passed",
-      "startedAtUtc": "2026-08-04T20:53:32.565Z",
-      "durationMs": 42,
+      "startedAtUtc": "2026-08-06T18:11:23.316Z",
+      "durationMs": 43,
       "detail": "code issued, 20 characters, shown once",
       "error": null
     },
@@ -81,8 +81,8 @@
       "n": 5,
       "name": "the handover names the address and admits nothing was sent",
       "status": "passed",
-      "startedAtUtc": "2026-08-04T20:53:32.607Z",
-      "durationMs": 7,
+      "startedAtUtc": "2026-08-06T18:11:23.359Z",
+      "durationMs": 10,
       "detail": "no delivery channel, /workforce/join named, once-only stated",
       "error": null
     },
@@ -90,8 +90,8 @@
       "n": 6,
       "name": "turn the schedule publication switch on for this store",
       "status": "passed",
-      "startedAtUtc": "2026-08-04T20:53:32.699Z",
-      "durationMs": 787,
+      "startedAtUtc": "2026-08-06T18:11:23.458Z",
+      "durationMs": 721,
       "detail": "workforce.publication on for this store",
       "error": null
     },
@@ -99,8 +99,8 @@
       "n": 7,
       "name": "build and publish a week containing the new hire's shift",
       "status": "passed",
-      "startedAtUtc": "2026-08-04T20:53:33.486Z",
-      "durationMs": 1064,
+      "startedAtUtc": "2026-08-06T18:11:24.179Z",
+      "durationMs": 863,
       "detail": "Publisert til 1 mottakere.",
       "error": null
     },
@@ -108,8 +108,8 @@
       "n": 8,
       "name": "a fragment-carried code never reaches the address bar",
       "status": "passed",
-      "startedAtUtc": "2026-08-04T20:53:34.550Z",
-      "durationMs": 1855,
+      "startedAtUtc": "2026-08-06T18:11:25.042Z",
+      "durationMs": 1325,
       "detail": "hash scrubbed, path /workforce/join, history length 6",
       "error": null
     },
@@ -117,8 +117,8 @@
       "n": 9,
       "name": "paste the real code BEFORE signing in",
       "status": "passed",
-      "startedAtUtc": "2026-08-04T20:53:36.405Z",
-      "durationMs": 793,
+      "startedAtUtc": "2026-08-06T18:11:26.367Z",
+      "durationMs": 716,
       "detail": "code accepted, page asks for a sign-in",
       "error": null
     },
@@ -126,7 +126,7 @@
       "n": 10,
       "name": "sign in as the new hire, in place",
       "status": "passed",
-      "startedAtUtc": "2026-08-04T20:53:37.213Z",
+      "startedAtUtc": "2026-08-06T18:11:27.096Z",
       "durationMs": 106,
       "detail": "signed in without navigating; the pasted code survived",
       "error": null
@@ -135,7 +135,7 @@
       "n": 11,
       "name": "the page admits what it cannot tell them before the button",
       "status": "passed",
-      "startedAtUtc": "2026-08-04T20:53:37.319Z",
+      "startedAtUtc": "2026-08-06T18:11:27.202Z",
       "durationMs": 9,
       "detail": "Dette vet vi ikke ennå Vi kan ikke vise hvilken arbeidsplass koden gjelder, hvilken rolle du får ell…",
       "error": null
@@ -144,8 +144,8 @@
       "n": 12,
       "name": "claim the code",
       "status": "passed",
-      "startedAtUtc": "2026-08-04T20:53:37.328Z",
-      "durationMs": 64,
+      "startedAtUtc": "2026-08-06T18:11:27.211Z",
+      "durationMs": 60,
       "detail": "claimed; grants on the receipt: WorkforceSelf",
       "error": null
     },
@@ -153,8 +153,8 @@
       "n": 13,
       "name": "the worker sees the shift the manager published",
       "status": "passed",
-      "startedAtUtc": "2026-08-04T20:53:37.414Z",
-      "durationMs": 630,
+      "startedAtUtc": "2026-08-06T18:11:27.282Z",
+      "durationMs": 647,
       "detail": "first shift card: 09:00–15:00 Uten rolle Betalt tid 6t Fra publisering 1",
       "error": null
     },
@@ -162,8 +162,8 @@
       "n": 14,
       "name": "claiming the same code again is answered honestly, not as a bare error",
       "status": "passed",
-      "startedAtUtc": "2026-08-04T20:53:38.057Z",
-      "durationMs": 752,
+      "startedAtUtc": "2026-08-06T18:11:27.942Z",
+      "durationMs": 749,
       "detail": "opaque refusal + the account's own engagements shown beside it",
       "error": null
     },
@@ -171,8 +171,8 @@
       "n": 15,
       "name": "the manager's roster now reads the person as signed in",
       "status": "passed",
-      "startedAtUtc": "2026-08-04T20:53:38.850Z",
-      "durationMs": 1802,
+      "startedAtUtc": "2026-08-06T18:11:28.727Z",
+      "durationMs": 1472,
       "detail": "Denne personen har koblet en innlogging til engasjementet og kan bruke Min vaktplan.",
       "error": null
     },
@@ -180,7 +180,7 @@
       "n": 16,
       "name": "what the browser said while this ran",
       "status": "passed",
-      "startedAtUtc": "2026-08-04T20:53:40.766Z",
+      "startedAtUtc": "2026-08-06T18:11:30.284Z",
       "durationMs": 0,
       "detail": "5 console errors recorded as findings",
       "error": null
@@ -211,11 +211,6 @@
       "severity": "defect",
       "summary": "browser error during the invitation journey",
       "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-roster\" to \"/admin?redirect=%2Fadmin%2Fworkforce-roster&storeId=42\" with a new navigation."
-    },
-    {
-      "severity": "note",
-      "summary": "no invitation list or revoke route exists",
-      "detail": "The manager surface can ISSUE (endpoint 6) and nothing else. `WorkforceStaffController` binds no GET for an engagement's invitations and no revoke verb, though `WorkforceInvitationState.Revoked` is declared and written by no code path in the module. So this UI cannot show whether a code is currently live, when it expires, or withdraw one that went to the wrong person — it offers a reissue (which supersedes in place and kills the previous token) and says so. Wanted: GET /workforce/stores/{storeId}/staff/{id}/invitations and a revoke route that writes the Revoked state."
     }
   ],
   "consoleErrors": [
@@ -228,7 +223,7 @@
   "failedRequests": [
     {
       "method": "POST",
-      "url": "http://127.0.0.1:4028/workforce/me/invitations/claim",
+      "url": "http://127.0.0.1:4316/workforce/me/invitations/claim",
       "status": 404
     }
   ],
@@ -245,8 +240,9 @@
   "artifact": {
     "key": "fixture",
     "file": "artifacts/journeys/runs/workforce-invitation-onboarding.fixture.playwright.json",
-    "canonical": true,
+    "canonical": false,
     "canonicalHeldBy": "fixture",
+    "canonicalTracked": true,
     "provisional": false,
     "supersedes": null
   }

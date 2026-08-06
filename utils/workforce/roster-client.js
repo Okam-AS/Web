@@ -15,6 +15,8 @@
 //   GET   /workforce/stores/{storeId}/staff/{id}                       #4   (:107)
 //   PATCH /workforce/stores/{storeId}/staff/{id}                       #5   (:122)
 //   POST  /workforce/stores/{storeId}/staff/{id}/invitations           #6   (:156)
+//   GET   /workforce/stores/{storeId}/invitations                      #6b  (:181)
+//   POST  /workforce/stores/{storeId}/invitations/{id}/revoke          #6c  (:201)
 //   GET   /workforce/stores/{storeId}/roles                            #8   (:203)
 //   PUT   /workforce/stores/{storeId}/roles                            #9   (:218)
 //   GET   /workforce/stores/{storeId}/staff/{id}/roles                 #10  (:243)
@@ -45,16 +47,30 @@
 // `PATCH { isActive: false }` and nothing else, which is why this client has no destructive verb to
 // offer.
 //
-// THE INVITATION SURFACE IS ONE ROUTE WIDE, AND THAT IS THE BACKEND'S SHAPE RATHER THAN THIS FILE'S
-// CHOICE. `WorkforceStaffController` binds issue (#6) and nothing else: there is no
-// `GET .../invitations` to list what is outstanding and no revoke verb, even though
-// `WorkforceInvitationState` declares a `Revoked` member that no code path in the module ever
-// writes. So a caller cannot ask whether an engagement currently holds a pending token, when it
-// expires, or who issued it — the only durable, readable signal is the engagement's
-// `personState`: `Invited` means no login has claimed it, `Claimed` means one has. The panel above
-// this client says exactly that and no more. Both gaps are named in the lane report as backend
-// handoffs; until they land, the mitigation for a leaked token is a REISSUE, which the service
-// performs by superseding the single pending row in place and killing the previous token instantly.
+// THE INVITATION SURFACE IS THREE ROUTES WIDE. It was one — issue (#6) and nothing else — and both
+// this file and the panel above it carried a sentence saying so. `WorkforceStaffController` now also
+// binds a store-scoped read (#6b) and a revoke verb (#6c), so the two gaps those sentences named are
+// closed and the sentences are gone with them. A caller can ask what is outstanding and withdraw one.
+//
+// TWO PROPERTIES OF THE READ THAT A CALLER MUST NOT FLATTEN:
+//
+//   • `state` IS NOT LIVENESS. `WorkforceInvitationState.Expired` is written by no code path in the
+//     module: expiry is decided at READ TIME by comparing `expiresAtUtc`, so an invitation that
+//     lapsed a month ago still sits at `Pending` in its row. A client that rendered `state` would
+//     tell a manager a dead code is still outstanding — the exact question this surface exists to
+//     answer, answered backwards while looking right. Use `isLive`, which the server computes with
+//     the same comparison the CLAIM path makes, so the two can never disagree.
+//   • THE RESPONSE CARRIES NO TOKEN AND NO TOKEN HASH, at any level (spec §13.4). The raw token left
+//     the building on the issue response and is unrecoverable; the hash is the stored secret. A
+//     manager needs to know THAT a code is outstanding and to WHOM it went, never what it is.
+//
+// The read is STORE-scoped rather than engagement-scoped because "which codes are still out there"
+// is a store-wide question. A caller wanting one engagement's codes filters by `staffMemberId`, which
+// every element carries.
+//
+// A REISSUE IS STILL A REAL LEVER and still supersedes the single pending row in place. It is no
+// longer the ONLY one: revoking withdraws without minting a replacement, which is what a manager
+// wants when the code went to the wrong person and no new code should exist.
 
 import { WorkforceClientBase, toUtcRangeParam } from '~/utils/workforce/api-client';
 
@@ -132,8 +148,9 @@ export class WorkforceRosterService extends WorkforceClientBase {
    *
    * A REISSUE SUPERSEDES IN PLACE. A filtered unique index permits one Pending invitation per
    * engagement, so the service overwrites that row's hash and expiry rather than adding a second one:
-   * the previous raw token stops working the instant this call returns. That is the only mitigation
-   * the module offers for a code relayed to the wrong person, because no revoke route exists.
+   * the previous raw token stops working the instant this call returns. For a code relayed to the
+   * wrong person that is one of two remedies — see `RevokeInvitation`, which withdraws without
+   * minting a replacement.
    *
    * `request` is optional and every field on it is: `{ expiresInHours }` overrides the server's
    * 14-day default and is clamped server-side to 60 days. An absent body is a valid issue.
@@ -147,6 +164,59 @@ export class WorkforceRosterService extends WorkforceClientBase {
    */
   IssueInvitation (storeId, staffMemberId, request) {
     return this._mutate('POST', this._staffPath(storeId, staffMemberId) + '/invitations', request || {});
+  }
+
+  /**
+   * #6b: the store's OUTSTANDING invitations — what is still redeemable, and to whom.
+   *
+   * PENDING ROWS ONLY. Claimed and Revoked rows are spent, and listing them would turn "what is
+   * outstanding" into a directory of who has and has not signed in yet.
+   *
+   * EACH ELEMENT CARRIES BOTH `state` AND `isLive`, AND THEY ARE DIFFERENT CLAIMS. `state` is what
+   * the row says and is always `Pending` here; `isLive` is whether the code can still be redeemed
+   * RIGHT NOW. They diverge because `Expired` is written by no code path — expiry is a read-time
+   * comparison of `expiresAtUtc` — so a code that lapsed a month ago is a `Pending` row with
+   * `isLive: false`. Render `isLive`. Rendering `state` would report a dead code as outstanding.
+   *
+   * NO TOKEN, NO HASH, ever (spec §13.4). This read cannot recover a code and is not meant to: the
+   * raw token was answerable exactly once, on the issue response.
+   *
+   * A read, so no `Idempotency-Key` and no `If-Match`. Requires `WorkforceManager` like every other
+   * write on this surface — a caller who cannot issue cannot enumerate either.
+   */
+  ListInvitations (storeId) {
+    return this._request('GET', '/workforce/stores/' + storeId + '/invitations');
+  }
+
+  /**
+   * #6c: withdraw an outstanding invitation. Returns the invitation's summary in its new state.
+   *
+   * POST `/revoke` rather than DELETE: the row is NOT removed. It transitions `Pending -> Revoked`
+   * and stays as the record of what was withdrawn and by whom, which is why this client — which has
+   * no destructive verb anywhere — can offer it at all.
+   *
+   * THE REFUSAL THAT MATTERS: revoking an ALREADY-CLAIMED invitation is `409
+   * workforce.invitation-not-revocable`, never a quiet success. The manager's reason for withdrawing
+   * is almost always that the code went to the wrong person; if that person has already redeemed it,
+   * a 200 would tell the manager they are safe at the exact moment they are not. Withdrawal cannot
+   * undo a link — ending the engagement (`UpdateStaff` with `isActive: false`) is what removes
+   * access — and callers must surface the refusal rather than swallowing it.
+   *
+   * `workforce.invitation-revoke-conflict` (409) is the other one: a concurrent claim or reissue
+   * moved the row between the list the manager read and this press. Nothing persisted; the correct
+   * response is to re-read the list, not to retry blindly. Both retryable invitation conflicts want a
+   * FRESH `Idempotency-Key`, which `_mutate` mints per call, so a re-press is already a fresh key.
+   *
+   * Revoking an ALREADY-REVOKED invitation under a fresh key answers 200 with the same summary — a
+   * manager who clicks twice is not told their withdrawal failed.
+   *
+   * REVOKING TELLS THE HOLDER NOTHING. The claim path admits `Pending` and nothing else, so from the
+   * moment this returns the withdrawn token meets the same opaque 404 as a fabricated one. That is a
+   * structural property of the claim path — it has no revoked branch — and it is why no caller should
+   * ever make the refusal on the worker's side more informative.
+   */
+  RevokeInvitation (storeId, invitationId) {
+    return this._mutate('POST', '/workforce/stores/' + storeId + '/invitations/' + invitationId + '/revoke', {});
   }
 
   /**
