@@ -132,6 +132,11 @@ import Modal from "~/components/atoms/Modal.vue";
 import OtpInput from "~/components/atoms/OtpInput.vue";
 import Loading from "~/components/atoms/Loading.vue";
 
+// Shown when the verification code was NOT sent — see `getCode`. Hard-coded Norwegian to match the
+// two error strings already in this file (`Feil kode`); routing it through `$t` would mean editing
+// the shared locale files, which three other lanes currently own.
+export const SEND_FAILED = "Vi kunne ikke sende koden. Sjekk nummeret, eller prøv igjen om litt.";
+
 export default {
   components: { Modal, OtpInput, Loading },
   props: {
@@ -177,16 +182,41 @@ export default {
       this.codeSent = false;
       this.code = "";
     },
+    // Advance to the six-box code step ONLY when the code was actually sent.
+    //
+    // This used to set `smsSent = true` from a `.then()` that never read the value, and that is a
+    // lie for every server-side failure rather than an edge case: `RequestService.PostRequest`
+    // RESOLVES a rejected request to the axios error object instead of rejecting it, so
+    // `UserService.SendVerificationToken` returns `false` and the promise still fulfils. The
+    // `.catch()` arm below was therefore unreachable for anything the server did — with nothing
+    // listening at all the modal opened six boxes for a code nobody had sent, and the person typed
+    // into them until the wait timed out.
+    //
+    // The fix is here and not in `PostRequest` deliberately. That resolve is a documented contract
+    // 205 call sites read through `TryParseResponse` / `TryParseResponseWithError`, and the
+    // `Safe*Request` variants exist precisely to make the other verbs match it; making it reject
+    // would turn every one of those `false` returns into an unhandled rejection. The honest boolean
+    // was already on `SendVerificationToken`'s signature (`Promise<boolean>`) and three of its four
+    // callers already read it — `core/pinia/user.ts`, `pages/registrer.vue`, `EmployeeManager.vue`.
+    // This modal was the only one that threw it away, which makes this a caller bug, not a layer bug.
+    //
+    // The message covers both causes because the boolean cannot tell them apart: a `false` here is
+    // "wrong number", "server said no" and "nothing answered" alike. Claiming «Feil telefonnummer»
+    // when the API is down would replace one false statement with another.
     getCode() {
       this.errorMessage = "";
       this.isLoading = true;
       this._userService
         .SendVerificationToken(this.countryCode + this.phone.replace(/\s/g, ''))
-        .then(() => {
-          this.smsSent = true;
+        .then((sent) => {
+          if (sent) {
+            this.smsSent = true;
+          } else {
+            this.errorMessage = SEND_FAILED;
+          }
         })
         .catch(() => {
-          this.errorMessage = "Feil telefonnummer";
+          this.errorMessage = SEND_FAILED;
         })
         .finally(() => {
           this.isLoading = false;
