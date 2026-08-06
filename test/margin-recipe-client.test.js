@@ -180,6 +180,88 @@ describe('MarginRecipeService', () => {
     })
   })
 
+  // The three routes that let a chef change a recipe AFTER activating it. Without them an active
+  // recipe is frozen: its version is immutable by rule, and the name-uniqueness check blocks
+  // re-creating it under the same name.
+  describe('revising and ending a live recipe', () => {
+    test('CreateVersion posts to the versions collection and sends NO If-Match', async () => {
+      respondWith(200, { recipeVersionId: VERSION, state: 'Draft' })
+      await service().CreateVersion(STORE, RECIPE, {})
+
+      const [url, init] = global.fetch.mock.calls[0]
+      expect(url).toBe('/margin/recipes/' + RECIPE + '/versions?storeId=42')
+      expect(init.method).toBe('POST')
+      // `Run`, not `RunWithIfMatch`: the controller asks for no precondition and checks none, so a
+      // revision here would be a guard the server does not apply.
+      expect(init.headers['If-Match']).toBeUndefined()
+      expect(JSON.parse(init.body)).toEqual({})
+    })
+
+    // Omitting `notes` is meaningful, not lazy: the server falls back to the Active version's own
+    // (`request?.Notes ?? active.Notes`), which is what a clone should inherit. Sending an empty
+    // string instead would blank a note nobody was shown.
+    test('CreateVersion sends an empty body when the caller supplies nothing', async () => {
+      respondWith(200, {})
+      await service().CreateVersion(STORE, RECIPE)
+      expect(JSON.parse(global.fetch.mock.calls[0][1].body)).toEqual({})
+    })
+
+    test('UpdateVersion PUTs the version and carries the draft revision as a quoted If-Match', async () => {
+      respondWith(200, { recipeVersionId: VERSION, state: 'Draft' })
+      await service().UpdateVersion(STORE, RECIPE, VERSION, {
+        yieldQuantity: 4,
+        yieldUnit: 'Liter',
+        portionCount: 20,
+        notes: 'Simmer 40 minutes',
+        components: [{ ingredientId: 'i-1', subRecipeId: null, quantity: 0.8, unitCode: 'kg', yieldFactor: null }]
+      }, 'rev-draft')
+
+      const [url, init] = global.fetch.mock.calls[0]
+      expect(url).toBe('/margin/recipes/' + RECIPE + '/versions/' + VERSION + '?storeId=42')
+      expect(init.method).toBe('PUT')
+      expect(init.headers['If-Match']).toBe('"rev-draft"')
+      // The version WHOLE. `EditDraftAsync` assigns each of these unconditionally, so a body that
+      // dropped `components` would delete every line and one that dropped `notes` would blank it.
+      const body = JSON.parse(init.body)
+      expect(body.notes).toBe('Simmer 40 minutes')
+      expect(body.components).toHaveLength(1)
+      expect(body.components[0].yieldFactor).toBeNull()
+    })
+
+    test('Retire posts to the retire route and carries a revision', async () => {
+      respondWith(200, { recipeVersionId: VERSION, state: 'Retired' })
+      await service().Retire(STORE, RECIPE, 'rev-active')
+
+      const [url, init] = global.fetch.mock.calls[0]
+      expect(url).toBe('/margin/recipes/' + RECIPE + '/retire?storeId=42')
+      expect(init.method).toBe('POST')
+      expect(init.headers['If-Match']).toBe('"rev-active"')
+      // No EffectiveFrom, exactly as on activate: the server's injected clock decides.
+      expect(JSON.parse(init.body)).toEqual({})
+    })
+
+    // Both aggregate mutations refuse BEFORE the request rather than sending an empty precondition,
+    // which under a provider with no rowversion would be a guard silently downgraded to none.
+    test('a missing revision is refused before the request on both aggregate mutations', async () => {
+      respondWith(200, {})
+      await expect(service().UpdateVersion(STORE, RECIPE, VERSION, {}, null))
+        .rejects.toMatchObject({ code: 'margin.client-missing-revision' })
+      await expect(service().Retire(STORE, RECIPE, ''))
+        .rejects.toMatchObject({ code: 'margin.client-missing-revision' })
+      expect(global.fetch).not.toHaveBeenCalled()
+    })
+
+    test('the typed refusals of this family survive the trip', async () => {
+      respondWith(400, { code: 'margin.no-active-version', detail: 'x', retryable: false })
+      await expect(service().CreateVersion(STORE, RECIPE, {}))
+        .rejects.toMatchObject({ code: 'margin.no-active-version', status: 400 })
+
+      respondWith(400, { code: 'margin.version-not-draft', detail: 'x', retryable: false })
+      await expect(service().UpdateVersion(STORE, RECIPE, VERSION, {}, 'rev'))
+        .rejects.toMatchObject({ code: 'margin.version-not-draft', status: 400 })
+    })
+  })
+
   describe('typed failures', () => {
     test('a business 400 becomes a MarginApiError carrying the machine code', async () => {
       respondWith(400, {

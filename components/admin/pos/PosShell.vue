@@ -26,6 +26,7 @@
         <BoardView v-else-if="mode === 'board'" />
         <DayFlow v-else-if="mode === 'day'" />
         <ReceiptsView v-else-if="mode === 'receipts'" />
+        <ClockScreen v-else-if="mode === 'clock'" />
       </main>
 
       <!-- Blocking overlays (highest priority first) -->
@@ -154,6 +155,7 @@ import SellScreen from '~/components/admin/pos/SellScreen.vue';
 import BoardView from '~/components/admin/pos/BoardView.vue';
 import DayFlow from '~/components/admin/pos/DayFlow.vue';
 import ReceiptsView from '~/components/admin/pos/ReceiptsView.vue';
+import ClockScreen from '~/components/admin/pos/ClockScreen.vue';
 import CashPointPicker from '~/components/admin/pos/CashPointPicker.vue';
 import OperatorLoginScreen from '~/components/admin/pos/OperatorLoginScreen.vue';
 import BeginDayModal from '~/components/admin/pos/BeginDayModal.vue';
@@ -172,6 +174,7 @@ export default {
     BoardView,
     DayFlow,
     ReceiptsView,
+    ClockScreen,
     CashPointPicker,
     OperatorLoginScreen,
     BeginDayModal,
@@ -247,9 +250,15 @@ export default {
     // what the day already produced, and the day is most often closed when a customer comes back
     // for one. Forcing a new trading day open to reach it would be a fiscal event caused by a
     // lookup.
+    // Stempling is exempt alongside Dag and Kvitteringer, and for a stronger reason than either:
+    // arriving at work happens BEFORE the trading day is opened. The first person in unlocks the
+    // door, clocks in, and only then opens the register — so gating the clock behind BeginDayModal
+    // would force a fiscal event (opening a trading day) as the price of recording an arrival, and
+    // would leave the last person out unable to clock out after the day is closed. The backend
+    // agrees: `POST /workforce/pos/clock-events` has no trading-day precondition at all.
     needsDay () {
       return !!this.cashPoint && !!this.session && !this.dayOpen &&
-        this.mode !== 'day' && this.mode !== 'receipts';
+        this.mode !== 'day' && this.mode !== 'receipts' && this.mode !== 'clock';
     },
     canOperate () { return !!this.cashPoint && !!this.session && this.dayOpen; },
     // Free tables the abandoned check can be placed on. Occupied ones are left out on purpose:

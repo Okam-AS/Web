@@ -82,11 +82,34 @@ describe('readWasteEntries / readWasteSummary', () => {
     expect(readWasteEntries({})).toBeNull()
   })
 
-  test('an absent summary block reads as nothing recorded rather than as unknown', () => {
-    const summary = readWasteSummary(undefined)
+  // This pin used to assert the opposite, on the stated assumption that the server always sends the
+  // block. It does not, and even once it does the two halves deploy separately, so the window never
+  // closes. An absent block is "nobody looked"; a zeroed block is "somebody looked and found none".
+  test('an absent summary block is UNKNOWN, never an empty summary', () => {
+    expect(readWasteSummary(undefined)).toBeNull()
+    expect(readWasteSummary(null)).toBeNull()
+    // A block that is not a block is unreadable, which is also not zero.
+    expect(readWasteSummary('none')).toBeNull()
+    expect(readWasteSummary(0)).toBeNull()
+  })
+
+  test('a PRESENT block of zeros stays a real zero — the distinction is not a relabelling', () => {
+    const summary = readWasteSummary({ valuedMinor: 0, entryCount: 0, unvaluedEntryCount: 0, byReason: [] })
     expect(summary.entryCount).toBe(0)
     expect(summary.valuedMinor).toBe(0)
     expect(summary.byReason).toEqual([])
+  })
+
+  // `longOrNull(x) || 0` is `Number(null)` wearing a hat: it turned every field the server withheld
+  // into a confident figure. Each of the three ways a field goes missing is checked on its own.
+  test('a withheld FIELD inside a present block stays null and is not coerced to zero', () => {
+    const summary = readWasteSummary({ valuedMinor: null, entryCount: 3, unvaluedEntryCount: 3, byReason: [] })
+    expect(summary.valuedMinor).toBeNull()
+    expect(summary.entryCount).toBe(3)
+
+    expect(readWasteSummary({ entryCount: 2 }).valuedMinor).toBeNull()
+    expect(readWasteSummary({ valuedMinor: '', entryCount: 2 }).valuedMinor).toBeNull()
+    expect(readWasteSummary({ valuedMinor: undefined, entryCount: 2 }).valuedMinor).toBeNull()
   })
 
   test('the per-reason lines keep the server order and are not re-sorted', () => {
@@ -234,7 +257,33 @@ describe('MarginCoveragePanel — the waste bucket', () => {
     const bare = Object.assign({}, response, { waste: { valuedMinor: 0, entryCount: 0, unvaluedEntryCount: 0, byReason: [] } })
     const w = coverage(readCoverage(bare))
     expect(w.find('[data-test="waste-none"]').exists()).toBe(true)
+    expect(w.find('[data-test="coverage-waste-unknown"]').exists()).toBe(false)
     expect(w.find('[data-test="waste-total"]').exists()).toBe(false)
+  })
+
+  test('a response with NO waste block says unknown, not that the week had no waste', () => {
+    const noBlock = Object.assign({}, response)
+    delete noBlock.waste
+    const w = coverage(readCoverage(noBlock))
+    expect(w.find('[data-test="coverage-waste-unknown"]').exists()).toBe(true)
+    expect(w.find('[data-test="waste-none"]').exists()).toBe(false)
+    expect(w.find('[data-test="waste-total"]').exists()).toBe(false)
+  })
+
+  // A count the server withheld would otherwise print as "0" — `Intl.NumberFormat().format(null)`.
+  test('a per-reason line with no count shows the unknown mark rather than a counted zero', () => {
+    const withheld = Object.assign({}, response, {
+      waste: {
+        valuedMinor: 3000,
+        entryCount: 1,
+        unvaluedEntryCount: 0,
+        byReason: [{ reason: 'Spoilage', valuedMinor: 3000, entryCount: null, unvaluedEntryCount: 0 }]
+      }
+    })
+    const w = coverage(readCoverage(withheld))
+    const cells = w.findAll('[data-test="waste-row"]').at(0).findAll('td')
+    expect(cells.at(1).text()).toBe(DASH)
+    expect(cells.at(1).text()).not.toBe('0')
   })
 
   test('the waste bucket enters none of the coverage figures', () => {

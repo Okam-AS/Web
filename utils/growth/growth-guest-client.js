@@ -31,20 +31,30 @@
 // `GrowthPreferenceController.TryAuthorizeSession` validates. Hence `credentials: 'include'` on
 // exactly those four calls and on nothing else.
 //
-// ⚠ TWO DEPLOYMENT FACTS CURRENTLY DEFEAT THAT COOKIE, and neither is fixable from this file:
+// ⚠ TWO CONDITIONS MUST BOTH HOLD BEFORE THAT COOKIE WORKS, and neither is fixable from this file.
+// Neither substitutes for the other, which is the trap: each one reads like it should have covered
+// the other, and satisfying one alone leaves the surface just as broken.
 //
-//   1. `Program.cs` builds the default CORS policy with `AllowAnyOrigin()`. A browser refuses to
-//      attach or accept credentials when the response carries `Access-Control-Allow-Origin: *`, so a
-//      credentialed call from any origin is blocked before the cookie matters.
-//   2. The cookie is `SameSite=Strict` and this app's `API_BASE_URL` default is
-//      `https://okamapi.azurewebsites.net` while the pages are served from `https://okam.no`. Those
-//      are different SITES (`azurewebsites.net` is a public suffix), so a Strict cookie is not sent
-//      with the request at all, whatever CORS says.
+//   1. CORS MUST NAME THIS WEB ORIGIN with `AllowCredentials`. The API serves the credentialed four
+//      (3/4/5/7) with a dedicated policy rather than the wildcard default — `Access-Control-Allow-
+//      Origin: *` is refused outright by every browser once a request's credentials mode is
+//      `include`. That policy's allowlist is DERIVED from the guest links Growth mints
+//      (`Growth:PreferenceCentreBaseUrl`, `Growth:ConfirmBaseUrl`) plus any `Growth:GuestOrigins`,
+//      so this half is now a deployment setting rather than a code defect — but an origin nobody
+//      named is still refused, and the refusal lands on the preflight as an opaque network error
+//      with no status code and no server log line.
+//   2. THE COOKIE MUST BE ABLE TO RIDE THE REQUEST AT ALL. It is `SameSite=Strict`, and this app's
+//      `API_BASE_URL` default is `https://okamapi.azurewebsites.net` while the pages are served from
+//      `https://okam.no`. Those are different SITES (`azurewebsites.net` is a public suffix), so the
+//      browser attaches no cookie whatever CORS says. Only serving the API same-site fixes this.
+//
+// Same-SITE serving does NOT remove condition 1: a different host is still a different ORIGIN, so
+// CORS still applies. A named policy does NOT remove condition 2: no CORS header persuades a Strict
+// cookie onto a cross-site request. Today condition 2 is unmet, so the endpoints answer 401.
 //
 // The client is written to the contract rather than to the defect: it sends what the endpoints
-// specify, so it starts working the moment the API is served same-site (or the policy names the web
-// origin with `AllowCredentials`). The preference page renders the failure honestly instead of
-// pretending the session opened.
+// specify, so it starts working once BOTH conditions hold. The preference page renders the failure
+// honestly instead of pretending the session opened.
 
 import { GrowthClientBase } from '~/utils/growth/api-client';
 

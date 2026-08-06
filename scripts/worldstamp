@@ -1,0 +1,137 @@
+#!/bin/sh
+# worldstamp — state, from inside a repo, which world this checkout is standing in.
+#
+# Writes artifacts/world/WORLD.json. Reads world.config for the one enumerated value
+# (integration_branch); derives everything else from git.
+#
+# Two laws govern this script:
+#
+#   1. It never guesses. A question it cannot answer is written as "unknown", never as
+#      a plausible value. An unconfirmed fact is loud; a confident wrong one is not.
+#   2. It never fails its caller. Every path exits 0. A collector that can break a
+#      session gets uninstalled, and an uninstalled collector is worse than none,
+#      because its stale output still looks like an answer.
+#
+# Usage:  worldstamp [--deep]
+#   --deep  also derive migration-chain topology and merged lanes (~200ms).
+#           Omit for the git-hook path, where only identity is wanted.
+
+set -u
+
+DEEP=0
+[ "${1:-}" = "--deep" ] && DEEP=1
+
+# Locate the repo root from wherever we were invoked.
+ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || ROOT=""
+if [ -z "$ROOT" ]; then
+  echo "worldstamp: not a git repository" >&2
+  exit 0
+fi
+cd "$ROOT" 2>/dev/null || exit 0
+
+OUT="$ROOT/artifacts/world"
+mkdir -p "$OUT" 2>/dev/null || exit 0
+
+j() { printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g'; }
+
+# --- identity -----------------------------------------------------------------
+BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null) || BRANCH="unknown"
+[ -z "$BRANCH" ] && BRANCH="unknown"
+# A detached HEAD is a real state, not an error, and must not be reported as a branch.
+[ "$BRANCH" = "HEAD" ] && BRANCH="detached"
+
+SHA=$(git rev-parse HEAD 2>/dev/null) || SHA="unknown"
+[ -z "$SHA" ] && SHA="unknown"
+
+if git diff --quiet HEAD 2>/dev/null && [ -z "$(git status --porcelain 2>/dev/null)" ]; then
+  DIRTY=false
+else
+  DIRTY=true
+fi
+
+HEAD_TIME=$(git log -1 --format=%cI 2>/dev/null) || HEAD_TIME="unknown"
+[ -z "$HEAD_TIME" ] && HEAD_TIME="unknown"
+
+# --- conformance --------------------------------------------------------------
+EXPECTED="unknown"
+if [ -f "$ROOT/world.config" ]; then
+  EXPECTED=$(sed -n 's/^[[:space:]]*integration_branch[[:space:]]*=[[:space:]]*//p' \
+             "$ROOT/world.config" 2>/dev/null | head -1)
+  [ -z "$EXPECTED" ] && EXPECTED="unknown"
+fi
+
+# Three-valued on purpose. "unknown" is not "false": a repo with no world.config has
+# not failed a check, it has never been given one, and those must read differently.
+if [ "$EXPECTED" = "unknown" ] || [ "$BRANCH" = "unknown" ]; then
+  ON_EXPECTED="unknown"
+elif [ "$BRANCH" = "$EXPECTED" ]; then
+  ON_EXPECTED=true
+else
+  ON_EXPECTED=false
+fi
+
+# --- topology (deep only) ------------------------------------------------------
+MIG_HEAD="unknown"
+ANCESTOR="unknown"
+BEHIND="unknown"
+AHEAD="unknown"
+MERGED_LANES=""
+
+if [ "$DEEP" = "1" ] && [ "$EXPECTED" != "unknown" ]; then
+  if git rev-parse --verify --quiet "$EXPECTED" >/dev/null 2>&1; then
+
+    # Is this checkout a descendant of the declared world? If it is not, the files a
+    # probe reads here can be missing landed work, carrying unlanded work, or both.
+    if git merge-base --is-ancestor "$EXPECTED" HEAD 2>/dev/null; then
+      ANCESTOR=true
+    else
+      ANCESTOR=false
+    fi
+
+    COUNTS=$(git rev-list --left-right --count "$EXPECTED...HEAD" 2>/dev/null)
+    if [ -n "$COUNTS" ]; then
+      BEHIND=$(printf '%s' "$COUNTS" | awk '{print $1}')
+      AHEAD=$(printf '%s' "$COUNTS" | awk '{print $2}')
+    fi
+
+    # Migration chain tip, by filename order — derived by glob, never listed.
+    if [ -d "$ROOT/Migrations" ]; then
+      MIG_HEAD=$(ls "$ROOT/Migrations"/*.cs 2>/dev/null \
+                 | grep -v '\.Designer\.cs$' | grep -v 'ModelSnapshot' \
+                 | sed 's#.*/##' | sort | tail -1)
+      [ -z "$MIG_HEAD" ] && MIG_HEAD="unknown"
+    fi
+
+    # Which lane branches have actually reached the declared world. Derived by
+    # merge-base, so a mark can never say "merged" about a branch that is not.
+    for b in $(git for-each-ref --format='%(refname:short)' 'refs/heads/lane/*' 2>/dev/null); do
+      if git merge-base --is-ancestor "$b" "$EXPECTED" 2>/dev/null; then
+        MERGED_LANES="$MERGED_LANES\"$(j "$b")\","
+      fi
+    done
+    MERGED_LANES=$(printf '%s' "$MERGED_LANES" | sed 's/,$//')
+  fi
+fi
+
+STAMPED=$(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null) || STAMPED="unknown"
+
+cat > "$OUT/WORLD.json" <<EOF
+{
+  "repo": "$(j "$(basename "$ROOT")")",
+  "branch": "$(j "$BRANCH")",
+  "sha": "$(j "$SHA")",
+  "dirty": $DIRTY,
+  "head_time": "$(j "$HEAD_TIME")",
+  "expected_branch": "$(j "$EXPECTED")",
+  "on_expected": $( [ "$ON_EXPECTED" = "unknown" ] && printf '"unknown"' || printf '%s' "$ON_EXPECTED" ),
+  "ancestor_of_integration": $( [ "$ANCESTOR" = "unknown" ] && printf '"unknown"' || printf '%s' "$ANCESTOR" ),
+  "commits_behind_integration": $( [ "$BEHIND" = "unknown" ] && printf '"unknown"' || printf '%s' "$BEHIND" ),
+  "commits_ahead_of_integration": $( [ "$AHEAD" = "unknown" ] && printf '"unknown"' || printf '%s' "$AHEAD" ),
+  "migrations_head": "$(j "$MIG_HEAD")",
+  "merged_lanes": [$MERGED_LANES],
+  "deep": $( [ "$DEEP" = "1" ] && printf 'true' || printf 'false' ),
+  "stamped_at": "$STAMPED"
+}
+EOF
+
+exit 0

@@ -15,6 +15,77 @@ const growthGuestTokenPages = [
   '/preferences/**', '/en/preferences/**'
 ]
 
+// ---------------------------------------------------------------------------------------------
+// WHICH BACKEND THIS BUILD TALKS TO
+//
+// `env.API_BASE_URL` below is the ONE origin this whole app addresses. Webpack's DefinePlugin
+// inlines it at BUILD time (see `env.ts`), so it is chosen once, by the process that compiles the
+// bundle, and nothing at runtime can change it. Both HTTP stacks read it: the Core services through
+// `core/helpers/configuration.ts`, and the workforce/events/margin clients through
+// `utils/workforce/api-client.js`.
+//
+// It used to default to the DEPLOYED API in every world, dev included. `npm run dev` with nothing
+// set was therefore a live client against real venues — on an app whose admin pages write on Save
+// (a cash sale on the register is a journaled fiscal event, and `pages/admin/dintero.vue` posts the
+// whole payment record). One forgotten variable undid every other precaution, so the dev default
+// now FAILS CLOSED: a dev server with no target REFUSES TO START rather than guessing one.
+//
+// Refusing was chosen over quietly defaulting to localhost. Silence is the failure shape here: a
+// localhost default would start, render an app that fetches nothing, and leave the reader to work
+// out which of several backends it decided on. A build that stops and names the variable cannot be
+// misread and is one line away from fixed. Every harness in this repo already passes the variable
+// explicitly (`test/e2e/scripts/dev-server.js`, `test/e2e/scripts/live-world.sh`), so naming the
+// target is the convention here, not a new burden.
+//
+// DEPLOYED BUILDS ARE UNTOUCHED, and that is load-bearing rather than incidental:
+//   * `okam.no` — `.github/workflows/nuxtjs.yml` runs `npm run generate` and sets no API_BASE_URL.
+//   * `www.okam-swiss.ch` — `vercel.json` runs `npm run generate` with OKAM_EDITION=ch and sets no
+//     API_BASE_URL either. It is a Nuxt build of THIS repository and it really does call the
+//     deployed API (measured: `/vilkar-store` issues `GET /stores/1` against it). Its landing page
+//     makes no API call at all, so a shallow look at that site says "safe" and is wrong.
+// Both go through NODE_ENV=production, and both keep exactly the value they resolve to today.
+//
+// The discriminator is the Nuxt command plus NODE_ENV, not "the variable is unset" — because unset
+// is precisely the state both deploys are in. `@nuxt/cli/dist/cli-index.js:536-539` sets
+// NODE_ENV=production before this file is evaluated for `build`, `generate`, `start` and `export`,
+// and development for `dev`; `package.json` sets it explicitly again for dev/start/generate. The
+// two are ORed so that neither `NODE_ENV=production nuxt dev` nor a bare `nuxt` invocation can slip
+// a dev server past the check.
+const DEPLOYED_API_BASE_URL = 'https://okamapi.azurewebsites.net'
+
+// Mirrors the CLI's own dispatch: a bare invocation, or one whose first argument is a flag, is
+// `dev` (`cli-index.js` unshifts "dev" before deciding).
+const nuxtCommand = process.argv.slice(2).filter(arg => !arg.startsWith('-'))[0] || 'dev'
+const isDevServer = nuxtCommand === 'dev' || process.env.NODE_ENV !== 'production'
+
+function resolveApiBaseUrl () {
+  const explicit = String(process.env.API_BASE_URL || '').trim()
+  if (explicit) { return explicit }
+  if (!isDevServer) { return DEPLOYED_API_BASE_URL }
+
+  throw new Error([
+    '',
+    'API_BASE_URL is not set, and a dev build will not guess one.',
+    '',
+    'This app inlines ONE backend origin at build time. What used to be filled in here was the',
+    'DEPLOYED API, so a dev server started without this variable was a live client against real',
+    'venues — on an app whose admin pages overwrite a store record on Save. Name the target:',
+    '',
+    '  API_BASE_URL=http://localhost:5080 npm run dev     (a backend you are running)',
+    '  echo API_BASE_URL=http://localhost:5080 >> .env    (remembered; .gitignore covers .env)',
+    '',
+    'Pointing a dev build at the deployed API is still allowed, and has to be typed:',
+    '',
+    '  API_BASE_URL=' + DEPLOYED_API_BASE_URL + ' npm run dev',
+    '',
+    'Deployed builds are unaffected: build, generate and start run with NODE_ENV=production and',
+    'keep ' + DEPLOYED_API_BASE_URL + '.',
+    ''
+  ].join('\n'))
+}
+
+const API_BASE_URL = resolveApiBaseUrl()
+
 const sitemapExclude = isCh
   ? ['/admin/**', '/import'].concat(growthGuestTokenPages)
   : ['/admin/**', '/import',
@@ -41,8 +112,9 @@ export default {
     EDITION: OKAM_EDITION,
     STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY || '',
     IS_PRODUCTION: process.env.NODE_ENV === 'production',
-    // Override with API_BASE_URL=http://localhost:5080 to point at a local backend; defaults to Azure.
-    API_BASE_URL: process.env.API_BASE_URL || (process.env.NODE_ENV === 'production' ? 'https://okamapi.azurewebsites.net' : 'https://okamapi.azurewebsites.net'),
+    // Resolved above. A deployed build (NODE_ENV=production) keeps the deployed API as its default;
+    // a dev server with no API_BASE_URL has already refused to start by the time this is read.
+    API_BASE_URL,
     IS_NATIVESCRIPT: 'false',
     VERSION: '1.0.0',
     PLATFORM_FILE_SUFFIX: '.nuxt'

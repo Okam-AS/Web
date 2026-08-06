@@ -68,6 +68,7 @@ const ICON_SELL = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="
 const ICON_BOARD = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h5v6H4V5zm10-1h5a1 1 0 011 1v5h-6V4zM4 13h6v6H5a1 1 0 01-1-1v-5zm10 0h6v5a1 1 0 01-1 1h-5v-6z" /></svg>';
 const ICON_RECEIPTS = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>';
 const ICON_DAY = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>';
+const ICON_CLOCK = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>';
 
 export default {
   name: 'PosTopBar',
@@ -88,7 +89,8 @@ export default {
         { key: 'sell', label: this.$i('pos_mode_sell'), icon: ICON_SELL },
         { key: 'board', label: this.$i('pos_mode_board'), icon: ICON_BOARD },
         { key: 'day', label: this.$i('pos_mode_day'), icon: ICON_DAY },
-        { key: 'receipts', label: this.$i('pos_mode_receipts'), icon: ICON_RECEIPTS }
+        { key: 'receipts', label: this.$i('pos_mode_receipts'), icon: ICON_RECEIPTS },
+        { key: 'clock', label: this.$i('pos_mode_clock'), icon: ICON_CLOCK }
       ];
     }
   }
@@ -106,9 +108,28 @@ export default {
   padding: 0 16px;
   flex-shrink: 0;
   gap: 12px;
+  /* Above BeginDayModal (850), which is `position: absolute; inset: 0` and therefore covered the bar
+     as well as the body it means to block.
+     THIS IS WHAT MADE THE MODE EXEMPTIONS REACHABLE RATHER THAN NOMINAL. `needsDay` has always
+     exempted `day` and `receipts`, but with the bar underneath the overlay there was no way to
+     REACH either one: a register whose day is closed opens in `sell`, the modal covers everything,
+     and its only control opens a trading day. So the exemption described a mode you could only be
+     in already. Found by clicking — the mode button was visible, enabled and stable, and the panel
+     took the pointer.
+     It matters most for the clock, because arriving at work happens BEFORE the day is opened: the
+     first person in would otherwise have to open a trading day — a fiscal event — to record that
+     they showed up, and the last one out could not clock out after it closed.
+     The body stays blocked, which is the modal's actual job; only the register's own navigation
+     stays live. Below the PIN pads (2000/2100) so an operator switch still covers the bar. */
+  position: relative;
+  z-index: 860;
 }
 
-.pos-topbar__left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+/* `overflow: hidden` so the cash point's name TRUNCATES instead of spilling out of the 64px bar.
+   A fifth mode entry (Stempling) widened the nav past what 1280 leaves for this block, and with
+   `white-space: nowrap` on the name the overflow rendered as text lying across the bar's top edge.
+   The store name already has an ellipsis; this is what lets it reach. */
+.pos-topbar__left { display: flex; align-items: center; gap: 12px; min-width: 0; overflow: hidden; }
 
 .pos-topbar__cashpoint { display: flex; flex-direction: column; min-width: 0; }
 .pos-topbar__cp-name { font-weight: 700; font-size: 1rem; white-space: nowrap; }
@@ -121,6 +142,10 @@ export default {
   letter-spacing: 0.04em;
   padding: 3px 8px;
   border-radius: 6px;
+  /* Never squeezed into a wrap: whether the trading day is open is a one-word fact and a badge that
+     broke across two lines pushed the whole left block past the bar's height. */
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 .pos-topbar__day.is-open { background: rgba(27, 183, 118, 0.2); color: #43d197; }
 .pos-topbar__day.is-closed { background: rgba(148, 163, 184, 0.18); color: #94a3b8; }
@@ -131,6 +156,9 @@ export default {
   background: #1c1f28;
   padding: 4px;
   border-radius: 12px;
+  /* The register's own navigation is the last thing that may be squeezed — a mode button narrowed
+     to nothing is a mode nobody can reach, which is how a shipped screen becomes invisible. */
+  flex-shrink: 0;
 }
 .pos-topbar__mode {
   display: flex;
@@ -198,7 +226,12 @@ export default {
 .pos-topbar__op-text { display: flex; flex-direction: column; align-items: flex-start; }
 .pos-topbar__op-name { font-size: 0.85rem; font-weight: 600; }
 
-@media (max-width: 1100px) {
+/* 1300 rather than 1100: this threshold was tuned when the bar carried FOUR modes, and Stempling is
+   a fifth. At 1280 — the commonest laptop the register is actually run on — the nav plus the three
+   right-hand labels over-subscribed the bar, and the left block was squeezed until the cash point's
+   name and the trading-day badge overlapped the bar's own edge. The icons stay; only their words go,
+   which is the same trade this rule already made one breakpoint down. */
+@media (max-width: 1300px) {
   .pos-topbar__ctrl-label { display: none; }
 }
 

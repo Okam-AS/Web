@@ -473,6 +473,22 @@
 
             <div class="sb-fieldset">
               <label class="sb-toggle">
+                <input v-model="config.tipsEnabled" type="checkbox">
+                <span class="sb-toggle__track"><span class="sb-toggle__thumb" /></span>
+                <span>
+                  <strong>Drikkepenger på terminal</strong>
+                  <!-- Denne innstillingen fantes i lagret konfigurasjon, men hadde ingen bryter her
+                       OG ble utelatt fra hver lagring — så hver lagring slo den av. Bryteren gjør
+                       den redigerbar; full-replace-vakta gjør at den ikke kan forsvinne igjen. -->
+                  <!-- Beskriver bare hva bryteren gjør. Hvordan tipset havner i journal og
+                       MVA-grunnlag avgjøres i backend, og påstås ikke her. -->
+                  <small>Terminalen spør kortholder om tips ved kortbetaling (tipsMode STANDARD).</small>
+                </span>
+              </label>
+            </div>
+
+            <div class="sb-fieldset">
+              <label class="sb-toggle">
                 <input v-model="config.partialPaymentsEnabled" type="checkbox">
                 <span class="sb-toggle__track"><span class="sb-toggle__thumb" /></span>
                 <span>
@@ -525,8 +541,17 @@
               </div>
             </details>
 
+            <!-- A failed read used to be swallowed (`.catch(() => ({}))`), leaving the blank
+                 defaults on screen looking like the store's configuration — and the record is
+                 replaced whole, so the next Save wrote those blanks over it. -->
+            <div v-if="configLoadFailed" class="sb-empty-state">
+              Klarte ikke hente butikkens lagrede Surfboard-konfigurasjon. Skjemaet under står tomt
+              og er IKKE butikkens innstillinger — lagring er sperret til konfigurasjonen er hentet.
+              Last siden på nytt.
+            </div>
+
             <div class="sb-card__foot">
-              <button class="sb-btn sb-btn--primary" :disabled="savingConfig" @click="saveConfig">
+              <button class="sb-btn sb-btn--primary" :disabled="savingConfig || !configLoaded" @click="saveConfig">
                 {{ savingConfig ? "Lagrer&hellip;" : "Lagre konfigurasjon" }}
               </button>
             </div>
@@ -905,6 +930,10 @@ export default {
       brregLoading: false,
       syncLoading: false,
       config: this.emptyConfig(),
+      // True only once THIS store's stored configuration has actually been read. The save endpoint
+      // replaces the record whole, so a form that never held the record must not be postable.
+      configLoaded: false,
+      configLoadFailed: false,
       savingConfig: false,
       terminals: [],
       registerForm: { registrationIdentifier: '', terminalName: '' },
@@ -1055,6 +1084,10 @@ export default {
         mobilePayEnabled: false,
         swishEnabled: false,
         klarnaEnabled: false,
+        // Was missing here AND from saveConfig's payload. The endpoint replaces the record whole,
+        // so an absent key is not "unchanged" — the backend bound it to false and every save
+        // silently switched the terminal's tip prompt off. The cost of that lands on staff.
+        tipsEnabled: false,
         partialPaymentsEnabled: false,
         commissionPercentage: 0,
         terminalCommissionPercentage: 0,
@@ -1148,10 +1181,14 @@ export default {
         this.loadStore(this.selectedStoreId);
       } else {
         this.config = this.emptyConfig();
+        this.configLoaded = false;
+        this.configLoadFailed = false;
       }
     },
     loadStore (storeId) {
       this.isLoading = true;
+      this.configLoaded = false;
+      this.configLoadFailed = false;
       const store = this.allStores.find(s => s.id === storeId);
       // Prefill the onboarding form from the Okam store. The online webshop/terms/privacy URLs are
       // Okam's standard pages (privacy is shared; the webshop and store terms carry the Okam store id).
@@ -1166,9 +1203,17 @@ export default {
 
       Promise.all([
         this._storeService.Get(storeId).catch(() => null),
-        this._storeService.GetSurfboardConfig(storeId).catch(() => ({}))
+        // `null` marks a read that FAILED, kept distinct from a store that has no configuration yet
+        // (the backend answers that with an empty object). Swallowing the failure into `{}` was how
+        // blank defaults came to be displayed — and then saved — as if they were the store's.
+        this._storeService.GetSurfboardConfig(storeId).catch(() => null)
       ])
         .then(([store2, config]) => {
+          this.configLoadFailed = config === null;
+          this.configLoaded = config !== null;
+          if (this.configLoadFailed) {
+            this.showNotification('Klarte ikke hente Surfboard-konfigurasjonen. Lagring er sperret.', 'error');
+          }
           this.config = Object.assign(this.emptyConfig(), config || {}, {
             surfboardEnabled: store2 ? !!store2.surfboardEnabled : false
           });
@@ -1236,6 +1281,12 @@ export default {
         });
     },
     saveConfig () {
+      // The record is replaced whole. A form that was never filled from it holds blank defaults,
+      // and posting those blanks IS the destruction — merchant ids, webhook secret, commission.
+      if (!this.configLoaded) {
+        this.showNotification('Konfigurasjonen er ikke hentet for denne butikken, så lagring ville overskrive den med et tomt skjema.', 'error');
+        return;
+      }
       this.savingConfig = true;
       this._storeService
         .UpdateSurfboardConfig(this.selectedStoreId, {
@@ -1249,6 +1300,7 @@ export default {
           mobilePayEnabled: this.config.mobilePayEnabled,
           swishEnabled: this.config.swishEnabled,
           klarnaEnabled: this.config.klarnaEnabled,
+          tipsEnabled: this.config.tipsEnabled,
           partialPaymentsEnabled: this.config.partialPaymentsEnabled,
           commissionPercentage: Number(this.config.commissionPercentage) || 0,
           terminalCommissionPercentage: Number(this.config.terminalCommissionPercentage) || 0,
@@ -1257,7 +1309,15 @@ export default {
           woltServiceFeeAmount: Number(this.config.woltServiceFeeAmount) || 0
         })
         .then(() => this.showNotification('Konfigurasjon lagret.'))
-        .catch(e => this.apiError(e, 'Lagring feilet.'))
+        .catch((e) => {
+          // The guard names the rule and the field (names only — this record carries the webhook
+          // secret), which tells the operator whether to reload or to report a dropped field.
+          if (e && e.isFullReplaceGuardError) {
+            this.showNotification(e.message, 'error');
+            return;
+          }
+          this.apiError(e, 'Lagring feilet.');
+        })
         .finally(() => {
           this.savingConfig = false;
         });

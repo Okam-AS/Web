@@ -70,6 +70,7 @@
 <script>
 import AdminPage from '~/components/organisms/AdminPage.vue'
 import Loading from '~/components/atoms/Loading.vue'
+import { amountLabel } from '~/utils/price'
 
 export default {
   name: 'RewardMembers',
@@ -119,9 +120,12 @@ export default {
         this.isLoading = false
       }
     },
+    // The absence test here was already right — `== null` catches both null and undefined — and it
+    // answered with a price: a member whose balance never arrived was shown as a member who has
+    // nothing left. `isAmountStated` additionally refuses a blank or non-numeric balance, which the
+    // old guard waved through into `('' / 100).toFixed(2)` → "0,00 kr" and `('abc' / 100)` → "NaN kr".
     formatBalance(balance) {
-      if (balance == null) return '0 kr'
-      return `${(balance / 100).toFixed(2).replace('.', ',')} kr`
+      return amountLabel(balance, { suffix: 'kr', decimalSeparator: ',' })
     },
   },
 }

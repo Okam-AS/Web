@@ -33,7 +33,9 @@ const {
   assertStampedActor,
   assertFirstRevision,
   isShellPath,
-  judgeSubjectOrigin
+  judgeSubjectOrigin,
+  proxiedApiPath,
+  judgeProxiedSubject
 } = require('../test/e2e/support/journey-assertions');
 
 const REPO_ROOT = path.resolve(__dirname, '..');
@@ -277,6 +279,84 @@ describe('the split-origin guard behind both served floors', () => {
   });
 });
 
+describe('the same-origin proxy, which the split-origin guard cannot see', () => {
+  // `nuxt.config.js:138` mounts `server-middleware/okam-api-proxy.js` at `/okam-api`, and it rewrites
+  // `pathRewrite: { '^/okam-api': '' }`. So the path the BACKEND saw is the path with the mount
+  // stripped, and that — not the browser's path — is what decides shell from subject.
+  it.each([
+    ['/okam-api/workforce/stores/1/context', '/workforce/stores/1/context'],
+    ['/okam-api/v1/growth/stores/42/newsletters', '/v1/growth/stores/42/newsletters'],
+    ['/okam-api/user/login', '/user/login'],
+    ['/okam-api/', '/'],
+    ['/okam-api', '/']
+  ])('%s reaches the backend as %s', (browserPath, backendPath) => {
+    expect(proxiedApiPath(browserPath)).toBe(backendPath);
+  });
+
+  // NOT proxied, and the reason the prefix is matched as a DELIMITED one. A bare `startsWith` would
+  // call the first two of these backend traffic; they are the app's own routes and are forwarded
+  // nowhere. `/_nuxt/*` is the case the brief names: the Nuxt dev server's own fetches must not red.
+  it.each([
+    ['/okam-api-docs'],
+    ['/okam-apifoo'],
+    ['/_nuxt/static/manifest.json'],
+    ['/workforce/stores/1/context'],
+    ['/']
+  ])('%s is not proxied traffic', p => expect(proxiedApiPath(p)).toBeNull());
+
+  // The whole point of stripping before testing the shell: a proxied sign-in is the SHELL, and a
+  // counter that tested `/okam-api/user/login` directly would call it a subject call and red on a
+  // run that only opened the door.
+  it('classifies a proxied sign-in as shell, not as the journey subject', () => {
+    expect(isShellPath('/okam-api/user/login')).toBe(false);
+    expect(isShellPath(proxiedApiPath('/okam-api/user/login'))).toBe(true);
+  });
+
+  const NAMED = 'http://127.0.0.1:5961';
+  const APP = 'http://127.0.0.1:3010';
+
+  it('reds when the whole subject came through the proxy and none from the named backend', () => {
+    const error = judgeProxiedSubject({
+      apiBaseUrl: NAMED,
+      appBaseUrl: APP,
+      subjectFromBackend: 0,
+      subjectViaProxy: 12,
+      proxySample: ['GET http://127.0.0.1:3010/okam-api/workforce/stores/42/context -> 200']
+    });
+    expect(error).toMatch(/SAME-ORIGIN PROXY/);
+    // …and this is exactly the run the split-origin judge stays silent on, because the traffic never
+    // left the app's origin and so `subjectFromElsewhere` is zero. That silence is the defect.
+    expect(judgeSubjectOrigin({
+      apiBaseUrl: NAMED, subjectFromBackend: 0, subjectFromElsewhere: 0, elsewhereSample: []
+    })).toBeNull();
+  });
+
+  // THE QUESTION THAT MAKES THE COUNTER WORTH HAVING. A guard that reds on "nothing was fetched" as
+  // well as on "the proxy served it" has re-created the silent zero one column along.
+  it('stays silent when nothing was fetched at all, which is a different fact', () => {
+    expect(judgeProxiedSubject({
+      apiBaseUrl: NAMED, appBaseUrl: APP, subjectFromBackend: 0, subjectViaProxy: 0, proxySample: []
+    })).toBeNull();
+  });
+
+  it('stays silent when the named backend served the subject directly', () => {
+    expect(judgeProxiedSubject({
+      apiBaseUrl: NAMED, appBaseUrl: APP, subjectFromBackend: 31, subjectViaProxy: 4, proxySample: []
+    })).toBeNull();
+  });
+
+  it('names the remedy rather than accusing the backend of not answering', () => {
+    // The backend may well have served every one of these calls — through the proxy. What is false
+    // is the artifact's ability to say so, so the sentence has to send the reader to the build, not
+    // to the API.
+    const error = judgeProxiedSubject({
+      apiBaseUrl: NAMED, appBaseUrl: APP, subjectFromBackend: 0, subjectViaProxy: 3, proxySample: []
+    });
+    expect(error).toContain('API_BASE_URL');
+    expect(error).toContain(NAMED);
+  });
+});
+
 describe('the journeys actually assert these things', () => {
   // A helper that can fail proves nothing about a spec that does not call it, and a spec can import
   // one and still assert the old weak form beside it. Read as text, which is a different direction
@@ -321,5 +401,42 @@ describe('the journeys actually assert these things', () => {
       path.join(REPO_ROOT, 'test', 'e2e', 'support', 'journey.js'), 'utf8'));
     expect(journey).toContain('judgeSubjectOrigin(');
     expect(journey).toContain('backendSubjectServed');
+  });
+
+  it('the recorder counts and judges the same-origin proxy too', () => {
+    const journey = code(fs.readFileSync(
+      path.join(REPO_ROOT, 'test', 'e2e', 'support', 'journey.js'), 'utf8'));
+    // The judge is CALLED, not merely imported — a helper that can fail proves nothing about a
+    // recorder that never asks it.
+    expect(journey).toContain('judgeProxiedSubject(');
+    // The counter is FILED, so a reader can see the zero rather than infer it from silence. This is
+    // the number that was previously unwritable rather than merely zero.
+    expect(journey).toContain('proxiedSubjectServed');
+    // And the shell test runs on the STRIPPED path. `isShellPath(pathOf(...))` alone would classify
+    // every proxied sign-in as a subject call.
+    expect(journey).toContain('proxiedApiPath(');
+    // The bare mount strips to `/`, which is in no SHELL_PATHS shape and would otherwise count as a
+    // subject call. No client fetches the API root as its subject, so counting it could only false-red.
+    expect(journey).toContain('proxied !== \'/\'');
+  });
+
+  it('an arm is not satisfied unless a test actually executed', () => {
+    // Arm 3 expects `nonzero` + `NONE`, which is EXACTLY the signature of a harness that died in
+    // module load. Without an execution check that arm was satisfiable by the very breakage this
+    // script failed to notice for five commits.
+    const proof = fs.readFileSync(
+      path.join(REPO_ROOT, 'test', 'e2e', 'scripts', 'guard-proof.js'), 'utf8');
+    expect(proof).toContain('&& executed');
+    expect(proof).toMatch(/const executed = .*1 \(\?:passed\|failed\)/);
+  });
+
+  it('guard-proof copies whatever the support files require, rather than a hand-written list', () => {
+    // The list was `artifact-store.js` and `journey-assertions.js`; `artifact-store.js` grew a
+    // `require('./world-stamp')` and the list did not follow, so every arm of the proof died in
+    // module load and the whole standing proof reported nothing while still printing a table.
+    const proof = fs.readFileSync(
+      path.join(REPO_ROOT, 'test', 'e2e', 'scripts', 'guard-proof.js'), 'utf8');
+    expect(proof).toContain('const queue = [\'journey.js\', \'artifact-store.js\', \'journey-assertions.js\']');
+    expect(proof).not.toContain('fs.copyFileSync(path.join(SUPPORT, \'artifact-store.js\')');
   });
 });

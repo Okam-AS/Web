@@ -362,6 +362,7 @@ import {
   clockLabel,
   readInstant
 } from '~/utils/events/journey';
+import { crossCurrencyLabel } from '~/utils/cross-currency';
 
 // One event, read out. Purely presentational: every panel renders a state its page resolved, and the
 // component owns no fetching and no actions, so the honesty rules it draws are testable without a
@@ -541,7 +542,7 @@ export default {
       const value = readMinor(minor);
       if (value === null) { return this.unknownMark; }
       if (currency && this.currency && currency !== this.currency) {
-        return this.wholeAmount(value) + ',' + this.fractionAmount(value) + ' ' + currency;
+        return crossCurrencyLabel(value, currency, this);
       }
       return this.priceLabel(value);
     },

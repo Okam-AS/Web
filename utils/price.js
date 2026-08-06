@@ -60,6 +60,124 @@ export function isAmountStated (amountMinor) {
   return false
 }
 
+/**
+ * Add amounts WITHOUT inventing one.
+ *
+ * A gate in front of a formatter cannot see a hole that the arithmetic already filled in. `null + null`
+ * is `0` and `(a || 0) + (b || 0)` is `0`, so a row whose two fields never arrived reaches
+ * `priceLabel` as a genuine zero and prints as a real amount — the figure is manufactured before
+ * anything is in a position to refuse it. That is why this is a SUM helper and not a second gate:
+ * the only place absence can still be seen is before the `+`.
+ *
+ * Returns `null` — the absent marker every entry point here already understands — if ANY addend is
+ * unstated, so `priceLabel(statedSum(a, b))` prints the unknown mark. A partial sum presented as a
+ * total is a worse lie than no total: the reader cannot tell which term is missing.
+ *
+ * An EMPTY list sums to `0`, and that is deliberate: nothing recorded really is nothing. An ABSENT
+ * list is not a list, and callers must gate the container themselves rather than pass `[]` for it.
+ */
+export function statedSum (...amounts) {
+  let total = 0
+  for (const amount of amounts) {
+    if (!isAmountStated(amount)) { return null }
+    total += Number(amount)
+  }
+  return total
+}
+
+/**
+ * The typographic MINUS (U+2212), not the ASCII hyphen. It is what these rows have always printed,
+ * and it is exported so a test can name the character instead of pasting a glyph that looks like
+ * three other ones.
+ */
+export const MINUS_SIGN = '−'
+
+/**
+ * The label for a row that prints the NEGATION of an amount — the deduction rows on an X/Z report
+ * (negativ salg, retur, feilslag) and the discount lines on a check.
+ *
+ * WHY IT EXISTS, AND WHY NO EXISTING GATE COULD REACH IT. Those rows wrote the sign as a template
+ * literal OUTSIDE the interpolation: `−{{ priceLabel(x) }}`. The formatter therefore never saw the
+ * character, and every absence rule in this module — all of which run INSIDE the interpolation —
+ * was structurally incapable of refusing it. An absent amount rendered as `−—`: a minus sign
+ * attached to the unknown mark, which reads as the negative of a figure nobody stated and is
+ * indistinguishable from a formatting slip on a kassasystemforskrifta document an inspector reads.
+ * A gate cannot refuse a character that is never passed to it, so the sign has to be owned by the
+ * label. That is the whole point of this function, and it is why the answer is not a fifth guard.
+ *
+ * FOUR WORLDS, NOT THREE. A deduction row has to survive a field that already carries a minus, on
+ * top of the usual stated / zero / absent trio:
+ *
+ *   - STATED MAGNITUDE (5000, the normal case) renders `−kr 50,00`. The sign MUST still print.
+ *     Deleting the literal is the obvious way to be rid of `−—`, and it silently turns every
+ *     deduction on the report into a positive — trading a confusing row for a wrong one.
+ *   - GENUINE ZERO renders `kr 0,00`, with no sign. Zero is a figure somebody stated; `−kr 0,00`
+ *     is not a smaller number, only a stranger one.
+ *   - ALREADY NEGATIVE (-5000): the negation is +50 and it prints `kr 50,00`. The sign is resolved
+ *     ONCE, from the negated value. Prepending a literal to a formatted negative would compose
+ *     `−kr -50,00`, which states the opposite of itself twice.
+ *   - ABSENT renders the bare unknown mark and NO sign, because "we do not know" is the whole of
+ *     the claim and a sign in front of it asserts a direction the row does not have.
+ *
+ * `formatAmount` is the caller's own formatter (`this.priceLabel` off the global mixin), and it is
+ * only ever handed a MAGNITUDE. That is not a stylistic preference: core's `priceLabel` splits the
+ * minor units with `slice(0, -2)` and `slice(-2)`, so it formats -4 as "kr 0,-4" and -50 as
+ * "kr -,50". Negating the value and letting the formatter print the sign would be correct
+ * arithmetic handed to a formatter that cannot render it.
+ */
+export function negatedAmountLabel (amountMinor, formatAmount) {
+  if (!isAmountStated(amountMinor)) { return UNKNOWN_AMOUNT }
+  const negated = -Number(amountMinor)
+  // A genuine zero needs no case of its own: negating it gives `-0`, and `-0 < 0` is false, so it
+  // takes the unsigned branch and prints its digits. An explicit `if (negated === 0)` guard stood
+  // here first and the mutation proof in `lanes/L-XZ-NEGATED-ABSENCE/` could not make deleting it
+  // fail a single test — which is what dead means.
+  return (negated < 0 ? MINUS_SIGN : '') + formatAmount(Math.abs(negated))
+}
+
+/**
+ * The gate in front of the local money formatters the legacy admin pages wrote for themselves.
+ *
+ * Five pages each invented their own — an invoice, a settlements summary, a Wolt menu, a rewards
+ * roster and two product lists — and five of them printed an amount nobody stated as a real figure,
+ * because each one re-decided the absence question and got it wrong in a different way (`|| 0`, an
+ * `if (!x)` that a genuine zero also takes, an explicit absence test answered with "0 kr", a raw
+ * `/ 100`). The FORMAT legitimately differs per page and stays with the page; the RULE does not, and
+ * lives here so there is one place left to get it wrong.
+ *
+ * `suffix` is a trailing unit ("kr", a currency code) and is omitted when blank — an absent amount
+ * never gets one, since "— kr" still asserts that somebody priced this in kroner.
+ */
+export function amountLabel (amountMinor, { suffix = '', decimalSeparator = '.' } = {}) {
+  if (!isAmountStated(amountMinor)) { return UNKNOWN_AMOUNT }
+  const kroner = (Number(amountMinor) / 100).toFixed(2)
+  const body = decimalSeparator === '.' ? kroner : kroner.split('.').join(decimalSeparator)
+  return suffix ? body + ' ' + suffix : body
+}
+
+/**
+ * The nb-NO currency rendering ("kr 206,80") that the invoice and the settlements summary each built
+ * with their own identical `Intl.NumberFormat` call.
+ */
+export function nokAmountLabel (amountMinor) {
+  if (!isAmountStated(amountMinor)) { return UNKNOWN_AMOUNT }
+  return new Intl.NumberFormat('nb-NO', { style: 'currency', currency: 'NOK' })
+    .format(Number(amountMinor) / 100)
+}
+
+/**
+ * What an `<input type="number">` is seeded with for an amount nobody stated.
+ *
+ * NOT the unknown mark: a number input cannot hold "—", and a dash is not something an operator can
+ * edit. Blank is the honest seed — there is no number to show — and it is the difference between an
+ * operator seeing an empty price field and an operator tabbing past a pre-filled "0.00" that then
+ * gets published as a real price.
+ */
+export function amountInputValue (amountMinor) {
+  if (!isAmountStated(amountMinor)) { return '' }
+  return (Number(amountMinor) / 100).toFixed(2)
+}
+
 export function formatChf (amountMinor) {
   // Before any arithmetic. `Number(null)` is 0 and `NaN || 0` is 0, so every absent amount used to
   // arrive at the formatter already disguised as a genuine zero.

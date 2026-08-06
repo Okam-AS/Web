@@ -54,6 +54,44 @@
 //     older one even when the news is worse (a world that has started failing must be able to say so); or
 //   • the incoming run ranks STRICTLY higher.
 //
+// ---- EXCEPT THAT A RECORD GIT KEEPS IS NOT A SLOT AT ALL --------------------------------------
+//
+// Every rule above decides which RUN owns a name. None of them could see the one case where the file
+// at that name is not a run's output but a REVIEWED ARTEFACT: `.gitignore` ignores `artifacts/`
+// wholesale and sixteen records were force-added past it (`git add -f`) precisely so that an exit
+// whose evidence is regenerated-or-absent could be read after the fact. So the first question asked
+// of the standing canonical is now whether git keeps it, and if it does, NO run displaces it —
+// not a stronger one, not its own lineage, and not the provisional `running` record.
+//
+// Both of the ways that went wrong were observed on this branch on 2026-08-05, from ONE re-run of the
+// three committed journeys:
+//
+//   THE OVERWRITE.  `workforce-invitation-onboarding`'s record and two of its seven tracked pictures
+//                   came back with different bytes. The same-lineage rule was reached before rank was
+//                   ever consulted, so a fixture re-run took the slot unconditionally.
+//   THE ORPHANING.  `modal-scroll-lock` and `modal-estate-scroll-lock` keep their pictures at the
+//                   PRE-BACKEND-KEY path (`<journey>/NN-….png`, no key segment). A re-run does not
+//                   overwrite those; it writes new ones under `<journey>/fixture/`, which is ignored,
+//                   and rewrites the committed JSON to point THERE. The committed record then cites
+//                   files git does not keep and the committed pictures are referenced by nothing —
+//                   the dangling reference `.gitignore` says must never exist. A diff of the pictures
+//                   shows nothing, which is why ranking alone could never have caught it: the
+//                   incoming run names its build and the legacy record cannot, so it outranks on
+//                   identity and would have taken the slot even with lineage checked last.
+//                   `modal-estate-scroll-lock`'s re-run FAILED, and replaced a passing committed
+//                   record with `"status": "failed"`, `"screenshots": []`.
+//
+// A run whose slot is held by a tracked record is still filed whole under `runs/` and in the ledger,
+// and its record says `canonicalTracked` so a reader learns WHY it did not take the name — "the slot
+// is committed evidence" and "a stronger run holds it" are different facts. Its pictures go under
+// `runs/` too; see `JourneyRecorder.dir` in journey.js, without which the guard would protect the
+// JSON and leave the tracked PNGs being overwritten one level down.
+//
+// TO REGENERATE COMMITTED EVIDENCE, delete the record and run again — the same gesture the header
+// already documents for handing the slot to another world. A file that is not there has no bytes to
+// preserve, so the guard does not fire, the run takes the name, its pictures land at the ordinary
+// path, and `git add -f` puts the new pair back under version control together.
+//
 // Equal rank from a DIFFERENT backend does not displace — that is the exit criterion of this lane
 // stated directly. Nothing is lost either way: the loser is written under `runs/` and appended to the
 // ledger, and its own record says which key holds the slot. To hand the canonical slot to a different
@@ -179,6 +217,28 @@ function gitIn (dir, args) {
   }
 }
 
+/**
+ * Does git KEEP this file?
+ *
+ * `git check-ignore` cannot answer it. `.gitignore` ignores `artifacts/` wholesale and the records
+ * this question is about were force-added past that line, so check-ignore calls every one of them
+ * ignored. Index membership is the only source that tells a force-added record from the run output
+ * beside it, and `ls-files --error-unmatch` is how it is read — from the file's OWN directory,
+ * because a bare filename pathspec resolved from the repo root matches nothing.
+ *
+ * FALSE when the file is not on disk. A record that has been deleted has no bytes to preserve, and
+ * deleting it is the documented way to hand the slot over on purpose.
+ *
+ * FALSE outside a checkout, where the question has no answer: `guard-proof.js` and
+ * `fixture-divergence.js` copy these files into temp trees that are not repositories, and the store's
+ * own suite runs in `mkdtempSync`. Unknown must behave like "nothing here is under review" rather
+ * than like a lock nobody can open, or those harnesses would stop being able to write at all.
+ */
+function isTracked (file) {
+  if (!file || !fs.existsSync(file)) { return false; }
+  return !!gitIn(path.dirname(file), ['ls-files', '--error-unmatch', '--', path.basename(file)]);
+}
+
 /** `{ id, short, detail }` for a checkout, or null when it is not one. */
 function buildFromCheckout (repo, source) {
   if (!repo || !fs.existsSync(repo)) { return null; }
@@ -248,7 +308,10 @@ function buildFromListeningProcess (apiBaseUrl) {
   } catch (e) {
     return null;
   }
-  if (!port || !(host === '127.0.0.1' || host === 'localhost' || host === '::1')) { return null; }
+  // `worldStamp.isLoopbackHost` and not an inline list: this comparison used to spell IPv6 loopback
+  // `'::1'`, which Node's WHATWG URL never returns — `hostname` is `'[::1]'`, brackets included — so
+  // the arm could not be reached and an IPv6 origin was treated as another machine.
+  if (!port || !worldStamp.isLoopbackHost(host)) { return null; }
 
   try {
     const pids = execFileSync('lsof', ['-nP', '-iTCP:' + port, '-sTCP:LISTEN', '-t'],
@@ -329,7 +392,7 @@ function backendKeyFor ({ backend, apiBaseUrl, build }) {
   } catch (e) {
     host = 'unparseable';
   }
-  const loopback = host === '127.0.0.1' || host === 'localhost' || host === '::1';
+  const loopback = worldStamp.isLoopbackHost(host);
   const where = loopback ? port : sanitize(host) + '-' + port;
   return ['live', where, (build && build.short) || UNIDENTIFIED].filter(Boolean).join('-');
 }
@@ -387,9 +450,19 @@ function readJson (file) {
  * `provisional` is a run that has only STARTED. It may replace its own lineage's record — that is
  * the invalidation that stops a killed run leaving a stale pass behind — but it may not take the slot
  * from another backend on strength, because it has not earned anything yet.
+ *
+ * `standingTracked` says git keeps the record that is there. See the header: that record is not a
+ * slot a run may win, it is the reviewed evidence of an exit, and no run displaces it.
  */
-function canTakeCanonical (incoming, standing, provisional) {
+function canTakeCanonical (incoming, standing, provisional, standingTracked) {
   if (!standing) { return true; }
+  // ASKED BEFORE LINEAGE AND BEFORE RANK, because each of the two rules below would let a re-run
+  // through on its own and the observed damage came through BOTH doors. Lineage: a fixture re-run of
+  // a committed fixture journey is always the same lineage, so it took the slot without rank ever
+  // being consulted. Rank: the two `modal-*` records predate `backendBuild` entirely, so an incoming
+  // run outranks them on identity — reordering lineage after rank would have left that case exactly
+  // as broken while looking like a fix. Neither is wrong for an ignored record; both are wrong here.
+  if (standingTracked) { return false; }
   const sameLineage = keyOfRecord(standing) === keyOfRecord(incoming);
   if (sameLineage) { return true; }
   if (provisional) { return false; }
@@ -455,8 +528,13 @@ function writeRun (artifactDir, record, options) {
   fs.mkdirSync(files.runsDir, { recursive: true });
 
   const standing = fs.existsSync(files.canonical) ? readJson(files.canonical) : null;
+  // Read from disk on every run rather than passed in by the caller: whether a record is under review
+  // is a fact about the checkout at this moment, and the one caller that could have been asked —
+  // `beginRun` — is exactly the path that used to file `"status": "running"` over committed evidence
+  // before the browser opened.
+  const tracked = isTracked(files.canonical);
   const incoming = Object.assign({}, record, { artifact: { key } });
-  const takes = canTakeCanonical(incoming, standing, !!opts.provisional);
+  const takes = canTakeCanonical(incoming, standing, !!opts.provisional, tracked);
 
   // THE ONE PATH BY WHICH THIS STORE STILL DESTROYS EVIDENCE, and the whole of what is done about it.
   // A run of the same backend takes the slot unconditionally — a failing world must be able to say so
@@ -473,6 +551,10 @@ function writeRun (artifactDir, record, options) {
       file: relative(artifactDir, files.run),
       canonical: takes,
       canonicalHeldBy: takes ? key : keyOfRecord(standing),
+      // WHY it did not take the name, which `canonicalHeldBy` alone cannot say. "A stronger run holds
+      // the slot" is a fact about two runs; "the record there is committed evidence" is a fact about
+      // the repository, and the reader who is about to re-run and commit needs to be told which.
+      canonicalTracked: tracked,
       provisional: !!opts.provisional,
       // Named IN the canonical record, not only in the ledger: the reader who most needs to know that
       // a stronger run of this same world exists is the one reading this file as the journey's result.
@@ -501,6 +583,7 @@ function writeRun (artifactDir, record, options) {
     provisional: !!opts.provisional,
     canonical: takes,
     canonicalHeldBy: filed.artifact.canonicalHeldBy,
+    canonicalTracked: tracked,
     supersedes: supersedes ? supersedes.file : null
   }) + '\n');
 
@@ -509,6 +592,7 @@ function writeRun (artifactDir, record, options) {
     runFile: files.run,
     canonicalFile: takes ? files.canonical : null,
     canonical: takes,
+    canonicalTracked: tracked,
     heldBy: filed.artifact.canonicalHeldBy,
     supersededFile: supersedes ? files.superseded : null,
     record: filed
@@ -536,6 +620,7 @@ module.exports = {
   readWorldStamp: worldStamp.readStamp,
   fixtureBuild,
   backendKeyFor,
+  isTracked,
   canTakeCanonical,
   compareRank,
   rankOf,

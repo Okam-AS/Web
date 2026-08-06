@@ -43,29 +43,31 @@
         <p class="trn-disclosure__summary" data-test="disclosure-summary">
           {{ $i('trn_disclosure_summary', { entries: log.entries.length, readers: readerCount }) }}
         </p>
-        <table class="trn-table" data-test="disclosure-table">
-          <thead>
-            <tr>
-              <th>{{ $i('trn_col_when') }}</th>
-              <th>{{ $i('trn_col_who') }}</th>
-              <th>{{ $i('trn_col_what') }}</th>
-              <th>{{ $i('trn_col_size') }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(entry, index) in log.entries" :key="index" data-test="disclosure-row">
-              <td>{{ whenLabel(entry) }}</td>
-              <td>
-                <span v-if="entry.actorIsSubject" class="trn-badge trn-badge--on" data-test="disclosure-actor-self">
-                  {{ $i('trn_disclosure_actor_self') }}
-                </span>
-                <code v-else class="trn-disclosure__actor" data-test="disclosure-actor">{{ entry.actorReference || dash }}</code>
-              </td>
-              <td>{{ eventLabel(entry) }}</td>
-              <td>{{ sizeLabel(entry) }}</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="trn-table-scroll">
+          <table class="trn-table" data-test="disclosure-table">
+            <thead>
+              <tr>
+                <th>{{ $i('trn_col_when') }}</th>
+                <th>{{ $i('trn_col_who') }}</th>
+                <th>{{ $i('trn_col_what') }}</th>
+                <th>{{ $i('trn_col_size') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(entry, index) in log.entries" :key="index" data-test="disclosure-row">
+                <td>{{ whenLabel(entry) }}</td>
+                <td>
+                  <span v-if="entry.actorIsSubject" class="trn-badge trn-badge--on" data-test="disclosure-actor-self">
+                    {{ $i('trn_disclosure_actor_self') }}
+                  </span>
+                  <code v-else class="trn-disclosure__actor" data-test="disclosure-actor">{{ entry.actorReference || dash }}</code>
+                </td>
+                <td>{{ eventLabel(entry) }}</td>
+                <td>{{ sizeLabel(entry) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </template>
 
       <p class="trn-form__hint" data-test="disclosure-no-names">

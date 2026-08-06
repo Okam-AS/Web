@@ -50,6 +50,30 @@ $trn-green: #1bb776;
   color: #b91c1c;
 }
 
+// EVERY `.trn-table` ON THIS SURFACE IS WRAPPED IN ONE OF THESE, and it is load-bearing rather than
+// cosmetic. These tables live in `.trn-page__columns`, a two-track `auto-fit` grid, so at 1280 each
+// track is ~488px — while the versions table's own min-content width is 607px and grows to 635px the
+// moment a published row carries a real content hash and a timestamp. A table box NEVER shrinks below
+// min-content, so without a scroll container it overflowed its track by ~120–160px and its last cell
+// — the cell holding `version-publish` and `assignment-revoke` — came to rest underneath the NEXT
+// column, which is painted later and therefore wins the hit test.
+//
+// Measured in Chromium on 2026-08-04 at the branch tip: `document.elementFromPoint` at the publish
+// button's own centre returned the right-hand column's `<form class="trn-form">`, and an ordinary
+// `.click()` timed out at 1024, at 1280 and — once a second version existed — at 1440 too. The
+// button was reachable by keyboard the whole time, which is the only reason it was not a total block
+// and also the reason no test caught it: every suite that "published" did so by calling the handler.
+//
+// Scrolling rather than wrapping the headers on purpose: wrapping would fit TODAY's labels and break
+// again on the next longer one, whereas this holds for any content width.
+.trn-table-scroll {
+  overflow-x: auto;
+  // The wrapper is a flex item in `.trn-page__column`; without an explicit floor it would adopt its
+  // content's min-content width and hand the overflow straight back to the column.
+  min-width: 0;
+  max-width: 100%;
+}
+
 .trn-table {
   width: 100%;
   border-collapse: collapse;

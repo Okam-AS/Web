@@ -183,6 +183,15 @@ export default {
       const width = Math.max(24, (this.dispDuration(r) / 60) * this.pxPerHour - 2);
       return { left: left + 'px', width: width + 'px' };
     },
+    // The tables a combined booking keeps hold of while its primary is dragged or its length
+    // changed. `block-move` only ever re-points the primary, so these come along unchanged — and a
+    // conflict check that ignored them would clear a drop that lands a secondary table on top of
+    // another party.
+    extraTablesOf (r) {
+      if (Array.isArray(r.extraTableIds)) { return r.extraTableIds.slice(); }
+      if (Array.isArray(r.tableIds)) { return r.tableIds.filter(id => id !== r.tableId); }
+      return [];
+    },
     startDrag (r, mode, e) {
       if (this.drag) { return; }
       e.preventDefault();
@@ -195,6 +204,7 @@ export default {
         origStart: r.startMin,
         origDur: r.durationMin,
         origTable: r.tableId,
+        extraTables: this.extraTablesOf(r),
         curStart: r.startMin,
         curDur: r.durationMin,
         curTable: r.tableId,
@@ -218,7 +228,7 @@ export default {
         curDur = d.origDur + (d.origStart - newStart);
         curStart = newStart;
       }
-      const conflict = this.checkConflict(d.id, curTable, curStart, curDur);
+      const conflict = this.checkConflict(d.id, [curTable].concat(d.extraTables), curStart, curDur);
       this.drag = { ...d, moved, curStart, curDur, curTable, conflict };
     },
     onPointerUp () {

@@ -222,12 +222,167 @@
                 <p class="mrg-card__note">
                   {{ $i('mrg_activate_lede', { number: activatable.versionNumber }) }}
                 </p>
-                <button v-if="activatable.revision" class="mrg-btn" :disabled="busy" @click="activate">
+                <button v-if="activatable.revision" class="mrg-btn" data-test="activate" :disabled="busy" @click="activate">
                   {{ activating ? $i('mrg_activate_running') : $i('mrg_activate') }}
                 </button>
                 <p v-else class="mrg-card__note" data-test="no-revision">
                   {{ $i('mrg_activate_no_revision') }}
                 </p>
+              </div>
+
+              <!-- STEP 6 — the only two things that can happen to a recipe AFTER it went live.
+                   An Active version is immutable (R4), so "fix the recipe" is not an edit of what is
+                   live: it is a new Draft cloned from it, edited, and activated in its place — which
+                   is why this card offers the clone and the editor and leaves activation to the card
+                   above, acting on the same draft. Retire is the other exit, and the server offers it
+                   only FROM an Active version; there is no route that retires a draft. -->
+              <div v-if="selectedRecipeId && detail" class="mrg-card mrg-revise" data-test="revise">
+                <h2 class="mrg-card__title">
+                  {{ $i('mrg_revise_title') }}
+                </h2>
+
+                <template v-if="activeVersion">
+                  <!-- `=== null` and not falsiness: a version genuinely numbered 0 is a number and
+                       must print as one, while an absent number must not print as "v0". -->
+                  <p class="mrg-card__note" data-test="revise-active">
+                    {{ activeVersionNumber === null
+                      ? $i('mrg_revise_active_unknown')
+                      : $i('mrg_revise_active', { number: activeVersionNumber }) }}
+                  </p>
+
+                  <!-- Hidden while a draft is open: this surface acts on ONE draft (the highest), so
+                       offering a second clone would mint a version nothing on this page can reach. -->
+                  <button
+                    v-if="!draftForm"
+                    class="mrg-btn mrg-btn--ghost"
+                    data-test="new-draft"
+                    :disabled="busy"
+                    @click="newDraft"
+                  >
+                    {{ drafting ? $i('mrg_revise_new_running') : $i('mrg_revise_new') }}
+                  </button>
+                </template>
+                <p v-else class="mrg-card__note" data-test="revise-no-active">
+                  {{ $i('mrg_revise_no_active') }}
+                </p>
+
+                <div v-if="draftForm" class="mrg-revise__editor" data-test="draft-editor">
+                  <h3 class="mrg-card__subtitle">
+                    {{ $i('mrg_revise_edit_title') }}
+                  </h3>
+
+                  <div class="mrg-field-row">
+                    <label class="mrg-field">
+                      <span class="mrg-field__label">{{ $i('mrg_form_yield') }}</span>
+                      <input
+                        v-model="draftForm.yieldQuantity"
+                        class="mrg-field__input"
+                        type="number"
+                        min="0"
+                        step="any"
+                        data-test="draft-yield"
+                        :disabled="busy"
+                      >
+                    </label>
+                    <label class="mrg-field">
+                      <span class="mrg-field__label">{{ $i('mrg_form_yield_unit') }}</span>
+                      <select v-model="draftForm.yieldUnit" class="mrg-field__input" data-test="draft-yield-unit" :disabled="busy">
+                        <option v-for="unit in baseUnits" :key="unit" :value="unit">
+                          {{ $i('mrg_unit_' + unit.toLowerCase()) }}
+                        </option>
+                      </select>
+                    </label>
+                    <label class="mrg-field">
+                      <span class="mrg-field__label">{{ $i('mrg_form_portions') }}</span>
+                      <input
+                        v-model="draftForm.portionCount"
+                        class="mrg-field__input"
+                        type="number"
+                        min="1"
+                        step="1"
+                        data-test="draft-portions"
+                        :disabled="busy"
+                      >
+                    </label>
+                  </div>
+
+                  <div v-for="(line, index) in draftForm.components" :key="index" class="mrg-component" data-test="draft-component">
+                    <!-- A SUB-RECIPE line is shown and never re-pointed. The editor may remove it, but
+                         it cannot turn it into an ingredient: the two cost different things, and a
+                         select seeded with an ingredient id would do exactly that on the next save. -->
+                    <span v-if="line.subRecipeId" class="mrg-component__sub" data-test="draft-sub-recipe">
+                      {{ $i('mrg_revise_sub_recipe') }}
+                    </span>
+                    <select
+                      v-else
+                      v-model="line.ingredientId"
+                      class="mrg-field__input"
+                      data-test="draft-ingredient"
+                      :disabled="busy"
+                      @change="onIngredientChange(line)"
+                    >
+                      <option value="">
+                        {{ $i('mrg_component_pick') }}
+                      </option>
+                      <option v-for="ingredient in ingredientOptions" :key="ingredient.ingredientId" :value="ingredient.ingredientId">
+                        {{ ingredient.name }}
+                      </option>
+                    </select>
+                    <input
+                      v-model="line.quantity"
+                      class="mrg-field__input mrg-component__qty"
+                      type="number"
+                      min="0"
+                      step="any"
+                      data-test="draft-quantity"
+                      :disabled="busy"
+                    >
+                    <select v-model="line.unitCode" class="mrg-field__input mrg-component__unit" :disabled="busy || !!line.subRecipeId">
+                      <option v-for="code in draftUnitOptionsFor(line)" :key="code" :value="code">
+                        {{ code }}
+                      </option>
+                    </select>
+                    <button class="mrg-component__remove" data-test="draft-remove" :disabled="busy" @click="removeDraftComponent(index)">
+                      ×
+                    </button>
+                  </div>
+
+                  <button
+                    v-if="hasIngredients"
+                    class="mrg-btn mrg-btn--ghost"
+                    data-test="draft-add"
+                    :disabled="busy"
+                    @click="addDraftComponent"
+                  >
+                    {{ $i('mrg_component_add') }}
+                  </button>
+
+                  <p v-if="draftError" class="mrg-card__error" data-test="draft-error">
+                    {{ draftError }}
+                  </p>
+
+                  <button class="mrg-btn" data-test="save-draft" :disabled="busy" @click="saveDraft">
+                    {{ savingDraft ? $i('mrg_revise_saving') : $i('mrg_revise_save') }}
+                  </button>
+                </div>
+
+                <template v-if="activeVersion">
+                  <p class="mrg-card__note">
+                    {{ $i('mrg_revise_retire_lede') }}
+                  </p>
+                  <button
+                    v-if="activeVersion.revision"
+                    class="mrg-btn mrg-btn--danger"
+                    data-test="retire"
+                    :disabled="busy"
+                    @click="retire"
+                  >
+                    {{ retiring ? $i('mrg_revise_retiring') : $i('mrg_revise_retire') }}
+                  </button>
+                  <p v-else class="mrg-card__note" data-test="retire-no-revision">
+                    {{ $i('mrg_revise_retire_no_revision') }}
+                  </p>
+                </template>
               </div>
             </template>
           </div>
@@ -260,13 +415,36 @@ import {
   MARGIN_NO_ACTIVE_VERSION,
   MARGIN_PRODUCT_LINK_INVALID
 } from '~/utils/margin/api-client';
-import { readCostPreview, readRecipeRow, ingredientNames, activatableDraft } from '~/utils/margin/cost-preview';
+import { readCostPreview, readRecipeRow, ingredientNames, activatableDraft, numberOrNull } from '~/utils/margin/cost-preview';
 import { readMenuMargin, readProductLinks } from '~/utils/margin/menu-margin';
 import { BASE_UNITS, unitCodesFor, defaultUnitCodeFor } from '~/utils/margin/units';
 
 const STATUS_UNKNOWN = 'unknown';
 const STATUS_MODULE_OFF = 'module-off';
 const STATUS_ON = 'on';
+
+/**
+ * A wire value as a form string.
+ *
+ * `String(null)` is `"null"` and `Number(null)` is `0`, and both would put a figure on screen the
+ * server never sent — so an absent value seeds an EMPTY field while a genuine `0` seeds `"0"`. The
+ * test for falsiness is the bug: `!0` is `true`, so `value || ''` swallows the real zero and the two
+ * become indistinguishable in the one place a venue reads them as different facts.
+ */
+function formValue (value) {
+  return value === null || value === undefined ? '' : String(value);
+}
+
+/**
+ * A wire yield factor, preserved exactly.
+ *
+ * Null is the legal "no trim loss" and `Number(null)` is `0`, which the server REFUSES — a yield
+ * factor must be in (0,1]. Passing a draft through the editor unchanged must therefore not turn its
+ * nulls into zeroes, or a save that changed nothing comes back `margin.component-invalid`.
+ */
+function yieldFactorOrNull (value) {
+  return value === null || value === undefined || value === '' ? null : Number(value);
+}
 
 // Every `margin.*` code this surface can meet, mapped to copy. Keyed on `code` and never on the
 // server's `detail`, which is English prose written for a developer — and never on the STATUS, which
@@ -333,6 +511,13 @@ export default {
       activating: false,
       linking: false,
       loading: false,
+      drafting: false,
+      savingDraft: false,
+      retiring: false,
+      // The open draft editor, or null when the recipe has no draft to edit. Seeded from the
+      // SERVER's document by a watcher, never assembled from a mutation response.
+      draftForm: null,
+      draftError: '',
       failure: '',
       formError: '',
       form: {
@@ -365,7 +550,8 @@ export default {
       return new MarginRecipeService(this._coreInitializer);
     },
     busy () {
-      return this.saving || this.activating || this.linking || this.loading;
+      return this.saving || this.activating || this.linking || this.loading ||
+        this.drafting || this.savingDraft || this.retiring;
     },
     blocker () {
       if (this.statusState === STATUS_MODULE_OFF) { return this.$i('mrg_module_off'); }
@@ -397,6 +583,24 @@ export default {
       return activatableDraft(this.detail);
     },
     /**
+     * The recipe's ACTIVE version, or null.
+     *
+     * Held as the whole object rather than reached for field by field at the call site for the same
+     * reason `activatableDraft` returns one: retire's `If-Match` guards THIS row, and the detail
+     * document carries a `revision` one level up under the same name. `this.detail.revision` would
+     * compile, read plausibly, and guard the wrong row.
+     */
+    activeVersion () {
+      return (this.detail && this.detail.activeVersion) || null;
+    },
+    /**
+     * The active version's number, or null when the wire did not send one. Null is a real answer and
+     * is kept apart from a genuine 0 — `numberOrNull` is the reader that does not collapse them.
+     */
+    activeVersionNumber () {
+      return this.activeVersion ? numberOrNull(this.activeVersion.versionNumber) : null;
+    },
+    /**
      * The store's product catalog, taken from the menu-margin answer — the module owns no product
      * endpoint of its own, and that answer already carries every product with its name, goods group
      * and current recipe claim.
@@ -415,7 +619,16 @@ export default {
     }
   },
   watch: {
-    storeId () { this.init(); }
+    storeId () { this.init(); },
+    /**
+     * The editor follows the SERVER's draft, not the page's memory of it.
+     *
+     * Every detail read replaces `detail`, so this fires after a clone, a save, an activation and a
+     * retire, and the fields are re-seeded from the document the server just returned. A form kept
+     * across a mutation is how a stale revision gets resubmitted; re-seeding is how the editor closes
+     * by itself when activation turns the draft into the Active version.
+     */
+    activatable (draft) { this.seedDraftForm(draft); }
   },
   mounted () {
     this.init();
@@ -671,6 +884,171 @@ export default {
       this.activating = false;
     },
 
+    /**
+     * A new Draft cloned from the Active version — the first step of every post-activation fix,
+     * because the Active version itself is immutable.
+     *
+     * The detail is RE-READ rather than patched from the response, which carries the new version
+     * only: the recipe's draft list, the row's draft count and the editor's seed all come from the
+     * server's document, so the screen after the clone is the server's answer and not this page's
+     * reconstruction of it. The menu margin is deliberately NOT re-read — a draft is not active, so
+     * nothing a dish earns can have moved.
+     */
+    async newDraft () {
+      if (!this.activeVersion) { return; }
+      this.drafting = true;
+      this.failure = '';
+      try {
+        await this._marginService.CreateVersion(this.storeId, this.selectedRecipeId, {});
+        this.detail = await this._marginService.GetRecipe(this.storeId, this.selectedRecipeId);
+        this.recipes = await this._marginService.ListRecipes(this.storeId).catch(() => null);
+      } catch (e) {
+        this.fail(e);
+      }
+      this.drafting = false;
+    },
+
+    /**
+     * Saves the open draft. The DRAFT's own revision goes in `If-Match` — the same row the activate
+     * control guards, and never the recipe header's.
+     *
+     * The request is the version WHOLE, including the notes this page does not show and the
+     * sub-recipe lines it will not re-point, because the server assigns every one of those fields
+     * unconditionally: an omission here is a deletion there.
+     */
+    async saveDraft () {
+      const draft = this.activatable;
+      if (!draft || !this.draftForm) { return; }
+
+      this.draftError = this.validateDraft();
+      if (this.draftError) { return; }
+
+      this.savingDraft = true;
+      this.failure = '';
+      try {
+        await this._marginService.UpdateVersion(
+          this.storeId,
+          this.selectedRecipeId,
+          draft.recipeVersionId,
+          this.draftRequest(),
+          draft.revision
+        );
+        this.detail = await this._marginService.GetRecipe(this.storeId, this.selectedRecipeId);
+      } catch (e) {
+        this.fail(e);
+      }
+      this.savingDraft = false;
+    },
+
+    /**
+     * Ends the recipe: the ACTIVE version becomes Retired and the recipe has none.
+     *
+     * The revision is the ACTIVE VERSION's. Retire is reachable only from an Active version — the
+     * server has no route that retires a draft — which is why the control lives behind
+     * `activeVersion` and not behind `activatable`.
+     *
+     * The menu margin IS re-read here, unlike after a draft edit: the read costs the version active
+     * at its instant, and after this there is none, so every dish this recipe is sold as loses its
+     * cost side. The stale answer would keep showing a margin that no longer has a cost behind it.
+     */
+    async retire () {
+      const active = this.activeVersion;
+      if (!active) { return; }
+      this.retiring = true;
+      this.failure = '';
+      try {
+        await this._marginService.Retire(this.storeId, this.selectedRecipeId, active.revision);
+        this.detail = await this._marginService.GetRecipe(this.storeId, this.selectedRecipeId);
+        this.recipes = await this._marginService.ListRecipes(this.storeId).catch(() => null);
+        await this.reloadMenuMargin();
+      } catch (e) {
+        this.fail(e);
+      }
+      this.retiring = false;
+    },
+
+    seedDraftForm (draft) {
+      this.draftError = '';
+      if (!draft) { this.draftForm = null; return; }
+
+      this.draftForm = {
+        yieldQuantity: formValue(draft.yieldQuantity),
+        yieldUnit: draft.yieldUnit || '',
+        portionCount: formValue(draft.portionCount),
+        // CARRIED, NOT SHOWN. `EditDraftAsync` assigns `Notes` on every save, so a body without it
+        // blanks a note this surface never offered to edit.
+        notes: draft.notes === undefined ? null : draft.notes,
+        components: (draft.components || []).map(component => ({
+          ingredientId: component.ingredientId || null,
+          subRecipeId: component.subRecipeId || null,
+          quantity: formValue(component.quantity),
+          unitCode: component.unitCode || '',
+          yieldFactor: yieldFactorOrNull(component.yieldFactor)
+        }))
+      };
+    },
+
+    /** The version WHOLE, in the shape `MarginEditVersionRequest` binds. */
+    draftRequest () {
+      return {
+        yieldQuantity: Number(this.draftForm.yieldQuantity),
+        yieldUnit: this.draftForm.yieldUnit,
+        portionCount: Number(this.draftForm.portionCount),
+        notes: this.draftForm.notes,
+        components: this.draftForm.components.map(line => ({
+          ingredientId: line.ingredientId || null,
+          subRecipeId: line.subRecipeId || null,
+          quantity: Number(line.quantity),
+          unitCode: line.unitCode,
+          yieldFactor: yieldFactorOrNull(line.yieldFactor)
+        }))
+      };
+    },
+
+    /** The same rules `ValidateVersionInput` applies, checked here only to spare a round trip. */
+    validateDraft () {
+      const form = this.draftForm;
+      if (!(Number(form.yieldQuantity) > 0)) { return this.$i('mrg_err_version_input'); }
+      if (!(Number(form.portionCount) > 0)) { return this.$i('mrg_err_version_input'); }
+      if (!form.yieldUnit) { return this.$i('mrg_err_version_input'); }
+      for (const line of form.components) {
+        // EXACTLY one of the two, which is the server's rule and a DB CHECK besides. Both set and
+        // neither set are the same refusal.
+        if (!!line.ingredientId === !!line.subRecipeId) { return this.$i('mrg_err_component'); }
+        if (!(Number(line.quantity) > 0)) { return this.$i('mrg_err_component'); }
+        if (!line.unitCode) { return this.$i('mrg_err_component'); }
+      }
+      return '';
+    },
+
+    addDraftComponent () {
+      const first = this.ingredientOptions[0];
+      this.draftForm.components.push({
+        ingredientId: first ? first.ingredientId : '',
+        subRecipeId: null,
+        quantity: '',
+        unitCode: first ? defaultUnitCodeFor(first.baseUnit) : '',
+        yieldFactor: null
+      });
+    },
+
+    removeDraftComponent (index) {
+      this.draftForm.components.splice(index, 1);
+    },
+
+    /**
+     * The unit codes offered for one draft line, always including the line's OWN.
+     *
+     * A sub-recipe line resolves no ingredient family, and so does a line whose ingredient has since
+     * been archived. A select with no matching option renders BLANK, and a blank unit beside a
+     * quantity is a wrong statement about the recipe rather than a missing one.
+     */
+    draftUnitOptionsFor (line) {
+      const codes = line.subRecipeId ? [] : this.unitOptionsFor(line);
+      if (line.unitCode && !codes.includes(line.unitCode)) { return [line.unitCode].concat(codes); }
+      return codes;
+    },
+
     rowMeta (row) {
       const parts = [];
       parts.push(row.activeVersionNumber === null
@@ -858,6 +1236,21 @@ export default {
     padding: 10px 16px;
     font-weight: 500;
   }
+
+  &--danger {
+    background: #fff;
+    color: #ef4444;
+    border: 2px solid #ef4444;
+    padding: 10px 16px;
+    font-weight: 500;
+
+    &:hover:not(:disabled) {
+      background: #ef4444;
+      color: #fff;
+    }
+
+    &:disabled { background: #fff; color: #cbd5e0; border-color: #e2e8f0; }
+  }
 }
 
 .mrg-chip {
@@ -902,4 +1295,18 @@ export default {
 }
 
 .mrg-activate { display: grid; gap: 12px; justify-items: start; }
+
+.mrg-revise { display: grid; gap: 12px; justify-items: start; }
+
+.mrg-revise__editor {
+  width: 100%;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 16px;
+}
+
+.mrg-component__sub {
+  font-size: 0.85em;
+  color: #64748b;
+  align-self: center;
+}
 </style>

@@ -13,45 +13,47 @@
     <p v-else-if="!rows.length" class="trn-note" data-test="assignments-empty">
       {{ $i('trn_assign_empty') }}
     </p>
-    <table v-else class="trn-table" data-test="assignments-table">
-      <thead>
-        <tr>
-          <th>{{ $i('trn_col_course') }}</th>
-          <th>{{ $i('trn_col_scope') }}</th>
-          <th>{{ $i('trn_col_reference') }}</th>
-          <th>{{ $i('trn_col_due') }}</th>
-          <th>{{ $i('trn_col_created') }}</th>
-          <th />
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="row in rows" :key="row.assignmentId" data-test="assignment-row">
-          <td>
-            {{ row.courseTitle || dash }}
-            <span v-if="row.versionNo !== null" class="trn-flag">v{{ row.versionNo }}</span>
-          </td>
-          <td>{{ scopeLabel(row.scope) }}</td>
-          <td>
-            <span class="trn-ref" :title="row.reference">{{ referenceName(row) }}</span>
-          </td>
-          <!-- Sliced from the wire, never converted: an assignment due "on the 1st" is due on the
-               1st in every reader's browser. -->
-          <td>{{ row.dueDate || dash }}</td>
-          <td>{{ stamp(row.created) }}</td>
-          <td>
-            <button
-              class="trn-btn trn-btn--small trn-btn--danger"
-              type="button"
-              :disabled="busy"
-              data-test="assignment-revoke"
-              @click="$emit('revoke', row.assignmentId)"
-            >
-              {{ $i('trn_assign_revoke') }}
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div v-else class="trn-table-scroll">
+      <table class="trn-table" data-test="assignments-table">
+        <thead>
+          <tr>
+            <th>{{ $i('trn_col_course') }}</th>
+            <th>{{ $i('trn_col_scope') }}</th>
+            <th>{{ $i('trn_col_reference') }}</th>
+            <th>{{ $i('trn_col_due') }}</th>
+            <th>{{ $i('trn_col_created') }}</th>
+            <th />
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="row in rows" :key="row.assignmentId" data-test="assignment-row">
+            <td>
+              {{ row.courseTitle || dash }}
+              <span v-if="row.versionNo !== null" class="trn-flag">v{{ row.versionNo }}</span>
+            </td>
+            <td>{{ scopeLabel(row.scope) }}</td>
+            <td>
+              <span class="trn-ref" :title="row.reference">{{ referenceName(row) }}</span>
+            </td>
+            <!-- Sliced from the wire, never converted: an assignment due "on the 1st" is due on the
+                 1st in every reader's browser. -->
+            <td>{{ row.dueDate || dash }}</td>
+            <td>{{ stamp(row.created) }}</td>
+            <td>
+              <button
+                class="trn-btn trn-btn--small trn-btn--danger"
+                type="button"
+                :disabled="busy"
+                data-test="assignment-revoke"
+                @click="$emit('revoke', row.assignmentId)"
+              >
+                {{ $i('trn_assign_revoke') }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <form class="trn-form" data-test="assignment-form" @submit.prevent="submit">
       <h3 class="trn-form__title">

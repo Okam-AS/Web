@@ -88,25 +88,87 @@ describe('storeAdminAccess — unknown is a state, not a refusal', () => {
 // The second mask is why `THE CONVERSE WALK` at the bottom of this file exists: the original static
 // walk checked links → pages and could not see a page → no link.
 // Ordered, and the order is the assertion: `toEqual` below pins the sidebar a store admin actually
-// renders. The eight module links were moved OUT of Menu / Sales / Administration into one `Moduler`
-// group by the owner's instruction — filed by subject matter they were correct and unfindable, and the
-// six restaurant modules are the surfaces under active acceptance. Same store-admin gate as the groups
-// they came from, so this reorder moves no link between audiences; only its position changed.
+// renders.
+//
+// TWO RULINGS ARE RECORDED IN THIS ORDER, and the second only makes sense against the first:
+//
+//   1. The module links were moved OUT of Menu / Sales / Administration into one `Moduler` group by
+//      the owner's instruction — filed by subject matter they were correct and unfindable, and the
+//      six restaurant modules are the surfaces under active acceptance.
+//   2. That single group was split into SIX, one per module, once it had grown to 22 links: one list
+//      of 22 is the same unscannable wall as five scattered ones. Ruling 1 survives — nothing went
+//      back to Menu or Sales — so the only thing that changed is which heading a link sits under and
+//      therefore the order below. The module block is now ordered by how finished each module is,
+//      best first: Margin, Workforce, Training, Events, Growth, Meals.
+//
+// Neither ruling moved a link across the `showsStoreAdminNav` boundary, which is why this list has
+// exactly the same MEMBERS after the split as before it — only their positions changed. The
+// `MODULE GROUPING` block at the bottom of this file asserts that membership property directly, as a
+// set comparison, so a future reorder cannot quietly drop or add a path while looking like a reorder.
 const STORE_ADMIN_PATHS = [
   '/admin', '/admin/ongoing', '/admin/orders', '/admin/statistics',
-  '/admin/workforce-schedule', '/admin/workforce-requests', '/admin/workforce-roster',
-  '/admin/workforce-rates', '/admin/workforce-personnel-list', '/admin/training-courses',
+  // The switchboard, now last in Operations rather than last in the modules group. It is not a
+  // module — it governs all six — so it cannot sit inside any one of them without reading as that
+  // module's own setting, and a seventh group whose heading and only row say the same word earns
+  // nothing. Here it lands immediately above the six groups it governs. Each module gates its writes
+  // on deny-closed per-store flags, and until this page existed the only way to move one was a curl
+  // against `PUT /stores/{id}/feature-flags`. Store-admin gated like its siblings.
+  '/admin/feature-flags',
+  // ── Margin ──
   '/admin/margin-recipes', '/admin/margin-suppliers', '/admin/margin-price-imports',
   '/admin/margin-statements',
-  '/admin/meals-agreements', '/admin/meals-companies', '/admin/events-pipeline', '/admin/growth-newsletter',
+  // ── Workforce ──
+  '/admin/workforce-schedule', '/admin/workforce-requests', '/admin/workforce-roster',
+  // The role catalogue, between the roster and the rates. `PUT /workforce/stores/{id}/roles` (#9)
+  // was live on the wire with no caller in any browser, and the roster client recorded the omission
+  // as "a screen of its own" that was never built — so a store nobody had seeded by curl had an
+  // EMPTY ROLE AXIS in the schedule's shift editor, on the rates page's role scope, and on the
+  // engagement panel, which printed "no roles defined" beside no way to define one. Store-admin
+  // gated like its siblings; the write itself is WorkforceManager and the page renders its own
+  // refusal when that grant is withheld, while still showing the list the read (WorkforceScheduler)
+  // does return.
+  '/admin/workforce-roles',
+  '/admin/workforce-rates', '/admin/workforce-personnel-list',
+  // What a publication actually reached. The publish button answers with a recipient COUNT — how
+  // many outbox rows were enqueued, not how many arrived — so until this page existed the only
+  // account of a schedule that reached nobody was `GET .../schedules/notification-failures` read
+  // with a bearer token and curl. Store-admin gated like its siblings; the read itself is
+  // `WorkforceManager` and the page renders its own refusal when that grant is withheld.
+  '/admin/workforce-delivery',
+  // Who a published week actually reached — endpoints #21 and #22. The delivery report above says
+  // what the outbox could not get OUT; this says what came BACK from the people it did reach, which
+  // is the only thing a venue asked to show that it rostered somebody can actually produce. Both
+  // endpoints were bound to nothing before this page: `GetPublicationHistory` sat in the client with
+  // zero callers, and the recipients route had no client method at all. Store-admin gated like its
+  // siblings; the history read is `WorkforceScheduler` and the recipient roster `WorkforceManager`,
+  // and the page renders a separate refusal for each.
+  '/admin/workforce-publications',
+  // The payroll batch — endpoints #27, #28, #29 plus the two reads beside them. On this list rather
+  // than in a role group for the same reason every module page is: the sidebar's audience is
+  // store-admin, and the page renders its own refusal when the backend withholds
+  // `WorkforcePayrollApprover` — which gates the WHOLE surface here, reads included, because a
+  // timesheet line is the wage record and there is nothing left to partially withhold.
+  '/admin/workforce-timesheets',
+  // ── Training ──
+  '/admin/training-courses',
+  // Training's second surface: one person's assembled record, endpoint #16. Store-admin gated like
+  // the courses page beside it — the evidence read resolves `RequireStoreAdminAsync` — and it is on
+  // this list rather than in a role group for the same reason every module page is.
+  '/admin/training-evidence',
+  // ── Events ──
+  '/admin/events-pipeline',
+  // ── Growth ──
+  '/admin/growth-newsletter',
   // Growth's other half, beside the newsletter link. The guest is told on screen that this venue
   // answers a privacy request within one month (GDPR art. 12); the two routes that let anybody answer
   // had no caller in this app at all, so the promise was printed on one surface and keepable on none.
   '/admin/growth-privacy',
-  // Last in the modules group, and the switchboard for every link above it: each of those modules
-  // gates its writes on deny-closed per-store flags, and until this page existed the only way to move
-  // one was a curl against `PUT /stores/{id}/feature-flags`. Store-admin gated like its siblings.
-  '/admin/feature-flags',
+  // ── Meals ──
+  '/admin/meals-agreements', '/admin/meals-companies',
+  // The third Meals link: the month statement, endpoints #19–#23. It is on this list rather than in
+  // a role group because draft and finalize are `RequireStoreAdminAsync` — the venue's own acts — so
+  // the audience the sidebar offers it to is the audience the API admits.
+  '/admin/meals-statements',
   '/admin/products', '/admin/categories', '/admin/allergens', '/admin/import',
   '/admin/delivery', '/admin/wolt',
   '/admin/kravia-invoice', '/admin/rewards', '/admin/discounts',
@@ -132,6 +194,9 @@ const WORKER_PATHS = ['/admin/workforce-me', '/admin/account-email']
 // unreachable, which is the exact failure this list exists to prevent.
 const MANAGER_MODULE_PATHS = [
   '/admin/workforce-schedule', '/admin/workforce-requests', '/admin/workforce-roster', '/admin/workforce-rates',
+  // The role catalogue is a manager surface like the four beside it: the write is WorkforceManager,
+  // and the roster, the rates and the schedule all pivot on the axis it authors.
+  '/admin/workforce-roles',
   '/admin/training-courses', '/admin/events-pipeline'
 ]
 
@@ -287,6 +352,132 @@ describe('AdminPageHeader — which links each kind of user is offered', () => {
 
       expect(labels.filter(label => label.startsWith('nav_'))).toEqual([])
       expect(labels.filter((label, i) => labels.indexOf(label) !== i)).toEqual([])
+    })
+  })
+})
+
+// MODULE GROUPING. The single `Moduler` group had grown to 22 links and become the same unscannable
+// wall it was created to fix, so it was split into six groups, one per module. Everything below is
+// about that split, and it is written to fail on the two ways such a split silently goes wrong:
+// a link quietly leaving the sidebar while the reorder hides it, and a link quietly changing
+// audience while the paths still all look present.
+describe('the six module groups', () => {
+  // Declared here rather than derived from the component, for the same reason `STORE_ADMIN_PATHS` is:
+  // a mapping read back out of the thing it is meant to pin is a mapping equal to itself. The ORDER
+  // is part of the assertion — by how finished each module is, best first, which is the order an
+  // owner verifying the product should meet them in. Meals is last because it is the one module that
+  // cannot yet be walked end to end.
+  const MODULE_GROUPS = [
+    ['nav_group_module_margin', [
+      '/admin/margin-recipes', '/admin/margin-suppliers', '/admin/margin-price-imports',
+      '/admin/margin-statements'
+    ]],
+    ['nav_group_module_workforce', [
+      '/admin/workforce-schedule', '/admin/workforce-requests', '/admin/workforce-roster',
+      '/admin/workforce-roles', '/admin/workforce-rates', '/admin/workforce-personnel-list',
+      '/admin/workforce-delivery', '/admin/workforce-publications', '/admin/workforce-timesheets'
+    ]],
+    ['nav_group_module_training', ['/admin/training-courses', '/admin/training-evidence']],
+    ['nav_group_module_events', ['/admin/events-pipeline']],
+    ['nav_group_module_growth', ['/admin/growth-newsletter', '/admin/growth-privacy']],
+    ['nav_group_module_meals', [
+      '/admin/meals-agreements', '/admin/meals-companies', '/admin/meals-statements'
+    ]]
+  ]
+
+  // The 21 module links plus the switchboard. Named once so the "same links, different headings"
+  // test below cannot drift away from the mapping above it.
+  const MODULE_PATHS = MODULE_GROUPS.reduce((acc, [, paths]) => acc.concat(paths), [])
+  const SWITCHBOARD = '/admin/feature-flags'
+
+  const groupsFor = user => mountNav(user).vm.navGroups
+  const titled = (groups, title) => groups.find(g => g.title === title)
+
+  test('each module has a heading of its own, in finished-first order, holding exactly its own pages', () => {
+    const groups = groupsFor(admin)
+    const moduleTitles = groups.map(g => g.title).filter(t => t.startsWith('nav_group_module_'))
+    expect(moduleTitles).toEqual(MODULE_GROUPS.map(([title]) => title))
+
+    MODULE_GROUPS.forEach(([title, paths]) => {
+      expect([title, titled(groups, title).items.map(i => i.path)]).toEqual([title, paths])
+    })
+  })
+
+  test('the six headings are contiguous and sit immediately after Operations', () => {
+    // Not decoration: the modules being adjacent is what survived of the original ruling. Scattering
+    // the six back through Menu, Sales and Administration would satisfy every other test in this
+    // block while undoing the decision the owner made in the first place.
+    const titles = groupsFor(admin).map(g => g.title)
+    const first = titles.indexOf('nav_group_module_margin')
+    expect(titles[first - 1]).toBe('nav_group_operations')
+    expect(titles.slice(first, first + 6)).toEqual(MODULE_GROUPS.map(([title]) => title))
+  })
+
+  test('THE SPLIT MOVED NOTHING: the same 22 links are offered, under six headings instead of one', () => {
+    // The property the whole change rests on. Compared as SETS, so a reordering cannot mask a link
+    // that was dropped on the way — the ordered `toEqual` at the top of this file pins position, and
+    // this pins membership, and it takes both to catch both mistakes.
+    const offered = pathsOf(mountNav(admin))
+    const inModuleBlock = offered.filter(p => MODULE_PATHS.includes(p) || p === SWITCHBOARD)
+    expect(inModuleBlock.slice().sort()).toEqual(MODULE_PATHS.concat(SWITCHBOARD).slice().sort())
+    expect(inModuleBlock.length).toBe(22)
+  })
+
+  test('AND MOVED NOBODY: every one of the 22 is still store-admin only, and still not role-gated', () => {
+    // Grouping is presentation. If the split had widened anything, a worker — the audience these
+    // pages bounce — would now be offered one of them, and if it had narrowed anything, the
+    // unresolved user would see fewer links than the admin and the sidebar would flicker.
+    const workerPaths = pathsOf(mountNav(worker))
+    MODULE_PATHS.concat(SWITCHBOARD).forEach(p => expect(workerPaths).not.toContain(p))
+    expect(pathsOf(mountNav(notYetKnown))).toEqual(pathsOf(mountNav(admin)))
+
+    const powerUser = { id: 9, adminIn: [{ id: 7 }], isPowerUser: true, isKeyAccountManager: true }
+    const gated = groupsFor(powerUser).reduce((acc, g) => acc.concat(g.role ? g.items.map(i => i.path) : []), [])
+    MODULE_PATHS.concat(SWITCHBOARD).forEach(p => expect(gated).not.toContain(p))
+  })
+
+  test('NYHET SURVIVES: the badge stayed on every link and did not move to a heading', () => {
+    // The owner asked for the split and asked to KEEP the badge — it is how he knows what is new. A
+    // heading-level badge would go stale the moment one link in a group stopped being new, so the
+    // group object is checked to carry no badge of its own as well.
+    const groups = groupsFor(admin)
+    const badged = groups
+      .reduce((acc, g) => acc.concat(g.items), [])
+      .filter(i => i.isNew)
+      .map(i => i.path)
+    MODULE_PATHS.concat(SWITCHBOARD).forEach(p => expect(badged).toContain(p))
+    MODULE_GROUPS.forEach(([title]) => expect(titled(groups, title).isNew).toBeUndefined())
+  })
+
+  test('THE SWITCHBOARD IS NOT A SEVENTH MODULE: it is last in Operations, above all six', () => {
+    // `/admin/feature-flags` governs every module rather than belonging to one, so it is filed with
+    // the operational screens and placed last there — immediately above the groups it switches.
+    const groups = groupsFor(admin)
+    const operations = titled(groups, 'nav_group_operations').items.map(i => i.path)
+    expect(operations[operations.length - 1]).toBe(SWITCHBOARD)
+    MODULE_GROUPS.forEach(([title]) => {
+      expect([title, titled(groups, title).items.map(i => i.path)]).not.toContain(SWITCHBOARD)
+    })
+  })
+
+  test('a worker is offered none of the six headings, not even an empty one', () => {
+    expect(groupsFor(worker).map(g => g.title)).toEqual(['nav_group_me'])
+  })
+
+  Object.keys(DICTIONARIES).forEach((locale) => {
+    test(`HEADINGS (${locale}): translated, and never a repeat of a link inside the same group`, () => {
+      // A heading that says exactly what the row beneath it says is a heading that earns nothing —
+      // which is a live risk here, because 'Opplæring', 'Selskap', 'Personvern' and 'Bedriftsmat' are
+      // all both a module and a page. A key-returning `$i` cannot see this, so it mounts for real.
+      const groups = mountNav(admin, DICTIONARIES[locale]).vm.navGroups
+      const moduleGroups = groups.filter(g => g.items.some(i => MODULE_PATHS.includes(i.path)))
+      expect(moduleGroups.length).toBe(6)
+
+      moduleGroups.forEach((group) => {
+        expect([locale, group.title.startsWith('nav_')]).toEqual([locale, false])
+        expect([locale, group.title, group.items.map(i => i.label).includes(group.title)])
+          .toEqual([locale, group.title, false])
+      })
     })
   })
 })

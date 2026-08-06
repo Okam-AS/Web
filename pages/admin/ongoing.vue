@@ -46,7 +46,7 @@
               :order="order"
               :expanded-order-id="showOrderId"
               :admin-stores="adminStores"
-              :primary-action-button="order.status === 'Accepted' ? $i('ongoing_actionNext') : null"
+              :primary-action-button="primaryActionLabel(order)"
               @toggle-expand="toggleOrderExpand"
               @primary-action="startProcessing"
               @transfer="transferOrder"
@@ -88,7 +88,7 @@
                 :order="order"
                 :expanded-order-id="showOrderId"
                 :admin-stores="adminStores"
-                :primary-action-button="order.status === 'Processing' ? $i('ongoing_actionNext') : null"
+                :primary-action-button="primaryActionLabel(order)"
                 @toggle-expand="toggleOrderExpand"
                 @primary-action="updateOrderToReady"
                 @transfer="transferOrder"
@@ -131,7 +131,7 @@
                 :order="order"
                 :expanded-order-id="showOrderId"
                 :admin-stores="adminStores"
-                :primary-action-button="['ReadyForPickup', 'ReadyForDriver', 'Served'].includes(order.status) ? $i('ongoing_actionComplete') : null"
+                :primary-action-button="primaryActionLabel(order)"
                 @toggle-expand="toggleOrderExpand"
                 @primary-action="completeOrder"
                 @transfer="transferOrder"
@@ -235,6 +235,15 @@ import ChangeDeliveryTypeModal from '~/components/molecules/ChangeDeliveryTypeMo
 import SmsDriverModal from '~/components/molecules/SmsDriverModal.vue';
 import CustomerInfoModal from '~/components/molecules/CustomerInfoModal.vue';
 import OrderCard from '~/components/molecules/OrderCard.vue';
+import {
+  COLUMN_NEW,
+  COLUMN_PROCESSING,
+  COLUMN_READY,
+  ACTION_NEXT,
+  ACTION_COMPLETE,
+  ordersInColumn,
+  actionForStatus
+} from '~/utils/admin/ongoing-columns';
 
 export default {
   components: { AdminPage, LoginModal, Loading, OrderProcessingModal, ReceiptModal, TransferOrderModal, ChangeDeliveryTypeModal, SmsDriverModal, CustomerInfoModal, OrderCard },
@@ -256,14 +265,21 @@ export default {
     hideBanner: true
   }),
   computed: {
+    // The three columns are derived from `OrderStatus` in `~/utils/admin/ongoing-columns`, not
+    // listed here. They used to be three hand-written status lists, and between them those lists
+    // covered five of the seven statuses a live order can hold: an order in `DriverPickedUp` or
+    // `OpenCheck` was loaded by `loadOrders()` and then rendered by no column at all — invisible on
+    // this board and, because `Fullfør` lives on the card, impossible to close from it. Nothing
+    // errored; the order was simply not there. That is why the rule now lives in one total table
+    // over the enum, where a status added later fails a test instead of vanishing on a Saturday.
     newOrders () {
-      return this.orders.filter(x => x.status === 'Accepted').sort((a, b) => new Date(a.created) - new Date(b.created));
+      return ordersInColumn(this.orders, COLUMN_NEW);
     },
     processingOrders () {
-      return this.orders.filter(x => x.status === 'Processing').sort((a, b) => new Date(a.created) - new Date(b.created));
+      return ordersInColumn(this.orders, COLUMN_PROCESSING);
     },
     readyOrders () {
-      return this.orders.filter(x => ['ReadyForPickup', 'ReadyForDriver', 'Served'].includes(x.status)).sort((a, b) => new Date(a.created) - new Date(b.created));
+      return ordersInColumn(this.orders, COLUMN_READY);
     }
   },
   mounted () {
@@ -271,21 +287,39 @@ export default {
       this.showLogin = true;
       return;
     }
-    this.adminStores = this.$store.state.currentUser.adminIn;
-    this.loadOrders();
-    this.checkMobile();
-    window.addEventListener('resize', this.checkMobile);
-    this.startAutoRefresh();
+    this.startLiveBoard();
   },
   beforeDestroy () {
-    window.removeEventListener('resize', this.checkMobile);
-    this.stopAutoRefresh();
+    this.stopLiveBoard();
   },
   methods: {
+    // THE ONE STARTER LIST for this screen, run by `mounted` for a visitor who arrives signed in and
+    // by `closeLoginModal` for one who signs in on the page. A signed-out visitor does reach this
+    // page: `AdminPage.initAuth` skips its bounce to /admin when a `redirect` query is already
+    // present (AdminPage.vue:99), which is exactly the post-login return path.
+    //
+    // It is one list rather than two because the second copy went stale. The sign-in handler called
+    // `loadOrders()` and stopped there, so the board a venue signed into showed the snapshot taken
+    // at that instant and never changed again — no order placed afterwards appeared, on the one
+    // screen the kitchen and the counter work from during service, and nothing looked broken.
+    // `adminStores` was left empty by the same omission, which does not break transfer visibly: it
+    // just offers nowhere to send the order.
+    startLiveBoard () {
+      this.adminStores = (this.$store.state.currentUser && this.$store.state.currentUser.adminIn) || [];
+      this.loadOrders();
+      this.checkMobile();
+      window.addEventListener('resize', this.checkMobile);
+      this.startAutoRefresh();
+    },
+    stopLiveBoard () {
+      window.removeEventListener('resize', this.checkMobile);
+      this.stopAutoRefresh();
+    },
+    // Recovery is the starter list above, not a hand-picked subset of it.
     closeLoginModal (isLoggedIn) {
       this.showLogin = !isLoggedIn;
       if (isLoggedIn) {
-        this.loadOrders();
+        this.startLiveBoard();
       }
     },
     loadOrders () {
@@ -302,7 +336,11 @@ export default {
     checkMobile () {
       this.isMobile = window.innerWidth <= 768;
     },
+    // Clears before it sets. `beforeDestroy` holds one handle, so a second poll started over the
+    // top of the first is one this page can never stop — it would keep fetching after the screen is
+    // gone, and signing in twice is enough to start one.
     startAutoRefresh () {
+      this.stopAutoRefresh();
       this.refreshInterval = setInterval(() => {
         this._orderService.GetAllOngoing().then((orders) => {
           this.orders = orders;
@@ -313,9 +351,20 @@ export default {
       if (this.refreshInterval) {
         clearInterval(this.refreshInterval);
       }
+      this.refreshInterval = null;
     },
     toggleOrderExpand (orderId) {
       this.showOrderId = this.showOrderId === orderId ? '' : orderId;
+    },
+    // The card's primary button, decided by the same table that decided its column so the two can
+    // never disagree. `DriverPickedUp` gets `Fullfør` here: putting the card back on the board
+    // without the control that closes the order would have been half a fix — visible, still stuck.
+    // A status this build cannot name gets no button, because it cannot know which move is legal.
+    primaryActionLabel (order) {
+      const action = actionForStatus(order && order.status);
+      if (action === ACTION_NEXT) { return this.$i('ongoing_actionNext'); }
+      if (action === ACTION_COMPLETE) { return this.$i('ongoing_actionComplete'); }
+      return null;
     },
     startProcessing (order) {
       this.currentOrder = order;

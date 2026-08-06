@@ -170,9 +170,23 @@ const mixin = {
     },
     // NOT gated, deliberately. These two are digit helpers, not labels: `pages/admin/delivery.vue`
     // seeds the two halves of a money INPUT from them, so answering "—" here would type a dash into
-    // a field the operator then saves. Their display use is the cross-currency composition in the
-    // module mixins (`wholeAmount + ',' + fractionAmount + ' ' + code`), and every one of those call
-    // sites already refuses an absent figure before it composes.
+    // a field the operator then saves.
+    //
+    // Their only DISPLAY use is the cross-currency composition, and that composition now carries the
+    // gate itself: `crossCurrencyLabel` in `~/utils/cross-currency` applies the same `isAmountStated`
+    // rule `priceLabel` above applies, so both branches of every module mixin's `amount()` answer an
+    // absence the same way. It used to be written out longhand at six call sites — `wholeAmount(null)`
+    // is "0" and `fractionAmount(null)` is "00", so wherever an absence reached one of them it
+    // composed to "0,00 SEK", indistinguishable from a genuine zero.
+    //
+    // FOUR of the six let an absence reach the composition: `WorkforceWeekGrid.amount`,
+    // `WorkforceRateTimeline.amountLabel` (which refused `null` and only `null`, so `undefined` went
+    // straight through), `MealsFundedOrders.amount`, and `marginMoney.amount`/`signedAmount`. The
+    // other TWO refused first and were already sound: `EventsJourney.amount` through `readMinor`, and
+    // `MealsProgramPanel.allowancePreview` because `parseRateAmount` yields an integer whenever it
+    // reports no error. Nothing was visibly wrong even at the four, because each one's callers
+    // happened to guard it — which is why the hole survived this long and why it would have been
+    // reopened by the first person to drop one of those guards for an unrelated reason.
     wholeAmount (amount) {
       return wholeAmount(amount)
     },

@@ -14,38 +14,40 @@
       {{ $i('trn_certs_empty') }}
     </p>
     <template v-else>
-      <table class="trn-table" data-test="certificates-table">
-        <thead>
-          <tr>
-            <th>{{ $i('trn_col_person') }}</th>
-            <th>{{ $i('trn_col_type') }}</th>
-            <th>{{ $i('trn_col_issuer') }}</th>
-            <th>{{ $i('trn_col_issue') }}</th>
-            <th>{{ $i('trn_col_expiry') }}</th>
-            <th>{{ $i('trn_col_status') }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="row in rows" :key="row.certificateId" data-test="certificate-row">
-            <td>
-              <span class="trn-ref" :title="row.personRef">{{ personName(row.personRef) }}</span>
-            </td>
-            <td>{{ row.type || dash }}</td>
-            <td>{{ row.issuer || dash }}</td>
-            <!-- Both dates are the authored day, sliced off the wire and never run through a zone.
-                 See `civilDateOf`: whether the stored midnight is UTC or store-local is an open
-                 ruling, and slicing is the only rendering that is right under both answers. -->
-            <td>{{ row.issueDate || dash }}</td>
-            <td>
-              <span :title="row.hasExpiry ? null : $i('trn_cert_no_expiry')">{{ row.expiryDate || dash }}</span>
-            </td>
-            <td>
-              <span v-if="row.status === null" :title="$i('trn_status_unknown')">{{ dash }}</span>
-              <span v-else class="trn-badge" :class="statusTone(row.status)">{{ statusLabel(row.status) }}</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="trn-table-scroll">
+        <table class="trn-table" data-test="certificates-table">
+          <thead>
+            <tr>
+              <th>{{ $i('trn_col_person') }}</th>
+              <th>{{ $i('trn_col_type') }}</th>
+              <th>{{ $i('trn_col_issuer') }}</th>
+              <th>{{ $i('trn_col_issue') }}</th>
+              <th>{{ $i('trn_col_expiry') }}</th>
+              <th>{{ $i('trn_col_status') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="row in rows" :key="row.certificateId" data-test="certificate-row">
+              <td>
+                <span class="trn-ref" :title="row.personRef">{{ personName(row.personRef) }}</span>
+              </td>
+              <td>{{ row.type || dash }}</td>
+              <td>{{ row.issuer || dash }}</td>
+              <!-- Both dates are the authored day, sliced off the wire and never run through a zone.
+                   See `civilDateOf`: whether the stored midnight is UTC or store-local is an open
+                   ruling, and slicing is the only rendering that is right under both answers. -->
+              <td>{{ row.issueDate || dash }}</td>
+              <td>
+                <span :title="row.hasExpiry ? null : $i('trn_cert_no_expiry')">{{ row.expiryDate || dash }}</span>
+              </td>
+              <td>
+                <span v-if="row.status === null" :title="$i('trn_status_unknown')">{{ dash }}</span>
+                <span v-else class="trn-badge" :class="statusTone(row.status)">{{ statusLabel(row.status) }}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <p class="trn-form__hint" data-test="certificates-status-note">
         {{ statusNote }}
       </p>

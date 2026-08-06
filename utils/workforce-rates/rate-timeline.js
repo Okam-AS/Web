@@ -76,7 +76,18 @@ function toRow (version) {
     // The head of the timeline: open-ended, so it governs every instant from its start onwards.
     isOpen: effectiveToUtc === null,
     // Integer minor units per worked hour, exactly as the API stated it. Never scaled here.
-    hourlyRateMinor: typeof row.hourlyRateMinor === 'number' ? row.hourlyRateMinor : null,
+    //
+    // `Number.isFinite`, not `typeof === 'number'`: `typeof NaN` is `'number'`, so the looser guard
+    // admitted a non-finite as a stated rate. The one consumer, `amountLabel` in
+    // `WorkforceRateTimeline.vue`, tests `=== null` — and a `NaN` past it reaches the CROSS-CURRENCY
+    // branch, whose `wholeAmount`/`fractionAmount` are ungated by design and answer "0"/"00" to
+    // anything falsy. A rate nobody stated would have printed `0,00 SEK`: an hour of work priced at
+    // nothing. Same shape as `wholeOrNull` in `attendance-view.js` beside this.
+    //
+    // `isFinite` is right because this value's DOMAIN is numeric, not because falsiness is a general
+    // hazard — the same reflex on a string field would enforce nothing (`!'0'` is `false`). Zero
+    // survives: `Number.isFinite(0)` is true, and a `|| null` here would have erased a real figure.
+    hourlyRateMinor: Number.isFinite(row.hourlyRateMinor) ? row.hourlyRateMinor : null,
     currency: row.currency || null,
     timeZoneId: row.timeZoneId || null,
     createdAtUtc: parseApiInstant(row.createdAtUtc)

@@ -93,6 +93,18 @@
             <button class="wf-page__btn wf-page__btn--ghost" :disabled="loading" @click="reload">
               {{ $i('wf_reload') }}
             </button>
+            <!-- The way OUT of the publish flow and into what the publish actually reached. The
+                 toast beside it reports a recipient COUNT, which is how many outbox rows were
+                 enqueued and not how many arrived; this is the only link on the surface that leads
+                 to the difference. Always offered, not just after a publish: the outbox is
+                 store-scoped and last week's dead letter is still undelivered today. -->
+            <nuxt-link
+              class="wf-page__btn wf-page__btn--ghost wf-page__btn--link"
+              data-testid="wf-delivery-link"
+              to="/admin/workforce-delivery"
+            >
+              {{ $i('wf_delivery_link') }}
+            </nuxt-link>
           </div>
         </div>
 
@@ -1064,6 +1076,10 @@ export default {
 .wf-page__btn { border: none; background: #1bb776; color: #fff; font-weight: 600; padding: 9px 18px; border-radius: 8px; cursor: pointer; font-size: 0.88rem; }
 .wf-page__btn--ghost { background: #fff; color: #292c34; border: 1px solid #cbd5e0; }
 .wf-page__btn:disabled { background: #cbd5e0; color: #fff; cursor: not-allowed; border-color: #cbd5e0; }
+/* The delivery link sits in the same row as the buttons and has to line up with them. `inline-flex`
+   with a min-height rather than the buttons' bare padding: an anchor has no default line-box height,
+   so padding alone leaves it a couple of pixels short and it reads as misaligned beside them. */
+.wf-page__btn--link { display: inline-flex; align-items: center; min-height: 38px; text-decoration: none; }
 
 .wf-page__state { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
 .wf-page__badge { padding: 4px 12px; border-radius: 999px; font-size: 0.76rem; font-weight: 700; letter-spacing: 0.02em; }

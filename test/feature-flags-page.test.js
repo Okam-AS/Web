@@ -477,6 +477,211 @@ describe('the deposit switch names what must be true before it is thrown', () =>
   })
 })
 
+// TRAINING'S "OFF" IS NOT THE ONE THE WORD SUGGESTS, and this page is where somebody presses it.
+//
+// `TrainingModuleGate` (backend `feature/restaurant-modules`) routes reads through
+// `EnsureVisibleAsync`, which consults no flag beyond visibility, and writes through
+// `EnsureWritableAsync(flag)`, which throws `FlagDisabledReadOnly` — 409
+// `training.flag-disabled-read-only` — when the flag is off on a visible store. Visible means
+// `training.setup` on OR any Training row already exists for the store. So off refuses the write and
+// leaves the lists, the form and its live submit exactly as they were; the
+// `training-course-to-evidence` journey walks that state and its own step is named
+// "READ-ONLY, NOT DARK". An operator flipping this during an incident expects the module to go away.
+//
+// The two rows are asserted to say DIFFERENT things, because their gates differ: `training.setup` is
+// half of the visibility test and `training.assignments` is no part of it. One shared sentence would
+// have to be wrong about one of them.
+describe('the Training rows say what their switch being off actually does', () => {
+  const SETUP_KEY = 'training.setup'
+  const ASSIGN_KEY = 'training.assignments'
+
+  const TRAINING_CATALOG = CATALOG.concat([
+    { flagKey: SETUP_KEY, module: 'Training', title: 'Setup (courses/certificates)', defaultEnabled: false },
+    { flagKey: ASSIGN_KEY, module: 'Training', title: 'Assignments', defaultEnabled: false }
+  ])
+  // Deliberately one ON and one OFF. What off does is a standing property of the flag, so the
+  // sentence has to be readable BEFORE the value changes — a note that appears only once the row is
+  // already off is a note that arrives after the click it existed to inform.
+  const trainingState = (flagKey, title, on) => ({
+    flagKey,
+    module: 'Training',
+    title,
+    defaultEnabled: false,
+    isOverridden: on,
+    overrideEnabled: on,
+    effective: on,
+    updatedByReference: on ? 'user-3' : null,
+    updatedAtUtc: on ? '2026-08-02T09:00:00Z' : null,
+    note: null
+  })
+  const TRAINING_STATES = STATES.concat([
+    trainingState(SETUP_KEY, 'Setup (courses/certificates)', true),
+    trainingState(ASSIGN_KEY, 'Assignments', false)
+  ])
+
+  const withTraining = () => {
+    behaviour.GetCatalog = () => Promise.resolve(TRAINING_CATALOG)
+    behaviour.GetStoreFlags = () => Promise.resolve(TRAINING_STATES)
+  }
+
+  test.each([
+    [SETUP_KEY, 'ff_off_training_setup'],
+    [ASSIGN_KEY, 'ff_off_training_assignments']
+  ])('%s carries its own sentence, above that row\'s own switch', async (flagKey, expected) => {
+    withTraining()
+    const wrapper = mountPage()
+    await settled()
+
+    const row = rowFor(wrapper, flagKey)
+    expect(row).toBeDefined()
+    const note = row.find('[data-off-meaning="' + flagKey + '"]')
+    expect(note.exists()).toBe(true)
+    expect(note.text()).toBe(expected)
+
+    // Above the control, within the row's own markup: an operator who has already clicked has not
+    // been warned of anything, and a sentence elsewhere on the page cannot satisfy this.
+    const html = row.html()
+    expect(html.indexOf('data-off-meaning')).toBeGreaterThan(-1)
+    expect(html.indexOf('data-flag-off')).toBeGreaterThan(-1)
+    expect(html.indexOf('data-off-meaning')).toBeLessThan(html.indexOf('data-flag-off'))
+  })
+
+  // The setup flag is rendered ON by the fixture above and still carries the sentence. This is the
+  // test that would red if the note were ever made conditional on `row.state`, which would hide it
+  // from precisely the operator who is about to turn the flag off.
+  test('the sentence is on the row whether the switch is on or off', async () => {
+    withTraining()
+    const wrapper = mountPage()
+    await settled()
+
+    expect(rowFor(wrapper, SETUP_KEY).find('.ff-row__badge').text()).toBe('ff_state_on')
+    expect(rowFor(wrapper, SETUP_KEY).find('[data-off-meaning]').exists()).toBe(true)
+    expect(rowFor(wrapper, ASSIGN_KEY).find('.ff-row__badge').text()).toBe('ff_state_off')
+    expect(rowFor(wrapper, ASSIGN_KEY).find('[data-off-meaning]').exists()).toBe(true)
+  })
+
+  // Their gates differ, so one shared sentence would be wrong about one of them: only
+  // `training.setup` is part of the visibility test, and only it can take the module dark.
+  test('the two Training rows do not share one sentence', async () => {
+    withTraining()
+    const wrapper = mountPage()
+    await settled()
+
+    const setup = rowFor(wrapper, SETUP_KEY).find('[data-off-meaning]').text()
+    const assignments = rowFor(wrapper, ASSIGN_KEY).find('[data-off-meaning]').text()
+    expect(setup).not.toBe(assignments)
+  })
+
+  // Five `training.*` flags are withheld from the catalog because they gate nothing, and the other
+  // five modules' gates answer differently — `Events.Core` off is a 404 that takes the module dark.
+  // A behaviour claim printed on a row whose gate nobody read would be the defect this lane fixes,
+  // pointing the other way.
+  test('no row outside Training claims anything about what its off does', async () => {
+    behaviour.GetCatalog = () => Promise.resolve(TRAINING_CATALOG.concat(
+      [{ flagKey: DEPOSITS_KEY, module: 'Events', title: 'Deposit money path', defaultEnabled: false }]))
+    behaviour.GetStoreFlags = () => Promise.resolve(TRAINING_STATES.concat(DEPOSITS_STATES.slice(-1)))
+    const wrapper = mountPage()
+    await settled()
+
+    expect(wrapper.findAll('[data-off-meaning]')).toHaveLength(2)
+    expect(rowFor(wrapper, 'workforce.publication').find('[data-off-meaning]').exists()).toBe(false)
+    expect(rowFor(wrapper, 'Margin.Module').find('[data-off-meaning]').exists()).toBe(false)
+    expect(rowFor(wrapper, DEPOSITS_KEY).find('[data-off-meaning]').exists()).toBe(false)
+  })
+
+  // A property of the FLAG, not of a value this store happens to hold. The store read failing to
+  // carry the key leaves the state unknown — and the behaviour of off is exactly as true.
+  test('the sentence survives a store read that never mentioned the key', async () => {
+    behaviour.GetCatalog = () => Promise.resolve(TRAINING_CATALOG)
+    behaviour.GetStoreFlags = () => Promise.resolve(STATES)
+    const wrapper = mountPage()
+    await settled()
+
+    const row = rowFor(wrapper, SETUP_KEY)
+    expect(row.text()).toContain('ff_state_unknown_row')
+    expect(row.find('[data-off-meaning="' + SETUP_KEY + '"]').exists()).toBe(true)
+  })
+
+  // The copy, per locale, asserted obligation by obligation. Each one is a fact read out of the gate
+  // rather than a tone: writes refused, reads still served, the submit still live (which is the part
+  // that surprises), and the one case per flag where that summary stops being the whole truth.
+  const SETUP_SAYS = {
+    no: {
+      'says writes are refused': [/avvises skriving/i],
+      'says reading continues': [/lesing fortsetter/i],
+      'says the form and its submit stay live': [/lagreknappen er aktiv/i, /når du trykker/i],
+      'names the store that does go dark': [/aldri har registrert/i, /finnes ikke/i]
+    },
+    en: {
+      'says writes are refused': [/writes are refused/i],
+      'says reading continues': [/reads keep serving/i],
+      'says the form and its submit stay live': [/save button is live/i, /when you press it/i],
+      'names the store that does go dark': [/never recorded/i, /not found/i]
+    },
+    de: {
+      'says writes are refused': [/Schreibvorgänge abgewiesen/i],
+      'says reading continues': [/gelesen wird weiter/i],
+      'says the form and its submit stay live': [/Schaltfläche bleibt aktiv/i, /beim Klick/i],
+      'names the store that does go dark': [/noch nie Trainingsdaten/i, /nicht gefunden/i]
+    }
+  }
+
+  const ASSIGNMENTS_SAYS = {
+    no: {
+      'says writes are refused': [/avvises skriving/i],
+      'says reading continues': [/lesing fortsetter/i],
+      'says the form and its submit stay live': [/lagreknappen er aktiv/i, /når du trykker/i],
+      'says it does not decide visibility': [/avgjør ikke om modulen er synlig/i, /training\.setup/]
+    },
+    en: {
+      'says writes are refused': [/writes are refused/i],
+      'says reading continues': [/reads keep serving/i],
+      'says the form and its submit stay live': [/save button is live/i, /when you press it/i],
+      'says it does not decide visibility': [/does not decide whether the module is visible/i, /training\.setup/]
+    },
+    de: {
+      'says writes are refused': [/Schreibvorgänge abgewiesen/i],
+      'says reading continues': [/gelesen wird weiter/i],
+      'says the form and its submit stay live': [/Schaltfläche bleibt aktiv/i, /beim Klick/i],
+      'says it does not decide visibility': [/entscheidet nicht über die Sichtbarkeit/i, /training\.setup/]
+    }
+  }
+
+  const assertSays = (text, obligations) => {
+    expect(typeof text).toBe('string')
+    Object.keys(obligations).forEach((obligation) => {
+      obligations[obligation].forEach((pattern) => {
+        expect({ obligation, text }).toEqual({ obligation, text: expect.stringMatching(pattern) })
+      })
+    })
+  }
+
+  test.each(['no', 'en', 'de'])('%s tells the operator what training.setup being off does', (locale) => {
+    assertSays(translations[locale].ff_off_training_setup, SETUP_SAYS[locale])
+  })
+
+  test.each(['no', 'en', 'de'])('%s tells the operator what training.assignments being off does', (locale) => {
+    assertSays(translations[locale].ff_off_training_assignments, ASSIGNMENTS_SAYS[locale])
+  })
+
+  // THE CLAIM THAT HAD TO GO. The intro promised, for all six modules at once, that a switch which
+  // is not on "refuses writes — reads and exports of what is already recorded keep working". True of
+  // Training; false of Events, whose gate answers 404 EVENTS_DISABLED and takes the module dark,
+  // reads included. A promise that holds for some modules and not others is not information, and it
+  // is read during exactly the incident where acting on it is worst.
+  const INTRO_SAYS = {
+    no: { says: [/ikke likt fra modul til modul/i, /les raden/i], never: [/lesing og eksport av det som allerede er registrert, fortsetter/i] },
+    en: { says: [/not the same from one module to the next/i, /read the row/i], never: [/reads and exports of what is already recorded keep working/i] },
+    de: { says: [/von Modul zu Modul verschieden/i, /lesen Sie deshalb die Zeile/i], never: [/Lesen und Exportieren von bereits Erfasstem läuft weiter/i] }
+  }
+
+  test.each(['no', 'en', 'de'])('%s intro says what off does to reading differs by module, and promises nothing fleet-wide', (locale) => {
+    const text = translations[locale].ff_page_intro
+    INTRO_SAYS[locale].says.forEach(pattern => expect(text).toEqual(expect.stringMatching(pattern)))
+    INTRO_SAYS[locale].never.forEach(pattern => expect(text).not.toEqual(expect.stringMatching(pattern)))
+  })
+})
+
 describe('every key this page prints exists in all three locales', () => {
   // The repo has shipped a missing-translation defect before, and a kill-switch page rendering a raw
   // key during an incident is the worst possible time to find one.
@@ -486,7 +691,8 @@ describe('every key this page prints exists in all three locales', () => {
     'ff_state_on', 'ff_state_off', 'ff_state_unknown', 'ff_default_on', 'ff_default_off',
     'ff_overridden', 'ff_not_overridden', 'ff_override_unknown', 'ff_effective_on', 'ff_effective_off',
     'ff_effective_unknown', 'ff_overruled', 'ff_state_unknown_row', 'ff_not_writable',
-    'ff_precondition_events_deposits', 'ff_note_label',
+    'ff_precondition_events_deposits', 'ff_off_training_setup', 'ff_off_training_assignments',
+    'ff_note_label',
     'ff_note_placeholder', 'ff_updated_by', 'ff_actor_unknown', 'ff_turn_on', 'ff_turn_off', 'ff_clear',
     'ff_saved_on', 'ff_saved_off', 'ff_cleared', 'ff_clear_none', 'ff_generic_error',
     'wf_conflict_flag_title', 'wf_conflict_flag', 'wf_conflict_flag_unnamed', 'wf_conflict_flag_link'

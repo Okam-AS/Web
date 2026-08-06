@@ -37,10 +37,65 @@
 // does. The fixture refuses an anonymous call, which is what makes the page's "sign in first" screen
 // an honest statement of the platform's rule rather than a choice the client made.
 
+const crypto = require('crypto');
 const world = require('./world');
 
 function stamp (offsetMs) {
   return new Date(Date.now() + (offsetMs || 0)).toISOString().slice(0, 19) + 'Z';
+}
+
+// ---- the statement world (endpoints #19–#23) ----------------------------------------------------
+//
+// WHY THESE EXACT VALUES. The one thing `pages/admin/meals-statements.vue` has to be proved to do is
+// PRINT THE STORED MEMBER REFERENCE rather than reconstruct a plausible one, and an assertion can
+// only show that if the stored value is unreachable by any other route through the payload. So every
+// identifier a line carries is deliberately drawn from a different alphabet:
+//
+//   statementLineId  stl-…      allocationId  alc-…      orderId  ord-…      receipt  K-2026-…
+//   memberDisplayRef ANS-2287   (line A)   /   4b050000-0000-0000-0000-000000000002   (line B)
+//
+// Line A's reference is a company payroll code that equals NOTHING else on the wire. Line B's is the
+// bare membership id, which is what the bill really says when the invitation carried no employee
+// reference (`MealsStatementService.MemberDisplayRef` falls back to it, and the row is frozen that
+// way for good). A page that printed "the id it already had" fails A; one that printed a constant or
+// a prefix fails B. Both are asserted BY VALUE.
+//
+// The membership ids are the ones L-MEALS-EMPREF's SQL tier used, and `ANS-2287` is the reference its
+// finalized line carried, so the fixture and the proven backend behaviour name the same strings.
+const STATEMENT_MEMBER_WITH_REF = '4b050000-0000-0000-0000-000000000001';
+const STATEMENT_MEMBER_BARE = '4b050000-0000-0000-0000-000000000002';
+const STATEMENT_EMPLOYEE_REF = 'ANS-2287';
+const STATEMENT_PERIOD_YEAR = 2026;
+const STATEMENT_PERIOD_MONTH = 6;
+
+/** The corridor the seeded company already has here, so a statement has something to be drafted against. */
+const STATEMENT_AGREEMENT_ID = 'agr-fixture-corridor';
+
+function freshAllocations () {
+  return [
+    {
+      allocationId: 'alc-2026-06-0001',
+      membershipId: STATEMENT_MEMBER_WITH_REF,
+      orderId: 'ord-2026-06-0117',
+      sourceReceiptNumber: 'K-2026-000117',
+      kind: 'Capture',
+      grossMinor: 18900,
+      netMinor: 17182,
+      vatMinor: 1718,
+      orderOccurredAtUtc: '2026-06-04T11:12:04Z'
+    },
+    {
+      allocationId: 'alc-2026-06-0002',
+      membershipId: STATEMENT_MEMBER_BARE,
+      orderId: 'ord-2026-06-0140',
+      sourceReceiptNumber: 'K-2026-000140',
+      kind: 'Capture',
+      grossMinor: 14500,
+      netMinor: 13182,
+      vatMinor: 1318,
+      orderOccurredAtUtc: '2026-06-11T11:41:55Z'
+    }
+  ];
 }
 
 function fresh () {
@@ -61,10 +116,55 @@ function fresh () {
         revision: 'mrev-1'
       }
     },
-    agreements: {},
+    // The seeded company already has an ACTIVE corridor here. Without one the venue directory reports
+    // it with no `currency`, and the statement page — correctly — will not offer a company it cannot
+    // name a currency for, because the currency is part of the corridor's identity and is what the
+    // draft is keyed on. This adds no ROW to any list; the company was always in the directory.
+    agreements: {
+      [STATEMENT_AGREEMENT_ID]: {
+        agreementId: STATEMENT_AGREEMENT_ID,
+        companyId: world.MEALS_COMPANY_ID,
+        storeId: String(world.STORE_ID),
+        currency: world.CURRENCY,
+        status: 'Active',
+        effectiveFromUtc: '2026-01-01T00:00:00Z',
+        sellerLegalName: 'Okam AS',
+        revision: 'arev-' + STATEMENT_AGREEMENT_ID
+      }
+    },
     programs: {},
     invitations: JSON.parse(JSON.stringify(world.MEALS_INVITATIONS)),
-    members: [],
+    members: [
+      // The two people the June statement bills. `employeeReference` is present on ONE of them, which
+      // is the whole point — see the block comment above the constants.
+      {
+        membershipId: STATEMENT_MEMBER_WITH_REF,
+        companyId: world.MEALS_COMPANY_ID,
+        applicationUserId: 'usr-meals-fixture-a',
+        employeeReference: STATEMENT_EMPLOYEE_REF,
+        role: 'Employee',
+        state: 'Revoked',
+        claimedFromInvitationId: null,
+        revision: 'mmrev-a'
+      },
+      {
+        membershipId: STATEMENT_MEMBER_BARE,
+        companyId: world.MEALS_COMPANY_ID,
+        applicationUserId: 'usr-meals-fixture-b',
+        employeeReference: null,
+        role: 'Employee',
+        state: 'Active',
+        claimedFromInvitationId: null,
+        revision: 'mmrev-b'
+      }
+    ],
+    // What a draft materialises from. In the product these are funded-order allocations written by
+    // the POS capture path; nothing an admin screen can create, which is why they are seeded.
+    statementAllocations: freshAllocations(),
+    statementRuns: {},
+    // Bumped on every write to a run row, exactly as a SQL Server rowversion is: re-drafting rewrites
+    // the run and its lines, so the revision moves even when the figures did not.
+    statementRevSeq: 0,
     // Which company each invitation belongs to. Seeded invitations belong to the seeded company.
     invitationCompany: Object.keys(world.MEALS_INVITATIONS)
       .reduce((acc, token) => { acc[token] = world.MEALS_COMPANY_ID; return acc; }, {})
@@ -130,6 +230,162 @@ function invitationModel (_token, invitation) {
 
 function tokenFor (state, invitationId) {
   return Object.keys(state.invitations).find(t => state.invitations[t].invitationId === invitationId) || null;
+}
+
+// ---- statements ---------------------------------------------------------------------------------
+//
+// `Controllers/Meals/MealsStatementController.cs` #19–#23, modelled as far as this fixture honestly
+// can. WHAT IS NOT MODELLED, named rather than left to be discovered:
+//
+//   • THE GATE. Every statement route resolves `IMealsFeatureGate` — BOTH `Features:Meals:Module`
+//     and `Features:Meals:Statements`, host configuration read through `IOptionsMonitor` — and
+//     `MealsFeatureFlags` withholds `meals.statements` from the per-store catalog on purpose, so
+//     there is no override row for this fixture's `flagEffective` to consult and no lever a journey
+//     could flip. These routes therefore always answer. A dark module's `meals.not-found` is
+//     modelled below only for an unknown statement id, which is the same answer by design.
+//   • THE AUTHORITY SPLIT. Draft and finalize are `RequireStoreAdminAsync`; the LIST is
+//     `RequireCompanyAdminAsync` and refuses a store admin with `meals.forbidden`. The list refusal
+//     IS modelled (it is a real thing the page is built around) but the store-admin check on draft
+//     and finalize is not — the api-server's auth wall admits any signed-in caller, and every
+//     identity in this world administers the seeded store anyway.
+//   • REDRAFTING A FINALIZED PERIOD. The server's behaviour there is a correction path this surface
+//     does not bind; the fixture refuses it as `meals.validation` rather than inventing a revision
+//     chain nothing in this repo reads.
+//
+// DELIBERATELY NOT ANCHORED to the backend. `test/e2e/scripts/fixture-divergence.js` compares an
+// ANCHORED route's refusals against the API's, and a route this fixture does not anchor is not its
+// claim. Anchoring these five would widen that guard's claim set in the same change that introduces
+// them, which is the wrong order: the anchors belong to a lane that can point the check at a real
+// checkout and settle every exemption listed above. (The annotation tokens themselves are omitted
+// rather than quoted here, because `test/fixture-refusal-divergence.test.js` reads them wherever
+// they appear and a token in prose is a token the parser cannot place.)
+
+function periodTag (year, month) {
+  return String(year) + '-' + (month < 10 ? '0' + month : String(month));
+}
+
+/**
+ * The content hash, over the lines and nothing else. Deterministic, so a re-draft that materialises
+ * the same rows produces the same hash — which is what makes the REVISION, and not the hash, the
+ * thing that moves on an idempotent re-draft.
+ */
+function contentHashOf (lines) {
+  const canonical = lines.map(l => [
+    l.allocationId, l.kind, l.memberDisplayRef, l.grossMinor, l.netMinor, l.vatMinor, l.orderOccurredAtUtc
+  ].join('|')).join('\n');
+  return crypto.createHash('sha256').update(canonical, 'utf8').digest('hex');
+}
+
+/** An opaque base64 revision, the shape a SQL Server rowversion arrives in. */
+function nextRevision (state) {
+  state.statementRevSeq += 1;
+  const buffer = Buffer.alloc(8);
+  buffer.writeUInt32BE(state.statementRevSeq, 4);
+  return buffer.toString('base64');
+}
+
+/**
+ * THE RULE THIS WHOLE LANE IS ABOUT. The member reference is resolved from the membership AT DRAFT
+ * TIME and copied onto the line; the fallback is the membership's own id, and once the run is
+ * finalized neither can be changed. `MealsStatementService.MemberDisplayRef` is this, exactly.
+ */
+function memberDisplayRefFor (state, membershipId) {
+  const membership = state.members.find(m => m.membershipId === membershipId) || null;
+  const reference = membership && membership.employeeReference;
+  return (typeof reference === 'string' && reference.trim() !== '') ? reference.trim() : membershipId;
+}
+
+function materialiseLines (state, allocations) {
+  return allocations
+    // The server's own deterministic order: occurrence, then allocation id.
+    .slice()
+    .sort((a, b) => (a.orderOccurredAtUtc + a.allocationId).localeCompare(b.orderOccurredAtUtc + b.allocationId))
+    .map((a, index) => ({
+      statementLineId: 'stl-' + a.allocationId.replace(/^alc-/, ''),
+      allocationId: a.allocationId,
+      kind: a.kind,
+      orderId: a.orderId,
+      sourceReceiptNumber: a.sourceReceiptNumber,
+      // READ FROM THE MEMBERSHIP AT THIS INSTANT, then frozen on the row.
+      memberDisplayRef: memberDisplayRefFor(state, a.membershipId),
+      grossMinor: a.grossMinor,
+      netMinor: a.netMinor,
+      vatMinor: a.vatMinor,
+      vatLines: [{ vatPercent: 10, basisMinor: a.netMinor, vatMinor: a.vatMinor }],
+      currency: world.CURRENCY,
+      orderOccurredAtUtc: a.orderOccurredAtUtc,
+      linkedFinalizedStatementRunId: null,
+      _ordinal: index
+    }));
+}
+
+function summaryOf (run) {
+  return {
+    statementRunId: run.statementRunId,
+    companyId: run.companyId,
+    storeId: run.storeId,
+    currency: run.currency,
+    periodYear: run.periodYear,
+    periodMonth: run.periodMonth,
+    status: run.status,
+    lineCount: run.lines.length,
+    totalGrossMinor: run.lines.reduce((sum, l) => sum + l.grossMinor, 0),
+    totalNetMinor: run.lines.reduce((sum, l) => sum + l.netMinor, 0),
+    totalVatMinor: run.lines.reduce((sum, l) => sum + l.vatMinor, 0),
+    contentHash: run.contentHash,
+    revision: run.revision,
+    finalizedAtUtc: run.finalizedAtUtc,
+    createdAtUtc: run.createdAtUtc
+  };
+}
+
+/** `MealsStatementDetailModel` — the summary and its lines, which is what #19, #20 and #22 return. */
+function detailOf (run) {
+  return {
+    summary: summaryOf(run),
+    lines: run.lines.map((l) => {
+      const line = Object.assign({}, l);
+      delete line._ordinal;
+      return line;
+    })
+  };
+}
+
+function csvOf (run) {
+  const summary = summaryOf(run);
+  const major = minor => (minor / 100).toFixed(2);
+  const head = [
+    '# okam-meals-statement',
+    '# statementRunId=' + summary.statementRunId,
+    '# buyerCompanyId=' + summary.companyId,
+    '# storeId=' + summary.storeId,
+    '# currency=' + summary.currency,
+    '# period=' + periodTag(summary.periodYear, summary.periodMonth),
+    '# status=' + summary.status,
+    '# lineCount=' + summary.lineCount,
+    '# totalGross=' + major(summary.totalGrossMinor),
+    '# totalNet=' + major(summary.totalNetMinor),
+    '# totalVat=' + major(summary.totalVatMinor),
+    '# contentHash=' + summary.contentHash
+  ];
+  const header = 'allocationId,orderId,receiptNumber,occurredAtUtc,memberDisplayRef,kind,gross,net,vat,currency,vatBreakdown,linkedFinalizedStatementRunId';
+  const rows = run.lines.map(l => [
+    l.allocationId,
+    l.orderId,
+    l.sourceReceiptNumber,
+    l.orderOccurredAtUtc,
+    // Column five, and the reason this file exists. Exactly the stored value; never re-derived.
+    l.memberDisplayRef,
+    l.kind,
+    major(l.grossMinor),
+    major(l.netMinor),
+    major(l.vatMinor),
+    l.currency,
+    l.vatLines.map(v => v.vatPercent + ':' + major(v.basisMinor) + ':' + major(v.vatMinor)).join(';'),
+    l.linkedFinalizedStatementRunId === null ? '' : l.linkedFinalizedStatementRunId
+  ].join(','));
+  // LF, no BOM, as the export service writes it.
+  return head.concat([header]).concat(rows).join('\n') + '\n';
 }
 
 function route (ctx) {
@@ -408,6 +664,26 @@ function route (ctx) {
       return true;
     }
 
+    // #21. `RequireCompanyAdminAsync` — the BUYER's read. Authority is an active CompanyAdmin
+    // membership and nothing else, so the venue's own store admin is refused here even though the
+    // same person may draft and export. Modelled because that refusal is what the page renders a
+    // sentence from; an empty list would be a different, false claim.
+    if (rest === '/statements' && method === 'GET') {
+      const isCompanyAdmin = state.members.some(m =>
+        m.companyId === companyId && m.role === 'CompanyAdmin' && m.state === 'Active' &&
+        caller && m.applicationUserId === caller.id);
+      if (!isCompanyAdmin) {
+        return refuse(ctx, 403, 'meals.forbidden', 'A company administrator membership is required.');
+      }
+      ctx.send(200, {
+        statements: Object.keys(state.statementRuns)
+          .map(id => state.statementRuns[id])
+          .filter(r => r.companyId === companyId)
+          .map(summaryOf)
+      });
+      return true;
+    }
+
     if (rest === '/members' && method === 'GET') {
       ctx.send(200, state.members.filter(m => m.companyId === companyId));
       return true;
@@ -439,6 +715,149 @@ function route (ctx) {
     return true;
   }
 
+  // ---- statements #19-#23 ------------------------------------------------------------------------
+  //
+  // #19 and #20 are modelled although `utils/meals/statement-client.js` binds neither: the month
+  // close is `components/admin/meals/MealsMonthClose.vue`'s, and a harness that could not produce a
+  // FINALIZED run could not put the frozen line under a browser at all. `meals-statement-month`
+  // drives these two through the API context and says so in its own artifact, step by step, rather
+  // than letting a reader assume a control performed them.
+
+  const draftRoute = /^\/v1\/stores\/([^/]+)\/meals\/statements\/drafts$/.exec(path);
+  if (draftRoute && method === 'POST') {
+    const storeId = decodeURIComponent(draftRoute[1]);
+    const companyId = (body && body.companyId) || '';
+    const year = body && body.periodYear;
+    const month = body && body.periodMonth;
+    if (!state.companies[companyId]) { return refuse(ctx, 404, 'meals.not-found', 'No such company.'); }
+    if (!Number.isInteger(year) || !Number.isInteger(month) || month < 1 || month > 12) {
+      return refuse(ctx, 400, 'meals.validation', 'A period year and month are required.');
+    }
+    const agreement = Object.keys(state.agreements)
+      .map(id => state.agreements[id])
+      .find(a => a.companyId === companyId && a.storeId === String(storeId) && a.status === 'Active') || null;
+    if (!agreement) { return refuse(ctx, 404, 'meals.not-found', 'No active agreement for this company here.'); }
+    if ((body && body.currency) && body.currency !== agreement.currency) {
+      return refuse(ctx, 400, 'meals.validation', 'The currency must be the corridor currency.');
+    }
+
+    const key = [storeId, companyId, agreement.currency, periodTag(year, month)].join('|');
+    const existing = Object.keys(state.statementRuns)
+      .map(id => state.statementRuns[id])
+      .find(r => r.periodKey === key) || null;
+    if (existing && existing.status === 'Finalized') {
+      // The correction path for a finalized period is not a route this repo binds; refused rather
+      // than invented. Declared in the block comment above `periodTag`.
+      return refuse(ctx, 400, 'meals.validation', 'This period is already finalized.');
+    }
+
+    // Only this company's allocations, and only this period's. `orderOccurredAtUtc` is the period's
+    // own clock; the module exposes no store timezone, so the fixture compares the UTC month exactly
+    // as the tag does and takes no position on the boundary defect the product still carries.
+    const allocations = state.statementAllocations
+      .filter(a => String(a.orderOccurredAtUtc).slice(0, 7) === periodTag(year, month));
+    const lines = materialiseLines(state, allocations);
+    const run = existing || {
+      statementRunId: 'stmt-' + periodTag(year, month) + '-' + companyId,
+      companyId,
+      storeId: String(storeId),
+      currency: agreement.currency,
+      periodYear: year,
+      periodMonth: month,
+      periodKey: key,
+      status: 'Draft',
+      finalizedAtUtc: null,
+      createdAtUtc: stamp()
+    };
+    run.lines = lines;
+    run.contentHash = contentHashOf(lines);
+    // The run row was rewritten, so its rowversion moves — even when the figures did not.
+    run.revision = nextRevision(state);
+    state.statementRuns[run.statementRunId] = run;
+    ctx.send(200, detailOf(run));
+    return true;
+  }
+
+  const finalizeRoute = /^\/v1\/meals\/statements\/([^/]+)\/finalize$/.exec(path);
+  if (finalizeRoute && method === 'POST') {
+    const run = state.statementRuns[decodeURIComponent(finalizeRoute[1])] || null;
+    if (!run) { return refuse(ctx, 404, 'meals.not-found', 'No such statement.'); }
+    if (run.status === 'Finalized') {
+      return refuse(ctx, 409, 'meals.stale-revision', 'The submitted expected version is stale; the resource has since changed.', {
+        conflictKind: 'stale-revision',
+        aggregateId: run.statementRunId,
+        submittedRevision: (body && body.expectedVersion) || null,
+        currentRevision: run.revision,
+        retryable: true,
+        latestResourceRef: 'v1/meals/statements/' + run.statementRunId
+      });
+    }
+    const expectedHash = body && body.expectedContentHash;
+    if (expectedHash && expectedHash !== run.contentHash) {
+      return refuse(ctx, 409, 'meals.statement-content-changed',
+        'The statement draft has changed since it was read; re-draft and re-read the content hash before finalizing.', {
+          conflictKind: 'statement-content-changed',
+          expectedContentHash: expectedHash,
+          currentContentHash: run.contentHash,
+          retryable: true
+        });
+    }
+    const expectedVersion = body && body.expectedVersion;
+    if (expectedVersion && expectedVersion !== run.revision) {
+      return refuse(ctx, 409, 'meals.stale-revision', 'The submitted expected version is stale; the resource has since changed.', {
+        conflictKind: 'stale-revision',
+        aggregateId: run.statementRunId,
+        submittedRevision: expectedVersion,
+        currentRevision: run.revision,
+        retryable: true,
+        latestResourceRef: 'v1/meals/statements/' + run.statementRunId
+      });
+    }
+    // FINALIZE DOES NOT RE-MATERIALISE THE LINES and does not recompute the hash: it freezes what the
+    // last draft produced. That is what makes the member reference on a finalized line the one that
+    // was resolved at DRAFT time, and it is the property this whole surface exists to show.
+    run.status = 'Finalized';
+    run.finalizedAtUtc = stamp();
+    run.revision = nextRevision(state);
+    ctx.send(200, detailOf(run));
+    return true;
+  }
+
+  const statementRoute = /^\/v1\/meals\/statements\/([^/]+)$/.exec(path);
+  if (statementRoute && method === 'GET') {
+    const run = state.statementRuns[decodeURIComponent(statementRoute[1])] || null;
+    // A dark module and an absent statement are ONE answer. Nothing may split them.
+    if (!run) { return refuse(ctx, 404, 'meals.not-found', 'The requested Company Meals resource was not found.'); }
+    ctx.send(200, detailOf(run));
+    return true;
+  }
+
+  const exportRoute = /^\/v1\/meals\/statements\/([^/]+)\/export$/.exec(path);
+  if (exportRoute && method === 'GET') {
+    const run = state.statementRuns[decodeURIComponent(exportRoute[1])] || null;
+    if (!run) { return refuse(ctx, 404, 'meals.not-found', 'The requested Company Meals resource was not found.'); }
+    const format = (ctx.url.searchParams.get('format') || 'csv').trim().toLowerCase();
+    if (format !== 'csv') {
+      return refuse(ctx, 400, 'meals.export-format-unsupported', 'Only csv is supported.');
+    }
+    const fileName = 'meals-statement-' + periodTag(run.periodYear, run.periodMonth) + '-' +
+      String(run.statementRunId).replace(/-/g, '') + '.csv';
+    // Written through `ctx.res` rather than `ctx.sendText`, which takes no extra headers: this route
+    // carries two the client reads, and `Access-Control-Expose-Headers` is what makes them readable
+    // at all from a cross-origin admin. Withholding it would make the page's "we named this file
+    // ourselves" fallback untestable — which is exactly the branch that must not be a guess.
+    ctx.res.writeHead(200, {
+      'Content-Type': 'text/csv; charset=utf-8',
+      'Content-Disposition': 'attachment; filename="' + fileName + '"',
+      'X-Meals-Content-Hash': run.contentHash,
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Expose-Headers': 'Content-Disposition, X-Meals-Content-Hash',
+      'Cache-Control': 'no-store'
+    });
+    ctx.res.end(csvOf(run));
+    return true;
+  }
+
   return false;
 }
 
@@ -447,4 +866,16 @@ function refuse (ctx, status, code, detail, extra) {
   return true;
 }
 
-module.exports = { fresh, route };
+module.exports = {
+  fresh,
+  route,
+  // Exported so `journeys/meals-statement-month.spec.js` asserts against the SAME strings this file
+  // seeds, rather than re-typing them. A journey that typed its own copy would go green against a
+  // fixture that had since changed underneath it — which is the whole class of defect the world
+  // module exists to prevent.
+  STATEMENT_MEMBER_WITH_REF,
+  STATEMENT_MEMBER_BARE,
+  STATEMENT_EMPLOYEE_REF,
+  STATEMENT_PERIOD_YEAR,
+  STATEMENT_PERIOD_MONTH
+};

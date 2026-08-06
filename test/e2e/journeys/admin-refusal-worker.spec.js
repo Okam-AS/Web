@@ -17,15 +17,81 @@
 // `worker` answer and never on `unknown`, so that an admin whose profile has not come back yet is
 // shown too much rather than shown nothing. This journey only exercises the positive branch — the
 // `unknown` branch would need a `/user` read that stalls, which is a different journey.
+//
+// ---- THE CREDENTIAL, AND WHY THIS JOURNEY IS THE FIXTURE-ONLY ONE -----------------------------
+//
+// Recorded here rather than rediscovered, because it costs an hour every time. Read out of OkamAPI
+// `feature/restaurant-modules` @ 5df07afa; every file:line below was checked, not remembered.
+//
+// `POST /User/login` (Controllers/UserController.cs:174-180) accepts a caller three ways:
+//
+//     verifiedDemoUser  || verifiedPowerUser || await VerifyTokenAsync(user, token)
+//
+// The third is a real Identity phone token — generated, sent by SMS and never knowable to a test —
+// and `GetOrCreateAsync` (Services/UserService.cs:540) additionally puts any number that is neither
+// of the first two through a Twilio number lookup before the account exists at all. So a journey can
+// only ever type one of the first two. THERE ARE EXACTLY TWO NO-SMS SIGN-INS, and both are product
+// settings rather than fixture inventions (Services/UserService.cs:631-635):
+//
+//   the manager   AppSettings:DemoPhoneNumber / AppSettings:DemoVerificationCode. Committed, and it
+//                 is what every other journey types. USELESS HERE: `test/e2e/scripts/live-world.sh`
+//                 registers the store through `POST /Stores/register` under this account's own
+//                 bearer, which creates its `StoreAdmins` row — so in every world that script builds
+//                 the demo manager IS a store admin, which is the opposite of this journey's subject.
+//
+//   the PowerUser AppSettings:AdminUserPhoneNumber / AppSettings:PowerUserVerificationCode. The code
+//                 has a committed value; the NUMBER does not — appsettings.json ships the string
+//                 "Set in Azure. For development, set in User Secrets", and Identity's account-name
+//                 charset is narrowed to `+0123456789` (Helpers/ServiceCollectionExtensions.cs:182),
+//                 so that placeholder can never name an account and the bypass is INERT out of the
+//                 box (Services/PowerUserRoleSeed.cs:67-80 logs exactly that, at Critical). An
+//                 operator has to choose a number and hand it to the API process —
+//                 `AppSettings__AdminUserPhoneNumber=+47…` — which is the environment variable this
+//                 journey's live credential comes down to. No value for it is written down anywhere,
+//                 here or in the estate, and none should be.
+//
+// SO THE LIVE SUBJECT IS NOT A WORKER, and an artifact from a live run must not be read as if it
+// were. `adminIn` is computed purely from `StoreAdmins` rows (Services/StoreService.cs:177) and
+// never consults the role, so the bypass account does resolve to `worker` in the shell and every
+// refusal below is genuinely observed. But signing in on that number GRANTS PowerUserRole
+// (Services/UserService.cs:601 -> PowerUserRoleSeed.EnsureConfiguredAdminHoldsRoleAsync), and
+// `StoreAdminAuthorizationHandler:17` succeeds on that role alone. Live, therefore, this journey
+// shows the BROWSER SHELL refusing an account the API itself would admit — a sharper fact than the
+// fixture's, and a different one. It is the shell's rule that is under test either way; that is what
+// the three capabilities on this test claim, and all three survive the substitution.
+//
+// The pair below is therefore overridable, and the `@fixture` tag comes off only when it has been
+// overridden — because `@fixture` means "depends on state only the fixture has", and the fixture-only
+// state this journey depends on is precisely the worker's phone number. `playwright.config.js`
+// excludes `@fixture` in live mode, so leaving the variables unset keeps today's behaviour exactly.
+//
+//   E2E_WORKER_PHONE   national part only, as typed into the modal (it prefixes +47 itself). Must be
+//                      the number the API was started with in AppSettings__AdminUserPhoneNumber.
+//   E2E_WORKER_CODE    AppSettings:PowerUserVerificationCode, from the API's own configuration.
+//
+// The number is NOT written into the artifact when it came from the environment — it is an operator's
+// personal phone number and a journey record gets pasted into reviews. The SOURCE is written instead.
 
 const { test, journeyDetails, expect } = require('../support/journey');
 const { signIn } = require('../support/admin');
+
+const WORKER = {
+  phone: process.env.E2E_WORKER_PHONE || '90000001',
+  code: process.env.E2E_WORKER_CODE || '123123'
+};
+// Named by where it came from, which is what the artifact is allowed to say.
+const WORKER_SOURCE = process.env.E2E_WORKER_PHONE
+  ? 'env:E2E_WORKER_PHONE'
+  : 'fixture:+47' + WORKER.phone;
 
 test(
   'A worker is refused the store-admin schedule and is given their own page instead',
   journeyDetails({
     journey: 'admin-refusal-worker',
     surface: 'admin',
+    // See THE CREDENTIAL above: `@fixture` is a claim about the phone number, so it comes off
+    // exactly when a live one has been supplied and not a moment earlier.
+    tag: process.env.E2E_WORKER_PHONE ? ['@live'] : ['@fixture'],
     capabilities: [
       'admin.shell.store-admin-guard',
       'admin.nav.worker-scoping',
@@ -33,11 +99,28 @@ test(
     ]
   }),
   async ({ page, journey }) => {
-    await journey.step('sign in as a worker who administers no store', async () => {
+    await journey.step('sign in as somebody who administers no store', async () => {
       await page.goto('/admin');
-      await signIn(page, { phone: '90000001', code: '123123' });
+      await signIn(page, { phone: WORKER.phone, code: WORKER.code });
       await expect(page).toHaveURL(/\/admin$/);
-      return 'signed in as +4790000001, adminIn: []';
+
+      // THE PREMISE, OBSERVED RATHER THAN NARRATED. Every refusal below is the shell acting on an
+      // EMPTY `adminIn`, and until now this step only asserted that in prose — so a world in which
+      // the account turned out to administer something would have produced three refusals that were
+      // about a different rule, and a detail line claiming otherwise. Read the way `nav-access.js`
+      // reads it: off the Vuex state the app persists, not off a literal this file chose.
+      const membership = await page.evaluate(() => {
+        try {
+          const parsed = JSON.parse(window.localStorage.getItem('state') || '{}');
+          const user = parsed.currentUser || {};
+          return { id: user.id || null, adminIn: Array.isArray(user.adminIn) ? user.adminIn.length : null };
+        } catch (e) { return { id: null, adminIn: null }; }
+      });
+      expect(membership.id).toBeTruthy();
+      // `null` here means `adminIn` was absent, which `nav-access.js` calls `unknown` and does NOT
+      // refuse on — so it must not be allowed to pass as a zero.
+      expect(membership.adminIn).toBe(0);
+      return 'signed in (' + WORKER_SOURCE + '), adminIn read back as an empty list';
     });
 
     await journey.step('the sidebar offers no store-admin group', async () => {
@@ -46,8 +129,9 @@ test(
       await expect(nav).toBeVisible();
       const text = await nav.textContent();
 
-      // "Vaktplan" is the store-admin schedule link and it lives in the Moduler group. Its absence is
-      // the refusal; the store selector's absence is the same fact from the other side.
+      // "Vaktplan" is the store-admin schedule link and it lives in the Workforce module group (it
+      // was in the single Moduler group until that was split into six, one per module). Its absence
+      // is the refusal; the store selector's absence is the same fact from the other side.
       expect(text).not.toContain('Vaktplan');
       await expect(page.locator('.store-selector-container')).toHaveCount(0);
 

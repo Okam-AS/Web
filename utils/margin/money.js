@@ -15,6 +15,8 @@
  * (`plugins/global-mixin.js`), which resolves them to core's formatter for kroner and `formatChf` for
  * francs. Nothing about grouping, separators or the symbol is reimplemented here.
  */
+import { crossCurrencyLabel } from '~/utils/cross-currency';
+
 export const marginMoney = {
   props: {
     currency: {
@@ -33,7 +35,7 @@ export const marginMoney = {
     /** Integer minor units through the admin's own money formatter, or the wire's ISO code. */
     amount (minor, wireCurrency) {
       if (wireCurrency && this.currency && wireCurrency !== this.currency) {
-        return this.wholeAmount(minor) + ',' + this.fractionAmount(minor) + ' ' + wireCurrency;
+        return crossCurrencyLabel(minor, wireCurrency, this);
       }
       return this.priceLabel(minor);
     },

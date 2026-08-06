@@ -211,56 +211,59 @@ test(
       return 'recorded: the worker half does not exist; walking the manager half';
     });
 
-    await journey.step('DEFECT — the publish button is not clickable at a 1280px viewport', async () => {
-      // Found by driving the page, not by reading it. An ordinary `.click()` on the publish button
-      // times out: something else is on top of it. The measurement below is what turns "the click
-      // timed out" into a defect somebody can act on, so it is taken rather than assumed.
-      const button = await page.locator('[data-test="version-publish"]').boundingBox();
+    await journey.step('the publish control is reachable BY POINTER at this viewport', async () => {
+      // THIS STEP USED TO FILE A DEFECT. It is now the guard against that defect returning, and it
+      // runs immediately before the click that depends on it rather than as a note somewhere else.
+      //
+      // What it caught: `.trn-page__columns` is `repeat(auto-fit, minmax(420px, 1fr))`, so at 1280
+      // each track is ~488px, while the six-column versions table's own min-content width is 607px
+      // and grows to 635px once a published row carries a real hash and a timestamp. A table box
+      // never shrinks below min-content, so the table escaped its track and its last cell — the one
+      // holding this button — came to rest under the NEXT column, which is painted later and won the
+      // hit test. Measured 2026-08-04: an ordinary click timed out at 1024, at 1280, and at 1440 too
+      // once a second version existed. `.trn-table-scroll` (components/admin/training/
+      // _training-panel.scss) now contains the overflow.
+      //
+      // TWO INSTRUMENTS, because the first one alone is what let this ship. The old check read
+      // `blocked = !!covering && …`, so `document.elementFromPoint` returning NULL — which is what a
+      // control overflowed clean off the viewport returns — scored as NOT BLOCKED. That is exactly
+      // the answer it gave while the button was unreachable.
       const viewport = page.viewportSize();
-      const columns = await page.locator('.trn-page__column').evaluateAll(
-        nodes => nodes.map((n) => { const r = n.getBoundingClientRect(); return { left: Math.round(r.left), right: Math.round(r.right) }; }));
 
-      // Whatever the browser says is actually at the button's centre. If it is not the button, no
-      // pointer at that point can ever reach it.
-      const covering = await page.evaluate(({ x, y }) => {
-        const el = document.elementFromPoint(x, y);
-        if (!el) { return null; }
+      // 1. Actionability. `trial` runs scroll-into-view and then hit-tests at the final position,
+      //    skipping only the press itself, so a covered control FAILS it. It cannot pass on a button
+      //    no mouse can reach — unlike `force: true` (fires at the coordinates regardless, hitting
+      //    whatever covers it) or `dispatchEvent` (proves the handler, never the control).
+      await page.locator('[data-test="version-publish"]').click({ trial: true, timeout: 8000 });
+
+      // 2. The cause, named directly, so a regression says WHY rather than just "click timed out".
+      //    The table is allowed to be wider than its column — that is what the scroll container is
+      //    for — but what the table PAINTS INTO must stay inside the column.
+      const escape = await page.locator('[data-test="versions-table"]').evaluate((t) => {
+        const holder = t.closest('.trn-page__column');
+        const painted = t.parentElement.getBoundingClientRect();
         return {
-          tag: el.tagName.toLowerCase(),
-          className: typeof el.className === 'string' ? el.className : '',
-          text: (el.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 70)
+          past: Math.round(painted.right - holder.getBoundingClientRect().right),
+          scrolls: getComputedStyle(t.parentElement).overflowX
         };
-      }, { x: button.x + button.width / 2, y: button.y + button.height / 2 });
+      });
+      expect(escape.past).toBeLessThanOrEqual(0);
+      expect(escape.scrolls).not.toBe('visible');
 
-      const blocked = !!covering && !covering.className.includes('trn-btn');
-      if (blocked) {
-        journey.finding('defect', 'the Training publish button cannot be clicked at a 1280px viewport',
-          'pages/admin/training-courses.vue — `.trn-page__columns` is ' +
-          '`grid-template-columns: repeat(auto-fit, minmax(420px, 1fr))` over columns that carry ' +
-          '`min-width: 0`, so the six-column versions table (which ends in the publish action cell) ' +
-          'overflows its own track and its last cell lands under the NEXT column, which paints over ' +
-          'it. Measured in Chromium at ' + viewport.width + '×' + viewport.height + ': the button box ' +
-          'is x=' + Math.round(button.x) + '–' + Math.round(button.x + button.width) + ', the columns ' +
-          'are ' + JSON.stringify(columns) + ', and `document.elementFromPoint` at the button\'s own ' +
-          'centre returns <' + covering.tag + ' class="' + covering.className + '"> — "' + covering.text +
-          '" — which belongs to the right-hand column. A manager on a 1280px laptop therefore cannot ' +
-          'publish a course version by pointing at the control that publishes it; the button is ' +
-          'reachable by keyboard, which is the only reason this is not a total block. Fix at the ' +
-          'layout: let the table scroll inside its column (`overflow-x: auto`) rather than overflow it.');
-      }
-      return blocked
-        ? 'blocked by <' + covering.tag + ' class="' + covering.className + '">'
-        : 'not blocked at this viewport';
+      return 'clickable by pointer at ' + viewport.width + '×' + viewport.height
+        + '; the table scrolls inside its column (overflow-x: ' + escape.scrolls
+        + ') and paints ' + Math.abs(escape.past) + 'px inside its right edge';
     });
 
     let hash = null;
     await journey.step('publish it — this is the hinge', async () => {
-      // DISPATCHED DIRECTLY, and that is the point rather than a convenience. A pointer click cannot
-      // reach this control at this viewport (see the step above), so the journey performs the one
-      // thing that still proves the HANDLER and the route are wired, while recording that the path a
-      // user would take is broken. Using `force: true` would have been dishonest: it still fires at
-      // the coordinates, so it would have exercised the covering element.
-      await page.locator('[data-test="version-publish"]').dispatchEvent('click');
+      // AN ORDINARY POINTER CLICK, which it could not be until 2026-08-04. This used to be a
+      // `dispatchEvent('click')` — honest at the time, because no pointer could reach the control and
+      // dispatching at least proved the handler and the route while the step above recorded that the
+      // path a real manager takes was broken. Now that the control is reachable the walk takes that
+      // path, because a test that calls the handler is a test of the handler: it passes with the
+      // button unbound, the route absent, or the control never rendered at all.
+      await page.locator('[data-test="version-publish"]').click();
       const row = page.locator('[data-test="version-row"]').first();
       await expect(row).toContainText('Publisert', { timeout: 15000 });
       // A published version is immutable, so the control that would change it is GONE rather than

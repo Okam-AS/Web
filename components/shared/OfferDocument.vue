@@ -147,7 +147,17 @@
 </template>
 
 <script>
-import { priceLabel } from "~/core/helpers/tools";
+// `priceLabel` in the template above is the GLOBAL MIXIN's (`plugins/global-mixin.js`), resolved off
+// the component instance. Naming it here because the structure said otherwise: this file imported
+// core's raw `priceLabel` from `~/core/helpers/tools` and never registered it in `methods`, and a
+// Vue 2 template compiles with `with(this)` — a module-scope import is invisible to it. The import
+// bound nothing. It read as a deliberate bypass of the absence gate and never was one, and the next
+// reader would have re-derived that same wrong conclusion, so the import is gone and this says what
+// actually resolves.
+//
+// What that buys this document: a fee nobody stated prints `—`, not `kr 0`. Core's raw helper
+// answers "0" to any falsy amount, so under the import this template APPEARED to promise a customer
+// a line item costing nothing. Pinned in `test/price-absence.test.js`.
 
 export default {
   name: "OfferDocument",

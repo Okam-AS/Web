@@ -213,12 +213,28 @@
             </div>
             <div class="form-group">
               <label>{{ $i('delivery_minimumOrderKroner') }}</label>
-              <input
-                v-model="localMinimumAmountForDelivery"
-                type="text"
-                inputmode="numeric"
-                maxlength="7"
-              />
+              <!-- The stored minimum is ØRE, so a single whole-kroner box could not show one. This is
+                   the same kroner/øre pair the delivery-method editor further down this file already
+                   uses, for the same reason: it is the only shape that can render what the column
+                   holds. -->
+              <div class="amount-inputs">
+                <input
+                  v-model="localMinimumWholeAmount"
+                  type="text"
+                  inputmode="numeric"
+                  maxlength="7"
+                  :placeholder="$i('delivery_kroner')"
+                  @blur="normalizeMinimumAmountField"
+                />
+                <input
+                  v-model="localMinimumFractionAmount"
+                  type="text"
+                  inputmode="numeric"
+                  maxlength="2"
+                  :placeholder="$i('delivery_ore')"
+                  @blur="normalizeMinimumAmountField"
+                />
+              </div>
             </div>
           </div>
         </section>
@@ -353,7 +369,8 @@ export default {
     localDeliveryFullAddress: "",
     localDeliveryZipCode: "",
     localDeliveryCity: "",
-    localMinimumAmountForDelivery: 0,
+    localMinimumWholeAmount: "0",
+    localMinimumFractionAmount: "00",
     editingDeliveryMethod: false,
     creatingDeliveryMethod: false,
     editorDeliveryMethod: {},
@@ -394,17 +411,43 @@ export default {
       }
       return this.$i("delivery_selectDeliveryType");
     },
+    // "Dirty" has to mean THE OPERATOR CHANGED SOMETHING, and the only way to mean that is to put
+    // both sides through the same conversion. These compared a normalised local (`|| ""` in
+    // setLocalVariables) against the raw stored value, so a store whose address came back with a
+    // null city compared `null !== ""` forever: Save was offered on a page nobody had touched, and
+    // pressing it posted the address anyway.
     hasDeliveryAddressChanges() {
+      const saved = this.defaultDeliveryAddress;
       return (
-        this.defaultDeliveryAddress.fullAddress !== this.localDeliveryFullAddress ||
-        this.defaultDeliveryAddress.zipCode !== this.localDeliveryZipCode ||
-        this.defaultDeliveryAddress.city !== this.localDeliveryCity
+        this.addressField(saved.fullAddress) !== this.addressField(this.localDeliveryFullAddress) ||
+        this.addressField(saved.zipCode) !== this.addressField(this.localDeliveryZipCode) ||
+        this.addressField(saved.city) !== this.addressField(this.localDeliveryCity)
       );
     },
+    // The same asymmetry, in money. The field held whole kroner and setLocalVariables FLOORED the
+    // stored øre into it, but this read the stored øre raw: a store on 150,50 kr compared 15050
+    // against 15000 forever, so Save never went away and pressing it wrote the rounded-down 15000
+    // the operator never asked for. Both sides go through the field's own representation.
+    //
+    // That representation is now LOSSLESS, which is the second half of the same defect. Putting
+    // both sides through a lossy one stopped the unasked-for write, but it also meant the øre were
+    // not on the screen at all AND could not be removed: the operator typed 150 over a stored
+    // 150,50, both sides read 15000, no change was detected and no Save appeared. A field that
+    // cannot express what the column holds cannot correct it either.
     hasMinimumAmountChanges() {
-      const savedAmount = parseInt(this.currentStore?.minimumOrderPriceForHomeDelivery || 0);
-      const localAmount = this.kronerToOre(this.localMinimumAmountForDelivery);
-      return savedAmount !== localAmount;
+      return this.minimumOrderAmountInOre !== this.storedMinimumOrderAmountInOre;
+    },
+    // What the two boxes currently say, in øre — the number Save would post.
+    minimumOrderAmountInOre() {
+      return this.minimumAmountFieldsToOre(this.localMinimumWholeAmount, this.localMinimumFractionAmount);
+    },
+    // What the server holds, put through the same two boxes and read back out. For every value the
+    // column can hold this is the stored number itself; it is written as a round trip rather than
+    // read raw so that the day the field stops being able to express something, the dirty check
+    // notices instead of quietly offering to overwrite it.
+    storedMinimumOrderAmountInOre() {
+      const stored = this.minimumAmountFields(this.currentStore?.minimumOrderPriceForHomeDelivery);
+      return this.minimumAmountFieldsToOre(stored.whole, stored.fraction);
     },
     hasChanges() {
       return this.hasDeliveryAddressChanges || this.hasMinimumAmountChanges;
@@ -432,6 +475,14 @@ export default {
 
     if (this.selectedStore) {
       this.fetchDeliverySettings(this.selectedStore);
+    }
+  },
+  beforeDestroy() {
+    // showNotification arms a 3.5s timer that writes component state. Leaving the page inside that
+    // window left the timer holding a destroyed component.
+    if (this.notification.timeout) {
+      clearTimeout(this.notification.timeout);
+      this.notification.timeout = null;
     }
   },
   methods: {
@@ -473,7 +524,8 @@ export default {
         deliveryFullAddress: this.localDeliveryFullAddress,
         deliveryZipCode: this.localDeliveryZipCode,
         deliveryCity: this.localDeliveryCity,
-        minimumAmountForDelivery: this.localMinimumAmountForDelivery,
+        minimumWholeAmount: this.localMinimumWholeAmount,
+        minimumFractionAmount: this.localMinimumFractionAmount,
       };
     },
     restoreUnsavedFormValues(unsavedFormValues) {
@@ -486,7 +538,8 @@ export default {
         this.localDeliveryCity = unsavedFormValues.deliveryCity;
       }
       if (unsavedFormValues.hasMinimumAmountChanges) {
-        this.localMinimumAmountForDelivery = unsavedFormValues.minimumAmountForDelivery;
+        this.localMinimumWholeAmount = unsavedFormValues.minimumWholeAmount;
+        this.localMinimumFractionAmount = unsavedFormValues.minimumFractionAmount;
       }
     },
     setLocalVariables(options = {}) {
@@ -501,9 +554,7 @@ export default {
       this.localInstantHomeDeliveryEnabled = !!store.homeDeliveryEnabled;
       this.localWoltDeliveryEnabled = !!store.woltDriveEnabled;
       this.localDeliveryEnabled = !!(store.homeDeliveryEnabled || store.woltDriveEnabled || store.dineHomeDeliveryEnabled);
-      this.localMinimumAmountForDelivery = !isNaN(parseInt(store.minimumOrderPriceForHomeDelivery))
-        ? Math.floor(parseInt(store.minimumOrderPriceForHomeDelivery) / 100)
-        : 0;
+      this.setMinimumAmountFields(store.minimumOrderPriceForHomeDelivery);
       this.restoreUnsavedFormValues(unsavedFormValues);
     },
     async refreshStore(options = {}) {
@@ -541,27 +592,28 @@ export default {
         if (!this.localDeliveryEnabled) {
           this.localInstantHomeDeliveryEnabled = false;
           this.localWoltDeliveryEnabled = false;
-          await Promise.all([
+          // Three writes, three booleans. Discarding them announced a deactivation the server had
+          // refused — the same lie as the silent one on the toggles above, only louder.
+          this.requireSaved(await Promise.all([
             this._storeService.UpdateHomeDelivery(this.selectedStore, false),
             this._storeService.UpdateDineHomeDelivery(this.selectedStore, false),
             this._storeService.UpdateWoltDelivery(this.selectedStore, false),
-          ]);
+          ]), "delivery_updateHomeDeliveryError");
           this.showNotification(this.$i("delivery_homeDeliveryDeactivated"));
         } else {
           this.localInstantHomeDeliveryEnabled = true;
           this.localWoltDeliveryEnabled = false;
-          await Promise.all([
+          this.requireSaved(await Promise.all([
             this._storeService.UpdateHomeDelivery(this.selectedStore, true),
             this._storeService.UpdateDineHomeDelivery(this.selectedStore, false),
             this._storeService.UpdateWoltDelivery(this.selectedStore, false),
-          ]);
+          ]), "delivery_updateHomeDeliveryError");
           this.showNotification(this.$i("delivery_homeDeliveryActivatedOwn"));
         }
         await this.refreshStore({ preserveUnsavedFormChanges: true });
         await this.loadDeliveryMethods();
       } catch (error) {
-        this.showNotification(error.message || this.$i("delivery_updateHomeDeliveryError"), "error");
-        this.setLocalVariables({ preserveUnsavedFormChanges: true });
+        await this.recoverFromFailedSave(error.message || this.$i("delivery_updateHomeDeliveryError"));
       } finally {
         this.isSaving = false;
       }
@@ -579,11 +631,11 @@ export default {
 
       this.isSaving = true;
       try {
-        await Promise.all([
+        this.requireSaved(await Promise.all([
           this._storeService.UpdateHomeDelivery(this.selectedStore, useOwnDelivery),
           this._storeService.UpdateDineHomeDelivery(this.selectedStore, false),
           this._storeService.UpdateWoltDelivery(this.selectedStore, useWolt),
-        ]);
+        ]), "delivery_changeHomeDeliveryTypeError");
         this.localDeliveryEnabled = true;
         this.localInstantHomeDeliveryEnabled = useOwnDelivery;
         this.localWoltDeliveryEnabled = useWolt;
@@ -595,23 +647,45 @@ export default {
           this.deliveryMethods = [];
         }
       } catch (error) {
-        this.showNotification(error.message || this.$i("delivery_changeHomeDeliveryTypeError"), "error");
-        this.setLocalVariables({ preserveUnsavedFormChanges: true });
+        await this.recoverFromFailedSave(error.message || this.$i("delivery_changeHomeDeliveryTypeError"));
       } finally {
         this.isSaving = false;
+      }
+    },
+    // A store-service write does NOT throw when it does not land. RequestService.TryParseResponse
+    // returns undefined for a 204, for any non-200 and for a body it cannot parse, and every toggle
+    // in core/services/store-service.ts turns that into a plain `false`. This page used to treat
+    // that `false` as "nothing to do": no message, no error, no re-read — so the switch stayed in
+    // the position the operator moved it to while the server still held the old value, and a failed
+    // "turn off self-pickup" was indistinguishable from a successful one. Turning the `false` into
+    // a throw routes every call site to the one recovery path below.
+    requireSaved(results, messageKey = "delivery_saveChangeError") {
+      const outcomes = Array.isArray(results) ? results : [results];
+      if (outcomes.some(saved => !saved)) {
+        throw new Error(this.$i(messageKey));
+      }
+    },
+    // Both halves, always. Saying it failed while leaving the switch flipped still leaves the screen
+    // reporting a state the venue is not in, so the re-read is not a nicety — it is the correction.
+    // If the re-read fails too, fall back to the last store the server gave us rather than leaving
+    // the un-saved position on screen, and keep the failure message rather than replacing it with
+    // one about reading.
+    async recoverFromFailedSave(message) {
+      this.showNotification(message, "error");
+      try {
+        await this.refreshStore({ preserveUnsavedFormChanges: true });
+      } catch (readError) {
+        this.setLocalVariables({ preserveUnsavedFormChanges: true });
       }
     },
     async updateToggle(action, successMessage) {
       this.isSaving = true;
       try {
-        const success = await action();
-        if (success) {
-          this.showNotification(successMessage);
-          await this.refreshStore({ preserveUnsavedFormChanges: true });
-        }
+        this.requireSaved(await action());
+        this.showNotification(successMessage);
+        await this.refreshStore({ preserveUnsavedFormChanges: true });
       } catch (error) {
-        this.showNotification(error.message || this.$i("delivery_saveChangeError"), "error");
-        this.setLocalVariables({ preserveUnsavedFormChanges: true });
+        await this.recoverFromFailedSave(error.message || this.$i("delivery_saveChangeError"));
       } finally {
         this.isSaving = false;
       }
@@ -649,16 +723,19 @@ export default {
           tasks.push(
             this._storeService.SetMinimumAmountForDelivery(
               this.selectedStore,
-              this.kronerToOre(this.localMinimumAmountForDelivery)
+              // The SAME computed the dirty check compares and the same one the boxes normalise to,
+              // so the number posted is the number on screen. A field that displayed øre and posted
+              // kroner would be worse than the floor it replaced, because it would look right.
+              this.minimumOrderAmountInOre
             )
           );
         }
 
-        await Promise.all(tasks);
+        this.requireSaved(await Promise.all(tasks), "delivery_saveSettingsError");
         this.showNotification(this.$i("delivery_settingsSaved"));
         await this.refreshStore();
       } catch (error) {
-        this.showNotification(error.message || this.$i("delivery_saveSettingsError"), "error");
+        await this.recoverFromFailedSave(error.message || this.$i("delivery_saveSettingsError"));
       } finally {
         this.isSaving = false;
       }
@@ -792,9 +869,54 @@ export default {
     distanceLabel(deliveryMethod) {
       return `${Math.round((deliveryMethod.minimumDistance || 0) / 1000)}-${Math.round((deliveryMethod.maxDistance || 0) / 1000)} km`;
     },
-    kronerToOre(value) {
-      const kroner = parseInt(value);
-      return isNaN(kroner) ? 0 : kroner * 100;
+    // One conversion each way between the stored øre and the two boxes, used by BOTH the dirty
+    // check and the load, so the two can no longer drift apart. They are exact inverses over every
+    // integer the column can hold, which is the property the objective actually asks for: an amount
+    // that cannot survive the trip to the screen and back is an amount the screen is lying about.
+    //
+    // Written as integer arithmetic rather than through the `wholeAmount`/`fractionAmount` mixin
+    // helpers the delivery-method editor uses. Those decompose by slicing the DECIMAL STRING, which
+    // is exact for the non-negative amounts a shipping price is, and is not for this column: it is
+    // a signed int with no validation on its route, and -50 øre slices to a whole part of "-" that
+    // reads back as +50 — a sign flip, offered to the operator as a Save.
+    minimumAmountFields(ore) {
+      const parsed = parseInt(ore, 10);
+      const amount = isNaN(parsed) ? 0 : parsed;
+      const absolute = Math.abs(amount);
+      return {
+        whole: (amount < 0 ? "-" : "") + String(Math.floor(absolute / 100)),
+        fraction: String(absolute % 100).padStart(2, "0"),
+      };
+    },
+    minimumAmountFieldsToOre(whole, fraction) {
+      const wholeText = this.numericInputValue(whole);
+      const kroner = parseInt(wholeText, 10);
+      const ore = parseInt(this.numericInputValue(fraction), 10);
+      // Clamped, not taken modulo 100. `maxlength="2"` keeps a person from reaching this, but were
+      // it ever reached, folding 150 øre down to 50 would look like a digit had been eaten, and the
+      // blur below would then put that eaten number on screen as though it had been typed.
+      const safeOre = isNaN(ore) ? 0 : Math.min(Math.abs(ore), 99);
+      const safeKroner = isNaN(kroner) ? 0 : Math.abs(kroner);
+      // From the TEXT, because `parseInt("-0")` is `-0` and `-0 < 0` is false — the one negative
+      // whole part that cannot be recognised from the number alone.
+      const negative = wholeText.startsWith("-");
+      const amount = safeKroner * 100 + safeOre;
+      return negative ? -amount : amount;
+    },
+    setMinimumAmountFields(ore) {
+      const fields = this.minimumAmountFields(ore);
+      this.localMinimumWholeAmount = fields.whole;
+      this.localMinimumFractionAmount = fields.fraction;
+    },
+    // What the field SHOWS has to be what Save would WRITE. Both boxes are free text, so `150,5`,
+    // `150.5`, `to hundre` and a bare `5` in the øre box all looked accepted and would otherwise
+    // silently become something else — the same shape of lie as the switch that stayed flipped.
+    // Normalising on blur puts the written number on screen while the operator can still see it.
+    normalizeMinimumAmountField() {
+      this.setMinimumAmountFields(this.minimumOrderAmountInOre);
+    },
+    addressField(value) {
+      return String(value ?? "");
     },
     showNotification(message, type = "success") {
       if (this.notification.timeout) {

@@ -813,61 +813,28 @@ export default {
       }
     },
 
-    calculateTotalMonthly(proposal) {
-      if (!proposal || !proposal.lineItems) {
-        return this.priceLabel(0);
-      }
-      const total = proposal.lineItems.reduce((sum, item) => {
-        if (item.monthlyFee) {
-          // Monthly fee is stored in øre, convert to kroner for display
-          return sum + (item.monthlyFee / 100) * item.quantity;
-        }
-        return sum;
-      }, 0);
-      return this.priceLabel(total);
-    },
-
-    calculateTotalOnetime(proposal) {
-      if (!proposal || !proposal.lineItems) {
-        return this.priceLabel(0);
-      }
-      const total = proposal.lineItems.reduce((sum, item) => {
-        if (item.onetimeFee) {
-          // Onetime fee is stored in øre, convert to kroner for display
-          return sum + (item.onetimeFee / 100) * item.quantity;
-        }
-        return sum;
-      }, 0);
-      return this.priceLabel(total);
-    },
-
-    calculateTotalMonthlyValue(proposal) {
-      if (!proposal || !proposal.lineItems) {
-        return 0;
-      }
-      const total = proposal.lineItems.reduce((sum, item) => {
-        if (item.monthlyFee) {
-          // Monthly fee is stored in øre, convert to kroner for calculations
-          return sum + (item.monthlyFee / 100) * item.quantity;
-        }
-        return sum;
-      }, 0);
-      return total;
-    },
-
-    calculateTotalOnetimeValue(proposal) {
-      if (!proposal || !proposal.lineItems) {
-        return 0;
-      }
-      const total = proposal.lineItems.reduce((sum, item) => {
-        if (item.onetimeFee) {
-          // Onetime fee is stored in øre, convert to kroner for calculations
-          return sum + (item.onetimeFee / 100) * item.quantity;
-        }
-        return sum;
-      }, 0);
-      return total;
-    },
+    // THIS PAGE DOES NOT COMPUTE OFFER TOTALS, and the four helpers that used to sit here claiming
+    // otherwise are gone. `calculateTotalMonthly`, `calculateTotalOnetime` and a `…Value` variant of
+    // each folded `lineItems` into a monthly and a one-time total. NOTHING CALLED THEM — not this
+    // page's template, not a computed, not a `this[...]` or `$options.methods` lookup, and no file
+    // on any branch in this repository. They arrived dead in the initial commit and never woke up.
+    //
+    // Deleted rather than repaired, because the figures they claimed to produce already exist, and
+    // are already correct, next door: `<OfferDocument :offer-proposal="viewingProposal" />` in the
+    // template above renders this page's ONLY offer totals, from its own `totalMonthlyFee` and
+    // `totalOnetimeFee` computeds, in MINOR units all the way to `priceLabel`. That component is
+    // also where the absence rule (`~/utils/price`) is applied to them. A second implementation of
+    // "what does this offer total" is just somewhere for the two answers to drift apart.
+    //
+    // Repairing them would have meant fixing two independent bugs in code no caller could reach:
+    //   MAGNITUDE — each divided by 100 before calling `priceLabel`, which takes minor units. A
+    //   stated 49900 øre rendered `kr 4,99` where OfferDocument renders `kr 499,00`, and the two
+    //   `…Value` helpers returned kroner (499) to callers that every sibling reads as øre (49900).
+    //   ABSENCE — `if (item.monthlyFee)` skipped an unstated fee and a genuine zero alike, so the
+    //   `reduce` seed survived and printed `kr 0,00`: a figure manufactured before `priceLabel`
+    //   could refuse it. The three worlds — stated, zero, absent — collapsed into one answer.
+    // Both measured against the shipped formatter rather than read off the source; the figures are
+    // in `lanes/L-OFFERS-PAGE-HUNDREDFOLD/magnitude-proof.txt`.
 
     sendProposalSms() {
       if (!this.viewingProposal || !this.viewingProposal.offerProposalId) {
