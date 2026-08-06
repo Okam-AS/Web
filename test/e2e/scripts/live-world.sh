@@ -333,10 +333,40 @@ GUARDED="$(sqld -Q "SET NOCOUNT ON;
 note "C1 checked on sys.triggers: the 3 directly-seeded tables carry none"
 
 say "4/5  Starting the API on $API_BASE"
-# No module config masters are set. This world exists for the feature-flag board, whose controller is
-# gated on StoreAdmin alone -- the flag CATALOG is composed unconditionally in Program.cs, so
-# Events:Enabled and Growth:Enabled would change nothing here. A journey that needs a module's ROUTES
-# to answer adds its switch here and says why, the way demo-up.sh does.
+# ---- ONE MODULE CONFIG MASTER IS SET, AND IT HAD TO BE ----------------------------------------
+#
+# This block used to say "No module config masters are set ... Events:Enabled and Growth:Enabled would
+# change nothing here", and that was TRUE OF THE THREE JOURNEYS THAT EXISTED. All three live on the
+# feature-flag board and the workforce schedule; neither surface calls a `/events` route, and the flag
+# CATALOG really is composed unconditionally in Program.cs, so the board renders all 18 rows -- including
+# every `Events.*` row -- with the Events module completely dark behind them. The sentence was read as
+# "Events needs no config", which is a different claim and a false one.
+#
+# `events-enquiry-to-settlement` is the journey that found the difference. `EventsController` implements
+# `IActionFilter` and short-circuits EVERY /events action -- public AND admin -- to 404 EVENTS_DISABLED
+# while `IEventsModuleGate.IsEnabled` is false (Controllers/EventsController.cs:68-75), and
+# `EventsModuleGate` reads `Events:Enabled` with a default of FALSE
+# (Services/Events/EventsModuleGate.cs:57,66). Neither appsettings.json nor appsettings.Development.json
+# declares that key at all -- Growth carries an explicit `"Enabled": false`, Events does not even have
+# the field -- so on a world this script built, the walk's very first act, an anonymous
+# `POST /events/inquiries`, answered 404 before any action body ran. The module was not partly there; it
+# was invisible.
+#
+# So the switch is set here, which is exactly what the line above already told the next lane to do. Set
+# as an ENVIRONMENT variable rather than by editing a checkout's appsettings: `Events__Enabled` is how
+# ASP.NET spells `Events:Enabled` in the environment, and it keeps this world's configuration a property
+# of the world rather than a modification of somebody's OkamAPI tree.
+#
+# WHAT THIS DOES NOT DO IS OPEN A STORE. The outer switch is ANDed with the store-scoped `Events.Core`
+# flag for every admin route (`EventsModuleGate.IsStoreEnabledAsync`), and this world still seeds NO flag
+# override -- so a store here reads deny-closed exactly as before, `/admin/events-pipeline` is still
+# dark, and the journey still has to pull the lever itself. Turning the master on makes the module
+# DEPLOYED; it does not make any venue's booking pipeline visible, and the probe below asserts the
+# distinction rather than trusting it.
+#
+# Growth, Meals and Margin masters are deliberately still unset: no journey needs their routes yet, and a
+# world that switched on everything would stop being able to show that a dark module is dark.
+#
 # Launched from THIS shell rather than from a `( … & )` subshell, and with stdin closed onto
 # /dev/null. Both details were learned the hard way on the first run: from a subshell `$!` reported
 # the subshell's own pid, so the "stop it with" line at the bottom named a process that was not the
@@ -346,6 +376,7 @@ cd "$OKAM_API_REPO"
 ASPNETCORE_ENVIRONMENT=Development \
 ASPNETCORE_URLS="$API_BASE" \
 ConnectionStrings__WebApiDatabase="$CONN" \
+Events__Enabled=true \
     nohup dotnet run --project WebApi.csproj --no-build --no-launch-profile </dev/null > "$LOG" 2>&1 &
 API_PID=$!
 cd "$WEB_REPO"
@@ -694,6 +725,44 @@ OVERRIDES="$(printf '%s' "$STATES" | jq -r '[ .[] | select(.isOverridden == true
     subject is the flag board must start from a store with none, or it is asserting the seed's answer."
 note "no flag overrides: every flag reads its module default, deny-closed"
 
+# ---- THE EVENTS MASTER IS ON, AND IT DID NOT OPEN A STORE --------------------------------------
+#
+# Two probes, because "Events__Enabled=true was in the launch line" is not evidence that the module is
+# deployed, and a master switch that ALSO opened a venue would silently seed the answer to the journey
+# that pulls the lever. Both are READ-ONLY and neither creates an event, a proposal or a flag row.
+#
+#   1. THE MASTER IS ON. A random token on the anonymous proposal page. While the master is off, the
+#      controller's action filter short-circuits it to EVENTS_DISABLED before the action body runs;
+#      with the master on, the body runs, resolves nothing, and answers EVENTS_PROPOSAL_NOT_FOUND.
+#      Those two codes are the whole difference between a deployed module and a dark one, on a route
+#      that needs no store, no bearer and no fixture -- which is why this is the probe rather than an
+#      admin read. A GUID that resolves to a real proposal would be a lottery win; the route is
+#      `{token:guid}` so a malformed one would 404 on ROUTING and prove nothing, hence uuidgen.
+EV_PROBE="$(curl -sS "$API_BASE/events/proposals/$(uuidgen | tr 'A-Z' 'a-z')")"
+EV_PROBE_CODE="$(printf '%s' "$EV_PROBE" | jq -r '.code // .Code // empty' 2>/dev/null)"
+[ "$EV_PROBE_CODE" != "EVENTS_DISABLED" ] || die "the Events module is DARK on this world: the anonymous
+    proposal route answered EVENTS_DISABLED, which is the outer config master refusing before any action
+    body runs. Events__Enabled did not reach the API process. Every /events route -- public and admin --
+    is 404 in this state, so events-enquiry-to-settlement cannot send its first enquiry."
+[ "$EV_PROBE_CODE" = "EVENTS_PROPOSAL_NOT_FOUND" ] || die "the anonymous proposal route answered
+    [$EV_PROBE_CODE], which is neither EVENTS_DISABLED (module dark) nor EVENTS_PROPOSAL_NOT_FOUND (module
+    deployed, token unknown). The Events module gate is not behaving as either of its two documented
+    states: $EV_PROBE"
+note "Events master ON: GET /events/proposals/<random> -> EVENTS_PROPOSAL_NOT_FOUND, not EVENTS_DISABLED"
+
+#   2. ...AND THE VENUE IS STILL DARK. The admin read ANDs the master with the store-scoped
+#      `Events.Core` flag, which this world deliberately leaves at its deny-closed default. So this
+#      MUST still refuse, and refuse with EVENTS_DISABLED. If turning the master on ever started
+#      opening stores as well, the journey's first finding -- a guest holding a reference the venue
+#      cannot see -- would quietly become unprovable, and it would fail HERE instead.
+EV_ADMIN="$(curl -sS "$API_BASE/events/admin/$STORE_ID/events" -H "Authorization: Bearer $MGR_TOKEN")"
+EV_ADMIN_CODE="$(printf '%s' "$EV_ADMIN" | jq -r '.code // .Code // empty' 2>/dev/null)"
+[ "$EV_ADMIN_CODE" = "EVENTS_DISABLED" ] || die "store $STORE_ID's Events pipeline is NOT deny-closed:
+    GET /events/admin/$STORE_ID/events answered [$EV_ADMIN_CODE] rather than EVENTS_DISABLED. This world
+    seeds no Events.Core override, so the store must be dark until a journey pulls the lever itself --
+    a world that answers this read has already seeded the answer: $EV_ADMIN"
+note "store $STORE_ID still deny-closed: GET /events/admin/$STORE_ID/events -> EVENTS_DISABLED (Events.Core off)"
+
 # ---- ...AND THE FOUR READS THE SCHEDULE PAGE MAKES ---------------------------------------------
 #
 # `init()` calls `GET /context` and refuses the whole page on a 403; `load()` then fires the range,
@@ -809,6 +878,16 @@ replayed.
 
 (\`events-deposit-precondition\` removes the override it sets, so it leaves the world as it found it and
 can run either side of a restore, or be re-run against a used one.)
+
+\`events-enquiry-to-settlement\` IS THE OPPOSITE CASE and needs a restore AFTER it, not just before. It
+is the longest walk here -- eleven writes -- and it ends having left behind a booking, a sent proposal,
+an accepted version, a closed statement, and TWO flag overrides it never clears (\`Events.Core\` and
+\`Events.Settlement\`, both left on). None of that reds the journey itself: it tags every subject it
+searches by with a per-run token, so it can be re-run against a world it has already written to. What it
+reds is any journey that comes after it expecting the deny-closed board this world seeds -- which is
+every one of the other three. So:
+
+    test/e2e/scripts/live-world-reset.sh restore     # BEFORE the next journey, not optional after this one
 
 Artifacts land in artifacts/journeys/ with "backend": "live", this API's origin on "apiBaseUrl" and
 "backendBuild" naming the build above -- and support/journey.js FAILS a live run in which the browser
