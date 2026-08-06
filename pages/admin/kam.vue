@@ -213,6 +213,15 @@ export default {
   },
 
   mounted() {
+    // `isPowerUser` reads `currentUser?.isPowerUser`, which is undefined for a visitor who is not
+    // signed in — so this hook used to answer "you are not a Power User" to somebody it had never
+    // met, and the bare `push('/admin')` superseded the shell's in-flight /admin?redirect=…,
+    // dropping the page they asked for. Authentication is `AdminPage`'s question and it is already
+    // asking it; see the long form in pages/admin/overview.vue.
+    if (!this.$store.getters.userIsLoggedIn) {
+      return;
+    }
+
     if (!this.isPowerUser) {
       this.$router.push("/admin");
       return;

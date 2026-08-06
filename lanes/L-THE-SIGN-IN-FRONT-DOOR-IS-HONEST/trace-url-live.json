@@ -1,0 +1,36 @@
+{
+  "web": "http://127.0.0.1:3971",
+  "at": "2026-08-06T20:03:02.765Z",
+  "urlBeforeSignIn": "http://127.0.0.1:3971/admin",
+  "urlAfterSignIn": "http://127.0.0.1:3971/admin?storeId=1",
+  "log": [
+    {
+      "ms": 423,
+      "how": "replaceState",
+      "to": "/admin/overview",
+      "from": "/admin/overview",
+      "stack": "    at history.<computed> [as replaceState] (<anonymous>:13:19) |     at pushState (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:1991:15) |     at replaceState (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:2001:3) |     at eval (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:2627:7) |     at eval (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:2272:21) |     at eval (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:2410:7) |     at step (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:2092:7) |     at step (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:2099:9)"
+    },
+    {
+      "ms": 424,
+      "how": "replaceState",
+      "to": "/admin/overview",
+      "from": "/admin/overview",
+      "stack": "    at history.<computed> [as replaceState] (<anonymous>:13:19) |     at setupScroll (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:1810:18) |     at HTML5History.setupListeners (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:2580:27) |     at setupListeners (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:3001:15) |     at eval (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:2288:9) |     at abort (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:2327:16) |     at HTML5History.confirmTransition (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:2341:12) |     at HTML5History.transitionTo (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:2268:8)"
+    },
+    {
+      "ms": 533,
+      "how": "pushState",
+      "to": "/admin",
+      "from": "/admin/overview",
+      "stack": "    at history.<computed> [as pushState] (<anonymous>:13:19) |     at pushState (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:1993:15) |     at eval (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:2615:7) |     at eval (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:2272:21) |     at eval (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:2410:7) |     at step (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:2092:7) |     at step (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:2099:9) |     at runQueue (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:2103:3)"
+    },
+    {
+      "ms": 2255,
+      "how": "replaceState",
+      "to": "/admin?storeId=1",
+      "from": "/admin",
+      "stack": "    at history.<computed> [as replaceState] (<anonymous>:13:19) |     at pushState (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:1991:15) |     at replaceState (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:2001:3) |     at eval (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:2627:7) |     at eval (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:2272:21) |     at eval (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:2410:7) |     at step (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:2092:7) |     at runQueue (webpack-internal:///../web-journeys/node_modules/vue-router/dist/vue-router.esm.js:2103:3)"
+    }
+  ]
+}

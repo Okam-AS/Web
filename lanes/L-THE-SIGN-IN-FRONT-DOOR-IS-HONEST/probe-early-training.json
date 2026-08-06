@@ -1,0 +1,60 @@
+{
+  "web": "http://127.0.0.1:3971",
+  "deepLink": "/admin/training-courses",
+  "at": "2026-08-06T20:05:08.312Z",
+  "verificationRequests": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:5971/user/sendverificationtoken"
+    }
+  ],
+  "click": {
+    "ms": 427,
+    "onModalId": "1",
+    "path": "/admin/training-courses"
+  },
+  "final": {
+    "path": "/admin?redirect=%2Fadmin%2Ftraining-courses",
+    "boxes": 0,
+    "modalId": "2",
+    "says": null,
+    "btn": true
+  },
+  "samples": [
+    {
+      "ms": 5,
+      "p": "/admin/training-courses",
+      "modalId": null,
+      "btn": false,
+      "boxes": 0
+    },
+    {
+      "ms": 427,
+      "p": "/admin/training-courses",
+      "modalId": "1",
+      "btn": true,
+      "boxes": 0
+    },
+    {
+      "ms": 453,
+      "p": "/admin/training-courses",
+      "modalId": "1",
+      "btn": true,
+      "boxes": 6
+    },
+    {
+      "ms": 478,
+      "p": "/admin?redirect=%2Fadmin%2Ftraining-courses",
+      "modalId": "1",
+      "btn": true,
+      "boxes": 6
+    },
+    {
+      "ms": 485,
+      "p": "/admin?redirect=%2Fadmin%2Ftraining-courses",
+      "modalId": "2",
+      "btn": true,
+      "boxes": 0
+    }
+  ]
+}

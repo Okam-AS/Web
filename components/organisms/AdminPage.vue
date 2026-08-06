@@ -124,14 +124,50 @@ export default {
         localStorage.setItem("adminSidebarCollapsed", this.sidebarCollapsed);
       }
     },
+    // A sign-in modal is raised only on a route this shell intends to KEEP.
+    //
+    // It used to be raised first and the bounce to /admin fired immediately after, which put a live
+    // «Send kode» button on a page that had milliseconds to live. Measured in Chromium against the
+    // live world on this build (lanes/L-THE-SIGN-IN-FRONT-DOOR-IS-HONEST/probe-early-training.json),
+    // clicking that button the frame it appeared:
+    //
+    //     404ms  modal #1 on /admin/training-courses, «Send kode» pressed
+    //     453ms  modal #1 shows six OTP boxes — the send SUCCEEDED, an SMS really went out
+    //     478ms  the route commits to /admin?redirect=%2Fadmin%2Ftraining-courses
+    //     485ms  modal #1 is destroyed; modal #2 mounts at the phone step with ZERO boxes
+    //
+    // So the failure was never a send that did not happen — it was a send that happened and was
+    // thrown away by this component's own navigation, 32ms after it succeeded. The person is left
+    // looking at a phone-number field holding a code the screen no longer wants, which is
+    // indistinguishable from a backend that answered nothing. `LoginModal` cannot report this: from
+    // inside the modal the send worked. Only the shell knows the page is leaving.
+    //
+    // Not fixed by disabling the button while the navigation is in flight, and not by having the
+    // modal report anything: the honest state is that there is nothing to sign into here yet. The
+    // control does not exist until it is on the page that will keep what it sends — 47 admin pages
+    // reach /admin the same way, and the destination raises its own door in the branch below.
     async initAuth() {
     if (!this.$store.getters.userIsLoggedIn) {
-      this.showLogin = true;
       // Only redirect to /admin if we're on a different admin page
       // This creates the redirect flow for protected pages
-      if (this.$route && this.$route.path !== "/admin" && !this.$route.query.redirect) {
-        this.$router.replace(`/admin?redirect=${encodeURIComponent(this.$route.fullPath)}`);
+      if (this.$route && this.$route.path !== SIGN_IN_PATH && !this.$route.query.redirect) {
+        const navigation = this.$router.replace(
+          `${SIGN_IN_PATH}?redirect=${encodeURIComponent(this.$route.fullPath)}`
+        );
+        // Leaving is the ONLY reason to withhold the door. If the navigation does not happen — a
+        // guard refused it, another one superseded it, an older vue-router returned nothing to wait
+        // on — this page is staying, and a guarded page with no way to sign in is the worse of the
+        // two failures. `replace` rejects rather than throws in vue-router 3.1+, so the fallback is
+        // hung off the rejection and never off a `try`.
+        if (navigation && typeof navigation.catch === "function") {
+          navigation.catch(() => { this.showLogin = true; });
+        }
+        return;
       }
+      // Either already on the sign-in page, or on an admin page carrying a `redirect` — the URL the
+      // sign-in flow itself leaves behind, which renders for a signed-out visitor on purpose. Both
+      // are routes this shell keeps, so both get the door.
+      this.showLogin = true;
     } else {
       await this._userService.Reload();
       if (this.allowNonAdmin) {

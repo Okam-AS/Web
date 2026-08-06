@@ -1,0 +1,54 @@
+{
+  "web": "http://127.0.0.1:3971",
+  "tag": "live-training",
+  "at": "2026-08-06T20:05:55.064Z",
+  "msToModalVisible": 605,
+  "atModalVisible": {
+    "modalText": "Logg inn Okam Admin Web Portal +47 Send kode",
+    "hasPhoneInput": true,
+    "hasSendButton": true,
+    "sendButtonText": "Send kode",
+    "sendButtonDisabled": false,
+    "sendButtonAriaDisabled": null,
+    "otpBoxes": 0,
+    "nuxtReady": true,
+    "loadState": "interactive"
+  },
+  "earlyClick": {
+    "attempted": true,
+    "filled": true,
+    "clicked": true,
+    "requestsAfter": 1,
+    "dom": {
+      "otpBoxes": 6,
+      "says": null,
+      "sendButtonStillThere": false,
+      "sendButtonDisabled": null,
+      "nuxtReady": true
+    }
+  },
+  "clicksNeededAfterSettle": 0,
+  "urlAtOtpStep": "http://127.0.0.1:3971/admin?redirect=%2Fadmin%2Ftraining-courses",
+  "finalUrl": "http://127.0.0.1:3971/admin/training-courses?storeId=1",
+  "urlTrail": [
+    "http://127.0.0.1:3971/admin/training-courses",
+    "http://127.0.0.1:3971/admin/training-courses",
+    "http://127.0.0.1:3971/admin/training-courses",
+    "http://127.0.0.1:3971/admin?redirect=%2Fadmin%2Ftraining-courses",
+    "http://127.0.0.1:3971/admin/training-courses",
+    "http://127.0.0.1:3971/admin/training-courses?storeId=1"
+  ],
+  "signedInUserId": "6ba6dd27-42b0-4ba9-807b-96930c735f2f",
+  "finalHeadings": [
+    "Opplæring",
+    "Modulstatus",
+    "1. Kurs",
+    "2. Versjoner",
+    "5. Sertifikater",
+    "3. Tildelinger",
+    "4. Gjennomføringer",
+    "6. Hva personen innehar",
+    "7. Hvem har sett dette"
+  ],
+  "consoleErrors": []
+}

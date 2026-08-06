@@ -346,7 +346,16 @@ export default {
   },
 
   mounted() {
-    if (!this.$store.getters.userIsLoggedIn || !this.$store.state.currentUser?.isPowerUser) {
+    // The two conditions were ORed into one bounce, so an anonymous visitor was pushed to the bare
+    // dashboard — superseding the shell's in-flight /admin?redirect=… and dropping the page they
+    // asked for. They are different facts: nobody signed in is `AdminPage`'s question and it is
+    // already asking it, and only the privilege refusal belongs here. See the long form in
+    // pages/admin/overview.vue.
+    if (!this.$store.getters.userIsLoggedIn) {
+      return;
+    }
+
+    if (!this.$store.state.currentUser?.isPowerUser) {
       this.$router.push("/admin");
       return;
     }

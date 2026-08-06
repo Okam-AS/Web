@@ -558,6 +558,28 @@ export default {
   },
 
   mounted() {
+    // NOBODY SIGNED IN IS NOT THE SAME FACT AS NOT A KEY ACCOUNT MANAGER, and this page used to
+    // answer the first question with the second. `AdminPage` is this component's CHILD, so its
+    // `mounted` runs first: it writes /admin?redirect=%2Fadmin%2Foverview and starts navigating —
+    // and then this hook ran, found `currentUser` null, and `push('/admin')` superseded the
+    // in-flight navigation. The bare path won, the `redirect` was never committed to the URL, and
+    // the operator who bookmarked this page signed in and landed on the dashboard. Measured in
+    // Chromium against the live world (lanes/L-THE-SIGN-IN-FRONT-DOOR-IS-HONEST/trace-url-live.json):
+    // one pushState at 533ms, /admin/overview -> /admin, no redirect query anywhere after it.
+    //
+    // Authentication is the shell's question and it is already asking it. Eleven sibling pages —
+    // dintero, surfboard, tripletex, tables, pos, pos-settings, pos-reports, reservations,
+    // dintero-terminal, wolt-drive-invoice, poweruser-growth — already open with exactly this line;
+    // this page, offers, kam and goods were the four that did not.
+    //
+    // `wrapped.vue` looks like a fifth and is not: it renders no `<AdminPage>`, so there is no shell
+    // to delegate to and its own bounce is the only thing keeping its door. Delegating there was
+    // tried in this lane and left an anonymous visitor on a page that rendered nothing at all
+    // (lanes/L-THE-SIGN-IN-FRONT-DOOR-IS-HONEST/walk-wrapped-delegation-regression.json).
+    if (!this.$store.getters.userIsLoggedIn) {
+      return;
+    }
+
     // Restrict to Key Account Managers (Power Users also allowed)
     const user = this.$store.state.currentUser;
     if (!user?.isKeyAccountManager && !user?.isPowerUser) {
