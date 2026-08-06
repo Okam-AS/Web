@@ -71,8 +71,11 @@ describe('AdminPage — the store-admin membership guard', () => {
       propsData: { allowNonAdmin: true }
     })
     await settled()
-    expect(wrapper.vm.showLogin).toBe(true)
     expect(replace).toHaveBeenCalledWith('/admin?redirect=%2Fadmin%2Fworkforce-me')
+    // And NOT on this route. This assertion used to read `toBe(true)`, which pinned the defect: a
+    // live «Send kode» button on a page with milliseconds to live. See the ledger in
+    // `AdminPage.initAuth` — the send succeeded and was destroyed 32ms later by this very redirect.
+    expect(wrapper.vm.showLogin).toBe(false)
   })
 
   test('the prop defaults to false, so a page that says nothing keeps the old behaviour', () => {

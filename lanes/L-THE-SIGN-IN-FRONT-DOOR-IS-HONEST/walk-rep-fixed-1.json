@@ -1,0 +1,84 @@
+{
+  "arm": "rep-fixed-1",
+  "web": "http://127.0.0.1:3975",
+  "api": "http://127.0.0.1:5971",
+  "deepLink": "/admin/overview",
+  "at": "2026-08-06T20:27:34.845Z",
+  "reachedOtpFromTheEarliestClick": true,
+  "extraPresses": 0,
+  "otpReached": true,
+  "firstSendControlAppearedAt": {
+    "ms": 665,
+    "path": "/admin?redirect=%2Fadmin%2Foverview",
+    "modalId": "1"
+  },
+  "earliestClick": {
+    "ms": 665,
+    "path": "/admin?redirect=%2Fadmin%2Foverview",
+    "modalId": "1"
+  },
+  "samples": [
+    {
+      "ms": 4,
+      "p": "/admin/overview",
+      "modalId": null,
+      "sendControl": false,
+      "boxes": 0
+    },
+    {
+      "ms": 646,
+      "p": "/admin?redirect=%2Fadmin%2Foverview",
+      "modalId": null,
+      "sendControl": false,
+      "boxes": 0
+    },
+    {
+      "ms": 665,
+      "p": "/admin?redirect=%2Fadmin%2Foverview",
+      "modalId": "1",
+      "sendControl": true,
+      "boxes": 0
+    },
+    {
+      "ms": 713,
+      "p": "/admin?redirect=%2Fadmin%2Foverview",
+      "modalId": "1",
+      "sendControl": true,
+      "boxes": 6
+    },
+    {
+      "ms": 1062,
+      "p": "/admin?redirect=%2Fadmin%2Foverview",
+      "modalId": "1",
+      "sendControl": false,
+      "boxes": 6
+    },
+    {
+      "ms": 1118,
+      "p": "/admin/overview",
+      "modalId": null,
+      "sendControl": false,
+      "boxes": 0
+    },
+    {
+      "ms": 1154,
+      "p": "/admin/overview?storeId=1",
+      "modalId": null,
+      "sendControl": false,
+      "boxes": 0
+    }
+  ],
+  "smsSendRequests": 1,
+  "finalUrl": "http://127.0.0.1:3975/admin/overview?storeId=1",
+  "finalPath": "/admin/overview",
+  "landedOnThePageAsked": true,
+  "headings": [],
+  "whoAmI": {
+    "id": "6ba6dd27-42b0-4ba9-807b-96930c735f2f",
+    "isPowerUser": true,
+    "isKeyAccountManager": false,
+    "adminIn": 1
+  },
+  "failedResponses": [],
+  "consoleErrors": []
+}

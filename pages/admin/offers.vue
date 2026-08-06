@@ -477,6 +477,15 @@ export default {
   },
 
   mounted() {
+    // Nobody signed in is not the same fact as not a Key Account Manager. Answering the first with
+    // the second bounces an anonymous visitor to the bare dashboard and supersedes the shell's
+    // in-flight /admin?redirect=… — so a deep link into this page silently becomes /admin after
+    // sign-in. Authentication is `AdminPage`'s question and it is already asking it; see the long
+    // form in pages/admin/overview.vue.
+    if (!this.$store.getters.userIsLoggedIn) {
+      return;
+    }
+
     // Restrict to Key Account Managers (Power Users also allowed)
     const user = this.$store.state.currentUser;
     if (!user?.isKeyAccountManager && !user?.isPowerUser) {

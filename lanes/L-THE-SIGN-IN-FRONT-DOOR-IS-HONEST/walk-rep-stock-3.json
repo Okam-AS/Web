@@ -1,0 +1,87 @@
+{
+  "arm": "rep-stock-3",
+  "web": "http://127.0.0.1:3971",
+  "api": "http://127.0.0.1:5971",
+  "deepLink": "/admin/overview",
+  "at": "2026-08-06T20:28:17.948Z",
+  "reachedOtpFromTheEarliestClick": false,
+  "extraPresses": 1,
+  "otpReached": true,
+  "firstSendControlAppearedAt": {
+    "ms": 657,
+    "path": "/admin/overview",
+    "modalId": "1"
+  },
+  "earliestClick": {
+    "ms": 657,
+    "path": "/admin/overview",
+    "modalId": "1"
+  },
+  "samples": [
+    {
+      "ms": 5,
+      "p": "/admin/overview",
+      "modalId": null,
+      "sendControl": false,
+      "boxes": 0
+    },
+    {
+      "ms": 657,
+      "p": "/admin/overview",
+      "modalId": "1",
+      "sendControl": true,
+      "boxes": 0
+    },
+    {
+      "ms": 736,
+      "p": "/admin/overview",
+      "modalId": "1",
+      "sendControl": true,
+      "boxes": 6
+    },
+    {
+      "ms": 818,
+      "p": "/admin",
+      "modalId": "1",
+      "sendControl": true,
+      "boxes": 6
+    },
+    {
+      "ms": 828,
+      "p": "/admin",
+      "modalId": "2",
+      "sendControl": true,
+      "boxes": 0
+    },
+    {
+      "ms": 40141,
+      "p": "/admin",
+      "modalId": "2",
+      "sendControl": true,
+      "boxes": 6
+    },
+    {
+      "ms": 40336,
+      "p": "/admin?storeId=1",
+      "modalId": null,
+      "sendControl": false,
+      "boxes": 0
+    }
+  ],
+  "smsSendRequests": 2,
+  "finalUrl": "http://127.0.0.1:3971/admin?storeId=1",
+  "finalPath": "/admin",
+  "landedOnThePageAsked": false,
+  "headings": [
+    "Velkommen !",
+    "Butikkinformasjon"
+  ],
+  "whoAmI": {
+    "id": "6ba6dd27-42b0-4ba9-807b-96930c735f2f",
+    "isPowerUser": true,
+    "isKeyAccountManager": false,
+    "adminIn": 1
+  },
+  "failedResponses": [],
+  "consoleErrors": []
+}

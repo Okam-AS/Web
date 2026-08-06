@@ -1,0 +1,73 @@
+{
+  "arm": "rep2-stock-1",
+  "web": "http://127.0.0.1:3971",
+  "api": "http://127.0.0.1:5971",
+  "deepLink": "/admin/overview",
+  "at": "2026-08-06T20:30:14.087Z",
+  "reachedOtpFromTheEarliestClick": true,
+  "extraPresses": 0,
+  "otpReached": true,
+  "otpVanishedWhileTyping": true,
+  "otpTypingError": "TimeoutError: locator.fill: Timeout 15000ms exceeded. Call log: \u001b[2m - waiting for locator('.login-modal .otp-input input').first()\u001b[22m \u001b[2m - locator resolved to <input type=\"tel\" data-id=\"0\" maxlen",
+  "firstSendControlAppearedAt": {
+    "ms": 511,
+    "path": "/admin/overview",
+    "modalId": "1"
+  },
+  "earliestClick": {
+    "ms": 511,
+    "path": "/admin/overview",
+    "modalId": "1"
+  },
+  "samples": [
+    {
+      "ms": 27,
+      "p": "/admin/overview",
+      "modalId": null,
+      "sendControl": false,
+      "boxes": 0
+    },
+    {
+      "ms": 511,
+      "p": "/admin/overview",
+      "modalId": "1",
+      "sendControl": true,
+      "boxes": 0
+    },
+    {
+      "ms": 598,
+      "p": "/admin/overview",
+      "modalId": "1",
+      "sendControl": true,
+      "boxes": 6
+    },
+    {
+      "ms": 643,
+      "p": "/admin",
+      "modalId": "1",
+      "sendControl": true,
+      "boxes": 6
+    },
+    {
+      "ms": 660,
+      "p": "/admin",
+      "modalId": "2",
+      "sendControl": true,
+      "boxes": 0
+    }
+  ],
+  "smsSendRequests": 1,
+  "finalUrl": "http://127.0.0.1:3971/admin",
+  "finalPath": "/admin",
+  "landedOnThePageAsked": false,
+  "headings": [
+    "Logg inn"
+  ],
+  "whoAmI": {
+    "isPowerUser": false,
+    "isKeyAccountManager": false,
+    "adminIn": 0
+  },
+  "failedResponses": [],
+  "consoleErrors": []
+}

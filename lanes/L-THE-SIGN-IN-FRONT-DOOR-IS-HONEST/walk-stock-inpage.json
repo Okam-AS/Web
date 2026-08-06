@@ -1,0 +1,68 @@
+{
+  "arm": "stock-inpage",
+  "web": "http://127.0.0.1:3971",
+  "api": "http://127.0.0.1:5971",
+  "deepLink": "/admin/ongoing?redirect=%2Fadmin%2Fongoing",
+  "at": "2026-08-06T20:26:42.455Z",
+  "reachedOtpFromTheEarliestClick": true,
+  "extraPresses": 0,
+  "otpReached": true,
+  "firstSendControlAppearedAt": {
+    "ms": 617,
+    "path": "/admin/ongoing?redirect=%2Fadmin%2Fongoing",
+    "modalId": "1"
+  },
+  "earliestClick": {
+    "ms": 617,
+    "path": "/admin/ongoing?redirect=%2Fadmin%2Fongoing",
+    "modalId": "1"
+  },
+  "samples": [
+    {
+      "ms": 48,
+      "p": "/admin/ongoing?redirect=%2Fadmin%2Fongoing",
+      "modalId": null,
+      "sendControl": false,
+      "boxes": 0
+    },
+    {
+      "ms": 617,
+      "p": "/admin/ongoing?redirect=%2Fadmin%2Fongoing",
+      "modalId": "1",
+      "sendControl": true,
+      "boxes": 0
+    },
+    {
+      "ms": 659,
+      "p": "/admin/ongoing?redirect=%2Fadmin%2Fongoing",
+      "modalId": "1",
+      "sendControl": true,
+      "boxes": 6
+    },
+    {
+      "ms": 861,
+      "p": "/admin/ongoing?redirect=%2Fadmin%2Fongoing&storeId=1",
+      "modalId": null,
+      "sendControl": false,
+      "boxes": 0
+    }
+  ],
+  "smsSendRequests": 1,
+  "finalUrl": "http://127.0.0.1:3971/admin/ongoing?redirect=%2Fadmin%2Fongoing&storeId=1",
+  "finalPath": "/admin/ongoing",
+  "landedOnThePageAsked": true,
+  "headings": [
+    "Pågående bestillinger",
+    "Nye",
+    "Pågående",
+    "Klar"
+  ],
+  "whoAmI": {
+    "id": "6ba6dd27-42b0-4ba9-807b-96930c735f2f",
+    "isPowerUser": true,
+    "isKeyAccountManager": false,
+    "adminIn": 1
+  },
+  "failedResponses": [],
+  "consoleErrors": []
+}
