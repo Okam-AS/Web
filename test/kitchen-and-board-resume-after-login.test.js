@@ -108,6 +108,25 @@ function signIn (store) {
   store.getters.userIsLoggedIn = true
 }
 
+// The shell, named so a test can raise the one event it sends downwards.
+//
+// These pages no longer mount a sign-in modal of their own — `AdminPage` owns the only one on an
+// admin route — so the sign-in arrives as `login-success` on the shell and NOT as a call to a
+// method on the page. Emitting it here rather than calling the handler by name is deliberate and
+// strictly stronger: it goes through the page's own template binding, so a page that binds the
+// wrong handler, or binds nothing at all, reds every test below. Binding `loadOrders` rather than
+// the whole starter list is exactly what the modal-removal branch carried before these two were
+// composed, and a direct method call could not have seen it.
+const AdminPageStub = {
+  name: 'AdminPageStub',
+  template: '<div><slot /></div>'
+}
+
+// A session arrives while the visitor is standing on the page.
+function signInThroughShell (wrapper) {
+  wrapper.findComponent(AdminPageStub).vm.$emit('login-success')
+}
+
 // ---------------------------------------------------------------------------------------------
 // REACHABILITY
 //
@@ -212,7 +231,7 @@ describe('/admin/kitchen — signing in through the page brings the ticket clock
       // KitchenTicket is deliberately NOT stubbed: the timer text and its colour class are the
       // product behaviour under test, and they are computed inside it.
       stubs: {
-        AdminPage: { template: '<div><slot /></div>' },
+        AdminPage: AdminPageStub,
         Loading: true,
         LoginModal: true
       }
@@ -230,8 +249,10 @@ describe('/admin/kitchen — signing in through the page brings the ticket clock
     const wrapper = mountKitchen(store, () => board)
     await flush()
 
-    // Signed out: the page shows its own modal and starts nothing. `now` is page-load time.
-    expect(wrapper.vm.showLogin).toBe(true)
+    // Signed out: the page starts nothing and `now` is page-load time. It mounts no sign-in modal
+    // of its own either — the shell owns the only one on an admin route — which is why the sign-in
+    // below arrives as an event and not as a close handler.
+    expect(wrapper.findComponent({ name: 'LoginModal' }).exists()).toBe(false)
     expect(wrapper.vm.now).toBe(T0)
 
     // The cook spends a minute finding the password.
@@ -241,7 +262,7 @@ describe('/admin/kitchen — signing in through the page brings the ticket clock
     const sentAt = clockMs
     board = boardWithTicketSentAt(sentAt)
     signIn(store)
-    wrapper.vm.closeLoginModal(true)
+    signInThroughShell(wrapper)
     await flush()
 
     expect(wrapper.find('.kds-timer').exists()).toBe(true)
@@ -275,7 +296,7 @@ describe('/admin/kitchen — signing in through the page brings the ticket clock
         }
       },
       stubs: {
-        AdminPage: { template: '<div><slot /></div>' },
+        AdminPage: AdminPageStub,
         Loading: true,
         LoginModal: true
       }
@@ -284,7 +305,7 @@ describe('/admin/kitchen — signing in through the page brings the ticket clock
     expect(calls).toBe(0)
 
     signIn(store)
-    wrapper.vm.closeLoginModal(true)
+    signInThroughShell(wrapper)
     await flush()
     const afterSignIn = calls
     expect(afterSignIn).toBeGreaterThan(0)
@@ -305,7 +326,7 @@ describe('/admin/kitchen — signing in through the page brings the ticket clock
     await flush()
 
     signIn(store)
-    wrapper.vm.closeLoginModal(true)
+    signInThroughShell(wrapper)
     await flush()
 
     expect(wrapper.vm.isFullscreen).toBe(false)
@@ -333,9 +354,9 @@ describe('/admin/kitchen — signing in through the page brings the ticket clock
     await flush()
 
     signIn(store)
-    wrapper.vm.closeLoginModal(true)
+    signInThroughShell(wrapper)
     await flush()
-    wrapper.vm.closeLoginModal(true)
+    signInThroughShell(wrapper)
     await flush()
 
     // One poll and one clock, no matter how many times the modal closed.
@@ -382,7 +403,7 @@ describe('/admin/ongoing — signing in through the page brings the live board w
         }
       },
       stubs: {
-        AdminPage: { template: '<div><slot /></div>' },
+        AdminPage: AdminPageStub,
         OrderCard: CardStub,
         Loading: true,
         LoginModal: true,
@@ -409,7 +430,7 @@ describe('/admin/ongoing — signing in through the page brings the live board w
     expect(cardIds(wrapper)).toEqual([])
 
     signIn(store)
-    wrapper.vm.closeLoginModal(true)
+    signInThroughShell(wrapper)
     await flush()
 
     // The snapshot taken at sign-in. Still empty — nothing has been ordered yet.
@@ -441,7 +462,7 @@ describe('/admin/ongoing — signing in through the page brings the live board w
     expect(wrapper.vm.adminStores).toEqual([])
 
     signIn(store)
-    wrapper.vm.closeLoginModal(true)
+    signInThroughShell(wrapper)
     await flush()
 
     expect(wrapper.vm.adminStores).toEqual([{ id: 42, name: 'Testkroa' }])
@@ -455,9 +476,9 @@ describe('/admin/ongoing — signing in through the page brings the live board w
     await flush()
 
     signIn(store)
-    wrapper.vm.closeLoginModal(true)
+    signInThroughShell(wrapper)
     await flush()
-    wrapper.vm.closeLoginModal(true)
+    signInThroughShell(wrapper)
     await flush()
 
     expect(jest.getTimerCount()).toBe(1)
