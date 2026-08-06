@@ -1,0 +1,40 @@
+  workforce-timesheets.vue             |       0 |        0 |       0 |       0 | 109-118           
+  wrapped.vue                          |       0 |        0 |       0 |       0 | 34-37             
+ pages/events/deposit                  |     100 |      100 |     100 |     100 |                   
+  _token.vue                           |     100 |      100 |     100 |     100 |                   
+ pages/events/inquiry                  |     100 |      100 |     100 |     100 |                   
+  _store.vue                           |     100 |      100 |     100 |     100 |                   
+ pages/events/proposal                 |     100 |      100 |     100 |     100 |                   
+  _token.vue                           |     100 |      100 |     100 |     100 |                   
+ pages/kvittering/_id                  |       0 |        0 |       0 |       0 |                   
+  _token.vue                           |       0 |        0 |       0 |       0 | 17-20             
+ pages/meals                           |     100 |      100 |     100 |     100 |                   
+  join.vue                             |     100 |      100 |     100 |     100 |                   
+ pages/offer                           |       0 |        0 |       0 |       0 |                   
+  _code.vue                            |       0 |        0 |       0 |       0 | 217-221           
+ pages/preferences                     |     100 |      100 |     100 |     100 |                   
+  communications.vue                   |     100 |      100 |     100 |     100 |                   
+  unsubscribe.vue                      |     100 |      100 |     100 |     100 |                   
+ pages/store                           |       0 |        0 |       0 |       0 |                   
+  _slug.vue                            |       0 |        0 |       0 |       0 | 57-60             
+  notfound.vue                         |       0 |        0 |       0 |       0 | 14-17             
+ pages/subscribe                       |     100 |      100 |     100 |     100 |                   
+  _store.vue                           |     100 |      100 |     100 |     100 |                   
+  confirm.vue                          |     100 |      100 |     100 |     100 |                   
+ pages/webshop                         |       0 |        0 |       0 |       0 |                   
+  3d.vue                               |       0 |        0 |       0 |       0 | 8                 
+  checkout.vue                         |       0 |        0 |       0 |       0 | 8                 
+  index.vue                            |       0 |        0 |       0 |       0 | 8                 
+  mycards.vue                          |       0 |        0 |       0 |       0 | 8                 
+  orders.vue                           |       0 |        0 |       0 |       0 | 8                 
+  vipps.vue                            |       0 |        0 |       0 |       0 | 8                 
+ pages/workforce                       |     100 |      100 |     100 |     100 |                   
+  join.vue                             |     100 |      100 |     100 |     100 |                   
+---------------------------------------|---------|----------|---------|---------|-------------------
+
+Test Suites: 145 passed, 145 total
+Tests:       3216 passed, 3216 total
+Snapshots:   0 total
+Time:        24.767 s
+Ran all test suites.
+JEST_EXIT=0
