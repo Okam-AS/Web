@@ -16,7 +16,7 @@
   always null) — a real sent-at is a later migration/UI pass.
 -->
 <template>
-  <AdminPage full-width>
+  <AdminPage full-width @login-success="resumeAfterLogin">
     <div
       ref="kdsBoard"
       class="kds-board"
@@ -75,11 +75,6 @@
           @recall-line="(line) => onRecallLine(ticket, line)"
         />
       </div>
-
-      <LoginModal
-        v-if="showLogin"
-        @close="closeLoginModal"
-      />
     </div>
   </AdminPage>
 </template>
@@ -87,13 +82,11 @@
 <script>
 import AdminPage from '~/components/organisms/AdminPage.vue'
 import Loading from '~/components/atoms/Loading.vue'
-import LoginModal from '~/components/molecules/LoginModal.vue'
 import KitchenTicket from '~/components/admin/kitchen/KitchenTicket.vue'
 
 export default {
-  components: { AdminPage, Loading, LoginModal, KitchenTicket },
+  components: { AdminPage, Loading, KitchenTicket },
   data: () => ({
-    showLogin: false,
     isLoading: true,
     board: { tickets: [] },
     now: Date.now(),
@@ -133,8 +126,9 @@ export default {
     }
   },
   mounted () {
+    // `AdminPage` raises the sign-in modal for a signed-out visitor and emits `login-success` when
+    // one arrives; the board must not spin behind it in the meantime.
     if (!this.$store.getters.userIsLoggedIn) {
-      this.showLogin = true
       this.isLoading = false
       return
     }
@@ -241,13 +235,12 @@ export default {
     reportError (error) {
       alert(this.$i('ongoing_errorUpdate', { error: (error && error.message) || this.$i('ongoing_unknownError') }))
     },
-    closeLoginModal (isLoggedIn) {
-      this.showLogin = !isLoggedIn
-      if (isLoggedIn) {
-        this.isLoading = true
-        this.refresh()
-        this.startAutoRefresh()
-      }
+    // A session arrived while the board was sitting empty behind the shell's sign-in modal. These
+    // are the three things the page's own duplicate modal did on the same event, unchanged.
+    resumeAfterLogin () {
+      this.isLoading = true
+      this.refresh()
+      this.startAutoRefresh()
     },
     toggleFullscreen () {
       const el = this.$refs.kdsBoard

@@ -1,0 +1,179 @@
+==== RED 1/3: the census BEFORE the fix, run at 2026-08-06T12:38:44Z on 8ac6f63
+==== command: npx jest test/login-modal-mounted-once.test.js --coverage=false
+
+FAIL test/login-modal-mounted-once.test.js
+  a page has one sign-in modal, not two
+    ✕ every admin route mounts exactly one <LoginModal>, and it is the shell's (213 ms)
+    ✕ no page anywhere renders a second sign-in modal (32 ms)
+    ✕ only these files mount a sign-in modal at all (241 ms)
+
+  ● a page has one sign-in modal, not two › every admin route mounts exactly one <LoginModal>, and it is the shell's
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 46
+
+    - Array []
+    + Array [
+    +   Array [
+    +     "pages/admin/brev.vue",
+    +     2,
+    +   ],
+    +   Array [
+    +     "pages/admin/dinehome.vue",
+    +     2,
+    +   ],
+    +   Array [
+    +     "pages/admin/kitchen.vue",
+    +     2,
+    +   ],
+    +   Array [
+    +     "pages/admin/lang.vue",
+    +     2,
+    +   ],
+    +   Array [
+    +     "pages/admin/onboarding.vue",
+    +     2,
+    +   ],
+    +   Array [
+    +     "pages/admin/ongoing.vue",
+    +     2,
+    +   ],
+    +   Array [
+    +     "pages/admin/orders.vue",
+    +     2,
+    +   ],
+    +   Array [
+    +     "pages/admin/payouts.vue",
+    +     2,
+    +   ],
+    +   Array [
+    +     "pages/admin/statistics.vue",
+    +     2,
+    +   ],
+    +   Array [
+    +     "pages/admin/wolt-calc.vue",
+    +     2,
+    +   ],
+    +   Array [
+    +     "pages/admin/wolt-menu.vue",
+    +     2,
+    +   ],
+    + ]
+
+      164 |       .map(f => [rel(f), countMountSites(f)])
+      165 |
+    > 166 |     expect(counted.filter(([, n]) => n !== 1)).toEqual([])
+          |                                                ^
+      167 |
+      168 |     for (const name of ADMIN_PAGES_WITHOUT_THE_SHELL) {
+      169 |       expect([name, countMountSites(path.join(ROOT, name))]).toEqual([name, 0])
+
+      at Object.<anonymous> (test/login-modal-mounted-once.test.js:166:48)
+
+  ● a page has one sign-in modal, not two › no page anywhere renders a second sign-in modal
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 46
+
+    - Array []
+    + Array [
+    +   Array [
+    +     "pages/admin/brev.vue",
+    +     2,
+    +   ],
+    +   Array [
+    +     "pages/admin/dinehome.vue",
+    +     2,
+    +   ],
+    +   Array [
+    +     "pages/admin/kitchen.vue",
+    +     2,
+    +   ],
+    +   Array [
+    +     "pages/admin/lang.vue",
+    +     2,
+    +   ],
+    +   Array [
+    +     "pages/admin/onboarding.vue",
+    +     2,
+    +   ],
+    +   Array [
+    +     "pages/admin/ongoing.vue",
+    +     2,
+    +   ],
+    +   Array [
+    +     "pages/admin/orders.vue",
+    +     2,
+    +   ],
+    +   Array [
+    +     "pages/admin/payouts.vue",
+    +     2,
+    +   ],
+    +   Array [
+    +     "pages/admin/statistics.vue",
+    +     2,
+    +   ],
+    +   Array [
+    +     "pages/admin/wolt-calc.vue",
+    +     2,
+    +   ],
+    +   Array [
+    +     "pages/admin/wolt-menu.vue",
+    +     2,
+    +   ],
+    + ]
+
+      176 |       .filter(([, n]) => n > 1)
+      177 |
+    > 178 |     expect(offenders).toEqual([])
+          |                       ^
+      179 |   })
+      180 |
+      181 |   test('only these files mount a sign-in modal at all', () => {
+
+      at Object.<anonymous> (test/login-modal-mounted-once.test.js:178:23)
+
+  ● a page has one sign-in modal, not two › only these files mount a sign-in modal at all
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  0
+    + Received  + 11
+
+      Array [
+        "components/atoms/MyUserDropdown.vue",
+        "components/organisms/AdminPage.vue",
+    +   "pages/admin/brev.vue",
+    +   "pages/admin/dinehome.vue",
+    +   "pages/admin/kitchen.vue",
+    +   "pages/admin/lang.vue",
+    +   "pages/admin/onboarding.vue",
+    +   "pages/admin/ongoing.vue",
+    +   "pages/admin/orders.vue",
+    +   "pages/admin/payouts.vue",
+    +   "pages/admin/statistics.vue",
+    +   "pages/admin/wolt-calc.vue",
+    +   "pages/admin/wolt-menu.vue",
+        "pages/meals/join.vue",
+        "pages/workforce/join.vue",
+      ]
+
+      186 |       .sort()
+      187 |
+    > 188 |     expect(mounts).toEqual([
+          |                    ^
+      189 |       // Unreachable: no template in this repository renders `<MyUserDropdown>` and nothing imports
+      190 |       // it, so this mount site is on no page's tree and no count above sees it. Left in place and
+      191 |       // listed here rather than deleted, because deleting a component is a different change than
+
+      at Object.<anonymous> (test/login-modal-mounted-once.test.js:188:20)
+
+Test Suites: 1 failed, 1 total
+Tests:       3 failed, 3 total
+Snapshots:   0 total
+Time:        0.964 s, estimated 1 s
+Ran all test suites matching /test\/login-modal-mounted-once.test.js/i.

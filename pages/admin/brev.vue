@@ -1,39 +1,31 @@
 <template>
-  <AdminPage class="print">
+  <AdminPage class="print" @login-success="loadLetters">
     <div class="container">
       <div v-for="letter in letters" :key="letter.name" class="a4page">
         <SalesLetter :name="letter.name" :image-url="letter.imageUrl" />
       </div>
     </div>
-    <LoginModal v-if="showLogin" @close="closeLoginModal" />
   </AdminPage>
 </template>
 
 <script>
 import AdminPage from '~/components/organisms/AdminPage.vue'
 import SalesLetter from '~/components/organisms/SalesLetter.vue'
-import LoginModal from '~/components/molecules/LoginModal.vue'
 
 export default {
-  components: { AdminPage, LoginModal, SalesLetter },
+  components: { AdminPage, SalesLetter },
   data: () => ({
-    letters: [],
-    showLogin: false
+    letters: []
   }),
   mounted () {
+    // `AdminPage` raises the sign-in modal for a signed-out visitor and emits `login-success` when
+    // one arrives. All this needs to do is not call anything before that happens.
     if (!this.$store.getters.userIsLoggedIn) {
-      this.showLogin = true
       return
     }
     this.loadLetters()
   },
   methods: {
-    closeLoginModal (isLoggedIn) {
-      this.showLogin = !isLoggedIn
-      if (isLoggedIn) {
-        this.loadOrders()
-      }
-    },
     loadLetters () {
       // For static generation, we'll use a predefined list or empty array
       // since require.context doesn't work well with static builds

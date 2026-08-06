@@ -151,23 +151,16 @@
           </div>
         </div>
       </div>
-
-      <LoginModal
-        v-if="showLogin"
-        @close="closeLoginModal"
-      />
     </div>
   </AdminPage>
 </template>
 
 <script>
 import AdminPage from "~/components/organisms/AdminPage.vue";
-import LoginModal from "~/components/molecules/LoginModal.vue";
 
 export default {
-  components: { AdminPage, LoginModal },
+  components: { AdminPage },
   data: () => ({
-    showLogin: false,
     woltCalc: {
       avgOrderValue: 400,
       shippingPrice: 75,
@@ -258,16 +251,9 @@ export default {
       };
     },
   },
-  mounted() {
-    if (!this.$store.getters.userIsLoggedIn) {
-      this.showLogin = true;
-    }
-  },
-  methods: {
-    closeLoginModal(isLoggedIn) {
-      this.showLogin = !isLoggedIn;
-    },
-  },
+  // No `mounted` and no methods: this page is a calculator that reads nothing from the API, so the
+  // only thing it ever did on mount was raise a second sign-in modal. `AdminPage` raises the one it
+  // needs, and there is no data to reload once a session arrives.
 };
 </script>
 

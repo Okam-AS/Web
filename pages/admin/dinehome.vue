@@ -1,5 +1,5 @@
 <template>
-  <AdminPage>
+  <AdminPage @login-success="fetchDeliveryTimes">
     <div class="dinehome-page">
       <div class="date-picker-section">
         <h2>{{ $i('dinehome_title') }}</h2>
@@ -184,11 +184,6 @@
       >
         {{ $i('dinehome_emptyState') }}
       </div>
-
-      <LoginModal
-        v-if="showLogin"
-        @close="closeLoginModal"
-      />
     </div>
   </AdminPage>
 </template>
@@ -196,12 +191,10 @@
 <script>
 import AdminPage from "~/components/organisms/AdminPage.vue";
 import Loading from "~/components/atoms/Loading.vue";
-import LoginModal from "~/components/molecules/LoginModal.vue";
 
 export default {
-  components: { AdminPage, LoginModal, Loading },
+  components: { AdminPage, Loading },
   data: () => ({
-    showLogin: false,
     isLoading: false,
     deliveryTimes: [],
     selectedDate: new Date().toISOString().split("T")[0],
@@ -271,8 +264,9 @@ export default {
     },
   },
   mounted() {
+    // `AdminPage` raises the sign-in modal for a signed-out visitor and emits `login-success` when
+    // one arrives. All this needs to do is not call anything before that happens.
     if (!this.$store.getters.userIsLoggedIn) {
-      this.showLogin = true;
       return;
     }
     this.fetchDeliveryTimes();
@@ -283,12 +277,6 @@ export default {
     window.removeEventListener("mouseup", this.stopResize);
   },
   methods: {
-    closeLoginModal(isLoggedIn) {
-      this.showLogin = !isLoggedIn;
-      if (isLoggedIn) {
-        this.fetchDeliveryTimes();
-      }
-    },
     async fetchDeliveryTimes() {
       this.isLoading = true;
       try {

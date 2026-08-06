@@ -1,5 +1,5 @@
 <template>
-  <AdminPage>
+  <AdminPage @login-success="loadPayouts">
     <div class="container">
       <Loading v-if="isLoading" :loading="true" />
 
@@ -62,8 +62,6 @@
           </div>
         </div>
       </div>
-
-      <LoginModal v-if="showLogin" @close="closeLoginModal" />
     </div>
   </AdminPage>
 </template>
@@ -71,31 +69,24 @@
 <script>
 import AdminPage from '~/components/organisms/AdminPage.vue'
 import Loading from '~/components/atoms/Loading.vue'
-import LoginModal from '~/components/molecules/LoginModal.vue'
 
 export default {
-  components: { AdminPage, LoginModal, Loading },
+  components: { AdminPage, Loading },
   data: () => ({
-    showLogin: false,
     isLoading: false,
     lockActions: false,
     payouts: [],
     showPayoutId: ''
   }),
   mounted () {
+    // `AdminPage` raises the sign-in modal for a signed-out visitor and emits `login-success` when
+    // one arrives. All this needs to do is not call anything before that happens.
     if (!this.$store.getters.userIsLoggedIn) {
-      this.showLogin = true
       return
     }
     this.loadPayouts()
   },
   methods: {
-    closeLoginModal (isLoggedIn) {
-      this.showLogin = !isLoggedIn
-      if (isLoggedIn) {
-        this.loadPayouts()
-      }
-    },
     sendInvoiceMail (payout) {
       if (this.lockActions) { return }
       this.lockActions = true

@@ -1,5 +1,5 @@
 <template>
-  <AdminPage :full-width="true">
+  <AdminPage :full-width="true" @login-success="fetchOrders()">
     <div class="orders-page">
       <h2>{{ $i('orders_allOrders') }}</h2>
 
@@ -376,11 +376,6 @@
         </div>
       </div>
 
-      <LoginModal
-        v-if="showLogin"
-        @close="closeLoginModal"
-      />
-
       <OrderModal
         v-if="showOrderModal"
         :order-code="selectedOrderCode"
@@ -392,15 +387,13 @@
 
 <script>
 import AdminPage from "~/components/organisms/AdminPage.vue";
-import LoginModal from "~/components/molecules/LoginModal.vue";
 import OrderModal from "~/components/organisms/OrderModal.vue";
 import MultiSelectDropdown from "~/components/molecules/MultiSelectDropdown.vue";
 import { debounce } from "~/core/helpers/ts-debounce";
 
 export default {
-  components: { AdminPage, LoginModal, OrderModal, MultiSelectDropdown },
+  components: { AdminPage, OrderModal, MultiSelectDropdown },
   data: () => ({
-    showLogin: false,
     ordersData: null,
     currentPage: 1,
     pageSize: 20,
@@ -600,8 +593,9 @@ export default {
     // Load settings from localStorage first (only available in browser)
     this.loadSettingsFromLocalStorage();
 
+    // `AdminPage` raises the sign-in modal for a signed-out visitor and emits `login-success` when
+    // one arrives. All this needs to do is not call anything before that happens.
     if (!this.$store.getters.userIsLoggedIn) {
-      this.showLogin = true;
       return;
     }
     this.adminStores = this.$store.state.currentUser.adminIn;
@@ -746,12 +740,6 @@ export default {
         localStorage.setItem("ordersPagePaymentTypes", JSON.stringify(this.selectedPaymentTypes));
       } catch (error) {
         console.warn("Failed to save settings to localStorage:", error);
-      }
-    },
-    closeLoginModal(isLoggedIn) {
-      this.showLogin = !isLoggedIn;
-      if (isLoggedIn) {
-        this.fetchOrders();
       }
     },
     onFilterChange() {

@@ -1,5 +1,5 @@
 <template>
-  <AdminPage>
+  <AdminPage @login-success="loadStatistics">
     <div class="statistics-page">
       <div class="page-header">
         <h1>{{ $i('statistics_title') }}</h1>
@@ -438,18 +438,12 @@
       </div>
 
       </div>
-
-      <LoginModal
-        v-if="showLogin"
-        @close="closeLoginModal"
-      />
     </div>
   </AdminPage>
 </template>
 
 <script>
 import AdminPage from '~/components/organisms/AdminPage.vue';
-import LoginModal from '~/components/molecules/LoginModal.vue';
 import MultiSelectDropdown from '~/components/molecules/MultiSelectDropdown.vue';
 import StatisticsChart from '~/components/molecules/StatisticsChart.vue';
 import LoadingSkeleton from '~/components/molecules/LoadingSkeleton.vue';
@@ -460,7 +454,6 @@ import { debounce } from '~/core/helpers/ts-debounce';
 export default {
   components: {
     AdminPage,
-    LoginModal,
     MultiSelectDropdown,
     StatisticsChart,
     LoadingSkeleton,
@@ -468,7 +461,6 @@ export default {
     AIQueryBox,
   },
   data: () => ({
-    showLogin: false,
     isLoading: false,
     statistics: null,
     deliveryStats: {
@@ -588,8 +580,9 @@ export default {
     },
   },
   mounted() {
+    // `AdminPage` raises the sign-in modal for a signed-out visitor and emits `login-success` when
+    // one arrives. All this needs to do is not call anything before that happens.
     if (!this.$store.getters.userIsLoggedIn) {
-      this.showLogin = true;
       return;
     }
     this.adminStores = this.$store.state.currentUser.adminIn;
@@ -600,12 +593,6 @@ export default {
     this.debouncedLoadStatistics = debounce(this.loadStatistics, 1000);
   },
   methods: {
-    closeLoginModal(isLoggedIn) {
-      this.showLogin = !isLoggedIn;
-      if (isLoggedIn) {
-        this.loadStatistics();
-      }
-    },
     selectDateFilter(value) {
       this.selectedDateFilter = value;
       this.setDates(value);

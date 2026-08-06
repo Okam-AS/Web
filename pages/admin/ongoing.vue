@@ -1,5 +1,5 @@
 <template>
-  <AdminPage>
+  <AdminPage @login-success="loadOrders">
     <div class="ongoing-orders">
       <div class="page-header">
         <h1>{{ $i('ongoing_title') }}</h1>
@@ -152,11 +152,6 @@
         </div>
       </div>
 
-      <LoginModal
-        v-if="showLogin"
-        @close="closeLoginModal"
-      />
-
       <OrderProcessingModal
         v-if="showProcessingModal && currentOrder"
         :order="currentOrder"
@@ -227,7 +222,6 @@
 <script>
 import AdminPage from '~/components/organisms/AdminPage.vue';
 import Loading from '~/components/atoms/Loading.vue';
-import LoginModal from '~/components/molecules/LoginModal.vue';
 import OrderProcessingModal from '~/components/molecules/OrderProcessingModal.vue';
 import ReceiptModal from '~/components/molecules/ReceiptModal.vue';
 import TransferOrderModal from '~/components/molecules/TransferOrderModal.vue';
@@ -237,9 +231,8 @@ import CustomerInfoModal from '~/components/molecules/CustomerInfoModal.vue';
 import OrderCard from '~/components/molecules/OrderCard.vue';
 
 export default {
-  components: { AdminPage, LoginModal, Loading, OrderProcessingModal, ReceiptModal, TransferOrderModal, ChangeDeliveryTypeModal, SmsDriverModal, CustomerInfoModal, OrderCard },
+  components: { AdminPage, Loading, OrderProcessingModal, ReceiptModal, TransferOrderModal, ChangeDeliveryTypeModal, SmsDriverModal, CustomerInfoModal, OrderCard },
   data: () => ({
-    showLogin: false,
     isLoading: false,
     orders: [],
     showOrderId: '',
@@ -267,8 +260,9 @@ export default {
     }
   },
   mounted () {
+    // `AdminPage` raises the sign-in modal for a signed-out visitor and emits `login-success` when
+    // one arrives. All this needs to do is not call anything before that happens.
     if (!this.$store.getters.userIsLoggedIn) {
-      this.showLogin = true;
       return;
     }
     this.adminStores = this.$store.state.currentUser.adminIn;
@@ -282,12 +276,6 @@ export default {
     this.stopAutoRefresh();
   },
   methods: {
-    closeLoginModal (isLoggedIn) {
-      this.showLogin = !isLoggedIn;
-      if (isLoggedIn) {
-        this.loadOrders();
-      }
-    },
     loadOrders () {
       this.isLoading = true;
       this._orderService

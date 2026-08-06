@@ -1,0 +1,25 @@
+baseline: census GREEN on an unmutated worktree
+
+OK     must red       the duplicate restored on pages/admin/brev.vue
+OK     must red       the duplicate restored on pages/admin/dinehome.vue
+OK     must red       the duplicate restored on pages/admin/kitchen.vue
+OK     must red       the duplicate restored on pages/admin/lang.vue
+OK     must red       the duplicate restored on pages/admin/onboarding.vue
+OK     must red       the duplicate restored on pages/admin/ongoing.vue
+OK     must red       the duplicate restored on pages/admin/orders.vue
+OK     must red       the duplicate restored on pages/admin/payouts.vue
+OK     must red       the duplicate restored on pages/admin/statistics.vue
+OK     must red       the duplicate restored on pages/admin/wolt-calc.vue
+OK     must red       the duplicate restored on pages/admin/wolt-menu.vue
+OK     must red       kebab-case <login-modal> on pages/admin/lang.vue
+OK     must red       a second modal inside components/organisms/AdminPageHeader.vue
+OK     must red       a second modal on a v-else branch of pages/admin/payouts.vue
+OK     must red       a second modal on pages/workforce/join.vue (not an admin route)
+OK     must stay green a <LoginModal> written inside an HTML comment (must NOT red)
+OK     must stay green the string "<LoginModal />" in a script comment (must NOT red)
+OK     must red       AdminPage.vue mounting two of its own
+OK     must red       openLogin() removed from AdminPage.vue
+OK     must red       the .login-modal class renamed in LoginModal.vue
+
+restored: census GREEN
+20 mutations, 0 fooled the census

@@ -1,5 +1,5 @@
 <template>
-  <AdminPage>
+  <AdminPage @login-success="loadCultures">
     <div class="container">
       <div class="search-container">
         <input v-model="searchInput" class="search-input" type="text">
@@ -61,7 +61,6 @@
           </div>
         </template>
       </Modal>
-      <LoginModal v-if="showLogin" @close="closeLoginModal" />
     </div>
   </AdminPage>
 </template>
@@ -69,17 +68,15 @@
 import EditRowModal from '~/components/organisms/EditLangRowModal.vue'
 import Modal from '~/components/atoms/Modal.vue'
 import AdminPage from '~/components/organisms/AdminPage.vue'
-import LoginModal from '~/components/molecules/LoginModal.vue'
 
 export default {
-  components: { AdminPage, EditRowModal, Modal, LoginModal },
+  components: { AdminPage, EditRowModal, Modal },
   data: () => ({
     showEditModal: false,
     showCantDeleteInfo: false,
     searchInput: '',
     editKey: '',
-    langs: [],
-    showLogin: false
+    langs: []
   }),
   computed: {
     allKeys () {
@@ -108,19 +105,14 @@ export default {
     }
   },
   mounted () {
+    // `AdminPage` raises the sign-in modal for a signed-out visitor and emits `login-success` when
+    // one arrives. All this needs to do is not call anything before that happens.
     if (!this.$store.getters.userIsLoggedIn) {
-      this.showLogin = true
       return
     }
     this.loadCultures()
   },
   methods: {
-    closeLoginModal (isLoggedIn) {
-      this.showLogin = !isLoggedIn
-      if (isLoggedIn) {
-        this.loadCultures()
-      }
-    },
     loadCultures () {
       const _this = this
       _this._cultureService.GetAll().then((response) => {
