@@ -1,0 +1,118 @@
+{
+  "journey": "workforce-invitation-revoke-claimed",
+  "title": "Withdrawing a code somebody already used is refused rather than quietly accepted",
+  "status": "passed",
+  "startedAtUtc": "2026-08-04T20:18:53.014Z",
+  "finishedAtUtc": "2026-08-04T20:18:57.032Z",
+  "durationMs": 4018,
+  "capabilities": [
+    "workforce.staff.invitation-revoke"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3311",
+  "apiBaseUrl": "http://127.0.0.1:4311",
+  "commit": "e34977acebd59b223584158c33451b6f1ffd82c1",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": {
+    "id": "fixture@e34977acebd59b223584158c33451b6f1ffd82c1+dirty",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "e34977a-dirty",
+    "detail": "the in-repo fixture backend, not an API build (branch lane/fe-wf-invite-list-revoke)"
+  },
+  "backendServed": 25,
+  "backendSubjectServed": 18,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:4311/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:4311/user/login -> 200",
+    "GET http://127.0.0.1:4311/user -> 200",
+    "GET http://127.0.0.1:4311/stores/42/market -> 200",
+    "GET http://127.0.0.1:4311/user -> 200",
+    "GET http://127.0.0.1:4311/workforce/stores/42/context -> 200",
+    "GET http://127.0.0.1:4311/stores/42 -> 200",
+    "GET http://127.0.0.1:4311/stores/42/specialopeninghours -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "the manager issues a code and reads it as live",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T20:18:53.015Z",
+      "durationMs": 2013,
+      "detail": "a live code is outstanding for Nina",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "meanwhile, in another browser, the worker claims that code",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T20:18:55.028Z",
+      "durationMs": 1856,
+      "detail": "the code has been redeemed by the account that received it",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "the manager presses Withdraw on a list one moment stale",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T20:18:56.884Z",
+      "durationMs": 49,
+      "detail": "Koden er allerede brukt Noen har logget inn med denne koden før den ble trukket tilbake, så å trekke den tilbake kan ikke fjerne d…",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "what the browser said while this ran",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T20:18:57.030Z",
+      "durationMs": 1,
+      "detail": "3 console errors recorded as findings",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "defect",
+      "summary": "browser error during the claimed-code revoke journey",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-roster\" to \"/admin?redirect=%2Fadmin%2Fworkforce-roster&storeId=42\" with a new navigation."
+    },
+    {
+      "severity": "defect",
+      "summary": "browser error during the claimed-code revoke journey",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-roster\" to \"/admin?redirect=%2Fadmin%2Fworkforce-roster&storeId=42\" with a new navigation."
+    },
+    {
+      "severity": "defect",
+      "summary": "browser error during the claimed-code revoke journey",
+      "detail": "Failed to load resource: the server responded with a status of 409 (Conflict)"
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-roster\" to \"/admin?redirect=%2Fadmin%2Fworkforce-roster&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-roster\" to \"/admin?redirect=%2Fadmin%2Fworkforce-roster&storeId=42\" with a new navigation.",
+    "Failed to load resource: the server responded with a status of 409 (Conflict)"
+  ],
+  "failedRequests": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:4311/workforce/stores/42/invitations/inv-2/revoke",
+      "status": 409
+    }
+  ],
+  "screenshots": [
+    "workforce-invitation-revoke-claimed/fixture/01-the-refusal-a-quiet-success-would-have-hidden.png"
+  ],
+  "error": null,
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/workforce-invitation-revoke-claimed.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false,
+    "supersedes": null
+  }
+}

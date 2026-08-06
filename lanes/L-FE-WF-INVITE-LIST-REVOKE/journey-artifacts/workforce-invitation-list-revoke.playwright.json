@@ -1,0 +1,145 @@
+{
+  "journey": "workforce-invitation-list-revoke",
+  "title": "A manager sees which codes are still live, withdraws one, and the withdrawn code dies silently",
+  "status": "passed",
+  "startedAtUtc": "2026-08-04T20:18:48.755Z",
+  "finishedAtUtc": "2026-08-04T20:18:52.892Z",
+  "durationMs": 4137,
+  "capabilities": [
+    "workforce.staff.invitation-list",
+    "workforce.staff.invitation-revoke"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3311",
+  "apiBaseUrl": "http://127.0.0.1:4311",
+  "commit": "e34977acebd59b223584158c33451b6f1ffd82c1",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": {
+    "id": "fixture@e34977acebd59b223584158c33451b6f1ffd82c1+dirty",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "e34977a-dirty",
+    "detail": "the in-repo fixture backend, not an API build (branch lane/fe-wf-invite-list-revoke)"
+  },
+  "backendServed": 25,
+  "backendSubjectServed": 18,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:4311/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:4311/user/login -> 200",
+    "GET http://127.0.0.1:4311/user -> 200",
+    "GET http://127.0.0.1:4311/stores/42/market -> 200",
+    "GET http://127.0.0.1:4311/user -> 200",
+    "GET http://127.0.0.1:4311/workforce/stores/42/context -> 200",
+    "GET http://127.0.0.1:4311/stores/42 -> 200",
+    "GET http://127.0.0.1:4311/stores/42/specialopeninghours -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in as the manager on the roster",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T20:18:48.756Z",
+      "durationMs": 1968,
+      "detail": "landed on /admin/workforce-roster",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "a code that lapsed a month ago is NOT shown as live",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T20:18:50.724Z",
+      "durationMs": 78,
+      "detail": "Laget 21. juni kl. 22:18, utløpt 5. juli kl. 22:18. Den kan ikke brukes av noen lenger. Fjern den utløpte kode…",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "withdrawing a lapsed code is offered as housekeeping, not as a rescue",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T20:18:50.906Z",
+      "durationMs": 28,
+      "detail": "lapsed code cleared; Kari now has nothing outstanding",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "issue a code for the new hire and read it back off the list",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T20:18:50.934Z",
+      "durationMs": 94,
+      "detail": "the code just minted is in the list, and reads as live",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "the list never shows the code itself",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T20:18:51.028Z",
+      "durationMs": 99,
+      "detail": "the run's real code appears nowhere in the rendered list",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "withdraw the live code",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T20:18:51.213Z",
+      "durationMs": 35,
+      "detail": "withdrawn; nothing is outstanding for this engagement",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "the withdrawn code is refused EXACTLY as a code that never existed",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T20:18:51.327Z",
+      "durationMs": 1563,
+      "detail": "both refusals identical, 344 characters",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "what the browser said while this ran",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T20:18:52.890Z",
+      "durationMs": 0,
+      "detail": "2 console errors recorded as findings",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "defect",
+      "summary": "browser error during the invitation list/revoke journey",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-roster\" to \"/admin?redirect=%2Fadmin%2Fworkforce-roster&storeId=42\" with a new navigation."
+    },
+    {
+      "severity": "defect",
+      "summary": "browser error during the invitation list/revoke journey",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-roster\" to \"/admin?redirect=%2Fadmin%2Fworkforce-roster&storeId=42\" with a new navigation."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-roster\" to \"/admin?redirect=%2Fadmin%2Fworkforce-roster&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-roster\" to \"/admin?redirect=%2Fadmin%2Fworkforce-roster&storeId=42\" with a new navigation."
+  ],
+  "failedRequests": [],
+  "screenshots": [
+    "workforce-invitation-list-revoke/fixture/01-a-lapsed-code-shown-as-lapsed.png",
+    "workforce-invitation-list-revoke/fixture/02-a-live-code-outstanding.png",
+    "workforce-invitation-list-revoke/fixture/03-after-the-withdrawal.png"
+  ],
+  "error": null,
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/workforce-invitation-list-revoke.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false,
+    "supersedes": null
+  }
+}

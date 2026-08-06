@@ -209,6 +209,91 @@ describe('WorkforceRosterService', () => {
     expect(issued.token).toBeNull()
   })
 
+  // ---- THE OTHER TWO THIRDS OF THE INVITATION SURFACE ----------------------------------------
+  //
+  // This client bound issue and nothing else, and said so in a comment, because the controller bound
+  // nothing else. Endpoints 6b and 6c landed; these pin them.
+  test('ListInvitations reads the STORE, not the engagement, and sends no key', async () => {
+    respondWith(200, [])
+    await service().ListInvitations(42)
+
+    const [url, init] = global.fetch.mock.calls[0]
+    // Store-scoped: "which codes are still out there" is a store-wide question, and one read then
+    // serves every row the manager clicks through.
+    expect(url).toBe('/workforce/stores/42/invitations')
+    expect(init.method).toBe('GET')
+    // A read. An Idempotency-Key here would be inventing a contract the controller does not have.
+    expect(init.headers['Idempotency-Key']).toBeUndefined()
+    expect(init.headers['If-Match']).toBeUndefined()
+  })
+
+  test('the list distinguishes the STORED state from liveness, and carries no token', async () => {
+    // `WorkforceInvitationState.Expired` is written by no code path: expiry is a read-time
+    // comparison, so a code that lapsed a month ago is still `Pending` in its row. A caller that
+    // took `state` for liveness would report a dead code as outstanding.
+    respondWith(200, [{
+      invitationId: 'inv-1',
+      storeId: 42,
+      staffMemberId: 'sm-1',
+      displayName: 'Ida Berg',
+      state: 'Pending',
+      isLive: false,
+      expiresAtUtc: '2026-06-01T00:00:00',
+      createdAtUtc: '2026-05-18T00:00:00'
+    }])
+
+    const [outstanding] = await service().ListInvitations(42)
+    expect(outstanding.state).toBe('Pending')
+    expect(outstanding.isLive).toBe(false)
+    // §13.4: the raw token left the building on the issue response and the hash never leaves the
+    // data layer. A manager needs to know THAT a code is out and to WHOM, never what it is.
+    expect(Object.keys(outstanding)).not.toContain('token')
+    expect(Object.keys(outstanding)).not.toContain('tokenHash')
+  })
+
+  test('RevokeInvitation posts to the STORE-scoped revoke, with a key and no If-Match', async () => {
+    respondWith(200, { invitationId: 'inv-1', state: 'Revoked', isLive: false })
+    await service().RevokeInvitation(42, 'inv-1')
+
+    const [url, init] = global.fetch.mock.calls[0]
+    // POST /revoke rather than DELETE: the row is not removed, it transitions and stays as the
+    // record of what was withdrawn. A DELETE verb would advertise the opposite.
+    expect(url).toBe('/workforce/stores/42/invitations/inv-1/revoke')
+    expect(init.method).toBe('POST')
+    expect(init.headers['Idempotency-Key']).toBe('idem-key')
+    expect(init.headers['If-Match']).toBeUndefined()
+  })
+
+  // THE REFUSAL A QUIET SUCCESS WOULD MAKE DANGEROUS. A manager withdraws because the code went to
+  // the wrong person; if that person already redeemed it, a 200 says "safe" at the moment they are
+  // not. The client must surface it as an error rather than resolving.
+  test('revoking an already-claimed code REJECTS, typed and not retryable', async () => {
+    respondWith(409, {
+      code: 'workforce.invitation-not-revocable',
+      conflictKind: 'invitation-not-revocable',
+      retryable: false,
+      detail: 'This invitation has already been claimed; withdrawing it cannot undo the access it granted.'
+    })
+
+    const error = await service().RevokeInvitation(42, 'inv-1').catch(e => e)
+    expect(isWorkforceApiError(error)).toBe(true)
+    expect(error.code).toBe('workforce.invitation-not-revocable')
+    expect(error.retryable).toBe(false)
+  })
+
+  test('the concurrent-revoke conflict arrives typed and wants a fresh key', async () => {
+    respondWith(409, {
+      code: 'workforce.invitation-revoke-conflict',
+      conflictKind: 'invitation-revoke-conflict',
+      retryable: true,
+      retryWithFreshKey: true
+    })
+
+    const error = await service().RevokeInvitation(42, 'inv-1').catch(e => e)
+    expect(error.code).toBe('workforce.invitation-revoke-conflict')
+    expect(error.problem.retryWithFreshKey).toBe(true)
+  })
+
   test('the concurrent-issue conflict arrives typed and retryable', async () => {
     respondWith(409, {
       code: 'workforce.invitation-issue-conflict',

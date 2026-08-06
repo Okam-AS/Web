@@ -83,24 +83,33 @@ test(
       await expect(row).toBeVisible({ timeout: 15000 });
       await row.click();
 
-      // The panel's own sentence, from `personState`. It is the ONLY durable signal the module
-      // offers about sign-in: there is no invitation list endpoint, so "a code is outstanding" is
-      // not a fact any client can hold, and the copy deliberately does not claim it.
+      // The panel's own sentence, from `personState`. It answers whether a LOGIN is attached, which
+      // since endpoints 6b/6c is no longer the only signal the module offers — the outstanding-code
+      // list below answers whether a CODE is live, and the two are deliberately separate sentences.
       const state = page.locator('[data-test="access-state"]');
       await expect(state).toContainText('Ingen innlogging', { timeout: 15000 });
       return (await state.textContent()).trim();
     });
 
-    await journey.step('the panel says what it cannot do before it offers the button', async () => {
-      // Not decoration. There is no revoke route and no list route in `WorkforceStaffController`, and
-      // a manager who believes otherwise will go looking for a button during an incident. The
-      // mitigation that DOES exist — reissue supersedes in place — is named in the same sentence.
+    // ---- THE INVERSION ---------------------------------------------------------------------------
+    //
+    // This step used to assert the OPPOSITE — that the panel says there is no list route and no
+    // revoke verb in `WorkforceStaffController`, so a manager would not go hunting for a button
+    // during an incident. Endpoints 6b and 6c landed and that sentence became false. The step is
+    // turned around rather than deleted: it now proves the panel makes no such claim, and that the
+    // list is genuinely there and genuinely empty for a hire nobody has invited yet.
+    await journey.step('the panel no longer claims it cannot list or revoke', async () => {
       const limits = page.locator('[data-test="access-limits"]');
       await expect(limits).toBeVisible();
       const text = (await limits.textContent()).trim();
-      expect(text).toContain('trekke den tilbake');
-      expect(text).toContain('slutter den forrige å virke');
-      return text.slice(0, 120) + '…';
+      expect(text).not.toContain('ingen slike ruter');
+
+      // EMPTY IS AN ANSWER AND IT IS THE RIGHT ONE HERE — nobody has issued Nina a code. The panel
+      // must say that rather than the "we could not read this" sentence, which is a different claim
+      // and the one a failed read produces.
+      await expect(page.locator('[data-test="invitations-none"]')).toBeVisible();
+      await expect(page.locator('[data-test="invitations-unknown"]')).toHaveCount(0);
+      return 'no absence claimed; the list reads EMPTY for an uninvited hire';
     });
 
     await journey.shot('the roster, before an invitation');
@@ -345,18 +354,12 @@ test(
         journey.finding('defect', 'browser error during the invitation journey', error);
       }
 
-      // THE BACKEND HANDOFF, recorded on every run rather than left in a lane report nobody reads.
-      journey.finding(
-        'note',
-        'no invitation list or revoke route exists',
-        'The manager surface can ISSUE (endpoint 6) and nothing else. `WorkforceStaffController` binds ' +
-        'no GET for an engagement\'s invitations and no revoke verb, though ' +
-        '`WorkforceInvitationState.Revoked` is declared and written by no code path in the module. So ' +
-        'this UI cannot show whether a code is currently live, when it expires, or withdraw one that ' +
-        'went to the wrong person — it offers a reissue (which supersedes in place and kills the ' +
-        'previous token) and says so. Wanted: GET /workforce/stores/{storeId}/staff/{id}/invitations ' +
-        'and a revoke route that writes the Revoked state.'
-      );
+      // THE BACKEND HANDOFF THIS STEP USED TO RECORD ON EVERY RUN — "no invitation list or revoke
+      // route exists; wanted, a GET and a revoke verb" — IS GONE BECAUSE IT WAS DELIVERED.
+      // `WorkforceStaffController` now binds both (6b, 6c), the panel lists and withdraws, and
+      // `workforce-invitation-list-revoke.spec.js` walks that half. A standing finding for a gap
+      // that has closed is the same lie in the opposite direction, so it is removed rather than
+      // reworded — there is nothing left to hand off.
 
       return errors.length ? errors.length + ' console errors recorded as findings' : 'no console errors';
     });

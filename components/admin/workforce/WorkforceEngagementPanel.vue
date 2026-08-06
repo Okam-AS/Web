@@ -120,18 +120,74 @@
       </div>
 
       <template v-else>
-        <!-- WHAT THIS SURFACE CANNOT DO, said here rather than left as an absence a manager
-             discovers during an incident. `WorkforceStaffController` binds issue and nothing else:
-             there is no read that lists an engagement's outstanding invitations and no verb that
-             revokes one — `WorkforceInvitationState.Revoked` is declared in the enum and written by
-             no code path in the module. So this panel cannot show whether a code is currently live,
-             when it expires, or who issued it; the durable signal it CAN show is the person state
-             above. The mitigation for a code that went to the wrong person is a REISSUE, which the
-             server performs by superseding the single pending row in place — the previous token
-             stops working the instant the new one is minted. That is a real lever, so it is offered;
-             a revoke button would be a control that does nothing. -->
+        <!-- WHAT IS STILL OUTSTANDING. This block used to be a sentence saying it could not exist —
+             that `WorkforceStaffController` bound issue and nothing else, so no client could know
+             whether a code was live and none could withdraw one. Endpoints 6b and 6c landed and the
+             sentence became false, which is why it is gone rather than softened.
+
+             THE ROW'S STATE IS NOT LIVENESS, and rendering it would answer the manager's question
+             backwards. `WorkforceInvitationState.Expired` is written by no code path: expiry is
+             decided at READ TIME by comparing `expiresAtUtc`, so a code that lapsed a month ago is
+             still `Pending` in its row. `isLive` is the server's own comparison — the SAME one the
+             claim path makes — so a code this panel calls live is a code the claim path would still
+             admit. Only `isLive` is rendered.
+
+             NULL IS UNKNOWN, [] IS NONE. A failed read must not spend a frame claiming nobody holds
+             a code, because that is the one wrong answer a manager would act on. -->
+        <div class="wfr-panel__invites" data-test="invitation-list">
+          <h4 class="wfr-panel__sublabel">
+            {{ $i('wfr_access_live_heading') }}
+          </h4>
+
+          <p v-if="invitations === null" class="wfr-panel__hint is-unknown" data-test="invitations-unknown">
+            {{ $i('wfr_access_live_unknown') }}
+          </p>
+          <p v-else-if="!engagementInvitations.length" class="wfr-panel__hint" data-test="invitations-none">
+            {{ $i('wfr_access_live_none') }}
+          </p>
+          <ul v-else class="wfr-panel__invitelist">
+            <li
+              v-for="invite in engagementInvitations"
+              :key="invite.invitationId"
+              class="wfr-panel__invite"
+              :class="{ 'is-live': invite.isLive }"
+              :data-test="invite.isLive ? 'invitation-live' : 'invitation-lapsed'"
+            >
+              <p class="wfr-panel__invite-state">
+                <template v-if="invite.isLive">
+                  {{ $i('wfr_access_live_state', { expires: stamp(invite.expiresAtUtc) }) }}
+                </template>
+                <template v-else>
+                  {{ $i('wfr_access_live_lapsed', { created: stamp(invite.createdAtUtc), expires: stamp(invite.expiresAtUtc) }) }}
+                </template>
+              </p>
+
+              <!-- Withdrawing a LAPSED code is offered too, with different wording, because the read
+                   returns Pending rows for ever and a lapsed one otherwise sits in this list until
+                   somebody claims a code that can no longer be claimed. What it does there is
+                   housekeeping, and the copy says so rather than implying danger was removed. -->
+              <button
+                class="wfr-panel__btn wfr-panel__btn--danger"
+                type="button"
+                data-test="revoke-invitation"
+                :disabled="!canInvite || busy"
+                @click="$emit('revoke-invitation', invite)"
+              >
+                {{ invite.isLive ? $i('wfr_access_revoke') : $i('wfr_access_revoke_lapsed') }}
+              </button>
+
+              <p class="wfr-panel__hint">
+                {{ invite.isLive ? $i('wfr_access_revoke_hint') : $i('wfr_access_revoke_lapsed_hint') }}
+              </p>
+            </li>
+          </ul>
+        </div>
+
+        <!-- What this read is and, just as importantly, what it is not: it never carries the code.
+             The server keeps a fingerprint, so no screen can show a code a second time — which is
+             why the handover above is the only place a token is ever on screen. -->
         <p class="wfr-panel__note" data-test="access-limits">
-          {{ $i('wfr_access_no_list') }}
+          {{ $i('wfr_access_list_note') }}
         </p>
 
         <label class="wfr-panel__sublabel" for="wfr-invitation-hours">
@@ -487,6 +543,18 @@ export default {
      * one person's claim token must never be on screen under another person's name.
      */
     invitation: { type: Object, default: null },
+    /**
+     * The STORE'S outstanding invitations (`GET /workforce/stores/{storeId}/invitations`), or null
+     * when that read has not answered.
+     *
+     * NULL IS UNKNOWN AND `[]` IS NONE, and the two are never collapsed: "nobody is holding a code"
+     * is the one answer a manager would act on, so a failed read must never produce it.
+     *
+     * Store-scoped on the wire because "which codes are still out there" is a store-wide question;
+     * this panel narrows it to the selected engagement. Every element carries `isLive` — the
+     * server's read-time expiry comparison — and NO token and no token hash, at any level.
+     */
+    invitations: { type: Array, default: null },
     storeId: { type: [String, Number], default: '' },
     timeZoneId: { type: String, default: null },
     locale: { type: String, default: 'no' },
@@ -528,9 +596,11 @@ export default {
     /**
      * What the access section is allowed to claim about this engagement's sign-in.
      *
-     * Derived from `personState` and from nothing else, because nothing else is readable: there is no
-     * invitation list, so "a code is outstanding" is not a fact this client can hold. `Invited` means
-     * no login is attached — whether a live token exists is unknown and is not implied.
+     * Derived from `personState` and from nothing else, deliberately. It answers whether a LOGIN is
+     * attached, which is a different question from whether a code is outstanding — the invitation
+     * list below answers that one, and neither sentence is allowed to stand in for the other. An
+     * `Invited` engagement with no live code and one with a live code read identically here, and
+     * that is correct: the difference is shown where it is actually known.
      */
     accessStateLabel () {
       switch (String(this.row.personState || '')) {
@@ -539,6 +609,25 @@ export default {
       case 'Archived': return this.$i('wfr_access_state_archived');
       default: return this.$i('wfr_access_state_unknown');
       }
+    },
+    /**
+     * This engagement's slice of the store-wide invitation read.
+     *
+     * `null` propagates as `[]` ONLY through the template's own `v-if="invitations === null"` guard,
+     * which is checked first — this computed never has to distinguish them, and callers must not use
+     * its emptiness as an answer.
+     *
+     * LIVE ONES FIRST, then lapsed, each group by expiry. The server orders by `expiresAtUtc`, which
+     * on a mixed list puts the long-dead code above a live one; a manager scanning for "is anything
+     * out there" needs the live ones where their eye lands. The comparison is on `isLive` — the
+     * server's own read-time verdict — never on `state`, which is `Pending` for both.
+     */
+    engagementInvitations () {
+      const mine = (this.invitations || []).filter(i => i && i.staffMemberId === this.row.staffMemberId);
+      return mine.slice().sort((a, b) => {
+        if (!!a.isLive !== !!b.isLive) { return a.isLive ? -1 : 1; }
+        return String(a.expiresAtUtc || '').localeCompare(String(b.expiresAtUtc || ''));
+      });
     },
     /** Days on screen, hours on the wire. Out-of-range or non-numeric input sends null — the server's default. */
     requestedHours () {
@@ -557,15 +646,7 @@ export default {
       return origin + '/workforce/join';
     },
     invitationExpiry () {
-      const raw = this.invitation && this.invitation.expiresAtUtc;
-      if (!raw) { return this.$i('wfr_access_expiry_unknown'); }
-      // The Workforce surface serialises column-loaded stamps BARE (no `Z`); JS reads a bare ISO
-      // string as browser-local, which would move the expiry by the viewer's own offset.
-      const parsed = new Date(/[Zz]|[+-]\d{2}:?\d{2}$/.test(raw) ? raw : raw + 'Z');
-      if (isNaN(parsed.getTime())) { return this.$i('wfr_access_expiry_unknown'); }
-      return new Intl.DateTimeFormat(this.locale, {
-        day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit', timeZone: this.timeZoneId || 'UTC'
-      }).format(parsed);
+      return this.stamp(this.invitation && this.invitation.expiresAtUtc);
     },
     capabilitiesChanged () {
       const before = (this.row.capabilities || []).slice().sort().join(',');
@@ -638,6 +719,26 @@ export default {
     orDash,
     short (capability) { return capability.replace('Workforce', '').toLowerCase(); },
     date (instant) { return formatDate(instant, this.timeZoneId, this.locale); },
+    /**
+     * A Workforce instant, rendered to the minute in the STORE'S zone.
+     *
+     * The Workforce surface serialises column-loaded stamps BARE (no `Z`), and JS reads a bare ISO
+     * string as browser-LOCAL — which would move every expiry by the viewer's own offset and let a
+     * manager in one zone read a code as live an hour after it died. The `Z` is supplied when the
+     * string carries no designator of its own.
+     *
+     * An unreadable stamp returns the "we could not read it" phrase rather than `Invalid Date`: this
+     * renders inside a sentence about whether a credential is still usable, and a broken date there
+     * has to read as unknown rather than as a time.
+     */
+    stamp (raw) {
+      if (!raw) { return this.$i('wfr_access_expiry_unknown'); }
+      const parsed = new Date(/[Zz]|[+-]\d{2}:?\d{2}$/.test(raw) ? raw : raw + 'Z');
+      if (isNaN(parsed.getTime())) { return this.$i('wfr_access_expiry_unknown'); }
+      return new Intl.DateTimeFormat(this.locale, {
+        day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit', timeZone: this.timeZoneId || 'UTC'
+      }).format(parsed);
+    },
     toggleCapability (capability) {
       const index = this.draftCapabilities.indexOf(capability);
       if (index === -1) { this.draftCapabilities.push(capability); } else { this.draftCapabilities.splice(index, 1); }
@@ -757,4 +858,16 @@ export default {
 .wfr-panel__warn { display: flex; flex-direction: column; gap: 3px; padding: 10px 14px; border-radius: 8px; background: #fff7ed; color: #92400e; font-size: 0.78rem; margin-bottom: 12px; }
 .wfr-panel__token { width: 100%; padding: 10px 12px; border: 1px solid #93c5fd; border-radius: 8px; background: #fff; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.8rem; word-break: break-all; box-sizing: border-box; }
 .wfr-panel__handover-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* OUTSTANDING CODES.
+   A LIVE code is a credential somebody is holding right now, so it gets the same amber the handover
+   warning uses — the manager scanning this panel during an incident has to find it without reading.
+   A LAPSED one is deliberately quiet: it is a dead row, and dressing it in a warning colour would
+   spend the manager's attention on the one entry that cannot hurt them. */
+.wfr-panel__invites { margin-bottom: 14px; }
+.wfr-panel__invitelist { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.wfr-panel__invite { padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; background: #f8f9fa; }
+.wfr-panel__invite.is-live { border-color: #fcd34d; background: #fffbeb; }
+.wfr-panel__invite-state { margin: 0 0 8px; font-size: 0.82rem; font-weight: 600; color: #292c34; }
+.wfr-panel__invite .wfr-panel__hint { margin-top: 8px; margin-bottom: 0; }
 </style>

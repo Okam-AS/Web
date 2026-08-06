@@ -1,0 +1,36 @@
+[WebServer] [fixture] listening on http://127.0.0.1:4311
+[WebServer] [dev-server] borrowed core from /Users/svendaneel/okam/Web-modules/core
+[WebServer] 
+[WebServer]  WARN  You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  Module @nuxt/image is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version >=3.1.0 is required but currently using 2.17.1
+[WebServer] 
+[WebServer] ℹ Parsed 0 files in 0.0 seconds
+[WebServer] ℹ [HPM] Proxy created: /  -> http://127.0.0.1:5080
+[WebServer] ℹ [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+[WebServer] ℹ Listening on: http://172.20.10.4:3311/
+[WebServer] ℹ Preparing project for development
+[WebServer] ℹ Initial build may take a while
+[WebServer] ℹ Discovered Components: .nuxt/components/readme.md
+[WebServer] ✔ Builder initialized
+[WebServer] ✔ Nuxt files generated
+[WebServer] ℹ Compiling Server
+[WebServer] ℹ Compiling Client
+[WebServer] ✔ Server: Compiled successfully in 23.31s
+[WebServer] ✔ Client: Compiled successfully in 25.91s
+
+Running 2 tests using 1 worker
+
+[WebServer] ℹ Waiting for file changes
+[WebServer] ℹ Memory usage: 1.31 GB (RSS: 2.6 GB)
+[WebServer] ℹ Listening on: http://172.20.10.4:3311/
+  ✓  1 [chromium] › test/e2e/journeys/workforce-invitation-list-revoke.spec.js:65:1 › A manager sees which codes are still live, withdraws one, and the withdrawn code dies silently @fixture (4.5s)
+  ✓  2 [chromium] › test/e2e/journeys/workforce-invitation-list-revoke.spec.js:234:1 › Withdrawing a code somebody already used is refused rather than quietly accepted @fixture (3.2s)
+[teardown] returned core/ to an empty submodule mount
+
+  2 passed (36.3s)

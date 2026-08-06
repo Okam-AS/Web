@@ -3144,7 +3144,17 @@ export default {
   wfr_access_state_invited: 'Mit dieser Anstellung ist noch kein Login verknüpft. Die Person kann eingeplant werden, sich aber nicht anmelden und ihre Schichten sehen.',
   wfr_access_state_archived: 'Der Personendatensatz ist archiviert. Die Historie bleibt erhalten, die Anstellung gewährt aber keinen Zugang.',
   wfr_access_state_unknown: 'Wir wissen nicht, ob mit dieser Anstellung ein Login verknüpft ist.',
-  wfr_access_no_list: 'Wir können nicht anzeigen, ob gerade ein Code gültig ist, wann er abläuft, oder ihn zurückziehen — die API hat dafür keine Routen. Ein neuer Code macht den vorherigen im selben Moment ungültig, und das ist die einzige Möglichkeit, einen an die falsche Person gegangenen Code zu stoppen.',
+  wfr_access_list_note: 'Dies wird aus den offenen Einladungen des Standorts gelesen. Der Code selbst wird nie angezeigt — der Server speichert nur einen Abdruck davon, deshalb kann kein Bildschirm einen Code ein zweites Mal zeigen. Gezeigt wird, dass ein Code existiert, an wen er ging, und ob er gerade jetzt noch eingelöst werden kann.',
+  wfr_access_live_heading: 'Offene Codes',
+  wfr_access_live_unknown: 'Wir konnten die offenen Einladungen nicht lesen und können daher nicht sagen, ob für diese Person ein Code unterwegs ist. Das ist nicht dasselbe, wie dass es keinen gibt.',
+  wfr_access_live_none: 'Für diese Person ist kein unbenutzter Code offen.',
+  wfr_access_live_state: 'Gültig bis {expires}.',
+  wfr_access_live_lapsed: 'Erstellt am {created}, abgelaufen am {expires}. Er kann von niemandem mehr verwendet werden.',
+  wfr_access_revoke: 'Code zurückziehen',
+  wfr_access_revoke_lapsed: 'Abgelaufenen Code entfernen',
+  wfr_access_revoke_hint: 'Das Zurückziehen stoppt den Code. Wer ihn besitzt, erhält dann dieselbe Ablehnung wie jemand, der einen nie existierenden Code eingibt — nichts verrät, dass er zurückgezogen wurde.',
+  wfr_access_revoke_lapsed_hint: 'Dieser Code hat mit dem Ablauf aufgehört zu funktionieren. Ihn zurückzuziehen nimmt ihn nur von dieser Liste.',
+  wfr_access_revoked_ok: 'Der Code wurde zurückgezogen.',
   wfr_access_expires_label: 'Der Code gilt (Tage)',
   wfr_access_expires_hint: 'Zwischen 1 und 60 Tagen. Leer oder außerhalb des Bereichs verwendet der Server seine eigene Vorgabe von 14 Tagen.',
   wfr_access_issue: 'Einladungscode erstellen',
@@ -3166,6 +3176,13 @@ export default {
   wfr_invitation_issued: 'Einladungscode erstellt',
   wfr_conflict_invitation_title: 'Eine andere Anfrage belegt den Platz',
   wfr_conflict_invitation: 'Jemand hat im selben Moment einen Code für diese Person erstellt. Versuchen Sie es erneut — jeder Klick sendet einen neuen Schlüssel, und genau darum bittet der Server.',
+  // Das Zurückziehen eines BEREITS eingelösten Codes. Der Grund zum Zurückziehen ist fast immer, dass
+  // der Code an die falsche Person ging — ein stiller Erfolg würde hier also genau dann Sicherheit
+  // melden, wenn keine besteht. Stattdessen wird benannt, was den Zugang tatsächlich entzieht.
+  wfr_conflict_revoke_claimed_title: 'Der Code wurde bereits eingelöst',
+  wfr_conflict_revoke_claimed: 'Jemand hat sich mit diesem Code angemeldet, bevor er zurückgezogen wurde; das Zurückziehen kann diesen Zugang nicht mehr entziehen. Es wurde nichts geändert. Ist die falsche Person hineingekommen, beenden Sie stattdessen die Anstellung — das entzieht den Zugang.',
+  wfr_conflict_revoke_stale_title: 'Der Code hat sich geändert, während Sie entschieden haben',
+  wfr_conflict_revoke_stale: 'Jemand hat diesen Code zwischen der von Ihnen gelesenen Liste und Ihrem Klick eingelöst oder neu erstellt; die Entscheidung fiel also gegen einen Zustand, der nicht mehr gilt. Es wurde nichts geändert. Lesen Sie die Liste erneut und entscheiden Sie auf Basis dessen, was sie jetzt sagt.',
 
   // ---------------------------------------------------------------------------------------------
   // WORKFORCE — die Einlöseseite der Mitarbeitenden (/workforce/join)
