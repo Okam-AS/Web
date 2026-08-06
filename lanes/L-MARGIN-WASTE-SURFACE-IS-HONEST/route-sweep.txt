@@ -1,0 +1,24 @@
+Live sweep of the running API on :5971 -- the backend the repo owner is walking Margin against.
+GET only, unauthenticated. 401 = the route EXISTS and wants a bearer. 404 = NO handler registered.
+
+  /margin/status                   -> 401
+  /margin/coverage                 -> 401
+  /margin/statements               -> 401
+  /margin/recipes                  -> 401
+  /margin/ingredients              -> 401
+  /margin/suppliers                -> 401
+  /margin/price-imports            -> 401
+  /margin/waste                    -> 404
+  /margin/definitely-not-a-route   -> 404
+
+The four routes utils/margin/waste-client.js names (waste-client.js:62-89):
+  GET    /margin/waste                 -- swept above
+  POST   /margin/waste                 -- not probed: a POST to a live API is a write attempt
+  PUT    /margin/waste/{wasteEntryId}  -- not probed, same reason
+  DELETE /margin/waste/{wasteEntryId}  -- not probed, same reason
+
+ASP.NET registers a controller's routes together, so a 404 on the GET is a 404 on all four:
+there is no MarginWasteController to register any of them. Corroborated four independent ways --
+this sweep; test/e2e/fixture/ containing the string 'waste' zero times; the demoplan's grep of
+Controllers/Services/Models/Enums/Helpers at 8e2b57de returning zero Margin hits; and
+L-MRG-WASTE-2's return, which records that the backend exists only on the unmerged lane/margin-waste.
