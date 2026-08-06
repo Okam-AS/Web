@@ -60,7 +60,10 @@
         {{ $i('trn_completion_new_title') }}
       </h3>
 
-      <p v-if="!versions.length" class="trn-note" data-test="completion-no-frozen">
+      <p v-if="versionsUnknown" class="trn-note trn-note--unknown" data-test="completion-versions-unknown">
+        {{ $i('trn_store_versions_unknown') }}
+      </p>
+      <p v-else-if="!versions.length" class="trn-note" data-test="completion-no-frozen">
         {{ $i('trn_completion_no_frozen') }}
       </p>
       <template v-else>
@@ -152,6 +155,11 @@ const SHORT_HASH = 12;
  * hash to be stamped against, and retiring a version freezes it further. A venue that withdraws a
  * course must still be able to file the completions of the people who took it.
  *
+ * THE OFFERED SET IS THE STORE'S. `POST /completions` carries a `courseVersionId` and no course, so
+ * this picker lists every frozen version the venue holds rather than the expanded course's — which
+ * with nothing expanded was none, under a note announcing there was no frozen version to record
+ * against. «No frozen version» is now said only about a course list that ANSWERED and held none.
+ *
  * THE ROW NAMES WHAT WAS COMPLETED, AND THE NAME COMES OFF THE WIRE. This table is store-WIDE — the
  * page reads every completion in the venue, not the selected course's — so before the title and
  * version number were carried it listed scores and pass/fail verdicts against nothing at all. The
@@ -166,8 +174,10 @@ export default {
   props: {
     /** `readListing(payload, error, 'completions')`. */
     listing: { type: Object, required: true },
-    /** `recordableVersions(detail)` — Published or Retired. */
+    /** `recordableVersions(storeVersions(coursesListing))` — the STORE's Published or Retired versions. */
     versions: { type: Array, default: () => [] },
+    /** True when the course list could not be read, so an empty picker means unread and not empty. */
+    versionsUnknown: { type: Boolean, default: false },
     /** `personDirectory(...)` — an assist for the reference field, never a gate on it. */
     peopleDirectory: { type: Object, default: () => ({ state: 'unknown', options: [] }) },
     locale: { type: String, default: 'no' },

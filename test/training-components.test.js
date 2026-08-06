@@ -241,6 +241,28 @@ describe('TrainingAssignmentPanel — only a published version is offered', () =
     expect(withOne.find('[data-test="assignment-no-published"]').exists()).toBe(false)
   })
 
+  test('an UNREAD catalogue is not an empty one, and the note says which it was', () => {
+    // «Publiser en versjon først» is an instruction, and it is wrong for a course list that did not
+    // answer — the operator may have published five already and be looking at a refused read.
+    const unread = mountPanel(answered('assignments', []), { versions: [], versionsUnknown: true })
+    expect(unread.find('[data-test="assignment-versions-unknown"]').exists()).toBe(true)
+    expect(unread.find('[data-test="assignment-no-published"]').exists()).toBe(false)
+    expect(unread.text()).toContain(translations.no.trn_store_versions_unknown)
+    expect(unread.text()).not.toContain(translations.no.trn_assign_no_published)
+  })
+
+  test('the picker names the course of every option, since the set spans the whole store', () => {
+    const wrapper = mountPanel(answered('assignments', []), {
+      versions: [
+        { courseVersionId: 'v-a', versionNo: 1, state: 'Published', courseTitle: 'Ansvarlig alkoholservering' },
+        { courseVersionId: 'v-b', versionNo: 1, state: 'Published', courseTitle: 'Brannvern' }
+      ]
+    })
+    const options = wrapper.findAll('[data-test="assignment-version"] option').wrappers.map(o => o.text())
+    expect(options).toContain('Ansvarlig alkoholservering · v1 · Published')
+    expect(options).toContain('Brannvern · v1 · Published')
+  })
+
   test('a row shows the reference its own scope names', () => {
     const wrapper = mountPanel(answered('assignments', [
       { assignmentId: 'a-1', scope: 'Role', roleRef: 'role-9', personRef: null, courseTitle: 'IK', versionNo: 2, createdAtUtc: '2026-07-01T09:00:00' },
@@ -504,6 +526,26 @@ describe('TrainingCompletionPanel — the ledger, and the grading it leaves to t
     const wrapper = mountPanel(answered('completions', []), { versions: [] })
     expect(wrapper.find('[data-test="completion-no-frozen"]').exists()).toBe(true)
     expect(wrapper.find('[data-test="completion-version"]').exists()).toBe(false)
+  })
+
+  test('an UNREAD catalogue says so rather than claiming the store has no frozen version', () => {
+    const unread = mountPanel(answered('completions', []), { versions: [], versionsUnknown: true })
+    expect(unread.find('[data-test="completion-versions-unknown"]').exists()).toBe(true)
+    expect(unread.find('[data-test="completion-no-frozen"]').exists()).toBe(false)
+    expect(unread.text()).not.toContain(translations.no.trn_completion_no_frozen)
+  })
+
+  test('the threshold note follows the PICKED version across courses, not the first one offered', () => {
+    // The store-wide set mixes courses with different thresholds, and the server grades against the
+    // one frozen into the version that was chosen.
+    const wrapper = mountPanel(answered('completions', []), {
+      versions: [
+        { courseVersionId: 'v-a', versionNo: 1, state: 'Published', passThresholdPercent: 80, courseTitle: 'Alkohol' },
+        { courseVersionId: 'v-b', versionNo: 1, state: 'Retired', passThresholdPercent: 60, courseTitle: 'Brannvern' }
+      ]
+    })
+    wrapper.find('[data-test="completion-version"]').setValue('v-b')
+    expect(wrapper.vm.selectedThreshold).toBe(60)
   })
 
   test('THE WIRE BODY CARRIES NO VERDICT — the score is the whole assertion', async () => {

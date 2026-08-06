@@ -107,7 +107,7 @@ function courseDetail () {
 function defaults () {
   return {
     GetContext: context(),
-    ListCourses: { storeId: 42, courses: [{ courseId: COURSE, title: 'Internkontroll grunnkurs', category: 'IK', competencyKey: 'food-hygiene', isActive: true, versionCount: 2, hasPublishedVersion: true, createdAtUtc: '2026-07-01T09:00:00' }], asOfUtc: '2026-07-29T08:00:00Z' },
+    ListCourses: { storeId: 42, courses: [{ courseId: COURSE, title: 'Internkontroll grunnkurs', category: 'IK', competencyKey: 'food-hygiene', isActive: true, versionCount: 2, hasPublishedVersion: true, versions: [{ courseVersionId: DRAFT_V, versionNo: 2, state: 'Draft', passThresholdPercent: 80 }, { courseVersionId: PUBLISHED_V, versionNo: 1, state: 'Published', passThresholdPercent: 80 }], createdAtUtc: '2026-07-01T09:00:00' }], asOfUtc: '2026-07-29T08:00:00Z' },
     GetCourse: courseDetail(),
     ListAssignments: { storeId: 42, assignments: [], asOfUtc: '2026-07-29T08:00:00Z' },
     ListCompletions: { storeId: 42, completions: [], asOfUtc: '2026-07-29T08:00:00Z' },
@@ -502,31 +502,86 @@ describe('the reference directories — another module\'s read, and its failures
 })
 
 describe('the version pickers offered to the two write panels differ', () => {
-  test('assign is offered the published version only; record is offered published and retired', async () => {
-    mockAnswers.GetCourse = {
+  // Two courses so the store's set is genuinely wider than any one course's, and a picker that
+  // silently kept deriving from the selection could not pass both assertions below.
+  function twoCourses () {
+    return {
       storeId: 42,
-      courseId: COURSE,
-      versions: [
-        { courseVersionId: 'v-draft', versionNo: 3, state: 'Draft' },
-        { courseVersionId: PUBLISHED_V, versionNo: 2, state: 'Published' },
-        { courseVersionId: 'v-retired', versionNo: 1, state: 'Retired' }
+      courses: [
+        {
+          courseId: COURSE,
+          title: 'Internkontroll grunnkurs',
+          versionCount: 3,
+          hasPublishedVersion: true,
+          versions: [
+            { courseVersionId: 'v-draft', versionNo: 3, state: 'Draft', passThresholdPercent: 80 },
+            { courseVersionId: PUBLISHED_V, versionNo: 2, state: 'Published', passThresholdPercent: 80 },
+            { courseVersionId: 'v-retired', versionNo: 1, state: 'Retired', passThresholdPercent: 80 }
+          ],
+          createdAtUtc: '2026-07-01T09:00:00'
+        },
+        {
+          courseId: 'c-fire',
+          title: 'Brannvern',
+          versionCount: 1,
+          hasPublishedVersion: true,
+          versions: [{ courseVersionId: 'v-fire', versionNo: 1, state: 'Published', passThresholdPercent: 60 }],
+          createdAtUtc: '2026-07-04T09:00:00'
+        }
       ],
       asOfUtc: '2026-07-29T08:00:00Z'
     }
+  }
+
+  test('assign is offered the published versions only; record is offered published and retired', async () => {
+    mockAnswers.ListCourses = twoCourses()
     const wrapper = mountPage()
     await settled()
+
+    expect(wrapper.vm.assignable.map(v => v.courseVersionId)).toEqual([PUBLISHED_V, 'v-fire'])
+    expect(wrapper.vm.recordable.map(v => v.courseVersionId)).toEqual([PUBLISHED_V, 'v-retired', 'v-fire'])
+  })
+
+  test('THE DEFECT: with no course selected the store\'s published versions are still offered', async () => {
+    // These derived from the expanded course, so an empty selection read as an empty store and both
+    // forms said so — «Ingen publisert versjon å tildele» against a catalogue holding two.
+    mockAnswers.ListCourses = twoCourses()
+    const wrapper = mountPage()
+    await settled()
+
+    expect(wrapper.vm.selectedCourseId).toBeNull()
+    expect(wrapper.vm.detailView.state).not.toBe('answered')
+    expect(wrapper.vm.assignable.length).toBe(2)
+    expect(wrapper.vm.versionsUnknown).toBe(false)
+  })
+
+  test('selecting a course does not narrow the set, because neither write is course-scoped', async () => {
+    mockAnswers.ListCourses = twoCourses()
+    const wrapper = mountPage()
+    await settled()
+    const before = wrapper.vm.assignable.map(v => v.courseVersionId)
     wrapper.vm.select(COURSE)
     await settled()
 
-    expect(wrapper.vm.assignable.map(v => v.courseVersionId)).toEqual([PUBLISHED_V])
-    expect(wrapper.vm.recordable.map(v => v.courseVersionId)).toEqual([PUBLISHED_V, 'v-retired'])
+    expect(wrapper.vm.assignable.map(v => v.courseVersionId)).toEqual(before)
   })
 
-  test('with no course selected neither panel is offered anything', async () => {
+  test('a refused course list offers nothing and says UNKNOWN rather than "publish one first"', async () => {
+    mockAnswers.ListCourses = () => Promise.reject(new WorkforceApiError(403, { code: 'training.forbidden' }))
     const wrapper = mountPage()
     await settled()
+
     expect(wrapper.vm.assignable).toEqual([])
-    expect(wrapper.vm.recordable).toEqual([])
+    expect(wrapper.vm.versionsUnknown).toBe(true)
+  })
+
+  test('an ANSWERED but empty catalogue is not unknown — that store really has nothing to assign', async () => {
+    mockAnswers.ListCourses = { storeId: 42, courses: [], asOfUtc: '2026-07-29T08:00:00Z' }
+    const wrapper = mountPage()
+    await settled()
+
+    expect(wrapper.vm.assignable).toEqual([])
+    expect(wrapper.vm.versionsUnknown).toBe(false)
   })
 })
 

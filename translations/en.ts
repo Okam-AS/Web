@@ -4807,6 +4807,7 @@ export default {
   trn_col_due: 'Due',
   trn_assign_revoke: 'Revoke',
   trn_assign_new_title: 'New assignment',
+  trn_store_versions_unknown: 'The course list did not answer, so which versions this store holds is unknown. Reload to try again.',
   trn_assign_no_published: 'No published version to assign. Publish one first — the server refuses to assign a draft or a retired version.',
   trn_assign_version: 'Version',
   trn_assign_version_pick: 'Pick a version',

@@ -4864,6 +4864,7 @@ export default {
   trn_col_due: 'Frist',
   trn_assign_revoke: 'Trekk tilbake',
   trn_assign_new_title: 'Ny tildeling',
+  trn_store_versions_unknown: 'Kurslisten svarte ikke, så hvilke versjoner butikken har er ukjent. Last inn på nytt.',
   trn_assign_no_published: 'Ingen publisert versjon å tildele. Publiser en versjon først — serveren avviser tildeling av utkast og pensjonerte versjoner.',
   trn_assign_version: 'Versjon',
   trn_assign_version_pick: 'Velg en versjon',

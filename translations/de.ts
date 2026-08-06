@@ -4815,6 +4815,7 @@ export default {
   trn_col_due: 'Fällig',
   trn_assign_revoke: 'Zurückziehen',
   trn_assign_new_title: 'Neue Zuweisung',
+  trn_store_versions_unknown: 'Die Kursliste hat nicht geantwortet, daher ist unbekannt, welche Versionen dieses Geschäft hat. Neu laden.',
   trn_assign_no_published: 'Keine veröffentlichte Version zum Zuweisen. Veröffentlichen Sie zuerst eine — der Server lehnt Entwürfe und stillgelegte Versionen ab.',
   trn_assign_version: 'Version',
   trn_assign_version_pick: 'Version wählen',
