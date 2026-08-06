@@ -1,0 +1,34 @@
+
+BASELINE — fix in place
+  Tests:       11 passed, 11 total
+
+orders: bind login-success back to the SHORT handler that shipped the defect
+  Tests:       4 failed, 7 passed, 11 total
+    ● /admin/orders — signing in through the page brings the whole page with it › the operator arrives on their own stores and their own orders, not on an empty page
+    ● /admin/orders — signing in through the page brings the whole page with it › the store picker is on screen afterwards, so the selection can still be changed
+    ● /admin/orders — signing in through the page brings the whole page with it › a store selection saved from a previous visit is restored, not silently widened
+    ● signing in on the page lands where a fresh mount would have › /admin/orders
+
+orders: bind login-success to nothing at all
+  Tests:       4 failed, 7 passed, 11 total
+    ● /admin/orders — signing in through the page brings the whole page with it › the operator arrives on their own stores and their own orders, not on an empty page
+    ● /admin/orders — signing in through the page brings the whole page with it › the store picker is on screen afterwards, so the selection can still be changed
+    ● /admin/orders — signing in through the page brings the whole page with it › a store selection saved from a previous visit is restored, not silently widened
+    ● signing in on the page lands where a fresh mount would have › /admin/orders
+
+statistics: bind login-success back to the SHORT handler that shipped the defect
+  Tests:       3 failed, 8 passed, 11 total
+    ● /admin/statistics — signing in through the page brings the whole page with it › the operator arrives on their own stores and their own turnover, not on a zero day
+    ● /admin/statistics — signing in through the page brings the whole page with it › the store picker is on screen afterwards, so the selection can still be changed
+    ● signing in on the page lands where a fresh mount would have › /admin/statistics
+
+statistics: bind login-success to nothing at all
+  Tests:       3 failed, 8 passed, 11 total
+    ● /admin/statistics — signing in through the page brings the whole page with it › the operator arrives on their own stores and their own turnover, not on a zero day
+    ● /admin/statistics — signing in through the page brings the whole page with it › the store picker is on screen afterwards, so the selection can still be changed
+    ● signing in on the page lands where a fresh mount would have › /admin/statistics
+
+RESTORED — fix back in place
+  Tests:       11 passed, 11 total
+
+VERDICT: every mutation is caught — no surviving mutant.
