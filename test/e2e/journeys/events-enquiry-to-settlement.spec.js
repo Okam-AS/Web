@@ -48,12 +48,20 @@
 // consequence: the guest is handed a reference, and the venue's own pipeline — on the very next
 // step, with the same store — is dark. That is the finding stated as a thing a person can see.
 //
-// AND IT IS A FIXTURE RUN. `backend: fixture` is in the artifact and it means what it says: the gate
-// this walk exercises is the fixture's model of `EventsProposalService.GuardStoreEnabledAsync`, not
-// the .NET service itself. The backend half was proved by mutation in its own lane; what is proved
-// HERE is that the whole journey reaches a browser, that every screen in it exists and connects, and
-// that the refusal lands where a guest can read it. Those are different claims and neither replaces
-// the other.
+// AND WHICH GATE IT EXERCISED IS THE ARTIFACT'S ANSWER, NOT THIS HEADER'S. This paragraph used to
+// read "AND IT IS A FIXTURE RUN", which was true of every run that could then be made and is no
+// longer true of every run that can. The walk is now selected in both modes, so read `backend` in the
+// artifact:
+//
+//   "backend": "fixture"   the gate exercised is the fixture's MODEL of
+//                          `EventsProposalService.GuardStoreEnabledAsync`. What such a run proves is
+//                          that the journey reaches a browser, that every screen in it exists and
+//                          connects, and that the refusal lands where a guest can read it.
+//   "backend": "live"      the gate exercised is the .NET service itself, on a real database, and
+//                          `backendBuild` names the build that answered.
+//
+// Those are different claims and neither replaces the other — which is why `support/artifact-store.js`
+// files them under separate keys instead of letting the cheaper run overwrite the dearer one.
 //
 // ---- THE TWO WAYS THIS FILE COULD ONLY EVER BE RUN ONCE ---------------------------------------
 //
@@ -83,27 +91,51 @@
 // journeys that tag their subjects differently is the same predicate collision this estate keeps
 // paying for, wearing test clothes. `test/journey-rerunnability.test.js` holds both files to it.
 //
-// ---- WHAT STILL STOPS THIS JOURNEY FROM RUNNING LIVE ------------------------------------------
+// ---- WHAT USED TO STOP THIS JOURNEY FROM RUNNING LIVE, AND WHAT REPLACED IT --------------------
 //
-// Not the two above, and this file does not claim otherwise. `STORE` below is still
-// `world.STORE_ID` — the FIXTURE's store 42 — and the tag is still `@fixture`, so live mode filters
-// this walk out before either fault could matter. The sibling could discover its venue because it
-// signs in FIRST; this one cannot without reordering itself, because its opening move is a public
-// enquiry sent BEFORE anybody signs in, and that ordering is the finding it exists to show. Closing
-// that is a change to the walk rather than to its constants and is left to a lane that can re-run it
-// against a browser.
+// This section used to say: "`STORE` below is still `world.STORE_ID` — the FIXTURE's store 42 — and
+// the tag is still `@fixture`, so live mode filters this walk out before either fault could matter.
+// The sibling could discover its venue because it signs in FIRST; this one cannot without reordering
+// itself, because its opening move is a public enquiry sent BEFORE anybody signs in."
+//
+// THE DIAGNOSIS WAS RIGHT AND THE PROPOSED REMEDY WAS WRONG. Reordering the walk would have paid for
+// the venue with the finding: the enquiry arriving BEFORE anybody signs in is what makes the next two
+// steps mean anything, because it is how a member of the public reaches a venue that has not opened
+// the module. A version that signed in first to learn its own store id would still show a dark
+// pipeline, but it would no longer show a STRANGER's enquiry landing in one.
+//
+// So the venue is discovered OUT OF BAND instead, before the browser opens, and the browser's walk is
+// untouched — same order, same first navigation, same anonymous enquiry. `support/venue.js` asks the
+// backend on `apiBaseUrl` which store the demo manager administers, over the same `/user/login` the
+// login modal itself posts. That is the harness standing in for the one thing it honestly is: THE
+// VENUE HANDING OUT ITS OWN LINK. Nothing in the product mints `/events/inquiry/{store}` for a
+// stranger — a venue publishes it — so there is no browsing path to it to walk, and inventing one
+// would be inventing a surface that does not ship.
+//
+// AND IT IS ONE PATH IN BOTH WORLDS, which is the property that keeps this file honest. The fixture
+// answers `/user/login` with a manager whose `adminIn` carries store 42; a live WebApi answers with
+// whatever store the seeded `StoreAdmins` row names. The walk below therefore does not know or care
+// which backend it is on, and there is no `@live` branch in it to drift from the `@fixture` one.
 
 const { test, journeyDetails, expect } = require('../support/journey');
 const { signIn } = require('../support/admin');
 const { turnOn, flip, flagRow } = require('../support/flags');
-const world = require('../fixture/world');
+const { venueStoreId } = require('../support/venue');
 
 const JOURNEY = 'events-enquiry-to-settlement';
 
+// The two module switches this walk pulls. Spelled as LITERALS rather than imported from
+// `fixture/world.js`, and the file no longer imports that module at all: a flag key is a property of
+// the PRODUCT — `Services/Events/EventsFeatureFlags.cs` contributes both — and reaching into the
+// fixture for one would make a live run quote a stand-in for a fact the backend owns.
+const EVENTS_CORE_FLAG = 'Events.Core';
+const EVENTS_SETTLEMENT_FLAG = 'Events.Settlement';
+
 // The venue this booking is for, and the store the host signs in to administer. ONE store on both
 // sides is the point: the enquiry, the lever, the proposal and the statement all name it, so a walk
-// that quietly changed venues halfway would fail rather than read as a success.
-const STORE = world.STORE_ID;
+// that quietly changed venues halfway would fail rather than read as a success. Resolved in the first
+// step below rather than written here — see the header.
+let STORE = null;
 
 // What makes this run's booking findable, and findable ONLY as itself. Spelled exactly as
 // `events-guest-proposal.spec.js` spells it, on purpose: one convention for per-run subjects across
@@ -186,6 +218,12 @@ test(
   journeyDetails({
     journey: JOURNEY,
     surface: 'public+admin',
+    // NOT `@fixture` any more. That tag means "this journey depends on state only the fixture has",
+    // and after the venue moved to `support/venue.js` this walk depends on none: every subject it
+    // names — the booking, the offer, the token, the statement — is created by the walk itself, and
+    // the one thing it does not create is asked of whichever backend is answering. In live mode this
+    // is now selected; in fixture mode it still runs alongside the rest, against the same code.
+    tag: ['@live'],
     capabilities: [
       'events.inquiry.public-create',
       'events.proposal.author',
@@ -207,6 +245,17 @@ test(
 
     let token = null;
     let reference = null;
+
+    // ---- 0. WHICH VENUE ------------------------------------------------------------------------
+    await journey.step('the venue whose public link this booking arrives on', async () => {
+      // Out of band and BEFORE the browser opens on anything, so the walk itself starts where it
+      // always started: at a public form, with nobody signed in. See the header for why this is the
+      // venue publishing its own address rather than the harness reading the answer to a question a
+      // later step is supposed to earn.
+      STORE = await venueStoreId(journey.meta.apiBaseUrl);
+      expect(STORE).toBeTruthy();
+      return 'store ' + STORE + ', as ' + journey.meta.apiBaseUrl + ' reports the demo manager administers';
+    });
 
     // ---- 1. THE ENQUIRY, WITH THE MODULE OFF ---------------------------------------------------
     await journey.step('a guest fills in the venue\'s public enquiry form', async () => {
@@ -274,9 +323,9 @@ test(
     // ---- 3. THE LEVER --------------------------------------------------------------------------
     await journey.step('the host switches Events on for this venue', async () => {
       // Through the product's own switchboard, never a seeded row — see support/flags.js.
-      await turnOn(page, world.EVENTS_CORE_FLAG);
+      await turnOn(page, EVENTS_CORE_FLAG);
       await page.goto('/admin/events-pipeline');
-      return world.EVENTS_CORE_FLAG + ' on for store ' + STORE;
+      return EVENTS_CORE_FLAG + ' on for store ' + STORE;
     });
 
     await journey.step('the guest\'s enquiry is now in the pipeline, under the name they typed', async () => {
@@ -349,9 +398,9 @@ test(
       // The one variable. Everything else about the next two steps is identical.
       await page.goto('/admin/feature-flags');
       await expect(page.locator('.ff-page__title')).toBeVisible({ timeout: 60000 });
-      await flip(page, 'off', world.EVENTS_CORE_FLAG);
-      await expect(flagRow(page, world.EVENTS_CORE_FLAG).locator('.ff-row__badge')).toHaveText('Av');
-      return world.EVENTS_CORE_FLAG + ' off for store ' + STORE;
+      await flip(page, 'off', EVENTS_CORE_FLAG);
+      await expect(flagRow(page, EVENTS_CORE_FLAG).locator('.ff-row__badge')).toHaveText('Av');
+      return EVENTS_CORE_FLAG + ' off for store ' + STORE;
     });
 
     await journey.step('the guest opens the offer and answers it — and the answer is refused', async () => {
@@ -395,9 +444,9 @@ test(
     await journey.step('the host switches Events on again', async () => {
       await page.goto('/admin/feature-flags');
       await expect(page.locator('.ff-page__title')).toBeVisible({ timeout: 60000 });
-      await flip(page, 'on', world.EVENTS_CORE_FLAG);
-      await expect(flagRow(page, world.EVENTS_CORE_FLAG).locator('.ff-row__badge')).toHaveText('På');
-      return world.EVENTS_CORE_FLAG + ' on for store ' + STORE;
+      await flip(page, 'on', EVENTS_CORE_FLAG);
+      await expect(flagRow(page, EVENTS_CORE_FLAG).locator('.ff-row__badge')).toHaveText('På');
+      return EVENTS_CORE_FLAG + ' on for store ' + STORE;
     });
 
     await journey.step('the guest presses the same button on the same offer, and it is accepted', async () => {
@@ -464,13 +513,13 @@ test(
     });
 
     await journey.step('the host opens the settlement machine for this venue', async () => {
-      await turnOn(page, world.EVENTS_SETTLEMENT_FLAG);
+      await turnOn(page, EVENTS_SETTLEMENT_FLAG);
       await page.goto('/admin/events-pipeline');
       const row = page.locator('.ev-pipeline__row', { hasText: GUEST.name });
       await expect(row).toHaveCount(1, { timeout: 60000 });
       await row.click();
       await expect(page.locator('.ev-journey')).toBeVisible();
-      return world.EVENTS_SETTLEMENT_FLAG + ' on for store ' + STORE;
+      return EVENTS_SETTLEMENT_FLAG + ' on for store ' + STORE;
     });
 
     await journey.step('service starts, and the event is closed after it', async () => {

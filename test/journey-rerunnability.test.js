@@ -58,9 +58,12 @@
 //     declaration, so a new journey that invents `const TAG = …` is outside the rule until somebody
 //     registers it. That is the cost of having a convention at all, and it is why the registry is
 //     explicit as well as derived.
-//   • whether a journey can run live AT ALL. `events-enquiry-to-settlement` still pins the fixture's
-//     store 42 and still carries `@fixture`; those are named in its own header and are not this
-//     file's subject.
+//   • whether a journey can run live AT ALL. This used to add that `events-enquiry-to-settlement`
+//     "still pins the fixture's store 42 and still carries `@fixture`"; it no longer does either —
+//     the venue moved to `test/e2e/support/venue.js` and the tag to `@live`. The exclusion itself
+//     stands: re-runnability and live-eligibility are different properties, a journey can hold this
+//     file's two and still be unable to reach a real backend, and what stops it is named in its own
+//     header rather than here.
 //
 // ---- WHY THE COMMENTS ARE BLANKED FIRST, AND WHY THAT IS CHECKED -------------------------------
 //
