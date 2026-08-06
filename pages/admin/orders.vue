@@ -1,5 +1,5 @@
 <template>
-  <AdminPage :full-width="true" @login-success="fetchOrders()">
+  <AdminPage :full-width="true" @login-success="startOrdersView">
     <div class="orders-page">
       <h2>{{ $i('orders_allOrders') }}</h2>
 
@@ -590,7 +590,10 @@ export default {
     this.debouncedFetchOrders = debounce(this.fetchOrders, 1000);
   },
   mounted() {
-    // Load settings from localStorage first (only available in browser)
+    // Load settings from localStorage first (only available in browser). Deliberately ABOVE the
+    // guard and outside `startOrdersView`: it depends on no session, it already ran by the time a
+    // sign-in arrives, and re-running it on `login-success` would throw away any filter the visitor
+    // adjusted while the modal was over the page.
     this.loadSettingsFromLocalStorage();
 
     // `AdminPage` raises the sign-in modal for a signed-out visitor and emits `login-success` when
@@ -598,21 +601,37 @@ export default {
     if (!this.$store.getters.userIsLoggedIn) {
       return;
     }
-    this.adminStores = this.$store.state.currentUser.adminIn;
-
-    // Load store selection from localStorage if exists, otherwise select all
-    const savedStoreIds = this.getSavedStoreIds();
-    if (savedStoreIds && savedStoreIds.length > 0) {
-      this.selectedStoreIds = savedStoreIds.filter(id =>
-        this.adminStores.some(store => store.id === id)
-      );
-    } else {
-      this.selectedStoreIds = this.adminStores.map((store) => store.id);
-    }
-
-    this.fetchOrders();
+    this.startOrdersView();
   },
   methods: {
+    // THE ONE STARTER LIST for this screen, run by `mounted` for an operator who arrives already
+    // signed in and by the shell's `login-success` for one who signs in on the page. A signed-out
+    // visitor does reach this page: `AdminPage.initAuth` skips its bounce to /admin when a
+    // `redirect` query is already present (AdminPage.vue:99), which is exactly the post-login
+    // return path.
+    //
+    // It is one list rather than two because the second copy was written short and went stale.
+    // `login-success` was bound to `fetchOrders()` alone, so signing in on the page left
+    // `adminStores` empty — and empty `adminStores` is not a cosmetic gap here. The store picker
+    // hides itself below two stores (`adminStores.length > 1`), so the operator cannot widen the
+    // selection; and `selectedStoreIds` stays `[]`, which `fetchOrders` sends straight to
+    // `GetAllOrdersWithPagination` as the store filter. The page then reads as an operator with no
+    // stores and no orders, which on screen is indistinguishable from one who genuinely has none.
+    startOrdersView() {
+      this.adminStores = (this.$store.state.currentUser && this.$store.state.currentUser.adminIn) || [];
+
+      // Load store selection from localStorage if exists, otherwise select all
+      const savedStoreIds = this.getSavedStoreIds();
+      if (savedStoreIds && savedStoreIds.length > 0) {
+        this.selectedStoreIds = savedStoreIds.filter(id =>
+          this.adminStores.some(store => store.id === id)
+        );
+      } else {
+        this.selectedStoreIds = this.adminStores.map((store) => store.id);
+      }
+
+      this.fetchOrders();
+    },
     getColumnLabel(columnId) {
       const column = this.allColumns.find(col => col.id === columnId);
       return column ? column.label : columnId;

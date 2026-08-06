@@ -1,5 +1,5 @@
 <template>
-  <AdminPage @login-success="loadStatistics">
+  <AdminPage @login-success="startStatisticsView">
     <div class="statistics-page">
       <div class="page-header">
         <h1>{{ $i('statistics_title') }}</h1>
@@ -585,14 +585,30 @@ export default {
     if (!this.$store.getters.userIsLoggedIn) {
       return;
     }
-    this.adminStores = this.$store.state.currentUser.adminIn;
-    this.selectedStoreIds = this.adminStores.map((store) => store.id);
-    this.loadStatistics();
+    this.startStatisticsView();
   },
   created() {
     this.debouncedLoadStatistics = debounce(this.loadStatistics, 1000);
   },
   methods: {
+    // THE ONE STARTER LIST for this screen, run by `mounted` for an operator who arrives already
+    // signed in and by the shell's `login-success` for one who signs in on the page. A signed-out
+    // visitor does reach this page: `AdminPage.initAuth` skips its bounce to /admin when a
+    // `redirect` query is already present (AdminPage.vue:99), which is exactly the post-login
+    // return path.
+    //
+    // It is one list rather than two because the second copy was written short and went stale.
+    // `login-success` was bound to `loadStatistics` alone, so signing in on the page left
+    // `adminStores` empty — and empty `adminStores` is not a cosmetic gap here. The store picker
+    // hides itself below two stores (`adminStores.length > 1`), so the operator cannot widen the
+    // selection; and `selectedStoreIds` stays `[]`, which `loadStatistics` puts in `storeIds` on
+    // every one of its five requests. The page then reports zero turnover for a venue that had a
+    // full day, and nothing on it says the filter, not the till, is why.
+    startStatisticsView() {
+      this.adminStores = (this.$store.state.currentUser && this.$store.state.currentUser.adminIn) || [];
+      this.selectedStoreIds = this.adminStores.map((store) => store.id);
+      this.loadStatistics();
+    },
     selectDateFilter(value) {
       this.selectedDateFilter = value;
       this.setDates(value);
