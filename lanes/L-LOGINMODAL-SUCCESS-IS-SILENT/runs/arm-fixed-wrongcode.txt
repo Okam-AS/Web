@@ -1,0 +1,15 @@
+
+Running 1 test using 1 worker
+
+[ARM fixed/wrongcode] scripts served: 91; carrying LoginModal: 1
+[ARM fixed/wrongcode] chunk served to the browser carries JSON.stringify(response): false
+[ARM fixed/wrongcode] login modals on page at start: 1
+[ARM fixed/wrongcode] code boxes offered: 6
+[ARM fixed/wrongcode] modal still present: 1
+[ARM fixed/wrongcode] error-slot sightings: [{"t":962,"why":"mutation","text":"Feil kode"}]
+[ARM fixed/wrongcode] sentinel anywhere in final DOM: false
+[ARM fixed/wrongcode] any sighting carried the sentinel: false
+[ARM fixed/wrongcode] any sighting carried a serialized body: false
+  ✓  1 lanes/L-LOGINMODAL-SUCCESS-IS-SILENT/browser-arm.spec.js:41:1 › arm fixed: a correct sign-in and everything the error slot says while it happens (1.1s)
+
+  1 passed (1.4s)

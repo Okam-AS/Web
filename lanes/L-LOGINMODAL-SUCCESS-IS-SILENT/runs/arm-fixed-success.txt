@@ -1,0 +1,15 @@
+
+Running 1 test using 1 worker
+
+[ARM fixed/success] scripts served: 93; carrying LoginModal: 1
+[ARM fixed/success] chunk served to the browser carries JSON.stringify(response): false
+[ARM fixed/success] login modals on page at start: 1
+[ARM fixed/success] code boxes offered: 6
+[ARM fixed/success] modal still present: 0
+[ARM fixed/success] error-slot sightings: []
+[ARM fixed/success] sentinel anywhere in final DOM: false
+[ARM fixed/success] any sighting carried the sentinel: false
+[ARM fixed/success] any sighting carried a serialized body: false
+  ✓  1 lanes/L-LOGINMODAL-SUCCESS-IS-SILENT/browser-arm.playwright.js:41:1 › arm fixed: a correct sign-in and everything the error slot says while it happens (16.9s)
+
+  1 passed (17.2s)

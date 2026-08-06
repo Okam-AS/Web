@@ -222,15 +222,38 @@ export default {
           this.isLoading = false;
         });
     },
+    // A sign-in that WORKED leaves no error behind.
+    //
+    // The success branch used to serialize the sign-in response into `errorMessage` — the slot the
+    // modal uses to say what went wrong. Two separate things were wrong with it, and only the
+    // second is why this method now opens with a reset. (The offending call is deliberately NOT
+    // quoted here: the lane's browser arm decides which build it is looking at by searching the
+    // served chunk for that exact token, and a comment carrying it would defeat the check.)
+    //
+    // 1. It rendered the auth layer's answer into the DOM. Measured, it did NOT leak a credential:
+    //    this modal's `_userService` is `AdminUserService` (plugins/global-mixin.js), whose `Login`
+    //    override collapses the resolved `User` to a boolean before the modal sees it, so the
+    //    assigned string was «true». But the raw `UserService.Login` this adapter wraps resolves the
+    //    whole user — `token` included — and the sibling method `LoginAdmin` in that same adapter
+    //    file already returns the user object rather than a boolean. Nothing in THIS file made the
+    //    difference, so the safe form is to never put a response here at all, whatever `Login`
+    //    happens to resolve today. See lanes/L-LOGINMODAL-SUCCESS-IS-SILENT/notes.md.
+    //
+    // 2. It was, by accident, the only thing clearing a previous «Feil kode». `login` had no reset
+    //    of its own, so simply deleting the line would let a stale failure ride onto a sign-in that
+    //    worked — the same lie pointing the other way, which is the defect a sibling lane's ninth
+    //    mutant found in `getCode`. The reset therefore moves to the top of the method, where
+    //    `getCode` already keeps its own: a fresh attempt starts with no error on screen, the
+    //    failure branches below re-state one, and the success branch says nothing.
     login(code) {
       this.code = code;
+      this.errorMessage = "";
       this.isLoading = true;
       this._userService
         .Login(this.countryCode + this.phone.replace(/\s/g, ''), this.code)
         .then((response) => {
           if(Boolean(response)) {
             this.codeSent = true;
-            this.errorMessage = JSON.stringify(response);
             this.$emit("close", true);
           } else {
             this.errorMessage = "Feil kode";
