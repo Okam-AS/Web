@@ -103,11 +103,19 @@ sw.*
 # this line (`git add -f`) and are the only artifacts under version control:
 #
 #   modal-scroll-lock, modal-estate-scroll-lock, workforce-invitation-onboarding
-#   growth-guest-lifecycle, growth-testsend-refusal        (L-JOURNEY-GROWTH)
 #
 # Each is committed WITH the screenshots its own `screenshots` array names, because a committed
 # record pointing at ignored pictures is a dangling reference. Everything else here stays ignored:
 # tracking every run would put a merge conflict on the output of a test.
+#
+# NAMED HERE UNTIL 2026-08-06 BUT NEVER ON THIS BRANCH: growth-guest-lifecycle and
+# growth-testsend-refusal (L-JOURNEY-GROWTH). Their SPECS landed — test/e2e/journeys/growth-
+# guest-lifecycle.spec.js and growth-testsend-refusal.spec.js are both here — but the records
+# and their screenshots stop at lane/L-JOURNEY-GROWTH (ef2d6be) and were never force-added.
+# Nothing on this branch reads them, so the gap costs nothing today; the list claiming they were
+# committed is what costs, because the next person to wonder why `git add artifacts/journeys/
+# growth-*` does nothing burns an hour on a line that was never true. Land them with `git add -f`
+# from ef2d6be if the exit still wants them, and move them back up into the list above when you do.
 artifacts/
 
 # Playwright's own caches
