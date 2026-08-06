@@ -110,12 +110,12 @@
 
     <footer class="check-panel__foot">
       <div v-if="hasItems" class="check-panel__totals">
-        <div v-if="totalDiscount > 0" class="check-panel__total-row">
+        <div v-if="showsDiscountTotal" class="check-panel__total-row">
           <span>
             {{ $i('pos_discount') }}
             <button type="button" class="check-panel__discount-remove" :title="$i('pos_remove_discount')" @click="$emit('remove-discount')">×</button>
           </span>
-          <span class="check-panel__discount">−{{ priceLabel(totalDiscount) }}</span>
+          <span class="check-panel__discount">{{ negatedPriceLabel(totalDiscount) }}</span>
         </div>
         <div class="check-panel__total-row check-panel__total-row--grand">
           <span>{{ $i('pos_total') }}</span>
@@ -168,6 +168,10 @@
 
 <script>
 import CheckLine from '~/components/admin/pos/CheckLine.vue';
+// The discount total prints its sign through `negatedAmountLabel` rather than as a template literal
+// in front of the interpolation. `−{{ priceLabel(x) }}` puts the minus outside the interpolation,
+// where no absence rule in this repo can see it, and an amount the rule withholds composes to `−—`.
+import { negatedAmountLabel, statedSum, isDeductionInPlay } from '~/utils/price';
 
 // The open-check panel (right column of the sales screen). Groups identical server lines into
 // quantity rows and shows the server-authoritative totals. All mutations are delegated upward.
@@ -263,7 +267,17 @@ export default {
         const g = map[key];
         g.quantity += line.quantity;
         g.lineAmount += line.netLineAmount;
-        g.discountAmount += line.discountAmount || 0;
+        // `statedSum`, not `+= (x || 0)`. `line` is the WIRE object, and the coercion folded a member
+        // line whose discount never arrived into the row as a zero — a hole filled in by the
+        // arithmetic, one screen before any gate was in a position to refuse it. A fixed discount is
+        // split proportionally across the member lines of exactly this row (see the grouping key
+        // above, which folds on the REASON and not the amount), so a row with one silent member is
+        // the ordinary shape of the bug and not a contrived one: the row then understates what came
+        // off the bill and prints the understatement as a real figure.
+        //
+        // Unstated is STICKY. Once a member says nothing the group's discount is `null` and stays
+        // null however many stated members follow, because a sum missing one term is not a total.
+        g.discountAmount = statedSum(g.discountAmount, line.discountAmount);
         g.depositAmount += line.depositAmount || 0;
         g.lineIds.push(line.orderLineItemId);
       });
@@ -289,9 +303,32 @@ export default {
       return order.map(k => map[k]);
     },
     finalAmount () { return this.check ? this.check.finalAmount : 0; },
+    // THE RULING THAT STOOD HERE IS REVERSED, and the reversal is the point. The comment this
+    // replaces argued that `sum + (g.discountAmount || 0)` could not be reached by an absence,
+    // because `groups` seeds `discountAmount: 0` and only ever `+=` a number onto it. That was TRUE
+    // of the code it was written against — nothing outside `groups` assigns the field, which was
+    // re-checked against every reader of it before this edit — and it stopped being true in the same
+    // edit that fixed `groups`. A group whose discount is unstated is `null` now, the coercion IS
+    // reachable, and `|| 0` here would have quietly put the manufactured zero back one screen below
+    // where it was taken out. A ruling that a coercion is unreachable is a ruling about the code as
+    // it stands, and it expires when that code changes.
+    //
+    // WHY THE ROW IS NOT GUARDED ON THIS NUMBER. `null` fails `> 0` and DELETES the discount row,
+    // while the server's `finalAmount` still carries the discount — so the sum and the guard are one
+    // defect, and fixing the sum alone turns a wrong figure into a missing row, which an operator
+    // reads as "no discount was given". Rendering is decided by `showsDiscountTotal` below.
+    //
+    // WHAT THE READER IS SPARED. `−kr 30,00` on a bill where 50,00 actually came off is a figure
+    // that disagrees with the server's own `finalAmount`, and it is worse than no figure, because
+    // nothing on screen says which term is missing. The unknown mark makes no claim at all.
     totalDiscount () {
-      return this.groups.reduce((sum, g) => sum + (g.discountAmount || 0), 0);
+      return statedSum(...this.groups.map(g => g.discountAmount));
     },
+    // Three worlds, and the middle one is what a truthiness guard swallows: a stated discount shows
+    // its figure, a stated zero shows no row (nothing came off), an unstated amount shows the row
+    // carrying the unknown mark. `isDeductionInPlay` is the one predicate for that, shared with the
+    // per-line row in CheckLine so this component cannot answer the same question two ways.
+    showsDiscountTotal () { return isDeductionInPlay(this.totalDiscount); },
     headerTitle () {
       if (this.check && this.check.tableId) { return this.check.tableName || this.$i('pos_table'); }
       return this.$i('pos_quick_sale');
@@ -303,6 +340,11 @@ export default {
     }
   },
   methods: {
+    // The sign is resolved from the negated value and the magnitude alone goes to the formatter —
+    // core's `priceLabel` renders -4 as "kr 0,-4" and -50 as "kr -,50". See `negatedAmountLabel`.
+    negatedPriceLabel (amountMinor) {
+      return negatedAmountLabel(amountMinor, this.priceLabel);
+    },
     startEditCouverts () {
       this.couvertsDraft = (this.check && this.check.couverts) || 2;
       this.editingCouverts = true;

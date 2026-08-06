@@ -1,0 +1,39 @@
+BASELINE (every edit in place)
+  GREEN  Tests:       71 passed, 71 total
+
+M1 the reducer: statedSum -> the manufactured zero it replaced
+  RED (branch is load-bearing)
+  Tests:       10 failed, 61 passed, 71 total
+
+M2 the footer sum: statedSum -> the `|| 0` the old ruling called unreachable
+  RED (branch is load-bearing)
+  Tests:       11 failed, 60 passed, 71 total
+
+M3 the footer row guard: isDeductionInPlay -> `> 0`
+  RED (branch is load-bearing)
+  Tests:       11 failed, 60 passed, 71 total
+
+M4 the line row guard: isDeductionInPlay -> `> 0`
+  RED (branch is load-bearing)
+  Tests:       7 failed, 64 passed, 71 total
+
+M5 the discount button highlight: one answer -> a second one
+  RED (branch is load-bearing)
+  Tests:       1 failed, 70 passed, 71 total
+
+M6 the return branch: isDeductionInPlay -> `> 0` (refunds the listed price)
+  RED (branch is load-bearing)
+  Tests:       1 failed, 70 passed, 71 total
+
+M7 the predicate loses its absence branch (an unstated amount reads as none)
+  RED (branch is load-bearing)
+  Tests:       19 failed, 52 passed, 71 total
+
+M8 the predicate loses its relational branch (a zero discount on every bill)
+  RED (branch is load-bearing)
+  Tests:       11 failed, 60 passed, 71 total
+
+==============================================================================
+all 8 mutations red. no branch in this change is carried by a green.
+
+restored: GREEN  Tests:       71 passed, 71 total

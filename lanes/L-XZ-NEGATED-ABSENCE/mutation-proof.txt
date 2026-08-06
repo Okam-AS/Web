@@ -1,0 +1,24 @@
+=== M0  the fix as written (control) — expect ALL PASS
+Tests:       58 passed, 58 total
+
+=== M1  the original defect: the sign as a template literal, restored verbatim
+Tests:       44 failed, 14 passed, 58 total
+
+=== M2  the tempting wrong fix: delete the minus literal, keep priceLabel
+Tests:       13 failed, 45 passed, 58 total
+
+=== M3  sign owned by the label, but absence not gated (returns the sign anyway)
+Tests:       20 failed, 38 passed, 58 total
+
+=== M4  a truthiness guard instead of isAmountStated (destroys the genuine zero)
+Tests:       14 failed, 44 passed, 58 total
+
+=== M5  negate the VALUE and let the formatter print the sign (the design rejected)
+Tests:       9 failed, 49 passed, 58 total
+=== M6  the sign printed unconditionally, so a zero and a negation both wear it
+Tests:       14 failed, 44 passed, 58 total
+
+=== M7  the sign dropped unconditionally (deduction rows all read as positives)
+Tests:       9 failed, 49 passed, 58 total
+=== restored; confirming control is green again
+Tests:       58 passed, 58 total

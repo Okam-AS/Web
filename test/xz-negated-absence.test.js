@@ -260,11 +260,72 @@ describe('negatedAmountLabel, the rule the rows now use', () => {
 })
 
 // Supplementary, and deliberately NOT the load-bearing assertion — the mounted tests above are.
-// This one exists so that reintroducing the literal is caught at the place it would be written.
-test('no deduction row in the report template writes its sign outside the interpolation', () => {
-  const source = fs.readFileSync(
-    path.resolve(__dirname, '../components/admin/pos/XReportView.vue'), 'utf8')
-  const template = source.slice(0, source.indexOf('</template>'))
+// This one exists so that reintroducing the literal is caught at the place it would be written, and
+// it covers the WHOLE POS component directory rather than the one file the defect was first found
+// in. Three more surfaces wrote the same construction (`PosReceiptView`, `CheckLine`, `CheckPanel`)
+// and a scan pinned to `XReportView.vue` could not see any of them; the point of a tripwire is that
+// it is not a list of the places somebody already looked.
+//
+// NO ALLOWLIST, and that is the whole design. An allowlist is how a tripwire stops being one: the
+// next surface to write `−{{` gets added to it in the same commit that ships the defect. It is
+// possible to have no allowlist only because the three residual sites were ported FIRST — widening
+// the scan ahead of the port would have forced one.
+//
+// TWO WAYS THIS ASSERTION CAN SILENTLY STOP ASSERTING, both guarded below:
+//
+//   1. `indexOf('</template>')` finds the first CLOSING TAG, and a Vue SFC's root template is full of
+//      `<template v-if>` blocks that close early. 18 of the 30 files here have more than one, and in
+//      BOTH files this lane ported the site sits after the first: CheckLine's first `</template>` is
+//      line 28 and its discount row is line 55; CheckPanel's are 90 and 118. Slicing at the first one
+//      would have scanned neither, passed, and read as proof. `lastIndexOf` is the root close.
+//   2. A glob that matches nothing, or a directory that gets renamed, makes an empty scan pass. The
+//      file count and the presence of the four known ex-offenders are asserted first.
+const POS_COMPONENT_DIR = path.resolve(__dirname, '../components/admin/pos')
 
-  expect(template).not.toContain(MINUS_SIGN + '{{')
+const posComponentFiles = () => fs.readdirSync(POS_COMPONENT_DIR)
+  .filter(f => f.endsWith('.vue'))
+  .sort()
+
+// The root template only. Every one of these files carries the fix's own explanation in a SCRIPT
+// comment, which quotes the offending construction verbatim — scanning the whole file would red on
+// the documentation of the fix.
+const rootTemplateOf = (file) => {
+  const source = fs.readFileSync(path.join(POS_COMPONENT_DIR, file), 'utf8')
+  return source.slice(0, source.lastIndexOf('</template>'))
+}
+
+describe('the source scan actually reaches the code it claims to scan', () => {
+  test('the POS component directory is non-empty and holds all four ex-offenders', () => {
+    const files = posComponentFiles()
+    expect(files.length).toBeGreaterThan(20)
+    expect(files).toEqual(expect.arrayContaining(
+      ['XReportView.vue', 'PosReceiptView.vue', 'CheckLine.vue', 'CheckPanel.vue']))
+  })
+
+  // `lastIndexOf` on a missing tag is -1, and `slice(0, -1)` is the whole file bar one character —
+  // an SFC without a root template close would silently have its SCRIPT scanned, and every one of
+  // these files documents the fix by quoting `−{{` verbatim. Asserted here rather than guarded with
+  // a `throw` inside the helper: a throw no file can reach is a branch nothing proves.
+  test('every file the scan reads has a root template to slice at', () => {
+    const missing = posComponentFiles()
+      .filter(f => !fs.readFileSync(path.join(POS_COMPONENT_DIR, f), 'utf8').includes('</template>'))
+
+    expect(missing).toEqual([])
+  })
+
+  // The guard on trap 1. If this ever fails, `lastIndexOf` has silently become `indexOf` or a nested
+  // block has moved, and the scan below is no longer looking at the rows it is named for.
+  test('the scanned region reaches the discount rows that sit past a nested template block', () => {
+    expect(rootTemplateOf('CheckLine.vue')).toContain("$emit('line-remove-discount', group)")
+    expect(rootTemplateOf('CheckPanel.vue')).toContain('check-panel__discount')
+    expect(rootTemplateOf('PosReceiptView.vue')).toContain('receipt__line-discount')
+    expect(rootTemplateOf('XReportView.vue')).toContain('pos_report_errors')
+  })
+})
+
+test('no POS template anywhere writes its sign outside the interpolation', () => {
+  const offenders = posComponentFiles()
+    .filter(file => rootTemplateOf(file).includes(MINUS_SIGN + '{{'))
+
+  expect(offenders).toEqual([])
 })

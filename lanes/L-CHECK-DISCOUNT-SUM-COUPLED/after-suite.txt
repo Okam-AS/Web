@@ -1,0 +1,50 @@
+    > 457 |       expect(store.buildFromListeningProcess(origin).id).toMatch(/^Web-modules@/);
+          |                                                          ^
+      458 |       expect(build.id).not.toMatch(/^Web-modules@/);
+      459 |     });
+      460 |
+
+      at Object.<anonymous> (test/journey-artifact-store.test.js:457:58)
+
+Summary of all failing tests
+FAIL test/journey-artifact-store.test.js
+  ● backend identity › asks whoever is holding the port what directory they are running from
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /^Web-modules@[0-9a-f]{40}(\+dirty)?$/
+    Received string:  "web-check-discount-sum@799f05d4f6f4f7ebd1539433d91061c9584548c6+dirty"
+
+      293 |       expect(build).not.toBeNull();
+      294 |       expect(build.source).toBe('process:127.0.0.1:' + port);
+    > 295 |       expect(build.id).toMatch(/^Web-modules@[0-9a-f]{40}(\+dirty)?$/);
+          |                        ^
+      296 |       // The checkout's name identifies it; its absolute path is the laptop's business and stays out of
+      297 |       // a file that gets pasted into reviews.
+      298 |       expect(JSON.stringify(build)).not.toContain(path.resolve(__dirname, '..'));
+
+      at Object.<anonymous> (test/journey-artifact-store.test.js:295:24)
+
+  ● backend identity › the world stamp › names the checkout the world script recorded, not the one holding the port
+
+    expect(received).toMatch(expected)
+
+    Expected pattern: /^Web-modules@/
+    Received string:  "web-check-discount-sum@799f05d4f6f4f7ebd1539433d91061c9584548c6+dirty"
+
+      455 |       // The answer the port would have given, and the one this run must NOT have taken: this process
+      456 |       // is running out of the Web-modules checkout and holds that socket.
+    > 457 |       expect(store.buildFromListeningProcess(origin).id).toMatch(/^Web-modules@/);
+          |                                                          ^
+      458 |       expect(build.id).not.toMatch(/^Web-modules@/);
+      459 |     });
+      460 |
+
+      at Object.<anonymous> (test/journey-artifact-store.test.js:457:58)
+
+
+Test Suites: 1 failed, 115 passed, 116 total
+Tests:       2 failed, 2754 passed, 2756 total
+Snapshots:   0 total
+Time:        3.893 s, estimated 4 s
+Ran all test suites.
