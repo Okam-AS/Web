@@ -199,11 +199,11 @@
               <table class="sb-table">
                 <thead><tr><th>Mål</th><th>Status</th><th>Bilag</th><th>Melding</th></tr></thead>
                 <tbody>
-                  <tr v-for="(r, i) in results" :key="i">
+                  <tr v-for="(r, i) in resultRows" :key="i">
                     <td>{{ r.target }}</td>
                     <td>
-                      <span :class="['sb-badge', r.success ? (r.skipped ? '' : 'sb-badge--ok') : 'sb-badge--bad']">
-                        {{ r.success ? (r.skipped ? 'Hoppet over' : 'OK') : 'Feil' }}
+                      <span :class="['sb-badge', r.outcome.badgeClass]">
+                        {{ r.outcome.label }}
                       </span>
                     </td>
                     <td class="sb-mono">{{ r.voucherId || '' }}</td>
@@ -375,6 +375,9 @@ export default {
     },
     voucherIsBalanced () {
       return Math.abs(this.voucherBalance) < 0.005;
+    },
+    resultRows () {
+      return this.results.map(r => Object.assign({}, r, { outcome: this.runOutcome(r) }));
     }
   },
   mounted () {
@@ -388,6 +391,23 @@ export default {
     this.init();
   },
   methods: {
+    // `AccountingExportResult` carries two independent booleans, so an export run has four outcomes
+    // and only ONE of them is a failure. The pair that matters is `success:false, skipped:true`:
+    // another run already holds this external key, the unique index refused the second claim, and
+    // that is the idempotence guarantee working exactly as designed. Painting it red tells the
+    // operator to press the button again, and pressing it again is the one action that can put a
+    // second voucher into Tripletex under one external number — so it stays neutral, and says that
+    // somebody else is posting rather than that nothing happened.
+    runOutcome (r) {
+      if (r.success) {
+        return r.skipped
+          ? { label: 'Hoppet over', badgeClass: '' }
+          : { label: 'OK', badgeClass: 'sb-badge--ok' };
+      }
+      return r.skipped
+        ? { label: 'Kjøres allerede', badgeClass: '' }
+        : { label: 'Feil', badgeClass: 'sb-badge--bad' };
+    },
     emptyForm () {
       return {
         apiToken: '',
