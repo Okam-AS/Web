@@ -1,0 +1,140 @@
+{
+  "test": "test/workforce-publications-page.test.js",
+  "mutations": [
+    {
+      "id": "P01 the scheduler gate removed from BOTH init and loadHistory",
+      "expect": "nothing is read and the refusal says so",
+      "edits": [
+        {
+          "file": "pages/admin/workforce-publications.vue",
+          "from": "      if (!this.canSchedule) { return; }\n      await this.loadHistory();",
+          "to": "      await this.loadHistory();"
+        },
+        {
+          "file": "pages/admin/workforce-publications.vue",
+          "from": "    async loadHistory () {\n      if (!this.canSchedule || !this.storeId) { return; }",
+          "to": "    async loadHistory () {\n      if (!this.storeId) { return; }"
+        }
+      ]
+    },
+    {
+      "id": "P02 the scheduler refusal section is dropped",
+      "file": "pages/admin/workforce-publications.vue",
+      "from": "      <section v-else-if=\"!canSchedule\" class=\"wfp-page__refusal\" data-testid=\"wfp-refusal\">",
+      "to": "      <section v-else-if=\"false\" class=\"wfp-page__refusal\" data-testid=\"wfp-refusal\">",
+      "expect": "nothing is read and the refusal says so"
+    },
+    {
+      "id": "P03 the manager-only refusal becomes an empty roster instead",
+      "file": "pages/admin/workforce-publications.vue",
+      "from": "        <section v-if=\"!canManage\" class=\"wfp-page__refusal\" data-testid=\"wfp-manager-only\">",
+      "to": "        <section v-if=\"false\" class=\"wfp-page__refusal\" data-testid=\"wfp-manager-only\">",
+      "expect": "TOLD the roster is manager-only"
+    },
+    {
+      "id": "P04 the roster read fires without the manager grant",
+      "file": "pages/admin/workforce-publications.vue",
+      "from": "      if (!this.canManage || !publicationId || !this.storeId) { return; }",
+      "to": "      if (!publicationId || !this.storeId) { return; }",
+      "expect": "never fires the recipient read"
+    },
+    {
+      "id": "P05 403 and non-403 context messages swapped",
+      "file": "pages/admin/workforce-publications.vue",
+      "from": "        this.contextError = isWorkforceApiError(e) && e.status === 403\n          ? this.$i('wfp_no_capability')\n          : this.$i('wfp_context_failed');",
+      "to": "        this.contextError = isWorkforceApiError(e) && e.status === 403\n          ? this.$i('wfp_context_failed')\n          : this.$i('wfp_no_capability');",
+      "expect": "403 on the context read names the grant"
+    },
+    {
+      "id": "P06 a failed history read falls through to an empty history",
+      "file": "pages/admin/workforce-publications.vue",
+      "from": "        // Left null: the list renders its `unknown` state, which says the history could not be read.\n        // It deliberately does NOT fall through to \"this store has never published\".\n        this.publications = null;",
+      "to": "        this.publications = [];",
+      "expect": "never reads as \"this store has never published\""
+    },
+    {
+      "id": "P07 an answered empty history is reported as unreadable",
+      "file": "pages/admin/workforce-publications.vue",
+      "from": "      return listPublications(this.publications === null ? RECEIPTS_UNKNOWN : this.publications);",
+      "to": "      return listPublications(RECEIPTS_UNKNOWN);",
+      "expect": "answered with no publications is a DIFFERENT sentence"
+    },
+    {
+      "id": "P08 a failed roster read falls through to an empty roster",
+      "file": "pages/admin/workforce-publications.vue",
+      "from": "      return summariseRecipients(this.recipients === null ? RECEIPTS_UNKNOWN : this.recipients, addressed);",
+      "to": "      return summariseRecipients(this.recipients === null ? [] : this.recipients, addressed);",
+      "expect": "roster read that failed says the roster is unreadable"
+    },
+    {
+      "id": "P09 the nothing-picked-yet state is dropped",
+      "file": "components/admin/workforce/WorkforcePublicationRecipients.vue",
+      "from": "    <div v-if=\"!publication\" class=\"wf-pubrec__state wf-pubrec__state--idle\" data-testid=\"wf-pubrec-idle\">",
+      "to": "    <div v-if=\"false\" class=\"wf-pubrec__state wf-pubrec__state--idle\" data-testid=\"wf-pubrec-idle\">",
+      "expect": "before anything is picked the roster says so"
+    },
+    {
+      "id": "P10 hand-delivered rows are folded into the confirmed bucket",
+      "file": "components/admin/workforce/WorkforcePublicationRecipients.vue",
+      "from": "          :rows=\"summary.confirmed\"",
+      "to": "          :rows=\"summary.confirmed.concat(summary.byHand)\"",
+      "expect": "hand-delivery note is never counted as the worker confirming"
+    },
+    {
+      "id": "P11 the no-receipt bucket is not rendered",
+      "file": "components/admin/workforce/WorkforcePublicationRecipients.vue",
+      "from": "          v-if=\"summary.noReceipt.length\"",
+      "to": "          v-if=\"false\"",
+      "expect": "lands with the rows that have no receipt at all"
+    },
+    {
+      "id": "P12 the addressed-versus-listed gap is never shown",
+      "file": "components/admin/workforce/WorkforcePublicationRecipients.vue",
+      "from": "          v-if=\"summary.shortBy\"",
+      "to": "          v-if=\"false\"",
+      "expect": "names how many workers it could not name"
+    },
+    {
+      "id": "P13 the gap note is shown even when the two counts agree",
+      "file": "components/admin/workforce/WorkforcePublicationRecipients.vue",
+      "from": "          v-if=\"summary.shortBy\"",
+      "to": "          v-if=\"summary.shortBy !== null\"",
+      "expect": "roster that matches the publish count raises no gap"
+    },
+    {
+      "id": "P14 a replaced week is not marked in the list",
+      "file": "components/admin/workforce/WorkforcePublicationList.vue",
+      "from": "            <span v-if=\"row.superseded\" class=\"wf-publist__tag wf-publist__tag--old\" data-testid=\"wf-publist-superseded\">",
+      "to": "            <span v-if=\"false\" class=\"wf-publist__tag wf-publist__tag--old\" data-testid=\"wf-publist-superseded\">",
+      "expect": "replaced week is marked in the list"
+    },
+    {
+      "id": "P15 every roster carries the superseded warning",
+      "file": "components/admin/workforce/WorkforcePublicationRecipients.vue",
+      "from": "      <div v-if=\"publication.superseded\"",
+      "to": "      <div v-if=\"publication\"",
+      "expect": "carries no warning of its own"
+    },
+    {
+      "id": "P16 the list always opens the first row rather than the one clicked",
+      "file": "components/admin/workforce/WorkforcePublicationList.vue",
+      "from": "          @click=\"$emit('select', row.id)\"",
+      "to": "          @click=\"$emit('select', history.rows[0].id)\"",
+      "expect": "picking a second week asks the server about THAT week"
+    },
+    {
+      "id": "P17 a vanished week keeps its roster on screen",
+      "file": "pages/admin/workforce-publications.vue",
+      "from": "      if (this.selectedId && !this.history.rows.some(r => r.id === this.selectedId)) {\n        this.selectedId = null;\n        this.recipients = null;\n      }",
+      "to": "",
+      "expect": "stops describing a roster"
+    },
+    {
+      "id": "P18 the superseded warning is placed BELOW the buckets",
+      "file": "components/admin/workforce/WorkforcePublicationList.vue",
+      "from": "            <span v-else class=\"wf-publist__tag wf-publist__tag--now\">",
+      "to": "            <span v-else class=\"wf-publist__tag wf-publist__tag--old\" data-testid=\"wf-publist-superseded\">",
+      "expect": "carries no warning of its own"
+    }
+  ]
+}

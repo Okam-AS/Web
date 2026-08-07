@@ -1,0 +1,28 @@
+{
+  "test": "test/workforce-publications-page.test.js",
+  "mutations": [
+    {
+      "id": "P17b a vanished week is kept AND invented back into the list",
+      "expect": "stops describing a roster",
+      "edits": [
+        {
+          "file": "pages/admin/workforce-publications.vue",
+          "from": "      if (this.selectedId && !this.history.rows.some(r => r.id === this.selectedId)) {\n        this.selectedId = null;\n        this.recipients = null;\n      }",
+          "to": ""
+        },
+        {
+          "file": "pages/admin/workforce-publications.vue",
+          "from": "      return this.history.rows.find(r => r.id === this.selectedId) || null;",
+          "to": "      return this.history.rows.find(r => r.id === this.selectedId) ||\n        { id: this.selectedId, superseded: false, addressed: null, rangeStartUtc: null, rangeEndUtc: null };"
+        }
+      ]
+    },
+    {
+      "id": "P18 every row in the history is marked superseded",
+      "file": "components/admin/workforce/WorkforcePublicationList.vue",
+      "from": "            <span v-else class=\"wf-publist__tag wf-publist__tag--now\">",
+      "to": "            <span v-else class=\"wf-publist__tag wf-publist__tag--old\" data-testid=\"wf-publist-superseded\">",
+      "expect": "replaced week is marked in the list"
+    }
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "test": "test/workforce-delivery-page.test.js",
+  "mutations": [
+    {
+      "id": "D01 the manager gate removed from BOTH init and load",
+      "expect": "nothing is read and the refusal says so",
+      "edits": [
+        {
+          "file": "pages/admin/workforce-delivery.vue",
+          "from": "      if (!this.canManage) { return; }\n",
+          "to": ""
+        },
+        {
+          "file": "pages/admin/workforce-delivery.vue",
+          "from": "    async load () {\n      if (!this.canManage || !this.storeId) { return; }",
+          "to": "    async load () {\n      if (!this.storeId) { return; }"
+        }
+      ]
+    },
+    {
+      "id": "D02 the capability refusal section is dropped",
+      "file": "pages/admin/workforce-delivery.vue",
+      "from": "      <section v-else-if=\"!canManage\" class=\"wfd-page__refusal\" data-testid=\"wfd-refusal\">",
+      "to": "      <section v-else-if=\"false\" class=\"wfd-page__refusal\" data-testid=\"wfd-refusal\">",
+      "expect": "nothing is read and the refusal says so"
+    },
+    {
+      "id": "D03 403 and non-403 context messages swapped",
+      "file": "pages/admin/workforce-delivery.vue",
+      "from": "        this.contextError = isWorkforceApiError(e) && e.status === 403\n          ? this.$i('wfd_no_capability')\n          : this.$i('wfd_context_failed');",
+      "to": "        this.contextError = isWorkforceApiError(e) && e.status === 403\n          ? this.$i('wfd_context_failed')\n          : this.$i('wfd_no_capability');",
+      "expect": "403 on the context read names the grant"
+    },
+    {
+      "id": "D04 a failed report falls through to the all-clear",
+      "file": "pages/admin/workforce-delivery.vue",
+      "from": "        // Left as null: the panel renders its `unknown` state, which says the report could not be\n        // read. It deliberately does NOT fall through to the \"nothing outstanding\" state.\n        this.rows = null;",
+      "to": "        this.rows = [];",
+      "expect": "never that nothing is outstanding"
+    },
+    {
+      "id": "D05 an answered empty report is reported as unreadable",
+      "file": "pages/admin/workforce-delivery.vue",
+      "from": "      return summarise(this.rows === null ? DELIVERY_UNKNOWN : this.rows, this.roster);",
+      "to": "      return summarise(DELIVERY_UNKNOWN, this.roster);",
+      "expect": "DIFFERENT sentence from one whose read failed"
+    },
+    {
+      "id": "D06 a refresh keeps the previous answer up while the new one is in flight",
+      "file": "pages/admin/workforce-delivery.vue",
+      "from": "      // Back to UNKNOWN while in flight, so a refresh that fails cannot leave the previous answer on\n      // screen under a fresh timestamp.\n      this.rows = null;\n",
+      "to": "",
+      "expect": "refresh that failed takes the previous answer down"
+    },
+    {
+      "id": "D07 the waiting tier is rendered with the gave-up rows",
+      "file": "components/admin/workforce/WorkforceDeliveryPanel.vue",
+      "from": "        :rows=\"summary.waiting\"",
+      "to": "        :rows=\"summary.waiting.concat(summary.gaveUp)\"",
+      "expect": "separate groups, each counting only itself"
+    },
+    {
+      "id": "D08 every group prints a panel-wide total instead of its own count",
+      "file": "components/admin/workforce/WorkforceDeliveryGroup.vue",
+      "from": "      <span class=\"wf-dgroup__count\" :data-testid=\"testid + '-count'\">{{ rows.length }}</span>",
+      "to": "      <span class=\"wf-dgroup__count\" :data-testid=\"testid + '-count'\">3</span>",
+      "expect": "no number anywhere on the panel spans the two tiers"
+    },
+    {
+      "id": "D09 an unrecognised status is defaulted into the worker tier",
+      "file": "components/admin/workforce/WorkforceDeliveryPanel.vue",
+      "from": "        v-if=\"summary.unrecognised.length\"",
+      "to": "        v-if=\"false\"",
+      "expect": "counted on its own, never defaulted into a tier"
+    },
+    {
+      "id": "D10 a live retry shows the gave-up stamp",
+      "file": "components/admin/workforce/WorkforceDeliveryGroup.vue",
+      "from": "          <span v-if=\"row.terminal && row.deadLetteredAtUtc\">",
+      "to": "          <span v-if=\"row.deadLetteredAtUtc\">",
+      "expect": "says when it gave up"
+    },
+    {
+      "id": "D11 the next-attempt line is dropped",
+      "file": "components/admin/workforce/WorkforceDeliveryGroup.vue",
+      "from": "          <span v-else-if=\"!row.terminal && row.nextAttemptUtc\">",
+      "to": "          <span v-else-if=\"false\">",
+      "expect": "says when it will try again"
+    },
+    {
+      "id": "D12 an explained reason is shown as the raw code instead",
+      "file": "components/admin/workforce/WorkforceDeliveryGroup.vue",
+      "from": "      return row.reasonKey\n        ? this.$i(row.reasonKey)\n        : this.$i('wf_delivery_reason_unrecognised', { code: row.lastError || '—' });",
+      "to": "      return this.$i('wf_delivery_reason_unrecognised', { code: row.lastError || '—' });",
+      "expect": "rendered as the sentence, not as the code"
+    },
+    {
+      "id": "D13 an unexplained code is guessed at rather than shown",
+      "file": "components/admin/workforce/WorkforceDeliveryGroup.vue",
+      "from": "        : this.$i('wf_delivery_reason_unrecognised', { code: row.lastError || '—' });",
+      "to": "        : this.$i('wf_delivery_reason_no_push_registration');",
+      "expect": "shown VERBATIM and said to be unexplained"
+    },
+    {
+      "id": "D14 the addressless notice is dropped",
+      "file": "components/admin/workforce/WorkforceDeliveryGroup.vue",
+      "from": "          <span v-if=\"isAddressless(row)\">{{ $i('wf_delivery_no_address') }}</span>",
+      "to": "          <span v-if=\"false\">{{ $i('wf_delivery_no_address') }}</span>",
+      "expect": "says we hold no address at all"
+    },
+    {
+      "id": "D15 a redacted address is misread as no address at all",
+      "file": "components/admin/workforce/WorkforceDeliveryGroup.vue",
+      "from": "      return String(row.targetLabel || '').toLowerCase() === '[none]';",
+      "to": "      return !!row.targetLabel;",
+      "expect": "merely redacted is not reported as addressless"
+    },
+    {
+      "id": "D16 the roster failure takes the whole page down with it",
+      "file": "pages/admin/workforce-delivery.vue",
+      "from": "        .catch(() => null);",
+      "to": "        .catch(() => { this.rows = []; return null; });",
+      "expect": "still leaves the dead letter on screen"
+    },
+    {
+      "id": "D17 an unnamed recipient is printed as a name",
+      "file": "components/admin/workforce/WorkforceDeliveryGroup.vue",
+      "from": "      return row.staffLabel || this.$i('wf_delivery_unnamed');",
+      "to": "      return row.staffLabel || 'Unknown';",
+      "expect": "said to be unnamed, never called \"Unknown\""
+    },
+    {
+      "id": "D18 the roster names any worker it happens to hold",
+      "file": "utils/workforce/delivery-failures.js",
+      "from": "  const hit = roster.find(s => s && s.staffMemberId === staffMemberId);",
+      "to": "  const hit = roster[0];",
+      "expect": "said to be unnamed, never called \"Unknown\""
+    }
+  ]
+}

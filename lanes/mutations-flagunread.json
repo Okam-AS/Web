@@ -1,0 +1,65 @@
+{
+ "test": [
+  "test/workforce-timesheets-page.test.js",
+  "test/workforce-timesheet.test.js",
+  "test/workforce-timesheet-components.test.js"
+ ],
+ "mutations": [
+  {
+   "id": "F01 the page collapses an unread flag back to false",
+   "file": "pages/admin/workforce-timesheets.vue",
+   "from": "      if (!this.listResult) { return null; }\n      return !!this.listResult.exportEnabled;",
+   "to": "      return !!(this.listResult && this.listResult.exportEnabled);",
+   "expect": "does not tell a manager the export flag is off when the flag was never read"
+  },
+  {
+   "id": "F02 approveAvailability stops distinguishing unread from off",
+   "file": "utils/workforce/timesheet.js",
+   "from": "  if (flagState(opts.exportEnabled) === 'unread') {\n    return { enabled: false, reasonKey: 'wft_gate_flag_unread' };\n  }\n  if (opts.exportEnabled !== true) {\n    return { enabled: false, reasonKey: 'wft_gate_flag_off' };\n  }\n  if (!period) {\n    return { enabled: false, reasonKey: 'wft_gate_no_period' };\n  }\n  if (period.status === STATUS_APPROVED || period.status === STATUS_EXPORTED) {",
+   "to": "  if (opts.exportEnabled !== true) {\n    return { enabled: false, reasonKey: 'wft_gate_flag_off' };\n  }\n  if (!period) {\n    return { enabled: false, reasonKey: 'wft_gate_no_period' };\n  }\n  if (period.status === STATUS_APPROVED || period.status === STATUS_EXPORTED) {",
+   "expect": "withholds it while the stage flag is UNREAD"
+  },
+  {
+   "id": "F03 exportAvailability stops distinguishing unread from off",
+   "file": "utils/workforce/timesheet.js",
+   "from": "  if (flagState(opts.exportEnabled) === 'unread') {\n    return { enabled: false, reasonKey: 'wft_gate_flag_unread' };\n  }\n  if (opts.exportEnabled !== true) {\n    return { enabled: false, reasonKey: 'wft_gate_flag_off' };\n  }\n  if (!period) {\n    return { enabled: false, reasonKey: 'wft_gate_no_period' };\n  }\n  if (period.status === STATUS_OPEN) {",
+   "to": "  if (opts.exportEnabled !== true) {\n    return { enabled: false, reasonKey: 'wft_gate_flag_off' };\n  }\n  if (!period) {\n    return { enabled: false, reasonKey: 'wft_gate_no_period' };\n  }\n  if (period.status === STATUS_OPEN) {",
+   "expect": "withholds EXPORT on an unread flag"
+  },
+  {
+   "id": "F04 the panel prop defaults back to a flag it was never told about",
+   "file": "components/admin/workforce/WorkforceTimesheetPanel.vue",
+   "from": "    exportEnabled: { type: Boolean, default: null },",
+   "to": "    exportEnabled: { type: Boolean, default: false },",
+   "expect": "says the switch is unread, not off, when it was never told about the switch"
+  },
+  {
+   "id": "F05 the unread sentence is the flag-off sentence",
+   "file": "translations/no.ts",
+   "from": "  wft_gate_flag_unread: 'Vi vet ikke om eksport er sl\u00e5tt p\u00e5 for denne butikken. Dette betyr ikke at den er av.',",
+   "to": "  wft_gate_flag_unread: 'Eksport er sl\u00e5tt av for denne butikken.',",
+   "expect": "does not tell a manager the export flag is off when the flag was never read"
+  },
+  {
+   "id": "F06 an undefined flag is treated as an answered one",
+   "file": "utils/workforce/timesheet.js",
+   "from": "  if (exportEnabled === null || exportEnabled === undefined) { return 'unread'; }",
+   "to": "  if (exportEnabled === null) { return 'unread'; }",
+   "expect": "withholds it while the stage flag is UNREAD (undefined)"
+  },
+  {
+   "id": "F07 the flag-off banner stops distinguishing unread from off",
+   "file": "pages/admin/workforce-timesheets.vue",
+   "from": "          v-if=\"exportEnabled === false\"",
+   "to": "          v-if=\"!exportEnabled\"",
+   "expect": "flag-off banner is shown only once the server has actually answered"
+  },
+  {
+   "id": "F08 an answered off flag is softened into unread",
+   "file": "utils/workforce/timesheet.js",
+   "from": "function flagState (exportEnabled) {\n  if (exportEnabled === null || exportEnabled === undefined) { return 'unread'; }\n  return exportEnabled === true ? 'on' : 'off';\n}",
+   "to": "function flagState (exportEnabled) {\n  return exportEnabled === true ? 'on' : 'unread';\n}",
+   "expect": "still says so, and is not softened"
+  }
+ ]
+}

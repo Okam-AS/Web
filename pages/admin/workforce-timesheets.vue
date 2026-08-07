@@ -59,9 +59,12 @@
         </div>
 
         <!-- The stage switch, reported by the server rather than guessed at. The two writes are
-             gated on it; the three reads are not. -->
+             gated on it; the three reads are not.
+             `=== false` and not `!exportEnabled`: the computed is three-state, and an UNREAD flag
+             must not raise this banner. It is the same rule the withheld-reason beside the button
+             now follows — the two disagreeing about it is exactly what shipped. -->
         <p
-          v-if="listResult && !listResult.exportEnabled"
+          v-if="exportEnabled === false"
           class="wft-page__flag-off"
           data-testid="wft-flag-off"
         >
@@ -189,9 +192,18 @@ export default {
     canApprovePayroll () {
       return callerHas(this.capabilities, CAPABILITY_PAYROLL);
     },
-    /** The server's own answer about the stage flag, never this app's guess. */
+    /**
+     * The server's own answer about the stage flag, never this app's guess — and `null` when there
+     * IS no answer yet, which is not the same as an answer of "off".
+     *
+     * This used to be `!!(listResult && listResult.exportEnabled)`. The `!!` turned an unread flag
+     * into a read one that said "off", and the withheld-reason beside Approve then told a manager
+     * the store's export switch was off when nothing had ever asked. See `flagState` in
+     * `~/utils/workforce/timesheet`.
+     */
     exportEnabled () {
-      return !!(this.listResult && this.listResult.exportEnabled);
+      if (!this.listResult) { return null; }
+      return !!this.listResult.exportEnabled;
     },
     /**
      * The period being acted on. The DETAIL read wins when it has answered, because it is the only

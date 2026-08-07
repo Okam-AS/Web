@@ -2681,6 +2681,7 @@ export default {
   wft_exporting: 'Sender …',
   wft_gate_no_payroll_capability: 'Krever lønnstilgang.',
   wft_gate_flag_off: 'Eksport er slått av for denne butikken.',
+  wft_gate_flag_unread: 'Vi vet ikke om eksport er slått på for denne butikken. Dette betyr ikke at den er av.',
   wft_gate_no_period: 'Ingen periode er hentet.',
   wft_gate_already_approved: 'Perioden er allerede godkjent og låst.',
   wft_gate_empty: 'Ingen vakt og ingen stempling faller i denne perioden.',

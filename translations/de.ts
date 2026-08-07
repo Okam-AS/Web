@@ -2628,6 +2628,7 @@ export default {
   wft_exporting: 'Wird gesendet …',
   wft_gate_no_payroll_capability: 'Erfordert Lohnzugriff.',
   wft_gate_flag_off: 'Der Export ist für diesen Standort ausgeschaltet.',
+  wft_gate_flag_unread: 'Wir wissen nicht, ob der Export für diesen Standort eingeschaltet ist. Das heisst nicht, dass er ausgeschaltet ist.',
   wft_gate_no_period: 'Es wurde keine Periode geladen.',
   wft_gate_already_approved: 'Die Periode ist bereits genehmigt und gesperrt.',
   wft_gate_empty: 'In diese Periode fällt keine Schicht und keine Stempelung.',

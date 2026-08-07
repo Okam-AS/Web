@@ -1,0 +1,19 @@
+{
+  "test": "test/workforce-delivery-page.test.js",
+  "mutations": [
+    {
+      "id": "D10b the gave-up stamp is labelled as a next attempt",
+      "file": "components/admin/workforce/WorkforceDeliveryGroup.vue",
+      "from": "            {{ $i('wf_delivery_gaveup_at', { time: stamp(row.deadLetteredAtUtc) }) }}",
+      "to": "            {{ $i('wf_delivery_next_attempt', { time: stamp(row.deadLetteredAtUtc) }) }}",
+      "expect": "says when it gave up"
+    },
+    {
+      "id": "D16b the roster read is no longer caught, so its failure takes the page down",
+      "file": "pages/admin/workforce-delivery.vue",
+      "from": "        .catch(() => null);",
+      "to": "        .then(list => list);",
+      "expect": "still leaves the dead letter on screen"
+    }
+  ]
+}

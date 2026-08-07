@@ -90,15 +90,43 @@ export function formatMinutes (minutes) {
 }
 
 /**
+ * THE STAGE FLAG IS THREE-STATE, AND THIS IS WHERE THAT IS ENFORCED.
+ *
+ * `true` the store's export switch is on, `false` it is off — both are the SERVER'S answer, read off
+ * the list response's own field. `null`/`undefined` is UNKNOWN: the list has not answered, or the
+ * read failed, and nobody has asked the store about its switch at all.
+ *
+ * The two are kept apart for the same reason every other UNKNOWN on this surface is. "Export is
+ * switched off for this store" is a statement about the store's configuration; a page that says it
+ * because a read timed out is telling a manager something nobody established, and the sentence is
+ * one they may act on — it reads as "stop asking, an operator has to pull a lever".
+ *
+ * It shipped collapsed. `exportEnabled` on the page was `!!(listResult && listResult.exportEnabled)`,
+ * so an unread flag arrived here as `false`, and the page's own flag-off BANNER two elements away
+ * got it right (`v-if="listResult && !listResult.exportEnabled"`) while the withheld-reason beside
+ * the button did not. The path is not exotic: `refresh()` re-reads the detail whatever
+ * `ListTimesheets` did, so ANY approve or export — success or refusal — followed by one failed list
+ * re-read leaves a real period on screen under a fabricated claim about the switch.
+ */
+function flagState (exportEnabled) {
+  if (exportEnabled === null || exportEnabled === undefined) { return 'unread'; }
+  return exportEnabled === true ? 'on' : 'off';
+}
+
+/**
  * Whether the APPROVE control may be offered at all, and if not, why.
  *
  * Returns `{ enabled, reasonKey }` rather than a bare boolean: a control that is simply missing
- * teaches a manager nothing, and this surface has four distinct reasons it can be withheld. The
+ * teaches a manager nothing, and this surface has five distinct reasons it can be withheld. The
  * reason is what the page prints beside the disabled button.
  *
  * The capability and the flag are BOTH the server's answers, not this app's opinion — `capabilities`
  * comes from `GET /context` and `exportEnabled` from the list response's own field. Deriving either
  * locally would be a second copy of an authorization rule.
+ *
+ * An UNREAD flag withholds the control exactly as an off one does — a write whose gate nobody has
+ * read cannot honestly be offered, and the server would refuse it anyway. Only the SENTENCE differs,
+ * and the sentence is the whole point.
  */
 export function approveAvailability (options) {
   const opts = options || {};
@@ -106,6 +134,9 @@ export function approveAvailability (options) {
 
   if (!opts.hasPayrollCapability) {
     return { enabled: false, reasonKey: 'wft_gate_no_payroll_capability' };
+  }
+  if (flagState(opts.exportEnabled) === 'unread') {
+    return { enabled: false, reasonKey: 'wft_gate_flag_unread' };
   }
   if (opts.exportEnabled !== true) {
     return { enabled: false, reasonKey: 'wft_gate_flag_off' };
@@ -133,6 +164,8 @@ export function approveAvailability (options) {
  * decides whether there is a delta and refuses with `timesheet-nothing-to-reconcile` when there is
  * not. Hiding the button would make the adjustment path unreachable, which is the one correction
  * route an immutable period has.
+ *
+ * The flag is three-state here for the same reason it is in `approveAvailability` — see `flagState`.
  */
 export function exportAvailability (options) {
   const opts = options || {};
@@ -140,6 +173,9 @@ export function exportAvailability (options) {
 
   if (!opts.hasPayrollCapability) {
     return { enabled: false, reasonKey: 'wft_gate_no_payroll_capability' };
+  }
+  if (flagState(opts.exportEnabled) === 'unread') {
+    return { enabled: false, reasonKey: 'wft_gate_flag_unread' };
   }
   if (opts.exportEnabled !== true) {
     return { enabled: false, reasonKey: 'wft_gate_flag_off' };

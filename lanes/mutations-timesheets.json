@@ -1,0 +1,131 @@
+{
+  "test": "test/workforce-timesheets-page.test.js",
+  "mutations": [
+    {
+      "id": "M01 payroll gate removed from init",
+      "file": "pages/admin/workforce-timesheets.vue",
+      "from": "      if (!this.canApprovePayroll) { return; }\n      await this.load();",
+      "to": "      await this.load();",
+      "expect": "no wage record is read on their behalf"
+    },
+    {
+      "id": "M02 403 and non-403 context messages swapped",
+      "file": "pages/admin/workforce-timesheets.vue",
+      "from": "        this.contextError = isWorkforceApiError(e) && e.status === 403\n          ? this.$i('wft_no_payroll_capability')\n          : this.$i('wft_context_failed');",
+      "to": "        this.contextError = isWorkforceApiError(e) && e.status === 403\n          ? this.$i('wft_context_failed')\n          : this.$i('wft_no_payroll_capability');",
+      "expect": "says the grant is missing"
+    },
+    {
+      "id": "M03 default period runs up to today",
+      "file": "pages/admin/workforce-timesheets.vue",
+      "from": "      toBusinessDate: iso(yesterday),",
+      "to": "      toBusinessDate: iso(today),",
+      "expect": "ends before today"
+    },
+    {
+      "id": "M04 default period is a week, not a fortnight",
+      "file": "pages/admin/workforce-timesheets.vue",
+      "from": "const fortnightStart = new Date(yesterday.getTime() - 13 * 86400000);",
+      "to": "const fortnightStart = new Date(yesterday.getTime() - 6 * 86400000);",
+      "expect": "ends before today"
+    },
+    {
+      "id": "M05 unknown-hours decision hard-coded rather than the manager's",
+      "file": "pages/admin/workforce-timesheets.vue",
+      "from": "          allowIncomplete: !!(options && options.allowIncomplete)",
+      "to": "          allowIncomplete: false",
+      "expect": "unknown-hours decision the manager ticked"
+    },
+    {
+      "id": "M06 no re-read after a successful freeze",
+      "file": "pages/admin/workforce-timesheets.vue",
+      "from": "        this.notice = this.$i('wft_approved_notice');\n        // Re-read BOTH: the list carries the stage flag and the period's derived status, the detail\n        // carries the batches.\n        await this.refresh(target.timesheetPeriodId);",
+      "to": "        this.notice = this.$i('wft_approved_notice');",
+      "expect": "re-read from BOTH calls"
+    },
+    {
+      "id": "M07 the refusal code is dropped from the screen",
+      "file": "pages/admin/workforce-timesheets.vue",
+      "from": "          code: error.code || null,",
+      "to": "          code: null,",
+      "expect": "second freeze earns the server refusal"
+    },
+    {
+      "id": "M08 every typed refusal collapses to the generic sentence",
+      "file": "pages/admin/workforce-timesheets.vue",
+      "from": "          text: key ? this.$i(key) : this.$i('wft_refusal_unknown')",
+      "to": "          text: this.$i('wft_refusal_unknown')",
+      "expect": "second freeze earns the server refusal"
+    },
+    {
+      "id": "M09 a refused freeze does not re-read",
+      "file": "pages/admin/workforce-timesheets.vue",
+      "from": "        this.showRefusal(e, 'wft_approve_failed');\n        // A refusal changes what the server holds often enough that the screen must re-read rather\n        // than keep rendering the state it guessed at — `already-approved` is exactly the case where\n        // the period on screen is stale and the refusal is the proof.\n        await this.refresh(target.timesheetPeriodId);",
+      "to": "        this.showRefusal(e, 'wft_approve_failed');",
+      "expect": "refused freeze still re-reads"
+    },
+    {
+      "id": "M10 an untyped failure is reported with the wrong sentence",
+      "file": "pages/admin/workforce-timesheets.vue",
+      "from": "      this.refusal = { code: null, text: this.$i(fallbackKey) };",
+      "to": "      this.refusal = { code: null, text: this.$i('wft_refusal_unknown') };",
+      "expect": "network failure is reported as the act that failed"
+    },
+    {
+      "id": "M11 the export confirmation forgets the file name",
+      "file": "pages/admin/workforce-timesheets.vue",
+      "from": "        this.notice = this.$i('wft_exported_notice', { file: (batch && batch.fileName) || '' });",
+      "to": "        this.notice = this.$i('wft_exported_notice', { file: '' });",
+      "expect": "names the file the SERVER said it wrote"
+    },
+    {
+      "id": "M12 the download prefers the client's guess to the server's file name",
+      "file": "pages/admin/workforce-timesheets.vue",
+      "from": "        const name = file.fileName || batch.fileName || 'timesheet.csv';",
+      "to": "        const name = batch.fileName || file.fileName || 'timesheet.csv';",
+      "expect": "server's own file name"
+    },
+    {
+      "id": "M13 the object URL is never revoked",
+      "file": "pages/admin/workforce-timesheets.vue",
+      "from": "        window.URL.revokeObjectURL(href);\n",
+      "to": "",
+      "expect": "server's own file name"
+    },
+    {
+      "id": "M14 a failed download is swallowed",
+      "file": "pages/admin/workforce-timesheets.vue",
+      "from": "        this.showRefusal(e, 'wft_download_failed');",
+      "to": "        this.notice = '';",
+      "expect": "download that failed says so"
+    },
+    {
+      "id": "M15 a reload keeps the previous period on screen",
+      "file": "pages/admin/workforce-timesheets.vue",
+      "from": "      this.listResult = null;\n      this.detail = null;\n\n      try {\n        this.listResult = await this._timesheets.ListTimesheets(",
+      "to": "      try {\n        this.listResult = await this._timesheets.ListTimesheets(",
+      "expect": "reload that failed says the period could not be read"
+    },
+    {
+      "id": "M16 the flag-off banner stops asking whether the list answered",
+      "file": "pages/admin/workforce-timesheets.vue",
+      "from": "          v-if=\"listResult && !listResult.exportEnabled\"",
+      "to": "          v-if=\"!exportEnabled\"",
+      "expect": "flag-off banner is shown only once the server has actually answered"
+    },
+    {
+      "id": "M17 the detail read is skipped, so the batches never arrive",
+      "file": "pages/admin/workforce-timesheets.vue",
+      "from": "        if (summary) { await this.readDetail(summary.timesheetPeriodId); }",
+      "to": "        if (false) { await this.readDetail(summary.timesheetPeriodId); }",
+      "expect": "gets the period AND the batches"
+    },
+    {
+      "id": "M18 the capability refusal section is dropped from the page",
+      "file": "pages/admin/workforce-timesheets.vue",
+      "from": "      <section v-else-if=\"!canApprovePayroll\" class=\"wft-page__refusal\" data-testid=\"wft-refusal\">",
+      "to": "      <section v-else-if=\"false\" class=\"wft-page__refusal\" data-testid=\"wft-refusal\">",
+      "expect": "without the payroll grant is told so"
+    }
+  ]
+}

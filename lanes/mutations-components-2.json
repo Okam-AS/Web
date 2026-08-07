@@ -1,0 +1,12 @@
+{
+  "test": "test/workforce-publication-delivery-components.test.js",
+  "mutations": [
+    {
+      "id": "C22 the attempt budget is printed with half of it missing",
+      "file": "components/admin/workforce/WorkforceDeliveryGroup.vue",
+      "from": "          <span v-if=\"row.attemptCount !== null && row.maxAttempts !== null\">",
+      "to": "          <span v-if=\"row.attemptCount !== null\">",
+      "expect": "printed only when BOTH halves of it are known"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "test": "test/workforce-timesheets-page.test.js",
+  "mutations": [
+    {
+      "id": "M19 the payroll gate removed from BOTH init and load",
+      "expect": "no wage record is read on their behalf",
+      "edits": [
+        {
+          "file": "pages/admin/workforce-timesheets.vue",
+          "from": "      if (!this.canApprovePayroll) { return; }\n      await this.load();",
+          "to": "      await this.load();"
+        },
+        {
+          "file": "pages/admin/workforce-timesheets.vue",
+          "from": "    async load () {\n      if (!this.canApprovePayroll || !this.storeId) { return; }",
+          "to": "    async load () {\n      if (!this.storeId) { return; }"
+        }
+      ]
+    }
+  ]
+}

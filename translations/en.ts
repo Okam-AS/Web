@@ -2625,6 +2625,7 @@ export default {
   wft_exporting: 'Sending …',
   wft_gate_no_payroll_capability: 'Requires payroll access.',
   wft_gate_flag_off: 'Export is switched off for this store.',
+  wft_gate_flag_unread: 'We do not know whether export is switched on for this store. That does not mean it is off.',
   wft_gate_no_period: 'No period has been loaded.',
   wft_gate_already_approved: 'The period is already approved and frozen.',
   wft_gate_empty: 'No shift and no clocked session falls inside this period.',
