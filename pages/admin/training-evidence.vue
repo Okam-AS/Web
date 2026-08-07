@@ -50,6 +50,41 @@
           </button>
         </form>
 
+        <!-- THE HAND-OVER. The page's own sentence says this record is one that «kan legges fram ved
+             tilsyn», and until this control existed the only thing a manager could produce on the day
+             was a browser tab. It is a first-class button rather than a hint to use the browser's own
+             menu for the same reason the personalliste's is: a document somebody may be asked for
+             while an inspector stands there is not something to go hunting through a menu for.
+
+             Disabled until there is something to hand over. A print that produced the page's own
+             heading and «velg en person» is worse than no button, because it looks like the record. -->
+        <div class="trn-ev-page__actions">
+          <button
+            class="trn-btn"
+            type="button"
+            :disabled="!canPrint"
+            data-test="evidence-print"
+            @click="printDocument"
+          >
+            {{ $i('trn_ev_print') }}
+          </button>
+          <p class="trn-form__hint" data-test="evidence-print-hint">
+            {{ $i('trn_ev_print_hint') }}
+          </p>
+          <p v-if="printFailure" class="trn-note trn-note--blocked" data-test="evidence-print-failure">
+            {{ printFailure }}
+          </p>
+        </div>
+
+        <!-- PAPER ONLY — revealed by this page's print block and by nothing else. On screen the
+             browser tab, the sidebar and the page heading all say what is being looked at; on paper
+             none of them survive, and a sheet handed over unnamed is a sheet about nothing. -->
+        <div class="trn-ev-page__sheet-head">
+          <h2 class="trn-ev-page__sheet-title">
+            {{ $i('trn_ev_page_title') }}
+          </h2>
+        </div>
+
         <TrainingEvidenceDocument
           :read="evidence"
           :locale="locale"
@@ -87,7 +122,7 @@ import {
   TRAINING_FLAG_DISABLED_READ_ONLY
 } from '~/utils/training/training-client';
 import { WorkforceRosterService } from '~/utils/workforce/roster-client';
-import { personDirectory, zoneIdOf, zoneIsFallback, isReferenceId } from '~/utils/training/journey';
+import { personDirectory, zoneIdOf, zoneIsFallback, isReferenceId, READ_ANSWERED } from '~/utils/training/journey';
 import { readEvidence } from '~/utils/training/evidence';
 
 const ERROR_KEYS = {
@@ -163,7 +198,12 @@ export default {
       evidenceError: null,
       asked: false,
       loading: false,
-      failure: ''
+      failure: '',
+      // Its own line rather than the read's banner. `failure` is keyed on a `training.*` code the
+      // server issued; this one is about the browser in front of the manager and the server has no
+      // opinion about it, so folding the two together would attribute a browser's limitation to the
+      // module.
+      printFailure: ''
     };
   },
   computed: {
@@ -197,6 +237,18 @@ export default {
     canSubmit () {
       return !this.busy && isReferenceId(this.personRef);
     },
+    /**
+     * Nothing is offered for printing until a document has actually answered.
+     *
+     * `answered` and not «asked»: an idle page, a refusal and a read that never came back all render
+     * a sentence rather than a record, and putting any of those three on paper under this page's
+     * heading would hand somebody a document that looks like a clean file and is not one. The three
+     * sentences DO print if a manager reaches the browser's own print command — see the component's
+     * print rules — because a sheet saying «the server declined» is honest and a blank one is not.
+     */
+    canPrint () {
+      return !this.busy && this.evidence.state === READ_ANSWERED;
+    },
     zoneFootnote () {
       if (!this.zoneId) { return this.$i('trn_footnote_zone_utc'); }
       return zoneIsFallback(this.context)
@@ -216,6 +268,7 @@ export default {
       this.gate = GATE_UNKNOWN;
       this.context = null;
       this.failure = '';
+      this.printFailure = '';
       // The document belongs to the store it was read from. Switching stores clears it rather than
       // re-fetching: re-fetching would write a disclosure nobody asked for, and keeping it on screen
       // would label one store's record with another store's heading.
@@ -246,6 +299,31 @@ export default {
     submit () {
       if (!this.canSubmit) { return; }
       this.open(this.personRef.trim());
+    },
+
+    /**
+     * THE COPY THAT LEAVES THE BUILDING.
+     *
+     * `window.print()` is what produces it; the stylesheets at the bottom of this file and of
+     * `TrainingEvidenceDocument.vue` are what make the output a document rather than a screenshot of
+     * an admin panel — the page heading, the lookup form, this button and the sidebar all come off
+     * the paper, and every claim the document carries stays on it. The browser's own «save as PDF»
+     * is the same pipeline, so the same press yields either paper or a file.
+     *
+     * NOTHING IS RE-READ. The record already on screen is the record that prints: a second fetch
+     * would append a second disclosure to an append-only ledger for a manager who only pressed
+     * print, and the row would say the file was opened twice.
+     *
+     * A browser exposing no print command is TOLD about rather than left with a control that appears
+     * to work and silently does nothing — which is the failure this whole page exists to avoid.
+     */
+    printDocument () {
+      this.printFailure = '';
+      if (typeof window === 'undefined' || typeof window.print !== 'function') {
+        this.printFailure = this.$i('trn_ev_print_unavailable');
+        return;
+      }
+      window.print();
     },
 
     /**
@@ -359,4 +437,118 @@ export default {
   color: #64748b;
   font-style: italic;
 }
+
+.trn-ev-page__actions {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 16px 0 20px;
+
+  .trn-form__hint {
+    margin: 0;
+    flex: 1 1 260px;
+  }
+
+  .trn-note {
+    flex: 1 1 100%;
+    margin: 0;
+  }
+}
+
+// Paper only. Revealed by the print block below and by nothing else.
+.trn-ev-page__sheet-head {
+  display: none;
+}
+
+/* ---- THE PAGE HALF OF THE PRINT PATH ------------------------------------------------------------
+   The component half lives in `TrainingEvidenceDocument.vue` and decides how the record itself sets
+   on paper. This half decides that nothing ELSE on the page reaches it.
+
+   SCOPED, AND THAT IS THE WHOLE GUARD. Every selector below carries this page's `data-v-` attribute,
+   so it cannot reach a screen this page did not render — even though a Nuxt chunk's CSS stays loaded
+   after navigation. No body class, no `head()`, nothing anyone has to apply and therefore nothing to
+   forget: the estate has already shipped one print stylesheet guarded by a class set imperatively on
+   `document.body`, which vue-meta rebuilt from its own map. The class was wiped, the rules stayed in
+   the file, and the document printed with the admin shell down the side of it for as long as nobody
+   looked. `pages/admin/events-pipeline.vue` records that diagnosis in full.
+
+   DEFAULT-DENY. Everything comes off the paper and three things are named back in: the paper-only
+   heading, the document, and the two footnotes — the zone every instant on the sheet is stated in,
+   and what the record's scope is. Both of those are qualifications on the figures above them, and a
+   record printed without them would be over-claiming in exactly the direction that matters. What is
+   NOT named back in is the page intro, the lookup form, this page's own controls and the disclosure
+   notice: a warning about an act the reader is about to perform has nothing to say on a sheet that
+   is the result of having performed it, and a control is not part of the document it produces.
+
+   The default-deny is also what covers whatever a later lane adds beside them.
+
+   `.trn-ev` is `TrainingEvidenceDocument`'s root, and Vue stamps THIS page's scope id onto a child
+   component's root element — which is why it is reachable from here and its innards are not. That is
+   the correct seam: what happens inside the record is the component's business. */
+@media print {
+  .trn-ev-page {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .trn-ev-page > * {
+    display: none !important;
+  }
+
+  .trn-ev-page__sheet-head {
+    display: block !important;
+    border-bottom: 1.5pt solid #000;
+    margin: 0 0 10pt;
+    padding-bottom: 6pt;
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  .trn-ev-page__sheet-title {
+    font-size: 15pt;
+    font-weight: 600;
+    color: #000;
+    margin: 0;
+  }
+
+  .trn-ev-page > .trn-ev {
+    display: block !important;
+  }
+
+  .trn-ev-page__footnote {
+    display: block !important;
+    color: #000;
+    font-style: normal;
+    font-size: 8pt;
+    margin: 8pt 0 0;
+  }
+}
+/* ---- THERE IS NO `@page` BOX HERE, AND THAT IS A MEASUREMENT RATHER THAN AN OMISSION ------------
+   The two print paths this page was modelled on both declare a named page box — `@page wfpl-sheet`
+   on the personalliste, `@page ev-runsheet` on the run sheet — and claim it from a scoped rule, so
+   the sheet comes out A4 at 14 mm regardless of the dialog. This page had the same pair and it was
+   REMOVED after reading the file it produced:
+
+     • A BLANK FIRST SHEET. `.trn-ev-page` is not the first box in the printed flow (the admin shell
+       wraps it), so claiming a named box part-way through forced a page break: the record began on
+       sheet two and sheet one came out of the printer empty. Handing an inspector a blank first page
+       is not a cosmetic defect.
+     • THE RIGHT-HAND EDGE CUT OFF. With the named box's 14 mm margin applied to the page and the
+       device margin still at the dialog's value, the document was laid out at the full paper width
+       and cropped at the narrower one. `Opphav` printed as `Opp`, `I journalen` as `I journa`, and
+       the ledger's delta column stopped mid-JSON — a document that LOOKS complete on paper and is
+       missing the column naming who filed each row.
+
+   Both were read out of the produced PDF with `pdftotext`, before and after. Without the named box
+   the record prints on the paper the manager chose, at the browser's own margins, on two sheets with
+   nothing cut off. A guaranteed 14 mm is worth less than a page that carries all of its columns.
+
+   No rule reaching `.admin__content`, `.admin__main` or `body` either. Those are ancestors of this
+   page's scope, so touching them means an unscoped rule — the thing this whole arrangement avoids —
+   and the shell's own components already take themselves off the paper (`AdminPageHeader.vue` hides
+   `.admin-nav`, `OnboardingNotification.vue` hides its banner, each in its own scoped `@media
+   print`). Measured at the printable width under emulated print media, `.admin__content` and every
+   box inside it are exactly the page width with no overflow, so there is nothing left to correct. */
 </style>

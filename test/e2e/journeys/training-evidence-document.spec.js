@@ -44,6 +44,9 @@
 // says so, rather than re-filing a defect that already has a home. Every other click here is a real
 // pointer click, and the evidence page's own control is measured below rather than assumed.
 
+const fs = require('fs');
+const path = require('path');
+const { spawnSync } = require('child_process');
 const { test, journeyDetails, expect } = require('../support/journey');
 const { signIn } = require('../support/admin');
 const { turnOn } = require('../support/flags');
@@ -80,6 +83,41 @@ async function ledger (personRef) {
   return response.json();
 }
 
+/**
+ * What the printer would actually put on the paper.
+ *
+ * Walks the rendered tree under whatever media is currently emulated and keeps only the text of
+ * elements the cascade leaves visible, exactly as `events-runsheet-print` does — `getComputedStyle`
+ * reflects the emulated media in Chromium, so under `media: 'print'` this is the printed document's
+ * text and nothing else.
+ *
+ * `checkVisibility()` on top of `display`/`visibility`, and it is load-bearing HERE in a way it is
+ * not on the run sheet: this document's material inputs sit behind a `<details>`, and a current
+ * engine hides a closed one with `content-visibility: hidden` on a `::details-content` box. Its
+ * `display` is not `none`, so a walker asking only about `display` would report the pages and the
+ * quiz as being on the paper while the printer left them off — the one false positive that would
+ * make this whole step worthless.
+ */
+function visibleText (page) {
+  return page.evaluate(() => {
+    const parts = [];
+    const walk = (node) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const text = node.textContent.replace(/\s+/g, ' ').trim();
+        if (text) { parts.push(text); }
+        return;
+      }
+      if (node.nodeType !== Node.ELEMENT_NODE) { return; }
+      const style = window.getComputedStyle(node);
+      if (style.display === 'none' || style.visibility === 'hidden') { return; }
+      if (typeof node.checkVisibility === 'function' && !node.checkVisibility()) { return; }
+      node.childNodes.forEach(walk);
+    };
+    document.body.childNodes.forEach(walk);
+    return parts.join(' ');
+  });
+}
+
 /** The civil day the venue's own clock is on, which is the day the document prints. */
 function osloDay () {
   return new Intl.DateTimeFormat('no', {
@@ -100,7 +138,11 @@ test(
       'training.evidence.disclosure-recorded-on-read',
       'training.evidence.disclosure-not-written-on-arrival',
       'training.evidence.audit-chain-is-not-an-access-log',
-      'training.evidence.absent-person-is-not-an-empty-record'
+      'training.evidence.absent-person-is-not-an-empty-record',
+      // The record can be HANDED OVER. Until this lane the page promised one that «kan legges fram
+      // ved tilsyn» and the product had no export of any kind — no file, no download, not even a
+      // print stylesheet — so a manager asked for it on the day could show an inspector a tab.
+      'training.evidence.record-can-be-produced-on-paper'
     ]
   }),
   async ({ page, journey }) => {
@@ -356,6 +398,129 @@ test(
       expect(after.disclosures).toBe(2);
       return 'ledger: 2 evidence.read rows for one person';
     });
+
+    // ---- THE RECORD IS HANDED OVER -------------------------------------------------------------
+    //
+    // The page's own sentence calls this the record «slik den kan legges fram ved tilsyn». That is a
+    // promise about a thing the venue can produce, and this is where it is made falsifiable: the
+    // control is pressed, the browser's cascade is asked what lands on the paper, and then the FILE
+    // the same pipeline produces is read back. The three instruments answer different questions and
+    // the last one has already caught what the first two could not — the first stylesheet this lane
+    // wrote passed every DOM assertion below and produced a PDF whose `Opphav` column printed as
+    // `Opp`, with a blank leading sheet, because a named `@page` box laid the document out at one
+    // width and cropped it at another.
+    await journey.step('the record can be handed over — the control produces a document', async () => {
+      const button = page.locator('[data-test="evidence-print"]');
+      await expect(button).toBeEnabled();
+      // Bound to the browser's own print, which is what produces both paper and «save as PDF». The
+      // command is stubbed because a headless run has no dialog; what is being measured is that the
+      // page's button reaches it at all, which is the wire four module journeys on this branch were
+      // missing.
+      const reached = await page.evaluate(() => {
+        let called = false;
+        const original = window.print;
+        window.print = () => { called = true; };
+        document.querySelector('[data-test="evidence-print"]').click();
+        window.print = original;
+        return called;
+      });
+      expect(reached).toBe(true);
+      return 'the control is live and reaches window.print';
+    });
+
+    const printed = await journey.step('what the printer would put on the paper', async () => {
+      // On SCREEN first. «Not on the paper» is worth nothing on its own: it is trivially true of a
+      // page that failed to load, and of a build where the whole panel is missing. Proving both
+      // halves are really there, and only then switching the media, is the difference between
+      // evidence and a test that passed on a blank page.
+      const screen = await visibleText(page);
+      expect(screen).toContain('Å hente dette dokumentet er selv en utlevering');
+      expect(screen).toContain('Hent dokumentasjonen');
+
+      await page.emulateMedia({ media: 'print' });
+      const paper = await visibleText(page);
+
+      // ON the paper: what the document is, who it is about, and every claim beside the value it was
+      // computed from. The material is the one that matters most — it sits behind a `<details>` on
+      // screen, a printer cannot open one, and a hash printed without the pages it was taken over is
+      // a figure an inspector can only believe.
+      expect(paper).toContain(PAGE_TITLE);
+      expect(paper).toContain(world.STAFF[0].displayName);
+      expect(paper).toContain(OLA);
+      expect(paper).toContain('Grense 80%');
+      expect(paper).toContain('Krysskontaminering');
+
+      // OFF the paper: the page's own furniture. A control is not part of the document it produces,
+      // and a warning about an act the reader is about to perform has nothing to say on the sheet
+      // that is the result of having performed it.
+      expect(paper).not.toContain('Å hente dette dokumentet er selv en utlevering');
+      expect(paper).not.toContain('Hent dokumentasjonen');
+      expect(paper).not.toContain('Skriv ut dokumentasjonen');
+      expect(paper).not.toContain('Én persons samlede opplæringsjournal');
+
+      return paper.length + ' characters on the sheet (screen: ' + screen.length + '); ' +
+        'the frozen threshold and the material are on it, the form and the notice are not';
+    });
+
+    await journey.shot('the record as it will print');
+
+    // Kept out of the step so the step's `detail` stays a RELATIVE description — an artifact read in
+    // a review should not carry the absolute path of the laptop that produced it.
+    const pdfFile = path.join(journey.dir, 'training-evidence.pdf');
+
+    await journey.step('produce the file a manager hands over', async () => {
+      fs.mkdirSync(path.dirname(pdfFile), { recursive: true });
+      await page.pdf({ path: pdfFile, format: 'A4', printBackground: false });
+      const bytes = fs.statSync(pdfFile).size;
+      expect(bytes).toBeGreaterThan(1000);
+      return journey.relativeDir + '/training-evidence.pdf (' + bytes + ' bytes)';
+    });
+
+    await journey.step('read the produced file back', () => {
+      // `pdftotext` (poppler) is NOT a dependency of this repo, and a journey that cannot run without
+      // a tool nobody has installed is a journey nobody runs. So this is conditional — and because a
+      // check that silently skips is the assertion-that-cannot-fail this project keeps paying for,
+      // WHICH MODE RAN is recorded either way.
+      const probe = spawnSync('pdftotext', ['-v'], { encoding: 'utf8' });
+      if (probe.error) {
+        journey.finding('note', 'the produced file was not read back',
+          '`pdftotext` is not on this machine, so the PDF was verified by size only. The content ' +
+          'assertions for this capability are the browser-cascade ones above; install poppler to ' +
+          'have the bytes checked too.');
+        return 'skipped: pdftotext not installed (' + printed + ')';
+      }
+      const out = spawnSync('pdftotext', [pdfFile, '-'], { encoding: 'utf8' });
+      expect(out.status).toBe(0);
+      const text = out.stdout.replace(/\s+/g, ' ');
+
+      expect(text).toContain(PAGE_TITLE);
+      expect(text).toContain(OLA);
+      expect(text).toContain('Krysskontaminering');
+      expect(text).not.toContain('Skriv ut dokumentasjonen');
+
+      // A LEADING BLANK SHEET is what a named `@page` box claimed part-way through the flow produced,
+      // and every assertion above passed while it did. Handing an inspector a blank first page is not
+      // a cosmetic defect, so the file is asked where its first sheet starts.
+      const first = out.stdout.split('\f')[0].trim();
+      expect(first.startsWith(PAGE_TITLE)).toBe(true);
+
+      // WHERE the text sits, not only that it is there. The admin shell reserves a 264px gutter for
+      // the sidebar it hides when printing (~198pt); a document printed inside it would satisfy every
+      // assertion above while coming out shoved into the right-hand two-thirds of the paper.
+      const boxed = spawnSync('pdftotext', ['-bbox', pdfFile, '-'], { encoding: 'utf8' });
+      expect(boxed.status).toBe(0);
+      const lefts = [...boxed.stdout.matchAll(/xMin="([\d.]+)"/g)].map(m => Number(m[1]));
+      expect(lefts.length).toBeGreaterThan(10);
+      const leftmost = Math.min(...lefts);
+      expect(leftmost).toBeLessThan(150);
+
+      return 'pdftotext read ' + text.length + ' characters out of the file: the record is on it, ' +
+        'the controls are not, the first sheet is the document, leftmost text at ' +
+        leftmost.toFixed(1) + 'pt (not in the sidebar gutter)';
+    });
+
+    // Back to screen media before the rest of the journey, which measures a SCREEN.
+    await page.emulateMedia({ media: 'screen' });
 
     await journey.step('a reference naming nobody is a document that SAYS so', async () => {
       // An invented id and a colleague who was never trained produce the same empty document. If the

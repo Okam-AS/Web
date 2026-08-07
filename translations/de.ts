@@ -4894,6 +4894,12 @@ export default {
   trn_ev_page_intro: 'Der gesammelte Schulungsnachweis einer Person, so wie er bei einer Prüfung vorgelegt werden kann: die Abschlüsse mit dem eingefrorenen Inhalt, gegen den sie abgelegt wurden, die Zertifikate und die Journalzeilen, die sagen, wer sie jeweils erfasst hat. Hier wird nichts neu berechnet — das Dokument druckt die Werte des Servers neben den Angaben, aus denen sie berechnet wurden, damit beides nachgeprüft werden kann.',
   trn_ev_person_label: 'Person',
   trn_ev_open: 'Nachweis abrufen',
+  // Die Papierkopie. Kein Paragraf und kein Verweis auf eine Vorschrift: OD-6 hält Rechtsangaben von
+  // dieser Fläche fern, bis TR8/TR-B6 ausgeliefert ist. Eingelöst wird hier das Versprechen eines
+  // vorlegbaren Dokuments, nicht das einer Rechtsgrundlage.
+  trn_ev_print: 'Nachweis drucken',
+  trn_ev_print_hint: 'Druckt das Dokument so, wie es dasteht — ohne das Suchformular, die Schaltflächen und das Menü. Mit „Als PDF sichern“ im Druckdialog erhalten Sie dasselbe Dokument als Datei. Es wird nichts erneut abgerufen, der Druck erzeugt also keine weitere Journalzeile.',
+  trn_ev_print_unavailable: 'Dieser Browser stellt keinen Druckbefehl bereit, den wir starten können. Verwenden Sie das Druckmenü des Browsers — das Dokument ist dasselbe.',
   trn_ev_prompt: 'Wählen Sie eine Person und rufen Sie den Nachweis ab. Er lädt nicht von allein, weil jeder Abruf im Journal vermerkt wird.',
   trn_ev_unknown: 'Der Server hat nicht so geantwortet, wie dieser Stand es versteht. Damit wird nichts darüber gesagt, was das Geschäft für diese Person erfasst hat.',
   trn_ev_refused: 'Der Server hat den Abruf abgelehnt. Das heißt nicht, dass es keinen Nachweis gibt — es heißt, dass er uns nicht gezeigt wurde.',
