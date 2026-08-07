@@ -1,0 +1,44 @@
+[
+  {
+    "name": "THE DEFECT RESTORED: the shipped runner restores with git checkout again",
+    "file": "test/support/mutate.js",
+    "test": "test/mutation-runner-restore.test.js",
+    "from": "function restore (absPath, original) {\n  fs.writeFileSync(absPath, original)\n}",
+    "to": "function restore (absPath, original) {\n  require('child_process').execFileSync('git', ['checkout', '--', absPath], { cwd: ROOT })\n}"
+  },
+  {
+    "name": "the verify-after-restore assertion is stripped as noise",
+    "file": "test/support/mutate.js",
+    "test": "test/mutation-runner-restore.test.js",
+    "from": "  if (fs.readFileSync(abs, 'utf8') !== original) {",
+    "to": "  if (false) {"
+  },
+  {
+    "name": "the restore leaves the `finally`, so a spawn failure keeps the mutant on disk",
+    "file": "test/support/mutate.js",
+    "test": "test/mutation-runner-restore.test.js",
+    "from": "  } finally {",
+    "to": "  }\n  if (true) {"
+  },
+  {
+    "name": "the repo root goes back to counting ../ from the script's own location",
+    "file": "test/support/mutate.js",
+    "test": "test/mutation-runner-restore.test.js",
+    "from": "const ROOT = repoRootFrom(__dirname)",
+    "to": "const ROOT = path.resolve(__dirname, '../../../..')"
+  },
+  {
+    "name": "results are written beside the script instead of beside the spec",
+    "file": "test/support/mutate.js",
+    "test": "test/mutation-runner-restore.test.js",
+    "from": "  path.join(path.dirname(specPath), path.basename(specPath, '.json') + '.results.json'),",
+    "to": "  path.join(__dirname, path.basename(specPath, '.json') + '.results.json'),"
+  },
+  {
+    "name": "an unplaceable anchor is counted as a run instead of reported",
+    "file": "test/support/mutate.js",
+    "test": "test/mutation-runner-restore.test.js",
+    "from": "  if (occurrences !== 1) {",
+    "to": "  if (false) {"
+  }
+]

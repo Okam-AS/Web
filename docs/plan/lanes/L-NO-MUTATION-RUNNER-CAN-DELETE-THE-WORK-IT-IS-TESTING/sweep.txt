@@ -1,0 +1,47 @@
+THE SWEEP — every mutation script under docs/plan/lanes/, 2026-08-07, main repo working tree.
+Command: find docs/plan/lanes -type f \( -name '*.js' -o -name '*.sh' -o -name '*.py' -o -name '*.zsh' \)
+         | grep -i mutat   ... then grep each for git checkout / git restore / git stash.
+
+BROKEN — restored a mutated file with git, i.e. reverts to HEAD and deletes uncommitted work
+  1. L-THE-LAST-UNTESTED-MEALS-AND-EVENTS-SCREENS/mutate.js:21
+       execFileSync('git', ['checkout', '--', file], { cwd: ROOT })
+       The known one. Fired once, on plugins/global-mixin.js.
+  2. L-FLAGS-RESOLVERS-COVER-THREE/mutations.sh:20
+       restore () { cd "$WT" && git checkout -- Program.cs; }
+       NOT PREVIOUSLY KNOWN. A second, independent copy of the same defect, in shell.
+       It calls `restore` seven times around five dotnet-test mutations.
+
+CORRECT — restored from an in-memory/on-disk buffer
+  3. L-ELEVEN-WOLT-STATUSES-REACH-A-SWISS-SCREEN-IN-NORWEGIAN/mutate.js   (the fixed one)
+  4. L-THE-TILL-TESTS-ARE-RUN-AND-TRUE/mutate.py                          (writes `original` back in a finally)
+
+NOT A RESTORE PATH
+  5. L-FLAGS-RESOLVERS-COVER-THREE/mutate.py     applies a mutation; never restores (the shell does)
+  6. L-PROBE-DIR-IS-PINNED/pinbench.sh           a benchmark that moves a SCRATCH worktree between
+                                                 refs with `git checkout`. That is its purpose, not a
+                                                 restore-after-mutation. Out of scope, left alone.
+
+NOT SWEPT, DELIBERATELY: *.md, *.txt, *.log, *.results.json under lane directories. Those are lanes'
+findings and several quote `git checkout` as prose. Untouched, and the guard strips comments before
+matching for the same reason.
+
+AFTER THE FIX — re-sweep, all five scripts clean:
+  L-ELEVEN-WOLT-.../mutate.js                     clean
+  L-FLAGS-RESOLVERS-COVER-THREE/mutate.py         clean
+  L-FLAGS-RESOLVERS-COVER-THREE/mutations.sh      clean
+  L-THE-LAST-UNTESTED-.../mutate.js               clean
+  L-THE-TILL-TESTS-ARE-RUN-AND-TRUE/mutate.py     clean
+
+A NOTE ON #4: it restores correctly but has NO verify-after-restore check. It is not broken and this
+lane did not edit it, but it is the one remaining runner that would fail silently rather than halt.
+Recommended, not done: add the byte-compare.
+
+FILES THIS LANE TOUCHED
+  committed to lane/mutation-runner-cannot-delete-work:
+    test/support/mutate.js                        (new — the canonical runner)
+    test/mutation-runner-restore.test.js          (new — the pin, 13 cases)
+    docs/plan/lanes/L-NO-MUTATION-RUNNER-.../     (this lane's own evidence)
+  edited in place in the main repo working tree (untracked there, no branch carries them):
+    docs/plan/lanes/L-THE-LAST-UNTESTED-MEALS-AND-EVENTS-SCREENS/mutate.js   -> shim over the canonical
+    docs/plan/lanes/L-FLAGS-RESOLVERS-COVER-THREE/mutations.sh               -> snapshot+cmp restore
+  NO lane's findings, logs, results or .md were read-modified. Both edited files are tools.
