@@ -2820,6 +2820,7 @@ export default {
   wfme_pub_published: 'Eingegangen {time}',
   wfme_pub_mark_read: 'Als gelesen markieren',
   wfme_pub_acknowledge: 'Empfang bestätigen',
+  wfme_pub_acknowledge_again: 'Erneut bestätigen',
   wfme_pub_receipt_new: 'Empfang bestätigt {time}.',
   wfme_pub_receipt_already: 'Bereits bestätigt {time}.',
   wfme_pub_disclaimer: 'Die Bestätigung belegt, dass du den Plan gesehen hast. Sie ist keine Zustimmung zu den Schichten.',

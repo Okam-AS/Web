@@ -117,8 +117,49 @@ export function unreadPublications (items) {
 }
 
 /**
+ * When an inbox row arrived, as a number, for ordering only.
+ *
+ * `createdAtUtc` is column-loaded and arrives BARE — no `Z`, no offset — so `new Date(...)` would
+ * read it in the reader's own zone. Every row in one response is bare in the same way, so a naive
+ * parse would still order them correctly; this reads them as UTC anyway because the same list can
+ * carry a row kept from an earlier press, and two rows parsed under two rules cannot be compared.
+ * An unreadable instant sorts LAST rather than throwing: a bad timestamp on one row must never take
+ * the whole notice off the worker's screen.
+ */
+function arrivedAt (value) {
+  const text = String(value || '');
+  const hasZone = /(?:Z|[+-]\d{2}:?\d{2})$/.test(text);
+  const parsed = Date.parse(text ? (hasZone ? text : text + 'Z') : '');
+  return isNaN(parsed) ? -Infinity : parsed;
+}
+
+/**
+ * THE ORDER THE NOTICE PUTS PUBLICATIONS IN, and the reason it is computed rather than inherited.
+ *
+ * Newest first, which is what `GET /workforce/me/inbox` already answers
+ * (`WorkforceSelfService.GetInboxAsync`, `OrderByDescending(i => i.CreatedAtUtc)`), with the inbox
+ * item id breaking a tie.
+ *
+ * The position of a row has to be a function of the ROW SET and of nothing else, because this page
+ * RE-READS the inbox after every press and re-renders from the answer. Two things would otherwise
+ * move a row for a reason the worker did not perform: a SQL `ORDER BY` whose keys are equal has no
+ * defined order and may answer two reads differently, and a row carried over from a press is not in
+ * the server's list at all. A row that moves is not cosmetic here — see `publicationsForNotice`.
+ */
+function noticeOrder (items) {
+  return items.slice().sort((a, b) => {
+    const at = arrivedAt(a.createdAtUtc);
+    const bt = arrivedAt(b.createdAtUtc);
+    if (at !== bt) { return bt - at; }
+    const ai = String(a.inboxItemId);
+    const bi = String(b.inboxItemId);
+    return ai < bi ? -1 : (ai > bi ? 1 : 0);
+  });
+}
+
+/**
  * The publications the notice must put on screen: everything still unread, PLUS everything this
- * session holds an acknowledgement receipt for.
+ * session holds an acknowledgement receipt for — in an order that does not depend on either.
  *
  * WHY THE SECOND HALF EXISTS, AND WHY IT IS NOT A RENDERING DETAIL. Acknowledging IMPLIES seen, so
  * the act that produces a receipt is the same act that makes the row read. A notice fed
@@ -127,6 +168,24 @@ export function unreadPublications (items) {
  * and was shown nothing at all. The renderer needed an item that was both unread and acknowledged,
  * and no such item can exist; this is where that contradiction is resolved, because no change to the
  * template can resolve it.
+ *
+ * WHY CONFIRMING ONE ROW MAY NOT MOVE ANOTHER, which is the half this function used to get wrong.
+ * It sorted unread-first and appended what had just been confirmed, so with TWO unread publications
+ * the first press pushed the row it confirmed to the BOTTOM and lifted the other week into the
+ * position the worker had just pressed. Every row offers an acknowledge control, so a second press
+ * at the same place — the press of a person who thinks the first one did not register — wrote a NEW
+ * acknowledgement for a week she had never looked at. That was walked live against trunk `6b98839`
+ * on 2026-08-07: two presses, two publications acknowledged, no error, nothing on screen saying the
+ * second press had addressed a different week.
+ *
+ * An acknowledgement is a person's statement that she has seen a roster she is on. So the repair is
+ * to RE-TARGET rather than to refuse: one ordering is applied to the whole set, and read state and
+ * acknowledgement state are used only to decide WHICH rows are on screen, never in what order. The
+ * control at a given place therefore keeps addressing the same publication across a press, and the
+ * second press is the idempotent replay it looks like. Refusing instead — dropping or disabling the
+ * control once something had been confirmed — would have taken away the replay this notice
+ * deliberately keeps a caller for, and would also have stopped a worker rostered on BOTH weeks from
+ * confirming the second one at all: it would have prevented the accident by preventing the act.
  *
  * `acknowledged` is keyed by `schedulePublicationId` and holds the inbox item AS IT STOOD when the
  * worker pressed. Kept from the press rather than looked up afterwards, so the confirmation does not
@@ -142,22 +201,25 @@ export function publicationsForNotice (items, acknowledged) {
   const unread = unreadPublications(items);
   if (unread === null && !ids.length) { return null; }
 
-  // Unread first, then what was just confirmed. What still needs the worker's attention outranks
-  // what no longer does.
-  const shown = (unread || []).slice();
   const reported = filterInboxItems(items, { kind: 'publication', state: 'all' }) || [];
-  ids.forEach((id) => {
-    const pressed = kept[id];
-    // Already there, because the server has not marked it read. Nothing to add.
-    if (shown.some(item => item.inboxItemId === pressed.inboxItemId)) { return; }
-    // The SERVER's copy where the inbox still reports it, because that copy is the one carrying
-    // `isRead: true` — which is what the surface reads to stop calling this row new. Falling back to
-    // the row as it was pressed is what keeps the receipt on screen when the re-read failed or no
-    // longer carries it: a confirmation must not depend on a second request succeeding.
-    const current = reported.find(item => item.inboxItemId === pressed.inboxItemId);
-    shown.push(current || pressed);
-  });
-  return shown;
+
+  // WHICH rows belong on screen — still unread, or confirmed in this session. This is the only thing
+  // read state and acknowledgement state decide. Neither reaches the ordering below.
+  const belongs = {};
+  (unread || []).forEach((item) => { belongs[item.inboxItemId] = true; });
+  ids.forEach((id) => { belongs[kept[id].inboxItemId] = true; });
+
+  // The SERVER's copy of each row, because that copy is the one carrying `isRead: true` — which is
+  // what the surface reads to stop calling a confirmed row new.
+  const shown = noticeOrder(reported).filter(item => belongs[item.inboxItemId]);
+
+  // A row confirmed in this session that the re-read no longer reports — a failed inbox read, or one
+  // that came back without it. The receipt is rendered ON the row, so the row is carried from the
+  // press rather than lost with the request: a confirmation must not depend on a second request
+  // succeeding. Ordered among themselves by the same rule, for the same reason.
+  const missing = ids.map(id => kept[id])
+    .filter(pressed => !reported.some(item => item.inboxItemId === pressed.inboxItemId));
+  return shown.concat(noticeOrder(missing));
 }
 
 /**
