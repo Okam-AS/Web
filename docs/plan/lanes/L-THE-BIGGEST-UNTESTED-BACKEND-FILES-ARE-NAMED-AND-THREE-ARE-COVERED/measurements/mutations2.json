@@ -1,0 +1,16 @@
+[
+  {
+    "id": "MG3b",
+    "file": "Services/GiftcardService.cs",
+    "expect": "red",
+    "filter": "FullyQualifiedName~GiftcardBalanceTests.A_refunded_gift_card",
+    "edits": [["else if (transaction.Type == GiftcardTransactionType.Redeemed)", "else if (transaction.Type == GiftcardTransactionType.Redeemed || transaction.Type == GiftcardTransactionType.Canceled)"]]
+  },
+  {
+    "id": "MGFIX2",
+    "file": "Services/GiftcardService.cs",
+    "expect": "green",
+    "filter": "FullyQualifiedName~GiftcardBalanceTests",
+    "edits": [["                        giftcard.ReceiverUserId = receiverUser.Id;\n                        giftcard.ReceiverPhoneNumber = newReceiverPhoneNumber;\n                        await CreateTransactionForGiftcard(clientTheme, GiftcardTransactionType.Purchased, receiverUser.Id, giftcard.FinalAmount, giftcard.GiftcardId, true);", "                        giftcard.ReceiverUserId = receiverUser.Id;\n                        giftcard.ReceiverPhoneNumber = newReceiverPhoneNumber;\n                        giftcard.GiftcardTransaction.UserId = receiverUser.Id;\n                        giftcard.GiftcardTransaction.ClientTheme = clientTheme;"]]
+  }
+]

@@ -1,0 +1,145 @@
+[
+  {
+    "id": "MI1",
+    "file": "Services/InvoiceService.cs",
+    "expect": "red",
+    "filter": "FullyQualifiedName~InvoiceDocumentTests.A_credit_note_says_KREDITNOTA",
+    "edits": [["Heading = entity.IsCreditNote ? \"KREDITNOTA\" : \"RAPPORT\",", "Heading = \"RAPPORT\","]]
+  },
+  {
+    "id": "MI2",
+    "file": "Services/InvoiceService.cs",
+    "expect": "red",
+    "filter": "FullyQualifiedName~InvoiceDocumentTests.An_ordinary_settlement_report",
+    "edits": [["CreditInvoice = entity.IsCreditNote ? entity.CreditInvoice.ToString() : string.Empty,", "CreditInvoice = entity.CreditInvoice.ToString(),"]]
+  },
+  {
+    "id": "MI3",
+    "file": "Services/InvoiceService.cs",
+    "expect": "red",
+    "filter": "FullyQualifiedName~InvoiceDocumentTests.The_VAT_summary_totals_each_rate",
+    "edits": [[".GroupBy(detail => detail.TaxPercent);", ".GroupBy(detail => 25);"]]
+  },
+  {
+    "id": "MI4",
+    "file": "Services/InvoiceService.cs",
+    "expect": "red",
+    "filter": "FullyQualifiedName~InvoiceDocumentTests.The_basis_the_store_is_charged_on",
+    "edits": [["BasisAmount = Label.Price(entity.Lines.Sum(x => x.BasisAmount) - zeroTaxSum),", "BasisAmount = Label.Price(entity.Lines.Sum(x => x.BasisAmount)),"]]
+  },
+  {
+    "id": "MI5",
+    "file": "Services/InvoiceService.cs",
+    "expect": "red",
+    "filter": "FullyQualifiedName~InvoiceDocumentTests.A_month_the_settlement_never_touched",
+    "edits": [["var monthsOrderDetails = entity.Lines\n                    .Where(order => order.Completed.Month == month.Month)\n                    .ToList();", "var monthsOrderDetails = entity.Lines\n                    .Where(order => true)\n                    .ToList();"]]
+  },
+  {
+    "id": "MI6",
+    "file": "Services/InvoiceService.cs",
+    "expect": "red",
+    "filter": "FullyQualifiedName~InvoiceDocumentTests.An_invoice_period_longer_than_two_years",
+    "edits": [["if (numberOfMonths > 24)", "if (numberOfMonths > 240)"]]
+  },
+  {
+    "id": "MIFIX",
+    "file": "Services/InvoiceService.cs",
+    "expect": "green",
+    "filter": "FullyQualifiedName~InvoiceDocumentTests",
+    "edits": [
+      ["var monthOrders = entity.Lines.Where(order => order.Completed.Month == month.Month);", "var monthOrders = entity.Lines.Where(order => order.Completed.Month == month.Month && order.Completed.Year == month.Year);"],
+      ["var monthsOrderDetails = entity.Lines\n                    .Where(order => order.Completed.Month == month.Month)\n                    .ToList();", "var monthsOrderDetails = entity.Lines\n                    .Where(order => order.Completed.Month == month.Month && order.Completed.Year == month.Year)\n                    .ToList();"]
+    ]
+  },
+  {
+    "id": "MG1",
+    "file": "Services/GiftcardService.cs",
+    "expect": "red",
+    "filter": "FullyQualifiedName~GiftcardBalanceTests.A_guests_balance_is_what_they_were_given",
+    "edits": [["return purchased - redeemed;", "return purchased + redeemed;"]]
+  },
+  {
+    "id": "MG2",
+    "file": "Services/GiftcardService.cs",
+    "expect": "red",
+    "filter": "FullyQualifiedName~GiftcardBalanceTests.A_gift_card_bought_in_another_brands_app",
+    "edits": [[".Where(x => x.ClientTheme == clientTheme && x.UserId == userId && x.Type == GiftcardTransactionType.Purchased)", ".Where(x => x.UserId == userId && x.Type == GiftcardTransactionType.Purchased)"]]
+  },
+  {
+    "id": "MG3",
+    "file": "Services/GiftcardService.cs",
+    "expect": "red",
+    "filter": "FullyQualifiedName~GiftcardBalanceTests.A_cancelled_gift_card_purchase",
+    "edits": [["else if (transaction.Type == GiftcardTransactionType.Redeemed)", "else if (transaction.Type == GiftcardTransactionType.Redeemed || transaction.Type == GiftcardTransactionType.Canceled)"]]
+  },
+  {
+    "id": "MGFIX",
+    "file": "Services/GiftcardService.cs",
+    "expect": "green",
+    "filter": "FullyQualifiedName~GiftcardBalanceTests",
+    "edits": [["                        giftcard.ReceiverUserId = receiverUser.Id;\n                        giftcard.ReceiverPhoneNumber = newReceiverPhoneNumber;\n                        await CreateTransactionForGiftcard(clientTheme, GiftcardTransactionType.Purchased, receiverUser.Id, giftcard.FinalAmount, giftcard.GiftcardId, true);", "                        giftcard.ReceiverUserId = receiverUser.Id;\n                        giftcard.ReceiverPhoneNumber = newReceiverPhoneNumber;\n                        if (giftcard.GiftcardTransaction != null && giftcard.GiftcardTransaction.Type == GiftcardTransactionType.Purchased)\n                        {\n                            giftcard.GiftcardTransaction.Type = GiftcardTransactionType.Transferred;\n                        }\n                        await CreateTransactionForGiftcard(clientTheme, GiftcardTransactionType.Purchased, receiverUser.Id, giftcard.FinalAmount, giftcard.GiftcardId, true);"]]
+  },
+  {
+    "id": "MC1",
+    "file": "Services/CartService.cs",
+    "expect": "red",
+    "filter": "FullyQualifiedName~CartCheckoutRefusalTests.A_gift_card_worth_exactly_the_bill",
+    "edits": [["cartModel.Calculations.GiftcardBalanceBeforeOrder < cartModel.Calculations.FinalAmount;", "cartModel.Calculations.GiftcardBalanceBeforeOrder <= cartModel.Calculations.FinalAmount;"]]
+  },
+  {
+    "id": "MC2",
+    "file": "Services/CartService.cs",
+    "expect": "red",
+    "filter": "FullyQualifiedName~CartCheckoutRefusalTests.A_guest_paying_by_gift_card_is_stopped",
+    "edits": [["response.GiftcardBalanceTooLow = cart.PaymentType == PaymentType.Giftcard && cartModel.Calculations.GiftcardBalanceBeforeOrder < cartModel.Calculations.FinalAmount;", "response.GiftcardBalanceTooLow = false;"]]
+  },
+  {
+    "id": "MC3",
+    "file": "Services/CartService.cs",
+    "expect": "red",
+    "filter": "FullyQualifiedName~CartCheckoutRefusalTests.A_guest_is_stopped_when_the_basket_no_longer_costs",
+    "edits": [["cartModel.Calculations.FinalAmount != capturableAmount;", "cartModel.Calculations.FinalAmount == capturableAmount;"]]
+  },
+  {
+    "id": "MC4",
+    "file": "Services/CartService.cs",
+    "expect": "red",
+    "filter": "FullyQualifiedName~CartCheckoutRefusalTests.The_last_item_on_the_shelf",
+    "edits": [["item.Quantity > item.Product.Inventory)", "item.Quantity >= item.Product.Inventory)"]]
+  },
+  {
+    "id": "MC5",
+    "file": "Services/CartService.cs",
+    "expect": "red",
+    "filter": "FullyQualifiedName~CartCheckoutRefusalTests.A_store_that_switched_inventory_off",
+    "edits": [["if (item.Product.Inventory != null && item.Product.InventoryEnabled && item.Quantity > item.Product.Inventory)", "if (item.Product.Inventory != null && item.Quantity > item.Product.Inventory)"]]
+  },
+  {
+    "id": "MC6",
+    "file": "Services/CartService.cs",
+    "expect": "red",
+    "filter": "FullyQualifiedName~CartCheckoutRefusalTests.An_item_that_ran_out",
+    "edits": [["item.Quantity > item.Product.Inventory)", "item.Quantity > item.Product.Inventory + 1000)"]]
+  },
+  {
+    "id": "MC7",
+    "file": "Services/CartService.cs",
+    "expect": "red",
+    "filter": "FullyQualifiedName~CartCheckoutRefusalTests.A_gift_card_may_pay_for_a_basket_below",
+    "edits": [["response.PriceTooLowError = (cart.UseReward && cartModel.Calculations.FinalAmount == 0) || cart.PaymentType == PaymentType.Giftcard ? false : cartModel.Calculations.ItemsAmount < minPrice;", "response.PriceTooLowError = (cart.UseReward && cartModel.Calculations.FinalAmount == 0) ? false : cartModel.Calculations.ItemsAmount < minPrice;"]]
+  },
+  {
+    "id": "MC8",
+    "file": "Services/CartService.cs",
+    "expect": "red",
+    "filter": "FullyQualifiedName~CartCheckoutRefusalTests.A_basket_below_the_stores_minimum",
+    "edits": [["? false : cartModel.Calculations.ItemsAmount < minPrice;", "? false : false;"]]
+  },
+  {
+    "id": "MC9",
+    "file": "Services/CartService.cs",
+    "expect": "red",
+    "filter": "FullyQualifiedName~CartCheckoutRefusalTests.An_empty_basket",
+    "edits": [["!(cart == null || cart.UserId != userId || !cart.Items.Any() || cart.Store == null)", "!(cart == null || cart.UserId != userId || cart.Store == null)"]]
+  }
+]

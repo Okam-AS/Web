@@ -1,0 +1,77 @@
+header: lines-covered=64766 lines-valid=738199 branches-covered=13681 branches-valid=28555
+class-block sum (no dedupe): covered=64766 valid=738199  MATCHES-HEADER=True
+
+== per module (deduped by file+line) ==
+module                  files      cov      tot   line%    uncov  br uncov
+Migrations                275        0   635874     0.0   635874         0
+Core/POS + shared         765    30037    63447    47.3    33410     12006
+Workforce                 160    12540    13721    91.4     1181       709
+Margin                     90     5570     6076    91.7      506       328
+Meals                      81     5092     5922    86.0      830       411
+Growth                    110     4987     5478    91.0      491       365
+Events                     73     4373     5268    83.0      895       563
+Training                   48     2167     2413    89.8      246        81
+TOTAL excl Migrations            64766   102325    63.3    37559
+
+== Core/POS + shared: 60 largest by UNCOVERED lines ==
+  #   uncov  total  line%  brUncov  brTot  file
+  1    1238   1288    3.9      533    540  Services/StoreService.cs
+  2     960   1276   24.8      643    801  Services/CartService.cs
+  3     932    973    4.2      241    242  Controllers/StoresController.cs
+  4     886   1159   23.6      308    368  Mcp/Services/McpShoppingService.cs
+  5     834    834    0.0      256    256  Services/WoltMenuSyncService.cs
+  6     715    957   25.3      430    494  Services/OrderService.cs
+  7     676    942   28.2      475    580  Services/WoltService.cs
+  8     661    731    9.6      151    170  Controllers/DinteroController.cs
+  9     651   1088   40.2      293    378  Services/InvoiceService.cs
+ 10     626    626    0.0      226    226  Services/ProductService.cs
+ 11     544    843   35.5      263    318  Services/StatisticsService.cs
+ 12     505    526    4.0      246    246  Services/CategoryService.cs
+ 13     477    638   25.2      325    382  Services/PaymentService.cs
+ 14     461    461    0.0       52     52  Services/Analytics/GeminiClient.cs
+ 15     436    566   23.0      200    238  Services/UserService.cs
+ 16     432    669   35.4      105    152  Controllers/PosController.cs
+ 17     393    501   21.6      129    140  Controllers/WoltController.cs
+ 18     377    377    0.0       58     58  Controllers/WoltMenuController.cs
+ 19     372    499   25.5      161    208  ModelBuilders/CartModelBuilder.cs
+ 20     368    421   12.6      136    142  Services/GiftcardService.cs
+ 21     366    409   10.5      158    172  Services/RewardService.cs
+ 22     358    358    0.0      100    100  Services/AIService.cs
+ 23     349    349    0.0       50     50  Controllers/OAuthLoginController.cs
+ 24     326    350    6.9      159    160  Services/StripeService.cs
+ 25     324    528   38.6      134    202  Services/Surfboard/SurfboardOnboardingService.cs
+ 26     314    371   15.4       72     78  Controllers/OrdersController.cs
+ 27     312    520   40.0      155    196  Services/OfferProposalService.cs
+ 28     311    311    0.0       86     86  Services/WoltMenuService.cs
+ 29     298    298    0.0       76     76  Services/DinteroService.Settlements.cs
+ 30     296    296    0.0      242    242  Services/Analytics/ChatOrchestrator.cs
+ 31     294    311    5.5       66     66  Services/DineHomeService.cs
+ 32     291    511   43.1      114    184  Services/VippsService.cs
+ 33     289    327   11.6       47     50  Services/WoltAuthService.cs
+ 34     288    342   15.8      108    133  Controllers/VippsController.cs
+ 35     280    280    0.0      110    110  Services/Mcp/ClientIdMetadataDocumentService.cs
+ 36     277    277    0.0       12     12  Controllers/OpenCheckController.cs
+ 37     255    255    0.0       70     70  Services/PlacesService.cs
+ 38     249    249    0.0      188    188  Services/ProductVariantService.cs
+ 39     244    329   25.8       89    100  Services/DinteroService.cs
+ 40     239    239    0.0       62     62  Controllers/OAuthAuthorizationController.cs
+ 41     238    238    0.0       68     68  Controllers/OfferProposalsController.cs
+ 42     238    292   18.5       44     56  Services/DinteroTerminalService.Initiate.cs
+ 43     232    232    0.0       62     62  Services/DinteroTerminalService.Transactions.cs
+ 44     228    968   76.4      172    401  Services/Analytics/Tools/AnalyticsToolRunner.cs
+ 45     220    248   11.3       88     92  Services/WrappedService.cs
+ 46     219    232    5.6      124    124  Services/HomeDeliveryMethodService.cs
+ 47     173    274   36.9       83    102  Services/DinteroService.Crons.cs
+ 48     173    200   13.5      155    166  Services/DiscountService.cs
+ 49     169    169    0.0        6      6  Controllers/RewardsController.cs
+ 50     168    168    0.0       62     62  Controllers/ChatController.cs
+ 51     167    167    0.0       40     40  Controllers/OperatorController.cs
+ 52     166    166    0.0        0      0  Controllers/CategoriesController.cs
+ 53     160    169    5.3       20     20  Services/WoltOrderService.cs
+ 54     158    162    2.5       60     60  Services/DinteroFeeCalculationService.cs
+ 55     157    190   17.4       63     64  Services/OkamPayoutService.cs
+ 56     157    183   14.2      108    112  Services/StoreTranslationService.cs
+ 57     156    758   79.4      136    307  Services/Surfboard/SurfboardTerminalService.cs
+ 58     155    155    0.0       20     20  Controllers/WoltAuthController.cs
+ 59     155    155    0.0       26     26  Services/Kassa/KeyVaultSigningKeyProvider.cs
+ 60     153    153    0.0       36     36  Services/ImageService.cs
