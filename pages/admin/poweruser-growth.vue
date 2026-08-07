@@ -114,6 +114,7 @@
 <script>
 import AdminPage from "~/components/organisms/AdminPage.vue";
 import Loading from "~/components/atoms/Loading.vue";
+import { describeRequestFailure } from "~/utils/request-failure";
 
 const STORE_START_EVENTS = [
   { date: "2021-02-15T14:07:29", name: "Stolpen butikk" },
@@ -374,10 +375,16 @@ export default {
         this.growthData = await this._statisticsService.GetPlatformGrowth();
         this.$nextTick(() => this.renderChart());
       } catch (error) {
-        this.errorMessage = error?.message || this.$i('poweruserGrowth_unknownError');
+        this.errorMessage = this.describeLoadFailure(error);
       } finally {
         this.isLoading = false;
       }
+    },
+    // What the operator is told when the read does not come back. The rule itself lives in
+    // `utils/request-failure.js` — `pages/admin/statistics.vue` needs exactly the same one, and a
+    // second copy would be a second rule the moment either was edited.
+    describeLoadFailure(error) {
+      return describeRequestFailure(error, (key, params) => this.$i(key, params));
     },
     ensureDataLoaded() {
       if (!this.userIsLoggedIn) return;

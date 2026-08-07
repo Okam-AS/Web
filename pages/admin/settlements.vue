@@ -156,9 +156,23 @@
         </div>
       </div>
 
+      <!-- Failed Read. Placed before the empty state, which now excludes it: a read that failed
+           used to land in "no Dintero orders in this period", a claim about the venue's trade made
+           on the strength of a request that never came back. -->
+      <div
+        v-if="!isLoading && selectedStoreId && loadError"
+        class="empty-state load-error"
+        role="alert"
+      >
+        <div class="empty-icon">⚠️</div>
+        <h3>{{ $i('settlements_loadErrorTitle') }}</h3>
+        <p>{{ loadError }}</p>
+        <button class="btn-primary" type="button" @click="loadData">{{ $i('common_tryAgain') }}</button>
+      </div>
+
       <!-- Empty State -->
       <div
-        v-if="!isLoading && selectedStoreId && (!settlementData || settlementData.totalDinteroOrders === 0)"
+        v-if="!isLoading && !loadError && selectedStoreId && (!settlementData || settlementData.totalDinteroOrders === 0)"
         class="empty-state"
       >
         <div class="empty-icon">📊</div>
@@ -181,6 +195,7 @@
 import AdminPage from "~/components/organisms/AdminPage.vue";
 import Loading from "~/components/atoms/Loading.vue";
 import { nokAmountLabel } from "~/utils/price";
+import { describeRequestFailure } from "~/utils/request-failure";
 
 export default {
   name: "PendingSettlements",
@@ -188,6 +203,9 @@ export default {
   data() {
     return {
       isLoading: false,
+      // A read that failed is not a period with no Dintero orders in it. Held separately from
+      // `settlementData` so the empty state cannot speak for a request that never came back.
+      loadError: "",
       settlementData: null,
       dateRange: {
         from: this.getDefaultFromDate(),
@@ -344,10 +362,12 @@ export default {
     async loadData() {
       if (!this.selectedStoreId) {
         this.settlementData = null;
+        this.loadError = "";
         return;
       }
 
       this.isLoading = true;
+      this.loadError = "";
       try {
         const model = {
           StoreId: parseInt(this.selectedStoreId),
@@ -358,7 +378,12 @@ export default {
         this.settlementData = await this._statisticsService.GetPendingSettlements(model);
       } catch (error) {
         console.error("Failed to load pending settlements:", error);
-        this.showNotification(this.$i("settlements_loadError"), "error");
+        // The toast said `settlements_loadError` — "could not load" — for an expired session, a
+        // refusal, a crashed server and a dead network alike, and it disappears. The reason now
+        // travels with it AND stays on the panel below, which the toast cannot do.
+        this.loadError = describeRequestFailure(error, (key, params) => this.$i(key, params));
+        this.settlementData = null;
+        this.showNotification(this.loadError, "error");
       } finally {
         this.isLoading = false;
       }
@@ -693,6 +718,12 @@ export default {
 .empty-icon {
   font-size: 4em;
   margin-bottom: 20px;
+}
+
+/* A failed read wears the error colour, so it cannot be skim-read as the neutral "nothing here"
+   state it now displaces. */
+.empty-state.load-error h3 {
+  color: #ef4444;
 }
 
 .empty-state h3 {

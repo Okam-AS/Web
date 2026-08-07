@@ -1,0 +1,164 @@
+{
+ "killed_by": {
+  "an expired session with no reason in the body is still named": [
+   "rule: an expired session loses its own sentence",
+   "statistics: the failure goes back to the console only",
+   "statistics: the failure panel is removed from the template",
+   "statistics: a good read is reported as a failure"
+  ],
+  "a failure of the general slice alone still reaches the operator": [
+   "rule: the server's own reason is ignored",
+   "statistics: the failure goes back to the console only",
+   "statistics: the failure panel is removed from the template",
+   "statistics: a good read is reported as a failure"
+  ],
+  "a genuinely empty Wolt Drive period still says the period was empty": [
+   "wolt: the empty state is gone entirely"
+  ],
+  "a server error with no body names the code it answered with": [
+   "rule: a server error loses its own sentence",
+   "statistics: the failure goes back to the console only",
+   "statistics: the failure panel is removed from the template",
+   "statistics: a good read is reported as a failure"
+  ],
+  "a failure of the self-pickup slice alone still reaches the operator": [
+   "rule: the server's own reason is ignored",
+   "statistics: the failure goes back to the console only",
+   "statistics: the failure panel is removed from the template",
+   "statistics: a good read is reported as a failure"
+  ],
+  "the \"no Dintero orders\" claim is not made about a read that failed": [
+   "rule: a refusal loses its own sentence",
+   "rule: 401 and 403 are collapsed into one sentence",
+   "settlements: the fixed 'could not load' line comes back",
+   "settlements: the empty state speaks for a failed read again",
+   "settlements: the failure panel is removed from the template"
+  ],
+  "an error the request layer DID build is still named by its status": [
+   "rule: an expired session loses its own sentence"
+  ],
+  "the reason the backend gave is on the screen, not only in the console": [
+   "rule: the server's own reason is ignored",
+   "statistics: the failure goes back to the console only",
+   "statistics: the failure panel is removed from the template",
+   "statistics: a good read is reported as a failure"
+  ],
+  "a genuinely empty settlements period still says the period was empty": [
+   "settlements: the empty state is gone entirely"
+  ],
+  "a read that succeeds shows no failure panel at all": [
+   "statistics: the failure panel shows even when nothing failed"
+  ],
+  "a refusal with no reason in the body is still named": [
+   "rule: a refusal loses its own sentence",
+   "rule: 401 and 403 are collapsed into one sentence",
+   "statistics: the failure goes back to the console only",
+   "statistics: the failure panel is removed from the template",
+   "statistics: a good read is reported as a failure"
+  ],
+  "the four failures do not read alike": [
+   "rule: 401 and 403 are collapsed into one sentence",
+   "statistics: the failure goes back to the console only",
+   "statistics: the failure panel is removed from the template",
+   "statistics: a good read is reported as a failure"
+  ],
+  "being offline is named as such rather than as an empty period": [
+   "rule: being offline loses its own sentence",
+   "wolt: the failure goes back to the console only",
+   "wolt: the empty state speaks for a failed read again",
+   "wolt: the failure panel is removed from the template"
+  ],
+  "trying again after a failure clears it and shows the figures": [
+   "statistics: the failure goes back to the console only",
+   "statistics: the failure panel is removed from the template",
+   "statistics: a retry no longer clears the previous failure",
+   "statistics: the failure panel shows even when nothing failed"
+  ],
+  "a failure of the home-delivery slice alone still reaches the operator": [
+   "rule: the server's own reason is ignored",
+   "statistics: the failure goes back to the console only",
+   "statistics: the failure panel is removed from the template",
+   "statistics: a good read is reported as a failure"
+  ],
+  "an error with nothing on it at all is reported as unknown": [
+   "rule: a page-side throw is dressed up as a transport failure"
+  ],
+  "the reason is on the screen and the \"no orders\" claim is gone": [
+   "rule: the server's own reason is ignored",
+   "wolt: the failure goes back to the console only",
+   "wolt: the empty state speaks for a failed read again",
+   "wolt: the failure panel is removed from the template"
+  ],
+  "a failure of the table slice alone still reaches the operator": [
+   "rule: the server's own reason is ignored",
+   "statistics: the failure goes back to the console only",
+   "statistics: the failure panel is removed from the template",
+   "statistics: a good read is reported as a failure"
+  ],
+  "figures already on screen are taken down when a refresh fails": [
+   "rule: the server's own reason is ignored",
+   "statistics: the failure goes back to the console only",
+   "statistics: the failure panel is removed from the template",
+   "statistics: the failure panel shows even when nothing failed",
+   "statistics: a good read is reported as a failure"
+  ],
+  "a failure of the heatmap read alone still reaches the operator": [
+   "rule: the server's own reason is ignored",
+   "statistics: the failure goes back to the console only",
+   "statistics: the failure panel is removed from the template",
+   "statistics: a good read is reported as a failure"
+  ],
+  "a page-side failure is not reported to the operator as a network problem": [
+   "rule: a page-side throw is dressed up as a transport failure",
+   "statistics: the failure goes back to the console only",
+   "statistics: the failure panel is removed from the template",
+   "statistics: a good read is reported as a failure"
+  ],
+  "the reason replaces the fixed \"could not load\" line, and stays on the page": [
+   "rule: the server's own reason is ignored",
+   "settlements: the fixed 'could not load' line comes back",
+   "settlements: the failure panel is removed from the template"
+  ],
+  "being offline with no reason in the body is still named": [
+   "rule: being offline loses its own sentence",
+   "statistics: the failure goes back to the console only",
+   "statistics: the failure panel is removed from the template",
+   "statistics: a good read is reported as a failure"
+  ]
+ },
+ "survivors": [],
+ "unused_mutations": [],
+ "inherited_disturbed": [
+  "a crashed report engine reaches the operator as the reason the backend gave",
+  "a crashed report engine with an empty body names the code it answered with",
+  "a failed read is said out loud instead of leaving an empty page",
+  "a failure that carries no message at all still says something",
+  "a refusal reaches the operator as the reason the backend gave",
+  "a refusal with an empty body is still named, not reduced to a code",
+  "an expired session reaches the operator as the reason the backend gave",
+  "an expired session with an empty body is still named, not reduced to a code",
+  "being offline is told apart from the server refusing"
+ ],
+ "mutations": [
+  "rule: the server's own reason is ignored",
+  "rule: a page-side throw is dressed up as a transport failure",
+  "rule: an expired session loses its own sentence",
+  "rule: a refusal loses its own sentence",
+  "rule: being offline loses its own sentence",
+  "rule: a server error loses its own sentence",
+  "rule: 401 and 403 are collapsed into one sentence",
+  "statistics: the failure goes back to the console only",
+  "statistics: the failure panel is removed from the template",
+  "statistics: a retry no longer clears the previous failure",
+  "wolt: the failure goes back to the console only",
+  "wolt: the empty state speaks for a failed read again",
+  "wolt: the failure panel is removed from the template",
+  "settlements: the fixed 'could not load' line comes back",
+  "settlements: the empty state speaks for a failed read again",
+  "settlements: the failure panel is removed from the template",
+  "statistics: the failure panel shows even when nothing failed",
+  "wolt: the empty state is gone entirely",
+  "settlements: the empty state is gone entirely",
+  "statistics: a good read is reported as a failure"
+ ]
+}
