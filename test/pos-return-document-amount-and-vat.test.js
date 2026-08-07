@@ -13,10 +13,29 @@ import ReturnBuilder from '~/components/admin/pos/ReturnBuilder.vue'
 // before a single assertion runs.
 //
 // That is the mechanical reason the till's two money-OUT surfaces have never been under test.
-// `newGuid` is called from `ReturnBuilder`, `RefundModal`, `DayFlow`, `ClockScreen` and
-// `pages/workforce/join.vue`, and every one of those files sits at 0–13% coverage. It was not that
-// nobody wrote the tests; the components could not be mounted. See this lane's return for the
-// separate latent defect in `utils/guid.js` that the same line exposes.
+// `newGuid` is called from `ReturnBuilder`, `RefundModal`, `DayFlow`, `ClockScreen`,
+// `pages/workforce/join.vue`, `pages/meals/join.vue` and `utils/workforce/api-client.js`, and every
+// one of the components sits at 0–13% coverage. It was not that nobody wrote the tests; the
+// components could not be constructed.
+//
+// AND THE LATENT DEFECT THE SAME LINE EXPOSES, written out here rather than left as a pointer,
+// because the lane that found it was killed before it could write the pointer's target down:
+//
+//   utils/guid.js:5  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function')
+//   utils/guid.js:9  crypto.getRandomValues(bytes)          // <- unguarded
+//
+// The `typeof crypto !== 'undefined'` half of the line-5 guard is DEAD. The only way it can be
+// false is that there is no `crypto` global at all — and four lines later the "fallback" written to
+// handle that case dereferences that exact global and throws `ReferenceError: crypto is not
+// defined`. So the function has no fallback for the condition its guard tests for; it has one only
+// for "crypto exists but randomUUID does not". Verified in all three environments: crypto absent
+// throws; crypto without randomUUID returns a well-formed RFC 4122 v4 (the arithmetic on lines
+// 10-13 is correct); full webcrypto takes the fast path. The file's own comment claims the fallback
+// "covers plain-http dev hosts and older WebViews" — it covers plain http (window.crypto exists on
+// insecure origins, only randomUUID is secure-context-only) and does NOT cover a missing crypto.
+// Not currently a production defect: every browser defines window.crypto and `target: static` is
+// prerendered on Node 24, which does too. It is a live TEST-INFRASTRUCTURE defect, and it is why
+// this line exists.
 //
 // Supplying the global is supplying the platform, not bending the product: nothing below stubs
 // `newGuid`, and the ids the component generates are the shipped ones.

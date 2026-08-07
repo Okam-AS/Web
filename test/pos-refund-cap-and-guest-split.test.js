@@ -191,6 +191,18 @@ describe('SplitBillModal — the per-guest subtotal is what each guest is asked 
     expect(b.reduce((s, x) => s + x.lines.length, 0)).toBe(3)
   })
 
+  // NOTE ON THE SOURCE, recorded rather than asserted away, in the same shape as the note in
+  // `pos-split-payment-shares.test.js`: the `.sort((a, b) => a.seat - b.seat)` at the end of
+  // `seatBuckets` is REDUNDANT. The buckets are accumulated into a plain object keyed by seat
+  // number, and `Object.keys` returns integer-like keys in ascending numeric order by language
+  // guarantee — for `[3, 1, 2]` it returns `['1','2','3']` whether the keys were written as
+  // numbers or as strings. Deleting the sort was checked and changes no answer this component can
+  // reach (seat numbers are positive integers 1..20, set from `seatChips`).
+  //
+  // So this test cannot red on the sort being DELETED, and that is a property of JavaScript, not
+  // evidence of protection. It does red on the ordering being WRONG — a reversed comparator fails
+  // it and two of its neighbours (3 tests), as does walking the keys backwards. Kept for that, and
+  // the redundancy is named here so nobody reads the line as load-bearing.
   test('the buckets are ordered by guest number, not by the order lines arrived in', () => {
     const w = mountSplitBill({ orderId: 'o-1', couverts: 3, items: [item('a', 3, 100), item('b', 1, 200), item('c', 2, 300)] })
     expect(w.vm.seatBuckets.map(x => x.seat)).toEqual([1, 2, 3])
