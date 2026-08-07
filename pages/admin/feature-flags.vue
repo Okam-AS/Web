@@ -239,10 +239,11 @@ const FLAG_PRECONDITIONS = {
 const FLAG_OFF_BEHAVIOUR = {
   'training.setup': 'ff_off_training_setup',
   'training.assignments': 'ff_off_training_assignments',
-  // Read off `EventsNotificationDrainService`: a row whose store has this off is skipped with its
-  // status, attempt count and next-attempt time untouched — it is withheld, never spent and never
-  // deleted. Staff keep issuing links and the queue keeps growing behind the switch, which is the
-  // opposite of what "off" suggests and is the reason turning it back on is not a fresh start.
+  // Read off `EventsNotificationDrainService`: the switch is resolved before the batch is drawn, so a
+  // withheld store's rows are never selected at all — status, attempt count and next-attempt time
+  // untouched, nothing spent and nothing deleted. Staff keep issuing links and the queue keeps growing
+  // behind the switch, which is the opposite of what "off" suggests and is why turning it back on is
+  // not a fresh start.
   'Events.Dispatch': 'ff_off_events_dispatch'
 };
 
