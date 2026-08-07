@@ -58,6 +58,20 @@ function readWorld () {
   return JSON.parse(fs.readFileSync(file, 'utf8'));
 }
 
+/**
+ * Tells the world that the withdrawal request has RETURNED, so it may read its database.
+ *
+ * A concurrency fence, not a claim being taken on trust. The world's host and every context in it share
+ * one `SqliteConnection` — that is what makes an in-memory database exist — and two threads on one
+ * connection is unsupported: a world that polled its suppression table while serving the browser's POST
+ * made that POST 500 with "The transaction object is not associated with the same connection object as
+ * this command". This says WHEN to look. What the world then finds is its own database, and the
+ * assertions below are on that, not on this file's existence.
+ */
+function reportWithdrawalReturned () {
+  fs.writeFileSync(path.join(RUN_DIR, 'withdrawn'), new Date().toISOString());
+}
+
 /** What the backend recorded about the effect of the browser's request, once it has recorded it. */
 async function readOutcome (timeoutMs) {
   const file = path.join(RUN_DIR, 'outcome.json');
@@ -212,6 +226,7 @@ test(
     await journey.step('the backend recorded the withdrawal, and the next campaign honours it', async () => {
       // A done card is a client-side fact. THIS is the durable one, and it is read from the backend's
       // own view of its database rather than from anything the browser was told.
+      reportWithdrawalReturned();
       const outcome = await readOutcome(120 * 1000);
       expect(outcome.suppressionCount, 'a suppression row exists for this recipient').toBeGreaterThan(0);
       expect(outcome.leaverNextCampaign, 'the leaver is suppressed on the next campaign').toBe('Suppressed');

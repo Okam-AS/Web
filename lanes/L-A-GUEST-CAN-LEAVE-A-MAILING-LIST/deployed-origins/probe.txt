@@ -1,0 +1,26 @@
+# Read-only probe of the DEPLOYED origins, 2026-08-07T12:36Z.
+# Three GETs and one OPTIONS against public endpoints. Nothing was written anywhere.
+
+$ curl -o /dev/null -w '%{http_code}' https://okam.no/preferences/unsubscribe
+404
+
+$ curl -o /dev/null -w '%{http_code}' https://okam.no/
+200
+
+$ curl -o /dev/null -w '%{http_code}' https://okamapi.azurewebsites.net/health
+200
+
+$ curl -i -X OPTIONS https://okamapi.azurewebsites.net/v1/growth/unsubscribe \
+     -H 'Origin: https://okam.no' -H 'Access-Control-Request-Method: POST' \
+     -H 'Access-Control-Request-Headers: content-type'
+HTTP/2 204 
+date: Fri, 07 Aug 2026 12:36:42 GMT
+server: Microsoft-IIS/10.0
+access-control-allow-headers: content-type
+access-control-allow-methods: POST
+access-control-allow-origin: *
+set-cookie: ARRAffinity=<redacted routing cookie>
+set-cookie: ARRAffinitySameSite=<redacted routing cookie>
+request-context: appId=cid-v1:ae4117c3-1ff4-4d0d-86b6-f2702a3d53ea
+x-powered-by: ASP.NET
+

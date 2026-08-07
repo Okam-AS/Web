@@ -84,7 +84,7 @@ mkdir -p "$RUN_DIR"
 [ -f "$RUN_DIR/.gitignore" ] || die "$RUN_DIR/.gitignore is missing. It is what keeps the handshake —
     which carries a working unsubscribe token — out of every commit (C7). The backend world refuses
     to start without it."
-rm -f "$RUN_DIR/world.json" "$RUN_DIR/outcome.json" "$RUN_DIR/stop" "$RUN_DIR/world.log"
+rm -f "$RUN_DIR/world.json" "$RUN_DIR/outcome.json" "$RUN_DIR/withdrawn" "$RUN_DIR/stop" "$RUN_DIR/world.log"
 
 WORLD_PID=""
 NUXT_PID=""
