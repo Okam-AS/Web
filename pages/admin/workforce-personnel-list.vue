@@ -86,7 +86,59 @@
           {{ $i('wfpl_loading') }}
         </p>
 
-        <WorkforcePersonnelListSheet :sheet="sheet" />
+        <!-- The § 8-5-6 correction form. Not a modal: the sheet stays on screen underneath, so the
+             manager can read the row they are correcting while they correct it. -->
+        <section v-if="correcting" class="wfpl-page__correct">
+          <h2 class="wfpl-page__correct-title">
+            {{ $i('wfpl_correct_title', { name: correcting.name || $i('wfpl_row_unnamed') }) }}
+          </h2>
+          <p class="wfpl-page__correct-note">
+            {{ $i('wfpl_correct_note') }}
+          </p>
+
+          <div class="wfpl-page__correct-fields">
+            <div class="wfpl-page__field">
+              <label class="wfpl-page__label" for="wfpl-correct-start-date">{{ $i('wfpl_correct_start') }}</label>
+              <div class="wfpl-page__pair">
+                <input id="wfpl-correct-start-date" v-model="form.startDate" class="wfpl-page__date" type="date" :disabled="saving">
+                <input v-model="form.startTime" class="wfpl-page__time" type="time" :disabled="saving">
+              </div>
+            </div>
+
+            <div class="wfpl-page__field">
+              <label class="wfpl-page__label" for="wfpl-correct-end-date">{{ $i('wfpl_correct_end') }}</label>
+              <div class="wfpl-page__pair">
+                <input
+                  id="wfpl-correct-end-date"
+                  v-model="form.endDate"
+                  class="wfpl-page__date"
+                  type="date"
+                  :disabled="saving || form.noDeparture"
+                >
+                <input v-model="form.endTime" class="wfpl-page__time" type="time" :disabled="saving || form.noDeparture">
+              </div>
+            </div>
+          </div>
+
+          <!-- A window with no recorded departure is a REAL state of the register (§ 8-5-6 asks for
+               the end time, and its absence is the fact the sheet reports), so it is offered as a
+               deliberate choice rather than reachable only by clearing two inputs. -->
+          <label class="wfpl-page__checkbox">
+            <input v-model="form.noDeparture" type="checkbox" :disabled="saving">
+            {{ $i('wfpl_correct_no_departure') }}
+          </label>
+
+          <div class="wfpl-page__correct-actions">
+            <button class="wfpl-page__btn wfpl-page__btn--save" :disabled="saving" @click="saveCorrection">
+              {{ saving ? $i('wfpl_correct_saving') : $i('wfpl_correct_save') }}
+            </button>
+            <button class="wfpl-page__btn" :disabled="saving" @click="cancelCorrection">
+              {{ $i('wfpl_correct_cancel') }}
+            </button>
+          </div>
+        </section>
+
+        <WorkforcePersonnelListSheet :sheet="sheet" correctable @correct="startCorrection" />
       </template>
     </div>
   </AdminPage>
@@ -102,7 +154,26 @@ import { CAPABILITY_MANAGER, callerHas } from '~/utils/workforce/roster';
 import { SHEET_UNKNOWN, buildPersonnelSheet } from '~/utils/workforce/personnel-list';
 
 const LOCAL_DATE = /^\d{4}-\d{2}-\d{2}$/;
+const LOCAL_TIME = /^(\d{2}):(\d{2})(:\d{2})?$/;
 const MS_PER_DAY = 86400000;
+
+/**
+ * A date input and a time input joined into the ONE wire shape the correction takes:
+ * `yyyy-MM-ddTHH:mm:ss`, venue wall clock, no `Z` and no offset. Null when either half is not what
+ * it claims to be — a browser that hands back a partial value must not become a request for some
+ * other minute.
+ *
+ * Seconds are pinned to `:00` rather than passed through. `<input type="time">` yields `HH:mm` in
+ * most browsers and `HH:mm:ss` in some, and a register whose recorded departure depends on which
+ * browser the manager used is a register with two answers. It also makes the fixed-width strings
+ * safely comparable as text, which is how the form checks that a departure follows its arrival.
+ */
+function wallTime (date, time) {
+  if (!LOCAL_DATE.test(date || '')) { return null; }
+  const parts = LOCAL_TIME.exec(time || '');
+  if (!parts) { return null; }
+  return date + 'T' + parts[1] + ':' + parts[2] + ':00';
+}
 
 // The statutory personalliste — `bokføringsforskriften § 8-5-6`.
 //
@@ -113,11 +184,18 @@ const MS_PER_DAY = 86400000;
 // there was no route, no client method and no control anywhere in the admin web that read it, so an
 // inspector standing in the venue could be shown nothing at all.
 //
-// WHAT IT DELIBERATELY DOES NOT OFFER. There is no editing. The whole personalliste family is
-// append-only and retention-locked on the backend: an entry is corrected by a superseding entry
-// carrying the correction actor and time, and no manager-facing endpoint on the API writes one. A
-// screen that offered a correction control here could only ever fail, so it shows the correction
-// lineage the register already carries and nothing more.
+// WHAT A CORRECTION IS HERE, AND WHY IT IS NOT AN EDIT. § 8-5-6 requires that "dersom det foretas
+// rettelser i personallisten, skal det fremgå hvem som har foretatt rettelsen og tidspunkt for når
+// det er gjort". The whole personalliste family is append-only and retention-locked on the backend,
+// so the correction control does not change a row: it POSTs a new entry that SUPERSEDES the one
+// being corrected and carries the correcting manager and the instant, and the corrected row is
+// retained saying exactly what it said. That is why the form asks for the whole window rather than
+// offering an in-place field, and why the sheet keeps showing the correction lineage afterwards.
+//
+// THE TIMES TYPED HERE ARE THE VENUE'S WALL CLOCK, AND THE SERVER CONVERTS THEM. This page never
+// turns a typed time into an instant: it has no business doing zone arithmetic on a statutory
+// register, and a browser in another country would otherwise write an hour nobody typed. The wire
+// takes `yyyy-MM-ddTHH:mm:ss` with no zone designator at all.
 //
 // THE DATE IS THE VENUE'S, AND THE SERVER OWNS IT. The picker starts empty and the first read sends
 // NO `businessDate` at all, which makes the server resolve the venue's today in the store's own
@@ -141,6 +219,12 @@ export default {
       response: null,
       loading: false,
       issuing: false,
+
+      // The row being corrected (the sheet's row shape), or null. Holding the ROW rather than only
+      // its id is what lets the form name the person it is about.
+      correcting: null,
+      form: { startDate: '', startTime: '', endDate: '', endTime: '', noDeparture: false },
+      saving: false,
 
       toast: { show: false, message: '', type: 'success' },
       toastTimer: null
@@ -209,6 +293,7 @@ export default {
       this.capabilities = [];
       this.selectedDate = '';
       this.response = null;
+      this.cancelCorrection();
 
       try {
         const context = await this._rosterService.GetContext(this.storeId);
@@ -236,6 +321,10 @@ export default {
       // Cleared to UNKNOWN while in flight. Leaving the previous day's rows on screen under a new
       // date would print one day's people under another day's heading.
       this.response = null;
+
+      // A correction form is about ONE row of the day being left. Carrying it across a reload would
+      // let a manager submit a window against an entry that is no longer on screen.
+      this.cancelCorrection();
 
       const asked = this.selectedDate;
       try {
@@ -279,6 +368,73 @@ export default {
       const pad = n => String(n).padStart(2, '0');
       this.selectedDate = moved.getUTCFullYear() + '-' + pad(moved.getUTCMonth() + 1) + '-' + pad(moved.getUTCDate());
       return this.load();
+    },
+
+    /**
+     * Opens the § 8-5-6 correction for one row, prefilled with what the register currently says.
+     *
+     * The prefill comes from the SHEET's already-resolved venue stamps (`row.start` / `row.end`),
+     * not from the raw UTC on the wire: those stamps are the store's own wall clock, which is the
+     * epoch the correction is submitted in. Re-deriving them here would be a second conversion able
+     * to disagree with the one printed in the row above the form.
+     */
+    startCorrection (row) {
+      if (!row || !row.entryId) { return; }
+      this.correcting = row;
+      this.form = {
+        startDate: row.start ? row.start.isoDate : (this.sheet.businessDate || ''),
+        startTime: row.start ? row.start.time : '',
+        endDate: row.end ? row.end.isoDate : (this.sheet.businessDate || ''),
+        endTime: row.end ? row.end.time : '',
+        // An open window opens the form already saying so, rather than presenting empty inputs a
+        // manager would have to read as either "unknown" or "none".
+        noDeparture: !row.end
+      };
+    },
+
+    cancelCorrection () {
+      this.correcting = null;
+      this.saving = false;
+      this.form = { startDate: '', startTime: '', endDate: '', endTime: '', noDeparture: false };
+    },
+
+    async saveCorrection () {
+      if (!this.correcting || this.saving) { return; }
+
+      const start = wallTime(this.form.startDate, this.form.startTime);
+      if (!start) {
+        this.notify(this.$i('wfpl_correct_start_invalid'), 'error');
+        return;
+      }
+
+      const end = this.form.noDeparture ? null : wallTime(this.form.endDate, this.form.endTime);
+      if (!this.form.noDeparture && !end) {
+        this.notify(this.$i('wfpl_correct_end_invalid'), 'error');
+        return;
+      }
+
+      // Compared as the manager typed them. The server refuses this too — this is the immediate
+      // answer, not the authority for it.
+      if (end && end <= start) {
+        this.notify(this.$i('wfpl_correct_order_invalid'), 'error');
+        return;
+      }
+
+      this.saving = true;
+      try {
+        await this._personnelService.CorrectPersonnelListEntry(
+          this.storeId, this.correcting.entryId, { onSiteStartLocal: start, onSiteEndLocal: end });
+        this.cancelCorrection();
+        this.notify(this.$i('wfpl_correct_saved'));
+      } catch (e) {
+        this.saving = false;
+        this.notifyError(e, 'wfpl_correct_failed');
+        return;
+      }
+
+      // Re-read rather than patch: the correction created a NEW entry and superseded the one on
+      // screen, so the register the manager is now looking at is a different set of rows.
+      await this.load();
     },
 
     /** "Today" is a question for the server: clear the date and let it resolve the venue's own day. */
@@ -386,6 +542,16 @@ export default {
 
 .wfpl-page__loading { font-size: 0.85rem; color: #64748b; margin: 0 0 12px; }
 
+.wfpl-page__correct { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 18px; }
+.wfpl-page__correct-title { font-size: 1.05rem; font-weight: 600; color: #292c34; margin: 0 0 6px; }
+.wfpl-page__correct-note { font-size: 0.82rem; color: #64748b; margin: 0 0 16px; }
+.wfpl-page__correct-fields { display: flex; gap: 24px; flex-wrap: wrap; }
+.wfpl-page__pair { display: flex; gap: 8px; }
+.wfpl-page__time { padding: 9px 10px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; color: #292c34; }
+.wfpl-page__checkbox { display: inline-flex; align-items: center; gap: 10px; margin-top: 16px; font-size: 0.86rem; color: #292c34; cursor: pointer; }
+.wfpl-page__correct-actions { display: flex; gap: 8px; margin-top: 18px; }
+.wfpl-page__btn--save { border-color: #1bb776; color: #159f63; font-weight: 600; }
+
 /* THE PAGE HALF OF THE PRINT PATH: everything that is not the register comes off the paper, and the
    sheet gets the full width of it. The sheet's own print rules (the component) do the rest. */
 @media print {
@@ -393,6 +559,7 @@ export default {
   .wfpl-page__header,
   .wfpl-page__controls,
   .wfpl-page__procedure,
+  .wfpl-page__correct,
   .wfpl-page__toast,
   .wfpl-page__loading { display: none !important; }
 }

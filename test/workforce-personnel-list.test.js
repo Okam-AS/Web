@@ -11,6 +11,12 @@ import {
   formatOrganizationNumber
 } from '~/utils/workforce/personnel-list'
 
+// The shared base mints the Idempotency-Key from `crypto.getRandomValues`, which this jsdom
+// environment does not expose. Pinned rather than shimmed so the header can be asserted BY VALUE —
+// the same treatment workforce-api-client.test.js gives it. (`jest.mock` is hoisted above the
+// imports at transform time, so declaring it here still registers before the client is loaded.)
+jest.mock('~/utils/guid', () => ({ newGuid: () => 'test-idempotency-key' }))
+
 // The statutory personalliste, from the wire to the sheet.
 //
 // The response fixture below is the backend's OWN committed wire fixture
@@ -366,5 +372,82 @@ describe('WorkforcePersonnelListService — route-for-route with endpoint 30', (
       expect(isWorkforceApiError(e)).toBe(true)
       expect(e.code).toBe('workforce.forbidden')
     })
+  })
+
+  // ---- The § 8-5-6 correction ----------------------------------------------------------------
+
+  test('a correction POSTs to the entry\'s corrections sub-collection, never a PUT on the entry', () => {
+    // The shape is the append the backend performs: a NEW entry supersedes this one. The whole
+    // family is physically append-only, so a route shaped like an edit would be one the database
+    // refuses.
+    respondWith(200, {})
+    service().CorrectPersonnelListEntry(42, 'entry-1', {
+      onSiteStartLocal: '2026-07-13T09:00:00',
+      onSiteEndLocal: '2026-07-13T16:45:00'
+    })
+
+    const [url, init] = global.fetch.mock.calls[0]
+    expect(url).toBe('/workforce/stores/42/personnel-list/entries/entry-1/corrections')
+    expect(init.method).toBe('POST')
+    // A mutation, so the shared base attaches the key the endpoint demands — the correction is
+    // otherwise retryable into a chain of superseding rows, which is a fork of the register.
+    expect(init.headers['Idempotency-Key']).toBe('test-idempotency-key')
+    expect(JSON.parse(init.body)).toEqual({
+      onSiteStartLocal: '2026-07-13T09:00:00',
+      onSiteEndLocal: '2026-07-13T16:45:00',
+      utcOffsetMinutes: null
+    })
+  })
+
+  test('a null departure is sent as null — a window with no recorded end is a real state', () => {
+    respondWith(200, {})
+    service().CorrectPersonnelListEntry(42, 'entry-1', {
+      onSiteStartLocal: '2026-07-13T09:00:00',
+      onSiteEndLocal: null
+    })
+
+    expect(JSON.parse(global.fetch.mock.calls[0][1].body).onSiteEndLocal).toBeNull()
+  })
+
+  test('a time carrying a zone is REFUSED before it can be written into an immutable row', () => {
+    // A value that DENOTES a zone is converted by the model binder before the store's own zone is
+    // consulted, so a departure typed as 23:30 would be recorded as another hour — a false statement
+    // about when somebody left work, inside a row nothing can afterwards edit.
+    respondWith(200, {})
+
+    expect(() => service().CorrectPersonnelListEntry(42, 'entry-1', {
+      onSiteStartLocal: '2026-07-13T09:00:00Z'
+    })).toThrow(/yyyy-MM-ddTHH:mm:ss/)
+    expect(() => service().CorrectPersonnelListEntry(42, 'entry-1', {
+      onSiteStartLocal: '2026-07-13T09:00:00',
+      onSiteEndLocal: '2026-07-13T16:45:00+02:00'
+    })).toThrow(/yyyy-MM-ddTHH:mm:ss/)
+    expect(() => service().CorrectPersonnelListEntry(42, 'entry-1', {
+      onSiteStartLocal: '2026-07-13'
+    })).toThrow(/yyyy-MM-ddTHH:mm:ss/)
+
+    expect(global.fetch).not.toHaveBeenCalled()
+  })
+
+  test('the stale-revision refusal arrives as the typed failure a caller can act on', async () => {
+    // Correcting a row a later one already replaced. The caller keys on the CODE, never on the
+    // prose, which is localised.
+    respondWith(409, {
+      code: 'workforce.stale-revision',
+      conflictKind: 'stale-revision',
+      detail: 'The submitted base revision is stale; the resource has since changed.'
+    })
+
+    // `rejects` FIRST, as the 403 test above does. A bare `.catch(fn)` on a promise that resolves
+    // runs zero assertions and reports green, so the whole refusal could stop happening — the client
+    // handing a 409 body back as a successful result — without this test noticing. The rejection is
+    // the claim; the fields are the detail.
+    await expect(service().CorrectPersonnelListEntry(42, 'entry-1', { onSiteStartLocal: '2026-07-13T09:00:00' }))
+      .rejects.toMatchObject({ status: 409, code: 'workforce.stale-revision', conflictKind: 'stale-revision' })
+
+    await service().CorrectPersonnelListEntry(42, 'entry-1', { onSiteStartLocal: '2026-07-13T09:00:00' })
+      .catch((e) => {
+        expect(isWorkforceApiError(e)).toBe(true)
+      })
   })
 })

@@ -66,7 +66,7 @@
                repeats on every printed page, so a two-page list would otherwise carry the venue and
                the date on sheet one and anonymous rows on sheet two. -->
           <tr class="wfpl-sheet__repeat">
-            <th colspan="6">
+            <th :colspan="columnCount">
               {{ runningIdentity }}
             </th>
           </tr>
@@ -77,6 +77,9 @@
             <th>{{ $i('wfpl_col_start') }}</th>
             <th>{{ $i('wfpl_col_end') }}</th>
             <th>{{ $i('wfpl_col_note') }}</th>
+            <!-- Screen only. The correction control is not part of the register, so it comes off the
+                 paper with the rest of the chrome — see the print rules below. -->
+            <th v-if="correctable" class="wfpl-sheet__actions-head" />
           </tr>
         </thead>
         <tbody>
@@ -113,6 +116,19 @@
                 {{ correctionLabel(row.correction) }}
               </span>
               <span v-if="!row.hiredInOrganizationNumber && !row.correction">{{ dash }}</span>
+            </td>
+            <td v-if="correctable" class="wfpl-sheet__actions">
+              <!-- § 8-5-6's rettelse. Offered only for a row the register can identify, because the
+                   correction names the entry it supersedes and a row with no id could only produce a
+                   request the server refuses. -->
+              <button
+                v-if="row.entryId"
+                type="button"
+                class="wfpl-sheet__correct"
+                @click="$emit('correct', row)"
+              >
+                {{ $i('wfpl_correct') }}
+              </button>
             </td>
           </tr>
         </tbody>
@@ -171,6 +187,17 @@ export default {
     sheet: {
       type: Object,
       required: true
+    },
+    /**
+     * Whether to offer the § 8-5-6 correction control per row (emits `correct` with the row).
+     *
+     * Default false, so a surface that has no correction path — the POS on-venue view, a print-only
+     * render — cannot grow a button that leads nowhere. The register itself is identical either way:
+     * the control is chrome around the sheet, never a column of it.
+     */
+    correctable: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -185,6 +212,10 @@ export default {
     },
     isZoneUnusable () {
       return this.sheet.zoneUnusable === true;
+    },
+    /** Kept in step with the header cells so the repeated print row never spans the wrong width. */
+    columnCount () {
+      return this.correctable ? 7 : 6;
     },
     /**
      * The single business the day was recorded under, or nothing.
@@ -289,6 +320,11 @@ export default {
 .wfpl-sheet__note { font-size: 0.78rem; color: #64748b; }
 .wfpl-sheet__note-line { display: block; }
 
+.wfpl-sheet__actions { text-align: right; white-space: nowrap; }
+.wfpl-sheet__correct { background: #fff; border: 2px solid #e2e8f0; border-radius: 8px; padding: 5px 10px; font-size: 0.78rem; color: #292c34; cursor: pointer; }
+.wfpl-sheet__correct:hover { background: #f8f9fa; border-color: #cbd5e0; }
+.wfpl-sheet__correct:focus { outline: none; border-color: #1bb776; box-shadow: 0 0 0 3px rgba(27, 183, 118, 0.2); }
+
 .wfpl-sheet__summary { font-size: 0.86rem; font-weight: 600; margin: 14px 0 0; }
 .wfpl-sheet__foot { margin-top: 14px; padding-top: 10px; border-top: 1px solid #e2e8f0; }
 .wfpl-sheet__foot-line { font-size: 0.76rem; color: #64748b; margin: 0 0 4px; }
@@ -324,6 +360,11 @@ export default {
   .wfpl-sheet__table thead { display: table-header-group; }
   .wfpl-sheet__repeat { display: table-row; }
   .wfpl-sheet__repeat th { font-size: 8pt; text-transform: none; letter-spacing: 0; border-bottom: 0; padding-bottom: 2px; }
+
+  /* The correction control is chrome, not register. It comes off the paper entirely — a printed
+     sheet handed to an inspector must show what was recorded and nothing that could be pressed. */
+  .wfpl-sheet__actions,
+  .wfpl-sheet__actions-head { display: none; }
 
   /* A person's row is never split across two sheets of paper. */
   .wfpl-sheet__table tr { break-inside: avoid; page-break-inside: avoid; }

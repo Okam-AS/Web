@@ -38,6 +38,12 @@ jest.mock('~/utils/workforce/personnel-list-client', () => ({
       // be testing a server that does not exist.
       return Promise.resolve(mockResponseFor(businessDate || behaviour.venueToday || '2026-07-13'))
     }
+
+    CorrectPersonnelListEntry (storeId, entryId, correction) {
+      calls.push(['CorrectPersonnelListEntry', storeId, entryId, correction])
+      if (behaviour.correctFails) { return Promise.reject(behaviour.correctFails) }
+      return Promise.resolve({ personnelListEntryId: 'entry-2', supersedesEntryId: entryId })
+    }
   }
 }))
 
@@ -321,5 +327,142 @@ describe('the print path', () => {
 
     wrapper.destroy()
     expect(document.body.classList.contains('wfpl-print-host')).toBe(false)
+  })
+})
+
+describe('the § 8-5-6 correction — an append that names its author, never an edit', () => {
+  // The register requires that "dersom det foretas rettelser i personallisten, skal det fremgå hvem
+  // som har foretatt rettelsen og tidspunkt for når det er gjort". Until this page grew the control
+  // there was no manager-facing route at all, and the only corrected row anywhere was a fixture row
+  // no part of the product could write.
+
+  const row = (wrapper, index = 0) => wrapper.vm.sheet.rows[index]
+
+  test('the form opens prefilled from what the register currently says, in the VENUE\'s clock', async () => {
+    behaviour.response = Object.assign(mockResponseFor('2026-07-13'), {
+      presentCount: 0,
+      rows: [Object.assign(mockResponseFor('2026-07-13').rows[0], {
+        onSiteStartUtc: '2026-07-13T07:00:00',
+        onSiteEndUtc: '2026-07-13T13:00:00',
+        isPresent: false
+      })]
+    })
+    const wrapper = mountPage()
+    await settled()
+
+    wrapper.vm.startCorrection(row(wrapper))
+
+    // 07:00Z / 13:00Z read in Europe/Oslo in July. Prefilling from the sheet's already-resolved
+    // stamps is what keeps the form and the row above it from disagreeing about the same instant.
+    expect(wrapper.vm.form.startDate).toBe('2026-07-13')
+    expect(wrapper.vm.form.startTime).toBe('09:00')
+    expect(wrapper.vm.form.endTime).toBe('15:00')
+    expect(wrapper.vm.form.noDeparture).toBe(false)
+  })
+
+  test('an open window opens the form already saying no departure was recorded', async () => {
+    // The default response's single row has no end. That is a real state of the register — § 8-5-6
+    // asks for the end time and its absence is the fact the sheet reports — so it is presented as
+    // such rather than as two empty inputs a manager has to interpret.
+    const wrapper = mountPage()
+    await settled()
+
+    wrapper.vm.startCorrection(row(wrapper))
+
+    expect(wrapper.vm.form.noDeparture).toBe(true)
+    expect(wrapper.vm.form.endTime).toBe('')
+  })
+
+  test('saving sends venue WALL-CLOCK times with no zone designator, then re-reads the day', async () => {
+    const wrapper = mountPage()
+    await settled()
+    calls.length = 0
+
+    wrapper.vm.startCorrection(row(wrapper))
+    wrapper.vm.form.endDate = '2026-07-13'
+    wrapper.vm.form.endTime = '16:45'
+    wrapper.vm.form.noDeparture = false
+    await wrapper.vm.saveCorrection()
+    await settled()
+
+    expect(calls[0]).toEqual(['CorrectPersonnelListEntry', 42, 'entry-1', {
+      onSiteStartLocal: '2026-07-13T09:00:00',
+      onSiteEndLocal: '2026-07-13T16:45:00'
+    }])
+    // The correction created a NEW entry and superseded the one on screen, so the rows the manager
+    // is looking at are a different set. Patching in place would show a register nobody wrote.
+    expect(calls[1]).toEqual(['GetPersonnelList', 42, '2026-07-13'])
+    expect(wrapper.vm.correcting).toBeNull()
+    expect(wrapper.vm.toast.message).toBe('wfpl_correct_saved')
+  })
+
+  test('a departure ticked as unrecorded is sent as null, not as a missing field', async () => {
+    const wrapper = mountPage()
+    await settled()
+    calls.length = 0
+
+    wrapper.vm.startCorrection(row(wrapper))
+    await wrapper.vm.saveCorrection()
+    await settled()
+
+    expect(calls[0][3]).toEqual({ onSiteStartLocal: '2026-07-13T09:00:00', onSiteEndLocal: null })
+  })
+
+  test('a half-typed time and a backwards window are refused BEFORE anything is sent', async () => {
+    const wrapper = mountPage()
+    await settled()
+    calls.length = 0
+
+    wrapper.vm.startCorrection(row(wrapper))
+    wrapper.vm.form.startTime = ''
+    await wrapper.vm.saveCorrection()
+    expect(wrapper.vm.toast.message).toBe('wfpl_correct_start_invalid')
+
+    wrapper.vm.form.startTime = '09:00'
+    wrapper.vm.form.noDeparture = false
+    wrapper.vm.form.endDate = '2026-07-13'
+    wrapper.vm.form.endTime = ''
+    await wrapper.vm.saveCorrection()
+    expect(wrapper.vm.toast.message).toBe('wfpl_correct_end_invalid')
+
+    wrapper.vm.form.endTime = '08:30'
+    await wrapper.vm.saveCorrection()
+    expect(wrapper.vm.toast.message).toBe('wfpl_correct_order_invalid')
+
+    expect(calls).toEqual([])
+    expect(wrapper.vm.correcting).not.toBeNull()
+  })
+
+  test('a REFUSED correction keeps the form open and reports the server\'s own wording', async () => {
+    // The refusal beside the acceptance, one variable apart: correcting a row a later one already
+    // replaced. Keeping the form open is the difference between a manager who can retry against the
+    // current row and one who has lost what they typed.
+    behaviour.correctFails = problem(409, 'workforce.stale-revision')
+    const wrapper = mountPage()
+    await settled()
+    calls.length = 0
+
+    wrapper.vm.startCorrection(row(wrapper))
+    await wrapper.vm.saveCorrection()
+    await settled()
+
+    expect(calls.map(c => c[0])).toEqual(['CorrectPersonnelListEntry'])
+    expect(wrapper.vm.correcting).not.toBeNull()
+    expect(wrapper.vm.saving).toBe(false)
+    expect(wrapper.vm.toast.type).toBe('error')
+    expect(wrapper.vm.toast.message).toBe('server said so')
+  })
+
+  test('changing the day drops a correction in progress rather than carrying it over', async () => {
+    // The form is about ONE row of the day being left. Submitting it after a reload would write a
+    // window against an entry that is no longer on screen.
+    const wrapper = mountPage()
+    await settled()
+
+    wrapper.vm.startCorrection(row(wrapper))
+    await wrapper.vm.pickDate('2026-07-01')
+    await settled()
+
+    expect(wrapper.vm.correcting).toBeNull()
   })
 })
