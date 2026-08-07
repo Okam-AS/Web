@@ -2867,6 +2867,7 @@ export default {
   // Publisert vaktplan: lest-markering og mottakskvittering
   wfme_pub_title_one: 'Ny vaktplan publisert',
   wfme_pub_title_many: '{count} nye vaktplaner publisert',
+  wfme_pub_title_confirmed: 'Vaktplanen er bekreftet',
   wfme_pub_lede: 'Du har ikke åpnet denne ennå. Lederen ser hvem som har lest.',
   wfme_pub_published: 'Kom {time}',
   wfme_pub_mark_read: 'Marker som lest',

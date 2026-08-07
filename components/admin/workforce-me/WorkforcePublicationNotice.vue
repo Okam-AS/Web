@@ -1,16 +1,19 @@
 <template>
   <section v-if="items && items.length" class="wfme-pub">
     <h2 class="wfme-pub__title">
-      {{ items.length === 1 ? $i('wfme_pub_title_one') : $i('wfme_pub_title_many', { count: items.length }) }}
+      {{ title }}
     </h2>
-    <p class="wfme-pub__lede">
+    <!-- "You have not opened this yet" is a claim about an UNREAD row. A row kept on screen only
+         because this session acknowledged it has been opened, so the lede goes when nothing here is
+         unread rather than telling the worker something they have just disproved. -->
+    <p v-if="unreadCount" class="wfme-pub__lede">
       {{ $i('wfme_pub_lede') }}
     </p>
 
     <ul class="wfme-pub__list">
       <li v-for="item in items" :key="item.inboxItemId" class="wfme-pub__item">
         <div class="wfme-pub__when">
-          <span class="wfme-pub__dot" aria-hidden="true" />
+          <span v-if="!item.isRead" class="wfme-pub__dot" aria-hidden="true" />
           {{ $i('wfme_pub_published', { time: publishedLabel(item) }) }}
         </div>
 
@@ -19,7 +22,10 @@
         </p>
 
         <div class="wfme-pub__actions">
+          <!-- Offered only while there is something to mark. A row that is already read gets no
+               button whose only possible effect is to re-assert what the server already says. -->
           <button
+            v-if="!item.isRead"
             class="wfme-pub__btn wfme-pub__btn--ghost"
             :disabled="busyId === item.inboxItemId"
             @click="$emit('mark-read', item)"
@@ -67,6 +73,24 @@ export default {
     receipts: { type: Object, default: () => ({}) },
     busyId: { type: String, default: null },
     locale: { type: String, default: 'nb-NO' }
+  },
+  computed: {
+    /** Rows the server still reports as unread. The heading and the lede are claims about these. */
+    unreadCount () {
+      return (this.items || []).filter(item => !item.isRead).length;
+    },
+    /**
+     * "Ny vaktplan publisert" is an announcement, and an announcement about a roster the worker has
+     * just confirmed is stale the moment it is made. Once nothing here is unread, the heading says
+     * the thing that IS true — this was confirmed — so the row carrying the receipt is not sitting
+     * under a title calling it new.
+     */
+    title () {
+      if (!this.unreadCount) { return this.$i('wfme_pub_title_confirmed'); }
+      return this.unreadCount === 1
+        ? this.$i('wfme_pub_title_one')
+        : this.$i('wfme_pub_title_many', { count: this.unreadCount });
+    }
   },
   methods: {
     publishedLabel (item) {

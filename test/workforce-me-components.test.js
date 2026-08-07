@@ -134,3 +134,58 @@ describe('WorkforcePublicationNotice parses UTC and renders local', () => {
     expect(render().find('.wfme-pub__receipt').text()).toContain(localLabel('2026-07-20T09:00:00Z'))
   })
 })
+
+describe('WorkforcePublicationNotice stops calling a confirmed row new', () => {
+  // A row is kept on screen after it is acknowledged so the receipt has somewhere to render — see
+  // `publicationsForNotice`. It arrives back from the server `isRead: true`, and the heading, the
+  // lede, the unread dot and the mark-as-read button are all claims about an UNREAD row. This is the
+  // component half only; that a worker actually sees the receipt is the workforce-week-run walk.
+  const row = isRead => ({
+    inboxItemId: 'i1', schedulePublicationId: 'p1', createdAtUtc: '2026-07-20T08:00:00', isRead
+  })
+  const render = (items, receipts) => mount(WorkforcePublicationNotice, {
+    propsData: { items, receipts: receipts || {}, locale: 'nb-NO' },
+    mocks: { $i }
+  })
+
+  const confirmed = () => render(
+    [row(true)],
+    { p1: { occurredAtUtc: '2026-07-20T09:00:00', alreadyAcknowledged: false } }
+  )
+
+  test('an acknowledged row still renders its receipt', () => {
+    expect(confirmed().find('.wfme-pub__receipt').text()).toContain('Bekreftet mottatt')
+  })
+
+  test('the heading names the confirmation rather than announcing a new plan', () => {
+    expect(confirmed().find('.wfme-pub__title').text()).toBe('Vaktplanen er bekreftet')
+    expect(render([row(false)]).find('.wfme-pub__title').text()).toBe('Ny vaktplan publisert')
+  })
+
+  test('"you have not opened this yet" is withheld once nothing is unread', () => {
+    expect(confirmed().find('.wfme-pub__lede').exists()).toBe(false)
+    expect(render([row(false)]).find('.wfme-pub__lede').exists()).toBe(true)
+  })
+
+  test('the unread dot and the mark-as-read button go with the unread state', () => {
+    const done = confirmed()
+    expect(done.find('.wfme-pub__dot').exists()).toBe(false)
+    expect(done.find('.wfme-pub__btn--ghost').exists()).toBe(false)
+    const fresh = render([row(false)])
+    expect(fresh.find('.wfme-pub__dot').exists()).toBe(true)
+    expect(fresh.find('.wfme-pub__btn--ghost').exists()).toBe(true)
+  })
+
+  test('the acknowledge button stays, so the idempotent replay has a caller', () => {
+    const buttons = confirmed().findAll('.wfme-pub__btn:not(.wfme-pub__btn--ghost)')
+    expect(buttons.length).toBe(1)
+    expect(buttons.at(0).text()).toBe('Bekreft mottatt')
+  })
+
+  test('the count in the heading is the unread ones, not the ones on screen', () => {
+    // Two rows, one of them already confirmed: announcing "2 nye" would count a plan the worker has
+    // just confirmed as something they have not looked at.
+    const items = [row(true), Object.assign(row(false), { inboxItemId: 'i2', schedulePublicationId: 'p2' })]
+    expect(render(items).find('.wfme-pub__title').text()).toBe('Ny vaktplan publisert')
+  })
+})

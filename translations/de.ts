@@ -2815,6 +2815,7 @@ export default {
   // Veröffentlichter Dienstplan: Lesemarkierung und Empfangsbestätigung
   wfme_pub_title_one: 'Neuer Dienstplan veröffentlicht',
   wfme_pub_title_many: '{count} neue Dienstpläne veröffentlicht',
+  wfme_pub_title_confirmed: 'Dienstplan bestätigt',
   wfme_pub_lede: 'Du hast ihn noch nicht geöffnet. Die Leitung sieht, wer gelesen hat.',
   wfme_pub_published: 'Eingegangen {time}',
   wfme_pub_mark_read: 'Als gelesen markieren',
