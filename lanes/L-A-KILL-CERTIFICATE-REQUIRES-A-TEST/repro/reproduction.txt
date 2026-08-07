@@ -1,0 +1,29 @@
+--- c65b19c  with MUTATE_TEST_COMMAND=false  (exits 1, executes no test)
+2/2 mutations reddened the suite
+    source intact
+    results file written (a certificate exists)
+--- c65b19c  with MUTATE_TEST_COMMAND=true  (exits 0, executes no test)
+0/2 mutations reddened the suite
+SURVIVED: first mutation [STILL-GREEN]; second mutation [STILL-GREEN]
+    source intact
+    results file written (a certificate exists)
+
+--- 05c160a  with MUTATE_TEST_COMMAND=false  (exits 1, executes no test)
+2/2 mutations reddened the suite
+    source intact
+    results file written (a certificate exists)
+--- 05c160a  with MUTATE_TEST_COMMAND=true  (exits 0, executes no test)
+0/2 mutations reddened the suite
+SURVIVED: first mutation [STILL-GREEN]; second mutation [STILL-GREEN]
+    source intact
+    results file written (a certificate exists)
+
+--- HEAD  with MUTATE_TEST_COMMAND=false  (exits 1, executes no test)
+Error: UNUSABLE BASELINE for anything — the suite command reported no executed-test count. Refusing to run: every mutation would be judged against a run that proves nothi
+    source intact
+    no results file (nothing certified)
+--- HEAD  with MUTATE_TEST_COMMAND=true  (exits 0, executes no test)
+Error: UNUSABLE BASELINE for anything — the suite command reported no executed-test count. Refusing to run: every mutation would be judged against a run that proves nothi
+    source intact
+    no results file (nothing certified)
+
