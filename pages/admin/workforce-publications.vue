@@ -68,7 +68,7 @@
 import AdminPage from '~/components/organisms/AdminPage.vue';
 import WorkforcePublicationList from '~/components/admin/workforce/WorkforcePublicationList.vue';
 import WorkforcePublicationRecipients from '~/components/admin/workforce/WorkforcePublicationRecipients.vue';
-import { isWorkforceApiError } from '~/utils/workforce/api-client';
+import { contextRefusalKey } from '~/utils/workforce/context-refusal';
 import { WorkforceScheduleService } from '~/utils/workforce/schedule-client';
 import { callerHas, CAPABILITY_MANAGER, CAPABILITY_SCHEDULER } from '~/utils/workforce/roster';
 import {
@@ -156,9 +156,10 @@ export default {
         const context = await this._scheduleService.GetContext(this.storeId);
         this.capabilities = (context && context.capabilities) || [];
       } catch (e) {
-        this.contextError = isWorkforceApiError(e) && e.status === 403
-          ? this.$i('wfp_no_capability')
-          : this.$i('wfp_context_failed');
+        this.contextError = this.$i(contextRefusalKey(e, {
+          noCapability: 'wfp_no_capability',
+          failed: 'wfp_context_failed'
+        }));
         return;
       }
 

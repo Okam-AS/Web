@@ -40,7 +40,7 @@
 <script>
 import AdminPage from '~/components/organisms/AdminPage.vue';
 import WorkforceDeliveryPanel from '~/components/admin/workforce/WorkforceDeliveryPanel.vue';
-import { isWorkforceApiError } from '~/utils/workforce/api-client';
+import { contextRefusalKey } from '~/utils/workforce/context-refusal';
 import { WorkforceScheduleService } from '~/utils/workforce/schedule-client';
 import { callerHas, CAPABILITY_MANAGER } from '~/utils/workforce/roster';
 import { summarise, DELIVERY_UNKNOWN } from '~/utils/workforce/delivery-failures';
@@ -105,9 +105,10 @@ export default {
         const context = await this._scheduleService.GetContext(this.storeId);
         this.capabilities = (context && context.capabilities) || [];
       } catch (e) {
-        this.contextError = isWorkforceApiError(e) && e.status === 403
-          ? this.$i('wfd_no_capability')
-          : this.$i('wfd_context_failed');
+        this.contextError = this.$i(contextRefusalKey(e, {
+          noCapability: 'wfd_no_capability',
+          failed: 'wfd_context_failed'
+        }));
         return;
       }
 

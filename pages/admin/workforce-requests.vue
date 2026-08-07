@@ -162,6 +162,7 @@
 import AdminPage from '~/components/organisms/AdminPage.vue';
 import WorkforceRequestCard from '~/components/admin/workforce/WorkforceRequestCard.vue';
 import { isWorkforceApiError, toUtcRangeParam } from '~/utils/workforce/api-client';
+import { contextRefusalKey } from '~/utils/workforce/context-refusal';
 import { WorkforceRequestsService } from '~/utils/workforce/requests-client';
 import { WorkforceScheduleService } from '~/utils/workforce/schedule-client';
 import { timeZoneIsKnown } from '~/utils/workforce-me/shift-view';
@@ -271,9 +272,10 @@ export default {
         this.timeZoneId = context && context.timeZone ? context.timeZone.id : null;
         this.capabilities = (context && context.capabilities) || [];
       } catch (e) {
-        this.contextError = isWorkforceApiError(e) && e.status === 403
-          ? this.$i('wfq_no_capability')
-          : this.$i('wfq_context_failed');
+        this.contextError = this.$i(contextRefusalKey(e, {
+          noCapability: 'wfq_no_capability',
+          failed: 'wfq_context_failed'
+        }));
         return;
       }
 

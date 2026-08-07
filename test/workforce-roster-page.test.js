@@ -114,6 +114,22 @@ describe('the workforce roster page', () => {
     expect(wrapper.vm.contextError).toBe('wfr_no_capability')
   })
 
+  // THE OTHER 403, and it is not about the reader at all. `workforce.module` off for this store
+  // answers 403 `workforce.module-disabled` — measured on the live world, whose body reads
+  // `{"code":"workforce.module-disabled","status":403,…}` (lanes/…/walk-before.json). The page used
+  // to print «Du har ikke bemanningstilgang», sending the operator who switched the module off to go
+  // and look at somebody's permissions.
+  test('a module-off 403 names the MODULE, not the reader\'s access', async () => {
+    behaviour.contextFails = problem(403, 'workforce.module-disabled')
+    const wrapper = mountPage()
+    await settled()
+
+    expect(wrapper.vm.contextError).toBe('wf_module_off')
+    expect(wrapper.vm.contextError).not.toBe('wfr_no_capability')
+    // And it still blocks: naming the cause is not permission to try the reads behind it.
+    expect(calls.filter(c => c[0] === 'ListStaff')).toHaveLength(0)
+  })
+
   // THE distinction. A failed roster read must never spend a frame claiming the store is empty.
   test('a failed staff read leaves the roster UNKNOWN, never empty', async () => {
     behaviour.staffFails = problem(500, 'boom')

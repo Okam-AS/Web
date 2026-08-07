@@ -131,6 +131,7 @@ import WorkforceAttendanceTable from '~/components/admin/workforce-rates/Workfor
 import WorkforceHoursExportPanel from '~/components/admin/workforce-rates/WorkforceHoursExportPanel.vue';
 import WorkforceRateTimeline from '~/components/admin/workforce-rates/WorkforceRateTimeline.vue';
 import { isWorkforceApiError } from '~/utils/workforce/api-client';
+import { contextRefusalKey } from '~/utils/workforce/context-refusal';
 import { WorkforceRosterService } from '~/utils/workforce/roster-client';
 import { CAPABILITY_MANAGER, CAPABILITY_PAYROLL, callerHas } from '~/utils/workforce/roster';
 import { isoWeekNumber, parseApiInstant, weekRange } from '~/utils/workforce/week-range';
@@ -322,9 +323,10 @@ export default {
           return;
         }
       } catch (e) {
-        this.contextError = isWorkforceApiError(e) && e.status === 403
-          ? this.$i('wfrt_no_capability')
-          : this.$i('wfrt_context_failed');
+        this.contextError = this.$i(contextRefusalKey(e, {
+          noCapability: 'wfrt_no_capability',
+          failed: 'wfrt_context_failed'
+        }));
         return;
       }
 

@@ -2463,6 +2463,7 @@ export default {
   wf_publish: 'Veröffentlichen',
   wf_reload: 'Aktualisieren',
   wf_no_capability: 'Sie haben in diesem Betrieb keinen Zugriff auf die Personalplanung.',
+  wf_module_off: 'Das Personalmodul ist für diesen Betrieb nicht eingeschaltet. Es ist ein Schalter pro Betrieb (workforce.module), und er steht hier auf aus — das sagt nichts über Ihre Zugriffsrechte aus.',
   wf_context_failed: 'Die Personalplanungs-Einrichtung des Betriebs konnte nicht geladen werden. Ohne die Zeitzone des Betriebs wird die Woche nicht angezeigt.',
   wf_conflict_overlap_title: 'Doppelbelegung',
   wf_conflict_overlap: 'Diese Person hat bereits eine überlappende Schicht. Die betroffene Schicht ist im Raster markiert.',

@@ -326,6 +326,7 @@ import WorkforceWeekGrid from '~/components/admin/workforce/WorkforceWeekGrid.vu
 import WorkforceRoleGrid from '~/components/admin/workforce/WorkforceRoleGrid.vue';
 import WorkforceMonthGrid from '~/components/admin/workforce/WorkforceMonthGrid.vue';
 import { isWorkforceApiError, toUtcRangeParam } from '~/utils/workforce/api-client';
+import { contextRefusalKey } from '~/utils/workforce/context-refusal';
 import { WorkforceRequestsService } from '~/utils/workforce/requests-client';
 import { WorkforceScheduleService } from '~/utils/workforce/schedule-client';
 import { weekRange, monthRange, isoWeekNumber } from '~/utils/workforce/week-range';
@@ -692,9 +693,10 @@ export default {
           return;
         }
       } catch (e) {
-        this.contextError = isWorkforceApiError(e) && e.status === 403
-          ? this.$i('wf_no_capability')
-          : this.$i('wf_context_failed');
+        this.contextError = this.$i(contextRefusalKey(e, {
+          noCapability: 'wf_no_capability',
+          failed: 'wf_context_failed'
+        }));
         return;
       }
       await this.reload();

@@ -2511,6 +2511,10 @@ export default {
   wf_publish: 'Publiser',
   wf_reload: 'Oppdater',
   wf_no_capability: 'Du har ikke bemanningstilgang i denne butikken.',
+  // Den ene setningen som navngir modulen, delt av alle bemanningssidene. Se
+  // `utils/workforce/context-refusal.js`: den skilles fra `wf_no_capability` på feilkoden
+  // `workforce.module-disabled`, ikke på 403 alene, fordi de to 403-ene handler om helt ulike ting.
+  wf_module_off: 'Bemanningsmodulen er ikke slått på for denne butikken. Det er en bryter per butikk (workforce.module), og den står av her — det sier ingenting om hvilke tilganger du har.',
   wf_context_failed: 'Kunne ikke hente bemanningsoppsettet for butikken. Uken vises ikke uten butikkens tidssone.',
   wf_conflict_overlap_title: 'Dobbeltbooking',
   wf_conflict_overlap: 'Personen har allerede en overlappende vakt. Vakten det gjelder er markert i rutenettet.',

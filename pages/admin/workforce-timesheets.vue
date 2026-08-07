@@ -113,6 +113,7 @@ import AdminPage from '~/components/organisms/AdminPage.vue';
 import WorkforceTimesheetPanel from '~/components/admin/workforce/WorkforceTimesheetPanel.vue';
 import WorkforceTimesheetBatchList from '~/components/admin/workforce/WorkforceTimesheetBatchList.vue';
 import { isWorkforceApiError } from '~/utils/workforce/api-client';
+import { contextRefusalKey } from '~/utils/workforce/context-refusal';
 import { WorkforceTimesheetService } from '~/utils/workforce/timesheet-client';
 import { WorkforceScheduleService } from '~/utils/workforce/schedule-client';
 import { callerHas, CAPABILITY_PAYROLL } from '~/utils/workforce/roster';
@@ -235,9 +236,10 @@ export default {
         const context = await this._schedule.GetContext(this.storeId);
         this.capabilities = (context && context.capabilities) || [];
       } catch (e) {
-        this.contextError = isWorkforceApiError(e) && e.status === 403
-          ? this.$i('wft_no_payroll_capability')
-          : this.$i('wft_context_failed');
+        this.contextError = this.$i(contextRefusalKey(e, {
+          noCapability: 'wft_no_payroll_capability',
+          failed: 'wft_context_failed'
+        }));
         return;
       }
 
