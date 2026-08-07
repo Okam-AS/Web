@@ -1,0 +1,6 @@
+RUN total=7 failed=0 rc=0 reddened=[] filter=FullyQualifiedName~GiftcardBalanceTests
+RUN total=7 failed=1 rc=1 reddened=[Passing_a_gift_card_on_moves_the_money_instead_of_copying_it,] filter=FullyQualifiedName~GiftcardBalanceTests
+RUN total=7 failed=1 rc=1 reddened=[A_card_passed_to_someone_without_an_account_stops_being_spendable_by_the_giver,] filter=FullyQualifiedName~GiftcardBalanceTests
+RUN total=7 failed=1 rc=1 reddened=[Passing_a_gift_card_on_moves_the_money_instead_of_copying_it,] filter=FullyQualifiedName~GiftcardBalanceTests
+RUN total=7 failed=2 rc=1 reddened=[A_card_claimed_after_the_receiver_signs_up_funds_the_claimant_and_nobody_else,A_card_passed_to_someone_without_an_account_stops_being_spendable_by_the_giver,] filter=FullyQualifiedName~GiftcardBalanceTests
+RUN total=7 failed=1 rc=1 reddened=[The_giver_keeps_a_record_naming_the_card_as_theirs,] filter=FullyQualifiedName~GiftcardBalanceTests
