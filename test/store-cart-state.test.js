@@ -448,12 +448,22 @@ describe('Load — three separate localStorage keys, and the base-10 that stops 
     expect(s.market).toBe('no')
   })
 
-  test('the selected admin store is parsed BASE TEN — a leading zero is not an octal', () => {
+  test('the selected admin store comes back a NUMBER, not the string localStorage handed over', () => {
+    // What this pins is the PARSE, not the radix. `localStorage.getItem` always answers a string,
+    // and `selectedAdminStore` is compared with `store.id` — a number — all over the admin surface
+    // (`AdminPageHeader.vue`, the `adminIn` lookup in `SetSelectedAdminStore` below), where `'42'
+    // === 42` is false and the header would silently show no store after a reload.
+    //
+    // The `, 10` in `parseInt(selectedAdminStore, 10)` is DEFENSIVE ONLY and is not what this arm
+    // measures: ES5 removed octal from radix-less `parseInt`, so `parseInt('08')` has answered 8
+    // since long before this build — dropping the radix does not red here and should not be
+    // claimed to. Removing the parse altogether does red, which is the real contract.
     window.localStorage.setItem('selectedAdminStore', '08')
     const s = makeState()
     mutations[MutationName.Load](s)
     expect(s.selectedAdminStore).toBe(8)
     expect(typeof s.selectedAdminStore).toBe('number')
+    expect(s.selectedAdminStore).not.toBe('08')
   })
 
   test('the admin language is read separately, so it survives a state dump that predates it', () => {
