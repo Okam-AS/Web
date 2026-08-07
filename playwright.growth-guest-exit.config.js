@@ -60,7 +60,20 @@ module.exports = defineConfig({
     baseURL: BASE_URL,
     headless: true,
     ignoreHTTPSErrors: true,
-    trace: 'retain-on-failure',
+    // TRACE OFF, AND IT IS A C7 DECISION RATHER THAN A PERFORMANCE ONE.
+    //
+    // This journey navigates to a URL whose FRAGMENT is a working unsubscribe token. A Playwright trace
+    // records every navigation with its full URL, so `retain-on-failure` writes that credential into
+    // `trace.zip` on exactly the runs most likely to be attached to a report or copied to a reviewer.
+    // The harness's own sweep (`growth-guest-exit-world.sh`) greps `artifacts/` for the token — and a
+    // grep cannot see inside a zip, so a leak here would be invisible to the one check built to catch it.
+    // A sweep that cannot fail is worse than no sweep, because it is read as an all-clear.
+    //
+    // Losing traces costs this journey little: it writes nine named steps with their details into its own
+    // artifact, and `GUEST_EXIT_KEEP=1` leaves the world standing for a headed re-run when one is needed.
+    trace: 'off',
+    // Kept: a failure screenshot is a picture of the rendered card, and the page strips the token from
+    // the address bar in `mounted()` before anything is painted.
     screenshot: 'only-on-failure',
     video: 'off',
     actionTimeout: 20 * 1000,

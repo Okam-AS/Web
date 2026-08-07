@@ -1,0 +1,41 @@
+# Backend non-SQL tier, lane/the-guest-exit-is-finished @ a65d9ab70
+#   cd OkamAPI-modules-wt/L-THE-GUEST-EXIT-IS-FINISHED/WebApi.Tests
+#   dotnet test --no-build --filter "Database!=SqlServer"
+#
+# The raw log is 29,517 lines, almost all of it EF command logging at Information.
+# Kept here: the summary, the whole skip list, every Failed/error line, and the two
+# 'Unhandled exception' lines with enough context to show what they are — because a
+# summary alone is exactly what a run that printed Passed! after a host crash also had.
+# Full log at /tmp/backend-tier-full.txt on the machine that ran it (not committed: 3.6M).
+
+## grep for an abort ABOVE the summary — 'test host process crashed', 'active test run was aborted'
+   (no match — the run was not aborted)
+
+## every Failed line
+   (no match — nothing failed)
+
+## the two 'Unhandled exception' lines, with their exception type
+2280:      Unhandled exception
+2281-      WebApi.Tests.Wire.WireEgressBlockedException: The wire host quarantined IVippsService.Initiate: this seam reaches a real provider or payment rail and is never available to a wire test.
+11436:      Unhandled exception
+11437-      WebApi.Tests.Wire.WireEgressBlockedException: The wire host quarantined IStripeService.GetConnectedAccounts: this seam reaches a real provider or payment rail and is never available to a wire test.
+
+## skip list (11)
+  Skipped WebApi.Tests.Growth.GrowthPostmarkSandboxSmokeTests.A_double_opt_in_confirmation_is_accepted_by_the_postmark_sandbox
+  Skipped WebApi.Tests.Events.EventsDepositRailJourneyGapTests.The_Dintero_deposit_rail_is_a_declared_gap_not_a_port_omission
+  Skipped WebApi.Tests.Events.EventsDepositRailJourneyGapTests.The_Stripe_deposit_rail_is_a_declared_gap_not_a_port_omission
+  Skipped WebApi.Tests.Growth.GrowthGuestExitWorldTests.The_guest_exit_world_serves_the_real_api_on_its_own_origin_until_a_browser_has_walked_it
+  Skipped WebApi.Tests.Meals.MealsInvitationIdentityBindingTests.Only_the_account_the_company_meant_ends_up_holding_the_membership
+  Skipped WebApi.Tests.Wire.GrowthWebhookAuthWireTests.An_authenticated_event_from_outside_the_providers_address_ranges_is_refused
+  Skipped WebApi.Tests.Wire.GrowthWebhookAuthWireTests.A_bounce_from_the_bound_provider_suppresses_the_guest_channel_globally
+  Skipped WebApi.Tests.Workforce.WorkforceEndToEndJourneyTests.WFJ11_give_away_exchange_approved_assignment_moves_atomically
+  Skipped WebApi.Tests.Surfboard.SurfboardCashSplitSmokeTests.Cash_Portion_Completes_A_Partially_Paid_Order
+  Skipped WebApi.Tests.Meals.MealsConsumerSurfaceJourneyGapTests.Consumer_employee_ordering_surface_is_a_separate_consumer_app_lane
+  Skipped WebApi.Tests.Meals.MealsConsumerSurfaceJourneyGapTests.Statement_pdf_export_is_a_documented_fast_follow
+
+## the two exit suites on their own (a passing test is not named in the tier log, so it is
+## measured directly rather than inferred from an absence). 24 at the inherited tip, 27 here.
+   Passed!  - Failed:     0, Passed:    27, Skipped:     0, Total:    27, Duration: 2 s - WebApi.Tests.dll (net8.0)
+
+## summary
+Passed!  - Failed:     0, Passed:  4892, Skipped:    11, Total:  4903, Duration: 5 m 26 s - WebApi.Tests.dll (net8.0)
