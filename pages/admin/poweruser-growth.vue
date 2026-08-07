@@ -374,10 +374,42 @@ export default {
         this.growthData = await this._statisticsService.GetPlatformGrowth();
         this.$nextTick(() => this.renderChart());
       } catch (error) {
-        this.errorMessage = error?.message || this.$i('poweruserGrowth_unknownError');
+        this.errorMessage = this.describeLoadFailure(error);
       } finally {
         this.isLoading = false;
       }
+    },
+    // What the operator is told when the read does not come back.
+    //
+    // The service now hands up the backend's own reason when there is one, plus the HTTP status and
+    // whether the message came from the server or is the client's own fallback. Before that, every
+    // failure arrived here as axios's "Request failed with status code 401" and was printed
+    // verbatim: untranslated, identical in shape for an expired session, a refusal and a crash, and
+    // carrying nothing the operator could act on.
+    //
+    // A server reason is preferred over anything written here, because the backend localises its
+    // AppException messages from the Language header and knows what actually went wrong. The lines
+    // below are for the failures that arrive with no body at all — which includes the one that
+    // matters most, being offline, where there is no server to ask.
+    describeLoadFailure(error) {
+      if (error?.hasBackendMessage && error.message) return error.message;
+
+      // `BuildError` always sets this property, to `true` or to `false`. Its ABSENCE therefore means
+      // the throw did not come from the request layer at all — a bug on this page, a parse failure —
+      // and such an error must not be dressed up as a transport one. Telling an operator "check your
+      // connection" when the network is fine is the same kind of lie this whole change is about, so
+      // an unrecognised error is reported as unknown rather than guessed at.
+      if (!error || !('hasBackendMessage' in error)) {
+        return error?.message || this.$i('poweruserGrowth_unknownError');
+      }
+
+      const status = error.statusCode;
+      if (status === 401) return this.$i('poweruserGrowth_errorSessionExpired');
+      if (status === 403) return this.$i('poweruserGrowth_errorNotAllowed');
+      // No status means the request never reached the server. `BuildError` leaves it undefined for
+      // exactly that case, and it is the failure an operator can actually do something about.
+      if (status === undefined || status === null) return this.$i('poweruserGrowth_errorOffline');
+      return this.$i('poweruserGrowth_errorServer', { status });
     },
     ensureDataLoaded() {
       if (!this.userIsLoggedIn) return;

@@ -294,43 +294,31 @@ describe('the operator is told which failure this is', () => {
 
   // ---- THE DEFECT ------------------------------------------------------------------------------
   //
-  // LEFT FAILING ON PURPOSE. `F-GROWTH-PUBLISH-LIES-ABOUT-WHY-IT-FAILED` on this page's read path.
-  //
-  // `StatisticsService.GetPlatformGrowth` (core/services/statistics-service.ts:40-45) reads through
-  // the UNSAFE `GetRequest`, which does not catch. Axios rejects on every non-2xx, so the rejection
-  // leaves the service as the RAW AXIOS ERROR and the page's `catch` puts `error.message` on screen.
-  // Measured, for a backend that answered with a reason in its body:
+  // These three arms were written RED, against the defect, and are green because the code was
+  // fixed — `L-EVERY-REPORT-READ-SAYS-WHY-IT-FAILED`. What they held before the fix:
   //
   //     401 + {message: "Sesjonen din er utløpt"}          -> "Request failed with status code 401"
   //     403 + {message: "Du har ikke tilgang …"}           -> "Request failed with status code 403"
   //     500 + {message: "Noe gikk galt i rapportmotoren"}  -> "Request failed with status code 500"
   //     offline                                            -> "Network Error"
   //
-  // Three consequences, all of them the operator's:
-  //   1. the backend's own reason is DISCARDED every time — the page shows a transport string;
-  //   2. `error.statusCode` is `undefined` on all four, so the page cannot branch on it either: an
-  //      expired session cannot be told from a refusal or from a crashed report engine;
-  //   3. the string is untranslated English inside a Norwegian admin UI.
+  // `GetPlatformGrowth` read through the UNSAFE `GetRequest`, which does not catch, so an axios
+  // rejection left the service raw and the page printed `error.message` verbatim: the backend's own
+  // reason discarded, `statusCode` undefined so nothing could branch on it, and untranslated
+  // English inside a Norwegian admin UI. The read is now `SafeGetRequest` + `BuildError`.
   //
-  // `RequestService` already has the parts that fix this and they are documented for exactly this
-  // purpose — `SafeGetRequest` (:151) resolves the rejection, and `BuildError` (:139) prefers "the
-  // backend's own message (an AppException reason the operator can act on) over the caller's
-  // generic fallback" and attaches `statusCode` "so callers can branch on e.statusCode — e.g. 401
-  // => session expired, undefined => network failure". `GetPlatformGrowth` calls neither.
+  // The whole file was taken, not the one method: the four POST reads were broken differently —
+  // `PostRequest` already catches, so they DID reach their own `throw` and replaced the backend's
+  // reason with a fixed English string. Both shapes are covered by
+  // `test/statistics-service-failure-reasons.test.js`.
   //
-  // Note also that the service's own fallback string, 'Failed to get platform growth', is reachable
-  // ONLY when the transport RESOLVES a non-200 — which axios on web never does. On this platform
-  // that line is dead.
-  //
-  // This is not fixed here. The fix belongs in `core/services/statistics-service.ts` and is a
-  // one-service change with the other four reads in that file sharing the flaw.
-  describe('[KNOWN DEFECT] the reason the backend gave is what reaches the screen', () => {
+  // Everything here goes through the REAL service over a transport that fails the way axios fails,
+  // so these are assertions about the shipped read path and not about a double.
+  describe('the reason the backend gave is what reaches the screen', () => {
     let respondWith
     class FakeHttpModule { httpClient () { return respondWith() } }
     class FakePersistenceModule {}
 
-    // The real service, over a transport that fails the way axios fails: rejects on any non-2xx,
-    // real response under `.response`.
     const realService = () => new StatisticsService({ bearerToken: '', clientPlatformName: 'Web', cultureCode: 'no' })
     const axiosRejects = (status, body) => () => {
       const error = new Error('Request failed with status code ' + status)
@@ -338,8 +326,19 @@ describe('the operator is told which failure this is', () => {
       error.response = { status, data: body }
       return Promise.reject(error)
     }
+    const axiosOffline = () => Promise.reject(
+      Object.assign(new Error('Network Error'), { isAxiosError: true })
+    )
 
     beforeEach(() => setPlatform(FakeHttpModule, FakePersistenceModule))
+
+    async function screenAfterFailure () {
+      const store = makeStore()
+      signInAsPowerUser(store)
+      const { wrapper } = track(mountGrowth({ store, service: realService() }))
+      await settle(wrapper)
+      return norm(wrapper.find('.empty-state').text())
+    }
 
     test.each([
       ['an expired session', 401, 'Sesjonen din er utløpt'],
@@ -347,12 +346,51 @@ describe('the operator is told which failure this is', () => {
       ['a crashed report engine', 500, 'Noe gikk galt i rapportmotoren']
     ])('%s reaches the operator as the reason the backend gave', async (_name, status, reason) => {
       respondWith = axiosRejects(status, { message: reason })
-      const store = makeStore()
-      signInAsPowerUser(store)
-      const { wrapper } = track(mountGrowth({ store, service: realService() }))
-      await settle(wrapper)
+      const screen = await screenAfterFailure()
 
-      expect(norm(wrapper.find('.empty-state').text())).toContain(reason)
+      expect(screen).toContain(reason)
+      // and the transport string the operator used to be shown is gone
+      expect(screen).not.toContain('Request failed with status code')
+    })
+
+    // The backend does not always put a reason in the body — a 401 from auth middleware often has
+    // none, and being offline has no body by definition. Those are the cases where the page has to
+    // supply the sentence, and where the four must still be told apart.
+    test.each([
+      ['an expired session', 401, 'poweruserGrowth_errorSessionExpired'],
+      ['a refusal', 403, 'poweruserGrowth_errorNotAllowed']
+    ])('%s with an empty body is still named, not reduced to a code', async (_name, status, key) => {
+      respondWith = axiosRejects(status, null)
+      const screen = await screenAfterFailure()
+
+      expect(screen).toContain(translate('no', key))
+      expect(screen).not.toContain('Failed to get platform growth')
+    })
+
+    test('a crashed report engine with an empty body names the code it answered with', async () => {
+      respondWith = axiosRejects(500, null)
+      expect(await screenAfterFailure())
+        .toContain(translate('no', 'poweruserGrowth_errorServer', { status: 500 }))
+    })
+
+    test('being offline is told apart from the server refusing', async () => {
+      respondWith = axiosOffline
+      const screen = await screenAfterFailure()
+
+      // The one failure the operator can act on themselves, and the one that has no status at all.
+      expect(screen).toContain(translate('no', 'poweruserGrowth_errorOffline'))
+      expect(screen).not.toContain('Network Error')
+    })
+
+    test('the four failures do not read alike', async () => {
+      // The point of the whole change: one sentence per cause. Asserted as a set so that a future
+      // simplification collapsing two of them back together cannot pass.
+      const screens = []
+      for (const behaviour of [axiosRejects(401, null), axiosRejects(403, null), axiosRejects(500, null), axiosOffline]) {
+        respondWith = behaviour
+        screens.push(await screenAfterFailure())
+      }
+      expect(new Set(screens).size).toBe(4)
     })
   })
 })
