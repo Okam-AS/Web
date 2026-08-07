@@ -36,7 +36,13 @@ module.exports = {
   transform: {
     '^.+\\.ts$': 'ts-jest',
     '^.+\\.js$': 'babel-jest',
-    '.*\\.(vue)$': 'vue-jest'
+    // `vue-jest@3.0.7` with one function replaced. It is still vue-jest that compiles the SFC;
+    // what the wrapper fixes is the source map handed to istanbul, which vue-jest builds from a
+    // single column-0 probe per line and which therefore placed NO indented statement — so every
+    // `data()`, `computed` and `methods` body in the repository was silently dropped from the
+    // coverage report rather than counted as uncovered. Read the file; it explains the whole
+    // defect, and `test/vue-coverage-instrumentation.test.js` reds if this line is reverted.
+    '.*\\.(vue)$': '<rootDir>/test/support/vue-sfc-transform.js'
   },
   collectCoverage: true,
   collectCoverageFrom: [
