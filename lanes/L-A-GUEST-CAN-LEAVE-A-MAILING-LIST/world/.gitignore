@@ -1,0 +1,9 @@
+# THE RUN DIRECTORY OF THE GUEST-EXIT WORLD.
+#
+# Everything here is produced by a run and one file — world.json — carries a WORKING unsubscribe
+# token, which is a credential (C7). Nothing in here may ever be committed, so the ignore is
+# `*` rather than a list somebody has to keep in step with what the world writes. The world
+# REFUSES TO START unless `git check-ignore` agrees with this file, so deleting it does not
+# quietly re-enable committing a token — it stops the world.
+*
+!.gitignore
