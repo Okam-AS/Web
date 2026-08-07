@@ -38,14 +38,22 @@ const PROPOSAL = {
 // `mocks` cannot replace one (Vue warns "assigned to but it has no setter") and the REAL service runs
 // instead — which fails on `currentUser` and lands in the very error branch these tests assert. Two of
 // them passed that way before this was fixed, for entirely the wrong reason.
-function mountPage (service, code = 'OFF-1') {
-  const stub = {
-    GetByCode: () => Promise.resolve(PROPOSAL),
+//
+// Every stub call is RECORDED, and `mountPage` returns the log beside the wrapper, so a test can prove
+// the stub was reached rather than assume it. That assumption is exactly what went wrong above: the
+// real service also throws, into the same branch, so "the error state rendered" is evidence of nothing
+// on its own.
+function mountPage (service, code = 'OFF-1', proposal = PROPOSAL) {
+  const calls = []
+  const record = (name, fn) => (...args) => { calls.push(name); return fn(...args) }
+  const base = {
+    GetByCode: () => Promise.resolve(proposal),
     MarkAsRead: () => Promise.resolve(true),
     SendVerificationToken: () => Promise.resolve(true),
-    AcceptOfferWithVerification: () => Promise.resolve({ ...PROPOSAL, accepted: '2026-08-07T12:00:00Z' }),
+    AcceptOfferWithVerification: () => Promise.resolve({ ...proposal, accepted: '2026-08-07T12:00:00Z' }),
     ...service
   }
+  const stub = Object.keys(base).reduce((acc, k) => ({ ...acc, [k]: record(k, base[k]) }), { calls })
   return mount(OfferCodePage, {
     computed: { _offerProposalService: () => stub },
     mocks: {
@@ -56,6 +64,10 @@ function mountPage (service, code = 'OFF-1') {
     stubs: { TermsModal: true }
   })
 }
+
+// The wrapper's own view of which stub methods ran. `wrapper.vm._offerProposalService` IS the stub when
+// the computed override took effect, and is the real service when it silently did not.
+const callsOf = wrapper => wrapper.vm._offerProposalService.calls
 
 const flush = () => new Promise(resolve => setTimeout(resolve, 0))
 
@@ -215,6 +227,154 @@ describe('accepting an offer cannot blank the page after the order is placed', (
 
     expect(wrapper.vm.offerProposal.accepted).toBeFalsy()
     expect(wrapper.text()).not.toContain('Ordren er bekreftet!')
+    wrapper.destroy()
+  })
+})
+
+// -------------------------------------------------------------------------------------------------
+// The two remaining untruths, and one of them accuses the guest.
+// -------------------------------------------------------------------------------------------------
+
+const NO_PHONE = { ...PROPOSAL, clientPhoneNumber: null }
+
+describe('an offer the venue left a phone number off', () => {
+  test('the stub is genuinely the service under test, not the real one failing alike', async () => {
+    // Inherited near-miss, asserted rather than assumed: `_offerProposalService` is a COMPUTED on the
+    // global mixin and `mocks` cannot override a computed, so the REAL service runs, throws on
+    // `currentUser`, and lands in the same error branch — two earlier tests passed exactly that way.
+    // If the override ever stops taking effect, this reds instead of everything quietly still passing.
+    const wrapper = mountPage({}, 'OFF-1', NO_PHONE)
+    await flush()
+
+    expect(callsOf(wrapper)).toContain('GetByCode')
+    expect(wrapper.find('[data-test="offer-document"]').exists()).toBe(true)
+    wrapper.destroy()
+  })
+
+  test('she is told before she acts, and told what to do instead', async () => {
+    const wrapper = mountPage({}, 'OFF-1', NO_PHONE)
+    await flush()
+
+    const block = wrapper.find('[data-test="offer-no-phone"]')
+    expect(block.exists()).toBe(true)
+    // The WORDS, not the marker: a marker-shaped assertion on a page whose markers this lane added
+    // survives the copy being replaced by anything at all, including the accusation.
+    expect(block.text()).toContain('kan ikke bekreftes med SMS')
+    expect(block.text()).toContain('Kontakt oss')
+    // And the thing she is asked to quote is on screen, not only in the URL she arrived from.
+    expect(wrapper.find('[data-test="offer-no-phone-code"]').text()).toContain('OFF-1')
+    wrapper.destroy()
+  })
+
+  test('the button that could only ever fail is not offered', async () => {
+    const wrapper = mountPage({}, 'OFF-1', NO_PHONE)
+    await flush()
+
+    // `Bekreft` starts a send that cannot succeed: there is no number to send to.
+    expect(wrapper.text()).not.toContain('Bekreft')
+    expect(wrapper.find('.acceptance-checkbox').exists()).toBe(false)
+    wrapper.destroy()
+  })
+
+  test('pressing send anyway raises no TypeError and reaches no service call', async () => {
+    // The dereference that threw: `clientPhoneNumber.replace(...)`. The guard makes it impossible
+    // rather than merely unreached, so the method is called directly here, past the template.
+    const wrapper = mountPage({}, 'OFF-1', NO_PHONE)
+    await flush()
+    wrapper.setData({ termsAccepted: true })
+
+    await expect(wrapper.vm.sendVerification()).resolves.toBeUndefined()
+
+    expect(callsOf(wrapper)).not.toContain('SendVerificationToken')
+    expect(wrapper.vm.errorMessage).not.toContain('TypeError')
+    expect(wrapper.vm.errorMessage).toContain('mobilnummer')
+    wrapper.destroy()
+  })
+
+  test('and accepting anyway does not tell her the code was wrong', async () => {
+    // THE ACCUSATION. The TypeError landed in acceptOffer's catch, which set errorWrongCode — so a
+    // guest who typed her code correctly was told she had not, over a blank field the venue owns and
+    // she has never seen.
+    const wrapper = mountPage({}, 'OFF-1', NO_PHONE)
+    await flush()
+    wrapper.setData({ verificationSent: true, verificationCode: '123456' })
+
+    await expect(wrapper.vm.acceptOffer()).resolves.toBeUndefined()
+
+    expect(callsOf(wrapper)).not.toContain('AcceptOfferWithVerification')
+    expect(wrapper.vm.errorMessage).not.toContain('Koden ble ikke godtatt')
+    expect(wrapper.vm.errorMessage).not.toContain('Feil verifiseringskode')
+    expect(wrapper.vm.errorMessage).toContain('mobilnummer')
+    wrapper.destroy()
+  })
+
+  test('a number that is only whitespace is an absent one', async () => {
+    const wrapper = mountPage({}, 'OFF-1', { ...PROPOSAL, clientPhoneNumber: '   ' })
+    await flush()
+
+    expect(wrapper.find('[data-test="offer-no-phone"]').exists()).toBe(true)
+    wrapper.destroy()
+  })
+
+  test('an offer that HAS a number is still offered the confirm button', async () => {
+    // The converse, so the fix cannot be satisfied by never offering acceptance again.
+    const wrapper = mountPage({})
+    await flush()
+
+    expect(wrapper.find('[data-test="offer-no-phone"]').exists()).toBe(false)
+    expect(wrapper.find('.acceptance-checkbox').exists()).toBe(true)
+    expect(wrapper.text()).toContain('Bekreft')
+    wrapper.destroy()
+  })
+})
+
+describe('a failed send is not an English stack-trace string', () => {
+  test('core’s developer-facing message never reaches the guest', async () => {
+    const wrapper = mountPage({
+      SendVerificationToken: () => Promise.reject(new Error('Failed to send verification token'))
+    })
+    await flush()
+    wrapper.setData({ termsAccepted: true })
+    await wrapper.vm.sendVerification()
+    await wrapper.vm.$nextTick()
+
+    expect(callsOf(wrapper)).toContain('SendVerificationToken')
+    expect(wrapper.vm.errorMessage).not.toContain('Failed to send verification token')
+    // The localised sentence that was sitting beside it the whole time, and a next step.
+    expect(wrapper.vm.errorMessage).toContain('Kunne ikke sende verifiseringskode')
+    expect(wrapper.find('.error-message').text()).toBe(wrapper.vm.errorMessage)
+    wrapper.destroy()
+  })
+
+  test('nor does a TypeError thrown inside the send path', async () => {
+    const wrapper = mountPage({
+      SendVerificationToken: () => { throw new TypeError('Cannot read properties of null (reading ‘x’)') }
+    })
+    await flush()
+    wrapper.setData({ termsAccepted: true })
+    await wrapper.vm.sendVerification()
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.errorMessage).not.toContain('Cannot read properties')
+    expect(wrapper.vm.errorMessage).not.toContain('TypeError')
+    wrapper.destroy()
+  })
+
+  test('a refused acceptance says what she can do, without asserting why it failed', async () => {
+    // Core collapses a wrong code, a 500 and a dead connection into one untyped Error, so "wrong code"
+    // was a guess at a cause this page cannot know — the same rule the previous lane established.
+    const wrapper = mountPage({
+      AcceptOfferWithVerification: () => Promise.reject(new Error('Failed to accept offer proposal'))
+    })
+    await flush()
+    wrapper.setData({ verificationSent: true, verificationCode: '000000' })
+    await wrapper.vm.acceptOffer()
+    await wrapper.vm.$nextTick()
+
+    expect(callsOf(wrapper)).toContain('AcceptOfferWithVerification')
+    expect(wrapper.vm.errorMessage).not.toContain('Failed to accept')
+    expect(wrapper.vm.errorMessage).not.toContain('Feil verifiseringskode')
+    expect(wrapper.vm.errorMessage).toContain('Kontakt oss')
     wrapper.destroy()
   })
 })

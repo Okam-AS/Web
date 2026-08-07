@@ -1,0 +1,53 @@
+[
+  {
+    "name": "sendVerification loses the phone guard (the TypeError site)",
+    "outcome": "RED",
+    "reddened": 1,
+    "first": [
+      "pressing send anyway raises no TypeError and reaches no service call (4 ms)"
+    ]
+  },
+  {
+    "name": "acceptOffer loses the phone guard (the accusation site)",
+    "outcome": "RED",
+    "reddened": 1,
+    "first": [
+      "and accepting anyway does not tell her the code was wrong (4 ms)"
+    ]
+  },
+  {
+    "name": "the failed send prints core’s English exception again",
+    "outcome": "RED",
+    "reddened": 2,
+    "first": [
+      "core’s developer-facing message never reaches the guest (4 ms)",
+      "nor does a TypeError thrown inside the send path (3 ms)"
+    ]
+  },
+  {
+    "name": "the refusal accuses the guest again",
+    "outcome": "RED",
+    "reddened": 1,
+    "first": [
+      "a refused acceptance says what she can do, without asserting why it failed (46 ms)"
+    ]
+  },
+  {
+    "name": "canConfirmBySms is always true, so the warning never shows",
+    "outcome": "RED",
+    "reddened": 5,
+    "first": [
+      "she is told before she acts, and told what to do instead (3 ms)",
+      "the button that could only ever fail is not offered (3 ms)",
+      "pressing send anyway raises no TypeError and reaches no service call (4 ms)"
+    ]
+  },
+  {
+    "name": "a whitespace-only number counts as a real one",
+    "outcome": "RED",
+    "reddened": 1,
+    "first": [
+      "a number that is only whitespace is an absent one (3 ms)"
+    ]
+  }
+]

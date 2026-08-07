@@ -22,8 +22,27 @@
           v-if="!offerProposal.accepted"
           class="document-section acceptance"
         >
+          <!-- The venue left the mobile number off this offer, so an SMS code cannot be sent and the
+               confirm button below could only ever fail. Said BEFORE she acts, because the failure is
+               knowable now: every other branch of this page waits for a request to come back, and this
+               one does not have to. This is the one absence the page can name with certainty. -->
           <div
-            v-if="!verificationSent"
+            v-if="!canConfirmBySms"
+            class="acceptance-container no-phone"
+            data-test="offer-no-phone"
+          >
+            <h3>{{ copy.noPhoneTitle }}</h3>
+            <p>{{ copy.noPhoneText }}</p>
+            <p
+              v-if="offerProposal.code"
+              class="no-phone-code"
+              data-test="offer-no-phone-code"
+            >
+              {{ copy.orderNumberLabel }} <strong>{{ offerProposal.code }}</strong>
+            </p>
+          </div>
+          <div
+            v-else-if="!verificationSent"
             class="acceptance-container"
           >
             <div class="acceptance-checkbox">
@@ -303,7 +322,10 @@ export default {
             errorCouldNotLoad: "Bestellung konnte nicht geladen werden",
             errorCouldNotSendCodeRetry: "Bestätigungscode konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.",
             errorCouldNotSendCode: "Bestätigungscode konnte nicht gesendet werden.",
-            errorWrongCode: "Falscher Bestätigungscode. Bitte versuchen Sie es erneut.",
+            errorWrongCode: "Der Code wurde nicht akzeptiert. Bitte prüfen Sie ihn und versuchen Sie es erneut. Wenn es weiterhin nicht klappt, kontaktieren Sie uns mit Ihrer Bestellnummer.",
+            noPhoneTitle: "Dieses Angebot kann nicht per SMS bestätigt werden",
+            noPhoneText: "Auf dem Angebot steht keine Mobilnummer, daher können wir Ihnen keinen Code senden. Bitte kontaktieren Sie uns — wir erledigen das für Sie.",
+            orderNumberLabel: "Bestellnummer:",
           }
         : {
             confirmReadIntro: "Jeg bekrefter at jeg har lest gjennom ordren og forstått",
@@ -329,7 +351,10 @@ export default {
             errorCouldNotLoad: "Kunne ikke laste ordren",
             errorCouldNotSendCodeRetry: "Kunne ikke sende verifiseringskode. Vennligst prøv igjen senere.",
             errorCouldNotSendCode: "Kunne ikke sende verifiseringskode.",
-            errorWrongCode: "Feil verifiseringskode. Vennligst prøv igjen.",
+            errorWrongCode: "Koden ble ikke godtatt. Sjekk at den er riktig skrevet og prøv igjen. Kontakt oss med ordrenummeret ditt hvis det fortsetter.",
+            noPhoneTitle: "Dette tilbudet kan ikke bekreftes med SMS",
+            noPhoneText: "Det står ikke noe mobilnummer på tilbudet, så vi får ikke sendt deg en kode. Kontakt oss, så ordner vi det.",
+            orderNumberLabel: "Ordrenummer:",
           };
     },
     totalMonthlyFee() {
@@ -358,6 +383,17 @@ export default {
     // expiration, which has passed. Reachable because the anonymous 404 is not the whole story — a
     // KAM or PowerUser session is served an expired proposal, and an offer can lapse while the page
     // is open. It is never inferred from a failure, which is what the defect did.
+    // Whether an SMS code can be sent at all. A trimmed check, because a whitespace-only field is an
+    // empty one for this purpose and `"  ".replace(/\s/g, "")` yields the empty string that the API
+    // would reject anyway. Both `sendVerification` and `acceptOffer` dereference this number, so this
+    // is also the guard that keeps a null out of `.replace`.
+    canConfirmBySms() {
+      return Boolean(
+        this.offerProposal &&
+        typeof this.offerProposal.clientPhoneNumber === "string" &&
+        this.offerProposal.clientPhoneNumber.trim()
+      );
+    },
     isExpired() {
       if (!this.offerProposal || !this.offerProposal.expiration) {
         return false;
@@ -431,6 +467,17 @@ export default {
         return;
       }
 
+      // The dereference that threw. `clientPhoneNumber` is a field the VENUE fills in, and when it is
+      // absent `.replace` raised a TypeError straight into the catch below — which told her the code
+      // was wrong. She had typed it correctly; the product blamed her for a blank field she has never
+      // seen and cannot fix. The template no longer offers these actions without a number, and this
+      // guard is what makes the TypeError impossible rather than merely unreached.
+      if (!this.canConfirmBySms) {
+        this.errorMessage = this.copy.noPhoneText;
+        this.showError = true;
+        return;
+      }
+
       this.isSubmitting = true;
       this.showError = false;
       try {
@@ -447,7 +494,13 @@ export default {
           this.showError = true;
         }
       } catch (error) {
-        this.errorMessage = error.message || this.copy.errorCouldNotSendCode;
+        // NEVER error.message. Core throws English strings written for a developer reading a stack
+        // trace ("Failed to send verification token"), and a TypeError here printed its own internals
+        // at a guest. She cannot act on either, and the localised sentence was sitting beside it the
+        // whole time. The cause is not named because it cannot be known — core collapses a 4xx, a 5xx
+        // and a dead connection into one untyped Error — so this says what she can do next instead.
+        console.error("Error sending verification code:", error);
+        this.errorMessage = this.copy.errorCouldNotSendCodeRetry;
         this.showError = true;
       } finally {
         this.scrollToBottom();
@@ -464,6 +517,17 @@ export default {
     },
     async acceptOffer() {
       if (!this.verificationCode || this.isSubmitting) {
+        return;
+      }
+
+      // The dereference that threw. `clientPhoneNumber` is a field the VENUE fills in, and when it is
+      // absent `.replace` raised a TypeError straight into the catch below — which told her the code
+      // was wrong. She had typed it correctly; the product blamed her for a blank field she has never
+      // seen and cannot fix. The template no longer offers these actions without a number, and this
+      // guard is what makes the TypeError impossible rather than merely unreached.
+      if (!this.canConfirmBySms) {
+        this.errorMessage = this.copy.noPhoneText;
+        this.showError = true;
         return;
       }
 
@@ -885,6 +949,32 @@ export default {
   font-size: 0.9em;
   font-style: italic;
   margin-bottom: 24px;
+}
+
+.no-phone {
+  background: #fff4e5;
+  border: 1px solid #f0c38a;
+  border-radius: 8px;
+  padding: 20px 24px;
+  color: #92400e;
+}
+
+.no-phone h3 {
+  color: #92400e;
+  margin: 0 0 8px 0;
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+.no-phone p {
+  margin: 0 0 8px 0;
+}
+
+/* The order number, repeated because the sentence above asks her to quote it and it is otherwise
+   only in the URL she arrived from. */
+.no-phone-code {
+  margin: 0;
+  font-size: 0.95em;
 }
 
 .expired-banner {
