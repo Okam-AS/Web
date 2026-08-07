@@ -692,6 +692,7 @@ describe('every key this page prints exists in all three locales', () => {
     'ff_overridden', 'ff_not_overridden', 'ff_override_unknown', 'ff_effective_on', 'ff_effective_off',
     'ff_effective_unknown', 'ff_overruled', 'ff_state_unknown_row', 'ff_not_writable',
     'ff_precondition_events_deposits', 'ff_off_training_setup', 'ff_off_training_assignments',
+    'ff_precondition_events_dispatch', 'ff_off_events_dispatch',
     'ff_note_label',
     'ff_note_placeholder', 'ff_updated_by', 'ff_actor_unknown', 'ff_turn_on', 'ff_turn_off', 'ff_clear',
     'ff_saved_on', 'ff_saved_off', 'ff_cleared', 'ff_clear_none', 'ff_generic_error',
@@ -712,5 +713,169 @@ describe('every key this page prints exists in all three locales', () => {
       expect(translations[locale].ff_clear_none).toContain('{flag}')
       expect(translations[locale].wf_conflict_flag).toContain('{flag}')
     })
+  })
+})
+
+// EVENTS.DISPATCH IS THE ONE SWITCH ON THIS PAGE THAT ACTS OUTWARD, AND IT CANNOT BE UNDONE.
+//
+// Every other row makes a surface readable or a write admissible; pressing it back restores the world.
+// This one releases the guest-link outbox: `EventsNotificationDrainService` delivers each queued row
+// over the platform mail transport, and a message that has left is gone. Two things about it are
+// invisible from the row's own value and are the reason both disclosures exist here.
+//
+// FIRST, ON IS NOT "FROM NOW ON". The drain takes the backlog that accumulated while the switch was
+// off — `EventsSettings.DispatchEnabled` calls that "the intended go-live sequence" — so what goes out
+// at the click is the queued count on the Events pipeline, which may be months of links, not zero.
+//
+// SECOND, OFF IS NOT "GONE". A withheld row keeps its status, attempt count and next-attempt time; it
+// is not spent, not failed and not deleted. Staff keep issuing links behind the switch and the queue
+// keeps growing, which is precisely why the first point bites.
+//
+// Both are asserted on CONTENT rather than on the key being present: a disclosure that has drifted
+// into saying nothing is the failure mode this page has already been through once with its intro.
+describe('the Events dispatch row says what pressing it actually releases', () => {
+  const DISPATCH_KEY = 'Events.Dispatch'
+
+  const DISPATCH_CATALOG = CATALOG.concat([
+    { flagKey: DISPATCH_KEY, module: 'Events', title: 'Guest-link dispatch', defaultEnabled: false }
+  ])
+  const DISPATCH_STATES = STATES.concat([
+    {
+      flagKey: DISPATCH_KEY,
+      module: 'Events',
+      title: 'Guest-link dispatch',
+      defaultEnabled: false,
+      isOverridden: false,
+      overrideEnabled: false,
+      effective: false,
+      updatedByReference: null,
+      updatedAtUtc: null,
+      note: null
+    }
+  ])
+
+  const withDispatch = () => {
+    behaviour.GetCatalog = () => Promise.resolve(DISPATCH_CATALOG)
+    behaviour.GetStoreFlags = () => Promise.resolve(DISPATCH_STATES)
+  }
+
+  // The row is drawn from the catalogue alone — no page code names this flag to make it appear — and
+  // it carries a live control, which is the whole point: before it existed the only way to release a
+  // store's queue was a launch-line variable.
+  test('the flag arrives from the catalogue with a working control', async () => {
+    withDispatch()
+    const wrapper = mountPage()
+    await settled()
+
+    const row = rowFor(wrapper, DISPATCH_KEY)
+    expect(row).toBeTruthy()
+    expect(row.text()).toContain('Guest-link dispatch')
+    expect(row.find('[data-flag-on]').exists()).toBe(true)
+  })
+
+  // Both notes are ABOVE the control, because they are read at the moment of the click or not at all.
+  // Asserted by position in the row's own markup rather than by presence anywhere on the page.
+  test('both disclosures render on the row, above its switch', async () => {
+    withDispatch()
+    const wrapper = mountPage()
+    await settled()
+
+    const row = rowFor(wrapper, DISPATCH_KEY)
+    expect(row.find('[data-precondition="' + DISPATCH_KEY + '"]').text()).toBe('ff_precondition_events_dispatch')
+    expect(row.find('[data-off-meaning="' + DISPATCH_KEY + '"]').text()).toBe('ff_off_events_dispatch')
+
+    const html = row.html()
+    expect(html.indexOf('data-precondition')).toBeLessThan(html.indexOf('data-flag-on'))
+    expect(html.indexOf('data-off-meaning')).toBeLessThan(html.indexOf('data-flag-on'))
+  })
+
+  // Independent of this store's value. An operator about to press "off" has to read what off does
+  // BEFORE the value changes, and an operator about to press "on" has to read the release warning
+  // while the switch still reads off — so neither may be conditional on `state`.
+  test('both disclosures survive a store read that never mentioned the flag', async () => {
+    behaviour.GetCatalog = () => Promise.resolve(DISPATCH_CATALOG)
+    behaviour.GetStoreFlags = () => Promise.resolve(STATES)
+    const wrapper = mountPage()
+    await settled()
+
+    const row = rowFor(wrapper, DISPATCH_KEY)
+    expect(row.text()).toContain('ff_state_unknown_row')
+    expect(row.find('[data-precondition="' + DISPATCH_KEY + '"]').exists()).toBe(true)
+    expect(row.find('[data-off-meaning="' + DISPATCH_KEY + '"]').exists()).toBe(true)
+  })
+
+  // Neither sentence is printed on a flag whose owner makes no such statement. The deposits row is
+  // the near neighbour that would be wrong to inherit either one.
+  test('no other flag row carries the dispatch disclosures', async () => {
+    behaviour.GetCatalog = () => Promise.resolve(DISPATCH_CATALOG.concat(
+      [{ flagKey: DEPOSITS_KEY, module: 'Events', title: 'Deposit money path', defaultEnabled: false }]))
+    behaviour.GetStoreFlags = () => Promise.resolve(DISPATCH_STATES)
+    const wrapper = mountPage()
+    await settled()
+
+    expect(wrapper.findAll('[data-off-meaning]')).toHaveLength(1)
+    expect(rowFor(wrapper, DEPOSITS_KEY).find('[data-off-meaning]').exists()).toBe(false)
+    expect(rowFor(wrapper, 'Margin.Module').find('[data-precondition]').exists()).toBe(false)
+    expect(rowFor(wrapper, 'workforce.publication').find('[data-off-meaning]').exists()).toBe(false)
+  })
+
+  // The copy, in every locale, on its content. The four obligations are the four facts a person
+  // cannot recover from the switch itself, and the last is the one the estate keeps having to relearn:
+  // say which mail account this goes through, because "it is only a test store" is a belief about
+  // configuration nobody on this page can see.
+  const RELEASE_SAYS = {
+    no: {
+      'says the link is a credential': [/nøkkel/i, /uten å logge inn/i],
+      'says the whole queue goes, not only what is next': [/hele køen/i, /ikke bare det som kommer etterpå/i],
+      'says a sent message cannot be recalled': [/kan ikke kalles tilbake/i],
+      'names the transport it goes out over': [/e-postkontoen/i, /ekte gjesteadresser/i]
+    },
+    en: {
+      'says the link is a credential': [/is a key/i, /without signing in/i],
+      'says the whole queue goes, not only what is next': [/whole queue/i, /not only what comes next/i],
+      'says a sent message cannot be recalled': [/cannot be recalled/i],
+      'names the transport it goes out over': [/mail account/i, /real guest addresses/i]
+    },
+    de: {
+      'says the link is a credential': [/ein Schlüssel/i, /ohne Anmeldung/i],
+      'says the whole queue goes, not only what is next': [/gesamte Warteschlange/i, /nicht nur das Kommende/i],
+      'says a sent message cannot be recalled': [/nicht zurückholen/i],
+      'names the transport it goes out over': [/E-Mail-Konto/i, /echte Gästeadressen/i]
+    }
+  }
+
+  const HELD_SAYS = {
+    no: {
+      'says links are held, not lost': [/holdes lenkene tilbake/i, /forsvinner ikke/i],
+      'says staff keep queueing behind it': [/fortsatt sende tilbud/i, /køen vokser/i],
+      'says no attempt is spent': [/ingen forsøk brukes opp/i]
+    },
+    en: {
+      'says links are held, not lost': [/held back/i, /not lost/i],
+      'says staff keep queueing behind it': [/still send proposals/i, /queue grows/i],
+      'says no attempt is spent': [/no attempt is spent/i]
+    },
+    de: {
+      'says links are held, not lost': [/zurückgehalten/i, /gehen nicht verloren/i],
+      'says staff keep queueing behind it': [/weiterhin Angebote senden/i, /Warteschlange wächst/i],
+      'says no attempt is spent': [/kein Versuch wird verbraucht/i]
+    }
+  }
+
+  const assertObligations = (text, obligations) => {
+    expect(typeof text).toBe('string')
+    Object.keys(obligations).forEach((obligation) => {
+      obligations[obligation].forEach((pattern) => {
+        expect({ obligation, text }).toEqual({ obligation, text: expect.stringMatching(pattern) })
+      })
+    })
+  }
+
+  test.each(['no', 'en', 'de'])('%s states what switching dispatch on releases', (locale) => {
+    assertObligations(translations[locale].ff_precondition_events_dispatch, RELEASE_SAYS[locale])
+  })
+
+  test.each(['no', 'en', 'de'])('%s states that off holds the queue rather than discarding it', (locale) => {
+    assertObligations(translations[locale].ff_off_events_dispatch, HELD_SAYS[locale])
   })
 })

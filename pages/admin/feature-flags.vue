@@ -203,7 +203,13 @@ import { buildBoard, isOverruled, BOARD_UNKNOWN } from '~/utils/platform/flag-bo
 // this map carries no precondition text at all rather than a generic one; a blanket note at the top
 // of the page would be read as covering all eighteen rows, which is a different and false claim.
 const FLAG_PRECONDITIONS = {
-  'Events.Deposits': 'ff_precondition_events_deposits'
+  'Events.Deposits': 'ff_precondition_events_deposits',
+  // Every other switch on this page makes a surface readable or a write admissible, and pressing it
+  // back undoes it. This one posts guest contact details outward over the deployment's mail transport,
+  // and a message that has left cannot be recalled. It also does not release "from now on": the drain
+  // takes the whole backlog that accumulated while it was off, so the size of what goes out is the
+  // queued count on the Events pipeline, not zero. Both are read at the click or not at all.
+  'Events.Dispatch': 'ff_precondition_events_dispatch'
 };
 
 // What turning a flag OFF actually does to the module — stated on the row, for the flags whose
@@ -232,7 +238,12 @@ const FLAG_PRECONDITIONS = {
 // first of them that is ever advertised, whatever gate it turns out to have.
 const FLAG_OFF_BEHAVIOUR = {
   'training.setup': 'ff_off_training_setup',
-  'training.assignments': 'ff_off_training_assignments'
+  'training.assignments': 'ff_off_training_assignments',
+  // Read off `EventsNotificationDrainService`: a row whose store has this off is skipped with its
+  // status, attempt count and next-attempt time untouched — it is withheld, never spent and never
+  // deleted. Staff keep issuing links and the queue keeps growing behind the switch, which is the
+  // opposite of what "off" suggests and is the reason turning it back on is not a fresh start.
+  'Events.Dispatch': 'ff_off_events_dispatch'
 };
 
 export default {
