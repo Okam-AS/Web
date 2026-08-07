@@ -280,7 +280,7 @@ describe('the operator is told which failure this is', () => {
     await settle(wrapper)
 
     expect(norm(wrapper.find('.empty-state').text()))
-      .toContain(translate('no', 'poweruserGrowth_unknownError'))
+      .toContain(translate('no', 'requestFailure_unknown'))
   })
 
   test('the spinner is taken down whether the read succeeded or failed', async () => {
@@ -357,8 +357,8 @@ describe('the operator is told which failure this is', () => {
     // none, and being offline has no body by definition. Those are the cases where the page has to
     // supply the sentence, and where the four must still be told apart.
     test.each([
-      ['an expired session', 401, 'poweruserGrowth_errorSessionExpired'],
-      ['a refusal', 403, 'poweruserGrowth_errorNotAllowed']
+      ['an expired session', 401, 'requestFailure_sessionExpired'],
+      ['a refusal', 403, 'requestFailure_notAllowed']
     ])('%s with an empty body is still named, not reduced to a code', async (_name, status, key) => {
       respondWith = axiosRejects(status, null)
       const screen = await screenAfterFailure()
@@ -370,7 +370,7 @@ describe('the operator is told which failure this is', () => {
     test('a crashed report engine with an empty body names the code it answered with', async () => {
       respondWith = axiosRejects(500, null)
       expect(await screenAfterFailure())
-        .toContain(translate('no', 'poweruserGrowth_errorServer', { status: 500 }))
+        .toContain(translate('no', 'requestFailure_serverError', { status: 500 }))
     })
 
     test('being offline is told apart from the server refusing', async () => {
@@ -378,7 +378,7 @@ describe('the operator is told which failure this is', () => {
       const screen = await screenAfterFailure()
 
       // The one failure the operator can act on themselves, and the one that has no status at all.
-      expect(screen).toContain(translate('no', 'poweruserGrowth_errorOffline'))
+      expect(screen).toContain(translate('no', 'requestFailure_offline'))
       expect(screen).not.toContain('Network Error')
     })
 

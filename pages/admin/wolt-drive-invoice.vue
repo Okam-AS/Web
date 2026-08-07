@@ -159,8 +159,21 @@
         </div>
       </div>
 
+      <!-- Failed Read. This comes BEFORE the empty state and the empty state now excludes it,
+           because a read that failed used to land in "no orders in this period" — a claim about the
+           venue's trade made on the strength of a request that never came back. -->
       <div
-        v-if="!isLoading && selectedStoreId && (!report || report.totalOrderCount === 0)"
+        v-if="!isLoading && selectedStoreId && loadError"
+        class="empty-state load-error"
+        role="alert"
+      >
+        <h3>{{ $i('woltDriveInvoice_loadErrorTitle') }}</h3>
+        <p>{{ loadError }}</p>
+        <button class="btn-primary" type="button" @click="loadData">{{ $i('common_tryAgain') }}</button>
+      </div>
+
+      <div
+        v-if="!isLoading && !loadError && selectedStoreId && (!report || report.totalOrderCount === 0)"
         class="empty-state"
       >
         <h3>{{ $i('woltDriveInvoice_noOrdersTitle') }}</h3>
@@ -181,6 +194,7 @@
 <script>
 import AdminPage from "~/components/organisms/AdminPage.vue";
 import Loading from "~/components/atoms/Loading.vue";
+import { describeRequestFailure } from "~/utils/request-failure";
 
 export default {
   name: "WoltDriveInvoice",
@@ -189,6 +203,9 @@ export default {
     return {
       isLoading: false,
       isDownloadingPdf: false,
+      // A read that failed is not a period with no deliveries in it. Kept separate from `report`
+      // so the empty state cannot speak for a request that never came back.
+      loadError: "",
       report: null,
       dateRange: {
         from: this.getDefaultFromDate(),
@@ -369,10 +386,12 @@ export default {
     async loadData() {
       if (!this.selectedStoreId) {
         this.report = null;
+        this.loadError = "";
         return;
       }
 
       this.isLoading = true;
+      this.loadError = "";
       try {
         const model = {
           StoreId: parseInt(this.selectedStoreId),
@@ -384,6 +403,7 @@ export default {
         this.report = await this._statisticsService.GetWoltDriveInvoice(model);
       } catch (error) {
         console.error("Failed to load Wolt Drive invoice report:", error);
+        this.loadError = describeRequestFailure(error, (key, params) => this.$i(key, params));
         this.report = null;
       } finally {
         this.isLoading = false;
@@ -680,6 +700,12 @@ export default {
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* A failed read wears the error colour, so it cannot be skim-read as the neutral "nothing here"
+   state it now displaces. */
+.empty-state.load-error h3 {
+  color: #ef4444;
 }
 
 .empty-state h3 {

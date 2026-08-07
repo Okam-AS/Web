@@ -143,6 +143,25 @@
       <!-- Loading State -->
       <LoadingSkeleton v-if="isLoading" />
 
+      <!-- Failed Read — stands exactly where the figures would have been, so the panel cannot be
+           mistaken for a period with no trade in it. -->
+      <div
+        v-else-if="loadError"
+        class="statistics-error"
+        role="alert"
+      >
+        <span class="material-icons">error_outline</span>
+        <h3>{{ $i('statistics_loadErrorTitle') }}</h3>
+        <p class="statistics-error-reason">{{ loadError }}</p>
+        <button
+          class="btn-primary"
+          type="button"
+          @click="loadStatistics"
+        >
+          {{ $i('common_tryAgain') }}
+        </button>
+      </div>
+
       <!-- Statistics Display -->
       <div
         v-else-if="statistics"
@@ -450,6 +469,7 @@ import LoadingSkeleton from '~/components/molecules/LoadingSkeleton.vue';
 import PeakPerformanceHeatmap from '~/components/molecules/PeakPerformanceHeatmap.vue';
 import AIQueryBox from '~/components/admin/statistics/AIQueryBox.vue';
 import { debounce } from '~/core/helpers/ts-debounce';
+import { describeRequestFailure } from '~/utils/request-failure';
 
 export default {
   components: {
@@ -462,6 +482,11 @@ export default {
   },
   data: () => ({
     isLoading: false,
+    // What the operator is told when a statistics read does not come back. Before this existed the
+    // failure went to `console.error` and the page simply did not populate, which an operator reads
+    // as "no trade in this period" — a wrong reason gets reported and fixed, a blank panel gets
+    // acted on.
+    loadError: '',
     statistics: null,
     deliveryStats: {
       pickup: null,
@@ -672,6 +697,9 @@ export default {
     },
     loadStatistics() {
       this.isLoading = true;
+      // Cleared on every attempt, so a retry that succeeds does not leave the previous failure
+      // standing above fresh figures.
+      this.loadError = '';
       this.ordersSummary = [];
       this.openOrderSummaryIndices = [];
 
@@ -766,6 +794,10 @@ export default {
           }
         })
         .catch((error) => {
+          // `Promise.all` rejects on the FIRST of the five (nine in comparison mode) reads to fail,
+          // so this one sentence is about whichever read broke — which is right, because they all
+          // go to the same server with the same session and a 401 on one is a 401 on all of them.
+          this.loadError = describeRequestFailure(error, (key, params) => this.$i(key, params));
           console.error('Failed to load statistics:', error);
         })
         .finally(() => {
@@ -1277,6 +1309,36 @@ export default {
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
   }
+}
+
+// Follows the empty-state pattern in CLAUDE.md, in the error colour rather than the neutral one:
+// this panel means something went wrong, not that the period was quiet.
+.statistics-error {
+  text-align: center;
+  padding: 64px 24px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  margin: 32px 0;
+
+  .material-icons {
+    font-size: 4em;
+    color: #ef4444;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-size: 1.5em;
+    color: #292c34;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+}
+
+.statistics-error-reason {
+  color: #64748b;
+  margin-bottom: 24px;
 }
 
 .statistics-content {
