@@ -175,6 +175,75 @@ const ORDER_STATUS_LABEL_KEYS = {
   Canceled: 'orders_statusCanceled'
 }
 
+// Every value the backend can persist into `WoltDeliveryInfo.Status`, mapped to the dictionary key an
+// operator reads off the order card. Same defect as the three maps above, same fix, one new wrinkle.
+//
+// THE POPULATION IS THE WRITE PATH, NOT THE ENUM. `Enums/WoltStatus.cs` declares FIFTEEN members, but
+// the column can only ever hold TEN of them, and the difference is the whole reason this map is the
+// size it is:
+//   • `OrderService.cs:424` creates every Wolt delivery row with `Status = WoltStatus.NotSet`.
+//   • `WoltService.HandleWebhookEvent` assigns the incoming status ONLY when it appears in the
+//     `statusesToSave` allowlist at `WoltService.cs:338-349` — nine members. Every other event type
+//     is processed for its ETA and tracking fields and LEAVES `Status` untouched.
+// So `PickupEtaUpdated`, `LocationUpdated`, `DropoffEtaUpdated` and `HandshakeDelivery` are real
+// webhook events that never reach this column. They are deliberately NOT named below: inventing a
+// word for a state the API cannot send is a guess printed on an operator's screen, which is the rule
+// ORDER_STATUS_LABEL_KEYS already states for `OpenCheck`. They resolve the waiting key, which is what
+// the switch's default already answered for them.
+//
+// `DropoffCompleted` IS declared and is carried below even though it is the one allowlist omission —
+// the enum declares it (9) and the switch this replaces had a word for it, so dropping the case would
+// be a behaviour change rather than the routing change this is. It is recorded here so that whoever
+// adds it to `statusesToSave`, or removes it from the enum, does so deliberately.
+//
+// KEYS ARE NEW HERE, unlike the three maps above. No `orderCard_wolt*` VALUE key existed — only the
+// row's own label (`orderCard_woltStatusLabel`) — because the switch had never been anything but
+// literals. The Norwegian values are the switch's own words, byte for byte, so nothing an operator
+// reads in Norwegian moves.
+const WOLT_STATUS_LABEL_KEYS = {
+  // 0 — the state every Wolt delivery row is created in. Named explicitly so the map covers what the
+  // column can hold, and pointed at the same key the fallback resolves, so the rendered string is
+  // unchanged for both. This is the shape DELIVERY_TYPE_LABEL_KEYS uses for its own `NotSet`.
+  NotSet: 'orderCard_woltWaiting',
+  OrderReceived: 'orderCard_woltOrderReceived',
+  OrderRejected: 'orderCard_woltOrderRejected',
+  PickupStarted: 'orderCard_woltPickupStarted',
+  PickedUp: 'orderCard_woltPickedUp',
+  PickupArrival: 'orderCard_woltPickupArrival',
+  DropoffStarted: 'orderCard_woltDropoffStarted',
+  DropoffArrival: 'orderCard_woltDropoffArrival',
+  // 9 — declared by the enum, absent from `statusesToSave`. See above.
+  DropoffCompleted: 'orderCard_woltDropoffCompleted',
+  Delivered: 'orderCard_woltDelivered',
+  CustomerNoShow: 'orderCard_woltCustomerNoShow'
+}
+
+// Every member of the backend's `DineHomeStatus` (OkamAPI `Enums/DineHomeStatus.cs`) mapped to the
+// dictionary key an operator reads off the order card.
+//
+// THIS MAP EXISTS TO COLLAPSE TWO COPIES OF ONE VOCABULARY, and that is the defect rather than the
+// translation. There were two `dineHomeDeliveryStatusLabel` implementations: this one, which returned
+// six Norwegian literals with no `$i`, and a LOCAL copy on `components/molecules/OrderCard.vue` which
+// resolved the `orderCard_dineHome*` keys properly. The component's own copy shadowed this one at the
+// only render site in the estate, so the reachable half was translated and the dead half was not —
+// and the pair read as correct from either end alone, which is how it survived a lane that was
+// looking straight at it. The component copy is deleted in the same change; this is now the single
+// source, and it resolves the same keys the component copy resolved, so no rendered string moves in
+// any language.
+//
+// The Norwegian dictionary values are byte-identical to the literals this switch returned, so the
+// deletion loses no wording either.
+const DINE_HOME_STATUS_LABEL_KEYS = {
+  // 0 — a real member and the state an order carries before a driver has answered. Points at the same
+  // key the fallback resolves, so both read alike.
+  NotSet: 'orderCard_dineHomeWaiting',
+  Accepted: 'orderCard_dineHomeAccepted',
+  PickedUp: 'orderCard_dineHomePickedUp',
+  ReachedDestination: 'orderCard_dineHomeReachedDestination',
+  Completed: 'orderCard_dineHomeCompleted',
+  Canceled: 'orderCard_dineHomeCanceled'
+}
+
 const mixin = {
   data () {
     return {
@@ -218,30 +287,25 @@ const mixin = {
         : 'orders_deliveryNotSet'
       return this.$i(key)
     },
+    // Resolves a dictionary key, never a literal. See DINE_HOME_STATUS_LABEL_KEYS above — this is now
+    // the ONLY `dineHomeDeliveryStatusLabel` in the estate; `OrderCard.vue` carried a second copy that
+    // shadowed this one and it is deleted in the same change. A value the map does not carry resolves
+    // the same key `NotSet` does, which is what the switch's default did, so no rendered string moves.
     dineHomeDeliveryStatusLabel (dineHomeDeliveryTypeEnum) {
-      switch (dineHomeDeliveryTypeEnum) {
-      case 'Accepted': return 'Sjåfør har akseptert'
-      case 'PickedUp': return 'Sjåfør leverer bestilling'
-      case 'ReachedDestination': return 'Sjåfør fremme hos kunde'
-      case 'Completed': return 'Fullført'
-      case 'Canceled': return 'Sjåfør har kansellert'
-      default: return 'Venter aksept fra sjåfør'
-      }
+      const key = Object.prototype.hasOwnProperty.call(DINE_HOME_STATUS_LABEL_KEYS, dineHomeDeliveryTypeEnum)
+        ? DINE_HOME_STATUS_LABEL_KEYS[dineHomeDeliveryTypeEnum]
+        : 'orderCard_dineHomeWaiting'
+      return this.$i(key)
     },
+    // Resolves a dictionary key, never a literal. See WOLT_STATUS_LABEL_KEYS above for why the map
+    // names ten of the enum's fifteen members and refuses to invent words for the other five. A value
+    // the map does not carry — which is exactly those five — resolves the same key `NotSet` does,
+    // which is what the switch's default answered for them, so no rendered string moves.
     woltDeliveryStatusLabel (woltDeliveryStatusEnum) {
-      switch (woltDeliveryStatusEnum) {
-      case 'OrderReceived': return 'Bestilling mottatt'
-      case 'OrderRejected': return 'Bestilling avvist'
-      case 'PickupStarted': return 'Henting startet'
-      case 'PickedUp': return 'Hentet'
-      case 'PickupArrival': return 'Sjåfør ankommer'
-      case 'DropoffStarted': return 'Levering startet'
-      case 'DropoffArrival': return 'Levering ankommer'
-      case 'DropoffCompleted': return 'Levert hos kunde'
-      case 'Delivered': return 'Levert'
-      case 'CustomerNoShow': return 'Kunde møtte ikke'
-      default: return 'Venter på sjåfør'
-      }
+      const key = Object.prototype.hasOwnProperty.call(WOLT_STATUS_LABEL_KEYS, woltDeliveryStatusEnum)
+        ? WOLT_STATUS_LABEL_KEYS[woltDeliveryStatusEnum]
+        : 'orderCard_woltWaiting'
+      return this.$i(key)
     },
     // Resolves a dictionary key, never a literal. See ORDER_STATUS_LABEL_KEYS above. A value the map
     // does not carry — `OpenCheck` is the one core declares and the backend does not — resolves
@@ -395,3 +459,7 @@ export { PAYMENT_TYPE_LABEL_KEYS }
 // `OrderStatus` members and asserts these two maps declare exactly them, and that every key they
 // name is present in each dictionary in its own right.
 export { DELIVERY_TYPE_LABEL_KEYS, ORDER_STATUS_LABEL_KEYS }
+
+// Exported for the same reason the three above are: a test asserts these maps ARE the backend enums,
+// and it has to read the shipped object rather than a copy written beside the assertion.
+export { WOLT_STATUS_LABEL_KEYS, DINE_HOME_STATUS_LABEL_KEYS }
