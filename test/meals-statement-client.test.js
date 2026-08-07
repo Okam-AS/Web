@@ -249,28 +249,31 @@ describe('ExportCsv — the document, its name and the hash the server signed it
     expect(file.contentHash).toBeNull()
   })
 
-  test('its filename reading does not drift from the shared layer\'s, which is a second copy of it', () => {
-    // `utils/workforce/api-client.js` exports `fileNameFrom` and `_requestFile` already uses it;
-    // `utils/meals/statement-client.js` carries its own private copy of the same function. Two
-    // copies of a header parser is the failure mode that file's own header warns about — silent,
-    // and one field at a time. There is no way to import the private one, so the copies are held
-    // together through the only observable that reaches it: `ExportCsv`'s `fileName`.
-    const worlds = [
-      'attachment; filename="statement-2026-06.csv"',
-      'attachment; filename=statement-2026-06.csv',
-      "attachment; filename*=UTF-8''oppgj%C3%B8r-2026-06.csv",
-      "attachment; filename=fallback.csv; filename*=UTF-8''oppgj%C3%B8r-2026-06.csv",
-      "attachment; filename*=UTF-8''broken-%E0%A4%A.csv",
-      'inline',
-      'attachment'
-    ]
-    expect(worlds).toHaveLength(7)
-    return worlds.reduce((chain, disposition) => chain.then(async () => {
-      respondCsv(200, 'x', { 'Content-Disposition': disposition })
-      const mine = (await service().ExportCsv(STATEMENT)).fileName
-      const shared = fileNameFrom(headers({ 'Content-Disposition': disposition }))
-      expect(mine).toBe(shared)
-    }), Promise.resolve())
+  test('the filename comes off the SHARED parser, not a second copy of it living in this module', async () => {
+    // There WAS a second copy — `utils/meals/statement-client.js` carried a character-identical
+    // private `fileNameFrom` until 2026-08-07, and this arm used to hold the two together by
+    // comparing their outputs across seven dispositions. That comparison is worthless now that
+    // there is one function: it would be the shared parser checked against itself, which is the
+    // shape this estate has already shipped once.
+    //
+    // So the copy is gone and this arm pins the thing that replaced it — that `ExportCsv` really
+    // routes through the export, rather than having quietly re-forked one. Stubbing the shared
+    // function is the only observable that can tell those apart; the behaviour arms above still
+    // drive the real parser end to end.
+    const shared = require('~/utils/workforce/api-client')
+    const original = shared.fileNameFrom
+    const spy = jest.fn(() => 'named-by-the-shared-parser.csv')
+    Object.defineProperty(shared, 'fileNameFrom', { value: spy, configurable: true })
+    try {
+      respondCsv(200, 'x', { 'Content-Disposition': 'attachment; filename="on-the-wire.csv"' })
+      const file = await service().ExportCsv(STATEMENT)
+      expect(spy).toHaveBeenCalledTimes(1)
+      // The value the caller gets is the SHARED function's, not one this module derived itself.
+      expect(file.fileName).toBe('named-by-the-shared-parser.csv')
+      expect(file.fileName).not.toBe('on-the-wire.csv')
+    } finally {
+      Object.defineProperty(shared, 'fileNameFrom', { value: original, configurable: true })
+    }
   })
 })
 
