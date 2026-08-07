@@ -37,6 +37,43 @@ it. **That is a pre-existing condition, not something this lane introduced** —
 this for real is a two-repo push of at least two commits, and `9626a561` has to reach the remote
 before `a6ae241` can be reachable there.
 
+## TEARDOWN HAZARD: the core commit lived in ONE place, inside a worktree admin directory
+
+A submodule inside a linked git worktree does not keep its objects in the shared repository. This
+lane's `core/.git` read:
+
+```
+gitdir: ../../Web/.git/worktrees/web-reasons/modules/core
+```
+
+so commit `a6ae241` existed **only** under `Web/.git/worktrees/web-reasons/` — the directory that
+`rm -rf` plus `git worktree prune` deletes. The ordinary teardown every brief in this program
+prescribes would have destroyed the lane's main artifact, silently, with the Web-modules pin left
+naming a SHA that no longer existed anywhere.
+
+(`Web-modules` is itself a linked worktree — its `.git` is `gitdir:
+/Users/svendaneel/okam/Web/.git/worktrees/Web-modules` — so the real superproject is
+`/Users/svendaneel/okam/Web`. Nothing about the submodule's objects is where it looks like it is.)
+
+**It is preserved as a git bundle committed on this branch**, so it survives teardown of everything:
+
+    lanes/L-EVERY-REPORT-READ-SAYS-WHY-IT-FAILED/core-a6ae241.bundle
+
+Restore it into a fresh checkout's `core/` with the prerequisite the briefs already document:
+
+```sh
+cd core
+git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core \
+    9626a561bb0442b0aed026be75b7f9419337ac6d
+git -c protocol.file.allow=always fetch \
+    ../lanes/L-EVERY-REPORT-READ-SAYS-WHY-IT-FAILED/core-a6ae241.bundle 'refs/heads/*:refs/heads/*'
+git checkout a6ae241
+```
+
+Proved, not asserted: the bundle was fetched into an empty `git init` repo holding only the
+prerequisite, and both changed files came back byte-identical to the worktree copy with the parent
+still `9626a561`.
+
 ## Why the fix touched `request-service.ts` and not only the file that was reported
 
 `BuildError` already preferred the backend's reason and already attached the status. It did not say
