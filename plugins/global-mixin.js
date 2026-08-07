@@ -179,22 +179,31 @@ const ORDER_STATUS_LABEL_KEYS = {
 // operator reads off the order card. Same defect as the three maps above, same fix, one new wrinkle.
 //
 // THE POPULATION IS THE WRITE PATH, NOT THE ENUM. `Enums/WoltStatus.cs` declares FIFTEEN members, but
-// the column can only ever hold TEN of them, and the difference is the whole reason this map is the
-// size it is:
-//   • `OrderService.cs:424` creates every Wolt delivery row with `Status = WoltStatus.NotSet`.
+// the column can only ever hold ELEVEN of them, and the difference is the whole reason this map is
+// the size it is:
+//   • `OrderService.cs:419` creates every Wolt delivery row with `Status = WoltStatus.NotSet`.
 //   • `WoltService.HandleWebhookEvent` assigns the incoming status ONLY when it appears in the
-//     `statusesToSave` allowlist at `WoltService.cs:338-349` — nine members. Every other event type
+//     `statusesToSave` allowlist at `WoltService.cs:502-513` — TEN members. Every other event type
 //     is processed for its ETA and tracking fields and LEAVES `Status` untouched.
-// So `PickupEtaUpdated`, `LocationUpdated`, `DropoffEtaUpdated` and `HandshakeDelivery` are real
-// webhook events that never reach this column. They are deliberately NOT named below: inventing a
-// word for a state the API cannot send is a guess printed on an operator's screen, which is the rule
-// ORDER_STATUS_LABEL_KEYS already states for `OpenCheck`. They resolve the waiting key, which is what
-// the switch's default already answered for them.
+// Three further writers add nothing to that set, checked rather than assumed: the order-status mirror
+// (`WoltService.cs:1104-1115`) maps only to `OrderReceived`/`PickupStarted`/`PickupArrival`/`PickedUp`,
+// the marketplace seed (`MapMarketplaceDeliveryStatus`) ranges over eight members that are all already
+// in the allowlist, and the two direct writes at `:1158`/`:1206` are `Delivered` and `OrderRejected`.
+// So the reachable set is exactly the ten-member allowlist plus `NotSet` — eleven.
 //
-// `DropoffCompleted` IS declared and is carried below even though it is the one allowlist omission —
-// the enum declares it (9) and the switch this replaces had a word for it, so dropping the case would
-// be a behaviour change rather than the routing change this is. It is recorded here so that whoever
-// adds it to `statusesToSave`, or removes it from the enum, does so deliberately.
+// So `PickupEtaUpdated`, `LocationUpdated`, `DropoffEtaUpdated` and `HandshakeDelivery` — FOUR, the
+// only members no writer can produce — are real webhook events that never reach this column. They are
+// deliberately NOT named below: inventing a word for a state the API cannot send is a guess printed on
+// an operator's screen, which is the rule ORDER_STATUS_LABEL_KEYS already states for `OpenCheck`. They
+// resolve the waiting key, which is what the switch's default already answered for them.
+//
+// `DropoffCompleted` IS IN THE ALLOWLIST (`WoltService.cs:511`, added by `6454f3c71`), so its entry
+// below is LOAD-BEARING rather than a courtesy carried over from the switch this replaced. It is a
+// state the column really holds — `WoltService.cs:559` maps it to `OrderStatus.Completed` — and the
+// fallback in `woltDeliveryStatusLabel` resolves `orderCard_woltWaiting`. Drop this entry and an
+// operator watching a delivery whose dropoff has completed reads "waiting": not a raw enum and not
+// invented German, but a well-formed word that is wrong. The map covering the whole reachable set is
+// what makes the fallback safe to be a single waiting key instead of a guess per state.
 //
 // KEYS ARE NEW HERE, unlike the three maps above. No `orderCard_wolt*` VALUE key existed — only the
 // row's own label (`orderCard_woltStatusLabel`) — because the switch had never been anything but
@@ -212,7 +221,7 @@ const WOLT_STATUS_LABEL_KEYS = {
   PickupArrival: 'orderCard_woltPickupArrival',
   DropoffStarted: 'orderCard_woltDropoffStarted',
   DropoffArrival: 'orderCard_woltDropoffArrival',
-  // 9 — declared by the enum, absent from `statusesToSave`. See above.
+  // 9 — in `statusesToSave` and mapped to `OrderStatus.Completed`. See above.
   DropoffCompleted: 'orderCard_woltDropoffCompleted',
   Delivered: 'orderCard_woltDelivered',
   CustomerNoShow: 'orderCard_woltCustomerNoShow'

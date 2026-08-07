@@ -16,12 +16,16 @@ import OrderCard from '~/components/molecules/OrderCard.vue'
 // looked complete while seven backend members fell through it.
 //
 // For Wolt the enum is NOT the population, and the difference is the point of this file.
-// `Enums/WoltStatus.cs` declares fifteen members, but only ten can ever reach
+// `Enums/WoltStatus.cs` declares fifteen members, but only ELEVEN can ever reach
 // `WoltDeliveryInfo.Status`:
-//   • `OrderService.cs:424` creates every row with `WoltStatus.NotSet`.
+//   • `OrderService.cs:419` creates every row with `WoltStatus.NotSet`.
 //   • `WoltService.HandleWebhookEvent` assigns the incoming status ONLY if it is in the
-//     `statusesToSave` allowlist at `WoltService.cs:338-349` — nine members.
-// Every other event type is processed for ETA/tracking and leaves `Status` alone.
+//     `statusesToSave` allowlist at `WoltService.cs:502-513` — TEN members, `DropoffCompleted`
+//     among them since `6454f3c71`.
+// Every other event type is processed for ETA/tracking and leaves `Status` alone. The other three
+// writers add nothing: the order-status mirror (`WoltService.cs:1104-1115`) produces only members
+// already in the allowlist, so does `MapMarketplaceDeliveryStatus`, and the direct writes at
+// `:1158`/`:1206` are `Delivered` and `OrderRejected`. Eleven = the ten-member allowlist + `NotSet`.
 const PERSISTED_WOLT_STATUSES = [
   ['NotSet', 0],
   ['OrderReceived', 1],
@@ -31,15 +35,10 @@ const PERSISTED_WOLT_STATUSES = [
   ['PickupArrival', 6],
   ['DropoffStarted', 7],
   ['DropoffArrival', 8],
+  ['DropoffCompleted', 9],
   ['Delivered', 10],
   ['CustomerNoShow', 11]
 ]
-
-// Declared by `Enums/WoltStatus.cs` and NOT in `statusesToSave`, so the column cannot hold it. The
-// map carries a word for it anyway, because the switch this replaced had one and dropping a case is
-// a behaviour change rather than the routing change this is. Named here so it cannot quietly grow
-// into "anything extra".
-const CARRIED_UNPERSISTED_WOLT = ['DropoffCompleted']
 
 // Declared by the enum, never written to this column, and deliberately given NO word: inventing one
 // would print a guess on an operator's screen. They must resolve the waiting fallback, which is what
@@ -218,9 +217,9 @@ async function renderDineHome (dineHomeStatus, locale) {
 }
 
 describe('the two maps are the backend enums, and nothing else', () => {
-  it('declares every status the Wolt write path can persist, plus the one carried non-persisted member', () => {
+  it('declares every status the Wolt write path can persist, and nothing else', () => {
     expect(Object.keys(WOLT_STATUS_LABEL_KEYS).sort())
-      .toEqual([...PERSISTED_WOLT_STATUSES.map(([n]) => n), ...CARRIED_UNPERSISTED_WOLT].sort())
+      .toEqual(PERSISTED_WOLT_STATUSES.map(([n]) => n).sort())
   })
 
   it('declares exactly the six members `Enums/DineHomeStatus.cs` declares', () => {
