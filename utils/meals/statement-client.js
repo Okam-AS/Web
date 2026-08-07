@@ -43,29 +43,20 @@
 // TRANSPORT IS SHARED, NOT COPIED — `WorkforceClientBase` is this repo's one HTTP layer. Nothing here
 // mutates, so nothing here mints an `Idempotency-Key`.
 
-import { WorkforceClientBase, WorkforceApiError } from '~/utils/workforce/api-client';
+// `fileNameFrom` is the SHARED parser, not a private copy of it. This file carried its own
+// character-identical duplicate until 2026-08-07; two copies of a `Content-Disposition` parser drift
+// one field at a time and in silence, which is the exact failure this module's own header warns
+// about elsewhere. `_requestFile` in the shared layer already used the exported one.
+//
+// On what it returns: `Content-Disposition` is not a CORS-safelisted response header, so a
+// cross-origin admin app can only read it where the API's policy exposes it — which THIS API does
+// (`Helpers/BrowserReadableHeaders.cs:29,38` reaches `Program.cs`'s `WithExposedHeaders`). Null is
+// still the honest answer for every other deployment, and the caller then knows it is naming the
+// file itself rather than repeating the server.
+import { WorkforceClientBase, WorkforceApiError, fileNameFrom } from '~/utils/workforce/api-client';
 
 function statementPath (statementId) {
   return '/v1/meals/statements/' + encodeURIComponent(statementId);
-}
-
-/**
- * The server's own filename, when the browser is allowed to see it.
- *
- * `Content-Disposition` is not a CORS-safelisted response header, so on a cross-origin admin app it
- * is readable only if the API's policy exposes it. Returning null rather than a guess is the point:
- * the caller then knows it is naming the file itself, and says so.
- */
-function fileNameFrom (headers) {
-  if (!headers || typeof headers.get !== 'function') { return null; }
-  const disposition = headers.get('Content-Disposition') || headers.get('content-disposition');
-  if (!disposition) { return null; }
-  const extended = /filename\*\s*=\s*UTF-8''([^;]+)/i.exec(disposition);
-  if (extended) {
-    try { return decodeURIComponent(extended[1].trim()); } catch (e) { return extended[1].trim(); }
-  }
-  const plain = /filename\s*=\s*"?([^";]+)"?/i.exec(disposition);
-  return plain ? plain[1].trim() : null;
 }
 
 export class MealsStatementService extends WorkforceClientBase {

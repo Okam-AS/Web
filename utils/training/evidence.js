@@ -250,10 +250,21 @@ export function integrityOf (integrity) {
  */
 export function integrityFinding (integrity) {
   const i = integrity || {};
-  if (i.linkage === null && i.rowsWithoutAuditEvent === null) { return null; }
-  if (i.linkage === LINKAGE_BROKEN || i.linkage === LINKAGE_UNRESOLVABLE) { return true; }
-  if (typeof i.rowsWithoutAuditEvent === 'number' && i.rowsWithoutAuditEvent > 0) { return true; }
+  // ABSENT AND NULL ARE THE SAME SILENCE HERE, and they were not, which is why this is spelled out.
+  // Every guard below asks `=== null`, and an absent property answers `undefined` to that — so an
+  // integrity block that was never built at all (`integrityFinding(null)`, which is exactly what
+  // `TrainingEvidenceDocument.vue`'s `this.doc && this.doc.integrity` hands over when there is no
+  // document) fell through all four and returned `false`: A CLEAN BILL FOR A DOCUMENT THAT DOES NOT
+  // EXIST. `integrityOf` normalises to null and so was the only caller that could not trigger it.
+  // Normalising here means the three answers hold for every input, not only for the pre-normalised
+  // one.
+  const linkage = i.linkage === undefined ? null : i.linkage;
+  const rowsWithoutAuditEvent = i.rowsWithoutAuditEvent === undefined ? null : i.rowsWithoutAuditEvent;
+
+  if (linkage === null && rowsWithoutAuditEvent === null) { return null; }
+  if (linkage === LINKAGE_BROKEN || linkage === LINKAGE_UNRESOLVABLE) { return true; }
+  if (typeof rowsWithoutAuditEvent === 'number' && rowsWithoutAuditEvent > 0) { return true; }
   // One half answered and was clean while the other said nothing: still not a clean bill.
-  if (i.linkage === null || i.rowsWithoutAuditEvent === null) { return null; }
+  if (linkage === null || rowsWithoutAuditEvent === null) { return null; }
   return false;
 }
