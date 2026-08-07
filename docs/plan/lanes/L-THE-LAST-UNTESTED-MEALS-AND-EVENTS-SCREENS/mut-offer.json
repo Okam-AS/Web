@@ -1,0 +1,212 @@
+[
+  {
+    "name": "a link with no order number is still sent to the server",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "      if (!code) {",
+    "to": "      if (false) {"
+  },
+  {
+    "name": "opening the link no longer records the offer as read",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "        await this._offerProposalService.MarkAsRead(response.offerProposalId);",
+    "to": ""
+  },
+  {
+    "name": "an offer with no id is reported as read anyway",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "      if (response && response.offerProposalId) {",
+    "to": "      if (true) {"
+  },
+  {
+    "name": "a double tap sends two SMS",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "      if (!this.termsAccepted || this.isSubmitting) {",
+    "to": "      if (!this.termsAccepted) {"
+  },
+  {
+    "name": "a double tap on confirm places two orders",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "      if (!this.verificationCode || this.isSubmitting) {",
+    "to": "      if (!this.verificationCode) {"
+  },
+  {
+    "name": "the confirm button is live before a code is typed",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": ":disabled=\"!verificationCode || isSubmitting\"",
+    "to": ":disabled=\"isSubmitting\""
+  },
+  {
+    "name": "an unticked guest is pushed at the send instead of being told to tick",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "@click=\"termsAccepted ? sendVerification() : (showTermsWarning = true)\"",
+    "to": "@click=\"sendVerification()\""
+  },
+  {
+    "name": "ticking the box leaves the warning up",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "@change=\"showTermsWarning = false\"",
+    "to": ""
+  },
+  {
+    "name": "the number is sent with the spacing it is printed with",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "          phoneNumber: this.offerProposal.clientPhoneNumber.replace(/\\s/g, ''),\n        };\n\n        const success",
+    "to": "          phoneNumber: this.offerProposal.clientPhoneNumber,\n        };\n\n        const success"
+  },
+  {
+    "name": "the code the guest typed is not submitted",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "          verificationCode: this.verificationCode,",
+    "to": ""
+  },
+  {
+    "name": "a send the server declined still advances the guest to the code field",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "        if (success) {\n          this.verificationSent = true;\n        } else {",
+    "to": "        this.verificationSent = true;\n        if (success) {\n        } else {"
+  },
+  {
+    "name": "the confirmed order is never put on screen",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "        this.offerProposal = response;\n      } catch (error) {\n        this.scrollToBottom();",
+    "to": "      } catch (error) {\n        this.scrollToBottom();"
+  },
+  {
+    "name": "THE FIX for the blank page: the acceptance response is guarded before it replaces the offer",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "        this.offerProposal = response;\n      } catch (error) {\n        this.scrollToBottom();",
+    "to": "        if (response) { this.offerProposal = response; }\n      } catch (error) {\n        this.scrollToBottom();"
+  },
+  {
+    "name": "a wrong code is swallowed and nothing is said",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "        this.errorMessage = this.copy.errorWrongCode;\n        this.showError = true;",
+    "to": "        this.errorMessage = this.copy.errorWrongCode;"
+  },
+  {
+    "name": "a wrong code is blamed on the SMS instead",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "        this.errorMessage = this.copy.errorWrongCode;",
+    "to": "        this.errorMessage = this.copy.errorCouldNotSendCode;"
+  },
+  {
+    "name": "a corrected code leaves the earlier refusal on screen",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "      this.isSubmitting = true;\n      this.showError = false;\n      try {\n        const model = {\n          phoneNumber: this.offerProposal.clientPhoneNumber.replace(/\\s/g, ''),\n          verificationCode: this.verificationCode,",
+    "to": "      this.isSubmitting = true;\n      try {\n        const model = {\n          phoneNumber: this.offerProposal.clientPhoneNumber.replace(/\\s/g, ''),\n          verificationCode: this.verificationCode,"
+  },
+  {
+    "name": "the guest is not carried down to the code field",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "        this.scrollToBottom();\n        this.isSubmitting = false;",
+    "to": "        this.isSubmitting = false;"
+  },
+  {
+    "name": "the spinner never comes down",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "    } finally {\n      this.loading = false;\n    }",
+    "to": "    } finally {\n    }"
+  },
+  {
+    "name": "an already-accepted offer is offered for acceptance again",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "          v-if=\"!offerProposal.accepted\"",
+    "to": "          v-if=\"true\""
+  },
+  {
+    "name": "the code step never replaces the terms step",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "            v-if=\"!verificationSent\"",
+    "to": "            v-if=\"true\""
+  },
+  {
+    "name": "a Swiss guest is shown Norwegian",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "      return this.isCh\n        ? {",
+    "to": "      return !this.isCh\n        ? {"
+  },
+  {
+    "name": "the terms link opens nothing",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "@click.prevent=\"showTermsModal = true\"",
+    "to": "@click.prevent=\"showTermsModal = false\""
+  },
+  {
+    "name": "the terms modal ignores whether it was asked to open",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "      :is-visible=\"showTermsModal\"",
+    "to": "      :is-visible=\"false\""
+  },
+  {
+    "name": "closing the terms does not close them",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "      @close=\"showTermsModal = false\"",
+    "to": ""
+  },
+  {
+    "name": "the load diagnosis is discarded before it is even assigned",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "      this.error = error.message || this.copy.errorCouldNotLoad;",
+    "to": "      this.error = true;"
+  },
+  {
+    "name": "a link with no order number records no diagnosis at all",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "        this.error = this.copy.errorNoOrderNumber;",
+    "to": "        this.error = true;"
+  },
+  {
+    "name": "an offer that will not load shows nothing at all",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "      v-else-if=\"error\"",
+    "to": "      v-else-if=\"false\""
+  },
+  {
+    "name": "the guest is not told which number the code went to",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "<strong>{{ offerProposal.clientPhoneNumber }}</strong>",
+    "to": "<strong></strong>"
+  },
+  {
+    "name": "the offer is never handed to the document that renders it",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "<OfferDocument :offer-proposal=\"offerProposal\">",
+    "to": "<OfferDocument :offer-proposal=\"{}\">"
+  },
+  {
+    "name": "a failed send is reported as a success",
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-code-guest-page.test.js",
+    "from": "        this.errorMessage = error.message || this.copy.errorCouldNotSendCode;\n        this.showError = true;",
+    "to": "        this.errorMessage = error.message || this.copy.errorCouldNotSendCode;"
+  }
+]

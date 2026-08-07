@@ -1,0 +1,21 @@
+Baseline at lane branch point (trunk feature/restaurant-modules @ 7a378e4, which carries the
+vue-jest source-map fix 780d405 — so these are post-instrument-fix figures).
+
+Command:
+  npx jest test/meals-statement-view.test.js \
+    --collectCoverageFrom='pages/admin/meals-statements.vue' \
+    --collectCoverageFrom='components/admin/meals/MealsStatementLines.vue' \
+    --collectCoverageFrom='pages/offer/_code.vue' \
+    --coverageReporters=text
+
+--------------------------|---------|----------|---------|---------|-------------------
+File                      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+--------------------------|---------|----------|---------|---------|-------------------
+All files                 |       0 |        0 |       0 |       0 |
+ components/admin/meals   |       0 |        0 |       0 |       0 |
+  MealsStatementLines.vue |       0 |        0 |       0 |       0 | 138-208
+ pages/admin              |       0 |        0 |       0 |       0 |
+  meals-statements.vue    |       0 |        0 |       0 |       0 | 132-318
+ pages/offer              |       0 |        0 |       0 |       0 |
+  _code.vue               |       0 |        0 |       0 |       0 | 217-430
+--------------------------|---------|----------|---------|---------|-------------------

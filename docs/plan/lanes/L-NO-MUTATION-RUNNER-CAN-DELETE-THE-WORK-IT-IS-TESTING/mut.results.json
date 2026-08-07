@@ -1,0 +1,42 @@
+[
+  {
+    "name": "THE DEFECT RESTORED: the shipped runner restores with git checkout again",
+    "outcome": "RED",
+    "reddened": 1,
+    "first": [
+      ".*/g) || []).map(s => s.replace(/^✕ /, '').trim())"
+    ]
+  },
+  {
+    "name": "the verify-after-restore assertion is stripped as noise",
+    "outcome": "RED",
+    "reddened": 1,
+    "first": [
+      ".*/g) || []).map(s => s.replace(/^✕ /, '').trim())"
+    ]
+  },
+  {
+    "name": "the restore leaves the `finally`, so a spawn failure keeps the mutant on disk",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the repo root goes back to counting ../ from the script's own location",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "results are written beside the script instead of beside the spec",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "an unplaceable anchor is counted as a run instead of reported",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  }
+]

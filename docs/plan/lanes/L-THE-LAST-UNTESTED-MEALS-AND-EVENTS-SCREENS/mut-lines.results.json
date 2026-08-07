@@ -1,0 +1,92 @@
+[
+  {
+    "name": "member column falls back to the allocation id (the substitution this surface forbids)",
+    "outcome": "STILL-GREEN",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "unknown-reference row prints the allocation id instead of the mark",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "truncated payload no longer warns (counts compared for equality)",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "an unstated line count is treated as a disagreement",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "draft and finalized status labels swapped",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "every run is badged as frozen regardless of status",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "a foreign currency loses its ISO code (a wrong symbol is a wrong amount)",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the venue's own currency is also suffixed with its code",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "a stated amount of zero is rendered as unknown",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "a Capture line is labelled as a Reversal",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the gross total cell shows the net total",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the stated line count cell shows the rendered count instead",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the empty-statement sentence never appears",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the content hash on screen is the revision",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the finalization date is shown on a run that was never finalized",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  }
+]

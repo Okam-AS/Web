@@ -1,0 +1,322 @@
+{
+  "baseline": {
+    "test/meals-statements-page.test.js": {
+      "total": 49,
+      "baselineRed": [],
+      "neverReddened": [
+        "opening a month statement by its run id a finalized run is marked frozen so nobody waits for it to change",
+        "opening a month statement by its run id a draft says it is still a draft, so nobody bills a buyer off it",
+        "the statement history, and the authority boundary across it a venue refused the buyer's history is told so, not shown an empty panel",
+        "the statement history, and the authority boundary across it a company that has genuinely produced no statements says none, not refused",
+        "the statement history, and the authority boundary across it the company is named by the name a person would recognise",
+        "the statement history, and the authority boundary across it a company with no display name falls back to its legal name",
+        "the statement history, and the authority boundary across it a company with no name at all is headed by its id rather than by nothing",
+        "the statement history, and the authority boundary across it only companies with a live agreement are asked about",
+        "the statement history, and the authority boundary across it a venue with no live corridors is told there are none",
+        "the statement history, and the authority boundary across it a directory read that failed is unknown, never reported as no companies",
+        "the statement history, and the authority boundary across it a directory that failed with an untyped error is still admitted as unknown",
+        "the statement history, and the authority boundary across it a payload that is not a list is read as no companies rather than crashing",
+        "the statement history, and the authority boundary across it a history payload without a statements array is read as none",
+        "the CSV the buyer receives a file this client had to name itself is marked as such, and named for the period",
+        "the CSV the buyer receives a client-named file for a run with no period says unknown rather than null",
+        "the CSV the buyer receives a refused export says why and offers no file to save",
+        "the CSV the buyer receives saving writes the text already on screen and issues no second request",
+        "the CSV the buyer receives a browser that cannot build a file link says so instead of failing silently",
+        "the CSV the buyer receives opening another run drops the file held for the previous one",
+        "who the page reads for a signed-out visitor triggers no read at all",
+        "who the page reads for an admin with no explicit selection reads for the first store they administer",
+        "who the page reads for signing in on the page loads it without a reload",
+        "what this screen deliberately cannot do the screen says who owns the month close, and offers no draft or finalize control"
+      ]
+    }
+  },
+  "killedBy": {
+    "opening a month statement by its run id a run id padded with spaces is sent trimmed, not rejected": [
+      "page: the run id is sent untrimmed",
+      "page: a URL with no run opens one anyway"
+    ],
+    "opening a month statement by its run id an operator who has typed nothing cannot fire a read": [
+      "page: the open button is live with nothing typed",
+      "page: a URL with no run opens one anyway"
+    ],
+    "opening a month statement by its run id re-reading asks for the run on screen again": [
+      "page: re-reading asks for a different run",
+      "page: a URL with no run opens one anyway"
+    ],
+    "opening a month statement by its run id a run that is not there is refused in words, and puts no document on screen": [
+      "view: a run that is not there is admitted as unknown instead of named"
+    ],
+    "opening a month statement by its run id a failed second read takes the first statement off the screen": [
+      "view: a run that is not there is admitted as unknown instead of named"
+    ],
+    "the statement history, and the authority boundary across it a history read that failed for any other reason gets its own sentence": [
+      "view: a run that is not there is admitted as unknown instead of named"
+    ],
+    "opening a month statement by its run id a session that has expired says so rather than reading as an empty month": [
+      "view: an expired session is not told apart from any other refusal"
+    ],
+    "opening a month statement by its run id a refusal with no code on the problem document is admitted as unknown": [
+      "view: a refusal with no code produces no sentence at all"
+    ],
+    "opening a month statement by its run id a read that succeeds clears the refusal the previous one left": [
+      "page: a successful read leaves the previous refusal standing"
+    ],
+    "opening a month statement by its run id the run asked for is the run fetched": [
+      "page: a URL with no run opens one anyway"
+    ],
+    "the statement history, and the authority boundary across it a listed run can be opened straight from the history": [
+      "page: a URL with no run opens one anyway"
+    ],
+    "the statement history, and the authority boundary across it a history row carrying no run id opens nothing when it is clicked": [
+      "page: a URL with no run opens one anyway"
+    ],
+    "the deep link the month-close screen will hand over a run named on the URL is opened without anyone typing it": [
+      "page: a URL with no run opens one anyway"
+    ],
+    "the deep link the month-close screen will hand over the deep link still opens for a venue that is refused the history list": [
+      "page: a URL with no run opens one anyway"
+    ],
+    "the deep link the month-close screen will hand over no run on the URL opens nothing on its own": [
+      "page: a URL with no run opens one anyway"
+    ],
+    "the CSV the buyer receives nothing is exported, and nothing is blamed, while no statement is open": [
+      "page: a URL with no run opens one anyway"
+    ],
+    "the CSV the buyer receives the file is fetched, held, and shown before it is saved": [
+      "page: the exported file is held empty"
+    ],
+    "the CSV the buyer receives a server-named file is not marked as named here": [
+      "page: every export claims the server named it"
+    ],
+    "who the page reads for an admin with no store selected triggers no read at all": [
+      "page: a read is fired with no store selected"
+    ],
+    "who the page reads for a session whose user has not hydrated yet reads nothing rather than throwing": [
+      "page: the store is read off a user that has not hydrated"
+    ],
+    "who the page reads for changing store re-reads the history for the new one": [
+      "page: the store is read off a user that has not hydrated"
+    ],
+    "what this screen deliberately cannot do every figure on screen came off the wire; the page sums nothing": [
+      "view: the document's totals are re-summed from its lines"
+    ],
+    "what this screen deliberately cannot do a line the server sent no member reference for is never given one here": [
+      "view: a line with no member reference is given the allocation id"
+    ],
+    "opening a month statement by its run id the venue reads the document's totals, its signature and every line": [
+      "view: the document's signature is dropped on the way to the screen"
+    ],
+    "the CSV the buyer receives a file the browser was not allowed to read a hash for shows none": [
+      "page: the export shows a signature the server never sent"
+    ],
+    "the CSV the buyer receives the server's signature on the file is shown beside it": [
+      "page: the export drops the signature the server did send"
+    ]
+  },
+  "mutations": [
+    {
+      "name": "page: the run id is sent untrimmed",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "opening a month statement by its run id a run id padded with spaces is sent trimmed, not rejected"
+      ],
+      "first": [
+        "opening a month statement by its run id a run id padded with spaces is sent trimmed, not rejected"
+      ]
+    },
+    {
+      "name": "page: the open button is live with nothing typed",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "opening a month statement by its run id an operator who has typed nothing cannot fire a read"
+      ],
+      "first": [
+        "opening a month statement by its run id an operator who has typed nothing cannot fire a read"
+      ]
+    },
+    {
+      "name": "page: re-reading asks for a different run",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "opening a month statement by its run id re-reading asks for the run on screen again"
+      ],
+      "first": [
+        "opening a month statement by its run id re-reading asks for the run on screen again"
+      ]
+    },
+    {
+      "name": "view: a run that is not there is admitted as unknown instead of named",
+      "outcome": "RED",
+      "reddened": 3,
+      "newlyRed": [
+        "opening a month statement by its run id a run that is not there is refused in words, and puts no document on screen",
+        "opening a month statement by its run id a failed second read takes the first statement off the screen",
+        "the statement history, and the authority boundary across it a history read that failed for any other reason gets its own sentence"
+      ],
+      "first": [
+        "opening a month statement by its run id a run that is not there is refused in words, and puts no document on screen",
+        "opening a month statement by its run id a failed second read takes the first statement off the screen",
+        "the statement history, and the authority boundary across it a history read that failed for any other reason gets its own sentence"
+      ]
+    },
+    {
+      "name": "view: an expired session is not told apart from any other refusal",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "opening a month statement by its run id a session that has expired says so rather than reading as an empty month"
+      ],
+      "first": [
+        "opening a month statement by its run id a session that has expired says so rather than reading as an empty month"
+      ]
+    },
+    {
+      "name": "view: a refusal with no code produces no sentence at all",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "opening a month statement by its run id a refusal with no code on the problem document is admitted as unknown"
+      ],
+      "first": [
+        "opening a month statement by its run id a refusal with no code on the problem document is admitted as unknown"
+      ]
+    },
+    {
+      "name": "page: a successful read leaves the previous refusal standing",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "opening a month statement by its run id a read that succeeds clears the refusal the previous one left"
+      ],
+      "first": [
+        "opening a month statement by its run id a read that succeeds clears the refusal the previous one left"
+      ]
+    },
+    {
+      "name": "page: a URL with no run opens one anyway",
+      "outcome": "RED",
+      "reddened": 10,
+      "newlyRed": [
+        "opening a month statement by its run id the run asked for is the run fetched",
+        "opening a month statement by its run id an operator who has typed nothing cannot fire a read",
+        "opening a month statement by its run id a run id padded with spaces is sent trimmed, not rejected",
+        "opening a month statement by its run id re-reading asks for the run on screen again",
+        "the statement history, and the authority boundary across it a listed run can be opened straight from the history",
+        "the statement history, and the authority boundary across it a history row carrying no run id opens nothing when it is clicked",
+        "the deep link the month-close screen will hand over a run named on the URL is opened without anyone typing it",
+        "the deep link the month-close screen will hand over the deep link still opens for a venue that is refused the history list",
+        "the deep link the month-close screen will hand over no run on the URL opens nothing on its own",
+        "the CSV the buyer receives nothing is exported, and nothing is blamed, while no statement is open"
+      ],
+      "first": [
+        "opening a month statement by its run id the run asked for is the run fetched",
+        "opening a month statement by its run id an operator who has typed nothing cannot fire a read",
+        "opening a month statement by its run id a run id padded with spaces is sent trimmed, not rejected"
+      ]
+    },
+    {
+      "name": "page: the exported file is held empty",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the CSV the buyer receives the file is fetched, held, and shown before it is saved"
+      ],
+      "first": [
+        "the CSV the buyer receives the file is fetched, held, and shown before it is saved"
+      ]
+    },
+    {
+      "name": "page: every export claims the server named it",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the CSV the buyer receives a server-named file is not marked as named here"
+      ],
+      "first": [
+        "the CSV the buyer receives a server-named file is not marked as named here"
+      ]
+    },
+    {
+      "name": "page: a read is fired with no store selected",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "who the page reads for an admin with no store selected triggers no read at all"
+      ],
+      "first": [
+        "who the page reads for an admin with no store selected triggers no read at all"
+      ]
+    },
+    {
+      "name": "page: the store is read off a user that has not hydrated",
+      "outcome": "RED",
+      "reddened": 2,
+      "newlyRed": [
+        "who the page reads for a session whose user has not hydrated yet reads nothing rather than throwing",
+        "who the page reads for changing store re-reads the history for the new one"
+      ],
+      "first": [
+        "who the page reads for a session whose user has not hydrated yet reads nothing rather than throwing",
+        "who the page reads for changing store re-reads the history for the new one"
+      ]
+    },
+    {
+      "name": "view: the document's totals are re-summed from its lines",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "what this screen deliberately cannot do every figure on screen came off the wire; the page sums nothing"
+      ],
+      "first": [
+        "what this screen deliberately cannot do every figure on screen came off the wire; the page sums nothing"
+      ]
+    },
+    {
+      "name": "view: a line with no member reference is given the allocation id",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "what this screen deliberately cannot do a line the server sent no member reference for is never given one here"
+      ],
+      "first": [
+        "what this screen deliberately cannot do a line the server sent no member reference for is never given one here"
+      ]
+    },
+    {
+      "name": "view: the document's signature is dropped on the way to the screen",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "opening a month statement by its run id the venue reads the document's totals, its signature and every line"
+      ],
+      "first": [
+        "opening a month statement by its run id the venue reads the document's totals, its signature and every line"
+      ]
+    },
+    {
+      "name": "page: the export shows a signature the server never sent",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the CSV the buyer receives a file the browser was not allowed to read a hash for shows none"
+      ],
+      "first": [
+        "the CSV the buyer receives a file the browser was not allowed to read a hash for shows none"
+      ]
+    },
+    {
+      "name": "page: the export drops the signature the server did send",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the CSV the buyer receives the server's signature on the file is shown beside it"
+      ],
+      "first": [
+        "the CSV the buyer receives the server's signature on the file is shown beside it"
+      ]
+    }
+  ]
+}

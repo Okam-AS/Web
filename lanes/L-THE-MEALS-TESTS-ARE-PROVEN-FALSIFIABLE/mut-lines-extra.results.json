@@ -1,0 +1,200 @@
+{
+  "baseline": {
+    "test/meals-statement-lines.component.test.js": {
+      "total": 29,
+      "baselineRed": [],
+      "neverReddened": [
+        "the month statement a venue hands to a buyer the three totals on screen are the ones the server stated, to the øre",
+        "the month statement a venue hands to a buyer a total is never recomputed from the lines it is shown above",
+        "the month statement a venue hands to a buyer the signature and the row version the venue signed at are both printed",
+        "the month statement a venue hands to a buyer a run that has never been finalized shows no finalization date at all",
+        "a line as a bookkeeping row a capture line shows its receipt, its date and its three figures",
+        "a line as a bookkeeping row a reversal is named as one and keeps the minus in front of its figures",
+        "a line as a bookkeeping row an amount of exactly zero is shown as zero, because zero is an answer",
+        "a line as a bookkeeping row a statement with no lines says so instead of showing an empty table",
+        "money the venue did not price in its own currency a line in another currency carries that currency code beside the figure",
+        "money the venue did not price in its own currency a line in the venue's own currency carries no code",
+        "the status the operator is looking at a finalized run is badged as frozen",
+        "the status the operator is looking at a draft is badged as still open, so nobody reads it as the closed month",
+        "a payload that does not carry all the lines it claims the operator is told both numbers when the server sent fewer lines than it stated",
+        "a payload that does not carry all the lines it claims a statement whose counts agree raises no alarm",
+        "a payload that does not carry all the lines it claims a statement that stated lines and delivered none is called out, not shown as empty only"
+      ]
+    }
+  },
+  "killedBy": {
+    "the month statement a venue hands to a buyer the operator can read the period, the run and the line count off the document": [
+      "view: the period tag loses its zero padding"
+    ],
+    "the member reference on a line, which is read and never derived the reference the company supplied is what an accountant reads on the bill": [
+      "view: the member reference is derived from the allocation id instead of read"
+    ],
+    "the member reference on a line, which is read and never derived a line the server sent no reference for shows the unknown mark, never the allocation id": [
+      "view: the member reference is derived from the allocation id instead of read"
+    ],
+    "the member reference on a line, which is read and never derived a bare membership id supplied as the reference is printed as supplied": [
+      "view: the member reference is derived from the allocation id instead of read",
+      "view: a long member reference is truncated on the way to the bill"
+    ],
+    "the member reference on a line, which is read and never derived a reference that arrived as blank space is unknown, not an empty column": [
+      "view: the member reference is derived from the allocation id instead of read"
+    ],
+    "a line as a bookkeeping row a figure the server did not state is a dash and can never be misread as zero": [
+      "view: an unstated minor amount becomes zero instead of nothing"
+    ],
+    "a payload that does not carry all the lines it claims a statement that stated no count at all is not accused of being truncated": [
+      "view: an unstated minor amount becomes zero instead of nothing"
+    ],
+    "a line as a bookkeeping row a receipt number the statement never carried leaves a dash, not a blank cell": [
+      "view: a missing receipt number is stringified rather than left unknown"
+    ],
+    "a line as a bookkeeping row every line the server sent gets a row": [
+      "view: the statement drops every line past the second"
+    ],
+    "a line as a bookkeeping row a kind the client has no word for is shown as the server sent it": [
+      "lines: a kind the client has no word for is replaced by the unknown mark"
+    ],
+    "the status the operator is looking at a line that arrived with no kind reads as unknown, not as a blank cell": [
+      "lines: a line with no kind renders an empty cell instead of the unknown mark"
+    ],
+    "the status the operator is looking at a status the client has no word for is shown verbatim rather than guessed at": [
+      "lines: a status the client has no word for is replaced by the unknown mark"
+    ],
+    "the status the operator is looking at a run that arrived with no status at all reads as unknown, not as a blank badge": [
+      "lines: a run with no status renders an empty badge instead of the unknown mark"
+    ],
+    "money the venue did not price in its own currency an admin whose own currency is unknown is not told the figure is foreign": [
+      "lines: a foreign currency code is appended even when the admin's own is unknown"
+    ]
+  },
+  "mutations": [
+    {
+      "name": "view: the period tag loses its zero padding",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the month statement a venue hands to a buyer the operator can read the period, the run and the line count off the document"
+      ],
+      "first": [
+        "the month statement a venue hands to a buyer the operator can read the period, the run and the line count off the document"
+      ]
+    },
+    {
+      "name": "view: the member reference is derived from the allocation id instead of read",
+      "outcome": "RED",
+      "reddened": 4,
+      "newlyRed": [
+        "the member reference on a line, which is read and never derived the reference the company supplied is what an accountant reads on the bill",
+        "the member reference on a line, which is read and never derived a line the server sent no reference for shows the unknown mark, never the allocation id",
+        "the member reference on a line, which is read and never derived a bare membership id supplied as the reference is printed as supplied",
+        "the member reference on a line, which is read and never derived a reference that arrived as blank space is unknown, not an empty column"
+      ],
+      "first": [
+        "the member reference on a line, which is read and never derived the reference the company supplied is what an accountant reads on the bill",
+        "the member reference on a line, which is read and never derived a line the server sent no reference for shows the unknown mark, never the allocation id",
+        "the member reference on a line, which is read and never derived a bare membership id supplied as the reference is printed as supplied"
+      ]
+    },
+    {
+      "name": "view: a long member reference is truncated on the way to the bill",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the member reference on a line, which is read and never derived a bare membership id supplied as the reference is printed as supplied"
+      ],
+      "first": [
+        "the member reference on a line, which is read and never derived a bare membership id supplied as the reference is printed as supplied"
+      ]
+    },
+    {
+      "name": "view: an unstated minor amount becomes zero instead of nothing",
+      "outcome": "RED",
+      "reddened": 2,
+      "newlyRed": [
+        "a line as a bookkeeping row a figure the server did not state is a dash and can never be misread as zero",
+        "a payload that does not carry all the lines it claims a statement that stated no count at all is not accused of being truncated"
+      ],
+      "first": [
+        "a line as a bookkeeping row a figure the server did not state is a dash and can never be misread as zero",
+        "a payload that does not carry all the lines it claims a statement that stated no count at all is not accused of being truncated"
+      ]
+    },
+    {
+      "name": "view: a missing receipt number is stringified rather than left unknown",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "a line as a bookkeeping row a receipt number the statement never carried leaves a dash, not a blank cell"
+      ],
+      "first": [
+        "a line as a bookkeeping row a receipt number the statement never carried leaves a dash, not a blank cell"
+      ]
+    },
+    {
+      "name": "view: the statement drops every line past the second",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "a line as a bookkeeping row every line the server sent gets a row"
+      ],
+      "first": [
+        "a line as a bookkeeping row every line the server sent gets a row"
+      ]
+    },
+    {
+      "name": "lines: a kind the client has no word for is replaced by the unknown mark",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "a line as a bookkeeping row a kind the client has no word for is shown as the server sent it"
+      ],
+      "first": [
+        "a line as a bookkeeping row a kind the client has no word for is shown as the server sent it"
+      ]
+    },
+    {
+      "name": "lines: a line with no kind renders an empty cell instead of the unknown mark",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the status the operator is looking at a line that arrived with no kind reads as unknown, not as a blank cell"
+      ],
+      "first": [
+        "the status the operator is looking at a line that arrived with no kind reads as unknown, not as a blank cell"
+      ]
+    },
+    {
+      "name": "lines: a status the client has no word for is replaced by the unknown mark",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the status the operator is looking at a status the client has no word for is shown verbatim rather than guessed at"
+      ],
+      "first": [
+        "the status the operator is looking at a status the client has no word for is shown verbatim rather than guessed at"
+      ]
+    },
+    {
+      "name": "lines: a run with no status renders an empty badge instead of the unknown mark",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the status the operator is looking at a run that arrived with no status at all reads as unknown, not as a blank badge"
+      ],
+      "first": [
+        "the status the operator is looking at a run that arrived with no status at all reads as unknown, not as a blank badge"
+      ]
+    },
+    {
+      "name": "lines: a foreign currency code is appended even when the admin's own is unknown",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "money the venue did not price in its own currency an admin whose own currency is unknown is not told the figure is foreign"
+      ],
+      "first": [
+        "money the venue did not price in its own currency an admin whose own currency is unknown is not told the figure is foreign"
+      ]
+    }
+  ]
+}
