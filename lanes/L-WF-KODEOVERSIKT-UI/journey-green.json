@@ -1,0 +1,136 @@
+{
+  "journey": "workforce-kodeoversikt",
+  "title": "a manager downloads the § 8-5-6 kodeoversikt from the personnel list and the issue is recorded",
+  "status": "passed",
+  "startedAtUtc": "2026-08-04T18:59:02.222Z",
+  "finishedAtUtc": "2026-08-04T19:00:03.794Z",
+  "durationMs": 61572,
+  "capabilities": [
+    "workforce.personnel-list.read",
+    "workforce.personnel-list.code-register.issue"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3021",
+  "apiBaseUrl": "http://127.0.0.1:4021",
+  "commit": "ba09fe35c1a6f97c01c6dcb3c478feaf2fc6cefb",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": {
+    "id": "fixture@ba09fe35c1a6f97c01c6dcb3c478feaf2fc6cefb+dirty",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "ba09fe3-dirty",
+    "detail": "the in-repo fixture backend, not an API build (branch lane/wf-kodeoversikt-ui)"
+  },
+  "backendServed": 11,
+  "backendSubjectServed": 4,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:4021/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:4021/user/login -> 200",
+    "GET http://127.0.0.1:4021/user -> 200",
+    "GET http://127.0.0.1:4021/stores/42/market -> 200",
+    "GET http://127.0.0.1:4021/stores/42 -> 200",
+    "GET http://127.0.0.1:4021/user -> 200",
+    "GET http://127.0.0.1:4021/workforce/stores/42/context -> 200",
+    "GET http://127.0.0.1:4021/stores/42/specialopeninghours -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in as the manager (99999999 / 123123)",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T18:59:02.225Z",
+      "durationMs": 60908,
+      "detail": "landed on /admin/workforce-personnel-list",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "the personalliste renders the seeded day, including the person with no code",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T19:00:03.133Z",
+      "durationMs": 117,
+      "detail": "three participants on 2026-07-13, one of them uncoded",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "the § 8-5-6 caveat names the overview the page can produce (C6)",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T19:00:03.250Z",
+      "durationMs": 33,
+      "detail": "the caveat names the issued template",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "the control is reachable and hit-testable at 1280×720",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T19:00:03.283Z",
+      "durationMs": 108,
+      "detail": "control at 176×37 inside 1280px",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "pressing it downloads the kodeoversikt under the SERVER's name",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T19:00:03.391Z",
+      "durationMs": 164,
+      "detail": "downloaded okam-kodeoversikt-42-2026-07-13.csv",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "the bytes are the template § 8-5-6 asks for",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T19:00:03.555Z",
+      "durationMs": 93,
+      "detail": "template carries 2 codes, 1 uncoded participant, retain-until 2030-06-30",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "each click appended its own issue row — two clicks, two rows",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T19:00:03.648Z",
+      "durationMs": 107,
+      "detail": "two issue rows, distinct ids, both stamped with an actor",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "the page reported no console errors of its own",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T19:00:03.755Z",
+      "durationMs": 4,
+      "detail": "no page-owned console errors (2 shell-redirect entries recorded as a note)",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "note",
+      "summary": "the admin shell logs a router «Navigation cancelled» pair on every signed-in journey",
+      "detail": "Seen 2 times here and identically in workforce-flag-lever, growth-privacy-queue and margin-recipe-to-margin. It is AdminPage's login redirect being superseded by the storeId append, not anything on /admin/workforce-personnel-list. Recorded so it is not re-diagnosed from this page."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-personnel-list\" to \"/admin?redirect=%2Fadmin%2Fworkforce-personnel-list&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-personnel-list\" to \"/admin?redirect=%2Fadmin%2Fworkforce-personnel-list&storeId=42\" with a new navigation."
+  ],
+  "failedRequests": [],
+  "screenshots": [],
+  "error": null,
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/workforce-kodeoversikt.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false,
+    "supersedes": null
+  }
+}

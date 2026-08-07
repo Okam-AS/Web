@@ -179,7 +179,8 @@ export class WorkforceClientBase {
    * which is not a contract.
    *
    * It lived on `WorkforceRatesService` while the payroll hours export was the only such route. The
-   * timesheet batch download is the second, so it moved here rather than being copied — the same
+   * timesheet batch download is the second and the personalliste kodeoversikt the third, so it moved
+   * here rather than being copied — the same
    * move `assertBusinessDate` made when the personalliste became the third date-taking surface. Two
    * copies of an error path is the dangerous kind of duplication: the failure is silent and the
    * copies drift one field at a time.

@@ -5088,6 +5088,12 @@ export default {
   wfpl_reload: 'Read again',
   wfpl_print: 'Print',
   wfpl_print_unavailable: 'This browser offers no print command here. Use the browser\'s own print (Ctrl/Cmd + P).',
+  wfpl_coderegister: 'Download code overview',
+  wfpl_coderegister_working: 'Producing code overview …',
+  wfpl_coderegister_procedure: 'CODE OVERVIEW (§ 8-5-6): the list uses an identity code in place of a fødselsnummer. That is permitted only where the business keeps an overview of the codes with the corresponding fødselsnummer or D-number. Okam does not collect national identity numbers and therefore cannot keep that overview for you. Download the day\'s code overview, fill in the fødselsnummer or D-number for each code, and keep it with the personnel list for three years and six months after the end of the accounting year. The file states that deadline itself.',
+  wfpl_coderegister_done: 'The code overview for {date} has been downloaded. Fill in the fødselsnummer or D-number for each code and keep it with the personnel list.',
+  wfpl_coderegister_failed: 'We could not produce the code overview. Nothing was downloaded.',
+  wfpl_coderegister_unavailable: 'This browser cannot download files here. The code overview was not downloaded.',
   wfpl_loading: 'Reading the personnel list …',
   wfpl_read_failed: 'The personnel list was not fetched.',
   wfpl_date_invalid: 'The date must be a calendar date in the form YYYY-MM-DD.',
@@ -5100,7 +5106,7 @@ export default {
   wfpl_f_zone: 'Time zone',
   // On the sheet, and on the printed copy. That is the point of it: the list must not look like it
   // meets a requirement it does not meet.
-  wfpl_identity_gap: 'IDENTIFICATION: § 8-5-6 requires each person\'s name and fødselsnummer (Norwegian national identity number) or D-number. Those numbers may be replaced by unique codes, but only if an overview of the codes used, with the corresponding national identity number or D-number, is kept. Okam neither collects nor stores national identity numbers, and keeps no such code overview. The codes below therefore cannot be resolved to a national identity number here. The list covers names, times and business identity, but not the identification requirement on its own — the business must keep the code overview itself, or the list must be supplemented with the national identity numbers.',
+  wfpl_identity_gap: 'IDENTIFICATION: § 8-5-6 requires each person\'s name and fødselsnummer (Norwegian national identity number) or D-number. Those numbers may be replaced by unique codes, but only where an overview of the codes with the corresponding national identity number or D-number is kept. Okam neither collects nor stores national identity numbers, so the codes below cannot be resolved to one inside the system. The code overview for this day is downloaded from the personnel-list page — pre-filled with the codes, the names and the retention deadline, with the national-id field left open. The business fills it in and keeps the overview with the personnel list for three years and six months after the end of the accounting year. Without that completed overview this list is not full identification.',
   wfpl_business_mixed: 'This day\'s entries were recorded under {count} different accounting entities. The "Workplace" field is therefore left empty: the list cannot answer with one name and one organisation number when the rows belong to several.',
   wfpl_zone_fallback: 'This store carries no valid time zone. The times below are shown in {zone} because that is the platform default — not because anyone chose it for this workplace.',
   wfpl_zone_unusable: 'The time zone "{zone}" cannot be read by this browser, so the times cannot be placed in the workplace\'s own clock. The list is withheld rather than shown against the wrong clock.',

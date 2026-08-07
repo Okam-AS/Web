@@ -210,6 +210,18 @@ function freshState () {
     // `userId -> [staffMemberId]`. The claim's whole effect. Seeded so the OTHER journeys keep the
     // world they were written against, and so the onboarding journey's account starts with nothing.
     claims: { 'user-worker': ['staff-1'] },
+    // ---- the § 8-5-6 kodeoversikt issue record -------------------------------------------------
+    //
+    // One row per issuance, appended and never rewritten, mirroring `WorkforceIdentityCodeRegisterIssues`.
+    // It exists here so a journey can READ BACK what a click produced instead of asserting that a
+    // request was sent: "the button called the server" and "the handover was recorded" are different
+    // facts, and only the second is the one § 8-5-6 leans on.
+    //
+    // It is APPEND-ONLY here for the same reason it is retention-locked there — a fixture that let a
+    // re-issue overwrite the first row would make the second click look idempotent, which is the
+    // opposite of what the real table does (a re-issue is a NEW row; see the backend's own
+    // `Re_issuing_the_same_day_appends_a_second_issue_never_replacing_the_first`).
+    codeRegisterIssues: [],
     // Idempotency outcomes, per (scope, key). The claim is scoped PER USER in the real service
     // (`wf.invitation.claim.{userId}`), so one caller's key can never alias another's — modelled
     // here because the join page's whole retry story rests on a replay returning the same answer.
@@ -327,12 +339,12 @@ function send (res, status, body, extraHeaders) {
  * `GET /margin/statements/{id}/export` answers `text/csv`; served as JSON it would download a quoted
  * string and the page's own `Content-Type` check would be the thing under test rather than the export.
  */
-function sendText (res, status, text, contentType) {
-  res.writeHead(status, {
+function sendText (res, status, text, contentType, extraHeaders) {
+  res.writeHead(status, Object.assign({
     'Content-Type': contentType || 'text/plain; charset=utf-8',
     'Access-Control-Allow-Origin': '*',
     'Cache-Control': 'no-store'
-  });
+  }, extraHeaders || {}));
   res.end(text);
 }
 
@@ -359,6 +371,72 @@ function sendFile (res, status, body, contentType, fileName, extraHeaders) {
     'Cache-Control': 'no-store'
   }, extraHeaders || {}));
   res.end(body);
+}
+
+/**
+ * The personalliste for one venue business day.
+ *
+ * The day is ECHOED back whatever was asked for, and resolved to the venue's own when nothing was —
+ * which is the real contract: the server is authoritative about which day it answered for, and the
+ * page's picker follows that answer rather than deciding it.
+ */
+function personnelListFor (storeId, askedDate) {
+  const businessDate = /^\d{4}-\d{2}-\d{2}$/.test(askedDate || '')
+    ? askedDate
+    : world.PERSONNEL_BUSINESS_DATE;
+  return {
+    storeId: Number(storeId),
+    businessDate,
+    timeZoneId: world.TIME_ZONE,
+    timeZoneIsFallback: false,
+    asOfUtc: world.PERSONNEL_AS_OF_UTC,
+    presentCount: 0,
+    // Only the seeded day carries people. Stepping to a neighbouring day answers an EMPTY list, and
+    // the overview stays offered for it on purpose: an empty overview for an empty day is a true
+    // statement, and the manager who asked for it is entitled to file it.
+    rows: businessDate === world.PERSONNEL_BUSINESS_DATE ? world.PERSONNEL_ROWS : []
+  };
+}
+
+/**
+ * The kodeoversikt document, in the shape `WorkforceIdentityCodeRegisterService.Render` emits.
+ *
+ * A `#`-commented preamble, then a five-column header whose LAST column is always empty — that blank
+ * is the whole artifact. Okam collects no fødselsnummer, so what is handed over is a TEMPLATE
+ * carrying every code the day's list used; the venue fills the column in and keeps it.
+ *
+ * Codeless participants are rendered with an empty first field rather than omitted, and counted on
+ * `rowsWithoutIdentityCode`, because § 8-5-6 covers everyone who was present.
+ */
+function renderCodeRegister (list, issue) {
+  const rows = list.rows.slice()
+    .sort((a, b) => String(a.protectedIdentityCodeRef || '￿').localeCompare(
+      String(b.protectedIdentityCodeRef || '￿'), 'en'));
+  return [
+    '# okam-workforce-kodeoversikt',
+    '# version=1',
+    '# lawReference=bokføringsforskriften § 8-5-6',
+    '# storeId=' + issue.storeId,
+    '# businessName=' + world.PERSONNEL_BUSINESS_NAME,
+    '# organizationNumber=' + world.PERSONNEL_ORGNR,
+    '# businessDate=' + list.businessDate,
+    '# timeZoneId=' + world.TIME_ZONE,
+    '# codeCount=' + issue.codeCount,
+    '# rowsWithoutIdentityCode=' + issue.rowsWithoutIdentityCode,
+    '# retainUntil=' + issue.retainUntil,
+    '# issueId=' + issue.issueId,
+    '# instruks=Fyll inn fødselsnummer eller D-nummer for hver kode nedenfor. Okam samler verken inn ' +
+      'eller lagrer fødselsnummer; denne oversikten er en mal. Virksomheten skal føre den ferdig ' +
+      'utfylte kodeoversikten og oppbevare den sammen med personallisten til og med ' + issue.retainUntil + '.',
+    'identityCode,participantName,category,hiredInOrganizationNumber,fodselsnummerEllerDNummer'
+  ].concat(rows.map(r => [
+    r.protectedIdentityCodeRef || '',
+    r.participantName || '',
+    r.category || '',
+    r.hiredInOrganizationNumber || '',
+    // The blank the venue fills. Never populated here, under any code path.
+    ''
+  ].join(','))).join('\n') + '\n';
 }
 
 /** RFC 9457 problem+json in the shape `WorkforceApiError` / `EventsApiError` parse. */
@@ -741,6 +819,16 @@ async function route (req, res, url) {
   }
   if (path === '/__fixture/stats') {
     return send(res, 200, { served: state.served });
+  }
+  // THE ISSUE RECORD, read back the way an inspector's question is answered: "show me that this
+  // handover happened". A journey asserts against THIS, not against its own count of requests — a
+  // request log proves the browser spoke, and what § 8-5-6 rests on is that the server recorded it.
+  //
+  // Control-surface, so it is not counted in `served` and is fetched from Node rather than through
+  // the page: the rows name an actor and a business day, and nothing about them belongs in page
+  // state or in a journey artifact (C7).
+  if (path === '/__fixture/code-register-issues') {
+    return send(res, 200, { issues: state.codeRegisterIssues });
   }
   // THE JOURNEY'S MAILBOX, and the reason it is a control-surface route rather than an assertion.
   //
@@ -1423,6 +1511,44 @@ async function route (req, res, url) {
           flag: world.SCHEDULE_WRITE_FLAG,
           retryable: false
         });
+    }
+
+    // ---- the personalliste and its § 8-5-6 kodeoversikt ----------------------------------------
+    //
+    // Both are GETs and NEITHER is flag-gated, matching the real controller: `WorkforceFeatureFlags`
+    // has a `workforce.personnel-list` key that the action deliberately does not consult, because
+    // §9.2 takes a module READ-ONLY rather than dark and a statutory register must stay producible
+    // while the switch is down.
+    if (rest === '/personnel-list' && req.method === 'GET') {
+      return send(res, 200, personnelListFor(storeId, url.searchParams.get('businessDate')));
+    }
+
+    // THE KODEOVERSIKT. `text/csv`, named on `Content-Disposition`, and the name is EXPOSED —
+    // `Helpers/BrowserReadableHeaders.cs` lists it and `Program.cs` applies it, so the client's
+    // `workforceFileNameFrom` can read the server's own filename. Withholding it here would let the
+    // page's local fallback name pass as if it were the server's, which is the one thing that reader
+    // exists to keep honest.
+    //
+    // A GET, not a POST, and not idempotent: each call is a separate handover and appends its own
+    // row. Suppressing the second would make the record disagree with what the venue holds.
+    if (rest === '/personnel-list/code-register' && req.method === 'GET') {
+      const list = personnelListFor(storeId, url.searchParams.get('businessDate'));
+      const issue = {
+        issueId: nextId('issue'),
+        storeId: Number(storeId),
+        businessDate: list.businessDate,
+        codeCount: list.rows.filter(r => r.protectedIdentityCodeRef).length,
+        rowsWithoutIdentityCode: list.rows.filter(r => !r.protectedIdentityCodeRef).length,
+        retainUntil: world.PERSONNEL_RETAIN_UNTIL,
+        issuedBy: caller.id,
+        issuedAtUtc: world.PERSONNEL_AS_OF_UTC
+      };
+      // APPENDED. Never replaced, never deduplicated on the day — see `codeRegisterIssues` above.
+      state.codeRegisterIssues.push(issue);
+      return sendText(res, 200, renderCodeRegister(list, issue), 'text/csv; charset=utf-8', {
+        'Content-Disposition': 'attachment; filename=okam-kodeoversikt-' + storeId + '-' + list.businessDate + '.csv',
+        'Access-Control-Expose-Headers': 'Content-Disposition'
+      });
     }
 
     if (rest === '/staff' && req.method === 'GET') {
