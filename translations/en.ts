@@ -4886,6 +4886,12 @@ export default {
   trn_ev_page_intro: 'One person\'s assembled training record, in the form it can be produced for an inspection: the completions with the frozen material they were taken against, the certificates, and the ledger rows naming who filed each one. Nothing is recomputed here — the document prints the server\'s figures beside the values they were computed from, so both can be re-checked.',
   trn_ev_person_label: 'Person',
   trn_ev_open: 'Open the record',
+  // The paper copy. No statute and no section reference: OD-6 keeps legal citations off this surface
+  // until TR8/TR-B6 ships, and the promise being made good here was the one about a record that can
+  // be produced — not one about a provision.
+  trn_ev_print: 'Print the record',
+  trn_ev_print_hint: 'Prints the document as it stands — without the lookup form, the controls or the menu. Choosing “Save as PDF” in the print dialog gives you the same document as a file. Nothing is fetched again, so printing writes no further ledger row.',
+  trn_ev_print_unavailable: 'This browser exposes no print command we can start. Use the browser’s own print menu — the document is the same.',
   trn_ev_prompt: 'Choose a person and open the record. It does not load on its own, because every read is written to the ledger.',
   trn_ev_unknown: 'The server did not answer in a way this build understands. Nothing is claimed about what the store holds for this person.',
   trn_ev_refused: 'The server refused the read. That does not mean there is no record — it means we were not shown it.',

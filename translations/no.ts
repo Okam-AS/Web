@@ -4950,6 +4950,12 @@ export default {
   trn_ev_page_intro: 'Én persons samlede opplæringsjournal, slik den kan legges fram ved tilsyn: gjennomføringene med det frosne innholdet de ble tatt mot, sertifikatene, og journalradene som sier hvem som førte hver av dem. Ingenting regnes ut på nytt her — dokumentet skriver ut serverens tall ved siden av det de ble regnet ut fra, slik at de kan etterprøves.',
   trn_ev_person_label: 'Person',
   trn_ev_open: 'Hent dokumentasjonen',
+  // Papirkopien. Ingen paragraf, ingen forskrift: OD-6 holder lovhenvisningene av denne flaten til
+  // TR8/TR-B6 er levert, og løftet som skulle innfris her var det om et dokument som kan legges fram
+  // — ikke et om en hjemmel.
+  trn_ev_print: 'Skriv ut dokumentasjonen',
+  trn_ev_print_hint: 'Skriver ut dokumentet slik det står — uten skjemaet, knappene og menyen. Velger du «Lagre som PDF» i utskriftsvinduet, får du det samme dokumentet som fil. Ingenting hentes på nytt, så utskriften fører ingen ny rad i journalen.',
+  trn_ev_print_unavailable: 'Denne nettleseren har ingen utskriftskommando vi kan starte. Bruk nettleserens egen utskriftsmeny — dokumentet er det samme.',
   trn_ev_prompt: 'Velg en person og hent dokumentasjonen. Den lastes ikke av seg selv, fordi hvert oppslag føres i journalen.',
   trn_ev_unknown: 'Serveren svarte ikke på en måte denne versjonen forstår. Da sies ingenting om hva butikken har ført på denne personen.',
   trn_ev_refused: 'Serveren avviste oppslaget. Det betyr ikke at det ikke finnes dokumentasjon — det betyr at vi ikke fikk se den.',
