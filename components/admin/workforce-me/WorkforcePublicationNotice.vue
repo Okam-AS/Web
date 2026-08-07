@@ -32,13 +32,17 @@
           >
             {{ $i('wfme_pub_mark_read') }}
           </button>
+          <!-- Two rows here can be two different weeks, and both offer this control. A row this
+               session has already confirmed says so ON THE BUTTON rather than only in the receipt
+               line above it, so the control that would write a NEW acknowledgement never reads the
+               same as the one that would only replay an old one. -->
           <button
             v-if="item.schedulePublicationId"
             class="wfme-pub__btn"
             :disabled="busyId === item.inboxItemId"
             @click="$emit('acknowledge', item)"
           >
-            {{ $i('wfme_pub_acknowledge') }}
+            {{ acknowledgeLabel(item) }}
           </button>
         </div>
       </li>
@@ -95,6 +99,23 @@ export default {
   methods: {
     publishedLabel (item) {
       return this.formatInstant(item.createdAtUtc);
+    },
+    /**
+     * What the acknowledge control on THIS row would do, said on the control itself.
+     *
+     * A worker can hold two unread publications, and every row here carries this button. While both
+     * buttons read `Bekreft mottatt` the two acts were indistinguishable at a glance: one writes a
+     * first acknowledgement of a week, the other only replays one already made. The row order no
+     * longer moves under a press (`publicationsForNotice`), so a second press at the same place IS
+     * the replay — and this label is what says so before it is pressed rather than after.
+     *
+     * Keyed on the session receipt rather than on `isRead`: the inbox row's read state does not mean
+     * acknowledged, and this component may only say "bekreftet" about a receipt it was handed.
+     */
+    acknowledgeLabel (item) {
+      return this.receipts[item.schedulePublicationId]
+        ? this.$i('wfme_pub_acknowledge_again')
+        : this.$i('wfme_pub_acknowledge');
     },
     receiptLabel (receipt) {
       const time = this.formatInstant(receipt.occurredAtUtc);

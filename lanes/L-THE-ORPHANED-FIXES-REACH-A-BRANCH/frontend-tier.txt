@@ -1,0 +1,16 @@
+# Frontend jest tier at the final tip dc96d45
+#   cd Web-modules-wt/L-THE-ORPHANED-FIXES && npx jest --ci   -> exit 0
+# core pinned to 9626a561bb0442b0aed026be75b7f9419337ac6d before the run.
+
+## every FAIL / suite-did-not-run line
+   (no match)
+
+## summary
+Test Suites: 168 passed, 168 total
+Tests:       4007 passed, 4007 total
+Snapshots:   0 total
+Time:        7.169 s, estimated 8 s
+
+## baseline 78ed84f, for the delta
+Test Suites: 166 passed, 166 total
+Tests:       3950 passed, 3950 total

@@ -243,7 +243,7 @@ import SeatPickerModal from '~/components/admin/pos/SeatPickerModal.vue';
 import ReturnBuilder from '~/components/admin/pos/ReturnBuilder.vue';
 import PosReceiptView from '~/components/admin/pos/PosReceiptView.vue';
 import PosConfirm, { confirmIsOpen } from '~/components/admin/pos/PosConfirm.vue';
-import { isDeductionInPlay } from '~/utils/price';
+import { isDeductionInPlay, isAmountStated } from '~/utils/price';
 
 // How long an add may be in flight before the check panel admits it is waiting. Below this the
 // line simply appears, which is what a fast register should look like.
@@ -559,6 +559,27 @@ export default {
     // § 5-3-7 settle flow takes over. Amounts, VAT and goods groups all come from the bill rows —
     // nothing is re-entered.
     onNegativeSale (groups) {
+      // A row whose net total nobody stated cannot be turned into a return line, and the whole
+      // negative sale stops here rather than refunding a figure it had to invent.
+      //
+      // WHY REFUSING IS THE ONLY HONEST BRANCH. `g.lineAmount` is `null` when a member line's
+      // `netLineAmount` never arrived (CheckPanel's `groups`), and every way of carrying on invents
+      // money: passing the `null` through makes ReturnBuilder compute `null * quantity` and settle a
+      // silent kr 0,00; falling back to `unitAmount * quantity` refunds the LISTED price on a bill
+      // that was discounted, which is the defect the sibling lane removed from the branch below.
+      // Before the sum above it was gated, the absent world reached here already disguised as a
+      // genuine zero — `0 + null` is `0` — so a bill the till took real money for handed back
+      // nothing, on a prefill indistinguishable from a fully-comped one.
+      //
+      // The operator is not dead-ended: `DayFlow` mounts the same ReturnBuilder un-prefilled, so the
+      // § 5-3-7 return is still available to be built by hand, with amounts a person states.
+      const unpriceable = groups.filter(g => !isAmountStated(g.lineAmount));
+      if (unpriceable.length) {
+        this.notify(this.$i('pos_negative_sale_unpriceable', {
+          names: unpriceable.map(g => g.name).join(', ')
+        }), 'error');
+        return;
+      }
       this.negativeSalePrefill = groups.map((g) => {
         const optionNames = (g.options || []).map(o => o.name).filter(Boolean);
         const name = optionNames.length ? g.name + ' (' + optionNames.join(', ') + ')' : g.name;

@@ -166,11 +166,13 @@ describe('inbox filter — an acknowledged publication stays on screen with its 
     expect(publicationsForNotice([], ack(pressed)).map(i => i.inboxItemId)).toEqual(['a'])
   })
 
-  test('the kept row is appended once, after what is still unread', () => {
-    // Not duplicated, and not ahead of a plan the worker has yet to look at.
+  test('the kept row is carried once, and stays where it was', () => {
+    // Not duplicated, and NOT moved below the week that is still unread. This case used to pin
+    // ['b', 'a'] — sorting unread first — and that ordering is the whole of
+    // F-THE-ACKNOWLEDGE-BUTTON-CAN-CONFIRM-THE-NEXT-WEEK: see the describe block below.
     const pressed = publication('a', false)
     const afterReload = [Object.assign({}, pressed, { isRead: true }), publication('b', false)]
-    expect(publicationsForNotice(afterReload, ack(pressed)).map(i => i.inboxItemId)).toEqual(['b', 'a'])
+    expect(publicationsForNotice(afterReload, ack(pressed)).map(i => i.inboxItemId)).toEqual(['a', 'b'])
   })
 
   test('a row the server has NOT marked read is kept once, in its unread position', () => {
@@ -193,6 +195,94 @@ describe('inbox filter — an acknowledged publication stays on screen with its 
     expect(publicationsForNotice(null, {})).toBeNull()
     expect(publicationsForNotice(null, null)).toBeNull()
     expect(publicationsForNotice(undefined, undefined)).toBeNull()
+  })
+})
+
+describe('inbox filter — confirming one week never moves another under the worker\'s finger', () => {
+  // THE DEFECT THESE EXIST FOR, walked live against trunk 6b98839 on 2026-08-07 before any of this
+  // was written. A worker held TWO unread publications. She pressed the acknowledge control at the
+  // top of the notice; the row she confirmed was pushed to the bottom and the OTHER week rose into
+  // the place she had just pressed, offering an identically-worded button. Her second press — the
+  // press of someone who thinks the first did not register — answered `alreadyAcknowledged: false`
+  // and wrote a FIRST acknowledgement for a week she had never opened. Both recipient rows carried
+  // an `acknowledgedAtUtc` afterwards, which is what a payroll or an inspector reads.
+  //
+  // The law these pin: read state and acknowledgement state decide WHICH rows are shown and never in
+  // what order. Position is a function of the row set alone.
+  const ack = item => ({ [item.schedulePublicationId]: item })
+  const at = (id, isRead, createdAtUtc) =>
+    Object.assign(publication(id, isRead), { createdAtUtc })
+
+  // Two weeks published minutes apart, as the inbox answers them: newest first.
+  const NEWER = () => at('newer', false, '2026-07-20T10:00:00')
+  const OLDER = () => at('older', false, '2026-07-20T08:00:00')
+
+  test('the control at the top addresses the same publication before and after a press', () => {
+    // The exit criterion, at the level the press is decided: the notice's first row is the same
+    // publication once the press has landed and the inbox has been re-read.
+    const before = publicationsForNotice([NEWER(), OLDER()], {})
+    const pressed = before[0]
+    const afterReload = [Object.assign({}, NEWER(), { isRead: true }), OLDER()]
+    const after = publicationsForNotice(afterReload, ack(pressed))
+    expect(before[0].schedulePublicationId).toBe('p-newer')
+    expect(after[0].schedulePublicationId).toBe('p-newer')
+  })
+
+  test('a second press at the top would replay, because that row is the one already confirmed', () => {
+    const pressed = NEWER()
+    const afterReload = [Object.assign({}, pressed, { isRead: true }), OLDER()]
+    const shown = publicationsForNotice(afterReload, ack(pressed))
+    expect(shown.map(i => i.inboxItemId)).toEqual(['newer', 'older'])
+    // The row still needing her attention is still on screen — this is not fixed by hiding it.
+    expect(shown[1].isRead).toBe(false)
+  })
+
+  test('confirming a row in the MIDDLE moves neither the row above it nor the one below', () => {
+    // Three weeks, the middle one confirmed. The hazard is any movement, and this is the shape that
+    // shows it: sorting unread-first leaves the two unread rows adjacent and drops the confirmed one
+    // to the bottom, so both of the worker's remaining rows change place.
+    const middle = at('middle', false, '2026-07-20T09:00:00')
+    const afterReload = [NEWER(), Object.assign({}, middle, { isRead: true }), OLDER()]
+    expect(publicationsForNotice(afterReload, ack(middle)).map(i => i.inboxItemId))
+      .toEqual(['newer', 'middle', 'older'])
+  })
+
+  test('the order does not depend on the order the inbox happened to answer in', () => {
+    // The page re-reads the inbox after every press. A SQL ORDER BY with equal keys has no defined
+    // order, so an order taken on trust could move a row for a reason nobody performed.
+    const forward = publicationsForNotice([NEWER(), OLDER()], {}).map(i => i.inboxItemId)
+    const reversed = publicationsForNotice([OLDER(), NEWER()], {}).map(i => i.inboxItemId)
+    expect(forward).toEqual(['newer', 'older'])
+    expect(reversed).toEqual(forward)
+  })
+
+  test('two rows that arrived in the same instant are still ordered the same way twice', () => {
+    const a = at('aaa', false, '2026-07-20T08:00:00')
+    const b = at('bbb', false, '2026-07-20T08:00:00')
+    expect(publicationsForNotice([a, b], {}).map(i => i.inboxItemId)).toEqual(['aaa', 'bbb'])
+    expect(publicationsForNotice([b, a], {}).map(i => i.inboxItemId)).toEqual(['aaa', 'bbb'])
+  })
+
+  test('newest first, and a bare stamp is read as UTC rather than as local', () => {
+    // `createdAtUtc` arrives bare. A row carried over from a press and a row from the response must
+    // be compared under ONE rule or the carried row lands in the wrong place on a non-UTC machine.
+    const bare = at('bare', false, '2026-07-20T10:00:00')
+    const zoned = at('zoned', false, '2026-07-20T09:00:00Z')
+    expect(publicationsForNotice([zoned, bare], {}).map(i => i.inboxItemId)).toEqual(['bare', 'zoned'])
+  })
+
+  test('rows carried over from a press are ordered too, not left in object order', () => {
+    // Both confirmed, and the re-read no longer reports either. They still come out newest first.
+    const older = OLDER()
+    const newer = NEWER()
+    const kept = Object.assign(ack(older), ack(newer))
+    expect(publicationsForNotice([], kept).map(i => i.inboxItemId)).toEqual(['newer', 'older'])
+  })
+
+  test('an unreadable arrival instant sorts last instead of taking the notice off screen', () => {
+    const broken = at('broken', false, 'not-a-timestamp')
+    const shown = publicationsForNotice([broken, OLDER()], {})
+    expect(shown.map(i => i.inboxItemId)).toEqual(['older', 'broken'])
   })
 })
 

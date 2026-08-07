@@ -53,7 +53,7 @@
           <div v-if="line.depositAmount > 0" class="receipt__line-sub">
             {{ $i('pos_deposit') }} {{ priceLabel(line.depositAmount) }}
           </div>
-          <div v-if="line.discountAmount > 0" class="receipt__line-sub receipt__line-discount">
+          <div v-if="showsDiscount(line)" class="receipt__line-sub receipt__line-discount">
             {{ line.discountReason || $i('pos_discount') }} {{ negatedPriceLabel(line.discountAmount) }}
           </div>
         </div>
@@ -120,14 +120,40 @@
 // The per-line discount prints its sign through `negatedAmountLabel`, never as a template literal in
 // front of the interpolation. `−{{ priceLabel(x) }}` puts the minus where no formatter can see it, so
 // an amount the absence rule withholds composes to `−—`: the negative of a figure nobody stated, on
-// the one artifact in this component tree that an inspector holds in their hand. The `> 0` guard
-// above hides the ordinary absences (`null`, `undefined`, `''`, `NaN`, a genuine zero) before the row
-// renders at all, but it is a RELATIONAL test, not the absence rule, and the two do not agree
-// everywhere: `Infinity > 0` is true while `isAmountStated(Infinity)` is false, so an amount the rule
-// refuses still reaches the label. A guard nobody wrote as an absence gate is not one, and the sign
-// belongs to the label either way — the only place that knows whether there is a figure to attach it
-// to. See `lanes/L-XZ-RESIDUAL-SITES/mutation-log.md`.
-import { negatedAmountLabel } from '~/utils/price';
+// the one artifact in this component tree that an inspector holds in their hand. See
+// `lanes/L-XZ-RESIDUAL-SITES/mutation-log.md`.
+//
+// THE ROW IS GUARDED ON THE ABSENCE RULE, NOT ON `> 0`, AND THE REASON IS ARITHMETIC ON THE PAPER.
+// A receipt line carries its GROSS amount and its discount as two separate fields — the backend
+// keeps them apart on purpose (`JournalLineFactory`: `LineAmount = lineAmount`, `DiscountAmount`
+// beside it, `netLineAmount = lineAmount - discountAmount` never journalled) — and the printed grand
+// total is the DISCOUNTED figure:
+//
+//   FinalizeService.cs:150-160   netLineTotal = SUM(LineAmount) - SUM(DiscountAmount)
+//                                grossAmount  = netLineTotal + roundingAmount
+//   FinalizeService.cs:169       netLineTotal == order.FinalAmount, enforced on the single
+//                                finalize path so a sale cannot be journalled with a total that
+//                                disagrees with its own lines
+//
+// So the deduction rows are the ONLY thing on the printed page that closes the gap between the line
+// amounts above them and the total below them. `Cov_FinalizeVatTests` is the estate's own witness:
+// lines of 20000 and 10000, discounts of 4000 and 2000, `receipt.GrossAmount == 24000`. Drop one
+// deduction row and the paper reads 200,00 + 100,00, less 40,00, total 240,00 — twenty kroner
+// unaccounted for, on the document a bokføring inspector reads. This is NOT the property the open
+// check has: `CheckLine` renders `netLineAmount`, which is already net, so a check adds up either
+// way and only the deduction itself is understated. The receipt does not add up. That difference is
+// measured in `lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED/receipt-vs-check-probe.js`, not assumed.
+//
+// `> 0` answered "no row" to a genuine zero AND to a field that never arrived, so an unstated
+// deduction was deleted from the page with nothing left to say it had been there.
+// `isDeductionInPlay` keeps the stated zero silent — a "Rabatt kr 0,00" line on every ordinary bill
+// is noise — and gives an unstated amount its row carrying the unknown mark. HONEST SIZE: the API
+// serialises `PosReceiptLineModel.DiscountAmount` as a non-nullable `int` through Newtonsoft with
+// default null/default handling, so a well-formed response always states it and no receipt printed
+// off this backend today is missing a row. This is hardening, and estate agreement — `CheckLine` and
+// `CheckPanel` already split these three worlds, and the receipt was the one surface left answering
+// differently.
+import { negatedAmountLabel, isDeductionInPlay } from '~/utils/price';
 
 const PRINT_CSS = `
   * { box-sizing: border-box; }
@@ -166,6 +192,11 @@ export default {
     // core's `priceLabel` renders -4 as "kr 0,-4" and -50 as "kr -,50". See `negatedAmountLabel`.
     negatedPriceLabel (amountMinor) {
       return negatedAmountLabel(amountMinor, this.priceLabel);
+    },
+    // A method rather than a computed because the rows come out of a `v-for`: the question is asked
+    // once per line, and it is the only question the row is rendered on.
+    showsDiscount (line) {
+      return isDeductionInPlay(line.discountAmount);
     },
     paymentLabel (type) {
       if (type === 'Cash') { return this.$i('pos_pay_cash'); }

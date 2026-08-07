@@ -107,10 +107,10 @@
                 25% mva
               </td>
               <td v-if="hasMonthlyFees">
-                {{ priceLabel(totalMonthlyFee * 0.25) }}
+                {{ priceLabel(monthlyVat) }}
               </td>
               <td v-if="hasOnetimeFees">
-                {{ priceLabel(totalOnetimeFee * 0.25) }}
+                {{ priceLabel(onetimeVat) }}
               </td>
             </tr>
             <tr class="total">
@@ -121,14 +121,20 @@
                 <strong>Totalt inkl. mva</strong>
               </td>
               <td v-if="hasMonthlyFees">
-                <strong>{{ priceLabel(totalMonthlyFee * 1.25) }}</strong>
+                <strong>{{ priceLabel(monthlyGross) }}</strong>
               </td>
               <td v-if="hasOnetimeFees">
-                <strong>{{ priceLabel(totalOnetimeFee * 1.25) }}</strong>
+                <strong>{{ priceLabel(onetimeGross) }}</strong>
               </td>
             </tr>
           </tfoot>
         </table>
+        <div
+          v-if="hasUnstatedTotal"
+          class="unstated-total-note"
+        >
+          Denne ordren har linjer uten oppgitt pris. Summene kan derfor ikke settes opp, og vises som «—». Kontakt selgeren for komplett pris før du bestiller.
+        </div>
         <div class="payment-terms">Månedskostnader faktureres den 1. hver måned. Engangskostnader faktureres 100% ved levering. Betalingsfrist 14 dager.</div>
       </div>
 
@@ -158,6 +164,42 @@
 // What that buys this document: a fee nobody stated prints `—`, not `kr 0`. Core's raw helper
 // answers "0" to any falsy amount, so under the import this template APPEARED to promise a customer
 // a line item costing nothing. Pinned in `test/price-absence.test.js`.
+//
+// ---------------------------------------------------------------------------------------------
+// THE TOTALS, AND WHY THEY REFUSE.
+//
+// The lines above were honest one at a time while the totals underneath them were not, and that
+// combination is worse than either half alone. The old fold was
+// `sum + (item.monthlyFee * item.quantity || 0)`: an unstated fee was added as NOTHING, so a
+// document whose line said `—` printed a subtotal of `kr 499,00` — a partial sum wearing the label
+// of a whole one. A reader who trusts the line has every reason to trust the total, and nothing on
+// the page let them tell the two apart.
+//
+// THREE DEFENSIBLE ANSWERS, and they are different promises. (1) Total the stated lines and mark
+// the sum partial. (2) Print the absence mark. (3) Refuse to total at all and say so. This document
+// does (3), for two reasons. The bold "Totalt inkl. mva" is the figure a customer actually quotes
+// and acts on, and there is no honest way to print a NUMBER there while a line is unpriced —
+// marking a bold figure "partial" in small type beside it is the weakest form of honesty available.
+// And (1) does not stay in one place: it cascades to the VAT and gross rows, in two columns, giving
+// six spots that each have to carry the caveat and one of which will eventually lose it. Refusing
+// collapses to a single rule that is either on or off for the whole column.
+//
+// Refusal alone would read as a broken renderer, so `hasUnstatedTotal` says out loud why the sums
+// are missing. Withholding a figure and appearing to have LOST one are not the same message.
+//
+// THE ZERO IS NOT THE ABSENCE. `!0` is `true`, so `|| 0` cannot simply be swapped for another
+// falsiness test: an included line deliberately priced at nothing is a claim somebody made, and its
+// offer still totals. Only `isAmountStated` separates the three worlds.
+//
+// AND THE ROWS UNDERNEATH. Fixing only the subtotal is a trap: `null * 0.25` is `0` in JavaScript,
+// so a subtotal that correctly answers `null` would feed a VAT row answering a confident `kr 0,00`,
+// trading a partial sum for an outright false one. `scaledTotal` is why those rows are computeds
+// now instead of arithmetic in the template. The one-time column had the identical defect and is
+// fixed with it — it was never separately reported, only found by looking.
+
+import { isAmountStated, statedSum } from "~/utils/price";
+
+const VAT_RATE = 0.25;
 
 export default {
   name: "OfferDocument",
@@ -175,14 +217,30 @@ export default {
       return this.offerProposal.lineItems.some((item) => item.onetimeFee > 0);
     },
     totalMonthlyFee() {
-      return this.offerProposal.lineItems.reduce((sum, item) => {
-        return sum + (item.monthlyFee * item.quantity || 0);
-      }, 0);
+      return this.statedColumnTotal("monthlyFee");
     },
     totalOnetimeFee() {
-      return this.offerProposal.lineItems.reduce((sum, item) => {
-        return sum + (item.onetimeFee * item.quantity || 0);
-      }, 0);
+      return this.statedColumnTotal("onetimeFee");
+    },
+    monthlyVat() {
+      return this.scaledTotal(this.totalMonthlyFee, VAT_RATE);
+    },
+    monthlyGross() {
+      return this.scaledTotal(this.totalMonthlyFee, 1 + VAT_RATE);
+    },
+    onetimeVat() {
+      return this.scaledTotal(this.totalOnetimeFee, VAT_RATE);
+    },
+    onetimeGross() {
+      return this.scaledTotal(this.totalOnetimeFee, 1 + VAT_RATE);
+    },
+    // Only a column the document actually RENDERS can be missing a total the reader can see. A
+    // refused one-time total on an offer with no one-time column at all is not a hole in anything.
+    hasUnstatedTotal() {
+      return (
+        (this.hasMonthlyFees && !isAmountStated(this.totalMonthlyFee)) ||
+        (this.hasOnetimeFees && !isAmountStated(this.totalOnetimeFee))
+      );
     },
     isExpiryClose() {
       if (!this.offerProposal.expiration) {
@@ -195,6 +253,26 @@ export default {
     },
   },
   methods: {
+    // One column's total: fee × quantity per line, folded with the SHARED `statedSum`, which
+    // answers `null` the moment any addend is unstated (`~/utils/price`, owned by the same rule
+    // that gates the formatter). The multiplication has to be gated out here rather than inside
+    // that helper, because `statedSum` adds — `49900 * undefined` is already NaN by the time a sum
+    // could notice, which is the same hole from the QUANTITY side and the reason a line can show
+    // `kr 499,00` while contributing nothing to the figure below it.
+    statedColumnTotal(field) {
+      const lineTotals = this.offerProposal.lineItems.map((item) => {
+        if (!isAmountStated(item[field]) || !isAmountStated(item.quantity)) {
+          return null;
+        }
+        return Number(item[field]) * Number(item.quantity);
+      });
+      return statedSum(...lineTotals);
+    },
+    // `null * 0.25` is 0, so the VAT and gross rows cannot simply multiply a refused subtotal
+    // without turning a withheld figure back into a confident zero.
+    scaledTotal(total, factor) {
+      return isAmountStated(total) ? total * factor : null;
+    },
     formatDate(dateString) {
       if (!dateString) {
         return "-";
@@ -369,6 +447,17 @@ export default {
 .total td {
   border-top: 1px solid #e2e8f0;
   padding: 12px;
+}
+
+.unstated-total-note {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #742a2a;
+  background-color: #fff5f5;
+  border: 1px solid #feb2b2;
+  border-radius: 4px;
+  padding: 12px;
+  margin-top: 15px;
 }
 
 .payment-terms {

@@ -139,6 +139,26 @@ export function negatedAmountLabel (amountMinor, formatAmount) {
 }
 
 /**
+ * Is there an amount in play here — or do we simply not know?
+ *
+ * THE ONE IMPLEMENTATION of the render question this module answers, with `isDeductionInPlay` below
+ * as its deduction-facing name. `true` when the amount states a figure above zero, and ALSO when it
+ * states nothing at all. `false` only for an amount that positively says there is none — a stated
+ * zero, or a stated value at or below it.
+ *
+ * WHY IT IS NAMED TWICE AND WRITTEN ONCE. The deduction rows were the first callers and their name
+ * is load-bearing where it is used; a check row's DEPOSIT tag then needed the identical predicate,
+ * and `isDeductionInPlay(depositAmount)` would have read as a lie about what a deposit is (pant is
+ * an addition to the bill, not a subtraction from it). Copying the two lines into the component
+ * would have put a second answer to the absence question in a Vue file, which is the exact thing
+ * this module exists to prevent — so the rule stays here, once, and the deduction name delegates.
+ */
+export function isAmountInPlay (amountMinor) {
+  if (!isAmountStated(amountMinor)) { return true }
+  return Number(amountMinor) > 0
+}
+
+/**
  * Is a deduction in play on this amount?
  *
  * The predicate a deduction ROW is rendered on, and the one that decides whether a returned bill row
@@ -162,8 +182,7 @@ export function negatedAmountLabel (amountMinor, formatAmount) {
  * shapes and prints every shape whose answer moves. All of them are unstated; no stated shape moves.
  */
 export function isDeductionInPlay (amountMinor) {
-  if (!isAmountStated(amountMinor)) { return true }
-  return Number(amountMinor) > 0
+  return isAmountInPlay(amountMinor)
 }
 
 /**
