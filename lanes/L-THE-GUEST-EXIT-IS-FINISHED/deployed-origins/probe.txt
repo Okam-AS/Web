@@ -1,0 +1,61 @@
+# Read-only re-probe of the DEPLOYED origins by L-THE-GUEST-EXIT-IS-FINISHED, 2026-08-07T15:29Z.
+# Three GETs and one OPTIONS against public endpoints. Nothing was written anywhere.
+
+$ curl -o /dev/null -w '%{http_code}' https://okam.no/preferences/unsubscribe
+404
+
+$ curl -o /dev/null -w '%{http_code}' https://okam.no/
+200
+
+$ curl -o /dev/null -w '%{http_code}' https://okamapi.azurewebsites.net/health
+200
+
+$ curl -i -X OPTIONS https://okamapi.azurewebsites.net/v1/growth/unsubscribe -H 'Origin: https://okam.no' -H 'Access-Control-Request-Method: POST' -H 'Access-Control-Request-Headers: content-type'
+HTTP/2 204 
+date: Fri, 07 Aug 2026 15:29:15 GMT
+server: Microsoft-IIS/10.0
+access-control-allow-headers: content-type
+access-control-allow-methods: POST
+access-control-allow-origin: *
+set-cookie: ARRAffinity=<redacted routing cookie>
+set-cookie: ARRAffinitySameSite=<redacted routing cookie>
+request-context: appId=cid-v1:ae4117c3-1ff4-4d0d-86b6-f2702a3d53ea
+x-powered-by: ASP.NET
+
+
+$ curl -o /dev/null -w '%{http_code}' https://okamapi.azurewebsites.net/v1/growth/unsubscribe   # GET, no token — is the landing redirect deployed?
+404
+
+
+# ---- CONTROLS, because the OPTIONS answer above does not discriminate ----------------
+# The inherited evidence read the 204 above as "the DEPLOYED API already answers this exact
+# request the same way". These two controls show what that probe can and cannot see.
+
+$ curl -i -X OPTIONS https://okamapi.azurewebsites.net/v1/this-route-does-not-exist-okam-probe -H 'Origin: https://okam.no' -H 'Access-Control-Request-Method: POST'
+HTTP/2 204 
+date: Fri, 07 Aug 2026 15:30:16 GMT
+server: Microsoft-IIS/10.0
+access-control-allow-headers: content-type
+access-control-allow-methods: POST
+access-control-allow-origin: *
+set-cookie: ARRAffinity=<redacted routing cookie>
+
+$ curl -i -X OPTIONS https://okamapi.azurewebsites.net/v1/growth/unsubscribe -H 'Origin: https://evil.example' -H 'Access-Control-Request-Method: POST'
+HTTP/2 204 
+date: Fri, 07 Aug 2026 15:30:16 GMT
+server: Microsoft-IIS/10.0
+access-control-allow-methods: POST
+access-control-allow-origin: *
+set-cookie: ARRAffinity=<redacted routing cookie>
+
+# READ THIS: a route that certainly does not exist, and an origin nobody would allow, both get
+# the SAME 204 with access-control-allow-origin: *. The deployed CORS middleware answers the
+# preflight BEFORE routing. So the probe proves the deployed CORS posture is AllowAnyOrigin
+# without credentials -- which IS blocker (b), and blocker (b) is a CORS claim -- but it does
+# NOT show that POST /v1/growth/unsubscribe is deployed. Nothing read-only can show that, and
+# this lane will not POST a token at production to find out.
+
+# Every GET above answers 404, including /v1/nothing-at-all, so 404 on
+# GET /v1/growth/unsubscribe distinguishes nothing either. What IS certain: the landing
+# redirect [HttpGet("unsubscribe")] is on an UNLANDED lane branch, and the page it would
+# redirect to is a 404 on okam.no.

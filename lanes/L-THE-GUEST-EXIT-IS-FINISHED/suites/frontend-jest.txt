@@ -1,0 +1,22 @@
+# Frontend jest tier, lane/the-guest-exit-is-finished, worktree at 2719fbe + this lane's config edit.
+#   npx jest --ci
+#
+# 4,147 raw lines, almost all per-suite PASS lines. Kept: every FAIL/error line, the console
+# noise summary, and the totals. Full log at /tmp/frontend-jest-full.txt on the machine that ran it.
+# Identical to the lane's base 00d84d7 and to the inherited claim: this lane's only frontend edit
+# is a Playwright config, which jest does not run.
+
+## every FAIL line
+27:  ● Console
+2034:  ● Console
+2141:  ● Console
+3025:  ● Console
+
+## heap/worker aborts
+   (no match)
+
+## totals
+Test Suites: 164 passed, 164 total
+Tests:       3874 passed, 3874 total
+Snapshots:   0 total
+Time:        11.442 s

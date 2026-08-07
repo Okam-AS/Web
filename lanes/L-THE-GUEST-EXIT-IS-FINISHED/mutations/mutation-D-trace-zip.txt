@@ -1,0 +1,16 @@
+# MUTATION D — is the harness C7 sweep able to see a token inside a Playwright trace zip?
+# The sweep is: grep -rlF "$TOKEN" "$WEB_REPO/artifacts"  (growth-guest-exit-world.sh:204)
+# Two files planted under artifacts/, both carrying the same value: one plain, one zipped.
+
+$ grep -rlF "$FAKE" artifacts/_c7probe
+artifacts/_c7probe/plain.txt
+
+$ unzip -p artifacts/_c7probe/trace.zip | grep -c "$FAKE"    # the zip DOES carry it
+1
+
+READ THIS: the sweep finds plain.txt and MISSES trace.zip. A Playwright trace records every
+navigation URL, and this journey navigates to a URL whose fragment is a live unsubscribe token.
+Under trace: 'retain-on-failure' a failing run would write that credential into a zip the one
+check built to catch it cannot read — and would then print 'no artifact carries the token'.
+A sweep that cannot fail is worse than no sweep. Hence trace: 'off' in
+playwright.growth-guest-exit.config.js.

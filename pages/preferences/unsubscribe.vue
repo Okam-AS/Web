@@ -94,18 +94,23 @@ import {
 // WHAT THIS PAGE IS FOR, stated plainly because it is not the machine path. The `List-Unsubscribe`
 // header points mailbox providers at `POST {PublicApiBaseUrl}/v1/growth/unsubscribe?token=…` on the
 // API itself, and that POST is the one-click mechanism; it is not this page and does not need one.
-// This page is the HUMAN path for the same token: a guest who long-presses the unsubscribe affordance
-// and opens the URI in a browser today reaches a POST-only endpoint and gets a 405, which reads as a
-// broken opt-out. It accepts the token from `?token=` for exactly that case, and from `#token=` for
-// any future body link, preferring the fragment when both are present.
+// This page is the HUMAN path for the same token, and it is reached two ways:
 //
-// ⚠ NOTHING LINKS HERE YET, and that is a backend fact rather than an omission on this side. The
-// newsletter footer (`GrowthMarketingFooter`) deliberately links the preference centre instead —
-// which is the right default, since that surface can also do art. 15/17 — and the RFC 8058 URI is
-// fixed to the API origin by the RFC. Two one-line backend changes would connect it: a GET handler on
-// `/v1/growth/unsubscribe` that 302s to `{PreferenceCentreBaseUrl}/../unsubscribe#token=…` (a GET
-// redirect is permitted; the RFC only forbids redirecting the POST), or a second footer link. Until
-// one lands, this page is reachable only by constructing the URL.
+//   1. THE FOOTER LINK — `{UnsubscribePageBaseUrl}#token=…`, emitted by `GrowthMarketingFooter` in
+//      every dispatched newsletter beside the preference-centre link. This is the primary entry, and
+//      the reason it exists is that the preference centre CANNOT be completed from a mail client's
+//      cross-site context (its session cookie is `SameSite=Strict` and the API's CORS posture is
+//      non-credentialed) while this page needs no session at all.
+//   2. A LONG-PRESS on the `List-Unsubscribe` URI — a human opening the machine URI by hand. The API
+//      answers that GET with a 302 to this page, moving the token from `?token=` into `#token=`.
+//      (It used to answer 405, i.e. a visibly broken opt-out, which is what that redirect closed.)
+//
+// So the token is accepted from `#token=` and from `?token=`, preferring the fragment when both are
+// present — the fragment is the safer carrier, because a browser never transmits it.
+//
+// FOR A GUEST SURFACE THE MAIL IS THE NAVIGATION ENTRY. There is deliberately no in-app link to this
+// page: its audience is a person holding a message, not a person browsing the site, and a token-less
+// arrival can do nothing but read the `no-token` card.
 export default {
   name: 'GrowthGuestUnsubscribePage',
   components: { GuestShell },

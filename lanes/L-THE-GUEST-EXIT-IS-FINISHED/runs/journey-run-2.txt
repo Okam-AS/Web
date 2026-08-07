@@ -1,0 +1,24 @@
+
+== building the backend world from /Users/svendaneel/okam/OkamAPI-modules-wt/L-THE-GUEST-EXIT-IS-FINISHED
+
+== starting the world: real composition root, real Kestrel, TLS, on https://127.0.0.1:5943
+
+== the world is up; a campaign has been dispatched and its exit link published
+
+== starting nuxt dev on 127.0.0.1:3944 with API_BASE_URL=https://127.0.0.1:5943
+
+== starting the TLS front end on https://localhost:3943
+
+== waiting for the app to compile (nuxt dev builds a route the first time it is asked for)
+
+== walking the journey
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › test/e2e/journeys/growth-guest-exit-cross-origin.spec.js:108:1 › a guest with no session opens the link the newsletter carried and the withdrawal lands in the real backend @guest-exit (1.4s)
+
+  1 passed (1.8s)
+
+== sweeping the artifacts for the credential
+
+== no artifact carries the token

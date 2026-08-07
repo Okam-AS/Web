@@ -1,0 +1,147 @@
+{
+  "journey": "growth-guest-exit-cross-origin",
+  "title": "a guest with no session opens the link the newsletter carried and the withdrawal lands in the real backend",
+  "status": "passed",
+  "startedAtUtc": "2026-08-07T12:37:49.593Z",
+  "finishedAtUtc": "2026-08-07T12:37:52.645Z",
+  "durationMs": 3052,
+  "capabilities": [
+    "growth.unsubscribe.session-free",
+    "growth.unsubscribe.cross-origin",
+    "growth.dispatch.footer-exit"
+  ],
+  "surface": "guest",
+  "backend": "live",
+  "baseUrl": "https://localhost:3943",
+  "apiBaseUrl": "https://127.0.0.1:5943",
+  "commit": "e66dbc7edf2640ecdff0ac7c598a815e031c4677",
+  "underTest": null,
+  "backendProbe": {
+    "url": "https://127.0.0.1:5943/health",
+    "status": 200,
+    "body": "Healthy"
+  },
+  "backendBuild": {
+    "id": "L-A-GUEST-CAN-LEAVE-A-MAILING-LIST@27b32737cc456bd0cf8678ed98c765f33c503d05",
+    "source": "env:E2E_API_BUILD",
+    "short": "27b3273",
+    "detail": null
+  },
+  "backendServed": 2,
+  "backendSubjectServed": 2,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "proxiedSubjectServed": 0,
+  "proxiedSubjectSample": [],
+  "backendSample": [
+    "POST https://127.0.0.1:5943/v1/growth/unsubscribe -> 200",
+    "POST https://127.0.0.1:5943/v1/growth/unsubscribe -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "the dispatched message names an origin that is not the API's",
+      "status": "passed",
+      "startedAtUtc": "2026-08-07T12:37:49.594Z",
+      "durationMs": 3,
+      "detail": "page https://localhost:3943, API https://127.0.0.1:5943, link on /preferences/unsubscribe with a 46-character fragment credential, from 2 dispatched messages",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "the guest holds no session with the API",
+      "status": "passed",
+      "startedAtUtc": "2026-08-07T12:37:49.597Z",
+      "durationMs": 10,
+      "detail": "the browser holds nothing the API would receive",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "open the link, exactly as the recipient would",
+      "status": "passed",
+      "startedAtUtc": "2026-08-07T12:37:49.607Z",
+      "durationMs": 1189,
+      "detail": "the done card rendered on arrival, with no confirmation step",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "the withdrawal crossed the origin boundary and was permitted there",
+      "status": "passed",
+      "startedAtUtc": "2026-08-07T12:37:50.796Z",
+      "durationMs": 2,
+      "detail": "POST https://127.0.0.1:5943/v1/growth/unsubscribe -> 200",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "the withdrawal opened no session, which is why it works at all",
+      "status": "passed",
+      "startedAtUtc": "2026-08-07T12:37:50.798Z",
+      "durationMs": 3,
+      "detail": "no cookie on https://127.0.0.1:5943 after the withdrawal completed; 3 analytics cookies on the web origin (finding)",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "the credential is gone from the address bar",
+      "status": "passed",
+      "startedAtUtc": "2026-08-07T12:37:50.801Z",
+      "durationMs": 1,
+      "detail": "address bar reads /preferences/unsubscribe with no token",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "the backend recorded the withdrawal, and the next campaign honours it",
+      "status": "passed",
+      "startedAtUtc": "2026-08-07T12:37:50.802Z",
+      "durationMs": 207,
+      "detail": "suppressions 1, next campaign — leaver Suppressed, control recipient ProviderAccepted",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "a second click on the same link is still a done card",
+      "status": "passed",
+      "startedAtUtc": "2026-08-07T12:37:51.009Z",
+      "durationMs": 813,
+      "detail": "replayed through about:blank so the component genuinely remounted; still the done card",
+      "error": null
+    },
+    {
+      "n": 9,
+      "name": "arriving with no token at all is a stated state, not a blank page",
+      "status": "passed",
+      "startedAtUtc": "2026-08-07T12:37:51.822Z",
+      "durationMs": 822,
+      "detail": "the no-token card rendered",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "defect",
+      "summary": "the guest withdrawal page sets analytics cookies before any consent",
+      "detail": "The browser arrived at https://localhost:3943/preferences/unsubscribe holding nothing and left holding _ga, _gid, _gat on https://localhost:3943. That is the app-wide analytics plugin rather than anything Growth does, and it is out of this lane's boundary — but a consent withdrawal surface is the worst possible page for it to be true on."
+    }
+  ],
+  "consoleErrors": [],
+  "failedRequests": [],
+  "screenshots": [
+    "growth-guest-exit-cross-origin/live-5943-unidentified/01-the-withdrawal-confirmed-on-the-guest-origin.png",
+    "growth-guest-exit-cross-origin/live-5943-unidentified/02-a-token-less-arrival-says-so.png"
+  ],
+  "error": null,
+  "artifact": {
+    "key": "live-5943-27b3273",
+    "file": "artifacts/journeys/runs/growth-guest-exit-cross-origin.live-5943-27b3273.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "live-5943-27b3273",
+    "canonicalTracked": false,
+    "provisional": false,
+    "supersedes": null
+  }
+}
