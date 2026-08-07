@@ -119,6 +119,7 @@ import WorkforceRosterTable from '~/components/admin/workforce/WorkforceRosterTa
 import WorkforceAddPersonForm from '~/components/admin/workforce/WorkforceAddPersonForm.vue';
 import WorkforceEngagementPanel from '~/components/admin/workforce/WorkforceEngagementPanel.vue';
 import { isWorkforceApiError } from '~/utils/workforce/api-client';
+import { contextRefusalKey } from '~/utils/workforce/context-refusal';
 import { WorkforceRosterService } from '~/utils/workforce/roster-client';
 import {
   CAPABILITY_MANAGER,
@@ -293,9 +294,10 @@ export default {
           return;
         }
       } catch (e) {
-        this.contextError = isWorkforceApiError(e) && e.status === 403
-          ? this.$i('wfr_no_capability')
-          : this.$i('wfr_context_failed');
+        this.contextError = this.$i(contextRefusalKey(e, {
+          noCapability: 'wfr_no_capability',
+          failed: 'wfr_context_failed'
+        }));
         return;
       }
       await this.loadRoster();

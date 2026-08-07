@@ -2450,6 +2450,7 @@ export default {
   wf_publish: 'Publish',
   wf_reload: 'Refresh',
   wf_no_capability: 'You have no workforce access in this store.',
+  wf_module_off: 'The Workforce module is not switched on for this store. It is a per-store switch (workforce.module) and it is off here — it says nothing about the access you hold.',
   wf_context_failed: 'The store workforce setup could not be loaded. The week is not shown without the store time zone.',
   wf_conflict_overlap_title: 'Double booking',
   wf_conflict_overlap: 'This person already has an overlapping shift. The shift in question is marked in the grid.',

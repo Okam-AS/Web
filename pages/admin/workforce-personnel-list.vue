@@ -148,6 +148,7 @@
 import AdminPage from '~/components/organisms/AdminPage.vue';
 import WorkforcePersonnelListSheet from '~/components/admin/workforce/WorkforcePersonnelListSheet.vue';
 import { isWorkforceApiError } from '~/utils/workforce/api-client';
+import { contextRefusalKey } from '~/utils/workforce/context-refusal';
 import { WorkforceRosterService } from '~/utils/workforce/roster-client';
 import { WorkforcePersonnelListService } from '~/utils/workforce/personnel-list-client';
 import { CAPABILITY_MANAGER, callerHas } from '~/utils/workforce/roster';
@@ -306,9 +307,10 @@ export default {
           return;
         }
       } catch (e) {
-        this.contextError = isWorkforceApiError(e) && e.status === 403
-          ? this.$i('wfpl_no_capability')
-          : this.$i('wfpl_context_failed');
+        this.contextError = this.$i(contextRefusalKey(e, {
+          noCapability: 'wfpl_no_capability',
+          failed: 'wfpl_context_failed'
+        }));
         return;
       }
 

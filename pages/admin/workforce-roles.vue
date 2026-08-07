@@ -198,6 +198,7 @@
 <script>
 import AdminPage from '~/components/organisms/AdminPage.vue';
 import { isWorkforceApiError } from '~/utils/workforce/api-client';
+import { contextRefusalKey } from '~/utils/workforce/context-refusal';
 import { WorkforceRosterService } from '~/utils/workforce/roster-client';
 import { CAPABILITY_MANAGER, callerHas } from '~/utils/workforce/roster';
 import { parseApiInstant } from '~/utils/workforce/week-range';
@@ -318,9 +319,10 @@ export default {
         const context = await this._rosterService.GetContext(this.storeId);
         this.capabilities = (context && context.capabilities) || [];
       } catch (e) {
-        this.contextError = isWorkforceApiError(e) && e.status === 403
-          ? this.$i('wfrl_no_workforce_access')
-          : this.$i('wfrl_context_failed');
+        this.contextError = this.$i(contextRefusalKey(e, {
+          noCapability: 'wfrl_no_workforce_access',
+          failed: 'wfrl_context_failed'
+        }));
         return;
       }
 
