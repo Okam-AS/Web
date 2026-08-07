@@ -15,8 +15,12 @@ const spec = JSON.parse(fs.readFileSync(path.resolve(root, process.argv[2]), 'ut
 
 function runJest (testFile) {
   const out = path.join(root, 'lanes', '.mutate-result.json')
+  // An ARRAY, spread into argv. Passing "a.test.js b.test.js" as one string makes jest read it as a
+  // single pattern, match nothing, run 0 tests and exit 0 — so every mutation reports GREEN and the
+  // sweep certifies work it never measured. The baseline assertion below is the backstop.
+  const patterns = Array.isArray(testFile) ? testFile : [testFile]
   try {
-    execFileSync('npx', ['jest', testFile, '--coverage=false', '--json', '--outputFile=' + out], {
+    execFileSync('npx', ['jest', ...patterns, '--coverage=false', '--json', '--outputFile=' + out], {
       cwd: root, stdio: ['ignore', 'ignore', 'ignore']
     })
   } catch (e) { /* a red run exits non-zero; the report is what matters */ }
@@ -32,6 +36,15 @@ function runJest (testFile) {
 
 const baseline = runJest(spec.test)
 console.log('BASELINE red (' + baseline.total + ' tests):', JSON.stringify(baseline.failed))
+// A sweep over nothing reports every mutation GREEN, which reads exactly like a suite too weak to
+// catch them. Refuse rather than report it.
+if (baseline.total === 0) {
+  console.error('ABORT: the baseline ran 0 tests — `test` matched no file. Nothing below would mean anything.')
+  process.exit(2)
+}
+// Likewise a mutation that makes the suite fail to LOAD: zero tests run, the runner sees no named
+// red, and a real regression reads as a survived mutation.
+const expectedTotal = baseline.total
 
 let ok = 0
 let bad = 0
@@ -68,7 +81,8 @@ for (const m of spec.mutations) {
   // The tests that went red BECAUSE of this mutation, i.e. excluding the ones already red.
   const newlyRed = result.failed.filter(t => !baseline.failed.includes(t))
   const hit = newlyRed.some(t => t.includes(m.expect))
-  console.log((hit ? 'RED   ' : 'GREEN ') + m.id + ' -> ' + JSON.stringify(newlyRed))
+  const shortfall = result.total < expectedTotal ? ' [ran ' + result.total + '/' + expectedTotal + ' — suite failed to load]' : ''
+  console.log((hit ? 'RED   ' : 'GREEN ') + m.id + shortfall + ' -> ' + JSON.stringify(newlyRed))
   if (hit) { ok += 1 } else { bad += 1 }
 }
 

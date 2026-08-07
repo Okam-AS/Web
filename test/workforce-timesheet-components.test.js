@@ -80,6 +80,18 @@ describe('WorkforceTimesheetPanel', () => {
       .toBe(translations.no.wft_gate_flag_off)
   })
 
+  // A panel nobody has told about the store's export switch has NOT been told it is off. The prop
+  // defaulted to `false`, which is how this surface came to print "Eksport er slått av for denne
+  // butikken." over a read that never answered.
+  it('says the switch is unread, not off, when it was never told about the switch', () => {
+    const panel = shallowMount(WorkforceTimesheetPanel, {
+      mocks,
+      propsData: { period: period(), hasPayrollCapability: true, loading: false, busy: '' }
+    })
+    expect(panel.find('[data-testid="wft-approve-why"]').text())
+      .toBe(translations.no.wft_gate_flag_unread)
+  })
+
   it('withholds Approve with a named reason without the payroll grant', () => {
     const panel = open({ hasPayrollCapability: false })
     expect(panel.find('[data-testid="wft-approve-why"]').text())

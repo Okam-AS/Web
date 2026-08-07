@@ -150,7 +150,14 @@ import {
 export default {
   props: {
     period: { type: Object, default: null },
-    exportEnabled: { type: Boolean, default: false },
+    /**
+     * THREE-STATE, and `null` is the default on purpose. A panel nobody has told about the store's
+     * export switch has not been told it is OFF, and defaulting to `false` is how the surface came
+     * to print "Eksport er slått av for denne butikken." over a read that never answered. Vue skips
+     * type validation for a null value on an optional prop, so the declared `Boolean` still documents
+     * the two answered states.
+     */
+    exportEnabled: { type: Boolean, default: null },
     hasPayrollCapability: { type: Boolean, default: false },
     loading: { type: Boolean, default: false },
     /** '' | 'approve' | 'export' — which write is in flight, so only that button says so. */

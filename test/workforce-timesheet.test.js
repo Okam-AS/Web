@@ -79,6 +79,35 @@ describe('timesheet view logic', () => {
       expect(gate.reasonKey).toBe('wft_gate_flag_off')
     })
 
+    // THE STAGE FLAG IS THREE-STATE. "Switched off for this store" is a statement about the store's
+    // configuration, and a surface that says it because a read never answered has invented it. The
+    // control is withheld either way; only the sentence differs, and the sentence is the point.
+    it.each([[null], [undefined]])('withholds it while the stage flag is UNREAD (%p), and says so', (unread) => {
+      const gate = approveAvailability({
+        period: openPeriod, exportEnabled: unread, hasPayrollCapability: true
+      })
+      expect(gate.enabled).toBe(false)
+      expect(gate.reasonKey).toBe('wft_gate_flag_unread')
+    })
+
+    it.each([[null], [undefined]])('withholds EXPORT on an unread flag (%p) too, with the same sentence', (unread) => {
+      const gate = exportAvailability({
+        period: Object.assign({}, openPeriod, { status: STATUS_APPROVED }),
+        exportEnabled: unread,
+        hasPayrollCapability: true
+      })
+      expect(gate.enabled).toBe(false)
+      expect(gate.reasonKey).toBe('wft_gate_flag_unread')
+    })
+
+    // The missing grant is the stronger fact and stays first: a caller without payroll access is
+    // told which grant they lack, not that a flag nobody asked them about is unread.
+    it('names the missing grant ahead of the unread flag', () => {
+      expect(approveAvailability({
+        period: openPeriod, exportEnabled: null, hasPayrollCapability: false
+      }).reasonKey).toBe('wft_gate_no_payroll_capability')
+    })
+
     // UNKNOWN must not present as an offerable act.
     it('withholds it while the period is unknown', () => {
       expect(approveAvailability(Object.assign({ period: null }, gates)).reasonKey)

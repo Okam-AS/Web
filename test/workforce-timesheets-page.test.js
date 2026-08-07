@@ -490,4 +490,63 @@ describe('the screen never claims more than it read', () => {
     expect(page.find('[data-testid="wft-approve-why"]').text())
       .not.toBe(translations.no.wft_gate_flag_off)
   })
+
+  // ---- and the positive half of the same rule ---------------------------------------------------
+  //
+  // The test above says what the screen must NOT claim. On its own that is satisfied by a page that
+  // says nothing at all, which teaches a manager just as little as the wrong sentence. These say
+  // what it must claim instead.
+
+  test('says the export switch is unread, on BOTH controls, when the list read did not answer', async () => {
+    behaviour.periodOver = { status: 'Approved' }
+    const page = await openPage()
+
+    behaviour.listFailsAfter = behaviour.listCount
+    await page.find('[data-testid="wft-export"]').trigger('click')
+    await settled()
+
+    expect(page.find('[data-testid="wft-approve-why"]').text())
+      .toBe(translations.no.wft_gate_flag_unread)
+    expect(page.find('[data-testid="wft-export-why"]').text())
+      .toBe(translations.no.wft_gate_flag_unread)
+  })
+
+  test('still withholds both writes while the switch is unread', async () => {
+    behaviour.periodOver = { status: 'Approved' }
+    const page = await openPage()
+
+    behaviour.listFailsAfter = behaviour.listCount
+    await page.find('[data-testid="wft-export"]').trigger('click')
+    await settled()
+
+    // A write whose gate nobody has read cannot honestly be offered; the server would refuse it.
+    // Only the sentence changes, never the withholding.
+    expect(page.find('[data-testid="wft-approve"]').attributes('disabled')).toBeDefined()
+    expect(page.find('[data-testid="wft-export"]').attributes('disabled')).toBeDefined()
+  })
+
+  test('an answered switch that really is off still says so, and is not softened into "unread"', async () => {
+    // The negative control for the two above: the fix must not buy honesty about UNKNOWN by making
+    // the surface vague about a flag the server actually answered.
+    behaviour.exportEnabled = false
+    behaviour.periodOver = { status: 'Approved' }
+    const page = await openPage()
+
+    expect(page.find('[data-testid="wft-approve-why"]').text())
+      .toBe(translations.no.wft_gate_flag_off)
+    expect(page.find('[data-testid="wft-flag-off"]').exists()).toBe(true)
+  })
+
+  // The brief asked whether this fix makes `wft_gate_no_period` reachable. It does not: the reason
+  // is still tested after the flag, and the panel renders no gate at all without a period — it
+  // renders `wft_period_unknown` instead. Pinned so that a later reordering cannot quietly let a
+  // string nobody has read reach a manager.
+  test('never shows the no-period reason, because a period-less panel says the period is unread', async () => {
+    behaviour.listFails = new Error('network')
+    const page = await openPage()
+
+    expect(page.find('[data-testid="wft-unknown"]').text()).toBe(translations.no.wft_period_unknown)
+    expect(page.text()).not.toContain(translations.no.wft_gate_no_period)
+    expect(page.find('[data-testid="wft-approve-why"]').exists()).toBe(false)
+  })
 })
