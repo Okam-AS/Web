@@ -1,0 +1,16 @@
+File                      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s   
+--------------------------|---------|----------|---------|---------|---------------------
+All files                 |   85.63 |    82.82 |   75.67 |    84.9 |                     
+ components/admin/meals   |     100 |      100 |     100 |     100 |                     
+  MealsStatementLines.vue |     100 |      100 |     100 |     100 |                     
+ pages/admin              |   98.71 |    93.61 |     100 |     100 |                     
+  meals-statements.vue    |   98.71 |    93.61 |     100 |     100 | 217,233,308         
+ pages/offer              |      68 |       60 |   47.05 |   67.56 |                     
+  _code.vue               |      68 |       60 |   47.05 |   67.56 | 295-323,330,360-370 
+--------------------------|---------|----------|---------|---------|---------------------
+
+Test Suites: 3 passed, 3 total
+Tests:       115 passed, 115 total
+Snapshots:   0 total
+Time:        0.996 s, estimated 1 s
+Ran all test suites matching /test\/meals-statement-lines.component.test.js|test\/meals-statements-page.test.js|test\/offer-code-guest-page.test.js/i.

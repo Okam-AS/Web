@@ -1,0 +1,108 @@
+[
+  {
+    "name": "member column falls back to the allocation id (the substitution this surface forbids)",
+    "file": "components/admin/meals/MealsStatementLines.vue",
+    "test": "test/meals-statement-lines.component.test.js",
+    "from": "{{ line.memberDisplayRef }}",
+    "to": "{{ line.memberDisplayRef || line.allocationId }}"
+  },
+  {
+    "name": "unknown-reference row prints the allocation id instead of the mark",
+    "file": "components/admin/meals/MealsStatementLines.vue",
+    "test": "test/meals-statement-lines.component.test.js",
+    "from": "<span v-else class=\"meals-statement__muted\">{{ unknownMark }}</span>",
+    "to": "<span v-else class=\"meals-statement__muted\">{{ line.allocationId }}</span>"
+  },
+  {
+    "name": "truncated payload no longer warns (counts compared for equality)",
+    "file": "components/admin/meals/MealsStatementLines.vue",
+    "test": "test/meals-statement-lines.component.test.js",
+    "from": "this.statement.lineCount !== this.statement.renderedLineCount;",
+    "to": "this.statement.lineCount === this.statement.renderedLineCount;"
+  },
+  {
+    "name": "an unstated line count is treated as a disagreement",
+    "file": "components/admin/meals/MealsStatementLines.vue",
+    "test": "test/meals-statement-lines.component.test.js",
+    "from": "return this.statement.lineCount !== null &&",
+    "to": "return this.statement.lineCount !== undefined &&"
+  },
+  {
+    "name": "draft and finalized status labels swapped",
+    "file": "components/admin/meals/MealsStatementLines.vue",
+    "test": "test/meals-statement-lines.component.test.js",
+    "from": "if (this.statement.isFinalized) { return this.$i('mlst_status_finalized'); }",
+    "to": "if (this.statement.isFinalized) { return this.$i('mlst_status_draft'); }"
+  },
+  {
+    "name": "every run is badged as frozen regardless of status",
+    "file": "components/admin/meals/MealsStatementLines.vue",
+    "test": "test/meals-statement-lines.component.test.js",
+    "from": "return this.statement.isFinalized ? 'mls-badge--on' : 'mls-badge--warn';",
+    "to": "return 'mls-badge--on';"
+  },
+  {
+    "name": "a foreign currency loses its ISO code (a wrong symbol is a wrong amount)",
+    "file": "components/admin/meals/MealsStatementLines.vue",
+    "test": "test/meals-statement-lines.component.test.js",
+    "from": "return this.priceLabel(minor) + ' ' + wireCurrency;",
+    "to": "return this.priceLabel(minor);"
+  },
+  {
+    "name": "the venue's own currency is also suffixed with its code",
+    "file": "components/admin/meals/MealsStatementLines.vue",
+    "test": "test/meals-statement-lines.component.test.js",
+    "from": "if (wireCurrency && this.currency && wireCurrency !== this.currency) {",
+    "to": "if (wireCurrency && this.currency) {",
+    "_note": "the cross-currency guard collapses"
+  },
+  {
+    "name": "a stated amount of zero is rendered as unknown",
+    "file": "components/admin/meals/MealsStatementLines.vue",
+    "test": "test/meals-statement-lines.component.test.js",
+    "from": "if (!value) { return this.unknownMark; }",
+    "to": "if (!value || !value.minor) { return this.unknownMark; }"
+  },
+  {
+    "name": "a Capture line is labelled as a Reversal",
+    "file": "components/admin/meals/MealsStatementLines.vue",
+    "test": "test/meals-statement-lines.component.test.js",
+    "from": "if (kind === 'Capture') { return this.$i('mlst_kind_capture'); }",
+    "to": "if (kind === 'Capture') { return this.$i('mlst_kind_reversal'); }"
+  },
+  {
+    "name": "the gross total cell shows the net total",
+    "file": "components/admin/meals/MealsStatementLines.vue",
+    "test": "test/meals-statement-lines.component.test.js",
+    "from": "{{ amountOrMark(statement.totalGross) }}",
+    "to": "{{ amountOrMark(statement.totalNet) }}"
+  },
+  {
+    "name": "the stated line count cell shows the rendered count instead",
+    "file": "components/admin/meals/MealsStatementLines.vue",
+    "test": "test/meals-statement-lines.component.test.js",
+    "from": "{{ statement.lineCount === null ? unknownMark : statement.lineCount }}",
+    "to": "{{ statement.renderedLineCount }}"
+  },
+  {
+    "name": "the empty-statement sentence never appears",
+    "file": "components/admin/meals/MealsStatementLines.vue",
+    "test": "test/meals-statement-lines.component.test.js",
+    "from": "<p v-if=\"!statement.lines.length\" class=\"mls-note\" data-test=\"meals-statement-empty\">",
+    "to": "<p v-if=\"false\" class=\"mls-note\" data-test=\"meals-statement-empty\">"
+  },
+  {
+    "name": "the content hash on screen is the revision",
+    "file": "components/admin/meals/MealsStatementLines.vue",
+    "test": "test/meals-statement-lines.component.test.js",
+    "from": "{{ statement.contentHash || unknownMark }}",
+    "to": "{{ statement.revision || unknownMark }}"
+  },
+  {
+    "name": "the finalization date is shown on a run that was never finalized",
+    "file": "components/admin/meals/MealsStatementLines.vue",
+    "test": "test/meals-statement-lines.component.test.js",
+    "from": "<div v-if=\"statement.finalizedAtUtc\">",
+    "to": "<div>"
+  }
+]
